@@ -5,7 +5,6 @@ import {
     MAX_PINNED_TILES,
     RECALL_FOCUS_MAX,
     type AchievementId,
-    type RouteNodeType,
     type RunState
 } from '../../shared/contracts';
 import { computeFocusDimmedTileIds } from '../../shared/focusDimmedTileIds';
@@ -91,8 +90,6 @@ import RunShell, { type RunShellTool } from './RunShell';
 import { RUN_SHELL_GLYPHS } from './runShellGlyphs';
 import MainMenuBackground from './MainMenuBackground';
 import FloorClearDialog, {
-    type FloorClearRouteOption,
-    type FloorClearSelectedRoute,
     type FloorClearWager
 } from './FloorClearDialog';
 import OverlayModal, { type ModalAction } from './OverlayModal';
@@ -410,7 +407,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             greetFloorResident: state.greetFloorResident,
             acceptEndlessRiskWager: state.acceptEndlessRiskWager,
             activateDungeonExitFromPrompt: state.activateDungeonExitFromPrompt,
-            chooseRouteAndContinue: state.chooseRouteAndContinue,
             closeDungeonExitPrompt: state.closeDungeonExitPrompt,
             continueToNextLevel: state.continueToNextLevel,
             dismissPowersFtue: state.dismissPowersFtue,
@@ -418,11 +414,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             applyRelicOfferService: state.applyRelicOfferService,
             openCodexFromPlaying: state.openCodexFromPlaying,
             openInventoryFromPlaying: state.openInventoryFromPlaying,
-            openShopFromLevelComplete: state.openShopFromLevelComplete,
             openSettings: state.openSettings,
             notifyMemorizeBoardReady: state.notifyMemorizeBoardReady,
             openDungeonExitPrompt: state.openDungeonExitPrompt,
-            openDungeonShopFromFloor: state.openDungeonShopFromFloor,
             skipMemorizePhase: state.skipMemorizePhase,
             pause: state.pause,
             pickRelic: state.pickRelic,
@@ -727,16 +721,13 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         greetFloorResident,
         acceptEndlessRiskWager,
         activateDungeonExitFromPrompt,
-        chooseRouteAndContinue,
         closeDungeonExitPrompt,
         continueToNextLevel,
         dismissPowersFtue,
         goToMenu,
         openCodexFromPlaying,
         openDungeonExitPrompt,
-        openDungeonShopFromFloor,
         openInventoryFromPlaying,
-        openShopFromLevelComplete,
         openSettings,
         skipMemorizePhase,
         pause,
@@ -1061,26 +1052,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         run.lastLevelResult && run.endlessRiskWager?.acceptedOnLevel === run.lastLevelResult.level
             ? run.endlessRiskWager
             : null;
-    /*
-     * The floor-clear panel used to hold the run here until the player picked one of three routes,
-     * with a glyph, a room name, a reward line and a risk line for each. No route is offered any
-     * more (Gen 173): the panel has one primary action, and it is the next floor.
-     */
-    const routeChoiceRequired = false;
-    const routeChoiceRequiredCopy = ROUTE_CHOICE_COPY.settled;
-    const floorClearRouteOptions: FloorClearRouteOption[] = [];
-    const floorClearSelectedRoute: FloorClearSelectedRoute | null = run.pendingRouteCardPlan
-        ? {
-              routeType: run.pendingRouteCardPlan.routeType,
-              label: routeTypeLabel(run.pendingRouteCardPlan.routeType),
-              line:
-                  run.pendingRouteCardPlan.routeType === 'safe'
-                      ? ROUTE_CHOICE_COPY.safePreview
-                      : run.pendingRouteCardPlan.routeType === 'greed'
-                        ? ROUTE_CHOICE_COPY.greedPreview
-                        : ROUTE_CHOICE_COPY.mysteryPreview
-          }
-        : null;
     const floorClearWager: FloorClearWager | null = acceptedEndlessRiskWager
         ? {
               armed: true,
@@ -1088,7 +1059,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
               streakAtRisk: acceptedEndlessRiskWager.streakAtRisk,
               suretyActive: wagerSuretyActive
           }
-        : !routeChoiceRequired && endlessRiskWagerOfferAvailable
+        : endlessRiskWagerOfferAvailable
           ? {
                 armed: false,
                 bonusFavor: offeredRiskWagerFavor,
@@ -1101,29 +1072,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             .filter((part): part is string => Boolean(part))
             .join(' · ') || null;
     const floorClearActions: ModalAction[] = [
-        ...(routeChoiceRequired
-            ? []
-            : [
-                  {
-                      label: run.pendingRouteCardPlan
-                          ? `Continue to ${routeTypeLabel(run.pendingRouteCardPlan.routeType)} floor`
-                          : 'Continue',
-                      onClick: continueToNextLevel,
-                      variant: 'primary' as const
-                  }
-              ]),
-        ...(run.shopOffers.length > 0 && !routeChoiceRequired
-            ? [
-                  {
-                      label: 'Visit Shop',
-                      onClick: () => {
-                          playUiClick();
-                          openShopFromLevelComplete();
-                      },
-                      variant: 'secondary' as const
-                  }
-              ]
-            : []),
+        {
+            label: 'Continue',
+            onClick: continueToNextLevel,
+            variant: 'primary' as const
+        },
         {
             label: 'Main Menu',
             onClick: () => {
@@ -1323,7 +1276,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         lives: run.lives,
         guardTokens: run.stats.guardTokens,
         comboShards: run.stats.comboShards,
-        shopGold: run.shopGold,
         shuffleCharges: run.shuffleCharges,
         regionShuffleCharges: run.regionShuffleCharges,
         stickyBlockIndex: run.stickyBlockIndex,
@@ -1525,14 +1477,13 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     // Ids and labels come from the catalog rather than being retyped here, so a tool the catalog
     // names but the dock forgets to build is a type error rather than a missing button.
     /*
-     * The exit and the vendor pop off the board when they are found, so the dock carries them
-     * from that point on. Offered on the same condition the board tile used to answer to — the
-     * card has been turned up on this floor — rather than on whether it can be used right now,
-     * so a locked exit still tells the player where the door is and what it wants.
+     * The exit pops off the board when it is found, so the dock carries it from that point on.
+     * Offered on the same condition the board tile used to answer to — the card has been turned
+     * up on this floor — rather than on whether it can be used right now, so a locked exit still
+     * tells the player where the door is and what it wants. (The vendor stood beside it until
+     * Gen 174.)
      */
     const dungeonExitDockOffered = run.status === 'playing' && dungeonExitStatus.revealed && dungeonExitStatus.exitTile !== null;
-    const dungeonStoreDockOffered =
-        run.status === 'playing' && run.board.dungeonShopVisited === true && run.shopOffers.length > 0;
     const toolSpec = (id: RunShellToolId): Pick<RunShellTool, 'id' | 'label'> => {
         const spec = RUN_SHELL_TOOL_CATALOG.find((candidate) => candidate.id === id);
         if (!spec) {
@@ -1644,19 +1595,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                           onClick: () => {
                               playUiClick();
                               openDungeonExitPrompt();
-                          }
-                      }
-                  ]
-                : []),
-            ...(dungeonStoreDockOffered
-                ? [
-                      {
-                          ...toolSpec('store'),
-                          glyph: RUN_SHELL_GLYPHS.store,
-                          title: RUN_TOOL_REASONS.store.available,
-                          onClick: () => {
-                              playUiClick();
-                              openDungeonShopFromFloor();
                           }
                       }
                   ]
@@ -2123,16 +2061,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             playUiClick();
                             acceptEndlessRiskWager();
                         }}
-                        onChooseRoute={(id) => {
-                            playUiClick();
-                            chooseRouteAndContinue(id);
-                        }}
                         residentLine={nextFloorResidentLine}
                         result={run.lastLevelResult}
-                        routeIntro={routeChoiceRequiredCopy}
-                        routeOptions={floorClearRouteOptions}
-                        routeRequired={routeChoiceRequired}
-                        selectedRoute={floorClearSelectedRoute}
                         totalScore={run.stats.totalScore}
                         wager={floorClearWager}
                     />

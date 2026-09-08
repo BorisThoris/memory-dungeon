@@ -355,30 +355,6 @@ test.describe('UI fit contract', () => {
         });
     }
 
-    // The vendor, the mode detail sheet and the showcase are surfaces a run passes through
-    // without a fixture of their own; they are held to the same contract.
-    test('the vendor fits every window', async ({ page }) => {
-        test.setTimeout(420_000);
-        await atEverySize(
-            page,
-            'shop',
-            async () => {
-                await openPlayablePathFixture(page, 'floorClearWithShop');
-            },
-            async () => {
-                const shop = page.getByTestId('shop-screen');
-                if (!(await shop.isVisible().catch(() => false))) {
-                    await page
-                        .getByRole('dialog', { name: /floor cleared/i })
-                        .getByRole('button', { name: /visit shop/i })
-                        .click({ force: true });
-                    await shop.waitFor({ state: 'visible', timeout: 20_000 });
-                }
-                await page.waitForTimeout(500);
-            }
-        );
-    });
-
     /*
      * Four seats is the crowded case for the run bar: it is the widest the HUD ever gets, and it
      * broke at 812x375 the first time it was measured — the full seat names pushed the stat row
@@ -451,13 +427,12 @@ test.describe('UI fit contract', () => {
 
     for (const fixture of [
         'floorClearWithRouteChoices',
-        'floorClearWithShop',
         'relicDraft',
         'gameOver'
     ] as const) {
         test(`${fixture} fits every window`, async ({ page }) => {
-            // These four reach their screen by playing a run, once per viewport. On a slow machine
-            // that is four runs in one test, and a 420s cap was timing out mid-sweep — which reads
+            // These three reach their screen by playing a run, once per viewport. On a slow machine
+            // that is three runs in one test, and a 420s cap was timing out mid-sweep — which reads
             // as a failure with no report of what did not fit.
             test.setTimeout(720_000);
             await atEverySize(page, fixture, async () => {

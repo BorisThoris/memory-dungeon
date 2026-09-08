@@ -56,7 +56,6 @@ export interface CascadeBalanceFloorSample {
     pairsOnFloor: number;
     /** Extreme Fever: the tier the momentum held when the floor cleared, and what it paid. */
     momentumBonusTier: 'none' | 'clean' | 'sharp' | 'fever';
-    momentumBonusGold: number;
     /** How the floor dealt its suits (by archetype), so the report can say what each shape buys. */
     suitDealProfile: SuitDealProfile;
 }
@@ -84,7 +83,6 @@ export interface CascadeBalanceBandReport {
     ratingDriftFloors: number;
     /** Floors cleared at the Fever rung of momentum: the Extreme Fever payout. */
     extremeFeverShare: number;
-    meanMomentumBonusGold: number;
 }
 
 export interface CascadeBalanceProfileReport {
@@ -243,7 +241,6 @@ export const playCascadeBalanceFloor = ({
         comboShardsGained: Math.max(0, runNonNegativeInteger(run.stats.comboShards) - shardsAtStart),
         pairsOnFloor,
         momentumBonusTier: run.lastLevelResult?.momentumBonusTier ?? 'none',
-        momentumBonusGold: runNonNegativeInteger(run.lastLevelResult?.momentumBonusGold),
         suitDealProfile: getSuitDealProfile(schedule.floorArchetypeId)
     };
 };
@@ -276,8 +273,7 @@ const summarizeBand = (missRate: number, samples: CascadeBalanceFloorSample[]): 
         rippleFloorShare: mean((sample) => (sample.bestRipple >= 2 ? 1 : 0)),
         ratingCounts,
         ratingDriftFloors: samples.filter((sample) => sample.rating !== sample.ratingFromMistakes).length,
-        extremeFeverShare: mean((sample) => (sample.momentumBonusTier === 'fever' ? 1 : 0)),
-        meanMomentumBonusGold: mean((sample) => sample.momentumBonusGold)
+        extremeFeverShare: mean((sample) => (sample.momentumBonusTier === 'fever' ? 1 : 0))
     };
 };
 
@@ -478,6 +474,6 @@ export const summarizeCascadeBalance = (report: CascadeBalanceReport): string =>
                 `miss=${band.missRate}: cleared=${band.clearedShare.toFixed(2)} settled=${band.settledShare.toFixed(2)} turns=${band.meanTurns.toFixed(1)} ` +
                 `mistakes=${band.meanMistakes.toFixed(2)} score=${band.meanLevelScore.toFixed(0)} chunkShare=${band.chunkShareOfScore.toFixed(2)} ` +
                 `breaks/floor=${band.chunkBreaksPerFloor.toFixed(2)} pairs/floor=${band.chunkPairsPerFloor.toFixed(2)} ` +
-                `fever=${band.feverFloorShare.toFixed(2)} ripple=${band.meanBestRipple.toFixed(2)} rippled=${band.rippleFloorShare.toFixed(2)} extreme=${band.extremeFeverShare.toFixed(2)} bonusGold=${band.meanMomentumBonusGold.toFixed(2)} drift=${band.ratingDriftFloors}`
+                `fever=${band.feverFloorShare.toFixed(2)} ripple=${band.meanBestRipple.toFixed(2)} rippled=${band.rippleFloorShare.toFixed(2)} extreme=${band.extremeFeverShare.toFixed(2)} drift=${band.ratingDriftFloors}`
         )
     ].join('\n');

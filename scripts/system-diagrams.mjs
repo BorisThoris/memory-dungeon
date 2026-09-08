@@ -386,27 +386,27 @@ const buildBoardGenerationDiagram = (repoRoot) => {
 const buildRewardsEconomyDiagram = (repoRoot) => {
     const rewardEvidence = evidence(repoRoot, [
         'src/shared/bonus-rewards.ts',
-        'src/shared/shop-rules.ts',
         'src/shared/relics.ts',
-        'src/shared/economy-ledger.ts',
+        'src/shared/relic-offer-rules.ts',
+        'src/shared/run-economy.ts',
         'src/shared/balance-simulation.ts'
     ]);
     return {
         id: 'rewards-economy',
         title: 'Rewards And Economy',
-        summary: 'Rewards, shops, relics, gold, shards, and route priorities decide what the player can buy or draft.',
+        summary: 'Rewards, relics, shards, favor and pickups decide what the player can draft or claim. Gold and the shop went in Gen 174; nothing is bought.',
         nodes: [
             node('reward_rooms', 'Reward Rooms', 'domain', 'shared', 'Bonus reward rooms grant gold, traits, relics, or board tools.', evidence(repoRoot, ['src/shared/bonus-rewards.ts'])),
-            node('shop_catalog', 'Shop Catalog', 'domain', 'shared', 'Shop services and items route scarce keys, powers, relics, and trait tools.', evidence(repoRoot, ['src/shared/shop-rules.ts'])),
-            node('economy_ledger', 'Economy Ledger', 'state', 'shared', 'Ledger records inflows, sinks, caps, and reward claims.', evidence(repoRoot, ['src/shared/economy-ledger.ts'])),
-            node('balance_sim', 'Balance Simulation', 'analysis', 'shared', 'Simulation watches access, spend, route pressure, and trait floor share.', evidence(repoRoot, ['src/shared/balance-simulation.ts'])),
-            node('reward_ui', 'Reward UI', 'ui', 'renderer', 'Renderer shows pickable rewards and shop decisions.', evidence(repoRoot, ['src/renderer/components', 'src/renderer/App.tsx']))
+            node('relic_offers', 'Relic Offers', 'domain', 'shared', 'Relic drafts and offer services route relics and favor.', evidence(repoRoot, ['src/shared/relics.ts', 'src/shared/relic-offer-rules.ts'])),
+            node('run_economy', 'Run Economy', 'state', 'shared', 'The run economy taxonomy names every temporary currency, its source and its sink.', evidence(repoRoot, ['src/shared/run-economy.ts'])),
+            node('balance_sim', 'Balance Simulation', 'analysis', 'shared', 'Simulation watches access, pressure, and trait floor share.', evidence(repoRoot, ['src/shared/balance-simulation.ts'])),
+            node('reward_ui', 'Reward UI', 'ui', 'renderer', 'Renderer shows pickable rewards and relic drafts.', evidence(repoRoot, ['src/renderer/components', 'src/renderer/App.tsx']))
         ],
         edges: [
-            edge('reward_rooms', 'economy_ledger', 'records claim'),
-            edge('shop_catalog', 'economy_ledger', 'spends and grants'),
-            edge('economy_ledger', 'balance_sim', 'sampled by'),
-            edge('shop_catalog', 'reward_ui', 'presented in'),
+            edge('reward_rooms', 'run_economy', 'counted in'),
+            edge('relic_offers', 'run_economy', 'spends favor'),
+            edge('run_economy', 'balance_sim', 'sampled by'),
+            edge('relic_offers', 'reward_ui', 'presented in'),
             edge('reward_rooms', 'reward_ui', 'presented in')
         ],
         findings: [
@@ -414,7 +414,7 @@ const buildRewardsEconomyDiagram = (repoRoot) => {
                 'priority-overlap',
                 'warning',
                 'Reward priority overlaps need regression coverage',
-                'Key, boss, loadout, trait-routing, and shop-service offers compete for limited slots. Keep tests around priority ordering so fun trait tools do not hide required progression items.',
+                'Key, boss, loadout, trait-routing, and relic-service offers compete for limited slots. Keep tests around priority ordering so fun trait tools do not hide required progression items.',
                 rewardEvidence
             )
         ],
@@ -424,7 +424,7 @@ const buildRewardsEconomyDiagram = (repoRoot) => {
                 'P1',
                 'Rewards And Economy',
                 'Lock reward priority slots before adding fun offers',
-                'Any new shop or reward offer must prove it does not displace required keys, boss access, loadout recovery, or trait-route starter support.',
+                'Any new reward or relic offer must prove it does not displace required keys, boss access, loadout recovery, or trait-route starter support.',
                 'Progression-critical offers remain reachable while optional trait tools still appear.',
                 rewardEvidence,
                 'done',
@@ -450,7 +450,7 @@ const buildTraitDiagram = (repoRoot) => {
             node('trait_catalog', 'Trait Catalog', 'domain', 'shared', 'Trait definitions, combos, blockers, and interaction hooks.', evidence(repoRoot, ['src/shared/tile-trait-rules.ts'])),
             node('trait_generation', 'Trait Generation', 'domain', 'shared', 'Board generation seeds route-visible trait opportunities.', evidence(repoRoot, ['src/shared/board-generation.ts', 'src/shared/board-tile-generation-rules.ts'])),
             node('trait_actions', 'Trait Actions', 'domain', 'shared', 'Matches and board powers create, move, reveal, or block trait opportunities.', evidence(repoRoot, ['src/shared/board-power-actions.ts', 'src/shared/game.ts'])),
-            node('trait_rewards', 'Trait Rewards', 'economy', 'shared', 'Rewards and shops let players build toward trait routes.', evidence(repoRoot, ['src/shared/bonus-rewards.ts', 'src/shared/shop-rules.ts'])),
+            node('trait_rewards', 'Trait Rewards', 'economy', 'shared', 'Rewards let players build toward trait routes.', evidence(repoRoot, ['src/shared/bonus-rewards.ts'])),
             node('trait_feedback', 'Trait Feedback', 'ui', 'renderer', 'HUD and tile faces make combo routes readable immediately.', evidence(repoRoot, ['src/renderer/components/RunShell.tsx', 'src/renderer/cardFace']))
         ],
         edges: [

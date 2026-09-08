@@ -211,7 +211,6 @@ export const selectGatesForChangedPaths = (paths) => {
             file.startsWith('src/shared/route') ||
             file.startsWith('src/shared/relic') ||
             file.startsWith('src/shared/balance-simulation') ||
-            file.startsWith('src/shared/economy-ledger') ||
             file.startsWith('src/shared/floor-mutator-schedule') ||
             file === 'src/shared/contracts.ts'
         ) {

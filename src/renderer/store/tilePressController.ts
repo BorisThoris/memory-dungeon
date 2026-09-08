@@ -38,7 +38,6 @@ type TilePressPatch = Partial<{
     mismatchScorePop: MismatchScorePop | null;
     peekModeArmed: boolean;
     run: RunState;
-    shopReturnMode: 'floor' | 'summary' | null;
     strayRemoveArmed: boolean;
     tileSwapArmed: boolean;
     tileSwapFirstTileId: string | null;
@@ -140,18 +139,6 @@ export const createPlayingTilePressSurfaceResult = ({
                 patch: {
                     ...createRunWithArmedModesClearedPatch(dungeonTileResult.run),
                     dungeonExitPromptOpen: true
-                },
-                audio,
-                resolveDelayMs: null
-            };
-        }
-        if (dungeonTileResult.kind === 'shop') {
-            return {
-                kind: 'patch',
-                patch: {
-                    ...createRunWithBoardInteractionClearedPatch(dungeonTileResult.run),
-                    view: 'shop',
-                    shopReturnMode: 'floor'
                 },
                 audio,
                 resolveDelayMs: null

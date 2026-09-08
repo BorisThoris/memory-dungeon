@@ -5,13 +5,11 @@ import { inspectRunFairness } from './board-inspection';
 import { GAME_RULES_VERSION, type BoardState, type EnemyHazardState, type Tile } from './contracts';
 import { advanceToNextLevel } from './next-floor-transition-rules';
 import { inspectDungeonRunMapProgression } from './run-map';
-import { getRunShopStockPlan } from './shop-rules';
 import { isSingletonUtilityPairKey } from './tile-identity';
 import {
     createClearedBoardFairnessProjection,
     createFinalPairFairnessProjection,
     createGeneratedBoardSolverRun,
-    createShopStockInspectionRun,
     DEFAULT_SOFTLOCK_GENERATOR_SCENARIOS,
     formatSoftlockGeneratorFailure,
     runSoftlockGeneratorContract,
@@ -84,7 +82,6 @@ describe('softlock generator contract', () => {
         expect(result.checkedBoards).toBeGreaterThan(100);
         expect(result.checkedPlayableBoards).toBeGreaterThan(30);
         expect(result.checkedNextFloorTransitions).toBe(result.checkedPlayableBoards);
-        expect(Number.isInteger(result.checkedShopPlans)).toBe(true);
         // Eight coverage families - locks, shops, keys, levers, exits, hazards, enemies, bosses -
         // left this list with the layer that produced them. What remains is what a floor of pairs
         // can still get wrong, and every one of them must still be exercised: a coverage key at
@@ -101,47 +98,6 @@ describe('softlock generator contract', () => {
         }
     }, 15_000);
 
-    it('uses generated-board run context when checking locked-exit shop stock', () => {
-        const board = projectionBoard({
-            level: 6,
-            matchedPairs: 0,
-            dungeonExitTileId: 'exit',
-            dungeonExitLockKind: 'iron',
-            dungeonShopTileId: 'shop',
-            tiles: [
-                tile('a1', 'a'),
-                tile('a2', 'a'),
-                {
-                    ...tile('exit', '__exit__'),
-                    dungeonCardKind: 'exit',
-                    dungeonExitLockKind: 'iron'
-                },
-                {
-                    ...tile('shop', '__shop__'),
-                    dungeonCardKind: 'shop',
-                    dungeonCardEffectId: 'shop_vendor'
-                }
-            ]
-        });
-
-        const run = createGeneratedBoardSolverRun(board, 130_111);
-        const plan = getRunShopStockPlan({ ...run, shopRerolls: 0 });
-
-        expect(run.board?.level).toBe(6);
-        expect(run.dungeonRun.currentFloor).toBe(6);
-        expect(plan.itemIds[0]).toBe('iron_key');
-
-        const malformedStatsRun = createShopStockInspectionRun(
-            {
-                ...run,
-                stats: Number.NaN as unknown as typeof run.stats
-            },
-            board
-        );
-        expect(malformedStatsRun.stats.highestLevel).toBe(6);
-        expect(malformedStatsRun.stats.totalScore).toBe(0);
-        expect(getRunShopStockPlan(malformedStatsRun).itemIds[0]).toBe('iron_key');
-    });
 
     it('executes generated boards through pair exhaustion, and the empty board ends the floor', () => {
         const board = buildBoard(5, {

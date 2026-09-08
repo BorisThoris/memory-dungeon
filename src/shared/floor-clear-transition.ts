@@ -24,7 +24,6 @@ import {
 } from './level-clear-rules';
 import { getFloorClearObjectiveResult } from './secondary-objective-rules';
 import { clearResolveState, extendTimerTimestampMs } from './run-timer-rules';
-import { getShopGoldRewardForFloor } from './shop-rules';
 import { hasMutator } from './mutators';
 import { getParasiteFloorsAfterFeaturedObjectiveClear } from './score-parasite-rules';
 import { normalizeSessionStats } from './session-stats-rules';
@@ -132,8 +131,8 @@ export const createFinalizeLevelTransition = ({
         const bestScore = Math.max(runNonNegativeInteger(stats.bestScore), totalScore);
         const rating = calculateRating(tries);
         const lives = Math.min(MAX_LIVES, livesBeforeClear + clearLifeGained);
-        // Extreme Fever: the momentum still standing when the last pair went pays gold, and a
-        // shard at Fever. Read before the streak resets with the floor, never from the score.
+        // Extreme Fever: the momentum still standing when the last pair went pays a shard at
+        // Fever. Read before the streak resets with the floor, never from the score.
         const momentumBonus = getFloorClearMomentumBonus({
             chain: stats.currentStreak,
             cascadedPairs: run.chunkPairsThisChain,
@@ -212,8 +211,13 @@ export const createFinalizeLevelTransition = ({
             bonusRelicPicksNextOffer: relicFavor.bonusRelicPicksNextOffer,
             favorBonusRelicPicksNextOffer: relicFavor.favorBonusRelicPicksNextOffer,
             relicFavorProgress: relicFavor.relicFavorProgress,
-            shopGold: runNonNegativeInteger(run.shopGold) + getShopGoldRewardForFloor(board.level) + momentumBonus.gold,
-            shopOffers: run.shopOffers,
+            /*
+             * A cleared floor used to pay three to eight gold and stock a shop for it. There is no
+             * shop and nothing to spend on (Gen 174), so the wallet is closed: nought in, nothing
+             * offered. The two fields come off the run shape with the save migration in T1.14.
+             */
+            shopGold: 0,
+            shopOffers: [],
             parasiteFloors,
             featuredObjectiveStreak: featuredObjectiveClear.featuredObjectiveStreak,
             endlessRiskWager: featuredObjectiveClear.activeEndlessRiskWager ? null : run.endlessRiskWager,

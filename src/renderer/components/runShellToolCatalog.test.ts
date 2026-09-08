@@ -62,8 +62,7 @@ describe('the run dock catalog', () => {
         // present, disabled with a reason when it cannot be used.
         expect(RUN_SHELL_TOOL_CATALOG.filter((tool) => tool.conditional).map((tool) => tool.id)).toEqual([
             'flash',
-            'exit',
-            'store'
+            'exit'
         ]);
     });
 });

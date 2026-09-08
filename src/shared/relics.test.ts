@@ -634,14 +634,15 @@ describe('REG-078 relic offer services', () => {
         expect(Object.keys(RELIC_OFFER_SERVICE_CATALOG)).toEqual([...RELIC_OFFER_SERVICE_IDS]);
         expect(rows.map((row) => row.serviceId)).toEqual([...RELIC_OFFER_SERVICE_IDS]);
         expect(rows.every((row) => row.available && row.cost > 0)).toBe(true);
-        expect(createRelicOfferServices({ ...run, shopGold: 0 }).every((row) => !row.available)).toBe(true);
+        // The price is on the card and nobody collects it (Gen 174): an empty wallet is no bar.
+        expect(createRelicOfferServices({ ...run, shopGold: 0 }).every((row) => row.available)).toBe(true);
     });
 
-    it('rerolls and bans deterministically while charging shop gold once per round', () => {
+    it('rerolls and bans deterministically, once per round', () => {
         const run = openOfferRun();
         const rerolled = applyRelicOfferService(run, 'reroll_offer');
         expect(rerolled.applied).toBe(true);
-        expect(rerolled.run.shopGold).toBe(run.shopGold - 2);
+        expect(rerolled.run.shopGold).toBe(0);
         expect(rerolled.run.relicOffer?.options).not.toEqual(run.relicOffer?.options);
         expect(rerolled.run.relicOffer?.options).toHaveLength(3);
         expect(applyRelicOfferService(rerolled.run, 'reroll_offer').applied).toBe(false);
@@ -672,12 +673,10 @@ describe('REG-078 relic offer services', () => {
             }
         };
 
-        expect(createRelicOfferServices({ ...run, shopGold: Number.NaN }).every((row) => !row.available)).toBe(true);
-
         const rerolled = applyRelicOfferService(run, 'reroll_offer');
 
         expect(rerolled.applied).toBe(true);
-        expect(rerolled.run.shopGold).toBe(3);
+        expect(rerolled.run.shopGold).toBe(0);
         expect(rerolled.run.relicOffer?.serviceUses?.reroll_offer).toBe(1);
     });
 
@@ -701,7 +700,7 @@ describe('REG-078 relic offer services', () => {
         const upgraded = applyRelicOfferService(run, 'upgrade_offer');
 
         expect(upgraded.applied).toBe(true);
-        expect(upgraded.run.shopGold).toBe(run.shopGold - 3);
+        expect(upgraded.run.shopGold).toBe(0);
         expect(upgraded.run.relicOffer?.upgradedOffer).toBe(true);
         const rarities = upgraded.run.relicOffer!.options.map((id) => getRelicDraftRow(id).rarity);
         expect(rarities.some((rarity) => rarity !== 'common')).toBe(true);

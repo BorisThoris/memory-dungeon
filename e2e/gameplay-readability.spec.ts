@@ -64,23 +64,24 @@ test.describe('Gameplay readability hardening', () => {
         await expectBoardKeepsPriority(page);
     });
 
-    test('mobile floor clear keeps the score and all three doors readable', async ({ page }) => {
+    test('mobile floor clear keeps the score and the way on readable', async ({ page }) => {
         test.setTimeout(120_000);
         await page.setViewportSize({ width: 390, height: 844 });
         await openPlayablePathFixture(page, 'floorClearWithRouteChoices');
 
-        await expect(page.getByRole('dialog', { name: /floor cleared/i })).toBeVisible();
+        const floorClear = page.getByRole('dialog', { name: /floor cleared/i });
+        await expect(floorClear).toBeVisible();
         await expect(page.getByTestId('floor-clear-score')).toBeVisible();
         await expectLocatorFullyInWindowViewport(page, page.getByTestId('floor-clear-stats'), 8);
-        await expect(page.getByTestId('route-choice-panel')).toBeVisible();
-        await expectLocatorStartsWithinWindowViewport(page, page.getByTestId('route-choice-panel'), 8);
-        for (const route of ['safe', 'greed', 'mystery'] as const) {
-            const door = page.getByTestId(`route-choice-${route}`);
-            await door.scrollIntoViewIfNeeded();
-            await expect(door).toBeVisible();
-            const box = await door.boundingBox();
-            expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
-        }
+        // No doors since Gen 173: the one control on the dialog is Continue, and it has to
+        // be a real touch target on a phone.
+        await expect(page.getByTestId('route-choice-panel')).toHaveCount(0);
+        const continueButton = floorClear.getByRole('button', { name: /^continue$/i });
+        await continueButton.scrollIntoViewIfNeeded();
+        await expect(continueButton).toBeVisible();
+        await expectLocatorStartsWithinWindowViewport(page, continueButton, 8);
+        const box = await continueButton.boundingBox();
+        expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
         await expectNoHorizontalOverflow(page);
     });
 

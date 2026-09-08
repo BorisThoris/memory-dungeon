@@ -6,7 +6,6 @@ import type { BoardState, RunState, Tile } from '../../shared/contracts';
 import { EXIT_PAIR_KEY } from '../../shared/dungeon-rules';
 import { createNewRun, finishMemorizePhase } from '../../shared/game-core';
 import { createBoardTurnResolvedEventFixture } from '../../shared/test/gameplay-event-fixtures';
-import { createDungeonRunMapState, revealDungeonChoices, selectDungeonNode } from '../../shared/run-map';
 import { createDefaultSaveData } from '../../shared/save-data';
 import { GAMBIT_KEYBOARD_HELP_TIP } from '../copy/gameplayHints';
 import { PlatformTiltProvider } from '../platformTilt/PlatformTiltProvider';
@@ -1924,122 +1923,11 @@ describe('GameScreen (OVR-014)', () => {
                 </NotificationHost>
             </PlatformTiltProvider>
         );
-
-        expect(screen.getByTestId('floor-clear-result-stack')).toHaveAttribute('data-route-choice-required', 'false');
         expect(screen.queryByTestId('route-choice-panel')).toBeNull();
         expect(screen.getByRole('button', { name: /^Continue$/i })).toBeTruthy();
     });
 
-    it('shows selected route copy instead of route buttons after a route is locked', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false });
-        const run: RunState = {
-            ...baseRun,
-            status: 'levelComplete',
-            relicOffer: null,
-            pendingRouteCardPlan: {
-                choiceId: '17:1:2:greed',
-                routeType: 'greed',
-                sourceLevel: 1,
-                targetLevel: 2
-            },
-            lastLevelResult: {
-                level: 1,
-                scoreGained: 120,
-                rating: 'S++',
-                livesRemaining: 5,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'perfect',
-                clearLifeGained: 1,
-                routeChoices: [
-                    {
-                        id: '17:1:2:greed',
-                        routeType: 'greed',
-                        label: 'Greedy route',
-                        detail: 'Higher pressure route hook for future shop, elite, or bonus rewards.'
-                    }
-                ]
-            }
-        };
 
-        render(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen achievements={[]} run={run} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-
-        expect(screen.queryByTestId('route-choice-panel')).toBeNull();
-        expect(screen.getByTestId('route-selected-note')).toHaveAttribute('data-route-type', 'greed');
-        expect(screen.getByTestId('route-selected-note')).toHaveTextContent(
-            'Greedy route selected. The next floor adds richer caches and extra reward-risk pressure.'
-        );
-        expect(screen.getByRole('button', { name: /continue to greedy route floor/i })).toBeTruthy();
-    });
-
-    it('does not show stale skipped dungeon node copy for corrupted pending route state', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false });
-        const routeChoices = [
-            {
-                id: '17:1:2:safe',
-                routeType: 'safe' as const,
-                label: 'Safe passage',
-                detail: 'Controlled path.'
-            },
-            {
-                id: '17:1:2:greed',
-                routeType: 'greed' as const,
-                label: 'Greedy route',
-                detail: 'Higher pressure route hook for future shop, elite, or bonus rewards.'
-            }
-        ];
-        const revealedDungeonRun = revealDungeonChoices(baseRun.dungeonRun, 1, routeChoices);
-        const greedNode = revealedDungeonRun.nodes.find((node) => node.choiceId === '17:1:2:greed');
-        const safeNode = revealedDungeonRun.nodes.find((node) => node.choiceId === '17:1:2:safe');
-        expect(greedNode).toBeTruthy();
-        expect(safeNode).toBeTruthy();
-        const selectedDungeonRun = selectDungeonNode(revealedDungeonRun, greedNode!.id);
-        const corruptedDungeonRun = {
-            ...selectedDungeonRun,
-            selectedNodeId: safeNode!.id
-        };
-        const run: RunState = {
-            ...baseRun,
-            status: 'levelComplete',
-            relicOffer: null,
-            dungeonRun: corruptedDungeonRun,
-            pendingRouteCardPlan: {
-                choiceId: '17:1:2:safe',
-                routeType: 'safe',
-                sourceLevel: 1,
-                targetLevel: 2
-            },
-            lastLevelResult: {
-                level: 1,
-                scoreGained: 120,
-                rating: 'S++',
-                livesRemaining: 5,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'perfect',
-                clearLifeGained: 1,
-                routeChoices
-            }
-        };
-
-        render(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen achievements={[]} run={run} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-
-        expect(screen.queryByTestId('route-choice-panel')).toBeNull();
-        expect(screen.getByTestId('route-selected-note')).toHaveTextContent('Safe route selected. The next floor adds defensive ward support.');
-        expect(screen.queryByText(/Dungeon node armed:/i)).toBeNull();
-    });
 
 
     it('shows payoff and cost signals while the Gambit third flip is active', () => {

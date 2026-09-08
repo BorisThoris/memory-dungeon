@@ -5,7 +5,6 @@ import {
     getLongRunFatigueRows,
     getLongRunRelicDecisionRows,
     getLongRunRoutePreviewRows,
-    getLongRunShopStockPools,
     runLongRunSoak
 } from './long-run-depth';
 import { runBalanceSimulation } from './balance-simulation';
@@ -60,20 +59,6 @@ describe('GLD long-run depth contracts', () => {
         expect(rows.find((row) => row.routeType === 'mystery')?.likelyReward).toMatch(/Treasure|Odd|Gold|Balanced|Spend/i);
     });
 
-    it('splits long-run shop stock pools by source and route pressure', () => {
-        const pools = getLongRunShopStockPools();
-
-        expect(pools.map((pool) => pool.source)).toEqual([
-            'floor_clear_shop',
-            'board_shop',
-            'route_shop',
-            'rest_hook',
-            'event_hook',
-            'treasure_hook'
-        ]);
-        expect(pools.find((pool) => pool.source === 'route_shop')?.itemIds).toContain('master_key');
-        expect(new Set(pools.map((pool) => pool.itemIds.join(','))).size).toBeGreaterThan(2);
-    });
 
     it('requires every relic to expose a changed decision and UI surface', () => {
         const rows = getLongRunRelicDecisionRows();
@@ -89,8 +74,7 @@ describe('GLD long-run depth contracts', () => {
 
         expect(rows.map((row) => row.key)).toEqual([
             'breather_spacing',
-            'relic_offer_spacing',
-            'avg_reward_inflation'
+            'relic_offer_spacing'
         ]);
         expect(rows.every((row) => row.status === 'within_range')).toBe(true);
     }, LONG_SIMULATION_TIMEOUT_MS);
@@ -108,8 +92,6 @@ describe('GLD long-run depth contracts', () => {
         expect(report.issues).toEqual([]);
         expect(report.ok).toBe(true);
         expect(report.rows.length).toBeGreaterThanOrEqual(8);
-        expect(report.rows.map((row) => row.key)).toContain('max_profile_worst_seed_unhealed_low_life_share');
-        expect(report.rows.map((row) => row.key)).toContain('max_profile_unhealed_low_life_streak');
-        expect(report.economySummary.totalSources).toBeGreaterThan(0);
+        expect(report.rows.map((row) => row.key)).toContain('max_profile_worst_seed_low_life_share');
     }, LONG_SIMULATION_TIMEOUT_MS);
 });

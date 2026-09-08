@@ -9,7 +9,6 @@ import GameOverScreen from './components/GameOverScreen';
 import InventoryScreen from './components/InventoryScreen';
 import MainMenu from './components/MainMenu';
 import SettingsScreen from './components/SettingsScreen';
-import ShopScreen from './components/ShopScreen';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './components/gameplayVisualConfig';
 import metaScreenStyles from './components/MetaScreen.module.css';
 import StartupIntro from './components/StartupIntro';
@@ -116,7 +115,6 @@ const App = () => {
         hydrated &&
         (view === 'inventory' || view === 'codex') &&
         shellChromeContract.shellChrome === 'gameplay_modal';
-    const inGameShopOverlay = hydrated && view === 'shop' && shellChromeContract.shellChrome === 'gameplay_modal';
     const visualView = shellChromeContract.visualView;
     const suppressGameplayStatusOverlays = shellChromeContract.shellChrome === 'gameplay_modal';
     const showDevBlueprintExplorer = import.meta.env.DEV && window.location.pathname === '/__blueprint';
@@ -218,7 +216,6 @@ const App = () => {
                     run: fixture.run,
                     saveData: fixture.saveData,
                     settings: fixture.saveData.settings,
-                    shopReturnMode: fixture.shopReturnMode ?? null,
                     boardPinMode: false,
                     destroyPairArmed: false,
                     peekModeArmed: false,
@@ -234,22 +231,6 @@ const App = () => {
             delete w.__memoryDungeonE2e;
         };
     }, []);
-
-    /** DS-010: `ShopScreen` returns null for invalid run state; snap view back so gameplay/floor summary stays coherent. */
-    useEffect(() => {
-        if (!hydrated || view !== 'shop') {
-            return;
-        }
-        const { closeShopToFloorSummary, run: shopRun, shopReturnMode } = useAppStore.getState();
-        if (
-            !shopRun ||
-            (shopRun.status !== 'levelComplete' && shopReturnMode !== 'floor') ||
-            shopRun.relicOffer ||
-            shopRun.shopOffers.length === 0
-        ) {
-            closeShopToFloorSummary();
-        }
-    }, [hydrated, view]);
 
     /*
      * OVR-008 / HUD-013 — z-index ladder (single reference; low → high where applicable):
@@ -395,8 +376,6 @@ const App = () => {
                                 </div>
                             </div>
                         ) : null}
-
-                        {inGameShopOverlay ? <ShopScreen /> : null}
 
                         {hydrated && view === 'gameOver' && run?.lastRunSummary && <GameOverScreen run={run} />}
                     </>

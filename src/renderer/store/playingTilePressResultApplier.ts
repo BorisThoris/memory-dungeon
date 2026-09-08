@@ -43,18 +43,7 @@ export const applyPlayingTilePressSurfaceResult = (
         return;
     }
 
-    const patch =
-        result.patch.view === 'shop' && result.patch.run
-            ? {
-                  ...result.patch,
-                  run: deps.freezeRunSnapshotForPlayingMetaOverlay(result.patch.run)
-              }
-            : result.patch;
-
-    if (patch.view === 'shop') {
-        deps.clearAllTimers();
-    }
-    deps.setState(patch);
+    deps.setState(result.patch);
 
     if (result.resolveDelayMs !== null) {
         deps.scheduleResolveTimer(result.resolveDelayMs);

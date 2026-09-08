@@ -159,13 +159,6 @@ async function captureProgressionStates(page: Page, viewportId: string): Promise
     await expect(floorCleared).toBeVisible({ timeout: 20_000 });
     await capture(page, viewportId, '09-floor-cleared');
 
-    const shopButton = floorCleared.getByRole('button', { name: /visit shop/i });
-    if (await shopButton.isVisible().catch(() => false)) {
-        await shopButton.click();
-        await expect(page.getByTestId('shop-screen')).toBeVisible({ timeout: 20_000 });
-        await capture(page, viewportId, '10-shop');
-    }
-
     const continueButton = page.getByRole('button', { name: /^continue/i }).first();
     if (await continueButton.isVisible().catch(() => false)) {
         await continueButton.click();
@@ -285,7 +278,7 @@ for (const viewport of VIEWPORTS) {
             await captureOverlayStates(page, viewport.id);
         });
 
-        test('captures floor clear, shop, and achievement toast', async ({ page }) => {
+        test('captures floor clear and achievement toast', async ({ page }) => {
             test.setTimeout(180_000);
             await captureProgressionStates(page, viewport.id);
         });

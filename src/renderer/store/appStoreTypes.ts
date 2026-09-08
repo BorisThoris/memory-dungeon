@@ -50,7 +50,6 @@ export interface AppState {
     tileSwapArmed: boolean;
     tileSwapFirstTileId: string | null;
     dungeonExitPromptOpen: boolean;
-    shopReturnMode: 'floor' | 'summary' | null;
     /** Transient floating +score near matched tiles (Gameplay column). */
     matchScorePop: MatchScorePop | null;
     dismissMatchScorePop: () => void;
@@ -83,9 +82,6 @@ export interface AppState {
     openCodexFromMenu: () => void;
     openInventoryFromPlaying: () => void;
     openCodexFromPlaying: () => void;
-    openShopFromLevelComplete: () => void;
-    closeShopToFloorSummary: () => void;
-    continueFromShop: () => void;
     closeSubscreen: () => void;
     openSettings: (returnView?: SubscreenReturnView) => void;
     closeSettings: () => void;
@@ -98,8 +94,6 @@ export interface AppState {
      * dock is the only way back to it.
      */
     openDungeonExitPrompt: () => void;
-    /** Re-opens the floor vendor, which pops off the board the same way the exit does. */
-    openDungeonShopFromFloor: () => void;
     closeDungeonExitPrompt: () => void;
     activateDungeonExitFromPrompt: (spend?: DungeonExitActivationSpend) => void;
     togglePeekMode: () => void;
@@ -119,10 +113,7 @@ export interface AppState {
     pause: () => void;
     resume: () => void;
     acceptEndlessRiskWager: () => void;
-    purchaseShopOffer: (offerId: string) => void;
-    rerollShopOffers: () => void;
     continueToNextLevel: () => void;
-    chooseRouteAndContinue: (choiceId: string) => void;
     restartRun: () => void;
     endRun: () => void;
     triggerDebugReveal: () => void;

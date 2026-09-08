@@ -8,7 +8,6 @@ type NavigationSurface =
     | 'collection'
     | 'profile'
     | 'inventory'
-    | 'shop'
     | 'codex'
     | 'settings'
     | 'playing'
@@ -60,7 +59,7 @@ type RequestedSettingsReturnView = SubscreenReturnView | 'settings';
 
 const MENU_RETURN_VIEWS = new Set<ViewState>(['modeSelect', 'collection', 'profile', 'inventory', 'codex', 'settings']);
 const IN_RUN_META_VIEWS = new Set<ViewState>(['inventory', 'codex', 'settings']);
-const IN_RUN_OVERLAY_VIEWS = new Set<ViewState>(['inventory', 'codex', 'settings', 'shop']);
+const IN_RUN_OVERLAY_VIEWS = new Set<ViewState>(['inventory', 'codex', 'settings']);
 
 export const NAVIGATION_ROUTE_CONTRACTS: ReadonlyArray<NavigationRouteContract> = [
     { action: 'open', from: 'menu', to: 'modeSelect', presentation: 'page', preservesRun: false, timerPolicy: 'none' },
@@ -142,22 +141,6 @@ export const NAVIGATION_ROUTE_CONTRACTS: ReadonlyArray<NavigationRouteContract> 
         presentation: 'in-run-overlay',
         preservesRun: true,
         timerPolicy: 'resume-on-close'
-    },
-    {
-        action: 'open',
-        from: 'playing',
-        to: 'shop',
-        presentation: 'in-run-overlay',
-        preservesRun: true,
-        timerPolicy: 'no-resume'
-    },
-    {
-        action: 'back',
-        from: 'shop',
-        to: 'playing',
-        presentation: 'in-run-overlay',
-        preservesRun: true,
-        timerPolicy: 'no-resume'
     },
     {
         action: 'pause-toggle',
@@ -279,9 +262,6 @@ export const getNavigationShellChromeContract = ({
     if ((view === 'inventory' || view === 'codex') && subscreenReturnView === 'playing') {
         return { visualView: runPresent ? 'playing' : 'menu', shellChrome: runPresent ? 'gameplay_modal' : 'menu_hub', boardMounted: runPresent, fallbackView: 'menu', reason: 'In-run meta overlays keep gameplay mounted.' };
     }
-    if (view === 'shop') {
-        return { visualView: runPresent ? 'playing' : 'menu', shellChrome: runPresent ? 'gameplay_modal' : 'menu_hub', boardMounted: runPresent, fallbackView: 'menu', reason: 'In-run interlude destination over gameplay.' };
-    }
     return { visualView: view, shellChrome: view === 'menu' ? 'menu_hub' : 'meta_page', boardMounted: false, fallbackView: 'menu', reason: 'Full-page menu/meta destination.' };
 };
 
@@ -295,8 +275,6 @@ export type StoreNavigationAction =
     | 'openInventoryFromMenu'
     | 'openInventoryFromPlaying'
     | 'openModeSelect'
-    | 'openShopFromLevelComplete'
-    | 'closeShopToFloorSummary'
     | 'openSettings';
 
 export type StoreNavigationTransition =
@@ -342,12 +320,6 @@ export const resolveNavigationTransition = (
             return state.run && state.view === 'playing'
                 ? { kind: 'setView', view: 'codex', subscreenReturnView: 'playing', freezeRun: true }
                 : { kind: 'setView', view: state.view };
-        case 'openShopFromLevelComplete':
-            return state.run && state.view === 'playing'
-                ? { kind: 'setView', view: 'shop' }
-                : { kind: 'setView', view: state.view };
-        case 'closeShopToFloorSummary':
-            return state.run ? { kind: 'setView', view: 'playing' } : { kind: 'setView', view: 'menu' };
         case 'closeSubscreen': {
             const target = resolveSubscreenCloseTarget({
                 currentView: state.view,

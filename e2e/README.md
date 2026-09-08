@@ -18,14 +18,14 @@ Use the named package scripts from the repo root so local and CI runs share the 
 
 - `yarn test:e2e:playable-path:audit` runs the fast playable-path navigation audit. Use it for quick local checks and light PR coverage when a change could affect menu, mode shell, in-run pause/settings, floor-clear navigation, or compact classic-start flow.
 - `yarn test:e2e:playable-path:readability` runs the focused gameplay HUD/board/action-dock bounds suite across phone, short landscape, tablet, and desktop viewports.
-- `yarn test:e2e:playable-path:full` runs the full playable-path sweep: navigation, mode matrix, interlude/post-run coverage, and gameplay readability. Use it before merging changes that affect mode starts, floor-clear decisions, shop/route/side-room interludes, game-over actions, first-run onboarding, or active gameplay layout.
+- `yarn test:e2e:playable-path:full` runs the full playable-path sweep: navigation, mode matrix, interlude/post-run coverage, and gameplay readability. Use it before merging changes that affect mode starts, floor-clear decisions, relic interludes, game-over actions, first-run onboarding, or active gameplay layout.
 - `yarn test:e2e:browser-smoke` runs the fast release-smoke browser path: clean demo startup on desktop/mobile, core playable-path navigation, and 3D board nonblank/bounds smoke. Use it when a change needs live renderer proof without the full renderer QA surface.
 - `yarn test:e2e:browser-smoke:full` adds the slower route/interlude/readability/HUD shard on top of the fast smoke. Use the shard scripts (`test:e2e:browser-smoke:core` and `test:e2e:browser-smoke:routes`) when local command timeouts are tight.
 - `yarn test:e2e:blueprint` runs the dev-only system diagram explorer smoke at `/__blueprint`.
 - `yarn test:e2e:renderer-qa` remains the curated full renderer QA entry point for CI and release-candidate checks. It aliases `yarn test:e2e:renderer-qa:full`, which sequences the shard scripts below so long local runs can be resumed from the failed shard instead of restarting the whole renderer surface.
 - `yarn test:e2e:renderer-qa:layout` covers mobile layout, gameplay readability, and long-run HUD bounds.
 - `yarn test:e2e:renderer-qa:navigation` covers shell navigation, playable-path navigation, and mode starts.
-- `yarn test:e2e:renderer-qa:interludes` covers route/shop/side-room/relic interludes plus Scholar and Wild starts.
+- `yarn test:e2e:renderer-qa:interludes` covers the floor-clear and relic interludes plus Scholar and Wild starts.
 - `yarn test:e2e:renderer-qa:3d` covers the 3D board value, WebGL fallback/recovery, tile face, and raycast contracts.
 - Keep renderer QA shards sequential on the shared strict Vite port. Running multiple Playwright shards at once can overload the dev server and produce misleading navigation timeouts.
 - Renderer layout coverage includes the 844x390 short-height settings page and run-settings modal path; keep that viewport in `e2e/mobile-layout.spec.ts` when changing settings chrome.
@@ -37,15 +37,11 @@ CI guidance:
 - For renderer-gated PRs and pre-release verification, run `yarn test:e2e:browser-smoke` for fast live gameplay smoke, `yarn test:e2e:browser-smoke:full` when time allows, and `yarn test:e2e:renderer-qa` for the complete renderer contract surface; existing jobs using `renderer-qa` do not need to change.
 - Keep visual captures on their dedicated visual scripts instead of folding them into renderer QA.
 
-Known PPI-010 note: playable-path specs carry one retry at the describe level to absorb current animation/first-floor timing variance; treat repeated retry passes as a signal to inspect the attached trace/video. Route, shop, side-room, relic draft, game over, fresh-profile, and active-run readability paths now use deterministic dev fixtures where appropriate.
+Known PPI-010 note: playable-path specs carry one retry at the describe level to absorb current animation/first-floor timing variance; treat repeated retry passes as a signal to inspect the attached trace/video. Floor clear, relic draft, game over, fresh-profile, and active-run readability paths now use deterministic dev fixtures where appropriate.
 
 ## `visual-screens.standard.spec.ts` - game over (`08-game-over`)
 
 The visual baseline opens the deterministic `gameOver` playable-path fixture. Keep live mismatch-burning coverage in gameplay-oriented specs so visual smoke stays focused on rendering and layout capture.
-
-## `visual-screens.*.spec.ts` - shop (`07a-shop-screen`)
-
-The shop capture opens the deterministic `floorClearWithShop` fixture, then uses the floor summary's Visit shop action. Do not depend on a fresh level-1 clear naturally offering a shop; current route-choice floors can present Safe, Greed, or Mystery choices instead.
 
 ## `ui-screenshots.spec.ts`
 

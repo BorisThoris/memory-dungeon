@@ -66,9 +66,6 @@ export const RUN_TOOL_REASONS = {
     exit: {
         available: 'Open the exit you found on this floor',
         locked: 'The exit is found, but not open yet'
-    },
-    store: {
-        available: 'Go back to the vendor you found on this floor'
     }
 } as const;
 

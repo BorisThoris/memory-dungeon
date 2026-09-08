@@ -1,37 +1,16 @@
 import { memo } from 'react';
-import type { LevelResult, RouteNodeType } from '../../shared/contracts';
+import type { LevelResult } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import OverlayModal, { type ModalAction } from './OverlayModal';
 import styles from './FloorClearDialog.module.css';
 import { FLOOR_CLEAR_CHAIN_COPY } from '../copy/floorClearChain';
 
 /**
- * Floor cleared. One dialog that says four things: what the floor paid, how it went, which
- * door comes next, and (on endless floors) whether the player wants to stake the objective
- * streak. Nothing else lives here; coaching, causality and momentum strips were deleted.
+ * Floor cleared. One dialog that says three things: what the floor paid, how it went, and (on
+ * endless floors) whether the player wants to stake the objective streak. Nothing else lives
+ * here; coaching, causality and momentum strips were deleted, and the three doors went with the
+ * route offer (Gen 173; the wiring in Gen 174).
  */
-
-export interface FloorClearRouteOption {
-    id: string;
-    routeType: RouteNodeType;
-    /** Door title: "Safe passage", "Greedy route", "Mystery route". */
-    label: string;
-    /** Room the door leads to: "Rest", "Treasure", "Keeper Chamber via Safe passage". */
-    room: string;
-    /** Kept in the accessible name when the room converged on a boss gate. */
-    approachLabel?: string;
-    glyph: string;
-    reward: string;
-    risk: string;
-    available: boolean;
-    unavailableLabel?: string;
-}
-
-export interface FloorClearSelectedRoute {
-    routeType: RouteNodeType;
-    label: string;
-    line: string;
-}
 
 export interface FloorClearWager {
     armed: boolean;
@@ -53,19 +32,12 @@ export interface FloorClearDialogProps {
      * run's own seed, so this is a promise the floor advance keeps rather than flavour text.
      */
     residentLine: string | null;
-    routeRequired: boolean;
-    routeIntro: string;
-    routeOptions: readonly FloorClearRouteOption[];
-    selectedRoute: FloorClearSelectedRoute | null;
     wager: FloorClearWager | null;
-    onChooseRoute: (id: string) => void;
     onArmWager: () => void;
     actions: ModalAction[];
 }
 
 const ratingLabel = (rating: LevelResult['rating']): string => String(rating ?? '-');
-
-const sentence = (value: string): string => value.trim().replace(/[.!]+$/u, '');
 
 const FloorClearDialog = ({
     actions,
@@ -73,13 +45,8 @@ const FloorClearDialog = ({
     lifeBonusLine,
     objectiveLine,
     onArmWager,
-    onChooseRoute,
     residentLine,
     result,
-    routeIntro,
-    routeOptions,
-    routeRequired,
-    selectedRoute,
     totalScore,
     wager
 }: FloorClearDialogProps) => {
@@ -107,7 +74,6 @@ const FloorClearDialog = ({
         >
             <div
                 className={styles.body}
-                data-route-choice-required={routeRequired ? 'true' : 'false'}
                 data-testid="floor-clear-result-stack"
             >
                 <div className={styles.score}>
@@ -154,73 +120,6 @@ const FloorClearDialog = ({
                     </ul>
                 ) : null}
 
-                {routeRequired ? (
-                    <section
-                        aria-labelledby="floor-clear-route-title"
-                        className={styles.routes}
-                        data-decision-state="required"
-                        data-testid="route-choice-panel"
-                    >
-                        <h3 className={styles.routesTitle} id="floor-clear-route-title">
-                            Choose the next door
-                        </h3>
-                        <p className={styles.routesIntro} data-testid="route-choice-required-copy">
-                            {routeIntro}
-                        </p>
-                        <div className={styles.doors}>
-                            {routeOptions.map((option) => {
-                                const consequence = option.available ? option.risk : option.unavailableLabel ?? option.risk;
-                                const name = `${[
-                                    option.label,
-                                    option.approachLabel ? `Approach: ${option.approachLabel}` : null,
-                                    option.room,
-                                    `Reward: ${option.reward}`,
-                                    option.available ? `Risk: ${option.risk}` : option.unavailableLabel ?? 'Unavailable'
-                                ]
-                                    .filter((part): part is string => Boolean(part))
-                                    .map(sentence)
-                                    .join('. ')}.`;
-                                return (
-                                    <button
-                                        aria-label={name}
-                                        className={styles.door}
-                                        data-route-type={option.routeType}
-                                        data-testid={`route-choice-${option.routeType}`}
-                                        disabled={!option.available}
-                                        key={option.id}
-                                        onClick={() => {
-                                            if (!option.available) {
-                                                return;
-                                            }
-                                            onChooseRoute(option.id);
-                                        }}
-                                        type="button"
-                                    >
-                                        <span aria-hidden="true" className={styles.doorGlyph}>
-                                            {option.glyph}
-                                        </span>
-                                        <strong className={styles.doorTitle}>{option.label}</strong>
-                                        <span className={styles.doorRoom}>
-                                            {option.approachLabel ? `Approach: ${option.approachLabel}. ` : ''}
-                                            {option.room}
-                                        </span>
-                                        <span className={styles.doorReward}>{option.reward}</span>
-                                        <span
-                                            className={styles.doorRisk}
-                                            data-tone={option.available ? 'risk' : 'locked'}
-                                        >
-                                            {consequence}
-                                        </span>
-                                    </button>
-                                );
-                            })}
-                        </div>
-                    </section>
-                ) : selectedRoute ? (
-                    <p className={styles.selected} data-route-type={selectedRoute.routeType} data-testid="route-selected-note">
-                        <strong>{selectedRoute.label} selected.</strong> {selectedRoute.line}
-                    </p>
-                ) : null}
 
                 {wager && streakLine ? (
                     <div className={styles.wager} data-armed={wager.armed ? 'true' : 'false'} data-testid="endless-risk-wager-panel">

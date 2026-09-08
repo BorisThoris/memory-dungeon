@@ -257,10 +257,7 @@ export const createResolveBoardTurnTransition = ({
             const spunG = rotateAnchorSealPressure(run, board);
             const followup = resolveTurnMatchFollowup({
                 run,
-                matchedPairKey,
-                encoreKey: scoring.encoreKey,
-                loadedGatewayClaimed,
-                dungeonGatewayRouteType: dungeonReward.gatewayRouteType
+                encoreKey: scoring.encoreKey
             });
             const boardCleanup = resolveTurnMatchBoardCleanup({
                 run,
@@ -271,13 +268,8 @@ export const createResolveBoardTurnTransition = ({
             });
             const economy = resolveTurnMatchEconomy({
                 run,
-                routeCardShopGold: routeCardReward.shopGold,
-                dungeonShopGold: dungeonReward.shopGold + chunkBreak.treasureGold,
                 dungeonKeysDelta: dungeonReward.keysHeldDelta,
                 dungeonMasterKeysDelta: dungeonReward.masterKeysHeldDelta,
-                tollCacheClaimed,
-                fuseCacheClaimed,
-                fuseCacheFresh,
                 matchedDungeonKind,
                 matchedDungeonKeyKind
             });
@@ -348,7 +340,7 @@ export const createResolveBoardTurnTransition = ({
                 regionShuffleCharges:
                     runNonNegativeInteger(run.regionShuffleCharges) + runNonNegativeInteger(traitReward.regionShuffleChargeGain),
                 flashPairCharges: runNonNegativeInteger(run.flashPairCharges) + runNonNegativeInteger(traitReward.flashPairChargeGain),
-                shopGold: runNonNegativeInteger(economy.shopGold) + runNonNegativeInteger(traitReward.shopGoldGain),
+                shopGold: economy.shopGold,
                 dungeonKeys: economy.dungeonKeys,
                 dungeonMasterKeys: economy.dungeonMasterKeys,
                 bonusRelicPicksNextOffer: routeFavor.bonusRelicPicksNextOffer,
@@ -578,10 +570,7 @@ export const createResolveBoardTurnTransition = ({
             const spun = rotateAnchorSealPressure(run, board);
             const followup = resolveTurnMatchFollowup({
                 run,
-                matchedPairKey,
-                encoreKey: scoring.encoreKey,
-                loadedGatewayClaimed,
-                dungeonGatewayRouteType: dungeonReward.gatewayRouteType
+                encoreKey: scoring.encoreKey
             });
             const boardCleanup = resolveTurnMatchBoardCleanup({
                 run,
@@ -592,13 +581,8 @@ export const createResolveBoardTurnTransition = ({
             });
             const economy = resolveTurnMatchEconomy({
                 run,
-                routeCardShopGold: routeCardReward.shopGold,
-                dungeonShopGold: dungeonReward.shopGold + chunkBreak.treasureGold,
                 dungeonKeysDelta: dungeonReward.keysHeldDelta,
                 dungeonMasterKeysDelta: dungeonReward.masterKeysHeldDelta,
-                tollCacheClaimed,
-                fuseCacheClaimed,
-                fuseCacheFresh,
                 matchedDungeonKind,
                 matchedDungeonKeyKind
             });
@@ -667,7 +651,7 @@ export const createResolveBoardTurnTransition = ({
                 regionShuffleCharges:
                     runNonNegativeInteger(run.regionShuffleCharges) + runNonNegativeInteger(traitReward.regionShuffleChargeGain),
                 flashPairCharges: runNonNegativeInteger(run.flashPairCharges) + runNonNegativeInteger(traitReward.flashPairChargeGain),
-                shopGold: runNonNegativeInteger(economy.shopGold) + runNonNegativeInteger(traitReward.shopGoldGain),
+                shopGold: economy.shopGold,
                 dungeonKeys: economy.dungeonKeys,
                 dungeonMasterKeys: economy.dungeonMasterKeys,
                 bonusRelicPicksNextOffer: routeFavor.bonusRelicPicksNextOffer,

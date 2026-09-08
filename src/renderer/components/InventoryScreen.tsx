@@ -91,8 +91,7 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
         `Floor ${floor}`,
         modeTitle(run.gameMode ?? 'classic'),
         `Score ${run.stats.totalScore.toLocaleString()}`,
-        `Lives ${run.lives}`,
-        `Shop gold ${run.shopGold}`
+        `Lives ${run.lives}`
     ].join(' · ');
 
     return (

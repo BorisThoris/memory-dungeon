@@ -29,8 +29,6 @@ import {
 import { createNewRun } from './run-creation-rules';
 import { createDungeonRunMapState, inspectDungeonRunMapProgression } from './run-map';
 import { runNonNegativeInteger } from './run-number-guards';
-import { getRunShopStockPlan, SHOP_KEY_ITEM_BY_KIND } from './shop-rules';
-import { normalizeSessionStats } from './session-stats-rules';
 import { activeEnemyHazardsForBoard, defeatEnemyHazardsOnClearedTiles, enemyHazardsForBoard } from './enemy-hazard-board-rules';
 import {
     formatDungeonBoardTopologyIssue,
@@ -67,7 +65,7 @@ export interface SoftlockGeneratorFailure {
     scenarioLabel: string;
     seed: number;
     floor: number;
-    projection: 'generated' | 'final_pair' | 'cleared_board' | 'playable_clear' | 'next_floor' | 'shop_stock';
+    projection: 'generated' | 'final_pair' | 'cleared_board' | 'playable_clear' | 'next_floor';
     issueCodes: string[];
     issueDetails: string[];
     issues: BoardFairnessIssue[];
@@ -78,7 +76,6 @@ export interface SoftlockGeneratorContractResult {
     checkedBoards: number;
     checkedPlayableBoards: number;
     checkedNextFloorTransitions: number;
-    checkedShopPlans: number;
     failures: SoftlockGeneratorFailure[];
     coverage: Record<SoftlockContractCoverageKey, number>;
 }
@@ -159,16 +156,6 @@ export const solveGeneratedBoardByExhaustingPairs = (board: BoardState, seed: nu
     const run = createGeneratedBoardSolverRun(board, seed);
     return solveRunThroughGameplayCoreWithTrace(run).run;
 };
-
-export const createShopStockInspectionRun = (run: RunState, board: BoardState): RunState => ({
-    ...run,
-    status: 'playing',
-    shopRerolls: 0,
-    stats: {
-        ...normalizeSessionStats(run.stats),
-        highestLevel: Math.max(1, board.level)
-    }
-});
 
 const solveGeneratedBoardByExhaustingPairsWithTrace = (board: BoardState, seed: number): GameplayCorePlaythroughSolverTrace => {
     return solveRunThroughGameplayCoreWithTrace(createGeneratedBoardSolverRun(board, seed));
@@ -264,21 +251,6 @@ const addCoverage = (
     if (projection === 'final_pair' || projection === 'cleared_board') coverage.finalPairStates += 1;
 };
 
-const boardNeedsKeyInsurance = (board: BoardState): boolean =>
-    (() => {
-        const lock = getEffectivePrimaryExitLock({ board });
-        return (
-            lock.lockKind !== 'none' &&
-            lock.lockKind !== 'lever' &&
-            countReachableExitKeySources(board, lock.lockKind) < 1
-        );
-    })();
-
-const requiredShopInsuranceItemForBoard = (board: BoardState) => {
-    const lock = getEffectivePrimaryExitLock({ board });
-    return lock.lockKind !== 'none' && lock.lockKind !== 'lever' ? SHOP_KEY_ITEM_BY_KIND[lock.lockKind] : null;
-};
-
 const recordInspection = (
     result: SoftlockGeneratorContractResult,
     scenario: SoftlockGeneratorScenario,
@@ -364,44 +336,6 @@ const recordInspection = (
             boardSummary: boardSummary(board)
         });
     }
-};
-
-const recordShopStockInspection = (
-    result: SoftlockGeneratorContractResult,
-    scenario: SoftlockGeneratorScenario,
-    seed: number,
-    floor: number,
-    board: BoardState
-): void => {
-    if (!boardNeedsKeyInsurance(board)) {
-        return;
-    }
-    result.checkedShopPlans += 1;
-    const run = createGeneratedBoardSolverRun(board, seed);
-    const plan = getRunShopStockPlan(createShopStockInspectionRun(run, board));
-    const requiredKeyItem = requiredShopInsuranceItemForBoard(board);
-    if ((requiredKeyItem && plan.itemIds.includes(requiredKeyItem)) || plan.itemIds.includes('master_key')) {
-        return;
-    }
-
-    const issue: BoardFairnessIssue = {
-        code: 'exit_lock_unreachable',
-        message: `Locked exit shop stock lacks ${requiredKeyItem ?? 'matching_key'} or master key insurance; stock=${
-            plan.itemIds.join(',') || 'empty'
-        }.`,
-        tileIds: board.dungeonExitTileId ? [board.dungeonExitTileId] : undefined
-    };
-    result.failures.push({
-        scenarioId: scenario.id,
-        scenarioLabel: scenario.label,
-        seed,
-        floor,
-        projection: 'shop_stock',
-        issueCodes: [issue.code],
-        issueDetails: [formatIssueDetail(issue)],
-        issues: [issue],
-        boardSummary: boardSummary(board)
-    });
 };
 
 const recordPlayableClearInspection = (
@@ -661,7 +595,6 @@ export const runSoftlockGeneratorContract = (
         checkedBoards: 0,
         checkedPlayableBoards: 0,
         checkedNextFloorTransitions: 0,
-        checkedShopPlans: 0,
         failures: [],
         coverage: coverageTemplate()
     };
@@ -672,7 +605,6 @@ export const runSoftlockGeneratorContract = (
                 const board = buildBoard(floor, scenario.optionsForFloor({ seed, floor }));
                 recordInspection(result, scenario, seed, floor, 'generated', board);
                 recordPlayableClearInspection(result, scenario, seed, floor, board);
-                recordShopStockInspection(result, scenario, seed, floor, board);
                 const finalPair = createFinalPairFairnessProjection(board);
                 if (finalPair) {
                     recordInspection(result, scenario, seed, floor, 'final_pair', finalPair);

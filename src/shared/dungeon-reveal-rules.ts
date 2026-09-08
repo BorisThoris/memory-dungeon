@@ -1,6 +1,5 @@
 import { type BoardState, type RunState, type Tile } from './contracts';
 import { advanceEnemyHazardsOnBoard } from './dungeon-enemy-hazard-rules';
-import { createRunShopOffers, runShopOffers } from './shop-rules';
 import { EXIT_PAIR_KEY, SHOP_PAIR_KEY } from './tile-identity';
 
 export const revealDungeonExit = (run: RunState, tileId: string): RunState => {
@@ -56,13 +55,9 @@ export const revealDungeonShop = (run: RunState, tileId: string): RunState => {
                 : candidate
         )
     });
-    const nextRun: RunState = {
+    // Revealing the shop card used to stock the vendor here. There is no vendor (Gen 174).
+    return {
         ...run,
         board: nextBoard
-    };
-    const existingShopOffers = runShopOffers(run.shopOffers);
-    return {
-        ...nextRun,
-        shopOffers: existingShopOffers.length > 0 ? existingShopOffers : createRunShopOffers(nextRun)
     };
 };

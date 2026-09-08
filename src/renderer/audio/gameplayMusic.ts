@@ -105,7 +105,6 @@ export const resolveAdaptiveMusicState = ({ hidden = false, run, view }: Adaptiv
 
     if (
         lifecycleState === 'levelComplete' ||
-        lifecycleState === 'shop' ||
         lifecycleState === 'relicOffer'
     ) {
         return { active: true, layer: 'run_release', suppressed: false, track: 'run', volumeMultiplier: 0.56 };

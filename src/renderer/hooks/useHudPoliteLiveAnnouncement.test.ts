@@ -545,8 +545,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
                     boardLevel: 2,
                     boardTurnEvent: p.turnEvent,
                     comboShards: p.shards,
-                    guardTokens: p.guards,
-                    shopGold: p.gold
+                    guardTokens: p.guards
                 }),
             {
                 initialProps: {
@@ -573,7 +572,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
         await flushRaf();
 
         expect(result.current.message).toBe(
-            '1 guard token gained. 1 available. Match resolved. 1/4 pairs cleared. Trait combo surge: Echo and Stasis resolved. Combo shard gained. 1 available. 2 shop gold gained. 2 available. Payoff stack: 4 payoffs cashed. Cash stack now.'
+            '1 guard token gained. 1 available. Match resolved. 1/4 pairs cleared. Trait combo surge: Echo and Stasis resolved. Combo shard gained. 1 available. Cashout hit: 3 payoffs paid together. Keep the chain live.'
         );
     });
 
@@ -978,8 +977,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
                     boardLevel: 2,
                     lives: p.lives,
                     guardTokens: p.guards,
-                    comboShards: p.shards,
-                    shopGold: p.gold
+                    comboShards: p.shards
                 }),
             { initialProps: { lives: 2, guards: 0, shards: 3, gold: 8 } }
         );
@@ -990,7 +988,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
         await flushRaf();
 
         expect(result.current.message).toBe(
-            'Life restored. 3 lives available. 2 combo shards spent. 1 available. 3 shop gold spent. 5 available.'
+            'Life restored. 3 lives available. 2 combo shards spent. 1 available.'
         );
     });
 

@@ -25,11 +25,8 @@ export const FLOOR_CLEAR_CHAIN_COPY = {
         if (fever > 0) parts.push(`Fever ×${fever}`);
         const tier = result.momentumBonusTier ?? 'none';
         const shards = runNonNegativeInteger(result.momentumBonusShards);
-        const gold = runNonNegativeInteger(result.momentumBonusGold);
-        if (tier !== 'none' && (shards > 0 || gold > 0)) {
-            const paid = [shards > 0 ? `+${shards} ${shards === 1 ? 'shard' : 'shards'}` : null, gold > 0 ? `+${gold} gold` : null]
-                .filter(Boolean)
-                .join(', ');
+        if (tier !== 'none' && shards > 0) {
+            const paid = `+${shards} ${shards === 1 ? 'shard' : 'shards'}`;
             parts.push(`${TIER_WORD[tier]} at momentum ${runNonNegativeInteger(result.chainMomentumAtClear)}: ${paid}`);
         }
         return parts.length === 0 ? null : `${parts.join(' · ')}.`;

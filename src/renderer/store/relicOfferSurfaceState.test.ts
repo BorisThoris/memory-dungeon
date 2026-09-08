@@ -315,7 +315,7 @@ describe('relicOfferSurfaceState', () => {
         if (result.kind !== 'applied') {
             return;
         }
-        expect(result.patch.run.shopGold).toBe(3);
+        expect(result.patch.run.shopGold).toBe(0);
         expect(result.patch.run.relicOffer?.serviceUses?.reroll_offer).toBe(1);
         expect(result.patch.run.gameplayCommandJournal).toEqual([
             expect.objectContaining({ type: 'relic.offer_service_use', serviceId: 'reroll_offer' })

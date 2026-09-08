@@ -24,7 +24,6 @@ import {
     EXIT_PAIR_KEY,
     revealDungeonExit
 } from './dungeon-rules';
-import { createRunShopOffers } from './shop-rules';
 
 export type PlayablePathFixtureId =
     | 'freshProfile'
@@ -33,9 +32,6 @@ export type PlayablePathFixtureId =
     | 'activeRunWithTraitRouteSetup'
     | 'activeRunWithTrapCard'
     | 'floorClearWithRouteChoices'
-    | 'floorClearWithShop'
-    | 'floorClearWithShopLowGold'
-    | 'inFloorShop'
     | 'relicDraft'
     | 'gameOver'
     | 'cascadeClump';
@@ -45,7 +41,6 @@ export interface PlayablePathFixtureState {
     view: ViewState;
     run: RunState | null;
     saveData: SaveData;
-    shopReturnMode?: 'floor' | 'summary' | null;
 }
 
 export interface PlayablePathFixtureOptions {
@@ -62,9 +57,6 @@ export const PLAYABLE_PATH_FIXTURE_IDS: readonly PlayablePathFixtureId[] = [
     'activeRunWithTraitRouteSetup',
     'activeRunWithTrapCard',
     'floorClearWithRouteChoices',
-    'floorClearWithShop',
-    'floorClearWithShopLowGold',
-    'inFloorShop',
     'relicDraft',
     'gameOver',
     'cascadeClump'
@@ -78,7 +70,7 @@ export const createPlayablePathFixture = (
 
     switch (id) {
         case 'freshProfile':
-            return { id, view: 'menu', run: null, saveData: createDefaultSaveData(), shopReturnMode: null };
+            return { id, view: 'menu', run: null, saveData: createDefaultSaveData() };
         case 'activeRunWithHazards':
             return {
                 id,
@@ -94,38 +86,24 @@ export const createPlayablePathFixture = (
                     findablesClaimedThisFloor: 1,
                     hazardTileTriggersThisFloor: 1,
                     safeHazardWardsUsedThisFloor: 1,
-                    safeHazardWardChargesThisFloor: 1,
-                    shopGold: 2
+                    safeHazardWardChargesThisFloor: 1
                 },
-                saveData,
-                shopReturnMode: null
+                saveData
             };
         case 'activeRunWithPickupCashout':
-            return { id, view: 'playing', run: activeRunWithPickupCashout(), saveData, shopReturnMode: null };
+            return { id, view: 'playing', run: activeRunWithPickupCashout(), saveData };
         case 'activeRunWithTraitRouteSetup':
-            return { id, view: 'playing', run: activeRunWithTraitRouteSetup(), saveData, shopReturnMode: null };
+            return { id, view: 'playing', run: activeRunWithTraitRouteSetup(), saveData };
         case 'activeRunWithTrapCard':
-            return { id, view: 'playing', run: activeRunWithTrapCard(), saveData, shopReturnMode: null };
+            return { id, view: 'playing', run: activeRunWithTrapCard(), saveData };
         case 'floorClearWithRouteChoices':
-            return { id, view: 'playing', run: floorClearWithRouteChoices(), saveData, shopReturnMode: null };
-        case 'floorClearWithShop':
-            return { id, view: 'playing', run: floorClearWithShop(20), saveData, shopReturnMode: null };
-        case 'floorClearWithShopLowGold':
-            return { id, view: 'playing', run: floorClearWithShop(0), saveData, shopReturnMode: null };
-        case 'inFloorShop':
-            /*
-             * The vendor as a player meets it mid-floor, by flipping a shop tile — a different
-             * screen from the one the floor-clear shop shows, with its own exit and its own copy.
-             * Nothing reached it, which is how it shipped with two buttons that did the same thing
-             * and a reachability gate that reported green.
-             */
-            return { id, view: 'shop', run: inFloorShopRun(), saveData, shopReturnMode: 'floor' };
+            return { id, view: 'playing', run: floorClearWithRouteChoices(), saveData };
         case 'relicDraft':
-            return { id, view: 'playing', run: relicDraftRun(), saveData, shopReturnMode: null };
+            return { id, view: 'playing', run: relicDraftRun(), saveData };
         case 'gameOver':
-            return { id, view: 'gameOver', run: gameOverRun(), saveData, shopReturnMode: null };
+            return { id, view: 'gameOver', run: gameOverRun(), saveData };
         case 'cascadeClump':
-            return { id, view: 'playing', run: cascadeClumpRun(), saveData, shopReturnMode: null };
+            return { id, view: 'playing', run: cascadeClumpRun(), saveData };
         default:
             return assertNever(id);
     }
@@ -358,26 +336,6 @@ const floorClearWithRouteChoices = (): RunState => ({
     pendingRouteCardPlan: null,
     sideRoom: null
 });
-
-const floorClearWithShop = (shopGold: number): RunState => {
-    const cleared = floorClearWithRouteChoices();
-    const stockedRun = {
-        ...cleared,
-        shopGold,
-        lives: cleared.lives,
-        lastLevelResult: cleared.lastLevelResult
-            ? { ...cleared.lastLevelResult, routeChoices: undefined }
-            : cleared.lastLevelResult
-    };
-    return { ...stockedRun, shopOffers: createRunShopOffers(stockedRun) };
-};
-
-/** A run still on its floor, standing at a vendor it opened from the board. */
-const inFloorShopRun = (): RunState => {
-    const base = activeRunWithTrapCard();
-    const stocked = { ...base, shopGold: 12 };
-    return { ...stocked, shopOffers: createRunShopOffers(stocked) };
-};
 
 const relicDraftRun = (): RunState => {
     const cleared = playPerfectFloors(baseEndlessRun(), 3);

@@ -10,24 +10,16 @@ import {
 } from '../../scripts/e2e-surface-coverage';
 
 describe('surfaces no test visits', () => {
-    it('separates the two vendors, which a view-level census cannot', () => {
-        // The correction the in-floor vendor forced: `shop` looked covered because the floor-clear
-        // vendor reached it, and the screen opened from the board — different exit, different
-        // layout, a clipped buy button on the Deck — was invisible to the count.
-        const shopSurfaces = DECLARED_SURFACES.filter((surface) => surface.key.startsWith('shop opened'));
-        expect(shopSurfaces).toHaveLength(2);
-        expect(shopSurfaces.map((surface) => surface.fixtureId).sort()).toEqual(['floorClearWithShop', 'inFloorShop']);
-    });
 
     it('holds every declared surface to a fixture that still lands on it', () => {
         expect(findBrokenSurfaces()).toEqual([]);
     });
 
     it('reports a surface whose fixture no spec names', () => {
-        // The state the in-floor vendor was in before Gen 106: the fixture could exist and still
-        // nothing would render it.
+        // The state the in-floor vendor was in before Gen 106 (the vendor went in Gen 174, the
+        // lesson stayed): the fixture could exist and still nothing would render it.
         expect(findUnvisitedSurfaces('a spec that names nothing')).not.toEqual([]);
-        expect(findUnvisitedSurfaces('a spec that names nothing').join(' ')).toContain('inFloorShop');
+        expect(findUnvisitedSurfaces('a spec that names nothing').join(' ')).toContain('relicDraft');
     });
 
     it('reports a fixture no spec names', () => {

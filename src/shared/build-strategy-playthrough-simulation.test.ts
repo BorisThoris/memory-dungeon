@@ -8,7 +8,7 @@ import { GAMEPLAY_BUILD_STRATEGIES } from './build-strategy-simulation';
 import { GAME_RULES_VERSION } from './contracts';
 
 describe('multi-floor typed build strategy simulation', () => {
-    it('carries eight distinct builds through generated floors, interludes, a relic milestone, and exact replay', () => {
+    it('carries seven distinct builds through generated floors, interludes, a relic milestone, and exact replay', () => {
         const report = runGameplayBuildMultiFloorSimulation({ rulesVersion: GAME_RULES_VERSION });
 
         expect(report.strategies.map((strategy) => strategy.id)).toEqual(
@@ -17,7 +17,6 @@ describe('multi-floor typed build strategy simulation', () => {
         expect(report.strategies.map((strategy) => strategy.dominantAxis)).toEqual([
             'information',
             'control',
-            'economy',
             'risk_conversion',
             'sustain_conversion',
             'board_reconfiguration',
@@ -140,7 +139,6 @@ describe('multi-floor typed build strategy simulation', () => {
             (pair) => pair.ratio > report.bounds.maxPairwiseMeanTurnRatio
         )).toEqual([
             { left: 'conduit_cartographer', right: 'guard_tank', ratio: 1.64 },
-            { left: 'conduit_cartographer', right: 'treasure_greed', ratio: 1.65 },
             { left: 'conduit_cartographer', right: 'route_gambler', ratio: 1.65 },
             { left: 'conduit_cartographer', right: 'combo_shard_engine', ratio: 1.65 },
             { left: 'conduit_cartographer', right: 'trap_control', ratio: 1.65 },
@@ -346,7 +344,6 @@ describe('multi-floor typed build strategy simulation', () => {
             'combo_shard_engine@seeds:42001,42077,42123:shardLifeConversions=2; required=3',
             'boss_hunter@seeds:42001,42077,42123:bossTrophyConversions=0; required=3',
             'conduit_cartographer<->guard_tank:meanTurnRatio=1.64; max=1.5',
-            'conduit_cartographer<->treasure_greed:meanTurnRatio=1.65; max=1.5',
             'conduit_cartographer<->route_gambler:meanTurnRatio=1.65; max=1.5',
             'conduit_cartographer<->combo_shard_engine:meanTurnRatio=1.65; max=1.5',
             'conduit_cartographer<->trap_control:meanTurnRatio=1.65; max=1.5',
@@ -381,19 +378,19 @@ describe('multi-floor typed build strategy simulation', () => {
         broken.strategies[1].imperfectInformationFloors = 0;
         broken.strategies[1].uncertainTurns = 0;
         broken.strategies[1].riskBudgetExhaustions = 1;
-        broken.strategies[3].gambitCommits = 0;
-        broken.strategies[3].riskWagersAccepted = 0;
-        broken.strategies[3].riskWagerWins = 0;
-        broken.strategies[3].riskWagerLosses = 0;
-        broken.strategies[4].shardLifeConversions = 0;
-        broken.strategies[4].comboShardSourceEvents = 0;
-        broken.strategies[5].targetedReconfigurationUses = 0;
-        broken.strategies[5].memoryPressureConservations = 0;
-        broken.strategies[6].bossTrophyConversions = 0;
-        broken.strategies[6].parasiteReliefEvents = 0;
-        broken.strategies[6].riskWagersAccepted = 0;
-        broken.strategies[6].riskWagerWins = 0;
-        broken.strategies[6].riskWagerLosses = 0;
+        broken.strategies[2].gambitCommits = 0;
+        broken.strategies[2].riskWagersAccepted = 0;
+        broken.strategies[2].riskWagerWins = 0;
+        broken.strategies[2].riskWagerLosses = 0;
+        broken.strategies[3].shardLifeConversions = 0;
+        broken.strategies[3].comboShardSourceEvents = 0;
+        broken.strategies[4].targetedReconfigurationUses = 0;
+        broken.strategies[4].memoryPressureConservations = 0;
+        broken.strategies[5].bossTrophyConversions = 0;
+        broken.strategies[5].parasiteReliefEvents = 0;
+        broken.strategies[5].riskWagersAccepted = 0;
+        broken.strategies[5].riskWagerWins = 0;
+        broken.strategies[5].riskWagerLosses = 0;
 
         expect(assertGameplayBuildMultiFloorViable(broken).issues).toEqual(expect.arrayContaining([
             'floorsPerSeed=3; required=12',

@@ -26,11 +26,6 @@ describe('navigationModel', () => {
         expect(getNavigationRouteContract('settings', 'playing', 'back')).toMatchObject({
             timerPolicy: 'resume-on-close'
         });
-        expect(getNavigationRouteContract('playing', 'shop', 'open')).toMatchObject({
-            presentation: 'in-run-overlay',
-            preservesRun: true,
-            timerPolicy: 'no-resume'
-        });
         expect(NAVIGATION_ROUTE_CONTRACTS.some((route) => route.from === 'gameOver' && route.to === 'menu')).toBe(true);
     });
 
@@ -39,35 +34,6 @@ describe('navigationModel', () => {
         expect(resolveSettingsCloseTarget({ currentView: 'settings', returnView: 'playing', runPresent: false })).toBe('menu');
     });
 
-    it('routes the dedicated shop over a completed floor without timer resume semantics', () => {
-        expect(
-            resolveNavigationTransition(
-                {
-                    run: {},
-                    settingsReturnView: 'menu',
-                    subscreenReturnView: 'menu',
-                    view: 'playing'
-                },
-                'openShopFromLevelComplete'
-            )
-        ).toMatchObject({
-            view: 'shop'
-        });
-
-        expect(
-            resolveNavigationTransition(
-                {
-                    run: {},
-                    settingsReturnView: 'menu',
-                    subscreenReturnView: 'menu',
-                    view: 'shop'
-                },
-                'closeShopToFloorSummary'
-            )
-        ).toMatchObject({
-            view: 'playing'
-        });
-    });
 
     it('opens profile from menu with menu return pointer', () => {
         expect(
@@ -131,8 +97,6 @@ describe('navigationModel', () => {
         expect(isMenuDestinationView('collection')).toBe(true);
         expect(isMenuDestinationView('playing')).toBe(false);
         expect(isInRunMetaView('codex')).toBe(true);
-        expect(isInRunMetaView('shop')).toBe(false);
-        expect(isInRunOverlayView('shop')).toBe(true);
         expect(isInRunOverlayView('gameOver')).toBe(false);
         expect(isRunStatusResumableAfterMetaOverlay('memorize')).toBe(true);
         expect(isRunStatusResumableAfterMetaOverlay('levelComplete')).toBe(false);

@@ -14,7 +14,6 @@ import App, { APP_MAIN_LANDMARK_ID } from './App';
 import type { RunState } from '../shared/contracts';
 import { createNewRun, finishMemorizePhase, pauseRun } from '../shared/game-core';
 import { createWildRun } from '../shared/run-creation-rules';
-import { createRunShopOffers } from '../shared/shop-rules';
 import { createDefaultSaveData } from '../shared/save-data';
 import { desktopClient } from './desktop-client';
 import { PlatformTiltProvider } from './platformTilt/PlatformTiltProvider';
@@ -394,57 +393,6 @@ describe('desktop app flow', () => {
         expect(await screen.findByRole('region', { name: /inventory/i })).toBeInTheDocument();
     });
 
-    it('renders the dedicated shop over gameplay and suppresses the floor-cleared modal', async () => {
-        const saveData = createDefaultSaveData();
-        const baseRun = createNewRun(0);
-        const runBase: RunState = {
-            ...baseRun,
-            status: 'levelComplete',
-            shopGold: 5,
-            timerState: {
-                memorizeRemainingMs: null,
-                resolveRemainingMs: null,
-                debugRevealRemainingMs: null,
-                pausedFromStatus: null
-            },
-            lastLevelResult: {
-                level: 1,
-                scoreGained: 120,
-                rating: 'S',
-                livesRemaining: baseRun.lives,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'none',
-                clearLifeGained: 0
-            },
-            relicOffer: null
-        };
-
-        act(() => {
-            useAppStore.setState({
-                hydrated: true,
-                hydrating: false,
-                steamConnected: false,
-                view: 'shop',
-                settingsReturnView: 'menu',
-                subscreenReturnView: 'menu',
-                saveData,
-                settings: saveData.settings,
-                run: {
-                    ...runBase,
-                    shopOffers: createRunShopOffers(runBase)
-                },
-                newlyUnlockedAchievements: [],
-                hydrate: async () => {}
-            });
-        });
-
-        renderApp();
-
-        expect(screen.queryByRole('dialog', { name: /floor cleared/i })).not.toBeInTheDocument();
-        expect(await screen.findByRole('dialog', { name: /vendor alcove/i })).toBeInTheDocument();
-        expect(screen.getByTestId('game-hud')).toBeInTheDocument();
-    });
 
     it('shows a finished run on Profile, which is the only place it survives', async () => {
         // The history is written at game over and read on Profile; this is the seam between them.
@@ -515,32 +463,6 @@ describe('desktop app flow', () => {
     });
 
 
-    it('normalizes invalid shop view to playing when the run is not level complete', async () => {
-        const saveData = createDefaultSaveData();
-        const baseRun = createNewRun(0);
-
-        act(() => {
-            useAppStore.setState({
-                hydrated: true,
-                hydrating: false,
-                steamConnected: false,
-                view: 'shop',
-                settingsReturnView: 'menu',
-                subscreenReturnView: 'menu',
-                saveData,
-                settings: saveData.settings,
-                run: { ...baseRun, status: 'playing' },
-                newlyUnlockedAchievements: [],
-                hydrate: async () => {}
-            });
-        });
-
-        renderApp();
-
-        await waitFor(() => {
-            expect(useAppStore.getState().view).toBe('playing');
-        });
-    });
 
     it(
         'pauses and resumes the run via P and the pause modal',

@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import type { RunState } from './contracts';
 import { createNewRun } from './run-creation-rules';
 import { resolveTurnMatchFollowup } from './turn-match-followup-rules';
 
@@ -9,10 +8,7 @@ describe('resolveTurnMatchFollowup', () => {
 
         const result = resolveTurnMatchFollowup({
             run,
-            matchedPairKey: 'sun',
-            encoreKey: 'sun',
-            loadedGatewayClaimed: false,
-            dungeonGatewayRouteType: null
+            encoreKey: 'sun'
         });
 
         expect(result.nBackMatchCounter).toBe(2);
@@ -28,10 +24,7 @@ describe('resolveTurnMatchFollowup', () => {
 
         const result = resolveTurnMatchFollowup({
             run,
-            matchedPairKey: 'moon',
-            encoreKey: 'moon:encore',
-            loadedGatewayClaimed: false,
-            dungeonGatewayRouteType: null
+            encoreKey: 'moon:encore'
         });
 
         expect(result.nBackMatchCounter).toBe(2);
@@ -47,10 +40,7 @@ describe('resolveTurnMatchFollowup', () => {
 
         const result = resolveTurnMatchFollowup({
             run,
-            matchedPairKey: 'star',
-            encoreKey: 'star:encore',
-            loadedGatewayClaimed: false,
-            dungeonGatewayRouteType: null
+            encoreKey: 'star:encore'
         });
 
         expect(result.nBackMatchCounter).toBe(1);
@@ -73,10 +63,7 @@ describe('resolveTurnMatchFollowup', () => {
 
         const result = resolveTurnMatchFollowup({
             run,
-            matchedPairKey: 'gateway-c',
-            encoreKey: 'gateway-c',
-            loadedGatewayClaimed: true,
-            dungeonGatewayRouteType: 'greed'
+            encoreKey: 'gateway-c'
         });
 
         expect(result.pendingRouteCardPlan).toBe(run.pendingRouteCardPlan);

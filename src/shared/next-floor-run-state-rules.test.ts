@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { type RelicId, type RewardPerkId, type RunState } from './contracts';
 import { createNewRun } from './game';
 import { createNextFloorRunState } from './next-floor-run-state-rules';
-import { createRunShopOffers } from './shop-rules';
 
 describe('createNextFloorRunState', () => {
     it('resets per-floor counters and prepares memorize timing for the next board', () => {
@@ -20,7 +19,7 @@ describe('createNextFloorRunState', () => {
             hazardShuffleSnaresThisFloor: 1,
             dungeonTrapsResolvedThisFloor: 2,
             enemyHazardsDefeatedThisFloor: 1,
-            shopOffers: createRunShopOffers(baseRun).slice(0, 1),
+            shopOffers: [],
             shopRerolls: 1,
             timerState: {
                 memorizeRemainingMs: null,

@@ -47,22 +47,6 @@ describe('applyPlayingTilePressSurfaceResult', () => {
         expect(deps.applyResolvedRun).toHaveBeenCalledWith(run);
     });
 
-    it('freezes shop patches and clears timers', () => {
-        const deps = createDeps();
-        const run = createNewRun(0, { echoFeedbackEnabled: false });
-        const result: PlayingTilePressSurfaceResult = {
-            audio: [],
-            kind: 'patch',
-            patch: { run, view: 'shop' },
-            resolveDelayMs: null
-        };
-
-        applyPlayingTilePressSurfaceResult(result, deps);
-
-        expect(deps.freezeRunSnapshotForPlayingMetaOverlay).toHaveBeenCalledWith(run);
-        expect(deps.clearAllTimers).toHaveBeenCalledTimes(1);
-        expect(deps.setState).toHaveBeenCalledWith({ run: { ...run, status: 'paused' }, view: 'shop' });
-    });
 
     it('schedules resolve timer for patch results with a delay', () => {
         const deps = createDeps();

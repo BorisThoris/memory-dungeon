@@ -31,7 +31,6 @@ export const SHARED_REACH_EXEMPTIONS: Record<string, string> = {
     'board-generation.ts': 'Re-export barrel over board-build-rules, board-tile-generation-rules and board-inspection; the simulations import it, the game imports those three directly, and it is the same code either way.',
     'build-strategy-playthrough-simulation.ts': 'Build-strategy playthrough sweep for the balance gates.',
     'build-strategy-simulation.ts': 'Build-strategy sweep for the balance gates.',
-    'economy-ledger.ts': 'Economy accounting the long-run depth sweep checks.',
     'gameplay-core-playthrough-solver.ts': 'Solver used by the core-replay gate.',
     'gameplay-core-simulation.ts': 'Core simulation used by the core-replay gate.',
     'gameplay-feedback-completeness.ts': 'Completeness check the simulations run over feedback coverage.',

@@ -20,10 +20,6 @@ import {
     executeMetaOverlayClose,
     executeMetaOverlayOpen
 } from './metaOverlayExecutor';
-import {
-    createShopPurchaseSurfaceResult,
-    createShopRerollSurfaceResult
-} from './shopSurfaceState';
 import { desktopClient } from '../desktop-client';
 import { normalizeUnknownSaveDataOrThrow } from '../../shared/save-data';
 import { createRunResolutionController } from './runResolutionController';
@@ -44,7 +40,6 @@ import {
     createDestroyPairArmedToggleResult,
     canOpenDungeonExitPrompt,
     createDungeonExitActivationSurfaceResult,
-    createDungeonShopOpenFromFloorResult,
     createFlashPairSurfaceResult,
     createGreetCurioSurfaceResult,
     createGambitThirdPickPressResult,
@@ -63,13 +58,6 @@ import {
     applyPlayingTilePressSurfaceResult
 } from './playingTilePressResultApplier';
 import {
-    executeContinueFromShop,
-    executeShopCloseToFloorSummary
-} from './shopCloseExecutor';
-import {
-    executeOpenShopFromLevelComplete
-} from './levelCompleteShopExecutor';
-import {
     executePauseRun,
     executeResumeRun
 } from './pauseResumeExecutor';
@@ -84,7 +72,6 @@ import {
     createRelicPickSurfaceResult
 } from './relicOfferSurfaceState';
 import {
-    executeChooseRouteAndContinue,
     executeContinueToNextLevel
 } from './levelCompleteContinuationExecutor';
 import { createMenuSurfacePatch } from './menuSurfaceState';
@@ -106,7 +93,6 @@ import {
 } from '../audio/gameSfx';
 import {
     playPauseOpenSfx,
-    playUiConfirmSfx,
     playPauseResumeSfx,
     playRunStartSfx,
     resumeUiSfxContext
@@ -202,15 +188,6 @@ const executeStoreRunStartRequest = (
         prepareMemorizeTimerForBoardReady,
         setState: set,
         trackRunStart: (payload) => trackEvent('run_start', payload)
-    });
-};
-
-const executeStoreShopCloseToFloorSummary = (set: (patch: Partial<AppState>) => void, get: () => AppState): void => {
-    executeShopCloseToFloorSummary({
-        applyResolvedRun,
-        getState: get,
-        resumeRunWithTimers,
-        setState: set
     });
 };
 
@@ -419,28 +396,6 @@ export const useAppStore = create<AppState>((set, get) => ({
         executeStoreMetaOverlayOpen('subscreenReturnView', 'openCodexFromPlaying', set, get);
     },
 
-    openShopFromLevelComplete: () => {
-        executeOpenShopFromLevelComplete({
-            applyResolvedRun,
-            getState: get,
-            setState: set
-        });
-    },
-
-    closeShopToFloorSummary: () => {
-        executeStoreShopCloseToFloorSummary(set, get);
-    },
-
-    continueFromShop: () => {
-        executeContinueFromShop({
-            applyResolvedRun,
-            continueToNextLevel: () => get().continueToNextLevel(),
-            getState: get,
-            resumeRunWithTimers,
-            setState: set
-        });
-    },
-
     closeSubscreen: () => {
         executeStoreMetaOverlayClose('subscreenReturnView', 'closeSubscreen', set, get);
     },
@@ -606,15 +561,6 @@ export const useAppStore = create<AppState>((set, get) => ({
             return;
         }
         set({ dungeonExitPromptOpen: true });
-    },
-
-    openDungeonShopFromFloor: () => {
-        const { run, view } = get();
-        const result = createDungeonShopOpenFromFloorResult({ run, view });
-        if (result.kind === 'ignored') {
-            return;
-        }
-        set(result.patch);
     },
 
     closeDungeonExitPrompt: () => {
@@ -813,52 +759,8 @@ export const useAppStore = create<AppState>((set, get) => ({
         set(result.patch);
     },
 
-    purchaseShopOffer: (offerId) => {
-        const { run, view, shopReturnMode } = get();
-        const result = createShopPurchaseSurfaceResult({
-            offerId,
-            run,
-            shopReturnMode,
-            view
-        });
-        if (result.kind === 'ignored') {
-            return;
-        }
-        set(result.patch);
-        // A completed purchase is a confirmed player action and owes an audible ack;
-        // the shop surface reports it through the accepted result, not a feedback field.
-        void resumeUiSfxContext();
-        playUiConfirmSfx(sfxGainFromStore());
-    },
-
-    rerollShopOffers: () => {
-        const { run, view, shopReturnMode } = get();
-        const result = createShopRerollSurfaceResult({
-            run,
-            shopReturnMode,
-            view
-        });
-        if (result.kind === 'ignored') {
-            return;
-        }
-        set(result.patch);
-        void resumeUiSfxContext();
-        playUiConfirmSfx(sfxGainFromStore());
-    },
-
     continueToNextLevel: () => {
         executeContinueToNextLevel({
-            applyResolvedRun,
-            clearAllTimers,
-            continueToNextLevel: () => get().continueToNextLevel(),
-            getState: get,
-            prepareMemorizeTimerForBoardReady,
-            setState: set
-        });
-    },
-
-    chooseRouteAndContinue: (choiceId) => {
-        executeChooseRouteAndContinue(choiceId, {
             applyResolvedRun,
             clearAllTimers,
             continueToNextLevel: () => get().continueToNextLevel(),

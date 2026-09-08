@@ -69,7 +69,7 @@ export const gameOverScreenCopy = {
         wild: 'Wild Run: joker-style matching pressure stayed attached through the final summary.',
         practice: 'Practice descent: training rules were explicit, with progression expectations reduced.',
         dungeonShowcase: 'Dungeon Showcase: wide-recall route pressure and dungeon systems were the featured contract.',
-        classic: 'Long-run core: routes, shop gold, relics, and featured objectives.'
+        classic: 'Long-run core: chains, relics, and featured objectives.'
     },
     flipHistoryCopy: (flipCount: number) =>
         flipCount > 0

@@ -167,7 +167,6 @@ export const createDungeonExitActivationTransition = (
     const objectiveReward = applyDungeonExitObjectiveReward(run, status);
     const floorClearHazards = defeatEnemyHazardsForFloorClear(sealBoardForDungeonExit(run.board, status.exitTile.id));
     const openedBoard = floorClearHazards.board;
-    const routeType = status.routeType;
 
     return {
         board: openedBoard,

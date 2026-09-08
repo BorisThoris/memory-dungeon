@@ -6,14 +6,12 @@ import {
     type FindableKind,
     type MutatorId,
     type RouteNodeType,
-    type RunState,
     type TileTraitKind,
     type Tile
 } from './contracts';
 import { buildBoard, countFindablePairs } from './board-generation';
 import { countReachableExitKeySources, getEffectivePrimaryExitLock, inspectBoardFairness } from './board-inspection';
 import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
-import { getShopGoldRewardForFloor, getShopItemCatalogRows, SHOP_ITEM_CATALOG } from './shop-rules';
 import { FINDABLE_REWARD_ROWS, getFindableSpawnWeightRows } from './findables';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import { RELIC_DRAFT, RELIC_POOL, type RelicDraftRarity } from './relics';
@@ -24,9 +22,6 @@ import {
     hasTraitRewardInteractionFloor,
     hasTraitSwapSetupOpportunity
 } from './tile-trait-rules';
-import type { GameplayEvent } from './gameplay-core-contracts';
-import { reduceGameplayCommand } from './gameplay-core';
-import { createNewRun } from './run-creation-rules';
 
 export interface BalanceSimulationInput {
     seeds?: readonly number[];
@@ -53,7 +48,6 @@ export interface BalanceSimulationReport {
     samples: Array<{
         seed: number;
         floor: number;
-        shopGoldEarned: number;
         findablePickupPairs: number;
         findableKindCounts: Record<FindableKind, number>;
         tileTraitPairs: number;
@@ -67,7 +61,6 @@ export interface BalanceSimulationReport {
         tileTraitKindCounts: Record<TileTraitKind, number>;
         floorTag: string;
         dungeonNodeKind: DungeonRunNodeKind;
-        shopSinkBudget: number;
         enemyThreatPairs: number;
         movingEnemyHazards: number;
         bossMovingEnemyHazards: number;
@@ -85,14 +78,12 @@ export interface BalanceSimulationReport {
         roomRewardPotential: number;
         keyInflowPotential: number;
         boardFairnessIssueCount: number;
-        shopGoldInflowPotential: number;
         destroyChargeInflowPotential: number;
         peekChargeInflowPotential: number;
         recoveryReliefPotential: number;
         netPressureAfterRelief: number;
     }>;
     aggregate: {
-        totalShopGoldEarned: number;
         findablePickupPairs: number;
         findableKindCounts: Record<FindableKind, number>;
         tileTraitPairs: number;
@@ -113,7 +104,6 @@ export interface BalanceSimulationReport {
         bossMovingEnemyHazards: number;
         hazardTileCount: number;
         contactRisk: number;
-        shopSinkBudget: number;
         relicFavorPotential: number;
         comboShardPotential: number;
         guardRewardPotential: number;
@@ -125,7 +115,6 @@ export interface BalanceSimulationReport {
         roomRewardPotential: number;
         keyInflowPotential: number;
         boardFairnessIssueCount: number;
-        shopGoldInflowPotential: number;
         destroyChargeInflowPotential: number;
         peekChargeInflowPotential: number;
         recoveryReliefPotential: number;
@@ -143,7 +132,6 @@ export interface DungeonBalanceProfileDefinition {
     riskTolerance: number;
     rewardBias: number;
     guardEfficiency: number;
-    shopVisitBias: number;
 }
 
 export interface DungeonBalanceProfileMetrics {
@@ -155,25 +143,18 @@ export interface DungeonBalanceProfileMetrics {
         runFalls: number;
         minLivesRemaining: number;
         lowLifeFloors: number;
-        unhealedLowLifeFloors: number;
-        endingShopGold: number;
         bossWins: number;
         bossAttempts: number;
     }>;
     floorsCleared: number;
     livesLost: number;
     guardUsed: number;
-    healingPurchased: number;
-    healingPurchaseShare: number;
     minLivesRemaining: number;
     runFalls: number;
     maxAtRiskStreak: number;
     lowLifeFloors: number;
     lowLifeFloorShare: number;
     maxLowLifeStreak: number;
-    unhealedLowLifeFloors: number;
-    unhealedLowLifeFloorShare: number;
-    maxUnhealedLowLifeStreak: number;
     recoveryDebtFloors: number;
     maxRecoveryDebtStreak: number;
     routeChoiceCounts: Record<RouteNodeType, number>;
@@ -181,29 +162,20 @@ export interface DungeonBalanceProfileMetrics {
     routeAcceptedChoices: number;
     routeRejectedChoices: number;
     routeLifeDelta: number;
-    routeShopGoldDelta: number;
     routeScoreDelta: number;
     routeGuardDelta: number;
     routeComboShardDelta: number;
     routeFavorDelta: number;
     routeMemorizeBonusMsDelta: number;
     dominantRouteShare: number;
-    safeRouteTollSpend: number;
     greedLifeCosts: number;
-    shopServiceSpend: number;
-    shopGoldEarned: number;
-    endingShopGold: number;
-    maxShopGoldHeld: number;
     worstSeedFloorsClearedShare: number;
     worstSeedLowLifeFloorShare: number;
-    worstSeedUnhealedLowLifeFloorShare: number;
     worstSeedRunFalls: number;
-    maxSeedEndingShopGold: number;
     seedFloorClearShareSpread: number;
     rewardClaims: number;
     bossWins: number;
     bossAttempts: number;
-    shopsVisited: number;
     firstRiskSample: { floor: number; seed: number } | null;
 }
 
@@ -214,34 +186,26 @@ export interface DungeonBalanceProfileReport {
         minFloorsClearedShare: number;
         maxLivesLostPerFloor: number;
         minBossWinShare: number;
-        maxShopGoldPerFloor: number;
         minLivesRemaining: number;
         maxRunFalls: number;
-        maxHealingPurchaseShare: number;
         maxAtRiskStreak: number;
         maxLowLifeFloorShare: number;
         maxLowLifeStreak: number;
-        maxUnhealedLowLifeFloorShare: number;
-        maxUnhealedLowLifeStreak: number;
         maxRecoveryDebtStreak: number;
         maxDominantRouteShare: number;
-        maxEndingShopGoldPerFloor: number;
-        maxShopGoldHeldPerFloor: number;
         minWorstSeedFloorsClearedShare: number;
         maxWorstSeedLowLifeFloorShare: number;
-        maxWorstSeedUnhealedLowLifeFloorShare: number;
         maxWorstSeedRunFalls: number;
-        maxSeedEndingShopGoldPerFloor: number;
         maxSeedFloorClearShareSpread: number;
     };
     notes: string[];
 }
 
 export const DUNGEON_BALANCE_PROFILES: readonly DungeonBalanceProfileDefinition[] = [
-    { id: 'cautious', riskTolerance: 0.72, rewardBias: 0.82, guardEfficiency: 0.88, shopVisitBias: 0.92 },
-    { id: 'average', riskTolerance: 0.58, rewardBias: 1, guardEfficiency: 0.72, shopVisitBias: 1 },
-    { id: 'greedy', riskTolerance: 0.42, rewardBias: 1.24, guardEfficiency: 0.52, shopVisitBias: 1.16 },
-    { id: 'high_skill', riskTolerance: 0.84, rewardBias: 1.08, guardEfficiency: 0.95, shopVisitBias: 1.06 }
+    { id: 'cautious', riskTolerance: 0.72, rewardBias: 0.82, guardEfficiency: 0.88 },
+    { id: 'average', riskTolerance: 0.58, rewardBias: 1, guardEfficiency: 0.72 },
+    { id: 'greedy', riskTolerance: 0.42, rewardBias: 1.24, guardEfficiency: 0.52 },
+    { id: 'high_skill', riskTolerance: 0.84, rewardBias: 1.08, guardEfficiency: 0.95 }
 ] as const;
 
 export const BALANCE_SIMULATION_FLOOR_BANDS = ['early', 'mid', 'late'] as const;
@@ -277,9 +241,6 @@ const scheduleMutatorsFor = (seed: number, rulesVersion: number, level: number):
 
 const average = (values: readonly number[]): number =>
     values.length === 0 ? 0 : values.reduce((sum, value) => sum + value, 0) / values.length;
-
-// Typed lock keys are alternatives to the same shop insurance slot, not extra services sold every visit.
-const ALTERNATE_LOCK_KEY_SHOP_ITEMS = new Set(['treasure_key', 'shrine_key', 'boss_key', 'trap_key']);
 
 const relicRarityShare = (rarity: RelicDraftRarity): number => {
     const total = RELIC_POOL.reduce((sum, id) => sum + RELIC_DRAFT[id].weight, 0);
@@ -420,14 +381,10 @@ const samplePressure = (sample: BalanceSimulationReport['samples'][number]): num
 const sampleRecoveryReliefPotential = (sample: {
     guardRewardPotential: number;
     roomRewardPotential: number;
-    dungeonNodeKind: DungeonRunNodeKind;
-    shopSinkBudget: number;
     keyInflowPotential: number;
 }): number =>
     sample.guardRewardPotential +
     sample.roomRewardPotential +
-    (sample.dungeonNodeKind === 'shop' ? 1 : 0) +
-    (sample.shopSinkBudget > 0 ? 0.5 : 0) +
     (sample.keyInflowPotential > 0 ? 0.5 : 0);
 
 const longestStreak = <T>(items: readonly T[], predicate: (item: T) => boolean): number => {
@@ -438,34 +395,6 @@ const longestStreak = <T>(items: readonly T[], predicate: (item: T) => boolean):
         longest = Math.max(longest, current);
     }
     return longest;
-};
-
-const healingBuyThresholdForProfile = (profile: DungeonBalanceProfileId): number => {
-    switch (profile) {
-        case 'cautious':
-            return MAX_LIVES;
-        case 'greedy':
-            return 3;
-        case 'high_skill':
-            return 3;
-        case 'average':
-        default:
-            return 3;
-    }
-};
-
-const shopServiceSpendShareForProfile = (profile: DungeonBalanceProfileId): number => {
-    switch (profile) {
-        case 'cautious':
-            return 0.6;
-        case 'greedy':
-            return 0.9;
-        case 'high_skill':
-            return 0.7;
-        case 'average':
-        default:
-            return 0.75;
-    }
 };
 
 const ROUTE_NODE_TYPES: readonly RouteNodeType[] = ['safe', 'greed', 'mystery'];
@@ -517,9 +446,6 @@ export const runBalanceSimulation = ({
     const safeFloors = Math.max(1, Math.floor(floors));
     const safeSeeds = seeds && seeds.length > 0 ? [...seeds] : [seed ?? 0];
     const floorNumbers = Array.from({ length: safeFloors }, (_, index) => index + 1);
-    const shopSinkPerVisit = getShopItemCatalogRows()
-        .filter((item) => !ALTERNATE_LOCK_KEY_SHOP_ITEMS.has(item.itemId))
-        .reduce((sum, item) => sum + item.baseCost, 0);
     const samples = safeSeeds.flatMap((sampleSeed) =>
         floorNumbers.map((floor) => {
             const schedule = pickFloorScheduleEntry(sampleSeed, rulesVersion, floor, 'endless');
@@ -583,20 +509,12 @@ export const runBalanceSimulation = ({
                 ? 1
                 : 0;
             const deadTraitFloors = tileTraitPairs > 0 && traitInteractionLines === 0 ? 1 : 0;
-            const shopGoldInflowPotential =
-                getShopGoldRewardForFloor(floor) +
-                treasureRewardPairs +
-                routeRewardPairs +
-                (eventRewardPotential > 0 ? 2 : 0);
             const destroyChargeInflowPotential =
                 roomEffectIds.includes('room_armory') || eventRewardPotential > 0 ? 1 : 0;
-            const peekChargeInflowPotential =
-                floor % 3 === 0 ? SHOP_ITEM_CATALOG.peek_charge.stock : roomEffectIds.includes('room_scrying_lens') ? 1 : 0;
+            const peekChargeInflowPotential = roomEffectIds.includes('room_scrying_lens') ? 1 : 0;
             const recoveryReliefPotential = sampleRecoveryReliefPotential({
                 guardRewardPotential: shrinePairs + (dungeonNodeKind === 'rest' ? 1 : 0),
                 roomRewardPotential,
-                dungeonNodeKind,
-                shopSinkBudget: floor % 3 === 0 ? shopSinkPerVisit : 0,
                 keyInflowPotential
             });
             const pressure =
@@ -606,7 +524,6 @@ export const runBalanceSimulation = ({
             return {
                 seed: sampleSeed,
                 floor,
-                shopGoldEarned: getShopGoldRewardForFloor(floor),
                 findablePickupPairs: countFindablePairs(board.tiles),
                 findableKindCounts,
                 tileTraitPairs,
@@ -620,7 +537,6 @@ export const runBalanceSimulation = ({
                 tileTraitKindCounts,
                 floorTag: schedule.floorTag,
                 dungeonNodeKind,
-                shopSinkBudget: floor % 3 === 0 ? shopSinkPerVisit : 0,
                 enemyThreatPairs,
                 movingEnemyHazards: activeHazards.length,
                 bossMovingEnemyHazards: activeHazards.filter((hazard) => hazard.bossId != null).length,
@@ -631,14 +547,13 @@ export const runBalanceSimulation = ({
                 comboShardPotential: countFindablePairs(board.tiles) + (routeRewardPairs > 0 ? 1 : 0),
                 guardRewardPotential: shrinePairs + (dungeonNodeKind === 'rest' ? 1 : 0),
                 relicOfferAvailable: floor >= 3 && floor % 3 === 0 ? 1 : 0,
-                consumableRewardPotential: keyPairs + (floor % 3 === 0 ? SHOP_ITEM_CATALOG.peek_charge.stock : 0),
+                consumableRewardPotential: keyPairs,
                 treasureRewardPairs,
                 routeRewardPairs,
                 eventRewardPotential,
                 roomRewardPotential,
                 keyInflowPotential,
                 boardFairnessIssueCount,
-                shopGoldInflowPotential,
                 destroyChargeInflowPotential,
                 peekChargeInflowPotential,
                 recoveryReliefPotential,
@@ -646,10 +561,6 @@ export const runBalanceSimulation = ({
             };
         })
     );
-    const shopGoldBySeed = safeSeeds.map(() =>
-        floorNumbers.reduce((sum, floor) => sum + getShopGoldRewardForFloor(floor), 0)
-    );
-    const shopVisits = floorNumbers.filter((floor) => floor % 3 === 0).length;
     const findableCounts = samples.map((sample) => sample.findablePickupPairs);
     const aggregateFindableKindCounts = sumFindableKindCounts(samples.map((sample) => sample.findableKindCounts));
     const findableKindShares = getFindableKindShares(aggregateFindableKindCounts);
@@ -693,7 +604,6 @@ export const runBalanceSimulation = ({
             ...totals,
             [sample.floorBand]:
                 totals[sample.floorBand] +
-                sample.shopGoldEarned +
                 sample.relicFavorPotential +
                 sample.comboShardPotential +
                 sample.guardRewardPotential +
@@ -714,22 +624,6 @@ export const runBalanceSimulation = ({
     );
 
     const rows = [
-        row(
-            'avg_shop_gold_per_seed',
-            'Average shop gold earned per simulated seed',
-            Number(average(shopGoldBySeed).toFixed(2)),
-            safeFloors * 3,
-            safeFloors * 8,
-            'getShopGoldRewardForFloor'
-        ),
-        row(
-            'shop_sink_pressure',
-            'Shop sink total per simulated shop visit',
-            shopSinkPerVisit * shopVisits,
-            shopVisits * 6,
-            shopVisits * 24,
-            'SHOP_ITEM_CATALOG baseCost'
-        ),
         row(
             'avg_findable_pairs_per_floor',
             'Average pickup pairs per floor',
@@ -859,7 +753,7 @@ export const runBalanceSimulation = ({
             Math.max(0, ...recoveryDebtStreaks),
             0,
             3,
-            'pressure minus guard/shop/room/key relief'
+            'pressure minus guard/room/key relief'
         ),
         row(
             'elite_route_node_share',
@@ -914,14 +808,6 @@ export const runBalanceSimulation = ({
             'relic milestone cadence'
         ),
         row(
-            'avg_consumable_reward_potential_per_floor',
-            'Average consumable reward potential per floor',
-            Number(average(samples.map((sample) => sample.consumableRewardPotential)).toFixed(2)),
-            0.2,
-            2,
-            'key cards and shop stock'
-        ),
-        row(
             'reward_band_spread',
             'Reward-source spread across early/mid/late bands',
             Number((Math.min(...rewardAverageByBand) / Math.max(1, Math.max(...rewardAverageByBand))).toFixed(2)),
@@ -938,14 +824,6 @@ export const runBalanceSimulation = ({
             'board fairness inspection'
         ),
         row(
-            'avg_live_shop_gold_inflow_per_floor',
-            'Average live shop-gold inflow estimate per floor',
-            Number(average(samples.map((sample) => sample.shopGoldInflowPotential)).toFixed(2)),
-            4,
-            12,
-            'floor clear, route, event, and treasure estimates'
-        ),
-        row(
             'avg_route_reward_pairs_per_floor',
             'Average route reward carrier pairs per floor',
             Number(average(samples.map((sample) => sample.routeRewardPairs)).toFixed(2)),
@@ -960,14 +838,6 @@ export const runBalanceSimulation = ({
             0,
             1,
             'event node estimate'
-        ),
-        row(
-            'avg_power_charge_inflow_per_floor',
-            'Average destroy/peek charge inflow estimate per floor',
-            Number(average(samples.map((sample) => sample.destroyChargeInflowPotential + sample.peekChargeInflowPotential)).toFixed(2)),
-            0.1,
-            2,
-            'room, event, and shop charge estimates'
         )
     ];
 
@@ -978,7 +848,6 @@ export const runBalanceSimulation = ({
         offlineOnly: true,
         samples,
         aggregate: {
-            totalShopGoldEarned: samples.reduce((sum, sample) => sum + sample.shopGoldEarned, 0),
             findablePickupPairs: samples.reduce((sum, sample) => sum + sample.findablePickupPairs, 0),
             findableKindCounts: aggregateFindableKindCounts,
             tileTraitPairs: samples.reduce((sum, sample) => sum + sample.tileTraitPairs, 0),
@@ -1002,7 +871,6 @@ export const runBalanceSimulation = ({
             bossMovingEnemyHazards: samples.reduce((sum, sample) => sum + sample.bossMovingEnemyHazards, 0),
             hazardTileCount: samples.reduce((sum, sample) => sum + sample.hazardTileCount, 0),
             contactRisk: samples.reduce((sum, sample) => sum + sample.contactRisk, 0),
-            shopSinkBudget: samples.reduce((sum, sample) => sum + sample.shopSinkBudget, 0),
             relicFavorPotential: samples.reduce((sum, sample) => sum + sample.relicFavorPotential, 0),
             comboShardPotential: samples.reduce((sum, sample) => sum + sample.comboShardPotential, 0),
             guardRewardPotential: samples.reduce((sum, sample) => sum + sample.guardRewardPotential, 0),
@@ -1014,7 +882,6 @@ export const runBalanceSimulation = ({
             roomRewardPotential: samples.reduce((sum, sample) => sum + sample.roomRewardPotential, 0),
             keyInflowPotential: samples.reduce((sum, sample) => sum + sample.keyInflowPotential, 0),
             boardFairnessIssueCount: samples.reduce((sum, sample) => sum + sample.boardFairnessIssueCount, 0),
-            shopGoldInflowPotential: samples.reduce((sum, sample) => sum + sample.shopGoldInflowPotential, 0),
             destroyChargeInflowPotential: samples.reduce((sum, sample) => sum + sample.destroyChargeInflowPotential, 0),
             peekChargeInflowPotential: samples.reduce((sum, sample) => sum + sample.peekChargeInflowPotential, 0),
             recoveryReliefPotential: samples.reduce((sum, sample) => sum + sample.recoveryReliefPotential, 0),
@@ -1036,19 +903,15 @@ export const summarizeBalanceSimulation = (report: BalanceSimulationReport): str
     report.rows.map((entry) => `${entry.key}=${entry.value}(${entry.status})`).join('; ');
 
 export const BALANCE_SIMULATION_BASELINE = {
-    totalShopGoldEarned: { min: 70, max: 85 },
     findablePickupPairs: { min: 12, max: 24 },
     bossFloors: { min: 2, max: 2 },
-    breatherFloors: { min: 3, max: 3 },
-    shopSinkBudget: { min: 84, max: 84 }
+    breatherFloors: { min: 3, max: 3 }
 } as const;
 
 export const BALANCE_SIMULATION_BASELINE_KEYS = [
-    'totalShopGoldEarned',
     'findablePickupPairs',
     'bossFloors',
-    'breatherFloors',
-    'shopSinkBudget'
+    'breatherFloors'
 ] as const satisfies readonly (keyof typeof BALANCE_SIMULATION_BASELINE)[];
 
 export const assertBalanceSimulationWithinBaseline = (
@@ -1089,40 +952,29 @@ export const runDungeonBalanceProfileSimulation = (
     const samplesBySeed = base.seeds.map((sampleSeed) =>
         base.samples.filter((sample) => sample.seed === sampleSeed).sort((a, b) => a.floor - b.floor)
     );
-    const healLifeCost = SHOP_ITEM_CATALOG.heal_life.baseCost;
 
     const profiles = selectedProfiles.map((profile) => {
         let floorsCleared = 0;
         let livesLost = 0;
         let guardUsed = 0;
-        let healingPurchased = 0;
         let minLivesRemaining = INITIAL_LIVES;
         let runFalls = 0;
         let maxAtRiskStreak = 0;
         let lowLifeFloors = 0;
         let maxLowLifeStreak = 0;
-        let unhealedLowLifeFloors = 0;
-        let maxUnhealedLowLifeStreak = 0;
         let recoveryDebtFloors = 0;
         let maxRecoveryDebtStreak = 0;
-        let healingSpend = 0;
-        let shopSpendBudget = 0;
         const routeChoiceCounts = emptyRouteChoiceCounts();
         const routeOutcomeCounts = emptyRouteOutcomeCounts();
-        let routeAcceptedChoices = 0;
-        let routeRejectedChoices = 0;
-        let routeLifeDelta = 0;
-        let routeShopGoldDelta = 0;
-        let routeScoreDelta = 0;
-        let routeGuardDelta = 0;
-        let routeComboShardDelta = 0;
-        let routeFavorDelta = 0;
-        let routeMemorizeBonusMsDelta = 0;
-        let safeRouteTollSpend = 0;
-        let greedLifeCosts = 0;
-        let shopServiceSpend = 0;
-        let endingShopGold = 0;
-        let maxShopGoldHeld = 0;
+        const routeAcceptedChoices = 0;
+        const routeRejectedChoices = 0;
+        const routeLifeDelta = 0;
+        const routeScoreDelta = 0;
+        const routeGuardDelta = 0;
+        const routeComboShardDelta = 0;
+        const routeFavorDelta = 0;
+        const routeMemorizeBonusMsDelta = 0;
+        const greedLifeCosts = 0;
         let rewardClaims = 0;
         let bossWins = 0;
         let bossAttempts = 0;
@@ -1131,7 +983,6 @@ export const runDungeonBalanceProfileSimulation = (
 
         for (const seedSamples of samplesBySeed) {
             let lives = INITIAL_LIVES;
-            let shopGold = 0;
             let atRiskStreak = 0;
             let lowLifeStreak = 0;
             let recoveryDebtStreak = 0;
@@ -1140,49 +991,21 @@ export const runDungeonBalanceProfileSimulation = (
             let seedRunFalls = 0;
             let seedMinLivesRemaining = INITIAL_LIVES;
             let seedLowLifeFloors = 0;
-            let seedUnhealedLowLifeFloors = 0;
             let seedBossWins = 0;
             let seedBossAttempts = 0;
-            let unhealedLowLifeStreak = 0;
-            let routeRun = createNewRun(0, {
-                gameMode: 'endless',
-                runSeed: seedSamples[0]?.seed ?? 0,
-                runRulesVersionOverride: base.rulesVersion
-            });
 
+            /*
+             * Each floor used to start with the profile at the vendor: gold in from the floor
+             * clear, healing bought when lives were low, the rest spent on stock. The vendor and
+             * the gold went in Gen 174, so a profile's lives are now only what the floor leaves
+             * them, and there is no wallet column to carry.
+             */
             for (const sample of seedSamples) {
-                shopGold += Math.floor(sample.shopGoldEarned * profile.rewardBias);
-                maxShopGoldHeld = Math.max(maxShopGoldHeld, shopGold);
-                shopSpendBudget += sample.shopSinkBudget;
-
-                const shopAvailable = sample.shopSinkBudget > 0 || sample.dungeonNodeKind === 'shop';
-                const healThreshold = healingBuyThresholdForProfile(profile.id);
-                if (shopAvailable && lives < healThreshold && lives < MAX_LIVES && shopGold >= healLifeCost) {
-                    lives += 1;
-                    shopGold -= healLifeCost;
-                    healingPurchased += 1;
-                    healingSpend += healLifeCost;
-                    maxShopGoldHeld = Math.max(maxShopGoldHeld, shopGold);
-                }
-                if (shopAvailable && sample.shopSinkBudget > 0 && shopGold > 0) {
-                    const discretionarySpend = Math.min(
-                        shopGold,
-                        Math.floor(sample.shopSinkBudget * shopServiceSpendShareForProfile(profile.id))
-                    );
-                    shopGold -= discretionarySpend;
-                    shopServiceSpend += discretionarySpend;
-                }
-
                 const pressure = samplePressure(sample);
                 const guardAvailable = sample.guardRewardPotential + (profile.id === 'cautious' ? 1 : 0);
                 const guardSpend = Math.min(guardAvailable, Math.floor(pressure * profile.guardEfficiency));
                 const residualPressure = Math.max(0, pressure - guardSpend - profile.riskTolerance);
-                const profileRecoveryDebt = Math.max(
-                    0,
-                    residualPressure -
-                        sample.recoveryReliefPotential -
-                        (shopAvailable && shopGold >= healLifeCost ? 0.75 : 0)
-                );
+                const profileRecoveryDebt = Math.max(0, residualPressure - sample.recoveryReliefPotential);
                 if (profileRecoveryDebt >= 1) {
                     recoveryDebtFloors += 1;
                     recoveryDebtStreak += 1;
@@ -1245,21 +1068,11 @@ export const runDungeonBalanceProfileSimulation = (
                     lowLifeFloors += 1;
                     seedLowLifeFloors += 1;
                     lowLifeStreak += 1;
-                    if (!(shopAvailable && lives < MAX_LIVES && shopGold >= healLifeCost)) {
-                        unhealedLowLifeFloors += 1;
-                        seedUnhealedLowLifeFloors += 1;
-                        unhealedLowLifeStreak += 1;
-                    } else {
-                        unhealedLowLifeStreak = 0;
-                    }
                 } else {
                     lowLifeStreak = 0;
-                    unhealedLowLifeStreak = 0;
                 }
                 maxLowLifeStreak = Math.max(maxLowLifeStreak, lowLifeStreak);
-                maxUnhealedLowLifeStreak = Math.max(maxUnhealedLowLifeStreak, unhealedLowLifeStreak);
             }
-            endingShopGold += shopGold;
             seedOutcomes.push({
                 seed: seedSamples[0]?.seed ?? 0,
                 floorsCleared: seedFloorsCleared,
@@ -1267,16 +1080,11 @@ export const runDungeonBalanceProfileSimulation = (
                 runFalls: seedRunFalls,
                 minLivesRemaining: seedMinLivesRemaining,
                 lowLifeFloors: seedLowLifeFloors,
-                unhealedLowLifeFloors: seedUnhealedLowLifeFloors,
-                endingShopGold: shopGold,
                 bossWins: seedBossWins,
                 bossAttempts: seedBossAttempts
             });
         }
 
-        const shopsVisited = Math.round(
-            base.samples.filter((sample) => sample.dungeonNodeKind === 'shop').length * profile.shopVisitBias
-        );
         const dominantRouteShare = getDominantRouteChoiceShare(routeChoiceCounts);
         const seedFloorClearShares = seedOutcomes.map((outcome) => outcome.floorsCleared / Math.max(1, base.floors));
         const worstSeedFloorsClearedShare = seedFloorClearShares.length === 0 ? 0 : Math.min(...seedFloorClearShares);
@@ -1285,12 +1093,6 @@ export const runDungeonBalanceProfileSimulation = (
             seedOutcomes.length === 0
                 ? 0
                 : Math.max(...seedOutcomes.map((outcome) => outcome.lowLifeFloors / Math.max(1, base.floors)));
-        const worstSeedUnhealedLowLifeFloorShare =
-            seedOutcomes.length === 0
-                ? 0
-                : Math.max(
-                      ...seedOutcomes.map((outcome) => outcome.unhealedLowLifeFloors / Math.max(1, base.floors))
-                  );
 
         return {
             profile: profile.id,
@@ -1298,18 +1100,12 @@ export const runDungeonBalanceProfileSimulation = (
             floorsCleared,
             livesLost,
             guardUsed,
-            healingPurchased,
             minLivesRemaining,
             runFalls,
             maxAtRiskStreak,
             lowLifeFloors,
             lowLifeFloorShare: Number((lowLifeFloors / Math.max(1, base.samples.length)).toFixed(2)),
             maxLowLifeStreak,
-            unhealedLowLifeFloors,
-            unhealedLowLifeFloorShare: Number(
-                (unhealedLowLifeFloors / Math.max(1, base.samples.length)).toFixed(2)
-            ),
-            maxUnhealedLowLifeStreak,
             recoveryDebtFloors,
             maxRecoveryDebtStreak,
             routeChoiceCounts,
@@ -1317,31 +1113,21 @@ export const runDungeonBalanceProfileSimulation = (
             routeAcceptedChoices,
             routeRejectedChoices,
             routeLifeDelta,
-            routeShopGoldDelta,
             routeScoreDelta,
             routeGuardDelta,
             routeComboShardDelta,
             routeFavorDelta,
             routeMemorizeBonusMsDelta,
             dominantRouteShare: Number(dominantRouteShare.toFixed(2)),
-            safeRouteTollSpend,
             greedLifeCosts,
-            shopServiceSpend,
-            shopGoldEarned: Number((base.aggregate.totalShopGoldEarned * profile.rewardBias).toFixed(2)),
-            endingShopGold,
-            maxShopGoldHeld,
             worstSeedFloorsClearedShare: Number(worstSeedFloorsClearedShare.toFixed(2)),
             worstSeedLowLifeFloorShare: Number(worstSeedLowLifeFloorShare.toFixed(2)),
-            worstSeedUnhealedLowLifeFloorShare: Number(worstSeedUnhealedLowLifeFloorShare.toFixed(2)),
             worstSeedRunFalls: Math.max(0, ...seedOutcomes.map((outcome) => outcome.runFalls)),
-            maxSeedEndingShopGold: Math.max(0, ...seedOutcomes.map((outcome) => outcome.endingShopGold)),
             seedFloorClearShareSpread: Number((bestSeedFloorsClearedShare - worstSeedFloorsClearedShare).toFixed(2)),
             rewardClaims: Number(rewardClaims.toFixed(2)),
             bossWins,
             bossAttempts,
-            shopsVisited,
-            firstRiskSample,
-            healingPurchaseShare: shopSpendBudget === 0 ? 0 : Number((healingSpend / shopSpendBudget).toFixed(2))
+            firstRiskSample
         };
     });
 
@@ -1352,35 +1138,25 @@ export const runDungeonBalanceProfileSimulation = (
             minFloorsClearedShare: 0.82,
             maxLivesLostPerFloor: 1.35,
             minBossWinShare: 0.5,
-            maxShopGoldPerFloor: 12,
             minLivesRemaining: 1,
             maxRunFalls: 0,
-            maxHealingPurchaseShare: 0.45,
             maxAtRiskStreak: 5,
             maxLowLifeFloorShare: 0.45,
             maxLowLifeStreak: 5,
-            maxUnhealedLowLifeFloorShare: 0.35,
-            maxUnhealedLowLifeStreak: 4,
             maxRecoveryDebtStreak: 3,
             maxDominantRouteShare: 0.75,
-            maxEndingShopGoldPerFloor: 5,
-            maxShopGoldHeldPerFloor: 6,
             minWorstSeedFloorsClearedShare: 0.72,
             maxWorstSeedLowLifeFloorShare: 0.55,
-            maxWorstSeedUnhealedLowLifeFloorShare: 0.45,
             maxWorstSeedRunFalls: 0,
-            maxSeedEndingShopGoldPerFloor: 7,
             maxSeedFloorClearShareSpread: 0.28
         },
         notes: [
             'Profiles are broad deterministic guardrails, not exact win-rate claims.',
             'Bounds intentionally report profile/seed/floor context so balance failures are actionable.',
-            'Profile diagnostics carry lives and healing across each seed to catch survivability cliffs hidden by average loss rates.',
+            'Profile diagnostics carry lives across each seed to catch survivability cliffs hidden by average loss rates.',
             'Route-choice diagnostics execute the same typed command as live play and retain exact outcome/resource deltas so one route cannot silently become the default answer.',
-            'Wallet-carry diagnostics keep profile survivability from masking runaway unspent shop gold.',
-            'Recovery-debt diagnostics catch clustered pressure floors whose local guard, shop, room, or key relief is too thin.',
+            'Recovery-debt diagnostics catch clustered pressure floors whose local guard, room, or key relief is too thin.',
             'Low-life exposure diagnostics catch runs that survive on paper while spending too many floors near collapse.',
-            'Unhealed low-life diagnostics separate ordinary danger from low-life floors without immediate shop healing access.',
             'Per-seed profile outcomes keep a rough seed from hiding inside healthy aggregate averages.'
         ]
     };
@@ -1407,9 +1183,6 @@ export const assertDungeonBalanceProfilesWithinBounds = (
         if (profile.runFalls > report.bounds.maxRunFalls) {
             profileIssues.push(`${context}:runFalls=${profile.runFalls}`);
         }
-        if (profile.healingPurchaseShare > report.bounds.maxHealingPurchaseShare) {
-            profileIssues.push(`${context}:healingPurchaseShare=${profile.healingPurchaseShare}`);
-        }
         if (profile.maxAtRiskStreak > report.bounds.maxAtRiskStreak) {
             profileIssues.push(`${context}:maxAtRiskStreak=${profile.maxAtRiskStreak}`);
         }
@@ -1419,23 +1192,11 @@ export const assertDungeonBalanceProfilesWithinBounds = (
         if (profile.maxLowLifeStreak > report.bounds.maxLowLifeStreak) {
             profileIssues.push(`${context}:maxLowLifeStreak=${profile.maxLowLifeStreak}`);
         }
-        if (profile.unhealedLowLifeFloorShare > report.bounds.maxUnhealedLowLifeFloorShare) {
-            profileIssues.push(`${context}:unhealedLowLifeFloorShare=${profile.unhealedLowLifeFloorShare}`);
-        }
-        if (profile.maxUnhealedLowLifeStreak > report.bounds.maxUnhealedLowLifeStreak) {
-            profileIssues.push(`${context}:maxUnhealedLowLifeStreak=${profile.maxUnhealedLowLifeStreak}`);
-        }
         if (profile.maxRecoveryDebtStreak > report.bounds.maxRecoveryDebtStreak) {
             profileIssues.push(`${context}:maxRecoveryDebtStreak=${profile.maxRecoveryDebtStreak}`);
         }
         if (profile.dominantRouteShare > report.bounds.maxDominantRouteShare) {
             profileIssues.push(`${context}:dominantRouteShare=${profile.dominantRouteShare}`);
-        }
-        if (profile.endingShopGold / totalFloors > report.bounds.maxEndingShopGoldPerFloor) {
-            profileIssues.push(`${context}:endingShopGold=${profile.endingShopGold}/${totalFloors}`);
-        }
-        if (profile.maxShopGoldHeld / report.base.floors > report.bounds.maxShopGoldHeldPerFloor) {
-            profileIssues.push(`${context}:maxShopGoldHeld=${profile.maxShopGoldHeld}/${report.base.floors}`);
         }
         if (profile.worstSeedFloorsClearedShare < report.bounds.minWorstSeedFloorsClearedShare) {
             profileIssues.push(`${context}:worstSeedFloorsClearedShare=${profile.worstSeedFloorsClearedShare}`);
@@ -1443,25 +1204,14 @@ export const assertDungeonBalanceProfilesWithinBounds = (
         if (profile.worstSeedLowLifeFloorShare > report.bounds.maxWorstSeedLowLifeFloorShare) {
             profileIssues.push(`${context}:worstSeedLowLifeFloorShare=${profile.worstSeedLowLifeFloorShare}`);
         }
-        if (profile.worstSeedUnhealedLowLifeFloorShare > report.bounds.maxWorstSeedUnhealedLowLifeFloorShare) {
-            profileIssues.push(
-                `${context}:worstSeedUnhealedLowLifeFloorShare=${profile.worstSeedUnhealedLowLifeFloorShare}`
-            );
-        }
         if (profile.worstSeedRunFalls > report.bounds.maxWorstSeedRunFalls) {
             profileIssues.push(`${context}:worstSeedRunFalls=${profile.worstSeedRunFalls}`);
-        }
-        if (profile.maxSeedEndingShopGold / report.base.floors > report.bounds.maxSeedEndingShopGoldPerFloor) {
-            profileIssues.push(`${context}:maxSeedEndingShopGold=${profile.maxSeedEndingShopGold}/${report.base.floors}`);
         }
         if (profile.seedFloorClearShareSpread > report.bounds.maxSeedFloorClearShareSpread) {
             profileIssues.push(`${context}:seedFloorClearShareSpread=${profile.seedFloorClearShareSpread}`);
         }
         if (profile.bossAttempts > 0 && profile.bossWins / profile.bossAttempts < report.bounds.minBossWinShare) {
             profileIssues.push(`${context}:bossWins=${profile.bossWins}/${profile.bossAttempts}`);
-        }
-        if (profile.shopGoldEarned / totalFloors > report.bounds.maxShopGoldPerFloor) {
-            profileIssues.push(`${context}:shopGoldEarned=${profile.shopGoldEarned}/${totalFloors}`);
         }
         return profileIssues;
     });

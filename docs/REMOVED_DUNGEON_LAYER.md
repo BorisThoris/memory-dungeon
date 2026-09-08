@@ -37,7 +37,11 @@ but "does the game still end":
    events behind them are removed at the source: a cleared floor goes straight to the next one. The route
    modules listed first at the end are deleted in this commit; a `route.choose` or `side_room.resolve`
    command in an old journal is rejected with a reason rather than replayed.
-4. **Gen 176 — the dungeon modules go.** The `dungeon-*` files listed second at the end are deleted, with the
+4. **Gen 174 — nothing purchasable.** Gold has no source and no sink: a cleared floor pays none, a match
+   pays none, the momentum ladder pays none, and the vendor - the floor-clear shop and the one opened from
+   the board - is gone with the store dock button, the shop view and the shop rules. The wallet reads
+   nought on every run. The shop modules listed second at the end are deleted in this commit.
+5. **Gen 176 — the dungeon modules go.** The `dungeon-*` files listed second at the end are deleted, with the
    run-state fields and save shape that carried them.
 
 ## How to get any of it back
@@ -250,9 +254,22 @@ Deleted in Gen 173, with the route offer itself. `git log --all -- <path>` is it
 - `src/shared/run-events.ts`
 - `src/shared/copy-tone.ts`
 - `src/shared/rest-shrine.ts`
+- `src/shared/loaded-gateway-rules.ts`
 - `src/renderer/components/SideRoomScreen.tsx`
 - `src/renderer/store/sideRoomActionController.ts`
 - `src/renderer/store/sideRoomSurfaceState.ts`
+
+## The shop, which went second
+
+Deleted in Gen 174, with the gold it existed to spend. `git log --all -- <path>` is its whole history.
+
+- `src/shared/shop-rules.ts`
+- `src/shared/economy-ledger.ts`
+- `src/shared/interlude-transition-rules.ts`
+- `src/renderer/components/ShopScreen.tsx`
+- `src/renderer/store/shopSurfaceState.ts`
+- `src/renderer/store/shopCloseExecutor.ts`
+- `src/renderer/store/levelCompleteShopExecutor.ts`
 
 ## The dungeon modules that go with it
 

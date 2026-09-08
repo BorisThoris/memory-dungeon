@@ -4,7 +4,6 @@ import type { BoardState, RunState, Tile } from '../../shared/contracts';
 import { buildBoard, countFindablePairs } from '../../shared/board-generation';
 import { createNewRun, createRunSummary } from '../../shared/game-core';
 import { createPlayablePathFixture, type PlayablePathFixtureId } from '../../shared/playable-path-fixtures';
-import { createRunShopOffers } from '../../shared/shop-rules';
 import { createDefaultSaveData } from '../../shared/save-data';
 import { calculateTileTraitMismatchPenalty } from '../../shared/tile-trait-rules';
 import { BOARD_FLOATER_POP_CLEAR } from './matchScorePop';
@@ -65,7 +64,6 @@ const resetStore = (): void => {
         tileSwapArmed: false,
         tileSwapFirstTileId: null,
         dungeonExitPromptOpen: false,
-        shopReturnMode: null,
         ...BOARD_FLOATER_POP_CLEAR
     });
 };
@@ -114,16 +112,14 @@ const installPlayablePathFixture = (id: PlayablePathFixtureId): void => {
         run: fixture.run,
         saveData: fixture.saveData,
         settings: fixture.saveData.settings,
-        shopReturnMode: fixture.shopReturnMode ?? null,
         view: fixture.view
     });
 };
 
 const visibleProgressionSignature = (): string => {
-    const { run, shopReturnMode, view } = useAppStore.getState();
+    const { run, view } = useAppStore.getState();
     return [
         view,
-        shopReturnMode ?? 'no-shop-return',
         run?.status ?? 'no-run',
         run?.board?.level ?? 'no-board',
         run?.sideRoom?.id ?? 'no-side-room',
@@ -136,14 +132,9 @@ const visibleProgressionSignature = (): string => {
 };
 
 const driveOneVisibleProgressionStep = (): boolean => {
-    const { run, shopReturnMode, view } = useAppStore.getState();
+    const { run, view } = useAppStore.getState();
     if (!run) {
         return false;
-    }
-
-    if (view === 'shop') {
-        useAppStore.getState().continueFromShop();
-        return true;
     }
 
     if (view !== 'playing' || run.status !== 'levelComplete') {
@@ -152,11 +143,6 @@ const driveOneVisibleProgressionStep = (): boolean => {
 
     if (run.relicOffer?.options[0]) {
         useAppStore.getState().pickRelic(run.relicOffer.options[0]);
-        return true;
-    }
-
-    if (run.shopOffers.length > 0 && shopReturnMode !== 'summary') {
-        useAppStore.getState().openShopFromLevelComplete();
         return true;
     }
 
@@ -179,8 +165,6 @@ describe('useAppStore timers', () => {
 
     it.each([
         'floorClearWithRouteChoices',
-        'floorClearWithShop',
-        'floorClearWithShopLowGold',
         'relicDraft'
     ] satisfies PlayablePathFixtureId[])(
         'drives the %s playable interlude fixture to the next playable state',
@@ -188,13 +172,12 @@ describe('useAppStore timers', () => {
             installPlayablePathFixture(fixtureId);
 
             for (let step = 0; step < 6; step += 1) {
-                const { run, shopReturnMode, view } = useAppStore.getState();
+                const { run, view } = useAppStore.getState();
                 if (
                     view === 'playing' &&
                     run?.status !== 'levelComplete' &&
                     !run?.sideRoom &&
-                    !run?.relicOffer &&
-                    shopReturnMode === null
+                    !run?.relicOffer
                 ) {
                     break;
                 }
@@ -204,9 +187,8 @@ describe('useAppStore timers', () => {
                 expect(visibleProgressionSignature()).not.toBe(before);
             }
 
-            const { run, shopReturnMode, view } = useAppStore.getState();
+            const { run, view } = useAppStore.getState();
             expect(view).toBe('playing');
-            expect(shopReturnMode).toBeNull();
             expect(run?.status).not.toBe('levelComplete');
             expect(run?.sideRoom).toBeNull();
             expect(run?.relicOffer).toBeNull();
@@ -581,102 +563,7 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().settingsReturnView).toBe('menu');
     });
 
-    it('routes the floor-clear shop as its own in-run destination without changing shop mechanics', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, practiceMode: true, runSeed: 44 });
-        const levelCompleteRun = {
-            ...baseRun,
-            status: 'levelComplete' as const,
-            shopGold: 5,
-            relicOffer: null,
-            timerState: {
-                memorizeRemainingMs: null,
-                resolveRemainingMs: null,
-                debugRevealRemainingMs: null,
-                pausedFromStatus: null
-            },
-            lastLevelResult: {
-                level: 1,
-                scoreGained: 100,
-                rating: 'S' as const,
-                livesRemaining: baseRun.lives,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'none' as const,
-                clearLifeGained: 0
-            }
-        };
-        useAppStore.setState({
-            view: 'playing',
-            run: {
-                ...levelCompleteRun,
-                shopOffers: createRunShopOffers(levelCompleteRun)
-            }
-        });
 
-        useAppStore.getState().openShopFromLevelComplete();
-        expect(useAppStore.getState().view).toBe('shop');
-
-        const peekOffer = useAppStore.getState().run!.shopOffers.find((offer) => offer.itemId === 'peek_charge')!;
-        useAppStore.getState().purchaseShopOffer(peekOffer.id);
-        expect(useAppStore.getState().run?.shopGold).toBe(5 - peekOffer.cost);
-        expect(useAppStore.getState().run?.shopOffers.find((offer) => offer.id === peekOffer.id)?.purchased).toBe(true);
-        expect(uiSfxMocks.playUiConfirmSfx).toHaveBeenCalledTimes(1);
-
-        useAppStore.getState().rerollShopOffers();
-        expect(useAppStore.getState().run?.shopRerolls).toBe(1);
-        expect(useAppStore.getState().run?.gameplayCommandJournal?.map((command) => command.type)).toEqual([
-            'shop.purchase',
-            'shop.reroll'
-        ]);
-        expect(uiSfxMocks.playUiConfirmSfx).toHaveBeenCalledTimes(2);
-
-        useAppStore.getState().closeShopToFloorSummary();
-        expect(useAppStore.getState().view).toBe('playing');
-        expect(useAppStore.getState().run?.status).toBe('levelComplete');
-
-        useAppStore.getState().openShopFromLevelComplete();
-        useAppStore.getState().continueFromShop();
-        expect(useAppStore.getState().view).toBe('playing');
-        expect(useAppStore.getState().run?.status).toBe('memorize');
-    });
-
-    it('does not open the floor-clear shop when the cleared floor has no existing offers', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, practiceMode: true, runSeed: 46 });
-        useAppStore.setState({
-            view: 'playing',
-            shopReturnMode: null,
-            run: {
-                ...baseRun,
-                status: 'levelComplete',
-                shopGold: 5,
-                shopOffers: [],
-                relicOffer: null,
-                timerState: {
-                    memorizeRemainingMs: null,
-                    resolveRemainingMs: null,
-                    debugRevealRemainingMs: null,
-                    pausedFromStatus: null
-                },
-                lastLevelResult: {
-                    level: 1,
-                    scoreGained: 100,
-                    rating: 'S',
-                    livesRemaining: baseRun.lives,
-                    perfect: true,
-                    mistakes: 0,
-                    clearLifeReason: 'none',
-                    clearLifeGained: 0
-                }
-            }
-        });
-
-        useAppStore.getState().openShopFromLevelComplete();
-
-        expect(useAppStore.getState().view).toBe('playing');
-        expect(useAppStore.getState().shopReturnMode).toBeNull();
-        expect(useAppStore.getState().run?.status).toBe('levelComplete');
-        expect(useAppStore.getState().run?.shopOffers).toEqual([]);
-    });
 
 
 
@@ -1105,103 +992,9 @@ describe('useAppStore timers', () => {
 
 
 
-    it('routes zero-life floor-clear shop attempts to game over instead of opening a spend surface', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 12_358 });
-        const deadShopRun: RunState = {
-            ...baseRun,
-            status: 'levelComplete',
-            lives: 0,
-            shopGold: 99,
-            shopOffers: createRunShopOffers({ ...baseRun, lives: 0, shopGold: 99 }),
-            lastLevelResult: {
-                level: 1,
-                scoreGained: 120,
-                rating: 'A',
-                livesRemaining: 0,
-                perfect: false,
-                mistakes: 1,
-                clearLifeReason: 'none',
-                clearLifeGained: 0
-            }
-        };
-        useAppStore.setState({ view: 'playing', run: deadShopRun });
 
-        useAppStore.getState().openShopFromLevelComplete();
 
-        expect(useAppStore.getState().view).toBe('gameOver');
-        expect(useAppStore.getState().run?.status).toBe('gameOver');
-        expect(useAppStore.getState().run?.lives).toBe(0);
-        expect(useAppStore.getState().run?.lastRunSummary).not.toBeNull();
-    });
 
-    it('keeps the shop route unavailable without an active completed floor', () => {
-        useAppStore.getState().openShopFromLevelComplete();
-        expect(useAppStore.getState().view).toBe('menu');
-
-        useAppStore.setState({ view: 'shop', run: null });
-        useAppStore.getState().closeShopToFloorSummary();
-        expect(useAppStore.getState().view).toBe('menu');
-    });
-
-    it('ignores stale shop purchases and rerolls for non-resumable floor-shop snapshots', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 12_401 });
-        const deadShopRun: RunState = {
-            ...baseRun,
-            status: 'gameOver',
-            lives: 0,
-            shopGold: 99,
-            shopOffers: createRunShopOffers({ ...baseRun, shopGold: 99 })
-        };
-        useAppStore.setState({
-            view: 'shop',
-            run: deadShopRun,
-            shopReturnMode: 'floor'
-        });
-
-        useAppStore.getState().purchaseShopOffer(deadShopRun.shopOffers[0]!.id);
-        useAppStore.getState().rerollShopOffers();
-
-        expect(useAppStore.getState().run).toBe(deadShopRun);
-        expect(useAppStore.getState().run?.shopGold).toBe(99);
-        expect(useAppStore.getState().run?.shopOffers).toBe(deadShopRun.shopOffers);
-    });
-
-    it('does not let corrupted zero-life floor-clear shops heal or reroll back into a live run', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 12_402 });
-        const deadLevelCompleteShopRun: RunState = {
-            ...baseRun,
-            status: 'levelComplete',
-            lives: 0,
-            shopGold: 99,
-            shopOffers: createRunShopOffers({ ...baseRun, lives: 0, shopGold: 99 }),
-            lastLevelResult: {
-                level: 1,
-                scoreGained: 120,
-                rating: 'A',
-                livesRemaining: 0,
-                perfect: false,
-                mistakes: 1,
-                clearLifeReason: 'none',
-                clearLifeGained: 0
-            }
-        };
-        const healOffer = deadLevelCompleteShopRun.shopOffers.find((offer) => offer.itemId === 'heal_life');
-        expect(healOffer).toBeDefined();
-
-        useAppStore.setState({
-            view: 'shop',
-            run: deadLevelCompleteShopRun,
-            shopReturnMode: 'summary'
-        });
-
-        useAppStore.getState().purchaseShopOffer(healOffer!.id);
-        useAppStore.getState().rerollShopOffers();
-
-        expect(useAppStore.getState().run).toBe(deadLevelCompleteShopRun);
-        expect(useAppStore.getState().run?.lives).toBe(0);
-        expect(useAppStore.getState().run?.shopGold).toBe(99);
-        expect(useAppStore.getState().run?.shopOffers).toBe(deadLevelCompleteShopRun.shopOffers);
-    });
 
     it('lets death win over puzzle and relic early returns when continuing a completed floor', () => {
         const makeDeadCompleteRun = (overrides: Partial<RunState> = {}): RunState => {
@@ -1210,7 +1003,7 @@ describe('useAppStore timers', () => {
                 ...baseRun,
                 status: 'levelComplete',
                 lives: 0,
-                shopOffers: createRunShopOffers({ ...baseRun, shopGold: 99 }),
+                shopOffers: [],
                 lastLevelResult: {
                     level: 1,
                     scoreGained: 100,
@@ -1446,18 +1239,6 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().run?.lives).toBe(0);
         expect(useAppStore.getState().subscreenReturnView).toBe('menu');
 
-        resetStore();
-        useAppStore.setState({
-            view: 'shop',
-            shopReturnMode: 'floor',
-            run: makePausedDead()
-        });
-        useAppStore.getState().continueFromShop();
-
-        expect(useAppStore.getState().view).toBe('gameOver');
-        expect(useAppStore.getState().run?.status).toBe('gameOver');
-        expect(useAppStore.getState().run?.lives).toBe(0);
-        expect(useAppStore.getState().shopReturnMode).toBeNull();
     });
 
     it('does not arm board action modes outside an actionable playing run', () => {
@@ -1491,34 +1272,7 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().dungeonExitPromptOpen).toBe(false);
     });
 
-    it('reopens the vendor from the dock once its card has been found', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 81_410 });
-        const withOffers = { ...baseRun, shopOffers: createRunShopOffers(baseRun) };
-        useAppStore.setState({
-            view: 'playing',
-            run: {
-                ...withOffers,
-                status: 'playing',
-                board: { ...withOffers.board!, dungeonShopVisited: true }
-            },
-            shopReturnMode: null
-        });
 
-        useAppStore.getState().openDungeonShopFromFloor();
-
-        expect(useAppStore.getState().view).toBe('shop');
-        expect(useAppStore.getState().shopReturnMode).toBe('floor');
-    });
-
-    it('does not offer the vendor on a floor whose shop card is still hidden', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 81_411 });
-        const withOffers = { ...baseRun, shopOffers: createRunShopOffers(baseRun) };
-        useAppStore.setState({ view: 'playing', run: { ...withOffers, status: 'playing' } });
-
-        useAppStore.getState().openDungeonShopFromFloor();
-
-        expect(useAppStore.getState().view).toBe('playing');
-    });
 
 
 
@@ -1527,7 +1281,6 @@ describe('useAppStore timers', () => {
             view: 'playing',
             run: createNewRun(0),
             dungeonExitPromptOpen: true,
-            shopReturnMode: 'floor',
             boardPinMode: true,
             destroyPairArmed: true,
             peekModeArmed: true,
@@ -1538,7 +1291,6 @@ describe('useAppStore timers', () => {
         useAppStore.getState().goToMenu();
 
         expect(useAppStore.getState().dungeonExitPromptOpen).toBe(false);
-        expect(useAppStore.getState().shopReturnMode).toBeNull();
         expect(useAppStore.getState().boardPinMode).toBe(false);
         expect(useAppStore.getState().destroyPairArmed).toBe(false);
         expect(useAppStore.getState().peekModeArmed).toBe(false);
@@ -1547,7 +1299,6 @@ describe('useAppStore timers', () => {
 
         useAppStore.setState({
             dungeonExitPromptOpen: true,
-            shopReturnMode: 'summary',
             boardPinMode: true,
             destroyPairArmed: true,
             peekModeArmed: true,
@@ -1558,7 +1309,6 @@ describe('useAppStore timers', () => {
 
         expect(useAppStore.getState().view).toBe('playing');
         expect(useAppStore.getState().dungeonExitPromptOpen).toBe(false);
-        expect(useAppStore.getState().shopReturnMode).toBeNull();
         expect(useAppStore.getState().boardPinMode).toBe(false);
         expect(useAppStore.getState().destroyPairArmed).toBe(false);
         expect(useAppStore.getState().peekModeArmed).toBe(false);
@@ -1567,7 +1317,6 @@ describe('useAppStore timers', () => {
 
         useAppStore.setState({
             dungeonExitPromptOpen: true,
-            shopReturnMode: 'floor',
             boardPinMode: true,
             destroyPairArmed: true,
             peekModeArmed: true,
@@ -1577,7 +1326,6 @@ describe('useAppStore timers', () => {
         useAppStore.getState().restartRun();
 
         expect(useAppStore.getState().dungeonExitPromptOpen).toBe(false);
-        expect(useAppStore.getState().shopReturnMode).toBeNull();
         expect(useAppStore.getState().boardPinMode).toBe(false);
         expect(useAppStore.getState().destroyPairArmed).toBe(false);
         expect(useAppStore.getState().peekModeArmed).toBe(false);
@@ -1586,7 +1334,6 @@ describe('useAppStore timers', () => {
 
         useAppStore.setState({
             dungeonExitPromptOpen: true,
-            shopReturnMode: 'summary',
             boardPinMode: true,
             destroyPairArmed: true,
             peekModeArmed: true,
@@ -1596,7 +1343,6 @@ describe('useAppStore timers', () => {
         useAppStore.getState().startRun({ ...DEFAULT_CLASSIC_RUN_SETUP, chaos: true });
 
         expect(useAppStore.getState().dungeonExitPromptOpen).toBe(false);
-        expect(useAppStore.getState().shopReturnMode).toBeNull();
         expect(useAppStore.getState().boardPinMode).toBe(false);
         expect(useAppStore.getState().destroyPairArmed).toBe(false);
         expect(useAppStore.getState().peekModeArmed).toBe(false);

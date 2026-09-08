@@ -4,7 +4,6 @@ import { createPlayablePathFixture } from '../../shared/playable-path-fixtures';
 import { openRelicOffer } from '../../shared/game-core';
 import { createPassAndPlayState, PASS_AND_PLAY_FLOORS } from '../../shared/pass-and-play-rules';
 import {
-    executeChooseRouteAndContinue,
     executeContinueToNextLevel,
     type LevelCompleteContinuationExecutorDeps,
     type LevelCompleteContinuationExecutorState
@@ -125,28 +124,5 @@ describe('level complete continuation executors', () => {
         expect(deps.clearAllTimers).not.toHaveBeenCalled();
     });
 
-    it('delegates route choice to normal continuation while a route card plan is pending', () => {
-        const run = {
-            ...createPlayablePathFixture('floorClearWithRouteChoices').run!,
-            pendingRouteCardPlan: { routeType: 'safe' }
-        } as RunState;
-        const deps = createDeps(createState({ run }));
 
-        executeChooseRouteAndContinue('choice-safe', deps);
-
-        expect(deps.continueToNextLevel).toHaveBeenCalledTimes(1);
-        expect(deps.clearAllTimers).not.toHaveBeenCalled();
-    });
-
-    it('treats a route choice as a plain continue, journaling no route command (Gen 173)', () => {
-        const run = createPlayablePathFixture('floorClearWithRouteChoices').run!;
-        const deps = createDeps(createState({ run }));
-
-        executeChooseRouteAndContinue('any-choice-id', deps);
-
-        expect(deps.continueToNextLevel).toHaveBeenCalledTimes(1);
-        expect(deps.clearAllTimers).not.toHaveBeenCalled();
-        expect(deps.setState).not.toHaveBeenCalled();
-        expect(run.lastLevelResult?.routeChoices).toBeUndefined();
-    });
 });

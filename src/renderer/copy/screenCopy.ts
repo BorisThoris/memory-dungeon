@@ -6,7 +6,7 @@
  * rather than being left behind in the markup.
  */
 export const CHOOSE_YOUR_PATH_COPY = {
-    dungeonBlurb: 'A clean dungeon descent: procedural floors, route choices, shops, and relic milestones.',
+    dungeonBlurb: 'A clean descent: procedural floors of pairs, chains, and relic milestones.',
     guidedBlurb:
         'Start with a guided first room: match the marked pair, clear the floor, then choose what the next room changes.',
     /** The "no group picked" chip on the library's group filter. */
@@ -29,22 +29,6 @@ export const GAME_OVER_LABELS = {
     playAgainMobile: 'Mobile Play Again - start a new run after this expedition',
     region: 'Run result and next actions',
     returnToMenuMobile: 'Mobile return to the main menu'
-} as const;
-
-export const SHOP_COPY = {
-    emptyState: 'The vendor has nothing left this visit.',
-    /*
-     * The exits are named for where they go, not for the shape of the gesture. "Back" and "return"
-     * mean the same thing to a player, and the alcove shipped with both on screen at once, doing
-     * the same thing, one of them styled as the primary.
-     */
-    backToBoard: 'Back to board',
-    backToFloorSummary: 'Back to floor summary',
-    continue: 'Continue',
-    continueToRoute: (routeLabel: string): string => `Continue to ${routeLabel} floor`,
-    /** The side-room vendor, which does not advance the floor. */
-    sideRoomSubtitle: 'Spend current shop gold, then return to the board. This vendor does not advance the floor.',
-    subtitle: 'Spend temporary shop gold before the next floor. Unspent gold expires when the run ends.'
 } as const;
 
 /**

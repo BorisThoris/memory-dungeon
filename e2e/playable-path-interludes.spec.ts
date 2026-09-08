@@ -27,58 +27,12 @@ test.describe('Expanded playable interludes and post-run loop', () => {
         const floorClear = page.getByRole('dialog', { name: /floor cleared/i });
         await expect(floorClear).toBeVisible();
         // No door between floors any more (Gen 173): the result and a Continue, nothing to pick.
-        await expect(page.getByTestId('floor-clear-result-stack')).toHaveAttribute('data-route-choice-required', 'false');
         await expect(page.getByTestId('floor-clear-score')).toBeVisible();
         await expect(page.getByTestId('floor-clear-stats')).toContainText(/Rating/);
         await expect(page.getByTestId('route-choice-panel')).toHaveCount(0);
         await expect(page.getByTestId('floor-clear-payoff-stack')).toHaveCount(0);
         await floorClear.getByRole('button', { name: /^continue$/i }).click({ force: true });
         await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 30_000 });
-    });
-
-    test('shop purchase path shows wallet/stock consequences before continuing', async ({ page }) => {
-        await openPlayablePathFixture(page, 'floorClearWithShop');
-        const floorClear = page.getByRole('dialog', { name: /floor cleared/i });
-
-        await floorClear.getByRole('button', { name: /visit shop/i }).click();
-        await expectShopDecisionUsable(page);
-        await expect(page.getByTestId('shop-screen')).toHaveAttribute('data-shop-return-mode', 'summary');
-        const purse = page.locator('[aria-label$="shop gold"]').first();
-        const startingGold = parseShopGold(await purse.getAttribute('aria-label'));
-        const firstAvailableOffer = page.locator('[role="listitem"][data-status="available"]').first();
-        await expect(firstAvailableOffer).toBeVisible();
-        const purchaseButton = firstAvailableOffer.locator('button').filter({ hasText: /^spend \d+g$/i }).first();
-        const cost = parseShopGold(await purchaseButton.textContent());
-        await purchaseButton.click();
-        await expect(page.locator('[role="listitem"][data-status="claimed"]').first()).toContainText(/claimed/i);
-        await expect.poll(async () => parseShopGold(await purse.getAttribute('aria-label'))).toBe(startingGold - cost);
-        await page.getByTestId('shop-action-dock').getByRole('button', { name: /^back to floor summary$/i }).click();
-        await expect(floorClear).toBeVisible();
-    });
-
-    test('shop blocked buy and reroll states are visible', async ({ page }) => {
-        await openPlayablePathFixture(page, 'floorClearWithShopLowGold');
-        await page.getByRole('dialog', { name: /floor cleared/i }).getByRole('button', { name: /visit shop/i }).click();
-        await expectShopDecisionUsable(page);
-        await expect(page.getByRole('listitem').filter({ hasText: /not enough shop gold/i }).first()).toBeVisible();
-        await expect(page.locator('button').filter({ hasText: /^spend \d+g$/i }).first()).toBeDisabled();
-
-        await openPlayablePathFixture(page, 'floorClearWithShop');
-        await page.getByRole('dialog', { name: /floor cleared/i }).getByRole('button', { name: /visit shop/i }).click();
-        await expectShopDecisionUsable(page);
-        await page.getByTestId('shop-reroll-button').click();
-        await expect(page.getByTestId('shop-screen')).toHaveAttribute('data-shop-rerolls', '1');
-        await expect(page.getByTestId('shop-reroll-button')).toContainText(/stock rerolled/i);
-        await expect(page.getByText(/one reroll per visit/i)).toBeVisible();
-    });
-
-    test('shop continue path advances from summary to the next playable floor', async ({ page }) => {
-        await openPlayablePathFixture(page, 'floorClearWithShop');
-        await page.getByRole('dialog', { name: /floor cleared/i }).getByRole('button', { name: /visit shop/i }).click();
-        await expectShopDecisionUsable(page);
-        await page.getByTestId('shop-action-dock').getByRole('button', { name: /^continue$/i }).click();
-        await expectGameplayReady(page);
-        await expect(page.getByTestId('shop-screen')).toBeHidden();
     });
 
     test('relic draft fixture shows build choices and can pick into the next floor', async ({ page }) => {
@@ -157,20 +111,6 @@ test.describe('Expanded playable interludes and post-run loop', () => {
     });
 });
 
-function parseShopGold(value: string | null): number {
-    const match = value?.match(/\d+/);
-    if (!match) {
-        throw new Error(`Could not parse shop gold from: ${value ?? '<null>'}`);
-    }
-    return Number(match[0]);
-}
-
-async function expectShopDecisionUsable(page: Page): Promise<void> {
-    await expect(page.getByRole('dialog', { name: /vendor alcove/i })).toBeVisible({ timeout: 20_000 });
-    await expect(page.getByTestId('shop-screen')).toBeVisible();
-    await expect(page.getByRole('list', { name: /vendor stock/i })).toBeVisible();
-    await expect(page.getByTestId('shop-action-dock')).toBeVisible();
-}
 
 async function openInventoryFromToolbar(page: Page): Promise<void> {
     await expect(async () => {

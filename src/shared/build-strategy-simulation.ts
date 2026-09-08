@@ -9,7 +9,6 @@ import {
     createGameplayMemorizeCompleteCommand,
     createGameplayPeekCommand,
     createGameplayRegionShuffleCommand,
-    createGameplayShopPurchaseCommand,
     createGameplayTileFlipCommand,
     gameplayCommandSchema,
     gameplayEventSchema,
@@ -20,12 +19,10 @@ import {
 import { reduceGameplayCommand, replayGameplayCommands } from './gameplay-core';
 import { inspectGameplayFeedbackCompleteness } from './gameplay-feedback-completeness';
 import { createNewRun } from './run-creation-rules';
-import { createRunShopOffers } from './shop-rules';
 
 export const GAMEPLAY_BUILD_STRATEGY_AXES = [
     'information',
     'control',
-    'economy',
     'risk_conversion',
     'sustain_conversion',
     'board_reconfiguration',
@@ -37,7 +34,6 @@ export type GameplayBuildStrategyAxis = (typeof GAMEPLAY_BUILD_STRATEGY_AXES)[nu
 export type GameplayBuildStrategyId =
     | 'conduit_cartographer'
     | 'guard_tank'
-    | 'treasure_greed'
     | 'route_gambler'
     | 'combo_shard_engine'
     | 'trap_control'
@@ -147,20 +143,6 @@ export const GAMEPLAY_BUILD_STRATEGIES: readonly GameplayBuildStrategyDefinition
         expectedDominantAxis: 'control'
     },
     {
-        id: 'treasure_greed',
-        label: 'The Vaultbreaker',
-        buildMechanicId: 'build.treasure_greed',
-        startingLoadoutId: 'vaultbreaker',
-        activationDefinitionIds: [
-            'bonus_reward.chest_gold',
-            'bonus_reward.cursed_opener_contract',
-            'reward_perk.cursed_opener_greed'
-        ],
-        consequenceCommandType: 'shop.purchase',
-        consequenceEventType: 'shop.offer_purchased',
-        expectedDominantAxis: 'economy'
-    },
-    {
         id: 'route_gambler',
         label: 'The Route Gambler',
         buildMechanicId: 'build.route_gambler',
@@ -246,7 +228,6 @@ const stableJson = (value: unknown): string => JSON.stringify(value);
 const emptyAxisScores = (): Record<GameplayBuildStrategyAxis, number> => ({
     information: 0,
     control: 0,
-    economy: 0,
     risk_conversion: 0,
     sustain_conversion: 0,
     board_reconfiguration: 0,
@@ -317,11 +298,7 @@ const createStrategyInitialRun = (
             stats: { ...base.stats, currentStreak: strategy.id === 'combo_shard_engine' ? 1 : 2 }
         };
     }
-    if (strategy.id !== 'treasure_greed') {
-        return base;
-    }
-    const interlude: RunState = { ...base, status: 'levelComplete' };
-    return { ...interlude, shopOffers: createRunShopOffers(interlude) };
+    return base;
 };
 
 const consequenceCommand = (
@@ -344,12 +321,6 @@ const consequenceCommand = (
                 ? [...collectDestroyEligibleTileIds(run.board)].sort((left, right) => left.localeCompare(right))[0]
                 : undefined;
             return createGameplayDestroyPairCommand(commandId, targetTileId ?? 'missing-destroy-target');
-        }
-        case 'treasure_greed': {
-            const offerId = (Array.isArray(run.shopOffers) ? run.shopOffers : [])
-                .filter((offer) => !offer.purchased && offer.compatible && offer.cost <= run.shopGold)
-                .sort((left, right) => left.cost - right.cost || left.id.localeCompare(right.id))[0]?.id;
-            return createGameplayShopPurchaseCommand(commandId, offerId ?? 'missing-affordable-offer');
         }
         case 'route_gambler': {
             const targetTileId = (run.board?.tiles ?? [])
@@ -404,7 +375,6 @@ const collectAxisScores = (
             ) {
                 scores.control += 1;
             }
-            if (event.itemId === 'iron_key') scores.economy += 1;
             if (event.source.id === 'wager_surety' && strategy.id !== 'boss_hunter') {
                 scores.risk_conversion += 1;
             }
@@ -416,23 +386,6 @@ const collectAxisScores = (
         }
         if (event.type === 'board.peeked') scores.information += 1;
         if (event.type === 'board.pair_destroyed') scores.control += 1;
-        if (
-            event.type === 'currency.changed' &&
-            event.currency === 'shop_gold' &&
-            event.applied !== 0
-        ) {
-            scores.economy += 1;
-        }
-        if (
-            event.type === 'score.changed' &&
-            event.amount > 0 &&
-            strategy.id !== 'memory_scout' &&
-            event.source.id !== 'trait_toolkit' &&
-            event.source.id !== 'free_swap_floor'
-        ) {
-            scores.economy += 1;
-        }
-        if (event.type === 'shop.offer_purchased') scores.economy += 1;
         if (event.type === 'risk_wager.accepted' || event.type === 'board.gambit_commit.requested') {
             scores.risk_conversion += 1;
         }
@@ -659,7 +612,7 @@ export const runGameplayBuildStrategySimulation = (
         strategies,
         pairwiseAxisDistances,
         bounds: {
-            requiredStrategyCount: 8,
+            requiredStrategyCount: 7,
             minViableSeedShare: 1,
             minFeedbackEventsPerSeed: 3,
             minSignatureAxisScorePerSeed: 1,

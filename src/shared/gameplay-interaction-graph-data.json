@@ -1,5 +1,5 @@
 {
-    "version": 26,
+    "version": 27,
     "mechanics": [
         {
             "id": "trait.echo",
@@ -120,13 +120,11 @@
             ],
             "writes": [
                 "triesDelta",
-                "shopGold",
                 "interactionTags"
             ],
             "enables": [
                 "trait.volatile",
-                "trait.conduit",
-                "shop.trait_cleanse"
+                "trait.conduit"
             ],
             "blocks": [
                 "clean_recall"
@@ -136,8 +134,7 @@
                 "stasis-buffer-counterplay"
             ],
             "tests": [
-                "src/shared/tile-trait-rules.test.ts",
-                "src/shared/shop-rules.test.ts"
+                "src/shared/tile-trait-rules.test.ts"
             ]
         },
         {
@@ -335,7 +332,8 @@
                 "regionShuffleFreeThisFloor",
                 "shuffleNonce",
                 "tileStates",
-                "noShuffle"
+                "noShuffle",
+                "tilePositions"
             ],
             "writes": [
                 "regionShuffleCharges",
@@ -382,7 +380,8 @@
                 "shuffleNonce",
                 "tileStates",
                 "noShuffle",
-                "boardRows"
+                "boardRows",
+                "tilePositions"
             ],
             "writes": [
                 "regionShuffleCharges",
@@ -643,8 +642,7 @@
             "role": "resource_gate",
             "evidence": [
                 "src/shared/dungeon-key-rules.ts",
-                "src/shared/board-inspection.ts",
-                "src/shared/shop-rules.ts"
+                "src/shared/board-inspection.ts"
             ],
             "reads": [
                 "dungeonKeys",
@@ -671,8 +669,7 @@
             ],
             "tests": [
                 "src/shared/dungeon-key-rules.test.ts",
-                "src/shared/softlock-fairness.test.ts",
-                "src/shared/shop-rules.test.ts"
+                "src/shared/softlock-fairness.test.ts"
             ]
         },
         {
@@ -683,7 +680,6 @@
             "evidence": [
                 "src/shared/dungeon-key-rules.ts",
                 "src/shared/board-inspection.ts",
-                "src/shared/shop-rules.ts",
                 "src/shared/dungeon-topology.ts"
             ],
             "reads": [
@@ -697,8 +693,7 @@
                 "dungeonExitActivated"
             ],
             "enables": [
-                "exit.primary",
-                "shop.typed_key"
+                "exit.primary"
             ],
             "blocks": [
                 "exit_activation"
@@ -714,7 +709,6 @@
             "tests": [
                 "src/shared/dungeon-match-reward-rules.test.ts",
                 "src/shared/dungeon-topology.test.ts",
-                "src/shared/shop-rules.test.ts",
                 "src/shared/softlock-generator-contract.test.ts"
             ]
         },
@@ -736,7 +730,6 @@
             "writes": [
                 "dungeonKeys",
                 "dungeonMasterKeys",
-                "shopGold",
                 "score",
                 "dungeonRoomUsed"
             ],
@@ -755,110 +748,6 @@
             "tests": [
                 "src/shared/dungeon-room-rules.test.ts",
                 "src/shared/dungeon-card-read-model.test.ts"
-            ]
-        },
-        {
-            "id": "shop.typed_key",
-            "label": "Typed Shop Key",
-            "kind": "shop",
-            "role": "lock_counterplay",
-            "evidence": [
-                "src/shared/shop-rules.ts",
-                "src/shared/shop-rules.test.ts",
-                "src/renderer/components/ShopScreen.tsx"
-            ],
-            "reads": [
-                "shopGold",
-                "dungeonExitLockKind",
-                "dungeonKeys",
-                "dungeonMasterKeys"
-            ],
-            "writes": [
-                "shopGold",
-                "dungeonKeys"
-            ],
-            "enables": [
-                "lock.typed_key",
-                "exit.primary"
-            ],
-            "blocks": [],
-            "softlockGuards": [
-                "shop-priority-key",
-                "matching-key-kind",
-                "balance-key-slot-is-alternative"
-            ],
-            "tests": [
-                "src/shared/shop-rules.test.ts",
-                "src/shared/balance-simulation.test.ts"
-            ]
-        },
-        {
-            "id": "shop.trait_cleanse",
-            "label": "Trait Cleanse",
-            "kind": "shop",
-            "role": "trait_counterplay",
-            "evidence": [
-                "src/shared/shop-rules.ts",
-                "src/shared/shop-rules.test.ts",
-                "src/renderer/components/ShopScreen.tsx"
-            ],
-            "reads": [
-                "shopGold",
-                "tileTraitKind"
-            ],
-            "writes": [
-                "shopGold",
-                "tileTraitKind"
-            ],
-            "enables": [
-                "trait.cursed",
-                "trait.volatile"
-            ],
-            "blocks": [],
-            "softlockGuards": [
-                "shop-priority-does-not-hide-required-items"
-            ],
-            "tests": [
-                "src/shared/shop-rules.test.ts"
-            ]
-        },
-        {
-            "id": "shop.trait_routing_kit",
-            "label": "Trait Routing Kit",
-            "kind": "shop",
-            "role": "trait_routing_counterplay",
-            "evidence": [
-                "src/shared/shop-rules.ts",
-                "src/shared/shop-rules.test.ts",
-                "src/shared/tile-trait-rules.ts",
-                "src/shared/trait-opportunities.ts",
-                "src/renderer/components/ShopScreen.tsx"
-            ],
-            "reads": [
-                "shopGold",
-                "tileTraitKind",
-                "tilePositions",
-                "regionShuffleCharges"
-            ],
-            "writes": [
-                "peekCharges",
-                "regionShuffleCharges"
-            ],
-            "enables": [
-                "power.tile_swap",
-                "power.region_shuffle",
-                "trait.conduit",
-                "trait.drift"
-            ],
-            "blocks": [],
-            "softlockGuards": [
-                "shop-priority-does-not-hide-required-items",
-                "swap-created-route-detection"
-            ],
-            "tests": [
-                "src/shared/shop-rules.test.ts",
-                "src/shared/trait-opportunities.test.ts",
-                "src/shared/tile-trait-rules.test.ts"
             ]
         },
         {
@@ -1083,7 +972,6 @@
                 "score",
                 "scoreRequests",
                 "comboShards",
-                "shopGold",
                 "bossTrophyCacheOutcome",
                 "bossTrophyCacheScore",
                 "objectiveCompleted",
@@ -1097,7 +985,6 @@
                 "relicFavorProgress"
             ],
             "enables": [
-                "shop.trait_cleanse",
                 "objective.floor_clear"
             ],
             "blocks": [],
@@ -2465,7 +2352,8 @@
                 "freeShuffleThisFloor",
                 "shuffleNonce",
                 "tileStates",
-                "noShuffle"
+                "noShuffle",
+                "tilePositions"
             ],
             "writes": [
                 "shuffleCharges",
@@ -2506,7 +2394,6 @@
             ],
             "reads": [
                 "dungeonKeys",
-                "shopGold",
                 "rewardPerkIds",
                 "bonusRelicPicksNextOffer",
                 "matchedFindables"
@@ -2516,7 +2403,6 @@
             ],
             "enables": [
                 "lock.iron_key",
-                "shop.typed_key",
                 "progression.relic_draft"
             ],
             "blocks": [],
@@ -2545,18 +2431,15 @@
             "reads": [
                 "bonusRewardLedger",
                 "dungeonKeys",
-                "shopGold",
                 "score"
             ],
             "writes": [
                 "dungeonKeys",
-                "shopGold",
                 "score",
                 "feedbackLines"
             ],
             "enables": [
                 "inventory.iron_key",
-                "economy.shop_gold",
                 "build.treasure_greed"
             ],
             "blocks": [],
@@ -2582,17 +2465,14 @@
             ],
             "reads": [
                 "bonusRewardLedger",
-                "rewardPerkIds",
-                "shopGold"
+                "rewardPerkIds"
             ],
             "writes": [
                 "rewardPerkIds",
-                "shopGold",
                 "feedbackLines"
             ],
             "enables": [
                 "perk.cursed_opener_greed",
-                "economy.shop_gold",
                 "build.treasure_greed"
             ],
             "blocks": [],
@@ -2622,12 +2502,10 @@
                 "matchResolutionsThisFloor"
             ],
             "writes": [
-                "shopGold",
                 "score",
                 "feedbackLines"
             ],
             "enables": [
-                "economy.shop_gold",
                 "build.treasure_greed"
             ],
             "blocks": [],
@@ -2701,7 +2579,6 @@
                 "feedbackLines"
             ],
             "enables": [
-                "economy.shop_gold",
                 "build.treasure_greed"
             ],
             "blocks": [],
@@ -2751,39 +2628,6 @@
             ]
         },
         {
-            "id": "economy.shop_gold",
-            "label": "Shop Gold Economy",
-            "kind": "economy",
-            "role": "extracted_value_resource",
-            "evidence": [
-                "src/shared/gameplay-core.ts",
-                "src/shared/turn-match-economy-rules.ts",
-                "src/shared/shop-rules.ts"
-            ],
-            "reads": [
-                "shopGold",
-                "shopCost"
-            ],
-            "writes": [
-                "shopGold"
-            ],
-            "enables": [
-                "shop.typed_key",
-                "shop.trait_routing_kit"
-            ],
-            "blocks": [],
-            "softlockGuards": [
-                "non-negative-counter",
-                "shop-priority-key",
-                "affordability-check"
-            ],
-            "tests": [
-                "src/shared/gameplay-core.test.ts",
-                "src/shared/turn-match-economy-rules.test.ts",
-                "src/shared/shop-rules.test.ts"
-            ]
-        },
-        {
             "id": "progression.relic_draft",
             "label": "Relic Draft Progression",
             "kind": "progression",
@@ -2801,7 +2645,6 @@
                 "bonusRelicPicksNextOffer",
                 "relicOffer",
                 "relicIds",
-                "shopGold",
                 "relicOfferServiceUses",
                 "bannedRelicIds",
                 "upgradedOffer"
@@ -2810,7 +2653,6 @@
                 "bonusRelicPicksNextOffer",
                 "relicOffer",
                 "relicIds",
-                "shopGold",
                 "relicOfferServiceUses",
                 "bannedRelicIds",
                 "upgradedOffer",
@@ -3232,7 +3074,6 @@
                 "destroyPairCharges",
                 "safeHazardWardChargesThisFloor",
                 "dungeonKeys",
-                "shopGold",
                 "relicFavorProgress",
                 "bonusRelicPicksNextOffer",
                 "bossTrophyCacheOutcome",
@@ -3277,7 +3118,6 @@
                 "comboShards",
                 "destroyPairCharges",
                 "dungeonKeys",
-                "shopGold",
                 "relicFavorProgress",
                 "bonusRelicPicksNextOffer",
                 "endlessRiskWager",
@@ -3295,12 +3135,12 @@
                 "build.combo_shard_engine",
                 "build.trap_control",
                 "build.emergency_toolkit",
-                "build.treasure_greed",
                 "build.boss_hunter",
                 "build.reveal_scout",
                 "build.route_gambler",
                 "persistence.run_summary",
-                "simulation.gameplay_replay"
+                "simulation.gameplay_replay",
+                "build.treasure_greed"
             ],
             "blocks": [],
             "softlockGuards": [
@@ -4370,12 +4210,10 @@
             ],
             "reads": [
                 "bonusRewardLedger",
-                "dungeonKeys",
-                "shopGold"
+                "dungeonKeys"
             ],
             "writes": [
                 "dungeonKeys",
-                "shopGold",
                 "score",
                 "gameplayCommands",
                 "gameplayEvents",
@@ -4395,50 +4233,6 @@
             "tests": [
                 "src/shared/bonus-rewards.test.ts",
                 "src/shared/gameplay-core.test.ts"
-            ]
-        },
-        {
-            "id": "shop.master_key",
-            "label": "Master Key Shop Offer",
-            "kind": "shop",
-            "role": "universal_lock_fallback_purchase",
-            "evidence": [
-                "src/shared/shop-rules.ts",
-                "src/shared/gameplay-core.ts",
-                "src/renderer/store/shopSurfaceState.ts"
-            ],
-            "reads": [
-                "shopGold",
-                "shopOffers",
-                "dungeonMasterKeys",
-                "dungeonExitLockKind"
-            ],
-            "writes": [
-                "shopGold",
-                "shopOffers",
-                "dungeonMasterKeys",
-                "gameplayCommands",
-                "gameplayEvents",
-                "feedbackLines"
-            ],
-            "enables": [
-                "inventory.master_key",
-                "lock.iron_key",
-                "lock.typed_key",
-                "room.locked_cache",
-                "build.locksmith"
-            ],
-            "blocks": [],
-            "softlockGuards": [
-                "shop-affordability",
-                "offer-compatibility",
-                "board-shop-master-key-slot",
-                "typed-key-preferred-at-exit"
-            ],
-            "tests": [
-                "src/shared/shop-rules.test.ts",
-                "src/shared/gameplay-core.test.ts",
-                "src/renderer/store/shopSurfaceState.test.ts"
             ]
         },
         {
@@ -4488,16 +4282,13 @@
             "role": "lock_insurance_and_extraction_build",
             "evidence": [
                 "src/shared/gameplay-core-contracts.ts",
-                "src/shared/shop-rules.ts",
                 "src/shared/dungeon-exit-rules.ts",
                 "src/shared/dungeon-room-rules.ts"
             ],
             "reads": [
                 "dungeonKeys",
                 "dungeonMasterKeys",
-                "shopGold",
-                "dungeonExitLockKind",
-                "shopOffers"
+                "dungeonExitLockKind"
             ],
             "writes": [],
             "enables": [
@@ -4516,7 +4307,6 @@
             ],
             "tests": [
                 "src/shared/gameplay-core.test.ts",
-                "src/shared/shop-rules.test.ts",
                 "src/shared/dungeon-exit-rules.test.ts"
             ]
         },
@@ -4735,10 +4525,10 @@
                 "build.guard_tank",
                 "build.combo_shard_engine",
                 "build.trap_control",
-                "build.treasure_greed",
                 "build.boss_hunter",
                 "build.reveal_scout",
-                "build.memory_scout"
+                "build.memory_scout",
+                "build.treasure_greed"
             ],
             "blocks": [],
             "softlockGuards": [
@@ -4908,7 +4698,6 @@
                 "routeChoices",
                 "gameplayEvents",
                 "lives",
-                "shopGold",
                 "totalScore",
                 "guardTokens",
                 "comboShards",
@@ -5038,7 +4827,6 @@
             ],
             "writes": [
                 "relicIds",
-                "shopGold",
                 "score",
                 "feedbackLines"
             ],
@@ -5176,13 +4964,12 @@
             ],
             "writes": [
                 "relicIds",
-                "shopGold",
                 "score",
                 "feedbackLines"
             ],
             "enables": [
-                "build.treasure_greed",
-                "build.route_gambler"
+                "build.route_gambler",
+                "build.treasure_greed"
             ],
             "blocks": [],
             "softlockGuards": [
@@ -5244,7 +5031,6 @@
             ],
             "writes": [
                 "relicIds",
-                "shopGold",
                 "feedbackLines"
             ],
             "enables": [
@@ -5318,7 +5104,6 @@
                 "tileStates",
                 "matchedPairs",
                 "score",
-                "shopGold",
                 "comboShards",
                 "chunkPairsThisChain",
                 "feedbackLines",
@@ -5329,7 +5114,6 @@
             ],
             "enables": [
                 "objective.floor_clear",
-                "economy.shop_gold",
                 "inventory.combo_shard",
                 "build.combo_shard_engine",
                 "build.treasure_greed"
@@ -5478,42 +5262,6 @@
             "label": "produces the completed-floor result when the removed pair is last"
         },
         {
-            "source": "shop.trait_cleanse",
-            "target": "trait.cursed",
-            "kind": "counterplay",
-            "label": "softens danger"
-        },
-        {
-            "source": "shop.trait_cleanse",
-            "target": "feedback.gameplay_hud",
-            "kind": "enables",
-            "label": "shows cleanse relief"
-        },
-        {
-            "source": "shop.trait_routing_kit",
-            "target": "power.tile_swap",
-            "kind": "counterplay",
-            "label": "funds swap route"
-        },
-        {
-            "source": "shop.trait_routing_kit",
-            "target": "power.region_shuffle",
-            "kind": "counterplay",
-            "label": "funds row route"
-        },
-        {
-            "source": "shop.trait_routing_kit",
-            "target": "trait.conduit",
-            "kind": "synergy",
-            "label": "creates adjacency"
-        },
-        {
-            "source": "shop.trait_routing_kit",
-            "target": "trait.drift",
-            "kind": "synergy",
-            "label": "creates route"
-        },
-        {
             "source": "hazard.enemy_patrol",
             "target": "safety.softlock_fairness",
             "kind": "guarded_by",
@@ -5592,24 +5340,6 @@
             "label": "typed key source audit"
         },
         {
-            "source": "shop.typed_key",
-            "target": "lock.typed_key",
-            "kind": "counterplay",
-            "label": "sells matching lock key"
-        },
-        {
-            "source": "shop.typed_key",
-            "target": "lock.typed_key",
-            "kind": "priority_guard",
-            "label": "typed lock insurance first"
-        },
-        {
-            "source": "shop.typed_key",
-            "target": "feedback.gameplay_hud",
-            "kind": "enables",
-            "label": "shows typed key insurance"
-        },
-        {
             "source": "lock.typed_key",
             "target": "room.locked_cache",
             "kind": "enables",
@@ -5632,42 +5362,6 @@
             "target": "safety.softlock_fairness",
             "kind": "guarded_by",
             "label": "optional cache cannot block clear"
-        },
-        {
-            "source": "shop.trait_cleanse",
-            "target": "lock.iron_key",
-            "kind": "priority_guard",
-            "label": "does not displace keys"
-        },
-        {
-            "source": "shop.trait_cleanse",
-            "target": "lock.typed_key",
-            "kind": "priority_guard",
-            "label": "does not displace typed keys"
-        },
-        {
-            "source": "shop.trait_routing_kit",
-            "target": "lock.iron_key",
-            "kind": "priority_guard",
-            "label": "does not displace keys"
-        },
-        {
-            "source": "shop.trait_routing_kit",
-            "target": "lock.typed_key",
-            "kind": "priority_guard",
-            "label": "does not displace typed keys"
-        },
-        {
-            "source": "shop.trait_routing_kit",
-            "target": "boss.moving_patrol",
-            "kind": "priority_guard",
-            "label": "does not displace boss counterplay"
-        },
-        {
-            "source": "shop.trait_routing_kit",
-            "target": "feedback.gameplay_hud",
-            "kind": "enables",
-            "label": "shows routing kit payoff"
         },
         {
             "source": "exit.primary",
@@ -6817,15 +6511,69 @@
         },
         {
             "source": "reward.chest_gold",
-            "target": "economy.shop_gold",
-            "kind": "grants",
-            "label": "extracts shop buying power"
-        },
-        {
-            "source": "reward.chest_gold",
             "target": "build.treasure_greed",
             "kind": "belongs_to",
             "label": "Vaultbreaker treasure source"
+        },
+        {
+            "source": "reward.cursed_opener_contract",
+            "target": "build.treasure_greed",
+            "kind": "belongs_to",
+            "label": "Vaultbreaker risk source"
+        },
+        {
+            "source": "perk.cursed_opener_greed",
+            "target": "build.treasure_greed",
+            "kind": "belongs_to",
+            "label": "Vaultbreaker risk payoff"
+        },
+        {
+            "source": "relic.shrine_echo",
+            "target": "build.treasure_greed",
+            "kind": "belongs_to",
+            "label": "Vaultbreaker relic source"
+        },
+        {
+            "source": "findable.score_glint",
+            "target": "build.treasure_greed",
+            "kind": "belongs_to",
+            "label": "Vaultbreaker pickup source"
+        },
+        {
+            "source": "build.treasure_greed",
+            "target": "lock.iron_key",
+            "kind": "consequence",
+            "label": "converts extraction into locked-route access"
+        },
+        {
+            "source": "build.treasure_greed",
+            "target": "progression.relic_draft",
+            "kind": "consequence",
+            "label": "compounds treasure into build selection"
+        },
+        {
+            "source": "inventory.relic_loadout",
+            "target": "build.treasure_greed",
+            "kind": "enables",
+            "label": "projects economy-build relic composition"
+        },
+        {
+            "source": "relic.tithe_conduit",
+            "target": "build.treasure_greed",
+            "kind": "belongs_to",
+            "label": "Tithe Conduit build source"
+        },
+        {
+            "source": "relic.drift_appraiser",
+            "target": "build.treasure_greed",
+            "kind": "belongs_to",
+            "label": "Drift Appraiser build source"
+        },
+        {
+            "source": "relic.magpie_ledger",
+            "target": "build.treasure_greed",
+            "kind": "belongs_to",
+            "label": "Magpie's Ledger build source"
         },
         {
             "source": "reward.chest_gold",
@@ -6847,18 +6595,6 @@
         },
         {
             "source": "reward.cursed_opener_contract",
-            "target": "economy.shop_gold",
-            "kind": "grants",
-            "label": "pays contract signing gold"
-        },
-        {
-            "source": "reward.cursed_opener_contract",
-            "target": "build.treasure_greed",
-            "kind": "belongs_to",
-            "label": "Vaultbreaker risk source"
-        },
-        {
-            "source": "reward.cursed_opener_contract",
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "shows contract activation"
@@ -6868,18 +6604,6 @@
             "target": "core.gameplay_commands",
             "kind": "triggers",
             "label": "first Cursed match command"
-        },
-        {
-            "source": "perk.cursed_opener_greed",
-            "target": "economy.shop_gold",
-            "kind": "grants",
-            "label": "converts opener risk into gold"
-        },
-        {
-            "source": "perk.cursed_opener_greed",
-            "target": "build.treasure_greed",
-            "kind": "belongs_to",
-            "label": "Vaultbreaker risk payoff"
         },
         {
             "source": "perk.cursed_opener_greed",
@@ -6901,12 +6625,6 @@
         },
         {
             "source": "relic.shrine_echo",
-            "target": "build.treasure_greed",
-            "kind": "belongs_to",
-            "label": "Vaultbreaker relic source"
-        },
-        {
-            "source": "relic.shrine_echo",
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "shows banked pick"
@@ -6919,18 +6637,6 @@
         },
         {
             "source": "findable.score_glint",
-            "target": "economy.shop_gold",
-            "kind": "enables",
-            "label": "adds remembered-pair value to extraction plan"
-        },
-        {
-            "source": "findable.score_glint",
-            "target": "build.treasure_greed",
-            "kind": "belongs_to",
-            "label": "Vaultbreaker pickup source"
-        },
-        {
-            "source": "findable.score_glint",
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "shows score source"
@@ -6940,12 +6646,6 @@
             "target": "inventory.iron_key",
             "kind": "modifies",
             "label": "applies typed iron-key grants"
-        },
-        {
-            "source": "core.gameplay_commands",
-            "target": "economy.shop_gold",
-            "kind": "modifies",
-            "label": "applies typed gold grants"
         },
         {
             "source": "core.gameplay_commands",
@@ -6972,24 +6672,6 @@
             "label": "shows key-ring quantity"
         },
         {
-            "source": "economy.shop_gold",
-            "target": "shop.typed_key",
-            "kind": "enables",
-            "label": "funds priority key purchases"
-        },
-        {
-            "source": "economy.shop_gold",
-            "target": "shop.trait_routing_kit",
-            "kind": "enables",
-            "label": "funds future board shaping"
-        },
-        {
-            "source": "economy.shop_gold",
-            "target": "feedback.gameplay_hud",
-            "kind": "displays",
-            "label": "shows spendable gold"
-        },
-        {
             "source": "progression.relic_draft",
             "target": "progression.run_flow",
             "kind": "consequence",
@@ -7014,18 +6696,6 @@
             "label": "owns relic acquisition immediate effect and offer outcome"
         },
         {
-            "source": "economy.shop_gold",
-            "target": "progression.relic_draft",
-            "kind": "enables",
-            "label": "funds one-use reroll ban or rarity upgrade services"
-        },
-        {
-            "source": "progression.relic_draft",
-            "target": "economy.shop_gold",
-            "kind": "consumes",
-            "label": "spends exact service cost through the typed command"
-        },
-        {
             "source": "core.gameplay_commands",
             "target": "progression.relic_draft",
             "kind": "modifies",
@@ -7042,24 +6712,6 @@
             "target": "simulation.gameplay_replay",
             "kind": "tested_by",
             "label": "replays strict relic selections and immediate effects"
-        },
-        {
-            "source": "build.treasure_greed",
-            "target": "lock.iron_key",
-            "kind": "consequence",
-            "label": "converts extraction into locked-route access"
-        },
-        {
-            "source": "build.treasure_greed",
-            "target": "shop.typed_key",
-            "kind": "consequence",
-            "label": "converts gold into chosen route insurance"
-        },
-        {
-            "source": "build.treasure_greed",
-            "target": "progression.relic_draft",
-            "kind": "consequence",
-            "label": "compounds treasure into build selection"
         },
         {
             "source": "relic.chapter_compass",
@@ -7831,12 +7483,6 @@
         },
         {
             "source": "reward.key_insurance",
-            "target": "economy.shop_gold",
-            "kind": "grants",
-            "label": "adds one gold toward later insurance"
-        },
-        {
-            "source": "reward.key_insurance",
             "target": "build.locksmith",
             "kind": "belongs_to",
             "label": "Locksmith reward source"
@@ -7846,36 +7492,6 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "shows key gold and score gain"
-        },
-        {
-            "source": "shop.master_key",
-            "target": "core.gameplay_commands",
-            "kind": "triggers",
-            "label": "journals successful shop purchase"
-        },
-        {
-            "source": "shop.master_key",
-            "target": "inventory.master_key",
-            "kind": "grants",
-            "label": "adds one universal lock fallback"
-        },
-        {
-            "source": "economy.shop_gold",
-            "target": "shop.master_key",
-            "kind": "enables",
-            "label": "funds Master Key purchase"
-        },
-        {
-            "source": "shop.master_key",
-            "target": "build.locksmith",
-            "kind": "belongs_to",
-            "label": "Locksmith fallback source"
-        },
-        {
-            "source": "shop.master_key",
-            "target": "feedback.gameplay_hud",
-            "kind": "displays",
-            "label": "shows purchase cost and gained key"
         },
         {
             "source": "inventory.master_key",
@@ -8074,12 +7690,6 @@
             "target": "build.trap_control",
             "kind": "enables",
             "label": "projects control-build relic composition"
-        },
-        {
-            "source": "inventory.relic_loadout",
-            "target": "build.treasure_greed",
-            "kind": "enables",
-            "label": "projects economy-build relic composition"
         },
         {
             "source": "inventory.relic_loadout",
@@ -8335,12 +7945,6 @@
         },
         {
             "source": "relic.tithe_conduit",
-            "target": "build.treasure_greed",
-            "kind": "belongs_to",
-            "label": "Tithe Conduit build source"
-        },
-        {
-            "source": "relic.tithe_conduit",
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "shows routed gold and score"
@@ -8449,12 +8053,6 @@
         },
         {
             "source": "relic.drift_appraiser",
-            "target": "build.treasure_greed",
-            "kind": "belongs_to",
-            "label": "Drift Appraiser build source"
-        },
-        {
-            "source": "relic.drift_appraiser",
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "shows appraised gold and score"
@@ -8491,18 +8089,6 @@
         },
         {
             "source": "relic.magpie_ledger",
-            "target": "build.treasure_greed",
-            "kind": "belongs_to",
-            "label": "Magpie's Ledger build source"
-        },
-        {
-            "source": "relic.magpie_ledger",
-            "target": "economy.shop_gold",
-            "kind": "grants",
-            "label": "doubles gold from spilled treasure"
-        },
-        {
-            "source": "relic.magpie_ledger",
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "shows the doubled spill"
@@ -8536,12 +8122,6 @@
             "target": "objective.floor_clear",
             "kind": "modifies",
             "label": "removes cascaded pairs toward the clear, never the exit"
-        },
-        {
-            "source": "board.chain_chunk_fever",
-            "target": "economy.shop_gold",
-            "kind": "grants",
-            "label": "spilled treasure pays as matched"
         },
         {
             "source": "board.chain_chunk_fever",

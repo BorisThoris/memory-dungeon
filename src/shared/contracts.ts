@@ -115,7 +115,6 @@ export type ViewState =
     | 'collection'
     | 'profile'
     | 'inventory'
-    | 'shop'
     | 'codex';
 
 /** Where sub-screens (mode select, collection, profile, inventory, codex) return on Back. */

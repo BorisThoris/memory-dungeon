@@ -45,9 +45,20 @@ const DELETED_ROUTE_MODULES: readonly string[] = [
     'src/shared/run-events.ts',
     'src/shared/copy-tone.ts',
     'src/shared/rest-shrine.ts',
+    'src/shared/loaded-gateway-rules.ts',
     'src/renderer/components/SideRoomScreen.tsx',
     'src/renderer/store/sideRoomActionController.ts',
     'src/renderer/store/sideRoomSurfaceState.ts'
+];
+
+const DELETED_SHOP_MODULES: readonly string[] = [
+    'src/shared/shop-rules.ts',
+    'src/shared/economy-ledger.ts',
+    'src/shared/interlude-transition-rules.ts',
+    'src/renderer/components/ShopScreen.tsx',
+    'src/renderer/store/shopSurfaceState.ts',
+    'src/renderer/store/shopCloseExecutor.ts',
+    'src/renderer/store/levelCompleteShopExecutor.ts'
 ];
 
 const DELETED_MODULES: readonly string[] = [
@@ -128,7 +139,11 @@ push('3. **Gen 173 — no door between floors.** The route offer, its gateway an
 push('   events behind them are removed at the source: a cleared floor goes straight to the next one. The route');
 push('   modules listed first at the end are deleted in this commit; a `route.choose` or `side_room.resolve`');
 push('   command in an old journal is rejected with a reason rather than replayed.');
-push('4. **Gen 176 — the dungeon modules go.** The `dungeon-*` files listed second at the end are deleted, with the');
+push('4. **Gen 174 — nothing purchasable.** Gold has no source and no sink: a cleared floor pays none, a match');
+push('   pays none, the momentum ladder pays none, and the vendor - the floor-clear shop and the one opened from');
+push('   the board - is gone with the store dock button, the shop view and the shop rules. The wallet reads');
+push('   nought on every run. The shop modules listed second at the end are deleted in this commit.');
+push('5. **Gen 176 — the dungeon modules go.** The `dungeon-*` files listed second at the end are deleted, with the');
 push('   run-state fields and save shape that carried them.');
 push();
 push('## How to get any of it back');
@@ -255,6 +270,14 @@ push();
 push('Deleted in Gen 173, with the route offer itself. `git log --all -- <path>` is its whole history.');
 push();
 for (const file of DELETED_ROUTE_MODULES) {
+    push(`- \`${file}\``);
+}
+push();
+push('## The shop, which went second');
+push();
+push('Deleted in Gen 174, with the gold it existed to spend. `git log --all -- <path>` is its whole history.');
+push();
+for (const file of DELETED_SHOP_MODULES) {
     push(`- \`${file}\``);
 }
 push();

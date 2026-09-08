@@ -7,7 +7,7 @@ import {
 import { GAME_RULES_VERSION } from './contracts';
 
 describe('typed gameplay build strategy simulation', () => {
-    it('proves eight shipped builds through distinct replayable command/event loops', () => {
+    it('proves seven shipped builds through distinct replayable command/event loops', () => {
         const report = runGameplayBuildStrategySimulation({
             seeds: [42_001, 42_077, 42_123],
             rulesVersion: GAME_RULES_VERSION
@@ -19,7 +19,6 @@ describe('typed gameplay build strategy simulation', () => {
         expect(report.strategies.map((strategy) => strategy.dominantAxis)).toEqual([
             'information',
             'control',
-            'economy',
             'risk_conversion',
             'sustain_conversion',
             'board_reconfiguration',
@@ -41,9 +40,9 @@ describe('typed gameplay build strategy simulation', () => {
                 expect(sample.commands.at(-1)?.type).toBe(strategy.consequenceCommandType);
             }
         }
-        expect(report.pairwiseAxisDistances).toHaveLength(28);
+        expect(report.pairwiseAxisDistances).toHaveLength(21);
         expect(report.pairwiseAxisDistances.every((pair) => pair.distance === 2)).toBe(true);
-        expect(report.bounds.requiredStrategyCount).toBe(8);
+        expect(report.bounds.requiredStrategyCount).toBe(7);
         expect(report.notes).toEqual(expect.arrayContaining([
             expect.stringContaining('lock-extraction consequences')
         ]));
@@ -79,17 +78,6 @@ describe('typed gameplay build strategy simulation', () => {
                 definitions: ['bonus_reward.hazard_ward', 'trait.volatile_heavy_guard'],
                 command: 'board.destroy_pair',
                 event: 'board.pair_destroyed'
-            },
-            {
-                id: 'treasure_greed',
-                loadout: 'vaultbreaker',
-                definitions: [
-                    'bonus_reward.chest_gold',
-                    'bonus_reward.cursed_opener_contract',
-                    'reward_perk.cursed_opener_greed'
-                ],
-                command: 'shop.purchase',
-                event: 'shop.offer_purchased'
             },
             {
                 id: 'route_gambler',

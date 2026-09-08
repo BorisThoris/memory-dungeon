@@ -252,10 +252,6 @@ test.describe('every control a screen shows can be clicked', () => {
      */
     const RUN_FIXTURES = [
         'floorClearWithRouteChoices',
-        'floorClearWithShop',
-        // The vendor opened from the board, which is a different screen from the floor-clear shop
-        // and the one that shipped two buttons doing the same thing.
-        'inFloorShop',
         'relicDraft',
         'gameOver',
         // The board a chain is built on: suits on every back, the chain stat with its momentum
@@ -279,25 +275,6 @@ test.describe('every control a screen shows can be clicked', () => {
                 expect(await findUnreachableControls(page), `${fixture} @ ${viewport.id}`).toEqual([]);
                 expect(await findAmbiguousControls(page), `${fixture} reads twice @ ${viewport.id}`).toEqual([]);
 
-                /*
-                 * The shop fixture lands on the floor-clear dialog, one click short of the vendor
-                 * — and the vendor is the screen that shipped with its cards clipped away, so
-                 * stopping here would check everything except the thing that broke.
-                 */
-                if (fixture === 'floorClearWithShop') {
-                    await page
-                        .getByRole('dialog', { name: /floor cleared/i })
-                        .getByRole('button', { name: /visit shop/i })
-                        .click({ force: true });
-                    await page.getByTestId('shop-screen').waitFor({ state: 'visible', timeout: 20_000 });
-                    await page.waitForTimeout(700);
-                    expect(await findUnreachableControls(page), `vendor @ ${viewport.id}`).toEqual([]);
-                    /*
-                     * The vendor is where this shipped: two buttons a player could not tell apart,
-                     * running the same action, with the screen's own test asserting both existed.
-                     */
-                    expect(await findAmbiguousControls(page), `vendor reads twice @ ${viewport.id}`).toEqual([]);
-                }
             });
         }
     }

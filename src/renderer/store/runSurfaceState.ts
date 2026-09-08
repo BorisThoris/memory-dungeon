@@ -18,7 +18,6 @@ import {
     type DungeonExitActivationSpend
 } from '../../shared/dungeon-exit-rules';
 import { getDungeonExitStatus } from '../../shared/dungeon-board-status';
-import { runShopOffers } from '../../shared/shop-rules';
 import { canGreetFloorCurio } from '../../shared/floor-curio-greeting-rules';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
@@ -535,35 +534,6 @@ export const canOpenDungeonExitPrompt = (run: RunState | null, view: ViewState):
     const status = getDungeonExitStatus(run);
     return Boolean(status.exitTile) && status.revealed;
 };
-
-/** Whether the run dock should be offering the vendor: found on this floor, and still stocked. */
-export const canOpenDungeonShopFromFloor = (run: RunState | null, view: ViewState): boolean =>
-    Boolean(
-        run &&
-            view === 'playing' &&
-            run.status === 'playing' &&
-            run.board?.dungeonShopVisited === true &&
-            runShopOffers(run.shopOffers).length > 0
-    );
-
-export const createDungeonShopOpenFromFloorResult = ({
-    run,
-    view
-}: {
-    run: RunState | null;
-    view: ViewState;
-}): { kind: 'ignored' } | { kind: 'applied'; patch: Partial<RunSurfaceState> & { view: ViewState } } =>
-    !canOpenDungeonShopFromFloor(run, view)
-        ? { kind: 'ignored' }
-        : {
-              kind: 'applied',
-              patch: {
-                  ...clearRunSurfaceArmedModes(),
-                  dungeonExitPromptOpen: false,
-                  shopReturnMode: 'floor',
-                  view: 'shop'
-              }
-          };
 
 export const createDungeonExitActivationSurfaceResult = ({
     run,

@@ -17,7 +17,6 @@ import {
     SEER_DEFINITIONS,
     SLAYER_DEFINITIONS,
     SUPPLY_CACHE_DEFINITIONS,
-    VAULTBREAKER_DEFINITIONS,
     WARDEN_DEFINITIONS
 } from './gameplay-core-contracts';
 
@@ -126,7 +125,6 @@ describe('gameplay interaction graph', () => {
                 expect.objectContaining({ source: 'lock.iron_key', target: 'safety.dungeon_topology' }),
                 expect.objectContaining({ source: 'lock.typed_key', target: 'exit.primary' }),
                 expect.objectContaining({ source: 'lock.typed_key', target: 'safety.dungeon_topology' }),
-                expect.objectContaining({ source: 'shop.typed_key', target: 'lock.typed_key', kind: 'counterplay' }),
                 expect.objectContaining({ source: 'lock.typed_key', target: 'room.locked_cache' }),
                 expect.objectContaining({ source: 'room.locked_cache', target: 'safety.softlock_fairness' }),
                 expect.objectContaining({ source: 'room.locked_cache', target: 'feedback.gameplay_hud' }),
@@ -146,9 +144,6 @@ describe('gameplay interaction graph', () => {
         );
         expect(byId.get('lock.typed_key')?.softlockGuards).toEqual(
             expect.arrayContaining(['matching-key-kind', 'typed-shop-key-insurance', 'dungeon-topology-key-route'])
-        );
-        expect(byId.get('shop.typed_key')?.softlockGuards).toEqual(
-            expect.arrayContaining(['shop-priority-key', 'matching-key-kind', 'balance-key-slot-is-alternative'])
         );
         expect(byId.get('room.locked_cache')?.softlockGuards).toEqual(
             expect.arrayContaining(['matching-key-kind', 'optional-cache-never-required', 'room-copy-matches-key-kind'])
@@ -374,43 +369,6 @@ describe('gameplay interaction graph', () => {
         ]));
     });
 
-    it('connects Vaultbreaker treasure sources to keys, gold, and future relic selection', () => {
-        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        const sourceNodeByDefinition = new Map([
-            ['bonus_reward.chest_gold', 'reward.chest_gold'],
-            ['bonus_reward.cursed_opener_contract', 'reward.cursed_opener_contract'],
-            ['reward_perk.cursed_opener_greed', 'perk.cursed_opener_greed'],
-            ['relic.shrine_echo', 'relic.shrine_echo'],
-            ['relic.shrine_echo.treasure_claim', 'relic.shrine_echo'],
-            ['findable.score_glint', 'findable.score_glint']
-        ]);
-
-        for (const definition of VAULTBREAKER_DEFINITIONS) {
-            const nodeId = sourceNodeByDefinition.get(definition.id);
-            expect(nodeId, definition.id).toBeTruthy();
-            expect(byId.get(nodeId!), definition.id).toMatchObject({
-                tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
-            });
-        }
-
-        expect(byId.get('build.treasure_greed')).toMatchObject({ kind: 'build', role: 'treasure_extraction_build' });
-        expect(byId.get('inventory.iron_key')).toMatchObject({ kind: 'inventory', role: 'treasure_extraction_resource' });
-        expect(byId.get('economy.shop_gold')).toMatchObject({ kind: 'economy', role: 'extracted_value_resource' });
-        expect(byId.get('progression.relic_draft')).toMatchObject({
-            kind: 'progression',
-            role: 'typed_replayable_build_selection_and_offer_shaping'
-        });
-        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
-            expect.objectContaining({ source: 'reward.chest_gold', target: 'inventory.iron_key', kind: 'grants' }),
-            expect.objectContaining({ source: 'reward.cursed_opener_contract', target: 'perk.cursed_opener_greed', kind: 'grants' }),
-            expect.objectContaining({ source: 'perk.cursed_opener_greed', target: 'economy.shop_gold', kind: 'grants' }),
-            expect.objectContaining({ source: 'relic.shrine_echo', target: 'progression.relic_draft', kind: 'grants' }),
-            expect.objectContaining({ source: 'findable.score_glint', target: 'core.gameplay_commands', kind: 'triggers' }),
-            expect.objectContaining({ source: 'inventory.iron_key', target: 'lock.iron_key', kind: 'unblocks' }),
-            expect.objectContaining({ source: 'economy.shop_gold', target: 'shop.typed_key', kind: 'enables' }),
-            expect.objectContaining({ source: 'build.treasure_greed', target: 'progression.relic_draft', kind: 'consequence' })
-        ]));
-    });
 
     it('connects Slayer preparation through boss, wager, Favor, and parasite consequences', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
@@ -607,10 +565,6 @@ describe('gameplay interaction graph', () => {
             role: 'pre_lock_typed_key_insurance',
             tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
         });
-        expect(byId.get('shop.master_key')).toMatchObject({
-            kind: 'shop',
-            role: 'universal_lock_fallback_purchase'
-        });
         expect(byId.get('inventory.master_key')).toMatchObject({
             kind: 'inventory',
             role: 'universal_single_lock_resource'
@@ -621,7 +575,6 @@ describe('gameplay interaction graph', () => {
         });
         expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
             expect.objectContaining({ source: 'reward.key_insurance', target: 'inventory.iron_key', kind: 'grants' }),
-            expect.objectContaining({ source: 'shop.master_key', target: 'inventory.master_key', kind: 'grants' }),
             expect.objectContaining({ source: 'inventory.master_key', target: 'exit.primary', kind: 'unblocks' }),
             expect.objectContaining({ source: 'inventory.master_key', target: 'room.locked_cache', kind: 'unblocks' }),
             expect.objectContaining({ source: 'exit.primary', target: 'inventory.master_key', kind: 'consumes' }),
@@ -725,7 +678,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects Hazard Banish acquisition to its typed floor-start removal or Destroy fallback', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(26);
+        expect(gameplayInteractionGraph.version).toBe(27);
         expect(byId.get('perk.hazard_banish_per_floor')).toMatchObject({
             kind: 'perk',
             role: 'durable_floor_start_hazard_or_destroy_conversion',
@@ -765,7 +718,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects relic drafting and offer shaping to typed build acquisition, economy, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(26);
+        expect(gameplayInteractionGraph.version).toBe(27);
         expect(byId.get('progression.relic_draft')).toMatchObject({
             kind: 'progression',
             role: 'typed_replayable_build_selection_and_offer_shaping',
@@ -784,8 +737,6 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'core.gameplay_commands', target: 'progression.relic_draft', kind: 'modifies' }),
             expect.objectContaining({ source: 'progression.relic_draft', target: 'inventory.relic_loadout', kind: 'modifies' }),
             expect.objectContaining({ source: 'inventory.relic_loadout', target: 'progression.relic_draft', kind: 'gates' }),
-            expect.objectContaining({ source: 'economy.shop_gold', target: 'progression.relic_draft', kind: 'enables' }),
-            expect.objectContaining({ source: 'progression.relic_draft', target: 'economy.shop_gold', kind: 'consumes' }),
             expect.objectContaining({ source: 'progression.relic_draft', target: 'feedback.gameplay_hud', kind: 'displays' }),
             expect.objectContaining({ source: 'progression.relic_draft', target: 'persistence.run_summary', kind: 'persists' }),
             expect.objectContaining({ source: 'progression.relic_draft', target: 'simulation.gameplay_replay', kind: 'tested_by' })
@@ -795,7 +746,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects flat typed floor advancement through pressure, board preparation, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(26);
+        expect(gameplayInteractionGraph.version).toBe(27);
         expect(byId.get('progression.run_flow')).toMatchObject({
             kind: 'progression',
             role: 'typed_flat_replayable_floor_transition',

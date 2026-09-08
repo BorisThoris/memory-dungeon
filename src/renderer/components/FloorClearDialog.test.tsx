@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import type { LevelResult } from '../../shared/contracts';
-import FloorClearDialog, { type FloorClearDialogProps, type FloorClearRouteOption } from './FloorClearDialog';
+import FloorClearDialog, { type FloorClearDialogProps } from './FloorClearDialog';
 
 const result: LevelResult = {
     level: 3,
@@ -15,41 +15,6 @@ const result: LevelResult = {
     clearLifeGained: 0
 };
 
-const doors: FloorClearRouteOption[] = [
-    {
-        id: 'r:safe',
-        routeType: 'safe',
-        label: 'Safe passage',
-        room: 'Rest',
-        glyph: 'S',
-        reward: 'Recover 1 life if wounded.',
-        risk: 'None.',
-        available: true
-    },
-    {
-        id: 'r:greed',
-        routeType: 'greed',
-        label: 'Greedy route',
-        room: 'Treasure',
-        glyph: 'G',
-        reward: '+3 shop gold and +35 score.',
-        risk: '-1 life.',
-        available: false,
-        unavailableLabel: 'Unavailable at 1 life'
-    },
-    {
-        id: 'r:mystery',
-        routeType: 'mystery',
-        label: 'Mystery route',
-        room: 'Keeper Chamber via Mystery route',
-        approachLabel: 'Mystery route',
-        glyph: 'M',
-        reward: 'Deterministic local reward.',
-        risk: 'Unknown board.',
-        available: true
-    }
-];
-
 const renderDialog = (overrides: Partial<FloorClearDialogProps> = {}) => {
     const props: FloorClearDialogProps = {
         actions: [{ label: 'Continue', onClick: vi.fn(), variant: 'primary' }],
@@ -57,13 +22,8 @@ const renderDialog = (overrides: Partial<FloorClearDialogProps> = {}) => {
         lifeBonusLine: null,
         objectiveLine: null,
         onArmWager: vi.fn(),
-        onChooseRoute: vi.fn(),
         residentLine: null,
         result,
-        routeIntro: 'Pick one door to continue.',
-        routeOptions: [],
-        routeRequired: false,
-        selectedRoute: null,
         totalScore: 1240,
         wager: null,
         ...overrides
@@ -88,12 +48,11 @@ describe('FloorClearDialog', () => {
                 feverBreaks: 1,
                 chainMomentumAtClear: 9,
                 momentumBonusTier: 'fever',
-                momentumBonusShards: 1,
-                momentumBonusGold: 3
+                momentumBonusShards: 1
             }
         });
         const chain = screen.getByTestId('floor-clear-chain');
-        expect(chain).toHaveTextContent('Best chain ×6 · 2 chunks, 5 pairs cascaded · Fever ×1 · Extreme Fever at momentum 9: +1 shard, +3 gold.');
+        expect(chain).toHaveTextContent('Best chain ×6 · 2 chunks, 5 pairs cascaded · Fever ×1 · Extreme Fever at momentum 9: +1 shard.');
         expect(chain).toHaveAttribute('data-tone', 'reward');
     });
 
@@ -116,31 +75,7 @@ describe('FloorClearDialog', () => {
         expect(screen.queryByTestId('route-choice-panel')).toBeNull();
     });
 
-    it('renders one door per route, disables the locked one, and reports the chosen id', async () => {
-        const user = userEvent.setup();
-        const props = renderDialog({ routeOptions: doors, routeRequired: true });
 
-        expect(screen.getByTestId('floor-clear-result-stack')).toHaveAttribute('data-route-choice-required', 'true');
-        expect(screen.getByTestId('route-choice-panel')).toHaveAttribute('data-decision-state', 'required');
-        expect(screen.getByTestId('route-choice-required-copy')).toHaveTextContent('Pick one door to continue.');
-
-        const greed = screen.getByTestId('route-choice-greed');
-        expect(greed).toBeDisabled();
-        expect(greed).toHaveTextContent('Unavailable at 1 life');
-        expect(screen.getByTestId('route-choice-mystery')).toHaveTextContent('Approach: Mystery route');
-        expect(screen.getByRole('button', { name: /^Safe passage\. Rest\. Reward: Recover 1 life if wounded\. Risk: None\.$/ })).toBeEnabled();
-
-        await user.click(screen.getByTestId('route-choice-safe'));
-        expect(props.onChooseRoute).toHaveBeenCalledWith('r:safe');
-        await user.click(greed);
-        expect(props.onChooseRoute).toHaveBeenCalledTimes(1);
-    });
-
-    it('shows the locked route as one line once a door is chosen', () => {
-        renderDialog({ selectedRoute: { routeType: 'greed', label: 'Greedy route', line: 'The next floor adds richer caches.' } });
-        expect(screen.getByTestId('route-selected-note')).toHaveAttribute('data-route-type', 'greed');
-        expect(screen.getByTestId('route-selected-note')).toHaveTextContent('Greedy route selected. The next floor adds richer caches.');
-    });
 
     it('lists the life bonus and objective outcome as notes', () => {
         renderDialog({ lifeBonusLine: 'Clean floor bonus: +1 Life', objectiveLine: 'Flip par: Complete (+30 score) · +1 Favor' });

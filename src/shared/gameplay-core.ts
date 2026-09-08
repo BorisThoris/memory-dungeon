@@ -26,7 +26,6 @@ import {
     type GameplaySource
 } from './gameplay-core-contracts';
 import { applyRelicOfferService, RELIC_OFFER_SERVICE_CATALOG } from './relics';
-import { rerollShopOffers } from './shop-rules';
 import { getBoardTurnAnnouncementFacts } from './board-turn-event-facts';
 import { finishMemorizePhase } from './memorize-phase-rules';
 import { computeRelicOfferPickBudget, openRelicOffer } from './relic-offer-open-rules';
@@ -45,7 +44,6 @@ import { runNonNegativeInteger } from './run-number-guards';
 import { runStringArray } from './run-array-guards';
 import { acceptEndlessRiskWager } from './risk-wager-rules';
 import { normalizeSessionStats } from './session-stats-rules';
-import { purchaseShopOffer } from './shop-rules';
 import { createDungeonExitActivationTransition } from './dungeon-exit-rules';
 import { getDungeonExitStatus } from './dungeon-board-status';
 import { advanceScoreParasiteFloor } from './score-parasite-rules';
@@ -108,7 +106,6 @@ const TILE_FLIP_SOURCE: GameplaySource = { kind: 'system', id: 'tile_flip' };
 const MEMORIZE_SOURCE: GameplaySource = { kind: 'system', id: 'memorize' };
 const RUN_TIMER_SOURCE: GameplaySource = { kind: 'system', id: 'run_timer' };
 const PROGRESSION_REPAIR_SOURCE: GameplaySource = { kind: 'system', id: 'progression_repair' };
-const SHOP_SOURCE: GameplaySource = { kind: 'shop', id: 'run_shop' };
 const DUNGEON_EXIT_SOURCE: GameplaySource = { kind: 'system', id: 'dungeon_exit' };
 const SCORE_PARASITE_SOURCE: GameplaySource = { kind: 'system', id: 'score_parasite' };
 const HAZARD_BANISH_SOURCE: GameplaySource = { kind: 'reward_perk', id: 'hazard_banish_per_floor' };
@@ -646,41 +643,15 @@ const applyUndoResolveCommand = (
     return { run: nextRun, command, events, accepted: true };
 };
 
+/*
+ * The shop went in Gen 174, and with it anything a `shop.purchase` or `shop.reroll` command could
+ * do. Both types stay in the command schema so an old journal still parses; both are rejected with
+ * a reason, the same way a route choice is, until the journal migration in T1.14.
+ */
 const applyShopPurchaseCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'shop.purchase' }>
-): GameplayCommandResult => {
-    const offer = (Array.isArray(run.shopOffers) ? run.shopOffers : []).find(
-        (candidate) => candidate.id === command.offerId
-    );
-    const nextRun = purchaseShopOffer(run, command.offerId);
-    if (nextRun === run || !offer) {
-        return rejectedResult(run, command.commandId, 'Shop offer cannot be purchased.', command);
-    }
-    const events: GameplayEvent[] = [];
-    const writeEvent = makeEventWriter(command.commandId, SHOP_SOURCE, events);
-    const shopGoldBefore = runNonNegativeInteger(run.shopGold);
-    const shopGoldAfter = runNonNegativeInteger(nextRun.shopGold);
-    const masterKeysBefore = runNonNegativeInteger(run.dungeonMasterKeys);
-    const masterKeysAfter = runNonNegativeInteger(nextRun.dungeonMasterKeys);
-    writeEvent({
-        type: 'shop.offer_purchased',
-        offerId: offer.id,
-        itemId: offer.itemId,
-        cost: runNonNegativeInteger(offer.cost),
-        shopGoldBefore,
-        shopGoldAfter,
-        masterKeysBefore,
-        masterKeysAfter
-    });
-    writeEvent({
-        type: 'feedback.requested',
-        cue: offer.itemId === 'master_key' ? 'shop.master_key.purchased' : 'shop.offer.purchased',
-        message: `${offer.label} purchased for ${shopGoldBefore - shopGoldAfter} shop gold.`,
-        tone: 'reward'
-    });
-    return { run: nextRun, command, events, accepted: true };
-};
+): GameplayCommandResult => rejectedResult(run, command.commandId, 'There is no shop to buy from any more.', command);
 
 const applyDungeonExitActivateCommand = (
     run: RunState,
@@ -1666,28 +1637,7 @@ const applyEnemyHazardContactCommand = (
 const applyShopRerollCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'shop.reroll' }>
-): GameplayCommandResult => {
-    const nextRun = rerollShopOffers(run);
-    if (nextRun === run) {
-        return rejectedResult(run, command.commandId, 'Shop stock cannot be rerolled right now.', command);
-    }
-    const events: GameplayEvent[] = [];
-    const writeRerollEvent = makeEventWriter(command.commandId, SHOP_SOURCE, events);
-    writeRerollEvent({
-        type: 'shop.stock_rerolled',
-        goldBefore: runNonNegativeInteger(run.shopGold),
-        goldAfter: runNonNegativeInteger(nextRun.shopGold),
-        rerollsBefore: runNonNegativeInteger(run.shopRerolls),
-        rerollsAfter: runNonNegativeInteger(nextRun.shopRerolls)
-    });
-    writeRerollEvent({
-        type: 'feedback.requested',
-        cue: 'shop.stock.rerolled',
-        message: 'Shop stock rerolled.',
-        tone: 'information'
-    });
-    return { run: nextRun, command, events, accepted: true };
-};
+): GameplayCommandResult => rejectedResult(run, command.commandId, 'There is no shop stock to reroll any more.', command);
 
 export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCommandResult => {
     const parsed = gameplayCommandSchema.safeParse(input);

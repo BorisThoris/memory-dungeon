@@ -59,7 +59,7 @@ describe('gate:changed selector', () => {
     it('selects focused gameplay, reward, navigation, and system gates for changed files', () => {
         const payload = runGateChanged(
             'src/shared/tile-trait-rules.ts',
-            'src/shared/shop-rules.ts',
+            'src/shared/relics.ts',
             'src/shared/run-map.ts',
             'docs/system-diagrams/actions.json'
         );

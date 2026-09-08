@@ -119,24 +119,7 @@ export const executeContinueToNextLevel = (deps: LevelCompleteContinuationExecut
 
     deps.clearAllTimers();
     applyContinuationResult(
-        createLevelCompleteContinuationSurfaceResult(run, { includeSummaryShop: false }),
+        createLevelCompleteContinuationSurfaceResult(run),
         deps
     );
-};
-
-/*
- * Choosing a route used to journal a `route.choose` command, open the side room behind the door,
- * and continue. No route is offered any more (Gen 173), so this is the same as continuing; it is
- * kept as an entry point because the store action that called it is still wired to the floor-clear
- * panel's controller path, and that wiring comes out with the shop in T1.10.
- */
-export const executeChooseRouteAndContinue = (
-    _choiceId: string,
-    deps: LevelCompleteContinuationExecutorDeps
-): void => {
-    const { run, view } = deps.getState();
-    if (!run || view !== 'playing' || run.status !== 'levelComplete') {
-        return;
-    }
-    deps.continueToNextLevel();
 };

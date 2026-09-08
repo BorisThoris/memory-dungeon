@@ -28,7 +28,6 @@ import {
     GAMEPLAY_RELIC_IDS,
     GAMEPLAY_RELIC_OFFER_SERVICE_IDS,
     MEMORY_SCOUT_DEFINITIONS,
-    LOCKSMITH_DEFINITIONS,
     SABOTEUR_DEFINITIONS,
     SEER_DEFINITIONS,
     SLAYER_DEFINITIONS,
@@ -38,7 +37,6 @@ import {
     createGameplayDefinitionCommand,
     createGameplayBoardTurnResolveCommand,
     createGameplayDestroyPairCommand,
-    createGameplayDungeonExitActivateCommand,
     createGameplayFlashPairCommand,
     createGameplayFloorAdvanceCommand,
     createGameplayGambitCommitCommand,
@@ -50,10 +48,7 @@ import {
     createGameplayRiskWagerAcceptCommand,
     createGameplayRelicPickCommand,
     createGameplayRelicOfferServiceCommand,
-    createGameplayRouteChooseCommand,
-    createGameplaySideRoomResolveCommand,
     createGameplayShuffleCommand,
-    createGameplayShopPurchaseCommand,
     createGameplayStrayRemoveCommand,
     createGameplayTileSwapCommand,
     createGameplayUndoResolveCommand,
@@ -71,11 +66,9 @@ import {
 } from './gameplay-core-adapters';
 import { applyRelicImmediate } from './relic-immediate-rules';
 import { resolveTileTraitEffects } from './tile-trait-rules';
-import { purchaseShopOffer } from './shop-rules';
 import { createNewRun } from './game';
-import { EXIT_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
+import { WILD_PAIR_KEY } from './tile-identity';
 import { createPlayablePathFixture } from './playable-path-fixtures';
-import { normalizeSessionStats } from './session-stats-rules';
 import { applyRelicOfferService, RELIC_OFFER_SERVICE_IDS, RELIC_POOL } from './relics';
 import { advanceToNextLevel } from './next-floor-transition-rules';
 import { resolveSlayerFloorClearEffects } from './slayer-floor-clear-transition';
@@ -1485,123 +1478,6 @@ describe('deterministic gameplay core', () => {
         ]);
     });
 
-    it('models Locksmith insurance, Master Key purchase, and explicit exit spend', () => {
-        expect(LOCKSMITH_DEFINITIONS.map((definition) => definition.id)).toEqual([
-            'bonus_reward.key_insurance'
-        ]);
-        const initial = run({ dungeonKeys: {}, shopGold: 0 });
-        const reward = {
-            ...BONUS_REWARD_CATALOG.key_insurance,
-            instanceId: 'reward:key-insurance:91',
-            runSeed: initial.runSeed,
-            rulesVersion: initial.runRulesVersion,
-            floor: 3,
-            offlineOnly: true as const,
-            eligible: true,
-            unavailableReason: null
-        };
-        const legacyReward = previewBonusRewardClaim(initial, reward).run;
-        const claimed = reduceGameplayCommand(
-            initial,
-            createGameplayDefinitionCommand('key-insurance', 'bonus_reward.key_insurance')
-        );
-        expect(claimed.run.dungeonKeys).toEqual(legacyReward.dungeonKeys);
-        expect(claimed.run.shopGold).toBe(legacyReward.shopGold);
-        expect(claimed.run.stats.totalScore).toBe(legacyReward.stats.totalScore);
-
-        const shopRun = run({
-            shopGold: 5,
-            dungeonMasterKeys: 0,
-            lives: 3,
-            shopOffers: [{
-                id: 'offer-master',
-                itemId: 'master_key',
-                category: 'consumable',
-                label: 'Master key',
-                description: 'Opens any one lock.',
-                cost: 2,
-                baseCost: 2,
-                stock: 1,
-                maxStock: 1,
-                stackLimit: null,
-                compatibleWhen: 'not_capped',
-                compatible: true,
-                unavailableReason: null,
-                purchased: false
-            }]
-        });
-        const bought = reduceGameplayCommand(
-            shopRun,
-            createGameplayShopPurchaseCommand('buy-master', 'offer-master')
-        );
-        expect(bought.accepted).toBe(true);
-        expect(bought.run).toEqual(purchaseShopOffer(shopRun, 'offer-master'));
-        expect(bought.events).toEqual([
-            expect.objectContaining({
-                type: 'shop.offer_purchased',
-                itemId: 'master_key',
-                shopGoldBefore: 5,
-                shopGoldAfter: 3,
-                masterKeysBefore: 0,
-                masterKeysAfter: 1
-            }),
-            expect.objectContaining({ type: 'feedback.requested', cue: 'shop.master_key.purchased' })
-        ]);
-
-        const base = createNewRun(0, { runSeed: 2405 });
-        const exitBoard: BoardState = {
-            ...base.board!,
-            pairCount: 1,
-            matchedPairs: 0,
-            flippedTileIds: ['exit'],
-            dungeonExitTileId: 'exit',
-            dungeonExitLockKind: 'iron',
-            tiles: [
-                tile('exit', EXIT_PAIR_KEY),
-                tile('a1', 'a'),
-                tile('a2', 'a')
-            ].map((candidate) => candidate.id === 'exit'
-                ? {
-                      ...candidate,
-                      state: 'flipped' as const,
-                      dungeonCardKind: 'exit' as const,
-                      dungeonCardState: 'revealed' as const,
-                      dungeonExitLockKind: 'iron' as const
-                  }
-                : candidate)
-        };
-        const exitRun: RunState = {
-            ...base,
-            status: 'playing',
-            board: exitBoard,
-            dungeonKeys: { iron: 0 },
-            dungeonMasterKeys: 1,
-            dungeonGatewaysUsed: 0
-        };
-        const activated = reduceGameplayCommand(
-            exitRun,
-            createGameplayDungeonExitActivateCommand('activate-master-exit', 'master_key')
-        );
-        expect(activated.accepted).toBe(true);
-        // The command reproduces activateDungeonExit, which finalizes the floor -
-        // activating the exit removes the remaining tiles, so the board is complete and
-        // the level closes. Comparing against the bare transition would assert the
-        // command does LESS than the direct path it has to match, which is what the
-        // solver determinism test checks.
-        expect(activated.run).toMatchObject({ status: 'levelComplete' });
-        expect(activated.run.board?.dungeonExitActivated).toBe(true);
-        expect(activated.events).toEqual([
-            expect.objectContaining({
-                type: 'dungeon.exit_activated',
-                exitTileId: 'exit',
-                spend: 'master_key',
-                masterKeysBefore: 1,
-                masterKeysAfter: 0,
-                gatewayUsesAfter: 1
-            }),
-            expect.objectContaining({ type: 'feedback.requested', cue: 'dungeon.exit.activated' })
-        ]);
-    });
 
     it('replays a JSON-round-tripped build sequence deterministically', () => {
         const initial = run({ peekCharges: 0 });

@@ -1,5 +1,4 @@
 import type { RunState } from './contracts';
-import { getDungeonKeyTotal } from './run-inventory';
 import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 
@@ -34,15 +33,6 @@ const SCORE_RUN_ECONOMY_DEFINITION = {
 } as const satisfies RunEconomyDefinition;
 
 export const RUN_ECONOMY_DEFINITIONS = [
-    {
-        id: 'shop_gold',
-        label: 'Shop gold',
-        bucket: 'temporary_run',
-        purpose: 'Temporary run currency for vendor purchases.',
-        source: 'floor clears',
-        sink: 'buy local vendor services; resets at run end',
-        persistence: 'temporary_run'
-    },
     SCORE_RUN_ECONOMY_DEFINITION,
     {
         id: 'combo_shards',
@@ -75,15 +65,6 @@ export const RUN_ECONOMY_DEFINITIONS = [
         maxValue: 3
     },
     {
-        id: 'dungeon_keys',
-        label: 'Dungeon keys',
-        bucket: 'temporary_run',
-        purpose: 'Temporary run unlock resource for dungeon exits, locks, and cache rooms.',
-        source: 'key cards, key cache rooms, shops, events, and rest shrine boss prep',
-        sink: 'spent on locked exits, locked caches, and cache rooms',
-        persistence: 'temporary_run'
-    },
-    {
         id: 'findable_pickups',
         label: 'Findable pickups',
         bucket: 'temporary_run',
@@ -97,7 +78,7 @@ export const RUN_ECONOMY_DEFINITIONS = [
         label: 'Assist charges',
         bucket: 'temporary_run',
         purpose: 'Temporary run action budget.',
-        source: 'run start, shops, relics, events, rooms, and pickup rewards',
+        source: 'run start, relics, and pickup rewards',
         sink: 'shuffle, row shuffle, tile swap, destroy, peek, and stray-remove actions',
         persistence: 'temporary_run'
     }
@@ -119,8 +100,6 @@ export const runEconomyDefinitionById = RUN_ECONOMY_DEFINITIONS.reduce<Record<st
 const valueFor = (run: RunState, id: string): string => {
     const stats = normalizeSessionStats(run.stats);
     switch (id) {
-        case 'shop_gold':
-            return String(runNonNegativeInteger(run.shopGold));
         case 'score':
             return String(stats.totalScore);
         case 'combo_shards':
@@ -129,9 +108,6 @@ const valueFor = (run: RunState, id: string): string => {
             return `${stats.guardTokens}/2`;
         case 'relic_favor':
             return `${runNonNegativeInteger(run.relicFavorProgress)}/3`;
-        case 'dungeon_keys': {
-            return `${getDungeonKeyTotal(run.dungeonKeys)} keys · ${runNonNegativeInteger(run.dungeonMasterKeys)} master`;
-        }
         case 'findable_pickups':
             return `${runNonNegativeInteger(run.findablesClaimedThisFloor)}/${runNonNegativeInteger(run.findablesTotalThisFloor)}`;
         case 'assist_charges':
@@ -144,8 +120,6 @@ const valueFor = (run: RunState, id: string): string => {
 const numericValueFor = (run: RunState, id: string): number => {
     const stats = normalizeSessionStats(run.stats);
     switch (id) {
-        case 'shop_gold':
-            return runNonNegativeInteger(run.shopGold);
         case 'score':
             return stats.totalScore;
         case 'combo_shards':
@@ -154,8 +128,6 @@ const numericValueFor = (run: RunState, id: string): number => {
             return stats.guardTokens;
         case 'relic_favor':
             return runNonNegativeInteger(run.relicFavorProgress);
-        case 'dungeon_keys':
-            return getDungeonKeyTotal(run.dungeonKeys) + runNonNegativeInteger(run.dungeonMasterKeys);
         case 'findable_pickups':
             return runNonNegativeInteger(run.findablesClaimedThisFloor);
         case 'assist_charges':

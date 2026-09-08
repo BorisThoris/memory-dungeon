@@ -254,6 +254,5 @@ export const createFloorClearLevelResult = ({
     chainMomentumAtClear: momentumBonus.momentum > 0 ? momentumBonus.momentum : undefined,
     momentumBonusTier: momentumBonus.tier !== 'none' ? momentumBonus.tier : undefined,
     momentumBonusShards: momentumBonus.shards > 0 ? momentumBonus.shards : undefined,
-    momentumBonusGold: momentumBonus.gold > 0 ? momentumBonus.gold : undefined,
     routeChoices
 });

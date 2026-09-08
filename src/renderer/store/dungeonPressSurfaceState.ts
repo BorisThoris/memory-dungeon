@@ -1,8 +1,7 @@
 import type { RunState } from '../../shared/contracts';
 import {
     EXIT_PAIR_KEY,
-    ROOM_PAIR_KEY,
-    SHOP_PAIR_KEY
+    ROOM_PAIR_KEY
 } from '../../shared/dungeon-rules';
 import { applyTileFlipThroughGameplayCore } from '../../shared/gameplay-core-adapters';
 
@@ -11,11 +10,6 @@ type DungeonTilePressSurfaceResult =
     | { kind: 'ignored' }
     | {
           kind: 'exitPrompt';
-          run: RunState;
-          playFlipSfx: boolean;
-      }
-    | {
-          kind: 'shop';
           run: RunState;
           playFlipSfx: boolean;
       }
@@ -41,17 +35,6 @@ export const createDungeonTilePressSurfaceResult = ({
             run: transition.run,
             playFlipSfx: transition.accepted
         };
-    }
-
-    if (pairKey === SHOP_PAIR_KEY) {
-        const transition = applyTileFlipThroughGameplayCore(run, tileId);
-        return !transition.accepted || transition.run.shopOffers.length === 0
-            ? { kind: 'ignored' }
-            : {
-                  kind: 'shop',
-                  run: transition.run,
-                  playFlipSfx: true
-              };
     }
 
     if (pairKey === ROOM_PAIR_KEY) {

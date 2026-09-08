@@ -242,21 +242,6 @@ export const VISUAL_SCREEN_SCENARIOS: ReadonlyArray<VisualScreenScenario> = [
         }
     },
     {
-        fileBase: '07a-shop-screen',
-        name: 'shop screen',
-        /** Same budget as floor-cleared (completes level before shop). */
-        timeoutMs: 260_000,
-        run: async (page, capture) => {
-            await openPlayablePathFixture(page, 'floorClearWithShop');
-            await expect(page.getByRole('dialog', { name: /floor cleared/i })).toBeVisible();
-            await page.getByRole('button', { name: /visit shop/i }).click();
-            await expect(page.getByRole('dialog', { name: /vendor alcove/i })).toBeVisible();
-            await expect(page.getByTestId('shop-screen')).toBeVisible();
-            await expectNoHorizontalOverflow(page);
-            await capture('07a-shop-screen');
-        }
-    },
-    {
         fileBase: '08-game-over',
         name: 'game over screen',
         /** Mismatch discovery + burn loops rival floor-clear duration on cold mobile. */

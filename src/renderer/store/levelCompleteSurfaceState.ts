@@ -7,23 +7,6 @@ import { createRunWithBoardInteractionClearedPatch, type RunSurfaceState } from 
 
 export type LevelCompleteContinuationSurfaceResult =
     | {
-          kind: 'shop';
-          patch: Pick<
-              RunSurfaceState,
-              | 'boardPinMode'
-              | 'destroyPairArmed'
-              | 'matchScorePop'
-              | 'mismatchScorePop'
-              | 'peekModeArmed'
-              | 'tileSwapArmed'
-              | 'tileSwapFirstTileId'
-          > & {
-              run: RunState;
-              shopReturnMode: 'summary';
-              view: 'shop';
-          };
-      }
-    | {
           kind: 'relicOffer';
           patch: Pick<
               RunSurfaceState,
@@ -68,29 +51,11 @@ export type LevelCompleteContinuationSurfaceResult =
           run: RunState;
       };
 
-interface LevelCompleteContinuationSurfaceOptions {
-    includeSummaryShop: boolean;
-}
-
-export const createLevelCompleteContinuationSurfaceResult = (
-    run: RunState,
-    { includeSummaryShop }: LevelCompleteContinuationSurfaceOptions
-): LevelCompleteContinuationSurfaceResult => {
+export const createLevelCompleteContinuationSurfaceResult = (run: RunState): LevelCompleteContinuationSurfaceResult => {
     // Through the command like the resolution controller's repair, so a floor-clear
     // repair is journalled rather than silently mutating the run.
     const repair = repairRunProgressionThroughGameplayCore(run);
     run = repair.accepted ? repair.run : run;
-
-    if (includeSummaryShop && run.shopOffers.length > 0) {
-        return {
-            kind: 'shop',
-            patch: {
-                view: 'shop',
-                shopReturnMode: 'summary',
-                ...createRunWithBoardInteractionClearedPatch(run)
-            }
-        };
-    }
 
     let nextRun = run;
 

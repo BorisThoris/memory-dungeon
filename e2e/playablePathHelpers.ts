@@ -22,8 +22,6 @@ export type PlayablePathFixtureId =
     | 'activeRunWithTraitRouteSetup'
     | 'activeRunWithTrapCard'
     | 'floorClearWithRouteChoices'
-    | 'floorClearWithShop'
-    | 'floorClearWithShopLowGold'
     | 'relicDraft'
     | 'gameOver';
 

@@ -24,7 +24,6 @@ type AppStoreInitialState = Pick<
     | 'saveWritesBlockedByReadFailure'
     | 'settings'
     | 'settingsReturnView'
-    | 'shopReturnMode'
     | 'steamConnected'
     | 'strayRemoveArmed'
     | 'subscreenReturnView'
@@ -60,7 +59,6 @@ export const createAppStoreInitialState = (): AppStoreInitialState => {
         tileSwapArmed: false,
         tileSwapFirstTileId: null,
         dungeonExitPromptOpen: false,
-        shopReturnMode: null,
         ...BOARD_FLOATER_POP_CLEAR
     };
 };

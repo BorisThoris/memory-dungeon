@@ -3,10 +3,8 @@ import {
     type DungeonRunNodeKind,
     type FloorArchetypeId,
     type FloorTag,
-    type RunShopItemId,
     type RouteNodeType
 } from './contracts';
-import { getBalanceSimulationEconomyLedgerRows, summarizeEconomyLedger } from './economy-ledger';
 import {
     ENDLESS_CYCLE_FLOOR_COUNT,
     getChapterActBiomePresentation,
@@ -65,17 +63,6 @@ export interface LongRunRoutePreviewRow extends DungeonRouteDecisionRow {
     actualNextBoardInput: string;
 }
 
-export type LongRunShopSource = 'floor_clear_shop' | 'board_shop' | 'route_shop' | 'rest_hook' | 'event_hook' | 'treasure_hook';
-
-export interface LongRunShopStockPool {
-    source: LongRunShopSource;
-    routeType: RouteNodeType | null;
-    nodeKind: DungeonRunNodeKind | null;
-    itemIds: RunShopItemId[];
-    rerollPolicy: string;
-    previewCopy: string;
-}
-
 export interface LongRunRelicDecisionRow extends RelicRoleAuditRow {
     changedDecision: string;
     uiSurface: string;
@@ -87,7 +74,6 @@ export interface LongRunSoakReport {
     seeds: number[];
     floors: number;
     rows: LongRunStatusRow[];
-    economySummary: ReturnType<typeof summarizeEconomyLedger>;
     ok: boolean;
     issues: string[];
     offlineOnly: true;
@@ -214,57 +200,6 @@ export const getLongRunRoutePreviewRows = (
         };
     });
 
-export const getLongRunShopStockPools = (): LongRunShopStockPool[] => [
-    {
-        source: 'floor_clear_shop',
-        routeType: null,
-        nodeKind: null,
-        itemIds: ['heal_life', 'peek_charge', 'region_shuffle_charge', 'destroy_charge', 'iron_key'],
-        rerollPolicy: 'one deterministic reroll per visit',
-        previewCopy: 'Floor-clear shops sell recovery, trait routing, and basic run tools.'
-    },
-    {
-        source: 'board_shop',
-        routeType: null,
-        nodeKind: 'shop',
-        itemIds: ['heal_life', 'peek_charge', 'region_shuffle_charge', 'destroy_charge', 'iron_key', 'master_key'],
-        rerollPolicy: 'one deterministic reroll per board vendor',
-        previewCopy: 'Board vendors add trait-routing and master-key depth after early floors.'
-    },
-    {
-        source: 'route_shop',
-        routeType: 'greed',
-        nodeKind: 'elite',
-        itemIds: ['destroy_charge', 'iron_key', 'master_key'],
-        rerollPolicy: 'route-stock variation; no extra reroll count',
-        previewCopy: 'Greed route shops lean toward extraction and bypass tools.'
-    },
-    {
-        source: 'rest_hook',
-        routeType: 'safe',
-        nodeKind: 'rest',
-        itemIds: ['heal_life', 'peek_charge', 'iron_key'],
-        rerollPolicy: 'rest services do not reroll stock',
-        previewCopy: 'Rest hooks rebuild life, scout information, and basic keys.'
-    },
-    {
-        source: 'event_hook',
-        routeType: 'mystery',
-        nodeKind: 'event',
-        itemIds: ['peek_charge', 'region_shuffle_charge', 'destroy_charge', 'iron_key'],
-        rerollPolicy: 'event choices are deterministic by seed',
-        previewCopy: 'Event hooks trade uncertainty for information and tactical charges.'
-    },
-    {
-        source: 'treasure_hook',
-        routeType: 'mystery',
-        nodeKind: 'treasure',
-        itemIds: ['iron_key', 'master_key', 'destroy_charge'],
-        rerollPolicy: 'treasure stock is claim-based, not a vendor reroll',
-        previewCopy: 'Treasure hooks bias toward keys and cache extraction.'
-    }
-];
-
 export const getLongRunRelicDecisionRows = (): LongRunRelicDecisionRow[] =>
     getRelicRoleAuditRows().map((row) => ({
         ...row,
@@ -279,9 +214,6 @@ export const getLongRunRelicDecisionRows = (): LongRunRelicDecisionRow[] =>
         regression: `relic-decision:${row.relicId}`
     }));
 
-const average = (values: readonly number[]): number =>
-    values.length === 0 ? 0 : values.reduce((sum, value) => sum + value, 0) / values.length;
-
 export const getLongRunFatigueRows = (report: BalanceSimulationReport): LongRunStatusRow[] => {
     const samples = report.samples;
     const breatherSpacing =
@@ -290,7 +222,6 @@ export const getLongRunFatigueRows = (report: BalanceSimulationReport): LongRunS
         report.aggregate.relicOfferAvailable > 0
             ? Number((samples.length / report.aggregate.relicOfferAvailable).toFixed(2))
             : samples.length;
-    const rewardInflation = average(samples.map((sample) => sample.shopGoldInflowPotential + sample.keyInflowPotential));
     /*
      * Fatigue used to be measured two ways here that it no longer can be: hazard-and-patrol
      * pressure, and contact-and-enemy pressure. Both summed counters the dungeon layer wrote, and
@@ -298,15 +229,12 @@ export const getLongRunFatigueRows = (report: BalanceSimulationReport): LongRunS
      *
      * Their question is still the right one - does a long run get monotonous - and Phase 2 answers
      * it with par and the pair curve rather than with things that bite. Until then, what is left
-     * measures the cadence a long run has: breathers, relic offers, and how fast currency comes in.
+     * measures the cadence a long run has: breathers and relic offers. The currency-inflow row went
+     * in Gen 174 with the gold it was watching; keys had already gone with the dungeon cards.
      */
     return [
         longRunRow('breather_spacing', 'Average floors between breather floors', breatherSpacing, 3, 5, 'scheduled breather count'),
-        longRunRow('relic_offer_spacing', 'Average floors between relic offers', relicCadence, 2.5, 4.5, 'relic milestone cadence'),
-        // Min 10 down to 7 (measured 7.81): the key half of "shop gold + key inflow" is nought now,
-        // because keys were dungeon cards. The shop gold half is unchanged and still the thing this
-        // row is really watching - whether a long run drowns in currency it cannot spend.
-        longRunRow('avg_reward_inflation', 'Average live currency inflow pressure per floor', Number(rewardInflation.toFixed(2)), 7, 40, 'shop gold + key inflow')
+        longRunRow('relic_offer_spacing', 'Average floors between relic offers', relicCadence, 2.5, 4.5, 'relic milestone cadence')
     ];
 };
 
@@ -347,43 +275,11 @@ export const runLongRunSoak = ({
             'runDungeonBalanceProfileSimulation'
         ),
         longRunRow(
-            'max_profile_healing_purchase_share',
-            'Largest heal spend share in any balance profile',
-            Math.max(...profileReport.profiles.map((profile) => profile.healingPurchaseShare)),
-            0,
-            profileReport.bounds.maxHealingPurchaseShare,
-            'runDungeonBalanceProfileSimulation'
-        ),
-        longRunRow(
             'max_profile_at_risk_streak',
             'Longest repeated at-risk floor streak in any balance profile',
             Math.max(...profileReport.profiles.map((profile) => profile.maxAtRiskStreak)),
             0,
             profileReport.bounds.maxAtRiskStreak,
-            'runDungeonBalanceProfileSimulation'
-        ),
-        longRunRow(
-            'max_profile_ending_gold_per_floor',
-            'Largest carried ending wallet per simulated floor',
-            Number(
-                Math.max(
-                    ...profileReport.profiles.map((profile) => profile.endingShopGold / profileReport.base.samples.length)
-                ).toFixed(2)
-            ),
-            0,
-            profileReport.bounds.maxEndingShopGoldPerFloor,
-            'runDungeonBalanceProfileSimulation'
-        ),
-        longRunRow(
-            'max_profile_gold_held_per_floor',
-            'Largest peak wallet held per seed-floor span',
-            Number(
-                Math.max(
-                    ...profileReport.profiles.map((profile) => profile.maxShopGoldHeld / profileReport.base.floors)
-                ).toFixed(2)
-            ),
-            0,
-            profileReport.bounds.maxShopGoldHeldPerFloor,
             'runDungeonBalanceProfileSimulation'
         ),
         longRunRow(
@@ -400,24 +296,6 @@ export const runLongRunSoak = ({
             Number(Math.max(...profileReport.profiles.map((profile) => profile.worstSeedLowLifeFloorShare)).toFixed(2)),
             0,
             profileReport.bounds.maxWorstSeedLowLifeFloorShare,
-            'runDungeonBalanceProfileSimulation'
-        ),
-        longRunRow(
-            'max_profile_worst_seed_unhealed_low_life_share',
-            'Largest per-seed low-life exposure without immediate healing access',
-            Number(
-                Math.max(...profileReport.profiles.map((profile) => profile.worstSeedUnhealedLowLifeFloorShare)).toFixed(2)
-            ),
-            0,
-            profileReport.bounds.maxWorstSeedUnhealedLowLifeFloorShare,
-            'runDungeonBalanceProfileSimulation'
-        ),
-        longRunRow(
-            'max_profile_unhealed_low_life_streak',
-            'Longest low-life streak without immediate healing access',
-            Math.max(...profileReport.profiles.map((profile) => profile.maxUnhealedLowLifeStreak)),
-            0,
-            profileReport.bounds.maxUnhealedLowLifeStreak,
             'runDungeonBalanceProfileSimulation'
         ),
         longRunRow(
@@ -440,7 +318,6 @@ export const runLongRunSoak = ({
         )
     );
     const rows = [...fatigueRows, ...profileRows, ...routeRows];
-    const economySummary = summarizeEconomyLedger(getBalanceSimulationEconomyLedgerRows(report));
     const profileBounds = assertDungeonBalanceProfilesWithinBounds(profileReport);
     const issues = [
         ...rows.filter((row) => row.status !== 'within_range').map((row) => `${row.key}:${row.value} outside ${row.targetMin}-${row.targetMax}`),
@@ -451,7 +328,6 @@ export const runLongRunSoak = ({
         seeds: [...seeds],
         floors,
         rows,
-        economySummary,
         ok: issues.length === 0,
         issues,
         offlineOnly: true

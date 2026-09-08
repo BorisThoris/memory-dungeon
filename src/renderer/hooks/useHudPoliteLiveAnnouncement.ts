@@ -31,21 +31,18 @@ const payoffIntensityAnnouncementLine = ({
     comboShardDelta,
     guardTokenDelta,
     lifeDelta,
-    shopGoldDelta,
     traitMatchCount
 }: {
     chainMatchStreak: number;
     comboShardDelta: number;
     guardTokenDelta: number;
     lifeDelta: number;
-    shopGoldDelta: number;
     traitMatchCount: number;
 }): string | null => {
     const lanes = [
         comboShardDelta > 0 ? 'combo shard' : null,
         guardTokenDelta > 0 ? 'guard token' : null,
         lifeDelta > 0 ? 'life' : null,
-        shopGoldDelta > 0 ? 'shop gold' : null,
         traitMatchCount >= 2 ? 'trait surge' : null
     ].filter((lane): lane is string => lane !== null);
     if (lanes.length < 2) {
@@ -75,7 +72,6 @@ interface HudPoliteLiveAnnouncementInput {
     lives: number;
     guardTokens: number;
     comboShards: number;
-    shopGold: number;
     shuffleCharges?: number;
     regionShuffleCharges?: number;
     stickyBlockIndex?: number | null;
@@ -136,7 +132,6 @@ export const useHudPoliteLiveAnnouncement = ({
     lives,
     guardTokens,
     comboShards,
-    shopGold,
     shuffleCharges = 0,
     regionShuffleCharges = 0,
     stickyBlockIndex = null,
@@ -171,7 +166,6 @@ export const useHudPoliteLiveAnnouncement = ({
         lives: number;
         guardTokens: number;
         comboShards: number;
-        shopGold: number;
         shuffleCharges: number;
         regionShuffleCharges: number;
         stickyBlockIndex: number | null;
@@ -434,7 +428,6 @@ export const useHudPoliteLiveAnnouncement = ({
             lives,
             guardTokens,
             comboShards,
-            shopGold,
             shuffleCharges,
             regionShuffleCharges,
             stickyBlockIndex,
@@ -468,7 +461,6 @@ export const useHudPoliteLiveAnnouncement = ({
         const lifeDelta = lives - snap.lives;
         const guardDelta = guardTokens - snap.guardTokens;
         const shardDelta = comboShards - snap.comboShards;
-        const goldDelta = shopGold - snap.shopGold;
         const shuffleChargeDelta = shuffleCharges - snap.shuffleCharges;
         const regionShuffleChargeDelta = regionShuffleCharges - snap.regionShuffleCharges;
         const stasisLocked = stickyBlockIndex !== null && snap.stickyBlockIndex !== stickyBlockIndex;
@@ -609,19 +601,12 @@ export const useHudPoliteLiveAnnouncement = ({
             lines.push(`${resourceDeltaCopy(shardDelta, 'Combo shard', 'combo shard', 'spent')}. ${comboShards} available.`);
         }
 
-        if (goldDelta > 0) {
-            lines.push(`${resourceDeltaCopy(goldDelta, 'Shop gold', 'shop gold', 'gained', 'shop gold')}. ${shopGold} available.`);
-        } else if (goldDelta < 0) {
-            lines.push(`${resourceDeltaCopy(goldDelta, 'Shop gold', 'shop gold', 'spent', 'shop gold')}. ${shopGold} available.`);
-        }
-
         if (matchDelta > 0) {
             const payoffIntensityLine = payoffIntensityAnnouncementLine({
                 chainMatchStreak: turnFacts?.currentStreakAfter ?? 0,
                 comboShardDelta: shardDelta,
                 guardTokenDelta: guardDelta,
                 lifeDelta,
-                shopGoldDelta: goldDelta,
                 traitMatchCount: traitMatchLabels.length
             });
             if (payoffIntensityLine) {
@@ -631,7 +616,7 @@ export const useHudPoliteLiveAnnouncement = ({
 
         if (lines.length > 0) {
             queuePoliteAnnouncement(lines.join(' '), {
-                dedupeKey: `action:${boardLevel}:${lives}:${guardTokens}:${comboShards}:${shopGold}:${shuffleCharges}:${regionShuffleCharges}:${stickyBlockIndex ?? 'none'}:${objectiveProgress}:${normalizedRecallFocusValue}:${normalizedRecallFocusMax}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${dungeonEnemiesDefeatedThisFloor}:${enemyHazardHitsThisFloor}:${enemyHazardsDefeatedThisFloor}:${boardTurnEvent?.eventId ?? 'no-turn'}:${newGameplayFeedback.map((item) => item.eventId).join(',') || 'legacy'}`,
+                dedupeKey: `action:${boardLevel}:${lives}:${guardTokens}:${comboShards}:${shuffleCharges}:${regionShuffleCharges}:${stickyBlockIndex ?? 'none'}:${objectiveProgress}:${normalizedRecallFocusValue}:${normalizedRecallFocusMax}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${dungeonEnemiesDefeatedThisFloor}:${enemyHazardHitsThisFloor}:${enemyHazardsDefeatedThisFloor}:${boardTurnEvent?.eventId ?? 'no-turn'}:${newGameplayFeedback.map((item) => item.eventId).join(',') || 'legacy'}`,
                 priority:
                     lifeDelta < 0 ||
                     enemyHazardHitDelta > 0 ||
@@ -667,7 +652,6 @@ export const useHudPoliteLiveAnnouncement = ({
         recallMatchesThisFloor,
         recallMistakesThisFloor,
         shuffleCharges,
-        shopGold,
         stickyBlockIndex,
         boardTurnEvent
     ]);

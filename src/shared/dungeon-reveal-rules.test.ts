@@ -77,17 +77,6 @@ describe('dungeon reveal rules', () => {
         });
     });
 
-    it('normalizes malformed shop offers before creating revealed shop stock', () => {
-        const b = board([tile('shop', SHOP_PAIR_KEY)]);
-
-        const revealed = revealDungeonShop(
-            run(b, { shopOffers: Number.NaN as unknown as RunState['shopOffers'] }),
-            'shop'
-        );
-
-        expect(revealed.board?.dungeonShopVisited).toBe(true);
-        expect(revealed.shopOffers.length).toBeGreaterThan(0);
-    });
 
     it('ignores non-matching tiles', () => {
         const current = run(board([tile('plain', 'A')]));

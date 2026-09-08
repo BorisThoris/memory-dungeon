@@ -22,11 +22,7 @@ import {
 } from './board-tile-generation-rules';
 import { assignTileTraitsToGeneratedBoard } from './tile-trait-rules';
 import { createDungeonEncounterContext } from './dungeon-encounter-context-rules';
-import {
-    DECOY_PAIR_KEY,
-    WILD_PAIR_KEY,
-    isSingletonUtilityPairKey
-} from './tile-identity';
+import { isSingletonUtilityPairKey } from './tile-identity';
 import { dealBoardSuits, getSuitDealProfile } from './tile-suit-rules';
 import { pickShiftingSpotlightKeys } from './shifting-spotlight-rules';
 import { repairDungeonExitSoftlocks } from './board-inspection';

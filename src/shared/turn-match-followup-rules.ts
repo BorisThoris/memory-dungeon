@@ -1,8 +1,6 @@
-import type { RouteNodeType, RunState } from './contracts';
-import { loadedGatewayRouteTypeFor } from './loaded-gateway-rules';
+import type { RunState } from './contracts';
 import { hasMutator } from './mutators';
 import { runNonNegativeInteger } from './run-number-guards';
-import { normalizeSessionStats } from './session-stats-rules';
 
 export interface TurnMatchFollowupResult {
     nBackMatchCounter: number;
@@ -12,24 +10,16 @@ export interface TurnMatchFollowupResult {
 
 export interface TurnMatchFollowupInput {
     run: RunState;
-    matchedPairKey: string;
     encoreKey: string;
-    loadedGatewayClaimed: boolean;
-    dungeonGatewayRouteType: RouteNodeType | null;
 }
 
 export const resolveTurnMatchFollowup = ({
     run,
-    matchedPairKey,
-    encoreKey,
-    loadedGatewayClaimed,
-    dungeonGatewayRouteType
+    encoreKey
 }: TurnMatchFollowupInput): TurnMatchFollowupResult => {
     const nBackMatchCounter = runNonNegativeInteger(run.nBackMatchCounter) + 1;
     const nBackAnchorPairKey =
         hasMutator(run, 'n_back_anchor') && nBackMatchCounter % 2 === 0 ? encoreKey : run.nBackAnchorPairKey;
-    const loadedGatewayRouteType = loadedGatewayClaimed ? loadedGatewayRouteTypeFor(run, matchedPairKey) : null;
-    const sourceLevel = run.board?.level ?? normalizeSessionStats(run.stats).highestLevel;
 
     /*
      * Matching a gateway pair used to plan the next floor's route from the board - a loaded gateway

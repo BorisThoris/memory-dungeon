@@ -40,7 +40,6 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
 
         expect(result.offlineOnly).toBe(true);
         expect(result.samples).toHaveLength(12);
-        expect(result.aggregate.totalShopGoldEarned).toBeGreaterThan(0);
         expect(result.aggregate.findablePickupPairs).toBeGreaterThanOrEqual(12);
         expect(sumFindableKindCounts(result.aggregate.findableKindCounts)).toBe(result.aggregate.findablePickupPairs);
         expect(result.aggregate.tileTraitPairs).toBeGreaterThan(0);
@@ -80,23 +79,23 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(result.aggregate.bossMovingEnemyHazards).toBe(0);
         expect(result.aggregate.hazardTileCount).toBe(0);
         expect(result.aggregate.contactRisk).toBe(result.aggregate.movingEnemyHazards);
-        expect(result.aggregate.shopSinkBudget).toBeGreaterThan(0);
         expect(result.aggregate.relicFavorPotential).toBeGreaterThan(0);
         expect(result.aggregate.comboShardPotential).toBeGreaterThan(0);
         expect(result.aggregate.guardRewardPotential).toBeGreaterThan(0);
         expect(result.aggregate.relicOfferAvailable).toBe(4);
-        expect(result.aggregate.consumableRewardPotential).toBeGreaterThan(0);
+        // Consumables came from key cards and the vendor's stock; both are gone (Gen 172, 174).
+        expect(result.aggregate.consumableRewardPotential).toBe(0);
         // Treasure pairs and key inflow were dungeon cards; the reward band now comes from
-        // findables, traits, relic offers and the shop sink alone. Same reasoning as above.
+        // findables, traits and relic offers alone. Same reasoning as above.
         expect(result.aggregate.treasureRewardPairs).toBe(0);
         expect(result.aggregate.routeRewardPairs).toBeGreaterThanOrEqual(0);
         expect(result.aggregate.eventRewardPotential).toBeGreaterThan(0);
         expect(result.aggregate.roomRewardPotential).toBeGreaterThan(0);
         expect(result.aggregate.keyInflowPotential).toBe(0);
         expect(result.aggregate.boardFairnessIssueCount).toBe(0);
-        expect(result.aggregate.shopGoldInflowPotential).toBeGreaterThan(result.aggregate.totalShopGoldEarned);
         expect(result.aggregate.destroyChargeInflowPotential).toBeGreaterThan(0);
-        expect(result.aggregate.peekChargeInflowPotential).toBeGreaterThan(0);
+        // Peek charges came from the vendor's stock and the scrying-lens room; both are gone.
+        expect(result.aggregate.peekChargeInflowPotential).toBe(0);
         expect(result.aggregate.recoveryReliefPotential).toBeGreaterThan(0);
         expect(result.aggregate.netPressureAfterRelief).toBeGreaterThanOrEqual(0);
         expect(result.aggregate.highPressureLowRecoveryFloors).toBeGreaterThanOrEqual(0);
@@ -109,13 +108,10 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
                 'avg_combo_shard_potential_per_floor',
                 'avg_guard_reward_potential_per_floor',
                 'relic_offer_cadence',
-                'avg_consumable_reward_potential_per_floor',
                 'reward_band_spread',
                 'board_fairness_issue_floor_share',
-                'avg_live_shop_gold_inflow_per_floor',
                 'avg_route_reward_pairs_per_floor',
                 'avg_event_room_reward_potential_per_floor',
-                'avg_power_charge_inflow_per_floor',
                 'avg_tile_trait_pairs_per_floor',
                 'avg_trait_combo_opportunity_pairs_per_floor',
                 'trait_match_route_floor_share',
@@ -149,13 +145,10 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             'avg_combo_shard_potential_per_floor',
             'avg_guard_reward_potential_per_floor',
             'relic_offer_cadence',
-            'avg_consumable_reward_potential_per_floor',
             'reward_band_spread',
             'board_fairness_issue_floor_share',
-            'avg_live_shop_gold_inflow_per_floor',
             'avg_route_reward_pairs_per_floor',
             'avg_event_room_reward_potential_per_floor',
-            'avg_power_charge_inflow_per_floor',
             'avg_tile_trait_pairs_per_floor',
             'avg_trait_combo_opportunity_pairs_per_floor',
             'trait_match_route_floor_share',
@@ -238,17 +231,15 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         const drift = assertBalanceSimulationWithinBaseline(result, BALANCE_SIMULATION_BASELINE);
 
         expect(BALANCE_SIMULATION_BASELINE_KEYS).toEqual([
-            'totalShopGoldEarned',
             'findablePickupPairs',
             'bossFloors',
-            'breatherFloors',
-            'shopSinkBudget'
+            'breatherFloors'
         ]);
         expect(drift.ok).toBe(true);
         expect(drift.issues).toEqual([]);
     });
 
-    it('DNG-071 reports dungeon balance profiles with pressure, economy, boss, and shop metrics', () => {
+    it('DNG-071 reports dungeon balance profiles with pressure, boss and survivability metrics', () => {
         const result = runDungeonBalanceProfileSimulation({
             seeds: [42_001, 42_777],
             floors: 12,
@@ -260,18 +251,12 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             expect(profile.floorsCleared).toBeGreaterThan(0);
             expect(profile.livesLost).toBeGreaterThanOrEqual(0);
             expect(profile.guardUsed).toBeGreaterThanOrEqual(0);
-            expect(profile.healingPurchased).toBeGreaterThanOrEqual(0);
-            expect(profile.healingPurchaseShare).toBeGreaterThanOrEqual(0);
             expect(profile.minLivesRemaining).toBeGreaterThanOrEqual(1);
             expect(profile.runFalls).toBe(0);
             expect(profile.maxAtRiskStreak).toBeLessThanOrEqual(result.bounds.maxAtRiskStreak);
             expect(profile.lowLifeFloors).toBeGreaterThanOrEqual(0);
             expect(profile.lowLifeFloorShare).toBeLessThanOrEqual(result.bounds.maxLowLifeFloorShare);
             expect(profile.maxLowLifeStreak).toBeLessThanOrEqual(result.bounds.maxLowLifeStreak);
-            expect(profile.unhealedLowLifeFloors).toBeGreaterThanOrEqual(0);
-            expect(profile.unhealedLowLifeFloors).toBeLessThanOrEqual(profile.lowLifeFloors);
-            expect(profile.unhealedLowLifeFloorShare).toBeLessThanOrEqual(result.bounds.maxUnhealedLowLifeFloorShare);
-            expect(profile.maxUnhealedLowLifeStreak).toBeLessThanOrEqual(result.bounds.maxUnhealedLowLifeStreak);
             expect(profile.recoveryDebtFloors).toBeGreaterThanOrEqual(0);
             expect(profile.maxRecoveryDebtStreak).toBeLessThanOrEqual(result.bounds.maxRecoveryDebtStreak);
             // No route is offered between floors (Gen 173), so every route column reads zero. They
@@ -290,7 +275,6 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             ).toBe(profile.routeChoiceCounts.mystery);
             expect(profile.routeScoreDelta).toBe(profile.routeChoiceCounts.greed * 35);
             expect(profile.routeLifeDelta).toBeGreaterThanOrEqual(-profile.routeChoiceCounts.greed);
-            expect(profile.routeShopGoldDelta).toBeGreaterThanOrEqual(-profile.safeRouteTollSpend);
             expect(profile.routeGuardDelta).toBeGreaterThanOrEqual(0);
             expect(profile.routeComboShardDelta).toBeGreaterThanOrEqual(0);
             expect(profile.routeFavorDelta).toBeGreaterThanOrEqual(0);
@@ -314,18 +298,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             expect(profile.dominantRouteShare).toBeLessThanOrEqual(
                 profile.profile === 'greedy' ? 1 : result.bounds.maxDominantRouteShare
             );
-            expect(profile.safeRouteTollSpend).toBeGreaterThanOrEqual(0);
             expect(profile.greedLifeCosts).toBeGreaterThanOrEqual(0);
-            expect(profile.shopServiceSpend).toBeGreaterThan(0);
-            expect(profile.shopGoldEarned).toBeGreaterThan(0);
-            expect(profile.endingShopGold).toBeGreaterThanOrEqual(0);
-            expect(profile.endingShopGold / result.base.samples.length).toBeLessThanOrEqual(
-                result.bounds.maxEndingShopGoldPerFloor
-            );
-            expect(profile.maxShopGoldHeld).toBeGreaterThanOrEqual(profile.endingShopGold / result.base.seeds.length);
-            expect(profile.maxShopGoldHeld / result.base.floors).toBeLessThanOrEqual(
-                result.bounds.maxShopGoldHeldPerFloor
-            );
             expect(profile.seedOutcomes).toHaveLength(result.base.seeds.length);
             expect(profile.seedOutcomes.map((outcome) => outcome.seed)).toEqual(result.base.seeds);
             expect(profile.seedOutcomes.reduce((sum, outcome) => sum + outcome.floorsCleared, 0)).toBe(
@@ -338,17 +311,10 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             expect(profile.worstSeedLowLifeFloorShare).toBeLessThanOrEqual(
                 result.bounds.maxWorstSeedLowLifeFloorShare
             );
-            expect(profile.worstSeedUnhealedLowLifeFloorShare).toBeLessThanOrEqual(
-                result.bounds.maxWorstSeedUnhealedLowLifeFloorShare
-            );
             expect(profile.worstSeedRunFalls).toBeLessThanOrEqual(result.bounds.maxWorstSeedRunFalls);
-            expect(profile.maxSeedEndingShopGold / result.base.floors).toBeLessThanOrEqual(
-                result.bounds.maxSeedEndingShopGoldPerFloor
-            );
             expect(profile.seedFloorClearShareSpread).toBeLessThanOrEqual(result.bounds.maxSeedFloorClearShareSpread);
             expect(profile.rewardClaims).toBeGreaterThan(0);
             expect(profile.bossAttempts).toBeGreaterThan(0);
-            expect(profile.shopsVisited).toBeGreaterThanOrEqual(0);
         }
 
         const greedy = result.profiles.find((profile) => profile.profile === 'greedy')!;
@@ -356,7 +322,6 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         const highSkill = result.profiles.find((profile) => profile.profile === 'high_skill')!;
         expect(greedy.rewardClaims).toBeGreaterThan(cautious.rewardClaims);
         expect(cautious.guardUsed).toBeGreaterThanOrEqual(greedy.guardUsed);
-        expect(greedy.healingPurchased).toBeGreaterThanOrEqual(cautious.healingPurchased);
         // The route columns all read zero for every profile (Gen 173): nothing is chosen between
         // floors, so nothing is scored, tolled or paid for in lives there. Asserted so that a route
         // finding its way back in fails here rather than hiding in a column nobody reads.
@@ -364,7 +329,6 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             expect(profile.routeChoiceCounts).toEqual({ safe: 0, greed: 0, mystery: 0 });
             expect(profile.routeScoreDelta).toBe(0);
             expect(profile.routeLifeDelta).toBe(0);
-            expect(profile.safeRouteTollSpend).toBe(0);
             expect(profile.greedLifeCosts).toBe(0);
         }
     });
@@ -470,36 +434,6 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(lowLifeExposure.issues).toEqual(expect.arrayContaining([expect.stringMatching(/lowLifeFloorShare=0.99/)]));
         expect(lowLifeExposure.issues).toEqual(expect.arrayContaining([expect.stringMatching(/maxLowLifeStreak=99/)]));
 
-        const strandedLowLife = assertDungeonBalanceProfilesWithinBounds({
-            ...result,
-            profiles: [
-                {
-                    ...result.profiles[0]!,
-                    unhealedLowLifeFloorShare: 0.99,
-                    maxUnhealedLowLifeStreak: 99,
-                    worstSeedUnhealedLowLifeFloorShare: 0.9
-                }
-            ]
-        });
-        expect(strandedLowLife.ok).toBe(false);
-        expect(strandedLowLife.issues).toEqual(
-            expect.arrayContaining([expect.stringMatching(/unhealedLowLifeFloorShare=0.99/)])
-        );
-        expect(strandedLowLife.issues).toEqual(
-            expect.arrayContaining([expect.stringMatching(/maxUnhealedLowLifeStreak=99/)])
-        );
-        expect(strandedLowLife.issues).toEqual(
-            expect.arrayContaining([expect.stringMatching(/worstSeedUnhealedLowLifeFloorShare=0.9/)])
-        );
-
-        const walletBloated = assertDungeonBalanceProfilesWithinBounds({
-            ...result,
-            profiles: [{ ...result.profiles[0]!, endingShopGold: 999, maxShopGoldHeld: 999 }]
-        });
-        expect(walletBloated.ok).toBe(false);
-        expect(walletBloated.issues).toEqual(expect.arrayContaining([expect.stringMatching(/endingShopGold=999/)]));
-        expect(walletBloated.issues).toEqual(expect.arrayContaining([expect.stringMatching(/maxShopGoldHeld=999/)]));
-
         const roughSeedHiddenByAggregate = assertDungeonBalanceProfilesWithinBounds({
             ...result,
             profiles: [
@@ -507,9 +441,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
                     ...result.profiles[0]!,
                     worstSeedFloorsClearedShare: 0.1,
                     worstSeedLowLifeFloorShare: 0.9,
-                    worstSeedUnhealedLowLifeFloorShare: 0.9,
                     worstSeedRunFalls: 1,
-                    maxSeedEndingShopGold: 999,
                     seedFloorClearShareSpread: 0.9
                 }
             ]
@@ -522,20 +454,14 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             expect.arrayContaining([expect.stringMatching(/worstSeedLowLifeFloorShare=0.9/)])
         );
         expect(roughSeedHiddenByAggregate.issues).toEqual(
-            expect.arrayContaining([expect.stringMatching(/worstSeedUnhealedLowLifeFloorShare=0.9/)])
-        );
-        expect(roughSeedHiddenByAggregate.issues).toEqual(
             expect.arrayContaining([expect.stringMatching(/worstSeedRunFalls=1/)])
-        );
-        expect(roughSeedHiddenByAggregate.issues).toEqual(
-            expect.arrayContaining([expect.stringMatching(/maxSeedEndingShopGold=999/)])
         );
         expect(roughSeedHiddenByAggregate.issues).toEqual(
             expect.arrayContaining([expect.stringMatching(/seedFloorClearShareSpread=0.9/)])
         );
     });
 
-    it('keeps long-run wallet growth and boss survivability inside profile bounds', () => {
+    it('keeps long-run boss survivability inside profile bounds', () => {
         const result = runDungeonBalanceProfileSimulation({
             seeds: [42_001, 42_077, 42_123],
             floors: 48,

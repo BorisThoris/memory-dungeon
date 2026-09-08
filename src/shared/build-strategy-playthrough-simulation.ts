@@ -1,12 +1,9 @@
 import { collectDestroyEligibleTileIds } from './board-power-targeting';
 import {
     GAME_RULES_VERSION,
-    MAX_COMBO_SHARDS,
-    MAX_LIVES,
     type BonusRewardId,
     type RelicId,
     type RouteNodeType,
-    type RunShopItemId,
     type RunState
 } from './contracts';
 import {
@@ -28,7 +25,6 @@ import {
     createGameplayRegionShuffleCommand,
     createGameplayRiskWagerAcceptCommand,
     createGameplayRouteChooseCommand,
-    createGameplayShopPurchaseCommand,
     createGameplaySideRoomResolveCommand,
     gameplayCommandSchema,
     gameplayEventSchema,
@@ -48,11 +44,10 @@ import {
 } from './gameplay-core-playthrough-solver';
 import { inspectGameplayFeedbackCompleteness } from './gameplay-feedback-completeness';
 import { needsRelicPick } from './relics';
-import { GAMEPLAY_RUN_EVENT_EFFECTS } from './gameplay-core-contracts';
+import type { GAMEPLAY_RUN_EVENT_EFFECTS } from './gameplay-core-contracts';
 import { createNewRun } from './run-creation-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 import { canOfferEndlessRiskWager } from './risk-wager-rules';
-import { createRunShopOffers } from './shop-rules';
 
 export type GameplayBuildMatchup =
     | 'neutral'
@@ -69,7 +64,6 @@ export interface GameplayBuildPolicyDefinition {
     routePriorities: readonly RouteNodeType[];
     bonusRewardPriorities: readonly BonusRewardId[];
     relicPriorities: readonly RelicId[];
-    shopItemPriorities: readonly RunShopItemId[];
     informationPolicy: GameplayCoreBoundedMemoryPolicy;
     gambitPolicy: GameplayCoreGambitPolicy | null;
     gambitSuppressedMatchups: readonly GameplayBuildMatchup[];
@@ -158,7 +152,6 @@ export interface GameplayBuildFloorTrace {
     undoResolveUses: number;
     typedKeyLockUses: number;
     masterKeyLockUses: number;
-    masterKeyPurchases: number;
     pinPlacements: number;
     scoutGlintMatches: number;
     pinPolicySuppressedByMatchup: boolean;
@@ -189,7 +182,6 @@ export interface GameplayBuildMultiFloorSeedSample {
     fullReplayDeterministic: boolean;
     finalLives: number;
     finalScore: number;
-    finalShopGold: number;
     invariantViolations: string[];
 }
 
@@ -266,7 +258,6 @@ export interface GameplayBuildMultiFloorMetrics {
     undoResolveUses: number;
     typedKeyLockUses: number;
     masterKeyLockUses: number;
-    masterKeyPurchases: number;
     lockPressureConservations: number;
     pinPlacements: number;
     scoutGlintMatches: number;
@@ -507,7 +498,6 @@ export const GAMEPLAY_BUILD_POLICIES: Readonly<Record<GameplayBuildStrategyId, G
         routePriorities: ['mystery', 'safe', 'greed'],
         bonusRewardPriorities: ['echo_conduit_lens', 'trait_toolkit', 'secret_favor', 'trait_streak_lens'],
         relicPriorities: ['peek_charge_plus_one', 'shrine_echo', 'chapter_compass', 'pin_cap_plus_one'],
-        shopItemPriorities: ['peek_charge', 'trait_routing_kit', 'region_shuffle_charge', 'iron_key'],
         informationPolicy: { kind: 'bounded_memory', memoryTileCapacity: 6, uncertainTurnBudget: 20 },
         gambitPolicy: null,
         gambitSuppressedMatchups: [],
@@ -529,7 +519,6 @@ export const GAMEPLAY_BUILD_POLICIES: Readonly<Record<GameplayBuildStrategyId, G
         routePriorities: ['safe', 'mystery', 'greed'],
         bonusRewardPriorities: ['hazard_ward', 'stasis_lockbox', 'hazard_banisher', 'supply_cache'],
         relicPriorities: ['guard_token_plus_one', 'destroy_bank_plus_one', 'parasite_ward_once', 'combo_shard_plus_step'],
-        shopItemPriorities: ['destroy_charge', 'heal_life', 'trait_cleanse', 'iron_key'],
         informationPolicy: { kind: 'bounded_memory', memoryTileCapacity: 8, uncertainTurnBudget: 24 },
         gambitPolicy: null,
         gambitSuppressedMatchups: [],
@@ -543,33 +532,12 @@ export const GAMEPLAY_BUILD_POLICIES: Readonly<Record<GameplayBuildStrategyId, G
         favorableMatchup: 'hazard_pressure',
         counterMatchup: 'memory_pressure'
     },
-    treasure_greed: {
-        id: 'treasure_greed_policy_v1',
-        strategyId: 'treasure_greed',
-        routePriorities: ['greed', 'mystery', 'safe'],
-        bonusRewardPriorities: ['chest_gold', 'cursed_opener_contract', 'key_insurance', 'bonus_shards'],
-        relicPriorities: ['wager_surety', 'parasite_ledger', 'chapter_compass', 'extra_shuffle_charge'],
-        shopItemPriorities: ['master_key', 'treasure_key', 'iron_key', 'trait_routing_kit'],
-        informationPolicy: { kind: 'bounded_memory', memoryTileCapacity: 6, uncertainTurnBudget: 28 },
-        gambitPolicy: null,
-        gambitSuppressedMatchups: [],
-        interludeRiskPolicy: {
-            maxRouteRiskUnits: 2,
-            minimumEffectiveSurvivalAfterRoute: 5,
-            openingUnbufferedGreedFloors: 1,
-            eventEffectPriorities: ['gain_shop_gold', 'gain_score', 'gain_iron_key', 'gain_relic_favor', 'gain_destroy_charge', 'heal_or_guard']
-        },
-        signatureTiming: 'after_board',
-        favorableMatchup: 'economy_opportunity',
-        counterMatchup: 'boss_pressure'
-    },
     route_gambler: {
         id: 'route_gambler_policy_v1',
         strategyId: 'route_gambler',
         routePriorities: ['greed', 'mystery', 'safe'],
         bonusRewardPriorities: ['free_swap_floor', 'trait_toolkit', 'secret_favor', 'hazard_ward'],
         relicPriorities: ['wager_surety', 'region_shuffle_free_first', 'guard_token_plus_one', 'chapter_compass'],
-        shopItemPriorities: ['region_shuffle_charge', 'trait_routing_kit', 'heal_life', 'iron_key'],
         informationPolicy: { kind: 'bounded_memory', memoryTileCapacity: 7, uncertainTurnBudget: 26 },
         gambitPolicy: { kind: 'first_uncertain_mismatch_rescue' },
         gambitSuppressedMatchups: ['hazard_pressure'],
@@ -589,7 +557,6 @@ export const GAMEPLAY_BUILD_POLICIES: Readonly<Record<GameplayBuildStrategyId, G
         routePriorities: ['greed', 'mystery', 'safe'],
         bonusRewardPriorities: ['bonus_shards', 'supply_cache', 'hazard_ward', 'trait_toolkit'],
         relicPriorities: ['combo_shard_plus_step', 'parasite_ledger', 'parasite_ward_once', 'guard_token_plus_one'],
-        shopItemPriorities: ['heal_life', 'trait_routing_kit', 'iron_key', 'destroy_charge'],
         informationPolicy: { kind: 'bounded_memory', memoryTileCapacity: 8, uncertainTurnBudget: 24 },
         gambitPolicy: null,
         gambitSuppressedMatchups: [],
@@ -609,7 +576,6 @@ export const GAMEPLAY_BUILD_POLICIES: Readonly<Record<GameplayBuildStrategyId, G
         routePriorities: ['safe', 'mystery', 'greed'],
         bonusRewardPriorities: ['free_swap_floor', 'trait_toolkit', 'stasis_lockbox', 'hazard_banisher'],
         relicPriorities: ['region_shuffle_free_first', 'extra_shuffle_charge', 'first_shuffle_free_per_floor', 'destroy_bank_plus_one'],
-        shopItemPriorities: ['region_shuffle_charge', 'trait_routing_kit', 'destroy_charge', 'heal_life'],
         informationPolicy: { kind: 'bounded_memory', memoryTileCapacity: 8, uncertainTurnBudget: 24 },
         gambitPolicy: null,
         gambitSuppressedMatchups: [],
@@ -629,7 +595,6 @@ export const GAMEPLAY_BUILD_POLICIES: Readonly<Record<GameplayBuildStrategyId, G
         routePriorities: ['safe', 'mystery', 'greed'],
         bonusRewardPriorities: ['hazard_ward', 'secret_favor', 'trait_toolkit', 'supply_cache'],
         relicPriorities: ['chapter_compass', 'wager_surety', 'parasite_ledger', 'guard_token_plus_one'],
-        shopItemPriorities: ['peek_charge', 'heal_life', 'trait_routing_kit', 'destroy_charge'],
         informationPolicy: { kind: 'bounded_memory', memoryTileCapacity: 9, uncertainTurnBudget: 24 },
         gambitPolicy: null,
         gambitSuppressedMatchups: [],
@@ -649,7 +614,6 @@ export const GAMEPLAY_BUILD_POLICIES: Readonly<Record<GameplayBuildStrategyId, G
         routePriorities: ['safe', 'mystery', 'greed'],
         bonusRewardPriorities: ['trait_streak_lens', 'trait_toolkit', 'secret_favor', 'supply_cache'],
         relicPriorities: ['memorize_under_short_memorize', 'memorize_bonus_ms', 'peek_charge_plus_one', 'pin_cap_plus_one'],
-        shopItemPriorities: ['peek_charge', 'trait_routing_kit', 'heal_life', 'region_shuffle_charge'],
         informationPolicy: { kind: 'bounded_memory', memoryTileCapacity: 8, uncertainTurnBudget: 24 },
         gambitPolicy: null,
         gambitSuppressedMatchups: [],
@@ -677,7 +641,6 @@ const round = (value: number): number => Number(value.toFixed(2));
 const emptyAxisScores = (): Record<GameplayBuildStrategyAxis, number> => ({
     information: 0,
     control: 0,
-    economy: 0,
     risk_conversion: 0,
     sustain_conversion: 0,
     board_reconfiguration: 0,
@@ -780,7 +743,7 @@ const createInitialRun = (
         echoFeedbackEnabled: false,
         initialRelicIds
     });
-    return { ...base, shopOffers: createRunShopOffers(base) };
+    return base;
 };
 
 const signatureConsequenceCommand = (
@@ -852,30 +815,8 @@ const signatureConsequenceCommand = (
             ? createGameplayFlashPairCommand(commandId)
             : null;
     }
-    if (trace.run.status !== 'levelComplete') return null;
-    const itemPriority = new Map(policy.shopItemPriorities.map((itemId, index) => [itemId, index]));
-    const offerId = (Array.isArray(trace.run.shopOffers) ? trace.run.shopOffers : [])
-        .filter((offer) => !offer.purchased && offer.compatible && offer.cost <= trace.run.shopGold)
-        .sort((left, right) =>
-            (itemPriority.get(left.itemId) ?? Number.MAX_SAFE_INTEGER) -
-                (itemPriority.get(right.itemId) ?? Number.MAX_SAFE_INTEGER) ||
-            left.cost - right.cost ||
-            left.id.localeCompare(right.id)
-        )[0]?.id;
-    return offerId ? createGameplayShopPurchaseCommand(commandId, offerId) : null;
+    return null;
 };
-
-const visibleProtectionUnits = (run: RunState): number =>
-    runNonNegativeInteger(run.stats?.guardTokens) +
-    runNonNegativeInteger(run.safeHazardWardChargesThisFloor) +
-    runNonNegativeInteger(run.parasiteWardRemaining) +
-    Math.min(1, runNonNegativeInteger(run.destroyPairCharges));
-
-const effectiveSurvival = (run: RunState): number =>
-    runNonNegativeInteger(run.lives) + Math.min(2, visibleProtectionUnits(run));
-
-const routeRiskUnits = (routeType: RouteNodeType): 0 | 1 | 2 =>
-    routeType === 'greed' ? 2 : routeType === 'mystery' ? 1 : 0;
 
 /*
  * The seven things a side-room event could hand out. `run-events.ts` owned this union and went with
@@ -903,45 +844,6 @@ const chooseRoute = (
     _run: RunState,
     _policy: GameplayBuildPolicyDefinition
 ): GameplayBuildRouteSelection | null => null;
-
-const bonusRewardIdFromChoiceId = (choiceId: string): BonusRewardId | null => {
-    for (const rewardId of [
-        'chest_gold',
-        'secret_favor',
-        'bonus_shards',
-        'supply_cache',
-        'trait_toolkit',
-        'key_insurance',
-        'hazard_ward',
-        'free_swap_floor',
-        'echo_conduit_lens',
-        'trait_streak_lens',
-        'cursed_opener_contract',
-        'stasis_lockbox',
-        'hazard_banisher'
-    ] as const satisfies readonly BonusRewardId[]) {
-        if (choiceId.endsWith(`:${rewardId}`)) return rewardId;
-    }
-    return null;
-};
-
-const sideRoomResourceAssessment = (
-    before: RunState,
-    after: RunState,
-    roomKind: string,
-    selectedEffect: string | null,
-    recoveryNeeded: boolean
-): GameplayBuildSideRoomResourceAssessment => ({
-    roomKind,
-    selectedEffect,
-    recoveryNeeded,
-    livesBefore: runNonNegativeInteger(before.lives),
-    livesAfter: runNonNegativeInteger(after.lives),
-    protectionBefore: visibleProtectionUnits(before),
-    protectionAfter: visibleProtectionUnits(after),
-    effectiveSurvivalBefore: effectiveSurvival(before),
-    effectiveSurvivalAfter: effectiveSurvival(after)
-});
 
 interface GameplayBuildSideRoomAction {
     action: 'claim' | 'skip';
@@ -1034,9 +936,7 @@ const signatureAxisScores = (
         ? new Set(['echo_conduit_lens', 'echo_conduit_double', 'pin_cap_plus_one', 'pin', 'scout_glint'])
         : strategy.id === 'guard_tank'
           ? new Set(['hazard_ward', 'volatile_heavy_guard'])
-          : strategy.id === 'treasure_greed'
-            ? new Set(['chest_gold', 'cursed_opener_contract', 'cursed_opener_greed'])
-            : strategy.id === 'route_gambler'
+          : strategy.id === 'route_gambler'
               ? new Set(['gambit', 'risk_wager', 'wager_surety'])
               : strategy.id === 'combo_shard_engine'
                 ? new Set(['bonus_shards', 'combo_shard_plus_step', 'shard_spark'])
@@ -1064,13 +964,6 @@ const signatureAxisScores = (
             (event.type === 'board.pair_destroyed' || (fromBuildSource && event.type === 'inventory.changed'))
         ) {
             scores.control += 1;
-        }
-        if (
-            strategy.id === 'treasure_greed' &&
-            (event.type === 'shop.offer_purchased' ||
-                (fromBuildSource && (event.type === 'currency.changed' || event.type === 'score.changed')))
-        ) {
-            scores.economy += 1;
         }
         if (
             strategy.id === 'route_gambler' &&
@@ -1276,9 +1169,6 @@ const runSeed = (
             (event.type === 'dungeon.locked_cache_opened' || event.type === 'dungeon.exit_activated') &&
             event.spend === 'master_key'
         ).length;
-        const masterKeyPurchases = floorEvents.filter((event) =>
-            event.type === 'shop.offer_purchased' && event.itemId === 'master_key'
-        ).length;
         const scoutGlintMatches = floorEvents.filter((event) =>
             event.type === 'board.turn_resolved' && event.matchedFindableKind === 'scout_glint'
         ).length;
@@ -1313,7 +1203,6 @@ const runSeed = (
             undoResolveUses: solver.undoResolveUses,
             typedKeyLockUses,
             masterKeyLockUses,
-            masterKeyPurchases,
             pinPlacements: solver.pinPlacements,
             scoutGlintMatches,
             pinPolicySuppressedByMatchup:
@@ -1466,7 +1355,6 @@ const runSeed = (
         fullReplayDeterministic,
         finalLives: runNonNegativeInteger(trace.run.lives),
         finalScore: runNonNegativeInteger(trace.run.stats?.totalScore),
-        finalShopGold: runNonNegativeInteger(trace.run.shopGold),
         invariantViolations: trace.invariantViolations
     };
 };
@@ -1676,7 +1564,6 @@ export const runGameplayBuildMultiFloorSimulation = (
                 : 0,
             typedKeyLockUses: 0,
             masterKeyLockUses: 0,
-            masterKeyPurchases: 0,
             lockPressureConservations: 0,
             pinPlacements: strategy.id === 'conduit_cartographer'
                 ? floorTraces.reduce((sum, floor) => sum + floor.pinPlacements, 0)
@@ -1872,7 +1759,7 @@ export const runGameplayBuildMultiFloorSimulation = (
             }
         },
         bounds: {
-            requiredStrategyCount: 8,
+            requiredStrategyCount: 7,
             minFloorsPerSeed: 12,
             minFloorCompletionShare: 1,
             minDeterministicReplayShare: 1,

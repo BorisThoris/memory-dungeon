@@ -996,12 +996,17 @@ export const RELIC_OFFER_SERVICE_CATALOG: Record<
     }
 };
 
+/*
+ * Relic-offer services still carry their two-or-three gold price on the card, but gold went with
+ * the shop in Gen 174: nothing checks the wallet and nothing is taken from it, so the services are
+ * free until the draft itself goes in T1.11. The price stays on the definition because the effect
+ * schema wants a positive cost, and rewriting that schema for one generation is not worth it.
+ */
 const relicOfferServiceUseCount = (run: RunState, serviceId: RelicOfferServiceId): number =>
     runNonNegativeInteger(run.relicOffer?.serviceUses?.[serviceId] ?? 0);
 
 export const createRelicOfferServices = (run: RunState): RelicOfferServiceState[] => {
     const offer = run.relicOffer;
-    const wallet = runNonNegativeInteger(run.shopGold);
     return RELIC_OFFER_SERVICE_IDS.map((serviceId) => {
         const base = RELIC_OFFER_SERVICE_CATALOG[serviceId];
         let unavailableReason: string | null = null;
@@ -1009,8 +1014,6 @@ export const createRelicOfferServices = (run: RunState): RelicOfferServiceState[
             unavailableReason = 'No relic offer is open.';
         } else if (relicOfferServiceUseCount(run, serviceId) > 0) {
             unavailableReason = 'Already used this relic service during this visit.';
-        } else if (wallet < base.cost) {
-            unavailableReason = 'Not enough shop gold.';
         } else if (offer.options.length === 0) {
             unavailableReason = 'No relic options remain.';
         } else if (serviceId === 'ban_option' && offer.options.length <= 1) {
@@ -1137,7 +1140,7 @@ export const applyRelicOfferService = (
     let pickRound = offer.pickRound;
     let upgradedOffer = offer.upgradedOffer ?? false;
     let options = [...offer.options];
-    const paidRun: RunState = { ...run, shopGold: runNonNegativeInteger(run.shopGold) - service.cost };
+    const paidRun: RunState = { ...run, shopGold: 0 };
 
     if (serviceId === 'ban_option') {
         const banTarget = targetRelicId && options.includes(targetRelicId) ? targetRelicId : options[0];

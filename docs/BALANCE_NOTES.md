@@ -1326,3 +1326,52 @@ either. That is the gap Phase 2 exists to fill, and it is asserted exactly.
   had been reading on paper; the peek power reads it in fact.
 - **Bands.** None moved. `sim:cascade`, `sim:pop` and `sim:occupancy` hold exactly where Gen 172
   left them.
+
+## Gen 174: nothing purchasable
+
+Gold is gone, and the shop with it. A cleared floor pays no gold; a match pays none, whatever it
+touched — the route card, the dungeon treasure, the toll cache and the fuse cache all paid into the
+same wallet, and the wallet is closed; the momentum ladder pays none at Clean and Sharp; the relic
+draft's services, still priced on the card, take none. The floor-clear vendor, the vendor a shop
+card opened from the board, the store dock button, the shop view, the shop rules and the economy
+ledger are deleted (`docs/REMOVED_DUNGEON_LAYER.md`). A `shop.purchase` or `shop.reroll` command in
+an old journal is rejected with a reason, like a route choice. `shopGold` stays on the run shape
+reading nought until the save migration in T1.14.
+
+### What it did to the numbers
+
+Nothing moved. `sim:cascade`, `sim:pop` and `sim:occupancy` hold exactly where Gen 172 and 173
+left them (Fever 0.51 clean, ladder spread 4.74, no silent system), which is the measurement of
+the thesis's claim that the wallet was never part of the loop: it was a number the loop fed and
+nothing on the board ever read back.
+
+### What left the reports rather than being baselined at nought
+
+The balance profile simulation was a wallet model — gold in from the floor, healing bought when
+lives ran low, the rest spent on stock — and with no gold there is no wallet to carry. Gone from it:
+the shop-sink row, the gold-per-seed row, the live gold-inflow row, the consumable and power-charge
+inflow rows (keys and the vendor's stock), the healing-purchase share, the unhealed low-life
+exposure (low life *without healing to buy* is now just low life), the ending and peak wallet
+ceilings, and the `shopVisitBias` profile knob. The long-run soak drops the currency-inflow fatigue
+row, the two unhealed rows and the wallet rows, and the economy ledger — whose every source was a
+dungeon card or the shop — is deleted rather than summarised at nought.
+
+The build catalog loses The Vaultbreaker: its signature was a purchase, its favourable matchup a
+treasure floor, its every input gone. Seven builds remain and the `economy` axis, which only it
+scored on, goes with it. The viability issue list is asserted exactly as before, one build shorter.
+The relic archetype of the same name stays in `relics.ts`, and so does its graph node, because six
+relics and the Vaultbreaker definitions still declare it; it reads no gold and enables no shop, and
+it goes with the rest of the relic layer in Gen 175.
+
+The lint pass that closed this commit also cleared the last of Gen 173's leftovers: the route
+readiness copy in `memory-recall-feedback.ts`, the gateway route resolver
+(`loaded-gateway-rules.ts`, deleted), and the side-room assessment helpers in the playthrough
+simulation, none of which anything called any more.
+
+### One thing that got slightly worse, and is recorded as such
+
+The Extreme Fever ladder paid a gold at Clean and Sharp and two at Fever, and a shard at Fever. With
+gold gone, Clean and Sharp pay nothing: a name on the floor-clear line and no reward behind it. That
+is a real loss to the floor-end beat and it is not fixed here. Phase 2's floor-end bonus (T2.7) is
+where the tiers get paid again, in score with a tier multiplier, which is what the thesis wanted the
+ladder to be in the first place.

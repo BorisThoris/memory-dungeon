@@ -8,7 +8,6 @@ export type RunLifecycleState =
     | 'resolving'
     | 'paused'
     | 'levelComplete'
-    | 'shop'
     | 'relicOffer'
     | 'gameOver';
 
@@ -19,7 +18,6 @@ export type RunLifecycleEvent =
     | { type: 'RESOLVE_MATCH' }
     | { type: 'RESOLVE_MISMATCH' }
     | { type: 'CLEAR_LEVEL' }
-    | { type: 'OPEN_SHOP' }
     | { type: 'CLOSE_SHOP' }
     | { type: 'OPEN_RELIC_OFFER' }
     | { type: 'CLOSE_RELIC_OFFER' }
@@ -82,16 +80,8 @@ export const runLifecycleMachine = createMachine({
         },
         levelComplete: {
             on: {
-                OPEN_SHOP: 'shop',
                 OPEN_RELIC_OFFER: 'relicOffer',
                 NEXT_LEVEL: 'memorize',
-                GAME_OVER: 'gameOver',
-                END_RUN: 'menu'
-            }
-        },
-        shop: {
-            on: {
-                CLOSE_SHOP: 'levelComplete',
                 GAME_OVER: 'gameOver',
                 END_RUN: 'menu'
             }
@@ -132,9 +122,6 @@ export const lifecycleStateFromSurface = ({
     run: RunState | null;
     view: ViewState;
 }): RunLifecycleState => {
-    if (view === 'shop') {
-        return 'shop';
-    }
     if (view === 'menu' || view === 'boot') {
         return 'menu';
     }

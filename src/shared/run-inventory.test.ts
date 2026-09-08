@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import { createNewRun } from './game-core';
-import { createRunShopOffers, purchaseShopOffer } from './shop-rules';
 import {
     buildRunInventory,
     DUNGEON_KEY_SPEND_ORDER,
@@ -302,18 +301,6 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
         expect(gainRunInventoryItem(run, invalidItemId, 1)).toBe(run);
     });
 
-    it('connects shop and treasure key rewards to the same run-only inventory rows', () => {
-        const shopRun = createNewRun(0, { runSeed: 52_001 });
-        const withShop = { ...shopRun, shopGold: 5, shopOffers: createRunShopOffers(shopRun) };
-        const keyOffer = withShop.shopOffers.find((offer) => offer.itemId === 'iron_key')!;
-        const purchased = purchaseShopOffer(withShop, keyOffer.id);
-        const treasureRewarded = gainRunInventoryItem(purchased, 'master_key');
-        const inventory = buildRunInventory(treasureRewarded);
-
-        expect(inventory.consumables.find((row) => row.id === 'iron_key')?.quantity).toBe(1);
-        expect(inventory.consumables.find((row) => row.id === 'master_key')?.quantity).toBe(1);
-        expect(inventory.consumables.find((row) => row.id === 'iron_key')?.source).toContain('treasure rooms');
-    });
 
     it('spends dungeon keys in stable route priority order', () => {
         const run = {

@@ -9,26 +9,6 @@ import {
 
 describe('levelCompleteSurfaceState', () => {
 
-    it('routes summary-shop runs to the shop only when requested', () => {
-        const run = createPlayablePathFixture('floorClearWithShop').run!;
-        const result = createLevelCompleteContinuationSurfaceResult(run, { includeSummaryShop: true });
-
-        expect(result.kind).toBe('shop');
-        expect(result).toMatchObject({
-            patch: {
-                boardPinMode: false,
-                destroyPairArmed: false,
-                matchScorePop: null,
-                mismatchScorePop: null,
-                peekModeArmed: false,
-                tileSwapArmed: false,
-                tileSwapFirstTileId: null,
-                run: { shopOffers: run.shopOffers },
-                shopReturnMode: 'summary',
-                view: 'shop'
-            }
-        });
-    });
 
     it('opens a pending relic offer before advancing to the next floor', () => {
         const run = {
@@ -36,7 +16,7 @@ describe('levelCompleteSurfaceState', () => {
             relicOffer: null,
             relicFavorProgress: 0
         };
-        const result = createLevelCompleteContinuationSurfaceResult(run, { includeSummaryShop: false });
+        const result = createLevelCompleteContinuationSurfaceResult(run);
 
         expect(result.kind).toBe('relicOffer');
         expect(result).toMatchObject({
@@ -98,8 +78,7 @@ describe('levelCompleteSurfaceState', () => {
                 enemyHazardsDefeatedThisFloor: 0,
                 relicFavorProgress: 0,
                 relicOffer: null
-            },
-            { includeSummaryShop: false }
+            }
         );
 
         expect(result.kind).toBe('relicOffer');
@@ -124,7 +103,7 @@ describe('levelCompleteSurfaceState', () => {
 
     it('keeps an existing relic offer as a run-only patch', () => {
         const run = openRelicOffer(createPlayablePathFixture('relicDraft').run!);
-        const result = createLevelCompleteContinuationSurfaceResult(run, { includeSummaryShop: false });
+        const result = createLevelCompleteContinuationSurfaceResult(run);
 
         expect(result).toEqual({
             kind: 'runOnly',
@@ -134,7 +113,7 @@ describe('levelCompleteSurfaceState', () => {
 
     it('advances normal completed floors to the next level and requests memorize timer setup', () => {
         const run = createPlayablePathFixture('floorClearWithRouteChoices').run!;
-        const result = createLevelCompleteContinuationSurfaceResult(run, { includeSummaryShop: false });
+        const result = createLevelCompleteContinuationSurfaceResult(run);
 
         expect(result.kind).toBe('nextLevel');
         expect(shouldPrepareMemorizeTimerForContinuation(result)).toBe(true);

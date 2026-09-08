@@ -57,7 +57,6 @@ export const findViewsNoFixtureReaches = (): string[] => {
         'collection',
         'profile',
         'inventory',
-        'shop',
         'codex'
     ];
     return all.filter((view) => !reached.has(view) && UNREACHED_VIEW_EXEMPTIONS[view] === undefined);
@@ -66,10 +65,11 @@ export const findViewsNoFixtureReaches = (): string[] => {
 /**
  * Distinct surfaces, not views.
  *
- * This is the correction the in-floor vendor forced. A view-level census said `shop` was covered,
- * because the floor-clear vendor reached it — and the vendor opened from the board, a different
- * screen with its own exit and its own layout, was invisible to the count. Two states of one view
- * that render differently are two surfaces, and each one needs a fixture that lands on it.
+ * This is the correction the in-floor vendor forced, back when there was one: a view-level census
+ * said `shop` was covered because the floor-clear vendor reached it, while the vendor opened from
+ * the board - a different screen with its own exit and layout - was invisible to the count. The
+ * vendor went in Gen 174; the lesson stays. Two states of one view that render differently are
+ * two surfaces, and each one needs a fixture that lands on it.
  */
 export interface DeclaredSurface {
     readonly key: string;
@@ -79,16 +79,6 @@ export interface DeclaredSurface {
 }
 
 export const DECLARED_SURFACES: readonly DeclaredSurface[] = [
-    {
-        key: 'shop opened from the floor summary',
-        fixtureId: 'floorClearWithShop',
-        holds: (state) => state.view === 'playing' || state.shopReturnMode === 'summary'
-    },
-    {
-        key: 'shop opened from the board mid-floor',
-        fixtureId: 'inFloorShop',
-        holds: (state) => state.view === 'shop' && state.shopReturnMode === 'floor'
-    },
     {
         key: 'a run that has ended',
         fixtureId: 'gameOver',

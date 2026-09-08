@@ -46,7 +46,7 @@ describe('InventoryScreen', () => {
         render(<InventoryScreen />);
         const header = screen.getByTestId('inventory-meta-frame-run');
         expect(header).toHaveTextContent(/Run snapshot/);
-        expect(screen.getByTestId('inventory-run-line')).toHaveTextContent(/Floor 1 · .* · Score 0 · Lives \d · Shop gold 7/);
+        expect(screen.getByTestId('inventory-run-line')).toHaveTextContent(/Floor 1 · .* · Score 0 · Lives \d/);
         // The build identity, contract and economy frames restated the codex and are gone.
         expect(screen.queryByTestId('inventory-meta-frame-build')).toBeNull();
         expect(screen.queryByTestId('inventory-meta-frame-economy')).toBeNull();

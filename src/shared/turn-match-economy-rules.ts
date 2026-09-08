@@ -1,11 +1,4 @@
-import {
-    FUSE_CACHE_EXPIRED_SHOP_GOLD_REWARD,
-    FUSE_CACHE_FRESH_SHOP_GOLD_REWARD,
-    TOLL_CACHE_SHOP_GOLD_REWARD,
-    type DungeonCardKind,
-    type DungeonKeyKind,
-    type RunState
-} from './contracts';
+import { type DungeonCardKind, type DungeonKeyKind, type RunState } from './contracts';
 import { addRunDungeonKey } from './dungeon-key-rules';
 import { runFiniteIntegerDelta, runNonNegativeInteger } from './run-number-guards';
 
@@ -17,39 +10,25 @@ export interface TurnMatchEconomyResult {
 
 export interface TurnMatchEconomyInput {
     run: RunState;
-    routeCardShopGold: number;
-    dungeonShopGold: number;
     dungeonKeysDelta: number;
     dungeonMasterKeysDelta: number;
-    tollCacheClaimed: boolean;
-    fuseCacheClaimed: boolean;
-    fuseCacheFresh: boolean;
     matchedDungeonKind: DungeonCardKind | null | undefined;
     matchedDungeonKeyKind: DungeonKeyKind;
 }
 
+/*
+ * A match used to pay gold four ways here - a route card, a dungeon treasure or chunk-spilled
+ * treasure, a toll cache, a fuse cache. Gold is gone with the shop (Gen 174): the wallet reads
+ * nought after every match, whatever the run carried in from an older save.
+ */
 export const resolveTurnMatchEconomy = ({
     run,
-    routeCardShopGold,
-    dungeonShopGold,
     dungeonKeysDelta,
     dungeonMasterKeysDelta,
-    tollCacheClaimed,
-    fuseCacheClaimed,
-    fuseCacheFresh,
     matchedDungeonKind,
     matchedDungeonKeyKind
 }: TurnMatchEconomyInput): TurnMatchEconomyResult => ({
-    shopGold:
-        runNonNegativeInteger(run.shopGold) +
-        runNonNegativeInteger(routeCardShopGold) +
-        runNonNegativeInteger(dungeonShopGold) +
-        (tollCacheClaimed ? TOLL_CACHE_SHOP_GOLD_REWARD : 0) +
-        (fuseCacheClaimed
-            ? fuseCacheFresh
-                ? FUSE_CACHE_FRESH_SHOP_GOLD_REWARD
-                : FUSE_CACHE_EXPIRED_SHOP_GOLD_REWARD
-            : 0),
+    shopGold: 0,
     dungeonKeys:
         runFiniteIntegerDelta(dungeonKeysDelta) !== 0 || matchedDungeonKind === 'key'
             ? addRunDungeonKey(run.dungeonKeys, matchedDungeonKeyKind, runFiniteIntegerDelta(dungeonKeysDelta))

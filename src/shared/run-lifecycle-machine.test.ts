@@ -32,7 +32,7 @@ describe('run lifecycle machine', () => {
 
     it('rejects impossible gameplay transitions by staying in the current state', () => {
         expect(actorValueAfter([{ type: 'FLIP_PAIR' }])).toBe('menu');
-        expect(actorValueAfter([{ type: 'START_RUN' }, { type: 'OPEN_SHOP' }])).toBe('memorize');
+        expect(actorValueAfter([{ type: 'START_RUN' }, { type: 'CLOSE_RELIC_OFFER' }])).toBe('memorize');
     });
 
     it('keeps terminal game-over from resuming directly into gameplay', () => {
@@ -55,7 +55,6 @@ describe('run lifecycle machine', () => {
         expect(isResumableLifecycleState('resolving')).toBe(true);
         expect(isResumableLifecycleState('paused')).toBe(false);
         expect(isResumableLifecycleState('levelComplete')).toBe(false);
-        expect(isResumableLifecycleState('shop')).toBe(false);
         expect(isResumableLifecycleState('gameOver')).toBe(false);
     });
 
@@ -63,7 +62,6 @@ describe('run lifecycle machine', () => {
         const run = createNewRun(0, { echoFeedbackEnabled: false });
         expect(lifecycleStateFromRun(null)).toBe('menu');
         expect(lifecycleStateFromRun({ ...run, status: 'paused' })).toBe('paused');
-        expect(lifecycleStateFromSurface({ run, view: 'shop' })).toBe('shop');
         expect(lifecycleStateFromSurface({ run, view: 'menu' })).toBe('menu');
     });
 });

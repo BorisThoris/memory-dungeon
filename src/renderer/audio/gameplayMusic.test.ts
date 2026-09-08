@@ -119,7 +119,7 @@ describe('REG-038 adaptive music state', () => {
             status: 'levelComplete'
         } as unknown as RunState;
 
-        expect(resolveAdaptiveMusicState({ run: levelCompleteRun, view: 'shop' })).toMatchObject({
+        expect(resolveAdaptiveMusicState({ run: levelCompleteRun, view: 'playing' })).toMatchObject({
             active: true,
             layer: 'run_release',
             track: 'run',

@@ -17,15 +17,10 @@ import {
     FINDABLE_MATCH_SAFE_HAZARD_WARDS,
     FINDABLE_MATCH_SCORE,
     FLIP_PAR_BONUS_SCORE,
-    FLOOR_CLEAR_GOLD_BASE,
-    FUSE_CACHE_EXPIRED_SHOP_GOLD_REWARD,
     FUSE_CACHE_FRESH_RESOLUTION_LIMIT,
     FUSE_CACHE_FRESH_SCORE_REWARD,
-    FUSE_CACHE_FRESH_SHOP_GOLD_REWARD,
     GAME_RULES_VERSION,
     MATCH_DELAY_MS,
-    MAX_COMBO_SHARDS,
-    MAX_GUARD_TOKENS,
     INITIAL_RECALL_FOCUS,
     MAX_LIVES,
     MEMORIZE_BONUS_PER_LIFE_LOST_MS,
@@ -35,7 +30,6 @@ import {
     SHIFTING_BOUNTY_MATCH_BONUS,
     SHIFTING_WARD_MATCH_PENALTY,
     TOLL_CACHE_MATCH_SCORE_TOLL,
-    TOLL_CACHE_SHOP_GOLD_REWARD
 } from './contracts';
 import {
     buildBoard,
@@ -59,7 +53,6 @@ import {
 import {
     applyDestroyPair,
     applyFlashPair,
-    applyPeek,
     applyRegionShuffle,
     applyShuffle,
     applyStrayRemove,
@@ -110,21 +103,6 @@ import {
     SHOP_PAIR_KEY
 } from './dungeon-rules';
 import {
-    createDungeonRunMapState,
-    getSelectedDungeonNode,
-    inspectDungeonRunMapProgression,
-    revealDungeonChoices
-} from './run-map';
-import {
-    canRerollShopOffers,
-    createRunShopOffers,
-    getShopGoldRewardForFloor,
-    getRunShopReadModel,
-    getShopWalletPacing,
-    purchaseShopOffer,
-    rerollShopOffers
-} from './shop-rules';
-import {
     acceptEndlessRiskWager,
     canOfferEndlessRiskWager,
     completeRelicPickAndAdvance,
@@ -136,9 +114,6 @@ import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 import { MIN_CURIO_MEMORIZE_MS, pickFloorCurio } from './floor-curio-rules';
 import { RELIC_POOL } from './relics';
 import { makeBoard as createBoard, makePair as createPair, makeRun as createRun, makeTile as createTile } from './test/game-fixtures';
-import {
-    EXPECTED_GAMEPLAY_NODE_KINDS,
-} from './test/dungeon-feature-coverage';
 import {
     DEFAULT_SOFTLOCK_GENERATOR_SCENARIOS,
     getScheduledSoftlockFloorOptions
@@ -668,26 +643,6 @@ const playPerfectFloors = (run: RunState, count: number): RunState => {
     return current;
 };
 
-const routeBoard = (
-    routeType: RouteNodeType,
-    level: number,
-    floorTag: BoardState['floorTag'] = 'normal',
-    overrides: { activeMutators?: MutatorId[]; floorArchetypeId?: FloorArchetypeId } = {}
-): BoardState =>
-    buildBoard(level, {
-        runSeed: 23_000 + level,
-        runRulesVersion: GAME_RULES_VERSION,
-        activeMutators: overrides.activeMutators ?? [],
-        floorTag,
-        ...(overrides.floorArchetypeId ? { floorArchetypeId: overrides.floorArchetypeId } : {}),
-        routeCardPlan: {
-            choiceId: `test:${level}:${routeType}`,
-            routeType,
-            sourceLevel: level - 1,
-            targetLevel: level
-        }
-    });
-
 
 describe('REG-088 first-run to first-win rules path', () => {
     it('clears the first two classic floors with local progress and achievements enabled', () => {
@@ -919,7 +874,7 @@ describe('GLD-P0-003 lifecycle advance guards', () => {
                 picksRemaining: 1,
                 pickRound: 0
             },
-            shopOffers: createRunShopOffers(paused)
+            shopOffers: []
         };
 
         const resumed = resumeRun(pausedDead);
@@ -1644,8 +1599,9 @@ describe('normal-run hazard tiles', () => {
         const tollResolved = resolveBoardTurn(flipTile(flipTile(tollRun, 'toll-a'), 'toll-b'));
         const normalResolved = resolveBoardTurn(flipTile(flipTile(normalRun, 'plain-a'), 'plain-b'));
 
-        expect(tollResolved.shopGold).toBe(tollRun.shopGold + TOLL_CACHE_SHOP_GOLD_REWARD);
-        expect(normalResolved.shopGold).toBe(normalRun.shopGold);
+        // The toll still costs score; it pays nothing back, because there is no gold (Gen 174).
+        expect(tollResolved.shopGold).toBe(0);
+        expect(normalResolved.shopGold).toBe(0);
         expect(normalResolved.stats.currentLevelScore - tollResolved.stats.currentLevelScore).toBe(TOLL_CACHE_MATCH_SCORE_TOLL);
         expect(tollResolved.hazardTollCachesThisFloor).toBe(1);
         expect(tollResolved.hazardTileTriggersThisFloor).toBe(1);
@@ -1666,14 +1622,14 @@ describe('normal-run hazard tiles', () => {
         };
         const lateResolved = resolveBoardTurn(flipTile(flipTile(lateRun, 'fuse-a'), 'fuse-b'));
 
-        expect(earlyResolved.shopGold).toBe(fuseRun.shopGold + FUSE_CACHE_FRESH_SHOP_GOLD_REWARD);
+        expect(earlyResolved.shopGold).toBe(0);
         expect(earlyResolved.stats.currentLevelScore).toBeGreaterThanOrEqual(
             fuseRun.stats.currentLevelScore + FUSE_CACHE_FRESH_SCORE_REWARD
         );
         expect(earlyResolved.hazardFuseCachesThisFloor).toBe(1);
         expect(earlyResolved.hazardFuseCacheExpiredClaimsThisFloor).toBe(0);
         expect(earlyResolved.hazardTileTriggersThisFloor).toBe(1);
-        expect(lateResolved.shopGold).toBe(lateRun.shopGold + FUSE_CACHE_EXPIRED_SHOP_GOLD_REWARD);
+        expect(lateResolved.shopGold).toBe(0);
         expect(lateResolved.stats.currentLevelScore).toBeLessThan(earlyResolved.stats.currentLevelScore);
         expect(lateResolved.hazardFuseCachesThisFloor).toBe(1);
         expect(lateResolved.hazardFuseCacheExpiredClaimsThisFloor).toBe(1);
@@ -2799,7 +2755,8 @@ describe('dungeon cards', () => {
                 'treasure_keeper-b'
             )
         );
-        expect(treasureKeeper.shopGold).toBeGreaterThanOrEqual(4);
+        // The keeper's hoard was gold; gold is gone (Gen 174). The card still counts as opened.
+        expect(treasureKeeper.shopGold).toBe(0);
         expect(treasureKeeper.dungeonTreasuresOpened).toBe(1);
         expect(getDungeonCardCopy(bossPair('treasure_keeper', 'Treasure Keeper')[0])).toMatch(/shop gold/i);
 
@@ -2889,47 +2846,7 @@ describe('dungeon cards', () => {
 
 
 
-    it('does not spend shop gold on incompatible or already purchased offers', () => {
-        const fullLifeRun = {
-            ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 81_042 })),
-            lives: MAX_LIVES,
-            shopGold: 10
-        };
-        const run = { ...fullLifeRun, shopOffers: createRunShopOffers(fullLifeRun) };
-        const heal = run.shopOffers.find((offer) => offer.itemId === 'heal_life')!;
-        const peek = run.shopOffers.find((offer) => offer.itemId === 'peek_charge')!;
 
-        expect(heal.compatible).toBe(false);
-        expect(purchaseShopOffer(run, heal.id)).toBe(run);
-
-        const purchased = purchaseShopOffer(run, peek.id);
-        const repurchased = purchaseShopOffer(purchased, peek.id);
-        expect(purchased.shopGold).toBe(run.shopGold - peek.cost);
-        expect(repurchased.shopGold).toBe(purchased.shopGold);
-        expect(repurchased.peekCharges).toBe(purchased.peekCharges);
-    });
-
-    it('rechecks shop compatibility when the run becomes full after offers were generated', () => {
-        const damagedRun = {
-            ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 81_043 })),
-            lives: MAX_LIVES - 1,
-            shopGold: 10
-        };
-        const staleShopRun = {
-            ...damagedRun,
-            lives: MAX_LIVES,
-            shopOffers: createRunShopOffers(damagedRun)
-        };
-        const heal = staleShopRun.shopOffers.find((offer) => offer.itemId === 'heal_life')!;
-
-        expect(heal.compatible).toBe(true);
-        expect(getRunShopReadModel(staleShopRun).availableOfferCount).toBe(
-            staleShopRun.shopOffers.filter(
-                (offer) => offer.itemId !== 'heal_life' && staleShopRun.shopGold >= offer.cost
-            ).length
-        );
-        expect(purchaseShopOffer(staleShopRun, heal.id)).toBe(staleShopRun);
-    });
 
 
     it('defines trigger, cost, reward, and resolution copy for each room effect', () => {
@@ -4041,77 +3958,6 @@ describe('dungeon cards', () => {
     });
 });
 
-describe('REG-015 run shop wallet', () => {
-
-    it('REG-070 rerolls shop stock once with deterministic pricing', () => {
-        const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 70_001 }), 1);
-        const shopRun = { ...cleared, shopOffers: createRunShopOffers(cleared) };
-        const idsBefore = shopRun.shopOffers.map((offer) => offer.id);
-        const rerolled = rerollShopOffers(shopRun);
-
-        expect(rerolled.shopRerolls).toBe(1);
-        expect(rerolled.shopGold).toBe(shopRun.shopGold - 1);
-        expect(rerolled.shopOffers.map((offer) => offer.id)).not.toEqual(idsBefore);
-        expect(rerollShopOffers(rerolled)).toBe(rerolled);
-        expect(canRerollShopOffers({ ...shopRun, shopGold: 0 })).toBe(false);
-    });
-
-    it('REG-071 exposes item catalog compatibility and uncapped destroy charges', () => {
-        const fullLifeBase = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 71_001 }), 1);
-        const fullLife = {
-            ...fullLifeBase,
-            lives: MAX_LIVES,
-            shopOffers: createRunShopOffers({ ...fullLifeBase, lives: MAX_LIVES })
-        };
-        const heal = fullLife.shopOffers.find((offer) => offer.itemId === 'heal_life')!;
-        expect(heal.compatible).toBe(false);
-        expect(heal.unavailableReason).toBe('Life already full.');
-
-        const damaged = { ...fullLife, lives: 3 };
-        const healAvailable = createRunShopOffers(damaged).find((offer) => offer.itemId === 'heal_life')!;
-        expect(healAvailable.compatible).toBe(true);
-        expect(purchaseShopOffer({ ...damaged, shopOffers: [healAvailable], shopGold: 99 }, healAvailable.id).lives).toBe(4);
-
-        const stockedDestroy = { ...fullLife, destroyPairCharges: 7 };
-        const destroyOffer = createRunShopOffers(stockedDestroy).find((offer) => offer.itemId === 'destroy_charge')!;
-        expect(destroyOffer.compatible).toBe(true);
-        expect(destroyOffer.unavailableReason).toBeNull();
-        expect(destroyOffer.stackLimit).toBeNull();
-        expect(purchaseShopOffer({ ...stockedDestroy, shopOffers: [destroyOffer], shopGold: 99 }, destroyOffer.id).destroyPairCharges).toBe(8);
-
-        const noDestroyRun = {
-            ...stockedDestroy,
-            activeContract: { noShuffle: false, noDestroy: true, maxMismatches: null }
-        };
-        const lockedDestroy = createRunShopOffers(noDestroyRun).find((offer) => offer.itemId === 'destroy_charge')!;
-        expect(lockedDestroy.compatible).toBe(false);
-        expect(lockedDestroy.unavailableReason).toBe('No-destroy contract locks this item.');
-        expect(purchaseShopOffer({ ...noDestroyRun, shopOffers: [destroyOffer], shopGold: 99 }, destroyOffer.id).destroyPairCharges).toBe(
-            stockedDestroy.destroyPairCharges
-        );
-    });
-
-    it('sells run-local dungeon keys', () => {
-        const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 71_101 }), 1);
-        const shopRun = { ...cleared, shopOffers: createRunShopOffers(cleared) };
-        const keyOffer = shopRun.shopOffers.find((offer) => offer.itemId === 'iron_key')!;
-        const boughtKey = purchaseShopOffer({ ...shopRun, shopGold: 99 }, keyOffer.id);
-
-        expect(boughtKey.dungeonKeys.iron).toBe(1);
-        expect(boughtKey.shopOffers.find((offer) => offer.id === keyOffer.id)?.purchased).toBe(true);
-    });
-
-    it('REG-072 exposes wallet pacing and sink totals for QA', () => {
-        const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 72_001 }), 2);
-        const pacing = getShopWalletPacing(cleared);
-
-        expect(pacing.earnedThisFloor).toBe(FLOOR_CLEAR_GOLD_BASE + 1);
-        expect(pacing.totalWallet).toBe(cleared.shopGold);
-        expect(pacing.sinkCostTotal).toBe(cleared.shopOffers.reduce((sum, offer) => sum + offer.cost, 0));
-        expect(pacing.conversionAtRunEnd).toBe('unspent_shop_gold_expires');
-    });
-});
-
 describe('endless chapters and featured objectives', () => {
     it('awards only the featured objective bonus on endless floors', () => {
         const started = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
@@ -4764,7 +4610,8 @@ describe('game rules', () => {
 
         expect(resolved.status).toBe('levelComplete');
         expect(resolved.lives).toBe(4);
-        expect(resolved.shopGold).toBe(getShopGoldRewardForFloor(1));
+        // Gen 174: a cleared floor pays no gold; the wallet reads nought.
+        expect(resolved.shopGold).toBe(0);
         expect(resolved.stats.totalScore).toBe(155);
         expect(resolved.stats.currentLevelScore).toBe(155);
         expect(resolved.stats.bestScore).toBe(155);
