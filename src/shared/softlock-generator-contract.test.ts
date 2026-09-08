@@ -77,7 +77,7 @@ describe('softlock generator contract', () => {
         ).toEqual(expect.arrayContaining(['safe', 'greed', 'mystery']));
     });
 
-    it('checks seeded floors across locks, shops, traits, hazards, bosses, and final-pair projections', () => {
+    it('checks seeded floors across traits, topology, and final-pair projections', () => {
         const result = runSoftlockGeneratorContract();
 
         expect(result.failures.map(formatSoftlockGeneratorFailure)).toEqual([]);
@@ -85,16 +85,12 @@ describe('softlock generator contract', () => {
         expect(result.checkedPlayableBoards).toBeGreaterThan(30);
         expect(result.checkedNextFloorTransitions).toBe(result.checkedPlayableBoards);
         expect(Number.isInteger(result.checkedShopPlans)).toBe(true);
+        // Eight coverage families - locks, shops, keys, levers, exits, hazards, enemies, bosses -
+        // left this list with the layer that produced them. What remains is what a floor of pairs
+        // can still get wrong, and every one of them must still be exercised: a coverage key at
+        // nought means this contract is asserting over a case it never actually builds.
         expect(result.coverage).toMatchObject({
-            locks: expect.any(Number),
-            shops: expect.any(Number),
-            keys: expect.any(Number),
-            levers: expect.any(Number),
             traits: expect.any(Number),
-            exits: expect.any(Number),
-            hazards: expect.any(Number),
-            enemies: expect.any(Number),
-            bosses: expect.any(Number),
             traitInteractions: expect.any(Number),
             traitRouteObjectives: expect.any(Number),
             topology: expect.any(Number),
@@ -147,7 +143,7 @@ describe('softlock generator contract', () => {
         expect(getRunShopStockPlan(malformedStatsRun).itemIds[0]).toBe('iron_key');
     });
 
-    it('executes generated boards through pair exhaustion and primary exit activation', () => {
+    it('executes generated boards through pair exhaustion, and the empty board ends the floor', () => {
         const board = buildBoard(5, {
             gameMode: 'endless',
             runSeed: 438154985,
@@ -173,7 +169,12 @@ describe('softlock generator contract', () => {
         expect(solverRun.dungeonRun.currentFloor).toBe(5);
         expect(solverRun.findablesTotalThisFloor).toBeGreaterThanOrEqual(0);
         expect(solved.status).toBe('levelComplete');
-        expect(solved.board?.dungeonExitActivated).toBe(true);
+        // There is no exit to activate. The floor ends because the board does: every tile the
+        // solver was handed is matched or removed, and nothing else was ever on it.
+        expect(solved.board?.dungeonExitTileId).toBeNull();
+        expect(
+            solved.board?.tiles.filter((tile) => tile.state !== 'matched' && tile.state !== 'removed')
+        ).toEqual([]);
         expect(next.status).toBe('memorize');
         expect(next.board?.level).toBe(6);
         expect(next.dungeonRun.currentFloor).toBe(6);

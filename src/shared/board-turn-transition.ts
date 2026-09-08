@@ -23,7 +23,7 @@ import { resolveTurnMatchEconomy } from './turn-match-economy-rules';
 import { resolveTurnMatchProgress } from './turn-match-progress-rules';
 import { resolveTurnMatchBoardResolution } from './turn-match-board-resolution-rules';
 import { resolveTurnMatchScoringSummary } from './turn-match-scoring-summary-rules';
-import { resolveTileTraitEffects } from './tile-trait-rules';
+import { releaseStrandedStasisBlock, resolveTileTraitEffects } from './tile-trait-rules';
 import { appendGameplayJournal } from './gameplay-journal';
 import type { GameplayCommand, GameplayEvent } from './gameplay-core-contracts';
 import { addTileTraitCountStats, normalizeSessionStats } from './session-stats-rules';
@@ -391,7 +391,7 @@ export const createResolveBoardTurnTransition = ({
                 },
                 timerState: clearResolveState(run)
             };
-            const cleanedNextRun = clearFinalPairEnemyHazardOccupationForRun(nextRun);
+            const cleanedNextRun = releaseStrandedStasisBlock(clearFinalPairEnemyHazardOccupationForRun(nextRun));
             const completionBoard = cleanedNextRun.board ?? spunG.board;
             return cleanedNextRun.status === 'gameOver'
                 ? cleanedNextRun
@@ -711,7 +711,7 @@ export const createResolveBoardTurnTransition = ({
                 timerState: clearResolveState(run)
             };
     
-            const cleanedNextRun = clearFinalPairEnemyHazardOccupationForRun(nextRun);
+            const cleanedNextRun = releaseStrandedStasisBlock(clearFinalPairEnemyHazardOccupationForRun(nextRun));
             const completionBoard = cleanedNextRun.board ?? spun.board;
             return cleanedNextRun.status === 'gameOver'
                 ? cleanedNextRun

@@ -3,8 +3,8 @@ import { GAME_RULES_VERSION } from './contracts';
 import { buildBoard } from './board-generation';
 import { countFindablePairs } from './board-tile-generation-rules';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
-import { activateDungeonExit, createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn, revealDungeonExit } from './game';
-import { getPrimaryPlaythroughExitTile, getUnresolvedPlayablePairGroups } from './playthrough-solver-rules';
+import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
+import { getUnresolvedPlayablePairGroups } from './playthrough-solver-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey } from './tile-identity';
@@ -31,7 +31,7 @@ export interface SystemOccupancyCounter {
     key: keyof RunState & string;
     label: string;
     /** What the game would lose if this never fired. Sorted into the report by it. */
-    family: 'cascade' | 'dungeon' | 'hazard' | 'reward' | 'memory' | 'route';
+    family: 'cascade' | 'memory' | 'reward';
     /**
      * The share of floors this is expected to touch, at the reference miss rate. `rare` systems
      * are meant to be occasional; `core` ones are the loop. Both must be greater than zero: a
@@ -47,29 +47,20 @@ export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
     { key: 'recallMatchesThisFloor', label: 'A pair was matched from memory', family: 'memory', cadence: 'core' },
     { key: 'recallMistakesThisFloor', label: 'A mismatch was made', family: 'memory', cadence: 'common' },
     { key: 'matchResolutionsThisFloor', label: 'A turn resolved', family: 'memory', cadence: 'core' },
-    { key: 'findablesClaimedThisFloor', label: 'A pickup was claimed', family: 'reward', cadence: 'core' },
-    { key: 'dungeonTreasuresOpenedThisFloor', label: 'A treasure was opened', family: 'reward', cadence: 'common' },
-    { key: 'dungeonEnemiesDefeatedThisFloor', label: 'A warden was defeated', family: 'dungeon', cadence: 'common' },
-    { key: 'dungeonTrapsResolvedThisFloor', label: 'A trap was resolved', family: 'dungeon', cadence: 'common' },
-    { key: 'dungeonGatewaysUsedThisFloor', label: 'A gateway was used', family: 'dungeon', cadence: 'common' },
-    { key: 'enemyHazardHitsThisFloor', label: 'A roaming hazard landed a hit', family: 'dungeon', cadence: 'rare' },
-    { key: 'hazardTileTriggersThisFloor', label: 'A hazard tile triggered', family: 'hazard', cadence: 'common' },
-    { key: 'hazardShuffleSnaresThisFloor', label: 'A shuffle snare sprang', family: 'hazard', cadence: 'rare' },
-    { key: 'hazardCascadeCachesThisFloor', label: 'A cascade cache paid', family: 'hazard', cadence: 'rare' },
-    { key: 'hazardMirrorDecoysThisFloor', label: 'A mirror decoy fooled a flip', family: 'hazard', cadence: 'rare' },
-    { key: 'hazardFragileCacheClaimsThisFloor', label: 'A fragile cache was claimed', family: 'hazard', cadence: 'rare' },
-    { key: 'hazardTollCachesThisFloor', label: 'A toll cache was paid', family: 'hazard', cadence: 'rare' },
-    { key: 'hazardFuseCachesThisFloor', label: 'A fuse cache was claimed', family: 'hazard', cadence: 'rare' },
-    { key: 'mimicCacheClaimsThisFloor', label: 'A mimic cache was opened', family: 'hazard', cadence: 'rare' },
-    { key: 'magpieTheftsThisFloor', label: 'The magpie stole a pair', family: 'dungeon', cadence: 'rare' },
-    { key: 'anchorSealUsesThisFloor', label: 'An anchor seal was spent', family: 'route', cadence: 'rare' },
-    { key: 'catalystAltarUpgradesThisFloor', label: 'A catalyst altar upgraded something', family: 'route', cadence: 'rare' },
-    { key: 'parasiteVesselConversionsThisFloor', label: 'A parasite vessel converted', family: 'route', cadence: 'rare' },
-    { key: 'pinLatticeRewardsThisFloor', label: 'A pin lattice paid out', family: 'route', cadence: 'rare' },
-    { key: 'lanternWardScoutsThisFloor', label: 'A lantern ward scouted', family: 'route', cadence: 'rare' },
-    { key: 'omenSealScoutsThisFloor', label: 'An omen seal scouted', family: 'route', cadence: 'rare' },
-    { key: 'safeHazardWardsUsedThisFloor', label: 'A safe-hazard ward absorbed a hit', family: 'hazard', cadence: 'rare' }
+    { key: 'findablesClaimedThisFloor', label: 'A pickup was claimed', family: 'reward', cadence: 'core' }
 ];
+
+/*
+ * Twenty counters left this list when the dungeon layer left the board: the treasures, the wardens,
+ * the traps, the gateways, the roaming hazards, the seven hazard-tile caches, the magpie and the
+ * six route specials. Every one of them read zero on all 160 floors, which is what a censused
+ * system looks like after the thing it counts is deleted.
+ *
+ * They are removed rather than baselined as silent on purpose. A baseline says "this is quiet and
+ * we have accepted that"; the honest reading here is "this does not exist", and a census that
+ * keeps listing absent systems is a census nobody reads. `docs/REMOVED_DUNGEON_LAYER.md` is where
+ * they went.
+ */
 
 /*
  * Not censused, and why: `undoUsesThisFloor` counts the undos a floor has LEFT, not the ones a
@@ -139,12 +130,11 @@ const playFloor = (seed: number, floor: number, missRate: number, relicIds: read
         run = resolveBoardTurn(flipTile(flipTile(run, first.id), second.id));
         turns += 1;
     }
-    if (run.status === 'playing') {
-        const exit = getPrimaryPlaythroughExitTile(run.board!);
-        if (exit) {
-            run = activateDungeonExit(revealDungeonExit(run, exit.id));
-        }
-    }
+    /*
+     * The floor used to need a closing move: find the exit tile, reveal it, activate it. There is
+     * no exit tile, so the floor is over when the board is - which is the whole point of the
+     * change, and the reason this census now ends where the pairs do.
+     */
     return run;
 };
 
@@ -237,41 +227,36 @@ export const SYSTEM_OCCUPANCY_BANDS = {
  * The census as a ratchet: what is silent and what is thin today, asserted exactly.
  *
  * `judgeSystemOccupancy` asks the aspirational question - is anything silent or thin at all - and
- * the answer is yes, eleven and one, so it cannot gate anything until that is nought. This is the
- * question a gate can ask meanwhile: has the set CHANGED. A system that goes quiet fails it the
- * moment it does, and a system brought back to life fails it too, which is the only way a list
- * like this ever shrinks rather than drifts.
+ * this asks the one a gate can ask meanwhile: has the set CHANGED. A system that goes quiet fails
+ * it the moment it does, and a system brought back to life fails it too, which is the only way a
+ * list like this ever shrinks rather than drifts.
  *
- * Every entry is a debt with a task against it, not an exemption. Four of the silent ones are
- * route specials this census structurally cannot reach, because it plays floors rather than runs
- * (task 150).
+ * All three lists are empty as of Gen 172, and how the silent list emptied is the whole point of
+ * recording these. It did not empty because eleven quiet systems woke up. It emptied because they
+ * were deleted: every one of them counted something the dungeon layer put on the board - a seal,
+ * an altar, a roaming hazard, a mirror decoy, a shuffle snare, a lantern ward, a magpie, a mimic
+ * cache, a parasite vessel, a pin lattice, a safe-hazard ward - and there is no dungeon layer.
+ * `docs/REMOVED_DUNGEON_LAYER.md` is the record of what each one did.
  *
- * The list has moved once, and it is worth recording how. Two silences were predicted to end with
- * the dungeon-budget reserve (task 156). The reserve shipped in Gen 167 and none of them moved:
- * the earlier measurement at a 40% share said shuffle snares and the safe-hazard ward came back,
- * and at the 25% share that actually shipped they do not.
+ * That distinction is worth keeping in front of whoever reads this next, because the two readings
+ * look identical from here and mean opposite things. The list was a debt register: eleven systems
+ * shipped, none of them observable. Gen 171-172 settled that debt by deciding the systems were the
+ * problem rather than their tuning. Anything that lands on this list from here is the old kind of
+ * debt again - a live system nobody can see - and wants a task, not a baseline entry.
  *
- * The drop came off this list in Gen 168 instead, and from the direction Gen 151 predicted. Its
- * finding was that the drop had nothing to take because the ripple had already swept the suit, and
- * that "the remnant this rule wants is a bigger suit than generation deals today; that is a task,
- * not a threshold." Gen 168 is that task: a bounded wave below Sharp and one suit per six pairs
- * leave a remnant standing, and the drop now takes it. The two the reserve was supposed to wake
- * keep their tasks (153, 154) rather than being counted as solved by anything.
+ * The one entry that ever left this list on its own merits did so in Gen 168, and from the
+ * direction Gen 151 predicted: the drop had nothing to take because the ripple had already swept
+ * the suit, and "the remnant this rule wants is a bigger suit than generation deals today; that is
+ * a task, not a threshold." A bounded wave below Sharp and one suit per six pairs leave a remnant
+ * standing, and the drop takes it. That is what a silence ending looks like.
  */
 export const SYSTEM_OCCUPANCY_BASELINE = {
-    silent: [
-        'anchorSealUsesThisFloor',
-        'catalystAltarUpgradesThisFloor',
-        'enemyHazardHitsThisFloor',
-        'hazardMirrorDecoysThisFloor',
-        'hazardShuffleSnaresThisFloor',
-        'lanternWardScoutsThisFloor',
-        'magpieTheftsThisFloor',
-        'mimicCacheClaimsThisFloor',
-        'parasiteVesselConversionsThisFloor',
-        'pinLatticeRewardsThisFloor',
-        'safeHazardWardsUsedThisFloor'
-    ],
+    /*
+     * Empty since Gen 172, when the eleven dungeon counters left the census with the systems they
+     * counted. Read the comment above before adding to this list: an entry here now means a live
+     * system nobody can observe, which is a bug with a task against it, not a fact to record.
+     */
+    silent: [] as readonly string[],
     /*
      * Empty since Gen 170. `feverBreaksThisFloor` was the one entry, and it left the list when the
      * Fever rung moved from two thirds of a floor to half of one: the tier used to arrive on the

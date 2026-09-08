@@ -9,6 +9,7 @@ import {
     type RouteNodeType,
     type Tile
 } from './contracts';
+import { isSingletonUtilityPairKey } from './tile-identity';
 import { buildBoard, type BuildBoardOptions } from './board-build-rules';
 import { countFindablePairs } from './board-generation';
 import {
@@ -25,10 +26,8 @@ import {
     solveRunThroughGameplayCoreWithTrace,
     type GameplayCorePlaythroughSolverTrace
 } from './gameplay-core-playthrough-solver';
-import { EXIT_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
 import { createNewRun } from './run-creation-rules';
 import { createDungeonRunMapState, inspectDungeonRunMapProgression } from './run-map';
-import { getDungeonKeyTotal } from './run-inventory';
 import { runNonNegativeInteger } from './run-number-guards';
 import { getRunShopStockPlan, SHOP_KEY_ITEM_BY_KIND } from './shop-rules';
 import { normalizeSessionStats } from './session-stats-rules';
@@ -42,16 +41,14 @@ import {
 import { getBoardTraitInteractionPreviewLines } from './tile-trait-rules';
 import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
 
+/*
+ * Eight of these went with the dungeon layer: `locks`, `shops`, `keys`, `levers`, `exits`,
+ * `hazards`, `enemies` and `bosses`. They are removed rather than left reading zero, because this
+ * list is the contract's own claim about what it covers - a key named here and stuck at nought says
+ * the contract checks something it does not.
+ */
 export type SoftlockContractCoverageKey =
-    | 'locks'
-    | 'shops'
-    | 'keys'
-    | 'levers'
     | 'traits'
-    | 'exits'
-    | 'hazards'
-    | 'enemies'
-    | 'bosses'
     | 'traitInteractions'
     | 'traitRouteObjectives'
     | 'topology'
@@ -87,15 +84,7 @@ export interface SoftlockGeneratorContractResult {
 }
 
 const COVERAGE_KEYS: readonly SoftlockContractCoverageKey[] = [
-    'locks',
-    'shops',
-    'keys',
-    'levers',
     'traits',
-    'exits',
-    'hazards',
-    'enemies',
-    'bosses',
     'traitInteractions',
     'traitRouteObjectives',
     'topology',
@@ -268,27 +257,7 @@ const addCoverage = (
     projection: 'generated' | 'final_pair' | 'cleared_board',
     topologyReport: ReturnType<typeof inspectDungeonBoardTopology>
 ): void => {
-    const lockKind = getEffectivePrimaryExitLock({ board }).lockKind;
-    if (lockKind !== 'none') coverage.locks += 1;
-    if (board.dungeonShopTileId || board.tiles.some((tile) => tile.dungeonCardKind === 'shop')) coverage.shops += 1;
-    if (
-        board.tiles.some((tile) => tile.dungeonCardKind === 'key' || tile.dungeonCardEffectId === 'room_key_cache') ||
-        runNonNegativeInteger(board.dungeonKeysHeld) > 0 ||
-        getDungeonKeyTotal(board.dungeonKeysHeldByKind) > 0
-    ) {
-        coverage.keys += 1;
-    }
-    if (board.tiles.some((tile) => tile.dungeonCardKind === 'lever') || runNonNegativeInteger(board.dungeonLeverCount) > 0) {
-        coverage.levers += 1;
-    }
     if (board.tiles.some((tile) => tile.tileTraitKind != null)) coverage.traits += 1;
-    if (board.tiles.some((tile) => tile.pairKey === EXIT_PAIR_KEY || tile.dungeonCardKind === 'exit')) coverage.exits += 1;
-    const enemyHazardCount = enemyHazardsForBoard(board).length;
-    if (board.tiles.some((tile) => tile.tileHazardKind != null) || enemyHazardCount > 0) coverage.hazards += 1;
-    if (board.tiles.some((tile) => tile.dungeonCardKind === 'enemy') || enemyHazardCount > 0) {
-        coverage.enemies += 1;
-    }
-    if (board.dungeonBossId != null || board.tiles.some((tile) => tile.dungeonBossId != null)) coverage.bosses += 1;
     if (getBoardTraitInteractionPreviewLines(board).length > 0) coverage.traitInteractions += 1;
     if (getTraitRouteObjectiveSeed(board) != null) coverage.traitRouteObjectives += 1;
     if (topologyReport.graph.order > 0) coverage.topology += 1;
@@ -673,40 +642,16 @@ export const DEFAULT_SOFTLOCK_GENERATOR_SCENARIOS: readonly SoftlockGeneratorSce
                 relicIds: ['region_shuffle_free_first', 'peek_charge_plus_one']
             })
     },
-    {
-        id: 'locked_exit_economy',
-        label: 'Locked exit economy insurance',
-        seeds: [130_011],
-        floors: [6],
-        optionsForFloor: ({ seed, floor }) =>
-            scenarioOptions(seed, floor, {
-                fixedTilesMode: 'exact',
-                fixedTiles: [
-                    { id: 'key-a', pairKey: 'key', symbol: 'K', label: 'Iron key', state: 'hidden', dungeonCardKind: 'key', dungeonKeyKind: 'iron' },
-                    { id: 'key-b', pairKey: 'key', symbol: 'K', label: 'Iron key', state: 'hidden', dungeonCardKind: 'key', dungeonKeyKind: 'iron' },
-                    { id: 'a1', pairKey: 'a', symbol: 'A', label: 'A', state: 'hidden' },
-                    { id: 'a2', pairKey: 'a', symbol: 'A', label: 'A', state: 'hidden' },
-                    {
-                        id: 'exit',
-                        pairKey: EXIT_PAIR_KEY,
-                        symbol: 'E',
-                        label: 'Iron exit',
-                        state: 'hidden',
-                        dungeonCardKind: 'exit',
-                        dungeonExitLockKind: 'iron'
-                    },
-                    {
-                        id: 'shop',
-                        pairKey: '__shop__',
-                        symbol: '$',
-                        label: 'Shop',
-                        state: 'hidden',
-                        dungeonCardKind: 'shop',
-                        dungeonCardEffectId: 'shop_vendor'
-                    }
-                ]
-            })
-    }
+    /*
+     * `locked_exit_economy` stood here: a hand-built floor with an iron key pair, an iron-locked
+     * exit and a shop, insuring the one economy that could strand a player - a lock whose key the
+     * floor never deals. It is removed because generation no longer deals a lock, a key or an exit,
+     * so the scenario was insuring a rule against a board no player can be given.
+     *
+     * The insurance it provided has not gone anywhere; it has moved down a level. What actually
+     * strands a player now is a floor with a pair on it that cannot be flipped, and the scenarios
+     * above catch that through the same pair-exhaustion solver, on boards generation really makes.
+     */
 ];
 
 export const runSoftlockGeneratorContract = (

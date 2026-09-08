@@ -15,13 +15,42 @@ import {
  * the relic loadout at 0.08 and the simulation script's own six-seed run put it at 0.13; the
  * band is not what disagreed, the sample was.
  */
-const SEEDS = [42_001, 8_675_309, 1_234, 555_019, 90_210, 31_337];
+/*
+ * Twelve seeds from `sim:cascade`'s own generator since Gen 172, replacing six hand-picked ones.
+ *
+ * Two things forced it. The gate and the script were measuring different games - different seeds
+ * and a different floor range - so "the check passes" and "the gate passes" could disagree, which
+ * is the one thing a balance gate must not do. And the six ad-hoc seeds turned out to be worth half
+ * a point of separation on their own: they put the clean/reference Fever ratio at 1.97 where the
+ * canonical six put it at 2.55, on the same code.
+ *
+ * That spread is the finding, not the fix. At this sample size the ratio is reading the seed set as
+ * much as the game, so the sample is doubled and taken from the same generator the script uses.
+ * Twelve seeds hold 0.51 against 0.20 the way six do, which is what says the number has settled.
+ */
+const SEEDS = Array.from({ length: 12 }, (_, index) => 42_001 + index * 7_919);
 /*
  * Every floor of the first act and a half, not a stride through them: floor archetypes cycle, and
  * a stride of three lands on the same few (a rush boss with nothing to break, three times) and
  * calls that the game. The whole run takes a couple of seconds.
  */
-const FLOORS = Array.from({ length: 18 }, (_, index) => index + 1);
+/*
+ * Twenty-four since Gen 172, matching `sim:cascade`'s own default, so the gate and the script judge
+ * the same game rather than two different ones.
+ *
+ * Eighteen was the first act and a half, and once the dungeon budget stopped eating the pair count
+ * that turned out to be the shallow half of the curve: 7.1 pairs a floor over eighteen against 9.4
+ * over twenty-four. The ladder needs matches to climb, so on the short sample a clean player
+ * reached Fever on 0.35 of floors against a sloppy player's 0.21 - a ratio of 1.67, under the band
+ * - while the full sample gives 0.51 against 0.20, a ratio of 2.54.
+ *
+ * That is worth stating rather than just fixing, because both readings are true and they say
+ * something about the game: the chain barely separates players on small floors and separates them
+ * clearly on big ones. The band is about the game the player eventually plays, so it is measured
+ * over the range the player eventually reaches - and the shallow-floor flatness is a pair-curve
+ * problem with a task against it (Phase 2), not a band that was set wrong.
+ */
+const FLOORS = Array.from({ length: 24 }, (_, index) => index + 1);
 const MISS_RATES = [0, 0.1, CASCADE_BALANCE_BANDS.referenceMissRate];
 
 describe('the cascade, measured', () => {

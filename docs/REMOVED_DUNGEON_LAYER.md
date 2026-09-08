@@ -21,12 +21,38 @@ The measurements had been saying so for a while without anyone reading them that
 
 It was expensive, it was fragile, and it was in the way.
 
+## How the removal was staged
+
+It happened in three commits rather than one, because the interesting failure is not "does it still compile"
+but "does the game still end":
+
+1. **Gen 171 — one mode.** `GameMode` collapsed to `endless`; daily, puzzle, meditation and gauntlet went,
+   with the three balance terms they had quietly been carrying written down in `BALANCE_NOTES.md`.
+2. **Gen 172 — generation stops dealing it.** Board generation no longer places a card recipe, a filler pass,
+   an exit, a shop, a room, a hazard pass or the layout plan that pinned them. A generated floor is pairs and
+   nothing else, asserted over 768 boards in `board-build-rules.test.ts`. This is the commit that matters:
+   the modules below still existed and still worked, and the game had already stopped being the game they
+   described.
+3. **Gen 173 — the modules go.** The files listed at the end are deleted, along with the between-floor layer
+   that fed them.
+
 ## How to get any of it back
 
-Everything below is in git. The removal commits carry `Gen 171` in the message, and each section names the
-module a definition lived in, so `git log --all -- src/shared/<module>.ts` finds its whole history. The intent
-is not that none of this returns — it is that it returns **deliberately, one mechanic at a time, measured
-against the loop** rather than layered on top of it.
+Everything here is in git. The removal commits carry `Gen 171`, `Gen 172` and `Gen 173` in their messages,
+and each section names the module a definition lived in, so `git log --all -- src/shared/<module>.ts` finds
+its whole history. The intent is not that none of this returns — it is that it returns **deliberately, one
+mechanic at a time, measured against the loop** rather than layered on top of it.
+
+## What removing it actually did
+
+Two numbers, both from the repository's own simulations, run immediately before and after the Gen 172 cut:
+
+- **Fever share went from ~0.13 to 0.51 of floors** for a clean player (`yarn sim:cascade`). The dungeon
+  budget had been eating the pairs the pop needed to reach, so the cascade could not build. This is the
+  thesis's central claim, and it is the first time it has been measured rather than argued.
+- **The occupancy census went fully green** (`yarn sim:occupancy`). Eleven systems had been listed as
+  silent — shipped and never observable — for eleven generations. They are not quiet now; they are gone,
+  which is a different and more honest answer than a widened band.
 
 ## Card kinds
 
@@ -208,7 +234,8 @@ From `src/shared/hazard-tiles.ts`. These are the decoys, snares and fake caches 
 
 ## The modules that went with it
 
-Every file below was deleted in the Gen 171 removal. `git log --all -- <path>` is its whole history.
+Every file below goes in the Gen 173 removal, after Gen 172 had already made all of it unreachable from a
+generated floor. `git log --all -- <path>` is its whole history.
 
 - `src/shared/dungeon-blueprint-policy-rules.ts`
 - `src/shared/dungeon-board-generation-rules.ts`

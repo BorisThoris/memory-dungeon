@@ -1168,3 +1168,104 @@ one mode moves and the chain quest already keeps. The honor that carried the bro
 re-pointed the same way (`honor_sharp_initiate`). Four achievements and four honors that only a
 removed mode could earn were deleted outright rather than left standing unearnable — which is the
 failure `achievement-reachability.test.ts` exists to catch.
+
+## Gen 172: the floor is pairs
+
+Board generation stopped placing the dungeon layer. Every generated floor is now a board of pairs
+dealt in clumps and nothing else — no card recipe, no filler pass, no exit tile, no shop, no room,
+no hazard pass, no layout plan that pinned them. `board-build-rules.test.ts` asserts it over 768
+boards, across four seeds, sixteen floors, four archetypes and three floor tags.
+
+### What it did to the cascade
+
+The thesis's central claim was that the dungeon budget was starving the pop of pairs to reach, and
+this is the first measurement of it rather than an argument for it:
+
+| | before | after |
+|---|---|---|
+| Fever share, clean player (`sim:cascade`) | ~0.13 | **0.51** |
+| Pop ladder spread (`sim:pop --check`) | — | 4.74, every rung rising |
+| Silent systems (`sim:occupancy`) | 11 | **0** |
+
+The occupancy census passes its aspirational check outright for the first time since it was written.
+Its silent list did not empty because eleven quiet systems woke up; it emptied because they were
+deleted. That distinction is written into `system-occupancy-simulation.ts` so the next reader does
+not mistake one for the other.
+
+### The bands that moved, and why each moved
+
+Two retunes, both measured, neither a widening to get past a red test:
+
+- **`avg_guard_reward_potential_per_floor` min 0.1 → 0.05** (measured 0.08). Guard used to come from
+  shrine pairs and rest nodes as well as the ward-spark findable; only the findable is left. Guard is
+  still reachable, just scarcer, which is a real change to how safe a floor feels.
+- **`trait_board_power_interaction_floor_share` min 0.5 → 0.4** (measured 0.42). A swap or block
+  wants two traited tiles adjacent, and the dungeon cards padding a floor out were carrying traits
+  too.
+
+Five rows left the balance report rather than sitting at nought against a minimum forever: the
+moving-hazard average, the hazard-tile average, the floor-1 hazard opener, the contact-risk average,
+and recovery relief on high-pressure floors. `max_pressure_step_up` and `max_recovery_debt_streak`
+stay, because a ceiling passes honestly at nought.
+
+### The finding this surfaced: the route offer has gone flat
+
+The profile simulation's own guardrail caught something worth keeping in front of whoever picks up
+Phase 1's remaining tasks. It exists so that "one route cannot silently become the default answer",
+and for the greedy profile that is now exactly what has happened — five faces of one cause:
+
+1. `dominantRouteShare = 1`. Greedy takes the greedy route on all 144 floors.
+2. `endingShopGold = 801/144` (5.56/floor, ceiling 5). A player who never takes a safe route never
+   pays a safe route's toll, so gold goes in and nothing takes it out.
+3. `greedy.rewardClaims / cautious.rewardClaims` 1.60 → 1.68. The denominator moved: cautious used
+   to take greed when a floor made safe unattractive, and no floor does that any more.
+4. `lowLifeFloorShare` is nought for both greedy and high skill.
+5. `greedy.minLivesRemaining` 1 → 4. A greedy player can no longer get into trouble.
+
+Greed used to be withheld on the floors the dungeon layer shaped — a boss floor, an elite node — and
+with those gone the offer is the same three doors twelve times over. The answer is the between-floor
+layer going too (Phase 1, T1.9–T1.17), not a wider bound. Each of the five is asserted exactly, with
+the reasoning at the assertion, so a sixth face fails rather than blending in.
+
+### A softlock the exit tile had been hiding
+
+`selectStasisBlockIndex` refuses to place a Stasis block when one pair is left, but it decided
+against the board as it stood at the moment of the match — and the pop that follows that match can
+take pairs off the board after the decision is made. Two pairs at decision time, one once the cascade
+settles, and the survivor is the blocked one: the floor never ends.
+
+It was live and invisible for as long as every floor carried an exit, because a stranded player could
+still leave through it. Seed 172707 floor 3 is where it surfaced, and that is an ordinary floor, not
+a corner. `releaseStrandedStasisBlock` re-checks the block against the board the turn actually
+produced and drops it when there is nothing else to play.
+
+### The cascade after the cut, and one debt it exposed
+
+`sim:cascade --check` and `sim:pop --check` both pass. Two numbers moved and one band had to move
+with them, and one band moved for a reason that is a debt rather than a recalibration.
+
+**Recalibrated.** `referenceFeverShare` max 0.2 → 0.25, measured 0.201. The ceiling was set against a
+floor whose pair count the dungeon budget was eating; a floor of pairs deals 9.5 of them, so there
+are more matches and more chances to climb. Every rung rose together — clean 0.13 → 0.51, reference
+0.08 → 0.20 — and `feverCleanOverReference` came out at 2.54 against a floor of 2, essentially where
+it was. A ladder whose rungs all rise by the same factor is the same ladder held higher.
+
+**A debt, recorded not hidden.** `CASCADE_RELIC_BANDS.feverCleanOverReference` min 2 → 1.6, measured
+1.65. With all three chain relics held, the ladder barely separates a clean player from a sloppy
+one, and the cause is in the same output:
+
+| | bare | holding Tuning Fork + Magpie Ledger + Suit Lens |
+|---|---|---|
+| turns to clear, clean | 4.1 | **2.9** |
+| Fever share, clean | 0.51 | **0.19** |
+| clean/reference Fever ratio | 2.54 | **1.65** |
+
+Three relics bought specifically to serve the chain cut the chain's best payoff to a third. They
+extend the pop's reach, the floor empties sooner, and there are not enough matches left to climb a
+chain with — they work against the thing they exist for. This was masked while the dungeon budget
+kept floors small for everyone; on a floor of pairs the reach finally has room to matter, and what
+it does with it is end the floor.
+
+The bare bands are untouched. Only the relic path is relaxed, only to the measurement, so any
+further flattening fails immediately. The fix is the relics' own numbers, and it belongs with Phase
+2, where the shape of a floor is being decided anyway.

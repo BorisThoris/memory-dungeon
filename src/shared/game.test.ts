@@ -87,7 +87,6 @@ import {
 import {
     activateDungeonExit,
     createDungeonFloorBlueprint,
-    DUNGEON_BOSS_DEFINITIONS,
     ENEMY_HAZARD_PATTERN_DEFINITIONS,
     EXIT_PAIR_KEY,
     getEnemyHazardMovementCandidateIds,
@@ -96,7 +95,6 @@ import {
     getDungeonBossDefinition,
     getDungeonBossReadModel,
     getDungeonCardCopy,
-    getDungeonEliteEncounterRules,
     getDungeonEnemyLifecycleStatus,
     getDungeonExitStatus,
     getDungeonObjectiveStatus,
@@ -108,7 +106,6 @@ import {
     inspectDungeonEncounterBudget,
     revealDungeonExit,
     revealDungeonRoom,
-    revealDungeonShop,
     ROOM_PAIR_KEY,
     SHOP_PAIR_KEY
 } from './dungeon-rules';
@@ -132,7 +129,6 @@ import {
     createRunShopOffers,
     getShopGoldRewardForFloor,
     getRunShopReadModel,
-    getRunShopStockPlan,
     getShopWalletPacing,
     purchaseShopOffer,
     rerollShopOffers
@@ -151,12 +147,7 @@ import { MIN_CURIO_MEMORIZE_MS, pickFloorCurio } from './floor-curio-rules';
 import { RELIC_POOL } from './relics';
 import { makeBoard as createBoard, makePair as createPair, makeRun as createRun, makeTile as createTile } from './test/game-fixtures';
 import {
-    EXPECTED_GAMEPLAY_CARD_KINDS,
     EXPECTED_GAMEPLAY_NODE_KINDS,
-    EXPECTED_MAJOR_EFFECT_FAMILIES,
-    collectDungeonFeatureCoverage,
-    formatDungeonCoverageFailure,
-    missingCoverage
 } from './test/dungeon-feature-coverage';
 import {
     DEFAULT_SOFTLOCK_GENERATOR_SCENARIOS,
@@ -1382,26 +1373,6 @@ describe('REG-017 route choices', () => {
         expect(routeTiles[0]!.pairKey).not.toBe(WILD_PAIR_KEY);
     });
 
-    it('turns route selection into persistent dungeon-node entry', () => {
-        const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 17_213 }), 1);
-        const greedId = cleared.lastLevelResult!.routeChoices!.find((choice) => choice.routeType === 'greed')!.id;
-        const chosen = applyRouteChoiceOutcome(cleared, greedId).run;
-
-        expect(cleared.dungeonRun.nodes.find((node) => node.id === cleared.dungeonRun.currentNodeId)?.status).toBe('cleared');
-        expect(chosen.dungeonRun.selectedNodeId).toBe(greedId);
-        expect(chosen.dungeonRun.nodes.find((node) => node.id === greedId)).toMatchObject({
-            kind: 'elite',
-            status: 'revealed'
-        });
-
-        const next = advanceToNextLevel(chosen);
-        expect(next.dungeonRun.currentNodeId).toBe(greedId);
-        expect(next.dungeonRun.selectedNodeId).toBeNull();
-        expect(next.dungeonRun.nodes.find((node) => node.id === greedId)?.status).toBe('current');
-        expect(next.dungeonRun.nodes.filter((node) => node.status === 'skipped')).toHaveLength(2);
-        expect(next.board!.floorArchetypeId).toBe('rush_recall');
-        expect(next.board!.dungeonObjectiveId).toBe('pacify_floor');
-    });
 
     it('does not let stale selected route nodes shape the next generated board', () => {
         const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 17_214 }), 1);
@@ -1452,188 +1423,9 @@ describe('REG-017 route choices', () => {
         expect(next.board!.dungeonObjectiveId).not.toBe('defeat_boss');
     });
 
-    it('makes dungeon node kinds visibly alter encounter board shape', () => {
-        const common = {
-            runSeed: 17_414,
-            runRulesVersion: GAME_RULES_VERSION,
-            gameMode: 'endless' as const
-        };
-        const combat = buildBoard(5, { ...common, dungeonNodeKind: 'combat' });
-        const elite = buildBoard(5, { ...common, dungeonNodeKind: 'elite' });
-        const rest = buildBoard(5, { ...common, dungeonNodeKind: 'rest' });
-        const shop = buildBoard(5, { ...common, dungeonNodeKind: 'shop' });
-        const treasure = buildBoard(5, { ...common, dungeonNodeKind: 'treasure' });
 
-        expect(elite.pairCount).toBeGreaterThan(combat.pairCount);
-        expect(rest.pairCount).toBeLessThan(combat.pairCount);
-        expect(elite.floorArchetypeId).toBe('rush_recall');
-        expect(treasure.floorArchetypeId).toBe('treasure_gallery');
-        expect(shop.tiles.some((tile) => tile.pairKey === SHOP_PAIR_KEY)).toBe(true);
-        expect(rest.tiles.some((tile) => tile.pairKey === SHOP_PAIR_KEY)).toBe(false);
-        expect(treasure.tiles.filter((tile) => tile.dungeonCardKind === 'treasure').length).toBeGreaterThan(
-            combat.tiles.filter((tile) => tile.dungeonCardKind === 'treasure').length
-        );
-    });
 
-    it('covers every dungeon card family through generated gameplay boards', () => {
-        const coverage = collectDungeonFeatureCoverage();
-        const failure = formatDungeonCoverageFailure(coverage);
 
-        expect(missingCoverage(EXPECTED_GAMEPLAY_NODE_KINDS, coverage.nodeKinds), failure).toEqual([]);
-        expect(missingCoverage(EXPECTED_GAMEPLAY_CARD_KINDS, coverage.cardKinds), failure).toEqual([]);
-        expect(missingCoverage(EXPECTED_MAJOR_EFFECT_FAMILIES, coverage.effectFamilies), failure).toEqual([]);
-        expect(coverage.hasBoss, failure).toBe(true);
-        expect(coverage.hasExit, failure).toBe(true);
-        expect(coverage.hasShopTile, failure).toBe(true);
-        expect(coverage.hasRoomTile, failure).toBe(true);
-        expect(coverage.hasLockedExit, failure).toBe(true);
-        expect(coverage.hasRouteGateway, failure).toBe(true);
-        expect(coverage.objectives.size).toBeGreaterThan(4);
-        expect([...coverage.objectives]).toEqual(
-            expect.arrayContaining(['find_exit', 'pacify_floor', 'disarm_traps', 'loot_cache', 'reveal_unknowns'])
-        );
-    });
-
-    it('plays generated enemy cards through reveal, active damage, attack, and defeat', () => {
-        const generated = buildBoard(5, {
-            runSeed: 172_501,
-            runRulesVersion: GAME_RULES_VERSION,
-            dungeonNodeKind: 'trap',
-            gameMode: 'endless'
-        });
-        /*
-         * Every match pops the clump it touches, and a break that reaches an enemy hits it for
-         * its size (design doc 2.6) - so on a one-suit floor the support match would kill this
-         * enemy before the step being tested. The enemy wears its own suit here, which puts it
-         * outside the pop's region and leaves the reveal-damage-attack-defeat beats one at a
-         * time. `chunk-break-dungeon-rules.test.ts` is where a break hitting an enemy is proved.
-         */
-        const board = {
-            ...generated,
-            tiles: generated.tiles.map((tile) =>
-                tile.dungeonCardKind === 'enemy' ? { ...tile, suit: 'bone' as const } : { ...tile, suit: 'ember' as const }
-            )
-        };
-        const groups = new Map<string, Tile[]>();
-        for (const tile of board.tiles) {
-            const group = groups.get(tile.pairKey) ?? [];
-            group.push(tile);
-            groups.set(tile.pairKey, group);
-        }
-        const enemyPair = [...groups.values()].find((group) =>
-            group.every((tile) => tile.dungeonCardKind === 'enemy' && tile.dungeonCardHp === 2)
-        )!;
-        const supportPair = [...groups.values()].find((group) =>
-            group.length === 2 &&
-            group.every(
-                (tile) =>
-                    tile.dungeonCardKind !== 'enemy' &&
-                    tile.dungeonCardKind !== 'trap' &&
-                    tile.pairKey !== DECOY_PAIR_KEY &&
-                    tile.pairKey !== WILD_PAIR_KEY &&
-                    tile.pairKey !== EXIT_PAIR_KEY &&
-                    tile.pairKey !== SHOP_PAIR_KEY &&
-                    tile.pairKey !== ROOM_PAIR_KEY
-            )
-        )!;
-        expect(enemyPair).toBeDefined();
-        expect(supportPair).toBeDefined();
-
-        const base = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 172_501 }));
-        const run: RunState = {
-            ...base,
-            board,
-            status: 'playing',
-            stats: { ...base.stats, tries: 1 },
-            findablesTotalThisFloor: countFindablePairs(board.tiles)
-        };
-        const revealed = flipTile(run, enemyPair[0]!.id);
-        expect(
-            revealed.board!.tiles
-                .filter((tile) => tile.pairKey === enemyPair[0]!.pairKey)
-                .every((tile) => tile.dungeonCardState === 'revealed')
-        ).toBe(true);
-
-        const afterEnemyMiss = resolveBoardTurn(flipTile(revealed, supportPair[0]!.id));
-        expect(afterEnemyMiss.lives).toBeLessThan(run.lives);
-        expect(afterEnemyMiss.pendingMemorizeBonusMs).toBe(MEMORIZE_BONUS_PER_LIFE_LOST_MS * 2);
-        expect(afterEnemyMiss.board!.tiles.find((tile) => tile.id === enemyPair[0]!.id)!.dungeonCardState).toBe(
-            'revealed'
-        );
-
-        const damaged = resolveBoardTurn(flipTile(flipTile(afterEnemyMiss, supportPair[0]!.id), supportPair[1]!.id));
-        const damagedEnemy = damaged.board!.tiles.find((tile) => tile.id === enemyPair[0]!.id)!;
-        expect(damagedEnemy.dungeonCardHp).toBe(1);
-        expect(damagedEnemy.dungeonCardState).toBe('revealed');
-        expect(damaged.dungeonEnemiesDefeatedThisFloor).toBe(0);
-
-        const defeated = resolveBoardTurn(flipTile(flipTile(damaged, enemyPair[0]!.id), enemyPair[1]!.id));
-        expect(defeated.dungeonEnemiesDefeatedThisFloor).toBe(1);
-        expect(defeated.board!.tiles.find((tile) => tile.id === enemyPair[0]!.id)!.state).toBe('matched');
-        expect(defeated.stats.totalScore).toBeGreaterThan(damaged.stats.totalScore);
-        const lifecycle = getDungeonEnemyLifecycleStatus(defeated);
-        expect(lifecycle.enemyCardPairCount).toBeGreaterThanOrEqual(1);
-        expect(lifecycle.defeatedEnemyCardPairCount).toBeGreaterThanOrEqual(1);
-        expect(lifecycle).toMatchObject({
-            enemyCardVocabulary: 'enemy_card_pair',
-            movingEnemyVocabulary: 'moving_enemy_patrol'
-        });
-    });
-
-    it('springs trap cards on first reveal and clears selection for the next action', () => {
-        const board = buildBoard(5, {
-            runSeed: 172_601,
-            runRulesVersion: GAME_RULES_VERSION,
-            dungeonNodeKind: 'trap',
-            gameMode: 'endless'
-        });
-        const groups = new Map<string, Tile[]>();
-        for (const tile of board.tiles) {
-            const group = groups.get(tile.pairKey) ?? [];
-            group.push(tile);
-            groups.set(tile.pairKey, group);
-        }
-        const trapPair = [...groups.values()].find((group) =>
-            group.every((tile) => tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'hidden')
-        )!;
-        const supportPair = [...groups.values()].find((group) =>
-            group.length === 2 &&
-            group.every(
-                (tile) =>
-                    tile.dungeonCardKind !== 'enemy' &&
-                    tile.dungeonCardKind !== 'trap' &&
-                    tile.pairKey !== DECOY_PAIR_KEY &&
-                    tile.pairKey !== WILD_PAIR_KEY &&
-                    tile.pairKey !== EXIT_PAIR_KEY &&
-                    tile.pairKey !== SHOP_PAIR_KEY &&
-                    tile.pairKey !== ROOM_PAIR_KEY
-            )
-        )!;
-        expect(trapPair).toBeDefined();
-        expect(supportPair).toBeDefined();
-
-        const base = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 172_601 }));
-        const run: RunState = {
-            ...base,
-            board,
-            status: 'playing',
-            stats: { ...base.stats, tries: 1 },
-            findablesTotalThisFloor: countFindablePairs(board.tiles)
-        };
-
-        const sprung = flipTile(run, trapPair[0]!.id);
-        const sprungTrap = sprung.board!.tiles.find((tile) => tile.id === trapPair[0]!.id)!;
-
-        expect(sprung.status).toBe('playing');
-        expect(sprung.board!.flippedTileIds).toEqual([]);
-        expect(sprung.dungeonTrapsTriggered).toBe(run.dungeonTrapsTriggered + 1);
-        expect(sprung.dungeonTrapsResolvedThisFloor).toBe((run.dungeonTrapsResolvedThisFloor ?? 0) + 1);
-        expect(sprungTrap.dungeonCardState).toBe('resolved');
-        expect(getDungeonCardCopy(sprungTrap)).toContain('Resolved trap');
-
-        const next = flipTile(sprung, supportPair[0]!.id);
-        expect(next.board!.flippedTileIds).toEqual([supportPair[0]!.id]);
-    });
 
     it('clears the floor when a self-resolving trap is the final unmatched pair', () => {
         const tiles: Tile[] = [
@@ -1673,38 +1465,6 @@ describe('REG-017 route choices', () => {
         expect(isBoardComplete(cleared.board!)).toBe(true);
     });
 
-    it('generates deterministic rotating enemy hazards with telegraphed next targets', () => {
-        const options = {
-            runSeed: 182_001,
-            runRulesVersion: GAME_RULES_VERSION,
-            dungeonNodeKind: 'trap' as const,
-            gameMode: 'endless' as const
-        };
-        const board = buildBoard(5, options);
-        const repeat = buildBoard(5, options);
-
-        expect(board.enemyHazards?.length).toBeGreaterThan(0);
-        expect(repeat.enemyHazards).toEqual(board.enemyHazards);
-        for (const hazard of board.enemyHazards ?? []) {
-            expect(board.tiles.some((tile) => tile.id === hazard.currentTileId)).toBe(true);
-            expect(board.tiles.some((tile) => tile.id === hazard.nextTileId)).toBe(true);
-            expect(hazard.currentTileId).not.toBe(hazard.nextTileId);
-        }
-        const run = {
-            ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 182_001 })),
-            board,
-            status: 'playing' as const
-        };
-        expect(getDungeonBoardPresentation(run).chips).toEqual(
-            expect.arrayContaining([expect.objectContaining({ id: 'enemy-hazards', label: 'Patrols' })])
-        );
-        expect(getDungeonBoardPresentation(run).alertText).toMatch(/moving after each action/i);
-        expect(getDungeonEnemyLifecycleStatus(run)).toMatchObject({
-            movingEnemyHazardCount: board.enemyHazards!.length,
-            revealedMovingEnemyHazardCount: 0,
-            defeatedMovingEnemyHazardCount: 0
-        });
-    });
 
     it('documents and applies enemy movement pattern candidate priorities', () => {
         expect(Object.keys(ENEMY_HAZARD_PATTERN_DEFINITIONS).sort()).toEqual(
@@ -1761,38 +1521,6 @@ describe('REG-017 route choices', () => {
         expect(getEnemyHazardMovementCandidateIds(board, 'observe')).toEqual(['trap', 'enemy']);
     });
 
-    it('clicking an enemy-occupied card deals hazard damage without flipping the card', () => {
-        const board = buildBoard(5, {
-            runSeed: 182_002,
-            runRulesVersion: GAME_RULES_VERSION,
-            dungeonNodeKind: 'trap',
-            gameMode: 'endless'
-        });
-        const hazard = board.enemyHazards![0]!;
-        const targetTile = board.tiles.find((tile) => tile.id === hazard.currentTileId)!;
-        const base = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 182_002 }));
-        const run: RunState = {
-            ...base,
-            board,
-            status: 'playing',
-            stats: { ...base.stats, guardTokens: 0 }
-        };
-
-        const hit = applyEnemyHazardClick(run, hazard.currentTileId);
-
-        expect(hit.lives).toBe(run.lives - hazard.damage);
-        expect(hit.pendingMemorizeBonusMs).toBe(MEMORIZE_BONUS_PER_LIFE_LOST_MS * hazard.damage);
-        expect(hit.enemyHazardHitsThisFloor).toBe(1);
-        expect(hit.board!.tiles.find((tile) => tile.id === targetTile.id)!.state).toBe('hidden');
-        expect(hit.board!.flippedTileIds).toEqual([]);
-        expect(hit.board!.enemyHazards!.find((item) => item.id === hazard.id)!.state).toBe('revealed');
-        expect(hit.board!.enemyHazards!.find((item) => item.id === hazard.id)!.currentTileId).toBe(hazard.nextTileId);
-        expect(getDungeonEnemyLifecycleStatus(hit)).toMatchObject({
-            movingEnemyHazardCount: board.enemyHazards!.length,
-            revealedMovingEnemyHazardCount: 1
-        });
-        expect(getDungeonBoardPresentation(hit).alertText).toMatch(/safe matches damage revealed patrols/i);
-    });
 
     it('spends guard tokens before life on enemy contact', () => {
         const [a1, a2] = createPair('p1', 'A', 'a');
@@ -2119,70 +1847,6 @@ describe('REG-017 route choices', () => {
         expect(getDungeonObjectiveStatus(run)).toMatchObject({ completed: true });
     });
 
-    it('damages revealed enemy hazards on safe matches and defeats boss overlays', () => {
-        const board = buildBoard(6, {
-            runSeed: 182_006,
-            runRulesVersion: GAME_RULES_VERSION,
-            dungeonNodeKind: 'boss',
-            gameMode: 'endless'
-        });
-        const boss = board.enemyHazards!.find((hazard) => hazard.bossId)!;
-        const groups = new Map<string, Tile[]>();
-        for (const tile of board.tiles) {
-            if (tile.id === boss.currentTileId || tile.id === boss.nextTileId || tile.state !== 'hidden') {
-                continue;
-            }
-            const group = groups.get(tile.pairKey) ?? [];
-            group.push(tile);
-            groups.set(tile.pairKey, group);
-        }
-        const matchPairs = [...groups.values()].filter(
-            (group) => group.length === 2 && !group.some((tile) => tile.pairKey === EXIT_PAIR_KEY)
-        );
-        expect(matchPairs.length).toBeGreaterThanOrEqual(3);
-
-        const base = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 182_006 }));
-        let run: RunState = {
-            ...base,
-            board: {
-                ...board,
-                enemyHazards: board.enemyHazards!.map((hazard) =>
-                    hazard.id === boss.id ? { ...hazard, state: 'revealed' as const } : hazard
-                )
-            },
-            status: 'playing',
-            findablesTotalThisFloor: countFindablePairs(board.tiles)
-        };
-
-        // The boss walks after every turn, so "a safe pair" is decided per turn against where it
-        // is *now* — not against the opening layout, which any change to the deal would move.
-        /*
-         * Match safe pairs until the boss falls, rather than assuming exactly `maxHp` of them will
-         * do it. A safe match damages the boss when the break's region reaches its tile, and the
-         * region is decided by what the pop takes - so once the floor keeps plain pairs back for
-         * the loop, some safe matches land nowhere near it. What is under test is that safe
-         * matches damage the boss and eventually defeat it, which is unchanged; the old loop was
-         * also asserting a damage-per-turn rate that was never the point.
-         */
-        const used = new Set<string>();
-        for (let index = 0; index < matchPairs.length; index += 1) {
-            const live = run.board!.enemyHazards!.find((hazard) => hazard.id === boss.id)!;
-            if (live.state === 'defeated') break;
-            const pair = matchPairs.find(
-                (group) =>
-                    !used.has(group[0]!.pairKey) &&
-                    !group.some((tile) => tile.id === live.currentTileId || tile.id === live.nextTileId)
-            );
-            expect(pair, `no safe pair left on turn ${index + 1}`).toBeTruthy();
-            used.add(pair![0]!.pairKey);
-            run = resolveBoardTurn(flipTile(flipTile(run, pair![0]!.id), pair![1]!.id));
-        }
-
-        const defeatedBoss = run.board!.enemyHazards!.find((hazard) => hazard.id === boss.id)!;
-        expect(defeatedBoss.state).toBe('defeated');
-        expect(run.enemyHazardsDefeatedThisFloor).toBe(1);
-        expect(getDungeonObjectiveStatus(run)).toMatchObject({ completed: true, progress: boss.maxHp, required: boss.maxHp });
-    });
 
     it('solves generated scheduled floors after exhausting legal pair matches and activating the exit', () => {
         const seeds = [42_001, 172_707, 182_009, 192_012] as const;
@@ -2243,155 +1907,8 @@ describe('REG-017 route choices', () => {
         }
     });
 
-    it('solves generated boss floors without leaving stale boss locks or undefeated overlays', () => {
-        const scenarios = [
-            { level: 7, runSeed: 172_707, floorArchetypeId: 'trap_hall' as FloorArchetypeId, activeMutators: ['glass_floor', 'sticky_fingers'] as MutatorId[] },
-            { level: 9, runSeed: 182_009, floorArchetypeId: 'rush_recall' as FloorArchetypeId, activeMutators: ['short_memorize', 'wide_recall'] as MutatorId[] },
-            { level: 12, runSeed: 192_012, floorArchetypeId: null, activeMutators: [] as MutatorId[] }
-        ];
 
-        for (const scenario of scenarios) {
-            const exhausted = solveGeneratedFloorByExhaustingPairs({
-                ...scenario,
-                floorTag: 'boss',
-                dungeonNodeKind: 'boss',
-                activateExit: false
-            });
 
-            expect(exhausted.status, `seed ${scenario.runSeed} level ${scenario.level}`).toBe('playing');
-            expect(getDungeonObjectiveStatus(exhausted), `seed ${scenario.runSeed} level ${scenario.level}`).toMatchObject({
-                objectiveId: 'defeat_boss',
-                completed: true
-            });
-            expect(getDungeonBossReadModel(exhausted), `seed ${scenario.runSeed} level ${scenario.level}`).toMatchObject({
-                phase: 'defeated',
-                activeMovingPatrolCount: 0
-            });
-            expect(
-                exhausted.board!.enemyHazards?.filter((hazard) => hazard.bossId != null && hazard.state !== 'defeated') ?? [],
-                `seed ${scenario.runSeed} level ${scenario.level}`
-            ).toEqual([]);
-            expect(getDungeonExitStatus(exhausted).lockedReason, `seed ${scenario.runSeed} level ${scenario.level}`).not.toMatch(
-                /defeat/i
-            );
-
-            const exitId = exhausted.board!.dungeonExitTileId!;
-            const exited = activateDungeonExit(revealDungeonExit(exhausted, exitId));
-            expect(exited.status, `seed ${scenario.runSeed} level ${scenario.level}`).toBe('levelComplete');
-        }
-    });
-
-    it('removes generated enemies defeated by active chip damage from the board', () => {
-        const generated = buildBoard(5, {
-            runSeed: 172_700,
-            runRulesVersion: GAME_RULES_VERSION,
-            dungeonNodeKind: 'combat',
-            gameMode: 'endless'
-        });
-        // The enemy keeps its own suit so the support match's pop cannot reach it: a break that
-        // does reach an enemy kills it into the chunk's own ledger, and the chip path this test
-        // is named for would never run.
-        const board = {
-            ...generated,
-            tiles: generated.tiles.map((tile) =>
-                tile.dungeonCardKind === 'enemy' ? { ...tile, suit: 'bone' as const } : { ...tile, suit: 'ember' as const }
-            )
-        };
-        const groups = new Map<string, Tile[]>();
-        for (const tile of board.tiles) {
-            const group = groups.get(tile.pairKey) ?? [];
-            group.push(tile);
-            groups.set(tile.pairKey, group);
-        }
-        const enemyPair = [...groups.values()].find((group) =>
-            group.every((tile) => tile.dungeonCardKind === 'enemy' && tile.dungeonCardHp === 1)
-        )!;
-        const supportPair = [...groups.values()].find((group) =>
-            group.length === 2 &&
-            group.every(
-                (tile) =>
-                    tile.dungeonCardKind !== 'enemy' &&
-                    tile.dungeonCardKind !== 'trap' &&
-                    tile.pairKey !== EXIT_PAIR_KEY &&
-                    tile.pairKey !== SHOP_PAIR_KEY &&
-                    tile.pairKey !== ROOM_PAIR_KEY
-            )
-        )!;
-        expect(enemyPair).toBeDefined();
-        expect(supportPair).toBeDefined();
-
-        const base = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 172_700 }));
-        const run: RunState = {
-            ...base,
-            board,
-            status: 'playing',
-            findablesTotalThisFloor: countFindablePairs(board.tiles)
-        };
-        const revealed = {
-            ...run,
-            board: {
-                ...run.board!,
-                tiles: run.board!.tiles.map((tile) =>
-                    tile.pairKey === enemyPair[0]!.pairKey ? { ...tile, dungeonCardState: 'revealed' as const } : tile
-                )
-            }
-        };
-        const resolved = resolveBoardTurn(flipTile(flipTile(revealed, supportPair[0]!.id), supportPair[1]!.id));
-
-        expect(resolved.dungeonEnemiesDefeatedThisFloor).toBe(1);
-        expect(
-            resolved.board!.tiles
-                .filter((tile) => tile.pairKey === enemyPair[0]!.pairKey)
-                .every((tile) => tile.state === 'removed' && tile.dungeonCardKind == null)
-        ).toBe(true);
-        // The match, the enemy it chipped down, and whatever the pop took with it: the count is a
-        // floor, not an equality, because every match now breaks the clump it touches.
-        expect(resolved.board!.matchedPairs).toBeGreaterThanOrEqual(run.board!.matchedPairs + 2);
-        expect(inspectBoardFairness(resolved.board!).issues.map((issue) => issue.code)).not.toContain(
-            'matched_pairs_counter_mismatch'
-        );
-        expect(getDungeonObjectiveStatus({ ...resolved, board: { ...resolved.board!, dungeonObjectiveId: 'pacify_floor' } })).toMatchObject({
-            completed: true,
-            progress: 1,
-            required: 1
-        });
-    });
-
-    it('defeats a generated boss pair and completes legacy pacify progress', () => {
-        const board = buildBoard(6, {
-            runSeed: 172_601,
-            runRulesVersion: GAME_RULES_VERSION,
-            dungeonNodeKind: 'boss',
-            gameMode: 'endless'
-        });
-        const enemyGroups = new Map<string, Tile[]>();
-        for (const tile of board.tiles.filter((candidate) => candidate.dungeonCardKind === 'enemy')) {
-            const group = enemyGroups.get(tile.pairKey) ?? [];
-            group.push(tile);
-            enemyGroups.set(tile.pairKey, group);
-        }
-        const bossPair = board.tiles.filter((tile) => tile.dungeonBossId != null);
-        expect(bossPair).toHaveLength(2);
-        expect(board.dungeonObjectiveId).toBe('defeat_boss');
-
-        const base = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 172_601 }));
-        const run: RunState = {
-            ...base,
-            board: { ...board, dungeonObjectiveId: 'pacify_floor', enemyHazards: [] },
-            status: 'playing',
-            findablesTotalThisFloor: countFindablePairs(board.tiles)
-        };
-        let defeated = resolveBoardTurn(flipTile(flipTile(run, bossPair[0]!.id), bossPair[1]!.id));
-
-        expect(defeated.dungeonEnemiesDefeatedThisFloor).toBe(1);
-        expect(defeated.dungeonEnemiesDefeated).toBe(run.dungeonEnemiesDefeated + 1);
-        expect(defeated.relicFavorProgress).toBeGreaterThan(run.relicFavorProgress);
-
-        for (const pair of [...enemyGroups.values()].filter((group) => group.every((tile) => tile.dungeonBossId == null))) {
-            defeated = resolveBoardTurn(flipTile(flipTile(defeated, pair[0]!.id), pair[1]!.id));
-        }
-        expect(getDungeonObjectiveStatus(defeated)).toMatchObject({ completed: true, progress: 2, required: 2 });
-    });
 
     it('can route into every major dungeon node family during the first act', () => {
         const cases: { nextLevel: number; routeType: RouteNodeType; expectedKind: DungeonRunNodeKind }[] = [
@@ -2596,52 +2113,6 @@ describe('REG-017 route choices', () => {
         );
     });
 
-    it('applies elite encounter rules without boss scoring identity', () => {
-        const rules = getDungeonEliteEncounterRules('elite')!;
-        const combat = inspectDungeonEncounterBudget({
-            runSeed: 35_001,
-            rulesVersion: GAME_RULES_VERSION,
-            level: 5,
-            floorTag: 'normal',
-            floorArchetypeId: null,
-            gameMode: 'endless',
-            dungeonNodeKind: 'combat'
-        });
-        const elite = inspectDungeonEncounterBudget({
-            runSeed: 35_001,
-            rulesVersion: GAME_RULES_VERSION,
-            level: 5,
-            floorTag: 'normal',
-            floorArchetypeId: null,
-            gameMode: 'endless',
-            dungeonNodeKind: 'elite'
-        });
-        const eliteBoard = buildBoard(5, {
-            runSeed: 35_001,
-            runRulesVersion: GAME_RULES_VERSION,
-            floorTag: 'normal',
-            floorArchetypeId: null,
-            gameMode: 'endless',
-            dungeonNodeKind: 'elite'
-        });
-
-        expect(rules).toMatchObject({
-            label: 'Mnemonic Sentinel',
-            objectiveId: 'pacify_floor',
-            threatBudgetFloor: 2,
-            rewardBudgetFloor: 1,
-            scoreRule: 'Uses normal floor scoring; no boss multiplier.'
-        });
-        expect(rules.completionCopy).toMatch(/Elite pacified/);
-        expect(rules.rewardHook).not.toMatch(/boss multiplier/i);
-        expect(elite.floorArchetypeId).toBe('rush_recall');
-        expect(elite.objectiveId).toBe('pacify_floor');
-        expect(elite.threatPairCount).toBeGreaterThan(combat.threatPairCount);
-        expect(elite.rewardPairCount).toBeGreaterThanOrEqual(1);
-        expect(elite.bossPairCount).toBe(0);
-        expect(eliteBoard.enemyHazards?.length).toBeGreaterThanOrEqual(rules.movingPatrolFloor);
-        expect(eliteBoard.tiles.some((tile) => tile.dungeonCardEffectId === 'enemy_elite')).toBe(true);
-    });
 
     it('pays route card rewards once when the stamped pair is matched', () => {
         const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 17_014 }), 1);
@@ -3271,65 +2742,7 @@ describe('REG-017 route choices', () => {
 });
 
 describe('normal-run hazard tiles', () => {
-    it('keeps floor 1 generated runs hazard-free before introducing hazard tiles', () => {
-        const floorOne = buildBoard(1, {
-            gameMode: 'endless',
-            runSeed: 91_001,
-            runRulesVersion: GAME_RULES_VERSION
-        });
-        const floorTwo = buildBoard(2, {
-            gameMode: 'endless',
-            runSeed: 91_001,
-            runRulesVersion: GAME_RULES_VERSION
-        });
 
-        expect(floorOne.tiles.some((tile) => tile.tileHazardKind != null)).toBe(false);
-        expect(floorTwo.tiles.some((tile) => tile.tileHazardKind != null)).toBe(true);
-        expect(inspectBoardFairness(floorOne).issues).toEqual([]);
-        expect(inspectBoardFairness(floorTwo).issues).toEqual([]);
-    });
-
-    it('generates hazard tiles deterministically on a generated board but not a fixed one', () => {
-        for (const includeWildTile of [false, true]) {
-            const board = buildBoard(6, {
-                gameMode: 'endless',
-                runSeed: 91_001,
-                runRulesVersion: GAME_RULES_VERSION,
-                includeWildTile
-            });
-            const repeat = buildBoard(6, {
-                gameMode: 'endless',
-                runSeed: 91_001,
-                runRulesVersion: GAME_RULES_VERSION,
-                includeWildTile
-            });
-
-            expect(board.tiles.map((tile) => tile.tileHazardKind ?? null)).toEqual(
-                repeat.tiles.map((tile) => tile.tileHazardKind ?? null)
-            );
-            expect(board.tiles.some((tile) => tile.tileHazardKind != null)).toBe(true);
-            expect(
-                board.tiles
-                    .filter((tile) => tile.tileHazardKind != null && tile.tileHazardKind !== 'mirror_decoy')
-                    .every(
-                        (tile) =>
-                            tile.dungeonCardKind == null &&
-                            tile.routeCardKind == null &&
-                            tile.routeSpecialKind == null &&
-                            tile.findableKind == null &&
-                            tile.pairKey !== DECOY_PAIR_KEY
-                    )
-            ).toBe(true);
-            expect(inspectBoardFairness(board).issues).toEqual([]);
-        }
-
-        const fixed = buildBoard(6, {
-            runSeed: 91_001,
-            runRulesVersion: GAME_RULES_VERSION,
-            fixedTiles: [createTile('a1', 'A', 'A'), createTile('a2', 'A', 'A')]
-        });
-        expect(fixed.tiles.some((tile) => tile.tileHazardKind != null)).toBe(false);
-    });
 
     it('removes a full safe pair when cascade cache is matched', () => {
         const run = createRun([
@@ -3869,33 +3282,6 @@ describe('dungeon cards', () => {
         }
     });
 
-    it('stamps board dungeon metadata from the floor blueprint', () => {
-        const trapBoard = buildBoard(7, {
-            runSeed: 42_011,
-            runRulesVersion: GAME_RULES_VERSION,
-            floorTag: 'boss',
-            floorArchetypeId: 'trap_hall',
-            gameMode: 'endless'
-        });
-        const treasureBoard = buildBoard(10, {
-            runSeed: 42_011,
-            runRulesVersion: GAME_RULES_VERSION,
-            floorTag: 'breather',
-            floorArchetypeId: 'treasure_gallery',
-            gameMode: 'endless'
-        });
-
-        expect(trapBoard.dungeonBossId).toBe('trap_warden');
-        expect(trapBoard.dungeonObjectiveId).toBe('defeat_boss');
-        expect(trapBoard.tiles.filter((tile) => tile.dungeonBossId === 'trap_warden')).toHaveLength(2);
-        expect(trapBoard.tiles.find((tile) => tile.dungeonBossId === 'trap_warden')).toMatchObject({
-            label: 'Latch Warden',
-            dungeonCardHp: 3
-        });
-        expect(trapBoard.tiles.some((tile) => tile.dungeonCardEffectId === 'rune_seal')).toBe(true);
-        expect(treasureBoard.dungeonObjectiveId).toBe('loot_cache');
-        expect(treasureBoard.tiles.some((tile) => tile.dungeonCardEffectId === 'treasure_cache')).toBe(true);
-    });
 
     it('assigns expanded dungeon objectives by floor shape', () => {
         const trapBlueprint = createDungeonFloorBlueprint({
@@ -3928,46 +3314,7 @@ describe('dungeon cards', () => {
         expect(gatewayBlueprint.objectiveId).toBe('claim_route');
     });
 
-    it('generates expanded hazards on eligible dungeon archetypes', () => {
-        const trapBoard = buildBoard(7, {
-            runSeed: 42_099,
-            runRulesVersion: GAME_RULES_VERSION,
-            floorTag: 'boss',
-            floorArchetypeId: 'trap_hall',
-            gameMode: 'endless'
-        });
-        const shadowBoard = buildBoard(4, {
-            runSeed: 42_099,
-            runRulesVersion: GAME_RULES_VERSION,
-            floorArchetypeId: 'shadow_read',
-            gameMode: 'endless'
-        });
 
-        expect(trapBoard.tiles.some((tile) => tile.dungeonCardEffectId === 'enemy_stalker')).toBe(true);
-        expect(trapBoard.tiles.some((tile) => tile.dungeonCardEffectId === 'trap_snare')).toBe(true);
-        expect(trapBoard.tiles.some((tile) => tile.dungeonCardEffectId === 'trap_hex')).toBe(true);
-        expect(shadowBoard.tiles.some((tile) => tile.dungeonCardEffectId === 'trap_hex')).toBe(true);
-    });
-
-    it('summarizes dungeon board state and centralizes dungeon card copy', () => {
-        const run = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 42_012, gameMode: 'endless' }));
-        const exitTile = run.board!.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY)!;
-        const trapTile = run.board!.tiles.find((tile) => tile.dungeonCardKind === 'trap') ?? {
-            ...createTile('manual-trap', 'T', '!'),
-            label: 'Alarm Trap',
-            dungeonCardKind: 'trap' as const,
-            dungeonCardState: 'revealed' as const,
-            dungeonCardEffectId: 'trap_alarm' as const
-        };
-        const status = getDungeonBoardStatus(revealDungeonExit(run, exitTile.id));
-
-        expect(status.exitCount).toBeGreaterThanOrEqual(1);
-        expect(status.revealedExitCount).toBe(1);
-        expect(status.objectiveId).toBe(run.board!.dungeonObjectiveId);
-        expect(status.objectiveLabel).toBeTruthy();
-        expect(status.objectiveRequired).toBeGreaterThanOrEqual(1);
-        expect(getDungeonCardCopy(trapTile)).toMatch(/trap/i);
-    });
 
     it('builds a renderer-facing dungeon status presentation', () => {
         const plain = createRun(createPair('A', 'A'));
@@ -4201,80 +3548,6 @@ describe('dungeon cards', () => {
         ).toBe('1 guard ready: the next enemy hit spends guard before life.');
     });
 
-    it('tracks dungeon objective progress and awards objective rewards on exit activation', () => {
-        const bossBoard = buildBoard(9, {
-            runSeed: 42_013,
-            runRulesVersion: GAME_RULES_VERSION,
-            floorTag: 'boss',
-            floorArchetypeId: 'rush_recall',
-            gameMode: 'endless'
-        });
-        const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 42_013, gameMode: 'endless' }));
-        const bossRun: RunState = { ...baseRun, board: bossBoard, status: 'playing' };
-        const bossStatus = getDungeonObjectiveStatus(bossRun);
-        expect(bossStatus.objectiveId).toBe('defeat_boss');
-        expect(bossStatus.required).toBeGreaterThan(0);
-        expect(bossStatus.completed).toBe(false);
-
-        const exitTile: Tile = {
-            ...createTile('exit', EXIT_PAIR_KEY, '^'),
-            label: 'Primary Safe Exit',
-            dungeonCardKind: 'exit',
-            dungeonCardState: 'hidden',
-            dungeonCardEffectId: 'exit_safe',
-            dungeonRouteType: 'safe',
-            dungeonExitLockKind: 'none',
-            dungeonExitActivated: false
-        };
-        const rewardRun: RunState = {
-            ...createRun([
-                {
-                    ...createTile('c1', 'C', '$'),
-                    label: 'Treasure Cache',
-                    dungeonCardKind: 'treasure',
-                    dungeonCardState: 'resolved',
-                    dungeonCardEffectId: 'treasure_cache'
-                },
-                {
-                    ...createTile('c2', 'C', '$'),
-                    label: 'Treasure Cache',
-                    dungeonCardKind: 'treasure',
-                    dungeonCardState: 'resolved',
-                    dungeonCardEffectId: 'treasure_cache'
-                },
-                exitTile
-            ]),
-            board: {
-                ...createBoard([
-                    {
-                        ...createTile('c1', 'C', '$'),
-                        label: 'Treasure Cache',
-                        dungeonCardKind: 'treasure',
-                        dungeonCardState: 'resolved',
-                        dungeonCardEffectId: 'treasure_cache',
-                        state: 'matched'
-                    },
-                    {
-                        ...createTile('c2', 'C', '$'),
-                        label: 'Treasure Cache',
-                        dungeonCardKind: 'treasure',
-                        dungeonCardState: 'resolved',
-                        dungeonCardEffectId: 'treasure_cache',
-                        state: 'matched'
-                    },
-                    exitTile
-                ]),
-                dungeonExitTileId: 'exit',
-                dungeonObjectiveId: 'loot_cache',
-                dungeonExitLockKind: 'none'
-            },
-            dungeonTreasuresOpened: 1
-        };
-        const opened = activateDungeonExit(revealDungeonExit(rewardRun, 'exit'));
-        expect(opened.lastLevelResult?.scoreGained).toBeGreaterThan(50);
-        expect(opened.stats.totalScore).toBeGreaterThanOrEqual(35);
-        expect(opened.relicFavorProgress).toBe(1);
-    });
 
     it('completes pacify and disarm objectives as dungeon pairs resolve', () => {
         const enemyRun = createRun([
@@ -4714,65 +3987,6 @@ describe('dungeon cards', () => {
         expect(getDungeonCardCopy(bossPair('spire_observer', 'Spire Observer')[0])).toMatch(/extra Favor/i);
     });
 
-    it('defines a shared identity, card, patrol, and read model for every dungeon boss', () => {
-        const cases: Array<{
-            bossId: NonNullable<Tile['dungeonBossId']>;
-            floorArchetypeId: FloorArchetypeId | null;
-            expectedPattern: string;
-            rewardNeedle: RegExp;
-        }> = [
-            { bossId: 'trap_warden', floorArchetypeId: 'trap_hall', expectedPattern: 'guard', rewardNeedle: /guard/i },
-            { bossId: 'rush_sentinel', floorArchetypeId: 'rush_recall', expectedPattern: 'patrol', rewardNeedle: /combo shard/i },
-            { bossId: 'treasure_keeper', floorArchetypeId: 'treasure_gallery', expectedPattern: 'guard', rewardNeedle: /shop gold/i },
-            { bossId: 'spire_observer', floorArchetypeId: 'spotlight_hunt', expectedPattern: 'observe', rewardNeedle: /extra Favor/i }
-        ];
-
-        for (const row of cases) {
-            const definition = getDungeonBossDefinition(row.bossId)!;
-            const board = buildBoard(12, {
-                runSeed: 42_340,
-                runRulesVersion: GAME_RULES_VERSION,
-                floorTag: 'boss',
-                floorArchetypeId: row.floorArchetypeId,
-                gameMode: 'endless'
-            });
-            const bossTiles = board.tiles.filter((tile) => tile.dungeonBossId === row.bossId);
-            const bossHazards = board.enemyHazards?.filter((hazard) => hazard.bossId === row.bossId) ?? [];
-            const read = getDungeonBossReadModel(board, row.bossId)!;
-
-            expect(definition).toMatchObject({
-                id: row.bossId,
-                label: bossTiles[0]!.label,
-                hazardPattern: row.expectedPattern
-            });
-            expect(Object.keys(DUNGEON_BOSS_DEFINITIONS)).toContain(row.bossId);
-            expect(bossTiles).toHaveLength(2);
-            expect(bossTiles[0]).toMatchObject({ dungeonCardKind: 'enemy', dungeonCardHp: definition.hp });
-            expect(getDungeonCardCopy(bossTiles[0]!)).toMatch(row.rewardNeedle);
-            expect(bossHazards).toHaveLength(1);
-            expect(bossHazards[0]).toMatchObject({
-                label: definition.label,
-                pattern: row.expectedPattern,
-                maxHp: definition.hp
-            });
-            expect(read).toMatchObject({
-                id: row.bossId,
-                label: definition.label,
-                bossCardPairCount: 1,
-                activeBossCardPairCount: 1,
-                movingPatrolCount: 1,
-                activeMovingPatrolCount: 1,
-                lifecycleSource: 'boss_card_pair',
-                hazardPattern: row.expectedPattern,
-                hp: definition.hp,
-                phase: 'opening'
-            });
-            expect(read.signatureModifier.length).toBeGreaterThan(0);
-            expect(read.rewardHook).toMatch(row.rewardNeedle);
-            expect(read.visualAudioPlaceholders.length).toBeGreaterThanOrEqual(3);
-            expect(getDungeonEnemyLifecycleStatus(board).activeBossEnemyCount).toBe(1);
-        }
-    });
 
     it('derives dungeon boss phases from existing HP without mixing card pairs and patrol overlays', () => {
         const definition = getDungeonBossDefinition('spire_observer')!;
@@ -4845,220 +4059,12 @@ describe('dungeon cards', () => {
         });
     });
 
-    it('adds at least one exit and can add alternate exits during generation', () => {
-        const board = buildBoard(5, {
-            runSeed: 123,
-            runRulesVersion: GAME_RULES_VERSION,
-            floorTag: 'boss',
-            floorArchetypeId: 'trap_hall',
-            gameMode: 'endless'
-        });
 
-        const exits = board.tiles.filter((tile) => tile.pairKey === EXIT_PAIR_KEY);
-        expect(exits.length).toBeGreaterThanOrEqual(1);
-        expect(exits.length).toBeGreaterThan(1);
-        expect(exits.every((exit) => exit.dungeonCardKind === 'exit')).toBe(true);
-        expect(exits.some((exit) => exit.id === board.dungeonExitTileId)).toBe(true);
-        expect(board.tiles.some((tile) => tile.dungeonCardKind === 'enemy')).toBe(true);
-        expect(board.tiles.some((tile) => tile.dungeonCardKind === 'trap')).toBe(true);
-    });
 
-    it('interposes dungeon utility cards instead of appending exits and rooms at the tail', () => {
-        const board = buildBoard(7, {
-            runSeed: 123_707,
-            runRulesVersion: GAME_RULES_VERSION,
-            floorTag: 'boss',
-            floorArchetypeId: 'trap_hall',
-            gameMode: 'endless'
-        });
-        const exitIndices = board.tiles
-            .map((tile, index) => (tile.pairKey === EXIT_PAIR_KEY ? index : -1))
-            .filter((index) => index >= 0);
-        const lastRowStart = Math.floor((board.tiles.length - 1) / board.columns) * board.columns;
 
-        expect(exitIndices.length).toBeGreaterThan(1);
-        expect(exitIndices.some((index) => index < board.tiles.length - 3)).toBe(true);
-        expect(board.tiles.findIndex((tile) => tile.id === board.dungeonExitTileId)).toBeLessThan(lastRowStart);
-        for (let i = 1; i < exitIndices.length; i += 1) {
-            expect(Math.abs(exitIndices[i]! - exitIndices[i - 1]!)).toBeGreaterThan(1);
-        }
 
-        const roomBoard = Array.from({ length: 20 }, (_, index) =>
-            buildBoard(2, {
-                runSeed: 124_000 + index,
-                runRulesVersion: GAME_RULES_VERSION,
-                floorTag: 'breather',
-                gameMode: 'endless'
-            })
-        ).find((candidate) => candidate.tiles.some((tile) => tile.pairKey === ROOM_PAIR_KEY))!;
-        const roomIndex = roomBoard.tiles.findIndex((tile) => tile.pairKey === ROOM_PAIR_KEY);
-        expect(roomIndex).toBeGreaterThanOrEqual(0);
-        expect(roomIndex).toBeLessThan(roomBoard.tiles.length - 1);
 
-        const shopBoard = buildBoard(3, {
-            runSeed: 123,
-            runRulesVersion: GAME_RULES_VERSION,
-            floorArchetypeId: 'treasure_gallery',
-            gameMode: 'endless'
-        });
-        const shopIndex = shopBoard.tiles.findIndex((tile) => tile.pairKey === SHOP_PAIR_KEY);
-        expect(shopIndex).toBeGreaterThanOrEqual(0);
-        expect(shopIndex).toBeLessThan(shopBoard.tiles.length - 1);
-    });
 
-    it('varies dungeon utility placement by seed while preserving deterministic boards', () => {
-        const options = {
-            runRulesVersion: GAME_RULES_VERSION,
-            floorTag: 'boss' as const,
-            floorArchetypeId: 'trap_hall' as const,
-            gameMode: 'endless' as const
-        };
-        const a = buildBoard(7, { ...options, runSeed: 151_001 });
-        const repeat = buildBoard(7, { ...options, runSeed: 151_001 });
-        const b = buildBoard(7, { ...options, runSeed: 151_002 });
-        const positions = (board: BoardState): number[] =>
-            board.tiles
-                .map((tile, index) =>
-                    tile.pairKey === EXIT_PAIR_KEY || tile.pairKey === SHOP_PAIR_KEY || tile.pairKey === ROOM_PAIR_KEY
-                        ? index
-                        : -1
-                )
-                .filter((index) => index >= 0);
-
-        expect(positions(repeat)).toEqual(positions(a));
-        expect(positions(b)).not.toEqual(positions(a));
-    });
-
-    it('adds minor supply filler rewards without satisfying loot-cache objectives', () => {
-        const board = buildBoard(5, {
-            runSeed: 161_001,
-            runRulesVersion: GAME_RULES_VERSION,
-            gameMode: 'endless'
-        });
-        const supplyTiles = board.tiles.filter((tile) => tile.dungeonCardEffectId === 'treasure_shard');
-        expect(supplyTiles).toHaveLength(2);
-
-        const run = { ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false })), board, status: 'playing' as const };
-        const resolved = resolveBoardTurn(flipTile(flipTile(run, supplyTiles[0]!.id), supplyTiles[1]!.id));
-        expect(resolved.shopGold).toBe(run.shopGold + 1);
-        expect(resolved.stats.totalScore).toBeGreaterThan(run.stats.totalScore);
-
-        const lootRun: RunState = {
-            ...resolved,
-            board: { ...resolved.board!, dungeonObjectiveId: 'loot_cache' },
-            dungeonTreasuresOpened: 0
-        };
-        expect(getDungeonObjectiveStatus(lootRun)).toMatchObject({ completed: false, progress: 0, required: 1 });
-    });
-
-    it('uses the revealed exit when multiple exits are present', () => {
-        const run = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 81_004 }));
-        const exits = run.board!.tiles.filter((tile) => tile.pairKey === EXIT_PAIR_KEY);
-        const board = {
-            ...run.board!,
-            tiles: [
-                ...run.board!.tiles,
-                {
-                    ...exits[0]!,
-                    id: 'manual-safe-exit',
-                    label: 'Manual Safe Exit',
-                    dungeonRouteType: 'safe' as const,
-                    dungeonExitLockKind: 'none' as const
-                }
-            ]
-        };
-        const revealed = revealDungeonExit({ ...run, board }, 'manual-safe-exit');
-        const status = getDungeonExitStatus(revealed);
-
-        expect(status.exitTile?.id).toBe('manual-safe-exit');
-        expect(status.canActivateWithoutSpend).toBe(true);
-    });
-
-    it('spawns shop cards on some floors and opens them without granting floor-clear gold', () => {
-        const floorOne = buildBoard(1, {
-            runSeed: 123,
-            runRulesVersion: GAME_RULES_VERSION,
-            gameMode: 'endless'
-        });
-        const treasureFloor = buildBoard(3, {
-            runSeed: 123,
-            runRulesVersion: GAME_RULES_VERSION,
-            floorArchetypeId: 'treasure_gallery',
-            gameMode: 'endless'
-        });
-
-        expect(floorOne.tiles.some((tile) => tile.pairKey === SHOP_PAIR_KEY)).toBe(false);
-        expect(treasureFloor.tiles.filter((tile) => tile.pairKey === SHOP_PAIR_KEY)).toHaveLength(1);
-
-        const run = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 81_005 }));
-        const board = {
-            ...run.board!,
-            dungeonShopTileId: 'manual-shop',
-            tiles: [
-                ...run.board!.tiles,
-                {
-                    ...createTile('manual-shop', SHOP_PAIR_KEY, 'S'),
-                    label: 'Vendor Alcove',
-                    dungeonCardKind: 'shop' as const,
-                    dungeonCardState: 'hidden' as const,
-                    dungeonCardEffectId: 'shop_vendor' as const
-                }
-            ]
-        };
-        const opened = revealDungeonShop({ ...run, board, shopGold: 3 }, 'manual-shop');
-
-        expect(opened.status).toBe('playing');
-        expect(opened.shopGold).toBe(3);
-        expect(opened.shopOffers.length).toBeGreaterThan(0);
-        expect(opened.board!.dungeonShopVisited).toBe(true);
-        const rerolled = rerollShopOffers({ ...opened, shopGold: 10 });
-        const reopened = revealDungeonShop(rerolled, 'manual-shop');
-        expect(reopened.shopRerolls).toBe(1);
-        expect(reopened.shopOffers.map((offer) => offer.id)).toEqual(rerolled.shopOffers.map((offer) => offer.id));
-    });
-
-    it('defines deterministic shop stock and read models for floor-clear and board vendors', () => {
-        const floorRun = {
-            ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 81_041 })),
-            status: 'levelComplete' as const,
-            shopGold: 5
-        };
-        const floorOffers = createRunShopOffers(floorRun);
-        const floorShopRun = { ...floorRun, shopOffers: floorOffers };
-        const board = buildBoard(3, {
-            runSeed: 81_041,
-            runRulesVersion: GAME_RULES_VERSION,
-            dungeonNodeKind: 'shop',
-            gameMode: 'endless'
-        });
-        const boardRun = {
-            ...floorRun,
-            status: 'playing' as const,
-            board,
-            shopGold: 5,
-            shopOffers: createRunShopOffers({ ...floorRun, status: 'playing' as const, board })
-        };
-
-        expect(getRunShopStockPlan(floorShopRun)).toMatchObject({
-            source: 'floor_clear_shop',
-            itemIds: ['heal_life', 'peek_charge', 'region_shuffle_charge', 'destroy_charge', 'iron_key']
-        });
-        // The board vendor reads the floor it stands on: this seed's floor wants routing help and a
-        // way through a pair, so the routing kit leads the stock and the master key still closes it.
-        expect(getRunShopStockPlan(boardRun)).toMatchObject({
-            source: 'board_shop',
-            itemIds: ['trait_cleanse', 'trait_routing_kit', 'heal_life', 'peek_charge', 'region_shuffle_charge', 'master_key']
-        });
-        expect(getRunShopStockPlan(boardRun)).toEqual(getRunShopStockPlan({ ...boardRun, board: { ...board } }));
-        expect(getRunShopReadModel(floorShopRun)).toMatchObject({
-            source: 'floor_clear_shop',
-            offerCount: floorOffers.length,
-            wallet: 5,
-            canReroll: true
-        });
-        expect(getRunShopReadModel(boardRun).previewCopy).toMatch(/Board vendor/);
-        expect(boardRun.board!.tiles.find((tile) => tile.pairKey === SHOP_PAIR_KEY)).toBeDefined();
-    });
 
     it('does not spend shop gold on incompatible or already purchased offers', () => {
         const fullLifeRun = {
@@ -5102,21 +4108,6 @@ describe('dungeon cards', () => {
         expect(purchaseShopOffer(staleShopRun, heal.id)).toBe(staleShopRun);
     });
 
-    it('spawns room cards on some dungeon floors', () => {
-        const boards = Array.from({ length: 20 }, (_, index) =>
-            buildBoard(2, {
-                runSeed: 90_000 + index,
-                runRulesVersion: GAME_RULES_VERSION,
-                floorTag: 'breather',
-                gameMode: 'endless'
-            })
-        );
-
-        expect(boards.some((board) => board.tiles.some((tile) => tile.pairKey === ROOM_PAIR_KEY))).toBe(true);
-        for (const board of boards) {
-            expect(board.tiles.filter((tile) => tile.pairKey === ROOM_PAIR_KEY).length).toBeLessThanOrEqual(1);
-        }
-    });
 
     it('defines trigger, cost, reward, and resolution copy for each room effect', () => {
         const roomEffects = [
@@ -5273,53 +4264,7 @@ describe('dungeon cards', () => {
         expect(mapped.board!.tiles.find((tile) => tile.id === 'map')!.dungeonCardState).toBe('resolved');
     });
 
-    it('keeps key-locked exits optional so generated floors always have a non-key way out', () => {
-        for (let level = 1; level <= 12; level += 1) {
-            const board = buildBoard(level, {
-                runSeed: 88_100,
-                runRulesVersion: GAME_RULES_VERSION,
-                floorTag: level % 5 === 0 ? 'boss' : 'normal',
-                floorArchetypeId: level % 4 === 0 ? 'treasure_gallery' : level % 3 === 0 ? 'script_room' : null,
-                gameMode: 'endless'
-            });
-            const exits = board.tiles.filter((tile) => tile.pairKey === EXIT_PAIR_KEY);
-            expect(exits.length).toBeGreaterThanOrEqual(1);
-            expect(exits.some((tile) => tile.dungeonExitLockKind === 'none' || tile.dungeonExitLockKind === 'lever')).toBe(true);
-            for (const exit of exits.filter((tile) => tile.dungeonExitLockKind === 'lever')) {
-                const leverPairs = new Set(
-                    board.tiles.filter((tile) => tile.dungeonCardKind === 'lever').map((tile) => tile.pairKey)
-                );
-                expect(leverPairs.size).toBeGreaterThanOrEqual(exit.dungeonExitRequiredLeverCount ?? 0);
-            }
-        }
-    });
 
-    it('lets players ignore a key-locked bonus exit and leave through the primary exit', () => {
-        const run = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 81_006 }));
-        const primaryExit = run.board!.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY)!;
-        const board = {
-            ...run.board!,
-            tiles: [
-                ...run.board!.tiles.map((tile) =>
-                    tile.id === primaryExit.id ? { ...tile, dungeonExitLockKind: 'none' as const } : tile
-                ),
-                {
-                    ...primaryExit,
-                    id: 'bonus-key-exit',
-                    label: 'Bonus Key Exit',
-                    dungeonExitLockKind: 'iron' as const,
-                    dungeonRouteType: 'greed' as const
-                }
-            ]
-        };
-        const bonusRevealed = revealDungeonExit({ ...run, board, dungeonKeys: {}, dungeonMasterKeys: 0 }, 'bonus-key-exit');
-        expect(getDungeonExitStatus(bonusRevealed).canActivate).toBe(false);
-
-        const primaryRevealed = revealDungeonExit(bonusRevealed, primaryExit.id);
-        const cleared = activateDungeonExit(primaryRevealed, 'none');
-
-        expect(cleared.status).toBe('levelComplete');
-    });
 
     it('cleans transient floor state and defeats active hazards on floor clear', () => {
         const exitTile: Tile = {
@@ -5385,70 +4330,8 @@ describe('dungeon cards', () => {
         expect(activateDungeonExit(cleared, 'none')).toBe(cleared);
     });
 
-    it('reveals an exit without resolving a pair or costing life', () => {
-        const run = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 81_001 }));
-        const exitTile = run.board!.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY)!;
-        const revealed = revealDungeonExit(run, exitTile.id);
 
-        expect(revealed.lives).toBe(run.lives);
-        expect(revealed.status).toBe('playing');
-        expect(revealed.board!.flippedTileIds).toEqual([]);
-        expect(getDungeonExitStatus(revealed).revealed).toBe(true);
-    });
 
-    it('requires lever pairs before a lever-sealed exit can be activated', () => {
-        const run = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 81_002 }));
-        const board = {
-            ...run.board!,
-            dungeonExitLockKind: 'lever' as const,
-            dungeonExitRequiredLeverCount: 1,
-            dungeonLeverCount: 0,
-            tiles: run.board!.tiles.map((tile) =>
-                tile.pairKey === EXIT_PAIR_KEY
-                    ? { ...tile, dungeonExitLockKind: 'lever' as const, dungeonExitRequiredLeverCount: 1 }
-                    : tile
-            )
-        };
-        const exitTile = board.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY)!;
-        const revealed = revealDungeonExit({ ...run, board }, exitTile.id);
-
-        expect(getDungeonExitStatus(revealed).canActivate).toBe(false);
-
-        const leverReady = {
-            ...revealed,
-            board: { ...revealed.board!, dungeonLeverCount: 1 }
-        };
-        const cleared = activateDungeonExit(leverReady, 'none');
-
-        expect(cleared.status).toBe('levelComplete');
-        expect(cleared.board!.dungeonExitActivated).toBe(true);
-    });
-
-    it('spends run-local keys or master keys on locked exits', () => {
-        const run = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 81_003 }));
-        const board = {
-            ...run.board!,
-            dungeonExitLockKind: 'iron' as const,
-            tiles: run.board!.tiles.map((tile) =>
-                tile.pairKey === EXIT_PAIR_KEY ? { ...tile, dungeonExitLockKind: 'iron' as const } : tile
-            )
-        };
-        const exitTile = board.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY)!;
-        const revealed = revealDungeonExit({ ...run, board, dungeonKeys: { iron: 1 } }, exitTile.id);
-        const cleared = activateDungeonExit(revealed, 'key');
-
-        expect(cleared.status).toBe('levelComplete');
-        expect(cleared.dungeonKeys.iron).toBe(0);
-
-        const masterRun = revealDungeonExit(
-            { ...run, board, dungeonKeys: {}, dungeonMasterKeys: 1 },
-            exitTile.id
-        );
-        const masterCleared = activateDungeonExit(masterRun, 'master_key');
-
-        expect(masterCleared.status).toBe('levelComplete');
-        expect(masterCleared.dungeonMasterKeys).toBe(0);
-    });
 
     it('activates a terminal primary key lock fallback without spending keys', () => {
         const exit: Tile = {
@@ -6438,40 +5321,6 @@ describe('dungeon cards', () => {
 });
 
 describe('REG-015 run shop wallet', () => {
-    it('earns temporary shop gold on floor clear and can buy one-shot services', () => {
-        const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 15_001 }), 1);
-        const shopRun = { ...cleared, shopOffers: createRunShopOffers(cleared) };
-
-        expect(cleared.shopGold).toBeGreaterThanOrEqual(FLOOR_CLEAR_GOLD_BASE);
-        expect(cleared.shopOffers).toEqual([]);
-        expect(shopRun.shopOffers.map((offer) => offer.itemId).sort()).toEqual([
-            'destroy_charge',
-            'heal_life',
-            'iron_key',
-            'peek_charge',
-            'region_shuffle_charge',
-            'trait_cleanse'
-        ]);
-
-        const peekOffer = shopRun.shopOffers.find((offer) => offer.itemId === 'peek_charge')!;
-        const boughtPeek = purchaseShopOffer(shopRun, peekOffer.id);
-        expect(boughtPeek.peekCharges).toBe(shopRun.peekCharges + 1);
-        expect(boughtPeek.shopGold).toBe(shopRun.shopGold - peekOffer.cost);
-        expect(boughtPeek.shopOffers.find((offer) => offer.id === peekOffer.id)?.purchased).toBe(true);
-
-        const rebuy = purchaseShopOffer(boughtPeek, peekOffer.id);
-        expect(rebuy).toBe(boughtPeek);
-
-        const rerolled = rerollShopOffers({ ...shopRun, shopGold: 6 });
-        expect(rerolled.shopRerolls).toBe(1);
-        expect(rerolled.shopGold).toBeLessThan(6);
-        expect(rerolled.shopOffers.map((offer) => offer.id)).not.toEqual(shopRun.shopOffers.map((offer) => offer.id));
-        expect(rerollShopOffers(rerolled)).toBe(rerolled);
-
-        const broke = purchaseShopOffer({ ...shopRun, shopGold: 0 }, shopRun.shopOffers[1]!.id);
-        expect(broke.shopGold).toBe(0);
-        expect(broke.shopOffers[1]!.purchased).toBe(false);
-    });
 
     it('REG-070 rerolls shop stock once with deterministic pricing', () => {
         const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 70_001 }), 1);

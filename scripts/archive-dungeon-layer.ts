@@ -21,14 +21,51 @@ import { DUNGEON_BOSS_DEFINITIONS } from '../src/shared/dungeon-boss-rules';
 import { calculateMemoryTaxReview, MEMORY_TAX_AXES } from '../src/shared/mechanic-feedback';
 import { HAZARD_TILE_DEFINITIONS } from '../src/shared/hazard-tiles';
 
-/**
- * The modules the removal deletes. Listed here rather than globbed, so the archive still names them
- * accurately after they are gone.
+/*
+ * The modules the removal deletes.
+ *
+ * This was a `readdirSync` glob over `src/shared/dungeon-*.ts`, with a comment claiming it was a
+ * literal list "so the archive still names them accurately after they are gone". It was not, and
+ * the first deletion proved it: `dungeon-tile-augmentation-rules.ts` went in Gen 172 and a re-run
+ * would have quietly dropped it from the record. An archive that forgets what it archived is worse
+ * than no archive, because it looks complete.
+ *
+ * So it is now the literal list the comment always described, captured from the glob on the last
+ * commit where every one of these still existed. Anything added here has to be added by hand, which
+ * is the correct amount of friction for a record of what was destroyed.
  */
-const DELETED_MODULES: readonly string[] = fs
-    .readdirSync('src/shared')
-    .filter((name) => name.startsWith('dungeon-') && name.endsWith('.ts') && !name.endsWith('.test.ts'))
-    .map((name) => `src/shared/${name}`);
+const DELETED_MODULES: readonly string[] = [
+    'src/shared/dungeon-blueprint-policy-rules.ts',
+    'src/shared/dungeon-board-generation-rules.ts',
+    'src/shared/dungeon-board-status.ts',
+    'src/shared/dungeon-boss-clear-rules.ts',
+    'src/shared/dungeon-boss-rules.ts',
+    'src/shared/dungeon-card-read-model.ts',
+    'src/shared/dungeon-card-recipe-rules.ts',
+    'src/shared/dungeon-cards.ts',
+    'src/shared/dungeon-combinatoric-matrix.ts',
+    'src/shared/dungeon-e2e-fixtures.ts',
+    'src/shared/dungeon-encounter-context-rules.ts',
+    'src/shared/dungeon-enemy-card-rules.ts',
+    'src/shared/dungeon-enemy-hazard-rules.ts',
+    'src/shared/dungeon-exit-rules.ts',
+    'src/shared/dungeon-floor-blueprint-rules.ts',
+    'src/shared/dungeon-key-copy.ts',
+    'src/shared/dungeon-key-rules.ts',
+    'src/shared/dungeon-match-reward-rules.ts',
+    'src/shared/dungeon-reveal-rules.ts',
+    'src/shared/dungeon-room-rules.ts',
+    'src/shared/dungeon-room-targeting-rules.ts',
+    'src/shared/dungeon-rules.ts',
+    'src/shared/dungeon-run-state-rules.ts',
+    'src/shared/dungeon-save-migration.ts',
+    'src/shared/dungeon-scout-rules.ts',
+    'src/shared/dungeon-showcase-run-rules.ts',
+    'src/shared/dungeon-tile-augmentation-rules.ts',
+    'src/shared/dungeon-topology.ts',
+    'src/shared/dungeon-trap-rules.ts',
+    'src/shared/dungeon-versioning.ts'
+];
 
 const lines: string[] = [];
 const push = (line = ''): void => {
@@ -59,12 +96,38 @@ push('  against them (the occupancy census, `sim:occupancy`).');
 push();
 push('It was expensive, it was fragile, and it was in the way.');
 push();
+push('## How the removal was staged');
+push();
+push('It happened in three commits rather than one, because the interesting failure is not "does it still compile"');
+push('but "does the game still end":');
+push();
+push('1. **Gen 171 — one mode.** `GameMode` collapsed to `endless`; daily, puzzle, meditation and gauntlet went,');
+push('   with the three balance terms they had quietly been carrying written down in `BALANCE_NOTES.md`.');
+push('2. **Gen 172 — generation stops dealing it.** Board generation no longer places a card recipe, a filler pass,');
+push('   an exit, a shop, a room, a hazard pass or the layout plan that pinned them. A generated floor is pairs and');
+push('   nothing else, asserted over 768 boards in `board-build-rules.test.ts`. This is the commit that matters:');
+push('   the modules below still existed and still worked, and the game had already stopped being the game they');
+push('   described.');
+push('3. **Gen 173 — the modules go.** The files listed at the end are deleted, along with the between-floor layer');
+push('   that fed them.');
+push();
 push('## How to get any of it back');
 push();
-push('Everything below is in git. The removal commits carry `Gen 171` in the message, and each section names the');
-push('module a definition lived in, so `git log --all -- src/shared/<module>.ts` finds its whole history. The intent');
-push('is not that none of this returns — it is that it returns **deliberately, one mechanic at a time, measured');
-push('against the loop** rather than layered on top of it.');
+push('Everything here is in git. The removal commits carry `Gen 171`, `Gen 172` and `Gen 173` in their messages,');
+push('and each section names the module a definition lived in, so `git log --all -- src/shared/<module>.ts` finds');
+push('its whole history. The intent is not that none of this returns — it is that it returns **deliberately, one');
+push('mechanic at a time, measured against the loop** rather than layered on top of it.');
+push();
+push('## What removing it actually did');
+push();
+push("Two numbers, both from the repository's own simulations, run immediately before and after the Gen 172 cut:");
+push();
+push('- **Fever share went from ~0.13 to 0.51 of floors** for a clean player (`yarn sim:cascade`). The dungeon');
+push('  budget had been eating the pairs the pop needed to reach, so the cascade could not build. This is the');
+push("  thesis's central claim, and it is the first time it has been measured rather than argued.");
+push('- **The occupancy census went fully green** (`yarn sim:occupancy`). Eleven systems had been listed as');
+push('  silent — shipped and never observable — for eleven generations. They are not quiet now; they are gone,');
+push('  which is a different and more honest answer than a widened band.');
 push();
 
 push('## Card kinds');
@@ -169,7 +232,8 @@ push();
 
 push('## The modules that went with it');
 push();
-push('Every file below was deleted in the Gen 171 removal. `git log --all -- <path>` is its whole history.');
+push('Every file below goes in the Gen 173 removal, after Gen 172 had already made all of it unreachable from a');
+push('generated floor. `git log --all -- <path>` is its whole history.');
 push();
 for (const file of DELETED_MODULES) {
     push(`- \`${file}\``);

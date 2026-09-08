@@ -29,7 +29,9 @@ describe('GLD-P2 board, power, and resolution contracts', () => {
         expect(board.enemyHazards).toEqual([]);
     });
 
-    it('keeps fixed tile legacy enhancement as the default', () => {
+    it('gives back exactly the fixed tiles it was handed, and nothing else', () => {
+        // The branch used to add an exit, a shop, a room and a layout plan to a board a caller
+        // had already authored. It hands back what it was given now (docs/REMOVED_DUNGEON_LAYER.md).
         const board = buildBoard(8, {
             fixedTiles: [tile('a1', 'A'), tile('a2', 'A')],
             gameMode: 'endless',
@@ -37,9 +39,9 @@ describe('GLD-P2 board, power, and resolution contracts', () => {
             runSeed: 42_001
         });
 
-        expect(board.tiles.length).toBeGreaterThan(2);
-        expect(board.dungeonExitTileId).not.toBeNull();
-        expect(board.dungeonBossId).not.toBeNull();
+        expect(board.tiles).toHaveLength(2);
+        expect(board.dungeonExitTileId).toBeNull();
+        expect(board.dungeonBossId).toBeNull();
     });
 
     it('does not spend wild capacity when a gambit third wild is not part of the selected match', () => {

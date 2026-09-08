@@ -844,6 +844,28 @@ const countRemainingFullyHiddenPairs = (board: BoardState): number => {
     return [...byPair.values()].filter((tiles) => tiles.length >= 2).length;
 };
 
+/**
+ * Release a Stasis block that has become the only way off the floor.
+ *
+ * `selectStasisBlockIndex` already refuses to block when one pair is left, but it decides against
+ * the board as it stands at the moment of the match - and the pop that follows that match can take
+ * pairs off the board after the decision is made. Two pairs remaining when the block is chosen and
+ * one remaining once the cascade settles is not an exotic case: it is what a short floor with a
+ * clumped suit does routinely. The dungeon layer hid this, because a blocked last pair still had an
+ * exit tile to leave through; with the exit gone, the floor simply never ends.
+ *
+ * So the block is re-checked against the board the turn actually produced, and dropped when there
+ * is nothing else to play. This is a release rather than a refusal on purpose - the block was real,
+ * it was earned, and it did its job for the turn it existed; what it must not do is outlive the
+ * board that justified it.
+ */
+export const releaseStrandedStasisBlock = (run: RunState): RunState => {
+    if (run.stickyBlockIndex === null || run.stickyBlockIndex === undefined || !run.board) {
+        return run;
+    }
+    return countRemainingFullyHiddenPairs(run.board) <= 1 ? { ...run, stickyBlockIndex: null } : run;
+};
+
 const selectStasisBlockIndex = (board: BoardState, sourceTiles: readonly Tile[]): number | null => {
     if (countRemainingFullyHiddenPairs(board) <= 1) {
         return null;

@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2617,
-    "codeFileCount": 1032,
-    "exportedSymbolCount": 3725,
+    "trackedFileCount": 2615,
+    "codeFileCount": 1030,
+    "exportedSymbolCount": 3721,
     "contentItemCount": 66,
     "mechanicCount": 140,
     "stateFieldCount": 149,
-    "relationshipCount": 10987
+    "relationshipCount": 10948
   },
   "inventory": [
     {
@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 274378,
-      "sha256": "9534c49d86ec0c782a6f18332cd2456968e54d208b76f77bbc764f1d34379eac"
+      "bytes": 280481,
+      "sha256": "3c10613485c260142e4c46b20c6430b1ae7e3a6680f4002e63d3e3404568d6c9"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 435,
-      "sha256": "b30ab3df8e044d19d308f98963eb9793f3b17ed5e9f408406a64e6662f3f9f2f"
+      "sha256": "81bf17aa2969cd38db8c61b39083997c3cea15573964f1ec12d439fee76807fe"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2289,8 +2289,8 @@
     {
       "path": "docs/REMOVED_DUNGEON_LAYER.md",
       "category": "documentation",
-      "bytes": 18797,
-      "sha256": "70a248950760b23eb4ea1d58b06293162c6527cfba244a5d86e7b53b473168af"
+      "bytes": 20575,
+      "sha256": "a078a6f234ccd5aa7f8c2048a52919a63edbf9b33fddd2678b8ce8a4ec098be8"
     },
     {
       "path": "docs/REMOVED_MODES.md",
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36715,
-      "sha256": "e3f4eafc437ae73b90882cab943474f9dea793cda60a1e2018a5d3b72179bb94"
+      "sha256": "f805895893888afc389548d2f4f0e59e9b166ca15938769f57a5036e65c54704"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4263,8 +4263,8 @@
     {
       "path": "scripts/archive-dungeon-layer.ts",
       "category": "script",
-      "bytes": 8537,
-      "sha256": "3e6df2e37ffefa39bec4aa3e9948b3ae0c12582d3af45271f60f2fefbaa8a808"
+      "bytes": 12317,
+      "sha256": "0531aeb184a769c662bb48addfa42a8775d419f9063f77381cd010ec1b869cde"
     },
     {
       "path": "scripts/ast-allowlist.json",
@@ -4803,8 +4803,8 @@
     {
       "path": "scripts/gate-long-run.ts",
       "category": "script",
-      "bytes": 1413,
-      "sha256": "fd4102ae8e364666985579abebd337f7fc9b0b8ef087469269f06d4f1362ad75"
+      "bytes": 3202,
+      "sha256": "47bab1d1fdacff5a9fb2ca20380ab537e01dd55c933476e3dc83679ab68fe3ed"
     },
     {
       "path": "scripts/gate-reachability.ts",
@@ -4947,8 +4947,8 @@
     {
       "path": "scripts/sim-endless.ts",
       "category": "script",
-      "bytes": 28500,
-      "sha256": "cf483b4910afd426b38e3d497e270fb702aaa68c4e970f5e027ef66706712fec"
+      "bytes": 29930,
+      "sha256": "e33db7c1588498c21374c6356115eb932d3f7fed9d7b734855215ab21b211790"
     },
     {
       "path": "scripts/sim-gameplay-core.ts",
@@ -9981,8 +9981,8 @@
     {
       "path": "src/renderer/store/dungeonPressSurfaceState.test.ts",
       "category": "test",
-      "bytes": 5552,
-      "sha256": "b67a10b72808e248fbfc921c30546fdd53c8dfd5f7636a20dbe5498cc917b316"
+      "bytes": 2321,
+      "sha256": "db6260a1908c12b89c23a5ef57d49ceb63eb76314712aaf99276a756071953d9"
     },
     {
       "path": "src/renderer/store/dungeonPressSurfaceState.ts",
@@ -10239,8 +10239,8 @@
     {
       "path": "src/renderer/store/runSurfaceState.test.ts",
       "category": "test",
-      "bytes": 42759,
-      "sha256": "ed480f98db2b33dac3976240bb2bcf003cc7023a937abe04f9020eba1d8304f9"
+      "bytes": 39306,
+      "sha256": "db97583a8d0b9a0d7545932cfced3c1e7485c2f63a550bd76fc3b2b5b6ed64dc"
     },
     {
       "path": "src/renderer/store/runSurfaceState.ts",
@@ -10371,8 +10371,8 @@
     {
       "path": "src/renderer/store/tilePressController.test.ts",
       "category": "test",
-      "bytes": 11220,
-      "sha256": "fe5afffca776d7625c07548b002a67a7532fc52ef22b8867c25f73c2fae9574b"
+      "bytes": 6758,
+      "sha256": "04ba725831dea04447749cd018f6a8b48602d03cf0322c43b1a290f18f650340"
     },
     {
       "path": "src/renderer/store/tilePressController.ts",
@@ -10383,8 +10383,8 @@
     {
       "path": "src/renderer/store/useAppStore.test.ts",
       "category": "test",
-      "bytes": 108012,
-      "sha256": "fbedea4bb6ac835af68e60be0a890248e9df5080b3d300184a9c86bcd80beb1c"
+      "bytes": 88592,
+      "sha256": "10705545973aa0eb6c386f92ec96bf57fad1cbe12bbf00e9a19c22d5fdbff69d"
     },
     {
       "path": "src/renderer/store/useAppStore.ts",
@@ -10665,14 +10665,14 @@
     {
       "path": "src/shared/balance-simulation.test.ts",
       "category": "test",
-      "bytes": 28178,
-      "sha256": "a2f25b9686a007c5f57e8e5e2cc8120ef2a57c46c39d0c330b783921e5c7f9e2"
+      "bytes": 32538,
+      "sha256": "6b0a7180080595f4cf2be2928901c915edb41136d8ec39a717cf7ffe47f12540"
     },
     {
       "path": "src/shared/balance-simulation.ts",
       "category": "source",
-      "bytes": 70749,
-      "sha256": "2d43c0fa747c219783476a28abb5eb442e3aa5b804781e00e0e0ae375be4c0e0"
+      "bytes": 69765,
+      "sha256": "2bf32320a7fa8197789ecc760bde72f2e8fa8933453ae435388ad6d87bea3890"
     },
     {
       "path": "src/shared/blueprintAstPoc.ts",
@@ -10689,14 +10689,14 @@
     {
       "path": "src/shared/board-build-rules.test.ts",
       "category": "test",
-      "bytes": 3492,
-      "sha256": "e92cc3429666dc2afb19a2dff8cda511b9211255881e237ff5143362ad816676"
+      "bytes": 4255,
+      "sha256": "ce7ad3b4d36127385399581da9e5cf8a574782a53a236a36fcf8ee614a04e953"
     },
     {
       "path": "src/shared/board-build-rules.ts",
       "category": "source",
-      "bytes": 12851,
-      "sha256": "839527468cca93315c307c04806bc528f58a18cf2af43b3245650e40e5ce40e7"
+      "bytes": 9836,
+      "sha256": "56b43a01a64738df6a3488ff79c13c0bbd0b52a78dcf735889b547a3c86bf173"
     },
     {
       "path": "src/shared/board-generation.ts",
@@ -10815,8 +10815,8 @@
     {
       "path": "src/shared/board-turn-transition.ts",
       "category": "source",
-      "bytes": 36711,
-      "sha256": "17eaa9951035a2ff6753c9668d7321ef509f7b271b6cd3f71a47c1fe286634ce"
+      "bytes": 36795,
+      "sha256": "cbe4f93440bdb81c31466bdf02287522b7f3588ff67e6f391b0a4b9738eb7ddc"
     },
     {
       "path": "src/shared/bonus-rewards.test.ts",
@@ -10851,26 +10851,26 @@
     {
       "path": "src/shared/build-strategy-playthrough-simulation.test.ts",
       "category": "test",
-      "bytes": 22272,
-      "sha256": "a47d53ee224afb3cc55b19204039b86fa0def38b6677c145888dd8984b16f363"
+      "bytes": 28695,
+      "sha256": "a4acf85c3587373ae4c09d9fdb4afb09d792ba97d769dbd8f140c8cbf65636f3"
     },
     {
       "path": "src/shared/build-strategy-playthrough-simulation.ts",
       "category": "source",
-      "bytes": 120370,
-      "sha256": "c7fbba57734e801e6bb487415e5899b3aaf28d2495356b7825660a6e169afd1c"
+      "bytes": 113335,
+      "sha256": "0cd744809958ecdd3cf2b31f966fc930ba7a28e9c0f26718911607c3bf86acea"
     },
     {
       "path": "src/shared/build-strategy-simulation.test.ts",
       "category": "test",
-      "bytes": 6745,
-      "sha256": "4764c952c0d2494cf8ef28299e638bd4bd1324611f05c54af2ffa162e71a5693"
+      "bytes": 6455,
+      "sha256": "fff93a4509302aca72220416d1e9f36adaad534950814e6dba3ac57756ca9424"
     },
     {
       "path": "src/shared/build-strategy-simulation.ts",
       "category": "source",
-      "bytes": 32238,
-      "sha256": "9d37adfe602f057873034daa1daed4e99d36e6a361d9eb7467515ec0c36b41cb"
+      "bytes": 30442,
+      "sha256": "7db1776f0b392d064037dea5d46cbaa7ff95694c0929f3b9ff3e029e13c9c149"
     },
     {
       "path": "src/shared/cameraViewportMode.test.ts",
@@ -10887,14 +10887,14 @@
     {
       "path": "src/shared/cascade-balance-simulation.test.ts",
       "category": "test",
-      "bytes": 3485,
-      "sha256": "d511458fa33c6e40873663c400d9ece4bd8dcf247b952c8ef2f27e08a155d77a"
+      "bytes": 5442,
+      "sha256": "8b20487a54c6b670cc44427b37283c3e779edcb31b9fe67b6089689401b5cd6d"
     },
     {
       "path": "src/shared/cascade-balance-simulation.ts",
       "category": "source",
-      "bytes": 21804,
-      "sha256": "ab6a5cd7586f5d576d830483645ecb78499c50f1578a0e192335a9b07f4ef8ad"
+      "bytes": 24211,
+      "sha256": "dcbb0d335f1cc8229e87c81a86b2ddb1dd985dcfc72aacb37a985f44ef4db744"
     },
     {
       "path": "src/shared/chain-targets.test.ts",
@@ -11431,18 +11431,6 @@
       "sha256": "ad9991131327c7e4fda8edf018b2bedb0b59c03892166974f446b7345d169fe7"
     },
     {
-      "path": "src/shared/dungeon-tile-augmentation-rules.test.ts",
-      "category": "test",
-      "bytes": 7510,
-      "sha256": "2687de0d547ff512e7fe631e7d96cc37a0126f351362e3dc900e1be543ce014b"
-    },
-    {
-      "path": "src/shared/dungeon-tile-augmentation-rules.ts",
-      "category": "source",
-      "bytes": 11366,
-      "sha256": "ff185e52572cf22409cdc7bd62e3bc5bd7318ae226f3fe02582b0f65392ea709"
-    },
-    {
       "path": "src/shared/dungeon-topology-audit-script.test.ts",
       "category": "test",
       "bytes": 11461,
@@ -11691,8 +11679,8 @@
     {
       "path": "src/shared/game.test.ts",
       "category": "test",
-      "bytes": 378099,
-      "sha256": "2749d6229d2eaeb15436a49471a8d17d3152d5f6a9e7b1acf940a3840774a6ab"
+      "bytes": 322030,
+      "sha256": "ab32e3a2a6192c0354fc006b8cde99662b011e29353076bbfcfb0cb56859550c"
     },
     {
       "path": "src/shared/game.ts",
@@ -12015,14 +12003,14 @@
     {
       "path": "src/shared/long-run-depth.test.ts",
       "category": "test",
-      "bytes": 4670,
-      "sha256": "817be3ec4f1723538ec7dd4921f8fa2c2002e20d728ed09376e3ce4f0979091a"
+      "bytes": 5915,
+      "sha256": "7b3262ee203900dc9c4d5e6f4f3ef53c29200e850d72a00041410b70011fb772"
     },
     {
       "path": "src/shared/long-run-depth.ts",
       "category": "source",
-      "bytes": 18446,
-      "sha256": "e5bb5511fce6c1766036fe42ae5e57faae0078f129896c8e9b0ade7be0a4c7fe"
+      "bytes": 18795,
+      "sha256": "4bc9e506af4c278ae1b47be06230d81da1d14ab17cde1c169aeb3d7bd079ae8b"
     },
     {
       "path": "src/shared/long-run-feedback.test.ts",
@@ -12261,8 +12249,8 @@
     {
       "path": "src/shared/p2-contracts.test.ts",
       "category": "test",
-      "bytes": 3895,
-      "sha256": "2cffb281a602ec5803a402a608790acb852b219c187641bf8562177ffb6e3f89"
+      "bytes": 4091,
+      "sha256": "1f56ece4a91a0326a31bb1180fdf728d43733ad9637273f03642e805dc452f62"
     },
     {
       "path": "src/shared/pairProximityHint.test.ts",
@@ -12465,8 +12453,8 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 38295,
-      "sha256": "4ae09dd910f8e5f3c6c2129c887008b87baf263b37ae64d49fa2382031a82d00"
+      "bytes": 38407,
+      "sha256": "879602b114665a54303042331f5c018399367639fd81deb174ebe6e0d3628726"
     },
     {
       "path": "src/shared/release-checklist.ts",
@@ -13101,8 +13089,8 @@
     {
       "path": "src/shared/sim-endless-output.test.ts",
       "category": "test",
-      "bytes": 12899,
-      "sha256": "01b2b2a0df0699664fd3363134f88c920a0f9ccf0e39c0b6e6e1be6fb52cfe07"
+      "bytes": 13332,
+      "sha256": "12654e830e9e67dc7c4f62a790b0f9d3d838544e412de555e08944bf47954c31"
     },
     {
       "path": "src/shared/slayer-floor-clear-transition.ts",
@@ -13131,14 +13119,14 @@
     {
       "path": "src/shared/softlock-generator-contract.test.ts",
       "category": "test",
-      "bytes": 18558,
-      "sha256": "f256747ab073e3feb48274a5b9b040b8810fdce44fb9004bfc7fc801683d3001"
+      "bytes": 18931,
+      "sha256": "64219ef191f3e33b31ba9941401ed5cc30d265f8f0c83c00571033f0b4758f91"
     },
     {
       "path": "src/shared/softlock-generator-contract.ts",
       "category": "source",
-      "bytes": 31026,
-      "sha256": "75e53cac32da2334026e2cff9918e8ab8173313c1875ba89e5ce6ecb361021f8"
+      "bytes": 29018,
+      "sha256": "6b895e7d632e7f930bd31dee68ce7db36a516e578aa06fa91fa9967df57399b7"
     },
     {
       "path": "src/shared/starting-loadouts.test.ts",
@@ -13179,14 +13167,14 @@
     {
       "path": "src/shared/system-occupancy-simulation.test.ts",
       "category": "test",
-      "bytes": 5379,
-      "sha256": "a7c5ff62d96c42911ef9bcba09ea5e24bc4be633ea3737bc4f69e07f601f87fd"
+      "bytes": 6159,
+      "sha256": "5c1e15aeea00e4710b5ee1b85e31d3b0474f85926d7ff377e52dd72a9ce096f7"
     },
     {
       "path": "src/shared/system-occupancy-simulation.ts",
       "category": "source",
-      "bytes": 19720,
-      "sha256": "6feabb5eee52a8d0e562c953b51c7be603553d65e075866b7639544ba6bded42"
+      "bytes": 18141,
+      "sha256": "e64f59ffdfd3ef348b8fcb218f5181c4eec55e9d98188ac73b0dbeed9044a2a4"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -13263,8 +13251,8 @@
     {
       "path": "src/shared/tile-suit-rules.test.ts",
       "category": "test",
-      "bytes": 12667,
-      "sha256": "72105d70838989db875934ae880980f071ebbc157479c6be591accbb8292566e"
+      "bytes": 11820,
+      "sha256": "82d07ca5e9d5dfa67f17a8b968a6b0180e56985c8a4c767b7cfb59020e6fec9b"
     },
     {
       "path": "src/shared/tile-suit-rules.ts",
@@ -13323,14 +13311,14 @@
     {
       "path": "src/shared/tile-trait-rules.test.ts",
       "category": "test",
-      "bytes": 51511,
-      "sha256": "4379ea4b3c8fa116c3e328a707d1819c0adf0a6e49ab1bf3f8cca426a6c3373a"
+      "bytes": 54764,
+      "sha256": "abbdd86bfc98f93d468e2d050e4343f78533548fa4fe6bb93f1b2ef693d99435"
     },
     {
       "path": "src/shared/tile-trait-rules.ts",
       "category": "source",
-      "bytes": 55123,
-      "sha256": "7a9df8c3e781fdc9a8bf1d5e3623bf95579769b494e39e7613a597a8f91df25a"
+      "bytes": 56407,
+      "sha256": "5793aa8312985a2737b8cd4839c97aefabada2df0293ceeb4e35a776029ba780"
     },
     {
       "path": "src/shared/trait-build-rewards.test.ts",
@@ -23686,10 +23674,9 @@
       "path": "src/renderer/store/dungeonPressSurfaceState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 138,
+      "lineCount": 59,
       "imports": [
         "file:src/renderer/store/dungeonPressSurfaceState.ts",
-        "file:src/shared/board-generation.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-rules.ts",
         "file:src/shared/game-core.ts"
@@ -24514,15 +24501,12 @@
       "path": "src/renderer/store/runSurfaceState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1122,
+      "lineCount": 1037,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/runSurfaceState.ts",
-        "file:src/shared/board-generation.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/game-core.ts",
-        "file:src/shared/gameplay-core-contracts.ts",
-        "file:src/shared/gameplay-core.ts",
         "file:src/shared/tile-identity.ts"
       ],
       "exports": [],
@@ -24939,10 +24923,9 @@
       "path": "src/renderer/store/tilePressController.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 293,
+      "lineCount": 180,
       "imports": [
         "file:src/renderer/store/tilePressController.ts",
-        "file:src/shared/board-generation.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-rules.ts",
         "file:src/shared/game-core.ts"
@@ -24982,19 +24965,16 @@
       "path": "src/renderer/store/useAppStore.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 2658,
+      "lineCount": 2207,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/shared/board-generation.ts",
         "file:src/shared/classic-run-setup.ts",
         "file:src/shared/contracts.ts",
-        "file:src/shared/dungeon-rules.ts",
         "file:src/shared/game-core.ts",
         "file:src/shared/playable-path-fixtures.ts",
-        "file:src/shared/route-rules.ts",
         "file:src/shared/run-events.ts",
-        "file:src/shared/run-map.ts",
         "file:src/shared/save-data.ts",
         "file:src/shared/shop-rules.ts",
         "file:src/shared/tile-trait-rules.ts"
@@ -25569,7 +25549,7 @@
       "path": "src/shared/balance-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 541,
+      "lineCount": 598,
       "imports": [
         "file:src/shared/balance-simulation.ts",
         "file:src/shared/contracts.ts",
@@ -25583,7 +25563,7 @@
       "path": "src/shared/balance-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1609,
+      "lineCount": 1564,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-inspection.ts",
@@ -25658,12 +25638,10 @@
       "path": "src/shared/board-build-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 90,
+      "lineCount": 92,
       "imports": [
         "file:src/shared/board-build-rules.ts",
-        "file:src/shared/board-inspection.ts",
-        "file:src/shared/contracts.ts",
-        "file:src/shared/tile-identity.ts"
+        "file:src/shared/contracts.ts"
       ],
       "exports": [],
       "testedBy": []
@@ -25673,16 +25651,12 @@
       "path": "src/shared/board-build-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 339,
+      "lineCount": 240,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/contracts.ts",
-        "file:src/shared/dungeon-board-generation-rules.ts",
         "file:src/shared/dungeon-encounter-context-rules.ts",
-        "file:src/shared/dungeon-enemy-hazard-rules.ts",
-        "file:src/shared/dungeon-floor-blueprint-rules.ts",
-        "file:src/shared/dungeon-tile-augmentation-rules.ts",
         "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/route-world.ts",
         "file:src/shared/shifting-spotlight-rules.ts",
@@ -25737,9 +25711,6 @@
         "symbol:src/shared/board-generation.ts#RunFairnessReport"
       ],
       "testedBy": [
-        "file:src/renderer/store/dungeonPressSurfaceState.test.ts",
-        "file:src/renderer/store/runSurfaceState.test.ts",
-        "file:src/renderer/store/tilePressController.test.ts",
         "file:src/renderer/store/useAppStore.test.ts",
         "file:src/shared/exploit-surface.test.ts",
         "file:src/shared/floor-mutator-schedule.test.ts",
@@ -25830,7 +25801,6 @@
         "symbol:src/shared/board-inspection.ts#RunFairnessReport"
       ],
       "testedBy": [
-        "file:src/shared/board-build-rules.test.ts",
         "file:src/shared/board-inspection.test.ts",
         "file:src/shared/gameplay-property-invariants.test.ts",
         "file:src/shared/softlock-generator-contract.test.ts"
@@ -26308,7 +26278,7 @@
       "path": "src/shared/build-strategy-playthrough-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 382,
+      "lineCount": 463,
       "imports": [
         "file:src/shared/build-strategy-playthrough-simulation.ts",
         "file:src/shared/build-strategy-simulation.ts",
@@ -26322,7 +26292,7 @@
       "path": "src/shared/build-strategy-playthrough-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2494,
+      "lineCount": 2351,
       "imports": [
         "file:src/shared/board-power-targeting.ts",
         "file:src/shared/build-strategy-simulation.ts",
@@ -26368,7 +26338,7 @@
       "path": "src/shared/build-strategy-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 160,
+      "lineCount": 152,
       "imports": [
         "file:src/shared/build-strategy-simulation.ts",
         "file:src/shared/contracts.ts"
@@ -26381,12 +26351,10 @@
       "path": "src/shared/build-strategy-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 769,
+      "lineCount": 721,
       "imports": [
-        "file:src/shared/board-build-rules.ts",
         "file:src/shared/board-power-targeting.ts",
         "file:src/shared/contracts.ts",
-        "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/gameplay-core-contracts.ts",
         "file:src/shared/gameplay-core.ts",
         "file:src/shared/gameplay-feedback-completeness.ts",
@@ -26447,7 +26415,7 @@
       "path": "src/shared/cascade-balance-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 72,
+      "lineCount": 101,
       "imports": [
         "file:src/shared/cascade-balance-simulation.ts"
       ],
@@ -26459,7 +26427,7 @@
       "path": "src/shared/cascade-balance-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 450,
+      "lineCount": 484,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-tile-generation-rules.ts",
@@ -27233,7 +27201,6 @@
         "file:src/shared/dungeon-room-targeting-rules.test.ts",
         "file:src/shared/dungeon-run-state-rules.test.ts",
         "file:src/shared/dungeon-scout-rules.test.ts",
-        "file:src/shared/dungeon-tile-augmentation-rules.test.ts",
         "file:src/shared/dungeon-topology-audit-script.test.ts",
         "file:src/shared/dungeon-topology.test.ts",
         "file:src/shared/dungeon-trap-rules.test.ts",
@@ -28489,7 +28456,6 @@
         "file:src/renderer/components/GameScreen.test.tsx",
         "file:src/renderer/store/dungeonPressSurfaceState.test.ts",
         "file:src/renderer/store/tilePressController.test.ts",
-        "file:src/renderer/store/useAppStore.test.ts",
         "file:src/shared/chunk-break-rules.test.ts",
         "file:src/shared/game.test.ts",
         "file:src/shared/release-checklist.test.ts",
@@ -28617,42 +28583,6 @@
         "file:src/shared/dungeon-showcase-run-rules.test.ts",
         "file:src/shared/run-mode-identity.test.ts",
         "file:src/shared/run-share-key.test.ts"
-      ]
-    },
-    {
-      "id": "file:src/shared/dungeon-tile-augmentation-rules.test.ts",
-      "path": "src/shared/dungeon-tile-augmentation-rules.test.ts",
-      "layer": "shared",
-      "role": "test",
-      "lineCount": 219,
-      "imports": [
-        "file:src/shared/contracts.ts",
-        "file:src/shared/dungeon-tile-augmentation-rules.ts"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/shared/dungeon-tile-augmentation-rules.ts",
-      "path": "src/shared/dungeon-tile-augmentation-rules.ts",
-      "layer": "shared",
-      "role": "production",
-      "lineCount": 340,
-      "imports": [
-        "file:src/shared/contracts.ts",
-        "file:src/shared/dungeon-card-recipe-rules.ts",
-        "file:src/shared/rng.ts",
-        "file:src/shared/tile-identity.ts"
-      ],
-      "exports": [
-        "symbol:src/shared/dungeon-tile-augmentation-rules.ts#addDungeonExitTile",
-        "symbol:src/shared/dungeon-tile-augmentation-rules.ts#addDungeonRoomTile",
-        "symbol:src/shared/dungeon-tile-augmentation-rules.ts#addDungeonShopTile",
-        "symbol:src/shared/dungeon-tile-augmentation-rules.ts#assignDungeonCardsToTiles",
-        "symbol:src/shared/dungeon-tile-augmentation-rules.ts#assignDungeonFillerCardsToTiles"
-      ],
-      "testedBy": [
-        "file:src/shared/dungeon-tile-augmentation-rules.test.ts"
       ]
     },
     {
@@ -29569,7 +29499,7 @@
       "path": "src/shared/game.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 8713,
+      "lineCount": 7562,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-powers.ts",
@@ -30011,7 +29941,6 @@
       ],
       "testedBy": [
         "file:src/renderer/store/gameplayFeedbackAdapter.test.ts",
-        "file:src/renderer/store/runSurfaceState.test.ts",
         "file:src/shared/floor-curio-greeting-rules.test.ts",
         "file:src/shared/gameplay-core-playthrough-solver.test.ts",
         "file:src/shared/gameplay-core.test.ts",
@@ -30203,7 +30132,6 @@
         "symbol:src/shared/gameplay-core.ts#replayGameplayCommands"
       ],
       "testedBy": [
-        "file:src/renderer/store/runSurfaceState.test.ts",
         "file:src/shared/floor-curio-greeting-rules.test.ts",
         "file:src/shared/gameplay-core.test.ts",
         "file:src/shared/gameplay-effect-transition.test.ts",
@@ -30973,7 +30901,7 @@
       "path": "src/shared/long-run-depth.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 100,
+      "lineCount": 119,
       "imports": [
         "file:src/shared/balance-simulation.ts",
         "file:src/shared/contracts.ts",
@@ -30988,7 +30916,7 @@
       "path": "src/shared/long-run-depth.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 452,
+      "lineCount": 460,
       "imports": [
         "file:src/shared/balance-simulation.ts",
         "file:src/shared/board-generation.ts",
@@ -31821,7 +31749,7 @@
       "path": "src/shared/p2-contracts.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 97,
+      "lineCount": 99,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/game.ts",
@@ -32485,7 +32413,7 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 665,
+      "lineCount": 666,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
@@ -33221,7 +33149,6 @@
       ],
       "testedBy": [
         "file:src/renderer/App.test.tsx",
-        "file:src/renderer/store/useAppStore.test.ts",
         "file:src/shared/game.test.ts",
         "file:src/shared/gameplay-property-invariants.test.ts",
         "file:src/shared/playable-path-fixtures.test.ts"
@@ -33829,7 +33756,6 @@
       ],
       "testedBy": [
         "file:src/renderer/components/GameScreen.test.tsx",
-        "file:src/renderer/store/useAppStore.test.ts",
         "file:src/shared/dungeon-topology.test.ts",
         "file:src/shared/game.test.ts",
         "file:src/shared/memory-recall-feedback.test.ts",
@@ -34806,7 +34732,7 @@
       "path": "src/shared/sim-endless-output.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 256,
+      "lineCount": 261,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/findables.ts"
@@ -34897,7 +34823,7 @@
       "path": "src/shared/softlock-generator-contract.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 456,
+      "lineCount": 457,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/board-inspection.ts",
@@ -34916,7 +34842,7 @@
       "path": "src/shared/softlock-generator-contract.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 759,
+      "lineCount": 704,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/board-generation.ts",
@@ -34927,7 +34853,6 @@
         "file:src/shared/gameplay-core-playthrough-solver.ts",
         "file:src/shared/next-floor-transition-rules.ts",
         "file:src/shared/run-creation-rules.ts",
-        "file:src/shared/run-inventory.ts",
         "file:src/shared/run-map.ts",
         "file:src/shared/run-number-guards.ts",
         "file:src/shared/session-stats-rules.ts",
@@ -35066,7 +34991,7 @@
       "path": "src/shared/system-occupancy-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 104,
+      "lineCount": 113,
       "imports": [
         "file:src/shared/system-occupancy-simulation.ts"
       ],
@@ -35078,7 +35003,7 @@
       "path": "src/shared/system-occupancy-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 370,
+      "lineCount": 355,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-tile-generation-rules.ts",
@@ -35312,7 +35237,6 @@
         "file:src/renderer/store/levelCompleteSurfaceState.test.ts",
         "file:src/renderer/store/runResolutionController.test.ts",
         "file:src/renderer/store/runSurfaceState.test.ts",
-        "file:src/shared/board-build-rules.test.ts",
         "file:src/shared/board-inspection.test.ts",
         "file:src/shared/board-power-actions.test.ts",
         "file:src/shared/board-power-availability.test.ts",
@@ -35378,7 +35302,7 @@
       "path": "src/shared/tile-suit-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 234,
+      "lineCount": 224,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/contracts.ts",
@@ -35584,7 +35508,7 @@
       "path": "src/shared/tile-trait-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1133,
+      "lineCount": 1197,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/contracts.ts",
@@ -35601,7 +35525,7 @@
       "path": "src/shared/tile-trait-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1281,
+      "lineCount": 1303,
       "imports": [
         "file:src/shared/bonus-rewards.ts",
         "file:src/shared/contracts.ts",
@@ -35632,6 +35556,7 @@
         "symbol:src/shared/tile-trait-rules.ts#hasTraitBoardPowerInteractionOpportunity",
         "symbol:src/shared/tile-trait-rules.ts#hasTraitRewardInteractionFloor",
         "symbol:src/shared/tile-trait-rules.ts#hasTraitSwapSetupOpportunity",
+        "symbol:src/shared/tile-trait-rules.ts#releaseStrandedStasisBlock",
         "symbol:src/shared/tile-trait-rules.ts#resolveTileTraitEffects",
         "symbol:src/shared/tile-trait-rules.ts#TILE_TRAIT_COPY",
         "symbol:src/shared/tile-trait-rules.ts#TILE_TRAIT_INTERACTION_TAGS",
@@ -46910,32 +46835,32 @@
       "name": "assertBalanceSimulationWithinBaseline",
       "kind": "value",
       "file": "src/shared/balance-simulation.ts",
-      "line": 1165,
-      "endLine": 1175
+      "line": 1120,
+      "endLine": 1130
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#assertDungeonBalanceProfilesWithinBounds",
       "name": "assertDungeonBalanceProfilesWithinBounds",
       "kind": "value",
       "file": "src/shared/balance-simulation.ts",
-      "line": 1527,
-      "endLine": 1608
+      "line": 1482,
+      "endLine": 1563
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#BALANCE_SIMULATION_BASELINE",
       "name": "BALANCE_SIMULATION_BASELINE",
       "kind": "value",
       "file": "src/shared/balance-simulation.ts",
-      "line": 1149,
-      "endLine": 1155
+      "line": 1104,
+      "endLine": 1110
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#BALANCE_SIMULATION_BASELINE_KEYS",
       "name": "BALANCE_SIMULATION_BASELINE_KEYS",
       "kind": "value",
       "file": "src/shared/balance-simulation.ts",
-      "line": 1157,
-      "endLine": 1163
+      "line": 1112,
+      "endLine": 1118
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#BALANCE_SIMULATION_FINDABLE_KINDS",
@@ -47055,23 +46980,23 @@
       "kind": "value",
       "file": "src/shared/balance-simulation.ts",
       "line": 577,
-      "endLine": 1144
+      "endLine": 1099
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#runDungeonBalanceProfileSimulation",
       "name": "runDungeonBalanceProfileSimulation",
       "kind": "value",
       "file": "src/shared/balance-simulation.ts",
-      "line": 1192,
-      "endLine": 1525
+      "line": 1147,
+      "endLine": 1480
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#summarizeBalanceSimulation",
       "name": "summarizeBalanceSimulation",
       "kind": "value",
       "file": "src/shared/balance-simulation.ts",
-      "line": 1146,
-      "endLine": 1147
+      "line": 1101,
+      "endLine": 1102
     },
     {
       "id": "symbol:src/shared/blueprintAstPoc.ts#BLUEPRINT_AST_POC",
@@ -47086,16 +47011,16 @@
       "name": "buildBoard",
       "kind": "value",
       "file": "src/shared/board-build-rules.ts",
-      "line": 74,
-      "endLine": 338
+      "line": 60,
+      "endLine": 239
     },
     {
       "id": "symbol:src/shared/board-build-rules.ts#BuildBoardOptions",
       "name": "BuildBoardOptions",
       "kind": "interface",
       "file": "src/shared/board-build-rules.ts",
-      "line": 51,
-      "endLine": 72
+      "line": 37,
+      "endLine": 58
     },
     {
       "id": "symbol:src/shared/board-generation.ts#BoardFairnessIssue",
@@ -48158,16 +48083,16 @@
       "name": "assertGameplayBuildMultiFloorViable",
       "kind": "value",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 2230,
-      "endLine": 2493
+      "line": 2112,
+      "endLine": 2350
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GAMEPLAY_BUILD_POLICIES",
       "name": "GAMEPLAY_BUILD_POLICIES",
       "kind": "value",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 538,
-      "endLine": 725
+      "line": 515,
+      "endLine": 685
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildDistribution",
@@ -48223,7 +48148,7 @@
       "kind": "interface",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
       "line": 285,
-      "endLine": 507
+      "endLine": 484
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildMultiFloorSeedSample",
@@ -48238,8 +48163,8 @@
       "name": "GameplayBuildMultiFloorSimulationInput",
       "kind": "interface",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 509,
-      "endLine": 514
+      "line": 486,
+      "endLine": 491
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildPolicyDecision",
@@ -48278,96 +48203,96 @@
       "name": "runGameplayBuildMultiFloorSimulation",
       "kind": "value",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 1760,
-      "endLine": 2228
+      "line": 1687,
+      "endLine": 2110
     },
     {
       "id": "symbol:src/shared/build-strategy-simulation.ts#assertGameplayBuildStrategiesViable",
       "name": "assertGameplayBuildStrategiesViable",
       "kind": "value",
       "file": "src/shared/build-strategy-simulation.ts",
-      "line": 725,
-      "endLine": 768
+      "line": 677,
+      "endLine": 720
     },
     {
       "id": "symbol:src/shared/build-strategy-simulation.ts#GAMEPLAY_BUILD_STRATEGIES",
       "name": "GAMEPLAY_BUILD_STRATEGIES",
       "kind": "value",
       "file": "src/shared/build-strategy-simulation.ts",
-      "line": 126,
-      "endLine": 243
+      "line": 121,
+      "endLine": 240
     },
     {
       "id": "symbol:src/shared/build-strategy-simulation.ts#GAMEPLAY_BUILD_STRATEGY_AXES",
       "name": "GAMEPLAY_BUILD_STRATEGY_AXES",
       "kind": "value",
       "file": "src/shared/build-strategy-simulation.ts",
-      "line": 28,
-      "endLine": 38
+      "line": 25,
+      "endLine": 34
     },
     {
       "id": "symbol:src/shared/build-strategy-simulation.ts#GameplayBuildStrategyAxis",
       "name": "GameplayBuildStrategyAxis",
       "kind": "type",
       "file": "src/shared/build-strategy-simulation.ts",
-      "line": 40,
-      "endLine": 40
+      "line": 36,
+      "endLine": 36
     },
     {
       "id": "symbol:src/shared/build-strategy-simulation.ts#GameplayBuildStrategyDefinition",
       "name": "GameplayBuildStrategyDefinition",
       "kind": "interface",
       "file": "src/shared/build-strategy-simulation.ts",
-      "line": 52,
-      "endLine": 61
+      "line": 47,
+      "endLine": 56
     },
     {
       "id": "symbol:src/shared/build-strategy-simulation.ts#GameplayBuildStrategyId",
       "name": "GameplayBuildStrategyId",
       "kind": "type",
       "file": "src/shared/build-strategy-simulation.ts",
-      "line": 41,
-      "endLine": 50
+      "line": 37,
+      "endLine": 45
     },
     {
       "id": "symbol:src/shared/build-strategy-simulation.ts#GameplayBuildStrategyMetrics",
       "name": "GameplayBuildStrategyMetrics",
       "kind": "interface",
       "file": "src/shared/build-strategy-simulation.ts",
-      "line": 78,
-      "endLine": 98
+      "line": 73,
+      "endLine": 93
     },
     {
       "id": "symbol:src/shared/build-strategy-simulation.ts#GameplayBuildStrategyReport",
       "name": "GameplayBuildStrategyReport",
       "kind": "interface",
       "file": "src/shared/build-strategy-simulation.ts",
-      "line": 100,
-      "endLine": 118
+      "line": 95,
+      "endLine": 113
     },
     {
       "id": "symbol:src/shared/build-strategy-simulation.ts#GameplayBuildStrategySeedSample",
       "name": "GameplayBuildStrategySeedSample",
       "kind": "interface",
       "file": "src/shared/build-strategy-simulation.ts",
-      "line": 63,
-      "endLine": 76
+      "line": 58,
+      "endLine": 71
     },
     {
       "id": "symbol:src/shared/build-strategy-simulation.ts#GameplayBuildStrategySimulationInput",
       "name": "GameplayBuildStrategySimulationInput",
       "kind": "interface",
       "file": "src/shared/build-strategy-simulation.ts",
-      "line": 120,
-      "endLine": 124
+      "line": 115,
+      "endLine": 119
     },
     {
       "id": "symbol:src/shared/build-strategy-simulation.ts#runGameplayBuildStrategySimulation",
       "name": "runGameplayBuildStrategySimulation",
       "kind": "value",
       "file": "src/shared/build-strategy-simulation.ts",
-      "line": 656,
-      "endLine": 723
+      "line": 608,
+      "endLine": 675
     },
     {
       "id": "symbol:src/shared/cameraViewportMode.ts#deriveCameraViewportMode",
@@ -48406,8 +48331,8 @@
       "name": "assertCascadeBalanceWithinBands",
       "kind": "value",
       "file": "src/shared/cascade-balance-simulation.ts",
-      "line": 383,
-      "endLine": 433
+      "line": 417,
+      "endLine": 467
     },
     {
       "id": "symbol:src/shared/cascade-balance-simulation.ts#CASCADE_BALANCE_BANDS",
@@ -48415,15 +48340,15 @@
       "kind": "value",
       "file": "src/shared/cascade-balance-simulation.ts",
       "line": 342,
-      "endLine": 370
+      "endLine": 383
     },
     {
       "id": "symbol:src/shared/cascade-balance-simulation.ts#CASCADE_RELIC_BANDS",
       "name": "CASCADE_RELIC_BANDS",
       "kind": "value",
       "file": "src/shared/cascade-balance-simulation.ts",
-      "line": 378,
-      "endLine": 381
+      "line": 391,
+      "endLine": 415
     },
     {
       "id": "symbol:src/shared/cascade-balance-simulation.ts#CASCADE_RELIC_LOADOUT",
@@ -48502,8 +48427,8 @@
       "name": "summarizeCascadeBalance",
       "kind": "value",
       "file": "src/shared/cascade-balance-simulation.ts",
-      "line": 435,
-      "endLine": 449
+      "line": 469,
+      "endLine": 483
     },
     {
       "id": "symbol:src/shared/chain-targets.ts#ChainTargetBand",
@@ -52952,46 +52877,6 @@
       "file": "src/shared/dungeon-showcase-run-rules.ts",
       "line": 11,
       "endLine": 40
-    },
-    {
-      "id": "symbol:src/shared/dungeon-tile-augmentation-rules.ts#addDungeonExitTile",
-      "name": "addDungeonExitTile",
-      "kind": "value",
-      "file": "src/shared/dungeon-tile-augmentation-rules.ts",
-      "line": 47,
-      "endLine": 92
-    },
-    {
-      "id": "symbol:src/shared/dungeon-tile-augmentation-rules.ts#addDungeonRoomTile",
-      "name": "addDungeonRoomTile",
-      "kind": "value",
-      "file": "src/shared/dungeon-tile-augmentation-rules.ts",
-      "line": 121,
-      "endLine": 197
-    },
-    {
-      "id": "symbol:src/shared/dungeon-tile-augmentation-rules.ts#addDungeonShopTile",
-      "name": "addDungeonShopTile",
-      "kind": "value",
-      "file": "src/shared/dungeon-tile-augmentation-rules.ts",
-      "line": 94,
-      "endLine": 119
-    },
-    {
-      "id": "symbol:src/shared/dungeon-tile-augmentation-rules.ts#assignDungeonCardsToTiles",
-      "name": "assignDungeonCardsToTiles",
-      "kind": "value",
-      "file": "src/shared/dungeon-tile-augmentation-rules.ts",
-      "line": 199,
-      "endLine": 274
-    },
-    {
-      "id": "symbol:src/shared/dungeon-tile-augmentation-rules.ts#assignDungeonFillerCardsToTiles",
-      "name": "assignDungeonFillerCardsToTiles",
-      "kind": "value",
-      "file": "src/shared/dungeon-tile-augmentation-rules.ts",
-      "line": 276,
-      "endLine": 339
     },
     {
       "id": "symbol:src/shared/dungeon-topology.ts#createDungeonBoardTopology",
@@ -57759,7 +57644,7 @@
       "kind": "value",
       "file": "src/shared/long-run-depth.ts",
       "line": 285,
-      "endLine": 303
+      "endLine": 311
     },
     {
       "id": "symbol:src/shared/long-run-depth.ts#getLongRunRelicDecisionRows",
@@ -57846,8 +57731,8 @@
       "name": "runLongRunSoak",
       "kind": "value",
       "file": "src/shared/long-run-depth.ts",
-      "line": 305,
-      "endLine": 451
+      "line": 313,
+      "endLine": 459
     },
     {
       "id": "symbol:src/shared/long-run-feedback.ts#FeedbackCauseKind",
@@ -64022,144 +63907,144 @@
       "name": "createClearedBoardFairnessProjection",
       "kind": "value",
       "file": "src/shared/softlock-generator-contract.ts",
-      "line": 250,
-      "endLine": 263
+      "line": 239,
+      "endLine": 252
     },
     {
       "id": "symbol:src/shared/softlock-generator-contract.ts#createFinalPairFairnessProjection",
       "name": "createFinalPairFairnessProjection",
       "kind": "value",
       "file": "src/shared/softlock-generator-contract.ts",
-      "line": 223,
-      "endLine": 248
+      "line": 212,
+      "endLine": 237
     },
     {
       "id": "symbol:src/shared/softlock-generator-contract.ts#createGeneratedBoardSolverRun",
       "name": "createGeneratedBoardSolverRun",
       "kind": "value",
       "file": "src/shared/softlock-generator-contract.ts",
-      "line": 147,
-      "endLine": 167
+      "line": 136,
+      "endLine": 156
     },
     {
       "id": "symbol:src/shared/softlock-generator-contract.ts#createShopStockInspectionRun",
       "name": "createShopStockInspectionRun",
       "kind": "value",
       "file": "src/shared/softlock-generator-contract.ts",
-      "line": 174,
-      "endLine": 182
+      "line": 163,
+      "endLine": 171
     },
     {
       "id": "symbol:src/shared/softlock-generator-contract.ts#DEFAULT_SOFTLOCK_GENERATOR_SCENARIOS",
       "name": "DEFAULT_SOFTLOCK_GENERATOR_SCENARIOS",
       "kind": "value",
       "file": "src/shared/softlock-generator-contract.ts",
-      "line": 620,
-      "endLine": 710
+      "line": 589,
+      "endLine": 655
     },
     {
       "id": "symbol:src/shared/softlock-generator-contract.ts#formatSoftlockGeneratorFailure",
       "name": "formatSoftlockGeneratorFailure",
       "kind": "value",
       "file": "src/shared/softlock-generator-contract.ts",
-      "line": 750,
-      "endLine": 758
+      "line": 695,
+      "endLine": 703
     },
     {
       "id": "symbol:src/shared/softlock-generator-contract.ts#getScheduledSoftlockFloorOptions",
       "name": "getScheduledSoftlockFloorOptions",
       "kind": "value",
       "file": "src/shared/softlock-generator-contract.ts",
-      "line": 613,
-      "endLine": 618
+      "line": 582,
+      "endLine": 587
     },
     {
       "id": "symbol:src/shared/softlock-generator-contract.ts#runSoftlockGeneratorContract",
       "name": "runSoftlockGeneratorContract",
       "kind": "value",
       "file": "src/shared/softlock-generator-contract.ts",
-      "line": 712,
-      "endLine": 748
+      "line": 657,
+      "endLine": 693
     },
     {
       "id": "symbol:src/shared/softlock-generator-contract.ts#scheduledSoftlockFloorArchetype",
       "name": "scheduledSoftlockFloorArchetype",
       "kind": "value",
       "file": "src/shared/softlock-generator-contract.ts",
-      "line": 596,
-      "endLine": 605
+      "line": 565,
+      "endLine": 574
     },
     {
       "id": "symbol:src/shared/softlock-generator-contract.ts#scheduledSoftlockFloorMutators",
       "name": "scheduledSoftlockFloorMutators",
       "kind": "value",
       "file": "src/shared/softlock-generator-contract.ts",
-      "line": 607,
-      "endLine": 608
+      "line": 576,
+      "endLine": 577
     },
     {
       "id": "symbol:src/shared/softlock-generator-contract.ts#scheduledSoftlockFloorNodeKind",
       "name": "scheduledSoftlockFloorNodeKind",
       "kind": "value",
       "file": "src/shared/softlock-generator-contract.ts",
-      "line": 610,
-      "endLine": 611
+      "line": 579,
+      "endLine": 580
     },
     {
       "id": "symbol:src/shared/softlock-generator-contract.ts#ScheduledSoftlockFloorOptions",
       "name": "ScheduledSoftlockFloorOptions",
       "kind": "interface",
       "file": "src/shared/softlock-generator-contract.ts",
-      "line": 586,
-      "endLine": 591
+      "line": 555,
+      "endLine": 560
     },
     {
       "id": "symbol:src/shared/softlock-generator-contract.ts#scheduledSoftlockFloorTag",
       "name": "scheduledSoftlockFloorTag",
       "kind": "value",
       "file": "src/shared/softlock-generator-contract.ts",
-      "line": 593,
-      "endLine": 594
+      "line": 562,
+      "endLine": 563
     },
     {
       "id": "symbol:src/shared/softlock-generator-contract.ts#SoftlockContractCoverageKey",
       "name": "SoftlockContractCoverageKey",
       "kind": "type",
       "file": "src/shared/softlock-generator-contract.ts",
-      "line": 45,
-      "endLine": 58
+      "line": 50,
+      "endLine": 55
     },
     {
       "id": "symbol:src/shared/softlock-generator-contract.ts#SoftlockGeneratorContractResult",
       "name": "SoftlockGeneratorContractResult",
       "kind": "interface",
       "file": "src/shared/softlock-generator-contract.ts",
-      "line": 80,
-      "endLine": 87
+      "line": 77,
+      "endLine": 84
     },
     {
       "id": "symbol:src/shared/softlock-generator-contract.ts#SoftlockGeneratorFailure",
       "name": "SoftlockGeneratorFailure",
       "kind": "interface",
       "file": "src/shared/softlock-generator-contract.ts",
-      "line": 68,
-      "endLine": 78
+      "line": 65,
+      "endLine": 75
     },
     {
       "id": "symbol:src/shared/softlock-generator-contract.ts#SoftlockGeneratorScenario",
       "name": "SoftlockGeneratorScenario",
       "kind": "interface",
       "file": "src/shared/softlock-generator-contract.ts",
-      "line": 60,
-      "endLine": 66
+      "line": 57,
+      "endLine": 63
     },
     {
       "id": "symbol:src/shared/softlock-generator-contract.ts#solveGeneratedBoardByExhaustingPairs",
       "name": "solveGeneratedBoardByExhaustingPairs",
       "kind": "value",
       "file": "src/shared/softlock-generator-contract.ts",
-      "line": 169,
-      "endLine": 172
+      "line": 158,
+      "endLine": 161
     },
     {
       "id": "symbol:src/shared/starting-loadouts.ts#applyStartingLoadout",
@@ -64238,72 +64123,72 @@
       "name": "dominantSystemKeys",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 358,
-      "endLine": 359
+      "line": 343,
+      "endLine": 344
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
       "name": "judgeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 333,
-      "endLine": 355
+      "line": 318,
+      "endLine": 340
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancyAgainstBaseline",
       "name": "judgeSystemOccupancyAgainstBaseline",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 309,
-      "endLine": 331
+      "line": 294,
+      "endLine": 316
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OCCUPANCY_SEEDS",
       "name": "OCCUPANCY_SEEDS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 151,
-      "endLine": 151
+      "line": 141,
+      "endLine": 141
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#simulateSystemOccupancy",
       "name": "simulateSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 153,
-      "endLine": 195
+      "line": 143,
+      "endLine": 185
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#summarizeSystemOccupancy",
       "name": "summarizeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 361,
-      "endLine": 369
+      "line": 346,
+      "endLine": 354
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BANDS",
       "name": "SYSTEM_OCCUPANCY_BANDS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 202,
-      "endLine": 213
+      "line": 192,
+      "endLine": 203
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE",
       "name": "SYSTEM_OCCUPANCY_BASELINE",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 261,
-      "endLine": 288
+      "line": 253,
+      "endLine": 273
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "name": "SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 300,
-      "endLine": 300
+      "line": 285,
+      "endLine": 285
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_COUNTERS",
@@ -64311,7 +64196,7 @@
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
       "line": 43,
-      "endLine": 72
+      "endLine": 51
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SystemOccupancyCounter",
@@ -64326,8 +64211,8 @@
       "name": "SystemOccupancyReport",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 81,
-      "endLine": 93
+      "line": 72,
+      "endLine": 84
     },
     {
       "id": "symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
@@ -65102,16 +64987,16 @@
       "name": "calculateTileTraitMatchRewards",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 1240,
-      "endLine": 1261
+      "line": 1262,
+      "endLine": 1283
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#calculateTileTraitMismatchPenalty",
       "name": "calculateTileTraitMismatchPenalty",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 1263,
-      "endLine": 1280
+      "line": 1285,
+      "endLine": 1302
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#countTraitComboOpportunityPairs",
@@ -65202,12 +65087,20 @@
       "endLine": 329
     },
     {
+      "id": "symbol:src/shared/tile-trait-rules.ts#releaseStrandedStasisBlock",
+      "name": "releaseStrandedStasisBlock",
+      "kind": "value",
+      "file": "src/shared/tile-trait-rules.ts",
+      "line": 862,
+      "endLine": 867
+    },
+    {
       "id": "symbol:src/shared/tile-trait-rules.ts#resolveTileTraitEffects",
       "name": "resolveTileTraitEffects",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 859,
-      "endLine": 1238
+      "line": 881,
+      "endLine": 1260
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#TILE_TRAIT_COPY",
@@ -66966,7 +66859,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 109
+          "line": 107
         }
       ],
       "enables": [
@@ -67065,7 +66958,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 90
+          "line": 95
         }
       ],
       "enables": [
@@ -67320,7 +67213,7 @@
         },
         {
           "path": "src/shared/tile-trait-rules.ts",
-          "line": 1108
+          "line": 1130
         }
       ],
       "tests": [
@@ -67432,7 +67325,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 4
+          "line": 1
         }
       ],
       "enables": [
@@ -67483,11 +67376,11 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 4
+          "line": 1
         },
         {
           "path": "src/renderer/store/tilePressController.test.ts",
-          "line": 3
+          "line": 5
         }
       ],
       "enables": [
@@ -67548,7 +67441,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 4
+          "line": 1
         },
         {
           "path": "src/renderer/store/useAppStore.test.ts",
@@ -67612,11 +67505,11 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 4
+          "line": 1
         },
         {
           "path": "src/renderer/store/tilePressController.test.ts",
-          "line": 3
+          "line": 1
         },
         {
           "path": "src/shared/game.test.ts",
@@ -67825,7 +67718,7 @@
         },
         {
           "path": "src/renderer/store/tilePressController.test.ts",
-          "line": 5
+          "line": 4
         }
       ],
       "enables": [
@@ -68154,7 +68047,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 367
+          "line": 358
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
@@ -69574,7 +69467,7 @@
         },
         {
           "path": "src/shared/tile-trait-rules.test.ts",
-          "line": 57
+          "line": 58
         }
       ],
       "enables": [
@@ -69611,7 +69504,7 @@
       "tests": [
         {
           "path": "src/shared/tile-trait-rules.test.ts",
-          "line": 51
+          "line": 52
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
@@ -69926,7 +69819,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 4
+          "line": 5
         }
       ],
       "enables": [
@@ -69977,7 +69870,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 4
+          "line": 5
         }
       ],
       "enables": [
@@ -70035,11 +69928,11 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 6
+          "line": 14
         },
         {
           "path": "src/renderer/store/useAppStore.test.ts",
-          "line": 19
+          "line": 16
         }
       ],
       "enables": [
@@ -70089,11 +69982,11 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 12
+          "line": 9
         },
         {
           "path": "src/renderer/store/tilePressController.test.ts",
-          "line": 39
+          "line": 22
         }
       ],
       "enables": [
@@ -70138,7 +70031,7 @@
         },
         {
           "path": "src/renderer/store/tilePressController.test.ts",
-          "line": 37
+          "line": 20
         }
       ],
       "enables": [
@@ -70186,7 +70079,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 21
+          "line": 18
         }
       ],
       "enables": [
@@ -70235,7 +70128,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 2
+          "line": 3
         }
       ],
       "enables": [
@@ -70281,7 +70174,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 25
+          "line": 22
         }
       ],
       "enables": [
@@ -70330,7 +70223,7 @@
         },
         {
           "path": "src/renderer/store/tilePressController.test.ts",
-          "line": 6
+          "line": 5
         }
       ],
       "enables": [
@@ -70383,7 +70276,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 27
+          "line": 24
         }
       ],
       "enables": [
@@ -70570,7 +70463,7 @@
         },
         {
           "path": "src/renderer/store/useAppStore.test.ts",
-          "line": 8
+          "line": 94
         },
         {
           "path": "src/shared/gameplay-core-simulation.test.ts",
@@ -70645,7 +70538,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 127
+          "line": 124
         },
         {
           "path": "src/shared/next-floor-run-state-rules.test.ts",
@@ -70856,7 +70749,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 144
+          "line": 140
         },
         {
           "path": "src/renderer/store/relicOfferSurfaceState.test.ts",
@@ -71412,7 +71305,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 144
+          "line": 140
         },
         {
           "path": "src/renderer/store/relicOfferSurfaceState.test.ts",
@@ -72914,7 +72807,7 @@
         },
         {
           "path": "src/shared/softlock-generator-contract.ts",
-          "line": 17
+          "line": 18
         }
       ],
       "tests": [
@@ -90861,36 +90754,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/shared/dungeon-tile-augmentation-rules.ts->symbol:src/shared/dungeon-tile-augmentation-rules.ts#addDungeonExitTile",
-      "source": "file:src/shared/dungeon-tile-augmentation-rules.ts",
-      "target": "symbol:src/shared/dungeon-tile-augmentation-rules.ts#addDungeonExitTile",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/dungeon-tile-augmentation-rules.ts->symbol:src/shared/dungeon-tile-augmentation-rules.ts#addDungeonRoomTile",
-      "source": "file:src/shared/dungeon-tile-augmentation-rules.ts",
-      "target": "symbol:src/shared/dungeon-tile-augmentation-rules.ts#addDungeonRoomTile",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/dungeon-tile-augmentation-rules.ts->symbol:src/shared/dungeon-tile-augmentation-rules.ts#addDungeonShopTile",
-      "source": "file:src/shared/dungeon-tile-augmentation-rules.ts",
-      "target": "symbol:src/shared/dungeon-tile-augmentation-rules.ts#addDungeonShopTile",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/dungeon-tile-augmentation-rules.ts->symbol:src/shared/dungeon-tile-augmentation-rules.ts#assignDungeonCardsToTiles",
-      "source": "file:src/shared/dungeon-tile-augmentation-rules.ts",
-      "target": "symbol:src/shared/dungeon-tile-augmentation-rules.ts#assignDungeonCardsToTiles",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/dungeon-tile-augmentation-rules.ts->symbol:src/shared/dungeon-tile-augmentation-rules.ts#assignDungeonFillerCardsToTiles",
-      "source": "file:src/shared/dungeon-tile-augmentation-rules.ts",
-      "target": "symbol:src/shared/dungeon-tile-augmentation-rules.ts#assignDungeonFillerCardsToTiles",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/shared/dungeon-topology.ts->symbol:src/shared/dungeon-topology.ts#createDungeonBoardTopology",
       "source": "file:src/shared/dungeon-topology.ts",
       "target": "symbol:src/shared/dungeon-topology.ts#createDungeonBoardTopology",
@@ -100044,6 +99907,12 @@
       "id": "exports:src/shared/tile-trait-rules.ts->symbol:src/shared/tile-trait-rules.ts#hasTraitSwapSetupOpportunity",
       "source": "file:src/shared/tile-trait-rules.ts",
       "target": "symbol:src/shared/tile-trait-rules.ts#hasTraitSwapSetupOpportunity",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/tile-trait-rules.ts->symbol:src/shared/tile-trait-rules.ts#releaseStrandedStasisBlock",
+      "source": "file:src/shared/tile-trait-rules.ts",
+      "target": "symbol:src/shared/tile-trait-rules.ts#releaseStrandedStasisBlock",
       "kind": "exports"
     },
     {
@@ -111901,12 +111770,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/store/dungeonPressSurfaceState.test.ts->src/shared/board-generation.ts",
-      "source": "file:src/renderer/store/dungeonPressSurfaceState.test.ts",
-      "target": "file:src/shared/board-generation.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/store/dungeonPressSurfaceState.test.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/store/dungeonPressSurfaceState.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -112987,12 +112850,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/store/runSurfaceState.test.ts->src/shared/board-generation.ts",
-      "source": "file:src/renderer/store/runSurfaceState.test.ts",
-      "target": "file:src/shared/board-generation.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/store/runSurfaceState.test.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/store/runSurfaceState.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -113002,18 +112859,6 @@
       "id": "imports:src/renderer/store/runSurfaceState.test.ts->src/shared/game-core.ts",
       "source": "file:src/renderer/store/runSurfaceState.test.ts",
       "target": "file:src/shared/game-core.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/store/runSurfaceState.test.ts->src/shared/gameplay-core-contracts.ts",
-      "source": "file:src/renderer/store/runSurfaceState.test.ts",
-      "target": "file:src/shared/gameplay-core-contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/store/runSurfaceState.test.ts->src/shared/gameplay-core.ts",
-      "source": "file:src/renderer/store/runSurfaceState.test.ts",
-      "target": "file:src/shared/gameplay-core.ts",
       "kind": "imports"
     },
     {
@@ -113509,12 +113354,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/store/tilePressController.test.ts->src/shared/board-generation.ts",
-      "source": "file:src/renderer/store/tilePressController.test.ts",
-      "target": "file:src/shared/board-generation.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/store/tilePressController.test.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/store/tilePressController.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -113617,12 +113456,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/store/useAppStore.test.ts->src/shared/dungeon-rules.ts",
-      "source": "file:src/renderer/store/useAppStore.test.ts",
-      "target": "file:src/shared/dungeon-rules.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/store/useAppStore.test.ts->src/shared/game-core.ts",
       "source": "file:src/renderer/store/useAppStore.test.ts",
       "target": "file:src/shared/game-core.ts",
@@ -113635,21 +113468,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/store/useAppStore.test.ts->src/shared/route-rules.ts",
-      "source": "file:src/renderer/store/useAppStore.test.ts",
-      "target": "file:src/shared/route-rules.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/store/useAppStore.test.ts->src/shared/run-events.ts",
       "source": "file:src/renderer/store/useAppStore.test.ts",
       "target": "file:src/shared/run-events.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/store/useAppStore.test.ts->src/shared/run-map.ts",
-      "source": "file:src/renderer/store/useAppStore.test.ts",
-      "target": "file:src/shared/run-map.ts",
       "kind": "imports"
     },
     {
@@ -114307,21 +114128,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/shared/board-build-rules.test.ts->src/shared/board-inspection.ts",
-      "source": "file:src/shared/board-build-rules.test.ts",
-      "target": "file:src/shared/board-inspection.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/shared/board-build-rules.test.ts->src/shared/contracts.ts",
       "source": "file:src/shared/board-build-rules.test.ts",
       "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/board-build-rules.test.ts->src/shared/tile-identity.ts",
-      "source": "file:src/shared/board-build-rules.test.ts",
-      "target": "file:src/shared/tile-identity.ts",
       "kind": "imports"
     },
     {
@@ -114343,33 +114152,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/shared/board-build-rules.ts->src/shared/dungeon-board-generation-rules.ts",
-      "source": "file:src/shared/board-build-rules.ts",
-      "target": "file:src/shared/dungeon-board-generation-rules.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/shared/board-build-rules.ts->src/shared/dungeon-encounter-context-rules.ts",
       "source": "file:src/shared/board-build-rules.ts",
       "target": "file:src/shared/dungeon-encounter-context-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/board-build-rules.ts->src/shared/dungeon-enemy-hazard-rules.ts",
-      "source": "file:src/shared/board-build-rules.ts",
-      "target": "file:src/shared/dungeon-enemy-hazard-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/board-build-rules.ts->src/shared/dungeon-floor-blueprint-rules.ts",
-      "source": "file:src/shared/board-build-rules.ts",
-      "target": "file:src/shared/dungeon-floor-blueprint-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/board-build-rules.ts->src/shared/dungeon-tile-augmentation-rules.ts",
-      "source": "file:src/shared/board-build-rules.ts",
-      "target": "file:src/shared/dungeon-tile-augmentation-rules.ts",
       "kind": "imports"
     },
     {
@@ -115309,12 +115094,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/shared/build-strategy-simulation.ts->src/shared/board-build-rules.ts",
-      "source": "file:src/shared/build-strategy-simulation.ts",
-      "target": "file:src/shared/board-build-rules.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/shared/build-strategy-simulation.ts->src/shared/board-power-targeting.ts",
       "source": "file:src/shared/build-strategy-simulation.ts",
       "target": "file:src/shared/board-power-targeting.ts",
@@ -115324,12 +115103,6 @@
       "id": "imports:src/shared/build-strategy-simulation.ts->src/shared/contracts.ts",
       "source": "file:src/shared/build-strategy-simulation.ts",
       "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/build-strategy-simulation.ts->src/shared/floor-mutator-schedule.ts",
-      "source": "file:src/shared/build-strategy-simulation.ts",
-      "target": "file:src/shared/floor-mutator-schedule.ts",
       "kind": "imports"
     },
     {
@@ -116854,42 +116627,6 @@
       "id": "imports:src/shared/dungeon-showcase-run-rules.ts->src/shared/run-map.ts",
       "source": "file:src/shared/dungeon-showcase-run-rules.ts",
       "target": "file:src/shared/run-map.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/dungeon-tile-augmentation-rules.test.ts->src/shared/contracts.ts",
-      "source": "file:src/shared/dungeon-tile-augmentation-rules.test.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/dungeon-tile-augmentation-rules.test.ts->src/shared/dungeon-tile-augmentation-rules.ts",
-      "source": "file:src/shared/dungeon-tile-augmentation-rules.test.ts",
-      "target": "file:src/shared/dungeon-tile-augmentation-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/dungeon-tile-augmentation-rules.ts->src/shared/contracts.ts",
-      "source": "file:src/shared/dungeon-tile-augmentation-rules.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/dungeon-tile-augmentation-rules.ts->src/shared/dungeon-card-recipe-rules.ts",
-      "source": "file:src/shared/dungeon-tile-augmentation-rules.ts",
-      "target": "file:src/shared/dungeon-card-recipe-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/dungeon-tile-augmentation-rules.ts->src/shared/rng.ts",
-      "source": "file:src/shared/dungeon-tile-augmentation-rules.ts",
-      "target": "file:src/shared/rng.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/dungeon-tile-augmentation-rules.ts->src/shared/tile-identity.ts",
-      "source": "file:src/shared/dungeon-tile-augmentation-rules.ts",
-      "target": "file:src/shared/tile-identity.ts",
       "kind": "imports"
     },
     {
@@ -123430,12 +123167,6 @@
       "id": "imports:src/shared/softlock-generator-contract.ts->src/shared/run-creation-rules.ts",
       "source": "file:src/shared/softlock-generator-contract.ts",
       "target": "file:src/shared/run-creation-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/softlock-generator-contract.ts->src/shared/run-inventory.ts",
-      "source": "file:src/shared/softlock-generator-contract.ts",
-      "target": "file:src/shared/run-inventory.ts",
       "kind": "imports"
     },
     {
@@ -133371,24 +133102,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/board-generation.ts->file:src/renderer/store/dungeonPressSurfaceState.test.ts",
-      "source": "file:src/shared/board-generation.ts",
-      "target": "file:src/renderer/store/dungeonPressSurfaceState.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/board-generation.ts->file:src/renderer/store/runSurfaceState.test.ts",
-      "source": "file:src/shared/board-generation.ts",
-      "target": "file:src/renderer/store/runSurfaceState.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/board-generation.ts->file:src/renderer/store/tilePressController.test.ts",
-      "source": "file:src/shared/board-generation.ts",
-      "target": "file:src/renderer/store/tilePressController.test.ts",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/board-generation.ts->file:src/renderer/store/useAppStore.test.ts",
       "source": "file:src/shared/board-generation.ts",
       "target": "file:src/renderer/store/useAppStore.test.ts",
@@ -133440,12 +133153,6 @@
       "id": "tested_by:src/shared/board-grid-dimensions.ts->file:src/shared/board-grid-dimensions.test.ts",
       "source": "file:src/shared/board-grid-dimensions.ts",
       "target": "file:src/shared/board-grid-dimensions.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/board-inspection.ts->file:src/shared/board-build-rules.test.ts",
-      "source": "file:src/shared/board-inspection.ts",
-      "target": "file:src/shared/board-build-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -134397,12 +134104,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/contracts.ts->file:src/shared/dungeon-tile-augmentation-rules.test.ts",
-      "source": "file:src/shared/contracts.ts",
-      "target": "file:src/shared/dungeon-tile-augmentation-rules.test.ts",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/dungeon-topology-audit-script.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/dungeon-topology-audit-script.test.ts",
@@ -135249,12 +134950,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/dungeon-rules.ts->file:src/renderer/store/useAppStore.test.ts",
-      "source": "file:src/shared/dungeon-rules.ts",
-      "target": "file:src/renderer/store/useAppStore.test.ts",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/dungeon-rules.ts->file:src/shared/chunk-break-rules.test.ts",
       "source": "file:src/shared/dungeon-rules.ts",
       "target": "file:src/shared/chunk-break-rules.test.ts",
@@ -135318,12 +135013,6 @@
       "id": "tested_by:src/shared/dungeon-showcase-run-rules.ts->file:src/shared/run-share-key.test.ts",
       "source": "file:src/shared/dungeon-showcase-run-rules.ts",
       "target": "file:src/shared/run-share-key.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/dungeon-tile-augmentation-rules.ts->file:src/shared/dungeon-tile-augmentation-rules.test.ts",
-      "source": "file:src/shared/dungeon-tile-augmentation-rules.ts",
-      "target": "file:src/shared/dungeon-tile-augmentation-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -136155,12 +135844,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/gameplay-core-contracts.ts->file:src/renderer/store/runSurfaceState.test.ts",
-      "source": "file:src/shared/gameplay-core-contracts.ts",
-      "target": "file:src/renderer/store/runSurfaceState.test.ts",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/gameplay-core-contracts.ts->file:src/shared/floor-curio-greeting-rules.test.ts",
       "source": "file:src/shared/gameplay-core-contracts.ts",
       "target": "file:src/shared/floor-curio-greeting-rules.test.ts",
@@ -136230,12 +135913,6 @@
       "id": "tested_by:src/shared/gameplay-core-simulation.ts->file:src/shared/gameplay-core-simulation.test.ts",
       "source": "file:src/shared/gameplay-core-simulation.ts",
       "target": "file:src/shared/gameplay-core-simulation.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/gameplay-core.ts->file:src/renderer/store/runSurfaceState.test.ts",
-      "source": "file:src/shared/gameplay-core.ts",
-      "target": "file:src/renderer/store/runSurfaceState.test.ts",
       "kind": "tested_by"
     },
     {
@@ -137097,12 +136774,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/route-rules.ts->file:src/renderer/store/useAppStore.test.ts",
-      "source": "file:src/shared/route-rules.ts",
-      "target": "file:src/renderer/store/useAppStore.test.ts",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/route-rules.ts->file:src/shared/game.test.ts",
       "source": "file:src/shared/route-rules.ts",
       "target": "file:src/shared/game.test.ts",
@@ -137400,12 +137071,6 @@
       "id": "tested_by:src/shared/run-map.ts->file:src/renderer/components/GameScreen.test.tsx",
       "source": "file:src/shared/run-map.ts",
       "target": "file:src/renderer/components/GameScreen.test.tsx",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/run-map.ts->file:src/renderer/store/useAppStore.test.ts",
-      "source": "file:src/shared/run-map.ts",
-      "target": "file:src/renderer/store/useAppStore.test.ts",
       "kind": "tested_by"
     },
     {
@@ -138300,12 +137965,6 @@
       "id": "tested_by:src/shared/tile-identity.ts->file:src/renderer/store/runSurfaceState.test.ts",
       "source": "file:src/shared/tile-identity.ts",
       "target": "file:src/renderer/store/runSurfaceState.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/tile-identity.ts->file:src/shared/board-build-rules.test.ts",
-      "source": "file:src/shared/tile-identity.ts",
-      "target": "file:src/shared/board-build-rules.test.ts",
       "kind": "tested_by"
     },
     {

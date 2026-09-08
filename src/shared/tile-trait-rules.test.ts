@@ -15,6 +15,7 @@ import {
     getTileTraitInteractionPreviewLines,
     TILE_TRAIT_INTERACTION_TAGS,
     TILE_TRAIT_INTERACTION_TEXT,
+    releaseStrandedStasisBlock,
     resolveTileTraitEffects
 } from './tile-trait-rules';
 
@@ -1128,5 +1129,68 @@ describe('standing-rule relics', () => {
         ] as const) {
             expect(tags).not.toContain(tag);
         }
+    });
+});
+
+describe('a Stasis block never becomes the last pair standing', () => {
+    /*
+     * This softlock was live and unreachable at the same time. `selectStasisBlockIndex` refuses to
+     * block when one pair is left, but it looks at the board before the match's pop takes its
+     * pairs off it: two pairs at the moment of decision, one once the cascade settles, and the one
+     * that survives is the blocked one. Nothing else on the board can be played and the floor never
+     * ends.
+     *
+     * It stayed invisible for as long as every floor carried an exit tile, because a stranded
+     * player could still leave through the exit and the floor would clear anyway - so the bug read
+     * as "an odd turn" rather than "the run is over". Removing the exit is what surfaced it, on
+     * seed 172707 floor 3, which is an ordinary floor and not a corner.
+     */
+    it('releases the block when the turn leaves a single playable pair behind', () => {
+        // One pair already taken by the pop, one pair left, and the block is on it.
+        const board = makeBoard([
+            makeTile('p1-a', 'p1', 'p1', { state: 'removed' }),
+            makeTile('p1-b', 'p1', 'p1', { state: 'removed' }),
+            ...makePair('p2', 'p2')
+        ]);
+        const stranded = makeRun(board.tiles, { board, stickyBlockIndex: 2 });
+
+        expect(releaseStrandedStasisBlock(stranded).stickyBlockIndex).toBeNull();
+    });
+
+    it('leaves a block alone while the player still has somewhere else to go', () => {
+        const board = makeBoard([...makePair('p1', 'p1'), ...makePair('p2', 'p2'), ...makePair('p3', 'p3')]);
+        const blocked = makeRun(board.tiles, { board, stickyBlockIndex: 4 });
+
+        expect(releaseStrandedStasisBlock(blocked).stickyBlockIndex).toBe(4);
+    });
+
+    it('is a no-op when no block is standing', () => {
+        const board = makeBoard([...makePair('p1', 'p1')]);
+        const clean = makeRun(board.tiles, { board, stickyBlockIndex: null });
+
+        expect(releaseStrandedStasisBlock(clean)).toBe(clean);
+    });
+
+    it('clears a real generated floor whose pop strands the block it just set', () => {
+        // Seed 172707 floor 3: a Stasis match pops the third pair, and the Conduit tile it blocked
+        // is half of the only pair left. Before the release this floor sat at 'playing' forever.
+        const board = buildBoard(3, {
+            runSeed: 172_707,
+            runRulesVersion: GAME_RULES_VERSION,
+            gameMode: 'endless',
+            floorTag: 'normal',
+            activeMutators: []
+        });
+        let run: RunState = { ...makeRun(board.tiles, { board }), board, status: 'playing' };
+
+        for (let pass = 0; pass < board.pairCount + 4 && run.status === 'playing'; pass += 1) {
+            const nextPair = [...new Set(run.board!.tiles.map((tile) => tile.pairKey))]
+                .map((pairKey) => run.board!.tiles.filter((tile) => tile.pairKey === pairKey && tile.state === 'hidden'))
+                .find((tiles) => tiles.length === 2);
+            if (!nextPair) break;
+            run = resolveBoardTurn(flipTile(flipTile(run, nextPair[0]!.id), nextPair[1]!.id));
+        }
+
+        expect(run.status).toBe('levelComplete');
     });
 });

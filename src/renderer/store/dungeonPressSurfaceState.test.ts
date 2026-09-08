@@ -1,26 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import type { BoardState, RunShopOfferState, RunState } from '../../shared/contracts';
-import { buildBoard } from '../../shared/board-generation';
-import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY } from '../../shared/dungeon-rules';
+import type { BoardState, RunState } from '../../shared/contracts';
+import { EXIT_PAIR_KEY } from '../../shared/dungeon-rules';
 import { createNewRun, finishMemorizePhase } from '../../shared/game-core';
 import { createDungeonTilePressSurfaceResult } from './dungeonPressSurfaceState';
 
-const offer = (): RunShopOfferState => ({
-    id: 'offer-heal',
-    itemId: 'heal_life',
-    category: 'consumable',
-    label: 'Heal',
-    description: 'Restore a life.',
-    cost: 2,
-    baseCost: 2,
-    stock: 1,
-    maxStock: 1,
-    stackLimit: null,
-    compatibleWhen: 'owned',
-    compatible: true,
-    unavailableReason: null,
-    purchased: false
-});
 
 const playingRun = (overrides: Partial<RunState> = {}): RunState => ({
     ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 48 })),
@@ -71,67 +54,5 @@ describe('dungeon press surface state helpers', () => {
         }
     });
 
-    it('creates a shop result when the dungeon shop tile is usable', () => {
-        const runSeed = 48;
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed });
-        const board = buildBoard(5, {
-            runSeed,
-            runRulesVersion: baseRun.runRulesVersion,
-            dungeonNodeKind: 'shop',
-            gameMode: 'endless'
-        });
-        const shopTile = board.tiles.find((tile) => tile.pairKey === SHOP_PAIR_KEY)!;
-        const run = playingRun({ board, runSeed, shopOffers: [offer()] });
-        const result = createDungeonTilePressSurfaceResult({
-            pairKey: shopTile.pairKey,
-            run,
-            tileId: shopTile.id
-        });
 
-        expect(result.kind).toBe('shop');
-        if (result.kind === 'shop') {
-            expect(result.playFlipSfx).toBe(true);
-            expect(result.run.board!.dungeonShopVisited).toBe(true);
-            expect(result.run.shopOffers).toHaveLength(1);
-            expect(result.run.gameplayCommandJournal).toEqual([
-                expect.objectContaining({ type: 'board.tile_flip', targetTileId: shopTile.id })
-            ]);
-            expect(result.run.gameplayEventJournal).toEqual(expect.arrayContaining([
-                expect.objectContaining({ type: 'board.tile_flipped', outcome: 'shop_revealed' })
-            ]));
-        }
-    });
-
-    it('creates a room result when the dungeon room tile resolves', () => {
-        const runSeed = 49;
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed });
-        const board = buildBoard(5, {
-            runSeed,
-            runRulesVersion: baseRun.runRulesVersion,
-            dungeonNodeKind: 'rest',
-            gameMode: 'endless'
-        });
-        const roomTile = board.tiles.find((tile) => tile.pairKey === ROOM_PAIR_KEY)!;
-        const run = playingRun({ board, runSeed });
-        const result = createDungeonTilePressSurfaceResult({
-            pairKey: roomTile.pairKey,
-            run,
-            tileId: roomTile.id
-        });
-
-        expect(result.kind).toBe('room');
-        if (result.kind === 'room') {
-            expect(result.playFlipSfx).toBe(true);
-            expect(result.run.board!.tiles.find((tile) => tile.id === roomTile.id)).toMatchObject({
-                dungeonRoomUsed: true,
-                dungeonCardState: 'resolved'
-            });
-            expect(result.run.gameplayCommandJournal).toEqual([
-                expect.objectContaining({ type: 'board.tile_flip', targetTileId: roomTile.id })
-            ]);
-            expect(result.run.gameplayEventJournal).toEqual(expect.arrayContaining([
-                expect.objectContaining({ type: 'board.tile_flipped', outcome: 'room_resolved' })
-            ]));
-        }
-    });
 });

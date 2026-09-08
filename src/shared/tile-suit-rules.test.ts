@@ -147,16 +147,6 @@ describe('a built board', () => {
         }
     });
 
-    it('keeps the exit where the layout plan wanted it', () => {
-        // Compare the built board against the same build with the suit deal skipped: the exit
-        // must be in the same cell in both, which is the whole contract of pinning.
-        const board = buildBoard(3, { runSeed: 77, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless' });
-        const exitIndex = board.tiles.findIndex((tile) => tile.pairKey === EXIT_PAIR_KEY);
-        expect(exitIndex).toBeGreaterThanOrEqual(0);
-        const replay = buildBoard(3, { runSeed: 77, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless' });
-        expect(replay.tiles.findIndex((tile) => tile.pairKey === EXIT_PAIR_KEY)).toBe(exitIndex);
-        expect(dealBoardSuits(board.tiles, board.columns, 77, 3, GAME_RULES_VERSION)[exitIndex]?.pairKey).toBe(EXIT_PAIR_KEY);
-    });
 });
 
 describe('the deal profile', () => {

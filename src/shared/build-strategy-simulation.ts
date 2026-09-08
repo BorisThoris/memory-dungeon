@@ -1,11 +1,9 @@
 import { collectDestroyEligibleTileIds } from './board-power-targeting';
 import { GAME_RULES_VERSION, MAX_LIVES, type RunState, type StartingLoadoutId } from './contracts';
-import { buildBoard } from './board-build-rules';
 import {
     createGameplayBoardTurnResolveCommand,
     createGameplayDefinitionCommand,
     createGameplayDestroyPairCommand,
-    createGameplayDungeonExitActivateCommand,
     createGameplayGambitCommitCommand,
     createGameplayFlashPairCommand,
     createGameplayMemorizeCompleteCommand,
@@ -22,7 +20,6 @@ import {
 import { reduceGameplayCommand, replayGameplayCommands } from './gameplay-core';
 import { inspectGameplayFeedbackCompleteness } from './gameplay-feedback-completeness';
 import { createNewRun } from './run-creation-rules';
-import { pickFloorScheduleEntry } from './floor-mutator-schedule';
 import { createRunShopOffers } from './shop-rules';
 
 export const GAMEPLAY_BUILD_STRATEGY_AXES = [
@@ -33,8 +30,7 @@ export const GAMEPLAY_BUILD_STRATEGY_AXES = [
     'sustain_conversion',
     'board_reconfiguration',
     'boss_extraction',
-    'mistake_recovery',
-    'lock_extraction'
+    'mistake_recovery'
 ] as const;
 
 export type GameplayBuildStrategyAxis = (typeof GAMEPLAY_BUILD_STRATEGY_AXES)[number];
@@ -46,8 +42,7 @@ export type GameplayBuildStrategyId =
     | 'combo_shard_engine'
     | 'trap_control'
     | 'boss_hunter'
-    | 'memory_scout'
-    | 'locksmith';
+    | 'memory_scout';
 
 export interface GameplayBuildStrategyDefinition {
     id: GameplayBuildStrategyId;
@@ -230,16 +225,18 @@ export const GAMEPLAY_BUILD_STRATEGIES: readonly GameplayBuildStrategyDefinition
         consequenceEventType: 'board.flash_pair_revealed',
         expectedDominantAxis: 'mistake_recovery'
     },
-    {
-        id: 'locksmith',
-        label: 'The Locksmith',
-        buildMechanicId: 'build.locksmith',
-        startingLoadoutId: 'vaultbreaker',
-        activationDefinitionIds: ['bonus_reward.key_insurance'],
-        consequenceCommandType: 'dungeon.exit_activate',
-        consequenceEventType: 'dungeon.exit_activated',
-        expectedDominantAxis: 'lock_extraction'
-    }
+    /*
+     * The Locksmith stood here, and it is the one build the dungeon removal actually killed.
+     *
+     * Its whole shape was the lock: a vaultbreaker loadout, key insurance, and a consequence that
+     * was literally `dungeon.exit_activate` spending an iron key. There is no lock, no key and no
+     * exit, so the build cannot be played - not tuned down, not weakened, unplayable. It is removed
+     * rather than left in the catalog failing its own viability contract, because a build the game
+     * offers and cannot deliver is worse than one it does not offer.
+     *
+     * `lock_extraction` went with it as an axis, for the same reason: no other build scores on it.
+     * `docs/REMOVED_DUNGEON_LAYER.md` has the lock and key definitions it was built around.
+     */
 ] as const;
 
 const DEFAULT_BUILD_STRATEGY_SEEDS = [42_001, 42_077, 42_123] as const;
@@ -255,7 +252,6 @@ const emptyAxisScores = (): Record<GameplayBuildStrategyAxis, number> => ({
     board_reconfiguration: 0,
     boss_extraction: 0,
     mistake_recovery: 0,
-    lock_extraction: 0
 });
 
 const increment = (counts: Record<string, number>, key: string): void => {
@@ -299,29 +295,11 @@ const createStrategyInitialRun = (
     seed: number,
     rulesVersion: number
 ): RunState => {
-    const locksmithSchedule = strategy.id === 'locksmith'
-        ? pickFloorScheduleEntry(seed, rulesVersion, 8, 'endless')
-        : null;
-    const locksmithBoard = locksmithSchedule
-        ? buildBoard(8, {
-              runSeed: seed,
-              runRulesVersion: rulesVersion,
-              activeMutators: [...locksmithSchedule.mutators],
-              floorTag: locksmithSchedule.floorTag,
-              floorArchetypeId: locksmithSchedule.floorArchetypeId,
-              featuredObjectiveId: locksmithSchedule.featuredObjectiveId,
-              cycleFloor: locksmithSchedule.cycleFloor,
-              gameMode: 'endless',
-              startingLoadoutId: strategy.startingLoadoutId
-          })
-        : undefined;
     const base = createNewRun(0, {
         runSeed: seed,
         runRulesVersionOverride: rulesVersion,
         startingLoadoutId: strategy.startingLoadoutId,
-        onboardingSafeFirstFloor: strategy.id !== 'locksmith',
-        fixedBoard: locksmithBoard,
-        activeMutators: locksmithSchedule ? [...locksmithSchedule.mutators] : undefined,
+        onboardingSafeFirstFloor: true,
         practiceMode: true,
         echoFeedbackEnabled: false,
         initialRelicIds: strategy.id === 'conduit_cartographer'
@@ -400,8 +378,6 @@ const consequenceCommand = (
             );
         case 'memory_scout':
             return createGameplayFlashPairCommand(commandId);
-        case 'locksmith':
-            return createGameplayDungeonExitActivateCommand(commandId, 'key');
     }
 };
 
@@ -428,7 +404,7 @@ const collectAxisScores = (
             ) {
                 scores.control += 1;
             }
-            if (event.itemId === 'iron_key' && strategy.id !== 'locksmith') scores.economy += 1;
+            if (event.itemId === 'iron_key') scores.economy += 1;
             if (event.source.id === 'wager_surety' && strategy.id !== 'boss_hunter') {
                 scores.risk_conversion += 1;
             }
@@ -443,8 +419,7 @@ const collectAxisScores = (
         if (
             event.type === 'currency.changed' &&
             event.currency === 'shop_gold' &&
-            event.applied !== 0 &&
-            strategy.id !== 'locksmith'
+            event.applied !== 0
         ) {
             scores.economy += 1;
         }
@@ -452,7 +427,6 @@ const collectAxisScores = (
             event.type === 'score.changed' &&
             event.amount > 0 &&
             strategy.id !== 'memory_scout' &&
-            strategy.id !== 'locksmith' &&
             event.source.id !== 'trait_toolkit' &&
             event.source.id !== 'free_swap_floor'
         ) {
@@ -490,13 +464,6 @@ const collectAxisScores = (
             (event.type === 'board.flash_pair_revealed' || event.type === 'board.resolve_undone')
         ) {
             scores.mistake_recovery += 1;
-        }
-        if (
-            strategy.id === 'locksmith' &&
-            ((event.type === 'inventory.changed' && event.source.id === 'key_insurance') ||
-                (event.type === 'dungeon.exit_activated' && event.spend !== 'none'))
-        ) {
-            scores.lock_extraction += 1;
         }
     }
     return scores;
@@ -582,21 +549,6 @@ const runStrategySeed = (
         if (first && second) {
             execute(createGameplayTileFlipCommand(`build:${strategy.id}:${seed}:${commands.length}:convert-first`, first.id));
             execute(createGameplayTileFlipCommand(`build:${strategy.id}:${seed}:${commands.length}:convert-second`, second.id));
-        }
-    }
-    if (strategy.id === 'locksmith') {
-        const lockedExit = (run.board?.tiles ?? [])
-            .filter((tile) =>
-                tile.state === 'hidden' &&
-                tile.dungeonCardKind === 'exit' &&
-                tile.dungeonExitLockKind === 'iron'
-            )
-            .sort((left, right) => left.id.localeCompare(right.id))[0];
-        if (lockedExit) {
-            execute(createGameplayTileFlipCommand(
-                `build:${strategy.id}:${seed}:${commands.length}:reveal-locked-exit`,
-                lockedExit.id
-            ));
         }
     }
     execute(consequenceCommand(strategy, run, seed, commands.length));
@@ -707,7 +659,7 @@ export const runGameplayBuildStrategySimulation = (
         strategies,
         pairwiseAxisDistances,
         bounds: {
-            requiredStrategyCount: 9,
+            requiredStrategyCount: 8,
             minViableSeedShare: 1,
             minFeedbackEventsPerSeed: 3,
             minSignatureAxisScorePerSeed: 1,

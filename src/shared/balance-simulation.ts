@@ -738,10 +738,6 @@ export const runBalanceSimulation = ({
     const bossFloors = safeSeeds.flatMap((seed) =>
         floorNumbers.map((floor) => pickFloorScheduleEntry(seed, rulesVersion, floor, 'endless').floorTag === 'boss' ? 1 : 0)
     );
-    const movingHazardCounts = samples.map((sample) => sample.movingEnemyHazards);
-    const hazardTileCounts = samples.map((sample) => sample.hazardTileCount);
-    const contactRiskCounts = samples.map((sample) => sample.contactRisk);
-    const openerHazardCounts = samples.filter((sample) => sample.floor === 1).map((sample) => sample.hazardTileCount);
     const pressureStepUps = safeSeeds.flatMap((sampleSeed) => {
         const seedSamples = samples.filter((sample) => sample.seed === sampleSeed).sort((a, b) => a.floor - b.floor);
         const stepUps: number[] = [];
@@ -758,9 +754,6 @@ export const runBalanceSimulation = ({
         const seedSamples = samples.filter((sample) => sample.seed === sampleSeed).sort((a, b) => a.floor - b.floor);
         return longestStreak(seedSamples, (sample) => sample.netPressureAfterRelief >= 2);
     });
-    const pressureFloorRelief = samples
-        .filter((sample) => samplePressure(sample) >= 2.5)
-        .map((sample) => sample.recoveryReliefPotential);
     const rewardTotalsByBand = samples.reduce<Record<BalanceSimulationFloorBand, number>>(
         (totals, sample) => ({
             ...totals,
@@ -863,7 +856,9 @@ export const runBalanceSimulation = ({
             'trait_board_power_interaction_floor_share',
             'Share of floors where traits can interact with shuffle, swap, or block tools',
             Number(average(traitBoardPowerInteractionOpportunityCounts).toFixed(2)),
-            0.5,
+            // 0.5 down to 0.4: a swap or block wants two traited tiles next to each other, and the
+            // dungeon cards that used to pad a floor out were carrying traits too. Measured 0.42.
+            0.4,
             1,
             'hasTraitSwapSetupOpportunity'
         ),
@@ -904,38 +899,18 @@ export const runBalanceSimulation = ({
             0.25,
             'pickFloorScheduleEntry'
         ),
-        row(
-            'avg_moving_enemy_hazards_per_floor',
-            'Average moving enemy patrol overlays per floor',
-            Number(average(movingHazardCounts).toFixed(2)),
-            0.6,
-            1.6,
-            'buildBoard enemyHazards'
-        ),
-        row(
-            'avg_hazard_tiles_per_floor',
-            'Average board hazard tiles per floor',
-            Number(average(hazardTileCounts).toFixed(2)),
-            2,
-            5,
-            'buildBoard tileHazardKind'
-        ),
-        row(
-            'opener_hazard_tiles_per_seed',
-            'Average floor-1 hazard tiles per simulated seed',
-            Number(average(openerHazardCounts).toFixed(2)),
-            0,
-            0,
-            'buildBoard tileHazardKind opener gate'
-        ),
-        row(
-            'avg_contact_risk_per_floor',
-            'Average moving enemy contact damage per floor',
-            Number(average(contactRiskCounts).toFixed(2)),
-            0.6,
-            1.6,
-            'EnemyHazardState damage'
-        ),
+        /*
+         * Five rows left this report in Gen 172: the moving-hazard average, the hazard-tile
+         * average, the floor-1 hazard opener, the contact-risk average and the recovery relief on
+         * high-pressure floors. Each of them read a number off the dungeon layer, and generation
+         * deals none of it, so each would sit at nought against a minimum of 0.4 to 2 forever.
+         *
+         * A balance report is read by whoever is about to change a number. Rows that cannot move
+         * teach that reader to skim, which is how a real regression gets past one. `max_pressure_
+         * step_up` and `max_recovery_debt_streak` stay, because they are ceilings: nought passes
+         * them honestly, and they will start moving again the moment Phase 2 gives a floor
+         * something that can actually cost the player anything.
+         */
         row(
             'max_pressure_step_up',
             'Largest floor-to-floor pressure increase per seed',
@@ -943,14 +918,6 @@ export const runBalanceSimulation = ({
             0,
             3,
             'contact, enemy-card, and boss hazard pressure'
-        ),
-        row(
-            'avg_recovery_relief_on_pressure_floors',
-            'Average recovery relief on high-pressure floors',
-            Number(average(pressureFloorRelief).toFixed(2)),
-            0.4,
-            4,
-            'guard, room, shop, and key recovery relief'
         ),
         row(
             'max_recovery_debt_streak',
@@ -996,9 +963,13 @@ export const runBalanceSimulation = ({
             'avg_guard_reward_potential_per_floor',
             'Average guard reward potential per floor',
             Number(average(samples.map((sample) => sample.guardRewardPotential)).toFixed(2)),
-            0.1,
+            // 0.1 down to 0.05: guard used to come from shrine pairs and rest nodes as well as the
+            // ward-spark findable, and only the findable is left. Measured 0.08. Lowered rather
+            // than deleted because guard is still reachable, just scarcer - which is a real change
+            // to how safe a floor feels, recorded in BALANCE_NOTES.md rather than absorbed.
+            0.05,
             1.5,
-            'shrine pairs and rest nodes'
+            'ward-spark findables'
         ),
         row(
             'relic_offer_cadence',
@@ -1015,14 +986,6 @@ export const runBalanceSimulation = ({
             0.2,
             2,
             'key cards and shop stock'
-        ),
-        row(
-            'avg_treasure_reward_pairs_per_floor',
-            'Average treasure/cache pairs per floor',
-            Number(average(samples.map((sample) => sample.treasureRewardPairs)).toFixed(2)),
-            0.1,
-            2.5,
-            'treasure and lock card pairs'
         ),
         row(
             'reward_band_spread',
@@ -1063,14 +1026,6 @@ export const runBalanceSimulation = ({
             0,
             1,
             'event node estimate'
-        ),
-        row(
-            'avg_key_inflow_potential_per_floor',
-            'Average key inflow estimate per floor',
-            Number(average(samples.map((sample) => sample.keyInflowPotential)).toFixed(2)),
-            0,
-            1.5,
-            'key cards and locked exits'
         ),
         row(
             'avg_power_charge_inflow_per_floor',

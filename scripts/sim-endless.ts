@@ -84,9 +84,25 @@ const emptyFindableKindCounts = (): Record<FindableKind, number> => ({
     scout_glint: 0
 });
 
+/*
+ * Which floors get played, not just inspected.
+ *
+ * The last clause used to pull in every locked-exit floor, and it was doing most of the work: with
+ * locks gone the sample fell from over 500 floors in a thousand to 220, which is a real loss of
+ * coverage dressed up as a passing gate. The every-25th sweep is widened to every 3rd to buy most
+ * of it back - 430 floors of a thousand, played through the command path - and the gate's own bar
+ * moves to that measured number rather than staying at a 500 it can no longer reach.
+ *
+ * Every 2nd would clear the old bar outright and roughly doubles the wall clock of a gate that
+ * already takes half a minute. 430 sampled floors with no locks left to skew which ones get picked
+ * is better coverage than 500 that were chosen because they had a lock on them.
+ *
+ * The lock clause stays. It costs nothing while generation deals no locks, and it is the clause
+ * that would matter first if one ever came back.
+ */
 const shouldCheckPlayableBoard = (board: BoardState): boolean =>
     board.level <= 24 ||
-    board.level % 25 === 0 ||
+    board.level % 3 === 0 ||
     board.floorTag === 'boss' ||
     getEffectivePrimaryExitLock({ board }).lockKind !== 'none';
 
@@ -429,9 +445,18 @@ export const evaluateEndlessSimulationHealth = (
     const safeFloors = Math.max(1, Math.floor(floors));
     const issues = [
         metrics.routeKinds < 8 ? `Expected at least 8 floor archetypes, saw ${metrics.routeKinds}.` : null,
-        metrics.objectiveKinds < 4 ? `Expected at least 4 dungeon objectives, saw ${metrics.objectiveKinds}.` : null,
-        metrics.exitLockTypes < 2 ? `Expected at least 2 nontrivial exit lock types, saw ${metrics.exitLockTypes}.` : null,
-        metrics.exitlessFloors > 0 ? `Expected every sampled floor to have an exit, saw ${metrics.exitlessFloors} exitless floors.` : null,
+        /*
+         * Three checks stood here and all three now assert the opposite of the game.
+         *
+         * They wanted at least four dungeon objectives, at least two nontrivial exit lock kinds,
+         * and an exit on every sampled floor. Generation deals no objective but `find_exit`, no
+         * lock at all, and no exit: over 1000 floors that is 1 objective, 0 lock kinds and 1000
+         * "exitless" floors, which is not a failure, it is the change.
+         *
+         * The floor-archetype check below stays, and it is the one that was doing the work these
+         * three looked like they were doing: it asks whether a thousand floors are actually
+         * different from each other, which is a question a board of pairs still has to answer.
+         */
         metrics.fairnessIssueFloors > 0 || metrics.fairnessIssueTypes > 0
             ? `Expected generated boards to pass fairness inspection, saw ${metrics.fairnessIssueFloors} floor(s) with ${metrics.fairnessIssueTypes} issue type(s): ${metrics.fairnessIssueCodes.join(', ') || 'unknown'}.`
             : null,
@@ -444,9 +469,9 @@ export const evaluateEndlessSimulationHealth = (
         metrics.playableIssueFloors > 0
             ? `Expected playable solver sample to clear every checked floor, saw ${metrics.playableIssueFloors} issue floor(s): ${metrics.playableIssueReasons.join(', ') || 'unknown'}. Details: ${metrics.playableFailureDetails.slice(0, 5).join('; ') || 'none'}.`
             : null,
-        safeFloors >= 20 && metrics.playableLockedExitFloors <= 0
-            ? 'Expected executable playable solver sampling to include at least one live locked-exit floor.'
-            : null,
+        // Same reasoning: the solver cannot sample a live locked-exit floor because generation
+        // makes none. What it still does - and what the playable checks above still assert - is
+        // clear every floor it samples through real pair play.
         metrics.rewardKinds < expectedRewardKinds
             ? `Expected all ${expectedRewardKinds} findable reward kinds, saw ${metrics.rewardKinds}.`
             : null,

@@ -95,9 +95,18 @@ describe('what actually happens to a player', () => {
         expect(SYSTEM_OCCUPANCY_COUNTERS.every((counter) => !/Charges|Remaining|Total/.test(counter.key))).toBe(true);
     });
 
-    it('reports every silent system by name and the verdict says so', () => {
+    it('passes the aspirational check outright, which it could not do while the dungeon layer shipped', () => {
+        // This assertion was `expect(verdict.ok).toBe(false)` for eleven generations, because the
+        // honest reading of the census was that eleven shipped systems never fired. That is not a
+        // test worth keeping green by widening a band, and it was never fixed by tuning: the
+        // systems were deleted in Gen 171-172 and the census is now every system the game has.
+        //
+        // Keeping the assertion here rather than deleting it is the point. `ok` false again means
+        // something shipped that a player cannot observe, and the reflex it should provoke is
+        // "which system, and why does generation never make its board", not "update the baseline".
         const verdict = judgeSystemOccupancy(report);
-        expect(verdict.ok).toBe(false);
-        expect(verdict.silent).toHaveLength(KNOWN_SILENT.length);
+        expect(verdict.ok, summarizeSystemOccupancy(report)).toBe(true);
+        expect(verdict.silent).toEqual([]);
+        expect(KNOWN_SILENT).toEqual([]);
     });
 });

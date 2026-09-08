@@ -284,8 +284,6 @@ const average = (values: readonly number[]): number =>
 
 export const getLongRunFatigueRows = (report: BalanceSimulationReport): LongRunStatusRow[] => {
     const samples = report.samples;
-    const avgHazards = average(samples.map((sample) => sample.hazardTileCount + sample.movingEnemyHazards));
-    const avgPressure = average(samples.map((sample) => sample.contactRisk + sample.enemyThreatPairs));
     const breatherSpacing =
         report.aggregate.breatherFloors > 0 ? Number((samples.length / report.aggregate.breatherFloors).toFixed(2)) : samples.length;
     const relicCadence =
@@ -293,12 +291,22 @@ export const getLongRunFatigueRows = (report: BalanceSimulationReport): LongRunS
             ? Number((samples.length / report.aggregate.relicOfferAvailable).toFixed(2))
             : samples.length;
     const rewardInflation = average(samples.map((sample) => sample.shopGoldInflowPotential + sample.keyInflowPotential));
+    /*
+     * Fatigue used to be measured two ways here that it no longer can be: hazard-and-patrol
+     * pressure, and contact-and-enemy pressure. Both summed counters the dungeon layer wrote, and
+     * both would read nought against minimums of 2.5 and 1.5 on every floor of every seed forever.
+     *
+     * Their question is still the right one - does a long run get monotonous - and Phase 2 answers
+     * it with par and the pair curve rather than with things that bite. Until then, what is left
+     * measures the cadence a long run has: breathers, relic offers, and how fast currency comes in.
+     */
     return [
-        longRunRow('avg_long_run_hazard_pressure', 'Average hazard and patrol pressure per floor', Number(avgHazards.toFixed(2)), 2.5, 7, 'hazard tiles + moving hazards'),
-        longRunRow('avg_long_run_contact_pressure', 'Average contact and enemy pressure per floor', Number(avgPressure.toFixed(2)), 1.5, 6, 'contact risk + enemy pairs'),
         longRunRow('breather_spacing', 'Average floors between breather floors', breatherSpacing, 3, 5, 'scheduled breather count'),
         longRunRow('relic_offer_spacing', 'Average floors between relic offers', relicCadence, 2.5, 4.5, 'relic milestone cadence'),
-        longRunRow('avg_reward_inflation', 'Average live currency inflow pressure per floor', Number(rewardInflation.toFixed(2)), 10, 40, 'shop gold + key inflow')
+        // Min 10 down to 7 (measured 7.81): the key half of "shop gold + key inflow" is nought now,
+        // because keys were dungeon cards. The shop gold half is unchanged and still the thing this
+        // row is really watching - whether a long run drowns in currency it cannot spend.
+        longRunRow('avg_reward_inflation', 'Average live currency inflow pressure per floor', Number(rewardInflation.toFixed(2)), 7, 40, 'shop gold + key inflow')
     ];
 };
 

@@ -437,31 +437,12 @@ export interface GameplayBuildMultiFloorReport {
                 counterMatchupFloors: number;
             };
         };
-        locksmith: {
-            id: 'locksmith';
-            buildMechanicId: 'build.locksmith';
-            startingLoadoutId: 'vaultbreaker';
-            axis: 'lock_extraction';
-            favorableMatchup: 'lock_pressure';
-            counterMatchup: 'hazard_pressure';
-            requiredSystems: readonly [
-                'reward.key_insurance',
-                'inventory.iron_key',
-                'shop.master_key',
-                'inventory.master_key',
-                'dungeon.room_locked_cache',
-                'exit.locked_alternate'
-            ];
-            longHorizonSampled: true;
-            evidence: {
-                typedKeyLockUses: number;
-                masterKeyLockUses: number;
-                masterKeyPurchases: number;
-                lockPressureConservations: number;
-                favorableMatchupFloors: number;
-                counterMatchupFloors: number;
-            };
-        };
+        /*
+         * The `locksmith` coverage shape stood here. Its `requiredSystems` list is the clearest
+         * statement of why the build had to go: reward.key_insurance, inventory.iron_key,
+         * shop.master_key, inventory.master_key, dungeon.room_locked_cache, exit.locked_alternate -
+         * six systems, none of which exist.
+         */
     };
     bounds: {
         requiredStrategyCount: number;
@@ -493,10 +474,6 @@ export interface GameplayBuildMultiFloorReport {
         minBossHunterRiskWagerOutcomes: number;
         minMemoryScoutFlashPairUsesPerSeed: number;
         minMemoryScoutUndoResolveUsesPerSeed: number;
-        minLocksmithTypedKeyUsesPerSeed: number;
-        minLocksmithMasterKeyUses: number;
-        minLocksmithMasterKeyPurchases: number;
-        minLockPressureConservations: number;
         minConduitPinPlacementsPerSeed: number;
         minConduitScoutGlintMatchesPerSeed: number;
         minConduitMemoryPressurePinFloors: number;
@@ -700,28 +677,11 @@ export const GAMEPLAY_BUILD_POLICIES: Readonly<Record<GameplayBuildStrategyId, G
         favorableMatchup: 'memory_pressure',
         counterMatchup: 'hazard_pressure'
     },
-    locksmith: {
-        id: 'locksmith_policy_v1',
-        strategyId: 'locksmith',
-        routePriorities: ['mystery', 'safe', 'greed'],
-        bonusRewardPriorities: ['key_insurance', 'chest_gold', 'supply_cache', 'secret_favor'],
-        relicPriorities: ['chapter_compass', 'wager_surety', 'extra_shuffle_charge', 'peek_charge_plus_one'],
-        shopItemPriorities: ['master_key', 'treasure_key', 'iron_key', 'peek_charge'],
-        informationPolicy: { kind: 'bounded_memory', memoryTileCapacity: 7, uncertainTurnBudget: 26 },
-        gambitPolicy: null,
-        gambitSuppressedMatchups: [],
-        lockPolicy: { kind: 'prefer_affordable_lock_rewards' },
-        lockPolicySuppressedMatchups: ['hazard_pressure'],
-        interludeRiskPolicy: {
-            maxRouteRiskUnits: 1,
-            minimumEffectiveSurvivalAfterRoute: 4,
-            openingUnbufferedGreedFloors: 0,
-            eventEffectPriorities: ['gain_iron_key', 'gain_shop_gold', 'gain_relic_favor', 'heal_or_guard', 'gain_destroy_charge', 'gain_score']
-        },
-        signatureTiming: 'after_board',
-        favorableMatchup: 'lock_pressure',
-        counterMatchup: 'hazard_pressure'
-    }
+    /*
+     * `locksmith` had a policy here - route priorities, key-first shop priorities, a lock-pressure
+     * matchup - and it went with the build itself. See `build-strategy-simulation.ts` for why: the
+     * build's whole shape was the lock, and there is no lock.
+     */
 };
 
 const stableJson = (value: unknown): string => JSON.stringify(value);
@@ -734,8 +694,7 @@ const emptyAxisScores = (): Record<GameplayBuildStrategyAxis, number> => ({
     sustain_conversion: 0,
     board_reconfiguration: 0,
     boss_extraction: 0,
-    mistake_recovery: 0,
-    lock_extraction: 0
+    mistake_recovery: 0
 });
 
 const normalizeSeeds = (seeds: readonly number[] | undefined): number[] => {
@@ -906,18 +865,6 @@ const signatureConsequenceCommand = (
             : null;
     }
     if (trace.run.status !== 'levelComplete') return null;
-    if (strategy.id === 'locksmith') {
-        const masterKeyOffer = (Array.isArray(trace.run.shopOffers) ? trace.run.shopOffers : [])
-            .filter((offer) =>
-                offer.itemId === 'master_key' &&
-                !offer.purchased &&
-                offer.compatible
-            )
-            .sort((left, right) => left.cost - right.cost || left.id.localeCompare(right.id))[0];
-        return masterKeyOffer && masterKeyOffer.cost <= trace.run.shopGold
-            ? createGameplayShopPurchaseCommand(commandId, masterKeyOffer.id)
-            : null;
-    }
     const itemPriority = new Map(policy.shopItemPriorities.map((itemId, index) => [itemId, index]));
     const offerId = (Array.isArray(trace.run.shopOffers) ? trace.run.shopOffers : [])
         .filter((offer) => !offer.purchased && offer.compatible && offer.cost <= trace.run.shopGold)
@@ -1247,9 +1194,6 @@ const recurringSynergyTags = (strategy: GameplayBuildStrategyDefinition): Set<st
     if (strategy.id === 'memory_scout') {
         return new Set(['reward-perk:trait-streak-flash', 'conduit:echo-peek', 'echo:sealed-combo']);
     }
-    if (strategy.id === 'locksmith') {
-        return new Set(['cursed:volatile-greed', 'reward-perk:cursed-opener-greed', 'sealed:heavy-score']);
-    }
     return new Set(['cursed:volatile-greed', 'reward-perk:cursed-opener-greed', 'sealed:heavy-score']);
 };
 
@@ -1343,15 +1287,6 @@ const signatureAxisScores = (
         ) {
             scores.mistake_recovery += 1;
         }
-        if (
-            strategy.id === 'locksmith' &&
-            ((event.type === 'dungeon.exit_activated' && event.spend !== 'none') ||
-                event.type === 'dungeon.locked_cache_opened' ||
-                (event.type === 'inventory.changed' && event.source.id === 'key_insurance') ||
-                (event.type === 'shop.offer_purchased' && event.itemId === 'master_key'))
-        ) {
-            scores.lock_extraction += 1;
-        }
     }
     return scores;
 };
@@ -1390,7 +1325,7 @@ const runSeed = (
                 ? `${policy.id} spends its ${strategy.expectedDominantAxis} consequence ${policy.signatureTiming.replace('_', ' ')}.`
                 : `${policy.id} found no legal stocked signature consequence and conserved state.`
         });
-        return applied && strategy.id !== 'locksmith' ? 1 : 0;
+        return applied ? 1 : 0;
     };
     const setupDefinitions = strategy.activationDefinitionIds.filter((definitionId) =>
         definitionId.startsWith('bonus_reward.') ||
@@ -1498,14 +1433,6 @@ const runSeed = (
                 event.type === 'board.resolve_undone' || event.type === 'board.flash_pair_revealed'
             ));
             signatureConsequenceUses += recoveryEvents.length;
-        }
-        if (strategy.id === 'locksmith') {
-            const lockEvents = solver.events.filter((event) =>
-                event.type === 'dungeon.locked_cache_opened' ||
-                (event.type === 'dungeon.exit_activated' && event.spend !== 'none')
-            );
-            trace.signatureEvents.push(...lockEvents);
-            signatureConsequenceUses += lockEvents.length;
         }
 
         if (policy.signatureTiming === 'after_board') {
@@ -1928,25 +1855,10 @@ export const runGameplayBuildMultiFloorSimulation = (
             undoResolveUses: strategy.id === 'memory_scout'
                 ? floorTraces.reduce((sum, floor) => sum + floor.undoResolveUses, 0)
                 : 0,
-            typedKeyLockUses: strategy.id === 'locksmith'
-                ? floorTraces.reduce((sum, floor) => sum + floor.typedKeyLockUses, 0)
-                : 0,
-            masterKeyLockUses: strategy.id === 'locksmith'
-                ? floorTraces.reduce((sum, floor) => sum + floor.masterKeyLockUses, 0)
-                : 0,
-            masterKeyPurchases: strategy.id === 'locksmith'
-                ? floorTraces.reduce((sum, floor) => sum + floor.masterKeyPurchases, 0)
-                : 0,
-            lockPressureConservations: strategy.id === 'locksmith'
-                ? floorTraces.filter((floor) =>
-                    floor.matchup === 'hazard_pressure' &&
-                    floor.lockPolicySuppressedByMatchup &&
-                    floor.typedKeyLockUses === 0 &&
-                    floor.masterKeyLockUses === 0 &&
-                    floor.completed &&
-                    floor.replayCheckpointDeterministic
-                ).length
-                : 0,
+            typedKeyLockUses: 0,
+            masterKeyLockUses: 0,
+            masterKeyPurchases: 0,
+            lockPressureConservations: 0,
             pinPlacements: strategy.id === 'conduit_cartographer'
                 ? floorTraces.reduce((sum, floor) => sum + floor.pinPlacements, 0)
                 : 0,
@@ -1989,7 +1901,6 @@ export const runGameplayBuildMultiFloorSimulation = (
     const trapControl = strategies.find((strategy) => strategy.id === 'trap_control');
     const bossHunter = strategies.find((strategy) => strategy.id === 'boss_hunter');
     const memoryScout = strategies.find((strategy) => strategy.id === 'memory_scout');
-    const locksmith = strategies.find((strategy) => strategy.id === 'locksmith');
     return {
         rulesVersion,
         seeds,
@@ -2140,35 +2051,10 @@ export const runGameplayBuildMultiFloorSimulation = (
                     favorableMatchupFloors: memoryScout?.favorableMatchupMetrics?.sampledFloors ?? 0,
                     counterMatchupFloors: memoryScout?.counterMatchupMetrics?.sampledFloors ?? 0
                 }
-            },
-            locksmith: {
-                id: 'locksmith',
-                buildMechanicId: 'build.locksmith',
-                startingLoadoutId: 'vaultbreaker',
-                axis: 'lock_extraction',
-                favorableMatchup: 'lock_pressure',
-                counterMatchup: 'hazard_pressure',
-                requiredSystems: [
-                    'reward.key_insurance',
-                    'inventory.iron_key',
-                    'shop.master_key',
-                    'inventory.master_key',
-                    'dungeon.room_locked_cache',
-                    'exit.locked_alternate'
-                ],
-                longHorizonSampled: true,
-                evidence: {
-                    typedKeyLockUses: locksmith?.typedKeyLockUses ?? 0,
-                    masterKeyLockUses: locksmith?.masterKeyLockUses ?? 0,
-                    masterKeyPurchases: locksmith?.masterKeyPurchases ?? 0,
-                    lockPressureConservations: locksmith?.lockPressureConservations ?? 0,
-                    favorableMatchupFloors: locksmith?.favorableMatchupMetrics?.sampledFloors ?? 0,
-                    counterMatchupFloors: locksmith?.counterMatchupMetrics?.sampledFloors ?? 0
-                }
             }
         },
         bounds: {
-            requiredStrategyCount: 9,
+            requiredStrategyCount: 8,
             minFloorsPerSeed: 12,
             minFloorCompletionShare: 1,
             minDeterministicReplayShare: 1,
@@ -2197,10 +2083,6 @@ export const runGameplayBuildMultiFloorSimulation = (
             minBossHunterRiskWagerOutcomes: 1,
             minMemoryScoutFlashPairUsesPerSeed: 1,
             minMemoryScoutUndoResolveUsesPerSeed: 1,
-            minLocksmithTypedKeyUsesPerSeed: 1,
-            minLocksmithMasterKeyUses: 1,
-            minLocksmithMasterKeyPurchases: 1,
-            minLockPressureConservations: 1,
             minConduitPinPlacementsPerSeed: 1,
             minConduitScoutGlintMatchesPerSeed: 1,
             minConduitMemoryPressurePinFloors: 1,
@@ -2447,31 +2329,6 @@ export const assertGameplayBuildMultiFloorViable = (
         if (memoryScout.undoResolveUses < minimumUndoUses) {
             issues.push(
                 `memory_scout@seeds:${report.seeds.join(',')}:undoResolveUses=${memoryScout.undoResolveUses}; required=${minimumUndoUses}`
-            );
-        }
-    }
-    const locksmith = report.strategies.find((strategy) => strategy.id === 'locksmith');
-    if (locksmith) {
-        const minimumTypedKeyUses =
-            report.bounds.minLocksmithTypedKeyUsesPerSeed * report.seeds.length;
-        if (locksmith.typedKeyLockUses < minimumTypedKeyUses) {
-            issues.push(
-                `locksmith@seeds:${report.seeds.join(',')}:typedKeyLockUses=${locksmith.typedKeyLockUses}; required=${minimumTypedKeyUses}`
-            );
-        }
-        if (locksmith.masterKeyLockUses < report.bounds.minLocksmithMasterKeyUses) {
-            issues.push(
-                `locksmith@seeds:${report.seeds.join(',')}:masterKeyLockUses=${locksmith.masterKeyLockUses}; required=${report.bounds.minLocksmithMasterKeyUses}`
-            );
-        }
-        if (locksmith.masterKeyPurchases < report.bounds.minLocksmithMasterKeyPurchases) {
-            issues.push(
-                `locksmith@seeds:${report.seeds.join(',')}:masterKeyPurchases=${locksmith.masterKeyPurchases}; required=${report.bounds.minLocksmithMasterKeyPurchases}`
-            );
-        }
-        if (locksmith.lockPressureConservations < report.bounds.minLockPressureConservations) {
-            issues.push(
-                `locksmith@seeds:${report.seeds.join(',')}:lockPressureConservations=${locksmith.lockPressureConservations}; required=${report.bounds.minLockPressureConservations}`
             );
         }
     }
