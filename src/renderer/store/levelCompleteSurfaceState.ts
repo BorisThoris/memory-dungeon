@@ -1,27 +1,9 @@
 import type { RunState } from '../../shared/contracts';
-import { openRelicOfferThroughGameplayCore } from '../../shared/gameplay-core-adapters';
 import { advanceFloorThroughGameplayCore } from '../../shared/gameplay-core-adapters';
-import { needsRelicPick } from '../../shared/relics';
 import { repairRunProgressionThroughGameplayCore } from '../../shared/gameplay-core-adapters';
 import { createRunWithBoardInteractionClearedPatch, type RunSurfaceState } from './runSurfaceState';
 
 export type LevelCompleteContinuationSurfaceResult =
-    | {
-          kind: 'relicOffer';
-          patch: Pick<
-              RunSurfaceState,
-              | 'boardPinMode'
-              | 'destroyPairArmed'
-              | 'matchScorePop'
-              | 'mismatchScorePop'
-              | 'peekModeArmed'
-              | 'tileSwapArmed'
-              | 'tileSwapFirstTileId'
-          > & {
-              run: RunState;
-              view: 'playing';
-          };
-      }
     | {
           kind: 'runOnly';
           patch: {
@@ -57,32 +39,11 @@ export const createLevelCompleteContinuationSurfaceResult = (run: RunState): Lev
     const repair = repairRunProgressionThroughGameplayCore(run);
     run = repair.accepted ? repair.run : run;
 
-    let nextRun = run;
-
-    if (needsRelicPick(nextRun) && !nextRun.relicOffer) {
-        // Through the command so the offer appears in the journal: which relics were
-        // presented is part of what happened in the run, and a replay that skips the
-        // offer diverges from the moment the player picks.
-        const offer = openRelicOfferThroughGameplayCore(nextRun);
-        const offerRun = offer.run;
-        if (offerRun.relicOffer) {
-            return {
-                kind: 'relicOffer',
-                patch: {
-                    view: 'playing',
-                    ...createRunWithBoardInteractionClearedPatch(offerRun)
-                }
-            };
-        }
-        nextRun = offerRun;
-    }
-
-    if (nextRun.relicOffer) {
-        return {
-            kind: 'runOnly',
-            patch: { run: nextRun }
-        };
-    }
+    /*
+     * Every third floor used to stop here for a relic draft. The draft went in Gen 175, so a
+     * cleared floor goes straight to the next one.
+     */
+    const nextRun = run;
 
     const floorAdvance = advanceFloorThroughGameplayCore(
         nextRun,

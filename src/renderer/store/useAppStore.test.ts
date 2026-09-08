@@ -141,11 +141,6 @@ const driveOneVisibleProgressionStep = (): boolean => {
         return false;
     }
 
-    if (run.relicOffer?.options[0]) {
-        useAppStore.getState().pickRelic(run.relicOffer.options[0]);
-        return true;
-    }
-
     useAppStore.getState().continueToNextLevel();
     return true;
 };
@@ -164,8 +159,7 @@ describe('useAppStore timers', () => {
     });
 
     it.each([
-        'floorClearWithRouteChoices',
-        'relicDraft'
+        'floorClearWithRouteChoices'
     ] satisfies PlayablePathFixtureId[])(
         'drives the %s playable interlude fixture to the next playable state',
         (fixtureId) => {
@@ -1380,62 +1374,7 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().destroyPairArmed).toBe(false);
     });
 
-    it('plays relic-pick cue when a relic choice is accepted', async () => {
-        useAppStore.getState().startRun();
-        const run = useAppStore.getState().run!;
-        useAppStore.setState({
-            run: {
-                ...run,
-                status: 'levelComplete',
-                lastLevelResult: {
-                    level: 1,
-                    scoreGained: 120,
-                    rating: 'S',
-                    livesRemaining: run.lives,
-                    perfect: true,
-                    mistakes: 0,
-                    clearLifeReason: 'perfect',
-                    clearLifeGained: 0
-                },
-                relicOffer: {
-                    tier: 1,
-                    options: ['extra_shuffle_charge'],
-                    picksRemaining: 1,
-                    pickRound: 0
-                }
-            }
-        });
 
-        useAppStore.getState().pickRelic('extra_shuffle_charge');
-        expect(gameSfxMocks.resumeAudioContext).toHaveBeenCalled();
-        expect(gameSfxMocks.playRelicPickSfx).toHaveBeenCalledTimes(1);
-    });
-
-    it('does not persist or play relic-pick feedback when a corrupted offer repeats an owned relic', () => {
-        useAppStore.getState().startRun();
-        const run = useAppStore.getState().run!;
-        const saveBefore = useAppStore.getState().saveData;
-        useAppStore.setState({
-            run: {
-                ...run,
-                relicIds: ['extra_shuffle_charge'],
-                relicOffer: {
-                    tier: 1,
-                    options: ['extra_shuffle_charge'],
-                    picksRemaining: 1,
-                    pickRound: 0
-                }
-            }
-        });
-
-        useAppStore.getState().pickRelic('extra_shuffle_charge');
-
-        expect(useAppStore.getState().run?.relicIds).toEqual(['extra_shuffle_charge']);
-        expect(useAppStore.getState().run?.relicOffer?.options).toEqual(['extra_shuffle_charge']);
-        expect(useAppStore.getState().saveData).toBe(saveBefore);
-        expect(gameSfxMocks.resumeAudioContext).not.toHaveBeenCalled();
-        expect(gameSfxMocks.playRelicPickSfx).not.toHaveBeenCalled();
-    });
 
     it('plays wager-arm cue when risk wager is accepted', () => {
         const run = useAppStore.getState().run;

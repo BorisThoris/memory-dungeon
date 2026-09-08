@@ -342,18 +342,6 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
         reducedMotionSafe: true
     },
     {
-        id: 'relic_choice_crescendo',
-        domain: 'gameplay',
-        interaction: 'Relic draft option receives focus or hover while displaying stack, cashout, prime, or rare crescendo beats',
-        cue: 'none',
-        callsite: 'RelicDraftOfferPanel choice focus/hover -> playRelicChoiceCrescendoSfx',
-        semanticMoment: 'reward',
-        decision: 'procedural_only',
-        cooldownPolicy: 'signature-gated by draft round, relic id, tier, and beat count; match category polyphony cap',
-        mixRole: 'short reward-preview beat that sonifies two-beat prime, three-beat cashout, four-beat stack, and five-beat rare draft choices',
-        reducedMotionSafe: true
-    },
-    {
         id: 'board_power',
         domain: 'gameplay',
         interaction: 'Arm, use, or preview board powers and their tool payoff crescendo',
@@ -411,18 +399,6 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
         decision: 'sampled_with_fallback',
         cooldownPolicy: 'menu category polyphony cap',
         mixRole: 'suspend/release chime',
-        reducedMotionSafe: true
-    },
-    {
-        id: 'relic_draft',
-        domain: 'overlay',
-        interaction: 'Relic offer opens and relic is picked',
-        cue: 'relic-offer-open',
-        callsite: 'GameScreen relic offer effect / useAppStore.pickRelic',
-        semanticMoment: 'reward',
-        decision: 'sampled_with_fallback',
-        cooldownPolicy: 'power category polyphony cap',
-        mixRole: 'mystical reveal and reward bloom',
         reducedMotionSafe: true
     },
     {

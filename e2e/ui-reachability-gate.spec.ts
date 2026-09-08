@@ -252,7 +252,6 @@ test.describe('every control a screen shows can be clicked', () => {
      */
     const RUN_FIXTURES = [
         'floorClearWithRouteChoices',
-        'relicDraft',
         'gameOver',
         // The board a chain is built on: suits on every back, the chain stat with its momentum
         // hint, and the stage that pulses on a break. Nothing here may sit where a click cannot reach.

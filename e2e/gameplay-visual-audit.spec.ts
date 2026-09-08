@@ -146,10 +146,6 @@ async function captureOverlayStates(page: Page, viewportId: string): Promise<voi
     await openRunMenuItem(page, 'codex');
     await expect(page.getByRole('region', { name: /codex/i })).toBeVisible({ timeout: 20_000 });
     await capture(page, viewportId, '08-in-run-codex');
-
-    await openPlayablePathFixture(page, 'relicDraft');
-    await expect(page.getByTestId('game-relic-offer-overlay')).toBeVisible({ timeout: 30_000 });
-    await capture(page, viewportId, '09-relic-offer');
 }
 
 async function captureProgressionStates(page: Page, viewportId: string): Promise<void> {

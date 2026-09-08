@@ -269,7 +269,7 @@ test.describe('Mobile layout (renderer)', () => {
         await page.getByText(/^Open$/).click();
         await expect(page.getByText(/first live board highlights a real pair/i)).toBeVisible();
         await expect(page.getByText(/clean matches bank score and streak/i)).toBeVisible();
-        await expect(page.getByText(/runs turn into relic drafts/i)).toBeVisible();
+        await expect(page.getByText(/runs turn into objective progress/i)).toBeVisible();
         await expect(page.getByText(/codex is the deeper reference/i)).toBeVisible();
     });
 
@@ -279,7 +279,7 @@ test.describe('Mobile layout (renderer)', () => {
         await page.getByText(/^Open$/).click();
         await expect(page.getByText(/first live board highlights a real pair/i)).toBeVisible();
         await expect(page.getByText(/clean matches bank score and streak/i)).toBeVisible();
-        await expect(page.getByText(/runs turn into relic drafts/i)).toBeVisible();
+        await expect(page.getByText(/runs turn into objective progress/i)).toBeVisible();
     });
 
     test('game HUD stays horizontal on compact viewport', async ({ page }) => {
@@ -387,18 +387,6 @@ test.describe('Mobile layout (renderer)', () => {
             await expectLocatorFullyInWindowViewport(page, dialog.getByRole('button', { name: /^save$/i }), 8);
         });
 
-        test(`${viewport.name} portrait relic offer overlay fits without clipped picks`, async ({ page }) => {
-            await forceCoarsePointerMedia(page);
-            await page.setViewportSize({ width: viewport.width, height: viewport.height });
-            await openPlayablePathFixture(page, 'relicDraft');
-
-            const relicDialog = page.getByTestId('game-relic-offer-overlay');
-            await expect(relicDialog).toBeVisible({ timeout: 30_000 });
-            await expectNoHorizontalOverflow(page);
-            await expectLocatorFullyInWindowViewport(page, relicDialog, 8);
-            await expect(page.getByTestId('relic-offer-card').first()).toBeVisible();
-            await expectLocatorFullyInWindowViewport(page, page.getByTestId('relic-offer-card').first(), 8);
-        });
     }
 
     test('pause modal backdrop keeps minimum padding (safe-area aware layout)', async ({ page }) => {

@@ -10,11 +10,7 @@ import { getRunEconomyRows } from '../../shared/run-economy';
 import { getRunInventoryRows, getRunLoadoutSummary, type RunInventoryItemId, type RunInventoryRow } from '../../shared/run-inventory';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { getRunBuildProfile } from '../../shared/relics';
-import { getRunStartingLoadoutRow } from '../../shared/starting-loadouts';
-import {
-    getTraitBuildRewardRows,
-    getTraitBuildRewardRowsForLoadout
-} from '../../shared/trait-build-rewards';
+import { getTraitBuildRewardRows } from '../../shared/trait-build-rewards';
 import { getTraitRouteObjectiveStatus } from '../../shared/trait-route-objectives';
 
 export const modeTitle = (gameMode: string): string =>
@@ -29,7 +25,7 @@ export const getActiveTraitBuildRows = (run: RunState) => {
     const relicTraitBuildRows = getTraitBuildRewardRows().filter((row) =>
         row.relicIds.some((relicId) => run.relicIds.includes(relicId))
     );
-    return [...getTraitBuildRewardRowsForLoadout(run.startingLoadoutId), ...relicTraitBuildRows].filter(
+    return relicTraitBuildRows.filter(
         (row, index, rows) => rows.findIndex((candidate) => candidate.id === row.id) === index
     );
 };
@@ -264,11 +260,6 @@ const TOOL_ACTION_CUES: Record<RunInventoryItemId, InventoryToolActionCue> = {
         detail: 'Stack shards until the sustain threshold converts chain pressure into survival.',
         tone: 'chain'
     },
-    relic_loadout: {
-        label: 'Build engine',
-        detail: 'Relics define the durable combo rules for this run.',
-        tone: 'build'
-    },
     mutator_loadout: {
         label: 'Pressure rule',
         detail: 'Mutators change what the board asks you to solve next.',
@@ -318,7 +309,6 @@ export const createInventoryScreenModel = (run: RunState, saveData: SaveData) =>
         payoffEngineSignal: getInventoryPayoffEngineSignal(run, runLoopSignals, rewardPerkRows),
         rewardPerkRows,
         rewardSignal: getInventoryRewardSignal(run),
-        runLoopSignals,
-        startingLoadoutRow: getRunStartingLoadoutRow(run)
+        runLoopSignals
     };
 };

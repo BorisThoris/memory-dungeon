@@ -50,7 +50,7 @@ export const getInventoryPrepRows = (run: RunState | null): InventoryPrepRow[] =
             title: 'Loadout capacity',
             value: `${loadout.length} fixed row(s)`,
             detail: 'Relics, mutators, and contracts are locked to their authored change windows.',
-            actionHint: 'Change windows are relic drafts, mode setup, or floor schedules only.',
+            actionHint: 'Change windows are mode setup or floor schedules only.',
             status: loadout.length > 0 ? 'in_progress' : 'empty',
             localOnly: true
         },

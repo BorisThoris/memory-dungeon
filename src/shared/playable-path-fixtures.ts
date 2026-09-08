@@ -14,8 +14,7 @@ import {
     advanceToNextLevel,
     createNewRun,
     createRunSummary,
-    finishMemorizePhase,
-    openRelicOffer
+    finishMemorizePhase
 } from './game-core';
 import { buildBoard } from './game';
 import { flipTile, resolveBoardTurn } from './turn-resolution';
@@ -32,7 +31,6 @@ export type PlayablePathFixtureId =
     | 'activeRunWithTraitRouteSetup'
     | 'activeRunWithTrapCard'
     | 'floorClearWithRouteChoices'
-    | 'relicDraft'
     | 'gameOver'
     | 'cascadeClump';
 
@@ -57,7 +55,6 @@ export const PLAYABLE_PATH_FIXTURE_IDS: readonly PlayablePathFixtureId[] = [
     'activeRunWithTraitRouteSetup',
     'activeRunWithTrapCard',
     'floorClearWithRouteChoices',
-    'relicDraft',
     'gameOver',
     'cascadeClump'
 ] as const;
@@ -98,8 +95,6 @@ export const createPlayablePathFixture = (
             return { id, view: 'playing', run: activeRunWithTrapCard(), saveData };
         case 'floorClearWithRouteChoices':
             return { id, view: 'playing', run: floorClearWithRouteChoices(), saveData };
-        case 'relicDraft':
-            return { id, view: 'playing', run: relicDraftRun(), saveData };
         case 'gameOver':
             return { id, view: 'gameOver', run: gameOverRun(), saveData };
         case 'cascadeClump':
@@ -336,11 +331,6 @@ const floorClearWithRouteChoices = (): RunState => ({
     pendingRouteCardPlan: null,
     sideRoom: null
 });
-
-const relicDraftRun = (): RunState => {
-    const cleared = playPerfectFloors(baseEndlessRun(), 3);
-    return openRelicOffer({ ...cleared, relicFavorProgress: 0 });
-};
 
 const gameOverRun = (): RunState => {
     const run = finishMemorizePhase(baseEndlessRun());

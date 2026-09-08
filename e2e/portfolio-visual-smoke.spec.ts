@@ -55,9 +55,6 @@ test.describe('portfolio visual smoke gate', () => {
     await assertBoardVisible(page);
     await capture(page, 'active-board-desktop', 'Active board');
 
-    await reachRelicOffer(page);
-    await capture(page, 'relic-offer-desktop', 'Relic offer');
-
     await openPlayablePathFixture(page, 'activeRunWithHazards');
     await openSettings(page);
     await capture(page, 'settings-overlay-desktop', 'Settings overlay');
@@ -148,20 +145,6 @@ async function assertBoardVisible(page: Page) {
     });
     expect(hasContent, 'board canvas must not be blank').toBe(true);
   }
-}
-
-async function reachRelicOffer(page: Page) {
-  await openPlayablePathFixture(page, 'relicDraft');
-  await expect(relicOffer(page), 'relic offer must appear on the reviewer path').toBeVisible({
-    timeout: 30_000,
-  });
-}
-
-function relicOffer(page: Page) {
-  return page
-    .getByTestId('game-relic-offer-overlay')
-    .or(page.getByRole('dialog', { name: /relic draft/i }))
-    .first();
 }
 
 async function openSettings(page: Page) {

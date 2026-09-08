@@ -39,7 +39,6 @@ describe('REG-037 audio interaction coverage', () => {
             'trait_mismatch_surge',
             'mismatch_recovery_crescendo',
             'reward_perk_pop',
-            'relic_choice_crescendo',
             'board_power',
             'gauntlet_pressure'
         ]);
@@ -173,19 +172,6 @@ describe('REG-037 audio interaction coverage', () => {
             semanticMoment: 'reward'
         });
         expect(gameplay.find((row) => row.id === 'reward_perk_pop')?.mixRole).toMatch(/perk activation/i);
-        expect(gameplay.find((row) => row.id === 'relic_choice_crescendo')).toMatchObject({
-            decision: 'procedural_only',
-            semanticMoment: 'reward'
-        });
-        expect(gameplay.find((row) => row.id === 'relic_choice_crescendo')?.callsite).toMatch(
-            /playRelicChoiceCrescendoSfx/i
-        );
-        expect(gameplay.find((row) => row.id === 'relic_choice_crescendo')?.cooldownPolicy).toMatch(
-            /signature-gated/i
-        );
-        expect(gameplay.find((row) => row.id === 'relic_choice_crescendo')?.mixRole).toMatch(
-            /two-beat prime.*five-beat rare/i
-        );
         expect(gameplay.find((row) => row.id === 'gauntlet_pressure')?.cue).toBe('countdown-pressure');
     });
 

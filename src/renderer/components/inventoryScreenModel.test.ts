@@ -36,9 +36,9 @@ describe('inventoryScreenModel', () => {
         expect(quantityById.get('combo_shard')).toBe(0);
     });
 
-    it('dedupes trait build rows from loadout and drafted relics', () => {
+    it('dedupes trait build rows from drafted relics', () => {
         const run = {
-            ...createNewRun(0, { startingLoadoutId: 'route_tactician' }),
+            ...createNewRun(0),
             relicIds: ['chapter_compass', 'region_shuffle_free_first'] as RelicId[]
         };
 

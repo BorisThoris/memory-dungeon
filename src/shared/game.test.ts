@@ -104,15 +104,10 @@ import {
 } from './dungeon-rules';
 import {
     acceptEndlessRiskWager,
-    canOfferEndlessRiskWager,
-    completeRelicPickAndAdvance,
-    computeRelicOfferPickBudget,
-    grantBonusRelicPickNextOffer,
-    openRelicOffer
+    canOfferEndlessRiskWager
 } from './objective-rules';
 import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 import { MIN_CURIO_MEMORIZE_MS, pickFloorCurio } from './floor-curio-rules';
-import { RELIC_POOL } from './relics';
 import { makeBoard as createBoard, makePair as createPair, makeRun as createRun, makeTile as createTile } from './test/game-fixtures';
 import {
     DEFAULT_SOFTLOCK_GENERATOR_SCENARIOS,
@@ -741,13 +736,6 @@ describe('GLD-P0-003 lifecycle advance guards', () => {
     });
 
 
-    it('refuses to bypass pending relic drafts', () => {
-        const relicClear = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_006 }), 3);
-        const relicRun = openRelicOffer(relicClear);
-
-        expect(relicRun.relicOffer).not.toBeNull();
-        expect(advanceToNextLevel(relicRun)).toBe(relicRun);
-    });
 
     it('still advances a non-puzzle levelComplete run', () => {
         const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_004 }), 1);
@@ -824,37 +812,8 @@ describe('GLD-P0-003 lifecycle advance guards', () => {
         expect(next.timerState.memorizeRemainingMs).toBeNull();
     });
 
-    it('lets death win over pending relic drafts during floor transition', () => {
-        const relicClear = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_012 }), 3);
-        const relicRun = openRelicOffer(relicClear);
-        const deadRelic: RunState = { ...relicRun, lives: 0 };
-
-        const relicNext = advanceToNextLevel(deadRelic);
-
-        expect(relicNext.status).toBe('gameOver');
-        expect(relicNext.lives).toBe(0);
-        expect(relicNext.relicOffer).toBeNull();
-        expect(relicNext.lastLevelResult?.livesRemaining).toBe(0);
-    });
 
 
-    it('does not open or accept relic drafts for a zero-health completed floor', () => {
-        const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_010 }), 3);
-        const dead: RunState = { ...cleared, lives: 0, pendingRouteCardPlan: null };
-        const blockedOffer = openRelicOffer(dead);
-        const staleOfferRun: RunState = {
-            ...dead,
-            relicOffer: {
-                tier: 1,
-                options: ['extra_shuffle_charge'],
-                picksRemaining: 1,
-                pickRound: 0
-            }
-        };
-
-        expect(blockedOffer).toBe(dead);
-        expect(completeRelicPickAndAdvance(staleOfferRun, 'extra_shuffle_charge')).toBe(staleOfferRun);
-    });
 
     it('does not resume a paused zero-health run back into play', () => {
         const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_008 }));
@@ -4067,34 +4026,6 @@ describe('endless chapters and featured objectives', () => {
     });
 
 
-    it('keeps an accepted risk wager through relic offer flow', () => {
-        const base = createNewRun(0, { echoFeedbackEnabled: false });
-        const clearedMilestone: RunState = {
-            ...base,
-            status: 'levelComplete',
-            featuredObjectiveStreak: ENDLESS_RISK_WAGER_MIN_STREAK,
-            lastLevelResult: {
-                level: 3,
-                scoreGained: 100,
-                rating: 'S++',
-                livesRemaining: base.lives,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'perfect',
-                clearLifeGained: 1,
-                featuredObjectiveId: 'scholar_style',
-                featuredObjectiveCompleted: true,
-                featuredObjectiveStreak: ENDLESS_RISK_WAGER_MIN_STREAK,
-                relicFavorGained: 1
-            }
-        };
-
-        const accepted = acceptEndlessRiskWager(clearedMilestone);
-        const offerRun = openRelicOffer(accepted);
-
-        expect(offerRun.relicOffer).not.toBeNull();
-        expect(offerRun.endlessRiskWager?.targetLevel).toBe(4);
-    });
 
     it('wins a risk wager by completing the next featured objective and converts bonus favor', () => {
         const base = createNewRun(0, { echoFeedbackEnabled: false });
@@ -6002,128 +5933,5 @@ describe('relic and mutator stacking', () => {
     });
 });
 
-describe('computeRelicOfferPickBudget', () => {
-    it('is 1 for vanilla endless', () => {
-        const run = createNewRun(0, { gameMode: 'endless' });
-        expect(computeRelicOfferPickBudget(run)).toBe(1);
-    });
 
-
-    it('stacks meta relic draft flag and scholar contract', () => {
-        const run = createNewRun(0, {
-            metaRelicDraftExtraPerMilestone: 1,
-            activeContract: {
-                noShuffle: true,
-                noDestroy: true,
-                maxMismatches: null,
-                bonusRelicDraftPick: true
-            }
-        });
-        expect(computeRelicOfferPickBudget(run)).toBe(3);
-    });
-
-    it('clamps malformed bonus-pick counters before draft budgeting', () => {
-        const run: RunState = {
-            ...createNewRun(0),
-            bonusRelicPicksNextOffer: Number.NaN,
-            metaRelicDraftExtraPerMilestone: Number.POSITIVE_INFINITY
-        };
-
-        expect(computeRelicOfferPickBudget(run)).toBe(1);
-        expect(grantBonusRelicPickNextOffer(run, Number.NaN).bonusRelicPicksNextOffer).toBe(0);
-        expect(grantBonusRelicPickNextOffer({ ...run, bonusRelicPicksNextOffer: -2 }, 2.9).bonusRelicPicksNextOffer).toBe(2);
-    });
-});
-
-describe('relic draft multi-pick', () => {
-    it('rejects a stale offer option for a relic the run already owns', () => {
-        const run: RunState = {
-            ...createNewRun(999, { gameMode: 'endless', initialRelicIds: ['extra_shuffle_charge'] }),
-            status: 'levelComplete',
-            relicOffer: {
-                tier: 1,
-                options: ['extra_shuffle_charge'],
-                picksRemaining: 1,
-                pickRound: 0
-            },
-            lastLevelResult: {
-                level: 3,
-                scoreGained: 1,
-                rating: 'S',
-                livesRemaining: 3,
-                perfect: false,
-                mistakes: 0,
-                clearLifeReason: 'none',
-                clearLifeGained: 0
-            }
-        };
-
-        expect(completeRelicPickAndAdvance(run, 'extra_shuffle_charge')).toBe(run);
-    });
-
-    it('skips an exhausted initial relic offer instead of opening an empty draft', () => {
-        let run = createNewRun(999);
-        run = {
-            ...run,
-            status: 'levelComplete',
-            relicIds: [...RELIC_POOL],
-            relicTiersClaimed: 0,
-            relicOffer: null,
-            bonusRelicPicksNextOffer: 3,
-            favorBonusRelicPicksNextOffer: 1,
-            lastLevelResult: {
-                level: 3,
-                scoreGained: 1,
-                rating: 'S',
-                livesRemaining: 3,
-                perfect: false,
-                mistakes: 0,
-                clearLifeReason: 'none',
-                clearLifeGained: 0
-            }
-        };
-
-        const opened = openRelicOffer(run);
-
-        expect(opened.relicOffer).toBeNull();
-        expect(opened.relicTiersClaimed).toBe(1);
-        expect(opened.bonusRelicPicksNextOffer).toBe(0);
-        expect(opened.favorBonusRelicPicksNextOffer).toBe(0);
-    });
-
-    it('consumes bonus and completes one milestone tier after two picks', () => {
-        let run = createNewRun(999, { gameMode: 'endless' });
-        run = {
-            ...run,
-            status: 'levelComplete',
-            relicTiersClaimed: 0,
-            relicOffer: null,
-            lastLevelResult: {
-                level: 3,
-                scoreGained: 1,
-                rating: 'S',
-                livesRemaining: 3,
-                perfect: false,
-                mistakes: 0,
-                clearLifeReason: 'none',
-                clearLifeGained: 0
-            }
-        };
-        run = grantBonusRelicPickNextOffer(run, 1);
-        run = openRelicOffer(run);
-        expect(run.relicOffer?.picksRemaining).toBe(2);
-        expect(run.bonusRelicPicksNextOffer).toBe(0);
-
-        const first = run.relicOffer!.options[0]!;
-        run = completeRelicPickAndAdvance(run, first);
-        expect(run.relicOffer).not.toBeNull();
-        expect(run.relicOffer!.picksRemaining).toBe(1);
-
-        const second = run.relicOffer!.options[0]!;
-        run = completeRelicPickAndAdvance(run, second);
-        expect(run.relicOffer).toBeNull();
-        expect(run.relicTiersClaimed).toBe(1);
-        expect(run.relicIds).toEqual(expect.arrayContaining([first, second]));
-    });
-});
 

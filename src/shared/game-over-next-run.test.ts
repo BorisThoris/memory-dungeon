@@ -109,24 +109,6 @@ describe('REG-096 game over next-run loop', () => {
         });
     });
 
-    it('summarizes starting loadout identity in the build recap', () => {
-        const summarized = createRunSummary(
-            {
-                ...finishMemorizePhase(createNewRun(0, { startingLoadoutId: 'cursebreaker' })),
-                status: 'gameOver',
-                lives: 0
-            },
-            []
-        );
-        const row = getGameOverNextRunRows(summarized).find((entry) => entry.id === 'build_recap');
-
-        expect(summarized.lastRunSummary?.startingLoadoutId).toBe('cursebreaker');
-        expect(row?.value).toContain('Cursebreaker');
-        expect(row?.detail).toContain('hazard-control toolkit');
-        expect(row?.detail).toContain('Starts: +1 guard, +1 destroy');
-        expect(row?.detail).toContain('Build bias: Cursed + Stasis');
-        expect(row?.detail).toContain('Payoff: Hazard control');
-    });
 
     it('uses save-backed meta progression feedback for the next-goal row when available', () => {
         const save = createDefaultSaveData();

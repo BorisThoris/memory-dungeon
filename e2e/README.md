@@ -4,10 +4,6 @@ Specs live in this directory and run against the Vite dev server (`playwright.co
 
 The default Playwright config uses one worker. The app shares a strict-port Vite/WebGL target, and broad parallel runs can cause misleading startup, navigation, and WebGL timeouts even when the same specs pass in shards. Use the curated shard scripts for speed, or set `PLAYWRIGHT_WORKERS=N` and `PLAYWRIGHT_FULLY_PARALLEL=1` only for intentional stress/diagnostic runs.
 
-## Relic draft overlay
-
-The milestone relic draft (`data-testid="game-relic-offer-overlay"`) is covered by deterministic Playwright fixture flow in `e2e/playable-path-interludes.spec.ts`. The manual checklist in [`docs/epics/relic-draft-fluid-system/05-ui-ultra-refinement.md`](../docs/epics/relic-draft-fluid-system/05-ui-ultra-refinement.md) remains useful for final presentation review, but relic draft is no longer a manual-only playable-path gap.
-
 ## Traces and videos on failure
 
 Config uses `trace: 'retain-on-failure'` and `video: 'retain-on-failure'` so passing runs stay light while failed attempts still upload Playwright traces/videos. Download artifacts from the CI job (or open `test-results/` after a local failure) and run `npx playwright show-trace path/to/trace.zip` to inspect.
@@ -25,7 +21,7 @@ Use the named package scripts from the repo root so local and CI runs share the 
 - `yarn test:e2e:renderer-qa` remains the curated full renderer QA entry point for CI and release-candidate checks. It aliases `yarn test:e2e:renderer-qa:full`, which sequences the shard scripts below so long local runs can be resumed from the failed shard instead of restarting the whole renderer surface.
 - `yarn test:e2e:renderer-qa:layout` covers mobile layout, gameplay readability, and long-run HUD bounds.
 - `yarn test:e2e:renderer-qa:navigation` covers shell navigation, playable-path navigation, and mode starts.
-- `yarn test:e2e:renderer-qa:interludes` covers the floor-clear and relic interludes plus Scholar and Wild starts.
+- `yarn test:e2e:renderer-qa:interludes` covers the floor-clear interlude and the post-run loop plus Scholar and Wild starts.
 - `yarn test:e2e:renderer-qa:3d` covers the 3D board value, WebGL fallback/recovery, tile face, and raycast contracts.
 - Keep renderer QA shards sequential on the shared strict Vite port. Running multiple Playwright shards at once can overload the dev server and produce misleading navigation timeouts.
 - Renderer layout coverage includes the 844x390 short-height settings page and run-settings modal path; keep that viewport in `e2e/mobile-layout.spec.ts` when changing settings chrome.

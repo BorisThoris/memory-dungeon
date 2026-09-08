@@ -6,7 +6,6 @@ import {
     type DungeonRunNodeKind,
     type FloorArchetypeId,
     type FloorTag,
-    type LevelResult,
     type MutatorId,
     type RouteNodeType,
     type RunState,
@@ -19,9 +18,6 @@ import { buildBoard } from './board-build-rules';
 import { createNewRun, finishMemorizePhase } from './game-core';
 import { advanceToNextLevel } from './next-floor-transition-rules';
 import { solveRunByExhaustingPlayablePairs } from './playthrough-solver';
-import { grantBonusRelicPickNextOffer } from './relic-immediate-rules';
-import { computeRelicOfferPickBudget, openRelicOffer } from './relic-offer-rules';
-import { completeRelicPickAndAdvance } from './relic-pick-advance-rules';
 import { getDungeonExitStatus } from './dungeon-board-status';
 import {
     chooseDungeonExitActivationSpend,
@@ -130,43 +126,6 @@ const hiddenRealPairGroups = (board: BoardState): Tile[][] => {
         groups.set(tile.pairKey, group);
     }
     return [...groups.values()].filter((group) => group.length >= 2);
-};
-
-const createLevelCompleteResult = (run: RunState, routeChoices: LevelResult['routeChoices']): LevelResult => ({
-    clearLifeGained: 0,
-    clearLifeReason: 'none',
-    level: run.board?.level ?? 1,
-    livesRemaining: run.lives,
-    mistakes: 0,
-    perfect: false,
-    rating: 'S',
-    recallMistakes: 0,
-    routeChoices,
-    scoreGained: 0
-});
-
-const createRelicMilestoneRun = (
-    runSeed: number,
-    rulesVersion: number,
-    bonusPicks: number
-): RunState => {
-    const playing = finishMemorizePhase(createNewRun(0, {
-        echoFeedbackEnabled: false,
-        runRulesVersionOverride: rulesVersion,
-        runSeed
-    }));
-    const levelComplete: RunState = {
-        ...playing,
-        status: 'levelComplete',
-        lives: Math.max(1, playing.lives),
-        lastLevelResult: {
-            ...createLevelCompleteResult(playing, undefined),
-            level: 3
-        },
-        relicOffer: null,
-        relicTiersClaimed: 0
-    };
-    return grantBonusRelicPickNextOffer(levelComplete, bonusPicks);
 };
 
 describe('gameplay property invariants', () => {
@@ -541,64 +500,5 @@ describe('gameplay property invariants', () => {
 
 
 
-    it('relic offers keep pick budgets positive and invalid picks unchanged', () => {
-        fc.assert(
-            fc.property(generatedRun, fc.integer({ min: 0, max: 4 }), ({ runSeed, rulesVersion }, bonusPicks) => {
-                const run = createRelicMilestoneRun(runSeed, rulesVersion, bonusPicks);
-                expect(computeRelicOfferPickBudget(run)).toBeGreaterThanOrEqual(1);
 
-                const opened = openRelicOffer(run);
-                expectRunResourceBounds(opened);
-
-                if (!opened.relicOffer) {
-                    return;
-                }
-
-                const invalid = completeRelicPickAndAdvance(opened, opened.relicOffer.options[0] ?? 'extra_shuffle_charge');
-                if (opened.relicIds.includes(opened.relicOffer.options[0]!)) {
-                    expect(invalid).toBe(opened);
-                }
-
-                const stale = completeRelicPickAndAdvance({
-                    ...opened,
-                    relicOffer: {
-                        ...opened.relicOffer,
-                        options: ['extra_shuffle_charge']
-                    },
-                    relicIds: ['extra_shuffle_charge']
-                }, 'extra_shuffle_charge');
-                expect(stale.relicOffer?.options).toEqual(['extra_shuffle_charge']);
-            }),
-            { numRuns: propertyRuns }
-        );
-    });
-
-    it('valid relic picks preserve run shape while continuing or advancing', () => {
-        fc.assert(
-            fc.property(generatedRun, fc.integer({ min: 0, max: 2 }), ({ runSeed, rulesVersion }, bonusPicks) => {
-                const opened = openRelicOffer(createRelicMilestoneRun(runSeed, rulesVersion, bonusPicks));
-                if (!opened.relicOffer || opened.relicOffer.options.length === 0) {
-                    return;
-                }
-
-                const relicId = opened.relicOffer.options[0]!;
-                const picked = completeRelicPickAndAdvance(opened, relicId);
-
-                expectRunResourceBounds(picked);
-                expectFlippedTileReferencesExist(picked);
-                expect(picked.relicIds).toEqual(expect.arrayContaining([relicId]));
-
-                if (picked.status === 'memorize') {
-                    expect(picked.relicOffer).toBeNull();
-                    expect(picked.timerState.memorizeRemainingMs).toBeGreaterThan(0);
-                    expect(inspectRunFairness(picked).issues).toEqual([]);
-                    return;
-                }
-
-                expect(picked.status).toBe('levelComplete');
-                expect(picked.relicOffer?.picksRemaining).toBeLessThan(opened.relicOffer!.picksRemaining);
-            }),
-            { numRuns: propertyRuns }
-        );
-    });
 });

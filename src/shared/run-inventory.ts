@@ -172,15 +172,6 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
         source: 'Match streaks and shard-spark pickups.',
         useRule: 'Automatically converts into life sustain when the shard threshold is met.'
     },
-    relic_loadout: {
-        id: 'relic_loadout',
-        kind: 'loadout',
-        label: 'Relic loadout',
-        stackLimit: 12,
-        mutableAt: 'draft_only',
-        source: 'Milestone relic drafts and shrine services.',
-        useRule: 'Changes only when a relic draft is open; selected relics are fixed for the run.'
-    },
     mutator_loadout: {
         id: 'mutator_loadout',
         kind: 'loadout',
@@ -265,8 +256,6 @@ export const getRunInventoryItemQuantity = (run: RunState, id: RunInventoryItemI
             return runNonNegativeInteger(stats.guardTokens);
         case 'combo_shard':
             return runNonNegativeInteger(stats.comboShards);
-        case 'relic_loadout':
-            return runRelicIds(run.relicIds).length;
         case 'mutator_loadout':
             return runMutatorIds(run.activeMutators).length;
         case 'contract_loadout':
@@ -468,7 +457,6 @@ const PICKUP_GAIN_LABELS: Record<RunInventoryItemId, { singular: string; plural:
     master_key: { singular: 'master key', plural: 'master keys' },
     guard_token: { singular: 'guard token', plural: 'guard tokens' },
     combo_shard: { singular: 'combo shard', plural: 'combo shards' },
-    relic_loadout: { singular: 'relic loadout', plural: 'relic loadouts' },
     mutator_loadout: { singular: 'mutator loadout', plural: 'mutator loadouts' },
     contract_loadout: { singular: 'contract loadout', plural: 'contract loadouts' }
 };

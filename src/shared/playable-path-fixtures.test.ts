@@ -19,7 +19,6 @@ describe('playable path fixtures', () => {
         ['activeRunWithPickupCashout', 'playing', 'playing'],
         ['activeRunWithTraitRouteSetup', 'playing', 'playing'],
         ['floorClearWithRouteChoices', 'playing', 'levelComplete'],
-        ['relicDraft', 'playing', 'levelComplete'],
         ['gameOver', 'gameOver', 'gameOver']
     ] satisfies [PlayablePathFixtureId, string, string | null][])(
         '%s exposes the expected view/run status',
@@ -32,7 +31,7 @@ describe('playable path fixtures', () => {
         }
     );
 
-    it('creates floor-clear, relic, and post-run scenario invariants', () => {
+    it('creates floor-clear and post-run scenario invariants', () => {
         // The floor-clear fixture kept its id but no longer offers routes: a cleared floor has one
         // way forward now (Gen 173).
         const routeFixture = createPlayablePathFixture('floorClearWithRouteChoices');
@@ -43,9 +42,6 @@ describe('playable path fixtures', () => {
         // No fixture stands at a shop any more (Gen 174): the floor clear carries no gold and no stock.
         expect(routeFixture.run?.shopGold).toBe(0);
         expect(routeFixture.run?.shopOffers).toEqual([]);
-
-        const relicFixture = createPlayablePathFixture('relicDraft');
-        expect(relicFixture.run?.relicOffer?.options.length).toBeGreaterThan(0);
 
         const gameOverFixture = createPlayablePathFixture('gameOver');
         expect(gameOverFixture.run?.lastRunSummary).not.toBeNull();

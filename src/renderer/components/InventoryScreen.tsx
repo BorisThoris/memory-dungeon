@@ -1,7 +1,6 @@
 import { useRef } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { MUTATOR_CATALOG, RELIC_CATALOG } from '../../shared/game-catalog';
-import { getRelicDecisionImpactCopy } from '../../shared/relics';
+import { MUTATOR_CATALOG } from '../../shared/game-catalog';
 import { getUiStateCopy } from '../../shared/ui-state-copy';
 import { playUiBackSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
 import { Eyebrow, MetaFrame, Panel, ScreenTitle, UiButton } from '../ui';
@@ -13,7 +12,7 @@ import { createInventoryQuantityMap, modeTitle } from './inventoryScreenModel';
 import styles from './InventoryScreen.module.css';
 
 /**
- * Inventory. Three sections that matter mid-run: relics, mutators, charges and tokens. The
+ * Inventory. Two sections that matter mid-run: mutators, charges and tokens. The
  * run snapshot is one header line. Build identity, contract flags and economy restated the
  * codex and were removed.
  */
@@ -113,34 +112,6 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
 
             <div ref={bodyScrollRef} className={`${metaStyles.body} ${styles.columns}`}>
                 <div className={styles.main}>
-                    <MetaFrame data-testid="inventory-meta-frame-relics">
-                        <Panel className={panelClassName} padding="lg" variant="default">
-                            <section aria-labelledby="inventory-relics-title" className={styles.section}>
-                                <h2 className={styles.sectionTitle} id="inventory-relics-title">
-                                    Relics
-                                </h2>
-                                {run.relicIds.length > 0 ? (
-                                    <ul className={styles.cards}>
-                                        {run.relicIds.map((id) => {
-                                            const def = RELIC_CATALOG[id];
-                                            return (
-                                                <li className={styles.card} key={id}>
-                                                    <strong className={styles.cardTitle}>{def?.title ?? id}</strong>
-                                                    {def?.description ? <span className={styles.cardLine}>{def.description}</span> : null}
-                                                    <span className={styles.cardMuted}>{getRelicDecisionImpactCopy(id)}</span>
-                                                </li>
-                                            );
-                                        })}
-                                    </ul>
-                                ) : (
-                                    <p className={styles.empty}>
-                                        {getUiStateCopy('inventory_no_relics').message} {getUiStateCopy('inventory_no_relics').actionLabel}.
-                                    </p>
-                                )}
-                            </section>
-                        </Panel>
-                    </MetaFrame>
-
                     <MetaFrame data-testid="inventory-meta-frame-mutators">
                         <Panel className={panelClassName} padding="lg" variant="default">
                             <section aria-labelledby="inventory-mutators-title" className={styles.section}>

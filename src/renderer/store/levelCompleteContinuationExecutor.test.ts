@@ -1,7 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { RunState } from '../../shared/contracts';
 import { createPlayablePathFixture } from '../../shared/playable-path-fixtures';
-import { openRelicOffer } from '../../shared/game-core';
 import { createPassAndPlayState, PASS_AND_PLAY_FLOORS } from '../../shared/pass-and-play-rules';
 import {
     executeContinueToNextLevel,
@@ -101,12 +100,6 @@ describe('level complete continuation executors', () => {
         });
     });
 
-    it('does not advance runs with an existing relic offer', () => {
-        const relicRun = openRelicOffer(createPlayablePathFixture('relicDraft').run!);
-        const relicDeps = createDeps(createState({ run: relicRun }));
-        executeContinueToNextLevel(relicDeps);
-        expect(relicDeps.clearAllTimers).not.toHaveBeenCalled();
-    });
 
     it('routes dead interlude runs through game-over resolution before early returns', () => {
         const run: RunState = {

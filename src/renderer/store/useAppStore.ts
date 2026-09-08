@@ -68,10 +68,6 @@ import {
     executeSettingsUpdate
 } from './savePreferenceExecutor';
 import {
-    createRelicOfferServiceSurfaceResult,
-    createRelicPickSurfaceResult
-} from './relicOfferSurfaceState';
-import {
     executeContinueToNextLevel
 } from './levelCompleteContinuationExecutor';
 import { createMenuSurfacePatch } from './menuSurfaceState';
@@ -83,7 +79,6 @@ import {
     playGambitCommitSfx,
     playPeekPowerSfx,
     playPowerArmSfx,
-    playRelicPickSfx,
     playResolveSfx,
     playStrayPowerSfx,
     playTrapSfx,
@@ -315,43 +310,6 @@ export const useAppStore = create<AppState>((set, get) => ({
 
 
 
-
-    pickRelic: (relicId) => {
-        const result = createRelicPickSurfaceResult({
-            relicId,
-            run: get().run,
-            saveData: get().saveData
-        });
-        if (result.kind === 'ignored') {
-            return;
-        }
-        clearAllTimers();
-        // Migrated relics prove their cue came from the gameplay journal; legacy
-        // relics retain the established pick sound until their core migration.
-        if (!result.feedback || result.feedback.audioCategory === 'relic-pick') {
-            void resumeAudioContext();
-            playRelicPickSfx(sfxGainFromStore());
-        }
-        set(result.patch);
-        prepareMemorizeTimerForBoardReady(result.patch.run);
-        runPersistenceInBackground(() => persistSaveDataSafely(result.nextSave));
-    },
-
-    applyRelicOfferService: (serviceId, targetRelicId) => {
-        const result = createRelicOfferServiceSurfaceResult({
-            run: get().run,
-            serviceId,
-            targetRelicId
-        });
-        if (result.kind === 'ignored') {
-            return;
-        }
-        if (result.feedback?.audioCategory === 'relic-service') {
-            void resumeAudioContext();
-            playRelicPickSfx(sfxGainFromStore() * 0.8);
-        }
-        set(result.patch);
-    },
 
     dismissPowersFtue: async () => {
         await executePowersFtueDismiss({

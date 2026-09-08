@@ -22,7 +22,6 @@ export type PlayablePathFixtureId =
     | 'activeRunWithTraitRouteSetup'
     | 'activeRunWithTrapCard'
     | 'floorClearWithRouteChoices'
-    | 'relicDraft'
     | 'gameOver';
 
 export async function expectGameplayReady(page: Page): Promise<void> {
@@ -213,10 +212,6 @@ export async function openPlayablePathFixture(page: Page, id: PlayablePathFixtur
     }
     if (id === 'freshProfile') {
         await expect(mainMenuPlayButton(page)).toBeVisible({ timeout: 30_000 });
-        return;
-    }
-    if (id === 'relicDraft') {
-        await expect(page.getByTestId('game-relic-offer-overlay')).toBeVisible({ timeout: 30_000 });
         return;
     }
     await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 30_000 });

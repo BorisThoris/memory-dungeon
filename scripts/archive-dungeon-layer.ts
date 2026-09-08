@@ -61,6 +61,22 @@ const DELETED_SHOP_MODULES: readonly string[] = [
     'src/renderer/store/levelCompleteShopExecutor.ts'
 ];
 
+const DELETED_RELIC_DRAFT_MODULES: readonly string[] = [
+    'src/shared/relic-offer-open-rules.ts',
+    'src/shared/relic-offer-rules.ts',
+    'src/shared/relic-pick-advance-rules.ts',
+    'src/shared/relic-pick-transition-rules.ts',
+    'src/shared/sealed-relic-rules.ts',
+    'src/shared/starting-loadouts.ts',
+    'src/shared/build-strategy-simulation.ts',
+    'src/shared/build-strategy-playthrough-simulation.ts',
+    'scripts/sim-build-strategies.ts',
+    'scripts/sim-build-strategy-playthroughs.ts',
+    'src/renderer/components/RelicDraftOfferPanel.tsx',
+    'src/renderer/store/relicOfferSurfaceState.ts',
+    'src/renderer/copy/relicDraftOffer.ts'
+];
+
 const DELETED_MODULES: readonly string[] = [
     'src/shared/dungeon-blueprint-policy-rules.ts',
     'src/shared/dungeon-board-generation-rules.ts',
@@ -143,7 +159,12 @@ push('4. **Gen 174 — nothing purchasable.** Gold has no source and no sink: a 
 push('   pays none, the momentum ladder pays none, and the vendor - the floor-clear shop and the one opened from');
 push('   the board - is gone with the store dock button, the shop view and the shop rules. The wallet reads');
 push('   nought on every run. The shop modules listed second at the end are deleted in this commit.');
-push('5. **Gen 176 — the dungeon modules go.** The `dungeon-*` files listed second at the end are deleted, with the');
+push('5. **Gen 175 — no draft, no loadout.** The milestone relic draft never opens, the four starting loadouts');
+push('   are gone from run creation, and the build-strategy simulations that drafted against them are deleted');
+push('   with the draft surface, its store slice and its copy. A `relic.offer_open`, `relic.pick` or');
+push('   `relic.offer_service_use` command in an old journal is rejected with a reason. The relic definitions');
+push('   and their in-play effects come out in the second half of the same generation.');
+push('6. **Gen 176 — the dungeon modules go.** The `dungeon-*` files listed last at the end are deleted, with the');
 push('   run-state fields and save shape that carried them.');
 push();
 push('## How to get any of it back');
@@ -278,6 +299,16 @@ push();
 push('Deleted in Gen 174, with the gold it existed to spend. `git log --all -- <path>` is its whole history.');
 push();
 for (const file of DELETED_SHOP_MODULES) {
+    push(`- \`${file}\``);
+}
+push();
+push('## The relic draft and the starting loadouts, which went third');
+push();
+push('Deleted in Gen 175, with the milestone draft that handed relics out, the four starting loadouts, and');
+push('the build-strategy simulations that existed to draft against them. `git log --all -- <path>` is its');
+push('whole history.');
+push();
+for (const file of DELETED_RELIC_DRAFT_MODULES) {
     push(`- \`${file}\``);
 }
 push();

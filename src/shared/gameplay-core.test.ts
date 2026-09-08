@@ -47,6 +47,7 @@ import {
     createGameplayRegionShuffleCommand,
     createGameplayRiskWagerAcceptCommand,
     createGameplayRelicPickCommand,
+    createGameplayRelicOfferOpenCommand,
     createGameplayRelicOfferServiceCommand,
     createGameplayShuffleCommand,
     createGameplayStrayRemoveCommand,
@@ -69,7 +70,7 @@ import { resolveTileTraitEffects } from './tile-trait-rules';
 import { createNewRun } from './game';
 import { WILD_PAIR_KEY } from './tile-identity';
 import { createPlayablePathFixture } from './playable-path-fixtures';
-import { applyRelicOfferService, RELIC_OFFER_SERVICE_IDS, RELIC_POOL } from './relics';
+import { RELIC_OFFER_SERVICE_IDS, RELIC_POOL } from './relics';
 import { advanceToNextLevel } from './next-floor-transition-rules';
 import { resolveSlayerFloorClearEffects } from './slayer-floor-clear-transition';
 
@@ -760,98 +761,26 @@ describe('deterministic gameplay core', () => {
     });
 
 
-    it('selects a relic through one replayable command covering ownership, immediate effect, and offer outcome', () => {
-        const initial = createPlayablePathFixture('relicDraft').run!;
-        const relicId = initial.relicOffer!.options[0]!;
-        const command = createGameplayRelicPickCommand('relic-pick-core', relicId);
-        const result = reduceGameplayCommand(initial, command);
-
-        expect(result).toMatchObject({
-            accepted: true,
-            run: {
-                relicIds: expect.arrayContaining([relicId]),
-                relicOffer: { picksRemaining: initial.relicOffer!.picksRemaining - 1, pickRound: 1 },
-                relicTiersClaimed: initial.relicTiersClaimed
-            }
-        });
-        expect(result.events).toEqual(expect.arrayContaining([
-            expect.objectContaining({
-                type: 'feedback.requested',
-                source: { kind: 'relic', id: relicId }
-            }),
-            expect.objectContaining({
-                type: 'relic.picked',
-                relicId,
-                outcome: 'offer_continues',
-                picksRemainingBefore: initial.relicOffer!.picksRemaining,
-                picksRemainingAfter: initial.relicOffer!.picksRemaining - 1,
-                relicCountAfter: initial.relicIds.length + 1
-            })
-        ]));
-        const secondRelicId = result.run.relicOffer!.options[0]!;
-        const secondCommand = createGameplayRelicPickCommand('relic-pick-core-final', secondRelicId);
-        const finalResult = reduceGameplayCommand(result.run, secondCommand);
-        expect(finalResult).toMatchObject({
-            accepted: true,
-            run: {
-                relicIds: expect.arrayContaining([relicId, secondRelicId]),
-                relicOffer: null,
-                relicTiersClaimed: initial.relicTiersClaimed + 1
-            },
-            events: expect.arrayContaining([
-                expect.objectContaining({
-                    type: 'relic.picked',
-                    relicId: secondRelicId,
-                    outcome: 'advance_ready',
-                    picksRemainingAfter: 0
-                })
-            ])
-        });
-        expect(replayGameplayCommands(
-            initial,
-            [JSON.parse(JSON.stringify(command)), JSON.parse(JSON.stringify(secondCommand))]
-        ).run).toEqual(finalResult.run);
-        expect(reduceGameplayCommand(
-            { ...initial, relicOffer: null },
-            createGameplayRelicPickCommand('relic-stale', relicId)
-        )).toMatchObject({ accepted: false, run: { relicOffer: null } });
-    });
 
 
-    it('uses relic draft services through replayable commands with exact option and economy deltas', () => {
-        for (const serviceId of RELIC_OFFER_SERVICE_IDS) {
-            const initial = createPlayablePathFixture('relicDraft').run!;
-            const targetRelicId = serviceId === 'ban_option' ? initial.relicOffer!.options[0] : undefined;
-            const command = createGameplayRelicOfferServiceCommand(
-                `relic-service-${serviceId}`,
-                serviceId,
-                targetRelicId
-            );
-            const legacy = applyRelicOfferService(initial, serviceId, targetRelicId);
-            const result = reduceGameplayCommand(initial, command);
 
-            expect(legacy.applied).toBe(true);
-            expect(result).toMatchObject({ accepted: true, run: legacy.run });
+    it('rejects every relic draft command with a reason now that there is no draft', () => {
+        // Gen 175: the draft is gone. An old journal that opens, picks from or services an
+        // offer still replays, each of those commands recorded as rejected rather than lost.
+        const run = createPlayablePathFixture('floorClearWithRouteChoices').run!;
+        const commands = [
+            createGameplayRelicOfferOpenCommand('relic-open-gone'),
+            createGameplayRelicPickCommand('relic-pick-gone', 'extra_shuffle_charge'),
+            createGameplayRelicOfferServiceCommand('relic-service-gone', 'reroll_offer')
+        ];
+        for (const command of commands) {
+            const result = reduceGameplayCommand(run, command);
+            expect(result).toMatchObject({ accepted: false, run });
             expect(result.events).toEqual([
-                expect.objectContaining({
-                    type: 'relic.offer_service_used',
-                    serviceId,
-                    targetRelicId: targetRelicId ?? null,
-                    cost: serviceId === 'upgrade_offer' ? 3 : 2,
-                    shopGoldBefore: initial.shopGold,
-                    shopGoldAfter: legacy.run.shopGold,
-                    optionsBefore: initial.relicOffer!.options,
-                    optionsAfter: legacy.run.relicOffer!.options
-                }),
-                expect.objectContaining({
-                    type: 'feedback.requested',
-                    cue: `relic.offer_service.${serviceId}`,
-                    source: { kind: 'system', id: 'relic_offer' }
-                })
+                expect.objectContaining({ type: 'command.rejected', reason: expect.stringMatching(/relic draft/) })
             ]);
-            expect(replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))]).run).toEqual(result.run);
-            expect(reduceGameplayCommand(result.run, command)).toMatchObject({ accepted: false, run: result.run });
         }
+        expect(run.relicOffer).toBeNull();
     });
 
     it('models Vaultbreaker treasure extraction from chest through opener, Shrine Echo, and Score Glint', () => {

@@ -1,11 +1,5 @@
 import { type RunState } from './contracts';
 export {
-    applyRelicOfferServiceToRun,
-    computeRelicOfferPickBudget,
-    openRelicOffer,
-    useRelicOfferService
-} from './relic-offer-rules';
-export {
     countFindablePairs
 } from './board-tile-generation-rules';
 export {
@@ -36,9 +30,6 @@ import {
 } from './gameplay-core-adapters';
 import { normalizeSessionStats } from './session-stats-rules';
 import { runNonNegativeInteger } from './run-number-guards';
-export {
-    completeRelicPickAndAdvance
-} from './relic-pick-advance-rules';
 
 export {
     DECOY_PAIR_KEY,

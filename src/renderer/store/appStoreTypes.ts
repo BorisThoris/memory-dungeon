@@ -1,8 +1,6 @@
 import type { ClassicRunSetup } from '../../shared/classic-run-setup';
 import type {
     AchievementId,
-    RelicId,
-    RelicOfferServiceId,
     RunState,
     SaveData,
     Settings,
@@ -71,8 +69,6 @@ export interface AppState {
     revealSaveFile: () => void;
     /** Starts the run a pasted share key describes; ignores anything that is not a key. */
     startSharedRun: (pastedText: string) => void;
-    pickRelic: (relicId: RelicId) => void;
-    applyRelicOfferService: (serviceId: RelicOfferServiceId, targetRelicId?: RelicId) => void;
     dismissPowersFtue: () => Promise<void>;
     goToMenu: () => void;
     openModeSelect: () => void;

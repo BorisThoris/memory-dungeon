@@ -66,8 +66,7 @@ describe('createRunSummary', () => {
                     maxPinsTotalRun: 10,
                     bonusRelicDraftPick: true
                 },
-                runSeed: 0xcafe,
-                startingLoadoutId: 'route_tactician'
+                runSeed: 0xcafe
             })
         );
         const command = createGameplayDefinitionCommand('summary-lens', 'bonus_reward.echo_conduit_lens');

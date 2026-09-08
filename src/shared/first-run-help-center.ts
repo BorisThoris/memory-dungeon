@@ -49,7 +49,7 @@ export const getFirstRunHelpCenterRows = (save: Pick<SaveData, 'onboardingDismis
         {
             id: 'relic_rewards',
             title: '4. Rewards and builds',
-            body: 'Runs turn into relic drafts, objective progress, profile levels, and visual-only collection rewards.',
+            body: 'Runs turn into objective progress, profile levels, and visual-only collection rewards.',
             action: 'Visit Collection after runs to see durable progress.',
             status: laterStatus,
             targetSurface: 'collection',

@@ -1375,3 +1375,29 @@ gold gone, Clean and Sharp pay nothing: a name on the floor-clear line and no re
 is a real loss to the floor-end beat and it is not fixed here. Phase 2's floor-end bonus (T2.7) is
 where the tiers get paid again, in score with a tier multiplier, which is what the thesis wanted the
 ladder to be in the first place.
+
+## Gen 175: no draft, no loadout
+
+The milestone relic draft never opens. The floor clear used to stop every third floor for it; now
+a cleared floor goes straight to the next one, whatever floor it is. The draft surface, its store
+slice and its copy are deleted, and so are the offer rules, the pick transition, the sealed fourth
+option and the draft services (`docs/REMOVED_DUNGEON_LAYER.md`). A `relic.offer_open`,
+`relic.pick` or `relic.offer_service_use` command in an old journal is rejected with a reason, like
+a route choice or a purchase. `relicOffer` stays on the run shape reading null until T1.14.
+
+The four starting loadouts are gone from run creation: a run starts with what every run starts
+with. `startingLoadoutId` stays on the run and the summary reading null until T1.14, and the
+loadout line leaves the game-over build recap and the inventory model.
+
+The build-strategy simulations are deleted rather than emptied: their subject was which relic to
+draft, and there is nothing to draft. The build viability issue list (12 rows, asserted exactly
+since Gen 173) goes with them. Nothing else that reads a relic moved yet: the relic definitions,
+their in-play effects, the favor counters and the relic graph nodes come out in the second half of
+this generation, and the reports that count them are re-baselined there.
+
+### What it did to the numbers
+
+Nothing moved. `sim:cascade --check` holds at Fever 0.38 (miss 0.1) / 0.20 (miss 0.25), Extreme
+Fever 0.58 / 0.43, ripple 1.09 / 1.06; `sim:pop --check` holds the ladder spread at 4.74; the
+occupancy census reports no silent system. The draft was a stop between floors, not a thing on
+the board.

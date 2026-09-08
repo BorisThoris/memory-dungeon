@@ -15,7 +15,6 @@ import { applyEnemyHazardClick } from './dungeon-enemy-hazard-rules';
 import { type DungeonKeyKind, type FindableKind, type RunState } from './contracts';
 import {
     GAMEPLAY_CORE_SCHEMA_VERSION,
-    createGameplayDefinitionCommand,
     gameplayCommandSchema,
     gameplayEventSchema,
     getGameplayContentDefinition,
@@ -25,10 +24,8 @@ import {
     type GameplayFacts,
     type GameplaySource
 } from './gameplay-core-contracts';
-import { applyRelicOfferService, RELIC_OFFER_SERVICE_CATALOG } from './relics';
 import { getBoardTurnAnnouncementFacts } from './board-turn-event-facts';
 import { finishMemorizePhase } from './memorize-phase-rules';
-import { computeRelicOfferPickBudget, openRelicOffer } from './relic-offer-open-rules';
 import { createRunProgressionRepairTransition } from './run-progression-repair';
 import { disableDebugPeek, enableDebugPeek, pauseRun, resumeRun } from './run-timer-rules';
 import {
@@ -57,14 +54,12 @@ import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY, WILD_PAIR_KEY } from './ti
 import { isBoardComplete } from './board-inspection';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
 import { resolveHazardBanisherFloorStart } from './hazard-banisher-rules';
-import { createRelicPickTransitionResult } from './relic-pick-transition-rules';
 import {
     canGreetFloorCurio,
     floorCurioGreetingReply,
     greetFloorCurio,
     runFloorCurioGreeting
 } from './floor-curio-greeting-rules';
-import { repairRunProgressionSoftlocks } from './run-progression-repair';
 import { advanceToNextLevel } from './next-floor-transition-rules';
 import {
     createResolveBoardTurnTransition,
@@ -110,7 +105,6 @@ const DUNGEON_EXIT_SOURCE: GameplaySource = { kind: 'system', id: 'dungeon_exit'
 const SCORE_PARASITE_SOURCE: GameplaySource = { kind: 'system', id: 'score_parasite' };
 const HAZARD_BANISH_SOURCE: GameplaySource = { kind: 'reward_perk', id: 'hazard_banish_per_floor' };
 const FLOOR_ADVANCE_SOURCE: GameplaySource = { kind: 'system', id: 'floor_advance' };
-const RELIC_OFFER_SOURCE: GameplaySource = { kind: 'system', id: 'relic_offer' };
 const DEBUG_REVEAL_SOURCE: GameplaySource = { kind: 'system', id: 'debug_reveal' };
 const ENEMY_HAZARD_SOURCE: GameplaySource = { kind: 'system', id: 'enemy_hazard' };
 const WILD_JOKER_SOURCE: GameplaySource = { kind: 'system', id: 'wild_joker' };
@@ -932,113 +926,23 @@ const applySideRoomResolveCommand = (
 ): GameplayCommandResult =>
     rejectedResult(run, command.commandId, 'No side room can open between floors any more.', command);
 
+/*
+ * The relic draft went in Gen 175. A pick, a draft service or an offer-open in an old journal is
+ * rejected with a reason rather than dropped on the floor, so a replay still reads; the journal
+ * migration in T1.14 removes the command types.
+ */
 const applyRelicPickCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'relic.pick' }>
-): GameplayCommandResult => {
-    const repairedRun = repairRunProgressionSoftlocks(run);
-    const offer = repairedRun.relicOffer;
-    const definition = getGameplayContentDefinition(`relic.${command.relicId}`);
-    if (!offer || !definition || definition.source.kind !== 'relic' || definition.source.id !== command.relicId) {
-        return rejectedResult(run, command.commandId, 'Relic pick has no matching open offer or definition.', command);
-    }
-
-    const events: GameplayEvent[] = [];
-    const effectCommand = createGameplayDefinitionCommand(command.commandId, definition.id);
-    if (effectCommand.type !== 'effects.apply') {
-        return rejectedResult(run, command.commandId, 'Relic definition did not produce an effect command.', command);
-    }
-    let effectAccepted = false;
-    const transition = createRelicPickTransitionResult(
-        repairedRun,
-        command.relicId,
-        (ownedRun) => {
-            const effectResult = applyDefinition(ownedRun, effectCommand, definition, events);
-            effectAccepted = effectResult.accepted;
-            return effectResult.run;
-        }
-    );
-    if (transition.kind === 'unchanged' || !effectAccepted) {
-        return rejectedResult(run, command.commandId, 'Relic is not eligible for the current draft offer.', command);
-    }
-
-    const nextOffer = transition.run.relicOffer;
-    const pickRoundBefore = runNonNegativeInteger(offer.pickRound);
-    const writeEvent = makeEventWriter(command.commandId, definition.source, events);
-    writeEvent({
-        type: 'relic.picked',
-        relicId: command.relicId,
-        definitionId: definition.id,
-        buildId: definition.buildId ?? null,
-        offerTier: runNonNegativeInteger(offer.tier),
-        pickRoundBefore,
-        pickRoundAfter: nextOffer ? runNonNegativeInteger(nextOffer.pickRound) : pickRoundBefore + 1,
-        picksRemainingBefore: runNonNegativeInteger(offer.picksRemaining),
-        picksRemainingAfter: nextOffer ? runNonNegativeInteger(nextOffer.picksRemaining) : 0,
-        outcome: transition.kind === 'offerContinues' ? 'offer_continues' : 'advance_ready',
-        nextOptions: nextOffer?.options ?? [],
-        relicCountBefore: Array.isArray(repairedRun.relicIds) ? repairedRun.relicIds.length : 0,
-        relicCountAfter: Array.isArray(transition.run.relicIds) ? transition.run.relicIds.length : 1,
-        relicTiersBefore: runNonNegativeInteger(repairedRun.relicTiersClaimed),
-        relicTiersAfter: runNonNegativeInteger(transition.run.relicTiersClaimed)
-    });
-    return { run: transition.run, command, events, accepted: true };
-};
+): GameplayCommandResult =>
+    rejectedResult(run, command.commandId, 'There is no relic draft to pick from any more.', command);
 
 const applyRelicOfferServiceCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'relic.offer_service_use' }>
-): GameplayCommandResult => {
-    const offer = run.relicOffer;
-    if (!offer) {
-        return rejectedResult(run, command.commandId, 'Relic offer service requires an open draft.', command);
-    }
-    const result = applyRelicOfferService(run, command.serviceId, command.targetRelicId);
-    const nextOffer = result.run.relicOffer;
-    if (!result.applied || !nextOffer) {
-        return rejectedResult(
-            run,
-            command.commandId,
-            `Relic offer service is unavailable${result.reason ? ` (${result.reason})` : ''}.`,
-            command
-        );
-    }
+): GameplayCommandResult =>
+    rejectedResult(run, command.commandId, 'There is no relic draft to reroll, ban or upgrade any more.', command);
 
-    const bannedBefore = Array.isArray(offer.bannedRelicIds) ? offer.bannedRelicIds : [];
-    const bannedAfter = Array.isArray(nextOffer.bannedRelicIds) ? nextOffer.bannedRelicIds : [];
-    const targetRelicId = command.serviceId === 'ban_option'
-        ? bannedAfter.find((relicId) => !bannedBefore.includes(relicId)) ?? command.targetRelicId ?? null
-        : null;
-    const events: GameplayEvent[] = [];
-    const writeEvent = makeEventWriter(command.commandId, RELIC_OFFER_SOURCE, events);
-    writeEvent({
-        type: 'relic.offer_service_used',
-        serviceId: command.serviceId,
-        targetRelicId,
-        cost: RELIC_OFFER_SERVICE_CATALOG[command.serviceId].cost,
-        shopGoldBefore: runNonNegativeInteger(run.shopGold),
-        shopGoldAfter: runNonNegativeInteger(result.run.shopGold),
-        pickRoundBefore: runNonNegativeInteger(offer.pickRound),
-        pickRoundAfter: runNonNegativeInteger(nextOffer.pickRound),
-        optionsBefore: offer.options,
-        optionsAfter: nextOffer.options,
-        bannedRelicIdsBefore: bannedBefore,
-        bannedRelicIdsAfter: bannedAfter,
-        upgradedOfferBefore: offer.upgradedOffer ?? false,
-        upgradedOfferAfter: nextOffer.upgradedOffer ?? false
-    });
-    writeEvent({
-        type: 'feedback.requested',
-        cue: `relic.offer_service.${command.serviceId}`,
-        message: command.serviceId === 'reroll_offer'
-            ? 'Relic offer rerolled with fresh build choices.'
-            : command.serviceId === 'ban_option'
-              ? `${targetRelicId ?? 'Relic'} was banned from this draft visit.`
-              : 'Relic offer upgraded toward uncommon and rare choices.',
-        tone: 'information'
-    });
-    return { run: result.run, command, events, accepted: true };
-};
 
 const findableDefinitionId = (findableKind: FindableKind | null): string | null =>
     findableKind === 'shard_spark'
@@ -1509,26 +1413,8 @@ const applyProgressionRepairCommand = (
 const applyRelicOfferOpenCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'relic.offer_open' }>
-): GameplayCommandResult => {
-    const nextRun = openRelicOffer(run);
-    if (nextRun === run) {
-        return rejectedResult(run, command.commandId, 'Relic offer cannot be opened for the current run.', command);
-    }
-    const events: GameplayEvent[] = [];
-    const writeOfferEvent = makeEventWriter(command.commandId, RELIC_OFFER_SOURCE, events);
-    writeOfferEvent({
-        type: 'relic.offer_opened',
-        outcome: 'opened',
-        pickBudget: computeRelicOfferPickBudget(nextRun)
-    });
-    writeOfferEvent({
-        type: 'feedback.requested',
-        cue: 'relic.offer.opened',
-        message: 'Relic offer open. Choose your reward.',
-        tone: 'reward'
-    });
-    return { run: nextRun, command, events, accepted: true };
-};
+): GameplayCommandResult =>
+    rejectedResult(run, command.commandId, 'There is no relic draft to open any more.', command);
 
 const applyGauntletExpireCommand = (
     run: RunState,

@@ -1,14 +1,12 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import {
     expectGameplayReady,
     forceCurrentRunGameOverViaE2eHook,
     forceGameOverViaE2eHook,
-    openPlayablePathFixture,
-    openRunMenuItem
+    openPlayablePathFixture
 } from './playablePathHelpers';
 import {
     buildFreshProfileSaveJson,
-    expectLocatorFullyInWindowViewport,
     gotoWithSave,
     mainMenuPlayButton,
     startClassicRunFromModeSelect,
@@ -35,35 +33,6 @@ test.describe('Expanded playable interludes and post-run loop', () => {
         await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 30_000 });
     });
 
-    test('relic draft fixture shows build choices and can pick into the next floor', async ({ page }) => {
-        await openPlayablePathFixture(page, 'relicDraft');
-        await expect(page.getByTestId('game-relic-offer-overlay')).toBeVisible();
-        await expect(page.getByRole('group', { name: /relic choices/i })).toBeVisible();
-        await expect(page.getByTestId('relic-offer-card')).toHaveCount(3);
-        await expect(page.getByTestId('relic-offer-card').first()).toContainText(/common|uncommon|rare/i);
-        await expectLocatorFullyInWindowViewport(page, page.getByTestId('relic-offer-card').first(), 8);
-        for (let pick = 0; pick < 3; pick += 1) {
-            if (!(await page.getByTestId('game-relic-offer-overlay').isVisible().catch(() => false))) {
-                break;
-            }
-            await page.getByRole('group', { name: /relic choices/i }).getByRole('button').first().click();
-        }
-        await expectGameplayReady(page);
-
-        await openInventoryFromToolbar(page);
-        await expect(page.getByTestId('inventory-run-line')).toContainText(/Floor \d+ · .* · Score/);
-        await expect(page.getByTestId('inventory-meta-frame-relics')).toBeVisible();
-        await expect(page.getByTestId('inventory-meta-frame-relics')).not.toContainText(/no relic/i);
-        await page.getByRole('region', { name: /inventory/i }).getByRole('button', { name: /^back$/i }).click();
-        await expectGameplayReady(page);
-
-        await forceCurrentRunGameOverViaE2eHook(page);
-        await expect(page.getByTestId('game-over-next-run-loop')).toBeVisible();
-        await expect(page.getByTestId('game-over-next-run-loop').locator('[data-next-run-row="chain_target"]')).toContainText(
-            /Chain target/i
-        );
-        await expect(page.getByTestId('game-over-relic-chip').first()).toBeVisible();
-    });
 
     test('game over actions restart and return to menu', async ({ page }) => {
         test.setTimeout(260_000);
@@ -112,14 +81,4 @@ test.describe('Expanded playable interludes and post-run loop', () => {
 });
 
 
-async function openInventoryFromToolbar(page: Page): Promise<void> {
-    await expect(async () => {
-        const inventory = page.getByRole('region', { name: /inventory/i });
-        if (await inventory.isVisible().catch(() => false)) {
-            return;
-        }
-        await openRunMenuItem(page, 'inventory');
-        await expect(inventory).toBeVisible({ timeout: 5_000 });
-    }).toPass({ timeout: 20_000 });
-}
 

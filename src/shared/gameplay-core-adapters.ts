@@ -13,7 +13,6 @@ import {
     createGameplayDebugRevealActivateCommand,
     createGameplayDebugRevealDeactivateCommand,
     createGameplayEnemyHazardContactCommand,
-    createGameplayRelicOfferOpenCommand,
     type GameplayCommand,
     type GameplayEvent,
     type GameplayPauseTimerSnapshot
@@ -391,8 +390,3 @@ export const applyEnemyHazardContactThroughGameplayCore = (
         createGameplayEnemyHazardContactCommand(commandId, tileId, advanceHazards)
     );
 
-export const openRelicOfferThroughGameplayCore = (
-    run: RunState,
-    commandId = `relic-offer-open:${run.runSeed}:${run.board?.level ?? 0}`
-): GameplayRunTransitionAdapterResult =>
-    reduceThroughGameplayCore(run, createGameplayRelicOfferOpenCommand(commandId));

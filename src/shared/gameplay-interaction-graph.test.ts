@@ -394,7 +394,6 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'relic.wager_surety', target: 'objective.featured_streak', kind: 'modifies' }),
             expect.objectContaining({ source: 'relic.parasite_ledger', target: 'hazard.score_parasite', kind: 'counterplay' }),
             expect.objectContaining({ source: 'objective.defeat_boss', target: 'reward.boss_trophy_cache', kind: 'triggers' }),
-            expect.objectContaining({ source: 'economy.relic_favor', target: 'progression.relic_draft', kind: 'grants' }),
             expect.objectContaining({ source: 'safety.parasite_ward', target: 'hazard.score_parasite', kind: 'counterplay' }),
             expect.objectContaining({ source: 'build.boss_hunter', target: 'reward.boss_trophy_cache', kind: 'consequence' })
         ]));
@@ -432,8 +431,7 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'relic.pin_cap_plus_one', target: 'power.pin', kind: 'modifies' }),
             expect.objectContaining({ source: 'findable.scout_glint', target: 'board.scout_reveal', kind: 'triggers' }),
             expect.objectContaining({ source: 'inventory.stray_remove_charge', target: 'power.stray_remove', kind: 'enables' }),
-            expect.objectContaining({ source: 'power.stray_remove', target: 'objective.floor_clear', kind: 'counterplay' }),
-            expect.objectContaining({ source: 'build.reveal_scout', target: 'progression.relic_draft', kind: 'consequence' })
+            expect.objectContaining({ source: 'power.stray_remove', target: 'objective.floor_clear', kind: 'counterplay' })
         ]));
     });
 
@@ -621,11 +619,6 @@ describe('gameplay interaction graph', () => {
             kind: 'progression',
             role: 'authoritative_pre_run_loadout_selection'
         });
-        expect(byId.get('inventory.relic_loadout')).toMatchObject({
-            kind: 'inventory',
-            role: 'owned_relic_build_projection',
-            writes: []
-        });
         expect(byId.get('inventory.mutator_loadout')).toMatchObject({
             kind: 'inventory',
             role: 'floor_pressure_projection',
@@ -637,17 +630,13 @@ describe('gameplay interaction graph', () => {
             writes: []
         });
         expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
-            expect.objectContaining({ source: 'progression.run_setup', target: 'inventory.relic_loadout', kind: 'grants' }),
             expect.objectContaining({ source: 'progression.run_setup', target: 'inventory.mutator_loadout', kind: 'grants' }),
             expect.objectContaining({ source: 'progression.run_setup', target: 'inventory.contract_loadout', kind: 'grants' }),
-            expect.objectContaining({ source: 'progression.relic_draft', target: 'inventory.relic_loadout', kind: 'modifies' }),
-            expect.objectContaining({ source: 'inventory.relic_loadout', target: 'progression.relic_draft', kind: 'gates' }),
             expect.objectContaining({ source: 'progression.run_flow', target: 'inventory.mutator_loadout', kind: 'modifies' }),
             expect.objectContaining({ source: 'inventory.mutator_loadout', target: 'hazard.score_parasite', kind: 'triggers' }),
             expect.objectContaining({ source: 'inventory.contract_loadout', target: 'power.shuffle', kind: 'gates' }),
             expect.objectContaining({ source: 'inventory.contract_loadout', target: 'power.destroy_pair', kind: 'gates' }),
             expect.objectContaining({ source: 'inventory.contract_loadout', target: 'power.pin', kind: 'gates' }),
-            expect.objectContaining({ source: 'inventory.relic_loadout', target: 'feedback.gameplay_hud', kind: 'displays' }),
             expect.objectContaining({ source: 'inventory.mutator_loadout', target: 'feedback.gameplay_hud', kind: 'displays' }),
             expect.objectContaining({ source: 'inventory.contract_loadout', target: 'feedback.gameplay_hud', kind: 'displays' })
         ]));
@@ -678,7 +667,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects Hazard Banish acquisition to its typed floor-start removal or Destroy fallback', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(27);
+        expect(gameplayInteractionGraph.version).toBe(28);
         expect(byId.get('perk.hazard_banish_per_floor')).toMatchObject({
             kind: 'perk',
             role: 'durable_floor_start_hazard_or_destroy_conversion',
@@ -716,37 +705,11 @@ describe('gameplay interaction graph', () => {
         ]));
     });
 
-    it('connects relic drafting and offer shaping to typed build acquisition, economy, feedback, persistence, and replay', () => {
-        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(27);
-        expect(byId.get('progression.relic_draft')).toMatchObject({
-            kind: 'progression',
-            role: 'typed_replayable_build_selection_and_offer_shaping',
-            evidence: expect.arrayContaining([
-                'src/shared/relic-pick-transition-rules.ts',
-                'src/shared/gameplay-core.ts',
-                'src/renderer/store/relicOfferSurfaceState.ts'
-            ]),
-            tests: expect.arrayContaining([
-                'src/shared/gameplay-core.test.ts',
-                'src/renderer/store/relicOfferSurfaceState.test.ts'
-            ])
-        });
-        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
-            expect.objectContaining({ source: 'progression.relic_draft', target: 'core.gameplay_commands', kind: 'triggers' }),
-            expect.objectContaining({ source: 'core.gameplay_commands', target: 'progression.relic_draft', kind: 'modifies' }),
-            expect.objectContaining({ source: 'progression.relic_draft', target: 'inventory.relic_loadout', kind: 'modifies' }),
-            expect.objectContaining({ source: 'inventory.relic_loadout', target: 'progression.relic_draft', kind: 'gates' }),
-            expect.objectContaining({ source: 'progression.relic_draft', target: 'feedback.gameplay_hud', kind: 'displays' }),
-            expect.objectContaining({ source: 'progression.relic_draft', target: 'persistence.run_summary', kind: 'persists' }),
-            expect.objectContaining({ source: 'progression.relic_draft', target: 'simulation.gameplay_replay', kind: 'tested_by' })
-        ]));
-    });
 
 
     it('connects flat typed floor advancement through pressure, board preparation, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(27);
+        expect(gameplayInteractionGraph.version).toBe(28);
         expect(byId.get('progression.run_flow')).toMatchObject({
             kind: 'progression',
             role: 'typed_flat_replayable_floor_transition',
@@ -754,14 +717,12 @@ describe('gameplay interaction graph', () => {
                 'src/shared/next-floor-transition-rules.ts',
                 'src/shared/gameplay-core.ts',
                 'src/shared/gameplay-core-adapters.ts',
-                'src/renderer/store/levelCompleteSurfaceState.ts',
-                'src/renderer/store/relicOfferSurfaceState.ts'
+                'src/renderer/store/levelCompleteSurfaceState.ts'
             ]),
             tests: expect.arrayContaining([
                 'src/shared/gameplay-core.test.ts',
                 'src/shared/game.test.ts',
-                'src/renderer/store/levelCompleteSurfaceState.test.ts',
-                'src/renderer/store/relicOfferSurfaceState.test.ts'
+                'src/renderer/store/levelCompleteSurfaceState.test.ts'
             ])
         });
         expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([

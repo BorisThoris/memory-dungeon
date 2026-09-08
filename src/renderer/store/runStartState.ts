@@ -35,11 +35,9 @@ export const createRunStartTelemetryPayload = (
     run: RunState,
     extra: RunStartTelemetryExtra = {}
 ): RunStartTelemetryExtra => {
-    const startingLoadout = run.startingLoadoutId ? { startingLoadout: run.startingLoadoutId } : {};
     return {
         mode: run.gameMode,
         practice: run.practiceMode,
-        ...startingLoadout,
         ...extra
     };
 };
@@ -122,7 +120,6 @@ export const isDungeonShowcaseRestartRun = (run: RunState | null): boolean =>
 export const createRestartRun = (previousRun: RunState | null, saveData: SaveData): RunState => {
     const bestScore = saveData.bestScore;
     const meta = metaRelicOptionsForSave(saveData);
-    const startingLoadoutId = previousRun?.startingLoadoutId ?? null;
 
     /*
      * A table that just finished wants another game, not a solo run. Restart is a separate path
@@ -148,13 +145,12 @@ export const createRestartRun = (previousRun: RunState | null, saveData: SaveDat
             ...meta,
             ...buildClassicRunOptions(setup),
             // The contract object itself carries on: a mismatch cap the sheet does not offer survives.
-            ...(previousRun?.activeContract ? { activeContract: previousRun.activeContract } : {}),
-            startingLoadoutId
+            ...(previousRun?.activeContract ? { activeContract: previousRun.activeContract } : {})
         });
     }
 
     if (previousRun?.activeContract?.maxPinsTotalRun != null) {
-        return createNewRun(bestScore, { ...meta, activeContract: previousRun.activeContract, startingLoadoutId });
+        return createNewRun(bestScore, { ...meta, activeContract: previousRun.activeContract });
     }
 
     if (previousRun?.wildMenuRun) {
@@ -162,20 +158,18 @@ export const createRestartRun = (previousRun: RunState | null, saveData: SaveDat
     }
 
     if (previousRun?.practiceMode) {
-        return createNewRun(bestScore, { practiceMode: true, ...meta, startingLoadoutId });
+        return createNewRun(bestScore, { practiceMode: true, ...meta });
     }
 
     if (previousRun?.activeContract?.noShuffle && previousRun.activeContract.noDestroy) {
         return createNewRun(bestScore, {
             ...meta,
-            activeContract: previousRun.activeContract,
-            startingLoadoutId
+            activeContract: previousRun.activeContract
         });
     }
 
     return createNewRun(bestScore, {
         ...meta,
-        startingLoadoutId,
         onboardingSafeFirstFloor: !saveData.onboardingDismissed
     });
 };

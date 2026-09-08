@@ -61,13 +61,6 @@ import {
     useHudPoliteLiveAnnouncement
 } from '../hooks/useHudPoliteLiveAnnouncement';
 import { useViewportSize } from '../hooks/useViewportSize';
-import {
-    buildRelicDraftBonusFootnoteLines,
-    getRelicOfferSubtitle,
-    getRelicOfferTitle,
-    relicDraftProgressLine,
-    relicEffectLabels
-} from '../copy/relicDraftOffer';
 import { GAMBIT_KEYBOARD_HELP_TIP } from '../copy/gameplayHints';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { describePassAndPlayChainLost } from '../../shared/pass-and-play-rules';
@@ -93,7 +86,6 @@ import FloorClearDialog, {
     type FloorClearWager
 } from './FloorClearDialog';
 import OverlayModal, { type ModalAction } from './OverlayModal';
-import RelicDraftOfferPanel from './RelicDraftOfferPanel';
 import { useGameScreenBoardVisualSettings } from './gameScreenStoreSelectors';
 import TileBoard, { type TileBoardHandle } from './TileBoard';
 
@@ -101,7 +93,6 @@ const MemoTileBoard = memo(TileBoard);
 import {
     playCountdownPressureSfx,
     playMismatchRecoveryCrescendoSfx,
-    playRelicOfferOpenSfx,
     resumeAudioContext,
     sfxGainFromSettings
 } from '../audio/gameSfx';
@@ -411,7 +402,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             continueToNextLevel: state.continueToNextLevel,
             dismissPowersFtue: state.dismissPowersFtue,
             goToMenu: state.goToMenu,
-            applyRelicOfferService: state.applyRelicOfferService,
             openCodexFromPlaying: state.openCodexFromPlaying,
             openInventoryFromPlaying: state.openInventoryFromPlaying,
             openSettings: state.openSettings,
@@ -419,7 +409,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             openDungeonExitPrompt: state.openDungeonExitPrompt,
             skipMemorizePhase: state.skipMemorizePhase,
             pause: state.pause,
-            pickRelic: state.pickRelic,
             resume: state.resume,
             shuffleBoard: state.shuffleBoard,
             toggleBoardPinMode: state.toggleBoardPinMode,
@@ -731,8 +720,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         openSettings,
         skipMemorizePhase,
         pause,
-        applyRelicOfferService,
-        pickRelic,
         resume,
         shuffleBoard,
         toggleBoardPinMode,
@@ -744,9 +731,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         undoResolvingFlip
     } = gameScreenActions;
 
-    const relicDraftProgressText = run.relicOffer ? relicDraftProgressLine(run.relicOffer) : null;
-    const relicBonusFootnoteLines = run.relicOffer ? buildRelicDraftBonusFootnoteLines(run) : [];
-    const previousRelicOfferOpenRef = useRef(false);
     const previousCountdownPressureSecondRef = useRef<number | null>(null);
     const announcedTraitRouteSetupKeyRef = useRef<string | null>(null);
     const playMenuOpen = useCallback((): void => {
@@ -770,7 +754,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         abandonRunConfirmOpen,
         lastLevelResult: run.lastLevelResult,
         pause,
-        relicOffer: run.relicOffer,
         resume,
         runStatus: run.status,
         shortcutsHelpOpen
@@ -780,15 +763,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         playUiBack,
         shortcutsHelpOpen
     });
-
-    useEffect(() => {
-        const relicOfferOpen = Boolean(run.relicOffer);
-        if (relicOfferOpen && !previousRelicOfferOpenRef.current) {
-            void resumeAudioContext();
-            playRelicOfferOpenSfx(shuffleSfxGain);
-        }
-        previousRelicOfferOpenRef.current = relicOfferOpen;
-    }, [run.relicOffer, shuffleSfxGain]);
 
     /** Pause / resume: toolbar control removed — **P** toggles pause when gameplay is active (not when meta overlays suppress status). */
     useEffect(() => {
@@ -818,10 +792,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             if (state.abandonRunConfirmOpen) {
                 return;
             }
-            if (state.relicOffer) {
-                return;
-            }
-            if (state.runStatus === 'levelComplete' && state.lastLevelResult && !state.relicOffer) {
+            if (state.runStatus === 'levelComplete' && state.lastLevelResult) {
                 return;
             }
             if (state.runStatus === 'paused') {
@@ -881,8 +852,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             !suppressStatusOverlays &&
             !abandonRunConfirmOpen &&
             run.status === 'levelComplete' &&
-            Boolean(run.lastLevelResult) &&
-            !run.relicOffer;
+            Boolean(run.lastLevelResult);
 
         const enqueuePending = (ids: AchievementId[]): void => {
             for (const achievementId of ids) {
@@ -931,7 +901,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         abandonRunConfirmOpen,
         achievements,
         run.lastLevelResult,
-        run.relicOffer,
         run.status,
         reduceMotion,
         suppressStatusOverlays
@@ -1613,7 +1582,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         ];
 
     /*
-     * A11Y-006 — backdrop inert behind OverlayModal surfaces (pause, relic, floor clear, abandon):
+     * A11Y-006 — backdrop inert behind OverlayModal surfaces (pause, floor clear, abandon):
      * - Native `inert` is supported in Chromium (Electron) and current Safari/Firefox; very old browsers
      *   ignore it, so `aria-hidden` is set in tandem to reduce stray tab stops where the attribute is honored.
      * - Do not wrap modal markup in this subtree: nesting focused dialogs inside `aria-hidden` breaks SR semantics.
@@ -1624,8 +1593,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         (abandonRunConfirmOpen ||
             dungeonExitPromptOpen ||
             run.status === 'paused' ||
-            Boolean(run.relicOffer) ||
-            (run.status === 'levelComplete' && Boolean(run.lastLevelResult) && !run.relicOffer));
+            (run.status === 'levelComplete' && Boolean(run.lastLevelResult)));
     const reg104GameplayShellVariant =
         run.status === 'paused' ? 'paused' : run.status === 'levelComplete' ? 'floor_clear' : 'playing';
     return (
@@ -2009,49 +1977,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     </OverlayModal>
                 )}
 
-                {!suppressStatusOverlays && run.relicOffer ? (
-                    <OverlayModal
-                        actions={[]}
-                        headerPlateTone="relic"
-                        ornamentalHeaderPlate
-                        subtitle={getRelicOfferSubtitle(
-                            run.lastLevelResult?.level ?? 0,
-                            run.relicOffer.picksRemaining
-                        )}
-                        testId="game-relic-offer-overlay"
-                        title={getRelicOfferTitle(run.relicOffer.tier)}
-                    >
-                        {relicDraftProgressText ? (
-                            <p className={styles.relicDraftProgress}>{relicDraftProgressText}</p>
-                        ) : null}
-                        {relicBonusFootnoteLines.length > 0 ? (
-                            <ul className={styles.relicDraftBonusList}>
-                                {relicBonusFootnoteLines.map((line) => (
-                                    <li key={line}>{line}</li>
-                                ))}
-                            </ul>
-                        ) : null}
-                        <RelicDraftOfferPanel
-                            currentRelicIds={run.relicIds}
-                            descriptionById={relicEffectLabels}
-                            onUseService={applyRelicOfferService}
-                            onPick={pickRelic}
-                            optionIds={run.relicOffer.options}
-                            pickRound={run.relicOffer.pickRound}
-                            reasonById={run.relicOffer.contextualOptionReasons}
-                            sealedRelicId={run.relicOffer.sealedRelicId}
-                            serviceActions={run.relicOffer.services}
-                            sfxGain={shuffleSfxGain}
-                        />
-                    </OverlayModal>
-                ) : null}
-
                 {!suppressStatusOverlays &&
                     !abandonRunConfirmOpen &&
                     run.status === 'levelComplete' &&
                     floorClearHeld &&
-                    run.lastLevelResult &&
-                    !run.relicOffer && (
+                    run.lastLevelResult && (
                     <FloorClearDialog
                         actions={floorClearActions}
                         bestStreak={run.stats.bestStreak}

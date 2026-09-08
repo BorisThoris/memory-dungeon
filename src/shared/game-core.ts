@@ -3,7 +3,6 @@ export {
     createDungeonShowcaseRun,
     createRunSummary,
     finishMemorizePhase,
-    openRelicOffer,
 } from './game';
 export { createNewRun, createWildRun, isGauntletExpired } from './run-creation-rules';
 export {

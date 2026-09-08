@@ -104,16 +104,8 @@ export const executeContinueToNextLevel = (deps: LevelCompleteContinuationExecut
      * is cleared the table is done and the standings decide it. Ending here rather than inside the
      * turn rules keeps the board, the floors and the lives exactly as a solo run has them — the
      * only thing multiplayer changes is when the run stops.
-     *
-     * Deliberately before the relic-offer guard below. The agreed length lands on a milestone
-     * floor, and offering a table a relic draft for a run that is already over would be asking
-     * them to build for floors nobody is going to play.
      */
     if (routePassAndPlayFinalFloorToGameOver(run, deps.applyResolvedRun)) {
-        return;
-    }
-
-    if (run.relicOffer) {
         return;
     }
 

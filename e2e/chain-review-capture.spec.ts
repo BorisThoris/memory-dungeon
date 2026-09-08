@@ -11,7 +11,7 @@ import { buildVisualSaveJson, gotoWithSave, mainMenuPlayButton } from './visualS
 
 /*
  * Review captures for the cascade batch: the clumped board with a tile under the pointer (the
- * clump read's ring and chip), the floor-clear dialog on a phone, the relic draft on a laptop and
+ * clump read's ring and chip), the floor-clear dialog on a phone and
  * the setup sheet on a phone held sideways — the four surfaces the fit contract found something
  * on. Not a gate: the point is to look at the frames, which nothing else in the suite does.
  */
@@ -84,12 +84,6 @@ test.describe('chain review captures', () => {
         await page.screenshot({ path: `${OUT}/floor-clear-phone.png` });
     });
 
-    test('the relic draft on a laptop', async ({ page }) => {
-        await page.setViewportSize({ width: 1024, height: 768 });
-        await openPlayablePathFixture(page, 'relicDraft');
-        await page.waitForTimeout(900);
-        await page.screenshot({ path: `${OUT}/relic-draft-laptop.png` });
-    });
 
     test('the profile on a phone held sideways', async ({ page }) => {
         await page.setViewportSize({ width: 812, height: 375 });

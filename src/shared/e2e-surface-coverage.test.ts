@@ -19,7 +19,7 @@ describe('surfaces no test visits', () => {
         // The state the in-floor vendor was in before Gen 106 (the vendor went in Gen 174, the
         // lesson stayed): the fixture could exist and still nothing would render it.
         expect(findUnvisitedSurfaces('a spec that names nothing')).not.toEqual([]);
-        expect(findUnvisitedSurfaces('a spec that names nothing').join(' ')).toContain('relicDraft');
+        expect(findUnvisitedSurfaces('a spec that names nothing').join(' ')).toContain('cascadeClump');
     });
 
     it('reports a fixture no spec names', () => {

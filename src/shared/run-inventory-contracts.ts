@@ -12,7 +12,6 @@ export type RunInventoryItemId =
     | 'master_key'
     | 'guard_token'
     | 'combo_shard'
-    | 'relic_loadout'
     | 'mutator_loadout'
     | 'contract_loadout';
 
@@ -30,7 +29,6 @@ export const RUN_INVENTORY_ITEM_IDS = [
     'master_key',
     'guard_token',
     'combo_shard',
-    'relic_loadout',
     'mutator_loadout',
     'contract_loadout'
 ] as const satisfies readonly RunInventoryItemId[];

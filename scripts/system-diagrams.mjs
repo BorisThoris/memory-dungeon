@@ -387,7 +387,6 @@ const buildRewardsEconomyDiagram = (repoRoot) => {
     const rewardEvidence = evidence(repoRoot, [
         'src/shared/bonus-rewards.ts',
         'src/shared/relics.ts',
-        'src/shared/relic-offer-rules.ts',
         'src/shared/run-economy.ts',
         'src/shared/balance-simulation.ts'
     ]);
@@ -397,10 +396,10 @@ const buildRewardsEconomyDiagram = (repoRoot) => {
         summary: 'Rewards, relics, shards, favor and pickups decide what the player can draft or claim. Gold and the shop went in Gen 174; nothing is bought.',
         nodes: [
             node('reward_rooms', 'Reward Rooms', 'domain', 'shared', 'Bonus reward rooms grant gold, traits, relics, or board tools.', evidence(repoRoot, ['src/shared/bonus-rewards.ts'])),
-            node('relic_offers', 'Relic Offers', 'domain', 'shared', 'Relic drafts and offer services route relics and favor.', evidence(repoRoot, ['src/shared/relics.ts', 'src/shared/relic-offer-rules.ts'])),
+            node('relic_offers', 'Relic Definitions', 'domain', 'shared', 'Relic definitions and favor; the draft that handed them out went in Gen 175.', evidence(repoRoot, ['src/shared/relics.ts'])),
             node('run_economy', 'Run Economy', 'state', 'shared', 'The run economy taxonomy names every temporary currency, its source and its sink.', evidence(repoRoot, ['src/shared/run-economy.ts'])),
             node('balance_sim', 'Balance Simulation', 'analysis', 'shared', 'Simulation watches access, pressure, and trait floor share.', evidence(repoRoot, ['src/shared/balance-simulation.ts'])),
-            node('reward_ui', 'Reward UI', 'ui', 'renderer', 'Renderer shows pickable rewards and relic drafts.', evidence(repoRoot, ['src/renderer/components', 'src/renderer/App.tsx']))
+            node('reward_ui', 'Reward UI', 'ui', 'renderer', 'Renderer shows pickable rewards.', evidence(repoRoot, ['src/renderer/components', 'src/renderer/App.tsx']))
         ],
         edges: [
             edge('reward_rooms', 'run_economy', 'counted in'),

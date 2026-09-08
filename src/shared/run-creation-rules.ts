@@ -8,7 +8,6 @@ import {
     type MutatorId,
     type RelicId,
     type RunState,
-    type StartingLoadoutId,
     type WeakerShuffleMode
 } from './contracts';
 import { filterMutatorsByContentLock } from './content-lock-state';
@@ -25,7 +24,6 @@ import { getMemorizeDurationForRun } from './scoring-rules';
 import { createSessionStats } from './session-stats-rules';
 import { createTimerState, normalizeTimerTimestampMs } from './run-timer-rules';
 import { buildBoard } from './board-build-rules';
-import { applyStartingLoadout } from './starting-loadouts';
 import { createPassAndPlayState } from './pass-and-play-rules';
 
 export interface CreateRunOptions {
@@ -56,8 +54,6 @@ export interface CreateRunOptions {
     onboardingSafeFirstFloor?: boolean;
     /** Copied from save: +1 relic pick at each milestone when meta unlock is active. */
     metaRelicDraftExtraPerMilestone?: number;
-    /** Optional starting archetype/loadout for early run identity. */
-    startingLoadoutId?: StartingLoadoutId | null;
     /** Seats for a same-device multiplayer run; omitted for every solo run. */
     passAndPlaySeats?: number | null;
 }
@@ -106,7 +102,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
             gameMode: useOnboardingSafeFirstFloor ? undefined : gameMode,
             suppressFindables: useOnboardingSafeFirstFloor,
             relicIds: options.initialRelicIds ?? [],
-            startingLoadoutId: options.startingLoadoutId ?? null
+            startingLoadoutId: null
         });
     const dungeonRun = createDungeonRunMapState(runSeed, rulesVersion, 1);
 
@@ -132,7 +128,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         runSeed,
         runRulesVersion: rulesVersion,
         gameMode,
-        startingLoadoutId: options.startingLoadoutId ?? null,
+        startingLoadoutId: null,
         shuffleNonce: 0,
         activeMutators,
         relicIds: [...(options.initialRelicIds ?? [])],
@@ -261,7 +257,8 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         enemyHazardsDefeatedThisFloor: 0
     };
 
-    let runWithRelics = applyStartingLoadout(run, options.startingLoadoutId ?? null);
+    // Starting loadouts went in Gen 175; a run starts with what it starts with.
+    let runWithRelics = run;
     for (const relicId of runWithRelics.relicIds) {
         runWithRelics = applyRelicImmediateThroughGameplayCore(
             runWithRelics,

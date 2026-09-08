@@ -157,7 +157,7 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
             gainedLabel: '+1 guard token',
             cappedLabel: 'Guard tokens already full'
         });
-        expect(getRunInventoryGainFeedback(run, 'relic_loadout', 1)).toMatchObject({
+        expect(getRunInventoryGainFeedback(run, 'mutator_loadout', 1)).toMatchObject({
             accepted: 0,
             gainedLabel: null,
             cappedLabel: null,

@@ -329,7 +329,6 @@ export const selectGatesForChangedPaths = (paths) => {
             file === 'e2e/wild-run.spec.ts' ||
             file.startsWith('src/renderer/components/ShopScreen') ||
             file.startsWith('src/renderer/components/SideRoom') ||
-            file.startsWith('src/renderer/components/RelicDraftOffer') ||
             file.startsWith('src/shared/shop') ||
             file.startsWith('src/shared/relic') ||
             file.startsWith('src/shared/route-side-room')

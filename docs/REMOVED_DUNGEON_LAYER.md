@@ -41,7 +41,12 @@ but "does the game still end":
    pays none, the momentum ladder pays none, and the vendor - the floor-clear shop and the one opened from
    the board - is gone with the store dock button, the shop view and the shop rules. The wallet reads
    nought on every run. The shop modules listed second at the end are deleted in this commit.
-5. **Gen 176 — the dungeon modules go.** The `dungeon-*` files listed second at the end are deleted, with the
+5. **Gen 175 — no draft, no loadout.** The milestone relic draft never opens, the four starting loadouts
+   are gone from run creation, and the build-strategy simulations that drafted against them are deleted
+   with the draft surface, its store slice and its copy. A `relic.offer_open`, `relic.pick` or
+   `relic.offer_service_use` command in an old journal is rejected with a reason. The relic definitions
+   and their in-play effects come out in the second half of the same generation.
+6. **Gen 176 — the dungeon modules go.** The `dungeon-*` files listed last at the end are deleted, with the
    run-state fields and save shape that carried them.
 
 ## How to get any of it back
@@ -270,6 +275,26 @@ Deleted in Gen 174, with the gold it existed to spend. `git log --all -- <path>`
 - `src/renderer/store/shopSurfaceState.ts`
 - `src/renderer/store/shopCloseExecutor.ts`
 - `src/renderer/store/levelCompleteShopExecutor.ts`
+
+## The relic draft and the starting loadouts, which went third
+
+Deleted in Gen 175, with the milestone draft that handed relics out, the four starting loadouts, and
+the build-strategy simulations that existed to draft against them. `git log --all -- <path>` is its
+whole history.
+
+- `src/shared/relic-offer-open-rules.ts`
+- `src/shared/relic-offer-rules.ts`
+- `src/shared/relic-pick-advance-rules.ts`
+- `src/shared/relic-pick-transition-rules.ts`
+- `src/shared/sealed-relic-rules.ts`
+- `src/shared/starting-loadouts.ts`
+- `src/shared/build-strategy-simulation.ts`
+- `src/shared/build-strategy-playthrough-simulation.ts`
+- `scripts/sim-build-strategies.ts`
+- `scripts/sim-build-strategy-playthroughs.ts`
+- `src/renderer/components/RelicDraftOfferPanel.tsx`
+- `src/renderer/store/relicOfferSurfaceState.ts`
+- `src/renderer/copy/relicDraftOffer.ts`
 
 ## The dungeon modules that go with it
 

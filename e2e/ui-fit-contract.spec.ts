@@ -427,12 +427,11 @@ test.describe('UI fit contract', () => {
 
     for (const fixture of [
         'floorClearWithRouteChoices',
-        'relicDraft',
         'gameOver'
     ] as const) {
         test(`${fixture} fits every window`, async ({ page }) => {
-            // These three reach their screen by playing a run, once per viewport. On a slow machine
-            // that is three runs in one test, and a 420s cap was timing out mid-sweep — which reads
+            // These two reach their screen by playing a run, once per viewport. On a slow machine
+            // that is two runs in one test, and a 420s cap was timing out mid-sweep — which reads
             // as a failure with no report of what did not fit.
             test.setTimeout(720_000);
             await atEverySize(page, fixture, async () => {

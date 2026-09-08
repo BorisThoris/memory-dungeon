@@ -53,13 +53,6 @@ describe('InventoryScreen', () => {
         expect(screen.queryByTestId('inventory-run-loop-signals')).toBeNull();
     });
 
-    it('lists each relic once with its title, effect and one impact line', () => {
-        render(<InventoryScreen />);
-        const relics = screen.getByTestId('inventory-meta-frame-relics');
-        expect(within(relics).getAllByRole('listitem')).toHaveLength(3);
-        expect(relics).toHaveTextContent(/Scrying Spark/);
-        expect(relics).not.toHaveTextContent(/no relic/i);
-    });
 
     it('lists active mutators as chips and charges as one row each', () => {
         render(<InventoryScreen />);

@@ -5,7 +5,6 @@ import { getMetaProgressionFeedback } from './meta-progression';
 import { runMutatorIds, runRelicIds } from './relics';
 import { buildRunHistoryExportString } from './run-history';
 import { runNonNegativeInteger } from './run-number-guards';
-import { getStartingLoadoutDefinition } from './starting-loadouts';
 
 export interface GameOverNextRunRow {
     id: 'run_it_back' | 'chain_target' | 'build_recap' | 'local_share' | 'next_goal';
@@ -105,14 +104,9 @@ export const getGameOverNextRunRows = (run: RunState, save?: SaveData, previousS
     const mutatorCount = summary ? runMutatorIds(summary.activeMutators).length : runMutatorIds(run.activeMutators).length;
     const buildCount = `${relicCount} relic(s) / ${mutatorCount} mutator(s)`;
     const activeContract = summary?.activeContract ?? run.activeContract;
-    const startingLoadout = getStartingLoadoutDefinition(summary?.startingLoadoutId ?? run.startingLoadoutId);
-    const buildDetail = startingLoadout
-        ? `${startingLoadout.label}: ${startingLoadout.summary} ${startingLoadout.impactSignals
-              .map((signal) => `${signal.label}: ${signal.value}`)
-              .join('; ')}.`
-        : activeContract
-          ? 'Contract rules shaped this run.'
-          : 'No contract constraints on this run.';
+    const buildDetail = activeContract
+        ? 'Contract rules shaped this run.'
+        : 'No contract constraints on this run.';
     return [
         {
             id: 'run_it_back',
@@ -126,7 +120,7 @@ export const getGameOverNextRunRows = (run: RunState, save?: SaveData, previousS
         {
             id: 'build_recap',
             title: 'Build recap',
-            value: startingLoadout ? `${startingLoadout.label} / ${buildCount}` : buildCount,
+            value: buildCount,
             detail: buildDetail,
             actionHint: 'Review Inventory/Codex for build rules before the next attempt.',
             localOnly: true

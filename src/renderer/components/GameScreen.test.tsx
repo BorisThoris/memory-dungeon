@@ -1585,35 +1585,6 @@ describe('GameScreen (OVR-014)', () => {
         }
     });
 
-    it('does not call pause when KeyP is pressed during a relic offer', () => {
-        const pauseSpy = vi.spyOn(useAppStore.getState(), 'pause');
-        const base = createNewRun(0, { echoFeedbackEnabled: false });
-        const playing = finishMemorizePhase(base);
-        const run: RunState = {
-            ...playing,
-            status: 'playing',
-            relicOffer: {
-                tier: 1,
-                options: ['extra_shuffle_charge'],
-                picksRemaining: 1,
-                pickRound: 0
-            }
-        };
-
-        render(
-            <PlatformTiltProvider>
-                <NotificationHost>
-            <GameScreen achievements={[]} run={{ ...run, shopGold: 5, shopOffers: [] }} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-
-        document.dispatchEvent(
-            new KeyboardEvent('keydown', { code: 'KeyP', bubbles: true, cancelable: true })
-        );
-        expect(pauseSpy).not.toHaveBeenCalled();
-        pauseSpy.mockRestore();
-    });
 
     it('does not call pause when KeyP is pressed on the floor-cleared overlay (levelComplete + lastLevelResult)', () => {
         const pauseSpy = vi.spyOn(useAppStore.getState(), 'pause');
@@ -1665,120 +1636,8 @@ describe('GameScreen (OVR-014)', () => {
         resumeSpy.mockRestore();
     });
 
-    it('shows relic draft title, progress, and Scholar footnote for a multi-pick offer', () => {
-        const base = createNewRun(0, { echoFeedbackEnabled: false });
-        const playing = finishMemorizePhase(base);
-        const run: RunState = {
-            ...playing,
-            status: 'playing',
-            lastLevelResult: {
-                level: 3,
-                scoreGained: 100,
-                rating: 'S',
-                livesRemaining: 5,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'none',
-                clearLifeGained: 0
-            },
-            activeContract: {
-                noShuffle: false,
-                noDestroy: false,
-                maxMismatches: null,
-                bonusRelicDraftPick: true
-            },
-            relicOffer: {
-                tier: 1,
-                options: ['chapter_compass', 'memorize_bonus_ms', 'destroy_bank_plus_one'],
-                picksRemaining: 2,
-                pickRound: 0,
-                favorBonusPicks: 1
-            }
-        };
 
-        const { getByTestId, getByText } = render(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen achievements={[]} run={run} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
 
-        expect(getByTestId('game-relic-offer-overlay')).toBeTruthy();
-        expect(getByText('Relic draft · tier 1')).toBeTruthy();
-        expect(getByText('Pick 1 of 2 this visit')).toBeTruthy();
-        expect(getByText(/Featured-objective favor/)).toBeTruthy();
-        expect(getByText(/Scholar contract/)).toBeTruthy();
-        expect(getByText(/Trait build: Conduit Cartographer/)).toBeTruthy();
-        // Each card carries one archetype chip; the full archetype line lives in the accessible name.
-        expect(screen.getAllByText(/^The (Warden|Saboteur|Slayer|Vaultbreaker|Gambit|Conduit Cartographer|Emergency Toolkit|Catalyst)$/).length).toBeGreaterThan(0);
-        expect(gameSfxMocks.playRelicOfferOpenSfx).toHaveBeenCalledTimes(1);
-    });
-
-    it('does not show progress line for a single-pick relic offer', () => {
-        const base = createNewRun(0, { echoFeedbackEnabled: false });
-        const playing = finishMemorizePhase(base);
-        const run: RunState = {
-            ...playing,
-            status: 'playing',
-            relicOffer: {
-                tier: 1,
-                options: ['extra_shuffle_charge'],
-                picksRemaining: 1,
-                pickRound: 0
-            }
-        };
-
-        const { getByTestId, queryByText } = render(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen achievements={[]} run={run} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-
-        expect(getByTestId('game-relic-offer-overlay')).toBeTruthy();
-        expect(queryByText(/this visit/)).toBeNull();
-    });
-
-    it('shows contextual relic draft reasons and chapter-aligned footnote', () => {
-        const base = createNewRun(0, { echoFeedbackEnabled: false });
-        const playing = finishMemorizePhase(base);
-        const run: RunState = {
-            ...playing,
-            status: 'playing',
-            lastLevelResult: {
-                level: 3,
-                scoreGained: 100,
-                rating: 'S',
-                livesRemaining: 5,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'none',
-                clearLifeGained: 0
-            },
-            relicOffer: {
-                tier: 1,
-                options: ['memorize_under_short_memorize', 'peek_charge_plus_one', 'shrine_echo'],
-                picksRemaining: 1,
-                pickRound: 0,
-                contextualOptionReasons: {
-                    memorize_under_short_memorize: 'Answers short memorize'
-                }
-            }
-        };
-
-        const { getByText } = render(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen achievements={[]} run={run} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-
-        expect(getByText('Answers short memorize')).toBeTruthy();
-        expect(getByText('At least one choice is chapter-aligned for this Endless route.')).toBeTruthy();
-    });
 
     it('shows featured objective result, favor gain, and next-floor preview on endless floor clear', () => {
         const baseRun = createNewRun(0, { echoFeedbackEnabled: false });

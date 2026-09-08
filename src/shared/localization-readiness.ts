@@ -68,7 +68,6 @@ export const getLocalizationCopySurfaceRows = (): LocalizationCopySurfaceRow[] =
     { surface: 'mechanics', owner: 'src/shared/mechanics-encyclopedia.ts', stableIds: true },
     { surface: 'game_over', owner: 'src/renderer/copy/gameOverScreen.ts', stableIds: true },
     { surface: 'inventory', owner: 'src/renderer/components/inventoryScreenModel.ts', stableIds: true },
-    { surface: 'relic_draft', owner: 'src/renderer/copy/relicDraftOffer.ts', stableIds: true },
     // Not a file: components may no longer carry prose at all (`scripts/copy-locality.ts` holds
     // that at zero), so what is left inline is short labels rather than a surface anyone owns.
     { surface: 'component_inline', owner: 'no owning module: short labels only', stableIds: true }
