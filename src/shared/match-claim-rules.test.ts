@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { BoardState, RunState, Tile } from './contracts';
 import { createNewRun } from './game';
 import { createMatchedPairClaimBoard, deriveMatchClaimContext } from './match-claim-rules';
+import { emptyRouteCardReward } from './route-card-reward-shape';
 import { WILD_PAIR_KEY } from './tile-identity';
 
 const tile = (id: string, pairKey = 'A', extra: Partial<Tile> = {}): Tile => ({
@@ -40,7 +41,7 @@ const runWith = (tiles: Tile[], patch: Partial<RunState> = {}): RunState => {
 };
 
 describe('match claim rules', () => {
-    it('derives findable and blind mimic route-special rewards for a matched pair', () => {
+    it('derives findable rewards for a matched pair and pays nothing for a route-special stamp (Gen 173)', () => {
         const first = tile('a1', 'A', {
             findableKind: 'score_glint',
             routeSpecialKind: 'mimic_cache'
@@ -63,7 +64,7 @@ describe('match claim rules', () => {
         expect(context.mimicCacheClaimed).toBe(true);
         expect(context.mimicCacheBite).toBe(true);
         expect(context.mimicCacheFatalBite).toBe(true);
-        expect(context.routeCardReward.shopGold).toBe(1);
+        expect(context.routeCardReward).toEqual(emptyRouteCardReward());
     });
 
     it('normalizes malformed stat records before deriving route-special predicates', () => {

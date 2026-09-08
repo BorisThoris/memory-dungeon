@@ -57,63 +57,8 @@ describe('resolveTurnMatchFollowup', () => {
         expect(result.nBackAnchorPairKey).toBe('previous');
     });
 
-    it('creates a loaded gateway route plan before dungeon gateway plans', () => {
-        const run = createNewRun(0, { runSeed: 1234, runRulesVersionOverride: 77 });
 
-        const result = resolveTurnMatchFollowup({
-            run,
-            matchedPairKey: 'gateway-a',
-            encoreKey: 'gateway-a',
-            loadedGatewayClaimed: true,
-            dungeonGatewayRouteType: 'safe'
-        });
 
-        expect(result.pendingRouteCardPlan?.choiceId).toBe('loaded_gateway:77:1234:1:gateway-a');
-        expect(['greed', 'mystery']).toContain(result.pendingRouteCardPlan?.routeType);
-        expect(result.pendingRouteCardPlan?.sourceLevel).toBe(1);
-        expect(result.pendingRouteCardPlan?.targetLevel).toBe(2);
-    });
-
-    it('creates a dungeon gateway route plan when no loaded gateway is claimed', () => {
-        const run = createNewRun(0, { runSeed: 4321, runRulesVersionOverride: 88 });
-
-        const result = resolveTurnMatchFollowup({
-            run,
-            matchedPairKey: 'gateway-b',
-            encoreKey: 'gateway-b',
-            loadedGatewayClaimed: false,
-            dungeonGatewayRouteType: 'mystery'
-        });
-
-        expect(result.pendingRouteCardPlan).toMatchObject({
-            choiceId: 'gateway:88:4321:1:mystery',
-            routeType: 'mystery',
-            sourceLevel: 1,
-            targetLevel: 2
-        });
-    });
-
-    it('normalizes malformed stat records before building boardless gateway plan ids', () => {
-        const run = {
-            ...createNewRun(0, { runSeed: 4321, runRulesVersionOverride: 88 }),
-            board: null,
-            stats: Number.NaN as unknown as RunState['stats']
-        };
-
-        const result = resolveTurnMatchFollowup({
-            run,
-            matchedPairKey: 'gateway-b',
-            encoreKey: 'gateway-b',
-            loadedGatewayClaimed: false,
-            dungeonGatewayRouteType: 'mystery'
-        });
-
-        expect(result.pendingRouteCardPlan).toMatchObject({
-            choiceId: 'gateway:88:4321:1:mystery',
-            sourceLevel: 1,
-            targetLevel: 2
-        });
-    });
 
     it('preserves an existing pending route plan', () => {
         const run = {

@@ -256,7 +256,6 @@ test.describe('every control a screen shows can be clicked', () => {
         // The vendor opened from the board, which is a different screen from the floor-clear shop
         // and the one that shipped two buttons doing the same thing.
         'inFloorShop',
-        'sideRoomChoice',
         'relicDraft',
         'gameOver',
         // The board a chain is built on: suits on every back, the chain stat with its momentum

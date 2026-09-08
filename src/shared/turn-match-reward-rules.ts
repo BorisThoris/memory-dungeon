@@ -7,7 +7,7 @@ import {
 } from './contracts';
 import { COMBO_SHARD_STREAK_STEP, applyComboShardGain } from './combo-shard-rules';
 import type { DungeonMatchReward } from './dungeon-match-reward-rules';
-import type { RouteCardReward } from './route-card-reward-rules';
+import type { RouteCardReward } from './route-card-reward-shape';
 import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 

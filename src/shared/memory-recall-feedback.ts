@@ -14,7 +14,6 @@ import { normalizeRecallFocus, tileHasRecallClue } from './recall-rules';
 import { hasRunRelic, runMutatorIds, runRelicIds } from './relics';
 import { runStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
-import { routeChoicesForResult } from './route-choice-rules';
 import { getCurrentDungeonNode } from './run-map';
 import { isSingletonUtilityPairKey } from './tile-identity';
 
@@ -687,13 +686,12 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
     const focusLabel = focusLabelFor(focus);
     const activeThreatCount = activeEnemyHazards.length + revealedEnemyTiles.length;
     const roomIdentity = roomIdentityFor(run);
-    const routeChoices = routeChoicesForResult(run.lastLevelResult);
     const totalNextCleanMatchBonus = nextCleanMatchBonus + clueBonus;
     const burden = buildMemoryBurden({
         forgottenTileCount: forgottenTileIds.length,
         partialPairCount: symbolMap.partialPairCount,
         activeThreatCount,
-        routeChoices,
+        routeChoices: [],
         recallMistakes: run.recallMistakesThisFloor
     });
 
@@ -849,8 +847,10 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
             forgottenTileCount: forgottenTileIds.length,
             activeThreatCount,
             rememberedClueTileCount: rememberedClueTiles.length,
-            hasGreedChoice: routeChoices.some((choice) => choice.routeType === 'greed'),
-            hasMysteryChoice: routeChoices.some((choice) => choice.routeType === 'mystery'),
+            // No route is offered any more, so the coach never has a greedy or mysterious door to
+            // point at. Gen 173.
+            hasGreedChoice: false,
+            hasMysteryChoice: false,
             nextCleanMatchBonus: totalNextCleanMatchBonus
         }),
         nextCleanMatchBonus: totalNextCleanMatchBonus,
@@ -867,22 +867,10 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
         recallPlan,
         penalties,
         upgrades,
-        choices: routeChoices.map((choice) => ({
-            id: choice.id,
-            label: choice.label,
-            routeType: choice.routeType,
-            memoryPrompt: choicePrompt(choice),
-            ...choiceReadiness({
-                choice,
-                pressure,
-                focusLabel,
-                forgottenTileCount: forgottenTileIds.length,
-                activeThreatCount,
-                rememberedClueTileCount: rememberedClueTiles.length
-            }),
-            atmosphericCue: choiceAtmosphericCue(choice),
-            consequence: choiceConsequence(choice),
-            tone: choiceTone(choice)
-        }))
+        /*
+         * The coach used to read the three route choices back to the player - a prompt, a readiness
+         * line, an atmospheric cue, a consequence and a tone for each. There are no choices to read.
+         */
+        choices: []
     };
 };

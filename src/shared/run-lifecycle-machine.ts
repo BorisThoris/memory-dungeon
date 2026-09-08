@@ -9,7 +9,6 @@ export type RunLifecycleState =
     | 'paused'
     | 'levelComplete'
     | 'shop'
-    | 'sideRoom'
     | 'relicOffer'
     | 'gameOver';
 
@@ -22,8 +21,6 @@ export type RunLifecycleEvent =
     | { type: 'CLEAR_LEVEL' }
     | { type: 'OPEN_SHOP' }
     | { type: 'CLOSE_SHOP' }
-    | { type: 'OPEN_SIDE_ROOM' }
-    | { type: 'CLOSE_SIDE_ROOM' }
     | { type: 'OPEN_RELIC_OFFER' }
     | { type: 'CLOSE_RELIC_OFFER' }
     | { type: 'NEXT_LEVEL' }
@@ -86,7 +83,6 @@ export const runLifecycleMachine = createMachine({
         levelComplete: {
             on: {
                 OPEN_SHOP: 'shop',
-                OPEN_SIDE_ROOM: 'sideRoom',
                 OPEN_RELIC_OFFER: 'relicOffer',
                 NEXT_LEVEL: 'memorize',
                 GAME_OVER: 'gameOver',
@@ -96,13 +92,6 @@ export const runLifecycleMachine = createMachine({
         shop: {
             on: {
                 CLOSE_SHOP: 'levelComplete',
-                GAME_OVER: 'gameOver',
-                END_RUN: 'menu'
-            }
-        },
-        sideRoom: {
-            on: {
-                CLOSE_SIDE_ROOM: 'levelComplete',
                 GAME_OVER: 'gameOver',
                 END_RUN: 'menu'
             }
@@ -132,9 +121,6 @@ export const lifecycleStateFromRun = (run: RunState | null): RunLifecycleState =
     }
     if (run.relicOffer && run.status === 'levelComplete') {
         return 'relicOffer';
-    }
-    if (run.sideRoom && run.status === 'levelComplete') {
-        return 'sideRoom';
     }
     return lifecycleStateFromRunStatus(run.status);
 };

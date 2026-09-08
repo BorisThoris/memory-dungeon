@@ -14,7 +14,6 @@ import {
     type Tile
 } from './contracts';
 import { getChapterActBiomeForCycleFloor } from './floor-mutator-schedule';
-import { assignRouteWorldSpecials, deriveRouteWorldProfile } from './route-world';
 import { NUMBER_SYMBOLS } from './tile-symbol-catalog';
 import {
     assignFindableKindsToTiles,
@@ -129,43 +128,29 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
     }
 
     const pairCount = clamp(level + 1 + encounter.pairCountDelta, Math.min(2, NUMBER_SYMBOLS.length), NUMBER_SYMBOLS.length);
-    const routeWorldProfile =
-        options.routeWorldProfile ??
-        deriveRouteWorldProfile({
-            plan: options.routeCardPlan,
-            level,
-            floorTag,
-            floorArchetypeId,
-            mutators
-        });
-    const routeTiles = assignRouteWorldSpecials({
-        tiles: options.suppressFindables
-            ? createTiles(level, pairCount, runSeed, rulesVersion, mutators, options.includeWildTile)
-            : assignFindableKindsToTiles(
-                  createTiles(level, pairCount, runSeed, rulesVersion, mutators, options.includeWildTile),
-                  mutators,
-                  runSeed,
-                  rulesVersion,
-                  level
-              ),
-        profile: routeWorldProfile,
-        runSeed,
-        rulesVersion,
-        level,
-        forbiddenPairKeys: [DECOY_PAIR_KEY, WILD_PAIR_KEY]
-    });
     /*
-     * The dungeon layer used to sit here, between the route specials and the suit deal: a card
-     * recipe, a filler pass, an exit tile, a shop tile, a room tile, a hazard pass and a layout
-     * plan that pinned all of them. Every one of those is a *stop* — a tile the player has to
-     * resolve before the floor will let them go — and the loop this game is about is a loop of
-     * momentum. `docs/REMOVED_DUNGEON_LAYER.md` has what each one did.
+     * The dungeon layer used to sit here: a card recipe, a filler pass, an exit tile, a shop tile,
+     * a room tile, a hazard pass and a layout plan that pinned all of them (Gen 172). The six route
+     * specials sat just before it — a secret door, a guard cache, a fragile cache, a lantern ward,
+     * an omen seal, a mimic cache — dealt according to whichever of Safe, Greed or Mystery the
+     * player picked on the way in, and they go now with the route offer itself (Gen 173).
+     *
+     * Every one of them is a *stop*: a tile the player has to resolve before the floor will let
+     * them go, in a loop that is about momentum. `docs/REMOVED_DUNGEON_LAYER.md` has what each did.
      *
      * What is left is the floor as the thesis states it (Part V): a board of pairs, dealt in
      * clumps, and nothing on it that is not a pair. The floor ends when the board is empty, which
      * `isBoardComplete` already said the moment there was no exit tile to activate.
      */
-    const layoutTiles = routeTiles;
+    const layoutTiles = options.suppressFindables
+        ? createTiles(level, pairCount, runSeed, rulesVersion, mutators, options.includeWildTile)
+        : assignFindableKindsToTiles(
+              createTiles(level, pairCount, runSeed, rulesVersion, mutators, options.includeWildTile),
+              mutators,
+              runSeed,
+              rulesVersion,
+              level
+          );
     const tileCount = layoutTiles.length;
     const columns = clamp(Math.ceil(Math.sqrt(tileCount)), 2, 8);
     /*
@@ -197,7 +182,7 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
         actFloorCount: actBiome?.actFloorCount ?? null,
         biomeTitle: actBiome?.biomeTitle ?? null,
         biomeTone: actBiome?.biomeTone ?? null,
-        routeWorldProfile,
+        routeWorldProfile: null,
         selectedGatewayRouteType: null,
         dungeonKeysHeld: 0,
         dungeonExitTileId: null,
@@ -219,7 +204,10 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
             runSeed,
             rulesVersion,
             level,
-            routeWorldProfile?.intensity,
+            // The route world's intensity used to bias how heavily a floor was traited: a Greed
+            // floor carried more. With one kind of floor there is one intensity, and it is the
+            // default.
+            undefined,
             options.relicIds ?? [],
             options.startingLoadoutId ?? null,
             baseBoard.columns

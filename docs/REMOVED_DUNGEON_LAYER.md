@@ -33,12 +33,16 @@ but "does the game still end":
    nothing else, asserted over 768 boards in `board-build-rules.test.ts`. This is the commit that matters:
    the modules below still existed and still worked, and the game had already stopped being the game they
    described.
-3. **Gen 173 — the modules go.** The files listed at the end are deleted, along with the between-floor layer
-   that fed them.
+3. **Gen 173 — no door between floors.** The route offer, its gateway and side-room stops, and the run
+   events behind them are removed at the source: a cleared floor goes straight to the next one. The route
+   modules listed first at the end are deleted in this commit; a `route.choose` or `side_room.resolve`
+   command in an old journal is rejected with a reason rather than replayed.
+4. **Gen 176 — the dungeon modules go.** The `dungeon-*` files listed second at the end are deleted, with the
+   run-state fields and save shape that carried them.
 
 ## How to get any of it back
 
-Everything here is in git. The removal commits carry `Gen 171`, `Gen 172` and `Gen 173` in their messages,
+Everything here is in git. The removal commits carry `Gen 171` through `Gen 176` in their messages,
 and each section names the module a definition lived in, so `git log --all -- src/shared/<module>.ts` finds
 its whole history. The intent is not that none of this returns — it is that it returns **deliberately, one
 mechanic at a time, measured against the loop** rather than layered on top of it.
@@ -232,9 +236,27 @@ From `src/shared/hazard-tiles.ts`. These are the decoys, snares and fake caches 
   - Objective interaction: Counts as a hazard trigger; rewards fast clean extraction while normal mismatch and flip-par pressure still apply.
   - Enabled in normal runs: yes
 
-## The modules that went with it
+## The route layer, which went first
 
-Every file below goes in the Gen 173 removal, after Gen 172 had already made all of it unreachable from a
+Deleted in Gen 173, with the route offer itself. `git log --all -- <path>` is its whole history.
+
+- `src/shared/route-card-plan-rules.ts`
+- `src/shared/route-card-reward-rules.ts`
+- `src/shared/route-choice-outcome-rules.ts`
+- `src/shared/route-choice-rules.ts`
+- `src/shared/route-rules.ts`
+- `src/shared/route-side-room-rules.ts`
+- `src/shared/route-world.ts`
+- `src/shared/run-events.ts`
+- `src/shared/copy-tone.ts`
+- `src/shared/rest-shrine.ts`
+- `src/renderer/components/SideRoomScreen.tsx`
+- `src/renderer/store/sideRoomActionController.ts`
+- `src/renderer/store/sideRoomSurfaceState.ts`
+
+## The dungeon modules that go with it
+
+Every file below goes in the Gen 176 removal, after Gen 172 had already made all of it unreachable from a
 generated floor. `git log --all -- <path>` is its whole history.
 
 - `src/shared/dungeon-blueprint-policy-rules.ts`

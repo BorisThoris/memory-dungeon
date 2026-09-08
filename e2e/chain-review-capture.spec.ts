@@ -91,13 +91,6 @@ test.describe('chain review captures', () => {
         await page.screenshot({ path: `${OUT}/relic-draft-laptop.png` });
     });
 
-    test('the side room on a phone held sideways', async ({ page }) => {
-        await page.setViewportSize({ width: 812, height: 375 });
-        await openPlayablePathFixture(page, 'sideRoomPrimary');
-        await page.waitForTimeout(700);
-        await page.screenshot({ path: `${OUT}/side-room-landscape.png` });
-    });
-
     test('the profile on a phone held sideways', async ({ page }) => {
         await page.setViewportSize({ width: 812, height: 375 });
         await gotoWithSave(page, buildVisualSaveJson(true));

@@ -22,7 +22,6 @@ import { solveRunByExhaustingPlayablePairs } from './playthrough-solver';
 import { grantBonusRelicPickNextOffer } from './relic-immediate-rules';
 import { computeRelicOfferPickBudget, openRelicOffer } from './relic-offer-rules';
 import { completeRelicPickAndAdvance } from './relic-pick-advance-rules';
-import { applyRouteChoiceOutcome, generateRouteChoices } from './route-rules';
 import { getDungeonExitStatus } from './dungeon-board-status';
 import {
     chooseDungeonExitActivationSpend,
@@ -156,13 +155,12 @@ const createRelicMilestoneRun = (
         runRulesVersionOverride: rulesVersion,
         runSeed
     }));
-    const routeChoices = generateRouteChoices(playing, 4);
     const levelComplete: RunState = {
         ...playing,
         status: 'levelComplete',
         lives: Math.max(1, playing.lives),
         lastLevelResult: {
-            ...createLevelCompleteResult(playing, routeChoices),
+            ...createLevelCompleteResult(playing, undefined),
             level: 3
         },
         relicOffer: null,
@@ -541,75 +539,7 @@ describe('gameplay property invariants', () => {
         );
     });
 
-    it('route choices apply only when available and preserve resource bounds', () => {
-        fc.assert(
-            fc.property(
-                generatedRun,
-                fc.integer({ min: 0, max: 2 }),
-                fc.integer({ min: 1, max: 5 }),
-                ({ runSeed, rulesVersion }, choiceIndex, lives) => {
-                    const playing = finishMemorizePhase(createNewRun(0, {
-                        echoFeedbackEnabled: false,
-                        runRulesVersionOverride: rulesVersion,
-                        runSeed
-                    }));
-                    const nextLevel = (playing.board?.level ?? 1) + 1;
-                    const routeChoices = generateRouteChoices(playing, nextLevel);
-                    const choice = routeChoices[choiceIndex % routeChoices.length]!;
-                    const run: RunState = {
-                        ...playing,
-                        status: 'levelComplete',
-                        lives,
-                        lastLevelResult: createLevelCompleteResult(playing, routeChoices),
-                        pendingRouteCardPlan: null
-                    };
 
-                    const result = applyRouteChoiceOutcome(run, choice.id);
-                    expectRunResourceBounds(result.run);
-                    expectFlippedTileReferencesExist(result.run);
-
-                    if (choice.routeType === 'greed' && lives <= 1) {
-                        expect(result.applied).toBe(false);
-                        expect(result.reason).toBe('unavailable');
-                        expect(result.run).toBe(run);
-                        return;
-                    }
-
-                    expect(result.applied).toBe(true);
-                    expect(result.routeType).toBe(choice.routeType);
-                    expect(result.run.pendingRouteCardPlan?.choiceId).toBe(choice.id);
-                    expect(result.run.lives).toBeGreaterThanOrEqual(0);
-                }
-            ),
-            { numRuns: propertyRuns }
-        );
-    });
-
-    it('invalid route choices are stable no-ops', () => {
-        fc.assert(
-            fc.property(generatedRun, ({ runSeed, rulesVersion }) => {
-                const playing = finishMemorizePhase(createNewRun(0, {
-                    echoFeedbackEnabled: false,
-                    runRulesVersionOverride: rulesVersion,
-                    runSeed
-                }));
-                const routeChoices = generateRouteChoices(playing, (playing.board?.level ?? 1) + 1);
-                const run: RunState = {
-                    ...playing,
-                    status: 'levelComplete',
-                    lastLevelResult: createLevelCompleteResult(playing, routeChoices),
-                    pendingRouteCardPlan: null
-                };
-
-                const result = applyRouteChoiceOutcome(run, 'missing-choice');
-
-                expect(result.applied).toBe(false);
-                expect(result.reason).toBe('missing_choice');
-                expect(result.run).toBe(run);
-            }),
-            { numRuns: propertyRuns }
-        );
-    });
 
     it('relic offers keep pick budgets positive and invalid picks unchanged', () => {
         fc.assert(

@@ -1,4 +1,3 @@
-import { routeSpecialLabel, routeSpecialRewardLine } from '../../shared/route-world';
 import { formatTileTraitInteractionTags } from '../../shared/tile-trait-rules';
 import { getFindableKindLabel, getFindableRewardCopy } from '../../shared/findables';
 import type { BoardTurnAnnouncementFacts } from '../../shared/board-turn-event-facts';
@@ -746,8 +745,9 @@ export function buildMatchScorePopPayload(
     if (!tileIdA || !tileIdB) {
         return null;
     }
-    const routeKind = facts.routeSpecialKind ?? facts.routeCardKind ?? null;
-    const routeRewardText = routeKind ? `${routeSpecialLabel(routeKind)} ${routeSpecialRewardLine(routeKind)}` : undefined;
+    // No route special or route card is dealt any more, so the pop never has a route reward line
+    // to carry. Gen 173.
+    const routeRewardText = undefined;
     const pickupRewardText = turnEvent.matchedFindableKind
         ? `${getFindableKindLabel(turnEvent.matchedFindableKind)} ${getFindableRewardCopy(turnEvent.matchedFindableKind)}`
         : undefined;

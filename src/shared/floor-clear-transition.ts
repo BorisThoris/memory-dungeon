@@ -6,9 +6,8 @@ import {
     type RunState
 } from './contracts';
 import { getDungeonLevelResultTags } from './secondary-objectives';
-import { generateRouteChoices } from './route-choice-rules';
 import { gainRelicFavor } from './relic-favor-rules';
-import { clearCurrentDungeonNode, revealDungeonChoices } from './run-map';
+import { clearCurrentDungeonNode } from './run-map';
 import { getRunDungeonMapState } from './dungeon-run-state-rules';
 import { getDungeonBossTrophyCacheResult } from './dungeon-boss-clear-rules';
 import { calculateRating } from './scoring-rules';
@@ -149,12 +148,24 @@ export const createFinalizeLevelTransition = ({
         const totalRelicFavorGained =
             featuredObjectiveClear.relicFavorGained + featuredObjectiveClear.endlessRiskWagerFavorGained;
         const relicFavor = gainRelicFavor(run, totalRelicFavorGained);
-        const routeChoices: LevelResult['routeChoices'] =
-            run.gameMode === 'endless' && board.level > 0 ? generateRouteChoices(run, board.level + 1) : undefined;
-        const currentDungeonRun = getRunDungeonMapState(run);
-        const dungeonRun = routeChoices
-            ? revealDungeonChoices(currentDungeonRun, board.level, routeChoices)
-            : clearCurrentDungeonNode(currentDungeonRun, board.level);
+        /*
+         * A cleared floor used to offer three doors here - Safe, Greed, Mystery - and the run
+         * stopped on a screen until the player picked one. It does not any more: the next board is
+         * the next thing that happens.
+         *
+         * The offer was already measured as no decision at all. Gen 172's profile simulation found
+         * a greedy player taking the greedy door on all 144 floors of a run, never paying a safe
+         * door's toll, and ending with gold nothing could spend - because greed used to be withheld
+         * on the floors the dungeon layer shaped, and with those gone every floor offered the same
+         * three doors. A choice that is the same every time is a keypress, and a keypress between
+         * two boards is a stop in a loop about momentum.
+         *
+         * `docs/REMOVED_DUNGEON_LAYER.md` records the route families. Phase 3 puts a decision back
+         * between floors, and the thesis is specific that it has to be one the board can see
+         * (§X, T3.x) rather than three doors with adjectives on them.
+         */
+        const routeChoices: LevelResult['routeChoices'] = undefined;
+        const dungeonRun = clearCurrentDungeonNode(getRunDungeonMapState(run), board.level);
         const parasiteFloors =
             featuredObjectiveId != null
                 ? getParasiteFloorsAfterFeaturedObjectiveClear(run, featuredObjectiveCompleted, {

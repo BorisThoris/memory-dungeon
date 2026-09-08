@@ -48,10 +48,7 @@ import {
 } from './gameplay-core-playthrough-solver';
 import { inspectGameplayFeedbackCompleteness } from './gameplay-feedback-completeness';
 import { needsRelicPick } from './relics';
-import { rollRunEventRoom, type RunEventChoiceEffect } from './run-events';
-import { getRouteChoiceAvailability } from './route-choice-rules';
-import { applyRouteChoiceOutcome } from './route-choice-outcome-rules';
-import { openRouteSideRoom } from './route-side-room-rules';
+import { GAMEPLAY_RUN_EVENT_EFFECTS } from './gameplay-core-contracts';
 import { createNewRun } from './run-creation-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 import { canOfferEndlessRiskWager } from './risk-wager-rules';
@@ -255,10 +252,6 @@ export interface GameplayBuildMultiFloorMetrics {
     uncertainTurns: number;
     memoryEvictions: number;
     riskBudgetExhaustions: number;
-    routeRiskAssessmentCount: number;
-    routeRiskRejections: number;
-    adaptiveRouteSelections: number;
-    sideRoomResourceAssessmentCount: number;
     gambitCommits: number;
     riskWagersAccepted: number;
     riskWagerWins: number;
@@ -331,8 +324,7 @@ export interface GameplayBuildMultiFloorReport {
                 'relic.wager_surety',
                 'objective.risk_wager',
                 'inventory.gambit_token',
-                'power.gambit',
-                'route.mystery'
+                'power.gambit'
             ];
             longHorizonSampled: true;
             evidence: {
@@ -457,10 +449,6 @@ export interface GameplayBuildMultiFloorReport {
         minImperfectInformationFloorsPerSeed: number;
         minUncertainTurnsPerSeed: number;
         maxRiskBudgetExhaustions: number;
-        minRouteRiskAssessmentsPerSeed: number;
-        minRouteRiskRejectionsPerStrategy: number;
-        minSideRoomResourceAssessmentsPerSeed: number;
-        minAdaptiveRouteSelections: number;
         minRouteGamblerGambitCommitsPerSeed: number;
         minRouteGamblerRiskWagersAccepted: number;
         minRouteGamblerRiskWagerOutcomes: number;
@@ -889,6 +877,13 @@ const effectiveSurvival = (run: RunState): number =>
 const routeRiskUnits = (routeType: RouteNodeType): 0 | 1 | 2 =>
     routeType === 'greed' ? 2 : routeType === 'mystery' ? 1 : 0;
 
+/*
+ * The seven things a side-room event could hand out. `run-events.ts` owned this union and went with
+ * the route layer in Gen 173; the policy tables below still rank these names, and the names come
+ * from the contract enum so a stale one cannot survive here unnoticed.
+ */
+type RunEventChoiceEffect = (typeof GAMEPLAY_RUN_EVENT_EFFECTS)[number];
+
 interface GameplayBuildRouteSelection {
     routeId: string;
     routeType: RouteNodeType;
@@ -896,80 +891,18 @@ interface GameplayBuildRouteSelection {
     adaptedFromPriority: boolean;
 }
 
+/*
+ * A route selection used to be a real decision here: every offered door was assessed for legality,
+ * risk units against the policy's cap, and effective survival after taking it, and the policy's
+ * priority list broke ties. No door is offered (Gen 173), so there is nothing to assess and the
+ * selection is always null. The assessment record shape stays because the playthrough report still
+ * carries it; it is emptied rather than deleted for the same reason the balance profile's route
+ * columns are, and comes out with them in T1.17.
+ */
 const chooseRoute = (
-    run: RunState,
-    policy: GameplayBuildPolicyDefinition
-): GameplayBuildRouteSelection | null => {
-    const choices = Array.isArray(run.lastLevelResult?.routeChoices) ? run.lastLevelResult.routeChoices : [];
-    const assessments = choices.map((choice): GameplayBuildRouteRiskAssessment => {
-        const availability = getRouteChoiceAvailability(run, choice);
-        const outcome = applyRouteChoiceOutcome(run, choice.id);
-        const legal = availability.available && outcome.applied && openRouteSideRoom(outcome.run).sideRoom != null;
-        const riskUnits = routeRiskUnits(choice.routeType);
-        const livesAfter = legal ? runNonNegativeInteger(outcome.run.lives) : runNonNegativeInteger(run.lives);
-        const protectionAfter = legal ? visibleProtectionUnits(outcome.run) : visibleProtectionUnits(run);
-        const effectiveSurvivalAfter = livesAfter + Math.min(2, protectionAfter);
-        const withinRiskBudget = riskUnits <= policy.interludeRiskPolicy.maxRouteRiskUnits;
-        const openingRiskCredit = choice.routeType === 'greed' &&
-            runNonNegativeInteger(run.board?.level) <= policy.interludeRiskPolicy.openingUnbufferedGreedFloors;
-        const comboShardsBefore = runNonNegativeInteger(run.stats?.comboShards);
-        const conversionRiskCredit =
-            policy.strategyId === 'combo_shard_engine' &&
-            choice.routeType === 'greed' &&
-            comboShardsBefore >= MAX_COMBO_SHARDS;
-        const preservesSurvival = openingRiskCredit || effectiveSurvivalAfter >=
-            policy.interludeRiskPolicy.minimumEffectiveSurvivalAfterRoute;
-        const accepted = legal &&
-            (withinRiskBudget || openingRiskCredit || conversionRiskCredit) &&
-            preservesSurvival;
-        const reason = !legal
-            ? availability.label ?? outcome.reason ?? 'Route did not produce a legal interlude.'
-            : openingRiskCredit
-              ? `Opening Greed credit permits one route above the sustained cap or reserve; effective survival ${effectiveSurvivalAfter}.`
-              : conversionRiskCredit
-                ? `A full ${comboShardsBefore}/${MAX_COMBO_SHARDS} shard bank permits Greed above the sustained cap while survival remains ${effectiveSurvivalAfter}.`
-              : !withinRiskBudget
-                ? `Risk ${riskUnits} exceeds policy cap ${policy.interludeRiskPolicy.maxRouteRiskUnits}.`
-                : !preservesSurvival
-                  ? `Effective survival ${effectiveSurvivalAfter} is below reserve ${policy.interludeRiskPolicy.minimumEffectiveSurvivalAfterRoute}.`
-                  : `Risk ${riskUnits}/${policy.interludeRiskPolicy.maxRouteRiskUnits}; effective survival ${effectiveSurvivalAfter}/${policy.interludeRiskPolicy.minimumEffectiveSurvivalAfterRoute}.`;
-        return {
-            routeId: choice.id,
-            routeType: choice.routeType,
-            legal,
-            riskUnits,
-            maxRiskUnits: policy.interludeRiskPolicy.maxRouteRiskUnits,
-            livesBefore: runNonNegativeInteger(run.lives),
-            livesAfter,
-            protectionBefore: visibleProtectionUnits(run),
-            protectionAfter,
-            effectiveSurvivalAfter,
-            minimumEffectiveSurvivalAfter: policy.interludeRiskPolicy.minimumEffectiveSurvivalAfterRoute,
-            comboShardsBefore,
-            conversionRiskCredit,
-            accepted,
-            reason
-        };
-    });
-    const legalByPriority = policy.routePriorities
-        .flatMap((routeType) => assessments.filter((assessment) => assessment.routeType === routeType && assessment.legal));
-    const acceptedByPriority = policy.routePriorities
-        .flatMap((routeType) => assessments.filter((assessment) => assessment.routeType === routeType && assessment.accepted));
-    const selected = acceptedByPriority[0] ?? assessments
-        .filter((assessment) => assessment.legal)
-        .sort((left, right) =>
-            left.riskUnits - right.riskUnits ||
-            right.effectiveSurvivalAfter - left.effectiveSurvivalAfter ||
-            left.routeId.localeCompare(right.routeId)
-        )[0];
-    if (!selected) return null;
-    return {
-        routeId: selected.routeId,
-        routeType: selected.routeType,
-        assessments,
-        adaptedFromPriority: legalByPriority[0]?.routeId !== selected.routeId
-    };
-};
+    _run: RunState,
+    _policy: GameplayBuildPolicyDefinition
+): GameplayBuildRouteSelection | null => null;
 
 const bonusRewardIdFromChoiceId = (choiceId: string): BonusRewardId | null => {
     for (const rewardId of [
@@ -1017,120 +950,15 @@ interface GameplayBuildSideRoomAction {
     resourceAssessment?: GameplayBuildSideRoomResourceAssessment;
 }
 
-const eventEffectPriority = (
-    effect: RunEventChoiceEffect,
-    policy: GameplayBuildPolicyDefinition,
-    recoveryNeeded: boolean
-): number => {
-    if (effect === 'skip') return Number.MAX_SAFE_INTEGER;
-    if (recoveryNeeded && effect === 'heal_or_guard') return -1;
-    const priority = policy.interludeRiskPolicy.eventEffectPriorities.indexOf(effect);
-    return priority >= 0 ? priority : Number.MAX_SAFE_INTEGER;
-};
-
+/*
+ * A side room used to be resolved here by policy - rest when hurt, rank an event's offers, claim
+ * the highest-priority bonus reward the build wanted. No side room can open (Gen 173), so the
+ * action is always a skip, and the resource assessment it used to attach is never produced.
+ */
 const chooseSideRoomAction = (
-    run: RunState,
-    policy: GameplayBuildPolicyDefinition
-): GameplayBuildSideRoomAction => {
-    const room = run.sideRoom;
-    if (!room) return { action: 'skip', reason: 'No side room is open.' };
-    const previewClaim = (choiceId?: string) => reduceGameplayCommand(
-        run,
-        createGameplaySideRoomResolveCommand(
-            `policy-preview:${run.runSeed}:${room.floor}:${choiceId ?? 'primary'}`,
-            'claim',
-            choiceId
-        )
-    );
-    const recoveryNeeded = effectiveSurvival(run) < policy.interludeRiskPolicy.minimumEffectiveSurvivalAfterRoute;
-    if (room.payload.kind === 'rest_heal') {
-        const preview = previewClaim();
-        return runNonNegativeInteger(run.lives) < MAX_LIVES && preview.accepted
-            ? {
-                  action: 'claim',
-                  reason: 'Recovery policy spends the safe stop only when life is missing.',
-                  resourceAssessment: sideRoomResourceAssessment(
-                      run,
-                      preview.run,
-                      room.payload.kind,
-                      'heal_or_guard',
-                      recoveryNeeded
-                  )
-              }
-            : { action: 'skip', reason: 'Recovery policy preserves gold at full life.' };
-    }
-    const choices = Array.isArray(room.choices) ? room.choices : [];
-    if (room.payload.kind === 'event_choice') {
-        const event = rollRunEventRoom({
-            runSeed: run.runSeed,
-            rulesVersion: run.runRulesVersion,
-            floor: room.floor
-        });
-        if (event.eventKey !== room.payload.eventKey) {
-            return { action: 'skip', reason: 'Event policy rejected a stale event identity.' };
-        }
-        const effectByChoiceId = new Map(event.options.map((option) => [option.id, option.effect] as const));
-        const ranked = choices
-            .map((choice) => ({
-                choice,
-                effect: effectByChoiceId.get(choice.id) ?? 'skip',
-                preview: previewClaim(choice.id)
-            }))
-            .filter((candidate) => candidate.effect !== 'skip' && candidate.preview.accepted)
-            .sort((left, right) =>
-                eventEffectPriority(left.effect, policy, recoveryNeeded) -
-                    eventEffectPriority(right.effect, policy, recoveryNeeded) ||
-                left.choice.id.localeCompare(right.choice.id)
-            );
-        const selected = ranked[0];
-        return selected
-            ? {
-                  action: 'claim',
-                  choiceId: selected.choice.id,
-                  reason: recoveryNeeded && selected.effect === 'heal_or_guard'
-                      ? 'Visible survival reserve is low, so the event policy prioritizes recovery.'
-                      : `${policy.id} selected its highest-priority legal event resource (${selected.effect}).`,
-                  resourceAssessment: sideRoomResourceAssessment(
-                      run,
-                      selected.preview.run,
-                      room.payload.kind,
-                      selected.effect,
-                      recoveryNeeded
-                  )
-              }
-            : { action: 'skip', reason: 'Event policy found no legal non-skip outcome.' };
-    }
-    const rewardPriority = new Map(policy.bonusRewardPriorities.map((rewardId, index) => [rewardId, index]));
-    const rankedChoices = choices
-        .filter((choice) => choice.rewardImpactKind !== 'risk')
-        .map((choice) => ({ choice, rewardId: bonusRewardIdFromChoiceId(choice.id), preview: previewClaim(choice.id) }))
-        .filter((candidate) => candidate.preview.accepted)
-        .sort((left, right) =>
-            (left.rewardId == null ? Number.MAX_SAFE_INTEGER : rewardPriority.get(left.rewardId) ?? Number.MAX_SAFE_INTEGER) -
-                (right.rewardId == null ? Number.MAX_SAFE_INTEGER : rewardPriority.get(right.rewardId) ?? Number.MAX_SAFE_INTEGER) ||
-            Number(Boolean(right.choice.primary)) - Number(Boolean(left.choice.primary)) ||
-            left.choice.id.localeCompare(right.choice.id)
-        );
-    const selected = rankedChoices[0];
-    if (!selected && choices.length > 0) {
-        return { action: 'skip', reason: 'No visible bonus choice is both policy-safe and command-legal.' };
-    }
-    const singlePreview = choices.length === 0 ? previewClaim() : null;
-    if (singlePreview && !singlePreview.accepted) {
-        return { action: 'skip', reason: 'The deterministic single reward is no longer legal.' };
-    }
-    const preview = selected?.preview ?? singlePreview;
-    return {
-        action: 'claim',
-        choiceId: selected?.choice.id,
-        reason: selected
-            ? 'Bonus policy selected the highest-priority eligible build reward.'
-            : 'Bonus policy claims the deterministic single reward.',
-        resourceAssessment: preview
-            ? sideRoomResourceAssessment(run, preview.run, room.payload.kind, selected?.rewardId ?? 'bonus_reward', recoveryNeeded)
-            : undefined
-    };
-};
+    _run: RunState,
+    _policy: GameplayBuildPolicyDefinition
+): GameplayBuildSideRoomAction => ({ action: 'skip', reason: 'No side room can open between floors any more.' });
 
 const chooseRelicId = (run: RunState, policy: GameplayBuildPolicyDefinition): RelicId | null => {
     const options = run.relicOffer?.options ?? [];
@@ -1694,7 +1522,6 @@ export const runGameplayBuildMultiFloorSimulation = (
         const samples = seeds.map((seed) => runSeed(strategy, seed, rulesVersion, floorsPerSeed));
         const floorTraces = samples.flatMap((sample) => sample.floorTraces);
         const policyDecisions = samples.flatMap((sample) => sample.policyDecisions);
-        const routeDecisions = policyDecisions.filter((decision) => decision.phase === 'route');
         const signatureScores = emptyAxisScores();
         for (const sample of samples) {
             for (const axis of GAMEPLAY_BUILD_STRATEGY_AXES) {
@@ -1757,20 +1584,12 @@ export const runGameplayBuildMultiFloorSimulation = (
             uncertainTurns: floorTraces.reduce((sum, floor) => sum + floor.information.uncertainTurns, 0),
             memoryEvictions: floorTraces.reduce((sum, floor) => sum + floor.information.evictedTileIds.length, 0),
             riskBudgetExhaustions: floorTraces.filter((floor) => floor.information.riskBudgetExhausted).length,
-            routeRiskAssessmentCount: routeDecisions.reduce(
-                (sum, decision) => sum + (decision.routeRiskAssessments?.length ?? 0),
-                0
-            ),
-            routeRiskRejections: routeDecisions.reduce(
-                (sum, decision) => sum + (decision.routeRiskAssessments?.filter(
-                    (assessment) => assessment.legal && !assessment.accepted
-                ).length ?? 0),
-                0
-            ),
-            adaptiveRouteSelections: routeDecisions.filter((decision) => decision.adaptedFromPriority).length,
-            sideRoomResourceAssessmentCount: policyDecisions.filter(
-                (decision) => decision.phase === 'side_room' && decision.sideRoomResourceAssessment != null
-            ).length,
+            /*
+             * Route risk assessments, route risk rejections, adaptive route selections and
+             * side-room resource assessments were reported here until Gen 173. No route is offered
+             * and no side room opens, so all four read zero on every strategy; a row that can only
+             * read zero is removed rather than baselined.
+             */
             gambitCommits: samples.reduce(
                 (sum, sample) => sum + (sample.eventTypeCounts['board.gambit_commit.requested'] ?? 0),
                 0
@@ -1946,8 +1765,7 @@ export const runGameplayBuildMultiFloorSimulation = (
                     'relic.wager_surety',
                     'objective.risk_wager',
                     'inventory.gambit_token',
-                    'power.gambit',
-                    'route.mystery'
+                    'power.gambit'
                 ],
                 longHorizonSampled: true,
                 evidence: {
@@ -2066,10 +1884,6 @@ export const runGameplayBuildMultiFloorSimulation = (
             minImperfectInformationFloorsPerSeed: 1,
             minUncertainTurnsPerSeed: 1,
             maxRiskBudgetExhaustions: 0,
-            minRouteRiskAssessmentsPerSeed: 3,
-            minRouteRiskRejectionsPerStrategy: 1,
-            minSideRoomResourceAssessmentsPerSeed: 1,
-            minAdaptiveRouteSelections: 1,
             minRouteGamblerGambitCommitsPerSeed: 1,
             minRouteGamblerRiskWagersAccepted: 1,
             minRouteGamblerRiskWagerOutcomes: 1,
@@ -2174,24 +1988,6 @@ export const assertGameplayBuildMultiFloorViable = (
         if (strategy.riskBudgetExhaustions > report.bounds.maxRiskBudgetExhaustions) {
             issues.push(
                 `${context}:riskBudgetExhaustions=${strategy.riskBudgetExhaustions}; max=${report.bounds.maxRiskBudgetExhaustions}`
-            );
-        }
-        const minimumRouteRiskAssessments = report.bounds.minRouteRiskAssessmentsPerSeed * report.seeds.length;
-        if (strategy.routeRiskAssessmentCount < minimumRouteRiskAssessments) {
-            issues.push(
-                `${context}:routeRiskAssessments=${strategy.routeRiskAssessmentCount}; required=${minimumRouteRiskAssessments}`
-            );
-        }
-        const minimumRouteRiskRejections = report.bounds.minRouteRiskRejectionsPerStrategy;
-        if (strategy.routeRiskRejections < minimumRouteRiskRejections) {
-            issues.push(
-                `${context}:routeRiskRejections=${strategy.routeRiskRejections}; required=${minimumRouteRiskRejections}`
-            );
-        }
-        const minimumSideRoomAssessments = report.bounds.minSideRoomResourceAssessmentsPerSeed * report.seeds.length;
-        if (strategy.sideRoomResourceAssessmentCount < minimumSideRoomAssessments) {
-            issues.push(
-                `${context}:sideRoomResourceAssessments=${strategy.sideRoomResourceAssessmentCount}; required=${minimumSideRoomAssessments}`
             );
         }
         for (const sample of strategy.samples) {
@@ -2331,15 +2127,6 @@ export const assertGameplayBuildMultiFloorViable = (
                 `memory_scout@seeds:${report.seeds.join(',')}:undoResolveUses=${memoryScout.undoResolveUses}; required=${minimumUndoUses}`
             );
         }
-    }
-    const adaptiveRouteSelections = report.strategies.reduce(
-        (sum, strategy) => sum + strategy.adaptiveRouteSelections,
-        0
-    );
-    if (adaptiveRouteSelections < report.bounds.minAdaptiveRouteSelections) {
-        issues.push(
-            `adaptiveRouteSelections=${adaptiveRouteSelections}; required=${report.bounds.minAdaptiveRouteSelections}`
-        );
     }
     for (const pair of report.pairwiseMeanTurnRatios) {
         if (pair.ratio > report.bounds.maxPairwiseMeanTurnRatio) {

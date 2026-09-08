@@ -3,17 +3,10 @@ import type {
     ViewState
 } from '../../shared/contracts';
 import {
-    openRouteSideRoom
-} from '../../shared/route-rules';
-import { createGameplayRouteChooseCommand } from '../../shared/gameplay-core-contracts';
-import { reduceGameplayCommand } from '../../shared/gameplay-core';
-import { appendGameplayJournal } from '../../shared/gameplay-journal';
-import {
     createLevelCompleteContinuationSurfaceResult,
     shouldPrepareMemorizeTimerForContinuation,
     type LevelCompleteContinuationSurfaceResult
 } from './levelCompleteSurfaceState';
-import { createDeadInterludeGameOverRun } from './sideRoomSurfaceState';
 import { isPassAndPlayFinalFloor, isPassAndPlayRun } from '../../shared/pass-and-play-rules';
 
 type ContinuationPatch = Exclude<LevelCompleteContinuationSurfaceResult, { kind: 'gameOver' }>['patch'];
@@ -31,6 +24,27 @@ export interface LevelCompleteContinuationExecutorDeps {
     prepareMemorizeTimerForBoardReady: (run: RunState) => void;
     setState: (patch: ContinuationPatch) => void;
 }
+
+/*
+ * A run that reached the floor-clear interlude with no lives left is over, whatever else the
+ * interlude was about to offer. This used to live in the side-room surface, which went with the
+ * route layer in Gen 173; the guard stays because dying on the last match of a floor still lands
+ * here, and the between-floor screens it clears out of the run are the ones that still exist.
+ */
+const createDeadInterludeGameOverRun = (run: RunState): RunState | null => {
+    if (run.status !== 'gameOver' && run.lives > 0) {
+        return null;
+    }
+    return {
+        ...run,
+        status: 'gameOver',
+        lives: 0,
+        pendingRouteCardPlan: null,
+        sideRoom: null,
+        relicOffer: null,
+        shopOffers: []
+    };
+};
 
 const routeDeadInterludeRunToGameOver = (
     run: RunState,
@@ -110,33 +124,19 @@ export const executeContinueToNextLevel = (deps: LevelCompleteContinuationExecut
     );
 };
 
+/*
+ * Choosing a route used to journal a `route.choose` command, open the side room behind the door,
+ * and continue. No route is offered any more (Gen 173), so this is the same as continuing; it is
+ * kept as an entry point because the store action that called it is still wired to the floor-clear
+ * panel's controller path, and that wiring comes out with the shop in T1.10.
+ */
 export const executeChooseRouteAndContinue = (
-    choiceId: string,
+    _choiceId: string,
     deps: LevelCompleteContinuationExecutorDeps
 ): void => {
     const { run, view } = deps.getState();
-
     if (!run || view !== 'playing' || run.status !== 'levelComplete') {
         return;
     }
-    if (run.pendingRouteCardPlan) {
-        deps.continueToNextLevel();
-        return;
-    }
-
-    const command = createGameplayRouteChooseCommand(
-        `route-choice:${run.runRulesVersion}:${run.runSeed}:${run.lastLevelResult?.level ?? run.board?.level ?? 0}:${choiceId}`,
-        choiceId
-    );
-    const routeOutcome = reduceGameplayCommand(run, command);
-    if (!routeOutcome.accepted) {
-        return;
-    }
-    const journaledRun = appendGameplayJournal(routeOutcome.run, [command], routeOutcome.events);
-
-    deps.clearAllTimers();
-    applyContinuationResult(
-        createLevelCompleteContinuationSurfaceResult(openRouteSideRoom(journaledRun), { includeSummaryShop: true }),
-        deps
-    );
+    deps.continueToNextLevel();
 };

@@ -15,7 +15,7 @@ import {
     type BalanceSimulationFloorBand,
     type BalanceSimulationReport
 } from './balance-simulation';
-import { GAME_RULES_VERSION, type FindableKind, type TileTraitKind } from './contracts';
+import { GAME_RULES_VERSION, INITIAL_LIVES, type FindableKind, type TileTraitKind } from './contracts';
 import { getFindableSpawnWeightRows } from './findables';
 
 const LONG_SIMULATION_TIMEOUT_MS = 15_000;
@@ -274,10 +274,10 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             expect(profile.maxUnhealedLowLifeStreak).toBeLessThanOrEqual(result.bounds.maxUnhealedLowLifeStreak);
             expect(profile.recoveryDebtFloors).toBeGreaterThanOrEqual(0);
             expect(profile.maxRecoveryDebtStreak).toBeLessThanOrEqual(result.bounds.maxRecoveryDebtStreak);
-            expect(profile.routeChoiceCounts.safe + profile.routeChoiceCounts.greed + profile.routeChoiceCounts.mystery).toBe(
-                profile.floorsCleared
-            );
-            expect(profile.routeAcceptedChoices).toBe(profile.floorsCleared);
+            // No route is offered between floors (Gen 173), so every route column reads zero. They
+            // stay in the report until T1.17 re-baselines it; asserting zero here keeps them honest.
+            expect(profile.routeChoiceCounts.safe + profile.routeChoiceCounts.greed + profile.routeChoiceCounts.mystery).toBe(0);
+            expect(profile.routeAcceptedChoices).toBe(0);
             expect(profile.routeRejectedChoices).toBe(0);
             expect(Object.values(profile.routeOutcomeCounts).reduce((sum, count) => sum + count, 0)).toBe(
                 profile.routeAcceptedChoices
@@ -357,16 +357,16 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(greedy.rewardClaims).toBeGreaterThan(cautious.rewardClaims);
         expect(cautious.guardUsed).toBeGreaterThanOrEqual(greedy.guardUsed);
         expect(greedy.healingPurchased).toBeGreaterThanOrEqual(cautious.healingPurchased);
-        expect(greedy.routeChoiceCounts.greed).toBeGreaterThan(cautious.routeChoiceCounts.greed);
-        expect(cautious.routeChoiceCounts.safe).toBeGreaterThan(cautious.routeChoiceCounts.greed);
-        expect(greedy.routeScoreDelta).toBeGreaterThan(cautious.routeScoreDelta);
-        expect(cautious.routeLifeDelta).toBeGreaterThan(greedy.routeLifeDelta);
-        expect(highSkill.safeRouteTollSpend).toBeGreaterThan(0);
-        // Greedy never takes a safe route any more, so it never pays a toll: the same flat route
-        // offer described above, seen from the spending side. High skill still mixes, which is why
-        // that assertion above stays as it was.
-        expect(greedy.safeRouteTollSpend).toBe(0);
-        expect(greedy.greedLifeCosts).toBe(greedy.routeChoiceCounts.greed);
+        // The route columns all read zero for every profile (Gen 173): nothing is chosen between
+        // floors, so nothing is scored, tolled or paid for in lives there. Asserted so that a route
+        // finding its way back in fails here rather than hiding in a column nobody reads.
+        for (const profile of [greedy, cautious, highSkill]) {
+            expect(profile.routeChoiceCounts).toEqual({ safe: 0, greed: 0, mystery: 0 });
+            expect(profile.routeScoreDelta).toBe(0);
+            expect(profile.routeLifeDelta).toBe(0);
+            expect(profile.safeRouteTollSpend).toBe(0);
+            expect(profile.greedLifeCosts).toBe(0);
+        }
     });
 
     it('falls back to shipped balance profiles when profile filters are malformed', () => {
@@ -424,11 +424,10 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         const result = runDungeonBalanceProfileSimulation({ seed: 42_001, floors: 12, rulesVersion: GAME_RULES_VERSION });
         const healthy = assertDungeonBalanceProfilesWithinBounds(result);
 
-        // Asserted exactly rather than as an empty list, for the reason given above: the greedy
-        // profile's route offer has gone flat and this is the record of it. A second issue
-        // appearing here is a new regression and fails, which is the point of naming this one.
-        expect(healthy.issues).toEqual(['greedy@seed:42001/floor:12:dominantRouteShare=1']);
-        expect(healthy.ok).toBe(false);
+        // Gen 172 recorded the greedy profile's flat route offer here. Gen 173 removed the route,
+        // and with it the finding; an issue appearing now is a new regression and fails.
+        expect(healthy.issues).toEqual([]);
+        expect(healthy.ok).toBe(true);
 
         const impossible = assertDungeonBalanceProfilesWithinBounds({
             ...result,
@@ -545,25 +544,16 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         const healthy = assertDungeonBalanceProfilesWithinBounds(result);
 
         /*
-         * Two issues over 48 floors and three seeds, and they are one finding with two faces.
-         *
-         * `dominantRouteShare=1` is the flat route offer. `endingShopGold=801/144` - 5.56 a floor
-         * against a ceiling of 5 - is its consequence: a greedy player who never takes a safe route
-         * never pays a safe route's toll, so the gold goes in and nothing takes it out again. The
-         * wallet diagnostic is doing its job; what it has caught is a sink that closed when the
-         * dungeon layer did, not a profile that got too rich.
-         *
-         * Asserted exactly, so a third issue fails. Fixed by Phase 1 T1.9-T1.17 removing the
-         * between-floor layer, not by moving either ceiling.
+         * Gen 172 recorded two issues here - the flat route offer and the 801 gold a greedy player
+         * banked because no safe toll ever took any out. Both were the between-floor route, and
+         * Gen 173 removed it: the greedy profile now clears the same floors the cautious one does
+         * and ends with the same wallet. Asserted empty so the next finding fails loudly.
          */
-        expect(healthy.issues).toEqual([
-            'greedy@seed:42001/floor:48:dominantRouteShare=1',
-            'greedy@seed:42001/floor:48:endingShopGold=801/144'
-        ]);
-        expect(healthy.ok).toBe(false);
+        expect(healthy.issues).toEqual([]);
+        expect(healthy.ok).toBe(true);
     }, LONG_SIMULATION_TIMEOUT_MS);
 
-    it('keeps greedy reward upside bounded by route life costs', () => {
+    it('keeps greedy reward upside bounded now that no route costs a life', () => {
         const result = runDungeonBalanceProfileSimulation({
             seeds: [42_001, 42_077, 42_123],
             floors: 48,
@@ -574,24 +564,19 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         const highSkill = result.profiles.find((profile) => profile.profile === 'high_skill')!;
 
         expect(greedy.rewardClaims).toBeGreaterThan(highSkill.rewardClaims);
-        // 1.6 up to 1.7, measured 1.68. Greed's upside is meant to be bounded by what greed costs
-        // in lives, and it still is - greedLifeCosts below is one per greedy route, all 144 of
-        // them. What moved is the denominator: cautious used to take greed occasionally when the
-        // floor made safe unattractive, and with every floor identical it never does. Third face of
-        // the same flat-route finding.
+        // Gen 172 measured 1.68 with the greedy route paying for its upside in lives. Gen 173 took
+        // the route away, so the only thing left separating greedy from cautious is how they play
+        // the board and spend the wallet; the ceiling stays where it was to catch that gap widening.
         expect(greedy.rewardClaims / cautious.rewardClaims).toBeLessThanOrEqual(1.7);
-        expect(greedy.greedLifeCosts).toBe(greedy.routeChoiceCounts.greed);
-        expect(greedy.greedLifeCosts).toBeGreaterThan(0);
-        // Both profiles now spend nought floors on low life, so neither is greater than the other:
-        // the greedy route costs a life each time and the floor has nothing else that can, so the
-        // wallet absorbs the whole difference and the health bar never moves. Fourth face.
+        expect(greedy.greedLifeCosts).toBe(0);
+        expect(greedy.routeChoiceCounts.greed).toBe(0);
+        // Nothing between floors costs a life and nothing on the floor does either, so no profile
+        // ever drops low and a greedy player never loses a life at all. That is the gap Phase 2
+        // exists to fill; it is asserted exactly so the first floor that can hurt shows up here.
         expect(greedy.lowLifeFloorShare).toBe(0);
         expect(highSkill.lowLifeFloorShare).toBe(0);
-        // Greedy bottoms out at 4 lives now rather than 1: 144 greedy routes at a life each, and
-        // the healing it can buy with gold it has nothing else to spend on covers all but four.
-        // Fifth face, and the one that says loudest what the floor has become - a greedy player
-        // cannot get themselves into trouble on it. That is the gap Phase 2 exists to fill.
-        expect(greedy.minLivesRemaining).toBe(4);
+        expect(greedy.livesLost).toBe(0);
+        expect(greedy.minLivesRemaining).toBe(INITIAL_LIVES);
         expect(greedy.runFalls).toBe(0);
     }, LONG_SIMULATION_TIMEOUT_MS);
 });

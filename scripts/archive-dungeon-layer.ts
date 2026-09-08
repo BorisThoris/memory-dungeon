@@ -34,6 +34,22 @@ import { HAZARD_TILE_DEFINITIONS } from '../src/shared/hazard-tiles';
  * commit where every one of these still existed. Anything added here has to be added by hand, which
  * is the correct amount of friction for a record of what was destroyed.
  */
+const DELETED_ROUTE_MODULES: readonly string[] = [
+    'src/shared/route-card-plan-rules.ts',
+    'src/shared/route-card-reward-rules.ts',
+    'src/shared/route-choice-outcome-rules.ts',
+    'src/shared/route-choice-rules.ts',
+    'src/shared/route-rules.ts',
+    'src/shared/route-side-room-rules.ts',
+    'src/shared/route-world.ts',
+    'src/shared/run-events.ts',
+    'src/shared/copy-tone.ts',
+    'src/shared/rest-shrine.ts',
+    'src/renderer/components/SideRoomScreen.tsx',
+    'src/renderer/store/sideRoomActionController.ts',
+    'src/renderer/store/sideRoomSurfaceState.ts'
+];
+
 const DELETED_MODULES: readonly string[] = [
     'src/shared/dungeon-blueprint-policy-rules.ts',
     'src/shared/dungeon-board-generation-rules.ts',
@@ -108,12 +124,16 @@ push('   an exit, a shop, a room, a hazard pass or the layout plan that pinned t
 push('   nothing else, asserted over 768 boards in `board-build-rules.test.ts`. This is the commit that matters:');
 push('   the modules below still existed and still worked, and the game had already stopped being the game they');
 push('   described.');
-push('3. **Gen 173 — the modules go.** The files listed at the end are deleted, along with the between-floor layer');
-push('   that fed them.');
+push('3. **Gen 173 — no door between floors.** The route offer, its gateway and side-room stops, and the run');
+push('   events behind them are removed at the source: a cleared floor goes straight to the next one. The route');
+push('   modules listed first at the end are deleted in this commit; a `route.choose` or `side_room.resolve`');
+push('   command in an old journal is rejected with a reason rather than replayed.');
+push('4. **Gen 176 — the dungeon modules go.** The `dungeon-*` files listed second at the end are deleted, with the');
+push('   run-state fields and save shape that carried them.');
 push();
 push('## How to get any of it back');
 push();
-push('Everything here is in git. The removal commits carry `Gen 171`, `Gen 172` and `Gen 173` in their messages,');
+push('Everything here is in git. The removal commits carry `Gen 171` through `Gen 176` in their messages,');
 push('and each section names the module a definition lived in, so `git log --all -- src/shared/<module>.ts` finds');
 push('its whole history. The intent is not that none of this returns — it is that it returns **deliberately, one');
 push('mechanic at a time, measured against the loop** rather than layered on top of it.');
@@ -230,9 +250,17 @@ for (const hazard of Object.values(HAZARD_TILE_DEFINITIONS)) {
 }
 push();
 
-push('## The modules that went with it');
+push('## The route layer, which went first');
 push();
-push('Every file below goes in the Gen 173 removal, after Gen 172 had already made all of it unreachable from a');
+push('Deleted in Gen 173, with the route offer itself. `git log --all -- <path>` is its whole history.');
+push();
+for (const file of DELETED_ROUTE_MODULES) {
+    push(`- \`${file}\``);
+}
+push();
+push('## The dungeon modules that go with it');
+push();
+push('Every file below goes in the Gen 176 removal, after Gen 172 had already made all of it unreachable from a');
 push('generated floor. `git log --all -- <path>` is its whole history.');
 push();
 for (const file of DELETED_MODULES) {

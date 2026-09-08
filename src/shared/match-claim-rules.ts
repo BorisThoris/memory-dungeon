@@ -11,7 +11,7 @@ import {
 import type { BoardState } from './contracts';
 import { clearDungeonCardFields } from './dungeon-enemy-card-rules';
 import { getDungeonMatchReward, type DungeonMatchReward } from './dungeon-match-reward-rules';
-import { getRouteCardReward, type RouteCardReward } from './route-card-reward-rules';
+import { emptyRouteCardReward, type RouteCardReward } from './route-card-reward-shape';
 import { runStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
@@ -66,13 +66,13 @@ export const deriveMatchClaimContext = ({
         null;
     const matchedPairKey = isWildPairKey(firstTile.pairKey) ? secondTile.pairKey : firstTile.pairKey;
     const claimedRouteSpecialRevealed = firstTile.routeSpecialRevealed === true || secondTile.routeSpecialRevealed === true;
-    const routeCardReward = getRouteCardReward(
-        run,
-        run.board?.level ?? 0,
-        matchedPairKey,
-        claimedRouteCardKind,
-        claimedRouteSpecialRevealed
-    );
+    /*
+     * A matched route card used to pay here - score for a secret door, gold for a greed cache, a
+     * guard token for a lantern ward, a combo shard or relic favor for a mystery veil. Generation
+     * deals no route card and no route special, so `claimedRouteCardKind` is always null and this
+     * reward is always nothing. Gen 173.
+     */
+    const routeCardReward = emptyRouteCardReward();
     const stats = normalizeSessionStats(run.stats);
     const mimicCacheClaimed = claimedRouteCardKind === 'mimic_cache';
     const mimicCacheBite = mimicCacheClaimed && !claimedRouteSpecialRevealed;

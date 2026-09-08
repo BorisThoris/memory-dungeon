@@ -12,17 +12,8 @@ import { maxPinnedTilesForRun, togglePinnedTile } from './board-power-state';
 import type { TileTraitInteractionTag } from './tile-trait-rules';
 import { createFlipTileTransition } from './flip-tile-transition';
 import { applyEnemyHazardClick } from './dungeon-enemy-hazard-rules';
-import { rerollShopOffers } from './shop-rules';
-import { openRouteSideRoom } from './route-side-room-rules';
-import { getBoardTurnAnnouncementFacts } from './board-turn-event-facts';
-import { finishMemorizePhase } from './memorize-phase-rules';
-import { computeRelicOfferPickBudget, openRelicOffer } from './relic-offer-open-rules';
-import { createRunProgressionRepairTransition } from './run-progression-repair';
-import { disableDebugPeek, enableDebugPeek, pauseRun, resumeRun } from './run-timer-rules';
-import { MAX_LIVES, type BonusRewardId, type DungeonKeyKind, type FindableKind, type RunState } from './contracts';
+import { type DungeonKeyKind, type FindableKind, type RunState } from './contracts';
 import {
-    GAMEPLAY_BONUS_REWARD_IDS,
-    GAMEPLAY_BONUS_REWARD_RULES,
     GAMEPLAY_CORE_SCHEMA_VERSION,
     createGameplayDefinitionCommand,
     gameplayCommandSchema,
@@ -34,6 +25,13 @@ import {
     type GameplayFacts,
     type GameplaySource
 } from './gameplay-core-contracts';
+import { applyRelicOfferService, RELIC_OFFER_SERVICE_CATALOG } from './relics';
+import { rerollShopOffers } from './shop-rules';
+import { getBoardTurnAnnouncementFacts } from './board-turn-event-facts';
+import { finishMemorizePhase } from './memorize-phase-rules';
+import { computeRelicOfferPickBudget, openRelicOffer } from './relic-offer-open-rules';
+import { createRunProgressionRepairTransition } from './run-progression-repair';
+import { disableDebugPeek, enableDebugPeek, pauseRun, resumeRun } from './run-timer-rules';
 import {
     getRunInventoryItemQuantity,
     useRunInventoryItem
@@ -42,7 +40,6 @@ import {
     applyGameplayDefinitionTransition,
     hasGameplayRewardPerk,
     makeGameplayEventWriter as makeEventWriter,
-    normalizeGameplayRewardPerkIds
 } from './gameplay-effect-transition';
 import { runNonNegativeInteger } from './run-number-guards';
 import { runStringArray } from './run-array-guards';
@@ -62,7 +59,6 @@ import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY, WILD_PAIR_KEY } from './ti
 import { isBoardComplete } from './board-inspection';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
 import { resolveHazardBanisherFloorStart } from './hazard-banisher-rules';
-import { applyRouteChoiceOutcome } from './route-rules';
 import { createRelicPickTransitionResult } from './relic-pick-transition-rules';
 import {
     canGreetFloorCurio,
@@ -71,8 +67,6 @@ import {
     runFloorCurioGreeting
 } from './floor-curio-greeting-rules';
 import { repairRunProgressionSoftlocks } from './run-progression-repair';
-import { applyRelicOfferService, hasRunRelic, RELIC_OFFER_SERVICE_CATALOG } from './relics';
-import { applyRunEventChoice, rollRunEventRoom, type RunEventChoiceEffect } from './run-events';
 import { advanceToNextLevel } from './next-floor-transition-rules';
 import {
     createResolveBoardTurnTransition,
@@ -119,8 +113,6 @@ const DUNGEON_EXIT_SOURCE: GameplaySource = { kind: 'system', id: 'dungeon_exit'
 const SCORE_PARASITE_SOURCE: GameplaySource = { kind: 'system', id: 'score_parasite' };
 const HAZARD_BANISH_SOURCE: GameplaySource = { kind: 'reward_perk', id: 'hazard_banish_per_floor' };
 const FLOOR_ADVANCE_SOURCE: GameplaySource = { kind: 'system', id: 'floor_advance' };
-const ROUTE_CHOICE_SOURCE: GameplaySource = { kind: 'system', id: 'route_choice' };
-const SIDE_ROOM_SOURCE: GameplaySource = { kind: 'system', id: 'route_side_room' };
 const RELIC_OFFER_SOURCE: GameplaySource = { kind: 'system', id: 'relic_offer' };
 const DEBUG_REVEAL_SOURCE: GameplaySource = { kind: 'system', id: 'debug_reveal' };
 const ENEMY_HAZARD_SOURCE: GameplaySource = { kind: 'system', id: 'enemy_hazard' };
@@ -947,250 +939,27 @@ const applyFloorAdvanceCommand = (
     return { run: nextRun, command, events, accepted: true };
 };
 
+/*
+ * `route.choose` and `side_room.resolve` are still commands the journal knows how to parse, and
+ * both are now refused. There is no route offer on a floor clear (Gen 173), so there is nothing
+ * for the first to choose and nothing that could open the room the second resolves.
+ *
+ * They are refused rather than deleted from the command union because a journal recorded before
+ * Gen 173 can still contain them, and a command the parser cannot read is a save that cannot load.
+ * The one-way upgrade for those journals is T1.14's job; until then a replay that meets one lands
+ * on a rejection, which the replay checker reports rather than hides.
+ */
 const applyRouteChooseCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'route.choose' }>
-): GameplayCommandResult => {
-    const outcome = applyRouteChoiceOutcome(run, command.choiceId);
-    // Choosing a route opens its side room. Doing it here, inside the command, keeps the
-    // interlude replayable: opening it afterwards on the resolved run - as the renderer
-    // and the build simulation both did - mutates state the journal never records, so a
-    // replay of the same commands lands on a run with no side room.
-    if (outcome.applied && !outcome.run.sideRoom) {
-        const opened = openRouteSideRoom(outcome.run);
-        if (opened.sideRoom) {
-            outcome.run = opened;
-        }
-    }
-    if (!outcome.applied || !outcome.routeType || !outcome.outcomeKind || !outcome.summaryText) {
-        return rejectedResult(
-            run,
-            command.commandId,
-            `Route choice is not available${outcome.reason ? ` (${outcome.reason})` : ''}.`,
-            command
-        );
-    }
-
-    const statsBefore = normalizeSessionStats(run.stats);
-    const statsAfter = normalizeSessionStats(outcome.run.stats);
-    const events: GameplayEvent[] = [];
-    const writeEvent = makeEventWriter(command.commandId, ROUTE_CHOICE_SOURCE, events);
-    writeEvent({
-        type: 'route.choice_selected',
-        choiceId: command.choiceId,
-        routeType: outcome.routeType,
-        outcome: outcome.outcomeKind,
-        summaryText: outcome.summaryText,
-        selectedDungeonNodeId: outcome.run.dungeonRun?.selectedNodeId ?? null,
-        livesBefore: runNonNegativeInteger(run.lives),
-        livesAfter: runNonNegativeInteger(outcome.run.lives),
-        shopGoldBefore: runNonNegativeInteger(run.shopGold),
-        shopGoldAfter: runNonNegativeInteger(outcome.run.shopGold),
-        totalScoreBefore: statsBefore.totalScore,
-        totalScoreAfter: statsAfter.totalScore,
-        guardTokensBefore: statsBefore.guardTokens,
-        guardTokensAfter: statsAfter.guardTokens,
-        comboShardsBefore: statsBefore.comboShards,
-        comboShardsAfter: statsAfter.comboShards,
-        relicFavorBefore: runNonNegativeInteger(run.relicFavorProgress),
-        relicFavorAfter: runNonNegativeInteger(outcome.run.relicFavorProgress),
-        memorizeBonusMsBefore: runNonNegativeInteger(run.pendingMemorizeBonusMs),
-        memorizeBonusMsAfter: runNonNegativeInteger(outcome.run.pendingMemorizeBonusMs)
-    });
-    writeEvent({
-        type: 'feedback.requested',
-        cue: `route.choice.${outcome.routeType}`,
-        message: outcome.summaryText,
-        tone: outcome.routeType === 'greed' ? 'warning' : 'reward'
-    });
-    return { run: outcome.run, command, events, accepted: true };
-};
-
-const gameplayBonusRewardIds = new Set<BonusRewardId>(GAMEPLAY_BONUS_REWARD_IDS);
-
-const bonusRewardIdFromInstance = (run: RunState, floor: number, instanceId: string): BonusRewardId | null => {
-    const prefix = `${run.runRulesVersion}:${run.runSeed}:${floor}:`;
-    if (!instanceId.startsWith(prefix)) {
-        return null;
-    }
-    const rewardId = instanceId.slice(prefix.length) as BonusRewardId;
-    return gameplayBonusRewardIds.has(rewardId) ? rewardId : null;
-};
+): GameplayCommandResult =>
+    rejectedResult(run, command.commandId, 'No route is offered between floors any more.', command);
 
 const applySideRoomResolveCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'side_room.resolve' }>
-): GameplayCommandResult => {
-    const room = run.sideRoom;
-    if (run.status !== 'levelComplete' || run.lives <= 0 || !room) {
-        return rejectedResult(run, command.commandId, 'Side-room action requires a live completed-floor interlude.', command);
-    }
-
-    const statsBefore = normalizeSessionStats(run.stats);
-    const events: GameplayEvent[] = [];
-    let nextRun: RunState = run;
-    let choiceId: string | null = command.choiceId ?? null;
-    let outcome: 'rest_healed' | 'event_applied' | 'bonus_claimed' | 'skipped' = 'skipped';
-    let rewardId: BonusRewardId | null = null;
-    let eventEffect: RunEventChoiceEffect | null = null;
-    let resultMessage = 'Side room skipped.';
-
-    if (command.action === 'skip') {
-        nextRun = { ...run, sideRoom: null };
-    } else if (room.payload.kind === 'rest_heal') {
-        const lives = Math.min(MAX_LIVES, runNonNegativeInteger(run.lives) + 1);
-        choiceId = room.payload.serviceId;
-        outcome = 'rest_healed';
-        resultMessage = lives > runNonNegativeInteger(run.lives)
-            ? 'The quiet rest restored one life.'
-            : 'The quiet rest preserved the current life total.';
-        nextRun = {
-            ...run,
-            sideRoom: null,
-            lives,
-            lastLevelResult: run.lastLevelResult
-                ? { ...run.lastLevelResult, livesRemaining: lives }
-                : run.lastLevelResult,
-            shopGold: Math.max(0, runNonNegativeInteger(run.shopGold) - 1)
-        };
-    } else if (room.payload.kind === 'event_choice') {
-        const event = rollRunEventRoom({
-            runSeed: run.runSeed,
-            rulesVersion: run.runRulesVersion,
-            floor: room.floor
-        });
-        const selectedChoiceId = command.choiceId ?? room.payload.choiceId;
-        const selectedChoice = event.options.find((option) => option.id === selectedChoiceId);
-        if (event.eventKey !== room.payload.eventKey || !selectedChoice) {
-            return rejectedResult(run, command.commandId, 'Side-room event choice is stale or unavailable.', command);
-        }
-        const applied = applyRunEventChoice({ ...run, sideRoom: null }, event, selectedChoiceId);
-        if (!applied.applied) {
-            return rejectedResult(run, command.commandId, 'Side-room event choice could not be applied.', command);
-        }
-        choiceId = selectedChoiceId;
-        eventEffect = selectedChoice.effect;
-        outcome = 'event_applied';
-        resultMessage = selectedChoice.resultText;
-        nextRun = applied.run;
-    } else {
-        const selectedInstanceId = command.choiceId
-            ?? (Array.isArray(room.choices) ? room.choices.find((choice) => choice.primary)?.id : undefined)
-            ?? room.payload.instanceId;
-        const visibleChoiceIds = Array.isArray(room.choices) ? room.choices.map((choice) => choice.id) : [];
-        if (visibleChoiceIds.length > 0 && !visibleChoiceIds.includes(selectedInstanceId)) {
-            return rejectedResult(run, command.commandId, 'Bonus reward choice is not part of the open draft.', command);
-        }
-        rewardId = bonusRewardIdFromInstance(run, room.floor, selectedInstanceId);
-        const rules = rewardId ? GAMEPLAY_BONUS_REWARD_RULES[rewardId] : null;
-        const ledger = run.bonusRewardLedger;
-        const claimedInstanceIds = runStringArray(ledger?.claimedInstanceIds);
-        const claimedCount = rewardId
-            ? runNonNegativeInteger(ledger?.claimedRewardIds?.[rewardId])
-            : 0;
-        if (
-            !rewardId
-            || !rules
-            || room.floor < rules.minFloor
-            || claimedInstanceIds.includes(selectedInstanceId)
-            || claimedCount >= rules.maxClaims
-            || (rules.roomKind === 'secret_room' && runNonNegativeInteger(ledger?.discoveredSecretRooms) >= 1)
-        ) {
-            return rejectedResult(run, command.commandId, 'Bonus reward choice is stale or ineligible.', command);
-        }
-        const definition = getGameplayContentDefinition(`bonus_reward.${rewardId}`);
-        const effectCommand = definition
-            ? createGameplayDefinitionCommand(command.commandId, definition.id)
-            : null;
-        if (!definition || definition.source.kind !== 'bonus_reward' || effectCommand?.type !== 'effects.apply') {
-            return rejectedResult(run, command.commandId, 'Bonus reward has no matching gameplay definition.', command);
-        }
-        const applied = applyDefinition({ ...run, sideRoom: null }, effectCommand, definition, events);
-        if (!applied.accepted) {
-            return rejectedResult(run, command.commandId, 'Bonus reward definition rejected the claim.', command);
-        }
-        nextRun = applied.run;
-        if (
-            rules.roomKind === 'treasure_chest'
-            && runNonNegativeInteger(ledger?.openedTreasureRooms) === 0
-            && hasRunRelic(run, 'shrine_echo')
-        ) {
-            const shrineDefinition = getGameplayContentDefinition('relic.shrine_echo.treasure_claim');
-            const shrineCommand = shrineDefinition
-                ? createGameplayDefinitionCommand(command.commandId, shrineDefinition.id)
-                : null;
-            if (shrineDefinition && shrineCommand?.type === 'effects.apply') {
-                const shrineApplied = applyDefinition(nextRun, shrineCommand, shrineDefinition, events);
-                if (shrineApplied.accepted) {
-                    nextRun = shrineApplied.run;
-                }
-            }
-        }
-        choiceId = selectedInstanceId;
-        outcome = 'bonus_claimed';
-        resultMessage = `${rewardId.replaceAll('_', ' ')} claimed.`;
-        nextRun = {
-            ...nextRun,
-            bonusRewardLedger: {
-                claimedInstanceIds: [...new Set([...claimedInstanceIds, selectedInstanceId])],
-                claimedRewardIds: {
-                    ...(ledger?.claimedRewardIds ?? {}),
-                    [rewardId]: claimedCount + 1
-                },
-                discoveredSecretRooms: runNonNegativeInteger(ledger?.discoveredSecretRooms)
-                    + (rules.roomKind === 'secret_room' ? 1 : 0),
-                openedTreasureRooms: runNonNegativeInteger(ledger?.openedTreasureRooms)
-                    + (rules.roomKind === 'treasure_chest' ? 1 : 0)
-            }
-        };
-    }
-
-    const statsAfter = normalizeSessionStats(nextRun.stats);
-    const writeEvent = makeEventWriter(command.commandId, SIDE_ROOM_SOURCE, events);
-    writeEvent({
-        type: 'side_room.resolved',
-        roomId: room.id,
-        roomKind: room.kind,
-        routeType: room.routeType,
-        nodeKind: room.nodeKind,
-        action: command.action,
-        choiceId,
-        outcome,
-        rewardId,
-        eventEffect,
-        livesBefore: runNonNegativeInteger(run.lives),
-        livesAfter: runNonNegativeInteger(nextRun.lives),
-        shopGoldBefore: runNonNegativeInteger(run.shopGold),
-        shopGoldAfter: runNonNegativeInteger(nextRun.shopGold),
-        totalScoreBefore: statsBefore.totalScore,
-        totalScoreAfter: statsAfter.totalScore,
-        guardTokensBefore: statsBefore.guardTokens,
-        guardTokensAfter: statsAfter.guardTokens,
-        comboShardsBefore: statsBefore.comboShards,
-        comboShardsAfter: statsAfter.comboShards,
-        relicFavorBefore: runNonNegativeInteger(run.relicFavorProgress),
-        relicFavorAfter: runNonNegativeInteger(nextRun.relicFavorProgress),
-        destroyChargesBefore: getRunInventoryItemQuantity(run, 'destroy_charge'),
-        destroyChargesAfter: getRunInventoryItemQuantity(nextRun, 'destroy_charge'),
-        peekChargesBefore: getRunInventoryItemQuantity(run, 'peek_charge'),
-        peekChargesAfter: getRunInventoryItemQuantity(nextRun, 'peek_charge'),
-        regionShuffleChargesBefore: getRunInventoryItemQuantity(run, 'region_shuffle_charge'),
-        regionShuffleChargesAfter: getRunInventoryItemQuantity(nextRun, 'region_shuffle_charge'),
-        ironKeysBefore: getRunInventoryItemQuantity(run, 'iron_key'),
-        ironKeysAfter: getRunInventoryItemQuantity(nextRun, 'iron_key'),
-        rewardPerkCountBefore: normalizeGameplayRewardPerkIds(run.rewardPerkIds).length,
-        rewardPerkCountAfter: normalizeGameplayRewardPerkIds(nextRun.rewardPerkIds).length
-    });
-    if (outcome !== 'bonus_claimed') {
-        writeEvent({
-            type: 'feedback.requested',
-            cue: `side_room.${outcome}`,
-            message: resultMessage,
-            tone: command.action === 'skip' ? 'information' : 'reward'
-        });
-    }
-    return { run: nextRun, command, events, accepted: true };
-};
+): GameplayCommandResult =>
+    rejectedResult(run, command.commandId, 'No side room can open between floors any more.', command);
 
 const applyRelicPickCommand = (
     run: RunState,

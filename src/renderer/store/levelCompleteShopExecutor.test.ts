@@ -26,7 +26,7 @@ const createDeps = (
 describe('executeOpenShopFromLevelComplete', () => {
     it('routes dead level-complete interludes to game over resolution', () => {
         const run = {
-            ...createPlayablePathFixture('sideRoomThenShop').run!,
+            ...createPlayablePathFixture('floorClearWithShop').run!,
             lives: 0,
             status: 'levelComplete' as const
         };
@@ -46,7 +46,7 @@ describe('executeOpenShopFromLevelComplete', () => {
 
     it('ignores states that cannot open a level-complete shop', () => {
         const run = {
-            ...createPlayablePathFixture('sideRoomThenShop').run!,
+            ...createPlayablePathFixture('floorClearWithShop').run!,
             status: 'playing' as const
         } as RunState;
         const deps = createDeps(createState({ run }));
@@ -58,7 +58,7 @@ describe('executeOpenShopFromLevelComplete', () => {
     });
 
     it('opens eligible level-complete shop runs', () => {
-        const source = createPlayablePathFixture('sideRoomThenShop').run!;
+        const source = createPlayablePathFixture('floorClearWithShop').run!;
         const run = { ...source, sideRoom: null };
         const deps = createDeps(createState({ run }));
 

@@ -55,7 +55,6 @@ export const SHARED_REACH_EXEMPTIONS: Record<string, string> = {
 
     // Records and contract tables whose consumer is a test.
     'color-vision.ts': 'Colour-distance maths the palette tests check the shipped palette against.',
-    'copy-tone.ts': 'Tone rules the copy tests hold the shipped strings to.',
     'difficulty-profile.ts': 'The shipped tuning profile written down so a change to the curve has to change this too.',
     'dungeon-combinatoric-matrix.ts': 'QA coverage matrix: which dungeon combinations are covered, excluded or future.',
     'dungeon-save-migration.ts': 'Field policy table saying which save fields need a migration when they change; the save tests hold the schema to it. Not a migration routine, so nothing calls it at load.',

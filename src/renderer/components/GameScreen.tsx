@@ -19,7 +19,6 @@ import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import {
     canOfferEndlessRiskWager
 } from '../../shared/objective-rules';
-import { getRouteChoiceAvailability, routeChoicesForResult } from '../../shared/route-rules';
 import { getTraitRouteObjectiveStatus } from '../../shared/trait-route-objectives';
 import {
     canRegionShuffle,
@@ -31,7 +30,6 @@ import {
     getDungeonExitStatus,
     getDungeonObjectiveStatus
 } from '../../shared/dungeon-rules';
-import { getDungeonRouteDecisionPresentation } from '../../shared/run-map';
 import { useNotificationStore } from '@cross-repo-libs/notifications';
 import type { CSSProperties } from 'react';
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
@@ -239,7 +237,6 @@ const dungeonExitPromptLockLine = (status: ReturnType<typeof getDungeonExitStatu
     return `Keys: ${run.dungeonKeys[status.lockKind] ?? 0} matching, ${run.dungeonMasterKeys} master.`;
 };
 
-const FLOOR_CLEAR_ROUTE_GLYPHS: Record<RouteNodeType, string> = { greed: '\u2666', mystery: '\u2726', safe: '\u2b21' };
 
 const getClearLifeBonusLabel = (result: NonNullable<RunState['lastLevelResult']>): string | null => {
     if (result.clearLifeGained !== 1) {
@@ -1064,36 +1061,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         run.lastLevelResult && run.endlessRiskWager?.acceptedOnLevel === run.lastLevelResult.level
             ? run.endlessRiskWager
             : null;
-    const routeChoices = useMemo(() => routeChoicesForResult(run.lastLevelResult), [run.lastLevelResult]);
-    const routeChoiceRequired = routeChoices.length > 0 && !run.pendingRouteCardPlan;
-    const firstRouteChoiceRequired = routeChoiceRequired && run.lastLevelResult?.level === 1;
-    const routeChoiceRequiredCopy =
-        firstRouteChoiceRequired
-            ? ROUTE_CHOICE_COPY.prompt
-            : ROUTE_CHOICE_COPY.settled;
-    const dungeonRouteDecisionPresentation =
-        routeChoiceRequired
-            ? getDungeonRouteDecisionPresentation(run.dungeonRun, routeChoices)
-            : null;
-    const floorClearRouteOptions: FloorClearRouteOption[] = routeChoiceRequired
-        ? routeChoices.map((choice) => {
-              const row = dungeonRouteDecisionPresentation?.rows.find((candidate) => candidate.id === choice.id) ?? null;
-              const availability = getRouteChoiceAvailability(run, choice);
-              return {
-                  id: choice.id,
-                  routeType: choice.routeType,
-                  label: row?.choiceLabel ?? choice.label,
-                  room: row?.nodeLabel ?? '',
-                  // The approach matters only when rooms converge on one gate ("Keeper Chamber via Safe passage").
-                  approachLabel: row?.approachLabel && /\bvia\b/u.test(row.nodeLabel) ? row.approachLabel : undefined,
-                  glyph: FLOOR_CLEAR_ROUTE_GLYPHS[choice.routeType],
-                  reward: row?.reward ?? choice.rewardPreview ?? choice.detail,
-                  risk: row?.risk ?? choice.riskPreview ?? 'No extra risk.',
-                  available: availability.available,
-                  unavailableLabel: availability.label
-              };
-          })
-        : [];
+    /*
+     * The floor-clear panel used to hold the run here until the player picked one of three routes,
+     * with a glyph, a room name, a reward line and a risk line for each. No route is offered any
+     * more (Gen 173): the panel has one primary action, and it is the next floor.
+     */
+    const routeChoiceRequired = false;
+    const routeChoiceRequiredCopy = ROUTE_CHOICE_COPY.settled;
+    const floorClearRouteOptions: FloorClearRouteOption[] = [];
     const floorClearSelectedRoute: FloorClearSelectedRoute | null = run.pendingRouteCardPlan
         ? {
               routeType: run.pendingRouteCardPlan.routeType,

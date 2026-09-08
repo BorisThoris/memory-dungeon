@@ -8,7 +8,6 @@ import { getPairProximityGridDistance } from '../../shared/pairProximityHint';
 import { getTileSuit } from '../../shared/tile-suit-rules';
 import { getClumpRead } from '../../shared/clump-read-rules';
 import { DECOY_PAIR_KEY } from '../../shared/tile-identity';
-import { routeSpecialLabel, routeSpecialRewardLine } from '../../shared/route-world';
 import {
     getTileSwapTraitPreviewLines,
     getTileTraitInteractionPreviewLines,
@@ -256,32 +255,12 @@ export const getTileAriaLabel = (
             : tile.scoutRevealSource === 'lantern_ward' || tile.lanternScouted
               ? ' Scouted by Lantern Ward.'
               : '';
-    const routeNote =
-        (tile.routeSpecialKind || tile.routeCardKind) && tile.state !== 'matched'
-            ? ` Route card: ${
-                  tile.routeSpecialKind
-                      ? `${routeSpecialLabel(tile.routeSpecialKind)}. ${routeSpecialRewardLine(tile.routeSpecialKind)}`
-                      : tile.routeCardKind === 'safe_ward'
-                        ? 'Safe ward.'
-                        : tile.routeCardKind === 'greed_cache'
-                          ? 'Greed cache.'
-                          : 'Mystery veil.'
-              }${
-                  (tile.routeSpecialKind === 'mystery_veil' ||
-                      tile.routeSpecialKind === 'secret_door' ||
-                      tile.routeSpecialKind === 'omen_seal' ||
-                      tile.routeSpecialKind === 'mimic_cache' ||
-                      tile.routeSpecialKind === 'loaded_gateway' ||
-                      tile.routeSpecialKind === 'parasite_vessel') &&
-                  tile.routeSpecialRevealed
-                      ? tile.routeSpecialRevealSource === 'lantern_ward'
-                          ? ' Scouted by Lantern Ward.'
-                          : tile.routeSpecialRevealSource === 'omen_seal'
-                            ? ' Scouted by Omen Seal.'
-                          : ' Revealed by peek.'
-                      : ''
-              }`
-            : '';
+    /*
+     * A route note used to be read out here - "Route card: Guard cache. Banks a ward." and the
+     * scouting line that went with it. Generation deals no route special and no route card, so the
+     * note was describing a tile that cannot exist. Gen 173; see `docs/REMOVED_DUNGEON_LAYER.md`.
+     */
+    const routeNote = '';
     const dungeonKnowledge = getDungeonCardKnowledge(tile, faceUp);
     const dungeonNote = dungeonKnowledge.familyKnown ? getDungeonCardText(tile, board) : '';
     const passiveScoutNote = scoutSourceNote && !routeNote.includes(scoutSourceNote.trim()) ? scoutSourceNote : '';

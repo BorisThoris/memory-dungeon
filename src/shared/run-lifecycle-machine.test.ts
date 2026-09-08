@@ -63,23 +63,6 @@ describe('run lifecycle machine', () => {
         const run = createNewRun(0, { echoFeedbackEnabled: false });
         expect(lifecycleStateFromRun(null)).toBe('menu');
         expect(lifecycleStateFromRun({ ...run, status: 'paused' })).toBe('paused');
-        expect(lifecycleStateFromRun({
-            ...run,
-            status: 'levelComplete',
-            sideRoom: {
-                body: 'Rest',
-                floor: 1,
-                id: 'rest',
-                kind: 'rest_shrine',
-                nodeKind: 'rest',
-                primaryDetail: 'Heal',
-                primaryLabel: 'Rest',
-                routeType: 'safe',
-                skipLabel: 'Skip',
-                title: 'Room',
-                payload: { kind: 'rest_heal', serviceId: 'rest_heal' }
-            }
-        })).toBe('sideRoom');
         expect(lifecycleStateFromSurface({ run, view: 'shop' })).toBe('shop');
         expect(lifecycleStateFromSurface({ run, view: 'menu' })).toBe('menu');
     });

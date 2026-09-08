@@ -8,33 +8,10 @@ import {
 } from './levelCompleteSurfaceState';
 
 describe('levelCompleteSurfaceState', () => {
-    it('routes side-room runs to the side-room view and clears board interaction surface', () => {
-        const run = createPlayablePathFixture('sideRoomPrimary').run!;
-        const result = createLevelCompleteContinuationSurfaceResult(run, { includeSummaryShop: false });
-
-        expect(result.kind).toBe('sideRoom');
-        expect(result).toMatchObject({
-            patch: {
-                boardPinMode: false,
-                destroyPairArmed: false,
-                matchScorePop: null,
-                mismatchScorePop: null,
-                peekModeArmed: false,
-                tileSwapArmed: false,
-                tileSwapFirstTileId: null,
-                run,
-                view: 'sideRoom'
-            }
-        });
-        expect(shouldPrepareMemorizeTimerForContinuation(result)).toBe(false);
-    });
 
     it('routes summary-shop runs to the shop only when requested', () => {
-        const run = createPlayablePathFixture('sideRoomThenShop').run!;
-        const result = createLevelCompleteContinuationSurfaceResult(
-            { ...run, sideRoom: null },
-            { includeSummaryShop: true }
-        );
+        const run = createPlayablePathFixture('floorClearWithShop').run!;
+        const result = createLevelCompleteContinuationSurfaceResult(run, { includeSummaryShop: true });
 
         expect(result.kind).toBe('shop');
         expect(result).toMatchObject({

@@ -1269,3 +1269,60 @@ it does with it is end the floor.
 The bare bands are untouched. Only the relic path is relaxed, only to the measurement, so any
 further flattening fails immediately. The fix is the relics' own numbers, and it belongs with Phase
 2, where the shape of a floor is being decided anyway.
+
+## Gen 173: no door between floors
+
+The route offer is gone. A cleared floor goes straight to the next one: no safe, greedy or mystery
+door, no gateway pair that picked the door for you, no side room behind it, no run event, no route
+card or route special dealt onto the next board. Cut at the source — `generateRouteChoices` and the
+route-special layer of board generation no longer exist — and the seven route modules, `run-events`
+and the side-room surface went with them (`docs/REMOVED_DUNGEON_LAYER.md` lists them). A
+`route.choose` or `side_room.resolve` command in an old journal is rejected with a reason instead of
+being replayed; the command types themselves stay in the schema until the journal migration in T1.14.
+
+### The debt list is empty
+
+Gen 172 recorded three findings in `KNOWN_LONG_RUN_DEBT`, each asserted exactly, each answered "by
+the between-floor layer going, not by moving a bound". It went, and all three went with it:
+
+| finding (Gen 172) | Gen 173 |
+|---|---|
+| `greedy … dominantRouteShare=1` | no route to dominate |
+| `greedy … endingShopGold=801/144` | gone — it was the toll a never-taken safe route never collected |
+| `max_profile_ending_gold_per_floor:5.56 outside 0-5` | inside the band |
+
+`gate:long-run`, `balance-simulation.test.ts` and `long-run-depth.test.ts` now assert an empty issue
+list, and the greedy profile's five faces collapse to one line: it loses no life at all over 48
+floors and three seeds, because nothing between floors costs one and nothing on the floor does
+either. That is the gap Phase 2 exists to fill, and it is asserted exactly.
+
+### The build catalog: seventeen became twelve, and moved
+
+`build-strategy-playthrough-simulation.test.ts` asserts its viability issues exactly. The count went
+17 → 12, but not by subtraction:
+
+- **Gone with the metric.** Route risk assessments, route risk rejections, adaptive route selections
+  and side-room resource assessments read zero on every build with no route to assess, so the four
+  columns were removed rather than baselined, and the two "greed policy with nothing to decline"
+  rows with them.
+- **Gone with the route, unexpectedly.** Eight hazard-pressure rows. The safe route every policy was
+  taking had been keeping the hazard-pressure mutators off the schedule; with no route, one lands
+  on one floor a seed. Every matchup is sampled again and The Saboteur's region shuffle fires — the
+  Gen 172 note that "its gate never opens" is no longer true, and the assertion says so.
+- **Arrived.** The Engine short of shard conversions (2 of 3; seed 42077 never converts, because a
+  run that never loses a life has nothing to convert for), one seed with no scout glint for The
+  Cartographer, and four more turn-ratio breaches — seven now, all The Cartographer against
+  everyone else at 1.53–1.65 — as the last thing that made builds' floors differ in length went.
+
+### Smaller things the cut moved
+
+- **Memory burden.** The same strained board reads 6 ("taxed") → 4 ("loaded"): three route
+  decisions no longer weigh on it.
+- **The payoff stack.** A route card was one of four reward channels; the same match now cashes
+  three and reads "Stack cashout" rather than "Super stack". The build lane behind it becomes
+  visible in the four-lane map.
+- **The interaction graph** drops `route.choice`, `route.mystery` and `progression.route_side_room`
+  (26 edges) and gains a declared reader for `peekRevealedTileIds`, which only the mystery route
+  had been reading on paper; the peek power reads it in fact.
+- **Bands.** None moved. `sim:cascade`, `sim:pop` and `sim:occupancy` hold exactly where Gen 172
+  left them.

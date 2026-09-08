@@ -24,11 +24,6 @@ import {
     EXIT_PAIR_KEY,
     revealDungeonExit
 } from './dungeon-rules';
-import {
-    applyRouteChoiceOutcome,
-    openRouteSideRoom,
-    routeChoicesForResult
-} from './route-rules';
 import { createRunShopOffers } from './shop-rules';
 
 export type PlayablePathFixtureId =
@@ -41,10 +36,6 @@ export type PlayablePathFixtureId =
     | 'floorClearWithShop'
     | 'floorClearWithShopLowGold'
     | 'inFloorShop'
-    | 'sideRoomPrimary'
-    | 'sideRoomChoice'
-    | 'sideRoomSkip'
-    | 'sideRoomThenShop'
     | 'relicDraft'
     | 'gameOver'
     | 'cascadeClump';
@@ -74,10 +65,6 @@ export const PLAYABLE_PATH_FIXTURE_IDS: readonly PlayablePathFixtureId[] = [
     'floorClearWithShop',
     'floorClearWithShopLowGold',
     'inFloorShop',
-    'sideRoomPrimary',
-    'sideRoomChoice',
-    'sideRoomSkip',
-    'sideRoomThenShop',
     'relicDraft',
     'gameOver',
     'cascadeClump'
@@ -133,14 +120,6 @@ export const createPlayablePathFixture = (
              * and a reachability gate that reported green.
              */
             return { id, view: 'shop', run: inFloorShopRun(), saveData, shopReturnMode: 'floor' };
-        case 'sideRoomPrimary':
-            return { id, view: 'sideRoom', run: sideRoomForRoute('safe'), saveData, shopReturnMode: null };
-        case 'sideRoomChoice':
-            return { id, view: 'sideRoom', run: sideRoomForRoute('mystery'), saveData, shopReturnMode: null };
-        case 'sideRoomSkip':
-            return { id, view: 'sideRoom', run: sideRoomForRoute('greed'), saveData, shopReturnMode: null };
-        case 'sideRoomThenShop':
-            return { id, view: 'sideRoom', run: sideRoomForRoute('safe', { withShop: true }), saveData, shopReturnMode: null };
         case 'relicDraft':
             return { id, view: 'playing', run: relicDraftRun(), saveData, shopReturnMode: null };
         case 'gameOver':
@@ -368,6 +347,12 @@ const playPerfectFloors = (run: RunState, count: number): RunState => {
     return current;
 };
 
+/*
+ * The floor-clear interlude. It kept its fixture id from when it offered three routes, because the
+ * e2e surface map and the reachability gate key on that id; what it shows now is a cleared floor
+ * with one way forward. The four side-room fixtures that used to grow out of it are gone with the
+ * rooms (Gen 173).
+ */
 const floorClearWithRouteChoices = (): RunState => ({
     ...playPerfectFloors(baseEndlessRun(), 1),
     pendingRouteCardPlan: null,
@@ -392,31 +377,6 @@ const inFloorShopRun = (): RunState => {
     const base = activeRunWithTrapCard();
     const stocked = { ...base, shopGold: 12 };
     return { ...stocked, shopOffers: createRunShopOffers(stocked) };
-};
-
-const sideRoomForRoute = (
-    routeType: 'safe' | 'greed' | 'mystery',
-    options: { withShop?: boolean } = {}
-): RunState => {
-    const cleared = floorClearWithRouteChoices();
-    const choice = routeChoicesForResult(cleared.lastLevelResult).find((item) => item.routeType === routeType);
-    if (!choice) {
-        throw new Error(`Missing ${routeType} route choice in playable-path fixture.`);
-    }
-    const sourceRun = routeType === 'safe' ? { ...cleared, lives: 3 } : cleared;
-    const chosen = applyRouteChoiceOutcome(sourceRun, choice.id);
-    if (!chosen.applied) {
-        throw new Error(`Could not apply ${routeType} route choice in playable-path fixture: ${chosen.reason}`);
-    }
-    const opened = openRouteSideRoom(chosen.run);
-    if (!opened.sideRoom) {
-        throw new Error(`Missing ${routeType} side room in playable-path fixture.`);
-    }
-    if (!options.withShop) {
-        return opened;
-    }
-    const shopReady = { ...opened, shopGold: 20 };
-    return { ...shopReady, shopOffers: createRunShopOffers(shopReady) };
 };
 
 const relicDraftRun = (): RunState => {

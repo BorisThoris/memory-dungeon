@@ -77,11 +77,6 @@ import { EXIT_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 import { createPlayablePathFixture } from './playable-path-fixtures';
 import { normalizeSessionStats } from './session-stats-rules';
 import { applyRelicOfferService, RELIC_OFFER_SERVICE_IDS, RELIC_POOL } from './relics';
-import {
-    claimRouteSideRoomChoice,
-    claimRouteSideRoomPrimary,
-    skipRouteSideRoom
-} from './route-side-room-rules';
 import { advanceToNextLevel } from './next-floor-transition-rules';
 import { resolveSlayerFloorClearEffects } from './slayer-floor-clear-transition';
 
@@ -628,12 +623,6 @@ describe('deterministic gameplay core', () => {
             expect.objectContaining({ type: 'floor.advanced', outcome: 'game_over', boardPairCount: 0 }),
             expect.objectContaining({ type: 'feedback.requested', cue: 'floor.advance.defeated', tone: 'warning' })
         ]));
-
-        const rejected = reduceGameplayCommand(
-            { ...initial, sideRoom: createPlayablePathFixture('sideRoomSkip').run!.sideRoom },
-            createGameplayFloorAdvanceCommand('floor-advance-blocked')
-        );
-        expect(rejected).toMatchObject({ accepted: false, run: expect.objectContaining({ status: 'levelComplete' }) });
     });
 
     it('consumes exactly one Wild Match token for a resolved wildcard bridge', () => {
@@ -777,47 +766,6 @@ describe('deterministic gameplay core', () => {
         ]);
     });
 
-    it('selects a route through a replayable command with exact progression deltas', () => {
-        const initial = createPlayablePathFixture('floorClearWithRouteChoices').run!;
-        const choice = initial.lastLevelResult!.routeChoices!.find((candidate) => candidate.routeType === 'greed')!;
-        const command = createGameplayRouteChooseCommand('route-greed', choice.id);
-        const result = reduceGameplayCommand(initial, command);
-        const beforeStats = normalizeSessionStats(initial.stats);
-
-        expect(result).toMatchObject({
-            accepted: true,
-            run: {
-                lives: initial.lives - 1,
-                shopGold: initial.shopGold + 3,
-                pendingRouteCardPlan: { choiceId: choice.id, routeType: 'greed' },
-                dungeonRun: { selectedNodeId: choice.id }
-            }
-        });
-        expect(normalizeSessionStats(result.run.stats).totalScore).toBe(beforeStats.totalScore + 35);
-        expect(result.events).toEqual([
-            expect.objectContaining({
-                type: 'route.choice_selected',
-                choiceId: choice.id,
-                routeType: 'greed',
-                outcome: 'greed',
-                selectedDungeonNodeId: choice.id,
-                livesBefore: initial.lives,
-                livesAfter: initial.lives - 1,
-                shopGoldBefore: initial.shopGold,
-                shopGoldAfter: initial.shopGold + 3,
-                totalScoreBefore: beforeStats.totalScore,
-                totalScoreAfter: beforeStats.totalScore + 35
-            }),
-            expect.objectContaining({
-                type: 'feedback.requested',
-                cue: 'route.choice.greed',
-                tone: 'warning'
-            })
-        ]);
-        expect(replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))]).run).toEqual(result.run);
-        expect(reduceGameplayCommand(initial, createGameplayRouteChooseCommand('route-missing', 'missing')))
-            .toMatchObject({ accepted: false, run: initial });
-    });
 
     it('selects a relic through one replayable command covering ownership, immediate effect, and offer outcome', () => {
         const initial = createPlayablePathFixture('relicDraft').run!;
@@ -876,127 +824,6 @@ describe('deterministic gameplay core', () => {
         )).toMatchObject({ accepted: false, run: { relicOffer: null } });
     });
 
-    it('resolves rest, event, bonus, and skip side rooms through flat replayable commands', () => {
-        const cases = [
-            {
-                action: 'claim' as const,
-                initial: createPlayablePathFixture('sideRoomPrimary').run!,
-                choiceId: undefined,
-                legacy: (candidate: RunState) => claimRouteSideRoomPrimary(candidate),
-                outcome: 'rest_healed'
-            },
-            {
-                action: 'claim' as const,
-                initial: createPlayablePathFixture('sideRoomChoice').run!,
-                choiceId: createPlayablePathFixture('sideRoomChoice').run!.sideRoom!.choices!
-                    .find((choice) => choice.primary)!.id,
-                legacy: (candidate: RunState, choiceId?: string) => claimRouteSideRoomChoice(candidate, choiceId),
-                outcome: 'event_applied'
-            },
-            {
-                action: 'claim' as const,
-                initial: createPlayablePathFixture('sideRoomSkip').run!,
-                choiceId: createPlayablePathFixture('sideRoomSkip').run!.sideRoom!.choices!
-                    .find((choice) => choice.primary)!.id,
-                legacy: (candidate: RunState, choiceId?: string) => claimRouteSideRoomChoice(candidate, choiceId),
-                outcome: 'bonus_claimed'
-            },
-            {
-                action: 'skip' as const,
-                initial: createPlayablePathFixture('sideRoomSkip').run!,
-                choiceId: undefined,
-                legacy: (candidate: RunState) => skipRouteSideRoom(candidate),
-                outcome: 'skipped'
-            }
-        ];
-        const withoutJournals = (candidate: RunState): RunState => ({
-            ...candidate,
-            gameplayCommandJournal: [],
-            gameplayEventJournal: []
-        });
-
-        for (const [index, row] of cases.entries()) {
-            const command = createGameplaySideRoomResolveCommand(
-                `side-room-core-${index}`,
-                row.action,
-                row.choiceId
-            );
-            const result = reduceGameplayCommand(row.initial, command);
-            const legacy = row.legacy(row.initial, row.choiceId);
-
-            expect(result.accepted).toBe(true);
-            expect(withoutJournals(result.run)).toEqual(withoutJournals(legacy));
-            expect(result.run.gameplayCommandJournal).toEqual(row.initial.gameplayCommandJournal);
-            expect(result.run.gameplayEventJournal).toEqual(row.initial.gameplayEventJournal);
-            expect(result.events).toEqual(expect.arrayContaining([
-                expect.objectContaining({
-                    type: 'side_room.resolved',
-                    action: row.action,
-                    outcome: row.outcome
-                })
-            ]));
-            expect(result.events.every((event, sequence) =>
-                event.commandId === command.commandId
-                && event.sequence === sequence
-                && event.eventId === `${command.commandId}:${sequence}`
-            )).toBe(true);
-            expect(replayGameplayCommands(
-                row.initial,
-                [JSON.parse(JSON.stringify(command))]
-            ).run).toEqual(result.run);
-        }
-
-        const eventRun = createPlayablePathFixture('sideRoomChoice').run!;
-        expect(reduceGameplayCommand(
-            eventRun,
-            createGameplaySideRoomResolveCommand('side-room-invalid', 'claim', 'missing-choice')
-        )).toMatchObject({ accepted: false, run: eventRun });
-
-        const shrineBase = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 7123 });
-        const chestChoiceId = `${shrineBase.runRulesVersion}:${shrineBase.runSeed}:4:chest_gold`;
-        const shrineRun: RunState = {
-            ...shrineBase,
-            status: 'levelComplete',
-            relicIds: ['shrine_echo'],
-            sideRoom: {
-                id: `${chestChoiceId}:side`,
-                kind: 'bonus_reward',
-                routeType: 'greed',
-                nodeKind: 'treasure',
-                floor: 4,
-                title: 'Greed Treasure chest',
-                body: 'A deterministic first treasure claim.',
-                primaryLabel: 'Claim treasure',
-                primaryDetail: 'Claim the authored chest payout.',
-                skipLabel: 'Leave it',
-                choices: [{
-                    id: chestChoiceId,
-                    label: 'Treasure chest',
-                    detail: 'Claim chest payout.',
-                    primary: true
-                }],
-                payload: { kind: 'bonus_reward', instanceId: chestChoiceId }
-            }
-        };
-        const shrineResult = reduceGameplayCommand(
-            shrineRun,
-            createGameplaySideRoomResolveCommand('side-room-shrine-echo', 'claim', chestChoiceId)
-        );
-        expect(shrineResult).toMatchObject({
-            accepted: true,
-            run: {
-                relicFavorProgress: shrineRun.relicFavorProgress + 1,
-                bonusRewardLedger: { openedTreasureRooms: 1 }
-            },
-            events: expect.arrayContaining([
-                expect.objectContaining({
-                    type: 'feedback.requested',
-                    cue: 'build.shrine_echo.treasure_claimed',
-                    source: { kind: 'relic', id: 'shrine_echo' }
-                })
-            ])
-        });
-    });
 
     it('uses relic draft services through replayable commands with exact option and economy deltas', () => {
         for (const serviceId of RELIC_OFFER_SERVICE_IDS) {

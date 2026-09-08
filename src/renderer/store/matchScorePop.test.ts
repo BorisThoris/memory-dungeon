@@ -279,41 +279,6 @@ describe('buildMatchScorePopPayload', () => {
         });
     });
 
-    it('adds route reward copy when the matched pair is a route card', () => {
-        const run = minimalRun({
-            board: {
-                level: 3,
-                rows: 2,
-                columns: 2,
-                flippedTileIds: ['t1', 't2'],
-                tiles: [
-                    { id: 't1', pairKey: 'pk', symbol: 'a', label: 'a', state: 'flipped', routeCardKind: 'greed_cache' },
-                    { id: 't2', pairKey: 'pk', symbol: 'a', label: 'a', state: 'flipped', routeCardKind: 'greed_cache' }
-                ]
-            } as unknown as BoardState,
-            stats: { matchesFound: 2, totalScore: 40 } as RunState['stats']
-        });
-        const next = {
-            ...run,
-            stats: { ...run.stats, matchesFound: 3, totalScore: 85 }
-        };
-        expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'route'), 'route')?.routeRewardText).toBe(
-            'Greed Cache +2 gold +25 score'
-        );
-        expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'route'), 'route')?.feedbackSignal).toEqual({
-            label: 'Route',
-            tone: 'route'
-        });
-        expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'route'), 'route')?.payoffSummary).toEqual({
-            label: 'Route cashout',
-            value: 'Greed Cache +2 gold +25 score',
-            tier: 'reward'
-        });
-        expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'route'), 'route')?.impactCue).toEqual({
-            label: 'Route cashout',
-            tone: 'route'
-        });
-    });
 
     it('turns matched pickup claims into reward floaters beside the matched cards', () => {
         const run = minimalRun({
@@ -598,7 +563,7 @@ describe('buildMatchScorePopPayload', () => {
         expect(pop?.payoffChips?.map((chip) => chip.value).join(' ')).not.toMatch(/NaN|Infinity/);
     });
 
-    it('summarizes four-channel match rewards as a super stack', () => {
+    it('summarizes three-channel match rewards as a stack cashout', () => {
         const run = minimalRun({
             lives: 4,
             board: {
@@ -614,8 +579,7 @@ describe('buildMatchScorePopPayload', () => {
                         label: 'Echo',
                         state: 'flipped',
                         tileTraitKind: 'echo',
-                        findableKind: 'shard_spark',
-                        routeCardKind: 'greed_cache'
+                        findableKind: 'shard_spark'
                     },
                     { id: 'c1', pairKey: 'conduit', symbol: 'c', label: 'Conduit', state: 'hidden', tileTraitKind: 'conduit' },
                     { id: 's1', pairKey: 'sealed', symbol: 's', label: 'Sealed', state: 'hidden', tileTraitKind: 'sealed' },
@@ -626,8 +590,7 @@ describe('buildMatchScorePopPayload', () => {
                         label: 'Echo',
                         state: 'flipped',
                         tileTraitKind: 'echo',
-                        findableKind: 'shard_spark',
-                        routeCardKind: 'greed_cache'
+                        findableKind: 'shard_spark'
                     },
                     { id: 'x1', pairKey: 'x', symbol: 'x', label: 'X', state: 'hidden' },
                     { id: 'x2', pairKey: 'x', symbol: 'x', label: 'X', state: 'hidden' }
@@ -665,16 +628,18 @@ describe('buildMatchScorePopPayload', () => {
         };
         const pop = buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'stack-cashout'), 'stack-cashout');
 
+        // Four channels became three when the route card went (Gen 173): the stack still cashes
+        // out, one rung down from the super stack it used to be.
         expect(pop?.payoffSummary).toEqual({
-            label: 'Super stack',
-            value: '4 payoffs: Route + Pickup + Trait + Chain',
-            tier: 'combo'
+            label: 'Stack cashout',
+            value: '3 payoffs: Pickup + Trait + Chain',
+            tier: 'reward'
         });
-        expect(pop?.impactCue).toEqual({ label: 'Super stack', tone: 'reward' });
+        expect(pop?.impactCue).toEqual({ label: 'Stack cashout', tone: 'reward' });
         expect(pop?.rewardBurst).toEqual({
-            action: 'Cash super stack',
-            label: 'Super stack',
-            value: '4-way payoff',
+            action: 'Cash stack',
+            label: 'Combo burst',
+            value: '3-way payoff',
             tier: 'mega'
         });
         expect(pop?.cascadeCue).toEqual({
@@ -684,17 +649,18 @@ describe('buildMatchScorePopPayload', () => {
         });
         expect(pop?.payoffChips).toEqual(
             expect.arrayContaining([
-                { arcadeCue: 'Route cashout', id: 'route', label: 'Route', value: 'Greed Cache +2 gold +25 score', tone: 'route' },
                 { arcadeCue: 'Pickup cashout', id: 'pickup', label: 'Pickup', value: 'Shard spark +1 combo shard', tone: 'pickup' },
                 { arcadeCue: 'Perk pop', id: 'trait', label: 'Perk', value: 'Perk pop: Echo Conduit Lens doubles the route', tone: 'trait' },
                 { arcadeCue: 'Chain cashout', id: 'chainReward', label: 'Cashout', value: '+1 combo shard / +1 guard token', tone: 'reward' }
             ])
         );
         expect(pop?.payoffLaneMap).toEqual([
-            { id: 'route', label: 'Route', count: 1, tone: 'route', cue: 'Route cashout' },
             { id: 'pickup', label: 'Pickup', count: 1, tone: 'pickup', cue: 'Pickup cashout' },
             { id: 'trait', label: 'Trait', count: 1, tone: 'trait', cue: 'Perk pop' },
-            { id: 'chain', label: 'Chain', count: 1, tone: 'chain', cue: 'Chain cashout' }
+            { id: 'chain', label: 'Chain', count: 1, tone: 'chain', cue: 'Chain cashout' },
+            // The build lane was always in the chips; the route lane in front of it hid it from the
+            // four-lane map until Gen 173 took the route away.
+            { id: 'build', label: 'Build', count: 1, tone: 'reward', cue: 'Heal prime' }
         ]);
     });
 

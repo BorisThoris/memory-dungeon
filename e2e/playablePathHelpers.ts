@@ -24,10 +24,6 @@ export type PlayablePathFixtureId =
     | 'floorClearWithRouteChoices'
     | 'floorClearWithShop'
     | 'floorClearWithShopLowGold'
-    | 'sideRoomPrimary'
-    | 'sideRoomChoice'
-    | 'sideRoomSkip'
-    | 'sideRoomThenShop'
     | 'relicDraft'
     | 'gameOver';
 
@@ -215,10 +211,6 @@ export async function openPlayablePathFixture(page: Page, id: PlayablePathFixtur
 
     if (id === 'gameOver') {
         await expect(page.getByText(/Expedition Over/i)).toBeVisible({ timeout: 30_000 });
-        return;
-    }
-    if (id.startsWith('sideRoom')) {
-        await expect(page.getByTestId('side-room-screen')).toBeVisible({ timeout: 30_000 });
         return;
     }
     if (id === 'freshProfile') {

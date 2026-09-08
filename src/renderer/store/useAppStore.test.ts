@@ -5,7 +5,6 @@ import { buildBoard, countFindablePairs } from '../../shared/board-generation';
 import { createNewRun, createRunSummary } from '../../shared/game-core';
 import { createPlayablePathFixture, type PlayablePathFixtureId } from '../../shared/playable-path-fixtures';
 import { createRunShopOffers } from '../../shared/shop-rules';
-import { rollRunEventRoom } from '../../shared/run-events';
 import { createDefaultSaveData } from '../../shared/save-data';
 import { calculateTileTraitMismatchPenalty } from '../../shared/tile-trait-rules';
 import { BOARD_FLOATER_POP_CLEAR } from './matchScorePop';
@@ -147,23 +146,12 @@ const driveOneVisibleProgressionStep = (): boolean => {
         return true;
     }
 
-    if (view === 'sideRoom') {
-        useAppStore.getState().claimSideRoomPrimary();
-        return true;
-    }
-
     if (view !== 'playing' || run.status !== 'levelComplete') {
         return false;
     }
 
     if (run.relicOffer?.options[0]) {
         useAppStore.getState().pickRelic(run.relicOffer.options[0]);
-        return true;
-    }
-
-    const routeChoice = run.lastLevelResult?.routeChoices?.[0];
-    if (routeChoice && !run.pendingRouteCardPlan) {
-        useAppStore.getState().chooseRouteAndContinue(routeChoice.id);
         return true;
     }
 
@@ -193,10 +181,6 @@ describe('useAppStore timers', () => {
         'floorClearWithRouteChoices',
         'floorClearWithShop',
         'floorClearWithShopLowGold',
-        'sideRoomPrimary',
-        'sideRoomChoice',
-        'sideRoomSkip',
-        'sideRoomThenShop',
         'relicDraft'
     ] satisfies PlayablePathFixtureId[])(
         'drives the %s playable interlude fixture to the next playable state',
@@ -694,147 +678,8 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().run?.shopOffers).toEqual([]);
     });
 
-    it('ignores stale side-room clicks after the side-room surface has already transitioned', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, practiceMode: true, runSeed: 47 });
-        const levelCompleteRun = {
-            ...baseRun,
-            status: 'levelComplete' as const,
-            shopGold: 5,
-            relicOffer: null,
-            sideRoom: null,
-            timerState: {
-                memorizeRemainingMs: null,
-                resolveRemainingMs: null,
-                debugRevealRemainingMs: null,
-                pausedFromStatus: null
-            },
-            lastLevelResult: {
-                level: 1,
-                scoreGained: 100,
-                rating: 'S' as const,
-                livesRemaining: baseRun.lives,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'none' as const,
-                clearLifeGained: 0
-            }
-        };
-        useAppStore.setState({
-            view: 'shop',
-            shopReturnMode: 'summary',
-            run: {
-                ...levelCompleteRun,
-                shopOffers: createRunShopOffers(levelCompleteRun)
-            }
-        });
 
-        useAppStore.getState().claimSideRoomChoice('stale-choice');
-        useAppStore.getState().claimSideRoomPrimary();
-        useAppStore.getState().skipSideRoom();
 
-        expect(useAppStore.getState().view).toBe('shop');
-        expect(useAppStore.getState().shopReturnMode).toBe('summary');
-        expect(useAppStore.getState().run?.status).toBe('levelComplete');
-    });
-
-    it('ignores stale side-room clicks while a side room exists but another surface is active', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, practiceMode: true, runSeed: 48 });
-        const event = rollRunEventRoom({ runSeed: baseRun.runSeed, rulesVersion: baseRun.runRulesVersion, floor: 2 });
-        const run: RunState = {
-            ...baseRun,
-            status: 'levelComplete',
-            sideRoom: {
-                id: `${event.eventKey}:side`,
-                kind: 'run_event',
-                routeType: 'mystery',
-                nodeKind: 'event',
-                floor: 2,
-                title: event.title,
-                body: event.body,
-                primaryLabel: event.options[0]!.label,
-                primaryDetail: event.options[0]!.detail,
-                skipLabel: 'Decline',
-                choices: event.options.map((option, index) => ({
-                    id: option.id,
-                    label: option.label,
-                    detail: option.detail,
-                    primary: index === 0
-                })),
-                payload: { kind: 'event_choice', eventKey: event.eventKey, choiceId: event.options[0]!.id }
-            }
-        };
-        useAppStore.setState({ view: 'playing', run });
-
-        useAppStore.getState().claimSideRoomChoice(event.options[0]!.id);
-        useAppStore.getState().claimSideRoomPrimary();
-        useAppStore.getState().skipSideRoom();
-
-        expect(useAppStore.getState().view).toBe('playing');
-        expect(useAppStore.getState().run).toBe(run);
-        expect(useAppStore.getState().run?.sideRoom).toBe(run.sideRoom);
-    });
-
-    it('selects a floor route through side room before shop and stamps the next board after continuing', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 45 });
-        const levelCompleteRun = {
-            ...baseRun,
-            status: 'levelComplete' as const,
-            shopGold: 5,
-            relicOffer: null,
-            timerState: {
-                memorizeRemainingMs: null,
-                resolveRemainingMs: null,
-                debugRevealRemainingMs: null,
-                pausedFromStatus: null
-            },
-            lastLevelResult: {
-                level: 1,
-                scoreGained: 100,
-                rating: 'S' as const,
-                livesRemaining: baseRun.lives,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'none' as const,
-                clearLifeGained: 0,
-                routeChoices: [
-                    {
-                        id: '17:45:2:greed',
-                        routeType: 'greed' as const,
-                        label: 'Greedy route',
-                        detail: 'Higher pressure route hook for future shop, elite, or bonus rewards.'
-                    }
-                ]
-            }
-        };
-        useAppStore.setState({
-            view: 'playing',
-            run: {
-                ...levelCompleteRun,
-                shopOffers: createRunShopOffers(levelCompleteRun)
-            }
-        });
-
-        useAppStore.getState().chooseRouteAndContinue('17:45:2:greed');
-        expect(useAppStore.getState().view).toBe('sideRoom');
-        expect(useAppStore.getState().run?.pendingRouteCardPlan).toMatchObject({ routeType: 'greed' });
-        expect(useAppStore.getState().run?.sideRoom).toMatchObject({ routeType: 'greed' });
-
-        useAppStore.getState().skipSideRoom();
-        expect(useAppStore.getState().view).toBe('shop');
-        const shopRun = useAppStore.getState().run;
-
-        useAppStore.getState().chooseRouteAndContinue('17:45:2:greed');
-        expect(useAppStore.getState().view).toBe('shop');
-        expect(useAppStore.getState().run).toBe(shopRun);
-
-        useAppStore.getState().continueFromShop();
-        expect(useAppStore.getState().view).toBe('playing');
-        expect(useAppStore.getState().run?.status).toBe('memorize');
-        expect(useAppStore.getState().run?.pendingRouteCardPlan).toBeNull();
-        expect(useAppStore.getState().run?.board?.tiles.some((tile) => tile.routeCardKind === 'greed_cache')).toBe(
-            true
-        );
-    });
 
 
 
@@ -1256,157 +1101,9 @@ describe('useAppStore timers', () => {
 
 
 
-    it('claims a selected side-room event choice before advancing', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 46 });
-        const event = rollRunEventRoom({ runSeed: baseRun.runSeed, rulesVersion: baseRun.runRulesVersion, floor: 2 });
-        const choice = event.options.find((option) => option.effect === 'gain_iron_key') ?? event.options[0]!;
-        useAppStore.setState({
-            view: 'sideRoom',
-            run: {
-                ...baseRun,
-                status: 'levelComplete',
-                sideRoom: {
-                    id: `${event.eventKey}:side`,
-                    kind: 'run_event',
-                    routeType: 'mystery',
-                    nodeKind: 'event',
-                    floor: 2,
-                    title: event.title,
-                    body: event.body,
-                    primaryLabel: event.options[0]!.label,
-                    primaryDetail: event.options[0]!.detail,
-                    skipLabel: 'Decline',
-                    choices: event.options.map((option, index) => ({
-                        id: option.id,
-                        label: option.label,
-                        detail: option.detail,
-                        primary: index === 0
-                    })),
-                    payload: { kind: 'event_choice', eventKey: event.eventKey, choiceId: event.options[0]!.id }
-                },
-                lastLevelResult: {
-                    level: 1,
-                    scoreGained: 100,
-                    rating: 'S',
-                    livesRemaining: baseRun.lives,
-                    perfect: true,
-                    mistakes: 0,
-                    clearLifeReason: 'none',
-                    clearLifeGained: 0
-                }
-            }
-        });
 
-        useAppStore.getState().claimSideRoomChoice(choice.id);
 
-        expect(useAppStore.getState().view).toBe('playing');
-        expect(useAppStore.getState().run?.sideRoom).toBeNull();
-        expect(useAppStore.getState().run?.status).toBe('memorize');
-        if (choice.effect === 'gain_iron_key') {
-            expect(useAppStore.getState().run?.dungeonKeys.iron).toBe(1);
-        }
-    });
 
-    it('keeps an event side room open when the selected choice id is invalid', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 47 });
-        const event = rollRunEventRoom({ runSeed: baseRun.runSeed, rulesVersion: baseRun.runRulesVersion, floor: 2 });
-        const run: RunState = {
-            ...baseRun,
-            status: 'levelComplete',
-            sideRoom: {
-                id: `${event.eventKey}:side`,
-                kind: 'run_event',
-                routeType: 'mystery',
-                nodeKind: 'event',
-                floor: 2,
-                title: event.title,
-                body: event.body,
-                primaryLabel: event.options[0]!.label,
-                primaryDetail: event.options[0]!.detail,
-                skipLabel: 'Decline',
-                choices: event.options.map((option, index) => ({
-                    id: option.id,
-                    label: option.label,
-                    detail: option.detail,
-                    primary: index === 0
-                })),
-                payload: { kind: 'event_choice', eventKey: event.eventKey, choiceId: event.options[0]!.id }
-            }
-        };
-        useAppStore.setState({ view: 'sideRoom', run });
-
-        useAppStore.getState().claimSideRoomChoice('missing-choice');
-
-        expect(useAppStore.getState().view).toBe('sideRoom');
-        expect(useAppStore.getState().run).toBe(run);
-        expect(useAppStore.getState().run?.sideRoom).toBe(run.sideRoom);
-    });
-
-    it('recovers stale side-room actions with no run back to the menu', () => {
-        for (const action of [
-            () => useAppStore.getState().claimSideRoomPrimary(),
-            () => useAppStore.getState().claimSideRoomChoice('missing-choice'),
-            () => useAppStore.getState().skipSideRoom()
-        ]) {
-            useAppStore.setState({ view: 'sideRoom', run: null });
-
-            action();
-
-            expect(useAppStore.getState().view).toBe('menu');
-            expect(useAppStore.getState().run).toBeNull();
-        }
-    });
-
-    it('routes stale dead side-room actions to game over instead of a blank playing shell', () => {
-        const makeDeadSideRoomRun = (): RunState => {
-            const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 12_357 });
-            return {
-                ...baseRun,
-                status: 'levelComplete',
-                lives: 0,
-                sideRoom: {
-                    id: 'dead-side-room',
-                    kind: 'rest_shrine',
-                    routeType: 'safe',
-                    nodeKind: 'rest',
-                    floor: 2,
-                    title: 'Stale Rest',
-                    body: 'A stale side-room snapshot should not revive a defeated run.',
-                    primaryLabel: 'Rest',
-                    primaryDetail: 'Recover only while alive.',
-                    skipLabel: 'Leave',
-                    payload: { kind: 'rest_heal', serviceId: 'rest_heal' }
-                },
-                lastLevelResult: {
-                    level: 1,
-                    scoreGained: 100,
-                    rating: 'B',
-                    livesRemaining: 0,
-                    perfect: false,
-                    mistakes: 1,
-                    clearLifeReason: 'none',
-                    clearLifeGained: 0
-                }
-            };
-        };
-
-        for (const action of [
-            () => useAppStore.getState().claimSideRoomPrimary(),
-            () => useAppStore.getState().claimSideRoomChoice('missing-choice'),
-            () => useAppStore.getState().skipSideRoom()
-        ]) {
-            resetStore();
-            useAppStore.setState({ view: 'sideRoom', run: makeDeadSideRoomRun() });
-
-            action();
-
-            expect(useAppStore.getState().view).toBe('gameOver');
-            expect(useAppStore.getState().run?.status).toBe('gameOver');
-            expect(useAppStore.getState().run?.lives).toBe(0);
-            expect(useAppStore.getState().run?.sideRoom).toBeNull();
-            expect(useAppStore.getState().run?.lastRunSummary).not.toBeNull();
-        }
-    });
 
     it('routes zero-life floor-clear shop attempts to game over instead of opening a spend surface', () => {
         const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 12_358 });

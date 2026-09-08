@@ -239,7 +239,6 @@ describe('gameplay interaction graph', () => {
                 expect.objectContaining({ source: 'trait.echo', target: 'perk.echo_conduit_double', kind: 'triggers' }),
                 expect.objectContaining({ source: 'trait.conduit', target: 'perk.echo_conduit_double', kind: 'gates' }),
                 expect.objectContaining({ source: 'power.peek', target: 'inventory.peek_charge', kind: 'consumes' }),
-                expect.objectContaining({ source: 'power.peek', target: 'route.mystery', kind: 'consequence' }),
                 expect.objectContaining({ source: 'core.gameplay_commands', target: 'feedback.gameplay_hud', kind: 'displays' }),
                 expect.objectContaining({ source: 'core.gameplay_commands', target: 'persistence.run_summary', kind: 'persists' }),
                 expect.objectContaining({ source: 'core.gameplay_commands', target: 'simulation.gameplay_replay', kind: 'tested_by' })
@@ -476,7 +475,6 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'findable.scout_glint', target: 'board.scout_reveal', kind: 'triggers' }),
             expect.objectContaining({ source: 'inventory.stray_remove_charge', target: 'power.stray_remove', kind: 'enables' }),
             expect.objectContaining({ source: 'power.stray_remove', target: 'objective.floor_clear', kind: 'counterplay' }),
-            expect.objectContaining({ source: 'board.scout_reveal', target: 'route.mystery', kind: 'consequence' }),
             expect.objectContaining({ source: 'build.reveal_scout', target: 'progression.relic_draft', kind: 'consequence' })
         ]));
     });
@@ -727,7 +725,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects Hazard Banish acquisition to its typed floor-start removal or Destroy fallback', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(25);
+        expect(gameplayInteractionGraph.version).toBe(26);
         expect(byId.get('perk.hazard_banish_per_floor')).toMatchObject({
             kind: 'perk',
             role: 'durable_floor_start_hazard_or_destroy_conversion',
@@ -748,29 +746,6 @@ describe('gameplay interaction graph', () => {
         ]));
     });
 
-    it('connects typed route selection from floor clear through exact replayable consequences', () => {
-        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(25);
-        expect(byId.get('route.choice')).toMatchObject({
-            kind: 'route',
-            role: 'replayable_between_floor_commitment',
-            tests: expect.arrayContaining([
-                'src/shared/gameplay-core.test.ts',
-                'src/renderer/store/levelCompleteContinuationExecutor.test.ts',
-                'src/shared/gameplay-core-simulation.test.ts'
-            ])
-        });
-        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
-            expect.objectContaining({ source: 'objective.floor_clear', target: 'route.choice', kind: 'enables' }),
-            expect.objectContaining({ source: 'route.choice', target: 'core.gameplay_commands', kind: 'triggers' }),
-            expect.objectContaining({ source: 'core.gameplay_commands', target: 'route.choice', kind: 'modifies' }),
-            expect.objectContaining({ source: 'route.choice', target: 'progression.run_flow', kind: 'modifies' }),
-            expect.objectContaining({ source: 'route.choice', target: 'economy.score_and_rewards', kind: 'modifies' }),
-            expect.objectContaining({ source: 'route.choice', target: 'feedback.gameplay_hud', kind: 'displays' }),
-            expect.objectContaining({ source: 'route.choice', target: 'persistence.run_summary', kind: 'persists' }),
-            expect.objectContaining({ source: 'route.choice', target: 'simulation.gameplay_replay', kind: 'tested_by' })
-        ]));
-    });
 
     it('evaluates route strategy through typed outcomes instead of parallel reward arithmetic', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
@@ -781,7 +756,6 @@ describe('gameplay interaction graph', () => {
             tests: ['src/shared/balance-simulation.test.ts']
         });
         expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
-            expect.objectContaining({ source: 'route.choice', target: 'simulation.build_evaluation', kind: 'tested_by' }),
             expect.objectContaining({ source: 'core.gameplay_commands', target: 'simulation.build_evaluation', kind: 'tested_by' }),
             expect.objectContaining({ source: 'simulation.build_evaluation', target: 'build.route_gambler', kind: 'tested_by' }),
             expect.objectContaining({ source: 'simulation.build_evaluation', target: 'economy.score_and_rewards', kind: 'tested_by' }),
@@ -791,7 +765,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects relic drafting and offer shaping to typed build acquisition, economy, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(25);
+        expect(gameplayInteractionGraph.version).toBe(26);
         expect(byId.get('progression.relic_draft')).toMatchObject({
             kind: 'progression',
             role: 'typed_replayable_build_selection_and_offer_shaping',
@@ -818,38 +792,10 @@ describe('gameplay interaction graph', () => {
         ]));
     });
 
-    it('connects flat typed side-room choices from routes through rewards, feedback, persistence, and replay', () => {
-        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(25);
-        expect(byId.get('progression.route_side_room')).toMatchObject({
-            kind: 'progression',
-            role: 'flat_replayable_between_floor_reward_choice',
-            evidence: expect.arrayContaining([
-                'src/shared/gameplay-core.ts',
-                'src/renderer/store/sideRoomSurfaceState.ts',
-                'src/renderer/store/sideRoomActionController.ts'
-            ]),
-            tests: expect.arrayContaining([
-                'src/shared/gameplay-core.test.ts',
-                'src/renderer/store/useAppStore.test.ts'
-            ])
-        });
-        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
-            expect.objectContaining({ source: 'route.choice', target: 'progression.route_side_room', kind: 'enables' }),
-            expect.objectContaining({ source: 'progression.route_side_room', target: 'core.gameplay_commands', kind: 'triggers' }),
-            expect.objectContaining({ source: 'core.gameplay_commands', target: 'progression.route_side_room', kind: 'modifies' }),
-            expect.objectContaining({ source: 'progression.route_side_room', target: 'progression.run_flow', kind: 'modifies' }),
-            expect.objectContaining({ source: 'progression.route_side_room', target: 'economy.score_and_rewards', kind: 'modifies' }),
-            expect.objectContaining({ source: 'relic.shrine_echo', target: 'progression.route_side_room', kind: 'modifies' }),
-            expect.objectContaining({ source: 'progression.route_side_room', target: 'feedback.gameplay_hud', kind: 'displays' }),
-            expect.objectContaining({ source: 'progression.route_side_room', target: 'persistence.run_summary', kind: 'persists' }),
-            expect.objectContaining({ source: 'progression.route_side_room', target: 'simulation.gameplay_replay', kind: 'tested_by' })
-        ]));
-    });
 
     it('connects flat typed floor advancement through pressure, board preparation, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(25);
+        expect(gameplayInteractionGraph.version).toBe(26);
         expect(byId.get('progression.run_flow')).toMatchObject({
             kind: 'progression',
             role: 'typed_flat_replayable_floor_transition',

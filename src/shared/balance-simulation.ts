@@ -24,16 +24,9 @@ import {
     hasTraitRewardInteractionFloor,
     hasTraitSwapSetupOpportunity
 } from './tile-trait-rules';
-import {
-    createGameplayRouteChooseCommand,
-    type GameplayEvent
-} from './gameplay-core-contracts';
+import type { GameplayEvent } from './gameplay-core-contracts';
 import { reduceGameplayCommand } from './gameplay-core';
 import { createNewRun } from './run-creation-rules';
-import {
-    generateRouteChoices,
-    type RouteChoiceOutcomeKind
-} from './route-rules';
 
 export interface BalanceSimulationInput {
     seeds?: readonly number[];
@@ -476,6 +469,22 @@ const shopServiceSpendShareForProfile = (profile: DungeonBalanceProfileId): numb
 };
 
 const ROUTE_NODE_TYPES: readonly RouteNodeType[] = ['safe', 'greed', 'mystery'];
+
+/*
+ * The eight ways a route choice used to resolve. `route-choice-outcome-rules.ts` owned this union
+ * and went with the route layer in Gen 173; the names stay here because the profile report still
+ * has a column for each, and the column is now always nought. Both the column and this list come
+ * out with the profile report's route section in T1.17's re-baseline.
+ */
+type RouteChoiceOutcomeKind =
+    | 'safe_life'
+    | 'safe_guard'
+    | 'safe_guard_capped'
+    | 'greed'
+    | 'mystery_shop_gold'
+    | 'mystery_combo_shard'
+    | 'mystery_combo_shard_capped'
+    | 'mystery_relic_favor';
 const ROUTE_OUTCOME_KINDS: readonly RouteChoiceOutcomeKind[] = [
     'safe_life',
     'safe_guard',
@@ -491,87 +500,12 @@ const emptyRouteChoiceCounts = (): Record<RouteNodeType, number> => ({ safe: 0, 
 const emptyRouteOutcomeCounts = (): Record<RouteChoiceOutcomeKind, number> =>
     Object.fromEntries(ROUTE_OUTCOME_KINDS.map((kind) => [kind, 0])) as Record<RouteChoiceOutcomeKind, number>;
 
-type RouteChoiceSelectedEvent = Extract<GameplayEvent, { type: 'route.choice_selected' }>;
-
-const evaluateProfileRouteThroughGameplayCore = (
-    sourceRun: RunState,
-    routeType: RouteNodeType,
-    lives: number,
-    shopGold: number,
-    sample: BalanceSimulationReport['samples'][number],
-    profileId: DungeonBalanceProfileId
-): { run: RunState; event: RouteChoiceSelectedEvent | null; accepted: boolean } => {
-    const completedRun: RunState = {
-        ...sourceRun,
-        status: 'levelComplete',
-        board: sourceRun.board ? { ...sourceRun.board, level: sample.floor } : sourceRun.board,
-        lives,
-        shopGold,
-        pendingRouteCardPlan: null,
-        sideRoom: null,
-        lastLevelResult: {
-            level: sample.floor,
-            scoreGained: 0,
-            rating: 'B',
-            livesRemaining: lives,
-            perfect: false,
-            mistakes: 0,
-            clearLifeReason: 'none',
-            clearLifeGained: 0,
-            recallMistakes: 0
-        }
-    };
-    const routeChoices = generateRouteChoices(completedRun, sample.floor + 1);
-    const choice = routeChoices.find((candidate) => candidate.routeType === routeType);
-    if (!choice) {
-        return { run: sourceRun, event: null, accepted: false };
-    }
-    const commandRun: RunState = {
-        ...completedRun,
-        lastLevelResult: { ...completedRun.lastLevelResult!, routeChoices }
-    };
-    const result = reduceGameplayCommand(
-        commandRun,
-        createGameplayRouteChooseCommand(
-            `balance-route:${profileId}:${sample.seed}:${sample.floor}`,
-            choice.id
-        )
-    );
-    const event = result.events.find(
-        (candidate): candidate is RouteChoiceSelectedEvent => candidate.type === 'route.choice_selected'
-    ) ?? null;
-    return { run: result.run, event, accepted: result.accepted };
-};
-
 const getRouteChoiceTotal = (counts: Record<RouteNodeType, number>): number =>
     ROUTE_NODE_TYPES.reduce((sum, type) => sum + counts[type], 0);
 
 const getDominantRouteChoiceShare = (counts: Record<RouteNodeType, number>): number => {
     const total = getRouteChoiceTotal(counts);
     return total === 0 ? 0 : Math.max(...ROUTE_NODE_TYPES.map((type) => counts[type])) / total;
-};
-
-const chooseProfileRoute = (
-    profile: DungeonBalanceProfileId,
-    lives: number,
-    sample: BalanceSimulationReport['samples'][number]
-): RouteNodeType => {
-    const pressure = samplePressure(sample);
-    if (profile === 'cautious') {
-        if (lives < MAX_LIVES || pressure >= 3.2) return 'safe';
-        return sample.floor % 2 === 0 ? 'mystery' : 'safe';
-    }
-    if (profile === 'greedy') {
-        if (lives >= 3 && pressure <= 3.5) return 'greed';
-        return lives <= 2 ? 'safe' : 'mystery';
-    }
-    if (profile === 'high_skill') {
-        if (lives <= 2 || (pressure >= 3.1 && lives < MAX_LIVES)) return 'safe';
-        if (sample.floor % 5 === 0 && lives >= 4) return 'greed';
-        return sample.floor % 2 === 0 ? 'mystery' : 'safe';
-    }
-    if (lives <= 2 || pressure >= 3) return 'safe';
-    return sample.floor % 4 === 0 ? 'greed' : 'mystery';
 };
 
 export const runBalanceSimulation = ({
@@ -1284,43 +1218,16 @@ export const runDungeonBalanceProfileSimulation = (
                         minLivesRemaining = Math.min(minLivesRemaining, lives);
                         seedMinLivesRemaining = Math.min(seedMinLivesRemaining, lives);
                     }
-                    const routeChoice = chooseProfileRoute(profile.id, lives, sample);
-                    const routeEvaluation = evaluateProfileRouteThroughGameplayCore(
-                        routeRun,
-                        routeChoice,
-                        lives,
-                        shopGold,
-                        sample,
-                        profile.id
-                    );
-                    if (routeEvaluation.accepted && routeEvaluation.event) {
-                        const event = routeEvaluation.event;
-                        routeRun = routeEvaluation.run;
-                        routeAcceptedChoices += 1;
-                        routeChoiceCounts[event.routeType] += 1;
-                        routeOutcomeCounts[event.outcome] += 1;
-                        routeLifeDelta += event.livesAfter - event.livesBefore;
-                        routeShopGoldDelta += event.shopGoldAfter - event.shopGoldBefore;
-                        routeScoreDelta += event.totalScoreAfter - event.totalScoreBefore;
-                        routeGuardDelta += event.guardTokensAfter - event.guardTokensBefore;
-                        routeComboShardDelta += event.comboShardsAfter - event.comboShardsBefore;
-                        routeFavorDelta += event.relicFavorAfter - event.relicFavorBefore;
-                        routeMemorizeBonusMsDelta += event.memorizeBonusMsAfter - event.memorizeBonusMsBefore;
-                        safeRouteTollSpend += Math.max(0, event.shopGoldBefore - event.shopGoldAfter);
-                        greedLifeCosts += event.routeType === 'greed'
-                            ? Math.max(0, event.livesBefore - event.livesAfter)
-                            : 0;
-                        lives = event.livesAfter;
-                        shopGold = event.shopGoldAfter;
-                        if (event.routeType === 'greed') {
-                            rewardClaims += 1.5;
-                        } else if (event.routeType === 'mystery') {
-                            rewardClaims += 1;
-                        }
-                        maxShopGoldHeld = Math.max(maxShopGoldHeld, shopGold);
-                    } else {
-                        routeRejectedChoices += 1;
-                    }
+                    /*
+                     * Each cleared floor used to put the profile through a route choice here -
+                     * cautious took Safe when hurt, greedy took Greed whenever it could - and the
+                     * choice's event moved lives, gold, guard, shards, favor and the memorize
+                     * bonus. There is no route offer (Gen 173), so nothing between floors moves
+                     * any of those, and every route column below reads nought.
+                     *
+                     * The columns stay for one commit so the profile report keeps its shape while
+                     * the between-floor layer comes out in pieces; T1.17 drops them with the rest.
+                     */
                     minLivesRemaining = Math.min(minLivesRemaining, lives);
                     seedMinLivesRemaining = Math.min(seedMinLivesRemaining, lives);
                 } else {

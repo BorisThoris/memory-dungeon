@@ -5,10 +5,6 @@ import {
     type PlayablePathFixtureId
 } from './playable-path-fixtures';
 import {
-    applyRouteChoiceOutcome,
-    openRouteSideRoom
-} from './route-rules';
-import {
     purchaseShopOffer,
     rerollShopOffers
 } from './game';
@@ -29,10 +25,6 @@ describe('playable path fixtures', () => {
         ['floorClearWithRouteChoices', 'playing', 'levelComplete'],
         ['floorClearWithShop', 'playing', 'levelComplete'],
         ['floorClearWithShopLowGold', 'playing', 'levelComplete'],
-        ['sideRoomPrimary', 'sideRoom', 'levelComplete'],
-        ['sideRoomChoice', 'sideRoom', 'levelComplete'],
-        ['sideRoomSkip', 'sideRoom', 'levelComplete'],
-        ['sideRoomThenShop', 'sideRoom', 'levelComplete'],
         ['relicDraft', 'playing', 'levelComplete'],
         ['gameOver', 'gameOver', 'gameOver']
     ] satisfies [PlayablePathFixtureId, string, string | null][])(
@@ -46,13 +38,13 @@ describe('playable path fixtures', () => {
         }
     );
 
-    it('creates route, shop, side-room, relic, and post-run scenario invariants', () => {
+    it('creates floor-clear, shop, relic, and post-run scenario invariants', () => {
+        // The floor-clear fixture kept its id but no longer offers routes: a cleared floor has one
+        // way forward now (Gen 173).
         const routeFixture = createPlayablePathFixture('floorClearWithRouteChoices');
-        expect(routeFixture.run?.lastLevelResult?.routeChoices?.map((choice) => choice.routeType)).toEqual([
-            'safe',
-            'greed',
-            'mystery'
-        ]);
+        expect(routeFixture.run?.status).toBe('levelComplete');
+        expect(routeFixture.run?.lastLevelResult?.routeChoices).toBeUndefined();
+        expect(routeFixture.run?.sideRoom).toBeNull();
 
         const shopFixture = createPlayablePathFixture('floorClearWithShop');
         expect(shopFixture.run?.shopGold).toBeGreaterThan(0);
@@ -62,14 +54,6 @@ describe('playable path fixtures', () => {
         const lowGoldShopFixture = createPlayablePathFixture('floorClearWithShopLowGold');
         expect(lowGoldShopFixture.run?.shopGold).toBe(0);
         expect(lowGoldShopFixture.run?.shopOffers.some((offer) => offer.compatible && offer.cost > 0)).toBe(true);
-
-        expect(createPlayablePathFixture('sideRoomPrimary').run?.sideRoom?.kind).toBe('rest_shrine');
-        expect(createPlayablePathFixture('sideRoomChoice').run?.sideRoom?.kind).toBe('run_event');
-        expect(createPlayablePathFixture('sideRoomSkip').run?.sideRoom?.kind).toBe('bonus_reward');
-
-        const sideRoomThenShop = createPlayablePathFixture('sideRoomThenShop');
-        expect(sideRoomThenShop.run?.sideRoom).not.toBeNull();
-        expect(sideRoomThenShop.run?.shopOffers.length).toBeGreaterThan(0);
 
         const relicFixture = createPlayablePathFixture('relicDraft');
         expect(relicFixture.run?.relicOffer?.options.length).toBeGreaterThan(0);
@@ -82,27 +66,6 @@ describe('playable path fixtures', () => {
         expect(pickupFixture.run?.board?.tiles.filter((tile) => tile.findableKind === 'shard_spark')).toHaveLength(2);
         expect(pickupFixture.run?.stats.currentStreak).toBe(0);
         expect(pickupFixture.run?.stats.comboShards).toBeGreaterThan(0);
-    });
-
-    it.each([
-        ['safe', 'bonus_reward', 'rest'],
-        ['greed', 'bonus_reward', 'treasure'],
-        ['mystery', 'run_event', 'event']
-    ] as const)('locks %s route into a deterministic stamped side room', (routeType, kind, nodeKind) => {
-        const fixture = createPlayablePathFixture('floorClearWithRouteChoices');
-        const choice = fixture.run?.lastLevelResult?.routeChoices?.find((item) => item.routeType === routeType);
-        expect(choice).toBeDefined();
-
-        const chosen = applyRouteChoiceOutcome(fixture.run!, choice!.id);
-        expect(chosen.applied).toBe(true);
-        expect(chosen.run.pendingRouteCardPlan?.routeType).toBe(routeType);
-
-        const opened = openRouteSideRoom(chosen.run);
-        expect(opened.sideRoom).toMatchObject({
-            routeType,
-            kind,
-            nodeKind
-        });
     });
 
     it('covers deterministic shop purchase, blocked buy, reroll, and continue preconditions', () => {

@@ -8,7 +8,6 @@ import { addRunDungeonKey } from './dungeon-key-rules';
 import { clearDungeonCardFields } from './dungeon-enemy-card-rules';
 import { defeatEnemyHazardsForFloorClear } from './dungeon-enemy-hazard-rules';
 import { gainRelicFavor } from './relic-favor-rules';
-import { createRouteCardPlanForRoute } from './route-card-plan-rules';
 import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 import {
@@ -188,14 +187,9 @@ export const createDungeonExitActivationTransition = (
                 runNonNegativeInteger(objectiveReward.run.enemyHazardsDefeatedThisFloor) +
                 floorClearHazards.defeated,
             dungeonGatewaysUsed: runNonNegativeInteger(run.dungeonGatewaysUsed) + 1,
-            pendingRouteCardPlan:
-                run.pendingRouteCardPlan == null && routeType
-                    ? createRouteCardPlanForRoute(
-                          run,
-                          routeType,
-                          `exit:${run.runRulesVersion}:${run.runSeed}:${run.board.level}:${routeType}`
-                      )
-                    : run.pendingRouteCardPlan,
+            // A gateway exit used to plan the next floor's route on the way out. There is no route
+            // to plan (Gen 173); this module itself goes with the dungeon layer in T1.12.
+            pendingRouteCardPlan: run.pendingRouteCardPlan,
             board: openedBoard
         }
     };

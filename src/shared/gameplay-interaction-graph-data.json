@@ -1,5 +1,5 @@
 {
-    "version": 25,
+    "version": 26,
     "mechanics": [
         {
             "id": "trait.echo",
@@ -1181,131 +1181,6 @@
             ]
         },
         {
-            "id": "route.choice",
-            "label": "Typed Route Choice",
-            "kind": "route",
-            "role": "replayable_between_floor_commitment",
-            "evidence": [
-                "src/shared/route-choice-outcome-rules.ts",
-                "src/shared/gameplay-core.ts",
-                "src/renderer/store/levelCompleteContinuationExecutor.ts",
-                "src/renderer/store/gameplayFeedbackAdapter.ts"
-            ],
-            "reads": [
-                "levelComplete",
-                "routeChoices",
-                "lives",
-                "shopGold",
-                "totalScore",
-                "guardTokens",
-                "comboShards",
-                "relicFavorProgress",
-                "pendingRouteCardPlan"
-            ],
-            "writes": [
-                "pendingRouteCardPlan",
-                "selectedDungeonNodeId",
-                "lives",
-                "shopGold",
-                "totalScore",
-                "guardTokens",
-                "comboShards",
-                "relicFavorProgress",
-                "pendingMemorizeBonusMs",
-                "gameplayCommandJournal",
-                "gameplayEventJournal"
-            ],
-            "enables": [
-                "nextFloor",
-                "routeSideRoom"
-            ],
-            "blocks": [],
-            "softlockGuards": [
-                "route-choice-availability",
-                "greed-needs-more-lives",
-                "single-pending-route-plan"
-            ],
-            "tests": [
-                "src/shared/gameplay-core.test.ts",
-                "src/renderer/store/levelCompleteContinuationExecutor.test.ts",
-                "src/shared/gameplay-core-simulation.test.ts"
-            ]
-        },
-        {
-            "id": "progression.route_side_room",
-            "label": "Typed Route Side-Room Resolution",
-            "kind": "progression",
-            "role": "flat_replayable_between_floor_reward_choice",
-            "evidence": [
-                "src/shared/route-side-room-rules.ts",
-                "src/shared/run-events.ts",
-                "src/shared/gameplay-core-contracts.ts",
-                "src/shared/gameplay-core.ts",
-                "src/renderer/store/sideRoomSurfaceState.ts",
-                "src/renderer/store/sideRoomActionController.ts",
-                "src/renderer/store/gameplayFeedbackAdapter.ts"
-            ],
-            "reads": [
-                "levelComplete",
-                "routeSideRoom",
-                "bonusRewardLedger",
-                "relicIds",
-                "lives",
-                "shopGold",
-                "totalScore",
-                "guardTokens",
-                "comboShards",
-                "relicFavorProgress",
-                "destroyPairCharges",
-                "peekCharges",
-                "regionShuffleCharges",
-                "dungeonKeys",
-                "rewardPerkIds"
-            ],
-            "writes": [
-                "routeSideRoom",
-                "bonusRewardLedger",
-                "lives",
-                "shopGold",
-                "totalScore",
-                "guardTokens",
-                "comboShards",
-                "relicFavorProgress",
-                "destroyPairCharges",
-                "peekCharges",
-                "regionShuffleCharges",
-                "dungeonKeys",
-                "rewardPerkIds",
-                "gameplayCommandJournal",
-                "gameplayEventJournal",
-                "feedbackLines"
-            ],
-            "enables": [
-                "progression.run_flow",
-                "progression.relic_draft",
-                "build.emergency_toolkit",
-                "build.treasure_greed"
-            ],
-            "blocks": [],
-            "softlockGuards": [
-                "strict-side-room-command",
-                "live-level-complete-interlude",
-                "event-key-and-choice-validation",
-                "bonus-reward-anti-grind-ledger",
-                "schema-owned-bonus-payout",
-                "single-flat-command-journal",
-                "skip-preserves-reward-state"
-            ],
-            "tests": [
-                "src/shared/gameplay-core.test.ts",
-                "src/shared/route-side-room-rules.test.ts",
-                "src/renderer/store/sideRoomSurfaceState.test.ts",
-                "src/renderer/store/sideRoomActionController.test.ts",
-                "src/renderer/store/useAppStore.test.ts",
-                "src/shared/gameplay-core-simulation.test.ts"
-            ]
-        },
-        {
             "id": "stats.session_tracking",
             "label": "Session Stat Tracking",
             "kind": "stats",
@@ -1972,8 +1847,7 @@
             "evidence": [
                 "src/shared/bonus-rewards.ts",
                 "src/shared/gameplay-core-contracts.ts",
-                "src/shared/gameplay-core.ts",
-                "src/shared/route-side-room-rules.ts"
+                "src/shared/gameplay-core.ts"
             ],
             "reads": [
                 "bonusRewardLedger",
@@ -3455,15 +3329,14 @@
                 "rewardPerkIds",
                 "relicIds",
                 "peekCharges",
-                "interactionTags",
-                "routeChoices"
+                "interactionTags"
             ],
             "writes": [
                 "buildPlan"
             ],
             "enables": [
                 "power.peek",
-                "route.mystery"
+                "power.pin"
             ],
             "blocks": [],
             "softlockGuards": [
@@ -3615,12 +3488,14 @@
                 "src/shared/board-power-actions.ts",
                 "src/shared/gameplay-core.ts",
                 "src/renderer/store/runSurfaceState.ts",
-                "src/renderer/store/tilePressController.ts"
+                "src/renderer/store/tilePressController.ts",
+                "src/shared/board-power-targeting.ts"
             ],
             "reads": [
                 "peekCharges",
                 "tileStates",
-                "recallFocus"
+                "recallFocus",
+                "peekRevealedTileIds"
             ],
             "writes": [
                 "peekCharges",
@@ -3630,7 +3505,6 @@
                 "feedbackLines"
             ],
             "enables": [
-                "route.mystery",
                 "build.conduit_cartographer"
             ],
             "blocks": [],
@@ -3675,8 +3549,7 @@
                 "power.pin",
                 "power.stray_remove",
                 "board.scout_reveal",
-                "progression.relic_draft",
-                "route.mystery"
+                "progression.relic_draft"
             ],
             "blocks": [],
             "softlockGuards": [
@@ -3950,7 +3823,6 @@
                 "routeSpecialRevealed"
             ],
             "enables": [
-                "route.mystery",
                 "build.reveal_scout"
             ],
             "blocks": [],
@@ -3962,34 +3834,6 @@
             "tests": [
                 "src/shared/dungeon-scout-rules.test.ts",
                 "src/shared/game.test.ts"
-            ]
-        },
-        {
-            "id": "route.mystery",
-            "label": "Mystery Route Read",
-            "kind": "route",
-            "role": "information_consequence",
-            "evidence": [
-                "src/shared/route-choice-rules.ts",
-                "src/shared/trait-opportunities.ts",
-                "src/shared/relics.ts"
-            ],
-            "reads": [
-                "peekRevealedTileIds",
-                "routeChoices"
-            ],
-            "writes": [],
-            "enables": [
-                "progression.run_flow"
-            ],
-            "blocks": [],
-            "softlockGuards": [
-                "route-choice-contract"
-            ],
-            "tests": [
-                "src/shared/route-choice-rules.test.ts",
-                "src/shared/trait-opportunities.test.ts",
-                "src/shared/relics.test.ts"
             ]
         },
         {
@@ -4019,8 +3863,7 @@
                 "objective.risk_wager",
                 "inventory.gambit_token",
                 "power.gambit",
-                "economy.relic_favor",
-                "route.mystery"
+                "economy.relic_favor"
             ],
             "blocks": [],
             "softlockGuards": [
@@ -5059,8 +4902,7 @@
             "role": "route_outcome_and_strategy_balance_gate",
             "evidence": [
                 "src/shared/balance-simulation.ts",
-                "src/shared/gameplay-core.ts",
-                "src/shared/route-choice-outcome-rules.ts"
+                "src/shared/gameplay-core.ts"
             ],
             "reads": [
                 "routeChoices",
@@ -5888,60 +5730,6 @@
             "label": "next flow"
         },
         {
-            "source": "objective.floor_clear",
-            "target": "route.choice",
-            "kind": "enables",
-            "label": "reveals the between-floor commitment"
-        },
-        {
-            "source": "route.choice",
-            "target": "core.gameplay_commands",
-            "kind": "triggers",
-            "label": "submits the selected route id"
-        },
-        {
-            "source": "core.gameplay_commands",
-            "target": "route.choice",
-            "kind": "modifies",
-            "label": "validates and applies exact route consequences"
-        },
-        {
-            "source": "route.choice",
-            "target": "progression.run_flow",
-            "kind": "modifies",
-            "label": "selects the dungeon node and pending card plan"
-        },
-        {
-            "source": "route.choice",
-            "target": "economy.score_and_rewards",
-            "kind": "modifies",
-            "label": "applies typed Safe Greed or Mystery deltas"
-        },
-        {
-            "source": "route.choice",
-            "target": "feedback.gameplay_hud",
-            "kind": "displays",
-            "label": "emits the selected payoff and cost"
-        },
-        {
-            "source": "route.choice",
-            "target": "persistence.run_summary",
-            "kind": "persists",
-            "label": "journals the choice and exact outcome"
-        },
-        {
-            "source": "route.choice",
-            "target": "simulation.gameplay_replay",
-            "kind": "tested_by",
-            "label": "participates in deterministic command replay"
-        },
-        {
-            "source": "route.choice",
-            "target": "simulation.build_evaluation",
-            "kind": "tested_by",
-            "label": "scores exact typed route outcomes across profiles"
-        },
-        {
             "source": "core.gameplay_commands",
             "target": "simulation.build_evaluation",
             "kind": "tested_by",
@@ -6068,12 +5856,6 @@
             "label": "spends one charge"
         },
         {
-            "source": "power.peek",
-            "target": "route.mystery",
-            "kind": "consequence",
-            "label": "reveals route information"
-        },
-        {
             "source": "core.gameplay_commands",
             "target": "feedback.gameplay_hud",
             "kind": "displays",
@@ -6108,12 +5890,6 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "shows trigger cause"
-        },
-        {
-            "source": "build.conduit_cartographer",
-            "target": "route.mystery",
-            "kind": "consequence",
-            "label": "converts information into route choice"
         },
         {
             "source": "reward.hazard_ward",
@@ -7695,12 +7471,6 @@
         },
         {
             "source": "board.scout_reveal",
-            "target": "route.mystery",
-            "kind": "consequence",
-            "label": "reveals hazard dungeon or route information"
-        },
-        {
-            "source": "board.scout_reveal",
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "shows scouted information"
@@ -7740,6 +7510,18 @@
             "target": "progression.relic_draft",
             "kind": "consequence",
             "label": "converts secrets into future build selection"
+        },
+        {
+            "source": "build.conduit_cartographer",
+            "target": "power.peek",
+            "kind": "consequence",
+            "label": "spends its extra peek charges on the tiles the scout glint pointed at"
+        },
+        {
+            "source": "build.conduit_cartographer",
+            "target": "power.pin",
+            "kind": "consequence",
+            "label": "pins what the peek revealed so the map outlives the memorize window"
         },
         {
             "source": "core.gameplay_commands",
@@ -7848,12 +7630,6 @@
             "target": "economy.relic_favor",
             "kind": "consequence",
             "label": "cashes successful risks into future build choices"
-        },
-        {
-            "source": "build.route_gambler",
-            "target": "route.mystery",
-            "kind": "risk",
-            "label": "prefers contextual Greed and Mystery opportunities"
         },
         {
             "source": "reward.trait_streak_lens",
@@ -8414,78 +8190,6 @@
             "label": "replays command log"
         },
         {
-            "source": "route.mystery",
-            "target": "route.choice",
-            "kind": "enables",
-            "label": "turns revealed uncertainty into an informed commitment"
-        },
-        {
-            "source": "route.choice",
-            "target": "progression.route_side_room",
-            "kind": "enables",
-            "label": "opens the deterministic rest event or reward interlude"
-        },
-        {
-            "source": "progression.route_side_room",
-            "target": "core.gameplay_commands",
-            "kind": "triggers",
-            "label": "submits one strict claim or skip command"
-        },
-        {
-            "source": "core.gameplay_commands",
-            "target": "progression.route_side_room",
-            "kind": "modifies",
-            "label": "owns event reward ledger and exact resource consequences"
-        },
-        {
-            "source": "progression.route_side_room",
-            "target": "progression.run_flow",
-            "kind": "modifies",
-            "label": "clears the interlude before shop or next-floor continuation"
-        },
-        {
-            "source": "progression.route_side_room",
-            "target": "economy.score_and_rewards",
-            "kind": "modifies",
-            "label": "applies schema-owned score Favor and inventory payouts"
-        },
-        {
-            "source": "relic.shrine_echo",
-            "target": "progression.route_side_room",
-            "kind": "modifies",
-            "label": "converts the first treasure claim into Favor"
-        },
-        {
-            "source": "progression.route_side_room",
-            "target": "economy.shop_gold",
-            "kind": "modifies",
-            "label": "records exact rest cost or event and reward gold"
-        },
-        {
-            "source": "progression.route_side_room",
-            "target": "progression.relic_draft",
-            "kind": "grants",
-            "label": "converts Favor and Shrine Echo treasure into future build choice"
-        },
-        {
-            "source": "progression.route_side_room",
-            "target": "feedback.gameplay_hud",
-            "kind": "displays",
-            "label": "projects typed rest event reward or skip feedback"
-        },
-        {
-            "source": "progression.route_side_room",
-            "target": "persistence.run_summary",
-            "kind": "persists",
-            "label": "retains one flat side-room command and its domain events"
-        },
-        {
-            "source": "progression.route_side_room",
-            "target": "simulation.gameplay_replay",
-            "kind": "tested_by",
-            "label": "replays rest event bonus and skip outcomes"
-        },
-        {
             "source": "progression.run_flow",
             "target": "core.gameplay_commands",
             "kind": "triggers",
@@ -8586,12 +8290,6 @@
             "target": "simulation.gameplay_replay",
             "kind": "tested_by",
             "label": "replays non-final match transitions exactly"
-        },
-        {
-            "source": "route.mystery",
-            "target": "progression.run_flow",
-            "kind": "modifies",
-            "label": "changes next decision"
         },
         {
             "source": "feedback.gameplay_hud",

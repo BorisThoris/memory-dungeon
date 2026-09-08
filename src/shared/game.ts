@@ -169,23 +169,11 @@ export {
     createDungeonShowcaseRun
 } from './dungeon-showcase-run-rules';
 
-export {
-    generateRouteChoices,
-    getRouteChoiceAvailability,
-    type RouteChoiceAvailability
-} from './route-choice-rules';
-export {
-    applyRouteChoiceOutcome,
-    type RouteChoiceOutcomeResult
-} from './route-choice-outcome-rules';
-
-export {
-    claimRouteSideRoomChoice,
-    claimRouteSideRoomPrimary,
-    openRouteSideRoom,
-    routeNodeKindForSideRoom,
-    skipRouteSideRoom
-} from './route-side-room-rules';
+/*
+ * The route layer's public surface stood here: generating three choices on a floor clear, applying
+ * whichever the player picked, and opening, claiming or skipping the side room a Mystery route led
+ * to. All of it went in Gen 173 with the between-floor screen itself.
+ */
 export {
     DUNGEON_BOSS_DEFEAT_SCORE,
     DUNGEON_BOSS_DEFINITIONS,

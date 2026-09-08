@@ -56,9 +56,7 @@ describe('DNG-004 dungeon determinism contract', () => {
     it('keeps dungeon generation modules free of unseeded randomness and wall-clock rules input', () => {
         const checkedFiles = [
             'src/shared/run-map.ts',
-            'src/shared/run-events.ts',
             'src/shared/bonus-rewards.ts',
-            'src/shared/rest-shrine.ts',
             'src/shared/relics.ts',
             'src/shared/floor-mutator-schedule.ts'
         ];

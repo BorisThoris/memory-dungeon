@@ -519,14 +519,12 @@ describe('runResolutionController', () => {
             {
                 ...tile('a1', 'a', 'flipped'),
                 findableKind: 'score_glint',
-                routeCardKind: 'greed_cache',
                 tileTraitKind: 'echo'
             },
             tile('b1', 'b'),
             {
                 ...tile('a2', 'a', 'flipped'),
                 findableKind: 'score_glint',
-                routeCardKind: 'greed_cache',
                 tileTraitKind: 'echo'
             },
             { ...tile('b2', 'b'), tileTraitKind: 'sealed' }
@@ -551,14 +549,12 @@ describe('runResolutionController', () => {
         expect(harness.state.matchScorePop).not.toBeNull();
         expect(harness.state.matchScorePop).toMatchObject({
             pickupRewardText: expect.any(String),
-            routeRewardText: expect.any(String),
             traitInteractionTexts: ['Echo + Sealed: combo shard'],
             key: expect.stringContaining('board-turn:')
         });
         expect(harness.state.run?.gameplayEventJournal).toContainEqual(expect.objectContaining({
             type: 'board.turn_resolved',
             matchedFindableKind: 'score_glint',
-            matchedRouteKind: 'greed_cache',
             traitInteractionTags: ['echo:sealed-combo'],
             floaterTileIds: ['a1', 'a2']
         }));

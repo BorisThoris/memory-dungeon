@@ -112,23 +112,16 @@ describe('getMemoryRecallFeedback', () => {
                 forgottenIntersectionCount: 1
             })
         );
+        // No route decisions weigh on the burden any more (Gen 173): the same board reads two
+        // lighter than it did when three doors were waiting behind the floor clear.
         expect(feedback.burden).toEqual({
-            score: 6,
-            label: 'taxed',
-            detail: 'Memory burden is taxed by 1 forgotten mark, 1 partial symbol read, 3 route decisions; cash in a known pair or choose the safer route.',
+            score: 4,
+            label: 'loaded',
+            detail: 'Memory burden is loaded with 1 forgotten mark, 1 partial symbol read; keep the next action tied to an existing clue.',
             tone: 'watch'
         });
         expect(feedback.penalties.map((line) => line.id)).toContain('recall-mistakes');
-        expect(feedback.choices).toEqual([
-            expect.objectContaining({ id: 'route:safe', tone: 'stable', readiness: 'ready' }),
-            expect.objectContaining({ id: 'route:greed', tone: 'danger', readiness: 'unsafe', consequence: '+6 gold. -1 life.' }),
-            expect.objectContaining({ id: 'route:mystery', tone: 'watch', readiness: 'ready' })
-        ]);
-        expect(feedback.choices.map((choice) => choice.atmosphericCue)).toEqual([
-            'A steadier corridor keeps its marks close to the wall.',
-            'The louder stair promises value, but every card remembers the noise.',
-            'The unindexed door offers a clue first and an answer later.'
-        ]);
+        expect(feedback.choices).toEqual([]);
     });
 
     it('normalizes malformed scout and recovery counters before building feedback copy', () => {
@@ -395,107 +388,7 @@ describe('getMemoryRecallFeedback', () => {
         expect(overloadedFeedback.forgottenTileCount).toBe(3);
     });
 
-    it('prioritizes route choice memory prompts before cashing in clean recall', () => {
-        const baseChoices: RouteChoice[] = [
-            {
-                id: 'route:greed',
-                routeType: 'greed',
-                label: 'Greed',
-                detail: 'Risk memory for more value.'
-            },
-            {
-                id: 'route:mystery',
-                routeType: 'mystery',
-                label: 'Mystery',
-                detail: 'Unknown clue route.'
-            }
-        ];
-        const warmingRun = makeRun([makeTile('a1', 'A', 'A'), makeTile('a2', 'A', 'A')], {
-            recallFocus: 1,
-            lastLevelResult: {
-                level: 2,
-                scoreGained: 80,
-                rating: 'B',
-                livesRemaining: 3,
-                perfect: false,
-                mistakes: 1,
-                clearLifeReason: 'none',
-                clearLifeGained: 0,
-                routeChoices: baseChoices
-            }
-        });
-        const lockedMysteryRun = makeRun([makeTile('a1', 'A', 'A'), makeTile('a2', 'A', 'A')], {
-            recallFocus: 2,
-            lastLevelResult: {
-                level: 2,
-                scoreGained: 80,
-                rating: 'B',
-                livesRemaining: 3,
-                perfect: false,
-                mistakes: 1,
-                clearLifeReason: 'none',
-                clearLifeGained: 0,
-                routeChoices: baseChoices.filter((choice) => choice.routeType === 'mystery')
-            }
-        });
-        const cleanRun = makeRun([makeTile('a1', 'A', 'A'), makeTile('a2', 'A', 'A')], {
-            recallFocus: 2
-        });
 
-        expect(getMemoryRecallFeedback(warmingRun).nextMemoryMove).toEqual(
-            expect.objectContaining({ id: 'next-memory-move-greed', tone: 'watch' })
-        );
-        expect(getMemoryRecallFeedback(lockedMysteryRun).nextMemoryMove).toEqual(
-            expect.objectContaining({ id: 'next-memory-move-mystery', tone: 'watch' })
-        );
-        expect(getMemoryRecallFeedback(cleanRun).nextMemoryMove).toEqual(
-            expect.objectContaining({ id: 'next-memory-move-cash-in', tone: 'reward' })
-        );
-    });
-
-    it('grades route choices against current recall pressure', () => {
-        const greedReadyRun = makeRun([makeTile('a1', 'A', 'A'), makeTile('a2', 'A', 'A')], {
-            recallFocus: 2,
-            lastLevelResult: {
-                level: 2,
-                scoreGained: 80,
-                rating: 'A',
-                livesRemaining: 4,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'perfect',
-                clearLifeGained: 1,
-                routeChoices: [routeChoices[1]!]
-            }
-        });
-        const mysteryThinRun = makeRun([makeTile('a1', 'A', 'A'), makeTile('a2', 'A', 'A')], {
-            recallFocus: 2,
-            lastLevelResult: {
-                level: 2,
-                scoreGained: 80,
-                rating: 'A',
-                livesRemaining: 4,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'perfect',
-                clearLifeGained: 1,
-                routeChoices: [routeChoices[2]!]
-            }
-        });
-
-        expect(getMemoryRecallFeedback(greedReadyRun).choices[0]).toEqual(
-            expect.objectContaining({
-                readiness: 'ready',
-                readinessLabel: 'Greed is supportable while focus is locked.'
-            })
-        );
-        expect(getMemoryRecallFeedback(mysteryThinRun).choices[0]).toEqual(
-            expect.objectContaining({
-                readiness: 'risky',
-                readinessLabel: 'Mystery is thin until one clue source is remembered.'
-            })
-        );
-    });
 
     it('maps symbol memory into known pairs, partial reads, hidden pairs, and cleared pairs', () => {
         const run = makeRun(

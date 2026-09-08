@@ -289,7 +289,6 @@ describe('createDungeonExitActivationTransition', () => {
         expect(transition?.run.board).toBe(transition?.board);
         expect(transition?.run.dungeonKeys.iron).toBe(0);
         expect(transition?.run.dungeonGatewaysUsed).toBe(1);
-        expect(transition?.run.pendingRouteCardPlan?.routeType).toBe('safe');
     });
 
     it('auto-selects the valid spend when opening a revealed keyed exit without an explicit spend', () => {
@@ -573,6 +572,5 @@ describe('getDungeonExitStatus softlock prevention', () => {
             dungeonExitActivated: true
         });
         expect(transition?.run.dungeonKeys.iron ?? 0).toBe(0);
-        expect(transition?.run.pendingRouteCardPlan?.routeType).toBe('safe');
     });
 });

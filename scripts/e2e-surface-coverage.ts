@@ -58,7 +58,6 @@ export const findViewsNoFixtureReaches = (): string[] => {
         'profile',
         'inventory',
         'shop',
-        'sideRoom',
         'codex'
     ];
     return all.filter((view) => !reached.has(view) && UNREACHED_VIEW_EXEMPTIONS[view] === undefined);
@@ -96,12 +95,7 @@ export const DECLARED_SURFACES: readonly DeclaredSurface[] = [
         holds: (state) => state.view === 'gameOver'
     },
     {
-        key: 'a side room offering a choice',
-        fixtureId: 'sideRoomChoice',
-        holds: (state) => state.view === 'sideRoom'
-    },
-    {
-        key: 'a floor cleared with routes to pick',
+        key: 'a floor cleared, with the next one behind it',
         fixtureId: 'floorClearWithRouteChoices',
         holds: (state) => state.run?.status === 'levelComplete'
     },

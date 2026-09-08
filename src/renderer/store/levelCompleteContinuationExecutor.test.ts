@@ -138,25 +138,15 @@ describe('level complete continuation executors', () => {
         expect(deps.clearAllTimers).not.toHaveBeenCalled();
     });
 
-    it('applies route choice outcome and routes into the next continuation surface', () => {
+    it('treats a route choice as a plain continue, journaling no route command (Gen 173)', () => {
         const run = createPlayablePathFixture('floorClearWithRouteChoices').run!;
-        const choiceId = run.lastLevelResult!.routeChoices![0]!.id;
         const deps = createDeps(createState({ run }));
 
-        executeChooseRouteAndContinue(choiceId, deps);
+        executeChooseRouteAndContinue('any-choice-id', deps);
 
-        expect(deps.clearAllTimers).toHaveBeenCalledTimes(1);
-        expect(deps.setState).toHaveBeenCalledWith(expect.objectContaining({
-            view: expect.any(String),
-            run: expect.objectContaining({
-                gameplayCommandJournal: expect.arrayContaining([
-                    expect.objectContaining({ type: 'route.choose', choiceId })
-                ]),
-                gameplayEventJournal: expect.arrayContaining([
-                    expect.objectContaining({ type: 'route.choice_selected', choiceId }),
-                    expect.objectContaining({ type: 'feedback.requested', cue: 'route.choice.safe' })
-                ])
-            })
-        }));
+        expect(deps.continueToNextLevel).toHaveBeenCalledTimes(1);
+        expect(deps.clearAllTimers).not.toHaveBeenCalled();
+        expect(deps.setState).not.toHaveBeenCalled();
+        expect(run.lastLevelResult?.routeChoices).toBeUndefined();
     });
 });

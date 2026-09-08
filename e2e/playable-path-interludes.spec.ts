@@ -21,37 +21,20 @@ import { STORAGE_KEY } from './tileBoardGameFlow';
 test.describe('Expanded playable interludes and post-run loop', () => {
     test.describe.configure({ retries: 0, timeout: 150_000 });
 
-    const routeChoices = [
-        { type: 'safe', kind: 'bonus_reward', node: 'rest', copy: /safe/i },
-        { type: 'greed', kind: 'bonus_reward', node: 'treasure', copy: /greed/i },
-        { type: 'mystery', kind: 'run_event', node: 'event', copy: /mystery|mirror bargain/i }
-    ] as const;
-
-    test('floor clear exposes route choice controls', async ({ page }) => {
+    test('floor clear offers no route and goes straight on', async ({ page }) => {
         await openPlayablePathFixture(page, 'floorClearWithRouteChoices');
 
         const floorClear = page.getByRole('dialog', { name: /floor cleared/i });
         await expect(floorClear).toBeVisible();
-        await expect(page.getByTestId('floor-clear-result-stack')).toHaveAttribute('data-route-choice-required', 'true');
+        // No door between floors any more (Gen 173): the result and a Continue, nothing to pick.
+        await expect(page.getByTestId('floor-clear-result-stack')).toHaveAttribute('data-route-choice-required', 'false');
         await expect(page.getByTestId('floor-clear-score')).toBeVisible();
         await expect(page.getByTestId('floor-clear-stats')).toContainText(/Rating/);
-        await expect(page.getByTestId('route-choice-panel')).toBeVisible();
-        await expect(page.getByTestId('route-choice-panel')).toHaveAttribute('data-decision-state', 'required');
-        await expect(page.getByTestId('route-choice-safe')).toContainText(/safe/i);
-        await expect(page.getByTestId('route-choice-greed')).toContainText(/greed/i);
-        await expect(page.getByTestId('route-choice-mystery')).toContainText(/mystery/i);
-        // The dialog carries the result and the door choice only; no coaching strips.
+        await expect(page.getByTestId('route-choice-panel')).toHaveCount(0);
         await expect(page.getByTestId('floor-clear-payoff-stack')).toHaveCount(0);
-        await expect(floorClear.getByRole('button', { name: /^continue$/i })).toHaveCount(0);
+        await floorClear.getByRole('button', { name: /^continue$/i }).click({ force: true });
+        await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 30_000 });
     });
-
-    for (const route of routeChoices) {
-        test(`route choice ${route.type} stamps the resulting side room`, async ({ page }) => {
-            await openPlayablePathFixture(page, 'floorClearWithRouteChoices');
-            await page.getByTestId(`route-choice-${route.type}`).click({ force: true });
-            await expectStampedSideRoom(page, route.type, route.kind, route.node, route.copy);
-        });
-    }
 
     test('shop purchase path shows wallet/stock consequences before continuing', async ({ page }) => {
         await openPlayablePathFixture(page, 'floorClearWithShop');
@@ -96,41 +79,6 @@ test.describe('Expanded playable interludes and post-run loop', () => {
         await page.getByTestId('shop-action-dock').getByRole('button', { name: /^continue$/i }).click();
         await expectGameplayReady(page);
         await expect(page.getByTestId('shop-screen')).toBeHidden();
-    });
-
-    test('side rooms support primary choice, explicit event choice, skip, and shop handoff', async ({ page }) => {
-        test.setTimeout(180_000);
-        await openPlayablePathFixture(page, 'sideRoomPrimary');
-        await expectStampedSideRoom(page, 'safe', 'rest_shrine', 'rest', /safe/i);
-        await page.getByTestId('side-room-action-dock').getByRole('button', { name: /^rest heal$/i }).click({ force: true });
-        await expectGameplayReady(page);
-        await expect(page.getByTestId('side-room-screen')).toBeHidden();
-
-        await openPlayablePathFixture(page, 'sideRoomChoice');
-        await expectStampedSideRoom(page, 'mystery', 'run_event', 'event', /forgotten names/i);
-        await expect(page.getByTestId('side-room-choice-speak_name')).toContainText(/speak the name/i);
-        await expect(page.getByTestId('side-room-choice-speak_name')).toContainText(/favor progress/i);
-        // The choice card is the control that takes it; the dock no longer repeats it.
-        await page.getByTestId('side-room-choice-speak_name').click();
-        await expectGameplayReady(page);
-        await expect(page.getByTestId('side-room-screen')).toBeHidden();
-
-        await openPlayablePathFixture(page, 'sideRoomSkip');
-        await expectStampedSideRoom(page, 'greed', 'bonus_reward', 'treasure', /greed/i);
-        const perkChoice = page.locator('[data-choice-id$="free_swap_floor"]');
-        await expect(perkChoice).toContainText(/free swap discipline/i);
-        await expect(perkChoice).toHaveAttribute('data-choice-primary', /true|false/);
-        await page.getByTestId('side-room-action-dock').getByRole('button', { name: /leave it/i }).click();
-        await expectGameplayReady(page);
-        await expect(page.getByTestId('side-room-screen')).toBeHidden();
-
-        await openPlayablePathFixture(page, 'sideRoomThenShop');
-        await expectStampedSideRoom(page, 'safe', 'rest_shrine', 'rest', /safe/i);
-        await page.getByTestId('side-room-action-dock').getByRole('button', { name: /^rest heal$/i }).click({ force: true });
-        await expectShopDecisionUsable(page);
-        await expect(page.getByTestId('shop-screen')).toHaveAttribute('data-shop-return-mode', 'summary');
-        await page.getByTestId('shop-action-dock').getByRole('button', { name: /^(continue|continue to)/i }).click();
-        await expectGameplayReady(page);
     });
 
     test('relic draft fixture shows build choices and can pick into the next floor', async ({ page }) => {
@@ -235,18 +183,3 @@ async function openInventoryFromToolbar(page: Page): Promise<void> {
     }).toPass({ timeout: 20_000 });
 }
 
-async function expectStampedSideRoom(
-    page: Page,
-    routeType: 'safe' | 'greed' | 'mystery',
-    kind: 'bonus_reward' | 'rest_shrine' | 'run_event',
-    nodeKind: 'event' | 'rest' | 'treasure',
-    copy: RegExp
-): Promise<void> {
-    const sideRoom = page.getByTestId('side-room-screen');
-    await expect(sideRoom).toBeVisible({ timeout: 20_000 });
-    await expect(sideRoom).toHaveAttribute('data-route-type', routeType);
-    await expect(sideRoom).toHaveAttribute('data-side-room-kind', kind);
-    await expect(sideRoom).toHaveAttribute('data-node-kind', nodeKind);
-    await expect(sideRoom).toContainText(copy);
-    await expect(page.getByTestId('side-room-action-dock')).toBeVisible();
-}

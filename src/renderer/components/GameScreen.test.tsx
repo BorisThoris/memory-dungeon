@@ -1900,13 +1900,9 @@ describe('GameScreen (OVR-014)', () => {
         expect(notes).toHaveTextContent('Perfect floor bonus: +1 Life');
         expect(notes).toHaveTextContent('Flip par: Complete (+30 score)');
         expect(notes).toHaveTextContent('+1 Favor');
-        // Route choice is the one decision on the screen: three doors, no Continue until one is picked.
-        expect(screen.getByTestId('route-choice-panel')).toHaveAttribute('data-decision-state', 'required');
-        expect(screen.getByTestId('route-choice-safe')).toBeEnabled();
-        expect(screen.getByTestId('route-choice-greed')).toBeEnabled();
-        expect(screen.getByTestId('route-choice-mystery')).toBeEnabled();
-        expect(screen.queryByRole('button', { name: /^continue$/i })).toBeNull();
-        expect(screen.queryByRole('button', { name: /visit shop/i })).toBeNull();
+        // No route is offered between floors any more (Gen 173): the doors are gone from the
+        // screen, and the floor clear goes straight on.
+        expect(screen.queryByTestId('route-choice-panel')).toBeNull();
         expect(screen.queryByTestId('floor-clear-payoff-stack')).toBeNull();
         expect(screen.queryByTestId('floor-clear-momentum-strip')).toBeNull();
     });
@@ -2045,58 +2041,6 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.queryByText(/Dungeon node armed:/i)).toBeNull();
     });
 
-    it('keeps boss-route approach labels visible when room choices converge', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 66_006 });
-        const run: RunState = {
-            ...baseRun,
-            status: 'levelComplete',
-            relicOffer: null,
-            dungeonRun: createDungeonRunMapState(baseRun.runSeed, baseRun.runRulesVersion, 5),
-            lastLevelResult: {
-                level: 5,
-                scoreGained: 220,
-                rating: 'S',
-                livesRemaining: 4,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'none',
-                clearLifeGained: 0,
-                routeChoices: [
-                    {
-                        id: 'boss:safe',
-                        routeType: 'safe',
-                        label: 'Safe passage',
-                        detail: 'Boss gate through a controlled route.'
-                    },
-                    {
-                        id: 'boss:greed',
-                        routeType: 'greed',
-                        label: 'Greedy route',
-                        detail: 'Boss gate through an elite route.'
-                    },
-                    {
-                        id: 'boss:mystery',
-                        routeType: 'mystery',
-                        label: 'Mystery route',
-                        detail: 'Boss gate through an omen route.'
-                    }
-                ]
-            }
-        };
-
-        render(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen achievements={[]} run={run} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-
-        expect(screen.getByTestId('route-choice-safe')).toHaveTextContent('Approach: Safe passage');
-        expect(screen.getByTestId('route-choice-safe')).toHaveTextContent('Keeper Chamber via Safe passage');
-        expect(screen.getByTestId('route-choice-greed')).toHaveTextContent('Approach: Greedy route');
-        expect(screen.getByTestId('route-choice-mystery')).toHaveTextContent('Approach: Mystery route');
-    });
 
     it('shows payoff and cost signals while the Gambit third flip is active', () => {
         const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));

@@ -39,7 +39,7 @@ describe('tile board DOM accessibility helpers', () => {
         expect(getTilePosition(3, 2)).toEqual({ row: 2, column: 2 });
     });
 
-    it('builds hidden and face-up tile labels with route, hazard, scout, and enemy context', () => {
+    it('builds hidden and face-up tile labels with hazard, scout, and enemy context', () => {
         const labelledBoard: BoardState = {
             ...board,
             enemyHazards: [
@@ -71,7 +71,7 @@ describe('tile board DOM accessibility helpers', () => {
         const label = getTileAriaLabel(labelledBoard, labelledBoard.tiles[0]!, true, 1, 1);
 
         expect(label).toContain('Tile A, row 1, column 1');
-        expect(label).toContain('Route card: Greed cache.');
+        expect(label).not.toContain('Route card');
         expect(label).toContain('Hazard tile:');
         // The mark is spoken as well as drawn, so a screen-reader user gets the second channel too.
         expect(label).toContain('Trait: Volatile (3 diamonds).');

@@ -28,18 +28,19 @@ describe('multi-floor typed build strategy simulation', () => {
             expect(strategy.floorCompletionShare).toBe(1);
             expect(strategy.deterministicReplaySeeds).toBe(report.seeds.length);
             /*
-             * The Saboteur's signature never fires. Its move is "shuffle the row carrying the most
-             * visible hazards", gated on a hazard-pressure floor and aimed by counting hazard tiles
-             * in each row - and there are no hazard tiles, so the gate never opens and the aim has
-             * nothing to sort by.
+             * Gen 172 asserted The Saboteur's signature at nought: its region shuffle is gated on a
+             * hazard-pressure floor, and no floor read as one. Gen 173 removed the route between
+             * floors, and with it the safe route every policy was taking - which had been keeping
+             * the hazard-pressure mutators off the schedule. One floor a seed now carries one, the
+             * gate opens, and the shuffle fires three times over three seeds.
              *
-             * Unlike The Locksmith it is not deleted, because the mechanism underneath it is fine:
-             * a targeted region shuffle is a real move that a real floor can want. What it needs is
-             * something else to aim at, and picking that is Phase 2's job when it decides what makes
-             * a floor hard. Asserted at nought so the day it starts firing again is a deliberate one.
+             * The Engine is the one that dropped: two signature uses over three seeds, none on
+             * 42077, because its shard-to-life conversion has nothing to convert on a run that never
+             * loses a life. Asserted at the measured two so a change either way is a deliberate one;
+             * Phase 2's floor is what gives it something to spend a shard on.
              */
-            if (strategy.id === 'trap_control') {
-                expect(strategy.signatureConsequenceUses).toBe(0);
+            if (strategy.id === 'combo_shard_engine') {
+                expect(strategy.signatureConsequenceUses).toBe(2);
             } else {
                 expect(strategy.signatureConsequenceUses).toBeGreaterThanOrEqual(report.seeds.length);
             }
@@ -64,50 +65,20 @@ describe('multi-floor typed build strategy simulation', () => {
             );
             expect(strategy.interludeRiskPolicy).toEqual(GAMEPLAY_BUILD_POLICIES[strategy.id].interludeRiskPolicy);
             /*
-             * `hazard_pressure` has almost stopped happening, and four builds are labelled against
-             * it: it is the favourable matchup for The Warden and The Saboteur, and the counter for
-             * The Cartographer, The Gambler and The Scout. Its only remaining source is a handful
-             * of mutators - every enemy patrol and trap that used to produce it was a dungeon card -
-             * so it turns up on one sampled floor out of the whole run instead of on many.
-             *
-             * The two builds keep working: their consequences are a destroy-pair and a region
-             * shuffle, neither of which needed a hazard. What is wrong is the label - "good against
-             * hazard pressure" no longer describes a floor anyone plays - and relabelling a build's
-             * matchup is a design decision, not a test fix. Phase 2 makes that call when it decides
-             * what a hard floor is; until then this asserts the shape honestly rather than
-             * pretending a matchup that has gone quiet is still being sampled.
+             * Every matchup is sampled again. Gen 172 had `hazard_pressure` down to nothing - the
+             * enemy patrols and traps that produced it were dungeon cards - and five builds are
+             * labelled against it. Its one remaining source is a mutator, and the safe route every
+             * policy took between floors had been keeping that mutator off the schedule; with the
+             * route gone (Gen 173) it lands on one floor a seed. That is still thin, and "good
+             * against hazard pressure" still describes very little; relabelling is Phase 2's call.
              */
-            const matchupIsThin = (matchup: string): boolean => matchup === 'hazard_pressure';
-            if (matchupIsThin(strategy.favorableMatchup)) {
-                expect(strategy.favorableMatchupMetrics).toBeNull();
-            } else {
-                expect(strategy.favorableMatchupMetrics?.sampledFloors).toBeGreaterThanOrEqual(1);
-            }
-            if (!matchupIsThin(strategy.counterMatchup)) {
-                expect(strategy.counterMatchupMetrics?.sampledFloors).toBeGreaterThanOrEqual(1);
-                expect(strategy.counterMatchupReplayFloors).toBeGreaterThanOrEqual(1);
-            }
+            expect(strategy.favorableMatchupMetrics?.sampledFloors).toBeGreaterThanOrEqual(1);
+            expect(strategy.counterMatchupMetrics?.sampledFloors).toBeGreaterThanOrEqual(1);
+            expect(strategy.counterMatchupReplayFloors).toBeGreaterThanOrEqual(1);
             expect(strategy.policyDecisionCount).toBeGreaterThanOrEqual(strategy.floorsAttempted);
             expect(strategy.imperfectInformationFloors).toBeGreaterThanOrEqual(report.seeds.length);
             expect(strategy.uncertainTurns).toBeGreaterThanOrEqual(report.seeds.length);
             expect(strategy.riskBudgetExhaustions).toBe(0);
-            expect(strategy.routeRiskAssessmentCount).toBeGreaterThanOrEqual(report.seeds.length * 3);
-            /*
-             * The Hoarder and The Gambler now reject nothing. They still assess every route - 99
-             * assessments each - and accept all of them, because nothing on the other side of a
-             * route can hurt a player any more, so a greed-leaning policy has no reason to decline.
-             * The other six still reject, which is what says the risk machinery is alive rather
-             * than that the assessment has stopped running.
-             *
-             * Same root as the flat route offer in `BALANCE_NOTES.md`: a decision with no downside
-             * is not a decision. Phase 2 gives the floor something to lose.
-             */
-            if (strategy.id === 'treasure_greed' || strategy.id === 'route_gambler') {
-                expect(strategy.routeRiskRejections).toBe(0);
-            } else {
-                expect(strategy.routeRiskRejections).toBeGreaterThanOrEqual(1);
-            }
-            expect(strategy.sideRoomResourceAssessmentCount).toBeGreaterThanOrEqual(report.seeds.length);
             expect(strategy.matchupMetrics.reduce(
                 (sum, matchup) => sum + matchup.recurringSynergyFloors,
                 0
@@ -133,39 +104,33 @@ describe('multi-floor typed build strategy simulation', () => {
                     (floor, index) => index === 0 || floor > observedFloors[index - 1]
                 )).toBe(true);
                 expect(sample.policyDecisions.length).toBeGreaterThanOrEqual(sample.floorTraces.length);
-                const routeDecisions = sample.policyDecisions.filter((decision) => decision.phase === 'route');
-                expect(routeDecisions.every((decision) =>
-                    decision.routeRiskAssessments?.length === 3 &&
-                    decision.routeRiskAssessments.some((assessment) =>
-                        assessment.routeId === decision.selectedId && assessment.accepted
-                    )
-                )).toBe(true);
-                expect(sample.policyDecisions
-                    .filter((decision) => decision.phase === 'side_room' && decision.applied)
-                    .some((decision) => decision.sideRoomResourceAssessment != null)).toBe(true);
-                // The Saboteur's consequence command is absent for the reason above: its gate
-                // never opens, so it never issues a region shuffle. Everything else in this list is
-                // the shape of an ordinary run and must still be there for every build.
+                // No route decision and no side room is ever offered between floors (Gen 173).
+                expect(sample.policyDecisions.filter((decision) => decision.phase === 'route')).toEqual([]);
+                expect(sample.policyDecisions.filter((decision) => decision.phase === 'side_room' && decision.applied)).toEqual([]);
+                // The Engine's consequence command is absent on seed 42077, for the reason above
+                // its signature assertion. Everything else in this list is the shape of an ordinary
+                // run and must still be there for every build.
                 expect(sample.commands.map((command) => command.type)).toEqual(expect.arrayContaining([
                     'phase.memorize_complete',
                     'board.tile_flip',
                     'board.turn_resolve',
-                    'route.choose',
-                    'side_room.resolve',
                     'relic.offer_open',
                     'relic.pick',
                     'floor.advance',
-                    ...(strategy.id === 'trap_control' ? [] : [strategy.consequenceCommandType])
+                    ...(strategy.id === 'combo_shard_engine' && sample.seed === 42_077
+                        ? []
+                        : [strategy.consequenceCommandType])
                 ]));
                 expect(new Set(sample.commands.map((command) => command.commandId)).size).toBe(sample.commands.length);
                 expect(new Set(sample.events.map((event) => event.eventId)).size).toBe(sample.events.length);
             }
         }
         /*
-         * Three pairs breach the mean-turn ratio, all of them The Cartographer against someone
-         * else: 1.66, 1.57, 1.57 against a ceiling of 1.5. The Cartographer peeks and takes fewer
-         * turns; everyone else now takes the same number as everyone else, because there is nothing
-         * left on a floor to make one build's turns differ from another's. The ceiling is not
+         * Seven pairs breach the mean-turn ratio, every one of them The Cartographer against
+         * someone else, at 1.53 to 1.65 against a ceiling of 1.5. Gen 172 had three; the route cut
+         * (Gen 173) took away the last thing that made one build's floors differ in length from
+         * another's, so the other seven now take the same number of turns to within a rounding, and
+         * The Cartographer's peeks stand out against all of them at once. The ceiling is not
          * catching a runaway build, it is catching the other seven converging.
          *
          * Named exactly rather than widened. Phase 2's pair curve and par are what give builds
@@ -174,14 +139,14 @@ describe('multi-floor typed build strategy simulation', () => {
         expect(report.pairwiseMeanTurnRatios.filter(
             (pair) => pair.ratio > report.bounds.maxPairwiseMeanTurnRatio
         )).toEqual([
-            { left: 'conduit_cartographer', right: 'guard_tank', ratio: 1.66 },
-            { left: 'conduit_cartographer', right: 'trap_control', ratio: 1.57 },
-            { left: 'conduit_cartographer', right: 'boss_hunter', ratio: 1.57 }
+            { left: 'conduit_cartographer', right: 'guard_tank', ratio: 1.64 },
+            { left: 'conduit_cartographer', right: 'treasure_greed', ratio: 1.65 },
+            { left: 'conduit_cartographer', right: 'route_gambler', ratio: 1.65 },
+            { left: 'conduit_cartographer', right: 'combo_shard_engine', ratio: 1.65 },
+            { left: 'conduit_cartographer', right: 'trap_control', ratio: 1.65 },
+            { left: 'conduit_cartographer', right: 'boss_hunter', ratio: 1.65 },
+            { left: 'conduit_cartographer', right: 'memory_scout', ratio: 1.53 }
         ]);
-        expect(report.strategies.reduce(
-            (sum, strategy) => sum + strategy.adaptiveRouteSelections,
-            0
-        )).toBeGreaterThanOrEqual(report.bounds.minAdaptiveRouteSelections);
         expect(report.cohesiveBuildCoverage.conduitCartographer).toMatchObject({
             id: 'conduit_cartographer',
             buildMechanicId: 'build.conduit_cartographer',
@@ -208,9 +173,13 @@ describe('multi-floor typed build strategy simulation', () => {
         expect(report.cohesiveBuildCoverage.conduitCartographer.evidence.hazardPinConservations).toBeGreaterThan(0);
         const conduitCartographer = report.strategies.find((strategy) => strategy.id === 'conduit_cartographer');
         expect(conduitCartographer?.samples.every((sample) =>
-            sample.floorTraces.reduce((sum, floor) => sum + floor.pinPlacements, 0) > 0 &&
-            sample.floorTraces.reduce((sum, floor) => sum + floor.scoutGlintMatches, 0) > 0
+            sample.floorTraces.reduce((sum, floor) => sum + floor.pinPlacements, 0) > 0
         )).toBe(true);
+        // Seed 42123 deals The Cartographer no scout glint it ever matches (Gen 173); it is in the
+        // issue list below, and named here so a second silent seed fails.
+        expect(conduitCartographer?.samples
+            .filter((sample) => sample.floorTraces.reduce((sum, floor) => sum + floor.scoutGlintMatches, 0) === 0)
+            .map((sample) => sample.seed)).toEqual([42_123]);
         expect(conduitCartographer?.samples.flatMap((sample) => sample.floorTraces)
             .filter((floor) => floor.matchup === 'hazard_pressure')
             .every((floor) => floor.pinPolicySuppressedByMatchup && floor.pinPlacements === 0)).toBe(true);
@@ -227,8 +196,7 @@ describe('multi-floor typed build strategy simulation', () => {
             'relic.wager_surety',
             'objective.risk_wager',
             'inventory.gambit_token',
-            'power.gambit',
-            'route.mystery'
+            'power.gambit'
         ]);
         expect(report.cohesiveBuildCoverage.routeGambler.evidence.gambitCommits).toBeGreaterThanOrEqual(report.seeds.length);
         expect(report.cohesiveBuildCoverage.routeGambler.evidence.riskWagersAccepted).toBeGreaterThan(0);
@@ -237,9 +205,8 @@ describe('multi-floor typed build strategy simulation', () => {
             report.cohesiveBuildCoverage.routeGambler.evidence.riskWagerLosses
         ).toBeGreaterThan(0);
         expect(report.cohesiveBuildCoverage.routeGambler.evidence.favorableMatchupFloors).toBeGreaterThan(0);
-        // Counter is hazard pressure, which no longer happens - the same thin matchup recorded at
-        // the top of this file. The Gambler's own economy-opportunity floors above are unaffected.
-        expect(report.cohesiveBuildCoverage.routeGambler.evidence.counterMatchupFloors).toBe(0);
+        // Counter is hazard pressure: one floor a seed since Gen 173, see the top of this test.
+        expect(report.cohesiveBuildCoverage.routeGambler.evidence.counterMatchupFloors).toBe(report.seeds.length);
         const routeGambler = report.strategies.find((strategy) => strategy.id === 'route_gambler');
         expect(routeGambler?.samples.every((sample) =>
             sample.floorTraces.some((floor) => floor.gambitCommits > 0)
@@ -265,8 +232,8 @@ describe('multi-floor typed build strategy simulation', () => {
         ]);
         expect(report.cohesiveBuildCoverage.comboShardEngine.evidence.comboShardSourceEvents)
             .toBeGreaterThanOrEqual(report.seeds.length);
-        expect(report.cohesiveBuildCoverage.comboShardEngine.evidence.shardLifeConversions)
-            .toBeGreaterThanOrEqual(report.seeds.length);
+        // Two, not three: seed 42077 never converts a shard. See the signature assertion above.
+        expect(report.cohesiveBuildCoverage.comboShardEngine.evidence.shardLifeConversions).toBe(2);
         expect(report.cohesiveBuildCoverage.comboShardEngine.evidence.favorableMatchupFloors).toBeGreaterThan(0);
         expect(report.cohesiveBuildCoverage.comboShardEngine.evidence.counterMatchupFloors).toBeGreaterThan(0);
         expect(report.cohesiveBuildCoverage.trapControl).toMatchObject({
@@ -285,9 +252,10 @@ describe('multi-floor typed build strategy simulation', () => {
             'power.region_shuffle',
             'power.tile_swap'
         ]);
-        // The Saboteur never reconfigures anything, for the reason given above its signature
-        // assertion: its shuffle is gated on a hazard-pressure floor and aimed at hazard tiles.
-        expect(report.cohesiveBuildCoverage.trapControl.evidence.targetedReconfigurationUses).toBe(0);
+        // The Saboteur reconfigures once a seed again: the hazard-pressure floor its shuffle is
+        // gated on is back on the schedule (Gen 173, see the signature assertion above).
+        expect(report.cohesiveBuildCoverage.trapControl.evidence.targetedReconfigurationUses)
+            .toBeGreaterThanOrEqual(report.seeds.length);
         expect(report.cohesiveBuildCoverage.trapControl.evidence.memoryPressureConservations)
             .toBeGreaterThan(0);
         const trapControl = report.strategies.find((strategy) => strategy.id === 'trap_control');
@@ -345,8 +313,8 @@ describe('multi-floor typed build strategy simulation', () => {
         expect(report.cohesiveBuildCoverage.memoryScout.evidence.undoResolveUses)
             .toBeGreaterThanOrEqual(report.seeds.length);
         expect(report.cohesiveBuildCoverage.memoryScout.evidence.favorableMatchupFloors).toBeGreaterThan(0);
-        // Counter is hazard pressure. Same reason as The Gambler above.
-        expect(report.cohesiveBuildCoverage.memoryScout.evidence.counterMatchupFloors).toBe(0);
+        // Counter is hazard pressure. Same as The Gambler above.
+        expect(report.cohesiveBuildCoverage.memoryScout.evidence.counterMatchupFloors).toBe(report.seeds.length);
         /*
          * The Locksmith's coverage block stood here, and it was the longest in this test: six
          * required systems, four evidence counters, and a matchup rule about conserving keys under
@@ -354,40 +322,36 @@ describe('multi-floor typed build strategy simulation', () => {
          * away, so the build is gone and so is its coverage. See `build-strategy-simulation.ts`.
          */
         /*
-         * Seventeen issues, and they are one finding: the build catalog was designed around a floor
-         * that had things on it, and the floor is now a board of pairs.
+         * Twelve issues, and they are still one finding: the build catalog was designed around a
+         * floor that had things on it, and the floor is now a board of pairs.
          *
-         * Read down the list and it is the same sentence eight ways. A favourable matchup that never
-         * comes up (guard_tank, trap_control). A counter matchup that never comes up (route_gambler,
-         * memory_scout). A greed policy with nothing to decline (treasure_greed, route_gambler). A
-         * signature move whose gate never opens (trap_control). A boss trophy with no boss
-         * (boss_hunter). And three turn-ratio breaches that are seven builds converging on the same
-         * floor length.
+         * Gen 172 counted seventeen. The route cut (Gen 173) moved the list rather than shortening
+         * it. Gone: the two "greed policy with nothing to decline" rows, with the route-risk metric
+         * that produced them; the eight hazard-pressure rows, because the hazard mutator is back on
+         * the schedule now that no safe route suppresses it, so The Saboteur fires and every
+         * matchup is sampled. Arrived: The Engine short of shard conversions, one seed short of a
+         * scout glint for The Cartographer, and four more turn-ratio breaches as the last thing
+         * that made builds' floors differ in length went with the route.
          *
-         * Asserted exactly, so an eighteenth fails. Every one of them is answered by giving the
+         * Asserted exactly, so a thirteenth fails. Every one of them is answered by giving the
          * floor something to be - Phase 2's pair curve, par, authored floors and severance drop -
          * and none of them by moving a bound here. Deleting the builds is the wrong answer too: The
          * Locksmith went because its every input was gone, and these seven still have working
          * mechanisms that need re-aiming rather than burial.
          */
         expect(assertGameplayBuildMultiFloorViable(report).issues).toEqual([
-            'guard_tank@seeds:42001,42077,42123:favorableMatchup=hazard_pressure; sampled=0; required=1',
-            'treasure_greed@seeds:42001,42077,42123:routeRiskRejections=0; required=1',
-            'route_gambler@seeds:42001,42077,42123:counterMatchup=hazard_pressure; sampled=0; required=1',
-            'route_gambler@seeds:42001,42077,42123:counterMatchupReplayFloors=0; required=1',
-            'route_gambler@seeds:42001,42077,42123:routeRiskRejections=0; required=1',
-            'trap_control@seeds:42001,42077,42123:signatureConsequenceUses=0; required=3',
-            'trap_control@seeds:42001,42077,42123:favorableMatchup=hazard_pressure; sampled=0; required=1',
-            'trap_control@seed:42001:signatureConsequenceUses=0; required=1',
-            'trap_control@seed:42077:signatureConsequenceUses=0; required=1',
-            'trap_control@seed:42123:signatureConsequenceUses=0; required=1',
-            'memory_scout@seeds:42001,42077,42123:counterMatchup=hazard_pressure; sampled=0; required=1',
-            'memory_scout@seeds:42001,42077,42123:counterMatchupReplayFloors=0; required=1',
-            'trap_control@seeds:42001,42077,42123:targetedReconfigurationUses=0; required=3',
+            'combo_shard_engine@seeds:42001,42077,42123:signatureConsequenceUses=2; required=3',
+            'combo_shard_engine@seed:42077:signatureConsequenceUses=0; required=1',
+            'conduit_cartographer@seed:42123:scoutGlintMatches=0; required=1',
+            'combo_shard_engine@seeds:42001,42077,42123:shardLifeConversions=2; required=3',
             'boss_hunter@seeds:42001,42077,42123:bossTrophyConversions=0; required=3',
-            'conduit_cartographer<->guard_tank:meanTurnRatio=1.66; max=1.5',
-            'conduit_cartographer<->trap_control:meanTurnRatio=1.57; max=1.5',
-            'conduit_cartographer<->boss_hunter:meanTurnRatio=1.57; max=1.5'
+            'conduit_cartographer<->guard_tank:meanTurnRatio=1.64; max=1.5',
+            'conduit_cartographer<->treasure_greed:meanTurnRatio=1.65; max=1.5',
+            'conduit_cartographer<->route_gambler:meanTurnRatio=1.65; max=1.5',
+            'conduit_cartographer<->combo_shard_engine:meanTurnRatio=1.65; max=1.5',
+            'conduit_cartographer<->trap_control:meanTurnRatio=1.65; max=1.5',
+            'conduit_cartographer<->boss_hunter:meanTurnRatio=1.65; max=1.5',
+            'conduit_cartographer<->memory_scout:meanTurnRatio=1.53; max=1.5'
         ]);
     }, 90_000);
 
@@ -417,9 +381,6 @@ describe('multi-floor typed build strategy simulation', () => {
         broken.strategies[1].imperfectInformationFloors = 0;
         broken.strategies[1].uncertainTurns = 0;
         broken.strategies[1].riskBudgetExhaustions = 1;
-        broken.strategies[1].routeRiskAssessmentCount = 0;
-        broken.strategies[1].routeRiskRejections = 0;
-        broken.strategies[1].sideRoomResourceAssessmentCount = 0;
         broken.strategies[3].gambitCommits = 0;
         broken.strategies[3].riskWagersAccepted = 0;
         broken.strategies[3].riskWagerWins = 0;
@@ -441,9 +402,6 @@ describe('multi-floor typed build strategy simulation', () => {
             'guard_tank@seeds:42001:imperfectInformationFloors=0; required=1',
             'guard_tank@seeds:42001:uncertainTurns=0; required=1',
             'guard_tank@seeds:42001:riskBudgetExhaustions=1; max=0',
-            'guard_tank@seeds:42001:routeRiskAssessments=0; required=3',
-            'guard_tank@seeds:42001:routeRiskRejections=0; required=1',
-            'guard_tank@seeds:42001:sideRoomResourceAssessments=0; required=1',
             'guard_tank@seed:42001:completedFloors=2; requested=3',
             'guard_tank@seed:42001:full replay diverged',
             'route_gambler@seeds:42001:gambitCommits=0; required=1',

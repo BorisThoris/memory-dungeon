@@ -7,22 +7,6 @@ import { createRunWithBoardInteractionClearedPatch, type RunSurfaceState } from 
 
 export type LevelCompleteContinuationSurfaceResult =
     | {
-          kind: 'sideRoom';
-          patch: Pick<
-              RunSurfaceState,
-              | 'boardPinMode'
-              | 'destroyPairArmed'
-              | 'matchScorePop'
-              | 'mismatchScorePop'
-              | 'peekModeArmed'
-              | 'tileSwapArmed'
-              | 'tileSwapFirstTileId'
-          > & {
-              run: RunState;
-              view: 'sideRoom';
-          };
-      }
-    | {
           kind: 'shop';
           patch: Pick<
               RunSurfaceState,
@@ -96,16 +80,6 @@ export const createLevelCompleteContinuationSurfaceResult = (
     // repair is journalled rather than silently mutating the run.
     const repair = repairRunProgressionThroughGameplayCore(run);
     run = repair.accepted ? repair.run : run;
-
-    if (run.sideRoom) {
-        return {
-            kind: 'sideRoom',
-            patch: {
-                view: 'sideRoom',
-                ...createRunWithBoardInteractionClearedPatch(run)
-            }
-        };
-    }
 
     if (includeSummaryShop && run.shopOffers.length > 0) {
         return {

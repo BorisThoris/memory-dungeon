@@ -9,7 +9,6 @@ import GameOverScreen from './components/GameOverScreen';
 import InventoryScreen from './components/InventoryScreen';
 import MainMenu from './components/MainMenu';
 import SettingsScreen from './components/SettingsScreen';
-import SideRoomScreen from './components/SideRoomScreen';
 import ShopScreen from './components/ShopScreen';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './components/gameplayVisualConfig';
 import metaScreenStyles from './components/MetaScreen.module.css';
@@ -118,7 +117,6 @@ const App = () => {
         (view === 'inventory' || view === 'codex') &&
         shellChromeContract.shellChrome === 'gameplay_modal';
     const inGameShopOverlay = hydrated && view === 'shop' && shellChromeContract.shellChrome === 'gameplay_modal';
-    const inGameSideRoomOverlay = hydrated && view === 'sideRoom' && shellChromeContract.shellChrome === 'gameplay_modal';
     const visualView = shellChromeContract.visualView;
     const suppressGameplayStatusOverlays = shellChromeContract.shellChrome === 'gameplay_modal';
     const showDevBlueprintExplorer = import.meta.env.DEV && window.location.pathname === '/__blueprint';
@@ -250,16 +248,6 @@ const App = () => {
             shopRun.shopOffers.length === 0
         ) {
             closeShopToFloorSummary();
-        }
-    }, [hydrated, view]);
-
-    useEffect(() => {
-        if (!hydrated || view !== 'sideRoom') {
-            return;
-        }
-        const { run: sideRoomRun } = useAppStore.getState();
-        if (!sideRoomRun || sideRoomRun.status !== 'levelComplete' || sideRoomRun.relicOffer || !sideRoomRun.sideRoom) {
-            useAppStore.setState({ view: 'playing' });
         }
     }, [hydrated, view]);
 
@@ -409,8 +397,6 @@ const App = () => {
                         ) : null}
 
                         {inGameShopOverlay ? <ShopScreen /> : null}
-
-                        {inGameSideRoomOverlay ? <SideRoomScreen /> : null}
 
                         {hydrated && view === 'gameOver' && run?.lastRunSummary && <GameOverScreen run={run} />}
                     </>

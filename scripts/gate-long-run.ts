@@ -38,11 +38,13 @@ export const formatLongRunGateReport = (report: Pick<LongRunSoakReport, 'rows'>)
  * anything". The debt is settled by Phase 1 T1.9-T1.17 removing the between-floor layer, at which
  * point this list goes back to empty.
  */
-const KNOWN_LONG_RUN_DEBT: readonly string[] = [
-    'max_profile_ending_gold_per_floor:5.56 outside 0-5',
-    'greedy@seed:42001/floor:48:dominantRouteShare=1',
-    'greedy@seed:42001/floor:48:endingShopGold=801/144'
-];
+/*
+ * Empty since Gen 173. The three entries Gen 172 recorded here - the greedy profile's flat route
+ * offer and the gold that a never-taken safe toll left in its wallet - were the between-floor route
+ * layer, and they went when it did. The list stays so that the next debt has somewhere honest to
+ * be written down, and so that a debt which stops reproducing is noticed rather than exempted.
+ */
+const KNOWN_LONG_RUN_DEBT: readonly string[] = [];
 
 export const runLongRunGate = (argv: readonly string[]): number => {
     const report = runLongRunSoak(parseLongRunGateOptions(argv));

@@ -13,7 +13,6 @@ import { parseRunShareKey } from '../../shared/run-share-key';
 import { trackEvent } from '../../shared/telemetry';
 import { executeRunStartRequest } from './runStartExecutor';
 import type { RunStartRequest } from './runStartState';
-import { createSideRoomActionController } from './sideRoomActionController';
 import {
     type MetaOverlayReturnPointer
 } from './metaOverlayState';
@@ -181,16 +180,6 @@ const scheduleDebugRevealTimer = (duration: number): void => runTimerController.
 const scheduleResolveTimer = (duration: number): void => runTimerController.scheduleResolveTimer(duration);
 const syncGauntletExpiryWatch = (): void => runTimerController.syncGauntletExpiryWatch();
 
-const sideRoomActionController = createSideRoomActionController({
-    applyResolvedRun,
-    continueToNextLevel: () => useAppStore.getState().continueToNextLevel(),
-    getState: () => useAppStore.getState(),
-    playRewardClaimFeedback: () => {
-        void resumeAudioContext();
-        playRelicPickSfx(sfxGainFromStore());
-    },
-    setState: (patch) => useAppStore.setState(patch)
-});
 
 const runLifecycleController = createRunLifecycleController({
     clearAllTimers,
@@ -450,18 +439,6 @@ export const useAppStore = create<AppState>((set, get) => ({
             resumeRunWithTimers,
             setState: set
         });
-    },
-
-    claimSideRoomPrimary: () => {
-        sideRoomActionController.resolveSideRoom('claim');
-    },
-
-    claimSideRoomChoice: (choiceId: string) => {
-        sideRoomActionController.resolveSideRoom('claim', choiceId);
-    },
-
-    skipSideRoom: () => {
-        sideRoomActionController.resolveSideRoom('skip');
     },
 
     closeSubscreen: () => {

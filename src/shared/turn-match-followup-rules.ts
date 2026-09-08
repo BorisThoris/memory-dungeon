@@ -1,7 +1,6 @@
 import type { RouteNodeType, RunState } from './contracts';
 import { loadedGatewayRouteTypeFor } from './loaded-gateway-rules';
 import { hasMutator } from './mutators';
-import { createRouteCardPlanForRoute } from './route-card-plan-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 
@@ -32,20 +31,13 @@ export const resolveTurnMatchFollowup = ({
     const loadedGatewayRouteType = loadedGatewayClaimed ? loadedGatewayRouteTypeFor(run, matchedPairKey) : null;
     const sourceLevel = run.board?.level ?? normalizeSessionStats(run.stats).highestLevel;
 
-    const pendingRouteCardPlan =
-        run.pendingRouteCardPlan == null && loadedGatewayRouteType
-            ? createRouteCardPlanForRoute(
-                  run,
-                  loadedGatewayRouteType,
-                  `loaded_gateway:${run.runRulesVersion}:${run.runSeed}:${sourceLevel}:${matchedPairKey}`
-              )
-            : run.pendingRouteCardPlan == null && dungeonGatewayRouteType
-            ? createRouteCardPlanForRoute(
-                  run,
-                  dungeonGatewayRouteType,
-                  `gateway:${run.runRulesVersion}:${run.runSeed}:${sourceLevel}:${dungeonGatewayRouteType}`
-              )
-            : run.pendingRouteCardPlan;
+    /*
+     * Matching a gateway pair used to plan the next floor's route from the board - a loaded gateway
+     * pinning the route it named, an ordinary one taking the branch it sat on. There are no gateway
+     * pairs and there is no route to plan, so the pending plan is whatever it already was, which is
+     * nothing. Gen 173.
+     */
+    const pendingRouteCardPlan = run.pendingRouteCardPlan;
 
     return {
         nBackMatchCounter,

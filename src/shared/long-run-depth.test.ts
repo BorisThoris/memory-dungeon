@@ -99,17 +99,14 @@ describe('GLD long-run depth contracts', () => {
         const report = runLongRunSoak({ seeds: [42_001, 42_077, 42_123], floors: 48, rulesVersion: GAME_RULES_VERSION });
 
         /*
-         * Three issues, asserted exactly so a fourth fails. All three are the flat route offer
-         * described in `balance-simulation.test.ts` and `BALANCE_NOTES.md`, and all three are
-         * answered by Phase 1 T1.9-T1.17 removing the between-floor layer, not by moving a bound.
+         * Gen 172 recorded three issues here, all faces of the greedy profile's flat route offer
+         * (`BALANCE_NOTES.md`, Gen 172). Gen 173 removed the route between floors and all three
+         * went with it - including the gold-per-floor overrun, which was the toll a never-taken
+         * safe route never collected. Asserted empty so the next issue fails loudly.
          */
         expect(report.offlineOnly).toBe(true);
-        expect(report.issues).toEqual([
-            'max_profile_ending_gold_per_floor:5.56 outside 0-5',
-            'greedy@seed:42001/floor:48:dominantRouteShare=1',
-            'greedy@seed:42001/floor:48:endingShopGold=801/144'
-        ]);
-        expect(report.ok).toBe(false);
+        expect(report.issues).toEqual([]);
+        expect(report.ok).toBe(true);
         expect(report.rows.length).toBeGreaterThanOrEqual(8);
         expect(report.rows.map((row) => row.key)).toContain('max_profile_worst_seed_unhealed_low_life_share');
         expect(report.rows.map((row) => row.key)).toContain('max_profile_unhealed_low_life_streak');

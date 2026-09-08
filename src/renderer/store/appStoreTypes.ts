@@ -123,9 +123,6 @@ export interface AppState {
     rerollShopOffers: () => void;
     continueToNextLevel: () => void;
     chooseRouteAndContinue: (choiceId: string) => void;
-    claimSideRoomPrimary: () => void;
-    claimSideRoomChoice: (choiceId: string) => void;
-    skipSideRoom: () => void;
     restartRun: () => void;
     endRun: () => void;
     triggerDebugReveal: () => void;

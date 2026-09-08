@@ -14,7 +14,6 @@ import App, { APP_MAIN_LANDMARK_ID } from './App';
 import type { RunState } from '../shared/contracts';
 import { createNewRun, finishMemorizePhase, pauseRun } from '../shared/game-core';
 import { createWildRun } from '../shared/run-creation-rules';
-import { generateRouteChoices } from '../shared/route-rules';
 import { createRunShopOffers } from '../shared/shop-rules';
 import { createDefaultSaveData } from '../shared/save-data';
 import { desktopClient } from './desktop-client';
@@ -515,67 +514,6 @@ describe('desktop app flow', () => {
         expect(screen.getByTestId('hud-mode-identity')).toHaveTextContent(/Wild Run/i);
     });
 
-    it('renders the route side-room overlay over gameplay', async () => {
-        const saveData = createDefaultSaveData();
-        const baseRun = createNewRun(0);
-        const runBase: RunState = {
-            ...baseRun,
-            status: 'levelComplete',
-            timerState: {
-                memorizeRemainingMs: null,
-                resolveRemainingMs: null,
-                debugRevealRemainingMs: null,
-                pausedFromStatus: null
-            },
-            lastLevelResult: {
-                level: 1,
-                scoreGained: 120,
-                rating: 'S',
-                livesRemaining: baseRun.lives,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'none',
-                clearLifeGained: 0
-            },
-            relicOffer: null,
-            sideRoom: {
-                id: 'test-side-room',
-                kind: 'bonus_reward',
-                routeType: 'greed',
-                nodeKind: 'treasure',
-                floor: 2,
-                title: 'Greed Treasure chest',
-                body: 'A route reward waits before the next floor.',
-                primaryLabel: 'Claim Treasure chest',
-                primaryDetail: '+2 shop gold and +25 score.',
-                skipLabel: 'Leave it',
-                payload: { kind: 'bonus_reward', instanceId: 'missing' }
-            }
-        };
-
-        act(() => {
-            useAppStore.setState({
-                hydrated: true,
-                hydrating: false,
-                steamConnected: false,
-                view: 'sideRoom',
-                settingsReturnView: 'menu',
-                subscreenReturnView: 'menu',
-                saveData,
-                settings: saveData.settings,
-                run: runBase,
-                newlyUnlockedAchievements: [],
-                hydrate: async () => {}
-            });
-        });
-
-        renderApp();
-
-        expect(screen.queryByRole('dialog', { name: /floor cleared/i })).not.toBeInTheDocument();
-        expect(await screen.findByRole('dialog', { name: /route side room/i })).toBeInTheDocument();
-        expect(screen.getByText(/greed treasure chest/i)).toBeInTheDocument();
-        expect(screen.getByTestId('game-hud')).toBeInTheDocument();
-    });
 
     it('normalizes invalid shop view to playing when the run is not level complete', async () => {
         const saveData = createDefaultSaveData();
@@ -743,45 +681,6 @@ describe('desktop app flow', () => {
         });
     }, 30_000);
 
-    it('explains and disables greedy route choice when the run is on its last life', async () => {
-        const baseRun = createNewRun(0, { runSeed: 88_120 });
-        const routeChoices = generateRouteChoices(baseRun, 2);
-        const run: RunState = {
-            ...baseRun,
-            status: 'levelComplete',
-            lives: 1,
-            lastLevelResult: {
-                level: 1,
-                scoreGained: 120,
-                rating: 'S',
-                livesRemaining: 1,
-                perfect: false,
-                mistakes: 1,
-                clearLifeReason: 'none',
-                clearLifeGained: 0,
-                routeChoices
-            }
-        };
-
-        act(() => {
-            const saveData = createDefaultSaveData();
-            useAppStore.setState({
-                hydrated: true,
-                hydrating: false,
-                view: 'playing',
-                run,
-                saveData,
-                settings: saveData.settings
-            });
-        });
-
-        renderApp();
-
-        expect(await screen.findByRole('dialog', { name: /floor cleared/i })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /greedy route/i })).toBeDisabled();
-        expect(screen.getByText(/unavailable at 1 life/i)).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /safe passage/i })).toBeEnabled();
-    });
 
     it('opens Collection from the main menu and returns', async () => {
         const user = userEvent.setup();
