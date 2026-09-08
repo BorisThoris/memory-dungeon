@@ -65,7 +65,6 @@ export const getTileBeatAccessibilityText = (
     const opportunityTileIds = new Set(getTraitOpportunitySummary(board).tiles.map((entry) => entry.tileId));
     const isTraitComboBack = tile.tileTraitKind != null && opportunityTileIds.has(tile.id);
     const traitRouteCadence = getTraitRouteReadabilityCadence(getTraitRouteReadabilityTier({
-        isPerkArmedBack: false,
         isSelectedTraitFollowupBack: routeSetupContext.selectedFollowupTileIds?.has(tile.id) ?? false,
         isTraitComboBack,
         isTraitComboSurgeBack: tile.tileTraitKind != null && getTraitComboSurgeTileIds(board).has(tile.id),
@@ -220,13 +219,6 @@ export const getTileAriaLabel = (
             : ` ${getTileSuit(tile.suit).name} suit.`
         : '';
     const findableNote = tile.findableKind && faceUp && tile.state !== 'matched' ? ` ${getFindableRewardText(tile.findableKind)}` : '';
-    const scoutSourceNote =
-        tile.scoutRevealSource === 'omen_seal'
-            ? ' Scouted by Omen Seal.'
-            : tile.scoutRevealSource === 'lantern_ward' || tile.lanternScouted
-              ? ' Scouted by Lantern Ward.'
-              : '';
-    const passiveScoutNote = scoutSourceNote;
     const routeSetupNote = routeSetupContext.targetTileIds?.has(tile.id)
         ? ` Chain prime target. ${routeSetupContext.hintText ? `${routeSetupContext.hintText}.` : 'Move this card to create a trait route.'}`
         : '';
@@ -241,7 +233,7 @@ export const getTileAriaLabel = (
         selectedFollowupTileIds: routeSetupContext.selectedFollowupTileIds,
         targetTileIds: routeSetupContext.targetTileIds
     });
-    return `${base}${suitNote}${findableNote}${getTileTraitText(tile)}${getTileTraitPreviewText(board, tile)}${routeSetupNote}${selectedFollowupNote}${rewardHotNote}${beatNote}${passiveScoutNote}`;
+    return `${base}${suitNote}${findableNote}${getTileTraitText(tile)}${getTileTraitPreviewText(board, tile)}${routeSetupNote}${selectedFollowupNote}${rewardHotNote}${beatNote}`;
 };
 
 export const getPowerTargetAriaText = (

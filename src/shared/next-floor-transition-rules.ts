@@ -37,18 +37,11 @@ export const advanceToNextLevel = (
             ...run,
             status: 'gameOver',
             lives: 0,
-            pendingRouteCardPlan: null,
-            sideRoom: null,
-            relicOffer: null,
             lastLevelResult: run.lastLevelResult
                 ? { ...run.lastLevelResult, livesRemaining: 0 }
                 : run.lastLevelResult,
             timerState: createTimerState()
         };
-    }
-
-    if (run.sideRoom || run.relicOffer) {
-        return run;
     }
 
     const nextLevelNum = run.board.level + 1;
@@ -70,12 +63,10 @@ export const advanceToNextLevel = (
     const transitionRun: RunState = {
         ...run,
         lives: parasiteAdvance.lives,
-        parasiteFloors: parasiteAdvance.parasiteFloors,
-        parasiteWardRemaining: parasiteAdvance.parasiteWardRemaining
+        parasiteFloors: parasiteAdvance.parasiteFloors
     };
     const parasiteFloors = transitionRun.parasiteFloors;
     const lives = transitionRun.lives;
-    const nextParasiteWard = transitionRun.parasiteWardRemaining;
 
     if (lives <= 0) {
         return {
@@ -83,10 +74,6 @@ export const advanceToNextLevel = (
             status: 'gameOver',
             lives: 0,
             parasiteFloors,
-            parasiteWardRemaining: nextParasiteWard,
-            pendingRouteCardPlan: null,
-            sideRoom: null,
-            relicOffer: null,
             lastLevelResult: run.lastLevelResult
                 ? { ...run.lastLevelResult, livesRemaining: 0 }
                 : run.lastLevelResult,
@@ -103,7 +90,6 @@ export const advanceToNextLevel = (
         floorArchetypeId: nextFloorArchetypeId,
         featuredObjectiveId: nextFeaturedObjectiveId,
         cycleFloor: nextCycleFloor,
-        routeCardPlan: run.pendingRouteCardPlan,
         gameMode: run.gameMode
     });
     const runForNextMemorize: RunState = { ...transitionRun, activeMutators: nextActiveMutators, board: nextBoard };
@@ -115,7 +101,6 @@ export const advanceToNextLevel = (
         activeMutators: nextActiveMutators,
         board: nextBoard,
         parasiteFloors,
-        parasiteWardRemaining: nextParasiteWard,
         memorizeRemainingMs: memorizeWithBonus
     });
 };

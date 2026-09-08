@@ -17,7 +17,6 @@ const run = (overrides: Partial<RunState> = {}): RunState =>
     ({
         status: 'playing',
         peekCharges: 0,
-        rewardPerkIds: [],
         stats: {},
         ...overrides
     }) as RunState;
@@ -25,7 +24,10 @@ const run = (overrides: Partial<RunState> = {}): RunState =>
 describe('gameplay command and event journal', () => {
     it('retains complete schema-validated command payloads and events', () => {
         const initial = run();
-        const command = createGameplayDefinitionCommand('journal-lens', 'bonus_reward.echo_conduit_lens');
+        const command = createGameplayDefinitionCommand('journal-guard', 'trait.volatile_heavy_guard', {
+            matchedTraits: ['volatile'],
+            adjacentTraits: ['heavy']
+        });
         const result = reduceGameplayCommand(initial, command);
         const journaled = appendGameplayJournal(result.run, [command], result.events);
         const snapshot = getGameplayJournalSnapshot(journaled);

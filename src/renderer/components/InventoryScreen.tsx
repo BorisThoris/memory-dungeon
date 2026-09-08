@@ -151,10 +151,6 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                                 </div>
                             ))}
                             <div className={styles.chargeRow}>
-                                <dt>Free shuffle this floor</dt>
-                                <dd>{run.freeShuffleThisFloor ? 'Ready' : 'Used'}</dd>
-                            </div>
-                            <div className={styles.chargeRow}>
                                 <dt>Match score multiplier</dt>
                                 <dd>{run.matchScoreMultiplier.toFixed(2)}&times;</dd>
                             </div>

@@ -3,21 +3,18 @@ import type {
     BoardState,
     FloorArchetypeId,
     MutatorId,
-    RouteNodeType,
     RunState,
     Tile
 } from './contracts';
 import {
     FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP,
     FINDABLE_MATCH_COMBO_SHARDS,
-    FINDABLE_MATCH_SAFE_HAZARD_WARDS,
     FINDABLE_MATCH_SCORE,
     FLIP_PAR_BONUS_SCORE,
     GAME_RULES_VERSION,
     MATCH_DELAY_MS,
     INITIAL_RECALL_FOCUS,
     MEMORIZE_BONUS_PER_LIFE_LOST_MS,
-    RECALL_CLUE_MATCH_SCORE,
     RECALL_FOCUS_MAX,
     RECALL_FOCUS_MATCH_SCORE,
     SHIFTING_BOUNTY_MATCH_BONUS,
@@ -252,23 +249,6 @@ describe('Recall Focus memory loop', () => {
         );
     });
 
-    it('pays an extra clue recall bonus when the player matches remembered scouted information', () => {
-        const run = {
-            ...createRun([
-                createTile('a1', 'A', 'A', { routeSpecialKind: 'mystery_veil', routeSpecialRevealed: true }),
-                createTile('a2', 'A', 'A', { routeSpecialKind: 'mystery_veil', routeSpecialRevealed: true }),
-                createTile('b1', 'B', 'B'),
-                createTile('b2', 'B', 'B')
-            ]),
-            recallFocus: INITIAL_RECALL_FOCUS
-        };
-        const resolved = resolveBoardTurn(flipTile(flipTile(run, 'a1'), 'a2'));
-
-        expect(resolved.recallBonusScoreThisFloor).toBe(RECALL_FOCUS_MATCH_SCORE + RECALL_CLUE_MATCH_SCORE);
-        expect(resolved.stats.currentLevelScore).toBe(
-            calculateMatchScore(1, 1, 1) + RECALL_FOCUS_MATCH_SCORE + RECALL_CLUE_MATCH_SCORE
-        );
-    });
 
     it('caps persisted recall focus before awarding match score', () => {
         const run = {
@@ -469,7 +449,6 @@ const solveGeneratedFloorByExhaustingPairs = (input: {
     floorTag?: 'normal' | 'boss' | 'breather';
     floorArchetypeId?: FloorArchetypeId | null;
     activeMutators?: MutatorId[];
-    routeType?: RouteNodeType;
 }): RunState => {
     const board = buildBoard(input.level, {
         runSeed: input.runSeed,
@@ -477,15 +456,7 @@ const solveGeneratedFloorByExhaustingPairs = (input: {
         floorTag: input.floorTag ?? 'normal',
         floorArchetypeId: input.floorArchetypeId ?? null,
         gameMode: 'endless',
-        activeMutators: input.activeMutators ?? [],
-        routeCardPlan: input.routeType
-            ? {
-                  choiceId: `solver:${input.routeType}:${input.runSeed}:${input.level}`,
-                  routeType: input.routeType,
-                  sourceLevel: Math.max(1, input.level - 1),
-                  targetLevel: input.level
-            }
-            : undefined
+        activeMutators: input.activeMutators ?? []
     });
     return solveBoardByExhaustingPairs(board, input.runSeed);
 };
@@ -597,7 +568,7 @@ describe('GLD-P0-003 lifecycle advance guards', () => {
 
     it('does not build the next board when a levelComplete run is already dead', () => {
         const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_005 }), 1);
-        const dead: RunState = { ...cleared, lives: 0, pendingRouteCardPlan: null };
+        const dead: RunState = { ...cleared, lives: 0 };
 
         const next = advanceToNextLevel(dead);
 
@@ -613,31 +584,12 @@ describe('GLD-P0-003 lifecycle advance guards', () => {
     it('does not resume a paused zero-health run back into play', () => {
         const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_008 }));
         const paused = pauseRun(playing);
-        const pausedDead: RunState = {
-            ...paused,
-            lives: 0,
-            pendingRouteCardPlan: {
-                choiceId: 'stale:route',
-                routeType: 'safe',
-                sourceLevel: 1,
-                targetLevel: 2
-            },
-            relicOffer: {
-                tier: 1,
-                options: ['extra_shuffle_charge'],
-                picksRemaining: 1,
-                pickRound: 0
-            },
-            shopOffers: []
-        };
+        const pausedDead: RunState = { ...paused, lives: 0 };
 
         const resumed = resumeRun(pausedDead);
 
         expect(resumed.status).toBe('gameOver');
         expect(resumed.lives).toBe(0);
-        expect(resumed.pendingRouteCardPlan).toBeNull();
-        expect(resumed.relicOffer).toBeNull();
-        expect(resumed.shopOffers).toEqual([]);
         expect(resumed.timerState.pausedFromStatus).toBeNull();
     });
 
@@ -683,9 +635,6 @@ describe('GLD-P0-003 lifecycle advance guards', () => {
 
         expect(resumed.status).toBe('gameOver');
         expect(resumed.lives).toBe(0);
-        expect(resumed.pendingRouteCardPlan).toBeNull();
-        expect(resumed.relicOffer).toBeNull();
-        expect(resumed.shopOffers).toEqual([]);
         expect(resumed.timerState.resolveRemainingMs).toBeNull();
         expect(resumed.timerState.pausedFromStatus).toBeNull();
     });
@@ -699,7 +648,7 @@ describe('GLD-P0-003 lifecycle advance guards', () => {
             }),
             1
         );
-        const doomed: RunState = { ...cleared, lives: 1, parasiteFloors: 3, parasiteWardRemaining: 0 };
+        const doomed: RunState = { ...cleared, lives: 1, parasiteFloors: 3 };
 
         const next = advanceToNextLevel(doomed);
 
@@ -711,28 +660,8 @@ describe('GLD-P0-003 lifecycle advance guards', () => {
         expect(next.gameplayEventJournal).toEqual(doomed.gameplayEventJournal);
     });
 
-    it('consumes a parasite ward without mutating journals in the pure floor transition', () => {
-        const cleared = playPerfectFloors(
-            createNewRun(0, {
-                echoFeedbackEnabled: false,
-                runSeed: 30_010,
-                activeMutators: ['score_parasite']
-            }),
-            1
-        );
-        const warded: RunState = { ...cleared, lives: 1, parasiteFloors: 3, parasiteWardRemaining: 1 };
 
-        const next = advanceToNextLevel(warded);
-
-        expect(next.status).toBe('memorize');
-        expect(next.lives).toBe(1);
-        expect(next.parasiteFloors).toBe(0);
-        expect(next.parasiteWardRemaining).toBe(0);
-        expect(next.gameplayCommandJournal).toEqual(warded.gameplayCommandJournal);
-        expect(next.gameplayEventJournal).toEqual(warded.gameplayEventJournal);
-    });
-
-    it('clears next-room progress state when score parasite kills during floor transition', () => {
+    it('zeroes the recorded lives when score parasite kills during floor transition', () => {
         const cleared = playPerfectFloors(
             createNewRun(0, {
                 echoFeedbackEnabled: false,
@@ -741,19 +670,12 @@ describe('GLD-P0-003 lifecycle advance guards', () => {
             }),
             1
         );
-        const doomed: RunState = {
-            ...cleared,
-            lives: 1,
-            parasiteFloors: 3,
-            parasiteWardRemaining: 0
-        };
+        const doomed: RunState = { ...cleared, lives: 1, parasiteFloors: 3 };
 
         const next = advanceToNextLevel(doomed);
 
         expect(next.status).toBe('gameOver');
         expect(next.lives).toBe(0);
-        expect(next.pendingRouteCardPlan).toBeNull();
-        expect(next.sideRoom).toBeNull();
         expect(next.lastLevelResult?.livesRemaining).toBe(0);
     });
 });
@@ -790,20 +712,6 @@ describe('floor-clear edge cases', () => {
         }
     });
 
-    it('solves generated route-pressure floors after exhausting legal pair matches', () => {
-        const seeds = [70_101, 70_202] as const;
-        const routeTypes: RouteNodeType[] = ['safe', 'greed', 'mystery'];
-
-        for (const runSeed of seeds) {
-            for (const level of [2, 4, 6, 8] as const) {
-                for (const routeType of routeTypes) {
-                    const run = solveGeneratedFloorByExhaustingPairs({ level, runSeed, routeType });
-
-                    expect(run.status, `seed ${runSeed} level ${level} route ${routeType}`).toBe('levelComplete');
-                }
-            }
-        }
-    });
 
     it('solves the default softlock contract scenario matrix through dynamic pair play', () => {
         for (const scenario of DEFAULT_SOFTLOCK_GENERATOR_SCENARIOS) {
@@ -1207,7 +1115,6 @@ describe('game rules', () => {
         const started = {
             ...createRun(tiles),
             lives: 3.8,
-            shopGold: Number.NaN,
             stats: {
                 ...createRun(tiles).stats,
                 tries: Number.NaN,
@@ -1224,8 +1131,6 @@ describe('game rules', () => {
 
         expect(resolved.status).toBe('levelComplete');
         expect(resolved.lives).toBe(4);
-        // Gen 174: a cleared floor pays no gold; the wallet reads nought.
-        expect(resolved.shopGold).toBe(0);
         expect(resolved.stats.totalScore).toBe(155);
         expect(resolved.stats.currentLevelScore).toBe(155);
         expect(resolved.stats.bestScore).toBe(155);
@@ -1894,25 +1799,6 @@ describe('board powers', () => {
             ]));
         });
 
-        it('claims ward spark as a capped safe hazard ward charge', () => {
-            const tiles: Tile[] = [
-                { ...createTile('a1', 'A', 'A'), findableKind: 'ward_spark' },
-                { ...createTile('a2', 'A', 'A'), findableKind: 'ward_spark' },
-                createTile('b1', 'B', 'B'),
-                createTile('b2', 'B', 'B')
-            ];
-            const started = { ...createRun(tiles), findablesClaimedThisFloor: 0, findablesTotalThisFloor: 1 };
-            const resolved = resolveBoardTurn(flipTile(flipTile(started, 'a1'), 'a2'));
-
-            expect(FINDABLE_MATCH_SAFE_HAZARD_WARDS.ward_spark).toBe(1);
-            expect(resolved.safeHazardWardChargesThisFloor).toBe(1);
-            expect(resolved.findablesClaimedThisFloor).toBe(1);
-            expect(resolved.stats.totalScore).toBe(calculateMatchScore(1, 1, 1));
-            expect(resolved.gameplayEventJournal).toEqual(expect.arrayContaining([
-                expect.objectContaining({ type: 'safe_hazard_ward.requested', amount: 1 }),
-                expect.objectContaining({ type: 'feedback.requested', cue: 'build.ward_spark.matched' })
-            ]));
-        });
 
 
         it('forfeits findable on destroy without score or claim counter', () => {

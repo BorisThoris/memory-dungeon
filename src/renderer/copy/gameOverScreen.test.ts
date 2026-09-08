@@ -20,12 +20,6 @@ describe('achievementsNote', () => {
         expect(note).not.toMatch(/debug/iu);
     });
 
-    it('names the showcase when that is the reason', () => {
-        expect(achievementsNote({ achievementsEnabled: false, dungeonShowcaseRun: true })).toBe(
-            gameOverScreenCopy.achievementsNoteOffShowcase
-        );
-    });
-
     it('still says debug tools when that really is the reason', () => {
         expect(achievementsNote({ achievementsEnabled: false })).toBe(gameOverScreenCopy.achievementsNoteOff);
     });

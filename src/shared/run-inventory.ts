@@ -1,5 +1,4 @@
 import {
-    type DungeonKeyKind,
     MAX_COMBO_SHARDS,
     MAX_GUARD_TOKENS,
     type MutatorId,
@@ -14,7 +13,7 @@ import { RUN_INVENTORY_ITEM_IDS, type RunInventoryItemId } from './run-inventory
 export { RUN_INVENTORY_ITEM_IDS, type RunInventoryItemId } from './run-inventory-contracts';
 
 export type RunInventoryItemKind = 'consumable' | 'loadout';
-export type RunInventoryMutability = 'mid_run' | 'floor_only' | 'shop_or_rest' | 'draft_only' | 'locked';
+export type RunInventoryMutability = 'mid_run' | 'floor_only' | 'locked';
 
 export interface RunInventoryDefinition {
     id: RunInventoryItemId;
@@ -62,7 +61,7 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
         label: 'Shuffle charge',
         stackLimit: null,
         mutableAt: 'mid_run',
-        source: 'Run start, relics, and explicit reward pickups.',
+        source: 'Run start and explicit reward pickups.',
         useRule: 'Spend during play to reshuffle hidden tiles; disabled by no-shuffle contracts.'
     },
     region_shuffle_charge: {
@@ -71,7 +70,7 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
         label: 'Row/swap charge',
         stackLimit: null,
         mutableAt: 'mid_run',
-        source: 'Run start and relic services.',
+        source: 'Run start and Drift trait matches.',
         useRule: 'Spend during play to reshuffle one row or swap two hidden tiles; disabled by no-shuffle contracts.'
     },
     destroy_charge: {
@@ -80,7 +79,7 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
         label: 'Destroy charge',
         stackLimit: null,
         mutableAt: 'mid_run',
-        source: 'Relics, room rewards, shop services, events, and explicit pickups.',
+        source: 'Run start and explicit pickups.',
         useRule: 'Spend during play to remove a hidden pair; disabled by no-destroy contracts.'
     },
     peek_charge: {
@@ -89,7 +88,7 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
         label: 'Peek charge',
         stackLimit: null,
         mutableAt: 'mid_run',
-        source: 'Run start, relics, and shop services.',
+        source: 'Run start, Echo trait matches, and explicit pickups.',
         useRule: 'Spend during play to reveal tiles without committing flips.'
     },
     stray_remove_charge: {
@@ -98,7 +97,7 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
         label: 'Stray remover',
         stackLimit: null,
         mutableAt: 'mid_run',
-        source: 'Wild/practice setup and relics.',
+        source: 'Wild/practice setup.',
         useRule: 'Spend during play to remove one hidden stray tile from the board.'
     },
     flash_pair_charge: {
@@ -136,24 +135,6 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
         mutableAt: 'mid_run',
         source: 'Wild/Joker setup and future rare pickups.',
         useRule: 'Spend by matching with a wild joker tile when one is present.'
-    },
-    iron_key: {
-        id: 'iron_key',
-        kind: 'consumable',
-        label: 'Dungeon key',
-        stackLimit: null,
-        mutableAt: 'shop_or_rest',
-        source: 'Key cards, locked caches, shops, events, and treasure rooms.',
-        useRule: 'Spent from the run-only key ring on matching locked exits, cache doors, and treasure locks.'
-    },
-    master_key: {
-        id: 'master_key',
-        kind: 'consumable',
-        label: 'Master key',
-        stackLimit: null,
-        mutableAt: 'shop_or_rest',
-        source: 'Deep shops, boss prep shrines, and rare treasure rewards.',
-        useRule: 'Spent once to open any locked dungeon exit, cache door, or treasure lock.'
     },
     guard_token: {
         id: 'guard_token',
@@ -193,31 +174,10 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
     }
 };
 
-export const DUNGEON_KEY_SPEND_ORDER = ['iron', 'treasure', 'shrine', 'boss', 'trap'] as const satisfies readonly DungeonKeyKind[];
-
-const dungeonKeyRecord = (value: unknown): Partial<Record<DungeonKeyKind, number>> =>
-    runRecord(value) as Partial<Record<DungeonKeyKind, number>>;
-
-export interface DungeonKeyQuantityRow {
-    kind: DungeonKeyKind;
-    quantity: number;
-}
-
 export interface RunInventoryItemPayoutRow {
     id: RunInventoryItemId;
     amount: number;
 }
-
-export const getDungeonKeyQuantityRows = (value: unknown): DungeonKeyQuantityRow[] => {
-    const dungeonKeys = dungeonKeyRecord(value);
-    return DUNGEON_KEY_SPEND_ORDER.map((kind) => ({
-        kind,
-        quantity: runNonNegativeInteger(dungeonKeys[kind])
-    }));
-};
-
-export const getDungeonKeyTotal = (value: unknown): number =>
-    getDungeonKeyQuantityRows(value).reduce((sum, row) => sum + row.quantity, 0);
 
 export const getRunInventoryItemPayoutRows = (value: unknown): RunInventoryItemPayoutRow[] => {
     const payouts = runRecord(value);
@@ -228,13 +188,12 @@ export const getRunInventoryItemPayoutRows = (value: unknown): RunInventoryItemP
 };
 
 export const getRunInventoryItemQuantity = (run: RunState, id: RunInventoryItemId): number => {
-    const dungeonKeys = dungeonKeyRecord(run.dungeonKeys);
     const stats = normalizeSessionStats(run.stats);
     switch (id) {
         case 'shuffle_charge':
-            return runNonNegativeInteger(run.shuffleCharges) + (run.freeShuffleThisFloor ? 1 : 0);
+            return runNonNegativeInteger(run.shuffleCharges);
         case 'region_shuffle_charge':
-            return runNonNegativeInteger(run.regionShuffleCharges) + (run.regionShuffleFreeThisFloor ? 1 : 0);
+            return runNonNegativeInteger(run.regionShuffleCharges);
         case 'destroy_charge':
             return runNonNegativeInteger(run.destroyPairCharges);
         case 'peek_charge':
@@ -249,10 +208,6 @@ export const getRunInventoryItemQuantity = (run: RunState, id: RunInventoryItemI
             return run.gambitAvailableThisFloor && !run.gambitThirdFlipUsed ? 1 : 0;
         case 'wild_match_token':
             return runNonNegativeInteger(run.wildMatchesRemaining);
-        case 'iron_key':
-            return getDungeonKeyTotal(dungeonKeys);
-        case 'master_key':
-            return runNonNegativeInteger(run.dungeonMasterKeys);
         case 'guard_token':
             return runNonNegativeInteger(stats.guardTokens);
         case 'combo_shard':
@@ -282,16 +237,6 @@ const unavailableReasonFor = (run: RunState, id: RunInventoryItemId, quantity: n
 const quantityLabelFor = (definition: RunInventoryDefinition, quantity: number): string =>
     definition.stackLimit == null ? String(quantity) : `${quantity}/${definition.stackLimit}`;
 
-const dungeonKeyQuantityLabelFor = (run: RunState, quantity: number): string => {
-    const parts = getDungeonKeyQuantityRows(run.dungeonKeys)
-        .map((row) => [row.kind, row.quantity] as const)
-        .filter(([, quantity]) => quantity > 0);
-    if (parts.length === 0 || (parts.length === 1 && parts[0]?.[0] === 'iron')) {
-        return String(quantity);
-    }
-    return `${quantity} (${parts.map(([kind, count]) => `${kind} ${count}`).join(', ')})`;
-};
-
 const maxStackFor = (definition: RunInventoryDefinition, quantity: number): number =>
     definition.stackLimit ?? Math.max(1, quantity);
 
@@ -319,7 +264,7 @@ export const getRunInventoryRows = (run: RunState): RunInventoryRow[] =>
         return {
             ...definition,
             quantity,
-            quantityLabel: id === 'iron_key' ? dungeonKeyQuantityLabelFor(run, quantity) : quantityLabelFor(definition, quantity),
+            quantityLabel: quantityLabelFor(definition, quantity),
             maxStack: maxStackFor(definition, quantity),
             remainingCapacity,
             atStackLimit: remainingCapacity === 0,
@@ -447,8 +392,6 @@ const PICKUP_GAIN_LABELS: Record<RunInventoryItemId, { singular: string; plural:
     undo_charge: { singular: 'undo charge', plural: 'undo charges' },
     gambit_token: { singular: 'Gambit token', plural: 'Gambit tokens' },
     wild_match_token: { singular: 'wild match', plural: 'wild matches' },
-    iron_key: { singular: 'dungeon key', plural: 'dungeon keys' },
-    master_key: { singular: 'master key', plural: 'master keys' },
     guard_token: { singular: 'guard token', plural: 'guard tokens' },
     combo_shard: { singular: 'combo shard', plural: 'combo shards' },
     mutator_loadout: { singular: 'mutator loadout', plural: 'mutator loadouts' },
@@ -463,9 +406,7 @@ const inventoryGainLabelFor = (itemId: RunInventoryItemId, amount: number): stri
 const CAPPED_GAIN_LABELS: Partial<Record<RunInventoryItemId, string>> = {
     peek_charge: 'Peek charges already full',
     guard_token: 'Guard tokens already full',
-    combo_shard: 'Combo shards already full',
-    iron_key: 'Dungeon keys already full',
-    master_key: 'Master keys already full'
+    combo_shard: 'Combo shards already full'
 };
 
 const cappedFeedbackLabelFor = (itemId: RunInventoryItemId): string => {
@@ -540,10 +481,6 @@ export const gainRunInventoryItem = (
             return { ...run, gambitAvailableThisFloor: true, gambitThirdFlipUsed: false };
         case 'wild_match_token':
             return { ...run, wildMatchesRemaining: runNonNegativeInteger(run.wildMatchesRemaining) + gain };
-        case 'iron_key':
-            return { ...run, dungeonKeys: { ...dungeonKeyRecord(run.dungeonKeys), iron: runNonNegativeInteger(dungeonKeyRecord(run.dungeonKeys).iron) + gain } };
-        case 'master_key':
-            return { ...run, dungeonMasterKeys: runNonNegativeInteger(run.dungeonMasterKeys) + gain };
         case 'guard_token':
             {
                 const stats = normalizeSessionStats(run.stats);
@@ -572,13 +509,9 @@ export const useRunInventoryItem = (run: RunState, itemId: RunInventoryItemId): 
     }
     switch (itemId) {
         case 'shuffle_charge':
-            return run.freeShuffleThisFloor
-                ? { run: { ...run, freeShuffleThisFloor: false }, itemId, applied: true }
-                : { run: { ...run, shuffleCharges: decrementRunCounter(run.shuffleCharges) }, itemId, applied: true };
+            return { run: { ...run, shuffleCharges: decrementRunCounter(run.shuffleCharges) }, itemId, applied: true };
         case 'region_shuffle_charge':
-            return run.regionShuffleFreeThisFloor
-                ? { run: { ...run, regionShuffleFreeThisFloor: false }, itemId, applied: true }
-                : { run: { ...run, regionShuffleCharges: decrementRunCounter(run.regionShuffleCharges) }, itemId, applied: true };
+            return { run: { ...run, regionShuffleCharges: decrementRunCounter(run.regionShuffleCharges) }, itemId, applied: true };
         case 'destroy_charge':
             return { run: { ...run, destroyPairCharges: decrementRunCounter(run.destroyPairCharges) }, itemId, applied: true };
         case 'peek_charge':
@@ -593,23 +526,6 @@ export const useRunInventoryItem = (run: RunState, itemId: RunInventoryItemId): 
             return { run: { ...run, gambitAvailableThisFloor: false, gambitThirdFlipUsed: true }, itemId, applied: true };
         case 'wild_match_token':
             return { run: { ...run, wildMatchesRemaining: decrementRunCounter(run.wildMatchesRemaining) }, itemId, applied: true };
-        case 'iron_key': {
-            const dungeonKeys = dungeonKeyRecord(run.dungeonKeys);
-            const spendKind = DUNGEON_KEY_SPEND_ORDER.find((kind) => runNonNegativeInteger(dungeonKeys[kind] ?? 0) > 0);
-            if (!spendKind) {
-                return { run, itemId, applied: false, reason: 'unavailable' };
-            }
-            return {
-                run: {
-                    ...run,
-                    dungeonKeys: { ...dungeonKeys, [spendKind]: decrementRunCounter(dungeonKeys[spendKind] ?? 0) }
-                },
-                itemId,
-                applied: true
-            };
-        }
-        case 'master_key':
-            return { run: { ...run, dungeonMasterKeys: decrementRunCounter(run.dungeonMasterKeys) }, itemId, applied: true };
         default:
             return { run, itemId, applied: false, reason: 'not_usable' };
     }

@@ -12,7 +12,7 @@ import { isBoardComplete } from './board-inspection';
 import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 import { tilesArePairMatch } from './scoring-rules';
 import { clearResolveState } from './run-timer-rules';
-import { rotateAnchorSealPressure } from './shifting-spotlight-rules';
+import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
 import { deriveMatchClaimContext } from './match-claim-rules';
 import { selectGambitMatchedPair } from './gambit-match-rules';
 import { resolveMismatchTurnTransition } from './turn-mismatch-rules';
@@ -37,9 +37,7 @@ export interface BoardTurnFindableRewardResult {
     commands: GameplayCommand[];
     events: GameplayEvent[];
     comboShardGain: number;
-    safeHazardWardGain: number;
     scoreGain: number;
-    scoutRevealGain: number;
     migrated: boolean;
 }
 
@@ -119,7 +117,6 @@ export const createResolveBoardTurnTransition = ({
         const {
             claimedFindableKind,
             findableComboShardGain,
-            findableSafeHazardWardGain,
             findableScoreBonus,
             findablesClaimedDelta,
             matchedPairKey,
@@ -135,9 +132,6 @@ export const createResolveBoardTurnTransition = ({
         const resolvedFindableComboShardGain = findableReward.migrated
             ? findableReward.comboShardGain
             : findableComboShardGain;
-        const resolvedFindableSafeHazardWardGain = findableReward.migrated
-            ? findableReward.safeHazardWardGain
-            : findableSafeHazardWardGain;
         const resolvedFindableScoreBonus = findableReward.migrated ? findableReward.scoreGain : findableScoreBonus;
 
         const { board, chunkBreak } = resolveTurnMatchBoardResolution({
@@ -158,7 +152,7 @@ export const createResolveBoardTurnTransition = ({
                   `findable-chunk:${run.runSeed}:${sourceBoard.level}:${matchResolutions}:${matchedPairKey}`,
                   execution
               )
-            : { scoreGain: 0, comboShardGain: 0, safeHazardWardGain: 0, scoutRevealGain: 0, migrated: false, commands: [], events: [] };
+            : { scoreGain: 0, comboShardGain: 0, migrated: false, commands: [], events: [] };
         const traitReward = resolveTileTraitEffects({
             run,
             board: sourceBoard,
@@ -171,7 +165,6 @@ export const createResolveBoardTurnTransition = ({
             sourceBoard,
             resolvedBoard: board,
             matchedPairKey,
-            matchedTiles: [firstTile, secondTile],
             encorePairKeys,
             findableScoreBonus: resolvedFindableScoreBonus + traitReward.scoreBonus,
             chunkScore: chunkBreak.score + chunkFindable.scoreGain
@@ -197,7 +190,7 @@ export const createResolveBoardTurnTransition = ({
               )
             : { run, commands: [], events: [] };
 
-        const spun = rotateAnchorSealPressure(run, board);
+        const spun = rotateRunShiftingSpotlight(run, board);
         const followup = resolveTurnMatchFollowup({
             run,
             encoreKey: scoring.encoreKey
@@ -213,15 +206,13 @@ export const createResolveBoardTurnTransition = ({
             run,
             cursedMatchedEarly: scoring.cursedMatchedEarly,
             findablesClaimedDelta: findablesClaimedDelta + (chunkBreak.claimedFindableKind ? 1 : 0),
-            findableSafeHazardWardGain: resolvedFindableSafeHazardWardGain,
             chunkPairsBroken: chunkBreak.brokenPairKeys.length,
             chunkScore: chunkBreak.score + chunkFindable.scoreGain,
             chunkTier: chunkBreak.tier,
             chainAfter: scoring.currentStreak,
             chunkDroppedPairs: chunkBreak.droppedPairKeys.length,
             chunkMomentumPairs: chunkBreakMomentumPairs(chunkBreak),
-            chunkRippleWaves: chunkBreak.waves,
-            anchorSealUsed: spun.anchorSealUsed
+            chunkRippleWaves: chunkBreak.waves
         });
         const stats = normalizeSessionStats(run.stats);
 
@@ -248,7 +239,6 @@ export const createResolveBoardTurnTransition = ({
             nBackMatchCounter: followup.nBackMatchCounter,
             nBackAnchorPairKey: followup.nBackAnchorPairKey,
             matchedPairKeysThisRun: [...runStringArray(run.matchedPairKeysThisRun), scoring.encoreKey],
-            pendingRouteCardPlan: followup.pendingRouteCardPlan,
             pinnedTileIds: boardCleanup.pinnedTileIds,
             recallFocus: Math.min(RECALL_FOCUS_MAX, boardCleanup.recallFocus + traitReward.recallFocusGain),
             recallMatchesThisFloor: boardCleanup.recallMatchesThisFloor,

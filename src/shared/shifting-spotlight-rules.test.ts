@@ -10,7 +10,6 @@ import {
 import {
     eligibleSpotlightPairKeys,
     pickShiftingSpotlightKeys,
-    rotateAnchorSealPressure,
     rotateRunShiftingSpotlight,
     rotateShiftingSpotlight,
     shiftingSpotlightMatchDelta
@@ -38,17 +37,6 @@ const board = (tiles: Tile[], overrides: Partial<BoardState> = {}): BoardState =
     bountyPairKey: null,
     floorArchetypeId: null,
     featuredObjectiveId: null,
-    dungeonExitTileId: null,
-    dungeonExitActivated: false,
-    dungeonExitLockKind: 'none',
-    dungeonExitRequiredLeverCount: 0,
-    dungeonLeverCount: 0,
-    dungeonShopTileId: null,
-    dungeonShopVisited: false,
-    dungeonBossId: null,
-    dungeonObjectiveId: 'find_exit',
-    enemyHazards: [],
-    enemyHazardTurn: 0,
     ...overrides
 });
 
@@ -133,32 +121,6 @@ describe('shifting spotlight rules', () => {
         const rotated = rotateRunShiftingSpotlight(run(), b);
 
         expect(rotated.shiftingSpotlightNonce).toBe(5);
-        expect(rotated.board).not.toBe(b);
-        expect(new Set([rotated.board.wardPairKey, rotated.board.bountyPairKey])).toEqual(new Set(['A', 'B']));
-    });
-
-    it('uses anchor seal pressure to spend a charge without rotating spotlight', () => {
-        const b = board([tile('a1', 'A'), tile('a2', 'A'), tile('b1', 'B'), tile('b2', 'B')], {
-            wardPairKey: 'A',
-            bountyPairKey: 'B'
-        });
-
-        const rotated = rotateAnchorSealPressure(run({ anchorSealChargesThisFloor: 1 }), b);
-
-        expect(rotated).toEqual({
-            board: b,
-            shiftingSpotlightNonce: 4,
-            anchorSealUsed: true
-        });
-    });
-
-    it('rotates anchor seal pressure normally when no seal charge is available', () => {
-        const b = board([tile('a1', 'A'), tile('a2', 'A'), tile('b1', 'B'), tile('b2', 'B')]);
-
-        const rotated = rotateAnchorSealPressure(run({ anchorSealChargesThisFloor: 0 }), b);
-
-        expect(rotated.shiftingSpotlightNonce).toBe(5);
-        expect(rotated.anchorSealUsed).toBe(false);
         expect(rotated.board).not.toBe(b);
         expect(new Set([rotated.board.wardPairKey, rotated.board.bountyPairKey])).toEqual(new Set(['A', 'B']));
     });

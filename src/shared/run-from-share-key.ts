@@ -15,7 +15,7 @@ import type { RunShareKey } from './run-share-key';
  * run started from the sheet are the same run, not two things that look alike.
  */
 
-const CONTRACT_SCHOLAR = { bonusRelicDraftPick: true, maxMismatches: null, noDestroy: true, noShuffle: true };
+const CONTRACT_SCHOLAR = { maxMismatches: null, noDestroy: true, noShuffle: true };
 const CONTRACT_PIN_VOW = { maxMismatches: null, maxPinsTotalRun: 10, noDestroy: false, noShuffle: false };
 
 export const createRunFromShareKey = (

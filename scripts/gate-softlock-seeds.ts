@@ -49,7 +49,6 @@ export const runSoftlockSeedGate = (argv: readonly string[]): number => {
             [
                 `seed=${seed}`,
                 `playable=${metric.playableCheckedFloors - metric.playableIssueFloors}/${metric.playableCheckedFloors}`,
-                `lockedExits=${metric.playableLockedExitFloors}`,
                 `playableIssues=${metric.playableIssueReasons.join('+') || 'none'}`,
                 `fairnessIssues=${metric.fairnessIssueFloors}`,
                 `traitDead=${metric.deadTraitFloors}`,

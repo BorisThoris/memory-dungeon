@@ -17,7 +17,6 @@ import { DECOY_PAIR_KEY } from './tile-identity';
 import {
     canDestroyPair,
     hasClearFlipState,
-    hasFreeTargetedReconfiguration,
     canRegionShuffle,
     canSwapHiddenTiles,
     canShuffleBoard
@@ -198,13 +197,8 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
         return run;
     }
 
-    let nextFree = run.regionShuffleFreeThisFloor;
-    let nextCharges = runNonNegativeInteger(run.regionShuffleCharges);
-    if (hasFreeTargetedReconfiguration(run)) {
-        nextFree = false;
-    } else if (nextCharges > 0) {
-        nextCharges -= 1;
-    } else {
+    const nextCharges = runNonNegativeInteger(run.regionShuffleCharges);
+    if (nextCharges <= 0) {
         return run;
     }
 
@@ -226,8 +220,7 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
         powersUsedThisRun: true,
         shuffleUsedThisFloor: true,
         shuffleNonce: shuffleNonce + 1,
-        regionShuffleCharges: nextCharges,
-        regionShuffleFreeThisFloor: nextFree,
+        regionShuffleCharges: nextCharges - 1,
         pinnedTileIds: [],
         recallFocus: 0,
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, shuffledTileIds),
@@ -252,13 +245,8 @@ export const applyTileSwap = (run: RunState, firstTileId: string, secondTileId: 
         return run;
     }
 
-    let nextFree = run.regionShuffleFreeThisFloor;
-    let nextCharges = runNonNegativeInteger(run.regionShuffleCharges);
-    if (hasFreeTargetedReconfiguration(run)) {
-        nextFree = false;
-    } else if (nextCharges > 0) {
-        nextCharges -= 1;
-    } else {
+    const nextCharges = runNonNegativeInteger(run.regionShuffleCharges);
+    if (nextCharges <= 0) {
         return run;
     }
 
@@ -277,8 +265,7 @@ export const applyTileSwap = (run: RunState, firstTileId: string, secondTileId: 
         powersUsedThisRun: true,
         shuffleUsedThisFloor: true,
         shuffleNonce: runNonNegativeInteger(run.shuffleNonce) + 1,
-        regionShuffleCharges: nextCharges,
-        regionShuffleFreeThisFloor: nextFree,
+        regionShuffleCharges: nextCharges - 1,
         pinnedTileIds: [],
         recallFocus: 0,
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, [firstTileId, secondTileId]),

@@ -3,7 +3,6 @@ import type { AchievementId, BoardState, RunState, SaveData, Settings, Tile, Vie
 import { createNewRun } from '../../shared/game-core';
 import { createDefaultSaveData } from '../../shared/save-data';
 import { getModeRecords } from '../../shared/mode-records';
-import { EXIT_PAIR_KEY } from '../../shared/tile-identity';
 import { enableDebugPeek } from '../../shared/run-timer-rules';
 import type { MatchScorePop, MismatchScorePop } from './matchScorePop';
 import { createRunResolutionController } from './runResolutionController';
@@ -34,7 +33,6 @@ type ResolutionPatch = Partial<{
     runStartSaveData: SaveData | null;
     saveData: SaveData;
     settings: Settings;
-    shopReturnMode: 'floor' | 'summary' | null;
     strayRemoveArmed: boolean;
     tileSwapArmed: boolean;
     tileSwapFirstTileId: string | null;
@@ -59,7 +57,6 @@ const runSurfaceReset = {
     matchScorePop: null,
     mismatchScorePop: null,
     peekModeArmed: false,
-    shopReturnMode: null,
     strayRemoveArmed: false,
     tileSwapArmed: false,
     tileSwapFirstTileId: null
@@ -113,7 +110,7 @@ const board = (tiles: Tile[], overrides: Partial<BoardState> = {}): BoardState =
     floorArchetypeId: null,
     level: 1,
     matchedPairs: 0,
-    pairCount: Math.max(0, Math.floor(tiles.filter((candidate) => candidate.pairKey !== EXIT_PAIR_KEY).length / 2)),
+    pairCount: Math.floor(tiles.length / 2),
     rows: Math.ceil(tiles.length / 2),
     tiles,
     ...overrides
@@ -241,7 +238,6 @@ describe('runResolutionController', () => {
             boardPinMode: true,
             destroyPairArmed: true,
             peekModeArmed: true,
-            shopReturnMode: 'floor' as const,
             tileSwapArmed: true,
             tileSwapFirstTileId: baseRun.board!.tiles[0]?.id ?? null
         });
@@ -268,7 +264,6 @@ describe('runResolutionController', () => {
         expect(harness.state.boardPinMode).toBe(false);
         expect(harness.state.destroyPairArmed).toBe(false);
         expect(harness.state.peekModeArmed).toBe(false);
-        expect(harness.state.shopReturnMode).toBeNull();
         expect(harness.state.tileSwapArmed).toBe(false);
         expect(harness.state.tileSwapFirstTileId).toBeNull();
         expect(telemetryMocks.trackEvent).toHaveBeenCalledWith(

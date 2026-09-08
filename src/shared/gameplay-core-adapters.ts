@@ -8,7 +8,6 @@ import {
     createGameplayMemorizeCompleteCommand,
     createGameplayPauseCommand,
     createGameplayResumeCommand,
-    createGameplayProgressionRepairCommand,
     createGameplayGauntletExpireCommand,
     createGameplayDebugRevealActivateCommand,
     createGameplayDebugRevealDeactivateCommand,
@@ -23,9 +22,7 @@ export interface GameplayMatchRewardAdapterResult {
     commands: GameplayCommand[];
     events: GameplayEvent[];
     comboShardGain: number;
-    safeHazardWardGain: number;
     scoreGain: number;
-    scoutRevealGain: number;
     migrated: boolean;
 }
 
@@ -62,21 +59,15 @@ export const resolveFindableMatchRewardThroughGameplayCore = (
     const definitionId =
         findableKind === 'shard_spark'
             ? 'findable.shard_spark'
-            : findableKind === 'ward_spark'
-              ? 'findable.ward_spark'
-              : findableKind === 'score_glint'
-                ? 'findable.score_glint'
-              : findableKind === 'scout_glint'
-                ? 'findable.scout_glint'
-                : null;
+            : findableKind === 'score_glint'
+              ? 'findable.score_glint'
+              : null;
     if (!definitionId || !findableKind) {
         return {
             commands: [],
             events: [],
             comboShardGain: 0,
-            safeHazardWardGain: 0,
             scoreGain: 0,
-            scoutRevealGain: 0,
             migrated: false
         };
     }
@@ -94,16 +85,8 @@ export const resolveFindableMatchRewardThroughGameplayCore = (
             (sum, event) => sum + (event.type === 'combo_shard.requested' ? event.amount : 0),
             0
         ),
-        safeHazardWardGain: result.events.reduce(
-            (sum, event) => sum + (event.type === 'safe_hazard_ward.requested' ? event.amount : 0),
-            0
-        ),
         scoreGain: result.events.reduce(
             (sum, event) => sum + (event.type === 'score.requested' ? event.amount : 0),
-            0
-        ),
-        scoutRevealGain: result.events.reduce(
-            (sum, event) => sum + (event.type === 'scout_reveal.requested' ? event.amount : 0),
             0
         ),
         migrated: true
@@ -217,12 +200,6 @@ export const resumeRunThroughGameplayCore = (
     commandId: string
 ): GameplayRunTransitionAdapterResult =>
     reduceThroughGameplayCore(run, createGameplayResumeCommand(commandId, resumedAtMs));
-
-export const repairRunProgressionThroughGameplayCore = (
-    run: RunState,
-    commandId = `progression-repair:${run.runSeed}:${run.board?.level ?? 0}`
-): GameplayRunTransitionAdapterResult =>
-    reduceThroughGameplayCore(run, createGameplayProgressionRepairCommand(commandId));
 
 export const activateDebugRevealThroughGameplayCore = (
     run: RunState,

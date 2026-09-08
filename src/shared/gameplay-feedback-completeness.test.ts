@@ -15,15 +15,11 @@ const run = (overrides: Partial<RunState> = {}): RunState => ({
     status: 'playing',
     lives: 3,
     board: null,
-    shopGold: 0,
     recallFocus: 0,
     recallMatchesThisFloor: 0,
     recallMistakesThisFloor: 0,
     recallBonusScoreThisFloor: 0,
     forgottenTileIdsThisFloor: [],
-    dungeonEnemiesDefeatedThisFloor: 0,
-    enemyHazardHitsThisFloor: 0,
-    enemyHazardsDefeatedThisFloor: 0,
     stats: { guardTokens: 0, comboShards: 0 },
     ...overrides
 } as RunState);
@@ -48,7 +44,6 @@ describe('gameplay feedback completeness', () => {
         );
         expect(GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES).toMatchObject({
             totalScore: 'totalScore',
-            dungeonKeys: 'dungeonKeys',
             peekCharges: 'peekCharges',
             pinnedTileCount: 'pinnedTileIds'
         });
@@ -60,7 +55,6 @@ describe('gameplay feedback completeness', () => {
             before: run(),
             after: run({
                 lives: 2,
-                shopGold: 3,
                 recallFocus: 1,
                 forgottenTileIdsThisFloor: ['tile-a'],
                 stats: { guardTokens: 1, comboShards: 2 } as RunState['stats']
@@ -77,22 +71,19 @@ describe('gameplay feedback completeness', () => {
                 'lives',
                 'guardTokens',
                 'comboShards',
-                'shopGold',
                 'recallFocus',
                 'forgottenTileCountThisFloor'
             ],
             eventTypes: [],
-            message: 'Accepted board.peek command missing-feedback changed feedback-critical fields without typed presentation: lives, guardTokens, comboShards, shopGold, recallFocus, forgottenTileCountThisFloor.'
+            message: 'Accepted board.peek command missing-feedback changed feedback-critical fields without typed presentation: lives, guardTokens, comboShards, recallFocus, forgottenTileCountThisFloor.'
         });
     });
 
-    it('reports power, key, score and streak HUD counters that the narrow audit previously missed', () => {
+    it('reports power, score and streak HUD counters that the narrow audit previously missed', () => {
         const command = createGameplayPeekCommand('missing-resource-feedback', 'tile-a');
         const diagnostic = inspectGameplayFeedbackCompleteness({
             before: run(),
             after: run({
-                dungeonKeys: { iron: 1, treasure: 1, shrine: 1, boss: 1, trap: 1 },
-                dungeonMasterKeys: 1,
                 shuffleCharges: 1,
                 regionShuffleCharges: 1,
                 destroyPairCharges: 1,
@@ -119,7 +110,6 @@ describe('gameplay feedback completeness', () => {
             'totalScore',
             'tries',
             'mismatches',
-            'dungeonKeys',
             'shuffleCharges',
             'regionShuffleCharges',
             'destroyPairCharges',
@@ -156,14 +146,14 @@ describe('gameplay feedback completeness', () => {
         const command = createGameplayPeekCommand('no-feedback-owed', 'tile-a');
         expect(inspectGameplayFeedbackCompleteness({
             before: run(),
-            after: run({ lives: Number.NaN, shopGold: -1 }),
+            after: run({ lives: Number.NaN, peekCharges: -1 }),
             command,
             events: [],
             accepted: false
         })).toBeNull();
         expect(inspectGameplayFeedbackCompleteness({
-            before: run({ lives: Number.NaN, shopGold: -1 }),
-            after: run({ lives: 0, shopGold: 0 }),
+            before: run({ lives: Number.NaN, peekCharges: -1 }),
+            after: run({ lives: 0, peekCharges: 0 }),
             command,
             events: [],
             accepted: true

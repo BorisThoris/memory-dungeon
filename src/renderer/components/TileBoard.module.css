@@ -66,72 +66,6 @@
     border: 0;
 }
 
-.trapResolutionToast {
-    position: absolute;
-    /*
-     * Under the HUD bar, wherever it ends. The guess this replaces put the toast at 72px on a
-     * 1280x800 panel and the bar ends at 99px, so it landed on the score. The fallback is that
-     * same guess, for the frame before the measurement lands.
-     */
-    top: calc(var(--gameplay-hud-top-clearance, clamp(3.1rem, 9vmin, 4.6rem)) + var(--ui-space-xs));
-    left: 50%;
-    z-index: 6;
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    align-items: center;
-    gap: 0.48rem;
-    max-width: min(92%, 28rem);
-    min-height: 2.35rem;
-    padding: 0.46rem 0.7rem 0.46rem 0.52rem;
-    border: 1px solid color-mix(in srgb, var(--theme-ember, #f08a5d) 58%, rgba(255, 245, 216, 0.22));
-    border-radius: 0.48rem;
-    background:
-        linear-gradient(135deg, rgba(48, 21, 16, 0.93), rgba(20, 17, 25, 0.9)),
-        color-mix(in srgb, var(--theme-panel-solid, #17131d) 88%, black);
-    box-shadow:
-        0 12px 32px rgba(0, 0, 0, 0.34),
-        0 0 24px color-mix(in srgb, var(--theme-ember, #f08a5d) 20%, transparent);
-    color: var(--theme-text, #f5ead4);
-    font-size: clamp(0.75rem, 1.5vmin, 0.86rem);
-    font-weight: 720;
-    line-height: 1.25;
-    pointer-events: none;
-    text-wrap: balance;
-    transform: translateX(-50%);
-    animation: trapResolutionToastIn 220ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
-}
-
-.trapResolutionCopy {
-    min-width: 0;
-}
-
-.trapResolutionSigil {
-    display: inline-grid;
-    place-items: center;
-    flex: 0 0 auto;
-    width: 1.34rem;
-    height: 1.34rem;
-    border: 1px solid color-mix(in srgb, var(--theme-gold-bright, #f2d39d) 65%, transparent);
-    border-radius: 50%;
-    background: color-mix(in srgb, var(--theme-ember, #f08a5d) 22%, rgba(0, 0, 0, 0.35));
-    color: var(--theme-gold-bright, #f2d39d);
-    font-size: 0.9rem;
-    font-weight: 900;
-    line-height: 1;
-}
-
-@keyframes trapResolutionToastIn {
-    from {
-        opacity: 0;
-        transform: translate(-50%, -0.35rem) scale(0.98);
-    }
-
-    to {
-        opacity: 1;
-        transform: translate(-50%, 0) scale(1);
-    }
-}
-
 @keyframes boardOpportunityPulse {
     0%,
 100% {
@@ -288,8 +222,7 @@ block board gestures so pan/zoom does not fight the deal. */
 }
 
 .frame[data-chain-opportunity-next-action='cashout'] .stage::after,
-.frame[data-card-feedback-primary-card-cue^='cash-now:cashout'] .stage::after,
-.frame[data-card-feedback-primary-card-cue^='perk-cash:cashout'] .stage::after {
+.frame[data-card-feedback-primary-card-cue^='cash-now:cashout'] .stage::after {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 54%, transparent);
     box-shadow:
         inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 22%, transparent),
@@ -689,10 +622,6 @@ block board gestures so pan/zoom does not fight the deal. */
     color: color-mix(in srgb, var(--theme-border-cyan) 88%, white);
 }
 
-:global([data-reduce-motion='true']) .trapResolutionToast {
-    animation: none;
-}
-
 :global([data-reduce-motion='true']) .traitPreviewChip[data-preview-kind='hazard'],
 :global([data-reduce-motion='true']) .traitPreviewChip[data-preview-kind='pickup'],
 :global([data-reduce-motion='true']) .traitPreviewChip[data-preview-screen-cue='burst'] {
@@ -700,10 +629,6 @@ block board gestures so pan/zoom does not fight the deal. */
 }
 
 @media (max-width: 640px) {
-    .trapResolutionToast {
-        top: clamp(13rem, 28vh, 15.5rem);
-        max-width: min(92%, 21rem);
-    }
 
     .chainOpportunityChip {
         align-items: stretch;
@@ -968,10 +893,6 @@ block board gestures so pan/zoom does not fight the deal. */
  */
 [data-mobile-camera-mode='false'] .passHandoff {
     top: var(--ui-space-sm);
-}
-
-[data-mobile-camera-mode='false'] .trapResolutionToast {
-    top: var(--ui-space-xs);
 }
 
 [data-mobile-camera-mode='false'] .traitPreviewChip {

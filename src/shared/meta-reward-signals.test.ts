@@ -47,7 +47,6 @@ describe('REG-011 meta reward signals', () => {
         const run = {
             ...createNewRun(0),
             lives: Number.POSITIVE_INFINITY,
-            shopGold: Number.NaN,
             stats: Number.NaN as unknown as RunState['stats']
         };
 
@@ -56,7 +55,6 @@ describe('REG-011 meta reward signals', () => {
             throw new Error('Expected inventory build and run progress reward signals');
         }
 
-        expect(buildValue.body).toContain('0 shop gold');
         expect(buildValue.body).toContain('0 shard(s)');
         expect(runProgress.body).toContain('0 life/lives remaining');
         expect(`${buildValue.body} ${runProgress.body}`).not.toMatch(/NaN|Infinity/);

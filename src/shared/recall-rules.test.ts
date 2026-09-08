@@ -3,11 +3,9 @@ import {
     INITIAL_RECALL_FOCUS,
     MAX_PENDING_MEMORIZE_BONUS_MS,
     MEMORIZE_BONUS_PER_LIFE_LOST_MS,
-    RECALL_CLUE_MATCH_SCORE,
     RECALL_FOCUS_MATCH_SCORE,
     RECALL_FOCUS_MAX,
-    type RunState,
-    type Tile
+    type RunState
 } from './contracts';
 import { createNewRun } from './game-core';
 import {
@@ -15,22 +13,12 @@ import {
     calculateRecallMatchBonus,
     decreaseRecallFocus,
     FORGOTTEN_TILE_LEDGER_LIMIT,
-    getMemorizePhaseRecallFocusForRoute,
+    getMemorizePhaseRecallFocus,
     increaseRecallFocus,
     normalizeRecallFocus,
     rememberForgottenTiles,
-    settleForgottenTiles,
-    tileHasRecallClue
+    settleForgottenTiles
 } from './recall-rules';
-
-const tile = (overrides: Partial<Tile> = {}): Tile => ({
-    id: 't1',
-    symbol: 'A',
-    label: 'A',
-    pairKey: 'A',
-    state: 'hidden',
-    ...overrides
-});
 
 const runWithLastResult = (
     overrides: Partial<NonNullable<RunState['lastLevelResult']>> = {}
@@ -63,12 +51,6 @@ describe('recall rules', () => {
         expect(settleForgottenTiles(['a1', 'b1', 'c1'], ['b1'])).toEqual(['a1', 'c1']);
     });
 
-    it('identifies tiles with recall clues', () => {
-        expect(tileHasRecallClue(tile())).toBe(false);
-        expect(tileHasRecallClue(tile({ lanternScouted: true }))).toBe(true);
-        expect(tileHasRecallClue(tile({ scoutRevealSource: 'lantern_ward' }))).toBe(true);
-        expect(tileHasRecallClue(tile({ routeSpecialRevealed: true }))).toBe(true);
-    });
 
     it('clamps focus and scores remembered matches', () => {
         const run = { ...createNewRun(0, { echoFeedbackEnabled: false }), recallFocus: RECALL_FOCUS_MAX + 2 };
@@ -76,9 +58,7 @@ describe('recall rules', () => {
         expect(normalizeRecallFocus(RECALL_FOCUS_MAX + 2)).toBe(RECALL_FOCUS_MAX);
         expect(increaseRecallFocus(run)).toBe(RECALL_FOCUS_MAX);
         expect(decreaseRecallFocus(run, 99)).toBe(0);
-        expect(calculateRecallMatchBonus(run, [tile({ lanternScouted: true })])).toBe(
-            RECALL_FOCUS_MAX * RECALL_FOCUS_MATCH_SCORE + RECALL_CLUE_MATCH_SCORE
-        );
+        expect(calculateRecallMatchBonus(run)).toBe(RECALL_FOCUS_MAX * RECALL_FOCUS_MATCH_SCORE);
     });
 
     it('caps pending memorize bonus from life loss', () => {
@@ -94,42 +74,29 @@ describe('recall rules', () => {
         expect(normalizeRecallFocus(Number.POSITIVE_INFINITY)).toBe(0);
         expect(addPendingMemorizeBonusForLostLives(Number.NaN, Number.POSITIVE_INFINITY)).toBe(0);
         expect(
-            getMemorizePhaseRecallFocusForRoute(
+            getMemorizePhaseRecallFocus(
                 runWithLastResult({
                     recallMatches: Number.POSITIVE_INFINITY,
                     recallMistakes: Number.NaN,
                     recallBonusScore: Number.POSITIVE_INFINITY
-                }),
-                'mystery'
+                })
             )
         ).toBe(INITIAL_RECALL_FOCUS);
         expect(
-            getMemorizePhaseRecallFocusForRoute(
+            getMemorizePhaseRecallFocus(
                 runWithLastResult({
                     recallMatches: Number.NaN,
                     recallMistakes: Number.POSITIVE_INFINITY,
                     recallBonusScore: Number.NaN
-                }),
-                'greed'
+                })
             )
         ).toBe(INITIAL_RECALL_FOCUS);
     });
 
-    it('derives next memorize focus from prior recall and route context', () => {
-        expect(getMemorizePhaseRecallFocusForRoute(createNewRun(0, { echoFeedbackEnabled: false }), null)).toBe(
-            INITIAL_RECALL_FOCUS
-        );
-        expect(getMemorizePhaseRecallFocusForRoute(runWithLastResult({ recallMatches: 2 }), null)).toBe(2);
-        expect(getMemorizePhaseRecallFocusForRoute(runWithLastResult({ recallMistakes: 1 }), null)).toBe(0);
-        expect(getMemorizePhaseRecallFocusForRoute(runWithLastResult({ recallMatches: 2 }), 'safe')).toBe(
-            RECALL_FOCUS_MAX
-        );
-        expect(
-            getMemorizePhaseRecallFocusForRoute(
-                runWithLastResult({ recallMatches: 1, recallBonusScore: RECALL_CLUE_MATCH_SCORE }),
-                'mystery'
-            )
-        ).toBe(2);
-        expect(getMemorizePhaseRecallFocusForRoute(runWithLastResult({ recallMistakes: 1 }), 'greed')).toBe(0);
+    it('derives next memorize focus from prior recall', () => {
+        expect(getMemorizePhaseRecallFocus(createNewRun(0, { echoFeedbackEnabled: false }))).toBe(INITIAL_RECALL_FOCUS);
+        expect(getMemorizePhaseRecallFocus(runWithLastResult({ recallMatches: 2 }))).toBe(2);
+        expect(getMemorizePhaseRecallFocus(runWithLastResult({ recallMatches: 1 }))).toBe(INITIAL_RECALL_FOCUS);
+        expect(getMemorizePhaseRecallFocus(runWithLastResult({ recallMistakes: 1 }))).toBe(0);
     });
 });

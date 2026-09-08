@@ -93,7 +93,6 @@ export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): A
         }
     };
 
-    award('ACH_WARDEN_FELLED', run.lastLevelResult?.bossTrophyCacheOutcome === 'claimed');
     award('ACH_ENDLESS_CYCLE', run.gameMode === 'endless' && stats.highestLevel >= ENDLESS_CYCLE_FLOOR_COUNT);
     award('ACH_ENDLESS_TWENTY', run.gameMode === 'endless' && stats.highestLevel >= 20);
     award('ACH_SCORE_TEN_THOUSAND', stats.totalScore >= 10_000);
@@ -107,7 +106,6 @@ export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): A
     award('ACH_FIRST_FEVER', runNonNegativeInteger(run.feverBreaksThisRun) >= 1);
     award('ACH_CHUNK_SIX', runNonNegativeInteger(run.biggestChunkPairs) >= CHUNK_SIX_PAIRS);
     award('ACH_EXTREME_FEVER', run.lastLevelResult?.momentumBonusTier === 'fever');
-    award('ACH_WARDEN_BY_CHUNK', runNonNegativeInteger(run.chunkWardenKills) >= 1);
     award('ACH_NOTHING_HELD_IT', runNonNegativeInteger(run.chunkDropsThisRun) >= 1);
     award('ACH_CHAIN_REACTION', runNonNegativeInteger(run.bestRippleThisRun) >= CHAIN_REACTION_WAVES);
 

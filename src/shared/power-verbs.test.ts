@@ -56,14 +56,6 @@ describe('REG-045 power verb teaching', () => {
         expect(getPowerVerbRows({ ...run, regionShuffleCharges: 0 }).find((row) => row.id === 'tile_swap')?.disabledReason).toBe(
             'No row/swap charge or free swap.'
         );
-        const perkRows = getPowerVerbRows({
-            ...run,
-            regionShuffleCharges: 0,
-            regionShuffleFreeThisFloor: true,
-            rewardPerkIds: ['free_first_swap_per_floor']
-        });
-        expect(perkRows.find((row) => row.id === 'region_shuffle')?.disabledReason).toBeNull();
-        expect(perkRows.find((row) => row.id === 'tile_swap')?.disabledReason).toBeNull();
         expect(getPowerVerbRows({ ...run, status: 'memorize' }).find((row) => row.id === 'peek')?.disabledReason).toBe(
             'Only while playing.'
         );

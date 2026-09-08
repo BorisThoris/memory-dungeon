@@ -41,7 +41,6 @@ export const CHAIN_BEAT_COPY = {
     styleLine: (style: {
         chunkPartnerSpanMax: number;
         chunkHaloPairs: number;
-        chunkTreasuresSpilled: number;
         chunkSuitCleared: boolean;
         chunkDroppedPairs?: number;
         chunkRippleWaves?: number;
@@ -55,9 +54,6 @@ export const CHAIN_BEAT_COPY = {
         if (dropped > 0) tags.push(dropped === 1 ? 'Drop' : `Drop ×${dropped}`);
         if (style.chunkPartnerSpanMax >= CHAIN_STYLE_LONG_SPAN) tags.push('Partner across the board');
         if (style.chunkHaloPairs > 0) tags.push('Halo');
-        if (style.chunkTreasuresSpilled > 0) {
-            tags.push(style.chunkTreasuresSpilled === 1 ? 'Treasure spill' : `Treasure spill ×${style.chunkTreasuresSpilled}`);
-        }
         if (style.chunkSuitCleared) tags.push('Clean sweep');
         return tags.length === 0 ? null : `${tags.join(', ')}.`;
     },

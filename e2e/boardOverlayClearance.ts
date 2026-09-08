@@ -82,4 +82,4 @@ export const expectBoardOverlaysClearChrome = async (
 };
 
 /** Every board overlay that positions itself against the measured chrome. */
-export const CHROME_ANCHORED_BOARD_OVERLAYS = ['board-pass-handoff', 'trap-resolution-feedback'] as const;
+export const CHROME_ANCHORED_BOARD_OVERLAYS = ['board-pass-handoff'] as const;

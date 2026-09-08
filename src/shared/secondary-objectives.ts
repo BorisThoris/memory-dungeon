@@ -1,4 +1,4 @@
-import type { BoardState, FeaturedObjectiveId, LevelResult, RunState } from './contracts';
+import type { FeaturedObjectiveId, LevelResult, RunState } from './contracts';
 import { getFeaturedObjectiveLabel } from './floor-mutator-schedule';
 import { runArrayCount } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -10,10 +10,6 @@ export type LevelResultTagId =
     | FeaturedObjectiveId
     | 'objective_streak'
     | 'boss_floor'
-    | 'boss_defeated'
-    | 'traps_disarmed'
-    | 'treasure_claimed'
-    | 'route_claimed'
     | 'perfect_scout'
     | 'trait_route_objective';
 
@@ -86,38 +82,6 @@ export const LEVEL_RESULT_TAG_DEFINITIONS: Record<LevelResultTagId, LevelResultT
         priority: 80,
         rewardBearing: true
     },
-    boss_defeated: {
-        id: 'boss_defeated',
-        label: 'Boss defeated',
-        shortCopy: 'Boss defeated.',
-        journalCopy: 'Defeated the boss card or patrol required by the dungeon objective.',
-        priority: 100,
-        rewardBearing: false
-    },
-    traps_disarmed: {
-        id: 'traps_disarmed',
-        label: 'Traps disarmed',
-        shortCopy: 'Trap objective cleared.',
-        journalCopy: 'Resolved dungeon trap pressure before leaving the floor.',
-        priority: 90,
-        rewardBearing: false
-    },
-    treasure_claimed: {
-        id: 'treasure_claimed',
-        label: 'Treasure claimed',
-        shortCopy: 'Treasure looted.',
-        journalCopy: 'Claimed a treasure, cache, or locked reward on the floor.',
-        priority: 85,
-        rewardBearing: false
-    },
-    route_claimed: {
-        id: 'route_claimed',
-        label: 'Route claimed',
-        shortCopy: 'Route locked.',
-        journalCopy: 'Claimed a route gateway or route exit for the next floor.',
-        priority: 75,
-        rewardBearing: false
-    },
     perfect_scout: {
         id: 'perfect_scout',
         label: 'Perfect scout',
@@ -141,30 +105,13 @@ const uniqueTags = <Tag extends string>(tags: readonly Tag[]): Tag[] => [...new 
 const isLevelResultTagId = (value: string): value is LevelResultTagId =>
     Object.prototype.hasOwnProperty.call(LEVEL_RESULT_TAG_DEFINITIONS, value);
 
-export const getDungeonLevelResultTags = (run: RunState, board: BoardState, perfect: boolean): LevelResultTagId[] => {
-    const tags: LevelResultTagId[] = [];
-    if (board.floorTag === 'boss' && runNonNegativeInteger(run.dungeonEnemiesDefeatedThisFloor) > 0) {
-        tags.push('boss_defeated');
-    }
-    if (runNonNegativeInteger(run.dungeonTrapsResolvedThisFloor) > 0) {
-        tags.push('traps_disarmed');
-    }
-    if (runNonNegativeInteger(run.dungeonTreasuresOpenedThisFloor) > 0) {
-        tags.push('treasure_claimed');
-    }
-    if (runNonNegativeInteger(run.dungeonGatewaysUsedThisFloor) > 0 || board.selectedGatewayRouteType != null) {
-        tags.push('route_claimed');
-    }
-    if (
-        perfect &&
-        runArrayCount(run.peekRevealedTileIds) === 0 &&
-        !run.shuffleUsedThisFloor &&
-        !run.destroyUsedThisFloor
-    ) {
-        tags.push('perfect_scout');
-    }
-    return uniqueTags(tags);
-};
+export const getFloorClearLevelResultTags = (run: RunState, perfect: boolean): LevelResultTagId[] =>
+    perfect &&
+    runArrayCount(run.peekRevealedTileIds) === 0 &&
+    !run.shuffleUsedThisFloor &&
+    !run.destroyUsedThisFloor
+        ? ['perfect_scout']
+        : [];
 
 export const getLevelResultTagDefinitions = (tags: readonly string[] = []): LevelResultTagDefinition[] =>
     uniqueTags(tags)

@@ -127,9 +127,6 @@ describe('tileBoardRows', () => {
         expect(swapRows.map((row) => row.powerBackAccent)).toEqual([null, 'swapOrigin', 'swap']);
     });
 
-
-
-
     it('collects overlay prewarm pair keys from face-up, resolving, and pickable rows', () => {
         const b = board(
             [
@@ -154,8 +151,8 @@ describe('tileBoardRows', () => {
         const b = board([
             tile('a1', 'a', 'matched'),
             tile('b1', 'b', 'flipped'),
-            tile('c1', 'c', 'hidden', { tileHazardKind: 'fuse_cache', routeCardKind: 'greed_cache' }),
-            tile('d1', 'd', 'hidden', { dungeonCardKind: 'trap' })
+            tile('c1', 'c'),
+            tile('d1', 'd')
         ]);
 
         const result = rows({
@@ -175,10 +172,7 @@ describe('tileBoardRows', () => {
         expect(result[1]!.presentationSilhouette).toBe(true);
         expect(result[1]!.presentationNBackAnchor).toBe(true);
         expect(result[2]!.spotlightWardOnBack).toBe(true);
-        expect(result[2]!.hazardBackAccent).toBe('fuse_cache');
-        expect(result[2]!.routeBackAccent).toBe(true);
         expect(result[3]!.spotlightBountyOnBack).toBe(true);
-        expect(result[3]!.objectiveBackAccent).toBe(true);
     });
 
     it('marks hidden cards that have actionable trait combo routes', () => {
@@ -261,38 +255,21 @@ describe('tileBoardRows', () => {
             [
                 tile('echo-a', 'echo', 'flipped', { tileTraitKind: 'echo' }),
                 tile('sealed-a', 'sealed', 'hidden', { tileTraitKind: 'sealed' }),
-                tile('route-a', 'route', 'hidden'),
-                tile('perk-a', 'perk', 'hidden')
+                tile('route-a', 'route', 'hidden')
             ],
             { flippedTileIds: ['echo-a'] }
         );
 
         const result = rows({
             board: b,
-            perkArmedTileIds: new Set(['perk-a']),
             selectedTraitFollowupTileIds: new Set(['sealed-a']),
             traitRouteTargetTileIds: new Set(['route-a'])
         });
 
-        expect(result.map((row) => row.traitRouteBeatTier)).toEqual([null, 'follow-up', 'setup', 'setup']);
-        expect(result.map((row) => row.traitRouteReadabilityIntensity)).toEqual(['none', 'ready', 'setup', 'setup']);
-        expect(result.map((row) => row.traitRouteCadence)).toEqual(['none', 'follow-up', 'prime', 'prime']);
-        expect(result.map((row) => row.traitRouteCadenceAction)).toEqual([null, 'Next tap', 'Prime payoff', 'Prime payoff']);
-    });
-
-    it('marks hidden cards targeted by an armed reward perk payoff', () => {
-        const b = board([
-            tile('cursed-a', 'cursed', 'hidden', { tileTraitKind: 'cursed' }),
-            tile('echo-a', 'echo', 'hidden', { tileTraitKind: 'echo' }),
-            tile('plain-a', 'plain')
-        ]);
-
-        const result = rows({
-            board: b,
-            perkArmedTileIds: new Set(['cursed-a'])
-        });
-
-        expect(result.map((row) => row.perkArmedBack)).toEqual([true, false, false]);
+        expect(result.map((row) => row.traitRouteBeatTier)).toEqual([null, 'follow-up', 'setup']);
+        expect(result.map((row) => row.traitRouteReadabilityIntensity)).toEqual(['none', 'ready', 'setup']);
+        expect(result.map((row) => row.traitRouteCadence)).toEqual(['none', 'follow-up', 'prime']);
+        expect(result.map((row) => row.traitRouteCadenceAction)).toEqual([null, 'Next tap', 'Prime payoff']);
     });
 
     it('marks the hidden matching mate as a selected trait followup after one combo trait card is flipped', () => {

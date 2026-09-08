@@ -1,16 +1,12 @@
 import {
     GAME_RULES_VERSION,
-    INITIAL_LIVES,
-    MAX_LIVES,
-    type DungeonRunNodeKind,
     type FindableKind,
     type MutatorId,
-    type RouteNodeType,
     type TileTraitKind,
     type Tile
 } from './contracts';
 import { buildBoard, countFindablePairs } from './board-generation';
-import { countReachableExitKeySources, getEffectivePrimaryExitLock, inspectBoardFairness } from './board-inspection';
+import { inspectBoardFairness } from './board-inspection';
 import { FINDABLE_REWARD_ROWS, getFindableSpawnWeightRows } from './findables';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import {
@@ -58,20 +54,8 @@ export interface BalanceSimulationReport {
         deadTraitFloors: number;
         tileTraitKindCounts: Record<TileTraitKind, number>;
         floorTag: string;
-        dungeonNodeKind: DungeonRunNodeKind;
         floorBand: BalanceSimulationFloorBand;
-        comboShardPotential: number;
-        guardRewardPotential: number;
-        consumableRewardPotential: number;
-        treasureRewardPairs: number;
-        routeRewardPairs: number;
-        eventRewardPotential: number;
-        roomRewardPotential: number;
-        keyInflowPotential: number;
         boardFairnessIssueCount: number;
-        destroyChargeInflowPotential: number;
-        peekChargeInflowPotential: number;
-        recoveryReliefPotential: number;
     }>;
     aggregate: {
         findablePickupPairs: number;
@@ -88,106 +72,11 @@ export interface BalanceSimulationReport {
         tileTraitKindCounts: Record<TileTraitKind, number>;
         bossFloors: number;
         breatherFloors: number;
-        eliteFloors: number;
-        comboShardPotential: number;
-        guardRewardPotential: number;
-        consumableRewardPotential: number;
-        treasureRewardPairs: number;
-        routeRewardPairs: number;
-        eventRewardPotential: number;
-        roomRewardPotential: number;
-        keyInflowPotential: number;
         boardFairnessIssueCount: number;
-        destroyChargeInflowPotential: number;
-        peekChargeInflowPotential: number;
-        recoveryReliefPotential: number;
     };
     rows: BalanceSimulationRow[];
     notes: string[];
 }
-
-export type DungeonBalanceProfileId = 'cautious' | 'average' | 'greedy' | 'high_skill';
-
-export interface DungeonBalanceProfileDefinition {
-    id: DungeonBalanceProfileId;
-    riskTolerance: number;
-    rewardBias: number;
-    guardEfficiency: number;
-}
-
-export interface DungeonBalanceProfileMetrics {
-    profile: DungeonBalanceProfileId;
-    seedOutcomes: Array<{
-        seed: number;
-        floorsCleared: number;
-        livesLost: number;
-        runFalls: number;
-        minLivesRemaining: number;
-        lowLifeFloors: number;
-        bossWins: number;
-        bossAttempts: number;
-    }>;
-    floorsCleared: number;
-    livesLost: number;
-    guardUsed: number;
-    minLivesRemaining: number;
-    runFalls: number;
-    maxAtRiskStreak: number;
-    lowLifeFloors: number;
-    lowLifeFloorShare: number;
-    maxLowLifeStreak: number;
-    recoveryDebtFloors: number;
-    maxRecoveryDebtStreak: number;
-    routeChoiceCounts: Record<RouteNodeType, number>;
-    routeOutcomeCounts: Record<RouteChoiceOutcomeKind, number>;
-    routeAcceptedChoices: number;
-    routeRejectedChoices: number;
-    routeLifeDelta: number;
-    routeScoreDelta: number;
-    routeGuardDelta: number;
-    routeComboShardDelta: number;
-    routeFavorDelta: number;
-    routeMemorizeBonusMsDelta: number;
-    dominantRouteShare: number;
-    greedLifeCosts: number;
-    worstSeedFloorsClearedShare: number;
-    worstSeedLowLifeFloorShare: number;
-    worstSeedRunFalls: number;
-    seedFloorClearShareSpread: number;
-    rewardClaims: number;
-    bossWins: number;
-    bossAttempts: number;
-    firstRiskSample: { floor: number; seed: number } | null;
-}
-
-export interface DungeonBalanceProfileReport {
-    base: BalanceSimulationReport;
-    profiles: DungeonBalanceProfileMetrics[];
-    bounds: {
-        minFloorsClearedShare: number;
-        maxLivesLostPerFloor: number;
-        minBossWinShare: number;
-        minLivesRemaining: number;
-        maxRunFalls: number;
-        maxAtRiskStreak: number;
-        maxLowLifeFloorShare: number;
-        maxLowLifeStreak: number;
-        maxRecoveryDebtStreak: number;
-        maxDominantRouteShare: number;
-        minWorstSeedFloorsClearedShare: number;
-        maxWorstSeedLowLifeFloorShare: number;
-        maxWorstSeedRunFalls: number;
-        maxSeedFloorClearShareSpread: number;
-    };
-    notes: string[];
-}
-
-export const DUNGEON_BALANCE_PROFILES: readonly DungeonBalanceProfileDefinition[] = [
-    { id: 'cautious', riskTolerance: 0.72, rewardBias: 0.82, guardEfficiency: 0.88 },
-    { id: 'average', riskTolerance: 0.58, rewardBias: 1, guardEfficiency: 0.72 },
-    { id: 'greedy', riskTolerance: 0.42, rewardBias: 1.24, guardEfficiency: 0.52 },
-    { id: 'high_skill', riskTolerance: 0.84, rewardBias: 1.08, guardEfficiency: 0.95 }
-] as const;
 
 export const BALANCE_SIMULATION_FLOOR_BANDS = ['early', 'mid', 'late'] as const;
 
@@ -223,27 +112,14 @@ const scheduleMutatorsFor = (seed: number, rulesVersion: number, level: number):
 const average = (values: readonly number[]): number =>
     values.length === 0 ? 0 : values.reduce((sum, value) => sum + value, 0) / values.length;
 
-const simulationNodeKindForFloor = (floor: number, floorTag: string): DungeonRunNodeKind => {
-    if (floorTag === 'boss') return 'boss';
-    if (floorTag === 'breather') return floor % 3 === 0 ? 'shop' : 'rest';
-    if (floor % 5 === 0) return 'trap';
-    if (floor % 2 === 0) return 'elite';
-    return 'combat';
-};
-
 const floorBandFor = (floor: number): BalanceSimulationFloorBand =>
     floor <= 4 ? 'early' : floor <= 8 ? 'mid' : 'late';
-
-const uniquePairCount = <T>(items: readonly T[], keyFor: (item: T) => string | null): number =>
-    new Set(items.map(keyFor).filter((key): key is string => key != null)).size;
 
 export const BALANCE_SIMULATION_FINDABLE_KINDS: readonly FindableKind[] = FINDABLE_REWARD_ROWS.map((row) => row.kind);
 
 const emptyFindableKindCounts = (): Record<FindableKind, number> => ({
     shard_spark: 0,
-    score_glint: 0,
-    ward_spark: 0,
-    scout_glint: 0
+    score_glint: 0
 });
 
 export const BALANCE_SIMULATION_TILE_TRAIT_KINDS: readonly TileTraitKind[] = [
@@ -348,55 +224,6 @@ export const getTileTraitKindShares = (
     );
 };
 
-const sampleRecoveryReliefPotential = (sample: {
-    guardRewardPotential: number;
-    roomRewardPotential: number;
-    keyInflowPotential: number;
-}): number =>
-    sample.guardRewardPotential +
-    sample.roomRewardPotential +
-    (sample.keyInflowPotential > 0 ? 0.5 : 0);
-
-const ROUTE_NODE_TYPES: readonly RouteNodeType[] = ['safe', 'greed', 'mystery'];
-
-/*
- * The eight ways a route choice used to resolve. `route-choice-outcome-rules.ts` owned this union
- * and went with the route layer in Gen 173; the names stay here because the profile report still
- * has a column for each, and the column is now always nought. Both the column and this list come
- * out with the profile report's route section in T1.17's re-baseline.
- */
-type RouteChoiceOutcomeKind =
-    | 'safe_life'
-    | 'safe_guard'
-    | 'safe_guard_capped'
-    | 'greed'
-    | 'mystery_shop_gold'
-    | 'mystery_combo_shard'
-    | 'mystery_combo_shard_capped'
-    | 'mystery_relic_favor';
-const ROUTE_OUTCOME_KINDS: readonly RouteChoiceOutcomeKind[] = [
-    'safe_life',
-    'safe_guard',
-    'safe_guard_capped',
-    'greed',
-    'mystery_shop_gold',
-    'mystery_combo_shard',
-    'mystery_combo_shard_capped',
-    'mystery_relic_favor'
-];
-
-const emptyRouteChoiceCounts = (): Record<RouteNodeType, number> => ({ safe: 0, greed: 0, mystery: 0 });
-const emptyRouteOutcomeCounts = (): Record<RouteChoiceOutcomeKind, number> =>
-    Object.fromEntries(ROUTE_OUTCOME_KINDS.map((kind) => [kind, 0])) as Record<RouteChoiceOutcomeKind, number>;
-
-const getRouteChoiceTotal = (counts: Record<RouteNodeType, number>): number =>
-    ROUTE_NODE_TYPES.reduce((sum, type) => sum + counts[type], 0);
-
-const getDominantRouteChoiceShare = (counts: Record<RouteNodeType, number>): number => {
-    const total = getRouteChoiceTotal(counts);
-    return total === 0 ? 0 : Math.max(...ROUTE_NODE_TYPES.map((type) => counts[type])) / total;
-};
-
 export const runBalanceSimulation = ({
     seeds,
     seed,
@@ -409,7 +236,6 @@ export const runBalanceSimulation = ({
     const samples = safeSeeds.flatMap((sampleSeed) =>
         floorNumbers.map((floor) => {
             const schedule = pickFloorScheduleEntry(sampleSeed, rulesVersion, floor, 'endless');
-            const dungeonNodeKind = simulationNodeKindForFloor(floor, schedule.floorTag);
             const board = buildBoard(floor, {
                 runSeed: sampleSeed,
                 runRulesVersion: rulesVersion,
@@ -418,34 +244,7 @@ export const runBalanceSimulation = ({
                 gameMode: 'endless',
                 activeMutators: scheduleMutatorsFor(sampleSeed, rulesVersion, floor)
             });
-            const treasureRewardPairs = uniquePairCount(
-                board.tiles,
-                (tile) => (tile.dungeonCardKind === 'treasure' || tile.dungeonCardKind === 'lock' ? tile.pairKey : null)
-            );
-            const keyPairs = uniquePairCount(board.tiles, (tile) => (tile.dungeonCardKind === 'key' ? tile.pairKey : null));
-            const shrinePairs = uniquePairCount(
-                board.tiles,
-                (tile) => (tile.dungeonCardKind === 'shrine' ? tile.pairKey : null)
-            );
-            const routeRewardPairs = uniquePairCount(
-                board.tiles,
-                (tile) => (tile.routeCardKind || tile.routeSpecialKind ? tile.pairKey : null)
-            );
-            const roomEffectIds = board.tiles
-                .map((tile) => tile.dungeonCardEffectId)
-                .filter((id): id is NonNullable<typeof id> => id != null && id.startsWith('room_'));
-            const eventRewardPotential = floor % 7 === 0 ? 2 : 0;
-            const roomRewardPotential = roomEffectIds.length > 0 || dungeonNodeKind === 'rest' ? 1 : 0;
-            const primaryExitLock = getEffectivePrimaryExitLock({ board });
             const boardFairnessIssueCount = inspectBoardFairness(board).issues.length;
-            const lockedExitKeySourceCount =
-                primaryExitLock.lockKind !== 'none' && primaryExitLock.lockKind !== 'lever'
-                    ? countReachableExitKeySources(board, primaryExitLock.lockKind)
-                    : 0;
-            const keyInflowPotential = Math.max(
-                keyPairs,
-                lockedExitKeySourceCount
-            );
             const findableKindCounts = countFindableKinds(board.tiles);
             const tileTraitKindCounts = countTileTraitKinds(board.tiles);
             const tileTraitPairs = getTileTraitKindTotal(tileTraitKindCounts);
@@ -461,14 +260,6 @@ export const runBalanceSimulation = ({
                 ? 1
                 : 0;
             const deadTraitFloors = tileTraitPairs > 0 && traitInteractionLines === 0 ? 1 : 0;
-            const destroyChargeInflowPotential =
-                roomEffectIds.includes('room_armory') || eventRewardPotential > 0 ? 1 : 0;
-            const peekChargeInflowPotential = roomEffectIds.includes('room_scrying_lens') ? 1 : 0;
-            const recoveryReliefPotential = sampleRecoveryReliefPotential({
-                guardRewardPotential: shrinePairs + (dungeonNodeKind === 'rest' ? 1 : 0),
-                roomRewardPotential,
-                keyInflowPotential
-            });
             return {
                 seed: sampleSeed,
                 floor,
@@ -484,20 +275,8 @@ export const runBalanceSimulation = ({
                 deadTraitFloors,
                 tileTraitKindCounts,
                 floorTag: schedule.floorTag,
-                dungeonNodeKind,
                 floorBand: floorBandFor(floor),
-                comboShardPotential: countFindablePairs(board.tiles) + (routeRewardPairs > 0 ? 1 : 0),
-                guardRewardPotential: shrinePairs + (dungeonNodeKind === 'rest' ? 1 : 0),
-                consumableRewardPotential: keyPairs,
-                treasureRewardPairs,
-                routeRewardPairs,
-                eventRewardPotential,
-                roomRewardPotential,
-                keyInflowPotential,
-                boardFairnessIssueCount,
-                destroyChargeInflowPotential,
-                peekChargeInflowPotential,
-                recoveryReliefPotential
+                boardFairnessIssueCount
             };
         })
     );
@@ -523,18 +302,10 @@ export const runBalanceSimulation = ({
     const bossFloors = safeSeeds.flatMap((seed) =>
         floorNumbers.map((floor) => pickFloorScheduleEntry(seed, rulesVersion, floor, 'endless').floorTag === 'boss' ? 1 : 0)
     );
-    const rewardTotalsByBand = samples.reduce<Record<BalanceSimulationFloorBand, number>>(
+    const findableTotalsByBand = samples.reduce<Record<BalanceSimulationFloorBand, number>>(
         (totals, sample) => ({
             ...totals,
-            [sample.floorBand]:
-                totals[sample.floorBand] +
-                sample.comboShardPotential +
-                sample.guardRewardPotential +
-                sample.consumableRewardPotential +
-                sample.treasureRewardPairs +
-                sample.routeRewardPairs +
-                sample.eventRewardPotential +
-                sample.roomRewardPotential
+            [sample.floorBand]: totals[sample.floorBand] + sample.findablePickupPairs
         }),
         { early: 0, mid: 0, late: 0 }
     );
@@ -542,8 +313,8 @@ export const runBalanceSimulation = ({
         (counts, sample) => ({ ...counts, [sample.floorBand]: counts[sample.floorBand] + 1 }),
         { early: 0, mid: 0, late: 0 }
     );
-    const rewardAverageByBand = BALANCE_SIMULATION_FLOOR_BANDS.map((band) =>
-        sampleCountsByBand[band] === 0 ? 0 : rewardTotalsByBand[band] / sampleCountsByBand[band]
+    const findableAverageByBand = BALANCE_SIMULATION_FLOOR_BANDS.map((band) =>
+        sampleCountsByBand[band] === 0 ? 0 : findableTotalsByBand[band] / sampleCountsByBand[band]
     );
 
     const rows = [
@@ -650,48 +421,13 @@ export const runBalanceSimulation = ({
             0.25,
             'pickFloorScheduleEntry'
         ),
-        /*
-         * Seven pressure rows have left this report: five in Gen 172 (the moving-hazard average,
-         * the hazard-tile average, the floor-1 hazard opener, the contact-risk average and the
-         * recovery relief on high-pressure floors) and the two pressure ceilings in Gen 176, when
-         * the hazard rules they read were deleted. A row that cannot move teaches the reader to
-         * skim, which is how a real regression gets past one.
-         */
         row(
-            'elite_route_node_share',
-            'Elite route node share in simulation sample',
-            Number(average(samples.map((sample) => (sample.dungeonNodeKind === 'elite' ? 1 : 0))).toFixed(2)),
-            0.15,
-            0.35,
-            'simulationNodeKindForFloor'
-        ),
-        row(
-            'avg_combo_shard_potential_per_floor',
-            'Average combo shard potential per floor',
-            Number(average(samples.map((sample) => sample.comboShardPotential)).toFixed(2)),
-            1,
-            3,
-            'findables and route reward pairs'
-        ),
-        row(
-            'avg_guard_reward_potential_per_floor',
-            'Average guard reward potential per floor',
-            Number(average(samples.map((sample) => sample.guardRewardPotential)).toFixed(2)),
-            // 0.1 down to 0.05: guard used to come from shrine pairs and rest nodes as well as the
-            // ward-spark findable, and only the findable is left. Measured 0.08. Lowered rather
-            // than deleted because guard is still reachable, just scarcer - which is a real change
-            // to how safe a floor feels, recorded in BALANCE_NOTES.md rather than absorbed.
-            0.05,
-            1.5,
-            'ward-spark findables'
-        ),
-        row(
-            'reward_band_spread',
-            'Reward-source spread across early/mid/late bands',
-            Number((Math.min(...rewardAverageByBand) / Math.max(1, Math.max(...rewardAverageByBand))).toFixed(2)),
+            'findable_band_spread',
+            'Findable spread across early/mid/late bands',
+            Number((Math.min(...findableAverageByBand) / Math.max(1, Math.max(...findableAverageByBand))).toFixed(2)),
             0.35,
             1,
-            'floor-band reward totals'
+            'floor-band findable totals'
         ),
         row(
             'board_fairness_issue_floor_share',
@@ -700,22 +436,6 @@ export const runBalanceSimulation = ({
             0,
             0,
             'board fairness inspection'
-        ),
-        row(
-            'avg_route_reward_pairs_per_floor',
-            'Average route reward carrier pairs per floor',
-            Number(average(samples.map((sample) => sample.routeRewardPairs)).toFixed(2)),
-            0,
-            2,
-            'route reward pair assignment'
-        ),
-        row(
-            'avg_event_room_reward_potential_per_floor',
-            'Average event-room reward options per floor',
-            Number(average(samples.map((sample) => sample.eventRewardPotential)).toFixed(2)),
-            0,
-            1,
-            'event node estimate'
         )
     ];
 
@@ -743,25 +463,12 @@ export const runBalanceSimulation = ({
             tileTraitKindCounts: aggregateTileTraitKindCounts,
             bossFloors: samples.filter((sample) => sample.floorTag === 'boss').length,
             breatherFloors: samples.filter((sample) => sample.floorTag === 'breather').length,
-            eliteFloors: samples.filter((sample) => sample.dungeonNodeKind === 'elite').length,
-            comboShardPotential: samples.reduce((sum, sample) => sum + sample.comboShardPotential, 0),
-            guardRewardPotential: samples.reduce((sum, sample) => sum + sample.guardRewardPotential, 0),
-            consumableRewardPotential: samples.reduce((sum, sample) => sum + sample.consumableRewardPotential, 0),
-            treasureRewardPairs: samples.reduce((sum, sample) => sum + sample.treasureRewardPairs, 0),
-            routeRewardPairs: samples.reduce((sum, sample) => sum + sample.routeRewardPairs, 0),
-            eventRewardPotential: samples.reduce((sum, sample) => sum + sample.eventRewardPotential, 0),
-            roomRewardPotential: samples.reduce((sum, sample) => sum + sample.roomRewardPotential, 0),
-            keyInflowPotential: samples.reduce((sum, sample) => sum + sample.keyInflowPotential, 0),
-            boardFairnessIssueCount: samples.reduce((sum, sample) => sum + sample.boardFairnessIssueCount, 0),
-            destroyChargeInflowPotential: samples.reduce((sum, sample) => sum + sample.destroyChargeInflowPotential, 0),
-            peekChargeInflowPotential: samples.reduce((sum, sample) => sum + sample.peekChargeInflowPotential, 0),
-            recoveryReliefPotential: samples.reduce((sum, sample) => sum + sample.recoveryReliefPotential, 0)
+            boardFairnessIssueCount: samples.reduce((sum, sample) => sum + sample.boardFairnessIssueCount, 0)
         },
         rows,
         notes: [
             'Simulation is deterministic and local-only; no leaderboard or server authority is implied.',
             'Targets are smoke-test guardrails, not final balance verdicts.',
-            'Live economy fields are estimates from existing route/event/room/reward rules; runtime gameplay is unchanged.',
             'Findable kind distribution rows are diagnostics for seeded generation drift; they do not alter rewards or spawn rules.',
             'Tile trait rows verify density and mix for the reward/drawback layer without changing runtime gameplay.'
         ]
@@ -792,302 +499,5 @@ export const assertBalanceSimulationWithinBaseline = (
         const range = baseline[key];
         return value < range.min || value > range.max ? [`${key}:${value} outside ${range.min}-${range.max}`] : [];
     });
-    return { ok: issues.length === 0, issues };
-};
-
-const sampleRewardPotential = (sample: BalanceSimulationReport['samples'][number]): number =>
-    sample.comboShardPotential +
-    sample.guardRewardPotential +
-    sample.consumableRewardPotential +
-    sample.treasureRewardPairs +
-    sample.findablePickupPairs;
-
-const selectedDungeonBalanceProfileIds = (value: unknown): DungeonBalanceProfileId[] =>
-    Array.isArray(value)
-        ? value.filter((profileId): profileId is DungeonBalanceProfileId =>
-              DUNGEON_BALANCE_PROFILES.some((profile) => profile.id === profileId)
-          )
-        : [];
-
-export const runDungeonBalanceProfileSimulation = (
-    input: BalanceSimulationInput & { profiles?: readonly DungeonBalanceProfileId[] }
-): DungeonBalanceProfileReport => {
-    const base = runBalanceSimulation(input);
-    const profileIds = selectedDungeonBalanceProfileIds(input.profiles);
-    const selectedProfiles = profileIds.length > 0
-        ? DUNGEON_BALANCE_PROFILES.filter((profile) => profileIds.includes(profile.id))
-        : DUNGEON_BALANCE_PROFILES;
-    const samplesBySeed = base.seeds.map((sampleSeed) =>
-        base.samples.filter((sample) => sample.seed === sampleSeed).sort((a, b) => a.floor - b.floor)
-    );
-
-    const profiles = selectedProfiles.map((profile) => {
-        let floorsCleared = 0;
-        let livesLost = 0;
-        let guardUsed = 0;
-        let minLivesRemaining = INITIAL_LIVES;
-        let runFalls = 0;
-        let maxAtRiskStreak = 0;
-        let lowLifeFloors = 0;
-        let maxLowLifeStreak = 0;
-        let recoveryDebtFloors = 0;
-        let maxRecoveryDebtStreak = 0;
-        const routeChoiceCounts = emptyRouteChoiceCounts();
-        const routeOutcomeCounts = emptyRouteOutcomeCounts();
-        const routeAcceptedChoices = 0;
-        const routeRejectedChoices = 0;
-        const routeLifeDelta = 0;
-        const routeScoreDelta = 0;
-        const routeGuardDelta = 0;
-        const routeComboShardDelta = 0;
-        const routeFavorDelta = 0;
-        const routeMemorizeBonusMsDelta = 0;
-        const greedLifeCosts = 0;
-        let rewardClaims = 0;
-        let bossWins = 0;
-        let bossAttempts = 0;
-        const seedOutcomes: DungeonBalanceProfileMetrics['seedOutcomes'] = [];
-        let firstRiskSample: DungeonBalanceProfileMetrics['firstRiskSample'] = null;
-
-        for (const seedSamples of samplesBySeed) {
-            let lives = INITIAL_LIVES;
-            let atRiskStreak = 0;
-            let lowLifeStreak = 0;
-            let recoveryDebtStreak = 0;
-            let seedFloorsCleared = 0;
-            let seedLivesLost = 0;
-            let seedRunFalls = 0;
-            let seedMinLivesRemaining = INITIAL_LIVES;
-            let seedLowLifeFloors = 0;
-            let seedBossWins = 0;
-            let seedBossAttempts = 0;
-
-            /*
-             * Each floor used to start with the profile at the vendor: gold in from the floor
-             * clear, healing bought when lives were low, the rest spent on stock. The vendor and
-             * the gold went in Gen 174, so a profile's lives are now only what the floor leaves
-             * them, and there is no wallet column to carry.
-             */
-            for (const sample of seedSamples) {
-                /*
-                 * Pressure was contact risk plus enemy-card and boss-hazard weight. The hazard
-                 * rules that produced all three were deleted in Gen 176, so no floor presses on a
-                 * profile; the survivability columns below stay until T1.17 re-baselines them.
-                 */
-                const pressure = 0;
-                const guardAvailable = sample.guardRewardPotential + (profile.id === 'cautious' ? 1 : 0);
-                const guardSpend = Math.min(guardAvailable, Math.floor(pressure * profile.guardEfficiency));
-                const residualPressure = Math.max(0, pressure - guardSpend - profile.riskTolerance);
-                const profileRecoveryDebt = Math.max(0, residualPressure - sample.recoveryReliefPotential);
-                if (profileRecoveryDebt >= 1) {
-                    recoveryDebtFloors += 1;
-                    recoveryDebtStreak += 1;
-                } else {
-                    recoveryDebtStreak = 0;
-                }
-                maxRecoveryDebtStreak = Math.max(maxRecoveryDebtStreak, recoveryDebtStreak);
-                const lost = Math.floor(residualPressure / (profile.id === 'greedy' ? 1.35 : 1.55));
-                const cleared = lost <= (profile.id === 'greedy' ? 1 : 2) && lives - lost > 0;
-
-                guardUsed += guardSpend;
-                livesLost += lost;
-                seedLivesLost += lost;
-                lives -= lost;
-                minLivesRemaining = Math.min(minLivesRemaining, lives);
-                seedMinLivesRemaining = Math.min(seedMinLivesRemaining, lives);
-                atRiskStreak = lost > 0 ? atRiskStreak + 1 : 0;
-                maxAtRiskStreak = Math.max(maxAtRiskStreak, atRiskStreak);
-                rewardClaims += sampleRewardPotential(sample) * profile.rewardBias;
-                if (sample.floorTag === 'boss') {
-                    bossAttempts += 1;
-                    seedBossAttempts += 1;
-                    if (cleared && residualPressure <= 2.25) {
-                        bossWins += 1;
-                        seedBossWins += 1;
-                    }
-                }
-                if (cleared) {
-                    floorsCleared += 1;
-                    seedFloorsCleared += 1;
-                    if (residualPressure <= 0.75 && lives < MAX_LIVES) {
-                        lives += 1;
-                        minLivesRemaining = Math.min(minLivesRemaining, lives);
-                        seedMinLivesRemaining = Math.min(seedMinLivesRemaining, lives);
-                    }
-                    /*
-                     * Each cleared floor used to put the profile through a route choice here -
-                     * cautious took Safe when hurt, greedy took Greed whenever it could - and the
-                     * choice's event moved lives, gold, guard, shards, favor and the memorize
-                     * bonus. There is no route offer (Gen 173), so nothing between floors moves
-                     * any of those, and every route column below reads nought.
-                     *
-                     * The columns stay for one commit so the profile report keeps its shape while
-                     * the between-floor layer comes out in pieces; T1.17 drops them with the rest.
-                     */
-                    minLivesRemaining = Math.min(minLivesRemaining, lives);
-                    seedMinLivesRemaining = Math.min(seedMinLivesRemaining, lives);
-                } else {
-                    if (!firstRiskSample) {
-                        firstRiskSample = { floor: sample.floor, seed: sample.seed };
-                    }
-                    if (lives <= 0) {
-                        runFalls += 1;
-                        seedRunFalls += 1;
-                        lives = INITIAL_LIVES;
-                        atRiskStreak = 0;
-                    }
-                }
-                if (lives <= 2) {
-                    lowLifeFloors += 1;
-                    seedLowLifeFloors += 1;
-                    lowLifeStreak += 1;
-                } else {
-                    lowLifeStreak = 0;
-                }
-                maxLowLifeStreak = Math.max(maxLowLifeStreak, lowLifeStreak);
-            }
-            seedOutcomes.push({
-                seed: seedSamples[0]?.seed ?? 0,
-                floorsCleared: seedFloorsCleared,
-                livesLost: seedLivesLost,
-                runFalls: seedRunFalls,
-                minLivesRemaining: seedMinLivesRemaining,
-                lowLifeFloors: seedLowLifeFloors,
-                bossWins: seedBossWins,
-                bossAttempts: seedBossAttempts
-            });
-        }
-
-        const dominantRouteShare = getDominantRouteChoiceShare(routeChoiceCounts);
-        const seedFloorClearShares = seedOutcomes.map((outcome) => outcome.floorsCleared / Math.max(1, base.floors));
-        const worstSeedFloorsClearedShare = seedFloorClearShares.length === 0 ? 0 : Math.min(...seedFloorClearShares);
-        const bestSeedFloorsClearedShare = seedFloorClearShares.length === 0 ? 0 : Math.max(...seedFloorClearShares);
-        const worstSeedLowLifeFloorShare =
-            seedOutcomes.length === 0
-                ? 0
-                : Math.max(...seedOutcomes.map((outcome) => outcome.lowLifeFloors / Math.max(1, base.floors)));
-
-        return {
-            profile: profile.id,
-            seedOutcomes,
-            floorsCleared,
-            livesLost,
-            guardUsed,
-            minLivesRemaining,
-            runFalls,
-            maxAtRiskStreak,
-            lowLifeFloors,
-            lowLifeFloorShare: Number((lowLifeFloors / Math.max(1, base.samples.length)).toFixed(2)),
-            maxLowLifeStreak,
-            recoveryDebtFloors,
-            maxRecoveryDebtStreak,
-            routeChoiceCounts,
-            routeOutcomeCounts,
-            routeAcceptedChoices,
-            routeRejectedChoices,
-            routeLifeDelta,
-            routeScoreDelta,
-            routeGuardDelta,
-            routeComboShardDelta,
-            routeFavorDelta,
-            routeMemorizeBonusMsDelta,
-            dominantRouteShare: Number(dominantRouteShare.toFixed(2)),
-            greedLifeCosts,
-            worstSeedFloorsClearedShare: Number(worstSeedFloorsClearedShare.toFixed(2)),
-            worstSeedLowLifeFloorShare: Number(worstSeedLowLifeFloorShare.toFixed(2)),
-            worstSeedRunFalls: Math.max(0, ...seedOutcomes.map((outcome) => outcome.runFalls)),
-            seedFloorClearShareSpread: Number((bestSeedFloorsClearedShare - worstSeedFloorsClearedShare).toFixed(2)),
-            rewardClaims: Number(rewardClaims.toFixed(2)),
-            bossWins,
-            bossAttempts,
-            firstRiskSample
-        };
-    });
-
-    return {
-        base,
-        profiles,
-        bounds: {
-            minFloorsClearedShare: 0.82,
-            maxLivesLostPerFloor: 1.35,
-            minBossWinShare: 0.5,
-            minLivesRemaining: 1,
-            maxRunFalls: 0,
-            maxAtRiskStreak: 5,
-            maxLowLifeFloorShare: 0.45,
-            maxLowLifeStreak: 5,
-            maxRecoveryDebtStreak: 3,
-            maxDominantRouteShare: 0.75,
-            minWorstSeedFloorsClearedShare: 0.72,
-            maxWorstSeedLowLifeFloorShare: 0.55,
-            maxWorstSeedRunFalls: 0,
-            maxSeedFloorClearShareSpread: 0.28
-        },
-        notes: [
-            'Profiles are broad deterministic guardrails, not exact win-rate claims.',
-            'Bounds intentionally report profile/seed/floor context so balance failures are actionable.',
-            'Profile diagnostics carry lives across each seed to catch survivability cliffs hidden by average loss rates.',
-            'Route-choice diagnostics execute the same typed command as live play and retain exact outcome/resource deltas so one route cannot silently become the default answer.',
-            'Recovery-debt diagnostics catch clustered pressure floors whose local guard, room, or key relief is too thin.',
-            'Low-life exposure diagnostics catch runs that survive on paper while spending too many floors near collapse.',
-            'Per-seed profile outcomes keep a rough seed from hiding inside healthy aggregate averages.'
-        ]
-    };
-};
-
-export const assertDungeonBalanceProfilesWithinBounds = (
-    report: DungeonBalanceProfileReport
-): { ok: boolean; issues: string[] } => {
-    const totalFloors = Math.max(1, report.base.samples.length);
-    const issues = report.profiles.flatMap((profile) => {
-        const context = `${profile.profile}@seed:${profile.firstRiskSample?.seed ?? report.base.seeds[0] ?? 0}/floor:${
-            profile.firstRiskSample?.floor ?? report.base.floors
-        }`;
-        const profileIssues: string[] = [];
-        if (profile.floorsCleared / totalFloors < report.bounds.minFloorsClearedShare) {
-            profileIssues.push(`${context}:floorsCleared=${profile.floorsCleared}/${totalFloors}`);
-        }
-        if (profile.livesLost / totalFloors > report.bounds.maxLivesLostPerFloor) {
-            profileIssues.push(`${context}:livesLost=${profile.livesLost}/${totalFloors}`);
-        }
-        if (profile.minLivesRemaining < report.bounds.minLivesRemaining) {
-            profileIssues.push(`${context}:minLivesRemaining=${profile.minLivesRemaining}`);
-        }
-        if (profile.runFalls > report.bounds.maxRunFalls) {
-            profileIssues.push(`${context}:runFalls=${profile.runFalls}`);
-        }
-        if (profile.maxAtRiskStreak > report.bounds.maxAtRiskStreak) {
-            profileIssues.push(`${context}:maxAtRiskStreak=${profile.maxAtRiskStreak}`);
-        }
-        if (profile.lowLifeFloorShare > report.bounds.maxLowLifeFloorShare) {
-            profileIssues.push(`${context}:lowLifeFloorShare=${profile.lowLifeFloorShare}`);
-        }
-        if (profile.maxLowLifeStreak > report.bounds.maxLowLifeStreak) {
-            profileIssues.push(`${context}:maxLowLifeStreak=${profile.maxLowLifeStreak}`);
-        }
-        if (profile.maxRecoveryDebtStreak > report.bounds.maxRecoveryDebtStreak) {
-            profileIssues.push(`${context}:maxRecoveryDebtStreak=${profile.maxRecoveryDebtStreak}`);
-        }
-        if (profile.dominantRouteShare > report.bounds.maxDominantRouteShare) {
-            profileIssues.push(`${context}:dominantRouteShare=${profile.dominantRouteShare}`);
-        }
-        if (profile.worstSeedFloorsClearedShare < report.bounds.minWorstSeedFloorsClearedShare) {
-            profileIssues.push(`${context}:worstSeedFloorsClearedShare=${profile.worstSeedFloorsClearedShare}`);
-        }
-        if (profile.worstSeedLowLifeFloorShare > report.bounds.maxWorstSeedLowLifeFloorShare) {
-            profileIssues.push(`${context}:worstSeedLowLifeFloorShare=${profile.worstSeedLowLifeFloorShare}`);
-        }
-        if (profile.worstSeedRunFalls > report.bounds.maxWorstSeedRunFalls) {
-            profileIssues.push(`${context}:worstSeedRunFalls=${profile.worstSeedRunFalls}`);
-        }
-        if (profile.seedFloorClearShareSpread > report.bounds.maxSeedFloorClearShareSpread) {
-            profileIssues.push(`${context}:seedFloorClearShareSpread=${profile.seedFloorClearShareSpread}`);
-        }
-        if (profile.bossAttempts > 0 && profile.bossWins / profile.bossAttempts < report.bounds.minBossWinShare) {
-            profileIssues.push(`${context}:bossWins=${profile.bossWins}/${profile.bossAttempts}`);
-        }
-        return profileIssues;
-    });
-
     return { ok: issues.length === 0, issues };
 };

@@ -6,8 +6,6 @@ import {
     type FloorTag,
     type GameMode,
     type MutatorId,
-    type RouteCardPlan,
-    type RouteWorldProfile,
     type Tile
 } from './contracts';
 import { getChapterActBiomeForCycleFloor } from './floor-mutator-schedule';
@@ -30,7 +28,7 @@ export interface BuildBoardOptions {
     activeMutators?: MutatorId[];
     /** Puzzle mode: skip RNG; copy these tiles as-is. */
     fixedTiles?: Tile[] | null;
-    /** `enhance` preserves legacy dungeon additions; `exact` copies fixed tiles without encounter layers. */
+    /** `exact` keeps the authored tile order and suits; `enhance` deals suits over the given tiles. */
     fixedTilesMode?: 'enhance' | 'exact';
     /** H4: include one wild tile that pairs with any real symbol. */
     includeWildTile?: boolean;
@@ -38,8 +36,6 @@ export interface BuildBoardOptions {
     floorArchetypeId?: FloorArchetypeId | null;
     featuredObjectiveId?: FeaturedObjectiveId | null;
     cycleFloor?: number | null;
-    routeCardPlan?: RouteCardPlan | null;
-    routeWorldProfile?: RouteWorldProfile | null;
     gameMode?: GameMode;
     suppressFindables?: boolean;
 }
@@ -54,13 +50,8 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
     const actBiome = cycleFloor != null ? getChapterActBiomeForCycleFloor(cycleFloor) : null;
     const floorTag = options.floorTag ?? 'normal';
 
-    /*
-     * A board someone handed us. It used to be augmented on the way through — an exit, a shop, a
-     * room, a layout plan, roaming hazards — which meant a caller who asked for exactly these
-     * tiles got those tiles plus six systems it never mentioned. With the dungeon layer gone the
-     * branch says what it always should have: these are the tiles. `exact` additionally keeps the
-     * authored order, so a softlock fixture stays the board it was written as.
-     */
+    // A board someone handed us: these are the tiles. `exact` additionally keeps the authored
+    // order, so a softlock fixture stays the board it was written as.
     if (options.fixedTiles && options.fixedTiles.length > 0) {
         const exactFixedTiles = options.fixedTilesMode === 'exact';
         const plannedTiles = options.fixedTiles.map((t) => ({ ...t }));
@@ -92,21 +83,7 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
             actFloorNumber: actBiome?.actFloorNumber ?? null,
             actFloorCount: actBiome?.actFloorCount ?? null,
             biomeTitle: actBiome?.biomeTitle ?? null,
-            biomeTone: actBiome?.biomeTone ?? null,
-            routeWorldProfile: options.routeWorldProfile ?? null,
-            selectedGatewayRouteType: null,
-            dungeonKeysHeld: 0,
-            dungeonExitTileId: null,
-            dungeonExitActivated: false,
-            dungeonExitLockKind: 'none',
-            dungeonExitRequiredLeverCount: 0,
-            dungeonLeverCount: 0,
-            dungeonShopTileId: null,
-            dungeonShopVisited: false,
-            dungeonBossId: null,
-            dungeonObjectiveId: 'find_exit',
-            enemyHazards: [],
-            enemyHazardTurn: 0
+            biomeTone: actBiome?.biomeTone ?? null
         };
     }
 
@@ -136,11 +113,8 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
           );
     const tileCount = layoutTiles.length;
     const columns = clamp(Math.ceil(Math.sqrt(tileCount)), 2, 8);
-    /*
-     * Suits go on after the layout plan and before anything reads positions: the plan has put the
-     * exit, branches, hazards and rewards where it wants them and those stay pinned; the plain
-     * pairs are dealt in clumps around them so the floor opens as a map rather than a field.
-     */
+    // Suits go on before anything reads positions: pairs are dealt in clumps so the floor opens as
+    // a map rather than a field.
     const tiles = dealBoardSuits(layoutTiles, columns, runSeed, level, rulesVersion, getSuitDealProfile(floorArchetypeId));
     const rows = Math.ceil(tileCount / columns);
     const cursedPairKey =
@@ -164,36 +138,11 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
         actFloorNumber: actBiome?.actFloorNumber ?? null,
         actFloorCount: actBiome?.actFloorCount ?? null,
         biomeTitle: actBiome?.biomeTitle ?? null,
-        biomeTone: actBiome?.biomeTone ?? null,
-        routeWorldProfile: null,
-        selectedGatewayRouteType: null,
-        dungeonKeysHeld: 0,
-        dungeonExitTileId: null,
-        dungeonExitActivated: false,
-        dungeonExitLockKind: 'none',
-        dungeonExitRequiredLeverCount: 0,
-        dungeonLeverCount: 0,
-        dungeonShopTileId: null,
-        dungeonShopVisited: false,
-        dungeonBossId: null,
-        dungeonObjectiveId: 'find_exit',
-        enemyHazards: [],
-        enemyHazardTurn: 0
+        biomeTone: actBiome?.biomeTone ?? null
     };
     const traitBoard: BoardState = {
         ...baseBoard,
-        tiles: assignTileTraitsToGeneratedBoard(
-            baseBoard.tiles,
-            runSeed,
-            rulesVersion,
-            level,
-            // The route world's intensity used to bias how heavily a floor was traited: a Greed
-            // floor carried more. With one kind of floor there is one intensity, and it is the
-            // default.
-            undefined,
-            null,
-            baseBoard.columns
-        )
+        tiles: assignTileTraitsToGeneratedBoard(baseBoard.tiles, runSeed, rulesVersion, level, baseBoard.columns)
     };
     if (!mutators.includes('shifting_spotlight')) {
         return { ...traitBoard, wardPairKey: null, bountyPairKey: null };

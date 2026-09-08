@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Tile } from './contracts';
-import { hideTileAfterTurn, isSprungTrapTile } from './tile-state-rules';
+import { hideTileAfterTurn } from './tile-state-rules';
 
 const tile = (overrides: Partial<Tile> = {}): Tile => ({
     id: 'tile',
@@ -25,7 +25,4 @@ describe('tile state rules', () => {
         }
     });
 
-    it('never reads a tile as a sprung trap', () => {
-        expect(isSprungTrapTile(tile())).toBe(false);
-    });
 });

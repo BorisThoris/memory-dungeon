@@ -282,14 +282,14 @@ export const getTraitSwapRouteHints = (
 
 export const getTraitOpportunityHudModel = (
     board: BoardState | null | undefined,
-    runTools: Pick<RunState, 'peekCharges' | 'regionShuffleCharges' | 'regionShuffleFreeThisFloor' | 'shuffleCharges'> &
+    runTools: Pick<RunState, 'peekCharges' | 'regionShuffleCharges' | 'shuffleCharges'> &
         Partial<Pick<RunState, 'activeContract'>>
 ): TraitOpportunityHudModel => {
     const summary = getTraitOpportunitySummary(board);
     const routeCount = summary.interactionLines.length;
     const swapToolsAvailable =
         !runTools.activeContract?.noShuffle &&
-        (runTools.regionShuffleCharges > 0 || runTools.regionShuffleFreeThisFloor);
+        runTools.regionShuffleCharges > 0;
     const swapHint = swapToolsAvailable
         ? getTraitSwapRouteHints(board, 1)[0] ?? null
         : null;
@@ -298,7 +298,7 @@ export const getTraitOpportunityHudModel = (
     const primaryLine = summary.interactionLines[0] ?? swapHint?.text ?? 'No trait route primed yet';
     const rowSwapLine = runTools.activeContract?.noShuffle
         ? 'locked'
-        : `${runTools.regionShuffleCharges}${runTools.regionShuffleFreeThisFloor ? ' + free' : ''}`;
+        : `${runTools.regionShuffleCharges}`;
     const toolLine = `Tools: row/swap ${rowSwapLine}, peek ${runTools.peekCharges}, shuffle ${runTools.shuffleCharges}`;
     const routeCountLabel = routeCount === 0 && swapHint
         ? 'setup'

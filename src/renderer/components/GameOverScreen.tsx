@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { ACHIEVEMENTS } from '../../shared/achievements';
 import { getActiveContentLock } from '../../shared/content-lock-state';
-import { MUTATOR_CATALOG, RELIC_CATALOG } from '../../shared/game-catalog';
+import { MUTATOR_CATALOG } from '../../shared/game-catalog';
 import { getSteamStorePageUrl } from '../steamStorePage';
-import type { MutatorId, RelicId, RunState } from '../../shared/contracts';
+import type { MutatorId, RunState } from '../../shared/contracts';
 import { getGameOverNextRunRows } from '../../shared/game-over-next-run';
 import { useShallow } from 'zustand/react/shallow';
 import { UI_ART } from '../assets/ui';
@@ -28,9 +28,6 @@ interface GameOverScreenProps {
 
 const mutatorLabel = (id: MutatorId): string => MUTATOR_CATALOG[id].title;
 
-const relicLabel = (id: RelicId): string => RELIC_CATALOG[id].title;
-
-
 const runModeIdentityLine = (summary: NonNullable<RunState['lastRunSummary']>): string => {
     if (summary.activeContract?.noShuffle) {
         return gameOverScreenCopy.modeIdentity.scholar;
@@ -40,9 +37,6 @@ const runModeIdentityLine = (summary: NonNullable<RunState['lastRunSummary']>): 
     }
     if (summary.wildMenuRun) {
         return gameOverScreenCopy.modeIdentity.wild;
-    }
-    if (summary.dungeonShowcaseRun) {
-        return gameOverScreenCopy.modeIdentity.dungeonShowcase;
     }
     if (summary.practiceMode) {
         return gameOverScreenCopy.modeIdentity.practice;
@@ -59,9 +53,6 @@ const runModeHeading = (summary: NonNullable<RunState['lastRunSummary']>): strin
     }
     if (summary.wildMenuRun) {
         return gameOverScreenCopy.runModeHeadings.wild;
-    }
-    if (summary.dungeonShowcaseRun) {
-        return gameOverScreenCopy.runModeHeadings.dungeonShowcase;
     }
     return summary.practiceMode
         ? gameOverScreenCopy.runModeHeadings.practice
@@ -132,10 +123,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
         saveAtRunStart: runStartSaveData,
         summary
     });
-    const metaItems = [
-        ...(summary.activeMutators?.map((id) => ({ kind: 'mutator' as const, label: mutatorLabel(id) })) ?? []),
-        ...(summary.relicIds?.map((id) => ({ kind: 'relic' as const, label: relicLabel(id) })) ?? [])
-    ];
+    const mutatorChips = summary.activeMutators?.map((id) => mutatorLabel(id)) ?? [];
 
     return (
         <section className={styles.shell} ref={shellRef}>
@@ -263,15 +251,11 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             {runModeIdentityLine(summary)}
                         </p>
 
-                        {metaItems.length > 0 ? (
+                        {mutatorChips.length > 0 ? (
                             <div className={styles.metaStrip} data-testid="game-over-meta-strip">
-                                {metaItems.map((item) => (
-                                    <span
-                                        className={styles.metaChip}
-                                        data-testid={item.kind === 'relic' ? 'game-over-relic-chip' : 'game-over-mutator-chip'}
-                                        key={`${item.kind}:${item.label}`}
-                                    >
-                                        {item.label}
+                                {mutatorChips.map((label) => (
+                                    <span className={styles.metaChip} data-testid="game-over-mutator-chip" key={label}>
+                                        {label}
                                     </span>
                                 ))}
                             </div>
@@ -320,7 +304,6 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                         <p className={styles.note}>
                             {achievementsNote({
                                 achievementsEnabled: summary.achievementsEnabled,
-                                dungeonShowcaseRun: summary.dungeonShowcaseRun,
                                 practiceMode: summary.practiceMode,
                                 sharedTable: passAndPlayOutcome !== null
                             })}
@@ -378,8 +361,8 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             </div>
                             {/*
                               * Only the rows that change the next run. "Run it back" restated the
-                              * mode the buttons already offer, "Build recap" restated the relic and
-                              * mutator chips above, and "Local share" printed an export string.
+                              * mode the buttons already offer, "Build recap" restated the mutator
+                              * chips above, and "Local share" printed an export string.
                               */}
                             <div className={styles.nextRunGrid} data-testid="game-over-next-run-loop">
                                 {nextRunRows

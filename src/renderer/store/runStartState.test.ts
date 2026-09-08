@@ -23,7 +23,6 @@ describe('runStartState', () => {
             peekModeArmed: false,
             run,
             runStartSaveData: saveData,
-            shopReturnMode: null,
             tileSwapArmed: false,
             tileSwapFirstTileId: null,
             view: 'playing'

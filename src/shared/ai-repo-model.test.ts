@@ -55,7 +55,7 @@ describe('AI repository model', () => {
             new Set(['findable', 'inventory_item'])
         );
         expect(model.content.map((item) => item.id)).toEqual(
-            expect.arrayContaining(['content:findable.scout_glint', 'content:inventory_item.peek_charge'])
+            expect.arrayContaining(['content:findable.shard_spark', 'content:inventory_item.peek_charge'])
         );
         expect(model.mechanics.every((mechanic) => mechanic.evidence.length > 0 && mechanic.tests.length > 0)).toBe(true);
         expect(model.relationships.map((edge) => edge.kind)).toEqual(

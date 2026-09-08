@@ -52,9 +52,6 @@ const modeLabel = (summary: RunSummary): string => {
     if (summary.wildMenuRun) {
         return 'Wild Run';
     }
-    if (summary.dungeonShowcaseRun) {
-        return 'Dungeon Showcase';
-    }
     if (summary.practiceMode) {
         return 'Practice';
     }

@@ -1,9 +1,5 @@
-import type { BoardState, HazardTileKind, Tile } from '../../shared/contracts';
-import { getEffectivePrimaryExitLock } from '../../shared/board-inspection';
-import { EXIT_PAIR_KEY } from '../../shared/tile-identity';
-import { hazardTileColor } from './tileBoardThreatColors';
+import type { Tile } from '../../shared/contracts';
 import { tileTraitColor } from '../../shared/tile-trait-rules';
-import { ENEMY_HAZARD_COLORS, TRAP_STATE_COLORS } from './tileBoardThreatColors';
 import type { TileBoardPowerBackAccent } from './tileBoardRows';
 import {
     getTraitInteractionLaneAction,
@@ -11,12 +7,10 @@ import {
     type TraitInteractionLaneId
 } from '../copy/traitInteractionLaneMap';
 
-type DungeonUtilityReadabilityKind = 'exit' | 'lever' | 'lock' | 'shop';
 export type TileTraitRouteReadabilityTier =
     | 'none'
     | 'selected-followup'
     | 'route-target'
-    | 'perk-armed'
     | 'combo'
     | 'surge'
     | 'reward-hot'
@@ -41,7 +35,6 @@ export type TileTraitRouteReadabilityGlyph =
     | 'cashout-crown'
     | 'payoff-stack';
 interface TileTraitRouteReadabilityFlags {
-    isPerkArmedBack: boolean;
     isSelectedTraitFollowupBack: boolean;
     isTraitComboBack: boolean;
     isTraitComboSurgeBack: boolean;
@@ -50,56 +43,11 @@ interface TileTraitRouteReadabilityFlags {
     isTraitRouteTargetBack: boolean;
 }
 
-export const getDungeonUtilityReadabilityKind = (
-    tile: Pick<Tile, 'dungeonCardKind' | 'dungeonExitLockKind'> & Partial<Pick<Tile, 'id' | 'pairKey'>>,
-    board?: BoardState
-): DungeonUtilityReadabilityKind | null => {
-    const isPrimaryExitTile = tile.id != null && tile.id === board?.dungeonExitTileId;
-    if (tile.dungeonCardKind === 'exit' || tile.pairKey === EXIT_PAIR_KEY || isPrimaryExitTile) {
-        return 'exit';
-    }
-    if (tile.dungeonCardKind === 'lever') {
-        return 'lever';
-    }
-    if (tile.dungeonCardKind === 'shop') {
-        return 'shop';
-    }
-    const lockKind =
-        board && tile.id === board.dungeonExitTileId
-            ? getEffectivePrimaryExitLock({ board }).lockKind
-            : tile.dungeonExitLockKind;
-    if (
-        tile.dungeonCardKind === 'lock' ||
-        (lockKind != null && lockKind !== 'none')
-    ) {
-        return 'lock';
-    }
-    return null;
-};
-
-const dungeonUtilityReadabilityColor = (kind: DungeonUtilityReadabilityKind): string => {
-    if (kind === 'exit') {
-        return '#7bd88f';
-    }
-    if (kind === 'lever') {
-        return '#d4a03d';
-    }
-    if (kind === 'shop') {
-        return '#5ee0c8';
-    }
-    return '#f2d39d';
-};
-
 interface TileBoardReadabilityInput {
     destroyBlockedDecoyBack: boolean;
-    enemyOccupiedBack: boolean;
     faceUp: boolean;
-    hazardBackAccent: HazardTileKind | null;
     nonPickableBack: boolean;
-    objectiveBackAccent: boolean;
     powerBackAccent: TileBoardPowerBackAccent | null;
-    perkArmedBack?: boolean;
-    routeBackAccent: boolean;
     selectedTraitFollowupBack?: boolean;
     spotlightBountyOnBack: boolean;
     spotlightWardOnBack: boolean;
@@ -110,35 +58,22 @@ interface TileBoardReadabilityInput {
     traitRewardHotBack: boolean;
     traitRouteTargetBack: boolean;
     tile: Tile;
-    board?: BoardState;
 }
 
 interface TileBoardReadabilityState {
-    enemyOccupiedColor: string;
     faceReadabilityAccentColor: string;
     hiddenReadabilityAccentColor: string;
-    isArmedTrap: boolean;
-    isBossCard: boolean;
-    isExitCard: boolean;
-    isLeverCard: boolean;
-    isLockCard: boolean;
-    isRelicCard: boolean;
-    isResolvedTrap: boolean;
-    isRevealedTrap: boolean;
-    isShopCard: boolean;
+    isFindableCard: boolean;
     isSelectedCard: boolean;
     isSelectedTraitFollowupBack: boolean;
-    isPerkArmedBack: boolean;
     isTraitComboBack: boolean;
     isTraitComboSurgeBack: boolean;
     isTraitPayoffStackBack: boolean;
     isTraitRewardHotBack: boolean;
     isTraitRouteTargetBack: boolean;
-    isTrapCard: boolean;
     showFaceReadabilityMarker: boolean;
     showHiddenReadabilityRing: boolean;
     showHiddenReadabilityMarkers: boolean;
-    trapReadabilityColor: string;
     traitRouteReadabilityIntensity: TileTraitRouteReadabilityIntensity;
     traitRouteReadabilityTier: TileTraitRouteReadabilityTier;
     traitLaneReadabilityAction: string | null;
@@ -152,7 +87,7 @@ interface TileBoardReadabilityState {
  * One colour per interaction lane. Each lane also has a pattern (`getTraitLaneReadabilityPattern`),
  * which is what keeps colour from being the only channel — but the colours still have to hold up:
  * as shipped, guard and the fallback were dE 1.0 apart for a protanope, and tool and recall only
- * 11.5 apart in ordinary vision. Gated in `tileBoardThreatColors.test.ts` with the other palettes.
+ * 11.5 apart in ordinary vision. Gated in `tileBoardReadability.test.ts`.
  */
 export const TRAIT_LANE_COLORS = {
     block: '#9e6ffe',
@@ -214,7 +149,6 @@ export const getTraitRouteReadabilityTier = ({
     isTraitPayoffStackBack,
     isTraitRewardHotBack,
     isTraitRouteTargetBack,
-    isPerkArmedBack,
     isSelectedTraitFollowupBack
 }: TileTraitRouteReadabilityFlags): TileTraitRouteReadabilityTier => {
     if (isTraitPayoffStackBack) {
@@ -235,9 +169,6 @@ export const getTraitRouteReadabilityTier = ({
     if (isTraitRouteTargetBack) {
         return 'route-target';
     }
-    if (isPerkArmedBack) {
-        return 'perk-armed';
-    }
     return 'none';
 };
 
@@ -256,7 +187,7 @@ export const getTraitRouteReadabilityIntensity = (
     if (tier === 'combo' || tier === 'selected-followup') {
         return 'ready';
     }
-    if (tier === 'route-target' || tier === 'perk-armed') {
+    if (tier === 'route-target') {
         return 'setup';
     }
     return 'none';
@@ -277,7 +208,7 @@ export const getTraitRouteReadabilityBeatTier = (
     if (tier === 'combo') {
         return 'route';
     }
-    if (tier === 'route-target' || tier === 'perk-armed') {
+    if (tier === 'route-target') {
         return 'setup';
     }
     return null;
@@ -319,7 +250,7 @@ export const getTraitRouteReadabilityGlyph = (
     if (tier === 'combo') {
         return 'linked-route';
     }
-    if (tier === 'route-target' || tier === 'perk-armed') {
+    if (tier === 'route-target') {
         return 'prime-cross';
     }
     return 'none';
@@ -340,7 +271,7 @@ export const getTraitRouteReadabilityCadence = (
     if (tier === 'combo') {
         return 'route';
     }
-    if (tier === 'route-target' || tier === 'perk-armed') {
+    if (tier === 'route-target') {
         return 'prime';
     }
     return 'none';
@@ -394,14 +325,9 @@ export const getTraitRouteCadenceAction = (
 
 export const getTileBoardReadabilityState = ({
     destroyBlockedDecoyBack,
-    enemyOccupiedBack,
     faceUp,
-    hazardBackAccent,
     nonPickableBack,
-    objectiveBackAccent,
     powerBackAccent,
-    perkArmedBack = false,
-    routeBackAccent,
     selectedTraitFollowupBack = false,
     spotlightBountyOnBack,
     spotlightWardOnBack,
@@ -411,23 +337,11 @@ export const getTileBoardReadabilityState = ({
     traitLaneBack = null,
     traitRewardHotBack,
     traitRouteTargetBack,
-    tile,
-    board
+    tile
 }: TileBoardReadabilityInput): TileBoardReadabilityState => {
-    const isTrapCard = tile.dungeonCardKind === 'trap';
-    const isResolvedTrap = isTrapCard && tile.dungeonCardState === 'resolved';
-    const isRevealedTrap = isTrapCard && tile.dungeonCardState === 'revealed';
-    const isArmedTrap = isTrapCard && !isResolvedTrap && !isRevealedTrap;
-    const isBossCard = tile.dungeonBossId != null;
-    const dungeonUtilityKind = getDungeonUtilityReadabilityKind(tile, board);
-    const isExitCard = dungeonUtilityKind === 'exit';
-    const isLeverCard = dungeonUtilityKind === 'lever';
-    const isLockCard = dungeonUtilityKind === 'lock';
-    const isShopCard = dungeonUtilityKind === 'shop';
-    const isRelicCard = tile.findableKind != null;
+    const isFindableCard = tile.findableKind != null;
     const isSelectedCard = faceUp && tile.state === 'flipped';
     const isSelectedTraitFollowupBack = selectedTraitFollowupBack && !faceUp && tile.state === 'hidden';
-    const isPerkArmedBack = perkArmedBack && !faceUp && tile.state === 'hidden';
     const isTraitComboBack = traitComboBack && !faceUp && tile.state === 'hidden';
     const isTraitComboSurgeBack = traitComboSurgeBack && !faceUp && tile.state === 'hidden';
     const isTraitRewardHotBack = traitRewardHotBack && !faceUp && tile.state === 'hidden';
@@ -443,83 +357,44 @@ export const getTileBoardReadabilityState = ({
     const traitRouteReadabilityTier = getTraitRouteReadabilityTier({
         isTraitComboBack,
         isTraitComboSurgeBack,
-        isPerkArmedBack,
         isSelectedTraitFollowupBack,
         isTraitPayoffStackBack,
         isTraitRewardHotBack,
         isTraitRouteTargetBack
     });
     const traitRouteReadabilityIntensity = getTraitRouteReadabilityIntensity(traitRouteReadabilityTier);
-    // Same signal as a sentinel hazard, so it reads from the same gated entry rather than a copy.
-    const enemyOccupiedColor = ENEMY_HAZARD_COLORS.sentinel;
-    /*
-     * Safe, seen, and armed. This triple decides whether a player walks into a trap, and as shipped
-     * resolved and armed were dE 16 apart for a deuteranope — the safe one and the dangerous one.
-     * Gated with the other threat palettes in `tileBoardThreatColors.test.ts`.
-     */
-    const trapReadabilityColor = isResolvedTrap
-        ? TRAP_STATE_COLORS.resolved
-        : isRevealedTrap
-          ? TRAP_STATE_COLORS.revealed
-          : TRAP_STATE_COLORS.armed;
-    const faceReadabilityAccentColor = isBossCard
-        ? ENEMY_HAZARD_COLORS.boss
-        : dungeonUtilityKind
-          ? dungeonUtilityReadabilityColor(dungeonUtilityKind)
-          : isTrapCard
-            ? trapReadabilityColor
-            : isRelicCard
-              ? '#5ee0c8'
-              : tile.routeSpecialKind || tile.routeCardKind
-                ? '#59b4d9'
-                : tile.tileHazardKind
-                  ? hazardTileColor(tile.tileHazardKind)
+    const faceReadabilityAccentColor = isFindableCard
+        ? '#5ee0c8'
+        : tile.tileTraitKind
+          ? tileTraitColor(tile.tileTraitKind)
+          : '#f2d39d';
+    const hiddenReadabilityAccentColor = traitLaneReadabilityColor
+        ? traitLaneReadabilityColor
+        : isSelectedTraitFollowupBack
+          ? '#fff7c4'
+          : isTraitRewardHotBack
+            ? '#ffe48a'
+            : isTraitComboSurgeBack
+              ? '#ffd166'
+              : isTraitComboBack
+                ? '#f7f1c2'
+                : isTraitRouteTargetBack
+                  ? '#5dd6ff'
                   : tile.tileTraitKind
                     ? tileTraitColor(tile.tileTraitKind)
-                    : '#f2d39d';
-    const hiddenReadabilityAccentColor = enemyOccupiedBack
-        ? enemyOccupiedColor
-        : hazardBackAccent
-          ? hazardTileColor(hazardBackAccent)
-          : isBossCard
-            ? ENEMY_HAZARD_COLORS.boss
-            : dungeonUtilityKind
-              ? dungeonUtilityReadabilityColor(dungeonUtilityKind)
-              : isTrapCard
-                ? trapReadabilityColor
-                : objectiveBackAccent
-                  ? '#f2d39d'
-                  : routeBackAccent
-                    ? '#59b4d9'
-                    : traitLaneReadabilityColor
-                      ? traitLaneReadabilityColor
-                    : isSelectedTraitFollowupBack
-                      ? '#fff7c4'
-                    : isPerkArmedBack
-                      ? '#ffe48a'
-                    : isTraitRewardHotBack
-                      ? '#ffe48a'
-                      : isTraitComboSurgeBack
-                        ? '#ffd166'
-                    : isTraitComboBack
-                      ? '#f7f1c2'
-                      : isTraitRouteTargetBack
-                        ? '#5dd6ff'
-                    : tile.tileTraitKind
-                      ? tileTraitColor(tile.tileTraitKind)
-                      : powerBackAccent === 'destroy'
-                        ? '#d94848'
-                        : powerBackAccent === 'peek'
-                          ? '#59b4d9'
-                          : powerBackAccent === 'stray'
-                            ? '#d4a03d'
-                            : powerBackAccent === 'pin'
-                              ? '#e8c878'
-                              : powerBackAccent === 'swap'
-                                ? '#5dd6ff'
-                                : powerBackAccent === 'swapOrigin'
-                                  ? '#f2f9ff'
-                                  : '#b6a4bd';
+                    : powerBackAccent === 'destroy'
+                      ? '#d94848'
+                      : powerBackAccent === 'peek'
+                        ? '#59b4d9'
+                        : powerBackAccent === 'stray'
+                          ? '#d4a03d'
+                          : powerBackAccent === 'pin'
+                            ? '#e8c878'
+                            : powerBackAccent === 'swap'
+                              ? '#5dd6ff'
+                              : powerBackAccent === 'swapOrigin'
+                                ? '#f2f9ff'
+                                : '#b6a4bd';
     const showHiddenReadabilityRing =
         !faceUp &&
         tile.state === 'hidden' &&
@@ -527,20 +402,9 @@ export const getTileBoardReadabilityState = ({
             spotlightBountyOnBack ||
             destroyBlockedDecoyBack ||
             powerBackAccent != null ||
-            hazardBackAccent != null ||
-            routeBackAccent ||
-            objectiveBackAccent ||
-            enemyOccupiedBack ||
             nonPickableBack ||
-            isExitCard ||
-            isLockCard ||
-            isLeverCard ||
-            isShopCard ||
-            isTrapCard ||
-            isBossCard ||
-            isRelicCard ||
+            isFindableCard ||
             isSelectedTraitFollowupBack ||
-            isPerkArmedBack ||
             tile.tileTraitKind != null ||
             isTraitRewardHotBack ||
             isTraitComboSurgeBack ||
@@ -551,32 +415,12 @@ export const getTileBoardReadabilityState = ({
     const showFaceReadabilityMarker =
         faceUp &&
         tile.state !== 'matched' &&
-        (isBossCard ||
-            isExitCard ||
-            isLockCard ||
-            isLeverCard ||
-            isShopCard ||
-            isTrapCard ||
-            isRelicCard ||
-            tile.routeSpecialKind != null ||
-            tile.routeCardKind != null ||
-            tile.tileHazardKind != null ||
-            tile.tileTraitKind != null);
+        (isFindableCard || tile.tileTraitKind != null);
 
     return {
-        enemyOccupiedColor,
         faceReadabilityAccentColor,
         hiddenReadabilityAccentColor,
-        isArmedTrap,
-        isBossCard,
-        isExitCard,
-        isLeverCard,
-        isLockCard,
-        isPerkArmedBack,
-        isRelicCard,
-        isResolvedTrap,
-        isRevealedTrap,
-        isShopCard,
+        isFindableCard,
         isSelectedCard,
         isSelectedTraitFollowupBack,
         isTraitComboBack,
@@ -584,11 +428,9 @@ export const getTileBoardReadabilityState = ({
         isTraitPayoffStackBack,
         isTraitRewardHotBack,
         isTraitRouteTargetBack,
-        isTrapCard,
         showFaceReadabilityMarker,
         showHiddenReadabilityRing,
         showHiddenReadabilityMarkers: showHiddenReadabilityRing,
-        trapReadabilityColor,
         traitRouteReadabilityIntensity,
         traitRouteReadabilityTier,
         traitLaneReadabilityAction,

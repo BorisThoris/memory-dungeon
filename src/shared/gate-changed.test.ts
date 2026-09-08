@@ -465,7 +465,6 @@ describe('gate:changed selector', () => {
             'scripts/gate-softlock-seeds.ts',
             'scripts/seed-sweep-options.ts',
             'src/shared/playthrough-solver.ts',
-            'src/shared/run-progression-repair.ts',
             'src/shared/softlock-fairness.ts',
             'src/shared/board-generation.ts',
             'src/shared/board-build-rules.ts',
@@ -486,17 +485,6 @@ describe('gate:changed selector', () => {
 
 
 
-    it('selects expensive softlock gates for runtime progression repair changes', () => {
-        const payload = runGateChanged('src/shared/run-progression-repair.ts');
-        const gateIds = payload.gates.map((gate) => gate.id);
-
-        expect(gateIds).toEqual(expect.arrayContaining(['actionLoop', 'simHealth', 'simSoftlockSeeds', 'softlockFull']));
-        expect(
-            payload.reasons.some(
-                (reason) => reason.gateId === 'simSoftlockSeeds' && reason.file === 'src/shared/run-progression-repair.ts'
-            )
-        ).toBe(true);
-    });
 
     it('keeps core game rules on expensive gates without matching gameplay support files', () => {
         const corePayload = runGateChanged('src/shared/game.ts');

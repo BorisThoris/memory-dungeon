@@ -1451,3 +1451,26 @@ The interaction graph loses every relic, build, reward, perk, boss, exit, lock, 
 node (version 30); the repo model loses the relic, build-archetype and bonus-reward content
 registries; the topology audit and its gate are gone from `gate:systems`, and `gate:softlock-full`
 is the softlock stress sweep alone.
+
+### The second half: the shape goes with the modules
+
+The fields are gone from the contract. `RunState` loses the relic, shop, wager, route, side-room,
+dungeon-map, ledger, perk, key and enemy fields and the twenty-two hazard, scout, mimic, seal,
+gateway, altar, vessel and lattice counters; `BoardState` loses the exit, shop, key, lever, boss,
+objective and roaming-hazard fields; `Tile` loses the route, dungeon, hazard and scout marks;
+`LevelResult` and `RunSummary` lose the rows that reported them; `PlayerStatsPersisted` loses the
+relic pick counts and the shrine unlock. The command core loses the eleven commands and
+twenty-four events the layer issued, the twelve content definition sets it drafted from and every
+condition and effect that fed them; what the effects engine still resolves is one trait interaction
+and two pickups.
+
+Two pickups go with it. The ward spark armed a ward against hazard tiles and the scout glint
+revealed a hidden dungeon card; with neither on any floor, both paid nothing, and a pickup that
+pays nothing is a stop by the same rule that removed the cards. `FindableKind` is `shard_spark`
+and `score_glint`, weighted evenly. That is a generation change, so `GAME_RULES_VERSION` is 34.
+
+The save schema is 7. The upgrade is one-way and it is the normalizer: a schema-6 profile loads
+with its best score, achievements, run history and chain records intact and none of the removed
+fields; a journal entry naming a command this build no longer has fails its schema and is dropped;
+`save-data.test.ts` proves both. The save-field policy table is `save-176-v6`, with the run-local
+rows for the dungeon fields gone because the fields are.

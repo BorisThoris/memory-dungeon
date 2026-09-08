@@ -109,7 +109,6 @@ export interface GameplayInteractionGraphAudit {
     highLeverageMechanicIds: string[];
     playerVisibleWriteWithoutHudIds: string[];
     recommendations: string[];
-    shopCounterplayWithoutPriorityGuardIds: string[];
 }
 
 const nonEmptyStringSchema = z.string().min(1);
@@ -357,22 +356,15 @@ export const auditGameplayInteractionGraph = (
                 )
         )
         .map((mechanic) => mechanic.id);
-    // GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES is the right source of truth for fields
-    // that owe critical feedback, but it is narrower than the set of writes a player can
-    // see: switching to it alone silently dropped 11 entries (score, routeChoices,
-    // relicOffer, lastLevelResult, feedbackLines, sessionStats, nextFloor, triesDelta,
-    // interactionTags, achievementProgress, bossTrophyCacheOutcome), so the HUD audit
-    // stopped covering them and passed vacuously. Union both.
+    // The critical-feedback field sources are narrower than the writes a player can see, so
+    // the HUD audit unions them with the run-level fields the shell renders directly.
     const playerVisibleWrites = new Set<string>([
         ...Object.values(GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES),
         'achievementProgress',
-        'bossTrophyCacheOutcome',
         'feedbackLines',
         'interactionTags',
         'lastLevelResult',
         'nextFloor',
-        'relicOffer',
-        'routeChoices',
         'score',
         'sessionStats',
         'triesDelta'
@@ -390,20 +382,6 @@ export const auditGameplayInteractionGraph = (
                 !mechanic.evidence.some((path) => path.includes('GameplayHudBar') || path.includes('RunShell') || path.includes('gameScreenFeedback'))
         )
         .map((mechanic) => mechanic.id);
-    const shopCounterplayWithoutPriorityGuardIds = graph.mechanics
-        .filter((mechanic) => mechanic.kind === 'shop' && mechanic.role.includes('counterplay'))
-        .filter(
-            (mechanic) =>
-                !graph.edges.some(
-                    (edge) =>
-                        edge.source === mechanic.id &&
-                        edge.kind === 'priority_guard' &&
-                        (edge.target === 'lock.iron_key' ||
-                            edge.target === 'lock.typed_key' ||
-                            edge.target === 'boss.moving_patrol')
-                )
-        )
-        .map((mechanic) => mechanic.id);
     const generatedFloorCoverageGapIds = graph.mechanics
         .filter((mechanic) => ['boss', 'exit', 'hazard', 'lock', 'objective', 'trait'].includes(mechanic.kind))
         .filter(
@@ -418,7 +396,6 @@ export const auditGameplayInteractionGraph = (
         .map((mechanic) => mechanic.id);
     const recommendations: string[] = [
         'Keep trait routing tools available when the graph shows swap-created trait routes.',
-        'Keep boss and lock counterplay ahead of optional rewards in shop priority.',
         'Add a topology, softlock-fairness, or generator-contract case for every new blocking edge.',
         'Add renderer/HUD feedback evidence when a mechanic writes player-visible state.'
     ];
@@ -432,7 +409,6 @@ export const auditGameplayInteractionGraph = (
         generatedFloorCoverageGapIds,
         highLeverageMechanicIds,
         playerVisibleWriteWithoutHudIds,
-        recommendations,
-        shopCounterplayWithoutPriorityGuardIds
+        recommendations
     };
 };

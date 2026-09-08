@@ -8,22 +8,13 @@ export type GameplayFeedbackAudioCategory =
     | 'destroy-pair'
     | 'flash-pair'
     | 'gambit-commit'
-    | 'hazard-banish'
     | 'match-resolution'
     | 'peek'
-    | 'relic-pick'
-    | 'relic-service'
-    | 'reward-claim'
-    | 'shop-purchase'
-    | 'exit-activate'
     | 'floor-advance'
     | 'parasite'
-    | 'route-choice'
-    | 'side-room'
     | 'wild-match'
     | 'undo'
-    | 'curio-greet'
-    | 'wager';
+    | 'curio-greet';
 
 export interface GameplayFeedbackPresentation {
     audioCategory: GameplayFeedbackAudioCategory;
@@ -60,44 +51,17 @@ const audioCategoryFor = (
     if (feedback.source.kind === 'power' && feedback.cue === 'power.undo_resolve.used') {
         return 'undo';
     }
-    if (feedback.source.kind === 'reward_perk' && feedback.source.id === 'hazard_banish_per_floor') {
-        return 'hazard-banish';
-    }
-    if (feedback.source.kind === 'shop') {
-        return 'shop-purchase';
-    }
-    if (feedback.source.kind === 'system' && feedback.cue === 'dungeon.exit.activated') {
-        return 'exit-activate';
-    }
     if (feedback.source.kind === 'system' && feedback.source.id === 'score_parasite') {
         return 'parasite';
     }
     if (feedback.source.kind === 'system' && feedback.source.id === 'floor_advance') {
         return 'floor-advance';
     }
-    if (feedback.source.kind === 'system' && feedback.source.id === 'route_choice') {
-        return 'route-choice';
-    }
-    if (feedback.source.kind === 'system' && feedback.source.id === 'route_side_room') {
-        return 'side-room';
-    }
-    if (feedback.source.kind === 'system' && feedback.source.id === 'relic_offer') {
-        return 'relic-service';
-    }
     if (feedback.source.kind === 'system' && feedback.source.id === 'floor_curio') {
         return 'curio-greet';
     }
     if (feedback.source.kind === 'system' && feedback.source.id === 'wild_joker') {
         return 'wild-match';
-    }
-    if (feedback.source.kind === 'system' && feedback.cue === 'build.route_gambler.wager_accepted') {
-        return 'wager';
-    }
-    if (feedback.source.kind === 'relic' && feedback.cue.endsWith('.claimed')) {
-        return 'relic-pick';
-    }
-    if (feedback.source.kind === 'bonus_reward') {
-        return 'reward-claim';
     }
     return 'match-resolution';
 };

@@ -1,5 +1,5 @@
 import type { RunState } from '../../shared/contracts';
-import { runArray, runArrayCount, runFilteredStringArray } from '../../shared/run-array-guards';
+import { runArray, runArrayCount } from '../../shared/run-array-guards';
 import { runFiniteNumber, runNonNegativeInteger } from '../../shared/run-number-guards';
 import { TILE_TRAIT_COUNT_KINDS } from '../../shared/session-stats-rules';
 import { getChainMilestoneFeedback, type ChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
@@ -57,7 +57,6 @@ export const sfxGainFromSettings = (masterVolume: number, sfxVolume: number): nu
 type SfxCategory = 'flip' | 'match' | 'mismatch' | 'power' | 'pressure' | 'shuffle';
 type ChainOpportunityBeatSfxTier = 'cashout' | 'follow-up' | 'route' | 'setup' | 'surge';
 type MismatchRecoveryCrescendoSfxTier = 'break' | 'lost-reward' | 'recover' | 'risk' | 'trait-surge';
-export type RelicChoiceCrescendoSfxTier = 'cashout' | 'prime' | 'rare' | 'stack';
 type MatchPayoffSfxPayload = {
     cascadeCue?: { tier: 'chain' | 'combo' | 'reward' } | null;
     impactCue?: { label: string } | null;
@@ -261,8 +260,6 @@ const hasResolvedResourceReward = (before: RunState, after: RunState): boolean =
     return (
         runFiniteNumber(afterStats.comboShards) > runFiniteNumber(beforeStats.comboShards) ||
         runFiniteNumber(afterStats.guardTokens) > runFiniteNumber(beforeStats.guardTokens) ||
-        runFiniteNumber(after.shopGold) > runFiniteNumber(before.shopGold) ||
-        runFiniteNumber(after.safeHazardWardChargesThisFloor) > runFiniteNumber(before.safeHazardWardChargesThisFloor) ||
         runFiniteNumber(after.flashPairCharges) > runFiniteNumber(before.flashPairCharges)
     );
 };
@@ -282,13 +279,6 @@ const resolvedTraitRouteProgressCount = (before: RunState, after: RunState): num
         runArrayCount(after.traitRouteObjectiveTriggeredTagsThisFloor) - runArrayCount(before.traitRouteObjectiveTriggeredTagsThisFloor)
     );
 
-const resolvedRewardPerkProcCount = (before: RunState, after: RunState): number => {
-    const beforeTags = new Set(runFilteredStringArray(before.traitRouteObjectiveTriggeredTagsThisFloor));
-    return runFilteredStringArray(after.traitRouteObjectiveTriggeredTagsThisFloor).filter(
-        (tag) => tag.startsWith('reward-perk:') && !beforeTags.has(tag)
-    ).length;
-};
-
 const hasResolvedChainRewardCashout = (before: RunState, after: RunState): boolean => {
     if (runFiniteNumber(after.stats.currentStreak) < 3) {
         return false;
@@ -307,13 +297,11 @@ const resolvedRewardChannelCount = (
 ): number => {
     const chainRewardCashout = hasResolvedChainRewardCashout(before, after);
     const traitRouteChannels = Math.min(2, resolvedTraitRouteProgressCount(before, after));
-    const rewardPerkChannels = Math.min(2, resolvedRewardPerkProcCount(before, after));
     return traitRouteChannels + [
         (after.findablesClaimedThisFloor ?? 0) > (before.findablesClaimedThisFloor ?? 0),
         hasResolvedResourceReward(before, after) && !chainRewardCashout,
         chainRewardCashout,
-        Boolean(chainMilestone),
-        ...Array.from({ length: rewardPerkChannels }, () => true)
+        Boolean(chainMilestone)
     ].filter(Boolean).length;
 };
 
@@ -415,18 +403,6 @@ const playChunkBreakSfx = (gain: number, pairs: number, tier: ChainTier): void =
             });
         }, count * 55 + 40);
     }
-};
-
-/** A chunk that finished a warden: one low thud under the phrase, so the kill reads as weight. */
-const playChunkWardenThudSfx = (gain: number): void => {
-    playTone({
-        frequency: 110,
-        frequencyEnd: 58,
-        durationSec: 0.28,
-        gain: gain * 0.3,
-        type: 'sine',
-        category: 'match'
-    });
 };
 
 const playBrokenChainRewardLossSfx = (gain: number, chainDepthLost: number): void => {
@@ -538,32 +514,6 @@ export const playMismatchRecoveryCrescendoSfx = (
     });
 };
 
-export const playRelicChoiceCrescendoSfx = (
-    gain: number,
-    tier: RelicChoiceCrescendoSfxTier,
-    beatCount: number
-): void => {
-    if (gain <= 0.001) {
-        return;
-    }
-    const safeBeatCount = Math.max(2, Math.min(5, Math.floor(runFiniteNumber(beatCount))));
-    const profile: Record<RelicChoiceCrescendoSfxTier, { frequency: number; frequencyEnd: number; gainScale: number; type: OscillatorType }> = {
-        cashout: { frequency: 1180, frequencyEnd: 1780, gainScale: 0.18, type: 'sine' },
-        prime: { frequency: 720, frequencyEnd: 1080, gainScale: 0.13, type: 'triangle' },
-        rare: { frequency: 1320, frequencyEnd: 2360, gainScale: 0.22, type: 'triangle' },
-        stack: { frequency: 980, frequencyEnd: 1860, gainScale: 0.2, type: 'sine' }
-    };
-    const cue = profile[tier];
-    playTone({
-        frequency: cue.frequency + safeBeatCount * 20,
-        frequencyEnd: cue.frequencyEnd + safeBeatCount * 44,
-        durationSec: tier === 'rare' ? 0.16 : tier === 'stack' ? 0.13 : 0.085 + safeBeatCount * 0.01,
-        gain: gain * cue.gainScale,
-        type: cue.type,
-        category: 'match'
-    });
-};
-
 const playResolvedCascadeAccentSfx = (gain: number, chainDepth: number, rewardChannelCount: number): void => {
     if (chainDepth < 3 && rewardChannelCount < 2) {
         return;
@@ -622,17 +572,6 @@ const playTraitRouteAccentSfx = (gain: number, after: RunState, routeProgressCou
         durationSec: traitSurge ? 0.14 : after.traitRouteObjectiveCompletedThisFloor ? 0.12 : 0.08,
         gain: gain * (traitSurge ? 0.34 : after.traitRouteObjectiveCompletedThisFloor ? 0.3 : 0.22),
         type: traitSurge ? 'triangle' : 'sine',
-        category: 'match'
-    });
-};
-
-const playRewardPerkPopSfx = (gain: number, perkProcCount: number): void => {
-    playTone({
-        frequency: 2140 + Math.min(perkProcCount, 3) * 120,
-        frequencyEnd: 3380 + Math.min(perkProcCount, 3) * 180,
-        durationSec: perkProcCount >= 2 ? 0.13 : 0.095,
-        gain: gain * (perkProcCount >= 2 ? 0.3 : 0.23),
-        type: 'triangle',
         category: 'match'
     });
 };
@@ -731,11 +670,6 @@ export const playResolveSfx = (before: RunState, after: RunState, gain: number):
         const chunkPairs = (after.chunkPairsBrokenThisFloor ?? 0) - (before.chunkPairsBrokenThisFloor ?? 0);
         if (chunkPairs > 0) {
             playChunkBreakSfx(gain, chunkPairs, runChainTier(after));
-            const wardensDown =
-                (after.dungeonEnemiesDefeatedThisFloor ?? 0) - (before.dungeonEnemiesDefeatedThisFloor ?? 0);
-            if (wardensDown > 0) {
-                playChunkWardenThudSfx(gain);
-            }
         }
         if ((after.findablesClaimedThisFloor ?? 0) > (before.findablesClaimedThisFloor ?? 0)) {
             playTone({
@@ -766,10 +700,6 @@ export const playResolveSfx = (before: RunState, after: RunState, gain: number):
         const traitRouteProgressCount = resolvedTraitRouteProgressCount(before, after);
         if (traitRouteProgressCount > 0) {
             playTraitRouteAccentSfx(gain, after, traitRouteProgressCount);
-        }
-        const rewardPerkProcCount = resolvedRewardPerkProcCount(before, after);
-        if (rewardPerkProcCount > 0) {
-            playRewardPerkPopSfx(gain, rewardPerkProcCount);
         }
         const rewardChannelCount = resolvedRewardChannelCount(before, after, chainMilestone);
         playResolvedCascadeAccentSfx(gain, Math.max(1, Math.floor(runFiniteNumber(after.stats.currentStreak))), rewardChannelCount);
@@ -931,20 +861,6 @@ export const playFloorClearSfx = (gain: number): void => {
     }, 0);
 };
 
-export const playRelicOfferOpenSfx = (gain: number): void => {
-    if (tryPlaySampled('relic-offer-open', gain)) {
-        return;
-    }
-    playTone({
-        frequency: 620,
-        frequencyEnd: 960,
-        durationSec: 0.18,
-        gain: gain * 0.78,
-        type: 'triangle',
-        category: 'power'
-    });
-};
-
 export const playCountdownPressureSfx = (gain: number): void => {
     if (tryPlaySampled('countdown-pressure', gain)) {
         return;
@@ -959,30 +875,3 @@ export const playCountdownPressureSfx = (gain: number): void => {
     });
 };
 
-export const playRelicPickSfx = (gain: number): void => {
-    if (tryPlaySampled('relic-pick', gain)) {
-        return;
-    }
-    playTone({
-        frequency: 520,
-        frequencyEnd: 920,
-        durationSec: 0.16,
-        gain: gain * 0.86,
-        type: 'triangle',
-        category: 'power'
-    });
-};
-
-export const playWagerArmSfx = (gain: number): void => {
-    if (tryPlaySampled('wager-arm', gain)) {
-        return;
-    }
-    playTone({
-        frequency: 460,
-        frequencyEnd: 1180,
-        durationSec: 0.14,
-        gain: gain * 0.82,
-        type: 'sawtooth',
-        category: 'power'
-    });
-};

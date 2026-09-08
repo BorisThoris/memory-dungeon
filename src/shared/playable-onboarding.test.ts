@@ -187,7 +187,7 @@ describe('REG-026 playable onboarding', () => {
         for (const tile of base.board!.tiles) {
             pairs.set(tile.pairKey, [...(pairs.get(tile.pairKey) ?? []), tile.id]);
         }
-        const [hazardPairKey, findablePairKey, safePairKey] = [...pairs.entries()]
+        const [wardPairKey, findablePairKey, safePairKey] = [...pairs.entries()]
             .filter(([pairKey, ids]) => ids.length === 2 && !pairKey.startsWith('__'))
             .slice(0, 3);
         const run = {
@@ -195,12 +195,9 @@ describe('REG-026 playable onboarding', () => {
             board: {
                 ...base.board!,
                 cursedPairKey: findablePairKey![0],
+                wardPairKey: wardPairKey![0],
                 tiles: base.board!.tiles.map((tile) =>
-                    hazardPairKey![1].includes(tile.id)
-                        ? { ...tile, tileHazardKind: 'shuffle_snare' as const }
-                        : findablePairKey![1].includes(tile.id)
-                          ? { ...tile, findableKind: 'score_glint' as const }
-                          : tile
+                    findablePairKey![1].includes(tile.id) ? { ...tile, findableKind: 'score_glint' as const } : tile
                 )
             }
         };

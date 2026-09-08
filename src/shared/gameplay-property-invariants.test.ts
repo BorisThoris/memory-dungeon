@@ -57,8 +57,6 @@ const expectRunResourceBounds = (run: RunState): void => {
     expect(run.peekCharges).toBeGreaterThanOrEqual(0);
     expect(run.flashPairCharges).toBeGreaterThanOrEqual(0);
     expect(run.strayRemoveCharges).toBeGreaterThanOrEqual(0);
-    expect(run.shopGold).toBeGreaterThanOrEqual(0);
-    expect(run.relicFavorProgress).toBeGreaterThanOrEqual(0);
 };
 
 const expectFlippedTileReferencesExist = (run: RunState): void => {
@@ -111,8 +109,6 @@ describe('gameplay property invariants', () => {
                 expect(run.lives).toBeGreaterThan(0);
                 expect(run.shuffleCharges).toBeGreaterThanOrEqual(0);
                 expect(run.destroyPairCharges).toBeGreaterThanOrEqual(0);
-                expect(run.shopGold).toBeGreaterThanOrEqual(0);
-                expect(run.relicFavorProgress).toBeGreaterThanOrEqual(0);
             }),
             { numRuns: propertyRuns }
         );

@@ -8,10 +8,7 @@ describe('meta progression run delta feedback', () => {
         before.playerStats = {
             ...before.playerStats!,
             sharpFloors: 6,
-            bestFloorNoPowers: 4,
-            relicPickCounts: {
-                extra_shuffle_charge: 1
-            }
+            bestFloorNoPowers: 4
         };
 
         const after = createDefaultSaveData();
@@ -22,11 +19,7 @@ describe('meta progression run delta feedback', () => {
         after.playerStats = {
             ...after.playerStats!,
             sharpFloors: 7,
-            bestFloorNoPowers: 5,
-            relicPickCounts: {
-                extra_shuffle_charge: 2
-            },
-            relicShrineExtraPickUnlocked: false
+            bestFloorNoPowers: 5
         };
 
         const delta = buildMetaProgressionRunDelta(before, after);

@@ -5,7 +5,6 @@ import {
     type FloorTag,
     type MutatorId,
     type RunState,
-    type RouteNodeType,
     type Tile
 } from './contracts';
 import { isSingletonUtilityPairKey } from './tile-identity';
@@ -72,9 +71,6 @@ const COVERAGE_KEYS: readonly SoftlockContractCoverageKey[] = [
     'traitRouteObjectives',
     'finalPairStates'
 ];
-
-const ROUTE_TYPES: readonly RouteNodeType[] = ['safe', 'greed', 'mystery'];
-const DEFAULT_ROUTE_TYPE: RouteNodeType = 'safe';
 
 const coverageTemplate = (): Record<SoftlockContractCoverageKey, number> =>
     Object.fromEntries(COVERAGE_KEYS.map((key) => [key, 0])) as Record<SoftlockContractCoverageKey, number>;
@@ -368,23 +364,6 @@ export const DEFAULT_SOFTLOCK_GENERATOR_SCENARIOS: readonly SoftlockGeneratorSce
                 ...getScheduledSoftlockFloorOptions(floor),
                 cycleFloor: floor
             })
-    },
-    {
-        id: 'route_pressure',
-        label: 'Route-card pressure floors',
-        seeds: [70_101, 70_202],
-        floors: [2, 4, 6, 8],
-        optionsForFloor: ({ seed, floor }) => {
-            const routeType = ROUTE_TYPES[(seed + floor) % ROUTE_TYPES.length] ?? DEFAULT_ROUTE_TYPE;
-            return scenarioOptions(seed, floor, {
-                routeCardPlan: {
-                    choiceId: `contract:${routeType}:${seed}:${floor}`,
-                    routeType,
-                    sourceLevel: Math.max(1, floor - 1),
-                    targetLevel: floor
-                }
-            });
-        }
     },
     {
         id: 'boss_pressure',

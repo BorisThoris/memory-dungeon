@@ -94,50 +94,6 @@ export const getBoardTurnPickupAnnouncement = (
     };
 };
 
-/**
- * Announcements for the remaining event-reported channels. Each fires on its own
- * before/after pair, so a turn that both scouts and claims reports both, and a turn that
- * changes neither stays silent - the snapshot refs these replace could only track one
- * counter per floor and lost interleaved events.
- */
-const counterAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): string[] => {
-    const {
-        scoutsBefore,
-        scoutsAfter,
-        mimicCacheBefore,
-        mimicCacheAfter,
-        routeSpecialsBefore,
-        routeSpecialsAfter,
-        safeHazardWardsUsedBefore,
-        safeHazardWardsUsedAfter
-    } = turnEvent.announcement;
-    const lines: string[] = [];
-    if (scoutsAfter > scoutsBefore) {
-        lines.push('Lantern Ward scouted a hidden threat.');
-    }
-    if (turnEvent.announcement.omenScoutsAfter > turnEvent.announcement.omenScoutsBefore) {
-        lines.push('Omen Seal revealed hidden danger.');
-    }
-    // A bite and a claim are mutually exclusive readings of the same cache, and a bite
-    // the guard absorbed reads differently from one that cost a life.
-    if (turnEvent.announcement.mimicCacheBitesAfter > turnEvent.announcement.mimicCacheBitesBefore) {
-        lines.push(
-            turnEvent.announcement.mimicCacheGuardBitesAfter > turnEvent.announcement.mimicCacheGuardBitesBefore
-                ? 'Mimic Cache bit. Guard absorbed the hit.'
-                : 'Mimic Cache bit. Life lost; reduced loot claimed.'
-        );
-    } else if (mimicCacheAfter > mimicCacheBefore) {
-        lines.push('Mimic Cache controlled. Full loot claimed.');
-    }
-    if (routeSpecialsAfter < routeSpecialsBefore) {
-        lines.push('Route special resolved.');
-    }
-    if (safeHazardWardsUsedAfter > safeHazardWardsUsedBefore) {
-        lines.push('Guard Cache ward blocked a hazard.');
-    }
-    return lines;
-};
-
 export interface BoardTurnAnnouncementResult {
     lines: string[];
     dedupeKey: string;
@@ -196,7 +152,6 @@ export const buildBoardTurnAnnouncement = (
          */
         ...chunkAnnouncementLines(turnEvent),
         ...magpieAnnouncementLines(turnEvent),
-        ...counterAnnouncementLines(turnEvent),
         getBoardTurnPickupAnnouncement(turnEvent)?.text ?? null
     ].filter((line): line is string => line != null && line.length > 0);
 

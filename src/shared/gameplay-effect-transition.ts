@@ -1,7 +1,6 @@
-import type { RewardPerkId, RunState } from './contracts';
+import type { RunState } from './contracts';
 import {
     GAMEPLAY_CORE_SCHEMA_VERSION,
-    GAMEPLAY_REWARD_PERK_IDS,
     gameplayEventSchema,
     type GameplayCondition,
     type GameplayContentDefinition,
@@ -27,18 +26,6 @@ export interface GameplayDefinitionTransitionResult {
     accepted: boolean;
     rejectionReason: string | null;
 }
-
-const gameplayRewardPerkIds = new Set<RewardPerkId>(GAMEPLAY_REWARD_PERK_IDS);
-
-export const normalizeGameplayRewardPerkIds = (value: unknown): RewardPerkId[] =>
-    Array.isArray(value)
-        ? value.filter((id): id is RewardPerkId => typeof id === 'string' && gameplayRewardPerkIds.has(id as RewardPerkId))
-        : [];
-
-export const hasGameplayRewardPerk = (
-    run: Pick<RunState, 'rewardPerkIds'>,
-    perkId: RewardPerkId
-): boolean => normalizeGameplayRewardPerkIds(run.rewardPerkIds).includes(perkId);
 
 export const makeGameplayEventWriter = (
     commandId: string,
@@ -70,12 +57,6 @@ const conditionFailure = (
             return getRunInventoryItemQuantity(run, condition.itemId) >= condition.amount
                 ? null
                 : `${condition.itemId} is below ${condition.amount}`;
-        case 'reward_perk.active':
-            return hasGameplayRewardPerk(run, condition.perkId) ? null : `${condition.perkId} is not active`;
-        case 'relic.active':
-            return Array.isArray(run.relicIds) && run.relicIds.includes(condition.relicId)
-                ? null
-                : `${condition.relicId} is not active`;
         case 'trait.matched':
             return facts.matchedTraits.includes(condition.trait) ? null : `${condition.trait} was not matched`;
         case 'trait.adjacent':
@@ -92,12 +73,6 @@ const conditionFailure = (
             return runNonNegativeInteger(run.matchResolutionsThisFloor) === condition.amount
                 ? null
                 : `floor match resolutions are ${runNonNegativeInteger(run.matchResolutionsThisFloor)}, expected ${condition.amount}`;
-        case 'boss_trophy.claimed':
-            return facts.bossTrophyClaimed ? null : 'boss trophy was not claimed';
-        case 'risk_wager.outcome_is':
-            return facts.riskWagerOutcome === condition.outcome
-                ? null
-                : `risk wager outcome is ${facts.riskWagerOutcome}, expected ${condition.outcome}`;
         case 'featured_objective.completed':
             return facts.featuredObjectiveCompleted ? null : 'featured objective was not completed';
         case 'score_parasite.active':
@@ -209,35 +184,9 @@ export const applyGameplayDefinitionTransition = (
                 }
                 break;
             }
-            case 'reward_perk.grant': {
-                const rewardPerkIds = normalizeGameplayRewardPerkIds(nextRun.rewardPerkIds);
-                const newlyGranted = !rewardPerkIds.includes(effect.perkId);
-                if (newlyGranted) {
-                    nextRun = { ...nextRun, rewardPerkIds: [...rewardPerkIds, effect.perkId] };
-                }
-                writeEvent({ type: 'reward_perk.granted', perkId: effect.perkId, newlyGranted });
-                break;
-            }
             case 'combo_shard.request':
                 writeEvent({ type: 'combo_shard.requested', amount: effect.amount });
                 break;
-            case 'safe_hazard_ward.request':
-                writeEvent({ type: 'safe_hazard_ward.requested', amount: effect.amount });
-                break;
-            case 'currency.grant': {
-                const before = runNonNegativeInteger(nextRun.shopGold);
-                const after = before + effect.amount;
-                nextRun = { ...nextRun, shopGold: after };
-                writeEvent({
-                    type: 'currency.changed',
-                    currency: effect.currency,
-                    requested: effect.amount,
-                    applied: after - before,
-                    before,
-                    after
-                });
-                break;
-            }
             case 'score.grant': {
                 const stats = normalizeSessionStats(nextRun.stats);
                 const totalBefore = runNonNegativeInteger(stats.totalScore);
@@ -264,73 +213,6 @@ export const applyGameplayDefinitionTransition = (
             case 'score.request':
                 writeEvent({ type: 'score.requested', reason: effect.reason, amount: effect.amount });
                 break;
-            case 'bonus_relic_pick.grant': {
-                const before = runNonNegativeInteger(nextRun.bonusRelicPicksNextOffer);
-                const after = before + effect.amount;
-                nextRun = { ...nextRun, bonusRelicPicksNextOffer: after };
-                writeEvent({
-                    type: 'bonus_relic_pick.changed',
-                    requested: effect.amount,
-                    applied: after - before,
-                    before,
-                    after
-                });
-                break;
-            }
-            case 'relic_favor.request':
-                writeEvent({ type: 'relic_favor.requested', reason: effect.reason, amount: effect.amount });
-                break;
-            case 'featured_streak_floor.request':
-                writeEvent({ type: 'featured_streak_floor.requested', reason: effect.reason, amount: effect.amount });
-                break;
-            case 'parasite_relief.request':
-                writeEvent({ type: 'parasite_relief.requested', reason: effect.reason, amount: effect.amount });
-                break;
-            case 'parasite_ward.grant': {
-                const before = runNonNegativeInteger(nextRun.parasiteWardRemaining);
-                const after = before + effect.amount;
-                nextRun = { ...nextRun, parasiteWardRemaining: after };
-                writeEvent({
-                    type: 'parasite_ward.changed',
-                    requested: effect.amount,
-                    applied: after - before,
-                    before,
-                    after
-                });
-                break;
-            }
-            case 'relic_favor.grant': {
-                /*
-                 * Favor banked picks for a relic draft that no longer opens (Gen 175). The grant
-                 * is recorded so an old journal still replays, and it moves nothing.
-                 */
-                const progress = runNonNegativeInteger(nextRun.relicFavorProgress);
-                const bonusPicks = runNonNegativeInteger(nextRun.bonusRelicPicksNextOffer);
-                const favorBonusPicks = runNonNegativeInteger(nextRun.favorBonusRelicPicksNextOffer);
-                writeEvent({
-                    type: 'relic_favor.changed',
-                    requested: effect.amount,
-                    progressBefore: progress,
-                    progressAfter: progress,
-                    bonusPicksBefore: bonusPicks,
-                    bonusPicksAfter: bonusPicks,
-                    favorBonusPicksBefore: favorBonusPicks,
-                    favorBonusPicksAfter: favorBonusPicks
-                });
-                break;
-            }
-            case 'pin_capacity.request':
-                writeEvent({ type: 'pin_capacity.requested', amount: effect.amount });
-                break;
-            case 'scout_reveal.request':
-                writeEvent({ type: 'scout_reveal.requested', amount: effect.amount });
-                break;
-            case 'free_shuffle.grant': {
-                const before = nextRun.freeShuffleThisFloor === true;
-                nextRun = { ...nextRun, freeShuffleThisFloor: true };
-                writeEvent({ type: 'free_shuffle.changed', before, after: true });
-                break;
-            }
             case 'feedback.emit':
                 writeEvent({
                     type: 'feedback.requested',

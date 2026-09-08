@@ -3,8 +3,7 @@ import type {
     FloorArchetypeId,
     FloorTag,
     GameMode,
-    MutatorId,
-    RouteNodeType
+    MutatorId
 } from './contracts';
 import { createMulberry32, hashStringToSeed } from './rng';
 import { runNonNegativeIntegerWithFallback } from './run-number-guards';
@@ -227,7 +226,6 @@ export interface FloorArchetypeProgressionRow {
     featuredObjectiveId: FeaturedObjectiveId;
     mutators: readonly MutatorId[];
     role: FloorArchetypePressureRole;
-    routeAffinity: RouteNodeType;
     budgetExpectation: string;
     softlockInvariant: string;
     actId: ChapterActId;
@@ -448,16 +446,6 @@ const roleForArchetype = (entry: FloorScheduleEntry): FloorArchetypePressureRole
     return 'pressure';
 };
 
-const routeAffinityForArchetype = (entry: FloorScheduleEntry): RouteNodeType => {
-    if (entry.floorArchetypeId === 'treasure_gallery' || entry.floorArchetypeId === 'script_room') {
-        return 'mystery';
-    }
-    if (entry.floorArchetypeId === 'breather' || entry.floorArchetypeId === 'survey_hall') {
-        return 'safe';
-    }
-    return 'greed';
-};
-
 const budgetExpectationForRole = (role: FloorArchetypePressureRole): string => {
     switch (role) {
         case 'baseline':
@@ -497,7 +485,6 @@ const progressionRowForEntry = (entry: FloorScheduleEntry): FloorArchetypeProgre
         featuredObjectiveId: entry.featuredObjectiveId,
         mutators: [...entry.mutators],
         role,
-        routeAffinity: routeAffinityForArchetype(entry),
         budgetExpectation: budgetExpectationForRole(role),
         softlockInvariant:
             'inspectBoardFairness and inspectDungeonBoardTopology must report completion, lock, and objective routes for generated samples.',

@@ -78,7 +78,6 @@ const SAVE_CONTRACTS = new Set(['SaveData', 'Settings', 'PlayerStatsPersisted', 
 const RULE_CONTRACTS = new Set([
     'RunState',
     'RunModeDefinition',
-    'RelicId',
     'MutatorId',
     'FindableKind',
     'Tile',

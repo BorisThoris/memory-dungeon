@@ -6,66 +6,41 @@ const baseInput = (run = createNewRun(0)) => ({
     run,
     cursedMatchedEarly: false,
     findablesClaimedDelta: 0,
-    findableSafeHazardWardGain: 0,
     chunkPairsBroken: 0,
     chunkScore: 0,
     chunkTier: 'none' as const,
     chainAfter: 0,
     chunkDroppedPairs: 0,
     chunkMomentumPairs: 0,
-    chunkRippleWaves: 0,
-    anchorSealUsed: false
+    chunkRippleWaves: 0
 });
 
 describe('resolveTurnMatchProgress', () => {
-    it('increments match and findable counters and caps the findable ward at one', () => {
+    it('increments match and findable counters', () => {
         const run = {
             ...createNewRun(0),
             matchResolutionsThisFloor: 2,
-            findablesClaimedThisFloor: 1,
-            safeHazardWardChargesThisFloor: 0
+            findablesClaimedThisFloor: 1
         };
 
         const result = resolveTurnMatchProgress({
             ...baseInput(run),
             cursedMatchedEarly: true,
-            findablesClaimedDelta: 2,
-            findableSafeHazardWardGain: 1
+            findablesClaimedDelta: 2
         });
 
         expect(result.cursedMatchedEarlyThisFloor).toBe(true);
         expect(result.matchResolutionsThisFloor).toBe(3);
         expect(result.findablesClaimedThisFloor).toBe(3);
-        expect(result.safeHazardWardChargesThisFloor).toBe(1);
-        expect(resolveTurnMatchProgress({ ...baseInput(run), findableSafeHazardWardGain: 3 }).safeHazardWardChargesThisFloor).toBe(1);
     });
 
-    it('spends an anchor seal charge on the turn the spotlight held', () => {
-        const run = { ...createNewRun(0), anchorSealChargesThisFloor: 1, anchorSealUsesThisFloor: 2 };
 
-        const result = resolveTurnMatchProgress({ ...baseInput(run), anchorSealUsed: true });
-
-        expect(result.anchorSealChargesThisFloor).toBe(0);
-        expect(result.anchorSealUsesThisFloor).toBe(3);
-    });
-
-    it('does not let anchor charges go below zero', () => {
-        const result = resolveTurnMatchProgress({
-            ...baseInput({ ...createNewRun(0), anchorSealChargesThisFloor: 0 }),
-            anchorSealUsed: true
-        });
-
-        expect(result.anchorSealChargesThisFloor).toBe(0);
-    });
 
     it('normalizes malformed persisted counters and match progress deltas', () => {
         const run = {
             ...createNewRun(0),
             matchResolutionsThisFloor: Number.NaN,
             findablesClaimedThisFloor: -2,
-            safeHazardWardChargesThisFloor: Number.POSITIVE_INFINITY,
-            anchorSealChargesThisFloor: Number.NaN,
-            anchorSealUsesThisFloor: -2,
             chunkBreaksThisFloor: Number.NaN,
             chunkPairsBrokenThisFloor: Number.POSITIVE_INFINITY,
             chunkScoreThisFloor: -3,
@@ -77,20 +52,15 @@ describe('resolveTurnMatchProgress', () => {
         const result = resolveTurnMatchProgress({
             ...baseInput(run),
             findablesClaimedDelta: 2.9,
-            findableSafeHazardWardGain: 1.9,
             chunkPairsBroken: 2.9,
             chunkScore: 10.5,
             chunkMomentumPairs: 1.5,
             chunkRippleWaves: 2.2,
-            chainAfter: 3.7,
-            anchorSealUsed: true
+            chainAfter: 3.7
         });
 
         expect(result.matchResolutionsThisFloor).toBe(1);
         expect(result.findablesClaimedThisFloor).toBe(2);
-        expect(result.safeHazardWardChargesThisFloor).toBe(1);
-        expect(result.anchorSealChargesThisFloor).toBe(0);
-        expect(result.anchorSealUsesThisFloor).toBe(1);
         expect(result.chunkBreaksThisFloor).toBe(1);
         expect(result.chunkPairsBrokenThisFloor).toBe(2);
         expect(result.chunkScoreThisFloor).toBe(10);

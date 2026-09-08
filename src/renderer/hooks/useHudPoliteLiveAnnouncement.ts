@@ -68,7 +68,6 @@ interface HudPoliteLiveAnnouncementInput {
     gauntletActive: boolean;
     scoreParasiteActive: boolean;
     parasiteFloors: number;
-    parasiteWardRemaining: number;
     lives: number;
     guardTokens: number;
     comboShards: number;
@@ -94,9 +93,6 @@ interface HudPoliteLiveAnnouncementInput {
     gambitOpportunityFlippedIds: readonly string[] | null;
     /** Motion setting for hazard effect announcement copy. */
     reduceMotion?: boolean;
-    dungeonEnemiesDefeatedThisFloor?: number;
-    enemyHazardHitsThisFloor?: number;
-    enemyHazardsDefeatedThisFloor?: number;
 }
 
 interface UseHudPoliteLiveAnnouncementResult {
@@ -128,7 +124,6 @@ export const useHudPoliteLiveAnnouncement = ({
     gauntletActive,
     scoreParasiteActive,
     parasiteFloors,
-    parasiteWardRemaining,
     lives,
     guardTokens,
     comboShards,
@@ -147,10 +142,7 @@ export const useHudPoliteLiveAnnouncement = ({
     forgottenTileCountThisFloor = 0,
     gambitThirdPickActive,
     gambitOpportunityFlippedIds,
-    reduceMotion = false,
-    dungeonEnemiesDefeatedThisFloor = 0,
-    enemyHazardHitsThisFloor = 0,
-    enemyHazardsDefeatedThisFloor = 0
+    reduceMotion = false
 }: HudPoliteLiveAnnouncementInput): UseHudPoliteLiveAnnouncementResult => {
     const [message, setMessage] = useState('');
     const [messagePriority, setMessagePriority] = useState<HudAnnouncePriority>('info');
@@ -159,7 +151,6 @@ export const useHudPoliteLiveAnnouncement = ({
         level: number;
         parasiteFloors: number;
         lives: number;
-        ward: number;
     } | null>(null);
     const actionSnapRef = useRef<{
         level: number;
@@ -177,9 +168,6 @@ export const useHudPoliteLiveAnnouncement = ({
         recallMistakes: number;
         recallBonusScore: number;
         forgottenTileCount: number;
-        dungeonEnemiesDefeated: number;
-        enemyHazardHits: number;
-        enemyHazardsDefeated: number;
     } | null>(null);
     const announcedGameplayFeedbackEventIdsRef = useRef<Set<string>>(new Set());
     // Read inside the effects rather than during render: whether a feedback event has
@@ -357,8 +345,7 @@ export const useHudPoliteLiveAnnouncement = ({
         const nextSnap = {
             level: boardLevel,
             parasiteFloors,
-            lives,
-            ward: parasiteWardRemaining
+            lives
         };
 
         if (snap === null) {
@@ -380,14 +367,9 @@ export const useHudPoliteLiveAnnouncement = ({
                         dedupeKey: 'parasite:drain',
                         priority: 'info'
                     });
-                } else if (parasiteWardRemaining < snap.ward) {
-                    queuePoliteAnnouncement('Score parasite drain absorbed by ward.', {
-                        dedupeKey: 'parasite:ward',
-                        priority: 'info'
-                    });
                 }
             } else if (parasiteFloors === 3 && snap.parasiteFloors === 2) {
-                queuePoliteAnnouncement('Score parasite: next cleared floor triggers the drain unless warded.', {
+                queuePoliteAnnouncement('Score parasite: next cleared floor triggers the drain.', {
                     dedupeKey: 'parasite:warn',
                     priority: 'info'
                 });
@@ -395,7 +377,7 @@ export const useHudPoliteLiveAnnouncement = ({
         }
 
         parasiteSnapRef.current = nextSnap;
-    }, [boardLevel, lives, parasiteFloors, parasiteWardRemaining, queuePoliteAnnouncement, scoreParasiteActive]);
+    }, [boardLevel, lives, parasiteFloors, queuePoliteAnnouncement, scoreParasiteActive]);
 
     // Pickups are announced from the resolved-turn event rather than by diffing the
     // previous board's tiles against the current ones. The core already reports which
@@ -438,10 +420,7 @@ export const useHudPoliteLiveAnnouncement = ({
             recallMatches: recallMatchesThisFloor,
             recallMistakes: recallMistakesThisFloor,
             recallBonusScore: recallBonusScoreThisFloor,
-            forgottenTileCount: forgottenTileCountThisFloor,
-            dungeonEnemiesDefeated: dungeonEnemiesDefeatedThisFloor,
-            enemyHazardHits: enemyHazardHitsThisFloor,
-            enemyHazardsDefeated: enemyHazardsDefeatedThisFloor
+            forgottenTileCount: forgottenTileCountThisFloor
         };
         const snap = actionSnapRef.current;
 
@@ -478,9 +457,6 @@ export const useHudPoliteLiveAnnouncement = ({
         const recallMistakeDelta = recallMistakesThisFloor - snap.recallMistakes;
         const recallBonusDelta = recallBonusScoreThisFloor - snap.recallBonusScore;
         const forgottenDelta = forgottenTileCountThisFloor - snap.forgottenTileCount;
-        const dungeonEnemyDefeatDelta = dungeonEnemiesDefeatedThisFloor - snap.dungeonEnemiesDefeated;
-        const enemyHazardHitDelta = enemyHazardHitsThisFloor - snap.enemyHazardHits;
-        const enemyHazardDefeatDelta = enemyHazardsDefeatedThisFloor - snap.enemyHazardsDefeated;
         const recallFocusLost = normalizedRecallFocusValue < snap.recallFocus;
 
         if (lifeDelta < 0) {
@@ -495,14 +471,6 @@ export const useHudPoliteLiveAnnouncement = ({
 
         if (mismatchDelta > 0 && lifeDelta >= 0 && guardDelta >= 0) {
             lines.push('No match. Recover with a safe match. Chain reset.');
-        }
-
-        if (enemyHazardHitDelta > 0) {
-            lines.push(
-                enemyHazardHitDelta === 1
-                    ? 'Moving enemy contact.'
-                    : `${enemyHazardHitDelta} moving enemy contacts.`
-            );
         }
 
         if (recallMistakeDelta > 0) {
@@ -551,20 +519,6 @@ export const useHudPoliteLiveAnnouncement = ({
                 const settledCount = Math.abs(forgottenDelta);
                 lines.push(
                     `${settledCount} ${settledCount === 1 ? 'unstable tile memory' : 'unstable tile memories'} stabilized.`
-                );
-            }
-            if (enemyHazardDefeatDelta > 0) {
-                lines.push(
-                    enemyHazardDefeatDelta === 1
-                        ? `Moving enemy defeated. ${enemyHazardsDefeatedThisFloor} cleared this floor.`
-                        : `${enemyHazardDefeatDelta} moving enemies defeated. ${enemyHazardsDefeatedThisFloor} cleared this floor.`
-                );
-            }
-            if (dungeonEnemyDefeatDelta > 0) {
-                lines.push(
-                    dungeonEnemyDefeatDelta === 1
-                        ? `Dungeon enemy defeated. ${dungeonEnemiesDefeatedThisFloor} defeated this floor.`
-                        : `${dungeonEnemyDefeatDelta} dungeon enemies defeated. ${dungeonEnemiesDefeatedThisFloor} defeated this floor.`
                 );
             }
         }
@@ -616,11 +570,9 @@ export const useHudPoliteLiveAnnouncement = ({
 
         if (lines.length > 0) {
             queuePoliteAnnouncement(lines.join(' '), {
-                dedupeKey: `action:${boardLevel}:${lives}:${guardTokens}:${comboShards}:${shuffleCharges}:${regionShuffleCharges}:${stickyBlockIndex ?? 'none'}:${objectiveProgress}:${normalizedRecallFocusValue}:${normalizedRecallFocusMax}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${dungeonEnemiesDefeatedThisFloor}:${enemyHazardHitsThisFloor}:${enemyHazardsDefeatedThisFloor}:${boardTurnEvent?.eventId ?? 'no-turn'}:${newGameplayFeedback.map((item) => item.eventId).join(',') || 'legacy'}`,
+                dedupeKey: `action:${boardLevel}:${lives}:${guardTokens}:${comboShards}:${shuffleCharges}:${regionShuffleCharges}:${stickyBlockIndex ?? 'none'}:${objectiveProgress}:${normalizedRecallFocusValue}:${normalizedRecallFocusMax}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${boardTurnEvent?.eventId ?? 'no-turn'}:${newGameplayFeedback.map((item) => item.eventId).join(',') || 'legacy'}`,
                 priority:
-                    lifeDelta < 0 ||
-                    enemyHazardHitDelta > 0 ||
-                    newGameplayFeedback.some((item) => item.priority === 'error')
+                    lifeDelta < 0 || newGameplayFeedback.some((item) => item.priority === 'error')
                         ? 'error'
                         : 'info'
             });
@@ -634,7 +586,6 @@ export const useHudPoliteLiveAnnouncement = ({
         announceGameplayFeedbackBatch,
         boardLevel,
         comboShards,
-        dungeonEnemiesDefeatedThisFloor,
         guardTokens,
         lives,
         unannouncedGameplayFeedback,
@@ -644,8 +595,6 @@ export const useHudPoliteLiveAnnouncement = ({
         queuePoliteAnnouncement,
         regionShuffleCharges,
         forgottenTileCountThisFloor,
-        enemyHazardHitsThisFloor,
-        enemyHazardsDefeatedThisFloor,
         recallBonusScoreThisFloor,
         normalizedRecallFocusMax,
         normalizedRecallFocusValue,

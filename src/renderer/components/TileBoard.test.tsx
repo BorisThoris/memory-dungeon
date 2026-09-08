@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { createRef, useState, type ReactElement } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { BoardState, RewardPerkId, RunStatus } from '../../shared/contracts';
+import type { BoardState, RunStatus } from '../../shared/contracts';
 import { PlatformTiltProvider } from '../platformTilt/PlatformTiltProvider';
 import {
     DNG065_BOARD_APPLICATION_LABEL,
@@ -12,10 +12,7 @@ import TileBoard, { type TileBoardHandle } from './TileBoard';
 import {
     DUNGEON_BOARD_STAGE_LAYER_POLICY,
     DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET,
-    estimateDungeonBoardStagePerformanceCost,
-    getDungeonBoardStageLod,
-    getDungeonEnemyMarkerAnchor,
-    getDungeonEnemyMarkerVisualProfile
+    estimateDungeonBoardStagePerformanceCost
 } from './tileBoardStageLayers';
 
 /** jsdom has no GPU; stub a minimal WebGL context so the board mounts the canvas path. */
@@ -57,10 +54,6 @@ const renderBoard = (props: {
     traitRouteHintText?: string | null;
     traitRouteTargetTileIds?: readonly string[];
     chainContext?: {
-        armedPerkId?: RewardPerkId | null;
-        armedPerkDetail?: string | null;
-        armedPerkLabel?: string | null;
-        armedPerkPayoff?: string | null;
         comboShards: number;
         currentStreak: number;
         lives: number;
@@ -135,13 +128,13 @@ describe('TileBoard touch and click controls', () => {
         expect(frame).toHaveAttribute('data-board-run-status', 'playing');
     });
 
-    it('exposes stable card feedback states for hidden, hazard, route, objective, and non-pickable cards', () => {
+    it('exposes stable card feedback states for hidden, trait, findable, and non-pickable cards', () => {
         const feedbackBoard: BoardState = {
             ...board,
             tiles: [
-                { id: 'a1', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden', routeCardKind: 'greed_cache' },
-                { id: 'a2', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden', dungeonCardKind: 'lever', dungeonCardState: 'hidden' },
-                { id: 'b1', pairKey: 'B', symbol: 'B', label: 'B', state: 'hidden', tileHazardKind: 'shuffle_snare' },
+                { id: 'a1', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden', tileTraitKind: 'echo' },
+                { id: 'a2', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
+                { id: 'b1', pairKey: 'B', symbol: 'B', label: 'B', state: 'hidden', findableKind: 'shard_spark' },
                 { id: 'b2', pairKey: 'B', symbol: 'B', label: 'B', state: 'matched' }
             ]
         };
@@ -158,12 +151,11 @@ describe('TileBoard touch and click controls', () => {
         const frame = screen.getByTestId('tile-board-frame');
         expect(frame).toHaveAttribute('data-card-feedback-reduced-motion', 'static-state-cues');
         expect(frame).toHaveAttribute('data-card-feedback-last-resolution', '');
-        expect(frame.getAttribute('data-card-feedback-states')).toContain('hazard:1');
+        expect(frame.getAttribute('data-card-feedback-states')).toContain('findable:1');
         expect(frame.getAttribute('data-card-feedback-states')).toContain('hidden:3');
         expect(frame.getAttribute('data-card-feedback-states')).toContain('matched:1');
         expect(frame.getAttribute('data-card-feedback-states')).toContain('non-pickable:3');
-        expect(frame.getAttribute('data-card-feedback-states')).toContain('objective:1');
-        expect(frame.getAttribute('data-card-feedback-states')).toContain('route:1');
+        expect(frame.getAttribute('data-card-feedback-states')).toContain('trait:1');
     });
 
     it('exposes reduced-motion match and mismatch feedback states without relying on animation', () => {
@@ -214,154 +206,6 @@ describe('TileBoard touch and click controls', () => {
         frame = screen.getByTestId('tile-board-frame');
         expect(frame.getAttribute('data-card-feedback-states')).toContain('match:2');
         expect(frame.getAttribute('data-card-feedback-last-resolution')).toContain('match:2');
-    });
-
-    it('announces resolved trap cards with a generic trap status and specific card label', async () => {
-        const resolvedTrapTiles: BoardState['tiles'] = [
-            {
-                id: 'trap-1',
-                pairKey: 'trap',
-                symbol: '!',
-                label: 'Mimic Bounty',
-                state: 'hidden',
-                dungeonCardKind: 'trap',
-                dungeonCardState: 'resolved'
-            },
-            {
-                id: 'trap-2',
-                pairKey: 'trap',
-                symbol: '!',
-                label: 'Mimic Bounty',
-                state: 'hidden',
-                dungeonCardKind: 'trap',
-                dungeonCardState: 'resolved'
-            },
-            board.tiles[2]!,
-            board.tiles[3]!
-        ];
-        const rendered = renderBoard({
-            board,
-            debugPeekActive: false,
-            interactive: true,
-            onTileSelect: vi.fn(),
-            previewActive: false,
-            reduceMotion: true
-        });
-
-        rendered.rerender(
-            <PlatformTiltProvider>
-                <TileBoard
-                    board={{ ...board, tiles: resolvedTrapTiles }}
-                    debugPeekActive={false}
-                    interactive
-                    mobileCameraMode={false}
-                    onTileSelect={vi.fn()}
-                    previewActive={false}
-                    reduceMotion
-                    runStatus="playing"
-                    viewportResetToken={0}
-                />
-            </PlatformTiltProvider>
-        );
-
-        await waitFor(() =>
-            expect(screen.getByTestId('trap-resolution-feedback')).toHaveTextContent(
-                'Trap resolved: Mimic Bounty. Trap effect paid; Chase next pair.'
-            )
-        );
-        // The toast sentence already names the count, the effect and the next move; the three
-        // pip blocks that restated it are gone.
-        const toast = screen.getByTestId('trap-resolution-feedback');
-        expect(screen.queryByTestId('trap-resolution-signals')).toBeNull();
-        expect(toast.querySelectorAll('[data-trap-resolution-signal]')).toHaveLength(0);
-    });
-
-    it('drops a queued trap resolution toast when the trap count resets first', async () => {
-        const pendingMicrotasks: VoidFunction[] = [];
-        const queueMicrotaskSpy = vi.spyOn(globalThis, 'queueMicrotask').mockImplementation((callback) => {
-            pendingMicrotasks.push(callback);
-        });
-        const resolvedTrapTiles: BoardState['tiles'] = [
-            {
-                id: 'trap-1',
-                pairKey: 'trap',
-                symbol: '!',
-                label: 'Mimic Bounty',
-                state: 'hidden',
-                dungeonCardKind: 'trap',
-                dungeonCardState: 'resolved'
-            },
-            {
-                id: 'trap-2',
-                pairKey: 'trap',
-                symbol: '!',
-                label: 'Mimic Bounty',
-                state: 'hidden',
-                dungeonCardKind: 'trap',
-                dungeonCardState: 'resolved'
-            },
-            board.tiles[2]!,
-            board.tiles[3]!
-        ];
-        const rendered = renderBoard({
-            board,
-            debugPeekActive: false,
-            interactive: true,
-            onTileSelect: vi.fn(),
-            previewActive: false,
-            reduceMotion: true
-        });
-
-        try {
-            pendingMicrotasks.length = 0;
-            rendered.rerender(
-                <PlatformTiltProvider>
-                    <TileBoard
-                        board={{ ...board, tiles: resolvedTrapTiles }}
-                        debugPeekActive={false}
-                        interactive
-                        mobileCameraMode={false}
-                        onTileSelect={vi.fn()}
-                        previewActive={false}
-                        reduceMotion
-                        runStatus="playing"
-                        viewportResetToken={0}
-                    />
-                </PlatformTiltProvider>
-            );
-            rendered.rerender(
-                <PlatformTiltProvider>
-                    <TileBoard
-                        board={board}
-                        debugPeekActive={false}
-                        interactive
-                        mobileCameraMode={false}
-                        onTileSelect={vi.fn()}
-                        previewActive={false}
-                        reduceMotion
-                        runStatus="playing"
-                        viewportResetToken={0}
-                    />
-                </PlatformTiltProvider>
-            );
-
-            const staleCallbacks = pendingMicrotasks.splice(0);
-            await act(async () => {
-                for (const callback of staleCallbacks) {
-                    callback();
-                    await Promise.resolve();
-                }
-            });
-
-            expect(screen.queryByTestId('trap-resolution-feedback')).toBeNull();
-            expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
-                'data-dungeon-trap-resolution-message',
-                ''
-            );
-        } finally {
-            rendered.unmount();
-            queueMicrotaskSpy.mockRestore();
-        }
     });
 
     it('arms deal-in motion on mount when motion is enabled', async () => {
@@ -706,11 +550,6 @@ describe('TileBoard touch and click controls', () => {
         });
     });
 
-
-
-
-
-
     it('exposes board grid dimensions on the frame for tests and assistive tech', () => {
         renderBoard({
             board,
@@ -764,132 +603,23 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-application')).toHaveAttribute('aria-label', DNG065_BOARD_APPLICATION_LABEL);
     });
 
-    it('keeps dungeon encounter markers above objective chrome without covering card center text', () => {
-        expect(DUNGEON_BOARD_STAGE_LAYER_POLICY.nextThreatTelegraph.renderOrder).toBeGreaterThan(
-            DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder
-        );
-        expect(DUNGEON_BOARD_STAGE_LAYER_POLICY.currentThreat.renderOrder).toBeGreaterThan(
-            DUNGEON_BOARD_STAGE_LAYER_POLICY.resolvingMatch.renderOrder
-        );
-        expect(DUNGEON_BOARD_STAGE_LAYER_POLICY.keyboardFocus.renderOrder).toBeGreaterThan(
-            DUNGEON_BOARD_STAGE_LAYER_POLICY.currentThreat.renderOrder
-        );
-
-        const baseTransform = {
-            baseX: 0,
-            baseY: 0,
-            imperfectionX: 0,
-            imperfectionY: 0,
-            layoutJitterX: 0,
-            layoutJitterY: 0
-        };
-        const [currentX, currentY] = getDungeonEnemyMarkerAnchor(baseTransform, 'currentThreat');
-        const [nextX, nextY] = getDungeonEnemyMarkerAnchor(baseTransform, 'nextThreatTelegraph');
-
-        expect(currentX).toBeGreaterThan(0);
-        expect(currentY).toBeGreaterThan(0);
-        expect(nextX).toBeLessThan(0);
-        expect(nextY).toBeLessThan(0);
-    });
-
-    it('keeps low-quality and reduced-motion dungeon threat indicators readable', () => {
-        const low = getDungeonBoardStageLod('low', false);
-        const reduced = getDungeonBoardStageLod('high', true);
-
-        expect(low.strongEffectBudget).toBe('critical-only');
-        expect(low.currentMarkerOpacity).toBeGreaterThanOrEqual(0.88);
-        expect(low.nextTelegraphOpacity).toBeGreaterThan(0.3);
-        expect(reduced.markerMotionEnabled).toBe(false);
-        expect(reduced.nextTelegraphOpacity).toBeGreaterThan(0.3);
-    });
-
-    it('assigns non-color-only visual identities to each enemy kind and bosses', () => {
-        const hazards = [
-            { kind: 'sentinel' as const, bossId: undefined, expectedShape: 'sentinel-diamond' },
-            { kind: 'stalker' as const, bossId: undefined, expectedShape: 'stalker-spear' },
-            { kind: 'warden' as const, bossId: undefined, expectedShape: 'warden-shield' },
-            { kind: 'observer' as const, bossId: undefined, expectedShape: 'observer-eye' },
-            { kind: 'sentinel' as const, bossId: 'rush_sentinel' as const, expectedShape: 'boss-crown' }
-        ];
-
-        for (const hazard of hazards) {
-            expect(getDungeonEnemyMarkerVisualProfile(hazard, 'medium', false).shape).toBe(hazard.expectedShape);
-        }
-
-        const boss = getDungeonEnemyMarkerVisualProfile({ kind: 'sentinel', bossId: 'rush_sentinel' }, 'high', false);
-        const sentinel = getDungeonEnemyMarkerVisualProfile({ kind: 'sentinel', bossId: undefined }, 'high', false);
-        expect(boss.mainScale[0]).toBeGreaterThan(sentinel.mainScale[0]);
-        expect(boss.secondaryOpacity).toBeGreaterThan(0);
-    });
-
-    it('keeps enemy marker VFX within static reduced-motion and low-quality LOD bounds', () => {
-        const low = getDungeonEnemyMarkerVisualProfile({ kind: 'stalker', bossId: undefined }, 'low', false);
-        const reduced = getDungeonEnemyMarkerVisualProfile({ kind: 'stalker', bossId: undefined }, 'high', true);
-        const high = getDungeonEnemyMarkerVisualProfile({ kind: 'stalker', bossId: undefined }, 'high', false);
-
-        expect(low.haloOpacity).toBeLessThan(high.haloOpacity);
-        expect(low.motionHz).toBeLessThan(high.motionHz);
-        expect(reduced.motionHz).toBe(0);
-        expect(reduced.secondaryOpacity).toBeGreaterThan(0.5);
-    });
-
-    it('keeps dungeon moving threat overlays inside the documented DNG-074 draw-call budget', () => {
-        const hazards = [
-            { kind: 'sentinel' as const, bossId: undefined, nextTileId: 'a2', state: 'revealed' as const },
-            { kind: 'stalker' as const, bossId: undefined, nextTileId: 'b1', state: 'revealed' as const },
-            { kind: 'warden' as const, bossId: undefined, nextTileId: 'b2', state: 'revealed' as const },
-            { kind: 'observer' as const, bossId: undefined, nextTileId: 'a1', state: 'revealed' as const },
-            { kind: 'sentinel' as const, bossId: 'rush_sentinel' as const, nextTileId: 'a2', state: 'revealed' as const },
-            { kind: 'observer' as const, bossId: 'spire_observer' as const, nextTileId: 'b1', state: 'revealed' as const }
-        ];
-
+    it('keeps static readability markers inside the documented draw-call budget', () => {
         const readabilityMarkerTiles = [
-            { dungeonCardKind: 'exit' as const, dungeonExitLockKind: 'iron' as const, tileTraitKind: 'echo' as const },
-            { dungeonCardKind: 'lock' as const, dungeonExitLockKind: undefined, tileTraitKind: undefined },
-            { dungeonCardKind: 'lever' as const, dungeonExitLockKind: undefined, tileTraitKind: undefined },
-            { dungeonCardKind: 'shop' as const, dungeonExitLockKind: undefined, tileTraitKind: 'conduit' as const }
+            { tileTraitKind: 'echo' as const },
+            { tileTraitKind: undefined },
+            { tileTraitKind: 'conduit' as const }
         ];
 
-        const high = estimateDungeonBoardStagePerformanceCost({
-            hazards,
-            graphicsQuality: 'high',
-            readabilityMarkerTiles,
-            reduceMotion: false
-        });
-        const reduced = estimateDungeonBoardStagePerformanceCost({
-            hazards,
-            graphicsQuality: 'high',
-            readabilityMarkerTiles,
-            reduceMotion: true
-        });
-        const low = estimateDungeonBoardStagePerformanceCost({
-            hazards,
-            graphicsQuality: 'low',
-            readabilityMarkerTiles,
-            reduceMotion: false
-        });
+        const cost = estimateDungeonBoardStagePerformanceCost({ readabilityMarkerTiles });
 
-        expect(high.activeHazardCount).toBe(DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.maxActiveEnemyHazards);
-        expect(high.estimatedMovingThreatDrawCalls).toBeLessThanOrEqual(
-            DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.maxMovingThreatDrawCalls
-        );
-        expect(high.estimatedMovingThreatMaterialSlots).toBe(high.estimatedMovingThreatDrawCalls);
-        expect(high.estimatedStaticReadabilityDrawCalls).toBe(12);
-        expect(high.estimatedStaticReadabilityDrawCalls).toBeLessThanOrEqual(
+        expect(cost.estimatedStaticReadabilityDrawCalls).toBe(4);
+        expect(cost.estimatedStaticReadabilityDrawCalls).toBeLessThanOrEqual(
             DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.maxStaticReadabilityMarkerDrawCalls
         );
-        expect(high.sharedEnemyMarkerGeometryCount).toBe(DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.sharedEnemyMarkerGeometryCount);
-        expect(high.traitRailExtraDrawCalls).toBe(DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.traitRailExtraDrawCalls);
-        expect(high.utilityCardExtraDrawCalls).toBe(DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.utilityCardExtraDrawCalls);
-        expect(high.trapCardExtraDrawCallsPerPair).toBe(0);
-        expect(high.contextLossRecovery).toBe('remount_canvas_on_restore');
-        expect(high.withinBudget).toBe(true);
-        expect(reduced.withinBudget).toBe(true);
-        expect(reduced.lowOrReducedQualityReadable).toBe(true);
-        expect(low.withinBudget).toBe(true);
-        expect(low.lowOrReducedQualityReadable).toBe(true);
+        expect(cost.traitRailExtraDrawCalls).toBe(DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.traitRailExtraDrawCalls);
+        expect(cost.contextLossRecovery).toBe('remount_canvas_on_restore');
+        expect(cost.withinBudget).toBe(true);
     });
-
 
     it('sets shuffle animating on the frame while the WebGL stagger window is active', async () => {
         const tileBoardRef = createRef<TileBoardHandle>();

@@ -29,7 +29,7 @@ export interface LevelCompleteContinuationExecutorDeps {
  * A run that reached the floor-clear interlude with no lives left is over, whatever else the
  * interlude was about to offer. This used to live in the side-room surface, which went with the
  * route layer in Gen 173; the guard stays because dying on the last match of a floor still lands
- * here, and the between-floor screens it clears out of the run are the ones that still exist.
+ * here.
  */
 const createDeadInterludeGameOverRun = (run: RunState): RunState | null => {
     if (run.status !== 'gameOver' && run.lives > 0) {
@@ -38,11 +38,7 @@ const createDeadInterludeGameOverRun = (run: RunState): RunState | null => {
     return {
         ...run,
         status: 'gameOver',
-        lives: 0,
-        pendingRouteCardPlan: null,
-        sideRoom: null,
-        relicOffer: null,
-        shopOffers: []
+        lives: 0
     };
 };
 

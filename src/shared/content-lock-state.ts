@@ -1,8 +1,8 @@
-import type { MutatorId, RelicId } from './contracts';
+import type { MutatorId } from './contracts';
 
 /**
  * The active content lock: what this build flavour ships. This module carries no game imports
- * so rules modules (relics, floor schedule, mode catalog) can read the lock without a cycle;
+ * so rules modules (floor schedule, mode catalog) can read the lock without a cycle;
  * `content-lock.ts` builds the demo and full locks from the catalogs.
  */
 
@@ -12,8 +12,6 @@ export interface ContentLock {
     flavour: BuildFlavour;
     /** Mode ids the player can start. `null` means every catalog mode. */
     availableModeIds: ReadonlySet<string> | null;
-    /** Relic ids drafts may offer. `null` means the full pool. */
-    relicPool: readonly RelicId[] | null;
     /** Mutator ids floors may roll. `null` means the full catalog. */
     mutatorPool: readonly MutatorId[] | null;
     steamAchievementsEnabled: boolean;
@@ -24,7 +22,6 @@ export interface ContentLock {
 export const FULL_CONTENT_LOCK: ContentLock = {
     flavour: 'full',
     availableModeIds: null,
-    relicPool: null,
     mutatorPool: null,
     steamAchievementsEnabled: true,
     fullGameLedger: []
@@ -47,8 +44,6 @@ export const isDemoBuild = (): boolean => activeLock.flavour === 'demo';
 export const isModeAvailableInBuild = (modeId: string, lock: ContentLock = activeLock): boolean =>
     lock.availableModeIds === null || lock.availableModeIds.has(modeId);
 
-export const filterRelicPoolByContentLock = (ids: readonly RelicId[], lock: ContentLock = activeLock): RelicId[] =>
-    lock.relicPool ? ids.filter((id) => lock.relicPool!.includes(id)) : [...ids];
 
 export const filterMutatorsByContentLock = (ids: readonly MutatorId[], lock: ContentLock = activeLock): MutatorId[] =>
     lock.mutatorPool ? ids.filter((id) => lock.mutatorPool!.includes(id)) : [...ids];

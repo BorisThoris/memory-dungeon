@@ -19,7 +19,6 @@ import {
 } from '../../shared/save-data';
 import {
     deactivateDebugRevealThroughGameplayCore,
-    repairRunProgressionThroughGameplayCore,
     resolveBoardTurnThroughGameplayCore
 } from '../../shared/gameplay-core-adapters';
 import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
@@ -57,7 +56,6 @@ type RunResolutionPatch = Partial<{
     runStartSaveData: SaveData | null;
     saveData: SaveData;
     settings: Settings;
-    shopReturnMode: 'floor' | 'summary' | null;
     tileSwapArmed: boolean;
     tileSwapFirstTileId: string | null;
     view: ViewState;
@@ -90,10 +88,6 @@ export const createRunResolutionController = ({
     setState
 }: RunResolutionControllerOptions): RunResolutionController => {
     const applyResolvedRun = (resolvedRun: RunState): void => {
-        resolvedRun = repairRunProgressionThroughGameplayCore(
-            resolvedRun,
-            `progression-repair:${resolvedRun.runSeed}:${resolvedRun.board?.level ?? 0}:${Array.isArray(resolvedRun.gameplayCommandJournal) ? resolvedRun.gameplayCommandJournal.length : 0}`
-        ).run;
         const state = getState();
         const prevStatus = state.run?.status;
         if (resolvedRun.status === 'levelComplete' && prevStatus !== 'levelComplete') {

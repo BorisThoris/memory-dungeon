@@ -1,5 +1,5 @@
 import { CircleGeometry, DoubleSide, PlaneGeometry, type BufferGeometry } from 'three';
-import type { BoardState, HazardTileKind, Tile } from '../../shared/contracts';
+import type { BoardState, Tile } from '../../shared/contracts';
 import { noopMeshRaycast } from './tileBoardPick';
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
 import { DUNGEON_BOARD_STAGE_LAYER_POLICY } from './tileBoardStageLayers';
@@ -11,7 +11,6 @@ import {
     getTraitRouteReadabilityGlyph,
     getTraitRouteReadabilityBeatTier
 } from './tileBoardReadability';
-import { hazardTileColor } from './tileBoardThreatColors';
 import { getTileTraitInteractionPreviewLines, tileTraitColor } from '../../shared/tile-trait-rules';
 import { tileTraitMark, traitMarkOffsets } from '../../shared/tile-trait-marks';
 import type { TraitInteractionLaneId } from '../copy/traitInteractionLaneMap';
@@ -30,16 +29,12 @@ const TRAIT_MARK_SPACING = 0.075;
 const BOARD_READABILITY_LARGE_PIP_GEOMETRY = new CircleGeometry(0.057, 22);
 const BOARD_READABILITY_BAR_GEOMETRY = new PlaneGeometry(0.2, 0.032, 1, 1);
 const BOARD_READABILITY_SHORT_BAR_GEOMETRY = new PlaneGeometry(0.13, 0.03, 1, 1);
-const BOARD_READABILITY_BOSS_MARK_GEOMETRY = new PlaneGeometry(0.25, 0.064, 1, 1);
 const BOARD_READABILITY_GLYPH_PLATE_GEOMETRY = new PlaneGeometry(0.19, 0.14, 1, 1);
 const BOARD_READABILITY_SELECTED_RAIL_GEOMETRY = new PlaneGeometry(0.018, CARD_FACE_HEIGHT * 0.74, 1, 1);
 const BOARD_READABILITY_DISABLED_SLASH_GEOMETRY = new PlaneGeometry(0.46, 0.024, 1, 1);
-const BOARD_READABILITY_ENEMY_OCCUPIED_GEOMETRY = new PlaneGeometry(0.22, 0.06, 1, 1);
 const BOARD_READABILITY_STATE_RAIL_GEOMETRY = new PlaneGeometry(0.26, 0.026, 1, 1);
-const BOARD_READABILITY_STATE_NOTCH_GEOMETRY = new PlaneGeometry(0.04, 0.13, 1, 1);
 const BOARD_READABILITY_TRAIT_COMBO_GEOMETRY = new PlaneGeometry(0.36, 0.045, 1, 1);
 const BOARD_READABILITY_REWARD_HOT_GEOMETRY = new PlaneGeometry(0.19, 0.055, 1, 1);
-const BOARD_READABILITY_PERK_ARMED_GEOMETRY = new PlaneGeometry(0.28, 0.04, 1, 1);
 const BOARD_READABILITY_FOLLOWUP_GEOMETRY = new PlaneGeometry(0.24, 0.038, 1, 1);
 const BOARD_READABILITY_ROUTE_GLYPH_PLATE_GEOMETRY = new PlaneGeometry(0.32, 0.2, 1, 1);
 const BOARD_READABILITY_ROUTE_GLYPH_BAR_GEOMETRY = new PlaneGeometry(0.22, 0.026, 1, 1);
@@ -48,17 +43,12 @@ const NON_PICKABLE_RAIL_GEOMETRY = new PlaneGeometry(CARD_WIDTH, HOVER_GOLD_RIM_
 
 interface TileBoardReadabilityMarkersProps {
     destroyBlockedDecoyBack: boolean;
-    enemyOccupiedBack: boolean;
     faceUp: boolean;
     faceZ: number;
     findableCornerRingGeometry: BufferGeometry;
-    hazardBackAccent: HazardTileKind | null;
     matchedEdgeGeometry: BufferGeometry;
     nonPickableBack: boolean;
-    objectiveBackAccent: boolean;
-    perkArmedBack: boolean;
     powerBackAccent: 'destroy' | 'peek' | 'stray' | 'pin' | 'swap' | 'swapOrigin' | 'clump' | null;
-    routeBackAccent: boolean;
     selectedTraitFollowupBack: boolean;
     spotlightBountyOnBack: boolean;
     spotlightWardOnBack: boolean;
@@ -185,17 +175,12 @@ const SignalCapRow = ({
 
 export const TileBoardReadabilityMarkers = ({
     destroyBlockedDecoyBack,
-    enemyOccupiedBack,
     faceUp,
     faceZ,
     findableCornerRingGeometry,
-    hazardBackAccent,
     matchedEdgeGeometry,
     nonPickableBack,
-    objectiveBackAccent,
-    perkArmedBack,
     powerBackAccent,
-    routeBackAccent,
     selectedTraitFollowupBack,
     spotlightBountyOnBack,
     spotlightWardOnBack,
@@ -209,18 +194,9 @@ export const TileBoardReadabilityMarkers = ({
     traitRouteTargetBack
 }: TileBoardReadabilityMarkersProps) => {
     const {
-        enemyOccupiedColor,
         faceReadabilityAccentColor,
         hiddenReadabilityAccentColor,
-        isArmedTrap,
-        isBossCard,
-        isExitCard,
-        isLeverCard,
-        isLockCard,
-        isPerkArmedBack,
-        isRelicCard,
-        isResolvedTrap,
-        isShopCard,
+        isFindableCard,
         isSelectedCard,
         isSelectedTraitFollowupBack,
         isTraitComboBack,
@@ -228,7 +204,6 @@ export const TileBoardReadabilityMarkers = ({
         isTraitPayoffStackBack,
         isTraitRewardHotBack,
         isTraitRouteTargetBack,
-        isTrapCard,
         showFaceReadabilityMarker,
         showHiddenReadabilityMarkers,
         showHiddenReadabilityRing,
@@ -236,18 +211,12 @@ export const TileBoardReadabilityMarkers = ({
         traitRouteReadabilityTier,
         traitLaneReadabilityColor,
         traitLaneReadabilityId,
-        traitLaneReadabilityPattern,
-        trapReadabilityColor
+        traitLaneReadabilityPattern
     } = getTileBoardReadabilityState({
         destroyBlockedDecoyBack,
-        enemyOccupiedBack,
         faceUp,
-        hazardBackAccent,
         nonPickableBack,
-        objectiveBackAccent,
-        perkArmedBack,
         powerBackAccent,
-        routeBackAccent,
         selectedTraitFollowupBack,
         spotlightBountyOnBack,
         spotlightWardOnBack,
@@ -257,7 +226,6 @@ export const TileBoardReadabilityMarkers = ({
         traitLaneBack,
         traitRewardHotBack,
         traitRouteTargetBack,
-        board,
         tile
     });
     const isTraitRoutePayoffLaneBack = traitRouteReadabilityTier === 'payoff-stack';
@@ -355,7 +323,7 @@ export const TileBoardReadabilityMarkers = ({
                                     color="#050409"
                                     depthTest
                                     depthWrite={false}
-                                    opacity={enemyOccupiedBack || isBossCard ? 0.78 : 0.56}
+                                    opacity={0.56}
                                     side={DoubleSide}
                                     toneMapped={false}
                                     transparent
@@ -371,7 +339,7 @@ export const TileBoardReadabilityMarkers = ({
                                     color={hiddenReadabilityAccentColor}
                                     depthTest
                                     depthWrite={false}
-                                    opacity={enemyOccupiedBack ? 0.84 : isResolvedTrap ? 0.68 : nonPickableBack ? 0.5 : 0.74}
+                                    opacity={nonPickableBack ? 0.5 : 0.74}
                                     side={DoubleSide}
                                     toneMapped={false}
                                     transparent
@@ -379,14 +347,10 @@ export const TileBoardReadabilityMarkers = ({
                             </mesh>
                         </>
                     ) : null}
-                    {isTrapCard || isRelicCard ? (
+                    {isFindableCard ? (
                         <mesh
                             geometry={BOARD_READABILITY_GLYPH_PLATE_GEOMETRY}
-                            position={[
-                                isRelicCard ? CARD_WIDTH * 0.37 : -CARD_WIDTH * 0.37,
-                                isRelicCard ? -CARD_HEIGHT * 0.4 : CARD_HEIGHT * 0.34,
-                                0.0006
-                            ]}
+                            position={[CARD_WIDTH * 0.37, -CARD_HEIGHT * 0.4, 0.0006]}
                             raycast={noopMeshRaycast}
                             renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder - 1}
                         >
@@ -401,185 +365,7 @@ export const TileBoardReadabilityMarkers = ({
                             />
                         </mesh>
                     ) : null}
-                    {isTrapCard ? (
-                        <group position={[-CARD_WIDTH * 0.37, CARD_HEIGHT * 0.32, 0.00061]}>
-                            <mesh
-                                geometry={BOARD_READABILITY_BAR_GEOMETRY}
-                                raycast={noopMeshRaycast}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
-                                rotation={[0, 0, Math.PI / 2]}
-                            >
-                                <meshBasicMaterial
-                                    color={trapReadabilityColor}
-                                    depthTest
-                                    depthWrite={false}
-                                    opacity={isResolvedTrap ? 0.72 : isArmedTrap ? 0.98 : 0.9}
-                                    side={DoubleSide}
-                                    toneMapped={false}
-                                    transparent
-                                />
-                            </mesh>
-                            <mesh
-                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
-                                position={[0.048, 0, 0.00003]}
-                                raycast={noopMeshRaycast}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
-                                rotation={[0, 0, Math.PI / 2]}
-                            >
-                                <meshBasicMaterial
-                                    color={isResolvedTrap ? '#d9ffe8' : '#1b0d10'}
-                                    depthTest
-                                    depthWrite={false}
-                                    opacity={isResolvedTrap ? 0.82 : 0.72}
-                                    side={DoubleSide}
-                                    toneMapped={false}
-                                    transparent
-                                />
-                            </mesh>
-                        </group>
-                    ) : null}
-                    {isBossCard ? (
-                        <group position={[0, CARD_HEIGHT * 0.41, 0.00062]}>
-                            <mesh
-                                geometry={BOARD_READABILITY_BOSS_MARK_GEOMETRY}
-                                raycast={noopMeshRaycast}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
-                            >
-                                <meshBasicMaterial
-                                    color="#09070d"
-                                    depthTest
-                                    depthWrite={false}
-                                    opacity={0.76}
-                                    side={DoubleSide}
-                                    toneMapped={false}
-                                    transparent
-                                />
-                            </mesh>
-                            <mesh
-                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
-                                position={[0, 0.002, 0.00004]}
-                                raycast={noopMeshRaycast}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
-                            >
-                                <meshBasicMaterial
-                                    color="#ffcf66"
-                                    depthTest
-                                    depthWrite={false}
-                                    opacity={0.96}
-                                    side={DoubleSide}
-                                    toneMapped={false}
-                                    transparent
-                                />
-                            </mesh>
-                        </group>
-                    ) : null}
-                    {isExitCard ? (
-                        <group position={[CARD_WIDTH * 0.36, -CARD_HEIGHT * 0.38, 0.00063]}>
-                            <ReadabilityMaterialMesh
-                                color="#7bd88f"
-                                geometry={BOARD_READABILITY_STATE_RAIL_GEOMETRY}
-                                opacity={0.96}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#d9ffe8"
-                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
-                                opacity={0.88}
-                                position={[0.042, 0.025, 0.00004]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
-                                rotation={[0, 0, Math.PI / 2]}
-                            />
-                        </group>
-                    ) : null}
-                    {isLockCard ? (
-                        <group position={[-CARD_WIDTH * 0.36, -CARD_HEIGHT * 0.38, 0.00064]}>
-                            <ReadabilityMaterialMesh
-                                color="#09070d"
-                                geometry={BOARD_READABILITY_GLYPH_PLATE_GEOMETRY}
-                                opacity={0.68}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#f2d39d"
-                                geometry={BOARD_READABILITY_PIP_GEOMETRY}
-                                opacity={0.95}
-                                position={[0, -0.02, 0.00005]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#f2d39d"
-                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
-                                opacity={0.88}
-                                position={[0, 0.032, 0.00006]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 2}
-                            />
-                        </group>
-                    ) : null}
-                    {isLeverCard ? (
-                        <group position={[CARD_WIDTH * 0.36, -CARD_HEIGHT * 0.38, 0.00064]} rotation={[0, 0, -Math.PI / 7]}>
-                            <ReadabilityMaterialMesh
-                                color="#d4a03d"
-                                geometry={BOARD_READABILITY_BAR_GEOMETRY}
-                                opacity={0.94}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
-                                rotation={[0, 0, Math.PI / 2]}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#ffe1a3"
-                                geometry={BOARD_READABILITY_PIP_GEOMETRY}
-                                opacity={0.9}
-                                position={[0, 0.075, 0.00005]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
-                            />
-                        </group>
-                    ) : null}
-                    {isShopCard ? (
-                        <ReadabilityMaterialMesh
-                            color="#5ee0c8"
-                            geometry={BOARD_READABILITY_LARGE_PIP_GEOMETRY}
-                            opacity={0.96}
-                            position={[CARD_WIDTH * 0.36, CARD_HEIGHT * 0.38, 0.00064]}
-                            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
-                            rotation={[0, 0, Math.PI / 4]}
-                        />
-                    ) : null}
-                    {enemyOccupiedBack ? (
-                        <group position={[CARD_WIDTH * 0.36, CARD_HEIGHT * 0.37, 0.00064]}>
-                            <mesh
-                                geometry={BOARD_READABILITY_GLYPH_PLATE_GEOMETRY}
-                                raycast={noopMeshRaycast}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
-                            >
-                                <meshBasicMaterial
-                                    color="#07060b"
-                                    depthTest
-                                    depthWrite={false}
-                                    opacity={0.72}
-                                    side={DoubleSide}
-                                    toneMapped={false}
-                                    transparent
-                                />
-                            </mesh>
-                            <mesh
-                                geometry={BOARD_READABILITY_ENEMY_OCCUPIED_GEOMETRY}
-                                position={[0, 0, 0.00005]}
-                                raycast={noopMeshRaycast}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
-                                rotation={[0, 0, Math.PI / 4]}
-                            >
-                                <meshBasicMaterial
-                                    color={enemyOccupiedColor}
-                                    depthTest
-                                    depthWrite={false}
-                                    opacity={0.98}
-                                    side={DoubleSide}
-                                    toneMapped={false}
-                                    transparent
-                                />
-                            </mesh>
-                        </group>
-                    ) : null}
-                    {isRelicCard ? (
+                    {isFindableCard ? (
                         <mesh
                             geometry={BOARD_READABILITY_LARGE_PIP_GEOMETRY}
                             position={[CARD_WIDTH * 0.37, -CARD_HEIGHT * 0.4, 0.00063]}
@@ -777,78 +563,6 @@ export const TileBoardReadabilityMarkers = ({
                                 transparent
                             />
                         </mesh>
-                    ) : null}
-                    {hazardBackAccent ? (
-                        <group position={[0, CARD_HEIGHT * 0.39, 0.00055]}>
-                            <mesh
-                                geometry={BOARD_READABILITY_STATE_RAIL_GEOMETRY}
-                                raycast={noopMeshRaycast}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveRing.renderOrder}
-                            >
-                                <meshBasicMaterial
-                                    color={hazardTileColor(hazardBackAccent)}
-                                    depthTest
-                                    depthWrite={false}
-                                    opacity={0.96}
-                                    side={DoubleSide}
-                                    toneMapped={false}
-                                    transparent
-                                />
-                            </mesh>
-                            <mesh
-                                geometry={BOARD_READABILITY_STATE_NOTCH_GEOMETRY}
-                                position={[0, -0.03, 0.00004]}
-                                raycast={noopMeshRaycast}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
-                            >
-                                <meshBasicMaterial
-                                    color="#12080a"
-                                    depthTest
-                                    depthWrite={false}
-                                    opacity={0.76}
-                                    side={DoubleSide}
-                                    toneMapped={false}
-                                    transparent
-                                />
-                            </mesh>
-                        </group>
-                    ) : null}
-                    {routeBackAccent ? (
-                        <group position={[-CARD_WIDTH * 0.36, 0, 0.00057]}>
-                            <mesh
-                                geometry={BOARD_READABILITY_STATE_RAIL_GEOMETRY}
-                                raycast={noopMeshRaycast}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveRing.renderOrder}
-                                rotation={[0, 0, Math.PI / 2]}
-                            >
-                                <meshBasicMaterial
-                                    color="#59b4d9"
-                                    depthTest
-                                    depthWrite={false}
-                                    opacity={0.9}
-                                    side={DoubleSide}
-                                    toneMapped={false}
-                                    transparent
-                                />
-                            </mesh>
-                            <mesh
-                                geometry={BOARD_READABILITY_LARGE_PIP_GEOMETRY}
-                                position={[0.045, 0, 0.00004]}
-                                raycast={noopMeshRaycast}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
-                                rotation={[0, 0, Math.PI / 4]}
-                            >
-                                <meshBasicMaterial
-                                    color="#d9f7ff"
-                                    depthTest
-                                    depthWrite={false}
-                                    opacity={0.84}
-                                    side={DoubleSide}
-                                    toneMapped={false}
-                                    transparent
-                                />
-                            </mesh>
-                        </group>
                     ) : null}
                     {tile.tileTraitKind ? (
                         <group position={[0, -CARD_HEIGHT * 0.39, 0.00057]}>
@@ -1352,36 +1066,6 @@ export const TileBoardReadabilityMarkers = ({
                             />
                         </group>
                     ) : null}
-                    {isPerkArmedBack ? (
-                        <group
-                            position={[0, CARD_HEIGHT * 0.305, 0.0007]}
-                            scale={[traitReadabilityScale, traitReadabilityScale, 1]}
-                        >
-                            <ReadabilityMaterialMesh
-                                color="#3b2605"
-                                geometry={BOARD_READABILITY_PERK_ARMED_GEOMETRY}
-                                opacity={Math.max(0.82, traitReadabilityOpacity - 0.08)}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 6}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#ffe48a"
-                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
-                                opacity={0.96}
-                                position={[0, 0.001, 0.00005]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 7}
-                                scale={[0.72, 1, 1]}
-                            />
-                            <BeatPipRow
-                                color="#ffe48a"
-                                count={2}
-                                keyPrefix={`trait-perk-${tile.id}`}
-                                opacity={0.94}
-                                positionY={-0.046}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
-                                supportColor="#8de6ff"
-                            />
-                        </group>
-                    ) : null}
                     {isSelectedTraitFollowupBack ? (
                         <group
                             position={[CARD_WIDTH * 0.31, CARD_HEIGHT * 0.305, 0.00071]}
@@ -1616,42 +1300,6 @@ export const TileBoardReadabilityMarkers = ({
                             />
                         </group>
                     ) : null}
-                    {objectiveBackAccent ? (
-                        <group position={[CARD_WIDTH * 0.36, 0, 0.00058]}>
-                            <mesh
-                                geometry={BOARD_READABILITY_STATE_RAIL_GEOMETRY}
-                                raycast={noopMeshRaycast}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveRing.renderOrder}
-                                rotation={[0, 0, Math.PI / 2]}
-                            >
-                                <meshBasicMaterial
-                                    color="#f2d39d"
-                                    depthTest
-                                    depthWrite={false}
-                                    opacity={0.92}
-                                    side={DoubleSide}
-                                    toneMapped={false}
-                                    transparent
-                                />
-                            </mesh>
-                            <mesh
-                                geometry={BOARD_READABILITY_PIP_GEOMETRY}
-                                position={[-0.045, 0, 0.00004]}
-                                raycast={noopMeshRaycast}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
-                            >
-                                <meshBasicMaterial
-                                    color="#171008"
-                                    depthTest
-                                    depthWrite={false}
-                                    opacity={0.78}
-                                    side={DoubleSide}
-                                    toneMapped={false}
-                                    transparent
-                                />
-                            </mesh>
-                        </group>
-                    ) : null}
                     {nonPickableBack ? (
                         <group>
                             <mesh
@@ -1732,14 +1380,14 @@ export const TileBoardReadabilityMarkers = ({
                     <ReadabilityMaterialMesh
                         color={faceReadabilityAccentColor}
                         geometry={matchedEdgeGeometry}
-                        opacity={isResolvedTrap ? 0.46 : isBossCard ? 0.7 : 0.62}
+                        opacity={0.62}
                         renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveRing.renderOrder}
                         scale={[0.93, 0.93, 1]}
                     />
                     <ReadabilityMaterialMesh
                         color={faceReadabilityAccentColor}
                         geometry={BOARD_READABILITY_PIP_GEOMETRY}
-                        opacity={isResolvedTrap ? 0.78 : 0.96}
+                        opacity={0.96}
                         position={[CARD_WIDTH * 0.35, CARD_HEIGHT * 0.39, 0.00072]}
                         renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
                     />
@@ -1808,89 +1456,7 @@ export const TileBoardReadabilityMarkers = ({
                             ))}
                         </group>
                     ) : null}
-                    {isTrapCard ? (
-                        <ReadabilityMaterialMesh
-                            color={trapReadabilityColor}
-                            geometry={BOARD_READABILITY_BAR_GEOMETRY}
-                            opacity={isResolvedTrap ? 0.74 : 0.96}
-                            position={[0, -CARD_HEIGHT * 0.42, 0.00076]}
-                            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
-                        />
-                    ) : null}
-                    {isExitCard ? (
-                        <ReadabilityMaterialMesh
-                            color="#7bd88f"
-                            geometry={BOARD_READABILITY_STATE_RAIL_GEOMETRY}
-                            opacity={0.94}
-                            position={[CARD_WIDTH * 0.35, -CARD_HEIGHT * 0.39, 0.00076]}
-                            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
-                        />
-                    ) : null}
-                    {isLockCard ? (
-                        <ReadabilityMaterialMesh
-                            color="#f2d39d"
-                            geometry={BOARD_READABILITY_PIP_GEOMETRY}
-                            opacity={0.94}
-                            position={[-CARD_WIDTH * 0.35, -CARD_HEIGHT * 0.39, 0.00077]}
-                            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
-                        />
-                    ) : null}
-                    {isLeverCard ? (
-                        <ReadabilityMaterialMesh
-                            color="#d4a03d"
-                            geometry={BOARD_READABILITY_BAR_GEOMETRY}
-                            opacity={0.94}
-                            position={[CARD_WIDTH * 0.35, -CARD_HEIGHT * 0.39, 0.00077]}
-                            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
-                            rotation={[0, 0, Math.PI / 2.8]}
-                        />
-                    ) : null}
-                    {isShopCard ? (
-                        <ReadabilityMaterialMesh
-                            color="#5ee0c8"
-                            geometry={BOARD_READABILITY_LARGE_PIP_GEOMETRY}
-                            opacity={0.96}
-                            position={[CARD_WIDTH * 0.35, -CARD_HEIGHT * 0.39, 0.00077]}
-                            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
-                            rotation={[0, 0, Math.PI / 4]}
-                        />
-                    ) : null}
-                    {isBossCard ? (
-                        <group position={[0, CARD_HEIGHT * 0.42, 0.00078]}>
-                            <mesh
-                                geometry={BOARD_READABILITY_BOSS_MARK_GEOMETRY}
-                                raycast={noopMeshRaycast}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
-                            >
-                                <meshBasicMaterial
-                                    color="#09070d"
-                                    depthTest
-                                    depthWrite={false}
-                                    opacity={0.72}
-                                    side={DoubleSide}
-                                    toneMapped={false}
-                                    transparent
-                                />
-                            </mesh>
-                            <mesh
-                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
-                                position={[0, 0.002, 0.00004]}
-                                raycast={noopMeshRaycast}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
-                            >
-                                <meshBasicMaterial
-                                    color="#ffcf66"
-                                    depthTest
-                                    depthWrite={false}
-                                    opacity={0.98}
-                                    side={DoubleSide}
-                                    toneMapped={false}
-                                    transparent
-                                />
-                            </mesh>
-                        </group>
-                    ) : null}
-                    {isRelicCard ? (
+                    {isFindableCard ? (
                         <ReadabilityMaterialMesh
                             color="#5ee0c8"
                             geometry={BOARD_READABILITY_LARGE_PIP_GEOMETRY}

@@ -1,12 +1,11 @@
 import type { RunState } from './contracts';
 import type { ChainTier } from './chain-tier-rules';
-import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
+import { runNonNegativeInteger } from './run-number-guards';
 
 export interface TurnMatchProgressResult {
     cursedMatchedEarlyThisFloor: boolean;
     matchResolutionsThisFloor: number;
     findablesClaimedThisFloor: number;
-    safeHazardWardChargesThisFloor: number;
     chunkBreaksThisFloor: number;
     chunkPairsBrokenThisFloor: number;
     chunkScoreThisFloor: number;
@@ -20,8 +19,6 @@ export interface TurnMatchProgressResult {
     chunkDropsThisRun: number;
     bestRippleThisFloor: number;
     bestRippleThisRun: number;
-    anchorSealChargesThisFloor: number;
-    anchorSealUsesThisFloor: number;
 }
 
 export interface TurnMatchProgressInput {
@@ -45,8 +42,6 @@ export interface TurnMatchProgressInput {
     chunkRippleWaves: number;
     cursedMatchedEarly: boolean;
     findablesClaimedDelta: number;
-    findableSafeHazardWardGain: number;
-    anchorSealUsed: boolean;
 }
 
 export const resolveTurnMatchProgress = ({
@@ -59,12 +54,9 @@ export const resolveTurnMatchProgress = ({
     chunkMomentumPairs,
     chunkRippleWaves,
     cursedMatchedEarly,
-    findablesClaimedDelta,
-    findableSafeHazardWardGain,
-    anchorSealUsed
+    findablesClaimedDelta
 }: TurnMatchProgressInput): TurnMatchProgressResult => {
     const safeFindablesClaimedDelta = runNonNegativeInteger(findablesClaimedDelta);
-    const safeFindableWardGain = runNonNegativeInteger(findableSafeHazardWardGain);
     const safePairsBroken = runNonNegativeInteger(chunkPairsBroken);
     const feverBreak = safePairsBroken > 0 && chunkTier === 'fever' ? 1 : 0;
 
@@ -72,10 +64,6 @@ export const resolveTurnMatchProgress = ({
         cursedMatchedEarlyThisFloor: run.cursedMatchedEarlyThisFloor || cursedMatchedEarly,
         matchResolutionsThisFloor: runNonNegativeInteger(run.matchResolutionsThisFloor) + 1,
         findablesClaimedThisFloor: runNonNegativeInteger(run.findablesClaimedThisFloor) + safeFindablesClaimedDelta,
-        safeHazardWardChargesThisFloor: Math.min(
-            1,
-            runNonNegativeInteger(run.safeHazardWardChargesThisFloor) + safeFindableWardGain
-        ),
         chunkBreaksThisFloor: runNonNegativeInteger(run.chunkBreaksThisFloor) + (safePairsBroken > 0 ? 1 : 0),
         chunkPairsBrokenThisFloor: runNonNegativeInteger(run.chunkPairsBrokenThisFloor) + safePairsBroken,
         chunkScoreThisFloor: runNonNegativeInteger(run.chunkScoreThisFloor) + runNonNegativeInteger(chunkScore),
@@ -88,8 +76,6 @@ export const resolveTurnMatchProgress = ({
         chunkPairsDroppedThisFloor: runNonNegativeInteger(run.chunkPairsDroppedThisFloor) + runNonNegativeInteger(chunkDroppedPairs),
         chunkDropsThisRun: runNonNegativeInteger(run.chunkDropsThisRun) + (runNonNegativeInteger(chunkDroppedPairs) > 0 ? 1 : 0),
         bestRippleThisFloor: Math.max(runNonNegativeInteger(run.bestRippleThisFloor), runNonNegativeInteger(chunkRippleWaves)),
-        bestRippleThisRun: Math.max(runNonNegativeInteger(run.bestRippleThisRun), runNonNegativeInteger(chunkRippleWaves)),
-        anchorSealChargesThisFloor: decrementRunCounter(run.anchorSealChargesThisFloor, anchorSealUsed ? 1 : 0),
-        anchorSealUsesThisFloor: runNonNegativeInteger(run.anchorSealUsesThisFloor) + (anchorSealUsed ? 1 : 0)
+        bestRippleThisRun: Math.max(runNonNegativeInteger(run.bestRippleThisRun), runNonNegativeInteger(chunkRippleWaves))
     };
 };

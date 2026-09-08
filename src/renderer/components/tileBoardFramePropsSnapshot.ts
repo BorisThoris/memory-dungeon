@@ -1,5 +1,5 @@
 import type { MutableRefObject } from 'react';
-import type { GraphicsQualityPreset, HazardTileKind, Tile } from '../../shared/contracts';
+import type { GraphicsQualityPreset, Tile } from '../../shared/contracts';
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
 import type { ResolvingSelectionState } from './tileResolvingSelection';
 import type { TileTransform } from './tileBoardTransform';
@@ -45,11 +45,7 @@ export interface TileBezelFramePropsSnapshot {
     presentationSilhouette: boolean;
     presentationNBackAnchor: boolean;
     nonPickableBack: boolean;
-    hazardBackAccent: HazardTileKind | null;
-    routeBackAccent: boolean;
     traitRouteReadabilityIntensity?: TileTraitRouteReadabilityIntensity;
-    objectiveBackAccent: boolean;
-    enemyOccupiedBack: boolean;
     /** Cancels match pulse / flip pop when a new resolving pair replaces the previous without a full idle frame. */
     resolvingMatchWaveKey: string | null;
     /** Seconds a removed tile waits for the chunk-break wave before it bursts and leaves. */

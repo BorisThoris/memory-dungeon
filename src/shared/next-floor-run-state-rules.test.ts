@@ -15,12 +15,6 @@ describe('createNextFloorRunState', () => {
             matchResolutionsThisFloor: 7,
             findablesClaimedThisFloor: 2,
             recallMatchesThisFloor: 3,
-            hazardTileTriggersThisFloor: 4,
-            hazardShuffleSnaresThisFloor: 1,
-            dungeonTrapsResolvedThisFloor: 2,
-            enemyHazardsDefeatedThisFloor: 1,
-            shopOffers: [],
-            shopRerolls: 1,
             timerState: {
                 memorizeRemainingMs: null,
                 resolveRemainingMs: 100,
@@ -43,25 +37,16 @@ describe('createNextFloorRunState', () => {
             activeMutators: run.activeMutators,
             board: { ...nextBoard, level: 4 },
             parasiteFloors: 1,
-            parasiteWardRemaining: 0,
             memorizeRemainingMs: 2500
         });
 
         expect(next.status).toBe('memorize');
         expect(next.activeMutators).toEqual(run.activeMutators);
-        expect(next.pendingRouteCardPlan).toBeNull();
-        expect(next.sideRoom).toBeNull();
         expect(next.pendingMemorizeBonusMs).toBe(0);
         expect(next.pinnedTileIds).toEqual([]);
         expect(next.matchResolutionsThisFloor).toBe(0);
         expect(next.findablesClaimedThisFloor).toBe(0);
         expect(next.recallMatchesThisFloor).toBe(0);
-        expect(next.hazardTileTriggersThisFloor).toBe(0);
-        expect(next.hazardShuffleSnaresThisFloor).toBe(0);
-        expect(next.dungeonTrapsResolvedThisFloor).toBe(0);
-        expect(next.enemyHazardsDefeatedThisFloor).toBe(0);
-        expect(next.shopOffers).toEqual([]);
-        expect(next.shopRerolls).toBe(0);
         expect(next.timerState).toMatchObject({
             memorizeRemainingMs: 2500,
             resolveRemainingMs: null,
@@ -87,7 +72,6 @@ describe('createNextFloorRunState', () => {
             activeMutators: run.activeMutators,
             board: { ...run.board!, level: 4 },
             parasiteFloors: run.parasiteFloors,
-            parasiteWardRemaining: run.parasiteWardRemaining,
             memorizeRemainingMs: 1000
         });
 

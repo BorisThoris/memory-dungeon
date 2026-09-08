@@ -367,8 +367,7 @@ describe('desktop app flow', () => {
                 mistakes: 0,
                 clearLifeReason: 'none' as const,
                 clearLifeGained: 0
-            },
-            relicOffer: null
+            }
         };
 
         act(() => {

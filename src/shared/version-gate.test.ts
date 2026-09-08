@@ -52,7 +52,7 @@ describe('REG-089 local version gate', () => {
     it('requires game rules review for run contracts, catalog ids, daily identity, and player-visible rules', () => {
         const decision = assessVersionGate({
             kinds: ['catalog_ids', 'daily_identity'],
-            touchedContracts: ['RunState', 'RelicId', 'MutatorId', 'FindableKind'],
+            touchedContracts: ['RunState', 'MutatorId', 'FindableKind'],
             playerVisibleRuleChange: true,
             changesDailyIdentity: true
         });
@@ -85,12 +85,10 @@ describe('REG-089 local version gate', () => {
     });
 
     it('covers the current findable weighting rules under the game-rules gate', () => {
-        expect(GAME_RULES_VERSION).toBe(33);
+        expect(GAME_RULES_VERSION).toBe(34);
         expect(FINDABLE_KIND_SPAWN_WEIGHTS).toEqual({
-            shard_spark: 35,
-            score_glint: 35,
-            ward_spark: 15,
-            scout_glint: 15
+            shard_spark: 50,
+            score_glint: 50
         });
 
         const decision = assessVersionGate({

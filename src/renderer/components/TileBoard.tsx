@@ -12,7 +12,7 @@ import {
     type FocusEvent
 } from 'react';
 import { flushSync } from 'react-dom';
-import type { BoardScreenSpaceAA, BoardState, GraphicsQualityPreset, RewardPerkId, RunStatus } from '../../shared/contracts';
+import type { BoardScreenSpaceAA, BoardState, GraphicsQualityPreset, RunStatus } from '../../shared/contracts';
 import { getChainTargetFeedback } from '../../shared/chain-targets';
 import { getClumpRead } from '../../shared/clump-read-rules';
 import { CHAIN_BEAT_COPY } from '../copy/chainBeat';
@@ -130,15 +130,15 @@ type BoardOpportunityHeat = 'cashout' | 'normal' | 'prime' | 'surge';
 type BoardOpportunityCompassRow = {
     action: string;
     detail: string;
-    id: 'chain' | 'hazard' | 'perk' | 'pickup' | 'recovery' | 'tool' | 'trait';
+    id: 'chain' | 'hazard' | 'pickup' | 'recovery' | 'tool' | 'trait';
     impactCue: string;
     label: string;
     tone: string;
     value: string;
 };
-type BoardOpportunityLaneId = 'cash' | 'build' | 'pickup' | 'perk' | 'recover' | 'risk' | 'tool' | 'trait';
+type BoardOpportunityLaneId = 'cash' | 'build' | 'pickup' | 'recover' | 'risk' | 'tool' | 'trait';
 type BoardOpportunityLaneMapEntry = {
-    action: 'Cash now' | 'Prime build' | 'Claim pickup' | 'Cash perk' | 'Recover' | 'Reduce risk' | 'Study traits' | 'Use tool';
+    action: 'Cash now' | 'Prime build' | 'Claim pickup' | 'Recover' | 'Reduce risk' | 'Study traits' | 'Use tool';
     id: BoardOpportunityLaneId;
     label: 'Cash' | 'Build' | 'Pickup' | 'Perk' | 'Recover' | 'Risk' | 'Tool' | 'Trait';
     count: number;
@@ -164,8 +164,7 @@ const getBoardOpportunityHeat = (impactCue: string): BoardOpportunityHeat => {
     }
     if (
         normalizedCue.includes('prime') ||
-        normalizedCue.includes('follow-up') ||
-        normalizedCue.includes('perk armed')
+        normalizedCue.includes('follow-up')
     ) {
         return 'prime';
     }
@@ -250,12 +249,11 @@ const getFocusedPreviewScreenCue = ({
 
 
 
-const BOARD_OPPORTUNITY_LANE_ORDER: BoardOpportunityLaneId[] = ['cash', 'build', 'trait', 'pickup', 'perk', 'recover', 'risk', 'tool'];
+const BOARD_OPPORTUNITY_LANE_ORDER: BoardOpportunityLaneId[] = ['cash', 'build', 'trait', 'pickup', 'recover', 'risk', 'tool'];
 
 const BOARD_OPPORTUNITY_LANE_LABELS: Record<BoardOpportunityLaneId, BoardOpportunityLaneMapEntry['label']> = {
     build: 'Build',
     cash: 'Cash',
-    perk: 'Perk',
     pickup: 'Pickup',
     recover: 'Recover',
     trait: 'Trait',
@@ -266,7 +264,6 @@ const BOARD_OPPORTUNITY_LANE_LABELS: Record<BoardOpportunityLaneId, BoardOpportu
 const BOARD_OPPORTUNITY_LANE_ACTIONS: Record<BoardOpportunityLaneId, BoardOpportunityLaneMapEntry['action']> = {
     build: 'Prime build',
     cash: 'Cash now',
-    perk: 'Cash perk',
     pickup: 'Claim pickup',
     recover: 'Recover',
     trait: 'Study traits',
@@ -280,9 +277,6 @@ const boardOpportunityLaneId = (row: BoardOpportunityCompassRow): BoardOpportuni
     }
     if (row.id === 'recovery') {
         return 'recover';
-    }
-    if (row.id === 'perk') {
-        return 'perk';
     }
     if (row.id === 'pickup') {
         return 'pickup';
@@ -375,7 +369,7 @@ const boardChainRewardLadderActionAttr = (entries: readonly BoardChainRewardLadd
 
 const boardOpportunityAudioCue = (
     row: BoardOpportunityCompassRow
-): 'opportunity-cashout' | 'opportunity-hazard' | 'opportunity-perk' | 'opportunity-prime' | 'opportunity-recover' | 'opportunity-tool' => {
+): 'opportunity-cashout' | 'opportunity-hazard' | 'opportunity-prime' | 'opportunity-recover' | 'opportunity-tool' => {
     if (row.id === 'hazard') {
         return 'opportunity-hazard';
     }
@@ -384,9 +378,6 @@ const boardOpportunityAudioCue = (
     }
     if (row.id === 'tool') {
         return 'opportunity-tool';
-    }
-    if (row.id === 'perk') {
-        return 'opportunity-perk';
     }
     return getBoardOpportunityHeat(row.impactCue) === 'cashout' ? 'opportunity-cashout' : 'opportunity-prime';
 };
@@ -405,10 +396,7 @@ const boardOpportunityScreenCue = (row: BoardOpportunityCompassRow): BoardFeedba
     return 'tick';
 };
 
-const boardPayoffStackCrescendoAudioCue = (tier: string): 'cashout-pop' | 'prime-pop' | 'stack-burst' | 'super-burst' => {
-    if (tier === 'super') {
-        return 'super-burst';
-    }
+const boardPayoffStackCrescendoAudioCue = (tier: string): 'cashout-pop' | 'prime-pop' | 'stack-burst' => {
     if (tier === 'stack') {
         return 'stack-burst';
     }
@@ -462,10 +450,6 @@ interface TileBoardProps {
     traitRouteHintText?: string | null;
     /** Current run chain state, used to preview the payoff of a highlighted chain move. */
     chainContext?: {
-        armedPerkId?: RewardPerkId | null;
-        armedPerkDetail?: string | null;
-        armedPerkLabel?: string | null;
-        armedPerkPayoff?: string | null;
         comboShards: number;
         currentStreak: number;
         lives: number;
@@ -542,10 +526,10 @@ interface MouseDragSnapshot {
 const MOUSE_PAN_DRAG_THRESHOLD_PX = 8;
 const EMPTY_TILE_IDS: ReadonlySet<string> = new Set();
 const BOARD_MARKER_READABILITY_CONTRACT =
-    'hidden selected matched disabled enemy-occupied boss-marked trap-armed trap-resolved relic objective exit lock lever shop trait chain-ready chain-surge chain-reward-hot chain-setup trait-combo trait-combo-surge trait-payoff-stack trait-route-target perk-armed selected-followup';
-const BOARD_MARKER_SHAPE_CONTRACT = 'linked-route combo-surge payoff-bar payoff-stack swap-target-crossbar perk-armed-bar followup-target';
-const BOARD_MARKER_ACTION_CUE_CONTRACT = 'bank-lane build-lane cash-now follow-up perk-cash route-setup';
-const BOARD_MARKER_ACTION_PRIORITY_CONTRACT = 'cash-now perk-cash follow-up build-lane route-setup bank-lane';
+    'hidden selected matched disabled findable trait chain-ready chain-surge chain-reward-hot chain-setup trait-combo trait-combo-surge trait-payoff-stack trait-route-target selected-followup';
+const BOARD_MARKER_SHAPE_CONTRACT = 'linked-route combo-surge payoff-bar payoff-stack swap-target-crossbar followup-target';
+const BOARD_MARKER_ACTION_CUE_CONTRACT = 'bank-lane build-lane cash-now follow-up route-setup';
+const BOARD_MARKER_ACTION_PRIORITY_CONTRACT = 'cash-now follow-up build-lane route-setup bank-lane';
 const BOARD_MARKER_TRAIT_LANE_CONTRACT = 'shard guard tool risk block recall score';
 const CARD_TRAIT_LANE_ORDER_SET = new Set<TraitInteractionLaneId>(
     BOARD_MARKER_TRAIT_LANE_CONTRACT.split(' ') as TraitInteractionLaneId[]
@@ -570,7 +554,6 @@ const CARD_ACTION_PRIORITY_LABELS: Record<string, string> = {
     'build-lane': 'Route prime',
     'cash-now': 'Cash now',
     'follow-up': 'Follow-up',
-    'perk-cash': 'Perk cash',
     'route-setup': 'Route prime'
 };
 const CARD_ACTION_SHOT_LABELS: Record<string, string> = {
@@ -578,7 +561,6 @@ const CARD_ACTION_SHOT_LABELS: Record<string, string> = {
     'build-lane': 'Build',
     'cash-now': 'Cash',
     'follow-up': 'Tap',
-    'perk-cash': 'Perk',
     'route-setup': 'Set'
 };
 const CARD_ACTION_SHOT_DETAILS: Record<string, string> = {
@@ -586,7 +568,6 @@ const CARD_ACTION_SHOT_DETAILS: Record<string, string> = {
     'build-lane': 'Route lane',
     'cash-now': 'Cashout lane',
     'follow-up': 'Next tap',
-    'perk-cash': 'Perk lane',
     'route-setup': 'Setup lane'
 };
 const CARD_FEEDBACK_BEAT_PRIORITY = ['cashout', 'surge', 'follow-up', 'route', 'setup'] as const;
@@ -866,14 +847,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const [focusedTileId, setFocusedTileId] = useState<string | null>(null);
     /** When false, no tile should show the keyboard focus ring (avoids a permanent “hover” on first pickable tile). */
     const [boardApplicationFocused, setBoardApplicationFocused] = useState(false);
-    const [trapResolutionMessage, setTrapResolutionMessage] = useState('');
-    const [trapResolutionDetails, setTrapResolutionDetails] = useState<{
-        count: number;
-        effect: string;
-        next: string;
-    } | null>(null);
     const [lastResolutionFeedback, setLastResolutionFeedback] = useState('');
-    const previousResolvedTrapTileCountRef = useRef<number | null>(null);
 
     const { tiltRef: fieldTiltRef, motionParallaxSuppressed } = usePlatformTiltField({
         enabled: true,
@@ -919,25 +893,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         }
         return [...getTraitOpportunityTileIds(board)];
     }, [board, chainContext, runStatus]);
-    const perkArmedTileIds = useMemo(() => {
-        if (runStatus !== 'playing' || !chainContext?.armedPerkId) {
-            return [];
-        }
-        if (chainContext.armedPerkId === 'trait_streak_toolkit') {
-            return [...getTraitOpportunityTileIds(board)];
-        }
-        if (chainContext.armedPerkId === 'cursed_opener_greed') {
-            return board.tiles
-                .filter((tile) => tile.state === 'hidden' && tile.tileTraitKind === 'cursed')
-                .map((tile) => tile.id);
-        }
-        if (chainContext.armedPerkId === 'echo_conduit_double') {
-            return board.tiles
-                .filter((tile) => tile.state === 'hidden' && (tile.tileTraitKind === 'echo' || tile.tileTraitKind === 'conduit'))
-                .map((tile) => tile.id);
-        }
-        return [];
-    }, [board, chainContext, runStatus]);
     const selectedTraitFollowupTileIds = useMemo(() => {
         if (runStatus !== 'playing') {
             return [];
@@ -964,10 +919,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         cardFeedbackVisibleTraitPreviewCount,
         hiddenSlotsAttr,
         hiddenTileCount,
-        hiddenTrapSlotsAttr,
-        pickableHiddenSlotsAttr,
-        resolvedTrapSlotsAttr,
-        resolvedTrapTileCount
+        pickableHiddenSlotsAttr
     } = useMemo(() => {
         return buildTileBoardDomSurfaceModel({
             allowGambitThirdFlip,
@@ -980,7 +932,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             peekRevealedTileIds: peekSet,
             previewActive,
             runStatus,
-            perkArmedTileIds,
             selectedTraitFollowupTileIds,
             traitRewardHotTileIds,
             traitRouteTargetTileIds
@@ -995,7 +946,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         interactive,
         peekSet,
         previewActive,
-        perkArmedTileIds,
         runStatus,
         selectedTraitFollowupTileIds,
         traitRewardHotTileIds,
@@ -1004,52 +954,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const cardFeedbackStatesValue = cardFeedbackStatesAttr ?? '';
     const cardFeedbackTraitPayoffStackActive = /\btrait-payoff-stack:\d+/.test(cardFeedbackStatesValue);
     const cardFeedbackTraitComboSurgeActive = /\btrait-combo-surge:\d+/.test(cardFeedbackStatesValue);
-    useEffect(() => {
-        const previous = previousResolvedTrapTileCountRef.current;
-        previousResolvedTrapTileCountRef.current = resolvedTrapTileCount;
-        if (previous == null || resolvedTrapTileCount <= previous) {
-            return undefined;
-        }
-
-        const trapCount = Math.max(1, Math.round((resolvedTrapTileCount - previous) / 2));
-        const trapLabel =
-            board.tiles.find((tile) => tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'resolved')
-                ?.label ?? 'Trap';
-        const trapEffect = trapCount === 1 ? 'Trap effect paid' : 'Trap effects paid';
-        const trapNext = 'Chase next pair';
-        const message =
-            trapCount === 1
-                ? `Trap resolved${trapLabel === 'Trap' ? '' : `: ${trapLabel}`}. ${trapEffect}; ${trapNext}.`
-                : `${trapCount} traps resolved. ${trapEffect}; ${trapNext}.`;
-        let active = true;
-        queueMicrotask(() => {
-            if (!active) {
-                return;
-            }
-            setTrapResolutionMessage(message);
-            setTrapResolutionDetails({ count: trapCount, effect: trapEffect, next: trapNext });
-        });
-        return () => {
-            active = false;
-        };
-    }, [board.tiles, resolvedTrapTileCount]);
-
-    useEffect(() => {
-        if (resolvedTrapTileCount === 0 && trapResolutionMessage) {
-            let active = true;
-            queueMicrotask(() => {
-                if (active) {
-                    setTrapResolutionMessage('');
-                    setTrapResolutionDetails(null);
-                }
-            });
-            return () => {
-                active = false;
-            };
-        }
-        return undefined;
-    }, [resolvedTrapTileCount, trapResolutionMessage]);
-
     useEffect(() => {
         const counts = new Map<string, number>();
         for (const tile of board.tiles) {
@@ -1631,9 +1535,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const boardChainOpportunity = useMemo((): {
         chainReadyCount: number;
         chainReadyTileCount: number;
-        armedPerkDetail: string | null;
-        armedPerkLabel: string | null;
-        armedPerkPayoff: string | null;
         beatSignal: ChainOpportunityBeatSignal | null;
         cue: string;
         examples: string[];
@@ -1670,9 +1571,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             return {
                 chainReadyCount: 0,
                 chainReadyTileCount: 0,
-                armedPerkDetail: null,
-                armedPerkLabel: null,
-                armedPerkPayoff: null,
                 beatSignal: null,
                 cue: '',
                 examples: [],
@@ -1728,9 +1626,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         const setupAction = setupCount > 0 && traitRouteHintText?.startsWith('Swap ') ? 'Use swap' : null;
         const chainReadyCount = readyExamples.size;
         const chainReadyTileCount = traitOpportunityTileIds.size;
-        const armedPerkLabel = chainContext?.armedPerkLabel ?? null;
-        const armedPerkPayoff = chainContext?.armedPerkPayoff ?? null;
-        const armedPerkDetail = chainContext?.armedPerkDetail ?? null;
         const milestonePreview = chainContext ? getChainMilestonePreview(chainContext.currentStreak) : null;
         const milestoneTargetLabel = milestonePreview
             ? milestonePreview.distance <= 0
@@ -1930,9 +1825,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         return {
             chainReadyCount,
             chainReadyTileCount,
-            armedPerkDetail,
-            armedPerkLabel,
-            armedPerkPayoff,
             beatSignal,
             cue,
             examples,
@@ -2233,9 +2125,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                     ].filter(Boolean).join(' / '),
                     id: 'chain',
                     impactCue: boardChainOpportunity.rewardHot
-                        ? boardPickupOpportunity.count > 0 && boardChainOpportunity.armedPerkLabel
-                            ? 'Super stack'
-                            : boardPickupOpportunity.count > 0 || boardChainOpportunity.armedPerkLabel
+                        ? boardPickupOpportunity.count > 0
                             ? 'Stack cashout'
                             : 'Route cashout'
                         : boardChainOpportunity.selectedFollowupCount > 0
@@ -2266,12 +2156,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                         boardChainOpportunity.examples[0]
                     ].filter(Boolean).join(' / '),
                     id: 'chain',
-                    impactCue:
-                        boardPickupOpportunity.count > 0 && boardChainOpportunity.armedPerkLabel
-                            ? 'Super stack'
-                            : boardPickupOpportunity.count > 0 || boardChainOpportunity.armedPerkLabel
-                            ? 'Stack cashout'
-                            : 'Chain cashout',
+                    impactCue: boardPickupOpportunity.count > 0 ? 'Stack cashout' : 'Chain cashout',
                     label: 'Streak reward',
                     tone: 'chain',
                     value: boardChainOpportunity.rewardCue?.replace(/^Next reward /, '') ?? 'Reward ready'
@@ -2332,22 +2217,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 });
             }
 
-            if (boardChainOpportunity.armedPerkLabel) {
-                rows.push({
-                    action: 'Cash',
-                    detail: [
-                        boardChainOpportunity.armedPerkDetail,
-                        boardChainOpportunity.armedPerkPayoff,
-                        BOARD_ROUTE_COACHING.perkArmed
-                    ].filter(Boolean).join(' / '),
-                    id: 'perk',
-                    impactCue: 'Perk armed',
-                    label: 'Perk payoff',
-                    tone: 'perk',
-                    value: boardChainOpportunity.armedPerkLabel
-                });
-            }
-
             if (boardPickupOpportunity.count > 0) {
                 rows.push({
                     action: 'Claim',
@@ -2397,7 +2266,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         ]
     );
     const boardPayoffStackRows = boardOpportunityCompassRows.filter((row) =>
-        row.id === 'chain' || row.id === 'perk' || row.id === 'pickup' || row.id === 'recovery' || row.id === 'tool'
+        row.id === 'chain' || row.id === 'pickup' || row.id === 'recovery' || row.id === 'tool'
     );
     const boardPayoffStackLabelForRow = (row: BoardOpportunityCompassRow): string =>
         row.id === 'chain' ? 'Stack route' : row.label;
@@ -2412,9 +2281,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         boardPayoffStackRows.length >= 2
             ? (() => {
                   const impactCues = new Set(boardPayoffStackRows.map((row) => row.impactCue));
-                  const tone = impactCues.has('Super stack')
-                      ? 'cashout'
-                      : impactCues.has('Stack cashout')
+                  const tone = impactCues.has('Stack cashout')
                       ? 'cashout'
                       : impactCues.has('Stack prime')
                         ? 'setup'
@@ -2422,9 +2289,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                           ? 'followup'
                           : 'build';
                   const cue =
-                      impactCues.has('Super stack')
-                          ? 'Super stack'
-                          : tone === 'cashout'
+                      tone === 'cashout'
                           ? 'Stack cashout'
                           : tone === 'setup'
                           ? 'Stack prime'
@@ -2432,9 +2297,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                               ? 'Follow-up stack'
                               : 'Stack prime';
                   const action =
-                      impactCues.has('Super stack')
-                          ? 'Cash super stack'
-                          : tone === 'cashout'
+                      tone === 'cashout'
                           ? 'Cash now'
                           : tone === 'setup'
                             ? 'Prime'
@@ -2454,37 +2317,29 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                           ? 'Keep route moving'
                           : 'Keep reward stack primed';
                   const crescendo =
-                      impactCues.has('Super stack')
+                      tone === 'cashout'
                           ? {
-                                beatCount: 5,
-                                detail: 'Five-beat super cashout window',
-                                label: 'Super burst',
-                                screenCue: 'super',
-                                tier: 'super'
+                                beatCount: 3,
+                                detail: BOARD_ROUTE_COACHING.cashout,
+                                label: 'Cashout beat',
+                                screenCue: 'snap',
+                                tier: 'cashout'
                             }
-                          : tone === 'cashout'
+                          : boardPayoffStackRows.length >= 3
                             ? {
-                                  beatCount: 3,
-                                  detail: BOARD_ROUTE_COACHING.cashout,
-                                  label: 'Cashout beat',
-                                  screenCue: 'snap',
-                                  tier: 'cashout'
+                                  beatCount: 4,
+                                  detail: BOARD_ROUTE_COACHING.stacked,
+                                  label: 'Stack burst',
+                                  screenCue: 'burst',
+                                  tier: 'stack'
                               }
-                            : boardPayoffStackRows.length >= 3
-                              ? {
-                                    beatCount: 4,
-                                    detail: BOARD_ROUTE_COACHING.stacked,
-                                    label: 'Stack burst',
-                                    screenCue: 'burst',
-                                    tier: 'stack'
-                                }
-                              : {
-                                    beatCount: 2,
-                                    detail: BOARD_ROUTE_COACHING.payoff,
-                                    label: 'Prime beat',
-                                    screenCue: 'pulse',
-                                    tier: 'prime'
-                                };
+                            : {
+                                  beatCount: 2,
+                                  detail: BOARD_ROUTE_COACHING.payoff,
+                                  label: 'Prime beat',
+                                  screenCue: 'pulse',
+                                  tier: 'prime'
+                              };
                   return {
                       action,
                       crescendo,
@@ -3630,8 +3485,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-chain-opportunity-ready-count={boardChainOpportunity.chainReadyCount}
             data-chain-opportunity-ready-tile-count={boardChainOpportunity.chainReadyTileCount}
             data-chain-opportunity-setup-count={boardChainOpportunity.setupCount}
-            data-chain-opportunity-armed-perk={boardChainOpportunity.armedPerkLabel ?? 'none'}
-            data-chain-opportunity-armed-perk-payoff={boardChainOpportunity.armedPerkPayoff ?? 'none'}
             data-chain-opportunity-priority={boardChainOpportunity.priorityLabel ?? 'none'}
             data-chain-opportunity-momentum={boardChainOpportunity.momentumLabel ?? 'none'}
             data-chain-opportunity-next-action={boardChainOpportunity.nextActionId}
@@ -3727,13 +3580,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-opportunity-lane-count={boardOpportunityLaneMapRows.length}
             data-opportunity-lane-label={boardOpportunityLaneMapRows[0]?.label ?? 'none'}
             data-card-feedback-visible-trait-preview-count={cardFeedbackVisibleTraitPreviewCount}
-            data-dungeon-resolved-trap-count={resolvedTrapTileCount}
-            data-dungeon-resolved-trap-slots={resolvedTrapSlotsAttr}
-            data-dungeon-trap-resolution-effect={trapResolutionDetails?.effect ?? 'none'}
-            data-dungeon-trap-resolution-message={trapResolutionMessage}
-            data-dungeon-trap-resolution-next={trapResolutionDetails?.next ?? 'none'}
             data-selected-tile-count={board.flippedTileIds.length}
-            {...(hiddenTrapSlotsAttr != null ? { 'data-e2e-hidden-trap-slots': hiddenTrapSlotsAttr } : {})}
             {...(pickableHiddenSlotsAttr != null ? { 'data-e2e-pickable-hidden-slots': pickableHiddenSlotsAttr } : {})}
             data-hidden-tile-count={hiddenTileCount}
             data-hidden-slots={hiddenSlotsAttr}
@@ -3765,19 +3612,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 >
                     <span className={styles.passHandoffTitle}>{PASS_AND_PLAY_COPY.handoffTitle(handoffSeatLabel)}</span>
                     <span className={styles.passHandoffBody}>{PASS_AND_PLAY_COPY.handoffBody}</span>
-                </div>
-            ) : null}
-            {trapResolutionMessage ? (
-                <div
-                    className={styles.trapResolutionToast}
-                    data-testid="trap-resolution-feedback"
-                    role="status"
-                    aria-live="polite"
-                >
-                    <span className={styles.trapResolutionSigil} aria-hidden="true">
-                        !
-                    </span>
-                    <span className={styles.trapResolutionCopy}>{trapResolutionMessage}</span>
                 </div>
             ) : null}
             {!baselineWebGl ? (
@@ -3881,7 +3715,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         tileSwapPowerVisualActive={tileSwapPowerVisualActive}
                                         tileSwapEligibleTileIds={tileSwapEligibleTileIds}
                                         tileSwapFirstTileId={tileSwapFirstTileId}
-                                        perkArmedTileIds={perkArmedTileIds}
                                         selectedTraitFollowupTileIds={selectedTraitFollowupTileIds}
                                         traitRewardHotTileIds={traitRewardHotTileIds}
                                         traitRouteTargetTileIds={traitRouteTargetTileIds}

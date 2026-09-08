@@ -20,7 +20,6 @@ import { runNonNegativeInteger } from './run-number-guards';
  */
 export interface FloorCurioGreetingEffect {
     readonly peekCharges: number;
-    readonly shopGold: number;
     readonly guardTokens: number;
     readonly strayRemoveCharges: number;
     readonly undoUses: number;
@@ -40,7 +39,6 @@ export interface FloorCurioGreeting {
 const NOTHING: FloorCurioGreetingEffect = {
     guardTokens: 0,
     peekCharges: 0,
-    shopGold: 0,
     strayRemoveCharges: 0,
     undoUses: 0
 };
@@ -63,8 +61,8 @@ export const FLOOR_CURIO_GREETINGS: Readonly<Record<FloorCurioId, FloorCurioGree
     hoarding_rat: {
         curioId: 'hoarding_rat',
         reply: 'It considers you at length, then pushes two coins across the floor with its nose and immediately regrets it.',
-        gained: 'Two coins, grudgingly.',
-        effect: { ...NOTHING, shopGold: 2 }
+        gained: 'Two coins, grudgingly. Nothing down here takes them.',
+        effect: NOTHING
     },
     gossiping_skull: {
         curioId: 'gossiping_skull',
@@ -123,7 +121,6 @@ export const greetFloorCurio = (run: RunState): RunState => {
         ...run,
         floorCurioGreeted: true,
         peekCharges: runNonNegativeInteger(run.peekCharges) + greeting.effect.peekCharges,
-        shopGold: runNonNegativeInteger(run.shopGold) + greeting.effect.shopGold,
         strayRemoveCharges: runNonNegativeInteger(run.strayRemoveCharges) + greeting.effect.strayRemoveCharges,
         undoUsesThisFloor: runNonNegativeInteger(run.undoUsesThisFloor) + greeting.effect.undoUses,
         stats: {

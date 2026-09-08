@@ -3,7 +3,7 @@ import {
     type MutatorId,
     type RunState
 } from './contracts';
-import { runArray, runArrayCount } from './run-array-guards';
+import { runArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 import { getGameplayJournalSummaryFields } from './gameplay-journal';
@@ -35,17 +35,11 @@ export const createRunSummary = (run: RunState, unlockedAchievements: Achievemen
             gameMode: run.gameMode,
             gauntletSessionDurationMs: run.gauntletSessionDurationMs ?? undefined,
             activeMutators: [...runArray<MutatorId>(run.activeMutators)],
-            relicIds: [],
             payoffPickupClaimed: Math.min(runNonNegativeInteger(run.findablesClaimedThisFloor), payoffPickupTotal),
             payoffPickupTotal,
             payoffPressureExtra: stats.mismatches + stats.volatileTraitShuffles,
-            payoffRewardPerkCount: runArrayCount(run.rewardPerkIds),
-            payoffRoutePaid: run.traitRouteObjectiveCompletedThisFloor || Boolean(run.traitRouteObjectiveRewardClaimedThisFloor),
-            payoffRouteRewardText: run.traitRouteObjectiveRewardTextThisFloor,
-            startingLoadoutId: run.startingLoadoutId ?? null,
             practiceMode: run.practiceMode,
             wildMenuRun: run.wildMenuRun,
-            dungeonShowcaseRun: run.dungeonShowcaseRun,
             activeContract: run.activeContract ? { ...run.activeContract } : null,
             ...getGameplayJournalSummaryFields(run)
         };

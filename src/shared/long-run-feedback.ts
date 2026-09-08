@@ -1,5 +1,5 @@
 import { RECALL_FOCUS_MAX, type FindableKind, type RunState } from './contracts';
-import { getFindableKindLabel, getFindableRewardCopy, getFindableSpawnWeightRows } from './findables';
+import { getFindableKindLabel, getFindableSpawnWeightRows } from './findables';
 import type { MechanicTokenId } from './mechanic-feedback';
 import { getMemoryRecallFeedback } from './memory-recall-feedback';
 import { getRunEconomyRows } from './run-economy';
@@ -9,7 +9,6 @@ import { getTraitRouteObjectiveStatus } from './trait-route-objectives';
 
 export type FeedbackCauseKind =
     | 'match_reward'
-    | 'route_reward'
     | 'power_use'
     | 'objective_progress'
     | 'economy_delta'
@@ -36,7 +35,7 @@ export interface PerfectMemoryAttribution {
     tokens: readonly MechanicTokenId[];
 }
 
-export type TouchHudDetailKind = 'objective' | 'route' | 'memory' | 'perfect_memory' | 'economy';
+export type TouchHudDetailKind = 'objective' | 'memory' | 'perfect_memory' | 'economy';
 
 export interface TouchHudDetailRow {
     id: TouchHudDetailKind;
@@ -53,24 +52,6 @@ export interface TerminologyContractRow {
     stateOwner: string;
     playerCopyRule: string;
 }
-
-export interface SafeExpansionImpactRow {
-    id: FindableKind | 'ward_cache';
-    label: string;
-    surface: 'findable' | 'hazard_reward_contract';
-    objectiveImpact: string;
-    perfectMemoryImpact: 'safe' | 'neutral';
-    runtimeStatus: 'wired' | 'read_model_only';
-}
-
-const WARD_CACHE_SAFE_EXPANSION_IMPACT_ROW: SafeExpansionImpactRow = {
-    id: 'ward_cache',
-    label: 'Ward cache: future safe hazard/reward candidate',
-    surface: 'hazard_reward_contract',
-    objectiveImpact: 'Documented as a read-model-only candidate until hazard runtime tuning is separately versioned.',
-    perfectMemoryImpact: 'neutral',
-    runtimeStatus: 'read_model_only'
-};
 
 export interface FindableDistributionRow {
     id: FindableKind;
@@ -124,7 +105,6 @@ export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
     const objective = getTraitRouteObjectiveStatus(run);
     const pm = getPerfectMemoryAttribution(run);
     const forgottenTileCount = runArrayCount(run.forgottenTileIdsThisFloor);
-    const matchedPairCount = runArrayCount(run.matchedPairKeysThisRun);
 
     if (objective && (objective.progress > 0 || objective.completed)) {
         rows.push(
@@ -174,23 +154,6 @@ export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
         );
     }
 
-    if (matchedPairCount > 0) {
-        rows.push(
-            causeRow({
-                id: 'latest-match-route',
-                kind: 'route_reward',
-                label: 'Route',
-                summary: `${matchedPairCount} pair(s) resolved this run`,
-                detail:
-                    run.pendingRouteCardPlan?.routeType != null
-                        ? `${run.pendingRouteCardPlan.routeType} route plan is pending.`
-                        : 'Resolved matches may open route cards, exits, or local archive rewards.',
-                tokens: ['reward', 'objective'],
-                priority: 40
-            })
-        );
-    }
-
     if (pm.locked) {
         rows.push(
             causeRow({
@@ -205,14 +168,14 @@ export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
         );
     }
 
-    if (run.shopGold > 0 || stats.comboShards > 0 || stats.guardTokens > 0) {
+    if (stats.comboShards > 0 || stats.guardTokens > 0) {
         rows.push(
             causeRow({
                 id: 'economy',
                 kind: 'economy_delta',
                 label: 'Economy',
-                summary: `${run.shopGold} gold, ${stats.comboShards}/2 shards, ${stats.guardTokens}/2 guard`,
-                detail: 'Temporary run resources shifted as caches, route cards, shops, and pickups resolved.',
+                summary: `${stats.comboShards}/2 shards, ${stats.guardTokens}/2 guard`,
+                detail: 'Temporary run resources shifted as streaks, traits and pickups resolved.',
                 tokens: ['reward', 'cost'],
                 priority: 60
             })
@@ -225,12 +188,12 @@ export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
 export const getTouchHudDetailRows = (run: RunState): TouchHudDetailRow[] => {
     const objective = getTraitRouteObjectiveStatus(run);
     const economy = getRunEconomyRows(run)
-        .filter((row) => ['shop_gold', 'combo_shards', 'guard_tokens', 'findable_pickups'].includes(row.id))
+        .filter((row) => ['combo_shards', 'guard_tokens', 'findable_pickups'].includes(row.id))
         .map((row) => `${row.label} ${row.value}`)
         .join(', ');
     const pm = getPerfectMemoryAttribution(run);
-    const routeType = run.board?.routeWorldProfile?.routeType ?? run.pendingRouteCardPlan?.routeType ?? 'none';
     const recall = getMemoryRecallFeedback(run);
+    const stats = normalizeSessionStats(run.stats);
 
     return [
         {
@@ -239,16 +202,6 @@ export const getTouchHudDetailRows = (run: RunState): TouchHudDetailRow[] => {
             value: objective ? `${objective.progress}/${objective.required}` : 'none',
             detail: objective ? `${objective.label}: ${objective.detail}` : 'No trait route objective on this floor.',
             tokens: ['objective']
-        },
-        {
-            id: 'route',
-            label: 'Route',
-            value: routeType,
-            detail:
-                run.pendingRouteCardPlan != null
-                    ? `${run.pendingRouteCardPlan.routeType} route plan queued.`
-                    : 'No pending route card plan.',
-            tokens: ['objective', 'reward']
         },
         {
             id: 'memory',
@@ -267,7 +220,7 @@ export const getTouchHudDetailRows = (run: RunState): TouchHudDetailRow[] => {
         {
             id: 'economy',
             label: 'Economy',
-            value: `${run.shopGold} gold`,
+            value: `${stats.comboShards}/2 shards, ${stats.guardTokens}/2 guard`,
             detail: economy,
             tokens: ['reward', 'cost']
         }
@@ -309,13 +262,6 @@ export const LONG_RUN_TERMINOLOGY_ROWS: readonly TerminologyContractRow[] = [
         playerCopyRule: 'Use decoy for fake pair pressure, not for hidden rewards.'
     },
     {
-        id: 'route_special',
-        term: 'Route special',
-        contract: 'Route-world modifier or reward carried by a pair.',
-        stateOwner: 'Tile.routeSpecialKind or Tile.routeCardKind',
-        playerCopyRule: 'Use route special for route rewards and route risks.'
-    },
-    {
         id: 'objective',
         term: 'Objective',
         contract: 'Floor goal with progress, completion, and HUD detail.',
@@ -323,25 +269,3 @@ export const LONG_RUN_TERMINOLOGY_ROWS: readonly TerminologyContractRow[] = [
         playerCopyRule: 'Use objective for goals only, not incidental rewards.'
     }
 ] as const;
-
-export const SAFE_EXPANSION_IMPACT_ROWS: readonly SafeExpansionImpactRow[] = [
-    {
-        id: 'ward_spark',
-        label: `${getFindableKindLabel('ward_spark')}: ${getFindableRewardCopy('ward_spark')}`,
-        surface: 'findable',
-        objectiveImpact: 'Adds one capped safe-hazard ward charge; does not complete objectives by itself.',
-        perfectMemoryImpact: 'safe',
-        runtimeStatus: 'wired'
-    },
-    {
-        id: 'scout_glint',
-        label: `${getFindableKindLabel('scout_glint')}: ${getFindableRewardCopy('scout_glint')}`,
-        surface: 'findable',
-        objectiveImpact: 'Reveals one hazard, dungeon, or route family through the existing scout path; objective progress remains rule-driven.',
-        perfectMemoryImpact: 'safe',
-        runtimeStatus: 'wired'
-    },
-    WARD_CACHE_SAFE_EXPANSION_IMPACT_ROW
-] as const;
-
-export const WARD_CACHE_CONTRACT_ROW = WARD_CACHE_SAFE_EXPANSION_IMPACT_ROW;

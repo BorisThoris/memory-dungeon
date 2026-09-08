@@ -283,24 +283,20 @@ describe('floor archetype progression contract', () => {
 
         expect(byArchetype.get('treasure_gallery:3')).toMatchObject({
             role: 'reward',
-            routeAffinity: 'mystery',
             floorTag: 'breather',
             featuredObjectiveId: 'scholar_style'
         });
         expect(byArchetype.get('breather:6')).toMatchObject({
             role: 'recovery',
-            routeAffinity: 'safe',
             floorTag: 'breather'
         });
         expect(byArchetype.get('trap_hall:7')).toMatchObject({
             role: 'boss',
-            routeAffinity: 'greed',
             floorTag: 'boss',
             featuredObjectiveId: 'glass_witness'
         });
         expect(byArchetype.get('script_room:8')).toMatchObject({
             role: 'mystery',
-            routeAffinity: 'mystery',
             featuredObjectiveId: 'flip_par'
         });
     });

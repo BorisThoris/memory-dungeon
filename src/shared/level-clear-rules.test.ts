@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { BOSS_FLOOR_SCORE_MULTIPLIER, type BoardState } from './contracts';
+import { BOSS_FLOOR_SCORE_MULTIPLIER } from './contracts';
 import { createNewRun } from './game';
 import {
-    applyFloorClearEnemyHazardDefeats,
     calculateFloorClearScore,
     createFloorClearLevelResult,
     getFloorClearStatLevelResultFields,
@@ -19,42 +18,28 @@ describe('level-clear-rules', () => {
 
 
 
-    it('closes the open flips on a floor clear and leaves the run alone', () => {
-        const run = createNewRun(0);
-        const board: BoardState = {
-            ...run.board!,
-            flippedTileIds: ['tile-a']
-        };
-
-        const result = applyFloorClearEnemyHazardDefeats(run, board);
-
-        expect(result.run).toBe(run);
-        expect(result.board.flippedTileIds).toEqual([]);
-        expect(result.board.tiles).toBe(board.tiles);
-    });
 
     it('maps positive floor counters into optional level-result fields', () => {
         const run = {
             ...createNewRun(0),
-            hazardTileTriggersThisFloor: 2,
-            hazardShuffleSnaresThisFloor: 0,
-            mimicCacheClaimsThisFloor: 1,
+            chunkBreaksThisFloor: 2,
+            feverBreaksThisFloor: 0,
+            recallMatchesThisFloor: 1,
             recallMistakesThisFloor: 3,
-            safeHazardWardsUsedThisFloor: 0
+            bestChainThisFloor: 0
         };
 
         expect(getFloorClearStatLevelResultFields(run)).toMatchObject({
-            hazardTileTriggers: 2,
-            hazardShuffleSnares: undefined,
-            mimicCacheClaims: 1,
+            chunkBreaks: 2,
+            feverBreaks: undefined,
+            recallMatches: 1,
             recallMistakes: 3,
-            safeHazardWardsUsed: undefined
+            bestChain: undefined
         });
     });
 
     it('calculates normal floor clear score from clear bonuses and floor counters', () => {
         const result = calculateFloorClearScore({
-            bossTrophyCacheScore: 0,
             currentLevelScore: 120,
             featuredObjectiveStreakBonus: 12,
             floorTag: 'normal',
@@ -73,7 +58,6 @@ describe('level-clear-rules', () => {
 
     it('normalizes malformed floor clear score inputs before subtotaling', () => {
         const result = calculateFloorClearScore({
-            bossTrophyCacheScore: Number.POSITIVE_INFINITY,
             currentLevelScore: Number.NaN,
             featuredObjectiveStreakBonus: 3.8,
             floorTag: 'normal',
@@ -86,9 +70,8 @@ describe('level-clear-rules', () => {
         expect(result.scoreGained).toBe(result.preBossSubtotal);
     });
 
-    it('applies the boss floor score multiplier after boss trophy cache score', () => {
+    it('applies the boss floor score multiplier after the clear bonuses', () => {
         const result = calculateFloorClearScore({
-            bossTrophyCacheScore: 90,
             currentLevelScore: 150,
             featuredObjectiveStreakBonus: 0,
             floorTag: 'boss',
@@ -98,7 +81,7 @@ describe('level-clear-rules', () => {
         });
 
         expect(result.perfectBonus).toBe(0);
-        expect(result.preBossSubtotal).toBe(150 + result.levelBonus + 30 + 90);
+        expect(result.preBossSubtotal).toBe(150 + result.levelBonus + 30);
         expect(result.scoreGained).toBe(
             Math.floor(result.preBossSubtotal * BOSS_FLOOR_SCORE_MULTIPLIER)
         );
@@ -107,14 +90,12 @@ describe('level-clear-rules', () => {
     it('creates floor clear level results with deduped tags and positive optional counters', () => {
         const run = {
             ...createNewRun(0),
-            hazardTileTriggersThisFloor: 2,
+            chunkBreaksThisFloor: 2,
             recallMatchesThisFloor: 1
         };
 
         const result = createFloorClearLevelResult({
-            bossTrophyCacheOutcome: 'claimed',
-            bossTrophyCacheScore: 90,
-            bonusTags: ['boss_floor', 'boss_floor', 'boss_trophy_cache'],
+            bonusTags: ['boss_floor', 'boss_floor', 'extreme_fever'],
             clearLifeGained: 1,
             clearLifeReason: 'perfect',
             featuredObjectiveCompleted: true,
@@ -128,7 +109,6 @@ describe('level-clear-rules', () => {
             objectiveBonusScore: 40,
             perfect: true,
             rating: 'S',
-            routeChoices: [{ id: 'route-a', routeType: 'safe', label: 'Safe', detail: 'Safe route.' }],
             run,
             scoreGained: 250
         });
@@ -142,26 +122,21 @@ describe('level-clear-rules', () => {
             mistakes: 0,
             clearLifeReason: 'perfect',
             clearLifeGained: 1,
-            bonusTags: ['boss_floor', 'boss_trophy_cache'],
+            bonusTags: ['boss_floor', 'extreme_fever'],
             objectiveBonusScore: 40,
             featuredObjectiveId: 'flip_par',
             featuredObjectiveCompleted: true,
             featuredObjectiveStreak: 3,
             featuredObjectiveStreakBonus: 12,
-            bossTrophyCacheOutcome: 'claimed',
-            bossTrophyCacheScore: 90,
-            hazardTileTriggers: 2,
+            chunkBreaks: 2,
             recallMatches: 1
         });
-        expect(result.routeChoices).toHaveLength(1);
     });
 
     it('omits featured objective fields and zero optional rewards when absent', () => {
         const run = createNewRun(0);
 
         const result = createFloorClearLevelResult({
-            bossTrophyCacheOutcome: undefined,
-            bossTrophyCacheScore: 0,
             bonusTags: [],
             clearLifeGained: 0,
             clearLifeReason: 'none',
@@ -176,7 +151,6 @@ describe('level-clear-rules', () => {
             objectiveBonusScore: 0,
             perfect: false,
             rating: 'C',
-            routeChoices: undefined,
             run,
             scoreGained: 100
         });
@@ -187,6 +161,6 @@ describe('level-clear-rules', () => {
         expect(result.featuredObjectiveCompleted).toBeUndefined();
         expect(result.featuredObjectiveStreak).toBeUndefined();
         expect(result.featuredObjectiveStreakBonus).toBeUndefined();
-        expect(result.bossTrophyCacheScore).toBeUndefined();
+        expect(result.chunkBreaks).toBeUndefined();
     });
 });

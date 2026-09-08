@@ -94,11 +94,11 @@ test.describe('Gameplay readability hardening', () => {
         const frame = page.getByTestId('tile-board-frame');
         await expect(frame).toHaveAttribute(
             'data-card-feedback-marker-contract',
-            /hidden selected matched disabled enemy-occupied boss-marked trap-armed trap-resolved relic objective exit lock lever shop trait chain-ready chain-surge chain-reward-hot chain-setup trait-combo trait-combo-surge trait-payoff-stack trait-route-target/
+            /hidden selected matched disabled findable trait chain-ready chain-surge chain-reward-hot chain-setup trait-combo trait-combo-surge trait-payoff-stack trait-route-target/
         );
         await expect(frame).toHaveAttribute(
             'data-card-feedback-marker-shape-contract',
-            'linked-route combo-surge payoff-bar payoff-stack swap-target-crossbar perk-armed-bar followup-target'
+            'linked-route combo-surge payoff-bar payoff-stack swap-target-crossbar followup-target'
         );
 
         const states = await readCardFeedbackStates(page);

@@ -50,14 +50,7 @@ describe('board build rules', () => {
                         }
                         expect([...counts.entries()].filter(([, count]) => count !== 2), where).toEqual([]);
                         expect(counts.size, where).toBe(board.pairCount);
-
-                        expect(board.tiles.filter((boardTile) => boardTile.dungeonCardKind != null), where).toEqual([]);
-                        expect(board.tiles.filter((boardTile) => boardTile.tileHazardKind != null), where).toEqual([]);
-                        expect(board.tiles.filter((boardTile) => boardTile.routeCardKind != null), where).toEqual([]);
-                        expect(board.enemyHazards ?? [], where).toEqual([]);
-                        expect(board.dungeonExitTileId, where).toBeNull();
-                        expect(board.dungeonShopTileId, where).toBeNull();
-                        expect(board.dungeonBossId, where).toBeNull();
+                        expect(board.tiles.filter((boardTile) => boardTile.pairKey.startsWith('__')), where).toEqual([]);
                     }
                 }
             }
@@ -70,7 +63,7 @@ describe('board build rules', () => {
         expect(buildBoard(4, options)).toEqual(buildBoard(4, options));
     });
 
-    it('copies exact fixed tiles without dungeon augmentation', () => {
+    it('copies exact fixed tiles as they were authored', () => {
         const fixedTiles = [tile('a1', 'A'), tile('a2', 'A')];
 
         const board = buildBoard(2, {
@@ -83,8 +76,6 @@ describe('board build rules', () => {
 
         expect(board.tiles).toEqual(fixedTiles);
         expect(board.tiles).not.toBe(fixedTiles);
-        expect(board.dungeonExitTileId).toBeNull();
-        expect(board.dungeonObjectiveId).toBe('find_exit');
     });
 
 

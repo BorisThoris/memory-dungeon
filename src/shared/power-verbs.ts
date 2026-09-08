@@ -1,5 +1,4 @@
 import type { RunState } from './contracts';
-import { hasFreeTargetedReconfiguration } from './board-power-availability';
 import {
     CORE_SAFE_MEMORY_TAX,
     perfectMemoryImpactCopy,
@@ -70,7 +69,7 @@ const hasPeekTarget = (run: RunState): boolean =>
     );
 
 const hasRowShufflePayment = (run: RunState): boolean =>
-    runNonNegativeInteger(run.regionShuffleCharges) > 0 || hasFreeTargetedReconfiguration(run);
+    runNonNegativeInteger(run.regionShuffleCharges) > 0;
 
 const hiddenTileCount = (run: RunState): number =>
     (run.board?.tiles ?? []).filter((tile) => tile.state === 'hidden').length;

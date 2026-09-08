@@ -13,20 +13,16 @@ const tile = (overrides: Partial<Tile> = {}): Tile =>
     }) as Tile;
 
 const input = (overrides: Partial<TileBoardCardTintInput> = {}): TileBoardCardTintInput => ({
-    enemyOccupiedBack: false,
     faceUp: false,
     graphicsQuality: 'medium',
-    hazardBackAccent: null,
     hoverDomParity: false,
     hoverFaceUpPickable: false,
     isPinned: false,
     nonPickableBack: false,
-    objectiveBackAccent: false,
     presentationNBackAnchor: false,
     presentationSilhouette: false,
     presentationWideRecall: false,
     resolvingSelection: null,
-    routeBackAccent: false,
     tile: tile(),
     ...overrides
 });
@@ -55,8 +51,8 @@ describe('tileBoardCardTint', () => {
         const target = new Color();
         const result = applyTileBoardCardTint(
             input({
-                hazardBackAccent: 'cascade_cache',
-                hoverDomParity: true
+                hoverDomParity: true,
+                tile: { ...input().tile, findableKind: 'shard_spark' }
             }),
             target,
             new Color()

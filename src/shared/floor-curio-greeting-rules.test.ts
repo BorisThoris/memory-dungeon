@@ -83,11 +83,6 @@ describe('what the greeting actually hands over', () => {
         expect(greetFloorCurio(run).stats.guardTokens).toBe(run.stats.guardTokens + 1);
     });
 
-    it('the rat parts with two coins', () => {
-        const run = standingOn('hoarding_rat');
-        expect(greetFloorCurio(run).shopGold).toBe(run.shopGold + 2);
-    });
-
     it('the torchbearer points at something', () => {
         const run = standingOn('nervous_torchbearer');
         expect(greetFloorCurio(run).peekCharges).toBe(run.peekCharges + 1);
@@ -147,7 +142,7 @@ describe('a run can reach the verb at all', () => {
         // about, quietly changing the starting peeks, is variance the player can never account for.
         const seeds = [1, 2, 3, 4, 5, 6, 7, 8].map((runSeed) => createNewRun(0, { runSeed }));
         const budgets = seeds.map(
-            (run) => `${run.peekCharges}:${run.shuffleCharges}:${run.shopGold}:${run.stats.guardTokens}`
+            (run) => `${run.peekCharges}:${run.shuffleCharges}:${run.stats.guardTokens}`
         );
 
         expect(new Set(budgets).size).toBe(1);
@@ -162,10 +157,9 @@ describe('a run can reach the verb at all', () => {
             board: { ...base.board!, level: 3 },
             lives: base.lives,
             activeMutators: [],
-            dungeonRun: base.dungeonRun,
             parasiteFloors: 0,
-            parasiteWardRemaining: 0
-        } as unknown as Parameters<typeof createNextFloorRunState>[1]);
+            memorizeRemainingMs: 6_000
+        });
 
         expect(next.floorCurioGreeted).toBe(false);
     });

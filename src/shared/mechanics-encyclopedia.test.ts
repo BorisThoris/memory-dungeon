@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MUTATOR_IDS, type AchievementId, type GameMode, type MutatorId, type RelicId } from './contracts';
+import { MUTATOR_IDS, type AchievementId, type GameMode, type MutatorId } from './contracts';
 import {
     ACHIEVEMENT_CATALOG,
     CODEX_CORE_TOPICS,
@@ -13,8 +13,7 @@ import {
     ENCYCLOPEDIA_VERSION,
     GAME_MODE_CODEX,
     glossaryTermById,
-    MUTATOR_CATALOG,
-    RELIC_CATALOG
+    MUTATOR_CATALOG
 } from './mechanics-encyclopedia';
 
 const TOPIC_ID = /^[a-z][a-z0-9_]*$/;
@@ -81,12 +80,6 @@ describe('mechanics-encyclopedia', () => {
     it('ACHIEVEMENT_CATALOG has an entry per AchievementId with id/title/description aligned to keys', () => {
         for (const id of Object.keys(ACHIEVEMENT_CATALOG) as AchievementId[]) {
             assertCatalogEntry(id, ACHIEVEMENT_CATALOG[id]);
-        }
-    });
-
-    it('RELIC_CATALOG has an entry per RelicId with id/title/description aligned to keys', () => {
-        for (const id of Object.keys(RELIC_CATALOG) as RelicId[]) {
-            assertCatalogEntry(id, RELIC_CATALOG[id]);
         }
     });
 

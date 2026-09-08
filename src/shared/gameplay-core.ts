@@ -25,7 +25,6 @@ import {
 } from './gameplay-core-contracts';
 import { getBoardTurnAnnouncementFacts } from './board-turn-event-facts';
 import { finishMemorizePhase } from './memorize-phase-rules';
-import { createRunProgressionRepairTransition } from './run-progression-repair';
 import { disableDebugPeek, enableDebugPeek, pauseRun, resumeRun } from './run-timer-rules';
 import {
     getRunInventoryItemQuantity,
@@ -92,7 +91,6 @@ const CURIO_GREET_SOURCE: GameplaySource = { kind: 'system', id: 'floor_curio' }
 const TILE_FLIP_SOURCE: GameplaySource = { kind: 'system', id: 'tile_flip' };
 const MEMORIZE_SOURCE: GameplaySource = { kind: 'system', id: 'memorize' };
 const RUN_TIMER_SOURCE: GameplaySource = { kind: 'system', id: 'run_timer' };
-const PROGRESSION_REPAIR_SOURCE: GameplaySource = { kind: 'system', id: 'progression_repair' };
 const SCORE_PARASITE_SOURCE: GameplaySource = { kind: 'system', id: 'score_parasite' };
 const FLOOR_ADVANCE_SOURCE: GameplaySource = { kind: 'system', id: 'floor_advance' };
 const DEBUG_REVEAL_SOURCE: GameplaySource = { kind: 'system', id: 'debug_reveal' };
@@ -293,17 +291,13 @@ const applyPeekCommand = (
         before,
         after
     });
-    const beforeTile = run.board?.tiles.find((tile) => tile.id === command.targetTileId);
-    const afterTile = nextRun.board?.tiles.find((tile) => tile.id === command.targetTileId);
     writeEvent({
         type: 'board.peeked',
         targetTileId: command.targetTileId,
         peekChargesBefore: before,
         peekChargesAfter: after,
         recallFocusBefore: runNonNegativeInteger(run.recallFocus),
-        recallFocusAfter: runNonNegativeInteger(nextRun.recallFocus),
-        routeSpecialRevealed:
-            beforeTile?.routeSpecialRevealed !== true && afterTile?.routeSpecialRevealed === true
+        recallFocusAfter: runNonNegativeInteger(nextRun.recallFocus)
     });
     writeEvent({
         type: 'feedback.requested',
@@ -313,16 +307,6 @@ const applyPeekCommand = (
     });
     return { run: nextRun, command, events, accepted: true };
 };
-
-/*
- * The Endless risk wager staked an objective streak for Favor, and Favor bought relic picks. Both
- * went in Gen 175; an accept in an old journal is rejected with a reason.
- */
-const applyRiskWagerAcceptCommand = (
-    run: RunState,
-    command: Extract<GameplayCommand, { type: 'risk_wager.accept' }>
-): GameplayCommandResult =>
-    rejectedResult(run, command.commandId, 'There is no risk wager to accept any more.', command);
 
 const applyGambitCommitCommand = (
     run: RunState,
@@ -376,7 +360,6 @@ const applyShuffleCommand = (
     const writeEvent = makeEventWriter(command.commandId, SHUFFLE_SOURCE, events);
     const beforeCharges = runNonNegativeInteger(run.shuffleCharges);
     const afterCharges = runNonNegativeInteger(nextRun.shuffleCharges);
-    const usedFreeCharge = run.freeShuffleThisFloor === true && nextRun.freeShuffleThisFloor === false;
     writeEvent({
         type: 'inventory.changed',
         itemId: 'shuffle_charge',
@@ -392,13 +375,12 @@ const applyShuffleCommand = (
             .filter((tile) => tile.state === 'hidden')
             .map((tile) => tile.id),
         shuffleNonceBefore: runNonNegativeInteger(run.shuffleNonce),
-        shuffleNonceAfter: runNonNegativeInteger(nextRun.shuffleNonce),
-        usedFreeCharge
+        shuffleNonceAfter: runNonNegativeInteger(nextRun.shuffleNonce)
     });
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.shuffle.used',
-        message: `Full-board shuffle committed${usedFreeCharge ? ' its free use' : `; ${afterCharges} charge${afterCharges === 1 ? '' : 's'} remain`}.`,
+        message: `Full-board shuffle committed; ${afterCharges} charge${afterCharges === 1 ? '' : 's'} remain.`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -416,7 +398,6 @@ const applyRegionShuffleCommand = (
     const writeEvent = makeEventWriter(command.commandId, REGION_SHUFFLE_SOURCE, events);
     const beforeCharges = runNonNegativeInteger(run.regionShuffleCharges);
     const afterCharges = runNonNegativeInteger(nextRun.regionShuffleCharges);
-    const usedFreeCharge = run.regionShuffleFreeThisFloor === true && nextRun.regionShuffleFreeThisFloor === false;
     const columns = runNonNegativeInteger(run.board?.columns);
     writeEvent({
         type: 'inventory.changed',
@@ -434,13 +415,12 @@ const applyRegionShuffleCommand = (
             .filter((tile, index) => tile.state === 'hidden' && columns > 0 && Math.floor(index / columns) === command.rowIndex)
             .map((tile) => tile.id),
         shuffleNonceBefore: runNonNegativeInteger(run.shuffleNonce),
-        shuffleNonceAfter: runNonNegativeInteger(nextRun.shuffleNonce),
-        usedFreeCharge
+        shuffleNonceAfter: runNonNegativeInteger(nextRun.shuffleNonce)
     });
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.region_shuffle.used',
-        message: `Row ${command.rowIndex + 1} shuffled${usedFreeCharge ? ' for free' : `; ${afterCharges} row/swap charge${afterCharges === 1 ? '' : 's'} remain`}.`,
+        message: `Row ${command.rowIndex + 1} shuffled; ${afterCharges} row/swap charge${afterCharges === 1 ? '' : 's'} remain.`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -458,7 +438,6 @@ const applyTileSwapCommand = (
     const writeEvent = makeEventWriter(command.commandId, TILE_SWAP_SOURCE, events);
     const beforeCharges = runNonNegativeInteger(run.regionShuffleCharges);
     const afterCharges = runNonNegativeInteger(nextRun.regionShuffleCharges);
-    const usedFreeCharge = run.regionShuffleFreeThisFloor === true && nextRun.regionShuffleFreeThisFloor === false;
     writeEvent({
         type: 'inventory.changed',
         itemId: 'region_shuffle_charge',
@@ -473,13 +452,12 @@ const applyTileSwapCommand = (
         firstTileId: command.firstTileId,
         secondTileId: command.secondTileId,
         shuffleNonceBefore: runNonNegativeInteger(run.shuffleNonce),
-        shuffleNonceAfter: runNonNegativeInteger(nextRun.shuffleNonce),
-        usedFreeCharge
+        shuffleNonceAfter: runNonNegativeInteger(nextRun.shuffleNonce)
     });
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.tile_swap.used',
-        message: `${command.firstTileId} swapped with ${command.secondTileId}${usedFreeCharge ? ' for free' : `; ${afterCharges} row/swap charge${afterCharges === 1 ? '' : 's'} remain`}.`,
+        message: `${command.firstTileId} swapped with ${command.secondTileId}; ${afterCharges} row/swap charge${afterCharges === 1 ? '' : 's'} remain.`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -543,8 +521,6 @@ const applyGreetCurioCommand = (
         curioId: greeting.curioId,
         peekChargesBefore: runNonNegativeInteger(run.peekCharges),
         peekChargesAfter: runNonNegativeInteger(nextRun.peekCharges),
-        shopGoldBefore: runNonNegativeInteger(run.shopGold),
-        shopGoldAfter: runNonNegativeInteger(nextRun.shopGold),
         guardTokensBefore: runNonNegativeInteger(run.stats.guardTokens),
         guardTokensAfter: runNonNegativeInteger(nextRun.stats.guardTokens),
         strayChargesBefore: runNonNegativeInteger(run.strayRemoveCharges),
@@ -600,26 +576,6 @@ const applyUndoResolveCommand = (
     return { run: nextRun, command, events, accepted: true };
 };
 
-/*
- * The shop went in Gen 174, and with it anything a `shop.purchase` or `shop.reroll` command could
- * do. Both types stay in the command schema so an old journal still parses; both are rejected with
- * a reason, the same way a route choice is, until the journal migration in T1.14.
- */
-const applyShopPurchaseCommand = (
-    run: RunState,
-    command: Extract<GameplayCommand, { type: 'shop.purchase' }>
-): GameplayCommandResult => rejectedResult(run, command.commandId, 'There is no shop to buy from any more.', command);
-
-/*
- * The dungeon exit, the per-floor Hazard Banish perk and enemy contact all went with the dungeon
- * layer. Their command types stay parseable for old journals and are refused like a route choice.
- */
-const applyDungeonExitActivateCommand = (
-    run: RunState,
-    command: Extract<GameplayCommand, { type: 'dungeon.exit_activate' }>
-): GameplayCommandResult =>
-    rejectedResult(run, command.commandId, 'There is no dungeon exit to activate any more.', command);
-
 const applyParasiteAdvanceCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'floor.parasite_advance' }>
@@ -628,18 +584,15 @@ const applyParasiteAdvanceCommand = (
         return rejectedResult(run, command.commandId, 'Score-parasite pressure advances only from a cleared floor.', command);
     }
     const pressureBefore = runNonNegativeInteger(run.parasiteFloors);
-    const wardBefore = runNonNegativeInteger(run.parasiteWardRemaining);
     const livesBefore = runNonNegativeInteger(run.lives);
     const advanced = advanceScoreParasiteFloor(run);
     const nextRun: RunState = {
         ...run,
         lives: advanced.lives,
-        parasiteFloors: advanced.parasiteFloors,
-        parasiteWardRemaining: advanced.parasiteWardRemaining
+        parasiteFloors: advanced.parasiteFloors
     };
     const active = hasMutator(run, 'score_parasite');
     const thresholdTriggered = active && pressureBefore + 1 >= 4;
-    const wardConsumed = advanced.parasiteWardRemaining < wardBefore;
     const lifeLost = advanced.lives < livesBefore;
     const events: GameplayEvent[] = [];
     const writeEvent = makeEventWriter(command.commandId, SCORE_PARASITE_SOURCE, events);
@@ -648,22 +601,12 @@ const applyParasiteAdvanceCommand = (
         active,
         pressureBefore,
         pressureAfter: advanced.parasiteFloors,
-        wardBefore,
-        wardAfter: advanced.parasiteWardRemaining,
         livesBefore,
         livesAfter: advanced.lives,
         thresholdTriggered,
-        wardConsumed,
         lifeLost
     });
-    if (wardConsumed) {
-        writeEvent({
-            type: 'feedback.requested',
-            cue: 'hazard.score_parasite.ward_consumed',
-            message: `Parasite Ward absorbed the life loss; ${advanced.parasiteWardRemaining} charge${advanced.parasiteWardRemaining === 1 ? '' : 's'} remain.`,
-            tone: 'reward'
-        });
-    } else if (lifeLost) {
+    if (lifeLost) {
         writeEvent({
             type: 'feedback.requested',
             cue: 'hazard.score_parasite.life_lost',
@@ -673,12 +616,6 @@ const applyParasiteAdvanceCommand = (
     }
     return { run: nextRun, command, events, accepted: true };
 };
-
-const applyHazardBanishCommand = (
-    run: RunState,
-    command: Extract<GameplayCommand, { type: 'floor.hazard_banish' }>
-): GameplayCommandResult =>
-    rejectedResult(run, command.commandId, 'There is no Hazard Banish perk to resolve any more.', command);
 
 const applyFloorAdvanceCommand = (
     run: RunState,
@@ -690,10 +627,6 @@ const applyFloorAdvanceCommand = (
     if (runNonNegativeInteger(run.lives) <= 0) {
         return rejectedResult(run, command.commandId, 'A defeated run cannot advance to another floor.', command);
     }
-    if (run.sideRoom || run.relicOffer) {
-        return rejectedResult(run, command.commandId, 'Resolve the current floor interlude before advancing.', command);
-    }
-
     const fromFloor = run.board.level;
     const events: GameplayEvent[] = [];
     const parasiteResult = applyParasiteAdvanceCommand(run, {
@@ -709,8 +642,7 @@ const applyFloorAdvanceCommand = (
     const nextRun = advanceToNextLevel(run, {
         parasiteAdvance: {
             lives: parasiteResult.run.lives,
-            parasiteFloors: parasiteResult.run.parasiteFloors,
-            parasiteWardRemaining: parasiteResult.run.parasiteWardRemaining
+            parasiteFloors: parasiteResult.run.parasiteFloors
         }
     });
 
@@ -724,7 +656,6 @@ const applyFloorAdvanceCommand = (
         nextFloorTag: nextBoard?.floorTag ?? null,
         nextFloorArchetypeId: nextBoard?.floorArchetypeId ?? null,
         nextFeaturedObjectiveId: nextBoard?.featuredObjectiveId ?? null,
-        selectedDungeonNodeId: null,
         boardPairCount: nextBoard?.pairCount ?? 0,
         boardTileCount: nextBoard?.tiles.length ?? 0,
         memorizeRemainingMs: nextRun.status === 'memorize'
@@ -734,9 +665,6 @@ const applyFloorAdvanceCommand = (
         livesAfter: runNonNegativeInteger(nextRun.lives),
         parasitePressureBefore: runNonNegativeInteger(run.parasiteFloors),
         parasitePressureAfter: runNonNegativeInteger(nextRun.parasiteFloors),
-        parasiteWardBefore: runNonNegativeInteger(run.parasiteWardRemaining),
-        parasiteWardAfter: runNonNegativeInteger(nextRun.parasiteWardRemaining),
-        hazardBanishOutcome: null,
         destroyChargesBefore: runNonNegativeInteger(run.destroyPairCharges),
         destroyChargesAfter: runNonNegativeInteger(nextRun.destroyPairCharges)
     });
@@ -751,56 +679,12 @@ const applyFloorAdvanceCommand = (
     return { run: nextRun, command, events, accepted: true };
 };
 
-/*
- * `route.choose` and `side_room.resolve` are still commands the journal knows how to parse, and
- * both are now refused. There is no route offer on a floor clear (Gen 173), so there is nothing
- * for the first to choose and nothing that could open the room the second resolves.
- *
- * They are refused rather than deleted from the command union because a journal recorded before
- * Gen 173 can still contain them, and a command the parser cannot read is a save that cannot load.
- * The one-way upgrade for those journals is T1.14's job; until then a replay that meets one lands
- * on a rejection, which the replay checker reports rather than hides.
- */
-const applyRouteChooseCommand = (
-    run: RunState,
-    command: Extract<GameplayCommand, { type: 'route.choose' }>
-): GameplayCommandResult =>
-    rejectedResult(run, command.commandId, 'No route is offered between floors any more.', command);
-
-const applySideRoomResolveCommand = (
-    run: RunState,
-    command: Extract<GameplayCommand, { type: 'side_room.resolve' }>
-): GameplayCommandResult =>
-    rejectedResult(run, command.commandId, 'No side room can open between floors any more.', command);
-
-/*
- * The relic draft went in Gen 175. A pick, a draft service or an offer-open in an old journal is
- * rejected with a reason rather than dropped on the floor, so a replay still reads; the journal
- * migration in T1.14 removes the command types.
- */
-const applyRelicPickCommand = (
-    run: RunState,
-    command: Extract<GameplayCommand, { type: 'relic.pick' }>
-): GameplayCommandResult =>
-    rejectedResult(run, command.commandId, 'There is no relic draft to pick from any more.', command);
-
-const applyRelicOfferServiceCommand = (
-    run: RunState,
-    command: Extract<GameplayCommand, { type: 'relic.offer_service_use' }>
-): GameplayCommandResult =>
-    rejectedResult(run, command.commandId, 'There is no relic draft to reroll, ban or upgrade any more.', command);
-
-
 const findableDefinitionId = (findableKind: FindableKind | null): string | null =>
     findableKind === 'shard_spark'
         ? 'findable.shard_spark'
-        : findableKind === 'ward_spark'
-          ? 'findable.ward_spark'
-          : findableKind === 'score_glint'
+        : findableKind === 'score_glint'
             ? 'findable.score_glint'
-            : findableKind === 'scout_glint'
-              ? 'findable.scout_glint'
-              : null;
+            : null;
 
 const resolveBoardTurnFindableReward = (
     run: RunState,
@@ -814,9 +698,7 @@ const resolveBoardTurnFindableReward = (
             commands: [],
             events: [],
             comboShardGain: 0,
-            safeHazardWardGain: 0,
             scoreGain: 0,
-            scoutRevealGain: 0,
             migrated: false
         };
     }
@@ -832,8 +714,6 @@ const resolveBoardTurnFindableReward = (
         matchedTraits: [],
         adjacentTraits: [],
         matchedFindables: [findableKind],
-        bossTrophyClaimed: false,
-        riskWagerOutcome: 'none',
         featuredObjectiveCompleted: false,
         scoreParasiteActive: false
     };
@@ -855,16 +735,8 @@ const resolveBoardTurnFindableReward = (
             (sum, event) => sum + (event.type === 'combo_shard.requested' ? event.amount : 0),
             0
         ),
-        safeHazardWardGain: events.reduce(
-            (sum, event) => sum + (event.type === 'safe_hazard_ward.requested' ? event.amount : 0),
-            0
-        ),
         scoreGain: events.reduce(
             (sum, event) => sum + (event.type === 'score.requested' ? event.amount : 0),
-            0
-        ),
-        scoutRevealGain: events.reduce(
-            (sum, event) => sum + (event.type === 'scout_reveal.requested' ? event.amount : 0),
             0
         ),
         migrated: true
@@ -963,7 +835,7 @@ const applyBoardTurnResolveCommand = (
     const outcome = flippedTileIds.length === 3
         ? isMatch ? 'gambit_match' : 'gambit_mismatch'
         : isMatch ? 'match' : 'mismatch';
-    // Resolved once; the route kind and floater anchors below are read back off it.
+    // Resolved once; the floater anchors below are read back off it.
     const resolved = { announcement: getBoardTurnAnnouncementFacts(run, nextRun) };
     const announcementFacts = resolved.announcement;
     const writeEvent = makeEventWriter(command.commandId, BOARD_TURN_SOURCE, events);
@@ -997,10 +869,9 @@ const applyBoardTurnResolveCommand = (
             (matchedSourceTile
                 ? run.board?.tiles.find((tile) => tile.id === matchedSourceTile.id)?.findableKind
                 : null) ?? null,
-        // Promoted onto the event itself, not just the announcement facts: the route kind
-        // and the floater anchors describe what happened, so consumers should not have to
-        // reach into presentation facts for them.
-        matchedRouteKind: announcementFacts.routeSpecialKind ?? announcementFacts.routeCardKind ?? null,
+        // Promoted onto the event itself, not just the announcement facts: the floater
+        // anchors describe what happened, so consumers should not have to reach into
+        // presentation facts for them.
         floaterTileIds: [...announcementFacts.anchorTileIds],
         announcement: announcementFacts,
         traitInteractionTags: [...traitInteractionTags]
@@ -1179,38 +1050,6 @@ const applyResumeCommand = (
     return { run: nextRun, command, events, accepted: true };
 };
 
-const applyProgressionRepairCommand = (
-    run: RunState,
-    command: Extract<GameplayCommand, { type: 'run.progression_repair' }>
-): GameplayCommandResult => {
-    const transition = createRunProgressionRepairTransition(run);
-    if (!transition.repaired) {
-        return rejectedResult(run, command.commandId, 'Run progression needed no repair.', command);
-    }
-    const events: GameplayEvent[] = [];
-    const writeRepairEvent = makeEventWriter(command.commandId, PROGRESSION_REPAIR_SOURCE, events);
-    writeRepairEvent({
-        type: 'run.progression_repaired',
-        repairKinds: transition.repairKinds,
-        enemyHazardIdsDefeated: transition.enemyHazardIdsDefeated
-    });
-    // Repairing a stale boss clears defeated-enemy counters, which are feedback-critical,
-    // so the repair owes the player typed presentation like any other accepted command.
-    writeRepairEvent({
-        type: 'feedback.requested',
-        cue: 'safety.progression.repaired',
-        message: 'The floor settled. A stale encounter was cleared.',
-        tone: 'information'
-    });
-    return { run: transition.run, command, events, accepted: true };
-};
-
-const applyRelicOfferOpenCommand = (
-    run: RunState,
-    command: Extract<GameplayCommand, { type: 'relic.offer_open' }>
-): GameplayCommandResult =>
-    rejectedResult(run, command.commandId, 'There is no relic draft to open any more.', command);
-
 const applyGauntletExpireCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'run.gauntlet_expire' }>
@@ -1286,17 +1125,6 @@ const applyDebugRevealDeactivateCommand = (
     return { run: nextRun, command, events, accepted: true };
 };
 
-const applyEnemyHazardContactCommand = (
-    run: RunState,
-    command: Extract<GameplayCommand, { type: 'enemy_hazard.contact' }>
-): GameplayCommandResult =>
-    rejectedResult(run, command.commandId, 'There is no enemy hazard to make contact with any more.', command);
-
-const applyShopRerollCommand = (
-    run: RunState,
-    command: Extract<GameplayCommand, { type: 'shop.reroll' }>
-): GameplayCommandResult => rejectedResult(run, command.commandId, 'There is no shop stock to reroll any more.', command);
-
 export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCommandResult => {
     const parsed = gameplayCommandSchema.safeParse(input);
     if (!parsed.success) {
@@ -1314,9 +1142,6 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'board.destroy_pair') {
         return applyDestroyPairCommand(run, command);
-    }
-    if (command.type === 'risk_wager.accept') {
-        return applyRiskWagerAcceptCommand(run, command);
     }
     if (command.type === 'board.gambit_commit') {
         return applyGambitCommitCommand(run, command);
@@ -1339,32 +1164,11 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     if (command.type === 'board.curio_greet') {
         return applyGreetCurioCommand(run, command);
     }
-    if (command.type === 'shop.purchase') {
-        return applyShopPurchaseCommand(run, command);
-    }
-    if (command.type === 'dungeon.exit_activate') {
-        return applyDungeonExitActivateCommand(run, command);
-    }
     if (command.type === 'floor.parasite_advance') {
         return applyParasiteAdvanceCommand(run, command);
     }
-    if (command.type === 'floor.hazard_banish') {
-        return applyHazardBanishCommand(run, command);
-    }
     if (command.type === 'floor.advance') {
         return applyFloorAdvanceCommand(run, command);
-    }
-    if (command.type === 'route.choose') {
-        return applyRouteChooseCommand(run, command);
-    }
-    if (command.type === 'side_room.resolve') {
-        return applySideRoomResolveCommand(run, command);
-    }
-    if (command.type === 'relic.pick') {
-        return applyRelicPickCommand(run, command);
-    }
-    if (command.type === 'relic.offer_service_use') {
-        return applyRelicOfferServiceCommand(run, command);
     }
     if (command.type === 'board.turn_resolve') {
         return applyBoardTurnResolveCommand(run, command);
@@ -1381,12 +1185,6 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     if (command.type === 'run.resume') {
         return applyResumeCommand(run, command);
     }
-    if (command.type === 'run.progression_repair') {
-        return applyProgressionRepairCommand(run, command);
-    }
-    if (command.type === 'relic.offer_open') {
-        return applyRelicOfferOpenCommand(run, command);
-    }
     if (command.type === 'run.gauntlet_expire') {
         return applyGauntletExpireCommand(run, command);
     }
@@ -1395,12 +1193,6 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'debug.reveal_deactivate') {
         return applyDebugRevealDeactivateCommand(run, command);
-    }
-    if (command.type === 'enemy_hazard.contact') {
-        return applyEnemyHazardContactCommand(run, command);
-    }
-    if (command.type === 'shop.reroll') {
-        return applyShopRerollCommand(run, command);
     }
     if (command.type === 'wild_match.consume') {
         return applyWildMatchConsumeCommand(run, command);

@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import type { BoardState } from '../../shared/contracts';
-import { EXIT_PAIR_KEY } from '../../shared/tile-identity';
 import {
     CARD_FEEDBACK_BEAT_TIER_CONTRACT,
     CARD_FEEDBACK_CADENCE_CONTRACT,
@@ -23,10 +22,7 @@ import {
     getDevE2ePairPositionsJson,
     getHiddenSlotsAttr,
     getHiddenTileCount,
-    getHiddenTrapSlotsAttr,
-    getPickableHiddenSlotsAttr,
-    getResolvedTrapSlotsAttr,
-    getResolvedTrapTileCount
+    getPickableHiddenSlotsAttr
 } from './tileBoardDomTelemetry';
 
 const board: BoardState = {
@@ -55,23 +51,14 @@ describe('tile board DOM telemetry helpers', () => {
         expect(CARD_FEEDBACK_CADENCE_CONTRACT).toBe('cashout surge follow-up route prime');
     });
 
-    it('summarizes hidden and trap slot attributes', () => {
-        const trapBoard: BoardState = {
+    it('summarizes hidden slot attributes', () => {
+        const partlyMatchedBoard: BoardState = {
             ...board,
-            tiles: [
-                { ...board.tiles[0]!, dungeonCardKind: 'trap', dungeonCardState: 'hidden' },
-                { ...board.tiles[1]!, dungeonCardKind: 'trap', dungeonCardState: 'resolved' },
-                { ...board.tiles[2]!, state: 'matched' },
-                board.tiles[3]!
-            ]
+            tiles: [board.tiles[0]!, board.tiles[1]!, { ...board.tiles[2]!, state: 'matched' }, board.tiles[3]!]
         };
 
-        expect(getHiddenTileCount(trapBoard)).toBe(3);
-        expect(getHiddenSlotsAttr(trapBoard)).toBe('1,1;1,2;2,2');
-        expect(getHiddenTrapSlotsAttr(trapBoard, true)).toBe('1,1');
-        expect(getHiddenTrapSlotsAttr(trapBoard, false)).toBeUndefined();
-        expect(getResolvedTrapSlotsAttr(trapBoard)).toBe('1,2');
-        expect(getResolvedTrapTileCount(trapBoard)).toBe(1);
+        expect(getHiddenTileCount(partlyMatchedBoard)).toBe(3);
+        expect(getHiddenSlotsAttr(partlyMatchedBoard)).toBe('1,1;1,2;2,2');
     });
 
     it('emits dev-only pickable hidden slots', () => {
@@ -93,10 +80,10 @@ describe('tile board DOM telemetry helpers', () => {
         const feedbackBoard: BoardState = {
             ...board,
             tiles: [
-                { ...board.tiles[0]!, tileHazardKind: 'shuffle_snare', tileTraitKind: 'echo', routeCardKind: 'greed_cache' },
-                { ...board.tiles[1]!, dungeonCardKind: 'trap', dungeonCardState: 'hidden' },
-                { ...board.tiles[2]!, dungeonCardKind: 'exit', dungeonExitLockKind: 'iron', state: 'matched' },
-                { ...board.tiles[3]!, dungeonCardKind: 'shop' },
+                { ...board.tiles[0]!, tileTraitKind: 'echo' },
+                { ...board.tiles[1]!, findableKind: 'shard_spark' },
+                { ...board.tiles[2]!, state: 'matched' },
+                board.tiles[3]!,
                 { id: 'c1', pairKey: 'C', symbol: 'C', label: 'C', state: 'removed' }
             ]
         };
@@ -113,119 +100,12 @@ describe('tile board DOM telemetry helpers', () => {
             runStatus: 'playing'
         });
 
+        expect(states).toContain('findable:1');
         expect(states).toContain('focused:1');
-        expect(states).toContain('hazard:1');
         expect(states).toContain('hidden:3');
-        expect(states).toContain('exit:1');
         expect(states).toContain('matched:1');
-        expect(states).toContain('objective:3');
         expect(states).toContain('removed:1');
-        expect(states).toContain('route:1');
-        expect(states).toContain('shop:1');
         expect(states).toContain('trait:1');
-        expect(states).toContain('trap-armed:1');
-    });
-
-    it('does not report stale moving enemy occupancy after all real pairs are cleared', () => {
-        const feedbackBoard: BoardState = {
-            ...board,
-            matchedPairs: 2,
-            enemyHazards: [
-                {
-                    id: 'stale-warden',
-                    kind: 'warden',
-                    label: 'Warden',
-                    currentTileId: 'a1',
-                    nextTileId: 'a2',
-                    pattern: 'guard',
-                    state: 'revealed',
-                    damage: 1,
-                    hp: 1,
-                    maxHp: 2,
-                    bossId: 'trap_warden'
-                }
-            ],
-            tiles: board.tiles.map((tile) => ({ ...tile, state: 'matched' }))
-        };
-
-        const states = getCardFeedbackStatesAttr({
-            allowGambitThirdFlip: false,
-            board: feedbackBoard,
-            boardApplicationFocused: true,
-            debugPeekActive: false,
-            focusedTileId: 'a1',
-            interactive: true,
-            peekRevealedTileIds: new Set(),
-            previewActive: false,
-            runStatus: 'playing'
-        });
-
-        expect(states).not.toContain('enemy-occupied');
-    });
-
-    it('tracks lever and lock feedback states for 3D readability audits', () => {
-        const utilityBoard: BoardState = {
-            ...board,
-            tiles: [
-                { ...board.tiles[0]!, dungeonCardKind: 'lever' },
-                { ...board.tiles[1]!, dungeonCardKind: 'lock' },
-                board.tiles[2]!,
-                board.tiles[3]!
-            ]
-        };
-
-        const states = getCardFeedbackStatesAttr({
-            allowGambitThirdFlip: false,
-            board: utilityBoard,
-            boardApplicationFocused: false,
-            debugPeekActive: false,
-            focusedTileId: null,
-            interactive: true,
-            peekRevealedTileIds: new Set(),
-            previewActive: false,
-            runStatus: 'playing'
-        });
-
-        expect(states).toContain('lever:1');
-        expect(states).toContain('lock:1');
-    });
-
-    it('classifies primary exit metadata as exit instead of raw lock in feedback states', () => {
-        const terminalExitBoard: BoardState = {
-            ...board,
-            pairCount: 1,
-            matchedPairs: 1,
-            dungeonExitTileId: 'exit',
-            dungeonExitLockKind: 'iron',
-            dungeonExitActivated: false,
-            tiles: [
-                { ...board.tiles[0]!, state: 'matched' },
-                { ...board.tiles[1]!, state: 'matched' },
-                {
-                    id: 'exit',
-                    pairKey: EXIT_PAIR_KEY,
-                    symbol: 'E',
-                    label: 'Exit',
-                    state: 'hidden',
-                    dungeonExitLockKind: 'iron'
-                }
-            ]
-        };
-
-        const states = getCardFeedbackStatesAttr({
-            allowGambitThirdFlip: false,
-            board: terminalExitBoard,
-            boardApplicationFocused: false,
-            debugPeekActive: false,
-            focusedTileId: null,
-            interactive: true,
-            peekRevealedTileIds: new Set(),
-            previewActive: false,
-            runStatus: 'playing'
-        });
-
-        expect(states).toContain('exit:1');
-        expect(states).not.toContain('lock:1');
     });
 
     it('tracks previewable trait combo opportunities separately from raw trait count', () => {
@@ -396,40 +276,6 @@ describe('tile board DOM telemetry helpers', () => {
         );
     });
 
-    it('keeps armed perk cues visible when the same trait cards are also cash-now payoff stacks', () => {
-        const traitBoard: BoardState = {
-            ...board,
-            tiles: [
-                { ...board.tiles[0]!, pairKey: 'echo', tileTraitKind: 'echo' },
-                { ...board.tiles[1]!, pairKey: 'sealed', tileTraitKind: 'sealed' },
-                board.tiles[2]!,
-                board.tiles[3]!
-            ]
-        };
-
-        expect(
-            getCardFeedbackActionCuesAttr({
-                board: traitBoard,
-                perkArmedTileIds: ['a1'],
-                traitRewardHotTileIds: ['a1', 'a2']
-            })
-        ).toBe('cash-now:2;perk-cash:1');
-        expect(
-            getCardFeedbackActionPriorityAttr({
-                board: traitBoard,
-                perkArmedTileIds: ['a1'],
-                traitRewardHotTileIds: ['a1', 'a2']
-            })
-        ).toBe('cash-now:2>perk-cash:1');
-        expect(
-            getCardFeedbackPrimaryActionAttr({
-                board: traitBoard,
-                perkArmedTileIds: ['a1'],
-                traitRewardHotTileIds: ['a1', 'a2']
-            })
-        ).toBe('cash-now');
-    });
-
     it('tracks swap-route setup targets separately from active chain cards', () => {
         const states = getCardFeedbackStatesAttr({
             allowGambitThirdFlip: false,
@@ -462,45 +308,6 @@ describe('tile board DOM telemetry helpers', () => {
         );
         expect(getCardFeedbackRouteGlyphsAttr({ board, traitRouteTargetTileIds: ['a1', 'b2'] })).toBe(
             'prime-cross:2'
-        );
-    });
-
-    it('tracks armed reward perk target markers separately from chain reward hot cards', () => {
-        const perkBoard = {
-            ...board,
-            tiles: [
-                { ...board.tiles[0]!, pairKey: 'cursed', tileTraitKind: 'cursed' as const },
-                board.tiles[1]!,
-                board.tiles[2]!,
-                board.tiles[3]!
-            ]
-        };
-        const states = getCardFeedbackStatesAttr({
-            allowGambitThirdFlip: false,
-            board: perkBoard,
-            boardApplicationFocused: false,
-            debugPeekActive: false,
-            focusedTileId: null,
-            interactive: true,
-            peekRevealedTileIds: new Set(),
-            previewActive: false,
-            runStatus: 'playing',
-            perkArmedTileIds: ['a1']
-        });
-
-        expect(states).toContain('perk-armed:1');
-        expect(getCardFeedbackMarkerShapesAttr({ board: perkBoard, perkArmedTileIds: ['a1'] })).toContain(
-            'perk-armed-bar:1'
-        );
-        expect(getCardFeedbackActionCuesAttr({ board: perkBoard, perkArmedTileIds: ['a1'] })).toBe('perk-cash:1');
-        expect(getCardFeedbackTraitRouteTiersAttr({ board: perkBoard, perkArmedTileIds: ['a1'] })).toBe(
-            'perk-armed:1'
-        );
-        expect(getCardFeedbackTraitRouteIntensitiesAttr({ board: perkBoard, perkArmedTileIds: ['a1'] })).toBe(
-            'setup:1'
-        );
-        expect(getCardFeedbackRouteGlyphsAttr({ board: perkBoard, perkArmedTileIds: ['a1'] })).toBe(
-            'prime-cross:1'
         );
     });
 

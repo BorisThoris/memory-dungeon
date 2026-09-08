@@ -11,7 +11,6 @@ import { PlatformTiltProvider } from '../platformTilt/PlatformTiltProvider';
 import { useAppStore } from '../store/useAppStore';
 import GameScreen, { LAST_PAIR_HOLD_MS } from './GameScreen';
 import {
-    getDungeonCombatLogRows,
     getStackCashoutLaneCount,
     getVisualHudAnnouncementFollowup,
     getVisualHudAnnouncementImpact,
@@ -22,8 +21,6 @@ import { BOARD_FLOATER_POP_CLEAR } from '../store/matchScorePop';
 const gameSfxMocks = vi.hoisted(() => ({
     playMismatchRecoveryCrescendoSfx: vi.fn(),
     playPowerArmSfx: vi.fn(),
-    playRelicOfferOpenSfx: vi.fn(),
-    playWagerArmSfx: vi.fn(),
     resumeAudioContext: vi.fn(),
     sfxGainFromSettings: (masterVolume: number, sfxVolume: number) =>
         Math.max(0, Math.min(1, masterVolume)) * Math.max(0, Math.min(1, sfxVolume))
@@ -162,7 +159,6 @@ const levelCompleteRunFixture = (): RunState => {
         ...baseRun,
         status: 'levelComplete',
         lives: 5,
-        relicOffer: null,
         stats: {
             ...baseRun.stats,
             totalScore: 120,
@@ -355,7 +351,6 @@ describe('GameScreen (OVR-014)', () => {
             ...fixture,
             findablesClaimedThisFloor: Number.POSITIVE_INFINITY,
             findablesTotalThisFloor: Number.NaN,
-            relicFavorProgress: Number.NaN,
             stats: {
                 ...fixture.stats,
                 bestStreak: Number.NaN,
@@ -373,9 +368,6 @@ describe('GameScreen (OVR-014)', () => {
                 objectiveBonusScore: Number.POSITIVE_INFINITY,
                 featuredObjectiveStreak: Number.NaN,
                 featuredObjectiveStreakBonus: Number.POSITIVE_INFINITY,
-                relicFavorGained: Number.NaN,
-                endlessRiskWagerOutcome: 'lost',
-                endlessRiskWagerStreakLost: Number.POSITIVE_INFINITY,
                 traitRouteObjectiveRequired: Number.POSITIVE_INFINITY,
                 traitRouteObjectiveProgress: Number.NaN
             }
@@ -395,7 +387,6 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('floor-clear-stats')).toHaveTextContent(/Misses\s*0/);
         expect(screen.getByTestId('floor-clear-notes')).toHaveTextContent('Flip par: Complete');
     });
-
 
     it('pulses the stage with the break tier for one beat after a chunk breaks, then lets it go', () => {
         // The shatter is a projection of the turn event, not a diff of boards: the stage reads the
@@ -979,60 +970,6 @@ describe('GameScreen (OVR-014)', () => {
         ).toBe('Next: review the run summary before starting the next descent.');
     });
 
-    it('builds a compact per-floor dungeon combat log from combat counters', () => {
-        const rows = getDungeonCombatLogRows({
-            ...finishMemorizePhase(createNewRun(0)),
-            lives: 1,
-            enemyHazardHitsThisFloor: 1,
-            enemyHazardsDefeatedThisFloor: 1,
-            dungeonEnemiesDefeatedThisFloor: 1,
-            safeHazardWardsUsedThisFloor: 1
-        });
-
-        expect(rows).toEqual([
-            {
-                id: 'patrol-contact',
-                label: '1 patrol contact',
-                detail: 'Critical health; avoid the next patrol path.',
-                tone: 'danger'
-            },
-            {
-                id: 'patrol-defeats',
-                label: '1 patrol defeated',
-                detail: 'Moving threat removed from this floor.',
-                tone: 'success'
-            },
-            {
-                id: 'dungeon-enemy-defeats',
-                label: '1 enemy pair defeated',
-                detail: 'Dungeon objective pressure converted into progress.',
-                tone: 'success'
-            },
-            {
-                id: 'ward-blocks',
-                label: '1 hazard warded',
-                detail: 'A ward absorbed a trap or cache effect.',
-                tone: 'info'
-            }
-        ]);
-    });
-
-    it('pluralizes combat-log counters when multiple threats resolve', () => {
-        const rows = getDungeonCombatLogRows({
-            ...finishMemorizePhase(createNewRun(0)),
-            lives: 3,
-            enemyHazardHitsThisFloor: 2,
-            enemyHazardsDefeatedThisFloor: 2,
-            dungeonEnemiesDefeatedThisFloor: 3
-        });
-
-        expect(rows.map((row) => row.label)).toEqual([
-            '2 patrol contacts',
-            '2 patrols defeated',
-            '3 enemy pairs defeated'
-        ]);
-    });
-
     it('adds next-step lines for health recovery, pickups, chains, and Gambit feedback', () => {
         expect(
             getVisualHudAnnouncementFollowup({
@@ -1347,7 +1284,6 @@ describe('GameScreen (OVR-014)', () => {
         expect(floater).not.toHaveTextContent(/NaN|undefined|\[object/);
     });
 
-
     it('marks plain chain-break misses as a break with one recovery line', () => {
         vi.useFakeTimers();
         const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
@@ -1492,7 +1428,6 @@ describe('GameScreen (OVR-014)', () => {
         }
     });
 
-
     it('does not call pause when KeyP is pressed on the floor-cleared overlay (levelComplete + lastLevelResult)', () => {
         const pauseSpy = vi.spyOn(useAppStore.getState(), 'pause');
         const runFixture = levelCompleteRunFixture();
@@ -1543,49 +1478,15 @@ describe('GameScreen (OVR-014)', () => {
         resumeSpy.mockRestore();
     });
 
-
-
-
     it('shows featured objective result and next-floor preview on endless floor clear', () => {
         const baseRun = createNewRun(0, { echoFeedbackEnabled: false });
         const run: RunState = {
             ...baseRun,
             status: 'levelComplete',
-            relicOffer: null,
-            shopGold: 5,
             featuredObjectiveStreak: 2,
-            shopOffers: [
-                {
-                    id: 'test-shop-peek',
-                    itemId: 'peek_charge',
-                    category: 'service',
-                    label: 'Peek charge',
-                    description: 'Add 1 peek charge for this run.',
-                    baseCost: 2,
-                    cost: 2,
-                    stock: 1,
-                    maxStock: 1,
-                    stackLimit: null,
-                    compatibleWhen: 'owned',
-                    compatible: true,
-                    unavailableReason: null,
-                    purchased: false
-                }
-            ],
-            relicFavorProgress: 0,
             recallFocus: 2,
             recallMistakesThisFloor: 1,
             forgottenTileIdsThisFloor: [baseRun.board!.tiles[1].id],
-            board: {
-                ...baseRun.board!,
-                tiles: baseRun.board!.tiles.map((tile, index) =>
-                    index === 0
-                        ? { ...tile, routeSpecialKind: 'mystery_veil' as const, routeSpecialRevealed: true }
-                        : tile
-                )
-            },
-            bonusRelicPicksNextOffer: 1,
-            favorBonusRelicPicksNextOffer: 1,
             findablesClaimedThisFloor: 1,
             findablesTotalThisFloor: 2,
             stats: {
@@ -1618,7 +1519,6 @@ describe('GameScreen (OVR-014)', () => {
                 clearLifeGained: 1,
                 featuredObjectiveId: 'flip_par',
                 featuredObjectiveCompleted: true,
-                relicFavorGained: 1,
                 featuredObjectiveStreak: 2,
                 featuredObjectiveStreakBonus: 10,
                 objectiveBonusScore: 30,
@@ -1627,27 +1527,6 @@ describe('GameScreen (OVR-014)', () => {
                 traitRouteObjectiveRequired: 1,
                 traitRouteObjectiveReward: '+1 combo shard',
                 bonusTags: ['flip_par', 'objective_streak']
-                ,
-                routeChoices: [
-                    {
-                        id: '14:1:2:safe',
-                        routeType: 'safe',
-                        label: 'Safe passage',
-                        detail: 'Standard next floor. Keep the run curve predictable.'
-                    },
-                    {
-                        id: '14:1:2:greed',
-                        routeType: 'greed',
-                        label: 'Greedy route',
-                        detail: 'Higher pressure route hook for future shop, elite, or bonus rewards.'
-                    },
-                    {
-                        id: '14:1:2:mystery',
-                        routeType: 'mystery',
-                        label: 'Mystery route',
-                        detail: 'Hidden treasure or secret-room hook.'
-                    }
-                ]
             }
         };
 
@@ -1670,30 +1549,6 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.queryByTestId('floor-clear-payoff-stack')).toBeNull();
         expect(screen.queryByTestId('floor-clear-momentum-strip')).toBeNull();
     });
-
-    it('ignores malformed route choice payloads in the floor-clear result', () => {
-        const baseRun = levelCompleteRunFixture();
-        const run: RunState = {
-            ...baseRun,
-            lastLevelResult: {
-                ...baseRun.lastLevelResult!,
-                routeChoices: { length: 3 } as never
-            }
-        };
-
-        render(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen achievements={[]} run={run} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-        expect(screen.queryByTestId('route-choice-panel')).toBeNull();
-        expect(screen.getByRole('button', { name: /^Continue$/i })).toBeTruthy();
-    });
-
-
-
 
     it('shows payoff and cost signals while the Gambit third flip is active', () => {
         const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
@@ -1728,8 +1583,6 @@ describe('GameScreen (OVR-014)', () => {
         expect(hint.querySelectorAll('*')).toHaveLength(0);
     });
 
-
-
     it('offers a double tap out of the study period, and only while it is running', () => {
         const memorizing = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' });
         expect(memorizing.status).toBe('memorize');
@@ -1754,8 +1607,4 @@ describe('GameScreen (OVR-014)', () => {
 
         expect(screen.queryByTestId('memorize-skip-layer')).toBeNull();
     });
-
-
-
-
 });

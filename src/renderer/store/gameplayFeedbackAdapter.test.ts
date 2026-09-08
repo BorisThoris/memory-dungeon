@@ -44,79 +44,31 @@ describe('gameplayFeedbackAdapter', () => {
         const presentations = projectGameplayFeedback([
             event(0, {
                 type: 'feedback.requested',
-                cue: 'build.warden_sigil.claimed',
-                message: 'Relic claimed.',
-                source: { kind: 'relic', id: 'guard_token_plus_one' },
-                tone: 'reward'
-            }),
-            event(1, {
-                type: 'feedback.requested',
-                cue: 'build.hazard_ward.claimed',
-                message: 'Reward claimed.',
-                source: { kind: 'bonus_reward', id: 'hazard_ward' },
-                tone: 'reward'
-            }),
-            event(2, {
-                type: 'feedback.requested',
                 cue: 'build.shard_spark.matched',
                 message: 'Findable matched.',
                 source: { kind: 'findable', id: 'shard_spark' },
                 tone: 'reward'
             }),
-            event(3, {
-                type: 'feedback.requested',
-                cue: 'relic.offer_service.reroll_offer',
-                message: 'Relic offer rerolled.',
-                source: { kind: 'system', id: 'relic_offer' },
-                tone: 'information'
-            }),
-            event(4, {
-                type: 'feedback.requested',
-                cue: 'side_room.rest_healed',
-                message: 'Rest completed.',
-                source: { kind: 'system', id: 'route_side_room' },
-                tone: 'reward'
-            }),
-            event(5, {
+            event(1, {
                 type: 'feedback.requested',
                 cue: 'floor.advance.ready',
                 message: 'Next floor ready.',
                 source: { kind: 'system', id: 'floor_advance' },
                 tone: 'information'
-            })
-        ]);
-
-        expect(presentations.map((item) => item.audioCategory)).toEqual([
-            'relic-pick',
-            'reward-claim',
-            'match-resolution',
-            'relic-service',
-            'side-room',
-            'floor-advance'
-        ]);
-    });
-
-    it('classifies Route Gambler commitment and wager cues from typed sources', () => {
-        const presentations = projectGameplayFeedback([
-            event(0, {
+            }),
+            event(2, {
                 type: 'feedback.requested',
                 cue: 'power.gambit.committed',
                 message: 'Gambit committed.',
                 source: { kind: 'power', id: 'gambit' },
                 tone: 'warning'
-            }),
-            event(1, {
-                type: 'feedback.requested',
-                cue: 'build.route_gambler.wager_accepted',
-                message: 'Wager accepted.',
-                source: { kind: 'system', id: 'risk_wager' },
-                tone: 'warning'
             })
         ]);
 
         expect(presentations.map((item) => item.audioCategory)).toEqual([
-            'gambit-commit',
-            'wager'
+            'match-resolution',
+            'floor-advance',
+            'gambit-commit'
         ]);
     });
 
@@ -153,55 +105,6 @@ describe('gameplayFeedbackAdapter', () => {
         ])[0];
 
         expect(presentation).toMatchObject({ audioCategory: 'destroy-pair' });
-    });
-
-    it('classifies Hazard Banish floor-start feedback from its durable perk source', () => {
-        const presentation = projectGameplayFeedback([
-            event(0, {
-                type: 'feedback.requested',
-                cue: 'perk.hazard_banish.hazard_removed',
-                message: 'Hazard removed.',
-                source: { kind: 'reward_perk', id: 'hazard_banish_per_floor' },
-                tone: 'reward'
-            })
-        ])[0];
-
-        expect(presentation).toMatchObject({ audioCategory: 'hazard-banish' });
-    });
-
-    it('classifies route selection feedback from the typed progression source', () => {
-        const presentation = projectGameplayFeedback([
-            event(0, {
-                type: 'feedback.requested',
-                cue: 'route.choice.mystery',
-                message: 'Mystery route selected.',
-                source: { kind: 'system', id: 'route_choice' },
-                tone: 'reward'
-            })
-        ])[0];
-
-        expect(presentation).toMatchObject({ audioCategory: 'route-choice' });
-    });
-
-    it('classifies Locksmith shop and exit cues from typed sources', () => {
-        const presentations = projectGameplayFeedback([
-            event(0, {
-                type: 'feedback.requested',
-                cue: 'shop.master_key.purchased',
-                message: 'Master Key purchased.',
-                source: { kind: 'shop', id: 'run_shop' },
-                tone: 'reward'
-            }),
-            event(1, {
-                type: 'feedback.requested',
-                cue: 'dungeon.exit.activated',
-                message: 'Exit activated.',
-                source: { kind: 'system', id: 'dungeon_exit' },
-                tone: 'information'
-            })
-        ]);
-
-        expect(presentations.map((item) => item.audioCategory)).toEqual(['shop-purchase', 'exit-activate']);
     });
 
     it('classifies score-parasite ward and life-loss feedback from the typed hazard source', () => {
@@ -249,13 +152,13 @@ describe('gameplayFeedbackAdapter', () => {
                 totalAfter: 120,
                 currentLevelBefore: 40,
                 currentLevelAfter: 60,
-                source: { kind: 'relic', id: 'guard_token_plus_one' }
+                source: { kind: 'trait', id: 'mirror' }
             }),
             event(1, {
                 type: 'feedback.requested',
-                cue: 'build.warden_sigil.mirror_triggered',
-                message: 'Mirror invoked the Warden Sigil for guard or overflow score.',
-                source: { kind: 'relic', id: 'guard_token_plus_one' },
+                cue: 'trait.mirror.overflow',
+                message: 'Mirror paid its reward as overflow score.',
+                source: { kind: 'trait', id: 'mirror' },
                 tone: 'reward'
             })
         ])[0];

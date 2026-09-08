@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { GAME_RULES_VERSION, type BoardState, type MutatorId, type RouteNodeType, type RunState, type Tile } from './contracts';
+import { GAME_RULES_VERSION, type BoardState, type MutatorId, type RunState, type Tile } from './contracts';
 import {
     buildBoard,
     countFullyHiddenPairs,
@@ -107,31 +107,22 @@ describe('REG-087 board fairness inspection', () => {
     });
 
 
-    it('accepts scheduled endless boss and route floors across multiple cycles', () => {
-        const routeTypes: readonly RouteNodeType[] = ['safe', 'greed', 'mystery'];
+    it('accepts scheduled endless boss floors across multiple cycles', () => {
         for (const runSeed of [101, 42_001, 90_123]) {
             for (const level of [1, 4, 7, 9, 12, 13, 16, 19, 21, 24]) {
                 const entry = pickFloorScheduleEntry(runSeed, GAME_RULES_VERSION, level, 'endless');
-                for (const routeType of routeTypes) {
-                    const board = buildBoard(level, {
-                        runSeed,
-                        runRulesVersion: GAME_RULES_VERSION,
-                        activeMutators: entry.mutators,
-                        floorTag: entry.floorTag,
-                        floorArchetypeId: entry.floorArchetypeId,
-                        featuredObjectiveId: entry.featuredObjectiveId,
-                        cycleFloor: entry.cycleFloor,
-                        gameMode: 'endless',
-                        routeCardPlan: {
-                            choiceId: `fixture:${routeType}:${level}`,
-                            routeType,
-                            sourceLevel: Math.max(1, level - 1),
-                            targetLevel: level
-                        }
-                    });
+                const board = buildBoard(level, {
+                    runSeed,
+                    runRulesVersion: GAME_RULES_VERSION,
+                    activeMutators: entry.mutators,
+                    floorTag: entry.floorTag,
+                    floorArchetypeId: entry.floorArchetypeId,
+                    featuredObjectiveId: entry.featuredObjectiveId,
+                    cycleFloor: entry.cycleFloor,
+                    gameMode: 'endless'
+                });
 
-                    expectBoardFair(board);
-                }
+                expectBoardFair(board);
             }
         }
     });

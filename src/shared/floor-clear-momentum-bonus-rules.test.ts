@@ -35,8 +35,6 @@ describe('Extreme Fever at the floor clear', () => {
             ...base.board!,
             pairCount: 12,
             matchedPairs: 12,
-            dungeonExitTileId: null,
-            dungeonExitActivated: false,
             tiles: base.board!.tiles.map((tile) => ({ ...tile, state: 'matched' as const }))
         };
         const run: RunState = {
@@ -65,8 +63,6 @@ describe('Extreme Fever at the floor clear', () => {
         expect(cleared.lastLevelResult?.feverBreaks).toBe(1);
         expect(cleared.lastLevelResult?.bestChain).toBe(5);
         expect(cleared.stats.comboShards).toBe(1);
-        // No gold: the wallet is closed (Gen 174), whatever the floor's momentum.
-        expect(cleared.shopGold).toBe(0);
     });
 
     it('pays nothing when the chain dropped before the last pair, and the score is untouched either way', () => {

@@ -74,10 +74,6 @@ export const resumeRun = (run: RunState): RunState => {
             ...run,
             status: 'gameOver',
             lives: 0,
-            pendingRouteCardPlan: null,
-            sideRoom: null,
-            relicOffer: null,
-            shopOffers: [],
             timerState: {
                 ...timerState,
                 pausedFromStatus: null,
@@ -91,10 +87,6 @@ export const resumeRun = (run: RunState): RunState => {
                 ...run,
                 status: 'gameOver',
                 lives: 0,
-                pendingRouteCardPlan: null,
-                sideRoom: null,
-                relicOffer: null,
-                shopOffers: [],
                 timerState: {
                     ...timerState,
                     resolveRemainingMs: null,

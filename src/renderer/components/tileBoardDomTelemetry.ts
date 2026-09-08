@@ -13,7 +13,6 @@ import {
 import { getResolvingSelectionState } from './tileResolvingSelection';
 import { getPickableTileIds, getTilePosition } from './tileBoardDomAccessibility';
 import {
-    getDungeonUtilityReadabilityKind,
     getTraitRouteCadenceAction,
     getTraitRouteReadabilityBeatCount,
     getTraitRouteReadabilityBeatTier,
@@ -28,7 +27,7 @@ import {
     type TileTraitRouteBeatTier
 } from './tileBoardReadability';
 
-const CARD_FEEDBACK_ACTION_PRIORITY = ['cash-now', 'perk-cash', 'follow-up', 'build-lane', 'route-setup', 'bank-lane'] as const;
+const CARD_FEEDBACK_ACTION_PRIORITY = ['cash-now', 'follow-up', 'build-lane', 'route-setup', 'bank-lane'] as const;
 const CARD_FEEDBACK_TRAIT_LANE_ORDER: readonly TraitInteractionLaneId[] = [
     'shard',
     'guard',
@@ -86,26 +85,6 @@ export const getHiddenTileCount = (board: BoardState): number =>
 
 export const getHiddenSlotsAttr = (board: BoardState): string =>
     slotListFor(board, (tile) => tile.state === 'hidden');
-
-export const getHiddenTrapSlotsAttr = (board: BoardState, includeDevAttributes: boolean): string | undefined =>
-    includeDevAttributes
-        ? slotListFor(
-              board,
-              (tile) =>
-                  tile.state === 'hidden' &&
-                  tile.dungeonCardKind === 'trap' &&
-                  tile.dungeonCardState === 'hidden'
-          )
-        : undefined;
-
-export const getResolvedTrapSlotsAttr = (board: BoardState): string =>
-    slotListFor(
-        board,
-        (tile) => tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'resolved'
-    );
-
-export const getResolvedTrapTileCount = (board: BoardState): number =>
-    board.tiles.filter((tile) => tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'resolved').length;
 
 const getVisibleTileIds = ({
     board,
@@ -189,7 +168,6 @@ export const getCardFeedbackStatesAttr = ({
     peekRevealedTileIds,
     previewActive,
     runStatus,
-    perkArmedTileIds = [],
     selectedTraitFollowupTileIds,
     traitRewardHotTileIds = [],
     traitRouteTargetTileIds = []
@@ -203,7 +181,6 @@ export const getCardFeedbackStatesAttr = ({
     peekRevealedTileIds: ReadonlySet<string>;
     previewActive: boolean;
     runStatus: RunStatus;
-    perkArmedTileIds?: readonly string[];
     selectedTraitFollowupTileIds?: readonly string[];
     traitRewardHotTileIds?: readonly string[];
     traitRouteTargetTileIds?: readonly string[];
@@ -211,7 +188,6 @@ export const getCardFeedbackStatesAttr = ({
     const pickable = new Set(getPickableTileIds(board, interactive, allowGambitThirdFlip));
     const traitOpportunityTileIds = getTraitOpportunityTileIds(board);
     const traitComboSurgeTileIds = getTraitComboSurgeTileIds(board);
-    const perkArmedTileIdSet = new Set(perkArmedTileIds);
     const selectedTraitFollowupTileIdSet = new Set(selectedTraitFollowupTileIds ?? getSelectedTraitFollowupTileIds(board));
     const traitRewardHotTileIdSet = new Set(traitRewardHotTileIds);
     const traitRouteTargetTileIdSet = new Set(traitRouteTargetTileIds);
@@ -252,9 +228,6 @@ export const getCardFeedbackStatesAttr = ({
         if (focusedTileId === tile.id && boardApplicationFocused) {
             add('focused');
         }
-        if (tile.tileHazardKind) {
-            add('hazard');
-        }
         if (tile.tileTraitKind) {
             add('trait');
             if (traitOpportunityTileIds.has(tile.id)) {
@@ -272,9 +245,6 @@ export const getCardFeedbackStatesAttr = ({
                 add('trait-payoff-stack');
             }
         }
-        if (perkArmedTileIdSet.has(tile.id) && tile.state === 'hidden' && !faceUp) {
-            add('perk-armed');
-        }
         if (selectedTraitFollowupTileIdSet.has(tile.id) && tile.state === 'hidden' && !faceUp) {
             add('selected-followup');
         }
@@ -282,33 +252,8 @@ export const getCardFeedbackStatesAttr = ({
             add('chain-setup');
             add('trait-route-target');
         }
-        if (tile.dungeonCardKind === 'trap') {
-            add(
-                tile.dungeonCardState === 'resolved'
-                    ? 'trap-resolved'
-                    : tile.dungeonCardState === 'revealed'
-                      ? 'trap-revealed'
-                      : 'trap-armed'
-            );
-        }
-        if (tile.dungeonBossId) {
-            add('boss-marked');
-        }
-        if (tile.dungeonCardKind === 'enemy') {
-            add('enemy-card');
-        }
-        const dungeonUtilityKind = getDungeonUtilityReadabilityKind(tile, board);
-        if (dungeonUtilityKind) {
-            add(dungeonUtilityKind);
-        }
         if (tile.findableKind) {
-            add('relic');
-        }
-        if (tile.routeSpecialKind || tile.routeCardKind) {
-            add('route');
-        }
-        if (tile.dungeonCardKind || tile.dungeonBossId) {
-            add('objective');
+            add('findable');
         }
     }
 
@@ -320,20 +265,17 @@ export const getCardFeedbackStatesAttr = ({
 
 export const getCardFeedbackMarkerShapesAttr = ({
     board,
-    perkArmedTileIds = [],
     selectedTraitFollowupTileIds,
     traitRewardHotTileIds = [],
     traitRouteTargetTileIds = []
 }: {
     board: BoardState;
-    perkArmedTileIds?: readonly string[];
     selectedTraitFollowupTileIds?: readonly string[];
     traitRewardHotTileIds?: readonly string[];
     traitRouteTargetTileIds?: readonly string[];
 }): string => {
     const traitOpportunityTileIds = getTraitOpportunityTileIds(board);
     const traitComboSurgeTileIds = getTraitComboSurgeTileIds(board);
-    const perkArmedTileIdSet = new Set(perkArmedTileIds);
     const selectedTraitFollowupTileIdSet = new Set(selectedTraitFollowupTileIds ?? getSelectedTraitFollowupTileIds(board));
     const traitRewardHotTileIdSet = new Set(traitRewardHotTileIds);
     const traitRouteTargetTileIdSet = new Set(traitRouteTargetTileIds);
@@ -347,7 +289,6 @@ export const getCardFeedbackMarkerShapesAttr = ({
             continue;
         }
         const chainReady = tile.tileTraitKind != null && traitOpportunityTileIds.has(tile.id);
-        const perkArmed = perkArmedTileIdSet.has(tile.id);
         const rewardHot = tile.tileTraitKind != null && traitRewardHotTileIdSet.has(tile.id);
         const routeTarget = traitRouteTargetTileIdSet.has(tile.id);
         if (chainReady) {
@@ -358,9 +299,6 @@ export const getCardFeedbackMarkerShapesAttr = ({
         }
         if (rewardHot) {
             add('payoff-bar');
-        }
-        if (perkArmed) {
-            add('perk-armed-bar');
         }
         if (selectedTraitFollowupTileIdSet.has(tile.id)) {
             add('followup-target');
@@ -381,20 +319,17 @@ export const getCardFeedbackMarkerShapesAttr = ({
 
 export const getCardFeedbackActionCuesAttr = ({
     board,
-    perkArmedTileIds = [],
     selectedTraitFollowupTileIds,
     traitRewardHotTileIds = [],
     traitRouteTargetTileIds = []
 }: {
     board: BoardState;
-    perkArmedTileIds?: readonly string[];
     selectedTraitFollowupTileIds?: readonly string[];
     traitRewardHotTileIds?: readonly string[];
     traitRouteTargetTileIds?: readonly string[];
 }): string => {
     const counts = getCardFeedbackActionCueCounts({
         board,
-        perkArmedTileIds,
         selectedTraitFollowupTileIds,
         traitRewardHotTileIds,
         traitRouteTargetTileIds
@@ -405,19 +340,16 @@ export const getCardFeedbackActionCuesAttr = ({
 
 const getCardFeedbackActionCueCounts = ({
     board,
-    perkArmedTileIds = [],
     selectedTraitFollowupTileIds,
     traitRewardHotTileIds = [],
     traitRouteTargetTileIds = []
 }: {
     board: BoardState;
-    perkArmedTileIds?: readonly string[];
     selectedTraitFollowupTileIds?: readonly string[];
     traitRewardHotTileIds?: readonly string[];
     traitRouteTargetTileIds?: readonly string[];
 }): Map<string, number> => {
     const traitOpportunityTileIds = getTraitOpportunityTileIds(board);
-    const perkArmedTileIdSet = new Set(perkArmedTileIds);
     const selectedTraitFollowupTileIdSet = new Set(selectedTraitFollowupTileIds ?? getSelectedTraitFollowupTileIds(board));
     const traitRewardHotTileIdSet = new Set(traitRewardHotTileIds);
     const traitRouteTargetTileIdSet = new Set(traitRouteTargetTileIds);
@@ -433,7 +365,6 @@ const getCardFeedbackActionCueCounts = ({
         const chainReady = tile.tileTraitKind != null && traitOpportunityTileIds.has(tile.id);
         const rewardHot = tile.tileTraitKind != null && traitRewardHotTileIdSet.has(tile.id);
         const selectedFollowup = selectedTraitFollowupTileIdSet.has(tile.id);
-        const perkArmed = perkArmedTileIdSet.has(tile.id);
         const routeTarget = traitRouteTargetTileIdSet.has(tile.id);
 
         if (chainReady && rewardHot) {
@@ -446,9 +377,6 @@ const getCardFeedbackActionCueCounts = ({
             add('build-lane');
         } else if (routeTarget) {
             add('route-setup');
-        }
-        if (perkArmed) {
-            add('perk-cash');
         }
     }
 
@@ -463,7 +391,6 @@ const formatCounts = (counts: ReadonlyMap<string, number>): string =>
 
 export const getCardFeedbackActionPriorityAttr = (options: {
     board: BoardState;
-    perkArmedTileIds?: readonly string[];
     selectedTraitFollowupTileIds?: readonly string[];
     traitRewardHotTileIds?: readonly string[];
     traitRouteTargetTileIds?: readonly string[];
@@ -477,7 +404,6 @@ export const getCardFeedbackActionPriorityAttr = (options: {
 
 export const getCardFeedbackPrimaryActionAttr = (options: {
     board: BoardState;
-    perkArmedTileIds?: readonly string[];
     selectedTraitFollowupTileIds?: readonly string[];
     traitRewardHotTileIds?: readonly string[];
     traitRouteTargetTileIds?: readonly string[];
@@ -488,7 +414,6 @@ export const getCardFeedbackPrimaryActionAttr = (options: {
 
 export const getCardFeedbackPrimaryCardCueAttr = (options: {
     board: BoardState;
-    perkArmedTileIds?: readonly string[];
     selectedTraitFollowupTileIds?: readonly string[];
     traitRewardHotTileIds?: readonly string[];
     traitRouteTargetTileIds?: readonly string[];
@@ -511,21 +436,18 @@ export const getCardFeedbackPrimaryCardCueAttr = (options: {
 
 function getTraitRouteReadabilityTierForTile({
     chainReady,
-    perkArmed,
     rewardHot,
     routeTarget,
     selectedFollowup,
     surge
 }: {
     chainReady: boolean;
-    perkArmed: boolean;
     rewardHot: boolean;
     routeTarget: boolean;
     selectedFollowup: boolean;
     surge: boolean;
 }): TileTraitRouteReadabilityTier {
     return getTraitRouteReadabilityTier({
-        isPerkArmedBack: perkArmed,
         isSelectedTraitFollowupBack: selectedFollowup,
         isTraitComboBack: chainReady,
         isTraitComboSurgeBack: surge,
@@ -563,7 +485,6 @@ export const getCardFeedbackBeatTiersAttr = ({
         const chainReady = tile.tileTraitKind != null && traitOpportunityTileIds.has(tile.id);
         const tier = getTraitRouteReadabilityTierForTile({
             chainReady,
-            perkArmed: false,
             rewardHot: tile.tileTraitKind != null && traitRewardHotTileIdSet.has(tile.id),
             selectedFollowup: selectedTraitFollowupTileIdSet.has(tile.id),
             surge: tile.tileTraitKind != null && traitComboSurgeTileIds.has(tile.id),
@@ -628,7 +549,6 @@ export const getCardFeedbackCadencesAttr = (options: Parameters<typeof getCardFe
         const chainReady = tile.tileTraitKind != null && traitOpportunityTileIds.has(tile.id);
         const tier = getTraitRouteReadabilityTierForTile({
             chainReady,
-            perkArmed: false,
             rewardHot: tile.tileTraitKind != null && traitRewardHotTileIdSet.has(tile.id),
             selectedFollowup: selectedTraitFollowupTileIdSet.has(tile.id),
             surge: tile.tileTraitKind != null && traitComboSurgeTileIds.has(tile.id),
@@ -730,20 +650,17 @@ export const getCardFeedbackTraitLanePrimaryActionAttr = (board: BoardState): st
 
 export const getCardFeedbackTraitRouteTiersAttr = ({
     board,
-    perkArmedTileIds = [],
     selectedTraitFollowupTileIds,
     traitRewardHotTileIds = [],
     traitRouteTargetTileIds = []
 }: {
     board: BoardState;
-    perkArmedTileIds?: readonly string[];
     selectedTraitFollowupTileIds?: readonly string[];
     traitRewardHotTileIds?: readonly string[];
     traitRouteTargetTileIds?: readonly string[];
 }): string => {
     const traitOpportunityTileIds = getTraitOpportunityTileIds(board);
     const traitComboSurgeTileIds = getTraitComboSurgeTileIds(board);
-    const perkArmedTileIdSet = new Set(perkArmedTileIds);
     const selectedTraitFollowupTileIdSet = new Set(selectedTraitFollowupTileIds ?? getSelectedTraitFollowupTileIds(board));
     const traitRewardHotTileIdSet = new Set(traitRewardHotTileIds);
     const traitRouteTargetTileIdSet = new Set(traitRouteTargetTileIds);
@@ -762,7 +679,6 @@ export const getCardFeedbackTraitRouteTiersAttr = ({
         const chainReady = tile.tileTraitKind != null && traitOpportunityTileIds.has(tile.id);
         add(getTraitRouteReadabilityTierForTile({
             chainReady,
-            perkArmed: perkArmedTileIdSet.has(tile.id),
             rewardHot: tile.tileTraitKind != null && traitRewardHotTileIdSet.has(tile.id),
             routeTarget: traitRouteTargetTileIdSet.has(tile.id),
             selectedFollowup: selectedTraitFollowupTileIdSet.has(tile.id),
@@ -778,20 +694,17 @@ export const getCardFeedbackTraitRouteTiersAttr = ({
 
 export const getCardFeedbackTraitRouteIntensitiesAttr = ({
     board,
-    perkArmedTileIds = [],
     selectedTraitFollowupTileIds,
     traitRewardHotTileIds = [],
     traitRouteTargetTileIds = []
 }: {
     board: BoardState;
-    perkArmedTileIds?: readonly string[];
     selectedTraitFollowupTileIds?: readonly string[];
     traitRewardHotTileIds?: readonly string[];
     traitRouteTargetTileIds?: readonly string[];
 }): string => {
     const tierCounts = getCardFeedbackTraitRouteTiersAttr({
         board,
-        perkArmedTileIds,
         selectedTraitFollowupTileIds,
         traitRewardHotTileIds,
         traitRouteTargetTileIds

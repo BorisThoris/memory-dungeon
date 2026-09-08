@@ -31,14 +31,13 @@ describe('resolveTurnMatchScoringSummary', () => {
                 currentStreak: 1
             }
         };
-        const [first, second] = firstPair(run.board!);
+        const [first] = firstPair(run.board!);
 
         const result = resolveTurnMatchScoringSummary({
             run,
             sourceBoard: run.board!,
             resolvedBoard: run.board!,
             matchedPairKey: first.pairKey,
-            matchedTiles: [first, second],
             encorePairKeys: [first.pairKey],
             findableScoreBonus: 2,
             chunkScore: 7
@@ -69,14 +68,13 @@ describe('resolveTurnMatchScoringSummary', () => {
                 currentStreak: Number.NaN
             }
         };
-        const [first, second] = firstPair(run.board!);
+        const [first] = firstPair(run.board!);
 
         const result = resolveTurnMatchScoringSummary({
             run,
             sourceBoard: run.board!,
             resolvedBoard: run.board!,
             matchedPairKey: first.pairKey,
-            matchedTiles: [first, second],
             encorePairKeys: [],
             findableScoreBonus: Number.NaN,
             chunkScore: 3.8
@@ -97,14 +95,13 @@ describe('resolveTurnMatchScoringSummary', () => {
             recallFocus: 0,
             stats: Number.NaN as unknown as RunState['stats']
         };
-        const [first, second] = firstPair(run.board!);
+        const [first] = firstPair(run.board!);
 
         const result = resolveTurnMatchScoringSummary({
             run,
             sourceBoard: run.board!,
             resolvedBoard: run.board!,
             matchedPairKey: first.pairKey,
-            matchedTiles: [first, second],
             encorePairKeys: [],
             findableScoreBonus: 0,
             chunkScore: 0
@@ -119,7 +116,7 @@ describe('resolveTurnMatchScoringSummary', () => {
 
     it('flags cursed pairs matched before the final pair', () => {
         const run = createNewRun(0);
-        const [first, second] = firstPair(run.board!);
+        const [first] = firstPair(run.board!);
         const board = {
             ...run.board!,
             cursedPairKey: first.pairKey,
@@ -131,7 +128,6 @@ describe('resolveTurnMatchScoringSummary', () => {
             sourceBoard: board,
             resolvedBoard: board,
             matchedPairKey: first.pairKey,
-            matchedTiles: [first, second],
             encorePairKeys: [],
             findableScoreBonus: 0,
             chunkScore: 0
@@ -142,7 +138,7 @@ describe('resolveTurnMatchScoringSummary', () => {
 
     it('does not flag cursed pairs when they are the final pair', () => {
         const run = createNewRun(0);
-        const [first, second] = firstPair(run.board!);
+        const [first] = firstPair(run.board!);
         const board = {
             ...run.board!,
             cursedPairKey: first.pairKey,
@@ -154,7 +150,6 @@ describe('resolveTurnMatchScoringSummary', () => {
             sourceBoard: board,
             resolvedBoard: board,
             matchedPairKey: first.pairKey,
-            matchedTiles: [first, second],
             encorePairKeys: [],
             findableScoreBonus: 0,
             chunkScore: 0

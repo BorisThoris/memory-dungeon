@@ -1,4 +1,4 @@
-import type { BoardState, HazardTileKind, RunStatus, Tile } from '../../shared/contracts';
+import type { BoardState, RunStatus, Tile } from '../../shared/contracts';
 import {
     getSelectedTraitFollowupTileIds,
     getTraitComboSurgeTileIds,
@@ -45,23 +45,18 @@ export { getTutorialPairOrdinalByKey } from './tileBoardTutorialMarkers';
 
 export interface TileBoardRow {
     destroyBlockedDecoyBack: boolean;
-    enemyOccupiedBack: boolean;
     faceUp: boolean;
     fieldAmp: number;
     focusDimmed: boolean;
-    hazardBackAccent: HazardTileKind | null;
     isPinned: boolean;
     memorizeCurseHighlight: boolean;
     nonPickableBack: boolean;
-    objectiveBackAccent: boolean;
     pairProximityDistance: number | null;
     powerBackAccent: TileBoardPowerBackAccent | null;
-    perkArmedBack: boolean;
     presentationNBackAnchor: boolean;
     presentationSilhouette: boolean;
     presentationWideRecall: boolean;
     resolvingSelection: ResolvingSelectionState;
-    routeBackAccent: boolean;
     selectedTraitFollowupBack: boolean;
     shuffleBoardOrderIndex: number;
     spotlightBountyHighlight: boolean;
@@ -118,7 +113,6 @@ export interface BuildTileBoardRowsInput {
     tileSwapEligibleTileIds: ReadonlySet<string>;
     tileSwapFirstTileId: string | null;
     tileSwapPowerVisualActive: boolean;
-    perkArmedTileIds?: ReadonlySet<string>;
     selectedTraitFollowupTileIds?: ReadonlySet<string>;
     traitRewardHotTileIds?: ReadonlySet<string>;
     traitRouteTargetTileIds?: ReadonlySet<string>;
@@ -158,7 +152,6 @@ export const buildTileBoardRows = ({
     tileSwapEligibleTileIds,
     tileSwapFirstTileId,
     tileSwapPowerVisualActive,
-    perkArmedTileIds = new Set(),
     selectedTraitFollowupTileIds,
     traitRewardHotTileIds = new Set(),
     traitRouteTargetTileIds = new Set(),
@@ -224,14 +217,7 @@ export const buildTileBoardRows = ({
             stickyBlockedTileId,
             tile
         });
-        const {
-            destroyBlockedDecoyBack,
-            hazardBackAccent,
-            nonPickableBack,
-            objectiveBackAccent,
-            powerBackAccent,
-            routeBackAccent
-        } = getTileBoardHiddenBackAccents({
+        const { destroyBlockedDecoyBack, nonPickableBack, powerBackAccent } = getTileBoardHiddenBackAccents({
             clumpReadTileIds,
             destroyEligibleTileIds,
             destroyPowerVisualActive,
@@ -252,14 +238,12 @@ export const buildTileBoardRows = ({
         const traitInteractionPreviewLines = traitOpportunity?.previewLines ?? [];
         const traitLanePreviewLines = !faceUp ? getTileTraitInteractionPreviewLines(board, [tile.id], 'match') : [];
         const traitLaneBack = buildTraitInteractionLaneMap(traitLanePreviewLines)[0]?.id ?? null;
-        const perkArmedBack = perkArmedTileIds.has(tile.id) && !faceUp;
         const selectedTraitFollowupBack = selectedTraitFollowupTileIdSet.has(tile.id) && !faceUp;
         const traitComboBack = Boolean(traitOpportunity && !faceUp);
         const traitComboSurgeBack = traitComboSurgeTileIds.has(tile.id) && !faceUp;
         const traitRewardHotBack = traitRewardHotTileIds.has(tile.id) && !faceUp;
         const traitRouteTargetBack = traitRouteTargetTileIds.has(tile.id) && !faceUp;
         const traitRouteReadabilityTier = getTraitRouteReadabilityTier({
-            isPerkArmedBack: perkArmedBack,
             isSelectedTraitFollowupBack: selectedTraitFollowupBack,
             isTraitComboBack: traitComboBack,
             isTraitComboSurgeBack: traitComboSurgeBack,
@@ -273,23 +257,18 @@ export const buildTileBoardRows = ({
 
         return {
             destroyBlockedDecoyBack,
-            enemyOccupiedBack: false,
             faceUp,
             fieldAmp: getTileFieldAmplification(index, totalColumns, totalRows),
             focusDimmed: Boolean(dimmedTileIds?.has(tile.id)),
-            hazardBackAccent,
             isPinned: pinnedTileIds.has(tile.id),
             memorizeCurseHighlight,
             nonPickableBack,
-            objectiveBackAccent,
             pairProximityDistance,
-            perkArmedBack,
             powerBackAccent,
             presentationNBackAnchor,
             presentationSilhouette,
             presentationWideRecall,
             resolvingSelection: getResolvingSelectionState(board, runStatus, tile.id),
-            routeBackAccent,
             selectedTraitFollowupBack,
             shuffleBoardOrderIndex: index,
             spotlightBountyHighlight,

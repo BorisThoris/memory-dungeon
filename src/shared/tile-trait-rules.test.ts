@@ -22,29 +22,6 @@ import {
 const uniqueTraitPairCount = (tiles: ReturnType<typeof makeTile>[]): number =>
     new Set(tiles.filter((tile) => tile.tileTraitKind != null).map((tile) => tile.pairKey)).size;
 
-const hasAdjacentTraitPair = (
-    tiles: ReturnType<typeof makeTile>[],
-    first: string,
-    second: string
-): boolean => {
-    const columns = Math.min(Math.max(Math.ceil(Math.sqrt(tiles.length)), 2), 8);
-    return tiles.some((tile, index) => {
-        if (tile.tileTraitKind !== first) {
-            return false;
-        }
-        const row = Math.floor(index / columns);
-        return [index - 1, index + 1, index - columns, index + columns].some((neighborIndex) => {
-            if (neighborIndex < 0 || neighborIndex >= tiles.length) {
-                return false;
-            }
-            if ((neighborIndex === index - 1 || neighborIndex === index + 1) && Math.floor(neighborIndex / columns) !== row) {
-                return false;
-            }
-            return tiles[neighborIndex]?.tileTraitKind === second;
-        });
-    });
-};
-
 describe('tile trait rules', () => {
     it('formats trait interaction tags as unique player-facing lines', () => {
         expect(
@@ -85,42 +62,26 @@ describe('tile trait rules', () => {
         );
     });
 
-    it('assigns deterministic route-weighted traits to generated safe tiles from the opener floor', () => {
+    it('assigns deterministic traits to generated tiles', () => {
         const baseTiles = [
             ...makePair('a', 'A'),
             ...makePair('b', 'B'),
             ...makePair('c', 'C'),
             ...makePair('d', 'D')
         ];
-        const tiles = assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 4, 'greed');
+        const tiles = assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 4);
 
-        const traitTiles = tiles.filter((tile) => tile.tileTraitKind != null);
-        expect(traitTiles.length).toBeGreaterThan(0);
-        expect(
-            traitTiles.every(
-                (tile) =>
-                    !['exit', 'shop', 'room'].includes(tile.dungeonCardKind ?? '')
-            )
-        ).toBe(true);
-        expect(assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 4, 'greed').map((tile) => tile.tileTraitKind ?? null)).toEqual(
+        expect(tiles.filter((tile) => tile.tileTraitKind != null).length).toBeGreaterThan(0);
+        expect(assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 4).map((tile) => tile.tileTraitKind ?? null)).toEqual(
             tiles.map((tile) => tile.tileTraitKind ?? null)
         );
     });
 
     it('uses final board columns when repairing generated trait interaction layouts', () => {
-        const seed = 70_202;
-        const floor = 4;
-        const routeType = 'safe';
-        const board = buildBoard(floor, {
-            runSeed: seed,
+        const board = buildBoard(4, {
+            runSeed: 70_202,
             runRulesVersion: GAME_RULES_VERSION,
-            gameMode: 'endless',
-            routeCardPlan: {
-                choiceId: `contract:${routeType}:${seed}:${floor}`,
-                routeType,
-                sourceLevel: floor - 1,
-                targetLevel: floor
-            }
+            gameMode: 'endless'
         });
 
         expect(uniqueTraitPairCount(board.tiles)).toBeGreaterThanOrEqual(2);
@@ -129,14 +90,14 @@ describe('tile trait rules', () => {
 
     it('keeps the opener readable while still introducing traits as a core mechanic', () => {
         const [a1, a2] = makePair('a', 'A');
-        const tiles = assignTileTraitsToGeneratedBoard([a1, a2], 1, 30, 1, 'mystery');
+        const tiles = assignTileTraitsToGeneratedBoard([a1, a2], 1, 30, 1);
         expect(uniqueTraitPairCount(tiles)).toBe(1);
         expect(tiles.every((tile) => ['echo', 'mirror', 'heavy'].includes(tile.tileTraitKind ?? ''))).toBe(true);
     });
 
     it('introduces a match-triggerable trait route on normal opener boards', () => {
         const baseTiles = Array.from({ length: 4 }, (_, index) => makePair(`pair-${index}`, String(index))).flat();
-        const tiles = assignTileTraitsToGeneratedBoard(baseTiles, 1, 30, 1, 'safe');
+        const tiles = assignTileTraitsToGeneratedBoard(baseTiles, 1, 30, 1);
         const board = makeBoard(tiles, { columns: 3, rows: 3 });
         const openerTraits = tiles.map((tile) => tile.tileTraitKind).filter(Boolean);
 
@@ -146,42 +107,20 @@ describe('tile trait rules', () => {
         expect(getBoardTraitInteractionPreviewLines(board, 'match').length).toBeGreaterThan(0);
     });
 
-    it('scales trait density into a normal board layer and seeds route combo adjacency', () => {
+    it('scales trait density into a normal board layer and seeds combo adjacency', () => {
         const baseTiles = Array.from({ length: 8 }, (_, index) => makePair(`pair-${index}`, String(index))).flat();
 
-        const safeTiles = assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 4, 'safe');
-        const greedTiles = assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 4, 'greed');
-        const safeBoard = makeBoard(safeTiles, { columns: 4, rows: 4 });
-        const greedBoard = makeBoard(greedTiles, { columns: 4, rows: 4 });
+        const tiles = assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 4);
+        const board = makeBoard(tiles, { columns: 4, rows: 4 });
 
-        expect(uniqueTraitPairCount(safeTiles)).toBe(4);
-        expect(hasAdjacentTraitPair(safeTiles, 'conduit', 'echo')).toBe(true);
-        expect(getBoardTraitInteractionPreviewLines(safeBoard, 'match').length).toBeGreaterThanOrEqual(2);
-        expect(uniqueTraitPairCount(greedTiles)).toBe(4);
-        expect(hasAdjacentTraitPair(greedTiles, 'drift', 'volatile')).toBe(true);
-        expect(getBoardTraitInteractionPreviewLines(greedBoard, 'match').length).toBeGreaterThanOrEqual(2);
+        expect(uniqueTraitPairCount(tiles)).toBe(4);
+        expect(getBoardTraitInteractionPreviewLines(board, 'match').length).toBeGreaterThanOrEqual(2);
     });
 
-    it('biases generated trait interaction pairs toward starting loadout identity', () => {
-        const baseTiles = Array.from({ length: 8 }, (_, index) => makePair(`pair-${index}`, String(index))).flat();
-
-        const scoutTiles = assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 4, 'greed', 'memory_scout');
-        const tacticianTiles = assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 4, 'safe', 'route_tactician');
-        const cursebreakerTiles = assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 4, 'safe', 'cursebreaker');
-        const vaultbreakerTiles = assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 4, 'mystery', 'vaultbreaker');
-
-        expect(hasAdjacentTraitPair(scoutTiles, 'conduit', 'echo')).toBe(true);
-        expect(hasAdjacentTraitPair(tacticianTiles, 'drift', 'volatile')).toBe(true);
-        expect(hasAdjacentTraitPair(cursebreakerTiles, 'mirror', 'stasis')).toBe(true);
-        expect(hasAdjacentTraitPair(vaultbreakerTiles, 'cursed', 'volatile')).toBe(true);
-        expect(assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 4, 'safe', 'route_tactician')).toEqual(
-            tacticianTiles
-        );
-    });
 
     it('does not hard-cap trait count on larger eligible boards', () => {
         const baseTiles = Array.from({ length: 18 }, (_, index) => makePair(`pair-${index}`, String(index))).flat();
-        const tiles = assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 12, null);
+        const tiles = assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 12);
 
         expect(uniqueTraitPairCount(tiles)).toBe(9);
     });
@@ -205,7 +144,6 @@ describe('tile trait rules', () => {
                 const hud = getTraitOpportunityHudModel(board, {
                     peekCharges: 0,
                     regionShuffleCharges: 1,
-                    regionShuffleFreeThisFloor: false,
                     shuffleCharges: 0
                 });
 
@@ -219,18 +157,13 @@ describe('tile trait rules', () => {
         }
     }, 15_000);
 
-    it('surfaces the newer interaction traits through seeded route pools', () => {
+    it('surfaces the newer interaction traits through the seeded pool', () => {
         const baseTiles = Array.from({ length: 12 }, (_, index) => makePair(`pair-${index}`, String(index))).flat();
-        const intensities: readonly (null | 'safe' | 'greed' | 'mystery')[] = [null, 'safe', 'greed', 'mystery'];
         const seen = new Set(
-            intensities.flatMap((intensity) =>
-                Array.from({ length: 120 }, (_, index) =>
-                    assignTileTraitsToGeneratedBoard(baseTiles, index + 1, 30, 12, intensity)
-                )
-                    .flat()
-                    .map((tile) => tile.tileTraitKind)
-                    .filter((kind): kind is NonNullable<typeof kind> => kind != null)
-            )
+            Array.from({ length: 120 }, (_, index) => assignTileTraitsToGeneratedBoard(baseTiles, index + 1, 30, 12))
+                .flat()
+                .map((tile) => tile.tileTraitKind)
+                .filter((kind): kind is NonNullable<typeof kind> => kind != null)
         );
 
         expect([...seen]).toEqual(expect.arrayContaining(['drift', 'conduit', 'stasis']));
@@ -238,16 +171,13 @@ describe('tile trait rules', () => {
 
     it('guarantees generated trait boards have match-triggerable routes when enough trait pairs exist', () => {
         const baseTiles = Array.from({ length: 10 }, (_, index) => makePair(`pair-${index}`, String(index))).flat();
-        const intensities: readonly (null | 'safe' | 'greed' | 'mystery')[] = [null, 'safe', 'greed', 'mystery'];
 
-        for (const intensity of intensities) {
-            for (let seed = 1; seed <= 80; seed += 1) {
-                const tiles = assignTileTraitsToGeneratedBoard(baseTiles, seed, 30, 7, intensity);
-                const board = makeBoard(tiles, { columns: 5, rows: 4 });
+        for (let seed = 1; seed <= 320; seed += 1) {
+            const tiles = assignTileTraitsToGeneratedBoard(baseTiles, seed, 30, 7);
+            const board = makeBoard(tiles, { columns: 5, rows: 4 });
 
-                expect(uniqueTraitPairCount(tiles)).toBeGreaterThanOrEqual(2);
-                expect(getBoardTraitInteractionPreviewLines(board, 'match').length).toBeGreaterThan(0);
-            }
+            expect(uniqueTraitPairCount(tiles)).toBeGreaterThanOrEqual(2);
+            expect(getBoardTraitInteractionPreviewLines(board, 'match').length).toBeGreaterThan(0);
         }
     });
 
@@ -260,15 +190,13 @@ describe('tile trait rules', () => {
             comboShardGain: 0,
             guardTokenGain: 0,
             peekChargeGain: 1,
-            scoreBonus: 0,
-            shopGoldGain: 0
+            scoreBonus: 0
         });
         expect(calculateTileTraitMatchRewards(run, [{ ...mirrorA, tileTraitKind: 'mirror' }, mirrorB])).toEqual({
             comboShardGain: 0,
             guardTokenGain: 1,
             peekChargeGain: 0,
-            scoreBonus: 0,
-            shopGoldGain: 0
+            scoreBonus: 0
         });
     });
 
@@ -278,10 +206,7 @@ describe('tile trait rules', () => {
         const [sealedA, sealedB] = makePair('sealed', 'S');
         const [heavyA, heavyB] = makePair('heavy', 'H');
 
-        expect(calculateTileTraitMatchRewards(run, [{ ...cursedA, tileTraitKind: 'cursed' }, cursedB])).toMatchObject({
-            scoreBonus: 15,
-            shopGoldGain: 0
-        });
+        expect(calculateTileTraitMatchRewards(run, [{ ...cursedA, tileTraitKind: 'cursed' }, cursedB]).scoreBonus).toBe(15);
         expect(calculateTileTraitMatchRewards(run, [{ ...sealedA, tileTraitKind: 'sealed' }, sealedB]).comboShardGain).toBe(1);
         expect(calculateTileTraitMatchRewards(run, [{ ...heavyA, tileTraitKind: 'heavy' }, heavyB]).scoreBonus).toBe(35);
     });
@@ -534,7 +459,6 @@ describe('tile trait rules', () => {
         });
         const missPenalty = calculateTileTraitMismatchPenalty(run, [board.tiles[0]!, board.tiles[3]!], board);
 
-        expect(matchEffect.shopGoldGain).toBe(1);
         expect(matchEffect.scoreBonus).toBe(35);
         expect(matchEffect.interactionTags).toContain('cursed:volatile-greed');
         expect(missPenalty).toMatchObject({ triesDelta: 1, recallMistakesDelta: 1 });

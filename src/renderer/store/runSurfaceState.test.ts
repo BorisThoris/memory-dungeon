@@ -71,7 +71,6 @@ describe('run surface state helpers', () => {
             regionShuffleArmed: false,
             tileSwapArmed: false,
             tileSwapFirstTileId: null,
-            shopReturnMode: null,
             ...BOARD_FLOATER_POP_CLEAR
         });
     });

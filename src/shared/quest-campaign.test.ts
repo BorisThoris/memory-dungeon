@@ -27,7 +27,7 @@ describe('REG-082 quest contract campaign ladder', () => {
             achievementsEnabled: true,
             unlockedAchievements: [],
             bestStreak: 2,
-            perfectClears: 0,
+            perfectClears: 0
         };
 
         const rows = getQuestCampaignRows(save);
@@ -59,8 +59,7 @@ describe('REG-082 quest contract campaign ladder', () => {
         save.playerStats = {
             ...save.playerStats!,
             bestFloorNoPowers: Number.POSITIVE_INFINITY,
-            sharpFloors: Number.NaN,
-            relicPickCounts: { guard_token_plus_one: Number.POSITIVE_INFINITY, parasite_ledger: 1.9 }
+            sharpFloors: Number.NaN
         };
         save.lastRunSummary = {
             totalScore: 0,
@@ -70,7 +69,7 @@ describe('REG-082 quest contract campaign ladder', () => {
             achievementsEnabled: true,
             unlockedAchievements: [],
             bestStreak: 0,
-            perfectClears: 0,
+            perfectClears: 0
         };
 
         const rows = getQuestCampaignRows(save);

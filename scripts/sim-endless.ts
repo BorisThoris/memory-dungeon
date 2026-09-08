@@ -12,7 +12,7 @@ import {
 import { getFindableSpawnWeightRows } from '../src/shared/findables';
 import { pickFloorScheduleEntry } from '../src/shared/floor-mutator-schedule';
 import { buildBoard } from '../src/shared/board-generation';
-import { getEffectivePrimaryExitLock, inspectBoardFairness } from '../src/shared/board-inspection';
+import { inspectBoardFairness } from '../src/shared/board-inspection';
 import { solveRunThroughGameplayCoreWithTrace } from '../src/shared/gameplay-core-playthrough-solver';
 import { createGeneratedBoardSolverRun } from '../src/shared/softlock-generator-contract';
 import {
@@ -52,7 +52,6 @@ export interface EndlessSimulationHealthReport {
         playableFailureDetails: string[];
         playableIssueFloors: number;
         playableIssueReasons: string[];
-        playableLockedExitFloors: number;
         rewardKinds: number;
         traitBoardPowerInteractionFloorShare: number;
         traitMatchRouteFloorShare: number;
@@ -68,32 +67,15 @@ type EndlessSimulationHealthMetrics = EndlessSimulationHealthReport['metrics'];
 
 const emptyFindableKindCounts = (): Record<FindableKind, number> => ({
     shard_spark: 0,
-    score_glint: 0,
-    ward_spark: 0,
-    scout_glint: 0
+    score_glint: 0
 });
 
 /*
- * Which floors get played, not just inspected.
- *
- * The last clause used to pull in every locked-exit floor, and it was doing most of the work: with
- * locks gone the sample fell from over 500 floors in a thousand to 220, which is a real loss of
- * coverage dressed up as a passing gate. The every-25th sweep is widened to every 3rd to buy most
- * of it back - 430 floors of a thousand, played through the command path - and the gate's own bar
- * moves to that measured number rather than staying at a 500 it can no longer reach.
- *
- * Every 2nd would clear the old bar outright and roughly doubles the wall clock of a gate that
- * already takes half a minute. 430 sampled floors with no locks left to skew which ones get picked
- * is better coverage than 500 that were chosen because they had a lock on them.
- *
- * The lock clause stays. It costs nothing while generation deals no locks, and it is the clause
- * that would matter first if one ever came back.
+ * Which floors get played, not just inspected: every early floor, every boss floor and every third
+ * floor after that - about 430 of a thousand, played through the command path.
  */
 const shouldCheckPlayableBoard = (board: BoardState): boolean =>
-    board.level <= 24 ||
-    board.level % 3 === 0 ||
-    board.floorTag === 'boss' ||
-    getEffectivePrimaryExitLock({ board }).lockKind !== 'none';
+    board.level <= 24 || board.level % 3 === 0 || board.floorTag === 'boss';
 
 export const buildEndlessSimulationCsv = ({
     floors,
@@ -113,7 +95,6 @@ export const buildEndlessSimulationCsv = ({
     let coreReplayIssueFloors = 0;
     let coreReplayRejectedCommandFloors = 0;
     let coreReplayInvariantViolationFloors = 0;
-    let playableLockedExitFloors = 0;
     const traitMetricCounts: Record<string, number> = {
         traitFloors: 0,
         traitInteractionLines: 0,
@@ -154,12 +135,8 @@ export const buildEndlessSimulationCsv = ({
                 fairnessIssueCounts[code] = (fairnessIssueCounts[code] ?? 0) + 1;
             }
         }
-        const effectiveExitLock = getEffectivePrimaryExitLock({ board });
         if (shouldCheckPlayableBoard(board)) {
             playableCheckedFloors += 1;
-            if (effectiveExitLock.lockKind !== 'none') {
-                playableLockedExitFloors += 1;
-            }
             // Solved through the command path rather than direct transitions, so the
             // endless gate exercises the same reducer the game runs and can report
             // whether the command journal replays deterministically.
@@ -248,7 +225,6 @@ export const buildEndlessSimulationCsv = ({
         `coreReplayMetric,issueFloors,${coreReplayIssueFloors}`,
         `coreReplayMetric,rejectedCommandFloors,${coreReplayRejectedCommandFloors}`,
         `coreReplayMetric,invariantViolationFloors,${coreReplayInvariantViolationFloors}`,
-        `playableMetric,lockedExitFloors,${playableLockedExitFloors}`,
         ...Object.entries(playableIssueCounts)
             .sort(([a], [b]) => a.localeCompare(b))
             .map(([k, v]) => `playableIssue,${k},${v}`),
@@ -303,7 +279,6 @@ const readEndlessSimulationMetrics = (input: EndlessSimulationCsvInput): Endless
         playableFailureDetails,
         playableIssueFloors: counts.playableIssue?.floorWithIssue ?? 0,
         playableIssueReasons,
-        playableLockedExitFloors: counts.playableMetric?.lockedExitFloors ?? 0,
         rewardKinds,
         traitBoardPowerInteractionFloorShare:
             (counts.traitMetric?.traitBoardPowerInteractionFloors ?? 0) / traitDenominator,
@@ -324,18 +299,6 @@ export const evaluateEndlessSimulationHealth = (
     const safeFloors = Math.max(1, Math.floor(floors));
     const issues = [
         metrics.routeKinds < 8 ? `Expected at least 8 floor archetypes, saw ${metrics.routeKinds}.` : null,
-        /*
-         * Three checks stood here and all three now assert the opposite of the game.
-         *
-         * They wanted at least four dungeon objectives, at least two nontrivial exit lock kinds,
-         * and an exit on every sampled floor. Generation deals no objective but `find_exit`, no
-         * lock at all, and no exit: over 1000 floors that is 1 objective, 0 lock kinds and 1000
-         * "exitless" floors, which is not a failure, it is the change.
-         *
-         * The floor-archetype check below stays, and it is the one that was doing the work these
-         * three looked like they were doing: it asks whether a thousand floors are actually
-         * different from each other, which is a question a board of pairs still has to answer.
-         */
         metrics.fairnessIssueFloors > 0 || metrics.fairnessIssueTypes > 0
             ? `Expected generated boards to pass fairness inspection, saw ${metrics.fairnessIssueFloors} floor(s) with ${metrics.fairnessIssueTypes} issue type(s): ${metrics.fairnessIssueCodes.join(', ') || 'unknown'}.`
             : null,
@@ -345,9 +308,6 @@ export const evaluateEndlessSimulationHealth = (
         metrics.playableIssueFloors > 0
             ? `Expected playable solver sample to clear every checked floor, saw ${metrics.playableIssueFloors} issue floor(s): ${metrics.playableIssueReasons.join(', ') || 'unknown'}. Details: ${metrics.playableFailureDetails.slice(0, 5).join('; ') || 'none'}.`
             : null,
-        // Same reasoning: the solver cannot sample a live locked-exit floor because generation
-        // makes none. What it still does - and what the playable checks above still assert - is
-        // clear every floor it samples through real pair play.
         metrics.rewardKinds < expectedRewardKinds
             ? `Expected all ${expectedRewardKinds} findable reward kinds, saw ${metrics.rewardKinds}.`
             : null,
@@ -399,7 +359,7 @@ const formatEndlessSimulationSummary = (
         `- Rules version: ${input.rulesVersion ?? GAME_RULES_VERSION}`,
         `- Route gates: ${metrics.routeKinds} floor archetypes.`,
         `- Fairness gates: ${metrics.fairnessIssueFloors} issue floors across ${metrics.fairnessIssueTypes} issue types (${metrics.fairnessIssueCodes.join(', ') || 'none'}).`,
-        `- Playable gates: ${metrics.playableCheckedFloors} sampled floors, ${metrics.playableLockedExitFloors} locked-exit floors, ${metrics.playableIssueFloors} issue floors (${metrics.playableIssueReasons.join(', ') || 'none'}).`,
+        `- Playable gates: ${metrics.playableCheckedFloors} sampled floors, ${metrics.playableIssueFloors} issue floors (${metrics.playableIssueReasons.join(', ') || 'none'}).`,
         `- Reward gates: ${metrics.findableTotal} findable rewards across ${metrics.rewardKinds} active reward kinds.`,
         `- Trait gates: ${Math.round(metrics.traitFloorShare * floors)} trait floors (${pct(metrics.traitFloorShare * floors)}), ${metrics.traitInteractionLines} interaction lines, ${metrics.deadTraitFloors} dead trait floors.`,
         `- Trait mechanic gates: ${(metrics.traitMatchRouteFloorShare * 100).toFixed(1)}% match-route floors, ${(metrics.traitRewardFloorShare * 100).toFixed(1)}% reward floors, ${(metrics.traitBoardPowerInteractionFloorShare * 100).toFixed(1)}% board-power floors, ${(metrics.traitSwapSetupFloorShare * 100).toFixed(1)}% one-swap setup floors.`,

@@ -19,8 +19,6 @@ export {
 export {
     DECOY_PAIR_KEY,
     EXIT_PAIR_KEY,
-    ROOM_PAIR_KEY,
-    SHOP_PAIR_KEY,
     WILD_PAIR_KEY,
     isSingletonUtilityPairKey,
     isWildPairKey
@@ -78,7 +76,6 @@ export {
 export {
     eligibleSpotlightPairKeys,
     pickShiftingSpotlightKeys,
-    rotateAnchorSealPressure,
     rotateRunShiftingSpotlight,
     rotateShiftingSpotlight,
     shiftingSpotlightMatchDelta

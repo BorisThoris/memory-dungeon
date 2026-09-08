@@ -1,18 +1,5 @@
-import type {
-    BoardState,
-    DungeonExitLockKind,
-    DungeonKeyKind,
-    RunState,
-    RunStatus,
-    Tile
-} from './contracts';
-import {
-    DECOY_PAIR_KEY,
-    EXIT_PAIR_KEY,
-    WILD_PAIR_KEY,
-    isSingletonUtilityPairKey
-} from './tile-identity';
-import { runNonNegativeInteger } from './run-number-guards';
+import type { BoardState, RunState, RunStatus, Tile } from './contracts';
+import { DECOY_PAIR_KEY, WILD_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
 
 /** When the board includes a wild joker, returns its tile id; otherwise null. */
 export const getWildTileIdFromBoard = (board: BoardState): string | null =>
@@ -71,17 +58,6 @@ export type BoardFairnessIssueCode =
     | 'matched_pairs_counter_mismatch'
     | 'board_tile_count_mismatch'
     | 'flipped_tile_reference_missing'
-    | 'exit_card_missing'
-    | 'exit_tile_reference_missing'
-    | 'exit_card_mismatch'
-    | 'exit_activation_mismatch'
-    | 'exit_lock_metadata_mismatch'
-    | 'exit_lock_unreachable'
-    | 'enemy_hazard_tile_reference_missing'
-    | 'enemy_hazard_on_cleared_tile'
-    | 'dungeon_card_pair_mismatch'
-    | 'dungeon_card_hp_mismatch'
-    | 'dungeon_objective_unreachable'
     | 'completion_route_missing'
     | 'trait_interaction_missing'
     | 'trait_route_objective_unreachable'
@@ -111,90 +87,6 @@ const tileIsActionableForCompletion = (tile: Tile): boolean =>
     tile.state === 'hidden' || tile.state === 'flipped';
 
 const pairIsCleared = (tiles: readonly Tile[]): boolean => tiles.every(tileIsCleared);
-
-/*
- * The exit-lock helpers below describe a lock no generated board has carried since Gen 172. They
- * stay exported only because the softlock generator contract, the balance simulation, the power
- * targeting rules and the board readability model still read them; each now reports what a plain
- * board has, which is no lock, no lever and no key.
- */
-export const countReachableExitLeverSources = (board: BoardState): number =>
-    runNonNegativeInteger(board.dungeonLeverCount);
-
-export const countReachableExitKeySources = (board: BoardState, keyKind: DungeonKeyKind): number =>
-    runNonNegativeInteger(board.dungeonKeysHeldByKind?.[keyKind]) +
-    (board.dungeonKeysHeldByKind == null && keyKind === 'iron' ? runNonNegativeInteger(board.dungeonKeysHeld) : 0);
-
-export const boardHasActionableProgressionPair = (board: BoardState): boolean => {
-    const actionableTilesByPairKey = new Map<string, number>();
-    let hasActionableWildTile = false;
-    let hasActionableRealTile = false;
-    for (const tile of board.tiles) {
-        if (!tileIsActionableForCompletion(tile)) {
-            continue;
-        }
-        if (tile.pairKey === WILD_PAIR_KEY) {
-            hasActionableWildTile = true;
-            continue;
-        }
-        if (isSingletonUtilityPairKey(tile.pairKey)) {
-            continue;
-        }
-        hasActionableRealTile = true;
-        actionableTilesByPairKey.set(tile.pairKey, (actionableTilesByPairKey.get(tile.pairKey) ?? 0) + 1);
-    }
-    return [...actionableTilesByPairKey.values()].some((count) => count >= 2) || (hasActionableWildTile && hasActionableRealTile);
-};
-
-export interface EffectivePrimaryExitLockInput {
-    board: BoardState;
-    dungeonKeys?: RunState['dungeonKeys'];
-    dungeonMasterKeys?: number;
-}
-
-export interface EffectivePrimaryExitLock {
-    exitTile: Tile | null;
-    lockKind: DungeonExitLockKind;
-    requiredLeverCount: number;
-    terminalKeySoftlockFallback: boolean;
-}
-
-export const getEffectivePrimaryExitLock = ({
-    board,
-    dungeonKeys = {},
-    dungeonMasterKeys = 0
-}: EffectivePrimaryExitLockInput): EffectivePrimaryExitLock => {
-    const primaryExit = board.dungeonExitTileId
-        ? board.tiles.find((tile) => tile.id === board.dungeonExitTileId) ?? null
-        : board.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY) ?? null;
-    const rawLockKind = primaryExit?.dungeonExitLockKind ?? board.dungeonExitLockKind ?? 'none';
-    const rawRequiredLeverCount = runNonNegativeInteger(
-        primaryExit?.dungeonExitRequiredLeverCount ?? board.dungeonExitRequiredLeverCount
-    );
-
-    if (!primaryExit || rawLockKind === 'none' || rawLockKind === 'lever') {
-        return {
-            exitTile: primaryExit,
-            lockKind: rawLockKind,
-            requiredLeverCount: rawRequiredLeverCount,
-            terminalKeySoftlockFallback: false
-        };
-    }
-
-    const hasRunKey =
-        runNonNegativeInteger(dungeonKeys[rawLockKind]) > 0 ||
-        runNonNegativeInteger(dungeonMasterKeys) > 0;
-    const hasReachableKeySource = countReachableExitKeySources(board, rawLockKind as DungeonKeyKind) > 0;
-    const terminalKeySoftlockFallback =
-        !boardHasActionableProgressionPair(board) && !hasRunKey && !hasReachableKeySource;
-
-    return {
-        exitTile: primaryExit,
-        lockKind: terminalKeySoftlockFallback ? 'none' : rawLockKind,
-        requiredLeverCount: terminalKeySoftlockFallback ? 0 : rawRequiredLeverCount,
-        terminalKeySoftlockFallback
-    };
-};
 
 /**
  * REG-087 anti-softlock inspection for board structure and completion reachability.

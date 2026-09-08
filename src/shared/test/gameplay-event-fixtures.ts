@@ -4,8 +4,6 @@ import type { BoardTurnAnnouncementFacts } from '../board-turn-event-facts';
 const DEFAULT_ANNOUNCEMENT: BoardTurnAnnouncementFacts = {
     anchorTileIds: ['tile-a', 'tile-b'],
     level: 1,
-    routeSpecialKind: null,
-    routeCardKind: null,
     currentStreakBefore: 0,
     currentStreakAfter: 1,
     comboShardsBefore: 0,
@@ -27,7 +25,6 @@ const DEFAULT_ANNOUNCEMENT: BoardTurnAnnouncementFacts = {
     chainTierBefore: 'none' as const,
     chunkPartnerSpanMax: 0,
     chunkHaloPairs: 0,
-    chunkTreasuresSpilled: 0,
     chunkSuitCleared: false,
     chunkDroppedPairs: 0,
     chunkRippleWaves: 0,
@@ -35,43 +32,7 @@ const DEFAULT_ANNOUNCEMENT: BoardTurnAnnouncementFacts = {
     magpieTheftsAfter: 0,
     magpieScaredOffBefore: 0,
     magpieScaredOffAfter: 0,
-    hazardTilesBefore: 0,
-    hazardTilesAfter: 0,
-    hazardKinds: {
-        shuffleSnareBefore: 0,
-        shuffleSnareAfter: 0,
-        cascadeCacheBefore: 0,
-        cascadeCacheAfter: 0,
-        mirrorDecoyBefore: 0,
-        mirrorDecoyAfter: 0,
-        fragileCacheClaimBefore: 0,
-        fragileCacheClaimAfter: 0,
-        fragileCacheBreakBefore: 0,
-        fragileCacheBreakAfter: 0,
-        tollCacheBefore: 0,
-        tollCacheAfter: 0,
-        fuseCacheBefore: 0,
-        fuseCacheAfter: 0,
-        fuseCacheExpiredBefore: 0,
-        fuseCacheExpiredAfter: 0
-    },
-    scoutsBefore: 0,
-    scoutsAfter: 0,
-    omenScoutsBefore: 0,
-    omenScoutsAfter: 0,
-    mimicCacheBefore: 0,
-    mimicCacheAfter: 0,
-    mimicCacheBitesBefore: 0,
-    mimicCacheBitesAfter: 0,
-    mimicCacheGuardBitesBefore: 0,
-    mimicCacheGuardBitesAfter: 0,
-    routeSpecialsBefore: 0,
-    routeSpecialsAfter: 0,
-    safeHazardWardsUsedBefore: 0,
-    safeHazardWardsUsedAfter: 0,
     matchedTraitKinds: [],
-    shopGoldBefore: 0,
-    shopGoldAfter: 0,
     shuffleChargesBefore: 0,
     shuffleChargesAfter: 0,
     regionShuffleChargesBefore: 0,
@@ -110,7 +71,7 @@ export interface BoardTurnResolvedEventFixtureOverrides {
     findablesClaimedAfter?: number;
     findablesTotalBefore?: number;
     findablesTotalAfter?: number;
-    matchedFindableKind?: 'shard_spark' | 'score_glint' | 'ward_spark' | 'scout_glint' | null;
+    matchedFindableKind?: 'shard_spark' | 'score_glint' | null;
     announcement?: Partial<BoardTurnAnnouncementFacts>;
 }
 

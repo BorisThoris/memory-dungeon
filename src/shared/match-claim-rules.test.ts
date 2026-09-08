@@ -43,7 +43,6 @@ describe('match claim rules', () => {
 
         expect(context.claimedFindableKind).toBeNull();
         expect(context.findableComboShardGain).toBe(0);
-        expect(context.findableSafeHazardWardGain).toBe(0);
         expect(context.findableScoreBonus).toBe(0);
         expect(context.findablesClaimedDelta).toBe(0);
     });

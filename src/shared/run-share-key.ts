@@ -44,9 +44,6 @@ const variantOf = (run: RunState): RunShareVariant | RunShareRefusal => {
     if (run.gauntletDeadlineMs !== null) {
         return 'gauntlet';
     }
-    if (run.dungeonShowcaseRun) {
-        return 'showcase';
-    }
     // Same precedence as `createRestartRun`, so a key and a retry never disagree.
     if (run.activeContract?.maxPinsTotalRun != null) {
         return 'pin_vow';

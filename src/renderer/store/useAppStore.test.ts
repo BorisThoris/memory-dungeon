@@ -17,10 +17,8 @@ const gameSfxMocks = vi.hoisted(() => ({
     playMatchPayoffSfx: vi.fn(),
     playPeekPowerSfx: vi.fn(),
     playPowerArmSfx: vi.fn(),
-    playRelicPickSfx: vi.fn(),
     playResolveSfx: vi.fn(),
     playStrayPowerSfx: vi.fn(),
-    playWagerArmSfx: vi.fn(),
     resumeAudioContext: vi.fn(),
     sfxGainFromSettings: (masterVolume: number, sfxVolume: number) =>
         Math.max(0, Math.min(1, masterVolume)) * Math.max(0, Math.min(1, sfxVolume))
@@ -84,16 +82,7 @@ const notifyCurrentBoardReady = (): void => {
 const normalPairGroups = (board: BoardState): Tile[][] => {
     const groups = new Map<string, Tile[]>();
     for (const tile of board.tiles) {
-        if (
-            tile.dungeonCardKind != null ||
-            tile.routeSpecialKind != null ||
-            tile.routeCardKind != null ||
-            tile.pairKey === '__decoy__' ||
-            tile.pairKey === '__wild__' ||
-            tile.pairKey === '__exit__' ||
-            tile.pairKey === '__shop__' ||
-            tile.pairKey === '__room__'
-        ) {
+        if (tile.pairKey === '__decoy__' || tile.pairKey === '__wild__') {
             continue;
         }
         const group = groups.get(tile.pairKey) ?? [];
@@ -119,13 +108,7 @@ const visibleProgressionSignature = (): string => {
     return [
         view,
         run?.status ?? 'no-run',
-        run?.board?.level ?? 'no-board',
-        run?.sideRoom?.id ?? 'no-side-room',
-        run?.relicOffer?.picksRemaining ?? 'no-relic-picks',
-        run?.relicOffer?.options.join(',') ?? 'no-relic-options',
-        run?.relicIds.join(',') ?? 'no-relics',
-        run?.pendingRouteCardPlan?.routeType ?? 'no-route-plan',
-        run?.lastLevelResult?.routeChoices?.map((choice) => choice.id).join(',') ?? 'no-route-choices'
+        run?.board?.level ?? 'no-board'
     ].join('|');
 };
 
@@ -165,12 +148,7 @@ describe('useAppStore timers', () => {
 
             for (let step = 0; step < 6; step += 1) {
                 const { run, view } = useAppStore.getState();
-                if (
-                    view === 'playing' &&
-                    run?.status !== 'levelComplete' &&
-                    !run?.sideRoom &&
-                    !run?.relicOffer
-                ) {
+                if (view === 'playing' && run?.status !== 'levelComplete') {
                     break;
                 }
 
@@ -182,8 +160,6 @@ describe('useAppStore timers', () => {
             const { run, view } = useAppStore.getState();
             expect(view).toBe('playing');
             expect(run?.status).not.toBe('levelComplete');
-            expect(run?.sideRoom).toBeNull();
-            expect(run?.relicOffer).toBeNull();
         }
     );
 
@@ -556,14 +532,13 @@ describe('useAppStore timers', () => {
 
 
 
-    it('lets death win over puzzle and relic early returns when continuing a completed floor', () => {
+    it('lets death win over the floor-clear interlude when continuing a completed floor', () => {
         const makeDeadCompleteRun = (overrides: Partial<RunState> = {}): RunState => {
             const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 12_359 });
             return {
                 ...baseRun,
                 status: 'levelComplete',
                 lives: 0,
-                shopOffers: [],
                 lastLevelResult: {
                     level: 1,
                     scoreGained: 100,
@@ -578,28 +553,15 @@ describe('useAppStore timers', () => {
             };
         };
 
-        for (const run of [
-            makeDeadCompleteRun({
-                relicOffer: {
-                    tier: 1,
-                    options: ['extra_shuffle_charge'],
-                    picksRemaining: 1,
-                    pickRound: 0
-                }
-            })
-        ]) {
-            resetStore();
-            useAppStore.setState({ view: 'playing', run });
+        resetStore();
+        useAppStore.setState({ view: 'playing', run: makeDeadCompleteRun() });
 
-            useAppStore.getState().continueToNextLevel();
+        useAppStore.getState().continueToNextLevel();
 
-            expect(useAppStore.getState().view).toBe('gameOver');
-            expect(useAppStore.getState().run?.status).toBe('gameOver');
-            expect(useAppStore.getState().run?.lives).toBe(0);
-            expect(useAppStore.getState().run?.relicOffer).toBeNull();
-            expect(useAppStore.getState().run?.shopOffers).toEqual([]);
-            expect(useAppStore.getState().run?.lastRunSummary).not.toBeNull();
-        }
+        expect(useAppStore.getState().view).toBe('gameOver');
+        expect(useAppStore.getState().run?.status).toBe('gameOver');
+        expect(useAppStore.getState().run?.lives).toBe(0);
+        expect(useAppStore.getState().run?.lastRunSummary).not.toBeNull();
     });
 
     it('GLD-P0-003: continueToNextLevel ignores non-complete runs', () => {
@@ -1052,9 +1014,6 @@ describe('useAppStore restartRun menu modes', () => {
             const next = useAppStore.getState().run;
             expect(next?.gameMode).toBe('endless');
             expect(next?.activeMutators).toEqual([]);
-            expect(next?.board?.tiles.some((tile) => tile.dungeonCardKind != null || tile.routeSpecialKind != null)).toBe(
-                false
-            );
             expect(next?.findablesTotalThisFloor).toBe(0);
         } finally {
             randomSpy.mockRestore();

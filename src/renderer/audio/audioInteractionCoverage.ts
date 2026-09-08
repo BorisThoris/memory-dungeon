@@ -193,7 +193,7 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
         callsite: 'applyResolveBoardTurn -> playResolveSfx two-lane stacked payoff accent layer',
         semanticMoment: 'reward',
         decision: 'procedural_only',
-        cooldownPolicy: 'match category polyphony cap; only fires on two-lane payoffs, including reward-perk lane joins, so common stacks read as intentional without using the capstone burst',
+        cooldownPolicy: 'match category polyphony cap; only fires on two-lane payoffs, so common stacks read as intentional without using the capstone burst',
         mixRole: 'light stacked-payoff pop between ordinary reward bloom and mega cashout sparkle',
         reducedMotionSafe: true
     },
@@ -205,7 +205,7 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
         callsite: 'applyResolveBoardTurn -> playResolveSfx stacked-reward capstone layer',
         semanticMoment: 'reward',
         decision: 'procedural_only',
-        cooldownPolicy: 'match category polyphony cap; only fires after pickup, resource, trait-route, reward-perk, chain reward, or milestone channels stack into a multi-lane payoff',
+        cooldownPolicy: 'match category polyphony cap; only fires after pickup, resource, trait-route, chain reward, or milestone channels stack into a multi-lane payoff',
         mixRole: 'high arcade cashout sparkle marking the top of a stacked reward burst',
         reducedMotionSafe: true
     },
@@ -217,7 +217,7 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
         callsite: 'applyResolveBoardTurn -> playResolveSfx super-stacked reward flourish layer',
         semanticMoment: 'reward',
         decision: 'procedural_only',
-        cooldownPolicy: 'match category polyphony cap; only fires above the normal stacked burst when four or more reward systems, including perk-trigger lanes, cash out together',
+        cooldownPolicy: 'match category polyphony cap; only fires above the normal stacked burst when four or more reward systems cash out together',
         mixRole: 'top-tier triangle flourish that separates rare super-stack payoffs from ordinary multi-lane bursts',
         reducedMotionSafe: true
     },
@@ -327,18 +327,6 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
         decision: 'procedural_only',
         cooldownPolicy: 'signature-gated by floater key, tier, and beat count; mismatch category polyphony cap',
         mixRole: 'cross-modal recovery beat contract: two-beat recover stays soft, three-beat break/risk snaps, four-beat lost reward drops harder, five-beat trait surge adds a compounded danger cue, and expanded lanes/chips keep audio roles plus screen cues readable',
-        reducedMotionSafe: true
-    },
-    {
-        id: 'reward_perk_pop',
-        domain: 'gameplay',
-        interaction: 'Durable reward perk triggers during a trait match',
-        cue: 'none',
-        callsite: 'applyResolveBoardTurn -> playResolveSfx reward-perk pop accent layer',
-        semanticMoment: 'reward',
-        decision: 'procedural_only',
-        cooldownPolicy: 'match category polyphony cap; layers only when a new reward-perk interaction tag resolves',
-        mixRole: 'bright perk activation pop above trait-route accent',
         reducedMotionSafe: true
     },
     {

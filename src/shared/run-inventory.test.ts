@@ -2,10 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { createNewRun } from './game-core';
 import {
     buildRunInventory,
-    DUNGEON_KEY_SPEND_ORDER,
     gainRunInventoryItem,
-    getDungeonKeyQuantityRows,
-    getDungeonKeyTotal,
     getRunConsumableRows,
     getRunInventoryGainFeedback,
     getRunInventoryItemPayoutRows,
@@ -37,13 +34,11 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
             'flash_pair_charge',
             'undo_charge',
             'gambit_token',
-            'wild_match_token',
-            'iron_key',
-            'master_key'
+            'wild_match_token'
         ]);
         expect(inventory.consumables.find((row) => row.id === 'destroy_charge')?.stackLimit).toBeNull();
         expect(inventory.consumables.find((row) => row.id === 'destroy_charge')?.source).toBe(
-            'Relics, room rewards, shop services, events, and explicit pickups.'
+            'Run start and explicit pickups.'
         );
         expect(inventory.consumables.find((row) => row.id === 'region_shuffle_charge')).toMatchObject({
             label: 'Row/swap charge',
@@ -170,16 +165,12 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
             ...createNewRun(0),
             shuffleCharges: -2,
             peekCharges: -1,
-            dungeonKeys: { iron: -1, treasure: 1 },
-            dungeonMasterKeys: -4,
             stats: { ...createNewRun(0).stats, guardTokens: -1 }
         };
 
         const rows = getRunConsumableRows(run);
         expect(rows.find((row) => row.id === 'shuffle_charge')?.quantity).toBe(0);
         expect(rows.find((row) => row.id === 'peek_charge')?.quantity).toBe(0);
-        expect(rows.find((row) => row.id === 'iron_key')?.quantity).toBe(1);
-        expect(rows.find((row) => row.id === 'master_key')?.quantity).toBe(0);
         expect(previewRunInventoryItemGain(run, 'guard_token', 1)).toMatchObject({
             quantity: 0,
             accepted: 1,
@@ -207,33 +198,6 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
         expect(gainRunInventoryItem(run, 'combo_shard').stats.comboShards).toBe(1);
     });
 
-    it('shows typed dungeon key breakdowns on the shared key row', () => {
-        const run = {
-            ...createNewRun(0),
-            dungeonKeys: { iron: 1, treasure: 2, boss: 1 }
-        };
-
-        expect(getDungeonKeyQuantityRows(run.dungeonKeys)).toEqual([
-            { kind: 'iron', quantity: 1 },
-            { kind: 'treasure', quantity: 2 },
-            { kind: 'shrine', quantity: 0 },
-            { kind: 'boss', quantity: 1 },
-            { kind: 'trap', quantity: 0 }
-        ]);
-        expect(getDungeonKeyTotal(run.dungeonKeys)).toBe(4);
-        expect(buildRunInventory(run).consumables.find((row) => row.id === 'iron_key')).toMatchObject({
-            quantity: 4,
-            quantityLabel: '4 (iron 1, treasure 2, boss 1)'
-        });
-        expect(
-            buildRunInventory({ ...run, dungeonKeys: { treasure: 1 } }).consumables.find((row) => row.id === 'iron_key')
-        ).toMatchObject({
-            quantity: 1,
-            quantityLabel: '1 (treasure 1)'
-        });
-        expect(getDungeonKeyTotal(Number.NaN)).toBe(0);
-        expect(getDungeonKeyTotal([{ iron: 99 }])).toBe(0);
-    });
 
     it('builds bounded inventory payout rows in catalog order', () => {
         const rows = getRunInventoryItemPayoutRows({
@@ -269,18 +233,13 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
         expect(gainRunInventoryItem(run, 'peek_charge', Number.POSITIVE_INFINITY)).toBe(run);
     });
 
-    it('normalizes malformed inventory arrays and key records before projecting rows', () => {
+    it('normalizes malformed inventory arrays before projecting rows', () => {
         const run = {
             ...createNewRun(0),
-            activeMutators: Number.NaN as unknown as [],
-            dungeonKeys: Number.NaN as unknown as RunState['dungeonKeys']
+            activeMutators: Number.NaN as unknown as []
         };
         const inventory = buildRunInventory(run);
 
-        expect(inventory.consumables.find((row) => row.id === 'iron_key')).toMatchObject({
-            quantity: 0,
-            quantityLabel: '0'
-        });
         expect(inventory.loadout).toHaveLength(0);
         expect(getRunInventoryLoadoutRows(run)).toEqual([]);
     });
@@ -301,50 +260,13 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
     });
 
 
-    it('spends dungeon keys in stable route priority order', () => {
-        const run = {
-            ...createNewRun(0),
-            dungeonKeys: { trap: 1, boss: 1, shrine: 1, treasure: 1, iron: 1 }
-        };
-        const inventory = buildRunInventory(run);
-
-        expect(DUNGEON_KEY_SPEND_ORDER).toEqual(['iron', 'treasure', 'shrine', 'boss', 'trap']);
-        expect(inventory.consumables.find((row) => row.id === 'iron_key')?.quantityLabel).toBe(
-            '5 (iron 1, treasure 1, shrine 1, boss 1, trap 1)'
-        );
-
-        const afterIron = useRunInventoryItem(run, 'iron_key');
-        const afterTreasure = useRunInventoryItem(afterIron.run, 'iron_key');
-        const afterShrine = useRunInventoryItem(afterTreasure.run, 'iron_key');
-        const afterBoss = useRunInventoryItem(afterShrine.run, 'iron_key');
-        const afterTrap = useRunInventoryItem(afterBoss.run, 'iron_key');
-
-        expect(afterIron.run.dungeonKeys).toMatchObject({ iron: 0, treasure: 1, shrine: 1, boss: 1, trap: 1 });
-        expect(afterTreasure.run.dungeonKeys).toMatchObject({ iron: 0, treasure: 0, shrine: 1, boss: 1, trap: 1 });
-        expect(afterShrine.run.dungeonKeys).toMatchObject({ iron: 0, treasure: 0, shrine: 0, boss: 1, trap: 1 });
-        expect(afterBoss.run.dungeonKeys).toMatchObject({ iron: 0, treasure: 0, shrine: 0, boss: 0, trap: 1 });
-        expect(afterTrap.run.dungeonKeys).toMatchObject({ iron: 0, treasure: 0, shrine: 0, boss: 0, trap: 0 });
-    });
 
     it('uses deterministic run consumables without touching meta inventory', () => {
-        const run = gainRunInventoryItem(
-            gainRunInventoryItem(
-                { ...createNewRun(0), shuffleCharges: 0, dungeonKeys: { treasure: 1 }, dungeonMasterKeys: 1 },
-                'peek_charge'
-            ),
-            'iron_key'
-        );
+        const run = gainRunInventoryItem({ ...createNewRun(0), shuffleCharges: 0 }, 'peek_charge');
         const peeked = useRunInventoryItem(run, 'peek_charge');
-        const keyed = useRunInventoryItem(peeked.run, 'iron_key');
-        const mastered = useRunInventoryItem(keyed.run, 'master_key');
 
         expect(peeked.applied).toBe(true);
         expect(peeked.run.peekCharges).toBe(run.peekCharges - 1);
-        expect(keyed.applied).toBe(true);
-        expect(keyed.run.dungeonKeys.iron).toBe(0);
-        expect(keyed.run.dungeonKeys.treasure).toBe(1);
-        expect(mastered.applied).toBe(true);
-        expect(mastered.run.dungeonMasterKeys).toBe(0);
         expect(useRunInventoryItem({ ...run, activeContract: { noShuffle: true, noDestroy: false, maxMismatches: null } }, 'shuffle_charge')).toMatchObject({
             applied: false,
             reason: 'unavailable'
@@ -355,38 +277,18 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
         const run = {
             ...createNewRun(0),
             peekCharges: 2.8,
-            dungeonKeys: { iron: 1.8, treasure: 0 },
-            dungeonMasterKeys: 1.9,
             wildMatchesRemaining: 1.9
         };
 
         const peeked = useRunInventoryItem(run, 'peek_charge');
-        const keyed = useRunInventoryItem(peeked.run, 'iron_key');
-        const mastered = useRunInventoryItem(keyed.run, 'master_key');
-        const wilded = useRunInventoryItem(mastered.run, 'wild_match_token');
+        const wilded = useRunInventoryItem(peeked.run, 'wild_match_token');
 
         expect(peeked.applied).toBe(true);
         expect(peeked.run.peekCharges).toBe(1);
-        expect(keyed.applied).toBe(true);
-        expect(keyed.run.dungeonKeys.iron).toBe(0);
-        expect(mastered.applied).toBe(true);
-        expect(mastered.run.dungeonMasterKeys).toBe(0);
         expect(wilded.applied).toBe(true);
         expect(wilded.run.wildMatchesRemaining).toBe(0);
     });
 
-    it('normalizes malformed key records before gaining or spending run inventory keys', () => {
-        const malformed = {
-            ...createNewRun(0),
-            dungeonKeys: Number.NaN as unknown as RunState['dungeonKeys']
-        };
-        const gained = gainRunInventoryItem(malformed, 'iron_key');
-        const spent = useRunInventoryItem({ ...gained, dungeonKeys: { iron: 1.8 } }, 'iron_key');
-
-        expect(gained.dungeonKeys.iron).toBe(1);
-        expect(spent.applied).toBe(true);
-        expect(spent.run.dungeonKeys.iron).toBe(0);
-    });
 
     it('separates mutable mid-run consumables from fixed loadout slots', () => {
         const run = createNewRun(0, {

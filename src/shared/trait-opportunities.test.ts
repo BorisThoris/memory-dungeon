@@ -90,7 +90,6 @@ describe('trait opportunities', () => {
             {
                 peekCharges: 1,
                 regionShuffleCharges: 2,
-                regionShuffleFreeThisFloor: true,
                 shuffleCharges: 0
             }
         );
@@ -100,7 +99,7 @@ describe('trait opportunities', () => {
             buildLabel: '2 combo-ready cards',
             primaryLine: 'Echo + Sealed: combo shard',
             routeCountLabel: '1 route',
-            toolLine: 'Tools: row/swap 2 + free, peek 1, shuffle 0'
+            toolLine: 'Tools: row/swap 2, peek 1, shuffle 0'
         });
         expect(model.title).toContain('Routes: Echo + Sealed: combo shard.');
     });
@@ -129,7 +128,6 @@ describe('trait opportunities', () => {
             getTraitOpportunityHudModel(b, {
                 peekCharges: 0,
                 regionShuffleCharges: 1,
-                regionShuffleFreeThisFloor: false,
                 shuffleCharges: 0
             })
         ).toMatchObject({
@@ -162,7 +160,6 @@ describe('trait opportunities', () => {
             activeContract: { maxMismatches: null, noDestroy: false, noShuffle: true },
             peekCharges: 0,
             regionShuffleCharges: 1,
-            regionShuffleFreeThisFloor: true,
             shuffleCharges: 0
         });
 

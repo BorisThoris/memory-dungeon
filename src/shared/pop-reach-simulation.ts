@@ -29,7 +29,6 @@ export interface PopReachFloorSample {
     level: number;
     seed: number;
     wholePairs: number;
-    breakablePairs: number;
     suits: number;
     /** Matches tried on this floor, and how many of them popped at least one other pair. */
     matches: number;
@@ -62,7 +61,6 @@ export interface PopReachLevelReport {
     floors: number;
     meanWholePairs: number;
     /** Pairs a break could actually take: what the suit palette is sized against. */
-    meanBreakablePairs: number;
     meanSuits: number;
     /** Share of matches on this floor that pop at least one other pair, at chain one. */
     popRate: number;
@@ -82,7 +80,7 @@ export const POP_REACH_SEEDS = [11, 202, 3003, 40404, 555, 6006, 77, 8888] as co
 
 export const simulatePopReach = (levels = 12, seeds: readonly number[] = POP_REACH_SEEDS): PopReachReport => {
     const samples: PopReachFloorSample[] = [];
-    const run = { gameMode: 'endless' as const, floorCurioId: null, relicIds: [] as const };
+    const run = { gameMode: 'endless' as const, floorCurioId: null };
     for (let level = 1; level <= levels; level += 1) {
         for (const seed of seeds) {
             const schedule = pickFloorScheduleEntry(seed, GAME_RULES_VERSION, level, 'endless');
@@ -102,7 +100,6 @@ export const simulatePopReach = (levels = 12, seeds: readonly number[] = POP_REA
             let matches = 0;
             let popped = 0;
             let poppedPairs = 0;
-            let breakablePairs = 0;
             // Each tier is replayed at its own rung on this floor, because the rungs are a share of
             // the floor's pairs: a fixed chain of 30 is already Fever on a small board, which is how
             // the flat middle of the ladder stayed hidden.
@@ -116,7 +113,6 @@ export const simulatePopReach = (levels = 12, seeds: readonly number[] = POP_REA
                 const broke = resolveChunkBreak({ board, run, matchedTileIds, chain: 1 });
                 if (broke.brokenPairKeys.length > 0) popped += 1;
                 poppedPairs += broke.brokenPairKeys.length;
-                if (broke.brokenPairKeys.length > 0 || halves.every((half) => !half.dungeonCardKind)) breakablePairs += 1;
                 for (const tier of POP_REACH_TIERS) {
                     const atTier =
                         tier === 'none'
@@ -129,7 +125,6 @@ export const simulatePopReach = (levels = 12, seeds: readonly number[] = POP_REA
                 level,
                 seed,
                 wholePairs: whole.length,
-                breakablePairs,
                 suits: new Set(board.tiles.map((tile) => tile.suit ?? 'none')).size,
                 matches,
                 popped,
@@ -146,7 +141,6 @@ export const simulatePopReach = (levels = 12, seeds: readonly number[] = POP_REA
             level,
             floors: group.length,
             meanWholePairs: group.reduce((sum, sample) => sum + sample.wholePairs, 0) / Math.max(1, group.length),
-            meanBreakablePairs: group.reduce((sum, sample) => sum + sample.breakablePairs, 0) / Math.max(1, group.length),
             meanSuits: group.reduce((sum, sample) => sum + sample.suits, 0) / Math.max(1, group.length),
             popRate: matches === 0 ? 0 : group.reduce((sum, sample) => sum + sample.popped, 0) / matches,
             pairsPerMatch: matches === 0 ? 0 : group.reduce((sum, sample) => sum + sample.poppedPairs, 0) / matches
@@ -234,7 +228,7 @@ export const summarizePopReach = (report: PopReachReport): string =>
     report.levels
         .map(
             (level) =>
-                `floor ${String(level.level).padStart(2)}: pairs=${level.meanWholePairs.toFixed(1)} breakable=${level.meanBreakablePairs.toFixed(1)} ` +
+                `floor ${String(level.level).padStart(2)}: pairs=${level.meanWholePairs.toFixed(1)} ` +
                 `suits=${level.meanSuits.toFixed(1)} ` +
                 `popRate=${level.popRate.toFixed(2)} pairsPerMatch=${level.pairsPerMatch.toFixed(2)}`
         )

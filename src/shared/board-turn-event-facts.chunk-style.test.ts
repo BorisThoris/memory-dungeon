@@ -36,22 +36,21 @@ describe('chunk style facts', () => {
         const facts = getBoardTurnAnnouncementFacts(before, after);
         expect(facts.chunkPartnerSpanMax).toBe(0);
         expect(facts.chunkHaloPairs).toBe(0);
-        expect(facts.chunkTreasuresSpilled).toBe(0);
         expect(facts.chunkSuitCleared).toBe(false);
     });
 
-    it('name the span, the halo, the spill and the sweep from the board the chunk left', () => {
+    it('name the span, the halo and the sweep from the board the chunk left', () => {
         // 4 columns. Row 1: a1 a2 b1 t1 · Row 2: c1 c2 t2 b2. The match is a (ember); b is ember
-        // with halves a row and a column apart (two steps); t is a treasure pair; c is tide, taken
+        // with halves a row and a column apart (two steps); t is a suitless pair; c is tide, taken
         // by the halo.
         const layout = (): Tile[] => [
             tile('a1', 'a'),
             tile('a2', 'a'),
             tile('b1', 'b'),
-            tile('t1', 't', { dungeonCardKind: 'treasure', dungeonCardEffectId: 'treasure_gold', dungeonCardState: 'hidden' }),
+            tile('t1', 't'),
             tile('c1', 'c', { suit: 'tide' }),
             tile('c2', 'c', { suit: 'tide' }),
-            tile('t2', 't', { dungeonCardKind: 'treasure', dungeonCardEffectId: 'treasure_gold', dungeonCardState: 'hidden' }),
+            tile('t2', 't'),
             tile('b2', 'b')
         ];
         const before = runWith(layout(), 4, ['a1', 'a2']);
@@ -69,7 +68,6 @@ describe('chunk style facts', () => {
         const facts = getBoardTurnAnnouncementFacts(before, after);
         expect(facts.chunkPartnerSpanMax).toBe(2);
         expect(facts.chunkHaloPairs).toBe(1);
-        expect(facts.chunkTreasuresSpilled).toBe(1);
         expect(facts.chunkSuitCleared).toBe(true);
     });
 

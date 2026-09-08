@@ -42,9 +42,7 @@ const run = (overrides: Partial<RunState> = {}): RunState => ({
         tile('b2', 'B')
     ]),
     shuffleCharges: 1,
-    freeShuffleThisFloor: false,
     regionShuffleCharges: 1,
-    regionShuffleFreeThisFloor: false,
     destroyPairCharges: 1,
     ...overrides
 } as RunState);
@@ -56,7 +54,6 @@ describe('board power availability rules', () => {
         expect(canShuffleBoard(run({ board: { ...run().board!, flippedTileIds: ['a1'] } }))).toBe(false);
         expect(canShuffleBoard(run({ shuffleCharges: 0 }))).toBe(false);
         expect(canShuffleBoard(run({ activeContract: { noShuffle: true } as RunState['activeContract'] }))).toBe(false);
-        expect(canShuffleBoard(run({ shuffleCharges: 0, freeShuffleThisFloor: true }))).toBe(false);
     });
 
     it('fails closed when board power open-flip state is malformed', () => {
@@ -110,12 +107,6 @@ describe('board power availability rules', () => {
         expect(canRegionShuffleRow(state, 0)).toBe(true);
         expect(canRegionShuffleRow(state, 1)).toBe(false);
         expect(canRegionShuffle(run({ regionShuffleCharges: 0 }))).toBe(false);
-        expect(canRegionShuffle(run({
-            regionShuffleCharges: 0,
-            regionShuffleFreeThisFloor: true,
-            rewardPerkIds: ['free_first_swap_per_floor']
-        }))).toBe(true);
-        expect(canRegionShuffle(run({ regionShuffleCharges: 0, regionShuffleFreeThisFloor: true }))).toBe(false);
     });
 
     it('allows tile swap only for two hidden tiles with row/swap payment and no open flip', () => {
@@ -124,11 +115,6 @@ describe('board power availability rules', () => {
         expect(canSwapHiddenTiles(run({ board: { ...run().board!, flippedTileIds: ['a1'] } }), 'a1', 'b1')).toBe(false);
         expect(canSwapHiddenTiles(run({ activeContract: { noShuffle: true } as RunState['activeContract'] }), 'a1', 'b1')).toBe(false);
         expect(canSwapHiddenTiles(run({ regionShuffleCharges: 0 }), 'a1', 'b1')).toBe(false);
-        expect(canSwapHiddenTiles(run({
-            regionShuffleCharges: 0,
-            regionShuffleFreeThisFloor: true,
-            rewardPerkIds: ['free_first_swap_per_floor']
-        }), 'a1', 'b1')).toBe(true);
         expect(canSwapHiddenTiles(run(), 'a1', 'a1')).toBe(false);
         expect(canSwapHiddenTiles(run({
             board: board([

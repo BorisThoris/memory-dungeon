@@ -39,18 +39,7 @@ const isSafeOnboardingTile = (board: BoardState, pairKey: string, tileId: string
     if (board.cursedPairKey === pairKey || board.wardPairKey === pairKey || board.bountyPairKey === pairKey) {
         return false;
     }
-    return (
-        tile.findableKind == null &&
-        tile.routeCardKind == null &&
-        tile.routeSpecialKind == null &&
-        tile.dungeonCardKind == null &&
-        tile.tileHazardKind == null &&
-        tile.dungeonBossId == null &&
-        tile.dungeonCardEffectId == null &&
-        tile.dungeonRouteType == null &&
-        tile.dungeonExitLockKind == null &&
-        tile.dungeonKeyKind == null
-    );
+    return tile.findableKind == null;
 };
 
 const firstUnmatchedPair = (board: BoardState | null): string[] => {

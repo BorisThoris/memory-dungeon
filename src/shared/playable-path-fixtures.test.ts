@@ -31,16 +31,10 @@ describe('playable path fixtures', () => {
     );
 
     it('creates floor-clear and post-run scenario invariants', () => {
-        // The floor-clear fixture kept its id but no longer offers routes: a cleared floor has one
-        // way forward now (Gen 173).
+        // The floor-clear fixture kept its id from when it offered routes; a cleared floor has one
+        // way forward now.
         const routeFixture = createPlayablePathFixture('floorClearWithRouteChoices');
         expect(routeFixture.run?.status).toBe('levelComplete');
-        expect(routeFixture.run?.lastLevelResult?.routeChoices).toBeUndefined();
-        expect(routeFixture.run?.sideRoom).toBeNull();
-
-        // No fixture stands at a shop any more (Gen 174): the floor clear carries no gold and no stock.
-        expect(routeFixture.run?.shopGold).toBe(0);
-        expect(routeFixture.run?.shopOffers).toEqual([]);
 
         const gameOverFixture = createPlayablePathFixture('gameOver');
         expect(gameOverFixture.run?.lastRunSummary).not.toBeNull();

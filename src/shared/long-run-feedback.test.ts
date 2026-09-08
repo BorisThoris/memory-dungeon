@@ -3,8 +3,6 @@ import type { RunState } from './contracts';
 import { createNewRun } from './game-core';
 import {
     LONG_RUN_TERMINOLOGY_ROWS,
-    SAFE_EXPANSION_IMPACT_ROWS,
-    WARD_CACHE_CONTRACT_ROW,
     getFindableDistributionRows,
     getInRunCauseRows,
     getPerfectMemoryAttribution,
@@ -66,7 +64,6 @@ describe('GLD-FB long-run feedback read models', () => {
             recallFocus: 2,
             recallMatchesThisFloor: 1,
             recallBonusScoreThisFloor: 16,
-            shopGold: 3,
             stats: {
                 ...createNewRun(0, { runSeed: 91_002, activeMutators: [] }).stats,
                 comboShards: 1,
@@ -91,7 +88,6 @@ describe('GLD-FB long-run feedback read models', () => {
         );
         expect(getTouchHudDetailRows(run).map((row) => row.id)).toEqual([
             'objective',
-            'route',
             'memory',
             'perfect_memory',
             'economy'
@@ -133,20 +129,11 @@ describe('GLD-FB long-run feedback read models', () => {
         const rows = getInRunCauseRows(run);
 
         expect(rows.map((row) => row.id)).toContain('recall-focus');
-        expect(rows.map((row) => row.id)).not.toContain('latest-match-route');
         expect(rows.find((row) => row.id === 'recall-focus')?.detail).toContain('0 forgotten tile marker(s)');
     });
 
-    it('publishes terminology and safe expansion contract matrices', () => {
-        expect(LONG_RUN_TERMINOLOGY_ROWS.map((row) => row.id)).toEqual(['decoy', 'route_special', 'objective']);
-        expect(SAFE_EXPANSION_IMPACT_ROWS).toEqual(
-            expect.arrayContaining([
-                expect.objectContaining({ id: 'ward_spark', runtimeStatus: 'wired' }),
-                expect.objectContaining({ id: 'scout_glint', runtimeStatus: 'wired' }),
-                expect.objectContaining({ id: 'ward_cache', runtimeStatus: 'read_model_only' })
-            ])
-        );
-        expect(WARD_CACHE_CONTRACT_ROW.surface).toBe('hazard_reward_contract');
+    it('publishes the terminology contract matrix', () => {
+        expect(LONG_RUN_TERMINOLOGY_ROWS.map((row) => row.id)).toEqual(['decoy', 'objective']);
     });
 
     it('reports weighted findable distribution targets and active floor counts', () => {
@@ -154,7 +141,7 @@ describe('GLD-FB long-run feedback read models', () => {
         const firstPair = base.board!.tiles.slice(0, 2).map((tile) => ({
             ...tile,
             pairKey: 'weighted-a',
-            findableKind: 'ward_spark' as const
+            findableKind: 'score_glint' as const
         }));
         const restWithoutFindables = base.board!.tiles.slice(2).map((tile) => ({
             ...tile,
@@ -170,10 +157,8 @@ describe('GLD-FB long-run feedback read models', () => {
 
         expect(getFindableDistributionRows(run)).toEqual(
             expect.arrayContaining([
-                expect.objectContaining({ id: 'shard_spark', spawnWeight: 35, targetShare: 0.35 }),
-                expect.objectContaining({ id: 'score_glint', spawnWeight: 35, targetShare: 0.35 }),
-                expect.objectContaining({ id: 'ward_spark', spawnWeight: 15, targetShare: 0.15, totalThisFloor: 1 }),
-                expect.objectContaining({ id: 'scout_glint', spawnWeight: 15, targetShare: 0.15 })
+                expect.objectContaining({ id: 'shard_spark', spawnWeight: 50, targetShare: 0.5, totalThisFloor: 0 }),
+                expect.objectContaining({ id: 'score_glint', spawnWeight: 50, targetShare: 0.5, totalThisFloor: 1 })
             ])
         );
     });

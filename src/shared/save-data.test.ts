@@ -258,33 +258,6 @@ describe('save normalization', () => {
         }
     });
 
-    it('keeps the relic shrine upgrade claim-driven when seven-dailies progress is present', () => {
-        const fromAchievement = normalizeSaveData({
-            achievements: { ...createAchievementState(), ACH_SEVEN_DAILIES: true }
-        });
-        expect(fromAchievement.playerStats?.relicShrineExtraPickUnlocked).toBe(false);
-
-        const fromCount = normalizeSaveData({
-            playerStats: {
-                bestFloorNoPowers: 0,
-                sharpFloors: 7,
-                relicPickCounts: {},
-                encorePairKeysLastRun: []
-            }
-        });
-        expect(fromCount.playerStats?.relicShrineExtraPickUnlocked).toBe(false);
-
-        const claimed = normalizeSaveData({
-            playerStats: {
-                bestFloorNoPowers: 0,
-                sharpFloors: 7,
-                relicPickCounts: {},
-                encorePairKeysLastRun: [],
-                relicShrineExtraPickUnlocked: true
-            }
-        });
-        expect(claimed.playerStats?.relicShrineExtraPickUnlocked).toBe(true);
-    });
 
 
 
@@ -378,10 +351,8 @@ describe('save normalization', () => {
         expect(normalized.settings.cameraViewportModePreference).toBe(DEFAULT_SETTINGS.cameraViewportModePreference);
         expect(normalized.settings.pairProximityHintsEnabled).toBe(DEFAULT_SETTINGS.pairProximityHintsEnabled);
         expect(normalized.playerStats?.encorePairKeysLastRun).toEqual([]);
-        expect(normalized.playerStats?.relicPickCounts).toEqual({});
         expect(normalized.lastRunSummary?.runSeed).toBe(72001);
         expect(normalized.lastRunSummary?.runRulesVersion).toBe(GAME_RULES_VERSION);
-        expect(normalized.lastRunSummary?.dungeonShowcaseRun).toBe(true);
         expect('currentRun' in normalized).toBe(false);
         assertNoUndefinedDeep(normalized, 'dng073.');
     });
@@ -425,7 +396,6 @@ describe('save normalization', () => {
         expect(Object.keys(normalized.achievements)).not.toContain('BAD_ACHIEVEMENT');
         expect(normalized.unlocks).toEqual(['achievement:ACH_LEVEL_FIVE', 'honor:honor_sharp_initiate']);
         expect(normalized.playerStats?.bestFloorNoPowers).toBe(0);
-        expect(normalized.playerStats?.relicPickCounts).toEqual({});
         expect(normalized.playerStats?.encorePairKeysLastRun).toEqual(['A', 'B']);
         expect(normalized.lastRunSummary).toBeNull();
     });
@@ -479,20 +449,14 @@ describe('save normalization', () => {
                 runRulesVersion: GAME_RULES_VERSION,
                 gameMode: 'endless',
                 activeMutators: ['short_memorize', 'retired_mutator', 'short_memorize', 'wide_recall'],
-                relicIds: ['extra_shuffle_charge', 'extra_shuffle_charge', 'guard_token_plus_one'],
                 payoffPickupClaimed: 2.9,
                 payoffPickupTotal: 3,
                 payoffPressureExtra: Number.POSITIVE_INFINITY,
-                payoffRewardPerkCount: 1,
-                payoffRoutePaid: true,
-                payoffRouteRewardText: '+1 combo shard',
-                startingLoadoutId: 'route_tactician',
                 activeContract: {
                     noShuffle: true,
                     noDestroy: false,
                     maxMismatches: 2.8,
-                    maxPinsTotalRun: 10.9,
-                    bonusRelicDraftPick: true
+                    maxPinsTotalRun: 10.9
                 }
             }
         });
@@ -500,20 +464,14 @@ describe('save normalization', () => {
         expect(normalized.playerStats?.encorePairKeysLastRun).toEqual(['A', 'B', 'C']);
         expect(normalized.lastRunSummary?.unlockedAchievements).toEqual(['ACH_FIRST_CLEAR']);
         expect(normalized.lastRunSummary?.activeMutators).toEqual(['short_memorize', 'wide_recall']);
-        expect(normalized.lastRunSummary?.relicIds).toEqual([]);
         expect(normalized.lastRunSummary?.payoffPickupClaimed).toBe(2);
         expect(normalized.lastRunSummary?.payoffPickupTotal).toBe(3);
         expect(normalized.lastRunSummary?.payoffPressureExtra).toBeUndefined();
-        expect(normalized.lastRunSummary?.payoffRewardPerkCount).toBe(1);
-        expect(normalized.lastRunSummary?.payoffRoutePaid).toBe(true);
-        expect(normalized.lastRunSummary?.payoffRouteRewardText).toBe('+1 combo shard');
-        expect(normalized.lastRunSummary?.startingLoadoutId).toBe('route_tactician');
         expect(normalized.lastRunSummary?.activeContract).toEqual({
             noShuffle: true,
             noDestroy: false,
             maxMismatches: 2,
-            maxPinsTotalRun: 10,
-            bonusRelicDraftPick: true
+            maxPinsTotalRun: 10
         });
         expect(
             normalizeSaveData({
@@ -527,20 +485,6 @@ describe('save normalization', () => {
             payoffPickupClaimed: 3,
             payoffPickupTotal: 3
         });
-        expect(
-            normalizeSaveData({
-                lastRunSummary: {
-                    ...normalized.lastRunSummary!,
-                    payoffRouteRewardText: 'x'.repeat(300)
-                }
-            }).lastRunSummary?.payoffRouteRewardText
-        ).toHaveLength(256);
-        expect(normalizeSaveData({
-            lastRunSummary: {
-                ...normalized.lastRunSummary!,
-                startingLoadoutId: 'missing_loadout' as unknown as RunSummary['startingLoadoutId']
-            }
-        }).lastRunSummary?.startingLoadoutId).toBeUndefined();
         expect(
             normalizeSaveData({
                 lastRunSummary: {
@@ -574,42 +518,98 @@ describe('save normalization', () => {
 
 
 
-    it('DNG-073 documents which dungeon fields require save migrations', () => {
+    it('documents which persisted fields require save migrations', () => {
         const policies = getSaveFieldPolicies();
-        const fields = policies.map((policy) => policy.field);
 
-        expect(SAVE_FIELD_POLICY_VERSION).toBe('dng-073-v5');
-        expect(fields).toEqual(expect.arrayContaining([
+        expect(SAVE_FIELD_POLICY_VERSION).toBe('save-176-v6');
+        expect(policies.map((policy) => policy.field)).toEqual([
             'runHistory',
             'runHistory.shareKey',
             'lastRunSummary.runSeed',
             'lastRunSummary.runRulesVersion',
             'lastRunSummary.gameMode',
             'playerStats.encorePairKeysLastRun',
-            'playerStats.relicPickCounts',
+            'playerStats.dailyStreakGraceAvailable',
             'playerStats.sharpFloors',
             'playerStats.feverFloors',
             'settings.cameraViewportModePreference',
-            'settings.pairProximityHintsEnabled',
-            'dungeonRun',
-            'pendingRouteCardPlan',
-            'sideRoom',
-            'bonusRewardLedger',
-            'dungeonKeys',
-            'dungeonMasterKeys',
-            'board.dungeonKeysHeld',
-            'board.dungeonKeysHeldByKind',
-            'board.dungeonExitTileId',
-            'board.dungeonExitLockKind',
-            'tile.dungeonExitLockKind',
-            'tile.dungeonKeyKind',
-            'board.enemyHazards',
-            'board.dungeonBossId'
-        ]));
-        expect(policies.filter((policy) => policy.scope === 'run_local_recoverable')).toHaveLength(14);
-        expect(shouldSaveFieldRequireMigration('playerStats.relicPickCounts')).toBe(true);
+            'settings.pairProximityHintsEnabled'
+        ]);
+        expect(policies.every((policy) => policy.scope === 'persisted_save')).toBe(true);
+        expect(shouldSaveFieldRequireMigration('runHistory')).toBe(true);
         expect(shouldSaveFieldRequireMigration('dungeonKeys')).toBe(false);
-        expect(shouldSaveFieldRequireMigration('board.dungeonKeysHeldByKind')).toBe(false);
+    });
+
+    it('loads a schema-6 profile with its records intact and none of the retired fields', () => {
+        const normalized = normalizeUnknownSaveDataOrThrow({
+            schemaVersion: 6,
+            bestScore: 4321,
+            achievements: { ...createAchievementState(), ACH_FIRST_CLEAR: true, ACH_STREAK_TEN: true },
+            playerStats: {
+                bestFloorNoPowers: 4,
+                encorePairKeysLastRun: ['A', 'B'],
+                sharpFloors: 3,
+                feverFloors: 1,
+                relicPickCounts: { extra_shuffle_charge: 2 },
+                relicShrineExtraPickUnlocked: true
+            },
+            lastRunSummary: {
+                totalScore: 4321,
+                bestScore: 4321,
+                levelsCleared: 9,
+                highestLevel: 10,
+                achievementsEnabled: true,
+                unlockedAchievements: ['ACH_FIRST_CLEAR'],
+                bestStreak: 6,
+                perfectClears: 2,
+                runSeed: 76_001,
+                runRulesVersion: 33,
+                gameMode: 'endless',
+                relicIds: ['extra_shuffle_charge', 'guard_token_plus_one'],
+                startingLoadoutId: 'route_tactician',
+                dungeonShowcaseRun: true
+            },
+            runHistory: [
+                {
+                    endedAtIso: '2026-09-01T10:00:00.000Z',
+                    highestLevel: 10,
+                    mode: 'Classic Dungeon',
+                    shareKey: 'md1:classic:33:76001',
+                    totalScore: 4321
+                }
+            ]
+        });
+
+        expect(normalized.schemaVersion).toBe(SAVE_SCHEMA_VERSION);
+        expect(normalized.bestScore).toBe(4321);
+        expect(normalized.achievements.ACH_FIRST_CLEAR).toBe(true);
+        expect(normalized.achievements.ACH_STREAK_TEN).toBe(true);
+        expect(normalized.playerStats).toEqual({
+            bestFloorNoPowers: 4,
+            encorePairKeysLastRun: ['A', 'B'],
+            sharpFloors: 3,
+            feverFloors: 1
+        });
+        expect(normalized.lastRunSummary).toMatchObject({
+            totalScore: 4321,
+            highestLevel: 10,
+            runSeed: 76_001,
+            runRulesVersion: 33,
+            unlockedAchievements: ['ACH_FIRST_CLEAR']
+        });
+        for (const field of ['relicIds', 'startingLoadoutId', 'dungeonShowcaseRun']) {
+            expect(normalized.lastRunSummary, field).not.toHaveProperty(field);
+        }
+        expect(normalized.runHistory).toEqual([
+            {
+                endedAtIso: '2026-09-01T10:00:00.000Z',
+                highestLevel: 10,
+                mode: 'Classic Dungeon',
+                shareKey: 'md1:classic:33:76001',
+                totalScore: 4321
+            }
+        ]);
+        assertNoUndefinedDeep(normalized, 'schema6.');
     });
 });
 

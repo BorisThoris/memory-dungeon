@@ -189,8 +189,7 @@ function buildPostRunMetaSaveJson(): string {
         runSeed: 72001,
         runRulesVersion: 1,
         gameMode: 'endless',
-        activeMutators: ['wide_recall'],
-        relicIds: ['extra_shuffle_charge']
+        activeMutators: ['wide_recall']
     };
     return JSON.stringify(save);
 }

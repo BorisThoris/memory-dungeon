@@ -33,7 +33,6 @@ describe('createRunSummary', () => {
                 status: 'gameOver',
                 findablesClaimedThisFloor: 2,
                 findablesTotalThisFloor: 2,
-                rewardPerkIds: ['trait_streak_toolkit'],
                 traitRouteObjectiveCompletedThisFloor: true,
                 traitRouteObjectiveRewardClaimedThisFloor: true,
                 traitRouteObjectiveRewardTextThisFloor: '+1 combo shard',
@@ -49,10 +48,7 @@ describe('createRunSummary', () => {
         expect(summarized.lastRunSummary).toMatchObject({
             payoffPickupClaimed: 2,
             payoffPickupTotal: 2,
-            payoffPressureExtra: 3,
-            payoffRewardPerkCount: 1,
-            payoffRoutePaid: true,
-            payoffRouteRewardText: '+1 combo shard'
+            payoffPressureExtra: 3
         });
     });
 
@@ -63,13 +59,15 @@ describe('createRunSummary', () => {
                     noShuffle: true,
                     noDestroy: false,
                     maxMismatches: 3,
-                    maxPinsTotalRun: 10,
-                    bonusRelicDraftPick: true
+                    maxPinsTotalRun: 10
                 },
                 runSeed: 0xcafe
             })
         );
-        const command = createGameplayDefinitionCommand('summary-lens', 'bonus_reward.echo_conduit_lens');
+        const command = createGameplayDefinitionCommand('summary-guard', 'trait.volatile_heavy_guard', {
+            matchedTraits: ['volatile'],
+            adjacentTraits: ['heavy']
+        });
         const commandResult = reduceGameplayCommand(run, command);
         const journaledRun = appendGameplayJournal(commandResult.run, [command], commandResult.events);
         const summary = createRunSummary(
@@ -98,8 +96,6 @@ describe('createRunSummary', () => {
                 findablesClaimedThisFloor: 9,
                 findablesTotalThisFloor: 2,
                 activeMutators: Number.NaN,
-                relicIds: Number.NaN,
-                rewardPerkIds: { length: Number.POSITIVE_INFINITY },
                 stats: {
                     ...run.stats,
                     totalScore: Number.NaN,
@@ -125,9 +121,7 @@ describe('createRunSummary', () => {
             payoffPickupClaimed: 2,
             payoffPickupTotal: 2,
             payoffPressureExtra: 2,
-            payoffRewardPerkCount: 0,
-            activeMutators: [],
-            relicIds: []
+            activeMutators: []
         });
     });
 

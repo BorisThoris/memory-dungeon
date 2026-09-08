@@ -4,7 +4,6 @@ import {
     RECALL_FOCUS_MAX,
     type BoardState,
     type RunState,
-    type StartingLoadoutId,
     type Tile,
     type TileTraitKind
 } from './contracts';
@@ -48,7 +47,7 @@ export const TILE_TRAIT_COPY: Record<TileTraitKind, { label: string; match: stri
     },
     cursed: {
         label: 'Cursed',
-        match: 'Clean match grants +1 relic Favor; adjacent Volatile adds gold and score.',
+        match: 'Clean match adds score; adjacent Volatile adds more score.',
         mismatch: 'Mismatch counts as an extra mistake; adjacent Volatile deepens recall unless Stasis buffers it.'
     },
     sealed: {
@@ -92,7 +91,6 @@ export interface TileTraitEffectResult {
     recallFocusGain: number;
     regionShuffleChargeGain: number;
     scoreBonus: number;
-    shopGoldGain: number;
     shuffleChargeGain: number;
     stickyBlockIndex: number | null;
     peekChargeLoss: number;
@@ -332,9 +330,7 @@ export const hasTraitRewardInteractionFloor = (board: BoardState): boolean =>
             line.includes('guard') ||
             line.includes('peek') ||
             line.includes('charge') ||
-            line.includes('score') ||
-            line.includes('gold') ||
-            line.includes('Favor')
+            line.includes('score')
     );
 
 export const hasTraitBoardPowerInteractionOpportunity = (board: BoardState, hasSwapSetup: boolean): boolean =>
@@ -349,7 +345,6 @@ const createEmptyTraitEffectResult = (): TileTraitEffectResult => ({
     recallFocusGain: 0,
     regionShuffleChargeGain: 0,
     scoreBonus: 0,
-    shopGoldGain: 0,
     shuffleChargeGain: 0,
     stickyBlockIndex: null,
     peekChargeLoss: 0,
@@ -408,113 +403,30 @@ const calculateCoreTraitCount = (eligiblePairCount: number, level: number): numb
     return Math.min(Math.max(densityCount, floorBandMinimum), eligiblePairCount);
 };
 
-const LOADOUT_TRAIT_PLANS: Record<
-    StartingLoadoutId,
-    { interactionSeed: readonly [TileTraitKind, TileTraitKind]; pool: readonly TileTraitKind[] }
-> = {
-    memory_scout: {
-        interactionSeed: ['conduit', 'echo'],
-        pool: ['echo', 'conduit', 'mirror', 'sealed', 'heavy']
-    },
-    route_tactician: {
-        interactionSeed: ['drift', 'volatile'],
-        pool: ['drift', 'volatile', 'conduit', 'echo', 'stasis']
-    },
-    cursebreaker: {
-        interactionSeed: ['mirror', 'stasis'],
-        pool: ['mirror', 'stasis', 'cursed', 'sealed', 'volatile']
-    },
-    vaultbreaker: {
-        interactionSeed: ['cursed', 'volatile'],
-        pool: ['cursed', 'volatile', 'drift', 'sealed', 'heavy']
-    }
-};
+/*
+ * The seed pairs a floor is traited around. A route world's intensity and a starting loadout used
+ * to pick these; with one kind of floor and no loadout, the opener list and the general list are
+ * all there is, and the general one is drawn from at random.
+ */
+const OPENER_INTERACTION_SEEDS: readonly (readonly [TileTraitKind, TileTraitKind])[] = [
+    ['conduit', 'echo'],
+    ['echo', 'mirror'],
+    ['sealed', 'heavy']
+];
 
-const routeInteractionSeed = (
-    intensity: 'safe' | 'greed' | 'mystery' | null | undefined,
-    startingLoadoutId: StartingLoadoutId | null | undefined
-): readonly [TileTraitKind, TileTraitKind] => {
-    const loadoutPlan = startingLoadoutId ? LOADOUT_TRAIT_PLANS[startingLoadoutId] : null;
-    if (loadoutPlan) {
-        return loadoutPlan.interactionSeed;
-    }
-    if (intensity === 'greed') {
-        return ['drift', 'volatile'];
-    }
-    if (intensity === 'mystery') {
-        return ['stasis', 'conduit'];
-    }
-    return ['conduit', 'echo'];
-};
+const INTERACTION_SEEDS: readonly (readonly [TileTraitKind, TileTraitKind])[] = [
+    ['conduit', 'echo'],
+    ['echo', 'mirror'],
+    ['sealed', 'conduit'],
+    ['cursed', 'volatile'],
+    ['heavy', 'mirror'],
+    ['drift', 'volatile'],
+    ['stasis', 'conduit']
+];
 
-const routeInteractionSeeds = (
-    intensity: 'safe' | 'greed' | 'mystery' | null | undefined,
-    startingLoadoutId: StartingLoadoutId | null | undefined
-): readonly (readonly [TileTraitKind, TileTraitKind])[] => {
-    const primary = routeInteractionSeed(intensity, startingLoadoutId);
-    const loadoutExtra: Partial<Record<StartingLoadoutId, readonly (readonly [TileTraitKind, TileTraitKind])[]>> = {
-        memory_scout: [['echo', 'mirror'], ['sealed', 'conduit']],
-        route_tactician: [['drift', 'volatile'], ['volatile', 'heavy']],
-        cursebreaker: [['mirror', 'stasis'], ['sealed', 'stasis']],
-        vaultbreaker: [['cursed', 'volatile'], ['sealed', 'heavy']]
-    };
-    const routeExtra: readonly (readonly [TileTraitKind, TileTraitKind])[] =
-        intensity === 'safe'
-            ? [['echo', 'mirror'], ['sealed', 'conduit'], ['sealed', 'heavy']]
-            : intensity === 'greed'
-              ? [['cursed', 'volatile'], ['volatile', 'heavy'], ['heavy', 'mirror']]
-              : intensity === 'mystery'
-                ? [['stasis', 'conduit'], ['mirror', 'stasis'], ['sealed', 'conduit'], ['echo', 'mirror']]
-                : [
-                      ['echo', 'mirror'],
-                      ['sealed', 'conduit'],
-                      ['cursed', 'volatile'],
-                      ['heavy', 'mirror'],
-                      ['drift', 'volatile'],
-                      ['stasis', 'conduit']
-                  ];
-    const seeded = startingLoadoutId ? loadoutExtra[startingLoadoutId] ?? [] : [];
-    return [primary, ...seeded, ...routeExtra];
-};
+const OPENER_TRAIT_POOL: readonly TileTraitKind[] = ['echo', 'mirror', 'heavy'];
 
-const openerInteractionSeeds = (
-    startingLoadoutId: StartingLoadoutId | null | undefined
-): readonly (readonly [TileTraitKind, TileTraitKind])[] => {
-    if (startingLoadoutId === 'route_tactician') {
-        return [['drift', 'volatile'], ['conduit', 'echo']];
-    }
-    if (startingLoadoutId === 'cursebreaker') {
-        return [['mirror', 'stasis'], ['sealed', 'heavy']];
-    }
-    if (startingLoadoutId === 'vaultbreaker') {
-        return [['sealed', 'heavy'], ['cursed', 'volatile']];
-    }
-    return [
-        ['conduit', 'echo'],
-        ['echo', 'mirror'],
-        ['sealed', 'heavy']
-    ];
-};
-
-const traitPoolForContext = (
-    level: number,
-    intensity: 'safe' | 'greed' | 'mystery' | null | undefined,
-    startingLoadoutId: StartingLoadoutId | null | undefined
-): TileTraitKind[] => {
-    const loadoutPool = startingLoadoutId ? LOADOUT_TRAIT_PLANS[startingLoadoutId]?.pool : null;
-    const routePool: TileTraitKind[] =
-        level <= 1
-            ? ['echo', 'mirror', 'heavy']
-            : intensity === 'safe'
-              ? ['echo', 'mirror', 'echo', 'heavy', 'conduit']
-              : intensity === 'greed'
-                ? ['volatile', 'cursed', 'volatile', 'heavy', 'drift']
-                : intensity === 'mystery'
-                  ? ['mirror', 'sealed', 'volatile', 'echo', 'conduit', 'stasis']
-                  : ['echo', 'volatile', 'mirror', 'cursed', 'sealed', 'heavy', 'drift', 'conduit', 'stasis'];
-
-    return loadoutPool ? [...loadoutPool, ...routePool] : routePool;
-};
+const TRAIT_POOL: readonly TileTraitKind[] = ['echo', 'volatile', 'mirror', 'cursed', 'sealed', 'heavy', 'drift', 'conduit', 'stasis'];
 
 const collectAdjacentEligiblePairKeys = (
     tiles: readonly Tile[],
@@ -587,8 +499,6 @@ export const assignTileTraitsToGeneratedBoard = (
     runSeed: number,
     rulesVersion: number,
     level: number,
-    intensity: 'safe' | 'greed' | 'mystery' | null | undefined,
-    startingLoadoutId: StartingLoadoutId | null | undefined = null,
     boardColumns: number = columnsForTileCount(tiles.length)
 ): Tile[] => {
     const eligiblePairKeys = [
@@ -598,21 +508,16 @@ export const assignTileTraitsToGeneratedBoard = (
         return tiles.map((tile) => ({ ...tile }));
     }
 
-    const traitSeedKey = startingLoadoutId
-        ? `tileTraits:${rulesVersion}:${runSeed}:${level}:${intensity ?? 'none'}:${startingLoadoutId}`
-        : `tileTraits:${rulesVersion}:${runSeed}:${level}:${intensity ?? 'none'}`;
-    const rng = createMulberry32(hashStringToSeed(traitSeedKey));
+    const rng = createMulberry32(hashStringToSeed(`tileTraits:${rulesVersion}:${runSeed}:${level}:none`));
     const traitCount = calculateCoreTraitCount(eligiblePairKeys.length, level);
-    const pool = traitPoolForContext(level, intensity, startingLoadoutId);
+    const pool = [...(level <= 1 ? OPENER_TRAIT_POOL : TRAIT_POOL)];
     const shuffledPairKeys = shuffleWithRng(() => rng(), eligiblePairKeys);
     const traitByPairKey = new Map<string, TileTraitKind>();
     if (traitCount >= 2) {
         const adjacentPairs = collectAdjacentEligiblePairKeys(tiles, eligiblePairKeys, boardColumns);
         const shuffledAdjacentPairs = shuffleWithRng(() => rng(), adjacentPairs);
-        const seeds = level <= 1
-            ? openerInteractionSeeds(startingLoadoutId)
-            : routeInteractionSeeds(intensity, startingLoadoutId);
-        let seedIndex = intensity == null && !startingLoadoutId ? pickRngIndex(rng, seeds.length) : 0;
+        const seeds = level <= 1 ? OPENER_INTERACTION_SEEDS : INTERACTION_SEEDS;
+        let seedIndex = pickRngIndex(rng, seeds.length);
         for (const [firstPairKey, secondPairKey] of shuffledAdjacentPairs) {
             if (traitByPairKey.size + 2 > traitCount) {
                 break;
@@ -662,10 +567,8 @@ export const assignTileTraitsToGeneratedBoard = (
             }
         }
         if (firstPairKey && secondPairKey) {
-            const repairSeeds = level <= 1
-                ? openerInteractionSeeds(startingLoadoutId)
-                : routeInteractionSeeds(intensity, startingLoadoutId);
-            const repairSeedIndex = intensity == null && !startingLoadoutId ? pickRngIndex(rng, repairSeeds.length) : 0;
+            const repairSeeds = level <= 1 ? OPENER_INTERACTION_SEEDS : INTERACTION_SEEDS;
+            const repairSeedIndex = pickRngIndex(rng, repairSeeds.length);
             const [firstTrait, secondTrait] =
                 repairSeeds[repairSeedIndex] ?? repairSeeds[0] ?? DEFAULT_TRAIT_INTERACTION_SEED;
             const repairedTraitByPairKey = new Map<string, TileTraitKind>([
@@ -855,8 +758,6 @@ export const resolveTileTraitEffects = ({
             matchedTraits: [...traits],
             adjacentTraits: [...adjacentTraitKinds],
             matchedFindables: [],
-            bossTrophyClaimed: false,
-            riskWagerOutcome: 'none',
             featuredObjectiveCompleted: false,
             scoreParasiteActive: false
         };
@@ -895,7 +796,6 @@ export const resolveTileTraitEffects = ({
         result.guardTokenGain = hasTrait('mirror') ? 1 : 0;
         result.peekChargeGain = hasTrait('echo') ? 1 : 0;
         result.scoreBonus = [...traits].reduce((sum, trait) => sum + (TILE_TRAIT_MATCH_SCORE_BONUS[trait] ?? 0), 0);
-        result.shopGoldGain = 0;
 
         if (hasTrait('echo') && adjacentTraitKinds.has('sealed') && comboShards < MAX_COMBO_SHARDS) {
             result.comboShardGain += 1;
@@ -929,7 +829,6 @@ export const resolveTileTraitEffects = ({
         }
 
         if (hasTrait('cursed') && adjacentTraitKinds.has('volatile')) {
-            result.shopGoldGain += 1;
             result.scoreBonus += 20;
             result.interactionTags.push('cursed:volatile-greed');
         }
@@ -1025,15 +924,13 @@ export const calculateTileTraitMatchRewards = (
     guardTokenGain: number;
     peekChargeGain: number;
     scoreBonus: number;
-    shopGoldGain: number;
 } => {
     const effect = resolveTileTraitEffects({ run, board, sourceTiles: matchedTiles, source: 'match' });
     return {
         comboShardGain: effect.comboShardGain,
         guardTokenGain: effect.guardTokenGain,
         peekChargeGain: effect.peekChargeGain,
-        scoreBonus: effect.scoreBonus,
-        shopGoldGain: effect.shopGoldGain
+        scoreBonus: effect.scoreBonus
     };
 };
 

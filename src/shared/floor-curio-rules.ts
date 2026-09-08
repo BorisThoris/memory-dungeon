@@ -10,8 +10,8 @@ import { runNonNegativeInteger } from './run-number-guards';
  * than a place. A dungeon is quirky because it is populated, not because one clever system lives
  * in it, so this is a cast: one resident per floor, rolled from the run's own seed.
  *
- * Every one of them is built from levers the run already has — guard tokens, peek charges, shop
- * gold, the memorize window, shuffle charges. That is deliberate. A resident that needed a new
+ * Every one of them is built from levers the run already has — guard tokens, peek charges, the
+ * memorize window, shuffle charges. That is deliberate. A resident that needed a new
  * subsystem would be a mechanic wearing a costume; these are small, real, and immediately legible,
  * and the character is in what they do and what they say about it rather than in novelty.
  *
@@ -34,7 +34,6 @@ export interface FloorCurioEffect {
     readonly guardTokens: number;
     readonly peekCharges: number;
     readonly shuffleCharges: number;
-    readonly shopGold: number;
 }
 
 export interface FloorCurio {
@@ -52,7 +51,6 @@ const NOTHING: FloorCurioEffect = {
     guardTokens: 0,
     memorizeBonusMs: 0,
     peekCharges: 0,
-    shopGold: 0,
     shuffleCharges: 0
 };
 
@@ -78,8 +76,9 @@ export const FLOOR_CURIOS: readonly FloorCurio[] = [
         id: 'hoarding_rat',
         name: 'A hoarding rat',
         line: 'It has been collecting. It does not want the coins, exactly. It wants to have them.',
-        effectSummary: 'Coins it has no use for, left where you will find them.',
-        effect: { ...NOTHING, shopGold: 3 }
+        // Its coins went with the shop (Gen 174). It still has them; there is nothing they buy.
+        effectSummary: 'Coins it has no use for. Nor, down here, have you.',
+        effect: NOTHING
     },
     {
         id: 'gossiping_skull',
@@ -87,7 +86,7 @@ export const FLOOR_CURIOS: readonly FloorCurio[] = [
         line: 'It knew the last three people through here. It would like to tell you about all of them.',
         effectSummary: 'Talks through the memorize window. You will look away. You will regret it.',
         // The one resident that costs you something, and it costs attention rather than a life.
-        effect: { ...NOTHING, memorizeBonusMs: -600, shopGold: 2 }
+        effect: { ...NOTHING, memorizeBonusMs: -600 }
     },
     {
         id: 'off_duty_guard',
@@ -168,7 +167,6 @@ export const applyFloorCurio = (run: RunState, curio: FloorCurio): RunState => (
     },
     peekCharges: Math.max(0, runNonNegativeInteger(run.peekCharges) + curio.effect.peekCharges),
     shuffleCharges: Math.max(0, runNonNegativeInteger(run.shuffleCharges) + curio.effect.shuffleCharges),
-    shopGold: Math.max(0, runNonNegativeInteger(run.shopGold) + curio.effect.shopGold),
     stats: {
         ...run.stats,
         guardTokens: Math.max(0, runNonNegativeInteger(run.stats.guardTokens) + curio.effect.guardTokens)

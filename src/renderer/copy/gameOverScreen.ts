@@ -21,7 +21,6 @@ export const gameOverScreenCopy = {
     achievementsNoteOff: 'Achievements were off (debug tools used).',
     achievementsNoteOffShared: 'Achievements are off in a shared game.',
     achievementsNoteOffPractice: 'Achievements are off in practice.',
-    achievementsNoteOffShowcase: 'Achievements are off in the showcase.',
     actionKicker: 'Next move',
     actionHeading: 'Continue the archive',
     playAgainLabel: 'Play Again',
@@ -56,7 +55,6 @@ export const gameOverScreenCopy = {
         pinVow: 'Pin vow descent',
         wild: 'Wild run',
         practice: 'Practice descent',
-        dungeonShowcase: 'Dungeon Showcase',
         classic: 'Classic descent'
     },
     modeIdentity: {
@@ -68,8 +66,7 @@ export const gameOverScreenCopy = {
         pinVow: 'Pin vow: route planning mattered because pinned notes were capped across the run.',
         wild: 'Wild Run: joker-style matching pressure stayed attached through the final summary.',
         practice: 'Practice descent: training rules were explicit, with progression expectations reduced.',
-        dungeonShowcase: 'Dungeon Showcase: wide-recall route pressure and dungeon systems were the featured contract.',
-        classic: 'Long-run core: chains, relics, and featured objectives.'
+        classic: 'Long-run core: chains and featured objectives.'
     },
     flipHistoryCopy: (flipCount: number) =>
         flipCount > 0
@@ -87,12 +84,10 @@ export const gameOverScreenCopy = {
  */
 export const achievementsNote = ({
     achievementsEnabled,
-    dungeonShowcaseRun,
     practiceMode,
     sharedTable
 }: {
     achievementsEnabled: boolean;
-    dungeonShowcaseRun?: boolean;
     practiceMode?: boolean;
     sharedTable?: boolean;
 }): string => {
@@ -104,9 +99,6 @@ export const achievementsNote = ({
     }
     if (practiceMode === true) {
         return gameOverScreenCopy.achievementsNoteOffPractice;
-    }
-    if (dungeonShowcaseRun === true) {
-        return gameOverScreenCopy.achievementsNoteOffShowcase;
     }
     return gameOverScreenCopy.achievementsNoteOff;
 };

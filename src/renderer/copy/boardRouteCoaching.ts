@@ -14,7 +14,6 @@ export const BOARD_ROUTE_COACHING = {
     cashout: 'Three-beat cashout route is live',
     followUp: 'Match the marked follow-up to resolve the trait route.',
     payoff: 'Two-beat payoff route is primed',
-    perkArmed: 'Resolve the matching trait route while the perk is armed.',
     pickups: 'Clear pickup-marked pairs before the floor ends.',
     routeTools: 'Use row/swap tools to connect the marked route cards.',
     stacked: 'Four-beat stacked route is primed',

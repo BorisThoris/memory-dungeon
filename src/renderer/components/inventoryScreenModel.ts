@@ -169,7 +169,7 @@ export const getInventoryPayoffEngineSignal = (
     };
 };
 
-type InventoryToolActionCueTone = 'chain' | 'route' | 'recovery' | 'key' | 'build';
+type InventoryToolActionCueTone = 'chain' | 'route' | 'recovery' | 'build';
 
 interface InventoryToolActionCue {
     label: string;
@@ -222,16 +222,6 @@ const TOOL_ACTION_CUES: Record<RunInventoryItemId, InventoryToolActionCue> = {
         label: 'Wildcard bridge',
         detail: 'Bridge an awkward symbol into a valid match when joker pressure appears.',
         tone: 'chain'
-    },
-    iron_key: {
-        label: 'Open route',
-        detail: 'Spend on locked exits, caches, or treasure doors before they block progress.',
-        tone: 'key'
-    },
-    master_key: {
-        label: 'Bypass lock',
-        detail: 'Save for the door that would otherwise end the dungeon route.',
-        tone: 'key'
     },
     guard_token: {
         label: 'Miss shield',

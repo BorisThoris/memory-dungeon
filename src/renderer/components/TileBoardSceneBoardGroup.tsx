@@ -89,23 +89,18 @@ export const TileBoardSceneBoardGroup = ({
         {tileBezelRows.map(
             ({
                 destroyBlockedDecoyBack,
-                enemyOccupiedBack,
                 faceUp,
                 fieldAmp,
                 focusDimmed,
-                hazardBackAccent,
                 isPinned,
                 memorizeCurseHighlight,
                 nonPickableBack,
-                objectiveBackAccent,
                 pairProximityDistance,
-                perkArmedBack,
                 powerBackAccent,
                 presentationNBackAnchor,
                 presentationSilhouette,
                 presentationWideRecall,
                 resolvingSelection,
-                routeBackAccent,
                 selectedTraitFollowupBack,
                 shuffleBoardOrderIndex,
                 spotlightBountyHighlight,
@@ -126,18 +121,13 @@ export const TileBoardSceneBoardGroup = ({
                 <TileBezel
                     key={tile.id}
                     destroyBlockedDecoyBack={destroyBlockedDecoyBack}
-                    enemyOccupiedBack={enemyOccupiedBack}
                     faceUp={faceUp}
                     fieldAmp={fieldAmp}
                     fieldTiltRef={fieldTiltRef}
                     tileFieldParallaxEnabled={tileFieldParallaxEnabled}
                     flipLocked={flipLocked}
                     focusDimmed={focusDimmed}
-                    hazardBackAccent={hazardBackAccent}
-                    routeBackAccent={routeBackAccent}
                     selectedTraitFollowupBack={selectedTraitFollowupBack}
-                    objectiveBackAccent={objectiveBackAccent}
-                    perkArmedBack={perkArmedBack}
                     nonPickableBack={nonPickableBack}
                     stickyFingerSlotMark={stickyFingerSlotMark}
                     traitComboBack={traitComboBack}

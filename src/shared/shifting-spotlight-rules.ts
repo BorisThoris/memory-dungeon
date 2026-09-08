@@ -20,10 +20,6 @@ export interface RotatedShiftingSpotlight {
     shiftingSpotlightNonce: number;
 }
 
-export interface AnchorSealPressureRotation extends RotatedShiftingSpotlight {
-    anchorSealUsed: boolean;
-}
-
 /** Remaining real pairs that can still be matched (not both matched; no removed tile in pair). */
 export const eligibleSpotlightPairKeys = (board: BoardState): string[] => {
     const groups = new Map<string, Tile[]>();
@@ -127,21 +123,3 @@ export const rotateShiftingSpotlight = (
 
 export const rotateRunShiftingSpotlight = (run: RunState, board: BoardState): RotatedShiftingSpotlight =>
     rotateShiftingSpotlight(run, board, isBoardComplete);
-
-export const rotateAnchorSealPressure = (
-    run: RunState,
-    board: BoardState
-): AnchorSealPressureRotation => {
-    if (hasMutator(run, 'shifting_spotlight') && !isBoardComplete(board) && run.anchorSealChargesThisFloor > 0) {
-        return {
-            board,
-            shiftingSpotlightNonce: run.shiftingSpotlightNonce ?? 0,
-            anchorSealUsed: true
-        };
-    }
-
-    return {
-        ...rotateRunShiftingSpotlight(run, board),
-        anchorSealUsed: false
-    };
-};

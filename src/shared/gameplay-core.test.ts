@@ -13,10 +13,8 @@ import {
     type Tile
 } from './contracts';
 import {
-    CONDUIT_CARTOGRAPHER_DEFINITIONS,
-    BOARD_TACTICIAN_DEFINITIONS,
+    GAMEPLAY_CONTENT_DEFINITIONS,
     GAMEPLAY_CORE_SCHEMA_VERSION,
-    SUPPLY_CACHE_DEFINITIONS,
     createGameplayDefinitionCommand,
     createGameplayBoardTurnResolveCommand,
     createGameplayDestroyPairCommand,
@@ -26,9 +24,6 @@ import {
     createGameplayParasiteAdvanceCommand,
     createGameplayPeekCommand,
     createGameplayRegionShuffleCommand,
-    createGameplayRelicPickCommand,
-    createGameplayRelicOfferOpenCommand,
-    createGameplayRelicOfferServiceCommand,
     createGameplayShuffleCommand,
     createGameplayTileSwapCommand,
     createGameplayUndoResolveCommand,
@@ -72,8 +67,6 @@ const run = (overrides: Partial<RunState> = {}): RunState =>
         runRulesVersion: 1,
         peekCharges: 0,
         recallFocus: 2,
-        rewardPerkIds: [],
-        relicIds: [],
         powersUsedThisRun: false,
         forgottenTileIdsThisFloor: [],
         pinnedTileIds: [],
@@ -175,18 +168,18 @@ describe('deterministic gameplay core', () => {
 
 
     it('validates commands, effects, conditions, and definitions as strict serializable contracts', () => {
-        expect(CONDUIT_CARTOGRAPHER_DEFINITIONS.map((definition) => definition.id)).toEqual([
-            'bonus_reward.echo_conduit_lens',
-            'relic.peek_charge_plus_one',
-            'reward_perk.echo_conduit_double'
+        expect(GAMEPLAY_CONTENT_DEFINITIONS.map((definition) => definition.id)).toEqual([
+            'trait.volatile_heavy_guard',
+            'findable.shard_spark',
+            'findable.score_glint'
         ]);
-        expect(CONDUIT_CARTOGRAPHER_DEFINITIONS.every((definition) => gameplayContentDefinitionSchema.safeParse(definition).success)).toBe(true);
+        expect(GAMEPLAY_CONTENT_DEFINITIONS.every((definition) => gameplayContentDefinitionSchema.safeParse(definition).success)).toBe(true);
         expect(
             gameplayCommandSchema.safeParse({
                 schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
                 commandId: 'bad',
                 type: 'effects.apply',
-                definitionId: 'relic.peek_charge_plus_one',
+                definitionId: 'trait.volatile_heavy_guard',
                 definitionVersion: 1,
                 facts: {},
                 undocumentedMutation: true
@@ -194,7 +187,7 @@ describe('deterministic gameplay core', () => {
         ).toBe(false);
         expect(
             gameplayContentDefinitionSchema.safeParse({
-                ...CONDUIT_CARTOGRAPHER_DEFINITIONS[0],
+                ...GAMEPLAY_CONTENT_DEFINITIONS[0],
                 effects: [{ kind: 'inventory.grant', itemId: 'peek_charge', amount: 0 }]
             }).success
         ).toBe(false);
@@ -204,31 +197,6 @@ describe('deterministic gameplay core', () => {
 
 
 
-    it('models Supply Cache as one typed emergency-tool claim across reveal, removal, and score', () => {
-        expect(SUPPLY_CACHE_DEFINITIONS.map((definition) => definition.id)).toEqual([
-            'bonus_reward.supply_cache'
-        ]);
-        const initial = run({ peekCharges: 0, destroyPairCharges: 0 });
-        const result = reduceGameplayCommand(
-            initial,
-            createGameplayDefinitionCommand('supply-cache', 'bonus_reward.supply_cache')
-        );
-
-        expect(result).toMatchObject({
-            accepted: true,
-            run: {
-                peekCharges: 1,
-                destroyPairCharges: 1,
-                stats: { totalScore: 10, currentLevelScore: 10 }
-            }
-        });
-        expect(result.events).toEqual([
-            expect.objectContaining({ type: 'inventory.changed', itemId: 'destroy_charge', applied: 1 }),
-            expect.objectContaining({ type: 'inventory.changed', itemId: 'peek_charge', applied: 1 }),
-            expect.objectContaining({ type: 'score.changed', reason: 'content_reward', amount: 10 }),
-            expect.objectContaining({ type: 'feedback.requested', cue: 'build.supply_cache.claimed' })
-        ]);
-    });
 
     it('removes one legal pair through a typed command and records every consequential delta', () => {
         const initial = run({
@@ -320,48 +288,41 @@ describe('deterministic gameplay core', () => {
         });
     });
 
-    it('advances score-parasite pressure through a typed floor command and records ward or life outcomes', () => {
-        const warded = run({
+    it('advances score-parasite pressure through a typed floor command and records the life outcome', () => {
+        const pressured = run({
             status: 'levelComplete',
             activeMutators: ['score_parasite'],
             parasiteFloors: 3,
-            parasiteWardRemaining: 1,
             lives: 2
         });
-        const protectedResult = reduceGameplayCommand(
-            warded,
-            createGameplayParasiteAdvanceCommand('parasite-warded')
+        const belowThreshold = reduceGameplayCommand(
+            { ...pressured, parasiteFloors: 1 },
+            createGameplayParasiteAdvanceCommand('parasite-building')
         );
         const hitResult = reduceGameplayCommand(
-            { ...warded, parasiteWardRemaining: 0 },
+            pressured,
             createGameplayParasiteAdvanceCommand('parasite-hit')
         );
 
-        expect(protectedResult).toMatchObject({
+        expect(belowThreshold).toMatchObject({
             accepted: true,
-            run: { parasiteFloors: 0, parasiteWardRemaining: 0, lives: 2 }
+            run: { parasiteFloors: 2, lives: 2 }
         });
-        expect(protectedResult.events).toEqual([
+        expect(belowThreshold.events).toEqual([
             expect.objectContaining({
                 type: 'score_parasite.advanced',
-                thresholdTriggered: true,
-                wardConsumed: true,
+                thresholdTriggered: false,
                 lifeLost: false
-            }),
-            expect.objectContaining({
-                type: 'feedback.requested',
-                cue: 'hazard.score_parasite.ward_consumed'
             })
         ]);
         expect(hitResult).toMatchObject({
             accepted: true,
-            run: { parasiteFloors: 0, parasiteWardRemaining: 0, lives: 1 }
+            run: { parasiteFloors: 0, lives: 1 }
         });
         expect(hitResult.events).toEqual([
             expect.objectContaining({
                 type: 'score_parasite.advanced',
                 thresholdTriggered: true,
-                wardConsumed: false,
                 lifeLost: true
             }),
             expect.objectContaining({
@@ -377,7 +338,7 @@ describe('deterministic gameplay core', () => {
             ...fixtureRun,
             activeMutators: ['score_parasite'],
             parasiteFloors: 3,
-            parasiteWardRemaining: 1,
+            lives: 3,
             destroyPairCharges: 0
         };
         const command = createGameplayFloorAdvanceCommand('floor-advance-flat');
@@ -392,8 +353,8 @@ describe('deterministic gameplay core', () => {
             expect.objectContaining({
                 type: 'score_parasite.advanced',
                 commandId: command.commandId,
-                wardConsumed: true,
-                lifeLost: false
+                thresholdTriggered: true,
+                lifeLost: true
             }),
             expect.objectContaining({
                 type: 'floor.advanced',
@@ -401,15 +362,12 @@ describe('deterministic gameplay core', () => {
                 fromFloor: initial.board!.level,
                 toFloor: initial.board!.level + 1,
                 outcome: 'memorize',
-                hazardBanishOutcome: null,
                 boardPairCount: result.run.board!.pairCount,
                 boardTileCount: result.run.board!.tiles.length,
                 livesBefore: initial.lives,
                 livesAfter: result.run.lives,
                 parasitePressureBefore: 3,
-                parasitePressureAfter: 0,
-                parasiteWardBefore: 1,
-                parasiteWardAfter: 0
+                parasitePressureAfter: 0
             }),
             expect.objectContaining({
                 type: 'feedback.requested',
@@ -425,7 +383,7 @@ describe('deterministic gameplay core', () => {
         expect(replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))]).run).toEqual(result.run);
 
         const defeated = reduceGameplayCommand(
-            { ...initial, lives: 1, parasiteWardRemaining: 0 },
+            { ...initial, lives: 1 },
             createGameplayFloorAdvanceCommand('floor-advance-defeated')
         );
         expect(defeated).toMatchObject({ accepted: true, run: { status: 'gameOver', lives: 0 } });
@@ -486,24 +444,6 @@ describe('deterministic gameplay core', () => {
 
 
 
-    it('rejects every relic draft command with a reason now that there is no draft', () => {
-        // Gen 175: the draft is gone. An old journal that opens, picks from or services an
-        // offer still replays, each of those commands recorded as rejected rather than lost.
-        const run = createPlayablePathFixture('floorClearWithRouteChoices').run!;
-        const commands = [
-            createGameplayRelicOfferOpenCommand('relic-open-gone'),
-            createGameplayRelicPickCommand('relic-pick-gone', 'extra_shuffle_charge'),
-            createGameplayRelicOfferServiceCommand('relic-service-gone', 'reroll_offer')
-        ];
-        for (const command of commands) {
-            const result = reduceGameplayCommand(run, command);
-            expect(result).toMatchObject({ accepted: false, run });
-            expect(result.events).toEqual([
-                expect.objectContaining({ type: 'command.rejected', reason: expect.stringMatching(/relic draft/) })
-            ]);
-        }
-        expect(run.relicOffer).toBeNull();
-    });
 
 
 
@@ -511,11 +451,11 @@ describe('deterministic gameplay core', () => {
 
 
     it('rejects unmet trait conditions atomically with an explainable event', () => {
-        const initial = run({ rewardPerkIds: ['echo_conduit_double'] });
+        const initial = run();
         const result = reduceGameplayCommand(
             initial,
-            createGameplayDefinitionCommand('bad-adjacency', 'reward_perk.echo_conduit_double', {
-                matchedTraits: ['echo'],
+            createGameplayDefinitionCommand('bad-adjacency', 'trait.volatile_heavy_guard', {
+                matchedTraits: ['volatile'],
                 adjacentTraits: []
             })
         );
@@ -523,7 +463,7 @@ describe('deterministic gameplay core', () => {
         expect(result.accepted).toBe(false);
         expect(result.run).toBe(initial);
         expect(result.events).toEqual([
-            expect.objectContaining({ type: 'command.rejected', reason: expect.stringContaining('conduit was not adjacent') })
+            expect.objectContaining({ type: 'command.rejected', reason: expect.stringContaining('heavy was not adjacent') })
         ]);
     });
 
@@ -583,68 +523,6 @@ describe('deterministic gameplay core', () => {
         ]);
     });
 
-    it('models the complete Board Tactician reward and relic source set', () => {
-        expect(BOARD_TACTICIAN_DEFINITIONS.map((definition) => definition.id)).toEqual([
-            'bonus_reward.trait_toolkit',
-            'bonus_reward.stasis_lockbox',
-            'bonus_reward.free_swap_floor',
-            'relic.extra_shuffle_charge',
-            'relic.first_shuffle_free_per_floor',
-            'relic.region_shuffle_free_first'
-        ]);
-        expect(BOARD_TACTICIAN_DEFINITIONS.every(
-            (definition) => gameplayContentDefinitionSchema.safeParse(definition).success
-        )).toBe(true);
-
-        const toolkit = reduceGameplayCommand(
-            run({ regionShuffleCharges: 0, peekCharges: 0 }),
-            createGameplayDefinitionCommand('toolkit', 'bonus_reward.trait_toolkit')
-        );
-        expect(toolkit.run).toMatchObject({ regionShuffleCharges: 1, peekCharges: 1 });
-        expect(toolkit.run.stats.totalScore).toBe(10);
-
-        const lockbox = reduceGameplayCommand(
-            run({ regionShuffleCharges: 0 }),
-            createGameplayDefinitionCommand('lockbox', 'bonus_reward.stasis_lockbox')
-        );
-        expect(lockbox.run.regionShuffleCharges).toBe(1);
-        expect(lockbox.run.stats.guardTokens).toBe(1);
-        expect(lockbox.run.stats.totalScore).toBe(15);
-
-        const discipline = reduceGameplayCommand(
-            run(),
-            createGameplayDefinitionCommand('discipline', 'bonus_reward.free_swap_floor')
-        );
-        expect(discipline.run.rewardPerkIds).toContain('free_first_swap_per_floor');
-        expect(discipline.run.stats.totalScore).toBe(15);
-
-        const shuffleRelic = reduceGameplayCommand(
-            run({ shuffleCharges: 0 }),
-            createGameplayDefinitionCommand('shuffle-relic', 'relic.extra_shuffle_charge')
-        );
-        expect(shuffleRelic.run.shuffleCharges).toBe(1);
-
-        const freeShuffleRelic = reduceGameplayCommand(
-            run({ freeShuffleThisFloor: false }),
-            createGameplayDefinitionCommand('free-shuffle-relic', 'relic.first_shuffle_free_per_floor')
-        );
-        expect(freeShuffleRelic.run.freeShuffleThisFloor).toBe(true);
-        expect(freeShuffleRelic.events).toEqual(expect.arrayContaining([
-            expect.objectContaining({ type: 'free_shuffle.changed', before: false, after: true })
-        ]));
-
-        const regionRelic = reduceGameplayCommand(
-            run(),
-            createGameplayDefinitionCommand('region-relic', 'relic.region_shuffle_free_first')
-        );
-        expect(regionRelic.run).toEqual(run());
-        expect(regionRelic.events).toEqual([
-            expect.objectContaining({
-                type: 'feedback.requested',
-                cue: 'build.region_shuffle_free_first.claimed'
-            })
-        ]);
-    });
 
     it('preserves deterministic shuffle, row-shuffle, and tile-swap parity with typed consumption events', () => {
         const initial = run({
@@ -657,8 +535,6 @@ describe('deterministic gameplay core', () => {
             shuffleCharges: 1,
             regionShuffleCharges: 2,
             shuffleNonce: 0,
-            freeShuffleThisFloor: false,
-            regionShuffleFreeThisFloor: false,
             pinnedTileIds: [],
             forgottenTileIdsThisFloor: [],
             matchScoreMultiplier: 1,
@@ -758,25 +634,26 @@ describe('deterministic gameplay core', () => {
 
 
     it('replays a JSON-round-tripped build sequence deterministically', () => {
-        const initial = run({ peekCharges: 0 });
+        const initial = run({ peekCharges: 1 });
         const commands = [
-            createGameplayDefinitionCommand('01-lens', 'bonus_reward.echo_conduit_lens'),
-            createGameplayDefinitionCommand('02-relic', 'relic.peek_charge_plus_one'),
-            createGameplayDefinitionCommand('03-combo', 'reward_perk.echo_conduit_double', {
-                matchedTraits: ['echo'],
-                adjacentTraits: ['conduit']
+            createGameplayDefinitionCommand('01-guard', 'trait.volatile_heavy_guard', {
+                matchedTraits: ['volatile'],
+                adjacentTraits: ['heavy']
             }),
-            createGameplayPeekCommand('04-peek', 'echo-a')
+            createGameplayDefinitionCommand('02-spark', 'findable.shard_spark', {
+                matchedFindables: ['shard_spark']
+            }),
+            createGameplayPeekCommand('03-peek', 'echo-a')
         ];
         const serialized = JSON.stringify(commands);
         const replayA = replayGameplayCommands(initial, JSON.parse(serialized) as unknown[]);
         const replayB = replayGameplayCommands(initial, JSON.parse(serialized) as unknown[]);
 
         expect(replayA).toEqual(replayB);
-        expect(replayA.acceptedCommandIds).toEqual(['01-lens', '02-relic', '03-combo', '04-peek']);
+        expect(replayA.acceptedCommandIds).toEqual(['01-guard', '02-spark', '03-peek']);
         expect(replayA.rejectedCommandIds).toEqual([]);
-        expect(replayA.run.peekCharges).toBe(2);
-        expect(replayA.run.rewardPerkIds).toContain('echo_conduit_double');
+        expect(replayA.run.peekCharges).toBe(0);
+        expect(replayA.run.stats.guardTokens).toBe(1);
         expect(JSON.parse(JSON.stringify(replayA.events))).toEqual(replayA.events);
     });
 
@@ -784,7 +661,7 @@ describe('deterministic gameplay core', () => {
         const initial = run();
         const malformed = reduceGameplayCommand(initial, { type: 'effects.apply' });
         const staleCommand = {
-            ...createGameplayDefinitionCommand('stale', 'relic.peek_charge_plus_one'),
+            ...createGameplayDefinitionCommand('stale', 'trait.volatile_heavy_guard'),
             definitionVersion: 99
         };
         const stale = reduceGameplayCommand(initial, staleCommand);

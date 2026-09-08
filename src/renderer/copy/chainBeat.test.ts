@@ -37,16 +37,14 @@ describe('the chunk says something', () => {
 
 describe('the style line', () => {
     it('names only what applies, in one line, and says nothing about a plain break', () => {
-        expect(CHAIN_BEAT_COPY.styleLine({ chunkPartnerSpanMax: 1, chunkHaloPairs: 0, chunkTreasuresSpilled: 0, chunkSuitCleared: false })).toBeNull();
+        expect(CHAIN_BEAT_COPY.styleLine({ chunkPartnerSpanMax: 1, chunkHaloPairs: 0, chunkSuitCleared: false })).toBeNull();
         expect(
-            CHAIN_BEAT_COPY.styleLine({ chunkPartnerSpanMax: 1, chunkHaloPairs: 0, chunkTreasuresSpilled: 0, chunkSuitCleared: false, chunkDroppedPairs: 2 })
+            CHAIN_BEAT_COPY.styleLine({ chunkPartnerSpanMax: 1, chunkHaloPairs: 0, chunkSuitCleared: false, chunkDroppedPairs: 2 })
         ).toBe('Drop ×2.');
-        expect(
-            CHAIN_BEAT_COPY.styleLine({ chunkPartnerSpanMax: 5, chunkHaloPairs: 1, chunkTreasuresSpilled: 2, chunkSuitCleared: true })
-        ).toBe('Partner across the board, Halo, Treasure spill ×2, Clean sweep.');
-        expect(CHAIN_BEAT_COPY.styleLine({ chunkPartnerSpanMax: 0, chunkHaloPairs: 0, chunkTreasuresSpilled: 1, chunkSuitCleared: false })).toBe(
-            'Treasure spill.'
+        expect(CHAIN_BEAT_COPY.styleLine({ chunkPartnerSpanMax: 5, chunkHaloPairs: 1, chunkSuitCleared: true })).toBe(
+            'Partner across the board, Halo, Clean sweep.'
         );
+        expect(CHAIN_BEAT_COPY.styleLine({ chunkPartnerSpanMax: 0, chunkHaloPairs: 1, chunkSuitCleared: false })).toBe('Halo.');
     });
 
     it('follows the chunk announcement, so the break and its name arrive together', () => {
@@ -58,7 +56,6 @@ describe('the style line', () => {
                 chainTierAfter: 'sharp',
                 chunkPartnerSpanMax: 6,
                 chunkHaloPairs: 0,
-                chunkTreasuresSpilled: 0,
                 chunkSuitCleared: false
             })
         );

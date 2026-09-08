@@ -22,10 +22,6 @@ describe('GLD-P2 board, power, and resolution contracts', () => {
         });
 
         expect(board.tiles).toEqual(fixedTiles);
-        expect(board.dungeonExitTileId).toBeNull();
-        expect(board.dungeonShopTileId).toBeNull();
-        expect(board.dungeonBossId).toBeNull();
-        expect(board.enemyHazards).toEqual([]);
     });
 
     it('gives back exactly the fixed tiles it was handed, and nothing else', () => {
@@ -38,8 +34,6 @@ describe('GLD-P2 board, power, and resolution contracts', () => {
         });
 
         expect(board.tiles).toHaveLength(2);
-        expect(board.dungeonExitTileId).toBeNull();
-        expect(board.dungeonBossId).toBeNull();
     });
 
     it('does not spend wild capacity when a gambit third wild is not part of the selected match', () => {

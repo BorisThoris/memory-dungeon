@@ -13,11 +13,9 @@ const base = {
     gauntletActive: false,
     scoreParasiteActive: true,
     parasiteFloors: 0,
-    parasiteWardRemaining: 0,
     lives: 3,
     guardTokens: 0,
     comboShards: 0,
-    shopGold: 0,
     shuffleCharges: 0,
     regionShuffleCharges: 0,
     stickyBlockIndex: null as number | null,
@@ -63,25 +61,7 @@ const base = {
     chainAnnounceActive: false,
     gambitThirdPickActive: false,
     gambitOpportunityFlippedIds: null as readonly string[] | null,
-    reduceMotion: false,
-    hazardTileTriggersThisFloor: 0,
-    hazardShuffleSnaresThisFloor: 0,
-    hazardCascadeCachesThisFloor: 0,
-    hazardMirrorDecoysThisFloor: 0,
-    hazardFragileCacheClaimsThisFloor: 0,
-    hazardFragileCacheBreaksThisFloor: 0,
-    hazardTollCachesThisFloor: 0,
-    hazardFuseCachesThisFloor: 0,
-    hazardFuseCacheExpiredClaimsThisFloor: 0,
-    lanternWardScoutsThisFloor: 0,
-    omenSealScoutsThisFloor: 0,
-    mimicCacheClaimsThisFloor: 0,
-    mimicCacheBitesThisFloor: 0,
-    mimicCacheGuardBitesThisFloor: 0,
-    safeHazardWardsUsedThisFloor: 0,
-    dungeonEnemiesDefeatedThisFloor: 0,
-    enemyHazardHitsThisFloor: 0,
-    enemyHazardsDefeatedThisFloor: 0
+    reduceMotion: false
 };
 
 /**
@@ -259,7 +239,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
         });
         await flushRaf();
         expect(result.current.message).toBe(
-            'Score parasite: next cleared floor triggers the drain unless warded.'
+            'Score parasite: next cleared floor triggers the drain.'
         );
     });
 
@@ -279,25 +259,6 @@ describe('useHudPoliteLiveAnnouncement', () => {
         });
         await flushRaf();
         expect(result.current.message).toBe('Score parasite drained one life.');
-    });
-
-    it('announces ward absorbing parasite drain', async () => {
-        const { result, rerender } = renderHook(
-            (p: { level: number; pf: number; ward: number; lives: number }) =>
-                useHudPoliteLiveAnnouncement({
-                    ...base,
-                    boardLevel: p.level,
-                    parasiteFloors: p.pf,
-                    parasiteWardRemaining: p.ward,
-                    lives: p.lives
-                }),
-            { initialProps: { level: 4, pf: 3, ward: 1, lives: 3 } }
-        );
-        await act(async () => {
-            rerender({ level: 5, pf: 0, ward: 0, lives: 3 });
-        });
-        await flushRaf();
-        expect(result.current.message).toBe('Score parasite drain absorbed by ward.');
     });
 
     it('announces match chain milestones with arcade payoff copy while playing', async () => {
@@ -326,7 +287,6 @@ describe('useHudPoliteLiveAnnouncement', () => {
         expect(result.current.message).toBe(
             'Chain started: x3. Reward loop online. Next reward: Double cashout: x4 +1 shard in 1 match.'
         );
-
     });
 
     it('announces surge chain milestones with the next reward target', async () => {
@@ -448,7 +408,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
         const command = 'flip-7';
         const feedback: GameplayFeedbackPresentation[] = [
             {
-                audioCategory: 'reward-claim',
+                audioCategory: 'match-resolution',
                 commandId: command,
                 cue: 'findable.claimed',
                 eventId: `${command}:1`,
@@ -458,7 +418,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
                 tone: 'reward'
             },
             {
-                audioCategory: 'hazard-banish',
+                audioCategory: 'match-resolution',
                 commandId: command,
                 cue: 'trait.snare.tripped',
                 eventId: `${command}:2`,
@@ -488,13 +448,13 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
     it('uses one typed reward message instead of duplicate legacy resource-gain copy', async () => {
         const feedback: GameplayFeedbackPresentation = {
-            audioCategory: 'reward-claim',
+            audioCategory: 'match-resolution',
             commandId: 'reward-1',
-            cue: 'build.bonus_shards.claimed',
+            cue: 'findable.shard_spark.matched',
             eventId: 'reward-1:2',
             message: 'Bonus Shards added one combo shard and one guard token.',
             priority: 'info',
-            source: { kind: 'bonus_reward', id: 'bonus_shards' },
+            source: { kind: 'findable', id: 'shard_spark' },
             tone: 'reward'
         };
         const { result, rerender } = renderHook(
@@ -884,71 +844,6 @@ describe('useHudPoliteLiveAnnouncement', () => {
         expect(result.current.message).toBe('Guard token spent. 0 guard tokens remain.');
     });
 
-    it('announces moving enemy contact alongside damage feedback', async () => {
-        const { result, rerender } = renderHook(
-            (p: { lives: number; hits: number }) =>
-                useHudPoliteLiveAnnouncement({
-                    ...base,
-                    boardLevel: 2,
-                    lives: p.lives,
-                    enemyHazardHitsThisFloor: p.hits
-                }),
-            { initialProps: { lives: 3, hits: 0 } }
-        );
-
-        await act(async () => {
-            rerender({ lives: 2, hits: 1 });
-        });
-        await flushRaf();
-
-        expect(result.current.message).toBe('Life lost. 2 lives remain. Moving enemy contact.');
-        expect(result.current.priority).toBe('error');
-    });
-
-    it('announces moving enemy defeats with match feedback', async () => {
-        const { result, rerender } = renderHook(
-            (p: { turnEvent: BoardTurnResolvedEvent | null; defeated: number }) =>
-                useHudPoliteLiveAnnouncement({
-                    ...base,
-                    boardLevel: 2,
-                    boardTurnEvent: p.turnEvent,
-                    enemyHazardsDefeatedThisFloor: p.defeated
-                }),
-            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null, defeated: 0 } }
-        );
-
-        await act(async () => {
-            rerender({ turnEvent: matchTurn('enemy-defeat-turn'), defeated: 1 });
-        });
-        await flushRaf();
-
-        expect(result.current.message).toBe(
-            'Match resolved. 1/4 pairs cleared. Moving enemy defeated. 1 cleared this floor.'
-        );
-    });
-
-    it('announces dungeon enemy card defeats with match feedback', async () => {
-        const { result, rerender } = renderHook(
-            (p: { turnEvent: BoardTurnResolvedEvent | null; defeated: number }) =>
-                useHudPoliteLiveAnnouncement({
-                    ...base,
-                    boardLevel: 2,
-                    boardTurnEvent: p.turnEvent,
-                    dungeonEnemiesDefeatedThisFloor: p.defeated
-                }),
-            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null, defeated: 0 } }
-        );
-
-        await act(async () => {
-            rerender({ turnEvent: matchTurn('dungeon-defeat-turn'), defeated: 1 });
-        });
-        await flushRaf();
-
-        expect(result.current.message).toBe(
-            'Match resolved. 1/4 pairs cleared. Dungeon enemy defeated. 1 defeated this floor.'
-        );
-    });
-
     it('announces recovery and resource spending deltas', async () => {
         const { result, rerender } = renderHook(
             (p: { lives: number; guards: number; shards: number; gold: number }) =>
@@ -991,128 +886,10 @@ describe('useHudPoliteLiveAnnouncement', () => {
         expect(result.current.message).toBe('2 guard tokens gained. 2 available.');
     });
 
-
-
-
-    it('announces lantern ward scout deltas', async () => {
-        const { result, rerender } = renderHook(
-            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
-                useHudPoliteLiveAnnouncement({
-                    ...base,
-                    scoreParasiteActive: false,
-                    boardTurnEvent: p.turnEvent
-                }),
-            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
-        );
-
-        await act(async () => {
-            rerender({
-                turnEvent: counterTurn('lantern-scout', { scoutsBefore: 0, scoutsAfter: 1 })
-            });
-        });
-        await flushRaf();
-
-        expect(result.current.message).toBe('Lantern Ward scouted a hidden threat.');
-    });
-
-    it('announces omen seal scout deltas', async () => {
-        const { result, rerender } = renderHook(
-            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
-                useHudPoliteLiveAnnouncement({
-                    ...base,
-                    scoreParasiteActive: false,
-                    boardTurnEvent: p.turnEvent
-                }),
-            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
-        );
-
-        await act(async () => {
-            rerender({
-                turnEvent: counterTurn('omen-scout', { omenScoutsBefore: 0, omenScoutsAfter: 1 })
-            });
-        });
-        await flushRaf();
-
-        expect(result.current.message).toBe('Omen Seal revealed hidden danger.');
-    });
-
-    it('announces controlled mimic cache claims', async () => {
-        const { result, rerender } = renderHook(
-            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
-                useHudPoliteLiveAnnouncement({
-                    ...base,
-                    scoreParasiteActive: false,
-                    boardTurnEvent: p.turnEvent
-                }),
-            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
-        );
-
-        await act(async () => {
-            rerender({
-                turnEvent: counterTurn('mimic-claim', { mimicCacheBefore: 0, mimicCacheAfter: 1 })
-            });
-        });
-        await flushRaf();
-
-        expect(result.current.message).toBe('Mimic Cache controlled. Full loot claimed.');
-    });
-
-    it('announces mimic cache guard bites before generic life bites', async () => {
-        const { result, rerender } = renderHook(
-            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
-                useHudPoliteLiveAnnouncement({
-                    ...base,
-                    scoreParasiteActive: false,
-                    boardTurnEvent: p.turnEvent
-                }),
-            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
-        );
-
-        await act(async () => {
-            rerender({
-                turnEvent: counterTurn('mimic-guard-bite', {
-                    mimicCacheBefore: 0,
-                    mimicCacheAfter: 1,
-                    mimicCacheBitesBefore: 0,
-                    mimicCacheBitesAfter: 1,
-                    mimicCacheGuardBitesBefore: 0,
-                    mimicCacheGuardBitesAfter: 1
-                })
-            });
-        });
-        await flushRaf();
-
-        expect(result.current.message).toBe('Mimic Cache bit. Guard absorbed the hit.');
-    });
-
-    it('announces Guard Cache ward blocks', async () => {
-        const { result, rerender } = renderHook(
-            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
-                useHudPoliteLiveAnnouncement({
-                    ...base,
-                    scoreParasiteActive: false,
-                    boardTurnEvent: p.turnEvent
-                }),
-            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
-        );
-
-        await act(async () => {
-            rerender({
-                turnEvent: counterTurn('ward-block', {
-                    safeHazardWardsUsedBefore: 0,
-                    safeHazardWardsUsedAfter: 1
-                })
-            });
-        });
-        await flushRaf();
-
-        expect(result.current.message).toBe('Guard Cache ward blocked a hazard.');
-    });
-
-    it('stays silent when a turn fires no hazard tile', async () => {
+    it('stays silent when a turn changes none of the announced counters', async () => {
         // The counters this used to watch were per-floor totals, so a floor that started
-        // with a hazard already recorded announced it again on the first render. Keyed on
-        // the event's own before/after pair, a turn with no hazard says nothing.
+        // with one already recorded announced it again on the first render. Keyed on the
+        // event's own before/after pair, a quiet turn says nothing.
         const { result, rerender } = renderHook(
             (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
@@ -1128,7 +905,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
         await act(async () => {
             rerender({
-                turnEvent: counterTurn('quiet-turn', { hazardTilesBefore: 4, hazardTilesAfter: 4 })
+                turnEvent: counterTurn('quiet-turn', {})
             });
         });
         await flushRaf();

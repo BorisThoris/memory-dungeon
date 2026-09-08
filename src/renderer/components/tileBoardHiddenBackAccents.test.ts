@@ -33,40 +33,23 @@ const accents = (overrides: Partial<TileBoardHiddenBackAccentsInput> = {}) =>
 
 describe('tileBoardHiddenBackAccents', () => {
     it('does not surface hidden-back accents for face-up or non-hidden tiles', () => {
-        expect(accents({ faceUp: true, tile: tile({ tileHazardKind: 'fuse_cache' }) })).toEqual({
+        expect(accents({ faceUp: true, tile: tile({ tileTraitKind: 'volatile' }) })).toEqual({
             destroyBlockedDecoyBack: false,
-            hazardBackAccent: null,
             nonPickableBack: false,
-            objectiveBackAccent: false,
             powerBackAccent: null,
-            routeBackAccent: false,
             traitBackAccent: null
         });
-        expect(accents({ tile: tile({ state: 'flipped', tileHazardKind: 'fuse_cache' }) })).toEqual({
+        expect(accents({ tile: tile({ state: 'flipped', tileTraitKind: 'volatile' }) })).toEqual({
             destroyBlockedDecoyBack: false,
-            hazardBackAccent: null,
             nonPickableBack: false,
-            objectiveBackAccent: false,
             powerBackAccent: null,
-            routeBackAccent: false,
             traitBackAccent: null
         });
     });
 
-    it('surfaces hazard, route, objective, and non-pickable accents for hidden backs', () => {
-        const result = accents({
-            flipLocked: true,
-            tile: tile({
-                dungeonCardKind: 'trap',
-                routeCardKind: 'greed_cache',
-                tileHazardKind: 'cascade_cache'
-            })
-        });
-
-        expect(result.hazardBackAccent).toBe('cascade_cache');
-        expect(result.routeBackAccent).toBe(true);
-        expect(result.objectiveBackAccent).toBe(true);
-        expect(result.nonPickableBack).toBe(true);
+    it('surfaces the non-pickable accent for hidden backs', () => {
+        expect(accents({ flipLocked: true }).nonPickableBack).toBe(true);
+        expect(accents().nonPickableBack).toBe(false);
     });
 
     it('surfaces trait accents for hidden backs', () => {

@@ -24,9 +24,6 @@ const CLASSIC: RunModeIdentity = { detail: null, label: 'Classic Dungeon' };
  * The mode name and rule for a live run. Pure: same run, same answer, no store and no clock.
  */
 export const describeRunModeIdentity = (run: RunState): RunModeIdentity => {
-    if (run.dungeonShowcaseRun) {
-        return { detail: null, label: 'Dungeon Showcase' };
-    }
     const contract = run.activeContract;
     if (contract?.maxPinsTotalRun != null) {
         return { detail: `Pins ${contract.maxPinsTotalRun} this run`, label: 'Pin vow' };

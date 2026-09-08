@@ -4,7 +4,7 @@ import { createNewRun, finishMemorizePhase } from './game-core';
 import {
     formatLevelResultObjectiveLine,
     formatLevelResultTagLabel,
-    getDungeonLevelResultTags,
+    getFloorClearLevelResultTags,
     getLevelResultTagDefinitions,
     getSecondaryObjectiveProgress,
     getSecondaryObjectiveStatusRows,
@@ -76,88 +76,32 @@ describe('REG-048 secondary objective clarity', () => {
         ).toBe('Flip par: Complete');
     });
 
-    it('generates dungeon result tags from rule state without reward-bearing duplicates', () => {
+
+    it('tags a perfect clear taken without peeks or tools as a perfect scout', () => {
         const run = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
-        const board = {
-            ...run.board!,
-            floorTag: 'boss' as const,
-            selectedGatewayRouteType: 'greed' as const
-        };
-        const tags = getDungeonLevelResultTags(
-            {
-                ...run,
-                dungeonEnemiesDefeatedThisFloor: 1,
-                dungeonTrapsResolvedThisFloor: 2,
-                dungeonTreasuresOpened: 1,
-                dungeonTreasuresOpenedThisFloor: 1,
-                dungeonGatewaysUsed: 1,
-                dungeonGatewaysUsedThisFloor: 1,
-                peekRevealedTileIds: []
-            },
-            board,
-            true
-        );
 
-        expect(tags).toEqual([
-            'boss_defeated',
-            'traps_disarmed',
-            'treasure_claimed',
-            'route_claimed',
-            'perfect_scout'
-        ]);
-        expect(getLevelResultTagDefinitions(tags).every((tag) => !tag.rewardBearing)).toBe(true);
-        expect(LEVEL_RESULT_TAG_DEFINITIONS.boss_floor.rewardBearing).toBe(true);
-
+        expect(getFloorClearLevelResultTags({ ...run, peekRevealedTileIds: [] }, true)).toEqual(['perfect_scout']);
+        expect(getFloorClearLevelResultTags({ ...run, peekRevealedTileIds: [] }, false)).toEqual([]);
+        expect(getFloorClearLevelResultTags({ ...run, peekRevealedTileIds: [], shuffleUsedThisFloor: true }, true)).toEqual([]);
         expect(
-            getDungeonLevelResultTags(
-                {
-                    ...run,
-                    dungeonTreasuresOpened: 1,
-                    dungeonTreasuresOpenedThisFloor: 0,
-                    dungeonGatewaysUsed: 1,
-                    dungeonGatewaysUsedThisFloor: 0
-                },
-                run.board!,
-                false
-            )
-        ).toEqual([]);
-
-        expect(
-            getDungeonLevelResultTags(
-                {
-                    ...run,
-                    dungeonEnemiesDefeatedThisFloor: Number.POSITIVE_INFINITY,
-                    dungeonTrapsResolvedThisFloor: Number.NaN,
-                    dungeonTreasuresOpenedThisFloor: Number.NEGATIVE_INFINITY,
-                    dungeonGatewaysUsedThisFloor: Number.NaN
-                },
-                { ...run.board!, floorTag: 'boss' },
-                false
-            )
-        ).toEqual([]);
-
-        expect(
-            getDungeonLevelResultTags(
-                {
-                    ...run,
-                    peekRevealedTileIds: Number.NaN as unknown as RunState['peekRevealedTileIds']
-                },
-                run.board!,
+            getFloorClearLevelResultTags(
+                { ...run, peekRevealedTileIds: Number.NaN as unknown as RunState['peekRevealedTileIds'] },
                 true
             )
         ).toEqual(['perfect_scout']);
+        expect(getLevelResultTagDefinitions(['perfect_scout']).every((tag) => !tag.rewardBearing)).toBe(true);
+        expect(LEVEL_RESULT_TAG_DEFINITIONS.boss_floor.rewardBearing).toBe(true);
     });
 
     it('prioritizes the top three visible result tags for floor-clear copy', () => {
         const visible = getVisibleLevelResultTags([
             'flip_par',
             'boss_floor',
-            'traps_disarmed',
-            'treasure_claimed',
+            'trait_route_objective',
             'perfect_scout'
         ]);
 
-        expect(visible.map((tag) => tag.id)).toEqual(['traps_disarmed', 'treasure_claimed', 'boss_floor']);
+        expect(visible.map((tag) => tag.id)).toEqual(['boss_floor', 'trait_route_objective', 'perfect_scout']);
     });
 
     it.each(['__proto__', 'constructor', 'toString'])('rejects prototype result tag %s', (tag) => {

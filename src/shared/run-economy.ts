@@ -49,7 +49,7 @@ export const RUN_ECONOMY_DEFINITIONS = [
         label: 'Guard tokens',
         bucket: 'temporary_run',
         purpose: 'Temporary run protection token.',
-        source: 'four-step streak rewards and relics',
+        source: 'four-step streak rewards and trait matches',
         sink: 'absorbs mismatch life loss before health is spent',
         persistence: 'temporary_run',
         maxValue: 2
@@ -68,7 +68,7 @@ export const RUN_ECONOMY_DEFINITIONS = [
         label: 'Assist charges',
         bucket: 'temporary_run',
         purpose: 'Temporary run action budget.',
-        source: 'run start, relics, and pickup rewards',
+        source: 'run start and pickup rewards',
         sink: 'shuffle, row shuffle, tile swap, destroy, peek, and stray-remove actions',
         persistence: 'temporary_run'
     }

@@ -1,13 +1,11 @@
 import {
     MAX_PENDING_MEMORIZE_BONUS_MS,
-    RECALL_CLUE_MATCH_SCORE,
     RECALL_FOCUS_MATCH_SCORE,
-    type RouteChoice,
     type RunState,
     type MutatorId,
     type Tile
 } from './contracts';
-import { normalizeRecallFocus, tileHasRecallClue } from './recall-rules';
+import { normalizeRecallFocus } from './recall-rules';
 import { runArray, runStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey } from './tile-identity';
@@ -18,18 +16,6 @@ export interface MemoryFeedbackLine {
     id: string;
     label: string;
     detail: string;
-    tone: MemoryFeedbackTone;
-}
-
-export interface MemoryRouteChoiceFeedback {
-    id: string;
-    label: string;
-    routeType: RouteChoice['routeType'];
-    memoryPrompt: string;
-    readiness: 'ready' | 'risky' | 'unsafe';
-    readinessLabel: string;
-    atmosphericCue: string;
-    consequence: string;
     tone: MemoryFeedbackTone;
 }
 
@@ -49,19 +35,16 @@ export interface MemoryRecallFeedback {
     pressureDetail: string;
     nextMemoryMove: MemoryFeedbackLine;
     nextCleanMatchBonus: number;
-    rememberedClueTileCount: number;
     forgottenTileCount: number;
     forgottenSymbols: string[];
     symbolMap: MemorySymbolMap;
     burden: MemoryBurdenFeedback;
     pressure: 'clear' | 'strained' | 'overloaded';
     path: MemoryFeedbackLine[];
-    clues: MemoryFeedbackLine[];
     symbols: MemoryFeedbackLine[];
     recallPlan: MemoryFeedbackLine[];
     penalties: MemoryFeedbackLine[];
     upgrades: MemoryFeedbackLine[];
-    choices: MemoryRouteChoiceFeedback[];
 }
 
 export interface MemorySymbolMap {
@@ -84,7 +67,7 @@ const tileMemoryLabel = (tile: Tile): string => tile.label || tile.symbol || til
 const tileIsCleared = (tile: Tile): boolean => tile.state === 'matched' || tile.state === 'removed';
 
 const tileIsKnownToMemory = (tile: Tile, pinnedTileIds: ReadonlySet<string>): boolean =>
-    tile.state === 'flipped' || tile.state === 'matched' || tileHasRecallClue(tile) || pinnedTileIds.has(tile.id);
+    tile.state === 'flipped' || tile.state === 'matched' || pinnedTileIds.has(tile.id);
 
 const buildSymbolMap = (tiles: readonly Tile[], pinnedTileIds: readonly string[], forgottenTileIds: readonly string[]): MemorySymbolMap => {
     const pinnedSet = new Set(pinnedTileIds);
@@ -239,8 +222,7 @@ const pressureDetailFor = (
 
 const atmosphericSummaryFor = (
     pressure: MemoryRecallFeedback['pressure'],
-    focusLabel: MemoryRecallFeedback['focusLabel'],
-    rememberedClueTileCount: number
+    focusLabel: MemoryRecallFeedback['focusLabel']
 ): string => {
     if (pressure === 'overloaded') {
         return 'The room log is crowded; old symbols scrape over the newest route marks.';
@@ -249,31 +231,22 @@ const atmosphericSummaryFor = (
         return 'The archive holds, but the next clean match needs a deliberate read.';
     }
     if (focusLabel === 'locked') {
-        return rememberedClueTileCount > 0
-            ? 'The route is legible and remembered clues are ready to pay out.'
-            : 'The route is legible; clean recall is carrying the room.';
+        return 'The route is legible; clean recall is carrying the room.';
     }
     return 'The room is quiet enough to rebuild focus before the next branch.';
 };
 
-const roomIdentityFor = (run: RunState): string => {
-    if (run.board?.routeWorldProfile) {
-        return `${run.board.routeWorldProfile.routeType} route chamber`;
-    }
-    return run.board ? `Floor ${run.board.level}` : 'Unindexed room';
-};
+const roomIdentityFor = (run: RunState): string => (run.board ? `Floor ${run.board.level}` : 'Unindexed room');
 
 const atmosphericBeatFor = ({
     roomIdentity,
     pressure,
     focusLabel,
-    rememberedClueTileCount,
     forgottenTileCount
 }: {
     roomIdentity: string;
     pressure: MemoryRecallFeedback['pressure'];
     focusLabel: MemoryRecallFeedback['focusLabel'];
-    rememberedClueTileCount: number;
     forgottenTileCount: number;
 }): string => {
     if (pressure === 'overloaded') {
@@ -283,9 +256,7 @@ const atmosphericBeatFor = ({
         return `${roomIdentity}: the room still answers, but the next match needs one clean remembered symbol.`;
     }
     if (focusLabel === 'locked') {
-        return rememberedClueTileCount > 0
-            ? `${roomIdentity}: focus is locked and the learned clue is ready to pay.`
-            : `${roomIdentity}: focus is locked; the route marks are holding steady.`;
+        return `${roomIdentity}: focus is locked; the route marks are holding steady.`;
     }
     return `${roomIdentity}: quiet enough to rebuild focus before the archive changes shape.`;
 };
@@ -312,18 +283,15 @@ const burdenToneFor = (label: MemoryBurdenFeedback['label']): MemoryFeedbackTone
 const burdenDetailFor = ({
     label,
     forgottenTileCount,
-    partialPairCount,
-    routeChoiceCount
+    partialPairCount
 }: {
     label: MemoryBurdenFeedback['label'];
     forgottenTileCount: number;
     partialPairCount: number;
-    routeChoiceCount: number;
 }): string => {
     const burdens = [
         forgottenTileCount > 0 ? `${forgottenTileCount} forgotten mark${forgottenTileCount === 1 ? '' : 's'}` : null,
-        partialPairCount > 0 ? `${partialPairCount} partial symbol read${partialPairCount === 1 ? '' : 's'}` : null,
-        routeChoiceCount > 0 ? `${routeChoiceCount} route decision${routeChoiceCount === 1 ? '' : 's'}` : null
+        partialPairCount > 0 ? `${partialPairCount} partial symbol read${partialPairCount === 1 ? '' : 's'}` : null
     ].filter(Boolean);
 
     if (burdens.length === 0) {
@@ -346,49 +314,28 @@ const burdenDetailFor = ({
 const buildMemoryBurden = ({
     forgottenTileCount,
     partialPairCount,
-    routeChoices,
     recallMistakes
 }: {
     forgottenTileCount: number;
     partialPairCount: number;
-    routeChoices: readonly RouteChoice[];
     recallMistakes: number;
 }): MemoryBurdenFeedback => {
-    const routeChoiceCount = routeChoices.length;
-    const greedyOrMysteryChoiceCount = routeChoices.filter((choice) => choice.routeType !== 'safe').length;
-    const score =
-        forgottenTileCount * 2 +
-        partialPairCount +
-        greedyOrMysteryChoiceCount +
-        Math.min(2, recallMistakes);
+    const score = forgottenTileCount * 2 + partialPairCount + Math.min(2, recallMistakes);
     const label = burdenLabelFor(score);
 
     return {
         score,
         label,
-        detail: burdenDetailFor({
-            label,
-            forgottenTileCount,
-            partialPairCount,
-            routeChoiceCount
-        }),
+        detail: burdenDetailFor({ label, forgottenTileCount, partialPairCount }),
         tone: burdenToneFor(label)
     };
 };
 
 const nextMemoryMoveFor = ({
-    focusLabel,
     forgottenTileCount,
-    rememberedClueTileCount,
-    hasGreedChoice,
-    hasMysteryChoice,
     nextCleanMatchBonus
 }: {
-    focusLabel: MemoryRecallFeedback['focusLabel'];
     forgottenTileCount: number;
-    rememberedClueTileCount: number;
-    hasGreedChoice: boolean;
-    hasMysteryChoice: boolean;
     nextCleanMatchBonus: number;
 }): MemoryFeedbackLine => {
     if (forgottenTileCount > 0) {
@@ -397,22 +344,6 @@ const nextMemoryMoveFor = ({
             label: 'Recover forgotten marks',
             detail: `Confirm a known pair before chasing route value; ${forgottenTileCount} tile memory marker${forgottenTileCount === 1 ? ' is' : 's are'} unstable.`,
             tone: 'danger'
-        };
-    }
-    if (hasGreedChoice && focusLabel !== 'locked') {
-        return {
-            id: 'next-memory-move-greed',
-            label: 'Delay greed route',
-            detail: 'Build locked focus before taking a route that taxes enemy, trap, and symbol memory.',
-            tone: 'watch'
-        };
-    }
-    if (hasMysteryChoice && rememberedClueTileCount === 0) {
-        return {
-            id: 'next-memory-move-mystery',
-            label: 'Mark one clue source',
-            detail: 'Mystery routes pay cleaner when at least one scout, reveal, or route clue is remembered.',
-            tone: 'watch'
         };
     }
     if (nextCleanMatchBonus > 0) {
@@ -492,7 +423,6 @@ const buildMemoryTaxLines = (run: RunState): MemoryFeedbackLine[] =>
 export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => {
     const board = run.board;
     const tiles = board?.tiles ?? [];
-    const rememberedClueTiles = tiles.filter(tileHasRecallClue);
     const forgottenTileIds = runStringArray(run.forgottenTileIdsThisFloor);
     const pinnedTileIds = runStringArray(run.pinnedTileIds);
     const forgottenSet = new Set(forgottenTileIds);
@@ -503,7 +433,6 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
     ).slice(0, 6);
     const focus = normalizeRecallFocus(run.recallFocus);
     const nextCleanMatchBonus = focus * RECALL_FOCUS_MATCH_SCORE;
-    const clueBonus = rememberedClueTiles.length > 0 ? RECALL_CLUE_MATCH_SCORE : 0;
     const symbolMap = buildSymbolMap(tiles, pinnedTileIds, forgottenTileIds);
     const recallPlan = buildRecallPlan(tiles, pinnedTileIds, forgottenTileIds);
     const overloadScore =
@@ -514,54 +443,25 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
         overloadScore >= 4 ? 'overloaded' : overloadScore >= 2 ? 'strained' : 'clear';
     const focusLabel = focusLabelFor(focus);
     const roomIdentity = roomIdentityFor(run);
-    const totalNextCleanMatchBonus = nextCleanMatchBonus + clueBonus;
     const burden = buildMemoryBurden({
         forgottenTileCount: forgottenTileIds.length,
         partialPairCount: symbolMap.partialPairCount,
-        routeChoices: [],
         recallMistakes: run.recallMistakesThisFloor
     });
 
-    const path: MemoryFeedbackLine[] = [];
-    if (board?.routeWorldProfile) {
-        path.push({
-            id: 'route-world-profile',
-            label: `${board.routeWorldProfile.routeType} route memory`,
-            detail: board.routeWorldProfile.summary,
-            tone: board.routeWorldProfile.routeType === 'greed' ? 'danger' : 'watch'
-        });
-    }
-    path.push({
-        id: 'room-atmosphere',
-        label:
-            pressure === 'overloaded'
-                ? 'Room log overloaded'
-                : pressure === 'strained'
-                  ? 'Room log strained'
-                  : 'Room log clear',
-        detail: atmosphericSummaryFor(pressure, focusLabel, rememberedClueTiles.length),
-        tone: pressureToneFor(pressure)
-    });
-
-    const clues: MemoryFeedbackLine[] = [];
-    if (rememberedClueTiles.length > 0) {
-        clues.push({
-            id: 'remembered-clues',
-            label: `${rememberedClueTiles.length} learned clue${rememberedClueTiles.length === 1 ? '' : 's'}`,
-            detail: `Matching one pays +${RECALL_CLUE_MATCH_SCORE} recall score on top of focus.`,
-            tone: 'reward'
-        });
-    }
-    const lanternWardScouts = runNonNegativeInteger(run.lanternWardScoutsThisFloor);
-    const omenSealScouts = runNonNegativeInteger(run.omenSealScoutsThisFloor);
-    if (lanternWardScouts > 0 || omenSealScouts > 0) {
-        clues.push({
-            id: 'scout-sources',
-            label: 'Scout trail active',
-            detail: `${lanternWardScouts} Lantern Ward and ${omenSealScouts} Omen Seal clue reads this floor.`,
-            tone: 'stable'
-        });
-    }
+    const path: MemoryFeedbackLine[] = [
+        {
+            id: 'room-atmosphere',
+            label:
+                pressure === 'overloaded'
+                    ? 'Room log overloaded'
+                    : pressure === 'strained'
+                      ? 'Room log strained'
+                      : 'Room log clear',
+            detail: atmosphericSummaryFor(pressure, focusLabel),
+            tone: pressureToneFor(pressure)
+        }
+    ];
 
     const symbols: MemoryFeedbackLine[] = [];
     const hiddenPairNoun = symbolMap.hiddenPairCount === 1 ? 'hidden pair remains' : 'hidden pairs remain';
@@ -611,12 +511,9 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
     const upgrades: MemoryFeedbackLine[] = [
         {
             id: 'next-clean-match',
-            label: `Next clean match +${totalNextCleanMatchBonus}`,
-            detail:
-                clueBonus > 0
-                    ? `Focus is worth +${nextCleanMatchBonus}; remembered clues can add +${clueBonus}.`
-                    : `Current focus is worth +${nextCleanMatchBonus} recall score.`,
-            tone: totalNextCleanMatchBonus > 0 ? 'reward' : 'watch'
+            label: `Next clean match +${nextCleanMatchBonus}`,
+            detail: `Current focus is worth +${nextCleanMatchBonus} recall score.`,
+            tone: nextCleanMatchBonus > 0 ? 'reward' : 'watch'
         }
     ];
 
@@ -624,42 +521,28 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
         focus,
         focusLabel,
         roomIdentity,
-        atmosphericSummary: atmosphericSummaryFor(pressure, focusLabel, rememberedClueTiles.length),
+        atmosphericSummary: atmosphericSummaryFor(pressure, focusLabel),
         atmosphericBeat: atmosphericBeatFor({
             roomIdentity,
             pressure,
             focusLabel,
-            rememberedClueTileCount: rememberedClueTiles.length,
             forgottenTileCount: forgottenTileIds.length
         }),
         pressureDetail: pressureDetailFor(pressure, forgottenTileIds.length),
         nextMemoryMove: nextMemoryMoveFor({
-            focusLabel,
             forgottenTileCount: forgottenTileIds.length,
-            rememberedClueTileCount: rememberedClueTiles.length,
-            // No route is offered any more, so the coach never has a greedy or mysterious door to
-            // point at. Gen 173.
-            hasGreedChoice: false,
-            hasMysteryChoice: false,
-            nextCleanMatchBonus: totalNextCleanMatchBonus
+            nextCleanMatchBonus
         }),
-        nextCleanMatchBonus: totalNextCleanMatchBonus,
-        rememberedClueTileCount: rememberedClueTiles.length,
+        nextCleanMatchBonus,
         forgottenTileCount: forgottenTileIds.length,
         forgottenSymbols,
         symbolMap,
         burden,
         pressure,
         path,
-        clues,
         symbols,
         recallPlan,
         penalties,
-        upgrades,
-        /*
-         * The coach used to read the three route choices back to the player - a prompt, a readiness
-         * line, an atmospheric cue, a consequence and a tone for each. There are no choices to read.
-         */
-        choices: []
+        upgrades
     };
 };

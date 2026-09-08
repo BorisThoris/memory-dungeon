@@ -1,10 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import type { BoardState, Tile } from '../../shared/contracts';
-import { EXIT_PAIR_KEY } from '../../shared/tile-identity';
+import type { Tile } from '../../shared/contracts';
+import { colorDistance, findConfusablePairs, hexToRgb } from '../../shared/color-vision';
 import { tileTraitColor } from '../../shared/tile-trait-rules';
-import { ENEMY_HAZARD_COLORS, HAZARD_TILE_COLORS, TRAP_STATE_COLORS } from './tileBoardThreatColors';
 import {
-    getDungeonUtilityReadabilityKind,
     getTileBoardReadabilityState,
     getTraitLaneReadabilityColor,
     TRAIT_LANE_COLORS,
@@ -30,13 +28,9 @@ const tile = (overrides: Partial<Tile> = {}): Tile => ({
 const state = (overrides: Partial<Parameters<typeof getTileBoardReadabilityState>[0]> = {}) =>
     getTileBoardReadabilityState({
         destroyBlockedDecoyBack: false,
-        enemyOccupiedBack: false,
         faceUp: false,
-        hazardBackAccent: null,
         nonPickableBack: false,
-        objectiveBackAccent: false,
         powerBackAccent: null,
-        routeBackAccent: false,
         spotlightBountyOnBack: false,
         spotlightWardOnBack: false,
         stickyFingerSlotMark: false,
@@ -48,86 +42,16 @@ const state = (overrides: Partial<Parameters<typeof getTileBoardReadabilityState
         ...overrides
     });
 
-const terminalLockedExitBoard = (): BoardState => ({
-    level: 1,
-    pairCount: 1,
-    columns: 2,
-    rows: 2,
-    matchedPairs: 1,
-    flippedTileIds: [],
-    floorArchetypeId: null,
-    featuredObjectiveId: null,
-    dungeonExitTileId: 'exit',
-    dungeonExitLockKind: 'iron',
-    dungeonExitActivated: false,
-    tiles: [
-        tile({ id: 'a1', state: 'matched' }),
-        tile({ id: 'a2', state: 'matched' }),
-        tile({
-            id: 'exit',
-            pairKey: EXIT_PAIR_KEY,
-            dungeonCardKind: 'exit',
-            dungeonExitLockKind: 'iron'
-        })
-    ]
-});
-
 describe('tileBoardReadability', () => {
-    it('classifies dungeon utility readability markers with stable precedence', () => {
-        expect(getDungeonUtilityReadabilityKind(tile({ dungeonCardKind: 'exit', dungeonExitLockKind: 'iron' }))).toBe('exit');
-        expect(getDungeonUtilityReadabilityKind(tile({ dungeonCardKind: 'lever' }))).toBe('lever');
-        expect(getDungeonUtilityReadabilityKind(tile({ dungeonCardKind: 'shop' }))).toBe('shop');
-        expect(getDungeonUtilityReadabilityKind(tile({ dungeonCardKind: 'lock' }))).toBe('lock');
-        expect(getDungeonUtilityReadabilityKind(tile({ dungeonExitLockKind: 'iron' }))).toBe('lock');
-        expect(getDungeonUtilityReadabilityKind(tile({ dungeonExitLockKind: 'none' }))).toBeNull();
-    });
-
-    it('uses effective exit lock state for primary exit lock markers when board context is available', () => {
-        const board = terminalLockedExitBoard();
-        const exitTile = board.tiles.find((candidate) => candidate.id === 'exit')!;
-
-        expect(getDungeonUtilityReadabilityKind(exitTile, board)).toBe('exit');
-        expect(
-            getDungeonUtilityReadabilityKind(
-                tile({ id: 'stray-lock-copy', dungeonExitLockKind: 'iron' }),
-                board
-            )
-        ).toBe('lock');
-        expect(state({ tile: exitTile, board })).toMatchObject({
-            isExitCard: true,
-            isLockCard: false
-        });
-    });
-
     it('shows hidden readability markers for hidden special backs only', () => {
         expect(state().showHiddenReadabilityMarkers).toBe(false);
         expect(state({ powerBackAccent: 'peek' }).showHiddenReadabilityMarkers).toBe(true);
-        expect(state({ tile: tile({ dungeonCardKind: 'trap' }) }).showHiddenReadabilityMarkers).toBe(true);
+        expect(state({ tile: tile({ findableKind: 'shard_spark' }) }).showHiddenReadabilityMarkers).toBe(true);
         expect(state({ traitRouteTargetBack: true }).showHiddenReadabilityMarkers).toBe(true);
         expect(state({ faceUp: true, powerBackAccent: 'peek' }).showHiddenReadabilityMarkers).toBe(false);
     });
 
-    it('prioritizes hidden accent colors by enemy, hazard, boss, dungeon utility, trap, objective, route, and powers', () => {
-        // Threat accents read from the gated palettes rather than repeating hex here: this test is
-        // about which category wins, and `tileBoardThreatColors.test.ts` owns what each looks like.
-        expect(state({ enemyOccupiedBack: true, hazardBackAccent: 'fuse_cache' }).hiddenReadabilityAccentColor).toBe(
-            ENEMY_HAZARD_COLORS.sentinel
-        );
-        expect(state({ hazardBackAccent: 'fuse_cache', tile: tile({ dungeonBossId: 'trap_warden' }) }).hiddenReadabilityAccentColor).toBe(
-            HAZARD_TILE_COLORS.trap
-        );
-        expect(state({ tile: tile({ dungeonBossId: 'trap_warden' }) }).hiddenReadabilityAccentColor).toBe(
-            ENEMY_HAZARD_COLORS.boss
-        );
-        expect(state({ tile: tile({ dungeonCardKind: 'exit' }) }).hiddenReadabilityAccentColor).toBe('#7bd88f');
-        expect(state({ tile: tile({ dungeonCardKind: 'lock' }) }).hiddenReadabilityAccentColor).toBe('#f2d39d');
-        expect(state({ tile: tile({ dungeonCardKind: 'lever' }) }).hiddenReadabilityAccentColor).toBe('#d4a03d');
-        expect(state({ tile: tile({ dungeonCardKind: 'shop' }) }).hiddenReadabilityAccentColor).toBe('#5ee0c8');
-        expect(state({ tile: tile({ dungeonCardKind: 'trap', dungeonCardState: 'resolved' }) }).hiddenReadabilityAccentColor).toBe(
-            TRAP_STATE_COLORS.resolved
-        );
-        expect(state({ objectiveBackAccent: true }).hiddenReadabilityAccentColor).toBe('#f2d39d');
-        expect(state({ routeBackAccent: true }).hiddenReadabilityAccentColor).toBe('#59b4d9');
+    it('prioritizes hidden accent colors by trait lane, trait route, trait kind, and powers', () => {
         expect(state({ traitRewardHotBack: true }).hiddenReadabilityAccentColor).toBe('#ffe48a');
         expect(state({ traitComboSurgeBack: true }).hiddenReadabilityAccentColor).toBe('#ffd166');
         expect(state({ traitComboBack: true }).hiddenReadabilityAccentColor).toBe('#f7f1c2');
@@ -141,71 +65,34 @@ describe('tileBoardReadability', () => {
     });
 
     it('marks front readability for face-up special cards that are not matched', () => {
-        expect(state({ faceUp: true, tile: tile({ state: 'flipped', routeCardKind: 'safe_ward' }) }).showFaceReadabilityMarker).toBe(
+        expect(state({ faceUp: true, tile: tile({ state: 'flipped', findableKind: 'shard_spark' }) }).showFaceReadabilityMarker).toBe(
             true
         );
-        expect(state({ faceUp: true, tile: tile({ state: 'flipped', dungeonCardKind: 'exit' }) }).showFaceReadabilityMarker).toBe(
-            true
-        );
-        expect(state({ faceUp: true, tile: tile({ state: 'flipped', dungeonCardKind: 'lever' }) }).showFaceReadabilityMarker).toBe(
-            true
-        );
-        expect(state({ faceUp: true, tile: tile({ state: 'flipped', dungeonCardKind: 'shop' }) }).showFaceReadabilityMarker).toBe(
-            true
-        );
-        expect(state({ faceUp: true, tile: tile({ state: 'matched', routeCardKind: 'safe_ward' }) }).showFaceReadabilityMarker).toBe(
+        expect(state({ faceUp: true, tile: tile({ state: 'matched', findableKind: 'shard_spark' }) }).showFaceReadabilityMarker).toBe(
             false
         );
-        expect(state({ faceUp: false, tile: tile({ tileHazardKind: 'mirror_decoy' }) }).showFaceReadabilityMarker).toBe(
-            false
-        );
+        expect(state({ faceUp: false, tile: tile({ findableKind: 'shard_spark' }) }).showFaceReadabilityMarker).toBe(false);
+        expect(state({ faceUp: true, tile: tile({ state: 'flipped' }) }).showFaceReadabilityMarker).toBe(false);
         expect(state({ faceUp: true, tile: tile({ state: 'flipped', tileTraitKind: 'echo' }) }).showFaceReadabilityMarker).toBe(
             true
         );
     });
 
-    it('reports trap, boss, relic, and selected-card flags used by mesh rendering', () => {
+    it('reports findable and selected-card flags used by mesh rendering', () => {
         const result = state({
             faceUp: true,
-            tile: tile({
-                dungeonBossId: 'rush_sentinel',
-                dungeonCardKind: 'trap',
-                dungeonCardState: 'revealed',
-                findableKind: 'score_glint',
-                state: 'flipped'
-            })
+            tile: tile({ findableKind: 'score_glint', state: 'flipped' })
         });
 
-        expect(result.isArmedTrap).toBe(false);
-        expect(result.isBossCard).toBe(true);
-        expect(result.isExitCard).toBe(false);
-        expect(result.isLeverCard).toBe(false);
-        expect(result.isLockCard).toBe(false);
-        expect(result.isRelicCard).toBe(true);
-        expect(result.isRevealedTrap).toBe(true);
-        expect(result.isShopCard).toBe(false);
+        expect(result.isFindableCard).toBe(true);
         expect(result.isSelectedCard).toBe(true);
-        expect(result.trapReadabilityColor).toBe(TRAP_STATE_COLORS.revealed);
-        expect(result.faceReadabilityAccentColor).toBe(ENEMY_HAZARD_COLORS.boss);
-    });
-
-    it('reports dungeon utility flags used by spatial marker meshes', () => {
-        expect(state({ tile: tile({ dungeonCardKind: 'exit' }) })).toMatchObject({
-            isExitCard: true,
-            isLockCard: false,
-            showHiddenReadabilityMarkers: true
-        });
-        expect(state({ tile: tile({ dungeonCardKind: 'lever' }) })).toMatchObject({
-            isLeverCard: true,
-            showHiddenReadabilityMarkers: true
-        });
-        expect(state({ tile: tile({ dungeonCardKind: 'shop' }) })).toMatchObject({
-            isShopCard: true,
-            showHiddenReadabilityMarkers: true
-        });
-        expect(state({ tile: tile({ dungeonExitLockKind: 'iron' }) })).toMatchObject({
-            isLockCard: true,
-            showHiddenReadabilityMarkers: true
+        expect(result.faceReadabilityAccentColor).toBe('#5ee0c8');
+        expect(state({ faceUp: true, tile: tile({ state: 'flipped', tileTraitKind: 'echo' }) }).faceReadabilityAccentColor).toBe(
+            tileTraitColor('echo')
+        );
+        expect(state({ faceUp: true, tile: tile({ state: 'flipped' }) })).toMatchObject({
+            isFindableCard: false,
+            isSelectedCard: true
         });
     });
 
@@ -258,11 +145,6 @@ describe('tileBoardReadability', () => {
             traitRouteReadabilityIntensity: 'setup',
             traitRouteReadabilityTier: 'route-target'
         });
-        expect(state({ perkArmedBack: true })).toMatchObject({
-            isPerkArmedBack: true,
-            traitRouteReadabilityIntensity: 'setup',
-            traitRouteReadabilityTier: 'perk-armed'
-        });
         expect(state({ selectedTraitFollowupBack: true })).toMatchObject({
             isSelectedTraitFollowupBack: true,
             traitRouteReadabilityIntensity: 'ready',
@@ -286,7 +168,6 @@ describe('tileBoardReadability', () => {
         expect(getTraitRouteReadabilityBeatTier('selected-followup')).toBe('follow-up');
         expect(getTraitRouteReadabilityBeatTier('combo')).toBe('route');
         expect(getTraitRouteReadabilityBeatTier('route-target')).toBe('setup');
-        expect(getTraitRouteReadabilityBeatTier('perk-armed')).toBe('setup');
         expect(getTraitRouteReadabilityBeatTier('none')).toBeNull();
 
         expect(getTraitRouteReadabilityBeatCount('cashout')).toBe(5);
@@ -304,7 +185,6 @@ describe('tileBoardReadability', () => {
         expect(getTraitRouteReadabilityGlyph('selected-followup')).toBe('next-tap');
         expect(getTraitRouteReadabilityGlyph('combo')).toBe('linked-route');
         expect(getTraitRouteReadabilityGlyph('route-target')).toBe('prime-cross');
-        expect(getTraitRouteReadabilityGlyph('perk-armed')).toBe('prime-cross');
         expect(getTraitRouteReadabilityGlyph('none')).toBe('none');
     });
 
@@ -315,7 +195,6 @@ describe('tileBoardReadability', () => {
         expect(getTraitRouteReadabilityCadence('selected-followup')).toBe('follow-up');
         expect(getTraitRouteReadabilityCadence('combo')).toBe('route');
         expect(getTraitRouteReadabilityCadence('route-target')).toBe('prime');
-        expect(getTraitRouteReadabilityCadence('perk-armed')).toBe('prime');
         expect(getTraitRouteReadabilityCadence('none')).toBe('none');
 
         expect(getTraitRouteCadenceAction('cashout')).toBe('Cash now');
@@ -374,5 +253,32 @@ describe('tileBoardReadability', () => {
             traitRouteReadabilityIntensity: 'none',
             traitRouteReadabilityTier: 'none'
         });
+    });
+});
+
+/**
+ * Lane colour is a rule the player reads at a glance, so the palette is tuned against the dichromacy
+ * simulation in `shared/color-vision.ts`: as shipped, guard and the fallback sat dE 1.0 apart for a
+ * protanope.
+ */
+describe('the trait lane palette', () => {
+    const MIN_LANE_COLOR_DISTANCE = 25;
+    const BOARD_GROUND = '#090d18';
+    const MIN_GROUND_CONTRAST = 45;
+
+    it('keeps every lane colour apart for every kind of colour vision', () => {
+        const confusable = findConfusablePairs(TRAIT_LANE_COLORS, MIN_LANE_COLOR_DISTANCE);
+        for (const pair of confusable) {
+            console.log(`TRAIT LANE PALETTE ${pair.vision}: ${pair.left} vs ${pair.right} = dE ${pair.distance.toFixed(1)}`);
+        }
+        expect(confusable).toEqual([]);
+    });
+
+    it('keeps every lane colour readable against the board', () => {
+        const ground = hexToRgb(BOARD_GROUND);
+        const faint = Object.entries(TRAIT_LANE_COLORS)
+            .map(([lane, hex]) => ({ distance: colorDistance(hexToRgb(hex), ground), lane }))
+            .filter((row) => row.distance < MIN_GROUND_CONTRAST);
+        expect(faint).toEqual([]);
     });
 });

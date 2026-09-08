@@ -2,12 +2,9 @@ import {
     INITIAL_RECALL_FOCUS,
     MAX_PENDING_MEMORIZE_BONUS_MS,
     MEMORIZE_BONUS_PER_LIFE_LOST_MS,
-    RECALL_CLUE_MATCH_SCORE,
     RECALL_FOCUS_MATCH_SCORE,
     RECALL_FOCUS_MAX,
-    type RouteNodeType,
-    type RunState,
-    type Tile
+    type RunState
 } from './contracts';
 import { runNonNegativeInteger } from './run-number-guards';
 
@@ -39,18 +36,10 @@ export const settleForgottenTiles = (
     return forgottenTileIdsThisFloor.filter((id) => !settled.has(id));
 };
 
-export const tileHasRecallClue = (tile: Tile): boolean =>
-    tile.routeSpecialRevealed === true ||
-    tile.lanternScouted === true ||
-    tile.scoutRevealSource != null;
-
 export const normalizeRecallFocus = (focus: number): number => clamp(runNonNegativeInteger(focus), 0, RECALL_FOCUS_MAX);
 
-export const calculateRecallMatchBonus = (run: RunState, tiles: readonly Tile[]): number => {
-    const focusBonus = normalizeRecallFocus(run.recallFocus) * RECALL_FOCUS_MATCH_SCORE;
-    const clueBonus = tiles.some(tileHasRecallClue) ? RECALL_CLUE_MATCH_SCORE : 0;
-    return focusBonus + clueBonus;
-};
+export const calculateRecallMatchBonus = (run: RunState): number =>
+    normalizeRecallFocus(run.recallFocus) * RECALL_FOCUS_MATCH_SCORE;
 
 export const increaseRecallFocus = (run: RunState): number => normalizeRecallFocus(run.recallFocus + 1);
 
@@ -69,10 +58,7 @@ export const addPendingMemorizeBonusForLostLives = (
                   MEMORIZE_BONUS_PER_LIFE_LOST_MS * runNonNegativeInteger(lostLives)
           );
 
-export const getMemorizePhaseRecallFocusForRoute = (
-    run: RunState,
-    currentRouteType: RouteNodeType | null | undefined
-): number => {
+export const getMemorizePhaseRecallFocus = (run: RunState): number => {
     const previous = run.lastLevelResult;
     if (!previous) {
         return INITIAL_RECALL_FOCUS;
@@ -80,21 +66,11 @@ export const getMemorizePhaseRecallFocusForRoute = (
 
     const recallMatches = runNonNegativeInteger(previous.recallMatches);
     const recallMistakes = runNonNegativeInteger(previous.recallMistakes);
-    const recallBonusScore = runNonNegativeInteger(previous.recallBonusScore);
-    let focus =
+    return normalizeRecallFocus(
         recallMistakes > 0
             ? 0
             : recallMatches >= 2
               ? INITIAL_RECALL_FOCUS + 1
-              : INITIAL_RECALL_FOCUS;
-
-    if (currentRouteType === 'safe' && recallMistakes === 0) {
-        focus += 1;
-    } else if (currentRouteType === 'greed' && recallMistakes > 0) {
-        focus -= 1;
-    } else if (currentRouteType === 'mystery' && recallMistakes === 0 && recallBonusScore > 0) {
-        focus += 1;
-    }
-
-    return normalizeRecallFocus(focus);
+              : INITIAL_RECALL_FOCUS
+    );
 };

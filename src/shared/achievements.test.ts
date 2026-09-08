@@ -176,27 +176,6 @@ describe('achievements that point at the rest of the game', () => {
     const unlocksFor = (run: RunState, save = createDefaultSaveData()): AchievementId[] =>
         evaluateAchievementUnlocks(run, save);
 
-    it('felling a warden is claiming its trophy', () => {
-        const run = baseRun({
-            lastLevelResult: {
-                level: 7,
-                scoreGained: 100,
-                rating: 'A' as const,
-                livesRemaining: 3,
-                perfect: false,
-                mistakes: 2,
-                clearLifeReason: 'none' as const,
-                clearLifeGained: 0,
-                bossTrophyCacheOutcome: 'claimed' as const
-            }
-        });
-        expect(unlocksFor(run)).toContain('ACH_WARDEN_FELLED');
-
-        const forfeited = baseRun({
-            lastLevelResult: { ...run.lastLevelResult!, bossTrophyCacheOutcome: 'forfeited' as const }
-        });
-        expect(unlocksFor(forfeited)).not.toContain('ACH_WARDEN_FELLED');
-    });
 
     it('the Endless depth marks need Endless, not just the floor number', () => {
         const deepEndless = baseRun({
@@ -237,14 +216,13 @@ describe('the chain loop achievements', () => {
         expect(quiet).not.toContain('ACH_FIRST_FEVER');
         expect(quiet).not.toContain('ACH_CHUNK_SIX');
         expect(quiet).not.toContain('ACH_EXTREME_FEVER');
-        expect(quiet).not.toContain('ACH_WARDEN_BY_CHUNK');
         expect(quiet).not.toContain('ACH_NOTHING_HELD_IT');
         const loud = evaluateAchievementUnlocks(
             {
                 ...base,
                 feverBreaksThisRun: 1,
                 biggestChunkPairs: CHUNK_SIX_PAIRS,
-                chunkWardenKills: 1, chunkDropsThisRun: 1,
+                chunkDropsThisRun: 1,
                 lastLevelResult: {
                     level: 3,
                     scoreGained: 100,
@@ -259,6 +237,6 @@ describe('the chain loop achievements', () => {
             },
             save
         );
-        expect(loud).toEqual(expect.arrayContaining(['ACH_FIRST_FEVER', 'ACH_CHUNK_SIX', 'ACH_EXTREME_FEVER', 'ACH_WARDEN_BY_CHUNK', 'ACH_NOTHING_HELD_IT']));
+        expect(loud).toEqual(expect.arrayContaining(['ACH_FIRST_FEVER', 'ACH_CHUNK_SIX', 'ACH_EXTREME_FEVER', 'ACH_NOTHING_HELD_IT']));
     });
 });

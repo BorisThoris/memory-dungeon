@@ -1,6 +1,5 @@
 import {
     FINDABLE_MATCH_COMBO_SHARDS,
-    FINDABLE_MATCH_SAFE_HAZARD_WARDS,
     FINDABLE_MATCH_SCORE,
     type BoardState,
     type FindableKind,
@@ -13,7 +12,6 @@ import { isWildPairKey } from './tile-identity';
 export interface MatchClaimContext {
     claimedFindableKind: FindableKind | null;
     findableComboShardGain: number;
-    findableSafeHazardWardGain: number;
     findableScoreBonus: number;
     findablesClaimedDelta: number;
     matchedPairKey: string;
@@ -28,8 +26,6 @@ export const deriveMatchClaimContext = (firstTile: Tile, secondTile: Tile): Matc
     return {
         claimedFindableKind,
         findableComboShardGain: claimedFindableKind != null ? FINDABLE_MATCH_COMBO_SHARDS[claimedFindableKind] : 0,
-        findableSafeHazardWardGain:
-            claimedFindableKind != null ? FINDABLE_MATCH_SAFE_HAZARD_WARDS[claimedFindableKind] : 0,
         findableScoreBonus: claimedFindableKind != null ? FINDABLE_MATCH_SCORE[claimedFindableKind] : 0,
         findablesClaimedDelta: claimedFindableKind != null ? 1 : 0,
         matchedPairKey,

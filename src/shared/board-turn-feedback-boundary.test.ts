@@ -84,20 +84,6 @@ describe('board-turn feedback ownership boundary', () => {
         expect(turnAnnouncement).not.toContain('RunState');
         expect(announcementHook).toContain('buildBoardTurnAnnouncement(');
         expect(announcementHook).toContain('{ reduceMotion }');
-        for (const field of [
-            'scoutsBefore',
-            'scoutsAfter',
-            'mimicCacheBefore',
-            'mimicCacheAfter',
-            'routeSpecialsBefore',
-            'routeSpecialsAfter',
-            'safeHazardWardsUsedBefore',
-            'safeHazardWardsUsedAfter'
-        ]) {
-            expect(contracts, field).toContain(field);
-            expect(turnFacts, field).toContain(field);
-            expect(turnAnnouncement, field).toContain(field);
-        }
         expect(turnAnnouncement).toContain('CHAIN_MILESTONE_THRESHOLDS');
         for (const forbiddenInference of [
             'matchedPairs - snap.matchedPairs',

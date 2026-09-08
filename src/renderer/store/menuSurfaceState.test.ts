@@ -14,7 +14,6 @@ describe('menuSurfaceState', () => {
             run: null,
             runStartSaveData: null,
             settingsReturnView: 'menu',
-            shopReturnMode: null,
             subscreenReturnView: 'menu',
             tileSwapArmed: false,
             tileSwapFirstTileId: null,

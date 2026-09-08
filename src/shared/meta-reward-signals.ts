@@ -147,7 +147,7 @@ export const getInventoryRewardSignals = (run: RunState | null): MetaRewardSigna
                 screen: 'inventory',
                 kind: 'empty_state',
                 title: 'No active expedition',
-                body: 'Relics, mutators, charges, and run economy appear here during a descent.',
+                body: 'Mutators, charges, and run economy appear here during a descent.',
                 cta: 'Start a run from Choose Your Path.'
             }
         ];
@@ -155,14 +155,13 @@ export const getInventoryRewardSignals = (run: RunState | null): MetaRewardSigna
     const mutatorCount = runArray<MutatorId>(run.activeMutators).length;
     const stats = normalizeSessionStats(run.stats);
     const lives = runNonNegativeInteger(run.lives);
-    const shopGold = runNonNegativeInteger(run.shopGold);
     return [
         {
             id: 'inventory_build_value',
             screen: 'inventory',
             kind: 'progress',
             title: `${mutatorCount} active mutator(s) shaping this build`,
-            body: `${mutatorCount} active mutator(s) | ${shopGold} shop gold | ${stats.comboShards} shard(s).`,
+            body: `${mutatorCount} active mutator(s) | ${stats.comboShards} shard(s).`,
             cta: 'Use this snapshot to plan the next floor.'
         },
         {

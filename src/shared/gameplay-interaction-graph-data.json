@@ -1,5 +1,5 @@
 {
-    "version": 30,
+    "version": 31,
     "mechanics": [
         {
             "id": "trait.echo",
@@ -45,8 +45,7 @@
             ],
             "reads": [
                 "tileTraitKind",
-                "guardTokens",
-                "relicIds"
+                "guardTokens"
             ],
             "writes": [
                 "volatileTraitShuffles",
@@ -327,7 +326,6 @@
             ],
             "reads": [
                 "regionShuffleCharges",
-                "regionShuffleFreeThisFloor",
                 "shuffleNonce",
                 "tileStates",
                 "noShuffle",
@@ -335,7 +333,6 @@
             ],
             "writes": [
                 "regionShuffleCharges",
-                "regionShuffleFreeThisFloor",
                 "shuffleNonce",
                 "tileStates",
                 "forgottenTileIdsThisFloor",
@@ -373,7 +370,6 @@
             ],
             "reads": [
                 "regionShuffleCharges",
-                "regionShuffleFreeThisFloor",
                 "shuffleNonce",
                 "tileStates",
                 "noShuffle",
@@ -382,7 +378,6 @@
             ],
             "writes": [
                 "regionShuffleCharges",
-                "regionShuffleFreeThisFloor",
                 "shuffleNonce",
                 "tileStates",
                 "forgottenTileIdsThisFloor",
@@ -399,8 +394,7 @@
                 "two-hidden-row-tiles",
                 "clear-flip-state",
                 "deterministic-seed",
-                "no-shuffle-contract",
-                "exit-source-protection"
+                "no-shuffle-contract"
             ],
             "tests": [
                 "src/shared/board-power-actions.test.ts",
@@ -426,7 +420,6 @@
                 "destroyPairCharges",
                 "noDestroy",
                 "tileStates",
-                "exitSources",
                 "recallFocus",
                 "parasiteFloors",
                 "shiftingSpotlightNonce"
@@ -453,7 +446,6 @@
             "softlockGuards": [
                 "exactly-two-hidden-pair",
                 "clear-flip-state",
-                "exit-source-protection",
                 "noDestroy-contract",
                 "destroy-forfeits-pair-reward",
                 "single-outer-command-finalize"
@@ -480,14 +472,12 @@
             "reads": [
                 "tileStates",
                 "matchedPairs",
-                "dungeonExitActivated",
                 "objectiveCompleted",
                 "tries"
             ],
             "writes": [
                 "levelComplete",
-                "lastLevelResult",
-                "routeChoices"
+                "lastLevelResult"
             ],
             "enables": [
                 "next_floor"
@@ -516,8 +506,6 @@
             ],
             "reads": [
                 "tileStates",
-                "enemyHazards",
-                "dungeonExitLockKind",
                 "tileTraitKind"
             ],
             "writes": [
@@ -531,8 +519,7 @@
                 "invalid_generation"
             ],
             "softlockGuards": [
-                "inspectBoardFairness",
-                "repairDungeonExitSoftlocks"
+                "inspectBoardFairness"
             ],
             "tests": [
                 "src/shared/softlock-fairness.test.ts",
@@ -558,16 +545,13 @@
                 "destroyPairCharges",
                 "lives",
                 "triesDelta",
-                "enemyHazardsDefeatedThisFloor",
-                "dungeonEnemiesDefeatedThisFloor",
                 "lastLevelResult",
                 "feedbackLines",
                 "totalScore",
                 "currentLevelScore",
                 "sessionStats",
                 "achievementProgress",
-                "nextFloor",
-                "relicOffer"
+                "nextFloor"
             ],
             "writes": [
                 "feedbackLines"
@@ -598,8 +582,6 @@
                 "score",
                 "scoreRequests",
                 "comboShards",
-                "bossTrophyCacheOutcome",
-                "bossTrophyCacheScore",
                 "objectiveCompleted",
                 "totalScore",
                 "currentLevelScore"
@@ -637,26 +619,17 @@
             "reads": [
                 "levelComplete",
                 "lastLevelResult",
-                "routeChoices",
-                "selectedDungeonNodeId",
                 "powersUsedThisRun",
                 "nextFloor",
-                "relicOffer",
-                "sideRoom",
                 "lives",
                 "parasiteFloors",
-                "parasiteWardRemaining",
-                "rewardPerkIds",
                 "pendingMemorizeBonusMs"
             ],
             "writes": [
                 "nextFloor",
-                "relicOffer",
-                "pendingRouteCardPlan",
                 "tileStates",
                 "lives",
                 "parasiteFloors",
-                "parasiteWardRemaining",
                 "destroyPairCharges",
                 "timerState",
                 "gameplayCommandJournal",
@@ -700,10 +673,6 @@
                 "volatileTraitShuffles",
                 "powersUsedThisRun",
                 "forgottenTileIdsThisFloor",
-                "hazardTileTriggersThisFloor",
-                "safeHazardWardsUsedThisFloor",
-                "dungeonEnemiesDefeatedThisFloor",
-                "enemyHazardsDefeatedThisFloor",
                 "chunkPairsDroppedThisFloor",
                 "chunkDropsThisRun",
                 "bestRippleThisFloor",
@@ -740,7 +709,6 @@
                 "forgottenTileIdsThisFloor",
                 "tileStates",
                 "stickyBlockIndex",
-                "enemyHazards",
                 "flippedTileIds"
             ],
             "writes": [
@@ -803,8 +771,7 @@
             ],
             "reads": [
                 "guardTokens",
-                "lives",
-                "enemyHazards"
+                "lives"
             ],
             "writes": [
                 "guardTokens",
@@ -817,8 +784,7 @@
             "blocks": [],
             "softlockGuards": [
                 "guard-spent-before-life",
-                "damage-floor",
-                "combat-forecast"
+                "damage-floor"
             ],
             "tests": [
                 "src/shared/turn-mismatch-rules.test.ts"
@@ -930,40 +896,6 @@
             ]
         },
         {
-            "id": "findable.ward_spark",
-            "label": "Ward Spark Findable",
-            "kind": "findable",
-            "role": "trap_ward_source",
-            "evidence": [
-                "src/shared/findables.ts",
-                "src/shared/match-claim-rules.ts",
-                "src/shared/gameplay-core-adapters.ts",
-                "src/shared/game.ts"
-            ],
-            "reads": [
-                "matchedFindables",
-                "tileStates",
-                "safeHazardWardChargesThisFloor"
-            ],
-            "writes": [
-                "safeHazardWardChargesThisFloor",
-                "feedbackLines"
-            ],
-            "enables": [],
-            "blocks": [],
-            "softlockGuards": [
-                "matched-pair-only",
-                "one-ward-cap",
-                "typed-request-event",
-                "destroy-forfeits-findable"
-            ],
-            "tests": [
-                "src/shared/findables.test.ts",
-                "src/shared/game.test.ts",
-                "src/shared/gameplay-core.test.ts"
-            ]
-        },
-        {
             "id": "inventory.destroy_charge",
             "label": "Destroy Charge Inventory",
             "kind": "inventory",
@@ -1009,7 +941,6 @@
             ],
             "reads": [
                 "shuffleCharges",
-                "freeShuffleThisFloor",
                 "noShuffle"
             ],
             "writes": [
@@ -1042,7 +973,6 @@
             ],
             "reads": [
                 "regionShuffleCharges",
-                "regionShuffleFreeThisFloor",
                 "noShuffle"
             ],
             "writes": [
@@ -1077,7 +1007,6 @@
             ],
             "reads": [
                 "shuffleCharges",
-                "freeShuffleThisFloor",
                 "shuffleNonce",
                 "tileStates",
                 "noShuffle",
@@ -1085,7 +1014,6 @@
             ],
             "writes": [
                 "shuffleCharges",
-                "freeShuffleThisFloor",
                 "shuffleNonce",
                 "tileStates",
                 "forgottenTileIdsThisFloor",
@@ -1142,55 +1070,26 @@
             ]
         },
         {
-            "id": "inventory.iron_key",
-            "label": "Iron Key Inventory",
-            "kind": "inventory",
-            "role": "treasure_extraction_resource",
-            "evidence": [
-                "src/shared/run-inventory.ts",
-                "src/shared/gameplay-core.ts"
-            ],
-            "reads": [
-                "dungeonKeys",
-                "dungeonExitLockKind"
-            ],
-            "writes": [
-                "dungeonKeys"
-            ],
-            "enables": [],
-            "blocks": [],
-            "softlockGuards": [
-                "non-negative-counter",
-                "matching-key-kind"
-            ],
-            "tests": [
-                "src/shared/run-inventory.test.ts",
-                "src/shared/gameplay-core.test.ts"
-            ]
-        },
-        {
             "id": "objective.featured_streak",
             "label": "Featured Objective Streak",
             "kind": "objective",
-            "role": "wager_risk_and_boss_preparation",
+            "role": "featured_objective_streak_bonus",
             "evidence": [
                 "src/shared/secondary-objective-rules.ts",
                 "src/shared/game.ts"
             ],
             "reads": [
-                "featuredStreakFloorRequests",
                 "featuredObjectiveCompleted",
                 "featuredObjectiveStreak"
             ],
             "writes": [
-                "featuredObjectiveStreak",
-                "endlessRiskWagerOutcome"
+                "featuredObjectiveStreak"
             ],
             "enables": [],
             "blocks": [],
             "softlockGuards": [
-                "scheduled-endless-only",
-                "minimum-wager-streak",
+                "miss-decays-streak",
+                "capped-streak-bonus",
                 "loss-floor-does-not-increase-streak"
             ],
             "tests": [
@@ -1205,20 +1104,17 @@
             "role": "chapter_pressure_and_objective_counterplay",
             "evidence": [
                 "src/shared/score-parasite-rules.ts",
+                "src/shared/board-power-actions.ts",
                 "src/shared/gameplay-core.ts",
                 "src/shared/next-floor-transition-rules.ts",
                 "src/shared/next-floor-run-state-rules.ts",
                 "src/shared/game.ts"
             ],
             "reads": [
-                "parasiteReliefRequests",
-                "parasiteFloors",
-                "parasiteWardRemaining",
-                "featuredObjectiveCompleted"
+                "parasiteFloors"
             ],
             "writes": [
                 "parasiteFloors",
-                "parasiteWardRemaining",
                 "lives",
                 "gameplayEvents",
                 "gameplayCommandJournal",
@@ -1231,55 +1127,15 @@
             ],
             "softlockGuards": [
                 "four-floor-cycle",
-                "ward-before-life",
-                "featured-objective-relief",
+                "destroy-pair-resets-pressure",
                 "typed-floor-transition"
             ],
             "tests": [
                 "src/shared/score-parasite-rules.test.ts",
+                "src/shared/board-power-actions.test.ts",
                 "src/shared/next-floor-run-state-rules.test.ts",
                 "src/shared/gameplay-core.test.ts",
                 "src/shared/game.test.ts"
-            ]
-        },
-        {
-            "id": "safety.parasite_ward",
-            "label": "Parasite Ward",
-            "kind": "safety",
-            "role": "parasite_life_loss_buffer",
-            "evidence": [
-                "src/shared/score-parasite-rules.ts",
-                "src/shared/gameplay-core.ts",
-                "src/shared/next-floor-transition-rules.ts",
-                "src/renderer/store/gameplayFeedbackAdapter.ts"
-            ],
-            "reads": [
-                "parasiteWardRemaining",
-                "parasiteFloors"
-            ],
-            "writes": [
-                "parasiteWardRemaining",
-                "gameplayEvents",
-                "gameplayCommandJournal",
-                "gameplayEventJournal",
-                "feedbackLines"
-            ],
-            "enables": [
-                "safety.softlock_fairness"
-            ],
-            "blocks": [
-                "parasite_life_loss"
-            ],
-            "softlockGuards": [
-                "ward-before-life",
-                "non-negative-counter",
-                "one-ward-per-trigger"
-            ],
-            "tests": [
-                "src/shared/score-parasite-rules.test.ts",
-                "src/shared/gameplay-core.test.ts",
-                "src/shared/game.test.ts",
-                "src/renderer/store/gameplayFeedbackAdapter.test.ts"
             ]
         },
         {
@@ -1298,31 +1154,22 @@
             ],
             "reads": [
                 "gameplayCommands",
-                "rewardPerkIds",
-                "relicIds",
                 "matchedFindables",
                 "peekCharges",
                 "shuffleCharges",
                 "regionShuffleCharges",
-                "freeShuffleThisFloor",
-                "regionShuffleFreeThisFloor",
                 "shuffleNonce",
                 "strayRemoveCharges",
                 "pinnedTileIds",
                 "guardTokens",
                 "comboShards",
                 "destroyPairCharges",
-                "safeHazardWardChargesThisFloor",
-                "dungeonKeys",
-                "bossTrophyCacheOutcome",
-                "endlessRiskWagerOutcome",
                 "featuredObjectiveStreak",
                 "featuredObjectiveCompleted",
                 "gambitAvailableThisFloor",
                 "gambitThirdFlipUsed",
                 "flippedTileIds",
                 "parasiteFloors",
-                "parasiteWardRemaining",
                 "tileTraitKind",
                 "adjacentTraits",
                 "matchResolutionsThisFloor"
@@ -1333,16 +1180,10 @@
                 "gameplayEventJournal",
                 "comboShardRequests",
                 "scoreRequests",
-                "featuredStreakFloorRequests",
-                "parasiteReliefRequests",
-                "pinCapacityRequests",
                 "gambitCommitRequests",
-                "rewardPerkIds",
                 "peekCharges",
                 "shuffleCharges",
                 "regionShuffleCharges",
-                "freeShuffleThisFloor",
-                "regionShuffleFreeThisFloor",
                 "shuffleNonce",
                 "strayRemoveCharges",
                 "pinnedTileIds",
@@ -1350,9 +1191,7 @@
                 "guardTokens",
                 "comboShards",
                 "destroyPairCharges",
-                "dungeonKeys",
                 "parasiteFloors",
-                "parasiteWardRemaining",
                 "lives",
                 "score",
                 "peekRevealedTileIds",
@@ -1445,33 +1284,6 @@
             ]
         },
         {
-            "id": "findable.scout_glint",
-            "label": "Scout Glint",
-            "kind": "findable",
-            "role": "matched_information_source",
-            "evidence": [
-                "src/shared/findables.ts",
-                "src/shared/gameplay-core-contracts.ts",
-                "src/shared/game.ts"
-            ],
-            "reads": [
-                "matchedFindables"
-            ],
-            "writes": [
-                "feedbackLines"
-            ],
-            "enables": [],
-            "blocks": [],
-            "softlockGuards": [
-                "matched-findable-condition",
-                "deterministic-scout-selection"
-            ],
-            "tests": [
-                "src/shared/game.test.ts",
-                "src/shared/gameplay-core.test.ts"
-            ]
-        },
-        {
             "id": "inventory.stray_remove_charge",
             "label": "Stray Remove Charge",
             "kind": "inventory",
@@ -1529,8 +1341,7 @@
             "blocks": [],
             "softlockGuards": [
                 "completion-safe-stray-target",
-                "clear-flip-state",
-                "protected-route-special"
+                "clear-flip-state"
             ],
             "tests": [
                 "src/shared/board-power-actions.test.ts",
@@ -1550,8 +1361,6 @@
             ],
             "reads": [
                 "pinnedTileIds",
-                "pinCapacityRequests",
-                "relicIds",
                 "tileStates",
                 "pinsPlacedCountThisRun"
             ],
@@ -1665,7 +1474,6 @@
             "reads": [
                 "memorizeMs",
                 "pendingMemorizeBonusMs",
-                "relicIds",
                 "activeMutators",
                 "gameMode"
             ],
@@ -1836,34 +1644,6 @@
             ]
         },
         {
-            "id": "inventory.master_key",
-            "label": "Master Key Inventory",
-            "kind": "inventory",
-            "role": "universal_single_lock_resource",
-            "evidence": [
-                "src/shared/run-inventory.ts"
-            ],
-            "reads": [
-                "dungeonMasterKeys",
-                "dungeonExitLockKind",
-                "dungeonKeyKind"
-            ],
-            "writes": [
-                "dungeonMasterKeys"
-            ],
-            "enables": [],
-            "blocks": [],
-            "softlockGuards": [
-                "nonnegative-counter",
-                "typed-key-first",
-                "one-lock-per-spend"
-            ],
-            "tests": [
-                "src/shared/run-inventory.test.ts",
-                "src/shared/gameplay-core.test.ts"
-            ]
-        },
-        {
             "id": "mode.wild_run",
             "label": "Wild Run",
             "kind": "progression",
@@ -2031,8 +1811,7 @@
             "reads": [],
             "writes": [
                 "activeContract",
-                "activeMutators",
-                "relicIds"
+                "activeMutators"
             ],
             "enables": [
                 "inventory.contract_loadout",
@@ -2043,8 +1822,7 @@
             "softlockGuards": [
                 "menu-owned-selection",
                 "copy-on-run-start",
-                "no-mid-run-contract-edit",
-                "starting-loadout-id-validation"
+                "no-mid-run-contract-edit"
             ],
             "tests": [
                 "src/shared/run-creation-rules.test.ts",
@@ -2203,7 +1981,6 @@
                 "src/shared/gameplay-core.ts"
             ],
             "reads": [
-                "routeChoices",
                 "gameplayEvents",
                 "lives",
                 "totalScore",
@@ -2301,7 +2078,6 @@
                 "chunkPairsThisChain",
                 "tileStates",
                 "pairKeys",
-                "relicIds",
                 "runSeed"
             ],
             "writes": [
@@ -2643,18 +2419,6 @@
             "label": "reveals the pair worth removing"
         },
         {
-            "source": "findable.ward_spark",
-            "target": "core.gameplay_commands",
-            "kind": "triggers",
-            "label": "matched Ward Spark command"
-        },
-        {
-            "source": "findable.ward_spark",
-            "target": "feedback.gameplay_hud",
-            "kind": "displays",
-            "label": "shows ward cause"
-        },
-        {
             "source": "core.gameplay_commands",
             "target": "inventory.destroy_charge",
             "kind": "modifies",
@@ -2823,52 +2587,34 @@
             "label": "shows score source"
         },
         {
-            "source": "core.gameplay_commands",
-            "target": "inventory.iron_key",
-            "kind": "modifies",
-            "label": "applies typed iron-key grants"
-        },
-        {
-            "source": "inventory.iron_key",
-            "target": "feedback.gameplay_hud",
-            "kind": "displays",
-            "label": "shows key-ring quantity"
-        },
-        {
             "source": "objective.featured_streak",
             "target": "objective.floor_clear",
             "kind": "gates",
-            "label": "resolves streak and wager at floor clear"
+            "label": "resolves streak bonus at floor clear"
         },
         {
             "source": "objective.featured_streak",
             "target": "feedback.gameplay_hud",
             "kind": "displays",
-            "label": "shows wager risk and retained streak"
+            "label": "shows retained streak"
         },
         {
-            "source": "safety.parasite_ward",
+            "source": "power.destroy_pair",
             "target": "hazard.score_parasite",
             "kind": "counterplay",
-            "label": "absorbs parasite life loss"
-        },
-        {
-            "source": "safety.parasite_ward",
-            "target": "feedback.gameplay_hud",
-            "kind": "displays",
-            "label": "shows ward balance and absorption"
+            "label": "destroying a pair resets parasite pressure"
         },
         {
             "source": "hazard.score_parasite",
-            "target": "safety.parasite_ward",
+            "target": "power.destroy_pair",
             "kind": "guarded_by",
-            "label": "ward-before-life protection"
+            "label": "pressure reset before the four-floor bite"
         },
         {
             "source": "hazard.score_parasite",
             "target": "feedback.gameplay_hud",
             "kind": "displays",
-            "label": "shows parasite pressure and relief"
+            "label": "shows parasite pressure"
         },
         {
             "source": "hazard.score_parasite",
@@ -2880,31 +2626,13 @@
             "source": "core.gameplay_commands",
             "target": "objective.featured_streak",
             "kind": "triggers",
-            "label": "emits typed wager-loss floor request"
+            "label": "resolves featured streak inside the typed floor clear"
         },
         {
             "source": "core.gameplay_commands",
             "target": "hazard.score_parasite",
             "kind": "triggers",
-            "label": "emits typed parasite-relief request"
-        },
-        {
-            "source": "core.gameplay_commands",
-            "target": "safety.parasite_ward",
-            "kind": "modifies",
-            "label": "applies immediate parasite ward"
-        },
-        {
-            "source": "findable.scout_glint",
-            "target": "core.gameplay_commands",
-            "kind": "triggers",
-            "label": "matched Scout Glint command"
-        },
-        {
-            "source": "findable.scout_glint",
-            "target": "feedback.gameplay_hud",
-            "kind": "displays",
-            "label": "shows Scout Glint cause"
+            "label": "advances parasite pressure through the typed floor command"
         },
         {
             "source": "core.gameplay_commands",
@@ -3379,12 +3107,6 @@
             "target": "core.gameplay_commands",
             "kind": "triggers",
             "label": "chunk facts on the board.turn_resolved event"
-        },
-        {
-            "source": "inventory.master_key",
-            "target": "feedback.gameplay_hud",
-            "kind": "displays",
-            "label": "shows master-key quantity"
         }
     ],
     "coverage": {
@@ -3401,9 +3123,9 @@
         ],
         "blockingKinds": [
             "trait",
-            "hazard",
-            "objective",
-            "power"
+            "power",
+            "safety",
+            "hazard"
         ],
         "requiredObjectives": [
             "objective.floor_clear"

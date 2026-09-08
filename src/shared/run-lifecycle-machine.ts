@@ -8,7 +8,6 @@ export type RunLifecycleState =
     | 'resolving'
     | 'paused'
     | 'levelComplete'
-    | 'relicOffer'
     | 'gameOver';
 
 export type RunLifecycleEvent =
@@ -18,9 +17,6 @@ export type RunLifecycleEvent =
     | { type: 'RESOLVE_MATCH' }
     | { type: 'RESOLVE_MISMATCH' }
     | { type: 'CLEAR_LEVEL' }
-    | { type: 'CLOSE_SHOP' }
-    | { type: 'OPEN_RELIC_OFFER' }
-    | { type: 'CLOSE_RELIC_OFFER' }
     | { type: 'NEXT_LEVEL' }
     | { type: 'PAUSE' }
     | { type: 'RESUME' }
@@ -80,15 +76,7 @@ export const runLifecycleMachine = createMachine({
         },
         levelComplete: {
             on: {
-                OPEN_RELIC_OFFER: 'relicOffer',
                 NEXT_LEVEL: 'memorize',
-                GAME_OVER: 'gameOver',
-                END_RUN: 'menu'
-            }
-        },
-        relicOffer: {
-            on: {
-                CLOSE_RELIC_OFFER: 'levelComplete',
                 GAME_OVER: 'gameOver',
                 END_RUN: 'menu'
             }
@@ -108,9 +96,6 @@ export const lifecycleStateFromRunStatus = (status: RunStatus | null): RunLifecy
 export const lifecycleStateFromRun = (run: RunState | null): RunLifecycleState => {
     if (!run) {
         return 'menu';
-    }
-    if (run.relicOffer && run.status === 'levelComplete') {
-        return 'relicOffer';
     }
     return lifecycleStateFromRunStatus(run.status);
 };

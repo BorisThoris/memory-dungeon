@@ -8,8 +8,6 @@ export type RunInventoryItemId =
     | 'undo_charge'
     | 'gambit_token'
     | 'wild_match_token'
-    | 'iron_key'
-    | 'master_key'
     | 'guard_token'
     | 'combo_shard'
     | 'mutator_loadout'
@@ -25,8 +23,6 @@ export const RUN_INVENTORY_ITEM_IDS = [
     'undo_charge',
     'gambit_token',
     'wild_match_token',
-    'iron_key',
-    'master_key',
     'guard_token',
     'combo_shard',
     'mutator_loadout',

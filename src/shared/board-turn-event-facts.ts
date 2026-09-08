@@ -1,4 +1,4 @@
-import type { RouteCardKind, RouteSpecialKind, TileTraitKind, RunState } from './contracts';
+import type { TileTraitKind, RunState } from './contracts';
 import { getSafeBoardColumns } from './board-grid-dimensions';
 import { runChainTier } from './chain-tier-rules';
 import { TILE_TRAIT_COUNT_KINDS } from './session-stats-rules';
@@ -19,32 +19,6 @@ import { normalizeSessionStats } from './session-stats-rules';
  * toasts or live-region announcements need in order to describe a turn belongs here, so
  * the projector can stay a pure function of the event.
  */
-/**
- * Per-kind hazard-tile firings for this turn.
- *
- * The announcer needs the exact kind - and, for fragile and fuse caches, whether the
- * cache broke - to pick its copy. A single aggregate count can only ever name one
- * hazard, so a turn that fires two says the wrong thing about one of them.
- */
-export interface BoardTurnHazardKindFacts {
-    shuffleSnareBefore: number;
-    shuffleSnareAfter: number;
-    cascadeCacheBefore: number;
-    cascadeCacheAfter: number;
-    mirrorDecoyBefore: number;
-    mirrorDecoyAfter: number;
-    fragileCacheClaimBefore: number;
-    fragileCacheClaimAfter: number;
-    fragileCacheBreakBefore: number;
-    fragileCacheBreakAfter: number;
-    tollCacheBefore: number;
-    tollCacheAfter: number;
-    fuseCacheBefore: number;
-    fuseCacheAfter: number;
-    fuseCacheExpiredBefore: number;
-    fuseCacheExpiredAfter: number;
-}
-
 export interface BoardTurnAnnouncementFacts {
     /** Chunk breaks this floor and the pairs they took, before and after this turn. */
     chunkBreaksBefore: number;
@@ -59,13 +33,11 @@ export interface BoardTurnAnnouncementFacts {
     chainTierBefore: 'none' | 'clean' | 'sharp' | 'fever';
     /**
      * The shape of this turn's chunk, for the style line (Peggle's "Long shot"): the widest gap
-     * between a broken pair's halves in grid steps, pairs the halo took from another suit, treasure
-     * pairs spilled, and whether the match's suit is now gone from the floor. Zeros on a turn
-     * without a break.
+     * between a broken pair's halves in grid steps, pairs the halo took from another suit, and
+     * whether the match's suit is now gone from the floor. Zeros on a turn without a break.
      */
     chunkPartnerSpanMax: number;
     chunkHaloPairs: number;
-    chunkTreasuresSpilled: number;
     chunkSuitCleared: boolean;
     /** Pairs that dropped with this turn's break because their suit had too few left to hold them. */
     chunkDroppedPairs: number;
@@ -84,8 +56,6 @@ export interface BoardTurnAnnouncementFacts {
      */
     anchorTileIds: string[];
     level: number;
-    routeSpecialKind: RouteSpecialKind | null;
-    routeCardKind: RouteCardKind | null;
     currentStreakBefore: number;
     currentStreakAfter: number;
     comboShardsBefore: number;
@@ -98,27 +68,8 @@ export interface BoardTurnAnnouncementFacts {
     findablesClaimedAfter: number;
     findablesTotalBefore: number;
     findablesTotalAfter: number;
-    hazardTilesBefore: number;
-    hazardTilesAfter: number;
-    hazardKinds: BoardTurnHazardKindFacts;
-    scoutsBefore: number;
-    scoutsAfter: number;
-    omenScoutsBefore: number;
-    omenScoutsAfter: number;
-    mimicCacheBefore: number;
-    mimicCacheAfter: number;
-    mimicCacheBitesBefore: number;
-    mimicCacheBitesAfter: number;
-    mimicCacheGuardBitesBefore: number;
-    mimicCacheGuardBitesAfter: number;
-    routeSpecialsBefore: number;
-    routeSpecialsAfter: number;
-    safeHazardWardsUsedBefore: number;
-    safeHazardWardsUsedAfter: number;
     /** Trait kinds actually involved in this turn, resolved here so the renderer never diffs trait counts. */
     matchedTraitKinds: TileTraitKind[];
-    shopGoldBefore: number;
-    shopGoldAfter: number;
     shuffleChargesBefore: number;
     shuffleChargesAfter: number;
     regionShuffleChargesBefore: number;
@@ -162,9 +113,9 @@ const chunkStyleFacts = (
     matchedTileIds: readonly string[]
 ): Pick<
     BoardTurnAnnouncementFacts,
-    'chunkPartnerSpanMax' | 'chunkHaloPairs' | 'chunkTreasuresSpilled' | 'chunkSuitCleared' | 'chunkRippleWaves'
+    'chunkPartnerSpanMax' | 'chunkHaloPairs' | 'chunkSuitCleared' | 'chunkRippleWaves'
 > => {
-    const none = { chunkPartnerSpanMax: 0, chunkHaloPairs: 0, chunkTreasuresSpilled: 0, chunkSuitCleared: false, chunkRippleWaves: 0 };
+    const none = { chunkPartnerSpanMax: 0, chunkHaloPairs: 0, chunkSuitCleared: false, chunkRippleWaves: 0 };
     const afterBoard = after.board;
     if (!afterBoard) {
         return none;
@@ -184,8 +135,7 @@ const chunkStyleFacts = (
     const matchSuit = firstTileValue(before, matchedTileIds, (tile) => tile.suit ?? null);
     let spanMax = 0;
     let haloPairs = 0;
-    let treasures = 0;
-    for (const [pairKey, indexes] of byPair) {
+    for (const indexes of byPair.values()) {
         if (indexes.length === 2) {
             const [a, b] = indexes as [number, number];
             spanMax = Math.max(
@@ -197,10 +147,6 @@ const chunkStyleFacts = (
         if (matchSuit && first.suit && first.suit !== matchSuit) {
             haloPairs += 1;
         }
-        if (first.dungeonCardKind === 'treasure') {
-            treasures += 1;
-        }
-        void pairKey;
     }
     const suitCleared =
         matchSuit != null && !afterBoard.tiles.some((tile) => tile.state === 'hidden' && tile.suit === matchSuit);
@@ -209,15 +155,10 @@ const chunkStyleFacts = (
     return {
         chunkPartnerSpanMax: spanMax,
         chunkHaloPairs: haloPairs,
-        chunkTreasuresSpilled: treasures,
         chunkSuitCleared: suitCleared,
         chunkRippleWaves: rippleWaves
     };
 };
-
-/** Route-special tiles still present on the board, so the announcer never counts them itself. */
-const routeSpecialCount = (run: RunState): number =>
-    (run.board?.tiles ?? []).filter((tile) => tile.routeSpecialKind != null).length;
 
 export const getBoardTurnAnnouncementFacts = (
     before: RunState,
@@ -246,10 +187,6 @@ export const getBoardTurnAnnouncementFacts = (
               ]
             : [...flippedTileIds],
         level: runNonNegativeInteger(before.board?.level),
-        // Read from the PRE-turn board: a matched tile can be removed from the resolved
-        // board, and the route kind is what the player just interacted with.
-        routeSpecialKind: firstTileValue(before, flippedTileIds, (tile) => tile.routeSpecialKind ?? null),
-        routeCardKind: firstTileValue(before, flippedTileIds, (tile) => tile.routeCardKind ?? null),
         currentStreakBefore: statsBefore.currentStreak,
         currentStreakAfter: statsAfter.currentStreak,
         comboShardsBefore: statsBefore.comboShards,
@@ -278,47 +215,11 @@ export const getBoardTurnAnnouncementFacts = (
         magpieTheftsAfter: runNonNegativeInteger(after.magpieTheftsThisFloor),
         magpieScaredOffBefore: runNonNegativeInteger(before.magpieScaredOffThisFloor),
         magpieScaredOffAfter: runNonNegativeInteger(after.magpieScaredOffThisFloor),
-        hazardTilesBefore: runNonNegativeInteger(before.hazardTileTriggersThisFloor),
-        hazardTilesAfter: runNonNegativeInteger(after.hazardTileTriggersThisFloor),
-        hazardKinds: {
-            shuffleSnareBefore: runNonNegativeInteger(before.hazardShuffleSnaresThisFloor),
-            shuffleSnareAfter: runNonNegativeInteger(after.hazardShuffleSnaresThisFloor),
-            cascadeCacheBefore: runNonNegativeInteger(before.hazardCascadeCachesThisFloor),
-            cascadeCacheAfter: runNonNegativeInteger(after.hazardCascadeCachesThisFloor),
-            mirrorDecoyBefore: runNonNegativeInteger(before.hazardMirrorDecoysThisFloor),
-            mirrorDecoyAfter: runNonNegativeInteger(after.hazardMirrorDecoysThisFloor),
-            fragileCacheClaimBefore: runNonNegativeInteger(before.hazardFragileCacheClaimsThisFloor),
-            fragileCacheClaimAfter: runNonNegativeInteger(after.hazardFragileCacheClaimsThisFloor),
-            fragileCacheBreakBefore: runNonNegativeInteger(before.hazardFragileCacheBreaksThisFloor),
-            fragileCacheBreakAfter: runNonNegativeInteger(after.hazardFragileCacheBreaksThisFloor),
-            tollCacheBefore: runNonNegativeInteger(before.hazardTollCachesThisFloor),
-            tollCacheAfter: runNonNegativeInteger(after.hazardTollCachesThisFloor),
-            fuseCacheBefore: runNonNegativeInteger(before.hazardFuseCachesThisFloor),
-            fuseCacheAfter: runNonNegativeInteger(after.hazardFuseCachesThisFloor),
-            fuseCacheExpiredBefore: runNonNegativeInteger(before.hazardFuseCacheExpiredClaimsThisFloor),
-            fuseCacheExpiredAfter: runNonNegativeInteger(after.hazardFuseCacheExpiredClaimsThisFloor)
-        },
-        scoutsBefore: runNonNegativeInteger(before.lanternWardScoutsThisFloor),
-        scoutsAfter: runNonNegativeInteger(after.lanternWardScoutsThisFloor),
-        omenScoutsBefore: runNonNegativeInteger(before.omenSealScoutsThisFloor),
-        omenScoutsAfter: runNonNegativeInteger(after.omenSealScoutsThisFloor),
-        mimicCacheBefore: runNonNegativeInteger(before.mimicCacheClaimsThisFloor),
-        mimicCacheAfter: runNonNegativeInteger(after.mimicCacheClaimsThisFloor),
-        mimicCacheBitesBefore: runNonNegativeInteger(before.mimicCacheBitesThisFloor),
-        mimicCacheBitesAfter: runNonNegativeInteger(after.mimicCacheBitesThisFloor),
-        mimicCacheGuardBitesBefore: runNonNegativeInteger(before.mimicCacheGuardBitesThisFloor),
-        mimicCacheGuardBitesAfter: runNonNegativeInteger(after.mimicCacheGuardBitesThisFloor),
-        routeSpecialsBefore: routeSpecialCount(before),
-        routeSpecialsAfter: routeSpecialCount(after),
-        safeHazardWardsUsedBefore: runNonNegativeInteger(before.safeHazardWardsUsedThisFloor),
-        safeHazardWardsUsedAfter: runNonNegativeInteger(after.safeHazardWardsUsedThisFloor),
         matchedTraitKinds: TILE_TRAIT_COUNT_KINDS.filter((kind) =>
             flippedTileIds.some(
                 (tileId) => before.board?.tiles.find((tile) => tile.id === tileId)?.tileTraitKind === kind
             )
         ),
-        shopGoldBefore: runNonNegativeInteger(before.shopGold),
-        shopGoldAfter: runNonNegativeInteger(after.shopGold),
         shuffleChargesBefore: runNonNegativeInteger(before.shuffleCharges),
         shuffleChargesAfter: runNonNegativeInteger(after.shuffleCharges),
         regionShuffleChargesBefore: runNonNegativeInteger(before.regionShuffleCharges),

@@ -291,13 +291,10 @@ const nextKnownPairPinCandidate = (
                 ? [{ tile, entry }]
                 : [];
         })
-        .sort((left, right) => {
-            const leftScouted = left.tile.scoutRevealSource != null || left.tile.routeSpecialRevealed === true;
-            const rightScouted = right.tile.scoutRevealSource != null || right.tile.routeSpecialRevealed === true;
-            return Number(rightScouted) - Number(leftScouted) ||
-                left.entry.lastObservedAt - right.entry.lastObservedAt ||
-                left.tile.id.localeCompare(right.tile.id);
-        })[0]?.tile ?? null;
+        .sort((left, right) =>
+            left.entry.lastObservedAt - right.entry.lastObservedAt ||
+            left.tile.id.localeCompare(right.tile.id)
+        )[0]?.tile ?? null;
 };
 
 const knownPairFromMemory = (memory: BoundedMemoryState, run: RunState): Tile[] | null => {

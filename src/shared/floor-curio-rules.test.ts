@@ -73,36 +73,29 @@ describe('what they actually do', () => {
         expect(after.pendingMemorizeBonusMs).toBe(before.pendingMemorizeBonusMs);
     });
 
-    it('the rat leaves coins', () => {
-        expect(applyFloorCurio(run(), curio('hoarding_rat')).shopGold).toBe(run().shopGold + 3);
-    });
-
     it('the off-duty guard hands over a token, which is the one thing that stops the magpie', () => {
         const after = applyFloorCurio(run(), curio('off_duty_guard'));
         expect(after.stats.guardTokens).toBe(run().stats.guardTokens + 1);
     });
 
-    it('the skull costs attention and pays in gossip-adjacent coins', () => {
+    it('the skull costs attention', () => {
         const before = run();
         const after = applyFloorCurio(before, curio('gossiping_skull'));
         expect(after.timerState.memorizeRemainingMs).toBeLessThan(before.timerState.memorizeRemainingMs!);
-        expect(after.shopGold).toBeGreaterThan(before.shopGold);
     });
 
     it('the sock does nothing, on purpose', () => {
         const before = run();
         const after = applyFloorCurio(before, curio('lost_sock'));
         expect(after.peekCharges).toBe(before.peekCharges);
-        expect(after.shopGold).toBe(before.shopGold);
         expect(after.stats.guardTokens).toBe(before.stats.guardTokens);
         expect(after.timerState.memorizeRemainingMs).toBe(before.timerState.memorizeRemainingMs);
     });
 
     it('never shortens a window past the point where the floor could be read', () => {
         // Deep floors have short windows to begin with; -600ms out of 1s is a different game.
-        const after = applyFloorCurio({ ...run(900), shopGold: 0 }, curio('gossiping_skull'));
+        const after = applyFloorCurio(run(900), curio('gossiping_skull'));
         expect(after.timerState.memorizeRemainingMs).toBe(MIN_CURIO_MEMORIZE_MS);
-        expect(after.shopGold).toBeGreaterThanOrEqual(0);
     });
 
     it('leaves a mode with no memorize clock alone rather than inventing one', () => {
@@ -124,10 +117,9 @@ describe('they actually move in', () => {
             board: { ...base.board!, level: 2 },
             lives: base.lives,
             activeMutators: [],
-            dungeonRun: base.dungeonRun,
             parasiteFloors: 0,
-            parasiteWardRemaining: 0
-        } as unknown as Parameters<typeof createNextFloorRunState>[1]);
+            memorizeRemainingMs: 6_000
+        });
 
         expect(next.floorCurioId).toBeTruthy();
         expect(FLOOR_CURIOS.map((resident) => resident.id)).toContain(next.floorCurioId);
@@ -152,10 +144,9 @@ describe('they actually move in', () => {
             board: { ...base.board!, level: 4 },
             lives: base.lives,
             activeMutators: [],
-            dungeonRun: base.dungeonRun,
             parasiteFloors: 0,
-            parasiteWardRemaining: 0
-        } as unknown as Parameters<typeof createNextFloorRunState>[1]);
+            memorizeRemainingMs: 6_000
+        });
 
         expect(next.floorCurioId).toBe(pickFloorCurio(base.runSeed, 4, base.runRulesVersion).id);
     });

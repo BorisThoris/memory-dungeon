@@ -46,14 +46,6 @@ const initialRun = (seed: number): RunState => ({
     strayRemoveCharges: 1,
     strayRemoveArmed: true,
     recallFocus: 3,
-    rewardPerkIds: [],
-    relicIds: [
-        'combo_shard_plus_step',
-        'guard_token_plus_one',
-        'chapter_compass',
-        'wager_surety',
-        'parasite_ledger'
-    ],
     powersUsedThisRun: false,
     forgottenTileIdsThisFloor: [],
     pinnedTileIds: [],
@@ -79,77 +71,26 @@ describe('seeded gameplay core simulation', () => {
         expect(first.acceptedCommandIds.length + first.rejectedCommandIds.length).toBe(384);
         expect(Object.keys(first.commandTypeCounts)).toEqual(
             expect.arrayContaining([
-                'bonus_reward.echo_conduit_lens',
-                'relic.peek_charge_plus_one',
-                'reward_perk.echo_conduit_double',
-                'bonus_reward.hazard_ward',
-                'relic.guard_token_plus_one',
                 'trait.volatile_heavy_guard',
-                'relic.guard_token_plus_one.mirror_match',
-                'bonus_reward.bonus_shards',
-                'bonus_reward.supply_cache',
-                'relic.combo_shard_plus_step',
                 'findable.shard_spark',
-                'relic.combo_shard_plus_step.sealed_match',
-                'bonus_reward.hazard_banisher',
-                'relic.destroy_bank_plus_one',
-                'findable.ward_spark',
-                'bonus_reward.chest_gold',
-                'bonus_reward.cursed_opener_contract',
-                'reward_perk.cursed_opener_greed',
-                'relic.shrine_echo',
                 'findable.score_glint',
-                'relic.chapter_compass',
-                'relic.wager_surety',
-                'relic.parasite_ledger',
-                'relic.chapter_compass.boss_trophy',
-                'relic.wager_surety.wager_won',
-                'relic.wager_surety.wager_lost',
-                'relic.parasite_ledger.featured_objective',
-                'bonus_reward.secret_favor',
-                'relic.stray_charge_plus_one',
-                'relic.pin_cap_plus_one',
-                'findable.scout_glint',
-                'bonus_reward.trait_toolkit',
-                'bonus_reward.stasis_lockbox',
-                'bonus_reward.free_swap_floor',
-                'relic.extra_shuffle_charge',
-                'relic.first_shuffle_free_per_floor',
-                'relic.region_shuffle_free_first',
-                'bonus_reward.trait_streak_lens',
-                'reward_perk.trait_streak_toolkit',
-                'relic.memorize_bonus_ms',
-                'relic.memorize_under_short_memorize',
-                'bonus_reward.key_insurance',
                 'board.peek',
                 'board.pin_toggle',
                 'board.stray_remove',
-                'risk_wager.accept',
                 'board.gambit_commit',
                 'board.shuffle',
                 'board.region_shuffle',
                 'board.tile_swap',
                 'board.flash_pair',
                 'board.undo_resolve',
-                'shop.purchase',
-                'dungeon.exit_activate',
                 'board.destroy_pair',
-                'floor.hazard_banish',
                 'floor.advance',
-                'route.choose',
-                'relic.pick',
-                'relic.offer_service_use',
-                'side_room.resolve',
                 'wild_match.consume',
                 'board.turn_resolve'
             ])
         );
         expect(first.commandTypeCounts['wild_match.consume']).toBe(1);
         expect(first.commandTypeCounts['board.turn_resolve']).toBe(1);
-        expect(first.commandTypeCounts['route.choose']).toBe(1);
-        expect(first.commandTypeCounts['relic.pick']).toBe(1);
-        expect(first.commandTypeCounts['relic.offer_service_use']).toBe(1);
-        expect(first.commandTypeCounts['side_room.resolve']).toBe(1);
         expect(first.commandTypeCounts['floor.advance']).toBe(1);
         expect(first.eventTypeCounts['wild_match.consumed']).toBe(1);
         expect(first.eventTypeCounts['board.turn_resolved']).toBe(1);

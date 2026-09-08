@@ -19,10 +19,7 @@ import {
     getCardFeedbackTraitRouteTiersAttr,
     getHiddenSlotsAttr,
     getHiddenTileCount,
-    getHiddenTrapSlotsAttr,
-    getPickableHiddenSlotsAttr,
-    getResolvedTrapSlotsAttr,
-    getResolvedTrapTileCount
+    getPickableHiddenSlotsAttr
 } from './tileBoardDomTelemetry';
 
 interface TileBoardDomSurfaceModel {
@@ -45,10 +42,7 @@ interface TileBoardDomSurfaceModel {
     cardFeedbackTraitRouteTiersAttr: string;
     hiddenSlotsAttr: string;
     hiddenTileCount: number;
-    hiddenTrapSlotsAttr: string | undefined;
     pickableHiddenSlotsAttr: string | undefined;
-    resolvedTrapSlotsAttr: string | undefined;
-    resolvedTrapTileCount: number;
 }
 
 export const buildTileBoardDomSurfaceModel = ({
@@ -62,7 +56,6 @@ export const buildTileBoardDomSurfaceModel = ({
     peekRevealedTileIds,
     previewActive,
     runStatus,
-    perkArmedTileIds = [],
     selectedTraitFollowupTileIds,
     traitRewardHotTileIds = [],
     traitRouteTargetTileIds = []
@@ -77,21 +70,18 @@ export const buildTileBoardDomSurfaceModel = ({
     peekRevealedTileIds: ReadonlySet<string>;
     previewActive: boolean;
     runStatus: RunStatus;
-    perkArmedTileIds?: readonly string[];
     selectedTraitFollowupTileIds?: readonly string[];
     traitRewardHotTileIds?: readonly string[];
     traitRouteTargetTileIds?: readonly string[];
 }): TileBoardDomSurfaceModel => ({
     cardFeedbackActionCuesAttr: getCardFeedbackActionCuesAttr({
         board,
-        perkArmedTileIds,
         selectedTraitFollowupTileIds,
         traitRewardHotTileIds,
         traitRouteTargetTileIds
     }),
     cardFeedbackActionPriorityAttr: getCardFeedbackActionPriorityAttr({
         board,
-        perkArmedTileIds,
         selectedTraitFollowupTileIds,
         traitRewardHotTileIds,
         traitRouteTargetTileIds
@@ -116,28 +106,24 @@ export const buildTileBoardDomSurfaceModel = ({
     }),
     cardFeedbackMarkerShapesAttr: getCardFeedbackMarkerShapesAttr({
         board,
-        perkArmedTileIds,
         selectedTraitFollowupTileIds,
         traitRewardHotTileIds,
         traitRouteTargetTileIds
     }),
     cardFeedbackPrimaryActionAttr: getCardFeedbackPrimaryActionAttr({
         board,
-        perkArmedTileIds,
         selectedTraitFollowupTileIds,
         traitRewardHotTileIds,
         traitRouteTargetTileIds
     }),
     cardFeedbackPrimaryCardCueAttr: getCardFeedbackPrimaryCardCueAttr({
         board,
-        perkArmedTileIds,
         selectedTraitFollowupTileIds,
         traitRewardHotTileIds,
         traitRouteTargetTileIds
     }),
     cardFeedbackRouteGlyphsAttr: getCardFeedbackRouteGlyphsAttr({
         board,
-        perkArmedTileIds,
         selectedTraitFollowupTileIds,
         traitRewardHotTileIds,
         traitRouteTargetTileIds
@@ -152,7 +138,6 @@ export const buildTileBoardDomSurfaceModel = ({
         peekRevealedTileIds,
         previewActive,
         runStatus,
-        perkArmedTileIds,
         selectedTraitFollowupTileIds,
         traitRewardHotTileIds,
         traitRouteTargetTileIds
@@ -165,14 +150,12 @@ export const buildTileBoardDomSurfaceModel = ({
     }),
     cardFeedbackTraitRouteTiersAttr: getCardFeedbackTraitRouteTiersAttr({
         board,
-        perkArmedTileIds,
         selectedTraitFollowupTileIds,
         traitRewardHotTileIds,
         traitRouteTargetTileIds
     }),
     cardFeedbackTraitRouteIntensitiesAttr: getCardFeedbackTraitRouteIntensitiesAttr({
         board,
-        perkArmedTileIds,
         selectedTraitFollowupTileIds,
         traitRewardHotTileIds,
         traitRouteTargetTileIds
@@ -183,13 +166,10 @@ export const buildTileBoardDomSurfaceModel = ({
     cardFeedbackTraitLanePrimaryActionAttr: getCardFeedbackTraitLanePrimaryActionAttr(board),
     hiddenSlotsAttr: getHiddenSlotsAttr(board),
     hiddenTileCount: getHiddenTileCount(board),
-    hiddenTrapSlotsAttr: getHiddenTrapSlotsAttr(board, includeDevAttributes),
     pickableHiddenSlotsAttr: getPickableHiddenSlotsAttr({
         allowGambitThirdFlip,
         board,
         includeDevAttributes,
         interactive
-    }),
-    resolvedTrapSlotsAttr: getResolvedTrapSlotsAttr(board),
-    resolvedTrapTileCount: getResolvedTrapTileCount(board)
+    })
 });

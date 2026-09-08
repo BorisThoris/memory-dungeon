@@ -14,20 +14,16 @@ const tile = (overrides: Partial<Tile> = {}): Tile =>
 
 const state = (overrides: Partial<Parameters<typeof applyTileBoardFrameMaterialState>[0]['state']> = {}) => ({
     cardTint: {
-        enemyOccupiedBack: false,
         faceUp: false,
         graphicsQuality: 'medium' as const,
-        hazardBackAccent: null,
         hoverDomParity: false,
         hoverFaceUpPickable: false,
         isPinned: false,
         nonPickableBack: false,
-        objectiveBackAccent: false,
         presentationNBackAnchor: false,
         presentationSilhouette: false,
         presentationWideRecall: false,
         resolvingSelection: null,
-        routeBackAccent: false,
         tile: tile()
     },
     currentFocusDimBlend: 0,

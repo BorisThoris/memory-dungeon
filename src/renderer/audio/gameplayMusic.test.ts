@@ -115,23 +115,10 @@ describe('REG-038 adaptive music state', () => {
             board: null,
             gameMode: 'endless',
             gauntletDeadlineMs: null,
-            relicOffer: null,
             status: 'levelComplete'
         } as unknown as RunState;
 
         expect(resolveAdaptiveMusicState({ run: levelCompleteRun, view: 'playing' })).toMatchObject({
-            active: true,
-            layer: 'run_release',
-            track: 'run',
-            volumeMultiplier: 0.56
-        });
-
-        expect(
-            resolveAdaptiveMusicState({
-                run: { ...levelCompleteRun, relicOffer: { offers: [] } } as unknown as RunState,
-                view: 'playing'
-            })
-        ).toMatchObject({
             active: true,
             layer: 'run_release',
             track: 'run',

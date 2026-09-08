@@ -17,7 +17,6 @@ export interface CreateNextFloorRunStateOptions {
     activeMutators: MutatorId[];
     board: BoardState;
     parasiteFloors: number;
-    parasiteWardRemaining: number;
     memorizeRemainingMs: number;
 }
 
@@ -34,18 +33,13 @@ export const createNextFloorRunState = (
         status: 'memorize',
         lives: options.lives,
         activeMutators: options.activeMutators,
-        pendingRouteCardPlan: null,
-        sideRoom: null,
         board: nextBoard,
         debugPeekActive: false,
         pendingMemorizeBonusMs: 0,
         pinnedTileIds: [],
         destroyPairCharges: run.destroyPairCharges,
         parasiteFloors: options.parasiteFloors,
-        parasiteWardRemaining: options.parasiteWardRemaining,
         stickyBlockIndex: null,
-        freeShuffleThisFloor: false,
-        regionShuffleFreeThisFloor: false,
         undoUsesThisFloor: 1,
         gambitAvailableThisFloor: true,
         gambitThirdFlipUsed: false,
@@ -63,7 +57,6 @@ export const createNextFloorRunState = (
         recallMistakesThisFloor: 0,
         recallBonusScoreThisFloor: 0,
         forgottenTileIdsThisFloor: [],
-        hazardTileTriggersThisFloor: 0,
         floorCurioGreeted: false,
         chunkBreaksThisFloor: 0,
         chunkPairsBrokenThisFloor: 0,
@@ -75,27 +68,6 @@ export const createNextFloorRunState = (
         bestRippleThisFloor: 0,
         magpieTheftsThisFloor: 0,
         magpieScaredOffThisFloor: 0,
-        hazardShuffleSnaresThisFloor: 0,
-        hazardCascadeCachesThisFloor: 0,
-        hazardMirrorDecoysThisFloor: 0,
-        hazardFragileCacheClaimsThisFloor: 0,
-        hazardFragileCacheBreaksThisFloor: 0,
-        hazardTollCachesThisFloor: 0,
-        hazardFuseCachesThisFloor: 0,
-        hazardFuseCacheExpiredClaimsThisFloor: 0,
-        lanternWardScoutsThisFloor: 0,
-        omenSealScoutsThisFloor: 0,
-        mimicCacheClaimsThisFloor: 0,
-        mimicCacheBitesThisFloor: 0,
-        mimicCacheGuardBitesThisFloor: 0,
-        anchorSealChargesThisFloor: 0,
-        anchorSealUsesThisFloor: 0,
-        loadedGatewayPlansThisFloor: 0,
-        catalystAltarUpgradesThisFloor: 0,
-        parasiteVesselConversionsThisFloor: 0,
-        pinLatticeRewardsThisFloor: 0,
-        safeHazardWardChargesThisFloor: 0,
-        safeHazardWardsUsedThisFloor: 0,
         shiftingSpotlightNonce: 0,
         flashPairRevealedTileIds: [],
         regionShuffleCharges: INITIAL_REGION_SHUFFLE_CHARGES,
@@ -105,14 +77,6 @@ export const createNextFloorRunState = (
         traitRouteObjectiveRewardClaimedThisFloor: false,
         traitRouteObjectiveRewardTextThisFloor: null,
         traitRouteObjectiveTriggeredTagsThisFloor: [],
-        shopOffers: [],
-        shopRerolls: 0,
-        dungeonEnemiesDefeatedThisFloor: 0,
-        dungeonTrapsResolvedThisFloor: 0,
-        dungeonTreasuresOpenedThisFloor: 0,
-        dungeonGatewaysUsedThisFloor: 0,
-        enemyHazardHitsThisFloor: 0,
-        enemyHazardsDefeatedThisFloor: 0,
         timerState: createTimerState({ memorizeRemainingMs: options.memorizeRemainingMs }),
         lastLevelResult: null,
         stats: {
@@ -126,7 +90,7 @@ export const createNextFloorRunState = (
     };
     /*
      * Whoever lives on the next floor moves in before anything else reads the run: their peek
-     * charge, their coins and their token are part of the floor the player is about to be handed,
+     * charge and their token are part of the floor the player is about to be handed,
      * not a bonus applied to a floor already underway.
      */
     return applyFloorCurio(

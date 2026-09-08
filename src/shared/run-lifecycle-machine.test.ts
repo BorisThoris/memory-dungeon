@@ -32,7 +32,7 @@ describe('run lifecycle machine', () => {
 
     it('rejects impossible gameplay transitions by staying in the current state', () => {
         expect(actorValueAfter([{ type: 'FLIP_PAIR' }])).toBe('menu');
-        expect(actorValueAfter([{ type: 'START_RUN' }, { type: 'CLOSE_RELIC_OFFER' }])).toBe('memorize');
+        expect(actorValueAfter([{ type: 'START_RUN' }, { type: 'NEXT_LEVEL' }])).toBe('memorize');
     });
 
     it('keeps terminal game-over from resuming directly into gameplay', () => {

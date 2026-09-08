@@ -1,4 +1,4 @@
-import type { BoardState, RunState, Tile } from './contracts';
+import type { BoardState, RunState } from './contracts';
 import { calculateRecallMatchBonus } from './recall-rules';
 import { getPresentationMutatorMatchPenalty } from './scoring-rules';
 import { normalizeSessionStats } from './session-stats-rules';
@@ -23,7 +23,6 @@ export interface TurnMatchScoringSummaryInput {
     sourceBoard: BoardState;
     resolvedBoard: BoardState;
     matchedPairKey: string;
-    matchedTiles: readonly Tile[];
     encorePairKeys: readonly string[];
     findableScoreBonus: number;
     chunkScore: number;
@@ -34,7 +33,6 @@ export const resolveTurnMatchScoringSummary = ({
     sourceBoard,
     resolvedBoard,
     matchedPairKey,
-    matchedTiles,
     encorePairKeys,
     findableScoreBonus,
     chunkScore
@@ -47,7 +45,7 @@ export const resolveTurnMatchScoringSummary = ({
     const encoreBonus = encorePairKeys.includes(encoreKey) ? ENCORE_BONUS_SCORE : 0;
     const spotlightDelta = shiftingSpotlightMatchDelta(sourceBoard, encoreKey);
     const presentationPenalty = getPresentationMutatorMatchPenalty(run);
-    const recallBonus = calculateRecallMatchBonus(run, matchedTiles);
+    const recallBonus = calculateRecallMatchBonus(run);
     const matchScore = calculateResolvedMatchScore({
         level: resolvedBoard.level,
         currentStreak,

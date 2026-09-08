@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MUTATOR_IDS, type RelicId } from './contracts';
+import { MUTATOR_IDS } from './contracts';
 import * as GameCatalog from './game-catalog';
 import * as Encyclopedia from './mechanics-encyclopedia';
 
@@ -14,15 +14,13 @@ describe('game-catalog encyclopedia re-exports', () => {
         expect(GameCatalog.ENCYCLOPEDIA_CONTRACT_TOPICS).toBe(Encyclopedia.ENCYCLOPEDIA_CONTRACT_TOPICS);
         expect(GameCatalog.ENCYCLOPEDIA_FEATURED_RUN_TOPICS).toBe(Encyclopedia.ENCYCLOPEDIA_FEATURED_RUN_TOPICS);
         expect(GameCatalog.GAME_MODE_CODEX).toBe(Encyclopedia.GAME_MODE_CODEX);
-        expect(GameCatalog.RELIC_CATALOG).toBe(Encyclopedia.RELIC_CATALOG);
         expect(GameCatalog.MUTATOR_CATALOG).toBe(Encyclopedia.MUTATOR_CATALOG);
         expect(GameCatalog.VISUAL_ENDLESS_MODE_LOCKED).toBe(Encyclopedia.VISUAL_ENDLESS_MODE_LOCKED);
         expect(GameCatalog.ENCYCLOPEDIA_VERSION).toBe(Encyclopedia.ENCYCLOPEDIA_VERSION);
         expect(GameCatalog.ACHIEVEMENT_CATALOG).toBe(Encyclopedia.ACHIEVEMENT_CATALOG);
     });
 
-    it('projects relic and mutator rows through stable shared ID orders', () => {
-        expect(GameCatalog.getRelicCatalogRows().map((row) => row.id)).toEqual(Object.keys(Encyclopedia.RELIC_CATALOG) as RelicId[]);
+    it('projects mutator rows through the shared ID order', () => {
         expect(GameCatalog.getMutatorCatalogRows().map((row) => row.id)).toEqual([...MUTATOR_IDS]);
     });
 });

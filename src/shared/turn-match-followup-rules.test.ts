@@ -46,26 +46,4 @@ describe('resolveTurnMatchFollowup', () => {
         expect(result.nBackMatchCounter).toBe(1);
         expect(result.nBackAnchorPairKey).toBe('previous');
     });
-
-
-
-
-    it('preserves an existing pending route plan', () => {
-        const run = {
-            ...createNewRun(0),
-            pendingRouteCardPlan: {
-                choiceId: 'existing',
-                routeType: 'safe' as const,
-                sourceLevel: 3,
-                targetLevel: 4
-            }
-        };
-
-        const result = resolveTurnMatchFollowup({
-            run,
-            encoreKey: 'gateway-c'
-        });
-
-        expect(result.pendingRouteCardPlan).toBe(run.pendingRouteCardPlan);
-    });
 });

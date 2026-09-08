@@ -28,11 +28,8 @@ const CONTENT_REGISTRIES = [
 ];
 const PLAYER_VISIBLE_STATES = new Set([
     'achievementProgress',
-    'bossTrophyCacheOutcome',
     'comboShards',
     'currentLevelScore',
-    'dungeonEnemiesDefeatedThisFloor',
-    'enemyHazardsDefeatedThisFloor',
     'feedbackLines',
     'guardTokens',
     'interactionTags',
@@ -43,12 +40,8 @@ const PLAYER_VISIBLE_STATES = new Set([
     'peekCharges',
     'recallFocus',
     'regionShuffleCharges',
-    'relicFavorProgress',
-    'relicOffer',
-    'routeChoices',
     'score',
     'sessionStats',
-    'shopGold',
     'totalScore',
     'triesDelta'
 ]);

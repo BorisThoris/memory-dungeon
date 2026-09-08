@@ -31,7 +31,12 @@ const REMOVED_MECHANIC_IDS = new Set([
     'safety.dungeon_topology',
     'safety.safe_hazard_ward',
     'board.scout_reveal',
-    'trait.volatile_heavy_guard'
+    'trait.volatile_heavy_guard',
+    'findable.ward_spark',
+    'findable.scout_glint',
+    'inventory.iron_key',
+    'inventory.master_key',
+    'safety.parasite_ward'
 ]);
 const REMOVED_MODULE_PATTERN =
     /(^|\/)(dungeon-[^/]*|hazard-[^/]*|enemy-hazard-board-rules|run-map|relics|relic-immediate-rules|trait-build-rewards|bonus-rewards|route-card-reward-shape|floor-completion-transitions|dungeonPressSurfaceState|TileBoardEnemyHazardMarker|useGameScreenTraitRouteTargets)(\.test)?\.tsx?$/;
@@ -62,7 +67,7 @@ describe('gameplay interaction graph', () => {
     });
 
     it('keeps the executable graph connected and guarded', () => {
-        expect(gameplayInteractionGraph.version).toBe(30);
+        expect(gameplayInteractionGraph.version).toBe(31);
         expect(validateGameplayInteractionGraph()).toEqual([]);
     });
 
@@ -97,10 +102,11 @@ describe('gameplay interaction graph', () => {
             }
         }
         expect(gameplayInteractionGraph.coverage).toMatchObject({
-            blockingKinds: expect.not.arrayContaining(['boss', 'exit', 'lock']),
+            blockingKinds: expect.not.arrayContaining(['boss', 'exit', 'lock', 'objective']),
             requiredObjectives: ['objective.floor_clear'],
             requiredSafetyNodes: ['safety.softlock_fairness']
         });
+        expect(gameplayInteractionGraph.edges.filter((edge) => edge.kind === 'unblocks' || edge.kind === 'priority_guard')).toEqual([]);
     });
 
     it('keeps a mechanic node for every findable and run inventory item the source rosters declare', () => {
@@ -125,8 +131,7 @@ describe('gameplay interaction graph', () => {
                 'trait.drift',
                 'power.destroy_pair',
                 'safety.softlock_fairness',
-                'hazard.score_parasite',
-                'safety.parasite_ward'
+                'hazard.score_parasite'
             ])
         );
         expect(blockers.every((mechanic) => mechanic.softlockGuards.length > 0)).toBe(true);
@@ -154,28 +159,23 @@ describe('gameplay interaction graph', () => {
         expect(byId.get('safety.softlock_fairness')).toMatchObject({
             kind: 'safety',
             role: 'invariant_gate',
-            softlockGuards: expect.arrayContaining(['inspectBoardFairness', 'repairDungeonExitSoftlocks'])
+            softlockGuards: ['inspectBoardFairness']
         });
         expect(byId.get('hazard.score_parasite')).toMatchObject({
             kind: 'hazard',
             role: 'chapter_pressure_and_objective_counterplay',
-            evidence: expect.arrayContaining(['src/shared/score-parasite-rules.ts']),
-            tests: expect.arrayContaining(['src/shared/score-parasite-rules.test.ts', 'src/shared/game.test.ts'])
-        });
-        expect(byId.get('safety.parasite_ward')).toMatchObject({
-            kind: 'safety',
-            role: 'parasite_life_loss_buffer',
-            softlockGuards: expect.arrayContaining(['ward-before-life', 'non-negative-counter'])
+            evidence: expect.arrayContaining(['src/shared/score-parasite-rules.ts', 'src/shared/board-power-actions.ts']),
+            tests: expect.arrayContaining(['src/shared/score-parasite-rules.test.ts', 'src/shared/game.test.ts']),
+            softlockGuards: expect.arrayContaining(['four-floor-cycle', 'destroy-pair-resets-pressure'])
         });
         expect(gameplayInteractionGraph.edges).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({ source: 'safety.softlock_fairness', target: 'objective.floor_clear' }),
                 expect.objectContaining({ source: 'board.cleanup', target: 'safety.softlock_fairness' }),
-                expect.objectContaining({ source: 'safety.parasite_ward', target: 'hazard.score_parasite', kind: 'counterplay' }),
-                expect.objectContaining({ source: 'hazard.score_parasite', target: 'safety.parasite_ward', kind: 'guarded_by' }),
+                expect.objectContaining({ source: 'power.destroy_pair', target: 'hazard.score_parasite', kind: 'counterplay' }),
+                expect.objectContaining({ source: 'hazard.score_parasite', target: 'power.destroy_pair', kind: 'guarded_by' }),
                 expect.objectContaining({ source: 'hazard.score_parasite', target: 'core.gameplay_commands', kind: 'triggers' }),
                 expect.objectContaining({ source: 'core.gameplay_commands', target: 'hazard.score_parasite', kind: 'triggers' }),
-                expect.objectContaining({ source: 'core.gameplay_commands', target: 'safety.parasite_ward', kind: 'modifies' }),
                 expect.objectContaining({ source: 'inventory.mutator_loadout', target: 'hazard.score_parasite', kind: 'triggers' }),
                 expect.objectContaining({ source: 'hazard.score_parasite', target: 'feedback.gameplay_hud', kind: 'displays' })
             ])
@@ -190,10 +190,9 @@ describe('gameplay interaction graph', () => {
             edgeCount: gameplayInteractionGraph.edges.length,
             traitCount: TILE_TRAIT_KINDS.length
         });
-        expect(audit.blockerCount).toBeGreaterThanOrEqual(9);
+        expect(audit.blockerCount).toBe(8);
         expect(audit.counterplayEdgeCount).toBeGreaterThanOrEqual(19);
         expect(audit.blockerWithoutProtectiveEdgeIds).toEqual([]);
-        expect(audit.shopCounterplayWithoutPriorityGuardIds).toEqual([]);
         expect(audit.generatedFloorCoverageGapIds).toEqual(expect.arrayContaining(['trait.echo']));
         expect(audit.playerVisibleWriteWithoutHudIds).toEqual([]);
         expect(audit.highLeverageMechanicIds).toEqual(
@@ -201,7 +200,6 @@ describe('gameplay interaction graph', () => {
                 'trait.stasis',
                 'power.destroy_pair',
                 'hazard.score_parasite',
-                'safety.parasite_ward',
                 'safety.softlock_fairness',
                 'core.gameplay_commands',
                 'progression.run_flow'
@@ -285,13 +283,11 @@ describe('gameplay interaction graph', () => {
         );
     });
 
-    it('connects Ward Spark and Destroy charges into deterministic pair removal', () => {
+    it('connects Destroy charges into deterministic pair removal', () => {
         const byId = mechanicById();
-        expect(byId.get('findable.ward_spark')).toMatchObject({ kind: 'findable', enables: [] });
         expect(byId.get('inventory.destroy_charge')).toMatchObject({ kind: 'inventory', role: 'pair_removal_resource' });
         expect(gameplayInteractionGraph.edges).toEqual(
             expect.arrayContaining([
-                expect.objectContaining({ source: 'findable.ward_spark', target: 'core.gameplay_commands', kind: 'triggers' }),
                 expect.objectContaining({ source: 'core.gameplay_commands', target: 'inventory.destroy_charge', kind: 'modifies' }),
                 expect.objectContaining({ source: 'inventory.destroy_charge', target: 'power.destroy_pair', kind: 'enables' }),
                 expect.objectContaining({ source: 'power.destroy_pair', target: 'inventory.destroy_charge', kind: 'consumes' })
@@ -364,31 +360,6 @@ describe('gameplay interaction graph', () => {
                 expect.objectContaining({ source: 'power.undo_resolve', target: 'objective.floor_clear', kind: 'counterplay' })
             ])
         );
-    });
-
-    it('keeps key inventories modeled as HUD-visible resources while no lock consumes them', () => {
-        const byId = mechanicById();
-        expect(byId.get('inventory.iron_key')).toMatchObject({
-            kind: 'inventory',
-            role: 'treasure_extraction_resource',
-            enables: [],
-            evidence: expect.arrayContaining(['src/shared/run-inventory.ts'])
-        });
-        expect(byId.get('inventory.master_key')).toMatchObject({
-            kind: 'inventory',
-            role: 'universal_single_lock_resource',
-            enables: [],
-            evidence: ['src/shared/run-inventory.ts'],
-            tests: expect.arrayContaining(['src/shared/run-inventory.test.ts'])
-        });
-        expect(gameplayInteractionGraph.edges).toEqual(
-            expect.arrayContaining([
-                expect.objectContaining({ source: 'core.gameplay_commands', target: 'inventory.iron_key', kind: 'modifies' }),
-                expect.objectContaining({ source: 'inventory.iron_key', target: 'feedback.gameplay_hud', kind: 'displays' }),
-                expect.objectContaining({ source: 'inventory.master_key', target: 'feedback.gameplay_hud', kind: 'displays' })
-            ])
-        );
-        expect(gameplayInteractionGraph.edges.filter((edge) => edge.kind === 'unblocks' || edge.kind === 'priority_guard')).toEqual([]);
     });
 
     it('connects Wild Run setup through one-token wildcard matches and floor continuity', () => {

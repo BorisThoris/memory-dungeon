@@ -1140,7 +1140,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         regionShuffleCharges: run.regionShuffleCharges,
         stickyBlockIndex: run.stickyBlockIndex,
         parasiteFloors: run.parasiteFloors,
-        parasiteWardRemaining: run.parasiteWardRemaining,
         scoreParasiteActive: run.activeMutators.includes('score_parasite'),
         objectiveProgress: liveObjectiveStatus?.progress,
         objectiveRequired: liveObjectiveStatus?.required,

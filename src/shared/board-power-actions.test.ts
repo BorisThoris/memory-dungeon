@@ -84,15 +84,7 @@ describe('board power actions', () => {
     it('applies destroy-pair transition accounting without finalizing the level', () => {
         const state = run({
             board: board([
-                {
-                    ...tile('a1', 'A'),
-                    routeCardKind: 'greed_cache',
-                    routeSpecialKind: 'mimic_cache',
-                    routeSpecialRevealed: true,
-                    routeSpecialRevealSource: 'peek',
-                    lanternScouted: true,
-                    scoutRevealSource: 'lantern_ward'
-                },
+                tile('a1', 'A'),
                 tile('a2', 'A'),
                 tile('b1', 'B'),
                 tile('b2', 'B')
@@ -300,20 +292,6 @@ describe('board power actions', () => {
     });
 
 
-    it('uses the free targeted-reconfiguration perk before spending normal row/swap charges', () => {
-        const perkRun = run({
-            regionShuffleCharges: 1,
-            regionShuffleFreeThisFloor: true,
-            rewardPerkIds: ['free_first_swap_per_floor']
-        });
-        const rowShuffled = applyRegionShuffle(perkRun, 0);
-        const tileSwapped = applyTileSwap(perkRun, 'a1', 'b1');
-
-        expect(rowShuffled.regionShuffleCharges).toBe(1);
-        expect(rowShuffled.regionShuffleFreeThisFloor).toBe(false);
-        expect(tileSwapped.regionShuffleCharges).toBe(1);
-        expect(tileSwapped.regionShuffleFreeThisFloor).toBe(false);
-    });
 
     it('refuses tile swaps while blocked by state, contract, or target legality', () => {
         const flipped = run({ board: { ...defaultBoard(), flippedTileIds: ['a1'] } });

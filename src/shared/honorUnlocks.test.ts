@@ -58,7 +58,6 @@ describe('honorUnlocks', () => {
             ...save.playerStats!,
             sharpFloors: 1,
             bestFloorNoPowers: 10,
-            relicPickCounts: { extra_shuffle_charge: 10 },
             encorePairKeysLastRun: []
         };
         save.bestScore = 3000;
@@ -70,7 +69,7 @@ describe('honorUnlocks', () => {
             achievementsEnabled: true,
             unlockedAchievements: [],
             bestStreak: 1,
-            perfectClears: 0,
+            perfectClears: 0
         };
 
         const ids = eligibleHonorUnlockIds(save);
@@ -84,11 +83,7 @@ describe('honorUnlocks', () => {
         save.playerStats = {
             ...save.playerStats!,
             sharpFloors: Number.POSITIVE_INFINITY,
-            bestFloorNoPowers: Number.POSITIVE_INFINITY,
-            relicPickCounts: {
-                guard_token_plus_one: Number.POSITIVE_INFINITY,
-                parasite_ledger: 9.9
-            }
+            bestFloorNoPowers: Number.POSITIVE_INFINITY
         };
         save.lastRunSummary = {
             totalScore: 100,
@@ -98,7 +93,7 @@ describe('honorUnlocks', () => {
             achievementsEnabled: true,
             unlockedAchievements: [],
             bestStreak: 1,
-            perfectClears: 0,
+            perfectClears: 0
         };
 
         expect(eligibleHonorUnlockIds(save)).toEqual([]);

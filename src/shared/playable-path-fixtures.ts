@@ -211,11 +211,7 @@ const playPerfectFloors = (run: RunState, count: number): RunState => {
  * with one way forward. The four side-room fixtures that used to grow out of it are gone with the
  * rooms (Gen 173).
  */
-const floorClearWithRouteChoices = (): RunState => ({
-    ...playPerfectFloors(baseEndlessRun(), 1),
-    pendingRouteCardPlan: null,
-    sideRoom: null
-});
+const floorClearWithRouteChoices = (): RunState => playPerfectFloors(baseEndlessRun(), 1);
 
 const gameOverRun = (): RunState => {
     const run = finishMemorizePhase(baseEndlessRun());

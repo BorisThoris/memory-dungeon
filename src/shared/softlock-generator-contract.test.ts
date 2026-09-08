@@ -9,23 +9,12 @@ import {
     createClearedBoardFairnessProjection,
     createFinalPairFairnessProjection,
     createGeneratedBoardSolverRun,
-    DEFAULT_SOFTLOCK_GENERATOR_SCENARIOS,
     formatSoftlockGeneratorFailure,
     runSoftlockGeneratorContract,
     solveGeneratedBoardByExhaustingPairs
 } from './softlock-generator-contract';
 
 describe('softlock generator contract', () => {
-    it('keeps route-pressure scenarios cycling through authored route types', () => {
-        const routePressure = DEFAULT_SOFTLOCK_GENERATOR_SCENARIOS.find((scenario) => scenario.id === 'route_pressure');
-
-        expect(routePressure).toBeTruthy();
-        expect(
-            routePressure?.seeds.flatMap((seed) =>
-                routePressure.floors.map((floor) => routePressure.optionsForFloor({ seed, floor }).routeCardPlan?.routeType)
-            )
-        ).toEqual(expect.arrayContaining(['safe', 'greed', 'mystery']));
-    });
 
     it('checks seeded floors across traits and final-pair projections', () => {
         const result = runSoftlockGeneratorContract();
@@ -57,13 +46,7 @@ describe('softlock generator contract', () => {
             runRulesVersion: GAME_RULES_VERSION,
             floorTag: 'normal',
             floorArchetypeId: null,
-            activeMutators: [],
-            routeCardPlan: {
-                choiceId: 'contract:mystery:438154985:5',
-                routeType: 'mystery',
-                sourceLevel: 4,
-                targetLevel: 5
-            }
+            activeMutators: []
         });
 
         const solverRun = createGeneratedBoardSolverRun(board, 438154985);
@@ -74,9 +57,8 @@ describe('softlock generator contract', () => {
         expect(solverRun.board?.level).toBe(5);
         expect(solverRun.findablesTotalThisFloor).toBeGreaterThanOrEqual(0);
         expect(solved.status).toBe('levelComplete');
-        // There is no exit to activate. The floor ends because the board does: every tile the
-        // solver was handed is matched or removed, and nothing else was ever on it.
-        expect(solved.board?.dungeonExitTileId).toBeNull();
+        // The floor ends because the board does: every tile the solver was handed is matched or
+        // removed, and nothing else was ever on it.
         expect(
             solved.board?.tiles.filter((tile) => tile.state !== 'matched' && tile.state !== 'removed')
         ).toEqual([]);
@@ -183,31 +165,30 @@ describe('softlock generator contract', () => {
         expect(formatSoftlockGeneratorFailure(playableFailure!)).toContain('solver_trace: reason=');
     });
 
-    it('includes blocked resource and tile context in failure diagnostics', () => {
+    it('includes pair and tile context in failure diagnostics', () => {
         const diagnostic = formatSoftlockGeneratorFailure({
-            scenarioId: 'missing_key_lock_fixture',
-            scenarioLabel: 'Missing key lock fixture',
+            scenarioId: 'orphan_pair_fixture',
+            scenarioLabel: 'Orphan pair fixture',
             seed: 23,
             floor: 6,
             projection: 'generated',
-            issueCodes: ['exit_lock_unreachable'],
-            issueDetails: [
-                'exit_lock_unreachable: iron-locked exit requires a matching key, but no reachable key route exists. tiles=exit'
-            ],
+            issueCodes: ['real_pair_incomplete'],
+            issueDetails: ['real_pair_incomplete: Real pair "a" has 1 tile(s); exactly 2 are required. pair=a tiles=a1'],
             issues: [
                 {
-                    code: 'exit_lock_unreachable',
-                    message: 'iron-locked exit requires a matching key, but no reachable key route exists.',
-                    tileIds: ['exit']
+                    code: 'real_pair_incomplete',
+                    message: 'Real pair "a" has 1 tile(s); exactly 2 are required.',
+                    pairKey: 'a',
+                    tileIds: ['a1']
                 }
             ],
             boardSummary: 'level=6 pairs=1 floorTag=normal archetype=none'
         });
 
         expect(diagnostic).toContain('level=6 pairs=1');
-        expect(diagnostic).toContain('exit_lock_unreachable');
-        expect(diagnostic).toContain('no reachable key route');
-        expect(diagnostic).toContain('tiles=exit');
+        expect(diagnostic).toContain('real_pair_incomplete');
+        expect(diagnostic).toContain('exactly 2 are required');
+        expect(diagnostic).toContain('tiles=a1');
     });
 
 });

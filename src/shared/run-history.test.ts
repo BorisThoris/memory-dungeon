@@ -88,12 +88,8 @@ describe('REG-085 run history, share keys, and journal', () => {
             unlockedAchievements: [],
             bestStreak: 13,
             perfectClears: 2,
-            relicIds: [],
             payoffPickupClaimed: 2,
             payoffPickupTotal: 2,
-            payoffRewardPerkCount: 1,
-            payoffRoutePaid: true,
-            payoffRouteRewardText: '+1 combo shard',
             gameMode: 'endless'
         };
 
@@ -101,7 +97,7 @@ describe('REG-085 run history, share keys, and journal', () => {
 
         expect(rows.find((row) => row.id === 'last_payoff_stack')).toMatchObject({
             label: 'Last payoff stack',
-            value: 'Super stack · 5 payoffs',
+            value: 'Combo burst · 3 payoffs',
             persistence: 'persisted_summary',
             exportSafe: true
         });
@@ -118,11 +114,8 @@ describe('REG-085 run history, share keys, and journal', () => {
             unlockedAchievements: [],
             bestStreak: 4,
             perfectClears: 0,
-            relicIds: Number.NaN as unknown as [],
             payoffPickupClaimed: 0,
             payoffPickupTotal: 0,
-            payoffRewardPerkCount: Number.NaN,
-            payoffRoutePaid: false,
             gameMode: 'endless'
         };
         save.playerStats = {

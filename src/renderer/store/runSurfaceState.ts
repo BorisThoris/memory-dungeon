@@ -37,7 +37,6 @@ export interface RunSurfaceState {
     regionShuffleArmed: boolean;
     tileSwapArmed: boolean;
     tileSwapFirstTileId: string | null;
-    shopReturnMode: 'floor' | 'summary' | null;
     matchScorePop: MatchScorePop | null;
     mismatchScorePop: MismatchScorePop | null;
 }
@@ -115,7 +114,6 @@ export const createRunSurfaceReset = (): RunSurfaceState => ({
     regionShuffleArmed: false,
     tileSwapArmed: false,
     tileSwapFirstTileId: null,
-    shopReturnMode: null,
     ...BOARD_FLOATER_POP_CLEAR
 });
 

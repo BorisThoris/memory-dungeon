@@ -1,47 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import {
-    RECALL_CLUE_MATCH_SCORE,
     RECALL_FOCUS_MATCH_SCORE,
     RECALL_FOCUS_MAX,
     type MutatorId,
-    type RouteChoice,
     type RunState
 } from './contracts';
 import { getMemoryRecallFeedback } from './memory-recall-feedback';
 import { makeRun, makeTile } from './test/game-fixtures';
 
-const routeChoices: RouteChoice[] = [
-    {
-        id: 'route:safe',
-        routeType: 'safe',
-        label: 'Safe passage',
-        detail: 'Recover before the next room.',
-        rewardPreview: '+1 life.'
-    },
-    {
-        id: 'route:greed',
-        routeType: 'greed',
-        label: 'Greedy route',
-        detail: 'Push for value.',
-        rewardPreview: '+6 gold.',
-        riskPreview: '-1 life.'
-    },
-    {
-        id: 'route:mystery',
-        routeType: 'mystery',
-        label: 'Mystery route',
-        detail: 'Unknown side-room hook.'
-    }
-];
-
 describe('getMemoryRecallFeedback', () => {
-    it('surfaces remembered clues, forgotten symbols, focus bonus, and route choices', () => {
+    it('surfaces forgotten symbols, focus bonus, and memory burden', () => {
         const run = makeRun(
             [
-                makeTile('a1', 'A', 'Rune A', {
-                    routeSpecialKind: 'mystery_veil',
-                    routeSpecialRevealed: true
-                }),
+                makeTile('a1', 'A', 'Rune A'),
                 makeTile('a2', 'A', 'Rune A'),
                 makeTile('b1', 'B', 'Rune B'),
                 makeTile('b2', 'B', 'Rune B')
@@ -60,8 +31,7 @@ describe('getMemoryRecallFeedback', () => {
                     perfect: false,
                     mistakes: 1,
                     clearLifeReason: 'none',
-                    clearLifeGained: 0,
-                    routeChoices
+                    clearLifeGained: 0
                 }
             }
         );
@@ -84,11 +54,9 @@ describe('getMemoryRecallFeedback', () => {
                 tone: 'danger'
             })
         );
-        expect(feedback.nextCleanMatchBonus).toBe(RECALL_FOCUS_MATCH_SCORE * 2 + RECALL_CLUE_MATCH_SCORE);
-        expect(feedback.rememberedClueTileCount).toBe(1);
+        expect(feedback.nextCleanMatchBonus).toBe(RECALL_FOCUS_MATCH_SCORE * 2);
         expect(feedback.forgottenSymbols).toEqual(['Rune B']);
         expect(feedback.pressure).toBe('strained');
-        expect(feedback.clues.map((line) => line.id)).toContain('remembered-clues');
         expect(feedback.symbols.map((line) => line.id)).toEqual(['symbol-memory-map', 'forgotten-symbols', 'pinned-symbols']);
         expect(feedback.recallPlan).toEqual([
             expect.objectContaining({
@@ -110,8 +78,6 @@ describe('getMemoryRecallFeedback', () => {
                 forgottenIntersectionCount: 1
             })
         );
-        // No route decisions weigh on the burden any more (Gen 173): the same board reads two
-        // lighter than it did when three doors were waiting behind the floor clear.
         expect(feedback.burden).toEqual({
             score: 4,
             label: 'loaded',
@@ -119,83 +85,22 @@ describe('getMemoryRecallFeedback', () => {
             tone: 'watch'
         });
         expect(feedback.penalties.map((line) => line.id)).toContain('recall-mistakes');
-        expect(feedback.choices).toEqual([]);
     });
 
-    it('normalizes malformed scout and recovery counters before building feedback copy', () => {
+    it('normalizes malformed recovery counters before building feedback copy', () => {
         const run = makeRun([makeTile('a1', 'A', 'A'), makeTile('a2', 'A', 'A')], {
-            lanternWardScoutsThisFloor: Number.POSITIVE_INFINITY,
-            omenSealScoutsThisFloor: 1.9,
             pendingMemorizeBonusMs: Number.POSITIVE_INFINITY
         });
 
         const feedback = getMemoryRecallFeedback(run);
 
-        expect([...feedback.clues, ...feedback.penalties].map((line) => line.detail).join(' ')).not.toMatch(/NaN|Infinity/);
-        expect(feedback.clues.find((line) => line.id === 'scout-sources')).toMatchObject({
-            detail: '0 Lantern Ward and 1 Omen Seal clue reads this floor.'
-        });
+        expect(feedback.penalties.map((line) => line.detail).join(' ')).not.toMatch(/NaN|Infinity/);
         expect(feedback.penalties.find((line) => line.id === 'memorize-recovery')).toBeUndefined();
     });
 
-    it('ignores malformed route choice payloads before building recall pressure', () => {
-        const run = makeRun([makeTile('a1', 'A', 'A'), makeTile('a2', 'A', 'A')], {
-            lastLevelResult: {
-                level: 1,
-                scoreGained: 100,
-                rating: 'A',
-                livesRemaining: 4,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'none',
-                clearLifeGained: 0,
-                routeChoices: { length: 3 } as never
-            }
-        });
-
-        const feedback = getMemoryRecallFeedback(run);
-
-        expect(feedback.choices).toEqual([]);
-        expect(feedback.burden.detail).not.toContain('route decisions');
-    });
 
 
 
-    it('includes path memory from route-world boards', () => {
-        const run = makeRun(
-            [makeTile('a1', 'A', 'A'), makeTile('a2', 'A', 'A')],
-            {
-                board: {
-                    ...makeRun([makeTile('a1', 'A', 'A'), makeTile('a2', 'A', 'A')]).board!,
-                    routeWorldProfile: {
-                        routeType: 'greed',
-                        intensity: 'greed',
-                        choiceId: 'choice:greed',
-                        sourceLevel: 1,
-                        targetLevel: 2,
-                        hazardBudget: 3,
-                        rewardBudget: 4,
-                        safetyBudget: 0,
-                        informationBudget: 1,
-                        routeSpecialKinds: ['greed_cache'],
-                        summary: 'Greed cache route adds pressure and reward.'
-                    }
-                }
-            }
-        );
-
-        const feedback = getMemoryRecallFeedback(run);
-
-        expect(feedback.path).toEqual([
-            expect.objectContaining({ id: 'route-world-profile', tone: 'danger' }),
-            expect.objectContaining({
-                id: 'room-atmosphere',
-                label: 'Room log clear',
-                detail: 'The room is quiet enough to rebuild focus before the next branch.',
-                tone: 'stable'
-            })
-        ]);
-    });
 
     it('adds clear and overloaded atmosphere without changing mechanical counters', () => {
         const clearRun = makeRun([makeTile('a1', 'A', 'A'), makeTile('a2', 'A', 'A')], {
@@ -253,7 +158,7 @@ describe('getMemoryRecallFeedback', () => {
             [
                 makeTile('a1', 'A', 'Rune A', { state: 'flipped' }),
                 makeTile('a2', 'A', 'Rune A', { state: 'flipped' }),
-                makeTile('b1', 'B', 'Rune B', { lanternScouted: true }),
+                makeTile('b1', 'B', 'Rune B'),
                 makeTile('b2', 'B', 'Rune B'),
                 makeTile('c1', 'C', 'Rune C'),
                 makeTile('c2', 'C', 'Rune C'),
@@ -330,8 +235,6 @@ describe('getMemoryRecallFeedback', () => {
             makeTile('a1', 'A', 'Rune A'),
             makeTile('a2', 'A', 'Rune A'),
             makeTile('exit', '__exit__', 'Exit'),
-            makeTile('shop', '__shop__', 'Shop'),
-            makeTile('room', '__room__', 'Room'),
             makeTile('decoy', '__decoy__', 'Decoy'),
             makeTile('wild', '__wild__', 'Wild')
         ]);
@@ -397,7 +300,6 @@ describe('getMemoryRecallFeedback', () => {
         );
         expect(feedback.upgrades.map((line) => line.id)).toEqual(['next-clean-match']);
         expect(feedback.focus).toBe(1);
-        expect(feedback.rememberedClueTileCount).toBe(0);
     });
 
     it('ignores malformed memory arrays before building feedback copy', () => {

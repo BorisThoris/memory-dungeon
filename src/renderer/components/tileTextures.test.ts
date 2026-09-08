@@ -6,9 +6,6 @@ import {
     clearTileTextureCachesForDebug,
     forceIllustrationOverlayCacheVersionForTest,
     getIllustrationPipelineDebugState,
-    getTileFaceRoughnessTexture,
-    getTileFaceTexture,
-    getTileFaceOverlayTextureCacheKey,
     getStaticCardTexturePixelSize,
     getTileFaceOverlayTexture,
     preloadTileTextureImages,
@@ -78,47 +75,6 @@ describe('tileTextures layout', () => {
         expect(state.overlayTexture.createdCount).toBe(1);
         expect(state.overlayTexture.hitCount).toBe(1);
         expect(state.illustrationBitmap.createdCount).toBe(1);
-    });
-
-    it('reuses one front overlay texture across gameplay card classes with the same card identity', () => {
-        clearTileTextureCachesForDebug();
-        const normal = baseTile('alpha', 'pair-alpha');
-        const greed: Tile = { ...normal, routeCardKind: 'greed_cache' };
-        const safe: Tile = { ...normal, routeCardKind: 'safe_ward' };
-        const mystery: Tile = { ...normal, routeCardKind: 'mystery_veil' };
-        const dungeon: Tile = { ...normal, dungeonCardKind: 'treasure', dungeonCardState: 'hidden', dungeonCardHp: 4 };
-        const special: Tile = { ...normal, routeSpecialKind: 'elite_cache', routeSpecialRevealed: true };
-        const cards = [normal, greed, safe, mystery, dungeon, special];
-        const keys = cards.map((tile) => getTileFaceOverlayTextureCacheKey(tile, 'active', 'high'));
-        const textures = cards.map((tile) => getTileFaceOverlayTexture(tile, 'active', 'high'));
-
-        expect(new Set(keys)).toHaveLength(1);
-        for (const texture of textures) {
-            expect(texture).toBe(textures[0]);
-        }
-    });
-
-    it('reuses one hidden back texture for normal, route, dungeon, and special cards', () => {
-        clearTileTextureCachesForDebug();
-        const normal = baseTile('alpha', 'pair-alpha');
-        const cards: Tile[] = [
-            normal,
-            { ...baseTile('greed', 'pair-greed'), routeCardKind: 'greed_cache' },
-            { ...baseTile('safe', 'pair-safe'), routeCardKind: 'safe_ward' },
-            { ...baseTile('mystery', 'pair-mystery'), routeCardKind: 'mystery_veil' },
-            { ...baseTile('dungeon', 'pair-dungeon'), dungeonCardKind: 'treasure', dungeonCardState: 'hidden', dungeonCardHp: 4 },
-            { ...baseTile('special', 'pair-special'), routeSpecialKind: 'elite_cache', routeSpecialRevealed: true }
-        ];
-
-        const hiddenBacks = cards.map((tile) => getTileFaceTexture(tile, 'back', 'hidden'));
-        const roughnessMaps = cards.map((tile) => getTileFaceRoughnessTexture(tile, 'back', 'hidden'));
-
-        for (const texture of hiddenBacks) {
-            expect(texture).toBe(hiddenBacks[0]);
-        }
-        for (const texture of roughnessMaps) {
-            expect(texture).toBe(roughnessMaps[0]);
-        }
     });
 
     it('prewarms only one center-art bitmap per unique pairKey and tier', async () => {

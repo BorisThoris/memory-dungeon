@@ -5,21 +5,13 @@ import {
     createGameplayBoardTurnResolveCommand,
     createGameplayDefinitionCommand,
     createGameplayDestroyPairCommand,
-    createGameplayDungeonExitActivateCommand,
     createGameplayFlashPairCommand,
     createGameplayFloorAdvanceCommand,
     createGameplayGambitCommitCommand,
-    createGameplayHazardBanishCommand,
     createGameplayPeekCommand,
     createGameplayPinToggleCommand,
     createGameplayRegionShuffleCommand,
-    createGameplayRiskWagerAcceptCommand,
-    createGameplayRelicPickCommand,
-    createGameplayRelicOfferServiceCommand,
-    createGameplayRouteChooseCommand,
-    createGameplaySideRoomResolveCommand,
     createGameplayShuffleCommand,
-    createGameplayShopPurchaseCommand,
     createGameplayStrayRemoveCommand,
     createGameplayTileSwapCommand,
     createGameplayUndoResolveCommand,
@@ -104,11 +96,9 @@ const commandForStep = (
     step: number,
     invalidTraitChance: number
 ): GameplayCommand => {
-    const definitions = GAMEPLAY_CONTENT_DEFINITIONS.filter(
-        (definition) => definition.id !== 'relic.shrine_echo.treasure_claim'
-    );
+    const definitions = GAMEPLAY_CONTENT_DEFINITIONS;
     const commandId = `sim:${seed}:${String(step).padStart(4, '0')}`;
-    const actionIndex = pickRngIndex(rng, definitions.length + 12);
+    const actionIndex = pickRngIndex(rng, definitions.length + 9);
     if (step === 0) {
         return createGameplayBoardTurnResolveCommand(commandId);
     }
@@ -128,27 +118,6 @@ const commandForStep = (
         return createGameplayDestroyPairCommand(commandId, target);
     }
     if (step === 3) {
-        return createGameplayHazardBanishCommand(commandId);
-    }
-    if (step === 4) {
-        const choiceId = Array.isArray(run.lastLevelResult?.routeChoices)
-            ? run.lastLevelResult.routeChoices[0]?.id
-            : undefined;
-        return createGameplayRouteChooseCommand(commandId, choiceId ?? 'missing-route-choice');
-    }
-    if (step === 5) {
-        const relicId = Array.isArray(run.relicOffer?.options)
-            ? run.relicOffer.options[0]
-            : undefined;
-        return createGameplayRelicPickCommand(commandId, relicId ?? 'extra_shuffle_charge');
-    }
-    if (step === 6) {
-        return createGameplayRelicOfferServiceCommand(commandId, 'reroll_offer');
-    }
-    if (step === 7) {
-        return createGameplaySideRoomResolveCommand(commandId, 'skip');
-    }
-    if (step === 8) {
         return createGameplayFloorAdvanceCommand(commandId);
     }
     if (actionIndex === definitions.length) {
@@ -171,39 +140,29 @@ const commandForStep = (
         return createGameplayStrayRemoveCommand(commandId, target);
     }
     if (actionIndex === definitions.length + 3) {
-        return createGameplayRiskWagerAcceptCommand(commandId);
-    }
-    if (actionIndex === definitions.length + 4) {
         const targets = availablePeekTargets(run);
         const target = targets[pickRngIndex(rng, targets.length)] ?? 'missing-gambit-target';
         return createGameplayGambitCommitCommand(commandId, target);
     }
-    if (actionIndex === definitions.length + 5) {
+    if (actionIndex === definitions.length + 4) {
         return createGameplayShuffleCommand(commandId);
     }
-    if (actionIndex === definitions.length + 6) {
+    if (actionIndex === definitions.length + 5) {
         const rowCount = Math.max(1, run.board?.rows ?? 1);
         return createGameplayRegionShuffleCommand(commandId, pickRngIndex(rng, rowCount));
     }
-    if (actionIndex === definitions.length + 7) {
+    if (actionIndex === definitions.length + 6) {
         const targets = availablePeekTargets(run);
         const firstTileId = targets[pickRngIndex(rng, targets.length)] ?? 'missing-swap-first';
         const remaining = targets.filter((target) => target !== firstTileId);
         const secondTileId = remaining[pickRngIndex(rng, remaining.length)] ?? 'missing-swap-second';
         return createGameplayTileSwapCommand(commandId, firstTileId, secondTileId);
     }
-    if (actionIndex === definitions.length + 8) {
+    if (actionIndex === definitions.length + 7) {
         return createGameplayFlashPairCommand(commandId);
     }
-    if (actionIndex === definitions.length + 9) {
+    if (actionIndex === definitions.length + 8) {
         return createGameplayUndoResolveCommand(commandId);
-    }
-    if (actionIndex === definitions.length + 10) {
-        const offerId = (Array.isArray(run.shopOffers) ? run.shopOffers : [])[0]?.id ?? 'missing-shop-offer';
-        return createGameplayShopPurchaseCommand(commandId, offerId);
-    }
-    if (actionIndex === definitions.length + 11) {
-        return createGameplayDungeonExitActivateCommand(commandId, 'master_key');
     }
     const definition = definitions[actionIndex % definitions.length] ?? definitions[0];
     if (definition.trigger === 'trait.match') {
@@ -230,19 +189,6 @@ const commandForStep = (
             .filter((condition) => condition.kind === 'findable.matched')
             .map((condition) => condition.findable);
         return createGameplayDefinitionCommand(commandId, definition.id, { matchedFindables });
-    }
-    if (definition.trigger === 'floor.cleared') {
-        const riskWagerOutcome = definition.conditions.find(
-            (condition) => condition.kind === 'risk_wager.outcome_is'
-        );
-        return createGameplayDefinitionCommand(commandId, definition.id, {
-            bossTrophyClaimed: definition.conditions.some((condition) => condition.kind === 'boss_trophy.claimed'),
-            riskWagerOutcome: riskWagerOutcome?.kind === 'risk_wager.outcome_is' ? riskWagerOutcome.outcome : 'none',
-            featuredObjectiveCompleted: definition.conditions.some(
-                (condition) => condition.kind === 'featured_objective.completed'
-            ),
-            scoreParasiteActive: definition.conditions.some((condition) => condition.kind === 'score_parasite.active')
-        });
     }
     return createGameplayDefinitionCommand(commandId, definition.id);
 };

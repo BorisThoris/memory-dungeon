@@ -41,7 +41,6 @@ const EXTRA_ARGS: Record<string, readonly unknown[]> = {
     playChainOpportunityBeatSfx: ['surge', 3],
     playMatchSfx: [3],
     playMismatchRecoveryCrescendoSfx: ['recover', 3],
-    playRelicChoiceCrescendoSfx: ['rare'],
     playShuffleSfx: [true],
     playUiCue: [{ durationSec: 0.05, frequency: 440, type: 'sine' }]
 };

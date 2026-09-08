@@ -1,6 +1,5 @@
 import {
     BOSS_FLOOR_SCORE_MULTIPLIER,
-    type BoardState,
     type ClearLifeReason,
     type FeaturedObjectiveId,
     type FloorTag,
@@ -20,51 +19,15 @@ export const getClearLifeReason = (tries: number): ClearLifeReason => {
     return 'none';
 };
 
-export interface FloorClearEnemyHazardDefeatResult {
-    run: RunState;
-    board: BoardState;
-}
-
-/**
- * No board carries an enemy hazard any more, so a floor clear has nothing left to defeat: the
- * board only closes its open flips. The name stays for `floor-clear-transition.ts`.
- */
-export const applyFloorClearEnemyHazardDefeats = (
-    run: RunState,
-    board: BoardState
-): FloorClearEnemyHazardDefeatResult => ({
-    run,
-    board: { ...board, flippedTileIds: [] }
-});
-
 export type FloorClearStatLevelResultFields = Pick<
     LevelResult,
     | 'bestChain'
     | 'chunkBreaks'
     | 'chunkPairsBroken'
     | 'feverBreaks'
-    | 'anchorSealUses'
-    | 'catalystAltarUpgrades'
-    | 'hazardCascadeCaches'
-    | 'hazardFragileCacheBreaks'
-    | 'hazardFragileCacheClaims'
-    | 'hazardFuseCacheExpiredClaims'
-    | 'hazardFuseCaches'
-    | 'hazardMirrorDecoys'
-    | 'hazardShuffleSnares'
-    | 'hazardTileTriggers'
-    | 'hazardTollCaches'
-    | 'lanternWardScouts'
-    | 'loadedGatewayPlans'
-    | 'mimicCacheBites'
-    | 'mimicCacheClaims'
-    | 'omenSealScouts'
-    | 'parasiteVesselConversions'
-    | 'pinLatticeRewards'
     | 'recallBonusScore'
     | 'recallMatches'
     | 'recallMistakes'
-    | 'safeHazardWardsUsed'
 >;
 
 const positive = (value: number): number | undefined => (value > 0 ? value : undefined);
@@ -74,28 +37,9 @@ export const getFloorClearStatLevelResultFields = (run: RunState): FloorClearSta
     chunkBreaks: positive(run.chunkBreaksThisFloor),
     chunkPairsBroken: positive(run.chunkPairsBrokenThisFloor),
     feverBreaks: positive(run.feverBreaksThisFloor),
-    anchorSealUses: positive(run.anchorSealUsesThisFloor),
-    catalystAltarUpgrades: positive(run.catalystAltarUpgradesThisFloor),
-    hazardCascadeCaches: positive(run.hazardCascadeCachesThisFloor),
-    hazardFragileCacheBreaks: positive(run.hazardFragileCacheBreaksThisFloor),
-    hazardFragileCacheClaims: positive(run.hazardFragileCacheClaimsThisFloor),
-    hazardFuseCacheExpiredClaims: positive(run.hazardFuseCacheExpiredClaimsThisFloor),
-    hazardFuseCaches: positive(run.hazardFuseCachesThisFloor),
-    hazardMirrorDecoys: positive(run.hazardMirrorDecoysThisFloor),
-    hazardShuffleSnares: positive(run.hazardShuffleSnaresThisFloor),
-    hazardTileTriggers: positive(run.hazardTileTriggersThisFloor),
-    hazardTollCaches: positive(run.hazardTollCachesThisFloor),
-    lanternWardScouts: positive(run.lanternWardScoutsThisFloor),
-    loadedGatewayPlans: positive(run.loadedGatewayPlansThisFloor),
-    mimicCacheBites: positive(run.mimicCacheBitesThisFloor),
-    mimicCacheClaims: positive(run.mimicCacheClaimsThisFloor),
-    omenSealScouts: positive(run.omenSealScoutsThisFloor),
-    parasiteVesselConversions: positive(run.parasiteVesselConversionsThisFloor),
-    pinLatticeRewards: positive(run.pinLatticeRewardsThisFloor),
     recallBonusScore: positive(run.recallBonusScoreThisFloor),
     recallMatches: positive(run.recallMatchesThisFloor),
-    recallMistakes: positive(run.recallMistakesThisFloor),
-    safeHazardWardsUsed: positive(run.safeHazardWardsUsedThisFloor)
+    recallMistakes: positive(run.recallMistakesThisFloor)
 });
 
 export interface FloorClearScoreResult {
@@ -106,7 +50,6 @@ export interface FloorClearScoreResult {
 }
 
 export const calculateFloorClearScore = ({
-    bossTrophyCacheScore,
     currentLevelScore,
     featuredObjectiveStreakBonus,
     floorTag,
@@ -114,7 +57,6 @@ export const calculateFloorClearScore = ({
     objectiveBonus,
     perfect
 }: {
-    bossTrophyCacheScore: number;
     currentLevelScore: number;
     featuredObjectiveStreakBonus: number;
     floorTag: FloorTag | undefined;
@@ -129,8 +71,7 @@ export const calculateFloorClearScore = ({
         levelBonus +
         perfectBonus +
         runNonNegativeInteger(objectiveBonus) +
-        runNonNegativeInteger(featuredObjectiveStreakBonus) +
-        runNonNegativeInteger(bossTrophyCacheScore);
+        runNonNegativeInteger(featuredObjectiveStreakBonus);
     return {
         levelBonus,
         perfectBonus,
@@ -143,8 +84,6 @@ export const calculateFloorClearScore = ({
 };
 
 export interface CreateFloorClearLevelResultInput {
-    bossTrophyCacheOutcome: LevelResult['bossTrophyCacheOutcome'];
-    bossTrophyCacheScore: number;
     bonusTags: readonly string[];
     clearLifeGained: number;
     clearLifeReason: ClearLifeReason;
@@ -159,7 +98,6 @@ export interface CreateFloorClearLevelResultInput {
     objectiveBonusScore: number;
     perfect: boolean;
     rating: LevelResult['rating'];
-    routeChoices: LevelResult['routeChoices'];
     run: RunState;
     scoreGained: number;
     traitRouteObjectiveCompleted?: boolean;
@@ -169,8 +107,6 @@ export interface CreateFloorClearLevelResultInput {
 }
 
 export const createFloorClearLevelResult = ({
-    bossTrophyCacheOutcome,
-    bossTrophyCacheScore,
     bonusTags,
     clearLifeGained,
     clearLifeReason,
@@ -185,7 +121,6 @@ export const createFloorClearLevelResult = ({
     objectiveBonusScore,
     perfect,
     rating,
-    routeChoices,
     run,
     scoreGained,
     traitRouteObjectiveCompleted = false,
@@ -210,8 +145,6 @@ export const createFloorClearLevelResult = ({
         featuredObjectiveId != null && featuredObjectiveStreakBonus > 0
             ? featuredObjectiveStreakBonus
             : undefined,
-    bossTrophyCacheOutcome,
-    bossTrophyCacheScore: bossTrophyCacheScore > 0 ? bossTrophyCacheScore : undefined,
     traitRouteObjectiveCompleted: traitRouteObjectiveRequired > 0 ? traitRouteObjectiveCompleted : undefined,
     traitRouteObjectiveProgress: traitRouteObjectiveRequired > 0 ? traitRouteObjectiveProgress : undefined,
     traitRouteObjectiveRequired: traitRouteObjectiveRequired > 0 ? traitRouteObjectiveRequired : undefined,
@@ -222,6 +155,5 @@ export const createFloorClearLevelResult = ({
     ...getFloorClearStatLevelResultFields(run),
     chainMomentumAtClear: momentumBonus.momentum > 0 ? momentumBonus.momentum : undefined,
     momentumBonusTier: momentumBonus.tier !== 'none' ? momentumBonus.tier : undefined,
-    momentumBonusShards: momentumBonus.shards > 0 ? momentumBonus.shards : undefined,
-    routeChoices
+    momentumBonusShards: momentumBonus.shards > 0 ? momentumBonus.shards : undefined
 });

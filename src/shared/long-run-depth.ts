@@ -9,11 +9,8 @@ import {
     pickFloorScheduleEntry
 } from './floor-mutator-schedule';
 import { getEncounterIdentityForFloor } from './boss-encounters';
-import { buildBoard } from './board-generation';
 import {
-    assertDungeonBalanceProfilesWithinBounds,
     runBalanceSimulation,
-    runDungeonBalanceProfileSimulation,
     type BalanceSimulationReport,
     type BalanceSimulationRow
 } from './balance-simulation';
@@ -36,8 +33,6 @@ export interface LongRunActBossRow {
     floorTag: FloorTag;
     floorArchetypeId: FloorArchetypeId | null;
     expectedBoss: boolean;
-    generatedBossId: string | null;
-    objectiveId: string;
     encounterRank: 'boss' | null;
     bossDistance: number;
     status: 'coherent' | 'needs_attention';
@@ -95,20 +90,9 @@ export const getLongRunActBossRows = ({
     Array.from({ length: floors }, (_, index) => {
         const floor = index + 1;
         const schedule = pickFloorScheduleEntry(seed, rulesVersion, floor, 'endless');
-        const board = buildBoard(floor, {
-            runSeed: seed,
-            runRulesVersion: rulesVersion,
-            floorTag: schedule.floorTag,
-            floorArchetypeId: schedule.floorArchetypeId,
-            featuredObjectiveId: schedule.featuredObjectiveId,
-            cycleFloor: schedule.cycleFloor,
-            activeMutators: schedule.mutators,
-            gameMode: 'endless'
-        });
         const act = getChapterActBiomePresentation(schedule.cycleFloor ?? floor);
         const encounter = getEncounterIdentityForFloor(schedule);
         const expectedBoss = schedule.floorTag === 'boss';
-        const generatedBossId = board.dungeonBossId ?? null;
         return {
             floor,
             cycleFloor: schedule.cycleFloor ?? floor,
@@ -117,15 +101,9 @@ export const getLongRunActBossRows = ({
             floorTag: schedule.floorTag,
             floorArchetypeId: schedule.floorArchetypeId,
             expectedBoss,
-            generatedBossId,
-            objectiveId: board.dungeonObjectiveId ?? 'find_exit',
             encounterRank: encounter?.encounterRank ?? null,
             bossDistance: Math.max(0, nextScheduledBossFloor(floor) - floor),
-            status:
-                expectedBoss === Boolean(generatedBossId) &&
-                (expectedBoss ? board.dungeonObjectiveId === 'defeat_boss' && encounter?.encounterRank === 'boss' : true)
-                    ? 'coherent'
-                    : 'needs_attention'
+            status: expectedBoss === (encounter?.encounterRank === 'boss') ? 'coherent' : 'needs_attention'
         };
     });
 
@@ -159,64 +137,10 @@ export const runLongRunSoak = ({
     rulesVersion?: number;
 } = {}): LongRunSoakReport => {
     const report = runBalanceSimulation({ seeds, floors, rulesVersion });
-    const profileReport = runDungeonBalanceProfileSimulation({ seeds, floors, rulesVersion });
-    const fatigueRows = getLongRunFatigueRows(report);
-    const profileRows = [
-        longRunRow(
-            'min_profile_lives_remaining',
-            'Lowest carried-life balance profile floor',
-            Math.min(...profileReport.profiles.map((profile) => profile.minLivesRemaining)),
-            profileReport.bounds.minLivesRemaining,
-            5,
-            'runDungeonBalanceProfileSimulation'
-        ),
-        longRunRow(
-            'max_profile_run_falls',
-            'Most run falls in any balance profile',
-            Math.max(...profileReport.profiles.map((profile) => profile.runFalls)),
-            0,
-            profileReport.bounds.maxRunFalls,
-            'runDungeonBalanceProfileSimulation'
-        ),
-        longRunRow(
-            'max_profile_at_risk_streak',
-            'Longest repeated at-risk floor streak in any balance profile',
-            Math.max(...profileReport.profiles.map((profile) => profile.maxAtRiskStreak)),
-            0,
-            profileReport.bounds.maxAtRiskStreak,
-            'runDungeonBalanceProfileSimulation'
-        ),
-        longRunRow(
-            'min_profile_worst_seed_clear_share',
-            'Lowest per-seed clear share across balance profiles',
-            Number(Math.min(...profileReport.profiles.map((profile) => profile.worstSeedFloorsClearedShare)).toFixed(2)),
-            profileReport.bounds.minWorstSeedFloorsClearedShare,
-            1,
-            'runDungeonBalanceProfileSimulation'
-        ),
-        longRunRow(
-            'max_profile_worst_seed_low_life_share',
-            'Largest per-seed low-life exposure share across balance profiles',
-            Number(Math.max(...profileReport.profiles.map((profile) => profile.worstSeedLowLifeFloorShare)).toFixed(2)),
-            0,
-            profileReport.bounds.maxWorstSeedLowLifeFloorShare,
-            'runDungeonBalanceProfileSimulation'
-        ),
-        longRunRow(
-            'max_profile_seed_clear_spread',
-            'Largest best-versus-worst seed clear spread across balance profiles',
-            Number(Math.max(...profileReport.profiles.map((profile) => profile.seedFloorClearShareSpread)).toFixed(2)),
-            0,
-            profileReport.bounds.maxSeedFloorClearShareSpread,
-            'runDungeonBalanceProfileSimulation'
-        )
-    ];
-    const rows = [...fatigueRows, ...profileRows];
-    const profileBounds = assertDungeonBalanceProfilesWithinBounds(profileReport);
-    const issues = [
-        ...rows.filter((row) => row.status !== 'within_range').map((row) => `${row.key}:${row.value} outside ${row.targetMin}-${row.targetMax}`),
-        ...profileBounds.issues
-    ];
+    const rows = getLongRunFatigueRows(report);
+    const issues = rows
+        .filter((row) => row.status !== 'within_range')
+        .map((row) => `${row.key}:${row.value} outside ${row.targetMin}-${row.targetMax}`);
     return {
         rulesVersion,
         seeds: [...seeds],

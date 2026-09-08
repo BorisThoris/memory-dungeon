@@ -49,8 +49,7 @@ describe('REG-021 objective board', () => {
         save.playerStats = {
             ...save.playerStats!,
             bestFloorNoPowers: Number.POSITIVE_INFINITY,
-            sharpFloors: Number.NaN,
-            relicPickCounts: { guard_token_plus_one: Number.POSITIVE_INFINITY, parasite_ledger: 1.9 }
+            sharpFloors: Number.NaN
         };
         save.lastRunSummary = {
             totalScore: 0,

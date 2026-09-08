@@ -97,7 +97,6 @@ export const selectGatesForChangedPaths = (paths) => {
         file === 'scripts/gate-softlock-seeds.ts' ||
         isSeedSweepContractFile(file) ||
         file.startsWith('src/shared/playthrough-solver') ||
-        file.startsWith('src/shared/run-progression-repair') ||
         file.startsWith('src/shared/softlock') ||
         file.startsWith('src/shared/board-generation') ||
         file.startsWith('src/shared/board-build') ||
@@ -227,8 +226,7 @@ export const selectGatesForChangedPaths = (paths) => {
             file.startsWith('src/shared/findables') ||
             file.startsWith('src/shared/objective-rules') ||
             file.startsWith('src/shared/playthrough-solver') ||
-            file.startsWith('src/shared/run-progression-repair') ||
-            file === 'src/shared/contracts.ts'
+                file === 'src/shared/contracts.ts'
         ) {
             add('simHealth', file, 'endless route, reward, trait, objective, or generation health can change');
         }
@@ -240,8 +238,7 @@ export const selectGatesForChangedPaths = (paths) => {
             file === 'scripts/gate-softlock-seeds.ts' ||
             isSeedSweepContractFile(file) ||
             file.startsWith('src/shared/playthrough-solver') ||
-            file.startsWith('src/shared/run-progression-repair') ||
-            file.startsWith('src/shared/softlock') ||
+                file.startsWith('src/shared/softlock') ||
             file.startsWith('src/shared/board-generation') ||
             file.startsWith('src/shared/board-build') ||
             file.startsWith('src/shared/board-inspection') ||
@@ -249,7 +246,7 @@ export const selectGatesForChangedPaths = (paths) => {
         ) {
             add('simSoftlockSeeds', file, 'multi-seed executable softlock coverage can change');
         }
-        if (file.startsWith('src/shared/tile-trait') || file.startsWith('src/shared/board-power') || isCoreGameRuleFile(file) || file.startsWith('src/shared/playthrough-solver') || file.startsWith('src/shared/run-progression-repair') || file.startsWith('src/shared/turn-resolution')) {
+        if (file.startsWith('src/shared/tile-trait') || file.startsWith('src/shared/board-power') || isCoreGameRuleFile(file) || file.startsWith('src/shared/playthrough-solver') || file.startsWith('src/shared/turn-resolution')) {
             add('actionLoop', file, 'core turn, trait, or board-power rules changed');
         }
         if (file.startsWith('src/shared/board-generation') || file.startsWith('src/shared/board-build') || file.startsWith('src/shared/board-inspection') || file.startsWith('src/shared/softlock') || file.startsWith('src/shared/objective-rules')) {

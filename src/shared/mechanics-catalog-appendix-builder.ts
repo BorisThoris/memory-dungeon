@@ -4,10 +4,9 @@
  */
 import { ACHIEVEMENTS } from './achievements';
 import { GAME_RULES_VERSION, MUTATOR_IDS } from './contracts';
-import { ENCYCLOPEDIA_VERSION, GAME_MODE_CODEX, RELIC_CATALOG } from './mechanics-encyclopedia';
+import { ENCYCLOPEDIA_VERSION, GAME_MODE_CODEX } from './mechanics-encyclopedia';
 
 export function buildMechanicsCatalogAppendixMarkdown(generatedAtIso = new Date().toISOString()): string {
-    const relicN = Object.keys(RELIC_CATALOG).length;
     const mutN = MUTATOR_IDS.length;
     const achN = ACHIEVEMENTS.length;
     const modes = [...GAME_MODE_CODEX.map((m) => m.id)].sort((a, b) => a.localeCompare(b, 'en')).join(', ');
@@ -23,7 +22,6 @@ export function buildMechanicsCatalogAppendixMarkdown(generatedAtIso = new Date(
         '| --- | --- |',
         `| \`GAME_RULES_VERSION\` | ${GAME_RULES_VERSION} |`,
         `| \`ENCYCLOPEDIA_VERSION\` | ${ENCYCLOPEDIA_VERSION} |`,
-        `| Relic entries (\`RELIC_CATALOG\`) | ${relicN} |`,
         `| Mutator entries (\`MUTATOR_CATALOG\`) | ${mutN} |`,
         `| Achievement entries (\`ACHIEVEMENT_CATALOG\`) | ${achN} |`,
         `| \`GameMode\` codex ids | ${modes} |`,

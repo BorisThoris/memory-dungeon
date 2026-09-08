@@ -15,8 +15,6 @@ const run = (overrides: Partial<RunState> = {}): RunState => ({
     runRulesVersion: 1,
     peekCharges: 0,
     shuffleCharges: 0,
-    rewardPerkIds: [],
-    relicIds: [],
     stats: {
         totalScore: 0,
         currentLevelScore: 0,
@@ -48,12 +46,14 @@ describe('pure gameplay effect transition', () => {
         const initial = run();
         const command = createGameplayDefinitionCommand(
             'effect-parity-accepted',
-            'bonus_reward.echo_conduit_lens'
+            'trait.volatile_heavy_guard',
+            { matchedTraits: ['volatile'], adjacentTraits: ['heavy'] }
         );
         const pure = applyPure(initial, command);
         const core = reduceGameplayCommand(initial, command);
 
         expect(pure).toMatchObject({ accepted: true, rejectionReason: null });
+        expect(pure.run.stats.guardTokens).toBe(1);
         expect({ run: pure.run, events: pure.events, accepted: pure.accepted }).toEqual({
             run: core.run,
             events: core.events,
@@ -67,14 +67,14 @@ describe('pure gameplay effect transition', () => {
         const initial = run();
         const command = createGameplayDefinitionCommand(
             'effect-parity-rejected',
-            'reward_perk.echo_conduit_double',
-            { matchedTraits: ['echo'], adjacentTraits: ['conduit'] }
+            'trait.volatile_heavy_guard',
+            { matchedTraits: ['volatile'], adjacentTraits: ['echo'] }
         );
         const pure = applyPure(initial, command);
         const core = reduceGameplayCommand(initial, command);
 
         expect(pure).toMatchObject({ accepted: false, run: initial });
-        expect(pure.rejectionReason).toContain('echo_conduit_double is not active');
+        expect(pure.rejectionReason).toContain('heavy was not adjacent');
         expect({ run: pure.run, events: pure.events, accepted: pure.accepted }).toEqual({
             run: core.run,
             events: core.events,
@@ -85,17 +85,24 @@ describe('pure gameplay effect transition', () => {
     it('composes multiple definitions under one outer deterministic event sequence', () => {
         const initial = run();
         const events: GameplayEvent[] = [];
-        const peek = getGameplayContentDefinition('relic.peek_charge_plus_one')!;
-        const shuffle = getGameplayContentDefinition('relic.extra_shuffle_charge')!;
-        const factsCommand = createGameplayDefinitionCommand('outer-turn', peek.id);
+        const spark = getGameplayContentDefinition('findable.shard_spark')!;
+        const glint = getGameplayContentDefinition('findable.score_glint')!;
+        const factsCommand = createGameplayDefinitionCommand('outer-turn', spark.id, {
+            matchedFindables: ['shard_spark', 'score_glint']
+        });
         if (factsCommand.type !== 'effects.apply') throw new Error('Could not construct default gameplay facts.');
         const facts = factsCommand.facts;
 
-        const first = applyGameplayDefinitionTransition(initial, 'outer-turn', peek, facts, events);
-        const second = applyGameplayDefinitionTransition(first.run, 'outer-turn', shuffle, facts, events);
+        const first = applyGameplayDefinitionTransition(initial, 'outer-turn', spark, facts, events);
+        const second = applyGameplayDefinitionTransition(first.run, 'outer-turn', glint, facts, events);
 
-        expect(second).toMatchObject({ accepted: true, run: { peekCharges: 1, shuffleCharges: 1 } });
-        expect(events.length).toBeGreaterThanOrEqual(4);
+        expect(second).toMatchObject({ accepted: true, run: initial });
+        expect(events.map((event) => event.type)).toEqual([
+            'combo_shard.requested',
+            'feedback.requested',
+            'score.requested',
+            'feedback.requested'
+        ]);
         expect(events.every((event, sequence) =>
             event.commandId === 'outer-turn' &&
             event.sequence === sequence &&

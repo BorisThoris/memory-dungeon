@@ -32,7 +32,6 @@ const minimalRun = (partial: Partial<RunState>): RunState =>
             mismatches: 0,
             guardTokens: 0
         },
-        relicIds: [],
         board: null,
         ...partial
     }) as RunState;

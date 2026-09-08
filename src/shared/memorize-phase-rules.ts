@@ -1,5 +1,5 @@
 import { type RunState } from './contracts';
-import { getMemorizePhaseRecallFocusForRoute } from './recall-rules';
+import { getMemorizePhaseRecallFocus } from './recall-rules';
 import { createTimerState } from './run-timer-rules';
 
 const memorizeTimerState = (value: unknown): RunState['timerState'] =>
@@ -13,7 +13,7 @@ export const finishMemorizePhase = (run: RunState): RunState =>
         : {
               ...run,
               status: 'playing',
-              recallFocus: getMemorizePhaseRecallFocusForRoute(run, null),
+              recallFocus: getMemorizePhaseRecallFocus(run),
               timerState: {
                   ...memorizeTimerState(run.timerState),
                   memorizeRemainingMs: null,

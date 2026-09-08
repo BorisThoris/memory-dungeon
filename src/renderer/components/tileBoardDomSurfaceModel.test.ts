@@ -32,10 +32,7 @@ describe('tileBoardDomSurfaceModel', () => {
             board: board([
                 tile('a1', 'a', 'hidden'),
                 tile('a2', 'a', 'flipped'),
-                tile('trap', 'trap', 'hidden', {
-                    dungeonCardKind: 'trap',
-                    dungeonCardState: 'hidden'
-                })
+                tile('b1', 'b', 'hidden')
             ], {
                 flippedTileIds: ['a2']
             }),
@@ -51,7 +48,6 @@ describe('tileBoardDomSurfaceModel', () => {
 
         expect(result.hiddenTileCount).toBe(2);
         expect(result.hiddenSlotsAttr).toContain('1,1');
-        expect(result.hiddenTrapSlotsAttr).toContain('2,1');
         expect(result.pickableHiddenSlotsAttr).toContain('1,1');
         expect(result.cardFeedbackStatesAttr).toContain('hidden:2');
         expect(result.cardFeedbackStatesAttr).toContain('focused:1');
@@ -152,33 +148,5 @@ describe('tileBoardDomSurfaceModel', () => {
         expect(result.cardFeedbackRouteGlyphsAttr).toBe('next-tap:1;prime-cross:1');
         expect(result.cardFeedbackTraitRouteTiersAttr).toContain('selected-followup:1');
         expect(result.cardFeedbackTraitRouteTiersAttr).toContain('route-target:1');
-    });
-
-    it('tracks resolved trap slots and counts', () => {
-        const result = buildTileBoardDomSurfaceModel({
-            allowGambitThirdFlip: false,
-            board: board([
-                tile('trap-a', 'trap', 'matched', {
-                    dungeonCardKind: 'trap',
-                    dungeonCardState: 'resolved'
-                }),
-                tile('trap-b', 'trap', 'matched', {
-                    dungeonCardKind: 'trap',
-                    dungeonCardState: 'resolved'
-                })
-            ]),
-            boardApplicationFocused: false,
-            debugPeekActive: false,
-            focusedTileId: null,
-            includeDevAttributes: true,
-            interactive: true,
-            peekRevealedTileIds: new Set(),
-            previewActive: false,
-            runStatus: 'playing'
-        });
-
-        expect(result.resolvedTrapTileCount).toBe(2);
-        expect(result.resolvedTrapSlotsAttr).toContain('1,1');
-        expect(result.resolvedTrapSlotsAttr).toContain('1,2');
     });
 });

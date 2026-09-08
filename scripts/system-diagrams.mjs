@@ -263,7 +263,7 @@ const buildGameplayInteractionGraphDiagram = (repoRoot) => {
     const graphNodes = [
         node('traits', 'Trait Layer', 'domain', 'shared', `${mechanicsByKind.trait ?? 0} trait mechanics with synergy, risk, and counterplay edges.`, evidence(repoRoot, ['src/shared/tile-trait-rules.ts', 'src/shared/trait-opportunities.ts'])),
         node('powers', 'Board Powers', 'domain', 'shared', `${mechanicsByKind.power ?? 0} routing/removal tools connect player agency to trait layouts.`, evidence(repoRoot, ['src/shared/board-power-actions.ts', 'src/shared/board-power-availability.ts'])),
-        node('objectives', 'Objectives', 'domain', 'shared', 'Objectives must connect to the floor clear.', evidence(repoRoot, ['src/shared/objective-rules.ts', 'src/shared/level-clear-rules.ts'])),
+        node('objectives', 'Objectives', 'domain', 'shared', 'Objectives must connect to the floor clear.', evidence(repoRoot, ['src/shared/secondary-objective-rules.ts', 'src/shared/level-clear-rules.ts'])),
         node('safety_graph', 'Interaction Graph Gate', 'safety', 'shared', 'Typed graph validation fails disconnected mechanics, unguarded blockers, and unwired outputs.', graphEvidence)
     ];
     const graphEdges = [
@@ -315,8 +315,7 @@ const buildBoardGenerationDiagram = (repoRoot) => {
         'src/shared/softlock-fairness.test.ts',
         'src/shared/softlock-generator-contract.ts',
         'src/shared/softlock-generator-contract.test.ts',
-        'src/shared/board-tile-generation-rules.ts',
-        'src/shared/objective-rules.ts'
+        'src/shared/board-tile-generation-rules.ts'
     ]);
     return {
         id: 'board-generation',

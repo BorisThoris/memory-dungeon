@@ -1,24 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import { type MutatorId } from './contracts';
 import { createNewRun } from './game';
-import {
-    advanceScoreParasiteFloor,
-    getParasiteFloorsAfterFeaturedObjectiveClear
-} from './score-parasite-rules';
+import { advanceScoreParasiteFloor } from './score-parasite-rules';
 
 describe('advanceScoreParasiteFloor', () => {
     it('increments floor pressure without life loss when score parasite is inactive', () => {
         const run = {
             ...createNewRun(0),
             lives: 2,
-            parasiteFloors: 3,
-            parasiteWardRemaining: 0
+            parasiteFloors: 3
         };
 
         expect(advanceScoreParasiteFloor(run)).toEqual({
             lives: 2,
-            parasiteFloors: 4,
-            parasiteWardRemaining: 0
+            parasiteFloors: 4
         });
     });
 
@@ -27,91 +22,34 @@ describe('advanceScoreParasiteFloor', () => {
             ...createNewRun(0),
             activeMutators: ['score_parasite'] satisfies MutatorId[],
             lives: 2,
-            parasiteFloors: 3,
-            parasiteWardRemaining: 0
+            parasiteFloors: 3
         };
 
         expect(advanceScoreParasiteFloor(run)).toEqual({
             lives: 1,
-            parasiteFloors: 0,
-            parasiteWardRemaining: 0
+            parasiteFloors: 0
         });
     });
 
-    it('spends a parasite ward before losing life', () => {
-        const run = {
-            ...createNewRun(0),
-            activeMutators: ['score_parasite'] satisfies MutatorId[],
-            lives: 2,
-            parasiteFloors: 3,
-            parasiteWardRemaining: 1
-        };
-
-        expect(advanceScoreParasiteFloor(run)).toEqual({
-            lives: 2,
-            parasiteFloors: 0,
-            parasiteWardRemaining: 0
-        });
-    });
 
     it('normalizes malformed counters before advancing pressure', () => {
         expect(advanceScoreParasiteFloor({
             ...createNewRun(0),
             lives: 2.9,
-            parasiteFloors: Number.NaN,
-            parasiteWardRemaining: Number.POSITIVE_INFINITY
+            parasiteFloors: Number.NaN
         })).toEqual({
             lives: 2,
-            parasiteFloors: 1,
-            parasiteWardRemaining: 0
+            parasiteFloors: 1
         });
 
         expect(advanceScoreParasiteFloor({
             ...createNewRun(0),
             activeMutators: ['score_parasite'] satisfies MutatorId[],
             lives: 2.9,
-            parasiteFloors: 3.9,
-            parasiteWardRemaining: 1.9
-        })).toEqual({
-            lives: 2,
-            parasiteFloors: 0,
-            parasiteWardRemaining: 0
-        });
-
-        expect(advanceScoreParasiteFloor({
-            ...createNewRun(0),
-            activeMutators: ['score_parasite'] satisfies MutatorId[],
-            lives: 2.9,
-            parasiteFloors: 3.9,
-            parasiteWardRemaining: Number.NaN
+            parasiteFloors: 3.9
         })).toEqual({
             lives: 1,
-            parasiteFloors: 0,
-            parasiteWardRemaining: 0
+            parasiteFloors: 0
         });
     });
-});
-
-describe('getParasiteFloorsAfterFeaturedObjectiveClear', () => {
-
-    it('carries parasite pressure over a featured objective clear, completed or not', () => {
-        const run = {
-            ...createNewRun(0),
-            activeMutators: ['score_parasite'] satisfies MutatorId[],
-            parasiteFloors: 3
-        };
-
-        expect(getParasiteFloorsAfterFeaturedObjectiveClear(run, false)).toBe(3);
-        expect(getParasiteFloorsAfterFeaturedObjectiveClear(run, true)).toBe(3);
-        expect(getParasiteFloorsAfterFeaturedObjectiveClear({ ...run, activeMutators: [] }, true)).toBe(3);
-    });
-
-    it('normalizes malformed parasite pressure', () => {
-        const run = { ...createNewRun(0), parasiteFloors: 2.9 };
-
-        expect(getParasiteFloorsAfterFeaturedObjectiveClear(run, true)).toBe(2);
-        expect(getParasiteFloorsAfterFeaturedObjectiveClear({ ...run, parasiteFloors: Number.NaN }, true)).toBe(0);
-    });
-
-
 });

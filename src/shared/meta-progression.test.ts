@@ -21,8 +21,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         save.playerStats = {
             ...save.playerStats!,
             sharpFloors: 7,
-            bestFloorNoPowers: 5,
-            relicShrineExtraPickUnlocked: true
+            bestFloorNoPowers: 5
         };
         const upgrades = buildPermanentUpgradeRows(save);
 
@@ -58,10 +57,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         save.playerStats = {
             ...save.playerStats!,
             sharpFloors: 4,
-            bestFloorNoPowers: 2,
-            relicPickCounts: {
-                extra_shuffle_charge: 3
-            }
+            bestFloorNoPowers: 2
         };
 
         const board = getMetaProgressionBoard(save);
@@ -110,8 +106,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         const save = createDefaultSaveData();
         save.playerStats = {
             ...save.playerStats!,
-            sharpFloors: 7,
-            relicShrineExtraPickUnlocked: true
+            sharpFloors: 7
         };
 
         const rows = getMetaProgressionRows(save);
@@ -131,10 +126,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         save.playerStats = {
             ...save.playerStats!,
             sharpFloors: 9,
-            bestFloorNoPowers: 2,
-            relicPickCounts: {
-                extra_shuffle_charge: 3
-            }
+            bestFloorNoPowers: 2
         };
 
         const sources = getMetaHonorMarkSourceRows(save);
@@ -152,11 +144,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         save.playerStats = {
             ...save.playerStats!,
             sharpFloors: Number.POSITIVE_INFINITY,
-            bestFloorNoPowers: Number.NaN,
-            relicPickCounts: {
-                guard_token_plus_one: Number.POSITIVE_INFINITY,
-                parasite_ledger: 1.9
-            }
+            bestFloorNoPowers: Number.NaN
         };
 
         const sources = getMetaHonorMarkSourceRows(save);
@@ -188,10 +176,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
     it('selects the nearest unfinished honor-mark source for motivation surfaces', () => {
         const save = createDefaultSaveData();
         save.playerStats = {
-            ...save.playerStats!,
-            relicPickCounts: {
-                extra_shuffle_charge: 1
-            }
+            ...save.playerStats!
         };
 
         const nextSource = getNextMetaHonorMarkSource(save);
@@ -219,10 +204,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         save.playerStats = {
             ...save.playerStats!,
             sharpFloors: 7,
-            bestFloorNoPowers: 5,
-            relicPickCounts: {
-                extra_shuffle_charge: 8
-            }
+            bestFloorNoPowers: 5
         };
 
         const milestones = getMetaProgressionMilestones(save);

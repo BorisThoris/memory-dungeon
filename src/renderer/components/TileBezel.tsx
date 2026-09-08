@@ -20,7 +20,7 @@ import {
     type MeshStandardMaterial,
     type ShaderMaterial
 } from 'three';
-import type { BoardState, GraphicsQualityPreset, HazardTileKind, Tile } from '../../shared/contracts';
+import type { BoardState, GraphicsQualityPreset, Tile } from '../../shared/contracts';
 import type { TraitInteractionLaneId } from '../copy/traitInteractionLaneMap';
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
 import type { TileTraitRouteReadabilityIntensity } from './tileBoardReadability';
@@ -130,7 +130,6 @@ interface TileBezelProps {
     stickyFingerSlotMark?: boolean;
     traitComboBack?: boolean;
     traitLaneBack?: TraitInteractionLaneId | null;
-    perkArmedBack?: boolean;
     traitRewardHotBack?: boolean;
     traitRouteTargetBack?: boolean;
     hostConsolidatesTileFrames?: boolean;
@@ -144,12 +143,8 @@ interface TileBezelProps {
     spotlightWardOnBack?: boolean;
     spotlightBountyOnBack?: boolean;
     powerBackAccent?: 'destroy' | 'peek' | 'stray' | 'pin' | 'swap' | 'swapOrigin' | 'clump' | null;
-    hazardBackAccent?: HazardTileKind | null;
-    routeBackAccent?: boolean;
     traitRouteReadabilityIntensity?: TileTraitRouteReadabilityIntensity;
     selectedTraitFollowupBack?: boolean;
-    objectiveBackAccent?: boolean;
-    enemyOccupiedBack?: boolean;
     nonPickableBack?: boolean;
     destroyBlockedDecoyBack?: boolean;
     traitComboSurgeBack?: boolean;
@@ -218,12 +213,8 @@ const TileBezelInner = ({
     spotlightWardOnBack = false,
     spotlightBountyOnBack = false,
     powerBackAccent = null,
-    hazardBackAccent = null,
-    routeBackAccent = false,
     traitRouteReadabilityIntensity = 'none',
     selectedTraitFollowupBack = false,
-    objectiveBackAccent = false,
-    enemyOccupiedBack = false,
     nonPickableBack = false,
     destroyBlockedDecoyBack = false,
     focusDimmed = false,
@@ -231,7 +222,6 @@ const TileBezelInner = ({
     traitComboBack = false,
     traitComboSurgeBack = false,
     traitLaneBack = null,
-    perkArmedBack = false,
     traitRewardHotBack = false,
     traitRouteTargetBack = false,
     hostConsolidatesTileFrames = true,
@@ -300,21 +290,18 @@ const TileBezelInner = ({
         boardEntranceStaggerTileCount,
         boardRows,
         breakWaveDelaySec,
-        enemyOccupiedBack,
         faceUp,
         fieldAmp,
         fieldTiltRef,
         flipLocked,
         focusDimmed,
         graphicsQuality,
-        hazardBackAccent,
         hoverTiltRef,
         interactionSuppressed,
         interactive,
         isPinned,
         keyboardFocused,
         nonPickableBack,
-        objectiveBackAccent,
         pickable,
         presentationNBackAnchor,
         presentationSilhouette,
@@ -322,7 +309,6 @@ const TileBezelInner = ({
         reduceMotion,
         resolvingMatchWaveKey,
         resolvingSelection,
-        routeBackAccent,
         traitRouteReadabilityIntensity,
         shuffleBoardOrderIndex,
         shuffleMotionBudgetMs,
@@ -791,17 +777,12 @@ const TileBezelInner = ({
                     />
                     <TileBoardReadabilityMarkers
                         destroyBlockedDecoyBack={destroyBlockedDecoyBack}
-                        enemyOccupiedBack={enemyOccupiedBack}
                         faceUp={faceUp}
                         faceZ={faceZ}
                         findableCornerRingGeometry={findableCornerRingGeometry}
-                        hazardBackAccent={hazardBackAccent}
                         matchedEdgeGeometry={matchedEdgeGeometry}
                         nonPickableBack={nonPickableBack}
-                        objectiveBackAccent={objectiveBackAccent}
-                        perkArmedBack={perkArmedBack}
                         powerBackAccent={powerBackAccent}
-                        routeBackAccent={routeBackAccent}
                         selectedTraitFollowupBack={selectedTraitFollowupBack}
                         spotlightBountyOnBack={spotlightBountyOnBack}
                         spotlightWardOnBack={spotlightWardOnBack}

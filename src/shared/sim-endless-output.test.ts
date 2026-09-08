@@ -54,7 +54,6 @@ describe('sim-endless CSV output', () => {
         expect(lines).toContain('traitMetric,deadTraitFloors,0');
         expect(lines.some((line) => line.startsWith('fairnessIssue,'))).toBe(false);
         expect(lines.some((line) => line.startsWith('playableMetric,checkedFloors,'))).toBe(true);
-        expect(lines.some((line) => line.startsWith('playableMetric,lockedExitFloors,'))).toBe(true);
         expect(lines.some((line) => line.startsWith('dungeon'))).toBe(false);
         expect(lines.some((line) => line.startsWith('playableIssue,'))).toBe(false);
         expect(lines.some((line) => line.startsWith('playableFailure,'))).toBe(false);
@@ -72,7 +71,6 @@ describe('sim-endless CSV output', () => {
         expect(summary).toContain('- Fairness gates:');
         expect(summary).toContain('issue types (none).');
         expect(summary).toContain('- Playable gates:');
-        expect(summary).toContain('locked-exit floors');
         expect(summary).toContain('issue floors (none).');
         expect(summary).toContain('- Reward gates:');
         expect(summary).toContain('- Trait gates:');
@@ -99,12 +97,9 @@ describe('sim-endless CSV output', () => {
             playableFailureDetails: [],
             playableIssueFloors: 0,
             playableIssueReasons: [],
-            playableLockedExitFloors: expect.any(Number),
             rewardKinds: getFindableSpawnWeightRows().length
         });
         expect(health.metrics.playableCheckedFloors).toBeGreaterThan(400);
-        // No floor has a locked exit to sample any more; the sweep above is what keeps the count up.
-        expect(health.metrics.playableLockedExitFloors).toBe(0);
         expect(health.metrics.routeKinds).toBeGreaterThanOrEqual(8);
         expect(health.metrics.traitFloorShare).toBeGreaterThanOrEqual(0.8);
         expect(health.metrics.traitMatchRouteFloorShare).toBeGreaterThanOrEqual(0.95);
@@ -118,7 +113,7 @@ describe('sim-endless CSV output', () => {
         const health = evaluateEndlessSimulationHealth(
             {
                 deadTraitFloors: 2,
-                fairnessIssueCodes: ['exit_lock_unreachable', 'completion_route_missing'],
+                fairnessIssueCodes: ['real_pair_incomplete', 'completion_route_missing'],
                 fairnessIssueFloors: 3,
                 fairnessIssueTypes: 2,
                     findableTotal: 2,
@@ -129,7 +124,6 @@ describe('sim-endless CSV output', () => {
                 ],
                 playableIssueFloors: 4,
                 playableIssueReasons: ['no_progress'],
-                playableLockedExitFloors: 0,
                 rewardKinds: 1,
                 traitBoardPowerInteractionFloorShare: 0.2,
                 traitMatchRouteFloorShare: 0.4,
@@ -147,7 +141,7 @@ describe('sim-endless CSV output', () => {
         expect(health.issues).toEqual(
             expect.arrayContaining([
                 'Expected at least 8 floor archetypes, saw 2.',
-                    'Expected generated boards to pass fairness inspection, saw 3 floor(s) with 2 issue type(s): exit_lock_unreachable, completion_route_missing.',
+                    'Expected generated boards to pass fairness inspection, saw 3 floor(s) with 2 issue type(s): real_pair_incomplete, completion_route_missing.',
                 'Expected executable playable solver sampling to inspect at least one floor.',
                 'Expected playable solver sample to clear every checked floor, saw 4 issue floor(s): no_progress. Details: floor=7|reason=no_progress|status=playing|turns=12|lastPair=a|lastTiles=a1+a2|archetype=trap_hall.',
                     'Expected match-triggerable trait routes on at least 95.0% of trait floors, saw 40.0%.',
@@ -166,7 +160,6 @@ describe('sim-endless CSV output', () => {
         expect(runSoftlockSeedGate(['--floors=120', '--seeds=42001,42002'])).toBe(0);
         expect(stdout.mock.calls.some(([chunk]) => String(chunk).includes('seed=42001,playable='))).toBe(true);
         expect(stdout.mock.calls.some(([chunk]) => String(chunk).includes('seed=42002,playable='))).toBe(true);
-        expect(stdout.mock.calls.some(([chunk]) => String(chunk).includes('lockedExits='))).toBe(true);
         expect(stdout.mock.calls.some(([chunk]) => String(chunk).includes('playableIssues=none'))).toBe(true);
 
         stdout.mockClear();

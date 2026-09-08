@@ -14,9 +14,7 @@ beforeEach(() => {
     closeSubscreen.mockClear();
     currentRun = {
         ...createNewRun(0),
-        relicIds: ['peek_charge_plus_one', 'pin_cap_plus_one', 'stray_charge_plus_one'],
-        activeMutators: ['wide_recall'],
-        shopGold: 7
+        activeMutators: ['wide_recall']
     };
 });
 

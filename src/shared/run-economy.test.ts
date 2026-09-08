@@ -62,9 +62,6 @@ describe('REG-024 run economy taxonomy', () => {
     it('normalizes malformed counters before projecting economy rows', () => {
         const run = {
             ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false })),
-            relicFavorProgress: Number.NaN,
-            dungeonKeys: Number.NaN as unknown as RunState['dungeonKeys'],
-            dungeonMasterKeys: Number.NaN,
             findablesClaimedThisFloor: Number.NaN,
             findablesTotalThisFloor: Number.POSITIVE_INFINITY,
             shuffleCharges: Number.NaN,

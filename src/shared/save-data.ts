@@ -10,8 +10,7 @@ import {
     type PlayerStatsPersisted,
     type RunSummary,
     type SaveData,
-    type Settings,
-    type StartingLoadoutId
+    type Settings
 } from './contracts';
 import { z } from 'zod';
 import type { ChainTier } from './chain-tier-rules';
@@ -83,7 +82,6 @@ export const ACHIEVEMENT_IDS = [
     'ACH_PERFECT_CLEAR',
     'ACH_LAST_LIFE',
     'ACH_ENDLESS_TEN',
-    'ACH_WARDEN_FELLED',
     'ACH_ENDLESS_CYCLE',
     'ACH_ENDLESS_TWENTY',
     'ACH_SCORE_TEN_THOUSAND',
@@ -93,7 +91,6 @@ export const ACHIEVEMENT_IDS = [
     'ACH_FIRST_FEVER',
     'ACH_CHUNK_SIX',
     'ACH_EXTREME_FEVER',
-    'ACH_WARDEN_BY_CHUNK',
     'ACH_NOTHING_HELD_IT',
     'ACH_CHAIN_REACTION'
 ] as const satisfies readonly AchievementId[];
@@ -110,9 +107,7 @@ export const createAchievementState = (): AchievementState =>
 
 const defaultPlayerStats = (): PlayerStatsPersisted => ({
     bestFloorNoPowers: 0,
-    relicPickCounts: {},
     encorePairKeysLastRun: [],
-    relicShrineExtraPickUnlocked: false,
     sharpFloors: 0,
     feverFloors: 0
 });
@@ -120,12 +115,6 @@ const defaultPlayerStats = (): PlayerStatsPersisted => ({
 const ACHIEVEMENT_ID_SET: ReadonlySet<string> = new Set(ACHIEVEMENT_IDS);
 const MUTATOR_ID_SET: ReadonlySet<string> = new Set(MUTATOR_IDS);
 const GAME_MODE_SET: ReadonlySet<string> = new Set(['endless']);
-const STARTING_LOADOUT_ID_SET: ReadonlySet<string> = new Set([
-    'memory_scout',
-    'route_tactician',
-    'cursebreaker',
-    'vaultbreaker'
-]);
 const VALID_UNLOCK_TAG_SET: ReadonlySet<string> = new Set([
     ...ACHIEVEMENT_IDS.map((id) => `achievement:${id}`),
     ...COSMETIC_IDS.map((id) => `cosmetic:${id}`),
@@ -138,7 +127,6 @@ const PERSISTED_COLLECTION_LIMITS = {
     inspectedEntries: 1024,
     unlockTags: 128
 } as const;
-const PERSISTED_SUMMARY_TEXT_LIMIT = 256;
 
 const isUnknownRecord = (value: unknown): value is Record<string, unknown> =>
     isRunRecord(value);
@@ -152,8 +140,6 @@ const isGameMode = (value: unknown): value is GameMode =>
 const isMutatorId = (value: unknown): value is MutatorId =>
     typeof value === 'string' && MUTATOR_ID_SET.has(value);
 
-const isStartingLoadoutId = (value: unknown): value is StartingLoadoutId =>
-    typeof value === 'string' && STARTING_LOADOUT_ID_SET.has(value);
 
 const finiteNonNegativeInteger = runNonNegativeIntegerOrFallback;
 
@@ -235,10 +221,7 @@ const normalizeContractFlags = (input: unknown): ContractFlags | null => {
             ? { maxPinsTotalRun: null }
             : typeof input.maxPinsTotalRun === 'number'
               ? { maxPinsTotalRun: finiteNonNegativeInteger(input.maxPinsTotalRun, 0) }
-              : {}),
-        ...(typeof input.bonusRelicDraftPick === 'boolean'
-            ? { bonusRelicDraftPick: input.bonusRelicDraftPick }
-            : {})
+              : {})
     };
 };
 
@@ -267,13 +250,6 @@ export const normalizeRunSummary = (input: unknown): RunSummary | null => {
     const activeMutators = Array.isArray(source.activeMutators)
         ? [...new Set(runFilteredArray(source.activeMutators, isMutatorId))]
         : undefined;
-    // There are no relics left to hold, so a summary that listed some now lists none.
-    const relicIds = Array.isArray(source.relicIds) ? [] : undefined;
-    const startingLoadoutId = isStartingLoadoutId(source.startingLoadoutId)
-        ? source.startingLoadoutId
-        : source.startingLoadoutId === null
-          ? null
-          : undefined;
     const payoffPickupClaimedRaw =
         source.payoffPickupClaimed === undefined ? undefined : finiteNonNegativeInteger(source.payoffPickupClaimed, Number.NaN);
     const payoffPickupTotal =
@@ -287,14 +263,6 @@ export const normalizeRunSummary = (input: unknown): RunSummary | null => {
             : payoffPickupClaimedRaw;
     const payoffPressureExtra =
         source.payoffPressureExtra === undefined ? undefined : finiteNonNegativeInteger(source.payoffPressureExtra, Number.NaN);
-    const payoffRewardPerkCount =
-        source.payoffRewardPerkCount === undefined ? undefined : finiteNonNegativeInteger(source.payoffRewardPerkCount, Number.NaN);
-    const payoffRouteRewardText =
-        typeof source.payoffRouteRewardText === 'string'
-            ? source.payoffRouteRewardText.slice(0, PERSISTED_SUMMARY_TEXT_LIMIT)
-            : source.payoffRouteRewardText === null
-              ? null
-              : undefined;
     const gameplayJournal = normalizeGameplayJournalSnapshot({
         gameplayCommandJournal: source.gameplayCommandJournal,
         gameplayEventJournal: source.gameplayEventJournal
@@ -330,17 +298,11 @@ export const normalizeRunSummary = (input: unknown): RunSummary | null => {
         ...(gameMode ? { gameMode } : {}),
         ...(gauntletSessionDurationMs != null ? { gauntletSessionDurationMs } : {}),
         ...(activeMutators ? { activeMutators } : {}),
-        ...(relicIds ? { relicIds } : {}),
         ...(Number.isFinite(payoffPickupClaimed) ? { payoffPickupClaimed } : {}),
         ...(Number.isFinite(payoffPickupTotal) ? { payoffPickupTotal } : {}),
         ...(Number.isFinite(payoffPressureExtra) ? { payoffPressureExtra } : {}),
-        ...(Number.isFinite(payoffRewardPerkCount) ? { payoffRewardPerkCount } : {}),
-        ...(typeof source.payoffRoutePaid === 'boolean' ? { payoffRoutePaid: source.payoffRoutePaid } : {}),
-        ...(payoffRouteRewardText !== undefined ? { payoffRouteRewardText } : {}),
-        ...(startingLoadoutId !== undefined ? { startingLoadoutId } : {}),
         ...(typeof source.practiceMode === 'boolean' ? { practiceMode: source.practiceMode } : {}),
         ...(typeof source.wildMenuRun === 'boolean' ? { wildMenuRun: source.wildMenuRun } : {}),
-        ...(typeof source.dungeonShowcaseRun === 'boolean' ? { dungeonShowcaseRun: source.dungeonShowcaseRun } : {}),
         ...(source.activeContract === null
             ? { activeContract: null }
             : activeContract
@@ -565,7 +527,6 @@ export const normalizeSaveData = (input?: SaveDataNormalizationInput | null): Sa
     const mergedAchievements = normalizeAchievements(input.achievements);
     const playerStatsDefaults = defaultPlayerStats();
     const psIn = isUnknownRecord(input.playerStats) ? input.playerStats : {};
-    const relicShrineExtraPickUnlocked = psIn.relicShrineExtraPickUnlocked === true;
     const lastRunSummary =
         migrationGate.keepLastRunSummary ? normalizeRunSummary(input.lastRunSummary) : defaults.lastRunSummary;
 
@@ -590,8 +551,6 @@ export const normalizeSaveData = (input?: SaveDataNormalizationInput | null): Sa
             encorePairKeysLastRun: Array.isArray(psIn.encorePairKeysLastRun)
                 ? normalizeStringLedger(psIn.encorePairKeysLastRun, PERSISTED_COLLECTION_LIMITS.encorePairKeys)
                 : playerStatsDefaults.encorePairKeysLastRun,
-            relicPickCounts: {},
-            relicShrineExtraPickUnlocked,
             sharpFloors: finiteNonNegativeInteger(psIn.sharpFloors, 0),
             feverFloors: finiteNonNegativeInteger(psIn.feverFloors, 0)
         },

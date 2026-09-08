@@ -1,4 +1,4 @@
-import type { HazardTileKind, Tile, TileTraitKind } from '../../shared/contracts';
+import type { Tile, TileTraitKind } from '../../shared/contracts';
 import { DECOY_PAIR_KEY } from '../../shared/tile-identity';
 import { isTilePickable } from './tileBoardPick';
 
@@ -6,11 +6,8 @@ export type TileBoardPowerBackAccent = 'destroy' | 'peek' | 'stray' | 'pin' | 's
 
 interface TileBoardHiddenBackAccents {
     destroyBlockedDecoyBack: boolean;
-    hazardBackAccent: HazardTileKind | null;
     nonPickableBack: boolean;
-    objectiveBackAccent: boolean;
     powerBackAccent: TileBoardPowerBackAccent | null;
-    routeBackAccent: boolean;
     traitBackAccent: TileTraitKind | null;
 }
 
@@ -56,11 +53,8 @@ export const getTileBoardHiddenBackAccents = ({
     if (tile.state !== 'hidden' || faceUp) {
         return {
             destroyBlockedDecoyBack,
-            hazardBackAccent: null,
             nonPickableBack: false,
-            objectiveBackAccent: false,
             powerBackAccent: null,
-            routeBackAccent: false,
             traitBackAccent: null
         };
     }
@@ -87,11 +81,8 @@ export const getTileBoardHiddenBackAccents = ({
 
     return {
         destroyBlockedDecoyBack,
-        hazardBackAccent: tile.tileHazardKind ?? null,
         nonPickableBack: !isTilePickable(tile, interactive, flipLocked),
-        objectiveBackAccent: Boolean(tile.dungeonCardKind || tile.dungeonBossId),
         powerBackAccent,
-        routeBackAccent: Boolean(tile.routeSpecialKind || tile.routeCardKind),
         traitBackAccent: tile.tileTraitKind ?? null
     };
 };

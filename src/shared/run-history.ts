@@ -46,34 +46,20 @@ export interface RunHistoryEntry {
 
 const getPersistedSummaryPayoffStack = (
     summary: RunSummary | null
-): { label: 'Combo burst' | 'Payoff burst' | 'Payoff stack' | 'Super stack'; lanes: number } | null => {
+): { label: 'Combo burst' | 'Payoff burst'; lanes: number } | null => {
     if (!summary) {
         return null;
     }
     const bestStreak = runNonNegativeInteger(summary.bestStreak);
-    const hasChainPayoff = bestStreak >= 4;
-    const hasComboPayoff = bestStreak >= 10;
     const payoffLanes = [
-        hasChainPayoff,
-        summary.payoffRoutePaid === true,
+        bestStreak >= 4,
         runNonNegativeInteger(summary.payoffPickupTotal) > 0,
-        runNonNegativeInteger(summary.perfectClears) > 0,
-        runNonNegativeInteger(summary.payoffRewardPerkCount) > 0
+        runNonNegativeInteger(summary.perfectClears) > 0
     ].filter(Boolean).length;
     if (payoffLanes < 3) {
         return null;
     }
-    return {
-        label:
-            payoffLanes >= 4
-                ? 'Super stack'
-                : hasComboPayoff
-                  ? 'Combo burst'
-                  : hasChainPayoff
-                    ? 'Payoff burst'
-                    : 'Payoff stack',
-        lanes: payoffLanes
-    };
+    return { label: bestStreak >= 10 ? 'Combo burst' : 'Payoff burst', lanes: payoffLanes };
 };
 
 const contractLabel = (run: Pick<RunState, 'activeContract' | 'practiceMode'>): string => {

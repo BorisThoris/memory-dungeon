@@ -54,8 +54,11 @@ but "does the game still end":
    hazard-tile and roaming-hazard modules, the dungeon run map, the relic definitions and their in-play
    effects, the bonus rewards and the build perks; every branch in the turn path that called them goes
    too. A `dungeon.exit_activate`, `enemy_hazard.contact` or `floor.hazard_banish` command in an old
-   journal is rejected with a reason. The run-state fields and the save shape that carried all of it are
-   stripped in the second half of the same generation, with a one-way upgrade for existing saves.
+   journal is dropped on load. The second half of the same generation strips the run, board and tile
+   fields and the save shape that carried all of it (save schema 7, rules version 34): a profile written
+   by an older build loads with its records intact and none of the removed fields, a journal entry
+   naming a removed command fails its schema and is dropped, and nothing is migrated forward. The two
+   pickups that only acted on the layer, the ward spark and the scout glint, went with it.
 
 ## How to get any of it back
 

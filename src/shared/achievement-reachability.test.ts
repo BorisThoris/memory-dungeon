@@ -44,7 +44,7 @@ describe('achievement thresholds against real content', () => {
         // reachable — and that removing what earns one means removing the id, which is why the
         // four mode-tied marks went with their modes (docs/REMOVED_MODES.md).
         const known: AchievementId[] = [...ACHIEVEMENT_IDS];
-        expect(known).toHaveLength(19);
+        expect(known).toHaveLength(17);
         expect(GAME_RULES_VERSION).toBeGreaterThan(0);
     });
 });

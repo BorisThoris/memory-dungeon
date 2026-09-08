@@ -45,7 +45,6 @@ describe('inventoryScreenModel', () => {
     it('adds tactical action cues to inventory rows without changing the shared row contract', () => {
         const run = {
             ...createNewRun(0),
-            dungeonKeys: { iron: 1, treasure: 0, shrine: 0, boss: 0, trap: 0 },
             shuffleCharges: 1
         };
         const model = createInventoryScreenModel(run, createDefaultSaveData());
@@ -53,10 +52,6 @@ describe('inventoryScreenModel', () => {
         expect(model.inventoryRows.find((row) => row.id === 'shuffle_charge')?.actionCue).toMatchObject({
             label: 'Route reset',
             tone: 'route'
-        });
-        expect(model.inventoryRows.find((row) => row.id === 'iron_key')?.actionCue).toMatchObject({
-            label: 'Open route',
-            tone: 'key'
         });
         expect(model.inventoryRows.find((row) => row.id === 'destroy_charge')?.actionCue).toMatchObject({
             label: 'Restock first',

@@ -38,7 +38,6 @@ describe('REG-037 audio interaction coverage', () => {
             'chain_break_miss',
             'trait_mismatch_surge',
             'mismatch_recovery_crescendo',
-            'reward_perk_pop',
             'board_power',
             'gauntlet_pressure'
         ]);
@@ -78,13 +77,13 @@ describe('REG-037 audio interaction coverage', () => {
             decision: 'procedural_only',
             semanticMoment: 'reward'
         });
-        expect(gameplay.find((row) => row.id === 'stacked_reward_burst')?.cooldownPolicy).toMatch(/reward-perk|multi-lane payoff/i);
+        expect(gameplay.find((row) => row.id === 'stacked_reward_burst')?.cooldownPolicy).toMatch(/multi-lane payoff/i);
         expect(gameplay.find((row) => row.id === 'stacked_reward_burst')?.mixRole).toMatch(/cashout sparkle/i);
         expect(gameplay.find((row) => row.id === 'super_stacked_reward_burst')).toMatchObject({
             decision: 'procedural_only',
             semanticMoment: 'reward'
         });
-        expect(gameplay.find((row) => row.id === 'super_stacked_reward_burst')?.cooldownPolicy).toMatch(/perk-trigger lanes/i);
+        expect(gameplay.find((row) => row.id === 'super_stacked_reward_burst')?.cooldownPolicy).toMatch(/four or more reward systems/i);
         expect(gameplay.find((row) => row.id === 'super_stacked_reward_burst')?.mixRole).toMatch(/top-tier triangle flourish/i);
         expect(gameplay.find((row) => row.id === 'payoff_intensity_cross_modal')).toMatchObject({
             decision: 'procedural_only',
@@ -167,11 +166,6 @@ describe('REG-037 audio interaction coverage', () => {
         expect(gameplay.find((row) => row.id === 'mismatch_recovery_crescendo')?.mixRole).toMatch(
             /two-beat recover.*five-beat trait surge.*expanded lanes\/chips.*screen cues/i
         );
-        expect(gameplay.find((row) => row.id === 'reward_perk_pop')).toMatchObject({
-            decision: 'procedural_only',
-            semanticMoment: 'reward'
-        });
-        expect(gameplay.find((row) => row.id === 'reward_perk_pop')?.mixRole).toMatch(/perk activation/i);
         expect(gameplay.find((row) => row.id === 'gauntlet_pressure')?.cue).toBe('countdown-pressure');
     });
 
