@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import {
     getBossEncounterIdentityForFloor,
     getEncounterIdentityForFloor,
-    getEncounterIdentityForRouteKind,
     getFloorIdentityContract
 } from './boss-encounters';
 import { GAME_RULES_VERSION } from './contracts';
@@ -29,24 +28,11 @@ describe('REG-076 boss and elite encounter identity', () => {
         expect(floorIdentity.payoffCopy).not.toMatch(/placeholder/i);
     });
 
-    it('names elite route identity without claiming boss score rules', () => {
-        const identity = getEncounterIdentityForRouteKind('elite');
-
-        expect(identity).not.toBeNull();
-        expect(identity!.encounterRank).toBe('elite');
-        expect(identity!.label).toBe('Mnemonic Sentinel');
-        expect(identity!.scoreRule).toBe('No boss score multiplier; elite identity is route-pressure and reward pacing only.');
-        expect(identity!.mechanics.join(' ')).toContain('Elite Cache');
-        expect(identity!.mechanics.join(' ')).toContain('Final Ward');
-        expect(identity!.mechanics.join(' ')).toContain('Omen Seal');
-        expect(identity!.placeholderSlots).toContain('elite route badge');
-    });
 
     it('keeps normal/breather floors out of boss encounter presentation', () => {
         const entry = pickFloorScheduleEntry(76_001, GAME_RULES_VERSION, 1, 'endless');
 
         expect(getEncounterIdentityForFloor(entry)).toBeNull();
-        expect(getEncounterIdentityForRouteKind('combat')).toBeNull();
     });
 
     it('provides floor identity contracts for baseline, trap, recovery, treasure, parasite, and boss floors', () => {

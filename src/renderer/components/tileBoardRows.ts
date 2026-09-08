@@ -1,5 +1,4 @@
-import type { BoardState, EnemyHazardState, HazardTileKind, RunStatus, Tile } from '../../shared/contracts';
-import { activeEnemyHazardsForBoard } from '../../shared/enemy-hazard-board-rules';
+import type { BoardState, HazardTileKind, RunStatus, Tile } from '../../shared/contracts';
 import {
     getSelectedTraitFollowupTileIds,
     getTraitComboSurgeTileIds,
@@ -87,12 +86,6 @@ export interface TileBoardRow {
     tutorialPairOrdinal: number | null;
 }
 
-export interface TileBoardEnemyHazardRow {
-    currentTransform: TileTransform;
-    hazard: EnemyHazardState;
-    nextTransform: TileTransform | null;
-}
-
 export interface BuildTileBoardRowsInput {
     allowGambitThirdFlip: boolean;
     board: BoardState;
@@ -132,11 +125,6 @@ export interface BuildTileBoardRowsInput {
     wardPairKey: string | null;
     wideRecallInPlay: boolean;
 }
-
-export const getEnemyOccupiedTileIds = (board: BoardState): Set<string> =>
-    new Set(
-        activeEnemyHazardsForBoard(board).map((hazard) => hazard.currentTileId)
-    );
 
 export const buildTileBoardRows = ({
     allowGambitThirdFlip,
@@ -181,7 +169,6 @@ export const buildTileBoardRows = ({
     const totalRows = board.rows;
     const flippedN = board.flippedTileIds.length;
     const flipLocked = isTileBoardFlipLocked({ allowGambitThirdFlip, flippedTileCount: flippedN });
-    const enemyOccupiedTileIds = getEnemyOccupiedTileIds(board);
     const tutorialPairOrdinalByKey = getTutorialPairOrdinalByKey(board, showTutorialPairMarkers);
     const traitOpportunityByTileId = new Map(
         getTraitOpportunitySummary(board).tiles.map((opportunity) => [opportunity.tileId, opportunity])
@@ -286,7 +273,7 @@ export const buildTileBoardRows = ({
 
         return {
             destroyBlockedDecoyBack,
-            enemyOccupiedBack: enemyOccupiedTileIds.has(tile.id),
+            enemyOccupiedBack: false,
             faceUp,
             fieldAmp: getTileFieldAmplification(index, totalColumns, totalRows),
             focusDimmed: Boolean(dimmedTileIds?.has(tile.id)),
@@ -356,25 +343,4 @@ export const getTileBoardOverlayPrewarmDemandPairKeys = (
     }
 
     return [...keys];
-};
-
-export const buildTileBoardEnemyHazardRows = (
-    board: BoardState,
-    rows: readonly TileBoardRow[]
-): TileBoardEnemyHazardRow[] => {
-    const byTileId = new Map(rows.map((row) => [row.tile.id, row.transform]));
-
-    return activeEnemyHazardsForBoard(board)
-        .map((hazard) => {
-            const currentTransform = byTileId.get(hazard.currentTileId) ?? null;
-            if (!currentTransform) {
-                return null;
-            }
-            return {
-                hazard,
-                currentTransform,
-                nextTransform: byTileId.get(hazard.nextTileId) ?? null
-            };
-        })
-        .filter((row): row is TileBoardEnemyHazardRow => row != null);
 };

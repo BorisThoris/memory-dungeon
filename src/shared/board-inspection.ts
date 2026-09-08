@@ -6,15 +6,12 @@ import type {
     RunStatus,
     Tile
 } from './contracts';
-import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
-import { isSprungTrapTile } from './tile-state-rules';
 import {
     DECOY_PAIR_KEY,
     EXIT_PAIR_KEY,
     WILD_PAIR_KEY,
     isSingletonUtilityPairKey
 } from './tile-identity';
-import { getFloorHeldDungeonKeyCount } from './dungeon-key-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 
 /** When the board includes a wild joker, returns its tile id; otherwise null. */
@@ -22,7 +19,7 @@ export const getWildTileIdFromBoard = (board: BoardState): string | null =>
     board.tiles.find((tile) => tile.pairKey === WILD_PAIR_KEY)?.id ?? null;
 
 export const boardHasGlassDecoy = (board: BoardState): boolean =>
-    board.tiles.some((tile) => tile.pairKey === DECOY_PAIR_KEY && tile.tileHazardKind !== 'mirror_decoy');
+    board.tiles.some((tile) => tile.pairKey === DECOY_PAIR_KEY);
 
 /** Pairs where both tiles are still hidden (eligible for shuffle / destroy targeting). */
 export const countFullyHiddenPairs = (board: BoardState): number => {
@@ -44,34 +41,24 @@ export const countFullyHiddenPairs = (board: BoardState): number => {
     return fullPairs;
 };
 
-const tileIsResolvedDungeonCard = (tile: Tile): boolean => tile.dungeonCardState === 'resolved';
+const tileIsCleared = (tile: Tile): boolean => tile.state === 'matched' || tile.state === 'removed';
 
 /**
- * Floor completion ignores singleton utility tiles, treats sprung traps as settled, and allows a glass decoy
- * to stay hidden after every real tile has been cleared.
+ * Floor completion ignores singleton utility tiles and allows a glass decoy to stay hidden after
+ * every real tile has been cleared.
  */
 export const isBoardComplete = (board: BoardState): boolean =>
-    (board.dungeonExitTileId ? board.dungeonExitActivated === true : true) &&
     board.tiles.every((tile) => {
         if (isSingletonUtilityPairKey(tile.pairKey) && tile.pairKey !== DECOY_PAIR_KEY) {
             return true;
         }
-        if (tile.state === 'matched' || tile.state === 'removed' || isSprungTrapTile(tile) || tileIsResolvedDungeonCard(tile)) {
+        if (tileIsCleared(tile)) {
             return true;
         }
-        if (
-            tile.pairKey === DECOY_PAIR_KEY &&
-            (tile.state === 'hidden' || (tile.tileHazardKind === 'mirror_decoy' && tile.state === 'flipped'))
-        ) {
+        if (tile.pairKey === DECOY_PAIR_KEY && tile.state === 'hidden') {
             return board.tiles
                 .filter((candidate) => !isSingletonUtilityPairKey(candidate.pairKey))
-                .every(
-                    (candidate) =>
-                        candidate.state === 'matched' ||
-                        candidate.state === 'removed' ||
-                        isSprungTrapTile(candidate) ||
-                        tileIsResolvedDungeonCard(candidate)
-                );
+                .every(tileIsCleared);
         }
         return false;
     });
@@ -120,50 +107,23 @@ export interface BoardFairnessReport {
     hasCompletionRoute: boolean;
 }
 
-export interface BoardFairnessInspectionOptions {
-    dungeonKeys?: RunState['dungeonKeys'];
-    dungeonMasterKeys?: number;
-    preservePendingKeyFallback?: boolean;
-}
-
 const tileIsActionableForCompletion = (tile: Tile): boolean =>
-    tile.state === 'hidden' || (tile.state === 'flipped' && !isSprungTrapTile(tile));
+    tile.state === 'hidden' || tile.state === 'flipped';
 
-const pairIsCleared = (tiles: readonly Tile[]): boolean =>
-    tiles.every((tile) => tile.state === 'matched' || tile.state === 'removed' || tileIsResolvedDungeonCard(tile));
+const pairIsCleared = (tiles: readonly Tile[]): boolean => tiles.every(tileIsCleared);
 
-const tileIsClearedForFairness = (tile: Tile): boolean =>
-    tile.state === 'matched' || tile.state === 'removed' || tileIsResolvedDungeonCard(tile);
-
-const countUnclearedDungeonPairs = (tiles: readonly Tile[], predicate: (tile: Tile) => boolean): number => {
-    const pairKeys = new Set<string>();
-    for (const tile of tiles) {
-        if (!tileIsClearedForFairness(tile) && predicate(tile)) {
-            pairKeys.add(tile.pairKey);
-        }
-    }
-    return pairKeys.size;
-};
-
+/*
+ * The exit-lock helpers below describe a lock no generated board has carried since Gen 172. They
+ * stay exported only because the softlock generator contract, the balance simulation, the power
+ * targeting rules and the board readability model still read them; each now reports what a plain
+ * board has, which is no lock, no lever and no key.
+ */
 export const countReachableExitLeverSources = (board: BoardState): number =>
-    runNonNegativeInteger(board.dungeonLeverCount) +
-    countUnclearedDungeonPairs(
-        board.tiles,
-        (tile) => tile.dungeonCardKind === 'lever' && tile.dungeonCardEffectId === 'lever_floor'
-    );
+    runNonNegativeInteger(board.dungeonLeverCount);
 
-export const countReachableExitKeySources = (board: BoardState, keyKind: DungeonKeyKind): number => {
-    const matchingKeyPairCount = countUnclearedDungeonPairs(
-        board.tiles,
-        (tile) => tile.dungeonCardKind === 'key' && (tile.dungeonKeyKind ?? 'iron') === keyKind
-    );
-    const floorHeldKeyCount = getFloorHeldDungeonKeyCount(board, keyKind);
-    const roomKeyCacheCount =
-        keyKind === 'iron'
-            ? board.tiles.filter((tile) => !tileIsClearedForFairness(tile) && tile.dungeonCardEffectId === 'room_key_cache').length
-            : 0;
-    return floorHeldKeyCount + matchingKeyPairCount + roomKeyCacheCount;
-};
+export const countReachableExitKeySources = (board: BoardState, keyKind: DungeonKeyKind): number =>
+    runNonNegativeInteger(board.dungeonKeysHeldByKind?.[keyKind]) +
+    (board.dungeonKeysHeldByKind == null && keyKind === 'iron' ? runNonNegativeInteger(board.dungeonKeysHeld) : 0);
 
 export const boardHasActionableProgressionPair = (board: BoardState): boolean => {
     const actionableTilesByPairKey = new Map<string, number>();
@@ -236,70 +196,6 @@ export const getEffectivePrimaryExitLock = ({
     };
 };
 
-export const repairDungeonExitSoftlocks = (
-    board: BoardState,
-    options: BoardFairnessInspectionOptions = {}
-): BoardState => {
-    if (!board.dungeonExitTileId) {
-        return board;
-    }
-    const primaryExit = board.tiles.find((tile) => tile.id === board.dungeonExitTileId);
-    if (!primaryExit) {
-        return board;
-    }
-    const exitLockKind = primaryExit.dungeonExitLockKind ?? board.dungeonExitLockKind ?? 'none';
-    const requiredLeverCount = runNonNegativeInteger(
-        primaryExit.dungeonExitRequiredLeverCount ?? board.dungeonExitRequiredLeverCount
-    );
-    let repairedLockKind = exitLockKind;
-    let repairedLeverCount = requiredLeverCount;
-
-    if (exitLockKind === 'lever') {
-        const reachableLevers = countReachableExitLeverSources(board);
-        if (reachableLevers <= 0) {
-            repairedLockKind = 'none';
-            repairedLeverCount = 0;
-        } else if (reachableLevers < requiredLeverCount) {
-            repairedLeverCount = reachableLevers;
-        }
-    } else if (exitLockKind !== 'none') {
-        const requiredKeyKind = exitLockKind as DungeonKeyKind;
-        const hasRunKey =
-            runNonNegativeInteger(options.dungeonKeys?.[requiredKeyKind]) > 0 ||
-            runNonNegativeInteger(options.dungeonMasterKeys) > 0;
-        const pendingFallback =
-            options.preservePendingKeyFallback === true && boardHasActionableProgressionPair(board);
-        if (!hasRunKey && countReachableExitKeySources(board, requiredKeyKind) < 1 && !pendingFallback) {
-            repairedLockKind = 'none';
-            repairedLeverCount = 0;
-        }
-    }
-
-    if (
-        repairedLockKind === exitLockKind &&
-        repairedLeverCount === requiredLeverCount &&
-        (board.dungeonExitLockKind ?? 'none') === repairedLockKind &&
-        (board.dungeonExitRequiredLeverCount ?? 0) === repairedLeverCount
-    ) {
-        return board;
-    }
-
-    return {
-        ...board,
-        dungeonExitLockKind: repairedLockKind,
-        dungeonExitRequiredLeverCount: repairedLeverCount,
-        tiles: board.tiles.map((tile) =>
-            tile.id === primaryExit.id
-                ? {
-                      ...tile,
-                      dungeonExitLockKind: repairedLockKind,
-                      dungeonExitRequiredLeverCount: repairedLeverCount
-                  }
-                : tile
-        )
-    };
-};
-
 /**
  * REG-087 anti-softlock inspection for board structure and completion reachability.
  *
@@ -308,10 +204,7 @@ export const repairDungeonExitSoftlocks = (
  * a legal path to finish. Decoys are allowed as hidden singleton traps; wild tiles are allowed only while at least one
  * real actionable tile or stray-removal route remains.
  */
-export const inspectBoardFairness = (
-    board: BoardState,
-    options: BoardFairnessInspectionOptions = {}
-): BoardFairnessReport => {
+export const inspectBoardFairness = (board: BoardState): BoardFairnessReport => {
     const issues: BoardFairnessIssue[] = [];
     const groups = new Map<string, Tile[]>();
     for (const tile of board.tiles) {
@@ -326,7 +219,6 @@ export const inspectBoardFairness = (
     const decoyTileIds = groups.get(DECOY_PAIR_KEY)?.map((tile) => tile.id) ?? [];
     const wildTiles = groups.get(WILD_PAIR_KEY) ?? [];
     const wildTileIds = wildTiles.map((tile) => tile.id);
-    const exitTiles = groups.get(EXIT_PAIR_KEY) ?? [];
 
     let structurallyClearable = true;
     let matchedOrRemovedRealPairs = 0;
@@ -348,10 +240,6 @@ export const inspectBoardFairness = (
             continue;
         }
         if (pairIsCleared(tiles)) {
-            matchedOrRemovedRealPairs += 1;
-            continue;
-        }
-        if (tiles.every(isSprungTrapTile)) {
             matchedOrRemovedRealPairs += 1;
             continue;
         }
@@ -382,87 +270,6 @@ export const inspectBoardFairness = (
         });
     }
 
-    if (board.dungeonExitTileId && exitTiles.length === 0) {
-        structurallyClearable = false;
-        issues.push({ code: 'exit_card_missing', message: 'Board declares an exit tile, but no exit card exists.' });
-    }
-    if (board.dungeonExitTileId) {
-        const declaredExit = board.tiles.find((tile) => tile.id === board.dungeonExitTileId);
-        if (!declaredExit) {
-            structurallyClearable = false;
-            issues.push({
-                code: 'exit_tile_reference_missing',
-                message: `Board declares exit tile "${board.dungeonExitTileId}", but that tile does not exist.`,
-                tileIds: [board.dungeonExitTileId]
-            });
-        } else if (declaredExit.pairKey !== EXIT_PAIR_KEY || declaredExit.dungeonCardKind !== 'exit') {
-            structurallyClearable = false;
-            issues.push({
-                code: 'exit_card_mismatch',
-                message: `Declared exit tile "${declaredExit.id}" is not an exit card.`,
-                pairKey: declaredExit.pairKey,
-                tileIds: [declaredExit.id]
-            });
-        } else if (
-            board.dungeonExitLockKind != null &&
-            declaredExit.dungeonExitLockKind != null &&
-            (board.dungeonExitLockKind !== declaredExit.dungeonExitLockKind ||
-                (board.dungeonExitRequiredLeverCount ?? 0) !== (declaredExit.dungeonExitRequiredLeverCount ?? 0))
-        ) {
-            structurallyClearable = false;
-            issues.push({
-                code: 'exit_lock_metadata_mismatch',
-                message: `Declared exit tile "${declaredExit.id}" has lock metadata that disagrees with the board lock metadata.`,
-                tileIds: [declaredExit.id]
-            });
-        }
-    }
-    const activatedExitTiles = exitTiles.filter((tile) => tile.dungeonExitActivated === true);
-    if (activatedExitTiles.length > 1) {
-        structurallyClearable = false;
-        issues.push({
-            code: 'exit_activation_mismatch',
-            message: `Board has ${activatedExitTiles.length} activated exit cards; exactly one exit can own floor activation.`,
-            tileIds: activatedExitTiles.map((tile) => tile.id)
-        });
-    }
-
-    const effectivePrimaryExitLock = getEffectivePrimaryExitLock({
-        board,
-        dungeonKeys: options.dungeonKeys,
-        dungeonMasterKeys: options.dungeonMasterKeys
-    });
-    const exitLockKind = effectivePrimaryExitLock.lockKind;
-    const requiredLeverCount = effectivePrimaryExitLock.requiredLeverCount;
-    if (exitLockKind === 'lever' && runNonNegativeInteger(board.dungeonLeverCount) < requiredLeverCount) {
-        const reachableLevers = countReachableExitLeverSources(board);
-        if (reachableLevers < requiredLeverCount) {
-            structurallyClearable = false;
-            issues.push({
-                code: 'exit_lock_unreachable',
-                message: `Lever-locked exit requires ${requiredLeverCount} lever(s), but only ${
-                    reachableLevers
-                } can be reached.`
-            });
-        }
-    }
-    if (exitLockKind !== 'none' && exitLockKind !== 'lever') {
-        const requiredKeyKind = exitLockKind as DungeonKeyKind;
-        const hasRunKey =
-            runNonNegativeInteger(options.dungeonKeys?.[requiredKeyKind]) > 0 ||
-            runNonNegativeInteger(options.dungeonMasterKeys) > 0;
-        if (
-            !hasRunKey &&
-            countReachableExitKeySources(board, requiredKeyKind) < 1 &&
-            !boardHasActionableProgressionPair(board)
-        ) {
-            structurallyClearable = false;
-            issues.push({
-                code: 'exit_lock_unreachable',
-                message: `${requiredKeyKind}-locked exit requires a matching key, but no reachable key route exists.`
-            });
-        }
-    }
     if (board.matchedPairs !== matchedOrRemovedRealPairs) {
         issues.push({
             code: 'matched_pairs_counter_mismatch',
@@ -472,11 +279,7 @@ export const inspectBoardFairness = (
 
     const realTilesComplete = realPairKeys.length > 0 && realPairKeys.length === matchedOrRemovedRealPairs;
     for (const decoy of groups.get(DECOY_PAIR_KEY) ?? []) {
-        if (
-            decoy.state !== 'hidden' &&
-            !(decoy.tileHazardKind === 'mirror_decoy' && decoy.state === 'flipped') &&
-            !realTilesComplete
-        ) {
+        if (decoy.state !== 'hidden' && !realTilesComplete) {
             structurallyClearable = false;
             issues.push({
                 code: 'decoy_flipped_or_cleared_before_completion',
@@ -509,127 +312,24 @@ export const inspectBoardFairness = (
         }
     }
 
-    for (const [pairKey, tiles] of groups) {
-        if (isSingletonUtilityPairKey(pairKey) || pairIsCleared(tiles)) {
-            continue;
-        }
-        const dungeonTiles = tiles.filter((tile) => !tileIsClearedForFairness(tile) && tile.dungeonCardKind != null);
-        if (dungeonTiles.length === 0) {
-            continue;
-        }
-        const tileIds = tiles.map((tile) => tile.id);
-        const first = dungeonTiles[0];
-        if (!first) {
-            continue;
-        }
-        if (
-            tiles.length !== dungeonTiles.length ||
-            dungeonTiles.some(
-                (tile) =>
-                    tile.dungeonCardKind !== first.dungeonCardKind ||
-                    tile.dungeonCardEffectId !== first.dungeonCardEffectId ||
-                    tile.dungeonBossId !== first.dungeonBossId
-            )
-        ) {
-            structurallyClearable = false;
-            issues.push({
-                code: 'dungeon_card_pair_mismatch',
-                message: `Dungeon pair "${pairKey}" has inconsistent card metadata.`,
-                pairKey,
-                tileIds
-            });
-        }
-        if (
-            first.dungeonCardKind === 'enemy' &&
-            dungeonTiles.some(
-                (tile) =>
-                    tile.dungeonCardHp !== first.dungeonCardHp ||
-                    tile.dungeonCardMaxHp !== first.dungeonCardMaxHp
-            )
-        ) {
-            structurallyClearable = false;
-            issues.push({
-                code: 'dungeon_card_hp_mismatch',
-                message: `Enemy pair "${pairKey}" has inconsistent HP metadata.`,
-                pairKey,
-                tileIds
-            });
-        }
-    }
-
-    const tileById = new Map(board.tiles.map((tile) => [tile.id, tile]));
-    const activeEnemyHazards = activeEnemyHazardsForBoard(board);
-    for (const hazard of activeEnemyHazards) {
-        for (const tileId of [hazard.currentTileId, hazard.nextTileId]) {
-            const tile = tileById.get(tileId);
-            if (!tile) {
-                structurallyClearable = false;
-                issues.push({
-                    code: 'enemy_hazard_tile_reference_missing',
-                    message: `Enemy hazard "${hazard.id}" references missing tile "${tileId}".`,
-                    tileIds: [tileId]
-                });
-            } else if (tileIsClearedForFairness(tile)) {
-                structurallyClearable = false;
-                issues.push({
-                    code: 'enemy_hazard_on_cleared_tile',
-                    message: `Enemy hazard "${hazard.id}" references cleared tile "${tileId}".`,
-                    tileIds: [tileId]
-                });
-            }
-        }
-    }
-
-    if (board.dungeonObjectiveId === 'defeat_boss') {
-        const hasBossRoute =
-            board.dungeonBossId != null ||
-            board.tiles.some((tile) => !tileIsClearedForFairness(tile) && tile.dungeonBossId != null) ||
-            activeEnemyHazards.some((hazard) => hazard.bossId != null);
-        if (!hasBossRoute) {
-            structurallyClearable = false;
-            issues.push({
-                code: 'dungeon_objective_unreachable',
-                message: 'Defeat-boss objective is active, but no boss card or boss hazard exists.'
-            });
-        }
-    }
-
-    const hasExitCompletionRoute = (() => {
-        if (!effectivePrimaryExitLock.exitTile) {
-            return false;
-        }
-        if (effectivePrimaryExitLock.lockKind === 'none') {
-            return true;
-        }
-        if (effectivePrimaryExitLock.lockKind === 'lever') {
-            return runNonNegativeInteger(board.dungeonLeverCount) >= effectivePrimaryExitLock.requiredLeverCount;
-        }
-        const requiredKeyKind = effectivePrimaryExitLock.lockKind as DungeonKeyKind;
-        return (
-            runNonNegativeInteger(options.dungeonKeys?.[requiredKeyKind]) > 0 ||
-            runNonNegativeInteger(options.dungeonMasterKeys) > 0 ||
-            countReachableExitKeySources(board, requiredKeyKind) > 0
-        );
-    })();
     for (const wild of wildTiles) {
         if (
             tileIsActionableForCompletion(wild) &&
             !actionableRealTileExists &&
             !hiddenRealTileExists &&
-            !isBoardComplete(board) &&
-            !hasExitCompletionRoute
+            !isBoardComplete(board)
         ) {
             structurallyClearable = false;
             issues.push({
                 code: 'wild_singleton_unmatched_without_route',
-                message: 'Wild singleton is still actionable, but no real hidden tile, removal route, or exit route remains.',
+                message: 'Wild singleton is still actionable, but no real hidden tile or removal route remains.',
                 pairKey: WILD_PAIR_KEY,
                 tileIds: [wild.id]
             });
         }
     }
     const hasCompletionRoute =
-        structurallyClearable && (isBoardComplete(board) || actionableRealPairKeys.length > 0 || hasExitCompletionRoute);
+        structurallyClearable && (isBoardComplete(board) || actionableRealPairKeys.length > 0);
 
     return {
         complete: isBoardComplete(board),
@@ -670,10 +370,7 @@ export const inspectRunFairness = (run: RunState): RunFairnessReport => {
         };
     }
 
-    const boardReport = inspectBoardFairness(run.board, {
-        dungeonKeys: run.dungeonKeys,
-        dungeonMasterKeys: run.dungeonMasterKeys
-    });
+    const boardReport = inspectBoardFairness(run.board);
     const issues = [...boardReport.issues];
     const intentionalBlockers: string[] = [];
 

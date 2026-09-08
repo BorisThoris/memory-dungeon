@@ -41,9 +41,7 @@ describe('reaching row shuffle from a press', () => {
         expect(canRegionShuffleRow(run, 0)).toBe(true);
 
         const pressed = createArmedBoardPowerPressResult({
-            canContinueSinglePowerAfterContact: true,
             destroyPairArmed: false,
-            enemyContacted: false,
             peekModeArmed: false,
             regionShuffleArmed: true,
             run,
@@ -61,9 +59,7 @@ describe('reaching row shuffle from a press', () => {
     it('does not fire while the power is unarmed', () => {
         const run = playingRun();
         const pressed = createArmedBoardPowerPressResult({
-            canContinueSinglePowerAfterContact: true,
             destroyPairArmed: false,
-            enemyContacted: false,
             peekModeArmed: false,
             regionShuffleArmed: false,
             run,
@@ -76,9 +72,7 @@ describe('reaching row shuffle from a press', () => {
     it('refuses a run under a contract that forbids shuffling', () => {
         const run = { ...playingRun(), activeContract: { maxMismatches: null, noDestroy: false, noShuffle: true } };
         const pressed = createArmedBoardPowerPressResult({
-            canContinueSinglePowerAfterContact: true,
             destroyPairArmed: false,
-            enemyContacted: false,
             peekModeArmed: false,
             regionShuffleArmed: true,
             run,

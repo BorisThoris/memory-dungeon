@@ -1,11 +1,7 @@
 import type { BoardState, RunState, Tile } from '../contracts';
 import { countFindablePairs } from '../board-generation';
 import { createNewRun, finishMemorizePhase } from '../game-core';
-import {
-    activateDungeonExit,
-    EXIT_PAIR_KEY,
-    revealDungeonExit
-} from '../dungeon-rules';
+import { EXIT_PAIR_KEY } from '../tile-identity';
 import { flipTile, resolveBoardTurn } from '../turn-resolution';
 
 export const makeTile = (id: string, pairKey: string, symbol: string, overrides: Partial<Tile> = {}): Tile => ({
@@ -73,15 +69,4 @@ export const playPerfectFloor = (run: RunState): RunState => {
         }
     }
     return current;
-};
-
-export const revealAndActivateExit = (run: RunState): RunState => {
-    const exitTile = run.board?.dungeonExitTileId
-        ? run.board.tiles.find((tile) => tile.id === run.board?.dungeonExitTileId)
-        : run.board?.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY);
-    if (!exitTile || run.status !== 'playing') {
-        return run;
-    }
-    const revealed = revealDungeonExit(run, exitTile.id);
-    return activateDungeonExit(revealed);
 };

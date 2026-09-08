@@ -68,7 +68,6 @@ describe('recall rules', () => {
         expect(tileHasRecallClue(tile({ lanternScouted: true }))).toBe(true);
         expect(tileHasRecallClue(tile({ scoutRevealSource: 'lantern_ward' }))).toBe(true);
         expect(tileHasRecallClue(tile({ routeSpecialRevealed: true }))).toBe(true);
-        expect(tileHasRecallClue(tile({ dungeonCardState: 'revealed' }))).toBe(true);
     });
 
     it('clamps focus and scores remembered matches', () => {

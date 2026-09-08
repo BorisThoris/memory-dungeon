@@ -221,7 +221,6 @@ const App = () => {
                     peekModeArmed: false,
                     tileSwapArmed: false,
                     tileSwapFirstTileId: null,
-                    dungeonExitPromptOpen: false,
                     matchScorePop: null,
                     mismatchScorePop: null
                 });

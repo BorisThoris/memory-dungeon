@@ -1,23 +1,23 @@
 /**
- * Entering the shared graph through `relics` must not kill the process.
+ * Entering the shared graph through the game barrel must not kill the process.
  *
- * `relics` reaches `save-data` through nine hops - trait-build-rewards, tile-trait-rules,
- * bonus-rewards, gameplay-core, board-turn-event-facts, turn-resolution, game and
- * run-summary-rules. While `save-data` read `RELIC_POOL` during its own module body, any
- * entry point that loaded `relics` first died on `Cannot access 'RELIC_POOL' before
- * initialization`, and this project has already shipped a build whose renderer went blank
- * for exactly that reason. Vitest's ESM loader does not reproduce the order; the CJS
- * transform every `tsx` script in this repo runs under does, so the guard lives here.
+ * `save-data` once read `RELIC_POOL` during its own module body, and any entry point that loaded
+ * `relics` first died on `Cannot access 'RELIC_POOL' before initialization`; this project has
+ * shipped a build whose renderer went blank for exactly that reason. The relics are gone
+ * (Gen 176), the lesson is not: Vitest's ESM loader does not reproduce module order, the CJS
+ * transform every `tsx` script in this repo runs under does, so the guard lives here and enters
+ * through the widest barrel, the way the renderer does.
  *
- * Keep the relics import first.
+ * Keep the game import first.
  */
-import { RELIC_POOL } from '../src/shared/relics';
+import { createNewRun } from '../src/shared/game';
 import { createDefaultSaveData, normalizeSaveData } from '../src/shared/save-data';
 
 const failures: string[] = [];
 
-if (RELIC_POOL.length === 0) {
-    failures.push('RELIC_POOL is empty when the graph is entered through relics.');
+const run = createNewRun(0, { runSeed: 42_001 });
+if (!run.board || run.board.tiles.length === 0) {
+    failures.push('createNewRun produced no board when the graph is entered through game.');
 }
 
 const save = createDefaultSaveData();
@@ -25,18 +25,11 @@ if (!(save.schemaVersion > 0)) {
     failures.push('createDefaultSaveData produced no schema version.');
 }
 
-// The relic-id guard is the binding that was read too early; exercise it both ways so a
-// lookup that silently resolves to nothing would fail here too.
-const firstRelic = RELIC_POOL[0]!;
-const restored = normalizeSaveData({
-    ...save,
-    playerStats: { ...save.playerStats, relicPickCounts: { [firstRelic]: 2, not_a_relic: 5 } }
-});
-if (restored.playerStats?.relicPickCounts?.[firstRelic] !== 2) {
-    failures.push('A real relic id was dropped from a restored save.');
-}
-if (restored.playerStats?.relicPickCounts && 'not_a_relic' in restored.playerStats.relicPickCounts) {
-    failures.push('A bogus relic id survived save normalization.');
+// Normalization reads the content catalogs that used to be read too early; a lookup that
+// silently resolved to nothing would fail here.
+const restored = normalizeSaveData({ ...save, bestScore: 1234 });
+if (restored.bestScore !== 1234) {
+    failures.push('A valid best score was dropped from a restored save.');
 }
 
 if (failures.length > 0) {
@@ -47,4 +40,4 @@ if (failures.length > 0) {
     process.exit(1);
 }
 
-console.log('Module graph entry check passed (relics -> save-data loads clean)');
+console.log('Module graph entry check passed (game -> save-data loads clean)');

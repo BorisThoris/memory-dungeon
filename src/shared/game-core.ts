@@ -1,6 +1,5 @@
 export {
     advanceToNextLevel,
-    createDungeonShowcaseRun,
     createRunSummary,
     finishMemorizePhase,
 } from './game';

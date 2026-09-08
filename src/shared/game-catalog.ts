@@ -1,12 +1,11 @@
 /**
  * Barrel for read-only UI copy: re-exports **mechanics encyclopedia** (single source of truth) + achievements.
- * Gameplay logic stays in `game.ts` / `relics.ts`; player-facing strings for relics/mutators/modes live in `mechanics-encyclopedia.ts`.
+ * Gameplay logic stays in `game.ts`; player-facing strings for relics/mutators/modes live in `mechanics-encyclopedia.ts`.
  */
 import { MUTATOR_IDS, type RelicId } from './contracts';
 import { ACHIEVEMENT_BY_ID, type AchievementDefinition } from './achievements';
 import type { MutatorDefinition, RelicDefinition } from './mechanics-encyclopedia';
 import { MUTATOR_CATALOG, RELIC_CATALOG } from './mechanics-encyclopedia';
-import { RELIC_POOL } from './relics';
 
 export { ACHIEVEMENT_BY_ID, ACHIEVEMENTS } from './achievements';
 export { MUTATOR_CATALOG } from './mechanics-encyclopedia';
@@ -34,6 +33,7 @@ export const getRelicMeta = (id: RelicId): RelicDefinition => RELIC_CATALOG[id];
 
 export const getMutatorMeta = (id: keyof typeof MUTATOR_CATALOG): MutatorDefinition => MUTATOR_CATALOG[id];
 
-export const getRelicCatalogRows = (): RelicDefinition[] => RELIC_POOL.map((id) => RELIC_CATALOG[id]);
+export const getRelicCatalogRows = (): RelicDefinition[] =>
+    (Object.keys(RELIC_CATALOG) as RelicId[]).map((id) => RELIC_CATALOG[id]);
 
 export const getMutatorCatalogRows = (): MutatorDefinition[] => MUTATOR_IDS.map((id) => MUTATOR_CATALOG[id]);

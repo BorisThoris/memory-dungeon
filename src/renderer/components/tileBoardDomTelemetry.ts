@@ -1,5 +1,4 @@
 import type { BoardState, RunStatus } from '../../shared/contracts';
-import { activeEnemyHazardsForBoard } from '../../shared/enemy-hazard-board-rules';
 import {
     getSelectedTraitFollowupTileIds,
     getTraitComboSurgeTileIds,
@@ -210,9 +209,6 @@ export const getCardFeedbackStatesAttr = ({
     traitRouteTargetTileIds?: readonly string[];
 }): string => {
     const pickable = new Set(getPickableTileIds(board, interactive, allowGambitThirdFlip));
-    const enemyOccupied = new Set(
-        activeEnemyHazardsForBoard(board).map((hazard) => hazard.currentTileId)
-    );
     const traitOpportunityTileIds = getTraitOpportunityTileIds(board);
     const traitComboSurgeTileIds = getTraitComboSurgeTileIds(board);
     const perkArmedTileIdSet = new Set(perkArmedTileIds);
@@ -304,9 +300,6 @@ export const getCardFeedbackStatesAttr = ({
         const dungeonUtilityKind = getDungeonUtilityReadabilityKind(tile, board);
         if (dungeonUtilityKind) {
             add(dungeonUtilityKind);
-        }
-        if (enemyOccupied.has(tile.id)) {
-            add('enemy-occupied');
         }
         if (tile.findableKind) {
             add('relic');

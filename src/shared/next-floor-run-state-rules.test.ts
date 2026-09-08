@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { type RelicId, type RewardPerkId, type RunState } from './contracts';
+import { type RunState } from './contracts';
 import { createNewRun } from './game';
 import { createNextFloorRunState } from './next-floor-run-state-rules';
 
@@ -41,7 +41,6 @@ describe('createNextFloorRunState', () => {
         const next = createNextFloorRunState(run, {
             lives: 2,
             activeMutators: run.activeMutators,
-            dungeonRun: run.dungeonRun,
             board: { ...nextBoard, level: 4 },
             parasiteFloors: 1,
             parasiteWardRemaining: 0,
@@ -76,49 +75,7 @@ describe('createNextFloorRunState', () => {
         expect(next.stats.highestLevel).toBe(4);
     });
 
-    it('restores per-floor relic free-use flags', () => {
-        const run = {
-            ...createNewRun(0, { runSeed: 15 }),
-            relicIds: ['first_shuffle_free_per_floor', 'region_shuffle_free_first'] satisfies RelicId[],
-            freeShuffleThisFloor: false,
-            regionShuffleFreeThisFloor: false
-        };
-        const nextBoard = run.board!;
 
-        const next = createNextFloorRunState(run, {
-            lives: run.lives,
-            activeMutators: run.activeMutators,
-            dungeonRun: run.dungeonRun,
-            board: nextBoard,
-            parasiteFloors: run.parasiteFloors,
-            parasiteWardRemaining: run.parasiteWardRemaining,
-            memorizeRemainingMs: 1000
-        });
-
-        expect(next.freeShuffleThisFloor).toBe(true);
-        expect(next.regionShuffleFreeThisFloor).toBe(true);
-    });
-
-    it('ignores malformed relic ids before restoring per-floor relic flags', () => {
-        const run = {
-            ...createNewRun(0, { runSeed: 15 }),
-            relicIds: Number.NaN as unknown as RelicId[],
-            freeShuffleThisFloor: false,
-            regionShuffleFreeThisFloor: false
-        };
-        const next = createNextFloorRunState(run, {
-            lives: run.lives,
-            activeMutators: run.activeMutators,
-            dungeonRun: run.dungeonRun,
-            board: run.board!,
-            parasiteFloors: run.parasiteFloors,
-            parasiteWardRemaining: run.parasiteWardRemaining,
-            memorizeRemainingMs: 1000
-        });
-
-        expect(next.freeShuffleThisFloor).toBe(false);
-        expect(next.regionShuffleFreeThisFloor).toBe(false);
-    });
 
     it('normalizes malformed stat records before resetting next-floor stats', () => {
         const run = {
@@ -128,7 +85,6 @@ describe('createNextFloorRunState', () => {
         const next = createNextFloorRunState(run, {
             lives: run.lives,
             activeMutators: run.activeMutators,
-            dungeonRun: run.dungeonRun,
             board: { ...run.board!, level: 4 },
             parasiteFloors: run.parasiteFloors,
             parasiteWardRemaining: run.parasiteWardRemaining,
@@ -142,93 +98,5 @@ describe('createNextFloorRunState', () => {
         expect(next.stats.highestLevel).toBe(4);
     });
 
-    it('restores durable reward perk floor benefits without bypassing contracts', () => {
-        const run = {
-            ...createNewRun(0, { runSeed: 16 }),
-            rewardPerkIds: ['free_first_swap_per_floor', 'hazard_banish_per_floor'] satisfies RewardPerkId[],
-            regionShuffleFreeThisFloor: false,
-            destroyPairCharges: 0
-        };
-        const hazardBoard = {
-            ...run.board!,
-            tiles: run.board!.tiles.map((tile, index) =>
-                index < 2
-                    ? { ...tile, pairKey: 'hazard-pair', tileHazardKind: 'shuffle_snare' as const }
-                    : tile
-            )
-        };
-        const noDestroyRun = {
-            ...run,
-            activeContract: { noShuffle: false, noDestroy: true, maxMismatches: null }
-        };
 
-        const next = createNextFloorRunState(run, {
-            lives: run.lives,
-            activeMutators: run.activeMutators,
-            dungeonRun: run.dungeonRun,
-            board: hazardBoard,
-            parasiteFloors: run.parasiteFloors,
-            parasiteWardRemaining: run.parasiteWardRemaining,
-            memorizeRemainingMs: 1000
-        });
-        const fallbackNext = createNextFloorRunState(run, {
-            lives: run.lives,
-            activeMutators: run.activeMutators,
-            dungeonRun: run.dungeonRun,
-            board: run.board!,
-            parasiteFloors: run.parasiteFloors,
-            parasiteWardRemaining: run.parasiteWardRemaining,
-            memorizeRemainingMs: 1000
-        });
-        const noDestroyNext = createNextFloorRunState(noDestroyRun, {
-            lives: noDestroyRun.lives,
-            activeMutators: noDestroyRun.activeMutators,
-            dungeonRun: noDestroyRun.dungeonRun,
-            board: hazardBoard,
-            parasiteFloors: noDestroyRun.parasiteFloors,
-            parasiteWardRemaining: noDestroyRun.parasiteWardRemaining,
-            memorizeRemainingMs: 1000
-        });
-
-        expect(next.regionShuffleFreeThisFloor).toBe(true);
-        expect(next.destroyPairCharges).toBe(0);
-        expect(next.board!.tiles.filter((tile) => tile.pairKey === 'hazard-pair').map((tile) => tile.tileHazardKind)).toEqual([
-            undefined,
-            undefined
-        ]);
-        expect(fallbackNext.destroyPairCharges).toBe(1);
-        expect(noDestroyNext.destroyPairCharges).toBe(0);
-        expect(noDestroyNext.board!.tiles.filter((tile) => tile.pairKey === 'hazard-pair').map((tile) => tile.tileHazardKind)).toEqual([
-            'shuffle_snare',
-            'shuffle_snare'
-        ]);
-        expect(next.gameplayCommandJournal).toEqual(run.gameplayCommandJournal);
-        expect(next.gameplayEventJournal).toEqual(run.gameplayEventJournal);
-        expect(fallbackNext.gameplayCommandJournal).toEqual(run.gameplayCommandJournal);
-        expect(fallbackNext.gameplayEventJournal).toEqual(run.gameplayEventJournal);
-        expect(noDestroyNext.gameplayCommandJournal).toEqual(noDestroyRun.gameplayCommandJournal);
-        expect(noDestroyNext.gameplayEventJournal).toEqual(noDestroyRun.gameplayEventJournal);
-    });
-
-    it('treats malformed reward perks as empty before restoring floor benefits', () => {
-        const run = {
-            ...createNewRun(0, { runSeed: 18 }),
-            rewardPerkIds: Number.NaN as unknown as RunState['rewardPerkIds'],
-            regionShuffleFreeThisFloor: false,
-            destroyPairCharges: 0
-        };
-
-        const next = createNextFloorRunState(run, {
-            lives: run.lives,
-            activeMutators: run.activeMutators,
-            dungeonRun: run.dungeonRun,
-            board: run.board!,
-            parasiteFloors: run.parasiteFloors,
-            parasiteWardRemaining: run.parasiteWardRemaining,
-            memorizeRemainingMs: 1000
-        });
-
-        expect(next.regionShuffleFreeThisFloor).toBe(false);
-        expect(next.destroyPairCharges).toBe(0);
-    });
 });

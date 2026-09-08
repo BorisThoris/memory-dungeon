@@ -32,7 +32,6 @@ Counts a player can actually reach, not counts declared somewhere:
 | Axis | Count | Note |
 |---|---|---|
 | Modes | 5 | Classic/Endless, Daily, Puzzle, Gauntlet, Meditation |
-| Relics | 22 | 16 pay once at pickup; 6 put a standing rule in force — see `RELIC_ROSTER.md` |
 | Mutators | 12 | one full endless cycle |
 | Run events | 26 | |
 | Floor archetypes | 11 | |

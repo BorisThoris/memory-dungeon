@@ -1,11 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { MUTATOR_IDS } from '../../shared/contracts';
-import { RELIC_POOL } from '../../shared/relics';
 import {
-    buildCodexBuildRows,
     buildCodexModeRows,
     buildCodexMutatorRows,
-    buildCodexRelicRows,
     CODEX_TOC,
     codexTabAllows,
     filterTopics,
@@ -34,7 +31,6 @@ describe('codexScreenModel', () => {
         expect(codexTabAllows('tables', 'table')).toBe(true);
         expect(CODEX_TOC.filter((item) => tocVisible('tables', item.kind)).map((item) => item.label)).toEqual([
             'Achievements',
-            'Relics',
             'Mutators'
         ]);
     });
@@ -45,14 +41,11 @@ describe('codexScreenModel', () => {
         expect(hasCodexFilterMatch({ guideCounts: [0], tableCounts: [1], tab: 'tables' })).toBe(true);
     });
 
-    it('builds player-facing mode and relic build rows', () => {
+    it('builds player-facing mode rows', () => {
         expect(buildCodexModeRows().some((row) => row.id === 'visual_endless_locked')).toBe(true);
-        expect(buildCodexBuildRows().some((row) => row.title === 'The Conduit Cartographer' && /peek, pin, read/i.test(row.description))).toBe(true);
-        expect(buildCodexBuildRows().some((row) => row.title === 'The Emergency Toolkit' && /inspect, remove, recover/i.test(row.description))).toBe(true);
     });
 
-    it('builds relic and mutator tables through shared catalog row order', () => {
-        expect(buildCodexRelicRows().map((row) => row.id)).toEqual([...RELIC_POOL]);
+    it('builds the mutator table through shared catalog row order', () => {
         expect(buildCodexMutatorRows().map((row) => row.id)).toEqual([...MUTATOR_IDS]);
     });
 });

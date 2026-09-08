@@ -1,5 +1,4 @@
 import type { RunState } from './contracts';
-import { getDungeonBoardPresentation, getDungeonObjectiveStatus } from './dungeon-board-status';
 import { runArrayCount } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
@@ -91,16 +90,6 @@ export const GAMEPLAY_FEEDBACK_CRITICAL_FIELDS = Object.keys(
 export const getGameplayFeedbackObjectiveSnapshot = (
     run: RunState
 ): GameplayFeedbackObjectiveSnapshot | null => {
-    const dungeonPresentation = getDungeonBoardPresentation(run);
-    if (run.status !== 'levelComplete' && dungeonPresentation.visible) {
-        const objective = getDungeonObjectiveStatus(run);
-        return {
-            label: objective.label,
-            progress: runNonNegativeInteger(objective.progress),
-            required: runNonNegativeInteger(objective.required)
-        };
-    }
-
     const traitRoute = getTraitRouteObjectiveStatus(run);
     return traitRoute
         ? {

@@ -85,8 +85,6 @@ describe('board-turn feedback ownership boundary', () => {
         expect(announcementHook).toContain('buildBoardTurnAnnouncement(');
         expect(announcementHook).toContain('{ reduceMotion }');
         for (const field of [
-            'hazardTilesBefore',
-            'hazardTilesAfter',
             'scoutsBefore',
             'scoutsAfter',
             'mimicCacheBefore',
@@ -101,7 +99,6 @@ describe('board-turn feedback ownership boundary', () => {
             expect(turnAnnouncement, field).toContain(field);
         }
         expect(turnAnnouncement).toContain('CHAIN_MILESTONE_THRESHOLDS');
-        expect(turnAnnouncement).toContain('hazardTileAnnouncementLines');
         for (const forbiddenInference of [
             'matchedPairs - snap.matchedPairs',
             'mismatches - snap.mismatches',

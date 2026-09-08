@@ -7,8 +7,6 @@ export interface TurnMatchProgressResult {
     matchResolutionsThisFloor: number;
     findablesClaimedThisFloor: number;
     safeHazardWardChargesThisFloor: number;
-    hazardTileTriggersThisFloor: number;
-    hazardCascadeCachesThisFloor: number;
     chunkBreaksThisFloor: number;
     chunkPairsBrokenThisFloor: number;
     chunkScoreThisFloor: number;
@@ -17,36 +15,13 @@ export interface TurnMatchProgressResult {
     bestChainThisFloor: number;
     feverBreaksThisRun: number;
     biggestChunkPairs: number;
-    chunkWardenKills: number;
     bestChainThisRun: number;
     chunkPairsDroppedThisFloor: number;
     chunkDropsThisRun: number;
     bestRippleThisFloor: number;
     bestRippleThisRun: number;
-    hazardFragileCacheClaimsThisFloor: number;
-    hazardTollCachesThisFloor: number;
-    hazardFuseCachesThisFloor: number;
-    hazardFuseCacheExpiredClaimsThisFloor: number;
-    lanternWardScoutsThisFloor: number;
-    omenSealScoutsThisFloor: number;
-    mimicCacheClaimsThisFloor: number;
-    mimicCacheBitesThisFloor: number;
-    mimicCacheGuardBitesThisFloor: number;
     anchorSealChargesThisFloor: number;
     anchorSealUsesThisFloor: number;
-    loadedGatewayPlansThisFloor: number;
-    catalystAltarUpgradesThisFloor: number;
-    parasiteVesselConversionsThisFloor: number;
-    pinLatticeRewardsThisFloor: number;
-    parasiteFloors: number;
-    dungeonEnemiesDefeated: number;
-    dungeonEnemiesDefeatedThisFloor: number;
-    enemyHazardsDefeatedThisFloor: number;
-    dungeonTreasuresOpened: number;
-    dungeonTreasuresOpenedThisFloor: number;
-    dungeonTrapsResolvedThisFloor: number;
-    dungeonGatewaysUsed: number;
-    dungeonGatewaysUsedThisFloor: number;
 }
 
 export interface TurnMatchProgressInput {
@@ -57,8 +32,6 @@ export interface TurnMatchProgressInput {
     /** The tier the break landed at, and the chain the run holds after this match. */
     chunkTier: ChainTier;
     chainAfter: number;
-    /** Wardens the chunk finished this turn. */
-    chunkWardensDefeated: number;
     /** Pairs that dropped with the break because nothing held them; zero on most turns. */
     chunkDroppedPairs: number;
     /**
@@ -72,30 +45,8 @@ export interface TurnMatchProgressInput {
     chunkRippleWaves: number;
     cursedMatchedEarly: boolean;
     findablesClaimedDelta: number;
-    routeCardSafeHazardWardCharges: number;
     findableSafeHazardWardGain: number;
-    cascadeHazardTriggered: boolean;
-    fragileCacheClaimed: boolean;
-    tollCacheClaimed: boolean;
-    fuseCacheClaimed: boolean;
-    fuseCacheFresh: boolean;
-    lanternScouted: boolean;
-    findableScouted: boolean;
-    omenScouted: boolean;
-    mimicCacheClaimed: boolean;
-    mimicCacheBite: boolean;
-    mimicCacheGuardBite: boolean;
     anchorSealUsed: boolean;
-    anchorSealClaimed: boolean;
-    loadedGatewayClaimed: boolean;
-    catalystAltarUpgraded: boolean;
-    parasiteVesselConverted: boolean;
-    pinLatticeRewarded: boolean;
-    defeatedDungeonEnemies: number;
-    defeatedEnemyHazards: number;
-    openedDungeonTreasures: number;
-    resolvedDungeonTraps: number;
-    usedDungeonGateways: number;
 }
 
 export const resolveTurnMatchProgress = ({
@@ -104,45 +55,18 @@ export const resolveTurnMatchProgress = ({
     chunkScore,
     chunkTier,
     chainAfter,
-    chunkWardensDefeated,
     chunkDroppedPairs,
     chunkMomentumPairs,
     chunkRippleWaves,
     cursedMatchedEarly,
     findablesClaimedDelta,
-    routeCardSafeHazardWardCharges,
     findableSafeHazardWardGain,
-    cascadeHazardTriggered,
-    fragileCacheClaimed,
-    tollCacheClaimed,
-    fuseCacheClaimed,
-    fuseCacheFresh,
-    lanternScouted,
-    findableScouted,
-    omenScouted,
-    mimicCacheClaimed,
-    mimicCacheBite,
-    mimicCacheGuardBite,
-    anchorSealUsed,
-    anchorSealClaimed,
-    loadedGatewayClaimed,
-    catalystAltarUpgraded,
-    parasiteVesselConverted,
-    pinLatticeRewarded,
-    defeatedDungeonEnemies,
-    defeatedEnemyHazards,
-    openedDungeonTreasures,
-    resolvedDungeonTraps,
-    usedDungeonGateways
+    anchorSealUsed
 }: TurnMatchProgressInput): TurnMatchProgressResult => {
     const safeFindablesClaimedDelta = runNonNegativeInteger(findablesClaimedDelta);
-    const safeRouteWardCharges = runNonNegativeInteger(routeCardSafeHazardWardCharges);
     const safeFindableWardGain = runNonNegativeInteger(findableSafeHazardWardGain);
-    const safeDefeatedDungeonEnemies = runNonNegativeInteger(defeatedDungeonEnemies);
-    const safeDefeatedEnemyHazards = runNonNegativeInteger(defeatedEnemyHazards);
-    const safeOpenedDungeonTreasures = runNonNegativeInteger(openedDungeonTreasures);
-    const safeResolvedDungeonTraps = runNonNegativeInteger(resolvedDungeonTraps);
-    const safeUsedDungeonGateways = runNonNegativeInteger(usedDungeonGateways);
+    const safePairsBroken = runNonNegativeInteger(chunkPairsBroken);
+    const feverBreak = safePairsBroken > 0 && chunkTier === 'fever' ? 1 : 0;
 
     return {
         cursedMatchedEarlyThisFloor: run.cursedMatchedEarlyThisFloor || cursedMatchedEarly,
@@ -150,78 +74,22 @@ export const resolveTurnMatchProgress = ({
         findablesClaimedThisFloor: runNonNegativeInteger(run.findablesClaimedThisFloor) + safeFindablesClaimedDelta,
         safeHazardWardChargesThisFloor: Math.min(
             1,
-            runNonNegativeInteger(run.safeHazardWardChargesThisFloor) + safeRouteWardCharges + safeFindableWardGain
+            runNonNegativeInteger(run.safeHazardWardChargesThisFloor) + safeFindableWardGain
         ),
-        hazardTileTriggersThisFloor:
-            runNonNegativeInteger(run.hazardTileTriggersThisFloor) +
-            (cascadeHazardTriggered ? 1 : 0) +
-            (fragileCacheClaimed ? 1 : 0) +
-            (tollCacheClaimed ? 1 : 0) +
-            (fuseCacheClaimed ? 1 : 0),
-        hazardCascadeCachesThisFloor:
-            runNonNegativeInteger(run.hazardCascadeCachesThisFloor) + (cascadeHazardTriggered ? 1 : 0),
-        chunkBreaksThisFloor:
-            runNonNegativeInteger(run.chunkBreaksThisFloor) + (runNonNegativeInteger(chunkPairsBroken) > 0 ? 1 : 0),
-        chunkPairsBrokenThisFloor:
-            runNonNegativeInteger(run.chunkPairsBrokenThisFloor) + runNonNegativeInteger(chunkPairsBroken),
+        chunkBreaksThisFloor: runNonNegativeInteger(run.chunkBreaksThisFloor) + (safePairsBroken > 0 ? 1 : 0),
+        chunkPairsBrokenThisFloor: runNonNegativeInteger(run.chunkPairsBrokenThisFloor) + safePairsBroken,
         chunkScoreThisFloor: runNonNegativeInteger(run.chunkScoreThisFloor) + runNonNegativeInteger(chunkScore),
         chunkPairsThisChain: runNonNegativeInteger(run.chunkPairsThisChain) + runNonNegativeInteger(chunkMomentumPairs),
-        feverBreaksThisFloor:
-            runNonNegativeInteger(run.feverBreaksThisFloor) +
-            (runNonNegativeInteger(chunkPairsBroken) > 0 && chunkTier === 'fever' ? 1 : 0),
+        feverBreaksThisFloor: runNonNegativeInteger(run.feverBreaksThisFloor) + feverBreak,
         bestChainThisFloor: Math.max(runNonNegativeInteger(run.bestChainThisFloor), runNonNegativeInteger(chainAfter)),
-        feverBreaksThisRun:
-            runNonNegativeInteger(run.feverBreaksThisRun) +
-            (runNonNegativeInteger(chunkPairsBroken) > 0 && chunkTier === 'fever' ? 1 : 0),
-        biggestChunkPairs: Math.max(runNonNegativeInteger(run.biggestChunkPairs), runNonNegativeInteger(chunkPairsBroken)),
-        chunkWardenKills: runNonNegativeInteger(run.chunkWardenKills) + runNonNegativeInteger(chunkWardensDefeated),
+        feverBreaksThisRun: runNonNegativeInteger(run.feverBreaksThisRun) + feverBreak,
+        biggestChunkPairs: Math.max(runNonNegativeInteger(run.biggestChunkPairs), safePairsBroken),
         bestChainThisRun: Math.max(runNonNegativeInteger(run.bestChainThisRun), runNonNegativeInteger(chainAfter)),
         chunkPairsDroppedThisFloor: runNonNegativeInteger(run.chunkPairsDroppedThisFloor) + runNonNegativeInteger(chunkDroppedPairs),
         chunkDropsThisRun: runNonNegativeInteger(run.chunkDropsThisRun) + (runNonNegativeInteger(chunkDroppedPairs) > 0 ? 1 : 0),
         bestRippleThisFloor: Math.max(runNonNegativeInteger(run.bestRippleThisFloor), runNonNegativeInteger(chunkRippleWaves)),
         bestRippleThisRun: Math.max(runNonNegativeInteger(run.bestRippleThisRun), runNonNegativeInteger(chunkRippleWaves)),
-        hazardFragileCacheClaimsThisFloor:
-            runNonNegativeInteger(run.hazardFragileCacheClaimsThisFloor) + (fragileCacheClaimed ? 1 : 0),
-        hazardTollCachesThisFloor:
-            runNonNegativeInteger(run.hazardTollCachesThisFloor) + (tollCacheClaimed ? 1 : 0),
-        hazardFuseCachesThisFloor:
-            runNonNegativeInteger(run.hazardFuseCachesThisFloor) + (fuseCacheClaimed ? 1 : 0),
-        hazardFuseCacheExpiredClaimsThisFloor:
-            runNonNegativeInteger(run.hazardFuseCacheExpiredClaimsThisFloor) + (fuseCacheClaimed && !fuseCacheFresh ? 1 : 0),
-        lanternWardScoutsThisFloor: runNonNegativeInteger(run.lanternWardScoutsThisFloor) + (lanternScouted ? 1 : 0),
-        omenSealScoutsThisFloor:
-            runNonNegativeInteger(run.omenSealScoutsThisFloor) + (findableScouted ? 1 : 0) + (omenScouted ? 1 : 0),
-        mimicCacheClaimsThisFloor: runNonNegativeInteger(run.mimicCacheClaimsThisFloor) + (mimicCacheClaimed ? 1 : 0),
-        mimicCacheBitesThisFloor: runNonNegativeInteger(run.mimicCacheBitesThisFloor) + (mimicCacheBite ? 1 : 0),
-        mimicCacheGuardBitesThisFloor:
-            runNonNegativeInteger(run.mimicCacheGuardBitesThisFloor) + (mimicCacheGuardBite ? 1 : 0),
-        anchorSealChargesThisFloor:
-            decrementRunCounter(run.anchorSealChargesThisFloor, anchorSealUsed ? 1 : 0) +
-            (anchorSealClaimed ? 1 : 0),
-        anchorSealUsesThisFloor: runNonNegativeInteger(run.anchorSealUsesThisFloor) + (anchorSealUsed ? 1 : 0),
-        loadedGatewayPlansThisFloor:
-            runNonNegativeInteger(run.loadedGatewayPlansThisFloor) + (loadedGatewayClaimed ? 1 : 0),
-        catalystAltarUpgradesThisFloor:
-            runNonNegativeInteger(run.catalystAltarUpgradesThisFloor) + (catalystAltarUpgraded ? 1 : 0),
-        parasiteVesselConversionsThisFloor:
-            runNonNegativeInteger(run.parasiteVesselConversionsThisFloor) + (parasiteVesselConverted ? 1 : 0),
-        pinLatticeRewardsThisFloor:
-            runNonNegativeInteger(run.pinLatticeRewardsThisFloor) + (pinLatticeRewarded ? 1 : 0),
-        parasiteFloors: parasiteVesselConverted
-            ? decrementRunCounter(run.parasiteFloors)
-            : runNonNegativeInteger(run.parasiteFloors),
-        dungeonEnemiesDefeated: runNonNegativeInteger(run.dungeonEnemiesDefeated) + safeDefeatedDungeonEnemies,
-        dungeonEnemiesDefeatedThisFloor:
-            runNonNegativeInteger(run.dungeonEnemiesDefeatedThisFloor) + safeDefeatedDungeonEnemies,
-        enemyHazardsDefeatedThisFloor:
-            runNonNegativeInteger(run.enemyHazardsDefeatedThisFloor) + safeDefeatedEnemyHazards,
-        dungeonTreasuresOpened: runNonNegativeInteger(run.dungeonTreasuresOpened) + safeOpenedDungeonTreasures,
-        dungeonTreasuresOpenedThisFloor:
-            runNonNegativeInteger(run.dungeonTreasuresOpenedThisFloor) + safeOpenedDungeonTreasures,
-        dungeonTrapsResolvedThisFloor:
-            runNonNegativeInteger(run.dungeonTrapsResolvedThisFloor) + safeResolvedDungeonTraps,
-        dungeonGatewaysUsed: runNonNegativeInteger(run.dungeonGatewaysUsed) + safeUsedDungeonGateways,
-        dungeonGatewaysUsedThisFloor:
-            runNonNegativeInteger(run.dungeonGatewaysUsedThisFloor) + safeUsedDungeonGateways
+        anchorSealChargesThisFloor: decrementRunCounter(run.anchorSealChargesThisFloor, anchorSealUsed ? 1 : 0),
+        anchorSealUsesThisFloor: runNonNegativeInteger(run.anchorSealUsesThisFloor) + (anchorSealUsed ? 1 : 0)
     };
 };

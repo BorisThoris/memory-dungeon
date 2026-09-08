@@ -1,12 +1,11 @@
 import type { BoardState, RunState, Tile } from './contracts';
-import { DECOY_PAIR_KEY, EXIT_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
+import { DECOY_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
 
 export type PlaythroughSolverStopReason =
     | 'missing_board'
     | 'terminal_status'
     | 'level_complete'
     | 'no_exit'
-    | 'exit_attempted'
     | 'missing_pair_tile'
     | 'no_progress'
     | 'risk_budget_exhausted'
@@ -26,7 +25,6 @@ export const getUnresolvedPlayablePairGroups = (board: BoardState): Tile[][] => 
         if (
             tile.state === 'matched' ||
             tile.state === 'removed' ||
-            tile.dungeonCardState === 'resolved' ||
             isSingletonUtilityPairKey(tile.pairKey) ||
             tile.pairKey === DECOY_PAIR_KEY
         ) {
@@ -44,8 +42,3 @@ export const getUnresolvedPlayablePairGroups = (board: BoardState): Tile[][] => 
             return leftHasExposed - rightHasExposed;
         });
 };
-
-export const getPrimaryPlaythroughExitTile = (board: BoardState): Tile | null =>
-    (board.dungeonExitTileId
-        ? board.tiles.find((tile) => tile.id === board.dungeonExitTileId)
-        : board.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY)) ?? null;

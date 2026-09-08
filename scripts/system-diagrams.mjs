@@ -204,19 +204,18 @@ const buildGameplayDiagram = (repoRoot) => {
         'src/shared/game.ts',
         'src/shared/softlock-fairness.test.ts',
         'src/shared/board-power-actions.ts',
-        'src/shared/hazard-tiles.ts',
-        'src/shared/enemy-resolution.ts'
+        'src/shared/chunk-break-rules.ts'
     ]);
     return {
         id: 'gameplay-resolution',
         title: 'Gameplay Resolution',
-        summary: 'Card flips resolve through matching, traits, hazards, enemies, board powers, scoring, and run progression.',
+        summary: 'Card flips resolve through matching, the chunk break, traits, board powers, scoring, and run progression.',
         nodes: [
             node('input', 'Player Input', 'interaction', 'renderer', 'Flip, inspect, match, shuffle, swap, and consume powers.', evidence(repoRoot, ['src/renderer/App.tsx', 'src/renderer/components'])),
-            node('rules', 'Shared Rules', 'domain', 'shared', 'Pure rules resolve matches, hazards, traits, enemies, and resources.', evidence(repoRoot, ['src/shared/game.ts', 'src/shared/tile-trait-rules.ts'])),
+            node('rules', 'Shared Rules', 'domain', 'shared', 'Pure rules resolve matches, the break, traits, and resources.', evidence(repoRoot, ['src/shared/game.ts', 'src/shared/tile-trait-rules.ts'])),
             node('board_powers', 'Board Powers', 'domain', 'shared', 'Peek, shuffle, region shuffle, and swap modify board state under legality rules.', evidence(repoRoot, ['src/shared/board-power-actions.ts', 'src/shared/board-power-availability.ts'])),
             node('feedback', 'HUD Feedback', 'ui', 'renderer', 'Gameplay HUD exposes route, trait, resource, and action state.', evidence(repoRoot, ['src/renderer/components/RunShell.tsx'])),
-            node('progression', 'Run Progression', 'domain', 'shared', 'Room completion advances route, rewards, shops, elites, and bosses.', evidence(repoRoot, ['src/shared/run-map.ts', 'src/shared/bonus-rewards.ts']))
+            node('progression', 'Run Progression', 'domain', 'shared', 'A cleared floor goes straight to the next one.', evidence(repoRoot, ['src/shared/floor-clear-transition.ts', 'src/shared/next-floor-transition-rules.ts']))
         ],
         edges: [
             edge('input', 'rules', 'dispatches action'),
@@ -229,7 +228,7 @@ const buildGameplayDiagram = (repoRoot) => {
                 'resolution-blast-radius',
                 'warning',
                 'Gameplay resolution has a wide blast radius',
-                'Changes to match resolution should keep focused tests around softlocks, powers, enemies, traits, HUD route copy, and progression because these systems share the same action loop.',
+                'Changes to match resolution should keep focused tests around softlocks, powers, the break, traits, HUD copy, and progression because these systems share the same action loop.',
                 softlockEvidence
             )
         ],
@@ -239,7 +238,7 @@ const buildGameplayDiagram = (repoRoot) => {
                 'P1',
                 'Gameplay Resolution',
                 'Use a focused action-loop gate for match changes',
-                'Match, enemy, hazard, board-power, and trait changes should run `yarn gate:action-loop` before full-suite handoff.',
+                'Match, break, board-power, and trait changes should run `yarn gate:action-loop` before full-suite handoff.',
                 'A change in one resolver branch cannot silently regress another branch of the same turn loop.',
                 softlockEvidence,
                 'done',
@@ -256,8 +255,7 @@ const buildGameplayInteractionGraphDiagram = (repoRoot) => {
         'src/shared/gameplay-interaction-graph.ts',
         'src/shared/gameplay-interaction-graph.test.ts',
         'src/shared/softlock-fairness.test.ts',
-        'src/shared/tile-trait-rules.ts',
-        'src/shared/enemy-hazard-board-rules.ts'
+        'src/shared/tile-trait-rules.ts'
     ]);
     const mechanicsByKind = countBy(graph.mechanics, (mechanic) => mechanic.kind);
     const blockers = graph.mechanics.filter((mechanic) => Array.isArray(mechanic.blocks) && mechanic.blocks.length > 0);
@@ -265,17 +263,13 @@ const buildGameplayInteractionGraphDiagram = (repoRoot) => {
     const graphNodes = [
         node('traits', 'Trait Layer', 'domain', 'shared', `${mechanicsByKind.trait ?? 0} trait mechanics with synergy, risk, and counterplay edges.`, evidence(repoRoot, ['src/shared/tile-trait-rules.ts', 'src/shared/trait-opportunities.ts'])),
         node('powers', 'Board Powers', 'domain', 'shared', `${mechanicsByKind.power ?? 0} routing/removal tools connect player agency to trait layouts.`, evidence(repoRoot, ['src/shared/board-power-actions.ts', 'src/shared/board-power-availability.ts'])),
-        node('hazards_bosses', 'Hazards And Bosses', 'domain', 'shared', 'Moving hazards and boss patrols must connect to defeat and safety routes.', evidence(repoRoot, ['src/shared/dungeon-enemy-hazard-rules.ts', 'src/shared/enemy-hazard-board-rules.ts', 'src/shared/dungeon-boss-rules.ts'])),
-        node('exits_locks', 'Exits And Locks', 'domain', 'shared', 'Exit and lock blockers require reachable sources or repair routes.', evidence(repoRoot, ['src/shared/dungeon-exit-rules.ts', 'src/shared/dungeon-key-rules.ts', 'src/shared/board-inspection.ts'])),
-        node('objectives', 'Objectives', 'domain', 'shared', 'Objectives must connect to exit activation or floor clear.', evidence(repoRoot, ['src/shared/dungeon-board-status.ts', 'src/shared/level-clear-rules.ts'])),
+        node('objectives', 'Objectives', 'domain', 'shared', 'Objectives must connect to the floor clear.', evidence(repoRoot, ['src/shared/objective-rules.ts', 'src/shared/level-clear-rules.ts'])),
         node('safety_graph', 'Interaction Graph Gate', 'safety', 'shared', 'Typed graph validation fails disconnected mechanics, unguarded blockers, and unwired outputs.', graphEvidence)
     ];
     const graphEdges = [
         edge('traits', 'powers', 'repositioned by', 'counterplay'),
         edge('powers', 'traits', 'creates combos', 'flow'),
-        edge('hazards_bosses', 'safety_graph', 'guarded by', 'safety'),
-        edge('exits_locks', 'safety_graph', 'guarded by', 'safety'),
-        edge('objectives', 'exits_locks', 'unblocks', 'flow'),
+        edge('objectives', 'safety_graph', 'guarded by', 'safety'),
         edge('safety_graph', 'objectives', 'proves completion', 'safety')
     ];
     return {
@@ -289,7 +283,7 @@ const buildGameplayInteractionGraphDiagram = (repoRoot) => {
                 'interaction-graph-is-executable',
                 'info',
                 'Cross-feature logic now has an executable graph',
-                'Mechanics declare reads, writes, blockers, counterplay, softlock guards, evidence, and tests. Keep this registry current whenever adding traits, hazards, objectives, locks, powers, shops, or boss logic.',
+                'Mechanics declare reads, writes, blockers, counterplay, softlock guards, evidence, and tests. Keep this registry current whenever adding traits, objectives, powers, or break logic.',
                 graphEvidence
             ),
             finding(
@@ -306,7 +300,7 @@ const buildGameplayInteractionGraphDiagram = (repoRoot) => {
                 'P0',
                 'Gameplay Interaction Graph',
                 'Keep cross-feature mechanics in the executable graph',
-                'Any new trait, hazard, boss, exit lock, objective, board power, shop service, or reward sink must update the gameplay interaction graph and keep its validation test passing.',
+                'Any new trait, objective, board power, or reward sink must update the gameplay interaction graph and keep its validation test passing.',
                 'Disconnected mechanics, unguarded blockers, missing counterplay, and unwired state outputs fail before they can become softlocks.',
                 graphEvidence
             )
@@ -321,30 +315,24 @@ const buildBoardGenerationDiagram = (repoRoot) => {
         'src/shared/softlock-fairness.test.ts',
         'src/shared/softlock-generator-contract.ts',
         'src/shared/softlock-generator-contract.test.ts',
-        'src/shared/dungeon-topology.ts',
-        'src/shared/dungeon-topology.test.ts',
-        'src/shared/dungeon-topology-audit-script.test.ts',
-        'scripts/audit-dungeon-topology.ts',
         'src/shared/board-tile-generation-rules.ts',
         'src/shared/objective-rules.ts'
     ]);
     return {
         id: 'board-generation',
         title: 'Board Generation',
-        summary: 'Room identity, objectives, tile pools, trait overlays, and repair rules build playable boards.',
+        summary: 'Floor identity, objectives, tile pools, trait overlays, and repair rules build playable boards.',
         nodes: [
-            node('room_context', 'Room Context', 'domain', 'shared', 'Floor, route, lock, objective, mutator, and seed inputs.', evidence(repoRoot, ['src/shared/run-map.ts', 'src/shared/contracts.ts'])),
-            node('tile_pool', 'Tile Pool', 'domain', 'shared', 'Base pairs, enemies, hazards, findables, locks, and supports.', evidence(repoRoot, ['src/shared/board-tile-generation-rules.ts'])),
+            node('room_context', 'Floor Context', 'domain', 'shared', 'Floor, objective, mutator, and seed inputs.', evidence(repoRoot, ['src/shared/floor-mutator-schedule.ts', 'src/shared/contracts.ts'])),
+            node('tile_pool', 'Tile Pool', 'domain', 'shared', 'Base pairs, suits, findables, and supports.', evidence(repoRoot, ['src/shared/board-tile-generation-rules.ts'])),
             node('trait_overlay', 'Trait Overlay', 'domain', 'shared', 'Trait-aware generation places comboable and reactive tile traits.', evidence(repoRoot, ['src/shared/tile-trait-rules.ts'])),
-            node('topology_graph', 'Topology Graph', 'safety', 'shared', 'Graphology-backed board and route topology proves reachable keys, levers, bosses, exits, route targets, route-generated boards, and audited route-state walks with archetype/objective/mutator coverage.', evidence(repoRoot, ['src/shared/dungeon-topology.ts', 'src/shared/dungeon-topology.test.ts', 'src/shared/dungeon-topology-audit-script.test.ts', 'scripts/audit-dungeon-topology.ts'])),
-            node('softlock_repair', 'Softlock Repair', 'safety', 'shared', 'Post-generation pass repairs missing keys, exits, and completion routes.', boardEvidence),
+            node('softlock_repair', 'Softlock Repair', 'safety', 'shared', 'Post-generation pass repairs completion routes.', boardEvidence),
             node('board_state', 'Board State', 'state', 'shared', 'Serializable board consumed by renderer and resolution rules.', evidence(repoRoot, ['src/shared/contracts.ts', 'src/shared/board-generation.ts']))
         ],
         edges: [
             edge('room_context', 'tile_pool', 'selects pool'),
             edge('tile_pool', 'trait_overlay', 'adds traits'),
-            edge('trait_overlay', 'topology_graph', 'projects to'),
-            edge('topology_graph', 'softlock_repair', 'validates blockers'),
+            edge('trait_overlay', 'softlock_repair', 'validated by'),
             edge('softlock_repair', 'board_state', 'emits')
         ],
         findings: [
@@ -352,7 +340,7 @@ const buildBoardGenerationDiagram = (repoRoot) => {
                 'repair-is-contract',
                 'warning',
                 'Softlock repair is part of the generation contract',
-                'Treat repair as required generation behavior, not a cleanup detail. New locks, blockers, objectives, or trait blockers need topology or property tests that prove at least one completion route remains.',
+                'Treat repair as required generation behavior, not a cleanup detail. New blockers, objectives, or trait blockers need property tests that prove at least one completion route remains.',
                 boardEvidence
             )
         ],
@@ -362,19 +350,19 @@ const buildBoardGenerationDiagram = (repoRoot) => {
                 'P0',
                 'Board Generation',
                 'Extend the softlock matrix for every new blocker',
-                'New locks, trait blockers, enemies, objectives, or exit states must add a topology, softlock-fairness, or softlock-generator-contract case that proves a completion path exists after generation and repair. Use the JSON topology audit when automation needs structured issue counts and archetype/objective/mutator coverage.',
+                'New trait blockers or objectives must add a softlock-fairness or softlock-generator-contract case that proves a completion path exists after generation and repair.',
                 'Generated boards remain completable even when repair has to intervene.',
                 boardEvidence,
                 'done',
-                'yarn audit:dungeon-topology:json && yarn gate:sim-softlock-seeds'
+                'yarn gate:sim-softlock-seeds'
             ),
             action(
                 'softlock-stress-sweep',
                 'P1',
                 'Board Generation',
                 'Stress sweep generated seeds after progression changes',
-                'Run a broader deterministic seed sweep plus the topology stress audit when touching locks, bosses, exits, objectives, shops, or repair rules so rare schedule and route-target board interactions are exercised before browser QA.',
-                'Generated stress seeds clear without fairness issues, stale bosses, dead traits, or locked-exit regressions.',
+                'Run a broader deterministic seed sweep when touching generation, objectives, or repair rules so rare schedule interactions are exercised before browser QA.',
+                'Generated stress seeds clear without fairness issues or dead traits.',
                 boardEvidence,
                 'done',
                 'yarn gate:softlock-full'
@@ -385,46 +373,43 @@ const buildBoardGenerationDiagram = (repoRoot) => {
 
 const buildRewardsEconomyDiagram = (repoRoot) => {
     const rewardEvidence = evidence(repoRoot, [
-        'src/shared/bonus-rewards.ts',
-        'src/shared/relics.ts',
         'src/shared/run-economy.ts',
+        'src/shared/run-economy.test.ts',
+        'src/shared/findables.ts',
         'src/shared/balance-simulation.ts'
     ]);
     return {
         id: 'rewards-economy',
         title: 'Rewards And Economy',
-        summary: 'Rewards, relics, shards, favor and pickups decide what the player can draft or claim. Gold and the shop went in Gen 174; nothing is bought.',
+        summary: 'Shards, guard tokens and findable pickups are what a run earns. Gold and the shop went in Gen 174, the relics and bonus rewards in Gen 175 and 176; nothing is bought or drafted.',
         nodes: [
-            node('reward_rooms', 'Reward Rooms', 'domain', 'shared', 'Bonus reward rooms grant gold, traits, relics, or board tools.', evidence(repoRoot, ['src/shared/bonus-rewards.ts'])),
-            node('relic_offers', 'Relic Definitions', 'domain', 'shared', 'Relic definitions and favor; the draft that handed them out went in Gen 175.', evidence(repoRoot, ['src/shared/relics.ts'])),
+            node('findables', 'Findables', 'domain', 'shared', 'Findable pairs pay score, shards or a ward when matched.', evidence(repoRoot, ['src/shared/findables.ts'])),
             node('run_economy', 'Run Economy', 'state', 'shared', 'The run economy taxonomy names every temporary currency, its source and its sink.', evidence(repoRoot, ['src/shared/run-economy.ts'])),
-            node('balance_sim', 'Balance Simulation', 'analysis', 'shared', 'Simulation watches access, pressure, and trait floor share.', evidence(repoRoot, ['src/shared/balance-simulation.ts'])),
-            node('reward_ui', 'Reward UI', 'ui', 'renderer', 'Renderer shows pickable rewards.', evidence(repoRoot, ['src/renderer/components', 'src/renderer/App.tsx']))
+            node('balance_sim', 'Balance Simulation', 'analysis', 'shared', 'Simulation watches pressure, cascade and trait floor share.', evidence(repoRoot, ['src/shared/balance-simulation.ts'])),
+            node('reward_ui', 'Reward UI', 'ui', 'renderer', 'The floor-clear dialog and the inventory show what the run holds.', evidence(repoRoot, ['src/renderer/components', 'src/renderer/App.tsx']))
         ],
         edges: [
-            edge('reward_rooms', 'run_economy', 'counted in'),
-            edge('relic_offers', 'run_economy', 'spends favor'),
+            edge('findables', 'run_economy', 'counted in'),
             edge('run_economy', 'balance_sim', 'sampled by'),
-            edge('relic_offers', 'reward_ui', 'presented in'),
-            edge('reward_rooms', 'reward_ui', 'presented in')
+            edge('findables', 'reward_ui', 'presented in')
         ],
         findings: [
             finding(
-                'priority-overlap',
-                'warning',
-                'Reward priority overlaps need regression coverage',
-                'Key, boss, loadout, trait-routing, and relic-service offers compete for limited slots. Keep tests around priority ordering so fun trait tools do not hide required progression items.',
+                'economy-is-small',
+                'info',
+                'The run economy is three counters',
+                'Shards, guard tokens and charges are all a run earns now. A new source or sink must be named in the run-economy taxonomy and sampled by the balance simulation.',
                 rewardEvidence
             )
         ],
         actions: [
             action(
-                'reward-priority-gate',
+                'economy-taxonomy-gate',
                 'P1',
                 'Rewards And Economy',
-                'Lock reward priority slots before adding fun offers',
-                'Any new reward or relic offer must prove it does not displace required keys, boss access, loadout recovery, or trait-route starter support.',
-                'Progression-critical offers remain reachable while optional trait tools still appear.',
+                'Name every currency in the run economy taxonomy',
+                'Any new source or sink must appear in the run-economy taxonomy with its source and sink and keep the balance simulation bands.',
+                'No currency is earned or spent that the taxonomy does not name.',
                 rewardEvidence,
                 'done',
                 'yarn gate:rewards-economy'
@@ -449,7 +434,7 @@ const buildTraitDiagram = (repoRoot) => {
             node('trait_catalog', 'Trait Catalog', 'domain', 'shared', 'Trait definitions, combos, blockers, and interaction hooks.', evidence(repoRoot, ['src/shared/tile-trait-rules.ts'])),
             node('trait_generation', 'Trait Generation', 'domain', 'shared', 'Board generation seeds route-visible trait opportunities.', evidence(repoRoot, ['src/shared/board-generation.ts', 'src/shared/board-tile-generation-rules.ts'])),
             node('trait_actions', 'Trait Actions', 'domain', 'shared', 'Matches and board powers create, move, reveal, or block trait opportunities.', evidence(repoRoot, ['src/shared/board-power-actions.ts', 'src/shared/game.ts'])),
-            node('trait_rewards', 'Trait Rewards', 'economy', 'shared', 'Rewards let players build toward trait routes.', evidence(repoRoot, ['src/shared/bonus-rewards.ts'])),
+            node('trait_rewards', 'Trait Rewards', 'economy', 'shared', 'Trait objectives pay score toward the floor.', evidence(repoRoot, ['src/shared/trait-route-objectives.ts'])),
             node('trait_feedback', 'Trait Feedback', 'ui', 'renderer', 'HUD and tile faces make combo routes readable immediately.', evidence(repoRoot, ['src/renderer/components/RunShell.tsx', 'src/renderer/cardFace']))
         ],
         edges: [
@@ -611,7 +596,7 @@ const buildAudioFeedbackDiagram = (repoRoot) => {
                 'feedback-coverage-risk',
                 'info',
                 'Feedback coverage should move with gameplay systems',
-                'New actions, rewards, hazards, and blockers should include audio and announcement coverage so mechanics stay readable without relying only on visuals.',
+                'New actions, rewards, and blockers should include audio and announcement coverage so mechanics stay readable without relying only on visuals.',
                 audioEvidence
             )
         ],
@@ -719,7 +704,7 @@ const buildTestGateArchitectureDiagram = (repoRoot) => {
         'e2e/README.md',
         'e2e/demo-readiness.spec.ts',
         'e2e/playable-path-navigation.spec.ts',
-        'e2e/dungeon-board-3d-value.spec.ts'
+        'e2e/board-3d-value.spec.ts'
     ]);
     const rendererQaEvidence = evidence(repoRoot, [
         'package.json',

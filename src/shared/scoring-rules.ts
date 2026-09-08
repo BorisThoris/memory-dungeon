@@ -13,9 +13,7 @@ import {
     type RunState,
     type Tile
 } from './contracts';
-import { getActiveDungeonBossPressureRule } from './dungeon-boss-rules';
 import { hasMutator } from './mutators';
-import { hasRunRelic } from './relics';
 import { runFiniteNumber, runFiniteNumberOrFallback, runNonNegativeInteger } from './run-number-guards';
 import { DECOY_PAIR_KEY, isWildPairKey } from './tile-identity';
 
@@ -79,22 +77,12 @@ export const getMemorizeDurationForRun = (run: RunState, level: number): number 
     if (hasMutator(run, 'short_memorize')) {
         ms = Math.max(MEMORIZE_MIN_MS, ms - 350);
     }
-    if (hasRunRelic(run, 'memorize_bonus_ms')) {
-        ms += 280;
-    }
-    if (hasRunRelic(run, 'memorize_under_short_memorize') && hasMutator(run, 'short_memorize')) {
-        ms += 220;
-    }
     /*
      * Calm pacing, the setup sheet's replacement for the Meditation card. `resolveDelayMultiplier`
      * is the only field the sheet raises above 1, so it is what a calm run is recognised by.
      */
     if (Number.isFinite(run.resolveDelayMultiplier) && run.resolveDelayMultiplier > 1) {
         ms = Math.floor(ms * 1.55);
-    }
-    const bossPressure = getActiveDungeonBossPressureRule(run.board);
-    if (bossPressure && run.board?.floorTag === 'boss') {
-        ms = Math.max(MEMORIZE_MIN_MS, ms + bossPressure.memorizeMsDelta);
     }
     return ms;
 };

@@ -49,7 +49,6 @@ type RunResolutionPatch = Partial<{
     achievementBridgeNotice: string | null;
     boardPinMode: boolean;
     destroyPairArmed: boolean;
-    dungeonExitPromptOpen: boolean;
     matchScorePop: MatchScorePop | null;
     mismatchScorePop: MismatchScorePop | null;
     newlyUnlockedAchievements: AchievementId[];
@@ -188,8 +187,7 @@ export const createRunResolutionController = ({
                     practice: nextRun.practiceMode,
                     highestLevel: summary.highestLevel,
                     totalScore: summary.totalScore,
-                    mutatorCount: runArrayCount(summary.activeMutators),
-                    relicCount: runArrayCount(summary.relicIds)
+                    mutatorCount: runArrayCount(summary.activeMutators)
                 });
             }
 
@@ -209,8 +207,7 @@ export const createRunResolutionController = ({
                 view: 'playing',
                 saveData: nextSave,
                 settings: nextSave.settings,
-                newlyUnlockedAchievements: unlockedAchievements,
-                dungeonExitPromptOpen: false
+                newlyUnlockedAchievements: unlockedAchievements
             });
         }
 

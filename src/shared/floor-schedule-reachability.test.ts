@@ -5,9 +5,7 @@ import {
     FLOOR_ARCHETYPE_CATALOG,
     pickFloorScheduleEntry
 } from './floor-mutator-schedule';
-import { createNewRun } from './game-core';
-import { RELIC_POOL, rollRelicOptions } from './relics';
-import type { FeaturedObjectiveId, RunState } from './contracts';
+import type { FeaturedObjectiveId } from './contracts';
 
 const FEATURED_OBJECTIVE_IDS: readonly FeaturedObjectiveId[] = [
     'scholar_style',
@@ -105,37 +103,4 @@ describe('content reachability census', () => {
         expect(missingObjectives, `unreachable featured objectives: ${missingObjectives.join(', ')}`).toEqual([]);
     });
 
-    it('offers every relic in the pool', () => {
-        // The eligibility filters — scheduled-endless-only relics, contract bans, tier weighting —
-        // are exactly the kind of thing that can strand an entry without anyone noticing.
-        const offered = new Set<string>();
-        for (let seed = 0; seed < 60; seed += 1) {
-            for (let tier = 0; tier < 12; tier += 1) {
-                const floor = 3 + tier * 3;
-                const run = {
-                    ...createNewRun(0),
-                    gameMode: 'endless' as const,
-                    lastLevelResult: {
-                        clearLifeGained: 0,
-                        clearLifeReason: 'none' as const,
-                        level: floor,
-                        livesRemaining: 3,
-                        mistakes: 0,
-                        perfect: false,
-                        rating: 'A' as const,
-                        scoreGained: 0
-                    },
-                    relicTiersClaimed: tier,
-                    runRulesVersion: GAME_RULES_VERSION,
-                    runSeed: 9_000 + seed,
-                    status: 'levelComplete' as const
-                } as unknown as RunState;
-                for (const id of rollRelicOptions(run, tier, floor, 0)) {
-                    offered.add(id);
-                }
-            }
-        }
-        const never = RELIC_POOL.filter((id) => !offered.has(id));
-        expect(never, `relics the draft never offers: ${never.join(', ')}`).toEqual([]);
-    });
 });

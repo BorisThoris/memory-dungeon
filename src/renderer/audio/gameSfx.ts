@@ -805,16 +805,6 @@ export const playResolveSfx = (before: RunState, after: RunState, gain: number):
     }
 };
 
-/** Immediate dungeon trap spring feedback: uses the danger/mismatch timbre without mutating run stats. */
-export const playTrapSfx = (gain: number): void => {
-    if (gain <= 0.001) {
-        silenceAllVoices();
-        silenceAllSampleVoices();
-        return;
-    }
-    playMismatchSfx(gain);
-};
-
 /** Arming destroy / peek / stray / pin: short affirming chirp (not played on disarm). */
 export const playPowerArmSfx = (gain: number): void => {
     if (tryPlaySampled('power-arm', gain)) {

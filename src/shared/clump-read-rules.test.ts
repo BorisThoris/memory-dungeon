@@ -28,10 +28,6 @@ describe('the clump read', () => {
         expect(read?.pairsSharpWouldTake).toBe(2);
     });
 
-    it('counts a pair only when both halves can go, the way the break does', () => {
-        const withExit = layout().map((t) => (t.id === 'C2' ? { ...t, dungeonCardKind: 'exit' as const } : t));
-        expect(getClumpRead(board(withExit), 'A1')?.pairsSharpWouldTake).toBe(1);
-    });
 
     it('is a lone tile when its neighbours are another suit, and nothing for a matched or removed tile', () => {
         // D2 sits under A2 and beside C2, both ember. (D1 is not lone: F1 below it is tide.)

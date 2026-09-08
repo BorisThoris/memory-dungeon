@@ -60,25 +60,6 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(result.aggregate.bossFloors).toBe(2);
         expect(result.aggregate.breatherFloors).toBe(3);
         expect(result.aggregate.eliteFloors).toBeGreaterThan(0);
-        /*
-         * These five read nought, and asserting the nought is the point.
-         *
-         * This simulation's pressure model is `contactRisk + enemyThreatPairs * 0.25 +
-         * bossMovingEnemyHazards * 0.9` - every term of it is a thing the dungeon layer put on the
-         * board, and generation puts none of them there now. So the model says every floor in the
-         * game has zero pressure, which is not a tuning result, it is a model describing a game
-         * that no longer exists.
-         *
-         * Left as exact assertions rather than deleted because the deletion is a design decision
-         * with a task against it (Phase 2: par, the pair curve, and what actually makes a floor
-         * hard when nothing on it can hurt you). Until that lands, this is the honest reading, and
-         * a non-zero here would mean the dungeon layer had come back through a door nobody watched.
-         */
-        expect(result.aggregate.enemyThreatPairs).toBe(0);
-        expect(result.aggregate.movingEnemyHazards).toBe(0);
-        expect(result.aggregate.bossMovingEnemyHazards).toBe(0);
-        expect(result.aggregate.hazardTileCount).toBe(0);
-        expect(result.aggregate.contactRisk).toBe(result.aggregate.movingEnemyHazards);
         expect(result.aggregate.comboShardPotential).toBeGreaterThan(0);
         expect(result.aggregate.guardRewardPotential).toBeGreaterThan(0);
         // Consumables came from key cards and the vendor's stock; both are gone (Gen 172, 174).
@@ -95,12 +76,8 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         // Peek charges came from the vendor's stock and the scrying-lens room; both are gone.
         expect(result.aggregate.peekChargeInflowPotential).toBe(0);
         expect(result.aggregate.recoveryReliefPotential).toBeGreaterThan(0);
-        expect(result.aggregate.netPressureAfterRelief).toBeGreaterThanOrEqual(0);
-        expect(result.aggregate.highPressureLowRecoveryFloors).toBeGreaterThanOrEqual(0);
         expect(result.rows.map((row) => row.key)).toEqual(
             expect.arrayContaining([
-                'max_pressure_step_up',
-                'max_recovery_debt_streak',
                 'elite_route_node_share',
                 'avg_combo_shard_potential_per_floor',
                 'avg_guard_reward_potential_per_floor',
@@ -131,12 +108,9 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
                 'findable_share_scout_glint'
             ])
         );
-        const pressureStepUp = result.rows.find((row) => row.key === 'max_pressure_step_up');
-        expect(pressureStepUp?.value).toBeGreaterThanOrEqual(0);
-        expect(Number.isFinite(pressureStepUp?.value)).toBe(true);
+        expect(result.rows.map((row) => row.key)).not.toContain('max_pressure_step_up');
+        expect(result.rows.map((row) => row.key)).not.toContain('max_recovery_debt_streak');
         const newRewardRows = new Set([
-            'max_pressure_step_up',
-            'max_recovery_debt_streak',
             'avg_combo_shard_potential_per_floor',
             'avg_guard_reward_potential_per_floor',
             'reward_band_spread',
@@ -153,11 +127,6 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             'dead_trait_floor_share'
         ]);
         expect(result.rows.filter((row) => newRewardRows.has(row.key) && row.status !== 'within_range')).toEqual([]);
-        // The elite-node threat check and the "floor 1 clean, floor 2+ hazardous" ramp both read the
-        // dungeon layer off the board. There is no ramp now: every floor is clean, which is the
-        // change, not a regression in it.
-        expect(result.samples.every((sample) => sample.enemyThreatPairs === 0)).toBe(true);
-        expect(result.samples.every((sample) => sample.hazardTileCount === 0)).toBe(true);
         expect(new Set(result.samples.map((sample) => sample.floorBand))).toEqual(new Set(['early', 'mid', 'late']));
     });
 

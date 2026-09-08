@@ -8,7 +8,6 @@ import {
     type GameMode,
     type MutatorId,
     type PlayerStatsPersisted,
-    type RelicId,
     type RunSummary,
     type SaveData,
     type Settings,
@@ -22,7 +21,6 @@ import { runArray, runFilteredArray } from './run-array-guards';
 import { isRunRecord } from './run-record-guards';
 import { normalizeRunHistory } from './run-history-log';
 import { runFiniteNumberOrFallback, runNonNegativeIntegerOrFallback } from './run-number-guards';
-import { RELIC_POOL } from './relics';
 import { evaluateSaveMigrationGate, isRecognizedSaveSchemaVersion } from './version-gate';
 import { normalizeGameplayJournalSnapshot } from './gameplay-journal';
 
@@ -120,22 +118,6 @@ const defaultPlayerStats = (): PlayerStatsPersisted => ({
 });
 
 const ACHIEVEMENT_ID_SET: ReadonlySet<string> = new Set(ACHIEVEMENT_IDS);
-/*
- * Read RELIC_POOL when a save is first validated, not while this module is evaluating.
- *
- * `relics` reaches this file through nine hops - trait-build-rewards, tile-trait-rules,
- * bonus-rewards, gameplay-core, board-turn-event-facts, turn-resolution, game and
- * run-summary-rules - so any entry point that loads `relics` first used to evaluate this
- * module before that one finished and die on `Cannot access 'RELIC_POOL' before
- * initialization`. The renderer only survived because it happened to enter the graph
- * somewhere else; a script, a test or a new chunk order did not.
- */
-let relicIdSet: ReadonlySet<string> | null = null;
-
-const getRelicIdSet = (): ReadonlySet<string> => {
-    relicIdSet ??= new Set<string>(RELIC_POOL);
-    return relicIdSet;
-};
 const MUTATOR_ID_SET: ReadonlySet<string> = new Set(MUTATOR_IDS);
 const GAME_MODE_SET: ReadonlySet<string> = new Set(['endless']);
 const STARTING_LOADOUT_ID_SET: ReadonlySet<string> = new Set([
@@ -170,9 +152,6 @@ const isGameMode = (value: unknown): value is GameMode =>
 const isMutatorId = (value: unknown): value is MutatorId =>
     typeof value === 'string' && MUTATOR_ID_SET.has(value);
 
-const isRelicId = (value: unknown): value is RelicId =>
-    typeof value === 'string' && getRelicIdSet().has(value);
-
 const isStartingLoadoutId = (value: unknown): value is StartingLoadoutId =>
     typeof value === 'string' && STARTING_LOADOUT_ID_SET.has(value);
 
@@ -192,32 +171,6 @@ const normalizeAchievements = (input: unknown): AchievementState => {
     }
     for (const id of ACHIEVEMENT_IDS) {
         out[id] = input[id] === true;
-    }
-    return out;
-};
-
-export interface RelicPickCountRow {
-    id: RelicId;
-    count: number;
-}
-
-export const getRelicPickCountRows = (input: unknown): RelicPickCountRow[] => {
-    const counts = isUnknownRecord(input) ? input : {};
-    return RELIC_POOL.map((id) => ({
-        id,
-        count: finiteNonNegativeInteger(counts[id], 0)
-    }));
-};
-
-export const getRelicPickTotal = (input: unknown): number =>
-    getRelicPickCountRows(input).reduce((sum, row) => sum + row.count, 0);
-
-const normalizeRelicPickCounts = (input: unknown): PlayerStatsPersisted['relicPickCounts'] => {
-    const out: PlayerStatsPersisted['relicPickCounts'] = {};
-    for (const { id, count } of getRelicPickCountRows(input)) {
-        if (count > 0) {
-            out[id] = count;
-        }
     }
     return out;
 };
@@ -314,9 +267,8 @@ export const normalizeRunSummary = (input: unknown): RunSummary | null => {
     const activeMutators = Array.isArray(source.activeMutators)
         ? [...new Set(runFilteredArray(source.activeMutators, isMutatorId))]
         : undefined;
-    const relicIds = Array.isArray(source.relicIds)
-        ? [...new Set(runFilteredArray(source.relicIds, isRelicId))]
-        : undefined;
+    // There are no relics left to hold, so a summary that listed some now lists none.
+    const relicIds = Array.isArray(source.relicIds) ? [] : undefined;
     const startingLoadoutId = isStartingLoadoutId(source.startingLoadoutId)
         ? source.startingLoadoutId
         : source.startingLoadoutId === null
@@ -613,7 +565,6 @@ export const normalizeSaveData = (input?: SaveDataNormalizationInput | null): Sa
     const mergedAchievements = normalizeAchievements(input.achievements);
     const playerStatsDefaults = defaultPlayerStats();
     const psIn = isUnknownRecord(input.playerStats) ? input.playerStats : {};
-    const relicPickCounts = normalizeRelicPickCounts(psIn.relicPickCounts);
     const relicShrineExtraPickUnlocked = psIn.relicShrineExtraPickUnlocked === true;
     const lastRunSummary =
         migrationGate.keepLastRunSummary ? normalizeRunSummary(input.lastRunSummary) : defaults.lastRunSummary;
@@ -639,7 +590,7 @@ export const normalizeSaveData = (input?: SaveDataNormalizationInput | null): Sa
             encorePairKeysLastRun: Array.isArray(psIn.encorePairKeysLastRun)
                 ? normalizeStringLedger(psIn.encorePairKeysLastRun, PERSISTED_COLLECTION_LIMITS.encorePairKeys)
                 : playerStatsDefaults.encorePairKeysLastRun,
-            relicPickCounts,
+            relicPickCounts: {},
             relicShrineExtraPickUnlocked,
             sharpFloors: finiteNonNegativeInteger(psIn.sharpFloors, 0),
             feverFloors: finiteNonNegativeInteger(psIn.feverFloors, 0)
@@ -688,17 +639,5 @@ export const mergeEncoreFromRun = (save: SaveData, pairKeys: string[]): SaveData
     return normalizeSaveData({
         ...save,
         playerStats: { ...ps, encorePairKeysLastRun: unique }
-    });
-};
-
-export const mergeRelicPickStat = (save: SaveData, relicId: RelicId): SaveData => {
-    const ps = save.playerStats ?? defaultPlayerStats();
-    const relicPickCounts: PlayerStatsPersisted['relicPickCounts'] = {
-        ...ps.relicPickCounts,
-        [relicId]: finiteNonNegativeInteger(ps.relicPickCounts[relicId], 0) + 1
-    };
-    return normalizeSaveData({
-        ...save,
-        playerStats: { ...ps, relicPickCounts }
     });
 };

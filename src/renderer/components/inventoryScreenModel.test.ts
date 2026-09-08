@@ -1,11 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import type { RelicId, RewardPerkId } from '../../shared/contracts';
 import { createDefaultSaveData } from '../../shared/save-data';
 import { createNewRun } from '../../shared/game-core';
 import {
     createInventoryQuantityMap,
     createInventoryScreenModel,
-    getActiveTraitBuildRows,
     getInventoryPayoffEngineSignal,
     getInventoryRunLoopSignals,
     getInventoryToolActionCue,
@@ -36,26 +34,10 @@ describe('inventoryScreenModel', () => {
         expect(quantityById.get('combo_shard')).toBe(0);
     });
 
-    it('dedupes trait build rows from drafted relics', () => {
-        const run = {
-            ...createNewRun(0),
-            relicIds: ['chapter_compass', 'region_shuffle_free_first'] as RelicId[]
-        };
-
-        const ids = getActiveTraitBuildRows(run).map((row) => row.id);
-
-        expect(ids).toContain('drift_routing');
-        expect(new Set(ids).size).toBe(ids.length);
-    });
 
     it('creates the inventory screen model without reaching into renderer store state', () => {
-        const run = {
-            ...createNewRun(0),
-            relicIds: ['peek_charge_plus_one', 'pin_cap_plus_one', 'stray_charge_plus_one'] as RelicId[]
-        };
-        const model = createInventoryScreenModel(run, createDefaultSaveData());
+        const model = createInventoryScreenModel(createNewRun(0), createDefaultSaveData());
 
-        expect(model.buildProfile.summary).toContain('The Conduit Cartographer');
         expect(model.inventoryRows.length).toBeGreaterThan(0);
         expect(model.equippedCosmetic?.id).toBe('title_seeker');
     });
@@ -110,7 +92,6 @@ describe('inventoryScreenModel', () => {
             ...createNewRun(0),
             findablesClaimedThisFloor: 0,
             findablesTotalThisFloor: 1,
-            rewardPerkIds: ['echo_conduit_double'] as RewardPerkId[],
             stats: { ...createNewRun(0).stats, currentStreak: 3, comboShards: 2, guardTokens: 0 },
             traitRouteObjectiveProgressThisFloor: 1,
             traitRouteObjectiveRequiredThisFloor: 2
@@ -118,7 +99,7 @@ describe('inventoryScreenModel', () => {
 
         expect(getInventoryPayoffEngineSignal(run)).toMatchObject({
             label: 'Super stack',
-            value: '5 payoffs live',
+            value: '4 payoffs live',
             detail: 'Chain + Pickup + Burst + Trait route',
             nextCue: 'Push x6 reward',
             tone: 'super'

@@ -1,164 +1,112 @@
 import { MATCH_DELAY_MS, type BoardState, type RunState } from './contracts';
-import { clearLastPairEnemyHazardSoftlock } from './dungeon-enemy-hazard-rules';
-import { clearFinalPairEnemyHazardOccupationForRun } from './enemy-hazard-board-rules';
-import { revealDungeonCardPair } from './dungeon-trap-rules';
-import { revealDungeonRoom } from './dungeon-room-rules';
-import { isBoardComplete } from './board-inspection';
-import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY } from './tile-identity';
 import { computeFlipResolveDelayMs, tilesArePairMatch } from './scoring-rules';
-import { clearResolveState } from './run-timer-rules';
-import { revealDungeonExit, revealDungeonShop } from './dungeon-reveal-rules';
 import { runFilteredStringArrayOrNull } from './run-array-guards';
 
 interface FlipTileTransitionDeps {
     finalizeLevel: (run: RunState, board: BoardState) => RunState;
 }
 
-export const createFlipTileTransition = ({ finalizeLevel }: FlipTileTransitionDeps) =>
+/*
+ * A flip used to pass through the dungeon layer first: a roaming enemy cleared off the last pair,
+ * an exit, vendor or room tile revealed instead of flipped, a trap sprung on the reveal. All of
+ * that went with the dungeon modules (Gen 176). A flip is a flip: it turns one hidden tile face up
+ * and, on the second, starts the resolve clock.
+ */
+export const createFlipTileTransition = (_deps: FlipTileTransitionDeps) =>
     (run: RunState, tileId: string): RunState => {
-        const runAfterFinalPairCleanup = clearFinalPairEnemyHazardOccupationForRun(run);
-        if (!runAfterFinalPairCleanup.board) {
+        if (!run.board) {
             return run;
         }
-        const cleanupFlippedTileIds = runFilteredStringArrayOrNull(runAfterFinalPairCleanup.board.flippedTileIds);
+        const currentFlippedTileIdsBeforeFlash = runFilteredStringArrayOrNull(run.board.flippedTileIds);
 
         const gambitThirdWhileResolving =
-            runAfterFinalPairCleanup.status === 'resolving' &&
-            runAfterFinalPairCleanup.gambitAvailableThisFloor &&
-            !runAfterFinalPairCleanup.gambitThirdFlipUsed &&
-            cleanupFlippedTileIds?.length === 2;
+            run.status === 'resolving' &&
+            run.gambitAvailableThisFloor &&
+            !run.gambitThirdFlipUsed &&
+            currentFlippedTileIdsBeforeFlash?.length === 2;
 
-        if (runAfterFinalPairCleanup.status !== 'playing' && !gambitThirdWhileResolving) {
-            return runAfterFinalPairCleanup;
+        if (run.status !== 'playing' && !gambitThirdWhileResolving) {
+            return run;
         }
 
         const runAfterFlashClear =
-            (runFilteredStringArrayOrNull(runAfterFinalPairCleanup.flashPairRevealedTileIds)?.length ?? 0) > 0
-                ? { ...runAfterFinalPairCleanup, flashPairRevealedTileIds: [] }
-                : runAfterFinalPairCleanup;
-        const boardBeforeLastPairFailsafe = runAfterFlashClear.board;
-        if (!boardBeforeLastPairFailsafe) {
-            return runAfterFlashClear;
-        }
-        const runAfterLastPairFailsafe = clearLastPairEnemyHazardSoftlock(runAfterFlashClear, boardBeforeLastPairFailsafe);
-        const board = runAfterLastPairFailsafe.board;
+            (runFilteredStringArrayOrNull(run.flashPairRevealedTileIds)?.length ?? 0) > 0
+                ? { ...run, flashPairRevealedTileIds: [] }
+                : run;
+        const board = runAfterFlashClear.board;
         if (!board) {
-            return runAfterLastPairFailsafe;
+            return runAfterFlashClear;
         }
         const currentFlippedTileIds = runFilteredStringArrayOrNull(board.flippedTileIds);
         if (!currentFlippedTileIds) {
-            return runAfterLastPairFailsafe;
+            return runAfterFlashClear;
         }
 
         const allowThird =
-            runAfterLastPairFailsafe.gambitAvailableThisFloor &&
-            !runAfterLastPairFailsafe.gambitThirdFlipUsed &&
+            runAfterFlashClear.gambitAvailableThisFloor &&
+            !runAfterFlashClear.gambitThirdFlipUsed &&
             currentFlippedTileIds.length === 2;
         const maxFlips = allowThird ? 3 : 2;
         if (currentFlippedTileIds.length >= maxFlips) {
-            return runAfterLastPairFailsafe;
+            return runAfterFlashClear;
         }
 
         const tile = board.tiles.find((candidate) => candidate.id === tileId);
 
         if (!tile || tile.state !== 'hidden' || currentFlippedTileIds.includes(tileId)) {
-            return runAfterLastPairFailsafe;
+            return runAfterFlashClear;
         }
 
         const tileIndex = board.tiles.findIndex((candidate) => candidate.id === tileId);
         if (
             currentFlippedTileIds.length === 0 &&
-            runAfterLastPairFailsafe.stickyBlockIndex !== null &&
-            tileIndex === runAfterLastPairFailsafe.stickyBlockIndex
+            runAfterFlashClear.stickyBlockIndex !== null &&
+            tileIndex === runAfterFlashClear.stickyBlockIndex
         ) {
-            return runAfterLastPairFailsafe;
+            return runAfterFlashClear;
         }
 
-        if (tile.pairKey === EXIT_PAIR_KEY) {
-            return revealDungeonExit(runAfterLastPairFailsafe, tileId);
-        }
-        if (tile.pairKey === SHOP_PAIR_KEY) {
-            return revealDungeonShop(runAfterLastPairFailsafe, tileId);
-        }
-        if (tile.pairKey === ROOM_PAIR_KEY) {
-            return revealDungeonRoom(runAfterLastPairFailsafe, tileId);
-        }
-
-        const runAfterDungeonReveal =
-            tile.state === 'hidden' ? revealDungeonCardPair(runAfterLastPairFailsafe, tile) : runAfterLastPairFailsafe;
-        if (runAfterDungeonReveal.status === 'gameOver') {
-            return runAfterDungeonReveal;
-        }
-        const revealedBoard = runAfterDungeonReveal.board;
-        if (!revealedBoard) {
-            return runAfterDungeonReveal;
-        }
-        const revealedFlippedTileIds = runFilteredStringArrayOrNull(revealedBoard.flippedTileIds);
-        if (!revealedFlippedTileIds) {
-            return runAfterDungeonReveal;
-        }
         const peekRevealedTileIds =
-            (runFilteredStringArrayOrNull(runAfterDungeonReveal.peekRevealedTileIds)?.length ?? 0) > 0
+            (runFilteredStringArrayOrNull(runAfterFlashClear.peekRevealedTileIds)?.length ?? 0) > 0
                 ? ([] as string[])
-                : runAfterDungeonReveal.peekRevealedTileIds;
-        if (
-            tile.state === 'hidden' &&
-            tile.dungeonCardKind === 'trap' &&
-            runAfterDungeonReveal.dungeonTrapsTriggered > runAfterLastPairFailsafe.dungeonTrapsTriggered
-        ) {
-            const trapResolvedRun: RunState = {
-                ...runAfterDungeonReveal,
-                status: 'playing',
-                peekRevealedTileIds,
-                board: {
-                    ...revealedBoard,
-                    flippedTileIds: []
-                },
-                flipHistory: [...runAfterDungeonReveal.flipHistory, tileId],
-                timerState: clearResolveState(runAfterDungeonReveal)
-            };
-            return trapResolvedRun.board && isBoardComplete(trapResolvedRun.board)
-                ? finalizeLevel(trapResolvedRun, trapResolvedRun.board)
-                : trapResolvedRun;
-        }
+                : runAfterFlashClear.peekRevealedTileIds;
 
-        const flippedTileIds = [...revealedFlippedTileIds, tileId];
-        const firstFlippedId = revealedFlippedTileIds[0] ?? null;
+        const flippedTileIds = [...currentFlippedTileIds, tileId];
+        const firstFlippedId = currentFlippedTileIds[0] ?? null;
         const firstFlippedTile = firstFlippedId
-            ? revealedBoard.tiles.find((candidate) => candidate.id === firstFlippedId) ?? null
+            ? board.tiles.find((candidate) => candidate.id === firstFlippedId) ?? null
             : null;
-        const revealedTile = revealedBoard.tiles.find((candidate) => candidate.id === tileId) ?? tile;
         const resolvesMatchImmediately =
             flippedTileIds.length === 2 &&
             firstFlippedTile !== null &&
-            tilesArePairMatch(firstFlippedTile, revealedTile);
+            tilesArePairMatch(firstFlippedTile, tile);
 
-        let resolveRemainingMs = runAfterDungeonReveal.timerState.resolveRemainingMs;
+        let resolveRemainingMs = runAfterFlashClear.timerState.resolveRemainingMs;
         if (flippedTileIds.length === 2) {
             resolveRemainingMs = resolvesMatchImmediately
                 ? 0
-                : computeFlipResolveDelayMs(runAfterDungeonReveal, flippedTileIds, {
-                      resolveDelayMultiplier: runAfterDungeonReveal.resolveDelayMultiplier,
-                      echoFeedbackEnabled: runAfterDungeonReveal.echoFeedbackEnabled
+                : computeFlipResolveDelayMs(runAfterFlashClear, flippedTileIds, {
+                      resolveDelayMultiplier: runAfterFlashClear.resolveDelayMultiplier,
+                      echoFeedbackEnabled: runAfterFlashClear.echoFeedbackEnabled
                   });
         } else if (flippedTileIds.length === 3) {
-            resolveRemainingMs = MATCH_DELAY_MS * runAfterDungeonReveal.resolveDelayMultiplier;
+            resolveRemainingMs = MATCH_DELAY_MS * runAfterFlashClear.resolveDelayMultiplier;
         }
 
         return {
-            ...runAfterDungeonReveal,
+            ...runAfterFlashClear,
             peekRevealedTileIds,
             status: flippedTileIds.length >= 2 ? 'resolving' : 'playing',
             board: {
-                ...revealedBoard,
-                tiles: revealedBoard.tiles.map((candidate) =>
+                ...board,
+                tiles: board.tiles.map((candidate) =>
                     candidate.id === tileId ? { ...candidate, state: 'flipped' } : candidate
                 ),
                 flippedTileIds
             },
-            flipHistory: [...runAfterDungeonReveal.flipHistory, tileId],
+            flipHistory: [...runAfterFlashClear.flipHistory, tileId],
             timerState: {
-                ...runAfterDungeonReveal.timerState,
+                ...runAfterFlashClear.timerState,
                 resolveRemainingMs
             }
         };

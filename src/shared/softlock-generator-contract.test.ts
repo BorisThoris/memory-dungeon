@@ -2,9 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import { buildBoard } from './board-build-rules';
 import { inspectRunFairness } from './board-inspection';
-import { GAME_RULES_VERSION, type BoardState, type EnemyHazardState, type Tile } from './contracts';
+import { GAME_RULES_VERSION } from './contracts';
 import { advanceToNextLevel } from './next-floor-transition-rules';
-import { inspectDungeonRunMapProgression } from './run-map';
 import { isSingletonUtilityPairKey } from './tile-identity';
 import {
     createClearedBoardFairnessProjection,
@@ -15,53 +14,6 @@ import {
     runSoftlockGeneratorContract,
     solveGeneratedBoardByExhaustingPairs
 } from './softlock-generator-contract';
-
-const tile = (id: string, pairKey: string, state: Tile['state'] = 'hidden'): Tile => ({
-    id,
-    pairKey,
-    state,
-    symbol: id,
-    label: id
-});
-
-const hazard = (id: string, currentTileId: string, nextTileId: string): EnemyHazardState => ({
-    id,
-    kind: 'sentinel',
-    label: id,
-    currentTileId,
-    nextTileId,
-    pattern: 'patrol',
-    state: 'revealed',
-    damage: 1,
-    hp: 1,
-    maxHp: 1
-});
-
-const projectionBoard = (overrides: Partial<BoardState> = {}): BoardState => ({
-    level: 6,
-    pairCount: 2,
-    columns: 3,
-    rows: 2,
-    tiles: [
-        tile('a1', 'a', 'matched'),
-        tile('a2', 'a', 'matched'),
-        tile('key-a', 'key'),
-        tile('key-b', 'key'),
-        {
-            ...tile('exit', '__exit__', 'flipped'),
-            dungeonCardKind: 'exit',
-            dungeonExitLockKind: 'iron'
-        }
-    ],
-    flippedTileIds: ['exit'],
-    matchedPairs: 1,
-    floorArchetypeId: null,
-    featuredObjectiveId: null,
-    dungeonExitTileId: 'exit',
-    dungeonExitLockKind: 'none',
-    dungeonKeysHeld: 0,
-    ...overrides
-});
 
 describe('softlock generator contract', () => {
     it('keeps route-pressure scenarios cycling through authored route types', () => {
@@ -75,22 +27,21 @@ describe('softlock generator contract', () => {
         ).toEqual(expect.arrayContaining(['safe', 'greed', 'mystery']));
     });
 
-    it('checks seeded floors across traits, topology, and final-pair projections', () => {
+    it('checks seeded floors across traits and final-pair projections', () => {
         const result = runSoftlockGeneratorContract();
 
         expect(result.failures.map(formatSoftlockGeneratorFailure)).toEqual([]);
         expect(result.checkedBoards).toBeGreaterThan(100);
         expect(result.checkedPlayableBoards).toBeGreaterThan(30);
         expect(result.checkedNextFloorTransitions).toBe(result.checkedPlayableBoards);
-        // Eight coverage families - locks, shops, keys, levers, exits, hazards, enemies, bosses -
-        // left this list with the layer that produced them. What remains is what a floor of pairs
+        // Nine coverage families - locks, shops, keys, levers, exits, hazards, enemies, bosses,
+        // topology - left this list with the layer that produced them. What remains is what a floor of pairs
         // can still get wrong, and every one of them must still be exercised: a coverage key at
         // nought means this contract is asserting over a case it never actually builds.
         expect(result.coverage).toMatchObject({
             traits: expect.any(Number),
             traitInteractions: expect.any(Number),
             traitRouteObjectives: expect.any(Number),
-            topology: expect.any(Number),
             finalPairStates: expect.any(Number)
         });
         for (const [key, count] of Object.entries(result.coverage)) {
@@ -106,7 +57,6 @@ describe('softlock generator contract', () => {
             runRulesVersion: GAME_RULES_VERSION,
             floorTag: 'normal',
             floorArchetypeId: null,
-            dungeonNodeKind: 'elite',
             activeMutators: [],
             routeCardPlan: {
                 choiceId: 'contract:mystery:438154985:5',
@@ -122,7 +72,6 @@ describe('softlock generator contract', () => {
 
         expect(solverRun.gameMode).toBe('endless');
         expect(solverRun.board?.level).toBe(5);
-        expect(solverRun.dungeonRun.currentFloor).toBe(5);
         expect(solverRun.findablesTotalThisFloor).toBeGreaterThanOrEqual(0);
         expect(solved.status).toBe('levelComplete');
         // There is no exit to activate. The floor ends because the board does: every tile the
@@ -133,22 +82,16 @@ describe('softlock generator contract', () => {
         ).toEqual([]);
         expect(next.status).toBe('memorize');
         expect(next.board?.level).toBe(6);
-        expect(next.dungeonRun.currentFloor).toBe(6);
         expect(inspectRunFairness(next).issues).toEqual([]);
-        expect(inspectDungeonRunMapProgression(next.dungeonRun)).toMatchObject({
-            hasLegalProgressionPath: true,
-            issues: []
-        });
     });
 
-    it('creates legal final-pair projections from generated dungeon boards', () => {
+    it('creates legal final-pair projections from generated boards', () => {
         const board = buildBoard(7, {
             gameMode: 'endless',
             runSeed: 77_707,
             runRulesVersion: GAME_RULES_VERSION,
             floorTag: 'boss',
-            floorArchetypeId: 'trap_hall',
-            dungeonNodeKind: 'boss'
+            floorArchetypeId: 'trap_hall'
         });
         const projected = createFinalPairFairnessProjection(board);
 
@@ -168,27 +111,24 @@ describe('softlock generator contract', () => {
                     runSeed: 77_707,
                     runRulesVersion: GAME_RULES_VERSION,
                     floorTag: 'boss',
-                    floorArchetypeId: 'trap_hall',
-                    dungeonNodeKind: 'boss'
+                    floorArchetypeId: 'trap_hall'
                 })
             }
         ]).failures.map(formatSoftlockGeneratorFailure)).toEqual([]);
     });
 
-    it('creates cleared-board projections for boss and hazard stale-overlay coverage', () => {
+    it('creates cleared-board projections for boss floor coverage', () => {
         const board = buildBoard(7, {
             gameMode: 'endless',
             runSeed: 77_708,
             runRulesVersion: GAME_RULES_VERSION,
             floorTag: 'boss',
-            floorArchetypeId: 'trap_hall',
-            dungeonNodeKind: 'boss'
+            floorArchetypeId: 'trap_hall'
         });
         const projected = createClearedBoardFairnessProjection(board);
 
         expect(projected.tiles.filter((tile) => tile.state === 'hidden' && !isSingletonUtilityPairKey(tile.pairKey))).toHaveLength(0);
         expect(projected.matchedPairs).toBe(projected.pairCount);
-        expect(projected.enemyHazards?.filter((hazard) => hazard.state !== 'defeated')).toEqual([]);
         expect(runSoftlockGeneratorContract([
             {
                 id: 'single_boss_cleared_projection',
@@ -200,132 +140,18 @@ describe('softlock generator contract', () => {
                     runSeed: 77_708,
                     runRulesVersion: GAME_RULES_VERSION,
                     floorTag: 'boss',
-                    floorArchetypeId: 'trap_hall',
-                    dungeonNodeKind: 'boss'
+                    floorArchetypeId: 'trap_hall'
                 })
             }
         ]).failures.map(formatSoftlockGeneratorFailure)).toEqual([]);
     });
 
-    it('normalizes malformed projection enemy hazards before contract checks', () => {
-        const board = projectionBoard({
-            enemyHazards: Number.NaN as unknown as BoardState['enemyHazards']
-        });
 
-        const finalPairProjection = createFinalPairFairnessProjection(board);
-        const clearedProjection = createClearedBoardFairnessProjection(board);
 
-        expect(finalPairProjection?.enemyHazards).toEqual([]);
-        expect(clearedProjection.enemyHazards).toEqual([]);
-        expect(createGeneratedBoardSolverRun(finalPairProjection!, 130_112).board?.enemyHazards).toEqual([]);
-    });
 
-    it('keeps only final-pair enemy hazards active in final-pair projections', () => {
-        const board = projectionBoard({
-            tiles: projectionBoard().tiles.map((candidate) =>
-                candidate.pairKey === 'key'
-                    ? { ...candidate, dungeonCardKind: 'key' as const, dungeonKeyKind: 'iron' as const }
-                    : candidate
-            ),
-            enemyHazards: [
-                hazard('on-final', 'key-a', 'key-b'),
-                hazard('off-final', 'a1', 'a2')
-            ]
-        });
 
-        const projected = createFinalPairFairnessProjection(board);
 
-        expect(projected?.enemyHazards).toMatchObject([
-            { id: 'on-final', state: 'revealed', hp: 1 },
-            { id: 'off-final', state: 'defeated', hp: 0 }
-        ]);
-    });
 
-    it('uses the primary exit tile lock when granting final-pair projection resources', () => {
-        const board = projectionBoard({
-            tiles: projectionBoard().tiles.map((candidate) =>
-                candidate.pairKey === 'key'
-                    ? { ...candidate, dungeonCardKind: 'key' as const, dungeonKeyKind: 'iron' as const }
-                    : candidate
-            )
-        });
-
-        const projected = createFinalPairFairnessProjection(board);
-
-        expect(board.dungeonExitLockKind).toBe('none');
-        expect(projected?.dungeonKeysHeld).toBe(1);
-    });
-
-    it('preserves key kind when granting final-pair projection resources', () => {
-        const board = projectionBoard({
-            tiles: projectionBoard().tiles.map((candidate) => {
-                if (candidate.pairKey === 'key') {
-                    return { ...candidate, dungeonCardKind: 'key' as const, dungeonKeyKind: 'treasure' as const };
-                }
-                if (candidate.pairKey === '__exit__') {
-                    return { ...candidate, dungeonExitLockKind: 'treasure' as const };
-                }
-                return candidate;
-            })
-        });
-
-        const projected = createFinalPairFairnessProjection(board);
-
-        expect(projected?.dungeonKeysHeld).toBe(1);
-        expect(projected?.dungeonKeysHeldByKind).toEqual({ treasure: 1 });
-    });
-
-    it('normalizes malformed projection resource counters before granting fallbacks', () => {
-        const board = projectionBoard({
-            dungeonKeysHeld: Number.POSITIVE_INFINITY,
-            dungeonKeysHeldByKind: { treasure: Number.NaN },
-            dungeonLeverCount: Number.POSITIVE_INFINITY,
-            tiles: projectionBoard().tiles.map((candidate) => {
-                if (candidate.pairKey === 'key') {
-                    return { ...candidate, dungeonCardKind: 'key' as const, dungeonKeyKind: 'treasure' as const };
-                }
-                if (candidate.pairKey === '__exit__') {
-                    return { ...candidate, dungeonExitLockKind: 'treasure' as const };
-                }
-                return candidate;
-            })
-        });
-
-        const projected = createFinalPairFairnessProjection(board);
-
-        expect(projected?.dungeonKeysHeld).toBe(1);
-        expect(projected?.dungeonKeysHeldByKind).toEqual({ treasure: 1 });
-    });
-
-    it('does not grant fake projection keys for terminal primary exit lock fallbacks', () => {
-        const board = projectionBoard({
-            pairCount: 1,
-            tiles: [
-                tile('a1', 'a', 'matched'),
-                tile('a2', 'a', 'matched'),
-                {
-                    ...tile('exit', '__exit__', 'flipped'),
-                    dungeonCardKind: 'exit',
-                    dungeonExitLockKind: 'iron'
-                }
-            ],
-            matchedPairs: 1
-        });
-
-        const projected = createClearedBoardFairnessProjection(board);
-
-        expect(board.dungeonExitLockKind).toBe('none');
-        expect(projected.dungeonKeysHeld).toBe(0);
-    });
-
-    it('does not grant fake projection keys while pending fallback pairs remain', () => {
-        const board = projectionBoard();
-
-        const projected = createFinalPairFairnessProjection(board);
-
-        expect(projected).not.toBeNull();
-        expect(projected?.dungeonKeysHeld).toBe(0);
-    });
 
     it('formats diagnostics with scenario, seed, floor, projection, and issue codes', () => {
         const result = runSoftlockGeneratorContract([
@@ -375,38 +201,13 @@ describe('softlock generator contract', () => {
                     tileIds: ['exit']
                 }
             ],
-            boardSummary: 'level=6 pairs=1 floorTag=normal archetype=none objective=find_exit exitLock=iron boss=none hazards=0'
+            boardSummary: 'level=6 pairs=1 floorTag=normal archetype=none'
         });
 
-        expect(diagnostic).toContain('exitLock=iron');
+        expect(diagnostic).toContain('level=6 pairs=1');
         expect(diagnostic).toContain('exit_lock_unreachable');
         expect(diagnostic).toContain('no reachable key route');
         expect(diagnostic).toContain('tiles=exit');
     });
 
-    it('preserves topology graph diagnostics in formatted locked-exit failures', () => {
-        const diagnostic = formatSoftlockGeneratorFailure({
-            scenarioId: 'topology_missing_key_fixture',
-            scenarioLabel: 'Topology missing key fixture',
-            seed: 7,
-            floor: 1,
-            projection: 'generated',
-            issueCodes: ['exit_lock_unreachable'],
-            issueDetails: [
-                'exit_lock_unreachable: Topology validation: topology_exit_lock_source_missing: Exit needs an iron key. nodes=2 edges=1 reachable=1 keys=none levers=0 bossRoute=false exitRoute=false exits=exit:exit[lock=iron levers=0] bosses=none'
-            ],
-            issues: [
-                {
-                    code: 'exit_lock_unreachable',
-                    message: 'Topology validation: topology_exit_lock_source_missing: Exit needs an iron key.'
-                }
-            ],
-            boardSummary: 'level=1 pairs=0 floorTag=normal archetype=none objective=find_exit exitLock=iron boss=none hazards=0'
-        });
-
-        expect(diagnostic).toContain('Topology validation: topology_exit_lock_source_missing');
-        expect(diagnostic).toContain('nodes=');
-        expect(diagnostic).toContain('keys=none');
-        expect(diagnostic).toContain('exitRoute=false');
-    });
 });

@@ -111,7 +111,7 @@ test.describe('Expanded playable navigation contract', () => {
 
     test('active-run meta screens expose current run value, not only empty states', async ({ page }) => {
         test.setTimeout(120_000);
-        await openPlayablePathFixture(page, 'activeRunWithHazards');
+        await openPlayablePathFixture(page, 'cascadeClump');
         await expectGameplayReady(page);
 
         await openRunMenuItem(page, 'inventory');

@@ -42,8 +42,7 @@ export const settleForgottenTiles = (
 export const tileHasRecallClue = (tile: Tile): boolean =>
     tile.routeSpecialRevealed === true ||
     tile.lanternScouted === true ||
-    tile.scoutRevealSource != null ||
-    tile.dungeonCardState === 'revealed';
+    tile.scoutRevealSource != null;
 
 export const normalizeRecallFocus = (focus: number): number => clamp(runNonNegativeInteger(focus), 0, RECALL_FOCUS_MAX);
 

@@ -111,7 +111,7 @@ describe('system diagram generator', () => {
         expect(payload.actions.every((item) => item.evidence.length >= (item.minimumEvidence ?? 1))).toBe(true);
         expect(payload.actions.find((item) => item.id === 'resolution-slice-gate')?.detail).toContain('yarn gate:action-loop');
         expect(payload.actions.find((item) => item.id === 'softlock-generation-matrix')).toMatchObject({
-            command: 'yarn audit:dungeon-topology:json && yarn gate:sim-softlock-seeds',
+            command: 'yarn gate:sim-softlock-seeds',
             verifies: expect.stringContaining('Generated boards')
         });
         expect(payload.stats.importGraph.fileCount).toBe(0);
@@ -131,11 +131,11 @@ describe('system diagram generator', () => {
         }));
         expect(navigation?.findings[0]?.evidence).toContain('src/renderer/store/navigationModel.ts');
         expect(payload.actions.find((item) => item.id === 'softlock-generation-matrix')?.system).toBe('Board Generation');
-        expect(boardGeneration?.nodes.some((node) => node.id === 'topology_graph')).toBe(true);
+        expect(boardGeneration?.nodes.some((node) => node.id === 'softlock_repair')).toBe(true);
         expect(boardGeneration?.edges).toContainEqual(expect.objectContaining({
-            source: 'topology_graph',
+            source: 'trait_overlay',
             target: 'softlock_repair',
-            label: 'validates blockers'
+            label: 'validated by'
         }));
         expect(traits?.findings[0]?.detail).toContain('trait-match-route floor share');
         expect(traits?.nodes.flatMap((node) => node.evidence)).toContain('src/shared/tile-trait-rules.ts');
@@ -154,7 +154,6 @@ describe('system diagram generator', () => {
         expect(markdown).toContain('## Audit Actions');
         expect(markdown).toContain('P0 Extend the softlock matrix for every new blocker');
         expect(markdown).toContain('yarn gate:action-loop');
-        expect(markdown).toContain('yarn audit:dungeon-topology');
         expect(markdown).toContain('yarn gate:sim-softlock-seeds');
         expect(markdown).toContain('yarn gate:softlock-full');
         expect(markdown).toContain('yarn gate:rewards-economy');
@@ -173,6 +172,6 @@ describe('system diagram generator', () => {
         expect(markdown).toContain('flowchart LR');
         expect(markdown).toContain('## Trait Systems');
         expect(markdown).toContain('Softlock repair is part of the generation contract');
-        expect(markdown).toContain('Topology Graph');
+        expect(markdown).toContain('Softlock Repair');
     });
 });

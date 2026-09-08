@@ -13,11 +13,10 @@ import {
     largestHiddenSuitClump,
     sameSuitNeighbourRate,
     SUIT_DEAL_PROFILE_BY_ARCHETYPE,
-    suitCountForDeal,
     TILE_SUIT_CATALOG,
     TILE_SUITS
 } from './tile-suit-rules';
-import { EXIT_PAIR_KEY } from './dungeon-rules';
+import { EXIT_PAIR_KEY } from './tile-identity';
 
 const pairs = (count: number): Tile[] =>
     Array.from({ length: count }, (_, index) => `p${index}`).flatMap((pairKey) => [
@@ -200,24 +199,3 @@ describe('the deal profile', () => {
     });
 });
 
-describe('the Suit Lens', () => {
-    it('deals one suit fewer than the floor would have, and never takes a board below two', () => {
-        const tiles = pairs(16);
-        expect(new Set(dealBoardSuits(tiles, 6, 3, 8, GAME_RULES_VERSION, 'clumped').map((t) => t.suit)).size).toBe(3);
-        expect(new Set(dealBoardSuits(tiles, 6, 3, 8, GAME_RULES_VERSION, 'clumped', ['suit_lens']).map((t) => t.suit)).size).toBe(2);
-        expect(new Set(dealBoardSuits(tiles, 6, 3, 8, GAME_RULES_VERSION, 'two_suit', ['suit_lens']).map((t) => t.suit)).size).toBe(2);
-        // A board already at two, or too small to have been dealt two, is left where it is.
-        expect(new Set(dealBoardSuits(pairs(10), 5, 3, 8, GAME_RULES_VERSION, 'clumped', ['suit_lens']).map((t) => t.suit)).size).toBe(2);
-        expect(new Set(dealBoardSuits(pairs(4), 4, 3, 8, GAME_RULES_VERSION, 'clumped', ['suit_lens']).map((t) => t.suit)).size).toBe(1);
-        expect(suitCountForDeal('scattered', ['suit_lens'])).toBe(3);
-    });
-
-    it("reaches the built floor through the run's relics", () => {
-        // Floor 22: deep enough that the palette deals three, which is where the lens bites.
-        const plain = buildBoard(22, { runSeed: 31, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', floorArchetypeId: 'breather' });
-        const lensed = buildBoard(22, { runSeed: 31, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', floorArchetypeId: 'breather', relicIds: ['suit_lens'] });
-        const plainSuits = new Set(plain.tiles.map((t) => t.suit)).size;
-        expect(plainSuits).toBeGreaterThan(2);
-        expect(new Set(lensed.tiles.map((t) => t.suit)).size).toBe(plainSuits - 1);
-    });
-});

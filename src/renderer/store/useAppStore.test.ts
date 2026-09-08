@@ -20,7 +20,6 @@ const gameSfxMocks = vi.hoisted(() => ({
     playRelicPickSfx: vi.fn(),
     playResolveSfx: vi.fn(),
     playStrayPowerSfx: vi.fn(),
-    playTrapSfx: vi.fn(),
     playWagerArmSfx: vi.fn(),
     resumeAudioContext: vi.fn(),
     sfxGainFromSettings: (masterVolume: number, sfxVolume: number) =>
@@ -63,7 +62,6 @@ const resetStore = (): void => {
         strayRemoveArmed: false,
         tileSwapArmed: false,
         tileSwapFirstTileId: null,
-        dungeonExitPromptOpen: false,
         ...BOARD_FLOATER_POP_CLEAR
     });
 };
@@ -541,419 +539,12 @@ describe('useAppStore timers', () => {
 
 
 
-    it('applies moving enemy contact before resolving an armed destroy power', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 54 });
-        const tiles: Tile[] = [
-            { id: 'a1', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
-            { id: 'a2', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
-            { id: 'b1', pairKey: 'B', symbol: 'B', label: 'B', state: 'hidden' },
-            { id: 'b2', pairKey: 'B', symbol: 'B', label: 'B', state: 'hidden' }
-        ];
-        const board: BoardState = {
-            level: 1,
-            pairCount: 2,
-            columns: 2,
-            rows: 2,
-            tiles,
-            flippedTileIds: [],
-            matchedPairs: 0,
-            floorArchetypeId: null,
-            featuredObjectiveId: null,
-            enemyHazards: [
-                {
-                    id: 'power-contact',
-                    kind: 'sentinel',
-                    label: 'Patrol Sentry',
-                    currentTileId: 'a1',
-                    nextTileId: 'b1',
-                    pattern: 'patrol',
-                    state: 'hidden',
-                    damage: 1,
-                    hp: 1,
-                    maxHp: 1
-                }
-            ],
-            enemyHazardTurn: 0
-        };
-        useAppStore.setState({
-            view: 'playing',
-            run: {
-                ...baseRun,
-                board,
-                status: 'playing',
-                destroyPairCharges: 1,
-                stats: { ...baseRun.stats, guardTokens: 0 }
-            },
-            destroyPairArmed: true
-        });
 
-        useAppStore.getState().pressTile('a1');
 
-        const nextRun = useAppStore.getState().run!;
-        expect(nextRun.lives).toBe(baseRun.lives - 1);
-        expect(nextRun.enemyHazardHitsThisFloor).toBe(1);
-        expect(nextRun.destroyPairCharges).toBe(0);
-        expect(nextRun.board!.flippedTileIds).toEqual([]);
-        expect(nextRun.board!.tiles.filter((tile) => tile.pairKey === 'A').every((tile) => tile.state === 'matched')).toBe(
-            true
-        );
-        expect(nextRun.board!.enemyHazards![0]).toMatchObject({ state: 'revealed', currentTileId: 'b1' });
-        expect(useAppStore.getState().destroyPairArmed).toBe(false);
-    });
 
-    it('does not charge a life for peeking at the tile an enemy is standing on', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 55 });
-        const tiles: Tile[] = [
-            { id: 'a1', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
-            { id: 'a2', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
-            { id: 'b1', pairKey: 'B', symbol: 'B', label: 'B', state: 'hidden' },
-            { id: 'b2', pairKey: 'B', symbol: 'B', label: 'B', state: 'hidden' }
-        ];
-        const board: BoardState = {
-            level: 1,
-            pairCount: 2,
-            columns: 2,
-            rows: 2,
-            tiles,
-            flippedTileIds: [],
-            matchedPairs: 0,
-            floorArchetypeId: null,
-            featuredObjectiveId: null,
-            enemyHazards: [
-                {
-                    id: 'peek-contact',
-                    kind: 'sentinel',
-                    label: 'Patrol Sentry',
-                    currentTileId: 'a1',
-                    nextTileId: 'b1',
-                    pattern: 'patrol',
-                    state: 'hidden',
-                    damage: 1,
-                    hp: 1,
-                    maxHp: 1
-                }
-            ],
-            enemyHazardTurn: 0
-        };
-        useAppStore.setState({
-            view: 'playing',
-            run: {
-                ...baseRun,
-                board,
-                status: 'playing',
-                peekCharges: 1,
-                stats: { ...baseRun.stats, guardTokens: 0 }
-            },
-            peekModeArmed: true
-        });
 
-        useAppStore.getState().pressTile('a1');
 
-        const nextRun = useAppStore.getState().run!;
-        /*
-         * A peek is a look, not a reach. Charging contact for it made checking the single most
-         * dangerous square on the board the most expensive thing a player could do, which is the
-         * opposite of what a scouting charge is for. The hazard is left exactly where it was: it
-         * was never touched, so it neither strikes nor advances.
-         */
-        expect(nextRun.lives).toBe(baseRun.lives);
-        expect(nextRun.enemyHazardHitsThisFloor).toBe(0);
-        expect(nextRun.peekCharges).toBe(0);
-        expect(nextRun.peekRevealedTileIds).toEqual(['a1']);
-        expect(nextRun.board!.flippedTileIds).toEqual([]);
-        expect(nextRun.board!.enemyHazards![0]).toMatchObject({ state: 'hidden', currentTileId: 'a1' });
-        expect(useAppStore.getState().peekModeArmed).toBe(false);
-    });
 
-    it('applies moving enemy contact before resolving an armed stray power', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 56 });
-        const tiles: Tile[] = [
-            { id: 'w1', pairKey: '__wild__', symbol: 'W', label: 'Wild', state: 'hidden' },
-            { id: 'a1', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
-            { id: 'a2', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
-            { id: 'b1', pairKey: 'B', symbol: 'B', label: 'B', state: 'hidden' }
-        ];
-        const board: BoardState = {
-            level: 1,
-            pairCount: 2,
-            columns: 2,
-            rows: 2,
-            tiles,
-            flippedTileIds: [],
-            matchedPairs: 0,
-            floorArchetypeId: null,
-            featuredObjectiveId: null,
-            enemyHazards: [
-                {
-                    id: 'stray-contact',
-                    kind: 'sentinel',
-                    label: 'Patrol Sentry',
-                    currentTileId: 'w1',
-                    nextTileId: 'b1',
-                    pattern: 'patrol',
-                    state: 'hidden',
-                    damage: 1,
-                    hp: 1,
-                    maxHp: 1
-                }
-            ],
-            enemyHazardTurn: 0
-        };
-        useAppStore.setState({
-            view: 'playing',
-            run: {
-                ...baseRun,
-                board,
-                status: 'playing',
-                strayRemoveCharges: 1,
-                stats: { ...baseRun.stats, guardTokens: 0 }
-            },
-            strayRemoveArmed: true
-        });
-
-        useAppStore.getState().pressTile('w1');
-
-        const nextRun = useAppStore.getState().run!;
-        expect(nextRun.lives).toBe(baseRun.lives - 1);
-        expect(nextRun.enemyHazardHitsThisFloor).toBe(1);
-        expect(nextRun.strayRemoveCharges).toBe(0);
-        expect(useAppStore.getState().strayRemoveArmed).toBe(false);
-        expect(nextRun.board!.tiles.find((tile) => tile.id === 'w1')!.state).toBe('removed');
-        expect(nextRun.board!.flippedTileIds).toEqual([]);
-        expect(nextRun.board!.enemyHazards![0]).toMatchObject({ state: 'revealed', currentTileId: 'b1' });
-    });
-
-    it('keeps moving enemy contact when an armed stray power is invalid for the occupied card', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 57 });
-        const tiles: Tile[] = [
-            { id: 'a1', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
-            { id: 'a2', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
-            { id: 'b1', pairKey: 'B', symbol: 'B', label: 'B', state: 'hidden' },
-            { id: 'b2', pairKey: 'B', symbol: 'B', label: 'B', state: 'hidden' }
-        ];
-        const board: BoardState = {
-            level: 1,
-            pairCount: 2,
-            columns: 2,
-            rows: 2,
-            tiles,
-            flippedTileIds: [],
-            matchedPairs: 0,
-            floorArchetypeId: null,
-            featuredObjectiveId: null,
-            enemyHazards: [
-                {
-                    id: 'stray-invalid-contact',
-                    kind: 'sentinel',
-                    label: 'Patrol Sentry',
-                    currentTileId: 'a1',
-                    nextTileId: 'b1',
-                    pattern: 'patrol',
-                    state: 'hidden',
-                    damage: 1,
-                    hp: 1,
-                    maxHp: 1
-                }
-            ],
-            enemyHazardTurn: 0
-        };
-        useAppStore.setState({
-            view: 'playing',
-            run: {
-                ...baseRun,
-                board,
-                status: 'playing',
-                strayRemoveCharges: 1,
-                stats: { ...baseRun.stats, guardTokens: 0 }
-            },
-            strayRemoveArmed: true
-        });
-
-        useAppStore.getState().pressTile('a1');
-
-        const nextRun = useAppStore.getState().run!;
-        expect(nextRun.lives).toBe(baseRun.lives - 1);
-        expect(nextRun.enemyHazardHitsThisFloor).toBe(1);
-        expect(nextRun.strayRemoveCharges).toBe(1);
-        expect(useAppStore.getState().strayRemoveArmed).toBe(true);
-        expect(nextRun.board!.tiles.find((tile) => tile.id === 'a1')!.state).toBe('hidden');
-        expect(nextRun.board!.enemyHazards![0]).toMatchObject({ state: 'revealed', currentTileId: 'b1' });
-    });
-
-    it('keeps moving enemy contact when an armed destroy power is blocked', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 58 });
-        const tiles: Tile[] = [
-            { id: 'a1', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
-            { id: 'a2', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
-            { id: 'b1', pairKey: 'B', symbol: 'B', label: 'B', state: 'hidden' },
-            { id: 'b2', pairKey: 'B', symbol: 'B', label: 'B', state: 'hidden' }
-        ];
-        const board: BoardState = {
-            level: 1,
-            pairCount: 2,
-            columns: 2,
-            rows: 2,
-            tiles,
-            flippedTileIds: [],
-            matchedPairs: 0,
-            floorArchetypeId: null,
-            featuredObjectiveId: null,
-            enemyHazards: [
-                {
-                    id: 'destroy-blocked-contact',
-                    kind: 'sentinel',
-                    label: 'Patrol Sentry',
-                    currentTileId: 'a1',
-                    nextTileId: 'b1',
-                    pattern: 'patrol',
-                    state: 'hidden',
-                    damage: 1,
-                    hp: 1,
-                    maxHp: 1
-                }
-            ],
-            enemyHazardTurn: 0
-        };
-        useAppStore.setState({
-            view: 'playing',
-            run: {
-                ...baseRun,
-                board,
-                status: 'playing',
-                activeContract: { noShuffle: false, noDestroy: true, maxMismatches: null },
-                destroyPairCharges: 1,
-                stats: { ...baseRun.stats, guardTokens: 0 }
-            },
-            destroyPairArmed: true
-        });
-
-        useAppStore.getState().pressTile('a1');
-
-        const nextRun = useAppStore.getState().run!;
-        expect(nextRun.lives).toBe(baseRun.lives - 1);
-        expect(nextRun.enemyHazardHitsThisFloor).toBe(1);
-        expect(nextRun.destroyPairCharges).toBe(1);
-        expect(nextRun.board!.tiles.find((tile) => tile.id === 'a1')!.state).toBe('hidden');
-        expect(nextRun.board!.enemyHazards![0]).toMatchObject({ state: 'revealed', currentTileId: 'b1' });
-    });
-
-    it('stops armed power resolution when moving enemy contact is fatal', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 59 });
-        const tiles: Tile[] = [
-            { id: 'a1', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
-            { id: 'a2', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
-            { id: 'b1', pairKey: 'B', symbol: 'B', label: 'B', state: 'hidden' },
-            { id: 'b2', pairKey: 'B', symbol: 'B', label: 'B', state: 'hidden' }
-        ];
-        const board: BoardState = {
-            level: 1,
-            pairCount: 2,
-            columns: 2,
-            rows: 2,
-            tiles,
-            flippedTileIds: [],
-            matchedPairs: 0,
-            floorArchetypeId: null,
-            featuredObjectiveId: null,
-            enemyHazards: [
-                {
-                    id: 'fatal-armed-contact',
-                    kind: 'sentinel',
-                    label: 'Patrol Sentry',
-                    currentTileId: 'a1',
-                    nextTileId: 'b1',
-                    pattern: 'patrol',
-                    state: 'hidden',
-                    damage: 2,
-                    hp: 1,
-                    maxHp: 1
-                }
-            ],
-            enemyHazardTurn: 0
-        };
-        useAppStore.setState({
-            view: 'playing',
-            run: {
-                ...baseRun,
-                board,
-                status: 'playing',
-                lives: 1,
-                destroyPairCharges: 1,
-                stats: { ...baseRun.stats, guardTokens: 0 }
-            },
-            destroyPairArmed: true
-        });
-
-        useAppStore.getState().pressTile('a1');
-
-        const nextRun = useAppStore.getState().run!;
-        expect(nextRun.status).toBe('gameOver');
-        expect(nextRun.lives).toBe(0);
-        expect(nextRun.destroyPairCharges).toBe(1);
-        expect(nextRun.board!.tiles.find((tile) => tile.id === 'a1')!.state).toBe('hidden');
-        expect(nextRun.board!.enemyHazards![0]).toMatchObject({ state: 'revealed', currentTileId: 'a1' });
-        expect(useAppStore.getState().destroyPairArmed).toBe(false);
-        expect(useAppStore.getState().peekModeArmed).toBe(false);
-    });
-
-    it('applies moving enemy contact before a Gambit third pick flips the occupied card', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 53 });
-        const tiles: Tile[] = [
-            { id: 'a1', pairKey: 'A', symbol: 'A', label: 'A', state: 'flipped' },
-            { id: 'a2', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
-            { id: 'b1', pairKey: 'B', symbol: 'B', label: 'B', state: 'flipped' },
-            { id: 'b2', pairKey: 'B', symbol: 'B', label: 'B', state: 'hidden' }
-        ];
-        const board: BoardState = {
-            level: 1,
-            pairCount: 2,
-            columns: 2,
-            rows: 2,
-            tiles,
-            flippedTileIds: ['a1', 'b1'],
-            matchedPairs: 0,
-            floorArchetypeId: null,
-            featuredObjectiveId: null,
-            enemyHazards: [
-                {
-                    id: 'gambit-contact',
-                    kind: 'sentinel',
-                    label: 'Patrol Sentry',
-                    currentTileId: 'a2',
-                    nextTileId: 'b2',
-                    pattern: 'patrol',
-                    state: 'hidden',
-                    damage: 1,
-                    hp: 1,
-                    maxHp: 1
-                }
-            ],
-            enemyHazardTurn: 0
-        };
-        useAppStore.setState({
-            view: 'playing',
-            run: {
-                ...baseRun,
-                board,
-                status: 'resolving',
-                gambitAvailableThisFloor: true,
-                gambitThirdFlipUsed: false,
-                stats: { ...baseRun.stats, guardTokens: 0 },
-                timerState: { ...baseRun.timerState, resolveRemainingMs: 250 }
-            }
-        });
-
-        useAppStore.getState().pressTile('a2');
-
-        const nextRun = useAppStore.getState().run!;
-        expect(nextRun.lives).toBe(baseRun.lives - 1);
-        expect(nextRun.enemyHazardHitsThisFloor).toBe(1);
-        expect(nextRun.board!.flippedTileIds).toEqual(['a1', 'b1', 'a2']);
-        expect(nextRun.board!.tiles.find((tile) => tile.id === 'a2')!.state).toBe('flipped');
-        expect(nextRun.board!.enemyHazards![0]).toMatchObject({ state: 'revealed', currentTileId: 'a2' });
-        expect(gameSfxMocks.playResolveSfx).toHaveBeenCalled();
-        expect(gameSfxMocks.playGambitCommitSfx).toHaveBeenCalled();
-    });
 
 
 
@@ -1228,28 +819,15 @@ describe('useAppStore timers', () => {
 
 
 
-    it('does not offer the door before the exit card has been found', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 81_409 });
-        useAppStore.setState({
-            view: 'playing',
-            run: { ...baseRun, status: 'playing' },
-            dungeonExitPromptOpen: false
-        });
-
-        useAppStore.getState().openDungeonExitPrompt();
-
-        expect(useAppStore.getState().dungeonExitPromptOpen).toBe(false);
-    });
 
 
 
 
 
-    it('clears stale in-run prompts and return modes when leaving or replacing a run', () => {
+    it('clears stale in-run armed modes when leaving or replacing a run', () => {
         useAppStore.setState({
             view: 'playing',
             run: createNewRun(0),
-            dungeonExitPromptOpen: true,
             boardPinMode: true,
             destroyPairArmed: true,
             peekModeArmed: true,
@@ -1259,7 +837,6 @@ describe('useAppStore timers', () => {
 
         useAppStore.getState().goToMenu();
 
-        expect(useAppStore.getState().dungeonExitPromptOpen).toBe(false);
         expect(useAppStore.getState().boardPinMode).toBe(false);
         expect(useAppStore.getState().destroyPairArmed).toBe(false);
         expect(useAppStore.getState().peekModeArmed).toBe(false);
@@ -1267,7 +844,6 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().tileSwapFirstTileId).toBeNull();
 
         useAppStore.setState({
-            dungeonExitPromptOpen: true,
             boardPinMode: true,
             destroyPairArmed: true,
             peekModeArmed: true,
@@ -1277,7 +853,6 @@ describe('useAppStore timers', () => {
         useAppStore.getState().startRun();
 
         expect(useAppStore.getState().view).toBe('playing');
-        expect(useAppStore.getState().dungeonExitPromptOpen).toBe(false);
         expect(useAppStore.getState().boardPinMode).toBe(false);
         expect(useAppStore.getState().destroyPairArmed).toBe(false);
         expect(useAppStore.getState().peekModeArmed).toBe(false);
@@ -1285,7 +860,6 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().tileSwapFirstTileId).toBeNull();
 
         useAppStore.setState({
-            dungeonExitPromptOpen: true,
             boardPinMode: true,
             destroyPairArmed: true,
             peekModeArmed: true,
@@ -1294,7 +868,6 @@ describe('useAppStore timers', () => {
         });
         useAppStore.getState().restartRun();
 
-        expect(useAppStore.getState().dungeonExitPromptOpen).toBe(false);
         expect(useAppStore.getState().boardPinMode).toBe(false);
         expect(useAppStore.getState().destroyPairArmed).toBe(false);
         expect(useAppStore.getState().peekModeArmed).toBe(false);
@@ -1302,7 +875,6 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().tileSwapFirstTileId).toBeNull();
 
         useAppStore.setState({
-            dungeonExitPromptOpen: true,
             boardPinMode: true,
             destroyPairArmed: true,
             peekModeArmed: true,
@@ -1311,7 +883,6 @@ describe('useAppStore timers', () => {
         });
         useAppStore.getState().startRun({ ...DEFAULT_CLASSIC_RUN_SETUP, chaos: true });
 
-        expect(useAppStore.getState().dungeonExitPromptOpen).toBe(false);
         expect(useAppStore.getState().boardPinMode).toBe(false);
         expect(useAppStore.getState().destroyPairArmed).toBe(false);
         expect(useAppStore.getState().peekModeArmed).toBe(false);
@@ -1384,13 +955,6 @@ describe('useAppStore timers', () => {
                 useAppStore.getState().pressTile(ids[0]!);
                 useAppStore.getState().pressTile(ids[1]!);
                 await vi.advanceTimersByTimeAsync(1400);
-            }
-
-            run = useAppStore.getState().run;
-            const exitTile = run?.board?.tiles.find((tile) => tile.pairKey === '__exit__');
-            if (exitTile && run?.status === 'playing') {
-                useAppStore.getState().pressTile(exitTile.id);
-                useAppStore.getState().activateDungeonExitFromPrompt('none');
             }
 
             run = useAppStore.getState().run;

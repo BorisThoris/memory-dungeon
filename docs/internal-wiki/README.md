@@ -54,7 +54,7 @@
 - **Catalog + epics:** [../gameplay/](../gameplay/README.md)
 - **Depth / theory:** [../gameplay-depth/](../gameplay-depth/README.md)
 - **Backlog tasks:** [../gameplay-tasks/](../gameplay-tasks/README.md)
-- **Standalone topic docs:** [../BALANCE_NOTES.md](../BALANCE_NOTES.md), [../RELIC_ROSTER.md](../RELIC_ROSTER.md), [../FINDABLES.md](../FINDABLES.md), [../COLLECTIBLE_SYSTEM.md](../COLLECTIBLE_SYSTEM.md), [../SYMBOL_GUIDELINES.md](../SYMBOL_GUIDELINES.md), [../STRAY_TILE.md](../STRAY_TILE.md), and other root-level `docs/*.md` files — full list in [DOCS_CATALOG.md](./DOCS_CATALOG.md)
+- **Standalone topic docs:** [../BALANCE_NOTES.md](../BALANCE_NOTES.md), [../FINDABLES.md](../FINDABLES.md), [../COLLECTIBLE_SYSTEM.md](../COLLECTIBLE_SYSTEM.md), [../SYMBOL_GUIDELINES.md](../SYMBOL_GUIDELINES.md), [../STRAY_TILE.md](../STRAY_TILE.md), and other root-level `docs/*.md` files — full list in [DOCS_CATALOG.md](./DOCS_CATALOG.md)
 
 ### Code truth (pointers)
 

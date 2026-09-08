@@ -1,7 +1,7 @@
 /**
  * Finds persisted save fields with no migration policy.
  *
- * `dungeon-save-migration.ts` exists to say which save fields need a migration when they change.
+ * `save-field-policy.ts` (in src/shared) exists to say which save fields need a migration when they change.
  * It only works if the next person to add a field is held to it, and the next person was me: I
  * added `runHistory` to `SaveData` and left the table alone for two generations, with every gate
  * green the whole time. Nothing could have said so, because the field and the table are two lists
@@ -48,7 +48,7 @@ export const findFieldsWithoutPolicy = (fields: readonly string[], roots: Readon
 
 const main = (): void => {
     const fields = readSaveDataFields(readFileSync('src/shared/contracts.ts', 'utf8'));
-    const roots = readPolicyRoots(readFileSync('src/shared/dungeon-save-migration.ts', 'utf8'));
+    const roots = readPolicyRoots(readFileSync('src/shared/save-field-policy.ts', 'utf8'));
     const missing = findFieldsWithoutPolicy(fields, roots);
 
     for (const field of missing) {

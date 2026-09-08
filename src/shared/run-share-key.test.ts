@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { createDungeonShowcaseRun } from './dungeon-showcase-run-rules';
 import {
     describeRunShareKey,
     encodeRunShareKey,
@@ -31,9 +30,6 @@ describe('describeRunShareKey', () => {
         expect(keyOf(createNewRun(0, { activeContract: pinVowContract })).variant).toBe('pin_vow');
     });
 
-    it('names the showcase run, which is endless underneath as well', () => {
-        expect(keyOf(createDungeonShowcaseRun(0)).variant).toBe('showcase');
-    });
 
     it('carries the clock a gauntlet was played against, since the seed alone is a different run', () => {
         const key = keyOf(createNewRun(0, { gauntletDurationMs: 600_000 }));
@@ -53,7 +49,6 @@ describe('encode and parse', () => {
             createNewRun(0, { practiceMode: true }),
             createNewRun(0, { activeContract: scholarContract }),
             createNewRun(0, { activeContract: pinVowContract }),
-            createDungeonShowcaseRun(0),
             createNewRun(0, { gauntletDurationMs: 900_000 })
         ]) {
             const key = keyOf(run);

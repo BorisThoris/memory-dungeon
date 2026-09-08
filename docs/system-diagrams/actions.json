@@ -34,7 +34,7 @@
             "system": "Board Generation",
             "title": "Extend the softlock matrix for every new blocker",
             "status": "done",
-            "command": "yarn audit:dungeon-topology:json && yarn gate:sim-softlock-seeds",
+            "command": "yarn gate:sim-softlock-seeds",
             "minimumEvidence": 5
         },
         {
@@ -47,10 +47,10 @@
             "minimumEvidence": 5
         },
         {
-            "id": "reward-priority-gate",
+            "id": "economy-taxonomy-gate",
             "priority": "P1",
             "system": "Rewards And Economy",
-            "title": "Lock reward priority slots before adding fun offers",
+            "title": "Name every currency in the run economy taxonomy",
             "status": "done",
             "command": "yarn gate:rewards-economy",
             "minimumEvidence": 4

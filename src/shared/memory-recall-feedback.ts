@@ -5,16 +5,11 @@ import {
     type RouteChoice,
     type RunState,
     type MutatorId,
-    type RelicId,
     type Tile
 } from './contracts';
-import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
-import { hasMutator } from './mutators';
 import { normalizeRecallFocus, tileHasRecallClue } from './recall-rules';
-import { hasRunRelic, runMutatorIds, runRelicIds } from './relics';
-import { runStringArray } from './run-array-guards';
+import { runArray, runStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
-import { getCurrentDungeonNode } from './run-map';
 import { isSingletonUtilityPairKey } from './tile-identity';
 
 export type MemoryFeedbackTone = 'stable' | 'watch' | 'danger' | 'reward';
@@ -62,7 +57,6 @@ export interface MemoryRecallFeedback {
     pressure: 'clear' | 'strained' | 'overloaded';
     path: MemoryFeedbackLine[];
     clues: MemoryFeedbackLine[];
-    enemies: MemoryFeedbackLine[];
     symbols: MemoryFeedbackLine[];
     recallPlan: MemoryFeedbackLine[];
     penalties: MemoryFeedbackLine[];
@@ -232,17 +226,13 @@ const focusLabelFor = (focus: number): MemoryRecallFeedback['focusLabel'] => {
 
 const pressureDetailFor = (
     pressure: MemoryRecallFeedback['pressure'],
-    forgottenTileCount: number,
-    activeThreatCount: number
+    forgottenTileCount: number
 ): string => {
     if (pressure === 'overloaded') {
-        return `Recall is overloaded: ${forgottenTileCount} forgotten tile marker${forgottenTileCount === 1 ? '' : 's'} and ${activeThreatCount} active threat read${activeThreatCount === 1 ? '' : 's'} are competing for attention.`;
+        return `Recall is overloaded: ${forgottenTileCount} forgotten tile marker${forgottenTileCount === 1 ? '' : 's'} are competing for attention.`;
     }
     if (pressure === 'strained') {
-        if (forgottenTileCount <= 0 && activeThreatCount > 0) {
-            return `Recall is strained: hold ${activeThreatCount} active threat read${activeThreatCount === 1 ? '' : 's'} in memory before route or patrol pressure stacks higher.`;
-        }
-        return `Recall is strained: recover forgotten markers before route or patrol pressure stacks higher.`;
+        return `Recall is strained: recover forgotten markers before route pressure stacks higher.`;
     }
     return 'Recall is clear: the room log has room for route, clue, and symbol reads.';
 };
@@ -267,14 +257,10 @@ const atmosphericSummaryFor = (
 };
 
 const roomIdentityFor = (run: RunState): string => {
-    const activeRoute = getCurrentDungeonNode(run.dungeonRun);
-    if (activeRoute) {
-        return activeRoute.label;
-    }
     if (run.board?.routeWorldProfile) {
         return `${run.board.routeWorldProfile.routeType} route chamber`;
     }
-    return 'Unindexed room';
+    return run.board ? `Floor ${run.board.level}` : 'Unindexed room';
 };
 
 const atmosphericBeatFor = ({
@@ -282,18 +268,16 @@ const atmosphericBeatFor = ({
     pressure,
     focusLabel,
     rememberedClueTileCount,
-    forgottenTileCount,
-    activeThreatCount
+    forgottenTileCount
 }: {
     roomIdentity: string;
     pressure: MemoryRecallFeedback['pressure'];
     focusLabel: MemoryRecallFeedback['focusLabel'];
     rememberedClueTileCount: number;
     forgottenTileCount: number;
-    activeThreatCount: number;
 }): string => {
     if (pressure === 'overloaded') {
-        return `${roomIdentity}: the archive margins are full; ${forgottenTileCount} forgotten marker${forgottenTileCount === 1 ? '' : 's'} and ${activeThreatCount} threat read${activeThreatCount === 1 ? '' : 's'} are blurring together.`;
+        return `${roomIdentity}: the archive margins are full; ${forgottenTileCount} forgotten marker${forgottenTileCount === 1 ? '' : 's'} are blurring together.`;
     }
     if (pressure === 'strained') {
         return `${roomIdentity}: the room still answers, but the next match needs one clean remembered symbol.`;
@@ -329,19 +313,16 @@ const burdenDetailFor = ({
     label,
     forgottenTileCount,
     partialPairCount,
-    activeThreatCount,
     routeChoiceCount
 }: {
     label: MemoryBurdenFeedback['label'];
     forgottenTileCount: number;
     partialPairCount: number;
-    activeThreatCount: number;
     routeChoiceCount: number;
 }): string => {
     const burdens = [
         forgottenTileCount > 0 ? `${forgottenTileCount} forgotten mark${forgottenTileCount === 1 ? '' : 's'}` : null,
         partialPairCount > 0 ? `${partialPairCount} partial symbol read${partialPairCount === 1 ? '' : 's'}` : null,
-        activeThreatCount > 0 ? `${activeThreatCount} threat memory target${activeThreatCount === 1 ? '' : 's'}` : null,
         routeChoiceCount > 0 ? `${routeChoiceCount} route decision${routeChoiceCount === 1 ? '' : 's'}` : null
     ].filter(Boolean);
 
@@ -365,13 +346,11 @@ const burdenDetailFor = ({
 const buildMemoryBurden = ({
     forgottenTileCount,
     partialPairCount,
-    activeThreatCount,
     routeChoices,
     recallMistakes
 }: {
     forgottenTileCount: number;
     partialPairCount: number;
-    activeThreatCount: number;
     routeChoices: readonly RouteChoice[];
     recallMistakes: number;
 }): MemoryBurdenFeedback => {
@@ -380,7 +359,6 @@ const buildMemoryBurden = ({
     const score =
         forgottenTileCount * 2 +
         partialPairCount +
-        activeThreatCount * 2 +
         greedyOrMysteryChoiceCount +
         Math.min(2, recallMistakes);
     const label = burdenLabelFor(score);
@@ -392,7 +370,6 @@ const buildMemoryBurden = ({
             label,
             forgottenTileCount,
             partialPairCount,
-            activeThreatCount,
             routeChoiceCount
         }),
         tone: burdenToneFor(label)
@@ -402,7 +379,6 @@ const buildMemoryBurden = ({
 const nextMemoryMoveFor = ({
     focusLabel,
     forgottenTileCount,
-    activeThreatCount,
     rememberedClueTileCount,
     hasGreedChoice,
     hasMysteryChoice,
@@ -410,7 +386,6 @@ const nextMemoryMoveFor = ({
 }: {
     focusLabel: MemoryRecallFeedback['focusLabel'];
     forgottenTileCount: number;
-    activeThreatCount: number;
     rememberedClueTileCount: number;
     hasGreedChoice: boolean;
     hasMysteryChoice: boolean;
@@ -422,14 +397,6 @@ const nextMemoryMoveFor = ({
             label: 'Recover forgotten marks',
             detail: `Confirm a known pair before chasing route value; ${forgottenTileCount} tile memory marker${forgottenTileCount === 1 ? ' is' : 's are'} unstable.`,
             tone: 'danger'
-        };
-    }
-    if (activeThreatCount > 0) {
-        return {
-            id: 'next-memory-move-threat',
-            label: 'Read patrol positions',
-            detail: `Hold the current and next threat tile in memory before flipping adjacent cards.`,
-            tone: 'watch'
         };
     }
     if (hasGreedChoice && focusLabel !== 'locked') {
@@ -507,37 +474,8 @@ const MEMORY_TAX_MUTATOR_COPY: Partial<Record<MutatorId, { label: string; detail
     }
 };
 
-const MEMORY_ASSIST_RELIC_COPY: Partial<Record<RelicId, (run: RunState) => MemoryFeedbackLine>> = {
-    memorize_under_short_memorize: (run) => ({
-        id: 'memory-assist-short-memorize-answer',
-        label: 'Short-study answer',
-        detail: hasMutator(run, 'short_memorize')
-            ? 'This relic directly answers the active short-study tax.'
-            : 'Banked for the next short-study floor so fast encoding stays fair.',
-        tone: hasMutator(run, 'short_memorize') ? 'reward' : 'stable'
-    }),
-    peek_charge_plus_one: (run) => ({
-        id: 'memory-assist-peek-charge',
-        label: `${run.peekCharges} peek read${run.peekCharges === 1 ? '' : 's'} ready`,
-        detail: 'Peeks can confirm one uncertain symbol or dungeon card without spending a committed flip.',
-        tone: run.peekCharges > 0 ? 'reward' : 'stable'
-    }),
-    pin_cap_plus_one: (run) => ({
-        id: 'memory-assist-pin-cap',
-        label: `Pin capacity ${runStringArray(run.pinnedTileIds).length}/${run.activeContract?.maxPinsTotalRun ?? 'expanded'}`,
-        detail: 'Expanded pin space lets the player author a safer path through noisy symbol bands.',
-        tone: 'stable'
-    }),
-    chapter_compass: () => ({
-        id: 'memory-assist-chapter-compass',
-        label: 'Chapter compass',
-        detail: 'Future drafts can answer upcoming memory taxes instead of only reacting after a lapse.',
-        tone: 'reward'
-    })
-};
-
 const buildMemoryTaxLines = (run: RunState): MemoryFeedbackLine[] =>
-    unique(runMutatorIds(run.activeMutators))
+    unique(runArray<MutatorId>(run.activeMutators))
         .flatMap((mutator) => {
             const copy = MEMORY_TAX_MUTATOR_COPY[mutator];
             return copy
@@ -548,14 +486,6 @@ const buildMemoryTaxLines = (run: RunState): MemoryFeedbackLine[] =>
                       }
                   ]
                 : [];
-        })
-        .slice(0, 4);
-
-const buildMemoryAssistLines = (run: RunState): MemoryFeedbackLine[] =>
-    unique(runRelicIds(run.relicIds))
-        .flatMap((relicId) => {
-            const makeLine = MEMORY_ASSIST_RELIC_COPY[relicId];
-            return makeLine ? [makeLine(run)] : [];
         })
         .slice(0, 4);
 
@@ -571,11 +501,6 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
             .filter((tile) => forgottenSet.has(tile.id))
             .map(tileMemoryLabel)
     ).slice(0, 6);
-    const activeEnemyHazards = activeEnemyHazardsForBoard(board);
-    const revealedEnemyTiles = tiles.filter(
-        (tile) => tile.dungeonCardKind === 'enemy' && tile.dungeonCardState === 'revealed'
-    );
-    const activeRoute = getCurrentDungeonNode(run.dungeonRun);
     const focus = normalizeRecallFocus(run.recallFocus);
     const nextCleanMatchBonus = focus * RECALL_FOCUS_MATCH_SCORE;
     const clueBonus = rememberedClueTiles.length > 0 ? RECALL_CLUE_MATCH_SCORE : 0;
@@ -583,20 +508,16 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
     const recallPlan = buildRecallPlan(tiles, pinnedTileIds, forgottenTileIds);
     const overloadScore =
         run.recallMistakesThisFloor +
-        Math.ceil(forgottenTileIds.length / 2) +
-        activeEnemyHazards.length +
-        revealedEnemyTiles.length;
+        Math.ceil(forgottenTileIds.length / 2);
 
     const pressure: MemoryRecallFeedback['pressure'] =
         overloadScore >= 4 ? 'overloaded' : overloadScore >= 2 ? 'strained' : 'clear';
     const focusLabel = focusLabelFor(focus);
-    const activeThreatCount = activeEnemyHazards.length + revealedEnemyTiles.length;
     const roomIdentity = roomIdentityFor(run);
     const totalNextCleanMatchBonus = nextCleanMatchBonus + clueBonus;
     const burden = buildMemoryBurden({
         forgottenTileCount: forgottenTileIds.length,
         partialPairCount: symbolMap.partialPairCount,
-        activeThreatCount,
         routeChoices: [],
         recallMistakes: run.recallMistakesThisFloor
     });
@@ -608,14 +529,6 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
             label: `${board.routeWorldProfile.routeType} route memory`,
             detail: board.routeWorldProfile.summary,
             tone: board.routeWorldProfile.routeType === 'greed' ? 'danger' : 'watch'
-        });
-    }
-    if (activeRoute) {
-        path.push({
-            id: 'current-dungeon-node',
-            label: activeRoute.label,
-            detail: activeRoute.detail,
-            tone: activeRoute.routeType === 'greed' || activeRoute.kind === 'elite' ? 'danger' : 'stable'
         });
     }
     path.push({
@@ -647,24 +560,6 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
             label: 'Scout trail active',
             detail: `${lanternWardScouts} Lantern Ward and ${omenSealScouts} Omen Seal clue reads this floor.`,
             tone: 'stable'
-        });
-    }
-
-    const enemies: MemoryFeedbackLine[] = [];
-    if (activeEnemyHazards.length > 0) {
-        enemies.push({
-            id: 'enemy-hazard-memory',
-            label: `${activeEnemyHazards.length} patrol memory target${activeEnemyHazards.length === 1 ? '' : 's'}`,
-            detail: 'Remember current and next enemy tiles before flipping near them.',
-            tone: 'danger'
-        });
-    }
-    if (revealedEnemyTiles.length > 0) {
-        enemies.push({
-            id: 'revealed-enemy-cards',
-            label: `${revealedEnemyTiles.length} revealed enemy card${revealedEnemyTiles.length === 1 ? '' : 's'}`,
-            detail: 'Pair enemy symbols deliberately to convert threat memory into progress.',
-            tone: 'watch'
         });
     }
 
@@ -724,15 +619,6 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
             tone: totalNextCleanMatchBonus > 0 ? 'reward' : 'watch'
         }
     ];
-    if (hasRunRelic(run, 'memorize_bonus_ms')) {
-        upgrades.push({
-            id: 'memorize-relic',
-            label: 'Memorize upgrade owned',
-            detail: 'Extra memorization time makes route and symbol recall more reliable.',
-            tone: 'stable'
-        });
-    }
-    upgrades.push(...buildMemoryAssistLines(run).filter((line) => !upgrades.some((upgrade) => upgrade.id === line.id)));
 
     return {
         focus,
@@ -744,14 +630,12 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
             pressure,
             focusLabel,
             rememberedClueTileCount: rememberedClueTiles.length,
-            forgottenTileCount: forgottenTileIds.length,
-            activeThreatCount
+            forgottenTileCount: forgottenTileIds.length
         }),
-        pressureDetail: pressureDetailFor(pressure, forgottenTileIds.length, activeThreatCount),
+        pressureDetail: pressureDetailFor(pressure, forgottenTileIds.length),
         nextMemoryMove: nextMemoryMoveFor({
             focusLabel,
             forgottenTileCount: forgottenTileIds.length,
-            activeThreatCount,
             rememberedClueTileCount: rememberedClueTiles.length,
             // No route is offered any more, so the coach never has a greedy or mysterious door to
             // point at. Gen 173.
@@ -768,7 +652,6 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
         pressure,
         path,
         clues,
-        enemies,
         symbols,
         recallPlan,
         penalties,

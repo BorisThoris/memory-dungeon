@@ -33,19 +33,15 @@ const run = (b: BoardState, overrides: Partial<RunState> = {}): RunState => ({
 });
 
 describe('turn mismatch rules', () => {
-    it('hides mismatched tiles and preserves sprung trap state', () => {
-        const b = board([
-            tile('a'),
-            tile('b'),
-            tile('trap', 'flipped', { dungeonCardKind: 'trap', dungeonCardState: 'resolved' })
-        ]);
+    it('hides the mismatched tiles and leaves the rest of the board alone', () => {
+        const b = board([tile('a'), tile('b'), tile('gone', 'removed')]);
 
-        const hidden = createHiddenMismatchBoard(b, ['a', 'trap']);
+        const hidden = createHiddenMismatchBoard(b, ['a', 'gone']);
 
         expect(hidden.flippedTileIds).toEqual([]);
         expect(hidden.tiles.find((candidate) => candidate.id === 'a')?.state).toBe('hidden');
         expect(hidden.tiles.find((candidate) => candidate.id === 'b')?.state).toBe('flipped');
-        expect(hidden.tiles.find((candidate) => candidate.id === 'trap')?.state).toBe('flipped');
+        expect(hidden.tiles.find((candidate) => candidate.id === 'gone')?.state).toBe('removed');
     });
 
     it('uses guard tokens before life loss', () => {
@@ -155,12 +151,6 @@ describe('turn mismatch rules', () => {
             tile('sealed-b', 'flipped', { pairKey: 'sealed', tileTraitKind: 'sealed' })
         ]);
         const base = run(b, {
-            hazardTileTriggersThisFloor: Number.NaN,
-            hazardShuffleSnaresThisFloor: -2,
-            hazardMirrorDecoysThisFloor: 1.9,
-            hazardFragileCacheBreaksThisFloor: Number.POSITIVE_INFINITY,
-            safeHazardWardChargesThisFloor: 1.9,
-            safeHazardWardsUsedThisFloor: Number.NaN,
             peekCharges: 2.9,
             recallMistakesThisFloor: Number.NaN,
             stats: {
@@ -183,12 +173,6 @@ describe('turn mismatch rules', () => {
             decoyTouched: false
         });
 
-        expect(resolved.hazardTileTriggersThisFloor).toBe(0);
-        expect(resolved.hazardShuffleSnaresThisFloor).toBe(0);
-        expect(resolved.hazardMirrorDecoysThisFloor).toBe(1);
-        expect(resolved.hazardFragileCacheBreaksThisFloor).toBe(0);
-        expect(resolved.safeHazardWardChargesThisFloor).toBe(1);
-        expect(resolved.safeHazardWardsUsedThisFloor).toBe(0);
         expect(resolved.peekCharges).toBe(1);
         expect(resolved.recallMistakesThisFloor).toBe(1);
         expect(resolved.stats.tries).toBe(1);
@@ -221,27 +205,6 @@ describe('turn mismatch rules', () => {
         expect(resolved.stats.guardTokens).toBe(0);
     });
 
-    it('adds boss identity mismatch pressure on boss floors', () => {
-        const b = board([tile('a'), tile('b')], {
-            floorTag: 'boss',
-            dungeonBossId: 'spire_observer'
-        });
-        const base = run(b, {
-            stats: { ...run(b).stats, tries: 1, mismatches: 0 }
-        });
-
-        const resolved = resolveMismatchTurnTransition({
-            run: base,
-            board: b,
-            tileIds: ['a', 'b'],
-            sourceTiles: b.tiles,
-            triesDelta: 1,
-            decoyTouched: false
-        });
-
-        expect(resolved.stats.tries).toBe(3);
-        expect(resolved.stats.mismatches).toBe(1);
-    });
 
     it('tracks trait mismatch and volatile shuffle counters', () => {
         const b = board([
@@ -270,67 +233,7 @@ describe('turn mismatch rules', () => {
         expect(resolved.stats.volatileTraitShuffles).toBe(1);
     });
 
-    it('lets Stasis absorb snare mismatches without negative ward charges', () => {
-        const b = board([
-            tile('snare-a', 'flipped', {
-                pairKey: 'snare',
-                tileHazardKind: 'shuffle_snare',
-                tileTraitKind: 'stasis'
-            }),
-            tile('safe-a', 'flipped', { pairKey: 'safe' }),
-            tile('safe-b', 'hidden', { pairKey: 'safe' }),
-            tile('extra-a', 'hidden', { pairKey: 'extra' }),
-            tile('extra-b', 'hidden', { pairKey: 'extra' })
-        ]);
-        const base = run(b, {
-            safeHazardWardChargesThisFloor: 0,
-            safeHazardWardsUsedThisFloor: 0
-        });
 
-        const resolved = resolveMismatchTurnTransition({
-            run: base,
-            board: b,
-            tileIds: ['snare-a', 'safe-a'],
-            sourceTiles: [b.tiles[0]!, b.tiles[1]!],
-            triesDelta: 1,
-            decoyTouched: false
-        });
-
-        expect(resolved.safeHazardWardChargesThisFloor).toBe(0);
-        expect(resolved.safeHazardWardsUsedThisFloor).toBe(1);
-        expect(resolved.hazardShuffleSnaresThisFloor).toBe(0);
-        expect(resolved.hazardTileTriggersThisFloor).toBe(0);
-    });
-
-    it('springs revealed trap mismatches through the transition', () => {
-        const b = board([
-            tile('trap-a', 'flipped', {
-                pairKey: 'trap',
-                dungeonCardKind: 'trap',
-                dungeonCardState: 'revealed'
-            }),
-            tile('trap-b', 'flipped', {
-                pairKey: 'trap',
-                dungeonCardKind: 'trap',
-                dungeonCardState: 'revealed'
-            }),
-            tile('c')
-        ]);
-        const base = run(b, { lives: 3 });
-
-        const resolved = resolveMismatchTurnTransition({
-            run: base,
-            board: b,
-            tileIds: ['trap-a', 'c'],
-            sourceTiles: [b.tiles[0]!, b.tiles[2]!],
-            triesDelta: 1,
-            decoyTouched: false
-        });
-
-        expect(resolved.dungeonTrapsTriggered).toBe(base.dungeonTrapsTriggered + 1);
-        expect(resolved.lives).toBeLessThanOrEqual(3);
-        expect(resolved.board?.tiles.find((candidate) => candidate.id === 'trap-a')?.dungeonCardState).toBe('resolved');
-    });
 });
 
 describe('the magpie on a real miss', () => {

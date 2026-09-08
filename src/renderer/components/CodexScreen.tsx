@@ -12,17 +12,15 @@ import {
     ENCYCLOPEDIA_VERSION
 } from '../../shared/game-catalog';
 import { getTileTraitCodexRows, getTileTraitInteractionCodexRows } from '../../shared/tile-trait-codex';
-import { getActiveContentLock, isDemoBuild } from '../../shared/content-lock-state';
-import { RELIC_POOL } from '../../shared/relics';
+import { isDemoBuild } from '../../shared/content-lock-state';
+import { CODEX_SCREEN_COPY } from '../copy/screenCopy';
 import { getUiStateCopy } from '../../shared/ui-state-copy';
 import { FittedGrid, MetaShell, SectionRail, UiButton } from '../ui';
 import { playUiBackSfx, playUiClickSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
 import { useAppStore } from '../store/useAppStore';
 import {
-    buildCodexBuildRows,
     buildCodexModeRows,
     buildCodexMutatorRows,
-    buildCodexRelicRows,
     buildCodexResidentRows,
     CODEX_TOC,
     filterTopics
@@ -120,10 +118,8 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
             residents: { kicker: 'Resident', entries: buildCodexResidentRows() },
             contracts: { kicker: 'Contract', entries: ENCYCLOPEDIA_CONTRACT_TOPICS },
             'featured-runs': { kicker: 'Featured run', entries: ENCYCLOPEDIA_FEATURED_RUN_TOPICS },
-            builds: { kicker: 'Build archetype', entries: buildCodexBuildRows() },
             modes: { kicker: 'Mode', entries: buildCodexModeRows() },
             achievements: { kicker: 'Achievement', entries: ACHIEVEMENTS },
-            relics: { kicker: 'Relic', entries: buildCodexRelicRows() },
             mutators: { kicker: 'Mutator', entries: buildCodexMutatorRows() }
         };
         return CODEX_TOC.map((item) => {
@@ -163,9 +159,7 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
             regionProps={{ 'data-codex-context': stackedOnGameplay ? 'in-run-desk' : 'menu' }}
             stackedOnGameplay={stackedOnGameplay}
             subtitle={
-                isDemoBuild()
-                    ? `Demo build: ${getActiveContentLock().relicPool?.length ?? RELIC_POOL.length} of ${RELIC_POOL.length} relics and Act I mutators are in play.`
-                    : `Everything the dungeon can put in front of you, in the words the run uses. Version ${ENCYCLOPEDIA_VERSION}.`
+                isDemoBuild() ? CODEX_SCREEN_COPY.demoSubtitle : CODEX_SCREEN_COPY.subtitle(ENCYCLOPEDIA_VERSION)
             }
             testId="codex-screen"
             title="Codex"

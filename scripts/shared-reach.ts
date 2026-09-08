@@ -45,17 +45,14 @@ export const SHARED_REACH_EXEMPTIONS: Record<string, string> = {
     'blueprintAstPoc.ts': 'The dev-only AST round-trip target named in scripts/ast-allowlist.json and read by the Vite dev endpoint; referenced from JSON, so no import edge reaches it.',
     'blueprintGlossaryGen.ts': 'Generated glossary read by the docs generator.',
     'content-security-policy.ts': 'Read by vite.config.mts at build time to stamp the policy into index.html.',
-    'dungeon-topology.ts': 'Topology model the dungeon-topology audit script walks.',
     'mechanics-catalog-appendix-builder.ts': 'Builds the mechanics appendix for the docs generator.',
+    'save-field-policy.ts': 'Field policy table saying which save fields need a migration when they change; the save tests hold the schema to it and `audit:save-field-policy` reads it. Not a migration routine, so nothing calls it at load.',
     'release-checklist.ts': 'Read by the release-checklist script and its gate.',
     'steam-rich-presence-tokens.ts': 'Token text the Steam Partner-site generator emits; the game sets presence through rich-presence.ts.',
 
     // Records and contract tables whose consumer is a test.
     'color-vision.ts': 'Colour-distance maths the palette tests check the shipped palette against.',
     'difficulty-profile.ts': 'The shipped tuning profile written down so a change to the curve has to change this too.',
-    'dungeon-combinatoric-matrix.ts': 'QA coverage matrix: which dungeon combinations are covered, excluded or future.',
-    'dungeon-save-migration.ts': 'Field policy table saying which save fields need a migration when they change; the save tests hold the schema to it. Not a migration routine, so nothing calls it at load.',
-    'dungeon-versioning.ts': 'Rules-change taxonomy that says which edits must bump the rules version.',
     'gameplay-interaction-graph.ts': 'Validates the interaction graph JSON against the feedback facts.',
     'localization-readiness.ts': 'Localization readiness record: what is source English, deferred or excluded.',
     'main-menu-hub-quality.ts': 'Hub quality contract: the four things the main menu must answer.',
@@ -66,9 +63,6 @@ export const SHARED_REACH_EXEMPTIONS: Record<string, string> = {
     'social-play-scope.ts': 'Scope record for what social play does and does not include offline.',
 
     // Test fixtures.
-    'dungeon-e2e-fixtures.ts':
-        'A capture plan, not fixtures: ten recipes naming a fixture id, seed, floor, selectors and screenshot filenames for the dungeon room types. The fixtures it names (dungeonEnemy, dungeonBoss, ...) were never built, so this is a record of intended coverage that does not exist.',
-    'dungeon-feature-coverage.ts': 'Test-only dungeon feature coverage helper.',
     'game-fixtures.ts': 'Shared test fixtures.',
     'gameplay-event-fixtures.ts': 'Shared test fixtures for gameplay events.'
 };

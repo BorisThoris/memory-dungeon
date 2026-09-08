@@ -55,7 +55,7 @@ test.describe('portfolio visual smoke gate', () => {
     await assertBoardVisible(page);
     await capture(page, 'active-board-desktop', 'Active board');
 
-    await openPlayablePathFixture(page, 'activeRunWithHazards');
+    await openPlayablePathFixture(page, 'cascadeClump');
     await openSettings(page);
     await capture(page, 'settings-overlay-desktop', 'Settings overlay');
   });

@@ -6,17 +6,12 @@ import {
     INITIAL_SHUFFLE_CHARGES,
     type BoardState,
     type MutatorId,
-    type RelicId,
     type RunState,
     type WeakerShuffleMode
 } from './contracts';
 import { filterMutatorsByContentLock } from './content-lock-state';
-import { createBonusRewardLedger, hasRewardPerk } from './bonus-rewards';
-import { applyRelicImmediateThroughGameplayCore } from './gameplay-core-adapters';
 import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
-import { hasRunRelic } from './relics';
-import { createDungeonRunMapState } from './run-map';
 import { pickFloorCurio, seatFloorCurio } from './floor-curio-rules';
 import { countFindablePairs } from './board-tile-generation-rules';
 import { boardHasGlassDecoy } from './board-inspection';
@@ -36,7 +31,6 @@ export interface CreateRunOptions {
     puzzleId?: string | null;
     gauntletDurationMs?: number | null;
     fixedBoard?: BoardState | null;
-    initialRelicIds?: RelicId[];
     /** Import / debug: use historical rules version for same tile order. */
     runRulesVersionOverride?: number;
     /** H4: add wild tile to generated boards. */
@@ -49,7 +43,6 @@ export interface CreateRunOptions {
     resolveDelayMultiplier?: number;
     echoFeedbackEnabled?: boolean;
     wildMenuRun?: boolean;
-    dungeonShowcaseRun?: boolean;
     /** First-run guidance: build floor 1 as ordinary real pairs so prompts never target specials. */
     onboardingSafeFirstFloor?: boolean;
     /** Seats for a same-device multiplayer run; omitted for every solo run. */
@@ -98,11 +91,8 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
             featuredObjectiveId: initialFeaturedObjectiveId,
             cycleFloor: initialCycleFloor,
             gameMode: useOnboardingSafeFirstFloor ? undefined : gameMode,
-            suppressFindables: useOnboardingSafeFirstFloor,
-            relicIds: options.initialRelicIds ?? [],
-            startingLoadoutId: null
+            suppressFindables: useOnboardingSafeFirstFloor
         });
-    const dungeonRun = createDungeonRunMapState(runSeed, rulesVersion, 1);
 
     const traitRouteObjective = getTraitRouteObjectiveSeed(board);
     const run: RunState = {
@@ -129,7 +119,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         startingLoadoutId: null,
         shuffleNonce: 0,
         activeMutators,
-        relicIds: [...(options.initialRelicIds ?? [])],
+        relicIds: [],
         rewardPerkIds: [],
         relicTiersClaimed: 0,
         bonusRelicPicksNextOffer: 0,
@@ -142,8 +132,25 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         endlessRiskWager: null,
         pendingRouteCardPlan: null,
         sideRoom: null,
-        dungeonRun,
-        bonusRewardLedger: createBonusRewardLedger(),
+        /*
+         * The run map, the reward ledger and the relic list are still on the run shape until the
+         * save migration strips them; with no map, no rewards and no relics they start empty.
+         */
+        dungeonRun: {
+            seed: runSeed,
+            rulesVersion,
+            act: 1,
+            currentFloor: 1,
+            currentNodeId: '',
+            selectedNodeId: null,
+            nodes: []
+        },
+        bonusRewardLedger: {
+            claimedInstanceIds: [],
+            claimedRewardIds: {},
+            discoveredSecretRooms: 0,
+            openedTreasureRooms: 0
+        },
         traitRouteObjectiveProgressThisFloor: 0,
         traitRouteObjectiveRequiredThisFloor: traitRouteObjective?.required ?? 0,
         traitRouteObjectiveCompletedThisFloor: false,
@@ -179,7 +186,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         resolveDelayMultiplier: options.resolveDelayMultiplier ?? 1,
         echoFeedbackEnabled: options.echoFeedbackEnabled ?? true,
         wildMenuRun: options.wildMenuRun ?? false,
-        dungeonShowcaseRun: options.dungeonShowcaseRun ?? false,
+        dungeonShowcaseRun: false,
         shuffleUsedThisFloor: false,
         destroyUsedThisFloor: false,
         decoyFlippedThisFloor: false,
@@ -255,17 +262,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         enemyHazardsDefeatedThisFloor: 0
     };
 
-    // Starting loadouts went in Gen 175; a run starts with what it starts with.
-    let runWithRelics = run;
-    for (const relicId of runWithRelics.relicIds) {
-        runWithRelics = applyRelicImmediateThroughGameplayCore(
-            runWithRelics,
-            relicId,
-            `starting-relic:${runWithRelics.runSeed}:${relicId}`
-        ).run;
-    }
-
-    const memorizeMs = getMemorizeDurationForRun(runWithRelics, 1) + runWithRelics.pendingMemorizeBonusMs;
+    const memorizeMs = getMemorizeDurationForRun(run, 1) + run.pendingMemorizeBonusMs;
 
     /*
      * Floor one has a resident too — seated, not welcomed. If the opening floor had nobody, the
@@ -275,15 +272,8 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
      * the change. Say hello and they will tell you themselves.
      */
     return seatFloorCurio(
-        {
-            ...runWithRelics,
-            freeShuffleThisFloor: hasRunRelic(runWithRelics, 'first_shuffle_free_per_floor'),
-            regionShuffleFreeThisFloor:
-                hasRunRelic(runWithRelics, 'region_shuffle_free_first') ||
-                hasRewardPerk(runWithRelics, 'free_first_swap_per_floor'),
-            timerState: createTimerState({ memorizeRemainingMs: memorizeMs })
-        },
-        pickFloorCurio(runWithRelics.runSeed, 1, runWithRelics.runRulesVersion)
+        { ...run, timerState: createTimerState({ memorizeRemainingMs: memorizeMs }) },
+        pickFloorCurio(run.runSeed, 1, run.runRulesVersion)
     );
 };
 

@@ -14,7 +14,7 @@ test.describe('Controls from the pause menu', () => {
 
     test('opens the shortcuts reference, and closing it comes back to pause', async ({ page }) => {
         test.setTimeout(120_000);
-        await openPlayablePathFixture(page, 'activeRunWithHazards');
+        await openPlayablePathFixture(page, 'cascadeClump');
         await expectGameplayReady(page);
 
         await page.getByTestId('game-toolbar-main-menu').click({ force: true });

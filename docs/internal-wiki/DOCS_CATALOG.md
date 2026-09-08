@@ -36,11 +36,8 @@
 | [MARKET_SIMILAR_GAMES_RESEARCH.md](../MARKET_SIMILAR_GAMES_RESEARCH.md) | Market / comps research |
 | [MEMORY_DUNGEON_PROJECT_REPORT.md](../MEMORY_DUNGEON_PROJECT_REPORT.md) | Current project report for the Windows-first Electron desktop game |
 | [MUTATORS.md](../MUTATORS.md) | Mutator reference checklist |
-| [OBSIDIAN_RELIC_THEORY.md](../OBSIDIAN_RELIC_THEORY.md) | Relic design theory |
 | [PICTURE_SUPERIORITY_CHECKLIST.md](../PICTURE_SUPERIORITY_CHECKLIST.md) | Picture-superiority UX checklist |
 | [PUZZLE_CONTRIBUTING.md](../PUZZLE_CONTRIBUTING.md) | Contributing puzzles |
-| [RELIC_ROSTER.md](../RELIC_ROSTER.md) | Relic roster |
-| [RELIC_SYNERGY_PLAYTEST.md](../RELIC_SYNERGY_PLAYTEST.md) | Relic synergy playtest notes |
 | [STRAY_TILE.md](../STRAY_TILE.md) | Stray tile mechanic |
 | [SYMBOL_GUIDELINES.md](../SYMBOL_GUIDELINES.md) | Symbol art / semantics guidelines |
 | [VIEWPORT_FIT_UI.md](../VIEWPORT_FIT_UI.md) | Viewport fit / shell behavior |

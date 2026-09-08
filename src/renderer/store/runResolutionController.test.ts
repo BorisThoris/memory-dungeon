@@ -26,7 +26,6 @@ type ResolutionPatch = Partial<{
     achievementBridgeNotice: string | null;
     boardPinMode: boolean;
     destroyPairArmed: boolean;
-    dungeonExitPromptOpen: boolean;
     matchScorePop: MatchScorePop | null;
     mismatchScorePop: MismatchScorePop | null;
     newlyUnlockedAchievements: AchievementId[];
@@ -57,7 +56,6 @@ interface Harness {
 const runSurfaceReset = {
     boardPinMode: false,
     destroyPairArmed: false,
-    dungeonExitPromptOpen: false,
     matchScorePop: null,
     mismatchScorePop: null,
     peekModeArmed: false,
@@ -142,7 +140,6 @@ describe('runResolutionController', () => {
         expect(harness.state.view).toBe('playing');
         expect(harness.state.saveData.bestScore).toBe(250);
         expect(harness.state.newlyUnlockedAchievements).toEqual([]);
-        expect(harness.state.dungeonExitPromptOpen).toBe(false);
         expect(harness.persistSaveData).toHaveBeenCalledWith(harness.state.saveData);
         expect(harness.persistSaveDataThenUnlockAchievements).not.toHaveBeenCalled();
         expect(gameSfxMocks.playFloorClearSfx).toHaveBeenCalledWith(0.5);
@@ -243,7 +240,6 @@ describe('runResolutionController', () => {
         Object.assign(harness.state, {
             boardPinMode: true,
             destroyPairArmed: true,
-            dungeonExitPromptOpen: true,
             peekModeArmed: true,
             shopReturnMode: 'floor' as const,
             tileSwapArmed: true,
@@ -271,7 +267,6 @@ describe('runResolutionController', () => {
         expect(harness.state.saveData.bestScore).toBe(500);
         expect(harness.state.boardPinMode).toBe(false);
         expect(harness.state.destroyPairArmed).toBe(false);
-        expect(harness.state.dungeonExitPromptOpen).toBe(false);
         expect(harness.state.peekModeArmed).toBe(false);
         expect(harness.state.shopReturnMode).toBeNull();
         expect(harness.state.tileSwapArmed).toBe(false);
@@ -289,7 +284,6 @@ describe('runResolutionController', () => {
             ...baseRun,
             achievementsEnabled: false,
             activeMutators: { length: 3 },
-            relicIds: { length: 2 },
             lives: 0,
             status: 'gameOver',
             stats: {
@@ -305,8 +299,7 @@ describe('runResolutionController', () => {
         expect(telemetryMocks.trackEvent).toHaveBeenCalledWith(
             'run_complete',
             expect.objectContaining({
-                mutatorCount: 0,
-                relicCount: 0
+                mutatorCount: 0
             })
         );
     });
@@ -396,122 +389,8 @@ describe('runResolutionController', () => {
         );
     });
 
-    it('repairs impossible primary exit locks before storing a resolved run', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' });
-        const harness = createHarness(baseRun);
-        const exitTile: Tile = {
-            ...tile('exit', EXIT_PAIR_KEY, 'flipped'),
-            dungeonCardKind: 'exit',
-            dungeonExitLockKind: 'iron'
-        };
-        const lockedBoard = board([tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched'), exitTile], {
-            dungeonExitLockKind: 'iron',
-            dungeonExitTileId: 'exit',
-            matchedPairs: 1,
-            pairCount: 1
-        });
 
-        harness.controller.applyResolvedRun({
-            ...baseRun,
-            board: lockedBoard,
-            status: 'playing'
-        });
 
-        expect(harness.state.run?.board?.dungeonExitLockKind).toBe('none');
-        expect(harness.state.run?.board?.tiles.find((candidate) => candidate.id === 'exit')?.dungeonExitLockKind).toBe(
-            'none'
-        );
-        expect(harness.state.run?.gameplayCommandJournal).toEqual([
-            expect.objectContaining({ type: 'run.progression_repair' })
-        ]);
-        expect(harness.state.run?.gameplayEventJournal).toEqual(expect.arrayContaining([
-            expect.objectContaining({
-                type: 'run.progression_repaired',
-                repairKinds: expect.arrayContaining(['exit_lock', 'exit_metadata'])
-            }),
-            expect.objectContaining({ type: 'feedback.requested', cue: 'safety.progression.repaired' })
-        ]));
-    });
-
-    it('keeps primary exit locks when the run already carries the required key', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' });
-        const harness = createHarness(baseRun);
-        const exitTile: Tile = {
-            ...tile('exit', EXIT_PAIR_KEY, 'flipped'),
-            dungeonCardKind: 'exit',
-            dungeonExitLockKind: 'iron'
-        };
-        const lockedBoard = board([tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched'), exitTile], {
-            dungeonExitLockKind: 'iron',
-            dungeonExitTileId: 'exit',
-            matchedPairs: 1,
-            pairCount: 1
-        });
-
-        harness.controller.applyResolvedRun({
-            ...baseRun,
-            board: lockedBoard,
-            dungeonKeys: { iron: 1 },
-            status: 'playing'
-        });
-
-        expect(harness.state.run?.board?.dungeonExitLockKind).toBe('iron');
-        expect(harness.state.run?.board?.tiles.find((candidate) => candidate.id === 'exit')?.dungeonExitLockKind).toBe(
-            'iron'
-        );
-    });
-
-    it('defeats stale boss hazards before storing a resolved run', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' });
-        const harness = createHarness(baseRun);
-        const clearedBossBoard = board([tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched')], {
-            dungeonBossId: 'trap_warden',
-            dungeonObjectiveId: 'defeat_boss',
-            enemyHazards: [
-                {
-                    bossId: 'trap_warden',
-                    currentTileId: 'a1',
-                    damage: 1,
-                    hp: 1,
-                    id: 'stale-warden',
-                    kind: 'warden',
-                    label: 'Stale Warden',
-                    maxHp: 1,
-                    nextTileId: 'a2',
-                    pattern: 'guard',
-                    state: 'revealed'
-                }
-            ],
-            floorTag: 'boss',
-            matchedPairs: 1,
-            pairCount: 1
-        });
-
-        harness.controller.applyResolvedRun({
-            ...baseRun,
-            board: clearedBossBoard,
-            dungeonEnemiesDefeated: 0,
-            dungeonEnemiesDefeatedThisFloor: 0,
-            enemyHazardsDefeatedThisFloor: 0,
-            status: 'playing'
-        });
-
-        expect(harness.state.run?.board?.enemyHazards?.[0]).toMatchObject({ hp: 0, state: 'defeated' });
-        expect(harness.state.run?.dungeonEnemiesDefeated).toBe(1);
-        expect(harness.state.run?.dungeonEnemiesDefeatedThisFloor).toBe(1);
-        expect(harness.state.run?.enemyHazardsDefeatedThisFloor).toBe(1);
-        expect(harness.state.run?.gameplayCommandJournal).toEqual([
-            expect.objectContaining({ type: 'run.progression_repair' })
-        ]);
-        expect(harness.state.run?.gameplayEventJournal).toEqual(expect.arrayContaining([
-            expect.objectContaining({
-                type: 'run.progression_repaired',
-                repairKinds: ['enemy_hazard'],
-                enemyHazardIdsDefeated: ['stale-warden']
-            }),
-            expect.objectContaining({ type: 'feedback.requested', cue: 'safety.progression.repaired' })
-        ]));
-    });
 
     it('plays a payoff cue from the match pop payload when a board resolve creates match feedback', () => {
         const baseRun = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' });
@@ -595,7 +474,6 @@ describe('runResolutionController', () => {
         const harness = createHarness(baseRun);
         Object.assign(harness.state, {
             boardPinMode: true,
-            dungeonExitPromptOpen: true,
             peekModeArmed: true,
             tileSwapArmed: true,
             tileSwapFirstTileId: baseRun.board!.tiles[0]?.id ?? null
@@ -610,7 +488,6 @@ describe('runResolutionController', () => {
 
         expect(harness.state.view).toBe('gameOver');
         expect(harness.state.boardPinMode).toBe(false);
-        expect(harness.state.dungeonExitPromptOpen).toBe(false);
         expect(harness.state.peekModeArmed).toBe(false);
         expect(harness.state.tileSwapArmed).toBe(false);
         expect(harness.state.tileSwapFirstTileId).toBeNull();

@@ -7,7 +7,6 @@ import {
 import { runArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
-import { getTraitOpportunitySummary } from './trait-opportunities';
 
 export const TRAIT_ROUTE_OBJECTIVE_SCORE_REWARD = 25;
 
@@ -48,7 +47,6 @@ export interface TraitRouteObjectiveStatus {
 }
 
 export const getTraitRouteObjectiveSeed = (board: BoardState | null | undefined): TraitRouteObjectiveSeed | null => {
-    const summary = getTraitOpportunitySummary(board);
     if (!board) {
         return null;
     }
@@ -57,7 +55,7 @@ export const getTraitRouteObjectiveSeed = (board: BoardState | null | undefined)
         return null;
     }
     const required = Math.min(2, matchInteractionLines.length);
-    const label = summary.buildLabels[0] ?? 'Trait routes';
+    const label = required === 1 ? 'Trait route' : 'Trait routes';
     return {
         required,
         label,

@@ -1,5 +1,5 @@
 import type { BoardState, Tile, TileSuit } from './contracts';
-import { findSuitRegion, tileCanBreakInChunk, tileIsChunkTreasure } from './chunk-break-rules';
+import { findSuitRegion, tileCanBreakInChunk } from './chunk-break-rules';
 
 /**
  * The clump read: what a hidden tile is standing in, before the player commits to it.
@@ -20,7 +20,7 @@ export interface ClumpRead {
     pairsSharpWouldTake: number;
 }
 
-const canGoWithAChunk = (tile: Tile): boolean => tileCanBreakInChunk(tile) || tileIsChunkTreasure(tile);
+const canGoWithAChunk = (tile: Tile): boolean => tileCanBreakInChunk(tile);
 
 export const getClumpRead = (board: Pick<BoardState, 'columns' | 'tiles'>, tileId: string): ClumpRead | null => {
     const seed = board.tiles.find((tile) => tile.id === tileId);

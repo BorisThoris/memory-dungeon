@@ -710,61 +710,6 @@ describe('TileBoard touch and click controls', () => {
 
 
 
-    it('announces moving enemy patrol occupancy and next-target telegraphs', async () => {
-        const enemyBoard: BoardState = {
-            ...board,
-            enemyHazards: [
-                {
-                    id: 'hazard-1',
-                    kind: 'sentinel',
-                    label: 'Patrol Sentry',
-                    currentTileId: 'a2',
-                    nextTileId: 'a1',
-                    pattern: 'patrol',
-                    state: 'revealed',
-                    damage: 1,
-                    hp: 1,
-                    maxHp: 2
-                }
-            ]
-        };
-
-        const rendered = renderBoard({
-            board: enemyBoard,
-            debugPeekActive: false,
-            interactive: true,
-            onTileSelect: vi.fn(),
-            previewActive: false,
-            reduceMotion: false
-        });
-
-        fireEvent.focus(screen.getByTestId('tile-board-application'));
-        await waitFor(() => {
-            expect(screen.getByText(/Next target of moving enemy patrol Patrol Sentry, 1\/2 HP, 1 damage/i)).toBeInTheDocument();
-        });
-        rendered.unmount();
-
-        renderBoard({
-            board: {
-                ...enemyBoard,
-                enemyHazards: enemyBoard.enemyHazards!.map((hazard) => ({
-                    ...hazard,
-                    currentTileId: 'a1',
-                    nextTileId: 'a2'
-                }))
-            },
-            debugPeekActive: false,
-            interactive: true,
-            onTileSelect: vi.fn(),
-            previewActive: false,
-            reduceMotion: false
-        });
-        fireEvent.focus(screen.getByTestId('tile-board-application'));
-
-        await waitFor(() => {
-            expect(screen.getByText(/Occupied by revealed moving enemy patrol Patrol Sentry, 1\/2 HP, 1 damage/i)).toBeInTheDocument();
-        });
-    });
 
     it('exposes board grid dimensions on the frame for tests and assistive tech', () => {
         renderBoard({
@@ -945,46 +890,6 @@ describe('TileBoard touch and click controls', () => {
         expect(low.lowOrReducedQualityReadable).toBe(true);
     });
 
-    it('selects an occupied enemy patrol card from keyboard focus without pointer input', async () => {
-        const onTileSelect = vi.fn();
-        const enemyBoard: BoardState = {
-            ...board,
-            enemyHazards: [
-                {
-                    id: 'hazard-1',
-                    kind: 'sentinel',
-                    label: 'Patrol Sentry',
-                    currentTileId: 'a2',
-                    nextTileId: 'a1',
-                    pattern: 'patrol',
-                    state: 'revealed',
-                    damage: 1,
-                    hp: 1,
-                    maxHp: 2
-                }
-            ]
-        };
-
-        renderBoard({
-            board: enemyBoard,
-            debugPeekActive: false,
-            interactive: true,
-            onTileSelect,
-            previewActive: false,
-            reduceMotion: false
-        });
-
-        const boardApplication = screen.getByTestId('tile-board-application');
-        fireEvent.focus(boardApplication);
-        fireEvent.keyDown(boardApplication, { key: 'ArrowRight' });
-
-        await waitFor(() => {
-            expect(screen.getByText(/Occupied by revealed moving enemy patrol Patrol Sentry/i)).toBeInTheDocument();
-        });
-
-        fireEvent.keyDown(boardApplication, { key: 'Enter' });
-        expect(onTileSelect).toHaveBeenCalledWith('a2');
-    });
 
     it('sets shuffle animating on the frame while the WebGL stagger window is active', async () => {
         const tileBoardRef = createRef<TileBoardHandle>();

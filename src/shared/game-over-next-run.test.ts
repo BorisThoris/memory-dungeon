@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { RunSummary } from './contracts';
-import { createDungeonShowcaseRun, createNewRun, createRunSummary, finishMemorizePhase } from './game-core';
+import { createNewRun, createRunSummary, finishMemorizePhase } from './game-core';
 import { getGameOverNextRunRows } from './game-over-next-run';
 import { createDefaultSaveData } from './save-data';
 
@@ -52,20 +52,13 @@ describe('REG-096 game over next-run loop', () => {
         });
     });
 
-    it('labels explicit dungeon showcase summaries for run-it-back', () => {
-        const run = createRunSummary({ ...createDungeonShowcaseRun(0), status: 'gameOver', lives: 0 }, []);
-        const rows = getGameOverNextRunRows(run);
-
-        expect(rows.find((row) => row.id === 'run_it_back')?.value).toBe('Dungeon Showcase');
-    });
 
     it('keeps build recap pinned to the terminal run summary', () => {
         const summarized = createRunSummary(
             {
                 ...finishMemorizePhase(
                     createNewRun(0, {
-                        activeMutators: ['wide_recall', 'silhouette_twist'],
-                        initialRelicIds: ['peek_charge_plus_one', 'pin_cap_plus_one']
+                        activeMutators: ['wide_recall', 'silhouette_twist']
                     })
                 ),
                 status: 'gameOver',
@@ -73,11 +66,11 @@ describe('REG-096 game over next-run loop', () => {
             },
             []
         );
-        const normalized = { ...summarized, relicIds: [], activeMutators: [] };
+        const normalized = { ...summarized, activeMutators: [] };
 
         const row = getGameOverNextRunRows(normalized).find((entry) => entry.id === 'build_recap');
 
-        expect(row?.value).toBe('2 relic(s) / 2 mutator(s)');
+        expect(row?.value).toBe('2 mutator(s)');
     });
 
     it('normalizes malformed terminal summary counters before building next-run rows', () => {
@@ -92,7 +85,6 @@ describe('REG-096 game over next-run loop', () => {
             levelsCleared: Number.NaN,
             bestStreak: Number.POSITIVE_INFINITY,
             perfectClears: Number.NaN,
-            relicIds: Number.NaN,
             activeMutators: Number.POSITIVE_INFINITY
         } as unknown as RunSummary;
 
@@ -102,7 +94,7 @@ describe('REG-096 game over next-run loop', () => {
         expect(rows.find((row) => row.id === 'run_it_back')?.detail).toBe(
             '0 score / floor 0 / 0 clear(s) / chain not started'
         );
-        expect(rows.find((row) => row.id === 'build_recap')?.value).toBe('0 relic(s) / 0 mutator(s)');
+        expect(rows.find((row) => row.id === 'build_recap')?.value).toBe('0 mutator(s)');
         expect(rows.find((row) => row.id === 'next_goal')).toMatchObject({
             value: 'Reach floor 5',
             detail: 'Perfect floors and no-assist runs unlock mastery.'

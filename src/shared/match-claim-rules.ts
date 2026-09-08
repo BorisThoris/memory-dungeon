@@ -2,177 +2,66 @@ import {
     FINDABLE_MATCH_COMBO_SHARDS,
     FINDABLE_MATCH_SAFE_HAZARD_WARDS,
     FINDABLE_MATCH_SCORE,
+    type BoardState,
     type FindableKind,
-    type RouteCardKind,
-    type RouteSpecialKind,
-    type RunState,
     type Tile
 } from './contracts';
-import type { BoardState } from './contracts';
-import { clearDungeonCardFields } from './dungeon-enemy-card-rules';
-import { getDungeonMatchReward, type DungeonMatchReward } from './dungeon-match-reward-rules';
-import { emptyRouteCardReward, type RouteCardReward } from './route-card-reward-shape';
-import { runStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
-import { normalizeSessionStats } from './session-stats-rules';
-import { hiddenUnlessSprungTrap } from './tile-state-rules';
+import { hideTileAfterTurn } from './tile-state-rules';
 import { isWildPairKey } from './tile-identity';
 
 export interface MatchClaimContext {
-    anchorSealClaimed: boolean;
-    catalystAltarUpgraded: boolean;
     claimedFindableKind: FindableKind | null;
-    claimedRouteCardKind: RouteSpecialKind | RouteCardKind | null;
-    claimedRouteSpecialRevealed: boolean;
-    dungeonReward: DungeonMatchReward;
-    dungeonTrapResolvedDelta: number;
     findableComboShardGain: number;
     findableSafeHazardWardGain: number;
     findableScoreBonus: number;
     findablesClaimedDelta: number;
-    loadedGatewayClaimed: boolean;
-    matchedDungeonKeyKind: NonNullable<Tile['dungeonKeyKind']>;
-    matchedDungeonKind: Tile['dungeonCardKind'] | null;
     matchedPairKey: string;
-    mimicCacheBite: boolean;
-    mimicCacheClaimed: boolean;
-    mimicCacheFatalBite: boolean;
-    mimicCacheGuardBite: boolean;
-    parasiteVesselConverted: boolean;
-    pinLatticeRewarded: boolean;
-    routeCardReward: RouteCardReward;
     usedWild: boolean;
 }
 
-export const deriveMatchClaimContext = ({
-    firstTile,
-    firstTileId,
-    run,
-    secondTile,
-    secondTileId
-}: {
-    firstTile: Tile;
-    firstTileId: string;
-    run: RunState;
-    secondTile: Tile;
-    secondTileId: string;
-}): MatchClaimContext => {
+/** What a matched pair claims: the findable riding on it, if any, and which pair key it counts as. */
+export const deriveMatchClaimContext = (firstTile: Tile, secondTile: Tile): MatchClaimContext => {
     const claimedFindableKind = firstTile.findableKind ?? secondTile.findableKind ?? null;
-    const claimedRouteCardKind =
-        firstTile.routeSpecialKind ??
-        secondTile.routeSpecialKind ??
-        firstTile.routeCardKind ??
-        secondTile.routeCardKind ??
-        null;
     const matchedPairKey = isWildPairKey(firstTile.pairKey) ? secondTile.pairKey : firstTile.pairKey;
-    const claimedRouteSpecialRevealed = firstTile.routeSpecialRevealed === true || secondTile.routeSpecialRevealed === true;
-    /*
-     * A matched route card used to pay here - score for a secret door, gold for a greed cache, a
-     * guard token for a lantern ward, a combo shard or relic favor for a mystery veil. Generation
-     * deals no route card and no route special, so `claimedRouteCardKind` is always null and this
-     * reward is always nothing. Gen 173.
-     */
-    const routeCardReward = emptyRouteCardReward();
-    const stats = normalizeSessionStats(run.stats);
-    const mimicCacheClaimed = claimedRouteCardKind === 'mimic_cache';
-    const mimicCacheBite = mimicCacheClaimed && !claimedRouteSpecialRevealed;
-    const mimicCacheGuardBite = mimicCacheBite && stats.guardTokens > 0;
-    const matchedDungeonKind = firstTile.dungeonCardKind ?? secondTile.dungeonCardKind ?? null;
-    const dungeonReward = getDungeonMatchReward(run, firstTile, secondTile);
 
     return {
-        anchorSealClaimed: claimedRouteCardKind === 'anchor_seal',
-        catalystAltarUpgraded: claimedRouteCardKind === 'catalyst_altar' && stats.comboShards > 0,
         claimedFindableKind,
-        claimedRouteCardKind,
-        claimedRouteSpecialRevealed,
-        dungeonReward,
-        dungeonTrapResolvedDelta:
-            matchedDungeonKind === 'trap' &&
-            firstTile.dungeonCardState !== 'resolved' &&
-            secondTile.dungeonCardState !== 'resolved'
-                ? 1
-                : 0,
         findableComboShardGain: claimedFindableKind != null ? FINDABLE_MATCH_COMBO_SHARDS[claimedFindableKind] : 0,
         findableSafeHazardWardGain:
             claimedFindableKind != null ? FINDABLE_MATCH_SAFE_HAZARD_WARDS[claimedFindableKind] : 0,
         findableScoreBonus: claimedFindableKind != null ? FINDABLE_MATCH_SCORE[claimedFindableKind] : 0,
         findablesClaimedDelta: claimedFindableKind != null ? 1 : 0,
-        loadedGatewayClaimed: claimedRouteCardKind === 'loaded_gateway',
-        matchedDungeonKeyKind: firstTile.dungeonKeyKind ?? secondTile.dungeonKeyKind ?? 'iron',
-        matchedDungeonKind,
         matchedPairKey,
-        mimicCacheBite,
-        mimicCacheClaimed,
-        mimicCacheFatalBite: mimicCacheBite && !mimicCacheGuardBite && run.lives <= 1,
-        mimicCacheGuardBite,
-        parasiteVesselConverted: claimedRouteCardKind === 'parasite_vessel' && run.parasiteFloors > 0,
-        pinLatticeRewarded:
-            claimedRouteCardKind === 'pin_lattice' &&
-            run.pinLatticeRewardsThisFloor < 1 &&
-            runStringArray(run.pinnedTileIds).includes(firstTileId) &&
-            runStringArray(run.pinnedTileIds).includes(secondTileId),
-        routeCardReward,
         usedWild: isWildPairKey(firstTile.pairKey) || isWildPairKey(secondTile.pairKey)
     };
 };
 
 export const createMatchedPairClaimBoard = ({
     board,
-    context,
     firstTileId,
     secondTileId,
     thirdTileId
 }: {
     board: BoardState;
-    context: MatchClaimContext;
     firstTileId: string;
     secondTileId: string;
     thirdTileId?: string;
-}): BoardState => {
-    const nextKeysHeld = Math.max(0, runNonNegativeInteger(board.dungeonKeysHeld) + context.dungeonReward.keysHeldDelta);
-    const nextKeysHeldByKind = (() => {
-        if (context.dungeonReward.keysHeldDelta === 0) {
-            return board.dungeonKeysHeldByKind;
+}): BoardState => ({
+    ...board,
+    flippedTileIds: [],
+    matchedPairs: runNonNegativeInteger(board.matchedPairs) + 1,
+    tiles: board.tiles.map((tile) => {
+        if (tile.id === firstTileId || tile.id === secondTileId) {
+            return {
+                ...tile,
+                state: 'matched' as const,
+                findableKind: undefined
+            };
         }
-        const current = runNonNegativeInteger(board.dungeonKeysHeldByKind?.[context.matchedDungeonKeyKind]);
-        const next = Math.max(0, current + context.dungeonReward.keysHeldDelta);
-        return {
-            ...(board.dungeonKeysHeldByKind ?? {}),
-            [context.matchedDungeonKeyKind]: next
-        };
-    })();
-    return {
-        ...board,
-        flippedTileIds: [],
-        matchedPairs: runNonNegativeInteger(board.matchedPairs) + 1,
-        tiles: board.tiles.map((tile) => {
-            if (tile.id === firstTileId || tile.id === secondTileId) {
-                return clearDungeonCardFields({
-                    ...tile,
-                    /*
-                     * A lever is a switch, not a souvenir. Once it is thrown its pair has nothing
-                     * left to say, so it pops off the board instead of sitting there face-up
-                     * competing for the read the remaining hidden cards need.
-                     */
-                    state: context.matchedDungeonKind === 'lever' ? ('removed' as const) : ('matched' as const),
-                    findableKind: undefined,
-                    routeCardKind: undefined,
-                    routeSpecialKind: undefined,
-                    routeSpecialRevealed: undefined,
-                    routeSpecialRevealSource: undefined,
-                    lanternScouted: undefined,
-                    scoutRevealSource: undefined
-                });
-            }
-            if (thirdTileId != null && tile.id === thirdTileId) {
-                return hiddenUnlessSprungTrap(tile);
-            }
-            return tile;
-        }),
-        selectedGatewayRouteType: board.selectedGatewayRouteType ?? context.dungeonReward.gatewayRouteType ?? null,
-        dungeonKeysHeld: nextKeysHeld,
-        dungeonKeysHeldByKind: nextKeysHeldByKind,
-        dungeonLeverCount: runNonNegativeInteger(board.dungeonLeverCount) + (context.matchedDungeonKind === 'lever' ? 1 : 0)
-    };
-};
+        if (thirdTileId != null && tile.id === thirdTileId) {
+            return hideTileAfterTurn(tile);
+        }
+        return tile;
+    })
+});

@@ -1,36 +1,21 @@
 import { type RunState } from './contracts';
-export {
-    countFindablePairs
-} from './board-tile-generation-rules';
-export {
-    createDungeonFloorBlueprint,
-    inspectDungeonEncounterBudget,
-    type DungeonEncounterBudgetSummary
-} from './dungeon-floor-blueprint-rules';
-export {
-    applyDungeonLayoutPlan,
-    assignHazardTilesToGeneratedBoard
-} from './dungeon-board-generation-rules';
-export {
-    ENEMY_HAZARD_PATTERN_DEFINITIONS,
-    applyEnemyHazardClick,
-    getEnemyHazardMovementCandidateIds,
-    type EnemyHazardPatternDefinition
-} from './dungeon-enemy-hazard-rules';
 import { createFlipTileTransition } from './flip-tile-transition';
-import { createActivateDungeonExit, createApplyDestroyPair } from './floor-completion-transitions';
 import { createResolveBoardTurnTransition } from './board-turn-transition';
-import { createFinalizeLevelTransition } from './floor-clear-transition';
+import { finalizeLevel } from './floor-clear-transition';
 import { appendGameplayJournal } from './gameplay-journal';
+import { createGameplayDestroyPairCommand } from './gameplay-core-contracts';
+import { reduceGameplayCommand } from './gameplay-core';
 import {
     consumeWildMatchThroughGameplayCore,
     resolveBoardTurnThroughGameplayCore,
-    resolveFindableMatchRewardThroughGameplayCore,
-    resolveSlayerFloorClearThroughGameplayCore
+    resolveFindableMatchRewardThroughGameplayCore
 } from './gameplay-core-adapters';
 import { normalizeSessionStats } from './session-stats-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 
+export {
+    countFindablePairs
+} from './board-tile-generation-rules';
 export {
     DECOY_PAIR_KEY,
     EXIT_PAIR_KEY,
@@ -62,17 +47,6 @@ export {
     getMatchFloaterAnchorTileIds,
     getMismatchFloaterAnchorTileIds
 } from './tile-floater-anchor-rules';
-export {
-    revealDungeonRoom
-} from './dungeon-room-rules';
-export {
-    revealDungeonExit,
-    revealDungeonShop
-} from './dungeon-reveal-rules';
-export {
-    chooseDungeonExitActivationSpend,
-    type DungeonExitActivationSpend
-} from './dungeon-exit-rules';
 export {
     collectDestroyEligibleTileIds,
     collectPeekEligibleTileIds,
@@ -136,88 +110,28 @@ export {
 export {
     finishMemorizePhase
 } from './memorize-phase-rules';
-export {
-    createDungeonShowcaseRun
-} from './dungeon-showcase-run-rules';
 
 /*
  * The route layer's public surface stood here: generating three choices on a floor clear, applying
  * whichever the player picked, and opening, claiming or skipping the side room a Mystery route led
  * to. All of it went in Gen 173 with the between-floor screen itself.
  */
-export {
-    DUNGEON_BOSS_DEFEAT_SCORE,
-    DUNGEON_BOSS_DEFINITIONS,
-    DUNGEON_ELITE_ENCOUNTER_RULES,
-    getDungeonBossDefinition,
-    getDungeonEliteEncounterRules,
-    type DungeonBossDefinition,
-    type DungeonBossLifecycleSource,
-    type DungeonBossPhase,
-    type DungeonBossRewardHook,
-    type DungeonEliteEncounterRules
-} from './dungeon-boss-rules';
 
-export {
-    createDungeonEncounterContext,
-    enemyHazardProfileForBoss,
-    floorArchetypeForDungeonNode,
-    floorTagForDungeonNode,
-    type DungeonEncounterContext
-} from './dungeon-encounter-context-rules';
-
-export {
-    DUNGEON_ROOM_EFFECT_DEFINITIONS,
-    DUNGEON_TREASURE_REWARD_DEFINITIONS,
-    getDungeonCardCopy,
-    getDungeonRoomEffectDefinition,
-    getDungeonRoomReadModel,
-    getDungeonTreasureReadModel,
-    getDungeonTreasureRewardDefinition,
-    type DungeonRoomEffectDefinition,
-    type DungeonRoomEffectId,
-    type DungeonRoomReadModel,
-    type DungeonRoomResolvedState,
-    type DungeonRoomTrigger,
-    type DungeonTreasureReadModel,
-    type DungeonTreasureRewardDefinition,
-    type DungeonTreasureRewardId,
-    type DungeonTreasureTier
-} from './dungeon-card-read-model';
-export {
-    getDungeonBoardPresentation,
-    getDungeonBoardStatus,
-    getDungeonBossReadModel,
-    getDungeonEnemyLifecycleStatus,
-    getDungeonExitStatus,
-    getDungeonObjectiveStatus,
-    getDungeonThreatStatus,
-    type DungeonBoardPresentation,
-    type DungeonBoardPresentationChip,
-    type DungeonBoardPresentationChipTone,
-    type DungeonBoardStatus,
-    type DungeonBossReadModel,
-    type DungeonEnemyLifecycleStatus,
-    type DungeonExitStatus,
-    type DungeonObjectiveStatus,
-    type DungeonThreatStatus
-} from './dungeon-board-status';
-export {
-    grantBonusRelicPickNextOffer
-} from './relic-immediate-rules';
-
-export const finalizeLevel = createFinalizeLevelTransition({
-    resolveSlayerFloorClear: resolveSlayerFloorClearThroughGameplayCore,
-    appendGameplayJournal
-});
+export { finalizeLevel };
 
 export const flipTile = createFlipTileTransition({ finalizeLevel });
 
-export const applyDestroyPair = createApplyDestroyPair({ finalizeLevel });
-
-export const activateDungeonExit = createActivateDungeonExit({ finalizeLevel });
-
-
+export const applyDestroyPair = (run: RunState, tileId: string): RunState => {
+    const command = createGameplayDestroyPairCommand(
+        `destroy-pair:${run.runSeed}:${run.board?.level ?? 0}:${run.destroyPairCharges}:${tileId}`,
+        tileId
+    );
+    const result = reduceGameplayCommand(run, command);
+    if (!result.accepted) {
+        return run;
+    }
+    return appendGameplayJournal(result.run, [command], result.events);
+};
 
 const resolveBoardTurnCompatibility = createResolveBoardTurnTransition({
     finalizeLevel,

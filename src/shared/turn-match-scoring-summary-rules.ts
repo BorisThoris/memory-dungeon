@@ -27,14 +27,6 @@ export interface TurnMatchScoringSummaryInput {
     encorePairKeys: readonly string[];
     findableScoreBonus: number;
     chunkScore: number;
-    routeCardScore: number;
-    dungeonScore: number;
-    enemyDamageScore: number;
-    hazardDamageScore: number;
-    fragileCacheClaimed: boolean;
-    fuseCacheFresh: boolean;
-    pinLatticeRewarded: boolean;
-    tollCacheClaimed: boolean;
 }
 
 export const resolveTurnMatchScoringSummary = ({
@@ -45,15 +37,7 @@ export const resolveTurnMatchScoringSummary = ({
     matchedTiles,
     encorePairKeys,
     findableScoreBonus,
-    chunkScore,
-    routeCardScore,
-    dungeonScore,
-    enemyDamageScore,
-    hazardDamageScore,
-    fragileCacheClaimed,
-    fuseCacheFresh,
-    pinLatticeRewarded,
-    tollCacheClaimed
+    chunkScore
 }: TurnMatchScoringSummaryInput): TurnMatchScoringSummaryResult => {
     const stats = normalizeSessionStats(run.stats);
     const currentStreak = stats.currentStreak + 1;
@@ -72,15 +56,7 @@ export const resolveTurnMatchScoringSummary = ({
         encoreBonus,
         findableScoreBonus,
         chunkScore,
-        routeCardScore,
-        dungeonScore,
-        enemyDamageScore,
-        hazardDamageScore,
-        fragileCacheClaimed,
-        fuseCacheFresh,
-        pinLatticeRewarded,
         spotlightDelta,
-        tollCacheClaimed,
         presentationPenalty
     });
     const totalScore = stats.totalScore + matchScore;

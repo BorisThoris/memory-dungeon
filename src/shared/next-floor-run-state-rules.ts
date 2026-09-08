@@ -4,21 +4,17 @@ import {
     type MutatorId,
     type RunState
 } from './contracts';
-import { hasRewardPerk } from './bonus-rewards';
 import { applyFloorCurio, pickFloorCurio } from './floor-curio-rules';
 import { boardHasGlassDecoy } from './board-inspection';
 import { countFindablePairs } from './board-tile-generation-rules';
 import { createTimerState } from './run-timer-rules';
 import { calculateRating } from './scoring-rules';
-import { hasRunRelic } from './relics';
 import { normalizeSessionStats } from './session-stats-rules';
 import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
-import { resolveHazardBanisherFloorStart } from './hazard-banisher-rules';
 
 export interface CreateNextFloorRunStateOptions {
     lives: number;
     activeMutators: MutatorId[];
-    dungeonRun: RunState['dungeonRun'];
     board: BoardState;
     parasiteFloors: number;
     parasiteWardRemaining: number;
@@ -27,8 +23,7 @@ export interface CreateNextFloorRunStateOptions {
 
 export const createNextFloorRunState = (
     run: RunState,
-    options: CreateNextFloorRunStateOptions,
-    behavior: { resolveHazardBanish?: boolean } = {}
+    options: CreateNextFloorRunStateOptions
 ): RunState => {
     const nextBoard = options.board;
     const traitRouteObjective = getTraitRouteObjectiveSeed(nextBoard);
@@ -39,7 +34,6 @@ export const createNextFloorRunState = (
         status: 'memorize',
         lives: options.lives,
         activeMutators: options.activeMutators,
-        dungeonRun: options.dungeonRun,
         pendingRouteCardPlan: null,
         sideRoom: null,
         board: nextBoard,
@@ -50,9 +44,8 @@ export const createNextFloorRunState = (
         parasiteFloors: options.parasiteFloors,
         parasiteWardRemaining: options.parasiteWardRemaining,
         stickyBlockIndex: null,
-        freeShuffleThisFloor: hasRunRelic(run, 'first_shuffle_free_per_floor'),
-        regionShuffleFreeThisFloor:
-            hasRunRelic(run, 'region_shuffle_free_first') || hasRewardPerk(run, 'free_first_swap_per_floor'),
+        freeShuffleThisFloor: false,
+        regionShuffleFreeThisFloor: false,
         undoUsesThisFloor: 1,
         gambitAvailableThisFloor: true,
         gambitThirdFlipUsed: false,
@@ -136,17 +129,8 @@ export const createNextFloorRunState = (
      * charge, their coins and their token are part of the floor the player is about to be handed,
      * not a bonus applied to a floor already underway.
      */
-    const populated = applyFloorCurio(
+    return applyFloorCurio(
         nextRun,
         pickFloorCurio(run.runSeed, nextBoard.level, run.runRulesVersion)
     );
-
-    if (behavior.resolveHazardBanish === false || !hasRewardPerk(run, 'hazard_banish_per_floor')) {
-        return populated;
-    }
-    const resolved = resolveHazardBanisherFloorStart(populated);
-    if (resolved.outcome === 'inactive') {
-        throw new Error('Hazard Banish was active before next-floor construction but inactive after it.');
-    }
-    return resolved.run;
 };

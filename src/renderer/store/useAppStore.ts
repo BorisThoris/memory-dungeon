@@ -38,8 +38,6 @@ import {
 import {
     createBoardPinModeToggleResult,
     createDestroyPairArmedToggleResult,
-    canOpenDungeonExitPrompt,
-    createDungeonExitActivationSurfaceResult,
     createFlashPairSurfaceResult,
     createGreetCurioSurfaceResult,
     createGambitThirdPickPressResult,
@@ -78,9 +76,7 @@ import {
     playGambitCommitSfx,
     playPeekPowerSfx,
     playPowerArmSfx,
-    playResolveSfx,
     playStrayPowerSfx,
-    playTrapSfx,
     resumeAudioContext,
     sfxGainFromSettings
 } from '../audio/gameSfx';
@@ -434,15 +430,7 @@ export const useAppStore = create<AppState>((set, get) => ({
                 return;
             }
             const result = createGambitThirdPickPressResult(run, tileId);
-            if (result.hazardContact) {
-                void resumeAudioContext();
-                playResolveSfx(result.hazardContact.fromRun, result.hazardContact.toRun, sfxGainFromStore());
-            }
             if (result.kind === 'unchanged') {
-                return;
-            }
-            if (result.kind === 'hazardGameOver') {
-                applyImmediateGameOverFromTilePress(result.run);
                 return;
             }
             if (result.playFlipSfx) {
@@ -499,9 +487,7 @@ export const useAppStore = create<AppState>((set, get) => ({
                         playDestroyPairSfx,
                         playFlipSfx,
                         playPeekPowerSfx,
-                        playResolveSfx,
                         playStrayPowerSfx,
-                        playTrapSfx,
                         resumeAudioContext
                     });
                 },
@@ -509,29 +495,6 @@ export const useAppStore = create<AppState>((set, get) => ({
                 setState: (patch) => useAppStore.setState(patch)
             }
         );
-    },
-
-    openDungeonExitPrompt: () => {
-        const { run, view } = get();
-        if (!canOpenDungeonExitPrompt(run, view)) {
-            return;
-        }
-        set({ dungeonExitPromptOpen: true });
-    },
-
-    closeDungeonExitPrompt: () => {
-        set({ dungeonExitPromptOpen: false });
-    },
-
-    activateDungeonExitFromPrompt: (spend) => {
-        const { run, view } = get();
-        const result = createDungeonExitActivationSurfaceResult({ run, spend, view });
-        if (result.kind === 'ignored') {
-            set({ dungeonExitPromptOpen: true });
-            return;
-        }
-        set({ dungeonExitPromptOpen: false });
-        applyResolvedRun(result.patch.run);
     },
 
     togglePeekMode: () => {

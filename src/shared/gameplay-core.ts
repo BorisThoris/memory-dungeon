@@ -11,8 +11,7 @@ import {
 import { maxPinnedTilesForRun, togglePinnedTile } from './board-power-state';
 import type { TileTraitInteractionTag } from './tile-trait-rules';
 import { createFlipTileTransition } from './flip-tile-transition';
-import { applyEnemyHazardClick } from './dungeon-enemy-hazard-rules';
-import { type DungeonKeyKind, type FindableKind, type RunState } from './contracts';
+import { type FindableKind, type RunState } from './contracts';
 import {
     GAMEPLAY_CORE_SCHEMA_VERSION,
     gameplayCommandSchema,
@@ -34,14 +33,11 @@ import {
 } from './run-inventory';
 import {
     applyGameplayDefinitionTransition,
-    hasGameplayRewardPerk,
     makeGameplayEventWriter as makeEventWriter,
 } from './gameplay-effect-transition';
 import { runNonNegativeInteger } from './run-number-guards';
 import { runStringArray } from './run-array-guards';
 import { normalizeSessionStats } from './session-stats-rules';
-import { createDungeonExitActivationTransition } from './dungeon-exit-rules';
-import { getDungeonExitStatus } from './dungeon-board-status';
 import { advanceScoreParasiteFloor } from './score-parasite-rules';
 import { hasMutator } from './mutators';
 import { tilesArePairMatch } from './scoring-rules';
@@ -49,10 +45,9 @@ import {
     GAMEPLAY_FEEDBACK_CRITICAL_FIELDS,
     getGameplayFeedbackCriticalSnapshot
 } from './gameplay-feedback-facts';
-import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
+import { WILD_PAIR_KEY } from './tile-identity';
 import { isBoardComplete } from './board-inspection';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
-import { resolveHazardBanisherFloorStart } from './hazard-banisher-rules';
 import {
     canGreetFloorCurio,
     floorCurioGreetingReply,
@@ -66,8 +61,7 @@ import {
     type BoardTurnFindableRewardResult,
     type BoardTurnWildMatchResult
 } from './board-turn-transition';
-import { createFinalizeLevelTransition } from './floor-clear-transition';
-import { resolveSlayerFloorClearEffects } from './slayer-floor-clear-transition';
+import { finalizeLevel } from './floor-clear-transition';
 
 export interface GameplayCommandResult {
     run: RunState;
@@ -99,23 +93,11 @@ const TILE_FLIP_SOURCE: GameplaySource = { kind: 'system', id: 'tile_flip' };
 const MEMORIZE_SOURCE: GameplaySource = { kind: 'system', id: 'memorize' };
 const RUN_TIMER_SOURCE: GameplaySource = { kind: 'system', id: 'run_timer' };
 const PROGRESSION_REPAIR_SOURCE: GameplaySource = { kind: 'system', id: 'progression_repair' };
-const DUNGEON_EXIT_SOURCE: GameplaySource = { kind: 'system', id: 'dungeon_exit' };
 const SCORE_PARASITE_SOURCE: GameplaySource = { kind: 'system', id: 'score_parasite' };
-const HAZARD_BANISH_SOURCE: GameplaySource = { kind: 'reward_perk', id: 'hazard_banish_per_floor' };
 const FLOOR_ADVANCE_SOURCE: GameplaySource = { kind: 'system', id: 'floor_advance' };
 const DEBUG_REVEAL_SOURCE: GameplaySource = { kind: 'system', id: 'debug_reveal' };
-const ENEMY_HAZARD_SOURCE: GameplaySource = { kind: 'system', id: 'enemy_hazard' };
 const WILD_JOKER_SOURCE: GameplaySource = { kind: 'system', id: 'wild_joker' };
 const BOARD_TURN_SOURCE: GameplaySource = { kind: 'system', id: 'board_turn' };
-const finalizeLevelThroughCore = createFinalizeLevelTransition({
-    resolveSlayerFloorClear: (run, input, _legacyCommandId, execution) => {
-        if (!execution) {
-            throw new Error('Core-owned floor clear requires an outer execution context.');
-        }
-        return resolveSlayerFloorClearEffects(run, input, execution.commandId, execution.events);
-    },
-    appendGameplayJournal: (run) => run
-});
 const appendReindexedEvents = (
     commandId: string,
     sourceEvents: readonly GameplayEvent[],
@@ -285,7 +267,7 @@ const applyDestroyPairCommand = (
         tone: 'information'
     });
     const resolvedRun = transition.boardComplete && nextRun.board
-        ? finalizeLevelThroughCore(nextRun, nextRun.board, { commandId: command.commandId, events })
+        ? finalizeLevel(nextRun, nextRun.board)
         : nextRun;
     return { run: resolvedRun, command, events, accepted: true };
 };
@@ -628,65 +610,15 @@ const applyShopPurchaseCommand = (
     command: Extract<GameplayCommand, { type: 'shop.purchase' }>
 ): GameplayCommandResult => rejectedResult(run, command.commandId, 'There is no shop to buy from any more.', command);
 
+/*
+ * The dungeon exit, the per-floor Hazard Banish perk and enemy contact all went with the dungeon
+ * layer. Their command types stay parseable for old journals and are refused like a route choice.
+ */
 const applyDungeonExitActivateCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'dungeon.exit_activate' }>
-): GameplayCommandResult => {
-    const status = getDungeonExitStatus(run);
-    const transition = createDungeonExitActivationTransition(run, command.spend);
-    if (!transition || !status.exitTile) {
-        return rejectedResult(run, command.commandId, 'Dungeon exit cannot be activated with the requested spend.', command);
-    }
-    const nextRun = transition.run;
-    const events: GameplayEvent[] = [];
-    const writeEvent = makeEventWriter(command.commandId, DUNGEON_EXIT_SOURCE, events);
-    const masterKeysBefore = runNonNegativeInteger(run.dungeonMasterKeys);
-    const masterKeysAfter = runNonNegativeInteger(nextRun.dungeonMasterKeys);
-    const gatewayUsesBefore = runNonNegativeInteger(run.dungeonGatewaysUsed);
-    const gatewayUsesAfter = runNonNegativeInteger(nextRun.dungeonGatewaysUsed);
-    const keyKind =
-        command.spend === 'key' && status.lockKind !== 'none' && status.lockKind !== 'lever'
-            ? status.lockKind
-            : null;
-    writeEvent({
-        type: 'dungeon.exit_activated',
-        exitTileId: status.exitTile.id,
-        spend: command.spend,
-        keyKind,
-        masterKeysBefore,
-        masterKeysAfter,
-        gatewayUsesBefore,
-        gatewayUsesAfter,
-        routeType: status.routeType ?? null
-    });
-    writeEvent({
-        type: 'feedback.requested',
-        cue: 'dungeon.exit.activated',
-        message: command.spend === 'master_key'
-            ? `Master Key opened the ${status.lockKind} exit.`
-            : command.spend === 'key'
-              ? `${status.lockKind} key opened the exit.`
-              : 'Dungeon exit activated without spending a key.',
-        tone: 'information'
-    });
-    // Activating the exit clears the floor only when nothing is left on the board. The
-    // legacy activateDungeonExit wraps this transition in finalizeLevel, and without it
-    // the command path left a solved board in 'playing' with no lastLevelResult. But
-    // activating an exit while pairs remain must not fabricate a floor clear, so the
-    // finalize is conditional on the board actually being complete.
-    // Activating the exit clears the floor - the transition removes the remaining tiles -
-    // so this always finalizes, exactly as the legacy activateDungeonExit does
-    // (createActivateDungeonExit wraps this same transition in finalizeLevel). The
-    // isBoardComplete guard is kept as an explicit statement of that invariant rather
-    // than an assumption.
-    // ...but never twice. If the turn that opened the exit already cleared the floor,
-    // finalizing again increments levelsCleared a second time for one floor.
-    const finalizedRun =
-        isBoardComplete(transition.board) && nextRun.status !== 'levelComplete'
-            ? finalizeLevelThroughCore(nextRun, transition.board, { commandId: command.commandId, events })
-            : nextRun;
-    return { run: finalizedRun, command, events, accepted: true };
-};
+): GameplayCommandResult =>
+    rejectedResult(run, command.commandId, 'There is no dungeon exit to activate any more.', command);
 
 const applyParasiteAdvanceCommand = (
     run: RunState,
@@ -745,56 +677,8 @@ const applyParasiteAdvanceCommand = (
 const applyHazardBanishCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'floor.hazard_banish' }>
-): GameplayCommandResult => {
-    if (run.status !== 'memorize' || !run.board) {
-        return rejectedResult(run, command.commandId, 'Hazard Banish resolves only on a prepared next floor.', command);
-    }
-    const resolved = resolveHazardBanisherFloorStart(run);
-    if (resolved.outcome === 'inactive') {
-        return rejectedResult(run, command.commandId, 'Hazard Banish perk is not active.', command);
-    }
-
-    const destroyChargesBefore = runNonNegativeInteger(run.destroyPairCharges);
-    const destroyChargesAfter = runNonNegativeInteger(resolved.run.destroyPairCharges);
-    const events: GameplayEvent[] = [];
-    const writeEvent = makeEventWriter(command.commandId, HAZARD_BANISH_SOURCE, events);
-    if (resolved.outcome === 'destroy_charge_granted') {
-        writeEvent({
-            type: 'inventory.changed',
-            itemId: 'destroy_charge',
-            operation: 'grant',
-            requested: 1,
-            applied: destroyChargesAfter - destroyChargesBefore,
-            before: destroyChargesBefore,
-            after: destroyChargesAfter
-        });
-    }
-    writeEvent({
-        type: 'hazard_banish.resolved',
-        outcome: resolved.outcome,
-        floor: run.board.level,
-        targetPairKey: resolved.targetPairKey,
-        hazardKind: resolved.hazardKind,
-        affectedTileIds: resolved.affectedTileIds,
-        destroyChargesBefore,
-        destroyChargesAfter
-    });
-    writeEvent({
-        type: 'feedback.requested',
-        cue: resolved.outcome === 'hazard_removed'
-            ? 'perk.hazard_banish.hazard_removed'
-            : resolved.outcome === 'destroy_charge_granted'
-              ? 'perk.hazard_banish.destroy_granted'
-              : 'perk.hazard_banish.contract_blocked',
-        message: resolved.outcome === 'hazard_removed'
-            ? `Hazard Banish cleared ${resolved.hazardKind ?? 'hazard'} pressure from ${resolved.affectedTileIds.length} tiles.`
-            : resolved.outcome === 'destroy_charge_granted'
-              ? `No hazard marker was present; Hazard Banish banked one Destroy charge (${destroyChargesAfter}).`
-              : 'The active no-Destroy contract suppressed Hazard Banish this floor.',
-        tone: resolved.outcome === 'contract_blocked' ? 'warning' : 'reward'
-    });
-    return { run: resolved.run, command, events, accepted: true };
-};
+): GameplayCommandResult =>
+    rejectedResult(run, command.commandId, 'There is no Hazard Banish perk to resolve any more.', command);
 
 const applyFloorAdvanceCommand = (
     run: RunState,
@@ -822,31 +706,13 @@ const applyFloorAdvanceCommand = (
     }
     appendReindexedEvents(command.commandId, parasiteResult.events, events);
 
-    let nextRun = advanceToNextLevel(run, {
+    const nextRun = advanceToNextLevel(run, {
         parasiteAdvance: {
             lives: parasiteResult.run.lives,
             parasiteFloors: parasiteResult.run.parasiteFloors,
             parasiteWardRemaining: parasiteResult.run.parasiteWardRemaining
-        },
-        resolveHazardBanish: false
-    });
-    let hazardBanishOutcome: 'contract_blocked' | 'hazard_removed' | 'destroy_charge_granted' | null = null;
-    if (nextRun.status === 'memorize' && hasGameplayRewardPerk(nextRun, 'hazard_banish_per_floor')) {
-        const hazardResult = applyHazardBanishCommand(nextRun, {
-            schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
-            commandId: command.commandId,
-            type: 'floor.hazard_banish'
-        });
-        if (!hazardResult.accepted) {
-            throw new Error('Hazard Banish was active on the prepared floor but its typed transition rejected.');
         }
-        nextRun = hazardResult.run;
-        hazardBanishOutcome = hazardResult.events.find(
-            (event): event is Extract<GameplayEvent, { type: 'hazard_banish.resolved' }> =>
-                event.type === 'hazard_banish.resolved'
-        )?.outcome ?? null;
-        appendReindexedEvents(command.commandId, hazardResult.events, events);
-    }
+    });
 
     const nextBoard = nextRun.status === 'memorize' ? nextRun.board : null;
     const writeEvent = makeEventWriter(command.commandId, FLOOR_ADVANCE_SOURCE, events);
@@ -858,7 +724,7 @@ const applyFloorAdvanceCommand = (
         nextFloorTag: nextBoard?.floorTag ?? null,
         nextFloorArchetypeId: nextBoard?.floorArchetypeId ?? null,
         nextFeaturedObjectiveId: nextBoard?.featuredObjectiveId ?? null,
-        selectedDungeonNodeId: run.dungeonRun?.selectedNodeId ?? null,
+        selectedDungeonNodeId: null,
         boardPairCount: nextBoard?.pairCount ?? 0,
         boardTileCount: nextBoard?.tiles.length ?? 0,
         memorizeRemainingMs: nextRun.status === 'memorize'
@@ -870,7 +736,7 @@ const applyFloorAdvanceCommand = (
         parasitePressureAfter: runNonNegativeInteger(nextRun.parasiteFloors),
         parasiteWardBefore: runNonNegativeInteger(run.parasiteWardRemaining),
         parasiteWardAfter: runNonNegativeInteger(nextRun.parasiteWardRemaining),
-        hazardBanishOutcome,
+        hazardBanishOutcome: null,
         destroyChargesBefore: runNonNegativeInteger(run.destroyPairCharges),
         destroyChargesAfter: runNonNegativeInteger(nextRun.destroyPairCharges)
     });
@@ -1069,7 +935,7 @@ const applyBoardTurnResolveCommand = (
 
     const events: GameplayEvent[] = [];
     const resolveTurn = createResolveBoardTurnTransition({
-        finalizeLevel: finalizeLevelThroughCore,
+        finalizeLevel,
         resolveFindableMatchReward: resolveBoardTurnFindableReward,
         consumeWildMatch: consumeBoardTurnWildMatch
     });
@@ -1193,73 +1059,28 @@ const applyWildMatchConsumeCommand = (
     return { run: consumed.run, command, events, accepted: true };
 };
 
-const tileFlipOutcome = (
-    run: RunState,
-    nextRun: RunState,
-    tileId: string
-): 'flipped' | 'exit_revealed' | 'shop_revealed' | 'room_resolved' => {
-    const tile = run.board?.tiles.find((candidate) => candidate.id === tileId);
-    if (tile?.pairKey === EXIT_PAIR_KEY) {
-        return 'exit_revealed';
-    }
-    if (tile?.pairKey === SHOP_PAIR_KEY) {
-        return 'shop_revealed';
-    }
-    if (tile?.pairKey === ROOM_PAIR_KEY) {
-        return 'room_resolved';
-    }
-    return 'flipped';
-};
-
 const applyTileFlipCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'board.tile_flip' }>
 ): GameplayCommandResult => {
     // Built locally from the core's own finalizeLevel, matching how board.turn_resolve
     // wires its transition, so gameplay-core never has to import the game.ts barrel.
-    const flipTileThroughCore = createFlipTileTransition({ finalizeLevel: finalizeLevelThroughCore });
+    const flipTileThroughCore = createFlipTileTransition({ finalizeLevel });
     const nextRun = flipTileThroughCore(run, command.targetTileId);
     if (nextRun === run) {
         return rejectedResult(run, command.commandId, 'Tile flip is not legal for the current run.', command);
     }
-    const outcome = tileFlipOutcome(run, nextRun, command.targetTileId);
     const events: GameplayEvent[] = [];
     const writeFlipEvent = makeEventWriter(command.commandId, TILE_FLIP_SOURCE, events);
     writeFlipEvent({
         type: 'board.tile_flipped',
         tileId: command.targetTileId,
-        outcome,
+        outcome: 'flipped',
         flippedCountAfter: runStringArray(nextRun.board?.flippedTileIds).length,
         statusAfter: nextRun.status
     });
-    // Revealing an exit, vendor or room changes feedback-critical dungeon state, so the
-    // flip owes the player typed presentation - inspectGameplayFeedbackCompleteness
-    // rejects an accepted command that moves a critical field silently. An ordinary
-    // face-up flip changes none of them and stays quiet.
-    if (outcome === 'room_resolved') {
-        // A locked cache opened by flipping it spends a key; report which kind, so the
-        // locksmith build scorer and the key-economy audits can see the spend. Derived by
-        // diffing the key purses rather than trusting the tile, because the transition
-        // decides which key it actually consumed.
-        const cacheTile = run.board?.tiles.find((candidate) => candidate.id === command.targetTileId);
-        if (cacheTile?.dungeonCardKind === 'room' && cacheTile.dungeonCardEffectId === 'room_locked_cache') {
-            const spentKeyKind = (Object.keys(run.dungeonKeys ?? {}) as DungeonKeyKind[]).find(
-                (kind) =>
-                    runNonNegativeInteger(nextRun.dungeonKeys?.[kind]) <
-                    runNonNegativeInteger(run.dungeonKeys?.[kind])
-            );
-            const spentMasterKey =
-                runNonNegativeInteger(nextRun.dungeonMasterKeys) < runNonNegativeInteger(run.dungeonMasterKeys);
-            writeFlipEvent({
-                type: 'dungeon.locked_cache_opened',
-                tileId: command.targetTileId,
-                spend: spentMasterKey ? 'master_key' : spentKeyKind ? 'key' : 'none',
-                keyKind: spentMasterKey ? null : (spentKeyKind ?? null)
-            });
-        }
-    }
     // A flip can move score, lives, guard tokens or objective progress - revealing a
-    // findable, tripping a hazard, completing an objective - and any accepted command
+    // findable, completing an objective - and any accepted command
     // that moves a feedback-critical field owes the player typed presentation, or
     // inspectGameplayFeedbackCompleteness rejects it. Emit exactly when something
     // changed rather than on every flip, so ordinary face-ups stay quiet.
@@ -1268,18 +1089,11 @@ const applyTileFlipCommand = (
     const changedCriticalField = GAMEPLAY_FEEDBACK_CRITICAL_FIELDS.some(
         (field) => JSON.stringify(criticalBefore[field]) !== JSON.stringify(criticalAfter[field])
     );
-    if (outcome !== 'flipped' || changedCriticalField) {
+    if (changedCriticalField) {
         writeFlipEvent({
             type: 'feedback.requested',
-            cue: `board.tile.${outcome}`,
-            message:
-                outcome === 'exit_revealed'
-                    ? 'Exit revealed.'
-                    : outcome === 'shop_revealed'
-                      ? 'Vendor revealed.'
-                      : outcome === 'room_resolved'
-                        ? 'Room revealed.'
-                        : 'Tile revealed.',
+            cue: 'board.tile.flipped',
+            message: 'Tile revealed.',
             tone: 'information'
         });
     }
@@ -1475,31 +1289,8 @@ const applyDebugRevealDeactivateCommand = (
 const applyEnemyHazardContactCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'enemy_hazard.contact' }>
-): GameplayCommandResult => {
-    const nextRun = applyEnemyHazardClick(run, command.targetTileId, {
-        advanceHazards: command.advanceHazards
-    });
-    if (nextRun === run) {
-        return rejectedResult(run, command.commandId, 'No enemy hazard contact at the pressed tile.', command);
-    }
-    const events: GameplayEvent[] = [];
-    const writeContactEvent = makeEventWriter(command.commandId, ENEMY_HAZARD_SOURCE, events);
-    writeContactEvent({
-        type: 'enemy_hazard.contacted',
-        targetTileId: command.targetTileId,
-        livesBefore: runNonNegativeInteger(run.lives),
-        livesAfter: runNonNegativeInteger(nextRun.lives),
-        hitsBefore: runNonNegativeInteger(run.enemyHazardHitsThisFloor),
-        hitsAfter: runNonNegativeInteger(nextRun.enemyHazardHitsThisFloor)
-    });
-    writeContactEvent({
-        type: 'feedback.requested',
-        cue: 'enemy_hazard.contacted',
-        message: 'An enemy struck as you reached for that card.',
-        tone: 'warning'
-    });
-    return { run: nextRun, command, events, accepted: true };
-};
+): GameplayCommandResult =>
+    rejectedResult(run, command.commandId, 'There is no enemy hazard to make contact with any more.', command);
 
 const applyShopRerollCommand = (
     run: RunState,

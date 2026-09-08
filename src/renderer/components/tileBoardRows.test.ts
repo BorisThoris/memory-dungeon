@@ -2,9 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { BoardState, Tile } from '../../shared/contracts';
 import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from '../../shared/tile-identity';
 import {
-    buildTileBoardEnemyHazardRows,
     buildTileBoardRows,
-    getEnemyOccupiedTileIds,
     getTileBoardOverlayPrewarmDemandPairKeys,
     getTutorialPairOrdinalByKey
 } from './tileBoardRows';
@@ -129,123 +127,8 @@ describe('tileBoardRows', () => {
         expect(swapRows.map((row) => row.powerBackAccent)).toEqual([null, 'swapOrigin', 'swap']);
     });
 
-    it('marks occupied hidden backs only for active enemy hazards', () => {
-        const b = board([tile('a1', 'a'), tile('b1', 'b')], {
-            enemyHazards: [
-                {
-                    id: 'active',
-                    kind: 'stalker',
-                    label: 'Stalker',
-                    currentTileId: 'a1',
-                    nextTileId: 'b1',
-                    pattern: 'stalk',
-                    state: 'revealed',
-                    damage: 1,
-                    hp: 1,
-                    maxHp: 1
-                },
-                {
-                    id: 'done',
-                    kind: 'sentinel',
-                    label: 'Sentinel',
-                    currentTileId: 'b1',
-                    nextTileId: 'a1',
-                    pattern: 'patrol',
-                    state: 'defeated',
-                    damage: 1,
-                    hp: 0,
-                    maxHp: 1
-                }
-            ]
-        });
 
-        expect([...getEnemyOccupiedTileIds(b)]).toEqual(['a1']);
-        expect(rows({ board: b }).map((row) => row.enemyOccupiedBack)).toEqual([true, false]);
-    });
 
-    it('builds enemy hazard render rows from active hazards with current and next transforms', () => {
-        const b = board([tile('a1', 'a'), tile('b1', 'b'), tile('c1', 'c')], {
-            enemyHazards: [
-                {
-                    id: 'active',
-                    kind: 'warden',
-                    label: 'Warden',
-                    currentTileId: 'a1',
-                    nextTileId: 'b1',
-                    pattern: 'guard',
-                    state: 'revealed',
-                    damage: 1,
-                    hp: 2,
-                    maxHp: 2
-                },
-                {
-                    id: 'missing',
-                    kind: 'observer',
-                    label: 'Observer',
-                    currentTileId: 'missing',
-                    nextTileId: 'c1',
-                    pattern: 'observe',
-                    state: 'revealed',
-                    damage: 1,
-                    hp: 1,
-                    maxHp: 1
-                },
-                {
-                    id: 'done',
-                    kind: 'sentinel',
-                    label: 'Sentinel',
-                    currentTileId: 'c1',
-                    nextTileId: 'a1',
-                    pattern: 'patrol',
-                    state: 'defeated',
-                    damage: 1,
-                    hp: 0,
-                    maxHp: 1
-                }
-            ]
-        });
-        const rowModel = rows({ board: b });
-        const hazardRows = buildTileBoardEnemyHazardRows(b, rowModel);
-
-        expect(hazardRows).toHaveLength(1);
-        expect(hazardRows[0]!.hazard.id).toBe('active');
-        expect(hazardRows[0]!.currentTransform).toBe(rowModel[0]!.transform);
-        expect(hazardRows[0]!.nextTransform).toBe(rowModel[1]!.transform);
-    });
-
-    it('does not render stale enemy hazards once all real pairs are cleared', () => {
-        const b = board(
-            [
-                tile('a1', 'a', 'matched'),
-                tile('a2', 'a', 'matched'),
-                tile('b1', 'b', 'matched'),
-                tile('b2', 'b', 'matched')
-            ],
-            {
-                matchedPairs: 2,
-                enemyHazards: [
-                    {
-                        id: 'stale-warden',
-                        kind: 'warden',
-                        label: 'Warden',
-                        currentTileId: 'a1',
-                        nextTileId: 'a2',
-                        pattern: 'guard',
-                        state: 'revealed',
-                        damage: 1,
-                        hp: 1,
-                        maxHp: 2,
-                        bossId: 'trap_warden'
-                    }
-                ]
-            }
-        );
-        const rowModel = rows({ board: b });
-
-        expect([...getEnemyOccupiedTileIds(b)]).toEqual([]);
-        expect(rowModel.map((row) => row.enemyOccupiedBack)).toEqual([false, false, false, false]);
-        expect(buildTileBoardEnemyHazardRows(b, rowModel)).toEqual([]);
-    });
 
     it('collects overlay prewarm pair keys from face-up, resolving, and pickable rows', () => {
         const b = board(

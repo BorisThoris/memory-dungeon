@@ -18,7 +18,6 @@ describe('GLD-P2 board, power, and resolution contracts', () => {
             fixedTiles,
             fixedTilesMode: 'exact',
             gameMode: 'endless',
-            dungeonNodeKind: 'boss',
             runSeed: 42_001
         });
 
@@ -35,7 +34,6 @@ describe('GLD-P2 board, power, and resolution contracts', () => {
         const board = buildBoard(8, {
             fixedTiles: [tile('a1', 'A'), tile('a2', 'A')],
             gameMode: 'endless',
-            dungeonNodeKind: 'boss',
             runSeed: 42_001
         });
 

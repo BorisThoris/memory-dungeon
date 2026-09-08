@@ -23,11 +23,8 @@ export const AI_REPO_MODEL_PATH = '.ai/repo-model.json';
 const MODEL_VERSION = 2;
 const GENERATED_PATHS = new Set([AI_REPO_MODEL_PATH]);
 const CONTENT_REGISTRIES = [
-    { kind: 'build_archetype', file: 'src/shared/relics.ts', variable: 'RELIC_BUILD_ARCHETYPE_ORDER', mechanicPrefix: 'build' },
-    { kind: 'relic', file: 'src/shared/relics.ts', variable: 'RELIC_POOL', mechanicPrefix: 'relic' },
     { kind: 'findable', file: 'src/shared/findables.ts', variable: 'FINDABLE_REWARD_ROW_ORDER', mechanicPrefix: 'findable' },
-    { kind: 'inventory_item', file: 'src/shared/run-inventory-contracts.ts', variable: 'RUN_INVENTORY_ITEM_IDS', mechanicPrefix: 'inventory' },
-    { kind: 'bonus_reward', file: 'src/shared/bonus-rewards.ts', variable: 'BONUS_REWARD_IDS', mechanicPrefix: 'reward' }
+    { kind: 'inventory_item', file: 'src/shared/run-inventory-contracts.ts', variable: 'RUN_INVENTORY_ITEM_IDS', mechanicPrefix: 'inventory' }
 ];
 const PLAYER_VISIBLE_STATES = new Set([
     'achievementProgress',

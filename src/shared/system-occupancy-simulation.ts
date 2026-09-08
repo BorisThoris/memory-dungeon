@@ -1,4 +1,4 @@
-import type { RelicId, RunState, Tile } from './contracts';
+import type { RunState, Tile } from './contracts';
 import { GAME_RULES_VERSION } from './contracts';
 import { buildBoard } from './board-generation';
 import { countFindablePairs } from './board-tile-generation-rules';
@@ -83,7 +83,7 @@ export interface SystemOccupancyReport {
     }>;
 }
 
-const playFloor = (seed: number, floor: number, missRate: number, relicIds: readonly RelicId[], maxTurns: number): RunState => {
+const playFloor = (seed: number, floor: number, missRate: number, maxTurns: number): RunState => {
     const rulesVersion = GAME_RULES_VERSION;
     const schedule = pickFloorScheduleEntry(seed, rulesVersion, floor, 'endless');
     const board = buildBoard(floor, {
@@ -94,15 +94,13 @@ const playFloor = (seed: number, floor: number, missRate: number, relicIds: read
         featuredObjectiveId: schedule.featuredObjectiveId,
         cycleFloor: schedule.cycleFloor,
         gameMode: 'endless',
-        activeMutators: schedule.mutators,
-        relicIds
+        activeMutators: schedule.mutators
     });
     const base = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed }));
     let run: RunState = {
         ...base,
         board,
         status: 'playing',
-        relicIds: [...relicIds],
         findablesTotalThisFloor: countFindablePairs(board.tiles)
     };
     const rng = createMulberry32(hashStringToSeed(`occupancy:${seed}:${floor}:${missRate}:${rulesVersion}`));
@@ -144,20 +142,18 @@ export const simulateSystemOccupancy = ({
     floors = 16,
     seeds = OCCUPANCY_SEEDS,
     missRate = 0.15,
-    relicIds = [],
     maxTurns = 240
 }: {
     floors?: number;
     seeds?: readonly number[];
     missRate?: number;
-    relicIds?: readonly RelicId[];
     maxTurns?: number;
 } = {}): SystemOccupancyReport => {
     const hits = new Map<string, { floors: number; total: number }>();
     let played = 0;
     for (const seed of seeds) {
         for (let floor = 1; floor <= floors; floor += 1) {
-            const run = playFloor(seed, floor, missRate, relicIds, maxTurns);
+            const run = playFloor(seed, floor, missRate, maxTurns);
             played += 1;
             for (const counter of SYSTEM_OCCUPANCY_COUNTERS) {
                 const value = runNonNegativeInteger(run[counter.key] as number);

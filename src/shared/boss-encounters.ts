@@ -6,9 +6,8 @@ import {
 } from './contracts';
 import type { FloorScheduleEntry } from './floor-mutator-schedule';
 import type { MechanicTokenId } from './mechanic-feedback';
-import type { RunMapNodeKind } from './run-map';
 
-export type BossEliteEncounterKind = 'boss' | 'elite';
+export type BossEliteEncounterKind = 'boss';
 
 export interface BossElitePresentationSlot {
     slot: 'icon' | 'key_art' | 'audio_stinger' | 'fx_burst';
@@ -77,35 +76,6 @@ export const BOSS_ENCOUNTER_IDENTITY: BossEliteEncounterIdentity = {
     presentationSlots: [...PRESENTATION_SLOTS],
     offlineOnly: true
 };
-
-export const ELITE_ENCOUNTER_IDENTITY: BossEliteEncounterIdentity = {
-    kind: 'elite',
-    id: 'elite_route_identity',
-    label: 'Mnemonic Sentinel',
-    readRule: 'Elite nodes must be greed-route pressure hooks: clearly harder than combat, not a vendor/rest/treasure node.',
-    mechanics: [
-        'Greed route node.',
-        'Higher pressure floor hook.',
-        'Elite Cache, Final Ward, or Omen Seal hard-route board anchor.'
-    ],
-    rewardHook: 'Route-specific elite anchors pay gold, guard/combo, or Favor/combo without boss score rules.',
-    scoreRule: 'Uses normal floor scoring until a future elite multiplier is explicitly versioned.',
-    presentationSlots: [...PRESENTATION_SLOTS],
-    offlineOnly: true
-};
-
-export const getBossEliteEncounterIdentityForNode = (
-    kind: RunMapNodeKind
-): BossEliteEncounterIdentity | null =>
-    kind === 'elite'
-        ? {
-              ...ELITE_ENCOUNTER_IDENTITY,
-              mechanics: [...ELITE_ENCOUNTER_IDENTITY.mechanics],
-              presentationSlots: ELITE_ENCOUNTER_IDENTITY.presentationSlots.map((slot) => ({ ...slot }))
-          }
-        : kind === 'combat'
-          ? null
-          : null;
 
 export const getBossEncounterIdentityForFloor = (
     floorTag: FloorTag,
@@ -279,27 +249,16 @@ export const getFloorIdentityContract = ({
 
 const rowFromIdentity = (identity: BossEliteEncounterIdentity): EncounterIdentityRow => ({
     encounterRank: identity.kind,
-    label: identity.kind === 'boss' ? 'Boss encounter' : identity.label,
-    scoreRule:
-        identity.kind === 'boss'
-            ? 'Applies the boss floor score multiplier after bonuses.'
-            : 'No boss score multiplier; elite identity is route-pressure and reward pacing only.',
+    label: 'Boss encounter',
+    scoreRule: 'Applies the boss floor score multiplier after bonuses.',
     mechanics: identity.mechanics,
     placeholderNeeded: identity.presentationSlots.some((slot) => slot.placeholderNeeded),
-    placeholderSlots:
-        identity.kind === 'boss'
-            ? ['boss intro stinger', 'boss key art panel', 'boss FX burst']
-            : ['elite route badge', 'elite key art panel', 'elite audio stinger']
+    placeholderSlots: ['boss intro stinger', 'boss key art panel', 'boss FX burst']
 });
 
 export const getEncounterIdentityForFloor = (
     entry: FloorScheduleEntry
 ): EncounterIdentityRow | null => {
     const identity = getBossEncounterIdentityForFloor(entry.floorTag, entry);
-    return identity ? rowFromIdentity(identity) : null;
-};
-
-export const getEncounterIdentityForRouteKind = (kind: RunMapNodeKind): EncounterIdentityRow | null => {
-    const identity = getBossEliteEncounterIdentityForNode(kind);
     return identity ? rowFromIdentity(identity) : null;
 };

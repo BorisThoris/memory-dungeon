@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { BoardState, RunState } from '../../shared/contracts';
-import { EXIT_PAIR_KEY } from '../../shared/dungeon-rules';
+import type { RunState } from '../../shared/contracts';
 import { createNewRun, finishMemorizePhase } from '../../shared/game-core';
 import { createPlayingTilePressSurfaceResult } from './tilePressController';
 
@@ -33,34 +32,6 @@ describe('tile press controller', () => {
         }
     });
 
-    it('routes dungeon exits to an exit prompt patch', () => {
-        const run = playingRun();
-        const exitTile = run.board!.tiles[0]!;
-        const board: BoardState = {
-            ...run.board!,
-            tiles: run.board!.tiles.map((tile) =>
-                tile.id === exitTile.id ? { ...tile, pairKey: EXIT_PAIR_KEY, dungeonCardState: 'hidden' } : tile
-            )
-        };
-
-        const result = createPlayingTilePressSurfaceResult({
-            boardPinMode: false,
-            destroyPairArmed: false,
-            peekModeArmed: false,
-            run: { ...run, board },
-            tileId: exitTile.id
-        });
-
-        expect(result.kind).toBe('patch');
-        if (result.kind === 'patch') {
-            expect(result.patch.dungeonExitPromptOpen).toBe(true);
-            expect(result.patch.run?.board?.tiles.find((tile) => tile.id === exitTile.id)).toMatchObject({
-                state: 'removed',
-                dungeonCardState: 'revealed'
-            });
-            expect(result.audio).toEqual([{ kind: 'flip' }]);
-        }
-    });
 
 
     it('uses board pin mode before ordinary flips', () => {

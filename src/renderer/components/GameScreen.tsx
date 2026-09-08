@@ -7,31 +7,23 @@ import {
     type RunState
 } from '../../shared/contracts';
 import { computeFocusDimmedTileIds } from '../../shared/focusDimmedTileIds';
-import { getPrimaryRewardPerkReadinessRow } from '../../shared/bonus-rewards';
 import { getFloorIdentityContract } from '../../shared/boss-encounters';
 import { getPlayableOnboardingStep } from '../../shared/playable-onboarding';
 import { useGameplayChromeClearance } from '../hooks/useGameplayChromeClearance';
 import { formatLevelResultObjectiveLine } from '../../shared/secondary-objectives';
 import { runFilteredArray, runFilteredStringArray } from '../../shared/run-array-guards';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
-import {
-} from '../../shared/objective-rules';
 import { getTraitRouteObjectiveStatus } from '../../shared/trait-route-objectives';
 import {
     canRegionShuffle,
     canRegionShuffleRow,
     canShuffleBoard
 } from '../../shared/board-powers';
-import {
-    getDungeonBoardPresentation,
-    getDungeonExitStatus,
-    getDungeonObjectiveStatus
-} from '../../shared/dungeon-rules';
 import { useNotificationStore } from '@cross-repo-libs/notifications';
 import type { CSSProperties } from 'react';
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { ABANDON_DIALOG_COPY, FLOOR_STATUS_COPY, PAUSE_DIALOG_COPY, ROUTE_CHOICE_COPY, RUN_TOOL_REASONS, SHORTCUTS_COPY } from '../copy/runDialogCopy';
+import { ABANDON_DIALOG_COPY, FLOOR_STATUS_COPY, PAUSE_DIALOG_COPY, RUN_TOOL_REASONS, SHORTCUTS_COPY } from '../copy/runDialogCopy';
 import {
     BOARD_SHUFFLE_COPY,
     FLASH_PAIR_COPY,
@@ -97,7 +89,6 @@ import { rumbleForBreak } from '../input/gamepadRumble';
 import {
     playMenuOpenSfx,
     playUiBackSfx,
-    playUiClickSfx,
     resumeUiSfxContext,
     uiSfxGainFromSettings
 } from '../audio/uiSfx';
@@ -110,7 +101,6 @@ import {
 } from './matchScoreFloaterTiming';
 import { getStickyBlockedTileId } from '../gameplay/stickyFingersBlockedTileId';
 import { useGameScreenPowerTileHints } from './useGameScreenPowerTileHints';
-import { useGameScreenTraitRouteTargets } from './useGameScreenTraitRouteTargets';
 import type { MatchScorePop, MatchScorePopPayoffChip, MismatchScorePop } from '../store/matchScorePop';
 
 import { MUTATOR_CATALOG } from '../../shared/mechanics-encyclopedia';
@@ -183,45 +173,6 @@ const matchTraitInteractionTexts = (value: unknown): string[] => runFilteredStri
 
 /** PLAY-009: pair-index rings on face-down DOM tiles only for very early floors + until FTUE flag clears after tutorial floors. */
 const TUTORIAL_PAIR_MARKER_MAX_LEVEL = 2;
-
-const routeTypeLabel = (routeType: NonNullable<RunState['pendingRouteCardPlan']>['routeType']): string => {
-    switch (routeType) {
-        case 'safe':
-            return 'Safe route';
-        case 'greed':
-            return 'Greedy route';
-        case 'mystery':
-        default:
-            return 'Mystery route';
-    }
-};
-
-const dungeonExitLockLabel = (lockKind: ReturnType<typeof getDungeonExitStatus>['lockKind']): string => {
-    if (lockKind === 'none') {
-        return 'Unlocked exit';
-    }
-    if (lockKind === 'lever') {
-        return 'Lever-sealed exit';
-    }
-    return `${lockKind.charAt(0).toUpperCase()}${lockKind.slice(1)} key exit`;
-};
-
-const dungeonExitPromptTitle = (status: ReturnType<typeof getDungeonExitStatus>): string =>
-    status.keyFallbackPending ? 'Key fallback pending' : dungeonExitLockLabel(status.lockKind);
-
-const dungeonExitPromptLockLine = (status: ReturnType<typeof getDungeonExitStatus>, run: RunState): string => {
-    if (status.keyFallbackPending) {
-        return FLOOR_STATUS_COPY.noKeySource;
-    }
-    if (status.lockKind === 'lever') {
-        return `${status.leverCount}/${status.requiredLeverCount} floor levers ready.`;
-    }
-    if (status.lockKind === 'none') {
-        return 'No key required.';
-    }
-    return `Keys: ${run.dungeonKeys[status.lockKind] ?? 0} matching, ${run.dungeonMasterKeys} master.`;
-};
-
 
 const getClearLifeBonusLabel = (result: NonNullable<RunState['lastLevelResult']>): string | null => {
     if (result.clearLifeGained !== 1) {
@@ -393,8 +344,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         useShallow((state) => ({
             applyFlashPairPower: state.applyFlashPairPower,
             greetFloorResident: state.greetFloorResident,
-            activateDungeonExitFromPrompt: state.activateDungeonExitFromPrompt,
-            closeDungeonExitPrompt: state.closeDungeonExitPrompt,
             continueToNextLevel: state.continueToNextLevel,
             dismissPowersFtue: state.dismissPowersFtue,
             goToMenu: state.goToMenu,
@@ -402,7 +351,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             openInventoryFromPlaying: state.openInventoryFromPlaying,
             openSettings: state.openSettings,
             notifyMemorizeBoardReady: state.notifyMemorizeBoardReady,
-            openDungeonExitPrompt: state.openDungeonExitPrompt,
             skipMemorizePhase: state.skipMemorizePhase,
             pause: state.pause,
             resume: state.resume,
@@ -416,7 +364,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             undoResolvingFlip: state.undoResolvingFlip
         }))
     );
-    const dungeonExitPromptOpen = useAppStore((state) => state.dungeonExitPromptOpen);
     const saveData = useAppStore((state) => state.saveData);
     const {
         boardBloomEnabled: settingsBoardBloomEnabled,
@@ -704,13 +651,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const {
         applyFlashPairPower,
         greetFloorResident,
-        activateDungeonExitFromPrompt,
-        closeDungeonExitPrompt,
         continueToNextLevel,
         dismissPowersFtue,
         goToMenu,
         openCodexFromPlaying,
-        openDungeonExitPrompt,
         openInventoryFromPlaying,
         openSettings,
         skipMemorizePhase,
@@ -727,7 +671,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     } = gameScreenActions;
 
     const previousCountdownPressureSecondRef = useRef<number | null>(null);
-    const announcedTraitRouteSetupKeyRef = useRef<string | null>(null);
     const playMenuOpen = useCallback((): void => {
         resumeUiSfxContext();
         playMenuOpenSfx(uiGain);
@@ -736,11 +679,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         resumeUiSfxContext();
         playUiBackSfx(uiGain);
     }, [uiGain]);
-    const playUiClick = useCallback((): void => {
-        resumeUiSfxContext();
-        playUiClickSfx(uiGain);
-    }, [uiGain]);
-
     const openSettingsPlayingMode = useCallback((): void => {
         openSettings('playing');
     }, [openSettings]);
@@ -1018,17 +956,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             variant: 'secondary' as const
         }
     ];
-    const dungeonExitStatus = getDungeonExitStatus(run);
-    const dungeonExitRouteLine = dungeonExitStatus.routeType
-        ? `${routeTypeLabel(dungeonExitStatus.routeType)} beyond this door.`
-        : ROUTE_CHOICE_COPY.stair;
-    const dungeonExitLockLine = dungeonExitPromptLockLine(dungeonExitStatus, run);
-    const dungeonPresentation = getDungeonBoardPresentation(run);
-    const activeDungeonPanel = run.status !== 'levelComplete' && dungeonPresentation.visible ? dungeonPresentation : null;
-    const activeDungeonObjectiveStatus = activeDungeonPanel ? getDungeonObjectiveStatus(run) : null;
-    const traitRouteObjectiveStatus = getTraitRouteObjectiveStatus(run);
-    const liveObjectiveStatus = activeDungeonObjectiveStatus ?? traitRouteObjectiveStatus;
-    const armedRewardPerkCue = getPrimaryRewardPerkReadinessRow(run);
+    const liveObjectiveStatus = getTraitRouteObjectiveStatus(run);
     const nextFloorPreview =
         endlessChapterActive && run.lastLevelResult
             ? pickFloorScheduleEntry(run.runSeed, run.runRulesVersion, run.lastLevelResult.level + 1, run.gameMode)
@@ -1226,10 +1154,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         gambitThirdPickActive,
         gambitOpportunityFlippedIds:
             gambitThirdPickActive && run.board ? run.board.flippedTileIds : null,
-        reduceMotion,
-        dungeonEnemiesDefeatedThisFloor: run.dungeonEnemiesDefeatedThisFloor,
-        enemyHazardHitsThisFloor: run.enemyHazardHitsThisFloor,
-        enemyHazardsDefeatedThisFloor: run.enemyHazardsDefeatedThisFloor
+        reduceMotion
     });
     const actionFeedbackAnnouncement = boardFloaterLiveText || politeHudAnnouncement;
     const actionFeedbackPriority =
@@ -1238,7 +1163,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         ? formatHudActionFeedbackText(actionFeedbackAnnouncement)
         : '';
 
-    const { hint: traitSwapRouteHint, tileIds: traitRouteTargetTileIds } = useGameScreenTraitRouteTargets(run);
     const handleTileSelect = useCallback((tileId: string): void => {
         useAppStore.getState().pressTile(tileId);
     }, []);
@@ -1293,30 +1217,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             !run.board ||
             run.board.flippedTileIds.length > 0 ||
             hiddenTileCount < 2 ||
-            (run.regionShuffleCharges < 1 &&
-                !(run.regionShuffleFreeThisFloor && run.relicIds.includes('region_shuffle_free_first')))
+            run.regionShuffleCharges < 1
     );
-    const traitSwapHint = !tileSwapDisabled ? traitSwapRouteHint : null;
-    const boardLevelForTraitSwapHint = run.board?.level ?? null;
-    useEffect(() => {
-        if (run.status !== 'playing' || boardLevelForTraitSwapHint === null || !traitSwapHint) {
-            return;
-        }
-        const routeSetupKey = `${boardLevelForTraitSwapHint}:${traitSwapHint.firstTileId}:${traitSwapHint.secondTileId}`;
-        if (announcedTraitRouteSetupKeyRef.current === routeSetupKey) {
-            return;
-        }
-        announcedTraitRouteSetupKeyRef.current = routeSetupKey;
-        queuePoliteAnnouncement(`Trait route prime found. Use swap: ${traitSwapHint.text}.`, {
-            dedupeKey: `trait-route-setup:${routeSetupKey}`,
-            priority: 'info'
-        });
-    }, [
-        boardLevelForTraitSwapHint,
-        queuePoliteAnnouncement,
-        run.status,
-        traitSwapHint
-    ]);
     const tileSwapPowerVisualActive = run.status === 'playing' && tileSwapArmed && !tileSwapDisabled;
     const {
         destroyEligibleTileIds,
@@ -1353,8 +1255,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         ? ROW_SHUFFLE_COPY.scholarContract
         : run.board.flippedTileIds.length > 0
           ? ROW_SHUFFLE_COPY.pendingFlip
-          : run.regionShuffleCharges < 1 &&
-              !(run.regionShuffleFreeThisFloor && run.relicIds.includes('region_shuffle_free_first'))
+          : run.regionShuffleCharges < 1
             ? ROW_SHUFFLE_COPY.noCharges
             : rowShuffleDisabled
               ? ROW_SHUFFLE_COPY.noRow
@@ -1367,16 +1268,13 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
           ? TILE_SWAP_COPY.pendingFlip
           : hiddenTileCount < 2
             ? TILE_SWAP_COPY.needTwoHidden
-              : run.regionShuffleCharges < 1 &&
-                  !(run.regionShuffleFreeThisFloor && run.relicIds.includes('region_shuffle_free_first'))
+              : run.regionShuffleCharges < 1
                 ? TILE_SWAP_COPY.noCharges
               : tileSwapArmed
                 ? tileSwapFirstTileId
                     ? TILE_SWAP_COPY.secondTile
                     : TILE_SWAP_COPY.firstTile
-                : traitSwapHint
-                  ? `${TILE_SWAP_COPY.idle}. ${traitSwapHint.text}`
-                  : TILE_SWAP_COPY.idle;
+                : TILE_SWAP_COPY.idle;
     const showFlashPairPower = (run.practiceMode || run.wildMenuRun) && run.status === 'playing';
     const flashPairDisabled =
         !showFlashPairPower ||
@@ -1391,8 +1289,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const shuffleTitle = run.activeContract?.noShuffle
         ? BOARD_SHUFFLE_COPY.scholarContract
         : shuffleDisabled
-          ? run.shuffleCharges < 1 &&
-              !(run.freeShuffleThisFloor && run.relicIds.includes('first_shuffle_free_per_floor'))
+          ? run.shuffleCharges < 1
             ? BOARD_SHUFFLE_COPY.noCharges
             : run.board.flippedTileIds.length > 0
               ? BOARD_SHUFFLE_COPY.pendingFlip
@@ -1408,14 +1305,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
 
     // Ids and labels come from the catalog rather than being retyped here, so a tool the catalog
     // names but the dock forgets to build is a type error rather than a missing button.
-    /*
-     * The exit pops off the board when it is found, so the dock carries it from that point on.
-     * Offered on the same condition the board tile used to answer to — the card has been turned
-     * up on this floor — rather than on whether it can be used right now, so a locked exit still
-     * tells the player where the door is and what it wants. (The vendor stood beside it until
-     * Gen 174.)
-     */
-    const dungeonExitDockOffered = run.status === 'playing' && dungeonExitStatus.revealed && dungeonExitStatus.exitTile !== null;
     const toolSpec = (id: RunShellToolId): Pick<RunShellTool, 'id' | 'label'> => {
         const spec = RUN_SHELL_TOOL_CATALOG.find((candidate) => candidate.id === id);
         if (!spec) {
@@ -1515,22 +1404,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 title: residentGreetTitle,
                 onClick: greetFloorResident
             },
-            ...(dungeonExitDockOffered
-                ? [
-                      {
-                          ...toolSpec('exit'),
-                          glyph: RUN_SHELL_GLYPHS.exit,
-                          disabled: false,
-                          title: dungeonExitStatus.canActivate
-                              ? RUN_TOOL_REASONS.exit.available
-                              : RUN_TOOL_REASONS.exit.locked,
-                          onClick: () => {
-                              playUiClick();
-                              openDungeonExitPrompt();
-                          }
-                      }
-                  ]
-                : []),
             {
                 // Same rule as `createUndoResolvingSurfaceResult`: only while a pair is resolving.
                 ...toolSpec('undo'),
@@ -1554,7 +1427,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const gameplayShellInert =
         !suppressStatusOverlays &&
         (abandonRunConfirmOpen ||
-            dungeonExitPromptOpen ||
             run.status === 'paused' ||
             (run.status === 'levelComplete' && Boolean(run.lastLevelResult)));
     const reg104GameplayShellVariant =
@@ -1671,17 +1543,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 dimmedTileIds={focusDimmedTileIds}
                                 guidedTargetTileIds={onboardingBoardTargetIds}
                                 chainContext={{
-                                    armedPerkId: armedRewardPerkCue?.id ?? null,
-                                    armedPerkDetail: armedRewardPerkCue?.readinessDetail ?? null,
-                                    armedPerkLabel: armedRewardPerkCue?.readinessLabel ?? null,
-                                    armedPerkPayoff: armedRewardPerkCue?.payoff ?? null,
                                     comboShards: run.stats.comboShards,
                                     currentStreak: run.stats.currentStreak,
                                     lives: run.lives
                                 }}
                                 recoveryContext={boardRecoveryContext}
-                                traitRouteHintText={traitSwapRouteHint?.text ?? null}
-                                traitRouteTargetTileIds={traitRouteTargetTileIds}
                                 interactive={run.status === 'playing' || gambitThirdPickActive}
                                 mobileCameraMode={cameraViewportMode}
                                 nBackAnchorPairKey={run.nBackAnchorPairKey}
@@ -1807,73 +1673,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     </div>
                 </div>
                 </div>
-
-                {!suppressStatusOverlays && dungeonExitPromptOpen && dungeonExitStatus.exitTile ? (
-                    <OverlayModal
-                        actions={[
-                            ...(dungeonExitStatus.canActivateWithoutSpend ||
-                            (dungeonExitStatus.lockKind === 'lever' && dungeonExitStatus.canActivate)
-                                ? [
-                                      {
-                                          label: 'Proceed',
-                                          onClick: () => {
-                                              playUiClick();
-                                              activateDungeonExitFromPrompt('none');
-                                          },
-                                          variant: 'primary' as const
-                                      }
-                                  ]
-                                : []),
-                            ...(dungeonExitStatus.canActivateWithKey
-                                ? [
-                                      {
-                                          label: 'Use key',
-                                          onClick: () => {
-                                              playUiClick();
-                                              activateDungeonExitFromPrompt('key');
-                                          },
-                                          variant: 'primary' as const
-                                      }
-                                  ]
-                                : []),
-                            ...(dungeonExitStatus.canActivateWithMasterKey
-                                ? [
-                                      {
-                                          label: 'Use master key',
-                                          onClick: () => {
-                                              playUiClick();
-                                              activateDungeonExitFromPrompt('master_key');
-                                          },
-                                          variant: 'primary' as const
-                                      }
-                                  ]
-                                : []),
-                            {
-                                label: 'Stay',
-                                onClick: () => {
-                                    playUiBack();
-                                    closeDungeonExitPrompt();
-                                },
-                                variant: 'secondary'
-                            }
-                        ]}
-                        headerPlateTone="success"
-                        onEscape={() => {
-                            playUiBack();
-                            closeDungeonExitPrompt();
-                        }}
-                        ornamentalHeaderPlate
-                        subtitle={`${dungeonExitRouteLine} ${dungeonExitLockLine}`}
-                        testId="dungeon-exit-overlay"
-                        title={dungeonExitPromptTitle(dungeonExitStatus)}
-                    >
-                        {dungeonExitStatus.lockedReason ? (
-                            <p className={styles.modalNote}>{dungeonExitStatus.lockedReason}</p>
-                        ) : (
-                            <p className={styles.modalNote}>Proceeding seals the remaining cards on this floor.</p>
-                        )}
-                    </OverlayModal>
-                ) : null}
 
                 {/* One modal at a time: Controls opens over pause, and closing it comes back here. */}
                 {!suppressStatusOverlays && !abandonRunConfirmOpen && !shortcutsHelpOpen && run.status === 'paused' && (

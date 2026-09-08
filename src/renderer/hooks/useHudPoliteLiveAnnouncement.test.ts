@@ -128,26 +128,6 @@ const mismatchTurn = (
         }
     }) as BoardTurnResolvedEvent;
 
-/** No hazard kind fired; override only the one a test is about. */
-const HAZARD_KINDS_QUIET = {
-    shuffleSnareBefore: 0,
-    shuffleSnareAfter: 0,
-    cascadeCacheBefore: 0,
-    cascadeCacheAfter: 0,
-    mirrorDecoyBefore: 0,
-    mirrorDecoyAfter: 0,
-    fragileCacheClaimBefore: 0,
-    fragileCacheClaimAfter: 0,
-    fragileCacheBreakBefore: 0,
-    fragileCacheBreakAfter: 0,
-    tollCacheBefore: 0,
-    tollCacheAfter: 0,
-    fuseCacheBefore: 0,
-    fuseCacheAfter: 0,
-    fuseCacheExpiredBefore: 0,
-    fuseCacheExpiredAfter: 0
-} as const;
-
 const flushRaf = async (): Promise<void> => {
     await act(async () => {
         await new Promise<void>((resolve) => {
@@ -1011,117 +991,8 @@ describe('useHudPoliteLiveAnnouncement', () => {
         expect(result.current.message).toBe('2 guard tokens gained. 2 available.');
     });
 
-    it('announces hazard tile trigger deltas in a stable order', async () => {
-        // Every hazard kind reports its own before/after pair on the turn event, so a
-        // turn that trips several announces all of them in HAZARD_TILE_KINDS order.
-        const hazardEvent = createBoardTurnResolvedEventFixture({
-            commandId: 'hazard-sweep',
-            announcement: {
-                hazardTilesBefore: 0,
-                hazardTilesAfter: 7,
-                hazardKinds: {
-                    shuffleSnareBefore: 0,
-                    shuffleSnareAfter: 1,
-                    cascadeCacheBefore: 0,
-                    cascadeCacheAfter: 1,
-                    mirrorDecoyBefore: 0,
-                    mirrorDecoyAfter: 1,
-                    fragileCacheClaimBefore: 0,
-                    fragileCacheClaimAfter: 1,
-                    fragileCacheBreakBefore: 0,
-                    fragileCacheBreakAfter: 1,
-                    tollCacheBefore: 0,
-                    tollCacheAfter: 1,
-                    fuseCacheBefore: 0,
-                    fuseCacheAfter: 1,
-                    fuseCacheExpiredBefore: 0,
-                    fuseCacheExpiredAfter: 0
-                }
-            }
-        }) as BoardTurnResolvedEvent;
 
-        const { result, rerender } = renderHook(
-            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
-                useHudPoliteLiveAnnouncement({
-                    ...base,
-                    scoreParasiteActive: false,
-                    boardTurnEvent: p.turnEvent
-                }),
-            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
-        );
 
-        await act(async () => {
-            rerender({ turnEvent: hazardEvent });
-        });
-        await flushRaf();
-
-        expect(result.current.message).toBe(
-            'Shuffle Snare fired. Hidden safe tiles reordered. Cascade Cache fired. One safe hidden pair cleared. Mirror Decoy misled the mismatch. It cannot form a pair. Fragile Cache claimed. Bonus score added. Fragile Cache broke. Its bonus is gone, but the pair still matches. Toll Cache claimed. Shop gold gained; score toll paid. Fuse Cache claimed early. Full payout gained.'
-        );
-    });
-
-    it('announces late Fuse Cache claims with expired-fuse copy', async () => {
-        const fuseEvent = createBoardTurnResolvedEventFixture({
-            commandId: 'fuse-late',
-            announcement: {
-                hazardTilesBefore: 0,
-                hazardTilesAfter: 1,
-                hazardKinds: {
-                    ...HAZARD_KINDS_QUIET,
-                    fuseCacheAfter: 1,
-                    fuseCacheExpiredAfter: 1
-                }
-            }
-        }) as BoardTurnResolvedEvent;
-
-        const { result, rerender } = renderHook(
-            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
-                useHudPoliteLiveAnnouncement({
-                    ...base,
-                    scoreParasiteActive: false,
-                    boardTurnEvent: p.turnEvent
-                }),
-            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
-        );
-
-        await act(async () => {
-            rerender({ turnEvent: fuseEvent });
-        });
-        await flushRaf();
-
-        expect(result.current.message).toBe('Fuse Cache claimed late. Fuse expired; consolation gold gained.');
-    });
-
-    it('uses reduced-motion copy for hazard tile trigger announcements', async () => {
-        const snareEvent = createBoardTurnResolvedEventFixture({
-            commandId: 'snare-reduced-motion',
-            announcement: {
-                hazardTilesBefore: 0,
-                hazardTilesAfter: 1,
-                hazardKinds: { ...HAZARD_KINDS_QUIET, shuffleSnareAfter: 1 }
-            }
-        }) as BoardTurnResolvedEvent;
-
-        const { result, rerender } = renderHook(
-            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
-                useHudPoliteLiveAnnouncement({
-                    ...base,
-                    scoreParasiteActive: false,
-                    reduceMotion: true,
-                    boardTurnEvent: p.turnEvent
-                }),
-            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
-        );
-
-        await act(async () => {
-            rerender({ turnEvent: snareEvent });
-        });
-        await flushRaf();
-
-        expect(result.current.message).toBe(
-            'Shuffle Snare fired. Hidden safe tiles reordered without motion.'
-        );
-    });
 
     it('announces lantern ward scout deltas', async () => {
         const { result, rerender } = renderHook(

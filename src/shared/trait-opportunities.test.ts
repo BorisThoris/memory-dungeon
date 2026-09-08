@@ -46,13 +46,12 @@ describe('trait opportunities', () => {
         expect(summary.tiles.map((row) => row.tileId)).toEqual(['echo-a', 'sealed-a']);
         expect(summary.tiles.map((row) => row.label)).toEqual(['echo-a', 'sealed-a']);
         expect(summary.interactionLines).toEqual(expect.arrayContaining(['Echo + Sealed: combo shard']));
-        expect(summary.buildLabels[0]).toBe('Sealed Catalyst');
-        expect(summary.reason).toContain('Offered for Sealed Catalyst');
+        expect(summary.reason).toContain('Offered for current trait route');
         expect([...getTraitOpportunityTileIds(b)]).toEqual(['echo-a', 'sealed-a']);
         expect([...getTraitComboSurgeTileIds(b)]).toEqual([]);
         expect(getTraitOpportunityHighlight(b)).toMatchObject({
             active: true,
-            buildLabel: 'Sealed Catalyst',
+            buildLabel: '2 combo-ready cards',
             headline: 'Chain route ready',
             primaryLine: 'Echo + Sealed: combo shard',
             secondaryLine: null,
@@ -98,7 +97,7 @@ describe('trait opportunities', () => {
 
         expect(model).toMatchObject({
             active: true,
-            buildLabel: 'Sealed Catalyst',
+            buildLabel: '2 combo-ready cards',
             primaryLine: 'Echo + Sealed: combo shard',
             routeCountLabel: '1 route',
             toolLine: 'Tools: row/swap 2 + free, peek 1, shuffle 0'
@@ -186,7 +185,6 @@ describe('trait opportunities', () => {
         expect(getTraitOpportunitySummary(b)).toEqual({
             tiles: [],
             interactionLines: [],
-            buildLabels: [],
             reason: null
         });
         expect(getTraitOpportunityHighlight(b)).toMatchObject({

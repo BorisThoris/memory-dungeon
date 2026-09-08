@@ -1,18 +1,11 @@
-import {
-    GAME_MODE_CODEX,
-    getMutatorCatalogRows,
-    getRelicCatalogRows,
-    RELIC_CATALOG,
-    VISUAL_ENDLESS_MODE_LOCKED
-} from '../../shared/game-catalog';
-import { getRelicBuildArchetypeSummaries } from '../../shared/relics';
+import { GAME_MODE_CODEX, getMutatorCatalogRows, VISUAL_ENDLESS_MODE_LOCKED } from '../../shared/game-catalog';
 import { FLOOR_CURIOS } from '../../shared/floor-curio-rules';
 import { codexResidentDescription, FLOOR_CURIO_COPY } from '../copy/floorCurioBeat';
 import { FLOOR_CURIO_GREETINGS } from '../../shared/floor-curio-greeting-rules';
 
 type TextTopic = { title: string; description: string };
 
-/** META-005: browse by article guides vs ID tables (rel/relic/mut/ach). */
+/** META-005: browse by article guides vs ID tables (mut/ach). */
 export type CodexTab = 'all' | 'guides' | 'tables';
 
 type TocKind = 'guide' | 'table';
@@ -27,10 +20,8 @@ export const CODEX_TOC: { href: string; label: string; kind: TocKind }[] = [
     { href: '#codex-residents', label: 'Residents', kind: 'guide' },
     { href: '#codex-contracts', label: 'Contracts', kind: 'guide' },
     { href: '#codex-featured-runs', label: 'Featured', kind: 'guide' },
-    { href: '#codex-builds', label: 'Builds', kind: 'guide' },
     { href: '#codex-modes', label: 'Modes', kind: 'guide' },
     { href: '#codex-achievements', label: 'Achievements', kind: 'table' },
-    { href: '#codex-relics', label: 'Relics', kind: 'table' },
     { href: '#codex-mutators', label: 'Mutators', kind: 'table' }
 ];
 
@@ -72,15 +63,6 @@ export const hasCodexFilterMatch = ({
     return counts.some((count) => count > 0);
 };
 
-export const buildCodexBuildRows = () =>
-    getRelicBuildArchetypeSummaries().map((row) => ({
-        id: row.id,
-        title: row.label,
-        description: `${row.fantasy} ${row.summary} Decisions: ${row.decisionVerbs.join(', ')}. Relics: ${row.relicIds
-            .map((id) => RELIC_CATALOG[id]?.title ?? id)
-            .join(', ')}.`
-    }));
-
 /**
  * The cast, as the Codex lists them: who they are, what they say, and what they actually change.
  *
@@ -100,8 +82,6 @@ export const buildCodexResidentRows = () => [
         description: codexResidentDescription(curio, FLOOR_CURIO_GREETINGS[curio.id].gained)
     }))
 ];
-
-export const buildCodexRelicRows = () => getRelicCatalogRows();
 
 export const buildCodexMutatorRows = () => getMutatorCatalogRows();
 

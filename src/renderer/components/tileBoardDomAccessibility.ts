@@ -1,9 +1,5 @@
 import type { BoardState, RunStatus, Tile } from '../../shared/contracts';
-import { activeEnemyHazardsForBoard } from '../../shared/enemy-hazard-board-rules';
-import { getDungeonCardKnowledge } from '../../shared/dungeon-cards';
-import { getDungeonCardCopy } from '../../shared/dungeon-rules';
 import { getFindableRewardText } from '../../shared/findables';
-import { getHazardTileTelegraph } from '../../shared/hazard-tiles';
 import { getPairProximityGridDistance } from '../../shared/pairProximityHint';
 import { getTileSuit } from '../../shared/tile-suit-rules';
 import { getClumpRead } from '../../shared/clump-read-rules';
@@ -35,31 +31,6 @@ export const getTilePosition = (index: number, columns: number): { row: number; 
     row: Math.floor(index / columns) + 1,
     column: (index % columns) + 1
 });
-
-export const getDungeonCardText = (tile: Tile, board?: BoardState): string => {
-    const copy = getDungeonCardCopy(tile, { board });
-    return copy ? ` ${copy}` : '';
-};
-
-export const getEnemyHazardText = (board: BoardState, tileId: string): string => {
-    const hazards = activeEnemyHazardsForBoard(board);
-    const hazard = hazards.find((candidate) => candidate.currentTileId === tileId);
-    if (hazard) {
-        const revealed = hazard.state === 'revealed' ? 'revealed ' : 'hidden ';
-        return ` Occupied by ${revealed}moving enemy patrol ${hazard.label}, ${hazard.hp}/${hazard.maxHp} HP, ${hazard.damage} damage.`;
-    }
-    const nextHazard = hazards.find((candidate) => candidate.nextTileId === tileId);
-    return nextHazard
-        ? ` Next target of moving enemy patrol ${nextHazard.label}, ${nextHazard.hp}/${nextHazard.maxHp} HP, ${nextHazard.damage} damage.`
-        : '';
-};
-
-export const getHazardTileText = (tile: Tile): string => {
-    const telegraph = getHazardTileTelegraph(tile);
-    return telegraph.hasHazard && telegraph.label && telegraph.telegraph
-        ? ` Hazard tile: ${telegraph.label}. ${telegraph.telegraph}`
-        : '';
-};
 
 export const getTileTraitPreviewText = (board: BoardState, tile: Tile): string => {
     const opportunity = getTraitOpportunitySummary(board).tiles.find((entry) => entry.tileId === tile.id);
@@ -255,15 +226,7 @@ export const getTileAriaLabel = (
             : tile.scoutRevealSource === 'lantern_ward' || tile.lanternScouted
               ? ' Scouted by Lantern Ward.'
               : '';
-    /*
-     * A route note used to be read out here - "Route card: Guard cache. Banks a ward." and the
-     * scouting line that went with it. Generation deals no route special and no route card, so the
-     * note was describing a tile that cannot exist. Gen 173; see `docs/REMOVED_DUNGEON_LAYER.md`.
-     */
-    const routeNote = '';
-    const dungeonKnowledge = getDungeonCardKnowledge(tile, faceUp);
-    const dungeonNote = dungeonKnowledge.familyKnown ? getDungeonCardText(tile, board) : '';
-    const passiveScoutNote = scoutSourceNote && !routeNote.includes(scoutSourceNote.trim()) ? scoutSourceNote : '';
+    const passiveScoutNote = scoutSourceNote;
     const routeSetupNote = routeSetupContext.targetTileIds?.has(tile.id)
         ? ` Chain prime target. ${routeSetupContext.hintText ? `${routeSetupContext.hintText}.` : 'Move this card to create a trait route.'}`
         : '';
@@ -278,7 +241,7 @@ export const getTileAriaLabel = (
         selectedFollowupTileIds: routeSetupContext.selectedFollowupTileIds,
         targetTileIds: routeSetupContext.targetTileIds
     });
-    return `${base}${suitNote}${findableNote}${routeNote}${dungeonNote}${getHazardTileText(tile)}${getTileTraitText(tile)}${getTileTraitPreviewText(board, tile)}${routeSetupNote}${selectedFollowupNote}${rewardHotNote}${beatNote}${passiveScoutNote}${getEnemyHazardText(board, tile.id)}`;
+    return `${base}${suitNote}${findableNote}${getTileTraitText(tile)}${getTileTraitPreviewText(board, tile)}${routeSetupNote}${selectedFollowupNote}${rewardHotNote}${beatNote}${passiveScoutNote}`;
 };
 
 export const getPowerTargetAriaText = (

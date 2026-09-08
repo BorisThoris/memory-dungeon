@@ -15,7 +15,7 @@ import {
 import { createRunSummary } from './game-core';
 import { buildRunShareText } from './run-share-text';
 import { getQuestCampaignRows, QUEST_CAMPAIGN_LADDER } from './quest-campaign';
-import { getDungeonSaveMigrationFieldPolicies } from './dungeon-save-migration';
+import { getSaveFieldPolicies } from './save-field-policy';
 import { PASS_AND_PLAY_COPY } from '../renderer/copy/passAndPlay';
 import { getSocialPlayScopeRows, SOCIAL_PLAY_SCOPE_DECISION } from './social-play-scope';
 import { isPassAndPlayFinalFloor, PASS_AND_PLAY_FLOORS, resolvePassAndPlayOutcome } from './pass-and-play-rules';
@@ -23,7 +23,6 @@ import { labelsAreAmbiguous } from '../../scripts/control-label-ambiguity';
 import { PLAYABLE_PATH_FIXTURE_IDS, createPlayablePathFixture } from './playable-path-fixtures';
 import { resolveChunkBreak } from './chunk-break-rules';
 import { CHAIN_REACTION_WAVES, evaluateAchievementUnlocks } from './achievements';
-import { EXIT_PAIR_KEY } from './dungeon-rules';
 import { makeBoard, makeTile } from './test/game-fixtures';
 import { assertCascadeBalanceWithinBands, runCascadeBalanceSimulation } from './cascade-balance-simulation';
 import { DECLARED_SURFACES, findBrokenSurfaces, findUnvisitedSurfaces } from '../../scripts/e2e-surface-coverage';
@@ -107,19 +106,11 @@ const VERIFIERS: Record<string, () => void> = {
             }
             suitByPair.set(tile.pairKey, tile.suit);
         }
-        // The clumped board: a Fever chain on the first pair breaks its clump and the halo, and
-        // an exit dropped into the clump stays on the board.
+        // The clumped board: a Fever chain on the first pair breaks its clump and the halo.
         const fixture = createPlayablePathFixture('cascadeClump').run!;
-        const withExit = {
-            ...fixture.board!,
-            tiles: fixture.board!.tiles.map((tile, index) =>
-                index === 1 ? { ...tile, pairKey: EXIT_PAIR_KEY, dungeonCardKind: 'exit' as const } : tile
-            )
-        };
-        const broken = resolveChunkBreak({ board: withExit, run: fixture, matchedTileIds: ['em1-A', 'em1-B'], chain: 8 });
+        const broken = resolveChunkBreak({ board: fixture.board!, run: fixture, matchedTileIds: ['em1-A', 'em1-B'], chain: 8 });
         expect(broken.tier).toBe('fever');
         expect(broken.brokenPairKeys.length).toBeGreaterThan(0);
-        expect(broken.board.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY)?.state).toBe('hidden');
     },
     'cascade-balance': () => {
         // Twelve seeds over twenty-four floors, matching `cascade-balance-simulation.test.ts` and
@@ -167,13 +158,6 @@ const VERIFIERS: Record<string, () => void> = {
         expect(sharp.droppedPairKeys, 'the cut-off pair drops at Sharp').toEqual(['C']);
         const clean = resolveChunkBreak({ board, run, matchedTileIds: ['A1', 'A2'], chain: 3 });
         expect(clean.droppedPairKeys, 'Clean does not drop').toEqual([]);
-        const withExit = makeBoard(
-            cutOff.map((t) => (t.id === 'C2' ? { ...t, pairKey: EXIT_PAIR_KEY, dungeonCardKind: 'exit' as const } : t)),
-            { columns: 4, rows: 3, level: 3 }
-        );
-        const held = resolveChunkBreak({ board: withExit, run, matchedTileIds: ['A1', 'A2'], chain: 6 });
-        expect(held.droppedPairKeys, 'a card with a job holds the suit').toEqual([]);
-        expect(held.board.tiles.find((t) => t.pairKey === EXIT_PAIR_KEY)?.state).toBe('hidden');
     },
     'ripple-records': () => {
         const run = createNewRun(0, { gameMode: 'endless', runSeed: 7 });
@@ -197,7 +181,7 @@ const VERIFIERS: Record<string, () => void> = {
         // The quest reads a persisted counter that has a migration policy, and three Sharp floors complete it.
         const quest = QUEST_CAMPAIGN_LADDER.find((row) => row.id === 'chain_rhythm');
         expect(quest?.saveFields).toEqual(['playerStats.sharpFloors']);
-        expect(getDungeonSaveMigrationFieldPolicies().map((policy) => policy.field)).toContain('playerStats.sharpFloors');
+        expect(getSaveFieldPolicies().map((policy) => policy.field)).toContain('playerStats.sharpFloors');
         let save = createDefaultSaveData();
         save.achievements.ACH_FIRST_CLEAR = true;
         for (let floor = 0; floor < 3; floor += 1) {

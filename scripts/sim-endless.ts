@@ -13,11 +13,8 @@ import { getFindableSpawnWeightRows } from '../src/shared/findables';
 import { pickFloorScheduleEntry } from '../src/shared/floor-mutator-schedule';
 import { buildBoard } from '../src/shared/board-generation';
 import { getEffectivePrimaryExitLock, inspectBoardFairness } from '../src/shared/board-inspection';
-import { activeEnemyHazardsForBoard } from '../src/shared/enemy-hazard-board-rules';
 import { solveRunThroughGameplayCoreWithTrace } from '../src/shared/gameplay-core-playthrough-solver';
 import { createGeneratedBoardSolverRun } from '../src/shared/softlock-generator-contract';
-import { inspectDungeonBoardTopology, inspectDungeonRunMapTopology } from '../src/shared/dungeon-topology';
-import { advanceToNextLevel } from '../src/shared/next-floor-transition-rules';
 import {
     countTraitComboOpportunityPairs,
     getBoardTraitInteractionPreviewLines,
@@ -46,17 +43,10 @@ export interface EndlessSimulationHealthReport {
     issues: string[];
     metrics: {
         deadTraitFloors: number;
-        exitlessFloors: number;
         fairnessIssueCodes: string[];
         fairnessIssueFloors: number;
         fairnessIssueTypes: number;
-        topologyIssueCodes: string[];
-        topologyIssueFloors: number;
-        topologyIssueTypes: number;
-        exitLockTypes: number;
         findableTotal: number;
-        lockedCacheRoomFloors: number;
-        objectiveKinds: number;
         playableCheckedFloors: number;
         coreReplayCheckedFloors: number;
         playableFailureDetails: string[];
@@ -64,7 +54,6 @@ export interface EndlessSimulationHealthReport {
         playableIssueReasons: string[];
         playableLockedExitFloors: number;
         rewardKinds: number;
-        typedLockedCacheRoomFloors: number;
         traitBoardPowerInteractionFloorShare: number;
         traitMatchRouteFloorShare: number;
         routeKinds: number;
@@ -106,9 +95,6 @@ const shouldCheckPlayableBoard = (board: BoardState): boolean =>
     board.floorTag === 'boss' ||
     getEffectivePrimaryExitLock({ board }).lockKind !== 'none';
 
-export const countUndefeatedEnemyHazardsForPlayableGate = (board: BoardState | null | undefined): number =>
-    board?.enemyHazards?.filter((hazard) => hazard.state !== 'defeated').length ?? 0;
-
 export const buildEndlessSimulationCsv = ({
     floors,
     runSeed,
@@ -119,13 +105,7 @@ export const buildEndlessSimulationCsv = ({
     const mutatorCounts: Record<string, number> = {};
     const floorTagCounts: Record<string, number> = {};
     const floorArchetypeCounts: Record<string, number> = {};
-    const objectiveCounts: Record<string, number> = {};
-    const bossCounts: Record<string, number> = {};
-    const dungeonCardKindCounts: Record<string, number> = {};
-    const dungeonExitLockCounts: Record<string, number> = {};
-    const dungeonExitCounts: Record<string, number> = {};
     const fairnessIssueCounts: Record<string, number> = {};
-    const topologyIssueCounts: Record<string, number> = {};
     const playableIssueCounts: Record<string, number> = {};
     const playableFailureDetails: string[] = [];
     let playableCheckedFloors = 0;
@@ -134,8 +114,6 @@ export const buildEndlessSimulationCsv = ({
     let coreReplayRejectedCommandFloors = 0;
     let coreReplayInvariantViolationFloors = 0;
     let playableLockedExitFloors = 0;
-    let lockedCacheRoomFloors = 0;
-    let typedLockedCacheRoomFloors = 0;
     const traitMetricCounts: Record<string, number> = {
         traitFloors: 0,
         traitInteractionLines: 0,
@@ -169,35 +147,11 @@ export const buildEndlessSimulationCsv = ({
             cycleFloor,
             gameMode: 'endless'
         });
-        objectiveCounts[board.dungeonObjectiveId ?? 'none'] = (objectiveCounts[board.dungeonObjectiveId ?? 'none'] ?? 0) + 1;
-        bossCounts[board.dungeonBossId ?? 'none'] = (bossCounts[board.dungeonBossId ?? 'none'] ?? 0) + 1;
-        const exits = board.tiles.filter((tile) => tile.dungeonCardKind === 'exit');
-        const lockedCacheRoom = board.tiles.find(
-            (tile) => tile.dungeonCardKind === 'room' && tile.dungeonCardEffectId === 'room_locked_cache'
-        );
-        if (lockedCacheRoom) {
-            lockedCacheRoomFloors += 1;
-            if ((lockedCacheRoom.dungeonKeyKind ?? 'iron') !== 'iron') {
-                typedLockedCacheRoomFloors += 1;
-            }
-        }
-        dungeonExitCounts[String(exits.length)] = (dungeonExitCounts[String(exits.length)] ?? 0) + 1;
-        for (const exit of exits) {
-            const lockKey = exit.dungeonExitLockKind ?? 'none';
-            dungeonExitLockCounts[lockKey] = (dungeonExitLockCounts[lockKey] ?? 0) + 1;
-        }
         const fairnessIssueCodes = new Set(inspectBoardFairness(board).issues.map((issue) => issue.code));
         if (fairnessIssueCodes.size > 0) {
             fairnessIssueCounts.floorWithIssue = (fairnessIssueCounts.floorWithIssue ?? 0) + 1;
             for (const code of fairnessIssueCodes) {
                 fairnessIssueCounts[code] = (fairnessIssueCounts[code] ?? 0) + 1;
-            }
-        }
-        const topologyIssueCodes = new Set(inspectDungeonBoardTopology(board).issues.map((issue) => issue.code));
-        if (topologyIssueCodes.size > 0) {
-            topologyIssueCounts.floorWithIssue = (topologyIssueCounts.floorWithIssue ?? 0) + 1;
-            for (const code of topologyIssueCodes) {
-                topologyIssueCounts[code] = (topologyIssueCounts[code] ?? 0) + 1;
             }
         }
         const effectiveExitLock = getEffectivePrimaryExitLock({ board });
@@ -222,38 +176,8 @@ export const buildEndlessSimulationCsv = ({
             if (trace.invariantViolations.length > 0) {
                 coreReplayInvariantViolationFloors += 1;
             }
-            const activeStaleHazards =
-                trace.run.status === 'levelComplete' ? activeEnemyHazardsForBoard(trace.run.board).length : 0;
-            const undefeatedStaleHazards =
-                trace.run.status === 'levelComplete'
-                    ? countUndefeatedEnemyHazardsForPlayableGate(trace.run.board)
-                    : 0;
-            const solvedBoardTopologyIssues =
-                trace.run.status === 'levelComplete'
-                    ? inspectDungeonBoardTopology(trace.run.board ?? board, {
-                          dungeonKeys: trace.run.dungeonKeys,
-                          dungeonMasterKeys: trace.run.dungeonMasterKeys
-                      }).issues
-                    : [];
-            const nextFloorRouteTopologyIssues =
-                trace.run.status === 'levelComplete' && activeStaleHazards === 0 && undefeatedStaleHazards === 0
-                    ? inspectDungeonRunMapTopology(advanceToNextLevel(trace.run).dungeonRun).issues
-                    : [];
-            if (
-                trace.run.status !== 'levelComplete' ||
-                activeStaleHazards > 0 ||
-                undefeatedStaleHazards > 0 ||
-                solvedBoardTopologyIssues.length > 0 ||
-                nextFloorRouteTopologyIssues.length > 0
-            ) {
-                const reason =
-                    solvedBoardTopologyIssues.length > 0
-                        ? 'solved_board_topology'
-                        : nextFloorRouteTopologyIssues.length > 0
-                        ? 'next_floor_route_topology'
-                        : activeStaleHazards > 0 || undefeatedStaleHazards > 0
-                          ? 'stale_enemy_hazard'
-                          : trace.stopReason;
+            if (trace.run.status !== 'levelComplete') {
+                const reason = trace.stopReason;
                 playableIssueCounts.floorWithIssue = (playableIssueCounts.floorWithIssue ?? 0) + 1;
                 playableIssueCounts[reason] = (playableIssueCounts[reason] ?? 0) + 1;
                 playableFailureDetails.push(
@@ -264,18 +188,12 @@ export const buildEndlessSimulationCsv = ({
                         `turns=${trace.turns}`,
                         `lastPair=${trace.lastPairKey ?? 'none'}`,
                         `lastTiles=${trace.lastTileIds.join('+') || 'none'}`,
-                        `activeStaleHazards=${activeStaleHazards}`,
-                        `undefeatedStaleHazards=${undefeatedStaleHazards}`,
-                        `solvedTopologyIssues=${solvedBoardTopologyIssues.map((issue) => issue.code).join('+') || 'none'}`,
-                        `routeTopologyIssues=${nextFloorRouteTopologyIssues.map((issue) => issue.code).join('+') || 'none'}`,
-                        `archetype=${floorArchetypeId ?? 'none'}`,
-                        `objective=${board.dungeonObjectiveId ?? 'none'}`
+                        `archetype=${floorArchetypeId ?? 'none'}`
                     ].join('|')
                 );
             }
         }
         const seenFindablePairs = new Set<string>();
-        const seenDungeonPairs = new Set<string>();
         const traitPairKeys = new Set<string>();
         for (const tile of board.tiles) {
             if (tile.tileTraitKind) {
@@ -285,11 +203,6 @@ export const buildEndlessSimulationCsv = ({
                 seenFindablePairs.add(tile.pairKey);
                 findableKindCounts[tile.findableKind] += 1;
             }
-            if (!tile.dungeonCardKind || seenDungeonPairs.has(tile.pairKey)) {
-                continue;
-            }
-            seenDungeonPairs.add(tile.pairKey);
-            dungeonCardKindCounts[tile.dungeonCardKind] = (dungeonCardKindCounts[tile.dungeonCardKind] ?? 0) + 1;
         }
         const traitInteractionLines = getBoardTraitInteractionPreviewLines(board).length;
         const traitComboOpportunityPairs = countTraitComboOpportunityPairs(board);
@@ -327,35 +240,15 @@ export const buildEndlessSimulationCsv = ({
         ...getFindableSpawnWeightRows()
             .sort((a, b) => a.id.localeCompare(b.id))
             .map((row) => `findableTargetWeight,${row.id},${row.weight}`),
-        ...Object.entries(objectiveCounts)
-            .sort(([a], [b]) => a.localeCompare(b))
-            .map(([k, v]) => `dungeonObjective,${k},${v}`),
-        ...Object.entries(bossCounts)
-            .sort(([a], [b]) => a.localeCompare(b))
-            .map(([k, v]) => `dungeonBoss,${k},${v}`),
-        ...Object.entries(dungeonCardKindCounts)
-            .sort(([a], [b]) => a.localeCompare(b))
-            .map(([k, v]) => `dungeonCardKind,${k},${v}`),
-        ...Object.entries(dungeonExitCounts)
-            .sort(([a], [b]) => Number(a) - Number(b))
-            .map(([k, v]) => `dungeonExitCount,${k},${v}`),
-        ...Object.entries(dungeonExitLockCounts)
-            .sort(([a], [b]) => a.localeCompare(b))
-            .map(([k, v]) => `dungeonExitLock,${k},${v}`),
         ...Object.entries(fairnessIssueCounts)
             .sort(([a], [b]) => a.localeCompare(b))
             .map(([k, v]) => `fairnessIssue,${k},${v}`),
-        ...Object.entries(topologyIssueCounts)
-            .sort(([a], [b]) => a.localeCompare(b))
-            .map(([k, v]) => `topologyIssue,${k},${v}`),
         `playableMetric,checkedFloors,${playableCheckedFloors}`,
         `coreReplayMetric,checkedFloors,${coreReplayCheckedFloors}`,
         `coreReplayMetric,issueFloors,${coreReplayIssueFloors}`,
         `coreReplayMetric,rejectedCommandFloors,${coreReplayRejectedCommandFloors}`,
         `coreReplayMetric,invariantViolationFloors,${coreReplayInvariantViolationFloors}`,
         `playableMetric,lockedExitFloors,${playableLockedExitFloors}`,
-        `dungeonMetric,lockedCacheRoomFloors,${lockedCacheRoomFloors}`,
-        `dungeonMetric,typedLockedCacheRoomFloors,${typedLockedCacheRoomFloors}`,
         ...Object.entries(playableIssueCounts)
             .sort(([a], [b]) => a.localeCompare(b))
             .map(([k, v]) => `playableIssue,${k},${v}`),
@@ -385,16 +278,10 @@ const readEndlessSimulationMetrics = (input: EndlessSimulationCsvInput): Endless
     const counts = parseCsvCounts(csv);
     const floors = Math.max(1, Math.floor(input.floors));
     const routeKinds = Object.keys(counts.floorArchetype ?? {}).filter((key) => key !== 'none').length;
-    const objectiveKinds = Object.keys(counts.dungeonObjective ?? {}).filter((key) => key !== 'none').length;
-    const exitLockTypes = Object.keys(counts.dungeonExitLock ?? {}).filter((key) => key !== 'none').length;
     const fairnessIssueCodes = Object.keys(counts.fairnessIssue ?? {})
         .filter((key) => key !== 'floorWithIssue')
         .sort((a, b) => a.localeCompare(b));
     const fairnessIssueTypes = fairnessIssueCodes.length;
-    const topologyIssueCodes = Object.keys(counts.topologyIssue ?? {})
-        .filter((key) => key !== 'floorWithIssue')
-        .sort((a, b) => a.localeCompare(b));
-    const topologyIssueTypes = topologyIssueCodes.length;
     const findableTotal = sumCounts(counts.findableKind);
     const playableIssueReasons = Object.keys(counts.playableIssue ?? {})
         .filter((key) => key !== 'floorWithIssue')
@@ -407,17 +294,10 @@ const readEndlessSimulationMetrics = (input: EndlessSimulationCsvInput): Endless
     const traitDenominator = Math.max(1, traitFloors);
     return {
         deadTraitFloors,
-        exitlessFloors: counts.dungeonExitCount?.['0'] ?? 0,
         fairnessIssueCodes,
         fairnessIssueFloors: counts.fairnessIssue?.floorWithIssue ?? 0,
         fairnessIssueTypes,
-        topologyIssueCodes,
-        topologyIssueFloors: counts.topologyIssue?.floorWithIssue ?? 0,
-        topologyIssueTypes,
-        exitLockTypes,
         findableTotal,
-        lockedCacheRoomFloors: counts.dungeonMetric?.lockedCacheRoomFloors ?? 0,
-        objectiveKinds,
         playableCheckedFloors: counts.playableMetric?.checkedFloors ?? 0,
         coreReplayCheckedFloors: counts.coreReplayMetric?.checkedFloors ?? 0,
         playableFailureDetails,
@@ -425,7 +305,6 @@ const readEndlessSimulationMetrics = (input: EndlessSimulationCsvInput): Endless
         playableIssueReasons,
         playableLockedExitFloors: counts.playableMetric?.lockedExitFloors ?? 0,
         rewardKinds,
-        typedLockedCacheRoomFloors: counts.dungeonMetric?.typedLockedCacheRoomFloors ?? 0,
         traitBoardPowerInteractionFloorShare:
             (counts.traitMetric?.traitBoardPowerInteractionFloors ?? 0) / traitDenominator,
         traitMatchRouteFloorShare: (counts.traitMetric?.traitMatchRouteFloors ?? 0) / traitDenominator,
@@ -459,9 +338,6 @@ export const evaluateEndlessSimulationHealth = (
          */
         metrics.fairnessIssueFloors > 0 || metrics.fairnessIssueTypes > 0
             ? `Expected generated boards to pass fairness inspection, saw ${metrics.fairnessIssueFloors} floor(s) with ${metrics.fairnessIssueTypes} issue type(s): ${metrics.fairnessIssueCodes.join(', ') || 'unknown'}.`
-            : null,
-        metrics.topologyIssueFloors > 0 || metrics.topologyIssueTypes > 0
-            ? `Expected generated boards to pass topology inspection, saw ${metrics.topologyIssueFloors} floor(s) with ${metrics.topologyIssueTypes} issue type(s): ${metrics.topologyIssueCodes.join(', ') || 'unknown'}.`
             : null,
         metrics.playableCheckedFloors <= 0
             ? 'Expected executable playable solver sampling to inspect at least one floor.'
@@ -521,11 +397,9 @@ const formatEndlessSimulationSummary = (
         `- Floors sampled: ${floors}`,
         `- Seed: ${Math.floor(input.runSeed)}`,
         `- Rules version: ${input.rulesVersion ?? GAME_RULES_VERSION}`,
-        `- Route gates: ${metrics.routeKinds} floor archetypes, ${metrics.objectiveKinds} objectives, ${metrics.exitLockTypes} exit lock types, ${metrics.exitlessFloors} exitless floors.`,
+        `- Route gates: ${metrics.routeKinds} floor archetypes.`,
         `- Fairness gates: ${metrics.fairnessIssueFloors} issue floors across ${metrics.fairnessIssueTypes} issue types (${metrics.fairnessIssueCodes.join(', ') || 'none'}).`,
-        `- Topology gates: ${metrics.topologyIssueFloors} issue floors across ${metrics.topologyIssueTypes} issue types (${metrics.topologyIssueCodes.join(', ') || 'none'}).`,
         `- Playable gates: ${metrics.playableCheckedFloors} sampled floors, ${metrics.playableLockedExitFloors} locked-exit floors, ${metrics.playableIssueFloors} issue floors (${metrics.playableIssueReasons.join(', ') || 'none'}).`,
-        `- Dungeon room gates: ${metrics.lockedCacheRoomFloors} locked cache room floors, ${metrics.typedLockedCacheRoomFloors} typed locked cache room floors.`,
         `- Reward gates: ${metrics.findableTotal} findable rewards across ${metrics.rewardKinds} active reward kinds.`,
         `- Trait gates: ${Math.round(metrics.traitFloorShare * floors)} trait floors (${pct(metrics.traitFloorShare * floors)}), ${metrics.traitInteractionLines} interaction lines, ${metrics.deadTraitFloors} dead trait floors.`,
         `- Trait mechanic gates: ${(metrics.traitMatchRouteFloorShare * 100).toFixed(1)}% match-route floors, ${(metrics.traitRewardFloorShare * 100).toFixed(1)}% reward floors, ${(metrics.traitBoardPowerInteractionFloorShare * 100).toFixed(1)}% board-power floors, ${(metrics.traitSwapSetupFloorShare * 100).toFixed(1)}% one-swap setup floors.`,

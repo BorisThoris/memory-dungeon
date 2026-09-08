@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { RunState } from './contracts';
 import { createNewRun } from './game-core';
-import { HAZARD_TILE_DEFINITIONS } from './hazard-tiles';
 import {
     LONG_RUN_TERMINOLOGY_ROWS,
     SAFE_EXPANSION_IMPACT_ROWS,
@@ -64,11 +63,6 @@ describe('GLD-FB long-run feedback read models', () => {
             ...createNewRun(0, { runSeed: 91_002, activeMutators: [] }),
             findablesClaimedThisFloor: 1,
             findablesTotalThisFloor: 2,
-            hazardTileTriggersThisFloor: 2,
-            safeHazardWardsUsedThisFloor: 1,
-            safeHazardWardChargesThisFloor: 1,
-            enemyHazardHitsThisFloor: 1,
-            enemyHazardsDefeatedThisFloor: 1,
             recallFocus: 2,
             recallMatchesThisFloor: 1,
             recallBonusScoreThisFloor: 16,
@@ -81,30 +75,28 @@ describe('GLD-FB long-run feedback read models', () => {
         };
 
         expect(getInRunCauseRows(run).map((row) => row.id)).toEqual(
-            expect.arrayContaining(['findables-claimed', 'hazard-events', 'enemy-contact', 'recall-focus', 'economy'])
+            expect.arrayContaining(['findables-claimed', 'recall-focus', 'economy'])
         );
+        expect(getInRunCauseRows(run).map((row) => row.id)).not.toContain('objective-progress');
         expect(getInRunCauseRows(run).map((row) => row.detail).join(' ')).toContain('archive finds');
-        expect(getInRunCauseRows(run).map((row) => row.detail).join(' ')).toContain('guard first');
         expect(getInRunCauseRows(run).map((row) => row.detail).join(' ')).toContain('room log');
         expect(getInRunCauseRows(run).find((row) => row.id === 'recall-focus')?.detail).toContain(
             'clean recall is carrying the room'
         );
         expect(getInRunCauseRows(run).find((row) => row.id === 'recall-focus')?.detail).toContain(
-            'Threshold Archive'
+            'Floor 1'
         );
         expect(getInRunCauseRows(run).find((row) => row.id === 'recall-focus')?.detail).toContain(
             'Next memory move: Cash in clean recall.'
         );
         expect(getTouchHudDetailRows(run).map((row) => row.id)).toEqual([
             'objective',
-            'hazard',
-            'boss',
             'route',
             'memory',
             'perfect_memory',
             'economy'
         ]);
-        expect(getTouchHudDetailRows(run).find((row) => row.id === 'hazard')?.detail).toContain('1 contact hit');
+        expect(getTouchHudDetailRows(run).find((row) => row.id === 'objective')?.detail).toContain('Trait routes');
         expect(getTouchHudDetailRows(run).find((row) => row.id === 'memory')?.detail).toContain('room log');
         expect(getTouchHudDetailRows(run).find((row) => row.id === 'memory')?.detail).toContain('Recall is clear');
         expect(getTouchHudDetailRows(run).find((row) => row.id === 'memory')?.detail).toContain(
@@ -146,15 +138,7 @@ describe('GLD-FB long-run feedback read models', () => {
     });
 
     it('publishes terminology and safe expansion contract matrices', () => {
-        expect(LONG_RUN_TERMINOLOGY_ROWS.map((row) => row.id)).toEqual([
-            'trap_card',
-            'hazard_tile',
-            'decoy',
-            'enemy_patrol',
-            'route_special',
-            'dungeon_card',
-            'objective'
-        ]);
+        expect(LONG_RUN_TERMINOLOGY_ROWS.map((row) => row.id)).toEqual(['decoy', 'route_special', 'objective']);
         expect(SAFE_EXPANSION_IMPACT_ROWS).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({ id: 'ward_spark', runtimeStatus: 'wired' }),
@@ -162,7 +146,6 @@ describe('GLD-FB long-run feedback read models', () => {
                 expect.objectContaining({ id: 'ward_cache', runtimeStatus: 'read_model_only' })
             ])
         );
-        expect(Object.keys(HAZARD_TILE_DEFINITIONS)).not.toContain('ward_cache');
         expect(WARD_CACHE_CONTRACT_ROW.surface).toBe('hazard_reward_contract');
     });
 

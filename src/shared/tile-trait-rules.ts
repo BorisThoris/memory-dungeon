@@ -3,14 +3,11 @@ import {
     MAX_GUARD_TOKENS,
     RECALL_FOCUS_MAX,
     type BoardState,
-    type RelicId,
-    type RouteNodeType,
     type RunState,
     type StartingLoadoutId,
     type Tile,
     type TileTraitKind
 } from './contracts';
-import { hasRewardPerk } from './bonus-rewards';
 import {
     createGameplayDefinitionCommand,
     getGameplayContentDefinition,
@@ -19,7 +16,6 @@ import {
     type GameplayFacts
 } from './gameplay-core-contracts';
 import { applyGameplayDefinitionTransition } from './gameplay-effect-transition';
-import { hasRunRelic } from './relics';
 import { createMulberry32, hashStringToSeed, pickRngIndex, shuffleWithRng } from './rng';
 import { runArrayCount } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -99,7 +95,6 @@ export interface TileTraitEffectResult {
     shopGoldGain: number;
     shuffleChargeGain: number;
     stickyBlockIndex: number | null;
-    blocksVolatileShuffle: boolean;
     peekChargeLoss: number;
     recallMistakesDelta: number;
     triesDelta: number;
@@ -357,29 +352,19 @@ const createEmptyTraitEffectResult = (): TileTraitEffectResult => ({
     shopGoldGain: 0,
     shuffleChargeGain: 0,
     stickyBlockIndex: null,
-    blocksVolatileShuffle: false,
     peekChargeLoss: 0,
     recallMistakesDelta: 0,
     triesDelta: 0
 });
 
 const tileCanReceiveTrait = (tile: Tile): boolean =>
-    tile.state === 'hidden' &&
-    !isSingletonUtilityPairKey(tile.pairKey) &&
-    tile.routeCardKind == null &&
-    tile.routeSpecialKind == null &&
-    !['exit', 'shop', 'room'].includes(tile.dungeonCardKind ?? '') &&
-    tile.tileTraitKind == null;
+    tile.state === 'hidden' && !isSingletonUtilityPairKey(tile.pairKey) && tile.tileTraitKind == null;
 
 const tileCanShuffleFromVolatileMiss = (tile: Tile, blockedPairKeys: ReadonlySet<string>): boolean =>
     tile.state === 'hidden' &&
     !blockedPairKeys.has(tile.pairKey) &&
     !isSingletonUtilityPairKey(tile.pairKey) &&
-    tile.dungeonCardKind == null &&
-    tile.routeCardKind == null &&
-    tile.routeSpecialKind == null &&
-    tile.findableKind == null &&
-    tile.tileHazardKind == null;
+    tile.findableKind == null;
 
 const DEFAULT_TRAIT_INTERACTION_SEED: readonly [TileTraitKind, TileTraitKind] = ['conduit', 'echo'];
 
@@ -447,7 +432,6 @@ const LOADOUT_TRAIT_PLANS: Record<
 
 const routeInteractionSeed = (
     intensity: 'safe' | 'greed' | 'mystery' | null | undefined,
-    relicIds: readonly RelicId[],
     startingLoadoutId: StartingLoadoutId | null | undefined
 ): readonly [TileTraitKind, TileTraitKind] => {
     const loadoutPlan = startingLoadoutId ? LOADOUT_TRAIT_PLANS[startingLoadoutId] : null;
@@ -458,17 +442,16 @@ const routeInteractionSeed = (
         return ['drift', 'volatile'];
     }
     if (intensity === 'mystery') {
-        return relicIds.includes('parasite_ledger') ? ['stasis', 'cursed'] : ['stasis', 'conduit'];
+        return ['stasis', 'conduit'];
     }
-    return relicIds.includes('chapter_compass') ? ['conduit', 'mirror'] : ['conduit', 'echo'];
+    return ['conduit', 'echo'];
 };
 
 const routeInteractionSeeds = (
     intensity: 'safe' | 'greed' | 'mystery' | null | undefined,
-    relicIds: readonly RelicId[],
     startingLoadoutId: StartingLoadoutId | null | undefined
 ): readonly (readonly [TileTraitKind, TileTraitKind])[] => {
-    const primary = routeInteractionSeed(intensity, relicIds, startingLoadoutId);
+    const primary = routeInteractionSeed(intensity, startingLoadoutId);
     const loadoutExtra: Partial<Record<StartingLoadoutId, readonly (readonly [TileTraitKind, TileTraitKind])[]>> = {
         memory_scout: [['echo', 'mirror'], ['sealed', 'conduit']],
         route_tactician: [['drift', 'volatile'], ['volatile', 'heavy']],
@@ -516,29 +499,19 @@ const openerInteractionSeeds = (
 const traitPoolForContext = (
     level: number,
     intensity: 'safe' | 'greed' | 'mystery' | null | undefined,
-    relicIds: readonly RelicId[],
     startingLoadoutId: StartingLoadoutId | null | undefined
 ): TileTraitKind[] => {
     const loadoutPool = startingLoadoutId ? LOADOUT_TRAIT_PLANS[startingLoadoutId]?.pool : null;
-    const hasChapterCompass = relicIds.includes('chapter_compass');
-    const hasWagerSurety = relicIds.includes('wager_surety');
-    const hasParasiteLedger = relicIds.includes('parasite_ledger');
     const routePool: TileTraitKind[] =
         level <= 1
             ? ['echo', 'mirror', 'heavy']
             : intensity === 'safe'
-            ? hasChapterCompass
-                ? ['echo', 'echo', 'mirror', 'sealed', 'conduit']
-                : ['echo', 'mirror', 'echo', 'heavy', 'conduit']
-            : intensity === 'greed'
-              ? hasWagerSurety
-                  ? ['volatile', 'cursed', 'echo', 'heavy', 'drift']
-                  : ['volatile', 'cursed', 'volatile', 'heavy', 'drift']
-              : intensity === 'mystery'
-                ? hasParasiteLedger
-                    ? ['mirror', 'sealed', 'cursed', 'echo', 'conduit', 'stasis']
-                    : ['mirror', 'sealed', 'volatile', 'echo', 'conduit', 'stasis']
-                : ['echo', 'volatile', 'mirror', 'cursed', 'sealed', 'heavy', 'drift', 'conduit', 'stasis'];
+              ? ['echo', 'mirror', 'echo', 'heavy', 'conduit']
+              : intensity === 'greed'
+                ? ['volatile', 'cursed', 'volatile', 'heavy', 'drift']
+                : intensity === 'mystery'
+                  ? ['mirror', 'sealed', 'volatile', 'echo', 'conduit', 'stasis']
+                  : ['echo', 'volatile', 'mirror', 'cursed', 'sealed', 'heavy', 'drift', 'conduit', 'stasis'];
 
     return loadoutPool ? [...loadoutPool, ...routePool] : routePool;
 };
@@ -585,25 +558,6 @@ const collectAdjacentEligiblePairKeys = (
     return pairs;
 };
 
-export const getRouteTraitForecastLine = (routeType: RouteNodeType, relicIds: readonly RelicId[] = []): string => {
-    const hasChapterCompass = relicIds.includes('chapter_compass');
-    const hasWagerSurety = relicIds.includes('wager_surety');
-    const hasParasiteLedger = relicIds.includes('parasite_ledger');
-    if (routeType === 'safe') {
-        return hasChapterCompass
-            ? 'Trait pressure: safer Echo/Mirror/Conduit clues, with Compass bias toward readable traits.'
-            : 'Trait pressure: mostly Echo/Mirror/Conduit clues and fewer punishing drawbacks.';
-    }
-    if (routeType === 'greed') {
-        return hasWagerSurety
-            ? 'Trait pressure: Volatile/Cursed/Drift upside, with Surety softening volatile misses while guarded.'
-            : 'Trait pressure: more Volatile/Cursed pairs with Drift reposition rewards.';
-    }
-    return hasParasiteLedger
-        ? 'Trait pressure: Mirror/Sealed/Cursed/Conduit unknowns; Ledger converts cursed matches into extra gold.'
-        : 'Trait pressure: Mirror/Sealed unknowns with Conduit/Stasis interactions.';
-};
-
 export const getTileTraitText = (tile: Tile): string => {
     if (!tile.tileTraitKind) {
         return '';
@@ -634,7 +588,6 @@ export const assignTileTraitsToGeneratedBoard = (
     rulesVersion: number,
     level: number,
     intensity: 'safe' | 'greed' | 'mystery' | null | undefined,
-    relicIds: readonly RelicId[] = [],
     startingLoadoutId: StartingLoadoutId | null | undefined = null,
     boardColumns: number = columnsForTileCount(tiles.length)
 ): Tile[] => {
@@ -650,7 +603,7 @@ export const assignTileTraitsToGeneratedBoard = (
         : `tileTraits:${rulesVersion}:${runSeed}:${level}:${intensity ?? 'none'}`;
     const rng = createMulberry32(hashStringToSeed(traitSeedKey));
     const traitCount = calculateCoreTraitCount(eligiblePairKeys.length, level);
-    const pool = traitPoolForContext(level, intensity, relicIds, startingLoadoutId);
+    const pool = traitPoolForContext(level, intensity, startingLoadoutId);
     const shuffledPairKeys = shuffleWithRng(() => rng(), eligiblePairKeys);
     const traitByPairKey = new Map<string, TileTraitKind>();
     if (traitCount >= 2) {
@@ -658,7 +611,7 @@ export const assignTileTraitsToGeneratedBoard = (
         const shuffledAdjacentPairs = shuffleWithRng(() => rng(), adjacentPairs);
         const seeds = level <= 1
             ? openerInteractionSeeds(startingLoadoutId)
-            : routeInteractionSeeds(intensity, relicIds, startingLoadoutId);
+            : routeInteractionSeeds(intensity, startingLoadoutId);
         let seedIndex = intensity == null && !startingLoadoutId ? pickRngIndex(rng, seeds.length) : 0;
         for (const [firstPairKey, secondPairKey] of shuffledAdjacentPairs) {
             if (traitByPairKey.size + 2 > traitCount) {
@@ -711,7 +664,7 @@ export const assignTileTraitsToGeneratedBoard = (
         if (firstPairKey && secondPairKey) {
             const repairSeeds = level <= 1
                 ? openerInteractionSeeds(startingLoadoutId)
-                : routeInteractionSeeds(intensity, relicIds, startingLoadoutId);
+                : routeInteractionSeeds(intensity, startingLoadoutId);
             const repairSeedIndex = intensity == null && !startingLoadoutId ? pickRngIndex(rng, repairSeeds.length) : 0;
             const [firstTrait, secondTrait] =
                 repairSeeds[repairSeedIndex] ?? repairSeeds[0] ?? DEFAULT_TRAIT_INTERACTION_SEED;
@@ -893,7 +846,6 @@ export const resolveTileTraitEffects = ({
     const stats = normalizeSessionStats(run.stats);
     const comboShards = stats.comboShards;
     const guardTokens = stats.guardTokens;
-    const currentStreak = stats.currentStreak;
     const matchResolutionsThisFloor = runNonNegativeInteger(run.matchResolutionsThisFloor);
     const peekCharges = runNonNegativeInteger(run.peekCharges);
     const recallFocus = runNonNegativeInteger(run.recallFocus);
@@ -940,28 +892,14 @@ export const resolveTileTraitEffects = ({
 
     if (source === 'match') {
         result.comboShardGain = hasTrait('sealed') && comboShards < MAX_COMBO_SHARDS ? 1 : 0;
-        result.guardTokenGain =
-            (hasTrait('mirror') ? 1 : 0) +
-            (hasTrait('volatile') && hasRunRelic(run, 'wager_surety') && guardTokens < MAX_GUARD_TOKENS ? 1 : 0);
+        result.guardTokenGain = hasTrait('mirror') ? 1 : 0;
         result.peekChargeGain = hasTrait('echo') ? 1 : 0;
-        result.scoreBonus =
-            [...traits].reduce((sum, trait) => sum + (TILE_TRAIT_MATCH_SCORE_BONUS[trait] ?? 0), 0) +
-            (hasTrait('echo') && hasRunRelic(run, 'chapter_compass') ? 10 : 0);
-        result.shopGoldGain = hasTrait('cursed') && hasRunRelic(run, 'parasite_ledger') ? 1 : 0;
+        result.scoreBonus = [...traits].reduce((sum, trait) => sum + (TILE_TRAIT_MATCH_SCORE_BONUS[trait] ?? 0), 0);
+        result.shopGoldGain = 0;
 
         if (hasTrait('echo') && adjacentTraitKinds.has('sealed') && comboShards < MAX_COMBO_SHARDS) {
             result.comboShardGain += 1;
             result.interactionTags.push('echo:sealed-combo');
-        }
-
-        if (hasTrait('echo') && adjacentTraitKinds.has('conduit') && hasRewardPerk(run, 'echo_conduit_double')) {
-            const coreResult = applyCoreTraitDefinition('reward_perk.echo_conduit_double', 'echo-conduit');
-            result.peekChargeGain +=
-                runNonNegativeInteger(coreResult.run.peekCharges) - peekCharges;
-            if (adjacentTraitKinds.has('sealed') && comboShards + result.comboShardGain < MAX_COMBO_SHARDS) {
-                result.comboShardGain += 1;
-            }
-            result.interactionTags.push('reward-perk:echo-conduit-double');
         }
 
         if (hasTrait('echo') && adjacentTraitKinds.has('mirror') && recallFocus < RECALL_FOCUS_MAX) {
@@ -994,30 +932,6 @@ export const resolveTileTraitEffects = ({
             result.shopGoldGain += 1;
             result.scoreBonus += 20;
             result.interactionTags.push('cursed:volatile-greed');
-        }
-
-        if (hasTrait('cursed') && matchResolutionsThisFloor === 0 && hasRewardPerk(run, 'cursed_opener_greed')) {
-            const projectedShopGold = runNonNegativeInteger(run.shopGold) + result.shopGoldGain;
-            const projectedTotalScore = runNonNegativeInteger(stats.totalScore) + result.scoreBonus;
-            const projectedCurrentLevelScore = runNonNegativeInteger(stats.currentLevelScore) + result.scoreBonus;
-            const projectedRun = {
-                ...run,
-                shopGold: projectedShopGold,
-                stats: {
-                    ...stats,
-                    totalScore: projectedTotalScore,
-                    currentLevelScore: projectedCurrentLevelScore
-                }
-            };
-            const coreResult = applyCoreTraitDefinition(
-                'reward_perk.cursed_opener_greed',
-                'cursed-opener',
-                projectedRun
-            );
-            const coreStats = normalizeSessionStats(coreResult.run.stats);
-            result.shopGoldGain += runNonNegativeInteger(coreResult.run.shopGold) - projectedShopGold;
-            result.scoreBonus += coreStats.totalScore - projectedTotalScore;
-            result.interactionTags.push('reward-perk:cursed-opener-greed');
         }
 
         if (hasTrait('volatile') && adjacentTraitKinds.has('heavy')) {
@@ -1066,11 +980,6 @@ export const resolveTileTraitEffects = ({
                 }
                 result.interactionTags.push('conduit:stasis-lock');
             }
-            if (hasRunRelic(run, 'chapter_compass')) {
-                result.peekChargeGain += 1;
-                result.scoreBonus += 10;
-                result.interactionTags.push('chapter-compass:conduit-map');
-            }
         }
 
         if (hasTrait('stasis') && board) {
@@ -1081,156 +990,11 @@ export const resolveTileTraitEffects = ({
             }
         }
 
-        if (traits.size > 0 && currentStreak >= 2 && hasRewardPerk(run, 'trait_streak_toolkit')) {
-            const projectedFlashPairCharges = runNonNegativeInteger(run.flashPairCharges) + result.flashPairChargeGain;
-            const coreResult = applyCoreTraitDefinition(
-                'reward_perk.trait_streak_toolkit',
-                'trait-streak-flash',
-                { ...run, flashPairCharges: projectedFlashPairCharges }
-            );
-            result.flashPairChargeGain +=
-                runNonNegativeInteger(coreResult.run.flashPairCharges) - projectedFlashPairCharges;
-            result.interactionTags.push('reward-perk:trait-streak-flash');
-        }
-
-        if (hasTrait('sealed') && hasRunRelic(run, 'combo_shard_plus_step')) {
-            const projectedComboShards = Math.min(MAX_COMBO_SHARDS, comboShards + result.comboShardGain);
-            const projectedRun = {
-                ...run,
-                stats: { ...stats, comboShards: projectedComboShards }
-            };
-            const coreResult = applyCoreTraitDefinition(
-                'relic.combo_shard_plus_step.sealed_match',
-                'catalyst-sealed',
-                projectedRun
-            );
-            const coreStats = normalizeSessionStats(coreResult.run.stats);
-            result.comboShardGain += coreStats.comboShards - projectedComboShards;
-            result.scoreBonus += coreStats.totalScore - stats.totalScore;
-            result.interactionTags.push('catalyst-thread:sealed-engine');
-        }
-
-        if (hasTrait('drift') && hasRunRelic(run, 'region_shuffle_free_first')) {
-            result.regionShuffleChargeGain += 1;
-            result.scoreBonus += 10;
-            result.interactionTags.push('row-compass:drift-routing');
-        }
-
-        if (hasTrait('mirror') && hasRunRelic(run, 'guard_token_plus_one')) {
-            const projectedGuardTokens = Math.min(MAX_GUARD_TOKENS, guardTokens + result.guardTokenGain);
-            const projectedRun = {
-                ...run,
-                stats: { ...stats, guardTokens: projectedGuardTokens }
-            };
-            const coreResult = applyCoreTraitDefinition(
-                'relic.guard_token_plus_one.mirror_match',
-                'warden-mirror',
-                projectedRun
-            );
-            const coreStats = normalizeSessionStats(coreResult.run.stats);
-            result.guardTokenGain += coreStats.guardTokens - projectedGuardTokens;
-            result.scoreBonus += coreStats.totalScore - stats.totalScore;
-            result.interactionTags.push('warden-sigil:mirror-ward');
-        }
-
-        /*
-         * Standing-rule relics. Each one turns a trait the board keeps dealing into a payout, so the
-         * same projected-run readback pattern as above applies: hand the core definition a run that
-         * already carries this turn's gains, then take the difference back out as a delta.
-         */
-        if (hasRunRelic(run, 'bulwark_plate') && hasTrait('heavy')) {
-            const projectedGuardTokens = Math.min(MAX_GUARD_TOKENS, guardTokens + result.guardTokenGain);
-            const projectedTotalScore = runNonNegativeInteger(stats.totalScore) + result.scoreBonus;
-            const projectedRun = {
-                ...run,
-                stats: {
-                    ...stats,
-                    currentLevelScore: runNonNegativeInteger(stats.currentLevelScore) + result.scoreBonus,
-                    guardTokens: projectedGuardTokens,
-                    totalScore: projectedTotalScore
-                }
-            };
-            const coreResult = applyCoreTraitDefinition('relic.bulwark_plate.heavy_match', 'bulwark-heavy', projectedRun);
-            const coreStats = normalizeSessionStats(coreResult.run.stats);
-            result.guardTokenGain += coreStats.guardTokens - projectedGuardTokens;
-            result.scoreBonus += coreStats.totalScore - projectedTotalScore;
-            result.interactionTags.push('bulwark-plate:heavy-guard');
-        }
-
-        if (hasRunRelic(run, 'tithe_conduit') && hasTrait('conduit')) {
-            const projectedShopGold = runNonNegativeInteger(run.shopGold) + result.shopGoldGain;
-            const projectedTotalScore = runNonNegativeInteger(stats.totalScore) + result.scoreBonus;
-            const projectedRun = {
-                ...run,
-                shopGold: projectedShopGold,
-                stats: {
-                    ...stats,
-                    currentLevelScore: runNonNegativeInteger(stats.currentLevelScore) + result.scoreBonus,
-                    totalScore: projectedTotalScore
-                }
-            };
-            const coreResult = applyCoreTraitDefinition('relic.tithe_conduit.conduit_match', 'tithe-conduit', projectedRun);
-            result.shopGoldGain += runNonNegativeInteger(coreResult.run.shopGold) - projectedShopGold;
-            result.scoreBonus += normalizeSessionStats(coreResult.run.stats).totalScore - projectedTotalScore;
-            result.interactionTags.push('tithe-conduit:conduit-gold');
-        }
-
-        if (hasRunRelic(run, 'stasis_broker') && hasTrait('stasis')) {
-            const projectedShuffleCharges = runNonNegativeInteger(run.shuffleCharges) + result.shuffleChargeGain;
-            const projectedRun = { ...run, shuffleCharges: projectedShuffleCharges };
-            const coreResult = applyCoreTraitDefinition('relic.stasis_broker.stasis_match', 'stasis-broker', projectedRun);
-            result.shuffleChargeGain += runNonNegativeInteger(coreResult.run.shuffleCharges) - projectedShuffleCharges;
-            result.interactionTags.push('stasis-broker:stasis-shuffle');
-        }
-
-        if (hasRunRelic(run, 'opening_ledger') && matchResolutionsThisFloor === 0) {
-            const projectedTotalScore = runNonNegativeInteger(stats.totalScore) + result.scoreBonus;
-            const projectedRun = {
-                ...run,
-                stats: {
-                    ...stats,
-                    currentLevelScore: runNonNegativeInteger(stats.currentLevelScore) + result.scoreBonus,
-                    totalScore: projectedTotalScore
-                }
-            };
-            const coreResult = applyCoreTraitDefinition('relic.opening_ledger.first_match', 'opening-ledger', projectedRun);
-            result.scoreBonus += normalizeSessionStats(coreResult.run.stats).totalScore - projectedTotalScore;
-            result.interactionTags.push('opening-ledger:first-match');
-        }
-
-        if (hasRunRelic(run, 'drift_appraiser') && hasTrait('drift') && adjacentTraitKinds.has('cursed')) {
-            const projectedShopGold = runNonNegativeInteger(run.shopGold) + result.shopGoldGain;
-            const projectedTotalScore = runNonNegativeInteger(stats.totalScore) + result.scoreBonus;
-            const projectedRun = {
-                ...run,
-                shopGold: projectedShopGold,
-                stats: {
-                    ...stats,
-                    currentLevelScore: runNonNegativeInteger(stats.currentLevelScore) + result.scoreBonus,
-                    totalScore: projectedTotalScore
-                }
-            };
-            const coreResult = applyCoreTraitDefinition('relic.drift_appraiser.cursed_drift', 'drift-appraiser', projectedRun);
-            result.shopGoldGain += runNonNegativeInteger(coreResult.run.shopGold) - projectedShopGold;
-            result.scoreBonus += normalizeSessionStats(coreResult.run.stats).totalScore - projectedTotalScore;
-            result.interactionTags.push('drift-appraiser:cursed-drift');
-        }
-
-        if (hasRunRelic(run, 'echo_relay') && hasTrait('echo') && adjacentTraitKinds.has('heavy')) {
-            const projectedFlashPairCharges = runNonNegativeInteger(run.flashPairCharges) + result.flashPairChargeGain;
-            const projectedRun = { ...run, flashPairCharges: projectedFlashPairCharges };
-            const coreResult = applyCoreTraitDefinition('relic.echo_relay.heavy_flash', 'echo-relay', projectedRun);
-            result.flashPairChargeGain +=
-                runNonNegativeInteger(coreResult.run.flashPairCharges) - projectedFlashPairCharges;
-            result.interactionTags.push('echo-relay:heavy-flash');
-        }
-
         return result;
     }
 
     const stasisBuffersSealed = hasTrait('sealed') && adjacentTraitKinds.has('stasis');
     const sealedPeekLoss = hasTrait('sealed') && !stasisBuffersSealed && peekCharges > 0 ? 1 : 0;
-    result.blocksVolatileShuffle = hasTrait('volatile') && hasRunRelic(run, 'wager_surety') && guardTokens > 0;
     result.peekChargeLoss = sealedPeekLoss;
     result.recallMistakesDelta =
         (hasTrait('mirror') ? 1 : 0) +
@@ -1248,10 +1012,6 @@ export const resolveTileTraitEffects = ({
         result.interactionTags.push(
             adjacentTraitKinds.has('stasis') ? 'stasis:cursed-volatile-buffer' : 'cursed:volatile-danger'
         );
-    }
-    if (hasRunRelic(run, 'wager_surety') && hasTrait('cursed') && adjacentTraitKinds.has('volatile')) {
-        result.triesDelta = Math.max(0, result.triesDelta - 1);
-        result.interactionTags.push('wager-surety:cursed-buffer');
     }
     return result;
 };
@@ -1282,14 +1042,12 @@ export const calculateTileTraitMismatchPenalty = (
     sourceTiles: readonly Tile[],
     board?: BoardState | null
 ): {
-    blocksVolatileShuffle: boolean;
     peekChargeLoss: number;
     recallMistakesDelta: number;
     triesDelta: number;
 } => {
     const effect = resolveTileTraitEffects({ run, board, sourceTiles, source: 'mismatch' });
     return {
-        blocksVolatileShuffle: effect.blocksVolatileShuffle,
         peekChargeLoss: effect.peekChargeLoss,
         recallMistakesDelta: effect.recallMistakesDelta,
         triesDelta: effect.triesDelta

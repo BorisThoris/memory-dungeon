@@ -7,7 +7,6 @@ describe('menuSurfaceState', () => {
             achievementBridgeNotice: null,
             boardPinMode: false,
             destroyPairArmed: false,
-            dungeonExitPromptOpen: false,
             matchScorePop: null,
             mismatchScorePop: null,
             newlyUnlockedAchievements: [],

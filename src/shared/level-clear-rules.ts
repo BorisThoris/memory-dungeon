@@ -7,7 +7,6 @@ import {
     type LevelResult,
     type RunState
 } from './contracts';
-import { defeatEnemyHazardsForFloorClear } from './dungeon-enemy-hazard-rules';
 import {
     calculateLevelClearBonus,
     calculatePerfectClearBonus
@@ -26,32 +25,17 @@ export interface FloorClearEnemyHazardDefeatResult {
     board: BoardState;
 }
 
+/**
+ * No board carries an enemy hazard any more, so a floor clear has nothing left to defeat: the
+ * board only closes its open flips. The name stays for `floor-clear-transition.ts`.
+ */
 export const applyFloorClearEnemyHazardDefeats = (
     run: RunState,
     board: BoardState
-): FloorClearEnemyHazardDefeatResult => {
-    const floorClearHazards = defeatEnemyHazardsForFloorClear(board);
-    const finalizedBoard: BoardState = { ...floorClearHazards.board, flippedTileIds: [] };
-    if (floorClearHazards.defeated <= 0) {
-        return {
-            run,
-            board: finalizedBoard
-        };
-    }
-
-    return {
-        run: {
-            ...run,
-            dungeonEnemiesDefeated:
-                runNonNegativeInteger(run.dungeonEnemiesDefeated) + floorClearHazards.bossesDefeated,
-            dungeonEnemiesDefeatedThisFloor:
-                runNonNegativeInteger(run.dungeonEnemiesDefeatedThisFloor) + floorClearHazards.bossesDefeated,
-            enemyHazardsDefeatedThisFloor:
-                runNonNegativeInteger(run.enemyHazardsDefeatedThisFloor) + floorClearHazards.defeated
-        },
-        board: finalizedBoard
-    };
-};
+): FloorClearEnemyHazardDefeatResult => ({
+    run,
+    board: { ...board, flippedTileIds: [] }
+});
 
 export type FloorClearStatLevelResultFields = Pick<
     LevelResult,

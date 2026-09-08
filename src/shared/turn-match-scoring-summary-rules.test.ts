@@ -41,25 +41,11 @@ describe('resolveTurnMatchScoringSummary', () => {
             matchedTiles: [first, second],
             encorePairKeys: [first.pairKey],
             findableScoreBonus: 2,
-            chunkScore: 0,
-            routeCardScore: 3,
-            dungeonScore: 4,
-            enemyDamageScore: 5,
-            hazardDamageScore: 6,
-            fragileCacheClaimed: false,
-            fuseCacheFresh: false,
-            pinLatticeRewarded: false,
-            tollCacheClaimed: false
+            chunkScore: 7
         });
 
         const expectedMatchScore =
-            calculateMatchScore(run.board!.level, 2, run.matchScoreMultiplier) +
-            ENCORE_BONUS_SCORE +
-            2 +
-            3 +
-            4 +
-            5 +
-            6;
+            calculateMatchScore(run.board!.level, 2, run.matchScoreMultiplier) + ENCORE_BONUS_SCORE + 2 + 7;
 
         expect(result.currentStreak).toBe(2);
         expect(result.encoreKey).toBe(first.pairKey);
@@ -93,18 +79,10 @@ describe('resolveTurnMatchScoringSummary', () => {
             matchedTiles: [first, second],
             encorePairKeys: [],
             findableScoreBonus: Number.NaN,
-            chunkScore: 0,
-            routeCardScore: 3.8,
-            dungeonScore: Number.POSITIVE_INFINITY,
-            enemyDamageScore: -5,
-            hazardDamageScore: 2.5,
-            fragileCacheClaimed: false,
-            fuseCacheFresh: false,
-            pinLatticeRewarded: false,
-            tollCacheClaimed: false
+            chunkScore: 3.8
         });
 
-        const expectedMatchScore = calculateMatchScore(run.board!.level, 1, run.matchScoreMultiplier) + 3 + 2;
+        const expectedMatchScore = calculateMatchScore(run.board!.level, 1, run.matchScoreMultiplier) + 3;
         expect(result.currentStreak).toBe(1);
         expect(result.matchScore).toBe(expectedMatchScore);
         expect(result.totalScore).toBe(expectedMatchScore);
@@ -129,15 +107,7 @@ describe('resolveTurnMatchScoringSummary', () => {
             matchedTiles: [first, second],
             encorePairKeys: [],
             findableScoreBonus: 0,
-            chunkScore: 0,
-            routeCardScore: 0,
-            dungeonScore: 0,
-            enemyDamageScore: 0,
-            hazardDamageScore: 0,
-            fragileCacheClaimed: false,
-            fuseCacheFresh: false,
-            pinLatticeRewarded: false,
-            tollCacheClaimed: false
+            chunkScore: 0
         });
 
         const expectedMatchScore = calculateMatchScore(run.board!.level, 1, run.matchScoreMultiplier);
@@ -164,15 +134,7 @@ describe('resolveTurnMatchScoringSummary', () => {
             matchedTiles: [first, second],
             encorePairKeys: [],
             findableScoreBonus: 0,
-            chunkScore: 0,
-            routeCardScore: 0,
-            dungeonScore: 0,
-            enemyDamageScore: 0,
-            hazardDamageScore: 0,
-            fragileCacheClaimed: false,
-            fuseCacheFresh: false,
-            pinLatticeRewarded: false,
-            tollCacheClaimed: false
+            chunkScore: 0
         });
 
         expect(result.cursedMatchedEarly).toBe(true);
@@ -195,15 +157,7 @@ describe('resolveTurnMatchScoringSummary', () => {
             matchedTiles: [first, second],
             encorePairKeys: [],
             findableScoreBonus: 0,
-            chunkScore: 0,
-            routeCardScore: 0,
-            dungeonScore: 0,
-            enemyDamageScore: 0,
-            hazardDamageScore: 0,
-            fragileCacheClaimed: false,
-            fuseCacheFresh: false,
-            pinLatticeRewarded: false,
-            tollCacheClaimed: false
+            chunkScore: 0
         });
 
         expect(result.cursedMatchedEarly).toBe(false);

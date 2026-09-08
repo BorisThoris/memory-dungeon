@@ -2,12 +2,10 @@ import {
     MAX_PINNED_TILES,
     type RunState
 } from './contracts';
-import { hasRunRelic } from './relics';
 import { runStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 
-export const maxPinnedTilesForRun = (run: RunState): number =>
-    MAX_PINNED_TILES + (hasRunRelic(run, 'pin_cap_plus_one') ? 1 : 0);
+export const maxPinnedTilesForRun = (_run: RunState): number => MAX_PINNED_TILES;
 
 export const togglePinnedTile = (run: RunState, tileId: string): RunState => {
     if (run.status !== 'playing' || !run.board) {

@@ -51,7 +51,7 @@ describe('trait route objectives', () => {
             tile('sealed-a', 'sealed', { tileTraitKind: 'sealed' })
         ]))).toMatchObject({
             required: 1,
-            label: 'Sealed Catalyst'
+            label: 'Trait route'
         });
         expect(getTraitRouteObjectiveSeed(board([tile('a', 'a'), tile('b', 'b')]))).toBeNull();
     });

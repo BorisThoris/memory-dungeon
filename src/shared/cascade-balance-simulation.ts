@@ -1,17 +1,10 @@
-import type { BoardState, Rating, RelicId, RunState, Tile } from './contracts';
+import type { BoardState, Rating, RunState, Tile } from './contracts';
 import { GAME_RULES_VERSION } from './contracts';
 import { buildBoard } from './board-generation';
 import { countFindablePairs } from './board-tile-generation-rules';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
-import {
-    activateDungeonExit,
-    createNewRun,
-    finishMemorizePhase,
-    flipTile,
-    resolveBoardTurn,
-    revealDungeonExit
-} from './game';
-import { getPrimaryPlaythroughExitTile, getUnresolvedPlayablePairGroups } from './playthrough-solver-rules';
+import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
+import { getUnresolvedPlayablePairGroups } from './playthrough-solver-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey } from './tile-identity';
@@ -109,8 +102,6 @@ export interface CascadeBalanceSimulationInput {
     floors: readonly number[];
     missRates: readonly number[];
     rulesVersion?: number;
-    /** Relics every floor is played with; empty for the bare rules. */
-    relicIds?: readonly RelicId[];
 }
 
 const EMPTY_RATINGS = (): Record<Rating, number> => ({ 'S++': 0, S: 0, A: 0, B: 0, C: 0, D: 0, F: 0 });
@@ -126,16 +117,13 @@ export const playCascadeBalanceFloor = ({
     floor,
     missRate,
     rulesVersion = GAME_RULES_VERSION,
-    maxTurns = 240,
-    relicIds = []
+    maxTurns = 240
 }: {
     seed: number;
     floor: number;
     missRate: number;
     rulesVersion?: number;
     maxTurns?: number;
-    /** Relics the player holds: the loadout axis, so a build that leans into the chain is measured too. */
-    relicIds?: readonly RelicId[];
 }): CascadeBalanceFloorSample => {
     const schedule = pickFloorScheduleEntry(seed, rulesVersion, floor, 'endless');
     const board = buildBoard(floor, {
@@ -146,15 +134,13 @@ export const playCascadeBalanceFloor = ({
         featuredObjectiveId: schedule.featuredObjectiveId,
         cycleFloor: schedule.cycleFloor,
         gameMode: 'endless',
-        activeMutators: schedule.mutators,
-        relicIds
+        activeMutators: schedule.mutators
     });
     const base = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed }));
     let run: RunState = {
         ...base,
         board,
         status: 'playing',
-        relicIds: [...relicIds],
         findablesTotalThisFloor: countFindablePairs(board.tiles)
     };
     const rng = createMulberry32(hashStringToSeed(`cascade-sim:${seed}:${floor}:${missRate}:${rulesVersion}`));
@@ -209,12 +195,6 @@ export const playCascadeBalanceFloor = ({
      * mistake the occupancy census exists to catch, one level up. It is fixed the same way.
      */
     const feverBreaks = runNonNegativeInteger(run.feverBreaksThisFloor);
-    if (run.status === 'playing') {
-        const exit = getPrimaryPlaythroughExitTile(run.board!);
-        if (exit) {
-            run = activateDungeonExit(revealDungeonExit(run, exit.id));
-        }
-    }
     const cleared = run.status === 'levelComplete';
     const fell = run.status === 'gameOver';
     // Mistakes are what the game counted, not what this loop tried to do: a miss a guard token
@@ -281,14 +261,13 @@ export const runCascadeBalanceSimulation = ({
     seeds,
     floors,
     missRates,
-    rulesVersion = GAME_RULES_VERSION,
-    relicIds = []
+    rulesVersion = GAME_RULES_VERSION
 }: CascadeBalanceSimulationInput): CascadeBalanceReport => {
     const samples: CascadeBalanceFloorSample[] = [];
     for (const missRate of missRates) {
         for (const seed of seeds) {
             for (const floor of floors) {
-                samples.push(playCascadeBalanceFloor({ seed, floor, missRate, rulesVersion, relicIds }));
+                samples.push(playCascadeBalanceFloor({ seed, floor, missRate, rulesVersion }));
             }
         }
     }
@@ -319,9 +298,6 @@ export const runCascadeBalanceSimulation = ({
  * a real part of the score without becoming most of it, Fever is a thing a clean player reaches on
  * the floors big enough to hold ten pairs, and nobody's rating ever moved because of a chunk.
  */
-/** The three relics that touch the cascade, held together: the loadout the bands must survive. */
-export const CASCADE_RELIC_LOADOUT: readonly RelicId[] = ['tuning_fork', 'magpie_ledger', 'suit_lens'];
-
 export interface CascadeBalanceBands {
     minSettledShare: number;
     cleanClearedShare: { min: number };
@@ -376,38 +352,6 @@ export const CASCADE_BALANCE_BANDS: CascadeBalanceBands = {
     /** Extreme Fever is the clean player's finish: they must reach it more often than the reference player. */
     extremeFeverCleanOverReference: { min: 1.5 },
     referenceMissRate: 0.25
-};
-
-/**
- * The bands a chain build is held to. Each relic alone sits inside the bare bands; all three
- * together lift a 25%-miss player's Fever share to about 0.23, which is what three relics
- * dedicated to the chain are for. The relaxation is stated here, once, rather than hidden by
- * loosening the bare bands.
- */
-export const CASCADE_RELIC_BANDS: CascadeBalanceBands = {
-    ...CASCADE_BALANCE_BANDS,
-    referenceFeverShare: { max: 0.3 },
-    /**
-     * 2 down to 1.6 in Gen 172, measured 1.65, and this one is a debt rather than a recalibration.
-     * Say what it means plainly: with all three chain relics held, the gap between a clean player
-     * and a sloppy one has narrowed to the point where the ladder barely separates them.
-     *
-     * The cause is visible in the same output. A clean player holding the loadout clears a floor in
-     * 2.9 turns against 4.1 bare, and reaches Fever on 0.19 of floors against 0.51 bare. The relics
-     * make the pop reach further, the floor empties sooner, and there are not enough matches left
-     * to climb a chain with - so three relics bought specifically to serve the chain now cut the
-     * chain's best payoff to a third. They are working against the thing they exist for.
-     *
-     * That is not something a band should be hiding, and this comment is here so it is not. It was
-     * masked before because the dungeon budget kept floors small for everyone; on a floor of pairs
-     * the relics' reach finally has room to matter, and what it does with it is end the floor. The
-     * fix is the relics' own numbers - reach, or a chain that survives a bigger break - and it
-     * belongs with Phase 2's scoring work, where the shape of a floor is being decided anyway.
-     *
-     * The bare bands are untouched and still hold at 2.54. Only the relic path is relaxed, and only
-     * to the measurement, so any further flattening fails here immediately.
-     */
-    feverCleanOverReference: { min: 1.6 }
 };
 
 export const assertCascadeBalanceWithinBands = (

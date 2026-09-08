@@ -1,6 +1,5 @@
 import type { CreateRunOptions } from './run-creation-rules';
 import { createNewRun, createWildRun } from './run-creation-rules';
-import { createDungeonShowcaseRun } from './dungeon-showcase-run-rules';
 import type { RunState } from './contracts';
 import type { RunShareKey } from './run-share-key';
 
@@ -46,7 +45,8 @@ export const createRunFromShareKey = (
         case 'scholar':
             return createNewRun(bestScore, { ...seeded, activeContract: CONTRACT_SCHOLAR });
         case 'showcase':
-            return createDungeonShowcaseRun(bestScore, seeded);
+            // The dungeon showcase went with the dungeon layer; its key plays as a seeded run.
+            return createNewRun(bestScore, seeded);
         case 'wild':
             return createWildRun(bestScore, seeded);
         default:

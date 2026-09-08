@@ -34,7 +34,7 @@ test.describe('Tile card face (WebGL)', () => {
     test('keeps the board mounted while WebGL context recovery is pending', async ({ page }) => {
         test.setTimeout(120_000);
         await page.setViewportSize({ width: 1280, height: 720 });
-        await openPlayablePathFixture(page, 'activeRunWithHazards');
+        await openPlayablePathFixture(page, 'cascadeClump');
         await expectGameplayReady(page);
         await waitForBoardPlayPhase(page);
 

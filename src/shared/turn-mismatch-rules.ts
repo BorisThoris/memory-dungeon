@@ -1,14 +1,6 @@
 import { type BoardState, type RunState, type RunStatus, type Tile } from './contracts';
-import { applyDungeonEnemyAttack } from './dungeon-enemy-card-rules';
-import { getActiveDungeonBossPressureRule } from './dungeon-boss-rules';
-import { advanceEnemyHazardsOnBoard } from './dungeon-enemy-hazard-rules';
-import { springArmedDungeonTraps } from './dungeon-trap-rules';
 import { applyMagpieTheft, resolveMagpieVisit } from './magpie-rules';
 import { hasMutator } from './mutators';
-import {
-    applySafeHazardWardMismatch,
-    hazardKindsInTiles
-} from './hazard-tile-effect-rules';
 import { hasFirstMismatchGrace } from './mismatch-grace-rules';
 import {
     addPendingMemorizeBonusForLostLives,
@@ -22,7 +14,7 @@ import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards'
 import { calculateRating } from './scoring-rules';
 import { addTileTraitCountStats, normalizeSessionStats } from './session-stats-rules';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
-import { hiddenUnlessSprungTrap } from './tile-state-rules';
+import { hideTileAfterTurn } from './tile-state-rules';
 import {
     applyVolatileMismatchTrait,
     calculateTileTraitMismatchPenalty
@@ -48,7 +40,7 @@ export const createHiddenMismatchBoard = (
     return {
         ...board,
         flippedTileIds: [],
-        tiles: board.tiles.map((tile) => hiddenTileIds.has(tile.id) ? hiddenUnlessSprungTrap(tile) : tile)
+        tiles: board.tiles.map((tile) => hiddenTileIds.has(tile.id) ? hideTileAfterTurn(tile) : tile)
     };
 };
 
@@ -107,46 +99,9 @@ export const resolveMismatchTurnTransition = ({
     const stats = normalizeSessionStats(run.stats);
     const normalizedRun = { ...run, stats };
     const traitPenalty = calculateTileTraitMismatchPenalty(normalizedRun, sourceTiles, board);
-    const bossPressure = board.floorTag === 'boss' ? getActiveDungeonBossPressureRule(board) : null;
-    const penalty = calculateMismatchPenalty(
-        normalizedRun,
-        board,
-        triesDelta + traitPenalty.triesDelta + (bossPressure?.mismatchTriesDelta ?? 0)
-    );
-    let lives = penalty.lives;
+    const penalty = calculateMismatchPenalty(normalizedRun, board, triesDelta + traitPenalty.triesDelta);
     const hiddenBoard = createHiddenMismatchBoard(board, tileIds);
-    let pendingMemorizeBonusMs = penalty.pendingMemorizeBonusMs;
-
-    const trapSpring = springArmedDungeonTraps(
-        { ...run, lives: Math.max(lives, 0), stats: { ...stats, guardTokens: penalty.guardTokens, tries: penalty.tries } },
-        hiddenBoard,
-        sourceTiles
-            .filter((tile) => tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'revealed')
-            .map((tile) => tile.pairKey)
-    );
-    const trapStats = normalizeSessionStats(trapSpring.run.stats);
-    lives = trapSpring.run.lives;
-    const livesBeforeEnemyAttack = lives;
-    const enemyAttack = applyDungeonEnemyAttack(
-        lives,
-        trapStats.guardTokens,
-        trapSpring.alarmTriggered || trapSpring.enemyWoken ? hiddenBoard : trapSpring.board
-    );
-    lives = enemyAttack.lives;
-    pendingMemorizeBonusMs = addPendingMemorizeBonusForLostLives(
-        pendingMemorizeBonusMs,
-        Math.max(0, livesBeforeEnemyAttack - Math.max(lives, 0))
-    );
-    const statusAfterEnemy: RunStatus =
-        lives <= 0 || penalty.contractFail || trapSpring.run.status === 'gameOver' ? 'gameOver' : penalty.status;
-    const advancedTrapBoard = advanceEnemyHazardsOnBoard(trapSpring.board);
-    const mismatchHazards = hazardKindsInTiles(board.tiles, tileIds);
-    const wardedHazards = applySafeHazardWardMismatch(run, advancedTrapBoard, sourceTiles, mismatchHazards);
-    const { fragileBreak, snareHazard } = wardedHazards;
-    const mirrorTriggered = mismatchHazards.has('mirror_decoy');
-    const volatileTrait = traitPenalty.blocksVolatileShuffle
-        ? { board: wardedHazards.board, triggered: false }
-        : applyVolatileMismatchTrait(wardedHazards.board, run, sourceTiles);
+    const volatileTrait = applyVolatileMismatchTrait(hiddenBoard, run, sourceTiles);
     const spunMiss = rotateRunShiftingSpotlight(run, volatileTrait.board);
 
     /*
@@ -157,7 +112,7 @@ export const resolveMismatchTurnTransition = ({
     const magpie = hasMutator(run, 'magpie_thief')
         ? resolveMagpieVisit({
               board: spunMiss.board,
-              guardTokens: trapStats.guardTokens,
+              guardTokens: penalty.guardTokens,
               mismatchCount: runNonNegativeInteger(stats.mismatches) + 1,
               rulesVersion: run.runRulesVersion,
               runSeed: run.runSeed
@@ -168,36 +123,15 @@ export const resolveMismatchTurnTransition = ({
 
     return {
         ...run,
-        status: statusAfterEnemy,
-        lives: Math.max(lives, 0),
-        shopGold: Math.max(0, trapSpring.run.shopGold),
-        freeShuffleThisFloor: trapSpring.run.freeShuffleThisFloor,
-        regionShuffleFreeThisFloor: trapSpring.run.regionShuffleFreeThisFloor,
-        dungeonTrapsTriggered: trapSpring.run.dungeonTrapsTriggered,
+        status: penalty.status,
+        lives: Math.max(penalty.lives, 0),
         board: boardAfterMagpie,
         shiftingSpotlightNonce: spunMiss.shiftingSpotlightNonce,
-        pinnedTileIds: snareHazard.triggered ? [] : run.pinnedTileIds,
         magpieTheftsThisFloor:
             runNonNegativeInteger(run.magpieTheftsThisFloor) + (magpie?.kind === 'theft' ? 1 : 0),
         magpieScaredOffThisFloor:
             runNonNegativeInteger(run.magpieScaredOffThisFloor) + (magpie?.kind === 'scared_off' ? 1 : 0),
-        hazardTileTriggersThisFloor:
-            runNonNegativeInteger(run.hazardTileTriggersThisFloor) +
-            (snareHazard.triggered ? 1 : 0) +
-            (mirrorTriggered ? 1 : 0) +
-            runNonNegativeInteger(fragileBreak.brokenCount) +
-            (volatileTrait.triggered ? 1 : 0),
-        hazardShuffleSnaresThisFloor:
-            runNonNegativeInteger(run.hazardShuffleSnaresThisFloor) + (snareHazard.triggered ? 1 : 0),
-        hazardMirrorDecoysThisFloor:
-            runNonNegativeInteger(run.hazardMirrorDecoysThisFloor) + (mirrorTriggered ? 1 : 0),
-        hazardFragileCacheBreaksThisFloor:
-            runNonNegativeInteger(run.hazardFragileCacheBreaksThisFloor) + runNonNegativeInteger(fragileBreak.brokenCount),
-        safeHazardWardChargesThisFloor:
-            decrementRunCounter(run.safeHazardWardChargesThisFloor, wardedHazards.wardChargeSpent ? 1 : 0),
-        safeHazardWardsUsedThisFloor:
-            runNonNegativeInteger(run.safeHazardWardsUsedThisFloor) + (wardedHazards.wardUsed ? 1 : 0),
-        pendingMemorizeBonusMs,
+        pendingMemorizeBonusMs: penalty.pendingMemorizeBonusMs,
         peekCharges: decrementRunCounter(run.peekCharges, traitPenalty.peekChargeLoss),
         stickyBlockIndex: null,
         recallFocus: decreaseRecallFocus(run),
@@ -209,26 +143,26 @@ export const resolveMismatchTurnTransition = ({
         // is gone: the fire goes out, and the ladder is climbed again from what was remembered.
         chunkPairsThisChain: 0,
         stats: {
-            ...trapStats,
+            ...stats,
             tries: penalty.tries,
-            mismatches: runNonNegativeInteger(trapStats.mismatches) + 1,
+            mismatches: runNonNegativeInteger(stats.mismatches) + 1,
             currentStreak: Math.floor(runNonNegativeInteger(stats.currentStreak) / 2),
             rating: calculateRating(penalty.tries),
-            highestLevel: Math.max(runNonNegativeInteger(stats.highestLevel), runNonNegativeInteger(advancedTrapBoard.level)),
+            highestLevel: Math.max(runNonNegativeInteger(stats.highestLevel), runNonNegativeInteger(board.level)),
             /*
              * The magpie's token is spent here, not inside its own rules: it decides whether it
              * was driven off, and the run is what actually holds the tokens. A visit that reports
              * a spend and never deducts one is a protection the player pays nothing for.
              */
             guardTokens: Math.min(
-                runNonNegativeInteger(enemyAttack.guardTokens),
+                runNonNegativeInteger(penalty.guardTokens),
                 magpie?.kind === 'scared_off'
                     ? runNonNegativeInteger(magpie.guardTokens)
-                    : runNonNegativeInteger(enemyAttack.guardTokens)
+                    : runNonNegativeInteger(penalty.guardTokens)
             ),
-            tileTraitMismatches: addTileTraitCountStats(trapStats.tileTraitMismatches, sourceTiles),
+            tileTraitMismatches: addTileTraitCountStats(stats.tileTraitMismatches, sourceTiles),
             volatileTraitShuffles:
-                runNonNegativeInteger(trapStats.volatileTraitShuffles) + (volatileTrait.triggered ? 1 : 0)
+                runNonNegativeInteger(stats.volatileTraitShuffles) + (volatileTrait.triggered ? 1 : 0)
         },
         timerState: clearResolveState(run)
     };

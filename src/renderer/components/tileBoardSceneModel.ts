@@ -1,15 +1,10 @@
-import type { BuildTileBoardRowsInput, TileBoardEnemyHazardRow, TileBoardRow } from './tileBoardRows';
-import {
-    buildTileBoardEnemyHazardRows,
-    buildTileBoardRows,
-    getTileBoardOverlayPrewarmDemandPairKeys
-} from './tileBoardRows';
+import type { BuildTileBoardRowsInput, TileBoardRow } from './tileBoardRows';
+import { buildTileBoardRows, getTileBoardOverlayPrewarmDemandPairKeys } from './tileBoardRows';
 import { isTileBoardFlipLocked } from './tileBoardFlipLock';
 import { computeTileBoardRuneFieldMetrics, type TileBoardRuneFieldMetrics } from './tileBoardRuneField';
 
 interface TileBoardSceneModel {
     boardRuneFieldMetrics: TileBoardRuneFieldMetrics;
-    enemyHazardRows: TileBoardEnemyHazardRow[];
     flipLocked: boolean;
     overlayPrewarmDemandPairKeys: string[];
     tileBezelRows: TileBoardRow[];
@@ -49,7 +44,6 @@ export const buildTileBoardSceneModel = ({
         rowInput.interactive,
         flipLocked
     );
-    const enemyHazardRows = buildTileBoardEnemyHazardRows(rowInput.board, tileBezelRows);
     const boardRuneFieldMetrics = computeTileBoardRuneFieldMetrics({
         cardHeight,
         cardWidth,
@@ -59,7 +53,6 @@ export const buildTileBoardSceneModel = ({
 
     return {
         boardRuneFieldMetrics,
-        enemyHazardRows,
         flipLocked,
         overlayPrewarmDemandPairKeys,
         tileBezelRows

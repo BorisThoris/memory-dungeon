@@ -2,8 +2,6 @@ import { describe, expect, it } from 'vitest';
 import {
     assertCascadeBalanceWithinBands,
     CASCADE_BALANCE_BANDS,
-    CASCADE_RELIC_BANDS,
-    CASCADE_RELIC_LOADOUT,
     runCascadeBalanceSimulation,
     summarizeCascadeBalance
 } from './cascade-balance-simulation';
@@ -88,13 +86,3 @@ describe('the cascade, measured', () => {
     });
 });
 
-describe('the cascade with every chain relic held', () => {
-    it('still sits inside the bands, so a build that leans into the chain cannot break the game', () => {
-        const report = runCascadeBalanceSimulation({ seeds: SEEDS, floors: FLOORS, missRates: MISS_RATES, relicIds: CASCADE_RELIC_LOADOUT });
-        const verdict = assertCascadeBalanceWithinBands(report, CASCADE_RELIC_BANDS);
-        expect(verdict.issues, summarizeCascadeBalance(report)).toEqual([]);
-        for (const band of report.bands) {
-            expect(band.ratingDriftFloors).toBe(0);
-        }
-    });
-});

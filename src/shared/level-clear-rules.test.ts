@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BOSS_FLOOR_SCORE_MULTIPLIER, type BoardState, type EnemyHazardState } from './contracts';
+import { BOSS_FLOOR_SCORE_MULTIPLIER, type BoardState } from './contracts';
 import { createNewRun } from './game';
 import {
     applyFloorClearEnemyHazardDefeats,
@@ -9,20 +9,6 @@ import {
     getClearLifeReason
 } from './level-clear-rules';
 
-const enemyHazard = (id: string, overrides: Partial<EnemyHazardState> = {}): EnemyHazardState => ({
-    id,
-    kind: 'sentinel',
-    label: id,
-    currentTileId: 'tile-a',
-    nextTileId: 'tile-b',
-    pattern: 'patrol',
-    state: 'revealed',
-    damage: 1,
-    hp: 1,
-    maxHp: 1,
-    ...overrides
-});
-
 describe('level-clear-rules', () => {
     it('classifies clear-life rewards from level tries', () => {
         expect(getClearLifeReason(0)).toBe('perfect');
@@ -31,69 +17,20 @@ describe('level-clear-rules', () => {
         expect(getClearLifeReason(9)).toBe('none');
     });
 
-    it('defeats active enemy hazards and updates floor-clear counters', () => {
-        const run = {
-            ...createNewRun(0),
-            dungeonEnemiesDefeated: 2,
-            dungeonEnemiesDefeatedThisFloor: 1,
-            enemyHazardsDefeatedThisFloor: 3
-        };
-        const board: BoardState = {
-            ...run.board!,
-            flippedTileIds: ['tile-a'],
-            enemyHazards: [
-                enemyHazard('normal'),
-                enemyHazard('boss', { bossId: 'trap_warden', hp: 2, maxHp: 2 })
-            ]
-        };
 
-        const result = applyFloorClearEnemyHazardDefeats(run, board);
 
-        expect(result.board.flippedTileIds).toEqual([]);
-        expect(result.board.enemyHazards).toEqual([
-            expect.objectContaining({ id: 'normal', hp: 0, state: 'defeated' }),
-            expect.objectContaining({ id: 'boss', hp: 0, state: 'defeated' })
-        ]);
-        expect(result.run.dungeonEnemiesDefeated).toBe(3);
-        expect(result.run.dungeonEnemiesDefeatedThisFloor).toBe(2);
-        expect(result.run.enemyHazardsDefeatedThisFloor).toBe(5);
-    });
-
-    it('normalizes malformed enemy hazard counters before floor-clear defeats', () => {
-        const run = {
-            ...createNewRun(0),
-            dungeonEnemiesDefeated: Number.NaN,
-            dungeonEnemiesDefeatedThisFloor: 1.9,
-            enemyHazardsDefeatedThisFloor: Number.POSITIVE_INFINITY
-        };
-        const board: BoardState = {
-            ...run.board!,
-            enemyHazards: [
-                enemyHazard('normal'),
-                enemyHazard('boss', { bossId: 'trap_warden', hp: 2, maxHp: 2 })
-            ]
-        };
-
-        const result = applyFloorClearEnemyHazardDefeats(run, board);
-
-        expect(result.run.dungeonEnemiesDefeated).toBe(1);
-        expect(result.run.dungeonEnemiesDefeatedThisFloor).toBe(2);
-        expect(result.run.enemyHazardsDefeatedThisFloor).toBe(2);
-    });
-
-    it('clears flipped ids without cloning run counters when no enemy hazards are active', () => {
+    it('closes the open flips on a floor clear and leaves the run alone', () => {
         const run = createNewRun(0);
         const board: BoardState = {
             ...run.board!,
-            flippedTileIds: ['tile-a'],
-            enemyHazards: [enemyHazard('done', { state: 'defeated', hp: 0 })]
+            flippedTileIds: ['tile-a']
         };
 
         const result = applyFloorClearEnemyHazardDefeats(run, board);
 
         expect(result.run).toBe(run);
         expect(result.board.flippedTileIds).toEqual([]);
-        expect(result.board.enemyHazards).toEqual(board.enemyHazards);
+        expect(result.board.tiles).toBe(board.tiles);
     });
 
     it('maps positive floor counters into optional level-result fields', () => {

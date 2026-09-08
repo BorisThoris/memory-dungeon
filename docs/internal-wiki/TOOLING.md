@@ -41,12 +41,10 @@
 | `yarn benchmark:illustration-regression` | Illustration perf sample (`RUN_ILLUSTRATION_BENCHMARK`) |
 | `yarn test:e2e:a11y` | Scoped axe on main menu, settings, in-run shell (`e2e/a11y-scoped-routes.spec.ts`) |
 | `yarn test:e2e:blueprint` | Dev-only `/__blueprint` system diagram explorer smoke |
-| `yarn sim:endless` | `tsx scripts/sim-endless.ts` — endless schedule CSV sampler with fairness, topology, solved-run topology, playable-clear, reward, and trait health metrics (REF-098) |
-| `yarn audit:dungeon-topology:gate` | Quiet graph-backed board/route topology audit for routine gate use |
-| `yarn audit:dungeon-topology:json` | Structured graph-backed topology audit with issue and coverage counts for diagnostics |
+| `yarn sim:endless` | `tsx scripts/sim-endless.ts` — endless schedule CSV sampler with fairness, playable-clear, reward, and trait health metrics (REF-098) |
 | `yarn gate:sim-softlock-seeds` | Deterministic multi-seed softlock/progression gate used by `gate:systems` |
-| `yarn gate:sim-softlock-stress` | Broader deterministic stress seed sweep for lock, boss, exit, objective, shop, and repair-rule changes |
-| `yarn gate:softlock-full` | Combined topology stress audit plus deterministic softlock stress sweep for progression-risk changes |
+| `yarn gate:sim-softlock-stress` | Broader deterministic stress seed sweep for generation, objective, and repair-rule changes |
+| `yarn gate:softlock-full` | The deterministic softlock stress sweep for progression-risk changes |
 
 **Refinement backlog (REF-100):** [REF-100](../refinement-tasks/REF-100.md) is **Done** (INDEX acceptance met). Notes live in [refinement-tasks/README.md](../refinement-tasks/README.md) and [COMPLETION.md](../refinement-tasks/COMPLETION.md) (2026-04-17); optional INDEX re-triage is process only.
 

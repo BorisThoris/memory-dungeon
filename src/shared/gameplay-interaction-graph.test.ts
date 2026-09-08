@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import {
     auditGameplayInteractionGraph,
@@ -7,17 +8,8 @@ import {
     validateGameplayInteractionGraph
 } from './gameplay-interaction-graph';
 import type { TileTraitKind } from './contracts';
-import {
-    BOARD_TACTICIAN_DEFINITIONS,
-    COMBO_SHARD_ENGINE_DEFINITIONS,
-    CONDUIT_CARTOGRAPHER_DEFINITIONS,
-    MEMORY_SCOUT_DEFINITIONS,
-    LOCKSMITH_DEFINITIONS,
-    SABOTEUR_DEFINITIONS,
-    SLAYER_DEFINITIONS,
-    SUPPLY_CACHE_DEFINITIONS,
-    WARDEN_DEFINITIONS
-} from './gameplay-core-contracts';
+import { FINDABLE_REWARD_ROWS } from './findables';
+import { RUN_INVENTORY_ITEM_IDS } from './run-inventory-contracts';
 
 const TILE_TRAIT_KINDS: readonly TileTraitKind[] = [
     'echo',
@@ -30,6 +22,21 @@ const TILE_TRAIT_KINDS: readonly TileTraitKind[] = [
     'conduit',
     'stasis'
 ];
+
+const REMOVED_MECHANIC_ID_PATTERN = /^(boss|exit|lock|room|shop|build|reward|relic|perk)\./;
+const REMOVED_MECHANIC_IDS = new Set([
+    'hazard.tile_pressure',
+    'hazard.enemy_patrol',
+    'objective.defeat_boss',
+    'safety.dungeon_topology',
+    'safety.safe_hazard_ward',
+    'board.scout_reveal',
+    'trait.volatile_heavy_guard'
+]);
+const REMOVED_MODULE_PATTERN =
+    /(^|\/)(dungeon-[^/]*|hazard-[^/]*|enemy-hazard-board-rules|run-map|relics|relic-immediate-rules|trait-build-rewards|bonus-rewards|route-card-reward-shape|floor-completion-transitions|dungeonPressSurfaceState|TileBoardEnemyHazardMarker|useGameScreenTraitRouteTargets)(\.test)?\.tsx?$/;
+
+const mechanicById = () => new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
 
 describe('gameplay interaction graph', () => {
     it('validates the imported JSON structure before graph logic trusts it', () => {
@@ -55,6 +62,7 @@ describe('gameplay interaction graph', () => {
     });
 
     it('keeps the executable graph connected and guarded', () => {
+        expect(gameplayInteractionGraph.version).toBe(30);
         expect(validateGameplayInteractionGraph()).toEqual([]);
     });
 
@@ -71,19 +79,54 @@ describe('gameplay interaction graph', () => {
         }
     });
 
+    it('drops the deleted dungeon, hazard, relic, reward, and build layer from the graph', () => {
+        const removedIds = gameplayInteractionGraph.mechanics
+            .map((mechanic) => mechanic.id)
+            .filter((id) => REMOVED_MECHANIC_ID_PATTERN.test(id));
+        expect(removedIds).toEqual([]);
+        expect(gameplayInteractionGraph.mechanics.filter((mechanic) => REMOVED_MECHANIC_IDS.has(mechanic.id))).toEqual([]);
+
+        for (const mechanic of gameplayInteractionGraph.mechanics) {
+            for (const enabled of mechanic.enables) {
+                expect(REMOVED_MECHANIC_ID_PATTERN.test(enabled), `${mechanic.id} enables ${enabled}`).toBe(false);
+                expect(REMOVED_MECHANIC_IDS.has(enabled), `${mechanic.id} enables ${enabled}`).toBe(false);
+            }
+            for (const reference of [...mechanic.evidence, ...mechanic.tests]) {
+                expect(REMOVED_MODULE_PATTERN.test(reference), `${mechanic.id} cites ${reference}`).toBe(false);
+                expect(existsSync(reference), `${mechanic.id} cites ${reference}`).toBe(true);
+            }
+        }
+        expect(gameplayInteractionGraph.coverage).toMatchObject({
+            blockingKinds: expect.not.arrayContaining(['boss', 'exit', 'lock']),
+            requiredObjectives: ['objective.floor_clear'],
+            requiredSafetyNodes: ['safety.softlock_fairness']
+        });
+    });
+
+    it('keeps a mechanic node for every findable and run inventory item the source rosters declare', () => {
+        const byId = mechanicById();
+        for (const row of FINDABLE_REWARD_ROWS) {
+            expect(byId.get(`findable.${row.kind}`), row.kind).toMatchObject({ kind: 'findable' });
+        }
+        for (const itemId of RUN_INVENTORY_ITEM_IDS) {
+            expect(byId.get(`inventory.${itemId}`), itemId).toMatchObject({ kind: 'inventory' });
+        }
+    });
+
     it('requires blockers to declare counterplay or softlock guards', () => {
         const blockers = gameplayInteractionGraph.mechanics.filter((mechanic) => mechanic.blocks.length > 0);
 
         expect(blockers.map((mechanic) => mechanic.id)).toEqual(
             expect.arrayContaining([
                 'trait.stasis',
-                'hazard.enemy_patrol',
-                'boss.moving_patrol',
-                'exit.primary',
-                'lock.iron_key',
-                'lock.typed_key',
-                'room.locked_cache',
-                'objective.defeat_boss'
+                'trait.volatile',
+                'trait.cursed',
+                'trait.sealed',
+                'trait.drift',
+                'power.destroy_pair',
+                'safety.softlock_fairness',
+                'hazard.score_parasite',
+                'safety.parasite_ward'
             ])
         );
         expect(blockers.every((mechanic) => mechanic.softlockGuards.length > 0)).toBe(true);
@@ -106,64 +149,36 @@ describe('gameplay interaction graph', () => {
         expect(blockersWithoutProtectiveEdges).toEqual([]);
     });
 
-    it('connects boss, exit, lock, and floor-clear mechanics through safety edges', () => {
+    it('connects floor-clear and parasite pressure through safety edges', () => {
+        const byId = mechanicById();
+        expect(byId.get('safety.softlock_fairness')).toMatchObject({
+            kind: 'safety',
+            role: 'invariant_gate',
+            softlockGuards: expect.arrayContaining(['inspectBoardFairness', 'repairDungeonExitSoftlocks'])
+        });
+        expect(byId.get('hazard.score_parasite')).toMatchObject({
+            kind: 'hazard',
+            role: 'chapter_pressure_and_objective_counterplay',
+            evidence: expect.arrayContaining(['src/shared/score-parasite-rules.ts']),
+            tests: expect.arrayContaining(['src/shared/score-parasite-rules.test.ts', 'src/shared/game.test.ts'])
+        });
+        expect(byId.get('safety.parasite_ward')).toMatchObject({
+            kind: 'safety',
+            role: 'parasite_life_loss_buffer',
+            softlockGuards: expect.arrayContaining(['ward-before-life', 'non-negative-counter'])
+        });
         expect(gameplayInteractionGraph.edges).toEqual(
             expect.arrayContaining([
-                expect.objectContaining({
-                    source: 'boss.moving_patrol',
-                    target: 'safety.softlock_fairness',
-                    label: 'stale overlay clear'
-                }),
-                expect.objectContaining({
-                    source: 'boss.moving_patrol',
-                    target: 'safety.dungeon_topology',
-                    label: 'boss route audit'
-                }),
-                expect.objectContaining({ source: 'objective.defeat_boss', target: 'exit.primary' }),
-                expect.objectContaining({ source: 'lock.iron_key', target: 'exit.primary' }),
-                expect.objectContaining({ source: 'lock.iron_key', target: 'safety.dungeon_topology' }),
-                expect.objectContaining({ source: 'lock.typed_key', target: 'exit.primary' }),
-                expect.objectContaining({ source: 'lock.typed_key', target: 'safety.dungeon_topology' }),
-                expect.objectContaining({ source: 'lock.typed_key', target: 'room.locked_cache' }),
-                expect.objectContaining({ source: 'room.locked_cache', target: 'safety.softlock_fairness' }),
-                expect.objectContaining({ source: 'room.locked_cache', target: 'feedback.gameplay_hud' }),
-                expect.objectContaining({ source: 'exit.primary', target: 'objective.floor_clear' }),
-                expect.objectContaining({ source: 'exit.primary', target: 'safety.dungeon_topology' }),
                 expect.objectContaining({ source: 'safety.softlock_fairness', target: 'objective.floor_clear' }),
-                expect.objectContaining({ source: 'safety.dungeon_topology', target: 'progression.run_flow' })
+                expect.objectContaining({ source: 'board.cleanup', target: 'safety.softlock_fairness' }),
+                expect.objectContaining({ source: 'safety.parasite_ward', target: 'hazard.score_parasite', kind: 'counterplay' }),
+                expect.objectContaining({ source: 'hazard.score_parasite', target: 'safety.parasite_ward', kind: 'guarded_by' }),
+                expect.objectContaining({ source: 'hazard.score_parasite', target: 'core.gameplay_commands', kind: 'triggers' }),
+                expect.objectContaining({ source: 'core.gameplay_commands', target: 'hazard.score_parasite', kind: 'triggers' }),
+                expect.objectContaining({ source: 'core.gameplay_commands', target: 'safety.parasite_ward', kind: 'modifies' }),
+                expect.objectContaining({ source: 'inventory.mutator_loadout', target: 'hazard.score_parasite', kind: 'triggers' }),
+                expect.objectContaining({ source: 'hazard.score_parasite', target: 'feedback.gameplay_hud', kind: 'displays' })
             ])
-        );
-    });
-
-    it('names topology, terminal key fallback, and stale boss overlay guards in the executable graph', () => {
-        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-
-        expect(byId.get('lock.iron_key')?.softlockGuards).toEqual(
-            expect.arrayContaining(['reachable-key-source', 'terminal-key-lock-fallback', 'dungeon-topology-key-route'])
-        );
-        expect(byId.get('lock.typed_key')?.softlockGuards).toEqual(
-            expect.arrayContaining(['matching-key-kind', 'typed-shop-key-insurance', 'dungeon-topology-key-route'])
-        );
-        expect(byId.get('room.locked_cache')?.softlockGuards).toEqual(
-            expect.arrayContaining(['matching-key-kind', 'optional-cache-never-required', 'room-copy-matches-key-kind'])
-        );
-        expect(byId.get('exit.primary')?.softlockGuards).toEqual(
-            expect.arrayContaining(['terminal-key-lock-fallback', 'dungeon-topology-exit-route'])
-        );
-        expect(byId.get('boss.moving_patrol')?.softlockGuards).toEqual(
-            expect.arrayContaining(['stale-boss-overlay-clear', 'all-real-pairs-cleared-clear', 'dungeon-topology-boss-route'])
-        );
-        expect(byId.get('safety.softlock_fairness')?.softlockGuards).toEqual(
-            expect.arrayContaining(['terminal-key-lock-fallback', 'stale-boss-overlay-clear', 'dungeon-topology-audit'])
-        );
-        expect(byId.get('safety.dungeon_topology')).toMatchObject({
-            kind: 'safety',
-            role: 'graph_invariant_gate',
-            evidence: expect.arrayContaining(['src/shared/run-map.ts']),
-            tests: expect.arrayContaining(['src/shared/dungeon-topology.test.ts'])
-        });
-        expect(gameplayInteractionGraph.coverage.requiredSafetyNodes).toEqual(
-            expect.arrayContaining(['safety.softlock_fairness', 'safety.dungeon_topology'])
         );
     });
 
@@ -175,8 +190,8 @@ describe('gameplay interaction graph', () => {
             edgeCount: gameplayInteractionGraph.edges.length,
             traitCount: TILE_TRAIT_KINDS.length
         });
-        expect(audit.blockerCount).toBeGreaterThanOrEqual(6);
-        expect(audit.counterplayEdgeCount).toBeGreaterThanOrEqual(12);
+        expect(audit.blockerCount).toBeGreaterThanOrEqual(9);
+        expect(audit.counterplayEdgeCount).toBeGreaterThanOrEqual(19);
         expect(audit.blockerWithoutProtectiveEdgeIds).toEqual([]);
         expect(audit.shopCounterplayWithoutPriorityGuardIds).toEqual([]);
         expect(audit.generatedFloorCoverageGapIds).toEqual(expect.arrayContaining(['trait.echo']));
@@ -184,40 +199,24 @@ describe('gameplay interaction graph', () => {
         expect(audit.highLeverageMechanicIds).toEqual(
             expect.arrayContaining([
                 'trait.stasis',
-                'boss.moving_patrol',
-                'lock.iron_key',
-                'lock.typed_key',
-                'room.locked_cache',
-                'objective.defeat_boss',
-                'safety.dungeon_topology'
+                'power.destroy_pair',
+                'hazard.score_parasite',
+                'safety.parasite_ward',
+                'safety.softlock_fairness',
+                'core.gameplay_commands',
+                'progression.run_flow'
             ])
         );
         expect(audit.recommendations).toEqual(
             expect.arrayContaining([
                 'Keep trait routing tools available when the graph shows swap-created trait routes.',
-                'Keep boss and lock counterplay ahead of optional rewards in shop priority.',
                 'Add a topology, softlock-fairness, or generator-contract case for every new blocking edge.'
             ])
         );
     });
 
-    it('connects the first command-core build from content choice through persistence and consequence', () => {
-        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        const prefixBySourceKind = {
-            bonus_reward: 'reward',
-            relic: 'relic',
-            reward_perk: 'perk'
-        } as const;
-
-        for (const definition of CONDUIT_CARTOGRAPHER_DEFINITIONS) {
-            const prefix = prefixBySourceKind[definition.source.kind as keyof typeof prefixBySourceKind];
-            expect(prefix, definition.id).toBeTruthy();
-            expect(byId.get(`${prefix}.${definition.source.id}`), definition.id).toMatchObject({
-                evidence: expect.arrayContaining(['src/shared/gameplay-core-contracts.ts']),
-                tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
-            });
-        }
-
+    it('connects the command core through Peek, persistence, and replay', () => {
+        const byId = mechanicById();
         expect(byId.get('core.gameplay_commands')).toMatchObject({ kind: 'core', role: 'authoritative_command_reducer' });
         expect(byId.get('inventory.peek_charge')).toMatchObject({ kind: 'inventory', role: 'build_resource' });
         expect(byId.get('power.peek')).toMatchObject({ kind: 'power', role: 'information_conversion' });
@@ -228,11 +227,9 @@ describe('gameplay interaction graph', () => {
         expect(byId.get('simulation.gameplay_replay')).toMatchObject({ kind: 'simulation' });
         expect(gameplayInteractionGraph.edges).toEqual(
             expect.arrayContaining([
-                expect.objectContaining({ source: 'reward.echo_conduit_lens', target: 'perk.echo_conduit_double', kind: 'grants' }),
-                expect.objectContaining({ source: 'relic.peek_charge_plus_one', target: 'inventory.peek_charge', kind: 'grants' }),
-                expect.objectContaining({ source: 'trait.echo', target: 'perk.echo_conduit_double', kind: 'triggers' }),
-                expect.objectContaining({ source: 'trait.conduit', target: 'perk.echo_conduit_double', kind: 'gates' }),
+                expect.objectContaining({ source: 'inventory.peek_charge', target: 'power.peek', kind: 'enables' }),
                 expect.objectContaining({ source: 'power.peek', target: 'inventory.peek_charge', kind: 'consumes' }),
+                expect.objectContaining({ source: 'power.peek', target: 'power.destroy_pair', kind: 'synergy' }),
                 expect.objectContaining({ source: 'core.gameplay_commands', target: 'feedback.gameplay_hud', kind: 'displays' }),
                 expect.objectContaining({ source: 'core.gameplay_commands', target: 'persistence.run_summary', kind: 'persists' }),
                 expect.objectContaining({ source: 'core.gameplay_commands', target: 'simulation.gameplay_replay', kind: 'tested_by' })
@@ -240,59 +237,37 @@ describe('gameplay interaction graph', () => {
         );
     });
 
-    it('connects the Warden build from defensive choices through capped guard and damage absorption', () => {
-        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        const sourceNodeByDefinition = new Map([
-            ['bonus_reward.hazard_ward', 'reward.hazard_ward'],
-            ['relic.guard_token_plus_one', 'relic.guard_token_plus_one'],
-            ['trait.volatile_heavy_guard', 'trait.volatile_heavy_guard'],
-            ['relic.guard_token_plus_one.mirror_match', 'relic.guard_token_plus_one']
-        ]);
-
-        for (const definition of WARDEN_DEFINITIONS) {
-            const nodeId = sourceNodeByDefinition.get(definition.id);
-            expect(nodeId, definition.id).toBeTruthy();
-            expect(byId.get(nodeId!), definition.id).toMatchObject({
-                evidence: expect.arrayContaining(['src/shared/gameplay-core-contracts.ts']),
-                tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
-            });
-        }
-
-        expect(byId.get('build.guard_tank')).toMatchObject({ kind: 'build', role: 'guard_absorption_build' });
-        expect(byId.get('inventory.guard_token')).toMatchObject({ kind: 'inventory', role: 'bounded_damage_buffer' });
-        expect(byId.get('safety.guard_absorption')).toMatchObject({ kind: 'safety', role: 'resource_consequence' });
+    it('connects Guard Token inventory through capped guard and damage absorption', () => {
+        const byId = mechanicById();
+        expect(byId.get('inventory.guard_token')).toMatchObject({
+            kind: 'inventory',
+            role: 'bounded_damage_buffer',
+            evidence: expect.arrayContaining(['src/shared/run-inventory.ts', 'src/shared/turn-mismatch-rules.ts']),
+            tests: expect.arrayContaining(['src/shared/run-inventory.test.ts', 'src/shared/turn-mismatch-rules.test.ts'])
+        });
+        expect(byId.get('safety.guard_absorption')).toMatchObject({
+            kind: 'safety',
+            role: 'resource_consequence',
+            evidence: ['src/shared/turn-mismatch-rules.ts'],
+            tests: ['src/shared/turn-mismatch-rules.test.ts']
+        });
         expect(gameplayInteractionGraph.edges).toEqual(
             expect.arrayContaining([
-                expect.objectContaining({ source: 'reward.hazard_ward', target: 'inventory.guard_token', kind: 'grants' }),
-                expect.objectContaining({ source: 'relic.guard_token_plus_one', target: 'inventory.guard_token', kind: 'grants' }),
-                expect.objectContaining({ source: 'trait.volatile', target: 'trait.volatile_heavy_guard', kind: 'triggers' }),
-                expect.objectContaining({ source: 'trait.heavy', target: 'trait.volatile_heavy_guard', kind: 'gates' }),
+                expect.objectContaining({ source: 'core.gameplay_commands', target: 'inventory.guard_token', kind: 'modifies' }),
                 expect.objectContaining({ source: 'inventory.guard_token', target: 'safety.guard_absorption', kind: 'enables' }),
                 expect.objectContaining({ source: 'safety.guard_absorption', target: 'inventory.guard_token', kind: 'consumes' }),
-                expect.objectContaining({ source: 'build.guard_tank', target: 'safety.guard_absorption', kind: 'consequence' })
+                expect.objectContaining({ source: 'inventory.guard_token', target: 'feedback.gameplay_hud', kind: 'displays' }),
+                expect.objectContaining({ source: 'safety.guard_absorption', target: 'feedback.gameplay_hud', kind: 'displays' })
             ])
         );
     });
 
-    it('connects Combo Shard Engine sources through typed match requests into life conversion', () => {
-        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        const sourceNodeByDefinition = new Map([
-            ['bonus_reward.bonus_shards', 'reward.bonus_shards'],
-            ['relic.combo_shard_plus_step', 'relic.combo_shard_plus_step'],
-            ['relic.parasite_ward_once', 'relic.parasite_ward_once'],
-            ['findable.shard_spark', 'findable.shard_spark'],
-            ['relic.combo_shard_plus_step.sealed_match', 'relic.combo_shard_plus_step']
-        ]);
-
-        for (const definition of COMBO_SHARD_ENGINE_DEFINITIONS) {
-            const nodeId = sourceNodeByDefinition.get(definition.id);
-            expect(nodeId, definition.id).toBeTruthy();
-            expect(byId.get(nodeId!), definition.id).toMatchObject({
-                tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
-            });
-        }
-
-        expect(byId.get('build.combo_shard_engine')).toMatchObject({ kind: 'build', role: 'momentum_to_life_build' });
+    it('connects Shard Spark through typed match requests into life conversion', () => {
+        const byId = mechanicById();
+        expect(byId.get('findable.shard_spark')).toMatchObject({
+            kind: 'findable',
+            tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
+        });
         expect(byId.get('inventory.combo_shard')).toMatchObject({
             kind: 'inventory',
             role: 'bounded_life_conversion_resource'
@@ -300,108 +275,32 @@ describe('gameplay interaction graph', () => {
         expect(byId.get('progression.shard_to_life')).toMatchObject({ kind: 'progression', role: 'resource_consequence' });
         expect(gameplayInteractionGraph.edges).toEqual(
             expect.arrayContaining([
-                expect.objectContaining({ source: 'reward.bonus_shards', target: 'inventory.combo_shard', kind: 'grants' }),
                 expect.objectContaining({ source: 'findable.shard_spark', target: 'core.gameplay_commands', kind: 'triggers' }),
-                expect.objectContaining({ source: 'trait.sealed', target: 'relic.combo_shard_plus_step', kind: 'triggers' }),
+                expect.objectContaining({ source: 'findable.shard_spark', target: 'inventory.combo_shard', kind: 'grants' }),
                 expect.objectContaining({ source: 'core.gameplay_commands', target: 'progression.shard_to_life', kind: 'triggers' }),
                 expect.objectContaining({ source: 'inventory.combo_shard', target: 'progression.shard_to_life', kind: 'enables' }),
                 expect.objectContaining({ source: 'progression.shard_to_life', target: 'inventory.combo_shard', kind: 'consumes' }),
-                expect.objectContaining({ source: 'build.combo_shard_engine', target: 'progression.shard_to_life', kind: 'consequence' }),
-                expect.objectContaining({ source: 'relic.parasite_ward_once', target: 'safety.parasite_ward', kind: 'grants' }),
-                expect.objectContaining({ source: 'safety.parasite_ward', target: 'hazard.score_parasite', kind: 'counterplay' }),
-                expect.objectContaining({ source: 'hazard.score_parasite', target: 'core.gameplay_commands', kind: 'triggers' })
+                expect.objectContaining({ source: 'board.chain_chunk_fever', target: 'inventory.combo_shard', kind: 'grants' })
             ])
         );
     });
 
-    it('connects Supply Cache through reveal-then-remove emergency recovery', () => {
-        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-
-        expect(SUPPLY_CACHE_DEFINITIONS.map((definition) => definition.id)).toEqual([
-            'bonus_reward.supply_cache'
-        ]);
-        expect(byId.get('reward.supply_cache')).toMatchObject({
-            kind: 'reward',
-            role: 'emergency_information_and_removal_source',
-            tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
-        });
-        expect(byId.get('build.emergency_toolkit')).toMatchObject({
-            kind: 'build',
-            role: 'reveal_then_remove_recovery_build'
-        });
-        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
-            expect.objectContaining({ source: 'reward.supply_cache', target: 'core.gameplay_commands', kind: 'triggers' }),
-            expect.objectContaining({ source: 'reward.supply_cache', target: 'inventory.peek_charge', kind: 'grants' }),
-            expect.objectContaining({ source: 'reward.supply_cache', target: 'inventory.destroy_charge', kind: 'grants' }),
-            expect.objectContaining({ source: 'power.peek', target: 'power.destroy_pair', kind: 'synergy' }),
-            expect.objectContaining({ source: 'build.emergency_toolkit', target: 'objective.floor_clear', kind: 'consequence' })
-        ]));
-    });
-
-    it('connects Saboteur sources through destroy control and safe-hazard ward consequences', () => {
-        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        const sourceNodeByDefinition = new Map([
-            ['bonus_reward.hazard_banisher', 'reward.hazard_banisher'],
-            ['relic.destroy_bank_plus_one', 'relic.destroy_bank_plus_one'],
-            ['findable.ward_spark', 'findable.ward_spark']
-        ]);
-
-        for (const definition of SABOTEUR_DEFINITIONS) {
-            const nodeId = sourceNodeByDefinition.get(definition.id);
-            expect(nodeId, definition.id).toBeTruthy();
-            expect(byId.get(nodeId!), definition.id).toMatchObject({
-                tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
-            });
-        }
-
-        expect(byId.get('build.trap_control')).toMatchObject({ kind: 'build', role: 'trap_pressure_control_build' });
+    it('connects Ward Spark and Destroy charges into deterministic pair removal', () => {
+        const byId = mechanicById();
+        expect(byId.get('findable.ward_spark')).toMatchObject({ kind: 'findable', enables: [] });
         expect(byId.get('inventory.destroy_charge')).toMatchObject({ kind: 'inventory', role: 'pair_removal_resource' });
-        expect(byId.get('safety.safe_hazard_ward')).toMatchObject({ kind: 'safety', role: 'trap_pressure_consequence' });
-        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
-            expect.objectContaining({ source: 'reward.hazard_banisher', target: 'inventory.destroy_charge', kind: 'grants' }),
-            expect.objectContaining({ source: 'relic.destroy_bank_plus_one', target: 'inventory.destroy_charge', kind: 'grants' }),
-            expect.objectContaining({ source: 'findable.ward_spark', target: 'core.gameplay_commands', kind: 'triggers' }),
-            expect.objectContaining({ source: 'findable.ward_spark', target: 'safety.safe_hazard_ward', kind: 'grants' }),
-            expect.objectContaining({ source: 'inventory.destroy_charge', target: 'power.destroy_pair', kind: 'enables' }),
-            expect.objectContaining({ source: 'safety.safe_hazard_ward', target: 'hazard.tile_pressure', kind: 'counterplay' }),
-            expect.objectContaining({ source: 'build.trap_control', target: 'power.destroy_pair', kind: 'consequence' })
-        ]));
+        expect(gameplayInteractionGraph.edges).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ source: 'findable.ward_spark', target: 'core.gameplay_commands', kind: 'triggers' }),
+                expect.objectContaining({ source: 'core.gameplay_commands', target: 'inventory.destroy_charge', kind: 'modifies' }),
+                expect.objectContaining({ source: 'inventory.destroy_charge', target: 'power.destroy_pair', kind: 'enables' }),
+                expect.objectContaining({ source: 'power.destroy_pair', target: 'inventory.destroy_charge', kind: 'consumes' })
+            ])
+        );
     });
 
-
-    it('connects Slayer preparation through boss and parasite consequences', () => {
-        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        const sourceNodeByDefinition = new Map(SLAYER_DEFINITIONS.map((definition) => [
-            definition.id,
-            `relic.${definition.source.id}`
-        ]));
-
-        for (const definition of SLAYER_DEFINITIONS) {
-            const nodeId = sourceNodeByDefinition.get(definition.id);
-            expect(byId.get(nodeId!), definition.id).toMatchObject({
-                tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
-            });
-        }
-
-        expect(byId.get('build.boss_hunter')).toMatchObject({ kind: 'build', role: 'boss_objective_extraction_build' });
-        expect(byId.get('reward.boss_trophy_cache')).toMatchObject({ kind: 'reward', role: 'boss_objective_score_consequence' });
-        expect(byId.get('hazard.score_parasite')).toMatchObject({ kind: 'hazard', role: 'chapter_pressure_and_objective_counterplay' });
-        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
-            expect.objectContaining({ source: 'relic.chapter_compass', target: 'reward.boss_trophy_cache', kind: 'modifies' }),
-            expect.objectContaining({ source: 'relic.parasite_ledger', target: 'hazard.score_parasite', kind: 'counterplay' }),
-            expect.objectContaining({ source: 'objective.defeat_boss', target: 'reward.boss_trophy_cache', kind: 'triggers' }),
-            expect.objectContaining({ source: 'safety.parasite_ward', target: 'hazard.score_parasite', kind: 'counterplay' }),
-            expect.objectContaining({ source: 'build.boss_hunter', target: 'reward.boss_trophy_cache', kind: 'consequence' })
-        ]));
-    });
-
-    it('connects the Route Gambler from per-floor commitment through wager Favor cash-out', () => {
-        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-
-        expect(byId.get('build.route_gambler')).toMatchObject({
-            kind: 'build',
-            role: 'risk_commitment_and_rescue_build'
-        });
+    it('connects the Gambit token from per-floor grant through mismatch rescue', () => {
+        const byId = mechanicById();
         expect(byId.get('inventory.gambit_token')).toMatchObject({
             kind: 'inventory',
             role: 'per_floor_third_flip_resource'
@@ -410,70 +309,34 @@ describe('gameplay interaction graph', () => {
             kind: 'power',
             role: 'mismatch_rescue_with_failure_cost'
         });
-        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
-            expect.objectContaining({ source: 'progression.run_flow', target: 'inventory.gambit_token', kind: 'grants' }),
-            expect.objectContaining({ source: 'inventory.gambit_token', target: 'power.gambit', kind: 'enables' }),
-            expect.objectContaining({ source: 'power.gambit', target: 'objective.floor_clear', kind: 'counterplay' }),
-            expect.objectContaining({ source: 'build.route_gambler', target: 'power.gambit', kind: 'consequence' })
-        ]));
+        expect(gameplayInteractionGraph.edges).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ source: 'progression.run_flow', target: 'inventory.gambit_token', kind: 'grants' }),
+                expect.objectContaining({ source: 'inventory.gambit_token', target: 'power.gambit', kind: 'enables' }),
+                expect.objectContaining({ source: 'power.gambit', target: 'inventory.gambit_token', kind: 'consumes' }),
+                expect.objectContaining({ source: 'power.gambit', target: 'objective.floor_clear', kind: 'counterplay' })
+            ])
+        );
     });
 
-    it('connects Saboteur board-control sources through charges into deterministic board choices', () => {
-        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        const sourceNodeByDefinition = new Map([
-            ['bonus_reward.trait_toolkit', 'reward.trait_toolkit'],
-            ['bonus_reward.stasis_lockbox', 'reward.stasis_lockbox'],
-            ['bonus_reward.free_swap_floor', 'reward.free_swap_floor'],
-            ['relic.extra_shuffle_charge', 'relic.extra_shuffle_charge'],
-            ['relic.first_shuffle_free_per_floor', 'relic.first_shuffle_free_per_floor'],
-            ['relic.region_shuffle_free_first', 'relic.region_shuffle_free_first']
-        ]);
-
-        for (const definition of BOARD_TACTICIAN_DEFINITIONS) {
-            const nodeId = sourceNodeByDefinition.get(definition.id);
-            expect(nodeId, definition.id).toBeTruthy();
-            expect(byId.get(nodeId!), definition.id).toMatchObject({
-                tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
-            });
-        }
-
+    it('connects board-control charges into deterministic board choices', () => {
+        const byId = mechanicById();
         expect(byId.get('inventory.shuffle_charge')).toMatchObject({ kind: 'inventory', role: 'full_board_control_resource' });
         expect(byId.get('inventory.region_shuffle_charge')).toMatchObject({ kind: 'inventory', role: 'targeted_board_control_resource' });
         expect(byId.get('power.shuffle')).toMatchObject({ kind: 'power', role: 'global_hidden_board_reordering' });
         expect(byId.get('power.region_shuffle')).toMatchObject({ kind: 'power', role: 'targeted_hidden_row_reordering' });
         expect(byId.get('power.tile_swap')).toMatchObject({ kind: 'power', role: 'player_selected_board_reordering' });
-        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
-            expect.objectContaining({ source: 'reward.trait_toolkit', target: 'inventory.region_shuffle_charge', kind: 'grants' }),
-            expect.objectContaining({ source: 'reward.free_swap_floor', target: 'perk.free_first_swap_per_floor', kind: 'grants' }),
-            expect.objectContaining({ source: 'relic.extra_shuffle_charge', target: 'inventory.shuffle_charge', kind: 'grants' }),
-            expect.objectContaining({ source: 'inventory.shuffle_charge', target: 'power.shuffle', kind: 'enables' }),
-            expect.objectContaining({ source: 'inventory.region_shuffle_charge', target: 'power.tile_swap', kind: 'enables' }),
-            expect.objectContaining({ source: 'power.region_shuffle', target: 'objective.floor_clear', kind: 'counterplay' }),
-            expect.objectContaining({ source: 'build.trap_control', target: 'power.tile_swap', kind: 'consequence' })
-        ]));
+        expect(gameplayInteractionGraph.edges).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ source: 'inventory.shuffle_charge', target: 'power.shuffle', kind: 'enables' }),
+                expect.objectContaining({ source: 'inventory.region_shuffle_charge', target: 'power.tile_swap', kind: 'enables' }),
+                expect.objectContaining({ source: 'power.region_shuffle', target: 'objective.floor_clear', kind: 'counterplay' })
+            ])
+        );
     });
 
-    it('connects Memory Scout from study and clean streaks through Flash and Undo recovery', () => {
-        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        const sourceNodeByDefinition = new Map([
-            ['bonus_reward.trait_streak_lens', 'reward.trait_streak_lens'],
-            ['reward_perk.trait_streak_toolkit', 'perk.trait_streak_toolkit'],
-            ['relic.memorize_bonus_ms', 'relic.memorize_bonus_ms'],
-            ['relic.memorize_under_short_memorize', 'relic.memorize_under_short_memorize']
-        ]);
-
-        for (const definition of MEMORY_SCOUT_DEFINITIONS) {
-            const nodeId = sourceNodeByDefinition.get(definition.id);
-            expect(nodeId, definition.id).toBeTruthy();
-            expect(byId.get(nodeId!), definition.id).toMatchObject({
-                tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
-            });
-        }
-
-        expect(byId.get('build.memory_scout')).toMatchObject({
-            kind: 'build',
-            role: 'study_recall_and_mistake_recovery_build'
-        });
+    it('connects the memorize window through Flash and Undo recovery', () => {
+        const byId = mechanicById();
         expect(byId.get('phase.memorize')).toMatchObject({
             kind: 'progression',
             role: 'bounded_pre_flip_information_window'
@@ -494,48 +357,42 @@ describe('gameplay interaction graph', () => {
             kind: 'power',
             role: 'pending_mistake_recovery_with_focus_cost'
         });
-        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
-            expect.objectContaining({ source: 'reward.trait_streak_lens', target: 'perk.trait_streak_toolkit', kind: 'grants' }),
-            expect.objectContaining({ source: 'perk.trait_streak_toolkit', target: 'inventory.flash_pair_charge', kind: 'grants' }),
-            expect.objectContaining({ source: 'relic.memorize_bonus_ms', target: 'phase.memorize', kind: 'modifies' }),
-            expect.objectContaining({ source: 'relic.memorize_under_short_memorize', target: 'phase.memorize', kind: 'counterplay' }),
-            expect.objectContaining({ source: 'inventory.flash_pair_charge', target: 'power.flash_pair', kind: 'enables' }),
-            expect.objectContaining({ source: 'inventory.undo_charge', target: 'power.undo_resolve', kind: 'enables' }),
-            expect.objectContaining({ source: 'power.undo_resolve', target: 'objective.floor_clear', kind: 'counterplay' }),
-            expect.objectContaining({ source: 'build.memory_scout', target: 'power.flash_pair', kind: 'consequence' })
-        ]));
+        expect(gameplayInteractionGraph.edges).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ source: 'inventory.flash_pair_charge', target: 'power.flash_pair', kind: 'enables' }),
+                expect.objectContaining({ source: 'inventory.undo_charge', target: 'power.undo_resolve', kind: 'enables' }),
+                expect.objectContaining({ source: 'power.undo_resolve', target: 'objective.floor_clear', kind: 'counterplay' })
+            ])
+        );
     });
 
-    it('connects Locksmith from insurance and shop purchase through explicit lock spend', () => {
-        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(LOCKSMITH_DEFINITIONS.map((definition) => definition.id)).toEqual([
-            'bonus_reward.key_insurance'
-        ]);
-        expect(byId.get('reward.key_insurance')).toMatchObject({
-            kind: 'reward',
-            role: 'pre_lock_typed_key_insurance',
-            tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
+    it('keeps key inventories modeled as HUD-visible resources while no lock consumes them', () => {
+        const byId = mechanicById();
+        expect(byId.get('inventory.iron_key')).toMatchObject({
+            kind: 'inventory',
+            role: 'treasure_extraction_resource',
+            enables: [],
+            evidence: expect.arrayContaining(['src/shared/run-inventory.ts'])
         });
         expect(byId.get('inventory.master_key')).toMatchObject({
             kind: 'inventory',
-            role: 'universal_single_lock_resource'
+            role: 'universal_single_lock_resource',
+            enables: [],
+            evidence: ['src/shared/run-inventory.ts'],
+            tests: expect.arrayContaining(['src/shared/run-inventory.test.ts'])
         });
-        expect(byId.get('build.locksmith')).toMatchObject({
-            kind: 'build',
-            role: 'lock_insurance_and_extraction_build'
-        });
-        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
-            expect.objectContaining({ source: 'reward.key_insurance', target: 'inventory.iron_key', kind: 'grants' }),
-            expect.objectContaining({ source: 'inventory.master_key', target: 'exit.primary', kind: 'unblocks' }),
-            expect.objectContaining({ source: 'inventory.master_key', target: 'room.locked_cache', kind: 'unblocks' }),
-            expect.objectContaining({ source: 'exit.primary', target: 'inventory.master_key', kind: 'consumes' }),
-            expect.objectContaining({ source: 'exit.primary', target: 'core.gameplay_commands', kind: 'triggers' }),
-            expect.objectContaining({ source: 'build.locksmith', target: 'lock.typed_key', kind: 'counterplay' })
-        ]));
+        expect(gameplayInteractionGraph.edges).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ source: 'core.gameplay_commands', target: 'inventory.iron_key', kind: 'modifies' }),
+                expect.objectContaining({ source: 'inventory.iron_key', target: 'feedback.gameplay_hud', kind: 'displays' }),
+                expect.objectContaining({ source: 'inventory.master_key', target: 'feedback.gameplay_hud', kind: 'displays' })
+            ])
+        );
+        expect(gameplayInteractionGraph.edges.filter((edge) => edge.kind === 'unblocks' || edge.kind === 'priority_guard')).toEqual([]);
     });
 
     it('connects Wild Run setup through one-token wildcard matches and floor continuity', () => {
-        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        const byId = mechanicById();
         expect(byId.get('mode.wild_run')).toMatchObject({
             kind: 'progression',
             role: 'persistent_joker_mode_setup'
@@ -567,7 +424,7 @@ describe('gameplay interaction graph', () => {
     });
 
     it('models run loadouts as read-only projections over authoritative setup state', () => {
-        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        const byId = mechanicById();
         expect(byId.get('progression.run_setup')).toMatchObject({
             kind: 'progression',
             role: 'authoritative_pre_run_loadout_selection'
@@ -596,7 +453,7 @@ describe('gameplay interaction graph', () => {
     });
 
     it('connects typed Destroy Pair from charge and target choice through replayable floor consequence', () => {
-        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        const byId = mechanicById();
         expect(byId.get('power.destroy_pair')).toMatchObject({
             kind: 'power',
             role: 'flat_typed_completion_safe_pair_removal_and_floor_clear',
@@ -612,38 +469,12 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'power.destroy_pair', target: 'objective.floor_clear', kind: 'counterplay' }),
             expect.objectContaining({ source: 'power.destroy_pair', target: 'progression.run_flow', kind: 'enables' }),
             expect.objectContaining({ source: 'power.destroy_pair', target: 'feedback.gameplay_hud', kind: 'displays' }),
-            expect.objectContaining({ source: 'power.destroy_pair', target: 'simulation.gameplay_replay', kind: 'tested_by' }),
-            expect.objectContaining({ source: 'build.emergency_toolkit', target: 'power.destroy_pair', kind: 'consequence' }),
-            expect.objectContaining({ source: 'build.trap_control', target: 'power.destroy_pair', kind: 'consequence' })
+            expect.objectContaining({ source: 'power.destroy_pair', target: 'simulation.gameplay_replay', kind: 'tested_by' })
         ]));
     });
-
-    it('connects Hazard Banish acquisition to its typed floor-start removal or Destroy fallback', () => {
-        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(29);
-        expect(byId.get('perk.hazard_banish_per_floor')).toMatchObject({
-            kind: 'perk',
-            role: 'durable_floor_start_hazard_or_destroy_conversion',
-            tests: expect.arrayContaining([
-                'src/shared/gameplay-core.test.ts',
-                'src/shared/next-floor-run-state-rules.test.ts'
-            ])
-        });
-        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
-            expect.objectContaining({ source: 'reward.hazard_banisher', target: 'perk.hazard_banish_per_floor', kind: 'grants' }),
-            expect.objectContaining({ source: 'progression.run_flow', target: 'perk.hazard_banish_per_floor', kind: 'triggers' }),
-            expect.objectContaining({ source: 'perk.hazard_banish_per_floor', target: 'core.gameplay_commands', kind: 'triggers' }),
-            expect.objectContaining({ source: 'perk.hazard_banish_per_floor', target: 'hazard.tile_pressure', kind: 'counterplay' }),
-            expect.objectContaining({ source: 'perk.hazard_banish_per_floor', target: 'inventory.destroy_charge', kind: 'grants' }),
-            expect.objectContaining({ source: 'perk.hazard_banish_per_floor', target: 'feedback.gameplay_hud', kind: 'displays' }),
-            expect.objectContaining({ source: 'inventory.contract_loadout', target: 'perk.hazard_banish_per_floor', kind: 'gates' }),
-            expect.objectContaining({ source: 'build.trap_control', target: 'perk.hazard_banish_per_floor', kind: 'consequence' })
-        ]));
-    });
-
 
     it('evaluates route strategy through typed outcomes instead of parallel reward arithmetic', () => {
-        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        const byId = mechanicById();
         expect(byId.get('simulation.build_evaluation')).toMatchObject({
             kind: 'simulation',
             role: 'route_outcome_and_strategy_balance_gate',
@@ -652,17 +483,13 @@ describe('gameplay interaction graph', () => {
         });
         expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
             expect.objectContaining({ source: 'core.gameplay_commands', target: 'simulation.build_evaluation', kind: 'tested_by' }),
-            expect.objectContaining({ source: 'simulation.build_evaluation', target: 'build.route_gambler', kind: 'tested_by' }),
             expect.objectContaining({ source: 'simulation.build_evaluation', target: 'economy.score_and_rewards', kind: 'tested_by' }),
             expect.objectContaining({ source: 'simulation.build_evaluation', target: 'safety.softlock_fairness', kind: 'guarded_by' })
         ]));
     });
 
-
-
     it('connects flat typed floor advancement through pressure, board preparation, feedback, persistence, and replay', () => {
-        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(29);
+        const byId = mechanicById();
         expect(byId.get('progression.run_flow')).toMatchObject({
             kind: 'progression',
             role: 'typed_flat_replayable_floor_transition',
@@ -683,7 +510,6 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'progression.run_flow', target: 'core.gameplay_commands', kind: 'triggers' }),
             expect.objectContaining({ source: 'core.gameplay_commands', target: 'progression.run_flow', kind: 'modifies' }),
             expect.objectContaining({ source: 'progression.run_flow', target: 'hazard.score_parasite', kind: 'triggers' }),
-            expect.objectContaining({ source: 'progression.run_flow', target: 'perk.hazard_banish_per_floor', kind: 'triggers' }),
             expect.objectContaining({ source: 'progression.run_flow', target: 'phase.memorize', kind: 'enables' }),
             expect.objectContaining({ source: 'progression.run_flow', target: 'feedback.gameplay_hud', kind: 'displays' }),
             expect.objectContaining({ source: 'progression.run_flow', target: 'persistence.run_summary', kind: 'persists' }),
@@ -692,14 +518,13 @@ describe('gameplay interaction graph', () => {
     });
 
     it('connects one typed non-final board turn through effects, feedback, persistence, and replay', () => {
-        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        const byId = mechanicById();
         expect(byId.get('core.board_turn_resolution')).toMatchObject({
             kind: 'core',
             role: 'single_command_match_mismatch_gambit_and_pair_floor_clear_transition',
             evidence: expect.arrayContaining([
                 'src/shared/board-turn-transition.ts',
                 'src/shared/floor-clear-transition.ts',
-                'src/shared/slayer-floor-clear-transition.ts',
                 'src/shared/gameplay-effect-transition.ts',
                 'src/shared/gameplay-core.ts',
                 'src/shared/game.ts'

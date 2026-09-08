@@ -221,7 +221,6 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     const hostConsolidatesTileFrames = !tileStepLegacy;
     const {
         boardRuneFieldMetrics,
-        enemyHazardRows,
         flipLocked,
         overlayPrewarmDemandPairKeys,
         tileBezelRows
@@ -404,7 +403,6 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
                 boardRuneFieldMaterial={boardRuneFieldMaterial}
                 boardRuneFieldMatRef={boardRuneFieldMatRef}
                 boardRuneFieldMetrics={boardRuneFieldMetrics}
-                enemyHazardRows={enemyHazardRows}
                 fieldTiltRef={fieldTiltRef}
                 flipLocked={flipLocked}
                 focusedTileId={focusedTileId}

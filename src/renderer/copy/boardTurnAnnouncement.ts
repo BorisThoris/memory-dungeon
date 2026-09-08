@@ -1,4 +1,3 @@
-import { getHazardTileLiveCopy, HAZARD_TILE_KINDS } from '../../shared/hazard-tiles';
 import { MAGPIE_BEAT_COPY } from './magpieBeat';
 import { CHAIN_BEAT_COPY, CHAIN_TIER_LABELS } from './chainBeat';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
@@ -12,61 +11,6 @@ export const CHAIN_MILESTONE_THRESHOLDS = [3, 6, 10] as const;
 const chainRewardAnnouncementLine = (streak: number, comboShards: number, lives: number): string => {
     const cue = getChainRewardForecastCues(streak, comboShards, lives)[0];
     return cue ? ` Next reward: ${getChainRewardUrgencyCopy(cue)}: ${cue.label} in ${cue.distanceLabel}.` : '';
-};
-
-/**
- * Hazard-tile live copy for the hazards this turn actually fired, taken from the event's
- * per-kind before/after counts instead of a per-floor snapshot ref.
- *
- * Each kind is checked independently, so a turn that trips two hazards announces both in
- * HAZARD_TILE_KINDS order. Fragile and fuse caches carry a second, break-specific line:
- * a fragile cache can both claim and break in one turn, and a fuse cache claimed after
- * its fuse ran out reads differently from one claimed in time.
- */
-export const hazardTileAnnouncementLines = (
-    turnEvent: BoardTurnResolvedEvent,
-    { reduceMotion }: { reduceMotion: boolean }
-): string[] => {
-    const { hazardTilesBefore, hazardTilesAfter, hazardKinds } = turnEvent.announcement;
-    if (hazardTilesAfter <= hazardTilesBefore) {
-        return [];
-    }
-    const fired = (before: number, after: number): boolean => after > before;
-    return HAZARD_TILE_KINDS.flatMap((kind) => {
-        const liveCopy = getHazardTileLiveCopy(kind);
-        const normalLine = reduceMotion ? liveCopy.reducedMotionLiveAnnouncement : liveCopy.liveAnnouncement;
-        const breakLine = reduceMotion
-            ? liveCopy.reducedMotionBreakLiveAnnouncement ?? liveCopy.reducedMotionLiveAnnouncement
-            : liveCopy.breakLiveAnnouncement ?? liveCopy.liveAnnouncement;
-        switch (kind) {
-            case 'shuffle_snare':
-                return fired(hazardKinds.shuffleSnareBefore, hazardKinds.shuffleSnareAfter) ? [normalLine] : [];
-            case 'cascade_cache':
-                return fired(hazardKinds.cascadeCacheBefore, hazardKinds.cascadeCacheAfter) ? [normalLine] : [];
-            case 'mirror_decoy':
-                return fired(hazardKinds.mirrorDecoyBefore, hazardKinds.mirrorDecoyAfter) ? [normalLine] : [];
-            case 'fragile_cache':
-                return [
-                    ...(fired(hazardKinds.fragileCacheClaimBefore, hazardKinds.fragileCacheClaimAfter)
-                        ? [normalLine]
-                        : []),
-                    ...(fired(hazardKinds.fragileCacheBreakBefore, hazardKinds.fragileCacheBreakAfter)
-                        ? [breakLine]
-                        : [])
-                ];
-            case 'toll_cache':
-                return fired(hazardKinds.tollCacheBefore, hazardKinds.tollCacheAfter) ? [normalLine] : [];
-            default:
-                if (!fired(hazardKinds.fuseCacheBefore, hazardKinds.fuseCacheAfter)) {
-                    return [];
-                }
-                return [
-                    fired(hazardKinds.fuseCacheExpiredBefore, hazardKinds.fuseCacheExpiredAfter)
-                        ? breakLine
-                        : normalLine
-                ];
-        }
-    }).filter((line): line is string => typeof line === 'string' && line.length > 0);
 };
 
 /**
@@ -203,7 +147,7 @@ export interface BoardTurnAnnouncementResult {
 /**
  * The whole polite announcement for one resolved turn, projected from the event.
  *
- * Everything it reports - chain milestones, hazard-tile firings, pickups - comes from
+ * Everything it reports - chain milestones, chunk breaks, pickups - comes from
  * before/after facts the core stamped on the event. The announcer previously kept seven
  * per-floor snapshot refs and inferred each of these by comparing renders, which meant
  * the spoken feedback could disagree with the rules and could double-fire or go silent
@@ -241,12 +185,11 @@ export const chunkAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): strin
 
 export const buildBoardTurnAnnouncement = (
     turnEvent: BoardTurnResolvedEvent,
-    { reduceMotion }: { reduceMotion: boolean }
+    _options: { reduceMotion: boolean }
 ): BoardTurnAnnouncementResult | null => {
     const lines = [
         chainMilestoneAnnouncement(turnEvent),
         chainBreakAnnouncement(turnEvent),
-        ...hazardTileAnnouncementLines(turnEvent, { reduceMotion }),
         /*
          * Ahead of the counters: the bird moved a pair, and a player who hears the score before
          * they hear that will already be looking in the wrong place.

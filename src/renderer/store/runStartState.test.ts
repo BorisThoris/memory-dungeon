@@ -1,18 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import {
-    createDungeonShowcaseRun,
-    createNewRun,
-    createRunSummary,
-    createWildRun
-} from '../../shared/game-core';
+import { createNewRun, createWildRun } from '../../shared/game-core';
 import { createDefaultSaveData } from '../../shared/save-data';
 import { buildClassicRunOptions, DEFAULT_CLASSIC_RUN_SETUP } from '../../shared/classic-run-setup';
 import {
     createRestartRun,
     createRunStartPlan,
     createRunStartStatePatch,
-    createRunStartTelemetryPayload,
-    isDungeonShowcaseRestartRun
+    createRunStartTelemetryPayload
 } from './runStartState';
 
 describe('runStartState', () => {
@@ -23,7 +17,6 @@ describe('runStartState', () => {
         expect(createRunStartStatePatch(run, saveData)).toMatchObject({
             boardPinMode: false,
             destroyPairArmed: false,
-            dungeonExitPromptOpen: false,
             matchScorePop: null,
             mismatchScorePop: null,
             newlyUnlockedAchievements: [],
@@ -90,14 +83,6 @@ describe('runStartState', () => {
     });
 
 
-    it('recognizes live and summarized dungeon showcase runs for restart', () => {
-        const run = createDungeonShowcaseRun(0);
-        const summary = createRunSummary({ ...run, status: 'gameOver', lives: 0 }, []);
-
-        expect(isDungeonShowcaseRestartRun(run)).toBe(true);
-        expect(isDungeonShowcaseRestartRun(summary)).toBe(true);
-        expect(isDungeonShowcaseRestartRun(createNewRun(0))).toBe(false);
-    });
 
     it('restarts a setup-sheet run from the previous run type', () => {
         const saveData = createDefaultSaveData();
@@ -112,14 +97,9 @@ describe('runStartState', () => {
         });
     });
 
-    it('restarts wild, practice, and dungeon showcase runs with their setup preserved', () => {
+    it('restarts wild and practice runs with their setup preserved', () => {
         const saveData = createDefaultSaveData();
 
-        expect(createRestartRun(createDungeonShowcaseRun(0), saveData)).toMatchObject({
-            dungeonShowcaseRun: true,
-            gameMode: 'endless',
-            practiceMode: true
-        });
         expect(createRestartRun(createWildRun(0), saveData)).toMatchObject({
             wildMenuRun: true,
             activeMutators: ['sticky_fingers', 'short_memorize', 'findables_floor']

@@ -9,7 +9,6 @@ import { solveRunThroughGameplayCoreWithTrace } from './gameplay-core-playthroug
 import { createNewRun, finishMemorizePhase } from './game-core';
 import { solveRunByExhaustingPlayablePairsWithTrace } from './playthrough-solver';
 import { createGeneratedBoardSolverRun } from './softlock-generator-contract';
-import { EXIT_PAIR_KEY, ROOM_PAIR_KEY } from './tile-identity';
 
 const tile = (id: string, pairKey: string, state: Tile['state'] = 'hidden'): Tile => ({
     id,
@@ -48,30 +47,22 @@ const gameplayStateWithoutJournals = (run: RunState): RunState => {
 };
 
 describe('gameplay-core playthrough solver', () => {
-    it('solves an exit board exclusively through replayable commands and events', () => {
-        const exit = { ...tile('exit', EXIT_PAIR_KEY), dungeonCardKind: 'exit' as const };
-        const initial = runWithBoard(board(
-            [tile('a1', 'a'), tile('a2', 'a'), exit],
-            { dungeonExitTileId: exit.id, dungeonExitActivated: false }
-        ));
+    it('solves a board exclusively through replayable commands and events', () => {
+        const initial = runWithBoard(board([tile('a1', 'a'), tile('a2', 'a')]));
         const trace = solveRunThroughGameplayCoreWithTrace(initial);
         const legacy = solveRunByExhaustingPlayablePairsWithTrace(initial);
 
-        expect(trace.stopReason).toBe('exit_attempted');
+        expect(trace.stopReason).toBe('level_complete');
         expect(gameplayStateWithoutJournals(trace.run)).toEqual(gameplayStateWithoutJournals(legacy.run));
         expect(trace.run.status).toBe('levelComplete');
         expect(trace.commands.map((command) => command.type)).toEqual([
             'board.tile_flip',
             'board.tile_flip',
-            'board.turn_resolve',
-            'board.tile_flip',
-            'dungeon.exit_activate'
+            'board.turn_resolve'
         ]);
         expect(trace.events.map((event) => event.type)).toEqual(expect.arrayContaining([
             'board.tile_flipped',
-            'board.turn_resolved',
-            'dungeon.exit_activated',
-            'feedback.requested'
+            'board.turn_resolved'
         ]));
         expect(trace.acceptedCommandIds).toHaveLength(trace.commands.length);
         expect(trace.rejectedCommandIds).toEqual([]);
@@ -80,111 +71,8 @@ describe('gameplay-core playthrough solver', () => {
         expect(trace.invariantViolations).toEqual([]);
     });
 
-    it('spends typed keys on an affordable locked cache and alternate exit only when lock policy opts in', () => {
-        const primaryExit: Tile = {
-            ...tile('exit-primary', EXIT_PAIR_KEY),
-            dungeonCardKind: 'exit',
-            dungeonExitLockKind: 'none'
-        };
-        const lockedExit: Tile = {
-            ...tile('exit-locked', EXIT_PAIR_KEY),
-            dungeonCardKind: 'exit',
-            dungeonExitLockKind: 'iron'
-        };
-        const lockedCache: Tile = {
-            ...tile('cache', ROOM_PAIR_KEY),
-            dungeonCardKind: 'room',
-            dungeonCardEffectId: 'room_locked_cache',
-            dungeonCardState: 'hidden',
-            dungeonKeyKind: 'iron',
-            dungeonRoomUsed: false
-        };
-        const initial: RunState = {
-            ...runWithBoard(board(
-                [tile('a1', 'a'), tile('a2', 'a'), lockedCache, primaryExit, lockedExit],
-                {
-                    columns: 3,
-                    rows: 2,
-                    dungeonExitTileId: primaryExit.id,
-                    dungeonExitActivated: false,
-                    dungeonExitLockKind: 'none'
-                }
-            )),
-            dungeonKeys: { iron: 2 },
-            dungeonMasterKeys: 1
-        };
-        const trace = solveRunThroughGameplayCoreWithTrace(initial, 40, true, {
-            lockPolicy: { kind: 'prefer_affordable_lock_rewards' }
-        });
-
-        expect(trace.run.status).toBe('levelComplete');
-        expect(trace.run.dungeonKeys.iron).toBe(0);
-        expect(trace.run.dungeonMasterKeys).toBe(1);
-        expect(trace.commands[0]).toMatchObject({ type: 'board.tile_flip', targetTileId: lockedCache.id });
-        expect(trace.commands).toEqual(expect.arrayContaining([
-            expect.objectContaining({ type: 'board.tile_flip', targetTileId: lockedExit.id }),
-            expect.objectContaining({ type: 'dungeon.exit_activate', spend: 'key' })
-        ]));
-        expect(trace.events).toEqual(expect.arrayContaining([
-            expect.objectContaining({
-                type: 'dungeon.locked_cache_opened',
-                tileId: lockedCache.id,
-                spend: 'key',
-                keyKind: 'iron'
-            }),
-            expect.objectContaining({
-                type: 'dungeon.exit_activated',
-                exitTileId: lockedExit.id,
-                spend: 'key',
-                keyKind: 'iron'
-            })
-        ]));
-        expect(trace.rejectedCommandIds).toEqual([]);
-        expect(trace.replayDeterministic).toBe(true);
-        expect(trace.invariantViolations).toEqual([]);
-    });
 
 
-    it('repairs a stale boss through a typed command before activating the exit', () => {
-        const exit = { ...tile('exit', EXIT_PAIR_KEY, 'flipped'), dungeonCardKind: 'exit' as const };
-        const initial = runWithBoard(board(
-            [tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched'), exit],
-            {
-                dungeonBossId: 'trap_warden',
-                dungeonExitTileId: exit.id,
-                dungeonObjectiveId: 'defeat_boss',
-                enemyHazards: [{
-                    bossId: 'trap_warden',
-                    currentTileId: 'a1',
-                    damage: 1,
-                    hp: 1,
-                    id: 'stale-warden',
-                    kind: 'warden',
-                    label: 'Stale Warden',
-                    maxHp: 1,
-                    nextTileId: 'a2',
-                    pattern: 'guard',
-                    state: 'revealed'
-                }],
-                matchedPairs: 1
-            }
-        ));
-        const trace = solveRunThroughGameplayCoreWithTrace(initial);
-        const legacy = solveRunByExhaustingPlayablePairsWithTrace(initial);
-
-        expect(gameplayStateWithoutJournals(trace.run)).toEqual(gameplayStateWithoutJournals(legacy.run));
-        expect(trace.commands.map((command) => command.type)).toEqual([
-            'run.progression_repair',
-            'dungeon.exit_activate'
-        ]);
-        expect(trace.events).toEqual(expect.arrayContaining([
-            expect.objectContaining({ type: 'run.progression_repaired' }),
-            expect.objectContaining({ type: 'dungeon.exit_activated' })
-        ]));
-        expect(trace.run.board?.enemyHazards?.[0]).toMatchObject({ hp: 0, state: 'defeated' });
-        expect(trace.replayDeterministic).toBe(true);
-        expect(trace.invariantViolations).toEqual([]);
-    });
 
     it('matches the legacy solver across seeded generated boards before consumer migration', () => {
         for (const seed of [42_001, 42_077]) {
@@ -283,8 +171,7 @@ describe('gameplay-core playthrough solver', () => {
                     tile('6-c', 'c')
                 ],
                 { pairCount: 3, columns: 3, rows: 2 }
-            )),
-            relicIds: ['pin_cap_plus_one']
+            ))
         };
         const options = {
             informationPolicy: {
@@ -306,7 +193,7 @@ describe('gameplay-core playthrough solver', () => {
         expect(pinTrace.run.status).toBe('levelComplete');
         expect(pinTrace.pinPlacements).toBeGreaterThanOrEqual(2);
         expect(pinEvents.map((event) => event.pinCapacity)).toEqual(
-            expect.arrayContaining([MAX_PINNED_TILES + 1])
+            expect.arrayContaining([MAX_PINNED_TILES])
         );
         expect(pinEvents.every((event) =>
             !pinTrace.information.evictedTileIds.includes(event.targetTileId)

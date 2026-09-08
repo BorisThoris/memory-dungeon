@@ -2,38 +2,25 @@ import type { RunState, ViewState } from '../../shared/contracts';
 import { createGameplayPinToggleCommand } from '../../shared/gameplay-core-contracts';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
-import {
-    BOARD_FLOATER_POP_CLEAR,
-    type MatchScorePop,
-    type MismatchScorePop
-} from './matchScorePop';
-import { createDungeonTilePressSurfaceResult } from './dungeonPressSurfaceState';
+import type { MatchScorePop, MismatchScorePop } from './matchScorePop';
 import { projectGameplayFeedback } from './gameplayFeedbackAdapter';
-import { applyEnemyHazardContactThroughGameplayCore } from '../../shared/gameplay-core-adapters';
 import {
-    clearRunSurfaceArmedModes,
     createArmedBoardPowerPressResult,
-    createBoardPowerContactPolicy,
     createOrdinaryTileFlipResult,
     createRunWithArmedModesClearedPatch,
-    createRunWithBoardInteractionClearedPatch,
     createRunWithBoardPowersDisarmedPatch,
-    createRunWithPeekDisarmedPatch,
-    pressWillSpendPeekCharge
+    createRunWithPeekDisarmedPatch
 } from './runSurfaceState';
 
 export type TilePressAudioCue =
     | { kind: 'destroyPair' }
     | { kind: 'flip' }
     | { kind: 'peekPower' }
-    | { kind: 'resolveContact'; fromRun: RunState; toRun: RunState }
-    | { kind: 'strayPower' }
-    | { kind: 'trap' };
+    | { kind: 'strayPower' };
 
 type TilePressPatch = Partial<{
     boardPinMode: boolean;
     destroyPairArmed: boolean;
-    dungeonExitPromptOpen: boolean;
     matchScorePop: MatchScorePop | null;
     mismatchScorePop: MismatchScorePop | null;
     peekModeArmed: boolean;
@@ -72,92 +59,15 @@ export const createPlayingTilePressSurfaceResult = ({
     tileId: string;
 }): PlayingTilePressSurfaceResult => {
     const audio: TilePressAudioCue[] = [];
-    const { canContinueSinglePowerAfterContact } = createBoardPowerContactPolicy({
-        boardPinMode,
-        destroyPairArmed,
-        peekModeArmed,
-        regionShuffleArmed,
-        tileSwapArmed,
-        strayRemoveArmed
-    });
-    let actionRun = run;
-    let pressedTile = actionRun.board?.tiles.find((tile) => tile.id === tileId) ?? null;
-    const flippedBefore = actionRun.board?.flippedTileIds.length ?? 0;
-    /*
-     * A peek is free. The charge buys a look, and a look never puts a hand near the card, so the
-     * enemy standing on it has nothing to strike at. This press used to resolve hazard contact
-     * first and the peek second, which charged a life for the privilege of looking at the one
-     * square on the board a player most wants to check before committing to it.
-     */
-    const peekPressIsFree = pressWillSpendPeekCharge({
-        canContinueSinglePowerAfterContact,
-        peekModeArmed,
-        run: actionRun,
-        tileId
-    });
-    // Routed through the command so a hazard contact is journalled like every other
-    // mutation. It was the last direct transition on the press path, which meant a hit
-    // that cost a life left no trace in the replayable command journal.
-    const hazardContact = peekPressIsFree
-        ? null
-        : applyEnemyHazardContactThroughGameplayCore(actionRun, tileId, flippedBefore === 0);
-    const hazardRun = hazardContact?.run ?? actionRun;
-    const enemyContacted = hazardContact?.accepted ?? false;
+    const pressedTile = run.board?.tiles.find((tile) => tile.id === tileId) ?? null;
+    const flippedBefore = run.board?.flippedTileIds.length ?? 0;
 
-    if (enemyContacted) {
-        audio.push({ kind: 'resolveContact', fromRun: run, toRun: hazardRun });
-        if (hazardRun.status === 'gameOver') {
-            return {
-                kind: 'applyResolvedRun',
-                run: hazardRun,
-                audio,
-                patch: {
-                    ...clearRunSurfaceArmedModes(),
-                    ...BOARD_FLOATER_POP_CLEAR
-                }
-            };
-        }
-        actionRun = hazardRun;
-        pressedTile = actionRun.board?.tiles.find((tile) => tile.id === tileId) ?? pressedTile;
-    }
-
-    const dungeonTileResult = createDungeonTilePressSurfaceResult({
-        pairKey: pressedTile?.pairKey,
-        run: actionRun,
-        tileId
-    });
-    if (dungeonTileResult.kind !== 'notDungeonTile') {
-        if (dungeonTileResult.kind === 'ignored') {
-            return { kind: 'ignored', audio };
-        }
-        if (dungeonTileResult.playFlipSfx) {
-            audio.push({ kind: 'flip' });
-        }
-        if (dungeonTileResult.kind === 'exitPrompt') {
-            return {
-                kind: 'patch',
-                patch: {
-                    ...createRunWithArmedModesClearedPatch(dungeonTileResult.run),
-                    dungeonExitPromptOpen: true
-                },
-                audio,
-                resolveDelayMs: null
-            };
-        }
-        return {
-            kind: 'patch',
-            patch: createRunWithArmedModesClearedPatch(dungeonTileResult.run),
-            audio,
-            resolveDelayMs: null
-        };
-    }
-
-    if (!enemyContacted && boardPinMode) {
+    if (boardPinMode) {
         const command = createGameplayPinToggleCommand(
-            `pin-toggle:${actionRun.runSeed}:${actionRun.board?.level ?? 0}:${Array.isArray(actionRun.pinnedTileIds) ? actionRun.pinnedTileIds.length : 0}:${tileId}`,
+            `pin-toggle:${run.runSeed}:${run.board?.level ?? 0}:${Array.isArray(run.pinnedTileIds) ? run.pinnedTileIds.length : 0}:${tileId}`,
             tileId
         );
-        const result = reduceGameplayCommand(actionRun, command);
+        const result = reduceGameplayCommand(run, command);
         return !result.accepted
             ? { kind: 'ignored', audio }
             : {
@@ -169,12 +79,10 @@ export const createPlayingTilePressSurfaceResult = ({
     }
 
     const armedPowerPressResult = createArmedBoardPowerPressResult({
-        canContinueSinglePowerAfterContact,
         destroyPairArmed,
-        enemyContacted,
         peekModeArmed,
         regionShuffleArmed,
-        run: actionRun,
+        run,
         strayRemoveArmed,
         tileSwapArmed,
         tileSwapFirstTileId,
@@ -182,13 +90,7 @@ export const createPlayingTilePressSurfaceResult = ({
     });
     if (armedPowerPressResult.kind !== 'notArmed') {
         if (armedPowerPressResult.kind === 'handled') {
-            if (enemyContacted) {
-                return { kind: 'patch', patch: { run: actionRun }, audio, resolveDelayMs: null };
-            }
             return { kind: 'ignored', audio };
-        }
-        if (armedPowerPressResult.kind === 'persistEnemyContact') {
-            return { kind: 'patch', patch: { run: armedPowerPressResult.run }, audio, resolveDelayMs: null };
         }
         if (armedPowerPressResult.kind === 'strayApplied') {
             audio.push({ kind: 'strayPower' });
@@ -216,10 +118,7 @@ export const createPlayingTilePressSurfaceResult = ({
         if (armedPowerPressResult.kind === 'tileSwapFirstSelected') {
             return {
                 kind: 'patch',
-                patch: {
-                    ...(enemyContacted ? { run: actionRun } : {}),
-                    tileSwapFirstTileId: armedPowerPressResult.tileId
-                },
+                patch: { tileSwapFirstTileId: armedPowerPressResult.tileId },
                 audio,
                 resolveDelayMs: null
             };
@@ -227,10 +126,7 @@ export const createPlayingTilePressSurfaceResult = ({
         if (armedPowerPressResult.kind === 'tileSwapFirstCleared') {
             return {
                 kind: 'patch',
-                patch: {
-                    ...(enemyContacted ? { run: actionRun } : {}),
-                    tileSwapFirstTileId: null
-                },
+                patch: { tileSwapFirstTileId: null },
                 audio,
                 resolveDelayMs: null
             };
@@ -267,28 +163,17 @@ export const createPlayingTilePressSurfaceResult = ({
     }
 
     const ordinaryFlipResult = createOrdinaryTileFlipResult({
-        enemyContacted,
         flippedBefore,
         pressedTileBefore: pressedTile,
-        run: actionRun,
+        run,
         tileId
     });
     if (ordinaryFlipResult.kind === 'unchanged') {
-        return ordinaryFlipResult.clearBoardInteraction
-            ? {
-                  kind: 'patch',
-                  patch: createRunWithBoardInteractionClearedPatch(actionRun),
-                  audio,
-                  resolveDelayMs: null
-              }
-            : { kind: 'ignored', audio };
+        return { kind: 'ignored', audio };
     }
 
     if (ordinaryFlipResult.playFlipSfx) {
         audio.push({ kind: 'flip' });
-    }
-    if (ordinaryFlipResult.playTrapSfx) {
-        audio.push({ kind: 'trap' });
     }
     if (ordinaryFlipResult.gameOver) {
         return { kind: 'applyImmediateGameOver', run: ordinaryFlipResult.run, audio };

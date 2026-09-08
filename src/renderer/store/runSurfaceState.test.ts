@@ -2,14 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { createNewRun } from '../../shared/game-core';
 import { BOARD_FLOATER_POP_CLEAR } from './matchScorePop';
 import type { BoardState, RunState, Tile } from '../../shared/contracts';
-import { EXIT_PAIR_KEY, WILD_PAIR_KEY } from '../../shared/tile-identity';
+import { WILD_PAIR_KEY } from '../../shared/tile-identity';
 import {
     canPauseRunSurface,
     clearRunSurfaceArmedModes,
     createArmedBoardPowerPressResult,
     createBoardPinModeToggleResult,
     createDestroyPairArmedToggleResult,
-    createDungeonExitActivationSurfaceResult,
     createFlashPairSurfaceResult,
     createGambitThirdPickPressResult,
     createOrdinaryTileFlipResult,
@@ -22,7 +21,6 @@ import {
     createStrayArmToggleResult,
     createTileSwapToggleResult,
     createUndoResolvingSurfaceResult,
-    createBoardPowerContactPolicy,
     createRunWithArmedModesClearedPatch,
     createRunWithBoardInteractionClearedPatch,
     createRunWithBoardPowersDisarmedPatch,
@@ -64,7 +62,7 @@ const pairGroups = (tiles: readonly Tile[]): Tile[][] => {
 };
 
 describe('run surface state helpers', () => {
-    it('resets board interaction modes, shop return, prompt, and floaters', () => {
+    it('resets board interaction modes, shop return, and floaters', () => {
         expect(createRunSurfaceReset()).toEqual({
             boardPinMode: false,
             destroyPairArmed: false,
@@ -73,7 +71,6 @@ describe('run surface state helpers', () => {
             regionShuffleArmed: false,
             tileSwapArmed: false,
             tileSwapFirstTileId: null,
-            dungeonExitPromptOpen: false,
             shopReturnMode: null,
             ...BOARD_FLOATER_POP_CLEAR
         });
@@ -610,110 +607,9 @@ describe('run surface state helpers', () => {
         })).toEqual({ kind: 'ignored' });
     });
 
-    it('journals the exact Master Key spend when activating a locked exit', () => {
-        const base = createNewRun(0, { runSeed: 51_001 });
-        const lockedRun: RunState = {
-            ...base,
-            status: 'playing',
-            dungeonKeys: { iron: 0 },
-            dungeonMasterKeys: 1,
-            dungeonGatewaysUsed: 0,
-            board: {
-                ...base.board!,
-                pairCount: 1,
-                matchedPairs: 0,
-                flippedTileIds: ['exit'],
-                dungeonExitTileId: 'exit',
-                dungeonExitLockKind: 'iron',
-                tiles: [
-                    {
-                        id: 'exit',
-                        pairKey: EXIT_PAIR_KEY,
-                        label: 'Exit',
-                        symbol: 'E',
-                        state: 'flipped',
-                        dungeonCardKind: 'exit',
-                        dungeonCardState: 'revealed',
-                        dungeonExitLockKind: 'iron'
-                    },
-                    { id: 'a1', pairKey: 'a', label: 'A', symbol: 'A', state: 'hidden' },
-                    { id: 'a2', pairKey: 'a', label: 'A', symbol: 'A', state: 'hidden' }
-                ]
-            }
-        };
-        const result = createDungeonExitActivationSurfaceResult({
-            run: lockedRun,
-            spend: 'master_key',
-            view: 'playing'
-        });
-        expect(result.kind).toBe('applied');
-        if (result.kind === 'applied') {
-            expect(result.patch.run).toMatchObject({
-                status: 'levelComplete',
-                dungeonMasterKeys: 0,
-                dungeonGatewaysUsed: 1
-            });
-            expect(result.patch.run.gameplayCommandJournal).toEqual([
-                expect.objectContaining({ type: 'dungeon.exit_activate', spend: 'master_key' })
-            ]);
-            expect(result.events).toEqual(expect.arrayContaining([
-                expect.objectContaining({ type: 'dungeon.exit_activated', spend: 'master_key' }),
-                expect.objectContaining({ type: 'feedback.requested', cue: 'dungeon.exit.activated' })
-            ]));
-        }
-    });
 
-    it('creates the board-power contact policy for enemy-contact presses', () => {
-        expect(
-            createBoardPowerContactPolicy({
-                boardPinMode: false,
-                destroyPairArmed: false,
-                peekModeArmed: false,
-                strayRemoveArmed: false
-            })
-        ).toEqual({
-            armedPowerCount: 0,
-            canContinueSinglePowerAfterContact: false
-        });
 
-        expect(
-            createBoardPowerContactPolicy({
-                boardPinMode: false,
-                destroyPairArmed: false,
-                peekModeArmed: false,
-                strayRemoveArmed: true
-            })
-        ).toEqual({
-            armedPowerCount: 1,
-            canContinueSinglePowerAfterContact: true
-        });
-
-        expect(
-            createBoardPowerContactPolicy({
-                boardPinMode: true,
-                destroyPairArmed: false,
-                peekModeArmed: true,
-                strayRemoveArmed: false
-            })
-        ).toEqual({
-            armedPowerCount: 1,
-            canContinueSinglePowerAfterContact: false
-        });
-
-        expect(
-            createBoardPowerContactPolicy({
-                boardPinMode: false,
-                destroyPairArmed: true,
-                peekModeArmed: true,
-                strayRemoveArmed: false
-            })
-        ).toEqual({
-            armedPowerCount: 2,
-            canContinueSinglePowerAfterContact: false
-        });
-    });
-
-    it('applies stray remove presses and preserves enemy contacts when a stray press fails', () => {
+    it('applies stray remove presses and treats a failed stray press as handled', () => {
         const activeRun = playingRun({
             board: board({
                 tiles: [
@@ -726,9 +622,7 @@ describe('run surface state helpers', () => {
         });
 
         const applied = createArmedBoardPowerPressResult({
-            canContinueSinglePowerAfterContact: false,
             destroyPairArmed: false,
-            enemyContacted: false,
             peekModeArmed: false,
             run: activeRun,
             strayRemoveArmed: true,
@@ -750,24 +644,20 @@ describe('run surface state helpers', () => {
 
         expect(
             createArmedBoardPowerPressResult({
-                canContinueSinglePowerAfterContact: true,
                 destroyPairArmed: false,
-                enemyContacted: true,
                 peekModeArmed: false,
                 run: activeRun,
                 strayRemoveArmed: true,
                 tileId: 'a1'
             })
-        ).toEqual({ kind: 'persistEnemyContact', run: activeRun });
+        ).toEqual({ kind: 'handled' });
     });
 
     it('applies peek presses and treats blocked peek presses as handled', () => {
         const activeRun = { ...createNewRun(0), peekCharges: 1, status: 'playing' as const };
         const tileId = activeRun.board!.tiles[0]!.id;
         const applied = createArmedBoardPowerPressResult({
-            canContinueSinglePowerAfterContact: false,
             destroyPairArmed: false,
-            enemyContacted: false,
             peekModeArmed: true,
             run: activeRun,
             tileId
@@ -793,9 +683,7 @@ describe('run surface state helpers', () => {
         const blockedTileId = blockedRun.board!.tiles[0]!.id;
         expect(
             createArmedBoardPowerPressResult({
-                canContinueSinglePowerAfterContact: true,
                 destroyPairArmed: false,
-                enemyContacted: true,
                 peekModeArmed: true,
                 run: blockedRun,
                 tileId: 'missing-tile'
@@ -804,9 +692,7 @@ describe('run surface state helpers', () => {
 
         expect(
             createArmedBoardPowerPressResult({
-                canContinueSinglePowerAfterContact: true,
                 destroyPairArmed: false,
-                enemyContacted: true,
                 peekModeArmed: true,
                 run: {
                     ...blockedRun,
@@ -825,9 +711,7 @@ describe('run surface state helpers', () => {
                 activeRun.board!.tiles.filter((candidate) => candidate.pairKey === tile.pairKey).length === 2
         )!.id;
         const applied = createArmedBoardPowerPressResult({
-            canContinueSinglePowerAfterContact: false,
             destroyPairArmed: true,
-            enemyContacted: false,
             peekModeArmed: false,
             run: activeRun,
             tileId
@@ -849,32 +733,25 @@ describe('run surface state helpers', () => {
 
         expect(
             createArmedBoardPowerPressResult({
-                canContinueSinglePowerAfterContact: true,
                 destroyPairArmed: true,
-                enemyContacted: true,
                 peekModeArmed: false,
                 run: playingRun({ destroyPairCharges: 0 }),
                 tileId: 'a1'
             })
-        ).toMatchObject({ kind: 'persistEnemyContact' });
+        ).toEqual({ kind: 'handled' });
     });
 
-    it('reports unchanged ordinary flips and whether board interaction should clear', () => {
+    it('reports unchanged ordinary flips', () => {
         const activeRun = { ...createNewRun(0), status: 'playing' as const };
 
         expect(
             createOrdinaryTileFlipResult({
-                enemyContacted: true,
                 flippedBefore: 0,
                 pressedTileBefore: null,
                 run: activeRun,
                 tileId: 'missing-tile'
             })
-        ).toEqual({
-            kind: 'unchanged',
-            clearBoardInteraction: true,
-            run: activeRun
-        });
+        ).toEqual({ kind: 'unchanged', run: activeRun });
     });
 
     it('reports first ordinary flips and mismatch resolve scheduling', () => {
@@ -884,7 +761,6 @@ describe('run surface state helpers', () => {
         const mismatchTile = groups[1]![0]!;
 
         const firstFlip = createOrdinaryTileFlipResult({
-            enemyContacted: false,
             flippedBefore: 0,
             pressedTileBefore: firstTile,
             run: activeRun,
@@ -894,13 +770,11 @@ describe('run surface state helpers', () => {
         expect(firstFlip.kind).toBe('flipped');
         if (firstFlip.kind === 'flipped') {
             expect(firstFlip.playFlipSfx).toBe(true);
-            expect(firstFlip.playTrapSfx).toBe(false);
             expect(firstFlip.gameOver).toBe(false);
             expect(firstFlip.resolveDelayMs).toBeNull();
 
             const secondFlip = createOrdinaryTileFlipResult({
-                enemyContacted: false,
-                flippedBefore: firstFlip.run.board!.flippedTileIds.length,
+                    flippedBefore: firstFlip.run.board!.flippedTileIds.length,
                 pressedTileBefore: mismatchTile,
                 run: firstFlip.run,
                 tileId: mismatchTile.id
@@ -923,7 +797,6 @@ describe('run surface state helpers', () => {
         const second = groups[1]![0]!;
         const third = groups[0]![1]!;
         const resolving = createOrdinaryTileFlipResult({
-            enemyContacted: false,
             flippedBefore: 0,
             pressedTileBefore: first,
             run: activeRun,
@@ -934,7 +807,6 @@ describe('run surface state helpers', () => {
             return;
         }
         const mismatch = createOrdinaryTileFlipResult({
-            enemyContacted: false,
             flippedBefore: resolving.run.board!.flippedTileIds.length,
             pressedTileBefore: second,
             run: resolving.run,
@@ -970,67 +842,10 @@ describe('run surface state helpers', () => {
     });
 
 
-    it('reports no-op gambit third picks without persisting hazard-only changes', () => {
+    it('reports no-op gambit third picks as unchanged', () => {
         const activeRun = { ...createNewRun(0), status: 'resolving' as const };
 
-        expect(createGambitThirdPickPressResult(activeRun, 'missing-tile')).toEqual({
-            kind: 'unchanged',
-            hazardContact: null
-        });
+        expect(createGambitThirdPickPressResult(activeRun, 'missing-tile')).toEqual({ kind: 'unchanged' });
     });
 
-    it('reports moving enemy contact before a gambit third pick', () => {
-        const baseRun = { ...createNewRun(0), status: 'resolving' as const };
-        const board = {
-            ...baseRun.board!,
-            flippedTileIds: ['a1', 'b1'],
-            tiles: [
-                { id: 'a1', pairKey: 'a', label: 'A', state: 'flipped' as const, symbol: 'A' },
-                { id: 'a2', pairKey: 'a', label: 'A', state: 'hidden' as const, symbol: 'A' },
-                { id: 'b1', pairKey: 'b', label: 'B', state: 'flipped' as const, symbol: 'B' },
-                { id: 'b2', pairKey: 'b', label: 'B', state: 'hidden' as const, symbol: 'B' },
-                { id: 'c1', pairKey: 'c', label: 'C', state: 'hidden' as const, symbol: 'C' },
-                { id: 'c2', pairKey: 'c', label: 'C', state: 'hidden' as const, symbol: 'C' }
-            ],
-            enemyHazards: [
-                {
-                    id: 'gambit-contact',
-                    kind: 'sentinel' as const,
-                    label: 'Sentinel',
-                    currentTileId: 'a2',
-                    nextTileId: 'c1',
-                    damage: 1,
-                    state: 'hidden' as const,
-                    pattern: 'patrol' as const,
-                    hp: 1,
-                    maxHp: 1
-                }
-            ],
-            enemyHazardTurn: 0
-        };
-        const run = {
-            ...baseRun,
-            board,
-            gambitAvailableThisFloor: true,
-            gambitThirdFlipUsed: false,
-            stats: { ...baseRun.stats, guardTokens: 0 }
-        };
-
-        const result = createGambitThirdPickPressResult(run, 'a2');
-
-        expect(result.kind).toBe('flipped');
-        expect(result.hazardContact).toMatchObject({
-            fromRun: run,
-            toRun: {
-                lives: run.lives - 1,
-                enemyHazardHitsThisFloor: run.enemyHazardHitsThisFloor + 1
-            }
-        });
-        if (result.kind === 'flipped') {
-            expect(result.run.board!.flippedTileIds).toEqual(['a1', 'b1', 'a2']);
-            expect(result.events).toEqual(expect.arrayContaining([
-                expect.objectContaining({ type: 'feedback.requested', cue: 'power.gambit.committed' })
-            ]));
-        }
-    });
 });

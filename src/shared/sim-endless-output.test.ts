@@ -3,7 +3,6 @@ import {
     analyzeEndlessSimulationHealth,
     buildEndlessSimulationCsv,
     buildEndlessSimulationSummary,
-    countUndefeatedEnemyHazardsForPlayableGate,
     evaluateEndlessSimulationHealth,
     parseEndlessSimulationCliOptions
 } from '../../scripts/sim-endless';
@@ -54,11 +53,9 @@ describe('sim-endless CSV output', () => {
         expect(lines.some((line) => line.startsWith('traitMetric,traitSwapSetupFloors,'))).toBe(true);
         expect(lines).toContain('traitMetric,deadTraitFloors,0');
         expect(lines.some((line) => line.startsWith('fairnessIssue,'))).toBe(false);
-        expect(lines.some((line) => line.startsWith('topologyIssue,'))).toBe(false);
         expect(lines.some((line) => line.startsWith('playableMetric,checkedFloors,'))).toBe(true);
         expect(lines.some((line) => line.startsWith('playableMetric,lockedExitFloors,'))).toBe(true);
-        expect(lines.some((line) => line.startsWith('dungeonMetric,lockedCacheRoomFloors,'))).toBe(true);
-        expect(lines.some((line) => line.startsWith('dungeonMetric,typedLockedCacheRoomFloors,'))).toBe(true);
+        expect(lines.some((line) => line.startsWith('dungeon'))).toBe(false);
         expect(lines.some((line) => line.startsWith('playableIssue,'))).toBe(false);
         expect(lines.some((line) => line.startsWith('playableFailure,'))).toBe(false);
     });
@@ -73,17 +70,14 @@ describe('sim-endless CSV output', () => {
         expect(summary).toContain('# Endless Simulation Gate Summary');
         expect(summary).toContain('- Route gates:');
         expect(summary).toContain('- Fairness gates:');
-        expect(summary).toContain('- Topology gates:');
         expect(summary).toContain('issue types (none).');
         expect(summary).toContain('- Playable gates:');
         expect(summary).toContain('locked-exit floors');
         expect(summary).toContain('issue floors (none).');
-        expect(summary).toContain('- Dungeon room gates:');
-        expect(summary).toContain('typed locked cache room floors.');
         expect(summary).toContain('- Reward gates:');
         expect(summary).toContain('- Trait gates:');
         expect(summary).toContain('- Trait mechanic gates:');
-        expect(summary).toContain('exitless floors.');
+        expect(summary).not.toContain('Dungeon');
         expect(summary).toContain('dead trait floors.');
         expect(summary).toContain('one-swap setup floors.');
     });
@@ -99,34 +93,19 @@ describe('sim-endless CSV output', () => {
         expect(health.issues).toEqual([]);
         expect(health.metrics).toMatchObject({
             deadTraitFloors: 0,
-            // Every floor is "exitless", which is the point: there is no exit tile to place.
-            exitlessFloors: 1000,
             fairnessIssueCodes: [],
             fairnessIssueFloors: 0,
             fairnessIssueTypes: 0,
-            topologyIssueCodes: [],
-            topologyIssueFloors: 0,
-            topologyIssueTypes: 0,
-            lockedCacheRoomFloors: expect.any(Number),
             playableFailureDetails: [],
             playableIssueFloors: 0,
             playableIssueReasons: [],
             playableLockedExitFloors: expect.any(Number),
-            rewardKinds: getFindableSpawnWeightRows().length,
-            typedLockedCacheRoomFloors: expect.any(Number)
+            rewardKinds: getFindableSpawnWeightRows().length
         });
-        // Locked caches and rooms were dungeon cards; nought over a thousand floors is what
-        // "generation deals none" reads as, and asserting it exactly keeps that visible.
-        expect(health.metrics.lockedCacheRoomFloors).toBe(0);
-        expect(health.metrics.typedLockedCacheRoomFloors).toBe(0);
         expect(health.metrics.playableCheckedFloors).toBeGreaterThan(400);
         // No floor has a locked exit to sample any more; the sweep above is what keeps the count up.
         expect(health.metrics.playableLockedExitFloors).toBe(0);
         expect(health.metrics.routeKinds).toBeGreaterThanOrEqual(8);
-        // One objective - `find_exit` - on every floor, because the other three were dungeon
-        // objectives. It is a floor's only remaining instruction, and it is now a lie the UI still
-        // tells: there is no exit to find, the board just empties. Phase 1 T1.9-T1.17 replaces it.
-        expect(health.metrics.objectiveKinds).toBe(1);
         expect(health.metrics.traitFloorShare).toBeGreaterThanOrEqual(0.8);
         expect(health.metrics.traitMatchRouteFloorShare).toBeGreaterThanOrEqual(0.95);
         expect(health.metrics.traitRewardFloorShare).toBeGreaterThanOrEqual(0.8);
@@ -134,64 +113,24 @@ describe('sim-endless CSV output', () => {
         expect(health.metrics.traitSwapSetupFloorShare).toBeGreaterThanOrEqual(0.1);
     }, 300_000);
 
-    it('counts raw undefeated hazard state for playable gates even when the hazard is no longer active', () => {
-        expect(
-            countUndefeatedEnemyHazardsForPlayableGate({
-                enemyHazards: [
-                    {
-                        currentTileId: 'matched-a',
-                        damage: 1,
-                        hp: 1,
-                        id: 'raw-leftover',
-                        kind: 'warden',
-                        label: 'Raw Leftover',
-                        maxHp: 1,
-                        nextTileId: 'matched-b',
-                        pattern: 'guard',
-                        state: 'revealed'
-                    },
-                    {
-                        currentTileId: 'done-a',
-                        damage: 1,
-                        hp: 0,
-                        id: 'done',
-                        kind: 'sentinel',
-                        label: 'Done',
-                        maxHp: 1,
-                        nextTileId: 'done-b',
-                        pattern: 'patrol',
-                        state: 'defeated'
-                    }
-                ]
-            } as Parameters<typeof countUndefeatedEnemyHazardsForPlayableGate>[0])
-        ).toBe(1);
-    });
 
     it('reports actionable failures when endless health metrics regress', () => {
         const health = evaluateEndlessSimulationHealth(
             {
                 deadTraitFloors: 2,
-                exitlessFloors: 1,
                 fairnessIssueCodes: ['exit_lock_unreachable', 'completion_route_missing'],
                 fairnessIssueFloors: 3,
                 fairnessIssueTypes: 2,
-                topologyIssueCodes: ['topology_exit_lock_source_missing'],
-                topologyIssueFloors: 5,
-                topologyIssueTypes: 1,
-                exitLockTypes: 0,
-                findableTotal: 2,
-                lockedCacheRoomFloors: 0,
-                objectiveKinds: 1,
+                    findableTotal: 2,
                 playableCheckedFloors: 0,
                 coreReplayCheckedFloors: 0,
                 playableFailureDetails: [
-                    'floor=7|reason=exit_attempted|status=playing|turns=12|lastPair=__exit__|lastTiles=exit|activeStaleHazards=0|undefeatedStaleHazards=0|archetype=trap_hall|objective=defeat_boss'
+                    'floor=7|reason=no_progress|status=playing|turns=12|lastPair=a|lastTiles=a1+a2|archetype=trap_hall'
                 ],
                 playableIssueFloors: 4,
-                playableIssueReasons: ['exit_attempted'],
+                playableIssueReasons: ['no_progress'],
                 playableLockedExitFloors: 0,
                 rewardKinds: 1,
-                typedLockedCacheRoomFloors: 0,
                 traitBoardPowerInteractionFloorShare: 0.2,
                 traitMatchRouteFloorShare: 0.4,
                 routeKinds: 2,
@@ -209,9 +148,8 @@ describe('sim-endless CSV output', () => {
             expect.arrayContaining([
                 'Expected at least 8 floor archetypes, saw 2.',
                     'Expected generated boards to pass fairness inspection, saw 3 floor(s) with 2 issue type(s): exit_lock_unreachable, completion_route_missing.',
-                'Expected generated boards to pass topology inspection, saw 5 floor(s) with 1 issue type(s): topology_exit_lock_source_missing.',
                 'Expected executable playable solver sampling to inspect at least one floor.',
-                'Expected playable solver sample to clear every checked floor, saw 4 issue floor(s): exit_attempted. Details: floor=7|reason=exit_attempted|status=playing|turns=12|lastPair=__exit__|lastTiles=exit|activeStaleHazards=0|undefeatedStaleHazards=0|archetype=trap_hall|objective=defeat_boss.',
+                'Expected playable solver sample to clear every checked floor, saw 4 issue floor(s): no_progress. Details: floor=7|reason=no_progress|status=playing|turns=12|lastPair=a|lastTiles=a1+a2|archetype=trap_hall.',
                     'Expected match-triggerable trait routes on at least 95.0% of trait floors, saw 40.0%.',
                 'Expected reward-producing trait interactions on at least 80.0% of trait floors, saw 30.0%.',
                 'Expected board-power trait interactions on at least 70.0% of trait floors, saw 20.0%.',
@@ -230,7 +168,6 @@ describe('sim-endless CSV output', () => {
         expect(stdout.mock.calls.some(([chunk]) => String(chunk).includes('seed=42002,playable='))).toBe(true);
         expect(stdout.mock.calls.some(([chunk]) => String(chunk).includes('lockedExits='))).toBe(true);
         expect(stdout.mock.calls.some(([chunk]) => String(chunk).includes('playableIssues=none'))).toBe(true);
-        expect(stdout.mock.calls.some(([chunk]) => String(chunk).includes('topologyIssues=0'))).toBe(true);
 
         stdout.mockClear();
         stderr.mockClear();

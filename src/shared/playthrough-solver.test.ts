@@ -3,7 +3,6 @@ import { describe, expect, it } from 'vitest';
 import type { BoardState, RunState, Tile } from './contracts';
 import { solveRunByExhaustingPlayablePairsWithTrace } from './playthrough-solver';
 import { createNewRun, finishMemorizePhase } from './game-core';
-import { EXIT_PAIR_KEY } from './tile-identity';
 
 const tile = (id: string, pairKey: string, state: Tile['state'] = 'hidden'): Tile => ({
     id,
@@ -33,73 +32,19 @@ const runWithBoard = (candidate: BoardState): RunState => ({
 });
 
 describe('playthrough solver trace', () => {
-    it('exhausts pairs, reveals the primary exit, and reports the exit attempt', () => {
-        const exit = {
-            ...tile('exit', EXIT_PAIR_KEY),
-            dungeonCardKind: 'exit' as const
-        };
+    it('exhausts pairs and reports the floor clear', () => {
         const traced = solveRunByExhaustingPlayablePairsWithTrace(
-            runWithBoard(
-                board([tile('a1', 'a'), tile('a2', 'a'), exit], {
-                    dungeonExitTileId: exit.id,
-                    dungeonExitActivated: false
-                })
-            )
+            runWithBoard(board([tile('a1', 'a'), tile('a2', 'a')]))
         );
 
-        expect(traced.stopReason).toBe('exit_attempted');
-        expect(traced.lastPairKey).toBe(EXIT_PAIR_KEY);
-        expect(traced.lastTileIds).toEqual(['exit']);
+        expect(traced.stopReason).toBe('level_complete');
+        expect(traced.turns).toBe(1);
         expect(traced.run.status).toBe('levelComplete');
-        expect(traced.run.board?.dungeonExitActivated).toBe(true);
+        expect(traced.run.board?.matchedPairs).toBe(1);
     });
 
-    it('repairs stale boss hazards after solved exit activation', () => {
-        const exit = {
-            ...tile('exit', EXIT_PAIR_KEY, 'flipped'),
-            dungeonCardKind: 'exit' as const
-        };
-        const traced = solveRunByExhaustingPlayablePairsWithTrace(
-            runWithBoard(
-                board(
-                    [
-                        tile('a1', 'a', 'matched'),
-                        tile('a2', 'a', 'matched'),
-                        exit
-                    ],
-                    {
-                        dungeonBossId: 'trap_warden',
-                        dungeonExitTileId: exit.id,
-                        dungeonObjectiveId: 'defeat_boss',
-                        enemyHazards: [
-                            {
-                                bossId: 'trap_warden',
-                                currentTileId: 'a1',
-                                damage: 1,
-                                hp: 1,
-                                id: 'stale-warden',
-                                kind: 'warden',
-                                label: 'Stale Warden',
-                                maxHp: 1,
-                                nextTileId: 'a2',
-                                pattern: 'guard',
-                                state: 'revealed'
-                            }
-                        ],
-                        matchedPairs: 1
-                    }
-                )
-            )
-        );
 
-        expect(traced.stopReason).toBe('exit_attempted');
-        expect(traced.run.status).toBe('levelComplete');
-        expect(traced.run.board?.enemyHazards?.[0]).toMatchObject({ hp: 0, state: 'defeated' });
-        expect(traced.run.dungeonEnemiesDefeatedThisFloor).toBe(1);
-        expect(traced.run.enemyHazardsDefeatedThisFloor).toBe(1);
-    });
-
-    it('reports no_exit when all playable pairs are exhausted but no exit exists', () => {
+    it('reports no_exit when nothing playable is left but the floor did not clear', () => {
         const traced = solveRunByExhaustingPlayablePairsWithTrace(
             runWithBoard(
                 board(
@@ -117,28 +62,19 @@ describe('playthrough solver trace', () => {
     });
 
     it('resolves already-flipped matching pairs before continuing', () => {
-        const exit = {
-            ...tile('exit', EXIT_PAIR_KEY),
-            dungeonCardKind: 'exit' as const
-        };
         const traced = solveRunByExhaustingPlayablePairsWithTrace(
             runWithBoard(
                 board(
                     [
                         tile('a1', 'a', 'flipped'),
-                        tile('a2', 'a', 'flipped'),
-                        exit
+                        tile('a2', 'a', 'flipped')
                     ],
-                    {
-                        dungeonExitTileId: exit.id,
-                        dungeonExitActivated: false,
-                        flippedTileIds: ['a1', 'a2']
-                    }
+                    { flippedTileIds: ['a1', 'a2'] }
                 )
             )
         );
 
-        expect(traced.stopReason).toBe('exit_attempted');
+        expect(traced.stopReason).toBe('level_complete');
         expect(traced.run.status).toBe('levelComplete');
         expect(traced.run.board?.tiles.filter((candidate) => candidate.pairKey === 'a')).toEqual(
             expect.arrayContaining([

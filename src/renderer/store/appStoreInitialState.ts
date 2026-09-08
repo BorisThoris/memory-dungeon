@@ -8,7 +8,6 @@ type AppStoreInitialState = Pick<
     | 'boardPinMode'
     | 'destroyPairArmed'
     | 'regionShuffleArmed'
-    | 'dungeonExitPromptOpen'
     | 'hydrated'
     | 'hydrating'
     | 'matchScorePop'
@@ -58,7 +57,6 @@ export const createAppStoreInitialState = (): AppStoreInitialState => {
         regionShuffleArmed: false,
         tileSwapArmed: false,
         tileSwapFirstTileId: null,
-        dungeonExitPromptOpen: false,
         ...BOARD_FLOATER_POP_CLEAR
     };
 };

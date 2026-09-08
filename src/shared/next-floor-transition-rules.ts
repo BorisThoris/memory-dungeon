@@ -2,6 +2,7 @@ import {
     type FeaturedObjectiveId,
     type FloorArchetypeId,
     type FloorTag,
+    type MutatorId,
     type RunState
 } from './contracts';
 import { filterMutatorsByContentLock } from './content-lock-state';
@@ -9,21 +10,11 @@ import {
     pickFloorScheduleEntry,
     usesEndlessFloorSchedule
 } from './floor-mutator-schedule';
-import {
-    floorArchetypeForDungeonNode,
-    floorTagForDungeonNode
-} from './dungeon-encounter-context-rules';
-import {
-    createDungeonRunMapState,
-    enterSelectedDungeonNode,
-    getCurrentDungeonNode
-} from './run-map';
-import { getRunDungeonMapState } from './dungeon-run-state-rules';
 import { createTimerState } from './run-timer-rules';
 import { getMemorizeDurationForRun } from './scoring-rules';
 import { buildBoard } from './board-build-rules';
 import { createNextFloorRunState } from './next-floor-run-state-rules';
-import { runMutatorIds } from './relics';
+import { runArray } from './run-array-guards';
 import {
     advanceScoreParasiteFloor,
     type ScoreParasiteFloorAdvance
@@ -31,7 +22,6 @@ import {
 
 export interface AdvanceToNextLevelOptions {
     parasiteAdvance?: ScoreParasiteFloorAdvance;
-    resolveHazardBanish?: boolean;
 }
 
 export const advanceToNextLevel = (
@@ -62,15 +52,7 @@ export const advanceToNextLevel = (
     }
 
     const nextLevelNum = run.board.level + 1;
-    const currentDungeonRun = getRunDungeonMapState(run);
-    const enteredDungeonRun = enterSelectedDungeonNode(currentDungeonRun);
-    const nextDungeonRun =
-        enteredDungeonRun.currentFloor === nextLevelNum
-            ? enteredDungeonRun
-            : createDungeonRunMapState(run.runSeed, run.runRulesVersion, nextLevelNum);
-    const enteredDungeonNode = getCurrentDungeonNode(enteredDungeonRun);
-    const selectedDungeonNode = enteredDungeonRun.currentFloor === nextLevelNum ? enteredDungeonNode : null;
-    let nextActiveMutators = runMutatorIds(run.activeMutators);
+    let nextActiveMutators = runArray<MutatorId>(run.activeMutators);
     let nextFloorTag: FloorTag = 'normal';
     let nextFloorArchetypeId: FloorArchetypeId | null = null;
     let nextFeaturedObjectiveId: FeaturedObjectiveId | null = null;
@@ -83,8 +65,6 @@ export const advanceToNextLevel = (
         nextFeaturedObjectiveId = entry.featuredObjectiveId;
         nextCycleFloor = entry.cycleFloor;
     }
-    nextFloorTag = floorTagForDungeonNode(selectedDungeonNode?.kind, nextFloorTag);
-    nextFloorArchetypeId = floorArchetypeForDungeonNode(selectedDungeonNode?.kind, nextFloorArchetypeId);
 
     const parasiteAdvance = options.parasiteAdvance ?? advanceScoreParasiteFloor(run);
     const transitionRun: RunState = {
@@ -124,10 +104,7 @@ export const advanceToNextLevel = (
         featuredObjectiveId: nextFeaturedObjectiveId,
         cycleFloor: nextCycleFloor,
         routeCardPlan: run.pendingRouteCardPlan,
-        dungeonNodeKind: selectedDungeonNode?.kind,
-        gameMode: run.gameMode,
-        relicIds: run.relicIds,
-        startingLoadoutId: run.startingLoadoutId
+        gameMode: run.gameMode
     });
     const runForNextMemorize: RunState = { ...transitionRun, activeMutators: nextActiveMutators, board: nextBoard };
     const baseMemorizeMs = getMemorizeDurationForRun(runForNextMemorize, nextBoard.level);
@@ -136,10 +113,9 @@ export const advanceToNextLevel = (
     return createNextFloorRunState(transitionRun, {
         lives,
         activeMutators: nextActiveMutators,
-        dungeonRun: nextDungeonRun,
         board: nextBoard,
         parasiteFloors,
         parasiteWardRemaining: nextParasiteWard,
         memorizeRemainingMs: memorizeWithBonus
-    }, { resolveHazardBanish: options.resolveHazardBanish });
+    });
 };

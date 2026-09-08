@@ -1,16 +1,10 @@
-import type { DungeonBossId, DungeonRunMapState, DungeonRunNode, RunState, SaveData, RunSummary } from './contracts';
-import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
-import { getRunBuildProfile, runMutatorIds, runRelicIds } from './relics';
-import { runArrayCount } from './run-array-guards';
-import { getDungeonKeyTotal } from './run-inventory';
-import { getRepairedSelectedDungeonNode, repairDungeonRunMapProgression } from './run-map';
+import type { MutatorId, RunState, SaveData, RunSummary } from './contracts';
+import { runArray, runArrayCount } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
-import { normalizeSessionStats } from './session-stats-rules';
 
 export type RunHistoryPersistence = 'persisted_summary' | 'ephemeral_run' | 'derived_export';
 
 export interface RunHistoryBuildSnapshot {
-    relicIds: string[];
     mutatorIds: string[];
     contract: string;
     mode: string;
@@ -50,10 +44,6 @@ export interface RunHistoryEntry {
     onlineRequired: false;
 }
 
-export const MAX_DUNGEON_JOURNAL_ROWS = 8;
-
-const getRunHistoryBuildProfile = (run: RunState) => getRunBuildProfile({ relicIds: runRelicIds(run.relicIds) });
-
 const getPersistedSummaryPayoffStack = (
     summary: RunSummary | null
 ): { label: 'Combo burst' | 'Payoff burst' | 'Payoff stack' | 'Super stack'; lanes: number } | null => {
@@ -68,7 +58,7 @@ const getPersistedSummaryPayoffStack = (
         summary.payoffRoutePaid === true,
         runNonNegativeInteger(summary.payoffPickupTotal) > 0,
         runNonNegativeInteger(summary.perfectClears) > 0,
-        runRelicIds(summary.relicIds).length + runNonNegativeInteger(summary.payoffRewardPerkCount) > 0
+        runNonNegativeInteger(summary.payoffRewardPerkCount) > 0
     ].filter(Boolean).length;
     if (payoffLanes < 3) {
         return null;
@@ -99,134 +89,11 @@ const contractLabel = (run: Pick<RunState, 'activeContract' | 'practiceMode'>): 
     return 'None';
 };
 
-const idLabel = (id: string | null | undefined): string | null =>
-    id ? id.replace(/_/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase()) : null;
-
 const summaryScoreCopy = (summary: RunSummary): string => {
     const totalScore = runNonNegativeInteger(summary.totalScore);
     const highestLevel = runNonNegativeInteger(summary.highestLevel);
     const levelsCleared = runNonNegativeInteger(summary.levelsCleared);
     return `${totalScore} score · floor ${highestLevel} · ${levelsCleared} clears`;
-};
-
-const currentDungeonNode = (dungeonRun: DungeonRunMapState): DungeonRunNode | null =>
-    dungeonRun.nodes.find((node) => node.id === dungeonRun.currentNodeId) ?? null;
-
-const routeLabelForNode = (node: DungeonRunNode, routeType: string | null): string =>
-    node.routeApproachLabel ?? routeType ?? node.routeApproachType ?? node.routeType;
-
-const bossIdForRun = (run: RunState): DungeonBossId | null =>
-    run.board?.dungeonBossId ??
-    run.board?.tiles.find((tile) => tile.dungeonBossId != null)?.dungeonBossId ??
-    activeEnemyHazardsForBoard(run.board).find((hazard) => hazard.bossId != null)?.bossId ??
-    null;
-
-export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] => {
-    if (run.gameMode !== 'endless' || !Array.isArray(run.dungeonRun?.nodes) || run.dungeonRun.nodes.length === 0) {
-        return [];
-    }
-
-    const dungeonRun = repairDungeonRunMapProgression(run.dungeonRun);
-    const rows: RunHistoryJournalRow[] = [];
-    const stats = normalizeSessionStats(run.stats);
-    const currentNode = currentDungeonNode(dungeonRun);
-    const selectedNode = getRepairedSelectedDungeonNode(dungeonRun);
-    const clearedNodes = dungeonRun.nodes.filter((node) => node.status === 'cleared').length;
-    const skippedNodes = dungeonRun.nodes.filter((node) => node.status === 'skipped').length;
-    const revealedNodes = dungeonRun.nodes.filter((node) => node.status === 'revealed').length;
-    const bossId = bossIdForRun(run);
-    const objectiveId = run.board?.dungeonObjectiveId ?? null;
-    const featuredObjectiveId = run.lastLevelResult?.featuredObjectiveId ?? run.board?.featuredObjectiveId ?? null;
-    const routeType =
-        run.pendingRouteCardPlan?.routeType ??
-        run.board?.selectedGatewayRouteType ??
-        run.board?.routeWorldProfile?.routeType ??
-        null;
-    const keyCount = getDungeonKeyTotal(run.dungeonKeys) + runNonNegativeInteger(run.dungeonMasterKeys);
-
-    rows.push({
-        id: 'dungeon_node',
-        label: 'Dungeon node',
-        value: currentNode
-            ? `${currentNode.label} (${currentNode.kind}) on floor ${currentNode.floor}`
-            : `Floor ${dungeonRun.currentFloor}`,
-        detail: `${clearedNodes} cleared, ${revealedNodes} revealed, ${skippedNodes} skipped in act ${dungeonRun.act}.`,
-        persistence: 'derived_export',
-        exportSafe: true,
-        offlineOnly: true
-    });
-
-    if (routeType || selectedNode) {
-        rows.push({
-            id: 'dungeon_route',
-            label: 'Route taken',
-            value: selectedNode
-                ? `${selectedNode.label} via ${routeLabelForNode(selectedNode, routeType)}`
-                : `${routeType} route`,
-            detail: selectedNode?.detail ?? `Selected after floor ${run.pendingRouteCardPlan?.sourceLevel ?? run.board?.level ?? 'unknown'}.`,
-            persistence: 'ephemeral_run',
-            exportSafe: true,
-            offlineOnly: true
-        });
-    }
-
-    if (bossId || runNonNegativeInteger(run.dungeonEnemiesDefeated) > 0 || run.board?.floorTag === 'boss') {
-        rows.push({
-            id: 'dungeon_boss',
-            label: 'Boss pressure',
-            value: bossId ? idLabel(bossId)! : 'No active boss identity',
-            detail: `${runNonNegativeInteger(run.dungeonEnemiesDefeated)} enemies defeated this run; ${runNonNegativeInteger(run.dungeonEnemiesDefeatedThisFloor)} this floor.`,
-            persistence: 'derived_export',
-            exportSafe: true,
-            offlineOnly: true
-        });
-    }
-
-    if (objectiveId || featuredObjectiveId || run.lastLevelResult?.featuredObjectiveCompleted != null) {
-        rows.push({
-            id: 'dungeon_objective',
-            label: 'Objective trail',
-            value: [
-                idLabel(objectiveId),
-                idLabel(featuredObjectiveId),
-                run.lastLevelResult?.featuredObjectiveCompleted === true
-                    ? 'completed'
-                    : run.lastLevelResult?.featuredObjectiveCompleted === false
-                      ? 'missed'
-                      : null
-            ]
-                .filter(Boolean)
-                .join(' / '),
-            detail: `${runNonNegativeInteger(run.dungeonTrapsResolvedThisFloor)} traps resolved this floor; ${runNonNegativeInteger(run.dungeonGatewaysUsed)} gateways used this run.`,
-            persistence: 'derived_export',
-            exportSafe: true,
-            offlineOnly: true
-        });
-    }
-
-    rows.push({
-        id: 'dungeon_rewards',
-        label: 'Dungeon rewards',
-        value: `${runNonNegativeInteger(run.dungeonTreasuresOpened)} treasures, ${keyCount} keys, ${runNonNegativeInteger(run.shopGold)} shop gold`,
-        detail: `${runRelicIds(run.relicIds).length} relics carried.`,
-        persistence: 'derived_export',
-        exportSafe: true,
-        offlineOnly: true
-    });
-
-    if (run.status === 'gameOver' || runNonNegativeInteger(run.lives) <= 0) {
-        rows.push({
-            id: 'dungeon_outcome',
-            label: 'Run outcome',
-            value: runNonNegativeInteger(run.lives) <= 0 ? 'Defeated in the dungeon' : 'Run ended',
-            detail: `${runNonNegativeInteger(run.enemyHazardHitsThisFloor)} enemy hazard hits this floor; ${stats.bestStreak} best streak.`,
-            persistence: 'persisted_summary',
-            exportSafe: true,
-            offlineOnly: true
-        });
-    }
-
-    return rows.slice(0, MAX_DUNGEON_JOURNAL_ROWS);
 };
 
 export const buildRunShareKey = (run: RunState): RunShareKey => {
@@ -253,13 +120,10 @@ export const buildRunReplayLink = buildRunShareKey;
 
 export const buildRunHistoryEntry = (run: RunState): RunHistoryEntry => {
     const summary = run.lastRunSummary;
-    const buildProfile = getRunHistoryBuildProfile(run);
-    const relicIds = runRelicIds(run.relicIds);
-    const mutatorIds = runMutatorIds(run.activeMutators);
+    const mutatorIds = runArray<MutatorId>(run.activeMutators);
     const flipHistoryCount = runArrayCount(run.flipHistory);
     const matchedPairKeyCount = runArrayCount(run.matchedPairKeysThisRun);
     const build: RunHistoryBuildSnapshot = {
-        relicIds: [...relicIds],
         mutatorIds: [...mutatorIds],
         contract: contractLabel(run),
         mode: run.gameMode
@@ -277,8 +141,8 @@ export const buildRunHistoryEntry = (run: RunState): RunHistoryEntry => {
         {
             id: 'build',
             label: 'Build snapshot',
-            value: `${buildProfile.primary?.label ?? build.mode} · ${build.contract} · ${build.relicIds.length} relics · ${build.mutatorIds.length} mutators`,
-            detail: buildProfile.primary ? buildProfile.tooltip : buildProfile.summary,
+            value: `${build.mode} · ${build.contract} · ${build.mutatorIds.length} mutators`,
+            detail: build.mutatorIds.length > 0 ? build.mutatorIds.join(', ') : 'No mutators active.',
             persistence: 'derived_export',
             exportSafe: true,
             offlineOnly: true
@@ -302,7 +166,6 @@ export const buildRunHistoryEntry = (run: RunState): RunHistoryEntry => {
             offlineOnly: true
         }
     ];
-    journalRows.push(...buildDungeonJournalRows(run));
     return {
         runSeed: share.seed ?? undefined,
         localOnly: true,
@@ -326,12 +189,9 @@ export const buildRunJournalEntry = (run: RunState): {
     localOnly: true;
 } => {
     const entry = buildRunHistoryEntry(run);
-    const buildProfile = getRunHistoryBuildProfile(run);
     return {
         journalId: entry.share.shareKey,
-        buildSummary: buildProfile.primary
-            ? `${buildProfile.primary.label} · ${entry.build.relicIds.length} relics / ${entry.build.mutatorIds.length} mutators`
-            : `${entry.build.relicIds.length} relics / ${entry.build.mutatorIds.length} mutators`,
+        buildSummary: `${entry.build.mutatorIds.length} mutators`,
         shareLabel: entry.share.shareSupported ? 'local share key available' : 'share key unavailable',
         rows: entry.journalRows,
         localOnly: true
@@ -357,7 +217,7 @@ export const buildRunJournalRowsFromSave = (save: SaveData): RunHistoryJournalRo
                       id: 'last_payoff_stack',
                       label: 'Last payoff stack',
                       value: `${payoffStack.label} · ${payoffStack.lanes} payoffs`,
-                      detail: 'Persisted chain, route, pickup, clean-floor, relic, and perk payoff routes.',
+                      detail: 'Persisted chain, route, pickup, clean-floor, and perk payoff routes.',
                       persistence: 'persisted_summary' as const,
                       exportSafe: true
                   }
@@ -379,17 +239,12 @@ export const buildRunHistoryExportString = (run: RunState): string => {
     if (!summary) {
         return 'No run history export available yet.';
     }
-    const dungeonRows = entry.journalRows
-        .filter((row) => row.id.startsWith('dungeon_') && row.exportSafe)
-        .slice(0, 3)
-        .map((row) => `${row.label}: ${row.value}`);
     const highestLevel = runNonNegativeInteger(summary.highestLevel);
     const totalScore = runNonNegativeInteger(summary.totalScore);
     return [
         `Run ${summary.gameMode ?? 'classic'} floor ${highestLevel}`,
         `${totalScore} local score`,
-        `build ${entry.build.relicIds.length} relics/${entry.build.mutatorIds.length} mutators`,
-        ...dungeonRows,
+        `build ${entry.build.mutatorIds.length} mutators`,
         entry.share.shareSupported ? `share ${entry.share.shareKey}` : 'share unavailable',
         'offline local journal; no account or leaderboard rank'
     ].join(' · ');

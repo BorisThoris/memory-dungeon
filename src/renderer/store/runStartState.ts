@@ -1,5 +1,5 @@
 import type { RunState, SaveData, Settings } from '../../shared/contracts';
-import { createDungeonShowcaseRun, createNewRun, createWildRun } from '../../shared/game-core';
+import { createNewRun, createWildRun } from '../../shared/game-core';
 import { createRunFromShareKey } from '../../shared/run-from-share-key';
 import {
     buildClassicRunOptions,
@@ -115,9 +115,6 @@ export const createRunStartPlan = ({
     };
 };
 
-export const isDungeonShowcaseRestartRun = (run: RunState | null): boolean =>
-    run?.dungeonShowcaseRun === true || run?.lastRunSummary?.dungeonShowcaseRun === true;
-
 export const createRestartRun = (previousRun: RunState | null, saveData: SaveData): RunState => {
     const bestScore = saveData.bestScore;
     const meta = metaRelicOptionsForSave(saveData);
@@ -129,10 +126,6 @@ export const createRestartRun = (previousRun: RunState | null, saveData: SaveDat
      */
     if (previousRun?.passAndPlay) {
         return createNewRun(bestScore, { ...meta, passAndPlaySeats: previousRun.passAndPlay.seats.length });
-    }
-
-    if (isDungeonShowcaseRestartRun(previousRun)) {
-        return createDungeonShowcaseRun(bestScore, meta);
     }
 
     /*

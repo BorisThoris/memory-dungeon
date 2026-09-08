@@ -26,21 +26,20 @@ describe('REG-011 meta reward signals', () => {
     it('gives inventory and codex active return reasons without new persistence', () => {
         const inventory = getInventoryRewardSignal(createNewRun(0));
         expect(inventory.id).toBe('inventory_build_value');
-        expect(inventory.cta).toMatch(/floor|relic/i);
+        expect(inventory.cta).toMatch(/floor/i);
 
         const codex = getCodexRewardSignal();
         expect(codex.id).toBe('codex_learning_goal');
         expect(codex.cta).toMatch(/Guides|Tables/i);
     });
 
-    it('ignores malformed inventory relic and mutator arrays before building copy', () => {
+    it('ignores malformed inventory mutator arrays before building copy', () => {
         const inventory = getInventoryRewardSignal({
             ...createNewRun(0),
-            relicIds: Number.NaN as unknown as RunState['relicIds'],
             activeMutators: Number.NaN as unknown as RunState['activeMutators']
         });
 
-        expect(inventory.title).toBe('First relic still ahead');
+        expect(inventory.title).toBe('0 active mutator(s) shaping this build');
         expect(inventory.body).toContain('0 active mutator(s)');
     });
 

@@ -2,20 +2,16 @@ import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import { GAME_RULES_VERSION, SAVE_SCHEMA_VERSION } from './contracts';
 import {
-    DUNGEON_SAVE_MIGRATION_POLICY_VERSION,
-    getDungeonSaveMigrationFieldPolicies,
-    shouldDungeonSaveFieldRequireMigration
-} from './dungeon-save-migration';
-import { RELIC_POOL } from './relics';
+    SAVE_FIELD_POLICY_VERSION,
+    getSaveFieldPolicies,
+    shouldSaveFieldRequireMigration
+} from './save-field-policy';
 import {
     createAchievementState,
     createDefaultSaveData,
     DEFAULT_SETTINGS,
-    getRelicPickCountRows,
-    getRelicPickTotal,
     mergeBestFloorNoPowers,
     mergeChainFloorStats,
-    mergeRelicPickStat,
     normalizeSaveData,
     normalizeUnknownSaveData,
     normalizeUnknownSaveDataOrThrow,
@@ -299,18 +295,12 @@ describe('save normalization', () => {
             ...createDefaultSaveData(),
             playerStats: {
                 ...createDefaultSaveData().playerStats!,
-                bestFloorNoPowers: Number.NaN,
-                relicPickCounts: {
-                    guard_token_plus_one: Number.POSITIVE_INFINITY
-                }
+                bestFloorNoPowers: Number.NaN
             }
         } as SaveData;
 
         expect(mergeBestFloorNoPowers(save, Number.POSITIVE_INFINITY)).toBe(save);
         expect(mergeBestFloorNoPowers(save, 3.9).playerStats?.bestFloorNoPowers).toBe(3);
-        expect(mergeRelicPickStat(save, 'guard_token_plus_one').playerStats?.relicPickCounts).toEqual({
-            guard_token_plus_one: 1
-        });
     });
 
     it('table-driven legacy / partial fixtures normalize without undefined leaks (REF-065)', () => {
@@ -435,27 +425,11 @@ describe('save normalization', () => {
         expect(Object.keys(normalized.achievements)).not.toContain('BAD_ACHIEVEMENT');
         expect(normalized.unlocks).toEqual(['achievement:ACH_LEVEL_FIVE', 'honor:honor_sharp_initiate']);
         expect(normalized.playerStats?.bestFloorNoPowers).toBe(0);
-        expect(normalized.playerStats?.relicPickCounts).toEqual({ extra_shuffle_charge: 2 });
+        expect(normalized.playerStats?.relicPickCounts).toEqual({});
         expect(normalized.playerStats?.encorePairKeysLastRun).toEqual(['A', 'B']);
         expect(normalized.lastRunSummary).toBeNull();
     });
 
-    it('builds bounded relic pick rows in catalog order', () => {
-        const counts = {
-            guard_token_plus_one: 2.8,
-            extra_shuffle_charge: -1,
-            missing_relic: 99,
-            parasite_ledger: Number.NaN
-        };
-        const rows = getRelicPickCountRows(counts);
-
-        expect(rows.map((row) => row.id)).toEqual(RELIC_POOL);
-        expect(rows.find((row) => row.id === 'guard_token_plus_one')?.count).toBe(2);
-        expect(rows.find((row) => row.id === 'extra_shuffle_charge')?.count).toBe(0);
-        expect(rows.find((row) => row.id === 'parasite_ledger')?.count).toBe(0);
-        expect(getRelicPickTotal(counts)).toBe(2);
-        expect(getRelicPickTotal(['guard_token_plus_one'])).toBe(0);
-    });
 
     it('bounds persisted collections and rejects unknown or oversized identifiers', () => {
         const expectedLimits = {
@@ -526,7 +500,7 @@ describe('save normalization', () => {
         expect(normalized.playerStats?.encorePairKeysLastRun).toEqual(['A', 'B', 'C']);
         expect(normalized.lastRunSummary?.unlockedAchievements).toEqual(['ACH_FIRST_CLEAR']);
         expect(normalized.lastRunSummary?.activeMutators).toEqual(['short_memorize', 'wide_recall']);
-        expect(normalized.lastRunSummary?.relicIds).toEqual(['extra_shuffle_charge', 'guard_token_plus_one']);
+        expect(normalized.lastRunSummary?.relicIds).toEqual([]);
         expect(normalized.lastRunSummary?.payoffPickupClaimed).toBe(2);
         expect(normalized.lastRunSummary?.payoffPickupTotal).toBe(3);
         expect(normalized.lastRunSummary?.payoffPressureExtra).toBeUndefined();
@@ -601,10 +575,10 @@ describe('save normalization', () => {
 
 
     it('DNG-073 documents which dungeon fields require save migrations', () => {
-        const policies = getDungeonSaveMigrationFieldPolicies();
+        const policies = getSaveFieldPolicies();
         const fields = policies.map((policy) => policy.field);
 
-        expect(DUNGEON_SAVE_MIGRATION_POLICY_VERSION).toBe('dng-073-v5');
+        expect(SAVE_FIELD_POLICY_VERSION).toBe('dng-073-v5');
         expect(fields).toEqual(expect.arrayContaining([
             'runHistory',
             'runHistory.shareKey',
@@ -633,9 +607,9 @@ describe('save normalization', () => {
             'board.dungeonBossId'
         ]));
         expect(policies.filter((policy) => policy.scope === 'run_local_recoverable')).toHaveLength(14);
-        expect(shouldDungeonSaveFieldRequireMigration('playerStats.relicPickCounts')).toBe(true);
-        expect(shouldDungeonSaveFieldRequireMigration('dungeonKeys')).toBe(false);
-        expect(shouldDungeonSaveFieldRequireMigration('board.dungeonKeysHeldByKind')).toBe(false);
+        expect(shouldSaveFieldRequireMigration('playerStats.relicPickCounts')).toBe(true);
+        expect(shouldSaveFieldRequireMigration('dungeonKeys')).toBe(false);
+        expect(shouldSaveFieldRequireMigration('board.dungeonKeysHeldByKind')).toBe(false);
     });
 });
 

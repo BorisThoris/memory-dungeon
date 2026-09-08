@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MATCH_DELAY_MS, type RelicId } from './contracts';
+import { MATCH_DELAY_MS } from './contracts';
 import { createNewRun } from './game-core';
 import {
     calculateLevelClearBonus,
@@ -37,36 +37,7 @@ describe('scoring-rules', () => {
         );
     });
 
-    it('ignores malformed relic ids when calculating run memorize duration', () => {
-        const run = {
-            ...createNewRun(0, { activeMutators: ['short_memorize'] }),
-            relicIds: Number.NaN as unknown as RelicId[]
-        };
 
-        expect(getMemorizeDurationForRun(run, 1)).toBe(getMemorizeDuration(1, run.board!.tiles.length) - 350);
-    });
-
-    it('applies boss identity pressure to boss-floor memorize time', () => {
-        const base = createNewRun(0, { runSeed: 9_100 });
-        const rush = {
-            ...base,
-            board: base.board && { ...base.board, floorTag: 'boss' as const, dungeonBossId: 'rush_sentinel' as const }
-        };
-        const spire = {
-            ...base,
-            board: base.board && { ...base.board, floorTag: 'boss' as const, dungeonBossId: 'spire_observer' as const }
-        };
-
-        const bossBase = getMemorizeDuration(1, base.board!.tiles.length);
-        expect(getMemorizeDurationForRun(rush, 1)).toBe(bossBase - 120);
-        expect(getMemorizeDurationForRun(spire, 1)).toBe(bossBase + 80);
-        expect(
-            getMemorizeDurationForRun(
-                { ...base, board: base.board && { ...base.board, floorTag: 'normal' as const, dungeonBossId: 'rush_sentinel' } },
-                1
-            )
-        ).toBe(bossBase);
-    });
 
     it('calculates ratings and score bonuses', () => {
         expect(calculateRating(0)).toBe('S++');

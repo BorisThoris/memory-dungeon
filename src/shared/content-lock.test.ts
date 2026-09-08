@@ -4,10 +4,8 @@ import {
     createContentLock,
     DEMO_MODE_IDS,
     filterMutatorsByContentLock,
-    filterRelicPoolByContentLock,
     getActiveContentLock,
     getDemoMutatorPool,
-    getDemoRelicPool,
     isDemoBuild,
     isModeAvailableInBuild,
     resolveBuildFlavour,
@@ -16,8 +14,6 @@ import {
 import { FULL_CONTENT_LOCK } from './content-lock-state';
 import { MUTATOR_IDS } from './contracts';
 import { getFloorArchetypeProgressionRows } from './floor-mutator-schedule';
-import { createNewRun } from './game-core';
-import { RELIC_DRAFT, RELIC_POOL, rollRelicOptions } from './relics';
 import { RUN_MODE_CATALOG, getRunModeDefinition, runModesByGroup } from './run-mode-catalog';
 
 describe('content lock', () => {
@@ -28,10 +24,6 @@ describe('content lock', () => {
     it('keeps the written-out demo pools in step with the catalogs they came from', () => {
         // content-lock.ts is a leaf module so the renderer entry cannot reorder the shared
         // graph's import cycles; these assertions are what keeps the lists honest.
-        const common = RELIC_POOL.filter((id) => RELIC_DRAFT[id].rarity === 'common');
-        expect(getDemoRelicPool()).toEqual(expect.arrayContaining(common));
-        expect(getDemoRelicPool().every((id) => RELIC_POOL.includes(id))).toBe(true);
-
         const actOne = new Set<string>();
         for (const row of getFloorArchetypeProgressionRows()) {
             if (row.cycleFloor <= 4) {
@@ -54,8 +46,6 @@ describe('content lock', () => {
         const demo = createContentLock('demo');
         expect(demo.flavour).toBe('demo');
         expect([...demo.availableModeIds!]).toEqual([...DEMO_MODE_IDS]);
-        expect(demo.relicPool!.length).toBeGreaterThan(0);
-        expect(demo.relicPool!.length).toBeLessThan(RELIC_POOL.length);
         expect(demo.mutatorPool!.length).toBeGreaterThan(0);
         expect(demo.mutatorPool!.length).toBeLessThan(MUTATOR_IDS.length);
         expect(demo.steamAchievementsEnabled).toBe(false);
@@ -67,11 +57,16 @@ describe('content lock', () => {
     it('leaves the full build untouched', () => {
         const full = createContentLock('full');
         expect(full.availableModeIds).toBeNull();
-        expect(full.relicPool).toBeNull();
         expect(full.mutatorPool).toBeNull();
         expect(full.steamAchievementsEnabled).toBe(true);
-        expect(filterRelicPoolByContentLock(RELIC_POOL, full)).toEqual([...RELIC_POOL]);
         expect(filterMutatorsByContentLock(MUTATOR_IDS, full)).toEqual([...MUTATOR_IDS]);
+    });
+
+    it('rolls only demo mutators in the demo', () => {
+        activateContentLockFromEnv('demo');
+        const demoMutators = new Set(getDemoMutatorPool());
+        expect(filterMutatorsByContentLock(MUTATOR_IDS).every((id) => demoMutators.has(id))).toBe(true);
+        expect(getActiveContentLock().steamAchievementsEnabled).toBe(false);
     });
 
     it('locks every mode but Classic in the demo catalog while keeping it visible', () => {
@@ -89,17 +84,4 @@ describe('content lock', () => {
         expect(coreModes.map((mode) => mode.id)).toEqual(RUN_MODE_CATALOG.filter((mode) => mode.group === 'core').map((mode) => mode.id));
     });
 
-    it('drafts only demo relics and rolls only demo mutators in the demo', () => {
-        activateContentLockFromEnv('demo');
-        const demoPool = new Set(getDemoRelicPool());
-        const run = createNewRun(0, { runSeed: 4_242 });
-        for (let tier = 0; tier < 4; tier += 1) {
-            for (const id of rollRelicOptions(run, tier, tier * 3 + 3)) {
-                expect(demoPool.has(id)).toBe(true);
-            }
-        }
-        const demoMutators = new Set(getDemoMutatorPool());
-        expect(filterMutatorsByContentLock(MUTATOR_IDS).every((id) => demoMutators.has(id))).toBe(true);
-        expect(getActiveContentLock().steamAchievementsEnabled).toBe(false);
-    });
 });

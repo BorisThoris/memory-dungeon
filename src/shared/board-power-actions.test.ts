@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type {
     BoardState,
-    RouteSpecialKind,
     RunState,
     Tile
 } from './contracts';
@@ -15,24 +14,14 @@ import {
     applyTileSwap,
     cancelResolvingWithUndo
 } from './board-power-actions';
-import {
-    DECOY_PAIR_KEY,
-    ROOM_PAIR_KEY,
-    WILD_PAIR_KEY
-} from './tile-identity';
+import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 
-const tile = (
-    id: string,
-    pairKey: string,
-    state: Tile['state'] = 'hidden',
-    routeSpecialKind?: RouteSpecialKind
-): Tile => ({
+const tile = (id: string, pairKey: string, state: Tile['state'] = 'hidden'): Tile => ({
     id,
     pairKey,
     symbol: id,
     label: id,
-    state,
-    routeSpecialKind
+    state
 });
 
 const board = (tiles: Tile[], columns = 2): BoardState => ({
@@ -73,7 +62,6 @@ const run = (overrides: Partial<RunState> = {}): RunState => ({
     weakerShuffleMode: null,
     shuffleScoreTaxActive: false,
     matchScoreMultiplier: 1,
-    relicIds: [],
     activeMutators: [],
     pinnedTileIds: ['a1'],
     forgottenTileIdsThisFloor: [],
@@ -138,9 +126,7 @@ describe('board power actions', () => {
         expect(result.run.board!.matchedPairs).toBe(1);
         const destroyedTile = result.run.board!.tiles.find((t) => t.id === 'a1')!;
         expect(destroyedTile.state).toBe('matched');
-        expect(destroyedTile.routeCardKind).toBeUndefined();
-        expect(destroyedTile.routeSpecialKind).toBeUndefined();
-        expect(destroyedTile.lanternScouted).toBeUndefined();
+        expect(destroyedTile.findableKind).toBeUndefined();
     });
 
     it('returns an unchanged destroy transition when run rules refuse the target', () => {
@@ -243,27 +229,7 @@ describe('board power actions', () => {
         expect(shuffled.stats.highestLevel).toBe(1);
     });
 
-    it('uses the first-shuffle relic free charge before spending normal charges', () => {
-        const shuffled = applyShuffle(run({
-            shuffleCharges: 1,
-            freeShuffleThisFloor: true,
-            relicIds: ['first_shuffle_free_per_floor']
-        }));
 
-        expect(shuffled.shuffleCharges).toBe(1);
-        expect(shuffled.freeShuffleThisFloor).toBe(false);
-    });
-
-    it('ignores malformed relic ids before direct shuffle charge accounting', () => {
-        const shuffled = applyShuffle(run({
-            shuffleCharges: 1,
-            freeShuffleThisFloor: true,
-            relicIds: Number.NaN as unknown as RunState['relicIds']
-        }));
-
-        expect(shuffled.shuffleCharges).toBe(0);
-        expect(shuffled.freeShuffleThisFloor).toBe(true);
-    });
 
     it('applies row shuffle only to rows with at least two hidden tiles', () => {
         const state = run({
@@ -333,16 +299,6 @@ describe('board power actions', () => {
         expect(swapped.stats.highestLevel).toBe(1);
     });
 
-    it('uses the free row-shuffle relic charge for tile swaps before spending normal charges', () => {
-        const swapped = applyTileSwap(run({
-            regionShuffleCharges: 1,
-            regionShuffleFreeThisFloor: true,
-            relicIds: ['region_shuffle_free_first']
-        }), 'a1', 'b1');
-
-        expect(swapped.regionShuffleCharges).toBe(1);
-        expect(swapped.regionShuffleFreeThisFloor).toBe(false);
-    });
 
     it('uses the free targeted-reconfiguration perk before spending normal row/swap charges', () => {
         const perkRun = run({
@@ -461,13 +417,9 @@ describe('board power actions', () => {
         expect(applyFlashPair(state)).toBe(state);
     });
 
-    it('peeks hidden tiles once and reveals eligible route specials across the pair', () => {
+    it('peeks a hidden tile once', () => {
         const state = run({
-            board: board([
-                tile('a1', 'A', 'hidden', 'secret_door'),
-                tile('a2', 'A', 'hidden', 'secret_door'),
-                tile('b1', 'B')
-            ]),
+            board: board([tile('a1', 'A'), tile('a2', 'A'), tile('b1', 'B')]),
             peekCharges: 1,
             recallFocus: 2
         });
@@ -479,7 +431,7 @@ describe('board power actions', () => {
         expect(peeked.recallFocus).toBe(1);
         expect(peeked.peekRevealedTileIds).toEqual(['a1']);
         expect(peeked.forgottenTileIdsThisFloor).toEqual(['a1']);
-        expect(peeked.board!.tiles.filter((t) => t.pairKey === 'A').every((t) => t.routeSpecialRevealed)).toBe(true);
+        expect(peeked.board).toBe(state.board);
         expect(applyPeek(peeked, 'a1')).toBe(peeked);
     });
 
@@ -491,13 +443,9 @@ describe('board power actions', () => {
         expect(applyPeek(matchedTile, 'a1')).toBe(matchedTile);
     });
 
-    it('removes completion-safe stray tiles and clears route metadata from the singleton pair', () => {
+    it('removes completion-safe stray tiles', () => {
         const state = run({
-            board: board([
-                tile('w1', WILD_PAIR_KEY, 'hidden', 'secret_door'),
-                tile('room1', ROOM_PAIR_KEY, 'hidden', 'secret_door'),
-                tile('a1', 'A')
-            ]),
+            board: board([tile('w1', WILD_PAIR_KEY), tile('a1', 'A')]),
             strayRemoveCharges: 1,
             recallFocus: 2
         });
@@ -508,35 +456,25 @@ describe('board power actions', () => {
         expect(removed.powersUsedThisRun).toBe(true);
         expect(removed.recallFocus).toBe(1);
         expect(removed.forgottenTileIdsThisFloor).toEqual(['w1']);
-        const removedTile = removed.board!.tiles.find((t) => t.id === 'w1')!;
-        expect(removedTile.state).toBe('removed');
-        expect(removedTile.routeSpecialKind).toBeUndefined();
+        expect(removed.board!.tiles.find((t) => t.id === 'w1')?.state).toBe('removed');
+        expect(removed.board!.tiles.find((t) => t.id === 'a1')?.state).toBe('hidden');
     });
 
-    it('refuses stray removal for normal pair tiles and protected route specials', () => {
+    it('refuses stray removal for normal pair tiles', () => {
         const normalPair = run({ board: board([tile('a1', 'A'), tile('a2', 'A')]) });
         expect(applyStrayRemove(normalPair, 'a1')).toBe(normalPair);
-
-        const protectedSpecial = run({
-            board: board([tile('w1', WILD_PAIR_KEY, 'hidden', 'final_ward')])
-        });
-        expect(applyStrayRemove(protectedSpecial, 'w1')).toBe(protectedSpecial);
     });
 
-    it('undoes resolving flips while preserving resolved trap cards face-up', () => {
+    it('undoes resolving flips and hides the flipped tiles again', () => {
         const resolving = run({
             status: 'resolving',
             board: {
                 ...board([
                     tile('a1', 'A', 'flipped'),
-                    {
-                        ...tile('trap1', 'T', 'flipped'),
-                        dungeonCardKind: 'trap' as const,
-                        dungeonCardState: 'resolved' as const
-                    },
+                    tile('t1', 'T', 'flipped'),
                     tile('b1', 'B', 'hidden')
                 ]),
-                flippedTileIds: ['a1', 'trap1']
+                flippedTileIds: ['a1', 't1']
             },
             undoUsesThisFloor: 1,
             recallFocus: 2,
@@ -554,10 +492,10 @@ describe('board power actions', () => {
         expect(undone.undoUsesThisFloor).toBe(0);
         expect(undone.powersUsedThisRun).toBe(true);
         expect(undone.recallFocus).toBe(1);
-        expect(undone.forgottenTileIdsThisFloor).toEqual(expect.arrayContaining(['a1', 'trap1']));
+        expect(undone.forgottenTileIdsThisFloor).toEqual(expect.arrayContaining(['a1', 't1']));
         expect(undone.board!.flippedTileIds).toEqual([]);
         expect(undone.board!.tiles.find((t) => t.id === 'a1')?.state).toBe('hidden');
-        expect(undone.board!.tiles.find((t) => t.id === 'trap1')?.state).toBe('flipped');
+        expect(undone.board!.tiles.find((t) => t.id === 't1')?.state).toBe('hidden');
         expect(undone.timerState.resolveRemainingMs).toBeNull();
     });
 

@@ -1,8 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { BoardState, RunState, Tile } from './contracts';
-import { createNewRun } from './game';
+import type { BoardState, Tile } from './contracts';
 import { createMatchedPairClaimBoard, deriveMatchClaimContext } from './match-claim-rules';
-import { emptyRouteCardReward } from './route-card-reward-shape';
 import { WILD_PAIR_KEY } from './tile-identity';
 
 const tile = (id: string, pairKey = 'A', extra: Partial<Tile> = {}): Tile => ({
@@ -26,367 +24,93 @@ const boardWith = (tiles: Tile[]): BoardState => ({
     tiles
 });
 
-const runWith = (tiles: Tile[], patch: Partial<RunState> = {}): RunState => {
-    const run = createNewRun(0, { runSeed: 1234 });
-    return {
-        ...run,
-        board: boardWith(tiles),
-        status: 'resolving',
-        ...patch,
-        stats: {
-            ...run.stats,
-            ...(patch.stats ?? {})
-        }
-    };
-};
-
 describe('match claim rules', () => {
-    it('derives findable rewards for a matched pair and pays nothing for a route-special stamp (Gen 173)', () => {
-        const first = tile('a1', 'A', {
-            findableKind: 'score_glint',
-            routeSpecialKind: 'mimic_cache'
-        });
+    it('derives findable rewards for a matched pair', () => {
+        const first = tile('a1', 'A', { findableKind: 'score_glint' });
         const second = tile('a2', 'A');
-        const run = runWith([first, second], { lives: 1 });
 
-        const context = deriveMatchClaimContext({
-            firstTile: first,
-            firstTileId: first.id,
-            run,
-            secondTile: second,
-            secondTileId: second.id
-        });
+        const context = deriveMatchClaimContext(first, second);
 
         expect(context.claimedFindableKind).toBe('score_glint');
         expect(context.findableScoreBonus).toBe(25);
         expect(context.findablesClaimedDelta).toBe(1);
-        expect(context.claimedRouteCardKind).toBe('mimic_cache');
-        expect(context.mimicCacheClaimed).toBe(true);
-        expect(context.mimicCacheBite).toBe(true);
-        expect(context.mimicCacheFatalBite).toBe(true);
-        expect(context.routeCardReward).toEqual(emptyRouteCardReward());
+        expect(context.matchedPairKey).toBe('A');
+        expect(context.usedWild).toBe(false);
     });
 
-    it('normalizes malformed stat records before deriving route-special predicates', () => {
-        const first = tile('a1', 'A', {
-            routeSpecialKind: 'mimic_cache'
-        });
-        const second = tile('a2', 'A');
-        const base = runWith([first, second], { lives: 1 });
-        const context = deriveMatchClaimContext({
-            firstTile: first,
-            firstTileId: first.id,
-            run: { ...base, stats: Number.NaN as unknown as RunState['stats'] },
-            secondTile: second,
-            secondTileId: second.id
-        });
+    it('claims nothing from a plain pair', () => {
+        const context = deriveMatchClaimContext(tile('a1'), tile('a2'));
 
-        expect(context.mimicCacheGuardBite).toBe(false);
-        expect(context.mimicCacheFatalBite).toBe(true);
-        expect(context.catalystAltarUpgraded).toBe(false);
+        expect(context.claimedFindableKind).toBeNull();
+        expect(context.findableComboShardGain).toBe(0);
+        expect(context.findableSafeHazardWardGain).toBe(0);
+        expect(context.findableScoreBonus).toBe(0);
+        expect(context.findablesClaimedDelta).toBe(0);
     });
 
     it('uses the non-wild pair key and reports wild usage when one matched tile is wild', () => {
         const first = tile('wild', WILD_PAIR_KEY);
-        const second = tile('b1', 'B', { routeSpecialKind: 'loaded_gateway' });
-        const run = runWith([first, second]);
+        const second = tile('b1', 'B');
 
-        const context = deriveMatchClaimContext({
-            firstTile: first,
-            firstTileId: first.id,
-            run,
-            secondTile: second,
-            secondTileId: second.id
-        });
+        const context = deriveMatchClaimContext(first, second);
 
         expect(context.matchedPairKey).toBe('B');
         expect(context.usedWild).toBe(true);
-        expect(context.loadedGatewayClaimed).toBe(true);
-    });
-
-    it('classifies dungeon trap and key rewards from matched dungeon card fields', () => {
-        const trapA = tile('trap-a', 'T', {
-            dungeonCardEffectId: 'trap_spikes',
-            dungeonCardKind: 'trap',
-            dungeonCardState: 'revealed'
-        });
-        const trapB = tile('trap-b', 'T', {
-            dungeonCardEffectId: 'trap_spikes',
-            dungeonCardKind: 'trap',
-            dungeonCardState: 'revealed'
-        });
-        const trapRun = runWith([trapA, trapB]);
-
-        const trapContext = deriveMatchClaimContext({
-            firstTile: trapA,
-            firstTileId: trapA.id,
-            run: trapRun,
-            secondTile: trapB,
-            secondTileId: trapB.id
-        });
-
-        expect(trapContext.matchedDungeonKind).toBe('trap');
-        expect(trapContext.dungeonTrapResolvedDelta).toBe(1);
-        expect(trapContext.dungeonReward.score).toBe(10);
-        expect(trapContext.dungeonReward.shopGold).toBe(1);
-
-        const keyA = tile('key-a', 'K', {
-            dungeonCardEffectId: 'key_iron',
-            dungeonCardKind: 'key',
-            dungeonKeyKind: 'treasure'
-        });
-        const keyB = tile('key-b', 'K', {
-            dungeonCardEffectId: 'key_iron',
-            dungeonCardKind: 'key'
-        });
-        const keyRun = runWith([keyA, keyB]);
-
-        const keyContext = deriveMatchClaimContext({
-            firstTile: keyA,
-            firstTileId: keyA.id,
-            run: keyRun,
-            secondTile: keyB,
-            secondTileId: keyB.id
-        });
-
-        expect(keyContext.matchedDungeonKind).toBe('key');
-        expect(keyContext.matchedDungeonKeyKind).toBe('treasure');
-        expect(keyContext.dungeonReward.keysHeldDelta).toBe(1);
-
-        const nextKeyBoard = createMatchedPairClaimBoard({
-            board: keyRun.board!,
-            context: keyContext,
-            firstTileId: keyA.id,
-            secondTileId: keyB.id
-        });
-        expect(nextKeyBoard.dungeonKeysHeld).toBe(1);
-        expect(nextKeyBoard.dungeonKeysHeldByKind).toEqual({ treasure: 1 });
-    });
-
-    it('decrements typed floor-held keys when a typed lock spends one', () => {
-        const lockA = tile('lock-a', 'L', {
-            dungeonCardEffectId: 'lock_cache',
-            dungeonCardKind: 'lock',
-            dungeonKeyKind: 'treasure'
-        });
-        const lockB = tile('lock-b', 'L', {
-            dungeonCardEffectId: 'lock_cache',
-            dungeonCardKind: 'lock',
-            dungeonKeyKind: 'treasure'
-        });
-        const run = runWith([lockA, lockB], {
-            board: {
-                ...boardWith([lockA, lockB]),
-                dungeonKeysHeld: 1,
-                dungeonKeysHeldByKind: { treasure: 1 }
-            }
-        });
-        const context = deriveMatchClaimContext({
-            firstTile: lockA,
-            firstTileId: lockA.id,
-            run,
-            secondTile: lockB,
-            secondTileId: lockB.id
-        });
-
-        const nextBoard = createMatchedPairClaimBoard({
-            board: run.board!,
-            context,
-            firstTileId: lockA.id,
-            secondTileId: lockB.id
-        });
-
-        expect(context.dungeonReward.keysHeldDelta).toBe(-1);
-        expect(nextBoard.dungeonKeysHeld).toBe(0);
-        expect(nextBoard.dungeonKeysHeldByKind).toEqual({ treasure: 0 });
     });
 
     it('normalizes malformed board counters while claiming a matched pair', () => {
-        const keyA = tile('key-a', 'K', {
-            dungeonCardEffectId: 'key_iron',
-            dungeonCardKind: 'key',
-            dungeonKeyKind: 'treasure'
-        });
-        const keyB = tile('key-b', 'K', {
-            dungeonCardEffectId: 'key_iron',
-            dungeonCardKind: 'key',
-            dungeonKeyKind: 'treasure'
-        });
-        const run = runWith([keyA, keyB], {
-            board: {
-                ...boardWith([keyA, keyB]),
-                matchedPairs: Number.NaN,
-                dungeonKeysHeld: Number.POSITIVE_INFINITY,
-                dungeonKeysHeldByKind: { treasure: Number.NaN },
-                dungeonLeverCount: Number.NaN
-            }
-        });
-        const context = deriveMatchClaimContext({
-            firstTile: keyA,
-            firstTileId: keyA.id,
-            run,
-            secondTile: keyB,
-            secondTileId: keyB.id
-        });
+        const first = tile('a1');
+        const second = tile('a2');
+        const board = { ...boardWith([first, second]), matchedPairs: Number.NaN };
 
         const nextBoard = createMatchedPairClaimBoard({
-            board: run.board!,
-            context,
-            firstTileId: keyA.id,
-            secondTileId: keyB.id
-        });
-
-        expect(nextBoard.matchedPairs).toBe(1);
-        expect(nextBoard.dungeonKeysHeld).toBe(1);
-        expect(nextBoard.dungeonKeysHeldByKind).toEqual({ treasure: 1 });
-        expect(nextBoard.dungeonLeverCount).toBe(0);
-    });
-
-    it('requires both matched tiles to be pinned before granting pin lattice reward', () => {
-        const first = tile('p1', 'P', { routeSpecialKind: 'pin_lattice' });
-        const second = tile('p2', 'P');
-        const unpinnedRun = runWith([first, second], { pinnedTileIds: ['p1'] });
-        const pinnedRun = runWith([first, second], { pinnedTileIds: ['p1', 'p2'] });
-        const malformedRun = runWith([first, second], { pinnedTileIds: Number.NaN as unknown as string[] });
-
-        expect(
-            deriveMatchClaimContext({
-                firstTile: first,
-                firstTileId: first.id,
-                run: unpinnedRun,
-                secondTile: second,
-                secondTileId: second.id
-            }).pinLatticeRewarded
-        ).toBe(false);
-        expect(
-            deriveMatchClaimContext({
-                firstTile: first,
-                firstTileId: first.id,
-                run: pinnedRun,
-                secondTile: second,
-                secondTileId: second.id
-            }).pinLatticeRewarded
-        ).toBe(true);
-        expect(
-            deriveMatchClaimContext({
-                firstTile: first,
-                firstTileId: first.id,
-                run: malformedRun,
-                secondTile: second,
-                secondTileId: second.id
-            }).pinLatticeRewarded
-        ).toBe(false);
-    });
-
-    it('creates the matched-pair board claim and clears claimed tile metadata', () => {
-        const first = tile('a1', 'A', {
-            dungeonCardEffectId: 'gateway_safe',
-            dungeonCardKind: 'gateway',
-            dungeonRouteType: 'safe',
-            findableKind: 'score_glint',
-            routeSpecialKind: 'loaded_gateway',
-            routeSpecialRevealed: true,
-            scoutRevealSource: 'omen_seal'
-        });
-        const second = tile('a2', 'A');
-        const run = runWith([first, second]);
-        const context = deriveMatchClaimContext({
-            firstTile: first,
+            board,
             firstTileId: first.id,
-            run,
-            secondTile: second,
             secondTileId: second.id
         });
 
+        expect(nextBoard.matchedPairs).toBe(1);
+    });
+
+    it('creates the matched-pair board claim and clears the claimed findable', () => {
+        const first = tile('a1', 'A', { findableKind: 'score_glint' });
+        const second = tile('a2', 'A');
+        const board = boardWith([first, second]);
+
         const nextBoard = createMatchedPairClaimBoard({
-            board: run.board!,
-            context,
+            board,
             firstTileId: first.id,
             secondTileId: second.id
         });
 
         expect(nextBoard.flippedTileIds).toEqual([]);
         expect(nextBoard.matchedPairs).toBe(1);
-        expect(nextBoard.selectedGatewayRouteType).toBe('safe');
         expect(nextBoard.tiles[0]).toMatchObject({ id: 'a1', state: 'matched' });
         expect(nextBoard.tiles[0]!.findableKind).toBeUndefined();
-        expect(nextBoard.tiles[0]!.routeSpecialKind).toBeUndefined();
-        expect(nextBoard.tiles[0]!.routeSpecialRevealed).toBeUndefined();
-        expect(nextBoard.tiles[0]!.scoutRevealSource).toBeUndefined();
-        expect(nextBoard.tiles[0]!.dungeonCardKind).toBeUndefined();
+        expect(nextBoard.tiles[1]).toMatchObject({ id: 'a2', state: 'matched' });
     });
 
-    it('resets a gambit third tile while preserving sprung trap visibility', () => {
-        const first = tile('a1', 'A');
-        const second = tile('a2', 'A');
+    it('hides a gambit third tile again unless it has already left the board', () => {
+        const first = tile('a1');
+        const second = tile('a2');
         const ordinaryThird = tile('b1', 'B');
-        const sprungTrapThird = tile('trap', 'T', {
-            dungeonCardKind: 'trap',
-            dungeonCardState: 'resolved'
-        });
-        const run = runWith([first, second, ordinaryThird, sprungTrapThird]);
-        const context = deriveMatchClaimContext({
-            firstTile: first,
-            firstTileId: first.id,
-            run,
-            secondTile: second,
-            secondTileId: second.id
-        });
+        const goneThird = tile('c1', 'C', { state: 'removed' });
+        const board = boardWith([first, second, ordinaryThird, goneThird]);
 
         const hiddenThirdBoard = createMatchedPairClaimBoard({
-            board: run.board!,
-            context,
+            board,
             firstTileId: first.id,
             secondTileId: second.id,
             thirdTileId: ordinaryThird.id
         });
-        const sprungThirdBoard = createMatchedPairClaimBoard({
-            board: run.board!,
-            context,
+        const goneThirdBoard = createMatchedPairClaimBoard({
+            board,
             firstTileId: first.id,
             secondTileId: second.id,
-            thirdTileId: sprungTrapThird.id
+            thirdTileId: goneThird.id
         });
 
         expect(hiddenThirdBoard.tiles.find((t) => t.id === ordinaryThird.id)?.state).toBe('hidden');
-        expect(sprungThirdBoard.tiles.find((t) => t.id === sprungTrapThird.id)?.state).toBe('flipped');
-    });
-});
-
-describe('a claimed pair', () => {
-    const claimBoard = (kind: Tile['dungeonCardKind'], effectId: string) => {
-        const first = tile('l1', 'L', { dungeonCardKind: kind, dungeonCardState: 'revealed', dungeonCardEffectId: effectId as Tile['dungeonCardEffectId'] });
-        const second = tile('l2', 'L', { dungeonCardKind: kind, dungeonCardState: 'revealed', dungeonCardEffectId: effectId as Tile['dungeonCardEffectId'] });
-        const run = runWith([first, second]);
-        const context = deriveMatchClaimContext({
-            firstTile: first,
-            firstTileId: first.id,
-            run,
-            secondTile: second,
-            secondTileId: second.id
-        });
-
-        return createMatchedPairClaimBoard({
-            board: run.board!,
-            context,
-            firstTileId: first.id,
-            secondTileId: second.id
-        });
-    };
-
-    it('pops a lever off the board once it has been thrown', () => {
-        const board = claimBoard('lever', 'lever_floor');
-
-        // A lever is a switch, not a souvenir. Leaving it face-up gave the player a card with
-        // nothing left to say, competing for the read the hidden cards still need.
-        expect(board.tiles.every((candidate) => candidate.state === 'removed')).toBe(true);
-        expect(board.dungeonLeverCount).toBe(1);
-        expect(board.matchedPairs).toBe(1);
-    });
-
-    it('still lays an ordinary claimed pair face-up', () => {
-        const board = claimBoard('treasure', 'treasure_coins');
-
-        expect(board.tiles.every((candidate) => candidate.state === 'matched')).toBe(true);
+        expect(goneThirdBoard.tiles.find((t) => t.id === goneThird.id)?.state).toBe('removed');
     });
 });

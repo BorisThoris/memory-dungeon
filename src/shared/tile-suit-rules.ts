@@ -1,4 +1,4 @@
-import type { BoardState, FloorArchetypeId, RelicId, Tile, TileSuit } from './contracts';
+import type { BoardState, FloorArchetypeId, Tile, TileSuit } from './contracts';
 import { getSafeBoardColumns } from './board-grid-dimensions';
 import { createMulberry32, hashStringToSeed, pickRngIndex, shuffleWithRng } from './rng';
 import { isSingletonUtilityPairKey } from './tile-identity';
@@ -271,17 +271,10 @@ export const dealTilesInClumps = (
 };
 
 /**
- * Tiles that keep their cell through the suit deal.
- *
- * Only the ones with a positional *rule* behind them: the exit and the shop and room branches,
- * which the layout plan puts on the main path and the softlock repair reasons about, and the
- * boss pair. Enemies, traps, keys and treasure are dealt with the pairs. On an endless floor
- * nearly every tile is a dungeon card, so pinning all of them would pin the whole board and the
- * floor would open as a field again — and a hazard sitting *inside* a clump is not a loss, it is
- * the point: chunks are how you hit it (`docs/CHAIN_CHUNK_FEVER_DESIGN.md` §2.6).
+ * Tiles that keep their cell through the suit deal: the singletons the layout plan places by
+ * rule. Everything else is dealt with the pairs.
  */
-export const isLayoutPinnedTile = (tile: Tile): boolean =>
-    isSingletonUtilityPairKey(tile.pairKey) || tile.dungeonBossId != null;
+export const isLayoutPinnedTile = (tile: Tile): boolean => isSingletonUtilityPairKey(tile.pairKey);
 
 /** Every tile gets a suit, then the loose ones are dealt in clumps around the pinned ones. */
 /**
@@ -329,42 +322,13 @@ export const scatterTiles = (
 };
 
 /**
- * Suit Lens: one suit fewer than the floor would otherwise deal, never below one.
- *
- * It used to be a cap at three, which worked when every floor of eight pairs or more dealt four.
- * Under the palette below a floor deals one, two or three, so a cap at three would do nothing on
- * almost every floor a player sees - a relic that is dead content on the boards it ships with,
- * which is the failure the occupancy census exists to catch. Taking one off whatever the floor
- * would have dealt keeps the promise the relic actually makes: bigger clumps, bigger breaks.
- *
- * Two suits is the floor it will not go under, for the same reason `MIN_PAIRS_FOR_TWO_SUITS`
- * exists and for a second one that was measured: one suit is not a bigger clump, it is a board
- * with no map on it, and a board with no map clears in 4.8 turns instead of 8.4 - too fast for a
- * chain to reach the Fever rung at all, which took Fever to zero across every band of
- * `cascade-balance-simulation` with this relic held. A relic that switches the top of the ladder
- * off is not a reward. A `two_suit` floor is exempt for the same reason.
- *
- * That leaves it live on any floor dealt three suits or four, which under this palette is floor
- * 22 and deeper - a wider reach than the cap at three it replaces, which only ever bit on a
- * four-suit floor.
- */
-export const SUIT_LENS_SUITS_REMOVED = 1;
-export const SUIT_LENS_MIN_SUITS = 2;
-
-/**
- * Pairs a break could take, which is what the palette has to be measured against.
- *
- * Mirrors `tileCanBreakInChunk` in shape without importing the break rule (the dungeon modules
- * it pulls in lead back here). Counting every pair instead - keys, levers, gateways, the exit -
- * spread the four suits over floors whose breakable pairs were one or two, so no two of them
- * ever shared a suit.
+ * Pairs a break could take, which is what the palette has to be measured against. Mirrors
+ * `tileCanBreakInChunk` in shape without importing the break rule; a singleton is not a pair.
  */
 const breakablePairCount = (tiles: readonly Tile[]): number => {
     const halves = new Map<string, number>();
     for (const tile of tiles) {
         if (isSingletonUtilityPairKey(tile.pairKey)) continue;
-        if (tile.dungeonCardKind != null && tile.dungeonCardKind !== 'treasure') continue;
-        if (tile.dungeonBossId != null || tile.routeSpecialKind != null || tile.routeCardKind != null) continue;
         halves.set(tile.pairKey, (halves.get(tile.pairKey) ?? 0) + 1);
     }
     return [...halves.values()].filter((count) => count === 2).length;
@@ -407,17 +371,8 @@ export const suitCountForPairs = (pairs: number): number => {
     return Math.max(legibilityFloor, Math.min(TILE_SUITS.length, Math.round(count / SUIT_TARGET_PAIRS)));
 };
 
-export const suitCountForDeal = (
-    profile: SuitDealProfile,
-    relicIds: readonly RelicId[] = [],
-    pairs = Number.POSITIVE_INFINITY
-): number => {
-    const dealt = Math.min(profile === 'two_suit' ? 2 : TILE_SUITS.length, suitCountForPairs(pairs));
-    if (profile === 'two_suit' || !relicIds.includes('suit_lens') || dealt <= SUIT_LENS_MIN_SUITS) {
-        return dealt;
-    }
-    return Math.max(SUIT_LENS_MIN_SUITS, dealt - SUIT_LENS_SUITS_REMOVED);
-};
+export const suitCountForDeal = (profile: SuitDealProfile, pairs = Number.POSITIVE_INFINITY): number =>
+    Math.min(profile === 'two_suit' ? 2 : TILE_SUITS.length, suitCountForPairs(pairs));
 
 export const dealBoardSuits = (
     tiles: readonly Tile[],
@@ -425,10 +380,9 @@ export const dealBoardSuits = (
     runSeed: number,
     level: number,
     rulesVersion: number,
-    profile: SuitDealProfile = 'clumped',
-    relicIds: readonly RelicId[] = []
+    profile: SuitDealProfile = 'clumped'
 ): Tile[] => {
-    const suitCount = suitCountForDeal(profile, relicIds, breakablePairCount(tiles));
+    const suitCount = suitCountForDeal(profile, breakablePairCount(tiles));
     if (profile === 'scattered') {
         return scatterTiles(assignSuitsToTiles(tiles, runSeed, level, rulesVersion, suitCount), runSeed, level, rulesVersion, isLayoutPinnedTile);
     }

@@ -1,16 +1,13 @@
 import {
     GAME_RULES_VERSION,
     type BoardState,
-    type DungeonRunNodeKind,
     type FeaturedObjectiveId,
     type FloorArchetypeId,
     type FloorTag,
     type GameMode,
     type MutatorId,
-    type RelicId,
     type RouteCardPlan,
     type RouteWorldProfile,
-    type StartingLoadoutId,
     type Tile
 } from './contracts';
 import { getChapterActBiomeForCycleFloor } from './floor-mutator-schedule';
@@ -21,11 +18,9 @@ import {
     pickCursedPairKey
 } from './board-tile-generation-rules';
 import { assignTileTraitsToGeneratedBoard } from './tile-trait-rules';
-import { createDungeonEncounterContext } from './dungeon-encounter-context-rules';
 import { isSingletonUtilityPairKey } from './tile-identity';
 import { dealBoardSuits, getSuitDealProfile } from './tile-suit-rules';
 import { pickShiftingSpotlightKeys } from './shifting-spotlight-rules';
-import { repairDungeonExitSoftlocks } from './board-inspection';
 
 const clamp = (value: number, min: number, max: number): number => Math.min(max, Math.max(min, value));
 
@@ -45,27 +40,19 @@ export interface BuildBoardOptions {
     cycleFloor?: number | null;
     routeCardPlan?: RouteCardPlan | null;
     routeWorldProfile?: RouteWorldProfile | null;
-    dungeonNodeKind?: DungeonRunNodeKind | null;
     gameMode?: GameMode;
     suppressFindables?: boolean;
-    relicIds?: readonly RelicId[];
-    startingLoadoutId?: StartingLoadoutId | null;
 }
 
 export const buildBoard = (level: number, options: BuildBoardOptions = {}): BoardState => {
     const runSeed = options.runSeed ?? 0;
     const rulesVersion = options.runRulesVersion ?? GAME_RULES_VERSION;
     const mutators = options.activeMutators ?? [];
-    const encounter = createDungeonEncounterContext(
-        options.dungeonNodeKind,
-        options.floorTag ?? 'normal',
-        options.floorArchetypeId ?? null
-    );
-    const floorArchetypeId = encounter.floorArchetypeId;
+    const floorArchetypeId = options.floorArchetypeId ?? null;
     const featuredObjectiveId = options.featuredObjectiveId ?? null;
     const cycleFloor = options.cycleFloor ?? null;
     const actBiome = cycleFloor != null ? getChapterActBiomeForCycleFloor(cycleFloor) : null;
-    const floorTag = encounter.floorTag;
+    const floorTag = options.floorTag ?? 'normal';
 
     /*
      * A board someone handed us. It used to be augmented on the way through — an exit, a shop, a
@@ -82,11 +69,11 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
         // Authored boards placed exactly stay exactly as authored; everything else gets its suits.
         const tiles = exactFixedTiles
             ? plannedTiles
-            : dealBoardSuits(plannedTiles, columns, runSeed, level, rulesVersion, getSuitDealProfile(floorArchetypeId), options.relicIds ?? []);
+            : dealBoardSuits(plannedTiles, columns, runSeed, level, rulesVersion, getSuitDealProfile(floorArchetypeId));
         const rows = Math.ceil(tileCount / columns);
         const realPairKeys = new Set(tiles.map((t) => t.pairKey).filter((k) => !isSingletonUtilityPairKey(k)));
 
-        return repairDungeonExitSoftlocks({
+        return {
             level,
             pairCount: realPairKeys.size,
             columns,
@@ -120,10 +107,10 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
             dungeonObjectiveId: 'find_exit',
             enemyHazards: [],
             enemyHazardTurn: 0
-        });
+        };
     }
 
-    const pairCount = clamp(level + 1 + encounter.pairCountDelta, Math.min(2, NUMBER_SYMBOLS.length), NUMBER_SYMBOLS.length);
+    const pairCount = clamp(level + 1, Math.min(2, NUMBER_SYMBOLS.length), NUMBER_SYMBOLS.length);
     /*
      * The dungeon layer used to sit here: a card recipe, a filler pass, an exit tile, a shop tile,
      * a room tile, a hazard pass and a layout plan that pinned all of them (Gen 172). The six route
@@ -154,13 +141,13 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
      * exit, branches, hazards and rewards where it wants them and those stay pinned; the plain
      * pairs are dealt in clumps around them so the floor opens as a map rather than a field.
      */
-    const tiles = dealBoardSuits(layoutTiles, columns, runSeed, level, rulesVersion, getSuitDealProfile(floorArchetypeId), options.relicIds ?? []);
+    const tiles = dealBoardSuits(layoutTiles, columns, runSeed, level, rulesVersion, getSuitDealProfile(floorArchetypeId));
     const rows = Math.ceil(tileCount / columns);
     const cursedPairKey =
         featuredObjectiveId === 'cursed_last' || featuredObjectiveId === null
             ? pickCursedPairKey(tiles, runSeed, rulesVersion, level)
             : null;
-    const baseBoard: BoardState = repairDungeonExitSoftlocks({
+    const baseBoard: BoardState = {
         level,
         pairCount,
         columns,
@@ -192,7 +179,7 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
         dungeonObjectiveId: 'find_exit',
         enemyHazards: [],
         enemyHazardTurn: 0
-    });
+    };
     const traitBoard: BoardState = {
         ...baseBoard,
         tiles: assignTileTraitsToGeneratedBoard(
@@ -204,8 +191,7 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
             // floor carried more. With one kind of floor there is one intensity, and it is the
             // default.
             undefined,
-            options.relicIds ?? [],
-            options.startingLoadoutId ?? null,
+            null,
             baseBoard.columns
         )
     };

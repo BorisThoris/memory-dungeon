@@ -273,8 +273,7 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
         const run = {
             ...createNewRun(0),
             activeMutators: Number.NaN as unknown as [],
-            dungeonKeys: Number.NaN as unknown as RunState['dungeonKeys'],
-            relicIds: Number.NaN as unknown as []
+            dungeonKeys: Number.NaN as unknown as RunState['dungeonKeys']
         };
         const inventory = buildRunInventory(run);
 
@@ -391,14 +390,15 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
 
     it('separates mutable mid-run consumables from fixed loadout slots', () => {
         const run = createNewRun(0, {
-            initialRelicIds: ['chapter_compass', 'wager_surety'],
-            activeMutators: ['short_memorize', 'wide_recall']
+            activeMutators: ['short_memorize', 'wide_recall'],
+            activeContract: { noShuffle: true, noDestroy: true, maxMismatches: null }
         });
         const loadout = getRunInventoryLoadoutRows(run);
 
-        expect(loadout).toHaveLength(RUN_LOADOUT_SLOT_LIMIT);
+        expect(loadout).toHaveLength(3);
+        expect(loadout.length).toBeLessThanOrEqual(RUN_LOADOUT_SLOT_LIMIT);
         expect(loadout.filter((slot) => slot.mutableDuringRun)).toHaveLength(0);
-        expect(loadout.map((slot) => slot.source)).toEqual(['relic', 'relic', 'mutator', 'mutator']);
-        expect(loadout[0]?.changeWindow).toContain('Relic draft');
+        expect(loadout.map((slot) => slot.source)).toEqual(['mutator', 'mutator', 'contract']);
+        expect(loadout[0]?.changeWindow).toContain('Locked for the active floor');
     });
 });

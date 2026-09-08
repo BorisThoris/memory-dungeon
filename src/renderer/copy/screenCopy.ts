@@ -25,6 +25,12 @@ export const CHOOSE_YOUR_PATH_COPY = {
     sharedRunUnreadable: 'That is not a run key.'
 } as const;
 
+export const CODEX_SCREEN_COPY = {
+    demoSubtitle: 'Demo build: Act I mutators are in play.',
+    subtitle: (version: string | number): string =>
+        `Everything the run can put in front of you, in the words the run uses. Version ${version}.`
+} as const;
+
 export const GAME_OVER_LABELS = {
     playAgainMobile: 'Mobile Play Again - start a new run after this expedition',
     region: 'Run result and next actions',

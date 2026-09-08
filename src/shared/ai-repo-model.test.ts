@@ -44,17 +44,18 @@ describe('AI repository model', () => {
         expect(model.repository.trackedFileCount).toBeGreaterThan(2_000);
         expect(model.repository.codeFileCount).toBeGreaterThan(800);
         expect(model.repository.exportedSymbolCount).toBeGreaterThan(1_000);
-        expect(model.repository.contentItemCount).toBeGreaterThan(50);
+        // Findables and inventory items are the content registries left after Gen 176.
+        expect(model.repository.contentItemCount).toBeGreaterThan(10);
         expect(model.repository.mechanicCount).toBeGreaterThan(20);
         expect(model.repository.stateFieldCount).toBeGreaterThan(20);
         expect(model.repository.relationshipCount).toBeGreaterThan(2_000);
         expect(model.diagnostics).toEqual([]);
         expect(model.symbols.every((symbol) => symbol.line > 0 && symbol.endLine >= symbol.line)).toBe(true);
         expect(new Set(model.content.map((item) => item.kind))).toEqual(
-            new Set(['build_archetype', 'relic', 'findable', 'inventory_item', 'bonus_reward'])
+            new Set(['findable', 'inventory_item'])
         );
         expect(model.content.map((item) => item.id)).toEqual(
-            expect.arrayContaining(['content:relic.peek_charge_plus_one', 'content:findable.scout_glint', 'content:bonus_reward.echo_conduit_lens'])
+            expect.arrayContaining(['content:findable.scout_glint', 'content:inventory_item.peek_charge'])
         );
         expect(model.mechanics.every((mechanic) => mechanic.evidence.length > 0 && mechanic.tests.length > 0)).toBe(true);
         expect(model.relationships.map((edge) => edge.kind)).toEqual(

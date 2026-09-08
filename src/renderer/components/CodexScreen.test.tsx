@@ -29,7 +29,7 @@ describe('CodexScreen', () => {
 
         const rail = screen.getByRole('tablist', { name: /codex sections/i });
         const tabs = within(rail).getAllByRole('tab');
-        expect(tabs.length).toBe(14);
+        expect(tabs.length).toBe(12);
         expect(within(rail).getByRole('tab', { name: /^Residents/ })).toBeInTheDocument();
         expect(within(rail).getByRole('tab', { name: /^Core/ })).toHaveAttribute('aria-selected', 'true');
         expect(screen.getByLabelText(/filter topics/i)).toBeInTheDocument();
@@ -41,33 +41,8 @@ describe('CodexScreen', () => {
         expect(screen.queryByTestId('codex-reward-signal')).toBeNull();
     });
 
-    it('switches sections from the rail and documents build archetypes and traits', () => {
+    it('switches sections from the rail and documents traits', () => {
         render(<CodexScreen />);
-
-        act(() => {
-            screen.getByRole('tab', { name: /^Builds/ }).click();
-        });
-        expect(screen.getByRole('tab', { name: /^Builds/ })).toHaveAttribute('aria-selected', 'true');
-        // Eight archetypes, six cards to a page in jsdom: the rest are one page away, not scrolled to.
-        const builds = screen.getByTestId('codex-entries');
-        expect(builds).toHaveTextContent('The Conduit Cartographer');
-        // The card carries the opening sentence; the rest of the entry is one click away
-        // rather than clamped out of sight.
-        const cartographer = within(builds).getByRole('button', { name: /The Conduit Cartographer/ });
-        act(() => {
-            cartographer.click();
-        });
-        expect(screen.getByTestId('codex-entry')).toHaveTextContent(/peek, pin, read/i);
-        act(() => {
-            screen.getByTestId('codex-entry-back').click();
-        });
-        expect(screen.getByTestId('codex-entries')).toBeInTheDocument();
-        const pager = screen.getByTestId('codex-entries-pager');
-        expect(pager).toHaveTextContent('of 8 entries');
-        act(() => {
-            within(pager).getByRole('button', { name: /^next$/i }).click();
-        });
-        expect(screen.getByTestId('codex-entries')).toHaveTextContent('The Emergency Toolkit');
 
         act(() => {
             screen.getByRole('tab', { name: /^Traits/ }).click();

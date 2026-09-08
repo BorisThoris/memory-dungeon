@@ -358,7 +358,7 @@ test.describe('Mobile layout (renderer)', () => {
         test(`${viewport.name} portrait active gameplay has no horizontal overflow`, async ({ page }) => {
             await forceCoarsePointerMedia(page);
             await page.setViewportSize({ width: viewport.width, height: viewport.height });
-            await openPlayablePathFixture(page, 'activeRunWithHazards');
+            await openPlayablePathFixture(page, 'cascadeClump');
             await expectGameplayReady(page);
 
             await expectCoreGameplayChromeFits(page);
@@ -377,7 +377,7 @@ test.describe('Mobile layout (renderer)', () => {
         test(`${viewport.name} portrait run settings overlay keeps actions reachable`, async ({ page }) => {
             await forceCoarsePointerMedia(page);
             await page.setViewportSize({ width: viewport.width, height: viewport.height });
-            await openPlayablePathFixture(page, 'activeRunWithHazards');
+            await openPlayablePathFixture(page, 'cascadeClump');
             await expectGameplayReady(page);
 
             await openRunSettings(page);
@@ -493,7 +493,7 @@ test.describe('Mobile layout (renderer)', () => {
 
     test('short-height landscape run settings modal collapses to one column with full-width actions', async ({ page }) => {
         await page.setViewportSize({ width: 844, height: 390 });
-        await openPlayablePathFixture(page, 'activeRunWithHazards');
+        await openPlayablePathFixture(page, 'cascadeClump');
         await openRunSettings(page);
         const dialog = page.getByRole('dialog', { name: /run settings/i });
         await expect(dialog).toBeVisible();
@@ -592,7 +592,7 @@ test.describe('Mobile layout (renderer)', () => {
     test('compact touch viewport uses a full-bleed board behind the HUD', async ({ page }) => {
         await forceCoarsePointerMedia(page);
         await page.setViewportSize({ width: 390, height: 844 });
-        await openPlayablePathFixture(page, 'activeRunWithHazards');
+        await openPlayablePathFixture(page, 'cascadeClump');
         await expectGameplayReady(page);
 
         const shell = page.getByTestId('game-shell');

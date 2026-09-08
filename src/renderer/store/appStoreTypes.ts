@@ -8,7 +8,6 @@ import type {
     ViewState
 } from '../../shared/contracts';
 import type { MetaProgressionUnlockResult } from '../../shared/meta-progression';
-import type { DungeonExitActivationSpend } from '../../shared/dungeon-rules';
 import type { MatchScorePop, MismatchScorePop } from './matchScorePop';
 
 export interface AppState {
@@ -47,7 +46,6 @@ export interface AppState {
     regionShuffleArmed: boolean;
     tileSwapArmed: boolean;
     tileSwapFirstTileId: string | null;
-    dungeonExitPromptOpen: boolean;
     /** Transient floating +score near matched tiles (Gameplay column). */
     matchScorePop: MatchScorePop | null;
     dismissMatchScorePop: () => void;
@@ -85,13 +83,6 @@ export interface AppState {
     dismissHowToPlay: () => Promise<void>;
     claimMetaProgressionReward: (rowId: string) => MetaProgressionUnlockResult;
     pressTile: (tileId: string) => void;
-    /**
-     * Re-opens the door. The exit card pops off the board when it is found, so after "Stay" the
-     * dock is the only way back to it.
-     */
-    openDungeonExitPrompt: () => void;
-    closeDungeonExitPrompt: () => void;
-    activateDungeonExitFromPrompt: (spend?: DungeonExitActivationSpend) => void;
     togglePeekMode: () => void;
     toggleTileSwapArmed: () => void;
     undoResolvingFlip: () => void;

@@ -103,13 +103,13 @@ export async function navigateToLevel1PlayPhase(
         await page.evaluate(async () => {
             const w = window as Window & {
                 __memoryDungeonE2e?: {
-                    startFixture?: (id: 'activeRunWithHazards') => Promise<void>;
+                    startFixture?: (id: 'cascadeClump') => Promise<void>;
                 };
             };
             if (!w.__memoryDungeonE2e?.startFixture) {
                 throw new Error('window.__memoryDungeonE2e.startFixture missing; cannot open fallback gameplay fixture.');
             }
-            await w.__memoryDungeonE2e.startFixture('activeRunWithHazards');
+            await w.__memoryDungeonE2e.startFixture('cascadeClump');
         });
         openedViaFixture = true;
     }

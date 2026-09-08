@@ -18,9 +18,6 @@ import { join } from 'node:path';
  * is the whole question, and a number lets a newly orphaned gate hide inside a total.
  */
 export const STANDALONE_GATES: Record<string, string> = {
-    'audit:dungeon-topology:json': 'Prints topology as JSON for a human to read; not a pass/fail check.',
-    'audit:dungeon-topology:stress':
-        'The 250-floor, 64-seed stress variant. fullcheck runs the release-scale sweep; this one is for a release candidate.',
     'audit:unused-exports':
         'Reports types exported as API and helpers only tests import. Zeroing it would mean deleting exports tests need, so it stays advisory rather than a permanently red light.',
     'audit:copy-locality':

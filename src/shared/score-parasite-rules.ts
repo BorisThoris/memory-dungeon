@@ -1,6 +1,5 @@
 import type { RunState } from './contracts';
 import { hasMutator } from './mutators';
-import { hasRunRelic } from './relics';
 import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
 
 export interface ScoreParasiteFloorAdvance {
@@ -30,21 +29,13 @@ export const advanceScoreParasiteFloor = (run: RunState): ScoreParasiteFloorAdva
     };
 };
 
+/**
+ * A completed featured objective used to relieve parasite pressure through a relic no run carries
+ * any more, so the pressure now simply carries over. The signature stays for
+ * `floor-clear-transition.ts`.
+ */
 export const getParasiteFloorsAfterFeaturedObjectiveClear = (
     run: RunState,
-    featuredObjectiveCompleted: boolean,
-    options: { reliefAmount?: number } = {}
-): number => {
-    if (
-        featuredObjectiveCompleted &&
-        hasRunRelic(run, 'parasite_ledger') &&
-        hasMutator(run, 'score_parasite')
-    ) {
-        return Math.max(
-            0,
-            runNonNegativeInteger(run.parasiteFloors) - runNonNegativeInteger(options.reliefAmount ?? 1)
-        );
-    }
-
-    return runNonNegativeInteger(run.parasiteFloors);
-};
+    _featuredObjectiveCompleted: boolean,
+    _options: { reliefAmount?: number } = {}
+): number => runNonNegativeInteger(run.parasiteFloors);

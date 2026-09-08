@@ -12,7 +12,6 @@ import { buildMeditationPickMutatorRows } from './chooseYourPathScreenModel';
 const storeSpies = vi.hoisted(() => ({
     startRun: vi.fn(),
     startSharedRun: vi.fn(),
-    startDungeonShowcaseRun: vi.fn(),
     startPassAndPlayRun: vi.fn()
 }));
 
@@ -34,7 +33,6 @@ vi.mock('../store/useAppStore', async () => {
         openSettings: vi.fn(),
         saveData,
         settings: saveData.settings,
-        startDungeonShowcaseRun: storeSpies.startDungeonShowcaseRun,
         startPassAndPlayRun: storeSpies.startPassAndPlayRun,
         startPinVowRun: vi.fn(),
         startPracticeRun: vi.fn(),

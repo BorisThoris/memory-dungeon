@@ -1,9 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Tile } from './contracts';
-import {
-    hiddenUnlessSprungTrap,
-    isSprungTrapTile
-} from './tile-state-rules';
+import { hideTileAfterTurn, isSprungTrapTile } from './tile-state-rules';
 
 const tile = (overrides: Partial<Tile> = {}): Tile => ({
     id: 'tile',
@@ -15,33 +12,20 @@ const tile = (overrides: Partial<Tile> = {}): Tile => ({
 });
 
 describe('tile state rules', () => {
-    it('keeps resolved trap cards face-up when resetting flipped tiles', () => {
-        const trap = tile({
-            dungeonCardKind: 'trap',
-            dungeonCardState: 'resolved'
-        });
-
-        expect(isSprungTrapTile(trap)).toBe(true);
-        expect(hiddenUnlessSprungTrap(trap).state).toBe('flipped');
-    });
-
-    it('hides ordinary flipped tiles and armed trap tiles', () => {
-        expect(hiddenUnlessSprungTrap(tile()).state).toBe('hidden');
-        expect(hiddenUnlessSprungTrap(tile({
-            dungeonCardKind: 'trap',
-            dungeonCardState: 'hidden'
-        })).state).toBe('hidden');
+    it('hides a flipped tile after the turn it took part in', () => {
+        expect(hideTileAfterTurn(tile()).state).toBe('hidden');
+        expect(hideTileAfterTurn(tile({ state: 'hidden' })).state).toBe('hidden');
     });
 
     it('leaves a card that has already left the board where it is', () => {
-        // Traps pop off the board when they spring, so a turn that hides its flipped tiles must
-        // not drag a removed one back under the player's finger.
+        // A turn that hides its flipped tiles must not drag a matched or popped one back under
+        // the player's finger.
         for (const state of ['matched', 'removed'] as const) {
-            expect(hiddenUnlessSprungTrap(tile({
-                dungeonCardKind: 'trap',
-                dungeonCardState: 'resolved',
-                state
-            })).state).toBe(state);
+            expect(hideTileAfterTurn(tile({ state })).state).toBe(state);
         }
+    });
+
+    it('never reads a tile as a sprung trap', () => {
+        expect(isSprungTrapTile(tile())).toBe(false);
     });
 });

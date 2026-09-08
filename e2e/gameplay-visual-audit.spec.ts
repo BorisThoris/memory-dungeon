@@ -96,7 +96,7 @@ async function captureGameplayStates(page: Page, viewportId: string): Promise<vo
 }
 
 async function captureTrapFeedbackState(page: Page, viewportId: string): Promise<void> {
-    await openPlayablePathFixture(page, 'activeRunWithHazards');
+    await openPlayablePathFixture(page, 'cascadeClump');
     await expectGameplayReady(page);
     /*
      * The hazard-tile panel and the cause strip lived behind an Info disclosure that the HUD

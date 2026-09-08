@@ -1,4 +1,3 @@
-import { getRewardPerkRows } from '../../shared/bonus-rewards';
 import { getChainTargetFeedback } from '../../shared/chain-targets';
 import type { RunState, SaveData } from '../../shared/contracts';
 import { getCosmeticCollectionRows } from '../../shared/cosmetics';
@@ -9,8 +8,6 @@ import { getInventoryRewardSignal } from '../../shared/meta-reward-signals';
 import { getRunEconomyRows } from '../../shared/run-economy';
 import { getRunInventoryRows, getRunLoadoutSummary, type RunInventoryItemId, type RunInventoryRow } from '../../shared/run-inventory';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
-import { getRunBuildProfile } from '../../shared/relics';
-import { getTraitBuildRewardRows } from '../../shared/trait-build-rewards';
 import { getTraitRouteObjectiveStatus } from '../../shared/trait-route-objectives';
 
 export const modeTitle = (gameMode: string): string =>
@@ -19,15 +16,6 @@ export const modeTitle = (gameMode: string): string =>
 export const createInventoryQuantityMap = (run: RunState): Map<string, number> => {
     const inventoryRows = getRunInventoryRows(run);
     return new Map(inventoryRows.map((row) => [row.id, row.quantity]));
-};
-
-export const getActiveTraitBuildRows = (run: RunState) => {
-    const relicTraitBuildRows = getTraitBuildRewardRows().filter((row) =>
-        row.relicIds.some((relicId) => run.relicIds.includes(relicId))
-    );
-    return relicTraitBuildRows.filter(
-        (row, index, rows) => rows.findIndex((candidate) => candidate.id === row.id) === index
-    );
 };
 
 type InventoryRunLoopSignal = {
@@ -122,8 +110,7 @@ export const getInventoryRunLoopSignals = (run: RunState): InventoryRunLoopSigna
 
 export const getInventoryPayoffEngineSignal = (
     run: RunState,
-    runLoopSignals = getInventoryRunLoopSignals(run),
-    rewardPerkRows = getRewardPerkRows(run)
+    runLoopSignals = getInventoryRunLoopSignals(run)
 ): InventoryPayoffEngineSignal => {
     const activeLanes = runLoopSignals.filter((signal) => {
         if (signal.id === 'chain') {
@@ -150,19 +137,15 @@ export const getInventoryPayoffEngineSignal = (
             run.traitRouteObjectiveRewardClaimedThisFloor
         );
     });
-    const durablePerkCount = rewardPerkRows.length;
-    const activeCount = activeLanes.length + (durablePerkCount > 0 ? 1 : 0);
-    const topLaneNames = [
-        ...activeLanes.map((signal) => signal.label.replace(' loop', '').replace(' bank', '')),
-        durablePerkCount > 0 ? 'Reward perks' : null
-    ].filter((label): label is string => label != null);
+    const activeCount = activeLanes.length;
+    const topLaneNames = activeLanes.map((signal) => signal.label.replace(' loop', '').replace(' bank', ''));
 
     if (activeCount >= 4) {
         return {
             label: 'Super stack',
             value: `${activeCount} payoffs live`,
             detail: topLaneNames.slice(0, 4).join(' + '),
-            nextCue: activeLanes[0]?.nextCue ?? rewardPerkRows[0]?.nextCue ?? 'Keep stacking reward payoffs',
+            nextCue: activeLanes[0]?.nextCue ?? 'Keep stacking reward payoffs',
             tone: 'super'
         };
     }
@@ -172,7 +155,7 @@ export const getInventoryPayoffEngineSignal = (
             label: 'Payoff engine',
             value: `${activeCount} payoffs live`,
             detail: topLaneNames.slice(0, 3).join(' + '),
-            nextCue: activeLanes[0]?.nextCue ?? rewardPerkRows[0]?.nextCue ?? 'Keep stacking reward payoffs',
+            nextCue: activeLanes[0]?.nextCue ?? 'Keep stacking reward payoffs',
             tone: 'burst'
         };
     }
@@ -293,12 +276,9 @@ export const createInventoryScreenModel = (run: RunState, saveData: SaveData) =>
         ...row,
         actionCue: getInventoryToolActionCue(row)
     }));
-    const rewardPerkRows = getRewardPerkRows(run);
     const runLoopSignals = getInventoryRunLoopSignals(run);
 
     return {
-        activeTraitBuildRows: getActiveTraitBuildRows(run),
-        buildProfile: getRunBuildProfile(run),
         economyRows: getRunEconomyRows(run),
         equippedCosmetic: getCosmeticCollectionRows(saveData).find((row) => row.equipped) ?? null,
         inventoryQuantityById: new Map(inventoryRows.map((row) => [row.id, row.quantity])),
@@ -306,8 +286,7 @@ export const createInventoryScreenModel = (run: RunState, saveData: SaveData) =>
         loadoutSummary: getRunLoadoutSummary(run),
         perfectMemoryAttribution: getPerfectMemoryAttribution(run),
         prepRows: getInventoryPrepRows(run),
-        payoffEngineSignal: getInventoryPayoffEngineSignal(run, runLoopSignals, rewardPerkRows),
-        rewardPerkRows,
+        payoffEngineSignal: getInventoryPayoffEngineSignal(run, runLoopSignals),
         rewardSignal: getInventoryRewardSignal(run),
         runLoopSignals
     };

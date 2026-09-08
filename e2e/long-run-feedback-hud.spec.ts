@@ -32,7 +32,7 @@ test.describe('Long-run feedback HUD readability', () => {
         test(`${viewport.name} keeps the run bar readable and bounded on a hazard run`, async ({ page }) => {
             test.setTimeout(150_000);
             await page.setViewportSize({ width: viewport.width, height: viewport.height });
-            await openPlayablePathFixture(page, 'activeRunWithHazards');
+            await openPlayablePathFixture(page, 'cascadeClump');
             await expectGameplayReady(page);
 
             const hud = page.getByTestId('game-hud');
@@ -56,7 +56,7 @@ test.describe('Long-run feedback HUD readability', () => {
     test('phone keeps the dock and the bar off each other at 390px', async ({ page }) => {
         test.setTimeout(150_000);
         await page.setViewportSize({ width: 390, height: 844 });
-        await openPlayablePathFixture(page, 'activeRunWithHazards');
+        await openPlayablePathFixture(page, 'cascadeClump');
         await expectGameplayReady(page);
 
         const hud = page.getByTestId('game-hud');

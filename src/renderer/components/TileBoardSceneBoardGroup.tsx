@@ -4,9 +4,8 @@ import type { BoardState, GraphicsQualityPreset } from '../../shared/contracts';
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
 import type { CardBackSvgLayerGeometry } from './cardSvgPlaneGeometry';
 import { TileBezel, type TileHoverTiltState } from './TileBezel';
-import { TileBoardEnemyHazardMarker } from './TileBoardEnemyHazardMarker';
 import { noopMeshRaycast } from './tileBoardPick';
-import type { TileBoardEnemyHazardRow, TileBoardRow } from './tileBoardRows';
+import type { TileBoardRow } from './tileBoardRows';
 import type { TileBoardRuneFieldMetrics } from './tileBoardRuneField';
 
 interface TileBoardSceneBoardGroupProps {
@@ -21,7 +20,6 @@ interface TileBoardSceneBoardGroupProps {
     boardRuneFieldMaterial: ShaderMaterial;
     boardRuneFieldMatRef: RefObject<ShaderMaterial | null>;
     boardRuneFieldMetrics: TileBoardRuneFieldMetrics;
-    enemyHazardRows: readonly TileBoardEnemyHazardRow[];
     fieldTiltRef: MutableRefObject<TiltVector>;
     flipLocked: boolean;
     focusedTileId: string | null;
@@ -56,7 +54,6 @@ export const TileBoardSceneBoardGroup = ({
     boardRuneFieldMaterial,
     boardRuneFieldMatRef,
     boardRuneFieldMetrics,
-    enemyHazardRows,
     fieldTiltRef,
     flipLocked,
     focusedTileId,
@@ -190,15 +187,5 @@ export const TileBoardSceneBoardGroup = ({
                 />
             )
         )}
-        {enemyHazardRows.map(({ hazard, currentTransform, nextTransform }) => (
-            <TileBoardEnemyHazardMarker
-                key={hazard.id}
-                currentTransform={currentTransform}
-                graphicsQuality={graphicsQuality}
-                hazard={hazard}
-                nextTransform={nextTransform}
-                reduceMotion={reduceMotion}
-            />
-        ))}
     </group>
 );

@@ -3,11 +3,9 @@ import { GAME_RULES_VERSION } from './contracts';
 import {
     getLongRunActBossRows,
     getLongRunFatigueRows,
-    getLongRunRoutePreviewRows,
     runLongRunSoak
 } from './long-run-depth';
 import { runBalanceSimulation } from './balance-simulation';
-import { pickFloorScheduleEntry } from './floor-mutator-schedule';
 
 const LONG_SIMULATION_TIMEOUT_MS = 15_000;
 
@@ -35,28 +33,6 @@ describe('GLD long-run depth contracts', () => {
         expect(rows.every((row) => row.actTitle.length > 0 && row.actProgress.includes('/'))).toBe(true);
     });
 
-    it('projects route previews into actual next-board inputs', () => {
-        const schedule = pickFloorScheduleEntry(42_001, GAME_RULES_VERSION, 4, 'endless');
-        const rows = getLongRunRoutePreviewRows(
-            schedule,
-            [
-                { id: 'safe', routeType: 'safe', label: 'Safe', detail: 'Stable combat route.' },
-                { id: 'greed', routeType: 'greed', label: 'Greed', detail: 'Elite pressure route.' },
-                { id: 'mystery', routeType: 'mystery', label: 'Mystery', detail: 'Treasure gallery route.' }
-            ],
-            4
-        );
-
-        expect(rows.map((row) => row.actualNextBoardInput)).toEqual(
-            expect.arrayContaining([
-                expect.stringContaining('combat:normal'),
-                expect.stringContaining('trap:normal'),
-                expect.stringContaining('treasure:normal')
-            ])
-        );
-        expect(rows.find((row) => row.routeType === 'greed')?.riskBand).toBe('danger');
-        expect(rows.find((row) => row.routeType === 'mystery')?.likelyReward).toMatch(/Treasure|Odd|Gold|Balanced|Spend/i);
-    });
 
 
 
@@ -82,7 +58,8 @@ describe('GLD long-run depth contracts', () => {
         expect(report.offlineOnly).toBe(true);
         expect(report.issues).toEqual([]);
         expect(report.ok).toBe(true);
-        expect(report.rows.length).toBeGreaterThanOrEqual(8);
+        expect(report.rows.length).toBe(7);
+        expect(report.rows.map((row) => row.key).some((key) => key.startsWith('route_share_'))).toBe(false);
         expect(report.rows.map((row) => row.key)).toContain('max_profile_worst_seed_low_life_share');
     }, LONG_SIMULATION_TIMEOUT_MS);
 });

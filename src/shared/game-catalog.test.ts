@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { MUTATOR_IDS } from './contracts';
+import { MUTATOR_IDS, type RelicId } from './contracts';
 import * as GameCatalog from './game-catalog';
 import * as Encyclopedia from './mechanics-encyclopedia';
-import { RELIC_POOL } from './relics';
 
 /** `CodexScreen` must import these from `game-catalog`; guard against silent export drops. */
 describe('game-catalog encyclopedia re-exports', () => {
@@ -23,7 +22,7 @@ describe('game-catalog encyclopedia re-exports', () => {
     });
 
     it('projects relic and mutator rows through stable shared ID orders', () => {
-        expect(GameCatalog.getRelicCatalogRows().map((row) => row.id)).toEqual([...RELIC_POOL]);
+        expect(GameCatalog.getRelicCatalogRows().map((row) => row.id)).toEqual(Object.keys(Encyclopedia.RELIC_CATALOG) as RelicId[]);
         expect(GameCatalog.getMutatorCatalogRows().map((row) => row.id)).toEqual([...MUTATOR_IDS]);
     });
 });

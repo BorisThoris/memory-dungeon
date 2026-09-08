@@ -3,14 +3,13 @@ import type { BoardState, Tile, TileSuit } from './contracts';
 import { getPairProximityGridDistance } from './pairProximityHint';
 import { resolveBoardTurn, flipTile } from './game';
 import { makeBoard, makeRun, makeTile } from './test/game-fixtures';
-import { EXIT_PAIR_KEY } from './dungeon-rules';
+import { WILD_PAIR_KEY } from './tile-identity';
 import {
     chunkBreakComboShards,
     chunkBreakMomentumPairs,
     chunkBreakScore,
     findSuitRegion,
     DROP_MAX_PAIRS,
-    MAGPIE_LEDGER_GOLD_MULTIPLIER,
     RIPPLE_MAX_WAVES,
     resolveChunkBreak,
     rippleLift,
@@ -114,9 +113,9 @@ describe('what breaks', () => {
         expect(tileCanBreakInChunk(tiles.find((t) => t.id === 'C2')!)).toBe(false);
     });
 
-    it('never takes the exit, the cursed pair, or anything that is not a plain pair', () => {
-        const exit = makeTile('X', EXIT_PAIR_KEY, 'X', { suit: 'ember' });
-        const tiles = layout().map((t) => (t.id === 'D1' ? exit : t));
+    it('never takes a singleton, the cursed pair, or anything that is not a plain pair', () => {
+        const wild = makeTile('X', WILD_PAIR_KEY, 'X', { suit: 'ember' });
+        const tiles = layout().map((t) => (t.id === 'D1' ? wild : t));
         const result = resolveChunkBreak({
             board: board(tiles, { cursedPairKey: 'B' }),
             run: endless,
@@ -124,9 +123,8 @@ describe('what breaks', () => {
             chain: 4
         });
         expect(result.brokenPairKeys).toEqual(['C']);
-        expect(result.board.tiles.find((t) => t.pairKey === EXIT_PAIR_KEY)?.state).toBe('hidden');
+        expect(result.board.tiles.find((t) => t.pairKey === WILD_PAIR_KEY)?.state).toBe('hidden');
     });
-
 });
 
 describe('the ripple', () => {
@@ -268,46 +266,13 @@ describe('the proximity badge stays honest', () => {
     });
 });
 
-describe('relics that touch the cascade', () => {
-    it("Tuning Fork lends a lone match the Clean rung's partner reach, and sustains a Sharp break", () => {
-        const plain = resolveChunkBreak({ board: row(), run: endless, matchedTileIds: ['A1', 'A2'], chain: 1 });
-        expect(plain.brokenPairKeys).toEqual([]);
-        const forked = resolveChunkBreak({
-            board: row(),
-            run: { ...endless, relicIds: ['tuning_fork'] },
-            matchedTileIds: ['A1', 'A2'],
-            chain: 1
-        });
-        // B has a half outside the clump, so a lone match leaves it whole; the fork takes it.
-        // The reaction after it still belongs to Sharp, so C stays standing.
-        expect(forked.tier).toBe('none');
-        expect(forked.wavePairKeys).toEqual([['B']]);
-        expect(rippleWaves('none', ['tuning_fork'])).toBe(1);
-        expect(rippleWaves('clean', ['tuning_fork'])).toBe(2);
-        expect(rippleWaves('sharp', ['tuning_fork'])).toBe(RIPPLE_MAX_WAVES);
-        // And the sustain: at Sharp the fork's break feeds the ladder its whole pop, not half.
-        const twoPairPop = { brokenPairKeys: ['B', 'C', 'D'], wavePairKeys: [['B', 'C'], ['D']] };
-        expect(chunkBreakMomentumPairs({ ...twoPairPop, tier: 'sharp' })).toBe(2);
-        expect(chunkBreakMomentumPairs({ ...twoPairPop, tier: 'sharp' }, ['tuning_fork'])).toBe(3);
-        // Below Sharp it is the ordinary half credit, fork or no fork: the sustain is earned.
-        expect(chunkBreakMomentumPairs({ ...twoPairPop, tier: 'clean' }, ['tuning_fork'])).toBe(2);
-    });
 
-    it("Magpie's Ledger doubles the gold a spilled treasure pays, and nothing else", () => {
-        const treasure = layout().map((t) =>
-            t.pairKey === 'B' ? { ...t, dungeonCardKind: 'treasure' as const, dungeonCardEffectId: 'treasure_gold' as const, dungeonCardState: 'hidden' as const } : t
-        );
-        const plain = resolveChunkBreak({ board: board(treasure), run: endless, matchedTileIds: ['A1', 'A2'], chain: 4 });
-        const ledger = resolveChunkBreak({
-            board: board(treasure),
-            run: { ...endless, relicIds: ['magpie_ledger'] },
-            matchedTileIds: ['A1', 'A2'],
-            chain: 4
-        });
-        expect(plain.treasuresSpilled).toBe(1);
-        expect(ledger.treasureGold).toBe(plain.treasureGold * MAGPIE_LEDGER_GOLD_MULTIPLIER);
-        expect(ledger.score).toBe(plain.score);
-        expect(ledger.brokenPairKeys).toEqual(plain.brokenPairKeys);
+describe('what feeds the ladder', () => {
+    it('credits the pop at half and every later wave in full', () => {
+        const twoPairPop = { brokenPairKeys: ['B', 'C', 'D'], wavePairKeys: [['B', 'C'], ['D']] };
+        expect(chunkBreakMomentumPairs(twoPairPop)).toBe(2);
+        expect(chunkBreakMomentumPairs({ brokenPairKeys: ['B'], wavePairKeys: [['B']] })).toBe(1);
+        expect(chunkBreakMomentumPairs({ brokenPairKeys: [], wavePairKeys: [] })).toBe(0);
     });
 });
 
@@ -344,9 +309,9 @@ describe('the drop', () => {
     });
 
     it('holds when a remaining pair has a job of its own, or when too many remain', () => {
-        const withExit = cutOff().map((t) => (t.id === 'C2' ? { ...t, dungeonCardKind: 'exit' as const } : t));
+        const withFindable = cutOff().map((t) => (t.id === 'C2' ? { ...t, findableKind: 'shard_spark' as const } : t));
         expect(
-            resolveChunkBreak({ board: board(withExit), run: endless, matchedTileIds: ['A1', 'A2'], chain: 6 }).droppedPairKeys
+            resolveChunkBreak({ board: board(withFindable), run: endless, matchedTileIds: ['A1', 'A2'], chain: 6 }).droppedPairKeys
         ).toEqual([]);
         // Three ember pairs left standing is a clump, not a remnant: G and H join C, all cut off.
         const crowded = cutOff().map((t) =>

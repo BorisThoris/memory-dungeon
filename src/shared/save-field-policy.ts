@@ -1,16 +1,24 @@
-export type DungeonSaveMigrationFieldScope = 'persisted_save' | 'run_local_recoverable';
+/**
+ * Which save fields need a migration when they change, and what happens to a field this build
+ * cannot read. Not a migration routine: nothing calls it at load. The save tests hold the schema
+ * to it and `yarn audit:save-field-policy` holds every `SaveData` field to a row here.
+ *
+ * It began life as `dungeon-save-migration.ts`; the dungeon layer is gone (Gen 176) and the
+ * table stayed, because it was never about the dungeon.
+ */
+export type SaveFieldPolicyScope = 'persisted_save' | 'run_local_recoverable';
 
-export interface DungeonSaveMigrationFieldPolicy {
+export interface SaveFieldPolicy {
     field: string;
-    scope: DungeonSaveMigrationFieldScope;
+    scope: SaveFieldPolicyScope;
     owner: 'SaveData' | 'RunSummary' | 'PlayerStatsPersisted' | 'Settings' | 'RunState' | 'BoardState';
     migrationRequiredWhenChanged: boolean;
     recoveryPolicy: string;
 }
 
-export const DUNGEON_SAVE_MIGRATION_POLICY_VERSION = 'dng-073-v5';
+export const SAVE_FIELD_POLICY_VERSION = 'dng-073-v5';
 
-const DUNGEON_SAVE_MIGRATION_FIELD_POLICIES: readonly DungeonSaveMigrationFieldPolicy[] = [
+const SAVE_FIELD_POLICIES: readonly SaveFieldPolicy[] = [
     {
         field: 'runHistory',
         scope: 'persisted_save',
@@ -198,10 +206,10 @@ const DUNGEON_SAVE_MIGRATION_FIELD_POLICIES: readonly DungeonSaveMigrationFieldP
     }
 ];
 
-export const getDungeonSaveMigrationFieldPolicies = (): readonly DungeonSaveMigrationFieldPolicy[] =>
-    DUNGEON_SAVE_MIGRATION_FIELD_POLICIES;
+export const getSaveFieldPolicies = (): readonly SaveFieldPolicy[] =>
+    SAVE_FIELD_POLICIES;
 
-export const shouldDungeonSaveFieldRequireMigration = (field: string): boolean =>
-    DUNGEON_SAVE_MIGRATION_FIELD_POLICIES.some(
+export const shouldSaveFieldRequireMigration = (field: string): boolean =>
+    SAVE_FIELD_POLICIES.some(
         (policy) => policy.field === field && policy.migrationRequiredWhenChanged
     );

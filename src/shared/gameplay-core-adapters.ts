@@ -1,4 +1,4 @@
-import type { FindableKind, RelicId, RunState } from './contracts';
+import type { FindableKind, RunState } from './contracts';
 import {
     createGameplayDefinitionCommand,
     createGameplayBoardTurnResolveCommand,
@@ -12,25 +12,12 @@ import {
     createGameplayGauntletExpireCommand,
     createGameplayDebugRevealActivateCommand,
     createGameplayDebugRevealDeactivateCommand,
-    createGameplayEnemyHazardContactCommand,
     type GameplayCommand,
     type GameplayEvent,
     type GameplayPauseTimerSnapshot
 } from './gameplay-core-contracts';
 import { reduceGameplayCommand } from './gameplay-core';
-import type { FloorClearExecutionContext } from './floor-clear-transition';
-import {
-    collectSlayerFloorClearDefinitions,
-    resolveSlayerFloorClearEffects
-} from './slayer-floor-clear-transition';
 import { appendGameplayJournal } from './gameplay-journal';
-import { applyRelicImmediate } from './relic-immediate-rules';
-
-export interface GameplayRelicImmediateAdapterResult {
-    run: RunState;
-    events: GameplayEvent[];
-    migrated: boolean;
-}
 
 export interface GameplayMatchRewardAdapterResult {
     commands: GameplayCommand[];
@@ -40,19 +27,6 @@ export interface GameplayMatchRewardAdapterResult {
     scoreGain: number;
     scoutRevealGain: number;
     migrated: boolean;
-}
-
-export interface GameplaySlayerFloorClearInput {
-    bossTrophyClaimed: boolean;
-    featuredObjectiveCompleted: boolean;
-    scoreParasiteActive: boolean;
-}
-
-export interface GameplaySlayerFloorClearAdapterResult {
-    commands: GameplayCommand[];
-    events: GameplayEvent[];
-    bossTrophyScoreGain: number;
-    parasiteRelief: number;
 }
 
 export interface GameplayWildMatchAdapterResult {
@@ -74,50 +48,6 @@ export interface GameplayFloorAdvanceAdapterResult {
     events: GameplayEvent[];
     accepted: boolean;
 }
-
-const RELIC_IMMEDIATE_DEFINITION_IDS: Partial<Record<RelicId, string>> = {
-    extra_shuffle_charge: 'relic.extra_shuffle_charge',
-    first_shuffle_free_per_floor: 'relic.first_shuffle_free_per_floor',
-    memorize_bonus_ms: 'relic.memorize_bonus_ms',
-    memorize_under_short_memorize: 'relic.memorize_under_short_memorize',
-    region_shuffle_free_first: 'relic.region_shuffle_free_first',
-    combo_shard_plus_step: 'relic.combo_shard_plus_step',
-    parasite_ward_once: 'relic.parasite_ward_once',
-    destroy_bank_plus_one: 'relic.destroy_bank_plus_one',
-    guard_token_plus_one: 'relic.guard_token_plus_one',
-    peek_charge_plus_one: 'relic.peek_charge_plus_one',
-    shrine_echo: 'relic.shrine_echo',
-    chapter_compass: 'relic.chapter_compass',
-    wager_surety: 'relic.wager_surety',
-    parasite_ledger: 'relic.parasite_ledger',
-    stray_charge_plus_one: 'relic.stray_charge_plus_one',
-    pin_cap_plus_one: 'relic.pin_cap_plus_one'
-};
-
-/**
- * Strangler adapter for relic immediate effects. Unmigrated relics retain the
- * legacy pure rule; migrated relics use the authoritative command definition.
- */
-export const applyRelicImmediateThroughGameplayCore = (
-    run: RunState,
-    relicId: RelicId,
-    commandId: string
-): GameplayRelicImmediateAdapterResult => {
-    const definitionId = RELIC_IMMEDIATE_DEFINITION_IDS[relicId];
-    if (!definitionId) {
-        return { run: applyRelicImmediate(run, relicId), events: [], migrated: false };
-    }
-    const command = createGameplayDefinitionCommand(commandId, definitionId);
-    const result = reduceGameplayCommand(run, command);
-    if (!result.accepted) {
-        throw new Error(`Migrated relic command rejected: ${relicId}`);
-    }
-    return {
-        run: appendGameplayJournal(result.run, [command], result.events),
-        events: result.events,
-        migrated: true
-    };
-};
 
 /**
  * Typed handoff from migrated match pickups into the legacy survival resolver.
@@ -202,55 +132,6 @@ export const resolveBoardTurnThroughGameplayCore = (
         command,
         events: result.accepted ? result.events : [],
         migrated: result.accepted
-    };
-};
-
-/**
- * Typed source boundary for Slayer floor-clear relic hooks. Established boss,
- * objective, Favor, and parasite rules consume these request amounts.
- */
-export const resolveSlayerFloorClearThroughGameplayCore = (
-    run: RunState,
-    input: GameplaySlayerFloorClearInput,
-    commandIdPrefix: string,
-    execution?: FloorClearExecutionContext
-): GameplaySlayerFloorClearAdapterResult => {
-    if (execution) {
-        return resolveSlayerFloorClearEffects(run, input, execution.commandId, execution.events);
-    }
-
-    const commands: GameplayCommand[] = [];
-    const events: GameplayEvent[] = [];
-    for (const definitionRef of collectSlayerFloorClearDefinitions(run, input)) {
-        const command = createGameplayDefinitionCommand(
-            `${commandIdPrefix}:${definitionRef.suffix}`,
-            definitionRef.id,
-            {
-                bossTrophyClaimed: input.bossTrophyClaimed,
-                riskWagerOutcome: 'none',
-                featuredObjectiveCompleted: input.featuredObjectiveCompleted,
-                scoreParasiteActive: input.scoreParasiteActive
-            }
-        );
-        const result = reduceGameplayCommand(run, command);
-        if (!result.accepted) {
-            throw new Error(`Migrated Slayer floor-clear command rejected: ${definitionRef.id}`);
-        }
-        commands.push(command);
-        events.push(...result.events);
-    }
-
-    return {
-        commands,
-        events,
-        bossTrophyScoreGain: events.reduce(
-            (sum, event) => sum + (event.type === 'score.requested' && event.reason === 'boss_trophy' ? event.amount : 0),
-            0
-        ),
-        parasiteRelief: events.reduce(
-            (sum, event) => sum + (event.type === 'parasite_relief.requested' ? event.amount : 0),
-            0
-        )
     };
 };
 
@@ -367,15 +248,3 @@ export const expireGauntletThroughGameplayCore = (
     commandId = `gauntlet-expire:${run.runSeed}:${run.gauntletDeadlineMs ?? 'none'}:${observedAtMs}`
 ): GameplayRunTransitionAdapterResult =>
     reduceThroughGameplayCore(run, createGameplayGauntletExpireCommand(commandId, observedAtMs));
-
-export const applyEnemyHazardContactThroughGameplayCore = (
-    run: RunState,
-    tileId: string,
-    advanceHazards: boolean,
-    commandId = `enemy-hazard-contact:${run.runSeed}:${run.board?.level ?? 0}:${tileId}`
-): GameplayRunTransitionAdapterResult =>
-    reduceThroughGameplayCore(
-        run,
-        createGameplayEnemyHazardContactCommand(commandId, tileId, advanceHazards)
-    );
-

@@ -4,12 +4,10 @@ import {
     RECALL_FOCUS_MATCH_SCORE,
     RECALL_FOCUS_MAX,
     type MutatorId,
-    type RelicId,
     type RouteChoice,
     type RunState
 } from './contracts';
 import { getMemoryRecallFeedback } from './memory-recall-feedback';
-import { createDungeonRunMapState } from './run-map';
 import { makeRun, makeTile } from './test/game-fixtures';
 
 const routeChoices: RouteChoice[] = [
@@ -71,13 +69,13 @@ describe('getMemoryRecallFeedback', () => {
         const feedback = getMemoryRecallFeedback(run);
 
         expect(feedback.focusLabel).toBe('locked');
-        expect(feedback.roomIdentity).toBe('Threshold Archive');
+        expect(feedback.roomIdentity).toBe('Floor 1');
         expect(feedback.atmosphericSummary).toBe('The archive holds, but the next clean match needs a deliberate read.');
         expect(feedback.atmosphericBeat).toBe(
-            'Threshold Archive: the room still answers, but the next match needs one clean remembered symbol.'
+            'Floor 1: the room still answers, but the next match needs one clean remembered symbol.'
         );
         expect(feedback.pressureDetail).toBe(
-            'Recall is strained: recover forgotten markers before route or patrol pressure stacks higher.'
+            'Recall is strained: recover forgotten markers before route pressure stacks higher.'
         );
         expect(feedback.nextMemoryMove).toEqual(
             expect.objectContaining({
@@ -161,118 +159,12 @@ describe('getMemoryRecallFeedback', () => {
         expect(feedback.burden.detail).not.toContain('route decisions');
     });
 
-    it('calls out patrol and revealed enemy memory pressure', () => {
-        const run = makeRun(
-            [
-                makeTile('a1', 'A', 'A', {
-                    dungeonCardKind: 'enemy',
-                    dungeonCardState: 'revealed'
-                }),
-                makeTile('a2', 'A', 'A'),
-                makeTile('b1', 'B', 'B'),
-                makeTile('b2', 'B', 'B')
-            ],
-            {
-                board: {
-                    ...makeRun([]).board!,
-                    level: 3,
-                    pairCount: 2,
-                    columns: 2,
-                    rows: 2,
-                    tiles: [
-                        makeTile('a1', 'A', 'A', {
-                            dungeonCardKind: 'enemy',
-                            dungeonCardState: 'revealed'
-                        }),
-                        makeTile('a2', 'A', 'A'),
-                        makeTile('b1', 'B', 'B'),
-                        makeTile('b2', 'B', 'B')
-                    ],
-                    enemyHazards: [
-                        {
-                            id: 'sentinel-1',
-                            kind: 'sentinel',
-                            label: 'Sentinel',
-                            currentTileId: 'b1',
-                            nextTileId: 'b2',
-                            pattern: 'patrol',
-                            state: 'revealed',
-                            damage: 1,
-                            hp: 1,
-                            maxHp: 1
-                        }
-                    ]
-                }
-            } satisfies Partial<RunState>
-        );
 
-        const feedback = getMemoryRecallFeedback(run);
 
-        expect(feedback.pressure).toBe('strained');
-        expect(feedback.pressureDetail).toBe(
-            'Recall is strained: hold 2 active threat reads in memory before route or patrol pressure stacks higher.'
-        );
-        expect(feedback.nextMemoryMove).toEqual(
-            expect.objectContaining({
-                id: 'next-memory-move-threat',
-                label: 'Read patrol positions',
-                tone: 'watch'
-            })
-        );
-        expect(feedback.enemies).toEqual([
-            expect.objectContaining({ id: 'enemy-hazard-memory', tone: 'danger' }),
-            expect.objectContaining({ id: 'revealed-enemy-cards', tone: 'watch' })
-        ]);
-    });
-
-    it('ignores stale patrol overlays on fully cleared boards for memory pressure', () => {
-        const run = makeRun(
-            [
-                makeTile('a1', 'A', 'A', { state: 'matched' }),
-                makeTile('a2', 'A', 'A', { state: 'matched' })
-            ],
-            {
-                board: {
-                    ...makeRun([]).board!,
-                    level: 3,
-                    pairCount: 1,
-                    columns: 2,
-                    rows: 1,
-                    matchedPairs: 1,
-                    tiles: [
-                        makeTile('a1', 'A', 'A', { state: 'matched' }),
-                        makeTile('a2', 'A', 'A', { state: 'matched' })
-                    ],
-                    enemyHazards: [
-                        {
-                            id: 'sentinel-stale',
-                            kind: 'sentinel',
-                            label: 'Sentinel',
-                            currentTileId: 'a1',
-                            nextTileId: 'a2',
-                            pattern: 'patrol',
-                            state: 'revealed',
-                            damage: 1,
-                            hp: 1,
-                            maxHp: 1
-                        }
-                    ]
-                }
-            } satisfies Partial<RunState>
-        );
-
-        const feedback = getMemoryRecallFeedback(run);
-
-        expect(feedback.pressure).toBe('clear');
-        expect(feedback.enemies.map((line) => line.id)).not.toContain('enemy-hazard-memory');
-    });
-
-    it('includes path memory from route-world boards and dungeon map state', () => {
-        const dungeonRun = createDungeonRunMapState(7, 1, 2);
+    it('includes path memory from route-world boards', () => {
         const run = makeRun(
             [makeTile('a1', 'A', 'A'), makeTile('a2', 'A', 'A')],
             {
-                dungeonRun,
                 board: {
                     ...makeRun([makeTile('a1', 'A', 'A'), makeTile('a2', 'A', 'A')]).board!,
                     routeWorldProfile: {
@@ -296,7 +188,6 @@ describe('getMemoryRecallFeedback', () => {
 
         expect(feedback.path).toEqual([
             expect.objectContaining({ id: 'route-world-profile', tone: 'danger' }),
-            expect.objectContaining({ id: 'current-dungeon-node' }),
             expect.objectContaining({
                 id: 'room-atmosphere',
                 label: 'Room log clear',
@@ -314,45 +205,12 @@ describe('getMemoryRecallFeedback', () => {
             [
                 makeTile('a1', 'A', 'Rune A'),
                 makeTile('a2', 'A', 'Rune A'),
-                makeTile('b1', 'B', 'Rune B', {
-                    dungeonCardKind: 'enemy',
-                    dungeonCardState: 'revealed'
-                }),
+                makeTile('b1', 'B', 'Rune B'),
                 makeTile('b2', 'B', 'Rune B')
             ],
             {
                 recallMistakesThisFloor: 2,
-                forgottenTileIdsThisFloor: ['a1', 'a2', 'b1'],
-                board: {
-                    ...makeRun([]).board!,
-                    level: 4,
-                    pairCount: 2,
-                    columns: 2,
-                    rows: 2,
-                    tiles: [
-                        makeTile('a1', 'A', 'Rune A'),
-                        makeTile('a2', 'A', 'Rune A'),
-                        makeTile('b1', 'B', 'Rune B', {
-                            dungeonCardKind: 'enemy',
-                            dungeonCardState: 'revealed'
-                        }),
-                        makeTile('b2', 'B', 'Rune B')
-                    ],
-                    enemyHazards: [
-                        {
-                            id: 'sentinel-2',
-                            kind: 'sentinel',
-                            label: 'Sentinel',
-                            currentTileId: 'b1',
-                            nextTileId: 'b2',
-                            pattern: 'patrol',
-                            state: 'revealed',
-                            damage: 1,
-                            hp: 1,
-                            maxHp: 1
-                        }
-                    ]
-                }
+                forgottenTileIdsThisFloor: ['a1', 'a2', 'b1']
             } satisfies Partial<RunState>
         );
 
@@ -362,7 +220,7 @@ describe('getMemoryRecallFeedback', () => {
         expect(clearFeedback.pressure).toBe('clear');
         expect(clearFeedback.atmosphericSummary).toBe('The route is legible; clean recall is carrying the room.');
         expect(clearFeedback.atmosphericBeat).toBe(
-            'Threshold Archive: focus is locked; the route marks are holding steady.'
+            'Floor 1: focus is locked; the route marks are holding steady.'
         );
         expect(overloadedFeedback.pressure).toBe('overloaded');
         expect(overloadedFeedback.atmosphericSummary).toContain('old symbols scrape');
@@ -370,7 +228,7 @@ describe('getMemoryRecallFeedback', () => {
         expect(overloadedFeedback.pressureDetail).toContain('3 forgotten tile markers');
         expect(overloadedFeedback.burden).toEqual(
             expect.objectContaining({
-                score: 13,
+                score: 8,
                 label: 'breaking',
                 tone: 'danger'
             })
@@ -508,10 +366,9 @@ describe('getMemoryRecallFeedback', () => {
         ]);
     });
 
-    it('surfaces active memory taxes and owned recall assists without changing score counters', () => {
+    it('surfaces active memory taxes without changing score counters', () => {
         const run = makeRun([makeTile('a1', 'A', 'A'), makeTile('a2', 'A', 'A')], {
             activeMutators: ['short_memorize', 'wide_recall', 'shifting_spotlight'],
-            relicIds: ['memorize_under_short_memorize', 'peek_charge_plus_one', 'pin_cap_plus_one', 'chapter_compass'],
             peekCharges: 2,
             pinnedTileIds: ['a1'],
             recallFocus: 1,
@@ -538,27 +395,7 @@ describe('getMemoryRecallFeedback', () => {
                 })
             ])
         );
-        expect(feedback.upgrades).toEqual(
-            expect.arrayContaining([
-                expect.objectContaining({
-                    id: 'memory-assist-short-memorize-answer',
-                    detail: 'This relic directly answers the active short-study tax.',
-                    tone: 'reward'
-                }),
-                expect.objectContaining({
-                    id: 'memory-assist-peek-charge',
-                    label: '2 peek reads ready'
-                }),
-                expect.objectContaining({
-                    id: 'memory-assist-pin-cap',
-                    detail: expect.stringContaining('safer path')
-                }),
-                expect.objectContaining({
-                    id: 'memory-assist-chapter-compass',
-                    tone: 'reward'
-                })
-            ])
-        );
+        expect(feedback.upgrades.map((line) => line.id)).toEqual(['next-clean-match']);
         expect(feedback.focus).toBe(1);
         expect(feedback.rememberedClueTileCount).toBe(0);
     });
@@ -566,7 +403,6 @@ describe('getMemoryRecallFeedback', () => {
     it('ignores malformed memory arrays before building feedback copy', () => {
         const run = makeRun([makeTile('a1', 'A', 'A'), makeTile('a2', 'A', 'A')], {
             activeMutators: Number.NaN as unknown as MutatorId[],
-            relicIds: Number.NaN as unknown as RelicId[],
             pinnedTileIds: Number.NaN as unknown as string[],
             forgottenTileIdsThisFloor: Number.NaN as unknown as string[],
             recallFocus: 1
@@ -575,7 +411,6 @@ describe('getMemoryRecallFeedback', () => {
         const feedback = getMemoryRecallFeedback(run);
 
         expect(feedback.penalties.map((line) => line.id)).not.toContain('memory-tax-short_memorize');
-        expect(feedback.upgrades.map((line) => line.id)).not.toContain('memorize-relic');
         expect(feedback.symbols.map((line) => line.id)).not.toContain('pinned-symbols');
         expect(feedback.forgottenTileCount).toBe(0);
     });

@@ -11,7 +11,6 @@ import {
 } from './contracts';
 import { buildBoard, countFindablePairs } from './board-generation';
 import { countReachableExitKeySources, getEffectivePrimaryExitLock, inspectBoardFairness } from './board-inspection';
-import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
 import { FINDABLE_REWARD_ROWS, getFindableSpawnWeightRows } from './findables';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import {
@@ -60,11 +59,6 @@ export interface BalanceSimulationReport {
         tileTraitKindCounts: Record<TileTraitKind, number>;
         floorTag: string;
         dungeonNodeKind: DungeonRunNodeKind;
-        enemyThreatPairs: number;
-        movingEnemyHazards: number;
-        bossMovingEnemyHazards: number;
-        hazardTileCount: number;
-        contactRisk: number;
         floorBand: BalanceSimulationFloorBand;
         comboShardPotential: number;
         guardRewardPotential: number;
@@ -78,7 +72,6 @@ export interface BalanceSimulationReport {
         destroyChargeInflowPotential: number;
         peekChargeInflowPotential: number;
         recoveryReliefPotential: number;
-        netPressureAfterRelief: number;
     }>;
     aggregate: {
         findablePickupPairs: number;
@@ -96,11 +89,6 @@ export interface BalanceSimulationReport {
         bossFloors: number;
         breatherFloors: number;
         eliteFloors: number;
-        enemyThreatPairs: number;
-        movingEnemyHazards: number;
-        bossMovingEnemyHazards: number;
-        hazardTileCount: number;
-        contactRisk: number;
         comboShardPotential: number;
         guardRewardPotential: number;
         consumableRewardPotential: number;
@@ -113,8 +101,6 @@ export interface BalanceSimulationReport {
         destroyChargeInflowPotential: number;
         peekChargeInflowPotential: number;
         recoveryReliefPotential: number;
-        netPressureAfterRelief: number;
-        highPressureLowRecoveryFloors: number;
     };
     rows: BalanceSimulationRow[];
     notes: string[];
@@ -362,9 +348,6 @@ export const getTileTraitKindShares = (
     );
 };
 
-const samplePressure = (sample: BalanceSimulationReport['samples'][number]): number =>
-    sample.contactRisk + sample.enemyThreatPairs * 0.25 + sample.bossMovingEnemyHazards * 0.9;
-
 const sampleRecoveryReliefPotential = (sample: {
     guardRewardPotential: number;
     roomRewardPotential: number;
@@ -373,16 +356,6 @@ const sampleRecoveryReliefPotential = (sample: {
     sample.guardRewardPotential +
     sample.roomRewardPotential +
     (sample.keyInflowPotential > 0 ? 0.5 : 0);
-
-const longestStreak = <T>(items: readonly T[], predicate: (item: T) => boolean): number => {
-    let current = 0;
-    let longest = 0;
-    for (const item of items) {
-        current = predicate(item) ? current + 1 : 0;
-        longest = Math.max(longest, current);
-    }
-    return longest;
-};
 
 const ROUTE_NODE_TYPES: readonly RouteNodeType[] = ['safe', 'greed', 'mystery'];
 
@@ -442,17 +415,9 @@ export const runBalanceSimulation = ({
                 runRulesVersion: rulesVersion,
                 floorTag: schedule.floorTag,
                 floorArchetypeId: schedule.floorArchetypeId,
-                dungeonNodeKind,
                 gameMode: 'endless',
                 activeMutators: scheduleMutatorsFor(sampleSeed, rulesVersion, floor)
             });
-            const activeHazards = activeEnemyHazardsForBoard(board);
-            const hazardTileCount = board.tiles.filter((tile) => tile.tileHazardKind != null).length;
-            const enemyThreatPairs = new Set(
-                board.tiles
-                    .filter((tile) => tile.dungeonCardKind === 'enemy' || tile.dungeonCardKind === 'trap')
-                    .map((tile) => tile.pairKey)
-            ).size;
             const treasureRewardPairs = uniquePairCount(
                 board.tiles,
                 (tile) => (tile.dungeonCardKind === 'treasure' || tile.dungeonCardKind === 'lock' ? tile.pairKey : null)
@@ -504,10 +469,6 @@ export const runBalanceSimulation = ({
                 roomRewardPotential,
                 keyInflowPotential
             });
-            const pressure =
-                activeHazards.reduce((sum, hazard) => sum + hazard.damage, 0) +
-                enemyThreatPairs * 0.25 +
-                activeHazards.filter((hazard) => hazard.bossId != null).length * 0.9;
             return {
                 seed: sampleSeed,
                 floor,
@@ -524,11 +485,6 @@ export const runBalanceSimulation = ({
                 tileTraitKindCounts,
                 floorTag: schedule.floorTag,
                 dungeonNodeKind,
-                enemyThreatPairs,
-                movingEnemyHazards: activeHazards.length,
-                bossMovingEnemyHazards: activeHazards.filter((hazard) => hazard.bossId != null).length,
-                hazardTileCount,
-                contactRisk: activeHazards.reduce((sum, hazard) => sum + hazard.damage, 0),
                 floorBand: floorBandFor(floor),
                 comboShardPotential: countFindablePairs(board.tiles) + (routeRewardPairs > 0 ? 1 : 0),
                 guardRewardPotential: shrinePairs + (dungeonNodeKind === 'rest' ? 1 : 0),
@@ -541,8 +497,7 @@ export const runBalanceSimulation = ({
                 boardFairnessIssueCount,
                 destroyChargeInflowPotential,
                 peekChargeInflowPotential,
-                recoveryReliefPotential,
-                netPressureAfterRelief: Math.max(0, pressure - recoveryReliefPotential)
+                recoveryReliefPotential
             };
         })
     );
@@ -568,22 +523,6 @@ export const runBalanceSimulation = ({
     const bossFloors = safeSeeds.flatMap((seed) =>
         floorNumbers.map((floor) => pickFloorScheduleEntry(seed, rulesVersion, floor, 'endless').floorTag === 'boss' ? 1 : 0)
     );
-    const pressureStepUps = safeSeeds.flatMap((sampleSeed) => {
-        const seedSamples = samples.filter((sample) => sample.seed === sampleSeed).sort((a, b) => a.floor - b.floor);
-        const stepUps: number[] = [];
-        for (let index = 1; index < seedSamples.length; index += 1) {
-            const previous = seedSamples[index - 1];
-            const sample = seedSamples[index];
-            if (previous && sample) {
-                stepUps.push(samplePressure(sample) - samplePressure(previous));
-            }
-        }
-        return stepUps;
-    });
-    const recoveryDebtStreaks = safeSeeds.map((sampleSeed) => {
-        const seedSamples = samples.filter((sample) => sample.seed === sampleSeed).sort((a, b) => a.floor - b.floor);
-        return longestStreak(seedSamples, (sample) => sample.netPressureAfterRelief >= 2);
-    });
     const rewardTotalsByBand = samples.reduce<Record<BalanceSimulationFloorBand, number>>(
         (totals, sample) => ({
             ...totals,
@@ -712,33 +651,12 @@ export const runBalanceSimulation = ({
             'pickFloorScheduleEntry'
         ),
         /*
-         * Five rows left this report in Gen 172: the moving-hazard average, the hazard-tile
-         * average, the floor-1 hazard opener, the contact-risk average and the recovery relief on
-         * high-pressure floors. Each of them read a number off the dungeon layer, and generation
-         * deals none of it, so each would sit at nought against a minimum of 0.4 to 2 forever.
-         *
-         * A balance report is read by whoever is about to change a number. Rows that cannot move
-         * teach that reader to skim, which is how a real regression gets past one. `max_pressure_
-         * step_up` and `max_recovery_debt_streak` stay, because they are ceilings: nought passes
-         * them honestly, and they will start moving again the moment Phase 2 gives a floor
-         * something that can actually cost the player anything.
+         * Seven pressure rows have left this report: five in Gen 172 (the moving-hazard average,
+         * the hazard-tile average, the floor-1 hazard opener, the contact-risk average and the
+         * recovery relief on high-pressure floors) and the two pressure ceilings in Gen 176, when
+         * the hazard rules they read were deleted. A row that cannot move teaches the reader to
+         * skim, which is how a real regression gets past one.
          */
-        row(
-            'max_pressure_step_up',
-            'Largest floor-to-floor pressure increase per seed',
-            Number(Math.max(0, ...pressureStepUps).toFixed(2)),
-            0,
-            3,
-            'contact, enemy-card, and boss hazard pressure'
-        ),
-        row(
-            'max_recovery_debt_streak',
-            'Longest seeded streak of high net pressure after relief',
-            Math.max(0, ...recoveryDebtStreaks),
-            0,
-            3,
-            'pressure minus guard/room/key relief'
-        ),
         row(
             'elite_route_node_share',
             'Elite route node share in simulation sample',
@@ -826,11 +744,6 @@ export const runBalanceSimulation = ({
             bossFloors: samples.filter((sample) => sample.floorTag === 'boss').length,
             breatherFloors: samples.filter((sample) => sample.floorTag === 'breather').length,
             eliteFloors: samples.filter((sample) => sample.dungeonNodeKind === 'elite').length,
-            enemyThreatPairs: samples.reduce((sum, sample) => sum + sample.enemyThreatPairs, 0),
-            movingEnemyHazards: samples.reduce((sum, sample) => sum + sample.movingEnemyHazards, 0),
-            bossMovingEnemyHazards: samples.reduce((sum, sample) => sum + sample.bossMovingEnemyHazards, 0),
-            hazardTileCount: samples.reduce((sum, sample) => sum + sample.hazardTileCount, 0),
-            contactRisk: samples.reduce((sum, sample) => sum + sample.contactRisk, 0),
             comboShardPotential: samples.reduce((sum, sample) => sum + sample.comboShardPotential, 0),
             guardRewardPotential: samples.reduce((sum, sample) => sum + sample.guardRewardPotential, 0),
             consumableRewardPotential: samples.reduce((sum, sample) => sum + sample.consumableRewardPotential, 0),
@@ -842,9 +755,7 @@ export const runBalanceSimulation = ({
             boardFairnessIssueCount: samples.reduce((sum, sample) => sum + sample.boardFairnessIssueCount, 0),
             destroyChargeInflowPotential: samples.reduce((sum, sample) => sum + sample.destroyChargeInflowPotential, 0),
             peekChargeInflowPotential: samples.reduce((sum, sample) => sum + sample.peekChargeInflowPotential, 0),
-            recoveryReliefPotential: samples.reduce((sum, sample) => sum + sample.recoveryReliefPotential, 0),
-            netPressureAfterRelief: samples.reduce((sum, sample) => sum + sample.netPressureAfterRelief, 0),
-            highPressureLowRecoveryFloors: samples.filter((sample) => sample.netPressureAfterRelief >= 2).length
+            recoveryReliefPotential: samples.reduce((sum, sample) => sum + sample.recoveryReliefPotential, 0)
         },
         rows,
         notes: [
@@ -958,7 +869,12 @@ export const runDungeonBalanceProfileSimulation = (
              * them, and there is no wallet column to carry.
              */
             for (const sample of seedSamples) {
-                const pressure = samplePressure(sample);
+                /*
+                 * Pressure was contact risk plus enemy-card and boss-hazard weight. The hazard
+                 * rules that produced all three were deleted in Gen 176, so no floor presses on a
+                 * profile; the survivability columns below stay until T1.17 re-baselines them.
+                 */
+                const pressure = 0;
                 const guardAvailable = sample.guardRewardPotential + (profile.id === 'cautious' ? 1 : 0);
                 const guardSpend = Math.min(guardAvailable, Math.floor(pressure * profile.guardEfficiency));
                 const residualPressure = Math.max(0, pressure - guardSpend - profile.riskTolerance);

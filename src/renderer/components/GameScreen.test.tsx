@@ -2,8 +2,7 @@ import { NotificationHost, useNotificationStore } from '@cross-repo-libs/notific
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { forwardRef, useImperativeHandle } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { BoardState, RunState, Tile } from '../../shared/contracts';
-import { EXIT_PAIR_KEY } from '../../shared/dungeon-rules';
+import type { RunState } from '../../shared/contracts';
 import { createNewRun, finishMemorizePhase } from '../../shared/game-core';
 import { createBoardTurnResolvedEventFixture } from '../../shared/test/gameplay-event-fixtures';
 import { createDefaultSaveData } from '../../shared/save-data';
@@ -218,7 +217,6 @@ describe('GameScreen (OVR-014)', () => {
                 boardPinMode: false,
                 destroyPairArmed: false,
                 peekModeArmed: false,
-                dungeonExitPromptOpen: false,
                 ...BOARD_FLOATER_POP_CLEAR
             });
         });
@@ -398,59 +396,6 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('floor-clear-notes')).toHaveTextContent('Flip par: Complete');
     });
 
-    it('queues a polite next-tool announcement when a swap can create a trait route', async () => {
-        const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
-        const run = {
-            ...baseRun,
-            regionShuffleCharges: 1,
-            board: {
-                ...baseRun.board!,
-                columns: 2,
-                tiles: [
-                    { id: 's1', pairKey: 'sealed', symbol: 'S', label: 'Sealed', state: 'hidden', tileTraitKind: 'sealed' as const },
-                    { id: 'f1', pairKey: 'filler', symbol: 'F', label: 'Filler', state: 'hidden' },
-                    { id: 'x1', pairKey: 'origin', symbol: 'O', label: 'Origin', state: 'hidden' },
-                    { id: 'h1', pairKey: 'heavy', symbol: 'H', label: 'Heavy', state: 'hidden', tileTraitKind: 'heavy' as const }
-                ]
-            }
-        } as RunState;
-
-        const rendered = render(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen achievements={[]} run={run} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-
-        await waitFor(() => {
-            expect(hudAnnouncementMock.queuePoliteAnnouncement).toHaveBeenCalledWith(
-                'Trait route prime found. Use swap: Swap Sealed with Filler: Sealed + Heavy: score surge.',
-                {
-                    dedupeKey: 'trait-route-setup:1:s1:f1',
-                    priority: 'info'
-                }
-            );
-        });
-
-        rendered.rerender(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen
-                        achievements={[]}
-                        run={{ ...run, board: { ...run.board!, tiles: [...run.board!.tiles] } }}
-                    />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-
-        await waitFor(() => {
-            const routeSetupCalls = hudAnnouncementMock.queuePoliteAnnouncement.mock.calls.filter(
-                ([text]) => text === 'Trait route prime found. Use swap: Swap Sealed with Filler: Sealed + Heavy: score surge.'
-            );
-            expect(routeSetupCalls).toHaveLength(1);
-        });
-    });
 
     it('pulses the stage with the break tier for one beat after a chunk breaks, then lets it go', () => {
         // The shatter is a projection of the turn event, not a diff of boards: the stage reads the
@@ -1402,43 +1347,6 @@ describe('GameScreen (OVR-014)', () => {
         expect(floater).not.toHaveTextContent(/NaN|undefined|\[object/);
     });
 
-    it('passes armed durable reward perk cues into the board chain context', () => {
-        const base = createNewRun(0, { echoFeedbackEnabled: false });
-        const playing = finishMemorizePhase(base);
-        const run = {
-            ...playing,
-            rewardPerkIds: ['trait_streak_toolkit'],
-            stats: {
-                ...playing.stats,
-                currentStreak: 2
-            }
-        } as RunState;
-
-        render(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen achievements={[]} run={run} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-
-        expect(screen.getByTestId('tile-board-stub')).toHaveAttribute(
-            'data-armed-perk-id',
-            'trait_streak_toolkit'
-        );
-        expect(screen.getByTestId('tile-board-stub')).toHaveAttribute(
-            'data-armed-perk-label',
-            'Trait cashout armed'
-        );
-        expect(screen.getByTestId('tile-board-stub')).toHaveAttribute(
-            'data-armed-perk-payoff',
-            'x3 trait flash'
-        );
-        expect(screen.getByTestId('tile-board-stub')).toHaveAttribute(
-            'data-armed-perk-detail',
-            'The next trait match in this clean chain creates a flash-pair charge.'
-        );
-    });
 
     it('marks plain chain-break misses as a break with one recovery line', () => {
         vi.useFakeTimers();
@@ -1820,67 +1728,7 @@ describe('GameScreen (OVR-014)', () => {
         expect(hint.querySelectorAll('*')).toHaveLength(0);
     });
 
-    it('carries the door in the dock once the exit card has popped off the board', () => {
-        const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' }));
-        const exitTile: Tile = {
-            id: 'exit',
-            pairKey: EXIT_PAIR_KEY,
-            // Where a found exit lives now: revealed, and gone from the board.
-            state: 'removed',
-            symbol: '^',
-            label: 'Exit',
-            dungeonCardKind: 'exit',
-            dungeonCardState: 'revealed',
-            dungeonCardEffectId: 'exit_safe'
-        };
-        const board: BoardState = {
-            ...baseRun.board!,
-            tiles: [
-                { ...baseRun.board!.tiles[0]!, id: 'a1', pairKey: 'a', state: 'hidden' },
-                { ...baseRun.board!.tiles[1]!, id: 'a2', pairKey: 'a', state: 'hidden' },
-                exitTile
-            ],
-            pairCount: 1,
-            matchedPairs: 0,
-            dungeonExitTileId: 'exit'
-        };
-        const run: RunState = { ...baseRun, board, status: 'playing' };
-        // The dock action reads the store, the way every other run action does.
-        act(() => {
-            useAppStore.setState({ run, view: 'playing', dungeonExitPromptOpen: false });
-        });
 
-        render(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen achievements={[]} run={run} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-
-        expect(screen.getByTestId('tool-exit')).toBeEnabled();
-        expect(screen.queryByTestId('dungeon-exit-overlay')).toBeNull();
-
-        act(() => {
-            fireEvent.click(screen.getByTestId('tool-exit'));
-        });
-
-        expect(screen.getByTestId('dungeon-exit-overlay')).toBeInTheDocument();
-    });
-
-    it('keeps the door out of the dock while the exit card is still hidden', () => {
-        const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' }));
-
-        render(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen achievements={[]} run={{ ...baseRun, status: 'playing' }} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-
-        expect(screen.queryByTestId('tool-exit')).toBeNull();
-    });
 
     it('offers a double tap out of the study period, and only while it is running', () => {
         const memorizing = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' });
@@ -1907,107 +1755,7 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.queryByTestId('memorize-skip-layer')).toBeNull();
     });
 
-    it('shows a free proceed action for terminal key-lock fallback exits', () => {
-        const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' }));
-        const exitTile: Tile = {
-            id: 'exit',
-            pairKey: EXIT_PAIR_KEY,
-            state: 'flipped',
-            symbol: '^',
-            label: 'Iron Exit',
-            dungeonCardKind: 'exit',
-            dungeonCardState: 'revealed',
-            dungeonCardEffectId: 'exit_safe',
-            dungeonExitLockKind: 'iron'
-        };
-        const board: BoardState = {
-            ...baseRun.board!,
-            tiles: [
-                { ...baseRun.board!.tiles[0]!, state: 'matched' },
-                { ...baseRun.board!.tiles[1]!, state: 'matched' },
-                exitTile
-            ],
-            pairCount: 1,
-            matchedPairs: 1,
-            dungeonExitTileId: 'exit',
-            dungeonExitLockKind: 'iron'
-        };
-        const run: RunState = {
-            ...baseRun,
-            board,
-            dungeonKeys: {},
-            dungeonMasterKeys: 0,
-            status: 'playing'
-        };
-        act(() => {
-            useAppStore.setState({ dungeonExitPromptOpen: true });
-        });
 
-        render(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen achievements={[]} run={run} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-
-        expect(screen.getByTestId('dungeon-exit-overlay')).toHaveTextContent('Unlocked exit');
-        expect(screen.getByRole('button', { name: 'Proceed' })).toBeEnabled();
-        expect(screen.queryByRole('button', { name: 'Use key' })).toBeNull();
-        expect(screen.queryByText(/Needs an iron key/i)).toBeNull();
-    });
-
-    it('labels pending key fallback exits as pair-clear gates instead of key shopping tasks', () => {
-        const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' }));
-        const exitTile: Tile = {
-            id: 'exit',
-            pairKey: EXIT_PAIR_KEY,
-            state: 'flipped',
-            symbol: '^',
-            label: 'Iron Exit',
-            dungeonCardKind: 'exit',
-            dungeonCardState: 'revealed',
-            dungeonCardEffectId: 'exit_safe',
-            dungeonExitLockKind: 'iron'
-        };
-        const board: BoardState = {
-            ...baseRun.board!,
-            tiles: [
-                { ...baseRun.board!.tiles[0]!, id: 'a1', pairKey: 'a', state: 'hidden' },
-                { ...baseRun.board!.tiles[1]!, id: 'a2', pairKey: 'a', state: 'hidden' },
-                exitTile
-            ],
-            pairCount: 1,
-            matchedPairs: 0,
-            dungeonExitTileId: 'exit',
-            dungeonExitLockKind: 'iron'
-        };
-        const run: RunState = {
-            ...baseRun,
-            board,
-            dungeonKeys: {},
-            dungeonMasterKeys: 0,
-            status: 'playing'
-        };
-        act(() => {
-            useAppStore.setState({ dungeonExitPromptOpen: true });
-        });
-
-        render(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen achievements={[]} run={run} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-
-        const overlay = screen.getByTestId('dungeon-exit-overlay');
-        expect(overlay).toHaveTextContent('Key fallback pending');
-        expect(overlay).toHaveTextContent('No key source remains; clear the remaining pairs to force this exit open.');
-        expect(screen.queryByRole('button', { name: 'Proceed' })).toBeNull();
-        expect(screen.queryByRole('button', { name: 'Use key' })).toBeNull();
-        expect(screen.getByRole('button', { name: 'Stay' })).toBeEnabled();
-    });
 
 
 });

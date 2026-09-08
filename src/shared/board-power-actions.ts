@@ -23,15 +23,10 @@ import {
     canShuffleBoard
 } from './board-power-availability';
 import { hasMutator } from './mutators';
-import {
-    PEEK_REVEALED_ROUTE_SPECIALS,
-    tileIsCompletionSafeStrayTarget
-} from './board-power-targeting';
+import { tileIsCompletionSafeStrayTarget } from './board-power-targeting';
 import { clearResolveState } from './run-timer-rules';
 import { normalizeSessionStats } from './session-stats-rules';
-import { disarmDungeonTrapPairByPeek } from './dungeon-trap-rules';
-import { hiddenUnlessSprungTrap } from './tile-state-rules';
-import { hasRunRelic } from './relics';
+import { hideTileAfterTurn } from './tile-state-rules';
 import { runFilteredStringArray } from './run-array-guards';
 import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
 
@@ -79,13 +74,7 @@ export const applyDestroyPairTransition = (
                 ? {
                       ...t,
                       state: 'matched' as const,
-                      findableKind: undefined,
-                      routeCardKind: undefined,
-                      routeSpecialKind: undefined,
-                      routeSpecialRevealed: undefined,
-                      routeSpecialRevealSource: undefined,
-                      lanternScouted: undefined,
-                      scoutRevealSource: undefined
+                      findableKind: undefined
                   }
                 : t
         )
@@ -163,13 +152,7 @@ export const applyShuffle = (run: RunState): RunState => {
         });
     }
 
-    let nextCharges = runNonNegativeInteger(run.shuffleCharges);
-    let nextFree = run.freeShuffleThisFloor;
-    if (nextFree && hasRunRelic(run, 'first_shuffle_free_per_floor')) {
-        nextFree = false;
-    } else if (nextCharges > 0) {
-        nextCharges -= 1;
-    }
+    const nextCharges = decrementRunCounter(run.shuffleCharges);
 
     let matchScoreMultiplier = run.matchScoreMultiplier;
     if (run.shuffleScoreTaxActive) {
@@ -184,7 +167,6 @@ export const applyShuffle = (run: RunState): RunState => {
         shuffleUsedThisFloor: true,
         shuffleCharges: nextCharges,
         shuffleNonce: shuffleNonce + 1,
-        freeShuffleThisFloor: nextFree,
         matchScoreMultiplier,
         pinnedTileIds: [],
         recallFocus: 0,
@@ -369,32 +351,14 @@ export const applyPeek = (run: RunState, tileId: string): RunState => {
     if (peekRevealedTileIds.includes(tileId)) {
         return run;
     }
-    const board =
-        tile.routeSpecialKind && PEEK_REVEALED_ROUTE_SPECIALS.has(tile.routeSpecialKind)
-            ? {
-                  ...run.board,
-                  tiles: run.board.tiles.map((t) =>
-                      t.pairKey === tile.pairKey
-                          ? { ...t, routeSpecialRevealed: true, routeSpecialRevealSource: 'peek' as const }
-                          : t
-                  )
-              }
-            : run.board;
-    const peeked: RunState = {
+    return {
         ...run,
-        board,
         peekCharges: decrementRunCounter(peekCharges),
         powersUsedThisRun: true,
         recallFocus: decreaseRecallFocus(run),
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, [tileId]),
         peekRevealedTileIds: [...peekRevealedTileIds, tileId]
     };
-    /*
-     * A trap the peek finds is disarmed on the spot rather than left armed under a card the
-     * player now knows about. Looking is the whole cost of the charge: the trap pops, and no
-     * life is spent on knowing where it was.
-     */
-    return disarmDungeonTrapPairByPeek(peeked, tileId);
 };
 
 export const applyStrayRemove = (run: RunState, tileId: string): RunState => {
@@ -411,30 +375,7 @@ export const applyStrayRemove = (run: RunState, tileId: string): RunState => {
     }
     const board: BoardState = {
         ...run.board,
-        tiles: run.board.tiles.map((t) =>
-            t.id === tileId
-                ? {
-                      ...t,
-                      state: 'removed' as const,
-                      routeCardKind: undefined,
-                      routeSpecialKind: undefined,
-                      routeSpecialRevealed: undefined,
-                      routeSpecialRevealSource: undefined,
-                      lanternScouted: undefined,
-                      scoutRevealSource: undefined
-                  }
-                : t.pairKey === tile.pairKey
-                  ? {
-                        ...t,
-                        routeCardKind: undefined,
-                        routeSpecialKind: undefined,
-                        routeSpecialRevealed: undefined,
-                        routeSpecialRevealSource: undefined,
-                        lanternScouted: undefined,
-                        scoutRevealSource: undefined
-                    }
-                  : t
-        )
+        tiles: run.board.tiles.map((t) => (t.id === tileId ? { ...t, state: 'removed' as const } : t))
     };
     return {
         ...run,
@@ -458,7 +399,7 @@ export const cancelResolvingWithUndo = (run: RunState): RunState => {
     const board: BoardState = {
         ...run.board,
         flippedTileIds: [],
-        tiles: run.board.tiles.map((t) => (ids.includes(t.id) ? hiddenUnlessSprungTrap(t) : t))
+        tiles: run.board.tiles.map((t) => (ids.includes(t.id) ? hideTileAfterTurn(t) : t))
     };
     return {
         ...run,

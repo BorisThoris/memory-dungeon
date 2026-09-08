@@ -1,55 +1,5 @@
-import type {
-    BoardState,
-    DungeonKeyKind,
-    RouteSpecialKind
-} from './contracts';
-import {
-    countReachableExitKeySources,
-    countReachableExitLeverSources,
-    getEffectivePrimaryExitLock
-} from './board-inspection';
-import {
-    DECOY_PAIR_KEY,
-    ROOM_PAIR_KEY,
-    SHOP_PAIR_KEY,
-    WILD_PAIR_KEY
-} from './tile-identity';
-
-export const STRAY_PROTECTED_ROUTE_SPECIALS = new Set<RouteSpecialKind>([
-    'keystone_pair',
-    'final_ward',
-    'omen_seal'
-]);
-
-export const PEEK_REVEALED_ROUTE_SPECIALS = new Set<RouteSpecialKind>([
-    'mystery_veil',
-    'secret_door',
-    'omen_seal',
-    'mimic_cache',
-    'loaded_gateway',
-    'parasite_vessel'
-]);
-
-const pairIsExitCriticalDestroyTarget = (board: BoardState, pairTiles: readonly BoardState['tiles'][number][]): boolean => {
-    const primaryExitLock = getEffectivePrimaryExitLock({ board });
-    const lockKind = primaryExitLock.lockKind;
-    if (lockKind === 'none') {
-        return false;
-    }
-    if (
-        lockKind === 'lever' &&
-        pairTiles.some((tile) => tile.dungeonCardKind === 'lever' && tile.dungeonCardEffectId === 'lever_floor')
-    ) {
-        return countReachableExitLeverSources(board) - 1 < primaryExitLock.requiredLeverCount;
-    }
-    if (lockKind !== 'lever') {
-        const keyKind = lockKind as DungeonKeyKind;
-        if (pairTiles.some((tile) => tile.dungeonCardKind === 'key' && (tile.dungeonKeyKind ?? 'iron') === keyKind)) {
-            return countReachableExitKeySources(board, keyKind) - 1 < 1;
-        }
-    }
-    return false;
-};
+import type { BoardState } from './contracts';
+import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 
 /**
  * Board-only checks for destroy targeting (mirrors `canDestroyPair` tile rules).
@@ -61,11 +11,7 @@ export const tileIsDestroyEligiblePreview = (board: BoardState, tileId: string):
         return false;
     }
     const pairTiles = board.tiles.filter((t) => t.pairKey === tile.pairKey);
-    return (
-        pairTiles.length === 2 &&
-        pairTiles.every((t) => t.state === 'hidden') &&
-        !pairIsExitCriticalDestroyTarget(board, pairTiles)
-    );
+    return pairTiles.length === 2 && pairTiles.every((t) => t.state === 'hidden');
 };
 
 /** All tile ids that are valid destroy targets when run rules would allow destroy (fully hidden real pairs). */
@@ -105,8 +51,8 @@ export const collectPeekEligibleTileIds = (
     return eligible;
 };
 
-export const isCompletionSafeStrayPairKey = (pairKey: string): boolean =>
-    pairKey === WILD_PAIR_KEY || pairKey === SHOP_PAIR_KEY || pairKey === ROOM_PAIR_KEY;
+/** The wild tile is the one singleton a floor can finish without, so it is the one a stray remove may take. */
+export const isCompletionSafeStrayPairKey = (pairKey: string): boolean => pairKey === WILD_PAIR_KEY;
 
 export const tileIsCompletionSafeStrayTarget = (board: BoardState, tileId: string): boolean => {
     const tile = board.tiles.find((t) => t.id === tileId);
@@ -114,12 +60,11 @@ export const tileIsCompletionSafeStrayTarget = (board: BoardState, tileId: strin
         tile &&
             tile.state === 'hidden' &&
             tile.pairKey !== DECOY_PAIR_KEY &&
-            isCompletionSafeStrayPairKey(tile.pairKey) &&
-            (!tile.routeSpecialKind || !STRAY_PROTECTED_ROUTE_SPECIALS.has(tile.routeSpecialKind))
+            isCompletionSafeStrayPairKey(tile.pairKey)
     );
 };
 
-/** Stray remove targets hidden completion-safe singleton/special tiles (mirrors `applyStrayRemove`). */
+/** Stray remove targets hidden completion-safe singleton tiles (mirrors `applyStrayRemove`). */
 export const tileIsStrayEligiblePreview = (board: BoardState, tileId: string): boolean => {
     return tileIsCompletionSafeStrayTarget(board, tileId);
 };

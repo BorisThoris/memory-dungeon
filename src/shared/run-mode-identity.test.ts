@@ -5,7 +5,6 @@ import {
     createNewRun,
     createWildRun
 } from './run-creation-rules';
-import { createDungeonShowcaseRun } from './dungeon-showcase-run-rules';
 
 const scholarContract = { bonusRelicDraftPick: true, maxMismatches: null, noDestroy: true, noShuffle: true };
 const pinVowContract = { maxMismatches: null, maxPinsTotalRun: 10, noDestroy: false, noShuffle: false };
@@ -17,9 +16,6 @@ describe('describeRunModeIdentity', () => {
 
 
 
-    it('names the showcase run even though it is an endless run underneath', () => {
-        expect(describeRunModeIdentity(createDungeonShowcaseRun(0)).label).toBe('Dungeon Showcase');
-    });
 
 
 

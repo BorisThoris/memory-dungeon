@@ -23,7 +23,6 @@ const HOVER_CLUMP_READ_DELAY_MS = 160;
 const EMPTY_CLUMP_READ: ReadonlySet<string> = new Set();
 import { resolveAdaptiveBoardRenderQuality } from '../../shared/graphicsQuality';
 import { getFindableRewardText } from '../../shared/findables';
-import { getHazardTileBoardSummary, getHazardTileTelegraph } from '../../shared/hazard-tiles';
 import { getTileSwapTraitPreviewLines, getTileTraitInteractionPreviewLines } from '../../shared/tile-trait-rules';
 import { BOARD_ROUTE_COACHING, BOARD_ROUTE_REWARD_LABEL } from '../copy/boardRouteCoaching';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
@@ -1529,17 +1528,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 ? { action: 'Route', eyebrow: 'Swap preview', lines, kind: 'trait', source, tone: 'setup' }
                 : null;
         }
-        const hazardTelegraph = getHazardTileTelegraph(focusedTile);
-        if (hazardTelegraph.hasHazard && hazardTelegraph.label && hazardTelegraph.telegraph) {
-            return {
-                action: 'Scout',
-                eyebrow: 'Hazard',
-                lines: [hazardTelegraph.label, hazardTelegraph.telegraph],
-                kind: 'hazard',
-                source,
-                tone: 'hazard'
-            };
-        }
         const traitLines = [
             ...new Set([
                 ...getTileTraitInteractionPreviewLines(board, [focusedTile.id], 'match'),
@@ -2124,28 +2112,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         return null;
     }, [boardChainOpportunity, runStatus]);
 
-    const boardHazardOpportunity = useMemo((): {
-        count: number;
-        detail: string;
-        label: string;
-        valueLabel: string;
-    } => {
-        if (runStatus !== 'playing') {
-            return { count: 0, detail: '', label: '', valueLabel: '' };
-        }
-        const summary = getHazardTileBoardSummary(board);
-        const first = summary.rows[0] ?? null;
-        if (!first) {
-            return { count: 0, detail: '', label: '', valueLabel: '' };
-        }
-        return {
-            count: summary.totalHazardTiles,
-            detail: first.telegraph,
-            label: first.label,
-            valueLabel: summary.totalHazardTiles === 1 ? '1 hazard' : `${summary.totalHazardTiles} hazards`
-        };
-    }, [board, runStatus]);
-
     const activePowerBoardChip = useMemo((): {
         detail: string;
         first: string;
@@ -2366,18 +2332,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 });
             }
 
-            if (boardHazardOpportunity.count > 0) {
-                rows.push({
-                    action: 'Scout',
-                    detail: boardHazardOpportunity.detail,
-                    id: 'hazard',
-                    impactCue: 'Avoid penalty',
-                    label: 'Risk',
-                    tone: 'hazard',
-                    value: boardHazardOpportunity.valueLabel
-                });
-            }
-
             if (boardChainOpportunity.armedPerkLabel) {
                 rows.push({
                     action: 'Cash',
@@ -2433,7 +2387,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         [
             activePowerBoardChip,
             boardChainOpportunity,
-            boardHazardOpportunity,
             boardPickupOpportunity,
             recoveryContext,
             runStatus,
@@ -3733,7 +3686,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-trait-mode-tone={boardTraitModeCue?.tone ?? 'none'}
             data-trait-mode-value={boardTraitModeCue?.value ?? 'none'}
             data-trait-mode-detail={boardTraitModeCue?.detail ?? 'none'}
-            data-hazard-opportunity-count={boardHazardOpportunity.count}
             data-pickup-opportunity-count={boardPickupOpportunity.count}
             data-pickup-opportunity-focus={boardPickupOpportunityFocus}
             data-pickup-sequence-first={boardPickupOpportunity.sequenceCue?.first ?? 'none'}

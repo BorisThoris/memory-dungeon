@@ -1,8 +1,8 @@
-import type { RunState, RunSummary, SaveData } from './contracts';
+import type { MutatorId, RunState, RunSummary, SaveData } from './contracts';
 import { getChainTargetFeedback } from './chain-targets';
 import { buildMetaProgressionRunDelta } from './meta-progression-delta';
 import { getMetaProgressionFeedback } from './meta-progression';
-import { runMutatorIds, runRelicIds } from './relics';
+import { runArray } from './run-array-guards';
 import { buildRunHistoryExportString } from './run-history';
 import { runNonNegativeInteger } from './run-number-guards';
 
@@ -103,9 +103,8 @@ const getMetaNextGoalRow = (save: SaveData, previousSave?: SaveData): GameOverNe
 export const getGameOverNextRunRows = (run: RunState, save?: SaveData, previousSave?: SaveData): GameOverNextRunRow[] => {
     const summary = run.lastRunSummary;
     const runLabel = summary ? modeLabel(summary) : 'No completed run';
-    const relicCount = summary ? runRelicIds(summary.relicIds).length : runRelicIds(run.relicIds).length;
-    const mutatorCount = summary ? runMutatorIds(summary.activeMutators).length : runMutatorIds(run.activeMutators).length;
-    const buildCount = `${relicCount} relic(s) / ${mutatorCount} mutator(s)`;
+    const mutatorCount = runArray<MutatorId>(summary ? summary.activeMutators : run.activeMutators).length;
+    const buildCount = `${mutatorCount} mutator(s)`;
     const activeContract = summary?.activeContract ?? run.activeContract;
     const buildDetail = activeContract
         ? 'Contract rules shaped this run.'

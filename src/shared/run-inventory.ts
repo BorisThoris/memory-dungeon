@@ -2,9 +2,10 @@ import {
     type DungeonKeyKind,
     MAX_COMBO_SHARDS,
     MAX_GUARD_TOKENS,
+    type MutatorId,
     type RunState
 } from './contracts';
-import { runMutatorIds, runRelicIds } from './relics';
+import { runArray } from './run-array-guards';
 import { runRecord } from './run-record-guards';
 import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
@@ -43,7 +44,7 @@ export interface RunInventoryRow extends RunInventoryDefinition {
 export interface RunLoadoutSlotRow {
     id: string;
     label: string;
-    source: 'relic' | 'mutator' | 'contract';
+    source: 'mutator' | 'contract';
     mutableDuringRun: boolean;
     changeWindow: string;
 }
@@ -257,7 +258,7 @@ export const getRunInventoryItemQuantity = (run: RunState, id: RunInventoryItemI
         case 'combo_shard':
             return runNonNegativeInteger(stats.comboShards);
         case 'mutator_loadout':
-            return runMutatorIds(run.activeMutators).length;
+            return runArray<MutatorId>(run.activeMutators).length;
         case 'contract_loadout':
             return run.activeContract ? 1 : 0;
         default:
@@ -343,14 +344,7 @@ export const getRunLoadoutRows = (run: RunState): RunInventoryRow[] =>
 export const RUN_LOADOUT_SLOT_LIMIT = 4;
 
 export const getRunInventoryLoadoutRows = (run: RunState): RunLoadoutSlotRow[] => [
-    ...runRelicIds(run.relicIds).map((id) => ({
-        id: `relic:${id}`,
-        label: id.replace(/_/g, ' '),
-        source: 'relic' as const,
-        mutableDuringRun: false,
-        changeWindow: 'Relic draft or relic service only.'
-    })),
-    ...runMutatorIds(run.activeMutators).map((id) => ({
+    ...runArray<MutatorId>(run.activeMutators).map((id) => ({
         id: `mutator:${id}`,
         label: id.replace(/_/g, ' '),
         source: 'mutator' as const,

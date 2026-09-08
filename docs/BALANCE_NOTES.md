@@ -1421,3 +1421,33 @@ falls to the cosmetic tracks. The relic loadout leaves the run inventory.
 
 Nothing on the board moved: `sim:cascade --check`, `sim:pop --check` and the occupancy census hold
 exactly where the first half left them.
+
+## Gen 176: the dungeon modules go
+
+The thirty `dungeon-*` modules, the hazard-tile and roaming-hazard modules, the dungeon run map,
+the relic definitions and their in-play effects, the bonus rewards, the build perks and the
+between-floor exit transition are deleted, with their tests (`docs/REMOVED_DUNGEON_LAYER.md` names
+every file). Gen 172 had already made all of it unreachable from a generated floor; this is the
+commit that stops the turn path asking. A flip is a flip: it no longer clears a roaming enemy off
+the last pair, reveals an exit, a vendor or a room, or springs a trap. A match no longer damages
+an enemy, scouts a hidden card, pays a key or spills a treasure; a miss no longer wakes one. The
+chunk break takes plain pairs and nothing else, and the Tuning Fork and Magpie's Ledger branches,
+relics no run has carried since Gen 175, go with the relic pool. A `dungeon.exit_activate`,
+`enemy_hazard.contact` or `floor.hazard_banish` command in an old journal is rejected with a
+reason.
+
+What stays for one more half-generation is the shape: the run, board and tile fields that carried
+the layer (`dungeonRun`, `dungeonKeys`, `enemyHazards`, `tileHazardKind`, the `hazard*ThisFloor`
+counters, `relicIds`) are still declared and read nought, so the occupancy diff below is readable
+against Gen 175. The second half strips them with the save shape and a one-way upgrade for
+existing profiles (T1.14).
+
+The save-field policy table survives the module it lived in. `dungeon-save-migration.ts` was
+never about the dungeon; it is the list of which persisted fields need a migration when they
+change, `audit:save-field-policy` holds every `SaveData` field to it, and it is now
+`save-field-policy.ts`.
+
+The interaction graph loses every relic, build, reward, perk, boss, exit, lock, room and topology
+node (version 30); the repo model loses the relic, build-archetype and bonus-reward content
+registries; the topology audit and its gate are gone from `gate:systems`, and `gate:softlock-full`
+is the softlock stress sweep alone.

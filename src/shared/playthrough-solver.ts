@@ -1,16 +1,12 @@
 import type { BoardState, RunState, Tile } from './contracts';
-import { activateDungeonExit } from './dungeon-rules';
-import { revealDungeonExit } from './dungeon-reveal-rules';
 import { flipTile, resolveBoardTurn } from './game';
-import { repairRunProgressionSoftlocks } from './run-progression-repair';
-import { DECOY_PAIR_KEY, EXIT_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
+import { DECOY_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
 
 export type PlaythroughSolverStopReason =
     | 'missing_board'
     | 'terminal_status'
     | 'level_complete'
     | 'no_exit'
-    | 'exit_attempted'
     | 'missing_pair_tile'
     | 'no_progress'
     | 'turn_guard';
@@ -29,7 +25,6 @@ const unresolvedPlayablePairGroups = (board: BoardState): Tile[][] => {
         if (
             tile.state === 'matched' ||
             tile.state === 'removed' ||
-            tile.dungeonCardState === 'resolved' ||
             isSingletonUtilityPairKey(tile.pairKey) ||
             tile.pairKey === DECOY_PAIR_KEY
         ) {
@@ -56,7 +51,7 @@ export const solveRunByExhaustingPlayablePairsWithTrace = (run: RunState, maxTur
         }
         if (current.status === 'levelComplete') {
             return {
-                run: repairRunProgressionSoftlocks(current),
+                run: current,
                 stopReason: 'level_complete',
                 turns: guard,
                 lastPairKey: null,
@@ -68,21 +63,9 @@ export const solveRunByExhaustingPlayablePairsWithTrace = (run: RunState, maxTur
         }
         const pair = unresolvedPlayablePairGroups(current.board)[0] ?? null;
         if (!pair) {
-            const exit = current.board.dungeonExitTileId
-                ? current.board.tiles.find((tile) => tile.id === current.board?.dungeonExitTileId)
-                : current.board.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY);
-            if (!exit) {
-                return { run: current, stopReason: 'no_exit', turns: guard, lastPairKey: null, lastTileIds: [] };
-            }
-            const revealed = exit.state === 'hidden' ? revealDungeonExit(current, exit.id) : current;
-            const activated = activateDungeonExit(revealed);
-            return {
-                run: repairRunProgressionSoftlocks(activated),
-                stopReason: 'exit_attempted',
-                turns: guard,
-                lastPairKey: EXIT_PAIR_KEY,
-                lastTileIds: [exit.id]
-            };
+            // Nothing playable is left and the floor did not clear on its own: there is no exit to
+            // walk through, so the solver has nowhere to go.
+            return { run: current, stopReason: 'no_exit', turns: guard, lastPairKey: null, lastTileIds: [] };
         }
 
         const [first, second] = pair;
@@ -115,7 +98,7 @@ export const solveRunByExhaustingPlayablePairsWithTrace = (run: RunState, maxTur
     }
 
     return {
-        run: repairRunProgressionSoftlocks(current),
+        run: current,
         stopReason: 'turn_guard',
         turns: maxTurns,
         lastPairKey: null,

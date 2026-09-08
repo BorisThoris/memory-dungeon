@@ -1,5 +1,4 @@
 export {
-    applyEnemyHazardClick,
     cancelResolvingWithUndo,
     flipTile,
     getMatchFloaterAnchorTileIds,

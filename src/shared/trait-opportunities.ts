@@ -3,11 +3,6 @@ import {
     getBoardTraitInteractionPreviewLines,
     getTileTraitInteractionPreviewLines
 } from './tile-trait-rules';
-import {
-    getTraitBuildBoardHint,
-    getTraitBuildRewardRowsForBoard,
-    type TraitBuildBoardHint
-} from './trait-build-rewards';
 
 export interface TraitOpportunityTile {
     tileId: string;
@@ -20,7 +15,7 @@ export interface TraitOpportunityTile {
 export interface TraitOpportunitySummary {
     tiles: TraitOpportunityTile[];
     interactionLines: string[];
-    buildLabels: string[];
+    /** Always empty: the trait build reward rows went with the relic layer. Read by trait-route-objectives. */
     reason: string | null;
 }
 
@@ -96,14 +91,9 @@ const getAdjacentTileIds = (board: BoardState, tileId: string): string[] => {
     return ids;
 };
 
-const copyBoardHint = (hint: TraitBuildBoardHint | null): Pick<TraitOpportunitySummary, 'buildLabels' | 'interactionLines'> => ({
-    buildLabels: [...(hint?.buildLabels ?? [])],
-    interactionLines: [...(hint?.interactionLines ?? [])]
-});
-
 export const getTraitOpportunitySummary = (board: BoardState | null | undefined): TraitOpportunitySummary => {
     if (!board) {
-        return { tiles: [], interactionLines: [], buildLabels: [], reason: null };
+        return { tiles: [], interactionLines: [], reason: null };
     }
 
     const tiles = board.tiles
@@ -130,27 +120,17 @@ export const getTraitOpportunitySummary = (board: BoardState | null | undefined)
         })
         .filter((tile): tile is TraitOpportunityTile => tile != null);
     if (tiles.length === 0) {
-        return { tiles: [], interactionLines: [], buildLabels: [], reason: null };
+        return { tiles: [], interactionLines: [], reason: null };
     }
-    const hint = copyBoardHint(getTraitBuildBoardHint(board));
-    const buildLabels =
-        hint.buildLabels.length > 0
-            ? hint.buildLabels
-            : getTraitBuildRewardRowsForBoard(board).map((row) => row.label).slice(0, 2);
-    const interactionLines = hint.interactionLines.length > 0
-        ? hint.interactionLines
+    const boardInteractionLines = getBoardTraitInteractionPreviewLines(board).slice(0, 4);
+    const interactionLines = boardInteractionLines.length > 0
+        ? boardInteractionLines
         : unique(tiles.flatMap((tile) => tile.previewLines)).slice(0, 4);
-    const reason =
-        buildLabels.length > 0 && interactionLines.length > 0
-            ? `Offered for ${buildLabels.join(' / ')}: ${interactionLines[0]}`
-            : interactionLines.length > 0
-              ? `Offered for current trait route: ${interactionLines[0]}`
-              : null;
+    const reason = interactionLines.length > 0 ? `Offered for current trait route: ${interactionLines[0]}` : null;
 
     return {
         tiles,
         interactionLines,
-        buildLabels,
         reason
     };
 };
@@ -197,9 +177,7 @@ export const getTraitOpportunityHighlight = (board: BoardState | null | undefine
     if (summary.interactionLines.length > 0) {
         const tone = surgeTileIds.size > 0 ? 'surge' : 'ready';
         const primaryLine = summary.interactionLines[0] ?? 'Match or move traits together to light a route.';
-        const buildLabel =
-            summary.buildLabels[0] ??
-            (summary.tiles.length > 0 ? `${summary.tiles.length} combo-ready cards` : 'Trait route');
+        const buildLabel = summary.tiles.length > 0 ? `${summary.tiles.length} combo-ready cards` : 'Trait route';
         return {
             active: true,
             buildLabel,
@@ -316,9 +294,7 @@ export const getTraitOpportunityHudModel = (
         ? getTraitSwapRouteHints(board, 1)[0] ?? null
         : null;
     const active = routeCount > 0 || swapHint != null;
-    const buildLabel =
-        summary.buildLabels[0] ??
-        (summary.tiles.length > 0 ? `${summary.tiles.length} combo-ready cards` : 'Route prime');
+    const buildLabel = summary.tiles.length > 0 ? `${summary.tiles.length} combo-ready cards` : 'Route prime';
     const primaryLine = summary.interactionLines[0] ?? swapHint?.text ?? 'No trait route primed yet';
     const rowSwapLine = runTools.activeContract?.noShuffle
         ? 'locked'
@@ -330,7 +306,6 @@ export const getTraitOpportunityHudModel = (
           ? '1 route'
           : `${routeCount} routes`;
     const title = [
-        summary.buildLabels.length > 0 ? `Builds: ${summary.buildLabels.join(' / ')}.` : null,
         routeCount > 0 ? `Routes: ${summary.interactionLines.slice(0, 3).join('; ')}.` : null,
         swapHint ? `Swap hint: ${swapHint.text}.` : null,
         `${toolLine}.`

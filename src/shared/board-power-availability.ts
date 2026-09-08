@@ -1,7 +1,6 @@
 import type { RunState } from './contracts';
 import { countFullyHiddenPairs } from './board-inspection';
 import { tileIsDestroyEligiblePreview } from './board-power-targeting';
-import { hasRunRelic } from './relics';
 import { runFilteredStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 
@@ -9,8 +8,7 @@ export const hasClearFlipState = (run: RunState): boolean => Array.isArray(run.b
 
 export const hasFreeTargetedReconfiguration = (run: RunState): boolean =>
     run.regionShuffleFreeThisFloor === true &&
-    (hasRunRelic(run, 'region_shuffle_free_first') ||
-        runFilteredStringArray(run.rewardPerkIds).includes('free_first_swap_per_floor'));
+    runFilteredStringArray(run.rewardPerkIds).includes('free_first_swap_per_floor');
 
 export const canShuffleBoard = (run: RunState): boolean => {
     const board = run.board;
@@ -19,8 +17,7 @@ export const canShuffleBoard = (run: RunState): boolean => {
         board != null &&
         hasClearFlipState(run) &&
         !run.activeContract?.noShuffle &&
-        (runNonNegativeInteger(run.shuffleCharges) > 0 ||
-            (run.freeShuffleThisFloor && hasRunRelic(run, 'first_shuffle_free_per_floor'))) &&
+        runNonNegativeInteger(run.shuffleCharges) > 0 &&
         countFullyHiddenPairs(board) >= 2
     );
 };

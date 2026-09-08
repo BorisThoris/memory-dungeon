@@ -1,5 +1,4 @@
 import {
-    GAME_RULES_VERSION,
     MAX_COMBO_SHARDS,
     MAX_LIVES,
     type BoardState,
@@ -16,20 +15,11 @@ import {
     createRunSummary,
     finishMemorizePhase
 } from './game-core';
-import { buildBoard } from './game';
 import { flipTile, resolveBoardTurn } from './turn-resolution';
-import {
-    activateDungeonExit,
-    EXIT_PAIR_KEY,
-    revealDungeonExit
-} from './dungeon-rules';
 
 export type PlayablePathFixtureId =
     | 'freshProfile'
-    | 'activeRunWithHazards'
     | 'activeRunWithPickupCashout'
-    | 'activeRunWithTraitRouteSetup'
-    | 'activeRunWithTrapCard'
     | 'floorClearWithRouteChoices'
     | 'gameOver'
     | 'cascadeClump';
@@ -46,14 +36,10 @@ export interface PlayablePathFixtureOptions {
 }
 
 const PLAYABLE_PATH_SEED = 172_501;
-const HAZARD_PATH_SEED = 81_004;
 
 export const PLAYABLE_PATH_FIXTURE_IDS: readonly PlayablePathFixtureId[] = [
     'freshProfile',
-    'activeRunWithHazards',
     'activeRunWithPickupCashout',
-    'activeRunWithTraitRouteSetup',
-    'activeRunWithTrapCard',
     'floorClearWithRouteChoices',
     'gameOver',
     'cascadeClump'
@@ -68,31 +54,8 @@ export const createPlayablePathFixture = (
     switch (id) {
         case 'freshProfile':
             return { id, view: 'menu', run: null, saveData: createDefaultSaveData() };
-        case 'activeRunWithHazards':
-            return {
-                id,
-                view: 'playing',
-                run: {
-                    ...finishMemorizePhase(
-                        createNewRun(0, {
-                            echoFeedbackEnabled: false,
-                            gameMode: 'endless',
-                            runSeed: HAZARD_PATH_SEED
-                        })
-                    ),
-                    findablesClaimedThisFloor: 1,
-                    hazardTileTriggersThisFloor: 1,
-                    safeHazardWardsUsedThisFloor: 1,
-                    safeHazardWardChargesThisFloor: 1
-                },
-                saveData
-            };
         case 'activeRunWithPickupCashout':
             return { id, view: 'playing', run: activeRunWithPickupCashout(), saveData };
-        case 'activeRunWithTraitRouteSetup':
-            return { id, view: 'playing', run: activeRunWithTraitRouteSetup(), saveData };
-        case 'activeRunWithTrapCard':
-            return { id, view: 'playing', run: activeRunWithTrapCard(), saveData };
         case 'floorClearWithRouteChoices':
             return { id, view: 'playing', run: floorClearWithRouteChoices(), saveData };
         case 'gameOver':
@@ -117,47 +80,6 @@ const baseEndlessRun = (): RunState =>
         gameMode: 'endless',
         runSeed: PLAYABLE_PATH_SEED
     });
-
-const activeRunWithTraitRouteSetup = (): RunState => {
-    const base = finishMemorizePhase(
-        createNewRun(0, {
-            echoFeedbackEnabled: false,
-            gameMode: 'endless',
-            runSeed: 172_651
-        })
-    );
-    const board: BoardState = {
-        ...base.board!,
-        columns: 3,
-        rows: 3,
-        pairCount: 4,
-        matchedPairs: 0,
-        flippedTileIds: [],
-        tiles: [
-            { id: 's1', pairKey: 'sealed', symbol: 'S', label: 'Sealed', state: 'hidden', tileTraitKind: 'sealed' },
-            { id: 'f1', pairKey: 'filler', symbol: 'F', label: 'Filler', state: 'hidden' },
-            { id: 'f2', pairKey: 'filler', symbol: 'F', label: 'Filler', state: 'hidden' },
-            { id: 'o1', pairKey: 'origin', symbol: 'O', label: 'Origin', state: 'hidden' },
-            { id: 'h1', pairKey: 'heavy', symbol: 'H', label: 'Heavy', state: 'hidden', tileTraitKind: 'heavy' },
-            { id: 'o2', pairKey: 'origin', symbol: 'O', label: 'Origin', state: 'hidden' },
-            { id: 's2', pairKey: 'sealed', symbol: 'S', label: 'Sealed', state: 'hidden' },
-            { id: 'h2', pairKey: 'heavy', symbol: 'H', label: 'Heavy', state: 'hidden' }
-        ]
-    };
-    return {
-        ...base,
-        board,
-        findablesTotalThisFloor: 0,
-        matchResolutionsThisFloor: 1,
-        regionShuffleCharges: 1,
-        rewardPerkIds: ['free_first_swap_per_floor', 'trait_streak_toolkit'],
-        shuffleCharges: 0,
-        stats: {
-            ...base.stats,
-            currentStreak: 2
-        }
-    };
-};
 
 /**
  * A board built to be chained: twelve plain pairs in three suit columns, each pair side by side.
@@ -193,10 +115,6 @@ const cascadeClumpRun = (): RunState => {
         matchedPairs: 0,
         flippedTileIds: [],
         cursedPairKey: null,
-        // No exit on this board: the floor ends when the last pair goes, the way a classic board does.
-        // The generated board's exit id would otherwise wait forever for a tile that is not there.
-        dungeonExitTileId: null,
-        dungeonExitActivated: false,
         tiles
     };
     return {
@@ -251,28 +169,6 @@ const activeRunWithPickupCashout = (): RunState => {
     };
 };
 
-const activeRunWithTrapCard = (): RunState => {
-    const base = finishMemorizePhase(
-        createNewRun(0, {
-            echoFeedbackEnabled: false,
-            gameMode: 'endless',
-            runSeed: 172_601
-        })
-    );
-    const board = buildBoard(5, {
-        activeMutators: base.activeMutators,
-        dungeonNodeKind: 'trap',
-        gameMode: 'endless',
-        runRulesVersion: GAME_RULES_VERSION,
-        runSeed: 172_601
-    });
-    return {
-        ...base,
-        board,
-        findablesTotalThisFloor: board.tiles.filter((tile) => tile.findableKind != null).length
-    };
-};
-
 const pairTileIds = (board: BoardState): string[][] => {
     const groups = new Map<string, string[]>();
     for (const tile of board.tiles) {
@@ -282,17 +178,6 @@ const pairTileIds = (board: BoardState): string[][] => {
         groups.get(tile.pairKey)!.push(tile.id);
     }
     return [...groups.values()].filter((group) => group.length === 2);
-};
-
-const leaveThroughExit = (run: RunState): RunState => {
-    const exitTile = run.board?.dungeonExitTileId
-        ? run.board.tiles.find((tile) => tile.id === run.board?.dungeonExitTileId)
-        : run.board?.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY);
-    if (!exitTile || run.status !== 'playing') {
-        return run;
-    }
-    const revealed = revealDungeonExit(run, exitTile.id);
-    return activateDungeonExit(revealed);
 };
 
 const clearPlayableFloor = (run: RunState): RunState => {
@@ -306,7 +191,7 @@ const clearPlayableFloor = (run: RunState): RunState => {
             current = resolveBoardTurn(flipTile(flipTile(current, firstId), secondId));
         }
     }
-    return leaveThroughExit(current);
+    return current;
 };
 
 const playPerfectFloors = (run: RunState, count: number): RunState => {

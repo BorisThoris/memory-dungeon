@@ -6,20 +6,12 @@ import {
     type RunState
 } from './contracts';
 import { COMBO_SHARD_STREAK_STEP, applyComboShardGain } from './combo-shard-rules';
-import type { DungeonMatchReward } from './dungeon-match-reward-rules';
-import type { RouteCardReward } from './route-card-reward-shape';
-import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
+import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 
 export interface ResolvedMatchSurvivalRewardInput {
-    catalystAltarUpgraded: boolean;
     currentStreak: number;
-    dungeonReward: Pick<DungeonMatchReward, 'comboShards' | 'guardTokens'>;
     findableComboShardGain: number;
-    mimicCacheBite: boolean;
-    mimicCacheFatalBite: boolean;
-    mimicCacheGuardBite: boolean;
-    routeCardReward: Pick<RouteCardReward, 'comboShards' | 'guardTokens'>;
     run: RunState;
 }
 
@@ -30,52 +22,26 @@ export interface ResolvedMatchSurvivalReward {
 }
 
 export const calculateResolvedMatchSurvivalReward = ({
-    catalystAltarUpgraded,
     currentStreak,
-    dungeonReward,
     findableComboShardGain,
-    mimicCacheBite,
-    mimicCacheFatalBite,
-    mimicCacheGuardBite,
-    routeCardReward,
     run
 }: ResolvedMatchSurvivalRewardInput): ResolvedMatchSurvivalReward => {
     const safeCurrentStreak = runNonNegativeInteger(currentStreak);
     const safeLives = runNonNegativeInteger(run.lives);
-    const routeGuardTokens = runNonNegativeInteger(routeCardReward.guardTokens);
-    const dungeonGuardTokens = runNonNegativeInteger(dungeonReward.guardTokens);
-    const routeComboShards = runNonNegativeInteger(routeCardReward.comboShards);
-    const dungeonComboShards = runNonNegativeInteger(dungeonReward.comboShards);
     const safeFindableComboShardGain = runNonNegativeInteger(findableComboShardGain);
     const stats = normalizeSessionStats(run.stats);
     const guardTokenGain =
         safeCurrentStreak <= 0 || safeCurrentStreak % COMBO_GUARD_STREAK_STEP !== 0 ? 0 : 1;
-    const guardTokensBeforeRewards = decrementRunCounter(stats.guardTokens, mimicCacheGuardBite ? 1 : 0);
-    const comboShardsBeforeRewards = decrementRunCounter(stats.comboShards, catalystAltarUpgraded ? 1 : 0);
-    const livesBeforeComboReward = decrementRunCounter(safeLives, mimicCacheBite && !mimicCacheGuardBite ? 1 : 0);
-    const guardTokens = Math.min(
-        MAX_GUARD_TOKENS,
-        guardTokensBeforeRewards + guardTokenGain + routeGuardTokens + dungeonGuardTokens
-    );
+    const guardTokens = Math.min(MAX_GUARD_TOKENS, stats.guardTokens + guardTokenGain);
     const comboShardReward = applyComboShardGain(
-              comboShardsBeforeRewards,
-              mimicCacheFatalBite ? 0 : livesBeforeComboReward,
-              (safeCurrentStreak > 0 && safeCurrentStreak % COMBO_SHARD_STREAK_STEP === 0 ? 1 : 0) +
-                  safeFindableComboShardGain +
-                  routeComboShards +
-                  dungeonComboShards
-          );
+        stats.comboShards,
+        safeLives,
+        (safeCurrentStreak > 0 && safeCurrentStreak % COMBO_SHARD_STREAK_STEP === 0 ? 1 : 0) +
+            safeFindableComboShardGain
+    );
     const chainHealLifeGain =
         safeCurrentStreak <= 0 || safeCurrentStreak % CHAIN_HEAL_STREAK_STEP !== 0 ? 0 : 1;
-    const lives = mimicCacheFatalBite
-        ? 0
-        : Math.min(
-              MAX_LIVES,
-              safeLives -
-                  (mimicCacheBite && !mimicCacheGuardBite ? 1 : 0) +
-                  chainHealLifeGain +
-                  comboShardReward.lifeGain
-          );
+    const lives = Math.min(MAX_LIVES, safeLives + chainHealLifeGain + comboShardReward.lifeGain);
 
     return {
         comboShards: comboShardReward.comboShards,

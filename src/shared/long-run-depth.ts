@@ -1,25 +1,15 @@
 import {
     GAME_RULES_VERSION,
-    type DungeonRunNodeKind,
     type FloorArchetypeId,
-    type FloorTag,
-    type RouteNodeType
+    type FloorTag
 } from './contracts';
 import {
     ENDLESS_CYCLE_FLOOR_COUNT,
     getChapterActBiomePresentation,
-    pickFloorScheduleEntry,
-    type FloorScheduleEntry
+    pickFloorScheduleEntry
 } from './floor-mutator-schedule';
 import { getEncounterIdentityForFloor } from './boss-encounters';
 import { buildBoard } from './board-generation';
-import {
-    getDungeonRouteSemanticContract,
-    generateRunMapChoices,
-    inspectRouteProfileBudgets,
-    routeChoiceToMapNode,
-    type DungeonRouteDecisionRow
-} from './run-map';
 import {
     assertDungeonBalanceProfilesWithinBounds,
     runBalanceSimulation,
@@ -48,18 +38,9 @@ export interface LongRunActBossRow {
     expectedBoss: boolean;
     generatedBossId: string | null;
     objectiveId: string;
-    encounterRank: 'boss' | 'elite' | null;
+    encounterRank: 'boss' | null;
     bossDistance: number;
     status: 'coherent' | 'needs_attention';
-}
-
-export interface LongRunRoutePreviewRow extends DungeonRouteDecisionRow {
-    floorTag: FloorTag;
-    floorArchetypeId: FloorArchetypeId | null;
-    objectiveId: string;
-    likelyReward: string;
-    riskBand: 'safe' | 'reward' | 'danger' | 'boss' | 'mystery';
-    actualNextBoardInput: string;
 }
 
 export interface LongRunSoakReport {
@@ -102,14 +83,6 @@ const nextScheduledBossFloor = (floor: number): number => {
     return floor;
 };
 
-const riskBandFor = (nodeKind: DungeonRunNodeKind, floorTag: FloorTag): LongRunRoutePreviewRow['riskBand'] => {
-    if (floorTag === 'boss' || nodeKind === 'boss') return 'boss';
-    if (nodeKind === 'elite' || nodeKind === 'trap') return 'danger';
-    if (nodeKind === 'treasure' || nodeKind === 'shop' || nodeKind === 'rest') return 'reward';
-    if (nodeKind === 'event') return 'mystery';
-    return 'safe';
-};
-
 export const getLongRunActBossRows = ({
     seed = 42_001,
     rulesVersion = GAME_RULES_VERSION,
@@ -130,7 +103,6 @@ export const getLongRunActBossRows = ({
             featuredObjectiveId: schedule.featuredObjectiveId,
             cycleFloor: schedule.cycleFloor,
             activeMutators: schedule.mutators,
-            dungeonNodeKind: schedule.floorTag === 'boss' ? 'boss' : null,
             gameMode: 'endless'
         });
         const act = getChapterActBiomePresentation(schedule.cycleFloor ?? floor);
@@ -154,42 +126,6 @@ export const getLongRunActBossRows = ({
                 (expectedBoss ? board.dungeonObjectiveId === 'defeat_boss' && encounter?.encounterRank === 'boss' : true)
                     ? 'coherent'
                     : 'needs_attention'
-        };
-    });
-
-export const getLongRunRoutePreviewRows = (
-    schedule: Pick<FloorScheduleEntry, 'floorTag' | 'floorArchetypeId'>,
-    choices: readonly { id: string; routeType: RouteNodeType; label: string; detail: string; rewardPreview?: string; riskPreview?: string }[],
-    currentFloor: number
-): LongRunRoutePreviewRow[] =>
-    choices.map((choice, index) => {
-        const node = routeChoiceToMapNode(choice, currentFloor + 1, index - 1);
-        const semantic = getDungeonRouteSemanticContract({
-            routeType: choice.routeType,
-            floor: node.floor,
-            nodeKind: schedule.floorTag === 'boss' ? 'boss' : node.kind
-        });
-        return {
-            id: choice.id,
-            routeType: choice.routeType,
-            choiceLabel: choice.label,
-            nodeLabel: node.label,
-            nodeKind: semantic.nodeKind,
-            glyph: node.kind === 'boss' ? 'B' : node.kind === 'elite' ? 'E' : node.kind === 'shop' ? '$' : node.kind === 'treasure' ? '*' : '?',
-            tone: semantic.floorTag === 'boss' ? 'boss' : choice.routeType === 'safe' ? 'safe' : choice.routeType === 'greed' ? 'danger' : 'mystery',
-            risk: choice.riskPreview ?? node.riskPreview ?? 'Stable path.',
-            reward: choice.rewardPreview ?? semantic.rewardPolicy,
-            mechanic: semantic.rewardPolicy,
-            detail: choice.detail,
-            sourceNodeId: null,
-            targetFloor: node.floor,
-            selected: false,
-            floorTag: semantic.floorTag,
-            floorArchetypeId: semantic.floorArchetypeId,
-            objectiveId: semantic.objectiveId,
-            likelyReward: semantic.rewardPolicy,
-            riskBand: riskBandFor(semantic.nodeKind, semantic.floorTag),
-            actualNextBoardInput: `${semantic.nodeKind}:${semantic.floorTag}:${semantic.floorArchetypeId ?? 'none'}:${semantic.objectiveId}`
         };
     });
 
@@ -224,13 +160,6 @@ export const runLongRunSoak = ({
 } = {}): LongRunSoakReport => {
     const report = runBalanceSimulation({ seeds, floors, rulesVersion });
     const profileReport = runDungeonBalanceProfileSimulation({ seeds, floors, rulesVersion });
-    const routeBudget = inspectRouteProfileBudgets(
-        seeds.flatMap((seed) =>
-            Array.from({ length: floors }, (_, index) =>
-                generateRunMapChoices({ runSeed: seed, rulesVersion, currentFloor: index + 1 })
-            ).flat()
-        )
-    );
     const fatigueRows = getLongRunFatigueRows(report);
     const profileRows = [
         longRunRow(
@@ -282,17 +211,7 @@ export const runLongRunSoak = ({
             'runDungeonBalanceProfileSimulation'
         )
     ];
-    const routeRows = routeBudget.rows.map((row) =>
-        longRunRow(
-            `route_share_${row.routeType}`,
-            `${row.routeType} route share in long-run sample`,
-            Number(row.actualShare.toFixed(2)),
-            row.minShare,
-            row.maxShare,
-            'inspectRouteProfileBudgets'
-        )
-    );
-    const rows = [...fatigueRows, ...profileRows, ...routeRows];
+    const rows = [...fatigueRows, ...profileRows];
     const profileBounds = assertDungeonBalanceProfilesWithinBounds(profileReport);
     const issues = [
         ...rows.filter((row) => row.status !== 'within_range').map((row) => `${row.key}:${row.value} outside ${row.targetMin}-${row.targetMax}`),

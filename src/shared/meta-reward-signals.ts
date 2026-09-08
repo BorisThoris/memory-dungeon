@@ -1,7 +1,7 @@
-import type { RunState, SaveData } from './contracts';
+import type { MutatorId, RunState, SaveData } from './contracts';
 import { getMetaProgressionBoard, getMetaProgressionFeedback } from './meta-progression';
 import { getObjectiveBoardItems } from './objective-board';
-import { runMutatorIds, runRelicIds } from './relics';
+import { runArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 
@@ -152,8 +152,7 @@ export const getInventoryRewardSignals = (run: RunState | null): MetaRewardSigna
             }
         ];
     }
-    const relicCount = runRelicIds(run.relicIds).length;
-    const mutatorCount = runMutatorIds(run.activeMutators).length;
+    const mutatorCount = runArray<MutatorId>(run.activeMutators).length;
     const stats = normalizeSessionStats(run.stats);
     const lives = runNonNegativeInteger(run.lives);
     const shopGold = runNonNegativeInteger(run.shopGold);
@@ -161,10 +160,10 @@ export const getInventoryRewardSignals = (run: RunState | null): MetaRewardSigna
         {
             id: 'inventory_build_value',
             screen: 'inventory',
-            kind: relicCount > 0 ? 'discovery' : 'next_goal',
-            title: relicCount > 0 ? `${relicCount} relic(s) shaping this build` : 'First relic still ahead',
+            kind: 'progress',
+            title: `${mutatorCount} active mutator(s) shaping this build`,
             body: `${mutatorCount} active mutator(s) | ${shopGold} shop gold | ${stats.comboShards} shard(s).`,
-            cta: relicCount > 0 ? 'Use this snapshot to plan the next floor.' : 'Clear milestone floors to draft relics.'
+            cta: 'Use this snapshot to plan the next floor.'
         },
         {
             id: 'inventory_run_progress',

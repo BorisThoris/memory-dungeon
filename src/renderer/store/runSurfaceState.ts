@@ -1,7 +1,6 @@
 import type { RunState, Tile, ViewState } from '../../shared/contracts';
 import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
 import {
-    createGameplayDungeonExitActivateCommand,
     createGameplayFlashPairCommand,
     createGameplayGambitCommitCommand,
     createGameplayGreetCurioCommand,
@@ -13,31 +12,21 @@ import {
     createGameplayUndoResolveCommand,
     gameplayEventSchema
 } from '../../shared/gameplay-core-contracts';
-import {
-    chooseDungeonExitActivationSpend,
-    type DungeonExitActivationSpend
-} from '../../shared/dungeon-exit-rules';
-import { getDungeonExitStatus } from '../../shared/dungeon-board-status';
 import { canGreetFloorCurio } from '../../shared/floor-curio-greeting-rules';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
 import {
     applyDestroyPair,
     canRegionShuffle,
-    collectDestroyEligibleTileIds,
-    tileIsPeekEligiblePreview
+    collectDestroyEligibleTileIds
 } from '../../shared/board-powers';
-import {
-    applyEnemyHazardClick,
-    flipTile
-} from '../../shared/turn-resolution';
+import { flipTile } from '../../shared/turn-resolution';
 import { isResumableLifecycleState, lifecycleStateFromRun } from '../../shared/run-lifecycle-machine';
 import {
     BOARD_FLOATER_POP_CLEAR,
     type MatchScorePop,
     type MismatchScorePop
 } from './matchScorePop';
-import { runFilteredStringArray } from '../../shared/run-array-guards';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 
 export interface RunSurfaceState {
@@ -48,7 +37,6 @@ export interface RunSurfaceState {
     regionShuffleArmed: boolean;
     tileSwapArmed: boolean;
     tileSwapFirstTileId: string | null;
-    dungeonExitPromptOpen: boolean;
     shopReturnMode: 'floor' | 'summary' | null;
     matchScorePop: MatchScorePop | null;
     mismatchScorePop: MismatchScorePop | null;
@@ -85,7 +73,6 @@ type RunSurfaceRunPatchResult =
 type ArmedBoardPowerPressResult =
     | { kind: 'notArmed' }
     | { kind: 'handled' }
-    | { kind: 'persistEnemyContact'; run: RunState }
     | { kind: 'strayApplied'; run: RunState }
     | { kind: 'peekApplied'; run: RunState; events: GameplayEvent[] }
     | { kind: 'tileSwapFirstSelected'; tileId: string }
@@ -95,39 +82,26 @@ type ArmedBoardPowerPressResult =
     | { kind: 'destroyApplied'; run: RunState; resolvesRun: boolean; events: GameplayEvent[] };
 
 type OrdinaryTileFlipResult =
-    | { kind: 'unchanged'; clearBoardInteraction: boolean; run: RunState }
+    | { kind: 'unchanged'; run: RunState }
     | {
           kind: 'flipped';
           run: RunState;
           playFlipSfx: boolean;
-          playTrapSfx: boolean;
           gameOver: boolean;
           resolveDelayMs: number | null;
       };
 
-interface EnemyHazardContactResult {
-    fromRun: RunState;
-    toRun: RunState;
-}
-
 type GambitThirdPickPressResult =
-    | { kind: 'unchanged'; hazardContact: EnemyHazardContactResult | null }
-    | {
-          kind: 'hazardGameOver';
-          run: RunState;
-          hazardContact: EnemyHazardContactResult;
-      }
+    | { kind: 'unchanged' }
     | {
           kind: 'flipGameOver';
           run: RunState;
-          hazardContact: EnemyHazardContactResult | null;
           playFlipSfx: boolean;
           events: GameplayEvent[];
       }
     | {
           kind: 'flipped';
           run: RunState;
-          hazardContact: EnemyHazardContactResult | null;
           playFlipSfx: boolean;
           events: GameplayEvent[];
           resolveDelayMs: number | null;
@@ -141,7 +115,6 @@ export const createRunSurfaceReset = (): RunSurfaceState => ({
     regionShuffleArmed: false,
     tileSwapArmed: false,
     tileSwapFirstTileId: null,
-    dungeonExitPromptOpen: false,
     shopReturnMode: null,
     ...BOARD_FLOATER_POP_CLEAR
 });
@@ -286,8 +259,7 @@ export const createTileSwapToggleResult = ({
             run.status !== 'playing' ||
             run.activeContract?.noShuffle ||
             run.board?.flippedTileIds.length !== 0 ||
-            (run.regionShuffleCharges <= 0 &&
-                !(run.regionShuffleFreeThisFloor && run.relicIds.includes('region_shuffle_free_first'))) ||
+            run.regionShuffleCharges <= 0 ||
             !run.board ||
             run.board.tiles.filter((tile) => tile.state === 'hidden').length < 2 ||
             destroyPairArmed ||
@@ -519,116 +491,8 @@ export const createUndoResolvingSurfaceResult = ({
           };
 };
 
-/**
- * Whether the run dock should be offering the door.
- *
- * The exit card pops off the board the moment it is found, so the board itself can no longer be
- * the way back to it: a player who answers "Stay" once would otherwise have sealed their own
- * floor. The dock carries the door for the rest of the floor instead, on exactly the condition
- * the board used to carry it — the exit has been revealed.
- */
-export const canOpenDungeonExitPrompt = (run: RunState | null, view: ViewState): boolean => {
-    if (!run || view !== 'playing' || run.status !== 'playing') {
-        return false;
-    }
-    const status = getDungeonExitStatus(run);
-    return Boolean(status.exitTile) && status.revealed;
-};
-
-export const createDungeonExitActivationSurfaceResult = ({
-    run,
-    spend,
-    view
-}: {
-    run: RunState | null;
-    spend?: DungeonExitActivationSpend;
-    view: ViewState;
-}): RunSurfaceRunPatchResult => {
-    if (!run || view !== 'playing' || run.status !== 'playing') {
-        return { kind: 'ignored' };
-    }
-    const resolvedSpend = spend ?? chooseDungeonExitActivationSpend(getDungeonExitStatus(run));
-    const command = createGameplayDungeonExitActivateCommand(
-        `dungeon-exit:${run.runSeed}:${run.board?.level ?? 0}:${run.dungeonGatewaysUsed}:${resolvedSpend}`,
-        resolvedSpend
-    );
-    const result = reduceGameplayCommand(run, command);
-    const journaledRun = result.accepted
-        ? appendGameplayJournal(result.run, [command], result.events)
-        : run;
-    return !result.accepted
-        ? { kind: 'ignored' }
-        : {
-              kind: 'applied',
-              // The dungeon.exit_activate command finalizes the floor itself now, matching
-              // the legacy activateDungeonExit it replaces. Finalizing again here counted
-              // one cleared floor twice in levelsCleared.
-              patch: { run: journaledRun },
-              playArmSfx: false,
-              events: result.events
-          };
-};
-
-export const createBoardPowerContactPolicy = ({
-    boardPinMode,
-    destroyPairArmed,
-    peekModeArmed,
-    regionShuffleArmed = false,
-    tileSwapArmed,
-    strayRemoveArmed
-}: {
-    boardPinMode: boolean;
-    destroyPairArmed: boolean;
-    peekModeArmed: boolean;
-    regionShuffleArmed?: boolean;
-    tileSwapArmed?: boolean;
-    strayRemoveArmed: boolean;
-}): {
-    armedPowerCount: number;
-    canContinueSinglePowerAfterContact: boolean;
-} => {
-    const armedPowerCount = [strayRemoveArmed, peekModeArmed, destroyPairArmed, tileSwapArmed, regionShuffleArmed].filter(
-        Boolean
-    ).length;
-
-    return {
-        armedPowerCount,
-        canContinueSinglePowerAfterContact: !boardPinMode && armedPowerCount === 1
-    };
-};
-
-/**
- * Whether this press is going to be spent looking rather than reaching.
- *
- * A peek is the one board power that never touches the card: the player pays a charge to see
- * what is under it. Pressing a tile an enemy is standing on used to cost a life first and apply
- * the peek second, which made looking at the most dangerous square on the board the most
- * expensive thing a player could do. The press path asks this before it resolves hazard
- * contact, so it has to accept exactly what applyPeek accepts.
- */
-export const pressWillSpendPeekCharge = ({
-    canContinueSinglePowerAfterContact,
-    peekModeArmed,
-    run,
-    tileId
-}: {
-    canContinueSinglePowerAfterContact: boolean;
-    peekModeArmed: boolean;
-    run: RunState;
-    tileId: string;
-}): boolean =>
-    peekModeArmed &&
-    canContinueSinglePowerAfterContact &&
-    run.status === 'playing' &&
-    runNonNegativeInteger(run.peekCharges) > 0 &&
-    run.board != null &&
-    run.board.flippedTileIds.length === 0 &&
-    tileIsPeekEligiblePreview(run.board, runFilteredStringArray(run.peekRevealedTileIds), tileId);
-
 export const createArmedBoardPowerPressResult = ({
-    canContinueSinglePowerAfterContact,
     destroyPairArmed,
-    enemyContacted,
     peekModeArmed,
     regionShuffleArmed = false,
     run,
@@ -637,9 +501,7 @@ export const createArmedBoardPowerPressResult = ({
     tileSwapFirstTileId = null,
     tileId
 }: {
-    canContinueSinglePowerAfterContact: boolean;
     destroyPairArmed: boolean;
-    enemyContacted: boolean;
     peekModeArmed: boolean;
     regionShuffleArmed?: boolean;
     run: RunState;
@@ -648,14 +510,12 @@ export const createArmedBoardPowerPressResult = ({
     tileSwapFirstTileId?: string | null;
     tileId: string;
 }): ArmedBoardPowerPressResult => {
-    const canApplyAfterContact = !enemyContacted || canContinueSinglePowerAfterContact;
-
-    if (canApplyAfterContact && regionShuffleArmed) {
+    if (regionShuffleArmed) {
         // The row is chosen by pressing any tile in it, so the power needs no separate row picker:
         // the board itself is the picker, the way tile swap uses presses to choose its two tiles.
         const row = regionShuffleRowForTile(run, tileId);
         if (row === null) {
-            return enemyContacted ? { kind: 'persistEnemyContact', run } : { kind: 'handled' };
+            return { kind: 'handled' };
         }
         const command = regionShuffleCommandForRow(run, row);
         const result = reduceGameplayCommand(run, command);
@@ -668,7 +528,7 @@ export const createArmedBoardPowerPressResult = ({
               };
     }
 
-    if (canApplyAfterContact && strayRemoveArmed) {
+    if (strayRemoveArmed) {
         const command = createGameplayStrayRemoveCommand(
             `stray-remove:${run.runSeed}:${run.board?.level ?? 0}:${run.strayRemoveCharges}:${tileId}`,
             tileId
@@ -680,13 +540,13 @@ export const createArmedBoardPowerPressResult = ({
                 run: appendGameplayJournal(result.run, [command], result.events)
             };
         }
-        return enemyContacted ? { kind: 'persistEnemyContact', run } : { kind: 'handled' };
+        return { kind: 'handled' };
     }
 
-    if (canApplyAfterContact && tileSwapArmed) {
+    if (tileSwapArmed) {
         const tile = run.board?.tiles.find((candidate) => candidate.id === tileId);
         if (!tile || tile.state !== 'hidden') {
-            return enemyContacted ? { kind: 'persistEnemyContact', run } : { kind: 'handled' };
+            return { kind: 'handled' };
         }
         if (tileSwapFirstTileId === null) {
             return { kind: 'tileSwapFirstSelected', tileId };
@@ -709,13 +569,7 @@ export const createArmedBoardPowerPressResult = ({
               };
     }
 
-    if (
-        canApplyAfterContact &&
-        peekModeArmed &&
-        run.peekCharges > 0 &&
-        run.board &&
-        run.board.flippedTileIds.length === 0
-    ) {
+    if (peekModeArmed && run.peekCharges > 0 && run.board && run.board.flippedTileIds.length === 0) {
         const command = createGameplayPeekCommand(
             `peek:${run.runSeed}:${run.board.level}:${run.peekCharges}:${tileId}`,
             tileId
@@ -730,10 +584,10 @@ export const createArmedBoardPowerPressResult = ({
             : { kind: 'handled' };
     }
 
-    if (canApplyAfterContact && destroyPairArmed) {
+    if (destroyPairArmed) {
         const nextRun = applyDestroyPair(run, tileId);
         if (nextRun === run) {
-            return enemyContacted ? { kind: 'persistEnemyContact', run } : { kind: 'handled' };
+            return { kind: 'handled' };
         }
 
         return {
@@ -755,13 +609,11 @@ export const createArmedBoardPowerPressResult = ({
 };
 
 export const createOrdinaryTileFlipResult = ({
-    enemyContacted,
     flippedBefore,
     pressedTileBefore,
     run,
     tileId
 }: {
-    enemyContacted: boolean;
     flippedBefore: number;
     pressedTileBefore: Tile | null;
     run: RunState;
@@ -770,29 +622,17 @@ export const createOrdinaryTileFlipResult = ({
     const nextRun = flipTile(run, tileId);
 
     if (nextRun === run) {
-        return {
-            kind: 'unchanged',
-            clearBoardInteraction: enemyContacted,
-            run
-        };
+        return { kind: 'unchanged', run };
     }
 
     const flippedAfter = nextRun.board?.flippedTileIds.length ?? 0;
     const pressedTileAfter = nextRun.board?.tiles.find((tile) => tile.id === tileId) ?? null;
-    /*
-     * A card the press turned over. A sprung trap turns over and pops off the board in the same
-     * beat, so it lands on 'removed' rather than 'flipped' — the flip still happened, and the
-     * player still needs to hear it, so removal counts here too.
-     */
-    const pressedTileBecameFaceUp =
-        pressedTileBefore?.state === 'hidden' &&
-        (pressedTileAfter?.state === 'flipped' || pressedTileAfter?.state === 'removed');
+    const pressedTileBecameFaceUp = pressedTileBefore?.state === 'hidden' && pressedTileAfter?.state === 'flipped';
 
     return {
         kind: 'flipped',
         run: nextRun,
         playFlipSfx: flippedAfter > flippedBefore || pressedTileBecameFaceUp,
-        playTrapSfx: nextRun.dungeonTrapsTriggered > run.dungeonTrapsTriggered,
         gameOver: nextRun.status === 'gameOver',
         resolveDelayMs:
             nextRun.status === 'resolving' && nextRun.timerState.resolveRemainingMs !== null
@@ -805,45 +645,32 @@ export const createGambitThirdPickPressResult = (
     run: RunState,
     tileId: string
 ): GambitThirdPickPressResult => {
-    const hazardRun = applyEnemyHazardClick(run, tileId, { advanceHazards: false });
-    const hazardContact = hazardRun !== run ? { fromRun: run, toRun: hazardRun } : null;
-
-    if (hazardRun.status === 'gameOver') {
-        return {
-            kind: 'hazardGameOver',
-            run: hazardRun,
-            hazardContact: hazardContact ?? { fromRun: run, toRun: hazardRun }
-        };
-    }
-
-    const actionRun = hazardRun;
     const command = createGameplayGambitCommitCommand(
-        `gambit-commit:${actionRun.runSeed}:${actionRun.board?.level ?? 0}:${actionRun.board?.flippedTileIds.join('+') ?? 'none'}:${tileId}`,
+        `gambit-commit:${run.runSeed}:${run.board?.level ?? 0}:${run.board?.flippedTileIds.join('+') ?? 'none'}:${tileId}`,
         tileId
     );
-    const commandResult = reduceGameplayCommand(actionRun, command);
+    const commandResult = reduceGameplayCommand(run, command);
     if (!commandResult.accepted) {
-        return { kind: 'unchanged', hazardContact };
+        return { kind: 'unchanged' };
     }
-    const flippedBefore = actionRun.board?.flippedTileIds.length ?? 0;
-    const transitionedRun = flipTile(actionRun, tileId);
+    const flippedBefore = run.board?.flippedTileIds.length ?? 0;
+    const transitionedRun = flipTile(run, tileId);
 
     const flippedAfter = transitionedRun.board?.flippedTileIds.length ?? 0;
     const committed =
-        transitionedRun !== actionRun &&
+        transitionedRun !== run &&
         flippedAfter === 3 &&
         transitionedRun.board?.flippedTileIds.includes(tileId) === true;
     if (!committed && transitionedRun.status === 'gameOver') {
         return {
             kind: 'flipGameOver',
             run: transitionedRun,
-            hazardContact,
             playFlipSfx: flippedAfter > flippedBefore,
             events: []
         };
     }
     if (!committed) {
-        return { kind: 'unchanged', hazardContact };
+        return { kind: 'unchanged' };
     }
 
     const nextRun = appendGameplayJournal(transitionedRun, [command], commandResult.events);
@@ -853,7 +680,6 @@ export const createGambitThirdPickPressResult = (
         return {
             kind: 'flipGameOver',
             run: nextRun,
-            hazardContact,
             playFlipSfx,
             events: commandResult.events
         };
@@ -862,7 +688,6 @@ export const createGambitThirdPickPressResult = (
     return {
         kind: 'flipped',
         run: nextRun,
-        hazardContact,
         playFlipSfx,
         events: commandResult.events,
         resolveDelayMs:

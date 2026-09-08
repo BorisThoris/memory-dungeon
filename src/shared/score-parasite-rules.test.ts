@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { type MutatorId, type RelicId } from './contracts';
+import { type MutatorId } from './contracts';
 import { createNewRun } from './game';
 import {
     advanceScoreParasiteFloor,
@@ -93,18 +93,8 @@ describe('advanceScoreParasiteFloor', () => {
 });
 
 describe('getParasiteFloorsAfterFeaturedObjectiveClear', () => {
-    it('reduces parasite pressure when parasite ledger rewards a completed featured objective', () => {
-        const run = {
-            ...createNewRun(0),
-            activeMutators: ['score_parasite'] satisfies MutatorId[],
-            relicIds: ['parasite_ledger'] satisfies RelicId[],
-            parasiteFloors: 3
-        };
 
-        expect(getParasiteFloorsAfterFeaturedObjectiveClear(run, true)).toBe(2);
-    });
-
-    it('does not reduce parasite pressure without completion, relic, or mutator', () => {
+    it('carries parasite pressure over a featured objective clear, completed or not', () => {
         const run = {
             ...createNewRun(0),
             activeMutators: ['score_parasite'] satisfies MutatorId[],
@@ -113,36 +103,15 @@ describe('getParasiteFloorsAfterFeaturedObjectiveClear', () => {
 
         expect(getParasiteFloorsAfterFeaturedObjectiveClear(run, false)).toBe(3);
         expect(getParasiteFloorsAfterFeaturedObjectiveClear(run, true)).toBe(3);
-        expect(getParasiteFloorsAfterFeaturedObjectiveClear({
-            ...run,
-            relicIds: ['parasite_ledger'] satisfies RelicId[],
-            activeMutators: []
-        }, true)).toBe(3);
+        expect(getParasiteFloorsAfterFeaturedObjectiveClear({ ...run, activeMutators: [] }, true)).toBe(3);
     });
 
-    it('normalizes malformed parasite pressure before applying featured objective clears', () => {
-        const run = {
-            ...createNewRun(0),
-            activeMutators: ['score_parasite'] satisfies MutatorId[],
-            relicIds: ['parasite_ledger'] satisfies RelicId[],
-            parasiteFloors: 2.9
-        };
+    it('normalizes malformed parasite pressure', () => {
+        const run = { ...createNewRun(0), parasiteFloors: 2.9 };
 
-        expect(getParasiteFloorsAfterFeaturedObjectiveClear(run, true)).toBe(1);
-        expect(getParasiteFloorsAfterFeaturedObjectiveClear({
-            ...run,
-            parasiteFloors: Number.NaN
-        }, true)).toBe(0);
+        expect(getParasiteFloorsAfterFeaturedObjectiveClear(run, true)).toBe(2);
+        expect(getParasiteFloorsAfterFeaturedObjectiveClear({ ...run, parasiteFloors: Number.NaN }, true)).toBe(0);
     });
 
-    it('ignores malformed relic ids before applying featured objective clears', () => {
-        const run = {
-            ...createNewRun(0),
-            activeMutators: ['score_parasite'] satisfies MutatorId[],
-            relicIds: Number.NaN as unknown as RelicId[],
-            parasiteFloors: 3
-        };
 
-        expect(getParasiteFloorsAfterFeaturedObjectiveClear(run, true)).toBe(3);
-    });
 });

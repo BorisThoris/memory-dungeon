@@ -2,10 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { BoardState, Tile } from '../../shared/contracts';
 import {
     getBoardChainAccessibilitySummary,
-    getDungeonCardText,
-    getEnemyHazardText,
     getFocusedTileLiveLabel,
-    getHazardTileText,
     getPickableTileIds,
     getPowerTargetAriaText,
     getTileBeatAccessibilityText,
@@ -39,132 +36,9 @@ describe('tile board DOM accessibility helpers', () => {
         expect(getTilePosition(3, 2)).toEqual({ row: 2, column: 2 });
     });
 
-    it('builds hidden and face-up tile labels with hazard, scout, and enemy context', () => {
-        const labelledBoard: BoardState = {
-            ...board,
-            enemyHazards: [
-                {
-                    id: 'enemy-a',
-                    kind: 'sentinel',
-                    label: 'Sentinel',
-                    currentTileId: 'a1',
-                    nextTileId: 'b1',
-                    pattern: 'patrol',
-                    state: 'revealed',
-                    damage: 1,
-                    hp: 2,
-                    maxHp: 3
-                }
-            ],
-            tiles: [
-                {
-                    ...board.tiles[0]!,
-                    state: 'flipped',
-                    routeCardKind: 'greed_cache',
-                    tileTraitKind: 'volatile',
-                    tileHazardKind: 'shuffle_snare',
-                    scoutRevealSource: 'omen_seal'
-                },
-                ...board.tiles.slice(1)
-            ]
-        };
-        const label = getTileAriaLabel(labelledBoard, labelledBoard.tiles[0]!, true, 1, 1);
 
-        expect(label).toContain('Tile A, row 1, column 1');
-        expect(label).not.toContain('Route card');
-        expect(label).toContain('Hazard tile:');
-        // The mark is spoken as well as drawn, so a screen-reader user gets the second channel too.
-        expect(label).toContain('Trait: Volatile (3 diamonds).');
-        expect(label).toContain('Scouted by Omen Seal.');
-        expect(label).toContain('Occupied by revealed moving enemy patrol Sentinel, 2/3 HP, 1 damage.');
-        expect(getEnemyHazardText(labelledBoard, 'b1')).toContain('Next target of moving enemy patrol Sentinel');
-    });
 
-    it('does not announce stale moving enemy patrols on cleared boards', () => {
-        const clearedBoard: BoardState = {
-            ...board,
-            matchedPairs: 2,
-            enemyHazards: [
-                {
-                    id: 'stale-warden',
-                    kind: 'warden',
-                    label: 'Warden',
-                    currentTileId: 'a1',
-                    nextTileId: 'a2',
-                    pattern: 'guard',
-                    state: 'revealed',
-                    damage: 1,
-                    hp: 1,
-                    maxHp: 2,
-                    bossId: 'trap_warden'
-                }
-            ],
-            tiles: board.tiles.map((tile) => ({ ...tile, state: 'matched' }))
-        };
 
-        expect(getEnemyHazardText(clearedBoard, 'a1')).toBe('');
-        expect(getEnemyHazardText(clearedBoard, 'a2')).toBe('');
-    });
-
-    it('announces terminal fallback primary exits as open instead of still key locked', () => {
-        const exitTile = {
-            id: 'exit',
-            pairKey: '__exit__',
-            symbol: 'E',
-            label: 'Iron Gate',
-            state: 'flipped' as const,
-            dungeonCardKind: 'exit' as const,
-            dungeonExitLockKind: 'iron' as const
-        };
-        const exitBoard: BoardState = {
-            ...board,
-            pairCount: 1,
-            matchedPairs: 1,
-            dungeonExitTileId: 'exit',
-            dungeonExitLockKind: 'iron',
-            dungeonKeysHeld: 0,
-            tiles: [
-                { id: 'a1', pairKey: 'A', symbol: 'A', label: 'A', state: 'matched' },
-                { id: 'a2', pairKey: 'A', symbol: 'A', label: 'A', state: 'matched' },
-                exitTile
-            ]
-        };
-
-        const label = getTileAriaLabel(exitBoard, exitTile, true, 2, 1);
-
-        expect(label).toContain('Can be opened once revealed');
-        expect(label).not.toContain('Requires iron key');
-    });
-
-    it('announces pending key fallback primary exits as pair-clear gates', () => {
-        const exitTile = {
-            id: 'exit',
-            pairKey: '__exit__',
-            symbol: 'E',
-            label: 'Iron Gate',
-            state: 'flipped' as const,
-            dungeonCardKind: 'exit' as const,
-            dungeonExitLockKind: 'iron' as const
-        };
-        const exitBoard: BoardState = {
-            ...board,
-            pairCount: 1,
-            matchedPairs: 0,
-            dungeonExitTileId: 'exit',
-            dungeonExitLockKind: 'iron',
-            dungeonKeysHeld: 0,
-            tiles: [
-                { id: 'a1', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
-                { id: 'a2', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
-                exitTile
-            ]
-        };
-
-        const label = getTileAriaLabel(exitBoard, exitTile, true, 2, 1);
-
-        expect(label).toContain('No key source remains; clear remaining pairs to force this exit open.');
-        expect(label).not.toContain('Requires iron key');
-    });
 
     it('describes board power target validity', () => {
         const hidden = board.tiles[0]!;
@@ -553,21 +427,12 @@ describe('tile board DOM accessibility helpers', () => {
     });
 
     it('exposes leaf text helpers used by keyboard and DOM board renderers', () => {
-        const dungeonTile = {
-            ...board.tiles[0]!,
-            state: 'flipped' as const,
-            dungeonCardKind: 'exit' as const,
-            dungeonExitLockKind: 'none' as const
-        };
-        const hazardTile = { ...board.tiles[1]!, tileHazardKind: 'shuffle_snare' as const };
         const proximityBoard: BoardState = {
             ...board,
             flippedTileIds: ['a1'],
             tiles: [{ ...board.tiles[0]!, state: 'flipped' }, ...board.tiles.slice(1)]
         };
 
-        expect(getDungeonCardText(dungeonTile, board)).toContain('Can be opened once revealed');
-        expect(getHazardTileText(hazardTile)).toContain('Hazard tile:');
         expect(gridIndexFromTileId(board, 'b2')).toBe(3);
         expect(gridIndexFromTileId(board, 'missing')).toBe(0);
         expect(proximityBoard.flippedTileIds).toEqual(['a1']);

@@ -15,9 +15,8 @@ describe('playable path fixtures', () => {
 
     it.each([
         ['freshProfile', 'menu', null],
-        ['activeRunWithHazards', 'playing', 'playing'],
         ['activeRunWithPickupCashout', 'playing', 'playing'],
-        ['activeRunWithTraitRouteSetup', 'playing', 'playing'],
+        ['cascadeClump', 'playing', 'playing'],
         ['floorClearWithRouteChoices', 'playing', 'levelComplete'],
         ['gameOver', 'gameOver', 'gameOver']
     ] satisfies [PlayablePathFixtureId, string, string | null][])(

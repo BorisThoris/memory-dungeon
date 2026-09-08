@@ -1,7 +1,6 @@
 import {
     GAME_RULES_VERSION,
     type BoardState,
-    type DungeonRunNodeKind,
     type FloorArchetypeId,
     type FloorTag,
     type MutatorId,
@@ -13,11 +12,8 @@ import { isSingletonUtilityPairKey } from './tile-identity';
 import { buildBoard, type BuildBoardOptions } from './board-build-rules';
 import { countFindablePairs } from './board-generation';
 import {
-    countReachableExitKeySources,
-    getEffectivePrimaryExitLock,
     inspectBoardFairness,
     inspectRunFairness,
-    boardHasActionableProgressionPair,
     boardHasGlassDecoy,
     type BoardFairnessIssue
 } from './board-inspection';
@@ -27,29 +23,19 @@ import {
     type GameplayCorePlaythroughSolverTrace
 } from './gameplay-core-playthrough-solver';
 import { createNewRun } from './run-creation-rules';
-import { createDungeonRunMapState, inspectDungeonRunMapProgression } from './run-map';
-import { runNonNegativeInteger } from './run-number-guards';
-import { activeEnemyHazardsForBoard, defeatEnemyHazardsOnClearedTiles, enemyHazardsForBoard } from './enemy-hazard-board-rules';
-import {
-    formatDungeonBoardTopologyIssue,
-    formatDungeonRunMapTopologyIssue,
-    inspectDungeonBoardTopology,
-    inspectDungeonRunMapTopology
-} from './dungeon-topology';
 import { getBoardTraitInteractionPreviewLines } from './tile-trait-rules';
 import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
 
 /*
- * Eight of these went with the dungeon layer: `locks`, `shops`, `keys`, `levers`, `exits`,
- * `hazards`, `enemies` and `bosses`. They are removed rather than left reading zero, because this
- * list is the contract's own claim about what it covers - a key named here and stuck at nought says
- * the contract checks something it does not.
+ * Nine of these went with the dungeon layer: `locks`, `shops`, `keys`, `levers`, `exits`,
+ * `hazards`, `enemies`, `bosses` and `topology`. They are removed rather than left reading zero,
+ * because this list is the contract's own claim about what it covers - a key named here and stuck
+ * at nought says the contract checks something it does not.
  */
 export type SoftlockContractCoverageKey =
     | 'traits'
     | 'traitInteractions'
     | 'traitRouteObjectives'
-    | 'topology'
     | 'finalPairStates';
 
 export interface SoftlockGeneratorScenario {
@@ -84,7 +70,6 @@ const COVERAGE_KEYS: readonly SoftlockContractCoverageKey[] = [
     'traits',
     'traitInteractions',
     'traitRouteObjectives',
-    'topology',
     'finalPairStates'
 ];
 
@@ -94,19 +79,13 @@ const DEFAULT_ROUTE_TYPE: RouteNodeType = 'safe';
 const coverageTemplate = (): Record<SoftlockContractCoverageKey, number> =>
     Object.fromEntries(COVERAGE_KEYS.map((key) => [key, 0])) as Record<SoftlockContractCoverageKey, number>;
 
-const boardSummary = (board: BoardState): string => {
-    const effectiveLock = getEffectivePrimaryExitLock({ board });
-    return [
+const boardSummary = (board: BoardState): string =>
+    [
         `level=${board.level}`,
         `pairs=${board.pairCount}`,
         `floorTag=${board.floorTag ?? 'normal'}`,
-        `archetype=${board.floorArchetypeId ?? 'none'}`,
-        `objective=${board.dungeonObjectiveId ?? 'find_exit'}`,
-        `exitLock=${effectiveLock.lockKind}`,
-        `boss=${board.dungeonBossId ?? 'none'}`,
-        `hazards=${activeEnemyHazardsForBoard(board).length}`
+        `archetype=${board.floorArchetypeId ?? 'none'}`
     ].join(' ');
-};
 
 const formatIssueDetail = (issue: BoardFairnessIssue): string => {
     const parts = [`${issue.code}: ${issue.message}`];
@@ -140,7 +119,6 @@ export const createGeneratedBoardSolverRun = (
         ...createNewRun(0, { runSeed: seed, runRulesVersionOverride: rulesVersion }),
         board,
         status: 'playing',
-        dungeonRun: createDungeonRunMapState(seed, rulesVersion, board.level),
         glassDecoyActiveThisFloor: boardHasGlassDecoy(board),
         findablesTotalThisFloor: countFindablePairs(board.tiles),
         traitRouteObjectiveProgressThisFloor: 0,
@@ -161,65 +139,23 @@ const solveGeneratedBoardByExhaustingPairsWithTrace = (board: BoardState, seed: 
     return solveRunThroughGameplayCoreWithTrace(createGeneratedBoardSolverRun(board, seed));
 };
 
-const pickFinalPairKey = (board: BoardState): string | null => {
-    const dungeonPair =
-        board.tiles.find((tile) => !isSingletonUtilityPairKey(tile.pairKey) && tile.dungeonCardKind != null)?.pairKey ?? null;
-    if (dungeonPair) {
-        return dungeonPair;
-    }
-    return realPairKeys(board)[0] ?? null;
-};
-
-const projectionExitResourceState = (
-    board: BoardState
-): Pick<BoardState, 'dungeonKeysHeld' | 'dungeonKeysHeldByKind' | 'dungeonLeverCount'> => {
-    const lock = getEffectivePrimaryExitLock({ board });
-    const needsKey =
-        lock.lockKind !== 'none' &&
-        lock.lockKind !== 'lever' &&
-        countReachableExitKeySources(board, lock.lockKind) > 0;
-    const needsLever = lock.lockKind === 'lever';
-    const dungeonKeysHeld = needsKey ? Math.max(runNonNegativeInteger(board.dungeonKeysHeld), 1) : board.dungeonKeysHeld;
-    const dungeonKeysHeldByKind =
-        needsKey && lock.lockKind !== 'none' && lock.lockKind !== 'lever'
-            ? {
-                  ...(board.dungeonKeysHeldByKind ?? {}),
-                  [lock.lockKind]: Math.max(runNonNegativeInteger(board.dungeonKeysHeldByKind?.[lock.lockKind]), 1)
-              }
-            : board.dungeonKeysHeldByKind;
-    return {
-        dungeonKeysHeld,
-        dungeonKeysHeldByKind,
-        dungeonLeverCount: needsLever
-            ? Math.max(runNonNegativeInteger(board.dungeonLeverCount), runNonNegativeInteger(lock.requiredLeverCount))
-            : board.dungeonLeverCount
-    };
-};
+const pickFinalPairKey = (board: BoardState): string | null => realPairKeys(board)[0] ?? null;
 
 export const createFinalPairFairnessProjection = (board: BoardState): BoardState | null => {
     const remainingPairKey = pickFinalPairKey(board);
     if (!remainingPairKey) {
         return null;
     }
-    const activeTileIds = new Set<string>();
-    const tiles = board.tiles.map((tile) => {
-        if (tile.pairKey === remainingPairKey || isSingletonUtilityPairKey(tile.pairKey)) {
-            activeTileIds.add(tile.id);
-            return tile.state === 'removed' ? { ...tile, state: 'hidden' as const } : { ...tile, state: 'hidden' as const };
-        }
-        return { ...tile, state: 'matched' as const };
-    });
+    const tiles = board.tiles.map((tile) =>
+        tile.pairKey === remainingPairKey || isSingletonUtilityPairKey(tile.pairKey)
+            ? { ...tile, state: 'hidden' as const }
+            : { ...tile, state: 'matched' as const }
+    );
     return {
         ...board,
         tiles,
         flippedTileIds: [],
-        matchedPairs: countMatchedPairs(tiles),
-        ...projectionExitResourceState(board),
-        enemyHazards: enemyHazardsForBoard(board).map((hazard) =>
-            activeTileIds.has(hazard.currentTileId) && activeTileIds.has(hazard.nextTileId)
-                ? hazard
-                : { ...hazard, state: 'defeated' as const, hp: 0 }
-        )
+        matchedPairs: countMatchedPairs(tiles)
     };
 };
 
@@ -227,27 +163,22 @@ export const createClearedBoardFairnessProjection = (board: BoardState): BoardSt
     const tiles = board.tiles.map((tile) =>
         isSingletonUtilityPairKey(tile.pairKey) ? { ...tile } : { ...tile, state: 'matched' as const }
     );
-    return defeatEnemyHazardsOnClearedTiles({
+    return {
         ...board,
         tiles,
-        enemyHazards: enemyHazardsForBoard(board),
         flippedTileIds: [],
-        matchedPairs: countMatchedPairs(tiles),
-        dungeonExitActivated: board.dungeonExitTileId != null ? true : board.dungeonExitActivated,
-        ...projectionExitResourceState(board)
-    });
+        matchedPairs: countMatchedPairs(tiles)
+    };
 };
 
 const addCoverage = (
     coverage: Record<SoftlockContractCoverageKey, number>,
     board: BoardState,
-    projection: 'generated' | 'final_pair' | 'cleared_board',
-    topologyReport: ReturnType<typeof inspectDungeonBoardTopology>
+    projection: 'generated' | 'final_pair' | 'cleared_board'
 ): void => {
     if (board.tiles.some((tile) => tile.tileTraitKind != null)) coverage.traits += 1;
     if (getBoardTraitInteractionPreviewLines(board).length > 0) coverage.traitInteractions += 1;
     if (getTraitRouteObjectiveSeed(board) != null) coverage.traitRouteObjectives += 1;
-    if (topologyReport.graph.order > 0) coverage.topology += 1;
     if (projection === 'final_pair' || projection === 'cleared_board') coverage.finalPairStates += 1;
 };
 
@@ -261,8 +192,7 @@ const recordInspection = (
 ): void => {
     result.checkedBoards += 1;
     const report = inspectBoardFairness(board);
-    const topologyReport = inspectDungeonBoardTopology(board);
-    addCoverage(result.coverage, board, projection, topologyReport);
+    addCoverage(result.coverage, board, projection);
     const traitPairCount = new Set(
         board.tiles
             .filter((tile) => tile.tileTraitKind != null && tile.state !== 'matched' && tile.state !== 'removed')
@@ -298,28 +228,9 @@ const recordInspection = (
                   message: 'Board has no structural completion route.'
               }
           ];
-    const topologyIssues: BoardFairnessIssue[] = topologyReport.issues
-        .filter((issue) => {
-            if (issue.code === 'topology_exit_lock_source_missing' || issue.code === 'topology_completion_route_missing') {
-                return !boardHasActionableProgressionPair(board);
-            }
-            if (issue.code === 'topology_boss_source_missing') {
-                return projection === 'generated';
-            }
-            return true;
-        })
-        .map((issue) => ({
-            code:
-                issue.code === 'topology_boss_source_missing'
-                    ? ('dungeon_objective_unreachable' as const)
-                    : ('exit_lock_unreachable' as const),
-            message: `Topology validation: ${formatDungeonBoardTopologyIssue(issue, topologyReport)}`,
-            tileIds: issue.tileIds
-        }));
     const issues = [
         ...report.issues,
         ...completionRouteIssues,
-        ...topologyIssues,
         ...generatedTraitInteractionIssues,
         ...traitRouteObjectiveIssues
     ];
@@ -349,89 +260,34 @@ const recordPlayableClearInspection = (
     const trace = solveGeneratedBoardByExhaustingPairsWithTrace(board, seed);
     const solved = trace.run;
     const solvedBoard = solved.board ?? board;
-    const report = inspectBoardFairness(solvedBoard, {
-        dungeonKeys: solved.dungeonKeys,
-        dungeonMasterKeys: solved.dungeonMasterKeys
-    });
-    const topologyReport = inspectDungeonBoardTopology(solvedBoard, {
-        dungeonKeys: solved.dungeonKeys,
-        dungeonMasterKeys: solved.dungeonMasterKeys
-    });
-    const topologyIssues: BoardFairnessIssue[] = topologyReport.issues.map((issue) => ({
-        code:
-            issue.code === 'topology_boss_source_missing'
-                ? ('dungeon_objective_unreachable' as const)
-                : ('exit_lock_unreachable' as const),
-        message: `Solved-run topology validation: ${formatDungeonBoardTopologyIssue(issue, topologyReport)}`,
-        tileIds: issue.tileIds
-    }));
-    const staleEnemyHazards =
-        solved.status === 'levelComplete'
-            ? enemyHazardsForBoard(solved.board).filter((hazard) => hazard.state !== 'defeated')
-            : [];
+    const report = inspectBoardFairness(solvedBoard);
     const coreSolverIssues = [
         ...(!trace.replayVerified ? ['command_replay_not_verified'] : []),
         ...(trace.replayVerified && !trace.replayDeterministic ? ['command_replay_diverged'] : []),
         ...trace.rejectedCommandIds.map((commandId) => `rejected:${commandId}`),
         ...trace.invariantViolations
     ];
-    if (
-        solved.status === 'levelComplete' &&
-        coreSolverIssues.length === 0 &&
-        report.issues.length === 0 &&
-        topologyIssues.length === 0 &&
-        staleEnemyHazards.length === 0
-    ) {
+    if (solved.status === 'levelComplete' && coreSolverIssues.length === 0 && report.issues.length === 0) {
         result.checkedNextFloorTransitions += 1;
         const next = advanceToNextLevel(solved);
         const nextReport = inspectRunFairness(next);
-        const routeReport = inspectDungeonRunMapProgression(next.dungeonRun);
-        const routeTopologyReport = inspectDungeonRunMapTopology(next.dungeonRun);
-        if (
-            next.status === 'memorize' &&
-            next.board?.level === floor + 1 &&
-            next.dungeonRun.currentFloor === next.board.level &&
-            nextReport.issues.length === 0 &&
-            routeReport.hasLegalProgressionPath &&
-            routeReport.issues.length === 0 &&
-            routeTopologyReport.issues.length === 0
-        ) {
+        if (next.status === 'memorize' && next.board?.level === floor + 1 && nextReport.issues.length === 0) {
             return;
         }
 
         const nextIssue: BoardFairnessIssue = {
             code: 'completion_route_missing',
-            message: `Next-floor transition ended with status=${next.status}, boardLevel=${next.board?.level ?? 'none'}, dungeonFloor=${next.dungeonRun.currentFloor}, routeLegal=${routeReport.hasLegalProgressionPath}; expected fair memorize run for level ${floor + 1}.`
+            message: `Next-floor transition ended with status=${next.status}, boardLevel=${next.board?.level ?? 'none'}; expected fair memorize run for level ${floor + 1}.`
         };
-        const routeIssues: BoardFairnessIssue[] = routeReport.issues.map((issue) => ({
-            code: 'completion_route_missing',
-            message: `${issue.code}: ${issue.detail}`,
-            tileIds: issue.nodeId ? [issue.nodeId] : undefined
-        }));
-        const routeTopologyIssues: BoardFairnessIssue[] = routeTopologyReport.issues.map((issue) => ({
-            code: 'completion_route_missing',
-            message: formatDungeonRunMapTopologyIssue(issue, routeTopologyReport),
-            tileIds: issue.nodeId ? [issue.nodeId] : undefined
-        }));
         result.failures.push({
             scenarioId: scenario.id,
             scenarioLabel: scenario.label,
             seed,
             floor,
             projection: 'next_floor',
-            issueCodes: [
-                nextIssue.code,
-                ...nextReport.issues.map((candidate) => candidate.code),
-                ...routeIssues.map((candidate) => candidate.code),
-                ...routeTopologyIssues.map((candidate) => candidate.code)
-            ],
-            issueDetails: [
-                formatIssueDetail(nextIssue),
-                ...nextReport.issues.map(formatIssueDetail),
-                ...routeIssues.map(formatIssueDetail),
-                ...routeTopologyIssues.map(formatIssueDetail)
-            ],
-            issues: [nextIssue, ...nextReport.issues, ...routeIssues, ...routeTopologyIssues],
+            issueCodes: [nextIssue.code, ...nextReport.issues.map((candidate) => candidate.code)],
+            issueDetails: [formatIssueDetail(nextIssue), ...nextReport.issues.map(formatIssueDetail)],
+            issues: [nextIssue, ...nextReport.issues],
             boardSummary: boardSummary(next.board ?? solved.board ?? board)
         });
         return;
@@ -442,35 +298,21 @@ const recordPlayableClearInspection = (
         message:
             coreSolverIssues.length > 0
                 ? `Typed gameplay-core solver reported ${coreSolverIssues.join(', ')}.`
-                : staleEnemyHazards.length > 0
-                ? `Executable pair-exhaustion solver ended with ${staleEnemyHazards.length} stale enemy hazard overlay(s); expected all hazards defeated.`
                 : `Executable pair-exhaustion solver stopped at ${trace.stopReason} after ${trace.turns} turn(s) with status=${solved.status}; expected levelComplete.`
     };
-    const staleEnemyIssues: BoardFairnessIssue[] = staleEnemyHazards.map((hazard) => ({
-        code: 'enemy_hazard_on_cleared_tile',
-        message: `Enemy hazard "${hazard.id}" remains ${hazard.state} after playable clear.`,
-        tileIds: [hazard.currentTileId, hazard.nextTileId]
-    }));
     result.failures.push({
         scenarioId: scenario.id,
         scenarioLabel: scenario.label,
         seed,
         floor,
         projection: 'playable_clear',
-        issueCodes: [
-            issue.code,
-            ...staleEnemyIssues.map((candidate) => candidate.code),
-            ...report.issues.map((candidate) => candidate.code),
-            ...topologyIssues.map((candidate) => candidate.code)
-        ],
+        issueCodes: [issue.code, ...report.issues.map((candidate) => candidate.code)],
         issueDetails: [
             formatIssueDetail(issue),
             `solver_trace: reason=${trace.stopReason} turns=${trace.turns} lastPair=${trace.lastPairKey ?? 'none'} lastTiles=${trace.lastTileIds.join(',') || 'none'} replayVerified=${trace.replayVerified} replayDeterministic=${trace.replayDeterministic} rejected=${trace.rejectedCommandIds.join(',') || 'none'} invariants=${trace.invariantViolations.join(',') || 'none'}`,
-            ...staleEnemyIssues.map(formatIssueDetail),
-            ...report.issues.map(formatIssueDetail),
-            ...topologyIssues.map(formatIssueDetail)
+            ...report.issues.map(formatIssueDetail)
         ],
-        issues: [issue, ...staleEnemyIssues, ...report.issues, ...topologyIssues],
+        issues: [issue, ...report.issues],
         boardSummary: boardSummary(solvedBoard)
     });
 };
@@ -490,7 +332,6 @@ export interface ScheduledSoftlockFloorOptions {
     floorTag: FloorTag;
     floorArchetypeId: FloorArchetypeId | null;
     activeMutators: MutatorId[];
-    dungeonNodeKind: DungeonRunNodeKind | null;
 }
 
 export const scheduledSoftlockFloorTag = (floor: number): FloorTag =>
@@ -510,14 +351,10 @@ export const scheduledSoftlockFloorArchetype = (floor: number): FloorArchetypeId
 export const scheduledSoftlockFloorMutators = (floor: number): MutatorId[] =>
     floor === 7 ? ['glass_floor', 'sticky_fingers'] : floor === 9 ? ['short_memorize', 'wide_recall'] : [];
 
-export const scheduledSoftlockFloorNodeKind = (floor: number): DungeonRunNodeKind | null =>
-    floor === 3 ? 'shop' : floor === 5 ? 'elite' : floor === 7 ? 'trap' : floor === 9 || floor === 12 ? 'boss' : null;
-
 export const getScheduledSoftlockFloorOptions = (floor: number): ScheduledSoftlockFloorOptions => ({
     floorTag: scheduledSoftlockFloorTag(floor),
     floorArchetypeId: scheduledSoftlockFloorArchetype(floor),
-    activeMutators: scheduledSoftlockFloorMutators(floor),
-    dungeonNodeKind: scheduledSoftlockFloorNodeKind(floor)
+    activeMutators: scheduledSoftlockFloorMutators(floor)
 });
 
 export const DEFAULT_SOFTLOCK_GENERATOR_SCENARIOS: readonly SoftlockGeneratorScenario[] = [
@@ -557,23 +394,20 @@ export const DEFAULT_SOFTLOCK_GENERATOR_SCENARIOS: readonly SoftlockGeneratorSce
         optionsForFloor: ({ seed, floor }) =>
             scenarioOptions(seed, floor, {
                 floorTag: 'boss',
-                dungeonNodeKind: 'boss',
                 floorArchetypeId: floor === 9 ? 'rush_recall' : null,
                 activeMutators: floor === 9 ? ['short_memorize', 'wide_recall'] : []
             })
     },
     {
-        id: 'trait_and_hazard_pressure',
-        label: 'Trait, hazard, and utility overlap floors',
+        id: 'trait_pressure',
+        label: 'Trait and utility overlap floors',
         seeds: [120_011, 120_022],
         floors: [3, 5, 7, 9, 11],
         optionsForFloor: ({ seed, floor }) =>
             scenarioOptions(seed, floor, {
                 floorTag: floor === 7 ? 'boss' : 'normal',
                 floorArchetypeId: floor === 7 ? 'trap_hall' : floor === 9 ? 'spotlight_hunt' : 'shadow_read',
-                activeMutators: ['shifting_spotlight'],
-                dungeonNodeKind: floor === 5 ? 'elite' : floor === 7 ? 'boss' : 'combat',
-                relicIds: ['region_shuffle_free_first', 'peek_charge_plus_one']
+                activeMutators: ['shifting_spotlight']
             })
     },
     /*

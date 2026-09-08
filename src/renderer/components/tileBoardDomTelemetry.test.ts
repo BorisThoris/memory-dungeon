@@ -92,20 +92,6 @@ describe('tile board DOM telemetry helpers', () => {
     it('summarizes card feedback states in stable sorted order', () => {
         const feedbackBoard: BoardState = {
             ...board,
-            enemyHazards: [
-                {
-                    id: 'enemy-a',
-                    kind: 'sentinel',
-                    label: 'Sentinel',
-                    currentTileId: 'a1',
-                    nextTileId: 'b1',
-                    pattern: 'patrol',
-                    state: 'revealed',
-                    damage: 1,
-                    hp: 1,
-                    maxHp: 1
-                }
-            ],
             tiles: [
                 { ...board.tiles[0]!, tileHazardKind: 'shuffle_snare', tileTraitKind: 'echo', routeCardKind: 'greed_cache' },
                 { ...board.tiles[1]!, dungeonCardKind: 'trap', dungeonCardState: 'hidden' },
@@ -127,7 +113,6 @@ describe('tile board DOM telemetry helpers', () => {
             runStatus: 'playing'
         });
 
-        expect(states).toContain('enemy-occupied:1');
         expect(states).toContain('focused:1');
         expect(states).toContain('hazard:1');
         expect(states).toContain('hidden:3');
