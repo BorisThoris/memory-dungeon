@@ -8,6 +8,7 @@ import styles from './RunShell.module.css';
 import { RUN_SHELL_LABELS } from '../copy/runDialogCopy';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { CHAIN_BEAT_COPY, CHAIN_TIER_LABELS } from '../copy/chainBeat';
+import { chainRungPips } from '../../shared/chain-rung-value-rules';
 import { chainTierRungs, runChainMeter, runChainTier } from '../../shared/chain-tier-rules';
 import { isPassAndPlayRun, PASS_AND_PLAY_FLOORS } from '../../shared/pass-and-play-rules';
 
@@ -205,7 +206,7 @@ const RunShell = ({
                         const meter = chainMeterView;
                         return (
                             <span
-                                aria-label={CHAIN_BEAT_COPY.meterLabel(meter.momentum, meter.feverAt, meter.full)}
+                                aria-label={CHAIN_BEAT_COPY.meterLabel(meter.momentum, meter.feverAt, meter.full, meter.tier)}
                                 className={styles.chainMeter}
                                 data-chain-tier={meter.tier}
                                 data-meter-drop={chainMeterDropping ? 'true' : 'false'}
@@ -228,17 +229,32 @@ const RunShell = ({
                 >
                     <span
                         data-chain-tier={runChainTier(run)}
-                        title={CHAIN_BEAT_COPY.momentumHint(
+                        title={`${CHAIN_BEAT_COPY.momentumHint(
                             runNonNegativeInteger(run.stats.currentStreak),
                             runNonNegativeInteger(run.chunkPairsThisChain),
                             chainTierRungs(run.board?.pairCount ?? null)
-                        )}
+                        )} ${CHAIN_BEAT_COPY.rungLadder()}`}
                     >
                         {`×${runNonNegativeInteger(run.stats.currentStreak)}${
                             CHAIN_TIER_LABELS[runChainTier(run)]
                                 ? ` ${CHAIN_TIER_LABELS[runChainTier(run)]}`
                                 : ''
                         }`}
+                        {/* What standing on this rung is worth, in pairs: one pip each, so the
+                            cluster grows as the player climbs and the ladder is learned by
+                            watching it rather than by reading a number (thesis §30.3a). */}
+                        <span
+                            aria-label={CHAIN_BEAT_COPY.rungValue(runChainTier(run))}
+                            className={styles.rungPips}
+                            data-chain-tier={runChainTier(run)}
+                            data-rung-pips={chainRungPips(runChainTier(run))}
+                            data-testid="hud-chain-rung-pips"
+                            role="img"
+                        >
+                            {Array.from({ length: chainRungPips(runChainTier(run)) }, (_, index) => (
+                                <span key={index} className={styles.rungPip} />
+                            ))}
+                        </span>
                     </span>
                 </Stat>
                 {mutatorTitles.length > 0 ? (

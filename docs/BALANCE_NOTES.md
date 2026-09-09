@@ -1866,3 +1866,37 @@ Fever 0.78 / 0.52, chunk share 0.70, largest break 0.49, under par 0.99 / 0.75, 
 miss rate the bands watch. `sim:pop --check` and `sim:endless --check` pass. The rules-version re-deal
 moves the reference player's Fever share 0.21 → 0.20 and under-par share 0.77 → 0.75, inside the
 noise Gen 181 measured for a re-deal; nothing was retuned.
+
+## Gen 186: what a rung is worth, measured and shown
+
+Thesis §30.3(a). The chain meter said where the player stood on the ladder and never what standing
+there bought, so the pairs a rung takes are now a cluster of pips beside the tier - one per pair -
+and the whole ladder sits in the hover hint and the meter's accessible label.
+
+### The ladder, re-measured
+
+`simulatePopReach()`, eight seeds, twelve levels, each tier measured at its own rung:
+
+| Rung | Pairs a break takes | Step over the rung below |
+|---|---|---|
+| A lone match | 1.91 | — |
+| Clean | 3.19 | 1.28 |
+| Sharp | 3.50 | **0.32** |
+| Fever | 6.95 | 3.44 |
+
+Spread 5.04 against a band floor of 2.2, so the climb as a whole is worth making. The constants the
+HUD draws (2 / 3 / 4 / 7) are pinned to this measurement by `chain-rung-value-rules.test.ts`, which
+re-runs the simulation and fails if a rung walks more than 0.6 of a pair away from what it promises.
+A meter that says three pairs while the rule pays one is worse than a meter that says nothing.
+
+### The finding: the middle rung is thin again
+
+**Sharp pays 0.32 pairs over Clean.** The band floor is 0.25, so this passes, but it is the same
+failure Gen 168 existed to fix: measured then at 0.01, repaired to 0.39, and the Phase 1 and 2 board
+changes have walked it back to 0.32. Clean's partner reach already sweeps most of what Sharp's
+unbounded reaction could find, and the floors are bigger now, which helps Clean more than Sharp.
+
+The pips make it visible for the first time - the cluster barely changes when a player reaches Sharp
+- which is the honest outcome of putting a number on an interface: it showed the design something it
+had been hiding from itself. Not retuned here, because an interface generation is the wrong place to
+move a rule: it has its own task.

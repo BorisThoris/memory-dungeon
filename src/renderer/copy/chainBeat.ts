@@ -1,4 +1,5 @@
 import type { ChainTier } from '../../shared/chain-tier-rules';
+import { CHAIN_RUNG_PAIRS } from '../../shared/chain-rung-value-rules';
 
 /**
  * What the chain and the chunk say.
@@ -16,6 +17,13 @@ export const CHAIN_TIER_LABELS: Readonly<Record<ChainTier, string>> = {
 
 /** Grid steps between a broken pair's halves that earn "Partner across the board". */
 export const CHAIN_STYLE_LONG_SPAN = 4;
+
+/** One rung's worth, as a sentence. Module-level so the meter's own label can reuse it. */
+const rungValueLine = (tier: ChainTier): string => {
+    const pairs = CHAIN_RUNG_PAIRS[tier];
+    const at = tier === 'none' ? 'A match with no chain' : `A ${CHAIN_TIER_LABELS[tier]} break`;
+    return `${at} takes about ${pairs} ${pairs === 1 ? 'pair' : 'pairs'} with it.`;
+};
 
 export const CHAIN_BEAT_COPY = {
     /**
@@ -76,9 +84,20 @@ export const CHAIN_BEAT_COPY = {
     momentumHint: (chain: number, cascaded: number, rungs: { sharp: number; fever: number }): string =>
         `${cascaded > 0 ? `Chain ${chain} plus ${cascaded} cascaded, momentum ${chain + cascaded}` : `Chain ${chain}`}. ` +
         `Every match pops the clump it touches. Clean from 3 lets the partners ripple, Sharp from ${rungs.sharp} runs the reaction out, Fever from ${rungs.fever} adds the halo on this floor. A miss halves the chain and puts the fire out.`,
-    /** The meter, for a screen reader: where the momentum stands on the ladder. */
-    meterLabel: (momentum: number, feverAt: number, full: boolean): string =>
-        full ? `Fever meter full: momentum ${momentum}.` : `Fever meter: momentum ${momentum} of ${feverAt}.`,
+    /**
+     * What the rung the player is standing on is worth, for the pip cluster beside the tier. The
+     * meter said where they were and never what being there bought (thesis §30.3a); a cluster that
+     * grows as they climb is how "Sharp takes about this many" is learned by seeing it.
+     */
+    rungValue: rungValueLine,
+    /** The whole ladder in one line, for the hover hint: what each rung up is worth. */
+    rungLadder: (): string =>
+        `A lone match takes about ${CHAIN_RUNG_PAIRS.none} pairs, Clean ${CHAIN_RUNG_PAIRS.clean}, ` +
+        `Sharp ${CHAIN_RUNG_PAIRS.sharp}, Fever ${CHAIN_RUNG_PAIRS.fever}.`,
+    /** The meter, for a screen reader: where the momentum stands on the ladder, and what it is worth. */
+    meterLabel: (momentum: number, feverAt: number, full: boolean, tier: ChainTier): string =>
+        `${full ? `Fever meter full: momentum ${momentum}.` : `Fever meter: momentum ${momentum} of ${feverAt}.`}` +
+        ` ${rungValueLine(tier)}`,
     codexChainTitle: 'Chain, chunk and Fever',
     codexChainDescription:
         'Every match pops: the whole same-suit clump touching the two tiles you matched breaks away with them, and the partners of those pairs go too, wherever they sit. ' +

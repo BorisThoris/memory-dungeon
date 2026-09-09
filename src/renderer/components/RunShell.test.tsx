@@ -30,6 +30,34 @@ describe('RunShell', () => {
         expect(screen.queryByRole('timer')).not.toBeInTheDocument();
     });
 
+    it('says what the rung the player is standing on is worth, and grows it as they climb', () => {
+        // The meter said where they were on the ladder and never what being there bought
+        // (thesis §30.3a). One pip per pair the rung takes, and the cluster grows with the chain.
+        const base = playingRun();
+        const cold: RunState = { ...base, board: { ...base.board!, pairCount: 12 } };
+        const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={cold} tools={[]} />);
+
+        const pipsAt = (): HTMLElement => screen.getByTestId('hud-chain-rung-pips');
+        expect(pipsAt()).toHaveAttribute('data-chain-tier', 'none');
+        expect(pipsAt()).toHaveAttribute('aria-label', 'A match with no chain takes about 2 pairs with it.');
+        const pops = Number(pipsAt().getAttribute('data-rung-pips'));
+        expect(pipsAt().children).toHaveLength(pops);
+
+        // Twelve pairs: Sharp from 5, Fever from 7. A Fever break takes far more than a lone match.
+        const hot: RunState = { ...cold, stats: { ...cold.stats, currentStreak: 9 } };
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={hot} tools={[]} />);
+        expect(pipsAt()).toHaveAttribute('data-chain-tier', 'fever');
+        expect(pipsAt().getAttribute('aria-label')).toMatch(/^A Fever break takes about \d+ pairs with it\.$/);
+        expect(Number(pipsAt().getAttribute('data-rung-pips'))).toBeGreaterThan(pops);
+        expect(pipsAt().children).toHaveLength(Number(pipsAt().getAttribute('data-rung-pips')));
+
+        // The meter's own label carries it too, so a screen reader is told the same thing.
+        expect(within(screen.getByTestId('hud-chain')).getByTestId('hud-chain-meter')).toHaveAttribute(
+            'aria-label',
+            expect.stringContaining('A Fever break takes about')
+        );
+    });
+
     it('reads the ceiling on the par, and marks it once the floor is two turns from it', () => {
         // Twelve pairs: par 5, ceiling 15. The pressure of thesis §43 lives on the par stat.
         const base = playingRun();
@@ -70,7 +98,7 @@ describe('RunShell', () => {
         expect(meter).toHaveAttribute('data-chain-tier', 'sharp');
         expect(meter).toHaveAttribute('data-meter-fill', '0.714');
         expect(meter).toHaveAttribute('data-meter-full', 'false');
-        expect(meter).toHaveAttribute('aria-label', 'Fever meter: momentum 5 of 7.');
+        expect(meter).toHaveAttribute('aria-label', expect.stringContaining('Fever meter: momentum 5 of 7.'));
     });
 
     it('drains the meter for a beat when a chain of Clean or better drops to nothing', () => {
@@ -110,7 +138,7 @@ describe('RunShell', () => {
         const meter = screen.getByTestId('hud-chain-meter');
         expect(meter).toHaveAttribute('data-meter-full', 'true');
         expect(meter).toHaveAttribute('data-meter-fill', '1.000');
-        expect(meter).toHaveAttribute('aria-label', 'Fever meter full: momentum 10.');
+        expect(meter).toHaveAttribute('aria-label', expect.stringContaining('Fever meter full: momentum 10.'));
     });
 
     it('marks the Floor stat as a personal best only when told the run is the deepest yet', () => {

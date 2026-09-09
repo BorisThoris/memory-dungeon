@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2425,
-    "codeFileCount": 866,
-    "exportedSymbolCount": 2675,
+    "trackedFileCount": 2427,
+    "codeFileCount": 868,
+    "exportedSymbolCount": 2678,
     "contentItemCount": 12,
     "mechanicCount": 45,
     "stateFieldCount": 81,
-    "relationshipCount": 6828
+    "relationshipCount": 6838
   },
   "inventory": [
     {
@@ -255,8 +255,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 318065,
-      "sha256": "99df8c9e4347d4d0f9c33080002f37d6c0fed6025cc84e61a972b7c49216b70d"
+      "bytes": 319866,
+      "sha256": "0ad0383368a80d5f6f7e3702fcf433f11ecbf265e141f4cd81fad44c7db49a68"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -267,8 +267,8 @@
     {
       "path": "docs/CHAIN_CHUNK_FEVER_DESIGN.md",
       "category": "documentation",
-      "bytes": 65734,
-      "sha256": "c5d4b15e9267e41a856ace448280d4a1bf2546b97173dab51430221517420b75"
+      "bytes": 66546,
+      "sha256": "f206f3517ff341dbe23c156f6b5681224eab9f1f2162252779ec5564b29d1798"
     },
     {
       "path": "docs/COLLECTIBLE_SYSTEM.md",
@@ -742,7 +742,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 394,
-      "sha256": "1454e3669259977cf36781055bfd286165ac072722d2649c10348a80d176f123"
+      "sha256": "91a76b3f391d718498eb66a391e8ec0e67dcf448c709819e23bd6325696db5f9"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2308,7 +2308,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33473,
-      "sha256": "8a259e4166dd3f5168d8902081589a36986f2969ccb1d0a35d1dc72e77bc003f"
+      "sha256": "db431f107b88e474d20e7e083d592e744f5d47cb9457d13675d0fad5b0fc71e1"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4011,8 +4011,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 30915,
-      "sha256": "377a152325d54f6f32be6884d0ceab24bf49f24c8821ad5d1f7a2bf67d23549e"
+      "bytes": 30957,
+      "sha256": "fa2996752bdbdd1c563aa24f5d3605cae6cfadec2a387308ad0a49aaeaaaaae4"
     },
     {
       "path": "packages/notifications/package.json",
@@ -8049,20 +8049,20 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 12718,
-      "sha256": "1d4d9fe3868a3d47f3968ccc844ce4ef3414961c871c882a81f7154ee696652b"
+      "bytes": 13599,
+      "sha256": "02b5d7c1c7f61be595a8e91985eb438afa382ea7a6a0352b16daa76534ec0e52"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 9243,
-      "sha256": "2f95ce569d95903802989120834c58c4be8f25cd250cd92ade002ed52c0e2ad6"
+      "bytes": 11170,
+      "sha256": "9f0e0dfbe93953dfee96bfe6a6359c8ee71368ced3f0d5affaa34f37690e8109"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 15279,
-      "sha256": "c67fe9eb43b8cac64798103aacb0f16fcb0511d14606dff700a1911977b0ba2b"
+      "bytes": 16366,
+      "sha256": "35692529d9f81965516778fc6245dc9e372a21ed3828edd6a60ca2c382d0ad39"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -9045,8 +9045,8 @@
     {
       "path": "src/renderer/copy/chainBeat.ts",
       "category": "source",
-      "bytes": 5822,
-      "sha256": "a6db4fa3d5a10af0c3dbc306de8e983174ecc03ae7932012ac12d4a5088a8ff0"
+      "bytes": 6979,
+      "sha256": "5edd1289a55ad1fe5dd76fbceb671fede5d829d16307459fa5fe469cbe0864e4"
     },
     {
       "path": "src/renderer/copy/chainMilestoneFeedback.test.ts",
@@ -10535,6 +10535,18 @@
       "category": "source",
       "bytes": 27651,
       "sha256": "8d9ba2d6a2c6b95530198e7164a71dbf43233901f0dc8068a0d85b912bcb89fb"
+    },
+    {
+      "path": "src/shared/chain-rung-value-rules.test.ts",
+      "category": "test",
+      "bytes": 1275,
+      "sha256": "5a76d650f671247f5a95bf28cd18ce589014759962779dcdfd7b9b2cf26263d5"
+    },
+    {
+      "path": "src/shared/chain-rung-value-rules.ts",
+      "category": "source",
+      "bytes": 1449,
+      "sha256": "d28e4adf11f0dbebf360a47d25a75fc51455d9cb24b765d47c5011f820b22006"
     },
     {
       "path": "src/shared/chain-targets.test.ts",
@@ -17511,7 +17523,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 178,
+      "lineCount": 206,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/shared/contracts.ts",
@@ -17525,12 +17537,13 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 315,
+      "lineCount": 331,
       "imports": [
         "file:src/renderer/copy/chainBeat.ts",
         "file:src/renderer/copy/passAndPlay.ts",
         "file:src/renderer/copy/runDialogCopy.ts",
         "file:src/renderer/ui/gameplayIcons.tsx",
+        "file:src/shared/chain-rung-value-rules.ts",
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-par.ts",
@@ -20464,8 +20477,9 @@
       "path": "src/renderer/copy/chainBeat.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 92,
+      "lineCount": 111,
       "imports": [
+        "file:src/shared/chain-rung-value-rules.ts",
         "file:src/shared/chain-tier-rules.ts"
       ],
       "exports": [
@@ -24453,6 +24467,37 @@
       ]
     },
     {
+      "id": "file:src/shared/chain-rung-value-rules.test.ts",
+      "path": "src/shared/chain-rung-value-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 26,
+      "imports": [
+        "file:src/shared/chain-rung-value-rules.ts",
+        "file:src/shared/pop-reach-simulation.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/chain-rung-value-rules.ts",
+      "path": "src/shared/chain-rung-value-rules.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 32,
+      "imports": [
+        "file:src/shared/chain-tier-rules.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/chain-rung-value-rules.ts#CHAIN_RUNG_PAIRS",
+        "symbol:src/shared/chain-rung-value-rules.ts#CHAIN_RUNG_PAIRS_TOLERANCE",
+        "symbol:src/shared/chain-rung-value-rules.ts#chainRungPips"
+      ],
+      "testedBy": [
+        "file:src/shared/chain-rung-value-rules.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/chain-targets.test.ts",
       "path": "src/shared/chain-targets.test.ts",
       "layer": "shared",
@@ -28063,6 +28108,7 @@
         "symbol:src/shared/pop-reach-simulation.ts#summarizePopReach"
       ],
       "testedBy": [
+        "file:src/shared/chain-rung-value-rules.test.ts",
         "file:src/shared/pop-reach-simulation.test.ts"
       ]
     },
@@ -33715,24 +33761,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 314,
-      "endLine": 314
+      "line": 330,
+      "endLine": 330
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 36,
-      "endLine": 53
+      "line": 37,
+      "endLine": 54
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 25,
-      "endLine": 34
+      "line": 26,
+      "endLine": 35
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
@@ -37211,24 +37257,24 @@
       "name": "CHAIN_BEAT_COPY",
       "kind": "value",
       "file": "src/renderer/copy/chainBeat.ts",
-      "line": 20,
-      "endLine": 91
+      "line": 28,
+      "endLine": 110
     },
     {
       "id": "symbol:src/renderer/copy/chainBeat.ts#CHAIN_STYLE_LONG_SPAN",
       "name": "CHAIN_STYLE_LONG_SPAN",
       "kind": "value",
       "file": "src/renderer/copy/chainBeat.ts",
-      "line": 18,
-      "endLine": 18
+      "line": 19,
+      "endLine": 19
     },
     {
       "id": "symbol:src/renderer/copy/chainBeat.ts#CHAIN_TIER_LABELS",
       "name": "CHAIN_TIER_LABELS",
       "kind": "value",
       "file": "src/renderer/copy/chainBeat.ts",
-      "line": 10,
-      "endLine": 15
+      "line": 11,
+      "endLine": 16
     },
     {
       "id": "symbol:src/renderer/copy/chainMilestoneFeedback.ts#ChainMilestoneFeedback",
@@ -41749,6 +41795,30 @@
       "file": "src/shared/cascade-balance-simulation.ts",
       "line": 510,
       "endLine": 525
+    },
+    {
+      "id": "symbol:src/shared/chain-rung-value-rules.ts#CHAIN_RUNG_PAIRS",
+      "name": "CHAIN_RUNG_PAIRS",
+      "kind": "value",
+      "file": "src/shared/chain-rung-value-rules.ts",
+      "line": 16,
+      "endLine": 21
+    },
+    {
+      "id": "symbol:src/shared/chain-rung-value-rules.ts#CHAIN_RUNG_PAIRS_TOLERANCE",
+      "name": "CHAIN_RUNG_PAIRS_TOLERANCE",
+      "kind": "value",
+      "file": "src/shared/chain-rung-value-rules.ts",
+      "line": 28,
+      "endLine": 28
+    },
+    {
+      "id": "symbol:src/shared/chain-rung-value-rules.ts#chainRungPips",
+      "name": "chainRungPips",
+      "kind": "value",
+      "file": "src/shared/chain-rung-value-rules.ts",
+      "line": 31,
+      "endLine": 31
     },
     {
       "id": "symbol:src/shared/chain-targets.ts#ChainTargetBand",
@@ -52399,7 +52469,7 @@
         },
         {
           "path": "src/renderer/copy/chainBeat.ts",
-          "line": 4
+          "line": 5
         },
         {
           "path": "src/renderer/components/tileBoardBreakWave.ts",
@@ -52407,7 +52477,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 204
+          "line": 205
         }
       ],
       "tests": [
@@ -52433,7 +52503,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 57
+          "line": 46
         },
         {
           "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -64255,6 +64325,24 @@
       "id": "exports:src/shared/cascade-balance-simulation.ts->symbol:src/shared/cascade-balance-simulation.ts#summarizeCascadeBalance",
       "source": "file:src/shared/cascade-balance-simulation.ts",
       "target": "symbol:src/shared/cascade-balance-simulation.ts#summarizeCascadeBalance",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/chain-rung-value-rules.ts->symbol:src/shared/chain-rung-value-rules.ts#CHAIN_RUNG_PAIRS",
+      "source": "file:src/shared/chain-rung-value-rules.ts",
+      "target": "symbol:src/shared/chain-rung-value-rules.ts#CHAIN_RUNG_PAIRS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/chain-rung-value-rules.ts->symbol:src/shared/chain-rung-value-rules.ts#CHAIN_RUNG_PAIRS_TOLERANCE",
+      "source": "file:src/shared/chain-rung-value-rules.ts",
+      "target": "symbol:src/shared/chain-rung-value-rules.ts#CHAIN_RUNG_PAIRS_TOLERANCE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/chain-rung-value-rules.ts->symbol:src/shared/chain-rung-value-rules.ts#chainRungPips",
+      "source": "file:src/shared/chain-rung-value-rules.ts",
+      "target": "symbol:src/shared/chain-rung-value-rules.ts#chainRungPips",
       "kind": "exports"
     },
     {
@@ -76212,6 +76300,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/shared/chain-rung-value-rules.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/shared/chain-rung-value-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/RunShell.tsx->src/shared/chain-tier-rules.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/shared/chain-tier-rules.ts",
@@ -79209,6 +79303,12 @@
       "id": "imports:src/renderer/copy/chainBeat.test.ts->src/shared/test/gameplay-event-fixtures.ts",
       "source": "file:src/renderer/copy/chainBeat.test.ts",
       "target": "file:src/shared/test/gameplay-event-fixtures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/copy/chainBeat.ts->src/shared/chain-rung-value-rules.ts",
+      "source": "file:src/renderer/copy/chainBeat.ts",
+      "target": "file:src/shared/chain-rung-value-rules.ts",
       "kind": "imports"
     },
     {
@@ -82575,6 +82675,24 @@
       "id": "imports:src/shared/cascade-balance-simulation.ts->src/shared/tile-suit-rules.ts",
       "source": "file:src/shared/cascade-balance-simulation.ts",
       "target": "file:src/shared/tile-suit-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/chain-rung-value-rules.test.ts->src/shared/chain-rung-value-rules.ts",
+      "source": "file:src/shared/chain-rung-value-rules.test.ts",
+      "target": "file:src/shared/chain-rung-value-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/chain-rung-value-rules.test.ts->src/shared/pop-reach-simulation.ts",
+      "source": "file:src/shared/chain-rung-value-rules.test.ts",
+      "target": "file:src/shared/pop-reach-simulation.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/chain-rung-value-rules.ts->src/shared/chain-tier-rules.ts",
+      "source": "file:src/shared/chain-rung-value-rules.ts",
+      "target": "file:src/shared/chain-tier-rules.ts",
       "kind": "imports"
     },
     {
@@ -92087,6 +92205,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/chain-rung-value-rules.ts->file:src/shared/chain-rung-value-rules.test.ts",
+      "source": "file:src/shared/chain-rung-value-rules.ts",
+      "target": "file:src/shared/chain-rung-value-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/chain-targets.ts->file:src/shared/chain-targets.test.ts",
       "source": "file:src/shared/chain-targets.ts",
       "target": "file:src/shared/chain-targets.test.ts",
@@ -94208,6 +94332,12 @@
       "id": "tested_by:src/shared/playthrough-solver.ts->file:src/shared/playthrough-solver.test.ts",
       "source": "file:src/shared/playthrough-solver.ts",
       "target": "file:src/shared/playthrough-solver.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/pop-reach-simulation.ts->file:src/shared/chain-rung-value-rules.test.ts",
+      "source": "file:src/shared/pop-reach-simulation.ts",
+      "target": "file:src/shared/chain-rung-value-rules.test.ts",
       "kind": "tested_by"
     },
     {
