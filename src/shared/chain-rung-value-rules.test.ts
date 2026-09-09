@@ -1,11 +1,46 @@
 import { describe, expect, it } from 'vitest';
-import { CHAIN_RUNG_PAIRS, CHAIN_RUNG_PAIRS_TOLERANCE, chainRungPips } from './chain-rung-value-rules';
-import { POP_REACH_TIERS, simulatePopReach } from './pop-reach-simulation';
+import {
+    CHAIN_RUNG_PAIRS,
+    CHAIN_RUNG_PAIRS_TOLERANCE,
+    chainRungPairs,
+    chainRungScoreMultiplier
+} from './chain-rung-value-rules';
+import { POP_REACH_BANDS, POP_REACH_TIERS, simulatePopReach } from './pop-reach-simulation';
 
 describe('what the meter promises a rung is worth', () => {
-    it('matches what a break at that rung actually takes', () => {
-        // The meter is a promise about the rule. This is the measurement that keeps it one: the
-        // same simulation `yarn sim:pop` runs, against the constant the HUD draws.
+    it('pays more than double what the rung below pays, which is the ladder the player feels', () => {
+        // The band that matters (Gen 189). Pairs are the input and read as a dead middle rung;
+        // the tier multiplies them, so the payoff ladder is healthy where the pair ladder is not.
+        const { ladder } = simulatePopReach();
+
+        for (const tier of POP_REACH_TIERS) {
+            if (tier === 'none') continue;
+            expect(
+                ladder.scoreStep[tier],
+                `${tier} pays ${ladder.scoreStep[tier].toFixed(2)}x the rung below`
+            ).toBeGreaterThanOrEqual(POP_REACH_BANDS.ladderScoreMinStep.min);
+        }
+    });
+
+    it('pays at least what its multiplier promises, because a rung never finds fewer pairs', () => {
+        const { ladder } = simulatePopReach();
+
+        // The measured step is the multiplier the meter shows times the pairs the rung finds, and
+        // the pairs never fall going up - so the multiplier is a floor under the real payoff and
+        // the number on screen never overstates the rung.
+        POP_REACH_TIERS.forEach((tier, index) => {
+            if (index === 0) return;
+            const below = POP_REACH_TIERS[index - 1]!;
+            const promised = chainRungScoreMultiplier(tier) / chainRungScoreMultiplier(below);
+            expect(ladder.pairsPerMatch[tier]).toBeGreaterThanOrEqual(ladder.pairsPerMatch[below]);
+            expect(
+                ladder.scoreStep[tier],
+                `${tier} shows x${chainRungScoreMultiplier(tier)} and pays ${ladder.scoreStep[tier].toFixed(2)}x the rung below`
+            ).toBeGreaterThanOrEqual(promised);
+        });
+    });
+
+    it('matches what a break at that rung actually takes, in pairs', () => {
         const { ladder } = simulatePopReach();
 
         for (const tier of POP_REACH_TIERS) {
@@ -17,9 +52,11 @@ describe('what the meter promises a rung is worth', () => {
         }
     });
 
-    it('climbs, so the cluster a player watches grows with the chain', () => {
-        expect(chainRungPips('none')).toBeLessThan(chainRungPips('clean'));
-        expect(chainRungPips('clean')).toBeLessThanOrEqual(chainRungPips('sharp'));
-        expect(chainRungPips('sharp')).toBeLessThan(chainRungPips('fever'));
+    it('climbs on both counts, so the rung a player reaches is always worth more', () => {
+        expect(chainRungPairs('none')).toBeLessThan(chainRungPairs('clean'));
+        expect(chainRungPairs('sharp')).toBeLessThan(chainRungPairs('fever'));
+        expect(chainRungScoreMultiplier('none')).toBeLessThan(chainRungScoreMultiplier('clean'));
+        expect(chainRungScoreMultiplier('clean')).toBeLessThan(chainRungScoreMultiplier('sharp'));
+        expect(chainRungScoreMultiplier('sharp')).toBeLessThan(chainRungScoreMultiplier('fever'));
     });
 });

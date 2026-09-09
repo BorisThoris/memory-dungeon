@@ -1,5 +1,5 @@
 import type { ChainTier } from '../../shared/chain-tier-rules';
-import { CHAIN_RUNG_PAIRS } from '../../shared/chain-rung-value-rules';
+import { CHAIN_RUNG_PAIRS, chainRungScoreMultiplier } from '../../shared/chain-rung-value-rules';
 
 /**
  * What the chain and the chunk say.
@@ -18,11 +18,17 @@ export const CHAIN_TIER_LABELS: Readonly<Record<ChainTier, string>> = {
 /** Grid steps between a broken pair's halves that earn "Partner across the board". */
 export const CHAIN_STYLE_LONG_SPAN = 4;
 
-/** One rung's worth, as a sentence. Module-level so the meter's own label can reuse it. */
+/**
+ * One rung's worth, as a sentence: what it finds and what it pays for finding it.
+ *
+ * Both halves, because either alone misleads. Sharp finds a third of a pair more than Clean and
+ * pays twice as much for every pair it finds, so the pairs read as a dead rung and the multiplier
+ * reads as the truth (Gen 189).
+ */
 const rungValueLine = (tier: ChainTier): string => {
     const pairs = CHAIN_RUNG_PAIRS[tier];
     const at = tier === 'none' ? 'A match with no chain' : `A ${CHAIN_TIER_LABELS[tier]} break`;
-    return `${at} takes about ${pairs} ${pairs === 1 ? 'pair' : 'pairs'} with it.`;
+    return `${at} takes about ${pairs} ${pairs === 1 ? 'pair' : 'pairs'} and pays ×${chainRungScoreMultiplier(tier)} for each.`;
 };
 
 export const CHAIN_BEAT_COPY = {
@@ -90,10 +96,10 @@ export const CHAIN_BEAT_COPY = {
      * grows as they climb is how "Sharp takes about this many" is learned by seeing it.
      */
     rungValue: rungValueLine,
-    /** The whole ladder in one line, for the hover hint: what each rung up is worth. */
+    /** The whole ladder in one line, for the hover hint: what each rung up pays. */
     rungLadder: (): string =>
-        `A lone match takes about ${CHAIN_RUNG_PAIRS.none} pairs, Clean ${CHAIN_RUNG_PAIRS.clean}, ` +
-        `Sharp ${CHAIN_RUNG_PAIRS.sharp}, Fever ${CHAIN_RUNG_PAIRS.fever}.`,
+        `A lone match pays ×${chainRungScoreMultiplier('none')} a pair, Clean ×${chainRungScoreMultiplier('clean')}, ` +
+        `Sharp ×${chainRungScoreMultiplier('sharp')}, Fever ×${chainRungScoreMultiplier('fever')}.`,
     /** The meter, for a screen reader: where the momentum stands on the ladder, and what it is worth. */
     meterLabel: (momentum: number, feverAt: number, full: boolean, tier: ChainTier): string =>
         `${full ? `Fever meter full: momentum ${momentum}.` : `Fever meter: momentum ${momentum} of ${feverAt}.`}` +

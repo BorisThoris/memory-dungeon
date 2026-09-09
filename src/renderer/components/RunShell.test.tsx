@@ -30,26 +30,29 @@ describe('RunShell', () => {
         expect(screen.queryByRole('timer')).not.toBeInTheDocument();
     });
 
-    it('says what the rung the player is standing on is worth, and grows it as they climb', () => {
+    it('says what the rung the player is standing on pays, and grows it as they climb', () => {
         // The meter said where they were on the ladder and never what being there bought
-        // (thesis §30.3a). One pip per pair the rung takes, and the cluster grows with the chain.
+        // (thesis §30.3a). The number is the multiplier a break at this rung is scored with -
+        // Gen 186 showed the pairs a rung finds, which reads as a dead middle rung because Sharp
+        // finds a third of a pair more than Clean and pays twice as much for each of them.
         const base = playingRun();
         const cold: RunState = { ...base, board: { ...base.board!, pairCount: 12 } };
         const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={cold} tools={[]} />);
 
-        const pipsAt = (): HTMLElement => screen.getByTestId('hud-chain-rung-pips');
-        expect(pipsAt()).toHaveAttribute('data-chain-tier', 'none');
-        expect(pipsAt()).toHaveAttribute('aria-label', 'A match with no chain takes about 2 pairs with it.');
-        const pops = Number(pipsAt().getAttribute('data-rung-pips'));
-        expect(pipsAt().children).toHaveLength(pops);
+        const rungAt = (): HTMLElement => screen.getByTestId('hud-chain-rung-value');
+        expect(rungAt()).toHaveAttribute('data-chain-tier', 'none');
+        expect(rungAt()).toHaveAttribute('data-rung-multiplier', '1');
+        expect(rungAt()).toHaveTextContent('×1');
+        expect(rungAt().getAttribute('aria-label')).toMatch(
+            /^A match with no chain takes about \d+ pairs and pays ×1 for each\.$/
+        );
 
-        // Twelve pairs: Sharp from 5, Fever from 7. A Fever break takes far more than a lone match.
+        // Twelve pairs: Sharp from 5, Fever from 7. A Fever break is scored at eight times a pop.
         const hot: RunState = { ...cold, stats: { ...cold.stats, currentStreak: 9 } };
         rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={hot} tools={[]} />);
-        expect(pipsAt()).toHaveAttribute('data-chain-tier', 'fever');
-        expect(pipsAt().getAttribute('aria-label')).toMatch(/^A Fever break takes about \d+ pairs with it\.$/);
-        expect(Number(pipsAt().getAttribute('data-rung-pips'))).toBeGreaterThan(pops);
-        expect(pipsAt().children).toHaveLength(Number(pipsAt().getAttribute('data-rung-pips')));
+        expect(rungAt()).toHaveAttribute('data-chain-tier', 'fever');
+        expect(rungAt()).toHaveTextContent('×8');
+        expect(Number(rungAt().getAttribute('data-rung-multiplier'))).toBeGreaterThan(1);
 
         // The meter's own label carries it too, so a screen reader is told the same thing.
         expect(within(screen.getByTestId('hud-chain')).getByTestId('hud-chain-meter')).toHaveAttribute(

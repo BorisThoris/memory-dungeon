@@ -1889,7 +1889,7 @@ HUD draws (2 / 3 / 4 / 7) are pinned to this measurement by `chain-rung-value-ru
 re-runs the simulation and fails if a rung walks more than 0.6 of a pair away from what it promises.
 A meter that says three pairs while the rule pays one is worse than a meter that says nothing.
 
-### The finding: the middle rung is thin again
+### The finding: the middle rung is thin again — **corrected at Gen 189, see below**
 
 **Sharp pays 0.32 pairs over Clean.** The band floor is 0.25, so this passes, but it is the same
 failure Gen 168 existed to fix: measured then at 0.01, repaired to 0.39, and the Phase 1 and 2 board
@@ -1900,3 +1900,56 @@ The pips make it visible for the first time - the cluster barely changes when a 
 - which is the honest outcome of putting a number on an interface: it showed the design something it
 had been hiding from itself. Not retuned here, because an interface generation is the wrong place to
 move a rule: it has its own task.
+
+## Gen 189: the ladder was not thin, the measurement was
+
+Gen 186 put the pairs a rung takes on the HUD and reported Sharp finding 0.32 of a pair more than
+Clean, against a band floor of 0.25 - the same failure Gen 168 existed to repair. That finding was
+measured on the wrong quantity, and this generation says so rather than acting on it.
+
+**Pairs are the ladder's input. Score is its payoff.** The tier multiplies what a break finds
+(`CHAIN_MULT` = ×1 / ×2 / ×4 / ×8), so a rung that finds barely more pairs still pays twice as much
+for every pair it finds. Measured both ways over eight seeds and twelve levels:
+
+| Rung | Pairs a break takes | Step in pairs | Score a break pays | Step in score |
+|---|---|---|---|---|
+| A lone match | 1.91 | — | 70 | — |
+| Clean | 3.19 | 1.28 | 226 | **×3.24** |
+| Sharp | 3.50 | **0.32** | 506 | **×2.24** |
+| Fever | 6.95 | 3.44 | 2036 | **×4.02** |
+
+Every rung more than doubles what the rung below pays. The ladder is healthy; the pair column is
+what made it look otherwise, and Gen 186's pips inherited that. `scorePerMatch` and `scoreStep` are
+now in the pop simulation's report and banded (`ladderScoreMinStep`, min 1.8×), so from here the
+thing that is guarded is the thing the player feels. The pairs band stays as a secondary guard: it
+caught a real failure at Gen 168, when a rung bought literally nothing.
+
+### The reach experiment, and why it was rejected
+
+Before measuring the payoff I tried to widen Sharp's step by shrinking the rungs below it, since the
+pop had grown fat (1.18 pairs at Gen 168, 1.91 now). Measured, with the wave's reach as a per-tier
+record and the drop's reach decoupled from it:
+
+| Reach (pop / Clean) | Pairs ladder | Sharp's step | Verdict |
+|---|---|---|---|
+| 2 / 2 (shipped) | 1.91 / 3.19 / 3.50 / 6.95 | 0.32 | — |
+| 1 / 1 | 0.63 / 2.43 / 3.50 / 6.95 | **1.07** | **rejected** |
+| 1 / 2 | 0.63 / 3.19 / 3.50 / 6.95 | 0.32 | no gain |
+| 1 / 3 | 0.63 / 3.35 / 3.50 / 6.95 | 0.15 | worse |
+| 2 / ∞, partner at Sharp | 1.91 / 2.95 / 3.50 / 6.95 | 0.56 | breaks floor 3 |
+| 2 / 2, partner at Sharp | 1.91 / **1.91** / 3.50 / 6.95 | 1.60 | Clean buys nothing |
+
+Reach 1 gives much the best pair ladder and fails twice over: a player missing a quarter of their
+flips reaches Fever on **0.326** of floors against a band of 0.22, because a weaker pop means more
+matches per floor and the Fever rung is a share of the floor's pairs - so shrinking the pop hands
+Fever to everyone and destroys the clean-over-reference separation the tier exists to create. It
+also breaks all three authored floors: floor 1's guarantee is that on a 3×2 no cell is further than
+the pop's reach from the nearer half of any pair, and at reach 1 a deal exists where the first match
+pops nothing, which is the one thing §51 authored those floors to prevent.
+
+The last row is the useful one for whoever tunes this next: with the partner reach moved off Clean,
+Clean buys **exactly nothing** over a lone match. Clean's entire value is the partner reach, and
+Sharp's problem is that a reach-2 region on a six-pair suit is already most of the suit. Making
+Sharp find more pairs means changing the *boards* - suits that spread past reach 2 - not the reach.
+Nothing was retuned: the rules are as they shipped, and `BREAK_CLUMP_REACH` / `BREAK_PARTNER_REACH`
+are now records so the next attempt is a one-line change with the numbers above to check it against.

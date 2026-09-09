@@ -495,33 +495,35 @@
     }
 }
 
-/* The rung's worth, in pairs: one pip each, beside the tier name. The meter says where you are on
-   the ladder; these say what being there buys, which is the half the player could not see. */
-.rungPips {
-    display: inline-flex;
-    align-items: center;
-    gap: 2px;
+/* The rung's worth: the multiplier a break here is scored with, beside the tier name. The meter
+   says where you are on the ladder; this says what being there pays, which is the half the player
+   could not see. */
+.rungValue {
+    display: inline-block;
     margin-left: 0.34rem;
+    padding: 0 0.22rem;
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--theme-text-muted) 16%, transparent);
+    color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
+    font-size: 0.82em;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    letter-spacing: 0.02em;
     vertical-align: middle;
 }
 
-.rungPip {
-    display: block;
-    width: 3px;
-    height: 3px;
-    border-radius: 50%;
-    background: color-mix(in srgb, var(--theme-text-muted) 80%, transparent);
+.rungValue[data-chain-tier='clean'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 70%, var(--theme-text));
 }
 
-.rungPips[data-chain-tier='clean'] .rungPip {
-    background: color-mix(in srgb, var(--theme-gold-bright) 60%, var(--theme-text));
+.rungValue[data-chain-tier='sharp'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 26%, transparent);
+    color: var(--theme-gold-bright);
 }
 
-.rungPips[data-chain-tier='sharp'] .rungPip {
-    background: var(--theme-gold-bright);
-}
-
-.rungPips[data-chain-tier='fever'] .rungPip {
-    background: #ffd27a;
-    box-shadow: 0 0 4px color-mix(in srgb, var(--theme-glow-gold) 80%, transparent);
+.rungValue[data-chain-tier='fever'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
+    color: #ffd27a;
+    box-shadow: 0 0 6px color-mix(in srgb, var(--theme-glow-gold) 70%, transparent);
 }

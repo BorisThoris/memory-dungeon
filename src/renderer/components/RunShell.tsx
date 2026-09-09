@@ -8,7 +8,7 @@ import styles from './RunShell.module.css';
 import { RUN_SHELL_LABELS } from '../copy/runDialogCopy';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { CHAIN_BEAT_COPY, CHAIN_TIER_LABELS } from '../copy/chainBeat';
-import { chainRungPips } from '../../shared/chain-rung-value-rules';
+import { chainRungScoreMultiplier } from '../../shared/chain-rung-value-rules';
 import { chainTierRungs, runChainMeter, runChainTier } from '../../shared/chain-tier-rules';
 import { isPassAndPlayRun, PASS_AND_PLAY_FLOORS } from '../../shared/pass-and-play-rules';
 
@@ -240,20 +240,20 @@ const RunShell = ({
                                 ? ` ${CHAIN_TIER_LABELS[runChainTier(run)]}`
                                 : ''
                         }`}
-                        {/* What standing on this rung is worth, in pairs: one pip each, so the
-                            cluster grows as the player climbs and the ladder is learned by
-                            watching it rather than by reading a number (thesis §30.3a). */}
+                        {/* What standing on this rung is worth: the multiplier a break here is
+                            scored with. Gen 186 showed the pairs a rung finds, which reads as a
+                            dead middle - Sharp finds a third of a pair more than Clean and pays
+                            twice as much for each. This is the number the player is paid, and it
+                            is Peggle's ladder exactly (thesis §30.3a). */}
                         <span
                             aria-label={CHAIN_BEAT_COPY.rungValue(runChainTier(run))}
-                            className={styles.rungPips}
+                            className={styles.rungValue}
                             data-chain-tier={runChainTier(run)}
-                            data-rung-pips={chainRungPips(runChainTier(run))}
-                            data-testid="hud-chain-rung-pips"
+                            data-rung-multiplier={chainRungScoreMultiplier(runChainTier(run))}
+                            data-testid="hud-chain-rung-value"
                             role="img"
                         >
-                            {Array.from({ length: chainRungPips(runChainTier(run)) }, (_, index) => (
-                                <span key={index} className={styles.rungPip} />
-                            ))}
+                            {`×${chainRungScoreMultiplier(runChainTier(run))}`}
                         </span>
                     </span>
                 </Stat>

@@ -71,9 +71,21 @@ export const CLEAN_WAVES = 1;
  */
 export const BOUNDED_BREAK_REACH = 2;
 
-/** How deep into the same-suit clump a wave walks at this tier; Infinity is the whole region. */
-export const breakClumpReach = (tier: ChainTier): number =>
-    tier === 'sharp' || tier === 'fever' ? Number.POSITIVE_INFINITY : BOUNDED_BREAK_REACH;
+/**
+ * How deep into the same-suit clump a wave walks, per tier. Infinity is the whole region.
+ *
+ * A record rather than a branch because this is the ladder's depth half and it is tuned: Gen 189
+ * measured the rungs against it after the pips (Gen 186) showed Sharp paying 0.32 pairs over Clean,
+ * a middle rung as thin as the one Gen 168 existed to repair.
+ */
+export const BREAK_CLUMP_REACH: Readonly<Record<ChainTier, number>> = {
+    none: BOUNDED_BREAK_REACH,
+    clean: BOUNDED_BREAK_REACH,
+    sharp: Number.POSITIVE_INFINITY,
+    fever: Number.POSITIVE_INFINITY
+};
+
+export const breakClumpReach = (tier: ChainTier): number => BREAK_CLUMP_REACH[tier];
 
 /**
  * Contact, or reach. A pop is contact: a pair goes when both its halves touch the clump. Reaching
@@ -81,7 +93,14 @@ export const breakClumpReach = (tier: ChainTier): number =>
  * chain buys from Clean. Pairs still leave together, always: a pair with a half outside the clump
  * stays whole on a pop.
  */
-export const breakReachesPartners = (tier: ChainTier): boolean => tier !== 'none';
+export const BREAK_PARTNER_REACH: Readonly<Record<ChainTier, boolean>> = {
+    none: false,
+    clean: true,
+    sharp: true,
+    fever: true
+};
+
+export const breakReachesPartners = (tier: ChainTier): boolean => BREAK_PARTNER_REACH[tier];
 /**
  * The ripple. Every tile a wave takes seeds the next wave with the same reach, until a wave takes
  * nothing. Each wave past the first multiplies the whole break by this step, up to the cap - the
@@ -108,7 +127,7 @@ export const RIPPLE_MAX_WAVES = 12;
  * it takes the last pairs of a suit a player would otherwise grind out by hand (§41.2). Pairs with
  * a job of their own - a findable, the cursed pair - never drop and never hold the suit up.
  */
-export const SEVERANCE_DROP_REACH = BOUNDED_BREAK_REACH;
+export const SEVERANCE_DROP_REACH = 2;
 /**
  * The cap the thesis asked for (F.7, T2.4). Measured before it: the severance fired on 28% of
  * chain-one matches and took 1.44 pairs a time, but one drop in eight took three or four - a

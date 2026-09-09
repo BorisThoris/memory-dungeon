@@ -1,17 +1,28 @@
+import { CHAIN_MULT } from './chunk-break-rules';
 import type { ChainTier } from './chain-tier-rules';
 
 /**
- * What a rung is worth, in pairs.
+ * What a rung is worth.
  *
  * The chain meter said where the player stood on the ladder and never what standing there was
  * worth, so a new player had no way to discover that holding a pair is a strategy except by
- * accident (thesis §30.2, §30.3a). These are the pairs a break takes at each tier's own rung,
- * measured by `simulatePopReach` over eight seeds and twelve levels - the same run `yarn sim:pop`
- * makes - and rounded to something a small cluster of pips can carry.
+ * accident (thesis §30.2, §30.3a).
  *
- * Measured at Gen 186: none 1.91, clean 3.19, sharp 3.50, fever 6.95. `chain-rung-value-rules.test`
- * re-measures and fails if the ladder walks away from these, because a meter that promises three
- * pairs while the rule pays one is worse than a meter that promises nothing.
+ * Gen 186 answered it in pairs and Gen 189 corrected that. Pairs are the ladder's *input*: measured
+ * by `simulatePopReach` the rungs take 1.91 / 3.19 / 3.50 / 6.95 pairs, which reads as a ladder with
+ * a dead middle - Sharp finding a third of a pair more than Clean. But the tier multiplies what it
+ * finds, so the same rungs pay 70 / 226 / 506 / 2036 score: **x3.2, x2.2, x4.0**. Every rung more
+ * than doubles the payoff. The ladder was never thin; the measurement was, and the interface
+ * inherited it. What the meter shows is the multiplier, because that is what the player is paid.
+ */
+export const CHAIN_RUNG_SCORE_MULTIPLIER: Readonly<Record<ChainTier, number>> = CHAIN_MULT;
+
+/**
+ * The pairs a break takes at each rung, measured by `simulatePopReach` over eight seeds and twelve
+ * levels and rounded. Kept because the sentence a player reads on hover is more useful with both -
+ * what a rung finds and what it pays - but the number on screen is the multiplier.
+ *
+ * Measured at Gen 186: none 1.91, clean 3.19, sharp 3.50, fever 6.95.
  */
 export const CHAIN_RUNG_PAIRS: Readonly<Record<ChainTier, number>> = {
     none: 2,
@@ -27,5 +38,8 @@ export const CHAIN_RUNG_PAIRS: Readonly<Record<ChainTier, number>> = {
  */
 export const CHAIN_RUNG_PAIRS_TOLERANCE = 0.6;
 
-/** The pips a rung draws: one per pair it takes, so the cluster grows as the player climbs. */
-export const chainRungPips = (tier: ChainTier): number => CHAIN_RUNG_PAIRS[tier];
+/** What a break at this rung multiplies its score by: the ladder as the player is paid it. */
+export const chainRungScoreMultiplier = (tier: ChainTier): number => CHAIN_RUNG_SCORE_MULTIPLIER[tier];
+
+/** The pairs a break at this rung takes, for the sentence that explains the multiplier. */
+export const chainRungPairs = (tier: ChainTier): number => CHAIN_RUNG_PAIRS[tier];

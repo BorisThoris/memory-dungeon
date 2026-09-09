@@ -37,6 +37,8 @@ export interface PopReachFloorSample {
     poppedPairs: number;
     /** The same matches replayed at each tier's own rung: pairs taken, summed, per tier. */
     tierPairs: Readonly<Record<ChainTier, number>>;
+    /** What those breaks were worth, summed, per tier: the payoff rather than the input. */
+    tierScore: Readonly<Record<ChainTier, number>>;
 }
 
 /**
@@ -54,6 +56,18 @@ export interface PopReachLadderReport {
     step: Readonly<Record<ChainTier, number>>;
     /** Fever's take minus a lone match's. */
     spread: number;
+    /**
+     * What a break at this rung is worth in score, which is what the player is actually paid.
+     *
+     * Added at Gen 189, after Gen 186's pips reported Sharp taking 0.32 pairs more than Clean and
+     * the ladder was nearly retuned on that number. Pairs are the input; the tier multiplies them
+     * (`CHAIN_MULT`), so a rung that finds barely more pairs can still pay twice as much. Measured
+     * both ways the ladder reads 1.91/3.19/3.50/6.95 pairs but 51/172/378/1501 score - thin in the
+     * middle by one measure and healthy by the other, and the second is the one the player feels.
+     */
+    scorePerMatch: Readonly<Record<ChainTier, number>>;
+    /** What this rung multiplies the rung below by, in score. The number the ladder lives or dies on. */
+    scoreStep: Readonly<Record<ChainTier, number>>;
 }
 
 export interface PopReachLevelReport {
@@ -122,6 +136,7 @@ export const simulatePopReach = (levels = 12, seeds: readonly number[] = POP_REA
             const rungs = chainTierRungs(board.pairCount);
             const chainForTier: Record<ChainTier, number> = { none: 1, clean: rungs.clean, sharp: rungs.sharp, fever: rungs.fever };
             const tierPairs: Record<ChainTier, number> = { none: 0, clean: 0, sharp: 0, fever: 0 };
+            const tierScore: Record<ChainTier, number> = { none: 0, clean: 0, sharp: 0, fever: 0 };
             for (const halves of whole) {
                 if (halves.some((half) => half.state !== 'hidden')) continue;
                 matches += 1;
@@ -143,6 +158,9 @@ export const simulatePopReach = (levels = 12, seeds: readonly number[] = POP_REA
                             ? broke
                             : resolveChunkBreak({ board, run, matchedTileIds, chain: chainForTier[tier] });
                     tierPairs[tier] += wavePairs(atTier);
+                    // What that break paid: the rule's own score, so the ladder is read in the
+                    // currency the player is paid in and not in the pairs that feed it.
+                    tierScore[tier] += atTier.score;
                 }
             }
             samples.push({
@@ -153,7 +171,8 @@ export const simulatePopReach = (levels = 12, seeds: readonly number[] = POP_REA
                 matches,
                 popped,
                 poppedPairs,
-                tierPairs
+                tierPairs,
+                tierScore
             });
         }
     }
@@ -181,12 +200,28 @@ export const simulatePopReach = (levels = 12, seeds: readonly number[] = POP_REA
         const below = index === 0 ? 0 : pairsPerMatch[POP_REACH_TIERS[index - 1]!];
         step[tier] = pairsPerMatch[tier] - below;
     });
+    const scorePerMatch = {} as Record<ChainTier, number>;
+    for (const tier of POP_REACH_TIERS) {
+        scorePerMatch[tier] =
+            allMatches === 0 ? 0 : samples.reduce((sum, sample) => sum + sample.tierScore[tier], 0) / allMatches;
+    }
+    const scoreStep = {} as Record<ChainTier, number>;
+    POP_REACH_TIERS.forEach((tier, index) => {
+        const below = index === 0 ? 0 : scorePerMatch[POP_REACH_TIERS[index - 1]!];
+        scoreStep[tier] = below === 0 ? 0 : scorePerMatch[tier] / below;
+    });
     const pairsPerDrop = Array.from({ length: dropCounts.length }, (_, index) => dropCounts[index] ?? 0);
     const droppedPairs = pairsPerDrop.reduce((sum, count, pairs) => sum + count * pairs, 0);
     return {
         levels: levelsOut,
         samples,
-        ladder: { pairsPerMatch, step, spread: pairsPerMatch.fever - pairsPerMatch.none },
+        ladder: {
+            pairsPerMatch,
+            step,
+            spread: pairsPerMatch.fever - pairsPerMatch.none,
+            scorePerMatch,
+            scoreStep
+        },
         drop: {
             dropRate: allMatches === 0 ? 0 : dropEvents / allMatches,
             pairsPerDrop,
@@ -220,7 +255,15 @@ export const POP_REACH_BANDS = {
      */
     ladderMinStep: { min: 0.25 },
     /** Fever over a lone match. Was 1.66 before the reach ladder and the bigger suits. */
-    ladderSpread: { min: 2.2 }
+    ladderSpread: { min: 2.2 },
+    /**
+     * The band that matters, added at Gen 189: every rung must at least come close to doubling what
+     * the rung below it pays. `ladderMinStep` above measures pairs, which is an input - a rung can
+     * find barely more pairs and still pay twice as much, because the tier multiplies them, and
+     * that is exactly what Sharp does. Measured at 3.35x / 2.20x / 3.97x, so 1.8 is a floor under
+     * the thinnest rung rather than a target: a rung that stops doubling has stopped being a rung.
+     */
+    ladderScoreMinStep: { min: 1.8 }
 } as const;
 
 export const judgePopReach = (report: PopReachReport): { ok: boolean; issues: string[] } => {
@@ -252,6 +295,15 @@ export const judgePopReach = (report: PopReachReport): { ok: boolean; issues: st
             );
         }
     }
+    for (const tier of POP_REACH_TIERS) {
+        if (tier === 'none') continue;
+        const scoreStep = report.ladder.scoreStep[tier];
+        if (scoreStep < POP_REACH_BANDS.ladderScoreMinStep.min) {
+            issues.push(
+                `chain tier ${tier} pays ${scoreStep.toFixed(2)}x the rung below, under ${POP_REACH_BANDS.ladderScoreMinStep.min}x`
+            );
+        }
+    }
     if (report.ladder.spread < POP_REACH_BANDS.ladderSpread.min) {
         issues.push(`ladder spread none to fever ${report.ladder.spread.toFixed(3)} below ${POP_REACH_BANDS.ladderSpread.min}`);
     }
@@ -271,6 +323,11 @@ export const summarizePopReach = (report: PopReachReport): string =>
                 (tier) => `${tier}=${report.ladder.pairsPerMatch[tier].toFixed(2)} (+${report.ladder.step[tier].toFixed(2)})`
             ).join('  ')}`,
             `ladder spread none to fever: ${report.ladder.spread.toFixed(2)}`,
+            `ladder score: ${POP_REACH_TIERS.map(
+                (tier) =>
+                    `${tier}=${report.ladder.scorePerMatch[tier].toFixed(0)}` +
+                    `${tier === 'none' ? '' : ` (x${report.ladder.scoreStep[tier].toFixed(2)})`}`
+            ).join('  ')}`,
             `drop: fires on ${report.drop.dropRate.toFixed(3)} of chain-one matches, ` +
                 `${report.drop.meanPairsPerDrop.toFixed(2)} pairs a drop, at most ${report.drop.maxPairsPerDrop}; ` +
                 `by pairs ${report.drop.pairsPerDrop
