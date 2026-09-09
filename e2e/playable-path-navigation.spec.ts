@@ -159,10 +159,14 @@ test.describe('Expanded playable navigation contract', () => {
         await expect(page.getByTestId('profile-objective-board')).toBeVisible();
     });
 
-    test('floor clear Main Menu action uses abandon confirmation before leaving gameplay', async ({ page }) => {
+    test('leaving a run after a floor clear goes through the pause menu and its abandon confirmation', async ({ page }) => {
         test.setTimeout(260_000);
+        // The floor-clear beat has no Main Menu: the run is on floor two once it has played out,
+        // and leaving is the pause menu's Retreat, as anywhere else in a run.
         await completeClassicLevelOne(page);
-        await page.getByRole('dialog', { name: /floor cleared/i }).getByRole('button', { name: /^main menu$/i }).click();
+        await page.getByTestId('game-toolbar-main-menu').click({ force: true });
+        await expect(page.getByTestId('game-pause-overlay')).toBeVisible();
+        await page.getByTestId('game-pause-overlay').getByRole('button', { name: /^retreat$/i }).click();
         await expect(page.getByRole('dialog', { name: /abandon run/i })).toBeVisible();
         await page.getByRole('dialog', { name: /abandon run/i }).getByRole('button', { name: /^abandon run$/i }).click();
         await expect(mainMenuPlayButton(page)).toBeVisible({ timeout: 15_000 });

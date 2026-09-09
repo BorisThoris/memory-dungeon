@@ -196,7 +196,7 @@ describe('desktop app flow', () => {
         expect(parsed.onboardingDismissed).toBe(false);
     });
 
-    it('shows the life-bonus reason in the floor-cleared modal', async () => {
+    it('shows the life-bonus reason on the floor-clear beat', async () => {
         const saveData = createDefaultSaveData();
         const baseRun = createNewRun(0);
         const run = {
@@ -252,7 +252,9 @@ describe('desktop app flow', () => {
 
         renderApp();
 
-        expect(await screen.findByRole('dialog', { name: /floor cleared/i })).toBeInTheDocument();
+        // The floor clears in place (Gen 182): a status over the board, not a dialog.
+        expect(await screen.findByTestId('floor-clear-beat')).toBeInTheDocument();
+        expect(screen.queryByRole('dialog', { name: /floor cleared/i })).not.toBeInTheDocument();
         expect(screen.getByText(/clean floor bonus: \+1 life/i)).toBeInTheDocument();
     });
 
@@ -388,7 +390,7 @@ describe('desktop app flow', () => {
 
         renderApp();
 
-        expect(screen.queryByRole('dialog', { name: /floor cleared/i })).not.toBeInTheDocument();
+        expect(screen.queryByTestId('floor-clear-beat')).not.toBeInTheDocument();
         expect(await screen.findByRole('region', { name: /inventory/i })).toBeInTheDocument();
     });
 

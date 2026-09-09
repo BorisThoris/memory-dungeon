@@ -13,6 +13,42 @@ import { dismissStartupIntro } from './startupIntroHelpers';
 
 const MATCH_SETTLE_MS = 950;
 
+/**
+ * Gen 182: a floor clears in place. There is no dialog and no button — the floor-clear beat shows
+ * over the board for ~1.6s (after a 650ms hold on the last pair) and then the run advances on its
+ * own. A helper that looks late therefore has to accept the next floor on the HUD as proof the
+ * floor cleared, which is what `isFloorClearedOrAdvanced` does.
+ */
+export function floorClearBeat(page: Page): Locator {
+    return page.getByTestId('floor-clear-beat');
+}
+
+/** The HUD floor stat's text, or null while no run shell is mounted. */
+export async function readHudFloorText(page: Page): Promise<string | null> {
+    const hudFloor = page.getByTestId('hud-floor');
+    if ((await hudFloor.count()) === 0) {
+        return null;
+    }
+    return hudFloor.textContent().catch(() => null);
+}
+
+/** True once the floor has cleared: the beat is up, or the HUD already reads a floor other than `floorBefore`. */
+export async function isFloorClearedOrAdvanced(page: Page, floorBefore: string | null): Promise<boolean> {
+    if (await floorClearBeat(page).isVisible().catch(() => false)) {
+        return true;
+    }
+    if (floorBefore === null) {
+        return false;
+    }
+    const now = await readHudFloorText(page);
+    return now !== null && now !== floorBefore;
+}
+
+/** The HUD reads `floor` once the beat has advanced the run (the stat's text is its label plus the number). */
+export async function expectHudFloor(page: Page, floor: number, timeout = 30_000): Promise<void> {
+    await expect(page.getByTestId('hud-floor')).toHaveText(new RegExp(`(^|\\D)${floor}(\\D|$)`), { timeout });
+}
+
 type PairClickSettlement = 'floor_cleared' | 'four_hidden' | 'two_hidden';
 
 /**
@@ -21,13 +57,13 @@ type PairClickSettlement = 'floor_cleared' | 'four_hidden' | 'two_hidden';
  */
 async function settleAfterHiddenPairClick(page: Page, timeoutMs = 18_000): Promise<PairClickSettlement> {
     const deadline = Date.now() + timeoutMs;
-    const floorCleared = page.getByRole('dialog', { name: /floor cleared/i });
+    const floorBefore = await readHudFloorText(page);
 
     /** On a mismatch, brief `hidden === 2` is transient (tiles revealed) before flip-back to four hidden. After a legal match clearing two tiles on a small board, `hidden === 2` can stay stable (two cards remain). Wait out the transient before treating as accidental match downstate. */
     const settleTransientTwoHiddenMs = 5_000;
 
     while (Date.now() < deadline) {
-        if (await floorCleared.isVisible().catch(() => false)) {
+        if (await isFloorClearedOrAdvanced(page, floorBefore)) {
             return 'floor_cleared';
         }
         const hidden = await readFrameHiddenTileCount(page);
@@ -37,7 +73,7 @@ async function settleAfterHiddenPairClick(page: Page, timeoutMs = 18_000): Promi
         if (hidden === 2) {
             const innerDeadline = Math.min(Date.now() + settleTransientTwoHiddenMs, deadline);
             while (Date.now() < innerDeadline) {
-                if (await floorCleared.isVisible().catch(() => false)) {
+                if (await isFloorClearedOrAdvanced(page, floorBefore)) {
                     return 'floor_cleared';
                 }
                 const h = await readFrameHiddenTileCount(page);
@@ -544,18 +580,23 @@ function pairKey(a: { row: number; col: number }, b: { row: number; col: number 
     return `${s[0]}|${s[1]}`;
 }
 
-async function completeLevel1ByTryingHiddenPairs(page: Page): Promise<void> {
+/**
+ * `floorBefore` is the HUD floor when the caller started clearing: the beat advances the run on
+ * its own, so a helper entered after it has gone must not mistake the next board for this one.
+ */
+async function completeLevel1ByTryingHiddenPairs(page: Page, floorBefore: string | null = null): Promise<void> {
+    const floorAtStart = floorBefore ?? (await readHudFloorText(page));
     await page.getByTestId('tile-board-application').focus();
     const tried = new Set<string>();
     const deadline = Date.now() + 120_000;
     while (Date.now() < deadline) {
-        if (await page.getByRole('dialog', { name: /floor cleared/i }).isVisible().catch(() => false)) {
+        if (await isFloorClearedOrAdvanced(page, floorAtStart)) {
             return;
         }
-        if (await proceedThroughUnlockedExitIfVisible(page)) {
+        if (await proceedThroughUnlockedExitIfVisible(page, floorAtStart)) {
             return;
         }
-        if (await revealLoneExitIfPresent(page)) {
+        if (await revealLoneExitIfPresent(page, floorAtStart)) {
             return;
         }
         const positions = await getHiddenTilePositions(page);
@@ -585,7 +626,7 @@ async function completeLevel1ByTryingHiddenPairs(page: Page): Promise<void> {
                 if (settled === 'floor_cleared') {
                     return;
                 }
-                if (await proceedThroughUnlockedExitIfVisible(page)) {
+                if (await proceedThroughUnlockedExitIfVisible(page, floorAtStart)) {
                     return;
                 }
                 clicked = true;
@@ -596,7 +637,9 @@ async function completeLevel1ByTryingHiddenPairs(page: Page): Promise<void> {
             await page.waitForTimeout(120);
         }
     }
-    await expect(page.getByRole('dialog', { name: /floor cleared/i })).toBeVisible({ timeout: 30_000 });
+    await expect
+        .poll(async () => isFloorClearedOrAdvanced(page, floorAtStart), { timeout: 30_000 })
+        .toBe(true);
 }
 
 /** Poll hidden-tile count only (run may be `playing`, `resolving`, or briefly `paused` — do not require `playing` here). */
@@ -619,18 +662,22 @@ async function clickHiddenTile(page: Page, row: number, col: number): Promise<vo
     await flipTileAtGridCellKeyboard(page, row, col);
 }
 
-async function proceedThroughUnlockedExitIfVisible(page: Page): Promise<boolean> {
+/** Proceeding through the exit clears the floor: the beat follows, and the run advances on its own. */
+async function proceedThroughUnlockedExitIfVisible(page: Page, floorBefore: string | null = null): Promise<boolean> {
     const exitDialog = page.getByRole('dialog', { name: /unlocked exit/i });
     if (!(await exitDialog.isVisible().catch(() => false))) {
         return false;
     }
+    const floorAtStart = floorBefore ?? (await readHudFloorText(page));
     await exitDialog.getByRole('button', { name: /^proceed$/i }).click();
-    await expect(page.getByRole('dialog', { name: /floor cleared/i })).toBeVisible({ timeout: 15_000 });
+    await expect
+        .poll(async () => isFloorClearedOrAdvanced(page, floorAtStart), { timeout: 15_000 })
+        .toBe(true);
     return true;
 }
 
-async function revealLoneExitIfPresent(page: Page): Promise<boolean> {
-    if (await proceedThroughUnlockedExitIfVisible(page)) {
+async function revealLoneExitIfPresent(page: Page, floorBefore: string | null = null): Promise<boolean> {
+    if (await proceedThroughUnlockedExitIfVisible(page, floorBefore)) {
         return true;
     }
 
@@ -641,7 +688,7 @@ async function revealLoneExitIfPresent(page: Page): Promise<boolean> {
 
     await clickHiddenTile(page, positions[0]!.row, positions[0]!.col);
     await expect(page.getByRole('dialog', { name: /unlocked exit/i })).toBeVisible({ timeout: 15_000 });
-    return proceedThroughUnlockedExitIfVisible(page);
+    return proceedThroughUnlockedExitIfVisible(page, floorBefore);
 }
 
 /**
@@ -668,7 +715,12 @@ export async function waitLevel1PlayReady(page: Page): Promise<PairPositions | n
     return lastMemorizeSnap;
 }
 
+/**
+ * Returns as soon as the floor has cleared (the floor-clear beat is up, or the run has already
+ * advanced). A caller that wants the beat in frame waits for `floor-clear-beat` right after this.
+ */
 export async function completeLevel1AllMatches(page: Page, pairs: PairPositions): Promise<void> {
+    const floorBefore = await readHudFloorText(page);
     await page.getByTestId('tile-board-application').focus();
     for (const label of Object.keys(pairs)) {
         const [a, b] = pairs[label];
@@ -676,13 +728,13 @@ export async function completeLevel1AllMatches(page: Page, pairs: PairPositions)
         await clickHiddenTile(page, b.row, b.col);
         await page.waitForTimeout(MATCH_SETTLE_MS);
     }
-    if (await proceedThroughUnlockedExitIfVisible(page)) {
+    if (await proceedThroughUnlockedExitIfVisible(page, floorBefore)) {
         return;
     }
-    if (await revealLoneExitIfPresent(page)) {
+    if (await revealLoneExitIfPresent(page, floorBefore)) {
         return;
     }
-    await completeLevel1ByTryingHiddenPairs(page);
+    await completeLevel1ByTryingHiddenPairs(page, floorBefore);
 }
 
 /** Finish level 1 using memorize pairs when present, otherwise search pairs (missed short memorize window). */
@@ -725,14 +777,20 @@ async function leaveRunForMainMenu(page: Page): Promise<void> {
     }
 }
 
-async function restartLevel1AfterAccidentalMatch(page: Page): Promise<void> {
-    const floorCleared = page.getByRole('dialog', { name: /floor cleared/i });
-
-    if (await floorCleared.isVisible().catch(() => false)) {
-        await floorCleared.getByRole('button', { name: /main menu/i }).click();
-    } else {
-        await page.getByRole('button', { name: /return to main menu/i }).click();
+/**
+ * A floor cleared by accident advances on its own (the beat has no Main Menu), so first wait for
+ * the run to be on floor two — pause is refused while the beat is up — then leave through the
+ * pause menu's Retreat, as anywhere else in a run.
+ */
+async function restartLevel1AfterAccidentalMatch(page: Page, floorCleared: boolean): Promise<void> {
+    if (floorCleared) {
+        await expectHudFloor(page, 2, 30_000);
+        await expect(floorClearBeat(page)).toBeHidden({ timeout: 15_000 });
     }
+    await page.getByRole('button', { name: /pause and open the run menu/i }).click({ force: true });
+    const pauseOverlay = page.getByTestId('game-pause-overlay');
+    await expect(pauseOverlay).toBeVisible({ timeout: 20_000 });
+    await pauseOverlay.getByRole('button', { name: /^retreat$/i }).click({ force: true });
 
     await leaveRunForMainMenu(page);
     await restartLevel1FromMainMenu(page);
@@ -780,7 +838,7 @@ async function discoverMismatchPair(
         const settled = await settleAfterHiddenPairClick(page);
 
         if (settled === 'floor_cleared') {
-            await restartLevel1AfterAccidentalMatch(page);
+            await restartLevel1AfterAccidentalMatch(page, true);
             continue;
         }
 
@@ -789,7 +847,7 @@ async function discoverMismatchPair(
         }
 
         if (settled === 'two_hidden') {
-            await restartLevel1AfterAccidentalMatch(page);
+            await restartLevel1AfterAccidentalMatch(page, false);
             continue;
         }
     }

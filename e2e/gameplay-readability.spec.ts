@@ -1,4 +1,4 @@
-import { expect, test, type Locator, type Page } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import {
     expectAppScrollportHasNoVerticalOverflow,
     expectLocatorFullyInWindowViewport,
@@ -69,19 +69,14 @@ test.describe('Gameplay readability hardening', () => {
         await page.setViewportSize({ width: 390, height: 844 });
         await openPlayablePathFixture(page, 'floorClearWithRouteChoices');
 
-        const floorClear = page.getByRole('dialog', { name: /floor cleared/i });
-        await expect(floorClear).toBeVisible();
+        // The screen opens already complete, so the floor-clear beat is up at once and the run
+        // advances on its own ~1.6s later: everything here is read inside that window. No doors
+        // since Gen 173 and no dialog since Gen 182 — the beat has nothing to press, so what has
+        // to hold on a phone is that the whole beat, score included, sits inside the viewport.
+        const floorClearBeat = page.getByTestId('floor-clear-beat');
+        await expect(floorClearBeat).toBeVisible({ timeout: 10_000 });
         await expect(page.getByTestId('floor-clear-score')).toBeVisible();
-        await expectLocatorFullyInWindowViewport(page, page.getByTestId('floor-clear-stats'), 8);
-        // No doors since Gen 173: the one control on the dialog is Continue, and it has to
-        // be a real touch target on a phone.
-        await expect(page.getByTestId('route-choice-panel')).toHaveCount(0);
-        const continueButton = floorClear.getByRole('button', { name: /^continue$/i });
-        await continueButton.scrollIntoViewIfNeeded();
-        await expect(continueButton).toBeVisible();
-        await expectLocatorStartsWithinWindowViewport(page, continueButton, 8);
-        const box = await continueButton.boundingBox();
-        expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
+        await expectLocatorFullyInWindowViewport(page, floorClearBeat, 8);
         await expectNoHorizontalOverflow(page);
     });
 
@@ -138,24 +133,6 @@ async function expectBoardKeepsPriority(page: Page): Promise<void> {
         metrics!.boardHeight / metrics!.shellHeight,
         `board should keep at least 45% of the gameplay shell height; got ${metrics!.boardHeight}/${metrics!.shellHeight}`
     ).toBeGreaterThanOrEqual(0.45);
-}
-
-async function expectLocatorStartsWithinWindowViewport(page: Page, locator: Locator, epsilon = 6): Promise<void> {
-    const box = await locator.evaluate((element, eps) => {
-        const r = element.getBoundingClientRect();
-        return {
-            eps,
-            left: r.left,
-            right: r.right,
-            top: r.top,
-            vh: window.innerHeight,
-            vw: window.innerWidth
-        };
-    }, epsilon);
-    expect(
-        box.top >= -box.eps && box.top <= box.vh + box.eps && box.left >= -box.eps && box.right <= box.vw + box.eps,
-        `expected locator to start in viewport; got top=${box.top} left=${box.left} right=${box.right} for ${box.vw}x${box.vh}`
-    ).toBeTruthy();
 }
 
 async function readCardFeedbackStates(page: Page): Promise<Map<string, number>> {

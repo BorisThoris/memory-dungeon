@@ -73,9 +73,8 @@ import { profileDeepestFloor } from '../../shared/profile-deepest-floor';
 import { describeRunModeIdentity } from '../../shared/run-mode-identity';
 import { RUN_SHELL_GLYPHS } from './runShellGlyphs';
 import MainMenuBackground from './MainMenuBackground';
-import FloorClearDialog, {
-} from './FloorClearDialog';
-import OverlayModal, { type ModalAction } from './OverlayModal';
+import FloorClearBeat from './FloorClearBeat';
+import OverlayModal from './OverlayModal';
 import { useGameScreenBoardVisualSettings } from './gameScreenStoreSelectors';
 import TileBoard, { type TileBoardHandle } from './TileBoard';
 
@@ -200,8 +199,14 @@ const getClearLifeBonusLabel = (result: NonNullable<RunState['lastLevelResult']>
 const BREAK_PULSE_MS = 720;
 /** A Fever break is held longer: the stage pushes in and stays for the slowed shatter wave. */
 const FEVER_BREAK_PULSE_MS = 1100;
-/** The breath before the floor-clear dialog on the last pair. */
+/** The breath before the floor-clear beat on the last pair. */
 export const LAST_PAIR_HOLD_MS = 650;
+/**
+ * How long the floor-clear beat stays before the next board builds in place (thesis §41.4):
+ * long enough to read four lines, short enough that the next input is available before the
+ * player has finished reading them. Not shortened under reduced motion; reading is not motion.
+ */
+export const FLOOR_CLEAR_BEAT_MS = 1600;
 
 type NextFloorSignalRow = {
     detail: string | null;
@@ -631,7 +636,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         [gameplayEventJournal]
     );
     const seenAchievementToastIdsRef = useRef<Set<string>>(new Set());
-    /** OVR-014: queue unlock toasts while the floor-cleared dialog is up; `continueToNextLevel` clears `newlyUnlockedAchievements` before the next paint. */
+    /** OVR-014: queue unlock toasts while the floor-clear beat is up; `continueToNextLevel` clears `newlyUnlockedAchievements` before the next paint. */
     const pendingAchievementToastIdsRef = useRef<AchievementId[]>([]);
     /** FX-015: WebGL bloom is medium+ when the toggle is on; add a light CSS rim only on High to avoid doubling cost on phones at Medium. */
     const boardStageCssBloomClass =
@@ -928,21 +933,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         run.gameMode === 'endless' && usesEndlessFloorSchedule(run.gameMode, run.runRulesVersion);
     const featuredObjectiveResultLine = run.lastLevelResult ? formatLevelResultObjectiveLine(run.lastLevelResult) : null;
     const floorClearObjectiveLine = featuredObjectiveResultLine;
-    const floorClearActions: ModalAction[] = [
-        {
-            label: 'Continue',
-            onClick: continueToNextLevel,
-            variant: 'primary' as const
-        },
-        {
-            label: 'Main Menu',
-            onClick: () => {
-                playMenuOpen();
-                setAbandonRunConfirmOpen(true);
-            },
-            variant: 'secondary' as const
-        }
-    ];
     const nextFloorPreview =
         endlessChapterActive && run.lastLevelResult
             ? pickFloorScheduleEntry(run.runSeed, run.runRulesVersion, run.lastLevelResult.level + 1, run.gameMode)
@@ -993,17 +983,19 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     }, [pulseEventId, pulsePairs, pulseTier, reduceMotion]);
 
     /*
-     * The last pair is its own moment. The dialog used to appear on the same frame the pair
-     * resolved; now the board holds for a breath first, so the finish is louder than anything
-     * before it. Keyed by the floor that was just cleared: a screen that opens already complete
-     * — a resumed save, a replayed floor — has no last pair to hold for and shows the dialog
+     * The last pair is its own moment. The board holds for a breath after it resolves, so the
+     * finish is louder than anything before it, and then the floor-clear beat settles over the
+     * stage. Keyed by the floor that was just cleared: a screen that opens already complete
+     * — a resumed save, a replayed floor — has no last pair to hold for and shows the beat
      * now; reduced motion skips the hold, since a delay with nothing moving is just latency.
      */
     const floorClearKey = `${run.runSeed}:${run.lastLevelResult?.level ?? 'none'}`;
     const [floorClearShownAtMount] = useState(() => (run.status === 'levelComplete' ? floorClearKey : null));
     const [floorClearReleasedKey, setFloorClearReleasedKey] = useState<string | null>(null);
-    const floorClearHeld =
+    const floorClearBeatShown =
         run.status === 'levelComplete' &&
+        Boolean(run.lastLevelResult) &&
+        !suppressStatusOverlays &&
         (reduceMotion || floorClearShownAtMount === floorClearKey || floorClearReleasedKey === floorClearKey);
     useEffect(() => {
         if (run.status !== 'levelComplete' || reduceMotion) {
@@ -1012,12 +1004,28 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         const timer = window.setTimeout(() => setFloorClearReleasedKey(floorClearKey), LAST_PAIR_HOLD_MS);
         return () => window.clearTimeout(timer);
     }, [run.status, reduceMotion, floorClearKey]);
+    /*
+     * No screen between floors (thesis §41.4). The beat is read, and the next board builds on the
+     * same surface: the store's continuation runs on its own once the beat has had its time. It
+     * keeps its own guard - a run that is no longer at levelComplete ignores it - so a beat that
+     * was cut short by anything else is harmless.
+     */
+    useEffect(() => {
+        if (!floorClearBeatShown || abandonRunConfirmOpen) {
+            return undefined;
+        }
+        const timer = window.setTimeout(() => continueToNextLevel(), FLOOR_CLEAR_BEAT_MS);
+        return () => window.clearTimeout(timer);
+    }, [floorClearBeatShown, floorClearKey, abandonRunConfirmOpen, continueToNextLevel]);
 
     const nextFloorResidentLine = run.lastLevelResult
         ? floorClearResidentLine(
               pickFloorCurio(run.runSeed, run.lastLevelResult.level + 1, run.runRulesVersion)
           )
         : null;
+    const floorClearNotes = [clearLifeBonusLabel, floorClearObjectiveLine, nextFloorResidentLine].filter(
+        (line): line is string => typeof line === 'string' && line.length > 0
+    );
     const nextFloorIdentity = nextFloorPreview
         ? getFloorIdentityContract({
               floorTag: nextFloorPreview.floorTag,
@@ -1387,11 +1395,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      * - Do not wrap modal markup in this subtree: nesting focused dialogs inside `aria-hidden` breaks SR semantics.
      * - `inert` alone should block pointer events on descendants; keep modal siblings outside this wrapper.
      */
-    const gameplayShellInert =
-        !suppressStatusOverlays &&
-        (abandonRunConfirmOpen ||
-            run.status === 'paused' ||
-            (run.status === 'levelComplete' && Boolean(run.lastLevelResult)));
+    const gameplayShellInert = !suppressStatusOverlays && (abandonRunConfirmOpen || run.status === 'paused');
     const reg104GameplayShellVariant =
         run.status === 'paused' ? 'paused' : run.status === 'levelComplete' ? 'floor_clear' : 'playing';
     return (
@@ -1493,6 +1497,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             style={{ '--gameplay-workshop-table-image': `url(${UI_ART.gameplayWorkshopTable})` } as CSSProperties}
                         >
                             <div className={styles.boardGlow} aria-hidden="true" />
+                            {floorClearBeatShown && run.lastLevelResult ? (
+                                <FloorClearBeat
+                                    notes={floorClearNotes}
+                                    personalBest={run.achievementsEnabled && run.lastLevelResult.level > profileDeepestFloor(saveData)}
+                                    result={run.lastLevelResult}
+                                    totalScore={run.stats.totalScore}
+                                />
+                            ) : null}
                             <MemoTileBoard
                                 ref={tileBoardRef}
                                 allowGambitThirdFlip={allowGambitThirdFlip}
@@ -1727,21 +1739,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     </OverlayModal>
                 )}
 
-                {!suppressStatusOverlays &&
-                    !abandonRunConfirmOpen &&
-                    run.status === 'levelComplete' &&
-                    floorClearHeld &&
-                    run.lastLevelResult && (
-                    <FloorClearDialog
-                        actions={floorClearActions}
-                        bestStreak={run.stats.bestStreak}
-                        lifeBonusLine={clearLifeBonusLabel}
-                        objectiveLine={floorClearObjectiveLine}
-                        residentLine={nextFloorResidentLine}
-                        result={run.lastLevelResult}
-                        totalScore={run.stats.totalScore}
-                    />
-                )}
 
                 {!suppressStatusOverlays && shortcutsHelpOpen ? (
                     <OverlayModal

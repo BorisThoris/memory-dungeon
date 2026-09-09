@@ -7,6 +7,7 @@ import {
 } from './playablePathHelpers';
 import {
     buildFreshProfileSaveJson,
+    expectHudFloor,
     gotoWithSave,
     mainMenuPlayButton,
     startClassicRunFromModeSelect,
@@ -22,15 +23,18 @@ test.describe('Expanded playable interludes and post-run loop', () => {
     test('floor clear offers no route and goes straight on', async ({ page }) => {
         await openPlayablePathFixture(page, 'floorClearWithRouteChoices');
 
-        const floorClear = page.getByRole('dialog', { name: /floor cleared/i });
-        await expect(floorClear).toBeVisible();
-        // No door between floors any more (Gen 173): the result and a Continue, nothing to pick.
+        // No door between floors (Gen 173) and no screen either (Gen 182): the beat shows the
+        // result over the board, has nothing to press, and the run goes on by itself. The screen
+        // opens already complete, so the beat is up at once and gone ~1.6s later.
+        const floorClearBeat = page.getByTestId('floor-clear-beat');
+        await expect(floorClearBeat).toBeVisible({ timeout: 10_000 });
+        await expect(page.getByTestId('floor-clear-title')).toContainText(/floor \d+ cleared/i);
+        await expect(page.getByTestId('floor-clear-par')).toContainText(/par \d+/i);
         await expect(page.getByTestId('floor-clear-score')).toBeVisible();
-        await expect(page.getByTestId('floor-clear-stats')).toContainText(/Rating/);
-        await expect(page.getByTestId('route-choice-panel')).toHaveCount(0);
-        await expect(page.getByTestId('floor-clear-payoff-stack')).toHaveCount(0);
-        await floorClear.getByRole('button', { name: /^continue$/i }).click({ force: true });
+        await expect(floorClearBeat.getByRole('button')).toHaveCount(0);
+        await expect(floorClearBeat).toBeHidden({ timeout: 15_000 });
         await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 30_000 });
+        await expectHudFloor(page, 2, 30_000);
     });
 
 
@@ -66,7 +70,8 @@ test.describe('Expanded playable interludes and post-run loop', () => {
         await expect(page.getByTestId('run-shell-line')).toBeVisible({ timeout: 30_000 });
         const pairs = await waitLevel1PlayReady(page);
         await completeLevel1Play(page, pairs);
-        await expect(page.getByRole('dialog', { name: /floor cleared/i })).toBeVisible({ timeout: 30_000 });
+        // The floor-clear beat advances on its own; the first clear is done once the HUD reads floor two.
+        await expectHudFloor(page, 2, 30_000);
         await expect
             .poll(
                 async () =>

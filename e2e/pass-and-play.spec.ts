@@ -230,15 +230,13 @@ test.describe('pass and play', () => {
             // A floor is not over when the last pair resolves: the exit is a tile of its own.
             await flipRemainingHiddenTiles(page);
             await page.waitForTimeout(1200);
+            // The floor clear itself has nothing to press: the beat holds over the board for
+            // ~1.6s and the next board builds on its own. Wait it out before reading the shell.
+            await expect(page.getByTestId('floor-clear-beat')).toBeHidden({ timeout: 15_000 });
 
-            // Whatever the run puts between floors — an exit door, a route, a vendor — take the
+            // Whatever else the run puts between floors — an exit door, a vendor — take the
             // option that continues rather than the one that buys something.
-            /*
-             * Unanchored on purpose. The floor-cleared button is not "Continue" — it is "Continue
-             * to Mystery route floor", named for the route it takes, so an anchored /^continue$/
-             * matches nothing and the run sits on a dialog until the test times out.
-             */
-            for (const name of [/proceed/i, /continue to/i, /back to board/i, /return to board/i, /^skip$/i]) {
+            for (const name of [/proceed/i, /back to board/i, /return to board/i, /^skip$/i]) {
                 const button = page.getByRole('button', { name }).first();
                 if (await button.isVisible().catch(() => false)) {
                     await button.click();

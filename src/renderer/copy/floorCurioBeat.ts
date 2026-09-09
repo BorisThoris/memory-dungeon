@@ -4,7 +4,7 @@ import type { FloorCurio } from '../../shared/floor-curio-rules';
  * How a floor introduces whoever lives on it.
  *
  * The resident is decided from the run's seed before the stairs are taken, so the floor-clear
- * screen can name them honestly: this is not a tease, it is the same roll the floor advance will
+ * beat can name them honestly: this is not a tease, it is the same roll the floor advance will
  * apply. Naming them there rather than on arrival is the point — meeting a hoarding rat is a
  * shrug, but being told a hoarding rat is downstairs makes the descent a decision about who you
  * are about to share a room with.
@@ -25,7 +25,7 @@ export const FLOOR_CURIO_COPY = {
         'the Greet control. It never costs you anything, and most of them give you something for it.'
 } as const;
 
-/** "Downstairs: A hoarding rat. It has been collecting..." — the note on the floor-clear screen. */
+/** "Downstairs: A hoarding rat. It has been collecting..." — the note on the floor-clear beat. */
 export const floorClearResidentLine = (curio: FloorCurio): string =>
     `${FLOOR_CURIO_COPY.downstairsPrefix}: ${curio.name}. ${curio.line}`;
 

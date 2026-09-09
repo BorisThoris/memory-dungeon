@@ -50,8 +50,9 @@ test.describe('OVR-013 — overlay smoke', () => {
 
         await completeLevel1Play(page, pairs);
 
-        const floorCleared = page.getByRole('dialog', { name: /floor cleared/i });
-        await expect(floorCleared).toBeVisible();
+        /* The floor-clear beat has no button: it is up for ~1.6s and the run advances on its own. */
+        const floorClearBeat = page.getByTestId('floor-clear-beat');
+        await expect(floorClearBeat).toBeVisible({ timeout: 10_000 });
 
         if (process.env.OVERLAY_SMOKE_SCREENSHOT === '1') {
             const outDir = join(process.cwd(), 'test-results', 'overlay-smoke');
@@ -59,9 +60,8 @@ test.describe('OVR-013 — overlay smoke', () => {
             await page.screenshot({ path: join(outDir, 'floor-cleared.png'), fullPage: true });
         }
 
-        /* GameScreen defers toast work while the floor overlay is open; continue must not unmount the rail. */
-        await floorCleared.getByRole('button', { name: /^continue/i }).click();
-        await expect(floorCleared).toBeHidden({ timeout: 15_000 });
+        /* GameScreen defers toast work while the beat is up; the automatic advance must not unmount the rail. */
+        await expect(floorClearBeat).toBeHidden({ timeout: 15_000 });
 
         await expect(tipsRegion).toBeAttached();
         await expect(page.getByRole('heading', { name: /level \d+/i })).toBeAttached({ timeout: 15_000 });

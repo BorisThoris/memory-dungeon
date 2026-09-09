@@ -229,14 +229,16 @@ export const VISUAL_SCREEN_SCENARIOS: ReadonlyArray<VisualScreenScenario> = [
     },
     {
         fileBase: '07-floor-cleared-modal',
-        name: 'floor cleared modal',
-        /** `waitLevel1PlayReady` (40s) + pair loop (120s) + final expect (30s) + cold navigation. */
+        name: 'floor cleared beat',
+        /** `waitLevel1PlayReady` (40s) + pair loop (120s) + beat wait (10s) + cold navigation. */
         timeoutMs: 260_000,
         run: async (page, capture) => {
             await openLevel1Play(page);
             const pairs = await waitLevel1PlayReady(page);
             await completeLevel1Play(page, pairs);
-            await expect(page.getByRole('dialog', { name: /floor cleared/i })).toBeVisible();
+            // The beat is up for ~1.6s after the last pair and the run advances on its own, so the
+            // frame is taken as soon as it shows.
+            await expect(page.getByTestId('floor-clear-beat')).toBeVisible({ timeout: 10_000 });
             await expectNoHorizontalOverflow(page);
             await capture('07-floor-cleared-modal');
         }

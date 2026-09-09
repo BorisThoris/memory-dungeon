@@ -181,7 +181,7 @@ test.describe('Tile board interaction', () => {
         await dispatchStageWheel(page, stageShell, -1200);
         await dispatchStageWheel(page, stageShell, -800);
         await expect.poll(async () => (await readBoardViewport(page)).zoom, { timeout: 15_000 }).toBeGreaterThan(1.05);
-        const beforeContinue = await readBoardViewport(page);
+        const beforeAdvance = await readBoardViewport(page);
 
         await expect
             .poll(async () => page.getByTestId('tile-board-frame').getAttribute('data-selection-suppressed'), {
@@ -195,14 +195,13 @@ test.describe('Tile board interaction', () => {
             .toBe('false');
 
         await completeLevel1Play(page, pairs);
-        await page.getByRole('dialog', { name: /floor cleared/i }).getByRole('button', { name: /^continue/i }).click();
-
-        await expect(page.getByRole('heading', { name: /level 2/i })).toBeVisible({ timeout: 15000 });
+        // The floor-clear beat has no button: the next board builds on the same surface on its own.
+        await expect(page.getByRole('heading', { name: /level 2/i })).toBeVisible({ timeout: 20_000 });
         await expect(page.getByRole('group', { name: /run stats/i })).toBeVisible();
 
         await expect(async () => {
             const z = (await readBoardViewport(page)).zoom;
-            expect(z).toBeCloseTo(beforeContinue.zoom, 1);
+            expect(z).toBeCloseTo(beforeAdvance.zoom, 1);
         }).toPass({ timeout: 20_000 });
     });
 });

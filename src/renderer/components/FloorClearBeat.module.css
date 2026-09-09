@@ -1,0 +1,123 @@
+/*
+ * The floor-clear beat: one plate over the board stage, nothing to press. Type floor 12px.
+ * It is read while the next board builds underneath, so it stays out of the way of input
+ * (pointer-events none) and off the tab order (no controls).
+ */
+
+.beat {
+    position: absolute;
+    inset: auto 0.75rem 0.75rem 0.75rem;
+    z-index: 6;
+    margin: 0 auto;
+    width: min(26rem, calc(100% - 1.5rem));
+    padding: 0.75rem 1rem 0.8rem;
+    border-radius: var(--ui-radius-lg);
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
+    background: color-mix(in srgb, var(--theme-void) 82%, var(--theme-gold-bright) 18%);
+    box-shadow:
+        0 12px 32px color-mix(in srgb, var(--theme-void) 70%, transparent),
+        inset 0 1px 0 var(--theme-hud-chrome-inset);
+    color: var(--theme-text);
+    text-align: center;
+    pointer-events: none;
+    animation: floorClearBeatIn 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.beat[data-tier='fever'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 70%, transparent);
+    box-shadow:
+        0 0 28px color-mix(in srgb, var(--theme-gold-bright) 40%, transparent),
+        0 12px 32px color-mix(in srgb, var(--theme-void) 70%, transparent);
+}
+
+.title {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+    gap: 0.25rem 0.6rem;
+    font-family: var(--theme-display-font);
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--theme-gold-bright);
+}
+
+.par {
+    font-family: var(--theme-body-font, inherit);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--theme-text-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.personalBest {
+    margin: 0.2rem 0 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--theme-gold-bright);
+}
+
+.score {
+    margin: 0.35rem 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 0.75rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.scoreValue {
+    font-family: var(--theme-display-font);
+    font-size: clamp(1.9rem, 5vw, 2.6rem);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--theme-gold-bright);
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
+}
+
+.scoreTotal {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--theme-text-muted);
+}
+
+.bonus {
+    margin: 0.4rem 0 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--theme-text);
+    font-variant-numeric: tabular-nums;
+}
+
+.notes {
+    margin: 0.35rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    font-size: 0.75rem;
+    color: var(--theme-text-muted);
+}
+
+@keyframes floorClearBeatIn {
+    from {
+        opacity: 0;
+        transform: translateY(0.5rem) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .beat {
+        animation: none;
+    }
+}

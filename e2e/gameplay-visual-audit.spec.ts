@@ -151,14 +151,13 @@ async function captureOverlayStates(page: Page, viewportId: string): Promise<voi
 async function captureProgressionStates(page: Page, viewportId: string): Promise<void> {
     await openLevel1Play(page);
     await clearLevelForAudit(page);
-    const floorCleared = page.getByRole('dialog', { name: /floor cleared/i });
-    await expect(floorCleared).toBeVisible({ timeout: 20_000 });
+    // The floor-clear beat has no button: it shows over the board for ~1.6s and the run advances
+    // on its own, so the capture is taken as soon as it is up and the advance is waited out.
+    const floorClearBeat = page.getByTestId('floor-clear-beat');
+    await expect(floorClearBeat).toBeVisible({ timeout: 20_000 });
     await capture(page, viewportId, '09-floor-cleared');
-
-    const continueButton = page.getByRole('button', { name: /^continue/i }).first();
-    if (await continueButton.isVisible().catch(() => false)) {
-        await continueButton.click();
-    }
+    await expect(floorClearBeat).toBeHidden({ timeout: 15_000 });
+    await expectGameplayReady(page);
 
     const tipsRegion = page.getByRole('region', { name: /memory dungeon tips/i });
     const achievementToast = tipsRegion.locator('[data-crn-stack-key="achievement:ACH_FIRST_CLEAR"]');
@@ -172,7 +171,7 @@ async function proceedThroughAuditExit(page: Page): Promise<boolean> {
         return false;
     }
     await exitDialog.getByRole('button', { name: /^proceed$/i }).click();
-    await expect(page.getByRole('dialog', { name: /floor cleared/i })).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByTestId('floor-clear-beat')).toBeVisible({ timeout: 20_000 });
     return true;
 }
 

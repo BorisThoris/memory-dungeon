@@ -7,6 +7,7 @@ import {
     openLevel1Play,
     openMainMenuFromSave,
     buildVisualSaveJson,
+    expectHudFloor,
     gotoWithSave,
     startClassicRunFromModeSelect,
     waitLevel1PlayReady
@@ -103,11 +104,13 @@ export async function startMeditationWithSelection(page: Page): Promise<void> {
     await expectGameplayReady(page);
 }
 
+/** Clears floor one and returns once the run is on floor two: the floor-clear beat advances on its own. */
 export async function completeClassicLevelOne(page: Page): Promise<void> {
     await openLevel1Play(page);
     const pairs = await waitLevel1PlayReady(page);
     await completeLevel1Play(page, pairs);
-    await expect(page.getByRole('dialog', { name: /floor cleared/i })).toBeVisible({ timeout: 30_000 });
+    await expectHudFloor(page, 2, 30_000);
+    await expectGameplayReady(page);
 }
 
 export async function forceClassicGameOver(page: Page): Promise<void> {

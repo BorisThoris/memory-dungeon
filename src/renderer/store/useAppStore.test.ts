@@ -440,10 +440,14 @@ describe('useAppStore timers', () => {
          * flip because the break took it.
          */
         if (matchedRun?.status === 'playing') {
-            useAppStore.getState().pressTile(nextPairTile!.id);
+            // Which of the two other pairs the pop took depends on the deal, so press whatever is
+            // still face down rather than a pair chosen before the match resolved.
+            const stillHidden = matchedBoard.tiles.find((tile) => tile.state === 'hidden');
+            expect(stillHidden).toBeDefined();
+            useAppStore.getState().pressTile(stillHidden!.id);
             const runAfterNextPress = useAppStore.getState().run;
             expect(runAfterNextPress?.board).not.toBeNull();
-            expect(runAfterNextPress?.board?.flippedTileIds).toContain(nextPairTile!.id);
+            expect(runAfterNextPress?.board?.flippedTileIds).toContain(stillHidden!.id);
         } else {
             expect(matchedRun?.status).toBe('levelComplete');
             expect(matchedBoard.tiles.filter((tile) => tile.state === 'hidden' && tile.pairKey === nextPairTile!.pairKey)).toEqual([]);

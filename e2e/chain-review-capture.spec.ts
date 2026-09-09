@@ -11,7 +11,7 @@ import { buildVisualSaveJson, gotoWithSave, mainMenuPlayButton } from './visualS
 
 /*
  * Review captures for the cascade batch: the clumped board with a tile under the pointer (the
- * clump read's ring and chip), the floor-clear dialog on a phone and
+ * clump read's ring and chip), the floor-clear beat on a phone and
  * the setup sheet on a phone held sideways — the four surfaces the fit contract found something
  * on. Not a gate: the point is to look at the frames, which nothing else in the suite does.
  */
@@ -76,11 +76,13 @@ test.describe('chain review captures', () => {
         await page.screenshot({ path: `${OUT}/pop-after.png` });
     });
 
-    test('the floor-clear dialog on a phone', async ({ page }) => {
+    test('the floor-clear beat on a phone', async ({ page }) => {
         await page.setViewportSize({ width: 390, height: 844 });
         await openPlayablePathFixture(page, 'floorClearWithRouteChoices');
-        await expect(page.getByRole('dialog', { name: /floor cleared/i })).toBeVisible();
-        await page.waitForTimeout(600);
+        // The screen opens already complete, so the beat is up at once and the run advances on its
+        // own ~1.6s later: the frame has to be taken inside that window.
+        await expect(page.getByTestId('floor-clear-beat')).toBeVisible({ timeout: 10_000 });
+        await page.waitForTimeout(400);
         await page.screenshot({ path: `${OUT}/floor-clear-phone.png` });
     });
 

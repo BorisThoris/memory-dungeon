@@ -151,7 +151,7 @@ sits under the bar's translucent tail. Phase 2 passes a top/bottom inset to `Til
 
 ## 4. The retry loop: floor clear, relic draft, shop, side room, game over
 
-**Status: built.** Floor clear is the new `FloorClearDialog` (score, four stats, notes, three doors,
+**Status: built, then superseded.** Floor clear was the `FloorClearDialog` (score, four stats, notes, three doors,
 wager line). Relic draft is three cards plus the service row. Shop, side room and game over are the
 06-28 shape with every label at 12px or above and the side room's duplicated primary block removed.
 

@@ -13,7 +13,7 @@ Everything that governs **time and phase** within a run: memorize → play → r
 | `finishMemorizePhase` | **Shippable** | Pure state transition when timer hits zero (store schedules timers). |
 | Pause | **Shippable** | `pauseRun` — snapshots `pausedFromStatus`, freezes meaningful timers in contract shape. |
 | Resume | **Shippable** | `resumeRun`. |
-| Level complete gate | **Shippable** | `status === 'levelComplete'`; `continueToNextLevel` opens relic or `advanceToNextLevel`. |
+| Level complete gate | **Shippable** | `status === 'levelComplete'`; the floor-clear beat (`FloorClearBeat`, no buttons) sits on the board for ~1.6s after the last-pair hold and then `continueToNextLevel` runs on its own (Gen 182, thesis §41.4). The floor-clear dialog with Continue / Main Menu is gone; a run is left from the pause menu. |
 | Relic pick blocking | **Shippable** | `openRelicOffer` vs `advanceToNextLevel` in store. |
 | Undo resolving | **Shippable** | `cancelResolvingWithUndo` — requires `undoUsesThisFloor >= 1`, returns to `playing` with flips cleared per rules. Sets `powersUsedThisRun`. |
 | Debug peek | **Functional** | `enableDebugPeek` / `disableDebugPeek`; `debugRevealRemainingMs`; gated by `debugFlags.allowBoardReveal`; can disable achievements. |

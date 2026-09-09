@@ -149,7 +149,7 @@ const describeFit = async (page: Page): Promise<FitReport> =>
                 const top = document.elementFromPoint(x, y);
                 if (!top) return false;
                 if (top === el || el.contains(top) || top.contains(el)) return false;
-                // A dialog over the screen is meant to cover it: the HUD under a floor-clear
+                // A dialog over the screen is meant to cover it: the HUD under the pause menu's
                 // scrim is not a defect, and the background is inert or aria-hidden while it shows.
                 if (el.closest('[aria-hidden="true"], [inert]')) return false;
                 if (top.closest('[role="dialog"]') || top.querySelector('[role="dialog"]')) return false;

@@ -22,7 +22,7 @@
 | Finish memorize → playing | `finishMemorizePhase` (`memorize-phase-rules.ts`) | [epic-run-session-flow](./epic-run-session-flow.md) |
 | Resolve timer after 2+ flips | `computeFlipResolveDelayMs`, `timerState.resolveRemainingMs` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Pause / resume (timers) | `pauseRun`, `resumeRun` (`run-timer-rules.ts`) | [epic-run-session-flow](./epic-run-session-flow.md) |
-| Level complete → next floor | `finalizeLevel` (`floor-clear-transition.ts`), `advanceToNextLevel` (`next-floor-transition-rules.ts`); store `continueToNextLevel` | [epic-run-session-flow](./epic-run-session-flow.md) |
+| Level complete → next floor, in place: the floor-clear beat (`FloorClearBeat`) shows for `FLOOR_CLEAR_BEAT_MS` after the last-pair hold, then the store's continuation runs on its own | `finalizeLevel` (`floor-clear-transition.ts`), `advanceToNextLevel` (`next-floor-transition-rules.ts`); store `continueToNextLevel` | [epic-run-session-flow](./epic-run-session-flow.md) |
 | Floor resident (curio) chosen for the next floor and applied on arrival | `pickFloorCurio`, `applyFloorCurio` (`floor-curio-rules.ts`) | [epic-run-session-flow](./epic-run-session-flow.md) |
 | Greet the floor resident (once per floor, free) | `greetFloorCurio`, `canGreetFloorCurio` (`floor-curio-greeting-rules.ts`); store `greetFloorResident` | [epic-run-session-flow](./epic-run-session-flow.md) |
 | Game over / summary | `createRunSummary` (`run-summary-rules.ts`), store `applyResolvedRun` | [epic-meta-progression](./epic-meta-progression.md) |

@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { openPlayablePathFixture } from './playablePathHelpers';
 import { flipTileAtGridCellKeyboard, readPairTileCells, waitForBoardPlayPhase } from './tileBoardGameFlow';
+import { isFloorClearedOrAdvanced, readHudFloorText } from './visualScreenHelpers';
 
 /**
  * The whole loop, where a player meets it: suits on a clumped board, the pop on the very first
@@ -75,6 +76,9 @@ test.describe('chain, chunk and Fever in the app', () => {
         const chainTexts: string[] = [];
         let removedSeen = 0;
         let removedAtFever = 0;
+        // The floor clears in place: the beat shows for ~1.6s and the run advances on its own, so
+        // "cleared" is the beat being up or the HUD already reading the next floor.
+        const floorBefore = await readHudFloorText(page);
         for (let turn = 0; turn < 8; turn += 1) {
             if (!(await matchNextPair(page))) {
                 break;
@@ -106,7 +110,7 @@ test.describe('chain, chunk and Fever in the app', () => {
                 if (read.tier === 'fever' && read.removed > removedAtFever) removedAtFever = read.removed;
                 removedSeen = Math.max(removedSeen, read.removed);
             }
-            if (await page.getByRole('dialog', { name: /floor cleared/i }).isVisible().catch(() => false)) {
+            if (await isFloorClearedOrAdvanced(page, floorBefore)) {
                 break;
             }
         }
@@ -120,6 +124,11 @@ test.describe('chain, chunk and Fever in the app', () => {
         expect(removedSeen, 'a chunk removed tiles').toBeGreaterThan(0);
         expect(removedAtFever, 'tiles were gone while the board read Fever').toBeGreaterThan(0);
         expect(chainTexts.some((text) => /Fever/.test(text)), 'the HUD named Fever').toBe(true);
-        await expect(page.getByRole('dialog', { name: /floor cleared/i })).toBeVisible({ timeout: 30_000 });
+        await expect
+            .poll(async () => isFloorClearedOrAdvanced(page, floorBefore), {
+                message: 'the floor cleared',
+                timeout: 30_000
+            })
+            .toBe(true);
     });
 });

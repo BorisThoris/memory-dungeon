@@ -9,7 +9,7 @@ import { createDefaultSaveData } from '../../shared/save-data';
 import { GAMBIT_KEYBOARD_HELP_TIP } from '../copy/gameplayHints';
 import { PlatformTiltProvider } from '../platformTilt/PlatformTiltProvider';
 import { useAppStore } from '../store/useAppStore';
-import GameScreen, { LAST_PAIR_HOLD_MS } from './GameScreen';
+import GameScreen, { FLOOR_CLEAR_BEAT_MS, LAST_PAIR_HOLD_MS } from './GameScreen';
 import {
     getStackCashoutLaneCount,
     getVisualHudAnnouncementFollowup,
@@ -218,11 +218,13 @@ describe('GameScreen (OVR-014)', () => {
         });
     });
 
-    it('holds the board for a breath when the last pair resolves, then shows the floor-clear dialog', () => {
+    it('holds the board for a breath when the last pair resolves, then shows the floor-clear beat, then goes on by itself', () => {
         // The finish should be louder than anything before it. That needs a beat between the pair
-        // resolving and the dialog — but only on that transition, never on a screen that opens
-        // already complete, or every resumed save would pay the wait for nothing.
+        // resolving and the plate — but only on that transition, never on a screen that opens
+        // already complete, or every resumed save would pay the wait for nothing. And then no
+        // screen: the next floor is asked for on its own once the beat has been read.
         vi.useFakeTimers();
+        const continueSpy = vi.spyOn(useAppStore.getState(), 'continueToNextLevel');
         try {
             const cleared = levelCompleteRunFixture();
             const playing: RunState = { ...cleared, status: 'playing', lastLevelResult: null };
@@ -240,13 +242,43 @@ describe('GameScreen (OVR-014)', () => {
                     </NotificationHost>
                 </PlatformTiltProvider>
             );
-            expect(screen.queryByRole('dialog', { name: /floor cleared/i })).not.toBeInTheDocument();
+            expect(screen.queryByTestId('floor-clear-beat')).not.toBeInTheDocument();
 
             act(() => {
                 vi.advanceTimersByTime(LAST_PAIR_HOLD_MS + 10);
             });
-            expect(screen.getByRole('dialog', { name: /floor cleared/i })).toBeInTheDocument();
+            expect(screen.getByTestId('floor-clear-beat')).toBeInTheDocument();
+            expect(screen.queryByRole('dialog', { name: /floor cleared/i })).not.toBeInTheDocument();
+            expect(continueSpy).not.toHaveBeenCalled();
+
+            act(() => {
+                vi.advanceTimersByTime(FLOOR_CLEAR_BEAT_MS + 10);
+            });
+            expect(continueSpy).toHaveBeenCalledTimes(1);
         } finally {
+            continueSpy.mockRestore();
+            vi.useRealTimers();
+        }
+    });
+
+    it('shows the beat at once on a screen that opens already complete, and still goes on by itself', () => {
+        vi.useFakeTimers();
+        const continueSpy = vi.spyOn(useAppStore.getState(), 'continueToNextLevel');
+        try {
+            render(
+                <PlatformTiltProvider>
+                    <NotificationHost>
+                        <GameScreen achievements={[]} run={levelCompleteRunFixture()} />
+                    </NotificationHost>
+                </PlatformTiltProvider>
+            );
+            expect(screen.getByTestId('floor-clear-beat')).toBeInTheDocument();
+            act(() => {
+                vi.advanceTimersByTime(FLOOR_CLEAR_BEAT_MS + 10);
+            });
+            expect(continueSpy).toHaveBeenCalledTimes(1);
+        } finally {
+            continueSpy.mockRestore();
             vi.useRealTimers();
         }
     });
@@ -293,7 +325,7 @@ describe('GameScreen (OVR-014)', () => {
         expect(useAppStore.getState().run!.stats.guardTokens).toBe(run.stats.guardTokens + 1);
     });
 
-    it('defers achievement toasts while the floor-cleared modal is visible, then emits after leaving levelComplete', () => {
+    it('defers achievement toasts while the floor-clear beat is up, then emits after leaving levelComplete', () => {
         const runFixture = levelCompleteRunFixture();
 
         const { rerender } = render(
@@ -323,7 +355,7 @@ describe('GameScreen (OVR-014)', () => {
         expect(achievementNotifications()).toBe(1);
     });
 
-    it('shows the floor score and the four stats on the floor-cleared dialog', () => {
+    it('says the floor, the score and the way it went on the beat, with nothing to press and the board still live', () => {
         render(
             <PlatformTiltProvider>
                 <NotificationHost>
@@ -332,17 +364,17 @@ describe('GameScreen (OVR-014)', () => {
             </PlatformTiltProvider>
         );
 
-        const dialog = screen.getByRole('dialog', { name: /floor cleared/i });
-        expect(dialog).toHaveTextContent('Floor 1');
+        const beat = screen.getByTestId('floor-clear-beat');
+        expect(beat).toHaveAttribute('role', 'status');
+        expect(screen.getByTestId('floor-clear-title')).toHaveTextContent('Floor 1 cleared');
         expect(screen.getByTestId('floor-clear-score')).toHaveTextContent('+120');
-        const stats = screen.getByTestId('floor-clear-stats');
-        expect(stats).toHaveTextContent(/Rating\s*S/);
-        expect(stats).toHaveTextContent(/Best streak\s*2/);
-        expect(stats).toHaveTextContent(/Misses\s*0/);
-        expect(stats).toHaveTextContent(/Lives\s*5/);
-        // The coaching strips are gone: the dialog states the result and the route choice only.
-        expect(dialog).not.toHaveTextContent(/Lives carry across the run|payoff stack|Carry forward|Next floor loop/i);
-        expect(screen.getByRole('button', { name: /^continue$/i })).toBeInTheDocument();
+        expect(beat).toHaveTextContent('Run total 120');
+        // No screen between floors: no dialog, no Continue, no Main Menu, and the board underneath is not inert.
+        expect(screen.queryByRole('dialog', { name: /floor cleared/i })).toBeNull();
+        expect(screen.queryByRole('button', { name: /^continue$/i })).toBeNull();
+        expect(screen.queryByRole('button', { name: /^main menu$/i })).toBeNull();
+        expect(screen.getByTestId('board-stage').closest('[inert]')).toBeNull();
+        expect(beat).not.toHaveTextContent(/Lives carry across the run|payoff stack|Carry forward|Next floor loop/i);
     });
 
     it('normalizes malformed floor-clear counters before rendering overlay copy', () => {
@@ -379,10 +411,9 @@ describe('GameScreen (OVR-014)', () => {
             </PlatformTiltProvider>
         );
 
-        expect(screen.getByRole('dialog', { name: /floor cleared/i })).toHaveTextContent('Floor 0');
-        expect(screen.getByTestId('floor-clear-result-stack')).not.toHaveTextContent(/NaN|Infinity/);
+        expect(screen.getByTestId('floor-clear-title')).toHaveTextContent('Floor 0 cleared');
+        expect(screen.getByTestId('floor-clear-beat')).not.toHaveTextContent(/NaN|Infinity/);
         expect(screen.getByTestId('floor-clear-score')).toHaveTextContent('+0');
-        expect(screen.getByTestId('floor-clear-stats')).toHaveTextContent(/Misses\s*0/);
         expect(screen.getByTestId('floor-clear-notes')).toHaveTextContent('Flip par: Complete');
     });
 
@@ -1426,7 +1457,7 @@ describe('GameScreen (OVR-014)', () => {
         }
     });
 
-    it('does not call pause when KeyP is pressed on the floor-cleared overlay (levelComplete + lastLevelResult)', () => {
+    it('does not call pause when KeyP is pressed during the floor-clear beat (levelComplete + lastLevelResult)', () => {
         const pauseSpy = vi.spyOn(useAppStore.getState(), 'pause');
         const runFixture = levelCompleteRunFixture();
 
@@ -1584,15 +1615,13 @@ describe('GameScreen (OVR-014)', () => {
         );
 
         expect(screen.getByTestId('floor-clear-score')).toHaveTextContent('+120');
-        expect(screen.getByTestId('floor-clear-stats')).toHaveTextContent(/Rating\s*S\+\+/);
         const notes = screen.getByTestId('floor-clear-notes');
         expect(notes).toHaveTextContent('Perfect floor bonus: +1 Life');
         expect(notes).toHaveTextContent('Flip par: Complete (+30 score)');
-        // No route is offered between floors any more (Gen 173): the doors are gone from the
-        // screen, and the floor clear goes straight on.
+        // No route is offered between floors any more (Gen 173), and no screen at all since
+        // Gen 182: the beat sits on the board and the floor clear goes straight on.
         expect(screen.queryByTestId('route-choice-panel')).toBeNull();
-        expect(screen.queryByTestId('floor-clear-payoff-stack')).toBeNull();
-        expect(screen.queryByTestId('floor-clear-momentum-strip')).toBeNull();
+        expect(screen.queryByRole('dialog', { name: /floor cleared/i })).toBeNull();
     });
 
     it('shows payoff and cost signals while the Gambit third flip is active', () => {
