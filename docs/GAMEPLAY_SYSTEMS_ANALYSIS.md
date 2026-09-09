@@ -162,3 +162,49 @@ Wired through **`useAppStore`** and **`GameScreen`** / toolbar:
 ---
 
 *End of analysis.*
+
+## Gen 194: how much of the game anything actually watches
+
+The interaction graph declares **45 mechanics**. The occupancy census watches **7 counters**. Until
+this generation nothing joined the two, and that gap is where this repository's most expensive
+failures have lived:
+
+- the pop shipped dead for six floors (Gen 148),
+- the ripple went from 7% of breaks to zero and stayed there for three generations (Gen 190–192),
+- the magpie takes back pairs the player has already cleared, on every fourth miss, on every floor,
+  with no counter, no graph node and no test that it has ever happened in a real run.
+
+None of those were bugs a unit test could catch. Every one of them had passing tests, because a
+fixture is built to make its rule fire - which is exactly what hides a rule that never fires on a
+board the generator actually deals.
+
+`yarn audit:mechanic-accountability` now walks the graph and asks three questions of every mechanic:
+does something count it, does its evidence exist, does it carry tests that exist. It is in
+`gate:systems`, so a new mechanic cannot ship without answering and a mechanic whose module is
+deleted cannot linger.
+
+### What it says today
+
+| | Mechanics |
+|---|---|
+| Censused by a `RunState` counter | 7 |
+| Exempt, with a written reason | 38 |
+| Unanswered | 0 |
+
+Zero unanswered is the gate passing, not the game being well watched. **Seven of forty-five** is the
+real number, and the exemption list is the worklist. Twenty-six of the thirty-eight are invisible
+for one reason:
+
+> The census plays real generated floors, but the thing playing them only ever flips pairs. It never
+> spends a charge, never arms a power, never reads a trait. So all eleven powers, all eleven
+> inventory charges and all four traits are invisible - not because the game lacks them, but because
+> the reference player does not use them.
+
+That is one fix, not twenty-six: a census player that spends what it is given. It is the next
+generation of this work.
+
+The other twelve are exempt for reasons that will not go away by trying harder. Some are frames the
+census itself drives (`progression.run_flow`), some are chosen before a floor exists
+(`progression.run_setup`, `mode.wild_run`, `board.wild_joker_tile`), some are guarantees rather than
+occurrences (`safety.softlock_fairness`, whose proof is the softlock seed sweep), and two are tools
+for measuring the game rather than rules inside it. Those stay exempt and say so.

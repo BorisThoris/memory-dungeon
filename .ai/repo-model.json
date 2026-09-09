@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2432,
-    "codeFileCount": 872,
+    "trackedFileCount": 2434,
+    "codeFileCount": 873,
     "exportedSymbolCount": 2691,
     "contentItemCount": 12,
     "mechanicCount": 45,
     "stateFieldCount": 81,
-    "relationshipCount": 6873
+    "relationshipCount": 6877
   },
   "inventory": [
     {
@@ -441,8 +441,8 @@
     {
       "path": "docs/GAMEPLAY_SYSTEMS_ANALYSIS.md",
       "category": "documentation",
-      "bytes": 15581,
-      "sha256": "c57168441e7196a6d9ea827a9cfeb793fc5bbd948e62a81171e2defa54fd4ad7"
+      "bytes": 18029,
+      "sha256": "066c93e4975d80106d201d146128af19d218ce866db7aef852f6d74db3aba7b1"
     },
     {
       "path": "docs/gameplay-depth/01-floor-identity-and-archetypes.md",
@@ -4017,8 +4017,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 30957,
-      "sha256": "fa2996752bdbdd1c563aa24f5d3605cae6cfadec2a387308ad0a49aaeaaaaae4"
+      "bytes": 29466,
+      "sha256": "ca080aabd67fa61f760668fec57d8fdd3a4393c61e9587df68fcc2e25fcebea5"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4799,6 +4799,12 @@
       "category": "script",
       "bytes": 4829,
       "sha256": "f58a4fea4c13b6a5efe05a65e2ab28aed0ae4aa4b909eb5fc796cbbee26f051a"
+    },
+    {
+      "path": "scripts/mechanic-accountability.ts",
+      "category": "script",
+      "bytes": 8682,
+      "sha256": "14001e2ae5329c40ae6af5205aaa8bb506ac7aa94fa5521b4af20d29145ddd72"
     },
     {
       "path": "scripts/min-type-size.ts",
@@ -11285,6 +11291,12 @@
       "category": "source",
       "bytes": 1965,
       "sha256": "e168176a297246a26c63635c133f9bab5c9b20fd55d2ec82d163fb80283331ac"
+    },
+    {
+      "path": "src/shared/mechanic-accountability.test.ts",
+      "category": "test",
+      "bytes": 2485,
+      "sha256": "607958f86f1409d51cc4389888650d86240e353dc79a63c0f1f0a85f605fa521"
     },
     {
       "path": "src/shared/mechanic-feedback.test.ts",
@@ -26638,7 +26650,8 @@
         "symbol:src/shared/gameplay-interaction-graph.ts#validateGameplayInteractionGraph"
       ],
       "testedBy": [
-        "file:src/shared/gameplay-interaction-graph.test.ts"
+        "file:src/shared/gameplay-interaction-graph.test.ts",
+        "file:src/shared/mechanic-accountability.test.ts"
       ]
     },
     {
@@ -27262,6 +27275,19 @@
       "testedBy": [
         "file:src/shared/match-claim-rules.test.ts"
       ]
+    },
+    {
+      "id": "file:src/shared/mechanic-accountability.test.ts",
+      "path": "src/shared/mechanic-accountability.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 54,
+      "imports": [
+        "file:src/shared/gameplay-interaction-graph.ts",
+        "file:src/shared/system-occupancy-simulation.ts"
+      ],
+      "exports": [],
+      "testedBy": []
     },
     {
       "id": "file:src/shared/mechanic-feedback.test.ts",
@@ -30086,6 +30112,7 @@
         "symbol:src/shared/system-occupancy-simulation.ts#SystemOccupancyReport"
       ],
       "testedBy": [
+        "file:src/shared/mechanic-accountability.test.ts",
         "file:src/shared/system-occupancy-simulation.test.ts"
       ]
     },
@@ -85199,6 +85226,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/mechanic-accountability.test.ts->src/shared/gameplay-interaction-graph.ts",
+      "source": "file:src/shared/mechanic-accountability.test.ts",
+      "target": "file:src/shared/gameplay-interaction-graph.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/mechanic-accountability.test.ts->src/shared/system-occupancy-simulation.ts",
+      "source": "file:src/shared/mechanic-accountability.test.ts",
+      "target": "file:src/shared/system-occupancy-simulation.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/mechanic-feedback.test.ts->src/shared/mechanic-feedback.ts",
       "source": "file:src/shared/mechanic-feedback.test.ts",
       "target": "file:src/shared/mechanic-feedback.ts",
@@ -94330,6 +94369,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/gameplay-interaction-graph.ts->file:src/shared/mechanic-accountability.test.ts",
+      "source": "file:src/shared/gameplay-interaction-graph.ts",
+      "target": "file:src/shared/mechanic-accountability.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/gameplay-journal.ts->file:src/shared/gameplay-journal-cost.test.ts",
       "source": "file:src/shared/gameplay-journal.ts",
       "target": "file:src/shared/gameplay-journal-cost.test.ts",
@@ -95653,6 +95698,12 @@
       "id": "tested_by:src/shared/steam-rich-presence-tokens.ts->file:src/shared/steam-partner-config.test.ts",
       "source": "file:src/shared/steam-rich-presence-tokens.ts",
       "target": "file:src/shared/steam-partner-config.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/system-occupancy-simulation.ts->file:src/shared/mechanic-accountability.test.ts",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "file:src/shared/mechanic-accountability.test.ts",
       "kind": "tested_by"
     },
     {
