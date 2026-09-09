@@ -35,7 +35,6 @@ interface TileBoardSceneBoardGroupProps {
     sharedCardBackLayers: readonly CardBackSvgLayerGeometry[] | null;
     sharedCardFrontGeometry: BufferGeometry | null;
     shuffleMotionBudgetMs: number;
-    settleMotionDeadlineMs: number;
     shuffleMotionDeadlineMs: number;
     shuffleStaggerTileCount: number;
     textureRevision: number;
@@ -70,7 +69,6 @@ export const TileBoardSceneBoardGroup = ({
     sharedCardBackLayers,
     sharedCardFrontGeometry,
     shuffleMotionBudgetMs,
-    settleMotionDeadlineMs,
     shuffleMotionDeadlineMs,
     shuffleStaggerTileCount,
     textureRevision,
@@ -162,7 +160,6 @@ export const TileBoardSceneBoardGroup = ({
                     resolvingSelection={resolvingSelection}
                     shuffleBoardOrderIndex={shuffleBoardOrderIndex}
                     shuffleMotionBudgetMs={shuffleMotionBudgetMs}
-                    settleMotionDeadlineMs={settleMotionDeadlineMs}
                     shuffleMotionDeadlineMs={shuffleMotionDeadlineMs}
                     shuffleStaggerTileCount={shuffleStaggerTileCount}
                     boardEntranceMotionDeadlineMs={boardEntranceMotionDeadlineMs}

@@ -107,7 +107,6 @@ interface TileBezelProps {
     onTileHover?: (tileId: string | null) => void;
     reduceMotion: boolean;
     resolvingSelection: ResolvingSelectionState;
-    settleMotionDeadlineMs: number;
     shuffleMotionDeadlineMs: number;
     shuffleMotionBudgetMs: number;
     shuffleStaggerTileCount: number;
@@ -193,7 +192,6 @@ const TileBezelInner = ({
     onTileHover,
     reduceMotion,
     resolvingSelection,
-    settleMotionDeadlineMs,
     shuffleMotionDeadlineMs,
     shuffleMotionBudgetMs,
     shuffleStaggerTileCount,
@@ -314,7 +312,6 @@ const TileBezelInner = ({
         traitRouteReadabilityIntensity,
         shuffleBoardOrderIndex,
         shuffleMotionBudgetMs,
-        settleMotionDeadlineMs,
         shuffleMotionDeadlineMs,
         shuffleStaggerTileCount,
         textureRevision,

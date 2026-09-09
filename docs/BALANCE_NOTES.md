@@ -2063,3 +2063,42 @@ the ripple only ever lived at Clean, where the reach is bounded, and a packed bo
 partners inside the clump the first wave already took. Making the ripple fire again means changing
 what a wave is allowed to take, which is its own generation and its own risk. Recorded here rather
 than quietly left as a number nobody looks at.
+
+## Gen 192: the settle out, and the ripple back on its own
+
+The settle went, on the player's call, for the reason no measurement was going to argue with: a
+memory game may not move a card the player has learned. `docs/REMOVED_SETTLE.md` keeps the whole
+record. Cleared cards still leave the board; the holes they leave now stay.
+
+The interesting part is what the measurement said afterwards. Two generations had been spent
+chasing the ripple - Gen 190 recorded it dying, Gen 191 widened the boards and the palette partly to
+revive it and got it back only to 0.02, and a task was filed to change what a wave is allowed to
+take. Removing the settle answered all of it at once:
+
+| | Ripple mean | Breaks that rippled | Drop, share of floors | Turns a floor takes |
+|---|---|---|---|---|
+| Before the settle (Gen 189 boards) | 1.08 | 0.07 | 0.442 | 4.3 |
+| With the settle (Gen 190) | 1.00 | 0.00 | 0.388 | 4.1 |
+| With it, on the wider boards (Gen 191) | 1.02 | 0.02 | 0.463 | 5.4 |
+| **Without it, on the wider boards** | **1.16** | **0.16** | **0.588** | **5.7** |
+
+The ripple is not merely restored, it is healthier than it has ever been: 0.16 of breaks reach a
+second wave at zero misses and 0.07 at the reference miss rate, against 0.07 and roughly nothing
+before any of this. The severance drop moved the same way, from 0.463 of floors to 0.588. Both had
+the same cause, and it was not the reach or the board size: a packed board lets the first wave
+swallow the partners and the orphans that the second wave and the drop existed to find.
+
+The finding worth keeping is procedural. Gen 191 was a real improvement on its own terms - the pair
+curve and the palette both stand - but it was reached for partly as a repair for a number that a
+different change had broken, and it could not have fixed it. When a metric falls the generation a
+mechanic lands, suspect the mechanic before tuning around it.
+
+### One band re-tuned
+
+`CHAIN_TIER_FEVER_SHARE` goes 0.6 to 0.62. Longer floors mean more matches and more momentum, so
+with the settle out the reference player landed on 0.22 of floors reaching Fever against a band
+whose ceiling is exactly 0.22 - passing, with no margin for the next change. At 0.62 that reads
+0.17, with a clean player at 0.44, so the separation is 2.6 against a band of 1.5.
+
+`CHAIN_TIER_SHARP_SHARE` stays at 0.45. The ladder is unchanged in shape: 1.74 / 3.00 / 3.40 / 7.88
+pairs per rung, paying x3.33 / x2.37 / x4.84.

@@ -8,7 +8,7 @@
  */
 export const SAVE_SCHEMA_VERSION = 8;
 /** Bump when generation rules change (tile order, mutators, pair layout). */
-export const GAME_RULES_VERSION = 42;
+export const GAME_RULES_VERSION = 43;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;

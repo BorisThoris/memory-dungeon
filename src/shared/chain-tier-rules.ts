@@ -49,8 +49,9 @@ export const CHAIN_TIER_FEVER_FROM = 10;
  * counts the pairs a break took as well as the matches made, and a break on a bigger board takes
  * more, so momentum climbs faster than the pair count it is measured against: on the wider curve
  * a player missing a quarter of their flips reached Fever on 0.32 of floors against a band of
- * 0.22. The shares are the correction, and they leave the reference player at 0.18 with a clean
- * player at 0.45 - a separation of 2.5 against a band of 1.5. `docs/BALANCE_NOTES.md`, Gen 191.
+ * 0.22. The shares are the correction, and after Gen 192 removed the settle they leave the
+ * reference player at 0.17 with a clean player at 0.44 - a separation of 2.6 against a band of
+ * 1.5. `docs/BALANCE_NOTES.md`, Gen 191 and Gen 192.
  */
 export const CHAIN_TIER_SHARP_SHARE = 0.45;
 /*
@@ -70,8 +71,10 @@ export const CHAIN_TIER_SHARP_SHARE = 0.45;
  * census, which plays at a 15% miss rate, from 0.05 to 0.119 - over the 0.1 bar a `common` system
  * has to clear, which is what this rung was always meant to be. Gen 191 moved it to 0.6 for the
  * reason above: three fifths of a bigger floor is the same run of play half of a smaller one was.
+ * Gen 192 nudged it to 0.62, because taking the settle out made floors longer again and left the
+ * reference player sitting exactly on the 0.22 ceiling with no margin for the next change.
  */
-export const CHAIN_TIER_FEVER_SHARE = 0.6;
+export const CHAIN_TIER_FEVER_SHARE = 0.62;
 export const CHAIN_TIER_SHARP_MIN = 4;
 export const CHAIN_TIER_FEVER_MIN = 7;
 

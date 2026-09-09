@@ -96,8 +96,6 @@ interface TileBoardSceneProps {
     wardPairKey?: string | null;
     bountyPairKey?: string | null;
     /** Wall-clock ms; while `now < deadline`, tile groups ease XY toward layout targets (shuffle). */
-    /** Set when a match settles the board, so the cards glide to the cells they packed into. */
-    settleMotionDeadlineMs: number;
     shuffleMotionDeadlineMs: number;
     /** Motion budget that produced `shuffleMotionDeadlineMs` (FX-013 staggered deal-Z). */
     shuffleMotionBudgetMs: number;
@@ -169,7 +167,6 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     cursedPairKey = null,
     wardPairKey = null,
     bountyPairKey = null,
-    settleMotionDeadlineMs,
     shuffleMotionDeadlineMs,
     shuffleMotionBudgetMs,
     shuffleStaggerTileCount,
@@ -421,7 +418,6 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
                 sharedCardBackLayers={sharedCardBackLayers}
                 sharedCardFrontGeometry={sharedCardFrontGeometry}
                 shuffleMotionBudgetMs={shuffleMotionBudgetMs}
-                settleMotionDeadlineMs={settleMotionDeadlineMs}
                 shuffleMotionDeadlineMs={shuffleMotionDeadlineMs}
                 shuffleStaggerTileCount={shuffleStaggerTileCount}
                 textureRevision={textureRevision}

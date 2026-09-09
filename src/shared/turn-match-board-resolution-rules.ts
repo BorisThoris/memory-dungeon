@@ -3,7 +3,6 @@ import { createMatchedPairClaimBoard } from './match-claim-rules';
 import { chainMomentum } from './chain-tier-rules';
 import { resolveChunkBreak, type ChunkBreakResult } from './chunk-break-rules';
 import { normalizeSessionStats } from './session-stats-rules';
-import { settleBoardTowardCentre } from './board-settle-rules';
 
 export interface TurnMatchBoardResolutionResult {
     board: BoardState;
@@ -42,12 +41,12 @@ export const resolveTurnMatchBoardResolution = ({
     });
 
     /*
-     * The settle. Whatever the match and the break took is gone, and the cards that are left fall
-     * toward the middle to close the gap - so the next turn's reach, ripple and aim guide read a
-     * board that is still packed rather than one slowly going hollow.
+     * A cleared card leaves a hole where it stood, and the hole stays. Gen 192 took out the settle
+     * that used to close it: a card the player had placed is not moved, whatever it costs the
+     * cascade. `docs/REMOVED_SETTLE.md`.
      */
     return {
-        board: settleBoardTowardCentre(chunkBreak.board),
+        board: chunkBreak.board,
         chunkBreak
     };
 };

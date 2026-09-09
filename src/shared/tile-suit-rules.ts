@@ -361,8 +361,8 @@ const breakablePairCount = (tiles: readonly Tile[]): number => {
  * (`pair-curve.ts`) and the palette grew with it, so a floor reaches three suits at floor 5 and
  * four by floor 11 while a suit still holds about as many pairs as it did before. It still reads
  * as a difficulty curve, the way a bubble shooter opens with two colours and adds more. The ladder
- * pays for it in pairs - Sharp's step over Clean goes 0.61 to 0.50 - and takes it back in score,
- * where the rungs come out x3.35 / x2.52 / x4.73, more even than they were.
+ * pays for it in pairs and takes it back in score: measured after Gen 192 took the settle out, the
+ * rungs find 1.74 / 3.00 / 3.40 / 7.88 pairs and pay x3.33 / x2.37 / x4.84.
  *
  * `MIN_PAIRS_FOR_TWO_SUITS` is the legibility floor. The suit is the map (Gen 117): a board dealt
  * one suit has no map at all, only a uniform field, and six breakable pairs is enough that a

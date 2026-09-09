@@ -7246,12 +7246,12 @@ board *is* between one turn and the next, and everything downstream of adjacency
 
 | ID | Task | Depends on | Acceptance | Risk |
 |---|---|---|---|---|
-| T6b.1 | Every cleared card leaves the board | — | No matched card sits face-up in its cell | Low — **done, Gen 190** |
-| T6b.2 | The survivors pack toward the middle | T6b.1 | Pure, deterministic, never moves a card outward | Med — **done, Gen 190** |
-| T6b.3 | The settle glides rather than teleports | T6b.2 | A card slides to its new cell; reduced motion snaps | Low — **done, Gen 190** |
+| T6b.1 | Every cleared card leaves the board | — | No matched card sits face-up in its cell | Low — **done, Gen 190**, and kept |
+| T6b.2 | ~~The survivors pack toward the middle~~ | T6b.1 | — | **Removed, Gen 192** — a memory game may not move a card a player has learned |
+| T6b.3 | ~~The settle glides rather than teleports~~ | T6b.2 | — | **Removed with it** |
 | T6b.4 | More suits from the first floor | T6b.2 | A run's early floors carry more than two suits | High — **done, Gen 191**, at one suit per four pairs with a scattered floor capped at two |
 | T6b.5 | A pair curve that grows with the settle | T6b.4 | Later floors carry more cards; the board still fits | Med — **done, Gen 191** |
-| T6b.6 | The ripple fires again | T6b.4, T6b.5 | `rippled` back above zero in `sim:cascade` | **Open** — bigger boards took it from 0.00 to 0.02; the rest is a rule, see below |
+| T6b.6 | The ripple fires again | T6b.2 removed | `rippled` back above zero in `sim:cascade` | **Done, Gen 192** — 0.16 of breaks, more than before any of this. The settle was the cause. |
 
 **Why the settle is not cosmetic.** Every reach in the game - the pop, the ripple, the severance
 drop, the aim guide - reads the grid as it stands. A board that never moves is a board whose clumps
@@ -7270,13 +7270,19 @@ and a floor takes 5.4 turns for the reference player against 4.1. Momentum climb
 board than the pair count it is measured against, so the tier shares were raised to 0.45 and 0.6 to
 keep Fever rare.
 
-**Why T6b.6 stays open.** The ripple came back to 0.02 of breaks and no further, and board size
-cannot carry it the rest of the way. A Sharp or Fever break has unbounded reach: it takes the whole
-suit in the first wave, so there is nothing left for a second, and the ripple only ever lived at
-Clean where the reach is bounded - where a packed board now puts the partners inside the clump the
-first wave already took. Making it fire means changing what a wave is allowed to take, which is a
-rule change with its own risk to the ladder, not a tuning pass. `docs/BALANCE_NOTES.md`, Gen 190 and
-Gen 191.
+**Why the settle came out (Gen 192).** Because it moves cards a player has memorised, which is the
+one cost a memory game cannot pay. No care in the movement rule buys it back: the settle was built
+to be gentle - globally-closest pairs, the hole walking outward rather than a card flung across the
+grid - and gentle is still moved. Either the grid a player learns is the grid they come back to or
+it is not. `docs/REMOVED_SETTLE.md` keeps what it cost and what shape an answer to the hollowing
+problem would have to have.
+
+**T6b.6 came free with it.** The ripple now fires on 0.16 of breaks, against 0.02 with the settle in
+and 0.07 before any of this - and the severance drop went from 0.463 of floors to 0.588. Both had
+the same cause, and it was neither the reach nor the board size: a packed board lets the first wave
+swallow the partners and orphans the second wave and the drop existed to find. Two generations were
+spent tuning around a number one change had broken. The lesson is in `docs/BALANCE_NOTES.md`, Gen
+192: when a metric falls the generation a mechanic lands, suspect the mechanic.
 
 ## G.7 Phase 7 — the sweep
 
@@ -7306,8 +7312,8 @@ T1.7 ─┬─ T1.8 ── T1.9 ── T1.10 ── T1.11 ─┬── T1.12 ─
 
   T3.4 ─── T3.6
 
-T6b.1 ── T6b.2 ─┬─ T6b.3
-                └─ T6b.4 ── T6b.5 ── T6b.6
+T6b.1 ─── T6b.4 ── T6b.5 ── T6b.6
+(T6b.2 and T6b.3 removed at Gen 192)
 ```
 
 **T1.7 is the critical path.** Everything of consequence depends on board generation no longer

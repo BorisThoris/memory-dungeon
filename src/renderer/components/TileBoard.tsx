@@ -82,8 +82,6 @@ import {
 } from './tileBoardGestureCommit';
 import { BOARD_LAYOUT_VIEWPORT_PADDING, TILE_SPACING } from './tileShatter';
 import { computeBoardEntranceMotionBudgetMs, computeShuffleMotionBudgetMs } from './shuffleFlipAnimation';
-import { SETTLE_MOTION_BUDGET_MS } from './tileBoardLayoutMotionState';
-import { getBoardSettleSignature } from './boardSettleMotion';
 import { boardWebglPerfSampleRecordReactCommit, boardWebglPerfSampleVerboseEnabled } from '../dev/boardWebglPerfSample';
 import { preloadTileTextureImages } from './tileTextures';
 import {
@@ -717,9 +715,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const entranceMotionKeyRef = useRef<string | null>(null);
     const entranceReadyFrameRef = useRef<number | null>(null);
     const [shuffleAnimating, setShuffleAnimating] = useState(false);
-    /** When the cards stop gliding into the cells the settle packed them into; a past time is closed. */
-    const [settleMotionDeadlineMs, setSettleMotionDeadlineMs] = useState(0);
-    const settleSignatureSeenRef = useRef<string | null>(null);
     const [shuffleMotionDeadlineMs, setShuffleMotionDeadlineMs] = useState(0);
     /** Mirrors FLIP motion budget for WebGL FX-013 staggered deal-Z (0 = inactive). */
     const [shuffleMotionBudgetMs, setShuffleMotionBudgetMs] = useState(0);
@@ -2223,24 +2218,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         },
         []
     );
-    /*
-     * The settle glide. A match repacks the board toward the middle, which moves cards into cells
-     * they were not in a frame ago. Without this the survivors would simply be somewhere else on
-     * the next frame; with it they slide, and the player can follow the card they were tracking.
-     */
-    const settleSignature = useMemo(() => getBoardSettleSignature(board), [board]);
-
-    useEffect(() => {
-        const previous = settleSignatureSeenRef.current;
-        settleSignatureSeenRef.current = settleSignature;
-        if (previous === null || previous === settleSignature || reduceMotion) {
-            return;
-        }
-        // The window closes on its own: the frame loop compares this deadline against the clock,
-        // so a deadline already past is a closed window and needs no timer to clear it.
-        // eslint-disable-next-line react-hooks/set-state-in-effect -- the glide is timed off the wall clock, which is only readable once the board has actually committed
-        setSettleMotionDeadlineMs(performance.now() + SETTLE_MOTION_BUDGET_MS);
-    }, [reduceMotion, settleSignature]);
     const deviceDpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
     const activeTileCount = useMemo(
         () => board.tiles.filter((t) => t.state !== 'removed').length,
@@ -3377,7 +3354,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         boardEntranceMotionDeadlineMs={boardEntranceMotionDeadlineMs}
                                         boardEntranceStaggerTileCount={boardEntranceStaggerTileCount}
                                         shuffleMotionBudgetMs={shuffleMotionBudgetMs}
-                                        settleMotionDeadlineMs={settleMotionDeadlineMs}
                                         shuffleMotionDeadlineMs={shuffleMotionDeadlineMs}
                                         shuffleStaggerTileCount={shuffleStaggerTileCount}
                                         showTutorialPairMarkers={showTutorialPairMarkers}
