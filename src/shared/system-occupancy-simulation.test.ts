@@ -85,11 +85,29 @@ describe('what actually happens to a player', () => {
         expect(judgeSystemOccupancyAgainstBaseline(swollen).issues.some((line) => line.includes('is now dominant'))).toBe(true);
     });
 
-    it('censuses a counter that tallies something that happened, never a charge that is merely available', () => {
-        // `undoUsesThisFloor` is undos remaining, and reading it as an occurrence is the mistake
-        // one level up from the one this file catches. Keep the roster free of "remaining" fields.
-        expect(SYSTEM_OCCUPANCY_COUNTERS.map((counter) => counter.key)).not.toContain('undoUsesThisFloor');
-        expect(SYSTEM_OCCUPANCY_COUNTERS.every((counter) => !/Charges|Remaining|Total/.test(counter.key))).toBe(true);
+    it('never reads a charge that is merely available as a thing that happened', () => {
+        /*
+         * `undoUsesThisFloor` is undos remaining, and reading its value as an occurrence is the
+         * mistake one level up from the one this file catches: it would report "the charge exists"
+         * as "somebody pressed it". Gen 195 made such a field censusable, but only as a spend -
+         * the fall, never the value - so the rule is now about the kind, not the name.
+         */
+        for (const counter of SYSTEM_OCCUPANCY_COUNTERS) {
+            if (/Charges$|Remaining|UsesThisFloor$/u.test(counter.key)) {
+                expect(counter.kind, counter.key).toBe('spend');
+            }
+        }
+        // And nothing reads a total, which is neither an occurrence nor a charge.
+        expect(SYSTEM_OCCUPANCY_COUNTERS.every((counter) => !/Total/u.test(counter.key))).toBe(true);
+    });
+
+    it('keeps the reference pass free of the tools, so a shuffled board never moves the cascade baseline', () => {
+        const reference = SYSTEM_OCCUPANCY_COUNTERS.filter((counter) => counter.player === 'reference');
+        expect(reference.every((counter) => counter.kind === 'tally')).toBe(true);
+        expect(reference.every((counter) => counter.family !== 'tools')).toBe(true);
+        const tooled = SYSTEM_OCCUPANCY_COUNTERS.filter((counter) => counter.player === 'tooled');
+        expect(tooled.length).toBeGreaterThan(0);
+        expect(tooled.every((counter) => counter.family === 'tools')).toBe(true);
     });
 
     it('passes the aspirational check outright, which it could not do while the dungeon layer shipped', () => {

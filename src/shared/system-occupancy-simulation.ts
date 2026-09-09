@@ -3,6 +3,7 @@ import { GAME_RULES_VERSION } from './contracts';
 import { buildBoard } from './board-generation';
 import { countFindablePairs } from './board-tile-generation-rules';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
+import { applyPeek, applyRegionShuffle, applyShuffle, cancelResolvingWithUndo } from './board-power-actions';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { getUnresolvedPlayablePairGroups } from './playthrough-solver-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
@@ -27,27 +28,52 @@ import { isSingletonUtilityPairKey } from './tile-identity';
  * census is decoration, and the report says so by name.
  */
 export interface SystemOccupancyCounter {
-    /** The `RunState` per-floor counter this system writes. */
+    /** The `RunState` field this system moves. */
     key: keyof RunState & string;
     label: string;
     /** What the game would lose if this never fired. Sorted into the report by it. */
-    family: 'cascade' | 'memory' | 'reward';
+    family: 'cascade' | 'memory' | 'reward' | 'tools';
     /**
      * The share of floors this is expected to touch, at the reference miss rate. `rare` systems
      * are meant to be occasional; `core` ones are the loop. Both must be greater than zero: a
      * system that never happens is not rare, it is absent.
      */
     cadence: 'core' | 'common' | 'rare';
+    /**
+     * How the field records the system happening.
+     *
+     * `tally` counts up from zero as the thing occurs. `spend` counts *down*: a charge the run was
+     * handed, whose fall is what the player used. Reading a charge as a tally is the mistake this
+     * file exists to catch one level up - a non-zero "undos left" means the charge exists, not that
+     * anyone pressed it - so the spend kind reads the drop rather than the value.
+     *
+     * The drop is summed as it happens, not taken from the two endpoints, because a charge can be
+     * refilled mid-floor: the Echo trait hands peeks back. Measured end to end, half the floors
+     * reported no peek spent on a floor where one was spent and another earned. A fall that
+     * happened is still a fall.
+     */
+    kind: 'tally' | 'spend';
+    /**
+     * Which pass sees it. The `reference` player only ever flips pairs, which is why every power
+     * and every charge was invisible until Gen 195; the `tooled` player spends what a plain endless
+     * run hands it. They are separate passes on purpose, so a shuffled board never moves the
+     * cascade counters the reference baseline is ratcheted against.
+     */
+    player: 'reference' | 'tooled';
 }
 
 export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
-    { key: 'chunkBreaksThisFloor', label: 'A match popped the clump it touched', family: 'cascade', cadence: 'core' },
-    { key: 'chunkPairsDroppedThisFloor', label: 'The drop took a severed suit’s last pairs', family: 'cascade', cadence: 'common' },
-    { key: 'feverBreaksThisFloor', label: 'A break landed at Fever', family: 'cascade', cadence: 'common' },
-    { key: 'recallMatchesThisFloor', label: 'A pair was matched from memory', family: 'memory', cadence: 'core' },
-    { key: 'recallMistakesThisFloor', label: 'A mismatch was made', family: 'memory', cadence: 'common' },
-    { key: 'matchResolutionsThisFloor', label: 'A turn resolved', family: 'memory', cadence: 'core' },
-    { key: 'findablesClaimedThisFloor', label: 'A pickup was claimed', family: 'reward', cadence: 'core' }
+    { key: 'chunkBreaksThisFloor', label: 'A match popped the clump it touched', family: 'cascade', cadence: 'core', kind: 'tally', player: 'reference' },
+    { key: 'chunkPairsDroppedThisFloor', label: 'The drop took a severed suit’s last pairs', family: 'cascade', cadence: 'common', kind: 'tally', player: 'reference' },
+    { key: 'feverBreaksThisFloor', label: 'A break landed at Fever', family: 'cascade', cadence: 'common', kind: 'tally', player: 'reference' },
+    { key: 'recallMatchesThisFloor', label: 'A pair was matched from memory', family: 'memory', cadence: 'core', kind: 'tally', player: 'reference' },
+    { key: 'recallMistakesThisFloor', label: 'A mismatch was made', family: 'memory', cadence: 'common', kind: 'tally', player: 'reference' },
+    { key: 'matchResolutionsThisFloor', label: 'A turn resolved', family: 'memory', cadence: 'core', kind: 'tally', player: 'reference' },
+    { key: 'findablesClaimedThisFloor', label: 'A pickup was claimed', family: 'reward', cadence: 'core', kind: 'tally', player: 'reference' },
+    { key: 'peekCharges', label: 'A peek was spent on a hidden tile', family: 'tools', cadence: 'core', kind: 'spend', player: 'tooled' },
+    { key: 'shuffleCharges', label: 'The board was shuffled', family: 'tools', cadence: 'core', kind: 'spend', player: 'tooled' },
+    { key: 'regionShuffleCharges', label: 'A row was shuffled', family: 'tools', cadence: 'core', kind: 'spend', player: 'tooled' },
+    { key: 'undoUsesThisFloor', label: 'A flip was taken back before it resolved', family: 'tools', cadence: 'common', kind: 'spend', player: 'tooled' }
 ];
 
 /*
@@ -63,10 +89,20 @@ export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
  */
 
 /*
- * Not censused, and why: `undoUsesThisFloor` counts the undos a floor has LEFT, not the ones a
- * player spent, so a non-zero reading means the charge exists rather than that anything happened.
- * Every counter above is a tally of something that occurred. A "charges remaining" field read as
- * an occurrence is the same mistake this file exists to catch, one level up.
+ * `undoUsesThisFloor` is the reason the `spend` kind exists. It counts the undos a floor has LEFT,
+ * so reading its value as an occurrence would report "the charge exists" as "somebody used it" -
+ * the same mistake this file exists to catch, one level up. Read as a spend, the drop from what the
+ * floor opened with is exactly what the player pressed.
+ *
+ * Three powers stay uncounted because a plain endless run never hands them out: Destroy, Stray
+ * Remove and Flash Pair all start at zero charges and are granted by a run setup. A census that
+ * reported them silent would be reporting the setup it chose, not the game.
+ *
+ * A `tools` row reads differently from the rest. The tooled player presses everything it is given,
+ * so the number is how often the power was *usable*, not how often a real player would reach for
+ * it: the peek works on every floor, the shuffle on 0.975 of them (the rest have too few hidden
+ * pairs left by the time it is tried), and the undo on 0.558 (it is spent on a miss, and the
+ * reference miss rate does not produce one on every floor). Read them as reachability.
  */
 
 export interface SystemOccupancyReport {
@@ -83,7 +119,49 @@ export interface SystemOccupancyReport {
     }>;
 }
 
-const playFloor = (seed: number, floor: number, missRate: number, maxTurns: number): RunState => {
+/**
+ * What a player does with the tools a plain endless run hands them, expressed as the least
+ * interesting policy that still presses every button: peek the first hidden tile, take back the
+ * first flip that was going to be a mismatch, and shuffle once the floor is half gone.
+ *
+ * It is deliberately not clever. The census asks whether a system can happen on a real board, not
+ * whether it is worth using - a power a good player would never touch still has to be reachable.
+ */
+const spendTools = (run: RunState, phase: 'opening' | 'midway'): RunState => {
+    const board = run.board;
+    if (!board || run.status !== 'playing') {
+        return run;
+    }
+    if (phase === 'opening') {
+        const hidden = board.tiles.find((tile) => tile.state === 'hidden' && !isSingletonUtilityPairKey(tile.pairKey));
+        return hidden ? applyPeek(run, hidden.id) : run;
+    }
+    const shuffled = applyShuffle(run);
+    const rows = Math.max(1, Math.ceil(shuffled.board!.tiles.length / Math.max(1, shuffled.board!.columns)));
+    for (let row = 0; row < rows; row += 1) {
+        const next = applyRegionShuffle(shuffled, row);
+        if (next !== shuffled) {
+            return next;
+        }
+    }
+    return shuffled;
+};
+
+const SPEND_KEYS = SYSTEM_OCCUPANCY_COUNTERS.filter((counter) => counter.kind === 'spend').map((counter) => counter.key);
+
+export interface OccupancyFloorResult {
+    run: RunState;
+    /** Every fall in a watched charge, summed as it happened. */
+    spends: Map<string, number>;
+}
+
+const playFloor = (
+    seed: number,
+    floor: number,
+    missRate: number,
+    maxTurns: number,
+    tooled = false
+): OccupancyFloorResult => {
     const rulesVersion = GAME_RULES_VERSION;
     const schedule = pickFloorScheduleEntry(seed, rulesVersion, floor, 'endless');
     const board = buildBoard(floor, {
@@ -104,7 +182,25 @@ const playFloor = (seed: number, floor: number, missRate: number, maxTurns: numb
         findablesTotalThisFloor: countFindablePairs(board.tiles)
     };
     const rng = createMulberry32(hashStringToSeed(`occupancy:${seed}:${floor}:${missRate}:${rulesVersion}`));
+    const openingPairs = board.pairCount;
+    const spends = new Map<string, number>();
+    /** Take the next run state, and record every watched charge that fell on the way to it. */
+    const step = (next: RunState): RunState => {
+        for (const key of SPEND_KEYS) {
+            const fell =
+                runNonNegativeInteger(run[key] as number) - runNonNegativeInteger(next[key] as number);
+            if (fell > 0) {
+                spends.set(key, (spends.get(key) ?? 0) + fell);
+            }
+        }
+        run = next;
+        return run;
+    };
     let turns = 0;
+    let undone = false;
+    if (tooled) {
+        step(spendTools(run, 'opening'));
+    }
     while (run.status === 'playing' && turns < maxTurns) {
         const groups = getUnresolvedPlayablePairGroups(run.board!).filter((group) =>
             group.every((tile) => tile.state === 'hidden' || tile.state === 'flipped')
@@ -125,15 +221,32 @@ const playFloor = (seed: number, floor: number, missRate: number, maxTurns: numb
             first = group[0]!;
             second = group[1]!;
         }
-        run = resolveBoardTurn(flipTile(flipTile(run, first.id), second.id));
+        const flipped = flipTile(flipTile(run, first.id), second.id);
+        /*
+         * The undo is the one tool that has to be spent mid-turn: it takes back a pair the player
+         * has flipped but not yet resolved. Spent on the first miss, which is when a player would.
+         */
+        if (tooled && wantsMiss && !undone) {
+            const cancelled = cancelResolvingWithUndo(flipped);
+            if (cancelled !== flipped) {
+                undone = true;
+                step(cancelled);
+                turns += 1;
+                continue;
+            }
+        }
+        step(resolveBoardTurn(flipped));
         turns += 1;
+        if (tooled && run.status === 'playing' && run.board!.matchedPairs * 2 >= openingPairs) {
+            step(spendTools(run, 'midway'));
+        }
     }
     /*
      * The floor used to need a closing move: find the exit tile, reveal it, activate it. There is
      * no exit tile, so the floor is over when the board is - which is the whole point of the
      * change, and the reason this census now ends where the pairs do.
      */
-    return run;
+    return { run, spends };
 };
 
 export const OCCUPANCY_SEEDS = [11, 202, 3003, 40404, 555, 6006, 77, 8888, 91_919, 1_234] as const;
@@ -151,16 +264,24 @@ export const simulateSystemOccupancy = ({
 } = {}): SystemOccupancyReport => {
     const hits = new Map<string, { floors: number; total: number }>();
     let played = 0;
+    const passes: Array<SystemOccupancyCounter['player']> = ['reference', 'tooled'];
     for (const seed of seeds) {
         for (let floor = 1; floor <= floors; floor += 1) {
-            const run = playFloor(seed, floor, missRate, maxTurns);
             played += 1;
-            for (const counter of SYSTEM_OCCUPANCY_COUNTERS) {
-                const value = runNonNegativeInteger(run[counter.key] as number);
-                const row = hits.get(counter.key) ?? { floors: 0, total: 0 };
-                if (value > 0) row.floors += 1;
-                row.total += value;
-                hits.set(counter.key, row);
+            for (const pass of passes) {
+                const counters = SYSTEM_OCCUPANCY_COUNTERS.filter((counter) => counter.player === pass);
+                if (counters.length === 0) continue;
+                const { run, spends } = playFloor(seed, floor, missRate, maxTurns, pass === 'tooled');
+                for (const counter of counters) {
+                    const value =
+                        counter.kind === 'spend'
+                            ? spends.get(counter.key) ?? 0
+                            : runNonNegativeInteger(run[counter.key] as number);
+                    const row = hits.get(counter.key) ?? { floors: 0, total: 0 };
+                    if (value > 0) row.floors += 1;
+                    row.total += value;
+                    hits.set(counter.key, row);
+                }
             }
         }
     }

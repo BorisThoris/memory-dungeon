@@ -208,3 +208,64 @@ census itself drives (`progression.run_flow`), some are chosen before a floor ex
 (`progression.run_setup`, `mode.wild_run`, `board.wild_joker_tile`), some are guarantees rather than
 occurrences (`safety.softlock_fairness`, whose proof is the softlock seed sweep), and two are tools
 for measuring the game rather than rules inside it. Those stay exempt and say so.
+
+## Gen 195: the census player picks up its tools
+
+Gen 194 measured that 26 of the 45 mechanics were invisible for one reason: the thing playing the
+census only ever flipped pairs. This generation gives it a policy for spending what a plain endless
+run hands it, and moves eight mechanics off the exemption list.
+
+| | Gen 194 | Gen 195 |
+|---|---|---|
+| Censused | 7 | **15** |
+| Exempt, with a reason | 38 | 30 |
+| Unanswered | 0 | 0 |
+
+### Two passes, not one
+
+The tooled player is a **second pass** over the same floors. A shuffled board pops differently, and
+the cascade counters are ratcheted against a baseline that means something; measuring both from one
+run would have quietly moved that baseline to describe a player who shuffles. So the reference pass
+plays as it always did and the tooled pass plays beside it.
+
+### A charge is not a tally, and its endpoints are not a spend
+
+Counters now have a kind. A `tally` counts up as something happens. A `spend` counts *down*: a
+charge whose fall is what the player pressed. That distinction already existed as a rule against
+censusing "undos remaining" at all - reading a charge's value as an occurrence reports that the
+charge exists, not that anyone used it.
+
+The first implementation took the spend as the difference between the floor's opening and closing
+charge, and the peek measured as **silent on all 240 floors** while working perfectly. Two separate
+mistakes, both worth keeping:
+
+1. The opening snapshot was taken from a tooled build, so any tool spent before the first turn had
+   already been spent in the reading it was being compared against. Every opening spend read zero.
+2. Fixing that took the peek to 0.492, which was the second mistake: **the Echo trait hands peek
+   charges back**. A charge that can be refilled mid-floor is not measurable from its endpoints - a
+   floor where one peek was spent and another earned reads as no peek at all.
+
+Spends are now summed as they happen: every fall in a watched charge is added as the run state moves
+through it. A fall that happened is still a fall, whatever the trait gives back afterwards. This is
+still reading the game's own ledger rather than remembering what the census pressed.
+
+### What the tools read
+
+| Tool | Floors | Reading |
+|---|---|---|
+| Peek | 1.000 | Usable on every floor |
+| A row shuffled | 0.983 | |
+| The board shuffled | 0.975 | The rest have too few hidden pairs left by the time it is tried |
+| Undo | 0.558 | Spent on a miss, and the reference miss rate does not make one every floor |
+
+A `tools` row reads differently from the rest of the census: the tooled player presses everything it
+is given, so the number is how often the power was **usable**, not how often a real player would
+reach for it. Read them as reachability.
+
+### What is still blind
+
+Eighteen mechanics: the seven powers a plain endless run never grants - Destroy, Stray Remove, Flash
+Pair, the pin, the gambit, the tile swap and the wild match all start at zero and come from a run
+setup - their seven charges, and the four traits, which pay on a match that touches them where the
+census player picks pairs without reading them. Both are a census that plays a *setup*, not a plain
+floor, which is the next step.

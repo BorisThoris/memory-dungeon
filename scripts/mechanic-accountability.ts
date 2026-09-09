@@ -42,7 +42,15 @@ export const MECHANIC_CENSUS_COUNTERS: Record<string, readonly string[]> = {
     'economy.score_and_rewards': ['recallMatchesThisFloor'],
     'findable.score_glint': ['findablesClaimedThisFloor'],
     'objective.floor_clear': ['matchResolutionsThisFloor'],
-    'stats.session_tracking': ['recallMistakesThisFloor']
+    'stats.session_tracking': ['recallMistakesThisFloor'],
+    'power.peek': ['peekCharges'],
+    'power.shuffle': ['shuffleCharges'],
+    'power.region_shuffle': ['regionShuffleCharges'],
+    'power.undo_resolve': ['undoUsesThisFloor'],
+    'inventory.peek_charge': ['peekCharges'],
+    'inventory.shuffle_charge': ['shuffleCharges'],
+    'inventory.region_shuffle_charge': ['regionShuffleCharges'],
+    'inventory.undo_charge': ['undoUsesThisFloor']
 };
 
 /**
@@ -72,13 +80,21 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, string> = {
 
 /** Prefixes whose mechanics are all invisible for the same reason: the census player never spends one. */
 const REFERENCE_PLAYER_BLIND: ReadonlyArray<{ prefix: string; reason: string }> = [
-    { prefix: 'power.', reason: 'The census player never arms a power, so no power can move a counter for it.' },
-    { prefix: 'inventory.', reason: 'The census player never spends a charge, so no charge can move a counter for it.' },
+    {
+        prefix: 'power.',
+        reason: 'Granted only by a run setup - Destroy, Stray Remove, Flash Pair, the pin, the gambit, the tile swap and the wild match all start a plain endless run at zero, so a census that reported them silent would be reporting its own setup.'
+    },
+    {
+        prefix: 'inventory.',
+        reason: 'The charge behind a power a plain endless run never hands out; it cannot be spent where the census plays.'
+    },
     { prefix: 'trait.', reason: 'Traits pay on a match that touches them, and the census player picks pairs without reading traits.' }
 ];
 
 const blindReason = (id: string): string | null =>
-    REFERENCE_PLAYER_BLIND.find((entry) => id.startsWith(entry.prefix))?.reason ?? null;
+    MECHANIC_CENSUS_COUNTERS[id]
+        ? null
+        : REFERENCE_PLAYER_BLIND.find((entry) => id.startsWith(entry.prefix))?.reason ?? null;
 
 export interface MechanicAccountabilityFinding {
     id: string;
