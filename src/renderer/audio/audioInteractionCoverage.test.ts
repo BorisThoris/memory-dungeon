@@ -22,8 +22,6 @@ describe('REG-037 audio interaction coverage', () => {
             'resolve_match',
             'trait_route_cashout',
             'chain_milestone_hit',
-            'chain_reward_cashout',
-            'chain_reward_armed',
             'resolved_cascade_accent',
             'chunk_break_ladder',
             'stacked_reward_setup',
@@ -51,16 +49,6 @@ describe('REG-037 audio interaction coverage', () => {
             semanticMoment: 'reward'
         });
         expect(gameplay.find((row) => row.id === 'chain_milestone_hit')?.cooldownPolicy).toMatch(/threshold/i);
-        expect(gameplay.find((row) => row.id === 'chain_reward_cashout')).toMatchObject({
-            decision: 'procedural_only',
-            semanticMoment: 'reward'
-        });
-        expect(gameplay.find((row) => row.id === 'chain_reward_cashout')?.mixRole).toMatch(/payoff accent/i);
-        expect(gameplay.find((row) => row.id === 'chain_reward_armed')).toMatchObject({
-            decision: 'procedural_only',
-            semanticMoment: 'reward'
-        });
-        expect(gameplay.find((row) => row.id === 'chain_reward_armed')?.mixRole).toMatch(/anticipatory chime/i);
         expect(gameplay.find((row) => row.id === 'resolved_cascade_accent')).toMatchObject({
             decision: 'procedural_only',
             semanticMoment: 'reward'

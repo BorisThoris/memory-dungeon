@@ -43,7 +43,7 @@ test.describe('Long-run feedback HUD readability', () => {
             await expect(page.getByTestId('hud-score')).toBeVisible();
 
             const stats = hud.getByRole('group', { name: /run stats/i });
-            for (const testId of ['hud-floor', 'hud-score', 'hud-par', 'hud-combo-shards']) {
+            for (const testId of ['hud-floor', 'hud-score', 'hud-par']) {
                 await expect(stats.getByTestId(testId)).toBeVisible();
             }
 

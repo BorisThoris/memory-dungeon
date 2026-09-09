@@ -20,7 +20,6 @@ import { appendGameplayJournal } from './gameplay-journal';
 export interface GameplayMatchRewardAdapterResult {
     commands: GameplayCommand[];
     events: GameplayEvent[];
-    comboShardGain: number;
     scoreGain: number;
     migrated: boolean;
 }
@@ -55,17 +54,11 @@ export const resolveFindableMatchRewardThroughGameplayCore = (
     findableKind: FindableKind | null,
     commandId: string
 ): GameplayMatchRewardAdapterResult => {
-    const definitionId =
-        findableKind === 'shard_spark'
-            ? 'findable.shard_spark'
-            : findableKind === 'score_glint'
-              ? 'findable.score_glint'
-              : null;
+    const definitionId = findableKind === 'score_glint' ? 'findable.score_glint' : null;
     if (!definitionId || !findableKind) {
         return {
             commands: [],
             events: [],
-            comboShardGain: 0,
             scoreGain: 0,
             migrated: false
         };
@@ -80,10 +73,6 @@ export const resolveFindableMatchRewardThroughGameplayCore = (
     return {
         commands: [command],
         events: result.events,
-        comboShardGain: result.events.reduce(
-            (sum, event) => sum + (event.type === 'combo_shard.requested' ? event.amount : 0),
-            0
-        ),
         scoreGain: result.events.reduce(
             (sum, event) => sum + (event.type === 'score.requested' ? event.amount : 0),
             0

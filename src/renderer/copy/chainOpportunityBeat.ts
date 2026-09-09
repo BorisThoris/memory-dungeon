@@ -1,55 +1,35 @@
 export type ChainOpportunityBeatSignal = {
-    action: 'Prime route' | 'Match route' | 'Tap follow-up' | 'Chain routes' | 'Cash out';
-    audioCue: 'setup-beat' | 'route-beat' | 'follow-up-beat' | 'surge-beat' | 'cashout-beat';
-    beatCount: 2 | 3 | 4 | 5;
-    cue: 'pulse' | 'snap' | 'burst' | 'super';
+    action: 'Prime route' | 'Match route' | 'Tap follow-up' | 'Chain routes';
+    audioCue: 'setup-beat' | 'route-beat' | 'follow-up-beat' | 'surge-beat';
+    beatCount: 2 | 3 | 4;
+    cue: 'pulse' | 'snap' | 'burst';
     detail: string;
-    label: 'Prime beat' | 'Route beat' | 'Follow-up beat' | 'Surge beat' | 'Cashout beat';
-    screenCue: 'pulse' | 'snap' | 'burst' | 'super';
-    tier: 'setup' | 'route' | 'follow-up' | 'surge' | 'cashout';
+    label: 'Prime beat' | 'Route beat' | 'Follow-up beat' | 'Surge beat';
+    screenCue: 'pulse' | 'snap' | 'burst';
+    tier: 'setup' | 'route' | 'follow-up' | 'surge';
 };
 
 interface ChainOpportunityBeatContext {
     chainReadyCount: number;
     comboSurgeLabel: string | null;
     followupReady: boolean;
-    nextTarget: string | null;
     readyCardLabel: string | null;
     readyRouteLabel: string | null;
-    rewardCue: string | null;
-    rewardHot: boolean;
     selectedFollowupLabel: string | null;
     setupAction: string | null;
     setupCount: number;
-    streakCashoutReady: boolean;
 }
 
 export function getChainOpportunityBeatSignal({
     chainReadyCount,
     comboSurgeLabel,
     followupReady,
-    nextTarget,
     readyCardLabel,
     readyRouteLabel,
-    rewardCue,
-    rewardHot,
     selectedFollowupLabel,
     setupAction,
-    setupCount,
-    streakCashoutReady
+    setupCount
 }: ChainOpportunityBeatContext): ChainOpportunityBeatSignal | null {
-    if (rewardHot || streakCashoutReady) {
-        return {
-            action: 'Cash out',
-            audioCue: 'cashout-beat',
-            beatCount: 5,
-            detail: nextTarget ?? rewardCue ?? 'Cashout is live',
-            label: 'Cashout beat',
-            cue: 'super',
-            screenCue: 'super',
-            tier: 'cashout'
-        };
-    }
     if (comboSurgeLabel) {
         return {
             action: 'Chain routes',

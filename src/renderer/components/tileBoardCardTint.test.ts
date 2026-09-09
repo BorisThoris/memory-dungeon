@@ -52,7 +52,7 @@ describe('tileBoardCardTint', () => {
         const result = applyTileBoardCardTint(
             input({
                 hoverDomParity: true,
-                tile: { ...input().tile, findableKind: 'shard_spark' }
+                tile: { ...input().tile, findableKind: 'score_glint' }
             }),
             target,
             new Color()

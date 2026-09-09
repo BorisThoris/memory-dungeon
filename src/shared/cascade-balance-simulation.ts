@@ -57,7 +57,6 @@ export interface CascadeBalanceFloorSample {
     bestChain: number;
     /** The longest ripple on the floor, in waves (`bestRippleThisFloor`): what the chain bought beyond the pop. */
     bestRipple: number;
-    comboShardsGained: number;
     pairsOnFloor: number;
     /** Extreme Fever: the tier the momentum held when the floor cleared, and what it paid. */
     momentumBonusTier: 'none' | 'clean' | 'sharp' | 'fever';
@@ -167,7 +166,6 @@ export const playCascadeBalanceFloor = ({
         findablesTotalThisFloor: countFindablePairs(board.tiles)
     };
     const rng = createMulberry32(hashStringToSeed(`cascade-sim:${seed}:${floor}:${missRate}:${rulesVersion}`));
-    const shardsAtStart = runNonNegativeInteger(run.stats.comboShards);
 
     let turns = 0;
     let bestChain = 0;
@@ -245,7 +243,6 @@ export const playCascadeBalanceFloor = ({
         feverBreaks,
         bestChain,
         bestRipple: runNonNegativeInteger(run.bestRippleThisFloor),
-        comboShardsGained: Math.max(0, runNonNegativeInteger(run.stats.comboShards) - shardsAtStart),
         pairsOnFloor,
         momentumBonusTier: run.lastLevelResult?.momentumBonusTier ?? 'none',
         suitDealProfile: getSuitDealProfile(schedule.floorArchetypeId)

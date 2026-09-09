@@ -138,30 +138,6 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
         reducedMotionSafe: true
     },
     {
-        id: 'chain_reward_cashout',
-        domain: 'gameplay',
-        interaction: 'Clean streak match banks a combo shard',
-        cue: 'none',
-        callsite: 'applyResolveBoardTurn -> playResolveSfx chain-reward cashout accent layer',
-        semanticMoment: 'reward',
-        decision: 'procedural_only',
-        cooldownPolicy: 'match category polyphony cap; only plays on successful chain-depth resource cashouts',
-        mixRole: 'bright payoff accent over match/resource bloom when the chain reward actually lands',
-        reducedMotionSafe: true
-    },
-    {
-        id: 'chain_reward_armed',
-        domain: 'gameplay',
-        interaction: 'Clean streak match leaves the next chain reward one match away',
-        cue: 'none',
-        callsite: 'applyResolveBoardTurn -> playResolveSfx near-chain-reward armed layer',
-        semanticMoment: 'reward',
-        decision: 'procedural_only',
-        cooldownPolicy: 'match category polyphony cap; only plays after successful resolves that arm but do not cash a chain reward',
-        mixRole: 'small anticipatory chime that makes one-away cashouts feel intentional',
-        reducedMotionSafe: true
-    },
-    {
         id: 'resolved_cascade_accent',
         domain: 'gameplay',
         interaction: 'Successful match resolves a chain, reward, or combo cascade moment',
@@ -320,7 +296,7 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
     {
         id: 'mismatch_recovery_crescendo',
         domain: 'gameplay',
-        interaction: 'Mismatch floater displays and plays recover, break, risk, lost-reward, or trait-surge recovery crescendo cues with recovery lane and chip metadata',
+        interaction: 'Mismatch floater displays and plays recover, break, risk, or trait-surge recovery crescendo cues with recovery lane and chip metadata',
         cue: 'none',
         callsite: 'GameScreen mismatch floater recovery crescendo / lane map / chip stack -> playMismatchRecoveryCrescendoSfx',
         semanticMoment: 'fail',

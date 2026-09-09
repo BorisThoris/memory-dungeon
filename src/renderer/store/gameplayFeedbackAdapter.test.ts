@@ -44,9 +44,9 @@ describe('gameplayFeedbackAdapter', () => {
         const presentations = projectGameplayFeedback([
             event(0, {
                 type: 'feedback.requested',
-                cue: 'build.shard_spark.matched',
+                cue: 'build.score_glint.matched',
                 message: 'Findable matched.',
-                source: { kind: 'findable', id: 'shard_spark' },
+                source: { kind: 'findable', id: 'score_glint' },
                 tone: 'reward'
             }),
             event(1, {

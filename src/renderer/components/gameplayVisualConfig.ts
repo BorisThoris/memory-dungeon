@@ -121,7 +121,7 @@ export const GAMEPLAY_BOARD_VISUALS = {
             reducedMotion: 'blocked slot dim + focus ring'
         },
         combo: {
-            material: 'gold shard/favor emphasis',
+            material: 'gold emphasis',
             motionMs: 240,
             reducedMotion: 'gold text/rim emphasis'
         }
@@ -245,7 +245,7 @@ export const CARD_INTERACTION_FEEDBACK = {
     },
     combo: {
         material: 'streak reward spark',
-        visualCue: 'HUD objective/combo shard reward copy plus score emphasis',
+        visualCue: 'HUD objective reward copy plus score emphasis',
         audioCue: 'floor_clear_or_pickup',
         motionMs: 320,
         reducedMotionCue: 'text reward copy and stable score emphasis'

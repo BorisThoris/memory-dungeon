@@ -70,7 +70,7 @@ const run = (overrides: Partial<RunState> = {}): RunState =>
         forgottenTileIdsThisFloor: [],
         pinnedTileIds: [],
         peekRevealedTileIds: [],
-        stats: { totalScore: 0, currentLevelScore: 0, comboShards: 0, currentStreak: 0 },
+        stats: { totalScore: 0, currentLevelScore: 0, currentStreak: 0 },
         ...overrides
     }) as RunState;
 
@@ -169,7 +169,6 @@ describe('deterministic gameplay core', () => {
     it('validates commands, effects, conditions, and definitions as strict serializable contracts', () => {
         expect(GAMEPLAY_CONTENT_DEFINITIONS.map((definition) => definition.id)).toEqual([
             'trait.conduit_echo_peek',
-            'findable.shard_spark',
             'findable.score_glint'
         ]);
         expect(GAMEPLAY_CONTENT_DEFINITIONS.every((definition) => gameplayContentDefinitionSchema.safeParse(definition).success)).toBe(true);
@@ -568,8 +567,8 @@ describe('deterministic gameplay core', () => {
                 matchedTraits: ['conduit'],
                 adjacentTraits: ['echo']
             }),
-            createGameplayDefinitionCommand('02-spark', 'findable.shard_spark', {
-                matchedFindables: ['shard_spark']
+            createGameplayDefinitionCommand('02-glint', 'findable.score_glint', {
+                matchedFindables: ['score_glint']
             }),
             createGameplayPeekCommand('03-peek', 'echo-a')
         ];
@@ -578,7 +577,7 @@ describe('deterministic gameplay core', () => {
         const replayB = replayGameplayCommands(initial, JSON.parse(serialized) as unknown[]);
 
         expect(replayA).toEqual(replayB);
-        expect(replayA.acceptedCommandIds).toEqual(['01-peek', '02-spark', '03-peek']);
+        expect(replayA.acceptedCommandIds).toEqual(['01-peek', '02-glint', '03-peek']);
         expect(replayA.rejectedCommandIds).toEqual([]);
         // One charge to start, one relayed by Conduit beside Echo, one spent on the peek.
         expect(replayA.run.peekCharges).toBe(1);

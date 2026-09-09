@@ -61,7 +61,6 @@ describe('InventoryScreen', () => {
 
         const charges = screen.getByTestId('inventory-charges-panel');
         expect(charges).toHaveTextContent(/Peek\s*\d/);
-        expect(charges).toHaveTextContent(/Combo shards\s*\d/);
         expect(charges).not.toHaveTextContent(/Guard tokens/);
         expect(charges).toHaveTextContent(/Match score multiplier/);
     });
@@ -72,14 +71,13 @@ describe('InventoryScreen', () => {
             ...base,
             shuffleCharges: -2,
             peekCharges: -4,
-            stats: { ...base.stats, comboShards: Number.POSITIVE_INFINITY }
+            stats: { ...base.stats, currentStreak: Number.POSITIVE_INFINITY }
         };
         render(<InventoryScreen />);
         const charges = screen.getByTestId('inventory-charges-panel');
         expect(charges).not.toHaveTextContent(/Infinity|NaN|-\d/);
         expect(charges).toHaveTextContent(/Full shuffle\s*0/);
         expect(charges).toHaveTextContent(/Peek\s*0/);
-        expect(charges).toHaveTextContent(/Combo shards\s*0/);
     });
 
     it('shows the empty state and Back when no run is active', () => {

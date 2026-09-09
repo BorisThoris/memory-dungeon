@@ -35,7 +35,7 @@ export const MECHANIC_TOKEN_DEFINITIONS: Record<MechanicTokenId, MechanicTokenDe
     reward: {
         id: 'reward',
         label: 'Reward',
-        purpose: 'Score, gold, Favor, guard, shards, keys, or other gains.',
+        purpose: 'Score, pickups, charges, or other gains.',
         a11yHint: 'Identifies value the player can earn.'
     },
     armed: {
@@ -71,7 +71,7 @@ export const MECHANIC_TOKEN_DEFINITIONS: Record<MechanicTokenId, MechanicTokenDe
     cost: {
         id: 'cost',
         label: 'Cost',
-        purpose: 'Charges, gold, keys, shards, risk, or opportunity spent.',
+        purpose: 'Charges, risk, or opportunity spent.',
         a11yHint: 'Identifies what will be spent or consumed.'
     },
     forfeit: {
@@ -89,7 +89,7 @@ export const MECHANIC_TOKEN_DEFINITIONS: Record<MechanicTokenId, MechanicTokenDe
     momentum: {
         id: 'momentum',
         label: 'Momentum',
-        purpose: 'Streaks, shards, guard saves, route payoff, and build engines changing state.',
+        purpose: 'Streaks, chain tiers, route payoff, and build engines changing state.',
         a11yHint: 'Identifies a positive or negative run-state swing.'
     }
 };

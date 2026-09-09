@@ -1,9 +1,4 @@
-import {
-    FINDABLE_KIND_SPAWN_WEIGHTS,
-    FINDABLE_MATCH_COMBO_SHARDS,
-    FINDABLE_MATCH_SCORE,
-    type FindableKind
-} from './contracts';
+import { FINDABLE_KIND_SPAWN_WEIGHTS, FINDABLE_MATCH_SCORE, type FindableKind } from './contracts';
 
 export interface FindableRewardRow {
     kind: FindableKind;
@@ -14,17 +9,10 @@ export interface FindableRewardRow {
     destroyRule: string;
 }
 
-const FINDABLE_REWARD_ROW_ORDER = ['shard_spark', 'score_glint'] as const satisfies readonly FindableKind[];
+/** Gen 184: one kind. The Shard Spark paid a combo shard, and the shard is gone (docs/REMOVED_LIVES.md). */
+const FINDABLE_REWARD_ROW_ORDER = ['score_glint'] as const satisfies readonly FindableKind[];
 
 const FINDABLE_REWARD_ROW_BY_KIND = {
-    shard_spark: {
-        kind: 'shard_spark',
-        label: 'Shard spark',
-        marker: 'Gold diamond corner glyph',
-        rewardText: `+${FINDABLE_MATCH_COMBO_SHARDS.shard_spark} combo shard`,
-        claimRule: 'Match the carrier pair.',
-        destroyRule: 'Destroy forfeits the shard.'
-    },
     score_glint: {
         kind: 'score_glint',
         label: 'Score glint',
@@ -54,9 +42,8 @@ export const getFindableRows = () =>
         label: row.label,
         rewardText: row.rewardText,
         score: FINDABLE_MATCH_SCORE[row.kind],
-        comboShards: FINDABLE_MATCH_COMBO_SHARDS[row.kind],
         spawnWeight: FINDABLE_KIND_SPAWN_WEIGHTS[row.kind],
-        destroyText: row.kind === 'score_glint' ? 'Destroy forfeits the score glint.' : row.destroyRule
+        destroyText: 'Destroy forfeits the score glint.'
     }));
 
 export const getFindableSpawnWeightRows = () =>

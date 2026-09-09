@@ -26,8 +26,10 @@ const hiddenTiles = (run: RunState): Tile[] =>
 const playMiss = (run: RunState): RunState => {
     const hidden = hiddenTiles(run);
     const first = hidden[0]!;
-    const second = hidden.find((tile) => tile.pairKey !== first.pairKey)!;
-    return resolveBoardTurn(flipTile(flipTile(run, first.id), second.id));
+    const second = hidden.find((tile) => tile.pairKey !== first.pairKey);
+    // Once the pops have left a single pair standing there is nothing to miss with; the trace
+    // matches it and moves on, the way a player would.
+    return second ? resolveBoardTurn(flipTile(flipTile(run, first.id), second.id)) : playMatch(run);
 };
 
 const playMatch = (run: RunState): RunState => {

@@ -42,7 +42,6 @@ describe('match claim rules', () => {
         const context = deriveMatchClaimContext(tile('a1'), tile('a2'));
 
         expect(context.claimedFindableKind).toBeNull();
-        expect(context.findableComboShardGain).toBe(0);
         expect(context.findableScoreBonus).toBe(0);
         expect(context.findablesClaimedDelta).toBe(0);
     });

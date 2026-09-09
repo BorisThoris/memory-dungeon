@@ -515,7 +515,7 @@ describe('gameSfx', () => {
             }
         );
 
-        playMismatchRecoveryCrescendoSfx(sfxGainFromSettings(1, 0), 'lost-reward', 4);
+        playMismatchRecoveryCrescendoSfx(sfxGainFromSettings(1, 0), 'break', 4);
 
         expect(createOscillator).not.toHaveBeenCalled();
     });
@@ -623,7 +623,7 @@ describe('gameSfx', () => {
         expect(createOscillator).toHaveBeenCalledTimes(5);
     });
 
-    it('layers a resource reward chime when a resolved match grants combo resources', () => {
+    it('layers a resource reward chime when a resolved match grants a flash-pair charge', () => {
         const createOscillator = vi.fn(() => {
             const o = {
                 type: 'sine' as OscillatorType,
@@ -653,114 +653,18 @@ describe('gameSfx', () => {
         );
 
         const before = {
-            stats: { matchesFound: 1, tries: 1, currentStreak: 1, comboShards: 0 },
-            findablesClaimedThisFloor: 0
+            stats: { matchesFound: 1, tries: 1, currentStreak: 1 },
+            findablesClaimedThisFloor: 0,
+            flashPairCharges: 0
         } as unknown as RunState;
         const after = {
-            stats: { matchesFound: 2, tries: 2, currentStreak: 2, comboShards: 1 },
-            findablesClaimedThisFloor: 0
+            stats: { matchesFound: 2, tries: 2, currentStreak: 2 },
+            findablesClaimedThisFloor: 0,
+            flashPairCharges: 1
         } as unknown as RunState;
 
         playResolveSfx(before, after, sfxGainFromSettings(1, 1));
         expect(createOscillator).toHaveBeenCalledTimes(2);
-    });
-
-    it('adds a distinct chain reward cashout accent for streak resource payouts', () => {
-        const createOscillator = vi.fn(() => {
-            const o = {
-                type: 'sine' as OscillatorType,
-                frequency: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
-                connect: vi.fn(),
-                start: vi.fn(),
-                stop: vi.fn(),
-                addEventListener: vi.fn()
-            };
-            oscillators.push(o);
-            return o;
-        });
-        const createGain = vi.fn(() => ({
-            gain: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
-            connect: vi.fn()
-        }));
-
-        vi.stubGlobal(
-            'AudioContext',
-            class {
-                currentTime = 0;
-                destination = {};
-                createOscillator = createOscillator;
-                createGain = createGain;
-                close = (): Promise<void> => Promise.resolve();
-            }
-        );
-
-        const before = {
-            stats: { matchesFound: 2, tries: 2, currentStreak: 3, comboShards: 1 },
-            findablesClaimedThisFloor: 0
-        } as unknown as RunState;
-        const after = {
-            stats: { matchesFound: 3, tries: 3, currentStreak: 4, comboShards: 2 },
-            findablesClaimedThisFloor: 0
-        } as unknown as RunState;
-
-        playResolveSfx(before, after, sfxGainFromSettings(1, 1));
-        expect(createOscillator).toHaveBeenCalledTimes(4);
-        expect(oscillators[2]?.type).toBe('triangle');
-        expect(createOscillator.mock.results[2]?.value.frequency.exponentialRampToValueAtTime).toHaveBeenCalledWith(
-            2536,
-            expect.any(Number)
-        );
-        expect(oscillators[3]?.type).toBe('sine');
-        expect(createOscillator.mock.results[3]?.value.frequency.exponentialRampToValueAtTime).toHaveBeenCalledWith(
-            2900,
-            expect.any(Number)
-        );
-    });
-
-    it('adds an anticipatory chime when a match arms a one-away chain reward', () => {
-        const createOscillator = vi.fn(() => {
-            const o = {
-                type: 'sine' as OscillatorType,
-                frequency: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
-                connect: vi.fn(),
-                start: vi.fn(),
-                stop: vi.fn(),
-                addEventListener: vi.fn()
-            };
-            oscillators.push(o);
-            return o;
-        });
-        const createGain = vi.fn(() => ({
-            gain: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
-            connect: vi.fn()
-        }));
-
-        vi.stubGlobal(
-            'AudioContext',
-            class {
-                currentTime = 0;
-                destination = {};
-                createOscillator = createOscillator;
-                createGain = createGain;
-                close = (): Promise<void> => Promise.resolve();
-            }
-        );
-
-        const before = {
-            stats: { matchesFound: 3, tries: 3, currentStreak: 4, comboShards: 0 }
-        } as unknown as RunState;
-        const after = {
-            stats: { matchesFound: 4, tries: 4, currentStreak: 5, comboShards: 0 }
-        } as unknown as RunState;
-
-        playResolveSfx(before, after, sfxGainFromSettings(1, 1));
-
-        expect(createOscillator).toHaveBeenCalledTimes(3);
-        expect(oscillators[1]?.type).toBe('sine');
-        expect(createOscillator.mock.results[1]?.value.frequency.exponentialRampToValueAtTime).toHaveBeenCalledWith(
-            1890,
-            expect.any(Number)
-        );
     });
 
     it('stacks pickup sparkle and resource chime for bigger reward moments', () => {
@@ -793,12 +697,14 @@ describe('gameSfx', () => {
         );
 
         const before = {
-            stats: { matchesFound: 1, tries: 1, currentStreak: 1, comboShards: 0 },
-            findablesClaimedThisFloor: 0
+            stats: { matchesFound: 1, tries: 1, currentStreak: 1 },
+            findablesClaimedThisFloor: 0,
+            flashPairCharges: 0
         } as unknown as RunState;
         const after = {
-            stats: { matchesFound: 2, tries: 2, currentStreak: 2, comboShards: 1 },
-            findablesClaimedThisFloor: 1
+            stats: { matchesFound: 2, tries: 2, currentStreak: 2 },
+            findablesClaimedThisFloor: 1,
+            flashPairCharges: 1
         } as unknown as RunState;
 
         playResolveSfx(before, after, sfxGainFromSettings(1, 1));
@@ -843,15 +749,17 @@ describe('gameSfx', () => {
             }
         );
 
-        // Three channels at once: a pickup claimed, a chain reward cashed out at x3, and the x3
-        // chain milestone itself. That is every reward channel a resolved match can still open.
+        // Three channels at once: a pickup claimed, a flash-pair charge granted, and the x3 chain
+        // milestone itself. That is every reward channel a resolved match can still open.
         const before = {
-            stats: { matchesFound: 1, tries: 1, currentStreak: 2, comboShards: 0 },
-            findablesClaimedThisFloor: 0
+            stats: { matchesFound: 1, tries: 1, currentStreak: 2 },
+            findablesClaimedThisFloor: 0,
+            flashPairCharges: 0
         } as unknown as RunState;
         const after = {
-            stats: { matchesFound: 2, tries: 2, currentStreak: 3, comboShards: 1 },
-            findablesClaimedThisFloor: 1
+            stats: { matchesFound: 2, tries: 2, currentStreak: 3 },
+            findablesClaimedThisFloor: 1,
+            flashPairCharges: 1
         } as unknown as RunState;
 
         playResolveSfx(before, after, sfxGainFromSettings(1, 1));
@@ -861,53 +769,6 @@ describe('gameSfx', () => {
         // The capstone burst for three channels ramps to 2860 + 3 * 160.
         expect(rampTargets).toContain(3340);
         expect(oscillators[rampTargets.indexOf(3340)]?.type).toBe('sine');
-    });
-
-    it('layers chain-break and lost-payoff accents when a mismatch drops a near reward streak', () => {
-        const createOscillator = vi.fn(() => {
-            const o = {
-                type: 'sine' as OscillatorType,
-                frequency: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
-                connect: vi.fn(),
-                start: vi.fn(),
-                stop: vi.fn(),
-                addEventListener: vi.fn()
-            };
-            oscillators.push(o);
-            return o;
-        });
-        const createGain = vi.fn(() => ({
-            gain: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
-            connect: vi.fn()
-        }));
-
-        vi.stubGlobal(
-            'AudioContext',
-            class {
-                currentTime = 0;
-                destination = {};
-                createOscillator = createOscillator;
-                createGain = createGain;
-                close = (): Promise<void> => Promise.resolve();
-            }
-        );
-
-        const before = {
-            stats: { matchesFound: 2, tries: 2, currentStreak: 6, comboShards: 0 }
-        } as unknown as RunState;
-        const after = {
-            stats: { matchesFound: 2, tries: 3, currentStreak: 0 }
-        } as unknown as RunState;
-
-        playResolveSfx(before, after, sfxGainFromSettings(1, 1));
-
-        expect(createOscillator).toHaveBeenCalledTimes(3);
-        expect(oscillators[1]?.type).toBe('triangle');
-        expect(oscillators[2]?.type).toBe('sine');
-        expect(createOscillator.mock.results[2]?.value.frequency.exponentialRampToValueAtTime).toHaveBeenCalledWith(
-            360,
-            expect.any(Number)
-        );
     });
 
     it('adds a trait-surge risk accent when several trait penalties land on one miss', () => {

@@ -52,17 +52,10 @@ const initialRun = {
     strayRemoveArmed: true,
     recallFocus: 3,
     rewardPerkIds: [],
-    relicIds: [
-        'combo_shard_plus_step',
-        'guard_token_plus_one',
-        'chapter_compass',
-        'wager_surety',
-        'parasite_ledger'
-    ],
     powersUsedThisRun: false,
     forgottenTileIdsThisFloor: [],
     peekRevealedTileIds: [],
-    stats: { totalScore: 0, currentLevelScore: 0, comboShards: 0, currentStreak: 0 }
+    stats: { totalScore: 0, currentLevelScore: 0, currentStreak: 0 }
 } as unknown as RunState;
 const report = runGameplayCoreSimulation(initialRun, { seed, steps });
 

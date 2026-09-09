@@ -819,14 +819,6 @@ subdued cool palette. */
         0 0 26px color-mix(in srgb, var(--theme-danger) 28%, transparent);
 }
 
-.mismatchScoreFloater[data-mismatch-floater-heat='lost-reward'] {
-    color: color-mix(in srgb, var(--theme-gold-bright) 72%, var(--theme-danger) 34%);
-    text-shadow:
-        0 0 10px color-mix(in srgb, var(--theme-void) 50%, transparent),
-        0 0 18px color-mix(in srgb, var(--theme-danger) 34%, transparent),
-        0 0 24px color-mix(in srgb, var(--theme-gold-bright) 26%, transparent);
-}
-
 .mismatchScoreFloater[data-mismatch-floater-heat='break'] {
     color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
 }

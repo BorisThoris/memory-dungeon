@@ -66,7 +66,6 @@ export interface EndlessSimulationHealthReport {
 type EndlessSimulationHealthMetrics = EndlessSimulationHealthReport['metrics'];
 
 const emptyFindableKindCounts = (): Record<FindableKind, number> => ({
-    shard_spark: 0,
     score_glint: 0
 });
 

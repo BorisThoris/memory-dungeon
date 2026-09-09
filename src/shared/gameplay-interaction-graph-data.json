@@ -1,5 +1,5 @@
 {
-    "version": 33,
+    "version": 34,
     "mechanics": [
         {
             "id": "trait.echo",
@@ -349,8 +349,6 @@
             "reads": [
                 "interactionTags",
                 "peekCharges",
-                "comboShards",
-                "comboShardRequests",
                 "destroyPairCharges",
                 "triesDelta",
                 "lastLevelResult",
@@ -389,7 +387,6 @@
             "reads": [
                 "score",
                 "scoreRequests",
-                "comboShards",
                 "objectiveCompleted",
                 "totalScore",
                 "currentLevelScore"
@@ -531,72 +528,6 @@
                 "src/shared/turn-match-board-cleanup-rules.test.ts",
                 "src/shared/softlock-fairness.test.ts",
                 "src/shared/board-inspection.test.ts"
-            ]
-        },
-        {
-            "id": "findable.shard_spark",
-            "label": "Shard Spark Findable",
-            "kind": "findable",
-            "role": "match_reward_source",
-            "evidence": [
-                "src/shared/findables.ts",
-                "src/shared/match-claim-rules.ts",
-                "src/shared/gameplay-core-adapters.ts",
-                "src/shared/game.ts"
-            ],
-            "reads": [
-                "matchedFindables",
-                "tileStates"
-            ],
-            "writes": [
-                "comboShardRequests",
-                "feedbackLines"
-            ],
-            "enables": [
-                "inventory.combo_shard"
-            ],
-            "blocks": [],
-            "softlockGuards": [
-                "matched-pair-only",
-                "typed-request-event",
-                "destroy-forfeits-findable"
-            ],
-            "tests": [
-                "src/shared/findables.test.ts",
-                "src/shared/game.test.ts",
-                "src/shared/gameplay-core.test.ts"
-            ]
-        },
-        {
-            "id": "inventory.combo_shard",
-            "label": "Combo Shard Inventory",
-            "kind": "inventory",
-            "role": "bounded_bank",
-            "evidence": [
-                "src/shared/run-inventory.ts",
-                "src/shared/combo-shard-rules.ts",
-                "src/shared/turn-match-reward-rules.ts",
-                "src/shared/gameplay-core.ts"
-            ],
-            "reads": [
-                "comboShards",
-                "comboShardRequests"
-            ],
-            "writes": [
-                "comboShards"
-            ],
-            "enables": [],
-            "blocks": [],
-            "softlockGuards": [
-                "non-negative-counter",
-                "two-shard-bank-cap",
-                "three-shard-conversion-threshold"
-            ],
-            "tests": [
-                "src/shared/run-inventory.test.ts",
-                "src/shared/combo-shard-rules.test.ts",
-                "src/shared/turn-match-reward-rules.test.ts",
-                "src/shared/gameplay-core.test.ts"
             ]
         },
         {
@@ -824,7 +755,6 @@
                 "shuffleNonce",
                 "strayRemoveCharges",
                 "pinnedTileIds",
-                "comboShards",
                 "destroyPairCharges",
                 "featuredObjectiveStreak",
                 "featuredObjectiveCompleted",
@@ -839,7 +769,6 @@
                 "gameplayEvents",
                 "gameplayCommandJournal",
                 "gameplayEventJournal",
-                "comboShardRequests",
                 "scoreRequests",
                 "gambitCommitRequests",
                 "peekCharges",
@@ -849,7 +778,6 @@
                 "strayRemoveCharges",
                 "pinnedTileIds",
                 "pinsPlacedCountThisRun",
-                "comboShards",
                 "destroyPairCharges",
                 "score",
                 "peekRevealedTileIds",
@@ -1638,8 +1566,7 @@
             ],
             "reads": [
                 "gameplayEvents",
-                "totalScore",
-                "comboShards"
+                "totalScore"
             ],
             "writes": [
                 "balanceProfileReport"
@@ -1736,7 +1663,6 @@
                 "tileStates",
                 "matchedPairs",
                 "score",
-                "comboShards",
                 "chunkPairsThisChain",
                 "feedbackLines",
                 "chunkPairsDroppedThisFloor",
@@ -1745,8 +1671,7 @@
                 "bestRippleThisRun"
             ],
             "enables": [
-                "objective.floor_clear",
-                "inventory.combo_shard"
+                "objective.floor_clear"
             ],
             "blocks": [],
             "softlockGuards": [
@@ -1834,7 +1759,7 @@
             "source": "simulation.build_evaluation",
             "target": "economy.score_and_rewards",
             "kind": "tested_by",
-            "label": "checks live gold score shard and Favor consequences"
+            "label": "checks live score consequences"
         },
         {
             "source": "simulation.build_evaluation",
@@ -1889,36 +1814,6 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "shows target and balance"
-        },
-        {
-            "source": "findable.shard_spark",
-            "target": "core.gameplay_commands",
-            "kind": "triggers",
-            "label": "matched findable command"
-        },
-        {
-            "source": "findable.shard_spark",
-            "target": "inventory.combo_shard",
-            "kind": "grants",
-            "label": "requests one match shard"
-        },
-        {
-            "source": "findable.shard_spark",
-            "target": "feedback.gameplay_hud",
-            "kind": "displays",
-            "label": "shows shard spark cause"
-        },
-        {
-            "source": "core.gameplay_commands",
-            "target": "inventory.combo_shard",
-            "kind": "modifies",
-            "label": "applies capped shard effects and requests"
-        },
-        {
-            "source": "inventory.combo_shard",
-            "target": "feedback.gameplay_hud",
-            "kind": "displays",
-            "label": "shows current shard bank"
         },
         {
             "source": "power.peek",
@@ -2555,12 +2450,6 @@
             "target": "objective.floor_clear",
             "kind": "modifies",
             "label": "removes cascaded pairs toward the clear, never the exit"
-        },
-        {
-            "source": "board.chain_chunk_fever",
-            "target": "inventory.combo_shard",
-            "kind": "grants",
-            "label": "shards per cascaded pair, one each at Fever"
         },
         {
             "source": "board.chain_chunk_fever",

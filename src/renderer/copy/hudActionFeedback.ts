@@ -89,10 +89,7 @@ export const getHudActionFeedbackProfile = (
     if (/\b(trait|stasis|row\/swap|shuffle charge)\b/.test(normalized)) {
         return { label: 'Trait play', tone: 'trait' };
     }
-    if (/\bcashout armed\b/.test(normalized)) {
-        return { label: 'Cashout armed', tone: 'reward' };
-    }
-    if (/\b(cashout|claimed|gained|reward|gold|shard|cache|favor)\b/.test(normalized)) {
+    if (/\b(cashout|claimed|gained|reward|gold|cache|favor)\b/.test(normalized)) {
         return { label: 'Reward burst', tone: 'reward' };
     }
     return { label: 'Action result', tone: 'info' };
@@ -114,13 +111,3 @@ export const joinReadableList = (items: readonly string[]): string =>
 export const pluralize = (count: number, singular: string, plural = `${singular}s`): string =>
     `${count} ${count === 1 ? singular : plural}`;
 
-export const resourceDeltaCopy = (
-    delta: number,
-    displayLabel: string,
-    countedLabel: string,
-    verb: 'gained' | 'spent',
-    countedPlural = `${countedLabel}s`
-): string => {
-    const amount = Math.abs(delta);
-    return amount === 1 ? `${displayLabel} ${verb}` : `${pluralize(amount, countedLabel, countedPlural)} ${verb}`;
-};

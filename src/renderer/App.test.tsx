@@ -111,7 +111,6 @@ describe('desktop app flow', () => {
         expect(await findGameplayBoardStage()).toBeInTheDocument();
         expect(screen.getByRole('group', { name: /run stats/i })).toBeInTheDocument();
         expect(screen.getByTestId('hud-score')).toHaveTextContent(/score/i);
-        expect(screen.getByText(/^shards$/i)).toBeInTheDocument();
     }, 45_000);
 
     it('turns off the app-level ambient grid while the menu or game Pixi background is active', async () => {
@@ -288,8 +287,7 @@ describe('desktop app flow', () => {
                 matchesFound: 2,
                 highestLevel: 1,
                 currentStreak: 2,
-                bestStreak: 2,
-                comboShards: 1
+                bestStreak: 2
             },
             timerState: {
                 memorizeRemainingMs: null,

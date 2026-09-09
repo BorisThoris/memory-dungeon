@@ -28,8 +28,7 @@ const CHARGE_ROWS: readonly { id: string; label: string }[] = [
     { id: 'peek_charge', label: 'Peek' },
     { id: 'destroy_charge', label: 'Destroy pair' },
     { id: 'stray_remove_charge', label: 'Stray remove' },
-    { id: 'undo_charge', label: 'Undo this floor' },
-    { id: 'combo_shard', label: 'Combo shards' }
+    { id: 'undo_charge', label: 'Undo this floor' }
 ];
 
 const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) => {

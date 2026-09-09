@@ -8,7 +8,6 @@ import type {
 } from './contracts';
 import {
     FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP,
-    FINDABLE_MATCH_COMBO_SHARDS,
     FINDABLE_MATCH_SCORE,
     FLIP_PAR_BONUS_SCORE,
     GAME_RULES_VERSION,
@@ -34,7 +33,6 @@ import {
     finishMemorizePhase,
     getMemorizeDuration,
     getMemorizeDurationForRun,
-    pauseRun,
     resumeRun,
     advanceToNextLevel
 } from './game-core';
@@ -285,8 +283,7 @@ describe('Recall Focus memory loop', () => {
                 ...base.stats,
                 matchesFound: Number.NaN,
                 bestStreak: Number.POSITIVE_INFINITY,
-                highestLevel: Number.NaN,
-                comboShards: Number.POSITIVE_INFINITY
+                highestLevel: Number.NaN
             }
         };
 
@@ -301,7 +298,6 @@ describe('Recall Focus memory loop', () => {
         expect(resolved.stats.currentStreak).toBe(1);
         expect(resolved.stats.bestStreak).toBe(1);
         expect(resolved.stats.highestLevel).toBe(1);
-        expect(resolved.stats.comboShards).toBe(0);
     });
 
     it('degrades focus and records forgotten tiles on mismatch and shuffle', () => {
@@ -960,96 +956,7 @@ describe('game rules', () => {
         expect(resolved.lastLevelResult?.mistakes).toBe(1);
     });
 
-    it('banks a combo shard on every second streak step', () => {
-        const tiles: Tile[] = [
-            createTile('a1', 'A', 'A'),
-            createTile('a2', 'A', 'A'),
-            createTile('b1', 'B', 'B'),
-            createTile('b2', 'B', 'B')
-        ];
 
-        const atStreakTwo = {
-            ...createRun(tiles),
-            stats: {
-                ...createRun(tiles).stats,
-                tries: 1,
-                currentStreak: 1,
-                comboShards: 0
-            }
-        };
-        const resolvedAtTwo = resolveBoardTurn(flipTile(flipTile(atStreakTwo, 'a1'), 'a2'));
-
-        expect(resolvedAtTwo.status).toBe('playing');
-        expect(resolvedAtTwo.stats.currentStreak).toBe(2);
-        expect(resolvedAtTwo.stats.comboShards).toBe(1);
-
-        const atStreakThree = {
-            ...createRun(tiles),
-            stats: {
-                ...createRun(tiles).stats,
-                tries: 1,
-                currentStreak: 2,
-                comboShards: 1
-            }
-        };
-        const resolvedAtThree = resolveBoardTurn(flipTile(flipTile(atStreakThree, 'a1'), 'a2'));
-
-        expect(resolvedAtThree.stats.currentStreak).toBe(3);
-        expect(resolvedAtThree.stats.comboShards).toBe(1);
-
-        const atStreakFour = {
-            ...createRun(tiles),
-            stats: {
-                ...createRun(tiles).stats,
-                tries: 1,
-                currentStreak: 3,
-                comboShards: 1
-            }
-        };
-        const resolvedAtFour = resolveBoardTurn(flipTile(flipTile(atStreakFour, 'a1'), 'a2'));
-
-        expect(resolvedAtFour.status).toBe('playing');
-        expect(resolvedAtFour.stats.currentStreak).toBe(4);
-        expect(resolvedAtFour.stats.comboShards).toBe(2);
-    });
-
-    it('caps stored shards at their max value', () => {
-        const tiles: Tile[] = [
-            createTile('a1', 'A', 'A'),
-            createTile('a2', 'A', 'A'),
-            createTile('b1', 'B', 'B'),
-            createTile('b2', 'B', 'B')
-        ];
-        const shardCapped = {
-            ...createRun(tiles),
-            stats: {
-                ...createRun(tiles).stats,
-                tries: 1,
-                currentStreak: 1,
-                comboShards: 2
-            }
-        };
-        const resolvedShardCap = resolveBoardTurn(flipTile(flipTile(shardCapped, 'a1'), 'a2'));
-
-        expect(resolvedShardCap.status).toBe('playing');
-        expect(resolvedShardCap.stats.currentStreak).toBe(2);
-        expect(resolvedShardCap.stats.comboShards).toBe(2);
-
-        const started = {
-            ...createRun(tiles),
-            stats: {
-                ...createRun(tiles).stats,
-                tries: 1,
-                currentStreak: 15,
-                comboShards: 2
-            }
-        };
-        const resolved = resolveBoardTurn(flipTile(flipTile(started, 'a1'), 'a2'));
-
-        expect(resolved.status).toBe('playing');
-        expect(resolved.stats.currentStreak).toBe(16);
-        expect(resolved.stats.comboShards).toBe(2);
-    });
 
     it('advances to the next level in memorize phase, resets floor state, and preserves banked sustain', () => {
         const finishedLevel = {
@@ -1063,8 +970,7 @@ describe('game rules', () => {
                 currentStreak: 3,
                 bestStreak: 3,
                 perfectClears: 1,
-                highestLevel: 1,
-                comboShards: 2
+                highestLevel: 1
             },
             timerState: {
                 memorizeRemainingMs: null,
@@ -1087,7 +993,6 @@ describe('game rules', () => {
         const resident = pickFloorCurio(finishedLevel.runSeed, 2, finishedLevel.runRulesVersion);
 
         expect(nextRun.floorCurioId).toBe(resident.id);
-        expect(nextRun.stats.comboShards).toBe(2);
         expect(nextRun.stats.totalScore).toBe(300);
         expect(nextRun.timerState.memorizeRemainingMs).toBe(
             Math.max(
@@ -1455,42 +1360,6 @@ describe('board powers', () => {
             expect(a.tiles.map((t) => [t.id, t.findableKind])).toEqual(b.tiles.map((t) => [t.id, t.findableKind]));
         });
 
-        it('claims shard spark, banks it to the shard cap, and clears carrier flags', () => {
-            const tiles: Tile[] = [
-                { ...createTile('a1', 'A', 'A'), findableKind: 'shard_spark' },
-                { ...createTile('a2', 'A', 'A'), findableKind: 'shard_spark' },
-                createTile('b1', 'B', 'B'),
-                createTile('b2', 'B', 'B')
-            ];
-            const started = {
-                ...createRun(tiles),
-                findablesClaimedThisFloor: 0,
-                findablesTotalThisFloor: 1,
-                stats: {
-                    ...createRun(tiles).stats,
-                    comboShards: 1
-                }
-            };
-            const resolved = resolveBoardTurn(flipTile(flipTile(started, 'a1'), 'a2'));
-            const base = calculateMatchScore(1, 1, 1);
-            expect(FINDABLE_MATCH_COMBO_SHARDS.shard_spark).toBe(1);
-            expect(resolved.stats.totalScore).toBe(base + FINDABLE_MATCH_SCORE.shard_spark);
-            expect(resolved.stats.comboShards).toBe(2);
-            expect(resolved.findablesClaimedThisFloor).toBe(1);
-            expect(resolved.gameplayCommandJournal).toEqual([
-                expect.objectContaining({ type: 'board.turn_resolve' })
-            ]);
-            expect(resolved.gameplayEventJournal).toEqual(
-                expect.arrayContaining([
-                    expect.objectContaining({ type: 'combo_shard.requested', amount: 1 }),
-                    expect.objectContaining({ type: 'feedback.requested', cue: 'build.shard_spark.matched' })
-                ])
-            );
-            expect(
-                resolved.board?.tiles.filter((t) => t.pairKey === 'A').every((t) => t.findableKind === undefined)
-            ).toBe(true);
-        });
-
         it('claims score glint for flat score immediately', () => {
             const tiles: Tile[] = [
                 { ...createTile('a1', 'A', 'A'), findableKind: 'score_glint' },
@@ -1516,8 +1385,8 @@ describe('board powers', () => {
 
         it('forfeits findable on destroy without score or claim counter', () => {
             const tiles: Tile[] = [
-                { ...createTile('a1', 'A', 'A'), findableKind: 'shard_spark' },
-                { ...createTile('a2', 'A', 'A'), findableKind: 'shard_spark' },
+                { ...createTile('a1', 'A', 'A'), findableKind: 'score_glint' },
+                { ...createTile('a2', 'A', 'A'), findableKind: 'score_glint' },
                 createTile('b1', 'B', 'B'),
                 createTile('b2', 'B', 'B')
             ];

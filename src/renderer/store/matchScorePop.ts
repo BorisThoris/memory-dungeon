@@ -5,7 +5,6 @@ import type { BoardTurnResolvedEvent } from './gameplayFeedbackAdapter';
 import { runArray } from '../../shared/run-array-guards';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { getChainMilestoneFeedback, type ChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
-import { getChainRewardForecastCues, getChainRewardUrgencyCopy, type ChainRewardForecastCue } from '../copy/chainMomentum';
 
 export type MatchScorePop = {
     amount: number;
@@ -18,11 +17,9 @@ export type MatchScorePop = {
     feedbackSignal: MatchScorePopSignal;
     impactCue: MatchScorePopImpactCue;
     crescendo?: MatchScorePopCrescendo;
-    chainRewardForecastCues?: ChainRewardForecastCue[];
     payoffSummary?: MatchScorePopPayoffSummary;
     payoffChips?: MatchScorePopPayoffChip[];
     payoffLaneMap?: MatchScorePopPayoffLaneMapEntry[];
-    chainRewardText?: string;
     pickupRewardText?: string;
     routeRewardText?: string;
     traitInteractionTexts?: string[];
@@ -54,9 +51,7 @@ export type MatchScorePopImpactCue = {
     label:
         | 'Score pop'
         | 'Prime chain'
-        | 'Cashout armed'
         | 'Combo hold'
-        | 'Cashout now'
         | 'Route cashout'
         | 'Pickup cashout'
         | 'Trait cashout'
@@ -79,17 +74,17 @@ export type MatchScorePopCrescendo = {
 
 export type MatchScorePopPayoffChip = {
     arcadeCue?: string;
-    id: 'score' | 'streak' | 'cascade' | 'tier' | 'trait' | 'pickup' | 'route' | 'chainReward' | 'next';
+    id: 'score' | 'streak' | 'cascade' | 'tier' | 'trait' | 'pickup' | 'route';
     label: string;
     value: string;
     tone: 'score' | 'chain' | 'trait' | 'pickup' | 'route' | 'reward';
 };
 
-export type MatchScorePopPayoffLaneId = 'route' | 'pickup' | 'trait' | 'chain' | 'build';
+export type MatchScorePopPayoffLaneId = 'route' | 'pickup' | 'trait' | 'chain';
 
 export type MatchScorePopPayoffLaneMapEntry = {
     id: MatchScorePopPayoffLaneId;
-    label: 'Route' | 'Pickup' | 'Trait' | 'Chain' | 'Build';
+    label: 'Route' | 'Pickup' | 'Trait' | 'Chain';
     count: number;
     tone: 'route' | 'pickup' | 'trait' | 'chain' | 'reward';
     cue: string;
@@ -99,7 +94,6 @@ export type MatchScorePopPayoffSummary = {
     label:
         | 'Score hit'
         | 'Chain hit'
-        | 'Cashout armed'
         | 'Combo hit'
         | 'Route cashout'
         | 'Pickup cashout'
@@ -107,7 +101,6 @@ export type MatchScorePopPayoffSummary = {
         | 'Perk pop'
         | 'Perk surge'
         | 'Trait surge'
-        | 'Chain cashout'
         | 'Stack cashout'
         | 'Super stack';
     value: string;
@@ -121,7 +114,6 @@ export type MismatchScorePop = {
     /** Gambit triple-miss only — centroid anchor for GameScreen. */
     tileIdC?: string;
     brokenChainDepth?: number;
-    brokenChainRewardCue?: ChainRewardForecastCue;
     traitInteractionTexts?: string[];
     key: string;
 };
@@ -132,24 +124,12 @@ export const BOARD_FLOATER_POP_CLEAR = {
     mismatchScorePop: null as MismatchScorePop | null
 };
 
-const nextRewardPayoffLabel = (cue: ChainRewardForecastCue): string => `${cue.actionLabel} shard`;
-
-const formatGain = (amount: number, singular: string): string => `+${amount} ${amount === 1 ? singular : `${singular}s`}`;
-
 const matchScoreChainDepth = (chainDepth: number): number => Math.max(1, runNonNegativeInteger(chainDepth));
 
 const isRewardPerkInteractionText = (text: string): boolean => text.startsWith('Perk pop: ');
 
 const isRewardPerkOnlyTraitBurst = (traitInteractionTexts: readonly string[]): boolean =>
     traitInteractionTexts.length > 0 && traitInteractionTexts.every(isRewardPerkInteractionText);
-
-const buildChainRewardText = (facts: BoardTurnAnnouncementFacts, chainDepth: number): string | undefined => {
-    if (chainDepth < 3) {
-        return undefined;
-    }
-    const comboShardGain = Math.max(0, facts.comboShardsAfter - facts.comboShardsBefore);
-    return comboShardGain > 0 ? formatGain(comboShardGain, 'combo shard') : undefined;
-};
 
 export const getMatchScorePopChainMilestone = (
     previousStreak: number,
@@ -207,14 +187,12 @@ export const getMatchScorePopSignal = ({
 const buildMatchScorePopRewardBurst = ({
     chainDepth,
     chainMilestone,
-    chainRewardText,
     pickupRewardText,
     routeRewardText,
     traitInteractionTexts
 }: {
     chainDepth: number;
     chainMilestone?: MatchScorePopChainMilestone;
-    chainRewardText?: string;
     pickupRewardText?: string;
     routeRewardText?: string;
     traitInteractionTexts: readonly string[];
@@ -223,7 +201,6 @@ const buildMatchScorePopRewardBurst = ({
     const channels = [
         routeRewardText ? 'Route' : null,
         pickupRewardText ? 'Pickup' : null,
-        chainRewardText ? 'Chain reward' : null,
         ...traitInteractionTexts.slice(0, 2).map((_, index) => (index === 0 ? 'Trait' : 'Trait surge')),
         chainMilestone ? chainMilestone.label : null,
         depth >= 6 ? 'Momentum' : null
@@ -270,13 +247,11 @@ const buildMatchScorePopRewardBurst = ({
 
 const buildMatchScorePopCascadeCue = ({
     chainDepth,
-    chainRewardText,
     pickupRewardText,
     routeRewardText,
     traitInteractionTexts
 }: {
     chainDepth: number;
-    chainRewardText?: string;
     pickupRewardText?: string;
     routeRewardText?: string;
     traitInteractionTexts: readonly string[];
@@ -285,7 +260,6 @@ const buildMatchScorePopCascadeCue = ({
     const rewardChannels = [
         routeRewardText,
         pickupRewardText,
-        chainRewardText,
         ...traitInteractionTexts.slice(0, 2)
     ].filter(Boolean).length;
     const channels = [
@@ -308,8 +282,6 @@ const buildMatchScorePopPayoffChips = ({
     amount,
     cascadeCue,
     chainDepth,
-    chainRewardForecastCues,
-    chainRewardText,
     pickupRewardText,
     routeRewardText,
     traitInteractionTexts
@@ -317,8 +289,6 @@ const buildMatchScorePopPayoffChips = ({
     amount: number;
     cascadeCue?: MatchScorePopCascadeCue;
     chainDepth: number;
-    chainRewardForecastCues: readonly ChainRewardForecastCue[];
-    chainRewardText?: string;
     pickupRewardText?: string;
     routeRewardText?: string;
     traitInteractionTexts: readonly string[];
@@ -333,11 +303,9 @@ const buildMatchScorePopPayoffChips = ({
     };
     const metaChips: MatchScorePopPayoffChip[] = [];
     const cashoutChips: MatchScorePopPayoffChip[] = [];
-    const nextChips: MatchScorePopPayoffChip[] = [];
-    const nextReward = chainRewardForecastCues[0];
     if (depth >= 3) {
         metaChips.push({
-            arcadeCue: depth >= 6 ? 'Chain cashout' : nextReward ? 'Prime cashout' : 'Keep streak',
+            arcadeCue: depth >= 6 ? 'Chain cashout' : 'Keep streak',
             id: 'streak',
             label: 'Streak',
             value: `x${depth}`,
@@ -400,36 +368,17 @@ const buildMatchScorePopPayoffChips = ({
             tone: 'trait'
         });
     }
-    if (chainRewardText) {
-        cashoutChips.push({
-            arcadeCue: 'Chain cashout',
-            id: 'chainReward',
-            label: 'Cashout',
-            value: chainRewardText,
-            tone: 'reward'
-        });
-    }
-    if (nextReward) {
-        nextChips.push({
-            arcadeCue: getChainRewardUrgencyCopy(nextReward),
-            id: 'next',
-            label: nextRewardPayoffLabel(nextReward),
-            value: nextReward.label,
-            tone: nextReward.tone
-        });
-    }
 
     if (cashoutChips.length >= 3) {
-        return [scoreChip, ...cashoutChips, ...nextChips].slice(0, 5);
+        return [scoreChip, ...cashoutChips].slice(0, 5);
     }
 
-    return [scoreChip, ...metaChips, ...cashoutChips, ...nextChips].slice(0, 5);
+    return [scoreChip, ...metaChips, ...cashoutChips].slice(0, 5);
 };
 
-const MATCH_PAYOFF_LANE_ORDER: MatchScorePopPayoffLaneId[] = ['route', 'pickup', 'trait', 'chain', 'build'];
+const MATCH_PAYOFF_LANE_ORDER: MatchScorePopPayoffLaneId[] = ['route', 'pickup', 'trait', 'chain'];
 
 const MATCH_PAYOFF_LANE_LABELS: Record<MatchScorePopPayoffLaneId, MatchScorePopPayoffLaneMapEntry['label']> = {
-    build: 'Build',
     chain: 'Chain',
     pickup: 'Pickup',
     route: 'Route',
@@ -437,7 +386,6 @@ const MATCH_PAYOFF_LANE_LABELS: Record<MatchScorePopPayoffLaneId, MatchScorePopP
 };
 
 const MATCH_PAYOFF_LANE_TONES: Record<MatchScorePopPayoffLaneId, MatchScorePopPayoffLaneMapEntry['tone']> = {
-    build: 'reward',
     chain: 'chain',
     pickup: 'pickup',
     route: 'route',
@@ -452,13 +400,10 @@ const getMatchScorePopPayoffLaneId = (chip: MatchScorePopPayoffChip): MatchScore
             return 'pickup';
         case 'trait':
             return 'trait';
-        case 'chainReward':
         case 'streak':
         case 'cascade':
         case 'tier':
             return 'chain';
-        case 'next':
-            return 'build';
         case 'score':
             return null;
         default:
@@ -505,16 +450,12 @@ export const buildMatchScorePopPayoffLaneMap = (
 export const buildMatchScorePopPayoffSummary = ({
     amount,
     chainDepth,
-    chainRewardForecastCues = [],
-    chainRewardText,
     pickupRewardText,
     routeRewardText,
     traitInteractionTexts
 }: {
     amount: number;
     chainDepth: number;
-    chainRewardForecastCues?: readonly ChainRewardForecastCue[];
-    chainRewardText?: string;
     pickupRewardText?: string;
     routeRewardText?: string;
     traitInteractionTexts: readonly string[];
@@ -523,8 +464,7 @@ export const buildMatchScorePopPayoffSummary = ({
     const cashoutChannels = [
         routeRewardText ? 'Route' : null,
         pickupRewardText ? 'Pickup' : null,
-        traitInteractionTexts[0] ? 'Trait' : null,
-        chainRewardText ? 'Chain' : null
+        traitInteractionTexts[0] ? 'Trait' : null
     ].filter((channel): channel is string => channel != null);
     if (cashoutChannels.length >= 4) {
         return {
@@ -556,13 +496,6 @@ export const buildMatchScorePopPayoffSummary = ({
             };
         }
         return { label: perkOnlyBurst ? 'Perk pop' : 'Trait cashout', value: traitInteractionTexts[0], tier: 'reward' };
-    }
-    if (chainRewardText) {
-        return { label: 'Chain cashout', value: chainRewardText, tier: 'reward' };
-    }
-    const nextReward = chainRewardForecastCues[0];
-    if (nextReward?.urgency === 'next') {
-        return { label: 'Cashout armed', value: nextReward.label, tier: 'reward' };
     }
     if (depth >= 10) {
         return { label: 'Combo hit', value: `x${depth} streak`, tier: 'combo' };
@@ -607,12 +540,6 @@ export const buildMatchScorePopImpactCue = ({
     }
     if (payoffSummary.label === 'Trait cashout') {
         return { label: 'Trait cashout', tone: 'trait' };
-    }
-    if (payoffSummary.label === 'Chain cashout') {
-        return { label: 'Cashout now', tone: 'reward' };
-    }
-    if (payoffSummary.label === 'Cashout armed') {
-        return { label: 'Cashout armed', tone: 'reward' };
     }
     if (depth >= 10) {
         return { label: 'Combo hold', tone: 'combo' };
@@ -667,8 +594,6 @@ export const buildMatchScorePopCrescendo = ({
 
     if (
         payoffSummary.tier === 'reward' ||
-        impactCue.label === 'Cashout armed' ||
-        impactCue.label === 'Cashout now' ||
         impactCue.label === 'Route cashout' ||
         impactCue.label === 'Pickup cashout' ||
         impactCue.label === 'Trait cashout'
@@ -737,9 +662,8 @@ export function buildMatchScorePopPayload(
         : undefined;
     const traitInteractionTexts = formatTileTraitInteractionTags(turnEvent.traitInteractionTags);
     const chainDepth = matchScoreChainDepth(facts.currentStreakAfter);
-    const chainRewardText = buildChainRewardText(facts, chainDepth);
     const chainMilestone = getMatchScorePopChainMilestone(facts.currentStreakBefore, chainDepth);
-    const feedbackProfile = pickupRewardText || chainRewardText
+    const feedbackProfile = pickupRewardText
         ? { feedbackHeadline: 'Reward' as const, feedbackIntensity: 'high' as const }
         : getMatchScorePopFeedbackProfile(chainDepth, traitInteractionTexts.length);
     const feedbackSignal = getMatchScorePopSignal({
@@ -752,19 +676,15 @@ export function buildMatchScorePopPayload(
     // function of the event so the same turn always produces the same payload.
     const nonce = keyNonce ?? turnEvent.eventId;
     const key = `${facts.level}-${nonce}-${tileIdA}-${tileIdB}`;
-    const chainRewardForecastCues =
-        chainDepth >= 3 ? getChainRewardForecastCues(chainDepth, facts.comboShardsAfter) : [];
     const rewardBurst = buildMatchScorePopRewardBurst({
         chainDepth,
         chainMilestone,
-        chainRewardText,
         pickupRewardText,
         routeRewardText,
         traitInteractionTexts
     });
     const cascadeCue = buildMatchScorePopCascadeCue({
         chainDepth,
-        chainRewardText,
         pickupRewardText,
         routeRewardText,
         traitInteractionTexts
@@ -773,8 +693,6 @@ export function buildMatchScorePopPayload(
         amount,
         cascadeCue,
         chainDepth,
-        chainRewardForecastCues,
-        chainRewardText,
         pickupRewardText,
         routeRewardText,
         traitInteractionTexts
@@ -783,8 +701,6 @@ export function buildMatchScorePopPayload(
     const payoffSummary = buildMatchScorePopPayoffSummary({
         amount,
         chainDepth,
-        chainRewardForecastCues,
-        chainRewardText,
         pickupRewardText,
         routeRewardText,
         traitInteractionTexts
@@ -825,12 +741,6 @@ export function buildMatchScorePopPayload(
     }
     if (payoffLaneMap) {
         payload.payoffLaneMap = payoffLaneMap;
-    }
-    if (chainRewardForecastCues.length > 0) {
-        payload.chainRewardForecastCues = chainRewardForecastCues;
-    }
-    if (chainRewardText) {
-        payload.chainRewardText = chainRewardText;
     }
     if (routeRewardText) {
         payload.routeRewardText = routeRewardText;
@@ -873,10 +783,6 @@ export function buildMismatchScorePopPayload(
     }
     if (brokenChainDepth > 0) {
         payload.brokenChainDepth = brokenChainDepth;
-        const brokenChainRewardCue = getChainRewardForecastCues(brokenChainDepth, facts.comboShardsBefore)[0];
-        if (brokenChainRewardCue) {
-            payload.brokenChainRewardCue = brokenChainRewardCue;
-        }
     }
     if (traitInteractionTexts.length > 0) {
         payload.traitInteractionTexts = traitInteractionTexts;

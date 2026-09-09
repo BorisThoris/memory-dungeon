@@ -3,11 +3,11 @@
 **Status:** **Implemented** in `game.ts` (`findableKind` on tiles, `findables_floor` mutator, HUD counter). Task file [`GP-FINDABLES.md`](./gameplay-tasks/GP-FINDABLES.md) is **historical** (checkboxes may lag).  
 **Backlog id:** **FN-01** in [`gameplay-depth/05-app-specific-idea-backlog.md`](./gameplay-depth/05-app-specific-idea-backlog.md).
 
-**Authoritative kinds and numbers:** [`FindableKind`](../src/shared/contracts.ts), `FINDABLE_MATCH_SCORE`, `FINDABLE_MATCH_COMBO_SHARDS`, and `FINDABLE_KIND_SPAWN_WEIGHTS` in [`contracts.ts`](../src/shared/contracts.ts). Spawn logic: `assignFindableKindsToTiles` in [`game.ts`](../src/shared/game.ts).
+**Authoritative kinds and numbers:** [`FindableKind`](../src/shared/contracts.ts), `FINDABLE_MATCH_SCORE` and `FINDABLE_KIND_SPAWN_WEIGHTS` in [`contracts.ts`](../src/shared/contracts.ts). Spawn logic: `assignFindableKindsToTiles` in [`game.ts`](../src/shared/game.ts).
 
 ## Not to be confused with the **“?” glass decoy**
 
-The **`glass_floor`** mutator adds a **singleton** tile with label **`?`** / `pairKey` **`__decoy__`**. It is **not** a findable pickup: it **never forms a pair** (by design), exists to tempt mis-flips, and supports the **glass witness** bonus when it stays face-down. **Findables** are optional **reward markers** on **normal pairs** (corner ring in WebGL when face-up). Rewards grant score or a combo shard depending on kind. If you saw a “?” and could not finish the floor, that was a **completion-rule bug** (decoy could not be `matched` or `removed` under the old `isBoardComplete` check) — fixed so a **hidden** decoy clears once all **non-decoy** tiles are matched or removed (`game.ts` `isBoardComplete`).
+The **`glass_floor`** mutator adds a **singleton** tile with label **`?`** / `pairKey` **`__decoy__`**. It is **not** a findable pickup: it **never forms a pair** (by design), exists to tempt mis-flips, and supports the **glass witness** bonus when it stays face-down. **Findables** are optional **reward markers** on **normal pairs** (corner ring in WebGL when face-up). Rewards grant score. If you saw a “?” and could not finish the floor, that was a **completion-rule bug** (decoy could not be `matched` or `removed` under the old `isBoardComplete` check) — fixed so a **hidden** decoy clears once all **non-decoy** tiles are matched or removed (`game.ts` `isBoardComplete`).
 
 ## Purpose
 
@@ -24,9 +24,9 @@ Design goals:
 
 | Term | Meaning |
 |------|---------|
-| **Findable kind** | `FindableKind` in `contracts.ts`: **`shard_spark` \| `score_glint`**. Two more kinds, `ward_spark` and `scout_glint`, went in Gen 176 with the hazard tiles and dungeon cards they acted on. |
+| **Findable kind** | `FindableKind` in `contracts.ts`: **`score_glint`**, the one kind left. `ward_spark` and `scout_glint` went in Gen 176 with the hazard tiles and dungeon cards they acted on; `shard_spark` went in Gen 184 with the combo shard it paid (`docs/REMOVED_LIVES.md`). |
 | **Carrier** | A **tile** (by `tile.id`) that **holds** the findable. **Both** tiles of a pair carry the same `findableKind` when spawned. |
-| **Claim** | On **match**, apply rewards from `FINDABLE_MATCH_SCORE` and `FINDABLE_MATCH_COMBO_SHARDS`; increment `findablesClaimedThisFloor`; clear `findableKind` on matched tiles. |
+| **Claim** | On **match**, apply the reward from `FINDABLE_MATCH_SCORE`; increment `findablesClaimedThisFloor`; clear `findableKind` on matched tiles. |
 | **Spawn** | `assignFindableKindsToTiles` in `buildBoard` (after `createTiles`), using a dedicated RNG seed string. |
 
 ## Implemented rules (code)
@@ -39,7 +39,7 @@ Spawn runs inside `assignFindableKindsToTiles` (`game.ts`).
 - **Current (rules version at or above that baseline):**
   - With mutator **`findables_floor`**: **2** findable pairs (capped by eligible real pairs on the floor).
   - Without that mutator: **levels 1–3** → **1** pair; **level 4+** → **1** or **2** pairs (50% each), capped by eligible pairs.
-- **Kind per pair:** weighted roll from `FINDABLE_KIND_SPAWN_WEIGHTS`: `shard_spark` **50**, `score_glint` **50**.
+- **Kind per pair:** weighted roll from `FINDABLE_KIND_SPAWN_WEIGHTS`: `score_glint` **100** (one kind, so the roll is a formality kept for the day a second kind earns its place).
 - **Never** on decoy (`DECOY_PAIR_KEY`) or wild (`WILD_PAIR_KEY`) pairs.
 - **Fixed / handcrafted boards** (`buildBoard` with `fixedTiles`): `assignFindableKindsToTiles` is **not** applied — no spawned findables unless the fixed payload already sets `findableKind`.
 
@@ -49,12 +49,11 @@ Spawn runs inside `assignFindableKindsToTiles` (`game.ts`).
 
 ### Rewards (authoritative)
 
-Values are in **`FINDABLE_MATCH_SCORE`** and **`FINDABLE_MATCH_COMBO_SHARDS`** (`contracts.ts`). On claim, the matching reward channels apply through match resolution.
+Values are in **`FINDABLE_MATCH_SCORE`** (`contracts.ts`). On claim, the score request applies through match resolution.
 
-| Kind | Flat match score | Combo shards |
-|------|------------------|--------------|
-| `shard_spark` | **0** | **+1** |
-| `score_glint` | **+25** | **0** |
+| Kind | Flat match score |
+|------|------------------|
+| `score_glint` | **+25** |
 
 Tune so rewards **do not** obsolete secondary objectives (scholar style, glass witness, etc.) — findables are **extra sugar**, not the main economy.
 
@@ -63,7 +62,7 @@ Tune so rewards **do not** obsolete secondary objectives (scholar style, glass w
 | Action | Behavior |
 |--------|----------|
 | **Match pair** (normal / wild) | Claim if findable on that pair; bonuses from tables above. |
-| **Destroy pair** | Findable **not claimed** — destroy uses a separate path that clears `findableKind` without match-time findable score/shard awards. |
+| **Destroy pair** | Findable **not claimed** — destroy uses a separate path that clears `findableKind` without the match-time findable score. |
 | **Shuffle (full or row)** | Findables **move with tiles** (identity keyed by `tile.id`); still claimable on later match. |
 | **Peek** | Does not claim; may reveal carrier is special if UI shows marker only when face-up / peek face-up. |
 | **Perfect Memory** | Findable claims are Perfect Memory-safe; they are match rewards, not assist powers. |

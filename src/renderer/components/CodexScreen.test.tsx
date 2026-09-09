@@ -61,36 +61,38 @@ describe('CodexScreen', () => {
             const input = screen.getByLabelText(/filter topics/i) as HTMLInputElement;
             act(() => {
                 const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!;
-                setter.call(input, 'spark');
+                setter.call(input, 'peek');
                 input.dispatchEvent(new Event('input', { bubbles: true }));
             });
             act(() => {
                 vi.advanceTimersByTime(200);
             });
             const entries = screen.getByTestId('codex-entries');
-            expect(entries).toHaveTextContent(/spark/i);
-            // Every hit carries the section it came from, whichever section that is.
-            const sections = within(entries)
-                .getAllByRole('listitem')
-                .map((item) => item.querySelector('[data-section]')?.getAttribute('data-section'));
-            expect(sections.every(Boolean)).toBe(true);
-            expect(sections).toContain('scoring');
-            // The trait interaction lives in another section and the one filter reaches it.
-            expect(sections).toContain('traits');
-            // "spark" hits the shard article, the findables article and the Conduit + Echo
-            // interaction. The first fitted page has six slots, so all three fit on it today; the
-            // pager is still walked, because it is how a player reaches a hit that does not.
-            const pageTo = (text: string): void => {
-                for (let page = 0; page < 6 && !entries.textContent?.includes(text); page += 1) {
-                    const next = screen.getByRole('button', { name: /^next$/i });
-                    if ((next as HTMLButtonElement).disabled) break;
-                    act(() => {
-                        next.click();
-                    });
+            expect(entries).toHaveTextContent(/peek/i);
+            // "peek" hits the Peek power, the findables article ("Peek only reveals it") and the
+            // Conduit + Echo interaction, in three sections. The fitted pages are walked because
+            // that is how a player reaches a hit that does not sit on the first one; every hit on
+            // every page carries the section it came from.
+            const seenSections = new Set<string>();
+            let sawTraitLine = false;
+            for (let page = 0; page < 8; page += 1) {
+                for (const item of within(entries).getAllByRole('listitem')) {
+                    const section = item.querySelector('[data-section]')?.getAttribute('data-section');
+                    expect(section).toBeTruthy();
+                    seenSections.add(section ?? '');
                 }
-            };
-            pageTo('Conduit + Echo: peek spark');
-            expect(entries).toHaveTextContent('Conduit + Echo: peek spark');
+                if (entries.textContent?.includes('Conduit + Echo: peek spark')) {
+                    sawTraitLine = true;
+                }
+                const next = screen.getByRole('button', { name: /^next$/i });
+                if ((next as HTMLButtonElement).disabled) break;
+                act(() => {
+                    next.click();
+                });
+            }
+            expect(seenSections.has('pickups')).toBe(true);
+            expect(seenSections.has('traits')).toBe(true);
+            expect(sawTraitLine).toBe(true);
         } finally {
             vi.useRealTimers();
         }

@@ -2,23 +2,17 @@ import { MAGPIE_BEAT_COPY } from './magpieBeat';
 import { CHAIN_BEAT_COPY, CHAIN_TIER_LABELS } from './chainBeat';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 import { getChainMilestoneFeedback } from './chainMilestoneFeedback';
-import { getChainRewardForecastCues, getChainRewardUrgencyCopy } from './chainMomentum';
 import { getFindableAnnouncementText } from './hudActionFeedback';
 
 /** Chain lengths that earn a called-out milestone announcement. */
 export const CHAIN_MILESTONE_THRESHOLDS = [3, 6, 10] as const;
-
-const chainRewardAnnouncementLine = (streak: number, comboShards: number): string => {
-    const cue = getChainRewardForecastCues(streak, comboShards)[0];
-    return cue ? ` Next reward: ${getChainRewardUrgencyCopy(cue)}: ${cue.label} in ${cue.distanceLabel}.` : '';
-};
 
 /**
  * Chain-milestone announcement for a turn that crossed a threshold, derived from the
  * streak the core reported rather than from a remembered previous streak.
  */
 export const chainMilestoneAnnouncement = (turnEvent: BoardTurnResolvedEvent): string | null => {
-    const { currentStreakBefore, currentStreakAfter, comboShardsAfter } = turnEvent.announcement;
+    const { currentStreakBefore, currentStreakAfter } = turnEvent.announcement;
     if (currentStreakAfter <= currentStreakBefore) {
         return null;
     }
@@ -29,10 +23,9 @@ export const chainMilestoneAnnouncement = (turnEvent: BoardTurnResolvedEvent): s
         return null;
     }
     const milestone = getChainMilestoneFeedback(currentStreakBefore, currentStreakAfter);
-    const rewardLine = chainRewardAnnouncementLine(currentStreakAfter, comboShardsAfter);
     return milestone
-        ? `${milestone.label}: ${milestone.target}. ${milestone.value}.${rewardLine}`
-        : `Chain times ${crossed} - keep the chain for bigger match payouts.${rewardLine}`;
+        ? `${milestone.label}: ${milestone.target}. ${milestone.value}.`
+        : `Chain times ${crossed} - keep the chain for bigger match payouts.`;
 };
 
 /**

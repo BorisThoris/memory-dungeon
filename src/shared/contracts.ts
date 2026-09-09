@@ -8,7 +8,7 @@
  */
 export const SAVE_SCHEMA_VERSION = 8;
 /** Bump when generation rules change (tile order, mutators, pair layout). */
-export const GAME_RULES_VERSION = 39;
+export const GAME_RULES_VERSION = 40;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -31,7 +31,6 @@ export const MEMORIZE_PER_TILE_MIN_MS = 110;
 export const MEMORIZE_MAX_MS = 6000;
 /** Memorize time drops by MEMORIZE_STEP_MS once per this many levels (so pairs and timer do not spike together every floor). */
 export const MEMORIZE_DECAY_EVERY_N_LEVELS = 2;
-export const MAX_COMBO_SHARDS = 2;
 export const INITIAL_SHUFFLE_CHARGES = 1;
 export const INITIAL_REGION_SHUFFLE_CHARGES = 1;
 export const MAX_PINNED_TILES = 3;
@@ -139,22 +138,16 @@ export type MutatorId = (typeof MUTATOR_IDS)[number];
  * a hidden dungeon card; with no hazard and no dungeon card on any floor (Gen 176) both paid
  * nothing, and a pickup that pays nothing is a stop. Two kinds remain, both paying on the spot.
  */
-export type FindableKind = 'shard_spark' | 'score_glint';
+/** Gen 184: one kind. The Shard Spark went with the shard it paid; see docs/REMOVED_LIVES.md. */
+export type FindableKind = 'score_glint';
 
 /** Flat score added on top of normal match score when a findable pair is matched. */
 export const FINDABLE_MATCH_SCORE: Record<FindableKind, number> = {
-    shard_spark: 0,
     score_glint: 25
-};
-/** Immediate combo-shard gain when a findable pair is matched. */
-export const FINDABLE_MATCH_COMBO_SHARDS: Record<FindableKind, number> = {
-    shard_spark: 1,
-    score_glint: 0
 };
 /** Relative spawn weights for current-rules findable kind assignment. */
 export const FINDABLE_KIND_SPAWN_WEIGHTS: Record<FindableKind, number> = {
-    shard_spark: 50,
-    score_glint: 50
+    score_glint: 100
 };
 
 /** Hidden shuffle: full Fisher–Yates vs row-preserving permute. */
@@ -335,7 +328,6 @@ export interface SessionStats {
     currentStreak: number;
     bestStreak: number;
     perfectClears: number;
-    comboShards: number;
     tileTraitMatches: Record<TileTraitKind, number>;
     tileTraitMismatches: Record<TileTraitKind, number>;
     shufflesUsed: number;
@@ -367,7 +359,6 @@ export interface LevelResult {
     /** Extreme Fever: the momentum still standing when the last pair went, and what it paid. */
     chainMomentumAtClear?: number;
     momentumBonusTier?: 'none' | 'clean' | 'sharp' | 'fever';
-    momentumBonusShards?: number;
     /** The floor's par and the turns it took; the floor-end bonus and its two terms (thesis §40.5, §41.3). */
     parTurns?: number;
     turnsTaken?: number;

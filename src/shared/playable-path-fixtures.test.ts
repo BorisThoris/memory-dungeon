@@ -41,9 +41,8 @@ describe('playable path fixtures', () => {
 
         const pickupFixture = createPlayablePathFixture('activeRunWithPickupCashout');
         expect(pickupFixture.run?.findablesTotalThisFloor).toBe(1);
-        expect(pickupFixture.run?.board?.tiles.filter((tile) => tile.findableKind === 'shard_spark')).toHaveLength(2);
+        expect(pickupFixture.run?.board?.tiles.filter((tile) => tile.findableKind === 'score_glint')).toHaveLength(2);
         expect(pickupFixture.run?.stats.currentStreak).toBe(0);
-        expect(pickupFixture.run?.stats.comboShards).toBeGreaterThan(0);
     });
 
 });

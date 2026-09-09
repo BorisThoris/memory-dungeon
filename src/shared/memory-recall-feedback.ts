@@ -6,7 +6,6 @@ import {
 } from './contracts';
 import { normalizeRecallFocus } from './recall-rules';
 import { runArray, runStringArray } from './run-array-guards';
-import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey } from './tile-identity';
 
 export type MemoryFeedbackTone = 'stable' | 'watch' | 'danger' | 'reward';

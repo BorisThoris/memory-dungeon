@@ -113,10 +113,10 @@ were tightened later.
   `lifeGain`. Below the cap, reaching three shards converted them into one life and kept the
   remainder in the bank. Arrived in the forgiveness pass, `e620b45c`.
 
-**Combo shards themselves stay this generation** - `MAX_COMBO_SHARDS = 2`, one every second
+**Combo shards themselves stayed that generation** - `MAX_COMBO_SHARDS = 2`, one every second
 consecutive match, more from chunk breaks and shard sparks, `hud-combo-shards` on the HUD. With the
-conversion gone they are a reading of momentum and nothing more, and **Gen 184 removes them**; the two
-removals are kept apart so each diff reads on its own.
+conversion gone they were a reading of momentum and nothing more; **Gen 184 removed them** (the
+section below). The two removals were kept apart so each diff reads on its own.
 
 ### The clean and perfect clear life
 
@@ -204,9 +204,82 @@ The Codex gains one entry in their place, **The turn ceiling**, under the core t
 Their tests go with them. Life, guard, heal, shard-to-life and clear-life branches inside surviving
 modules were removed in place.
 
+## Gen 184: the shard
+
+> Written from the rule modules as they stood on the Gen 183 tip (`ffb44795`), the last commit that
+> carried a shard.
+
+The combo shard was the life economy's bank. Every second consecutive match added one
+(`COMBO_SHARD_STREAK_STEP = 2`, `turn-match-reward-rules.ts`); a chunk break added one per two pairs
+it took, one per pair at Fever (`chunkBreakComboShards`, `chunk-break-rules.ts`); the **Shard Spark**
+findable paid one on its match (`FINDABLE_MATCH_COMBO_SHARDS.shard_spark = 1`); an Extreme Fever finish
+paid one at the floor clear (`MOMENTUM_BONUS_BY_TIER.fever.shards = 1`, `applyMomentumBonusShards`).
+The bank held two (`MAX_COMBO_SHARDS = 2`, `combo-shard-rules.ts`), and until Gen 183 three of them
+bought a life. After Gen 183 they bought nothing: a run reached the cap on its first chain and the
+HUD's **Shards 2** never moved again. Thesis §44.4 - there is no consumable and no charge other than
+the Recall - and §40 - every reward is score, so the one number the player watches is the one that
+climbs - both say the same thing about a bank that fills and stays full.
+
+### What went
+
+- `SessionStats.comboShards`, `MAX_COMBO_SHARDS`, `combo-shard-rules.ts` and
+  `turn-match-reward-rules.ts` (their only job was the shard), `chunkBreakComboShards` and the
+  `comboShardGain` on the chunk-break result, `LevelResult.momentumBonusShards`,
+  `applyMomentumBonusShards` and `MOMENTUM_BONUS_BY_TIER` (the momentum bonus keeps its tier and the
+  Extreme Fever tag; since Gen 181 the tier multiplies the floor-end bonus, ×5 at Fever, and that is
+  what Extreme Fever pays now).
+- The **Shard Spark** findable: `FindableKind` is `'score_glint'` alone,
+  `FINDABLE_KIND_SPAWN_WEIGHTS = { score_glint: 100 }`, `FINDABLE_MATCH_COMBO_SHARDS` is gone,
+  `findableComboShardGain` is gone from the match-claim context. `GAME_RULES_VERSION` 39 → 40, since
+  the spawn roll changes the deal.
+- The core: effect `combo_shard.request`, event `combo_shard.requested`, definition
+  `findable.shard_spark`, and `comboShardsBefore/After` on the announcement facts and the
+  `board.turn_resolved` event. Removed types are not schema-bumped (`GAMEPLAY_CORE_SCHEMA_VERSION`
+  stays 1); a journal naming them is dropped at load.
+- The inventory item `combo_shard`, the run-economy row `combo_shards`, the cascade sim's
+  `comboShardsGained`, the `sim-endless` / `sim-gameplay-core` shard fields.
+- The HUD **Shards** stat (`hud-combo-shards`) and its polite live-region lines, the inventory
+  screen's shard row and "Burst bank" loop signal, the shard SFX (`chain_reward_cashout`,
+  `chain_reward_armed`, the lost-payoff accent on a miss), the `lost-reward` miss floater heat.
+- **The chain reward forecast.** `getChainRewardForecastCues` in `chainMomentum.ts` told the player
+  which streak step would bank the next shard; everything downstream of it - the board's "reward
+  hot" tile marking and hot lane, the reward ladder pips, the "cashout armed" / "one-away cashout"
+  / "combo prime" copy on the HUD, floater and toasts, the pickup toast's "Stack prime", the payoff
+  chips `chainReward` and `next` and the `build` lane, the `Cashout` action on the focused-tile
+  preview, the beat signal's cashout tier - forecast a shard and nothing else, and went with it.
+- Codex: the `sys_combo_shards` entry and the `combo_shards` glossary term; the chain entry's
+  "drop combo shards" and "a shard and two gold at Fever" lines now describe the floor-end bonus
+  multiplier. `ENCYCLOPEDIA_VERSION` 32 → 33.
+- Interaction graph: `findable.shard_spark` and `inventory.combo_shard` and their edges; version
+  33 → 34 (47 → 45 mechanics, 137 → 131 edges).
+
+### What the Codex said
+
+> **Combo shards** - Each **even-numbered** consecutive match adds a **combo shard**; chunk breaks
+> and shard sparks on the board add to the same bank. The bank is small and resets with the run:
+> shards are a reading of momentum, not something to spend.
+
+> **Combo shards** (glossary) - Streak resource: every second consecutive match adds one, chunk
+> breaks and shard sparks add more; the bank is small and resets with the run. Avoid: gems, paid
+> shards.
+
+### What stays
+
+The Score Glint (+25 on its match, spilled by a break), the momentum bonus tier and the Extreme
+Fever tag, the floor-end bonus and its tier multiplier, the chain meter, the pickup counter. The
+trait-interaction lane ids `'shard'` and `'guard'` (`traitInteractionLaneMap.ts`) and the
+readability tier `reward-hot` with its `traitRewardHotTileIds` telemetry input are presentation
+channels no rule feeds any more; they are a follow-on cleanup, not part of this removal.
+
+### Measured
+
+`sim:occupancy --ratchet` matches its baseline: findable claims 1.000 of floors × 1.54 a floor before
+and after, since the Score Glint now takes the whole spawn roll. `sim:cascade --check` and
+`sim:endless --check` hold every band. The numbers are in `BALANCE_NOTES.md` under Gen 184.
+
 ## How to get any of it back
 
-Everything here is in git; the removal commit carries `Gen 183` in its message, and each section
+Everything here is in git; the removal commits carry `Gen 183` and `Gen 184` in their messages, and each section
 names the module a rule lived in, so `git log --all -S<symbol> -- src/shared/<module>.ts` finds its
 whole history. The intent is not that a life economy returns. If a run ever needs to end sooner than
 the ceiling, the thesis's answer is to move the ceiling (§42.2), measured against the cascade

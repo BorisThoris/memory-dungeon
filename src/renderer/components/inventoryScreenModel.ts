@@ -18,12 +18,12 @@ export const createInventoryQuantityMap = (run: RunState): Map<string, number> =
 };
 
 type InventoryRunLoopSignal = {
-    id: 'chain' | 'pickup' | 'resource';
+    id: 'chain' | 'pickup';
     label: string;
     value: string;
     detail: string;
     nextCue: string;
-    tone: 'chain' | 'reward' | 'resource';
+    tone: 'chain' | 'reward';
 };
 
 type InventoryPayoffEngineSignal = {
@@ -37,7 +37,6 @@ type InventoryPayoffEngineSignal = {
 export const getInventoryRunLoopSignals = (run: RunState): InventoryRunLoopSignal[] => {
     const pickupClaimed = runNonNegativeInteger(run.findablesClaimedThisFloor);
     const pickupTotal = runNonNegativeInteger(run.findablesTotalThisFloor);
-    const comboShards = runNonNegativeInteger(run.stats.comboShards);
     const currentStreak = runNonNegativeInteger(run.stats.currentStreak);
     const bestStreak = runNonNegativeInteger(run.stats.bestStreak);
     const chainTarget = getChainTargetFeedback(Math.max(currentStreak, bestStreak));
@@ -65,14 +64,6 @@ export const getInventoryRunLoopSignals = (run: RunState): InventoryRunLoopSigna
                     ? `${pickupTotal - pickupClaimed} marked pickup${pickupTotal - pickupClaimed === 1 ? '' : 's'} left`
                     : 'Watch for the next marked carrier',
             tone: 'reward'
-        },
-        {
-            id: 'resource',
-            label: 'Burst bank',
-            value: `${comboShards} shards`,
-            detail: 'Shards push burst rewards.',
-            nextCue: comboShards >= 2 ? 'Shard burst is primed' : 'Build x6 chain pressure',
-            tone: 'resource'
         }
     ];
 };
@@ -88,16 +79,13 @@ export const getInventoryPayoffEngineSignal = (
                 runNonNegativeInteger(run.stats.bestStreak) >= 3
             );
         }
-        if (signal.id === 'pickup') {
-            return (
-                runNonNegativeInteger(run.findablesTotalThisFloor) >
-                runNonNegativeInteger(run.findablesClaimedThisFloor)
-            );
-        }
-        return runNonNegativeInteger(run.stats.comboShards) >= 2;
+        return (
+            runNonNegativeInteger(run.findablesTotalThisFloor) >
+            runNonNegativeInteger(run.findablesClaimedThisFloor)
+        );
     });
     const activeCount = activeLanes.length;
-    const topLaneNames = activeLanes.map((signal) => signal.label.replace(' loop', '').replace(' bank', ''));
+    const topLaneNames = activeLanes.map((signal) => signal.label.replace(' loop', ''));
 
     if (activeCount >= 2) {
         return {
@@ -170,11 +158,6 @@ const TOOL_ACTION_CUES: Record<RunInventoryItemId, InventoryToolActionCue> = {
     wild_match_token: {
         label: 'Wildcard bridge',
         detail: 'Bridge an awkward symbol into a valid match when joker pressure appears.',
-        tone: 'chain'
-    },
-    combo_shard: {
-        label: 'Burst payoff',
-        detail: 'Clean chains bank shards up to the cap.',
         tone: 'chain'
     },
     mutator_loadout: {

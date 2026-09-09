@@ -46,7 +46,7 @@ describe('tileBoardReadability', () => {
     it('shows hidden readability markers for hidden special backs only', () => {
         expect(state().showHiddenReadabilityMarkers).toBe(false);
         expect(state({ powerBackAccent: 'peek' }).showHiddenReadabilityMarkers).toBe(true);
-        expect(state({ tile: tile({ findableKind: 'shard_spark' }) }).showHiddenReadabilityMarkers).toBe(true);
+        expect(state({ tile: tile({ findableKind: 'score_glint' }) }).showHiddenReadabilityMarkers).toBe(true);
         expect(state({ traitRouteTargetBack: true }).showHiddenReadabilityMarkers).toBe(true);
         expect(state({ faceUp: true, powerBackAccent: 'peek' }).showHiddenReadabilityMarkers).toBe(false);
     });
@@ -65,13 +65,13 @@ describe('tileBoardReadability', () => {
     });
 
     it('marks front readability for face-up special cards that are not matched', () => {
-        expect(state({ faceUp: true, tile: tile({ state: 'flipped', findableKind: 'shard_spark' }) }).showFaceReadabilityMarker).toBe(
+        expect(state({ faceUp: true, tile: tile({ state: 'flipped', findableKind: 'score_glint' }) }).showFaceReadabilityMarker).toBe(
             true
         );
-        expect(state({ faceUp: true, tile: tile({ state: 'matched', findableKind: 'shard_spark' }) }).showFaceReadabilityMarker).toBe(
+        expect(state({ faceUp: true, tile: tile({ state: 'matched', findableKind: 'score_glint' }) }).showFaceReadabilityMarker).toBe(
             false
         );
-        expect(state({ faceUp: false, tile: tile({ findableKind: 'shard_spark' }) }).showFaceReadabilityMarker).toBe(false);
+        expect(state({ faceUp: false, tile: tile({ findableKind: 'score_glint' }) }).showFaceReadabilityMarker).toBe(false);
         expect(state({ faceUp: true, tile: tile({ state: 'flipped' }) }).showFaceReadabilityMarker).toBe(false);
         expect(state({ faceUp: true, tile: tile({ state: 'flipped', tileTraitKind: 'echo' }) }).showFaceReadabilityMarker).toBe(
             true

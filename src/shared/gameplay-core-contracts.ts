@@ -4,7 +4,7 @@ import { RUN_INVENTORY_ITEM_IDS } from './run-inventory-contracts';
 
 export const GAMEPLAY_CORE_SCHEMA_VERSION = 1 as const;
 
-export const GAMEPLAY_FINDABLE_KINDS = ['shard_spark', 'score_glint'] as const satisfies readonly FindableKind[];
+export const GAMEPLAY_FINDABLE_KINDS = ['score_glint'] as const satisfies readonly FindableKind[];
 
 export const GAMEPLAY_TILE_TRAIT_KINDS = ['echo', 'heavy', 'conduit', 'stasis'] as const satisfies readonly TileTraitKind[];
 
@@ -114,12 +114,6 @@ export const gameplayEffectSchema = z.discriminatedUnion('kind', [
         .strict(),
     z
         .object({
-            kind: z.literal('combo_shard.request'),
-            amount: z.number().int().positive()
-        })
-        .strict(),
-    z
-        .object({
             kind: z.literal('score.grant'),
             reason: z.enum(['content_reward', 'trait_reward']),
             amount: z.number().int().positive()
@@ -187,23 +181,6 @@ export const GAMEPLAY_CONTENT_DEFINITIONS = z.array(gameplayContentDefinitionSch
         ]
     },
     {
-        id: 'findable.shard_spark',
-        version: 1,
-        buildId: 'combo_shard_engine',
-        source: { kind: 'findable', id: 'shard_spark' },
-        trigger: 'findable.match',
-        conditions: [{ kind: 'findable.matched', findable: 'shard_spark' }],
-        effects: [
-            { kind: 'combo_shard.request', amount: 1 },
-            {
-                kind: 'feedback.emit',
-                cue: 'build.shard_spark.matched',
-                message: 'Shard Spark requested one combo shard through match reward resolution.',
-                tone: 'reward'
-            }
-        ]
-    },
-    {
         id: 'findable.score_glint',
         version: 1,
         buildId: 'treasure_greed',
@@ -258,8 +235,6 @@ export const boardTurnAnnouncementFactsSchema = z
         level: z.number().int().nonnegative(),
         currentStreakBefore: z.number().int().nonnegative(),
         currentStreakAfter: z.number().int().nonnegative(),
-        comboShardsBefore: z.number().int().nonnegative(),
-        comboShardsAfter: z.number().int().nonnegative(),
         findablesClaimedBefore: z.number().int().nonnegative(),
         findablesClaimedAfter: z.number().int().nonnegative(),
         chunkBreaksBefore: z.number().int().nonnegative().default(0),
@@ -641,8 +616,6 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             triesAfter: z.number().int().nonnegative(),
             matchesBefore: z.number().int().nonnegative(),
             matchesAfter: z.number().int().nonnegative(),
-            comboShardsBefore: z.number().int().nonnegative().default(0),
-            comboShardsAfter: z.number().int().nonnegative().default(0),
             currentStreakAfter: z.number().int().nonnegative().default(0),
             findablesClaimedBefore: z.number().int().nonnegative().default(0),
             findablesClaimedAfter: z.number().int().nonnegative().default(0),
@@ -662,13 +635,6 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             pairedTileId: z.string().min(1).max(160),
             tokensBefore: z.number().int().positive(),
             tokensAfter: z.number().int().nonnegative()
-        })
-        .strict(),
-    z
-        .object({
-            ...eventBase,
-            type: z.literal('combo_shard.requested'),
-            amount: z.number().int().positive()
         })
         .strict(),
     z

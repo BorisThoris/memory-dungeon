@@ -224,7 +224,7 @@ describe('tile trait rules', () => {
             board,
             matchResolutionsThisFloor: Number.NaN,
             peekCharges: Number.POSITIVE_INFINITY,
-            stats: { ...makeRun([]).stats, currentStreak: Number.POSITIVE_INFINITY, comboShards: Number.NaN }
+            stats: { ...makeRun([]).stats, currentStreak: Number.POSITIVE_INFINITY }
         });
         const malformedStats = { ...run, stats: Number.NaN as unknown as RunState['stats'] };
 

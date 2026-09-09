@@ -1,31 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import type { BoardState, RunState } from './contracts';
-import { MAX_COMBO_SHARDS } from './contracts';
 import { createNewRun, finalizeLevel, finishMemorizePhase } from './game';
 import { FLOOR_CLEAR_BASE_PER_LEVEL } from './level-clear-rules';
-import {
-    applyMomentumBonusShards,
-    EXTREME_FEVER_BONUS_TAG,
-    getFloorClearMomentumBonus,
-    MOMENTUM_BONUS_BY_TIER
-} from './floor-clear-momentum-bonus-rules';
+import { EXTREME_FEVER_BONUS_TAG, getFloorClearMomentumBonus } from './floor-clear-momentum-bonus-rules';
 
 describe('the momentum bonus ladder', () => {
-    it('pays by the tier the momentum holds on this floor, and nothing below Clean', () => {
-        // Twelve pairs: Sharp from 5, Fever from 8.
-        // Gold left the ladder with the shop (Gen 174): Clean and Sharp name the tier and pay
-        // nothing until Phase 2's floor-end bonus pays them in score; Fever still pays the shard.
-        expect(getFloorClearMomentumBonus({ chain: 2, cascadedPairs: 0, pairsOnFloor: 12 })).toMatchObject({ tier: 'none', shards: 0 });
-        expect(getFloorClearMomentumBonus({ chain: 3, cascadedPairs: 0, pairsOnFloor: 12 })).toMatchObject({ tier: 'clean', shards: 0 });
-        expect(getFloorClearMomentumBonus({ chain: 3, cascadedPairs: 2, pairsOnFloor: 12 })).toMatchObject({ momentum: 5, tier: 'sharp', shards: 0 });
-        expect(getFloorClearMomentumBonus({ chain: 5, cascadedPairs: 3, pairsOnFloor: 12 })).toMatchObject({ momentum: 8, tier: 'fever', shards: 1 });
-        expect(MOMENTUM_BONUS_BY_TIER.fever.shards).toBe(1);
-    });
-
-    it('never pushes shards past the cap', () => {
-        const fever = getFloorClearMomentumBonus({ chain: 8, cascadedPairs: 0, pairsOnFloor: 12 });
-        expect(applyMomentumBonusShards(MAX_COMBO_SHARDS, fever)).toBe(MAX_COMBO_SHARDS);
-        expect(applyMomentumBonusShards(0, fever)).toBe(1);
+    it('names the tier the momentum holds on this floor, and nothing below Clean', () => {
+        // Twelve pairs: Sharp from 5, Fever from 8. The ladder pays nothing itself any more: gold
+        // left with the shop (Gen 174) and the shard with the life economy (Gen 184). The tier it
+        // names multiplies the floor-end bonus (Gen 181).
+        expect(getFloorClearMomentumBonus({ chain: 2, cascadedPairs: 0, pairsOnFloor: 12 })).toEqual({ momentum: 2, tier: 'none' });
+        expect(getFloorClearMomentumBonus({ chain: 3, cascadedPairs: 0, pairsOnFloor: 12 })).toEqual({ momentum: 3, tier: 'clean' });
+        expect(getFloorClearMomentumBonus({ chain: 3, cascadedPairs: 2, pairsOnFloor: 12 })).toEqual({ momentum: 5, tier: 'sharp' });
+        expect(getFloorClearMomentumBonus({ chain: 5, cascadedPairs: 3, pairsOnFloor: 12 })).toEqual({ momentum: 8, tier: 'fever' });
     });
 });
 
@@ -46,24 +33,22 @@ describe('Extreme Fever at the floor clear', () => {
             chunkPairsBrokenThisFloor: cascadedPairs,
             feverBreaksThisFloor: 1,
             bestChainThisFloor: chain,
-            stats: { ...base.stats, currentStreak: chain, comboShards: 0 }
+            stats: { ...base.stats, currentStreak: chain }
         };
         return { run, board };
     };
 
-    it('pays the standing momentum in a shard, tags the result, and writes the chain recap', () => {
+    it('names the standing momentum tier, tags the result, and writes the chain recap', () => {
         const { run, board } = clearedRun(5, 3);
         const cleared = finalizeLevel(run, board);
         expect(cleared.status).toBe('levelComplete');
         expect(cleared.lastLevelResult?.momentumBonusTier).toBe('fever');
         expect(cleared.lastLevelResult?.chainMomentumAtClear).toBe(8);
-        expect(cleared.lastLevelResult?.momentumBonusShards).toBe(1);
         expect(cleared.lastLevelResult?.bonusTags).toContain(EXTREME_FEVER_BONUS_TAG);
         expect(cleared.lastLevelResult?.chunkBreaks).toBe(2);
         expect(cleared.lastLevelResult?.chunkPairsBroken).toBe(3);
         expect(cleared.lastLevelResult?.feverBreaks).toBe(1);
         expect(cleared.lastLevelResult?.bestChain).toBe(5);
-        expect(cleared.stats.comboShards).toBe(1);
     });
 
     it('pays nothing when the chain dropped before the last pair; a Fever finish multiplies the floor bonus and never the rating', () => {
@@ -71,7 +56,6 @@ describe('Extreme Fever at the floor clear', () => {
         const cleared = finalizeLevel(run, board);
         expect(cleared.lastLevelResult?.momentumBonusTier).toBeUndefined();
         expect(cleared.lastLevelResult?.bonusTags ?? []).not.toContain(EXTREME_FEVER_BONUS_TAG);
-        expect(cleared.stats.comboShards).toBe(0);
         expect(cleared.lastLevelResult?.floorBonusTierMult).toBe(1);
         const fever = finalizeLevel(clearedRun(5, 3).run, board);
         // Gen 181: the tier still standing multiplies the floor-end bonus (thesis §40.5), five times cold at Fever.

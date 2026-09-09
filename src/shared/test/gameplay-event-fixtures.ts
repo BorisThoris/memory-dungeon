@@ -6,8 +6,6 @@ const DEFAULT_ANNOUNCEMENT: BoardTurnAnnouncementFacts = {
     level: 1,
     currentStreakBefore: 0,
     currentStreakAfter: 1,
-    comboShardsBefore: 0,
-    comboShardsAfter: 0,
     findablesClaimedBefore: 0,
     findablesClaimedAfter: 0,
     findablesTotalBefore: 0,
@@ -59,7 +57,7 @@ export interface BoardTurnResolvedEventFixtureOverrides {
     findablesClaimedAfter?: number;
     findablesTotalBefore?: number;
     findablesTotalAfter?: number;
-    matchedFindableKind?: 'shard_spark' | 'score_glint' | null;
+    matchedFindableKind?: 'score_glint' | null;
     announcement?: Partial<BoardTurnAnnouncementFacts>;
 }
 

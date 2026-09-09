@@ -525,25 +525,6 @@ block board gestures so pan/zoom does not fight the deal. */
         0 0 0.86rem color-mix(in srgb, var(--theme-danger) 22%, transparent);
 }
 
-.traitPreviewCashout {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.08rem;
-    width: fit-content;
-    max-width: 100%;
-    padding: 0.12rem 0.38rem;
-    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 46%, transparent);
-    border-radius: 999px;
-    background:
-        radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), transparent 68%),
-        color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
-    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
-    font-size: 0.75rem;
-    font-weight: 900;
-    line-height: 1.08;
-    overflow-wrap: anywhere;
-}
-
 .traitPreviewLine {
     display: inline-flex;
     align-items: center;

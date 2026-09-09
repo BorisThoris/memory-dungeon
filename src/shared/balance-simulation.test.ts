@@ -78,7 +78,6 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
                 'tile_trait_share_heavy',
                 'tile_trait_share_conduit',
                 'tile_trait_share_stasis',
-                'findable_share_shard_spark',
                 'findable_share_score_glint'
             ])
         );
@@ -116,9 +115,9 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             expect(sumFindableKindCounts(result.aggregate.findableKindCounts)).toBe(total);
             const shares = getFindableKindShares(result.aggregate.findableKindCounts);
 
+            // Gen 184: one kind, so its share is the whole of the spawn.
             const bounds: Record<FindableKind, { min: number; max: number }> = {
-                shard_spark: { min: 0.35, max: 0.65 },
-                score_glint: { min: 0.35, max: 0.65 }
+                score_glint: { min: 1, max: 1 }
             };
 
             for (const row of getFindableSpawnWeightRows()) {
@@ -131,14 +130,8 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
     );
 
     it('summarizes findable kind shares from aggregate counts', () => {
-        expect(getFindableKindShares({ shard_spark: 30, score_glint: 70 })).toEqual({
-            shard_spark: 0.3,
-            score_glint: 0.7
-        });
-        expect(getFindableKindShares({ shard_spark: 0, score_glint: 0 })).toEqual({
-            shard_spark: 0,
-            score_glint: 0
-        });
+        expect(getFindableKindShares({ score_glint: 70 })).toEqual({ score_glint: 1 });
+        expect(getFindableKindShares({ score_glint: 0 })).toEqual({ score_glint: 0 });
     });
 
     it('guards the shipped balance baseline against large drift', () => {

@@ -118,7 +118,7 @@ test.describe('Expanded playable navigation contract', () => {
         await expect(page.getByRole('region', { name: /inventory/i })).toBeVisible();
         await expect(page.getByTestId('inventory-meta-frame-run')).toContainText(/Run snapshot/i);
         await expect(page.getByTestId('inventory-meta-frame-mutators')).toContainText(/Wide recall|mutator/i);
-        await expect(page.getByTestId('inventory-charges-panel')).toContainText(/Combo shards/);
+        await expect(page.getByTestId('inventory-charges-panel')).toContainText(/Peek/);
         await page.getByRole('region', { name: /inventory/i }).getByRole('button', { name: /^back$/i }).click();
         await expectGameplayReady(page);
 

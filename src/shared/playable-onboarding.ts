@@ -146,7 +146,7 @@ export const getPlayableOnboardingScenario = ({
         {
             id: 'recovery',
             title: 'Use recovery tools',
-            body: 'Shards, peek and shuffle help you recover after the board gets harder.',
+            body: 'Peek and shuffle help you recover after the board gets harder.',
             status: activeId === 'recovery' ? 'active' : stepIndex > 1 ? 'complete' : 'locked',
             targetTileIds,
             mobilePlacement: 'bottom'

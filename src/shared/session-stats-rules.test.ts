@@ -23,7 +23,6 @@ describe('session-stats-rules', () => {
             currentStreak: 0,
             bestStreak: 0,
             perfectClears: 0,
-            comboShards: 0,
             tileTraitMatches: { echo: 0, heavy: 0, conduit: 0, stasis: 0 },
             tileTraitMismatches: { echo: 0, heavy: 0, conduit: 0, stasis: 0 },
             shufflesUsed: 0,
@@ -63,14 +62,12 @@ describe('session-stats-rules', () => {
         expect(normalizeSessionStats(Number.NaN, 77)).toEqual(createSessionStats(77));
         expect(normalizeSessionStats({
             bestScore: 123.9,
-            comboShards: 2.6,
             highestLevel: Number.NEGATIVE_INFINITY,
             rating: 'bad',
             tileTraitMatches: { heavy: 3.2 },
             tries: 2.1
         })).toMatchObject({
             bestScore: 123,
-            comboShards: 2,
             highestLevel: 1,
             rating: 'A',
             tileTraitMatches: expect.objectContaining({ heavy: 3 }),

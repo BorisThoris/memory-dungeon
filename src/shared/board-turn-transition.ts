@@ -1,5 +1,4 @@
 import {
-    MAX_COMBO_SHARDS,
     type BoardState,
     type FindableKind,
     type RunState,
@@ -15,7 +14,6 @@ import { deriveMatchClaimContext } from './match-claim-rules';
 import { selectGambitMatchedPair } from './gambit-match-rules';
 import { resolveMismatchTurnTransition } from './turn-mismatch-rules';
 import { floorHitTurnCeiling } from './floor-par';
-import { calculateResolvedMatchSurvivalReward } from './turn-match-reward-rules';
 import { resolveTurnMatchFollowup } from './turn-match-followup-rules';
 import { resolveTurnMatchBoardCleanup } from './turn-match-board-cleanup-rules';
 import { resolveTurnMatchProgress } from './turn-match-progress-rules';
@@ -34,7 +32,6 @@ const GAMBIT_FAIL_EXTRA_TRIES = 1;
 export interface BoardTurnFindableRewardResult {
     commands: GameplayCommand[];
     events: GameplayEvent[];
-    comboShardGain: number;
     scoreGain: number;
     migrated: boolean;
 }
@@ -130,7 +127,6 @@ export const createResolveBoardTurnTransition = ({
     }: ResolvedMatchInput): RunState => {
         const {
             claimedFindableKind,
-            findableComboShardGain,
             findableScoreBonus,
             findablesClaimedDelta,
             matchedPairKey,
@@ -143,9 +139,6 @@ export const createResolveBoardTurnTransition = ({
             `findable-match:${run.runSeed}:${sourceBoard.level}:${matchResolutions}:${matchedPairKey}:${commandTag}`,
             execution
         );
-        const resolvedFindableComboShardGain = findableReward.migrated
-            ? findableReward.comboShardGain
-            : findableComboShardGain;
         const resolvedFindableScoreBonus = findableReward.migrated ? findableReward.scoreGain : findableScoreBonus;
 
         const { board, chunkBreak } = resolveTurnMatchBoardResolution({
@@ -157,7 +150,7 @@ export const createResolveBoardTurnTransition = ({
         });
         /*
          * A findable that went with the chunk is paid the way a matched findable is paid, through
-         * the same adapter with its own command id, so its score and shards land in the same sums.
+         * the same adapter with its own command id, so its score lands in the same sum.
          */
         const chunkFindable = chunkBreak.claimedFindableKind
             ? resolveFindableMatchRewardThroughGameplayCore(
@@ -166,7 +159,7 @@ export const createResolveBoardTurnTransition = ({
                   `findable-chunk:${run.runSeed}:${sourceBoard.level}:${matchResolutions}:${matchedPairKey}`,
                   execution
               )
-            : { scoreGain: 0, comboShardGain: 0, migrated: false, commands: [], events: [] };
+            : { scoreGain: 0, migrated: false, commands: [], events: [] };
         const traitReward = resolveTileTraitEffects({
             run,
             board: sourceBoard,
@@ -182,12 +175,6 @@ export const createResolveBoardTurnTransition = ({
             encorePairKeys,
             findableScoreBonus: resolvedFindableScoreBonus + traitReward.scoreBonus,
             chunkScore: chunkBreak.score + chunkFindable.scoreGain
-        });
-        const survivalReward = calculateResolvedMatchSurvivalReward({
-            currentStreak: scoring.currentStreak,
-            findableComboShardGain:
-                resolvedFindableComboShardGain + chunkBreak.comboShardGain + chunkFindable.comboShardGain,
-            run
         });
         execution?.traitInteractionTags?.push(...traitReward.interactionTags);
         const wildMatch = usedWild && runNonNegativeInteger(run.wildMatchesRemaining) > 0
@@ -265,7 +252,6 @@ export const createResolveBoardTurnTransition = ({
                 currentStreak: runNonNegativeInteger(scoring.currentStreak),
                 bestStreak: Math.max(runNonNegativeInteger(stats.bestStreak), runNonNegativeInteger(scoring.currentStreak)),
                 highestLevel: Math.max(runNonNegativeInteger(stats.highestLevel), runNonNegativeInteger(board.level)),
-                comboShards: Math.min(MAX_COMBO_SHARDS, runNonNegativeInteger(survivalReward.comboShards)),
                 tileTraitMatches: addTileTraitCountStats(stats.tileTraitMatches, [firstTile, secondTile])
             },
             timerState: clearResolveState(run)

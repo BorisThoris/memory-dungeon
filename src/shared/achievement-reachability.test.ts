@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { GAME_RULES_VERSION, MAX_COMBO_SHARDS, type AchievementId } from './contracts';
+import { GAME_RULES_VERSION, type AchievementId } from './contracts';
 import { CHAIN_REACTION_WAVES, CHUNK_SIX_PAIRS, evaluateAchievementUnlocks } from './achievements';
 import { resolveChunkBreak } from './chunk-break-rules';
 import { createPlayablePathFixture } from './playable-path-fixtures';
@@ -35,9 +35,6 @@ describe('achievement thresholds against real content', () => {
     });
 
 
-    it('asks for no more combo shards than the cap allows', () => {
-        expect(MAX_COMBO_SHARDS).toBeGreaterThan(0);
-    });
 
     it('covers every achievement id, so a new one cannot skip this file unnoticed', () => {
         // Not a behaviour check: a reminder that adding an id means deciding whether its bar is

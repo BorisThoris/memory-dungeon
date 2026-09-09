@@ -15,7 +15,7 @@ const tool = (overrides: Partial<RunShellTool> & { id: string }): RunShellTool =
 });
 
 describe('RunShell', () => {
-    it('renders the five run numbers as one stats group, with no hearts among them', () => {
+    it('renders the four run numbers as one stats group, with no hearts among them', () => {
         const run = playingRun();
         render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={run} tools={[]} />);
 
@@ -23,7 +23,6 @@ describe('RunShell', () => {
         expect(within(stats).getByTestId('hud-floor')).toHaveTextContent(/floor/i);
         expect(within(stats).getByTestId('hud-score')).toHaveTextContent(/score/i);
         expect(within(stats).getByTestId('hud-par')).toHaveTextContent(/par/i);
-        expect(within(stats).getByTestId('hud-combo-shards')).toHaveTextContent(/shards/i);
         expect(within(stats).getByTestId('hud-chain')).toHaveTextContent(/chain/i);
         // There are no lives (Gen 183): no hearts, no life count, and the mutator stat only
         // appears when it carries a value; there is no clock to show.

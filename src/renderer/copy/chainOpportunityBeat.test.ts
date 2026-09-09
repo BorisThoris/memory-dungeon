@@ -8,12 +8,9 @@ const baseContext = {
     nextTarget: null,
     readyCardLabel: null,
     readyRouteLabel: null,
-    rewardCue: null,
-    rewardHot: false,
     selectedFollowupLabel: null,
     setupAction: null,
-    setupCount: 0,
-    streakCashoutReady: false
+    setupCount: 0
 };
 
 describe('getChainOpportunityBeatSignal', () => {
@@ -88,25 +85,6 @@ describe('getChainOpportunityBeatSignal', () => {
             label: 'Surge beat',
             screenCue: 'burst',
             tier: 'surge'
-        });
-    });
-
-    it('uses the maximum beat signal for live cashouts', () => {
-        expect(
-            getChainOpportunityBeatSignal({
-                ...baseContext,
-                nextTarget: 'Match lit route for reward',
-                rewardHot: true
-            })
-        ).toEqual({
-            action: 'Cash out',
-            audioCue: 'cashout-beat',
-            beatCount: 5,
-            cue: 'super',
-            detail: 'Match lit route for reward',
-            label: 'Cashout beat',
-            screenCue: 'super',
-            tier: 'cashout'
         });
     });
 

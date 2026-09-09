@@ -25,7 +25,7 @@ const localChromium = process.env.PLAYWRIGHT_CHROMIUM_PATH;
 test.use(localChromium ? { launchOptions: { executablePath: localChromium } } : {});
 
 /** Lanes a player has to read to make a decision. */
-const MUST_READ_LANES = ['Floor', 'Par', 'Shards', 'Score'];
+const MUST_READ_LANES = ['Floor', 'Par', 'Score'];
 
 const startRun = async (page: import('@playwright/test').Page): Promise<void> => {
     await page.setViewportSize({ width: 1440, height: 900 });

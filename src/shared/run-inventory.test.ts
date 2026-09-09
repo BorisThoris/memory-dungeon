@@ -13,7 +13,6 @@ import {
     RUN_LOADOUT_SLOT_LIMIT,
     useRunInventoryItem
 } from './run-inventory';
-import { MAX_COMBO_SHARDS, type RunState } from './contracts';
 
 describe('REG-079 run inventory, consumables, and loadout model', () => {
     it('derives run-scoped consumables from current charges and stack limits', () => {
@@ -89,16 +88,9 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
         const run = {
             ...createNewRun(0),
             gambitAvailableThisFloor: true,
-            gambitThirdFlipUsed: false,
-            stats: { ...createNewRun(0).stats, comboShards: MAX_COMBO_SHARDS }
+            gambitThirdFlipUsed: false
         };
 
-        expect(previewRunInventoryItemGain(run, 'combo_shard', 2)).toMatchObject({
-            requested: 2,
-            accepted: 0,
-            capped: true,
-            remainingCapacity: 0
-        });
         expect(previewRunInventoryItemGain(run, 'gambit_token')).toMatchObject({
             requested: 1,
             accepted: 0,
@@ -118,8 +110,7 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
         const run = {
             ...createNewRun(0),
             gambitAvailableThisFloor: true,
-            gambitThirdFlipUsed: false,
-            stats: { ...createNewRun(0).stats, comboShards: MAX_COMBO_SHARDS - 1 }
+            gambitThirdFlipUsed: false
         };
 
         expect(getRunInventoryGainFeedback(run, 'peek_charge', 2)).toMatchObject({
@@ -146,12 +137,6 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
             gainedLabel: null,
             cappedLabel: 'Gambit token already full'
         });
-        expect(getRunInventoryGainFeedback(run, 'combo_shard', 2)).toMatchObject({
-            accepted: 1,
-            capped: true,
-            gainedLabel: '+1 combo shard',
-            cappedLabel: 'Combo shards already full'
-        });
         expect(getRunInventoryGainFeedback(run, 'mutator_loadout', 1)).toMatchObject({
             accepted: 0,
             gainedLabel: null,
@@ -164,36 +149,18 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
         const run = {
             ...createNewRun(0),
             shuffleCharges: -2,
-            peekCharges: -1,
-            stats: { ...createNewRun(0).stats, comboShards: -1 }
+            peekCharges: -1
         };
 
         const rows = getRunConsumableRows(run);
         expect(rows.find((row) => row.id === 'shuffle_charge')?.quantity).toBe(0);
         expect(rows.find((row) => row.id === 'peek_charge')?.quantity).toBe(0);
-        expect(previewRunInventoryItemGain(run, 'combo_shard', 1)).toMatchObject({
+        expect(previewRunInventoryItemGain(run, 'peek_charge', 1)).toMatchObject({
             quantity: 0,
             accepted: 1,
             nextQuantity: 1
         });
         expect(gainRunInventoryItem(run, 'peek_charge').peekCharges).toBe(1);
-        expect(gainRunInventoryItem(run, 'combo_shard').stats.comboShards).toBe(1);
-    });
-
-    it('normalizes malformed stat blocks before gaining stat inventory items', () => {
-        const run = {
-            ...createNewRun(0),
-            stats: Number.NaN as unknown as RunState['stats']
-        };
-
-        const consumables = getRunConsumableRows(run);
-        expect(consumables.find((row) => row.id === 'combo_shard')?.quantity).toBe(0);
-        expect(previewRunInventoryItemGain(run, 'combo_shard', 1)).toMatchObject({
-            quantity: 0,
-            accepted: 1,
-            nextQuantity: 1
-        });
-        expect(gainRunInventoryItem(run, 'combo_shard').stats.comboShards).toBe(1);
     });
 
 
@@ -201,14 +168,14 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
         const rows = getRunInventoryItemPayoutRows({
             peek_charge: 2.8,
             destroy_charge: Number.NaN,
-            combo_shard: -1,
+            undo_charge: -1,
             missing_item: 99
         });
 
         expect(rows.map((row) => row.id)).toEqual([...RUN_INVENTORY_ITEM_IDS]);
         expect(rows.find((row) => row.id === 'peek_charge')?.amount).toBe(2);
         expect(rows.find((row) => row.id === 'destroy_charge')?.amount).toBe(0);
-        expect(rows.find((row) => row.id === 'combo_shard')?.amount).toBe(0);
+        expect(rows.find((row) => row.id === 'undo_charge')?.amount).toBe(0);
         expect(getRunInventoryItemPayoutRows(['peek_charge']).every((row) => row.amount === 0)).toBe(true);
     });
 

@@ -54,7 +54,6 @@ const renderBoard = (props: {
     traitRouteHintText?: string | null;
     traitRouteTargetTileIds?: readonly string[];
     chainContext?: {
-        comboShards: number;
         currentStreak: number;
     };
     recoveryContext?: {
@@ -62,7 +61,7 @@ const renderBoard = (props: {
         detail: string;
         impactCue: string;
         value: string;
-        tone: 'recover' | 'risk' | 'lost-reward';
+        tone: 'recover' | 'risk';
     } | null;
 }): ReturnType<typeof render> =>
     {
@@ -133,7 +132,7 @@ describe('TileBoard touch and click controls', () => {
             tiles: [
                 { id: 'a1', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden', tileTraitKind: 'echo' },
                 { id: 'a2', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
-                { id: 'b1', pairKey: 'B', symbol: 'B', label: 'B', state: 'hidden', findableKind: 'shard_spark' },
+                { id: 'b1', pairKey: 'B', symbol: 'B', label: 'B', state: 'hidden', findableKind: 'score_glint' },
                 { id: 'b2', pairKey: 'B', symbol: 'B', label: 'B', state: 'matched' }
             ]
         };

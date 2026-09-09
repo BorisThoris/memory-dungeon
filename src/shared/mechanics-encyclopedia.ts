@@ -11,7 +11,7 @@
 import type { AchievementId, GameMode, MutatorId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 32 as const;
+export const ENCYCLOPEDIA_VERSION = 33 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -43,7 +43,6 @@ export type EncyclopediaTopic = CodexCoreTopic;
 
 export interface MechanicsGlossaryTerm {
     id:
-        | 'combo_shards'
         | 'mutators'
         | 'contracts'
         | 'findables'
@@ -58,13 +57,6 @@ export interface MechanicsGlossaryTerm {
 }
 
 export const MECHANICS_GLOSSARY_TERMS: readonly MechanicsGlossaryTerm[] = [
-    {
-        id: 'combo_shards',
-        preferredLabel: 'Combo shards',
-        shortDefinition: 'Streak resource: every second consecutive match adds one, chunk breaks and shard sparks add more; the bank is small and resets with the run.',
-        avoidLabels: ['gems', 'paid shards'],
-        surfaces: ['HUD', 'Inventory', 'Findables']
-    },
     {
         id: 'mutators',
         preferredLabel: 'Mutators',
@@ -454,12 +446,6 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
             'Floors tagged **boss** apply a **score multiplier** (~1.15×) to the pre-boss subtotal for that clear (the floor-end bonus and stacked objective bonuses included before the multiply).'
     },
     {
-        id: 'sys_combo_shards',
-        title: 'Combo shards',
-        description:
-            'Each **even-numbered** consecutive match adds a **combo shard**; chunk breaks and shard sparks on the board add to the same bank. The bank is small and resets with the run: shards are a reading of momentum, not something to spend.'
-    },
-    {
         id: 'sys_shuffle_score_tax',
         title: 'Shuffle score tax (optional)',
         description:
@@ -538,11 +524,11 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
             'A pair goes only when both its halves touch the clump, so a partner across the board is the chain\'s to reach. ' +
             'From chain 3 (Clean) each partner that left takes its own clump - a second wave. Sharp, about two-fifths of the floor\'s pairs of momentum and four at least, runs the reaction until a wave takes nothing. ' +
             'Fever, about two-thirds and seven at least, adds the halo: everything touching the first clump, whatever its suit. Every pair a break takes adds to the chain\'s momentum. ' +
-            'Treasure inside a break spills and pays as if you had matched it. A break pays a pair\'s worth times the pairs, times the tier it landed at (Clean ×2, Sharp ×4, Fever ×8), times the ripple (×1.75 for a second wave, up to ×6): a huge Fever reaction is worth hundreds of pops. Broken pairs give no recall credit - memory still pays best - but they drop combo shards, ' +
+            'Treasure inside a break spills and pays as if you had matched it. A break pays a pair\'s worth times the pairs, times the tier it landed at (Clean ×2, Sharp ×4, Fever ×8), times the ripple (×1.75 for a second wave, up to ×6): a huge Fever reaction is worth hundreds of pops. Broken pairs give no recall credit - memory still pays best - but they ' +
             'clear the floor faster, and a longer ripple pays more. A miss halves the chain and puts the fire out. ' +
             'A suit that can no longer pop - no two of its pairs within reach of each other - loses its last pairs on its own: that is the drop, and it happens at any chain, so breaking the two pairs that hold a third up is a thing you can aim. ' +
             'A break with a shape gets a name on the run line: a ripple that ran on, a drop, a partner taken from across the board, a halo, a treasure spill, a clean sweep of a suit. ' +
-            'Clear the floor with momentum still standing and the end pays out: a gold at Clean and Sharp, a shard and two gold at Fever - Extreme Fever. Never score, never rating.'
+            'Clear the floor with momentum still standing and the floor-end bonus multiplies with the tier: 1.5x at Clean, 2.5x at Sharp, 5x at Fever - Extreme Fever. Never the rating.'
     },
     {
         id: 'tile_suits',
@@ -558,7 +544,7 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         id: 'pickup_findables',
         title: 'Findables (bonus pickups)',
         description:
-            'Procedural floors spawn **real** pickup pairs by default: floors 1–3 have one pair, later floors have one or two, and **Dense pickups** guarantees two. There are two kinds: **Shard spark** grants +1 combo shard and **score glint** grants +25 score. Matching the carrier pair claims it, a chunk break that takes it spills it and pays it out, Destroy forfeits it, and Peek only reveals it.'
+            'Procedural floors spawn **real** pickup pairs by default: floors 1–3 have one pair, later floors have one or two, and **Dense pickups** guarantees two. There is one kind: the **score glint**, +25 score. Matching the carrier pair claims it, a chunk break that takes it spills it and pays it out, Destroy forfeits it, and Peek only reveals it.'
     },
     {
         id: 'board_glass_decoy',

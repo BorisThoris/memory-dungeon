@@ -4,7 +4,6 @@ import { runFiniteNumber, runNonNegativeInteger } from '../../shared/run-number-
 import { TILE_TRAIT_COUNT_KINDS } from '../../shared/session-stats-rules';
 import { getChainMilestoneFeedback, type ChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
 import { runChainTier, type ChainTier } from '../../shared/chain-tier-rules';
-import { getChainRewardForecastCues } from '../copy/chainMomentum';
 import { audioNeverThrows, audioNeverThrowsBoolean } from './audioSafety';
 import {
     maybePreloadSampledSfx,
@@ -56,7 +55,7 @@ export const sfxGainFromSettings = (masterVolume: number, sfxVolume: number): nu
 
 type SfxCategory = 'flip' | 'match' | 'mismatch' | 'power' | 'shuffle';
 type ChainOpportunityBeatSfxTier = 'cashout' | 'follow-up' | 'route' | 'setup' | 'surge';
-type MismatchRecoveryCrescendoSfxTier = 'break' | 'lost-reward' | 'recover' | 'risk' | 'trait-surge';
+type MismatchRecoveryCrescendoSfxTier = 'break' | 'recover' | 'risk' | 'trait-surge';
 type MatchPayoffSfxPayload = {
     cascadeCue?: { tier: 'chain' | 'combo' | 'reward' } | null;
     impactCue?: { label: string } | null;
@@ -253,14 +252,8 @@ const playMismatchSfx = (gain: number): void => {
     });
 };
 
-const hasResolvedResourceReward = (before: RunState, after: RunState): boolean => {
-    const beforeStats = before.stats;
-    const afterStats = after.stats;
-    return (
-        runFiniteNumber(afterStats.comboShards) > runFiniteNumber(beforeStats.comboShards) ||
-        runFiniteNumber(after.flashPairCharges) > runFiniteNumber(before.flashPairCharges)
-    );
-};
+const hasResolvedResourceReward = (before: RunState, after: RunState): boolean =>
+    runFiniteNumber(after.flashPairCharges) > runFiniteNumber(before.flashPairCharges);
 
 const tileTraitCountTotal = (value: unknown): number => {
     if (value == null || typeof value !== 'object') {
@@ -270,23 +263,14 @@ const tileTraitCountTotal = (value: unknown): number => {
     return TILE_TRAIT_COUNT_KINDS.reduce((sum, kind) => sum + runNonNegativeInteger(counts[kind]), 0);
 };
 
-const hasResolvedChainRewardCashout = (before: RunState, after: RunState): boolean => {
-    if (runFiniteNumber(after.stats.currentStreak) < 3) {
-        return false;
-    }
-    return runFiniteNumber(after.stats.comboShards) > runFiniteNumber(before.stats.comboShards);
-};
-
 const resolvedRewardChannelCount = (
     before: RunState,
     after: RunState,
     chainMilestone?: ChainMilestoneFeedback
 ): number => {
-    const chainRewardCashout = hasResolvedChainRewardCashout(before, after);
     return [
         (after.findablesClaimedThisFloor ?? 0) > (before.findablesClaimedThisFloor ?? 0),
-        hasResolvedResourceReward(before, after) && !chainRewardCashout,
-        chainRewardCashout,
+        hasResolvedResourceReward(before, after),
         Boolean(chainMilestone)
     ].filter(Boolean).length;
 };
@@ -302,22 +286,6 @@ const resolvedTraitMismatchCount = (before: RunState, after: RunState): number =
         0,
         tileTraitCountTotal(after.stats.tileTraitMismatches) - tileTraitCountTotal(before.stats.tileTraitMismatches)
     );
-
-const hasNearBrokenChainReward = (before: RunState, chainDepthLost: number): boolean =>
-    chainDepthLost > 0 &&
-    (getChainRewardForecastCues(chainDepthLost, runFiniteNumber(before.stats.comboShards))[0]?.distance ??
-        Number.POSITIVE_INFINITY) <= 2;
-
-const hasArmedNearChainReward = (before: RunState, after: RunState): boolean => {
-    if (hasResolvedChainRewardCashout(before, after)) {
-        return false;
-    }
-    const chainDepth = Math.floor(runFiniteNumber(after.stats.currentStreak));
-    if (chainDepth < 4) {
-        return false;
-    }
-    return getChainRewardForecastCues(chainDepth, runFiniteNumber(after.stats.comboShards))[0]?.distance === 1;
-};
 
 const chainMilestoneAccentFrequency = (milestone: ChainMilestoneFeedback): number => {
     if (milestone.tone === 'combo') {
@@ -380,17 +348,6 @@ const playChunkBreakSfx = (gain: number, pairs: number, tier: ChainTier): void =
             });
         }, count * 55 + 40);
     }
-};
-
-const playBrokenChainRewardLossSfx = (gain: number, chainDepthLost: number): void => {
-    playTone({
-        frequency: 760 + Math.min(chainDepthLost, 10) * 22,
-        frequencyEnd: 360,
-        durationSec: 0.16,
-        gain: gain * (chainDepthLost >= 6 ? 0.2 : 0.16),
-        type: 'sine',
-        category: 'mismatch'
-    });
 };
 
 const playTraitMismatchSurgeSfx = (gain: number, traitMismatchCount: number): void => {
@@ -464,7 +421,6 @@ export const playMismatchRecoveryCrescendoSfx = (
     const safeBeatCount = Math.max(2, Math.min(5, Math.floor(runFiniteNumber(beatCount))));
     const profile: Record<MismatchRecoveryCrescendoSfxTier, { frequency: number; frequencyEnd: number; gainScale: number; type: OscillatorType }> = {
         break: { frequency: 420, frequencyEnd: 220, gainScale: 0.18, type: 'sawtooth' },
-        'lost-reward': { frequency: 720, frequencyEnd: 320, gainScale: 0.2, type: 'triangle' },
         recover: { frequency: 560, frequencyEnd: 840, gainScale: 0.14, type: 'sine' },
         risk: { frequency: 640, frequencyEnd: 260, gainScale: 0.17, type: 'square' },
         'trait-surge': { frequency: 880, frequencyEnd: 240, gainScale: 0.22, type: 'square' }
@@ -473,7 +429,7 @@ export const playMismatchRecoveryCrescendoSfx = (
     playTone({
         frequency: cue.frequency + safeBeatCount * 14,
         frequencyEnd: Math.max(40, cue.frequencyEnd + (tier === 'recover' ? safeBeatCount * 24 : -safeBeatCount * 10)),
-        durationSec: tier === 'trait-surge' ? 0.15 : tier === 'lost-reward' ? 0.14 : 0.09 + safeBeatCount * 0.012,
+        durationSec: tier === 'trait-surge' ? 0.15 : 0.09 + safeBeatCount * 0.012,
         gain: gain * cue.gainScale,
         type: cue.type,
         category: 'mismatch'
@@ -498,30 +454,6 @@ const playResolvedCascadeAccentSfx = (gain: number, chainDepth: number, rewardCh
         durationSec: comboCascade ? 0.15 : rewardCascade ? 0.12 : 0.09,
         gain: gain * (comboCascade ? 0.28 : rewardCascade ? 0.22 : 0.16),
         type: comboCascade ? 'triangle' : 'sine',
-        category: 'match'
-    });
-};
-
-const playChainRewardCashoutSfx = (gain: number, after: RunState): void => {
-    const chainDepth = Math.max(3, Math.min(12, Math.floor(runFiniteNumber(after.stats.currentStreak))));
-    playTone({
-        frequency: 1420 + chainDepth * 36,
-        frequencyEnd: 2320 + chainDepth * 54,
-        durationSec: chainDepth >= 8 ? 0.14 : 0.105,
-        gain: gain * (chainDepth >= 8 ? 0.32 : 0.26),
-        type: 'triangle',
-        category: 'match'
-    });
-};
-
-const playNearChainRewardArmedSfx = (gain: number, after: RunState): void => {
-    const chainDepth = Math.max(4, Math.min(12, Math.floor(runFiniteNumber(after.stats.currentStreak))));
-    playTone({
-        frequency: 1040 + chainDepth * 28,
-        frequencyEnd: 1680 + chainDepth * 42,
-        durationSec: 0.082,
-        gain: gain * 0.18,
-        type: 'sine',
         category: 'match'
     });
 };
@@ -641,12 +573,6 @@ export const playResolveSfx = (before: RunState, after: RunState, gain: number):
                 category: 'match'
             });
         }
-        if (hasResolvedChainRewardCashout(before, after)) {
-            playChainRewardCashoutSfx(gain, after);
-        }
-        if (hasArmedNearChainReward(before, after)) {
-            playNearChainRewardArmedSfx(gain, after);
-        }
         const rewardChannelCount = resolvedRewardChannelCount(before, after, chainMilestone);
         playResolvedCascadeAccentSfx(gain, Math.max(1, Math.floor(runFiniteNumber(after.stats.currentStreak))), rewardChannelCount);
         if (rewardChannelCount === 2) {
@@ -671,9 +597,6 @@ export const playResolveSfx = (before: RunState, after: RunState, gain: number):
                 type: 'triangle',
                 category: 'mismatch'
             });
-            if (hasNearBrokenChainReward(before, chainDepthLost)) {
-                playBrokenChainRewardLossSfx(gain, chainDepthLost);
-            }
         }
     }
 };

@@ -22,10 +22,7 @@ export const getStackCashoutLaneCount = (labels: readonly string[]): number =>
     [
         labels.some(
             (label) =>
-                /^Chain x/i.test(label) ||
-                label === 'Shard cashout' ||
-                label === 'One-away cashout' ||
-                label === 'Cashout armed'
+                /^Chain x/i.test(label)
         ),
         labels.includes('Pickup') || labels.includes('Pickup cashout'),
         labels.includes('Route paid') || labels.includes('Route cashout'),
@@ -55,8 +52,6 @@ export const getVisualHudAnnouncementSignal = (
     const normalized = announcement.toLowerCase();
     if (
         priority === 'error' ||
-        normalized.includes('lost reward target') ||
-        normalized.includes('reward lost') ||
         normalized.includes('no match') ||
         normalized.includes('shuffle snare fired') ||
         normalized.includes('mirror decoy') ||
@@ -82,7 +77,6 @@ export const getVisualHudAnnouncementSignal = (
         normalized.includes('cashout') ||
         normalized.includes('reward') ||
         normalized.includes('shop gold') ||
-        normalized.includes('combo shard') ||
         normalized.includes('cascade cache fired') ||
         normalized.includes('toll cache claimed') ||
         normalized.includes('fuse cache claimed late')
@@ -137,10 +131,6 @@ export const getVisualHudAnnouncementImpact = (
 
     const normalizedAnnouncement = announcement.toLowerCase();
     const chainLabel = getChainMultiplierLabel(normalizedAnnouncement);
-    const hasFutureRewardSetup =
-        normalizedAnnouncement.includes('combo setup') || normalizedAnnouncement.includes('combo prime');
-    const hasImmediateRewardTarget =
-        normalizedAnnouncement.includes('one-away cashout') || normalizedAnnouncement.includes('cashout armed');
 
     if (chainLabel) {
         pushUniqueDetail(details, { label: `Chain ${chainLabel}`, tone: 'chain' });
@@ -157,22 +147,6 @@ export const getVisualHudAnnouncementImpact = (
     }
     if (normalizedAnnouncement.includes('chain') && normalizedAnnouncement.includes('broken')) {
         pushUniqueDetail(details, { label: 'Chain break', tone: 'risk' });
-    }
-    if (normalizedAnnouncement.includes('lost reward target') || normalizedAnnouncement.includes('reward lost')) {
-        pushUniqueDetail(details, { label: 'Lost reward', tone: 'risk' });
-    }
-    if (normalizedAnnouncement.includes('next chase')) {
-        pushUniqueDetail(details, { label: 'Next chase', tone: 'chain' });
-    }
-    if (/\b(?:combo\s+)?shards?\b/.test(normalizedAnnouncement)) {
-        const shardLabel = normalizedAnnouncement.includes('spent')
-            ? 'Shard spent'
-            : hasFutureRewardSetup && !hasImmediateRewardTarget
-              ? 'Shard setup'
-              : chainLabel || normalizedAnnouncement.includes('cashout') || normalizedAnnouncement.includes('complete') || normalizedAnnouncement.includes('gained')
-              ? 'Shard cashout'
-              : '+Shard';
-        pushUniqueDetail(details, { label: shardLabel, tone: 'reward' });
     }
     if (normalizedAnnouncement.includes('super stack')) {
         pushUniqueDetail(details, { label: 'Super stack', tone: 'reward' });
@@ -205,13 +179,6 @@ export const getVisualHudAnnouncementImpact = (
         pushUniqueDetail(details, { label: 'Combo hit', tone: 'chain' });
     } else if (normalizedAnnouncement.includes('chain hit')) {
         pushUniqueDetail(details, { label: 'Chain hit', tone: 'chain' });
-    }
-    if (normalizedAnnouncement.includes('one-away cashout')) {
-        pushUniqueDetail(details, { label: 'One-away cashout', tone: 'reward' });
-    } else if (normalizedAnnouncement.includes('cashout armed')) {
-        pushUniqueDetail(details, { label: 'Cashout armed', tone: 'reward' });
-    } else if (normalizedAnnouncement.includes('combo setup') || normalizedAnnouncement.includes('combo prime')) {
-        pushUniqueDetail(details, { label: 'Combo prime', tone: 'reward' });
     }
     if (normalizedAnnouncement.includes('shop gold') || normalizedAnnouncement.includes('gold')) {
         pushUniqueDetail(details, { label: '+Gold', tone: 'reward' });
@@ -339,10 +306,6 @@ export const getVisualHudAnnouncementFollowup = ({
         return 'Next: pressure is down; keep clearing confirmed pairs.';
     }
 
-    if (normalizedAnnouncement.includes('lost reward target') || normalizedAnnouncement.includes('reward lost')) {
-        return 'Next: rebuild from a confirmed pair before chasing the lost reward again.';
-    }
-
     if (normalizedAnnouncement.includes('chain') && normalizedAnnouncement.includes('broken')) {
         return 'Next: rebuild from a confirmed pair before chasing rewards.';
     }
@@ -360,21 +323,6 @@ export const getVisualHudAnnouncementFollowup = ({
 
     if (normalizedAnnouncement.includes('pickup cashout')) {
         return 'Next: pickup reward applied; keep the streak alive with a confirmed pair.';
-    }
-
-    if (normalizedAnnouncement.includes('cashout armed')) {
-        return 'Next: cashout is armed; take the safest confirmed match now.';
-    }
-
-    if (
-        normalizedAnnouncement.includes('next reward') &&
-        (normalizedAnnouncement.includes('combo setup') || normalizedAnnouncement.includes('combo prime'))
-    ) {
-        return 'Next: prime the cashout with the safest confirmed match.';
-    }
-
-    if (normalizedAnnouncement.includes('next reward') && normalizedAnnouncement.includes('one-away cashout')) {
-        return 'Next: cashout is one match away; take the safest confirmed match.';
     }
 
     if (normalizedAnnouncement.includes('route cashout')) {
@@ -446,10 +394,6 @@ export const getVisualHudAnnouncementFollowup = ({
         return 'Next: finish this floor knowing the next route is prepared.';
     }
 
-    if (normalizedAnnouncement.includes('catalyst altar')) {
-        return 'Next: shard value converted; reassess remaining power charges.';
-    }
-
     if (normalizedAnnouncement.includes('pin lattice')) {
         return 'Next: planning paid out; preserve pins for uncertain pairs.';
     }
@@ -498,10 +442,6 @@ export const getVisualHudAnnouncementFollowup = ({
         return normalizedAnnouncement.includes('penalty')
             ? 'Next: trait penalty landed; rebuild from a confirmed pair.'
             : 'Next: trait payoff landed; look for the next chainable interaction.';
-    }
-
-    if (normalizedAnnouncement.includes('combo shard')) {
-        return 'Next: spend shards on powers when the board gets risky.';
     }
 
     if (normalizedAnnouncement.includes('shop gold')) {

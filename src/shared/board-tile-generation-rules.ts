@@ -123,7 +123,7 @@ const pickFindableKind = (roll: number): FindableKind => {
         }
         cursor -= row.weight;
     }
-    return rows[rows.length - 1]?.id ?? 'shard_spark';
+    return rows[rows.length - 1]?.id ?? 'score_glint';
 };
 
 export const assignFindableKindsToTiles = (

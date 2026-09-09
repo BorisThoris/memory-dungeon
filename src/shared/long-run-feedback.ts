@@ -4,6 +4,7 @@ import type { MechanicTokenId } from './mechanic-feedback';
 import { getMemoryRecallFeedback } from './memory-recall-feedback';
 import { getRunEconomyRows } from './run-economy';
 import { runArrayCount } from './run-array-guards';
+import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 
 export type FeedbackCauseKind =
@@ -99,7 +100,6 @@ export const getPerfectMemoryAttribution = (run: RunState): PerfectMemoryAttribu
 
 export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
     const rows: FeedbackCauseRow[] = [];
-    const stats = normalizeSessionStats(run.stats);
     const pm = getPerfectMemoryAttribution(run);
     const forgottenTileCount = runArrayCount(run.forgottenTileIdsThisFloor);
 
@@ -151,31 +151,16 @@ export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
         );
     }
 
-    if (stats.comboShards > 0) {
-        rows.push(
-            causeRow({
-                id: 'economy',
-                kind: 'economy_delta',
-                label: 'Economy',
-                summary: `${stats.comboShards}/2 shards`,
-                detail: 'Temporary run resources shifted as streaks, traits and pickups resolved.',
-                tokens: ['reward', 'cost'],
-                priority: 60
-            })
-        );
-    }
-
     return rows.sort((a, b) => a.priority - b.priority || a.id.localeCompare(b.id));
 };
 
 export const getTouchHudDetailRows = (run: RunState): TouchHudDetailRow[] => {
     const economy = getRunEconomyRows(run)
-        .filter((row) => ['combo_shards', 'findable_pickups'].includes(row.id))
+        .filter((row) => row.id === 'findable_pickups')
         .map((row) => `${row.label} ${row.value}`)
         .join(', ');
     const pm = getPerfectMemoryAttribution(run);
     const recall = getMemoryRecallFeedback(run);
-    const stats = normalizeSessionStats(run.stats);
 
     return [
         {
@@ -195,7 +180,7 @@ export const getTouchHudDetailRows = (run: RunState): TouchHudDetailRow[] => {
         {
             id: 'economy',
             label: 'Economy',
-            value: `${stats.comboShards}/2 shards`,
+            value: `${runNonNegativeInteger(run.findablesClaimedThisFloor)}/${runNonNegativeInteger(run.findablesTotalThisFloor)} pickups`,
             detail: economy,
             tokens: ['reward', 'cost']
         }

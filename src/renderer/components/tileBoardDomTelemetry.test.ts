@@ -81,7 +81,7 @@ describe('tile board DOM telemetry helpers', () => {
             ...board,
             tiles: [
                 { ...board.tiles[0]!, tileTraitKind: 'echo' },
-                { ...board.tiles[1]!, findableKind: 'shard_spark' },
+                { ...board.tiles[1]!, findableKind: 'score_glint' },
                 { ...board.tiles[2]!, state: 'matched' },
                 board.tiles[3]!,
                 { id: 'c1', pairKey: 'C', symbol: 'C', label: 'C', state: 'removed' }

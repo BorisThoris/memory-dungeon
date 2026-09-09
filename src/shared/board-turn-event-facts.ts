@@ -51,8 +51,6 @@ export interface BoardTurnAnnouncementFacts {
     level: number;
     currentStreakBefore: number;
     currentStreakAfter: number;
-    comboShardsBefore: number;
-    comboShardsAfter: number;
     findablesClaimedBefore: number;
     findablesClaimedAfter: number;
     findablesTotalBefore: number;
@@ -174,8 +172,6 @@ export const getBoardTurnAnnouncementFacts = (
         level: runNonNegativeInteger(before.board?.level),
         currentStreakBefore: statsBefore.currentStreak,
         currentStreakAfter: statsAfter.currentStreak,
-        comboShardsBefore: statsBefore.comboShards,
-        comboShardsAfter: statsAfter.comboShards,
         findablesClaimedBefore: runNonNegativeInteger(before.findablesClaimedThisFloor),
         findablesClaimedAfter: runNonNegativeInteger(after.findablesClaimedThisFloor),
         findablesTotalBefore: runNonNegativeInteger(before.findablesTotalThisFloor),

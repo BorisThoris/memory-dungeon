@@ -241,9 +241,6 @@ const RunShell = ({
                         }`}
                     </span>
                 </Stat>
-                <Stat label="Shards" testId="hud-combo-shards">
-                    {String(run.stats.comboShards)}
-                </Stat>
                 {mutatorTitles.length > 0 ? (
                     <Stat label="Mutator" testId="hud-mutators">
                         <span style={{ fontSize: '0.95rem', letterSpacing: '0.04em' }}>{mutatorTitles.join(' · ')}</span>

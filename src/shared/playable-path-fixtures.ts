@@ -1,5 +1,4 @@
 import {
-    MAX_COMBO_SHARDS,
     type BoardState,
     type RunState,
     type SaveData,
@@ -150,8 +149,8 @@ const activeRunWithPickupCashout = (): RunState => {
         matchedPairs: 0,
         flippedTileIds: [],
         tiles: [
-            { id: 'p1', pairKey: 'pickup', symbol: 'P', label: 'Pickup', state: 'hidden', findableKind: 'shard_spark' },
-            { id: 'p2', pairKey: 'pickup', symbol: 'P', label: 'Pickup', state: 'hidden', findableKind: 'shard_spark' },
+            { id: 'p1', pairKey: 'pickup', symbol: 'P', label: 'Pickup', state: 'hidden', findableKind: 'score_glint' },
+            { id: 'p2', pairKey: 'pickup', symbol: 'P', label: 'Pickup', state: 'hidden', findableKind: 'score_glint' },
             { id: 'a1', pairKey: 'anchor', symbol: 'A', label: 'Anchor', state: 'hidden' },
             { id: 'a2', pairKey: 'anchor', symbol: 'A', label: 'Anchor', state: 'hidden' }
         ]
@@ -163,7 +162,6 @@ const activeRunWithPickupCashout = (): RunState => {
         findablesTotalThisFloor: 1,
         stats: {
             ...base.stats,
-            comboShards: MAX_COMBO_SHARDS,
             currentStreak: 0
         }
     };

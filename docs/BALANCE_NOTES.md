@@ -1838,3 +1838,31 @@ one floor in a hundred they used to die on was a life lost to a miss, and there 
 Every other band is where Gen 181 left it, within the deal's noise: rules version 38 → 39 re-deals
 the boards (Fever clean 0.35 / reference 0.21, ratio 1.67; Extreme Fever 0.79 / 0.54; chunk share
 0.70; largest break 0.49; under par 0.99 / 0.77).
+
+## Gen 184: combo shards out
+
+Thesis §44.4 and §40. The combo shard was the life economy's bank and, after Gen 183, a number that
+filled to two on the first chain and never moved. It is gone: from the streak, the chunk break, the
+Extreme Fever finish and the board, where the **Shard Spark** findable went with it and the Score
+Glint takes the whole spawn roll. `GAME_RULES_VERSION` 39 → 40 for the changed roll. The record is in
+`docs/REMOVED_LIVES.md`.
+
+### The findable census
+
+`sim:occupancy --ratchet`, 240 floors, the reward row before and after:
+
+| | Floors with a claim | Claims a floor |
+|---|---|---|
+| Gen 183 (two kinds, 50/50) | 1.000 | 1.54 |
+| Gen 184 (one kind) | 1.000 | 1.54 |
+
+Unmoved, as expected: the number of findable pairs a floor deals is decided before the kind roll, and
+every claim pays score now rather than half of them paying a shard.
+
+### The bands
+
+`sim:cascade --check`, 48 seeds, after: clean player Fever 0.34 / reference 0.20 (ratio 1.70), Extreme
+Fever 0.78 / 0.52, chunk share 0.70, largest break 0.49, under par 0.99 / 0.75, ceiling 0.000 at every
+miss rate the bands watch. `sim:pop --check` and `sim:endless --check` pass. The rules-version re-deal
+moves the reference player's Fever share 0.21 → 0.20 and under-par share 0.77 → 0.75, inside the
+noise Gen 181 measured for a re-deal; nothing was retuned.

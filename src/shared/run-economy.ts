@@ -35,16 +35,6 @@ const SCORE_RUN_ECONOMY_DEFINITION = {
 export const RUN_ECONOMY_DEFINITIONS = [
     SCORE_RUN_ECONOMY_DEFINITION,
     {
-        id: 'combo_shards',
-        label: 'Combo shards',
-        bucket: 'temporary_run',
-        purpose: 'Temporary run bank.',
-        source: 'match streaks and shard-spark pickups',
-        sink: 'banked to the cap and shown on the HUD; nothing spends it',
-        persistence: 'temporary_run',
-        maxValue: 2
-    },
-    {
         id: 'findable_pickups',
         label: 'Findable pickups',
         bucket: 'temporary_run',
@@ -82,8 +72,6 @@ const valueFor = (run: RunState, id: string): string => {
     switch (id) {
         case 'score':
             return String(stats.totalScore);
-        case 'combo_shards':
-            return `${stats.comboShards}/2`;
         case 'findable_pickups':
             return `${runNonNegativeInteger(run.findablesClaimedThisFloor)}/${runNonNegativeInteger(run.findablesTotalThisFloor)}`;
         case 'assist_charges':
@@ -98,8 +86,6 @@ const numericValueFor = (run: RunState, id: string): number => {
     switch (id) {
         case 'score':
             return stats.totalScore;
-        case 'combo_shards':
-            return stats.comboShards;
         case 'findable_pickups':
             return runNonNegativeInteger(run.findablesClaimedThisFloor);
         case 'assist_charges':

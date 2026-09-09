@@ -19,7 +19,7 @@ const run = (overrides: Partial<RunState> = {}): RunState => ({
     recallMistakesThisFloor: 0,
     recallBonusScoreThisFloor: 0,
     forgottenTileIdsThisFloor: [],
-    stats: { comboShards: 0 },
+    stats: { totalScore: 0 },
     ...overrides
 } as RunState);
 
@@ -55,7 +55,7 @@ describe('gameplay feedback completeness', () => {
             after: run({
                 recallFocus: 1,
                 forgottenTileIdsThisFloor: ['tile-a'],
-                stats: { comboShards: 2 } as RunState['stats']
+                stats: { totalScore: 2 } as RunState['stats']
             }),
             command,
             events: [],
@@ -66,12 +66,12 @@ describe('gameplay feedback completeness', () => {
             commandId: 'missing-feedback',
             commandType: 'board.peek',
             changedFields: [
-                'comboShards',
+                'totalScore',
                 'recallFocus',
                 'forgottenTileCountThisFloor'
             ],
             eventTypes: [],
-            message: 'Accepted board.peek command missing-feedback changed feedback-critical fields without typed presentation: comboShards, recallFocus, forgottenTileCountThisFloor.'
+            message: 'Accepted board.peek command missing-feedback changed feedback-critical fields without typed presentation: totalScore, recallFocus, forgottenTileCountThisFloor.'
         });
     });
 

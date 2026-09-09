@@ -21,7 +21,6 @@ const minimalRun = (partial: Partial<RunState>): RunState =>
             matchesFound: 0,
             totalScore: 0,
             tries: 0,
-            comboShards: 0,
             rating: '',
             highestLevel: 1,
             currentLevelScore: 0,
@@ -88,8 +87,6 @@ const turnEventFor = (
         triesAfter: next.stats.tries ?? 0,
         matchesBefore: run.stats.matchesFound ?? 0,
         matchesAfter: next.stats.matchesFound ?? 0,
-        comboShardsBefore: run.stats.comboShards ?? 0,
-        comboShardsAfter: next.stats.comboShards ?? 0,
         currentStreakAfter: next.stats.currentStreak ?? 0,
         findablesClaimedBefore: run.findablesClaimedThisFloor ?? 0,
         findablesClaimedAfter: next.findablesClaimedThisFloor ?? 0,
@@ -284,8 +281,8 @@ describe('buildMatchScorePopPayload', () => {
                 columns: 2,
                 flippedTileIds: ['t1', 't2'],
                 tiles: [
-                    { id: 't1', pairKey: 'pk', symbol: 'a', label: 'a', state: 'flipped', findableKind: 'shard_spark' },
-                    { id: 't2', pairKey: 'pk', symbol: 'a', label: 'a', state: 'flipped', findableKind: 'shard_spark' }
+                    { id: 't1', pairKey: 'pk', symbol: 'a', label: 'a', state: 'flipped', findableKind: 'score_glint' },
+                    { id: 't2', pairKey: 'pk', symbol: 'a', label: 'a', state: 'flipped', findableKind: 'score_glint' }
                 ]
             } as unknown as BoardState,
             stats: { matchesFound: 2, totalScore: 40 } as RunState['stats']
@@ -305,195 +302,13 @@ describe('buildMatchScorePopPayload', () => {
             feedbackSignal: { label: 'Pickup', tone: 'pickup' },
             impactCue: { label: 'Pickup cashout', tone: 'pickup' },
             rewardBurst: { action: 'Cash now', label: 'Reward hit', value: 'Pickup', tier: 'single' },
-            payoffSummary: { label: 'Pickup cashout', value: 'Shard spark +1 combo shard', tier: 'reward' },
+            payoffSummary: { label: 'Pickup cashout', value: 'Score glint +25 score', tier: 'reward' },
             payoffChips: [
                 { arcadeCue: 'Score pop', id: 'score', label: 'Score', value: '+25', tone: 'score' },
-                { arcadeCue: 'Pickup cashout', id: 'pickup', label: 'Pickup', value: 'Shard spark +1 combo shard', tone: 'pickup' }
+                { arcadeCue: 'Pickup cashout', id: 'pickup', label: 'Pickup', value: 'Score glint +25 score', tone: 'pickup' }
             ],
-            pickupRewardText: 'Shard spark +1 combo shard'
+            pickupRewardText: 'Score glint +25 score'
         });
-    });
-
-    it('adds chain reward forecast cues to streak floaters', () => {
-        const run = minimalRun({
-            board: {
-                level: 3,
-                rows: 2,
-                columns: 2,
-                flippedTileIds: ['t1', 't2'],
-                tiles: [
-                    { id: 't1', pairKey: 'pk', symbol: 'a', label: 'a', state: 'flipped' },
-                    { id: 't2', pairKey: 'pk', symbol: 'a', label: 'a', state: 'flipped' }
-                ]
-            } as unknown as BoardState,
-            stats: { ...minimalRun({}).stats, matchesFound: 2, totalScore: 40, comboShards: 1, currentStreak: 3 }
-        });
-        const next = {
-            ...run,
-            stats: { ...run.stats, matchesFound: 3, totalScore: 65, currentStreak: 4 }
-        };
-
-        expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'chain'), 'chain')?.chainRewardForecastCues).toEqual([
-            {
-                actionLabel: 'Soon',
-                chaseLabel: 'Prime',
-                distance: 2,
-                distanceLabel: '2 matches',
-                id: 'shard-6',
-                label: 'x6 +1 shard',
-                targetStreak: 6,
-                tone: 'reward',
-                urgency: 'soon'
-            }
-        ]);
-        expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'chain'), 'chain')?.payoffChips).toEqual([
-            { arcadeCue: 'Score pop', id: 'score', label: 'Score', value: '+25', tone: 'score' },
-            { arcadeCue: 'Prime cashout', id: 'streak', label: 'Streak', value: 'x4', tone: 'chain' },
-            { arcadeCue: 'Chain cascade', id: 'cascade', label: 'Cascade', value: 'chain cascade', tone: 'chain' },
-            { arcadeCue: 'Combo prime', id: 'next', label: 'Soon shard', value: 'x6 +1 shard', tone: 'reward' }
-        ]);
-        expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'chain'), 'chain')?.cascadeCue).toEqual({
-            label: 'Cascade',
-            value: 'chain cascade',
-            tier: 'chain'
-        });
-    });
-
-    it('promotes one-away chain rewards as armed cashouts on the match floater', () => {
-        const run = minimalRun({
-            board: {
-                level: 3,
-                rows: 2,
-                columns: 2,
-                flippedTileIds: ['t1', 't2'],
-                tiles: [
-                    { id: 't1', pairKey: 'pk', symbol: 'a', label: 'a', state: 'flipped' },
-                    { id: 't2', pairKey: 'pk', symbol: 'a', label: 'a', state: 'flipped' }
-                ]
-            } as unknown as BoardState,
-            stats: { ...minimalRun({}).stats, matchesFound: 4, totalScore: 80, comboShards: 0, currentStreak: 4 }
-        });
-        const pop = buildMatchScorePopPayload(turnEventFor(run, { ...run, stats: { ...run.stats, matchesFound: 5, totalScore: 110, currentStreak: 5 } }, 'match', 'armed-cashout'), 'armed-cashout');
-
-        expect(pop?.chainRewardText).toBeUndefined();
-        expect(pop?.payoffSummary).toEqual({
-            label: 'Cashout armed',
-            value: 'x6 +1 shard',
-            tier: 'reward'
-        });
-        expect(pop?.impactCue).toEqual({ label: 'Cashout armed', tone: 'reward' });
-        expect(pop?.payoffChips).toContainEqual({
-            arcadeCue: 'One-away cashout',
-            id: 'next',
-            label: 'Next shard',
-            value: 'x6 +1 shard',
-            tone: 'reward'
-        });
-    });
-
-    it('surfaces chain reward cashouts from resource gains on the matched turn', () => {
-        const baseRun = minimalRun({
-            board: {
-                level: 3,
-                rows: 2,
-                columns: 2,
-                flippedTileIds: ['t1', 't2'],
-                tiles: [
-                    { id: 't1', pairKey: 'pk', symbol: 'a', label: 'a', state: 'flipped' },
-                    { id: 't2', pairKey: 'pk', symbol: 'a', label: 'a', state: 'flipped' }
-                ]
-            } as unknown as BoardState,
-            stats: {
-                ...minimalRun({}).stats,
-                matchesFound: 2,
-                totalScore: 40,
-                comboShards: 1,
-                currentStreak: 3
-            }
-        });
-        const pop = buildMatchScorePopPayload(turnEventFor(baseRun, {
-                ...baseRun,
-                stats: {
-                    ...baseRun.stats,
-                    comboShards: 2,
-                    matchesFound: 3,
-                    totalScore: 75,
-                    currentStreak: 4
-                }
-            }, 'match', 'cashout'), 'cashout');
-
-        expect(pop?.chainRewardText).toBe('+1 combo shard');
-        expect(pop).toMatchObject({
-            feedbackHeadline: 'Reward',
-            feedbackIntensity: 'high'
-        });
-        expect(pop?.payoffSummary).toEqual({
-            label: 'Chain cashout',
-            value: '+1 combo shard',
-            tier: 'reward'
-        });
-        expect(pop?.impactCue).toEqual({ label: 'Cashout now', tone: 'reward' });
-        expect(pop?.payoffChips).toContainEqual({
-            arcadeCue: 'Chain cashout',
-            id: 'chainReward',
-            label: 'Cashout',
-            value: '+1 combo shard',
-            tone: 'reward'
-        });
-        expect(pop?.payoffChips).toContainEqual({
-            arcadeCue: 'Reward cascade',
-            id: 'cascade',
-            label: 'Cascade',
-            value: 'reward cascade',
-            tone: 'chain'
-        });
-        expect(pop?.cascadeCue).toEqual({
-            label: 'Cascade',
-            value: 'reward cascade',
-            tier: 'reward'
-        });
-        expect(pop?.rewardBurst).toEqual({
-            action: 'Cash now',
-            label: 'Reward hit',
-            value: 'Chain reward',
-            tier: 'single'
-        });
-    });
-
-    it('normalizes malformed chain reward counters before building cashout copy', () => {
-        const baseRun = minimalRun({
-            board: {
-                level: 3,
-                rows: 2,
-                columns: 2,
-                flippedTileIds: ['t1', 't2'],
-                tiles: [
-                    { id: 't1', pairKey: 'pk', symbol: 'a', label: 'a', state: 'flipped' },
-                    { id: 't2', pairKey: 'pk', symbol: 'a', label: 'a', state: 'flipped' }
-                ]
-            } as unknown as BoardState,
-            stats: {
-                ...minimalRun({}).stats,
-                matchesFound: 2,
-                totalScore: 40,
-                comboShards: Number.POSITIVE_INFINITY,
-                currentStreak: 3
-            }
-        });
-        const pop = buildMatchScorePopPayload(turnEventFor(baseRun, {
-                ...baseRun,
-                stats: {
-                    ...baseRun.stats,
-                    comboShards: Number.POSITIVE_INFINITY,
-                    matchesFound: 3,
-                    totalScore: 75,
-                    currentStreak: 4
-                }
-            }, 'match', 'malformed-cashout'), 'malformed-cashout');
-
-        expect(pop?.chainRewardText).toBeUndefined();
-        expect(pop?.payoffSummary?.value).not.toMatch(/NaN|Infinity/);
-        expect(pop?.payoffChips?.map((chip) => chip.value).join(' ')).not.toMatch(/NaN|Infinity/);
     });
 
 
@@ -508,11 +323,11 @@ describe('buildMatchScorePopPayload', () => {
                 { arcadeCue: 'Score pop', id: 'score', label: 'Score', value: '+80', tone: 'score' },
                 { arcadeCue: 'Chain cashout', id: 'streak', label: 'Streak', value: 'x6', tone: 'chain' },
                 { arcadeCue: 'Surge live', id: 'tier', label: 'Momentum', value: 'Surge live', tone: 'chain' },
-                { arcadeCue: 'One-away cashout', id: 'next', label: 'Next', value: 'x8 +1 shard', tone: 'reward' }
+                { arcadeCue: 'Pickup cashout', id: 'pickup', label: 'Pickup', value: 'Score glint +25 score', tone: 'pickup' }
             ])
         ).toEqual([
-            { id: 'chain', label: 'Chain', count: 2, tone: 'chain', cue: 'Chain cashout' },
-            { id: 'build', label: 'Build', count: 1, tone: 'reward', cue: 'One-away cashout' }
+            { id: 'pickup', label: 'Pickup', count: 1, tone: 'pickup', cue: 'Pickup cashout' },
+            { id: 'chain', label: 'Chain', count: 2, tone: 'chain', cue: 'Chain cashout' }
         ]);
     });
 
@@ -528,7 +343,7 @@ describe('buildMatchScorePopPayload', () => {
                     { id: 't2', pairKey: 'pk', symbol: 'a', label: 'a', state: 'flipped' }
                 ]
             } as unknown as BoardState,
-            stats: { ...minimalRun({}).stats, matchesFound: 2, totalScore: 40, comboShards: 1, currentStreak: 5 }
+            stats: { ...minimalRun({}).stats, matchesFound: 2, totalScore: 40, currentStreak: 5 }
         });
         const surge = buildMatchScorePopPayload(turnEventFor(run, { ...run, stats: { ...run.stats, matchesFound: 3, totalScore: 70, currentStreak: 6 } }, 'match', 'surge'), 'surge');
         const combo = buildMatchScorePopPayload(turnEventFor(run, { ...run, stats: { ...run.stats, matchesFound: 3, totalScore: 90, currentStreak: 10 } }, 'match', 'combo'), 'combo');
@@ -612,7 +427,7 @@ describe('buildMatchScorePopPayload', () => {
                     { id: 't2', pairKey: 'pk', symbol: 'a', label: 'a', state: 'flipped' }
                 ]
             } as unknown as BoardState,
-            stats: { ...minimalRun({}).stats, matchesFound: 2, totalScore: 40, comboShards: 1, currentStreak: 5 }
+            stats: { ...minimalRun({}).stats, matchesFound: 2, totalScore: 40, currentStreak: 5 }
         });
         const pop = buildMatchScorePopPayload(turnEventFor(run, { ...run, stats: { ...run.stats, matchesFound: 3, totalScore: 70, currentStreak: 6 } }, 'match', 'surge-milestone'), 'surge-milestone');
 
@@ -642,7 +457,7 @@ describe('buildMatchScorePopPayload', () => {
                     { id: 'h2', pairKey: 'heavy', symbol: 'h', label: 'Heavy', state: 'hidden', tileTraitKind: 'heavy' }
                 ]
             } as unknown as BoardState,
-            stats: { matchesFound: 2, totalScore: 40, comboShards: 0 } as RunState['stats']
+            stats: { matchesFound: 2, totalScore: 40 } as RunState['stats']
         });
         const next = {
             ...run,
@@ -794,19 +609,6 @@ describe('buildMatchScorePopPayload', () => {
             label: 'Prime beat',
             screenCue: 'pulse',
             tier: 'prime'
-        });
-        expect(
-            buildMatchScorePopCrescendo({
-                chainDepth: 5,
-                impactCue: { label: 'Cashout armed', tone: 'reward' },
-                payoffSummary: { label: 'Cashout armed', value: 'x6 +1 shard', tier: 'reward' }
-            })
-        ).toMatchObject({
-            audioCue: 'cashout-pop',
-            beatCount: 3,
-            label: 'Cashout beat',
-            screenCue: 'snap',
-            tier: 'cashout'
         });
         expect(
             buildMatchScorePopCrescendo({
@@ -996,17 +798,6 @@ describe('buildMismatchScorePopPayload', () => {
             tileIdA: 'x',
             tileIdB: 'y',
             brokenChainDepth: 6,
-            brokenChainRewardCue: {
-                actionLabel: 'Soon',
-                chaseLabel: 'Prime',
-                distance: 2,
-                distanceLabel: '2 matches',
-                id: 'shard-8',
-                label: 'x8 +1 shard',
-                targetStreak: 8,
-                tone: 'reward',
-                urgency: 'soon'
-            },
             key: 'miss-2-break-x-y'
         });
     });

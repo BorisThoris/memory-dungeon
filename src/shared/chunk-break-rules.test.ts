@@ -5,7 +5,6 @@ import { resolveBoardTurn, flipTile } from './game';
 import { makeBoard, makeRun, makeTile } from './test/game-fixtures';
 import { WILD_PAIR_KEY } from './tile-identity';
 import {
-    chunkBreakComboShards,
     chunkBreakMomentumPairs,
     chunkBreakScore,
     findSuitRegion,
@@ -110,7 +109,7 @@ describe('what breaks', () => {
     });
 
     it('leaves a pair alone when its partner has a job of its own', () => {
-        const tiles = layout().map((t) => (t.id === 'C2' ? { ...t, findableKind: 'shard_spark' as const } : t));
+        const tiles = layout().map((t) => (t.id === 'C2' ? { ...t, findableKind: 'score_glint' as const } : t));
         const result = resolveChunkBreak({ board: board(tiles), run: endless, matchedTileIds: ['A1', 'A2'], chain: 4 });
         expect(result.brokenPairKeys).toEqual(['B']);
         expect(tileCanBreakInChunk(tiles.find((t) => t.id === 'C2')!)).toBe(false);
@@ -205,11 +204,6 @@ describe('what it pays', () => {
         expect(chunkBreakScore(5, 6, 'clean')).toBe(chunkBreakScore(5, 3, 'clean') * 2);
     });
 
-    it('drops a shard per two pairs, or per pair in Fever', () => {
-        expect(chunkBreakComboShards(1, 'clean')).toBe(0);
-        expect(chunkBreakComboShards(2, 'sharp')).toBe(1);
-        expect(chunkBreakComboShards(3, 'fever')).toBe(3);
-    });
 });
 
 describe('through a real turn', () => {
@@ -342,7 +336,7 @@ describe('the drop', () => {
     });
 
     it('never takes a pair with a job of its own, and never counts the cursed pair as a target', () => {
-        const withFindable = cutOff().map((t) => (t.id === 'C2' ? { ...t, findableKind: 'shard_spark' as const } : t));
+        const withFindable = cutOff().map((t) => (t.id === 'C2' ? { ...t, findableKind: 'score_glint' as const } : t));
         expect(
             resolveChunkBreak({ board: board(withFindable), run: endless, matchedTileIds: ['A1', 'A2'], chain: 6 }).droppedPairKeys
         ).toEqual([]);

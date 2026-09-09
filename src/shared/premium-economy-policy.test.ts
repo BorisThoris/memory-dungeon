@@ -37,6 +37,6 @@ describe('REG-054 premium economy policy', () => {
             expect(row.uiCopy, row.id).not.toMatch(removed);
         }
         expect(premiumEconomyCopyAuditPasses('buy continues')).toBe(false);
-        expect(premiumEconomyCopyAuditPasses('Combo shards and power charges reset with the run.')).toBe(true);
+        expect(premiumEconomyCopyAuditPasses('Power charges reset with the run.')).toBe(true);
     });
 });

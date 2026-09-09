@@ -36,12 +36,12 @@ const uiSfxMocks = vi.hoisted(() => ({
 }));
 
 const hudAnnouncementMock = vi.hoisted(() => ({
-    claimedFindableKind: null as 'shard_spark' | null,
+    claimedFindableKind: null as 'score_glint' | null,
     message: '',
     priority: 'info' as 'info' | 'error',
     queuePoliteAnnouncement: vi.fn(),
     formatHudActionFeedbackText: (text: string) => text.length > 48 ? `${text.slice(0, 45)}...` : text,
-    getFindableToastText: vi.fn((kind: string) => (kind === 'shard_spark' ? 'Shard spark +1 combo shard' : `${kind} reward`))
+    getFindableToastText: vi.fn((kind: string) => (kind === 'score_glint' ? 'Score glint +25 score' : `${kind} reward`))
 }));
 
 const viewportSizeMock = vi.hoisted(() => ({
@@ -169,7 +169,6 @@ const levelCompleteRunFixture = (): RunState => {
             highestLevel: 1,
             currentStreak: 2,
             bestStreak: 2,
-            comboShards: 1
         },
         timerState: {
             memorizeRemainingMs: null,
@@ -388,7 +387,6 @@ describe('GameScreen (OVR-014)', () => {
             stats: {
                 ...fixture.stats,
                 bestStreak: Number.NaN,
-                comboShards: Number.POSITIVE_INFINITY,
                 totalScore: Number.POSITIVE_INFINITY
             },
             lastLevelResult: {
@@ -479,7 +477,6 @@ describe('GameScreen (OVR-014)', () => {
             findablesTotalThisFloor: 2,
             stats: {
                 ...baseRun.stats,
-                comboShards: 1,
                 currentStreak: 3
             }
         } as RunState;
@@ -487,13 +484,12 @@ describe('GameScreen (OVR-014)', () => {
         // so the claim is expressed as a journalled event.
         const claimEvent = createBoardTurnResolvedEventFixture({
             commandId: 'pickup-claim',
-            matchedFindableKind: 'shard_spark',
+            matchedFindableKind: 'score_glint',
             findablesClaimedBefore: 0,
             findablesClaimedAfter: 1,
             findablesTotalBefore: 2,
             findablesTotalAfter: 2,
             announcement: {
-                comboShardsAfter: 1,
                 currentStreakAfter: 3,
                 findablesClaimedBefore: 0,
                 findablesClaimedAfter: 1,
@@ -519,7 +515,7 @@ describe('GameScreen (OVR-014)', () => {
             </PlatformTiltProvider>
         );
 
-        hudAnnouncementMock.claimedFindableKind = 'shard_spark';
+        hudAnnouncementMock.claimedFindableKind = 'score_glint';
         rendered.rerender(
             <PlatformTiltProvider>
                 <NotificationHost>
@@ -532,9 +528,7 @@ describe('GameScreen (OVR-014)', () => {
             const pickupToast = useNotificationStore
                 .getState()
                 .notifications.find((notification) => notification.stackKey === `pickup:${claimEvent.eventId}`);
-            expect(pickupToast?.message).toBe(
-                'Stack prime: Shard spark +1 combo shard. One-away cashout: x4 +1 shard in 1 match. Pickups 1/2.'
-            );
+            expect(pickupToast?.message).toBe('Score glint +25 score. Pickups 1/2.');
         });
     });
 
@@ -543,7 +537,7 @@ describe('GameScreen (OVR-014)', () => {
             label: 'Chain',
             tone: 'chain'
         });
-        expect(getVisualHudAnnouncementSignal('Surge hit: x6. Surge tier live. Next reward: Combo prime: x8 +1 shard in 2 matches.', 'info')).toEqual({
+        expect(getVisualHudAnnouncementSignal('Surge hit: x6. Surge tier live.', 'info')).toEqual({
             label: 'Chain',
             tone: 'chain'
         });
@@ -551,11 +545,11 @@ describe('GameScreen (OVR-014)', () => {
             label: 'Risk',
             tone: 'risk'
         });
-        expect(getVisualHudAnnouncementSignal('Shard spark claimed: +1 combo shard.', 'info')).toEqual({
+        expect(getVisualHudAnnouncementSignal('Score glint claimed: +25 score.', 'info')).toEqual({
             label: 'Reward',
             tone: 'reward'
         });
-        expect(getVisualHudAnnouncementSignal('Pickup cashout: Shard spark +1 combo shard.', 'info')).toEqual({
+        expect(getVisualHudAnnouncementSignal('Pickup cashout: Score glint +25 score.', 'info')).toEqual({
             label: 'Reward',
             tone: 'reward'
         });
@@ -575,10 +569,6 @@ describe('GameScreen (OVR-014)', () => {
             label: 'Risk',
             tone: 'risk'
         });
-        expect(getVisualHudAnnouncementSignal('Reward lost: x8 +1 shard.', 'info')).toEqual({
-            label: 'Risk',
-            tone: 'risk'
-        });
         expect(getVisualHudAnnouncementSignal('Echo and Stasis trait resolved.', 'info')).toEqual({
             label: 'Trait',
             tone: 'trait'
@@ -594,20 +584,19 @@ describe('GameScreen (OVR-014)', () => {
     });
 
     it('summarizes visible action feedback into compact impact chips', () => {
-        expect(getStackCashoutLaneCount(['Chain x5', 'Shard cashout', 'Pickup', 'Route paid'])).toBe(3);
-        expect(getStackCashoutLaneCount(['Chain x3', 'Shard cashout', 'One-away cashout'])).toBe(1);
-        expect(getStackCashoutLaneCount(['Cashout armed', 'Pickup cashout', 'Route paid'])).toBe(3);
-        expect(getStackCashoutLaneCount(['Route cashout', 'Trait cashout', 'Perk pop', 'One-away cashout'])).toBe(3);
+        expect(getStackCashoutLaneCount(['Chain x5', 'Pickup', 'Route paid'])).toBe(3);
+        expect(getStackCashoutLaneCount(['Chain x3', 'Streak live'])).toBe(1);
+        expect(getStackCashoutLaneCount(['Chain x4', 'Pickup cashout', 'Route paid'])).toBe(3);
+        expect(getStackCashoutLaneCount(['Route cashout', 'Trait cashout', 'Perk pop', 'Chain x6'])).toBe(3);
         expect(
             getVisualHudAnnouncementImpact(
-                'Chain times five - Shard spark claimed: +1 combo shard. Trait routes: 2/2 complete.',
+                'Chain times five - Score glint claimed: +25 score. Trait routes: 2/2 complete.',
                 'info'
             )
         ).toEqual({
             burstTier: 'combo',
             details: [
                 { label: 'Chain x5', tone: 'chain' },
-                { label: 'Shard cashout', tone: 'reward' },
                 { label: 'Pickup', tone: 'reward' },
                 { label: 'Route paid', tone: 'trait' }
             ],
@@ -630,21 +619,6 @@ describe('GameScreen (OVR-014)', () => {
         });
         expect(
             getVisualHudAnnouncementImpact(
-                'No match. Chain x6 broken. Lost reward target: x8 +1 shard in 2 matches. Next chase: Break into x10. Next action: Save cashout: Rebuild toward x8 +1 shard. Recover with a safe match. x6 lost',
-                'info'
-            )
-        ).toEqual({
-            burstTier: 'risk',
-            details: [
-                { label: 'Chain x6', tone: 'chain' },
-                { label: 'Chain break', tone: 'risk' },
-                { label: 'Lost reward', tone: 'risk' },
-                { label: 'Next chase', tone: 'chain' }
-            ],
-            level: 'high'
-        });
-        expect(
-            getVisualHudAnnouncementImpact(
                 'Trait penalty. No match. Next action: Recover route: prime with tools. Heavy: extra try. Recover - prime with tools',
                 'info'
             )
@@ -657,54 +631,11 @@ describe('GameScreen (OVR-014)', () => {
             ],
             level: 'high'
         });
-        expect(
-            getVisualHudAnnouncementImpact(
-                'Surge hit: x6. Surge tier live. Next reward: Combo prime: x8 +1 shard in 2 matches.',
-                'info'
-            )
-        ).toEqual({
-            burstTier: 'combo',
-            details: [
-                { label: 'Chain x6', tone: 'chain' },
-                { label: 'Shard setup', tone: 'reward' },
-                { label: 'Combo prime', tone: 'reward' }
-            ],
-            level: 'high'
-        });
-        expect(
-            getVisualHudAnnouncementImpact(
-                'Chain started: x3. Reward loop online. Next reward: One-away cashout: x4 +1 shard in 1 match.',
-                'info'
-            )
-        ).toEqual({
-            burstTier: 'combo',
-            details: [
-                { label: 'Chain x3', tone: 'chain' },
-                { label: 'Shard cashout', tone: 'reward' },
-                { label: 'One-away cashout', tone: 'reward' }
-            ],
-            level: 'medium'
-        });
-        expect(getVisualHudAnnouncementImpact('Pickup cashout: Shard spark +1 combo shard.', 'info')).toEqual({
+        expect(getVisualHudAnnouncementImpact('Pickup cashout: Score glint +25 score.', 'info')).toEqual({
             burstTier: 'reward',
             details: [
-                { label: 'Shard cashout', tone: 'reward' },
                 { label: 'Pickup cashout', tone: 'reward' },
                 { label: 'Pickup', tone: 'reward' }
-            ],
-            level: 'medium'
-        });
-        expect(
-            getVisualHudAnnouncementImpact(
-                'Chain. Plus 30 points. 5 match streak, 1 match to x6. Cashout armed: x6 +1 shard. Impact cue: Cashout armed.',
-                'info'
-            )
-        ).toEqual({
-            burstTier: 'combo',
-            details: [
-                { label: 'Streak live', tone: 'chain' },
-                { label: 'Shard cashout', tone: 'reward' },
-                { label: 'Cashout armed', tone: 'reward' }
             ],
             level: 'medium'
         });
@@ -721,13 +652,12 @@ describe('GameScreen (OVR-014)', () => {
             details: [{ label: 'Perk pop', tone: 'trait' }],
             level: 'low'
         });
-        expect(getVisualHudAnnouncementImpact('Trait cashout: Conduit + Echo: peek spark, combo shard.', 'info')).toEqual({
-            burstTier: 'reward',
+        expect(getVisualHudAnnouncementImpact('Trait cashout: Conduit + Echo: peek spark.', 'info')).toEqual({
+            burstTier: 'trait',
             details: [
-                { label: 'Shard cashout', tone: 'reward' },
                 { label: 'Trait cashout', tone: 'trait' }
             ],
-            level: 'medium'
+            level: 'low'
         });
         expect(getVisualHudAnnouncementImpact('Trait surge: 2 interactions. Cascade: combo cascade.', 'info')).toEqual({
             burstTier: 'combo',
@@ -748,12 +678,11 @@ describe('GameScreen (OVR-014)', () => {
             details: [{ label: 'Chain cascade', tone: 'chain' }],
             level: 'low'
         });
-        expect(getVisualHudAnnouncementImpact('Cascade: combo cascade. Shard spark +1 combo shard.', 'info')).toEqual({
+        expect(getVisualHudAnnouncementImpact('Cascade: combo cascade. Score glint +25 score.', 'info')).toEqual({
             burstTier: 'combo',
             details: [
                 { label: 'Combo cascade', tone: 'chain' },
-                { label: 'Reward cascade', tone: 'reward' },
-                { label: '+Shard', tone: 'reward' }
+                { label: 'Reward cascade', tone: 'reward' }
             ],
             level: 'medium'
         });
@@ -808,14 +737,6 @@ describe('GameScreen (OVR-014)', () => {
         ).toBe('Next: hazard blocked; continue from the best safe match.');
         expect(
             getVisualHudAnnouncementFollowup({
-                announcement: '2 combo shards spent. 1 available.',
-                priority: 'info',
-                runStatus: 'playing',
-                remainingPairCount: 3,
-            })
-        ).toBe('Next: spend shards on powers when the board gets risky.');
-        expect(
-            getVisualHudAnnouncementFollowup({
                 announcement: 'Chain x5 broken - recover with a remembered pair.',
                 priority: 'info',
                 runStatus: 'playing',
@@ -824,44 +745,12 @@ describe('GameScreen (OVR-014)', () => {
         ).toBe('Next: rebuild from a confirmed pair before chasing rewards.');
         expect(
             getVisualHudAnnouncementFollowup({
-                announcement: 'No match. Chain x6 broken. Lost reward target: x8 +1 shard in 2 matches.',
-                priority: 'info',
-                runStatus: 'playing',
-                remainingPairCount: 4,
-            })
-        ).toBe('Next: rebuild from a confirmed pair before chasing the lost reward again.');
-        expect(
-            getVisualHudAnnouncementFollowup({
-                announcement: 'Pickup cashout: Shard spark +1 combo shard.',
+                announcement: 'Pickup cashout: Score glint +25 score.',
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
             })
         ).toBe('Next: pickup reward applied; keep the streak alive with a confirmed pair.');
-        expect(
-            getVisualHudAnnouncementFollowup({
-                announcement: 'Cashout armed: x6 +1 shard.',
-                priority: 'info',
-                runStatus: 'playing',
-                remainingPairCount: 3,
-            })
-        ).toBe('Next: cashout is armed; take the safest confirmed match now.');
-        expect(
-            getVisualHudAnnouncementFollowup({
-                announcement: 'Surge hit: x6. Surge tier live. Next reward: Combo prime: x8 +1 shard in 2 matches.',
-                priority: 'info',
-                runStatus: 'playing',
-                remainingPairCount: 3,
-            })
-        ).toBe('Next: prime the cashout with the safest confirmed match.');
-        expect(
-            getVisualHudAnnouncementFollowup({
-                announcement: 'Chain started: x3. Reward loop online. Next reward: One-away cashout: x4 +1 shard in 1 match.',
-                priority: 'info',
-                runStatus: 'playing',
-                remainingPairCount: 3,
-            })
-        ).toBe('Next: cashout is one match away; take the safest confirmed match.');
         expect(
             getVisualHudAnnouncementFollowup({
                 announcement: 'Route cashout: Greed Cache +2 gold +25 score.',
@@ -872,7 +761,7 @@ describe('GameScreen (OVR-014)', () => {
         ).toBe('Next: route value is banked; chase the safest chainable payoff.');
         expect(
             getVisualHudAnnouncementFollowup({
-                announcement: 'Trait cashout: Conduit + Echo peek spark, combo shard.',
+                announcement: 'Trait cashout: Conduit + Echo peek spark.',
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
@@ -980,7 +869,7 @@ describe('GameScreen (OVR-014)', () => {
     it('adds next-step lines for pickups, chains, and Gambit feedback', () => {
         expect(
             getVisualHudAnnouncementFollowup({
-                announcement: 'Shard spark claimed: +1 combo shard.',
+                announcement: 'Score glint claimed: +25 score.',
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
@@ -1025,7 +914,7 @@ describe('GameScreen (OVR-014)', () => {
 
         expect(
             getVisualHudAnnouncementFollowup({
-                announcement: 'Match resolved. 2/4 pairs cleared. Trait routes: 2/2 complete. Combo shard gained. 1 available.',
+                announcement: 'Match resolved. 2/4 pairs cleared. Trait routes: 2/2 complete.',
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 2,
@@ -1034,14 +923,6 @@ describe('GameScreen (OVR-014)', () => {
     });
 
     it('prioritizes reward and trait next-step copy over generic match progress', () => {
-        expect(
-            getVisualHudAnnouncementFollowup({
-                announcement: 'Match resolved. 1/4 pairs cleared. Combo shard gained. 1 available.',
-                priority: 'info',
-                runStatus: 'playing',
-                remainingPairCount: 3,
-            })
-        ).toBe('Next: spend shards on powers when the board gets risky.');
 
         expect(
             getVisualHudAnnouncementFollowup({
@@ -1252,7 +1133,6 @@ describe('GameScreen (OVR-014)', () => {
                     payoffSummary: { label: 'Stack cashout', value: '2 payoffs: Route + Pickup', tier: 'reward' },
                     payoffLaneMap: { length: 2 } as never,
                     payoffChips: { length: 3 } as never,
-                    chainRewardForecastCues: { length: 1 } as never,
                     traitInteractionTexts: { length: 2 } as never,
                     tileIdA: 'a',
                     tileIdB: 'b',
@@ -1534,7 +1414,6 @@ describe('GameScreen (OVR-014)', () => {
                 highestLevel: 1,
                 currentStreak: 2,
                 bestStreak: 2,
-                comboShards: 1
             },
             timerState: {
                 memorizeRemainingMs: null,

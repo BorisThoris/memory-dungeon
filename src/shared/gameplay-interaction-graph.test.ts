@@ -57,7 +57,7 @@ describe('gameplay interaction graph', () => {
     });
 
     it('keeps the executable graph connected and guarded', () => {
-        expect(gameplayInteractionGraph.version).toBe(33);
+        expect(gameplayInteractionGraph.version).toBe(34);
         expect(validateGameplayInteractionGraph()).toEqual([]);
     });
 
@@ -223,22 +223,21 @@ describe('gameplay interaction graph', () => {
         }
     });
 
-    it('connects Shard Spark through typed match requests into the shard bank', () => {
-        // Gen 183: the bank no longer converts to a life; the shard itself goes in Gen 184.
+    it('connects the Score Glint through typed match requests into the score, and has no shard left in it', () => {
+        // Gen 184: the Shard Spark and the combo-shard bank went with the life economy (docs/REMOVED_LIVES.md).
         const byId = mechanicById();
-        expect(byId.get('findable.shard_spark')).toMatchObject({
+        expect(byId.get('findable.shard_spark')).toBeUndefined();
+        expect(byId.get('inventory.combo_shard')).toBeUndefined();
+        for (const mechanic of gameplayInteractionGraph.mechanics) {
+            expect([...mechanic.reads, ...mechanic.writes], mechanic.id).not.toContain('comboShards');
+        }
+        expect(byId.get('findable.score_glint')).toMatchObject({
             kind: 'findable',
             tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
         });
-        expect(byId.get('inventory.combo_shard')).toMatchObject({
-            kind: 'inventory',
-            role: 'bounded_bank'
-        });
         expect(gameplayInteractionGraph.edges).toEqual(
             expect.arrayContaining([
-                expect.objectContaining({ source: 'findable.shard_spark', target: 'core.gameplay_commands', kind: 'triggers' }),
-                expect.objectContaining({ source: 'findable.shard_spark', target: 'inventory.combo_shard', kind: 'grants' }),
-                expect.objectContaining({ source: 'board.chain_chunk_fever', target: 'inventory.combo_shard', kind: 'grants' })
+                expect.objectContaining({ source: 'findable.score_glint', target: 'core.gameplay_commands', kind: 'triggers' })
             ])
         );
     });

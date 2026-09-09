@@ -59,7 +59,7 @@ export const PREMIUM_ECONOMY_POLICY_ROWS: readonly PremiumEconomyPolicyRow[] = [
         id: 'run_currency',
         title: 'Run currency is temporary',
         status: 'shipped',
-        copy: 'Combo shards and power charges are local run systems; they expire or reset by design.',
+        copy: 'Power charges are local run systems; they expire or reset by design.',
         allowedInSaveData: false
     },
     {
@@ -92,12 +92,12 @@ export interface PremiumEconomySurfacePolicy {
 
 export const PREMIUM_ECONOMY_SURFACE_ROWS: readonly PremiumEconomySurfacePolicy[] = [
     {
-        // The run has no currency: shards and charges are the only things it banks, and both
-        // reset with the run. Nothing on this surface can look like a balance.
+        // The run has no currency: power charges are the only thing it banks, and they reset
+        // with the run. Nothing on this surface can look like a balance.
         id: 'run_resources',
         status: 'allowed_gameplay_system',
         paymentLike: false,
-        uiCopy: 'Combo shards and power charges are run-scoped resources, not a purchasable balance.'
+        uiCopy: 'Power charges are run-scoped resources, not a purchasable balance.'
     },
     {
         id: 'cosmetics',

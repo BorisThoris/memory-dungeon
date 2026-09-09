@@ -69,8 +69,8 @@ export const CHAIN_BEAT_COPY = {
         'Every match pops: the whole same-suit clump touching the two tiles you matched breaks away with them, and the partners of those pairs go too, wherever they sit. ' +
         'The chain decides how far the pops ripple. With no chain the partners leave and stop. From chain 3 (Clean) each partner that left takes its own clump - a second wave. ' +
         'Sharp - about two-fifths of the floor\'s pairs of momentum, four at least - runs the reaction until a wave takes nothing. Fever - about two-thirds, seven at least - adds the halo: everything touching the first clump, whatever its suit. ' +
-        'Every pair a break takes adds to the chain\'s momentum. Treasure inside a break spills and pays as if you had matched it. Broken pairs score less than matched ones and give no recall credit - memory still pays best - but they drop combo shards, ' +
+        'Every pair a break takes adds to the chain\'s momentum. Treasure inside a break spills and pays as if you had matched it. Broken pairs score less than matched ones and give no recall credit - memory still pays best - but they ' +
         'clear the floor faster, and a longer ripple pays more. A miss halves the chain and puts the fire out. ' +
         'A break with a shape gets a name on the run line: a ripple that ran on, a drop, a partner taken from across the board, a halo, a treasure spill, a clean sweep of a suit. ' +
-        'Clear the floor with momentum still standing and the end pays out: a gold at Clean and Sharp, a shard and two gold at Fever - Extreme Fever. Never score, never rating.'
+        'Clear the floor with momentum still standing and the floor-end bonus multiplies with it: 1.5x at Clean, 2.5x at Sharp, 5x at Fever - Extreme Fever.'
 } as const;

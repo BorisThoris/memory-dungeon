@@ -103,7 +103,6 @@ import { useGameScreenPowerTileHints } from './useGameScreenPowerTileHints';
 import type { MatchScorePop, MatchScorePopPayoffChip, MismatchScorePop } from '../store/matchScorePop';
 
 import { MUTATOR_CATALOG } from '../../shared/mechanics-encyclopedia';
-import { getChainRewardForecastCues, getChainRewardUrgencyCopy } from '../copy/chainMomentum';
 import { matchScoreFloaterChainCue, matchScoreFloaterLiveRegionText } from '../copy/matchScoreFloater';
 import {
     mismatchFloaterLiveRegionText,
@@ -135,9 +134,7 @@ const MATCH_PAYOFF_CHIP_IDS: readonly MatchScorePopPayoffChip['id'][] = [
     'tier',
     'trait',
     'pickup',
-    'route',
-    'chainReward',
-    'next'
+    'route'
 ];
 
 const MATCH_PAYOFF_CHIP_TONES: readonly MatchScorePopPayoffChip['tone'][] = [
@@ -209,10 +206,6 @@ const getPickupStackToastText = (turnEvent: BoardTurnResolvedEvent): string | nu
         return null;
     }
     const baseText = getFindableToastText(claimedKind);
-    const nextReward = getChainRewardForecastCues(
-        runNonNegativeInteger(turnEvent.announcement.currentStreakAfter),
-        runNonNegativeInteger(turnEvent.announcement.comboShardsAfter)
-    )[0];
     const pickupClaimed = runNonNegativeInteger(turnEvent.findablesClaimedAfter);
     const pickupTotal = runNonNegativeInteger(turnEvent.findablesTotalAfter);
     const pickupProgress =
@@ -220,21 +213,11 @@ const getPickupStackToastText = (turnEvent: BoardTurnResolvedEvent): string | nu
             ? `Pickups ${pickupClaimed}/${pickupTotal}.`
             : null;
 
-    if (nextReward?.urgency === 'next') {
-        return [
-            `Stack prime: ${baseText}.`,
-            `${getChainRewardUrgencyCopy(nextReward)}: ${nextReward.label} in ${nextReward.distanceLabel}.`,
-            pickupProgress
-        ]
-            .filter(Boolean)
-            .join(' ');
-    }
-
     return pickupProgress ? `${baseText}. ${pickupProgress}` : baseText;
 };
 
 type MatchFloaterHeat = 'cashout' | 'prime' | 'score' | 'stack' | 'surge';
-type MismatchFloaterHeat = 'break' | 'lost-reward' | 'recover' | 'risk' | 'trait-surge';
+type MismatchFloaterHeat = 'break' | 'recover' | 'risk' | 'trait-surge';
 
 const getMatchFloaterHeat = (payload: MatchScorePop): MatchFloaterHeat => {
     const impactLabel = payload.impactCue.label.toLowerCase();
@@ -268,9 +251,6 @@ const getMatchFloaterHeat = (payload: MatchScorePop): MatchFloaterHeat => {
 
 const getMismatchFloaterHeat = (payload: MismatchScorePop): MismatchFloaterHeat => {
     const traitRiskCount = matchTraitInteractionTexts(payload.traitInteractionTexts).length;
-    if (payload.brokenChainRewardCue) {
-        return 'lost-reward';
-    }
     if ((payload.brokenChainDepth ?? 0) >= 3) {
         return 'break';
     }
@@ -417,7 +397,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             return [
                 boardFloaterPayload.pickupRewardText,
                 boardFloaterPayload.routeRewardText,
-                boardFloaterPayload.chainRewardText,
                 ...traitTexts
             ].filter((line): line is string => Boolean(line));
         }
@@ -426,8 +405,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const boardFloaterMismatchSignal =
         boardFloaterPayload?.kind === 'miss'
             ? mismatchFloaterSignal(boardFloaterDetailLines, {
-                  brokenChainDepth: boardFloaterPayload.brokenChainDepth,
-                  brokenChainRewardCue: boardFloaterPayload.brokenChainRewardCue
+                  brokenChainDepth: boardFloaterPayload.brokenChainDepth
               })
             : null;
     const boardFloaterMismatchRecovery =
@@ -435,8 +413,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const boardFloaterMismatchNextAction =
         boardFloaterPayload?.kind === 'miss'
             ? mismatchFloaterNextAction(boardFloaterDetailLines, {
-                  brokenChainDepth: boardFloaterPayload.brokenChainDepth,
-                  brokenChainRewardCue: boardFloaterPayload.brokenChainRewardCue
+                  brokenChainDepth: boardFloaterPayload.brokenChainDepth
               })
             : null;
     /**
@@ -480,12 +457,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const boardRecoveryContext =
         boardFloaterPayload?.kind === 'miss' && boardFloaterMismatchNextAction
             ? {
-                  action:
-                      boardFloaterMismatchNextAction.tone === 'lost-reward'
-                          ? 'Save'
-                          : boardFloaterMismatchNextAction.tone === 'risk'
-                            ? 'Stabilize'
-                            : 'Recover',
+                  action: boardFloaterMismatchNextAction.tone === 'risk' ? 'Stabilize' : 'Recover',
                   detail: boardFloaterMismatchRecovery ?? boardFloaterMismatchNextAction.value,
                   impactCue: boardFloaterMismatchNextAction.arcadeCue,
                   tone: boardFloaterMismatchNextAction.tone,
@@ -1088,7 +1060,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         boardTurnEvent: typedBoardTurnEvent,
         gameplayFeedback: typedGameplayFeedback,
         boardLevel: run.board?.level ?? null,
-        comboShards: run.stats.comboShards,
         shuffleCharges: run.shuffleCharges,
         regionShuffleCharges: run.regionShuffleCharges,
         stickyBlockIndex: run.stickyBlockIndex,
@@ -1492,10 +1463,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 debugPeekActive={run.debugPeekActive}
                                 dimmedTileIds={focusDimmedTileIds}
                                 guidedTargetTileIds={onboardingBoardTargetIds}
-                                chainContext={{
-                                    comboShards: run.stats.comboShards,
-                                    currentStreak: run.stats.currentStreak
-                                }}
+                                chainContext={{ currentStreak: run.stats.currentStreak }}
                                 recoveryContext={boardRecoveryContext}
                                 interactive={run.status === 'playing' || gambitThirdPickActive}
                                 mobileCameraMode={cameraViewportMode}

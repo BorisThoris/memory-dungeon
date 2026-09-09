@@ -4,7 +4,6 @@ import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 
 export interface GameplayFeedbackCriticalSnapshot {
-    comboShards: number;
     currentStreak: number;
     currentLevelScore: number;
     totalScore: number;
@@ -31,7 +30,6 @@ export interface GameplayFeedbackCriticalSnapshot {
  * silently drift into different definitions of "player visible".
  */
 export const GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES = {
-    comboShards: 'comboShards',
     currentStreak: 'currentStreak',
     currentLevelScore: 'currentLevelScore',
     totalScore: 'totalScore',
@@ -65,7 +63,6 @@ export const getGameplayFeedbackCriticalSnapshot = (
 ): GameplayFeedbackCriticalSnapshot => {
     const stats = normalizeSessionStats(run.stats);
     return {
-        comboShards: stats.comboShards,
         currentStreak: stats.currentStreak,
         currentLevelScore: stats.currentLevelScore,
         totalScore: stats.totalScore,

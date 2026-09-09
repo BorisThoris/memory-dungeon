@@ -13,9 +13,7 @@ import type { TileTraitInteractionTag } from './tile-trait-rules';
 import { createFlipTileTransition } from './flip-tile-transition';
 import { type FindableKind, type RunState } from './contracts';
 import {
-    GAMEPLAY_CORE_SCHEMA_VERSION,
     gameplayCommandSchema,
-    gameplayEventSchema,
     getGameplayContentDefinition,
     type GameplayCommand,
     type GameplayContentDefinition,
@@ -37,7 +35,6 @@ import {
 import { runNonNegativeInteger } from './run-number-guards';
 import { runStringArray } from './run-array-guards';
 import { normalizeSessionStats } from './session-stats-rules';
-import { hasMutator } from './mutators';
 import { tilesArePairMatch } from './scoring-rules';
 import {
     GAMEPLAY_FEEDBACK_CRITICAL_FIELDS,
@@ -94,22 +91,6 @@ const FLOOR_ADVANCE_SOURCE: GameplaySource = { kind: 'system', id: 'floor_advanc
 const DEBUG_REVEAL_SOURCE: GameplaySource = { kind: 'system', id: 'debug_reveal' };
 const WILD_JOKER_SOURCE: GameplaySource = { kind: 'system', id: 'wild_joker' };
 const BOARD_TURN_SOURCE: GameplaySource = { kind: 'system', id: 'board_turn' };
-const appendReindexedEvents = (
-    commandId: string,
-    sourceEvents: readonly GameplayEvent[],
-    targetEvents: GameplayEvent[]
-): void => {
-    for (const event of sourceEvents) {
-        const sequence = targetEvents.length;
-        targetEvents.push(gameplayEventSchema.parse({
-            ...event,
-            commandId,
-            eventId: `${commandId}:${sequence}`,
-            sequence
-        }));
-    }
-};
-
 const rejectedResult = (
     run: RunState,
     commandId: string,
@@ -611,11 +592,7 @@ const applyFloorAdvanceCommand = (
 };
 
 const findableDefinitionId = (findableKind: FindableKind | null): string | null =>
-    findableKind === 'shard_spark'
-        ? 'findable.shard_spark'
-        : findableKind === 'score_glint'
-            ? 'findable.score_glint'
-            : null;
+    findableKind === 'score_glint' ? 'findable.score_glint' : null;
 
 const resolveBoardTurnFindableReward = (
     run: RunState,
@@ -628,7 +605,6 @@ const resolveBoardTurnFindableReward = (
         return {
             commands: [],
             events: [],
-            comboShardGain: 0,
             scoreGain: 0,
             migrated: false
         };
@@ -661,10 +637,6 @@ const resolveBoardTurnFindableReward = (
     return {
         commands: [],
         events,
-        comboShardGain: events.reduce(
-            (sum, event) => sum + (event.type === 'combo_shard.requested' ? event.amount : 0),
-            0
-        ),
         scoreGain: events.reduce(
             (sum, event) => sum + (event.type === 'score.requested' ? event.amount : 0),
             0
@@ -783,8 +755,6 @@ const applyBoardTurnResolveCommand = (
         triesAfter: statsAfter.tries,
         matchesBefore: statsBefore.matchesFound,
         matchesAfter: statsAfter.matchesFound,
-        comboShardsBefore: statsBefore.comboShards,
-        comboShardsAfter: statsAfter.comboShards,
         currentStreakAfter: statsAfter.currentStreak,
         findablesClaimedBefore: runNonNegativeInteger(run.findablesClaimedThisFloor),
         findablesClaimedAfter: runNonNegativeInteger(nextRun.findablesClaimedThisFloor),

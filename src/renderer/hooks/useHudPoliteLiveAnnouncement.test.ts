@@ -9,7 +9,6 @@ import { createBoardTurnResolvedEventFixture } from '../../shared/test/gameplay-
 import { formatHudActionFeedbackText, useHudPoliteLiveAnnouncement } from './useHudPoliteLiveAnnouncement';
 
 const base = {
-    comboShards: 0,
     shuffleCharges: 0,
     regionShuffleCharges: 0,
     stickyBlockIndex: null as number | null,
@@ -116,7 +115,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
     });
 
     it('classifies compact visual action feedback by gameplay impact', () => {
-        expect(getHudActionFeedbackProfile('Shard spark claimed: +1 combo shard.')).toEqual({
+        expect(getHudActionFeedbackProfile('Score glint claimed: +25 score.')).toEqual({
             label: 'Reward burst',
             tone: 'reward'
         });
@@ -132,13 +131,13 @@ describe('useHudPoliteLiveAnnouncement', () => {
             label: 'Reward burst',
             tone: 'reward'
         });
-        expect(getHudActionFeedbackProfile('Pickup cashout: Shard spark +1 combo shard.')).toEqual({
+        expect(getHudActionFeedbackProfile('Pickup cashout: Score glint +25 score.')).toEqual({
             label: 'Reward burst',
             tone: 'reward'
         });
         expect(
             getHudActionFeedbackProfile(
-                'Trait combo surge: Echo and Stasis resolved. Combo shard gained. Payoff stack: 4 payoffs cashed. Cash stack now.'
+                'Trait combo surge: Echo and Stasis resolved. Payoff stack: 4 payoffs cashed. Cash stack now.'
             )
         ).toEqual({
             label: 'Payoff stack',
@@ -156,7 +155,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             label: 'Chain',
             tone: 'chain'
         });
-        expect(getHudActionFeedbackProfile('Surge hit: x6. Surge tier live. Next reward: Combo prime: x8 +1 shard in 2 matches.')).toEqual({
+        expect(getHudActionFeedbackProfile('Surge hit: x6. Surge tier live.')).toEqual({
             label: 'Chain',
             tone: 'chain'
         });
@@ -193,20 +192,16 @@ describe('useHudPoliteLiveAnnouncement', () => {
         });
         await flushRaf();
 
-        expect(result.current.message).toBe(
-            'Chain started: x3. Reward loop online. Next reward: One-away cashout: x4 +1 shard in 1 match.'
-        );
+        expect(result.current.message).toBe('Chain started: x3. Reward loop online.');
     });
 
-    it('announces surge chain milestones with the next reward target', async () => {
+    it('announces surge chain milestones', async () => {
         const surgeEvent = createBoardTurnResolvedEventFixture({
             commandId: 'chain-surge',
             announcement: {
                 level: 3,
                 currentStreakBefore: 5,
-                currentStreakAfter: 6,
-                comboShardsBefore: 1,
-                comboShardsAfter: 1
+                currentStreakAfter: 6
             }
         });
 
@@ -215,7 +210,6 @@ describe('useHudPoliteLiveAnnouncement', () => {
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 3,
-                    comboShards: 1,
                     boardTurnEvent: p.turnEvent
                 }),
             { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
@@ -228,9 +222,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
         });
         await flushRaf();
 
-        expect(result.current.message).toBe(
-            'Surge hit: x6. Surge tier live. Next reward: Combo prime: x8 +1 shard in 2 matches.'
-        );
+        expect(result.current.message).toBe('Surge hit: x6. Surge tier live.');
     });
 
     it('announces when a meaningful match chain breaks', async () => {
@@ -263,7 +255,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
         // claimed findable, so the announcer no longer infers it from board snapshots.
         const pickupEvent = createBoardTurnResolvedEventFixture({
             commandId: 'pickup-turn',
-            matchedFindableKind: 'shard_spark',
+            matchedFindableKind: 'score_glint',
             announcement: { findablesClaimedBefore: 0, findablesClaimedAfter: 1 }
         });
 
@@ -282,29 +274,26 @@ describe('useHudPoliteLiveAnnouncement', () => {
         });
         await flushRaf();
 
-        expect(result.current.message).toBe('Shard spark claimed: +1 combo shard.');
+        expect(result.current.message).toBe('Score glint claimed: +25 score.');
     });
 
-    it('announces match and resource deltas as one readable action summary', async () => {
+    it('announces a resolved match as one readable action summary', async () => {
         const { result, rerender } = renderHook(
-            (p: { turnEvent: BoardTurnResolvedEvent | null; shards: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 2,
-                    boardTurnEvent: p.turnEvent,
-                    comboShards: p.shards
+                    boardTurnEvent: p.turnEvent
                 }),
-            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null, shards: 0 } }
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
         );
 
         await act(async () => {
-            rerender({ turnEvent: matchTurn('summary-turn'), shards: 1 });
+            rerender({ turnEvent: matchTurn('summary-turn') });
         });
         await flushRaf();
 
-        expect(result.current.message).toBe(
-            'Match resolved. 1/4 pairs cleared. Combo shard gained. 1 available.'
-        );
+        expect(result.current.message).toBe('Match resolved. 1/4 pairs cleared.');
         expect(result.current.priority).toBe('info');
     });
 
@@ -356,66 +345,29 @@ describe('useHudPoliteLiveAnnouncement', () => {
         const feedback: GameplayFeedbackPresentation = {
             audioCategory: 'match-resolution',
             commandId: 'reward-1',
-            cue: 'findable.shard_spark.matched',
+            cue: 'findable.score_glint.matched',
             eventId: 'reward-1:2',
-            message: 'Bonus Shards added one combo shard.',
+            message: 'Score Glint requested 25 score through match resolution.',
             priority: 'info',
-            source: { kind: 'findable', id: 'shard_spark' },
+            source: { kind: 'findable', id: 'score_glint' },
             tone: 'reward'
         };
         const { result, rerender } = renderHook(
-            (p: { feedback: GameplayFeedbackPresentation | null; shards: number }) =>
+            (p: { feedback: GameplayFeedbackPresentation | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    gameplayFeedback: p.feedback ? [p.feedback] : [],
-                    comboShards: p.shards
+                    gameplayFeedback: p.feedback ? [p.feedback] : []
                 }),
-            { initialProps: { feedback: null as GameplayFeedbackPresentation | null, shards: 0 } }
+            { initialProps: { feedback: null as GameplayFeedbackPresentation | null } }
         );
 
         await act(async () => {
-            rerender({ feedback, shards: 1 });
+            rerender({ feedback });
         });
         await flushRaf();
 
-        expect(result.current.message).toBe('Bonus Shards added one combo shard.');
+        expect(result.current.message).toBe('Score Glint requested 25 score through match resolution.');
         expect(result.current.message).not.toContain('available');
-    });
-
-    it('summarizes stacked reward cashouts in the live-region action summary', async () => {
-        const { result, rerender } = renderHook(
-            (p: { turnEvent: BoardTurnResolvedEvent | null; shards: number; gold: number }) =>
-                useHudPoliteLiveAnnouncement({
-                    ...base,
-                    boardLevel: 2,
-                    boardTurnEvent: p.turnEvent,
-                    comboShards: p.shards
-                }),
-            {
-                initialProps: {
-                    turnEvent: null as BoardTurnResolvedEvent | null,
-                    shards: 0,
-                    gold: 0
-                }
-            }
-        );
-
-        await act(async () => {
-            rerender({
-                turnEvent: matchTurn('cashout-turn', {
-                    currentStreakBefore: 3,
-                    currentStreakAfter: 4,
-                    matchedTraitKinds: ['echo', 'stasis']
-                }),
-                shards: 1,
-                gold: 2
-            });
-        });
-        await flushRaf();
-
-        expect(result.current.message).toBe(
-            'Match resolved. 1/4 pairs cleared. Trait combo surge: Echo and Stasis resolved. Combo shard gained. 1 available. Cashout hit: 2 payoffs paid together. Keep the chain live.'
-        );
     });
 
     it('announces matched tile trait effects with the resolved match', async () => {
@@ -720,25 +672,6 @@ describe('useHudPoliteLiveAnnouncement', () => {
         expect(result.current.message).toBe('No match. Recover with a safe match. Chain reset.');
         expect(result.current.message).not.toMatch(/\b(life|lives|lost|penalty|punish)\b/i);
         expect(result.current.priority).toBe('info');
-    });
-
-    it('announces shard spending deltas', async () => {
-        const { result, rerender } = renderHook(
-            (p: { shards: number; gold: number }) =>
-                useHudPoliteLiveAnnouncement({
-                    ...base,
-                    boardLevel: 2,
-                    comboShards: p.shards
-                }),
-            { initialProps: { shards: 3, gold: 8 } }
-        );
-
-        await act(async () => {
-            rerender({ shards: 1, gold: 5 });
-        });
-        await flushRaf();
-
-        expect(result.current.message).toBe('2 combo shards spent. 1 available.');
     });
 
     it('stays silent when a turn changes none of the announced counters', async () => {

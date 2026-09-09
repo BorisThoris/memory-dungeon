@@ -21,7 +21,6 @@ import {
     canSwapHiddenTiles,
     canShuffleBoard
 } from './board-power-availability';
-import { hasMutator } from './mutators';
 import { tileIsCompletionSafeStrayTarget } from './board-power-targeting';
 import { clearResolveState } from './run-timer-rules';
 import { normalizeSessionStats } from './session-stats-rules';

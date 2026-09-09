@@ -23,7 +23,7 @@ Hooks in `src/shared/game.ts` consult `activeMutators` via `hasMutator` / `src/s
 - `silhouette_twist` — silhouette / reduced-face styling during play (CSS / materials); **rules:** flat match-score penalty per match.
 - `n_back_anchor` — every 2 successful matches, surface an “anchor” pair key for recall pressure (`nBackAnchorPairKey` on `RunState`).
 - `distraction_channel` — optional numeric HUD (settings `distractionChannelEnabled`, **off** by default; no mandatory audio); **rules:** flat match-score penalty per match while the mutator is active (`getPresentationMutatorMatchPenalty` in `game.ts`; HUD is cosmetic).
-- `findables_floor` — seeded pickup pairs carry `findableKind` on tiles; matching claims the reward (a combo shard or score); `applyDestroyPair` clears the marker without reward (`findablesClaimedThisFloor` on `RunState`).
+- `findables_floor` — seeded pickup pairs carry `findableKind` on tiles; matching claims the reward (score); `applyDestroyPair` clears the marker without reward (`findablesClaimedThisFloor` on `RunState`).
 - `shifting_spotlight` — `wardPairKey` / `bountyPairKey` on `BoardState` (distinct from `cursedPairKey` “match last” objective). Bounty adds `SHIFTING_BOUNTY_MATCH_BONUS`, ward subtracts `SHIFTING_WARD_MATCH_PENALTY` (match score floored at 0). Keys re-roll from unresolved pairs after each two-flip resolution (match or miss), gambit resolution, and `applyDestroyPair` (`shiftingSpotlightNonce` on `RunState`).
 - `magpie_thief` — every third miss re-hides a pair the player already cleared somewhere they have not looked; score keeps the points; a held guard token scares it off (`chunk-break-rules.ts` / `magpie` rules).
 

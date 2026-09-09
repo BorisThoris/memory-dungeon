@@ -1,11 +1,7 @@
 import type { BoardState, RunState } from './contracts';
 import { getFloorClearLevelResultTags } from './secondary-objectives';
 import { calculateRating } from './scoring-rules';
-import {
-    applyMomentumBonusShards,
-    EXTREME_FEVER_BONUS_TAG,
-    getFloorClearMomentumBonus
-} from './floor-clear-momentum-bonus-rules';
+import { EXTREME_FEVER_BONUS_TAG, getFloorClearMomentumBonus } from './floor-clear-momentum-bonus-rules';
 import {
     calculateFloorClearBonus,
     calculateFloorClearScore,
@@ -105,7 +101,6 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
         feverFloorsThisRun: runNonNegativeInteger(run.feverFloorsThisRun) + (floorChainTier === 'fever' ? 1 : 0),
         stats: {
             ...stats,
-            comboShards: applyMomentumBonusShards(stats.comboShards, momentumBonus),
             totalScore,
             bestScore,
             currentLevelScore: scoreGained,

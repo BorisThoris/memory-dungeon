@@ -8,8 +8,7 @@ import type { GameplayFeedbackPresentation } from '../store/gameplayFeedbackAdap
 import {
     tileTraitKindLabels,
     joinReadableList,
-    pluralize,
-    resourceDeltaCopy
+    pluralize
 } from '../copy/hudActionFeedback';
 
 export { formatHudActionFeedbackText, getFindableToastText } from '../copy/hudActionFeedback';
@@ -24,31 +23,6 @@ type HudAnnouncePriority = 'info' | 'error';
 
 const PRIORITY_RANK: Record<HudAnnouncePriority, number> = { error: 2, info: 1 };
 
-const payoffIntensityAnnouncementLine = ({
-    chainMatchStreak,
-    comboShardDelta,
-    traitMatchCount
-}: {
-    chainMatchStreak: number;
-    comboShardDelta: number;
-    traitMatchCount: number;
-}): string | null => {
-    const lanes = [
-        comboShardDelta > 0 ? 'combo shard' : null,
-        traitMatchCount >= 2 ? 'trait surge' : null
-    ].filter((lane): lane is string => lane !== null);
-    if (lanes.length < 2) {
-        return null;
-    }
-    if (lanes.length >= 4) {
-        return `Payoff stack: ${lanes.length} payoffs cashed. Cash stack now.`;
-    }
-    if (chainMatchStreak >= 3) {
-        return `Cashout hit: ${lanes.length} payoffs paid together. Keep the chain live.`;
-    }
-    return `Reward cashout: ${lanes.length} payoffs paid together.`;
-};
-
 interface HudPoliteLiveAnnouncementInput {
     /**
      * Every feedback event the journal has produced, in order. A list rather than the latest one:
@@ -56,7 +30,6 @@ interface HudPoliteLiveAnnouncementInput {
      * — and announcing only the last of them dropped the rest on the floor.
      */
     gameplayFeedback?: readonly GameplayFeedbackPresentation[];
-    comboShards: number;
     shuffleCharges?: number;
     regionShuffleCharges?: number;
     stickyBlockIndex?: number | null;
@@ -103,7 +76,6 @@ const normalizeRecallFocusForAnnouncement = (focus: number, max: number): { focu
 export const useHudPoliteLiveAnnouncement = ({
     boardTurnEvent = null,
     gameplayFeedback = EMPTY_FEEDBACK,
-    comboShards,
     shuffleCharges = 0,
     regionShuffleCharges = 0,
     stickyBlockIndex = null,
@@ -122,7 +94,6 @@ export const useHudPoliteLiveAnnouncement = ({
     const [messagePriority, setMessagePriority] = useState<HudAnnouncePriority>('info');
     const actionSnapRef = useRef<{
         level: number;
-        comboShards: number;
         shuffleCharges: number;
         regionShuffleCharges: number;
         stickyBlockIndex: number | null;
@@ -304,7 +275,6 @@ export const useHudPoliteLiveAnnouncement = ({
 
         const nextSnap = {
             level: boardLevel,
-            comboShards,
             shuffleCharges,
             regionShuffleCharges,
             stickyBlockIndex,
@@ -323,13 +293,6 @@ export const useHudPoliteLiveAnnouncement = ({
         }
 
         const lines: string[] = newGameplayFeedback.map((item) => item.message);
-        /*
-         * `newGameplayFeedback` used to be null-or-one, so `!newGameplayFeedback` read as "the
-         * core said nothing about this turn". An empty array is truthy, so the checks below say
-         * that in terms of length instead — silently, they had stopped suppressing anything.
-         */
-        const coreSaidNothing = newGameplayFeedback.length === 0;
-        const shardDelta = comboShards - snap.comboShards;
         const shuffleChargeDelta = shuffleCharges - snap.shuffleCharges;
         const regionShuffleChargeDelta = regionShuffleCharges - snap.regionShuffleCharges;
         const stasisLocked = stickyBlockIndex !== null && snap.stickyBlockIndex !== stickyBlockIndex;
@@ -411,26 +374,9 @@ export const useHudPoliteLiveAnnouncement = ({
             );
         }
 
-        if (shardDelta > 0 && coreSaidNothing) {
-            lines.push(`${resourceDeltaCopy(shardDelta, 'Combo shard', 'combo shard', 'gained')}. ${comboShards} available.`);
-        } else if (shardDelta < 0) {
-            lines.push(`${resourceDeltaCopy(shardDelta, 'Combo shard', 'combo shard', 'spent')}. ${comboShards} available.`);
-        }
-
-        if (matchDelta > 0) {
-            const payoffIntensityLine = payoffIntensityAnnouncementLine({
-                chainMatchStreak: turnFacts?.currentStreakAfter ?? 0,
-                comboShardDelta: shardDelta,
-                traitMatchCount: traitMatchLabels.length
-            });
-            if (payoffIntensityLine) {
-                lines.push(payoffIntensityLine);
-            }
-        }
-
         if (lines.length > 0) {
             queuePoliteAnnouncement(lines.join(' '), {
-                dedupeKey: `action:${boardLevel}:${comboShards}:${shuffleCharges}:${regionShuffleCharges}:${stickyBlockIndex ?? 'none'}:${normalizedRecallFocusValue}:${normalizedRecallFocusMax}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${boardTurnEvent?.eventId ?? 'no-turn'}:${newGameplayFeedback.map((item) => item.eventId).join(',') || 'legacy'}`,
+                dedupeKey: `action:${boardLevel}:${shuffleCharges}:${regionShuffleCharges}:${stickyBlockIndex ?? 'none'}:${normalizedRecallFocusValue}:${normalizedRecallFocusMax}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${boardTurnEvent?.eventId ?? 'no-turn'}:${newGameplayFeedback.map((item) => item.eventId).join(',') || 'legacy'}`,
                 priority: newGameplayFeedback.some((item) => item.priority === 'error') ? 'error' : 'info'
             });
         }
@@ -442,7 +388,6 @@ export const useHudPoliteLiveAnnouncement = ({
     }, [
         announceGameplayFeedbackBatch,
         boardLevel,
-        comboShards,
         unannouncedGameplayFeedback,
         queuePoliteAnnouncement,
         regionShuffleCharges,

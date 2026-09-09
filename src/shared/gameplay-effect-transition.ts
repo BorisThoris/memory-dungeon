@@ -182,9 +182,6 @@ export const applyGameplayDefinitionTransition = (
                 }
                 break;
             }
-            case 'combo_shard.request':
-                writeEvent({ type: 'combo_shard.requested', amount: effect.amount });
-                break;
             case 'score.grant': {
                 const stats = normalizeSessionStats(nextRun.stats);
                 const totalBefore = runNonNegativeInteger(stats.totalScore);

@@ -118,7 +118,6 @@ const floorBandFor = (floor: number): BalanceSimulationFloorBand =>
 export const BALANCE_SIMULATION_FINDABLE_KINDS: readonly FindableKind[] = FINDABLE_REWARD_ROWS.map((row) => row.kind);
 
 const emptyFindableKindCounts = (): Record<FindableKind, number> => ({
-    shard_spark: 0,
     score_glint: 0
 });
 

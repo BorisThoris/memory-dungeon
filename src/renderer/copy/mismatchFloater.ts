@@ -7,10 +7,6 @@ import { runNonNegativeInteger } from '../../shared/run-number-guards';
 
 type MismatchFloaterContext = {
     brokenChainDepth?: number;
-    brokenChainRewardCue?: {
-        distanceLabel: string;
-        label: string;
-    };
 };
 
 const normalizeBrokenChainDepth = (context: MismatchFloaterContext = {}): number =>
@@ -57,7 +53,7 @@ export function mismatchFloaterSignal(
 type MismatchFloaterNextAction = {
     arcadeCue: string;
     label: string;
-    tone: 'recover' | 'risk' | 'lost-reward';
+    tone: 'recover' | 'risk';
     value: string;
 };
 
@@ -67,14 +63,6 @@ export function mismatchFloaterNextAction(
     context: MismatchFloaterContext = {}
 ): MismatchFloaterNextAction {
     const brokenChainDepth = normalizeBrokenChainDepth(context);
-    if (brokenChainDepth >= 2 && context.brokenChainRewardCue) {
-        return {
-            arcadeCue: 'Save cashout',
-            label: 'Save streak',
-            value: `Rebuild toward ${context.brokenChainRewardCue.label}`,
-            tone: 'lost-reward'
-        };
-    }
     if (brokenChainDepth >= 2) {
         return {
             arcadeCue: 'Rebuild chase',

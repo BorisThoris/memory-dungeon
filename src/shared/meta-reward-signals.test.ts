@@ -46,6 +46,7 @@ describe('REG-011 meta reward signals', () => {
     it('normalizes malformed inventory stats before building copy', () => {
         const run = {
             ...createNewRun(0),
+            activeMutators: Number.NaN as unknown as RunState['activeMutators'],
             stats: Number.NaN as unknown as RunState['stats']
         };
 
@@ -54,7 +55,7 @@ describe('REG-011 meta reward signals', () => {
             throw new Error('Expected inventory build and run progress reward signals');
         }
 
-        expect(buildValue.body).toContain('0 shard(s)');
+        expect(buildValue.body).toContain('0 active mutator(s)');
         expect(runProgress.body).toBe('0 score.');
         expect(`${buildValue.body} ${runProgress.body}`).not.toMatch(/NaN|Infinity/);
     });

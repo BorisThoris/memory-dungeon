@@ -42,12 +42,6 @@ describe('mismatchFloaterRecoveryHint', () => {
 
 describe('mismatchFloaterNextAction', () => {
     it('points at the lost reward first, then the broken chain, then the route', () => {
-        expect(
-            mismatchFloaterNextAction([], {
-                brokenChainDepth: 4,
-                brokenChainRewardCue: { distanceLabel: '2 matches', label: 'x6 +1 shard' }
-            })
-        ).toMatchObject({ tone: 'lost-reward', value: 'Rebuild toward x6 +1 shard' });
         expect(mismatchFloaterNextAction([], { brokenChainDepth: 3 })).toMatchObject({ tone: 'risk' });
         expect(mismatchFloaterNextAction(['Heavy: extra try'])).toMatchObject({
             tone: 'risk',

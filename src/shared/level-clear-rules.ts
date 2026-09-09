@@ -164,7 +164,6 @@ export const createFloorClearLevelResult = ({
     ...getFloorClearStatLevelResultFields(run),
     chainMomentumAtClear: momentumBonus.momentum > 0 ? momentumBonus.momentum : undefined,
     momentumBonusTier: momentumBonus.tier !== 'none' ? momentumBonus.tier : undefined,
-    momentumBonusShards: momentumBonus.shards > 0 ? momentumBonus.shards : undefined,
     parTurns,
     turnsTaken,
     playScore: runNonNegativeInteger(playScore),

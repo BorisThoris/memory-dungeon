@@ -64,14 +64,11 @@ describe('GLD-FB long-run feedback read models', () => {
             recallFocus: 2,
             recallMatchesThisFloor: 1,
             recallBonusScoreThisFloor: 16,
-            stats: {
-                ...createNewRun(0, { runSeed: 91_002, activeMutators: [] }).stats,
-                comboShards: 1
-            }
+            stats: createNewRun(0, { runSeed: 91_002, activeMutators: [] }).stats
         };
 
         expect(getInRunCauseRows(run).map((row) => row.id)).toEqual(
-            expect.arrayContaining(['findables-claimed', 'recall-focus', 'economy'])
+            expect.arrayContaining(['findables-claimed', 'recall-focus'])
         );
         expect(getInRunCauseRows(run).map((row) => row.id)).not.toContain('objective-progress');
         expect(getInRunCauseRows(run).map((row) => row.detail).join(' ')).toContain('archive finds');
@@ -154,8 +151,7 @@ describe('GLD-FB long-run feedback read models', () => {
 
         expect(getFindableDistributionRows(run)).toEqual(
             expect.arrayContaining([
-                expect.objectContaining({ id: 'shard_spark', spawnWeight: 50, targetShare: 0.5, totalThisFloor: 0 }),
-                expect.objectContaining({ id: 'score_glint', spawnWeight: 50, targetShare: 0.5, totalThisFloor: 1 })
+                expect.objectContaining({ id: 'score_glint', spawnWeight: 100, targetShare: 1, totalThisFloor: 1 })
             ])
         );
     });

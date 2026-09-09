@@ -160,7 +160,7 @@ export const getInventoryRewardSignals = (run: RunState | null): MetaRewardSigna
             screen: 'inventory',
             kind: 'progress',
             title: `${mutatorCount} active mutator(s) shaping this build`,
-            body: `${mutatorCount} active mutator(s) | ${stats.comboShards} shard(s).`,
+            body: `${mutatorCount} active mutator(s) shaping the next floor.`,
             cta: 'Use this snapshot to plan the next floor.'
         },
         {

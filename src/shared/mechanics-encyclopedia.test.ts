@@ -37,7 +37,6 @@ describe('mechanics-encyclopedia', () => {
     it('REG-064 glossary locks preferred player-facing labels for recurring mechanics', () => {
         expect(MECHANICS_GLOSSARY.find((row) => row.id === 'perfect_memory')?.preferredLabel).toBe('Perfect Memory');
         expect(MECHANICS_GLOSSARY.find((row) => row.id === 'recall_focus')?.preferredLabel).toBe('Recall Focus');
-        expect(MECHANICS_GLOSSARY.find((row) => row.id === 'combo_shards')?.avoidLabels).toContain('paid shards');
         expect(MECHANICS_GLOSSARY.every((row) => row.shortDefinition.length > 0)).toBe(true);
         expect(glossaryTermById('missing_term' as Parameters<typeof glossaryTermById>[0]).id).toBe('mutators');
     });
@@ -74,7 +73,7 @@ describe('mechanics-encyclopedia', () => {
     });
 
     it('names no part of the life economy Gen 183 removed', () => {
-        // Lives, guard tokens, the first-mismatch grace, chain heal, the shard-to-life conversion,
+        // Lives, guard tokens, the first-mismatch grace, chain heal, the shard-to-life conversion and (Gen 184) the shard itself,
         // the clear-life bonus and the score parasite are gone from the rules (docs/REMOVED_LIVES.md).
         // No reference copy may describe them as if a player could still meet them; the glossary
         // has no term for them and the sections have no entry for them.
@@ -185,7 +184,7 @@ describe('mechanics-encyclopedia', () => {
         expect(schedule?.description).toContain('featured objective');
         expect(schedule?.description).toContain('objective streak');
         expect(ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS.find((topic) => topic.id === 'pickup_findables')?.description)
-            .toContain('two kinds');
+            .toContain('one kind');
     });
 
     it('keeps Codex coverage for power scope, assists, and presentation mutators', () => {

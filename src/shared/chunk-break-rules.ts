@@ -133,7 +133,6 @@ export interface ChunkBreakResult {
     /** Every tile id that left the board, both halves of each pair. */
     brokenTileIds: string[];
     score: number;
-    comboShardGain: number;
     /** A findable pair that was inside the chunk and went with it; the turn awards it. */
     claimedFindableKind: FindableKind | null;
     /** Pairs that dropped because the break left their suit with too few to hold them; also in `brokenPairKeys`. */
@@ -272,12 +271,6 @@ export const chunkBreakScore = (level: number, pairs: number, tier: ChainTier, w
     return Math.floor(chunkScorePerPair(level) * count * CHAIN_MULT[tier] * waveMult(waves));
 };
 
-/** Shards a chunk drops: one per two pairs, or one per pair in Fever. */
-export const chunkBreakComboShards = (pairs: number, tier: ChainTier): number => {
-    const count = runNonNegativeInteger(pairs);
-    return tier === 'fever' ? count : Math.floor(count / 2);
-};
-
 /**
  * Pairs a break feeds the ladder.
  *
@@ -352,7 +345,6 @@ export const resolveChunkBreak = ({
         brokenPairKeys: [],
         brokenTileIds: [],
         score: 0,
-        comboShardGain: 0,
         claimedFindableKind: null,
         droppedPairKeys: [],
         waves: 0,
@@ -482,7 +474,6 @@ export const resolveChunkBreak = ({
         brokenPairKeys,
         brokenTileIds,
         score: chunkBreakScore(board.level, brokenPairKeys.length, tier, Math.max(1, waves)),
-        comboShardGain: chunkBreakComboShards(brokenPairKeys.length, tier),
         claimedFindableKind,
         droppedPairKeys,
         waves,

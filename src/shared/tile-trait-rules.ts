@@ -22,7 +22,7 @@ import { describeTraitMark, tileTraitMark } from './tile-trait-marks';
 /*
  * Four traits. Nine shipped; Mirror, Cursed, Sealed, Volatile and Drift were cut in the trait
  * triage (thesis §32.4) because each of them was a rule the player had to hold in memory that paid
- * in a resource the game no longer builds around - guard tokens, combo shards, shuffle charges -
+ * in a resource the game no longer builds around - guard tokens, combo shards (both gone since), shuffle charges -
  * or punished a miss in a way the miss itself already did. What is left is one trait per idea:
  * Echo pays in information, Heavy pays in score and costs a try, Conduit pays for neighbours,
  * Stasis takes a tile off the table for a turn.

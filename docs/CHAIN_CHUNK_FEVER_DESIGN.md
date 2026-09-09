@@ -82,7 +82,7 @@ The streak is renamed in player-facing copy to the **chain**, and it gets named 
 | 0–2 | — | **the pop**: two steps into the clump touching the match, pairs whose both halves are inside it |
 | 3+ | **Clean** | **the partner reach**: a pair goes when the pop has either half, so partners across the board leave too |
 | max(4, 40% of the floor's pairs) | **Sharp** | the whole clump, and **the ripple**: the reaction runs from every partner until a wave takes nothing |
-| max(7, half the floor's pairs) | **Fever** | Sharp + the first clump's halo + celebration + shard burst |
+| max(7, half the floor's pairs) | **Fever** | Sharp + the first clump's halo + celebration (the shard burst went with the shard in Gen 184) |
 
 Gen 168 moved the ripple from Clean to Sharp and bounded the wave at two steps, because measured at each tier's own rung the old ladder paid 1.67 / 1.91 / 1.92 / 3.34 pairs per match: Sharp was worth one hundredth of a pair over Clean, and the whole payoff was Fever's halo, which is width rather than depth. Clean had been given the reaction *and* the partner reach at once, and on a four-and-a-half-pair suit two waves swept everything there was, so Sharp arrived at a clump that was already gone. One rung, one thing: Clean buys reach across the board, Sharp buys the reaction. With one suit per six pairs behind it (§10) the ladder reads 1.18 / 2.32 / 2.71 / 3.71, and `yarn sim:pop --check` bands both the spread and the thinnest rung so it cannot flatten again.
 
@@ -161,7 +161,7 @@ Every rule below is a pure function in `src/shared/`, reachable from the real tu
 | Region finder + break rule | new `chunk-break-rules.ts` (`findSuitRegion`, `resolveChunkBreak`) |
 | Turn integration | `turn-match-board-resolution-rules.ts` after the claim, before enemy damage; enemy damage reads the chunk |
 | Event | `board.chunk_broken` on `gameplay-core-contracts.ts`; facts on `board.turn_resolved` (`chunkPairsBefore/After`, `chainTier`) |
-| Scoring | `turn-match-score-rules.ts` cascade score; `combo-shard-rules.ts` shard grant |
+| Scoring | `turn-match-score-rules.ts` cascade score (the `combo-shard-rules.ts` shard grant went in Gen 184) |
 | Suit on the back | `tileTextures.ts` back raster variant per suit; DOM fallback `.cardFaceBack[data-suit]` |
 | Shatter wave | `tileShatter.ts` → staggered shatter by Manhattan distance from the match |
 | Announcement | `boardTurnAnnouncement.ts` chunk/fever lines; copy in `src/renderer/copy/chainBeat.ts` |
