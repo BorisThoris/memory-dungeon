@@ -28,12 +28,27 @@ export const CHAIN_BEAT_COPY = {
             : `Chain ${chain}, ${CHAIN_TIER_LABELS[tier]} break. ${pairs} more ${
                   pairs === 1 ? 'pair' : 'pairs'
               } of the same suit broke away with that match and left the board.`,
-    /** The clump read on a focused tile: what it stands in, and what a match there pops. */
-    clumpRead: (suitName: string, size: number, pairsSharpWouldTake: number): string =>
-        `${suitName} clump of ${size}` +
-        (pairsSharpWouldTake > 0
-            ? ` — a match here pops ${pairsSharpWouldTake} more ${pairsSharpWouldTake === 1 ? 'pair' : 'pairs'}.`
-            : '.'),
+    /**
+     * The clump read on a considered tile: what it stands in, what a match there pops **now**, and
+     * what the next rung would add. The second half is the hold decision (thesis §30.3b) said on
+     * the tile the player is deciding about: spend it here for this, or hold it for that.
+     */
+    clumpRead: (
+        suitName: string,
+        size: number,
+        now: { pairs: number },
+        next: { tier: ChainTier; addedPairs: number; pairs: number } | null
+    ): string => {
+        const pairs = (count: number): string => `${count} ${count === 1 ? 'pair' : 'pairs'}`;
+        const nowLine = now.pairs > 0 ? `this match pops ${pairs(now.pairs)}` : 'this match pops nothing';
+        const nextLine =
+            next == null
+                ? ''
+                : next.addedPairs > 0
+                  ? `; ${pairs(next.pairs)} at ${CHAIN_TIER_LABELS[next.tier]}`
+                  : `; ${CHAIN_TIER_LABELS[next.tier]} reaches no further here`;
+        return `${suitName} clump of ${size} — ${nowLine}${nextLine}.`;
+    },
     /**
      * The style line: what made this break worth a name. Peggle labels the shot ("Long shot",
      * "Lucky bounce") so the player can own it; one line, only the tags that apply, or nothing.

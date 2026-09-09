@@ -7145,12 +7145,20 @@ tried to give it.
 
 | ID | Task | Depends on | Acceptance | Risk |
 |---|---|---|---|---|
-| T3.1 | Tier-aware aim guide (§29.2) | T1.7 | Hover and long-press both work | Low |
-| T3.2 | Next-tier ghost overlay (§30.3b) | T3.1 | The delta is visible on the board | Med |
+| T3.1 | Tier-aware aim guide (§29.2) | T1.7 | Hover and long-press both work | Low — **done, Gen 185** |
+| T3.2 | Next-tier ghost overlay (§30.3b) | T3.1 | The delta is visible on the board | Med — **done, Gen 185** |
 | T3.3 | Rung value pips in the meter (§30.3a) | — | Each tick carries weight | Low |
 | T3.4 | Held-pair marker, capped (§30.3c) | — | Changes no rules; mistake rate check | Med — see E.6 |
 | T3.5 | Score built term by term (§40.4) | T2.5 | The multiplier is watched being constructed | Low |
-| T3.6 | Show that a pair's halves are far apart | T3.1 | Derived from trace §68(b) | Med |
+| T3.6 | Show that a pair's halves are far apart | **T3.4** | Derived from trace §68(b) | Med — see the note below |
+
+**T3.6 depends on T3.4, not T3.1 (found building Gen 185).** A pair's span is a fact about the
+hidden *symbol* layout, not about the suits on the backs, so putting it on a tile the player has not
+found tells them where not to look - it hands back part of the memory game the clump read never
+touches. In trace §68(b) the player *knew* both halves, because it was a held pair; the interface
+was only failing to reflect something they already had. Nothing in the run state knows a pair is
+known until the held-pair marker exists. So the span belongs on the marker: mark the pair, and the
+marker says whether it is worth holding.
 
 ## G.4 Phase 4 — feel
 
@@ -7211,8 +7219,9 @@ T1.7 ─┬─ T1.8 ── T1.9 ── T1.10 ── T1.11 ─┬── T1.12 ─
       ├─ T2.3 ── T2.4
       ├─ T2.5 ── T2.7
       ├─ T2.11
-      └─ T3.1 ─┬─ T3.2
-               └─ T3.6
+      └─ T3.1 ─── T3.2
+
+  T3.4 ─── T3.6
 ```
 
 **T1.7 is the critical path.** Everything of consequence depends on board generation no longer

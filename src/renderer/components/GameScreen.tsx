@@ -56,7 +56,7 @@ import { describePassAndPlayChainLost } from '../../shared/pass-and-play-rules';
 import { floorClearResidentLine } from '../copy/floorCurioBeat';
 import { pickFloorCurio } from '../../shared/floor-curio-rules';
 import { canGreetFloorCurio } from '../../shared/floor-curio-greeting-rules';
-import { runChainTier, type ChainTier } from '../../shared/chain-tier-rules';
+import { chainMomentum, runChainTier, type ChainTier } from '../../shared/chain-tier-rules';
 import { GAMEPAD_SHORTCUT_ROWS, GAMEPLAY_SHORTCUT_ROWS } from '../keyboard/gameplayShortcuts';
 import { useGamepadConnected } from '../hooks/useGamepadNavigation';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
@@ -1463,7 +1463,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 debugPeekActive={run.debugPeekActive}
                                 dimmedTileIds={focusDimmedTileIds}
                                 guidedTargetTileIds={onboardingBoardTargetIds}
-                                chainContext={{ currentStreak: run.stats.currentStreak }}
+                                chainContext={{
+                                    currentStreak: run.stats.currentStreak,
+                                    floorCurioId: run.floorCurioId ?? null,
+                                    momentum: chainMomentum(run.stats.currentStreak, run.chunkPairsThisChain)
+                                }}
                                 recoveryContext={boardRecoveryContext}
                                 interactive={run.status === 'playing' || gambitThirdPickActive}
                                 mobileCameraMode={cameraViewportMode}

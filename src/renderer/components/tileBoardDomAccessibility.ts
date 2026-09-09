@@ -2,7 +2,7 @@ import type { BoardState, RunStatus, Tile } from '../../shared/contracts';
 import { getFindableRewardText } from '../../shared/findables';
 import { getPairProximityGridDistance } from '../../shared/pairProximityHint';
 import { getTileSuit } from '../../shared/tile-suit-rules';
-import { getClumpRead } from '../../shared/clump-read-rules';
+import { getClumpRead, type ClumpReadContext } from '../../shared/clump-read-rules';
 import { DECOY_PAIR_KEY } from '../../shared/tile-identity';
 import {
     getTileSwapTraitPreviewLines,
@@ -201,7 +201,9 @@ export const getTileAriaLabel = (
         rewardHotTileIds?: ReadonlySet<string>;
         selectedFollowupTileIds?: ReadonlySet<string>;
         targetTileIds?: ReadonlySet<string>;
-    } = {}
+    } = {},
+    /** The aim guide's context, so a screen reader is told the same tier read the board draws. */
+    clumpReadContext: ClumpReadContext = { chain: 1, run: { floorCurioId: null } }
 ): string => {
     const base = faceUp
         ? tile.pairKey === DECOY_PAIR_KEY
@@ -211,7 +213,7 @@ export const getTileAriaLabel = (
     // The suit is the one thing a face-down tile shows, so it is the one thing its name says.
     // A hidden tile also says how big a clump it stands in: the read a sighted player gets from the
     // outline on the board, and the number the chain is planned against.
-    const clump = !faceUp && tile.state === 'hidden' ? getClumpRead(board, tile.id) : null;
+    const clump = !faceUp && tile.state === 'hidden' ? getClumpRead(board, tile.id, clumpReadContext) : null;
     const suitNote = tile.suit && tile.state !== 'matched' && tile.state !== 'removed'
         ? clump && clump.size > 1
             ? ` ${getTileSuit(tile.suit).name} suit, clump of ${clump.size}.`

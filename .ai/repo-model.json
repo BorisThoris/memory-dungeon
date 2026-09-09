@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2425,
     "codeFileCount": 866,
-    "exportedSymbolCount": 2672,
+    "exportedSymbolCount": 2675,
     "contentItemCount": 12,
     "mechanicCount": 45,
     "stateFieldCount": 81,
-    "relationshipCount": 6820
+    "relationshipCount": 6828
   },
   "inventory": [
     {
@@ -267,8 +267,8 @@
     {
       "path": "docs/CHAIN_CHUNK_FEVER_DESIGN.md",
       "category": "documentation",
-      "bytes": 64743,
-      "sha256": "76747225f359abbdbe2ef15473d2612d03fc4eacffdb5fd278852f37b6a1f85e"
+      "bytes": 65734,
+      "sha256": "c5d4b15e9267e41a856ace448280d4a1bf2546b97173dab51430221517420b75"
     },
     {
       "path": "docs/COLLECTIBLE_SYSTEM.md",
@@ -742,7 +742,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 394,
-      "sha256": "a673be7024fbbc5c847c97baefe824017fca647134159681d3dc32e35e4d9c2f"
+      "sha256": "1454e3669259977cf36781055bfd286165ac072722d2649c10348a80d176f123"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2308,13 +2308,13 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33473,
-      "sha256": "dc36b448213a070eccd034b2e2bb5a8de97aab3543e43313780b80f5a45880da"
+      "sha256": "8a259e4166dd3f5168d8902081589a36986f2969ccb1d0a35d1dc72e77bc003f"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
       "category": "documentation",
-      "bytes": 484476,
-      "sha256": "385c245d7be98ff9c590212a0d018206d5f810e5ca06803d353bd9ab48ba47c9"
+      "bytes": 485172,
+      "sha256": "ba1fcb4749739710b306fa0e431a7e2a282d4fb7a6dd07dc8746e0728e035098"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -7851,8 +7851,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 80979,
-      "sha256": "174eb42e854afe474268d0c9f0cff35ed6cf690c827c9bde2b232f017a6f07c0"
+      "bytes": 81249,
+      "sha256": "6cca8da3de7a1fbb35eec1c817b5f4b01f1e1a9df9df9da8ed56a349da28a577"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -8181,8 +8181,8 @@
     {
       "path": "src/renderer/components/TileBezel.tsx",
       "category": "source",
-      "bytes": 32757,
-      "sha256": "3108c045995705883bfdd5ca69b57438f2254cd72b19ba903be68eb668d8bf38"
+      "bytes": 32771,
+      "sha256": "66aec4aefc5ca2162e94dfde2004e15d1b6b23b57a65ea2a12ec34d058c201da"
     },
     {
       "path": "src/renderer/components/TileBoard.module.css",
@@ -8193,14 +8193,14 @@
     {
       "path": "src/renderer/components/TileBoard.test.tsx",
       "category": "test",
-      "bytes": 26895,
-      "sha256": "59d787107ddda997b678d0749ee50643a414d25b5b5eeafdbb47c9117bbd75ad"
+      "bytes": 26958,
+      "sha256": "2e28911982f94a5328544b54e28c0b4a9b3d716a4e5c7a6a548475d926e064e5"
     },
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 147109,
-      "sha256": "da2c7a8b2a14e4007f1211b4af115de77b340aeda03b0706a70af39c49d749ff"
+      "bytes": 148585,
+      "sha256": "3ffca24c0ddac647854cf6f006664875855a3832b662bccb6a6a36bf6ba5459b"
     },
     {
       "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -8289,8 +8289,8 @@
     {
       "path": "src/renderer/components/tileBoardDomAccessibility.ts",
       "category": "source",
-      "bytes": 18593,
-      "sha256": "77b8a08f76e3d6fdb78ee21d76a9ab8f61bd0dd75afdd3683927fcf668ce00a5"
+      "bytes": 18817,
+      "sha256": "1f76fbbb9db690108dc0dc70079fc9e474f9511be7f2405ebe40d116d1957cf4"
     },
     {
       "path": "src/renderer/components/tileBoardDomSurfaceModel.test.ts",
@@ -8445,14 +8445,14 @@
     {
       "path": "src/renderer/components/tileBoardHiddenBackAccents.test.ts",
       "category": "test",
-      "bytes": 4287,
-      "sha256": "c304b35b9ddc38f79786775ce822654b6ec0ee1f295bbbf5f1c7e7a6af7183b9"
+      "bytes": 5039,
+      "sha256": "359f2df4ed430ec6e3d7a1a91bc40d01a3b03916aff355daa4ad3846161b353e"
     },
     {
       "path": "src/renderer/components/tileBoardHiddenBackAccents.ts",
       "category": "source",
-      "bytes": 3216,
-      "sha256": "1d6bc2b7fc51bb6d620e11d92cd9a14792211eea06441d04f487aac21a7843d9"
+      "bytes": 3644,
+      "sha256": "a6a6b7fadceed7d7ed46ed960126f1d6a389fa964c34cce115a579b5554269b3"
     },
     {
       "path": "src/renderer/components/TileBoardHoverChrome.tsx",
@@ -8601,8 +8601,8 @@
     {
       "path": "src/renderer/components/TileBoardReadabilityMarkers.tsx",
       "category": "source",
-      "bytes": 77993,
-      "sha256": "7bf9397475dda90a91fdfdca68e804655c5ad68593a59700036f8756034e047e"
+      "bytes": 78846,
+      "sha256": "de48481e5d42d35df8a3002a9ac0fae3314f50f6ae0e10e55214821b95385234"
     },
     {
       "path": "src/renderer/components/tileBoardRegistry.test.ts",
@@ -8661,8 +8661,8 @@
     {
       "path": "src/renderer/components/tileBoardRows.ts",
       "category": "source",
-      "bytes": 12356,
-      "sha256": "5726669452cbe6efe860992847ad023ac7672b6c5e287b397fba3e671c19cf34"
+      "bytes": 12464,
+      "sha256": "5f59d0eb525627ec2f8ff2fd317dcec0817bfaae6d2eef22e011ce599bee5c2d"
     },
     {
       "path": "src/renderer/components/tileBoardRuneField.test.ts",
@@ -8679,8 +8679,8 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 16861,
-      "sha256": "073efebdb0f8d233cb4daff54f0bbfe2926985d3c62b576d9e36653d48686306"
+      "bytes": 17016,
+      "sha256": "9a8f3193c943ad9bac8c9454ff9cc168c6ca0f8713e36e0e077e567ade9547ca"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
@@ -9045,8 +9045,8 @@
     {
       "path": "src/renderer/copy/chainBeat.ts",
       "category": "source",
-      "bytes": 5162,
-      "sha256": "ce5332e683d15ceeea9e609d619186dfa1730ac45523e411e44529b75a1a1157"
+      "bytes": 5822,
+      "sha256": "a6db4fa3d5a10af0c3dbc306de8e983174ecc03ae7932012ac12d4a5088a8ff0"
     },
     {
       "path": "src/renderer/copy/chainMilestoneFeedback.test.ts",
@@ -10581,14 +10581,14 @@
     {
       "path": "src/shared/chunk-break-rules.test.ts",
       "category": "test",
-      "bytes": 18292,
-      "sha256": "c2db714e8b406572df0eff47a51ceb6b0fe049833ad7cd6ac53aadaa4b728fbd"
+      "bytes": 18281,
+      "sha256": "2f0ba89a0f27e62d380ba10ad920b546d00b16542eb1fa1d29f12d5b88409f20"
     },
     {
       "path": "src/shared/chunk-break-rules.ts",
       "category": "source",
-      "bytes": 24556,
-      "sha256": "eb6a4075f249bcf8be1983ccbd8d42a3423f712a41ad43cb68a680e6ab978da8"
+      "bytes": 24543,
+      "sha256": "12fce5bc50d22fca631e4e14743f398c0bd63bb2c824fb4357b49812902448f0"
     },
     {
       "path": "src/shared/classic-run-setup.test.ts",
@@ -10605,14 +10605,14 @@
     {
       "path": "src/shared/clump-read-rules.test.ts",
       "category": "test",
-      "bytes": 2522,
-      "sha256": "381f7762b55d781d61a07eed05defee4c5429ee3d406357a3fbcb1374a2e627b"
+      "bytes": 5865,
+      "sha256": "a5b3ad377e7025cd0f65540eaf7e4c3cd15c094494dbd503ca1c206e07933880"
     },
     {
       "path": "src/shared/clump-read-rules.ts",
       "category": "source",
-      "bytes": 2371,
-      "sha256": "d647fe5476828e8669bb809a4a0188432ed55b8e718d1112d25c52ed03180189"
+      "bytes": 4674,
+      "sha256": "3a4455c73004dccb55592ac7db99bd84b4db7372f7fa2fa8300c860bf146a9ae"
     },
     {
       "path": "src/shared/color-vision.test.ts",
@@ -16985,7 +16985,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1760,
+      "lineCount": 1764,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -17903,7 +17903,7 @@
       "path": "src/renderer/components/TileBoard.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 718,
+      "lineCount": 720,
       "imports": [
         "file:src/renderer/components/TileBoard.tsx",
         "file:src/renderer/components/tileBoardStageLayers.ts",
@@ -17919,7 +17919,7 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3431,
+      "lineCount": 3467,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -18225,7 +18225,7 @@
       "path": "src/renderer/components/tileBoardDomAccessibility.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 444,
+      "lineCount": 446,
       "imports": [
         "file:src/renderer/components/tileBoardPick.ts",
         "file:src/renderer/components/tileBoardReadability.ts",
@@ -18701,7 +18701,7 @@
       "path": "src/renderer/components/tileBoardHiddenBackAccents.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 116,
+      "lineCount": 134,
       "imports": [
         "file:src/renderer/components/tileBoardHiddenBackAccents.ts",
         "file:src/shared/contracts.ts",
@@ -18715,7 +18715,7 @@
       "path": "src/renderer/components/tileBoardHiddenBackAccents.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 89,
+      "lineCount": 103,
       "imports": [
         "file:src/renderer/components/tileBoardPick.ts",
         "file:src/shared/contracts.ts",
@@ -19135,7 +19135,7 @@
       "path": "src/renderer/components/TileBoardReadabilityMarkers.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1472,
+      "lineCount": 1490,
       "imports": [
         "file:src/renderer/components/tileBoardPick.ts",
         "file:src/renderer/components/tileBoardReadability.ts",
@@ -19314,7 +19314,7 @@
       "path": "src/renderer/components/tileBoardRows.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 326,
+      "lineCount": 329,
       "imports": [
         "file:src/renderer/components/tileBoardFaceUp.ts",
         "file:src/renderer/components/tileBoardFlipLock.ts",
@@ -19386,7 +19386,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 432,
+      "lineCount": 436,
       "imports": [
         "file:src/renderer/components/gameplayRenderProfile.ts",
         "file:src/renderer/components/TileBezel.tsx",
@@ -20464,7 +20464,7 @@
       "path": "src/renderer/copy/chainBeat.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 77,
+      "lineCount": 92,
       "imports": [
         "file:src/shared/chain-tier-rules.ts"
       ],
@@ -24525,7 +24525,8 @@
       ],
       "testedBy": [
         "file:src/shared/authored-floors.test.ts",
-        "file:src/shared/chain-tier-rules.test.ts"
+        "file:src/shared/chain-tier-rules.test.ts",
+        "file:src/shared/clump-read-rules.test.ts"
       ]
     },
     {
@@ -24640,6 +24641,7 @@
         "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/authored-floors.test.ts",
         "file:src/shared/chunk-break-rules.test.ts",
+        "file:src/shared/clump-read-rules.test.ts",
         "file:src/shared/release-checklist.test.ts"
       ]
     },
@@ -24690,8 +24692,10 @@
       "path": "src/shared/clump-read-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 48,
+      "lineCount": 107,
       "imports": [
+        "file:src/shared/chain-tier-rules.ts",
+        "file:src/shared/chunk-break-rules.ts",
         "file:src/shared/clump-read-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/test/game-fixtures.ts"
@@ -24704,13 +24708,17 @@
       "path": "src/shared/clump-read-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 47,
+      "lineCount": 105,
       "imports": [
+        "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/chunk-break-rules.ts",
         "file:src/shared/contracts.ts"
       ],
       "exports": [
         "symbol:src/shared/clump-read-rules.ts#ClumpRead",
+        "symbol:src/shared/clump-read-rules.ts#ClumpReadContext",
+        "symbol:src/shared/clump-read-rules.ts#ClumpReadNextTierPreview",
+        "symbol:src/shared/clump-read-rules.ts#ClumpReadTierPreview",
         "symbol:src/shared/clump-read-rules.ts#getClumpRead"
       ],
       "testedBy": [
@@ -33395,8 +33403,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 1759,
-      "endLine": 1759
+      "line": 1763,
+      "endLine": 1763
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
@@ -34083,8 +34091,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 3430,
-      "endLine": 3430
+      "line": 3466,
+      "endLine": 3466
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
@@ -34563,24 +34571,24 @@
       "name": "getFocusedTileLiveLabel",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomAccessibility.ts",
-      "line": 352,
-      "endLine": 443
+      "line": 354,
+      "endLine": 445
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomAccessibility.ts#getPickableTileIds",
       "name": "getPickableTileIds",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomAccessibility.ts",
-      "line": 295,
-      "endLine": 308
+      "line": 297,
+      "endLine": 310
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomAccessibility.ts#getPowerTargetAriaText",
       "name": "getPowerTargetAriaText",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomAccessibility.ts",
-      "line": 238,
-      "endLine": 293
+      "line": 240,
+      "endLine": 295
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomAccessibility.ts#getTileAriaLabel",
@@ -34588,7 +34596,7 @@
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomAccessibility.ts",
       "line": 192,
-      "endLine": 236
+      "endLine": 238
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomAccessibility.ts#getTileBeatAccessibilityText",
@@ -34619,16 +34627,16 @@
       "name": "gridIndexFromTileId",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomAccessibility.ts",
-      "line": 310,
-      "endLine": 313
+      "line": 312,
+      "endLine": 315
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomAccessibility.ts#moveFocusInGrid",
       "name": "moveFocusInGrid",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomAccessibility.ts",
-      "line": 315,
-      "endLine": 350
+      "line": 317,
+      "endLine": 352
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomSurfaceModel.ts#buildTileBoardDomSurfaceModel",
@@ -35131,16 +35139,16 @@
       "name": "getTileBoardHiddenBackAccents",
       "kind": "value",
       "file": "src/renderer/components/tileBoardHiddenBackAccents.ts",
-      "line": 33,
-      "endLine": 88
+      "line": 43,
+      "endLine": 102
     },
     {
       "id": "symbol:src/renderer/components/tileBoardHiddenBackAccents.ts#TileBoardHiddenBackAccentsInput",
       "name": "TileBoardHiddenBackAccentsInput",
       "kind": "interface",
       "file": "src/renderer/components/tileBoardHiddenBackAccents.ts",
-      "line": 14,
-      "endLine": 31
+      "line": 22,
+      "endLine": 41
     },
     {
       "id": "symbol:src/renderer/components/tileBoardHiddenBackAccents.ts#TileBoardPowerBackAccent",
@@ -35148,7 +35156,7 @@
       "kind": "type",
       "file": "src/renderer/components/tileBoardHiddenBackAccents.ts",
       "line": 5,
-      "endLine": 5
+      "endLine": 13
     },
     {
       "id": "symbol:src/renderer/components/TileBoardHoverChrome.tsx#TileBoardHoverChrome",
@@ -35572,7 +35580,7 @@
       "kind": "value",
       "file": "src/renderer/components/TileBoardReadabilityMarkers.tsx",
       "line": 176,
-      "endLine": 1471
+      "endLine": 1489
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRegistry.ts#createTileBoardItemRegistry",
@@ -35795,8 +35803,8 @@
       "name": "buildTileBoardRows",
       "kind": "value",
       "file": "src/renderer/components/tileBoardRows.ts",
-      "line": 123,
-      "endLine": 296
+      "line": 124,
+      "endLine": 299
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRows.ts#BuildTileBoardRowsInput",
@@ -35804,15 +35812,15 @@
       "kind": "interface",
       "file": "src/renderer/components/tileBoardRows.ts",
       "line": 84,
-      "endLine": 121
+      "endLine": 122
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRows.ts#getTileBoardOverlayPrewarmDemandPairKeys",
       "name": "getTileBoardOverlayPrewarmDemandPairKeys",
       "kind": "value",
       "file": "src/renderer/components/tileBoardRows.ts",
-      "line": 298,
-      "endLine": 325
+      "line": 301,
+      "endLine": 328
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRows.ts#getTutorialPairOrdinalByKey",
@@ -35883,16 +35891,16 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 431,
-      "endLine": 431
+      "line": 435,
+      "endLine": 435
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
       "name": "TileBoardSceneHandle",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 144,
-      "endLine": 144
+      "line": 145,
+      "endLine": 145
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileHoverTiltState",
@@ -37204,7 +37212,7 @@
       "kind": "value",
       "file": "src/renderer/copy/chainBeat.ts",
       "line": 20,
-      "endLine": 76
+      "endLine": 91
     },
     {
       "id": "symbol:src/renderer/copy/chainBeat.ts#CHAIN_STYLE_LONG_SPAN",
@@ -42267,16 +42275,40 @@
       "name": "ClumpRead",
       "kind": "interface",
       "file": "src/shared/clump-read-rules.ts",
-      "line": 13,
-      "endLine": 21
+      "line": 42,
+      "endLine": 52
+    },
+    {
+      "id": "symbol:src/shared/clump-read-rules.ts#ClumpReadContext",
+      "name": "ClumpReadContext",
+      "kind": "interface",
+      "file": "src/shared/clump-read-rules.ts",
+      "line": 17,
+      "endLine": 25
+    },
+    {
+      "id": "symbol:src/shared/clump-read-rules.ts#ClumpReadNextTierPreview",
+      "name": "ClumpReadNextTierPreview",
+      "kind": "interface",
+      "file": "src/shared/clump-read-rules.ts",
+      "line": 35,
+      "endLine": 40
+    },
+    {
+      "id": "symbol:src/shared/clump-read-rules.ts#ClumpReadTierPreview",
+      "name": "ClumpReadTierPreview",
+      "kind": "interface",
+      "file": "src/shared/clump-read-rules.ts",
+      "line": 27,
+      "endLine": 33
     },
     {
       "id": "symbol:src/shared/clump-read-rules.ts#getClumpRead",
       "name": "getClumpRead",
       "kind": "value",
       "file": "src/shared/clump-read-rules.ts",
-      "line": 25,
-      "endLine": 46
+      "line": 70,
+      "endLine": 104
     },
     {
       "id": "symbol:src/shared/color-vision.ts#COLOR_VISION_KINDS",
@@ -64622,6 +64654,24 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/clump-read-rules.ts->symbol:src/shared/clump-read-rules.ts#ClumpReadContext",
+      "source": "file:src/shared/clump-read-rules.ts",
+      "target": "symbol:src/shared/clump-read-rules.ts#ClumpReadContext",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/clump-read-rules.ts->symbol:src/shared/clump-read-rules.ts#ClumpReadNextTierPreview",
+      "source": "file:src/shared/clump-read-rules.ts",
+      "target": "symbol:src/shared/clump-read-rules.ts#ClumpReadNextTierPreview",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/clump-read-rules.ts->symbol:src/shared/clump-read-rules.ts#ClumpReadTierPreview",
+      "source": "file:src/shared/clump-read-rules.ts",
+      "target": "symbol:src/shared/clump-read-rules.ts#ClumpReadTierPreview",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/clump-read-rules.ts->symbol:src/shared/clump-read-rules.ts#getClumpRead",
       "source": "file:src/shared/clump-read-rules.ts",
       "target": "symbol:src/shared/clump-read-rules.ts#getClumpRead",
@@ -82690,6 +82740,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/clump-read-rules.test.ts->src/shared/chain-tier-rules.ts",
+      "source": "file:src/shared/clump-read-rules.test.ts",
+      "target": "file:src/shared/chain-tier-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/clump-read-rules.test.ts->src/shared/chunk-break-rules.ts",
+      "source": "file:src/shared/clump-read-rules.test.ts",
+      "target": "file:src/shared/chunk-break-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/clump-read-rules.test.ts->src/shared/clump-read-rules.ts",
       "source": "file:src/shared/clump-read-rules.test.ts",
       "target": "file:src/shared/clump-read-rules.ts",
@@ -82705,6 +82767,12 @@
       "id": "imports:src/shared/clump-read-rules.test.ts->src/shared/test/game-fixtures.ts",
       "source": "file:src/shared/clump-read-rules.test.ts",
       "target": "file:src/shared/test/game-fixtures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/clump-read-rules.ts->src/shared/chain-tier-rules.ts",
+      "source": "file:src/shared/clump-read-rules.ts",
+      "target": "file:src/shared/chain-tier-rules.ts",
       "kind": "imports"
     },
     {
@@ -92037,6 +92105,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/chain-tier-rules.ts->file:src/shared/clump-read-rules.test.ts",
+      "source": "file:src/shared/chain-tier-rules.ts",
+      "target": "file:src/shared/clump-read-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/challenge-progression.ts->file:src/shared/challenge-progression.test.ts",
       "source": "file:src/shared/challenge-progression.ts",
       "target": "file:src/shared/challenge-progression.test.ts",
@@ -92058,6 +92132,12 @@
       "id": "tested_by:src/shared/chunk-break-rules.ts->file:src/shared/chunk-break-rules.test.ts",
       "source": "file:src/shared/chunk-break-rules.ts",
       "target": "file:src/shared/chunk-break-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/chunk-break-rules.ts->file:src/shared/clump-read-rules.test.ts",
+      "source": "file:src/shared/chunk-break-rules.ts",
+      "target": "file:src/shared/clump-read-rules.test.ts",
       "kind": "tested_by"
     },
     {

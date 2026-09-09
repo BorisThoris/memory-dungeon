@@ -127,6 +127,7 @@ interface TileBoardSceneProps {
     destroyEligibleTileIds?: ReadonlySet<string>;
     peekPowerVisualActive?: boolean;
     peekEligibleTileIds?: ReadonlySet<string>;
+    clumpReadNextTileIds?: ReadonlySet<string>;
     clumpReadTileIds?: ReadonlySet<string>;
     strayPowerVisualActive?: boolean;
     strayEligibleTileIds?: ReadonlySet<string>;
@@ -187,6 +188,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     destroyEligibleTileIds = EMPTY_TILE_IDS,
     peekPowerVisualActive = false,
     peekEligibleTileIds = EMPTY_TILE_IDS,
+    clumpReadNextTileIds = EMPTY_TILE_IDS,
     clumpReadTileIds = EMPTY_TILE_IDS,
     strayPowerVisualActive = false,
     strayEligibleTileIds = EMPTY_TILE_IDS,
@@ -239,6 +241,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
             interactive,
             nBackAnchorPairKey,
             nBackMutatorActive,
+            clumpReadNextTileIds,
             clumpReadTileIds,
             pairProximityHintsEnabled,
             peekEligibleTileIds,
@@ -279,6 +282,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         interactive,
         nBackAnchorPairKey,
         nBackMutatorActive,
+        clumpReadNextTileIds,
         clumpReadTileIds,
         pairProximityHintsEnabled,
         peekEligibleTileIds,

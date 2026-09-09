@@ -38,7 +38,7 @@ const layout = (): Tile[] => [
 ];
 const board = (tiles: Tile[] = layout(), overrides: Partial<BoardState> = {}): BoardState =>
     makeBoard(tiles, { columns: 4, rows: 3, level: 3, ...overrides });
-const endless = { gameMode: 'endless' as const };
+const endless = { floorCurioId: null };
 
 /**
  * One row, read left to right, for the ripple. A's clump reaches B1; B's partner sits two tiles
@@ -208,7 +208,7 @@ describe('what it pays', () => {
 
 describe('through a real turn', () => {
     const runWithChain = (chain: number) => {
-        const base = makeRun(layout(), { gameMode: 'endless' });
+        const base = makeRun(layout(), { floorCurioId: null });
         // The fixture rolls a random floor resident; toffee would make this break diagonal.
         return {
             ...base,

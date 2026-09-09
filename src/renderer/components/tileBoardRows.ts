@@ -85,6 +85,7 @@ export interface BuildTileBoardRowsInput {
     allowGambitThirdFlip: boolean;
     board: BoardState;
     bountyPairKey: string | null;
+    clumpReadNextTileIds?: ReadonlySet<string>;
     clumpReadTileIds?: ReadonlySet<string>;
     compact: boolean;
     cursedPairKey: string | null;
@@ -124,6 +125,7 @@ export const buildTileBoardRows = ({
     allowGambitThirdFlip,
     board,
     bountyPairKey,
+    clumpReadNextTileIds,
     clumpReadTileIds,
     compact,
     cursedPairKey,
@@ -218,6 +220,7 @@ export const buildTileBoardRows = ({
             tile
         });
         const { destroyBlockedDecoyBack, nonPickableBack, powerBackAccent } = getTileBoardHiddenBackAccents({
+            clumpReadNextTileIds,
             clumpReadTileIds,
             destroyEligibleTileIds,
             destroyPowerVisualActive,

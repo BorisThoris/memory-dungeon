@@ -48,7 +48,7 @@ interface TileBoardReadabilityMarkersProps {
     findableCornerRingGeometry: BufferGeometry;
     matchedEdgeGeometry: BufferGeometry;
     nonPickableBack: boolean;
-    powerBackAccent: 'destroy' | 'peek' | 'stray' | 'pin' | 'swap' | 'swapOrigin' | 'clump' | null;
+    powerBackAccent: 'destroy' | 'peek' | 'stray' | 'pin' | 'swap' | 'swapOrigin' | 'clump' | 'clumpNext' | null;
     selectedTraitFollowupBack: boolean;
     spotlightBountyOnBack: boolean;
     spotlightWardOnBack: boolean;
@@ -503,6 +503,24 @@ export const TileBoardReadabilityMarkers = ({
                                 depthTest
                                 depthWrite={false}
                                 opacity={0.9}
+                                side={DoubleSide}
+                                toneMapped={false}
+                                transparent
+                            />
+                        </mesh>
+                    ) : null}
+                    {powerBackAccent === 'clumpNext' ? (
+                        <mesh
+                            geometry={findableCornerRingGeometry}
+                            position={[-CARD_WIDTH * 0.36, CARD_HEIGHT * 0.4, 0.00054]}
+                            raycast={noopMeshRaycast}
+                            renderOrder={10}
+                        >
+                            <meshBasicMaterial
+                                color="#7de8b8"
+                                depthTest
+                                depthWrite={false}
+                                opacity={0.34}
                                 side={DoubleSide}
                                 toneMapped={false}
                                 transparent

@@ -334,7 +334,7 @@ export const resolveChunkBreak = ({
     chain
 }: {
     board: BoardState;
-    run: Pick<RunState, 'gameMode' | 'floorCurioId'>;
+    run: Pick<RunState, 'floorCurioId'>;
     matchedTileIds: readonly string[];
     chain: number;
 }): ChunkBreakResult => {

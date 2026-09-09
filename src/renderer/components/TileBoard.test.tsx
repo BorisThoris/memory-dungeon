@@ -55,6 +55,8 @@ const renderBoard = (props: {
     traitRouteTargetTileIds?: readonly string[];
     chainContext?: {
         currentStreak: number;
+        momentum: number;
+        floorCurioId: string | null;
     };
     recoveryContext?: {
         action: string;

@@ -101,12 +101,30 @@ describe('tileBoardHiddenBackAccents', () => {
 });
 
 describe('the clump read accent', () => {
-    it('outlines the clump the considered tile stands in, and yields to any armed power', () => {
+    it('outlines what this match takes, and yields to any armed power', () => {
         expect(accents({ clumpReadTileIds: new Set(['tile-a']) }).powerBackAccent).toBe('clump');
         expect(accents({ clumpReadTileIds: new Set(['other']) }).powerBackAccent).toBeNull();
         expect(
             accents({
                 clumpReadTileIds: new Set(['tile-a']),
+                peekPowerVisualActive: true,
+                peekEligibleTileIds: new Set(['tile-a'])
+            }).powerBackAccent
+        ).toBe('peek');
+    });
+
+    it('ghosts what the next rung would add, under the solid read and under every power', () => {
+        expect(accents({ clumpReadNextTileIds: new Set(['tile-a']) }).powerBackAccent).toBe('clumpNext');
+        // A tile that goes now is drawn as going now: the ghost is only ever the rung's extra.
+        expect(
+            accents({
+                clumpReadNextTileIds: new Set(['tile-a']),
+                clumpReadTileIds: new Set(['tile-a'])
+            }).powerBackAccent
+        ).toBe('clump');
+        expect(
+            accents({
+                clumpReadNextTileIds: new Set(['tile-a']),
                 peekPowerVisualActive: true,
                 peekEligibleTileIds: new Set(['tile-a'])
             }).powerBackAccent

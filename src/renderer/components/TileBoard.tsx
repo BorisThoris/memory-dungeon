@@ -368,6 +368,10 @@ interface TileBoardProps {
     /** Current run chain state, used to preview the payoff of a highlighted chain move. */
     chainContext?: {
         currentStreak: number;
+        /** Streak plus the pairs this chain's breaks took: what the ladder actually reads. */
+        momentum: number;
+        /** Sticky toffee sticks the clump diagonally, so the aim guide has to know the resident. */
+        floorCurioId: string | null;
     };
     recoveryContext?: {
         action: string;
@@ -1268,12 +1272,36 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
      * from the live board through the same region rule the break uses, so what is promised is
      * what a Sharp break there would take.
      */
-    const clumpRead = useMemo(
-        () => (previewChipTileId && runStatus === 'playing' ? getClumpRead(board, previewChipTileId) : null),
-        [board, previewChipTileId, runStatus]
+    /*
+     * The chain the considered match would land on: the run's momentum plus that match, which is
+     * the expression the live break resolves with. Without a run context - a bare board in a test
+     * - the honest default is the chain-one pop.
+     */
+    const clumpReadContext = useMemo(
+        () => ({
+            chain: (chainContext?.momentum ?? 0) + 1,
+            run: { floorCurioId: chainContext?.floorCurioId ?? null }
+        }),
+        [chainContext]
     );
+    const clumpRead = useMemo(
+        () =>
+            previewChipTileId && runStatus === 'playing'
+                ? getClumpRead(board, previewChipTileId, clumpReadContext)
+                : null,
+        [board, clumpReadContext, previewChipTileId, runStatus]
+    );
+    /** Solid: what this match takes now. */
     const clumpReadTileIds = useMemo(
-        () => (clumpRead && clumpRead.size > 1 ? new Set(clumpRead.tileIds) : EMPTY_CLUMP_READ),
+        () => (clumpRead && clumpRead.now.tileIds.length > 0 ? new Set(clumpRead.now.tileIds) : EMPTY_CLUMP_READ),
+        [clumpRead]
+    );
+    /** Ghosted: what the next rung would add on top of it - the hold decision, on the board. */
+    const clumpReadNextTileIds = useMemo(
+        () =>
+            clumpRead && clumpRead.next && clumpRead.next.addedTileIds.length > 0
+                ? new Set(clumpRead.next.addedTileIds)
+                : EMPTY_CLUMP_READ,
         [clumpRead]
     );
     const focusedPreviewChip = useMemo((): {
@@ -1333,7 +1361,14 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             return {
                 action: 'Preview',
                 eyebrow: 'Clump',
-                lines: [CHAIN_BEAT_COPY.clumpRead(getTileSuit(clumpRead.suit).name, clumpRead.size, clumpRead.pairsSharpWouldTake)],
+                lines: [
+                    CHAIN_BEAT_COPY.clumpRead(
+                        getTileSuit(clumpRead.suit).name,
+                        clumpRead.size,
+                        clumpRead.now,
+                        clumpRead.next
+                    )
+                ],
                 kind: 'clump',
                 source,
                 tone: 'setup'
@@ -3328,6 +3363,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         destroyPowerVisualActive={destroyPowerVisualActive}
                                         destroyEligibleTileIds={destroyEligibleTileIds}
                                         peekPowerVisualActive={peekPowerVisualActive}
+                                        clumpReadNextTileIds={clumpReadNextTileIds}
                                         clumpReadTileIds={clumpReadTileIds}
                                         peekEligibleTileIds={peekEligibleTileIds}
                                         strayPowerVisualActive={strayPowerVisualActive}
