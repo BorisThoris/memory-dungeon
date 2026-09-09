@@ -17,12 +17,12 @@ describe('REG-048 secondary objective clarity', () => {
         const row = getSecondaryObjectiveProgress(active);
 
         expect(row?.status).toBe('active');
-        expect(row?.condition).toMatch(/match-resolution par/i);
+        expect(row?.condition).toMatch(/within par/i);
         expect(row?.reward).toContain(`+${FLIP_PAR_BONUS_SCORE}`);
 
         const failed = {
             ...active,
-            matchResolutionsThisFloor: 999
+            turnsThisFloor: 999
         };
         const failedRow = getSecondaryObjectiveProgress(failed);
         expect(failedRow?.status).toBe('failed');
@@ -30,7 +30,7 @@ describe('REG-048 secondary objective clarity', () => {
 
         const malformed = {
             ...active,
-            matchResolutionsThisFloor: Number.POSITIVE_INFINITY
+            turnsThisFloor: Number.POSITIVE_INFINITY
         };
         const malformedRow = getSecondaryObjectiveProgress(malformed);
         expect(malformedRow?.status).toBe('active');

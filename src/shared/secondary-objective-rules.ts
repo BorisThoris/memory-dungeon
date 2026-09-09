@@ -11,6 +11,7 @@ import {
     type FeaturedObjectiveId
 } from './contracts';
 import { usesEndlessFloorSchedule } from './floor-mutator-schedule';
+import { parTurnsForFloor, turnsTakenThisFloor } from './floor-par';
 import { runNonNegativeInteger } from './run-number-guards';
 
 export const FEATURED_OBJECTIVE_BONUS_SCORES: Record<FeaturedObjectiveId, number> = {
@@ -23,7 +24,14 @@ export const FEATURED_OBJECTIVE_BONUS_SCORES: Record<FeaturedObjectiveId, number
 export const getFeaturedObjectiveBonusScore = (id: FeaturedObjectiveId): number =>
     FEATURED_OBJECTIVE_BONUS_SCORES[id];
 
-export const getFlipParLimit = (pairCount: number): number => Math.ceil(pairCount * 1.25) + 2;
+/**
+ * Within par: the floor's turns, match or miss, at or under its stated par (`floor-par.ts`).
+ *
+ * Gen 181: this used to compare match resolutions to `ceil(pairs × 1.25) + 2`, and a floor of N
+ * pairs cannot resolve more than N matches, so it could not be failed. It reads the real par now.
+ */
+export const isWithinFloorPar = (run: RunState, board: BoardState): boolean =>
+    board.pairCount >= 2 && turnsTakenThisFloor(run) <= parTurnsForFloor(board.pairCount);
 
 export const isFeaturedObjectiveCompleted = (
     run: RunState,
@@ -38,7 +46,7 @@ export const isFeaturedObjectiveCompleted = (
         case 'cursed_last':
             return Boolean(board.cursedPairKey) && !run.cursedMatchedEarlyThisFloor;
         case 'flip_par':
-            return board.pairCount >= 2 && runNonNegativeInteger(run.matchResolutionsThisFloor) <= getFlipParLimit(board.pairCount);
+            return isWithinFloorPar(run, board);
         default:
             return false;
     }
@@ -68,7 +76,7 @@ export const getDefaultClearObjectiveBonus = (
         bonusScore += FEATURED_OBJECTIVE_BONUS_SCORES.cursed_last;
         bonusTags.push('cursed_last');
     }
-    if (board.pairCount >= 2 && runNonNegativeInteger(run.matchResolutionsThisFloor) <= getFlipParLimit(board.pairCount)) {
+    if (isWithinFloorPar(run, board)) {
         bonusScore += FEATURED_OBJECTIVE_BONUS_SCORES.flip_par;
         bonusTags.push('flip_par');
     }

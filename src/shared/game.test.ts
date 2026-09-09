@@ -775,7 +775,7 @@ describe('endless chapters and featured objectives', () => {
         const primed: RunState = {
             ...started,
             featuredObjectiveStreak: 3,
-            matchResolutionsThisFloor: 99
+            turnsThisFloor: 99
         };
 
         const finished = clearRealPairs(primed);
@@ -1053,7 +1053,7 @@ describe('game rules', () => {
         expect(matchPending.timerState.resolveRemainingMs).toBe(0);
     });
 
-    it('awards immediate match score and perfect clear bonuses on a flawless level', () => {
+    it('awards immediate match score and the floor-end bonus on a flawless level', () => {
         const tiles: Tile[] = [createTile('a1', 'A', 'A'), createTile('a2', 'A', 'A')];
         const started = createRun(tiles);
         const flippedOnce = flipTile(started, 'a1');
@@ -1062,8 +1062,10 @@ describe('game rules', () => {
 
         expect(resolved.status).toBe('levelComplete');
         expect(resolved.lives).toBe(5);
-        expect(resolved.stats.totalScore).toBe(155);
-        expect(resolved.stats.currentLevelScore).toBe(155);
+        // 30 for the match, 100 for the floor cleared cold at par, 50 in floor objectives.
+        expect(resolved.stats.totalScore).toBe(180);
+        expect(resolved.stats.currentLevelScore).toBe(180);
+        expect(resolved.lastLevelResult).toMatchObject({ parTurns: 1, turnsTaken: 1, playScore: 30, floorBonus: 100, floorBonusTierMult: 1 });
         expect(resolved.stats.bestStreak).toBe(1);
         expect(resolved.stats.perfectClears).toBe(1);
         expect(resolved.lastLevelResult?.perfect).toBe(true);
@@ -1104,9 +1106,9 @@ describe('game rules', () => {
 
         expect(resolved.status).toBe('levelComplete');
         expect(resolved.lives).toBe(4);
-        expect(resolved.stats.totalScore).toBe(155);
-        expect(resolved.stats.currentLevelScore).toBe(155);
-        expect(resolved.stats.bestScore).toBe(155);
+        expect(resolved.stats.totalScore).toBe(180);
+        expect(resolved.stats.currentLevelScore).toBe(180);
+        expect(resolved.stats.bestScore).toBe(180);
         expect(resolved.stats.levelsCleared).toBe(1);
         expect(resolved.stats.highestLevel).toBe(1);
         expect(resolved.stats.perfectClears).toBe(1);
@@ -1128,7 +1130,9 @@ describe('game rules', () => {
         expect(firstMatch.stats.totalScore).toBe(30);
         expect(firstMatch.stats.currentStreak).toBe(1);
         expect(secondMatch.status).toBe('levelComplete');
-        expect(secondMatch.stats.totalScore).toBe(240 + RECALL_FOCUS_MATCH_SCORE);
+        // Two turns on a two-pair floor whose par is one: the clear pays its base and no efficiency, and the within-par objective is missed.
+        expect(secondMatch.stats.totalScore).toBe(70 + RECALL_FOCUS_MATCH_SCORE + 100 + 50);
+        expect(secondMatch.lastLevelResult).toMatchObject({ parTurns: 1, turnsTaken: 2, floorEfficiencyBonus: undefined });
         expect(secondMatch.stats.bestStreak).toBe(2);
     });
 
@@ -1145,7 +1149,9 @@ describe('game rules', () => {
 
         expect(resolved.status).toBe('levelComplete');
         expect(resolved.lives).toBe(5);
-        expect(resolved.stats.totalScore).toBe(215 + RECALL_FOCUS_MATCH_SCORE);
+        // A miss is a turn too: three turns against a par of one, and the floor pays the same as the flawless one.
+        expect(resolved.stats.totalScore).toBe(70 + RECALL_FOCUS_MATCH_SCORE + 100 + 50);
+        expect(resolved.lastLevelResult?.turnsTaken).toBe(3);
         expect(resolved.lastLevelResult?.perfect).toBe(false);
         expect(resolved.lastLevelResult?.mistakes).toBe(1);
         expect(resolved.lastLevelResult?.clearLifeReason).toBe('clean');

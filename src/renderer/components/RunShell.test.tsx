@@ -23,6 +23,7 @@ describe('RunShell', () => {
         expect(within(stats).getByTestId('hud-floor')).toHaveTextContent(/floor/i);
         expect(within(stats).getByTestId('hud-lives')).toHaveTextContent(/lives/i);
         expect(within(stats).getByTestId('hud-score')).toHaveTextContent(/score/i);
+        expect(within(stats).getByTestId('hud-par')).toHaveTextContent(/par/i);
         expect(within(stats).getByTestId('hud-combo-shards')).toHaveTextContent(/shards/i);
         expect(within(stats).getByTestId('hud-chain')).toHaveTextContent(/chain/i);
         // Guards and mutators only appear when they carry a value; there is no clock to show.

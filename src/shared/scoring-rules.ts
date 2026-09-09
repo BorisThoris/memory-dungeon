@@ -146,8 +146,3 @@ export const computeFlipResolveDelayMs = (
     }
     return ms;
 };
-
-export const calculateLevelClearBonus = (level: number): number =>
-    50 * runNonNegativeInteger(level);
-
-export const calculatePerfectClearBonus = (): number => 25;

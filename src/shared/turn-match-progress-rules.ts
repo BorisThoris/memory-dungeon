@@ -19,6 +19,8 @@ export interface TurnMatchProgressResult {
     chunkDropsThisRun: number;
     bestRippleThisFloor: number;
     bestRippleThisRun: number;
+    turnsThisFloor: number;
+    largestChunkScoreThisFloor: number;
 }
 
 export interface TurnMatchProgressInput {
@@ -76,6 +78,8 @@ export const resolveTurnMatchProgress = ({
         chunkPairsDroppedThisFloor: runNonNegativeInteger(run.chunkPairsDroppedThisFloor) + runNonNegativeInteger(chunkDroppedPairs),
         chunkDropsThisRun: runNonNegativeInteger(run.chunkDropsThisRun) + (runNonNegativeInteger(chunkDroppedPairs) > 0 ? 1 : 0),
         bestRippleThisFloor: Math.max(runNonNegativeInteger(run.bestRippleThisFloor), runNonNegativeInteger(chunkRippleWaves)),
-        bestRippleThisRun: Math.max(runNonNegativeInteger(run.bestRippleThisRun), runNonNegativeInteger(chunkRippleWaves))
+        bestRippleThisRun: Math.max(runNonNegativeInteger(run.bestRippleThisRun), runNonNegativeInteger(chunkRippleWaves)),
+        turnsThisFloor: runNonNegativeInteger(run.turnsThisFloor) + 1,
+        largestChunkScoreThisFloor: Math.max(runNonNegativeInteger(run.largestChunkScoreThisFloor), runNonNegativeInteger(chunkScore))
     };
 };

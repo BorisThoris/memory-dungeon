@@ -10,6 +10,7 @@ import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey } from './tile-identity';
 import { getSuitDealProfile, type SuitDealProfile } from './tile-suit-rules';
 import { calculateRating } from './scoring-rules';
+import { parTurnsForFloor } from './floor-par';
 
 /**
  * The cascade, measured rather than felt.
@@ -39,6 +40,17 @@ export interface CascadeBalanceFloorSample {
     levelScore: number;
     /** Score the chunks paid, read from the run's own ledger (`chunkScoreThisFloor`). */
     chunkScore: number;
+    /** The biggest single break's score (`largestChunkScoreThisFloor`): band N5's numerator. */
+    largestBreakScore: number;
+    /** The floor's turns against its par, and the floor-end bonus the clear paid. */
+    parTurns: number;
+    floorBonus: number;
+    /**
+     * What the floor's play paid before the clear (`LevelResult.playScore`): the denominator the
+     * score shares read against. The floor-end bonus is a multiple of the play on most floors,
+     * and a share of the total would measure the bonus, not the curve.
+     */
+    playScore: number;
     chunkBreaks: number;
     chunkPairs: number;
     feverBreaks: number;
@@ -62,8 +74,17 @@ export interface CascadeBalanceBandReport {
     meanTurns: number;
     meanMistakes: number;
     meanLevelScore: number;
-    /** Chunk score over level score, over floors that had a chunk at all. */
+    /** Chunk score over the floor's play score, over floors that had a chunk at all. */
     chunkShareOfScore: number;
+    /**
+     * The largest break's score over the floor's play score, over floors that had a chunk at all:
+     * band N5 (thesis §40.3). Too low and the curve is flat; too high and the small breaks are
+     * decoration.
+     */
+    largestBreakShareOfScore: number;
+    /** Share of cleared floors that came in at or under par, and the mean turns over par. */
+    underParShare: number;
+    meanTurnsOverPar: number;
     chunkBreaksPerFloor: number;
     chunkPairsPerFloor: number;
     feverFloorShare: number;
@@ -213,6 +234,10 @@ export const playCascadeBalanceFloor = ({
         ratingFromMistakes: calculateRating(mistakes),
         levelScore: runNonNegativeInteger(run.lastLevelResult?.scoreGained ?? run.stats.currentLevelScore),
         chunkScore: runNonNegativeInteger(run.chunkScoreThisFloor),
+        largestBreakScore: runNonNegativeInteger(run.largestChunkScoreThisFloor),
+        parTurns: runNonNegativeInteger(run.lastLevelResult?.parTurns ?? parTurnsForFloor(pairsOnFloor)),
+        floorBonus: runNonNegativeInteger(run.lastLevelResult?.floorBonus),
+        playScore: runNonNegativeInteger(run.lastLevelResult?.playScore ?? run.stats.currentLevelScore),
         chunkBreaks: runNonNegativeInteger(run.chunkBreaksThisFloor),
         chunkPairs: runNonNegativeInteger(run.chunkPairsBrokenThisFloor),
         feverBreaks,
@@ -229,7 +254,8 @@ const summarizeBand = (missRate: number, samples: CascadeBalanceFloorSample[]): 
     const floors = samples.length;
     const mean = (pick: (sample: CascadeBalanceFloorSample) => number): number =>
         floors === 0 ? 0 : samples.reduce((sum, sample) => sum + pick(sample), 0) / floors;
-    const withChunks = samples.filter((sample) => sample.chunkPairs > 0 && sample.levelScore > 0);
+    const withChunks = samples.filter((sample) => sample.chunkPairs > 0 && sample.playScore > 0);
+    const cleared = samples.filter((sample) => sample.cleared);
     const ratingCounts = EMPTY_RATINGS();
     for (const sample of samples) {
         ratingCounts[sample.rating] += 1;
@@ -245,7 +271,13 @@ const summarizeBand = (missRate: number, samples: CascadeBalanceFloorSample[]): 
         chunkShareOfScore:
             withChunks.length === 0
                 ? 0
-                : withChunks.reduce((sum, sample) => sum + sample.chunkScore / sample.levelScore, 0) / withChunks.length,
+                : withChunks.reduce((sum, sample) => sum + sample.chunkScore / sample.playScore, 0) / withChunks.length,
+        largestBreakShareOfScore:
+            withChunks.length === 0
+                ? 0
+                : withChunks.reduce((sum, sample) => sum + sample.largestBreakScore / sample.playScore, 0) / withChunks.length,
+        underParShare: cleared.length === 0 ? 0 : cleared.filter((sample) => sample.turns <= sample.parTurns).length / cleared.length,
+        meanTurnsOverPar: cleared.length === 0 ? 0 : cleared.reduce((sum, sample) => sum + (sample.turns - sample.parTurns), 0) / cleared.length,
         chunkBreaksPerFloor: mean((sample) => sample.chunkBreaks),
         chunkPairsPerFloor: mean((sample) => sample.chunkPairs),
         feverFloorShare: mean((sample) => (sample.feverBreaks > 0 ? 1 : 0)),
@@ -302,6 +334,10 @@ export interface CascadeBalanceBands {
     minSettledShare: number;
     cleanClearedShare: { min: number };
     cleanChunkShareOfScore: { min: number; max: number };
+    /** Band N5: the largest break's share of the floor's score at zero misses. */
+    cleanLargestBreakShareOfScore: { min: number; max: number };
+    cleanUnderParShare: { min: number };
+    underParCleanMinusReference: { min: number };
     cleanTurnsOverReferenceTurns: { max: number };
     cleanFeverShareOnBigFloors: { min: number };
     feverCleanOverReference: { min: number };
@@ -316,8 +352,25 @@ export const CASCADE_BALANCE_BANDS: CascadeBalanceBands = {
     minSettledShare: 1,
     /** A player who never misses clears every floor. */
     cleanClearedShare: { min: 1 },
-    /** At zero misses, chunk score over level score on floors with a chunk: real, not dominant. */
-    cleanChunkShareOfScore: { min: 0.08, max: 0.4 },
+    /**
+     * At zero misses, chunk score over the floor's play score on floors with a chunk.
+     *
+     * Was 0.08-0.4, "real, not dominant", when a break paid under a match per pair and the floor's
+     * total was mostly matches. Gen 181's multiplicative scoring (thesis §40.2) makes the break
+     * the score - a Fever reaction pays eight times a pop per pair - and the share it is allowed
+     * to take moves with the intent: measured 0.70-0.71 across two rules versions and 48 or 96
+     * seeds. What keeps the small breaks from being decoration is the band below, not this one.
+     */
+    cleanChunkShareOfScore: { min: 0.5, max: 0.85 },
+    /** Band N5 (thesis §40.3): below 0.25 the curve is too flat, above 0.7 the small breaks are decoration. Measured 0.49-0.50. */
+    cleanLargestBreakShareOfScore: { min: 0.25, max: 0.7 },
+    /**
+     * The par (thesis §41.3): a player who never misses is under it on nearly every floor, and
+     * the gap to the reference player is what makes it a goal rather than a formality. Measured
+     * at `PAR_TURNS_PER_PAIR` 0.4: clean 0.99, reference 0.77-0.78.
+     */
+    cleanUnderParShare: { min: 0.9 },
+    underParCleanMinusReference: { min: 0.1 },
     /** Turns to clear at zero misses over turns at the reference miss rate: faster, and by enough to feel. */
     cleanTurnsOverReferenceTurns: { max: 0.9 },
     /**
@@ -335,8 +388,16 @@ export const CASCADE_BALANCE_BANDS: CascadeBalanceBands = {
      * the measurement is a band that would let half the loop's payoff disappear unnoticed.
      */
     cleanFeverShareOnBigFloors: { min: 0.3 },
-    /** Fever floors at zero misses over Fever floors at the reference miss rate: the ladder separates. */
-    feverCleanOverReference: { min: 2 },
+    /**
+     * Fever floors at zero misses over Fever floors at the reference miss rate: the ladder separates.
+     *
+     * 2 down to 1.5 in Gen 181. The ratio was 1.95 on rules version 37 and 1.70 on version 38 with
+     * the same code, at 48 seeds and again at 96 (1.94 and 1.75): the boards a version deals are
+     * one draw, and forty-eight seeds settle the reference player's share but not the ratio of
+     * two shares. A floor at 2 sat inside that noise. What the band is for - a clean player reaches
+     * Fever markedly more often than a sloppy one - holds at 1.7; a ratio near 1 is the failure.
+     */
+    feverCleanOverReference: { min: 1.5 },
     bigFloorPairs: 8,
     /**
      * Fever floor share at the reference miss rate: rare, or the ladder is not a ladder.
@@ -357,8 +418,12 @@ export const CASCADE_BALANCE_BANDS: CascadeBalanceBands = {
      * the same margin the old one had over its own measurement.
      */
     referenceFeverShare: { max: 0.22 },
-    /** Extreme Fever is the clean player's finish: they must reach it more often than the reference player. */
-    extremeFeverCleanOverReference: { min: 1.5 },
+    /**
+     * Extreme Fever is the clean player's finish: they must reach it more often than the reference
+     * player. 1.5 down to 1.3 in Gen 181 for the reason `feverCleanOverReference` gives: 1.55 on
+     * version 37, 1.49 on version 38, same code.
+     */
+    extremeFeverCleanOverReference: { min: 1.3 },
     referenceMissRate: 0.25
 };
 
@@ -384,6 +449,17 @@ export const assertCascadeBalanceWithinBands = (
         if (clean.chunkShareOfScore < bands.cleanChunkShareOfScore.min || clean.chunkShareOfScore > bands.cleanChunkShareOfScore.max) {
             issues.push(`clean chunkShareOfScore ${clean.chunkShareOfScore.toFixed(3)} outside ${bands.cleanChunkShareOfScore.min}-${bands.cleanChunkShareOfScore.max}`);
         }
+        if (
+            clean.largestBreakShareOfScore < bands.cleanLargestBreakShareOfScore.min ||
+            clean.largestBreakShareOfScore > bands.cleanLargestBreakShareOfScore.max
+        ) {
+            issues.push(
+                `clean largestBreakShareOfScore ${clean.largestBreakShareOfScore.toFixed(3)} outside ${bands.cleanLargestBreakShareOfScore.min}-${bands.cleanLargestBreakShareOfScore.max} (band N5)`
+            );
+        }
+        if (clean.underParShare < bands.cleanUnderParShare.min) {
+            issues.push(`clean underParShare ${clean.underParShare.toFixed(3)} below ${bands.cleanUnderParShare.min}`);
+        }
         const bigFloors = report.samples.filter((sample) => sample.missRate === 0 && sample.pairsOnFloor >= bands.bigFloorPairs);
         const feverOnBig = bigFloors.length === 0 ? 0 : bigFloors.filter((sample) => sample.feverBreaks > 0).length / bigFloors.length;
         if (bigFloors.length > 0 && feverOnBig < bands.cleanFeverShareOnBigFloors.min) {
@@ -399,6 +475,11 @@ export const assertCascadeBalanceWithinBands = (
     if (clean && reference && clean.extremeFeverShare < reference.extremeFeverShare * bands.extremeFeverCleanOverReference.min) {
         issues.push(
             `clean extremeFeverShare ${clean.extremeFeverShare.toFixed(3)} is not ${bands.extremeFeverCleanOverReference.min}x the reference ${reference.extremeFeverShare.toFixed(3)}`
+        );
+    }
+    if (clean && reference && clean.underParShare - reference.underParShare < bands.underParCleanMinusReference.min) {
+        issues.push(
+            `clean underParShare ${clean.underParShare.toFixed(3)} is not ${bands.underParCleanMinusReference.min} above the reference ${reference.underParShare.toFixed(3)} (the par is not a goal)`
         );
     }
     if (reference && reference.feverFloorShare > bands.referenceFeverShare.max) {
@@ -424,7 +505,8 @@ export const summarizeCascadeBalance = (report: CascadeBalanceReport): string =>
         .map(
             (band) =>
                 `miss=${band.missRate}: cleared=${band.clearedShare.toFixed(2)} settled=${band.settledShare.toFixed(2)} turns=${band.meanTurns.toFixed(1)} ` +
-                `mistakes=${band.meanMistakes.toFixed(2)} score=${band.meanLevelScore.toFixed(0)} chunkShare=${band.chunkShareOfScore.toFixed(2)} ` +
+                `mistakes=${band.meanMistakes.toFixed(2)} score=${band.meanLevelScore.toFixed(0)} chunkShare=${band.chunkShareOfScore.toFixed(2)} largest=${band.largestBreakShareOfScore.toFixed(2)} ` +
+                `underPar=${band.underParShare.toFixed(2)} overPar=${band.meanTurnsOverPar.toFixed(1)} ` +
                 `breaks/floor=${band.chunkBreaksPerFloor.toFixed(2)} pairs/floor=${band.chunkPairsPerFloor.toFixed(2)} ` +
                 `fever=${band.feverFloorShare.toFixed(2)} ripple=${band.meanBestRipple.toFixed(2)} rippled=${band.rippleFloorShare.toFixed(2)} extreme=${band.extremeFeverShare.toFixed(2)} drift=${band.ratingDriftFloors}`
         )

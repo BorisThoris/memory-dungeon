@@ -13,7 +13,35 @@ const TIER_WORD: Record<NonNullable<LevelResult['momentumBonusTier']>, string> =
     fever: 'Extreme Fever'
 };
 
+const TIER_MULT_WORD: Record<NonNullable<LevelResult['momentumBonusTier']>, string> = {
+    none: 'cleared cold',
+    clean: 'Clean ×1.5',
+    sharp: 'Sharp ×2.5',
+    fever: 'Fever ×5'
+};
+
 export const FLOOR_CLEAR_CHAIN_COPY = {
+    /** `4 turns, par 5`: the floor's turns against its stated par (thesis §41.4). */
+    parLine: (result: LevelResult): string | null => {
+        if (result.parTurns == null || result.turnsTaken == null) return null;
+        const turns = runNonNegativeInteger(result.turnsTaken);
+        return `${turns} ${turns === 1 ? 'turn' : 'turns'}, par ${runNonNegativeInteger(result.parTurns)}`;
+    },
+    /**
+     * The floor-end bonus, term by term: what the clear paid, the tier that multiplied it, and
+     * the turns under par that added to it. Nothing when the result predates the bonus.
+     */
+    bonusLine: (result: LevelResult): string | null => {
+        if (result.floorBonus == null) return null;
+        const tier = result.momentumBonusTier ?? 'none';
+        const efficiency = runNonNegativeInteger(result.floorEfficiencyBonus);
+        const under = Math.max(0, runNonNegativeInteger(result.parTurns) - runNonNegativeInteger(result.turnsTaken));
+        const terms = [`Floor bonus +${runNonNegativeInteger(result.floorBonus).toLocaleString()}: ${TIER_MULT_WORD[tier]}`];
+        if (efficiency > 0) {
+            terms.push(`${under} under par +${efficiency.toLocaleString()}`);
+        }
+        return `${terms.join(' · ')}.`;
+    },
     recapLine: (result: LevelResult): string | null => {
         const breaks = runNonNegativeInteger(result.chunkBreaks);
         const pairs = runNonNegativeInteger(result.chunkPairsBroken);

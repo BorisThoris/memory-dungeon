@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { BoardState, RunState } from './contracts';
 import { MAX_COMBO_SHARDS } from './contracts';
 import { createNewRun, finalizeLevel, finishMemorizePhase } from './game';
+import { FLOOR_CLEAR_BASE_PER_LEVEL } from './level-clear-rules';
 import {
     applyMomentumBonusShards,
     EXTREME_FEVER_BONUS_TAG,
@@ -65,14 +66,20 @@ describe('Extreme Fever at the floor clear', () => {
         expect(cleared.stats.comboShards).toBe(1);
     });
 
-    it('pays nothing when the chain dropped before the last pair, and the score is untouched either way', () => {
+    it('pays nothing when the chain dropped before the last pair; a Fever finish multiplies the floor bonus and never the rating', () => {
         const { run, board } = clearedRun(1, 0);
         const cleared = finalizeLevel(run, board);
         expect(cleared.lastLevelResult?.momentumBonusTier).toBeUndefined();
         expect(cleared.lastLevelResult?.bonusTags ?? []).not.toContain(EXTREME_FEVER_BONUS_TAG);
         expect(cleared.stats.comboShards).toBe(0);
+        expect(cleared.lastLevelResult?.floorBonusTierMult).toBe(1);
         const fever = finalizeLevel(clearedRun(5, 3).run, board);
-        expect(fever.lastLevelResult?.scoreGained).toBe(cleared.lastLevelResult?.scoreGained);
+        // Gen 181: the tier still standing multiplies the floor-end bonus (thesis §40.5), five times cold at Fever.
+        expect(fever.lastLevelResult?.floorBonusTierMult).toBe(5);
+        const base = FLOOR_CLEAR_BASE_PER_LEVEL * board.level;
+        expect((fever.lastLevelResult?.floorBonus ?? 0) - (cleared.lastLevelResult?.floorBonus ?? 0)).toBe(base * 4);
+        expect((fever.lastLevelResult?.scoreGained ?? 0) - (cleared.lastLevelResult?.scoreGained ?? 0)).toBe(base * 4);
+        expect(fever.lastLevelResult?.floorEfficiencyBonus).toBe(cleared.lastLevelResult?.floorEfficiencyBonus);
         expect(fever.lastLevelResult?.rating).toBe(cleared.lastLevelResult?.rating);
     });
 });

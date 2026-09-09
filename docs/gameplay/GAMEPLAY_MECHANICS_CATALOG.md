@@ -64,7 +64,7 @@
 | Chunk break: every match pops the same-suit clump and its partners | `resolveChunkBreak`, `tileCanBreakInChunk`, `breakClumpReach` (`chunk-break-rules.ts`) | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Ripple waves, the severance drop, the halo | `rippleWaves`, `suitCanStillPop`, `RIPPLE_MAX_WAVES` (`chunk-break-rules.ts`) | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Chain tiers (Clean / Sharp / Fever) and momentum | `getChainTier`, `chainTierRungs`, `chainMomentum`, `chainMeter` (`chain-tier-rules.ts`) | [epic-scoring-objectives](./epic-scoring-objectives.md) |
-| Chunk score and shards | `chunkBreakScore`, `chunkBreakComboShards` | [epic-scoring-objectives](./epic-scoring-objectives.md) |
+| Break score, multiplicative: a pair's worth × pairs × tier (`CHAIN_MULT`) × ripple (`waveMult`); shards | `chunkBreakScore`, `chunkScorePerPair`, `chunkBreakComboShards` | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | Shifting spotlight scoring + rotation | `shiftingSpotlightMatchDelta` (`shifting-spotlight-rules.ts`), `shiftingSpotlightNonce` | [epic-mutators](./epic-mutators.md), [epic-board-rendering-assists](./epic-board-rendering-assists.md) |
 | Cursed pair early match flag | `cursedMatchedEarlyThisFloor` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Findables on match, spilled by a break, forfeited by Destroy | `findableKind`, `findablesClaimedThisFloor`, `resolveFindableMatchRewardThroughGameplayCore` | [epic-mutators](./epic-mutators.md) |
@@ -84,7 +84,8 @@
 | Per-match score | `calculateMatchScore`, streak, `matchScoreMultiplier` | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | Recall match bonus | `calculateRecallMatchBonus` | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | Presentation mutator flat penalty | `getPresentationMutatorMatchPenalty` | [epic-mutators](./epic-mutators.md) |
-| Level clear bonus / perfect / boss multiplier | `finalizeLevel` | [epic-scoring-objectives](./epic-scoring-objectives.md) |
+| The floor par and the turns taken against it | `parTurnsForFloor`, `turnsTakenThisFloor` (`floor-par.ts`), `turnsThisFloor` | [epic-scoring-objectives](./epic-scoring-objectives.md) |
+| Floor-end bonus: 100 × floor × tier at clear (`FLOOR_TIER_MULT`) + 50 × floor per turn under par; boss multiplier | `calculateFloorClearBonus` (`level-clear-rules.ts`), `finalizeLevel` | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | Featured objective bonus and objective streak kicker | `getFloorClearObjectiveResult`, `getFeaturedObjectiveClearResult`, `FEATURED_OBJECTIVE_BONUS_SCORES` (`secondary-objective-rules.ts`) | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | Chain-standing floor-end payout (Extreme Fever) | `finalizeLevel` reads `runChainTier` | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | Rating letter | `calculateRating` | [epic-scoring-objectives](./epic-scoring-objectives.md) |
@@ -284,7 +285,8 @@ Source: [`RunState`](../../src/shared/contracts.ts) interface.
 | `decoyFlippedThisFloor` | Glass decoy touched in mismatch | [epic-mutators](./epic-mutators.md) |
 | `glassDecoyActiveThisFloor` | Board includes decoy tile | [epic-mutators](./epic-mutators.md) |
 | `cursedMatchedEarlyThisFloor` | Cursed objective failed | [epic-core-memory-loop](./epic-core-memory-loop.md) |
-| `matchResolutionsThisFloor` | Flip-par / efficiency counter | [epic-scoring-objectives](./epic-scoring-objectives.md) |
+| `matchResolutionsThisFloor` | Matches resolved this floor (seeds deterministic rolls) | [epic-scoring-objectives](./epic-scoring-objectives.md) |
+| `turnsThisFloor`, `largestChunkScoreThisFloor` | Turns against the par; the biggest break's score (band N5) | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | `flashPairCharges` | Practice / wild flash reveal | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `flashPairRevealedTileIds` | Tiles shown by flash | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `regionShuffleCharges` | Row shuffle / tile swap budget | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |

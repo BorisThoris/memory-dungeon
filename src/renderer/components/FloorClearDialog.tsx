@@ -44,6 +44,8 @@ const FloorClearDialog = ({
     const mistakes = runNonNegativeInteger(result.mistakes);
     const lives = runNonNegativeInteger(result.livesRemaining);
     const chainLine = FLOOR_CLEAR_CHAIN_COPY.recapLine(result);
+    const parLine = FLOOR_CLEAR_CHAIN_COPY.parLine(result);
+    const bonusLine = FLOOR_CLEAR_CHAIN_COPY.bonusLine(result);
 
     return (
         <OverlayModal
@@ -51,7 +53,7 @@ const FloorClearDialog = ({
             headerPlateTone="success"
             ornamentalHeaderPlate
             quietHeaderPlate
-            subtitle={`Floor ${level}${result.perfect ? ' · Perfect clear' : ''}`}
+            subtitle={`Floor ${level}${parLine ? ` · ${parLine}` : ''}${result.perfect ? ' · Perfect clear' : ''}`}
             title="Floor cleared"
         >
             <div
@@ -85,8 +87,13 @@ const FloorClearDialog = ({
                     </div>
                 </dl>
 
-                {lifeBonusLine || objectiveLine || residentLine || chainLine ? (
+                {lifeBonusLine || objectiveLine || residentLine || chainLine || bonusLine ? (
                     <ul className={styles.notes} data-testid="floor-clear-notes">
+                        {bonusLine ? (
+                            <li data-testid="floor-clear-bonus" data-tone={result.momentumBonusTier === 'fever' ? 'reward' : undefined}>
+                                {bonusLine}
+                            </li>
+                        ) : null}
                         {lifeBonusLine ? <li data-tone="reward">{lifeBonusLine}</li> : null}
                         {chainLine ? (
                             <li data-testid="floor-clear-chain" data-tone={result.momentumBonusTier === 'fever' ? 'reward' : undefined}>

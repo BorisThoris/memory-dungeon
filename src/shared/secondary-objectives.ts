@@ -2,7 +2,8 @@ import type { FeaturedObjectiveId, LevelResult, RunState } from './contracts';
 import { getFeaturedObjectiveLabel } from './floor-mutator-schedule';
 import { runArrayCount } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
-import { getFeaturedObjectiveRewardCopy, getFlipParLimit } from './secondary-objective-rules';
+import { getFeaturedObjectiveRewardCopy } from './secondary-objective-rules';
+import { parTurnsForFloor, turnsTakenThisFloor } from './floor-par';
 
 export type SecondaryObjectiveState = 'active' | 'completed' | 'failed';
 export type LevelResultTagId =
@@ -60,7 +61,7 @@ export const LEVEL_RESULT_TAG_DEFINITIONS: Record<LevelResultTagId, LevelResultT
         id: 'flip_par',
         label: 'Flip par',
         shortCopy: 'Cleared within par.',
-        journalCopy: 'Stayed within the match-resolution par for the floor.',
+        journalCopy: 'Cleared the floor within its par of turns.',
         priority: 55,
         rewardBearing: true
     },
@@ -164,15 +165,15 @@ export const getSecondaryObjectiveProgress = (run: RunState): SecondaryObjective
             detail = state === 'failed' ? `Failed: ${failureReason}` : 'Clear the cursed pair last among real pairs.';
             break;
         case 'flip_par': {
-            const limit = getFlipParLimit(board.pairCount);
-            const matchResolutionsThisFloor = runNonNegativeInteger(run.matchResolutionsThisFloor);
-            state = matchResolutionsThisFloor > limit ? 'failed' : 'active';
-            condition = `Stay within match-resolution par (${matchResolutionsThisFloor}/${limit}).`;
-            failureReason = state === 'failed' ? `Match-resolution par exceeded (${matchResolutionsThisFloor}/${limit}).` : null;
+            const par = parTurnsForFloor(board.pairCount);
+            const turns = turnsTakenThisFloor(run);
+            state = turns > par ? 'failed' : 'active';
+            condition = `Clear within par (${turns}/${par} turns).`;
+            failureReason = state === 'failed' ? `Par exceeded (${turns}/${par} turns).` : null;
             detail =
                 state === 'failed'
                     ? `Failed: ${failureReason}`
-                    : `Stay within ${matchResolutionsThisFloor}/${limit} match resolutions.`;
+                    : `Clear the floor within ${turns}/${par} turns.`;
             break;
         }
         default:

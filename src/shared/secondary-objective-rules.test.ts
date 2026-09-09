@@ -12,7 +12,7 @@ import {
     getFeaturedObjectiveClearResult,
     getFeaturedObjectiveBonusScore,
     getFeaturedObjectiveRewardCopy,
-    getFlipParLimit,
+    isWithinFloorPar,
     isFeaturedObjectiveCompleted
 } from './secondary-objective-rules';
 import { createNewRun } from './game-core';
@@ -28,10 +28,13 @@ describe('secondary objective rules', () => {
         expect(getFeaturedObjectiveBonusScore('flip_par')).toBe(FLIP_PAR_BONUS_SCORE);
     });
 
-    it('computes match-resolution par from pair count', () => {
-        expect(getFlipParLimit(0)).toBe(2);
-        expect(getFlipParLimit(2)).toBe(5);
-        expect(getFlipParLimit(8)).toBe(12);
+    it('reads within-par from the floor par and the turns taken, match or miss', () => {
+        const run = createNewRun(0);
+        const board = { ...run.board!, pairCount: 12 };
+        // Twelve pairs par at five turns (ceil(12 × 0.4)).
+        expect(isWithinFloorPar({ ...run, turnsThisFloor: 5 }, board)).toBe(true);
+        expect(isWithinFloorPar({ ...run, turnsThisFloor: 6 }, board)).toBe(false);
+        expect(isWithinFloorPar(run, { ...board, pairCount: 1 })).toBe(false);
     });
 
     it('uses the score table in reward copy', () => {
@@ -55,10 +58,10 @@ describe('secondary objective rules', () => {
         expect(isFeaturedObjectiveCompleted(run, { ...board, cursedPairKey: 'curse' }, 'cursed_last')).toBe(true);
         expect(isFeaturedObjectiveCompleted({ ...run, cursedMatchedEarlyThisFloor: true }, { ...board, cursedPairKey: 'curse' }, 'cursed_last')).toBe(false);
         expect(isFeaturedObjectiveCompleted(run, { ...board, pairCount: 4 }, 'flip_par')).toBe(true);
-        expect(isFeaturedObjectiveCompleted({ ...run, matchResolutionsThisFloor: 99 }, { ...board, pairCount: 4 }, 'flip_par')).toBe(false);
+        expect(isFeaturedObjectiveCompleted({ ...run, turnsThisFloor: 99 }, { ...board, pairCount: 4 }, 'flip_par')).toBe(false);
         expect(
             isFeaturedObjectiveCompleted(
-                { ...run, matchResolutionsThisFloor: Number.POSITIVE_INFINITY },
+                { ...run, turnsThisFloor: Number.POSITIVE_INFINITY },
                 { ...board, pairCount: 4 },
                 'flip_par'
             )
@@ -82,7 +85,7 @@ describe('secondary objective rules', () => {
         });
         expect(
             getDefaultClearObjectiveBonus(
-                { ...run, matchResolutionsThisFloor: Number.NaN },
+                { ...run, turnsThisFloor: Number.NaN },
                 board
             ).bonusTags
         ).toContain('flip_par');
@@ -96,7 +99,7 @@ describe('secondary objective rules', () => {
             glassDecoyActiveThisFloor: true,
             decoyFlippedThisFloor: true,
             cursedMatchedEarlyThisFloor: true,
-            matchResolutionsThisFloor: 99
+            turnsThisFloor: 99
         };
         const board = { ...run.board!, cursedPairKey: 'curse', pairCount: 4 };
 

@@ -3,9 +3,7 @@ import { MATCH_DELAY_MS } from './contracts';
 import { createNewRun } from './game-core';
 import { pairsForFloor } from './pair-curve';
 import {
-    calculateLevelClearBonus,
     calculateMatchScore,
-    calculatePerfectClearBonus,
     calculateRating,
     computeFlipResolveDelayMs,
     getMemorizeDuration,
@@ -43,16 +41,11 @@ describe('scoring-rules', () => {
 
 
 
-    it('calculates ratings and score bonuses', () => {
+    it('calculates ratings and the match score', () => {
         expect(calculateRating(0)).toBe('S++');
         expect(calculateRating(1)).toBe('S');
         expect(calculateRating(9)).toBe('F');
         expect(calculateMatchScore(2, 3, 1.5)).toBe(82);
-        expect(calculateLevelClearBonus(4.9)).toBe(200);
-        expect(calculateLevelClearBonus(4)).toBe(200);
-        expect(calculateLevelClearBonus(Number.NaN)).toBe(0);
-        expect(calculateLevelClearBonus(Number.POSITIVE_INFINITY)).toBe(0);
-        expect(calculatePerfectClearBonus()).toBe(25);
     });
 
     it('matches regular, wild, and decoy pair keys', () => {

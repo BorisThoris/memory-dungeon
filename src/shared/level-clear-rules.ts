@@ -6,12 +6,51 @@ import {
     type LevelResult,
     type RunState
 } from './contracts';
-import {
-    calculateLevelClearBonus,
-    calculatePerfectClearBonus
-} from './scoring-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 import type { FloorClearMomentumBonus } from './floor-clear-momentum-bonus-rules';
+import type { ChainTier } from './chain-tier-rules';
+
+/**
+ * The floor-end bonus (thesis §40.5). A floor pays for being cleared, more for being cleared
+ * with the chain still up, and more again for being cleared under par: Peggle's Extreme Fever
+ * disproportion, where the ceremony pays more than the floor. Clearing at Fever is worth five
+ * times clearing cold. The efficiency term is what replaced the exit's "leave early" option: a
+ * floor that went badly pays less, and needs no escape hatch.
+ */
+export const FLOOR_CLEAR_BASE_PER_LEVEL = 100;
+export const FLOOR_TIER_MULT: Record<ChainTier, number> = { none: 1, clean: 1.5, sharp: 2.5, fever: 5 };
+export const FLOOR_EFFICIENCY_PER_TURN_PER_LEVEL = 50;
+
+export interface FloorClearBonus {
+    base: number;
+    tier: ChainTier;
+    tierMult: number;
+    /** `base × tierMult`, whole. */
+    tierBonus: number;
+    turnsUnderPar: number;
+    efficiencyBonus: number;
+    total: number;
+}
+
+export const calculateFloorClearBonus = ({
+    level,
+    tier,
+    parTurns,
+    turnsTaken
+}: {
+    level: number;
+    tier: ChainTier;
+    parTurns: number;
+    turnsTaken: number;
+}): FloorClearBonus => {
+    const safeLevel = Math.max(1, runNonNegativeInteger(level));
+    const base = FLOOR_CLEAR_BASE_PER_LEVEL * safeLevel;
+    const tierMult = FLOOR_TIER_MULT[tier];
+    const tierBonus = Math.floor(base * tierMult);
+    const turnsUnderPar = Math.max(0, runNonNegativeInteger(parTurns) - runNonNegativeInteger(turnsTaken));
+    const efficiencyBonus = turnsUnderPar * FLOOR_EFFICIENCY_PER_TURN_PER_LEVEL * safeLevel;
+    return { base, tier, tierMult, tierBonus, turnsUnderPar, efficiencyBonus, total: tierBonus + efficiencyBonus };
+};
 
 export const getClearLifeReason = (tries: number): ClearLifeReason => {
     if (tries === 0) return 'perfect';
@@ -43,8 +82,7 @@ export const getFloorClearStatLevelResultFields = (run: RunState): FloorClearSta
 });
 
 export interface FloorClearScoreResult {
-    levelBonus: number;
-    perfectBonus: number;
+    floorBonus: FloorClearBonus;
     preBossSubtotal: number;
     scoreGained: number;
 }
@@ -52,29 +90,23 @@ export interface FloorClearScoreResult {
 export const calculateFloorClearScore = ({
     currentLevelScore,
     featuredObjectiveStreakBonus,
+    floorBonus,
     floorTag,
-    level,
-    objectiveBonus,
-    perfect
+    objectiveBonus
 }: {
     currentLevelScore: number;
     featuredObjectiveStreakBonus: number;
+    floorBonus: FloorClearBonus;
     floorTag: FloorTag | undefined;
-    level: number;
     objectiveBonus: number;
-    perfect: boolean;
 }): FloorClearScoreResult => {
-    const levelBonus = calculateLevelClearBonus(level);
-    const perfectBonus = perfect ? calculatePerfectClearBonus() : 0;
     const preBossSubtotal =
         runNonNegativeInteger(currentLevelScore) +
-        levelBonus +
-        perfectBonus +
+        floorBonus.total +
         runNonNegativeInteger(objectiveBonus) +
         runNonNegativeInteger(featuredObjectiveStreakBonus);
     return {
-        levelBonus,
-        perfectBonus,
+        floorBonus,
         preBossSubtotal,
         scoreGained:
             floorTag === 'boss'
@@ -91,15 +123,19 @@ export interface CreateFloorClearLevelResultInput {
     featuredObjectiveId: FeaturedObjectiveId | null;
     featuredObjectiveStreak: number;
     featuredObjectiveStreakBonus: number;
+    floorBonus: FloorClearBonus;
     level: number;
     livesRemaining: number;
     mistakes: number;
     momentumBonus: FloorClearMomentumBonus;
     objectiveBonusScore: number;
+    parTurns: number;
     perfect: boolean;
+    playScore: number;
     rating: LevelResult['rating'];
     run: RunState;
     scoreGained: number;
+    turnsTaken: number;
 }
 
 export const createFloorClearLevelResult = ({
@@ -110,15 +146,19 @@ export const createFloorClearLevelResult = ({
     featuredObjectiveId,
     featuredObjectiveStreak,
     featuredObjectiveStreakBonus,
+    floorBonus,
     level,
     livesRemaining,
     mistakes,
     momentumBonus,
     objectiveBonusScore,
+    parTurns,
     perfect,
+    playScore,
     rating,
     run,
-    scoreGained
+    scoreGained,
+    turnsTaken
 }: CreateFloorClearLevelResultInput): LevelResult => ({
     level,
     scoreGained,
@@ -140,5 +180,12 @@ export const createFloorClearLevelResult = ({
     ...getFloorClearStatLevelResultFields(run),
     chainMomentumAtClear: momentumBonus.momentum > 0 ? momentumBonus.momentum : undefined,
     momentumBonusTier: momentumBonus.tier !== 'none' ? momentumBonus.tier : undefined,
-    momentumBonusShards: momentumBonus.shards > 0 ? momentumBonus.shards : undefined
+    momentumBonusShards: momentumBonus.shards > 0 ? momentumBonus.shards : undefined,
+    parTurns,
+    turnsTaken,
+    playScore: runNonNegativeInteger(playScore),
+    floorBonus: floorBonus.total,
+    floorBonusTierMult: floorBonus.tierMult,
+    floorEfficiencyBonus: floorBonus.efficiencyBonus > 0 ? floorBonus.efficiencyBonus : undefined,
+    largestBreakScore: positive(runNonNegativeInteger(run.largestChunkScoreThisFloor))
 });

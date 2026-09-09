@@ -11,7 +11,7 @@
 import type { AchievementId, GameMode, MutatorId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 30 as const;
+export const ENCYCLOPEDIA_VERSION = 31 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -162,7 +162,7 @@ export const ACHIEVEMENT_CATALOG: Record<AchievementId, AchievementCodexEntry> =
     ACH_SCORE_THOUSAND: {
         id: 'ACH_SCORE_THOUSAND',
         title: 'Gold Mind',
-        description: 'Score 1000 total points in one run.'
+        description: 'Score 10,000 total points in one run.'
     },
     ACH_PERFECT_CLEAR: {
         id: 'ACH_PERFECT_CLEAR',
@@ -195,7 +195,7 @@ export const ACHIEVEMENT_CATALOG: Record<AchievementId, AchievementCodexEntry> =
     ACH_SCORE_TEN_THOUSAND: {
         id: 'ACH_SCORE_TEN_THOUSAND',
         title: 'Vault Mind',
-        description: 'Score 10,000 total points in one run.'
+        description: 'Score 100,000 total points in one run.'
     },
     ACH_STREAK_TEN: {
         id: 'ACH_STREAK_TEN',
@@ -344,9 +344,9 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
     },
     {
         id: 'scoring',
-        title: 'Score, flip par, and perfect clears',
+        title: 'Score, the par, and the floor-end bonus',
         description:
-            'Match score, floor clear bonuses, streak systems, and optional shuffle tax are summarized under **Scoring & survival** in this Codex. **Perfect Memory** (achievement) requires a flawless **floor** (zero tries) **and** no disallowed powers this **run**—see that section for the split between “perfect floor” and “no-assist run.”'
+            'Every floor states a **par**: the turns a competent player needs, `ceil(pairs × 0.85)`, shown as **turns / par** on the run bar. A turn is a pair of flips resolved, match or miss. Clearing a floor pays **100 × floor**, multiplied by the chain tier still standing when the last pair went (**Clean ×1.5, Sharp ×2.5, Fever ×5**), plus **50 × floor** for every turn under par. Missing par costs nothing else. Match score, streaks and the break\'s own scoring are under **Scoring & survival**. **Perfect Memory** (achievement) requires a flawless **floor** (zero tries) **and** no disallowed powers this **run**.'
     },
     {
         id: 'powers',
@@ -456,9 +456,9 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
     },
     {
         id: 'sys_flip_par_floor',
-        title: 'Flip par (match-resolution budget)',
+        title: 'Flip par (within the floor par)',
         description:
-            'The **flip par** objective is worth **+30**. If you finish the floor within a **match-resolution budget** based on pair count, you get the bonus. It counts **pair clears** (matches, gambit hits), not every tile flip. Outside scheduled endless chapters this can stack with other floor objectives; in modern endless chapters it pays out only when **Flip par** is the **featured objective** for that floor.'
+            'The **flip par** objective is worth **+30**. Clear the floor within its stated **par** of turns (`ceil(pairs × 0.85)`, the same par the run bar shows) and you get the bonus. A turn is a pair of flips resolved, match or miss; the gambit\'s three flips are one turn. Outside scheduled endless chapters this can stack with other floor objectives; in modern endless chapters it pays out only when **Flip par** is the **featured objective** for that floor.'
     },
     {
         id: 'sys_glass_witness_and_cursed_last',
@@ -470,7 +470,7 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         id: 'sys_boss_floor_multiplier',
         title: 'Boss floors',
         description:
-            'Floors tagged **boss** apply a **score multiplier** (~1.15×) to the pre-boss subtotal for that clear (level bonus, perfect bonus, and stacked objective bonuses included before the multiply).'
+            'Floors tagged **boss** apply a **score multiplier** (~1.15×) to the pre-boss subtotal for that clear (the floor-end bonus and stacked objective bonuses included before the multiply).'
     },
     {
         id: 'sys_combo_shards',
@@ -569,7 +569,7 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
             'A pair goes only when both its halves touch the clump, so a partner across the board is the chain\'s to reach. ' +
             'From chain 3 (Clean) each partner that left takes its own clump - a second wave. Sharp, about two-fifths of the floor\'s pairs of momentum and four at least, runs the reaction until a wave takes nothing. ' +
             'Fever, about two-thirds and seven at least, adds the halo: everything touching the first clump, whatever its suit. Every pair a break takes adds to the chain\'s momentum. ' +
-            'Treasure inside a break spills and pays as if you had matched it. Broken pairs score less than matched ones and give no recall credit - memory still pays best - but they drop combo shards, ' +
+            'Treasure inside a break spills and pays as if you had matched it. A break pays a pair\'s worth times the pairs, times the tier it landed at (Clean ×2, Sharp ×4, Fever ×8), times the ripple (×1.75 for a second wave, up to ×6): a huge Fever reaction is worth hundreds of pops. Broken pairs give no recall credit - memory still pays best - but they drop combo shards, ' +
             'clear the floor faster, and a longer ripple pays more. A miss halves the chain and puts the fire out. ' +
             'A suit that can no longer pop - no two of its pairs within reach of each other - loses its last pairs on its own: that is the drop, and it happens at any chain, so breaking the two pairs that hold a third up is a thing you can aim. ' +
             'A break with a shape gets a name on the run line: a ripple that ran on, a drop, a partner taken from across the board, a halo, a treasure spill, a clean sweep of a suit. ' +

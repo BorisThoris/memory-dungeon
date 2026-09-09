@@ -131,6 +131,8 @@ export const resolveMismatchTurnTransition = ({
         stickyBlockIndex: null,
         recallFocus: decreaseRecallFocus(run),
         recallMistakesThisFloor: runNonNegativeInteger(run.recallMistakesThisFloor) + 1,
+        // A miss is a turn against the par as much as a match is; the gambit's three flips are one.
+        turnsThisFloor: runNonNegativeInteger(run.turnsThisFloor) + 1,
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, tileIds),
         decoyFlippedThisFloor: run.decoyFlippedThisFloor || decoyTouched,
         // A miss keeps half the streak (the score multiplier forgives) but the cascade's momentum

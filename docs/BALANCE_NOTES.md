@@ -1703,3 +1703,97 @@ have to be found by hand, and the chunk's share of score rises with the pairs it
 clean/reference Fever ratio sits on its floor of 2: the drop is worth the same to a sloppy player
 as to a clean one, which is the price of a rule that fires at chain zero, and the ladder above it
 still separates. `ACH_NOTHING_HELD_IT`, unearnable since Gen 141, is earnable on most floors.
+
+## Gen 181: multiplicative scoring, the floor par, the floor-end bonus
+
+Thesis §40.2, §40.5 and §41.3, implemented as specified and then measured (`sim:cascade`, 48 seeds,
+floors 1-24, three miss rates), with two constants set from the measurement rather than the page.
+
+### The break's score
+
+`chunkBreakScore = perPair × pairs × CHAIN_MULT[tier] × waveMult(waves)`, with `CHAIN_MULT` none 1,
+Clean 2, Sharp 4, Fever 8 and `waveMult(w) = min(6, 1 + 0.75 (w - 1))`. The per-pair figure stays
+derived from the base match score (`floor(match × 0.6)`), so a change to match scoring still
+propagates. The size bonus (`6 × n × (n - 1)`), the Fever lift of 1.5 and the ripple lift of 0.2 a
+wave capped at 2 are gone, not zeroed. A twelve-pair Fever reaction over seven waves is worth 528
+chain-one pops; it was worth 27.
+
+| Break | Old | New |
+|---|---|---|
+| A chain-one pop, one pair | perPair | perPair |
+| Three pairs at Clean | 3 perPair + 36 | 6 perPair |
+| Four pairs at Sharp, three waves | (4 perPair + 72) × 1.4 | 40 perPair |
+| Twelve pairs at Fever, seven waves | (12 perPair + 792) × 1.5 × 2 | 528 perPair |
+
+### The par
+
+`parTurnsForFloor(pairs) = ceil(pairs × 0.4)`, not the thesis's 0.85. A turn is a pair of flips
+resolved, match or miss (the gambit's three are one), counted on a new `turnsThisFloor` ledger the
+run bar shows as `turns / par`. The thesis wrote 0.85 assuming a twelve-pair floor takes about ten
+turns; measured, with every match popping, it takes 3.5 for a player who never misses and 4.6 for
+one who misses a quarter of their flips, so a par of eleven was under on every floor at every miss
+rate and said nothing. Per-floor means (clean / 25% miss): 8 pairs 3.0 / 4.5, 12 pairs 3.5 / 4.6,
+15 pairs 3.9 / 5.2. At 0.4 a twelve-pair floor pars at five: the clean player is under par on 0.99
+of floors, the reference player on 0.78, and that gap is what makes it a goal. Both are bands now.
+
+The `flip_par` objective read the same par. It used to compare matches resolved to
+`ceil(pairs × 1.25) + 2`, and a floor of N pairs cannot resolve more than N matches, so it had
+never once been failed.
+
+### The floor-end bonus
+
+`100 × floor × {none 1, Clean 1.5, Sharp 2.5, Fever 5}[tier at clear] + 50 × floor × max(0, par - turns)`,
+where the tier is the momentum still standing when the last pair went (the Extreme Fever reading,
+which used to pay a shard and a name and now multiplies the clear). The flat 50 × floor and the
+perfect clear's 25 are gone; a perfect floor is a rating, not a payment. `LevelResult` carries the
+par, the turns, the play score, the bonus and its two terms, and the floor-clear dialog says
+`Floor 12 · 4 turns, par 5` and `Floor bonus +6,600: Fever ×5 · 1 under par +600.`
+
+Measured, the bonus is a multiple of the floor's play on most floors: at floor 12 the play (matches
+and breaks) pays about 1,500 and a Fever clear 6,000 plus efficiency. That is the thesis's own
+proportion - its worked table puts a floor-12 Fever clear (6,000) beside a huge Fever reaction
+(5,280) - but our real breaks are smaller than its examples (the largest break on a clean floor 12
+is about 700), so the ceremony pays eight times the best thing that happened rather than about the
+same. Recorded here, not changed: Phase 3's scoring re-read (§40.4, the score built term by term)
+is where the proportion gets looked at with the presentation in place. The score shares below are
+read against the play score for that reason; against the total they measure the bonus.
+
+### The bands
+
+| | Gen 180 | Gen 181 |
+|---|---|---|
+| Chunk share of play score, clean | 0.33 (of level score) | **0.71** |
+| Largest break's share of play score, clean (N5, 0.25-0.70) | - | **0.50** |
+| Under par, clean / reference | - | **0.99 / 0.78** |
+| Turns to clear, clean / reference | 3.1 / 4.3 | 3.1 / 4.2 |
+| Fever share, clean / reference | 0.38 / 0.19 | 0.33 / 0.19 |
+| clean/reference Fever ratio | 2.00 | **1.70** |
+| Extreme Fever, clean / reference | 0.78 / 0.50 | 0.78 / 0.52 |
+
+`cleanChunkShareOfScore` moves from 0.08-0.4 to 0.5-0.85: the break is the score now, by design,
+and N5 is the band that keeps the small ones from being decoration.
+
+The score milestones are a new record season, as the design doc said a new scoring regime would
+be: Gold Mind moves from 1,000 to 10,000 and Vault Mind from 10,000 to 100,000. A clean player
+banks a thousand by floor two now and ten thousand by about floor seven; a hundred thousand is
+floor fifteen or so for the clean player and later for the reference one. The ids stay, because
+they are Steam API names.
+
+Two bands moved for a reason that is not this generation's. Scoring cannot touch the ladder, yet
+the clean/reference Fever ratio fell 2.00 → 1.70 and Extreme Fever's 1.56 → 1.49. The rules version
+went 37 → 38, which re-deals every seed's board, and that alone is the movement:
+
+| | 48 seeds v37 | 48 seeds v38 | 96 seeds v37 | 96 seeds v38 |
+|---|---|---|---|---|
+| Fever clean / reference | 0.364 / 0.187 | 0.327 / 0.193 | 0.368 / 0.190 | 0.349 / 0.199 |
+| ratio | 1.95 | 1.70 | 1.94 | 1.75 |
+| Extreme Fever ratio | 1.55 | 1.49 | 1.53 | 1.48 |
+
+Forty-eight seeds settle the reference player's share (Gen 177's finding still holds: 0.19-0.20
+everywhere) but not the ratio of two shares, and doubling the seeds does not close the gap between
+versions. A version's boards are one draw, and a band at 2 or 1.5 sat inside the spread between
+two draws of the same rules. `feverCleanOverReference` moves 2 → 1.5 and
+`extremeFeverCleanOverReference` 1.5 → 1.3, under the worse draw with the margin the old floors had
+over the better one. What the bands are for - the clean player reaches Fever and finishes at it
+markedly more often than the sloppy one - holds on both draws; a ratio near 1 is the failure they
+exist to catch.

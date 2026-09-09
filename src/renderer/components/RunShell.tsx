@@ -1,6 +1,7 @@
 import { memo, useEffect, useRef, useState, type CSSProperties, type ReactElement } from 'react';
 import type { RunState } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
+import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
 import { MUTATOR_CATALOG } from '../../shared/mechanics-encyclopedia';
 import { GameplayMenuIcon } from '../ui/gameplayIcons';
 import styles from './RunShell.module.css';
@@ -160,6 +161,14 @@ const RunShell = ({
                 </Stat>
                 <Stat label="Score" primary testId="hud-score">
                     {runNonNegativeInteger(run.stats.totalScore).toLocaleString()}
+                </Stat>
+                {/* The par: a visible goal at every moment. Turns resolved on this floor over the
+                    turns a competent player needs; beating it pays the floor-end efficiency bonus,
+                    missing it costs nothing else. */}
+                <Stat label="Par" testId="hud-par">
+                    <span aria-label={`${turnsTakenThisFloor(run)} of ${parTurnsForRun(run)} turns`} role="img">
+                        {turnsTakenThisFloor(run)} / {parTurnsForRun(run)}
+                    </span>
                 </Stat>
                 {/* Only on a shared game. The run's own score stays: the table is still playing one
                     run together, and these say who has earned which part of it. */}

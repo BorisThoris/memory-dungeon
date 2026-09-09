@@ -11,8 +11,6 @@ export {
     resumeRun
 } from './run-timer-rules';
 export {
-    calculateLevelClearBonus,
-    calculatePerfectClearBonus,
     calculateRating,
     getMemorizeDuration,
     getMemorizeDurationForRun

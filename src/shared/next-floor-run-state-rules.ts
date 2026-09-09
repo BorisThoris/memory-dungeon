@@ -64,6 +64,8 @@ export const createNextFloorRunState = (
         bestChainThisFloor: 0,
         chunkPairsDroppedThisFloor: 0,
         bestRippleThisFloor: 0,
+        turnsThisFloor: 0,
+        largestChunkScoreThisFloor: 0,
         magpieTheftsThisFloor: 0,
         magpieScaredOffThisFloor: 0,
         shiftingSpotlightNonce: 0,

@@ -11,8 +11,9 @@ import { runNonNegativeInteger } from './run-number-guards';
  * never score: those stay what memory earned.
  *
  * Gen 174: the ladder used to pay a gold at Clean and Sharp and two at Fever, and gold is gone
- * with the shop it was for. Until Phase 2's floor-end bonus (T2.7) pays the tiers in score, only
- * Fever pays anything - the shard - and Clean and Sharp are a name on the floor-clear line.
+ * with the shop it was for. Gen 181: the tier this reads is what multiplies the floor-end bonus
+ * (`calculateFloorClearBonus`, thesis §40.5) - clearing at Fever pays five times clearing cold -
+ * so the ladder pays in score after all, through that bonus. Here only Fever still pays a shard.
  */
 export const EXTREME_FEVER_BONUS_TAG = 'extreme_fever';
 

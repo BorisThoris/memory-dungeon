@@ -11,10 +11,12 @@ import {
     getFloorClearMomentumBonus
 } from './floor-clear-momentum-bonus-rules';
 import {
+    calculateFloorClearBonus,
     calculateFloorClearScore,
     createFloorClearLevelResult,
     getClearLifeReason
 } from './level-clear-rules';
+import { parTurnsForFloor, turnsTakenThisFloor } from './floor-par';
 import { getFloorClearObjectiveResult } from './secondary-objective-rules';
 import { clearResolveState } from './run-timer-rules';
 import { normalizeSessionStats } from './session-stats-rules';
@@ -38,13 +40,28 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
     const featuredObjectiveCompleted = floorClearObjective.featuredObjectiveCompleted;
     const featuredObjectiveClear = floorClearObjective.featuredObjectiveClear;
 
+    // Extreme Fever: the momentum still standing when the last pair went is the tier the floor
+    // clears at, and it multiplies the floor-end bonus. Read before the streak resets with the
+    // floor, never from the score.
+    const momentumBonus = getFloorClearMomentumBonus({
+        chain: stats.currentStreak,
+        cascadedPairs: run.chunkPairsThisChain,
+        pairsOnFloor: board.pairCount
+    });
+    const parTurns = parTurnsForFloor(board.pairCount);
+    const turnsTaken = turnsTakenThisFloor(run);
+    const floorBonus = calculateFloorClearBonus({
+        level: board.level,
+        tier: momentumBonus.tier,
+        parTurns,
+        turnsTaken
+    });
     const clearScore = calculateFloorClearScore({
         currentLevelScore: currentLevelScoreBeforeClear,
         featuredObjectiveStreakBonus: featuredObjectiveClear.featuredObjectiveStreakBonus,
+        floorBonus,
         floorTag: board.floorTag,
-        level: board.level,
-        objectiveBonus,
-        perfect
+        objectiveBonus
     });
     const scoreGained = clearScore.scoreGained;
     if (board.floorTag === 'boss') {
@@ -56,13 +73,6 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
     const bestScore = Math.max(runNonNegativeInteger(stats.bestScore), totalScore);
     const rating = calculateRating(tries);
     const lives = Math.min(MAX_LIVES, livesBeforeClear + clearLifeGained);
-    // Extreme Fever: the momentum still standing when the last pair went pays a shard at
-    // Fever. Read before the streak resets with the floor, never from the score.
-    const momentumBonus = getFloorClearMomentumBonus({
-        chain: stats.currentStreak,
-        cascadedPairs: run.chunkPairsThisChain,
-        pairsOnFloor: board.pairCount
-    });
     if (momentumBonus.tier === 'fever') {
         bonusTags.push(EXTREME_FEVER_BONUS_TAG);
     }
@@ -77,15 +87,19 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
         featuredObjectiveId,
         featuredObjectiveStreak: featuredObjectiveClear.featuredObjectiveStreak,
         featuredObjectiveStreakBonus: featuredObjectiveClear.featuredObjectiveStreakBonus,
+        floorBonus,
         level: board.level,
         livesRemaining: lives,
         mistakes: tries,
         momentumBonus,
         objectiveBonusScore: objectiveBonus,
+        parTurns,
         perfect,
+        playScore: currentLevelScoreBeforeClear,
         rating,
         run,
-        scoreGained
+        scoreGained,
+        turnsTaken
     });
 
     return {

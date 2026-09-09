@@ -83,9 +83,7 @@ export {
 
 export {
     PRESENTATION_MUTATOR_MATCH_PENALTIES,
-    calculateLevelClearBonus,
     calculateMatchScore,
-    calculatePerfectClearBonus,
     calculateRating,
     computeFlipResolveDelayMs,
     getMemorizeDuration,

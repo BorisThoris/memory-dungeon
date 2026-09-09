@@ -53,6 +53,31 @@ describe('FloorClearDialog', () => {
         expect(chain).toHaveAttribute('data-tone', 'reward');
     });
 
+    it('says the turns against par in the header and the floor bonus term by term', () => {
+        renderDialog({
+            result: {
+                ...result,
+                parTurns: 5,
+                turnsTaken: 3,
+                playScore: 900,
+                floorBonus: 1500 + 600,
+                floorBonusTierMult: 5,
+                floorEfficiencyBonus: 600,
+                momentumBonusTier: 'fever'
+            }
+        });
+        expect(screen.getByRole('dialog', { name: /floor cleared/i })).toHaveTextContent('Floor 3 · 3 turns, par 5');
+        const bonus = screen.getByTestId('floor-clear-bonus');
+        expect(bonus).toHaveTextContent('Floor bonus +2,100: Fever ×5 · 2 under par +600.');
+        expect(bonus).toHaveAttribute('data-tone', 'reward');
+    });
+
+    it('says a cold clear over par paid its base and nothing more', () => {
+        renderDialog({ result: { ...result, parTurns: 4, turnsTaken: 6, floorBonus: 300, floorBonusTierMult: 1 } });
+        expect(screen.getByRole('dialog', { name: /floor cleared/i })).toHaveTextContent('6 turns, par 4');
+        expect(screen.getByTestId('floor-clear-bonus')).toHaveTextContent('Floor bonus +300: cleared cold.');
+    });
+
     it('leaves the notes list out entirely when there is nothing to note', () => {
         renderDialog();
         expect(screen.queryByTestId('floor-clear-notes')).not.toBeInTheDocument();

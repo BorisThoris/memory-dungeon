@@ -12,8 +12,10 @@ import {
     RIPPLE_MAX_WAVES,
     resolveChunkBreak,
     suitCanStillPop,
-    rippleLift,
+    waveMult,
     rippleWaves,
+    CHAIN_MULT,
+    chunkScorePerPair,
     tileCanBreakInChunk
 } from './chunk-break-rules';
 
@@ -175,21 +177,32 @@ describe('the ripple', () => {
     });
 
     it('a longer reaction pays more for the same pairs, up to the cap', () => {
-        expect(rippleLift(1)).toBe(1);
-        expect(rippleLift(2)).toBeCloseTo(1.2);
-        expect(rippleLift(40)).toBe(2);
+        expect(waveMult(1)).toBe(1);
+        expect(waveMult(2)).toBeCloseTo(1.75);
+        expect(waveMult(5)).toBe(4);
+        expect(waveMult(40)).toBe(6);
         expect(chunkBreakScore(3, 3, 'clean', 3)).toBeGreaterThan(chunkBreakScore(3, 3, 'clean', 1));
     });
 });
 
 describe('what it pays', () => {
-    it('scores less per pair than a match, and more per pair the bigger the chunk', () => {
+    it('scores a pair under a match, then multiplies by the pairs, the tier and the ripple', () => {
         expect(chunkBreakScore(3, 0, 'clean')).toBe(0);
-        const one = chunkBreakScore(3, 1, 'clean');
-        const three = chunkBreakScore(3, 3, 'clean');
-        expect(one).toBeGreaterThan(0);
-        expect(three / 3).toBeGreaterThan(one);
-        expect(chunkBreakScore(3, 3, 'fever')).toBeGreaterThan(three);
+        const perPair = chunkScorePerPair(3);
+        expect(perPair).toBeGreaterThan(0);
+        expect(chunkBreakScore(3, 1, 'none')).toBe(perPair);
+        expect(chunkBreakScore(3, 3, 'clean')).toBe(perPair * 3 * 2);
+        expect(chunkBreakScore(3, 4, 'sharp', 3)).toBe(Math.floor(perPair * 4 * 4 * 2.5));
+        expect(chunkBreakScore(3, 12, 'fever', 7)).toBe(Math.floor(perPair * 12 * 8 * 5.5));
+        expect(CHAIN_MULT).toEqual({ none: 1, clean: 2, sharp: 4, fever: 8 });
+    });
+
+    it('is the Puyo shape: a huge Fever reaction is worth hundreds of chain-one pops', () => {
+        const pop = chunkBreakScore(10, 1, 'none', 1);
+        const reaction = chunkBreakScore(10, 12, 'fever', 7);
+        expect(reaction / pop).toBeGreaterThanOrEqual(500);
+        // Linear in pairs within a tier: concentration is bought by the tier and the ripple, not by size alone.
+        expect(chunkBreakScore(5, 6, 'clean')).toBe(chunkBreakScore(5, 3, 'clean') * 2);
     });
 
     it('drops a shard per two pairs, or per pair in Fever', () => {

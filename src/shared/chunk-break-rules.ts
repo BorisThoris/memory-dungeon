@@ -84,11 +84,13 @@ export const breakClumpReach = (tier: ChainTier): number =>
 export const breakReachesPartners = (tier: ChainTier): boolean => tier !== 'none';
 /**
  * The ripple. Every tile a wave takes seeds the next wave with the same reach, until a wave takes
- * nothing. A second wave lifts the whole break's score by this share, a third by twice it, up to
- * the cap - the chain reaction is the shot worth naming, as it is in Puyo.
+ * nothing. Each wave past the first multiplies the whole break by this step, up to the cap - the
+ * chain reaction is the shot worth naming, as it is in Puyo (thesis §40.2).
  */
-export const RIPPLE_WAVE_LIFT = 0.2;
-export const RIPPLE_MAX_LIFT = 2;
+export const WAVE_MULT_STEP = 0.75;
+export const WAVE_MULT_CAP = 6;
+/** What the tier a break lands at multiplies it by: the ladder's rungs, in score. */
+export const CHAIN_MULT: Record<ChainTier, number> = { none: 1, clean: 2, sharp: 4, fever: 8 };
 /** A chain reaction cannot outrun the board, but a bound keeps the rule honest on an authored one. */
 export const RIPPLE_MAX_WAVES = 12;
 /**
@@ -250,17 +252,24 @@ export const findSuitRegion = (
 };
 
 /** What a ripple of `waves` waves multiplies the break by: nothing for one wave, capped. */
-export const rippleLift = (waves: number): number =>
-    Math.min(RIPPLE_MAX_LIFT, 1 + RIPPLE_WAVE_LIFT * Math.max(0, runNonNegativeInteger(waves) - 1));
+export const waveMult = (waves: number): number =>
+    Math.min(WAVE_MULT_CAP, 1 + WAVE_MULT_STEP * Math.max(0, runNonNegativeInteger(waves) - 1));
 
-/** Score for a chunk of `pairs` pairs on `level`: under a base match per pair, rising with size and with the ripple. */
+/** What one broken pair is worth on `level` before the multipliers: under a base match, and derived from it. */
+export const chunkScorePerPair = (level: number): number => Math.floor(calculateMatchScore(level, 0) * 0.6);
+
+/**
+ * Score for a break of `pairs` pairs on `level`: a pair's worth, times the pairs, times the tier,
+ * times the ripple. Multiplicative in every term (thesis §40.2), so a Fever reaction of twelve
+ * pairs over seven waves is worth five hundred chain-one pops and not twenty-seven: the Puyo and
+ * Balatro shape, where concentration beats accumulation by enough to be worth talking about.
+ * The small breaks are still the ladder to it, which is what keeps the curve from being
+ * "wait for Fever" (§40.3, band N5 in the cascade simulation).
+ */
 export const chunkBreakScore = (level: number, pairs: number, tier: ChainTier, waves = 1): number => {
     const count = runNonNegativeInteger(pairs);
     if (count === 0) return 0;
-    const perPair = Math.floor(calculateMatchScore(level, 0) * 0.6);
-    const sizeBonus = 6 * count * (count - 1);
-    const feverLift = tier === 'fever' ? 1.5 : 1;
-    return Math.floor((perPair * count + sizeBonus) * feverLift * rippleLift(waves));
+    return Math.floor(chunkScorePerPair(level) * count * CHAIN_MULT[tier] * waveMult(waves));
 };
 
 /** Shards a chunk drops: one per two pairs, or one per pair in Fever. */

@@ -13,9 +13,9 @@ Per-match score, streak multipliers, presentation mutator penalties, boss floors
 | Shifting spotlight deltas | **Shippable** | `shiftingSpotlightMatchDelta` on successful matches. |
 | Findable bonus | **Shippable** | `FINDABLE_MATCH_SCORE` on matching findable pair. |
 | Encore / pair memory | **Functional** | Encore bonus from prior-run pair keys (`encorePairKeysLastRun`). |
-| Floor clear | **Shippable** | `finalizeLevel` — level bonus, perfect bonus, boss multiplier on subtotal. |
+| Floor clear | **Shippable** | `finalizeLevel` — floor-end bonus (`calculateFloorClearBonus`: 100 × floor × tier at clear + 50 × floor per turn under par), boss multiplier on subtotal. |
 | Objective bonuses | **Shippable** | Tags: `scholar_style` (no shuffle/destroy floor), `glass_witness`, `cursed_last`, `flip_par`, `boss_floor`. Surfaced on `LevelResult`. |
-| Flip par | **Functional** | Limit tied to `matchResolutionsThisFloor` vs `flipParLimit(pairCount)` — “par” reads as efficient **pair clears**, not raw flip count; document for players. |
+| Flip par | **Shippable** | `isWithinFloorPar`: `turnsThisFloor` at or under `parTurnsForFloor(pairCount)` (`floor-par.ts`), the same par the run bar shows as `turns / par`. |
 | Shuffle score tax | **Functional** | User setting interacts with `matchScoreMultiplier` decay on shuffles. |
 | Rating letter | **Shippable** | `calculateRating(tries)` — coarse grades. |
 

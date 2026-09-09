@@ -112,7 +112,7 @@ export const FEATURED_OBJECTIVE_LABELS: Record<FeaturedObjectiveId, string> = {
 /** Endless objective pill `title` — align with `isFeaturedObjectiveCompleted` in `game.ts`. */
 export const FEATURED_OBJECTIVE_HUD_TOOLTIPS: Record<FeaturedObjectiveId, string> = {
     flip_par:
-        'Match resolutions (pair clears, including gambit) this floor must stay at or below ceil(pairCount × 1.25) + 2. Not the same as every tile flip.',
+        'Turns this floor (each pair of flips resolved, match or miss; the gambit is one turn) must stay at or below the floor par, ceil(pairs × 0.85).',
     scholar_style: 'Do not use board shuffle, tile swap, or destroy pair on this floor.',
     glass_witness: 'With a glass decoy, it must never be flipped into a mismatch.',
     cursed_last: 'The cursed pair must be the last real pair you clear on this floor (not resolved early).'

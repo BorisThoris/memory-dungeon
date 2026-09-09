@@ -126,6 +126,8 @@ const cascadeClumpRun = (): RunState => {
         chunkPairsBrokenThisFloor: 0,
         chunkScoreThisFloor: 0,
         chunkPairsThisChain: 0,
+        turnsThisFloor: 0,
+        largestChunkScoreThisFloor: 0,
         stats: {
             ...base.stats,
             currentStreak: 0

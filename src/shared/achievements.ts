@@ -6,6 +6,10 @@ import { ENDLESS_CYCLE_FLOOR_COUNT } from './floor-mutator-schedule';
 import { ACHIEVEMENT_IDS } from './save-data';
 import { normalizeSessionStats, TILE_TRAIT_COUNT_KINDS } from './session-stats-rules';
 
+/** Run-score milestones, in points. Named for the Codex copy and the tests; the ids they unlock are older than the numbers. */
+export const SCORE_MILESTONE_FIRST = 10_000;
+export const SCORE_MILESTONE_SECOND = 100_000;
+
 export type AchievementDefinition = AchievementCodexEntry;
 
 /** Pairs one break has to take for Sixfold: a Fever halo on a clumped board does it (see the reachability test). */
@@ -58,7 +62,13 @@ export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): A
         unlocked.push('ACH_LEVEL_FIVE');
     }
 
-    if (stats.totalScore >= 1000 && !saveData.achievements.ACH_SCORE_THOUSAND) {
+    /*
+     * Gen 181: the score milestones are a new record season. Under multiplicative scoring and the
+     * floor-end bonus a clean player banks about a thousand by floor two and ten thousand by floor
+     * seven, so the two milestones sit at ten and a hundred thousand - mid-run and deep-run - and
+     * keep their ids, which are Steam API names and never change.
+     */
+    if (stats.totalScore >= SCORE_MILESTONE_FIRST && !saveData.achievements.ACH_SCORE_THOUSAND) {
         unlocked.push('ACH_SCORE_THOUSAND');
     }
 
@@ -95,7 +105,7 @@ export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): A
 
     award('ACH_ENDLESS_CYCLE', run.gameMode === 'endless' && stats.highestLevel >= ENDLESS_CYCLE_FLOOR_COUNT);
     award('ACH_ENDLESS_TWENTY', run.gameMode === 'endless' && stats.highestLevel >= 20);
-    award('ACH_SCORE_TEN_THOUSAND', stats.totalScore >= 10_000);
+    award('ACH_SCORE_TEN_THOUSAND', stats.totalScore >= SCORE_MILESTONE_SECOND);
     award('ACH_STREAK_TEN', runNonNegativeInteger(stats.bestStreak) >= 10);
     // Every trait kind matched at least once. Five of nine used to be enough; with four kinds left
     // the scholar has to have met all of them.

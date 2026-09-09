@@ -54,7 +54,7 @@ describe('achievement rules', () => {
             ...createNewRun(0),
             stats: {
                 ...createNewRun(0).stats,
-                totalScore: 1100,
+                totalScore: 11_000,
                 levelsCleared: 5,
                 highestLevel: 5
             },
@@ -86,7 +86,7 @@ describe('achievement rules', () => {
             powersUsedThisRun: true,
             stats: {
                 ...createNewRun(0).stats,
-                totalScore: 1100,
+                totalScore: 11_000,
                 levelsCleared: 5,
                 highestLevel: 5
             },
@@ -188,7 +188,7 @@ describe('achievements that point at the rest of the game', () => {
     it('reads the streak, the score and the trait spread off the run', () => {
         const stats = createNewRun(0).stats;
         expect(unlocksFor(baseRun({ stats: { ...stats, bestStreak: 10 } }))).toContain('ACH_STREAK_TEN');
-        expect(unlocksFor(baseRun({ stats: { ...stats, totalScore: 10_000 } }))).toContain('ACH_SCORE_TEN_THOUSAND');
+        expect(unlocksFor(baseRun({ stats: { ...stats, totalScore: 100_000 } }))).toContain('ACH_SCORE_TEN_THOUSAND');
 
         const threeTraits = {
             ...stats,

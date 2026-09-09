@@ -8,7 +8,7 @@
  */
 export const SAVE_SCHEMA_VERSION = 8;
 /** Bump when generation rules change (tile order, mutators, pair layout). */
-export const GAME_RULES_VERSION = 37;
+export const GAME_RULES_VERSION = 38;
 export const INITIAL_LIVES = 4;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MAX_LIVES = 5;
@@ -376,6 +376,16 @@ export interface LevelResult {
     chainMomentumAtClear?: number;
     momentumBonusTier?: 'none' | 'clean' | 'sharp' | 'fever';
     momentumBonusShards?: number;
+    /** The floor's par and the turns it took; the floor-end bonus and its two terms (thesis §40.5, §41.3). */
+    parTurns?: number;
+    turnsTaken?: number;
+    /** What the floor's play paid before the clear: matches and breaks, the number the bonus is added to. */
+    playScore?: number;
+    floorBonus?: number;
+    floorBonusTierMult?: number;
+    floorEfficiencyBonus?: number;
+    /** The biggest single break on the floor, in score; absent when nothing broke. */
+    largestBreakScore?: number;
 }
 
 export type TileTraitKind = 'echo' | 'heavy' | 'conduit' | 'stasis';
@@ -606,6 +616,10 @@ export interface RunState {
     /** The longest ripple this floor and this run, in waves: 1 is a pop that stopped at its clump. */
     bestRippleThisFloor: number;
     bestRippleThisRun: number;
+    /** Turns resolved on this floor, match or miss, against the floor's par (`floor-par.ts`). */
+    turnsThisFloor: number;
+    /** The biggest single break's score this floor: what band N5 reads the largest break's share from. */
+    largestChunkScoreThisFloor: number;
     /** Pairs the magpie has taken back on this floor. */
     magpieTheftsThisFloor: number;
     /** Times a guard token drove the magpie off on this floor. */

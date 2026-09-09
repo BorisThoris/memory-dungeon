@@ -171,6 +171,8 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         chunkPairsDroppedThisFloor: 0,
         chunkDropsThisRun: 0,
         bestRippleThisFloor: 0,
+        turnsThisFloor: 0,
+        largestChunkScoreThisFloor: 0,
         bestRippleThisRun: 0,
         magpieTheftsThisFloor: 0,
         magpieScaredOffThisFloor: 0,
