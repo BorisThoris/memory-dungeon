@@ -449,6 +449,7 @@ the exit included, and the shop sells one.
 | **191** | ~~More suits from the first floor, and a pair curve that grows.~~ Done: the curve anchored to the authored floors, one suit per four pairs, a scattered floor capped at two, and the tier shares raised to match. | A floor is three turns long and shows two suits, so the screen clears in two goes and the ripple has no room to fire (Gen 190's note). |
 | **192** | ~~The ripple fires on 2% of breaks and the cause is a rule, not a board.~~ Answered by removing the settle: the ripple fires on 16% of breaks, more than it ever did. The cause was the packed board, not the reach. | An unbounded Sharp reach takes the whole suit in wave 0, so only Clean can ripple - and a packed board put Clean's partners inside the clump already taken. |
 | **192** | ~~The settle out: a memory game may not move a card a player has learned.~~ Done. `docs/REMOVED_SETTLE.md` keeps what it cost and what is still open. | Cleared cards still leave; the holes they leave now stay. |
+| **193** | ~~Two suits on the first board, three on the second.~~ Done: floor 1 is four pairs on two suits, floors 2 and 3 carry three, and the palette rounds up so floor 4 does not narrow. | An authored floor was taking an incidental cursed pair, which a break never takes - so a two-pair suit popped nothing and the guarantee was cancelled silently. |
 
 Deferred from the batch set after Gen 142, still wanted, now behind the census: a third island on
 boards of 32 tiles or more; the floor's suits on the floor-clear recap; the tutorial floor's first

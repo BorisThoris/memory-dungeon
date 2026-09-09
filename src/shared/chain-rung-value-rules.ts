@@ -22,15 +22,15 @@ export const CHAIN_RUNG_SCORE_MULTIPLIER: Readonly<Record<ChainTier, number>> = 
  * levels and rounded. Kept because the sentence a player reads on hover is more useful with both -
  * what a rung finds and what it pays - but the number on screen is the multiplier.
  *
- * Measured at Gen 192, on the wider boards with the settle out: none 1.74, clean 3.00, sharp 3.40,
- * fever 7.88. (At Gen 186, on the boards before any of it: 1.91, 3.19, 3.50, 6.95.)
+ * Measured at Gen 193, once the palette widened: none 1.47, clean 2.61, sharp 3.04, fever 7.55.
+ * (At Gen 186, on the boards before any of it: 1.91, 3.19, 3.50, 6.95.)
  *
  * Clean and Sharp both round to three, and that is the finding rather than a fault in the rounding:
  * in pairs the two rungs find about the same, and it is the multiplier on top of them that makes
  * Sharp worth two and a half times what Clean pays. Gen 189 is why the meter shows the multiplier.
  */
 export const CHAIN_RUNG_PAIRS: Readonly<Record<ChainTier, number>> = {
-    none: 2,
+    none: 1,
     clean: 3,
     sharp: 3,
     fever: 8

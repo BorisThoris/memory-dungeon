@@ -355,6 +355,11 @@ const breakablePairCount = (tiles: readonly Tile[]): number => {
  * 1.18 / 2.32 / 2.71 / 3.71: the spread from a lone match to Fever went 1.66 to 2.53, and the
  * thinnest rung went from a hundredth of a pair to four tenths.
  *
+ * **Gen 193 rounds up rather than to nearest.** The three authored floors carry two, three and
+ * three suits, and with rounding-to-nearest the first procedural floor dropped back to two - the
+ * palette going backwards the moment the tutorial ended, which is the opposite of what a player is
+ * being taught to read. Rounding up makes floor 4 carry three and floor 10 all four.
+ *
  * **Gen 191 moved it to one suit per four**, because the boards under it changed. A floor showed
  * two suits until floor twenty and cleared in three turns, which is both halves of the same
  * complaint: too few kinds of card, and the whole screen gone in two goes. The pair curve grew
@@ -376,7 +381,7 @@ export const MIN_PAIRS_FOR_TWO_SUITS = 6;
 export const suitCountForPairs = (pairs: number): number => {
     const count = Math.max(0, pairs);
     const legibilityFloor = count >= MIN_PAIRS_FOR_TWO_SUITS ? 2 : 1;
-    return Math.max(legibilityFloor, Math.min(TILE_SUITS.length, Math.round(count / SUIT_TARGET_PAIRS)));
+    return Math.max(legibilityFloor, Math.min(TILE_SUITS.length, Math.ceil(count / SUIT_TARGET_PAIRS)));
 };
 
 /**

@@ -16,22 +16,24 @@ import { isSingletonUtilityPairKey } from './tile-identity';
  * and which pair lands in which cell still come from the run seed, so two runs differ in what is
  * where; the *shape* is fixed, because the shape is what guarantees the lesson. Thesis §51.
  *
- * Floor 1 teaches the pop. Three pairs, one suit, a 3×2 grid. A bounded wave walks
- * `BOUNDED_BREAK_REACH` steps from the matched pair, and on a 3×2 no cell is further than that
- * from the nearer half of any pair, so whatever the player matches first, the wave holds both
- * halves of every other pair and at least one of them pops.
+ * Floor 1 teaches the pop and the boundary together. Four pairs, two suits, a 4×2 grid: a solid
+ * 2×2 of Ember beside a solid 2×2 of Tide, two pairs each. Every cell of a suit is within
+ * `BOUNDED_BREAK_REACH` steps of every other, so whatever the player matches first, the wave holds
+ * both halves of the suit's other pair and it pops - and it visibly stops at the colour it started
+ * in. Two suits from the first board, because a board of one colour is not a board with a map on
+ * it, only a field (Gen 193).
  *
- * Floor 2 teaches the boundary. Six pairs, two suits, a 4×3 grid split down the middle: one
- * solid clump of Ember on the left, one of Tide on the right, one straight line between them. A
- * wave walks same-suit tiles only, so a match in either clump pops inside it and visibly stops
- * at the line. Each clump is a 2×3, small enough that a match anywhere in it pops.
+ * Floor 2 widens the palette. Six pairs, three suits, a 4×3 grid dealt in bands: Ember across the
+ * top, Tide across the middle, Moss across the bottom, two pairs to a band. A row of four holds any
+ * two pairs within reach of each other however the seed lays them, so a match anywhere pops, and
+ * three bands make the boundary a rule rather than a coincidence of one line.
  *
- * Floor 3 teaches the reach. Seven pairs, two suits, and one Ember pair split: one half at the
- * centre of the Ember clump, the other in the far corner with nothing but Tide around it. Below
- * Clean a pair goes only when the wave holds both halves, so the split pair stays whole - and
- * at Clean the wave reaches partners, so the far half flies out of a corner nobody was looking
- * at. The in-clump half sits at the one cell every other clump pair is within two steps of, so
- * the reach is guaranteed from any pair, not most.
+ * Floor 3 teaches the reach. Seven pairs, three suits on a 5×3 grid, and one Ember pair split: one
+ * half inside the Ember clump, the other alone at the far end with nothing but Moss and Tide around
+ * it. Below Clean a pair goes only when the wave holds both halves, so the split pair stays whole -
+ * and at Clean the wave reaches partners, so the far half flies out of a corner nobody was looking
+ * at. The in-clump half sits at the one cell every other clump pair is within two steps of, so the
+ * reach is guaranteed from any pair, not most.
  */
 export const AUTHORED_FLOOR_LAST_LEVEL = 3;
 
@@ -51,50 +53,55 @@ export interface AuthoredFloorLayout {
 
 const E: TileSuit = 'ember';
 const T: TileSuit = 'tide';
+const M: TileSuit = 'moss';
 
+/* Two solid 2x2 blocks. Every cell of a suit is within two steps of every other, so a match
+ * anywhere pops the suit's other pair, and the wave stops dead at the colour boundary. */
 const FLOOR_ONE: AuthoredFloorLayout = {
     level: 1,
-    pairs: 3,
-    columns: 3,
+    pairs: 4,
+    columns: 4,
     rows: 2,
     cells: [
-        E, E, E,
-        E, E, E
-    ],
-    splitCells: null
-};
-
-const FLOOR_TWO: AuthoredFloorLayout = {
-    level: 2,
-    pairs: 6,
-    columns: 4,
-    rows: 3,
-    cells: [
-        E, E, T, T,
         E, E, T, T,
         E, E, T, T
     ],
     splitCells: null
 };
 
+/* Three bands. A row of four holds any two pairs within reach of each other however the seed
+ * lays them out, so every band pops from any of its pairs. */
+const FLOOR_TWO: AuthoredFloorLayout = {
+    level: 2,
+    pairs: 6,
+    columns: 4,
+    rows: 3,
+    cells: [
+        E, E, E, E,
+        T, T, T, T,
+        M, M, M, M
+    ],
+    splitCells: null
+};
+
 /*
- * Ember is the top-right 3×3 minus its two left-hand corners; Tide is the left column and a step
- * in at the top and at the third row; the last row holds the far half. Cell 6 is the Ember
- * centre: every other Ember cell is within two steps of it by two different paths, so one
- * matched pair cannot stand in the way. Cell 13 touches cells 9 and 12 only, both Tide.
+ * Ember is the right-hand column and a step in, plus one cell below; Moss holds the top-left 2x2
+ * and Tide the rest. Cell 8 is the Ember centre: every other Ember cell is within two steps of it,
+ * so one matched pair cannot stand between a Clean break and the split. Cell 10 is the far half,
+ * and its only neighbours are Moss and Tide - three grid steps from the nearest Ember, so no
+ * bounded wave reaches it.
  */
 const FLOOR_THREE: AuthoredFloorLayout = {
     level: 3,
     pairs: 7,
-    columns: 4,
-    rows: 4,
+    columns: 5,
+    rows: 3,
     cells: [
-        T, T, E, E,
-        T, E, E, E,
-        T, T, E, E,
-        T, E
+        M, M, T, E, E,
+        M, M, T, E, E,
+        E, T, T, E
     ],
-    splitCells: [6, 13]
+    splitCells: [8, 10]
 };
 
 const LAYOUTS: readonly AuthoredFloorLayout[] = [FLOOR_ONE, FLOOR_TWO, FLOOR_THREE];

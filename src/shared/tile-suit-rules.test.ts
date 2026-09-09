@@ -113,17 +113,30 @@ describe('a built board', () => {
         }
     });
 
-    it('deals one suit on floor 1 and two from floor 2, so a match can always pop and a map arrives early', () => {
-        // Floor 1 is authored as one suit (`authored-floors.ts`): three pairs, and the suit rule
-        // is not the first lesson. Floors 2 and 3 are authored as two clumps, and floor 4 - the
-        // first procedural floor, eight pairs on the curve - clears `MIN_PAIRS_FOR_TWO_SUITS`,
-        // so the palette the deal picks agrees with the authored ones on either side of it.
-        expect(suitCountForPairs(pairsForFloor(1))).toBe(1);
-        for (const level of [1, 2, 3, 4]) {
-            const board = buildBoard(level, { runSeed: 11, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless' });
-            expect(new Set(board.tiles.map((tile) => tile.suit)).size, `floor ${level}`).toBe(level === 1 ? 1 : 2);
+    it('opens on two suits and widens from there, never narrowing as the tutorial ends', () => {
+        // Floors 1 to 3 are authored (`authored-floors.ts`): two suits, then three, then three.
+        // Floor 4 is the first procedural floor, and the palette rule has to agree with the
+        // authored floor before it rather than dropping back - which is what rounding the ratio
+        // up rather than to nearest buys (Gen 193).
+        const suitsOn = (level: number) =>
+            new Set(
+                buildBoard(level, { runSeed: 11, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless' }).tiles.map(
+                    (tile) => tile.suit
+                )
+            ).size;
+        expect(suitsOn(1)).toBe(2);
+        expect(suitsOn(2)).toBe(3);
+        expect(suitsOn(3)).toBe(3);
+        expect(suitsOn(4)).toBe(3);
+        expect(suitCountForPairs(pairsForFloor(4))).toBe(3);
+        // And it never goes backwards as the boards grow.
+        let previous = 0;
+        for (let level = 4; level <= 40; level += 1) {
+            const suits = suitCountForPairs(pairsForFloor(level));
+            expect(suits, `floor ${level}`).toBeGreaterThanOrEqual(previous);
+            previous = suits;
         }
-        expect(suitCountForPairs(pairsForFloor(4))).toBe(2);
+        expect(previous).toBe(4);
     });
 
     it('opens clumped, not scattered, on every floor big enough to have a palette', () => {

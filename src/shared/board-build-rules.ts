@@ -15,7 +15,7 @@ import {
     pickCursedPairKey
 } from './board-tile-generation-rules';
 import { assignTileTraitsToGeneratedBoard } from './tile-trait-rules';
-import { authoredFloorLayout, layAuthoredFloorTiles } from './authored-floors';
+import { authoredFloorLayout, isAuthoredFloor, layAuthoredFloorTiles } from './authored-floors';
 import { pairsForFloor } from './pair-curve';
 import { isSingletonUtilityPairKey } from './tile-identity';
 import { dealBoardSuits, getSuitDealProfile } from './tile-suit-rules';
@@ -114,11 +114,19 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
               rulesVersion,
               level
           );
-    // The cursed pair is picked before the tiles are placed: an authored floor keeps it out of
-    // the split slot, because a break never takes the cursed pair and the split pair is there to
-    // be taken.
+    /*
+     * The cursed pair is picked before the tiles are placed: an authored floor keeps it out of
+     * the split slot, because a break never takes the cursed pair and the split pair is there to
+     * be taken.
+     *
+     * An authored floor takes no *incidental* cursed pair at all (Gen 193). Those three boards
+     * exist to guarantee the pop, the boundary and the reach where a new player meets them, and a
+     * pair a break can never take cancels the guarantee silently: a suit of two pairs whose other
+     * pair is cursed pops nothing, whatever the layout promised. A cursed pair the floor's own
+     * objective asks for is still honoured - it is content the player was told about.
+     */
     const cursedPairKey =
-        featuredObjectiveId === 'cursed_last' || featuredObjectiveId === null
+        featuredObjectiveId === 'cursed_last' || (featuredObjectiveId === null && !isAuthoredFloor(level))
             ? pickCursedPairKey(layoutTiles, runSeed, rulesVersion, level)
             : null;
     const tileCount = layoutTiles.length;

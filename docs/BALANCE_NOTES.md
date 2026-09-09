@@ -2102,3 +2102,60 @@ whose ceiling is exactly 0.22 - passing, with no margin for the next change. At 
 
 `CHAIN_TIER_SHARP_SHARE` stays at 0.45. The ladder is unchanged in shape: 1.74 / 3.00 / 3.40 / 7.88
 pairs per rung, paying x3.33 / x2.37 / x4.84.
+
+## Gen 193: two suits on the first board, three on the second
+
+The first three floors are authored, and they were dealing one suit, then two, then two. A board of
+one colour is not a board with a map on it, it is a field, and the palette then sat at two until the
+procedural floors caught up. This generation opens them.
+
+| Floor | 1 | 2 | 3 | 4 | 6 | 10 |
+|---|---|---|---|---|---|---|
+| Suits, was | 1 | 2 | 2 | 2 | 3 | 3 |
+| Suits, now | **2** | **3** | **3** | **3** | 3 | 4 |
+| Pairs, was | 3 | 6 | 7 | 9 | 11 | 13 |
+| Pairs, now | **4** | 6 | 7 | 9 | 11 | 13 |
+
+### Floor 1 needed a fourth pair, and the reason is the cursed pair
+
+Two suits over three pairs is 2 and 1, and a suit of one pair cannot pop at all - the pop needs two
+whole pairs of a suit within reach of each other. Four pairs gives two suits of two, laid as two
+solid 2×2 blocks on a 4×2 grid, where every cell of a suit is within `BOUNDED_BREAK_REACH` of every
+other. So whatever the player matches first, the suit's other pair pops, and it visibly stops at the
+colour boundary - the pop and the boundary taught on one board instead of two.
+
+That still failed on measurement, and the cause is worth recording: **an authored floor was taking
+an incidental cursed pair**, and a break never takes the cursed pair. A suit of two pairs whose other
+pair is cursed pops nothing, whatever the layout promised. The guarantee those three boards exist to
+make was being cancelled silently on any seed that put the cursed pair on floor 1.
+
+Authored floors now take no incidental cursed pair. One asked for by the floor's own objective is
+still honoured, because that is content the player was told about; the schedule never puts a cursed
+objective on floors 1 to 3 in any case. This is the same rule the authored floors already applied to
+traits, which start on floor 4.
+
+Floor 2 is three bands of four on a 4×3 grid, two pairs to a band: a row of four holds any two pairs
+within reach of each other however the seed lays them, so every band pops from any of its pairs, and
+three bands make the boundary a rule rather than the coincidence of one line. Floor 3 keeps its seven
+pairs and its split pair and moves to a 5×3 grid with three suits.
+
+### The palette rounds up now, so it never goes backwards
+
+With rounding-to-nearest, floor 4's nine pairs asked for two suits - the palette narrowing the moment
+the tutorial ended, which is the opposite of what the player has just been taught to read. Rounding
+the ratio up instead gives floor 4 three suits and floor 10 all four, and the count never decreases
+as the boards grow.
+
+### What it cost
+
+| | Lone match, pairs | Sharp step | Spread | Score rungs | Ripple | Fever, reference |
+|---|---|---|---|---|---|---|
+| Gen 192 | 1.74 | 0.40 | 6.13 | ×3.33 / ×2.37 / ×4.84 | 0.16 | 0.17 |
+| Gen 193 | 1.47 | 0.43 | 6.08 | ×3.42 / ×2.47 / ×5.10 | 0.14 | 0.18 |
+
+The ladder is unchanged in shape and slightly more even in score. The real cost is the pop rate on
+the early procedural floors: floors 4 to 6 fall from about 0.95 of matches popping to about 0.76,
+because three suits over nine to eleven pairs is three pairs to a suit and a three-pair region does
+not always hold two whole pairs within reach. Every band still passes, and the scattered-floor cap
+from Gen 191 keeps the worst floors where they were. It is the price of the palette and it is worth
+watching: if it drops further, the lever is the pair curve, not the palette.

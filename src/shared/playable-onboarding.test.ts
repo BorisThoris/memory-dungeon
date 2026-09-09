@@ -156,9 +156,9 @@ describe('REG-026 playable onboarding', () => {
             }
         };
 
-        // Floor 1 is authored as three pairs (`authored-floors.ts`), so the first match never
-        // leaves the final pair on its own: the reward banks with two pairs still on the board.
-        expect(run.board!.pairCount).toBe(3);
+        // Floor 1 is authored as four pairs in two suits (`authored-floors.ts`), so the first match
+        // never leaves the final pair on its own: the reward banks with pairs still on the board.
+        expect(run.board!.pairCount).toBe(4);
         const step = getPlayableOnboardingStep(afterFirstReward, {
             onboardingDismissed: false,
             powersFtueSeen: false

@@ -6,7 +6,7 @@ import { authoredFloorLayout } from './authored-floors';
 describe('the pair curve', () => {
     it('deals the floors the thesis tabulates (§32.2), exactly', () => {
         const table: Array<[floor: number, pairs: number]> = [
-            [1, 3],
+            [1, 4],
             [2, 6],
             [3, 7],
             [4, 9],

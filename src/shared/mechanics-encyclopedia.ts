@@ -11,7 +11,7 @@
 import type { AchievementId, GameMode, MutatorId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 36 as const;
+export const ENCYCLOPEDIA_VERSION = 37 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -536,7 +536,7 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         description:
             'Every tile wears one of four suits on its back — Ember, Tide, Moss or Bone — and both halves of a pair share it. ' +
             'Suits are dealt in clumps, so the floor opens as a map you can plan against before you flip anything. ' +
-            'A floor carries about one suit for every four pairs it deals, so it opens with two and reaches all four by around the tenth floor. '
+            'A floor carries about one suit for every four pairs it deals, rounded up: the very first board shows two, the second shows three, and all four are out by around the tenth floor. '
             + 'The floor decides the shape: a breather or a treasure hall deals big clumps, a rush, speed or trap floor deals its suits scattered - and a scattered floor keeps to two suits however big it is, because a scattered third suit thins the board until a match touches nothing of its own kind. A spotlight floor deals only two by design. ' +
             'Focus or select a hidden tile and the board outlines the clump it stands in and says how many pairs a Sharp break there would take. ' +
             'The symbol on the front is still the thing to remember; the suit is the thing you can see.'

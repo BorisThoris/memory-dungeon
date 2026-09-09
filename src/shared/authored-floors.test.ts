@@ -156,15 +156,29 @@ describe('N6: the first pop', () => {
         }
     });
 
-    it('floor 1 is one suit: the suit rule is not taught yet', () => {
+    it('floor 1 is two suits, and the pop stops at the line between them', () => {
         for (const [where, board] of boardsUnderTest(1)) {
-            expect(new Set(board.tiles.map((tile) => tile.suit)), where).toEqual(new Set(['ember']));
+            expect(new Set(board.tiles.map((tile) => tile.suit)), where).toEqual(new Set(['ember', 'tide']));
+            for (const [key, halves] of realPairs(board)) {
+                const suit = halves[0]!.suit;
+                const result = resolveChunkBreak({ board, run, matchedTileIds: halves.map((t) => t.id), chain: 0 });
+                const taken = board.tiles.filter((tile) => result.brokenTileIds.includes(tile.id));
+                expect(taken.map((tile) => tile.suit), `${where} match ${key}`).toEqual(taken.map(() => suit));
+            }
         }
     });
 
-    it('floor 2: a match pops inside its own clump and never takes a tile of the other suit', () => {
+    it('carries no cursed pair: a pair a break cannot take would cancel the guarantee', () => {
+        for (const level of [1, 2, 3]) {
+            for (const [where, board] of boardsUnderTest(level)) {
+                expect(board.cursedPairKey, `${level} ${where}`).toBeNull();
+            }
+        }
+    });
+
+    it('floor 2: a match pops inside its own band and never takes a tile of another suit', () => {
         for (const [where, board] of boardsUnderTest(2)) {
-            expect(new Set(board.tiles.map((tile) => tile.suit)).size, where).toBe(2);
+            expect(new Set(board.tiles.map((tile) => tile.suit)).size, where).toBe(3);
             const rungs = chainTierRungs(board.pairCount);
             for (const [key, halves] of realPairs(board)) {
                 const suit = halves[0]!.suit;
@@ -180,17 +194,15 @@ describe('N6: the first pop', () => {
         }
     });
 
-    it('floor 2: the two clumps are solid and meet along one straight line', () => {
+    it('floor 2: three bands, each one solid clump of its own suit', () => {
         const layout = authoredFloorLayout(2)!;
         const total = layout.cells.length;
-        const contacts = layout.cells.flatMap((suit, cell) =>
-            orthogonalNeighbours(cell, layout.columns, total).filter((n) => n > cell && layout.cells[n] !== suit)
-        );
-        // One boundary, one contact per row.
-        expect(contacts.length).toBe(layout.rows);
-        for (const suit of ['ember', 'tide'] as const) {
+        const suits = [...new Set(layout.cells)];
+        expect(suits.length).toBe(3);
+        for (const suit of suits) {
             const cells = layout.cells.flatMap((s, cell) => (s === suit ? [cell] : []));
-            expect(cells.length).toBe(total / 2);
+            expect(cells.length, `${suit} is a whole number of pairs`).toBe(total / 3);
+            expect(cells.length % 2, `${suit} is a whole number of pairs`).toBe(0);
             const seen = new Set<number>([cells[0]!]);
             const stack = [cells[0]!];
             while (stack.length > 0) {
@@ -205,6 +217,23 @@ describe('N6: the first pop', () => {
             expect(seen.size, `${suit} is one clump`).toBe(cells.length);
         }
     });
+
+    it('floor 2: any two cells of a band are within a bounded wave of each other, so every band pops', () => {
+        const layout = authoredFloorLayout(2)!;
+        const step = (a: number, b: number) =>
+            Math.abs((a % layout.columns) - (b % layout.columns)) +
+            Math.abs(Math.floor(a / layout.columns) - Math.floor(b / layout.columns));
+        for (const suit of new Set(layout.cells)) {
+            const cells = layout.cells.flatMap((s, cell) => (s === suit ? [cell] : []));
+            // However the seed splits a band's cells into pairs, one matched pair leaves the other
+            // with both halves inside the wave: every cell of the band is close enough to some cell
+            // of every other pair in it.
+            for (const cell of cells) {
+                const reachable = cells.filter((other) => other !== cell && step(cell, other) <= BOUNDED_BREAK_REACH);
+                expect(reachable.length, `${suit} cell ${cell}`).toBeGreaterThanOrEqual(cells.length - 2);
+            }
+        }
+    });
 });
 
 describe('N7: the split pair on floor 3', () => {
@@ -215,7 +244,7 @@ describe('N7: the split pair on floor 3', () => {
         return { key, near, far, layout };
     };
 
-    it('sits with one half in the Ember clump and the other across the board, touching only Tide', () => {
+    it('sits with one half in the Ember clump and the other across the board, touching no Ember', () => {
         for (const [where, board] of boardsUnderTest(3)) {
             const { key, near, far, layout } = splitOf(board);
             expect(board.tiles[near]!.pairKey, where).toBe(key);
@@ -223,7 +252,7 @@ describe('N7: the split pair on floor 3', () => {
             expect(board.tiles[near]!.suit).toBe('ember');
             expect(board.tiles[far]!.suit).toBe('ember');
             for (const n of orthogonalNeighbours(far, layout.columns, board.tiles.length)) {
-                expect(board.tiles[n]!.suit, `${where} far half touches only tide`).toBe('tide');
+                expect(board.tiles[n]!.suit, `${where} far half touches no ember`).not.toBe('ember');
             }
             // Neither the cursed pair nor a findable: a break has to be able to take it.
             expect(board.cursedPairKey, where).not.toBe(key);
@@ -264,7 +293,12 @@ describe('N7: the split pair on floor 3', () => {
                 expect(result.brokenTileIds, `${where} match ${matched}`).toContain(board.tiles[near]!.id);
                 expect(result.board.tiles[near]!.state).toBe('removed');
             }
-            expect(clumpPairs, where).toBe(3);
+            // Every Ember pair the layout puts in the clump, not a magic number: the suit's cells
+            // less the two the split pair holds, over two.
+            const layout = authoredFloorLayout(3)!;
+            const emberCells = layout.cells.filter((suit) => suit === 'ember').length;
+            expect(clumpPairs, where).toBe((emberCells - 2) / 2);
+            expect(clumpPairs, `${where} the lesson needs more than one pair to be taught from`).toBeGreaterThanOrEqual(2);
         }
     });
 

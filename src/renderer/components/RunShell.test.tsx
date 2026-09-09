@@ -44,7 +44,7 @@ describe('RunShell', () => {
         expect(rungAt()).toHaveAttribute('data-rung-multiplier', '1');
         expect(rungAt()).toHaveTextContent('×1');
         expect(rungAt().getAttribute('aria-label')).toMatch(
-            /^A match with no chain takes about \d+ pairs and pays ×1 for each\.$/
+            /^A match with no chain takes about \d+ pairs? and pays ×1 for each\.$/
         );
 
         // Twelve pairs: Sharp from 5, Fever from 7. A Fever break is scored at eight times a pop.

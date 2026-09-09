@@ -2,8 +2,8 @@
  * The pair-count curve: how many pairs a floor deals.
  *
  * Two regimes, because the first three floors are not on a curve at all. They are authored
- * (`authored-floors.ts`): three pairs on one suit to teach the pop, six on two suits split down
- * the middle to teach the boundary, seven with a split pair to teach the reach. Their sizes are
+ * (`authored-floors.ts`): four pairs on two suits to teach the pop and the boundary at once, six
+ * on three suits to widen the palette, seven with a split pair to teach the reach. Their sizes are
  * part of the proofs those layouts carry, and a board the layout cannot hold is silently dealt the
  * ordinary way instead - so the curve has to agree with them rather than the other way round.
  * `AUTHORED_FLOOR_PAIRS` is that agreement, and `authored-floors.test.ts` fails if it drifts.
@@ -12,6 +12,11 @@
  * the seam. Square-root-tempered growth, because memory difficulty is superlinear in board size:
  * every extra pair interferes with every pair already there, so a linear curve reaches the
  * gruelling end within thirty floors.
+ *
+ * **Gen 193 opened floor 1 wider.** It dealt three pairs on a single suit, which is a board with
+ * no map on it at all - and two suits need four pairs, because a suit of two pairs pops nothing
+ * once one of them is the cursed pair. Floor 1 is four pairs now; floors 2 and 3 keep their sizes
+ * and carry three suits each.
  *
  * **Gen 191 raised it.** With the settle in (Gen 190) a floor was three turns long: the board
  * packed itself back into a solid block after every break, and eight pairs went in two goes. The
@@ -22,7 +27,7 @@
  */
 
 /** Floors 1 to 3, whose sizes belong to the authored layouts rather than to the curve. */
-export const AUTHORED_FLOOR_PAIRS: readonly number[] = [3, 6, 7];
+export const AUTHORED_FLOOR_PAIRS: readonly number[] = [4, 6, 7];
 
 export const PAIRS_BASE = AUTHORED_FLOOR_PAIRS[AUTHORED_FLOOR_PAIRS.length - 1]!;
 export const PAIRS_GROWTH = 2.4;

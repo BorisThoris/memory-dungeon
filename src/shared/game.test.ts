@@ -64,6 +64,7 @@ import {
 import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 import { MIN_CURIO_MEMORIZE_MS, pickFloorCurio } from './floor-curio-rules';
 import { pairsForFloor } from './pair-curve';
+import { parTurnsForFloor } from './floor-par';
 import { makeBoard as createBoard, makePair as createPair, makeRun as createRun, makeTile as createTile } from './test/game-fixtures';
 import {
     DEFAULT_SOFTLOCK_GENERATOR_SCENARIOS,
@@ -660,10 +661,9 @@ describe('floor-clear edge cases', () => {
 describe('endless chapters and featured objectives', () => {
     it('awards only the featured objective bonus on endless floors', () => {
         const started = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
-        const [firstPair, secondPair] = pairTileIds(started.board!);
-
-        const afterFirstMatch = resolveBoardTurn(flipTile(flipTile(started, firstPair![0]!), firstPair![1]!));
-        const finished = resolveBoardTurn(flipTile(flipTile(afterFirstMatch, secondPair![0]!), secondPair![1]!));
+        // Floor 1 is two suits of two pairs, and a match pops its own suit's other pair, so the
+        // floor takes one match per suit. `clearRealPairs` walks whatever is still standing.
+        const finished = clearRealPairs(started);
 
         expect(finished.status).toBe('levelComplete');
         expect(finished.lastLevelResult?.featuredObjectiveId).toBe('flip_par');
@@ -696,10 +696,12 @@ describe('endless chapters and featured objectives', () => {
 
     it('decays the featured-objective streak when a non-wager objective is missed', () => {
         const started = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
+        // Over par, so the objective is missed, but under the floor's turn ceiling, so the run
+        // does not end before the floor does.
         const primed: RunState = {
             ...started,
             featuredObjectiveStreak: 3,
-            turnsThisFloor: 99
+            turnsThisFloor: parTurnsForFloor(started.board!.pairCount) + 1
         };
 
         const finished = clearRealPairs(primed);
@@ -752,10 +754,10 @@ describe('game rules', () => {
         expect(board.pairCount).toBe(9);
         expect(board.tiles).toHaveLength(18);
         expect(board.columns).toBeGreaterThanOrEqual(2);
-        // Per-tile budget over the curve's board: 6 tiles at floor 1, 12 at floor 2, 14 at floor 3,
-        // 28 at floor 20 on the floor of the per-tile budget, 34 at floor 29 - under the cap now
+        // Per-tile budget over the curve's board: 8 tiles at floor 1, 12 at floor 2, 14 at floor 3,
+        // 34 at floor 20 on the floor of the per-tile budget, 38 at floor 29 - under the cap now
         // that the curve is tempered.
-        expect(getMemorizeDuration(1)).toBe(1950);
+        expect(getMemorizeDuration(1)).toBe(2600);
         expect(getMemorizeDuration(2)).toBe(3756);
         expect(getMemorizeDuration(3)).toBe(4214);
         expect(getMemorizeDuration(20)).toBe(3740);

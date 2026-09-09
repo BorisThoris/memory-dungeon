@@ -9,7 +9,7 @@
     "contentItemCount": 12,
     "mechanicCount": 45,
     "stateFieldCount": 81,
-    "relationshipCount": 6871
+    "relationshipCount": 6873
   },
   "inventory": [
     {
@@ -255,8 +255,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 332462,
-      "sha256": "430d5462a2ef00eabc95d7beab2a51912cf986308c1acacae0dc79dc817a1b25"
+      "bytes": 335912,
+      "sha256": "ea0e031be58856e8035291a889a0122de215bb0bbf79bad6ad2607968066a4fe"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -267,8 +267,8 @@
     {
       "path": "docs/CHAIN_CHUNK_FEVER_DESIGN.md",
       "category": "documentation",
-      "bytes": 70983,
-      "sha256": "fb034232d07d423674d1fe075a3e0cf034154dec813352e25e6bd6f863a26971"
+      "bytes": 71338,
+      "sha256": "d01ac1f908fc098489ed87e305fd2acd99f8f943259cfd5e3bd88f1936683f76"
     },
     {
       "path": "docs/COLLECTIBLE_SYSTEM.md",
@@ -742,7 +742,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 394,
-      "sha256": "4623ec30503d7fd256109fd6d41a9bce32d8d61e3b4b5ad3673fd5791e5e2efa"
+      "sha256": "f72d1c2a718e72147dded899feed5c6d806cacac540cf82e46e0cff941106f17"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2308,13 +2308,13 @@
       "path": "docs/system-diagrams/AUDIT.md",
       "category": "documentation",
       "bytes": 10613,
-      "sha256": "d4f4ecfd3e0856bef97e6c63ef56bf21475e07782367dd640ac80cbbc985ff48"
+      "sha256": "e14896e3157aef6e744e8570625ce482c817d56ca697e0a569d58362bc2ca468"
     },
     {
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33473,
-      "sha256": "5b657041e2a58d2af7a76896a2df83efc94b2e5529b9a87564c78581617410fb"
+      "sha256": "46f941fd9ced9cfe1e0e19d0118c29b49602a97ecbf512bd4389aa2d90e5f006"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -8061,8 +8061,8 @@
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 11240,
-      "sha256": "7f0e24db2187af3aa6cad1a0a2350e02209f13705b35d1e821c3e9a758eee451"
+      "bytes": 11241,
+      "sha256": "aefc4f73b6d34908fcf2b343f3c09be26002df233524c6a304aaa0ecd09cdc5b"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
@@ -10294,7 +10294,7 @@
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
       "bytes": 562,
-      "sha256": "ab49f8775d247b37c18a379630c65850968d5bef17d91d5c47b00f39eb332313"
+      "sha256": "029e5e06d64099fbca322e08a37a5836e51912c8c3b2f7f72385aae9747bb614"
     },
     {
       "path": "src/shared/achievement-reachability.test.ts",
@@ -10329,14 +10329,14 @@
     {
       "path": "src/shared/authored-floors.test.ts",
       "category": "test",
-      "bytes": 15473,
-      "sha256": "b0f1eafebfe6536fd1b86392c45ffc563413762c1fcc789fe4dd74593342041e"
+      "bytes": 17638,
+      "sha256": "42d3dbe696d449d7b2c6888efbc4f307631fd3407b42ed24c2bc8c8905823c33"
     },
     {
       "path": "src/shared/authored-floors.ts",
       "category": "source",
-      "bytes": 8356,
-      "sha256": "56c8ba1d5437d31eee5c461e7ce669b339b1014d0600c93d62a39c2ec76a7158"
+      "bytes": 8977,
+      "sha256": "3ae0d3bfa25eec19d9e2f636f4bdc95648491ace55f5f65a82d3c9825c3e3285"
     },
     {
       "path": "src/shared/bad-floor-is-quiet.test.ts",
@@ -10389,8 +10389,8 @@
     {
       "path": "src/shared/board-build-rules.ts",
       "category": "source",
-      "bytes": 8282,
-      "sha256": "4279fb5d59c4b1a9d8997701ccc7526a963790e937f6dba7df7c3cfc9883544f"
+      "bytes": 8827,
+      "sha256": "018f4737a300dbb7a618a052e49ce2ed56a7dd0602327d690b5ea3d5d1e43ee4"
     },
     {
       "path": "src/shared/board-generation.ts",
@@ -10563,8 +10563,8 @@
     {
       "path": "src/shared/chain-rung-value-rules.ts",
       "category": "source",
-      "bytes": 2649,
-      "sha256": "5d61d0d5f21ce90ba3fc2337a5b24b66b98c9c1f731a7e07a20b422bf983c178"
+      "bytes": 2634,
+      "sha256": "b606d223d55fc4a85bac1029d0db3ef9b0c346ac257629eacd8f90e24c261979"
     },
     {
       "path": "src/shared/chain-targets.test.ts",
@@ -10690,7 +10690,7 @@
       "path": "src/shared/contracts.ts",
       "category": "source",
       "bytes": 31470,
-      "sha256": "e0eee9a5b2e5f679c895330ba43396beb36bccdc12680a3cf2f0241f8de5a8ab"
+      "sha256": "93a908d3da565fae38204e304fbaab5cef9b0a6702a5459d6fa9583e12725904"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -10953,8 +10953,8 @@
     {
       "path": "src/shared/game.test.ts",
       "category": "test",
-      "bytes": 76854,
-      "sha256": "b7634f7fc0d7d159015ba08e3dabf3f69766ff1542e3663eb9829a9e00d92a19"
+      "bytes": 77035,
+      "sha256": "3a35deb7600e9ca04a1a15f4ac5dfb1ea508cda70c181d38174ca95ef83630f7"
     },
     {
       "path": "src/shared/game.ts",
@@ -11319,8 +11319,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 32831,
-      "sha256": "339c3784c0cd0e084015f1d04afd593873e573c7e09cf0e77632d74750be406d"
+      "bytes": 32878,
+      "sha256": "3e1207feb9a6cf1221cc8066baac6807bd27a60464b8b71f300515ddd5109b45"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -11464,13 +11464,13 @@
       "path": "src/shared/pair-curve.test.ts",
       "category": "test",
       "bytes": 2484,
-      "sha256": "50d072926c410c4b1542c0b036cd0c484462d82017970920661126cb68f78b4e"
+      "sha256": "ed4cbc6e2a9920156838df53776ca17539363b9966ff01318dae0c90d700e1df"
     },
     {
       "path": "src/shared/pair-curve.ts",
       "category": "source",
-      "bytes": 2275,
-      "sha256": "a91438196e7be83e64ba3e04755a0479fe2fac76fbe4c38b9930390d2fb27466"
+      "bytes": 2607,
+      "sha256": "181c020872369833779b5f4e7284af0623b0097313bd22c4216ff7ab4fe4b560"
     },
     {
       "path": "src/shared/pairProximityHint.test.ts",
@@ -11523,8 +11523,8 @@
     {
       "path": "src/shared/playable-onboarding.test.ts",
       "category": "test",
-      "bytes": 10430,
-      "sha256": "9d741bd82bb9cb420631d0275be1904209b221d5a52ed74b0a0728169cbfb8b3"
+      "bytes": 10438,
+      "sha256": "2b6909c66090006741e03c6b0270f4ef70f47c4165d0c10349a3e598a6079ee0"
     },
     {
       "path": "src/shared/playable-onboarding.ts",
@@ -11998,7 +11998,7 @@
       "path": "src/shared/scoring-rules.test.ts",
       "category": "test",
       "bytes": 4382,
-      "sha256": "61d35e7a88c8897106539f30c0a4b4b12302f51790b7e62453210860b5cdaf64"
+      "sha256": "074d78b1f474132c22c24b5c56440efbca26505281cba51f0165209172b83b49"
     },
     {
       "path": "src/shared/scoring-rules.ts",
@@ -12213,14 +12213,14 @@
     {
       "path": "src/shared/tile-suit-rules.test.ts",
       "category": "test",
-      "bytes": 11785,
-      "sha256": "01721a69c723424a909f54bca4dc0232af53c5cd358fdf2c69443412f60a35f6"
+      "bytes": 12136,
+      "sha256": "d52fd5f0f1502ac79ebaafc3229eb7533c1e37dbc89e80c0c9d6a6b3af07ea57"
     },
     {
       "path": "src/shared/tile-suit-rules.ts",
       "category": "source",
-      "bytes": 21608,
-      "sha256": "104505dfed119988051898b4d67a651b48a5e080208ba4bf7b5971755177dfbb"
+      "bytes": 21990,
+      "sha256": "86655733ed26208aefda3abeabfff4e1b30d12c67a77c5c805364537f57147e2"
     },
     {
       "path": "src/shared/tile-symbol-catalog.test.ts",
@@ -12400,7 +12400,7 @@
       "path": "src/shared/version-gate.test.ts",
       "category": "test",
       "bytes": 7336,
-      "sha256": "9d340e2799524d25f44bd8e7957bf7c0f32a7eee0388388ad5ad77658c152e88"
+      "sha256": "7c7211805d41cbaa0f3eb01be53aa441e3c4a6c5d33fc2d9b1a6d96317a82c7a"
     },
     {
       "path": "src/shared/version-gate.ts",
@@ -23764,7 +23764,7 @@
       "path": "src/shared/authored-floors.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 302,
+      "lineCount": 336,
       "imports": [
         "file:src/shared/authored-floors.ts",
         "file:src/shared/board-build-rules.ts",
@@ -23783,7 +23783,7 @@
       "path": "src/shared/authored-floors.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 200,
+      "lineCount": 207,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/tile-identity.ts"
@@ -23937,7 +23937,7 @@
       "path": "src/shared/board-build-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 182,
+      "lineCount": 190,
       "imports": [
         "file:src/shared/authored-floors.ts",
         "file:src/shared/board-tile-generation-rules.ts",
@@ -25816,6 +25816,7 @@
       "testedBy": [
         "file:src/shared/achievements.test.ts",
         "file:src/shared/bad-floor-is-quiet.test.ts",
+        "file:src/shared/game.test.ts",
         "file:src/shared/turn-mismatch-rules.test.ts"
       ]
     },
@@ -26061,12 +26062,13 @@
       "path": "src/shared/game.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1925,
+      "lineCount": 1927,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-powers.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-curio-rules.ts",
+        "file:src/shared/floor-par.ts",
         "file:src/shared/game-core.ts",
         "file:src/shared/pair-curve.ts",
         "file:src/shared/softlock-generator-contract.ts",
@@ -27841,7 +27843,7 @@
       "path": "src/shared/pair-curve.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 41,
+      "lineCount": 46,
       "imports": [],
       "exports": [
         "symbol:src/shared/pair-curve.ts#AUTHORED_FLOOR_PAIRS",
@@ -30299,7 +30301,7 @@
       "path": "src/shared/tile-suit-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 229,
+      "lineCount": 242,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/contracts.ts",
@@ -30317,7 +30319,7 @@
       "path": "src/shared/tile-suit-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 476,
+      "lineCount": 481,
       "imports": [
         "file:src/shared/board-grid-dimensions.ts",
         "file:src/shared/contracts.ts",
@@ -40888,56 +40890,56 @@
       "name": "AUTHORED_FLOOR_LAST_LEVEL",
       "kind": "value",
       "file": "src/shared/authored-floors.ts",
-      "line": 36,
-      "endLine": 36
+      "line": 38,
+      "endLine": 38
     },
     {
       "id": "symbol:src/shared/authored-floors.ts#authoredFloorLayout",
       "name": "authoredFloorLayout",
       "kind": "value",
       "file": "src/shared/authored-floors.ts",
-      "line": 102,
-      "endLine": 103
+      "line": 109,
+      "endLine": 110
     },
     {
       "id": "symbol:src/shared/authored-floors.ts#AuthoredFloorLayout",
       "name": "AuthoredFloorLayout",
       "kind": "interface",
       "file": "src/shared/authored-floors.ts",
-      "line": 41,
-      "endLine": 50
+      "line": 43,
+      "endLine": 52
     },
     {
       "id": "symbol:src/shared/authored-floors.ts#authoredSplitPairKey",
       "name": "authoredSplitPairKey",
       "kind": "value",
       "file": "src/shared/authored-floors.ts",
-      "line": 196,
-      "endLine": 199
+      "line": 203,
+      "endLine": 206
     },
     {
       "id": "symbol:src/shared/authored-floors.ts#isAuthoredFloor",
       "name": "isAuthoredFloor",
       "kind": "value",
       "file": "src/shared/authored-floors.ts",
-      "line": 38,
-      "endLine": 39
+      "line": 40,
+      "endLine": 41
     },
     {
       "id": "symbol:src/shared/authored-floors.ts#LayAuthoredFloorOptions",
       "name": "LayAuthoredFloorOptions",
       "kind": "interface",
       "file": "src/shared/authored-floors.ts",
-      "line": 105,
-      "endLine": 112
+      "line": 112,
+      "endLine": 119
     },
     {
       "id": "symbol:src/shared/authored-floors.ts#layAuthoredFloorTiles",
       "name": "layAuthoredFloorTiles",
       "kind": "value",
       "file": "src/shared/authored-floors.ts",
-      "line": 126,
-      "endLine": 193
+      "line": 133,
+      "endLine": 200
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#assertBalanceSimulationWithinBaseline",
@@ -41065,7 +41067,7 @@
       "kind": "value",
       "file": "src/shared/board-build-rules.ts",
       "line": 44,
-      "endLine": 181
+      "endLine": 189
     },
     {
       "id": "symbol:src/shared/board-build-rules.ts#BuildBoardOptions",
@@ -47872,48 +47874,48 @@
       "name": "AUTHORED_FLOOR_PAIRS",
       "kind": "value",
       "file": "src/shared/pair-curve.ts",
-      "line": 25,
-      "endLine": 25
+      "line": 30,
+      "endLine": 30
     },
     {
       "id": "symbol:src/shared/pair-curve.ts#PAIRS_BASE",
       "name": "PAIRS_BASE",
       "kind": "value",
       "file": "src/shared/pair-curve.ts",
-      "line": 27,
-      "endLine": 27
+      "line": 32,
+      "endLine": 32
     },
     {
       "id": "symbol:src/shared/pair-curve.ts#PAIRS_GROWTH",
       "name": "PAIRS_GROWTH",
       "kind": "value",
       "file": "src/shared/pair-curve.ts",
-      "line": 28,
-      "endLine": 28
+      "line": 33,
+      "endLine": 33
     },
     {
       "id": "symbol:src/shared/pair-curve.ts#PAIRS_MAX",
       "name": "PAIRS_MAX",
       "kind": "value",
       "file": "src/shared/pair-curve.ts",
-      "line": 29,
-      "endLine": 29
+      "line": 34,
+      "endLine": 34
     },
     {
       "id": "symbol:src/shared/pair-curve.ts#PAIRS_MIN",
       "name": "PAIRS_MIN",
       "kind": "value",
       "file": "src/shared/pair-curve.ts",
-      "line": 30,
-      "endLine": 30
+      "line": 35,
+      "endLine": 35
     },
     {
       "id": "symbol:src/shared/pair-curve.ts#pairsForFloor",
       "name": "pairsForFloor",
       "kind": "value",
       "file": "src/shared/pair-curve.ts",
-      "line": 32,
-      "endLine": 40
+      "line": 37,
+      "endLine": 45
     },
     {
       "id": "symbol:src/shared/pairProximityHint.ts#getPairProximityGridDistance",
@@ -51336,8 +51338,8 @@
       "name": "dealBoardSuits",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 403,
-      "endLine": 423
+      "line": 408,
+      "endLine": 428
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#dealTilesInClumps",
@@ -51392,32 +51394,32 @@
       "name": "largestHiddenSuitClump",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 449,
-      "endLine": 475
+      "line": 454,
+      "endLine": 480
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#MIN_PAIRS_FOR_TWO_SUITS",
       "name": "MIN_PAIRS_FOR_TWO_SUITS",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 374,
-      "endLine": 374
+      "line": 379,
+      "endLine": 379
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#sameSuitNeighbourRate",
       "name": "sameSuitNeighbourRate",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 429,
-      "endLine": 443
+      "line": 434,
+      "endLine": 448
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#SCATTERED_SUIT_CEILING",
       "name": "SCATTERED_SUIT_CEILING",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 395,
-      "endLine": 395
+      "line": 400,
+      "endLine": 400
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#scatterTiles",
@@ -51440,24 +51442,24 @@
       "name": "SUIT_TARGET_PAIRS",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 373,
-      "endLine": 373
+      "line": 378,
+      "endLine": 378
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#suitCountForDeal",
       "name": "suitCountForDeal",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 397,
-      "endLine": 401
+      "line": 402,
+      "endLine": 406
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#suitCountForPairs",
       "name": "suitCountForPairs",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 376,
-      "endLine": 380
+      "line": 381,
+      "endLine": 385
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#SuitDealProfile",
@@ -53259,7 +53261,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 141
+          "line": 142
         },
         {
           "path": "src/shared/next-floor-run-state-rules.test.ts",
@@ -83919,6 +83921,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/game.test.ts->src/shared/floor-par.ts",
+      "source": "file:src/shared/game.test.ts",
+      "target": "file:src/shared/floor-par.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/game.test.ts->src/shared/game-core.ts",
       "source": "file:src/shared/game.test.ts",
       "target": "file:src/shared/game-core.ts",
@@ -93785,6 +93793,12 @@
       "id": "tested_by:src/shared/floor-par.ts->file:src/shared/bad-floor-is-quiet.test.ts",
       "source": "file:src/shared/floor-par.ts",
       "target": "file:src/shared/bad-floor-is-quiet.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/floor-par.ts->file:src/shared/game.test.ts",
+      "source": "file:src/shared/floor-par.ts",
+      "target": "file:src/shared/game.test.ts",
       "kind": "tested_by"
     },
     {
