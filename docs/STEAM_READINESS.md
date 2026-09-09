@@ -17,13 +17,13 @@ file is only about whether the build clears a launch checklist.
 | Every other resolution | **Verified** at 1440x900, 1024x768, 834x1112, 390x844 and 812x375 by the same contract. | `e2e/ui-fit-contract.spec.ts` |
 | Window size and position | **Done.** Restored across launches, clamped back onto a display that still exists, and never stored below the size floor. | `src/main/window-bounds.ts`, `src/main/index.ts` |
 | Window modes | **Partial.** Windowed and fullscreen, switchable from Settings and remembered. There is no separate borderless mode; on Windows and Linux Electron's fullscreen is already borderless, so the gap is a macOS one. | `src/main/ipc.ts`, `src/main/startup-display-mode.ts` |
-| Steam achievements | **Done.** Twenty, each mapped to a Partner API Name, and switched off in the demo flavour on Valve's own recommendation. | `src/shared/achievements.ts`, `src/main/steam.ts` |
+| Steam achievements | **Done.** Seventeen, each mapped to a Partner API Name, and switched off in the demo flavour on Valve's own recommendation. | `src/shared/achievements.ts`, `src/main/steam.ts` |
 | Steam cloud saves | **Ready to switch on.** Auto-Cloud needs no code in the game, so what was missing was a path that will not drift and a decision about what must not sync. `yarn steam:cloud-config` prints the Partner-site rows from the same constant the save is written with; crash logs are explicitly excluded. `VITE_FEATURE_CLOUD_SAVE=1` at packaging time makes the Settings copy match, and should only be set once the rows are actually saved. | `src/shared/save-location.ts`, `scripts/steam-cloud-config.ts` |
 | Localization | **Not implemented, but scoped.** Copy is centralised in `src/renderer/copy/` and the shared catalogs, which is the expensive half. `yarn audit:copy-locality` counts what is still hardcoded in components — **54**, down from 67 — and a gated baseline stops it growing. No lookup layer and no second language yet. | `scripts/copy-locality.ts` |
 | Rich Presence | **Done.** A run publishes its mode and floor; anything else reads as in the menus. Pushed only when it changes, never awaited, and a no-op outside Steam. The `#Status_*` tokens still need defining on the Partner site — until then Steam has nothing to render them with. | `src/shared/rich-presence.ts`, `src/renderer/hooks/useRichPresence.ts` |
 | Crash reporting | **Local.** Uncaught throws, unhandled rejections, renderer deaths and helper-process deaths write a bounded, redacted record beside the save; the ten newest are kept and the next launch reports how many are waiting. Nothing is sent anywhere — there is no backend and transmitting would need consent. | `src/main/crash-log.ts`, `src/main/crash-reporter.ts` |
 | Store page metadata | **Out of repository.** Tracked on the Partner site. | — |
-| Colour-blind safety | **Done for the five palettes that carry rules, plus a non-colour channel for traits.** Each trait draws a distinct mark (shape and count) on its rail, listed in the Codex and spoken in the tile's accessible label. Trait, enemy-hazard, hazard-tile, trap-state and interaction-lane colours are each gated against protanopia, deuteranopia and tritanopia. | `src/shared/color-vision.ts`, `tile-trait-palette.test.ts`, `tileBoardThreatColors.test.ts` |
+| Colour-blind safety | **Done for the two palettes that carry rules, plus a non-colour channel for traits.** Each trait draws a distinct mark (shape and count) on its rail, listed in the Codex and spoken in the tile's accessible label. The trait palette and the trait interaction-lane colours are each gated against protanopia, deuteranopia and tritanopia. | `src/shared/color-vision.ts`, `tile-trait-palette.test.ts`, `tileBoardReadability.test.ts` |
 
 ## Content
 
@@ -31,12 +31,10 @@ Counts a player can actually reach, not counts declared somewhere:
 
 | Axis | Count | Note |
 |---|---|---|
-| Modes | 5 | Classic/Endless, Daily, Puzzle, Gauntlet, Meditation |
+| Modes | 1 | Classic Run; Pass and Play is a shared game of the same rules on one device |
 | Mutators | 12 | one full endless cycle |
-| Run events | 26 | |
 | Floor archetypes | 11 | |
-| Wardens | 4 | all four reachable inside a single endless run |
-| Achievements | 20 | seven fall out of playing Classic; thirteen point at the rest of the game |
+| Achievements | 17 | all of them fall out of playing Classic |
 
 ## Dependency advisories
 
@@ -79,7 +77,7 @@ and is not what a colour-palette or crash-log pass should be dragging along.
   several times a packaged build's and is a regression tripwire rather than a shipping load time.
 - `yarn gate:gameplay` — includes a 1000-floor endless simulation and the balance profile bounds.
 - `src/shared/floor-schedule-reachability.test.ts` and `achievement-reachability.test.ts` — the
-  content census: every mutator, floor archetype, featured objective and relic must be reachable,
+  content census: every mutator, floor archetype and featured objective must be reachable,
   and no achievement threshold may exceed the content that exists. Both were written after finding
   real unreachable content, twice each.
 
@@ -107,8 +105,8 @@ hides it, which is worth knowing before trusting a green CI badge.
 - **Localization.** Needs a decision on languages before the copy layer is worth building; the cost
   is in extracting the strings, not in the plumbing. Copy is already largely centralised in
   `src/renderer/copy/` and `src/shared/mechanics-encyclopedia.ts`, which is the hard part done.
-- **Rich Presence tokens.** The game sends `#Status_Menu`, `#Status_Run`, `#Status_Endless`,
-  `#Status_Daily` and `#Status_Puzzle`. Those are localization keys; until they exist on the
+- **Rich Presence tokens.** The game sends `#Status_Menu`, `#Status_Run` and `#Status_Endless`.
+  Those are localization keys; until they exist on the
   Partner site under Application > Rich Presence, Steam receives them and displays nothing.
 - **Crash telemetry.** Records are written locally and never leave the machine, so a crash is
   invisible until a player volunteers the file. Sending them needs a backend and a consent flow.

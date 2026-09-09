@@ -17,7 +17,7 @@ const tool = (overrides: Partial<RunShellTool> & { id: string }): RunShellTool =
 describe('RunShell', () => {
     it('renders the five run numbers as one stats group', () => {
         const run = playingRun();
-        render(<RunShell gauntletRemainingMs={null} onPause={vi.fn()} run={run} tools={[]} />);
+        render(<RunShell gauntletRemainingMs={null} personalBestDepth={false} onPause={vi.fn()} run={run} tools={[]} />);
 
         const stats = screen.getByRole('group', { name: /run stats/i });
         expect(within(stats).getByTestId('hud-floor')).toHaveTextContent(/floor/i);
@@ -38,7 +38,7 @@ describe('RunShell', () => {
             chunkPairsThisChain: 2,
             stats: { ...base.stats, currentStreak: 3 }
         };
-        render(<RunShell gauntletRemainingMs={null} onPause={vi.fn()} run={run} tools={[]} />);
+        render(<RunShell gauntletRemainingMs={null} personalBestDepth={false} onPause={vi.fn()} run={run} tools={[]} />);
 
         const chain = within(screen.getByTestId('hud-chain')).getByText(/×3/);
         // Twelve pairs: Sharp from 5, Fever from 7. A chain of 3 plus 2 cascaded pairs is Sharp.
@@ -63,9 +63,9 @@ describe('RunShell', () => {
                 board: { ...base.board!, pairCount: 12 },
                 stats: { ...base.stats, currentStreak: 4 }
             };
-            const { rerender } = render(<RunShell gauntletRemainingMs={null} onPause={vi.fn()} run={chained} tools={[]} />);
+            const { rerender } = render(<RunShell gauntletRemainingMs={null} personalBestDepth={false} onPause={vi.fn()} run={chained} tools={[]} />);
             expect(screen.getByTestId('hud-chain-meter')).toHaveAttribute('data-meter-drop', 'false');
-            rerender(<RunShell gauntletRemainingMs={null} onPause={vi.fn()} run={{ ...chained, stats: { ...chained.stats, currentStreak: 0 } }} tools={[]} />);
+            rerender(<RunShell gauntletRemainingMs={null} personalBestDepth={false} onPause={vi.fn()} run={{ ...chained, stats: { ...chained.stats, currentStreak: 0 } }} tools={[]} />);
             act(() => {
                 vi.advanceTimersByTime(1);
             });
@@ -87,64 +87,47 @@ describe('RunShell', () => {
             chunkPairsThisChain: 4,
             stats: { ...base.stats, currentStreak: 6 }
         };
-        render(<RunShell gauntletRemainingMs={null} onPause={vi.fn()} run={run} tools={[]} />);
+        render(<RunShell gauntletRemainingMs={null} personalBestDepth={false} onPause={vi.fn()} run={run} tools={[]} />);
         const meter = screen.getByTestId('hud-chain-meter');
         expect(meter).toHaveAttribute('data-meter-full', 'true');
         expect(meter).toHaveAttribute('data-meter-fill', '1.000');
         expect(meter).toHaveAttribute('aria-label', 'Fever meter full: momentum 10.');
     });
 
-    it('names the run mode, so a Practice run is not mistaken for a Classic one', () => {
+    it('marks the Floor stat as a personal best only when told the run is the deepest yet', () => {
         const { rerender } = render(
-            <RunShell gauntletRemainingMs={null} onPause={vi.fn()} run={playingRun()} tools={[]} />
+            <RunShell gauntletRemainingMs={null} onPause={vi.fn()} personalBestDepth={false} run={playingRun()} tools={[]} />
         );
-        expect(screen.getByTestId('hud-mode-identity')).toHaveTextContent(/Classic Dungeon/i);
+        expect(screen.queryByTestId('hud-personal-best')).not.toBeInTheDocument();
+        expect(screen.getByTestId('hud-floor')).not.toHaveAttribute('data-personal-best');
 
-        const practice = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, practiceMode: true }));
-        rerender(<RunShell gauntletRemainingMs={null} onPause={vi.fn()} run={practice} tools={[]} />);
-        const identity = screen.getByTestId('hud-mode-identity');
-        expect(identity).toHaveTextContent(/Practice/i);
-        expect(identity).toHaveTextContent(/Achievements off/i);
+        rerender(<RunShell gauntletRemainingMs={null} onPause={vi.fn()} personalBestDepth run={playingRun()} tools={[]} />);
+        const floor = screen.getByTestId('hud-floor');
+        expect(floor).toHaveAttribute('data-personal-best', 'true');
+        expect(within(floor).getByTestId('hud-personal-best')).toHaveTextContent('Best');
+        expect(within(floor).getByRole('img', { name: /deepest floor yet/i })).toBeInTheDocument();
     });
 
-    it('says whether the run can still earn perfect memory, and strikes it out once it cannot', () => {
-        const { rerender } = render(
-            <RunShell gauntletRemainingMs={null} onPause={vi.fn()} perfectMemory="eligible" run={playingRun()} tools={[]} />
-        );
-        expect(screen.getByTestId('hud-perfect-memory')).toHaveTextContent(/Eligible/i);
+    it('carries nothing about which run this is: the mode and the perfect-memory stakes live in the pause menu', () => {
+        render(<RunShell gauntletRemainingMs={null} onPause={vi.fn()} personalBestDepth={false} run={playingRun()} tools={[]} />);
 
-        rerender(
-            <RunShell gauntletRemainingMs={null} onPause={vi.fn()} perfectMemory="locked" run={playingRun()} tools={[]} />
-        );
-        expect(screen.getByTestId('hud-perfect-memory')).toHaveTextContent(/Locked/i);
-    });
-
-    it('leaves the bar alone when perfect memory is not live stakes for this run', () => {
-        render(<RunShell gauntletRemainingMs={null} onPause={vi.fn()} perfectMemory={null} run={playingRun()} tools={[]} />);
-
-        expect(screen.queryByTestId('hud-perfect-memory')).not.toBeInTheDocument();
-    });
-
-    it('keeps the mode identity out of the numbers group, which stays a row of numbers', () => {
-        render(<RunShell gauntletRemainingMs={null} onPause={vi.fn()} run={playingRun()} tools={[]} />);
-
-        const stats = screen.getByRole('group', { name: /run stats/i });
-        expect(within(stats).queryByTestId('hud-mode-identity')).not.toBeInTheDocument();
+        expect(screen.getByTestId('game-hud')).not.toHaveTextContent(/Classic Dungeon|Perfect memory/i);
     });
 
     it('shows the gauntlet clock only when a gauntlet is running', () => {
-        render(<RunShell gauntletRemainingMs={95_000} onPause={vi.fn()} run={playingRun()} tools={[]} />);
+        render(<RunShell gauntletRemainingMs={95_000} onPause={vi.fn()} personalBestDepth={false} run={playingRun()} tools={[]} />);
 
         expect(screen.getByRole('timer')).toHaveTextContent('1:35');
     });
 
-    it('carries one line: feedback first, then the first-run instruction, then the objective', () => {
+    it('carries one line: feedback first, then the first-run instruction, and nothing otherwise', () => {
         const run = playingRun();
         const { rerender } = render(
             <RunShell
                 feedback="Match resolved."
                 gauntletRemainingMs={null}
                 onboardingLine="Flip a marked tile"
+                personalBestDepth={false}
                 onPause={vi.fn()}
                 run={run}
                 tools={[]}
@@ -153,10 +136,13 @@ describe('RunShell', () => {
         expect(screen.getByTestId('run-shell-line')).toHaveTextContent('Match resolved.');
 
         rerender(
-            <RunShell gauntletRemainingMs={null} onboardingLine="Flip a marked tile" onPause={vi.fn()} run={run} tools={[]} />
+            <RunShell gauntletRemainingMs={null} personalBestDepth={false} onboardingLine="Flip a marked tile" onPause={vi.fn()} run={run} tools={[]} />
         );
         expect(screen.getByTestId('run-shell-line')).toHaveTextContent('Flip a marked tile');
         expect(screen.getByTestId('run-shell-line')).toHaveAttribute('data-run-shell-line-tone', 'info');
+
+        rerender(<RunShell gauntletRemainingMs={null} onPause={vi.fn()} personalBestDepth={false} run={run} tools={[]} />);
+        expect(screen.queryByTestId('run-shell-line')).not.toBeInTheDocument();
     });
 
     it('docks only the tools that have charges or are armed, plus the menu', async () => {
@@ -165,7 +151,7 @@ describe('RunShell', () => {
         const armed = tool({ id: 'pin', armed: true });
         const spent = tool({ id: 'peek', charges: 0 });
         const ready = tool({ id: 'shuffle', charges: 2 });
-        render(<RunShell gauntletRemainingMs={null} onPause={onPause} run={playingRun()} tools={[armed, spent, ready]} />);
+        render(<RunShell gauntletRemainingMs={null} personalBestDepth={false} onPause={onPause} run={playingRun()} tools={[armed, spent, ready]} />);
 
         const dock = screen.getByRole('toolbar', { name: /game controls/i });
         expect(within(dock).getByTestId('tool-pin')).toHaveAttribute('aria-pressed', 'true');

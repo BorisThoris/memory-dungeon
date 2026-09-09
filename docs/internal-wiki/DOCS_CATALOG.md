@@ -57,14 +57,13 @@
 | [GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md](../gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md) | Machine snapshot (`yarn docs:mechanics-appendix`) — versions + catalog counts |
 | [GAMEPLAY_POLISH_AND_GAPS.md](../gameplay/GAMEPLAY_POLISH_AND_GAPS.md) | Consolidated polish, partial implementations, UX/doc risks |
 | [epic-core-memory-loop.md](../gameplay/epic-core-memory-loop.md) | Flips, match flow, gambit, wild/decoy |
-| [epic-run-session-flow.md](../gameplay/epic-run-session-flow.md) | Memorize/play/resolve, pause, relic gate |
+| [epic-run-session-flow.md](../gameplay/epic-run-session-flow.md) | Memorize/play/resolve, pause, advance |
 | [epic-board-rendering-assists.md](../gameplay/epic-board-rendering-assists.md) | Board, findables, hints, WebGL |
-| [epic-mutators.md](../gameplay/epic-mutators.md) | Mutator IDs, daily, endless schedule |
+| [epic-mutators.md](../gameplay/epic-mutators.md) | Mutator IDs, endless schedule |
 | [epic-scoring-objectives.md](../gameplay/epic-scoring-objectives.md) | Scoring, objectives, penalties |
 | [epic-lives-and-pressure.md](../gameplay/epic-lives-and-pressure.md) | Lives, guard, timer, parasite |
 | [epic-powers-and-interactions.md](../gameplay/epic-powers-and-interactions.md) | Powers, toolbar, tile actions |
-| [epic-relics.md](../gameplay/epic-relics.md) | Relics, milestones |
-| [epic-modes-and-runs.md](../gameplay/epic-modes-and-runs.md) | Modes, puzzles, import/export |
+| [epic-modes-and-runs.md](../gameplay/epic-modes-and-runs.md) | Classic Run setup, Pass and Play, import/export |
 | [epic-meta-progression.md](../gameplay/epic-meta-progression.md) | Achievements, telemetry, saves |
 | [epic-contracts-challenge-runs.md](../gameplay/epic-contracts-challenge-runs.md) | Scholar / pin vow contracts |
 | [epic-content-symbols-and-generation.md](../gameplay/epic-content-symbols-and-generation.md) | Symbols, generation |

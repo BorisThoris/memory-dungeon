@@ -105,7 +105,7 @@ async function captureTrapFeedbackState(page: Page, viewportId: string): Promise
      * stopped existing — which is what turned this into a 20-second wait per viewport.
      */
     await expect(page.getByTestId('tile-board-frame')).toBeVisible({ timeout: 20_000 });
-    await expect(page.getByTestId('hud-mode-identity')).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByTestId('hud-score')).toBeVisible({ timeout: 20_000 });
     await capture(page, viewportId, '05-trap-feedback');
 }
 

@@ -7,7 +7,7 @@ Authoritative semantic sound map for the renderer. Raw typing, passive scrolling
 | Decision | Meaning |
 |----------|---------|
 | `reuse` | Reuse an existing shipped cue family |
-| `new` | Uses one of the new dedicated 29-target cues |
+| `new` | Uses one of the dedicated cues in the app-audio batch |
 | `silent` | Intentionally no SFX |
 
 ## Runtime coverage contract (REG-037)
@@ -23,7 +23,7 @@ Machine-readable mirror: `src/renderer/audio/audioInteractionCoverage.ts`.
 
 | Screen | Interaction | Trigger location | Decision | Cue | Style | Trim | Type | Base reference |
 |--------|-------------|------------------|----------|-----|-------|------|------|----------------|
-| Startup intro | Intro completes or skip resolves | `StartupIntro.completeIntro` | `new` | `intro-sting` | ceremonial relic sting | 0.24s | sampled + procedural fallback | `Menu_load.wav` |
+| Startup intro | Intro completes or skip resolves | `StartupIntro.completeIntro` | `new` | `intro-sting` | ceremonial vault sting | 0.24s | sampled + procedural fallback | `Menu_load.wav` |
 | Main menu | Primary/secondary menu navigation | `MainMenu` buttons | `reuse` | `ui-click` / `menu-open` / `ui-back` | marble tap / panel swell / cancel tap | 0.04s–0.16s | sampled + procedural fallback | existing |
 | Choose Path | Open mode detail / import modal / meditation setup | `ChooseYourPathScreen` | `reuse` | `menu-open` | meta panel reveal | 0.16s | sampled + procedural fallback | `Menu_load.wav` |
 | Choose Path | Close detail/import modal / back to menu | `ChooseYourPathScreen` | `reuse` | `ui-back` | soft cancel tap | 0.08s | sampled + procedural fallback | existing |
@@ -55,10 +55,6 @@ Machine-readable mirror: `src/renderer/audio/audioInteractionCoverage.ts`.
 | Pause | Resume by button or `P` | `useAppStore.resume` | `new` | `pause-resume` | short upward release ping | 0.12s | sampled + procedural fallback | `Misc_Checkpoint.wav` |
 | Overlays | Open shortcuts / abandon confirm / floor-clear menu branch | `GameScreen` | `reuse` | `menu-open` | modal reveal | 0.16s | sampled + procedural fallback | `Menu_load.wav` |
 | Overlays | Close shortcuts / abandon cancel | `GameScreen` | `reuse` | `ui-back` | cancel tap | 0.08s | sampled + procedural fallback | existing |
-| Relic draft | Relic offer appears | `GameScreen` effect on `run.relicOffer` | `new` | `relic-offer-open` | mystical reveal swell | 0.18s | sampled + procedural fallback | `Misc_UFO_anim.wav` |
-| Relic draft | Focus / hover relic choice crescendo | `RelicDraftOfferPanel` -> `playRelicChoiceCrescendoSfx` | `none` | procedural layer | signature-gated two-beat prime, three-beat cashout, four-beat stack, and five-beat rare draft preview | 0.10s-0.16s | procedural fallback | existing |
-| Relic draft | Pick relic | `useAppStore.pickRelic` | `new` | `relic-pick` | warm reward bloom | 0.16s | sampled + procedural fallback | `Extra_Life_Blob.wav` |
-| Endless wager | Arm wager | `useAppStore.acceptEndlessRiskWager` | `new` | `wager-arm` | tense upward spark | 0.14s | sampled + procedural fallback | `Misc_Lightning.wav` |
 | Game over | Screen enters | `GameOverScreen` mount | `new` | `game-over-open` | elegant downward close | 0.20s | sampled + procedural fallback | `Misc_Fall.wav` |
 | Game over | Main menu button | `GameOverScreen` | `reuse` | `ui-back` | cancel/return tap | 0.08s | sampled + procedural fallback | existing |
 | Game over | Copy run export success | `GameOverScreen.copyRunExport` | `new` | `ui-copy` | bright archive tick | 0.08s | sampled + procedural fallback | `Menu_counter.wav` |

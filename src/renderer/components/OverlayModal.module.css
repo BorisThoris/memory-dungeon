@@ -138,12 +138,6 @@
         linear-gradient(168deg, rgba(12, 14, 20, 0.9), rgba(8, 9, 14, 0.86));
 }
 
-.headerQuietToneRelic {
-    border-color: color-mix(in srgb, #8c62df 18%, transparent);
-    background:
-        radial-gradient(ellipse 120% 80% at 50% 0%, color-mix(in srgb, #8c62df 12%, transparent), transparent 54%),
-        linear-gradient(168deg, rgba(16, 12, 22, 0.9), rgba(8, 8, 12, 0.84));
-}
 
 .headerQuietToneDanger {
     border-color: color-mix(in srgb, var(--theme-danger) 20%, transparent);
@@ -208,20 +202,7 @@
 }
 
 /* META-009 / OVR-012 — relic milestone: arcane violet band (HUD parasite / theme-glow family). */
-.headerPlateFrameRelic {
-    --theme-meta-frame-drop: 0 0 16px color-mix(in srgb, var(--theme-glow-violet-drop) 72%, transparent);
-}
 
-.headerPlateFrameRelic .headerPlateWell {
-    background:
-        radial-gradient(ellipse 125% 85% at 50% 0%, color-mix(in srgb, #8c62df 24%, transparent), transparent 56%),
-        linear-gradient(180deg, rgba(255, 243, 217, 0.035) 0%, transparent 42%),
-        linear-gradient(168deg, rgba(18, 12, 28, 0.94), rgba(8, 8, 12, 0.9));
-    box-shadow:
-        inset 0 1px 0 rgba(217, 199, 255, 0.09),
-        inset 0 0 0 1px color-mix(in srgb, #8c62df 20%, transparent),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.38);
-}
 
 .headerPlateFrameDanger {
     --theme-meta-frame-drop: 0 0 16px color-mix(in srgb, var(--theme-danger) 46%, transparent);
@@ -253,10 +234,6 @@
     --overlay-accent-soft: color-mix(in srgb, rgba(87, 220, 255, 1) 14%, transparent);
 }
 
-.modalToneRelic {
-    --overlay-accent: color-mix(in srgb, #8c62df 52%, transparent);
-    --overlay-accent-soft: color-mix(in srgb, #8c62df 16%, transparent);
-}
 
 .modalToneDanger {
     --overlay-accent: color-mix(in srgb, var(--theme-danger) 44%, transparent);

@@ -145,9 +145,9 @@ node scripts/audio-pipeline/run-ace-batch.mjs --jobs scripts/audio-pipeline/jobs
 
 **Convenience:** `yarn audio:ace-step:app:high` runs the app batch with **`--quality high`**, `yarn audio:ace-step:app:max` with **`--quality max`**, and **`yarn audio:ace-step:app:hq-variants`** (or **`app:max-variants`**) combines quality with **`--variants 3`** for A/B listening.
 
-### Full app sound replacement (all 29 shipped assets)
+### Full app sound replacement (all 26 shipped assets)
 
-The Memory Dungeon app batch in [`jobs.memory-dungeon-app-audio.json`](jobs.memory-dungeon-app-audio.json) has **29** jobs; they map to the files installed by [`install-ace-app-outputs.mjs`](install-ace-app-outputs.mjs) into `src/renderer/assets/audio/sfx/`, `ui/`, and `music/`. This is the path to **replace every shipped non-procedural** cue and both music loops. Procedural fallbacks in `gameSfx.ts` / `uiSfx.ts` only play when a file is missing.
+The Memory Dungeon app batch in [`jobs.memory-dungeon-app-audio.json`](jobs.memory-dungeon-app-audio.json) has **26** jobs; they map to the files installed by [`install-ace-app-outputs.mjs`](install-ace-app-outputs.mjs) into `src/renderer/assets/audio/sfx/`, `ui/`, and `music/`. This is the path to **replace every shipped non-procedural** cue and both music loops. Procedural fallbacks in `gameSfx.ts` / `uiSfx.ts` only play when a file is missing.
 
 1. **Machine:** set up **`.venv-audio`**, ACE-Step, checkpoints, optional `ACESTEP_PROJECT_ROOT` (see [Prerequisites](#prerequisites) and [Install ACE-Step 1.5](#install-ace-step-15-once-per-machine)). Install **ffmpeg** on PATH (required for the install/trim step). In step 6, pass **`--loudness`** to the install command if you want ffmpeg **loudnorm** on the trimmed WAVs.
 2. **References:** ensure `scripts/audio-pipeline/reference-audio/` is ready: **`yarn audio:prep-ace-app`** and/or **`yarn audio:materialize-references-from-pack`**, and optionally **`yarn audio:apply-reference-coverage -- --write`**. Renders must match right/timbre; rights are on you (see [RIGHTS.md](RIGHTS.md)).
@@ -232,7 +232,7 @@ node scripts/audio-pipeline/run-ace-batch.mjs --dry-run --jobs scripts/audio-pip
 
 ### Full app audio (`jobs.memory-dungeon-app-audio.json`)
 
-Use [`jobs.memory-dungeon-app-audio.json`](jobs.memory-dungeon-app-audio.json) for **29** shipped targets in one batch (gameplay SFX, UI, meta one-shots, and two background loops; see the install map in [`install-ace-app-outputs.mjs`](install-ace-app-outputs.mjs)). Reference WAVs live under **`reference-audio/`** — run **`yarn audio:prep-ace-app`** for procedural stubs, or replace with licensed originals (see [`reference-audio/README.md`](reference-audio/README.md)). The install script **trims** using job `duration`; for a full replacement workflow, see [Full app sound replacement](#full-app-sound-replacement-all-29-shipped-assets) above.
+Use [`jobs.memory-dungeon-app-audio.json`](jobs.memory-dungeon-app-audio.json) for **26** shipped targets in one batch (gameplay SFX, UI, meta one-shots, and two background loops; see the install map in [`install-ace-app-outputs.mjs`](install-ace-app-outputs.mjs)). Reference WAVs live under **`reference-audio/`** — run **`yarn audio:prep-ace-app`** for procedural stubs, or replace with licensed originals (see [`reference-audio/README.md`](reference-audio/README.md)). The install script **trims** using job `duration`; for a full replacement workflow, see [Full app sound replacement](#full-app-sound-replacement-all-26-shipped-assets) above.
 
 ```bash
 node scripts/audio-pipeline/run-ace-batch.mjs --dry-run --jobs scripts/audio-pipeline/jobs.memory-dungeon-app-audio.json

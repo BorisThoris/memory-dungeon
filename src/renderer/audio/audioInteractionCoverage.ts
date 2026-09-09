@@ -62,7 +62,7 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
         semanticMoment: 'navigation',
         decision: 'sampled_with_fallback',
         cooldownPolicy: 'once per boot intro',
-        mixRole: 'ceremonial relic sting',
+        mixRole: 'ceremonial vault sting',
         reducedMotionSafe: true
     },
     {

@@ -142,7 +142,6 @@
             "role": "delayed_value",
             "evidence": [
                 "src/shared/tile-trait-rules.ts",
-                "src/shared/trait-route-objectives.ts",
                 "src/renderer/components/RunShell.tsx"
             ],
             "reads": [
@@ -167,8 +166,7 @@
                 "matchable-pair-remains"
             ],
             "tests": [
-                "src/shared/tile-trait-rules.test.ts",
-                "src/shared/trait-route-objectives.test.ts"
+                "src/shared/tile-trait-rules.test.ts"
             ]
         },
         {

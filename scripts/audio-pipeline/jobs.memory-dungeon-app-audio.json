@@ -1,5 +1,5 @@
 {
-    "notes": "Captions target Memory Dungeon tone: dark fantasy memory-vault arcade, crystalline and marble-glass textures, restrained mix—paired with dont_modify reference_audio for timbre. Reference-assisted batch for 29 shipped targets. Paths resolve under scripts/audio-pipeline/reference-audio/ via materialize-reference-audio using src/renderer/assets/audio/dont_modify as the primary pack.",
+    "notes": "Captions target Memory Dungeon tone: dark fantasy memory-vault arcade, crystalline and marble-glass textures, restrained mix—paired with dont_modify reference_audio for timbre. Reference-assisted batch for 26 shipped targets. Paths resolve under scripts/audio-pipeline/reference-audio/ via materialize-reference-audio using src/renderer/assets/audio/dont_modify as the primary pack.",
     "referenceSourceCoverage": {
         "flip": ["Hit_WoodenFlap.wav", "Hit_Wood_Wood.wav", "Pieces_Wood.wav"],
         "gambit-commit": ["ATARI.wav", "Extra_Start.wav"],
@@ -25,9 +25,6 @@
         "pause-resume": ["Misc_Checkpoint.wav"],
         "game-over-open": ["Misc_Fall.wav"],
         "ui-copy": ["Menu_counter.wav"],
-        "relic-offer-open": ["Misc_UFO_anim.wav", "Misc_Checkpoint.wav"],
-        "relic-pick": ["Extra_Life_Blob.wav"],
-        "wager-arm": ["Misc_Lightning.wav", "Misc_UFO.wav"],
         "menu-loop": ["Menu_atmo.wav", "Menu_load.wav"],
         "run-loop": ["Music_thunder.wav", "Misc_Ventilator.wav", "Pieces_Paper.wav"]
     },
@@ -295,39 +292,6 @@
             "reference_audio": "reference-audio/Menu_counter.wav",
             "audio_cover_strength": 0.24,
             "seed": 920126
-        },
-        {
-            "id": "relic-offer-open",
-            "task_type": "text2music",
-            "caption": "Memory Dungeon vault aesthetic—relic draft appears, airy mystical reveal with hovering glass shimmer and sacred vault focus, short ceremonial entrance, no sci-fi sweep no beat",
-            "lyrics": "[Instrumental]",
-            "instrumental": true,
-            "duration": 5,
-            "reference_audio": "reference-audio/Misc_UFO_anim.wav",
-            "audio_cover_strength": 0.26,
-            "seed": 920127
-        },
-        {
-            "id": "relic-pick",
-            "task_type": "text2music",
-            "caption": "Memory Dungeon vault aesthetic—relic chosen, warm reward bloom with crystal bell edge, short affirmative gain moment, richer than ui confirm, no groove",
-            "lyrics": "[Instrumental]",
-            "instrumental": true,
-            "duration": 4,
-            "reference_audio": "reference-audio/Extra_Life_Blob.wav",
-            "audio_cover_strength": 0.28,
-            "seed": 920128
-        },
-        {
-            "id": "wager-arm",
-            "task_type": "text2music",
-            "caption": "Memory Dungeon vault aesthetic—endless risk wager armed, tense upward spark with vault lightning edge, daring but short, no trailer hit no drum loop",
-            "lyrics": "[Instrumental]",
-            "instrumental": true,
-            "duration": 4,
-            "reference_audio": "reference-audio/Misc_Lightning.wav",
-            "audio_cover_strength": 0.28,
-            "seed": 920129
         },
         {
             "id": "menu-loop",

@@ -65,18 +65,18 @@ describe('describeRunModeIdentity', () => {
 
 describe('the catalog start contracts this exists to honour', () => {
     /**
-     * PPI-006 names the HUD element every mode promises to light up. If a mode declares that
-     * contract, something in this file has to be able to produce that label — otherwise the promise
-     * is a comment again.
+     * PPI-006 names the element every mode promises to light up. If a mode declares that contract,
+     * something in this file has to be able to produce that label — otherwise the promise is a
+     * comment again.
      */
     const identityContractModes = RUN_MODE_CATALOG.filter(
-        (mode) => mode.startContract?.testId === 'hud-mode-identity'
+        (mode) => mode.startContract?.testId === 'pause-run-identity'
     );
 
-    it('covers every mode that promises the HUD names it', () => {
+    it('covers every mode that promises the pause menu names it', () => {
         expect(identityContractModes.length).toBeGreaterThan(0);
         for (const mode of identityContractModes) {
-            expect(mode.startContract?.signal, `${mode.id} start signal`).toMatch(/^HUD mode reads /u);
+            expect(mode.startContract?.signal, `${mode.id} start signal`).toMatch(/^The pause menu names the run /u);
         }
     });
 });

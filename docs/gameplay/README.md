@@ -17,17 +17,14 @@ Epics below are **narrative deep dives** + refinement notes; they must stay cons
 | [GAMEPLAY_MECHANICS_CATALOG](./GAMEPLAY_MECHANICS_CATALOG.md) | **Master checklist** — all mechanics mapped to code and epics |
 | [GAMEPLAY_EPIC_ACCEPTANCE_REPORT](./GAMEPLAY_EPIC_ACCEPTANCE_REPORT.md) | **Closure report** — converted theory epics mapped to implementation and test coverage |
 | [GAMEPLAY_POLISH_AND_GAPS](./GAMEPLAY_POLISH_AND_GAPS.md) | **Polish / partial / risky** — consolidated from epics |
-| [hazard-tile-matrix](./hazard-tile-matrix.md) | Hazard tile taxonomy, safe-target rules, objective impact, and live-copy contract |
 | [epic-core-memory-loop](./epic-core-memory-loop.md) | Flips, match/mismatch, gambit, wild, decoy, resolve timing |
-| [epic-run-session-flow](./epic-run-session-flow.md) | Memorize/play/resolving, pause, advance, relic gate, undo, debug peek |
+| [epic-run-session-flow](./epic-run-session-flow.md) | Memorize/play/resolving, pause, advance, undo, debug peek |
 | [epic-board-rendering-assists](./epic-board-rendering-assists.md) | WebGL board, findables/shifting spotlight, pair-distance hints, focus assist, presentation mutator **3D tints** |
-| [epic-mutators](./epic-mutators.md) | All mutator IDs, daily table, endless floor schedule |
+| [epic-mutators](./epic-mutators.md) | All mutator IDs, endless floor schedule |
 | [epic-scoring-objectives](./epic-scoring-objectives.md) | Match score, floor clear, flip par, boss multiplier, penalties |
-| [epic-lives-and-pressure](./epic-lives-and-pressure.md) | Lives, guard, combo shards, echo, gauntlet timer, score parasite |
+| [epic-lives-and-pressure](./epic-lives-and-pressure.md) | Lives, guard, combo shards, echo, run clock, score parasite |
 | [epic-powers-and-interactions](./epic-powers-and-interactions.md) | Peek, shuffle, region shuffle, tile swap, destroy, pin, stray, undo, flash pair |
-| [epic-relics](./epic-relics.md) | Relic pool, milestones, `applyRelicImmediate` |
-| [epic-route-world-pipeline](./epic-route-world-pipeline.md) | Route choice as next-floor world generation: Safe/Greed/Mystery profiles, card families, side-room hooks |
-| [epic-modes-and-runs](./epic-modes-and-runs.md) | Game modes, practice/scholar/pin vow/wild, puzzles, import/export |
+| [epic-modes-and-runs](./epic-modes-and-runs.md) | Classic Run and its setup sheet, Pass and Play, practice/scholar/pin vow/wild, import/export |
 | [epic-meta-progression](./epic-meta-progression.md) | Achievements, telemetry, saves, `powersUsedThisRun` |
 | [epic-contracts-challenge-runs](./epic-contracts-challenge-runs.md) | Scholar / pin vow `activeContract` |
 | [epic-content-symbols-and-generation](./epic-content-symbols-and-generation.md) | Symbol bands, atomic variants, generation |

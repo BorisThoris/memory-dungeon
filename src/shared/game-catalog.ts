@@ -22,8 +22,7 @@ export {
     ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS,
     ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS,
     ENCYCLOPEDIA_VERSION,
-    GAME_MODE_CODEX,
-    VISUAL_ENDLESS_MODE_LOCKED
+    GAME_MODE_CODEX
 } from './mechanics-encyclopedia';
 
 export const getAchievementMeta = (id: keyof typeof ACHIEVEMENT_BY_ID): AchievementDefinition => ACHIEVEMENT_BY_ID[id];

@@ -33,7 +33,7 @@ Ultra-deep table of every shipped sound (style, duration, references, coupling):
 
 ## Asset Set
 
-Gameplay SFX: `flip`, `gambit-commit`, `match-tier-low`, `match-tier-mid`, `match-tier-high`, `mismatch`, `power-arm`, `destroy-pair`, `peek-power`, `stray-power`, `shuffle-full`, `shuffle-quick`, `floor-clear`, `relic-offer-open`, `relic-pick`, `wager-arm`, and `countdown-pressure`.
+Gameplay SFX: `flip`, `gambit-commit`, `match-tier-low`, `match-tier-mid`, `match-tier-high`, `mismatch`, `power-arm`, `destroy-pair`, `peek-power`, `stray-power`, `shuffle-full`, `shuffle-quick`, `floor-clear`, and `countdown-pressure`.
 
 UI/menu SFX: `ui-click`, `ui-confirm`, `ui-back`, `ui-counter`, `menu-open`, `run-start`, `intro-sting`, `pause-open`, `pause-resume`, `game-over-open`, and `ui-copy`.
 

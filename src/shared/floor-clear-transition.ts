@@ -34,9 +34,6 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
     const clearLifeGained = clearLifeReason !== 'none' && livesBeforeClear < MAX_LIVES ? 1 : 0;
     const floorClearObjective = getFloorClearObjectiveResult(run, board);
     const bonusTags: string[] = [...floorClearObjective.bonusTags];
-    if (run.traitRouteObjectiveCompletedThisFloor) {
-        bonusTags.push('trait_route_objective');
-    }
     const objectiveBonus = floorClearObjective.objectiveBonus;
     const featuredObjectiveId = floorClearObjective.featuredObjectiveId;
     const featuredObjectiveCompleted = floorClearObjective.featuredObjectiveCompleted;
@@ -89,11 +86,7 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
         perfect,
         rating,
         run,
-        scoreGained,
-        traitRouteObjectiveCompleted: run.traitRouteObjectiveCompletedThisFloor,
-        traitRouteObjectiveProgress: run.traitRouteObjectiveProgressThisFloor,
-        traitRouteObjectiveRequired: run.traitRouteObjectiveRequiredThisFloor,
-        traitRouteObjectiveReward: run.traitRouteObjectiveRewardTextThisFloor ?? undefined
+        scoreGained
     });
 
     return {

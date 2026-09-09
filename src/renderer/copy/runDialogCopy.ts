@@ -38,7 +38,10 @@ export const ROUTE_CHOICE_COPY = {
 
 /** Spoken by screen readers over the run shell's pause control. */
 export const RUN_SHELL_LABELS = {
-    pause: 'Pause and open the run menu'
+    pause: 'Pause and open the run menu',
+    /** The tag on the Floor stat once this run is the deepest the profile has seen. */
+    personalBest: 'Best',
+    personalBestAria: 'Deepest floor yet'
 } as const;
 
 /**

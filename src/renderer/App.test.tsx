@@ -458,7 +458,9 @@ describe('desktop app flow', () => {
 
         // GameScreen is lazy: the shell shows "Loading run..." until the chunk resolves.
         expect(await screen.findByTestId('game-hud', undefined, { timeout: 10_000 })).toBeInTheDocument();
-        expect(screen.getByTestId('hud-mode-identity')).toHaveTextContent(/Wild Run/i);
+        // The bar carries numbers only; which run this is reads from the pause menu.
+        await userEvent.setup().click(screen.getByRole('button', { name: /pause and open the run menu/i }));
+        expect(await screen.findByTestId('pause-run-identity')).toHaveTextContent(/Wild Run/i);
     });
 
 

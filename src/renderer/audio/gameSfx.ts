@@ -1,5 +1,5 @@
 import type { RunState } from '../../shared/contracts';
-import { runArray, runArrayCount } from '../../shared/run-array-guards';
+import { runArray } from '../../shared/run-array-guards';
 import { runFiniteNumber, runNonNegativeInteger } from '../../shared/run-number-guards';
 import { TILE_TRAIT_COUNT_KINDS } from '../../shared/session-stats-rules';
 import { getChainMilestoneFeedback, type ChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
@@ -272,13 +272,6 @@ const tileTraitCountTotal = (value: unknown): number => {
     return TILE_TRAIT_COUNT_KINDS.reduce((sum, kind) => sum + runNonNegativeInteger(counts[kind]), 0);
 };
 
-const resolvedTraitRouteProgressCount = (before: RunState, after: RunState): number =>
-    Math.max(
-        0,
-        runFiniteNumber(after.traitRouteObjectiveProgressThisFloor) - runFiniteNumber(before.traitRouteObjectiveProgressThisFloor),
-        runArrayCount(after.traitRouteObjectiveTriggeredTagsThisFloor) - runArrayCount(before.traitRouteObjectiveTriggeredTagsThisFloor)
-    );
-
 const hasResolvedChainRewardCashout = (before: RunState, after: RunState): boolean => {
     if (runFiniteNumber(after.stats.currentStreak) < 3) {
         return false;
@@ -296,8 +289,7 @@ const resolvedRewardChannelCount = (
     chainMilestone?: ChainMilestoneFeedback
 ): number => {
     const chainRewardCashout = hasResolvedChainRewardCashout(before, after);
-    const traitRouteChannels = Math.min(2, resolvedTraitRouteProgressCount(before, after));
-    return traitRouteChannels + [
+    return [
         (after.findablesClaimedThisFloor ?? 0) > (before.findablesClaimedThisFloor ?? 0),
         hasResolvedResourceReward(before, after) && !chainRewardCashout,
         chainRewardCashout,
@@ -438,17 +430,6 @@ const playStackedRewardBurstSfx = (gain: number, channelCount: number): void => 
     });
 };
 
-const playSuperStackedRewardBurstSfx = (gain: number, channelCount: number): void => {
-    playTone({
-        frequency: 2440 + Math.min(channelCount, 6) * 90,
-        frequencyEnd: 3860 + Math.min(channelCount, 6) * 140,
-        durationSec: channelCount >= 5 ? 0.18 : 0.15,
-        gain: gain * (channelCount >= 5 ? 0.3 : 0.25),
-        type: 'triangle',
-        category: 'match'
-    });
-};
-
 const playStackedRewardSetupSfx = (gain: number, channelCount: number): void => {
     playTone({
         frequency: 1660 + Math.min(channelCount, 3) * 90,
@@ -556,22 +537,6 @@ const playNearChainRewardArmedSfx = (gain: number, after: RunState): void => {
         durationSec: 0.082,
         gain: gain * 0.18,
         type: 'sine',
-        category: 'match'
-    });
-};
-
-const playTraitRouteAccentSfx = (gain: number, after: RunState, routeProgressCount: number): void => {
-    const traitSurge = routeProgressCount >= 2;
-    playTone({
-        frequency: traitSurge ? 1880 : 1560,
-        frequencyEnd: traitSurge
-            ? 2920
-            : after.traitRouteObjectiveCompletedThisFloor
-              ? 2440
-              : 2040,
-        durationSec: traitSurge ? 0.14 : after.traitRouteObjectiveCompletedThisFloor ? 0.12 : 0.08,
-        gain: gain * (traitSurge ? 0.34 : after.traitRouteObjectiveCompletedThisFloor ? 0.3 : 0.22),
-        type: traitSurge ? 'triangle' : 'sine',
         category: 'match'
     });
 };
@@ -697,10 +662,6 @@ export const playResolveSfx = (before: RunState, after: RunState, gain: number):
         if (hasArmedNearChainReward(before, after)) {
             playNearChainRewardArmedSfx(gain, after);
         }
-        const traitRouteProgressCount = resolvedTraitRouteProgressCount(before, after);
-        if (traitRouteProgressCount > 0) {
-            playTraitRouteAccentSfx(gain, after, traitRouteProgressCount);
-        }
         const rewardChannelCount = resolvedRewardChannelCount(before, after, chainMilestone);
         playResolvedCascadeAccentSfx(gain, Math.max(1, Math.floor(runFiniteNumber(after.stats.currentStreak))), rewardChannelCount);
         if (rewardChannelCount === 2) {
@@ -708,9 +669,6 @@ export const playResolveSfx = (before: RunState, after: RunState, gain: number):
         }
         if (rewardChannelCount >= 3) {
             playStackedRewardBurstSfx(gain, rewardChannelCount);
-        }
-        if (rewardChannelCount >= 4) {
-            playSuperStackedRewardBurstSfx(gain, rewardChannelCount);
         }
     } else if (after.stats.tries > before.stats.tries) {
         playMismatchSfx(gain);

@@ -48,9 +48,6 @@ const base = {
     },
     volatileTraitShuffles: 0,
     findablesClaimedThisFloor: 0,
-    objectiveProgress: 0,
-    objectiveRequired: 1,
-    objectiveLabel: 'Find the exit',
     recallFocus: 1,
     recallFocusMax: 3,
     recallMatchesThisFloor: 0,
@@ -376,28 +373,25 @@ describe('useHudPoliteLiveAnnouncement', () => {
         expect(result.current.message).toBe('Shard spark claimed: +1 combo shard.');
     });
 
-    it('announces match, objective, and resource deltas as one readable action summary', async () => {
+    it('announces match and resource deltas as one readable action summary', async () => {
         const { result, rerender } = renderHook(
-            (p: { turnEvent: BoardTurnResolvedEvent | null; shards: number; progress: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null; shards: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 2,
                     boardTurnEvent: p.turnEvent,
-                    comboShards: p.shards,
-                    objectiveProgress: p.progress,
-                    objectiveRequired: 2,
-                    objectiveLabel: 'Disarm traps'
+                    comboShards: p.shards
                 }),
-            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null, shards: 0, progress: 0 } }
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null, shards: 0 } }
         );
 
         await act(async () => {
-            rerender({ turnEvent: matchTurn('summary-turn'), shards: 1, progress: 1 });
+            rerender({ turnEvent: matchTurn('summary-turn'), shards: 1 });
         });
         await flushRaf();
 
         expect(result.current.message).toBe(
-            'Match resolved. 1/4 pairs cleared. Disarm traps: 1/2. Combo shard gained. 1 available.'
+            'Match resolved. 1/4 pairs cleared. Combo shard gained. 1 available.'
         );
         expect(result.current.priority).toBe('info');
     });

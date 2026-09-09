@@ -130,17 +130,17 @@ type BoardOpportunityHeat = 'cashout' | 'normal' | 'prime' | 'surge';
 type BoardOpportunityCompassRow = {
     action: string;
     detail: string;
-    id: 'chain' | 'hazard' | 'pickup' | 'recovery' | 'tool' | 'trait';
+    id: 'chain' | 'pickup' | 'recovery' | 'tool' | 'trait';
     impactCue: string;
     label: string;
     tone: string;
     value: string;
 };
-type BoardOpportunityLaneId = 'cash' | 'build' | 'pickup' | 'recover' | 'risk' | 'tool' | 'trait';
+type BoardOpportunityLaneId = 'cash' | 'build' | 'pickup' | 'recover' | 'tool' | 'trait';
 type BoardOpportunityLaneMapEntry = {
-    action: 'Cash now' | 'Prime build' | 'Claim pickup' | 'Recover' | 'Reduce risk' | 'Study traits' | 'Use tool';
+    action: 'Cash now' | 'Prime build' | 'Claim pickup' | 'Recover' | 'Study traits' | 'Use tool';
     id: BoardOpportunityLaneId;
-    label: 'Cash' | 'Build' | 'Pickup' | 'Perk' | 'Recover' | 'Risk' | 'Tool' | 'Trait';
+    label: 'Cash' | 'Build' | 'Pickup' | 'Perk' | 'Recover' | 'Tool' | 'Trait';
     count: number;
     cue: string;
 };
@@ -179,26 +179,21 @@ const getBoardOpportunityBeatCount = (row: BoardOpportunityCompassRow): 2 | 3 | 
     if (heat === 'surge') {
         return 4;
     }
-    if (heat === 'prime' || row.id === 'hazard') {
+    if (heat === 'prime') {
         return 3;
     }
     return 2;
 };
 
 const getFocusedPreviewBeatCount = ({
-    kind,
     rewardHotText,
     tone
 }: {
-    kind: 'hazard' | 'pickup' | 'trait' | 'clump';
     rewardHotText?: string | null;
-    tone: 'cashout' | 'hazard' | 'pickup' | 'setup' | 'trait';
-}): 3 | 4 | 5 => {
+    tone: 'cashout' | 'pickup' | 'setup' | 'trait';
+}): 4 | 5 => {
     if (tone === 'cashout' || rewardHotText) {
         return 5;
-    }
-    if (kind === 'hazard' || tone === 'hazard') {
-        return 3;
     }
     return 4;
 };
@@ -208,15 +203,12 @@ const getFocusedPreviewAudioCue = ({
     rewardHotText,
     tone
 }: {
-    kind: 'hazard' | 'pickup' | 'trait' | 'clump';
+    kind: 'pickup' | 'trait' | 'clump';
     rewardHotText?: string | null;
-    tone: 'cashout' | 'hazard' | 'pickup' | 'setup' | 'trait';
-}): 'preview-cashout' | 'preview-hazard' | 'preview-pickup' | 'preview-route' => {
+    tone: 'cashout' | 'pickup' | 'setup' | 'trait';
+}): 'preview-cashout' | 'preview-pickup' | 'preview-route' => {
     if (tone === 'cashout' || rewardHotText) {
         return 'preview-cashout';
-    }
-    if (kind === 'hazard' || tone === 'hazard') {
-        return 'preview-hazard';
     }
     if (kind === 'pickup' || tone === 'pickup') {
         return 'preview-pickup';
@@ -229,15 +221,12 @@ const getFocusedPreviewScreenCue = ({
     rewardHotText,
     tone
 }: {
-    kind: 'hazard' | 'pickup' | 'trait' | 'clump';
+    kind: 'pickup' | 'trait' | 'clump';
     rewardHotText?: string | null;
-    tone: 'cashout' | 'hazard' | 'pickup' | 'setup' | 'trait';
+    tone: 'cashout' | 'pickup' | 'setup' | 'trait';
 }): BoardFeedbackScreenCue => {
     if (tone === 'cashout' || rewardHotText) {
         return 'burst';
-    }
-    if (kind === 'hazard' || tone === 'hazard') {
-        return 'guard';
     }
     if (kind === 'pickup' || tone === 'pickup') {
         return 'snap';
@@ -249,7 +238,7 @@ const getFocusedPreviewScreenCue = ({
 
 
 
-const BOARD_OPPORTUNITY_LANE_ORDER: BoardOpportunityLaneId[] = ['cash', 'build', 'trait', 'pickup', 'recover', 'risk', 'tool'];
+const BOARD_OPPORTUNITY_LANE_ORDER: BoardOpportunityLaneId[] = ['cash', 'build', 'trait', 'pickup', 'recover', 'tool'];
 
 const BOARD_OPPORTUNITY_LANE_LABELS: Record<BoardOpportunityLaneId, BoardOpportunityLaneMapEntry['label']> = {
     build: 'Build',
@@ -257,7 +246,6 @@ const BOARD_OPPORTUNITY_LANE_LABELS: Record<BoardOpportunityLaneId, BoardOpportu
     pickup: 'Pickup',
     recover: 'Recover',
     trait: 'Trait',
-    risk: 'Risk',
     tool: 'Tool'
 };
 
@@ -267,14 +255,10 @@ const BOARD_OPPORTUNITY_LANE_ACTIONS: Record<BoardOpportunityLaneId, BoardOpport
     pickup: 'Claim pickup',
     recover: 'Recover',
     trait: 'Study traits',
-    risk: 'Reduce risk',
     tool: 'Use tool'
 };
 
 const boardOpportunityLaneId = (row: BoardOpportunityCompassRow): BoardOpportunityLaneId => {
-    if (row.id === 'hazard') {
-        return 'risk';
-    }
     if (row.id === 'recovery') {
         return 'recover';
     }
@@ -369,10 +353,7 @@ const boardChainRewardLadderActionAttr = (entries: readonly BoardChainRewardLadd
 
 const boardOpportunityAudioCue = (
     row: BoardOpportunityCompassRow
-): 'opportunity-cashout' | 'opportunity-hazard' | 'opportunity-prime' | 'opportunity-recover' | 'opportunity-tool' => {
-    if (row.id === 'hazard') {
-        return 'opportunity-hazard';
-    }
+): 'opportunity-cashout' | 'opportunity-prime' | 'opportunity-recover' | 'opportunity-tool' => {
     if (row.id === 'recovery') {
         return 'opportunity-recover';
     }
@@ -383,7 +364,7 @@ const boardOpportunityAudioCue = (
 };
 
 const boardOpportunityScreenCue = (row: BoardOpportunityCompassRow): BoardFeedbackScreenCue => {
-    if (row.id === 'hazard' || row.id === 'recovery') {
+    if (row.id === 'recovery') {
         return 'guard';
     }
     const heat = getBoardOpportunityHeat(row.impactCue);
@@ -1404,13 +1385,13 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         [clumpRead]
     );
     const focusedPreviewChip = useMemo((): {
-        action: 'Cashout' | 'Claim' | 'Preview' | 'Route' | 'Scout';
+        action: 'Cashout' | 'Claim' | 'Preview' | 'Route';
         eyebrow: string;
         lines: string[];
-        kind: 'hazard' | 'trait' | 'pickup' | 'clump';
+        kind: 'trait' | 'pickup' | 'clump';
         rewardHotText?: string | null;
         source: 'focus' | 'selected';
-        tone: 'cashout' | 'hazard' | 'pickup' | 'setup' | 'trait';
+        tone: 'cashout' | 'pickup' | 'setup' | 'trait';
     } | null => {
         if (!previewChipTileId) {
             return null;
@@ -2415,11 +2396,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
               `${focusedPreviewChip.eyebrow} ${
                   focusedPreviewChip.kind === 'pickup'
                       ? 'reward'
-                      : focusedPreviewChip.kind === 'hazard'
-                        ? 'risk'
-                        : /\btrait-payoff-stack:\d+/.test(cardFeedbackStatesAttr ?? '')
-                          ? 'stack'
-                          : 'combo'
+                      : /\btrait-payoff-stack:\d+/.test(cardFeedbackStatesAttr ?? '')
+                        ? 'stack'
+                        : 'combo'
               } preview`,
               [
               focusedPreviewChip.action,
@@ -3742,11 +3721,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                             const traitPreviewSummaryLabel =
                                 focusedPreviewChip.kind === 'pickup'
                                     ? 'Reward'
-                                    : focusedPreviewChip.kind === 'hazard'
-                                      ? 'Risk'
-                                      : cardFeedbackTraitPayoffStackActive
-                                        ? 'Stack'
-                                        : 'Combo';
+                                    : cardFeedbackTraitPayoffStackActive
+                                      ? 'Stack'
+                                      : 'Combo';
                             const traitPreviewDensityTone =
                                 focusedPreviewChip.kind === 'trait' && cardFeedbackTraitPayoffStackActive
                                     ? 'cashout'
@@ -3781,11 +3758,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         <b>{traitPreviewSummaryLabel}</b>
                                     </span>
                                     <span className={styles.traitPreviewSignal}>
-                                        {focusedPreviewChip.kind === 'pickup'
-                                            ? 'Reward'
-                                            : focusedPreviewChip.kind === 'hazard'
-                                              ? 'Risk'
-                                              : 'Combo'}
+                                        {focusedPreviewChip.kind === 'pickup' ? 'Reward' : 'Combo'}
                                         {previewDensity > 0
                                             ? focusedPreviewChip.kind === 'trait'
                                                 ? ` · ${previewDensity} ${previewDensity === 1 ? 'combo card' : 'combo cards'} lit`

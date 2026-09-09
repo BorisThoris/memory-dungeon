@@ -5,7 +5,6 @@
 export type Reg114DuckId =
     | 'menu_overlay'
     | 'pause'
-    | 'relic_draft'
     | 'game_over'
     | 'run_critical_sfx' /** match, floor clear — keep music slightly under SFX */
     | 'fever_break' /** the Fever sting and its shatter phrase read over the bed for one beat */
@@ -25,7 +24,6 @@ interface Reg114DuckRow {
 export const REG114_MIX_DUCKING_TABLE: readonly Reg114DuckRow[] = [
     { id: 'menu_overlay', musicVolumeMultiplier: 0.9, reason: 'Meta modals and settings stay readable', audioInteractionCoverage: true },
     { id: 'pause', musicVolumeMultiplier: 0, reason: 'Pause suppresses run loop; music paused with gameplayMusic', audioInteractionCoverage: true },
-    { id: 'relic_draft', musicVolumeMultiplier: 0.55, reason: 'Offer panel is run-critical read', audioInteractionCoverage: true },
     { id: 'game_over', musicVolumeMultiplier: 0, reason: 'Results screen is own layer', audioInteractionCoverage: true },
     { id: 'run_critical_sfx', musicVolumeMultiplier: 0.88, reason: 'Light duck so board SFX read over bed', audioInteractionCoverage: true },
     { id: 'fever_break', musicVolumeMultiplier: 0.6, reason: 'A Fever break is the loudest thing on the floor; the bed steps aside for one beat and comes back on a curve', audioInteractionCoverage: true },

@@ -19,10 +19,9 @@ import { join } from 'node:path';
  * Locators known to be dead and not yet repaired. The number fails on growth rather than on the
  * debt itself: a gate that cannot pass is a gate nobody runs, which is how this rot started.
  *
- * Twelve, across seven ids, each confirmed absent from every file under `src`:
- * floor-clear-payoff-stack, hud-hazard-tiles, hud-in-run-cause-strip, hud-perfect-memory,
- * hud-secondary-stat-drawer, hud-touch-detail-rows, power-teaching-panel. All are HUD and interlude
- * panels removed in the shell rebuild whose specs were never updated.
+ * Zero now. The last batch was the HUD and interlude panels removed in the shell rebuild whose
+ * specs were never updated; the HUD's mode line and perfect-memory badge went the same way when
+ * they moved into the pause menu, and their specs moved with them.
  */
 export const DEAD_E2E_LOCATOR_BASELINE = 0;
 

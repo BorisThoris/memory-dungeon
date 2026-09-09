@@ -77,9 +77,6 @@ interface HudPoliteLiveAnnouncementInput {
     boardLevel: number | null;
     /** Latest resolved turn, the source of truth for pickup announcements. */
     boardTurnEvent?: BoardTurnResolvedEvent | null;
-    objectiveProgress?: number;
-    objectiveRequired?: number;
-    objectiveLabel?: string | null;
     recallFocus?: number;
     recallFocusMax?: number;
     recallMatchesThisFloor?: number;
@@ -131,9 +128,6 @@ export const useHudPoliteLiveAnnouncement = ({
     regionShuffleCharges = 0,
     stickyBlockIndex = null,
     boardLevel,
-    objectiveProgress = 0,
-    objectiveRequired = 0,
-    objectiveLabel = null,
     recallFocus = 0,
     recallFocusMax = 3,
     recallMatchesThisFloor = 0,
@@ -160,9 +154,6 @@ export const useHudPoliteLiveAnnouncement = ({
         shuffleCharges: number;
         regionShuffleCharges: number;
         stickyBlockIndex: number | null;
-        objectiveProgress: number;
-        objectiveRequired: number;
-        objectiveLabel: string | null;
         recallFocus: number;
         recallMatches: number;
         recallMistakes: number;
@@ -413,9 +404,6 @@ export const useHudPoliteLiveAnnouncement = ({
             shuffleCharges,
             regionShuffleCharges,
             stickyBlockIndex,
-            objectiveProgress,
-            objectiveRequired,
-            objectiveLabel,
             recallFocus: normalizedRecallFocusValue,
             recallMatches: recallMatchesThisFloor,
             recallMistakes: recallMistakesThisFloor,
@@ -452,7 +440,6 @@ export const useHudPoliteLiveAnnouncement = ({
         const traitLabels = tileTraitKindLabels(turnFacts?.matchedTraitKinds ?? []);
         const traitMatchLabels = matchDelta > 0 ? traitLabels : [];
         const traitMismatchLabels = mismatchDelta > 0 ? traitLabels : [];
-        const objectiveDelta = objectiveProgress - snap.objectiveProgress;
         const recallMatchDelta = recallMatchesThisFloor - snap.recallMatches;
         const recallMistakeDelta = recallMistakesThisFloor - snap.recallMistakes;
         const recallBonusDelta = recallBonusScoreThisFloor - snap.recallBonusScore;
@@ -536,19 +523,6 @@ export const useHudPoliteLiveAnnouncement = ({
             lines.push(volatileShuffleLine);
         }
 
-        if (
-            objectiveRequired > 0 &&
-            (objectiveDelta > 0 || (objectiveProgress >= objectiveRequired && snap.objectiveProgress < snap.objectiveRequired))
-        ) {
-            const label = objectiveLabel ?? 'Objective';
-            const complete = objectiveRequired > 0 && objectiveProgress >= objectiveRequired;
-            lines.push(
-                `${label}: ${Math.min(objectiveProgress, objectiveRequired)}/${objectiveRequired}${
-                    complete ? ' complete' : ''
-                }.`
-            );
-        }
-
         if (shardDelta > 0 && coreSaidNothing) {
             lines.push(`${resourceDeltaCopy(shardDelta, 'Combo shard', 'combo shard', 'gained')}. ${comboShards} available.`);
         } else if (shardDelta < 0) {
@@ -570,7 +544,7 @@ export const useHudPoliteLiveAnnouncement = ({
 
         if (lines.length > 0) {
             queuePoliteAnnouncement(lines.join(' '), {
-                dedupeKey: `action:${boardLevel}:${lives}:${guardTokens}:${comboShards}:${shuffleCharges}:${regionShuffleCharges}:${stickyBlockIndex ?? 'none'}:${objectiveProgress}:${normalizedRecallFocusValue}:${normalizedRecallFocusMax}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${boardTurnEvent?.eventId ?? 'no-turn'}:${newGameplayFeedback.map((item) => item.eventId).join(',') || 'legacy'}`,
+                dedupeKey: `action:${boardLevel}:${lives}:${guardTokens}:${comboShards}:${shuffleCharges}:${regionShuffleCharges}:${stickyBlockIndex ?? 'none'}:${normalizedRecallFocusValue}:${normalizedRecallFocusMax}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${boardTurnEvent?.eventId ?? 'no-turn'}:${newGameplayFeedback.map((item) => item.eventId).join(',') || 'legacy'}`,
                 priority:
                     lifeDelta < 0 || newGameplayFeedback.some((item) => item.priority === 'error')
                         ? 'error'
@@ -589,9 +563,6 @@ export const useHudPoliteLiveAnnouncement = ({
         guardTokens,
         lives,
         unannouncedGameplayFeedback,
-        objectiveLabel,
-        objectiveProgress,
-        objectiveRequired,
         queuePoliteAnnouncement,
         regionShuffleCharges,
         forgottenTileCountThisFloor,

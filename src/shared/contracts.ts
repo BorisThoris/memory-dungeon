@@ -8,7 +8,7 @@
  */
 export const SAVE_SCHEMA_VERSION = 7;
 /** Bump when generation rules change (tile order, mutators, pair layout). */
-export const GAME_RULES_VERSION = 34;
+export const GAME_RULES_VERSION = 35;
 export const INITIAL_LIVES = 4;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MAX_LIVES = 5;
@@ -135,7 +135,6 @@ export const MUTATOR_IDS = [
     'distraction_channel',
     'findables_floor',
     'shifting_spotlight',
-    'generous_shrine',
     'magpie_thief'
 ] as const;
 export type MutatorId = (typeof MUTATOR_IDS)[number];
@@ -381,10 +380,6 @@ export interface LevelResult {
     chainMomentumAtClear?: number;
     momentumBonusTier?: 'none' | 'clean' | 'sharp' | 'fever';
     momentumBonusShards?: number;
-    traitRouteObjectiveCompleted?: boolean;
-    traitRouteObjectiveProgress?: number;
-    traitRouteObjectiveRequired?: number;
-    traitRouteObjectiveReward?: string;
 }
 
 export type TileTraitKind =
@@ -529,13 +524,6 @@ export interface RunState {
     activeMutators: MutatorId[];
     /** Consecutive featured-objective clears; a miss decays it. */
     featuredObjectiveStreak: number;
-    /** Floor-local trait-route objective progress. Active when required > 0. */
-    traitRouteObjectiveProgressThisFloor: number;
-    traitRouteObjectiveRequiredThisFloor: number;
-    traitRouteObjectiveCompletedThisFloor: boolean;
-    traitRouteObjectiveRewardClaimedThisFloor: boolean;
-    traitRouteObjectiveRewardTextThisFloor: string | null;
-    traitRouteObjectiveTriggeredTagsThisFloor: string[];
     /** Run-local deterministic command journal; persisted only through the bounded final summary. */
     gameplayCommandJournal?: GameplayCommandJournalEntry[];
     /** Run-local deterministic event journal; persisted only through the bounded final summary. */

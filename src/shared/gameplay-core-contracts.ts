@@ -259,14 +259,6 @@ export const gameplayPauseTimerSnapshotSchema = z
 
 export type GameplayPauseTimerSnapshot = z.infer<typeof gameplayPauseTimerSnapshotSchema>;
 
-const gameplayFeedbackObjectiveSnapshotSchema = z
-    .object({
-        label: z.string().min(1).max(160),
-        progress: z.number().int().nonnegative(),
-        required: z.number().int().nonnegative()
-    })
-    .strict();
-
 /**
  * Presentation facts stamped onto board.turn_resolved so the renderer can project
  * feedback from the event alone instead of re-deriving it from board snapshots.
@@ -317,9 +309,7 @@ export const boardTurnAnnouncementFactsSchema = z
         mismatchesBefore: z.number().int().nonnegative().default(0),
         mismatchesAfter: z.number().int().nonnegative().default(0),
         volatileTraitShufflesBefore: z.number().int().nonnegative().default(0),
-        volatileTraitShufflesAfter: z.number().int().nonnegative().default(0),
-        objectiveBefore: gameplayFeedbackObjectiveSnapshotSchema.nullable().default(null),
-        objectiveAfter: gameplayFeedbackObjectiveSnapshotSchema.nullable().default(null)
+        volatileTraitShufflesAfter: z.number().int().nonnegative().default(0)
     })
     .strict();
 

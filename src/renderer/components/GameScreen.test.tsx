@@ -367,9 +367,7 @@ describe('GameScreen (OVR-014)', () => {
                 featuredObjectiveCompleted: true,
                 objectiveBonusScore: Number.POSITIVE_INFINITY,
                 featuredObjectiveStreak: Number.NaN,
-                featuredObjectiveStreakBonus: Number.POSITIVE_INFINITY,
-                traitRouteObjectiveRequired: Number.POSITIVE_INFINITY,
-                traitRouteObjectiveProgress: Number.NaN
+                featuredObjectiveStreakBonus: Number.POSITIVE_INFINITY
             }
         };
 
@@ -1478,6 +1476,57 @@ describe('GameScreen (OVR-014)', () => {
         resumeSpy.mockRestore();
     });
 
+    /*
+     * Which run this is, and whether it can still earn perfect memory, used to sit on the bar.
+     * The bar is numbers now; a player asks these by pausing, and the answer has to be here.
+     */
+    const pausedRun = (overrides: Partial<RunState> = {}, options: { practiceMode?: boolean } = {}): RunState => ({
+        ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, ...options })),
+        status: 'paused',
+        timerState: {
+            memorizeRemainingMs: null,
+            resolveRemainingMs: null,
+            debugRevealRemainingMs: null,
+            pausedFromStatus: 'playing'
+        },
+        ...overrides
+    });
+
+    const renderPaused = (run: RunState): ReturnType<typeof render> =>
+        render(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={run} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+    it('names the run in the pause menu, so a Practice run is not mistaken for a Classic one', () => {
+        const { unmount } = renderPaused(pausedRun());
+        expect(screen.getByTestId('pause-run-identity')).toHaveTextContent(/^Classic Dungeon$/);
+        expect(screen.getByTestId('game-hud')).not.toHaveTextContent(/Classic Dungeon/);
+        unmount();
+
+        renderPaused(pausedRun({}, { practiceMode: true }));
+        expect(screen.getByTestId('pause-run-identity')).toHaveTextContent('Practice — Achievements off');
+    });
+
+    it('says in the pause menu whether the run can still earn perfect memory, and only while that is live stakes', () => {
+        const { unmount } = renderPaused(pausedRun());
+        expect(screen.getByTestId('pause-perfect-memory')).toHaveTextContent(/Eligible/);
+        expect(screen.getByTestId('pause-perfect-memory')).toHaveAttribute('data-state', 'eligible');
+        unmount();
+
+        const { unmount: unmountLocked } = renderPaused(pausedRun({ powersUsedThisRun: true }));
+        expect(screen.getByTestId('pause-perfect-memory')).toHaveTextContent(/Locked/);
+        expect(screen.getByTestId('pause-perfect-memory')).toHaveAttribute('data-state', 'locked');
+        unmountLocked();
+
+        // Achievements off: nothing to lose, so nothing to say.
+        renderPaused(pausedRun({}, { practiceMode: true }));
+        expect(screen.queryByTestId('pause-perfect-memory')).not.toBeInTheDocument();
+    });
+
     it('shows featured objective result and next-floor preview on endless floor clear', () => {
         const baseRun = createNewRun(0, { echoFeedbackEnabled: false });
         const run: RunState = {
@@ -1522,10 +1571,6 @@ describe('GameScreen (OVR-014)', () => {
                 featuredObjectiveStreak: 2,
                 featuredObjectiveStreakBonus: 10,
                 objectiveBonusScore: 30,
-                traitRouteObjectiveCompleted: true,
-                traitRouteObjectiveProgress: 1,
-                traitRouteObjectiveRequired: 1,
-                traitRouteObjectiveReward: '+1 combo shard',
                 bonusTags: ['flip_par', 'objective_streak']
             }
         };

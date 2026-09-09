@@ -17,10 +17,10 @@ const FEATURED_OBJECTIVE_IDS: readonly FeaturedObjectiveId[] = [
 /**
  * Content a player cannot reach is content that does not exist, however complete the code is.
  *
- * `generous_shrine` had working rules in `relic-offer-open-rules.ts` and `relic-offer-rules.ts`,
- * a Codex entry, and a place in `MUTATOR_IDS` — and no floor scheduled it and no mode pooled it,
- * so the extra relic pick it grants had never reached anybody. This is the check that would have
- * said so. It is the same shape as the warden-reachability problem on the boss floors.
+ * A mutator once sat in `MUTATOR_IDS` with working rules and a Codex entry while no floor
+ * scheduled it and no mode pooled it, so its effect had never reached anybody. This is the check
+ * that would have said so. It is the same shape as the warden-reachability problem on the boss
+ * floors.
  */
 
 const SEEDS = [42_001, 77_707, 130_011, 420_113] as const;
@@ -62,12 +62,14 @@ describe('endless floor schedule reachability', () => {
         const firstCycle = new Set(
             walkSchedule(SEEDS[0], ENDLESS_CYCLE_FLOOR_COUNT).flatMap((entry) => entry.mutators)
         );
-        const missing = MUTATOR_IDS.filter((id) => !firstCycle.has(id));
-        expect(missing).toEqual(['distraction_channel']);
+        // Whether the variation lands in the first cycle depends on the seed and the rules
+        // version, so the check is that nothing else is missing, not that it is.
+        const missing = MUTATOR_IDS.filter((id) => !firstCycle.has(id) && id !== 'distraction_channel');
+        expect(missing).toEqual([]);
     });
 
     it('does not repeat a floor inside one cycle', () => {
-        // Floors 3 and 10 were byte-for-byte identical, so a cycle showed the same room twice.
+        // Floors 3 and 10 were byte-for-byte identical once, so a cycle showed the same room twice.
         const cycle = walkSchedule(SEEDS[0], ENDLESS_CYCLE_FLOOR_COUNT).map((entry) =>
             [entry.floorArchetypeId, entry.featuredObjectiveId, [...entry.mutators].sort().join('+')].join('|')
         );
@@ -83,7 +85,7 @@ describe('endless floor schedule reachability', () => {
 
 describe('content reachability census', () => {
     /**
-     * Broadened after the same defect appeared twice — two wardens, then `generous_shrine`. A
+     * Broadened after the same defect appeared twice — two wardens, then an unscheduled mutator. A
      * declared id can be implemented, documented, and unit-tested in isolation while nothing ever
      * hands it to a player, and no type checks that. So every family gets walked, not just the one
      * that broke last.

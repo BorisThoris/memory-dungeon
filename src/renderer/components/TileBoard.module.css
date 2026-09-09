@@ -450,24 +450,6 @@ block board gestures so pan/zoom does not fight the deal. */
     color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
 }
 
-.traitPreviewChip[data-preview-kind='hazard'] {
-    border-color: color-mix(in srgb, var(--theme-danger) 48%, var(--theme-gold-bright) 18%);
-    background:
-        linear-gradient(110deg, transparent 0 34%, color-mix(in srgb, var(--theme-danger) 10%, transparent) 45%, transparent 58%),
-        radial-gradient(ellipse 100% 150% at 50% 0%, color-mix(in srgb, var(--theme-danger) 16%, transparent), transparent 64%),
-        linear-gradient(135deg, rgba(30, 14, 16, 0.9), rgba(26, 22, 13, 0.84)),
-        var(--theme-panel-solid);
-    background-size: 220% 100%, auto, auto, auto;
-    box-shadow:
-        0 10px 28px rgba(0, 0, 0, 0.3),
-        0 0 18px color-mix(in srgb, var(--theme-danger) 24%, transparent);
-    animation: boardOpportunityShimmer 2.5s ease-in-out infinite;
-}
-
-.traitPreviewChip[data-preview-kind='hazard'] .traitPreviewLine {
-    color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 82%, white);
-}
-
 .traitPreviewSignal {
     width: fit-content;
     max-width: 100%;
@@ -506,12 +488,6 @@ block board gestures so pan/zoom does not fight the deal. */
     color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
 }
 
-.traitPreviewChip[data-preview-kind='hazard'] .traitPreviewSignal {
-    border-color: color-mix(in srgb, var(--theme-danger) 42%, transparent);
-    background: color-mix(in srgb, var(--theme-danger) 12%, transparent);
-    color: color-mix(in srgb, var(--theme-danger) 78%, white);
-}
-
 .traitPreviewChip[data-preview-tone='setup'] .traitPreviewAction {
     border-color: color-mix(in srgb, var(--theme-border-cyan) 44%, transparent);
     background: color-mix(in srgb, var(--theme-border-cyan) 12%, transparent);
@@ -525,14 +501,6 @@ block board gestures so pan/zoom does not fight the deal. */
         radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--theme-gold-bright) 16%, transparent), transparent 68%),
         color-mix(in srgb, var(--theme-gold-bright) 13%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
-}
-
-.traitPreviewChip[data-preview-tone='hazard'] .traitPreviewAction {
-    border-color: color-mix(in srgb, var(--theme-danger) 46%, var(--theme-gold-bright) 18%);
-    background:
-        radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--theme-danger) 16%, transparent), transparent 68%),
-        color-mix(in srgb, var(--theme-danger) 12%, transparent);
-    color: color-mix(in srgb, var(--theme-danger) 78%, white);
 }
 
 .traitPreviewChip[data-preview-screen-cue='burst'] {
@@ -610,19 +578,12 @@ block board gestures so pan/zoom does not fight the deal. */
     box-shadow: 0 0 0.62rem color-mix(in srgb, var(--theme-gold-bright) 13%, transparent);
 }
 
-.traitPreviewChip[data-preview-tone='hazard'] .traitPreviewLine[data-preview-line-focus='primary'] {
-    border-color: color-mix(in srgb, var(--theme-danger) 42%, var(--theme-gold-bright) 14%);
-    background: color-mix(in srgb, var(--theme-danger) 11%, transparent);
-    color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 84%, white);
-}
-
 .traitPreviewChip[data-preview-tone='setup'] .traitPreviewLine[data-preview-line-focus='primary'],
 .traitPreviewChip[data-preview-tone='trait'] .traitPreviewLine[data-preview-line-focus='primary'] {
     border-color: color-mix(in srgb, var(--theme-border-cyan) 40%, transparent);
     color: color-mix(in srgb, var(--theme-border-cyan) 88%, white);
 }
 
-:global([data-reduce-motion='true']) .traitPreviewChip[data-preview-kind='hazard'],
 :global([data-reduce-motion='true']) .traitPreviewChip[data-preview-kind='pickup'],
 :global([data-reduce-motion='true']) .traitPreviewChip[data-preview-screen-cue='burst'] {
     animation: none;

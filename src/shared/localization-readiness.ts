@@ -28,7 +28,7 @@ export const LOCALIZATION_READINESS_ROWS: readonly LocalizationReadinessRow[] = 
         label: 'Shared catalogs',
         status: 'english_source',
         owner: 'shared',
-        guidance: 'Mechanics, achievements, relics, mutators, modes, and progression rows keep stable ids with English fallback strings.'
+        guidance: 'Mechanics, achievements, mutators, modes, and progression rows keep stable ids with English fallback strings.'
     },
     {
         id: 'concat_policy',
@@ -59,7 +59,7 @@ export const LOCALIZATION_FOUNDATION_DECISION = {
 } as const;
 
 export interface LocalizationCopySurfaceRow {
-    surface: 'mechanics' | 'game_over' | 'inventory' | 'relic_draft' | 'component_inline';
+    surface: 'mechanics' | 'game_over' | 'inventory' | 'component_inline';
     owner: string;
     stableIds: boolean;
 }

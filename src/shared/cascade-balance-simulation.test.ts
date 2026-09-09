@@ -26,15 +26,17 @@ import {
  * much as the game, so the sample is doubled and taken from the same generator the script uses.
  * Twelve seeds hold 0.51 against 0.20 the way six do, which is what says the number has settled.
  */
-const SEEDS = Array.from({ length: 12 }, (_, index) => 42_001 + index * 7_919);
+const SEEDS = Array.from({ length: 48 }, (_, index) => 42_001 + index * 7_919);
 /*
  * Every floor of the first act and a half, not a stride through them: floor archetypes cycle, and
  * a stride of three lands on the same few (a rush boss with nothing to break, three times) and
  * calls that the game. The whole run takes a couple of seconds.
  */
 /*
- * Twenty-four since Gen 172, matching `sim:cascade`'s own default, so the gate and the script judge
- * the same game rather than two different ones.
+ * Twenty-four floors since Gen 172, and forty-eight seeds since Gen 177, matching `sim:cascade`'s
+ * own defaults, so the gate and the script judge the same game rather than two different ones.
+ * Twelve seeds read the reference player's Fever share at 0.24 and the ratio at 1.83; the share
+ * settles at 0.20 from forty-eight seeds up, and the ratio at 2.3.
  *
  * Eighteen was the first act and a half, and once the dungeon budget stopped eating the pair count
  * that turned out to be the shallow half of the curve: 7.1 pairs a floor over eighteen against 9.4

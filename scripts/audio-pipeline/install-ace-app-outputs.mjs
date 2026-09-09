@@ -46,9 +46,6 @@ const JOB_INSTALL_PATHS = {
     'pause-resume': 'src/renderer/assets/audio/ui/pause-resume.wav',
     'game-over-open': 'src/renderer/assets/audio/ui/game-over-open.wav',
     'ui-copy': 'src/renderer/assets/audio/ui/ui-copy.wav',
-    'relic-offer-open': 'src/renderer/assets/audio/sfx/relic-offer-open.wav',
-    'relic-pick': 'src/renderer/assets/audio/sfx/relic-pick.wav',
-    'wager-arm': 'src/renderer/assets/audio/sfx/wager-arm.wav',
     'menu-loop': 'src/renderer/assets/audio/music/menu-loop.wav',
     'run-loop': 'src/renderer/assets/audio/music/run-loop.wav'
 };

@@ -29,10 +29,7 @@ export const SFX_SAMPLE_KEYS = [
     'shuffle-full',
     'shuffle-quick',
     'floor-clear',
-    'relic-offer-open',
-    'countdown-pressure',
-    'relic-pick',
-    'wager-arm'
+    'countdown-pressure'
 ] as const satisfies readonly SfxSampleKey[];
 
 export const MATCH_TIER_SAMPLE_KEYS = [

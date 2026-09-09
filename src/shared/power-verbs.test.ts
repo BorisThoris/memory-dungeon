@@ -48,7 +48,7 @@ describe('REG-045 power verb teaching', () => {
             '1 row/swap charge(s); build effects may make the first row shuffle or tile swap free.'
         );
         expect(getPowerVerbRows({ ...run, regionShuffleCharges: 0 }).find((row) => row.id === 'region_shuffle')?.disabledReason).toBe(
-            'No row/swap charge or free row shuffle.'
+            'No row or swap charge.'
         );
         expect(rows.find((row) => row.id === 'tile_swap')?.cost).toBe(
             '1 row/swap charge(s); build effects may make the first row shuffle or tile swap free.'

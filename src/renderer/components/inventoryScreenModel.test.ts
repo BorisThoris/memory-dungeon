@@ -87,17 +87,15 @@ describe('inventoryScreenModel', () => {
             ...createNewRun(0),
             findablesClaimedThisFloor: 0,
             findablesTotalThisFloor: 1,
-            stats: { ...createNewRun(0).stats, currentStreak: 3, comboShards: 2, guardTokens: 0 },
-            traitRouteObjectiveProgressThisFloor: 1,
-            traitRouteObjectiveRequiredThisFloor: 2
+            stats: { ...createNewRun(0).stats, currentStreak: 3, comboShards: 2, guardTokens: 0 }
         };
 
         expect(getInventoryPayoffEngineSignal(run)).toMatchObject({
-            label: 'Super stack',
-            value: '4 payoffs live',
-            detail: 'Chain + Pickup + Burst + Trait route',
+            label: 'Payoff engine',
+            value: '3 payoffs live',
+            detail: 'Chain + Pickup + Burst',
             nextCue: 'Push x6 reward',
-            tone: 'super'
+            tone: 'burst'
         });
     });
 
@@ -112,9 +110,7 @@ describe('inventoryScreenModel', () => {
                 comboShards: Number.POSITIVE_INFINITY,
                 currentStreak: Number.NaN,
                 guardTokens: Number.NEGATIVE_INFINITY
-            },
-            traitRouteObjectiveProgressThisFloor: Number.NaN,
-            traitRouteObjectiveRequiredThisFloor: Number.POSITIVE_INFINITY
+            }
         };
 
         const signals = getInventoryRunLoopSignals(run);
@@ -122,8 +118,7 @@ describe('inventoryScreenModel', () => {
         expect(signals).toMatchObject([
             { id: 'chain', value: 'ready' },
             { id: 'pickup', value: '0' },
-            { id: 'resource', nextCue: 'Build x6 chain pressure', value: '0 shards / 0 guards' },
-            { id: 'trait', value: 'scout' }
+            { id: 'resource', nextCue: 'Build x6 chain pressure', value: '0 shards / 0 guards' }
         ]);
         expect(signals.map((signal) => `${signal.value} ${signal.nextCue}`).join(' ')).not.toMatch(/NaN|Infinity/);
         expect(getInventoryPayoffEngineSignal(run, signals)).toMatchObject({
@@ -133,38 +128,17 @@ describe('inventoryScreenModel', () => {
         });
     });
 
-    it('uses shared trait route action cues in run loop signals', () => {
-        const [traitSignal] = getInventoryRunLoopSignals({
-            ...createNewRun(0),
-            traitRouteObjectiveProgressThisFloor: 1,
-            traitRouteObjectiveRequiredThisFloor: 2,
-            traitRouteObjectiveCompletedThisFloor: false,
-            traitRouteObjectiveRewardClaimedThisFloor: false,
-            traitRouteObjectiveRewardTextThisFloor: null
-        }).filter((signal) => signal.id === 'trait');
-
-        expect(traitSignal).toMatchObject({
-            detail: 'One route to cashout: +1 combo shard.',
-            nextCue: 'Cash next route',
-            value: '1/2'
-        });
-    });
-
     it('keeps quiet runs framed as setup instead of fake payoff', () => {
         const signal = getInventoryPayoffEngineSignal({
             ...createNewRun(0),
             findablesClaimedThisFloor: 0,
-            findablesTotalThisFloor: 0,
-            traitRouteObjectiveCompletedThisFloor: false,
-            traitRouteObjectiveProgressThisFloor: 0,
-            traitRouteObjectiveRequiredThisFloor: 0,
-            traitRouteObjectiveRewardClaimedThisFloor: false
+            findablesTotalThisFloor: 0
         });
 
         expect(signal).toMatchObject({
             label: 'Prime payoff',
             value: 'Prime beat',
-            detail: 'Open with a safe match to light chain, pickup, or trait payoffs.',
+            detail: 'Open with a safe match to light chain or pickup payoffs.',
             nextCue: 'Start x3 loop',
             tone: 'setup'
         });

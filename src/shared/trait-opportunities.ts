@@ -15,7 +15,7 @@ export interface TraitOpportunityTile {
 export interface TraitOpportunitySummary {
     tiles: TraitOpportunityTile[];
     interactionLines: string[];
-    /** Always empty: the trait build reward rows went with the relic layer. Read by trait-route-objectives. */
+    /** Always empty: the trait build reward rows went with the relic layer. */
     reason: string | null;
 }
 

@@ -1,6 +1,9 @@
 /**
  * Mechanics encyclopedia — **single source of truth** for player-facing reference copy tied to game IDs
- * (mutators, modes, achievements) plus explicit articles for powers, pickups, board specials, and contracts.
+ * (mutators, the one mode, achievements) plus explicit articles for powers, pickups, board specials, and contracts.
+ *
+ * Every entry describes a rule that exists in `src/shared` today. When a system is removed, its entries go
+ * with it rather than staying as history; the history lives in docs/REMOVED_DUNGEON_LAYER.md.
  *
  * **Version** bumps when entries are added, removed, or meaningfully rewritten (helps audits and saves).
  * Gameplay rules remain in `game.ts`; this file is **labels + reference only**.
@@ -8,7 +11,7 @@
 import type { AchievementId, GameMode, MutatorId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 27 as const;
+export const ENCYCLOPEDIA_VERSION = 28 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -43,29 +46,13 @@ export interface MechanicsGlossaryTerm {
         | 'lives'
         | 'guard_tokens'
         | 'combo_shards'
-        | 'relic_favor'
-        | 'shop_gold'
-        | 'relics'
         | 'mutators'
         | 'contracts'
         | 'findables'
         | 'tile_traits'
         | 'recall_focus'
         | 'perfect_memory'
-        | 'daily_challenge'
-        | 'powers'
-        | 'dungeon_enemies'
-        | 'enemy_patrols'
-        | 'trap_cards'
-        | 'dungeon_keys'
-        | 'locked_exits'
-        | 'dungeon_rooms'
-        | 'rest_shrines'
-        | 'treasure_caches'
-        | 'route_cards'
-        | 'boss_floors'
-        | 'elite_anchors'
-        | 'dungeon_objectives';
+        | 'powers';
     preferredLabel: string;
     shortDefinition: string;
     avoidLabels: string[];
@@ -90,44 +77,23 @@ export const MECHANICS_GLOSSARY_TERMS: readonly MechanicsGlossaryTerm[] = [
     {
         id: 'combo_shards',
         preferredLabel: 'Combo shards',
-        shortDefinition: 'Temporary streak resource that can convert into life recovery in eligible modes.',
+        shortDefinition: 'Streak resource: every second consecutive match adds one, and three convert into a life when you are below the cap.',
         avoidLabels: ['gems', 'paid shards'],
         surfaces: ['HUD', 'Inventory', 'Findables']
-    },
-    {
-        id: 'relic_favor',
-        preferredLabel: 'Relic Favor',
-        shortDefinition: 'Run-only progress toward relic milestone choices and shrine/reward momentum.',
-        avoidLabels: ['favor currency pack', 'premium favor'],
-        surfaces: ['HUD', 'Events', 'Bonus rewards']
-    },
-    {
-        id: 'shop_gold',
-        preferredLabel: 'shop gold',
-        shortDefinition: 'Temporary run wallet spent on vendor/rest/relic services; never durable or purchasable.',
-        avoidLabels: ['coins', 'premium gold', 'cash'],
-        surfaces: ['Shop', 'Inventory', 'Economy copy']
-    },
-    {
-        id: 'relics',
-        preferredLabel: 'Relics',
-        shortDefinition: 'Run build modifiers drafted at milestones; not permanent equipment unless a meta row says so.',
-        avoidLabels: ['items', 'gear'],
-        surfaces: ['Relic draft', 'Inventory', 'Codex']
     },
     {
         id: 'mutators',
         preferredLabel: 'Mutators',
         shortDefinition: 'Rule modifiers that change floor pressure, presentation, scoring, or board constraints.',
         avoidLabels: ['debuffs only', 'mods'],
-        surfaces: ['HUD', 'Codex', 'Choose Path']
+        surfaces: ['HUD', 'Codex', 'Floor banner']
     },
     {
         id: 'contracts',
         preferredLabel: 'Contracts',
-        shortDefinition: 'Optional mode constraints with explicit retry/failure rules.',
+        shortDefinition: 'Optional run constraints chosen on the setup sheet, with explicit failure rules.',
         avoidLabels: ['quests when constraint is active'],
-        surfaces: ['Choose Path', 'Inventory', 'Codex']
+        surfaces: ['Setup sheet', 'Inventory', 'Codex']
     },
     {
         id: 'findables',
@@ -139,10 +105,9 @@ export const MECHANICS_GLOSSARY_TERMS: readonly MechanicsGlossaryTerm[] = [
     {
         id: 'tile_traits',
         preferredLabel: 'Tile traits',
-        // Skip Codex copy refresh for the new trait interactions until a dedicated Codex clarity pass.
         shortDefinition: 'Pair-level modifiers such as Echo, Volatile, Mirror, Cursed, Sealed, and Heavy that add match rewards or miss drawbacks.',
         avoidLabels: ['random punishments', 'status ailments'],
-        surfaces: ['Board', 'Route choice', 'Tile a11y', 'Codex']
+        surfaces: ['Board', 'Tile a11y', 'Codex']
     },
     {
         id: 'recall_focus',
@@ -159,102 +124,11 @@ export const MECHANICS_GLOSSARY_TERMS: readonly MechanicsGlossaryTerm[] = [
         surfaces: ['HUD', 'Game over', 'Codex']
     },
     {
-        id: 'daily_challenge',
-        preferredLabel: 'Daily Challenge',
-        shortDefinition: 'UTC-seeded local challenge with share strings; online rankings are deferred.',
-        avoidLabels: ['online daily leaderboard'],
-        surfaces: ['Choose Path', 'Collection', 'Game over']
-    },
-    {
         id: 'powers',
         preferredLabel: 'Powers',
         shortDefinition: 'Player-triggered board tools such as shuffle, peek, destroy, pin, stray remove, and flash pair.',
         avoidLabels: ['boosters for sale'],
         surfaces: ['Toolbar', 'Inventory', 'Codex']
-    },
-    {
-        id: 'dungeon_enemies',
-        preferredLabel: 'Enemies',
-        shortDefinition: 'Dungeon threats tied to cards, moving patrol overlays, or floor objectives.',
-        avoidLabels: ['monsters as cards', 'random attackers'],
-        surfaces: ['HUD', 'Tile a11y', 'Codex']
-    },
-    {
-        id: 'enemy_patrols',
-        preferredLabel: 'enemy patrols',
-        shortDefinition: 'Moving threat overlays with an occupied tile and a telegraphed next target.',
-        avoidLabels: ['roaming mobs', 'unshown movement'],
-        surfaces: ['Board', 'Tile a11y', 'HUD']
-    },
-    {
-        id: 'trap_cards',
-        preferredLabel: 'Trap cards',
-        shortDefinition: 'Dungeon card pairs that resolve as hazards through normal reveal and matching rules.',
-        avoidLabels: ['trap enemies', 'unfair traps'],
-        surfaces: ['Board', 'HUD', 'Codex']
-    },
-    {
-        id: 'dungeon_keys',
-        preferredLabel: 'dungeon keys',
-        shortDefinition: 'Run-only keys and master keys used for lock and route interactions.',
-        avoidLabels: ['premium keys', 'permanent keys'],
-        surfaces: ['Inventory', 'HUD', 'Codex']
-    },
-    {
-        id: 'locked_exits',
-        preferredLabel: 'locked exits',
-        shortDefinition: 'Exit cards blocked by locks, levers, bosses, or objective requirements until rules are satisfied.',
-        avoidLabels: ['paywalls', 'random locks'],
-        surfaces: ['Board', 'HUD', 'Tile a11y']
-    },
-    {
-        id: 'dungeon_rooms',
-        preferredLabel: 'rooms',
-        shortDefinition: 'One-shot board or route interactions such as shops, rest shrines, events, and utility rooms.',
-        avoidLabels: ['menus only', 'repeat farms'],
-        surfaces: ['Board', 'Route', 'Codex']
-    },
-    {
-        id: 'rest_shrines',
-        preferredLabel: 'rest shrines',
-        shortDefinition: 'Room services for healing, guard, Favor bargains, or boss preparation with clear costs.',
-        avoidLabels: ['healing shop', 'paid rest'],
-        surfaces: ['Room UI', 'Inventory', 'Codex']
-    },
-    {
-        id: 'treasure_caches',
-        preferredLabel: 'treasure caches',
-        shortDefinition: 'Reward sources that can be claimed through treasure, cache, supply, lock, or secret-door hooks.',
-        avoidLabels: ['loot boxes', 'cash chests'],
-        surfaces: ['Board', 'Route', 'Results']
-    },
-    {
-        id: 'route_cards',
-        preferredLabel: 'Route cards',
-        shortDefinition: 'Safe, Greed, or Mystery card families stamped onto the next floor after a route choice.',
-        avoidLabels: ['random route cards', 'route loot boxes'],
-        surfaces: ['Choose Path', 'Board', 'Codex']
-    },
-    {
-        id: 'boss_floors',
-        preferredLabel: 'boss floors',
-        shortDefinition: 'Dungeon floors with a named boss identity, special threat hook, and defeat-gated rewards or exits.',
-        avoidLabels: ['boss rounds', 'raid bosses'],
-        surfaces: ['HUD', 'Board', 'Results']
-    },
-    {
-        id: 'elite_anchors',
-        preferredLabel: 'elite anchors',
-        shortDefinition: 'Hard-route non-boss anchors such as Elite Cache, Final Ward, and Omen Seal.',
-        avoidLabels: ['mini bosses', 'elite loot boxes'],
-        surfaces: ['Board', 'Route', 'Codex']
-    },
-    {
-        id: 'dungeon_objectives',
-        preferredLabel: 'dungeon objectives',
-        shortDefinition: 'Floor goals such as find exit, disarm traps, defeat boss, pacify floor, loot cache, or reveal unknowns.',
-        avoidLabels: ['quests with rewards store', 'hidden chores'],
-        surfaces: ['HUD', 'Results', 'Codex']
     }
 ];
 
@@ -270,13 +144,6 @@ export const glossaryTermById = (id: MechanicsGlossaryTerm['id']): MechanicsGlos
     MECHANICS_GLOSSARY_TERMS.find((term) => term.id === id) ?? DEFAULT_MECHANICS_GLOSSARY_TERM;
 
 export const MECHANICS_GLOSSARY = MECHANICS_GLOSSARY_TERMS;
-
-/** Product “Endless Mode” card — not yet a live ruleset; distinct from internal classic/endless. */
-export const VISUAL_ENDLESS_MODE_LOCKED = {
-    title: 'Endless Mode',
-    description:
-        'A staged future ruleset for ultra-long descents. Classic already uses endless-style floors; this separate mode stays locked until its distinct scoring and reward cadence are tuned.'
-} as const;
 
 /**
  * Achievements — single source for `achievements.ts` blurbs and Codex “Achievements” section.
@@ -392,7 +259,7 @@ export const MUTATOR_CATALOG: Record<MutatorId, MutatorDefinition> = {
         id: 'score_parasite',
         title: 'Score parasite',
         description:
-            'While active, each **floor advance** counts toward parasite pressure; roughly every **fourth** advance, you lose **one life** unless a **Parasite ward** (relic charge) absorbs the hit—pace long runs accordingly.'
+            'While active, each **floor advance** counts toward parasite pressure; every **fourth** advance costs **one life**. Nothing absorbs the hit, so pace long runs accordingly.'
     },
     category_letters: {
         id: 'category_letters',
@@ -444,12 +311,6 @@ export const MUTATOR_CATALOG: Record<MutatorId, MutatorDefinition> = {
         title: 'The magpie',
         description:
             'Something bright-eyed is nesting on this floor. Every **third miss** it drops in, takes a **pair you already cleared**, and hides it again somewhere you have never looked. Your **score keeps the points** — what it takes is the knowing. A **guard token** scares it off, if you are holding one when it arrives.'
-    },
-    generous_shrine: {
-        id: 'generous_shrine',
-        title: 'Generous shrine',
-        description:
-            'While active, each **relic milestone draft** grants **one extra selection** (same visit; stacks with other bonuses).'
     }
 };
 
@@ -458,7 +319,7 @@ export const GAME_MODE_CODEX: GameModeCodexEntry[] = [
         id: 'endless',
         title: 'Classic Run',
         description:
-            'The one mode. Procedural floors, named endless chapters, one featured objective per floor, and relic offers every three clears. Completing featured objectives builds Favor; every 3 Favor banks +1 extra relic selection for the next shrine. Shrine drafts can surface chapter-aligned relics. Everything the retired mode cards used to switch on — a clock, calm pacing, vows, chaos, an unrecorded run — is a choice on the setup sheet in front of the run. (Internal mode id: endless.)'
+            'The one mode. Procedural floors whose suits are dealt in clumps, so every board opens as a map. Every match pops the clump around it, and the chain that builds from pop to pop climbs toward Fever. Each floor is named, carries a hint, and features one objective that pays a floor bonus. Everything the retired mode cards used to switch on — a clock, calm pacing, vows, chaos, an unrecorded run — is a choice on the setup sheet in front of the run. (Internal mode id: endless.)'
     },
 ];
 
@@ -474,12 +335,12 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
         id: 'memorize',
         title: 'Memorize phase',
         description:
-            'Each floor begins with tiles face-up briefly, then play continues hidden. Mutators and relics can shorten or extend this window.'
+            'Each floor begins with tiles face-up briefly, then play continues hidden. Mutators such as Short memorize can shorten this window, and losing a life banks a little extra study time for the next floor.'
     },
     {
         id: 'lives',
         title: 'Lives and clears',
-        description: 'Mismatches cost lives. Lives carry across the run instead of resetting each floor; clears advance the floor and may trigger relic offers on milestone floors.'
+        description: 'Mismatches cost lives. Lives carry across the run instead of resetting each floor; clears advance the floor.'
     },
     {
         id: 'scoring',
@@ -494,22 +355,10 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
             'Board tools (shuffle, destroy, peek, pins, stray, region shuffle, flash) and meta-actions (undo resolve, gambit third flip) use charges or per-floor budgets. See **Powers & tools** in this Codex for each one. Scholar contracts can disable shuffle and destroy.'
     },
     {
-        id: 'relics',
-        title: 'Relics',
-        description:
-            'Offered at milestone floors **during the current run** (every **three** cleared floors starting at floor **3**, with a cap on how many visits per run). Picks apply **for the rest of that run only**. After the **Week of Archives** achievement, meta progression can grant **+1 selection at each milestone**. **Shrine echo**, **Generous shrine**, endless-floor **Favor**, and occasional bonus drafts can add extra picks in specific visits.'
-    },
-    {
         id: 'mutators',
         title: 'Mutators',
         description:
             'Classic chapters telegraph mutators before play: the banner names the chapter theme, active pressure, featured objective, and pacing tag so the player knows how to adapt.'
-    },
-    {
-        id: 'route_world',
-        title: 'Route-world cards',
-        description:
-            'Choosing Safe, Greed, or Mystery after a clear stores a route plan for the next floor. That next board gains route-specific card families, hard-route elite anchors, tile-trait pressure, side-room pacing, and relic draft weighting tied to the route you selected.'
     }
 ];
 
@@ -519,25 +368,25 @@ export const ENCYCLOPEDIA_POWER_TOPICS: readonly EncyclopediaTopic[] = [
         id: 'power_full_shuffle',
         title: 'Full-board shuffle',
         description:
-            'Spends a shuffle charge to permute hidden tiles (rules may use weaker “rows only” shuffle). May incur shuffle score tax when enabled. Relics can grant extra charges or a free first shuffle per floor.'
+            'Spends a shuffle charge to permute hidden tiles (rules may use weaker “rows only” shuffle). May incur shuffle score tax when enabled. A clean match on a Drift tile next to Volatile can grant an extra charge.'
     },
     {
         id: 'power_region_shuffle',
         title: 'Row / region shuffle',
         description:
-            'Shuffles tiles within a single row (charges per run; relic may make the first row shuffle free). Distinct from full-board shuffle.'
+            'Shuffles tiles within a single row (charges per run; a clean Drift match grants one). Distinct from full-board shuffle.'
     },
     {
         id: 'power_destroy_pair',
         title: 'Destroy pair',
         description:
-            'Spends destroy charges to remove a fully hidden **pair** without match score—counts as a power for perfect-clear rules. Findable bonus pickups and destroy-denied route rewards on that pair are **forfeited**. Cannot target the glass decoy tile.'
+            'Spends destroy charges to remove a fully hidden **pair** without match score—counts as a power for perfect-clear rules. Findable bonus pickups on that pair are **forfeited**. Cannot target the glass decoy tile.'
     },
     {
         id: 'power_peek',
         title: 'Peek',
         description:
-            'Reveals a hidden tile briefly without committing a full flip sequence (charges). Peek also marks Mystery Veil, Secret Door, and Omen Seal route families as revealed without claiming their reward. Useful for verification; still counts as a power where perfect-clear rules apply.'
+            'Reveals a hidden tile briefly without committing a full flip sequence (charges). Peeking a findable shows it without claiming it. Useful for verification; still counts as a power where perfect-clear rules apply.'
     },
     {
         id: 'power_pin',
@@ -549,7 +398,7 @@ export const ENCYCLOPEDIA_POWER_TOPICS: readonly EncyclopediaTopic[] = [
         id: 'power_stray_remove',
         title: 'Stray remove',
         description:
-            'Arms removal of **one** hidden completion-safe singleton tile, such as a wild joker or optional shop/room marker; does not score. Normal matched pairs are blocked so Stray cannot orphan a partner. Cannot remove the glass decoy trap tile, exit tile, Keystone Pair, Final Ward, or Omen Seal route anchors.'
+            'Arms removal of **one** hidden completion-safe singleton tile, such as a wild joker; does not score. Normal matched pairs are blocked so Stray cannot orphan a partner. Cannot remove the glass decoy trap tile.'
     },
     {
         id: 'power_flash_pair',
@@ -582,10 +431,10 @@ export const ENCYCLOPEDIA_POWER_TOPICS: readonly EncyclopediaTopic[] = [
  */
 export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopic[] = [
     {
-        id: 'sys_endless_chapters_and_favor',
-        title: 'Endless chapters, featured objectives, streaks, and Favor',
+        id: 'sys_floor_schedule_and_featured_objective',
+        title: 'Floor schedule, featured objectives, and the objective streak',
         description:
-            'Modern **Classic Run** uses a repeating chapter schedule: each endless floor has a **name**, a short **hint**, and **one featured objective** instead of the old hidden objective stack. Completing consecutive featured objectives builds an **objective streak**: the first clear starts the chain, then each continued clear adds a small capped score kicker. A normal miss decays the streak by 1. At streak x2 or higher, you can arm a **risk wager** for the next floor: complete that featured objective for bonus Favor, or miss it and reset the streak. Completing featured objectives also grants **Favor** (+1 on normal or breather floors, +2 on boss floors). Every **3 Favor** banks **+1 extra relic selection** for the next shrine. Scheduled Endless shrine drafts guarantee one chapter-aligned option when an eligible answer exists, then fill the other options from the normal weighted pool.'
+            '**Classic Run** uses a repeating chapter schedule: each floor has a **name**, a short **hint**, and **one featured objective** — **Scholar style**, **Glass witness**, **Flip par**, or **Cursed last** — that pays a floor bonus when you clear with it intact. Consecutive featured-objective clears build an **objective streak**: the first clear starts it, and each clear after that adds a **+10** score kicker per streak step, capped at **+50**. Missing the featured objective on a clear decays the streak by **2**; a floor without a featured objective leaves it untouched.'
     },
     {
         id: 'sys_perfect_floor_vs_achievement',
@@ -597,7 +446,7 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         id: 'sys_recall_focus',
         title: 'Recall Focus and forgotten tiles',
         description:
-            '**Recall Focus** is the floor-level memory readout. Clean remembered matches raise focus and can add memory score; mismatches, shuffles, peeks, destroy, stray, and other memory aids can lower focus and mark affected tile memories as unstable. If you later match a pair containing those tiles, the forgotten markers are removed, so the HUD distinguishes a lapse from a recovered route through the room.'
+            '**Recall Focus** is the floor-level memory readout. Clean remembered matches raise focus and can add memory score; mismatches, shuffles, peeks, destroy, stray, and other memory aids can lower focus and mark affected tile memories as unstable. If you later match a pair containing those tiles, the forgotten markers are removed, so the HUD distinguishes a lapse from a recovered memory.'
     },
     {
         id: 'sys_scholar_style_floor',
@@ -627,19 +476,19 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         id: 'sys_combo_shards',
         title: 'Combo shards → extra life',
         description:
-            'Each **even-numbered** consecutive match adds a **combo shard** (bank capped low). At **three** shards, if you are below max lives, shards convert to **+1 life** (remainder stays in the bank). **Meditation** disables shard→life. The **Combo shard head start** relic shifts thresholds—it does not replace the base system.'
+            'Each **even-numbered** consecutive match adds a **combo shard** (bank capped low). At **three** shards, if you are below max lives, shards convert to **+1 life** (remainder stays in the bank). Shard sparks on the board and clean Sealed matches add shards to the same bank.'
     },
     {
         id: 'sys_chain_heal_and_guard',
         title: 'Chain heal & combo guard tokens',
         description:
-            'Long **match streaks** can **restore a life** (every 8th consecutive match in non-Meditation runs) and earn **guard tokens** (every 4th consecutive match, capped). The **first mismatch of a floor** is free (no life); after that, a **guard token** can absorb a mismatch instead of losing a life when available.'
+            'Long **match streaks** can **restore a life** (every 8th consecutive match) and earn **guard tokens** (every 4th consecutive match, capped). The **first mismatch of a floor** is free (no life); after that, a **guard token** can absorb a mismatch instead of losing a life when available.'
     },
     {
         id: 'sys_shuffle_score_tax',
         title: 'Shuffle score tax (optional)',
         description:
-            'When the **shuffle score tax** option is on in settings, each **full-board shuffle** multiplies your run’s **match-score multiplier** down by a modest factor—**additional shuffles compound** the penalty for that run. Distinct from floor objective bonuses.'
+            'When the **shuffle score tax** option is on in settings, each **full-board shuffle** multiplies your run’s **match-score multiplier** down by a modest factor—**additional shuffles compound** the penalty for that run. Every shuffle is taxed; there is no free first one. Distinct from floor objective bonuses.'
     },
     {
         id: 'sys_encore_pairs',
@@ -682,7 +531,7 @@ export const ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS: readonly EncyclopediaTopi
         id: 'opt_weaker_shuffle',
         title: 'Weaker shuffle (full vs rows-only)',
         description:
-            'Settings can force **row-preserving** shuffles (only hidden tiles permute **within each row**) instead of a full hidden-tile Fisher–Yates. **Full-board shuffle** charges and relics that mention shuffle refer to the full-board tool; **row / region shuffle** stays a separate control.'
+            'Settings can force **row-preserving** shuffles (only hidden tiles permute **within each row**) instead of a full hidden-tile Fisher–Yates. **Full-board shuffle** charges refer to the full-board tool; **row / region shuffle** stays a separate control.'
     },
     {
         id: 'opt_resolve_echo',
@@ -710,7 +559,7 @@ export const ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS: readonly EncyclopediaTopi
     }
 ];
 
-/** Bonus pickups and special tile types (not the same as relics). */
+/** Bonus pickups and special tile types. */
 export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] = [
     {
         id: 'chain_chunk_fever',
@@ -726,16 +575,6 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
             'Clear the floor with momentum still standing and the end pays out: a gold at Clean and Sharp, a shard and two gold at Fever - Extreme Fever. Never score, never rating.'
     },
     {
-        id: 'chunk_and_the_dungeon',
-        title: 'What a chunk does to the dungeon',
-        description:
-            'A chunk is an attack: every revealed enemy or warden standing inside it takes the chunk\'s size in damage. ' +
-            'An unsprung trap stops a chunk — the clump does not spread through it — so springing a trap opens the clump behind it. ' +
-            'One findable inside a chunk goes with it and pays out. The exit never breaks; you flip it yourself. ' +
-            'The magpie steals from pairs a chunk broke before pairs you matched. Spilled toffee makes clumps stick diagonally, ' +
-            'and a greeted skull will tell you which clump is worth a chain.'
-    },
-    {
         id: 'tile_suits',
         title: 'Suits',
         description:
@@ -749,7 +588,7 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         id: 'pickup_findables',
         title: 'Findables (bonus pickups)',
         description:
-            'Procedural floors spawn **real** pickup pairs by default: floors 1–3 have one pair, later floors have one or two, and **Dense pickups** guarantees two. **Shard spark** grants +1 combo shard, **score glint** grants +25 score, **ward spark** grants a capped safe-hazard ward charge, and **scout glint** scouts one hazard or dungeon family through the existing scout path. Matching the carrier pair claims it, Destroy forfeits it, and Peek only reveals it.'
+            'Procedural floors spawn **real** pickup pairs by default: floors 1–3 have one pair, later floors have one or two, and **Dense pickups** guarantees two. There are two kinds: **Shard spark** grants +1 combo shard and **score glint** grants +25 score. Matching the carrier pair claims it, a chunk break that takes it spills it and pays it out, Destroy forfeits it, and Peek only reveals it.'
     },
     {
         id: 'board_glass_decoy',
@@ -773,44 +612,13 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         id: 'board_tile_traits',
         title: 'Tile traits',
         description:
-            // Skip Codex copy refresh for the new trait interactions until a dedicated Codex clarity pass.
-            '**Tile traits** are pair-level rules layered onto ordinary match pairs from floor 2 onward. **Echo** grants a peek charge on clean match. **Volatile** shuffles safe hidden tiles on a miss. **Mirror** grants guard on clean match but deepens miss pressure. **Cursed** grants Relic Favor on clean match but counts as an extra mistake on miss. **Sealed** grants a combo shard on clean match and drains a peek charge on miss. **Heavy** grants bonus score on clean match. Safe routes bias toward readable traits, Greed toward higher reward-risk traits, and Mystery toward hidden-information traits; Chapter Compass, Wager Surety, and Parasite Ledger add trait synergies.'
+            '**Tile traits** are pair-level rules layered onto ordinary match pairs from floor 2 onward. **Echo** grants a peek charge on clean match. **Volatile** shuffles safe hidden tiles on a miss. **Mirror** grants a guard token on clean match but a miss counts as a deeper memory slip. **Cursed** adds score on clean match but counts as an extra mistake on miss. **Sealed** grants a combo shard on clean match and drains a peek charge on miss. **Heavy** grants +35 score on clean match and a miss costs an extra try. **Drift** grants a row/swap charge on clean match. **Conduit** converts nearby traits into score and small resource sparks. **Stasis** locks a nearby trait tile from being opened first next turn. Traits standing next to each other add to these effects — Echo beside Sealed also grants a shard, Volatile beside Heavy a guard, Stasis buffers a Cursed or Volatile miss.'
     },
     {
         id: 'board_shifting_spotlight',
         title: 'Ward & bounty (shifting spotlight)',
         description:
             'With **Shifting spotlight**, a Ward pair scores less if matched while highlighted; a Bounty pair grants extra score. Rotates on match, miss, gambit, or destroy.'
-    },
-    {
-        id: 'board_route_cards',
-        title: 'Route cards',
-        description:
-            'Route boards stamp real pairs with Safe Ward, Greed Cache, or Mystery Veil rendering metadata plus named special families. Safe rewards protection, Greed rewards gold/score and can lose value to destroy, and Mystery rewards information, shards, or Favor after fair reveal counterplay.'
-    },
-    {
-        id: 'board_route_reveal',
-        title: 'Mystery route reveal rules',
-        description:
-            'Mystery Veil, Secret Door, and Omen Seal start unrevealed. Peek reveals the matching pair label for readability but does not grant the route reward; the reward is paid only when the pair is actually matched.'
-    },
-    {
-        id: 'board_boss_elite_anchors',
-        title: 'Boss and elite route anchors',
-        description:
-            'Boss route floors add a Keystone Pair anchor mapped through the selected route. Hard non-boss route floors add an elite anchor: Greed gets Elite Cache, Safe gets Final Ward, and Mystery gets Omen Seal. Final Ward and Omen Seal are protected from Stray remove so route pressure stays on the board.'
-    },
-    {
-        id: 'board_route_side_rooms',
-        title: 'Route side rooms and relic weighting',
-        description:
-            'Route choices can open side-room interludes before the next board and mark bonus-reward ledgers. Safe leans defensive, Greed leans risky economy, and Mystery leans event/reveal outcomes; relic weighting can nudge shrine drafts toward the chosen route when eligible.'
-    },
-    {
-        id: 'board_dungeon_glossary',
-        title: 'Dungeon board glossary',
-        description:
-            '**Enemies** may appear as card pairs or moving **enemy patrols**; patrols always expose an occupied tile and next-target telegraph. **Trap cards**, **Route cards**, **elite anchors**, **treasure caches**, **rooms**, **rest shrines**, **dungeon keys**, **locked exits**, **boss floors**, and **dungeon objectives** use the same board/focus vocabulary across HUD, tile a11y, and results copy.'
     }
 ];
 
@@ -846,11 +654,5 @@ export const ENCYCLOPEDIA_FEATURED_RUN_TOPICS: readonly EncyclopediaTopic[] = [
         id: 'featured_wild',
         title: 'Wild / joker run',
         description: 'Endless run with wild-tile rules enabled from the menu for a different pairing puzzle.'
-    },
-    {
-        id: 'featured_route_world',
-        title: 'Route-world run flow',
-        description:
-            'After eligible clears, pick Safe, Greed, or Mystery to shape the next floor. The selected route affects board specials, side rooms, reward hooks, elite anchors on hard floors, and route-aware relic opportunities.'
     }
 ];

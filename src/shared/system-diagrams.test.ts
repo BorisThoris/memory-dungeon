@@ -137,7 +137,7 @@ describe('system diagram generator', () => {
             target: 'softlock_repair',
             label: 'validated by'
         }));
-        expect(traits?.findings[0]?.detail).toContain('trait-match-route floor share');
+        expect(traits?.findings[0]?.detail).toContain('trait-match floor share');
         expect(traits?.nodes.flatMap((node) => node.evidence)).toContain('src/shared/tile-trait-rules.ts');
     });
 

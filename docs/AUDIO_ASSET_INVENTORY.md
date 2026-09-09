@@ -1,10 +1,10 @@
 # Memory Dungeon — audio asset inventory
 
-Ultra-deep catalog of **all shipped audio roles** (29 targets): runtime triggers, Memory Dungeon style intent, ACE batch **duration** (ffmpeg trim window via [`install-ace-app-outputs.mjs`](../scripts/audio-pipeline/install-ace-app-outputs.mjs)), **reference** legacy filenames, **materialize** sources, runtime OGG one-shots/music loops, WAV masters, and **procedural** fallbacks.
+Ultra-deep catalog of **all shipped audio roles** (26 targets): runtime triggers, Memory Dungeon style intent, ACE batch **duration** (ffmpeg trim window via [`install-ace-app-outputs.mjs`](../scripts/audio-pipeline/install-ace-app-outputs.mjs)), **reference** legacy filenames, **materialize** sources, runtime OGG one-shots/music loops, WAV masters, and **procedural** fallbacks.
 
 For end-to-end wiring, see [AUDIO_INTEGRATION.md](./AUDIO_INTEGRATION.md).
 
-> **Current renders (2026-09-07):** all 29 one-shot cues were regenerated on **ACE-Step 1.5 XL turbo** (4B DiT, 8 steps, DCW sampler) — see [`generated-ace-step-app-last-run.json`](../scripts/audio-pipeline/generated-ace-step-app-last-run.json) for seeds and the per-job take picks — through the trim + loudnorm install. `menu-loop` deliberately keeps the earlier 30 s render. `run-loop` — the in-run music (`gameplayMusic.ts` plays it and treats the portfolio `demo-ambience-loop` as a fallback only) — is a new XL-turbo render whose caption carries the main-menu cathedral painting as a scene brief ([`MUSIC_SCENE_BRIEF.md`](../scripts/audio-pipeline/MUSIC_SCENE_BRIEF.md)) and whose `reference_audio` is a blend of the Ballance pack in `dont_modify/` (`jobs.run-bed-ambience.json`, job `run-bed-ballance-music`, take 3), cut into a seamless 24 s bed with [`make-seamless-loop.py`](../scripts/audio-pipeline/make-seamless-loop.py).
+> **Current renders (2026-09-07):** all one-shot cues were regenerated on **ACE-Step 1.5 XL turbo** (4B DiT, 8 steps, DCW sampler) — see [`generated-ace-step-app-last-run.json`](../scripts/audio-pipeline/generated-ace-step-app-last-run.json) for seeds and the per-job take picks — through the trim + loudnorm install. `menu-loop` deliberately keeps the earlier 30 s render. `run-loop` — the in-run music (`gameplayMusic.ts` plays it and treats the portfolio `demo-ambience-loop` as a fallback only) — is a new XL-turbo render whose caption carries the main-menu cathedral painting as a scene brief ([`MUSIC_SCENE_BRIEF.md`](../scripts/audio-pipeline/MUSIC_SCENE_BRIEF.md)) and whose `reference_audio` is a blend of the Ballance pack in `dont_modify/` (`jobs.run-bed-ambience.json`, job `run-bed-ballance-music`, take 3), cut into a seamless 24 s bed with [`make-seamless-loop.py`](../scripts/audio-pipeline/make-seamless-loop.py).
 
 ## Contents
 
@@ -56,14 +56,6 @@ Directory: `src/renderer/assets/audio/sfx/`
 | `shuffle-quick` | `shuffle-quick.ogg` | `shuffle-quick` | `playShuffleSfx(true)` | Reduce-motion tick | 4 | `Pieces_Stone.wav` | `src/renderer/assets/audio/sfx/shuffle-quick.wav` | Sine 440 Hz, ~42 ms |
 | `floor-clear` | `floor-clear.ogg` | `floor-clear` | `playFloorClearSfx` (deferred macrotask) | Floor clear flourish | 7 | `Misc_StartLevel.wav` | **`src/renderer/assets/audio/sfx/match-tier-high.wav`** (same legacy ref as high-tier match) | Sine 300→1080 Hz, ~200 ms |
 
-Additional gameplay cues in the 29-target batch:
-
-| Key | File | ACE `id` | Trigger | Style / role | ACE `duration` (s) | `reference_audio` |
-|-----|------|----------|---------|--------------|-------------------|-------------------|
-| `relic-offer-open` | `relic-offer-open.ogg` | `relic-offer-open` | `GameScreen` relic-offer transition | Mystical reveal swell | 5 | `Misc_UFO_anim.wav` |
-| `relic-pick` | `relic-pick.ogg` | `relic-pick` | `useAppStore.pickRelic` | Warm reward bloom | 4 | `Extra_Life_Blob.wav` |
-| `wager-arm` | `wager-arm.ogg` | `wager-arm` | `useAppStore.acceptEndlessRiskWager` | Tense upward spark | 4 | `Misc_Lightning.wav` |
-
 **Coupling:** `floor-clear` and `match-tier-high` still share **`Misc_StartLevel.wav`**, but references now come from `dont_modify` instead of generated shipped assets.
 
 ## UI / menu one-shots (11)
@@ -79,7 +71,7 @@ Directory: `src/renderer/assets/audio/ui/`
 | `menu-open` | `menu-open.ogg` | `menu-open` | `playMenuOpenSfx` (main menu / meta navigation) | Panel open whoosh | 4 | `Misc_Checkpoint.wav` | **`src/renderer/assets/audio/sfx/match-tier-mid.wav`** (shared with `match-tier-mid` job ref) | Triangle 280→540 Hz, ~160 ms |
 | `run-start` | `run-start.ogg` | `run-start` | `playRunStartSfx` (`useAppStore` run / restart paths) | Run begin sting | 4 | `ATARI.wav` | **`src/renderer/assets/audio/sfx/gambit-commit.wav`** (shared with `gambit-commit` job ref) | Triangle 220→620 Hz, ~220 ms |
 
-Additional UI/meta cues in the 29-target batch:
+Additional UI/meta cues in the batch:
 
 | Key | File | ACE `id` | Trigger | Style / role | ACE `duration` (s) | `reference_audio` |
 |-----|------|----------|---------|--------------|-------------------|-------------------|

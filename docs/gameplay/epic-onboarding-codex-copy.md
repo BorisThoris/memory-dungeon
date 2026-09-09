@@ -11,8 +11,8 @@ First-run teaching, powers discovery, and **read-only** reference (`Codex`) — 
 | Main menu “How to play” | **Shippable** | `onboardingDismissed` in save; `showHowToPlay={!saveData.onboardingDismissed}` in `App.tsx`; test in `App.test.tsx`. |
 | Powers / tutorial flag | **Functional** | `powersFtueSeen` is set when the run advances past early tutorial floors (pair markers); no separate powers toast. |
 | Tutorial pair markers (WebGL) | **Shippable** | `showTutorialPairMarkers` from `GameScreen` → `TileBoard` → `TileBoardScene`; **`TutorialPairMarkerPlane`** draws a small **pair-index badge** on hidden card backs when the FTUE gate applies (early floors, powers FTUE not yet seen). |
-| Codex | **Shippable** | `CodexScreen.tsx` renders encyclopedia exports (`CODEX_CORE_TOPICS`, granular topic arrays, `GAME_MODE_CODEX`, `RELIC_CATALOG`, `MUTATOR_CATALOG`, `VISUAL_ENDLESS_MODE_LOCKED`, `ENCYCLOPEDIA_VERSION`) plus achievements via `game-catalog` barrel. Explicit subtitle: reference does not change gameplay. |
-| Copy vs mechanics drift | **Functional** | Codex remains static strings, but encyclopedia versioning plus coverage tests now guard route-world, powers, assists, gambit, and presentation mutator copy. |
+| Codex | **Shippable** | `CodexScreen.tsx` renders encyclopedia exports (`CODEX_CORE_TOPICS`, granular topic arrays, `GAME_MODE_CODEX`, `MUTATOR_CATALOG`, `ENCYCLOPEDIA_VERSION`) plus achievements via `game-catalog` barrel. Explicit subtitle: reference does not change gameplay. |
+| Copy vs mechanics drift | **Functional** | Codex remains static strings, but encyclopedia versioning plus coverage tests now guard powers, assists, gambit, presentation mutator copy, and the vocabulary of the removed dungeon layer. |
 
 ## Rough edges
 

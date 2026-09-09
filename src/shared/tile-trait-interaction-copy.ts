@@ -18,20 +18,6 @@ export const TILE_TRAIT_INTERACTION_TEXT = {
     'stasis:sealed-buffer': 'Stasis buffered Sealed',
     'stasis:cursed-volatile-buffer': 'Stasis buffered Cursed + Volatile',
     'cursed:volatile-danger': 'Cursed + Volatile: recall pressure',
-    'chapter-compass:conduit-map': 'Chapter Compass + Conduit: mapped charge',
-    'catalyst-thread:sealed-engine': 'Catalyst Thread + Sealed: shard engine',
-    'row-compass:drift-routing': 'Row Compass + Drift: extra route charge',
-    'warden-sigil:mirror-ward': 'Warden Sigil + Mirror: warded reflection',
-    'wager-surety:cursed-buffer': 'Wager Surety buffered cursed risk',
-    'reward-perk:echo-conduit-double': 'Perk pop: Echo Conduit Lens doubles the route',
-    'reward-perk:trait-streak-flash': 'Perk pop: Trait Streak Lens flashes a pair',
-    'reward-perk:cursed-opener-greed': 'Perk pop: Cursed Opener pays gold',
-    'bulwark-plate:heavy-guard': 'Bulwark Plate + Heavy: braced guard',
-    'tithe-conduit:conduit-gold': 'Tithe Conduit + Conduit: routed gold',
-    'stasis-broker:stasis-shuffle': 'Stasis Broker + Stasis: bought shuffle',
-    'opening-ledger:first-match': 'Opening Ledger: first match of the floor',
-    'drift-appraiser:cursed-drift': 'Drift Appraiser + Drift near Cursed: appraised risk',
-    'echo-relay:heavy-flash': 'Echo Relay + Echo near Heavy: relayed flash'
 } as const;
 
 export type TileTraitInteractionTag = keyof typeof TILE_TRAIT_INTERACTION_TEXT;
@@ -56,20 +42,6 @@ export const TILE_TRAIT_INTERACTION_TAGS = [
     'stasis:sealed-buffer',
     'stasis:cursed-volatile-buffer',
     'cursed:volatile-danger',
-    'chapter-compass:conduit-map',
-    'catalyst-thread:sealed-engine',
-    'row-compass:drift-routing',
-    'warden-sigil:mirror-ward',
-    'wager-surety:cursed-buffer',
-    'reward-perk:echo-conduit-double',
-    'reward-perk:trait-streak-flash',
-    'reward-perk:cursed-opener-greed',
-    'bulwark-plate:heavy-guard',
-    'tithe-conduit:conduit-gold',
-    'stasis-broker:stasis-shuffle',
-    'opening-ledger:first-match',
-    'drift-appraiser:cursed-drift',
-    'echo-relay:heavy-flash'
 ] as const satisfies readonly TileTraitInteractionTag[];
 
 const isTileTraitInteractionTag = (value: string): value is TileTraitInteractionTag =>

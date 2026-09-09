@@ -4,14 +4,13 @@ export type OverlayDecisionKind =
     | 'sheet'
     | 'pause'
     | 'floor_clear'
-    | 'relic_draft'
     | 'settings_modal'
     | 'danger_confirm';
 
 export interface OverlayDecisionPolicyRow {
     kind: OverlayDecisionKind;
     modalKind?: 'alert' | 'decision' | 'sheet';
-    tone: 'pause' | 'success' | 'relic' | 'neutral' | 'danger';
+    tone: 'pause' | 'success' | 'neutral' | 'danger';
     primaryAction: string;
     secondaryAction: string;
     oneHand: true;
@@ -91,19 +90,6 @@ export const OVERLAY_DECISION_POLICY_ROWS: readonly OverlayDecisionPolicyRow[] =
         keyboard: true,
         keyboardPath: 'Tab trap + initial focus + focus restore',
         backBehavior: 'Continue advances locally; status overlays are suppressed under meta screens.',
-        usesExistingChrome: true,
-        finalLicensedAssetRequired: false
-    },
-    {
-        kind: 'relic_draft',
-        tone: 'relic',
-        primaryAction: 'Pick relic',
-        secondaryAction: 'Use service',
-        oneHand: true,
-        oneHandPlacement: 'scrollable sheet with service buttons in body',
-        keyboard: true,
-        keyboardPath: 'Tab trap + initial focus + focus restore',
-        backBehavior: 'Relic picks are required before advancing; focus remains trapped in the draft sheet.',
         usesExistingChrome: true,
         finalLicensedAssetRequired: false
     },

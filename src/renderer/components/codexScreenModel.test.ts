@@ -42,7 +42,7 @@ describe('codexScreenModel', () => {
     });
 
     it('builds player-facing mode rows', () => {
-        expect(buildCodexModeRows().some((row) => row.id === 'visual_endless_locked')).toBe(true);
+        expect(buildCodexModeRows().map((row) => row.id)).toEqual(['endless']);
     });
 
     it('builds the mutator table through shared catalog row order', () => {

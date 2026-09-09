@@ -1,4 +1,4 @@
-import { GAME_MODE_CODEX, getMutatorCatalogRows, VISUAL_ENDLESS_MODE_LOCKED } from '../../shared/game-catalog';
+import { GAME_MODE_CODEX, getMutatorCatalogRows } from '../../shared/game-catalog';
 import { FLOOR_CURIOS } from '../../shared/floor-curio-rules';
 import { codexResidentDescription, FLOOR_CURIO_COPY } from '../copy/floorCurioBeat';
 import { FLOOR_CURIO_GREETINGS } from '../../shared/floor-curio-greeting-rules';
@@ -85,11 +85,5 @@ export const buildCodexResidentRows = () => [
 
 export const buildCodexMutatorRows = () => getMutatorCatalogRows();
 
-export const buildCodexModeRows = () => [
-    ...GAME_MODE_CODEX.map((mode) => ({ id: mode.id, title: mode.title, description: mode.description })),
-    {
-        id: 'visual_endless_locked',
-        title: VISUAL_ENDLESS_MODE_LOCKED.title,
-        description: VISUAL_ENDLESS_MODE_LOCKED.description
-    }
-];
+export const buildCodexModeRows = () =>
+    GAME_MODE_CODEX.map((mode) => ({ id: mode.id, title: mode.title, description: mode.description }));

@@ -45,9 +45,7 @@ const DEFAULT_ANNOUNCEMENT: BoardTurnAnnouncementFacts = {
     mismatchesBefore: 0,
     mismatchesAfter: 0,
     volatileTraitShufflesBefore: 0,
-    volatileTraitShufflesAfter: 0,
-    objectiveBefore: null,
-    objectiveAfter: null
+    volatileTraitShufflesAfter: 0
 };
 
 export interface BoardTurnResolvedEventFixtureOverrides {

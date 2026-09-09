@@ -1,13 +1,10 @@
 import { memo, useEffect, useRef, useState, type CSSProperties, type ReactElement } from 'react';
 import type { RunState } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
-import { getGameplayFeedbackObjectiveSnapshot } from '../../shared/gameplay-feedback-facts';
 import { MUTATOR_CATALOG } from '../../shared/mechanics-encyclopedia';
-import { describeRunModeIdentity, runModeIdentityText } from '../../shared/run-mode-identity';
 import { GameplayMenuIcon } from '../ui/gameplayIcons';
 import styles from './RunShell.module.css';
-import type { PerfectMemoryStatus } from '../../shared/perfect-memory-status';
-import { PERFECT_MEMORY_COPY, RUN_SHELL_LABELS } from '../copy/runDialogCopy';
+import { RUN_SHELL_LABELS } from '../copy/runDialogCopy';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { CHAIN_BEAT_COPY, CHAIN_TIER_LABELS } from '../copy/chainBeat';
 import { chainTierRungs, runChainMeter, runChainTier } from '../../shared/chain-tier-rules';
@@ -16,10 +13,12 @@ import { isPassAndPlayRun, PASS_AND_PLAY_FLOORS } from '../../shared/pass-and-pl
 /**
  * The HTML layer over the 3D board during a run.
  *
- * One bar across the top carries the four numbers a player reads mid-run; one dock along
- * the bottom carries the tools they can actually use right now; one line between them says
- * what just happened or what to do first. Nothing else is drawn over the board. The
- * previous layer stacked up to 28 panels here; this one is budgeted at 8.
+ * One bar across the top carries the numbers the rules still need and nothing about which run
+ * this is — the mode, its one bending rule and the perfect-memory stakes are answers to a question
+ * a player asks by pausing, so the pause overlay holds them. One dock along the bottom carries the
+ * tools they can actually use right now; one line between them says what just happened or what to
+ * do first. Nothing else is drawn over the board. The previous layer stacked up to 28 panels here;
+ * this one is budgeted at 8.
  */
 
 export interface RunShellTool {
@@ -37,9 +36,13 @@ export interface RunShellProps {
     run: RunState;
     /** Precomputed from the host clock, or null when the gauntlet is off. */
     gauntletRemainingMs: number | null;
-    /** Null when the perfect-clear achievement is not live stakes for this run. */
-    perfectMemory?: PerfectMemoryStatus | null;
-    /** The one line under the bar. Feedback wins over the standing objective. */
+    /**
+     * True once this run's floor passes the profile's deepest on record and the run counts. The
+     * marker is the one piece of the profile the bar shows, because the moment it appears is the
+     * moment the run became the best one.
+     */
+    personalBestDepth: boolean;
+    /** The one line under the bar. Feedback wins over the first-run instruction. */
     feedback?: string | null;
     feedbackPriority?: 'info' | 'error';
     /** First-run instruction, shown only until the first clear. */
@@ -88,6 +91,7 @@ const Stat = ({
     label,
     children,
     meter = null,
+    personalBest = false,
     primary = false,
     testId
 }: {
@@ -95,11 +99,24 @@ const Stat = ({
     children: ReactElement | string;
     /** A bar under the value, the stat's full width; only the Chain stat carries one. */
     meter?: ReactElement | null;
+    /** A small tag beside the label; only the Floor stat carries one, once the run is the deepest. */
+    personalBest?: boolean;
     primary?: boolean;
     testId: string;
 }): ReactElement => (
-    <div className={`${styles.stat} ${primary ? styles.statPrimary : ''}`.trim()} data-testid={testId}>
-        <span className={styles.label}>{label}</span>
+    <div
+        className={`${styles.stat} ${primary ? styles.statPrimary : ''}`.trim()}
+        data-personal-best={personalBest ? 'true' : undefined}
+        data-testid={testId}
+    >
+        <span className={styles.label}>
+            {label}
+            {personalBest ? (
+                <span aria-label={RUN_SHELL_LABELS.personalBestAria} className={styles.personalBest} data-testid="hud-personal-best" role="img">
+                    {RUN_SHELL_LABELS.personalBest}
+                </span>
+            ) : null}
+        </span>
         <span className={`${styles.value} ${primary ? styles.valuePrimary : ''}`.trim()}>{children}</span>
         {meter}
     </div>
@@ -108,7 +125,7 @@ const Stat = ({
 const RunShell = ({
     run,
     gauntletRemainingMs,
-    perfectMemory = null,
+    personalBestDepth,
     feedback,
     feedbackPriority = 'info',
     onboardingLine,
@@ -117,42 +134,20 @@ const RunShell = ({
     onPause
 }: RunShellProps): ReactElement => {
     const maxLives = Math.max(run.lives, 5);
-    const objective = getGameplayFeedbackObjectiveSnapshot(run);
     const mutatorTitles = run.activeMutators.map((id) => MUTATOR_CATALOG[id]?.title ?? id);
-    const modeIdentity = describeRunModeIdentity(run);
     const chainMeterView = runChainMeter(run);
     const chainMeterDropping = useChainMeterDrop(chainMeterView.momentum, chainTierRungs(run.board?.pairCount ?? null).clean);
-    const line = feedback ?? onboardingLine ?? (objective ? `${objective.label}: ${objective.progress}/${objective.required}` : null);
-    const lineTone = feedback ? feedbackPriority : onboardingLine ? 'info' : 'objective';
+    const line = feedback ?? onboardingLine ?? null;
+    const lineTone = feedback ? feedbackPriority : 'info';
     const visibleTools = tools.filter((tool) => tool.charges === undefined || tool.charges > 0 || tool.armed);
 
     return (
         <div className={styles.shell} data-testid="run-shell">
             <header className={styles.bar} data-testid="game-hud">
-                {/* Identity, not a number: which run this is and the one rule that bends it. It sits
-                    above the stat row rather than inside it so the numbers stay a row of numbers. */}
-                {/* No aria-label: a paragraph prohibits one, and the text below already reads the
-                    whole thing. `title` is the hover affordance, not the accessible name. */}
-                <p className={styles.modeIdentity} data-testid="hud-mode-identity" title={runModeIdentityText(modeIdentity)}>
-                    <span className={styles.modeIdentityName}>{modeIdentity.label}</span>
-                    {modeIdentity.detail === null ? null : (
-                        <span className={styles.modeIdentityDetail}>{modeIdentity.detail}</span>
-                    )}
-                    {perfectMemory === null ? null : (
-                        <span
-                            className={styles.perfectMemory}
-                            data-state={perfectMemory}
-                            data-testid="hud-perfect-memory"
-                        >
-                            {PERFECT_MEMORY_COPY.label}{' '}
-                            {perfectMemory === 'eligible' ? PERFECT_MEMORY_COPY.eligible : PERFECT_MEMORY_COPY.locked}
-                        </span>
-                    )}
-                </p>
                 <div className={styles.stats} role="group" aria-label="Run stats">
                 {/* A shared game runs to an agreed number of floors, so the floor count is a
                     progress reading rather than a depth reading. */}
-                <Stat label="Floor" testId="hud-floor">
+                <Stat label="Floor" personalBest={personalBestDepth} testId="hud-floor">
                     {isPassAndPlayRun(run.passAndPlay)
                         ? PASS_AND_PLAY_COPY.floorProgress(run.board?.level ?? 1, PASS_AND_PLAY_FLOORS)
                         : String(run.board?.level ?? 1)}
@@ -281,7 +276,7 @@ const RunShell = ({
                 </div>
             {line ? (
                 <p
-                    className={`${styles.feedback} ${lineTone === 'error' ? styles.feedbackError : ''} ${lineTone === 'objective' ? styles.feedbackObjective : ''}`.trim()}
+                    className={`${styles.feedback} ${lineTone === 'error' ? styles.feedbackError : ''}`.trim()}
                     data-testid="run-shell-line"
                     data-run-shell-line-tone={lineTone}
                     role="status"

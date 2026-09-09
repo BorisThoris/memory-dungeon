@@ -23,10 +23,6 @@ import { basename, join, relative, resolve } from 'node:path';
 export const TEST_ONLY_EXEMPTIONS: Record<string, string> = {
     'assetDropInReadiness.ts': 'Asset pipeline readiness record: what each art category accepts and who owns it.',
     'difficulty-profile.ts': 'The shipped tuning profile written down so a change to the curve has to change this too.',
-    'dungeon-combinatoric-matrix.ts': 'QA coverage matrix: which dungeon combinations are covered, excluded or future.',
-    'dungeon-e2e-fixtures.ts': 'A capture plan for the dungeon room types: recipes naming a fixture id, seed, floor and screenshot names. The fixtures it names were never built.',
-    'dungeon-versioning.ts': 'Rules-change taxonomy that says which edits must bump the rules version.',
-    'dungeonAudioEventCoverage.ts': 'Audio coverage table pairing every dungeon event with its cue and duck.',
     'gameplay-interaction-graph.ts': 'Validates the interaction graph JSON against the feedback facts; a check, not a caller.',
     'illustrationManifest.ts': 'Manifest of authored and baked illustrations, checked against what is on disk.',
     'illustrationRegressionPairKeys.ts': 'Dev-only list kept in sync with the e2e illustration fixture.',

@@ -100,10 +100,6 @@ export interface CreateFloorClearLevelResultInput {
     rating: LevelResult['rating'];
     run: RunState;
     scoreGained: number;
-    traitRouteObjectiveCompleted?: boolean;
-    traitRouteObjectiveProgress?: number;
-    traitRouteObjectiveRequired?: number;
-    traitRouteObjectiveReward?: string | undefined;
 }
 
 export const createFloorClearLevelResult = ({
@@ -122,11 +118,7 @@ export const createFloorClearLevelResult = ({
     perfect,
     rating,
     run,
-    scoreGained,
-    traitRouteObjectiveCompleted = false,
-    traitRouteObjectiveProgress = 0,
-    traitRouteObjectiveRequired = 0,
-    traitRouteObjectiveReward
+    scoreGained
 }: CreateFloorClearLevelResultInput): LevelResult => ({
     level,
     scoreGained,
@@ -144,13 +136,6 @@ export const createFloorClearLevelResult = ({
     featuredObjectiveStreakBonus:
         featuredObjectiveId != null && featuredObjectiveStreakBonus > 0
             ? featuredObjectiveStreakBonus
-            : undefined,
-    traitRouteObjectiveCompleted: traitRouteObjectiveRequired > 0 ? traitRouteObjectiveCompleted : undefined,
-    traitRouteObjectiveProgress: traitRouteObjectiveRequired > 0 ? traitRouteObjectiveProgress : undefined,
-    traitRouteObjectiveRequired: traitRouteObjectiveRequired > 0 ? traitRouteObjectiveRequired : undefined,
-    traitRouteObjectiveReward:
-        traitRouteObjectiveRequired > 0 && traitRouteObjectiveCompleted
-            ? traitRouteObjectiveReward
             : undefined,
     ...getFloorClearStatLevelResultFields(run),
     chainMomentumAtClear: momentumBonus.momentum > 0 ? momentumBonus.momentum : undefined,

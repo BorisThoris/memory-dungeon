@@ -79,7 +79,6 @@ describe('board-turn feedback ownership boundary', () => {
         expect(contracts).toContain('announcement: boardTurnAnnouncementFactsSchema');
         expect(core).toContain('announcement: getBoardTurnAnnouncementFacts(run, nextRun)');
         expect(turnFacts).toContain('matchedTraitKinds: TILE_TRAIT_COUNT_KINDS.filter');
-        expect(turnFacts).toContain('objectiveBefore: getGameplayFeedbackObjectiveSnapshot(before)');
         expect(turnAnnouncement).toMatch(/buildBoardTurnAnnouncement = \(\s*turnEvent: BoardTurnResolvedEvent/u);
         expect(turnAnnouncement).not.toContain('RunState');
         expect(announcementHook).toContain('buildBoardTurnAnnouncement(');

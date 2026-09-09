@@ -6,7 +6,7 @@
  * rather than being left behind in the markup.
  */
 export const CHOOSE_YOUR_PATH_COPY = {
-    dungeonBlurb: 'A clean descent: procedural floors of pairs, chains, and relic milestones.',
+    dungeonBlurb: 'A clean descent: procedural floors of pairs, clumps, and chains.',
     guidedBlurb:
         'Start with a guided first room: match the marked pair, clear the floor, then choose what the next room changes.',
     /** The "no group picked" chip on the library's group filter. */

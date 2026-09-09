@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import {
     expectGameplayReady,
-    openModeDetail,
+    expectRunIdentity,
     openModeLibrary
 } from './playablePathHelpers';
 
@@ -9,17 +9,12 @@ import {
  * Gen 111 retired eight of the twelve cards into the Classic setup sheet: Gauntlet is a clock,
  * Wild is a joker and a chaotic floor set, Scholar and Pin Vow are vows, Practice is a record
  * toggle, Meditation is a pace, Endless was Classic with the length turned up and Dungeon Showcase
- * was a staged unrecorded run. This spec used to start each of those by card name and went stale
- * the day the cards went; the modes that differ in kind are still started by name below, and the
- * retired ones are started the way a player starts them now — from the sheet — and proven the
- * same way, by what the HUD says once the board is up.
+ * was a staged unrecorded run; Gen 171 then retired the four that were other games (Daily, the
+ * puzzles). This spec used to start each of those by card name and went stale the day the cards
+ * went. What is left is started the way a player starts it now — from the sheet — and proven the
+ * same way, by what the pause menu names the run once the board is up. The bar itself carries
+ * numbers only.
  */
-const directPlayModes = [
-    { title: 'Daily Challenge', hudIdentity: /Daily challenge/i },
-    { title: 'Puzzle', hudIdentity: /Puzzle:\s*Starter/i },
-    { title: 'Mirror Puzzle', hudIdentity: /Puzzle:\s*Mirror craft/i },
-    { title: 'Glyph Cross', hudIdentity: /Puzzle:\s*Glyph Cross/i }
-] as const;
 
 async function openSetupSheet(page: Page) {
     await openModeLibrary(page);
@@ -39,24 +34,12 @@ async function startFromSheet(page: Page, sheet: ReturnType<Page['getByRole']>):
 test.describe('Expanded Choose Your Path mode matrix', () => {
     test.describe.configure({ retries: 0 });
 
-    for (const mode of directPlayModes) {
-        test(`${mode.title} detail starts a playable run with a stable identity signal`, async ({ page }) => {
-            test.setTimeout(240_000);
-            await openModeLibrary(page);
-            const modal = await openModeDetail(page, mode.title);
-            await expect(modal.getByTestId('choose-path-start-contract')).toContainText(/Start signal/i);
-            await modal.getByRole('button', { name: /^play$/i }).click();
-            await expectGameplayReady(page);
-            await expect(page.getByTestId('hud-mode-identity')).toContainText(mode.hudIdentity);
-        });
-    }
-
     test('the plain descent starts from the launch panel in one press', async ({ page }) => {
         test.setTimeout(240_000);
         await openModeLibrary(page);
         await page.getByRole('region', { name: /recommended run/i }).getByRole('button', { name: /^start run$/i }).click({ force: true });
         await expectGameplayReady(page);
-        await expect(page.getByTestId('hud-mode-identity')).toContainText(/Classic Dungeon/i);
+        await expectRunIdentity(page, /Classic Dungeon/i);
         await expect(page.getByTestId('hud-gauntlet-timer')).toHaveCount(0);
     });
 
@@ -65,20 +48,18 @@ test.describe('Expanded Choose Your Path mode matrix', () => {
         const sheet = await openSetupSheet(page);
         await sheet.getByLabel(/^5 minutes$/i).check({ force: true });
         await startFromSheet(page, sheet);
-        // The clock is its own stat, so the identity line does not repeat it.
+        // The clock is its own stat, so the identity row does not repeat it.
         await expect(page.getByTestId('hud-gauntlet-timer')).toBeVisible();
-        await expect(page.getByTestId('hud-mode-identity')).toContainText(/Classic Dungeon/i);
+        await expectRunIdentity(page, /Classic Dungeon/i);
     });
 
-    test('two vows taken together both hold, and the bar names the stricter one', async ({ page }) => {
+    test('two vows taken together both hold, and the pause menu names the stricter one', async ({ page }) => {
         test.setTimeout(240_000);
         const sheet = await openSetupSheet(page);
         await sheet.getByLabel(/scholar: no shuffle, no destroy/i).check({ force: true });
         await sheet.getByLabel(/pin vow: ten pins/i).check({ force: true });
         await startFromSheet(page, sheet);
-        const identity = page.getByTestId('hud-mode-identity');
-        await expect(identity).toContainText(/Pin vow/i);
-        await expect(identity).toContainText(/Pins 10 this run/i);
+        await expectRunIdentity(page, /Pin vow — Pins 10 this run/i);
         // The Scholar half is a rule about tools, so it shows where the tools are: the shuffle
         // and destroy actions in the dock stay present but cannot be pressed.
         const shuffle = page.getByRole('button', { name: /shuffle/i }).first();
@@ -87,12 +68,12 @@ test.describe('Expanded Choose Your Path mode matrix', () => {
         }
     });
 
-    test('a wild run carries the joker and says so on the bar', async ({ page }) => {
+    test('a wild run carries the joker and says so in the pause menu', async ({ page }) => {
         test.setTimeout(240_000);
         const sheet = await openSetupSheet(page);
         await sheet.getByLabel(/wild: a joker tile/i).check({ force: true });
         await startFromSheet(page, sheet);
-        await expect(page.getByTestId('hud-mode-identity')).toContainText(/Wild Run/i);
+        await expectRunIdentity(page, /Wild Run/i);
         await expect(page.getByTestId('hud-mutators')).toBeVisible();
     });
 
@@ -101,8 +82,6 @@ test.describe('Expanded Choose Your Path mode matrix', () => {
         const sheet = await openSetupSheet(page);
         await sheet.getByLabel(/do not record this run/i).check({ force: true });
         await startFromSheet(page, sheet);
-        const identity = page.getByTestId('hud-mode-identity');
-        await expect(identity).toContainText(/Practice/i);
-        await expect(identity).toContainText(/Achievements off/i);
+        await expectRunIdentity(page, /Practice — Achievements off/i);
     });
 });

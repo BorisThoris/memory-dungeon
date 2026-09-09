@@ -2,10 +2,6 @@ import type { TileTraitKind, RunState } from './contracts';
 import { getSafeBoardColumns } from './board-grid-dimensions';
 import { runChainTier } from './chain-tier-rules';
 import { TILE_TRAIT_COUNT_KINDS } from './session-stats-rules';
-import {
-    getGameplayFeedbackObjectiveSnapshot,
-    type GameplayFeedbackObjectiveSnapshot
-} from './gameplay-feedback-facts';
 import { getMatchFloaterAnchorTileIds, getMismatchFloaterAnchorTileIds } from './turn-resolution';
 import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
@@ -83,8 +79,6 @@ export interface BoardTurnAnnouncementFacts {
     mismatchesAfter: number;
     volatileTraitShufflesBefore: number;
     volatileTraitShufflesAfter: number;
-    objectiveBefore: GameplayFeedbackObjectiveSnapshot | null;
-    objectiveAfter: GameplayFeedbackObjectiveSnapshot | null;
 }
 
 const firstTileValue = <T>(
@@ -232,8 +226,6 @@ export const getBoardTurnAnnouncementFacts = (
         mismatchesBefore: statsBefore.mismatches,
         mismatchesAfter: statsAfter.mismatches,
         volatileTraitShufflesBefore: runNonNegativeInteger(statsBefore.volatileTraitShuffles),
-        volatileTraitShufflesAfter: runNonNegativeInteger(statsAfter.volatileTraitShuffles),
-        objectiveBefore: getGameplayFeedbackObjectiveSnapshot(before),
-        objectiveAfter: getGameplayFeedbackObjectiveSnapshot(after)
+        volatileTraitShufflesAfter: runNonNegativeInteger(statsAfter.volatileTraitShuffles)
     };
 };

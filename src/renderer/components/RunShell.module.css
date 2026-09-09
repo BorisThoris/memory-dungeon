@@ -44,51 +44,19 @@
     pointer-events: none;
 }
 
-.modeIdentity {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: center;
-    gap: 0.2rem 0.5rem;
-    margin: 0 0 0.25rem;
-    line-height: 1.2;
-    text-align: center;
-}
-
-/* 0.75rem floor: the HUD's minimum readable type size, same as `.label`. */
-.modeIdentityName {
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--theme-gold-bright);
-}
-
-.perfectMemory {
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 0.08rem 0.42rem;
+/*
+ * The personal-best tag beside the Floor label. It appears once and stays: a mark that flashed
+ * and went would read as a notification, and the point is that this run is now the deepest.
+ */
+.personalBest {
+    margin-left: 0.4rem;
+    padding: 0.05rem 0.38rem;
     border-radius: var(--ui-radius-pill);
-    border: 1px solid var(--theme-border);
-    color: var(--theme-text-subtle);
-}
-
-.perfectMemory[data-state='eligible'] {
-    color: color-mix(in srgb, var(--theme-success) 82%, var(--theme-text));
-    border-color: color-mix(in srgb, var(--theme-success) 42%, var(--theme-border));
-}
-
-.perfectMemory[data-state='locked'] {
-    opacity: 0.7;
-    text-decoration: line-through;
-}
-
-.modeIdentityDetail {
-    font-size: 0.75rem;
-    letter-spacing: 0.06em;
-    color: var(--theme-text-subtle);
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 55%, var(--theme-border));
+    background: color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+    color: var(--theme-gold-bright);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
 }
 
 .stats {
@@ -178,11 +146,6 @@
 
 .feedbackError {
     border-color: rgba(224, 101, 90, 0.5);
-}
-
-.feedbackObjective {
-    color: var(--theme-cyan-bright);
-    border-color: color-mix(in srgb, var(--theme-cyan-bright) 22%, transparent);
 }
 
 @keyframes feedbackIn {
@@ -367,10 +330,6 @@
 
     .label {
         letter-spacing: 0.14em;
-    }
-
-    .modeIdentityName {
-        letter-spacing: 0.1em;
     }
 
     .dock {

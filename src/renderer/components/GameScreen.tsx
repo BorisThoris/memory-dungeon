@@ -13,7 +13,6 @@ import { useGameplayChromeClearance } from '../hooks/useGameplayChromeClearance'
 import { formatLevelResultObjectiveLine } from '../../shared/secondary-objectives';
 import { runFilteredArray, runFilteredStringArray } from '../../shared/run-array-guards';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
-import { getTraitRouteObjectiveStatus } from '../../shared/trait-route-objectives';
 import {
     canRegionShuffle,
     canRegionShuffleRow,
@@ -23,7 +22,7 @@ import { useNotificationStore } from '@cross-repo-libs/notifications';
 import type { CSSProperties } from 'react';
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { ABANDON_DIALOG_COPY, FLOOR_STATUS_COPY, PAUSE_DIALOG_COPY, RUN_TOOL_REASONS, SHORTCUTS_COPY } from '../copy/runDialogCopy';
+import { ABANDON_DIALOG_COPY, FLOOR_STATUS_COPY, PAUSE_DIALOG_COPY, PERFECT_MEMORY_COPY, RUN_TOOL_REASONS, SHORTCUTS_COPY } from '../copy/runDialogCopy';
 import {
     BOARD_SHUFFLE_COPY,
     FLASH_PAIR_COPY,
@@ -70,6 +69,8 @@ import { projectGameplayFeedback } from '../store/gameplayFeedbackAdapter';
 import { perfectMemoryStatus } from '../../shared/perfect-memory-status';
 import { MemorizeSkipLayer } from './MemorizeSkipLayer';
 import RunShell, { type RunShellTool } from './RunShell';
+import { profileDeepestFloor } from '../../shared/profile-deepest-floor';
+import { describeRunModeIdentity } from '../../shared/run-mode-identity';
 import { RUN_SHELL_GLYPHS } from './runShellGlyphs';
 import MainMenuBackground from './MainMenuBackground';
 import FloorClearDialog, {
@@ -956,7 +957,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             variant: 'secondary' as const
         }
     ];
-    const liveObjectiveStatus = getTraitRouteObjectiveStatus(run);
     const nextFloorPreview =
         endlessChapterActive && run.lastLevelResult
             ? pickFloorScheduleEntry(run.runSeed, run.runRulesVersion, run.lastLevelResult.level + 1, run.gameMode)
@@ -1141,9 +1141,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         stickyBlockIndex: run.stickyBlockIndex,
         parasiteFloors: run.parasiteFloors,
         scoreParasiteActive: run.activeMutators.includes('score_parasite'),
-        objectiveProgress: liveObjectiveStatus?.progress,
-        objectiveRequired: liveObjectiveStatus?.required,
-        objectiveLabel: liveObjectiveStatus?.label,
         recallFocus: run.recallFocus,
         recallFocusMax: RECALL_FOCUS_MAX,
         recallMatchesThisFloor: run.recallMatchesThisFloor,
@@ -1479,12 +1476,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         data-html-ui-layer="gameplay-chrome-v2"
                     >
                         <RunShell
-                            perfectMemory={perfectMemoryStatus(run, saveData)}
                             feedback={visualHudAnnouncement}
                             feedbackPriority={actionFeedbackPriority}
                             gauntletRemainingMs={gauntletRemainingMs}
                             onboardingLine={onboardingStep && run.status === 'playing' ? onboardingStep.prompt : null}
                             onPause={pause}
+                            personalBestDepth={run.achievementsEnabled && (run.board?.level ?? 0) > profileDeepestFloor(saveData)}
                             politeAnnouncement={politeHudAnnouncement}
                             run={run}
                             tools={runShellTools}
@@ -1720,6 +1717,32 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         title="Run paused"
                     >
                         <dl aria-label="Run so far" className={styles.pauseStats}>
+                            {/* Which run this is, and whether it can still earn perfect memory, are
+                                answers to a question a player asks by pausing; the bar keeps to the
+                                numbers the rules need. */}
+                            {(() => {
+                                const identity = describeRunModeIdentity(run);
+                                return (
+                                    <div>
+                                        <dt>Run</dt>
+                                        <dd data-testid="pause-run-identity">
+                                            {identity.label}
+                                            {identity.detail ? ` — ${identity.detail}` : ''}
+                                        </dd>
+                                    </div>
+                                );
+                            })()}
+                            {(() => {
+                                const perfectMemory = perfectMemoryStatus(run, saveData);
+                                return perfectMemory === null ? null : (
+                                    <div>
+                                        <dt>{PERFECT_MEMORY_COPY.label}</dt>
+                                        <dd data-state={perfectMemory} data-testid="pause-perfect-memory">
+                                            {perfectMemory === 'eligible' ? PERFECT_MEMORY_COPY.eligible : PERFECT_MEMORY_COPY.locked}
+                                        </dd>
+                                    </div>
+                                );
+                            })()}
                             <div>
                                 <dt>Floor</dt>
                                 <dd>{run.board?.level ?? run.stats.highestLevel}</dd>

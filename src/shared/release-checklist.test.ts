@@ -113,12 +113,12 @@ const VERIFIERS: Record<string, () => void> = {
         expect(broken.brokenPairKeys.length).toBeGreaterThan(0);
     },
     'cascade-balance': () => {
-        // Twelve seeds over twenty-four floors, matching `cascade-balance-simulation.test.ts` and
-        // `sim:cascade` exactly. Three places used to check this row against three different
+        // Forty-eight seeds over twenty-four floors, matching `cascade-balance-simulation.test.ts`
+        // and `sim:cascade` exactly. Three places used to check this row against three different
         // samples and could disagree about whether the game was in band; now there is one sample
         // and one answer. See that test's own comments for what the smaller ones were reading.
         const report = runCascadeBalanceSimulation({
-            seeds: Array.from({ length: 12 }, (_unused, index) => 42_001 + index * 7_919),
+            seeds: Array.from({ length: 48 }, (_unused, index) => 42_001 + index * 7_919),
             floors: Array.from({ length: 24 }, (_unused, index) => index + 1),
             missRates: [0, 0.1, 0.25]
         });

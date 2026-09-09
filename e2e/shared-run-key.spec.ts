@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { GAME_RULES_VERSION } from '../src/shared/contracts';
 import { encodeRunShareKey } from '../src/shared/run-share-key';
-import { expectGameplayReady, openModeLibrary } from './playablePathHelpers';
+import { expectGameplayReady, expectRunIdentity, openModeLibrary } from './playablePathHelpers';
 
 /**
  * The share loop end to end: a key someone else's game produced starts that run here.
@@ -37,7 +37,7 @@ test.describe('Playing a shared run', () => {
             );
 
             await expectGameplayReady(page);
-            await expect(page.getByTestId('hud-mode-identity')).toContainText(shared.expected);
+            await expectRunIdentity(page, shared.expected);
         });
     }
 
@@ -50,7 +50,7 @@ test.describe('Playing a shared run', () => {
         await pasteAndPlay(page, `Memory Dungeon — Practice: floor 9, 1,200 points. Same run: ${key}`);
 
         await expectGameplayReady(page);
-        await expect(page.getByTestId('hud-mode-identity')).toContainText(/Practice/i);
+        await expectRunIdentity(page, /Practice/i);
     });
 
     test('a paste that is not a key says so and starts nothing', async ({ page }) => {

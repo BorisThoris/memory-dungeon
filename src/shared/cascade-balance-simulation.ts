@@ -329,8 +329,12 @@ export const CASCADE_BALANCE_BANDS: CascadeBalanceBands = {
      * climb a ladder with. Fever is now the celebration on top of a loop that already pays, so
      * it is rarer for everyone - and what the ladder must still do is separate: see
      * `feverCleanOverReference` below, which is the band that carries the intent now.
+     *
+     * 0.15 up to 0.3 in Gen 177, the Phase 1 re-baseline: with the dungeon budget gone the clean
+     * player reaches Fever on 0.45 of big floors over forty-eight seeds, and a band at a third of
+     * the measurement is a band that would let half the loop's payoff disappear unnoticed.
      */
-    cleanFeverShareOnBigFloors: { min: 0.15 },
+    cleanFeverShareOnBigFloors: { min: 0.3 },
     /** Fever floors at zero misses over Fever floors at the reference miss rate: the ladder separates. */
     feverCleanOverReference: { min: 2 },
     bigFloorPairs: 8,
@@ -347,8 +351,12 @@ export const CASCADE_BALANCE_BANDS: CascadeBalanceBands = {
      * rise by the same factor is the same ladder held higher; one whose top and bottom converge is
      * a different game, and that is the band to watch. This ceiling is the coarser of the two and
      * moves to where the measurement actually is rather than sitting 0.001 below it.
+     *
+     * 0.25 down to 0.22 in Gen 177. The 0.25 was read off six seeds; from forty-eight seeds up the
+     * reference player's share sits at 0.20 and stops moving, so the ceiling follows it down with
+     * the same margin the old one had over its own measurement.
      */
-    referenceFeverShare: { max: 0.25 },
+    referenceFeverShare: { max: 0.22 },
     /** Extreme Fever is the clean player's finish: they must reach it more often than the reference player. */
     extremeFeverCleanOverReference: { min: 1.5 },
     referenceMissRate: 0.25

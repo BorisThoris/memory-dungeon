@@ -75,10 +75,11 @@ export const FLOOR_CURIOS: readonly FloorCurio[] = [
     {
         id: 'hoarding_rat',
         name: 'A hoarding rat',
-        line: 'It has been collecting. It does not want the coins, exactly. It wants to have them.',
-        // Its coins went with the shop (Gen 174). It still has them; there is nothing they buy.
-        effectSummary: 'Coins it has no use for. Nor, down here, have you.',
-        effect: NOTHING
+        line: 'It has been collecting. Looks. It will let you have one.',
+        // Its coins went with the shop (Gen 174) and there was nothing left for them to buy, so
+        // what it hoards now is the one thing a memory game has to spare: a look at the board.
+        effectSummary: 'A peek, from a pile of them. It is keeping the rest.',
+        effect: { ...NOTHING, peekCharges: 1 }
     },
     {
         id: 'gossiping_skull',

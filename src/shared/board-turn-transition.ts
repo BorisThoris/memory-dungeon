@@ -29,7 +29,6 @@ import { addTileTraitCountStats, normalizeSessionStats } from './session-stats-r
 import { runFilteredStringArrayOrNull, runStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import type { TileTraitInteractionTag } from './tile-trait-rules';
-import { applyTraitRouteObjectiveProgress } from './trait-route-objectives';
 
 const GAMBIT_FAIL_EXTRA_TRIES = 1;
 
@@ -179,7 +178,6 @@ export const createResolveBoardTurnTransition = ({
             run
         });
         execution?.traitInteractionTags?.push(...traitReward.interactionTags);
-        const traitRouteObjective = applyTraitRouteObjectiveProgress(run, traitReward.interactionTags);
         const wildMatch = usedWild && runNonNegativeInteger(run.wildMatchesRemaining) > 0
             ? consumeWildMatchThroughGameplayCore(
                   run,
@@ -245,17 +243,12 @@ export const createResolveBoardTurnTransition = ({
             recallBonusScoreThisFloor: boardCleanup.recallBonusScoreThisFloor,
             forgottenTileIdsThisFloor: boardCleanup.forgottenTileIdsThisFloor,
             stickyBlockIndex: traitReward.stickyBlockIndex ?? boardCleanup.stickyBlockIndex,
-            ...traitRouteObjective.runPatch,
             ...progress,
             stats: {
                 ...stats,
-                totalScore: runNonNegativeInteger(scoring.totalScore) + runNonNegativeInteger(traitRouteObjective.scoreBonus),
-                currentLevelScore:
-                    runNonNegativeInteger(scoring.currentLevelScore) + runNonNegativeInteger(traitRouteObjective.scoreBonus),
-                bestScore: Math.max(
-                    runNonNegativeInteger(scoring.bestScore),
-                    runNonNegativeInteger(scoring.totalScore) + runNonNegativeInteger(traitRouteObjective.scoreBonus)
-                ),
+                totalScore: runNonNegativeInteger(scoring.totalScore),
+                currentLevelScore: runNonNegativeInteger(scoring.currentLevelScore),
+                bestScore: Math.max(runNonNegativeInteger(scoring.bestScore), runNonNegativeInteger(scoring.totalScore)),
                 matchesFound: runNonNegativeInteger(stats.matchesFound) + 1,
                 currentStreak: runNonNegativeInteger(scoring.currentStreak),
                 bestStreak: Math.max(runNonNegativeInteger(stats.bestStreak), runNonNegativeInteger(scoring.currentStreak)),
@@ -264,10 +257,7 @@ export const createResolveBoardTurnTransition = ({
                     MAX_GUARD_TOKENS,
                     runNonNegativeInteger(survivalReward.guardTokens) + runNonNegativeInteger(traitReward.guardTokenGain)
                 ),
-                comboShards: Math.min(
-                    MAX_COMBO_SHARDS,
-                    runNonNegativeInteger(survivalReward.comboShards) + runNonNegativeInteger(traitRouteObjective.comboShardGain)
-                ),
+                comboShards: Math.min(MAX_COMBO_SHARDS, runNonNegativeInteger(survivalReward.comboShards)),
                 tileTraitMatches: addTileTraitCountStats(stats.tileTraitMatches, [firstTile, secondTile])
             },
             timerState: clearResolveState(run)

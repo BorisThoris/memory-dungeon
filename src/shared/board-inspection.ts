@@ -60,7 +60,6 @@ export type BoardFairnessIssueCode =
     | 'flipped_tile_reference_missing'
     | 'completion_route_missing'
     | 'trait_interaction_missing'
-    | 'trait_route_objective_unreachable'
     | 'run_has_no_board'
     | 'run_terminal_incomplete_board'
     | 'run_resolving_without_flipped_tiles';

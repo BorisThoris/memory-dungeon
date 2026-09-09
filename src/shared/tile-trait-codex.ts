@@ -29,7 +29,7 @@ const INTERACTION_DESCRIPTIONS: Record<TileTraitInteractionTag, string> = {
     'echo:sealed-combo': 'Match Echo next to a different Sealed trait pair to convert the clean read into a combo shard.',
     'mirror:stasis-guard': 'Match Mirror beside Stasis to turn a risky memory tile into guard and score.',
     'sealed:heavy-score': 'Match Sealed beside Heavy to trade a stricter tile for a larger score spike.',
-    'cursed:volatile-greed': 'Match Cursed beside Volatile for gold and score, accepting that misses around the same cluster hurt recall.',
+    'cursed:volatile-greed': 'Match Cursed beside Volatile for extra score, accepting that misses around the same cluster hurt recall.',
     'volatile:heavy-guard': 'Match Volatile beside Heavy to turn an unstable tile into guard.',
     'drift:row-shuffle': 'Match Drift to earn a row/swap charge, letting positioning become a repeatable board tool.',
     'drift:volatile-full-shuffle': 'Match Drift beside Volatile to add a full shuffle charge on top of the row/swap charge.',
@@ -45,20 +45,6 @@ const INTERACTION_DESCRIPTIONS: Record<TileTraitInteractionTag, string> = {
     'stasis:sealed-buffer': 'Place Stasis beside Sealed to stop the Sealed miss from draining peek or deepening recall.',
     'stasis:cursed-volatile-buffer': 'Place Stasis near a Cursed and Volatile cluster to buffer the extra recall danger on a miss.',
     'cursed:volatile-danger': 'Miss Cursed beside Volatile and the greedy cluster adds recall pressure.',
-    'chapter-compass:conduit-map': 'Draft Chapter Compass to make Conduit clusters pay extra peek value and score.',
-    'catalyst-thread:sealed-engine': 'Draft Catalyst Thread to make Sealed matches stronger, with capped shards converting to score.',
-    'row-compass:drift-routing': 'Draft Row Compass to make Drift matches generate extra row/swap routing value.',
-    'warden-sigil:mirror-ward': 'Draft Warden Sigil to make Mirror matches produce stronger guard or capped-guard score.',
-    'wager-surety:cursed-buffer': 'Draft Wager Surety to soften Cursed plus Volatile miss tries while keeping recall pressure visible.',
-    'reward-perk:echo-conduit-double': 'Claim Echo Conduit Lens so Echo beside Conduit doubles its peek and adjacent Sealed shard payoff.',
-    'reward-perk:trait-streak-flash': 'Claim Trait Streak Lens so a trait match at x3+ clean streak creates a flash-pair charge.',
-    'reward-perk:cursed-opener-greed': 'Claim Cursed Opener Contract so the first Cursed match each floor becomes a gold and score play.',
-    'bulwark-plate:heavy-guard': 'Draft Bulwark Plate to make every Heavy match brace into guard, or into score once guard is capped.',
-    'tithe-conduit:conduit-gold': 'Draft Tithe Conduit to make every Conduit match pay shop gold on top of its score.',
-    'stasis-broker:stasis-shuffle': 'Draft Stasis Broker to turn every Stasis match into a full-board shuffle charge.',
-    'opening-ledger:first-match': 'Draft Opening Ledger so the first match you resolve on every floor pays bonus score.',
-    'drift-appraiser:cursed-drift': 'Draft Drift Appraiser so a Drift match beside Cursed pays two gold and score for taking the risky lane.',
-    'echo-relay:heavy-flash': 'Draft Echo Relay so an Echo match beside Heavy grants a flash-pair charge.'
 };
 
 export const getTileTraitCodexRows = (): TileTraitCodexRow[] =>

@@ -19,10 +19,7 @@
 | shuffle-full | `shuffle-full.ogg` |
 | shuffle-quick | `shuffle-quick.ogg` |
 | floor-clear | `floor-clear.ogg` |
-| relic-offer-open | `relic-offer-open.ogg` |
 | countdown-pressure | `countdown-pressure.ogg` |
-| relic-pick | `relic-pick.ogg` |
-| wager-arm | `wager-arm.ogg` |
 
 Match streak depth maps to low / mid / high in `manifest.json`.
 

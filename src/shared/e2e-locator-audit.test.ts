@@ -84,8 +84,8 @@ describe('the e2e locator audit', () => {
     });
 
     it('does not call an id missing just because it is not a plain attribute', () => {
-        const rendered = readRenderedTestIds(["const modes = [{ testId: 'hud-mode-identity' }];"]);
+        const rendered = readRenderedTestIds(["const modes = [{ testId: 'pause-run-identity' }];"]);
 
-        expect(findDeadTestIds(['hud-mode-identity'], rendered)).toEqual([]);
+        expect(findDeadTestIds(['pause-run-identity'], rendered)).toEqual([]);
     });
 });

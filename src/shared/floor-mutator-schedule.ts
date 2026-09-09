@@ -34,9 +34,9 @@ export interface FloorArchetypeDefinition {
 export const FLOOR_ARCHETYPE_CATALOG: Record<FloorArchetypeId, FloorArchetypeDefinition> = {
     survey_hall: {
         title: 'Dungeon Gate',
-        hint: 'First room shows the dungeon route, exit pressure, and patrol intel before the descent branches.',
+        hint: 'First room: read the clumps and the pairs before the descent picks up.',
         theme: 'Gate',
-        riskProfile: 'Readable opener with dungeon route intel; clear fast to choose the next room.'
+        riskProfile: 'Readable opener; clear it under par to set the run\'s pace.'
     },
     speed_trial: {
         title: 'Speed Trial',
@@ -84,9 +84,9 @@ export const FLOOR_ARCHETYPE_CATALOG: Record<FloorArchetypeId, FloorArchetypeDef
     },
     parasite_tithe: {
         title: 'Parasite Tithe',
-        hint: 'The parasite taxes slow descents. Play clean and bank favor.',
+        hint: 'The parasite taxes slow descents. Play clean and keep the chain up.',
         theme: 'Parasite',
-        riskProfile: 'Parasite clock; sustain relics and guard tokens matter.'
+        riskProfile: 'Parasite clock; guard tokens and a clean floor matter.'
     },
     spotlight_hunt: {
         title: 'Spotlight Hunt',
@@ -96,7 +96,7 @@ export const FLOOR_ARCHETYPE_CATALOG: Record<FloorArchetypeId, FloorArchetypeDef
     },
     breather: {
         title: 'Breather',
-        hint: 'A calmer floor to steady the board and bank favor.',
+        hint: 'A calmer floor to steady the board and rebuild the chain.',
         theme: 'Breather',
         riskProfile: 'Lower pressure; rebuild resources and protect streaks.'
     }
@@ -196,11 +196,11 @@ export const CHAPTER_ACT_BIOME_STRUCTURE: readonly ChapterActBiomeDefinition[] =
         lastCycleFloor: 12,
         biomeId: 'spire_convergence',
         biomeTitle: 'Spire Convergence',
-        biomeTone: 'A second warden, treasure reset, parasite sustain, and spotlight finale.',
+        biomeTone: 'A second boss floor, a pickup reset, parasite sustain, and a spotlight finale.',
         paletteHook: 'spire_prismatic_alarm',
         audioHook: 'spire_recall_alarm',
-        pressureCue: 'The cycle\'s second warden and sustain pressure frame the final read.',
-        routePreview: 'Expect a second warden, a treasure reset, parasite sustain, then spotlight rotation.',
+        pressureCue: 'The cycle\'s second boss floor and sustain pressure frame the final read.',
+        routePreview: 'Expect a second boss floor, a pickup reset, parasite sustain, then spotlight rotation.',
         gateRule: 'Floors 9-12 of each endless cycle.'
     }
 ] as const;
@@ -372,28 +372,25 @@ const ENDLESS_FLOOR_CYCLE: FloorScheduleEntry[] = [
     makeEntry(8, 'script_room', 'flip_par', ['category_letters'], 'normal'),
     makeEntry(9, 'rush_recall', 'flip_par', ['short_memorize', 'wide_recall'], 'boss'),
     /*
-     * Floor 10 used to be a byte-for-byte copy of floor 3, so one cycle repeated itself. It is now
-     * the shrine breather: `generous_shrine` had full mechanical support in the relic-offer rules
-     * and a Codex entry, but nothing scheduled it and no mode pooled it, so the +1 relic pick it
-     * grants had never once reached a player.
+     * Floor 10 is the back half's pickup breather. The shrine mutator that once told it apart from
+     * floor 3 went with the relic draft, so the objective does instead: floor 3 asks for a floor
+     * without shuffle or destroy, floor 10 asks for one under par.
      */
-    makeEntry(10, 'treasure_gallery', 'scholar_style', ['findables_floor', 'generous_shrine'], 'breather'),
+    makeEntry(10, 'treasure_gallery', 'flip_par', ['findables_floor'], 'breather'),
     makeEntry(11, 'parasite_tithe', 'scholar_style', ['score_parasite'], 'normal'),
     makeEntry(12, 'spotlight_hunt', 'cursed_last', ['shifting_spotlight'], 'normal')
 ];
 
 /**
- * The warden rotation.
+ * The position-nine rotation.
  *
- * The cycle keeps both boss floors where they are, and the trap hall at position 7 keeps its
- * warden: the balance profile leans on that floor's trap budget for how a greedy run heals,
- * and swapping it pushed low-life floors from a third of a run to nearly half. Position 9 is
- * the one that rotates, so a run meets the Rush Sentinel, then the Gilded Keeper, then the
- * Mnemonist Observer across three cycles. `dungeonBossForFloor` reads the archetype, so each
- * warden arrives on the floor its pattern was written for - guard on treasure and locks,
- * observe on encounters. Two of these wardens were fully written and unreachable before.
+ * The cycle keeps both boss floors where they are; the trap hall at position 7 stays put because
+ * the balance profile leans on it for how a run heals, and swapping it pushed low-life floors
+ * from a third of a run to nearly half. Position 9 is the one that rotates, so the second boss
+ * floor of each cycle is a different room three cycles running. It once decided which warden
+ * a run met; the wardens went with the dungeon, and what rotates now is the room itself.
  */
-const POSITION_NINE_WARDEN_ROTATION: readonly FloorScheduleEntry[] = [
+const POSITION_NINE_ROTATION: readonly FloorScheduleEntry[] = [
     makeEntry(9, 'rush_recall', 'flip_par', ['short_memorize', 'wide_recall'], 'boss'),
     makeEntry(9, 'treasure_gallery', 'glass_witness', ['findables_floor'], 'boss'),
     makeEntry(9, 'spotlight_hunt', 'flip_par', ['shifting_spotlight'], 'boss')
@@ -449,17 +446,17 @@ const roleForArchetype = (entry: FloorScheduleEntry): FloorArchetypePressureRole
 const budgetExpectationForRole = (role: FloorArchetypePressureRole): string => {
     switch (role) {
         case 'baseline':
-            return 'standard enemy budget with readable recall pressure';
+            return 'standard pair budget with readable recall pressure';
         case 'pressure':
-            return 'elevated hazard or mutator budget with normal completion route';
+            return 'elevated mutator budget with a normal clear';
         case 'reward':
-            return 'pickup and cache reward budget with reduced combat pressure';
+            return 'pickup reward budget with reduced pressure';
         case 'recovery':
-            return 'lower threat utility budget for resource recovery';
+            return 'lower pressure budget for resource recovery';
         case 'boss':
-            return 'boss or trap-heavy budget with explicit defeat objective support';
+            return 'boss-multiplier floor with a decoy or trap-style mutator';
         case 'mystery':
-            return 'event-style information budget with altered card reading';
+            return 'information budget with altered tile reading';
     }
 };
 
@@ -487,7 +484,7 @@ const progressionRowForEntry = (entry: FloorScheduleEntry): FloorArchetypeProgre
         role,
         budgetExpectation: budgetExpectationForRole(role),
         softlockInvariant:
-            'inspectBoardFairness and inspectDungeonBoardTopology must report completion, lock, and objective routes for generated samples.',
+            'inspectBoardFairness must report a completion route for generated samples.',
         actId: entry.actId,
         actTitle: entry.actTitle,
         biomeId: entry.biomeId,
@@ -604,7 +601,7 @@ export const pickFloorScheduleEntry = (
     const cycleIndex = Math.floor(Math.max(0, safeLevel - 1) / ENDLESS_FLOOR_CYCLE.length);
     const rotated =
         idx + 1 === BOSS_ROTATION_CYCLE_POSITION
-            ? POSITION_NINE_WARDEN_ROTATION[cycleIndex % POSITION_NINE_WARDEN_ROTATION.length]
+            ? POSITION_NINE_ROTATION[cycleIndex % POSITION_NINE_ROTATION.length]
             : undefined;
     const base = rotated ?? ENDLESS_FLOOR_CYCLE[idx] ?? DEFAULT_ENDLESS_FLOOR_ENTRY;
     const rng = createMulberry32(hashStringToSeed(`floorSchedule:${rulesVersion}:${runSeed}:${level}`));

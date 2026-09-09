@@ -1474,3 +1474,72 @@ with its best score, achievements, run history and chain records intact and none
 fields; a journal entry naming a command this build no longer has fails its schema and is dropped;
 `save-data.test.ts` proves both. The save-field policy table is `save-176-v6`, with the run-local
 rows for the dungeon fields gone because the fields are.
+
+## Gen 177: the HUD, the book, and the bands
+
+Phase 1 closes here: what the dungeon left on the screen, in the Codex and in the bands.
+
+### The bar
+
+`RunShell` carries numbers and nothing about which run this is. The line that named the run
+(Classic, Practice, Wild, a vow) and the perfect-memory badge move into the pause menu, which is a
+menu and not the HUD; the floor number gains the one thing the thesis asked for that was missing, a
+marker once the run passes the profile's deepest floor (`profileDeepestFloor`, the greater of the
+last summary, the run history and the no-powers record, because `SaveData` never kept one number
+for it). The trait-route objective - "trigger two trait routes this floor" for a shard or a score
+kicker - was an objective, and objectives go with the dungeon; it is removed with its six run
+fields, its floor-clear rows, its inventory row and its SFX accent, and `GAME_RULES_VERSION` is 35.
+What stays on the bar still has a rule behind it: lives, shards and guards leave with T2.9, turns
+against par arrives with T2.6, the clock with Gen 178, and the mutator name goes when the §33.4
+profile rotation replaces the schedule's mutator output.
+
+### The book
+
+`generous_shrine` leaves the mutator roster: its only effect was an extra relic pick. Floor 10 of
+the cycle keeps its pickup breather and takes `flip_par` as its objective so it is not floor 3
+again, and the guard that forbids a repeated room is back. The Codex loses sixteen glossary terms
+and nine entries that described relics, Favor, shop gold, routes, side rooms, wagers, enemies,
+keys, exits and the daily challenge; every surviving entry is rewritten to the game that exists
+(`ENCYCLOPEDIA_VERSION` 28), and a test now greps every term, topic, mode, mutator and achievement
+for the vocabulary of the removed layer. Fourteen trait-interaction tags that named relics and
+perks nothing produces any more are gone from the interaction copy, the locked "Endless Mode"
+Codex card for a mode that does not exist is gone, and so are the relic overlay tone, the
+relic-draft overlay policy row and the three sampled cues nothing played.
+
+### The bands, re-baselined
+
+Every simulation, run on this commit:
+
+| | Gen 176 (six seeds) | Gen 177 (forty-eight seeds) |
+|---|---|---|
+| Fever share, clean / 10% miss / reference (`sim:cascade`) | 0.48 / 0.39 / 0.24 | **0.46 / 0.37 / 0.20** |
+| clean/reference Fever ratio | 2.00 | **2.30** |
+| Turns to clear, clean / reference | 4.1 / 6.1 | 4.1 / 6.3 |
+| Chunk share of score, clean | 0.31 | 0.31 |
+| Extreme Fever, clean / reference | 0.72 / 0.47 | 0.71 / 0.41 |
+| Pop ladder (`sim:pop --check`) | 1.93 / 3.22 / 3.58 / 6.82, spread 4.71 | 1.93 / 3.22 / 3.58 / 6.82, spread **4.89** |
+| Silent / thin / dominant systems (`sim:occupancy`) | 0 / 0 / 0 | **0 / 0 / 0** |
+| `sim:endless --floors=200`, fairness and playable issues | 0 / 0 | 0 / 0 |
+| Rating drift from a chunk | 0 | 0 |
+
+**The sample was the finding.** On the six seeds the check used to run, the rules-version bump
+alone - the same code, different boards - moved the clean/reference Fever ratio from 2.00 to 1.67
+against a band of 2, and the twelve-seed gate read 1.83. The reference player's share is the noisy
+half: 0.24 at six and twelve seeds, 0.22 at twenty-four, 0.20 from forty-eight to ninety-six,
+where it stops moving. `sim:cascade` and `cascade-balance-simulation.test.ts` both run forty-eight
+seeds now (six seconds), and the number they agree on is 2.3.
+
+**Ratcheted, both toward the measurement.** `cleanFeverShareOnBigFloors` min 0.15 → 0.3 (measured
+0.45; the 0.15 was set when the dungeon budget kept floors small, and a band at a third of the
+measurement would let half the loop's payoff go unnoticed). `referenceFeverShare` max 0.25 → 0.22
+(measured 0.20). `feverCleanOverReference` stays at 2 with 0.3 of margin. The pop bands and the
+occupancy ratchet were already at their measurements.
+
+### The three recorded debts
+
+- `KNOWN_LONG_RUN_DEBT` emptied in Gen 173 and stays empty; `gate:long-run` asserts it.
+- The build-catalog issue list (`build-strategy-playthrough-simulation.test.ts`, seventeen then
+  twelve exact issues) went with the builds in Gen 175: there is no catalog to have issues.
+- The relic ladder debt - `CASCADE_RELIC_BANDS.feverCleanOverReference` relaxed 2 → 1.6 in Gen 172
+  because three chain relics cut the clean player's Fever to a third - went with the relics in
+  Gen 175. The bare band it was relaxed from is the only one left, and it holds at 2.3.

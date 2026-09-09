@@ -5,12 +5,10 @@ import { getMemoryRecallFeedback } from './memory-recall-feedback';
 import { getRunEconomyRows } from './run-economy';
 import { runArrayCount } from './run-array-guards';
 import { normalizeSessionStats } from './session-stats-rules';
-import { getTraitRouteObjectiveStatus } from './trait-route-objectives';
 
 export type FeedbackCauseKind =
     | 'match_reward'
     | 'power_use'
-    | 'objective_progress'
     | 'economy_delta'
     | 'recall_feedback'
     | 'perfect_memory_locked';
@@ -102,23 +100,8 @@ export const getPerfectMemoryAttribution = (run: RunState): PerfectMemoryAttribu
 export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
     const rows: FeedbackCauseRow[] = [];
     const stats = normalizeSessionStats(run.stats);
-    const objective = getTraitRouteObjectiveStatus(run);
     const pm = getPerfectMemoryAttribution(run);
     const forgottenTileCount = runArrayCount(run.forgottenTileIdsThisFloor);
-
-    if (objective && (objective.progress > 0 || objective.completed)) {
-        rows.push(
-            causeRow({
-                id: 'objective-progress',
-                kind: 'objective_progress',
-                label: 'Objective',
-                summary: `${objective.progress}/${objective.required} ${objective.label}`,
-                detail: objective.completed ? 'Trait route objective paid out.' : 'Trait routes triggered this floor count toward the objective.',
-                tokens: ['objective', objective.completed ? 'resolved' : 'momentum'],
-                priority: 10
-            })
-        );
-    }
 
     if (run.findablesClaimedThisFloor > 0) {
         rows.push(
@@ -186,7 +169,6 @@ export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
 };
 
 export const getTouchHudDetailRows = (run: RunState): TouchHudDetailRow[] => {
-    const objective = getTraitRouteObjectiveStatus(run);
     const economy = getRunEconomyRows(run)
         .filter((row) => ['combo_shards', 'guard_tokens', 'findable_pickups'].includes(row.id))
         .map((row) => `${row.label} ${row.value}`)
@@ -196,13 +178,6 @@ export const getTouchHudDetailRows = (run: RunState): TouchHudDetailRow[] => {
     const stats = normalizeSessionStats(run.stats);
 
     return [
-        {
-            id: 'objective',
-            label: 'Objective',
-            value: objective ? `${objective.progress}/${objective.required}` : 'none',
-            detail: objective ? `${objective.label}: ${objective.detail}` : 'No trait route objective on this floor.',
-            tokens: ['objective']
-        },
         {
             id: 'memory',
             label: 'Recall',
@@ -265,7 +240,7 @@ export const LONG_RUN_TERMINOLOGY_ROWS: readonly TerminologyContractRow[] = [
         id: 'objective',
         term: 'Objective',
         contract: 'Floor goal with progress, completion, and HUD detail.',
-        stateOwner: 'RunState.traitRouteObjective* counters plus getTraitRouteObjectiveStatus',
+        stateOwner: 'BoardState.featuredObjectiveId plus getSecondaryObjectiveProgress',
         playerCopyRule: 'Use objective for goals only, not incidental rewards.'
     }
 ] as const;

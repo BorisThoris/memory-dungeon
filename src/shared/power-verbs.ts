@@ -199,7 +199,7 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => {
                 : hasOpenFlip(run)
                   ? 'Resolve the current flip first.'
                   : !hasRowShufflePayment(run)
-                    ? 'No row/swap charge or free row shuffle.'
+                    ? 'No row or swap charge.'
                     : null)
     },
     {

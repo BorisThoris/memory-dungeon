@@ -6,7 +6,6 @@ export interface PremiumEconomyPolicyRow {
         | 'ads_iap'
         | 'continues_lives_fairness'
         | 'accessibility'
-        | 'shop_gold'
         | 'core_power_access'
         | 'run_currency'
         | 'cosmetics';
@@ -48,15 +47,6 @@ export const PREMIUM_ECONOMY_POLICY_ROWS: readonly PremiumEconomyPolicyRow[] = [
         allowedInSaveData: false
     },
     {
-        id: 'shop_gold',
-        title: 'Shop gold',
-        status: 'allowed_gameplay_system',
-        copy: 'Temporary run shop gold is earned and spent inside a run only.',
-        uiCopy: 'Temporary run shop gold is earned and spent inside a run only.',
-        allowedInSaveData: false,
-        paymentLike: false
-    },
-    {
         id: 'core_power_access',
         title: 'Core power access',
         status: 'never_monetized',
@@ -69,7 +59,7 @@ export const PREMIUM_ECONOMY_POLICY_ROWS: readonly PremiumEconomyPolicyRow[] = [
         id: 'run_currency',
         title: 'Run currency is temporary',
         status: 'shipped',
-        copy: 'Shop gold, shards, favor, and run consumables are local run systems; they expire or reset by design.',
+        copy: 'Combo shards, guard tokens, and power charges are local run systems; they expire or reset by design.',
         allowedInSaveData: false
     },
     {
@@ -94,7 +84,7 @@ export const PREMIUM_ECONOMY_POLICY = {
 } as const;
 
 export interface PremiumEconomySurfacePolicy {
-    id: 'shop_gold' | 'cosmetics' | 'core_power_access';
+    id: 'run_resources' | 'cosmetics' | 'core_power_access';
     status: 'allowed_gameplay_system' | 'earned_progression' | 'never_monetized';
     paymentLike: false;
     uiCopy: string;
@@ -102,10 +92,12 @@ export interface PremiumEconomySurfacePolicy {
 
 export const PREMIUM_ECONOMY_SURFACE_ROWS: readonly PremiumEconomySurfacePolicy[] = [
     {
-        id: 'shop_gold',
+        // The run has no currency: shards, guard tokens and charges are the only things it banks,
+        // and all of them reset with the run. Nothing on this surface can look like a balance.
+        id: 'run_resources',
         status: 'allowed_gameplay_system',
         paymentLike: false,
-        uiCopy: 'Shop gold is temporary run currency, not a purchasable premium balance.'
+        uiCopy: 'Combo shards, guard tokens, and power charges are run-scoped resources, not a purchasable balance.'
     },
     {
         id: 'cosmetics',

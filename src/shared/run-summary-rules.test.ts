@@ -33,9 +33,6 @@ describe('createRunSummary', () => {
                 status: 'gameOver',
                 findablesClaimedThisFloor: 2,
                 findablesTotalThisFloor: 2,
-                traitRouteObjectiveCompletedThisFloor: true,
-                traitRouteObjectiveRewardClaimedThisFloor: true,
-                traitRouteObjectiveRewardTextThisFloor: '+1 combo shard',
                 stats: {
                     ...run.stats,
                     mismatches: 1,
@@ -73,10 +70,7 @@ describe('createRunSummary', () => {
         const summary = createRunSummary(
             {
                 ...journaledRun,
-                status: 'gameOver',
-                traitRouteObjectiveCompletedThisFloor: true,
-                traitRouteObjectiveRewardClaimedThisFloor: true,
-                traitRouteObjectiveRewardTextThisFloor: '+1 combo shard'
+                status: 'gameOver'
             },
             ['ACH_FIRST_CLEAR']
         ).lastRunSummary!;

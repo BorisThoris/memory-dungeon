@@ -10,7 +10,6 @@ import { countFindablePairs } from './board-tile-generation-rules';
 import { createTimerState } from './run-timer-rules';
 import { calculateRating } from './scoring-rules';
 import { normalizeSessionStats } from './session-stats-rules';
-import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
 
 export interface CreateNextFloorRunStateOptions {
     lives: number;
@@ -25,7 +24,6 @@ export const createNextFloorRunState = (
     options: CreateNextFloorRunStateOptions
 ): RunState => {
     const nextBoard = options.board;
-    const traitRouteObjective = getTraitRouteObjectiveSeed(nextBoard);
     const stats = normalizeSessionStats(run.stats);
 
     const nextRun: RunState = {
@@ -71,12 +69,6 @@ export const createNextFloorRunState = (
         shiftingSpotlightNonce: 0,
         flashPairRevealedTileIds: [],
         regionShuffleCharges: INITIAL_REGION_SHUFFLE_CHARGES,
-        traitRouteObjectiveProgressThisFloor: 0,
-        traitRouteObjectiveRequiredThisFloor: traitRouteObjective?.required ?? 0,
-        traitRouteObjectiveCompletedThisFloor: false,
-        traitRouteObjectiveRewardClaimedThisFloor: false,
-        traitRouteObjectiveRewardTextThisFloor: null,
-        traitRouteObjectiveTriggeredTagsThisFloor: [],
         timerState: createTimerState({ memorizeRemainingMs: options.memorizeRemainingMs }),
         lastLevelResult: null,
         stats: {

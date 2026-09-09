@@ -8,7 +8,6 @@ import { getInventoryRewardSignal } from '../../shared/meta-reward-signals';
 import { getRunEconomyRows } from '../../shared/run-economy';
 import { getRunInventoryRows, getRunLoadoutSummary, type RunInventoryItemId, type RunInventoryRow } from '../../shared/run-inventory';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
-import { getTraitRouteObjectiveStatus } from '../../shared/trait-route-objectives';
 
 export const modeTitle = (gameMode: string): string =>
     GAME_MODE_CODEX.find((mode) => mode.id === gameMode)?.title ?? gameMode;
@@ -19,29 +18,25 @@ export const createInventoryQuantityMap = (run: RunState): Map<string, number> =
 };
 
 type InventoryRunLoopSignal = {
-    id: 'chain' | 'pickup' | 'resource' | 'trait';
+    id: 'chain' | 'pickup' | 'resource';
     label: string;
     value: string;
     detail: string;
     nextCue: string;
-    tone: 'chain' | 'reward' | 'resource' | 'trait';
+    tone: 'chain' | 'reward' | 'resource';
 };
 
 type InventoryPayoffEngineSignal = {
-    label: 'Super stack' | 'Payoff engine' | 'Prime payoff';
+    label: 'Payoff engine' | 'Prime payoff';
     value: string;
     detail: string;
     nextCue: string;
-    tone: 'super' | 'burst' | 'setup';
+    tone: 'burst' | 'setup';
 };
 
 export const getInventoryRunLoopSignals = (run: RunState): InventoryRunLoopSignal[] => {
     const pickupClaimed = runNonNegativeInteger(run.findablesClaimedThisFloor);
     const pickupTotal = runNonNegativeInteger(run.findablesTotalThisFloor);
-    const traitRequired = runNonNegativeInteger(run.traitRouteObjectiveRequiredThisFloor);
-    const traitProgress = runNonNegativeInteger(run.traitRouteObjectiveProgressThisFloor);
-    const traitComplete = run.traitRouteObjectiveCompletedThisFloor || run.traitRouteObjectiveRewardClaimedThisFloor;
-    const traitRouteStatus = getTraitRouteObjectiveStatus(run);
     const comboShards = runNonNegativeInteger(run.stats.comboShards);
     const currentStreak = runNonNegativeInteger(run.stats.currentStreak);
     const bestStreak = runNonNegativeInteger(run.stats.bestStreak);
@@ -79,31 +74,6 @@ export const getInventoryRunLoopSignals = (run: RunState): InventoryRunLoopSigna
             detail: 'Shards push burst rewards; guards preserve tempo after misses.',
             nextCue: comboShards >= 2 ? 'Shard burst is primed' : 'Build x6 chain pressure',
             tone: 'resource'
-        },
-        {
-            id: 'trait',
-            label: 'Trait route',
-            value:
-                traitRequired > 0
-                    ? `${Math.min(traitProgress, traitRequired)}/${traitRequired}`
-                    : traitComplete
-                      ? 'paid'
-                      : 'scout',
-            detail: traitRouteStatus
-                ? `${traitRouteStatus.stateLabel}: ${traitRouteStatus.reward}.`
-                : traitComplete
-                  ? `Route paid: ${run.traitRouteObjectiveRewardTextThisFloor ?? 'trait route cashout'}.`
-                  : traitRequired > 0
-                    ? 'Move and match trait cards to cash the route objective.'
-                    : 'Look for adjacency routes that turn traits into payoff.',
-            nextCue: traitRouteStatus
-                ? traitRouteStatus.actionLabel
-                : traitComplete
-                  ? 'Bank the route payoff'
-                  : traitRequired > 0
-                    ? 'Cash trait route'
-                    : 'Scout adjacent trait pairs',
-            tone: 'trait'
         }
     ];
 };
@@ -125,30 +95,13 @@ export const getInventoryPayoffEngineSignal = (
                 runNonNegativeInteger(run.findablesClaimedThisFloor)
             );
         }
-        if (signal.id === 'resource') {
-            return (
-                runNonNegativeInteger(run.stats.comboShards) >= 2 ||
-                runNonNegativeInteger(run.stats.guardTokens) > 0
-            );
-        }
         return (
-            runNonNegativeInteger(run.traitRouteObjectiveRequiredThisFloor) > 0 ||
-            run.traitRouteObjectiveCompletedThisFloor ||
-            run.traitRouteObjectiveRewardClaimedThisFloor
+            runNonNegativeInteger(run.stats.comboShards) >= 2 ||
+            runNonNegativeInteger(run.stats.guardTokens) > 0
         );
     });
     const activeCount = activeLanes.length;
     const topLaneNames = activeLanes.map((signal) => signal.label.replace(' loop', '').replace(' bank', ''));
-
-    if (activeCount >= 4) {
-        return {
-            label: 'Super stack',
-            value: `${activeCount} payoffs live`,
-            detail: topLaneNames.slice(0, 4).join(' + '),
-            nextCue: activeLanes[0]?.nextCue ?? 'Keep stacking reward payoffs',
-            tone: 'super'
-        };
-    }
 
     if (activeCount >= 2) {
         return {
@@ -163,7 +116,7 @@ export const getInventoryPayoffEngineSignal = (
     return {
         label: 'Prime payoff',
         value: activeCount === 1 ? '1 payoff primed' : 'Prime beat',
-        detail: topLaneNames[0] ?? 'Open with a safe match to light chain, pickup, or trait payoffs.',
+        detail: topLaneNames[0] ?? 'Open with a safe match to light chain or pickup payoffs.',
         nextCue: runLoopSignals.find((signal) => signal.id === 'chain')?.nextCue ?? 'Start x3 loop',
         tone: 'setup'
     };

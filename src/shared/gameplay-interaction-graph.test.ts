@@ -102,7 +102,7 @@ describe('gameplay interaction graph', () => {
             }
         }
         expect(gameplayInteractionGraph.coverage).toMatchObject({
-            blockingKinds: expect.not.arrayContaining(['boss', 'exit', 'lock', 'objective']),
+            blockingKinds: expect.not.arrayContaining(['objective']),
             requiredObjectives: ['objective.floor_clear'],
             requiredSafetyNodes: ['safety.softlock_fairness']
         });

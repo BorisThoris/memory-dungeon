@@ -41,7 +41,6 @@
 | Item | Status | Notes | Epic |
 |------|--------|-------|------|
 | Wild tile identity | **Shippable** | `BoardState.tiles` plus `WILD_PAIR_KEY` are authoritative; `getWildTileIdFromBoard` provides a derived query without duplicated run state. | [epic-core-memory-loop](./epic-core-memory-loop.md) |
-| Fixed / puzzle `fixedTiles` boards | **Functional** | Built-in puzzles are layout-only tile lists unless a caller wires extra init (cursed pair, shifting spotlight seeds, etc.); see [`builtin-puzzles.ts`](../../src/shared/builtin-puzzles.ts) header and [PUZZLE_CONTRIBUTING.md](../PUZZLE_CONTRIBUTING.md). Authored payload validation enforces playable base structure. | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Gambit vs echo timing | **Functional** | Mismatch **resolve delay** differs 2-flip vs 3-flip (echo-aware vs not)—no bug flagged; revisit if balance changes. | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 
 ---
@@ -65,15 +64,13 @@
 
 ---
 
-## 5. Modes, puzzles, export
+## 5. Modes and export
 
 | Item | Status | Notes | Epic |
 |------|--------|-------|------|
 | Findables vs **?** decoy | **Functional** | **Findables** = bonus on real pairs (`findableKind`, mutator `findables_floor`). **`?`** on **`glass_floor`** = **singleton decoy** (not a pickup). `isBoardComplete` treats a **hidden** decoy as OK once all other tiles are matched/removed (avoids soft-lock). See [FINDABLES.md](../FINDABLES.md). | [FINDABLES.md](../FINDABLES.md) |
-| Puzzle user import | **Partial** | `puzzle-import.ts` validates authored payloads, but no main-menu file picker, parser, store start action, or imported-puzzle restart cache is wired. Builtins + [PUZZLE_CONTRIBUTING.md](../PUZZLE_CONTRIBUTING.md) remain the shipping path. | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | Export / import replay | **Functional** | Treat **best-effort** until restart/import paths are unified. | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | Naming: endless vs classic | **Functional** | Code “endless” vs UI “Classic Run” vs locked “Endless Mode”—onboarding hurdle; see catalog. | [epic-modes-and-runs](./epic-modes-and-runs.md), catalog |
-| Puzzle library size | **Functional** | Scope limit vs aspiration. | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 
 ---
 
@@ -95,12 +92,12 @@
 
 ---
 
-## 8. Lives, pressure, gauntlet
+## 8. Lives, pressure, run clock
 
 | Item | Status | Notes | Epic |
 |------|--------|-------|------|
-| Gauntlet | **Functional** | **5 / 10 / 15 minute** menu presets; `gauntletSessionDurationMs` on `RunState` preserves length for **restart**. No extra in-run curve beyond base game. | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
-| Score parasite | **Shippable** | HUD track + **Ward ×N** when ward charges remain; tooltips/aria match life-drain rules (not score). | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
+| Run clock | **Functional** | The setup sheet's pressure option puts a clock on the whole run; `gauntletSessionDurationMs` on `RunState` preserves the length for **restart**. No extra in-run curve beyond base game. | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
+| Score parasite | **Shippable** | Every fourth floor advance costs a life while the mutator is active; tooltips/aria match the life-drain rule (not score). Nothing absorbs the hit. | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
 
 ---
 
@@ -118,18 +115,7 @@
 | Item | Status | Notes | Epic |
 |------|--------|-------|------|
 | High-floor pool readability | **Functional** | Large pools are intentional; **wide_recall** does not yet change 3D legibility. | [epic-content-symbols-and-generation](./epic-content-symbols-and-generation.md) |
-| Puzzle vs catalog renames | **Functional** | Built-in puzzles pin symbol/label pairs—must stay synced with global renames. | [epic-content-symbols-and-generation](./epic-content-symbols-and-generation.md) |
 | Symbol band rotation balance | **Functional** | Confirm per-level curve when balancing ([GAMEPLAY_SYSTEMS_ANALYSIS.md](../GAMEPLAY_SYSTEMS_ANALYSIS.md) §8). | systems analysis |
-
----
-
-## 11. Route-world pipeline
-
-| Item | Status | Notes | Epic |
-|------|--------|-------|------|
-| Route cards and hard-route anchors | **Functional** | Safe/Greed/Mystery route choices feed next-board generation. Hard non-boss floors add Final Ward, Elite Cache, or Omen Seal; boss route floors add Keystone Pair. | [epic-route-world-pipeline](./epic-route-world-pipeline.md) |
-| Route action rules | **Functional** | Match claims route rewards; destroy denies eligible route rewards; peek reveals Mystery Veil/Secret Door/Omen Seal/Mimic Cache without claiming; Stray remove refuses Keystone Pair, Final Ward, and Omen Seal. | [epic-route-world-pipeline](./epic-route-world-pipeline.md) |
-| Route-world presentation depth | **Functional** | Rendering/copy surfaces distinguish route families. Remaining polish is final art/audio and deeper trap-family tuning, not missing gameplay plumbing. | [epic-route-world-pipeline](./epic-route-world-pipeline.md) |
 
 ---
 
@@ -151,13 +137,11 @@
 
 ---
 
-## 14. Challenge contracts & relics
+## 14. Challenge contracts
 
 | Item | Status | Notes | Epic |
 |------|--------|-------|------|
 | Scholar / pin vow discoverability | **Functional** | New players may not distinguish modes without codex or locked power feedback. | [epic-contracts-challenge-runs](./epic-contracts-challenge-runs.md) |
-| Relic pool depth | **Functional** | Small fixed pool; not dynamic rotation in current design. | [epic-relics](./epic-relics.md) |
-| Relic “immediate” hooks | **Functional** | Some `applyRelicImmediate` paths read as no-ops but fold into other helpers—easy to misread as missing ([GAMEPLAY_SYSTEMS_ANALYSIS.md](../GAMEPLAY_SYSTEMS_ANALYSIS.md) §8). | systems analysis |
 
 ---
 
@@ -189,7 +173,7 @@ From [GAMEPLAY_SYSTEMS_ANALYSIS.md](../GAMEPLAY_SYSTEMS_ANALYSIS.md) §10:
 
 1. Keep **MUTATORS.md**, **catalog**, and **game.ts + renderer** aligned as mechanics evolve.
 2. **Optional:** Additional e2e for board flows; **balance** follow-ups per [BALANCE_NOTES.md](../BALANCE_NOTES.md) and `tile-symbol-catalog` curves.
-3. **`mutators.ts`** — light coverage in **`src/shared/mutators.test.ts`** (catalog/daily table + `hasMutator`); full behavior remains in **`game.test.ts`** and integration/e2e.
+3. **`mutators.ts`** — light coverage in **`src/shared/mutators.test.ts`** (catalog + `hasMutator`); full behavior remains in **`game.test.ts`** and integration/e2e.
 
 **Floor mutator schedule (tests):** `src/shared/floor-mutator-schedule.ts` drives endless per-floor mutator lists and `floorTag` pacing (`pickFloorScheduleEntry`, `usesEndlessFloorSchedule`, `FLOOR_SCHEDULE_RULES_VERSION`). **`src/shared/floor-mutator-schedule.test.ts`** already covers mode gates, cycle wrap, the boss-floor branch that sometimes appends `distraction_channel` without duplicating mutators, and the [BALANCE_NOTES.md](../BALANCE_NOTES.md) seed smoke. When you change schedule rules, bump **`FLOOR_SCHEDULE_RULES_VERSION`** in `floor-mutator-schedule.ts` and extend the suite per the header checklist there (and keep [epic-mutators](./epic-mutators.md) **Schedules** in sync).
 
@@ -203,7 +187,7 @@ From [GAMEPLAY_SYSTEMS_ANALYSIS.md](../GAMEPLAY_SYSTEMS_ANALYSIS.md) §10:
 |------|-------------------|
 | [epic-board-rendering-assists](./epic-board-rendering-assists.md) | 3D presentation mutators, prop wiring |
 | [epic-mutators](./epic-mutators.md) | Visual reading vs score tax, sticky UX |
-| [epic-core-memory-loop](./epic-core-memory-loop.md) | Board-derived wild identity, puzzle board completeness |
+| [epic-core-memory-loop](./epic-core-memory-loop.md) | Board-derived wild identity |
 | [epic-powers-and-interactions](./epic-powers-and-interactions.md) | `powersUsedThisRun` / perfect clear semantics, flash pair |
 | [epic-meta-progression](./epic-meta-progression.md) | Telemetry sink, achievement clarity |
 | [epic-audio-feedback](./epic-audio-feedback.md) | Procedural gameplay SFX vs product audio pass |
@@ -213,9 +197,8 @@ From [GAMEPLAY_SYSTEMS_ANALYSIS.md](../GAMEPLAY_SYSTEMS_ANALYSIS.md) §10:
 | [epic-scoring-objectives](./epic-scoring-objectives.md) | Thematic clarity when visuals stubbed |
 | [epic-run-session-flow](./epic-run-session-flow.md) | Timer pairing, undo edge cases |
 | [epic-contracts-challenge-runs](./epic-contracts-challenge-runs.md) | Discoverability |
-| [epic-lives-and-pressure](./epic-lives-and-pressure.md) | Gauntlet depth, parasite explanation |
-| [epic-content-symbols-and-generation](./epic-content-symbols-and-generation.md) | Readability curve, puzzle sync |
-| [epic-relics](./epic-relics.md) | Pool size / discovery |
+| [epic-lives-and-pressure](./epic-lives-and-pressure.md) | Run clock depth, parasite explanation |
+| [epic-content-symbols-and-generation](./epic-content-symbols-and-generation.md) | Readability curve |
 | [epic-readonly-meta-ui](./epic-readonly-meta-ui.md) | Illustrative vs live data |
 | [epic-choose-your-path](./epic-choose-your-path.md) | CYP: drag-first library, magnifier search, touch + mouse; optional per-mode art later |
 

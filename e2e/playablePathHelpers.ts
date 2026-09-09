@@ -233,6 +233,19 @@ function escapeRegExp(value: string): string {
     return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+/**
+ * Which run this is reads from the pause menu, not the bar: the bar carries numbers only. Opens
+ * the menu, checks the identity row, and resumes so the caller's run is where it left it.
+ */
+export async function expectRunIdentity(page: Page, pattern: RegExp): Promise<void> {
+    await page.getByRole('button', { name: /pause and open the run menu/i }).click({ force: true });
+    const overlay = page.getByTestId('game-pause-overlay');
+    await expect(overlay).toBeVisible({ timeout: 20_000 });
+    await expect(overlay.getByTestId('pause-run-identity')).toContainText(pattern);
+    await overlay.getByRole('button', { name: /^resume$/i }).click({ force: true });
+    await expect(overlay).toBeHidden();
+}
+
 /** The in-run shell has one menu button; Inventory, Codex and Settings open from the pause dialog. */
 export async function openRunMenuItem(page: Page, item: 'inventory' | 'codex' | 'settings'): Promise<void> {
     await page.getByRole('button', { name: /pause and open the run menu/i }).click({ force: true });

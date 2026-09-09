@@ -365,12 +365,12 @@ test.describe('Mobile layout (renderer)', () => {
             /*
              * This used to open an Info disclosure and read a cause strip that named the floor's
              * hazards in text. Both went with the HUD rebuild: hazards are marked on the tiles
-             * themselves rather than restated beside the board, and the bar carries the mode and
-             * four numbers. The click was silent once the summary went, so the assertion below it
-             * timed out rather than failing.
+             * themselves rather than restated beside the board, and the bar carries numbers only.
+             * The click was silent once the summary went, so the assertion below it timed out
+             * rather than failing.
              */
             await expectLocatorFullyInWindowViewport(page, page.getByTestId('game-hud'), 8);
-            await expect(page.getByTestId('hud-mode-identity')).toBeVisible();
+            await expect(page.getByTestId('hud-score')).toBeVisible();
             await expectLocatorFullyInWindowViewport(page, page.getByTestId('game-action-dock'), 8);
         });
 

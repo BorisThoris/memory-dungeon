@@ -39,8 +39,8 @@ test.describe('Long-run feedback HUD readability', () => {
             await expect(hud).toBeVisible();
             await expectLocatorFullyInWindowViewport(page, hud, 8);
 
-            // The bar says which run this is before it says anything about numbers.
-            await expect(page.getByTestId('hud-mode-identity')).toBeVisible();
+            // The bar is numbers only; the score is the one that is always there.
+            await expect(page.getByTestId('hud-score')).toBeVisible();
 
             const stats = hud.getByRole('group', { name: /run stats/i });
             for (const testId of ['hud-floor', 'hud-lives', 'hud-score', 'hud-combo-shards']) {

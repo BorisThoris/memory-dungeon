@@ -59,6 +59,18 @@ but "does the game still end":
    by an older build loads with its records intact and none of the removed fields, a journal entry
    naming a removed command fails its schema and is dropped, and nothing is migrated forward. The two
    pickups that only acted on the layer, the ward spark and the scout glint, went with it.
+7. **Gen 177 — what the layer left on the screen and in the book.** The HUD bar loses the line that
+   named the run and the perfect-memory badge (both live in the pause menu now) and gains the one thing
+   the thesis asked for that was missing, a marker on the floor number once a run passes the profile's
+   deepest floor. The trait-route objective - "trigger two trait routes this floor" for a shard - was an
+   objective, and objectives went with the dungeon; it is removed with its six run fields (rules version
+   35). `generous_shrine`, a mutator whose only effect was an extra relic pick, leaves the roster. The
+   Codex loses sixteen glossary terms and nine entries that described relics, routes, side rooms, wagers,
+   enemies, keys, exits and the daily challenge, and every surviving entry is rewritten to the game that
+   exists; the hand-written mechanics catalog is rebuilt against the contract as it stands; the three
+   epic documents for the removed systems, the dungeon audio coverage table and the three sampled cues
+   nothing plays any more (`relic-offer-open`, `relic-pick`, `wager-arm`) are deleted. Every band is
+   re-baselined and recorded in `BALANCE_NOTES.md`.
 
 ## How to get any of it back
 
@@ -324,6 +336,11 @@ With them, the same commit deleted the modules the list below does not name beca
 `floor-completion-transitions.ts`, the renderer's `dungeonPressSurfaceState.ts`,
 `TileBoardEnemyHazardMarker.tsx` and `useGameScreenTraitRouteTargets.ts`, and
 `scripts/audit-dungeon-topology.ts`.
+
+Gen 177 took the documents and copy that still described them: `docs/gameplay/epic-relics.md`,
+`docs/gameplay/epic-route-world-pipeline.md`, `docs/gameplay/hazard-tile-matrix.md`, the renderer's
+`dungeonAudioEventCoverage.ts`, and `trait-route-objectives.ts`, the one rule that had been written for
+the route layer and outlived it.
 
 - `src/shared/dungeon-blueprint-policy-rules.ts`
 - `src/shared/dungeon-board-generation-rules.ts`

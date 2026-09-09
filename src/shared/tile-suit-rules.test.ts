@@ -165,11 +165,23 @@ describe('the deal profile', () => {
 
     it('scatters a rush floor and clumps a breather, on the same tiles', () => {
         const tiles = pairs(18);
-        const clumped = dealBoardSuits(tiles, 6, 91, 9, GAME_RULES_VERSION, 'clumped');
+        /*
+         * Eight seeds, averaged. A scatter is a shuffle, and one shuffle in ten lands half its
+         * pairs beside their own suit anyway: on a single seed the margin read 0.32 under one
+         * rules version and 0.10 under the next, with the deal untouched. Over eight seeds it
+         * reads about 0.3 either way, which is the profile and not the draw.
+         */
+        const seeds = [91, 7, 13, 42, 77, 101, 123, 555];
+        const margin =
+            seeds.reduce(
+                (sum, seed) =>
+                    sum +
+                    sameSuitNeighbourRate({ columns: 6, tiles: dealBoardSuits(tiles, 6, seed, 9, GAME_RULES_VERSION, 'clumped') }) -
+                    sameSuitNeighbourRate({ columns: 6, tiles: dealBoardSuits(tiles, 6, seed, 9, GAME_RULES_VERSION, 'scattered') }),
+                0
+            ) / seeds.length;
+        expect(margin).toBeGreaterThan(0.15);
         const scattered = dealBoardSuits(tiles, 6, 91, 9, GAME_RULES_VERSION, 'scattered');
-        expect(sameSuitNeighbourRate({ columns: 6, tiles: clumped })).toBeGreaterThan(
-            sameSuitNeighbourRate({ columns: 6, tiles: scattered }) + 0.15
-        );
         // Same tiles either way, and both halves of every pair still share a suit.
         expect(scattered.map((t) => t.id).sort()).toEqual(tiles.map((t) => t.id).sort());
         for (const tile of scattered) {

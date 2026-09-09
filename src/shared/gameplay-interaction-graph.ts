@@ -6,24 +6,15 @@ export type GameplayInteractionMechanicKind =
     | 'board'
     | 'trait'
     | 'power'
-    | 'build'
     | 'core'
     | 'economy'
     | 'feedback'
     | 'findable'
     | 'hazard'
-    | 'boss'
-    | 'exit'
     | 'inventory'
-    | 'lock'
-    | 'perk'
     | 'persistence'
     | 'progression'
-    | 'relic'
-    | 'reward'
-    | 'route'
     | 'simulation'
-    | 'shop'
     | 'stats'
     | 'objective'
     | 'safety';
@@ -116,24 +107,15 @@ const mechanicKindSchema = z.enum([
     'board',
     'trait',
     'power',
-    'build',
     'core',
     'economy',
     'feedback',
     'findable',
     'hazard',
-    'boss',
-    'exit',
     'inventory',
-    'lock',
-    'perk',
     'persistence',
     'progression',
-    'relic',
-    'reward',
-    'route',
     'simulation',
-    'shop',
     'stats',
     'objective',
     'safety'
@@ -221,7 +203,7 @@ const hasCompletionRoute = (mechanic: GameplayInteractionMechanic): boolean =>
     gameplayInteractionGraph.edges.some(
         (edge) =>
             edge.source === mechanic.id &&
-            (edge.target === 'objective.floor_clear' || edge.target === 'exit.primary' || edge.kind === 'unblocks')
+            (edge.target === 'objective.floor_clear' || edge.kind === 'unblocks')
     );
 
 export const validateGameplayInteractionGraph = (
@@ -383,7 +365,7 @@ export const auditGameplayInteractionGraph = (
         )
         .map((mechanic) => mechanic.id);
     const generatedFloorCoverageGapIds = graph.mechanics
-        .filter((mechanic) => ['boss', 'exit', 'hazard', 'lock', 'objective', 'trait'].includes(mechanic.kind))
+        .filter((mechanic) => ['hazard', 'objective', 'trait'].includes(mechanic.kind))
         .filter(
             (mechanic) =>
                 !mechanic.tests.some(

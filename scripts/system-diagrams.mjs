@@ -428,19 +428,16 @@ const buildTraitDiagram = (repoRoot) => {
     return {
         id: 'trait-systems',
         title: 'Trait Systems',
-        summary: 'Traits are a third gameplay layer: placement, matching, blockers, interactions, rewards, powers, and HUD visibility.',
+        summary: 'Traits are a second layer on the pairs: placement, matching, blockers, interactions, powers, and tile-face visibility.',
         nodes: [
             node('trait_catalog', 'Trait Catalog', 'domain', 'shared', 'Trait definitions, combos, blockers, and interaction hooks.', evidence(repoRoot, ['src/shared/tile-trait-rules.ts'])),
-            node('trait_generation', 'Trait Generation', 'domain', 'shared', 'Board generation seeds route-visible trait opportunities.', evidence(repoRoot, ['src/shared/board-generation.ts', 'src/shared/board-tile-generation-rules.ts'])),
+            node('trait_generation', 'Trait Generation', 'domain', 'shared', 'Board generation seeds trait pairs from floor 2 on.', evidence(repoRoot, ['src/shared/board-generation.ts', 'src/shared/board-tile-generation-rules.ts'])),
             node('trait_actions', 'Trait Actions', 'domain', 'shared', 'Matches and board powers create, move, reveal, or block trait opportunities.', evidence(repoRoot, ['src/shared/board-power-actions.ts', 'src/shared/game.ts'])),
-            node('trait_rewards', 'Trait Rewards', 'economy', 'shared', 'Trait objectives pay score toward the floor.', evidence(repoRoot, ['src/shared/trait-route-objectives.ts'])),
             node('trait_feedback', 'Trait Feedback', 'ui', 'renderer', 'HUD and tile faces make combo routes readable immediately.', evidence(repoRoot, ['src/renderer/components/RunShell.tsx', 'src/renderer/cardFace']))
         ],
         edges: [
             edge('trait_catalog', 'trait_generation', 'informs placement'),
             edge('trait_generation', 'trait_actions', 'creates opportunities'),
-            edge('trait_actions', 'trait_rewards', 'drives build value'),
-            edge('trait_rewards', 'trait_catalog', 'expands catalog access'),
             edge('trait_actions', 'trait_feedback', 'explains state')
         ],
         findings: [
@@ -448,7 +445,7 @@ const buildTraitDiagram = (repoRoot) => {
                 'traits-as-core-loop',
                 'info',
                 'Traits are now core-loop material',
-                'Keep trait opportunities visible from early floors and track trait-match-route floor share in simulation whenever adding new interactions or blockers.',
+                'Keep trait opportunities visible from early floors and track trait-match floor share in simulation whenever adding new interactions or blockers.',
                 traitEvidence
             )
         ],
@@ -457,9 +454,9 @@ const buildTraitDiagram = (repoRoot) => {
                 'trait-route-visibility-gate',
                 'P1',
                 'Trait Systems',
-                'Keep traits visible as a third mechanic',
+                'Keep traits visible as a second mechanic',
                 'New trait interactions should update simulation visibility metrics, first-run HUD smoke, and at least one `yarn gate:action-loop` board-power interaction case.',
-                'Trait routes stay present early and interact with movement/shuffle tools instead of becoming rare flavor.',
+                'Traits stay present early and interact with movement/shuffle tools instead of becoming rare flavor.',
                 traitEvidence,
                 'done',
                 'yarn gate:action-loop'

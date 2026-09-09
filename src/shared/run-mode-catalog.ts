@@ -58,11 +58,11 @@ export const RUN_MODE_CATALOG: readonly RunModeDefinition[] = [
     {
         id: 'classic',
         title: 'Classic Run',
-        shortDescription: 'Shippable endless-style descent: procedural floors, route choices, shop gold, relic milestones, and escalating pair counts.',
+        shortDescription: 'The endless descent: procedural floors of suits and clumps, the chain and Fever, and pair counts that keep climbing.',
         startContract: {
             label: 'Start signal',
-            signal: 'HUD mode reads Classic Dungeon.',
-            testId: 'hud-mode-identity'
+            signal: 'The pause menu names the run Classic Dungeon.',
+            testId: 'pause-run-identity'
         },
         availabilityDetail:
             'This is the live long-run ruleset for v1. It uses the internal endless simulation but is branded Classic until the future ultra-long Endless variant ships.',

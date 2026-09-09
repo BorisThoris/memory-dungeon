@@ -5,10 +5,10 @@ import type { RunState } from './contracts';
  *
  * There is one mode now, so the question is really "what did I set this run up as?". The setup
  * sheet's options are flags on the run (`practiceMode`, `wildMenuRun`, `dungeonShowcaseRun`, the
- * clock) or the shape of `activeContract`, and the HUD names whichever one is in force
- * (`testId: 'hud-mode-identity'`). The order below is the same precedence `createRestartRun` uses
- * to decide what a retry restarts, so the name on the bar and the run a retry gives you can never
- * disagree.
+ * clock) or the shape of `activeContract`, and the pause menu names whichever one is in force
+ * (`testId: 'pause-run-identity'`; the bar itself carries only numbers). The order below is the
+ * same precedence `createRestartRun` uses to decide what a retry restarts, so the name in the menu
+ * and the run a retry gives you can never disagree.
  */
 
 export interface RunModeIdentity {

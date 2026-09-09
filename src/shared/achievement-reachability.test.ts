@@ -12,7 +12,7 @@ import { makeBoard, makeTile } from './test/game-fixtures';
  * An achievement whose threshold exceeds the content that exists is unearnable, and looks exactly
  * like one nobody has got round to yet. `ACH_PUZZLE_SOLVER` asked for five puzzle completions while
  * the game shipped three builtin puzzles — the same "declared but unreachable" defect as the two
- * wardens and `generous_shrine`, except this one was introduced by the commit that added it.
+ * wardens, except this one was introduced by the commit that added it.
  *
  * These are ceiling checks, not simulations: each asserts the bar sits at or under the most a
  * player could ever accumulate.

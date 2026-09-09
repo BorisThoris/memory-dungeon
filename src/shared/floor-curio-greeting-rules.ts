@@ -60,8 +60,10 @@ export const FLOOR_CURIO_GREETINGS: Readonly<Record<FloorCurioId, FloorCurioGree
     },
     hoarding_rat: {
         curioId: 'hoarding_rat',
-        reply: 'It considers you at length, then pushes two coins across the floor with its nose and immediately regrets it.',
-        gained: 'Two coins, grudgingly. Nothing down here takes them.',
+        reply: 'It considers you at length, moves itself between you and the pile, and does not blink.',
+        gained: 'Nothing more. It gave you one look on the way down, and a hoarder does not part with two.',
+        // The rat's gift is its arrival peek; the greeting pays nothing on purpose, because a
+        // hoarder that hands over a second thing when asked nicely is not a hoarder.
         effect: NOTHING
     },
     gossiping_skull: {

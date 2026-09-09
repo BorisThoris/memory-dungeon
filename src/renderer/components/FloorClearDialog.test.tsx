@@ -31,7 +31,7 @@ const renderDialog = (overrides: Partial<FloorClearDialogProps> = {}) => {
 
 describe('FloorClearDialog', () => {
     it('names who is on the next floor before the stairs are taken', () => {
-        renderDialog({ residentLine: 'Downstairs: A hoarding rat. It has been collecting.' });
+        renderDialog({ residentLine: 'Downstairs: A hoarding rat. It has been collecting. Looks. It will let you have one.' });
         expect(screen.getByTestId('floor-clear-resident')).toHaveTextContent(/a hoarding rat/i);
     });
 

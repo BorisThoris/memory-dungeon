@@ -16,8 +16,8 @@ export interface ModalAction {
 
 type OverlayModalActionPlacement = OverlayActionPlacement | 'auto';
 
-/** META-009: pause=blue-neutral, floor=gold+success well, relic=violet — only when `ornamentalHeaderPlate`. */
-type OverlayModalHeaderPlateTone = 'neutral' | 'success' | 'pause' | 'relic' | 'danger';
+/** META-009: pause=blue-neutral, floor=gold+success well — only when `ornamentalHeaderPlate`. */
+type OverlayModalHeaderPlateTone = 'neutral' | 'success' | 'pause' | 'danger';
 
 interface OverlayModalProps {
     title: string;
@@ -34,7 +34,7 @@ interface OverlayModalProps {
     ornamentalHeaderPlate?: boolean;
     /**
      * DS-010: with `ornamentalHeaderPlate`, use a flat title band (no MetaFrame cornice) for routine summaries
-     * (e.g. floor cleared). Relic / pause keep the forged header unless this is set.
+     * (e.g. floor cleared). Pause keeps the forged header unless this is set.
      */
     quietHeaderPlate?: boolean;
     /** When `ornamentalHeaderPlate` is set: chrome wash + MetaFrame glow (see {@link OverlayModalHeaderPlateTone}). */
@@ -64,10 +64,6 @@ const headerPlateToneClass = (tone: OverlayModalHeaderPlateTone): string => {
         return styles.headerPlateFramePause;
     }
 
-    if (tone === 'relic') {
-        return styles.headerPlateFrameRelic;
-    }
-
     if (tone === 'danger') {
         return styles.headerPlateFrameDanger;
     }
@@ -82,9 +78,6 @@ const quietHeaderToneClass = (tone: OverlayModalHeaderPlateTone): string => {
     if (tone === 'pause') {
         return styles.headerQuietTonePause;
     }
-    if (tone === 'relic') {
-        return styles.headerQuietToneRelic;
-    }
     if (tone === 'danger') {
         return styles.headerQuietToneDanger;
     }
@@ -98,10 +91,6 @@ const overlayToneClass = (tone: OverlayModalHeaderPlateTone): string => {
 
     if (tone === 'pause') {
         return styles.modalTonePause;
-    }
-
-    if (tone === 'relic') {
-        return styles.modalToneRelic;
     }
 
     if (tone === 'danger') {

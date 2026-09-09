@@ -2,13 +2,6 @@ import type { RunState } from './contracts';
 import { runArrayCount } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
-import { getTraitRouteObjectiveStatus } from './trait-route-objectives';
-
-export interface GameplayFeedbackObjectiveSnapshot {
-    label: string;
-    progress: number;
-    required: number;
-}
 
 export interface GameplayFeedbackCriticalSnapshot {
     lives: number;
@@ -26,7 +19,6 @@ export interface GameplayFeedbackCriticalSnapshot {
     flashPairCharges: number;
     strayRemoveCharges: number;
     pinnedTileCount: number;
-    objective: GameplayFeedbackObjectiveSnapshot | null;
     recallFocus: number;
     recallMatchesThisFloor: number;
     recallMistakesThisFloor: number;
@@ -56,7 +48,6 @@ export const GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES = {
     flashPairCharges: 'flashPairCharges',
     strayRemoveCharges: 'strayRemoveCharges',
     pinnedTileCount: 'pinnedTileIds',
-    objective: 'objectiveCompleted',
     recallFocus: 'recallFocus',
     recallMatchesThisFloor: 'recallMatchesThisFloor',
     recallMistakesThisFloor: 'recallMistakesThisFloor',
@@ -67,19 +58,6 @@ export const GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES = {
 export const GAMEPLAY_FEEDBACK_CRITICAL_FIELDS = Object.keys(
     GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES
 ) as (keyof GameplayFeedbackCriticalSnapshot)[];
-
-export const getGameplayFeedbackObjectiveSnapshot = (
-    run: RunState
-): GameplayFeedbackObjectiveSnapshot | null => {
-    const traitRoute = getTraitRouteObjectiveStatus(run);
-    return traitRoute
-        ? {
-              label: traitRoute.label,
-              progress: runNonNegativeInteger(traitRoute.progress),
-              required: runNonNegativeInteger(traitRoute.required)
-          }
-        : null;
-};
 
 /**
  * Normalized state that previously fed React delta reconstruction. Keeping this
@@ -106,7 +84,6 @@ export const getGameplayFeedbackCriticalSnapshot = (
         flashPairCharges: runNonNegativeInteger(run.flashPairCharges),
         strayRemoveCharges: runNonNegativeInteger(run.strayRemoveCharges),
         pinnedTileCount: runArrayCount(run.pinnedTileIds),
-        objective: getGameplayFeedbackObjectiveSnapshot(run),
         recallFocus: runNonNegativeInteger(run.recallFocus),
         recallMatchesThisFloor: runNonNegativeInteger(run.recallMatchesThisFloor),
         recallMistakesThisFloor: runNonNegativeInteger(run.recallMistakesThisFloor),

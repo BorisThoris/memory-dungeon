@@ -59,7 +59,7 @@
             "id": "trait-route-visibility-gate",
             "priority": "P1",
             "system": "Trait Systems",
-            "title": "Keep traits visible as a third mechanic",
+            "title": "Keep traits visible as a second mechanic",
             "status": "done",
             "command": "yarn gate:action-loop",
             "minimumEvidence": 4

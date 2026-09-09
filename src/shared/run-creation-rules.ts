@@ -10,7 +10,6 @@ import {
     type WeakerShuffleMode
 } from './contracts';
 import { filterMutatorsByContentLock } from './content-lock-state';
-import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import { pickFloorCurio, seatFloorCurio } from './floor-curio-rules';
 import { countFindablePairs } from './board-tile-generation-rules';
@@ -94,7 +93,6 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
             suppressFindables: useOnboardingSafeFirstFloor
         });
 
-    const traitRouteObjective = getTraitRouteObjectiveSeed(board);
     const run: RunState = {
         status: 'memorize',
         lives: INITIAL_LIVES,
@@ -119,12 +117,6 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         shuffleNonce: 0,
         activeMutators,
         featuredObjectiveStreak: 0,
-        traitRouteObjectiveProgressThisFloor: 0,
-        traitRouteObjectiveRequiredThisFloor: traitRouteObjective?.required ?? 0,
-        traitRouteObjectiveCompletedThisFloor: false,
-        traitRouteObjectiveRewardClaimedThisFloor: false,
-        traitRouteObjectiveRewardTextThisFloor: null,
-        traitRouteObjectiveTriggeredTagsThisFloor: [],
         activeContract: options.activeContract ?? null,
         practiceMode: options.practiceMode ?? false,
         dailyDateKeyUtc: options.dailyDateKeyUtc ?? null,

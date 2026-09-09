@@ -87,12 +87,10 @@ describe('GLD-FB long-run feedback read models', () => {
             'Next memory move: Cash in clean recall.'
         );
         expect(getTouchHudDetailRows(run).map((row) => row.id)).toEqual([
-            'objective',
             'memory',
             'perfect_memory',
             'economy'
         ]);
-        expect(getTouchHudDetailRows(run).find((row) => row.id === 'objective')?.detail).toContain('Trait routes');
         expect(getTouchHudDetailRows(run).find((row) => row.id === 'memory')?.detail).toContain('room log');
         expect(getTouchHudDetailRows(run).find((row) => row.id === 'memory')?.detail).toContain('Recall is clear');
         expect(getTouchHudDetailRows(run).find((row) => row.id === 'memory')?.detail).toContain(

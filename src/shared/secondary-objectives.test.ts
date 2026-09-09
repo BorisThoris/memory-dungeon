@@ -7,7 +7,6 @@ import {
     getFloorClearLevelResultTags,
     getLevelResultTagDefinitions,
     getSecondaryObjectiveProgress,
-    getSecondaryObjectiveStatusRows,
     getVisibleLevelResultTags,
     LEVEL_RESULT_TAG_DEFINITIONS
 } from './secondary-objectives';
@@ -97,37 +96,15 @@ describe('REG-048 secondary objective clarity', () => {
         const visible = getVisibleLevelResultTags([
             'flip_par',
             'boss_floor',
-            'trait_route_objective',
+            'objective_streak',
             'perfect_scout'
         ]);
 
-        expect(visible.map((tag) => tag.id)).toEqual(['boss_floor', 'trait_route_objective', 'perfect_scout']);
+        expect(visible.map((tag) => tag.id)).toEqual(['boss_floor', 'objective_streak', 'perfect_scout']);
     });
 
     it.each(['__proto__', 'constructor', 'toString'])('rejects prototype result tag %s', (tag) => {
         expect(getLevelResultTagDefinitions([tag])).toEqual([]);
         expect(formatLevelResultTagLabel(tag)).toBe(tag);
-    });
-
-    it('includes active trait route objectives in secondary objective rows', () => {
-        const run = {
-            ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false })),
-            traitRouteObjectiveProgressThisFloor: 1,
-            traitRouteObjectiveRequiredThisFloor: 2,
-            traitRouteObjectiveCompletedThisFloor: false,
-            traitRouteObjectiveRewardClaimedThisFloor: false,
-            traitRouteObjectiveRewardTextThisFloor: null
-        };
-
-        expect(getSecondaryObjectiveStatusRows(run)).toEqual(
-            expect.arrayContaining([
-                expect.objectContaining({
-                    id: 'trait_route_objective',
-                    label: 'Trait routes',
-                    condition: 'Trigger 2 trait routes.',
-                    reward: '+1 combo shard'
-                })
-            ])
-        );
     });
 });

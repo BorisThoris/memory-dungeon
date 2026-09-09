@@ -37,7 +37,6 @@ describe('mechanics-encyclopedia', () => {
     it('REG-064 glossary locks preferred player-facing labels for recurring mechanics', () => {
         expect(MECHANICS_GLOSSARY.find((row) => row.id === 'perfect_memory')?.preferredLabel).toBe('Perfect Memory');
         expect(MECHANICS_GLOSSARY.find((row) => row.id === 'recall_focus')?.preferredLabel).toBe('Recall Focus');
-        expect(MECHANICS_GLOSSARY.find((row) => row.id === 'shop_gold')?.preferredLabel).toBe('shop gold');
         expect(MECHANICS_GLOSSARY.find((row) => row.id === 'combo_shards')?.avoidLabels).toContain('paid shards');
         expect(MECHANICS_GLOSSARY.every((row) => row.shortDefinition.length > 0)).toBe(true);
         expect(glossaryTermById('missing_term' as Parameters<typeof glossaryTermById>[0]).id).toBe('lives');
@@ -46,35 +45,32 @@ describe('mechanics-encyclopedia', () => {
     it('REG-101 glossary avoids forbidden monetization and internal labels', () => {
         expect(MECHANICS_GLOSSARY.every((row) => row.avoidLabels.length > 0)).toBe(true);
         expect(MECHANICS_GLOSSARY.flatMap((row) => row.avoidLabels)).not.toContain('shop currency');
-        expect(MECHANICS_GLOSSARY.find((row) => row.id === 'shop_gold')?.avoidLabels).toContain('premium gold');
     });
 
-    it('DNG-064 covers shipped dungeon terms in the glossary and Codex board guide', () => {
-        const requiredDungeonTerms = [
-            'dungeon_enemies',
-            'enemy_patrols',
-            'trap_cards',
-            'dungeon_keys',
-            'locked_exits',
-            'dungeon_rooms',
-            'rest_shrines',
-            'treasure_caches',
-            'route_cards',
-            'boss_floors',
-            'elite_anchors',
-            'dungeon_objectives'
-        ];
-
-        for (const id of requiredDungeonTerms) {
-            const row = MECHANICS_GLOSSARY.find((term) => term.id === id);
-            expect(row?.shortDefinition.length, id).toBeGreaterThan(20);
-            expect(row?.surfaces.length, id).toBeGreaterThanOrEqual(2);
+    it('names no system the dungeon layer took with it', () => {
+        // Relics, shop gold, routes, side rooms, wagers, wardens, keys and exits are gone from the
+        // rules, so no reference copy may still describe them as if a player could meet them.
+        const removed = /relic|shop gold|route card|side room|wager|warden|dungeon key|locked exit/i;
+        for (const term of MECHANICS_GLOSSARY) {
+            expect(term.shortDefinition, term.id).not.toMatch(removed);
+            expect(term.preferredLabel, term.id).not.toMatch(removed);
         }
-
-        const guide = ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS.find((topic) => topic.id === 'board_dungeon_glossary');
-        expect(guide?.description).toContain('enemy patrols');
-        expect(guide?.description).toContain('locked exits');
-        expect(guide?.description).toContain('dungeon objectives');
+        const topics = [
+            ...CODEX_CORE_TOPICS,
+            ...ENCYCLOPEDIA_POWER_TOPICS,
+            ...ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS,
+            ...ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS,
+            ...ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS,
+            ...ENCYCLOPEDIA_CONTRACT_TOPICS,
+            ...ENCYCLOPEDIA_FEATURED_RUN_TOPICS,
+            ...GAME_MODE_CODEX,
+            ...Object.values(MUTATOR_CATALOG),
+            ...Object.values(ACHIEVEMENT_CATALOG)
+        ];
+        for (const topic of topics) {
+            expect(topic.description, topic.id).not.toMatch(removed);
+            expect(topic.title, topic.id).not.toMatch(removed);
+        }
     });
 
     it('ACHIEVEMENT_CATALOG has an entry per AchievementId with id/title/description aligned to keys', () => {
@@ -131,21 +127,14 @@ describe('mechanics-encyclopedia', () => {
         }
     });
 
-    it('documents route-world cards, anchors, reveal rules, and side rooms', () => {
-        expect(CODEX_CORE_TOPICS.find((topic) => topic.id === 'route_world')?.description).toContain(
-            'route-specific card families'
+    it('describes the floor schedule by the objective and streak rules that exist', () => {
+        const schedule = ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS.find(
+            (topic) => topic.id === 'sys_floor_schedule_and_featured_objective'
         );
-        expect(ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS.find((topic) => topic.id === 'board_route_cards')?.description)
-            .toContain('Safe Ward');
-        expect(ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS.find((topic) => topic.id === 'board_route_reveal')?.description)
-            .toContain('Omen Seal');
-        expect(
-            ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS.find((topic) => topic.id === 'board_boss_elite_anchors')
-                ?.description
-        ).toContain('Elite Cache');
-        expect(
-            ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS.find((topic) => topic.id === 'board_route_side_rooms')?.description
-        ).toContain('relic weighting');
+        expect(schedule?.description).toContain('featured objective');
+        expect(schedule?.description).toContain('objective streak');
+        expect(ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS.find((topic) => topic.id === 'pickup_findables')?.description)
+            .toContain('two kinds');
     });
 
     it('keeps Codex coverage for power scope, assists, and presentation mutators', () => {

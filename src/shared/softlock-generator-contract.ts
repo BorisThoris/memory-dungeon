@@ -23,7 +23,6 @@ import {
 } from './gameplay-core-playthrough-solver';
 import { createNewRun } from './run-creation-rules';
 import { getBoardTraitInteractionPreviewLines } from './tile-trait-rules';
-import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
 
 /*
  * Nine of these went with the dungeon layer: `locks`, `shops`, `keys`, `levers`, `exits`,
@@ -34,7 +33,6 @@ import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
 export type SoftlockContractCoverageKey =
     | 'traits'
     | 'traitInteractions'
-    | 'traitRouteObjectives'
     | 'finalPairStates';
 
 export interface SoftlockGeneratorScenario {
@@ -68,7 +66,6 @@ export interface SoftlockGeneratorContractResult {
 const COVERAGE_KEYS: readonly SoftlockContractCoverageKey[] = [
     'traits',
     'traitInteractions',
-    'traitRouteObjectives',
     'finalPairStates'
 ];
 
@@ -110,19 +107,12 @@ export const createGeneratedBoardSolverRun = (
     seed: number,
     rulesVersion = GAME_RULES_VERSION
 ): RunState => {
-    const traitRouteObjective = getTraitRouteObjectiveSeed(board);
     return {
         ...createNewRun(0, { runSeed: seed, runRulesVersionOverride: rulesVersion }),
         board,
         status: 'playing',
         glassDecoyActiveThisFloor: boardHasGlassDecoy(board),
-        findablesTotalThisFloor: countFindablePairs(board.tiles),
-        traitRouteObjectiveProgressThisFloor: 0,
-        traitRouteObjectiveRequiredThisFloor: traitRouteObjective?.required ?? 0,
-        traitRouteObjectiveCompletedThisFloor: false,
-        traitRouteObjectiveRewardClaimedThisFloor: false,
-        traitRouteObjectiveRewardTextThisFloor: null,
-        traitRouteObjectiveTriggeredTagsThisFloor: []
+        findablesTotalThisFloor: countFindablePairs(board.tiles)
     };
 };
 
@@ -174,7 +164,6 @@ const addCoverage = (
 ): void => {
     if (board.tiles.some((tile) => tile.tileTraitKind != null)) coverage.traits += 1;
     if (getBoardTraitInteractionPreviewLines(board).length > 0) coverage.traitInteractions += 1;
-    if (getTraitRouteObjectiveSeed(board) != null) coverage.traitRouteObjectives += 1;
     if (projection === 'final_pair' || projection === 'cleared_board') coverage.finalPairStates += 1;
 };
 
@@ -203,19 +192,6 @@ const recordInspection = (
                   }
               ]
             : [];
-    const traitRouteObjective = projection === 'generated' ? getTraitRouteObjectiveSeed(board) : null;
-    const matchTraitInteractionLines = traitRouteObjective
-        ? getBoardTraitInteractionPreviewLines(board, 'match')
-        : [];
-    const traitRouteObjectiveIssues: BoardFairnessIssue[] =
-        traitRouteObjective && traitRouteObjective.required > matchTraitInteractionLines.length
-            ? [
-                  {
-                      code: 'trait_route_objective_unreachable',
-                      message: `Trait route objective requires ${traitRouteObjective.required} match interaction(s), but only ${matchTraitInteractionLines.length} are triggerable.`
-                  }
-              ]
-            : [];
     const completionRouteIssues: BoardFairnessIssue[] = report.hasCompletionRoute
         ? []
         : [
@@ -227,8 +203,7 @@ const recordInspection = (
     const issues = [
         ...report.issues,
         ...completionRouteIssues,
-        ...generatedTraitInteractionIssues,
-        ...traitRouteObjectiveIssues
+        ...generatedTraitInteractionIssues
     ];
     if (issues.length > 0) {
         result.failures.push({

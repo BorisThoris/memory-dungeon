@@ -15,7 +15,6 @@ describe('game-catalog encyclopedia re-exports', () => {
         expect(GameCatalog.ENCYCLOPEDIA_FEATURED_RUN_TOPICS).toBe(Encyclopedia.ENCYCLOPEDIA_FEATURED_RUN_TOPICS);
         expect(GameCatalog.GAME_MODE_CODEX).toBe(Encyclopedia.GAME_MODE_CODEX);
         expect(GameCatalog.MUTATOR_CATALOG).toBe(Encyclopedia.MUTATOR_CATALOG);
-        expect(GameCatalog.VISUAL_ENDLESS_MODE_LOCKED).toBe(Encyclopedia.VISUAL_ENDLESS_MODE_LOCKED);
         expect(GameCatalog.ENCYCLOPEDIA_VERSION).toBe(Encyclopedia.ENCYCLOPEDIA_VERSION);
         expect(GameCatalog.ACHIEVEMENT_CATALOG).toBe(Encyclopedia.ACHIEVEMENT_CATALOG);
     });

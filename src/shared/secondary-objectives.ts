@@ -3,15 +3,13 @@ import { getFeaturedObjectiveLabel } from './floor-mutator-schedule';
 import { runArrayCount } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { getFeaturedObjectiveRewardCopy, getFlipParLimit } from './secondary-objective-rules';
-import { getTraitRouteObjectiveStatus } from './trait-route-objectives';
 
 export type SecondaryObjectiveState = 'active' | 'completed' | 'failed';
 export type LevelResultTagId =
     | FeaturedObjectiveId
     | 'objective_streak'
     | 'boss_floor'
-    | 'perfect_scout'
-    | 'trait_route_objective';
+    | 'perfect_scout';
 
 export interface LevelResultTagDefinition {
     id: LevelResultTagId;
@@ -23,7 +21,7 @@ export interface LevelResultTagDefinition {
 }
 
 export interface SecondaryObjectiveProgress {
-    id: FeaturedObjectiveId | 'trait_route_objective';
+    id: FeaturedObjectiveId;
     label: string;
     status: SecondaryObjectiveState;
     state: SecondaryObjectiveState;
@@ -89,14 +87,6 @@ export const LEVEL_RESULT_TAG_DEFINITIONS: Record<LevelResultTagId, LevelResultT
         journalCopy: 'Cleared with no mistakes, no peek reveal, and no shuffle/swap/destroy tools.',
         priority: 65,
         rewardBearing: false
-    },
-    trait_route_objective: {
-        id: 'trait_route_objective',
-        label: 'Trait routes',
-        shortCopy: 'Trait route objective cleared.',
-        journalCopy: 'Triggered the floor-local trait-route objective before leaving.',
-        priority: 74,
-        rewardBearing: true
     }
 };
 
@@ -205,24 +195,7 @@ export const getSecondaryObjectiveProgress = (run: RunState): SecondaryObjective
 
 export const getSecondaryObjectiveStatusRows = (run: RunState): SecondaryObjectiveProgress[] => {
     const progress = getSecondaryObjectiveProgress(run);
-    const traitRoute = getTraitRouteObjectiveStatus(run);
-    return [
-        ...(progress ? [progress] : []),
-        ...(traitRoute
-            ? [
-                  {
-                      id: 'trait_route_objective' as const,
-                      label: traitRoute.label,
-                      status: traitRoute.completed ? 'completed' as const : 'active' as const,
-                      state: traitRoute.completed ? 'completed' as const : 'active' as const,
-                      condition: `Trigger ${traitRoute.required} trait ${traitRoute.required === 1 ? 'route' : 'routes'}.`,
-                      detail: traitRoute.detail,
-                      failureReason: null,
-                      reward: traitRoute.reward
-                  }
-              ]
-            : [])
-    ];
+    return progress ? [progress] : [];
 };
 
 export const formatLevelResultObjectiveLine = (result: LevelResult): string | null => {

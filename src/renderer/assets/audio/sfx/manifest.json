@@ -14,10 +14,7 @@
         "shuffle-full": { "file": "shuffle-full.ogg", "category": "shuffle" },
         "shuffle-quick": { "file": "shuffle-quick.ogg", "category": "shuffle" },
         "floor-clear": { "file": "floor-clear.ogg", "category": "power" },
-        "relic-offer-open": { "file": "relic-offer-open.ogg", "category": "power" },
-        "countdown-pressure": { "file": "countdown-pressure.ogg", "category": "pressure" },
-        "relic-pick": { "file": "relic-pick.ogg", "category": "power" },
-        "wager-arm": { "file": "wager-arm.ogg", "category": "power" }
+        "countdown-pressure": { "file": "countdown-pressure.ogg", "category": "pressure" }
     },
     "matchTierDepthRanges": {
         "match-tier-low": [1, 5],
