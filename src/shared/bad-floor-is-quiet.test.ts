@@ -12,10 +12,11 @@ import { isSingletonUtilityPairKey } from './tile-identity';
 /**
  * Thesis §67, trace 4: a bad floor is quiet, not punishing (task T2.10).
  *
- * Floor eleven, a tired player: four misses, then matches, then three more misses, then the board
- * is small enough to remember and the rest goes cleanly. What must be true at the end - the floor
- * cleared, the run went on, the score went up, the bonus was small, and nothing said "you did
- * badly" - is checked here against the real turn path on a real generated floor, not a fixture.
+ * Floor eleven, a tired player: four misses, then matches, then three more misses, and a miss
+ * between matches for the rest of the floor - a bad floor all the way down rather than a bad
+ * opening a player recovers from. What must be true at the end - the floor cleared, the run went
+ * on, the score went up, the bonus was small, and nothing said "you did badly" - is checked here
+ * against the real turn path on a real generated floor, not a fixture.
  */
 const FLOOR = 11;
 const SEED = 42_001;
@@ -63,17 +64,23 @@ describe('a bad floor is quiet, not punishing (thesis §67, trace 4)', () => {
         const scoreBefore = run.stats.totalScore;
         const par = parTurnsForFloor(run.board!.pairCount);
         const ceiling = turnCeilingForFloor(run.board!.pairCount);
-        // Four misses, then matches; three more misses once something has been matched; then the
-        // board is small enough to remember and the rest goes cleanly. Every match pops, so the
-        // floor can end inside the script - what matters is that it ends cleared, never over.
+        // Four misses, then matches; three more misses once something has been matched. Every match
+        // pops, so the floor can end inside the script - what matters is that it ends cleared,
+        // never over.
         const script: Array<'miss' | 'match'> = ['miss', 'miss', 'miss', 'miss', 'match', 'miss', 'match', 'miss', 'match', 'miss'];
         for (const step of script) {
             if (run.status !== 'playing') break;
             run = step === 'miss' ? playMiss(run) : playMatch(run);
             expect(run.status, `after a ${step}`).not.toBe('gameOver');
         }
+        // And a miss between matches for the rest of it. A player having a bad floor is having it
+        // when the floor ends too; a clean finish would earn a tier honestly, and this trace is
+        // about the floor that never gets one.
         while (run.status === 'playing') {
             run = playMatch(run);
+            if (run.status === 'playing') {
+                run = playMiss(run);
+            }
         }
 
         // The floor cleared and the run went on: no life to lose, and the ceiling was never near.

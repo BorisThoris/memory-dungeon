@@ -6,12 +6,13 @@ import { EXTREME_FEVER_BONUS_TAG, getFloorClearMomentumBonus } from './floor-cle
 
 describe('the momentum bonus ladder', () => {
     it('names the tier the momentum holds on this floor, and nothing below Clean', () => {
-        // Twelve pairs: Sharp from 5, Fever from 8. The ladder pays nothing itself any more: gold
+        // Twelve pairs: Sharp from 6, Fever from 8. The ladder pays nothing itself any more: gold
         // left with the shop (Gen 174) and the shard with the life economy (Gen 184). The tier it
         // names multiplies the floor-end bonus (Gen 181).
         expect(getFloorClearMomentumBonus({ chain: 2, cascadedPairs: 0, pairsOnFloor: 12 })).toEqual({ momentum: 2, tier: 'none' });
         expect(getFloorClearMomentumBonus({ chain: 3, cascadedPairs: 0, pairsOnFloor: 12 })).toEqual({ momentum: 3, tier: 'clean' });
-        expect(getFloorClearMomentumBonus({ chain: 3, cascadedPairs: 2, pairsOnFloor: 12 })).toEqual({ momentum: 5, tier: 'sharp' });
+        expect(getFloorClearMomentumBonus({ chain: 3, cascadedPairs: 2, pairsOnFloor: 12 })).toEqual({ momentum: 5, tier: 'clean' });
+        expect(getFloorClearMomentumBonus({ chain: 4, cascadedPairs: 2, pairsOnFloor: 12 })).toEqual({ momentum: 6, tier: 'sharp' });
         expect(getFloorClearMomentumBonus({ chain: 5, cascadedPairs: 3, pairsOnFloor: 12 })).toEqual({ momentum: 8, tier: 'fever' });
     });
 });

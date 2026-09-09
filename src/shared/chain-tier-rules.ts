@@ -43,9 +43,16 @@ export const CHAIN_TIER_FEVER_FROM = 10;
  * Fever arrived on zero percent of floors even for a player who never missed, because a Clean
  * break removes pairs and a ten-to-fourteen-pair floor ends before a chain of ten can exist. The
  * ladder was eating itself. A floor is the unit of this game, so the top rungs are a share of the
- * floor: Fever is "you ran half this floor clean", which is what it always meant.
+ * floor: Fever is "you ran most of this floor clean", which is what it always meant.
+ *
+ * **Gen 191 raised both shares**, from 0.4 and 0.5, because the boards under them grew. Momentum
+ * counts the pairs a break took as well as the matches made, and a break on a bigger board takes
+ * more, so momentum climbs faster than the pair count it is measured against: on the wider curve
+ * a player missing a quarter of their flips reached Fever on 0.32 of floors against a band of
+ * 0.22. The shares are the correction, and they leave the reference player at 0.18 with a clean
+ * player at 0.45 - a separation of 2.5 against a band of 1.5. `docs/BALANCE_NOTES.md`, Gen 191.
  */
-export const CHAIN_TIER_SHARP_SHARE = 0.4;
+export const CHAIN_TIER_SHARP_SHARE = 0.45;
 /*
  * Half the floor, not two thirds.
  *
@@ -61,9 +68,10 @@ export const CHAIN_TIER_SHARP_SHARE = 0.4;
  * 0.45 takes the clean-over-reference separation to 1.88 against a band of 2, because half a floor
  * is a run a sloppy player also puts together. 0.5 keeps the separation at 2.64 and takes the
  * census, which plays at a 15% miss rate, from 0.05 to 0.119 - over the 0.1 bar a `common` system
- * has to clear, which is what this rung was always meant to be.
+ * has to clear, which is what this rung was always meant to be. Gen 191 moved it to 0.6 for the
+ * reason above: three fifths of a bigger floor is the same run of play half of a smaller one was.
  */
-export const CHAIN_TIER_FEVER_SHARE = 0.5;
+export const CHAIN_TIER_FEVER_SHARE = 0.6;
 export const CHAIN_TIER_SHARP_MIN = 4;
 export const CHAIN_TIER_FEVER_MIN = 7;
 

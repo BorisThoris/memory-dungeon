@@ -749,8 +749,8 @@ describe('game rules', () => {
         // Floor 4 is the first procedural floor, and the pair curve (`pair-curve.ts`) deals it.
         expect(board.level).toBe(4);
         expect(board.pairCount).toBe(pairsForFloor(4));
-        expect(board.pairCount).toBe(8);
-        expect(board.tiles).toHaveLength(16);
+        expect(board.pairCount).toBe(9);
+        expect(board.tiles).toHaveLength(18);
         expect(board.columns).toBeGreaterThanOrEqual(2);
         // Per-tile budget over the curve's board: 6 tiles at floor 1, 12 at floor 2, 14 at floor 3,
         // 28 at floor 20 on the floor of the per-tile budget, 34 at floor 29 - under the cap now
@@ -758,8 +758,8 @@ describe('game rules', () => {
         expect(getMemorizeDuration(1)).toBe(1950);
         expect(getMemorizeDuration(2)).toBe(3756);
         expect(getMemorizeDuration(3)).toBe(4214);
-        expect(getMemorizeDuration(20)).toBe(3080);
-        expect(getMemorizeDuration(29)).toBe(3740);
+        expect(getMemorizeDuration(20)).toBe(3740);
+        expect(getMemorizeDuration(29)).toBe(4180);
     });
 
     it('uses staged symbol bands by level when category_letters is off', () => {

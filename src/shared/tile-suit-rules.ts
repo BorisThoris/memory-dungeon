@@ -350,11 +350,19 @@ const breakablePairCount = (tiles: readonly Tile[]): number => {
  * by one bounded wave, so the chain ladder had nothing left to pay out with: Sharp was worth
  * three hundredths of a pair over Clean (`chunk-break-rules.ts`). Depth needs somewhere to go.
  *
- * One suit per six pairs gives the reaction room to run. Measured by `yarn sim:pop`, the ladder
- * widens from 1.67 / 1.91 / 1.92 / 3.34 pairs per match to 1.18 / 2.32 / 2.71 / 3.71: the spread
- * from a lone match to Fever goes 1.66 to 2.53, and the thinnest rung goes from a hundredth of a
- * pair to four tenths. It still reads as a difficulty curve, the way a bubble shooter opens with
- * two colours and adds more; it just climbs at the pace the break can use.
+ * One suit per six pairs gave the reaction room to run on the boards of the time. Measured by
+ * `yarn sim:pop`, the ladder widened from 1.67 / 1.91 / 1.92 / 3.34 pairs per match to
+ * 1.18 / 2.32 / 2.71 / 3.71: the spread from a lone match to Fever went 1.66 to 2.53, and the
+ * thinnest rung went from a hundredth of a pair to four tenths.
+ *
+ * **Gen 191 moved it to one suit per four**, because the boards under it changed. A floor showed
+ * two suits until floor twenty and cleared in three turns, which is both halves of the same
+ * complaint: too few kinds of card, and the whole screen gone in two goes. The pair curve grew
+ * (`pair-curve.ts`) and the palette grew with it, so a floor reaches three suits at floor 5 and
+ * four by floor 11 while a suit still holds about as many pairs as it did before. It still reads
+ * as a difficulty curve, the way a bubble shooter opens with two colours and adds more. The ladder
+ * pays for it in pairs - Sharp's step over Clean goes 0.61 to 0.50 - and takes it back in score,
+ * where the rungs come out x3.35 / x2.52 / x4.73, more even than they were.
  *
  * `MIN_PAIRS_FOR_TWO_SUITS` is the legibility floor. The suit is the map (Gen 117): a board dealt
  * one suit has no map at all, only a uniform field, and six breakable pairs is enough that a
@@ -362,7 +370,7 @@ const breakablePairCount = (tiles: readonly Tile[]): number => {
  * the Sharp rung against leaving the palette to the ratio alone, and that is the trade this file
  * makes on purpose: a readable board first.
  */
-export const SUIT_TARGET_PAIRS = 6;
+export const SUIT_TARGET_PAIRS = 4;
 export const MIN_PAIRS_FOR_TWO_SUITS = 6;
 
 export const suitCountForPairs = (pairs: number): number => {
@@ -371,8 +379,26 @@ export const suitCountForPairs = (pairs: number): number => {
     return Math.max(legibilityFloor, Math.min(TILE_SUITS.length, Math.round(count / SUIT_TARGET_PAIRS)));
 };
 
-export const suitCountForDeal = (profile: SuitDealProfile, pairs = Number.POSITIVE_INFINITY): number =>
-    Math.min(profile === 'two_suit' ? 2 : TILE_SUITS.length, suitCountForPairs(pairs));
+/**
+ * How wide a palette a floor of this shape can carry.
+ *
+ * The palette and the pop trade against each other, and how a floor deals its suits decides the
+ * rate. A clumped floor gives each suit one region, so a third and a fourth suit cost the break
+ * almost nothing: the region is smaller but it is still a region. A scattered floor has no regions
+ * at all, and every suit added to one thins what is left until a match touches nothing of its own
+ * kind - measured at Gen 191, a third suit halves a scattered floor's pop rate, from about 0.7 of
+ * matches to about 0.36, which is the failure Gen 148 existed to fix.
+ *
+ * So a scattered floor keeps two suits however big it is, and a spotlight floor keeps its two by
+ * definition. Everything else grows with the board.
+ */
+export const SCATTERED_SUIT_CEILING = 2;
+
+export const suitCountForDeal = (profile: SuitDealProfile, pairs = Number.POSITIVE_INFINITY): number => {
+    const ceiling =
+        profile === 'two_suit' || profile === 'scattered' ? SCATTERED_SUIT_CEILING : TILE_SUITS.length;
+    return Math.min(ceiling, suitCountForPairs(pairs));
+};
 
 export const dealBoardSuits = (
     tiles: readonly Tile[],

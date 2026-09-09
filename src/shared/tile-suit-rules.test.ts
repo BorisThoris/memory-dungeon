@@ -174,15 +174,22 @@ describe('the deal profile', () => {
          * Eight seeds, averaged. A scatter is a shuffle, and one shuffle in ten lands half its
          * pairs beside their own suit anyway: on a single seed the margin read 0.32 under one
          * rules version and 0.10 under the next, with the deal untouched. Over eight seeds it
-         * reads about 0.3 either way, which is the profile and not the draw.
+         * reads the profile and not the draw.
+         *
+         * Measured over chance rather than raw, because the two profiles no longer carry the same
+         * palette (Gen 191 caps a scattered floor at two suits). A board of `s` suits laid at
+         * random puts a tile beside its own suit about one time in `s`, so a raw rate compares a
+         * four-suit board against a two-suit one and says nothing about how either was dealt.
          */
         const seeds = [91, 7, 13, 42, 77, 101, 123, 555];
+        const overChance = (dealt: Tile[]): number =>
+            sameSuitNeighbourRate({ columns: 6, tiles: dealt }) - 1 / new Set(dealt.map((tile) => tile.suit)).size;
         const margin =
             seeds.reduce(
                 (sum, seed) =>
                     sum +
-                    sameSuitNeighbourRate({ columns: 6, tiles: dealBoardSuits(tiles, 6, seed, 9, GAME_RULES_VERSION, 'clumped') }) -
-                    sameSuitNeighbourRate({ columns: 6, tiles: dealBoardSuits(tiles, 6, seed, 9, GAME_RULES_VERSION, 'scattered') }),
+                    overChance(dealBoardSuits(tiles, 6, seed, 9, GAME_RULES_VERSION, 'clumped')) -
+                    overChance(dealBoardSuits(tiles, 6, seed, 9, GAME_RULES_VERSION, 'scattered')),
                 0
             ) / seeds.length;
         expect(margin).toBeGreaterThan(0.15);
@@ -204,13 +211,16 @@ describe('the deal profile', () => {
     it('reads the profile off the built floor: a rush floor opens scattered, a breather clumped', () => {
         let clumped = 0;
         let scattered = 0;
+        // Over chance, as above: the two archetypes carry different palettes on the same floor.
+        const overChance = (board: { columns: number; tiles: Tile[] }): number =>
+            sameSuitNeighbourRate(board) - 1 / new Set(board.tiles.map((tile) => tile.suit)).size;
         for (const runSeed of [21, 22, 23, 24]) {
             // Floor 14: deep enough that both archetypes carry more than one suit, which the
             // measure needs (a one-suit floor reads as clumped and shuffled at the same time).
             const breather = buildBoard(14, { runSeed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', floorArchetypeId: 'breather' });
             const rush = buildBoard(14, { runSeed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', floorArchetypeId: 'rush_recall' });
-            clumped += sameSuitNeighbourRate(breather);
-            scattered += sameSuitNeighbourRate(rush);
+            clumped += overChance(breather);
+            scattered += overChance(rush);
         }
         expect(clumped / 4).toBeGreaterThan(scattered / 4 + 0.1);
     });

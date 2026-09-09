@@ -15,12 +15,12 @@ import {
 
 describe('scoring-rules', () => {
     it('calculates memorize duration and run modifiers', () => {
-        // Per-tile budget × the curve's default board: 6 tiles at floor 1, 14 at floor 3, 34 at
+        // Per-tile budget × the curve's default board: 6 tiles at floor 1, 14 at floor 3, 38 at
         // floor 29, which the tempered curve keeps under the cap.
         expect(getMemorizeDuration(1)).toBe(1950);
         expect(getMemorizeDuration(1.9)).toBe(1950);
         expect(getMemorizeDuration(3)).toBe(4214);
-        expect(getMemorizeDuration(29)).toBe(3740);
+        expect(getMemorizeDuration(29)).toBe(4180);
         expect(getMemorizeDuration(29)).toBe(getMemorizePerTileBudget(29) * pairsForFloor(29) * 2);
         // A real board wins over the default size: a 10-tile floor 3 gets its own budget.
         expect(getMemorizeDuration(3, 10)).toBe(3010);

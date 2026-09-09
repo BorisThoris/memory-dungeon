@@ -1989,3 +1989,77 @@ small and carry too few suits for any of this to have room. A floor is **three t
 shows **two suits** up to floor 12 (`yarn sim:pop`), so the whole screen clears in two goes and no
 reaction ever needs a second wave. Gen 191 widens the palette and the pair curve, and the ripple is
 the number to re-measure there.
+
+## Gen 191: the boards grew, and the palette grew with them
+
+Gen 190's note ended by naming the reason the ripple had nowhere to fire: a floor was three turns
+long and showed two suits until floor twenty, so the whole screen went in two goes and no reaction
+ever needed a second wave. This generation is that repair. Three constants moved, and the third
+moved because the first two did.
+
+### The pair curve, anchored to the authored floors
+
+`pairsForFloor` used to be one square-root curve over every floor, which quietly collided with the
+three authored teaching floors: a layout the deal cannot fill is abandoned for the ordinary deal
+with nothing failing, so a curve that stopped returning 3, 6 and 7 would have turned floors 1 to 3
+off in silence. The curve now returns the authored sizes for those floors by name and takes over
+from floor 4, anchored on the last of them. `pair-curve.test.ts` fails if the two ever disagree.
+
+| Floor | 4 | 6 | 8 | 12 | 20 | 30 | 50 |
+|---|---|---|---|---|---|---|---|
+| Was | 8 | 9 | 10 | 12 | 14 | 17 | 21 |
+| Now | 9 | 11 | 12 | 14 | 17 | 19 | 23 |
+
+### The palette, one suit per four pairs instead of six
+
+With bigger boards a suit can be one in four rather than one in six and still hold about as many
+pairs as it did. A floor now reaches three suits at floor 5 and four by floor 11, against two suits
+until floor twenty.
+
+The cost is real and it is not evenly spread. A **scattered** floor - a rush, speed or trap floor -
+has no regions by construction, and every suit added to one thins what is left until a match
+touches nothing of its own kind: measured, a third suit takes a scattered floor's pop rate from
+about 0.7 of matches to **0.36**, which is exactly the failure Gen 148 existed to fix. So the
+palette is now capped by how a floor deals: a scattered floor keeps two suits however big it is,
+a spotlight floor keeps its two by definition, and a clumped floor grows. With that cap the worst
+floor in the first twelve pops on 0.63 of matches, unchanged from before this generation.
+
+### The tier shares, 0.45 and 0.6
+
+Momentum counts the pairs a break took as well as the matches made, so it climbs faster on a bigger
+board than the pair count it is measured against. On the new curve a reference player reached Fever
+on 0.32 of floors against a band of 0.22 - Fever stops being a thing you reach and becomes a thing
+that happens. Raising the shares from 0.4 and 0.5 corrects it without touching the reaction itself.
+
+| Reference player (misses a quarter) | Turns | Pairs a floor | Fever share | Score |
+|---|---|---|---|---|
+| Gen 190 | 4.1 | 8.08 | 0.19 | 7480 |
+| Gen 191, shares unchanged | 5.5 | 9.37 | 0.35 | 7755 |
+| Gen 191, shares raised | 5.4 | 9.26 | **0.18** | 6796 |
+
+A clean player reaches Fever on 0.45 of floors, so the separation is 2.5 against a band of 1.5.
+
+### What it bought, and what it did not
+
+The ladder got deeper, which is the thing Gen 189's reach experiment concluded could only be bought
+by changing the boards:
+
+| Rung | Pairs, Gen 190 | Pairs, Gen 191 | Score step, Gen 190 | Score step, Gen 191 |
+|---|---|---|---|---|
+| A lone match | 1.91 | 1.76 | — | — |
+| Clean | 3.19 | 2.97 | ×3.24 | ×3.35 |
+| Sharp | 3.50 | 3.47 | ×2.24 | **×2.52** |
+| Fever | 6.95 | 7.84 | ×4.02 | **×4.73** |
+
+Sharp's step over Clean in pairs goes 0.32 to 0.50, the spread from a lone match to Fever 5.04 to
+6.08, and every rung's score step is more even than it was. A floor now takes 5.4 turns for the
+reference player against 4.1, which is the "two goes and the screen is gone" complaint answered.
+
+**The ripple is still not back.** It reads 0.02 of breaks at zero misses and 0.00 at the reference
+rate, against 0.07 before the settle. Bigger boards moved it from nothing to nearly nothing, and
+that is as far as board size can carry it: the cause is a rule, not a size. A Sharp or Fever break
+has unbounded reach, so it takes the whole suit in the first wave and leaves nothing for a second;
+the ripple only ever lived at Clean, where the reach is bounded, and a packed board puts Clean's
+partners inside the clump the first wave already took. Making the ripple fire again means changing
+what a wave is allowed to take, which is its own generation and its own risk. Recorded here rather
+than quietly left as a number nobody looks at.

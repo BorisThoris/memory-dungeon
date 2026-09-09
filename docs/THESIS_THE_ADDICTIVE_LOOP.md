@@ -7249,9 +7249,9 @@ board *is* between one turn and the next, and everything downstream of adjacency
 | T6b.1 | Every cleared card leaves the board | — | No matched card sits face-up in its cell | Low — **done, Gen 190** |
 | T6b.2 | The survivors pack toward the middle | T6b.1 | Pure, deterministic, never moves a card outward | Med — **done, Gen 190** |
 | T6b.3 | The settle glides rather than teleports | T6b.2 | A card slides to its new cell; reduced motion snaps | Low — **done, Gen 190** |
-| T6b.4 | More suits from the first floor | T6b.2 | A run's early floors carry more than two suits | **High** — the palette and the ladder trade against each other; Gen 189's note |
-| T6b.5 | A pair curve that grows with the settle | T6b.4 | Later floors carry more cards; the board still fits | Med |
-| T6b.6 | The ripple fires again | T6b.4, T6b.5 | `rippled` back above zero in `sim:cascade` | Med — the number Gen 190 broke |
+| T6b.4 | More suits from the first floor | T6b.2 | A run's early floors carry more than two suits | High — **done, Gen 191**, at one suit per four pairs with a scattered floor capped at two |
+| T6b.5 | A pair curve that grows with the settle | T6b.4 | Later floors carry more cards; the board still fits | Med — **done, Gen 191** |
+| T6b.6 | The ripple fires again | T6b.4, T6b.5 | `rippled` back above zero in `sim:cascade` | **Open** — bigger boards took it from 0.00 to 0.02; the rest is a rule, see below |
 
 **Why the settle is not cosmetic.** Every reach in the game - the pop, the ripple, the severance
 drop, the aim guide - reads the grid as it stands. A board that never moves is a board whose clumps
@@ -7260,10 +7260,23 @@ floor are worth nothing to break with. A board that closes its gaps keeps making
 
 **What it cost, measured (Gen 190).** The ripple stopped firing: 7% of breaks reached a second wave
 before, none after. Not because reactions got smaller - pairs per floor went up - but because a
-packed board lets the first wave swallow the partners that used to seed the second. T6b.4 through
-T6b.6 are the repair, and they are the same change §30.3's reach experiment concluded was needed:
-suits that spread past reach 2, which means bigger boards with more colours on them, not a different
-reach. `docs/BALANCE_NOTES.md`, Gen 190.
+packed board lets the first wave swallow the partners that used to seed the second.
+
+**What T6b.4 and T6b.5 bought (Gen 191).** The boards grew and the palette grew with them, which is
+the same change §30.3's reach experiment concluded was needed: suits that spread past reach 2, which
+means bigger boards with more colours on them, not a different reach. It worked on the ladder -
+Sharp's step over Clean goes 0.32 pairs to 0.50, the spread from a lone match to Fever 5.04 to 6.08,
+and a floor takes 5.4 turns for the reference player against 4.1. Momentum climbs faster on a bigger
+board than the pair count it is measured against, so the tier shares were raised to 0.45 and 0.6 to
+keep Fever rare.
+
+**Why T6b.6 stays open.** The ripple came back to 0.02 of breaks and no further, and board size
+cannot carry it the rest of the way. A Sharp or Fever break has unbounded reach: it takes the whole
+suit in the first wave, so there is nothing left for a second, and the ripple only ever lived at
+Clean where the reach is bounded - where a packed board now puts the partners inside the clump the
+first wave already took. Making it fire means changing what a wave is allowed to take, which is a
+rule change with its own risk to the ladder, not a tuning pass. `docs/BALANCE_NOTES.md`, Gen 190 and
+Gen 191.
 
 ## G.7 Phase 7 — the sweep
 
