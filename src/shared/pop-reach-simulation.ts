@@ -68,10 +68,24 @@ export interface PopReachLevelReport {
     pairsPerMatch: number;
 }
 
+/**
+ * The severance drop, measured (thesis T2.4): how many pairs a drop takes when it fires, so a
+ * fat tail - a drop handing over a clump that was not nearly gone - is a number and not a fear.
+ */
+export interface PopReachDropReport {
+    /** Share of chain-one matches whose severance dropped at least one pair. */
+    dropRate: number;
+    /** Pairs per drop event, by count: index 1 is one pair, index 2 two pairs, and so on. */
+    pairsPerDrop: number[];
+    meanPairsPerDrop: number;
+    maxPairsPerDrop: number;
+}
+
 export interface PopReachReport {
     levels: PopReachLevelReport[];
     samples: PopReachFloorSample[];
     ladder: PopReachLadderReport;
+    drop: PopReachDropReport;
 }
 
 export const POP_REACH_TIERS: readonly ChainTier[] = ['none', 'clean', 'sharp', 'fever'];
@@ -80,6 +94,8 @@ export const POP_REACH_SEEDS = [11, 202, 3003, 40404, 555, 6006, 77, 8888] as co
 
 export const simulatePopReach = (levels = 12, seeds: readonly number[] = POP_REACH_SEEDS): PopReachReport => {
     const samples: PopReachFloorSample[] = [];
+    const dropCounts: number[] = [];
+    let dropEvents = 0;
     const run = { gameMode: 'endless' as const, floorCurioId: null };
     for (let level = 1; level <= levels; level += 1) {
         for (const seed of seeds) {
@@ -111,14 +127,22 @@ export const simulatePopReach = (levels = 12, seeds: readonly number[] = POP_REA
                 matches += 1;
                 const matchedTileIds = halves.map((half) => half.id);
                 const broke = resolveChunkBreak({ board, run, matchedTileIds, chain: 1 });
-                if (broke.brokenPairKeys.length > 0) popped += 1;
-                poppedPairs += broke.brokenPairKeys.length;
+                if (broke.droppedPairKeys.length > 0) {
+                    dropEvents += 1;
+                    dropCounts[broke.droppedPairKeys.length] = (dropCounts[broke.droppedPairKeys.length] ?? 0) + 1;
+                }
+                // The drop is the floor's structure, not the chain's: it fires at every tier, so the
+                // ladder is read on what the waves took and the drop is reported on its own.
+                const wavePairs = (result: { brokenPairKeys: string[]; droppedPairKeys: string[] }): number =>
+                    result.brokenPairKeys.length - result.droppedPairKeys.length;
+                if (wavePairs(broke) > 0) popped += 1;
+                poppedPairs += wavePairs(broke);
                 for (const tier of POP_REACH_TIERS) {
                     const atTier =
                         tier === 'none'
                             ? broke
                             : resolveChunkBreak({ board, run, matchedTileIds, chain: chainForTier[tier] });
-                    tierPairs[tier] += atTier.brokenPairKeys.length;
+                    tierPairs[tier] += wavePairs(atTier);
                 }
             }
             samples.push({
@@ -157,10 +181,18 @@ export const simulatePopReach = (levels = 12, seeds: readonly number[] = POP_REA
         const below = index === 0 ? 0 : pairsPerMatch[POP_REACH_TIERS[index - 1]!];
         step[tier] = pairsPerMatch[tier] - below;
     });
+    const pairsPerDrop = Array.from({ length: dropCounts.length }, (_, index) => dropCounts[index] ?? 0);
+    const droppedPairs = pairsPerDrop.reduce((sum, count, pairs) => sum + count * pairs, 0);
     return {
         levels: levelsOut,
         samples,
-        ladder: { pairsPerMatch, step, spread: pairsPerMatch.fever - pairsPerMatch.none }
+        ladder: { pairsPerMatch, step, spread: pairsPerMatch.fever - pairsPerMatch.none },
+        drop: {
+            dropRate: allMatches === 0 ? 0 : dropEvents / allMatches,
+            pairsPerDrop,
+            meanPairsPerDrop: dropEvents === 0 ? 0 : droppedPairs / dropEvents,
+            maxPairsPerDrop: pairsPerDrop.length - 1
+        }
     };
 };
 
@@ -238,6 +270,12 @@ export const summarizePopReach = (report: PopReachReport): string =>
             `ladder pairsPerMatch: ${POP_REACH_TIERS.map(
                 (tier) => `${tier}=${report.ladder.pairsPerMatch[tier].toFixed(2)} (+${report.ladder.step[tier].toFixed(2)})`
             ).join('  ')}`,
-            `ladder spread none to fever: ${report.ladder.spread.toFixed(2)}`
+            `ladder spread none to fever: ${report.ladder.spread.toFixed(2)}`,
+            `drop: fires on ${report.drop.dropRate.toFixed(3)} of chain-one matches, ` +
+                `${report.drop.meanPairsPerDrop.toFixed(2)} pairs a drop, at most ${report.drop.maxPairsPerDrop}; ` +
+                `by pairs ${report.drop.pairsPerDrop
+                    .map((count, pairs) => (pairs === 0 ? null : `${pairs}:${count}`))
+                    .filter(Boolean)
+                    .join(' ')}`
         ])
         .join('\n');

@@ -42,7 +42,7 @@ export interface SystemOccupancyCounter {
 
 export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
     { key: 'chunkBreaksThisFloor', label: 'A match popped the clump it touched', family: 'cascade', cadence: 'core' },
-    { key: 'chunkPairsDroppedThisFloor', label: 'The drop took a suit’s last pairs', family: 'cascade', cadence: 'rare' },
+    { key: 'chunkPairsDroppedThisFloor', label: 'The drop took a severed suit’s last pairs', family: 'cascade', cadence: 'common' },
     { key: 'feverBreaksThisFloor', label: 'A break landed at Fever', family: 'cascade', cadence: 'common' },
     { key: 'recallMatchesThisFloor', label: 'A pair was matched from memory', family: 'memory', cadence: 'core' },
     { key: 'recallMistakesThisFloor', label: 'A mismatch was made', family: 'memory', cadence: 'common' },
@@ -139,7 +139,7 @@ const playFloor = (seed: number, floor: number, missRate: number, maxTurns: numb
 export const OCCUPANCY_SEEDS = [11, 202, 3003, 40404, 555, 6006, 77, 8888, 91_919, 1_234] as const;
 
 export const simulateSystemOccupancy = ({
-    floors = 16,
+    floors = 24,
     seeds = OCCUPANCY_SEEDS,
     missRate = 0.15,
     maxTurns = 240
@@ -277,8 +277,13 @@ export const SYSTEM_OCCUPANCY_BASELINE = {
  * Gen 167 to match an earlier measurement and had the effect of holding the ratchet to the first
  * act, where floors are small: Fever cleared its bar at sixteen floors (0.119) while still reading
  * thin at twelve (0.050), which is the sample talking rather than the game.
+ *
+ * Twenty-four since Gen 180, matching `sim:cascade`'s horizon, for the same reason again one
+ * curve later: the tempered pair curve (Gen 179) makes floors seven to sixteen smaller than the
+ * linear one did, and the severance drop clears their tails, so sixteen floors is the shallow
+ * half once more - Fever read 0.094 at sixteen and 0.233 at twenty-four, on the same code.
  */
-export const SYSTEM_OCCUPANCY_BASELINE_FLOORS = 16;
+export const SYSTEM_OCCUPANCY_BASELINE_FLOORS = 24;
 
 /**
  * Compare a census against the recorded baseline, naming what moved in either direction.

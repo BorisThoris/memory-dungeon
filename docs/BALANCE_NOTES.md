@@ -1637,3 +1637,69 @@ Clean on the tempered curve where it paid 0.33 on the linear one. The early floo
 still one or two suits, so Clean's two waves sweep most of what Sharp's full reaction could reach;
 the ladder still rises at every rung (spread 5.10, up from 4.79). The severance drop is the rung
 that gives Sharp something back, and this band is re-read there.
+
+## Gen 180: the severance drop
+
+**A pair drops when its suit can no longer pop** (thesis §37.3, T2.3). A suit can pop while two
+whole pairs of it sit within a chain-zero pop's reach of each other; when a match or a break
+leaves a suit that fails that test, its plain pairs fall, at any tier. `suitCanStillPop` in
+`chunk-break-rules.ts` is the test, and it is the pop rule's own reach, so it cannot drift from
+the thing it derives from. That replaces Gen 137's remnant threshold (`DROP_MAX_PAIRS`: at Sharp or
+better, two plain pairs or fewer left in the matched suit), which fired on 0.6% of floors because
+a threshold on a remnant fires when a numeric accident occurs and cannot be aimed at.
+
+### The distribution, and the cap (T2.4)
+
+Measured before any cap, with the pop-reach simulation's new `drop` report over eight seeds and
+twelve floors:
+
+| | uncapped | capped at a two-pair remnant |
+|---|---|---|
+| Chain-one matches that dropped something | 0.284 | **0.250** |
+| Pairs a drop takes | 1.44 | **1.20** |
+| Drops by pairs taken | 1: 167 · 2: 41 · 3: 21 · 4: 7 | 1: 167 · 2: 41 |
+| Floors a drop touched, census at 15% miss | 0.456 | **0.444** (24 floors: 0.508) |
+
+One drop in eight took three or four pairs - F.7's own example, a clump that was cut off rather
+than a remnant that was nearly gone. `SEVERANCE_DROP_MAX_PAIRS = 2`: a severed suit down to two
+plain pairs falls; with more left it stands, and those pairs are matched from memory like any
+other. Two is the remnant §41.2's last-pair problem is about. N8 asked for the drop on at least a
+quarter of floors; it is on half.
+
+### What the drop is worth to the chain
+
+Dropped pairs feed momentum in full, as a later wave does. Measured the other way - the drop
+feeding the ladder nothing, on the argument that structure giving way is not the chain's work -
+Fever on the census fell from 0.11 to 0.05 of floors: a floor the drop clears faster leaves too
+few matches to climb. The severance is aimable, and in Puzzle Bobble's economy what falls pays
+more than what pops; the credit stays. The ladder itself is now read on the waves alone
+(`sim:pop` subtracts dropped pairs), because the drop fires at every tier and was inflating the
+chain-one rung by 0.4 pairs while adding nothing to the separation between rungs.
+
+### The census horizon
+
+The occupancy census plays twenty-four floors, matching `sim:cascade`, for the reason Gen 170 gave
+when it moved from twelve to sixteen: on the tempered curve floors seven to sixteen are smaller
+than the linear ones were, and the drop clears their tails, so sixteen was the shallow half again.
+Fever read 0.094 at sixteen floors and 0.233 at twenty-four on the same code, against a `common`
+floor of 0.1.
+
+### The bands
+
+| | Gen 179 | Gen 180 |
+|---|---|---|
+| Turns to clear, clean / reference (`sim:cascade`, 48 seeds) | 3.6 / 5.2 | **3.1 / 4.3** |
+| Fever share, clean / 10% miss / reference | 0.37 / 0.29 / 0.17 | 0.38 / 0.32 / 0.19 |
+| clean/reference Fever ratio | 2.18 | 2.00 |
+| Extreme Fever, clean / reference | 0.78 / 0.47 | 0.78 / 0.50 |
+| Chunk share of score, clean | 0.30 | 0.33 |
+| Pop ladder none / clean / sharp / fever (waves only) | 1.95 / 3.27 / 3.57 / 7.06 | 1.95 / 3.27 / 3.56 / 7.05 |
+| Drop: share of matches / pairs per drop / max | 0.006 of floors | **0.25 / 1.20 / 2** |
+| Fever breaks on the census | 0.11 (16 floors) | **0.23** (24 floors) |
+| Silent / thin / dominant systems | 0 / 0 / 0 | 0 / 0 / 0 |
+
+A floor clears half a turn faster for everyone, because the last pairs of a severed suit no longer
+have to be found by hand, and the chunk's share of score rises with the pairs it takes. The
+clean/reference Fever ratio sits on its floor of 2: the drop is worth the same to a sloppy player
+as to a clean one, which is the price of a rule that fires at chain zero, and the ladder above it
+still separates. `ACH_NOTHING_HELD_IT`, unearnable since Gen 141, is earnable on most floors.

@@ -11,7 +11,7 @@
 import type { AchievementId, GameMode, MutatorId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 29 as const;
+export const ENCYCLOPEDIA_VERSION = 30 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -571,6 +571,7 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
             'Fever, about two-thirds and seven at least, adds the halo: everything touching the first clump, whatever its suit. Every pair a break takes adds to the chain\'s momentum. ' +
             'Treasure inside a break spills and pays as if you had matched it. Broken pairs score less than matched ones and give no recall credit - memory still pays best - but they drop combo shards, ' +
             'clear the floor faster, and a longer ripple pays more. A miss halves the chain and puts the fire out. ' +
+            'A suit that can no longer pop - no two of its pairs within reach of each other - loses its last pairs on its own: that is the drop, and it happens at any chain, so breaking the two pairs that hold a third up is a thing you can aim. ' +
             'A break with a shape gets a name on the run line: a ripple that ran on, a drop, a partner taken from across the board, a halo, a treasure spill, a clean sweep of a suit. ' +
             'Clear the floor with momentum still standing and the end pays out: a gold at Clean and Sharp, a shard and two gold at Fever - Extreme Fever. Never score, never rating.'
     },

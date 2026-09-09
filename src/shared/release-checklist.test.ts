@@ -134,13 +134,13 @@ const VERIFIERS: Record<string, () => void> = {
         const row = makeBoard(rowTiles, { columns: 12, rows: 1, level: 3 });
         const run = createNewRun(0, { gameMode: 'endless', runSeed: 7 });
         const lone = resolveChunkBreak({ board: row, run, matchedTileIds: ['A1', 'A2'], chain: 1 });
-        expect(lone.brokenPairKeys, 'a lone match is contact: B has a half outside the clump').toEqual([]);
+        expect(lone.wavePairKeys, 'a lone match is contact: B has a half outside the clump').toEqual([]);
         const touching = makeBoard(
             rowTiles.map((t) => (t.id === 'B2' ? rowTile('T1') : t.id === 'T1' ? rowTile('B2') : t)),
             { columns: 12, rows: 1, level: 3 }
         );
         const pop = resolveChunkBreak({ board: touching, run, matchedTileIds: ['A1', 'A2'], chain: 1 });
-        expect(pop.brokenPairKeys, 'both halves touching: the pair pops with the match').toEqual(['B']);
+        expect(pop.wavePairKeys, 'both halves touching: the pair pops with the match').toEqual([['B']]);
         expect(pop.waves).toBe(1);
         const clean = resolveChunkBreak({ board: row, run, matchedTileIds: ['A1', 'A2'], chain: 3 });
         expect(clean.wavePairKeys, 'Clean reaches the partner across the board; the reaction is Sharp\'s').toEqual([['B']]);
@@ -156,8 +156,8 @@ const VERIFIERS: Record<string, () => void> = {
         const run = createNewRun(0, { gameMode: 'endless', runSeed: 7 });
         const sharp = resolveChunkBreak({ board, run, matchedTileIds: ['A1', 'A2'], chain: 6 });
         expect(sharp.droppedPairKeys, 'the cut-off pair drops at Sharp').toEqual(['C']);
-        const clean = resolveChunkBreak({ board, run, matchedTileIds: ['A1', 'A2'], chain: 3 });
-        expect(clean.droppedPairKeys, 'Clean does not drop').toEqual([]);
+        const lone = resolveChunkBreak({ board, run, matchedTileIds: ['A1', 'A2'], chain: 1 });
+        expect(lone.droppedPairKeys, 'and with no chain behind the match at all').toEqual(['C']);
     },
     'ripple-records': () => {
         const run = createNewRun(0, { gameMode: 'endless', runSeed: 7 });

@@ -1,5 +1,5 @@
 /**
- * Which systems actually happen to a player? Run: yarn sim:occupancy [--floors=16] [--check]
+ * Which systems actually happen to a player? Run: yarn sim:occupancy [--floors=24] [--check]
  *
  * Plays generated floors with a reference player and reports, per system, the share of floors
  * where the run's own counter for it moved. A system that never moves is decoration.
@@ -19,7 +19,7 @@ const floorsArg = argv.find((arg) => arg.startsWith('--floors='));
  * different game: three hazard caches that sit at 4-7% over 160 floors read as under 2% over 120.
  */
 const ratchet = argv.includes('--ratchet');
-const defaultFloors = ratchet ? SYSTEM_OCCUPANCY_BASELINE_FLOORS : 16;
+const defaultFloors = SYSTEM_OCCUPANCY_BASELINE_FLOORS;
 const floors = floorsArg
     ? Math.max(1, Number.parseInt(floorsArg.split('=')[1] ?? String(defaultFloors), 10))
     : defaultFloors;

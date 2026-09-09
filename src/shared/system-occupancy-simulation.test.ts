@@ -14,13 +14,9 @@ import {
 /**
  * The census, gated as a ratchet.
  *
- * Twelve systems fire on no floor at all today. The drop is still one of them, and now for one
- * reason rather than two: a key or a treasure left in the suit no longer vetoes it (see
- * `DROP_MAX_PAIRS`), but at Sharp the ripple has already swept the suit's plain pairs, so there
- * is nothing left to fall. Two others - shuffle snares and the safe-hazard ward - come back the
- * moment a floor keeps pairs back from the dungeon's budget, which was measured and is its own
- * change (see `pairCapacityForDungeonEncounter`). That is the finding, not a reason to skip the
- * check: `SYSTEM_OCCUPANCY_BASELINE` is a baseline to burn down, and it is asserted exactly. A
+ * Twelve systems once fired on no floor at all, the drop among them; eleven left with the dungeon
+ * layer and the drop came back as the severance drop (Gen 180), which fires on nearly half of
+ * floors. `SYSTEM_OCCUPANCY_BASELINE` is a baseline to burn down, and it is asserted exactly. A
  * system that goes quiet fails this test the moment it does, and a system brought back to life
  * fails it too, which is the only way a list like this ever shrinks.
  *
@@ -77,14 +73,15 @@ describe('what actually happens to a player', () => {
 
     it('would name a system that grew past its cadence, which is the half a minimum cannot see', () => {
         // The ceilings are new and everything currently passes them, so the only way to know they
-        // are wired to anything is to hand the judge a census that breaches one. A `rare` system on
-        // four floors in five is the case this exists for: still firing, still passing every
-        // minimum, and no longer the occasional flourish it was designed as.
-        const rare = report.rows.find((row) => row.cadence === 'rare')!;
-        const swollen = { ...report, rows: report.rows.map((row) => (row.key === rare.key ? { ...row, floorShare: 0.8 } : row)) };
-        expect(dominantSystemKeys(swollen)).toEqual([rare.key]);
+        // are wired to anything is to hand the judge a census that breaches one. A `common` system
+        // on nineteen floors in twenty is the case this exists for: still firing, still passing
+        // every minimum, and no longer one system among several. (It was a `rare` row swollen to
+        // 0.8 until the drop, the last rare system, became common in Gen 180.)
+        const common = report.rows.find((row) => row.cadence === 'common')!;
+        const swollen = { ...report, rows: report.rows.map((row) => (row.key === common.key ? { ...row, floorShare: 0.95 } : row)) };
+        expect(dominantSystemKeys(swollen)).toEqual([common.key]);
         const verdict = judgeSystemOccupancy(swollen);
-        expect(verdict.dominant.some((line) => line.includes(rare.key) && line.includes('above 0.25'))).toBe(true);
+        expect(verdict.dominant.some((line) => line.includes(common.key) && line.includes('above 0.9'))).toBe(true);
         expect(judgeSystemOccupancyAgainstBaseline(swollen).issues.some((line) => line.includes('is now dominant'))).toBe(true);
     });
 

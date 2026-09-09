@@ -274,7 +274,7 @@ The gap between us and every one of them is **gravity**. Every chain reaction in
 | Sharp | unbounded (12) | the reaction runs until a wave takes nothing — Puyo's chain |
 | Fever | unbounded + halo | Sharp, and the first clump's halo (every hidden tile touching it, any suit) |
 
-Tuning Fork lends a lone match the chain's reach (partners leave and seed one wave) and adds a wave to Clean. A halo pair is the edge of the celebration, not a bridge: it does not seed. The matched pair itself is never re-taken by a later wave. The drop (Gen 137) still fires at Sharp and Fever after the last wave and is not a wave.
+Tuning Fork lends a lone match the chain's reach (partners leave and seed one wave) and adds a wave to Clean. A halo pair is the edge of the celebration, not a bridge: it does not seed. The matched pair itself is never re-taken by a later wave. The drop (Gen 137, restructured as the severance drop in Gen 180) fires after the last wave at any tier and is not a wave: a suit that can no longer pop loses its plain pairs.
 
 **Islands.** The deal (`tile-suit-rules.ts`) now lays every suit with three pairs or more as **two clumps seeded apart**, so about thirty percent of a floor's pairs straddle two islands of their suit (measured on 6×4, 8×4 and 8×6: 1.7–1.9 islands per suit, 0.29–0.32 straddling). A lone match pops the island it is in; the straddling pairs sit there whole; a Clean chain is what takes them and, with them, the other island. The reason is the measurement in §8.5: with one clump per suit the ripple had nothing to bridge, and the ladder it was meant to reward fired on four percent of floors.
 

@@ -92,25 +92,30 @@ export const RIPPLE_MAX_LIFT = 2;
 /** A chain reaction cannot outrun the board, but a bound keeps the rule honest on an authored one. */
 export const RIPPLE_MAX_WAVES = 12;
 /**
- * The drop. Puzzle Bobble's second ingredient: a cluster falls once nothing holds it. A Sharp or
- * Fever break that leaves the matched suit with this many plain pairs or fewer takes them too,
- * wherever they sit - a suit down to a pair or two can never pop again (a pop needs two same-suit
- * pairs touching), so what is left is a chore, not a target.
+ * The drop. Puzzle Bobble's second ingredient: a cluster falls once nothing holds it. Here what
+ * holds a suit up is the pop itself - **a pair drops when its suit can no longer pop** (thesis
+ * §37.3). A suit can pop while two whole pairs of it sit within a chain-zero pop's reach of each
+ * other; when a match or a break leaves a suit that fails that test, every plain pair of that suit
+ * falls, at any tier.
  *
- * Measured over 120 generated floors it fired on nothing at all, which also left
- * `ACH_NOTHING_HELD_IT` unearnable. Two causes, and only one of them is the drop's own. The first
- * is that a pair with a job - a findable, the cursed pair - used to veto the whole drop: 483 of
- * 501 Sharp and Fever breaks were refused on that alone. A pair with a job sitting in the suit is
- * not what holds the plain tiles up, so it no longer stops them falling; it simply is not taken.
- *
- * The second is not the drop's to fix: at Sharp the ripple runs until a wave takes nothing, so it
- * has usually swept every plain pair of the suit before the drop looks (0 left on 92-98% of breaks
- * at every tier). Letting the drop run at the bounded tiers instead was tried and rejected - on a
- * four-pair suit it hands a chain-one match the whole suit, which is the tier ladder collapsing.
- * The remnant this rule wants is a bigger suit than generation deals today; that is a task, not a
- * threshold.
+ * That replaces a threshold (Gen 137's `DROP_MAX_PAIRS`: at Sharp or better, a remnant of two
+ * plain pairs or fewer) that fired on 0.6% of floors, because a threshold on a remnant fires when
+ * a numeric accident occurs and cannot be aimed at. A structure can: a player can look at a suit
+ * of three pairs, see that two are adjacent and one is alone, and know that breaking the two
+ * orphans the third. It fires at chain zero, so a new player meets it on their first floors, and
+ * it takes the last pairs of a suit a player would otherwise grind out by hand (§41.2). Pairs with
+ * a job of their own - a findable, the cursed pair - never drop and never hold the suit up.
  */
-export const DROP_MAX_PAIRS = 2;
+export const SEVERANCE_DROP_REACH = BOUNDED_BREAK_REACH;
+/**
+ * The cap the thesis asked for (F.7, T2.4). Measured before it: the severance fired on 28% of
+ * chain-one matches and took 1.44 pairs a time, but one drop in eight took three or four - a
+ * clump that was cut off, not a remnant that was nearly gone. A severed suit down to this many
+ * plain pairs falls; with more left it stands, and those pairs are matched from memory like any
+ * other. Two is the remnant the last-pair problem (§41.2) is about: the pairs a player would
+ * otherwise grind out by hand once nothing on the floor can reach them.
+ */
+export const SEVERANCE_DROP_MAX_PAIRS = 2;
 
 /** How many waves the ripple may run at this tier: the pop alone, the pop and its partners' clumps, or the whole reaction. */
 export const rippleWaves = (tier: ChainTier): number => {
@@ -276,8 +281,48 @@ export const chunkBreakComboShards = (pairs: number, tier: ChainTier): number =>
  */
 export const chunkBreakMomentumPairs = (result: Pick<ChunkBreakResult, 'brokenPairKeys' | 'wavePairKeys'>): number => {
     const pop = result.wavePairKeys[0]?.length ?? 0;
+    // Dropped pairs are in `brokenPairKeys` and count in full, like a later wave. The severance
+    // is aimable - a player who sees that breaking two adjacent pairs orphans the third has
+    // planned the drop - and Puzzle Bobble's whole economy is that what falls pays more than what
+    // pops. Measured without the credit, a floor that the drop clears faster leaves too few
+    // matches to climb: Fever on the census fell from 0.11 to 0.05 of floors.
     const rest = Math.max(0, result.brokenPairKeys.length - pop);
     return Math.ceil(pop / 2) + rest;
+};
+
+/**
+ * Whether a suit can still pop on this board: two whole hidden pairs of it within a chain-zero
+ * pop's reach of each other, so that matching one takes the other. `ignorePairKeys` are pairs
+ * that are leaving with the current break and no longer count.
+ */
+export const suitCanStillPop = (
+    board: Pick<BoardState, 'columns' | 'tiles' | 'cursedPairKey'>,
+    suit: Tile['suit'],
+    options: { diagonal?: boolean; ignorePairKeys?: ReadonlySet<string> } = {}
+): boolean => {
+    const ignore = options.ignorePairKeys ?? new Set<string>();
+    const byPairKey = new Map<string, Tile[]>();
+    for (const tile of board.tiles) {
+        if (tile.suit !== suit || tile.state !== 'hidden' || ignore.has(tile.pairKey)) continue;
+        byPairKey.set(tile.pairKey, [...(byPairKey.get(tile.pairKey) ?? []), tile]);
+    }
+    const whole = [...byPairKey.entries()].filter(([, halves]) => halves.length === 2);
+    if (whole.length < 2) return false;
+    const canBeTaken = ([pairKey, halves]: [string, Tile[]]): boolean =>
+        pairKey !== board.cursedPairKey && halves.every(tileIsPlainApartFromFindable);
+    for (const [seedKey, seedHalves] of whole) {
+        const seedIds = seedHalves.map((half) => half.id);
+        const region = new Set(
+            findSuitRegion(board, seedIds, SEVERANCE_DROP_REACH, { diagonal: options.diagonal, exclude: seedIds }).map(
+                (index) => board.tiles[index]!.id
+            )
+        );
+        for (const entry of whole) {
+            if (entry[0] === seedKey || !canBeTaken(entry)) continue;
+            if (entry[1].every((half) => region.has(half.id))) return true;
+        }
+    }
+    return false;
 };
 
 export const resolveChunkBreak = ({
@@ -372,35 +417,29 @@ export const resolveChunkBreak = ({
             .filter((pairKey) => !haloTaken.has(pairKey))
             .flatMap((pairKey) => (byPairKey.get(pairKey) ?? []).filter((half) => !regionTileIds.has(half.id)).map((half) => half.id));
     }
-    const matchedSuit = board.tiles.find((tile) => matchedTileIds.includes(tile.id))?.suit ?? null;
-
-    // The drop: at Sharp or better, when the break leaves the matched suit with at most
-    // DROP_MAX_PAIRS plain pairs, those fall too. Pairs with a job of their own stay standing,
-    // and no longer veto the drop - they are not what holds the plain tiles up.
+    // The drop: the matched pair and the broken pairs leave, and any suit they left that can no
+    // longer pop - no two whole pairs of it within a pop's reach of each other - loses its plain
+    // pairs too, at any tier. Pairs with a job of their own stay standing, and do not hold the
+    // suit up either: a findable is a pair a break can take, so it still counts toward the pop
+    // test, and the cursed pair counts only as the match that might start one.
     const droppedPairKeys: string[] = [];
-    if ((tier === 'sharp' || tier === 'fever') && matchedSuit && brokenPairKeys.length > 0) {
-        const matched = new Set(matchedTileIds);
-        const remaining = new Map<string, Tile[]>();
-        for (const tile of board.tiles) {
-            if (tile.suit !== matchedSuit || tile.state !== 'hidden') continue;
-            if (matched.has(tile.id) || brokenPairKeys.includes(tile.pairKey)) continue;
-            remaining.set(tile.pairKey, [...(remaining.get(tile.pairKey) ?? []), tile]);
+    const matchedSet = new Set(matchedTileIds);
+    const leaving = new Set<string>(brokenPairKeys);
+    for (const tile of board.tiles) if (matchedSet.has(tile.id)) leaving.add(tile.pairKey);
+    const suitsLeft = new Set<Tile['suit']>();
+    for (const tile of board.tiles) if (leaving.has(tile.pairKey) && tile.suit) suitsLeft.add(tile.suit);
+    for (const suit of suitsLeft) {
+        if (suitCanStillPop(board, suit, { diagonal, ignorePairKeys: leaving })) continue;
+        const plain: string[] = [];
+        for (const [pairKey, halves] of byPairKey) {
+            if (leaving.has(pairKey) || halves.length !== 2) continue;
+            if (halves[0]!.suit !== suit || !halves.every((half) => half.state === 'hidden' && tileCanBreakInChunk(half))) continue;
+            if (board.cursedPairKey != null && pairKey === board.cursedPairKey) continue;
+            plain.push(pairKey);
         }
-        // A cursed pair is never taken without the player choosing it, so it stays standing too.
-        const plainPairKeys = [...remaining.entries()]
-            .filter(
-                ([pairKey, halves]) =>
-                    halves.length === 2 &&
-                    halves.every(tileCanBreakInChunk) &&
-                    !(board.cursedPairKey != null && pairKey === board.cursedPairKey)
-            )
-            .map(([pairKey]) => pairKey);
-        if (plainPairKeys.length > 0 && plainPairKeys.length <= DROP_MAX_PAIRS) {
-            for (const pairKey of plainPairKeys) {
-                droppedPairKeys.push(pairKey);
-                brokenPairKeys.push(pairKey);
-            }
-        }
+        if (plain.length === 0 || plain.length > SEVERANCE_DROP_MAX_PAIRS) continue;
+        droppedPairKeys.push(...plain);
+        brokenPairKeys.push(...plain);
     }
 
     if (brokenPairKeys.length === 0) {

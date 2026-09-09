@@ -231,14 +231,21 @@ describe('N7: the split pair on floor 3', () => {
         }
     });
 
-    it('stays whole below Clean: a lone match in the clump never takes it', () => {
+    it('is never reached by a wave below Clean: if it leaves on a lone match, it is the drop that took it', () => {
+        // The pop cannot reach the far half - that is the point of the split. What can take the
+        // pair at chain zero is the severance drop: once the clump's other pairs have gone, the
+        // suit has no two pairs within reach of each other and its last pair falls. Either way the
+        // player sees a tile leave from somewhere they were not looking, which is the lesson.
         for (const [where, board] of boardsUnderTest(3)) {
             const { key, near } = splitOf(board);
             for (const [matched, halves] of realPairs(board)) {
                 if (matched === key || halves[0]!.suit !== board.tiles[near]!.suit) continue;
                 const result = resolveChunkBreak({ board, run, matchedTileIds: halves.map((t) => t.id), chain: 0 });
                 expect(result.tier).toBe('none');
-                expect(result.brokenPairKeys, `${where} match ${matched}`).not.toContain(key);
+                expect(result.wavePairKeys.flat(), `${where} match ${matched}`).not.toContain(key);
+                if (result.brokenPairKeys.includes(key)) {
+                    expect(result.droppedPairKeys, `${where} match ${matched}`).toContain(key);
+                }
             }
         }
     });
@@ -253,7 +260,7 @@ describe('N7: the split pair on floor 3', () => {
                 clumpPairs += 1;
                 const result = resolveChunkBreak({ board, run, matchedTileIds: halves.map((t) => t.id), chain: clean });
                 expect(result.tier, `${where} match ${matched}`).toBe('clean');
-                expect(result.brokenPairKeys, `${where} match ${matched}`).toContain(key);
+                expect(result.wavePairKeys.flat(), `${where} match ${matched}`).toContain(key);
                 expect(result.brokenTileIds, `${where} match ${matched}`).toContain(board.tiles[near]!.id);
                 expect(result.board.tiles[near]!.state).toBe('removed');
             }

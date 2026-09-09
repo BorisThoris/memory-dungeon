@@ -62,7 +62,7 @@
 | Wild tile identity | `BoardState.tiles` + `WILD_PAIR_KEY`; derived query `getWildTileIdFromBoard` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Glass / decoy | `boardHasGlassDecoy`, `DECOY` handling | [epic-mutators](./epic-mutators.md), core |
 | Chunk break: every match pops the same-suit clump and its partners | `resolveChunkBreak`, `tileCanBreakInChunk`, `breakClumpReach` (`chunk-break-rules.ts`) | [epic-core-memory-loop](./epic-core-memory-loop.md) |
-| Ripple waves, the drop, the halo | `rippleWaves`, `DROP_MAX_PAIRS`, `RIPPLE_MAX_WAVES` (`chunk-break-rules.ts`) | [epic-core-memory-loop](./epic-core-memory-loop.md) |
+| Ripple waves, the severance drop, the halo | `rippleWaves`, `suitCanStillPop`, `RIPPLE_MAX_WAVES` (`chunk-break-rules.ts`) | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Chain tiers (Clean / Sharp / Fever) and momentum | `getChainTier`, `chainTierRungs`, `chainMomentum`, `chainMeter` (`chain-tier-rules.ts`) | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | Chunk score and shards | `chunkBreakScore`, `chunkBreakComboShards` | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | Shifting spotlight scoring + rotation | `shiftingSpotlightMatchDelta` (`shifting-spotlight-rules.ts`), `shiftingSpotlightNonce` | [epic-mutators](./epic-mutators.md), [epic-board-rendering-assists](./epic-board-rendering-assists.md) |

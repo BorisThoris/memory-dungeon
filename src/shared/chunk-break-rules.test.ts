@@ -9,9 +9,9 @@ import {
     chunkBreakMomentumPairs,
     chunkBreakScore,
     findSuitRegion,
-    DROP_MAX_PAIRS,
     RIPPLE_MAX_WAVES,
     resolveChunkBreak,
+    suitCanStillPop,
     rippleLift,
     rippleWaves,
     tileCanBreakInChunk
@@ -100,9 +100,10 @@ describe('what breaks', () => {
         const result = resolveChunkBreak({ board: board(), run: endless, matchedTileIds: ['A1', 'A2'], chain: 7 });
         expect(result.tier).toBe('fever');
         // The ember clump is B and C; D1 and E1 border it, so tide D and E go with it. F touches
-        // E2 and D2 and would go if a halo pair rippled; it stays.
-        expect(result.brokenPairKeys.sort()).toEqual(['B', 'C', 'D', 'E']);
-        expect(result.board.tiles.find((t) => t.id === 'F1')?.state).toBe('hidden');
+        // E2 and D2 and would go if a halo pair rippled; the wave leaves it. It falls anyway - the
+        // last tide pair, with nothing left to pop against - and that is the drop, not the halo.
+        expect(result.wavePairKeys.flat().sort()).toEqual(['B', 'C', 'D', 'E']);
+        expect(result.droppedPairKeys).toEqual(['F']);
         expect(result.waves).toBe(1);
     });
 
@@ -130,8 +131,10 @@ describe('what breaks', () => {
 describe('the ripple', () => {
     it('a lone match is contact: B1 touches the clump but B2 does not, so B stays whole', () => {
         const result = resolveChunkBreak({ board: row(), run: endless, matchedTileIds: ['A1', 'A2'], chain: 1 });
-        expect(result.brokenPairKeys).toEqual([]);
+        expect(result.wavePairKeys).toEqual([]);
         expect(result.waves).toBe(0);
+        // B, C and D stay: three pairs is more than the severance takes, so the suit stands.
+        expect(result.droppedPairKeys).toEqual([]);
         expect(result.board.tiles.find((t) => t.id === 'B1')?.state).toBe('hidden');
     });
 
@@ -139,11 +142,12 @@ describe('the ripple', () => {
         // B2 moved beside A2's row end: both halves of B touch A's clump.
         const tiles = rowLayout().map((t) => (t.id === 'B2' ? rowTile('T1') : t.id === 'T1' ? rowTile('B2') : t));
         const result = resolveChunkBreak({ board: row(tiles), run: endless, matchedTileIds: ['A1', 'A2'], chain: 1 });
-        expect(result.brokenPairKeys).toEqual(['B']);
+        expect(result.wavePairKeys).toEqual([['B']]);
         expect(result.waves).toBe(1);
         expect(waveOf(result, 'B2')).toBe(0);
-        // C1 touched B2 in the new place, but a pop's partners do not seed a wave.
-        expect(result.board.tiles.find((t) => t.id === 'C1')?.state).toBe('hidden');
+        // C1 touched B2 in the new place, but a pop's partners do not seed a wave. C and D leave
+        // all the same: two ember pairs that cannot reach each other are the severance's remnant.
+        expect(result.droppedPairKeys.sort()).toEqual(['C', 'D']);
     });
 
     it('Clean: the pops reach a partner across the board, but the reaction is still Sharp\'s', () => {
@@ -155,8 +159,8 @@ describe('the ripple', () => {
         expect(result.wavePairKeys).toEqual([['B']]);
         expect(result.waves).toBe(1);
         expect(waveOf(result, 'B2')).toBe(0);
-        expect(result.board.tiles.find((t) => t.id === 'C1')?.state).toBe('hidden');
-        expect(result.board.tiles.find((t) => t.id === 'D1')?.state).toBe('hidden');
+        // What the reaction did not reach, the severance takes: C and D are the suit's last two.
+        expect(result.droppedPairKeys.sort()).toEqual(['C', 'D']);
     });
 
     it('Sharp: the reaction runs until a wave takes nothing', () => {
@@ -284,8 +288,8 @@ describe('the drop', () => {
      *   A2 B2 E1 C2
      *   D2 F1 E2 F2
      *
-     * Sharp on A takes B through the region and leaves the ember suit with one pair, C, that
-     * touches nothing ember. Nothing holds it: it drops with the break.
+     * A match on A pops B by contact and leaves the ember suit with one pair, C, that touches
+     * nothing ember: the suit can no longer pop, so nothing holds C up and it drops.
      */
     const cutOff = (): Tile[] => [
         tile('A1'), tile('B1'), tile('D1'), tile('C1'),
@@ -293,34 +297,46 @@ describe('the drop', () => {
         tile('D2'), tile('F1'), tile('E2'), tile('F2')
     ];
 
-    it('takes the last pairs of the suit when a Sharp break leaves too few to hold', () => {
-        const result = resolveChunkBreak({ board: board(cutOff()), run: endless, matchedTileIds: ['A1', 'A2'], chain: 6 });
-        expect(result.tier).toBe('sharp');
+    it('takes the pairs of a suit that can no longer pop, at any tier', () => {
+        for (const chain of [1, 3, 6]) {
+            const result = resolveChunkBreak({ board: board(cutOff()), run: endless, matchedTileIds: ['A1', 'A2'], chain });
+            expect(result.droppedPairKeys, `chain ${chain}`).toEqual(['C']);
+            expect(result.brokenPairKeys, `chain ${chain}`).toEqual(['B', 'C']);
+            expect(result.board.tiles.filter((t) => t.pairKey === 'C').every((t) => t.state === 'removed')).toBe(true);
+        }
+    });
+
+    it('fires on a match that pops nothing, when the match itself severs the suit', () => {
+        // Two ember pairs at opposite corners of a tide board: matching one leaves the other alone.
+        const corners: Tile[] = [
+            tile('A1'), tile('D1'), tile('E1'), tile('C1'),
+            tile('A2'), tile('D2'), tile('E2'), tile('F1'),
+            tile('G1', { suit: 'tide' }), tile('G2', { suit: 'tide' }), tile('F2'), tile('C2')
+        ];
+        const result = resolveChunkBreak({ board: board(corners), run: endless, matchedTileIds: ['A1', 'A2'], chain: 1 });
+        expect(result.wavePairKeys).toEqual([]);
         expect(result.droppedPairKeys).toEqual(['C']);
-        expect(result.brokenPairKeys).toEqual(['B', 'C']);
-        expect(result.board.tiles.filter((t) => t.pairKey === 'C').every((t) => t.state === 'removed')).toBe(true);
-        expect(DROP_MAX_PAIRS).toBe(2);
     });
 
-    it('does not drop at Clean: the drop is a Sharp reward, not a rule about the ripple', () => {
-        const result = resolveChunkBreak({ board: board(cutOff()), run: endless, matchedTileIds: ['A1', 'A2'], chain: 3 });
+    it('holds while two whole pairs of the suit can still reach each other', () => {
+        // G joins C in the cut-off corner, beside it: the suit can still pop there, so both stand.
+        const company = cutOff().map((t) =>
+            t.id === 'E2' ? tile('G1', { suit: 'ember' }) : t.id === 'F2' ? tile('G2', { suit: 'ember' }) : t
+        );
+        const result = resolveChunkBreak({ board: board(company), run: endless, matchedTileIds: ['A1', 'A2'], chain: 6 });
         expect(result.droppedPairKeys).toEqual([]);
-        expect(result.brokenPairKeys).toEqual(['B']);
+        expect(suitCanStillPop(result.board, 'ember')).toBe(true);
     });
 
-    it('holds when a remaining pair has a job of its own, or when too many remain', () => {
+    it('never takes a pair with a job of its own, and never counts the cursed pair as a target', () => {
         const withFindable = cutOff().map((t) => (t.id === 'C2' ? { ...t, findableKind: 'shard_spark' as const } : t));
         expect(
             resolveChunkBreak({ board: board(withFindable), run: endless, matchedTileIds: ['A1', 'A2'], chain: 6 }).droppedPairKeys
         ).toEqual([]);
-        // Three ember pairs left standing is a clump, not a remnant: G and H join C, all cut off.
-        const crowded = cutOff().map((t) =>
-            t.id === 'D1' ? tile('G1', { suit: 'ember' }) : t.id === 'D2' ? tile('G2', { suit: 'ember' }) : t
-        );
-        const moreEmber = crowded.map((t) =>
-            t.id === 'F1' ? tile('H1', { suit: 'ember' }) : t.id === 'F2' ? tile('H2', { suit: 'ember' }) : t
-        );
-        const result = resolveChunkBreak({ board: board(moreEmber), run: endless, matchedTileIds: ['A1', 'A2'], chain: 6 });
-        expect(result.droppedPairKeys).toEqual([]);
+        const cursed = { ...board(cutOff()), cursedPairKey: 'C' };
+        expect(resolveChunkBreak({ board: cursed, run: endless, matchedTileIds: ['A1', 'A2'], chain: 6 }).droppedPairKeys).toEqual([]);
+        // A cursed pair beside a plain one keeps the plain one standing only if the plain one is
+        // within its reach as a target: the cursed pair can start a pop but never be taken by one.
+        expect(suitCanStillPop({ ...board(cutOff()), cursedPairKey: 'B' }, 'ember')).toBe(true);
     });
 });
