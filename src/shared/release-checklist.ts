@@ -80,6 +80,13 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Gameplay'
     },
     {
+        evidence: 'src/shared/board-settle-rules.ts',
+        id: 'the-settle',
+        label: 'Every card a match or a break takes leaves the board, and the survivors fall in toward the middle to close the gap',
+        owner: 'repo',
+        section: 'Gameplay'
+    },
+    {
         evidence: 'src/shared/chunk-break-rules.ts',
         id: 'the-drop',
         label: 'A Sharp or Fever break that leaves a suit with two plain pairs or fewer takes them too, and never a card with a job',

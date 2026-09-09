@@ -2,10 +2,11 @@ import { describe, expect, it } from 'vitest';
 import { BREAK_DEPARTURE_SECONDS, computeTileBoardMatchedBurstState } from './tileBoardFramePulseState';
 
 /**
- * A removed tile has to actually leave. Before this, `removed` was a state the scene had no
- * opinion about: the card sat there face-up, unpickable, and a chunk break looked like a bug.
+ * A cleared card has to actually leave. A card the break took waits for the wave to reach it and
+ * then goes; a matched pair goes at once. Neither is allowed to sit face-up in its cell, because
+ * the cell is about to be taken by whatever settles into it.
  */
-describe('a removed tile departs', () => {
+describe('a cleared card departs', () => {
     const step = (time: number, startedAt: number | null, wasMatched: boolean, delay = 0) =>
         computeTileBoardMatchedBurstState({
             breakWaveDelaySec: delay,
@@ -35,7 +36,7 @@ describe('a removed tile departs', () => {
         expect(step(99, null, true).departure).toBe(1);
     });
 
-    it('never departs a matched tile', () => {
+    it('takes a matched pair away too, without waiting for a break wave', () => {
         const matched = computeTileBoardMatchedBurstState({
             reduceMotion: false,
             startedAt: 5,
@@ -43,6 +44,17 @@ describe('a removed tile departs', () => {
             time: 9,
             wasMatched: true
         });
-        expect(matched.departure).toBe(0);
+        expect(matched.departure).toBe(1);
+
+        // A card still in play is never scaled away.
+        expect(
+            computeTileBoardMatchedBurstState({
+                reduceMotion: false,
+                startedAt: 5,
+                tileState: 'hidden',
+                time: 9,
+                wasMatched: true
+            }).departure
+        ).toBe(0);
     });
 });

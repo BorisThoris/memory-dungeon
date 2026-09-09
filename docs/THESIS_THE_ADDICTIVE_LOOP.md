@@ -7238,6 +7238,33 @@ marker says whether it is worth holding.
 | T6.4 | The player memory model (§59) | Changes no decision |
 | T6.5 | Attract-mode Fever replay (§52.2d) | Delays restart |
 
+## G.6b Phase 6b — the settle and the room it needs
+
+Not in the original plan. Asked for after Phase 3 shipped, and it belongs here rather than as a
+candidate because it is not a feature the loop can be measured with or without: it changes what a
+board *is* between one turn and the next, and everything downstream of adjacency reads that.
+
+| ID | Task | Depends on | Acceptance | Risk |
+|---|---|---|---|---|
+| T6b.1 | Every cleared card leaves the board | — | No matched card sits face-up in its cell | Low — **done, Gen 190** |
+| T6b.2 | The survivors pack toward the middle | T6b.1 | Pure, deterministic, never moves a card outward | Med — **done, Gen 190** |
+| T6b.3 | The settle glides rather than teleports | T6b.2 | A card slides to its new cell; reduced motion snaps | Low — **done, Gen 190** |
+| T6b.4 | More suits from the first floor | T6b.2 | A run's early floors carry more than two suits | **High** — the palette and the ladder trade against each other; Gen 189's note |
+| T6b.5 | A pair curve that grows with the settle | T6b.4 | Later floors carry more cards; the board still fits | Med |
+| T6b.6 | The ripple fires again | T6b.4, T6b.5 | `rippled` back above zero in `sim:cascade` | Med — the number Gen 190 broke |
+
+**Why the settle is not cosmetic.** Every reach in the game - the pop, the ripple, the severance
+drop, the aim guide - reads the grid as it stands. A board that never moves is a board whose clumps
+only ever shrink, so the cascade decays toward nothing as a floor empties, and the last matches of a
+floor are worth nothing to break with. A board that closes its gaps keeps making new neighbours.
+
+**What it cost, measured (Gen 190).** The ripple stopped firing: 7% of breaks reached a second wave
+before, none after. Not because reactions got smaller - pairs per floor went up - but because a
+packed board lets the first wave swallow the partners that used to seed the second. T6b.4 through
+T6b.6 are the repair, and they are the same change §30.3's reach experiment concluded was needed:
+suits that spread past reach 2, which means bigger boards with more colours on them, not a different
+reach. `docs/BALANCE_NOTES.md`, Gen 190.
+
 ## G.7 Phase 7 — the sweep
 
 | ID | Task |
@@ -7265,6 +7292,9 @@ T1.7 ─┬─ T1.8 ── T1.9 ── T1.10 ── T1.11 ─┬── T1.12 ─
       └─ T3.1 ─── T3.2
 
   T3.4 ─── T3.6
+
+T6b.1 ── T6b.2 ─┬─ T6b.3
+                └─ T6b.4 ── T6b.5 ── T6b.6
 ```
 
 **T1.7 is the critical path.** Everything of consequence depends on board generation no longer

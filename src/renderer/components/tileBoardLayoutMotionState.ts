@@ -21,6 +21,7 @@ interface TileBoardLayoutMotionState {
     entranceMotion: TileBoardLayoutMotionTransform;
     layoutMotionActive: boolean;
     posLambda: number;
+    settleLayoutActive: boolean;
     shuffleLayoutActive: boolean;
     shuffleMotion: TileBoardLayoutMotionTransform;
 }
@@ -71,6 +72,12 @@ interface TileBoardCardGroupMotionStateInput {
     wobbleTime: number;
 }
 
+/** How hard a card is pulled to the cell it settled into: a glide of roughly a quarter second. */
+export const SETTLE_POSITION_LAMBDA = 13;
+
+/** How long the board is allowed to keep gliding after a settle, in milliseconds. */
+export const SETTLE_MOTION_BUDGET_MS = 420;
+
 export const TILE_BOARD_ZERO_LAYOUT_MOTION: TileBoardLayoutMotionTransform = {
     rotX: 0,
     rotY: 0,
@@ -88,6 +95,7 @@ export const computeTileBoardLayoutMotionState = ({
     boardRows,
     now,
     reduceMotion,
+    settleMotionDeadlineMs,
     shuffleBoardOrderIndex,
     shuffleMotionBudgetMs,
     shuffleMotionDeadlineMs,
@@ -100,6 +108,7 @@ export const computeTileBoardLayoutMotionState = ({
     boardRows: number;
     now: number;
     reduceMotion: boolean;
+    settleMotionDeadlineMs: number;
     shuffleBoardOrderIndex: number;
     shuffleMotionBudgetMs: number;
     shuffleMotionDeadlineMs: number;
@@ -136,13 +145,25 @@ export const computeTileBoardLayoutMotionState = ({
                   boardColumns
               )
             : TILE_BOARD_ZERO_LAYOUT_MOTION;
-    const layoutMotionActive = shuffleLayoutActive || entranceLayoutActive;
+    /*
+     * The settle. A card's cell is its position, so when the board packs toward the middle the
+     * cards would otherwise appear in their new cells between one frame and the next. This window
+     * damps the move instead, so a card slides to where it landed and the player can follow it.
+     */
+    const settleLayoutActive =
+        !reduceMotion &&
+        !shuffleLayoutActive &&
+        !entranceLayoutActive &&
+        settleMotionDeadlineMs > 0 &&
+        now < settleMotionDeadlineMs;
+    const layoutMotionActive = shuffleLayoutActive || entranceLayoutActive || settleLayoutActive;
 
     return {
         entranceLayoutActive,
         entranceMotion,
         layoutMotionActive,
-        posLambda: layoutMotionActive ? 9 : 200,
+        posLambda: settleLayoutActive ? SETTLE_POSITION_LAMBDA : layoutMotionActive ? 9 : 200,
+        settleLayoutActive,
         shuffleLayoutActive,
         shuffleMotion
     };

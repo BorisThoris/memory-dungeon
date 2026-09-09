@@ -1953,3 +1953,39 @@ Sharp's problem is that a reach-2 region on a six-pair suit is already most of t
 Sharp find more pairs means changing the *boards* - suits that spread past reach 2 - not the reach.
 Nothing was retuned: the rules are as they shipped, and `BREAK_CLUMP_REACH` / `BREAK_PARTNER_REACH`
 are now records so the next attempt is a one-line change with the numbers above to check it against.
+
+## Gen 190: the settle — the board packs toward the middle
+
+Every card a match or a break takes now leaves the board, and the cards left behind fall in toward
+the centre to close the gap (`board-settle-rules.ts`, wired into the turn at
+`turn-match-board-resolution-rules.ts`). The rule is one move repeated: take the closest gap-and-card
+pair on the board and put the card in the gap, where a card may only ever move to a cell nearer the
+middle than the one it is in. Because the pair is chosen globally, a card moves as short a distance
+as the settle allows and the gap walks outward, rather than one card being flung across the grid.
+
+Measured over the same forty-eight seeds the cascade simulation always uses, with everything else
+held still:
+
+| Reference player | Turns a floor takes | Pairs a floor pays | Fever share | Score | Ripple mean | Breaks that rippled |
+|---|---|---|---|---|---|---|
+| No settle, miss 0 | 3.1 | 8.13 | 0.37 | 9668 | 1.08 | 0.07 |
+| Settle, miss 0 | 3.0 | 8.19 | 0.34 | 9608 | **1.00** | **0.00** |
+| No settle, miss 0.25 | 4.3 | 7.92 | 0.20 | 7436 | 1.06 | 0.06 |
+| Settle, miss 0.25 | 4.1 | 8.08 | 0.19 | 7480 | **1.00** | **0.00** |
+
+Every band still holds and `yarn sim:cascade --check` passes. The occupancy census moves the same
+way: the drop's share of floors falls from 0.442 to 0.388 and matches per floor from 3.18 to 3.04,
+both inside their bands.
+
+**The finding, recorded because it is a regression and not a win.** The ripple stops firing. It was
+already marginal - 7% of breaks reached a second wave before the settle - and the settle takes it to
+zero. The cause is not that reactions got smaller: `largest` is 0.49 either way and pairs per floor
+went *up*. A packed board simply makes the first wave's clump big enough to swallow the partners
+that used to seed the second, so the ripple's work moved into wave 0 where it has no name and no
+beat. The player loses the "Ripple ×N" line, not the payout.
+
+The fix is the one the Gen 189 note already pointed at from the other direction: the boards are too
+small and carry too few suits for any of this to have room. A floor is **three turns long** and
+shows **two suits** up to floor 12 (`yarn sim:pop`), so the whole screen clears in two goes and no
+reaction ever needs a second wave. Gen 191 widens the palette and the pair curve, and the ripple is
+the number to re-measure there.

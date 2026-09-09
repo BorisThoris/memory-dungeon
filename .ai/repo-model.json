@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2431,
-    "codeFileCount": 872,
-    "exportedSymbolCount": 2689,
+    "trackedFileCount": 2435,
+    "codeFileCount": 876,
+    "exportedSymbolCount": 2694,
     "contentItemCount": 12,
-    "mechanicCount": 45,
-    "stateFieldCount": 81,
-    "relationshipCount": 6867
+    "mechanicCount": 46,
+    "stateFieldCount": 82,
+    "relationshipCount": 6904
   },
   "inventory": [
     {
@@ -255,8 +255,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 323327,
-      "sha256": "9704848cf1e9db4374c98a362433ac7f8ad347872609a626e938011a50fc4978"
+      "bytes": 325707,
+      "sha256": "717182d0e859891f3dfc2d47ac41e86a28b99da0b8c1f9ad1dd1926c5fd22a6a"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -267,8 +267,8 @@
     {
       "path": "docs/CHAIN_CHUNK_FEVER_DESIGN.md",
       "category": "documentation",
-      "bytes": 69741,
-      "sha256": "9d6bc651db8b1347c678f1cb1aa3c4ffc530b9c76624281ec19d08397ff16b64"
+      "bytes": 70226,
+      "sha256": "9e15629c2098a4bc5f7b0e4dd7f2a004243d11c4782ab4d1221973af1f57e24f"
     },
     {
       "path": "docs/COLLECTIBLE_SYSTEM.md",
@@ -742,7 +742,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 394,
-      "sha256": "7dd03c8805f8b691ebcdd0efefb818dca667f36f6b190db3131f020b742114fb"
+      "sha256": "0885375b18d9b3256fcefb30631f63cde4eea582d271c32937460abf724cbbaa"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2223,8 +2223,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 8516,
-      "sha256": "9ec9540680f28bc28fb888f7a791fd3c2a52d8ec16e180d701f284c4116952b7"
+      "bytes": 8696,
+      "sha256": "d87651c29f1a4afbcf0b849b9ceda5317707b2c2baa967fd64ca8acd6c168702"
     },
     {
       "path": "docs/REMOVED_DUNGEON_LAYER.md",
@@ -2302,19 +2302,19 @@
       "path": "docs/system-diagrams/AUDIT.md",
       "category": "documentation",
       "bytes": 10613,
-      "sha256": "f963eeba9ad2e36576f1fc9a03b2dc83d5868e09990a36d094c2ec59c07ae896"
+      "sha256": "2a6785ecb692f8d2afe173111006575a924446bc837a99b8c2c508aa169850f4"
     },
     {
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33473,
-      "sha256": "782cac89d267ce925980e2dabcb451ae37a0e5a87f8831f3331977f37b467a28"
+      "sha256": "ebe354653467c598731b837a86fcdd6bf268b855ed8186742b2d30a0f6253533"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
       "category": "documentation",
-      "bytes": 488477,
-      "sha256": "da9b22dca072d978906d2b5f30bb14e7f9e25a4fb9710f9dae2cd5d558efa16c"
+      "bytes": 490749,
+      "sha256": "172a4b50dbebe03c8d6b518867a2ef21fc7f6cfe4ee160706abe451b9219e23b"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -7675,6 +7675,18 @@
       "sha256": "5ea2579e9b47f7664a89383604aec4078a58f6040420484a0d16ba56e14e2552"
     },
     {
+      "path": "src/renderer/components/boardSettleMotion.test.ts",
+      "category": "test",
+      "bytes": 1829,
+      "sha256": "290a75c8133939848648f9b0c40b02a464ce99c81f0393b9be8c1cae83c2b545"
+    },
+    {
+      "path": "src/renderer/components/boardSettleMotion.ts",
+      "category": "source",
+      "bytes": 1076,
+      "sha256": "c25404495684197da83b31d57a2c8e1bad6d503ecbaf25c7b7795d55365a3d9d"
+    },
+    {
       "path": "src/renderer/components/cardArcaneGlowMaterial.test.ts",
       "category": "test",
       "bytes": 2142,
@@ -8193,8 +8205,8 @@
     {
       "path": "src/renderer/components/TileBezel.tsx",
       "category": "source",
-      "bytes": 32771,
-      "sha256": "66aec4aefc5ca2162e94dfde2004e15d1b6b23b57a65ea2a12ec34d058c201da"
+      "bytes": 32867,
+      "sha256": "ae5dda7759009250bcce71d8abcf71f59b75919e1141ba61a56a3390cf324396"
     },
     {
       "path": "src/renderer/components/TileBoard.module.css",
@@ -8211,8 +8223,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 148585,
-      "sha256": "3ffca24c0ddac647854cf6f006664875855a3832b662bccb6a6a36bf6ba5459b"
+      "bytes": 150177,
+      "sha256": "b88b0f639d88b4c377d33ec92486c4d504dd68265bb0d4dc526dca2be523bc8a"
     },
     {
       "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -8361,8 +8373,8 @@
     {
       "path": "src/renderer/components/tileBoardFrameAdvance.ts",
       "category": "source",
-      "bytes": 11850,
-      "sha256": "995ed7e34dc5905b755ca10e3ab03915bcb59017a707d1ae44d9bcc231dbbde4"
+      "bytes": 11912,
+      "sha256": "90dd313c898b7b8d838680421cb81b6c054b0d537c38b8393ea27dfb358160d1"
     },
     {
       "path": "src/renderer/components/tileBoardFrameBag.test.ts",
@@ -8379,8 +8391,8 @@
     {
       "path": "src/renderer/components/tileBoardFrameDeparture.test.ts",
       "category": "test",
-      "bytes": 1758,
-      "sha256": "9d7c78cd03488b1f90f492f3961139235ec88570cf9ea68d9bb8375d939dd88f"
+      "bytes": 2188,
+      "sha256": "8bf22fa7d22dab7dd8b63fd6604967242ca015b3cb20c6412f929152f32531d6"
     },
     {
       "path": "src/renderer/components/tileBoardFrameMaterialState.test.ts",
@@ -8397,26 +8409,26 @@
     {
       "path": "src/renderer/components/tileBoardFramePropsSnapshot.test.ts",
       "category": "test",
-      "bytes": 2581,
-      "sha256": "ae10669617dd190731a2881155286e0b3b7686c7ab6cc918b248c5e1e92e66bf"
+      "bytes": 2620,
+      "sha256": "41173a3185d703deb634a61caa513be17aa626b5e2c72db6914573d91af68d69"
     },
     {
       "path": "src/renderer/components/tileBoardFramePropsSnapshot.ts",
       "category": "source",
-      "bytes": 2167,
-      "sha256": "68bd57811cfb8fdb6eb9eb2471801b55e8355870a74d91a86f9074c9bcbd37d9"
+      "bytes": 2203,
+      "sha256": "1d7c9003aee2d0dca3fa5a158e0d6bf26b08640b57dc2f13dfe732405a767ae3"
     },
     {
       "path": "src/renderer/components/tileBoardFramePulseState.test.ts",
       "category": "test",
-      "bytes": 9677,
-      "sha256": "6d1f84c51bf7cf233dbd7bfd1052465545ed44744f930db0ff61435533d6cfaa"
+      "bytes": 11102,
+      "sha256": "0ca33c66dc37e4b54ee75fee9a8d46aba4738a532f4df9872c7270e614f6267e"
     },
     {
       "path": "src/renderer/components/tileBoardFramePulseState.ts",
       "category": "source",
-      "bytes": 10103,
-      "sha256": "d6ffe39000f5044a6270b59a4ac73998c2d4fa168ad45d36555c449a1d3681ef"
+      "bytes": 10168,
+      "sha256": "9dc56cece5c42865f5c976473c25824a969564a07be667d1a64ba9b2489b4208"
     },
     {
       "path": "src/renderer/components/tileBoardFrameVisualState.test.ts",
@@ -8523,14 +8535,14 @@
     {
       "path": "src/renderer/components/tileBoardLayoutMotionState.test.ts",
       "category": "test",
-      "bytes": 10924,
-      "sha256": "9ae83e16442cf5421e10df230bc85abbbaca41795355521aa9459bac3ea8c344"
+      "bytes": 12428,
+      "sha256": "bc09a187bdcd5da6b3264162752fcb115d9453783c7cf156d6eda7219df65389"
     },
     {
       "path": "src/renderer/components/tileBoardLayoutMotionState.ts",
       "category": "source",
-      "bytes": 7984,
-      "sha256": "907c47a68afa734cfd9f73bf0a5c97aa5518dc05c52b9d61865c89fe0afce5c5"
+      "bytes": 8954,
+      "sha256": "bf6ea9990fafd9f98f8789662f2a7fcea32bfb6bb9f2552f53c635be348678b5"
     },
     {
       "path": "src/renderer/components/tileBoardMaterialVisualState.test.ts",
@@ -8691,14 +8703,14 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 17016,
-      "sha256": "9a8f3193c943ad9bac8c9454ff9cc168c6ca0f8713e36e0e077e567ade9547ca"
+      "bytes": 17241,
+      "sha256": "9bc1e3f2fac1aeef0cda3c2ee67fd38dc7f87f0a4a95c308e9292151260fdaad"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "category": "source",
-      "bytes": 7636,
-      "sha256": "c0e753ccb6163f2254ebd23f59c390120f08f561aa3c6f46bd8bdd8347b324ab"
+      "bytes": 7768,
+      "sha256": "3e2f7fc66ae10e51f23491d90a915af7b3b74d3d48afda36fe423309cbd2fa84"
     },
     {
       "path": "src/renderer/components/tileBoardSceneFrame.test.ts",
@@ -8937,8 +8949,8 @@
     {
       "path": "src/renderer/components/tileFrameActivity.ts",
       "category": "source",
-      "bytes": 13183,
-      "sha256": "2e16464c281d7472f3c65d411d6bf48702e10f7de03d70c793ca9293cab4e466"
+      "bytes": 13510,
+      "sha256": "0944eb6cad706c9a8c6b87ff863fb45461b34727e4e5f78f442d950acc839a51"
     },
     {
       "path": "src/renderer/components/tileResolvingSelection.test.ts",
@@ -10288,7 +10300,7 @@
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
       "bytes": 562,
-      "sha256": "f6a0923e708b4187ff686c09a52011aa00cf42eb9612ffa297ac63cb71fc390f"
+      "sha256": "fd6e161488efa4443b508ea9e96ebb30104940f4a478717dd44800bbc0be68ea"
     },
     {
       "path": "src/shared/achievement-reachability.test.ts",
@@ -10469,6 +10481,18 @@
       "category": "source",
       "bytes": 658,
       "sha256": "36e9149565a3304a93614b0bef24b0e662f2dc8bb41f45a283fb08d5bdd6fa26"
+    },
+    {
+      "path": "src/shared/board-settle-rules.test.ts",
+      "category": "test",
+      "bytes": 6465,
+      "sha256": "dffdbfba594eecb04d243dfad8d2da1aa923221753b3e09448b9249c6027b0fc"
+    },
+    {
+      "path": "src/shared/board-settle-rules.ts",
+      "category": "source",
+      "bytes": 6424,
+      "sha256": "c712c3160d0eb8700131e76f81e87421773109397d1ada13a3148911eac6d524"
     },
     {
       "path": "src/shared/board-tile-generation-rules.test.ts",
@@ -10684,7 +10708,7 @@
       "path": "src/shared/contracts.ts",
       "category": "source",
       "bytes": 31470,
-      "sha256": "365f736c0e70be215efa3896449cce620d0d44218466cd7240553d9403611cee"
+      "sha256": "72d84c83bafede6354831e138d89f2fdb447dcd3ee13a8d6ab4203a82f94d1c1"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -11049,14 +11073,14 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 84000,
-      "sha256": "0f1a4ccc3a2d50b3a65088369c132abeabc7e5f10133da4914ff2150ad65d6f0"
+      "bytes": 85674,
+      "sha256": "789e4bc43d6eb86e2f7410c5877ad803993d633553ec55eebd0409dc491db19d"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "category": "test",
       "bytes": 26914,
-      "sha256": "eed3c06e02a23b65868667519a7ad49d3c999f6f5f2771112a5c72171d349a80"
+      "sha256": "a8567c5283c0616b52ea88e9e0d6d91102b421fb11f8175672d7ee1c8d012075"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.ts",
@@ -11313,8 +11337,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 32522,
-      "sha256": "cdaac86b9476b5f7656d3ca675df8e7a7505b3055bc978424005a9b96df56cc5"
+      "bytes": 33346,
+      "sha256": "f7dd0ce3eda589d8e00fdadcbb40dc29a808104c5abde03b1a2bfc3da6096b73"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -11679,14 +11703,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 37765,
-      "sha256": "d75b4ddc5141e790e0f5af31c8bb84451454e7a1fcf00c0f3b5b8bb6f9404d4a"
+      "bytes": 39345,
+      "sha256": "ec28ea713b19ce8d1b81b21471fca1fa0805c4a93cbdd240456388f19196876a"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 16333,
-      "sha256": "87c6ae659050c10a93e4e6a85daca435f15a0686e46dc3a42d358bafb20270d4"
+      "bytes": 16610,
+      "sha256": "3bea1795225fe09ed3e407ab01c1a2ca3f9c497fb8a329043df1150e715de798"
     },
     {
       "path": "src/shared/renderer-bundle-budget-script.test.ts",
@@ -12309,8 +12333,8 @@
     {
       "path": "src/shared/turn-match-board-resolution-rules.ts",
       "category": "source",
-      "bytes": 1494,
-      "sha256": "4f038261952efcb191c30222ae336c6fa65f34460d73c16ffcba34c2a71134dd"
+      "bytes": 1866,
+      "sha256": "f63599b3f9126fd905c6335203d52f6e547a2b956003f6ec4b7f60eab799cf02"
     },
     {
       "path": "src/shared/turn-match-followup-rules.test.ts",
@@ -12394,7 +12418,7 @@
       "path": "src/shared/version-gate.test.ts",
       "category": "test",
       "bytes": 7336,
-      "sha256": "4b9688f541f09b3aec2c9f2419305d1ba174028458818c24ea9e2775368fea6a"
+      "sha256": "9e19cd94b2872df20781d6b2b0fecdcb9a04ef48be925abe6e4610a9fa38dba3"
     },
     {
       "path": "src/shared/version-gate.ts",
@@ -16587,6 +16611,36 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/boardSettleMotion.test.ts",
+      "path": "src/renderer/components/boardSettleMotion.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 40,
+      "imports": [
+        "file:src/renderer/components/boardSettleMotion.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/boardSettleMotion.ts",
+      "path": "src/renderer/components/boardSettleMotion.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 19,
+      "imports": [
+        "file:src/shared/board-settle-rules.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/boardSettleMotion.ts#getBoardSettleSignature"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/boardSettleMotion.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/cardArcaneGlowMaterial.test.ts",
       "path": "src/renderer/components/cardArcaneGlowMaterial.test.ts",
       "layer": "renderer",
@@ -17929,7 +17983,7 @@
       "path": "src/renderer/components/TileBezel.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 850,
+      "lineCount": 853,
       "imports": [
         "file:src/renderer/components/cardArcaneGlowMaterial.ts",
         "file:src/renderer/components/cardSvgPlaneGeometry.ts",
@@ -17988,16 +18042,18 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3467,
+      "lineCount": 3491,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
+        "file:src/renderer/components/boardSettleMotion.ts",
         "file:src/renderer/components/shuffleFlipAnimation.ts",
         "file:src/renderer/components/tileBoardCanvasContext.ts",
         "file:src/renderer/components/tileBoardDomAccessibility.ts",
         "file:src/renderer/components/tileBoardDomSurfaceModel.ts",
         "file:src/renderer/components/tileBoardDomTelemetry.ts",
         "file:src/renderer/components/tileBoardGestureCommit.ts",
+        "file:src/renderer/components/tileBoardLayoutMotionState.ts",
         "file:src/renderer/components/TileBoardPrestageOverlay.tsx",
         "file:src/renderer/components/tileBoardReadability.ts",
         "file:src/renderer/components/TileBoardScene.tsx",
@@ -18491,7 +18547,7 @@
       "path": "src/renderer/components/tileBoardFrameAdvance.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 305,
+      "lineCount": 306,
       "imports": [
         "file:src/renderer/components/tileBoardCardBend.ts",
         "file:src/renderer/components/tileBoardFrameBag.ts",
@@ -18546,7 +18602,7 @@
       "path": "src/renderer/components/tileBoardFrameDeparture.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 49,
+      "lineCount": 61,
       "imports": [
         "file:src/renderer/components/tileBoardFramePulseState.ts"
       ],
@@ -18590,7 +18646,7 @@
       "path": "src/renderer/components/tileBoardFramePropsSnapshot.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 83,
+      "lineCount": 84,
       "imports": [
         "file:src/renderer/components/tileBoardFramePropsSnapshot.ts"
       ],
@@ -18602,7 +18658,7 @@
       "path": "src/renderer/components/tileBoardFramePropsSnapshot.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 60,
+      "lineCount": 61,
       "imports": [
         "file:src/renderer/components/tileBoardReadability.ts",
         "file:src/renderer/components/tileBoardTransform.ts",
@@ -18624,7 +18680,7 @@
       "path": "src/renderer/components/tileBoardFramePulseState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 281,
+      "lineCount": 316,
       "imports": [
         "file:src/renderer/components/gameplayVisualConfig.ts",
         "file:src/renderer/components/tileBoardFramePulseState.ts"
@@ -18637,7 +18693,7 @@
       "path": "src/renderer/components/tileBoardFramePulseState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 333,
+      "lineCount": 334,
       "imports": [
         "file:src/renderer/components/gameplayVisualConfig.ts",
         "file:src/renderer/components/tileResolvingSelection.ts",
@@ -18948,7 +19004,7 @@
       "path": "src/renderer/components/tileBoardLayoutMotionState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 307,
+      "lineCount": 338,
       "imports": [
         "file:src/renderer/components/gameplayVisualConfig.ts",
         "file:src/renderer/components/tileBoardLayoutMotionState.ts"
@@ -18961,7 +19017,7 @@
       "path": "src/renderer/components/tileBoardLayoutMotionState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 242,
+      "lineCount": 263,
       "imports": [
         "file:src/renderer/components/gameplayVisualConfig.ts",
         "file:src/renderer/components/shuffleFlipAnimation.ts",
@@ -18972,6 +19028,8 @@
         "symbol:src/renderer/components/tileBoardLayoutMotionState.ts#applyTileBoardCardGroupMotionState",
         "symbol:src/renderer/components/tileBoardLayoutMotionState.ts#computeTileBoardCardGroupMotionState",
         "symbol:src/renderer/components/tileBoardLayoutMotionState.ts#computeTileBoardLayoutMotionState",
+        "symbol:src/renderer/components/tileBoardLayoutMotionState.ts#SETTLE_MOTION_BUDGET_MS",
+        "symbol:src/renderer/components/tileBoardLayoutMotionState.ts#SETTLE_POSITION_LAMBDA",
         "symbol:src/renderer/components/tileBoardLayoutMotionState.ts#TILE_BOARD_ZERO_LAYOUT_MOTION"
       ],
       "testedBy": [
@@ -19455,7 +19513,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 436,
+      "lineCount": 440,
       "imports": [
         "file:src/renderer/components/gameplayRenderProfile.ts",
         "file:src/renderer/components/TileBezel.tsx",
@@ -19495,7 +19553,7 @@
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 182,
+      "lineCount": 185,
       "imports": [
         "file:src/renderer/components/cardSvgPlaneGeometry.ts",
         "file:src/renderer/components/TileBezel.tsx",
@@ -20139,7 +20197,7 @@
       "path": "src/renderer/components/tileFrameActivity.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 371,
+      "lineCount": 375,
       "imports": [
         "file:src/renderer/components/gameplayVisualConfig.ts",
         "file:src/renderer/components/tileResolvingSelection.ts",
@@ -24266,6 +24324,37 @@
       ]
     },
     {
+      "id": "file:src/shared/board-settle-rules.test.ts",
+      "path": "src/shared/board-settle-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 172,
+      "imports": [
+        "file:src/shared/board-settle-rules.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/board-settle-rules.ts",
+      "path": "src/shared/board-settle-rules.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 136,
+      "imports": [
+        "file:src/shared/board-grid-dimensions.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/board-settle-rules.ts#settleBoardTowardCentre",
+        "symbol:src/shared/board-settle-rules.ts#tileIsSettleLive"
+      ],
+      "testedBy": [
+        "file:src/shared/board-settle-rules.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/board-tile-generation-rules.test.ts",
       "path": "src/shared/board-tile-generation-rules.test.ts",
       "layer": "shared",
@@ -25078,6 +25167,7 @@
         "file:src/renderer/audio/gameSfx.test.ts",
         "file:src/renderer/cardFace/programmaticCardFace.test.ts",
         "file:src/renderer/cardFace/resolveCardIllustrationUrl.test.ts",
+        "file:src/renderer/components/boardSettleMotion.test.ts",
         "file:src/renderer/components/codexScreenModel.test.ts",
         "file:src/renderer/components/CollectionScreen.test.tsx",
         "file:src/renderer/components/FloorClearBeat.test.tsx",
@@ -25140,6 +25230,7 @@
         "file:src/shared/board-power-availability.test.ts",
         "file:src/shared/board-power-state.test.ts",
         "file:src/shared/board-power-targeting.test.ts",
+        "file:src/shared/board-settle-rules.test.ts",
         "file:src/shared/board-tile-generation-rules.test.ts",
         "file:src/shared/board-turn-event-facts.chunk-style.test.ts",
         "file:src/shared/boss-encounters.test.ts",
@@ -26583,7 +26674,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2506,
+      "lineCount": 2553,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -27344,7 +27435,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 615,
+      "lineCount": 624,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -28516,7 +28607,7 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 656,
+      "lineCount": 681,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
@@ -28550,7 +28641,8 @@
         "file:src/shared/social-play-scope.ts",
         "file:src/shared/steam-achievement-api-names.ts",
         "file:src/shared/test/game-fixtures.ts",
-        "file:src/shared/tile-trait-marks.ts"
+        "file:src/shared/tile-trait-marks.ts",
+        "file:src/shared/turn-match-board-resolution-rules.ts"
       ],
       "exports": [],
       "testedBy": []
@@ -28560,7 +28652,7 @@
       "path": "src/shared/release-checklist.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 431,
+      "lineCount": 438,
       "imports": [],
       "exports": [
         "symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
@@ -30660,8 +30752,9 @@
       "path": "src/shared/turn-match-board-resolution-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 48,
+      "lineCount": 54,
       "imports": [
+        "file:src/shared/board-settle-rules.ts",
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/chunk-break-rules.ts",
         "file:src/shared/contracts.ts",
@@ -30674,6 +30767,7 @@
         "symbol:src/shared/turn-match-board-resolution-rules.ts#TurnMatchBoardResolutionResult"
       ],
       "testedBy": [
+        "file:src/shared/release-checklist.test.ts",
         "file:src/shared/turn-match-board-resolution-rules.test.ts"
       ]
     },
@@ -33290,6 +33384,14 @@
       "endLine": 63
     },
     {
+      "id": "symbol:src/renderer/components/boardSettleMotion.ts#getBoardSettleSignature",
+      "name": "getBoardSettleSignature",
+      "kind": "value",
+      "file": "src/renderer/components/boardSettleMotion.ts",
+      "line": 17,
+      "endLine": 18
+    },
+    {
       "id": "symbol:src/renderer/components/cardArcaneGlowMaterial.ts#CardArcaneGlowUniforms",
       "name": "CardArcaneGlowUniforms",
       "kind": "interface",
@@ -34238,40 +34340,40 @@
       "name": "TileBezel",
       "kind": "value",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 849,
-      "endLine": 849
+      "line": 852,
+      "endLine": 852
     },
     {
       "id": "symbol:src/renderer/components/TileBezel.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "interface",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 153,
-      "endLine": 157
+      "line": 154,
+      "endLine": 158
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 3466,
-      "endLine": 3466
+      "line": 3490,
+      "endLine": 3490
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
       "name": "TileBoardClientRect",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 326,
-      "endLine": 333
+      "line": 328,
+      "endLine": 335
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardHandle",
       "name": "TileBoardHandle",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 335,
-      "endLine": 339
+      "line": 337,
+      "endLine": 341
     },
     {
       "id": "symbol:src/renderer/components/tileBoardBreakWave.ts#BREAK_WAVE_MAX_DELAY_SECONDS",
@@ -35039,7 +35141,7 @@
       "kind": "value",
       "file": "src/renderer/components/tileBoardFrameAdvance.ts",
       "line": 32,
-      "endLine": 304
+      "endLine": 305
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFrameBag.ts#createOrUpdateTileBezelFrameBag",
@@ -35086,8 +35188,8 @@
       "name": "createTileBezelFramePropsSnapshot",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePropsSnapshot.ts",
-      "line": 55,
-      "endLine": 59
+      "line": 56,
+      "endLine": 60
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePropsSnapshot.ts#TileBezelFramePropsSnapshot",
@@ -35095,7 +35197,7 @@
       "kind": "interface",
       "file": "src/renderer/components/tileBoardFramePropsSnapshot.ts",
       "line": 14,
-      "endLine": 53
+      "endLine": 54
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePropsSnapshot.ts#TileBoardFrameHoverTiltState",
@@ -35150,16 +35252,16 @@
       "name": "computeTileBoardFlipPopVisualState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 229,
-      "endLine": 253
+      "line": 230,
+      "endLine": 254
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardFramePulseTransitionState",
       "name": "computeTileBoardFramePulseTransitionState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 255,
-      "endLine": 332
+      "line": 256,
+      "endLine": 333
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardMatchedBurstState",
@@ -35167,7 +35269,7 @@
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
       "line": 180,
-      "endLine": 227
+      "endLine": 228
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardMatchPulseState",
@@ -35430,32 +35532,48 @@
       "name": "applyTileBoardCardGroupMotionState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardLayoutMotionState.ts",
-      "line": 151,
-      "endLine": 185
+      "line": 172,
+      "endLine": 206
     },
     {
       "id": "symbol:src/renderer/components/tileBoardLayoutMotionState.ts#computeTileBoardCardGroupMotionState",
       "name": "computeTileBoardCardGroupMotionState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardLayoutMotionState.ts",
-      "line": 187,
-      "endLine": 241
+      "line": 208,
+      "endLine": 262
     },
     {
       "id": "symbol:src/renderer/components/tileBoardLayoutMotionState.ts#computeTileBoardLayoutMotionState",
       "name": "computeTileBoardLayoutMotionState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardLayoutMotionState.ts",
-      "line": 83,
-      "endLine": 149
+      "line": 90,
+      "endLine": 170
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardLayoutMotionState.ts#SETTLE_MOTION_BUDGET_MS",
+      "name": "SETTLE_MOTION_BUDGET_MS",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardLayoutMotionState.ts",
+      "line": 79,
+      "endLine": 79
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardLayoutMotionState.ts#SETTLE_POSITION_LAMBDA",
+      "name": "SETTLE_POSITION_LAMBDA",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardLayoutMotionState.ts",
+      "line": 76,
+      "endLine": 76
     },
     {
       "id": "symbol:src/renderer/components/tileBoardLayoutMotionState.ts#TILE_BOARD_ZERO_LAYOUT_MOTION",
       "name": "TILE_BOARD_ZERO_LAYOUT_MOTION",
       "kind": "value",
       "file": "src/renderer/components/tileBoardLayoutMotionState.ts",
-      "line": 74,
-      "endLine": 81
+      "line": 81,
+      "endLine": 88
     },
     {
       "id": "symbol:src/renderer/components/tileBoardMaterialVisualState.ts#applyCardMaterialEmissive",
@@ -36054,16 +36172,16 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 435,
-      "endLine": 435
+      "line": 439,
+      "endLine": 439
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
       "name": "TileBoardSceneHandle",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 145,
-      "endLine": 145
+      "line": 147,
+      "endLine": 147
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileHoverTiltState",
@@ -36078,8 +36196,8 @@
       "name": "TileBoardSceneBoardGroup",
       "kind": "value",
       "file": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
-      "line": 45,
-      "endLine": 181
+      "line": 46,
+      "endLine": 184
     },
     {
       "id": "symbol:src/renderer/components/tileBoardSceneFrame.ts#runTileBoardSceneFrame",
@@ -36686,32 +36804,32 @@
       "name": "advanceScheduledTileBezelFrames",
       "kind": "value",
       "file": "src/renderer/components/tileFrameActivity.ts",
-      "line": 98,
-      "endLine": 124
+      "line": 99,
+      "endLine": 125
     },
     {
       "id": "symbol:src/renderer/components/tileFrameActivity.ts#AdvanceScheduledTileBezelFramesResult",
       "name": "AdvanceScheduledTileBezelFramesResult",
       "kind": "interface",
       "file": "src/renderer/components/tileFrameActivity.ts",
-      "line": 81,
-      "endLine": 84
+      "line": 82,
+      "endLine": 85
     },
     {
       "id": "symbol:src/renderer/components/tileFrameActivity.ts#scheduleTileBezelFrameActivity",
       "name": "scheduleTileBezelFrameActivity",
       "kind": "value",
       "file": "src/renderer/components/tileFrameActivity.ts",
-      "line": 86,
-      "endLine": 96
+      "line": 87,
+      "endLine": 97
     },
     {
       "id": "symbol:src/renderer/components/tileFrameActivity.ts#shouldAdvanceTileBezelThisFrame",
       "name": "shouldAdvanceTileBezelThisFrame",
       "kind": "function",
       "file": "src/renderer/components/tileFrameActivity.ts",
-      "line": 126,
-      "endLine": 370
+      "line": 127,
+      "endLine": 374
     },
     {
       "id": "symbol:src/renderer/components/tileFrameActivity.ts#TileBezelActivityBag",
@@ -36719,7 +36837,7 @@
       "kind": "type",
       "file": "src/renderer/components/tileFrameActivity.ts",
       "line": 12,
-      "endLine": 62
+      "endLine": 63
     },
     {
       "id": "symbol:src/renderer/components/tileResolvingSelection.ts#getMatchResolvingPairTileIds",
@@ -41616,6 +41734,22 @@
       "file": "src/shared/board-powers.ts",
       "line": 23,
       "endLine": 23
+    },
+    {
+      "id": "symbol:src/shared/board-settle-rules.ts#settleBoardTowardCentre",
+      "name": "settleBoardTowardCentre",
+      "kind": "value",
+      "file": "src/shared/board-settle-rules.ts",
+      "line": 100,
+      "endLine": 135
+    },
+    {
+      "id": "symbol:src/shared/board-settle-rules.ts#tileIsSettleLive",
+      "name": "tileIsSettleLive",
+      "kind": "value",
+      "file": "src/shared/board-settle-rules.ts",
+      "line": 36,
+      "endLine": 36
     },
     {
       "id": "symbol:src/shared/board-tile-generation-rules.ts#assignFindableKindsToTiles",
@@ -47070,16 +47204,16 @@
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 582,
-      "endLine": 600
+      "line": 591,
+      "endLine": 609
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 603,
-      "endLine": 614
+      "line": 612,
+      "endLine": 623
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
@@ -47087,7 +47221,7 @@
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
       "line": 518,
-      "endLine": 579
+      "endLine": 588
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
@@ -48895,15 +49029,15 @@
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
       "line": 32,
-      "endLine": 383
+      "endLine": 390
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
       "name": "releaseChecklistByOwner",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 389,
-      "endLine": 390
+      "line": 396,
+      "endLine": 397
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
@@ -48926,16 +49060,16 @@
       "name": "releaseChecklistSections",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 385,
-      "endLine": 387
+      "line": 392,
+      "endLine": 394
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown",
       "name": "renderReleaseChecklistMarkdown",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 404,
-      "endLine": 430
+      "line": 411,
+      "endLine": 437
     },
     {
       "id": "symbol:src/shared/rich-presence.ts#buildRichPresence",
@@ -52078,24 +52212,24 @@
       "name": "resolveTurnMatchBoardResolution",
       "kind": "value",
       "file": "src/shared/turn-match-board-resolution-rules.ts",
-      "line": 21,
-      "endLine": 47
+      "line": 22,
+      "endLine": 53
     },
     {
       "id": "symbol:src/shared/turn-match-board-resolution-rules.ts#TurnMatchBoardResolutionInput",
       "name": "TurnMatchBoardResolutionInput",
       "kind": "interface",
       "file": "src/shared/turn-match-board-resolution-rules.ts",
-      "line": 12,
-      "endLine": 18
+      "line": 13,
+      "endLine": 19
     },
     {
       "id": "symbol:src/shared/turn-match-board-resolution-rules.ts#TurnMatchBoardResolutionResult",
       "name": "TurnMatchBoardResolutionResult",
       "kind": "interface",
       "file": "src/shared/turn-match-board-resolution-rules.ts",
-      "line": 7,
-      "endLine": 10
+      "line": 8,
+      "endLine": 11
     },
     {
       "id": "symbol:src/shared/turn-match-followup-rules.ts#resolveTurnMatchFollowup",
@@ -52750,6 +52884,61 @@
       "blocks": [],
       "softlockGuards": [
         "cleanup-before-completion-check"
+      ]
+    },
+    {
+      "id": "mechanic:board.settle",
+      "mechanicId": "board.settle",
+      "label": "The Settle",
+      "kind": "board",
+      "role": "centre_gravity_repack_after_a_clear",
+      "evidence": [
+        {
+          "path": "src/shared/board-settle-rules.ts",
+          "line": 5
+        },
+        {
+          "path": "src/shared/turn-match-board-resolution-rules.ts",
+          "line": 6
+        },
+        {
+          "path": "src/renderer/components/boardSettleMotion.ts",
+          "line": 2
+        },
+        {
+          "path": "src/renderer/components/tileBoardLayoutMotionState.ts",
+          "line": 24
+        },
+        {
+          "path": "src/renderer/components/tileBoardFramePulseState.ts",
+          "line": 200
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/board-settle-rules.test.ts",
+          "line": 3
+        },
+        {
+          "path": "src/renderer/components/boardSettleMotion.test.ts",
+          "line": 3
+        },
+        {
+          "path": "src/renderer/components/tileBoardLayoutMotionState.test.ts",
+          "line": 3
+        },
+        {
+          "path": "src/renderer/components/tileBoardFrameDeparture.test.ts",
+          "line": 7
+        }
+      ],
+      "enables": [
+        "board.chain_chunk_fever"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "settle-never-moves-a-card-outward",
+        "settle-is-pure-and-idempotent"
       ]
     },
     {
@@ -54848,9 +55037,18 @@
       ]
     },
     {
+      "id": "state:boardColumns",
+      "name": "boardColumns",
+      "readBy": [
+        "mechanic:board.settle"
+      ],
+      "writtenBy": []
+    },
+    {
       "id": "state:boardRows",
       "name": "boardRows",
       "readBy": [
+        "mechanic:board.settle",
         "mechanic:power.region_shuffle"
       ],
       "writtenBy": []
@@ -55581,6 +55779,7 @@
       "readBy": [
         "mechanic:board.chain_chunk_fever",
         "mechanic:board.cleanup",
+        "mechanic:board.settle",
         "mechanic:board.wild_joker_tile",
         "mechanic:core.board_turn_resolution",
         "mechanic:findable.score_glint",
@@ -55601,6 +55800,7 @@
       "writtenBy": [
         "mechanic:board.chain_chunk_fever",
         "mechanic:board.cleanup",
+        "mechanic:board.settle",
         "mechanic:board.wild_joker_tile",
         "mechanic:core.board_turn_resolution",
         "mechanic:power.destroy_pair",
@@ -58061,6 +58261,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/boardSettleMotion.ts->symbol:src/renderer/components/boardSettleMotion.ts#getBoardSettleSignature",
+      "source": "file:src/renderer/components/boardSettleMotion.ts",
+      "target": "symbol:src/renderer/components/boardSettleMotion.ts#getBoardSettleSignature",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/cardArcaneGlowMaterial.ts->symbol:src/renderer/components/cardArcaneGlowMaterial.ts#CardArcaneGlowUniforms",
       "source": "file:src/renderer/components/cardArcaneGlowMaterial.ts",
       "target": "symbol:src/renderer/components/cardArcaneGlowMaterial.ts#CardArcaneGlowUniforms",
@@ -59678,6 +59884,18 @@
       "id": "exports:src/renderer/components/tileBoardLayoutMotionState.ts->symbol:src/renderer/components/tileBoardLayoutMotionState.ts#computeTileBoardLayoutMotionState",
       "source": "file:src/renderer/components/tileBoardLayoutMotionState.ts",
       "target": "symbol:src/renderer/components/tileBoardLayoutMotionState.ts#computeTileBoardLayoutMotionState",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileBoardLayoutMotionState.ts->symbol:src/renderer/components/tileBoardLayoutMotionState.ts#SETTLE_MOTION_BUDGET_MS",
+      "source": "file:src/renderer/components/tileBoardLayoutMotionState.ts",
+      "target": "symbol:src/renderer/components/tileBoardLayoutMotionState.ts#SETTLE_MOTION_BUDGET_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileBoardLayoutMotionState.ts->symbol:src/renderer/components/tileBoardLayoutMotionState.ts#SETTLE_POSITION_LAMBDA",
+      "source": "file:src/renderer/components/tileBoardLayoutMotionState.ts",
+      "target": "symbol:src/renderer/components/tileBoardLayoutMotionState.ts#SETTLE_POSITION_LAMBDA",
       "kind": "exports"
     },
     {
@@ -64304,6 +64522,18 @@
       "id": "exports:src/shared/board-powers.ts->symbol:src/shared/board-powers.ts#togglePinnedTile",
       "source": "file:src/shared/board-powers.ts",
       "target": "symbol:src/shared/board-powers.ts#togglePinnedTile",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/board-settle-rules.ts->symbol:src/shared/board-settle-rules.ts#settleBoardTowardCentre",
+      "source": "file:src/shared/board-settle-rules.ts",
+      "target": "symbol:src/shared/board-settle-rules.ts#settleBoardTowardCentre",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/board-settle-rules.ts->symbol:src/shared/board-settle-rules.ts#tileIsSettleLive",
+      "source": "file:src/shared/board-settle-rules.ts",
+      "target": "symbol:src/shared/board-settle-rules.ts#tileIsSettleLive",
       "kind": "exports"
     },
     {
@@ -72619,6 +72849,36 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:board.settle->file:src/renderer/components/boardSettleMotion.ts",
+      "source": "mechanic:board.settle",
+      "target": "file:src/renderer/components/boardSettleMotion.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:board.settle->file:src/renderer/components/tileBoardFramePulseState.ts",
+      "source": "mechanic:board.settle",
+      "target": "file:src/renderer/components/tileBoardFramePulseState.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:board.settle->file:src/renderer/components/tileBoardLayoutMotionState.ts",
+      "source": "mechanic:board.settle",
+      "target": "file:src/renderer/components/tileBoardLayoutMotionState.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:board.settle->file:src/shared/board-settle-rules.ts",
+      "source": "mechanic:board.settle",
+      "target": "file:src/shared/board-settle-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:board.settle->file:src/shared/turn-match-board-resolution-rules.ts",
+      "source": "mechanic:board.settle",
+      "target": "file:src/shared/turn-match-board-resolution-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:board.wild_joker_tile->file:src/shared/board-inspection.ts",
       "source": "mechanic:board.wild_joker_tile",
       "target": "file:src/shared/board-inspection.ts",
@@ -75001,6 +75261,30 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/boardSettleMotion.test.ts->src/renderer/components/boardSettleMotion.ts",
+      "source": "file:src/renderer/components/boardSettleMotion.test.ts",
+      "target": "file:src/renderer/components/boardSettleMotion.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/boardSettleMotion.test.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/boardSettleMotion.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/boardSettleMotion.ts->src/shared/board-settle-rules.ts",
+      "source": "file:src/renderer/components/boardSettleMotion.ts",
+      "target": "file:src/shared/board-settle-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/boardSettleMotion.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/boardSettleMotion.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/cardArcaneGlowMaterial.test.ts->src/renderer/components/boardRuneFieldMaterial.ts",
       "source": "file:src/renderer/components/cardArcaneGlowMaterial.test.ts",
       "target": "file:src/renderer/components/boardRuneFieldMaterial.ts",
@@ -77179,6 +77463,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/TileBoard.tsx->src/renderer/components/boardSettleMotion.ts",
+      "source": "file:src/renderer/components/TileBoard.tsx",
+      "target": "file:src/renderer/components/boardSettleMotion.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/TileBoard.tsx->src/renderer/components/shuffleFlipAnimation.ts",
       "source": "file:src/renderer/components/TileBoard.tsx",
       "target": "file:src/renderer/components/shuffleFlipAnimation.ts",
@@ -77212,6 +77502,12 @@
       "id": "imports:src/renderer/components/TileBoard.tsx->src/renderer/components/tileBoardGestureCommit.ts",
       "source": "file:src/renderer/components/TileBoard.tsx",
       "target": "file:src/renderer/components/tileBoardGestureCommit.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoard.tsx->src/renderer/components/tileBoardLayoutMotionState.ts",
+      "source": "file:src/renderer/components/TileBoard.tsx",
+      "target": "file:src/renderer/components/tileBoardLayoutMotionState.ts",
       "kind": "imports"
     },
     {
@@ -82615,6 +82911,30 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/board-settle-rules.test.ts->src/shared/board-settle-rules.ts",
+      "source": "file:src/shared/board-settle-rules.test.ts",
+      "target": "file:src/shared/board-settle-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/board-settle-rules.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/board-settle-rules.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/board-settle-rules.ts->src/shared/board-grid-dimensions.ts",
+      "source": "file:src/shared/board-settle-rules.ts",
+      "target": "file:src/shared/board-grid-dimensions.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/board-settle-rules.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/board-settle-rules.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/board-tile-generation-rules.test.ts->src/shared/board-tile-generation-rules.ts",
       "source": "file:src/shared/board-tile-generation-rules.test.ts",
       "target": "file:src/shared/board-tile-generation-rules.ts",
@@ -86335,6 +86655,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/release-checklist.test.ts->src/shared/turn-match-board-resolution-rules.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/shared/turn-match-board-resolution-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/renderer-error-report.test.ts->src/shared/desktop-api-boundary.ts",
       "source": "file:src/shared/renderer-error-report.test.ts",
       "target": "file:src/shared/desktop-api-boundary.ts",
@@ -88003,6 +88329,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/turn-match-board-resolution-rules.ts->src/shared/board-settle-rules.ts",
+      "source": "file:src/shared/turn-match-board-resolution-rules.ts",
+      "target": "file:src/shared/board-settle-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/turn-match-board-resolution-rules.ts->src/shared/chain-tier-rules.ts",
       "source": "file:src/shared/turn-match-board-resolution-rules.ts",
       "target": "file:src/shared/chain-tier-rules.ts",
@@ -88537,6 +88869,24 @@
     {
       "id": "reads:mechanic:board.cleanup->state:tileStates",
       "source": "mechanic:board.cleanup",
+      "target": "state:tileStates",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:board.settle->state:boardColumns",
+      "source": "mechanic:board.settle",
+      "target": "state:boardColumns",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:board.settle->state:boardRows",
+      "source": "mechanic:board.settle",
+      "target": "state:boardRows",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:board.settle->state:tileStates",
+      "source": "mechanic:board.settle",
       "target": "state:tileStates",
       "kind": "reads"
     },
@@ -89520,6 +89870,20 @@
       "label": "lock pulse"
     },
     {
+      "id": "synergy:mechanic:board.chain_chunk_fever->mechanic:board.settle:clears the cells",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "mechanic:board.settle",
+      "kind": "synergy",
+      "label": "clears the cells"
+    },
+    {
+      "id": "synergy:mechanic:board.settle->mechanic:board.chain_chunk_fever:packs new neighbours",
+      "source": "mechanic:board.settle",
+      "target": "mechanic:board.chain_chunk_fever",
+      "kind": "synergy",
+      "label": "packs new neighbours"
+    },
+    {
       "id": "synergy:mechanic:power.gambit->mechanic:power.wild_match:third-flip rescue can complete a wildcard pair",
       "source": "mechanic:power.gambit",
       "target": "mechanic:power.wild_match",
@@ -89612,6 +89976,30 @@
       "id": "tested_by:mechanic:board.cleanup->file:src/shared/turn-match-board-cleanup-rules.test.ts",
       "source": "mechanic:board.cleanup",
       "target": "file:src/shared/turn-match-board-cleanup-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:board.settle->file:src/renderer/components/boardSettleMotion.test.ts",
+      "source": "mechanic:board.settle",
+      "target": "file:src/renderer/components/boardSettleMotion.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:board.settle->file:src/renderer/components/tileBoardFrameDeparture.test.ts",
+      "source": "mechanic:board.settle",
+      "target": "file:src/renderer/components/tileBoardFrameDeparture.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:board.settle->file:src/renderer/components/tileBoardLayoutMotionState.test.ts",
+      "source": "mechanic:board.settle",
+      "target": "file:src/renderer/components/tileBoardLayoutMotionState.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:board.settle->file:src/shared/board-settle-rules.test.ts",
+      "source": "mechanic:board.settle",
+      "target": "file:src/shared/board-settle-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -90861,6 +91249,12 @@
       "id": "tested_by:src/renderer/components/boardRuneFieldMaterial.ts->file:src/renderer/components/cardArcaneGlowMaterial.test.ts",
       "source": "file:src/renderer/components/boardRuneFieldMaterial.ts",
       "target": "file:src/renderer/components/cardArcaneGlowMaterial.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/boardSettleMotion.ts->file:src/renderer/components/boardSettleMotion.test.ts",
+      "source": "file:src/renderer/components/boardSettleMotion.ts",
+      "target": "file:src/renderer/components/boardSettleMotion.test.ts",
       "kind": "tested_by"
     },
     {
@@ -92496,6 +92890,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/board-settle-rules.ts->file:src/shared/board-settle-rules.test.ts",
+      "source": "file:src/shared/board-settle-rules.ts",
+      "target": "file:src/shared/board-settle-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/board-tile-generation-rules.ts->file:src/shared/bad-floor-is-quiet.test.ts",
       "source": "file:src/shared/board-tile-generation-rules.ts",
       "target": "file:src/shared/bad-floor-is-quiet.test.ts",
@@ -92739,6 +93139,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/cardFace/resolveCardIllustrationUrl.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/cardFace/resolveCardIllustrationUrl.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/boardSettleMotion.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/renderer/components/boardSettleMotion.test.ts",
       "kind": "tested_by"
     },
     {
@@ -93111,6 +93517,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/board-power-targeting.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/board-power-targeting.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/board-settle-rules.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/board-settle-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -95946,6 +96358,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/turn-match-board-resolution-rules.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/shared/turn-match-board-resolution-rules.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/turn-match-board-resolution-rules.ts->file:src/shared/turn-match-board-resolution-rules.test.ts",
       "source": "file:src/shared/turn-match-board-resolution-rules.ts",
       "target": "file:src/shared/turn-match-board-resolution-rules.test.ts",
@@ -96173,6 +96591,12 @@
     {
       "id": "writes:mechanic:board.cleanup->state:tileStates",
       "source": "mechanic:board.cleanup",
+      "target": "state:tileStates",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:board.settle->state:tileStates",
+      "source": "mechanic:board.settle",
       "target": "state:tileStates",
       "kind": "writes"
     },

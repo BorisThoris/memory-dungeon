@@ -22,6 +22,7 @@ export interface TileBezelFramePropsSnapshot {
     pickable: boolean;
     reduceMotion: boolean;
     resolvingSelection: ResolvingSelectionState;
+    settleMotionDeadlineMs: number;
     shuffleMotionDeadlineMs: number;
     shuffleMotionBudgetMs: number;
     shuffleStaggerTileCount: number;

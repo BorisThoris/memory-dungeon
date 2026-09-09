@@ -11,7 +11,7 @@
 import type { AchievementId, GameMode, MutatorId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 33 as const;
+export const ENCYCLOPEDIA_VERSION = 34 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -529,6 +529,15 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
             'A suit that can no longer pop - no two of its pairs within reach of each other - loses its last pairs on its own: that is the drop, and it happens at any chain, so breaking the two pairs that hold a third up is a thing you can aim. ' +
             'A break with a shape gets a name on the run line: a ripple that ran on, a drop, a partner taken from across the board, a halo, a treasure spill, a clean sweep of a suit. ' +
             'Clear the floor with momentum still standing and the floor-end bonus multiplies with the tier: 1.5x at Clean, 2.5x at Sharp, 5x at Fever - Extreme Fever. Never the rating.'
+    },
+    {
+        id: 'board_settle',
+        title: 'The settle',
+        description:
+            'Every card a match or a break takes leaves the board, and the cards that are left fall in to close the gap. ' +
+            'The middle of the board is the down: a floor plays like sand collecting in a globe rather than a grid slowly going hollow. ' +
+            'A card only ever moves to a cell nearer the middle than the one it was in, and it is always the nearest card that fills a gap, so a card you were tracking slides a step rather than being flung across the board. ' +
+            'It is not only a look. Every reach in the game reads the grid as it stands, so a board that closes its gaps keeps making new neighbours - which is what lets a late match on an emptying floor still find something worth taking.'
     },
     {
         id: 'tile_suits',

@@ -8,6 +8,7 @@ import {
     computeTileBoardFramePulseTransitionState,
     computeTileBoardFlipPopStart,
     computeTileBoardFlipPopVisualState,
+    BREAK_DEPARTURE_SECONDS,
     computeTileBoardMatchedBurstState,
     computeTileBoardMatchPulseState,
     computeTileBoardResolvingWaveFrameState
@@ -215,6 +216,40 @@ describe('tileBoardFramePulseState', () => {
         ).toBeCloseTo(0.52);
     });
 
+    it('takes a matched card off the board, the way a broken one leaves', () => {
+        const duration = GAMEPLAY_BOARD_VISUALS.matchedEdgeEffect.burstDuration.default;
+        // Halfway through the burst the card has not begun to go yet.
+        expect(
+            computeTileBoardMatchedBurstState({
+                reduceMotion: false,
+                startedAt: 3,
+                tileState: 'matched',
+                time: 3 + duration * 0.4,
+                wasMatched: true
+            }).departure
+        ).toBe(0);
+        // And by the end of the departure it is gone, leaving the cell for the settle to fill.
+        expect(
+            computeTileBoardMatchedBurstState({
+                reduceMotion: false,
+                startedAt: 3,
+                tileState: 'matched',
+                time: 3 + duration * 0.5 + BREAK_DEPARTURE_SECONDS + 0.001,
+                wasMatched: true
+            })
+        ).toEqual({ burst: 0, departure: 1, startedAt: null, wasMatched: true });
+        // A card that has already left stays gone rather than reappearing in its old cell.
+        expect(
+            computeTileBoardMatchedBurstState({
+                reduceMotion: false,
+                startedAt: null,
+                tileState: 'matched',
+                time: 9,
+                wasMatched: true
+            })
+        ).toEqual({ burst: 0, departure: 1, startedAt: null, wasMatched: true });
+    });
+
     it('starts and fades matched victory burst using the configured duration', () => {
         const started = computeTileBoardMatchedBurstState({
             reduceMotion: false,
@@ -236,15 +271,15 @@ describe('tileBoardFramePulseState', () => {
         expect(halfway.burst).toBeCloseTo(0.5);
         expect(halfway.startedAt).toBe(3);
 
-        expect(
-            computeTileBoardMatchedBurstState({
-                reduceMotion: false,
-                startedAt: 3,
-                tileState: 'matched',
-                time: 3 + duration + 0.001,
-                wasMatched: true
-            })
-        ).toEqual({ burst: 0, departure: 0, startedAt: null, wasMatched: true });
+        const faded = computeTileBoardMatchedBurstState({
+            reduceMotion: false,
+            startedAt: 3,
+            tileState: 'matched',
+            time: 3 + duration + 0.001,
+            wasMatched: true
+        });
+        expect(faded.burst).toBe(0);
+        expect(faded.startedAt).toBe(3);
     });
 
     it('clears matched victory burst for non-matched tiles', () => {

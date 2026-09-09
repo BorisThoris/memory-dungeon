@@ -22,6 +22,7 @@ import { isPassAndPlayFinalFloor, PASS_AND_PLAY_FLOORS, resolvePassAndPlayOutcom
 import { labelsAreAmbiguous } from '../../scripts/control-label-ambiguity';
 import { PLAYABLE_PATH_FIXTURE_IDS, createPlayablePathFixture } from './playable-path-fixtures';
 import { resolveChunkBreak } from './chunk-break-rules';
+import { resolveTurnMatchBoardResolution } from './turn-match-board-resolution-rules';
 import { CHAIN_REACTION_WAVES, evaluateAchievementUnlocks } from './achievements';
 import { makeBoard, makeTile } from './test/game-fixtures';
 import { assertCascadeBalanceWithinBands, runCascadeBalanceSimulation } from './cascade-balance-simulation';
@@ -147,6 +148,30 @@ const VERIFIERS: Record<string, () => void> = {
         const sharp = resolveChunkBreak({ board: row, run, matchedTileIds: ['A1', 'A2'], chain: 4 });
         expect(sharp.wavePairKeys, 'Sharp runs the reaction out').toEqual([['B'], ['C'], ['D']]);
         expect(sharp.board.tiles.find((t) => t.id === 'D2')?.brokenAtWave).toBe(2);
+    },
+    'the-settle': () => {
+        const rowTile = (id: string) => makeTile(id, id[0]!, id[0]!, { suit: id[0] === 'A' ? 'ember' : 'tide' });
+        // Two rows of six, with A's pair standing one above the other in the middle of the board.
+        const order = ['B1', 'C1', 'A1', 'D1', 'E1', 'F1', 'B2', 'C2', 'A2', 'D2', 'E2', 'F2'];
+        const board = makeBoard(order.map(rowTile), { columns: 6, rows: 2, level: 3 });
+        const run = createNewRun(0, { gameMode: 'endless', runSeed: 7 });
+        const centre = (index: number) => ((index % 6) - 2.5) ** 2 + (Math.floor(index / 6) - 0.5) ** 2;
+        const cellOf = (state: typeof board, id: string) => state.tiles.findIndex((t) => t.id === id);
+        const { board: settled } = resolveTurnMatchBoardResolution({
+            run,
+            board,
+            firstTileId: 'A1',
+            secondTileId: 'A2'
+        });
+
+        expect(settled.tiles.find((t) => t.id === 'A1')?.state, 'the matched card is off the board').toBe('matched');
+        const before = cellOf(board, 'C1');
+        const after = cellOf(settled, 'C1');
+        expect(centre(after), 'and its neighbour fell in toward the middle to close the gap').toBeLessThan(centre(before));
+        // Nothing is ever pushed outward by the settle.
+        for (const tile of board.tiles.filter((t) => t.id !== 'A1' && t.id !== 'A2')) {
+            expect(centre(cellOf(settled, tile.id)), tile.id).toBeLessThanOrEqual(centre(cellOf(board, tile.id)));
+        }
     },
     'the-drop': () => {
         const suit = (id: string) => (['A', 'B', 'C'].includes(id[0]!) ? 'ember' : 'tide');

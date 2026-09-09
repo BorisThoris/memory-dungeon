@@ -3,6 +3,7 @@ import { createMatchedPairClaimBoard } from './match-claim-rules';
 import { chainMomentum } from './chain-tier-rules';
 import { resolveChunkBreak, type ChunkBreakResult } from './chunk-break-rules';
 import { normalizeSessionStats } from './session-stats-rules';
+import { settleBoardTowardCentre } from './board-settle-rules';
 
 export interface TurnMatchBoardResolutionResult {
     board: BoardState;
@@ -40,8 +41,13 @@ export const resolveTurnMatchBoardResolution = ({
         chain: chainMomentum(normalizeSessionStats(run.stats).currentStreak + 1, run.chunkPairsThisChain)
     });
 
+    /*
+     * The settle. Whatever the match and the break took is gone, and the cards that are left fall
+     * toward the middle to close the gap - so the next turn's reach, ripple and aim guide read a
+     * board that is still packed rather than one slowly going hollow.
+     */
     return {
-        board: chunkBreak.board,
+        board: settleBoardTowardCentre(chunkBreak.board),
         chunkBreak
     };
 };

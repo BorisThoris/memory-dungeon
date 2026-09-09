@@ -60,6 +60,7 @@ describe('tileBoardFramePropsSnapshot', () => {
             resolvingSelection: 'match',
             shuffleBoardOrderIndex: 2,
             shuffleMotionBudgetMs: 200,
+            settleMotionDeadlineMs: 0,
             shuffleMotionDeadlineMs: 800,
             shuffleStaggerTileCount: 10,
             textureRevision: 7,

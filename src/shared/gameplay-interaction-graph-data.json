@@ -1,5 +1,5 @@
 {
-    "version": 34,
+    "version": 35,
     "mechanics": [
         {
             "id": "trait.echo",
@@ -1692,6 +1692,41 @@
                 "src/renderer/components/RunShell.test.tsx",
                 "src/renderer/components/tileBoardBreakWave.test.ts"
             ]
+        },
+        {
+            "id": "board.settle",
+            "label": "The Settle",
+            "kind": "board",
+            "role": "centre_gravity_repack_after_a_clear",
+            "evidence": [
+                "src/shared/board-settle-rules.ts",
+                "src/shared/turn-match-board-resolution-rules.ts",
+                "src/renderer/components/boardSettleMotion.ts",
+                "src/renderer/components/tileBoardLayoutMotionState.ts",
+                "src/renderer/components/tileBoardFramePulseState.ts"
+            ],
+            "reads": [
+                "tileStates",
+                "boardColumns",
+                "boardRows"
+            ],
+            "writes": [
+                "tileStates"
+            ],
+            "enables": [
+                "board.chain_chunk_fever"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "settle-never-moves-a-card-outward",
+                "settle-is-pure-and-idempotent"
+            ],
+            "tests": [
+                "src/shared/board-settle-rules.test.ts",
+                "src/renderer/components/boardSettleMotion.test.ts",
+                "src/renderer/components/tileBoardLayoutMotionState.test.ts",
+                "src/renderer/components/tileBoardFrameDeparture.test.ts"
+            ]
         }
     ],
     "edges": [
@@ -2480,6 +2515,18 @@
             "target": "trait.stasis",
             "kind": "counterplay",
             "label": "swap the blocked pair away"
+        },
+        {
+            "source": "board.chain_chunk_fever",
+            "target": "board.settle",
+            "kind": "synergy",
+            "label": "clears the cells"
+        },
+        {
+            "source": "board.settle",
+            "target": "board.chain_chunk_fever",
+            "kind": "synergy",
+            "label": "packs new neighbours"
         }
     ],
     "coverage": {

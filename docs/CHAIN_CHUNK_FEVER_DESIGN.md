@@ -445,6 +445,8 @@ the exit included, and the shop sells one.
 | **155** | ~~Put the occupancy census in `gate:systems`.~~ Done: `yarn gate:occupancy` asserts the baseline in both directions, off one shared record the census test reads too. | A ratchet nobody runs is a comment. |
 | **156** | Reserve plain pairs from the dungeon budget, properly. | §11.2: worth doing, with the recipe taught to cut optional content before identity and the build-strategy fixtures re-measured. |
 | **157** | The magpie play-through (task 114 / #156). | Carried. |
+| **190** | ~~The settle: cleared cards leave and the survivors pack toward the middle.~~ Done: `board-settle-rules.ts`, in the turn path, with the glide in the scene. | A board that never moves is one whose clumps only shrink, so the cascade decays as a floor empties. |
+| **191** | More suits from the first floor, and a pair curve that grows. | A floor is three turns long and shows two suits, so the screen clears in two goes and the ripple has no room to fire (Gen 190's note). |
 
 Deferred from the batch set after Gen 142, still wanted, now behind the census: a third island on
 boards of 32 tiles or more; the floor's suits on the floor-clear recap; the tutorial floor's first

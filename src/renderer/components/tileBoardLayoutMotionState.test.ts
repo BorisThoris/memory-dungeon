@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+    SETTLE_POSITION_LAMBDA,
     TILE_BOARD_ZERO_LAYOUT_MOTION,
     applyTileBoardCardGroupMotionState,
     computeTileBoardCardGroupMotionState,
@@ -42,7 +43,8 @@ const layoutMotion = (overrides: Partial<Parameters<typeof computeTileBoardLayou
         reduceMotion: false,
         shuffleBoardOrderIndex: 3,
         shuffleMotionBudgetMs: 600,
-        shuffleMotionDeadlineMs: 0,
+        settleMotionDeadlineMs: 0,
+    shuffleMotionDeadlineMs: 0,
         shuffleStaggerTileCount: 8,
         ...overrides
     });
@@ -52,6 +54,7 @@ describe('tileBoardLayoutMotionState', () => {
         expect(layoutMotion()).toEqual({
             entranceLayoutActive: false,
             entranceMotion: TILE_BOARD_ZERO_LAYOUT_MOTION,
+            settleLayoutActive: false,
             layoutMotionActive: false,
             posLambda: 200,
             shuffleLayoutActive: false,
@@ -302,5 +305,33 @@ describe('tileBoardLayoutMotionState', () => {
         expect(animated.positionYTarget).toBeCloseTo(
             reduced.positionYTarget + GAMEPLAY_BOARD_VISUALS.mismatchShakeY
         );
+    });
+});
+
+describe('the settle glide', () => {
+    it('damps a card into the cell it settled into instead of putting it there', () => {
+        const motion = layoutMotion({ settleMotionDeadlineMs: 1400 });
+        expect(motion.settleLayoutActive).toBe(true);
+        expect(motion.layoutMotionActive).toBe(true);
+        expect(motion.posLambda).toBe(SETTLE_POSITION_LAMBDA);
+        // The glide is a position change only; the settle adds no offset of its own.
+        expect(motion.shuffleMotion).toEqual(TILE_BOARD_ZERO_LAYOUT_MOTION);
+    });
+
+    it('closes on its own once the deadline has passed, with no timer to clear it', () => {
+        const motion = layoutMotion({ settleMotionDeadlineMs: 900 });
+        expect(motion.settleLayoutActive).toBe(false);
+        expect(motion.layoutMotionActive).toBe(false);
+    });
+
+    it('does not glide for a player who asked for less motion', () => {
+        expect(layoutMotion({ reduceMotion: true, settleMotionDeadlineMs: 1400 }).settleLayoutActive).toBe(false);
+    });
+
+    it('yields to the shuffle and the board entrance, which move the cards themselves', () => {
+        expect(layoutMotion({ settleMotionDeadlineMs: 1400, shuffleMotionDeadlineMs: 1400 }).settleLayoutActive).toBe(false);
+        expect(
+            layoutMotion({ boardEntranceMotionDeadlineMs: 1400, settleMotionDeadlineMs: 1400 }).settleLayoutActive
+        ).toBe(false);
     });
 });

@@ -194,18 +194,19 @@ export const computeTileBoardMatchedBurstState = ({
     breakWaveDelaySec?: number;
 }): TileBoardMatchedBurstState => {
     /*
-     * A removed tile is a chunk-break casualty: it bursts like a match, after the wave reaches
-     * it, and then it departs — `departure` runs 0→1 after the burst and the frame scales the
-     * card away on it. A matched tile bursts and stays; it never departs.
+     * A cleared card leaves the board. It bursts - a chunk-break casualty waits for the wave to
+     * reach it first, a matched pair bursts at once - and then it departs: `departure` runs 0→1
+     * after the burst and the frame scales the card away on it. Nothing cleared stays lying in
+     * its cell, because the cell is about to be taken by whatever settles into it.
      */
-    const removed = tileState === 'removed';
-    if (tileState !== 'matched' && !removed) {
+    const brokenByWave = tileState === 'removed';
+    if (tileState !== 'matched' && !brokenByWave) {
         return { burst: 0, departure: 0, startedAt: null, wasMatched: false };
     }
 
-    const nextStartedAt = !wasMatched ? time + (removed ? breakWaveDelaySec ?? 0 : 0) : startedAt;
+    const nextStartedAt = !wasMatched ? time + (brokenByWave ? breakWaveDelaySec ?? 0 : 0) : startedAt;
     if (nextStartedAt == null) {
-        return { burst: 0, departure: removed ? 1 : 0, startedAt: null, wasMatched: true };
+        return { burst: 0, departure: 1, startedAt: null, wasMatched: true };
     }
     if (time < nextStartedAt) {
         return { burst: 0, departure: 0, startedAt: nextStartedAt, wasMatched: true };
@@ -216,10 +217,10 @@ export const computeTileBoardMatchedBurstState = ({
         : GAMEPLAY_BOARD_VISUALS.matchedEdgeEffect.burstDuration.default;
     const progress = clamp01((time - nextStartedAt) / burstDuration);
     const burst = 1 - smoothstep01(progress);
-    const departure = removed
-        ? clamp01((time - nextStartedAt - burstDuration * 0.5) / (reduceMotion ? 0.12 : BREAK_DEPARTURE_SECONDS))
-        : 0;
-    const settled = removed ? departure >= 1 : progress >= 1;
+    const departure = clamp01(
+        (time - nextStartedAt - burstDuration * 0.5) / (reduceMotion ? 0.12 : BREAK_DEPARTURE_SECONDS)
+    );
+    const settled = departure >= 1;
 
     return settled
         ? { burst, departure, startedAt: null, wasMatched: true }

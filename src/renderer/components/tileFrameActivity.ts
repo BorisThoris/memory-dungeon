@@ -25,6 +25,7 @@ export type TileBezelActivityBag = {
         boardEntranceMotionDeadlineMs: number;
         boardEntranceMotionBudgetMs: number;
         boardEntranceStaggerTileCount: number;
+        settleMotionDeadlineMs: number;
         tile: Tile;
         tileFieldParallaxEnabled: boolean;
         fieldAmp: number;
@@ -241,8 +242,11 @@ export function shouldAdvanceTileBezelThisFrame(
         !shuffleLayoutActive &&
         p.boardEntranceMotionDeadlineMs > 0 &&
         nowMs < p.boardEntranceMotionDeadlineMs;
+    // The settle glide has to keep the loop awake for its whole window, or a card that is being
+    // damped toward its new cell would stop partway and never arrive.
+    const settleLayoutActive = p.settleMotionDeadlineMs > 0 && nowMs < p.settleMotionDeadlineMs;
 
-    if (shuffleLayoutActive || entranceLayoutActive) {
+    if (shuffleLayoutActive || entranceLayoutActive || settleLayoutActive) {
         return true;
     }
 
