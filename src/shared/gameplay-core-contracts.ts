@@ -246,7 +246,7 @@ export const boardTurnAnnouncementFactsSchema = z
 
         chainTierBefore: z.enum(['none', 'clean', 'sharp', 'fever']).default('none'),
         chunkPartnerSpanMax: z.number().int().nonnegative().default(0),
-        chunkHaloPairs: z.number().int().nonnegative().default(0),
+        chunkBridgedPairs: z.number().int().nonnegative().default(0),
         chunkSuitCleared: z.boolean().default(false),
         chunkDroppedPairs: z.number().int().nonnegative().default(0),
         chunkRippleWaves: z.number().int().nonnegative().default(0),

@@ -56,9 +56,9 @@ describe('the chain loop achievements against real boards', () => {
         expect(broken.brokenPairKeys.length).toBeGreaterThanOrEqual(CHUNK_SIX_PAIRS);
     });
 
-    it('Nothing held it is earnable: a Sharp break on a cut-off suit drops its last pair', () => {
-        // A, B, C ember; D, E, F tide. C touches no ember tile, so a Sharp break on A takes B
-        // through the clump and C drops. One drop is the whole bar.
+    it('Nothing held it is earnable: a break on a cut-off suit drops its last pair', () => {
+        // A, B, C ember; D, E, F tide. C touches no ember tile, so a break on A takes B through
+        // the clump and C drops. One drop is the whole bar, and the drop fires at any tier.
         const suit = (id: string) => (['A', 'B', 'C'].includes(id[0]!) ? 'ember' : 'tide');
         const tile = (id: string) => makeTile(id, id[0]!, id[0]!, { suit: suit(id) });
         const board = makeBoard(
@@ -66,18 +66,17 @@ describe('the chain loop achievements against real boards', () => {
             { columns: 4, rows: 3, level: 3 }
         );
         const run = createNewRun(0);
-        const broken = resolveChunkBreak({ board, run, matchedTileIds: ['A1', 'A2'], chain: 6 });
+        const broken = resolveChunkBreak({ board, run, matchedTileIds: ['A1', 'A2'], chain: 1 });
         expect(broken.droppedPairKeys).toEqual(['C']);
         expect(evaluateAchievementUnlocks({ ...run, chunkDropsThisRun: 1 }, createDefaultSaveData())).toContain('ACH_NOTHING_HELD_IT');
     });
 
-    it('Chain reaction is earnable: a Sharp break across a suit\'s islands runs three waves', () => {
-        // One row: A's clump reaches B1, B's partner sits two on and touches C1, C's touches D1.
-        // The deal lays every suit of three pairs or more as two islands (`tile-suit-rules.ts`),
-        // which is what puts a partner outside the clump for the ripple to reach.
-        const rowTile = (id: string) => makeTile(id, id[0]!, id[0]!, { suit: 'ABCD'.includes(id[0]!) ? 'ember' : 'tide' });
+    it('Chain reaction is earnable: a Sharp break walks a long clump in three waves', () => {
+        // One row of six whole ember pairs. Sharp walks four steps a wave, so the reaction has to
+        // run three times to reach the far end - which is what the achievement is asking for.
+        const rowTile = (id: string) => makeTile(id, id[0]!, id[0]!, { suit: 'ember' });
         const board = makeBoard(
-            ['A1', 'A2', 'B1', 'T1', 'B2', 'C1', 'T2', 'C2', 'D1', 'S1', 'D2', 'S2'].map(rowTile),
+            ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'D1', 'D2', 'E1', 'E2', 'F1', 'F2'].map(rowTile),
             { columns: 12, rows: 1, level: 3 }
         );
         const run = createNewRun(0);

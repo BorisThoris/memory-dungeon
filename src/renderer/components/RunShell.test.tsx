@@ -95,7 +95,7 @@ describe('RunShell', () => {
         expect(chain).toHaveAttribute('data-chain-tier', 'sharp');
         expect(chain).toHaveTextContent(/Sharp/);
         expect(chain).toHaveAttribute('title', expect.stringMatching(/momentum 6/));
-        expect(chain).toHaveAttribute('title', expect.stringMatching(/Sharp from 6 runs the reaction out, Fever from 8/));
+        expect(chain).toHaveAttribute('title', expect.stringMatching(/Sharp from 6 runs the reaction into the clump next door, Fever from 8/));
         // The meter reads the same ladder: momentum 6 of 8, Sharp, not yet full.
         const meter = screen.getByTestId('hud-chain-meter');
         expect(meter).toHaveAttribute('data-chain-tier', 'sharp');

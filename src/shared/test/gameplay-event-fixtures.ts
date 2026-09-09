@@ -18,7 +18,7 @@ const DEFAULT_ANNOUNCEMENT: BoardTurnAnnouncementFacts = {
     chainTierAfter: 'none' as const,
     chainTierBefore: 'none' as const,
     chunkPartnerSpanMax: 0,
-    chunkHaloPairs: 0,
+    chunkBridgedPairs: 0,
     chunkSuitCleared: false,
     chunkDroppedPairs: 0,
     chunkRippleWaves: 0,

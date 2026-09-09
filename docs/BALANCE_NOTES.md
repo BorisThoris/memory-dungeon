@@ -2190,3 +2190,42 @@ entries rather than 11, and `SINGLETON_UTILITY_PAIR_KEYS` holds one key rather t
 `tile-identity.test.ts` now pins that count, so the next singleton anyone adds has to argue for
 itself against the rule the removal doc states: **every card on the board has a partner**, and the
 wild joker's exception is one that makes the player's read worth *more*, not worthless.
+
+## Gen 197 — contact, not distance
+
+The pop stopped reaching cards it was not touching. `docs/BREAK_TOUCHES_ONLY.md` is the full record:
+what was measured, why the partner reach and the halo went, and what replaced them. This is the
+balance side of it.
+
+| | Lone match | Clean | Sharp | Fever | Spread | Score rungs | Rippled | Severance floors |
+|---|---|---|---|---|---|---|---|---|
+| Gen 196 | 1.46 | 2.62 (+1.16) | 3.05 (+0.43) | 7.59 (+4.54) | 6.13 | ×3.56 / ×2.49 / ×5.11 | 0.16 | 0.583 |
+| Gen 197 | 1.46 | 2.10 (+0.65) | 5.79 (+3.69) | 8.46 (+2.67) | 7.00 | ×2.89 / ×8.99 / ×2.81 | 0.25 | 0.779 |
+
+Every band passes. Three readings worth keeping.
+
+**The middle rung got thicker, not thinner.** The whole risk of this change was that removing the two
+long-range rules would flatten the ladder, and the first measurement said exactly that: bounded to
+one suit clump the rungs paid 1.46 / 2.10 / 2.20 / 2.66, Sharp worth **0.10 pairs** over Clean. The
+fix was not to give the reach back but to find a lever that stays inside the rule — the **bridge**,
+which spreads the wave into a clump the broken cards were in contact with. With it Sharp pays 3.69
+over Clean, against the 0.43 it paid before the change. `CHAIN_RUNG_PAIRS` moved from `{1, 3, 3, 8}`
+to `{1, 2, 6, 8}`; Clean and Sharp stopped rounding to the same number for the first time since
+Gen 186.
+
+**The score rungs got less even while the pair rungs got more even.** ×2.89 / ×8.99 / ×2.81 against
+×3.56 / ×2.49 / ×5.11. Sharp is now the loud step in both currencies, which is defensible — it is the
+rung where a break stops being one clump and becomes two, and that is a thing a player can see happen.
+It is worth watching rather than tuning immediately: the pair ladder is what the aim guide previews,
+and it now reads 1 / 3 / 5 / 7 on the reference fixture, two pairs a rung, which is the cleanest that
+ghost has ever been.
+
+**The severance drop is doing a lot more work**: 0.583 → 0.779 of floors. That is the direct
+consequence of a pop that only takes what it touches — more suits end up stranded, and the drop is
+the rule that clears a stranded suit. It is inside its band. If it climbs much further it stops being
+a surprise and becomes a second, quieter pop, and the lever is `SEVERANCE_DROP_MAX_PAIRS`, not the
+break reach.
+
+The bridge also had to be capped, and the measurement is the argument: uncounted, a Sharp break took
+**8.26** pairs against Clean's 2.10, because a clump touches several others at once and the fire ran
+until the floor was gone. One clump at Sharp, three at Fever, and the bridge fires on one wave only.

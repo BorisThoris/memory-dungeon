@@ -8,15 +8,22 @@ import { isSingletonUtilityPairKey } from './tile-identity';
 /**
  * The chunk break: what a match does to the board around it.
  *
- * A correct match does not just clear its own pair. It pops the same-suit tiles touching it, and
- * their partners go with them wherever they are - and every tile that pops is a new seed, so the
- * pops ripple: a partner that left from across the board takes its own neighbours, and theirs.
+ * A correct match does not just clear its own pair. It pops the same-suit cards it is touching -
+ * touching, through unbroken cards of that suit, never across the gap a cleared card leaves - and
+ * every card that pops seeds the next wave, so the pops ripple outward along the clump.
  * Bubble games are built on contact - a bubble touching its colour goes with it, and what it was
  * holding falls - and Tetris Attack and Puyo on the chain reaction that follows. Here the contact
- * rule runs on every match, live, and the chain decides how far each pop reaches: a lone match
- * takes what it is touching, a Clean chain the partners those tiles had elsewhere, Sharp the whole
- * clump and the reaction after it, Fever the clump and its halo. One small, skilled input, a large visible consequence, bigger the better you have been
- * playing. That is the whole loop.
+ * rule runs on every match, live, and the chain decides only how far along the clump each pop
+ * walks: a lone match two steps, a Clean chain four, Sharp the whole connected region and the
+ * reaction after it, Fever that region walked around corners as well. One small, skilled input, a
+ * large visible consequence, bigger the better you have been playing. That is the whole loop.
+ *
+ * What the chain never buys is a card that is not touching. Until Gen 197 it did, twice: Clean and
+ * above took a pair when one half was in the clump and the other was anywhere on the board, and
+ * Fever took a halo of neighbours whatever their suit. Measured over 2367 breaks on real floors,
+ * that was 10% of a Clean break's cards, 17% of a Sharp one and 55% of a Fever one arriving from
+ * somewhere the player could not see the pop coming from. Both are gone; see
+ * `docs/BREAK_TOUCHES_ONLY.md`.
  *
  * What it is not: a way to skip the memory game. Cascaded pairs score less than a matched pair,
  * carry no streak, recall or rating credit, and only ever take plain pair tiles - never a
@@ -27,12 +34,12 @@ import { isSingletonUtilityPairKey } from './tile-identity';
  * The pop and the ripple, by tier.
  *
  * Every match pops the same-suit tiles around it, chain or no chain: that is the contact rule,
- * and it runs live on every match. What the chain buys is how far that goes. A bounded wave walks
- * two steps into the clump and stops, and below Clean a pair goes only when the wave has both of
- * its halves - so a lone match takes what it is touching. A Clean chain adds the partner reach:
- * the pops now take a pair whose other half is across the board. Sharp and Fever unbind both -
- * the whole clump, and the reaction running from every partner until a wave takes nothing, which
- * is Puyo's chain.
+ * and it runs live on every match. At every tier a pair goes only when the wave holds both of its
+ * halves, so a pop never orphans a partner and never takes a card the player cannot trace back to
+ * the match by eye. What the chain buys is how far the wave walks: two steps at chain zero, four
+ * at Clean, the whole connected region at Sharp, and at Fever that region taken around corners
+ * too, with the reaction running from every popped card until a wave takes nothing - Puyo's
+ * chain.
  */
 export const POP_WAVES = 1;
 /**
@@ -41,15 +48,14 @@ export const POP_WAVES = 1;
  * Measured by `yarn sim:pop` at the rung each tier actually sits on, the old ladder paid 1.67
  * pairs at chain one, 1.91 at Clean, 1.92 at Sharp and 3.34 at Fever. Sharp was worth one
  * hundredth of a pair over Clean - a whole rung of the chain, for nothing a player could see -
- * and the entire payoff sat at Fever, whose payoff is the halo: the neighbourhood of the clump
- * whatever its suit, which is width, not depth. That is not a ladder, it is a switch that flips
- * at the top.
+ * because Clean had already been given everything: two waves swept every breakable pair a suit
+ * had, so Sharp's unbounded reaction arrived at a clump that was already gone.
  *
- * The reason is that Clean had already been given everything. Two waves plus the partner reach
- * sweeps every breakable pair a suit has - so Sharp's unbounded reaction arrived at a clump that
- * was already gone. One wave at Clean hands the reaction back to Sharp, which is where
- * `docs/CHAIN_CHUNK_FEVER_DESIGN.md` 2.3 always put it: Clean buys that the pops reach a partner
- * across the board at all, and Sharp buys that the reaction runs.
+ * One wave at Clean hands the reaction back to Sharp, which is where
+ * `docs/CHAIN_CHUNK_FEVER_DESIGN.md` 2.3 always put it. Since Gen 197 what Clean buys instead is
+ * depth: the wave walks four steps along the clump rather than two, which is a bigger pop of the
+ * same shape, in the same place, from the same match - and Sharp still buys that the reaction
+ * runs.
  */
 export const CLEAN_WAVES = 1;
 
@@ -60,9 +66,9 @@ export const CLEAN_WAVES = 1;
  * times that happened.
  *
  * A bounded wave stops two steps from its seeds. Reach one was measured and is too small on this
- * board: below Clean a pop has no partner reach, so it needs both halves of another pair inside
- * the region, and a one-step region holds too few tiles for that - a chain-one match fell to 0.26
- * pairs, which is the pop going invisible again and the regression Gen 148 exists to prevent.
+ * board: a pop needs both halves of another pair inside the region, and a one-step region holds
+ * too few tiles for that - a chain-one match fell to 0.26 pairs, which is the pop going invisible
+ * again and the regression Gen 148 exists to prevent.
  *
  * Bounding the wave does cost the chain-one pop, and that cost is the point rather than a side
  * effect: it took 1.67 pairs and now takes 1.18, and the floors a player meets first pop on 0.63
@@ -72,35 +78,79 @@ export const CLEAN_WAVES = 1;
 export const BOUNDED_BREAK_REACH = 2;
 
 /**
+ * What Clean buys, since Gen 197 took away the partner reach: the wave walks twice as far along
+ * the clump. It is the same shape of pop in the same place, only bigger - which is the whole point
+ * of a rung a player is meant to be able to aim at.
+ */
+export const CLEAN_BREAK_REACH = BOUNDED_BREAK_REACH * 2;
+
+/**
  * How deep into the same-suit clump a wave walks, per tier. Infinity is the whole region.
  *
  * A record rather than a branch because this is the ladder's depth half and it is tuned: Gen 189
  * measured the rungs against it after the pips (Gen 186) showed Sharp paying 0.32 pairs over Clean,
  * a middle rung as thin as the one Gen 168 existed to repair.
+ *
+ * No tier walks the whole region in one wave any more (Gen 197). It used to, at Sharp and above,
+ * and that is what made the ripple decorative up there: an unbounded first wave leaves the
+ * reaction nothing to run into. Bounded at every tier, the reaction is the thing that covers
+ * distance - Sharp's twelve waves walk the same clump Sharp used to swallow whole, but outward,
+ * a step at a time, which is what a chain reaction looks like and what the shatter animation has
+ * always been drawing.
  */
 export const BREAK_CLUMP_REACH: Readonly<Record<ChainTier, number>> = {
     none: BOUNDED_BREAK_REACH,
-    clean: BOUNDED_BREAK_REACH,
-    sharp: Number.POSITIVE_INFINITY,
-    fever: Number.POSITIVE_INFINITY
+    clean: CLEAN_BREAK_REACH,
+    sharp: CLEAN_BREAK_REACH,
+    fever: CLEAN_BREAK_REACH
 };
 
 export const breakClumpReach = (tier: ChainTier): number => BREAK_CLUMP_REACH[tier];
 
 /**
- * Contact, or reach. A pop is contact: a pair goes when both its halves touch the clump. Reaching
- * a partner across the board - the half you would otherwise have had to remember - is what the
- * chain buys from Clean. Pairs still leave together, always: a pair with a half outside the clump
- * stays whole on a pop.
+ * Fever walks corners. Every tier below it steps orthogonally, so a clump that meets another only
+ * at a diagonal is two clumps; at Fever it is one. That is the last privilege the ladder sells and
+ * it is the only kind left that a player can see coming, because it never leaves the cards that
+ * are actually touching (Gen 197). The `sticky_toffee` curio grants the same corner step at every
+ * tier, which is what that curio has always been for.
  */
-export const BREAK_PARTNER_REACH: Readonly<Record<ChainTier, boolean>> = {
-    none: false,
-    clean: true,
-    sharp: true,
-    fever: true
+export const BREAK_DIAGONAL_TIERS: ReadonlySet<ChainTier> = new Set<ChainTier>(['fever']);
+
+export const breakWalksDiagonals = (tier: ChainTier): boolean => BREAK_DIAGONAL_TIERS.has(tier);
+
+/**
+ * The bridge: what Sharp buys, and what makes the reaction a reaction rather than a longer walk.
+ *
+ * A wave takes one suit's clump. When the tier bridges, the cards it took hand the next wave every
+ * card they were *touching* - the neighbour of another suit at the clump's edge - and that card's
+ * own clump is the next wave. The fire spreads from clump to clump across contacts, which is what
+ * a Puyo chain is and what the shatter animation has always drawn.
+ *
+ * It is the answer to the question Gen 197 raised and could not dodge. Taking away the partner
+ * reach and the halo capped every break at the size of one suit clump, which on these boards is
+ * three or four pairs: measured, the ladder fell from a spread of 6.13 pairs to 1.21, with Sharp
+ * paying 0.10 over Clean - the thin middle rung, back again. Depth cannot fix that, because the
+ * clump runs out. The bridge can, and it never crosses a gap: every card it reaches is in contact
+ * with a card that just broke. That is the line Gen 197 draws - **contact, not distance**. A pop
+ * may spread anywhere it is touching; it may not reach a card across empty space, whatever the
+ * chain behind it.
+ *
+ * The clumps it catches are counted, because an uncounted bridge is not a rung, it is the board.
+ * Unbounded, a Sharp break took 8.26 pairs against Clean's 2.10 - a clump touches several others
+ * at once, so the fire caught all of them and simply ran until the floor was gone. Sharp catches
+ * one neighbouring clump and Fever three, which keeps it a reaction a player can picture: your
+ * clump, and the one it was leaning on. The bridge fires on one wave only; after it the reaction
+ * walks the clumps it caught and stops.
+ */
+export const BREAK_BRIDGE_CLUMPS: Readonly<Record<ChainTier, number>> = {
+    none: 0,
+    clean: 0,
+    sharp: 1,
+    fever: 3
 };
 
-export const breakReachesPartners = (tier: ChainTier): boolean => BREAK_PARTNER_REACH[tier];
+export const breakBridgeClumps = (tier: ChainTier): number => BREAK_BRIDGE_CLUMPS[tier];
+
 /**
  * The ripple. Every tile a wave takes seeds the next wave with the same reach, until a wave takes
  * nothing. Each wave past the first multiplies the whole break by this step, up to the cap - the
@@ -174,7 +224,7 @@ export const tileIsPlainApartFromFindable = (tile: Tile): boolean =>
 export const tileCanBreakInChunk = (tile: Tile): boolean =>
     tileIsPlainApartFromFindable(tile) && tile.findableKind == null;
 
-const orthogonalNeighbours = (index: number, columns: number, total: number): number[] => {
+export const orthogonalNeighbours = (index: number, columns: number, total: number): number[] => {
     const row = Math.floor(index / columns);
     const col = index % columns;
     const out: number[] = [];
@@ -185,7 +235,7 @@ const orthogonalNeighbours = (index: number, columns: number, total: number): nu
     return out;
 };
 
-const diagonalNeighbours = (index: number, columns: number, total: number): number[] => {
+export const diagonalNeighbours = (index: number, columns: number, total: number): number[] => {
     const row = Math.floor(index / columns);
     const col = index % columns;
     const out: number[] = [];
@@ -203,11 +253,6 @@ export interface SuitRegionOptions {
     diagonal?: boolean;
     /** Tiles the walk never enters or crosses: the matched pair, once a later wave starts elsewhere. */
     exclude?: readonly string[];
-    /**
-     * Fever: the region takes a halo — every hidden tile bordering it, whatever its suit. Peggle's
-     * fever lights every peg left; here the whole neighbourhood of the clump goes with it.
-     */
-    halo?: boolean;
 }
 
 /**
@@ -254,17 +299,6 @@ export const findSuitRegion = (
             }
         }
         frontier = next;
-    }
-    if (options.halo) {
-        for (const from of [...seeds, ...region]) {
-            for (const cell of neighboursOf(from)) {
-                if (seen.has(cell)) continue;
-                const tile = board.tiles[cell];
-                if (!tile || tile.state !== 'hidden') continue;
-                seen.add(cell);
-                region.push(cell);
-            }
-        }
     }
     return region;
 };
@@ -370,8 +404,7 @@ export const resolveChunkBreak = ({
         wavePairKeys: []
     };
     const wavesAllowed = rippleWaves(tier);
-    const reachesPartners = breakReachesPartners(tier);
-    const diagonal = run.floorCurioId === 'sticky_toffee';
+    const diagonal = run.floorCurioId === 'sticky_toffee' || breakWalksDiagonals(tier);
     const byPairKey = new Map<string, Tile[]>();
     for (const tile of board.tiles) {
         byPairKey.set(tile.pairKey, [...(byPairKey.get(tile.pairKey) ?? []), tile]);
@@ -381,33 +414,44 @@ export const resolveChunkBreak = ({
     const regionTileIds = new Set<string>();
     let claimedFindableKind: FindableKind | null = null;
 
-    // The waves. The first is the pop: the whole same-suit clump touching the match and, at
-    // Fever, its halo. Every pair a wave takes leaves both halves, and where the chain allows it
-    // the partner's half seeds the next wave - its own clump goes, and so on until a wave takes
-    // nothing. A halo pair is the edge of the celebration, not a bridge: it does not seed.
+    // The waves. The first is the pop: the same-suit cards the match is touching, as far along the
+    // clump as the tier walks. A pair goes only when the wave holds both of its halves, so nothing
+    // leaves from off-screen and nothing is orphaned. Every card a wave takes seeds the next one,
+    // and the reaction runs on until a wave takes nothing.
     let seeds: string[] = [...matchedTileIds];
     const reach = breakClumpReach(tier);
+    const bridgeClumps = breakBridgeClumps(tier);
+    let bridgesLeft = bridgeClumps > 0 ? 1 : 0;
+    const columns = getSafeBoardColumns(board);
+    const indexById = new Map(board.tiles.map((tile, index) => [tile.id, index]));
+    const matchedSeedSet = new Set(matchedTileIds);
+    const neighboursOfIndex = (index: number): number[] =>
+        diagonal
+            ? [
+                  ...orthogonalNeighbours(index, columns, board.tiles.length),
+                  ...diagonalNeighbours(index, columns, board.tiles.length)
+              ]
+            : orthogonalNeighbours(index, columns, board.tiles.length);
     for (let wave = 0; wave < wavesAllowed && seeds.length > 0; wave += 1) {
-        const core = findSuitRegion(board, seeds, reach, { diagonal, exclude: matchedTileIds });
-        const region =
-            tier === 'fever' && wave === 0
-                ? findSuitRegion(board, seeds, reach, { diagonal, exclude: matchedTileIds, halo: true })
-                : core;
-        const coreSet = new Set(core);
+        // A bridged seed is a card the last wave was touching: it is the head of the next clump,
+        // so it is part of this wave's region, not merely the place it starts from.
+        const seedIndexes = seeds
+            .filter((id) => !matchedSeedSet.has(id))
+            .map((id) => indexById.get(id))
+            .filter((index): index is number => index != null && board.tiles[index]!.state === 'hidden');
+        const region = [...new Set([...seedIndexes, ...findSuitRegion(board, seeds, reach, { diagonal, exclude: matchedTileIds })])];
         const regionSet = new Set(region.map((index) => board.tiles[index]!.id));
         const taken: string[] = [];
-        const haloTaken = new Set<string>();
         for (const index of region) {
             const tile = board.tiles[index]!;
             regionTileIds.add(tile.id);
             if (brokenPairKeys.includes(tile.pairKey) || taken.includes(tile.pairKey)) continue;
             if (board.cursedPairKey && tile.pairKey === board.cursedPairKey) continue;
             const pair = byPairKey.get(tile.pairKey) ?? [];
-            // Contact: without a chain, a pair goes only when both halves are in the region.
-            if (!reachesPartners && !pair.every((half) => regionSet.has(half.id))) continue;
+            // Contact, at every tier: a pair goes only when both halves are in the region.
+            if (!pair.every((half) => regionSet.has(half.id))) continue;
             const take = () => {
                 taken.push(tile.pairKey);
-                if (!coreSet.has(index)) haloTaken.add(tile.pairKey);
             };
             // One findable pair per break goes with the chunk: drop the treasure. The turn awards it
             // through the same path a matched findable takes, so nothing is paid twice or never.
@@ -431,11 +475,29 @@ export const resolveChunkBreak = ({
         }
         wavePairKeys.push(taken);
         brokenPairKeys.push(...taken);
-        // The partners the wave pulled from elsewhere seed the next one: the half outside every
-        // region walked so far. The half inside has had its clump walked already.
-        seeds = taken
-            .filter((pairKey) => !haloTaken.has(pairKey))
-            .flatMap((pairKey) => (byPairKey.get(pairKey) ?? []).filter((half) => !regionTileIds.has(half.id)).map((half) => half.id));
+        // Every card the wave took seeds the next one, so the reaction walks on along the clump
+        // from where it stopped. Where the tier bridges, the cards each broken card was touching
+        // seed it too, whatever their suit - contact, never distance.
+        const takenIds = taken.flatMap((pairKey) => (byPairKey.get(pairKey) ?? []).map((half) => half.id));
+        const bridged: string[] = [];
+        const bridgedSuits = new Set<NonNullable<Tile['suit']>>();
+        if (bridgesLeft > 0) {
+            bridgesLeft -= 1;
+            for (const id of takenIds) {
+                const index = indexById.get(id);
+                if (index == null) continue;
+                for (const cell of neighboursOfIndex(index)) {
+                    const neighbour = board.tiles[cell];
+                    if (!neighbour || neighbour.state !== 'hidden' || regionTileIds.has(neighbour.id)) continue;
+                    if (matchedSeedSet.has(neighbour.id) || brokenPairKeys.includes(neighbour.pairKey)) continue;
+                    if (!neighbour.suit || bridged.includes(neighbour.id)) continue;
+                    if (bridgedSuits.size >= bridgeClumps && !bridgedSuits.has(neighbour.suit)) continue;
+                    bridgedSuits.add(neighbour.suit);
+                    bridged.push(neighbour.id);
+                }
+            }
+        }
+        seeds = [...takenIds, ...bridged];
     }
     // The drop: the matched pair and the broken pairs leave, and any suit they left that can no
     // longer pop - no two whole pairs of it within a pop's reach of each other - loses its plain

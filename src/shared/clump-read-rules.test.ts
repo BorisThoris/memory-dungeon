@@ -10,21 +10,22 @@ import { makeBoard, makeTile } from './test/game-fixtures';
  * below it - which is the whole point of the guide (thesis §30.2), and the thing it could not say
  * until Gen 185 because it reported the Sharp answer at every tier.
  *
- *   A1 B1 C1 E1 E2 C2 G1 H1
- *   A2 B2 D1 D2 F1 F2 G2 H2
+ *   A1 A2 B1 B2 C1 C2 D1 D2        A B C D ember
+ *   E1 E2 F1 F2 G1 G2 H1 H2        E G tide, F H moss
  *
- * A, B, C, G and H are ember; D, E and F are tide. A match on A reaches B and C1 within two steps,
- * and C's far half sits beside the G/H cluster on the other side of the board. G and H are whole
- * and adjacent throughout, so ember can always still pop and the severance drop never fires here -
- * the ladder is measured on its own.
+ * A match on A walks the ember row: two steps reach B, four reach C and D. The row below is two
+ * suits laid alternately, so the bridge at Sharp catches one of them (moss, the first the wave
+ * touches) and Fever, catching three, takes the other as well. Every pair is whole and beside its
+ * partner, so nothing here is ever stranded and the severance drop never fires - the ladder is
+ * measured on its own.
  */
-const EMBER = ['A', 'B', 'C', 'G', 'H'];
-const suit = (id: string): TileSuit => (EMBER.includes(id[0]!) ? 'ember' : 'tide');
+const SUITS: Readonly<Record<string, TileSuit>> = {
+    A: 'ember', B: 'ember', C: 'ember', D: 'ember', E: 'tide', F: 'moss', G: 'tide', H: 'moss'
+};
+const suit = (id: string): TileSuit => SUITS[id[0]!]!;
 const tile = (id: string): Tile => makeTile(id, id[0]!, id[0]!, { suit: suit(id) });
-const layout = (): Tile[] => [
-    tile('A1'), tile('B1'), tile('C1'), tile('E1'), tile('E2'), tile('C2'), tile('G1'), tile('H1'),
-    tile('A2'), tile('B2'), tile('D1'), tile('D2'), tile('F1'), tile('F2'), tile('G2'), tile('H2')
-];
+const layout = (): Tile[] =>
+    ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'D1', 'D2', 'E1', 'E2', 'F1', 'F2', 'G1', 'G2', 'H1', 'H2'].map(tile);
 const board = (tiles: Tile[] = layout()): BoardState => makeBoard(tiles, { columns: 8, rows: 2, level: 3 });
 const at = (chain: number): ClumpReadContext => ({ chain, run: { floorCurioId: null } });
 const sorted = (ids: readonly string[] = []): string[] => [...ids].sort();
@@ -35,30 +36,30 @@ describe('the aim guide reads the tier it is actually on', () => {
         const read = getClumpRead(board(), 'A1', at(1));
 
         expect(read?.suit).toBe('ember');
-        // The connected ember region the tile stands in, itself included: A2, B1, B2 and C1.
-        expect(read?.size).toBe(5);
-        // A pop is contact: B has both halves inside the reach, C has only one, so B alone goes.
+        // The connected ember region the tile stands in, itself included: the whole top row.
+        expect(read?.size).toBe(8);
+        // A pop walks two steps: B is inside them, C is one card further on.
         expect(read?.now).toMatchObject({ tier: 'none', pairs: 1 });
         expect(sorted(read?.now.tileIds)).toEqual(['B1', 'B2']);
     });
 
     it('ghosts what the next rung would add, which is the hold decision on the board', () => {
-        // Clean buys the partner reach, so C goes and its far half goes with it.
+        // Clean buys depth: the same wave, walked twice as far along the same row.
         const pop = getClumpRead(board(), 'A1', at(1));
-        expect(pop?.next).toMatchObject({ tier: 'clean', pairs: 2, addedPairs: 1 });
-        expect(sorted(pop?.next?.addedTileIds)).toEqual(['C1', 'C2']);
+        expect(pop?.next).toMatchObject({ tier: 'clean', pairs: 3, addedPairs: 2 });
+        expect(sorted(pop?.next?.addedTileIds)).toEqual(['C1', 'C2', 'D1', 'D2']);
 
-        // Sharp buys the reaction: C's far half seeds a second wave into the G/H cluster.
+        // Sharp buys the bridge: the wave crosses into the one clump it was touching.
         const clean = getClumpRead(board(), 'A1', at(RUNGS.clean));
-        expect(clean?.now).toMatchObject({ tier: 'clean', pairs: 2 });
-        expect(clean?.next).toMatchObject({ tier: 'sharp', pairs: 4, addedPairs: 2 });
-        expect(sorted(clean?.next?.addedTileIds)).toEqual(['G1', 'G2', 'H1', 'H2']);
+        expect(clean?.now).toMatchObject({ tier: 'clean', pairs: 3 });
+        expect(clean?.next).toMatchObject({ tier: 'sharp', pairs: 5, addedPairs: 2 });
+        expect(sorted(clean?.next?.addedTileIds)).toEqual(['F1', 'F2', 'H1', 'H2']);
 
-        // Fever buys the halo: the neighbourhood of the first clump, whatever its suit.
+        // Fever catches three clumps rather than one, so the other suit below goes too.
         const sharp = getClumpRead(board(), 'A1', at(RUNGS.sharp));
-        expect(sharp?.now).toMatchObject({ tier: 'sharp', pairs: 4 });
-        expect(sharp?.next).toMatchObject({ tier: 'fever', pairs: 7, addedPairs: 3 });
-        expect(sorted(sharp?.next?.addedTileIds)).toEqual(['D1', 'D2', 'E1', 'E2', 'F1', 'F2']);
+        expect(sharp?.now).toMatchObject({ tier: 'sharp', pairs: 5 });
+        expect(sharp?.next).toMatchObject({ tier: 'fever', pairs: 7, addedPairs: 2 });
+        expect(sorted(sharp?.next?.addedTileIds)).toEqual(['E1', 'E2', 'G1', 'G2']);
     });
 
     it('has no rung left to ghost at Fever', () => {
@@ -88,7 +89,7 @@ describe('the aim guide reads the tier it is actually on', () => {
     it('reads a flipped tile, and nothing for a tile that has left the board', () => {
         // A flipped tile still stands in its clump: the break fires when its partner turns up.
         const flipped = layout().map((t) => (t.id === 'A1' ? { ...t, state: 'flipped' as const } : t));
-        expect(getClumpRead(board(flipped), 'A1', at(1))?.size).toBe(5);
+        expect(getClumpRead(board(flipped), 'A1', at(1))?.size).toBe(8);
 
         const matched = layout().map((t) => (t.id === 'A1' ? { ...t, state: 'matched' as const } : t));
         expect(getClumpRead(board(matched), 'A1', at(1))).toBeNull();

@@ -129,24 +129,24 @@ const VERIFIERS: Record<string, () => void> = {
     },
     'the-live-pop': () => {
         const rowTile = (id: string) => makeTile(id, id[0]!, id[0]!, { suit: 'ABCD'.includes(id[0]!) ? 'ember' : 'tide' });
-        // One row: A's clump reaches B1; B2 sits two on, touching C1; C2 touches D1.
-        const rowTiles = ['A1', 'A2', 'B1', 'T1', 'B2', 'C1', 'T2', 'C2', 'D1', 'S1', 'D2', 'S2'].map(rowTile);
+        // One row of four whole ember pairs, then two tide pairs. Every card touches the next.
+        const rowTiles = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'D1', 'D2', 'T1', 'T2', 'S1', 'S2'].map(rowTile);
         const row = makeBoard(rowTiles, { columns: 12, rows: 1, level: 3 });
         const run = createNewRun(0, { gameMode: 'endless', runSeed: 7 });
         const lone = resolveChunkBreak({ board: row, run, matchedTileIds: ['A1', 'A2'], chain: 1 });
-        expect(lone.wavePairKeys, 'a lone match is contact: B has a half outside the clump').toEqual([]);
-        const touching = makeBoard(
+        expect(lone.wavePairKeys, 'a lone match walks two steps and takes what is touching').toEqual([['B']]);
+        expect(lone.waves).toBe(1);
+        const split = makeBoard(
             rowTiles.map((t) => (t.id === 'B2' ? rowTile('T1') : t.id === 'T1' ? rowTile('B2') : t)),
             { columns: 12, rows: 1, level: 3 }
         );
-        const pop = resolveChunkBreak({ board: touching, run, matchedTileIds: ['A1', 'A2'], chain: 1 });
-        expect(pop.wavePairKeys, 'both halves touching: the pair pops with the match').toEqual([['B']]);
-        expect(pop.waves).toBe(1);
+        const halfOut = resolveChunkBreak({ board: split, run, matchedTileIds: ['A1', 'A2'], chain: 3 });
+        expect(halfOut.wavePairKeys.flat(), 'a pair with a half outside the wave is never reached').not.toContain('B');
         const clean = resolveChunkBreak({ board: row, run, matchedTileIds: ['A1', 'A2'], chain: 3 });
-        expect(clean.wavePairKeys, 'Clean reaches the partner across the board; the reaction is Sharp\'s').toEqual([['B']]);
+        expect(clean.wavePairKeys, 'Clean walks four steps: the same wave, twice as far').toEqual([['B', 'C']]);
         const sharp = resolveChunkBreak({ board: row, run, matchedTileIds: ['A1', 'A2'], chain: 4 });
-        expect(sharp.wavePairKeys, 'Sharp runs the reaction out').toEqual([['B'], ['C'], ['D']]);
-        expect(sharp.board.tiles.find((t) => t.id === 'D2')?.brokenAtWave).toBe(2);
+        expect(sharp.wavePairKeys, 'Sharp runs the reaction on from where the wave stopped').toEqual([['B', 'C'], ['D']]);
+        expect(sharp.board.tiles.find((t) => t.id === 'D2')?.brokenAtWave).toBe(1);
     },
     'the-drop': () => {
         const suit = (id: string) => (['A', 'B', 'C'].includes(id[0]!) ? 'ember' : 'tide');
@@ -154,8 +154,8 @@ const VERIFIERS: Record<string, () => void> = {
         const cutOff = [tile('A1'), tile('B1'), tile('D1'), tile('C1'), tile('A2'), tile('B2'), tile('E1'), tile('C2'), tile('D2'), tile('F1'), tile('E2'), tile('F2')];
         const board = makeBoard(cutOff, { columns: 4, rows: 3, level: 3 });
         const run = createNewRun(0, { gameMode: 'endless', runSeed: 7 });
-        const sharp = resolveChunkBreak({ board, run, matchedTileIds: ['A1', 'A2'], chain: 6 });
-        expect(sharp.droppedPairKeys, 'the cut-off pair drops at Sharp').toEqual(['C']);
+        const clean = resolveChunkBreak({ board, run, matchedTileIds: ['A1', 'A2'], chain: 3 });
+        expect(clean.droppedPairKeys, 'the cut-off pair drops at Clean').toEqual(['C']);
         const lone = resolveChunkBreak({ board, run, matchedTileIds: ['A1', 'A2'], chain: 1 });
         expect(lone.droppedPairKeys, 'and with no chain behind the match at all').toEqual(['C']);
     },

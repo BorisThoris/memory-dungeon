@@ -35,7 +35,7 @@ describe('chunk style facts', () => {
         );
         const facts = getBoardTurnAnnouncementFacts(before, after);
         expect(facts.chunkPartnerSpanMax).toBe(0);
-        expect(facts.chunkHaloPairs).toBe(0);
+        expect(facts.chunkBridgedPairs).toBe(0);
         expect(facts.chunkSuitCleared).toBe(false);
     });
 
@@ -67,7 +67,7 @@ describe('chunk style facts', () => {
         );
         const facts = getBoardTurnAnnouncementFacts(before, after);
         expect(facts.chunkPartnerSpanMax).toBe(2);
-        expect(facts.chunkHaloPairs).toBe(1);
+        expect(facts.chunkBridgedPairs).toBe(1);
         expect(facts.chunkSuitCleared).toBe(true);
     });
 

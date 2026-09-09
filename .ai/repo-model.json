@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2435,
+    "trackedFileCount": 2436,
     "codeFileCount": 873,
-    "exportedSymbolCount": 2684,
+    "exportedSymbolCount": 2689,
     "contentItemCount": 12,
     "mechanicCount": 45,
     "stateFieldCount": 81,
-    "relationshipCount": 6861
+    "relationshipCount": 6866
   },
   "inventory": [
     {
@@ -255,8 +255,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 335912,
-      "sha256": "ea0e031be58856e8035291a889a0122de215bb0bbf79bad6ad2607968066a4fe"
+      "bytes": 340683,
+      "sha256": "25bda265bcde29c59aa81f713b00fb310eec9b5cf88ea808943894ee6a795fb2"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -265,10 +265,16 @@
       "sha256": "05c2812b073fb3c45172b9883d883b3c6621cbc370ca996d97cdba068bbf9396"
     },
     {
+      "path": "docs/BREAK_TOUCHES_ONLY.md",
+      "category": "documentation",
+      "bytes": 6999,
+      "sha256": "8e5d38cc240499976ec3033287ce457277c90232e632923e85de09aa1b03de12"
+    },
+    {
       "path": "docs/CHAIN_CHUNK_FEVER_DESIGN.md",
       "category": "documentation",
-      "bytes": 71338,
-      "sha256": "d01ac1f908fc098489ed87e305fd2acd99f8f943259cfd5e3bd88f1936683f76"
+      "bytes": 72871,
+      "sha256": "9601482efbbbbab5576d86d4e8900a6a15a90666b733bc30a592908268933659"
     },
     {
       "path": "docs/COLLECTIBLE_SYSTEM.md",
@@ -742,7 +748,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 394,
-      "sha256": "3186ecaab9bc2ea8d7da09c729af545a60670202f2bdf7f05e17c0d283ba6e24"
+      "sha256": "2cc0923590dde9048cdb9ab0436be5f032694e298308b60edd14212baed01247"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2314,13 +2320,13 @@
       "path": "docs/system-diagrams/AUDIT.md",
       "category": "documentation",
       "bytes": 10613,
-      "sha256": "455d88723da3a4df8532f2fa52fbfbe2b279bb9dda207f579985a3c076e007a6"
+      "sha256": "784835d72e12980285d2e0d313dacead94e7a829c3129d3710b85fa45e5aed63"
     },
     {
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33473,
-      "sha256": "51df193303a308f36d771ade9d369965caaf920d698c7526e01135d159ced6f6"
+      "sha256": "352898e16ac1707be0feef47fbd1ef6f8fcdf86b2891a35138091248a7db6c08"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -8073,8 +8079,8 @@
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 11241,
-      "sha256": "aefc4f73b6d34908fcf2b343f3c09be26002df233524c6a304aaa0ecd09cdc5b"
+      "bytes": 11262,
+      "sha256": "77a7abedc4c7b65379ff16cd58c34852a51d57ccd0bffde44ee728fda993a112"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
@@ -9069,14 +9075,14 @@
     {
       "path": "src/renderer/copy/chainBeat.test.ts",
       "category": "test",
-      "bytes": 3190,
-      "sha256": "eeedaa8a04dc5011f7419c8a5d416cda2836815325a4a484fc03e612f71fa35c"
+      "bytes": 3181,
+      "sha256": "148d74504ad20dcdee08865f19f0ae0948e1ba8fbf2de3192d80649c60fca3b5"
     },
     {
       "path": "src/renderer/copy/chainBeat.ts",
       "category": "source",
-      "bytes": 7324,
-      "sha256": "e4f882526abaa1d03f36b560a0fde7d331057bc726ca911973b61ba978e5050d"
+      "bytes": 7362,
+      "sha256": "7d2cf761f2e203250d61d0cae75b47b0dea07da9e50270ff0cc916f5d10abe91"
     },
     {
       "path": "src/renderer/copy/chainMilestoneFeedback.test.ts",
@@ -10306,13 +10312,13 @@
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
       "bytes": 562,
-      "sha256": "4aec931803bcd7a30f8c827c8162dcfc1ec7913cb17237d9057fddfba6d49d53"
+      "sha256": "f475074abd482fe4df0c1a8e2377ce861aa989fd2b3d547b6f33c4e8bda968c3"
     },
     {
       "path": "src/shared/achievement-reachability.test.ts",
       "category": "test",
-      "bytes": 5280,
-      "sha256": "011337d538c6a20723f23dee9c3017230360d3bcc2b53fe776dc4f65ba98557b"
+      "bytes": 5172,
+      "sha256": "858af33bd6ea79760a8f0ea561661eadb96aef07d827a5ca15cb105da50780a8"
     },
     {
       "path": "src/shared/achievements.test.ts",
@@ -10341,8 +10347,8 @@
     {
       "path": "src/shared/authored-floors.test.ts",
       "category": "test",
-      "bytes": 17638,
-      "sha256": "42d3dbe696d449d7b2c6888efbc4f307631fd3407b42ed24c2bc8c8905823c33"
+      "bytes": 18322,
+      "sha256": "ca5af7bc99932f59a1c44e510ab45e4cbc877ba22e8ceaa04ed861d8bb8b7273"
     },
     {
       "path": "src/shared/authored-floors.ts",
@@ -10503,14 +10509,14 @@
     {
       "path": "src/shared/board-turn-event-facts.chunk-style.test.ts",
       "category": "test",
-      "bytes": 3773,
-      "sha256": "f7a8ecd763885b692551d20329e9eacd5565d97c4f049664b10eccc95c7bdbeb"
+      "bytes": 3779,
+      "sha256": "f842d9b3596d39e52e31a5f0aa0b1eb3a946595596f5de5993f827adde75b227"
     },
     {
       "path": "src/shared/board-turn-event-facts.ts",
       "category": "source",
-      "bytes": 10114,
-      "sha256": "f33f96a07d62959bdeb267e81e7d4974529c77f7735c9428e23b87ae116f9791"
+      "bytes": 10135,
+      "sha256": "357d0d21ad1aaa00b4499980d0a89cba32558f69aefe023f0c9d75ba1ae5329e"
     },
     {
       "path": "src/shared/board-turn-feedback-boundary.test.ts",
@@ -10575,8 +10581,8 @@
     {
       "path": "src/shared/chain-rung-value-rules.ts",
       "category": "source",
-      "bytes": 2634,
-      "sha256": "b606d223d55fc4a85bac1029d0db3ef9b0c346ac257629eacd8f90e24c261979"
+      "bytes": 2818,
+      "sha256": "58466fc3fe6e1e511bd2c5e5ff8d87a0538cc1ab1204fb4c8dbac6af741235be"
     },
     {
       "path": "src/shared/chain-targets.test.ts",
@@ -10623,14 +10629,14 @@
     {
       "path": "src/shared/chunk-break-rules.test.ts",
       "category": "test",
-      "bytes": 18281,
-      "sha256": "2f0ba89a0f27e62d380ba10ad920b546d00b16542eb1fa1d29f12d5b88409f20"
+      "bytes": 18444,
+      "sha256": "7dbdaba2ece316a9f09638fdae80c81aaf42a7dad86526b3c98c6d6758c1643c"
     },
     {
       "path": "src/shared/chunk-break-rules.ts",
       "category": "source",
-      "bytes": 25093,
-      "sha256": "16635df1920303365e4e0bd60c64c0e0ee01bcc48787b8b521897ac5ca52ed78"
+      "bytes": 29311,
+      "sha256": "7dff16245bc13865d5af280e0a09652e63b4f837df00cdc52da1930264b0c0dd"
     },
     {
       "path": "src/shared/classic-run-setup.test.ts",
@@ -10647,8 +10653,8 @@
     {
       "path": "src/shared/clump-read-rules.test.ts",
       "category": "test",
-      "bytes": 5865,
-      "sha256": "a5b3ad377e7025cd0f65540eaf7e4c3cd15c094494dbd503ca1c206e07933880"
+      "bytes": 5954,
+      "sha256": "66ebb998e150b6af8f88dd70b1ecf4d6c4bc9e22ee9030df9ea88535f9cf4858"
     },
     {
       "path": "src/shared/clump-read-rules.ts",
@@ -10702,7 +10708,7 @@
       "path": "src/shared/contracts.ts",
       "category": "source",
       "bytes": 31051,
-      "sha256": "a2835654127286b699cf5c716274e8461ac90db7b4e27ed9944d78a4245ff4cf"
+      "sha256": "2305c4985c949213793a6ee968aa706daef707555ad5612a444188b9e7fcecf5"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -10995,8 +11001,8 @@
     {
       "path": "src/shared/gameplay-core-contracts.ts",
       "category": "source",
-      "bytes": 32767,
-      "sha256": "cbed472b023abce29cbbcf3d27b1dc01dc9a3c60479193dade2173ed56f8e704"
+      "bytes": 32770,
+      "sha256": "642f279cc1f829b7732645472378a3f57257f249e9e7a123d16475bcf6179db0"
     },
     {
       "path": "src/shared/gameplay-core-playthrough-solver.test.ts",
@@ -11337,8 +11343,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 31919,
-      "sha256": "0420578dac98de376e55b51453ea5d6eb052e6baefdaefbd91ce90d7c3998a01"
+      "bytes": 32030,
+      "sha256": "b4bcf0659e16d3db32ba666a325bcb9a5141481d332f7ab40025d5b5c9af9c96"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -11703,8 +11709,8 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 37765,
-      "sha256": "d75b4ddc5141e790e0f5af31c8bb84451454e7a1fcf00c0f3b5b8bb6f9404d4a"
+      "bytes": 37807,
+      "sha256": "7002d2f3425b001ca05f5ac828121620ad80cc39f96e43a67f9cc0cf41c8a9e9"
     },
     {
       "path": "src/shared/release-checklist.ts",
@@ -12189,8 +12195,8 @@
     {
       "path": "src/shared/test/gameplay-event-fixtures.ts",
       "category": "source",
-      "bytes": 3807,
-      "sha256": "2c40c2e1aeb8754218faec8b1a253d6fdee2d857bcd7b87543a2d455c5a3fb1c"
+      "bytes": 3810,
+      "sha256": "623d33494b231d7d26ce99e303ac68bf7053dc6a6f1941ced96860c1030bceea"
     },
     {
       "path": "src/shared/tile-floater-anchor-rules.test.ts",
@@ -12418,7 +12424,7 @@
       "path": "src/shared/version-gate.test.ts",
       "category": "test",
       "bytes": 7336,
-      "sha256": "5cc2b59e83e75b96f6ce46f0bd0d411d69435ed29ab6e51fe31d114673e44346"
+      "sha256": "71e150235b7a421487c33b08b5e1ee7451384c6c8ecab6d49e564d8ee0317823"
     },
     {
       "path": "src/shared/version-gate.ts",
@@ -23686,7 +23692,7 @@
       "path": "src/shared/achievement-reachability.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 92,
+      "lineCount": 91,
       "imports": [
         "file:src/shared/achievements.ts",
         "file:src/shared/chunk-break-rules.ts",
@@ -23779,7 +23785,7 @@
       "path": "src/shared/authored-floors.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 336,
+      "lineCount": 344,
       "imports": [
         "file:src/shared/authored-floors.ts",
         "file:src/shared/board-build-rules.ts",
@@ -24563,7 +24569,7 @@
       "path": "src/shared/chain-rung-value-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 51,
+      "lineCount": 53,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/chunk-break-rules.ts"
@@ -24713,7 +24719,7 @@
       "path": "src/shared/chunk-break-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 350,
+      "lineCount": 353,
       "imports": [
         "file:src/shared/chunk-break-rules.ts",
         "file:src/shared/contracts.ts",
@@ -24730,7 +24736,7 @@
       "path": "src/shared/chunk-break-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 502,
+      "lineCount": 564,
       "imports": [
         "file:src/shared/board-grid-dimensions.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -24741,17 +24747,22 @@
       ],
       "exports": [
         "symbol:src/shared/chunk-break-rules.ts#BOUNDED_BREAK_REACH",
+        "symbol:src/shared/chunk-break-rules.ts#BREAK_BRIDGE_CLUMPS",
         "symbol:src/shared/chunk-break-rules.ts#BREAK_CLUMP_REACH",
-        "symbol:src/shared/chunk-break-rules.ts#BREAK_PARTNER_REACH",
+        "symbol:src/shared/chunk-break-rules.ts#BREAK_DIAGONAL_TIERS",
+        "symbol:src/shared/chunk-break-rules.ts#breakBridgeClumps",
         "symbol:src/shared/chunk-break-rules.ts#breakClumpReach",
-        "symbol:src/shared/chunk-break-rules.ts#breakReachesPartners",
+        "symbol:src/shared/chunk-break-rules.ts#breakWalksDiagonals",
         "symbol:src/shared/chunk-break-rules.ts#CHAIN_MULT",
         "symbol:src/shared/chunk-break-rules.ts#chunkBreakMomentumPairs",
         "symbol:src/shared/chunk-break-rules.ts#ChunkBreakResult",
         "symbol:src/shared/chunk-break-rules.ts#chunkBreakScore",
         "symbol:src/shared/chunk-break-rules.ts#chunkScorePerPair",
+        "symbol:src/shared/chunk-break-rules.ts#CLEAN_BREAK_REACH",
         "symbol:src/shared/chunk-break-rules.ts#CLEAN_WAVES",
+        "symbol:src/shared/chunk-break-rules.ts#diagonalNeighbours",
         "symbol:src/shared/chunk-break-rules.ts#findSuitRegion",
+        "symbol:src/shared/chunk-break-rules.ts#orthogonalNeighbours",
         "symbol:src/shared/chunk-break-rules.ts#POP_WAVES",
         "symbol:src/shared/chunk-break-rules.ts#resolveChunkBreak",
         "symbol:src/shared/chunk-break-rules.ts#RIPPLE_MAX_WAVES",
@@ -24822,7 +24833,7 @@
       "path": "src/shared/clump-read-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 107,
+      "lineCount": 108,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/chunk-break-rules.ts",
@@ -27374,7 +27385,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 604,
+      "lineCount": 605,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -41947,16 +41958,16 @@
       "name": "CHAIN_RUNG_PAIRS",
       "kind": "value",
       "file": "src/shared/chain-rung-value-rules.ts",
-      "line": 32,
-      "endLine": 37
+      "line": 34,
+      "endLine": 39
     },
     {
       "id": "symbol:src/shared/chain-rung-value-rules.ts#CHAIN_RUNG_PAIRS_TOLERANCE",
       "name": "CHAIN_RUNG_PAIRS_TOLERANCE",
       "kind": "value",
       "file": "src/shared/chain-rung-value-rules.ts",
-      "line": 44,
-      "endLine": 44
+      "line": 46,
+      "endLine": 46
     },
     {
       "id": "symbol:src/shared/chain-rung-value-rules.ts#CHAIN_RUNG_SCORE_MULTIPLIER",
@@ -41971,16 +41982,16 @@
       "name": "chainRungPairs",
       "kind": "value",
       "file": "src/shared/chain-rung-value-rules.ts",
-      "line": 50,
-      "endLine": 50
+      "line": 52,
+      "endLine": 52
     },
     {
       "id": "symbol:src/shared/chain-rung-value-rules.ts#chainRungScoreMultiplier",
       "name": "chainRungScoreMultiplier",
       "kind": "value",
       "file": "src/shared/chain-rung-value-rules.ts",
-      "line": 47,
-      "endLine": 47
+      "line": 49,
+      "endLine": 49
     },
     {
       "id": "symbol:src/shared/chain-targets.ts#ChainTargetBand",
@@ -42243,200 +42254,240 @@
       "name": "BOUNDED_BREAK_REACH",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 72,
-      "endLine": 72
+      "line": 78,
+      "endLine": 78
+    },
+    {
+      "id": "symbol:src/shared/chunk-break-rules.ts#BREAK_BRIDGE_CLUMPS",
+      "name": "BREAK_BRIDGE_CLUMPS",
+      "kind": "value",
+      "file": "src/shared/chunk-break-rules.ts",
+      "line": 145,
+      "endLine": 150
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#BREAK_CLUMP_REACH",
       "name": "BREAK_CLUMP_REACH",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 81,
-      "endLine": 86
+      "line": 101,
+      "endLine": 106
     },
     {
-      "id": "symbol:src/shared/chunk-break-rules.ts#BREAK_PARTNER_REACH",
-      "name": "BREAK_PARTNER_REACH",
+      "id": "symbol:src/shared/chunk-break-rules.ts#BREAK_DIAGONAL_TIERS",
+      "name": "BREAK_DIAGONAL_TIERS",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 96,
-      "endLine": 101
+      "line": 117,
+      "endLine": 117
+    },
+    {
+      "id": "symbol:src/shared/chunk-break-rules.ts#breakBridgeClumps",
+      "name": "breakBridgeClumps",
+      "kind": "value",
+      "file": "src/shared/chunk-break-rules.ts",
+      "line": 152,
+      "endLine": 152
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#breakClumpReach",
       "name": "breakClumpReach",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 88,
-      "endLine": 88
+      "line": 108,
+      "endLine": 108
     },
     {
-      "id": "symbol:src/shared/chunk-break-rules.ts#breakReachesPartners",
-      "name": "breakReachesPartners",
+      "id": "symbol:src/shared/chunk-break-rules.ts#breakWalksDiagonals",
+      "name": "breakWalksDiagonals",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 103,
-      "endLine": 103
+      "line": 119,
+      "endLine": 119
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#CHAIN_MULT",
       "name": "CHAIN_MULT",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 112,
-      "endLine": 112
+      "line": 162,
+      "endLine": 162
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#chunkBreakMomentumPairs",
       "name": "chunkBreakMomentumPairs",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 303,
-      "endLine": 312
+      "line": 337,
+      "endLine": 346
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#ChunkBreakResult",
       "name": "ChunkBreakResult",
       "kind": "interface",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 147,
-      "endLine": 163
+      "line": 197,
+      "endLine": 213
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#chunkBreakScore",
       "name": "chunkBreakScore",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 287,
-      "endLine": 291
+      "line": 321,
+      "endLine": 325
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#chunkScorePerPair",
       "name": "chunkScorePerPair",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 277,
-      "endLine": 277
+      "line": 311,
+      "endLine": 311
+    },
+    {
+      "id": "symbol:src/shared/chunk-break-rules.ts#CLEAN_BREAK_REACH",
+      "name": "CLEAN_BREAK_REACH",
+      "kind": "value",
+      "file": "src/shared/chunk-break-rules.ts",
+      "line": 85,
+      "endLine": 85
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#CLEAN_WAVES",
       "name": "CLEAN_WAVES",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 54,
-      "endLine": 54
+      "line": 60,
+      "endLine": 60
+    },
+    {
+      "id": "symbol:src/shared/chunk-break-rules.ts#diagonalNeighbours",
+      "name": "diagonalNeighbours",
+      "kind": "value",
+      "file": "src/shared/chunk-break-rules.ts",
+      "line": 238,
+      "endLine": 249
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#findSuitRegion",
       "name": "findSuitRegion",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 218,
-      "endLine": 270
+      "line": 263,
+      "endLine": 304
+    },
+    {
+      "id": "symbol:src/shared/chunk-break-rules.ts#orthogonalNeighbours",
+      "name": "orthogonalNeighbours",
+      "kind": "value",
+      "file": "src/shared/chunk-break-rules.ts",
+      "line": 227,
+      "endLine": 236
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#POP_WAVES",
       "name": "POP_WAVES",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 37,
-      "endLine": 37
+      "line": 44,
+      "endLine": 44
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#resolveChunkBreak",
       "name": "resolveChunkBreak",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 349,
-      "endLine": 501
+      "line": 383,
+      "endLine": 563
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#RIPPLE_MAX_WAVES",
       "name": "RIPPLE_MAX_WAVES",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 114,
-      "endLine": 114
+      "line": 164,
+      "endLine": 164
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#rippleWaves",
       "name": "rippleWaves",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 142,
-      "endLine": 145
+      "line": 192,
+      "endLine": 195
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#SEVERANCE_DROP_MAX_PAIRS",
       "name": "SEVERANCE_DROP_MAX_PAIRS",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 139,
-      "endLine": 139
+      "line": 189,
+      "endLine": 189
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#SEVERANCE_DROP_REACH",
       "name": "SEVERANCE_DROP_REACH",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 130,
-      "endLine": 130
+      "line": 180,
+      "endLine": 180
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#suitCanStillPop",
       "name": "suitCanStillPop",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 319,
-      "endLine": 347
+      "line": 353,
+      "endLine": 381
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#SuitRegionOptions",
       "name": "SuitRegionOptions",
       "kind": "interface",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 201,
-      "endLine": 211
+      "line": 251,
+      "endLine": 256
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#tileCanBreakInChunk",
       "name": "tileCanBreakInChunk",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 174,
-      "endLine": 175
+      "line": 224,
+      "endLine": 225
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#tileIsPlainApartFromFindable",
       "name": "tileIsPlainApartFromFindable",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 170,
-      "endLine": 171
+      "line": 220,
+      "endLine": 221
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#WAVE_MULT_CAP",
       "name": "WAVE_MULT_CAP",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 110,
-      "endLine": 110
+      "line": 160,
+      "endLine": 160
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#WAVE_MULT_STEP",
       "name": "WAVE_MULT_STEP",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 109,
-      "endLine": 109
+      "line": 159,
+      "endLine": 159
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#waveMult",
       "name": "waveMult",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 273,
-      "endLine": 274
+      "line": 307,
+      "endLine": 308
     },
     {
       "id": "symbol:src/shared/classic-run-setup.ts#buildClassicRunOptions",
@@ -47051,16 +47102,16 @@
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 571,
-      "endLine": 589
+      "line": 572,
+      "endLine": 590
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 592,
-      "endLine": 603
+      "line": 593,
+      "endLine": 604
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
@@ -47068,7 +47119,7 @@
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
       "line": 512,
-      "endLine": 568
+      "endLine": 569
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
@@ -64746,15 +64797,27 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/chunk-break-rules.ts->symbol:src/shared/chunk-break-rules.ts#BREAK_BRIDGE_CLUMPS",
+      "source": "file:src/shared/chunk-break-rules.ts",
+      "target": "symbol:src/shared/chunk-break-rules.ts#BREAK_BRIDGE_CLUMPS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/chunk-break-rules.ts->symbol:src/shared/chunk-break-rules.ts#BREAK_CLUMP_REACH",
       "source": "file:src/shared/chunk-break-rules.ts",
       "target": "symbol:src/shared/chunk-break-rules.ts#BREAK_CLUMP_REACH",
       "kind": "exports"
     },
     {
-      "id": "exports:src/shared/chunk-break-rules.ts->symbol:src/shared/chunk-break-rules.ts#BREAK_PARTNER_REACH",
+      "id": "exports:src/shared/chunk-break-rules.ts->symbol:src/shared/chunk-break-rules.ts#BREAK_DIAGONAL_TIERS",
       "source": "file:src/shared/chunk-break-rules.ts",
-      "target": "symbol:src/shared/chunk-break-rules.ts#BREAK_PARTNER_REACH",
+      "target": "symbol:src/shared/chunk-break-rules.ts#BREAK_DIAGONAL_TIERS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/chunk-break-rules.ts->symbol:src/shared/chunk-break-rules.ts#breakBridgeClumps",
+      "source": "file:src/shared/chunk-break-rules.ts",
+      "target": "symbol:src/shared/chunk-break-rules.ts#breakBridgeClumps",
       "kind": "exports"
     },
     {
@@ -64764,9 +64827,9 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/shared/chunk-break-rules.ts->symbol:src/shared/chunk-break-rules.ts#breakReachesPartners",
+      "id": "exports:src/shared/chunk-break-rules.ts->symbol:src/shared/chunk-break-rules.ts#breakWalksDiagonals",
       "source": "file:src/shared/chunk-break-rules.ts",
-      "target": "symbol:src/shared/chunk-break-rules.ts#breakReachesPartners",
+      "target": "symbol:src/shared/chunk-break-rules.ts#breakWalksDiagonals",
       "kind": "exports"
     },
     {
@@ -64800,15 +64863,33 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/chunk-break-rules.ts->symbol:src/shared/chunk-break-rules.ts#CLEAN_BREAK_REACH",
+      "source": "file:src/shared/chunk-break-rules.ts",
+      "target": "symbol:src/shared/chunk-break-rules.ts#CLEAN_BREAK_REACH",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/chunk-break-rules.ts->symbol:src/shared/chunk-break-rules.ts#CLEAN_WAVES",
       "source": "file:src/shared/chunk-break-rules.ts",
       "target": "symbol:src/shared/chunk-break-rules.ts#CLEAN_WAVES",
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/chunk-break-rules.ts->symbol:src/shared/chunk-break-rules.ts#diagonalNeighbours",
+      "source": "file:src/shared/chunk-break-rules.ts",
+      "target": "symbol:src/shared/chunk-break-rules.ts#diagonalNeighbours",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/chunk-break-rules.ts->symbol:src/shared/chunk-break-rules.ts#findSuitRegion",
       "source": "file:src/shared/chunk-break-rules.ts",
       "target": "symbol:src/shared/chunk-break-rules.ts#findSuitRegion",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/chunk-break-rules.ts->symbol:src/shared/chunk-break-rules.ts#orthogonalNeighbours",
+      "source": "file:src/shared/chunk-break-rules.ts",
+      "target": "symbol:src/shared/chunk-break-rules.ts#orthogonalNeighbours",
       "kind": "exports"
     },
     {

@@ -37,14 +37,14 @@ describe('the chunk says something', () => {
 
 describe('the style line', () => {
     it('names only what applies, in one line, and says nothing about a plain break', () => {
-        expect(CHAIN_BEAT_COPY.styleLine({ chunkPartnerSpanMax: 1, chunkHaloPairs: 0, chunkSuitCleared: false })).toBeNull();
+        expect(CHAIN_BEAT_COPY.styleLine({ chunkPartnerSpanMax: 1, chunkBridgedPairs: 0, chunkSuitCleared: false })).toBeNull();
         expect(
-            CHAIN_BEAT_COPY.styleLine({ chunkPartnerSpanMax: 1, chunkHaloPairs: 0, chunkSuitCleared: false, chunkDroppedPairs: 2 })
+            CHAIN_BEAT_COPY.styleLine({ chunkPartnerSpanMax: 1, chunkBridgedPairs: 0, chunkSuitCleared: false, chunkDroppedPairs: 2 })
         ).toBe('Drop ×2.');
-        expect(CHAIN_BEAT_COPY.styleLine({ chunkPartnerSpanMax: 5, chunkHaloPairs: 1, chunkSuitCleared: true })).toBe(
-            'Partner across the board, Halo, Clean sweep.'
+        expect(CHAIN_BEAT_COPY.styleLine({ chunkPartnerSpanMax: 5, chunkBridgedPairs: 1, chunkSuitCleared: true })).toBe(
+            'Long clump, Bridge, Clean sweep.'
         );
-        expect(CHAIN_BEAT_COPY.styleLine({ chunkPartnerSpanMax: 0, chunkHaloPairs: 1, chunkSuitCleared: false })).toBe('Halo.');
+        expect(CHAIN_BEAT_COPY.styleLine({ chunkPartnerSpanMax: 0, chunkBridgedPairs: 1, chunkSuitCleared: false })).toBe('Bridge.');
     });
 
     it('follows the chunk announcement, so the break and its name arrive together', () => {
@@ -55,10 +55,10 @@ describe('the style line', () => {
                 chainAfter: 4,
                 chainTierAfter: 'sharp',
                 chunkPartnerSpanMax: 6,
-                chunkHaloPairs: 0,
+                chunkBridgedPairs: 0,
                 chunkSuitCleared: false
             })
         );
-        expect(lines).toEqual([CHAIN_BEAT_COPY.chunkAnnouncement(2, 'sharp', 4), 'Partner across the board.']);
+        expect(lines).toEqual([CHAIN_BEAT_COPY.chunkAnnouncement(2, 'sharp', 4), 'Long clump.']);
     });
 });

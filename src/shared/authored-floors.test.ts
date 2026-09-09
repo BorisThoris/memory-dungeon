@@ -182,7 +182,9 @@ describe('N6: the first pop', () => {
             const rungs = chainTierRungs(board.pairCount);
             for (const [key, halves] of realPairs(board)) {
                 const suit = halves[0]!.suit;
-                for (const chain of [0, rungs.clean, rungs.sharp]) {
+                // Below Sharp the wave never leaves the suit. From Sharp the bridge deliberately
+                // carries it into the clump next door, which `chunk-break-rules.test.ts` pins.
+                for (const chain of [0, rungs.clean]) {
                     const result = resolveChunkBreak({ board, run, matchedTileIds: halves.map((t) => t.id), chain });
                     const taken = board.tiles.filter((tile) => result.brokenTileIds.includes(tile.id));
                     expect(taken.map((tile) => tile.suit), `${where} match ${key} chain ${chain}`).toEqual(taken.map(() => suit));
@@ -279,7 +281,11 @@ describe('N7: the split pair on floor 3', () => {
         }
     });
 
-    it('is taken at Clean from any pair inside the clump: the far half flies out', () => {
+    it('is never taken by a pop at Clean either: a split pair is memory\'s job, not the wave\'s', () => {
+        // What this floor teaches changed at Gen 197. It used to teach the partner reach: match
+        // inside the clump at Clean and the far half flew out from across the board. Nothing
+        // reaches across the board any more, so the split pair teaches the rule that replaced it -
+        // a pop takes what it is touching, and a pair you have pulled apart is yours to remember.
         for (const [where, board] of boardsUnderTest(3)) {
             const { key, near } = splitOf(board);
             const clean = chainTierRungs(board.pairCount).clean;
@@ -289,9 +295,11 @@ describe('N7: the split pair on floor 3', () => {
                 clumpPairs += 1;
                 const result = resolveChunkBreak({ board, run, matchedTileIds: halves.map((t) => t.id), chain: clean });
                 expect(result.tier, `${where} match ${matched}`).toBe('clean');
-                expect(result.wavePairKeys.flat(), `${where} match ${matched}`).toContain(key);
-                expect(result.brokenTileIds, `${where} match ${matched}`).toContain(board.tiles[near]!.id);
-                expect(result.board.tiles[near]!.state).toBe('removed');
+                expect(result.wavePairKeys.flat(), `${where} match ${matched}`).not.toContain(key);
+                // It may still leave, but only as the severance drop, which says so in its own beat.
+                if (result.brokenPairKeys.includes(key)) {
+                    expect(result.droppedPairKeys, `${where} match ${matched}`).toContain(key);
+                }
             }
             // Every Ember pair the layout puts in the clump, not a magic number: the suit's cells
             // less the two the split pair holds, over two.

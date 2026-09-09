@@ -11,7 +11,7 @@
 import type { AchievementId, GameMode, MutatorId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 38 as const;
+export const ENCYCLOPEDIA_VERSION = 39 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -213,7 +213,7 @@ export const ACHIEVEMENT_CATALOG: Record<AchievementId, AchievementCodexEntry> =
     ACH_CHAIN_REACTION: {
         id: 'ACH_CHAIN_REACTION',
         title: 'Chain reaction',
-        description: 'Send a pop three waves deep: a partner across the board takes its own clump, and that one takes another.'
+        description: 'Send a pop three waves deep: the wave walks on from where it stopped, and on again.'
     }
 };
 
@@ -514,14 +514,15 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         id: 'chain_chunk_fever',
         title: 'Chain, chunk and Fever',
         description:
-            'Every match pops: the whole same-suit clump touching the two tiles you matched breaks away with them, and their partners go too. ' +
-            'A pair goes only when both its halves touch the clump, so a partner across the board is the chain\'s to reach. ' +
-            'From chain 3 (Clean) each partner that left takes its own clump - a second wave. Sharp, about two-fifths of the floor\'s pairs of momentum and four at least, runs the reaction until a wave takes nothing. ' +
-            'Fever, about two-thirds and seven at least, adds the halo: everything touching the first clump, whatever its suit. Every pair a break takes adds to the chain\'s momentum. ' +
+            'Every match pops: the same-suit cards the two tiles you matched are touching break away with them. ' +
+            'A pop only ever takes what it is touching - a pair goes when the wave holds **both** halves, and nothing is ever taken across a gap. ' +
+            'What the chain buys is how far the wave walks: two steps with no chain, four from chain 3 (Clean). ' +
+            'Sharp, about two-fifths of the floor\'s pairs of momentum and four at least, runs the reaction on from where the wave stopped and lets it **bridge** - crossing into the one clump its cards were touching, whatever that suit is. ' +
+            'Fever, about two-thirds and seven at least, bridges into three clumps and walks diagonals, so corners connect too. Every pair a break takes adds to the chain\'s momentum. ' +
             'Treasure inside a break spills and pays as if you had matched it. A break pays a pair\'s worth times the pairs, times the tier it landed at (Clean ×2, Sharp ×4, Fever ×8), times the ripple (×1.75 for a second wave, up to ×6): a huge Fever reaction is worth hundreds of pops. Broken pairs give no recall credit - memory still pays best - but they ' +
             'clear the floor faster, and a longer ripple pays more. A miss halves the chain and puts the fire out. ' +
             'A suit that can no longer pop - no two of its pairs within reach of each other - loses its last pairs on its own: that is the drop, and it happens at any chain, so breaking the two pairs that hold a third up is a thing you can aim. ' +
-            'A break with a shape gets a name on the run line: a ripple that ran on, a drop, a partner taken from across the board, a halo, a treasure spill, a clean sweep of a suit. ' +
+            'A break with a shape gets a name on the run line: a ripple that ran on, a drop, a long clump, a bridge into the suit next door, a treasure spill, a clean sweep of a suit. ' +
             'Clear the floor with momentum still standing and the floor-end bonus multiplies with the tier: 1.5x at Clean, 2.5x at Sharp, 5x at Fever - Extreme Fever. Never the rating.'
     },
     {

@@ -33,7 +33,7 @@ export interface BoardTurnAnnouncementFacts {
      * whether the match's suit is now gone from the floor. Zeros on a turn without a break.
      */
     chunkPartnerSpanMax: number;
-    chunkHaloPairs: number;
+    chunkBridgedPairs: number;
     chunkSuitCleared: boolean;
     /** Pairs that dropped with this turn's break because their suit had too few left to hold them. */
     chunkDroppedPairs: number;
@@ -96,9 +96,9 @@ const chunkStyleFacts = (
     matchedTileIds: readonly string[]
 ): Pick<
     BoardTurnAnnouncementFacts,
-    'chunkPartnerSpanMax' | 'chunkHaloPairs' | 'chunkSuitCleared' | 'chunkRippleWaves'
+    'chunkPartnerSpanMax' | 'chunkBridgedPairs' | 'chunkSuitCleared' | 'chunkRippleWaves'
 > => {
-    const none = { chunkPartnerSpanMax: 0, chunkHaloPairs: 0, chunkSuitCleared: false, chunkRippleWaves: 0 };
+    const none = { chunkPartnerSpanMax: 0, chunkBridgedPairs: 0, chunkSuitCleared: false, chunkRippleWaves: 0 };
     const afterBoard = after.board;
     if (!afterBoard) {
         return none;
@@ -117,7 +117,7 @@ const chunkStyleFacts = (
     }
     const matchSuit = firstTileValue(before, matchedTileIds, (tile) => tile.suit ?? null);
     let spanMax = 0;
-    let haloPairs = 0;
+    let bridgedPairs = 0;
     for (const indexes of byPair.values()) {
         if (indexes.length === 2) {
             const [a, b] = indexes as [number, number];
@@ -128,7 +128,7 @@ const chunkStyleFacts = (
         }
         const first = afterBoard.tiles[indexes[0]!]!;
         if (matchSuit && first.suit && first.suit !== matchSuit) {
-            haloPairs += 1;
+            bridgedPairs += 1;
         }
     }
     const suitCleared =
@@ -137,7 +137,7 @@ const chunkStyleFacts = (
     const rippleWaves = taken.reduce((max, { tile }) => Math.max(max, runNonNegativeInteger(tile.brokenAtWave ?? 0)), 0) + 1;
     return {
         chunkPartnerSpanMax: spanMax,
-        chunkHaloPairs: haloPairs,
+        chunkBridgedPairs: bridgedPairs,
         chunkSuitCleared: suitCleared,
         chunkRippleWaves: rippleWaves
     };

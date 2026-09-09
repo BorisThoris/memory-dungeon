@@ -15,7 +15,7 @@ export const CHAIN_TIER_LABELS: Readonly<Record<ChainTier, string>> = {
     fever: 'Fever'
 };
 
-/** Grid steps between a broken pair's halves that earn "Partner across the board". */
+/** Grid steps between a broken pair's halves that earn "Long clump": a wave that ran a long way. */
 export const CHAIN_STYLE_LONG_SPAN = 4;
 
 /**
@@ -69,7 +69,7 @@ export const CHAIN_BEAT_COPY = {
      */
     styleLine: (style: {
         chunkPartnerSpanMax: number;
-        chunkHaloPairs: number;
+        chunkBridgedPairs: number;
         chunkSuitCleared: boolean;
         chunkDroppedPairs?: number;
         chunkRippleWaves?: number;
@@ -81,15 +81,15 @@ export const CHAIN_BEAT_COPY = {
         // Then the drop: a pair that fell with nothing touching it is the surprise.
         const dropped = style.chunkDroppedPairs ?? 0;
         if (dropped > 0) tags.push(dropped === 1 ? 'Drop' : `Drop ×${dropped}`);
-        if (style.chunkPartnerSpanMax >= CHAIN_STYLE_LONG_SPAN) tags.push('Partner across the board');
-        if (style.chunkHaloPairs > 0) tags.push('Halo');
+        if (style.chunkPartnerSpanMax >= CHAIN_STYLE_LONG_SPAN) tags.push('Long clump');
+        if (style.chunkBridgedPairs > 0) tags.push('Bridge');
         if (style.chunkSuitCleared) tags.push('Clean sweep');
         return tags.length === 0 ? null : `${tags.join(', ')}.`;
     },
     /** Hover on the chain stat: what the tier is made of and where the next rungs sit on this floor. */
     momentumHint: (chain: number, cascaded: number, rungs: { sharp: number; fever: number }): string =>
         `${cascaded > 0 ? `Chain ${chain} plus ${cascaded} cascaded, momentum ${chain + cascaded}` : `Chain ${chain}`}. ` +
-        `Every match pops the clump it touches. Clean from 3 lets the partners ripple, Sharp from ${rungs.sharp} runs the reaction out, Fever from ${rungs.fever} adds the halo on this floor. A miss halves the chain and puts the fire out.`,
+        `Every match pops the clump it touches. Clean from 3 reaches twice as far into it, Sharp from ${rungs.sharp} runs the reaction into the clump next door, Fever from ${rungs.fever} into three of them on this floor. A miss halves the chain and puts the fire out.`,
     /**
      * What the rung the player is standing on is worth, for the pip cluster beside the tier. The
      * meter said where they were and never what being there bought (thesis §30.3a); a cluster that
