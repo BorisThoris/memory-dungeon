@@ -2581,6 +2581,42 @@ strategies are what §8.3 says produce a shared vocabulary. *(Candidate; risk is
 crutch that replaces memory. §63 discusses. My view: mark the pair, not the symbol, and cap the
 number of markers at one or two, so it is a commitment rather than a notebook.)*
 
+**Found building Phase 3 (Gen 188): the marker collides with the pin, and the collision is
+structural.** The game already ships a memory marker - the **pin**: up to three hidden tiles
+(`MAX_PINNED_TILES`), toggled from the dock, changing no rules, with a contract vow that caps how
+many a run may place. That is (c)'s job description almost word for word, minus the one thing that
+matters: a pin marks a *tile*, and the hold decision's unit is a *pair*.
+
+The gap cannot be closed by making the game smarter, because the game deliberately does not know
+what the player has seen. There is no seen-set in `RunState` - that absence *is* the memory game -
+so nothing can infer that a player knows a pair. The claim has to be a two-tile gesture the player
+makes, which is exactly the gesture the pin already owns. Two controls that both mark tiles on the
+same board is the duplication §105 was written to remove.
+
+Two further constraints on any answer:
+
+- **The marker must never validate.** If marking two tiles told the player whether they match, it
+  would be a free match test - no turn spent, no mismatch, strictly better than flipping. The mark
+  is a claim the player makes and may be wrong about; they find out by flipping, as now.
+- **T3.6 rides on it, and only on it.** A pair's span is a fact about the hidden symbol layout, so
+  putting it on an unmarked tile hands back part of the memory game (the finding recorded at G.3).
+  On a *marked* pair it is safe by construction: it restates the distance between two tiles the
+  player themselves chose, and if the claim is wrong the span shown is the span of the pair they
+  think they have, which is what they are deciding about.
+
+Three ways out, and the choice belongs to the product rather than to an interface generation:
+
+1. **Extend the pin into a pair link.** Pins stay three tiles and a note; two of them can be linked
+   into one held pair, capped at one, carrying the badge and the span. One new verb on an existing
+   control; the vow keeps counting pins placed. *Recommended:* no second control, the cap makes it a
+   commitment as (c) asks, and T3.6 comes free.
+2. **Replace the pin with the held pair.** One pair, no tile notes. Cleanest interface, but it
+   removes shipped content and rewrites the Pin vow, its Codex entry and its contract cap.
+3. **Leave the pin alone and build nothing.** (c) is a candidate, and E.6's question - whether the
+   marker does the remembering for the player - cannot be settled here: it needs players, not a
+   simulation, because a memory aid's effect on human memory is not a thing the reference player
+   models.
+
 ### 30.4 Why this is the highest-value unbuilt feature
 
 Per §17.2, our 10-second cell — "a chain built, held, and detonated" — is the strategic heart and
@@ -6850,6 +6886,13 @@ support.
 **What would settle it:** measure mistake rate with and without. If it falls more than a fifth, it
 is doing the remembering.
 
+**Not settleable here (Gen 188).** The cascade and pop simulations model a reference player who
+misses at a fixed rate; a memory aid changes what a *human* remembers, which is not a parameter any
+of them carry. Turning the miss rate down to simulate "the marker helped" measures the miss rate,
+not the marker. This one waits for players, and §30.3(c) now records the two constraints any build
+has to meet in the meantime: the mark must not validate, and the span (T3.6) may only be shown on a
+pair the player has claimed.
+
 ## E.7 What is the right assist for players with memory impairment?
 
 §48.4 declines to build a board-revealing assist mode on the grounds that it removes the game. That
@@ -7147,10 +7190,10 @@ tried to give it.
 |---|---|---|---|---|
 | T3.1 | Tier-aware aim guide (§29.2) | T1.7 | Hover and long-press both work | Low — **done, Gen 185** |
 | T3.2 | Next-tier ghost overlay (§30.3b) | T3.1 | The delta is visible on the board | Med — **done, Gen 185** |
-| T3.3 | Rung value pips in the meter (§30.3a) | — | Each tick carries weight | Low |
-| T3.4 | Held-pair marker, capped (§30.3c) | — | Changes no rules; mistake rate check | Med — see E.6 |
-| T3.5 | Score built term by term (§40.4) | T2.5 | The multiplier is watched being constructed | Low |
-| T3.6 | Show that a pair's halves are far apart | **T3.4** | Derived from trace §68(b) | Med — see the note below |
+| T3.3 | Rung value pips in the meter (§30.3a) | — | Each tick carries weight | Low — **done, Gen 186** |
+| T3.4 | Held-pair marker, capped (§30.3c) | — | Changes no rules; mistake rate check | **Blocked on a product decision** — collides with the shipped pin; three options and a recommendation at §30.3(c) |
+| T3.5 | Score built term by term (§40.4) | T2.5 | The multiplier is watched being constructed | Low — **done, Gen 187** |
+| T3.6 | Show that a pair's halves are far apart | **T3.4** | Derived from trace §68(b) | **Blocked with T3.4** — see the note below |
 
 **T3.6 depends on T3.4, not T3.1 (found building Gen 185).** A pair's span is a fact about the
 hidden *symbol* layout, not about the suits on the backs, so putting it on a tile the player has not

@@ -267,8 +267,8 @@
     {
       "path": "docs/CHAIN_CHUNK_FEVER_DESIGN.md",
       "category": "documentation",
-      "bytes": 67303,
-      "sha256": "b9071c2737f38c735f58c7ee6eba86f20bc48d6ad7f17d3515057990ed508903"
+      "bytes": 68646,
+      "sha256": "287397f28dd4e089b21850fb96edc4ed1e5dcfdf9f4742e976175f74ab6b2511"
     },
     {
       "path": "docs/COLLECTIBLE_SYSTEM.md",
@@ -742,7 +742,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 394,
-      "sha256": "909650c58f274fbb804798da6d2198a20467c42453cbdef0d53bc536107cacfd"
+      "sha256": "7c89a3b8cf8f85847b6b42cfc0283dfde8f9872ca5a8f0b725c17ac4903a23d9"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2313,8 +2313,8 @@
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
       "category": "documentation",
-      "bytes": 485172,
-      "sha256": "ba1fcb4749739710b306fa0e431a7e2a282d4fb7a6dd07dc8746e0728e035098"
+      "bytes": 488477,
+      "sha256": "da9b22dca072d978906d2b5f30bb14e7f9e25a4fb9710f9dae2cd5d558efa16c"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
