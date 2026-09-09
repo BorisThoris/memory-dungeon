@@ -7,9 +7,9 @@
  *
  * The turn rule is Concentration's, the one every player at a kitchen table already knows: find a
  * pair and you go again, miss and the device moves on. Nothing about the board changes — the same
- * floors, the same powers, the same lives. What changes is who is credited, and the lives stay
- * shared on purpose: they are the clock the table is racing, not a resource one player can spend
- * out from under another.
+ * floors, the same powers, the same turn ceiling. What changes is who is credited, and the floor's
+ * turns stay shared on purpose: they are the clock the table is racing, not a resource one player
+ * can spend out from under another.
  *
  * The seat scores are projected from the `board.turn_resolved` event rather than computed inside
  * the turn transition. The core decides what happened and says so; this reads what it said. That
@@ -23,10 +23,10 @@ export type { PassAndPlaySeat, PassAndPlayState };
 /**
  * How many floors a shared game runs for.
  *
- * A solo run is endless by design: it ends when the player runs out of lives, and the score is how
- * far they got. That is the wrong shape for people sitting down together. A table wants a contest
- * with a known length — everyone gets the same amount of board, the highest total wins, and the
- * game is over in one sitting rather than whenever the shared lives happen to run out.
+ * A solo run is endless by design: it ends when the player stops or a floor's ceiling ends it, and
+ * the score is how far they got. That is the wrong shape for people sitting down together. A table
+ * wants a contest with a known length — everyone gets the same amount of board, the highest total
+ * wins, and the game is over in one sitting rather than whenever a ceiling happens to fall.
  *
  * Three is short enough to play again immediately, which is what a table actually does, and long
  * enough that one lucky floor does not decide it. It is one number rather than a range because a

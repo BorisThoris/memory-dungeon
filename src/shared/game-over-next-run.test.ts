@@ -13,7 +13,7 @@ describe('REG-096 game over next-run loop', () => {
             findablesTotalThisFloor: 2,
             stats: { ...source.stats, bestStreak: 5 },
             status: 'gameOver',
-            lives: 0
+            runEndReason: 'turn_ceiling'
         }, []);
         const rows = getGameOverNextRunRows(run);
 
@@ -39,7 +39,7 @@ describe('REG-096 game over next-run loop', () => {
                 ...source,
                 stats: { ...source.stats, bestStreak: 8 },
                 status: 'gameOver',
-                lives: 0
+                runEndReason: 'turn_ceiling'
             },
             []
         );
@@ -62,7 +62,7 @@ describe('REG-096 game over next-run loop', () => {
                     })
                 ),
                 status: 'gameOver',
-                lives: 0
+                runEndReason: 'turn_ceiling'
             },
             []
         );
@@ -75,7 +75,7 @@ describe('REG-096 game over next-run loop', () => {
 
     it('normalizes malformed terminal summary counters before building next-run rows', () => {
         const source = finishMemorizePhase(createNewRun(0));
-        const run = createRunSummary({ ...source, status: 'gameOver', lives: 0 }, []);
+        const run = createRunSummary({ ...source, status: 'gameOver', runEndReason: 'turn_ceiling' }, []);
         run.findablesClaimedThisFloor = Number.POSITIVE_INFINITY;
         run.findablesTotalThisFloor = Number.NaN;
         run.lastRunSummary = {
@@ -108,7 +108,7 @@ describe('REG-096 game over next-run loop', () => {
             ...save.playerStats!,
             sharpFloors: 7
         };
-        const run = createRunSummary({ ...finishMemorizePhase(createNewRun(0)), status: 'gameOver', lives: 0 }, []);
+        const run = createRunSummary({ ...finishMemorizePhase(createNewRun(0)), status: 'gameOver', runEndReason: 'turn_ceiling' }, []);
 
         const row = getGameOverNextRunRows(run, save).find((entry) => entry.id === 'next_goal');
 
@@ -133,7 +133,7 @@ describe('REG-096 game over next-run loop', () => {
             ...after.playerStats!,
             sharpFloors: 7
         };
-        const run = createRunSummary({ ...finishMemorizePhase(createNewRun(0)), status: 'gameOver', lives: 0 }, []);
+        const run = createRunSummary({ ...finishMemorizePhase(createNewRun(0)), status: 'gameOver', runEndReason: 'turn_ceiling' }, []);
 
         const row = getGameOverNextRunRows(run, after, before).find((entry) => entry.id === 'next_goal');
 

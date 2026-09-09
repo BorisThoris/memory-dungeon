@@ -29,7 +29,6 @@ const CHARGE_ROWS: readonly { id: string; label: string }[] = [
     { id: 'destroy_charge', label: 'Destroy pair' },
     { id: 'stray_remove_charge', label: 'Stray remove' },
     { id: 'undo_charge', label: 'Undo this floor' },
-    { id: 'guard_token', label: 'Guard tokens' },
     { id: 'combo_shard', label: 'Combo shards' }
 ];
 
@@ -89,8 +88,7 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
     const snapshot = [
         `Floor ${floor}`,
         modeTitle(run.gameMode ?? 'classic'),
-        `Score ${run.stats.totalScore.toLocaleString()}`,
-        `Lives ${run.lives}`
+        `Score ${run.stats.totalScore.toLocaleString()}`
     ].join(' · ');
 
     return (

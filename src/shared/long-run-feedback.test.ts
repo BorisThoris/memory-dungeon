@@ -66,8 +66,7 @@ describe('GLD-FB long-run feedback read models', () => {
             recallBonusScoreThisFloor: 16,
             stats: {
                 ...createNewRun(0, { runSeed: 91_002, activeMutators: [] }).stats,
-                comboShards: 1,
-                guardTokens: 1
+                comboShards: 1
             }
         };
 

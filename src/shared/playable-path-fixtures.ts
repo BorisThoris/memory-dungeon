@@ -1,6 +1,5 @@
 import {
     MAX_COMBO_SHARDS,
-    MAX_LIVES,
     type BoardState,
     type RunState,
     type SaveData,
@@ -162,7 +161,6 @@ const activeRunWithPickupCashout = (): RunState => {
         board,
         findablesClaimedThisFloor: 0,
         findablesTotalThisFloor: 1,
-        lives: MAX_LIVES,
         stats: {
             ...base.stats,
             comboShards: MAX_COMBO_SHARDS,
@@ -217,7 +215,7 @@ const floorClearWithRouteChoices = (): RunState => playPerfectFloors(baseEndless
 
 const gameOverRun = (): RunState => {
     const run = finishMemorizePhase(baseEndlessRun());
-    return createRunSummary({ ...run, status: 'gameOver', lives: 0 }, []);
+    return createRunSummary({ ...run, status: 'gameOver', runEndReason: 'turn_ceiling' }, []);
 };
 
 const assertNever = (value: never): never => {

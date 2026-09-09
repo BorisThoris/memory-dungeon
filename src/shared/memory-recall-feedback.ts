@@ -1,5 +1,4 @@
 import {
-    MAX_PENDING_MEMORIZE_BONUS_MS,
     RECALL_FOCUS_MATCH_SCORE,
     type RunState,
     type MutatorId,
@@ -495,15 +494,6 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
             label: `${run.recallMistakesThisFloor} recall lapse${run.recallMistakesThisFloor === 1 ? '' : 's'}`,
             detail: 'Lapses lower focus and mark tiles as forgotten until recovered by a match.',
             tone: 'danger'
-        });
-    }
-    const pendingMemorizeBonusMs = runNonNegativeInteger(run.pendingMemorizeBonusMs);
-    if (pendingMemorizeBonusMs > 0) {
-        penalties.push({
-            id: 'memorize-recovery',
-            label: 'Recovery memorize time banked',
-            detail: `+${Math.min(pendingMemorizeBonusMs, MAX_PENDING_MEMORIZE_BONUS_MS)}ms will soften the next memorization phase.`,
-            tone: 'stable'
         });
     }
     penalties.push(...buildMemoryTaxLines(run));

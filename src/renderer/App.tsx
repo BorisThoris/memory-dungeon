@@ -198,7 +198,7 @@ const App = () => {
             }
             useAppStore.setState({
                 view: 'gameOver',
-                run: createGameOverRunSummary(current, [])
+                run: createGameOverRunSummary(current, [], 'quit')
             });
         };
         w.__memoryDungeonE2e = {

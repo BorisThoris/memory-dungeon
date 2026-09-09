@@ -653,11 +653,11 @@ describe('gameSfx', () => {
         );
 
         const before = {
-            stats: { matchesFound: 1, tries: 1, currentStreak: 1, comboShards: 0, guardTokens: 0 },
+            stats: { matchesFound: 1, tries: 1, currentStreak: 1, comboShards: 0 },
             findablesClaimedThisFloor: 0
         } as unknown as RunState;
         const after = {
-            stats: { matchesFound: 2, tries: 2, currentStreak: 2, comboShards: 1, guardTokens: 0 },
+            stats: { matchesFound: 2, tries: 2, currentStreak: 2, comboShards: 1 },
             findablesClaimedThisFloor: 0
         } as unknown as RunState;
 
@@ -695,13 +695,11 @@ describe('gameSfx', () => {
         );
 
         const before = {
-            lives: 4,
-            stats: { matchesFound: 2, tries: 2, currentStreak: 3, comboShards: 1, guardTokens: 0 },
+            stats: { matchesFound: 2, tries: 2, currentStreak: 3, comboShards: 1 },
             findablesClaimedThisFloor: 0
         } as unknown as RunState;
         const after = {
-            lives: 5,
-            stats: { matchesFound: 3, tries: 3, currentStreak: 4, comboShards: 2, guardTokens: 1 },
+            stats: { matchesFound: 3, tries: 3, currentStreak: 4, comboShards: 2 },
             findablesClaimedThisFloor: 0
         } as unknown as RunState;
 
@@ -749,12 +747,10 @@ describe('gameSfx', () => {
         );
 
         const before = {
-            lives: 4,
-            stats: { matchesFound: 3, tries: 3, currentStreak: 4, comboShards: 0, guardTokens: 0 }
+            stats: { matchesFound: 3, tries: 3, currentStreak: 4, comboShards: 0 }
         } as unknown as RunState;
         const after = {
-            lives: 4,
-            stats: { matchesFound: 4, tries: 4, currentStreak: 5, comboShards: 0, guardTokens: 0 }
+            stats: { matchesFound: 4, tries: 4, currentStreak: 5, comboShards: 0 }
         } as unknown as RunState;
 
         playResolveSfx(before, after, sfxGainFromSettings(1, 1));
@@ -797,11 +793,11 @@ describe('gameSfx', () => {
         );
 
         const before = {
-            stats: { matchesFound: 1, tries: 1, currentStreak: 1, comboShards: 0, guardTokens: 0 },
+            stats: { matchesFound: 1, tries: 1, currentStreak: 1, comboShards: 0 },
             findablesClaimedThisFloor: 0
         } as unknown as RunState;
         const after = {
-            stats: { matchesFound: 2, tries: 2, currentStreak: 2, comboShards: 1, guardTokens: 0 },
+            stats: { matchesFound: 2, tries: 2, currentStreak: 2, comboShards: 1 },
             findablesClaimedThisFloor: 1
         } as unknown as RunState;
 
@@ -850,11 +846,11 @@ describe('gameSfx', () => {
         // Three channels at once: a pickup claimed, a chain reward cashed out at x3, and the x3
         // chain milestone itself. That is every reward channel a resolved match can still open.
         const before = {
-            stats: { matchesFound: 1, tries: 1, currentStreak: 2, comboShards: 0, guardTokens: 0 },
+            stats: { matchesFound: 1, tries: 1, currentStreak: 2, comboShards: 0 },
             findablesClaimedThisFloor: 0
         } as unknown as RunState;
         const after = {
-            stats: { matchesFound: 2, tries: 2, currentStreak: 3, comboShards: 1, guardTokens: 0 },
+            stats: { matchesFound: 2, tries: 2, currentStreak: 3, comboShards: 1 },
             findablesClaimedThisFloor: 1
         } as unknown as RunState;
 
@@ -897,7 +893,6 @@ describe('gameSfx', () => {
         );
 
         const before = {
-            lives: 4,
             stats: { matchesFound: 2, tries: 2, currentStreak: 6, comboShards: 0 }
         } as unknown as RunState;
         const after = {

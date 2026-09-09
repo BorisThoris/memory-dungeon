@@ -89,7 +89,7 @@ describe('meta overlay executors', () => {
 
     it('routes resumed game-over runs through resolved-run handling', () => {
         const run = createPausedRun();
-        const gameOverRun = { ...run, status: 'gameOver' as const, lives: 0 };
+        const gameOverRun = { ...run, status: 'gameOver' as const };
         const deps = {
             ...createDeps(createState({
                 run,

@@ -22,7 +22,7 @@ describe('inventoryScreenModel', () => {
             shuffleCharges: -2,
             destroyPairCharges: -1,
             peekCharges: -4,
-            stats: { ...createNewRun(0).stats, guardTokens: -2, comboShards: -5 }
+            stats: { ...createNewRun(0).stats, comboShards: -5 }
         };
 
         const quantityById = createInventoryQuantityMap(run);
@@ -30,7 +30,7 @@ describe('inventoryScreenModel', () => {
         expect(quantityById.get('shuffle_charge')).toBe(0);
         expect(quantityById.get('destroy_charge')).toBe(0);
         expect(quantityById.get('peek_charge')).toBe(0);
-        expect(quantityById.get('guard_token')).toBe(0);
+        expect(quantityById.has('guard_token')).toBe(false);
         expect(quantityById.get('combo_shard')).toBe(0);
     });
 
@@ -87,7 +87,7 @@ describe('inventoryScreenModel', () => {
             ...createNewRun(0),
             findablesClaimedThisFloor: 0,
             findablesTotalThisFloor: 1,
-            stats: { ...createNewRun(0).stats, currentStreak: 3, comboShards: 2, guardTokens: 0 }
+            stats: { ...createNewRun(0).stats, currentStreak: 3, comboShards: 2 }
         };
 
         expect(getInventoryPayoffEngineSignal(run)).toMatchObject({
@@ -108,8 +108,7 @@ describe('inventoryScreenModel', () => {
                 ...createNewRun(0).stats,
                 bestStreak: Number.NaN,
                 comboShards: Number.POSITIVE_INFINITY,
-                currentStreak: Number.NaN,
-                guardTokens: Number.NEGATIVE_INFINITY
+                currentStreak: Number.NaN
             }
         };
 
@@ -118,7 +117,7 @@ describe('inventoryScreenModel', () => {
         expect(signals).toMatchObject([
             { id: 'chain', value: 'ready' },
             { id: 'pickup', value: '0' },
-            { id: 'resource', nextCue: 'Build x6 chain pressure', value: '0 shards / 0 guards' }
+            { id: 'resource', nextCue: 'Build x6 chain pressure', value: '0 shards' }
         ]);
         expect(signals.map((signal) => `${signal.value} ${signal.nextCue}`).join(' ')).not.toMatch(/NaN|Infinity/);
         expect(getInventoryPayoffEngineSignal(run, signals)).toMatchObject({

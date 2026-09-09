@@ -101,21 +101,4 @@ describe('level complete continuation executors', () => {
     });
 
 
-    it('routes dead interlude runs through game-over resolution before early returns', () => {
-        const run: RunState = {
-            ...createPlayablePathFixture('floorClearWithRouteChoices').run!,
-            lives: 0
-        };
-        const deps = createDeps(createState({ run }));
-
-        executeContinueToNextLevel(deps);
-
-        expect(deps.applyResolvedRun).toHaveBeenCalledWith(expect.objectContaining({
-            lives: 0,
-            status: 'gameOver'
-        }));
-        expect(deps.clearAllTimers).not.toHaveBeenCalled();
-    });
-
-
 });

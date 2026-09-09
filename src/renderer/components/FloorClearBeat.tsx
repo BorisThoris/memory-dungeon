@@ -17,7 +17,7 @@ export interface FloorClearBeatProps {
     totalScore: number;
     /** The cleared floor is deeper than any this profile has cleared before. */
     personalBest: boolean;
-    /** Small notes under the bonus: a life earned, the objective's outcome, who is downstairs. */
+    /** Small notes under the bonus: the objective's outcome, who is downstairs. */
     notes: readonly string[];
 }
 

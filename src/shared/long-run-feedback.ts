@@ -151,13 +151,13 @@ export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
         );
     }
 
-    if (stats.comboShards > 0 || stats.guardTokens > 0) {
+    if (stats.comboShards > 0) {
         rows.push(
             causeRow({
                 id: 'economy',
                 kind: 'economy_delta',
                 label: 'Economy',
-                summary: `${stats.comboShards}/2 shards, ${stats.guardTokens}/2 guard`,
+                summary: `${stats.comboShards}/2 shards`,
                 detail: 'Temporary run resources shifted as streaks, traits and pickups resolved.',
                 tokens: ['reward', 'cost'],
                 priority: 60
@@ -170,7 +170,7 @@ export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
 
 export const getTouchHudDetailRows = (run: RunState): TouchHudDetailRow[] => {
     const economy = getRunEconomyRows(run)
-        .filter((row) => ['combo_shards', 'guard_tokens', 'findable_pickups'].includes(row.id))
+        .filter((row) => ['combo_shards', 'findable_pickups'].includes(row.id))
         .map((row) => `${row.label} ${row.value}`)
         .join(', ');
     const pm = getPerfectMemoryAttribution(run);
@@ -195,7 +195,7 @@ export const getTouchHudDetailRows = (run: RunState): TouchHudDetailRow[] => {
         {
             id: 'economy',
             label: 'Economy',
-            value: `${stats.comboShards}/2 shards, ${stats.guardTokens}/2 guard`,
+            value: `${stats.comboShards}/2 shards`,
             detail: economy,
             tokens: ['reward', 'cost']
         }

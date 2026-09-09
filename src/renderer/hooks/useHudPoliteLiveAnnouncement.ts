@@ -27,20 +27,14 @@ const PRIORITY_RANK: Record<HudAnnouncePriority, number> = { error: 2, info: 1 }
 const payoffIntensityAnnouncementLine = ({
     chainMatchStreak,
     comboShardDelta,
-    guardTokenDelta,
-    lifeDelta,
     traitMatchCount
 }: {
     chainMatchStreak: number;
     comboShardDelta: number;
-    guardTokenDelta: number;
-    lifeDelta: number;
     traitMatchCount: number;
 }): string | null => {
     const lanes = [
         comboShardDelta > 0 ? 'combo shard' : null,
-        guardTokenDelta > 0 ? 'guard token' : null,
-        lifeDelta > 0 ? 'life' : null,
         traitMatchCount >= 2 ? 'trait surge' : null
     ].filter((lane): lane is string => lane !== null);
     if (lanes.length < 2) {
@@ -62,10 +56,6 @@ interface HudPoliteLiveAnnouncementInput {
      * — and announcing only the last of them dropped the rest on the floor.
      */
     gameplayFeedback?: readonly GameplayFeedbackPresentation[];
-    scoreParasiteActive: boolean;
-    parasiteFloors: number;
-    lives: number;
-    guardTokens: number;
     comboShards: number;
     shuffleCharges?: number;
     regionShuffleCharges?: number;
@@ -105,7 +95,7 @@ const normalizeRecallFocusForAnnouncement = (focus: number, max: number): { focu
 };
 
 /**
- * HUD-015: polite `aria-live` source text for score-parasite milestones and resource changes.
+ * HUD-015: polite `aria-live` source text for resolved turns and resource changes.
  * Batches concurrent announcements on `requestAnimationFrame`, dedupes by key, prefers higher priority,
  * and throttles display cadence so screen readers get summaries, not chatter.
  */
@@ -113,10 +103,6 @@ const normalizeRecallFocusForAnnouncement = (focus: number, max: number): { focu
 export const useHudPoliteLiveAnnouncement = ({
     boardTurnEvent = null,
     gameplayFeedback = EMPTY_FEEDBACK,
-    scoreParasiteActive,
-    parasiteFloors,
-    lives,
-    guardTokens,
     comboShards,
     shuffleCharges = 0,
     regionShuffleCharges = 0,
@@ -134,15 +120,8 @@ export const useHudPoliteLiveAnnouncement = ({
 }: HudPoliteLiveAnnouncementInput): UseHudPoliteLiveAnnouncementResult => {
     const [message, setMessage] = useState('');
     const [messagePriority, setMessagePriority] = useState<HudAnnouncePriority>('info');
-    const parasiteSnapRef = useRef<{
-        level: number;
-        parasiteFloors: number;
-        lives: number;
-    } | null>(null);
     const actionSnapRef = useRef<{
         level: number;
-        lives: number;
-        guardTokens: number;
         comboShards: number;
         shuffleCharges: number;
         regionShuffleCharges: number;
@@ -297,50 +276,6 @@ export const useHudPoliteLiveAnnouncement = ({
         []
     );
 
-    useEffect(() => {
-        if (!scoreParasiteActive || boardLevel === null) {
-            parasiteSnapRef.current = null;
-            return;
-        }
-
-        const snap = parasiteSnapRef.current;
-        const nextSnap = {
-            level: boardLevel,
-            parasiteFloors,
-            lives
-        };
-
-        if (snap === null) {
-            parasiteSnapRef.current = nextSnap;
-            return;
-        }
-
-        if (boardLevel < snap.level) {
-            parasiteSnapRef.current = nextSnap;
-            return;
-        }
-
-        const levelAdvanced = boardLevel > snap.level;
-        if (levelAdvanced) {
-            const crossedDrain = snap.parasiteFloors === 3 && parasiteFloors === 0;
-            if (crossedDrain) {
-                if (lives < snap.lives) {
-                    queuePoliteAnnouncement('Score parasite drained one life.', {
-                        dedupeKey: 'parasite:drain',
-                        priority: 'info'
-                    });
-                }
-            } else if (parasiteFloors === 3 && snap.parasiteFloors === 2) {
-                queuePoliteAnnouncement('Score parasite: next cleared floor triggers the drain.', {
-                    dedupeKey: 'parasite:warn',
-                    priority: 'info'
-                });
-            }
-        }
-
-        parasiteSnapRef.current = nextSnap;
-    }, [boardLevel, lives, parasiteFloors, queuePoliteAnnouncement, scoreParasiteActive]);
-
     // Pickups are announced from the resolved-turn event rather than by diffing the
     // previous board's tiles against the current ones. The core already reports which
     // findable was claimed, and the event id makes the dedupe key unique per turn, so a
@@ -369,8 +304,6 @@ export const useHudPoliteLiveAnnouncement = ({
 
         const nextSnap = {
             level: boardLevel,
-            lives,
-            guardTokens,
             comboShards,
             shuffleCharges,
             regionShuffleCharges,
@@ -396,8 +329,6 @@ export const useHudPoliteLiveAnnouncement = ({
          * that in terms of length instead — silently, they had stopped suppressing anything.
          */
         const coreSaidNothing = newGameplayFeedback.length === 0;
-        const lifeDelta = lives - snap.lives;
-        const guardDelta = guardTokens - snap.guardTokens;
         const shardDelta = comboShards - snap.comboShards;
         const shuffleChargeDelta = shuffleCharges - snap.shuffleCharges;
         const regionShuffleChargeDelta = regionShuffleCharges - snap.regionShuffleCharges;
@@ -417,17 +348,8 @@ export const useHudPoliteLiveAnnouncement = ({
         const forgottenDelta = forgottenTileCountThisFloor - snap.forgottenTileCount;
         const recallFocusLost = normalizedRecallFocusValue < snap.recallFocus;
 
-        if (lifeDelta < 0) {
-            lines.push(`Life lost. ${lives} ${lives === 1 ? 'life remains' : 'lives remain'}.`);
-        } else if (lifeDelta > 0) {
-            lines.push(`Life restored. ${lives} ${lives === 1 ? 'life available' : 'lives available'}.`);
-        } else if (guardDelta < 0) {
-            lines.push(`Guard token spent. ${guardTokens} guard ${guardTokens === 1 ? 'token remains' : 'tokens remain'}.`);
-        } else if (guardDelta > 0 && coreSaidNothing) {
-            lines.push(`${pluralize(guardDelta, 'guard token')} gained. ${guardTokens} available.`);
-        }
-
-        if (mismatchDelta > 0 && lifeDelta >= 0 && guardDelta >= 0) {
+        // A miss is quiet (thesis §67): the cards reset, the chain does, and that is all it says.
+        if (mismatchDelta > 0) {
             lines.push('No match. Recover with a safe match. Chain reset.');
         }
 
@@ -499,8 +421,6 @@ export const useHudPoliteLiveAnnouncement = ({
             const payoffIntensityLine = payoffIntensityAnnouncementLine({
                 chainMatchStreak: turnFacts?.currentStreakAfter ?? 0,
                 comboShardDelta: shardDelta,
-                guardTokenDelta: guardDelta,
-                lifeDelta,
                 traitMatchCount: traitMatchLabels.length
             });
             if (payoffIntensityLine) {
@@ -510,11 +430,8 @@ export const useHudPoliteLiveAnnouncement = ({
 
         if (lines.length > 0) {
             queuePoliteAnnouncement(lines.join(' '), {
-                dedupeKey: `action:${boardLevel}:${lives}:${guardTokens}:${comboShards}:${shuffleCharges}:${regionShuffleCharges}:${stickyBlockIndex ?? 'none'}:${normalizedRecallFocusValue}:${normalizedRecallFocusMax}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${boardTurnEvent?.eventId ?? 'no-turn'}:${newGameplayFeedback.map((item) => item.eventId).join(',') || 'legacy'}`,
-                priority:
-                    lifeDelta < 0 || newGameplayFeedback.some((item) => item.priority === 'error')
-                        ? 'error'
-                        : 'info'
+                dedupeKey: `action:${boardLevel}:${comboShards}:${shuffleCharges}:${regionShuffleCharges}:${stickyBlockIndex ?? 'none'}:${normalizedRecallFocusValue}:${normalizedRecallFocusMax}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${boardTurnEvent?.eventId ?? 'no-turn'}:${newGameplayFeedback.map((item) => item.eventId).join(',') || 'legacy'}`,
+                priority: newGameplayFeedback.some((item) => item.priority === 'error') ? 'error' : 'info'
             });
         }
 
@@ -526,8 +443,6 @@ export const useHudPoliteLiveAnnouncement = ({
         announceGameplayFeedbackBatch,
         boardLevel,
         comboShards,
-        guardTokens,
-        lives,
         unannouncedGameplayFeedback,
         queuePoliteAnnouncement,
         regionShuffleCharges,

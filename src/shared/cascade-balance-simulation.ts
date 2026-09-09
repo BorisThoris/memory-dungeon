@@ -31,7 +31,7 @@ export interface CascadeBalanceFloorSample {
     floor: number;
     missRate: number;
     cleared: boolean;
-    /** The run died on this floor; not cleared, but not stuck either. */
+    /** The turn ceiling ended the run on this floor (Gen 183); not cleared, but not stuck either. */
     fell: boolean;
     turns: number;
     mistakes: number;
@@ -69,8 +69,10 @@ export interface CascadeBalanceBandReport {
     missRate: number;
     floors: number;
     clearedShare: number;
-    /** Floors that ended cleared or in a death; anything else is a floor that got stuck. */
+    /** Floors that ended cleared or at the ceiling; anything else is a floor that got stuck. */
     settledShare: number;
+    /** Share of floors the turn ceiling ended: the run's only ending besides stopping (thesis §42.2). */
+    ceilingShare: number;
     meanTurns: number;
     meanMistakes: number;
     meanLevelScore: number;
@@ -265,6 +267,7 @@ const summarizeBand = (missRate: number, samples: CascadeBalanceFloorSample[]): 
         floors,
         clearedShare: mean((sample) => (sample.cleared ? 1 : 0)),
         settledShare: mean((sample) => (sample.cleared || sample.fell ? 1 : 0)),
+        ceilingShare: mean((sample) => (sample.fell ? 1 : 0)),
         meanTurns: mean((sample) => sample.turns),
         meanMistakes: mean((sample) => sample.mistakes),
         meanLevelScore: mean((sample) => sample.levelScore),
@@ -338,6 +341,8 @@ export interface CascadeBalanceBands {
     cleanLargestBreakShareOfScore: { min: number; max: number };
     cleanUnderParShare: { min: number };
     underParCleanMinusReference: { min: number };
+    /** The ceiling must be a floor under competence, not a difficulty gate: the reference player almost never meets it. */
+    referenceCeilingShare: { max: number };
     cleanTurnsOverReferenceTurns: { max: number };
     cleanFeverShareOnBigFloors: { min: number };
     feverCleanOverReference: { min: number };
@@ -371,6 +376,13 @@ export const CASCADE_BALANCE_BANDS: CascadeBalanceBands = {
      */
     cleanUnderParShare: { min: 0.9 },
     underParCleanMinusReference: { min: 0.1 },
+    /**
+     * Thesis §42.2: three times par is a player missing two thirds of their flips. Measured in
+     * Gen 183 over 48 seeds and 24 floors: a player missing a quarter of their flips never met it
+     * (0.000), one missing half met it on 0.029 of floors, one missing seventy percent on 0.236.
+     * The ceiling sits at zero for the reference player with a margin for the deal.
+     */
+    referenceCeilingShare: { max: 0.02 },
     /** Turns to clear at zero misses over turns at the reference miss rate: faster, and by enough to feel. */
     cleanTurnsOverReferenceTurns: { max: 0.9 },
     /**
@@ -482,6 +494,9 @@ export const assertCascadeBalanceWithinBands = (
             `clean underParShare ${clean.underParShare.toFixed(3)} is not ${bands.underParCleanMinusReference.min} above the reference ${reference.underParShare.toFixed(3)} (the par is not a goal)`
         );
     }
+    if (reference && reference.ceilingShare > bands.referenceCeilingShare.max) {
+        issues.push(`reference ceilingShare ${reference.ceilingShare.toFixed(3)} above ${bands.referenceCeilingShare.max} (the ceiling is a gate)`);
+    }
     if (reference && reference.feverFloorShare > bands.referenceFeverShare.max) {
         issues.push(`reference feverFloorShare ${reference.feverFloorShare.toFixed(3)} above ${bands.referenceFeverShare.max}`);
     }
@@ -504,7 +519,7 @@ export const summarizeCascadeBalance = (report: CascadeBalanceReport): string =>
         ...report.bands
         .map(
             (band) =>
-                `miss=${band.missRate}: cleared=${band.clearedShare.toFixed(2)} settled=${band.settledShare.toFixed(2)} turns=${band.meanTurns.toFixed(1)} ` +
+                `miss=${band.missRate}: cleared=${band.clearedShare.toFixed(2)} settled=${band.settledShare.toFixed(2)} ceiling=${band.ceilingShare.toFixed(3)} turns=${band.meanTurns.toFixed(1)} ` +
                 `mistakes=${band.meanMistakes.toFixed(2)} score=${band.meanLevelScore.toFixed(0)} chunkShare=${band.chunkShareOfScore.toFixed(2)} largest=${band.largestBreakShareOfScore.toFixed(2)} ` +
                 `underPar=${band.underParShare.toFixed(2)} overPar=${band.meanTurnsOverPar.toFixed(1)} ` +
                 `breaks/floor=${band.chunkBreaksPerFloor.toFixed(2)} pairs/floor=${band.chunkPairsPerFloor.toFixed(2)} ` +

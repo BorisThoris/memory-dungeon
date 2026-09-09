@@ -6,23 +6,12 @@ import {
     calculateFloorClearScore,
     createFloorClearLevelResult,
     FLOOR_TIER_MULT,
-    getFloorClearStatLevelResultFields,
-    getClearLifeReason
+    getFloorClearStatLevelResultFields
 } from './level-clear-rules';
 
 const coldBonus = (level: number) => calculateFloorClearBonus({ level, tier: 'none', parTurns: 10, turnsTaken: 10 });
 
 describe('level-clear-rules', () => {
-    it('classifies clear-life rewards from level tries', () => {
-        expect(getClearLifeReason(0)).toBe('perfect');
-        expect(getClearLifeReason(1)).toBe('clean');
-        expect(getClearLifeReason(2)).toBe('none');
-        expect(getClearLifeReason(9)).toBe('none');
-    });
-
-
-
-
     it('maps positive floor counters into optional level-result fields', () => {
         const run = {
             ...createNewRun(0),
@@ -121,15 +110,12 @@ describe('level-clear-rules', () => {
 
         const result = createFloorClearLevelResult({
             bonusTags: ['boss_floor', 'boss_floor', 'extreme_fever'],
-            clearLifeGained: 1,
-            clearLifeReason: 'perfect',
             featuredObjectiveCompleted: true,
             featuredObjectiveId: 'flip_par',
             featuredObjectiveStreak: 3,
             featuredObjectiveStreakBonus: 12,
             floorBonus: calculateFloorClearBonus({ level: 7, tier: 'sharp', parTurns: 9, turnsTaken: 7 }),
             level: 7,
-            livesRemaining: 4,
             mistakes: 0,
             momentumBonus: { momentum: 0, tier: 'none' as const, shards: 0 },
             objectiveBonusScore: 40,
@@ -146,11 +132,8 @@ describe('level-clear-rules', () => {
             level: 7,
             scoreGained: 250,
             rating: 'S',
-            livesRemaining: 4,
             perfect: true,
             mistakes: 0,
-            clearLifeReason: 'perfect',
-            clearLifeGained: 1,
             bonusTags: ['boss_floor', 'extreme_fever'],
             objectiveBonusScore: 40,
             featuredObjectiveId: 'flip_par',
@@ -174,15 +157,12 @@ describe('level-clear-rules', () => {
 
         const result = createFloorClearLevelResult({
             bonusTags: [],
-            clearLifeGained: 0,
-            clearLifeReason: 'none',
             featuredObjectiveCompleted: false,
             featuredObjectiveId: null,
             featuredObjectiveStreak: 0,
             featuredObjectiveStreakBonus: 0,
             floorBonus: coldBonus(2),
             level: 2,
-            livesRemaining: 3,
             mistakes: 2,
             momentumBonus: { momentum: 0, tier: 'none' as const, shards: 0 },
             objectiveBonusScore: 0,

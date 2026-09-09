@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
 import { type BoardState, type RunState, type Tile } from './contracts';
+import { parTurnsForFloor, turnCeilingForFloor, TURN_CEILING_PAR_MULTIPLIER } from './floor-par';
+import { flipTile, resolveBoardTurn } from './game';
 import { createNewRun } from './run-creation-rules';
+import { makeRun, makeTile } from './test/game-fixtures';
 import { calculateMismatchPenalty, createHiddenMismatchBoard, resolveMismatchTurnTransition } from './turn-mismatch-rules';
 
 const tile = (id: string, state: Tile['state'] = 'flipped', overrides: Partial<Tile> = {}): Tile => ({
@@ -23,11 +26,9 @@ const board = (tiles: Tile[], overrides: Partial<BoardState> = {}): BoardState =
 const run = (b: BoardState, overrides: Partial<RunState> = {}): RunState => ({
     ...createNewRun(0, { runSeed: 21_002 }),
     board: b,
-    pendingMemorizeBonusMs: 0,
     stats: {
         ...createNewRun(0, { runSeed: 21_003 }).stats,
-        tries: 2,
-        guardTokens: 0
+        tries: 2
     },
     ...overrides
 });
@@ -44,34 +45,25 @@ describe('turn mismatch rules', () => {
         expect(hidden.tiles.find((candidate) => candidate.id === 'gone')?.state).toBe('removed');
     });
 
-    it('uses guard tokens before life loss', () => {
+    it('costs a try and nothing else: there are no lives to lose', () => {
         const b = board([tile('a'), tile('b')]);
-        const penalty = calculateMismatchPenalty(run(b, {
-            stats: { ...run(b).stats, guardTokens: 1 }
-        }), b, 1);
+        const penalty = calculateMismatchPenalty(run(b), 1);
 
-        expect(penalty).toMatchObject({
-            consumesGuardToken: true,
-            guardTokens: 0,
-            lives: 4,
-            lostLife: false,
+        expect(penalty).toEqual({
+            contractFail: false,
             status: 'playing',
             tries: 3
         });
     });
 
-    it('normalizes malformed mismatch penalty counters before applying life and guard loss', () => {
+    it('normalizes malformed mismatch penalty counters before counting the try', () => {
         const b = board([tile('a'), tile('b')]);
         const penalty = calculateMismatchPenalty(run(b, {
-            lives: 2.9,
-            stats: { ...run(b).stats, tries: Number.NaN, guardTokens: Number.POSITIVE_INFINITY }
-        }), b, 1.9);
+            stats: { ...run(b).stats, tries: Number.NaN }
+        }), 1.9);
 
-        expect(penalty).toMatchObject({
-            consumesGuardToken: false,
-            guardTokens: 0,
-            lives: 2,
-            lostLife: false,
+        expect(penalty).toEqual({
+            contractFail: false,
             status: 'playing',
             tries: 1
         });
@@ -80,40 +72,45 @@ describe('turn mismatch rules', () => {
     it('normalizes malformed stat blocks before calculating mismatch penalties', () => {
         const b = board([tile('a'), tile('b')]);
         const penalty = calculateMismatchPenalty(run(b, {
-            lives: 2,
             stats: Number.NaN as unknown as RunState['stats']
-        }), b, 1);
+        }), 1);
 
-        expect(penalty).toMatchObject({
-            guardTokens: 0,
-            lives: 2,
+        expect(penalty).toEqual({
+            contractFail: false,
             status: 'playing',
             tries: 1
         });
-    });
-
-    it('applies first mismatch grace when eligible', () => {
-        const b = board([tile('a'), tile('b')], { matchedPairs: 0 });
-        const penalty = calculateMismatchPenalty(run(b, {
-            stats: { ...run(b).stats, tries: 0, guardTokens: 0 },
-            lives: 2
-        }), b, 1);
-
-        expect(penalty.hasGraceMismatch).toBe(true);
-        expect(penalty.lostLife).toBe(false);
-        expect(penalty.lives).toBe(2);
     });
 
     it('forces game over when mismatch contract is exceeded', () => {
         const b = board([tile('a'), tile('b')]);
         const penalty = calculateMismatchPenalty(run(b, {
             activeContract: { noShuffle: false, noDestroy: false, maxMismatches: 2 },
-            stats: { ...run(b).stats, tries: 2, guardTokens: 0 }
-        }), b, 1);
+            stats: { ...run(b).stats, tries: 2 }
+        }), 1);
 
         expect(penalty.contractFail).toBe(true);
-        expect(penalty.lives).toBe(0);
         expect(penalty.status).toBe('gameOver');
+    });
+
+    it('names the contract as the reason the run ended', () => {
+        const b = board([tile('a'), tile('b')]);
+        const base = run(b, {
+            activeContract: { noShuffle: false, noDestroy: false, maxMismatches: 2 },
+            stats: { ...run(b).stats, tries: 2 }
+        });
+
+        const resolved = resolveMismatchTurnTransition({
+            run: base,
+            board: b,
+            tileIds: ['a', 'b'],
+            sourceTiles: b.tiles,
+            triesDelta: 1,
+            decoyTouched: false
+        });
+
+        expect(resolved.status).toBe('gameOver');
+        expect(resolved.runEndReason).toBe('contract');
     });
 
     it('resolves mismatch transition bookkeeping', () => {
@@ -133,12 +130,15 @@ describe('turn mismatch rules', () => {
             decoyTouched: true
         });
 
+        expect(resolved.status).toBe('playing');
+        expect(resolved.runEndReason).toBeNull();
         expect(resolved.board?.flippedTileIds).toEqual([]);
         expect(resolved.board?.tiles.map((candidate) => candidate.state)).toEqual(['hidden', 'hidden']);
         expect(resolved.recallFocus).toBe(1);
         expect(resolved.recallMistakesThisFloor).toBe(base.recallMistakesThisFloor + 1);
         expect(resolved.forgottenTileIdsThisFloor).toEqual(['old', 'a', 'b']);
         expect(resolved.decoyFlippedThisFloor).toBe(true);
+        expect(resolved.turnsThisFloor).toBe(base.turnsThisFloor + 1);
         expect(resolved.stats.tries).toBe(2);
         expect(resolved.stats.mismatches).toBe(3);
         expect(resolved.stats.currentStreak).toBe(2);
@@ -158,8 +158,7 @@ describe('turn mismatch rules', () => {
                 tries: Number.NaN,
                 mismatches: Number.POSITIVE_INFINITY,
                 currentStreak: Number.POSITIVE_INFINITY,
-                highestLevel: Number.NaN,
-                guardTokens: Number.NaN
+                highestLevel: Number.NaN
             }
         });
 
@@ -178,7 +177,6 @@ describe('turn mismatch rules', () => {
         expect(resolved.stats.mismatches).toBe(1);
         expect(resolved.stats.currentStreak).toBe(0);
         expect(resolved.stats.highestLevel).toBe(1);
-        expect(resolved.stats.guardTokens).toBe(0);
     });
 
     it('normalizes malformed stat blocks during mismatch transition bookkeeping', () => {
@@ -200,7 +198,6 @@ describe('turn mismatch rules', () => {
         expect(resolved.stats.mismatches).toBe(1);
         expect(resolved.stats.currentStreak).toBe(0);
         expect(resolved.stats.highestLevel).toBe(1);
-        expect(resolved.stats.guardTokens).toBe(0);
     });
 
 
@@ -246,14 +243,14 @@ describe('the magpie on a real miss', () => {
             tile('z-B', 'hidden', { pairKey: 'z' })
         ], { matchedPairs: 1 });
 
-    const missWithMagpie = (mismatches: number, guardTokens = 0, mutators: RunState['activeMutators'] = ['magpie_thief']) => {
+    const missWithMagpie = (mismatches: number, mutators: RunState['activeMutators'] = ['magpie_thief']) => {
         const b = magpieBoard();
         const base = run(b);
         return resolveMismatchTurnTransition({
             run: {
                 ...base,
                 activeMutators: mutators,
-                stats: { ...base.stats, guardTokens, mismatches }
+                stats: { ...base.stats, mismatches }
             },
             board: b,
             tileIds: ['x-A', 'y-A'],
@@ -274,17 +271,79 @@ describe('the magpie on a real miss', () => {
     it('leaves the board alone on a miss that is not its turn', () => {
         const after = missWithMagpie(0);
         expect(after.board?.matchedPairs).toBe(1);
-        expect(after.board?.tiles.filter((t) => t.pairKey === 'cleared').every((t) => t.state === 'matched')).toBe(true);
-    });
-
-    it('is scared off by a guard token, which is what makes holding one a decision', () => {
-        const after = missWithMagpie(2, 3);
-        expect(after.board?.matchedPairs).toBe(1);
     });
 
     it('does not visit a floor it was never nesting on', () => {
-        const after = missWithMagpie(2, 0, []);
+        const after = missWithMagpie(2, []);
         expect(after.board?.matchedPairs).toBe(1);
     });
 });
 
+/*
+ * The turn ceiling (thesis §42.2): the one way a floor ends a run. Two pairs par at one turn, so
+ * the ceiling is three; every turn below is played through the real flip/resolve path.
+ */
+describe('the turn ceiling', () => {
+    const twoPairRun = () =>
+        makeRun([
+            makeTile('a-1', 'a', 'A'),
+            makeTile('a-2', 'a', 'A'),
+            makeTile('b-1', 'b', 'B'),
+            makeTile('b-2', 'b', 'B')
+        ]);
+    const play = (run: RunState, first: string, second: string) => resolveBoardTurn(flipTile(flipTile(run, first), second));
+    const miss = (run: RunState) => play(run, 'a-1', 'b-1');
+    const ceiling = turnCeilingForFloor(2);
+
+    it('is three times par', () => {
+        expect(TURN_CEILING_PAR_MULTIPLIER).toBe(3);
+        expect(parTurnsForFloor(2)).toBe(1);
+        expect(ceiling).toBe(3);
+        expect(turnCeilingForFloor(14)).toBe(parTurnsForFloor(14) * 3);
+    });
+
+    it('ends a floor never cleared exactly on turn three times par, with nothing left face up', () => {
+        let run = twoPairRun();
+        for (let turn = 1; turn < ceiling; turn += 1) {
+            run = miss(run);
+            expect(run.status).toBe('playing');
+            expect(run.runEndReason).toBeNull();
+            expect(run.turnsThisFloor).toBe(turn);
+        }
+
+        const ended = miss(run);
+
+        expect(ended.turnsThisFloor).toBe(ceiling);
+        expect(ended.status).toBe('gameOver');
+        expect(ended.runEndReason).toBe('turn_ceiling');
+        expect(ended.board?.flippedTileIds).toEqual([]);
+        expect(ended.board?.tiles.every((t) => t.state === 'hidden')).toBe(true);
+    });
+
+    it('ends the run on a match that leaves the floor open on the ceiling turn', () => {
+        const ended = play(miss(miss(twoPairRun())), 'a-1', 'a-2');
+
+        expect(ended.turnsThisFloor).toBe(ceiling);
+        expect(ended.board?.matchedPairs).toBe(1);
+        expect(ended.status).toBe('gameOver');
+        expect(ended.runEndReason).toBe('turn_ceiling');
+        expect(ended.board?.flippedTileIds).toEqual([]);
+    });
+
+    it('is a clear, not an end, when the floor clears on that same turn', () => {
+        const cleared = play(play(miss(twoPairRun()), 'a-1', 'a-2'), 'b-1', 'b-2');
+
+        expect(cleared.turnsThisFloor).toBe(ceiling);
+        expect(cleared.status).toBe('levelComplete');
+        expect(cleared.runEndReason).toBeNull();
+        expect(cleared.lastLevelResult?.turnsTaken).toBe(ceiling);
+    });
+
+    it('leaves the run playing after a match on a turn before the ceiling', () => {
+        const matched = play(miss(twoPairRun()), 'a-1', 'a-2');
+
+        expect(matched.turnsThisFloor).toBe(2);
+        expect(matched.status).toBe('playing');
+        expect(matched.runEndReason).toBeNull();
+    });
+});

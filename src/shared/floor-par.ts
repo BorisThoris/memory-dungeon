@@ -27,3 +27,24 @@ export const turnsTakenThisFloor = (run: Pick<RunState, 'turnsThisFloor'>): numb
 
 export const parTurnsForRun = (run: Pick<RunState, 'board'>): number =>
     parTurnsForFloor(run.board?.pairCount ?? 0);
+
+/**
+ * The turn ceiling (thesis §42.2). There are no lives; a run ends when a floor is not cleared
+ * within three times its par. Three times par is a player missing two thirds of their flips: not
+ * a difficulty gate but a floor under competence, there so that a run *can* end and be a story.
+ * The run never ends because you forgot - it ends because you could not finish a board at all.
+ */
+export const TURN_CEILING_PAR_MULTIPLIER = 3;
+
+export const turnCeilingForFloor = (pairs: number): number => parTurnsForFloor(pairs) * TURN_CEILING_PAR_MULTIPLIER;
+
+export const turnCeilingForRun = (run: Pick<RunState, 'board'>): number =>
+    turnCeilingForFloor(run.board?.pairCount ?? 0);
+
+/** Turns left before the ceiling ends the run, never below zero. */
+export const turnsToCeiling = (run: Pick<RunState, 'board' | 'turnsThisFloor'>): number =>
+    Math.max(0, turnCeilingForRun(run) - turnsTakenThisFloor(run));
+
+/** A floor still open on its ceiling turn ends the run. A floor that cleared on that turn is a clear. */
+export const floorHitTurnCeiling = (run: Pick<RunState, 'board' | 'turnsThisFloor' | 'status'>): boolean =>
+    run.status === 'playing' && run.board != null && turnsTakenThisFloor(run) >= turnCeilingForRun(run);

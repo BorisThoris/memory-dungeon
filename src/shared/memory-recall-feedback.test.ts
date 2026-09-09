@@ -27,11 +27,8 @@ describe('getMemoryRecallFeedback', () => {
                     level: 1,
                     scoreGained: 100,
                     rating: 'A',
-                    livesRemaining: 4,
                     perfect: false,
-                    mistakes: 1,
-                    clearLifeReason: 'none',
-                    clearLifeGained: 0
+                    mistakes: 1
                 }
             }
         );
@@ -85,17 +82,6 @@ describe('getMemoryRecallFeedback', () => {
             tone: 'watch'
         });
         expect(feedback.penalties.map((line) => line.id)).toContain('recall-mistakes');
-    });
-
-    it('normalizes malformed recovery counters before building feedback copy', () => {
-        const run = makeRun([makeTile('a1', 'A', 'A'), makeTile('a2', 'A', 'A')], {
-            pendingMemorizeBonusMs: Number.POSITIVE_INFINITY
-        });
-
-        const feedback = getMemoryRecallFeedback(run);
-
-        expect(feedback.penalties.map((line) => line.detail).join(' ')).not.toMatch(/NaN|Infinity/);
-        expect(feedback.penalties.find((line) => line.id === 'memorize-recovery')).toBeUndefined();
     });
 
 

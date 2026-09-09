@@ -1,6 +1,5 @@
 import {
     GAME_RULES_VERSION,
-    INITIAL_LIVES,
     INITIAL_RECALL_FOCUS,
     INITIAL_REGION_SHUFFLE_CHARGES,
     INITIAL_SHUFFLE_CHARGES,
@@ -94,7 +93,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
 
     const run: RunState = {
         status: 'memorize',
-        lives: INITIAL_LIVES,
+        runEndReason: null,
         passAndPlay:
             options.passAndPlaySeats != null ? createPassAndPlayState(options.passAndPlaySeats) : null,
         board,
@@ -102,7 +101,6 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         achievementsEnabled: !options.practiceMode && options.passAndPlaySeats == null,
         debugUsed: false,
         debugPeekActive: false,
-        pendingMemorizeBonusMs: 0,
         shuffleCharges: INITIAL_SHUFFLE_CHARGES,
         destroyPairCharges: 0,
         pinnedTileIds: [],
@@ -121,7 +119,6 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         dailyDateKeyUtc: options.dailyDateKeyUtc ?? null,
         puzzleId: options.puzzleId ?? null,
         stickyBlockIndex: null,
-        parasiteFloors: 0,
         flipHistory: [],
         peekCharges,
         peekRevealedTileIds: [],
@@ -175,11 +172,10 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         largestChunkScoreThisFloor: 0,
         bestRippleThisRun: 0,
         magpieTheftsThisFloor: 0,
-        magpieScaredOffThisFloor: 0,
         shiftingSpotlightNonce: 0
     };
 
-    const memorizeMs = getMemorizeDurationForRun(run, 1) + run.pendingMemorizeBonusMs;
+    const memorizeMs = getMemorizeDurationForRun(run, 1);
 
     /*
      * Floor one has a resident too — seated, not welcomed. If the opening floor had nobody, the

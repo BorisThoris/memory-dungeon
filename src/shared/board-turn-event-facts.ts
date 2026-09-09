@@ -42,9 +42,6 @@ export interface BoardTurnAnnouncementFacts {
     /** Pairs the magpie took back this floor, before and after this turn. */
     magpieTheftsBefore: number;
     magpieTheftsAfter: number;
-    /** Times a guard token drove it off this floor, before and after this turn. */
-    magpieScaredOffBefore: number;
-    magpieScaredOffAfter: number;
     /**
      * Which tiles the floater anchors to. Not simply the flipped ids: a gambit resolves
      * three tiles but the floater belongs on the matched pair, and only the rules layer
@@ -56,10 +53,6 @@ export interface BoardTurnAnnouncementFacts {
     currentStreakAfter: number;
     comboShardsBefore: number;
     comboShardsAfter: number;
-    guardTokensBefore: number;
-    guardTokensAfter: number;
-    livesBefore: number;
-    livesAfter: number;
     findablesClaimedBefore: number;
     findablesClaimedAfter: number;
     findablesTotalBefore: number;
@@ -183,10 +176,6 @@ export const getBoardTurnAnnouncementFacts = (
         currentStreakAfter: statsAfter.currentStreak,
         comboShardsBefore: statsBefore.comboShards,
         comboShardsAfter: statsAfter.comboShards,
-        guardTokensBefore: runNonNegativeInteger(statsBefore.guardTokens),
-        guardTokensAfter: runNonNegativeInteger(statsAfter.guardTokens),
-        livesBefore: runNonNegativeInteger(before.lives),
-        livesAfter: runNonNegativeInteger(after.lives),
         findablesClaimedBefore: runNonNegativeInteger(before.findablesClaimedThisFloor),
         findablesClaimedAfter: runNonNegativeInteger(after.findablesClaimedThisFloor),
         findablesTotalBefore: runNonNegativeInteger(before.findablesTotalThisFloor),
@@ -205,8 +194,6 @@ export const getBoardTurnAnnouncementFacts = (
         ),
         magpieTheftsBefore: runNonNegativeInteger(before.magpieTheftsThisFloor),
         magpieTheftsAfter: runNonNegativeInteger(after.magpieTheftsThisFloor),
-        magpieScaredOffBefore: runNonNegativeInteger(before.magpieScaredOffThisFloor),
-        magpieScaredOffAfter: runNonNegativeInteger(after.magpieScaredOffThisFloor),
         matchedTraitKinds: TILE_TRAIT_COUNT_KINDS.filter((kind) =>
             flippedTileIds.some(
                 (tileId) => before.board?.tiles.find((tile) => tile.id === tileId)?.tileTraitKind === kind

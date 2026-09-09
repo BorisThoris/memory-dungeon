@@ -1797,3 +1797,44 @@ two draws of the same rules. `feverCleanOverReference` moves 2 → 1.5 and
 over the better one. What the bands are for - the clean player reaches Fever and finishes at it
 markedly more often than the sloppy one - holds on both draws; a ratio near 1 is the failure they
 exist to catch.
+
+## Gen 183: lives out, the turn ceiling in
+
+Thesis §42.2 and §67. There are no lives. A run ends when the player stops, when a contract's
+mismatch limit is passed, when a shared game's last floor is done, or when a floor is not cleared
+within its turn ceiling, `parTurnsForFloor(pairs) × 3`. A miss is still a try against the rating
+and a turn against the par, and it still drops the chain's momentum; it costs nothing else.
+
+### What went with the lives
+
+Lives (4 to start, 5 at most), the life lost on a miss, the first-mismatch grace, guard tokens
+(one every fourth chain step, two at most, spent on a miss or on the magpie), the chain heal (a
+life every eighth step), three combo shards for a life, the clean and perfect clear's life, the
+memorize time banked for a lost life, and the score parasite - a mutator that ate a life every
+four floors and did nothing else. The magpie cannot be scared off any more; the off-duty guard
+lends a peek instead of a token. Combo shards stay one more generation, banked to their cap and
+buying nothing, so this diff reads; Gen 184 takes them. The history is in
+`docs/REMOVED_LIVES.md`.
+
+### The ceiling, measured
+
+`sim:cascade`, 48 seeds, floors 1-24, the share of floors the ceiling ended:
+
+| Miss rate | Cleared | Ceiling | Turns to clear | Under par |
+|---|---|---|---|---|
+| 0 | 1.000 | 0.000 | 3.1 | 0.99 |
+| 0.10 | 1.000 | 0.000 | 3.5 | 0.93 |
+| 0.25 (reference) | 1.000 | 0.000 | 4.2 | 0.77 |
+| 0.40 | 0.996 | 0.004 | 5.6 | 0.57 |
+| 0.50 | 0.971 | 0.029 | 6.6 | 0.45 |
+| 0.60 | 0.914 | 0.086 | 8.3 | 0.31 |
+| 0.70 | 0.764 | 0.236 | 10.0 | 0.23 |
+
+The reference player never meets it, and a player missing half their flips meets it on three
+floors in a hundred: a floor under competence, as the thesis asked, not a gate. It is a band now
+(`referenceCeilingShare`, max 0.02). The reference player's cleared share moved 0.99 → 1.00 - the
+one floor in a hundred they used to die on was a life lost to a miss, and there is no such floor.
+
+Every other band is where Gen 181 left it, within the deal's noise: rules version 38 → 39 re-deals
+the boards (Fever clean 0.35 / reference 0.21, ratio 1.67; Extreme Fever 0.79 / 0.54; chunk share
+0.70; largest break 0.49; under par 0.99 / 0.77).

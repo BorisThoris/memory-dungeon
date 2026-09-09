@@ -433,7 +433,6 @@ interface TileBoardProps {
     chainContext?: {
         comboShards: number;
         currentStreak: number;
-        lives: number;
     };
     recoveryContext?: {
         action: string;
@@ -866,8 +865,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         }
         const nextReward = getChainRewardForecastCues(
             chainContext.currentStreak + 1,
-            chainContext.comboShards,
-            chainContext.lives
+            chainContext.comboShards
         )[0];
         if (!nextReward || nextReward.distance > 1) {
             return [];
@@ -1131,8 +1129,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         }
         const nextReward = getChainRewardForecastCues(
             chainContext.currentStreak + 1,
-            chainContext.comboShards,
-            chainContext.lives
+            chainContext.comboShards
         )[0];
         const target = getChainTargetFeedback(chainContext.currentStreak + 1);
         return nextReward && nextReward.distance <= 1
@@ -1492,8 +1489,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             count > 0 && chainContext
                 ? getChainRewardForecastCues(
                       chainContext.currentStreak + 1,
-                      chainContext.comboShards,
-                      chainContext.lives
+                      chainContext.comboShards
                   )[0] ?? null
                 : null;
         const stackCue = nextReward?.urgency === 'next' ? getChainRewardUrgencyCopy(nextReward) : null;
@@ -1630,8 +1626,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         const upcomingReward = chainContext
             ? getChainRewardForecastCues(
                   chainContext.currentStreak + 1,
-                  chainContext.comboShards,
-                  chainContext.lives
+                  chainContext.comboShards
               )[0] ?? null
             : null;
         const followupReady = selectedFollowupCount > 0;
@@ -1870,8 +1865,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             runStatus === 'playing' && chainContext
                 ? getChainRewardForecastCues(
                       chainContext.currentStreak,
-                      chainContext.comboShards,
-                      chainContext.lives
+                      chainContext.comboShards
                   )
                 : [],
         [chainContext, runStatus]

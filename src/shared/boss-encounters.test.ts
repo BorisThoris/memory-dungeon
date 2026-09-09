@@ -64,7 +64,7 @@ describe('REG-076 boss and elite encounter identity', () => {
             getFloorIdentityContract({
                 floorTag: 'normal',
                 floorArchetypeId: 'parasite_tithe',
-                mutators: ['score_parasite'],
+                mutators: ['distraction_channel'],
                 featuredObjectiveLabel: 'Scholar style'
             })
         ];

@@ -8,7 +8,7 @@ import { getGameOverNextRunRows } from '../../shared/game-over-next-run';
 import { useShallow } from 'zustand/react/shallow';
 import { UI_ART } from '../assets/ui';
 import { playGameOverOpenSfx, playUiBackSfx, playUiCopySfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
-import { achievementsNote, gameOverScreenCopy } from '../copy/gameOverScreen';
+import { achievementsNote, gameOverScreenCopy, runEndReasonLine } from '../copy/gameOverScreen';
 import { personalBestResult } from '../../shared/personal-best';
 import { buildRunShareText } from '../../shared/run-share-text';
 import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
@@ -124,6 +124,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
         summary
     });
     const mutatorChips = summary.activeMutators?.map((id) => mutatorLabel(id)) ?? [];
+    const endReasonLine = runEndReasonLine(summary);
 
     return (
         <section className={styles.shell} ref={shellRef}>
@@ -244,6 +245,12 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             <span className={styles.scoreHeroLabel}>{gameOverScreenCopy.scoreLabel}</span>
                             <span className={styles.scoreHeroValue}>{summary.totalScore.toLocaleString()}</span>
                         </div>
+                        {/* How it ended, before how far it got: the one fact this screen has that the run bar did not. */}
+                        {endReasonLine ? (
+                            <p className={styles.copy} data-testid="game-over-end-reason">
+                                {endReasonLine}
+                            </p>
+                        ) : null}
                         <img alt="" className={styles.divider} src={UI_ART.dividerOrnament} />
                         <p className={styles.copy}>{gameOverScreenCopy.floorCaption(summary.highestLevel)}</p>
                         {/* The rules this run ran under: a fact the score means nothing without. */}

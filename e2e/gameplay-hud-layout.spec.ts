@@ -7,7 +7,7 @@ import { dismissStartupIntro } from './startupIntroHelpers';
  * The floating overlays - the chain-opportunity chip, the trait-mode cue, the
  * action-feedback rail, the dungeon run strip - are absolutely positioned against the
  * stage by three different components, and each used to pick its own offset. They landed
- * on each other: the chip on the floor/lives rail, the feedback rail over the score at a
+ * on each other: the chip on the floor/par rail, the feedback rail over the score at a
  * higher z-index, the run strip inside the action dock. Separately, a collapsed `details`
  * whose children had an author `display` laid out its whole rail behind the board canvas,
  * eighteen panels below the fold, with its labels squeezed down to 7px.
@@ -25,7 +25,7 @@ const localChromium = process.env.PLAYWRIGHT_CHROMIUM_PATH;
 test.use(localChromium ? { launchOptions: { executablePath: localChromium } } : {});
 
 /** Lanes a player has to read to make a decision. */
-const MUST_READ_LANES = ['Floor', 'Lives', 'Shards', 'Score'];
+const MUST_READ_LANES = ['Floor', 'Par', 'Shards', 'Score'];
 
 const startRun = async (page: import('@playwright/test').Page): Promise<void> => {
     await page.setViewportSize({ width: 1440, height: 900 });

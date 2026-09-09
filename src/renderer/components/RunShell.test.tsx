@@ -15,20 +15,39 @@ const tool = (overrides: Partial<RunShellTool> & { id: string }): RunShellTool =
 });
 
 describe('RunShell', () => {
-    it('renders the five run numbers as one stats group', () => {
+    it('renders the five run numbers as one stats group, with no hearts among them', () => {
         const run = playingRun();
         render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={run} tools={[]} />);
 
         const stats = screen.getByRole('group', { name: /run stats/i });
         expect(within(stats).getByTestId('hud-floor')).toHaveTextContent(/floor/i);
-        expect(within(stats).getByTestId('hud-lives')).toHaveTextContent(/lives/i);
         expect(within(stats).getByTestId('hud-score')).toHaveTextContent(/score/i);
         expect(within(stats).getByTestId('hud-par')).toHaveTextContent(/par/i);
         expect(within(stats).getByTestId('hud-combo-shards')).toHaveTextContent(/shards/i);
         expect(within(stats).getByTestId('hud-chain')).toHaveTextContent(/chain/i);
-        // Guards and mutators only appear when they carry a value; there is no clock to show.
-        expect(screen.queryByTestId('hud-guards')).not.toBeInTheDocument();
+        // There are no lives (Gen 183): no hearts, no life count, and the mutator stat only
+        // appears when it carries a value; there is no clock to show.
+        expect(stats).not.toHaveTextContent(/lives|\u2665/i);
         expect(screen.queryByRole('timer')).not.toBeInTheDocument();
+    });
+
+    it('reads the ceiling on the par, and marks it once the floor is two turns from it', () => {
+        // Twelve pairs: par 5, ceiling 15. The pressure of thesis §43 lives on the par stat.
+        const base = playingRun();
+        const calm: RunState = { ...base, board: { ...base.board!, pairCount: 12 }, turnsThisFloor: 4 };
+        const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={calm} tools={[]} />);
+
+        const par = screen.getByTestId('hud-par');
+        expect(within(par).getByRole('img')).toHaveAttribute('aria-label', '4 of 5 turns, ceiling 15');
+        expect(par).toHaveTextContent('4 / 5');
+        expect(par).not.toHaveAttribute('data-ceiling-near');
+
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...calm, turnsThisFloor: 13 }} tools={[]} />);
+        expect(screen.getByTestId('hud-par')).toHaveAttribute('data-ceiling-near', 'true');
+        expect(within(screen.getByTestId('hud-par')).getByRole('img')).toHaveAttribute(
+            'aria-label',
+            '13 of 5 turns, ceiling 15'
+        );
     });
 
     it('explains the chain tier from momentum, so a Sharp read on a x3 chain is not a mystery', () => {

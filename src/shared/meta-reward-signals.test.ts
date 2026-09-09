@@ -46,7 +46,6 @@ describe('REG-011 meta reward signals', () => {
     it('normalizes malformed inventory stats before building copy', () => {
         const run = {
             ...createNewRun(0),
-            lives: Number.POSITIVE_INFINITY,
             stats: Number.NaN as unknown as RunState['stats']
         };
 
@@ -56,7 +55,7 @@ describe('REG-011 meta reward signals', () => {
         }
 
         expect(buildValue.body).toContain('0 shard(s)');
-        expect(runProgress.body).toContain('0 life/lives remaining');
+        expect(runProgress.body).toBe('0 score.');
         expect(`${buildValue.body} ${runProgress.body}`).not.toMatch(/NaN|Infinity/);
     });
 

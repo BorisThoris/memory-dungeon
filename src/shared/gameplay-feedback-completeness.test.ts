@@ -13,14 +13,13 @@ import { createBoardTurnResolvedEventFixture } from './test/gameplay-event-fixtu
 
 const run = (overrides: Partial<RunState> = {}): RunState => ({
     status: 'playing',
-    lives: 3,
     board: null,
     recallFocus: 0,
     recallMatchesThisFloor: 0,
     recallMistakesThisFloor: 0,
     recallBonusScoreThisFloor: 0,
     forgottenTileIdsThisFloor: [],
-    stats: { guardTokens: 0, comboShards: 0 },
+    stats: { comboShards: 0 },
     ...overrides
 } as RunState);
 
@@ -54,10 +53,9 @@ describe('gameplay feedback completeness', () => {
         const diagnostic = inspectGameplayFeedbackCompleteness({
             before: run(),
             after: run({
-                lives: 2,
                 recallFocus: 1,
                 forgottenTileIdsThisFloor: ['tile-a'],
-                stats: { guardTokens: 1, comboShards: 2 } as RunState['stats']
+                stats: { comboShards: 2 } as RunState['stats']
             }),
             command,
             events: [],
@@ -68,14 +66,12 @@ describe('gameplay feedback completeness', () => {
             commandId: 'missing-feedback',
             commandType: 'board.peek',
             changedFields: [
-                'lives',
-                'guardTokens',
                 'comboShards',
                 'recallFocus',
                 'forgottenTileCountThisFloor'
             ],
             eventTypes: [],
-            message: 'Accepted board.peek command missing-feedback changed feedback-critical fields without typed presentation: lives, guardTokens, comboShards, recallFocus, forgottenTileCountThisFloor.'
+            message: 'Accepted board.peek command missing-feedback changed feedback-critical fields without typed presentation: comboShards, recallFocus, forgottenTileCountThisFloor.'
         });
     });
 
@@ -124,7 +120,7 @@ describe('gameplay feedback completeness', () => {
     it('accepts typed feedback and the authoritative board-turn envelope', () => {
         const command = createGameplayPeekCommand('covered-feedback', 'tile-a');
         const before = run();
-        const after = run({ lives: 2 });
+        const after = run({ recallFocus: 2 });
 
         expect(inspectGameplayFeedbackCompleteness({
             before,
@@ -146,14 +142,14 @@ describe('gameplay feedback completeness', () => {
         const command = createGameplayPeekCommand('no-feedback-owed', 'tile-a');
         expect(inspectGameplayFeedbackCompleteness({
             before: run(),
-            after: run({ lives: Number.NaN, peekCharges: -1 }),
+            after: run({ recallFocus: Number.NaN, peekCharges: -1 }),
             command,
             events: [],
             accepted: false
         })).toBeNull();
         expect(inspectGameplayFeedbackCompleteness({
-            before: run({ lives: Number.NaN, peekCharges: -1 }),
-            after: run({ lives: 0, peekCharges: 0 }),
+            before: run({ recallFocus: Number.NaN, peekCharges: -1 }),
+            after: run({ recallFocus: 0, peekCharges: 0 }),
             command,
             events: [],
             accepted: true

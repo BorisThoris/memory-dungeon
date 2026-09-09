@@ -14,7 +14,6 @@ import {
     GAME_RULES_VERSION,
     MATCH_DELAY_MS,
     INITIAL_RECALL_FOCUS,
-    MEMORIZE_BONUS_PER_LIFE_LOST_MS,
     RECALL_FOCUS_MAX,
     RECALL_FOCUS_MATCH_SCORE,
     SHIFTING_BOUNTY_MATCH_BONUS,
@@ -218,11 +217,8 @@ describe('Recall Focus memory loop', () => {
         level: 1,
         scoreGained: 100,
         rating: 'S',
-        livesRemaining: 5,
         perfect: true,
         mistakes: 0,
-        clearLifeReason: 'perfect',
-        clearLifeGained: 0,
         recallMatches: 2,
         recallBonusScore: RECALL_FOCUS_MATCH_SCORE * 2,
         ...overrides
@@ -290,7 +286,6 @@ describe('Recall Focus memory loop', () => {
                 matchesFound: Number.NaN,
                 bestStreak: Number.POSITIVE_INFINITY,
                 highestLevel: Number.NaN,
-                guardTokens: Number.NaN,
                 comboShards: Number.POSITIVE_INFINITY
             }
         };
@@ -306,7 +301,6 @@ describe('Recall Focus memory loop', () => {
         expect(resolved.stats.currentStreak).toBe(1);
         expect(resolved.stats.bestStreak).toBe(1);
         expect(resolved.stats.highestLevel).toBe(1);
-        expect(resolved.stats.guardTokens).toBe(0);
         expect(resolved.stats.comboShards).toBe(0);
     });
 
@@ -534,33 +528,6 @@ describe('GLD-P0-003 lifecycle advance guards', () => {
         expect(resolved.stats.highestLevel).toBeGreaterThanOrEqual(1);
     });
 
-    it('does not build the next board when a levelComplete run is already dead', () => {
-        const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_005 }), 1);
-        const dead: RunState = { ...cleared, lives: 0 };
-
-        const next = advanceToNextLevel(dead);
-
-        expect(next.status).toBe('gameOver');
-        expect(next.lives).toBe(0);
-        expect(next.board).toBe(dead.board);
-        expect(next.timerState.memorizeRemainingMs).toBeNull();
-    });
-
-
-
-
-    it('does not resume a paused zero-health run back into play', () => {
-        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_008 }));
-        const paused = pauseRun(playing);
-        const pausedDead: RunState = { ...paused, lives: 0 };
-
-        const resumed = resumeRun(pausedDead);
-
-        expect(resumed.status).toBe('gameOver');
-        expect(resumed.lives).toBe(0);
-        expect(resumed.timerState.pausedFromStatus).toBeNull();
-    });
-
     it('recovers a save-loaded paused resolving run with no pending flips', () => {
         const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_013 }));
         const corruptedResolvingPause: RunState = {
@@ -602,50 +569,11 @@ describe('GLD-P0-003 lifecycle advance guards', () => {
         const resumed = resumeRun(missingBoardPause);
 
         expect(resumed.status).toBe('gameOver');
-        expect(resumed.lives).toBe(0);
+        expect(resumed.runEndReason).toBe('quit');
         expect(resumed.timerState.resolveRemainingMs).toBeNull();
         expect(resumed.timerState.pausedFromStatus).toBeNull();
     });
 
-    it('stops on the cleared board when score parasite kills during the pure floor transition', () => {
-        const cleared = playPerfectFloors(
-            createNewRun(0, {
-                echoFeedbackEnabled: false,
-                runSeed: 30_006,
-                activeMutators: ['score_parasite']
-            }),
-            1
-        );
-        const doomed: RunState = { ...cleared, lives: 1, parasiteFloors: 3 };
-
-        const next = advanceToNextLevel(doomed);
-
-        expect(next.status).toBe('gameOver');
-        expect(next.lives).toBe(0);
-        expect(next.board).toBe(doomed.board);
-        expect(next.parasiteFloors).toBe(0);
-        expect(next.gameplayCommandJournal).toEqual(doomed.gameplayCommandJournal);
-        expect(next.gameplayEventJournal).toEqual(doomed.gameplayEventJournal);
-    });
-
-
-    it('zeroes the recorded lives when score parasite kills during floor transition', () => {
-        const cleared = playPerfectFloors(
-            createNewRun(0, {
-                echoFeedbackEnabled: false,
-                runSeed: 30_009,
-                activeMutators: ['score_parasite']
-            }),
-            1
-        );
-        const doomed: RunState = { ...cleared, lives: 1, parasiteFloors: 3 };
-
-        const next = advanceToNextLevel(doomed);
-
-        expect(next.status).toBe('gameOver');
-        expect(next.lives).toBe(0);
-        expect(next.lastLevelResult?.livesRemaining).toBe(0);
-    });
 });
 
 describe('floor-clear edge cases', () => {
@@ -863,7 +791,7 @@ describe('game rules', () => {
         expect(resolved.stats.totalScore).toBe(Math.max(0, base - penalty));
     });
 
-    it('forgives the first mismatch on a floor without spending a life or guard', () => {
+    it('costs a miss a try, a turn and half the streak, and nothing else', () => {
         const tiles: Tile[] = [
             createTile('a1', 'A', 'A'),
             createTile('a2', 'A', 'A'),
@@ -874,8 +802,7 @@ describe('game rules', () => {
             ...createRun(tiles),
             stats: {
                 ...createRun(tiles).stats,
-                currentStreak: 2,
-                guardTokens: 1
+                currentStreak: 2
             }
         };
         const flippedOnce = flipTile(started, 'a1');
@@ -883,16 +810,16 @@ describe('game rules', () => {
         const resolved = resolveBoardTurn(flippedTwice);
 
         expect(resolved.status).toBe('playing');
-        expect(resolved.lives).toBe(4);
+        expect(resolved.runEndReason).toBeNull();
+        expect(resolved.turnsThisFloor).toBe(1);
         expect(resolved.stats.tries).toBe(1);
         expect(resolved.stats.mismatches).toBe(1);
         expect(resolved.stats.currentStreak).toBe(1);
-        expect(resolved.stats.guardTokens).toBe(1);
         expect(resolved.stats.totalScore).toBe(0);
         expect(resolved.board?.tiles.every((tile) => tile.state === 'hidden')).toBe(true);
     });
 
-    it('spends a life on the second mismatch of a floor when no guard is available', () => {
+    it('treats the second miss of a floor exactly like the first, on any floor', () => {
         const tiles: Tile[] = [
             createTile('a1', 'A', 'A'),
             createTile('a2', 'A', 'A'),
@@ -901,6 +828,7 @@ describe('game rules', () => {
         ];
         const started = {
             ...createRun(tiles),
+            board: { ...createBoard(tiles), level: 2 },
             stats: {
                 ...createRun(tiles).stats,
                 tries: 1
@@ -910,129 +838,10 @@ describe('game rules', () => {
         const resolved = resolveBoardTurn(flipTile(flipTile(started, 'a1'), 'b1'));
 
         expect(resolved.status).toBe('playing');
-        expect(resolved.lives).toBe(3);
+        expect(resolved.runEndReason).toBeNull();
         expect(resolved.stats.tries).toBe(2);
         expect(resolved.stats.mismatches).toBe(1);
         expect(resolved.stats.currentStreak).toBe(0);
-    });
-
-    it('spends guard or life on the first mismatch after floor 1 instead of granting broad grace', () => {
-        const tiles: Tile[] = [
-            createTile('a1', 'A', 'A'),
-            createTile('a2', 'A', 'A'),
-            createTile('b1', 'B', 'B'),
-            createTile('b2', 'B', 'B')
-        ];
-        const floorTwoBoard = { ...createBoard(tiles), level: 2 };
-        const guarded = {
-            ...createRun(tiles),
-            board: floorTwoBoard,
-            stats: { ...createRun(tiles).stats, guardTokens: 1 }
-        };
-        const guardedResolved = resolveBoardTurn(flipTile(flipTile(guarded, 'a1'), 'b1'));
-        expect(guardedResolved.lives).toBe(4);
-        expect(guardedResolved.stats.guardTokens).toBe(0);
-
-        const lastLife = {
-            ...createRun(tiles),
-            board: floorTwoBoard,
-            lives: 1
-        };
-        const lastLifeResolved = resolveBoardTurn(flipTile(flipTile(lastLife, 'a1'), 'b1'));
-        expect(lastLifeResolved.status).toBe('gameOver');
-        expect(lastLifeResolved.lives).toBe(0);
-    });
-
-    it('banks memorize bonus when a life is lost and applies it on the next level', () => {
-        const tiles: Tile[] = [
-            createTile('a1', 'A', 'A'),
-            createTile('a2', 'A', 'A'),
-            createTile('b1', 'B', 'B'),
-            createTile('b2', 'B', 'B')
-        ];
-        const started = {
-            ...createRun(tiles),
-            stats: { ...createRun(tiles).stats, tries: 1 }
-        };
-        const afterLifeLoss = resolveBoardTurn(flipTile(flipTile(started, 'a1'), 'b1'));
-        expect(afterLifeLoss.lives).toBe(3);
-        expect(afterLifeLoss.pendingMemorizeBonusMs).toBe(MEMORIZE_BONUS_PER_LIFE_LOST_MS);
-
-        const finishedLevel = {
-            ...afterLifeLoss,
-            status: 'levelComplete' as const,
-            board: afterLifeLoss.board
-                ? {
-                      ...afterLifeLoss.board,
-                      matchedPairs: afterLifeLoss.board.pairCount,
-                      flippedTileIds: [],
-                      tiles: afterLifeLoss.board.tiles.map((t) => ({ ...t, state: 'matched' as const }))
-                  }
-                : null
-        };
-        const bankedMs = afterLifeLoss.pendingMemorizeBonusMs;
-        const nextRun = advanceToNextLevel(finishedLevel);
-        // The floor's resident also touches this window, so the banked bonus is one of two terms.
-        const resident = pickFloorCurio(
-            finishedLevel.runSeed,
-            nextRun.board!.level,
-            finishedLevel.runRulesVersion
-        );
-
-        expect(nextRun.pendingMemorizeBonusMs).toBe(0);
-        expect(nextRun.timerState.memorizeRemainingMs).toBe(
-            Math.max(
-                MIN_CURIO_MEMORIZE_MS,
-                getMemorizeDurationForRun(
-                    { ...finishedLevel, activeMutators: nextRun.activeMutators, board: nextRun.board },
-                    nextRun.board!.level
-                ) +
-                    bankedMs +
-                    resident.effect.memorizeBonusMs
-            )
-        );
-    });
-
-    it('carries the current life total into the next level instead of resetting it', () => {
-        const started = createRun([createTile('a1', 'A', 'A'), createTile('a2', 'A', 'A')]);
-        const finishedLevel = resolveBoardTurn(flipTile(flipTile({ ...started, lives: 2 }, 'a1'), 'a2'));
-
-        expect(finishedLevel.status).toBe('levelComplete');
-        expect(finishedLevel.lives).toBe(3);
-
-        const nextRun = advanceToNextLevel(finishedLevel);
-
-        expect(nextRun.status).toBe('memorize');
-        expect(nextRun.lives).toBe(finishedLevel.lives);
-        expect(nextRun.lives).toBe(3);
-    });
-
-    it('consumes a guard token on mismatch and prevents life loss', () => {
-        const tiles: Tile[] = [
-            createTile('a1', 'A', 'A'),
-            createTile('a2', 'A', 'A'),
-            createTile('b1', 'B', 'B'),
-            createTile('b2', 'B', 'B')
-        ];
-        const started = {
-            ...createRun(tiles),
-            lives: 1,
-            stats: {
-                ...createRun(tiles).stats,
-                tries: 1,
-                currentStreak: 5,
-                guardTokens: 1
-            }
-        };
-
-        const resolved = resolveBoardTurn(flipTile(flipTile(started, 'a1'), 'b1'));
-
-        expect(resolved.status).toBe('playing');
-        expect(resolved.lives).toBe(1);
-        expect(resolved.stats.guardTokens).toBe(0);
-        expect(resolved.stats.currentStreak).toBe(2);
-        expect(resolved.stats.tries).toBe(2);
-        expect(resolved.stats.mismatches).toBe(1);
     });
 
     it('keeps mismatch resolve delay but resolves matching flips immediately', () => {
@@ -1061,7 +870,7 @@ describe('game rules', () => {
         const resolved = resolveBoardTurn(flippedTwice);
 
         expect(resolved.status).toBe('levelComplete');
-        expect(resolved.lives).toBe(5);
+        expect(resolved.runEndReason).toBeNull();
         // 30 for the match, 100 for the floor cleared cold at par, 50 in floor objectives.
         expect(resolved.stats.totalScore).toBe(180);
         expect(resolved.stats.currentLevelScore).toBe(180);
@@ -1070,8 +879,6 @@ describe('game rules', () => {
         expect(resolved.stats.perfectClears).toBe(1);
         expect(resolved.lastLevelResult?.perfect).toBe(true);
         expect(resolved.lastLevelResult?.mistakes).toBe(0);
-        expect(resolved.lastLevelResult?.clearLifeReason).toBe('perfect');
-        expect(resolved.lastLevelResult?.clearLifeGained).toBe(1);
         expect(resolved.gameplayCommandJournal).toEqual([
             expect.objectContaining({ type: 'board.turn_resolve' })
         ]);
@@ -1089,7 +896,6 @@ describe('game rules', () => {
         const tiles: Tile[] = [createTile('a1', 'A', 'A'), createTile('a2', 'A', 'A')];
         const started = {
             ...createRun(tiles),
-            lives: 3.8,
             stats: {
                 ...createRun(tiles).stats,
                 tries: Number.NaN,
@@ -1105,7 +911,6 @@ describe('game rules', () => {
         const resolved = resolveBoardTurn(flipTile(flipTile(started, 'a1'), 'a2'));
 
         expect(resolved.status).toBe('levelComplete');
-        expect(resolved.lives).toBe(4);
         expect(resolved.stats.totalScore).toBe(180);
         expect(resolved.stats.currentLevelScore).toBe(180);
         expect(resolved.stats.bestScore).toBe(180);
@@ -1113,7 +918,6 @@ describe('game rules', () => {
         expect(resolved.stats.highestLevel).toBe(1);
         expect(resolved.stats.perfectClears).toBe(1);
         expect(resolved.lastLevelResult?.mistakes).toBe(0);
-        expect(resolved.lastLevelResult?.livesRemaining).toBe(4);
     });
 
     it('scales streak score within a level before the clear bonus lands', () => {
@@ -1136,7 +940,7 @@ describe('game rules', () => {
         expect(secondMatch.stats.bestStreak).toBe(2);
     });
 
-    it('grants a clean-clear life bonus for floors finished with one mistake', () => {
+    it('pays a floor finished with one mistake the same as a flawless one', () => {
         const tiles: Tile[] = [
             createTile('a1', 'A', 'A'),
             createTile('a2', 'A', 'A'),
@@ -1148,17 +952,15 @@ describe('game rules', () => {
         const resolved = resolveBoardTurn(flipTile(flipTile(firstMatch, 'b1'), 'b2'));
 
         expect(resolved.status).toBe('levelComplete');
-        expect(resolved.lives).toBe(5);
+        expect(resolved.runEndReason).toBeNull();
         // A miss is a turn too: three turns against a par of one, and the floor pays the same as the flawless one.
         expect(resolved.stats.totalScore).toBe(70 + RECALL_FOCUS_MATCH_SCORE + 100 + 50);
         expect(resolved.lastLevelResult?.turnsTaken).toBe(3);
         expect(resolved.lastLevelResult?.perfect).toBe(false);
         expect(resolved.lastLevelResult?.mistakes).toBe(1);
-        expect(resolved.lastLevelResult?.clearLifeReason).toBe('clean');
-        expect(resolved.lastLevelResult?.clearLifeGained).toBe(1);
     });
 
-    it('grants combo shards on every second streak and guards on every fourth streak', () => {
+    it('banks a combo shard on every second streak step', () => {
         const tiles: Tile[] = [
             createTile('a1', 'A', 'A'),
             createTile('a2', 'A', 'A'),
@@ -1168,7 +970,6 @@ describe('game rules', () => {
 
         const atStreakTwo = {
             ...createRun(tiles),
-            lives: 3,
             stats: {
                 ...createRun(tiles).stats,
                 tries: 1,
@@ -1179,77 +980,40 @@ describe('game rules', () => {
         const resolvedAtTwo = resolveBoardTurn(flipTile(flipTile(atStreakTwo, 'a1'), 'a2'));
 
         expect(resolvedAtTwo.status).toBe('playing');
-        expect(resolvedAtTwo.lives).toBe(3);
         expect(resolvedAtTwo.stats.currentStreak).toBe(2);
         expect(resolvedAtTwo.stats.comboShards).toBe(1);
-        expect(resolvedAtTwo.stats.guardTokens).toBe(0);
+
+        const atStreakThree = {
+            ...createRun(tiles),
+            stats: {
+                ...createRun(tiles).stats,
+                tries: 1,
+                currentStreak: 2,
+                comboShards: 1
+            }
+        };
+        const resolvedAtThree = resolveBoardTurn(flipTile(flipTile(atStreakThree, 'a1'), 'a2'));
+
+        expect(resolvedAtThree.stats.currentStreak).toBe(3);
+        expect(resolvedAtThree.stats.comboShards).toBe(1);
 
         const atStreakFour = {
             ...createRun(tiles),
-            lives: 3,
             stats: {
                 ...createRun(tiles).stats,
                 tries: 1,
                 currentStreak: 3,
-                guardTokens: 0,
                 comboShards: 1
             }
         };
         const resolvedAtFour = resolveBoardTurn(flipTile(flipTile(atStreakFour, 'a1'), 'a2'));
 
         expect(resolvedAtFour.status).toBe('playing');
-        expect(resolvedAtFour.lives).toBe(3);
         expect(resolvedAtFour.stats.currentStreak).toBe(4);
-        expect(resolvedAtFour.stats.guardTokens).toBe(1);
         expect(resolvedAtFour.stats.comboShards).toBe(2);
     });
 
-    it('converts the third combo shard into a life and keeps the old 8-streak heal', () => {
-        const tiles: Tile[] = [
-            createTile('a1', 'A', 'A'),
-            createTile('a2', 'A', 'A'),
-            createTile('b1', 'B', 'B'),
-            createTile('b2', 'B', 'B')
-        ];
-
-        const atThirdShard = {
-            ...createRun(tiles),
-            lives: 3,
-            stats: {
-                ...createRun(tiles).stats,
-                tries: 1,
-                currentStreak: 5,
-                comboShards: 2
-            }
-        };
-        const resolvedAtThirdShard = resolveBoardTurn(flipTile(flipTile(atThirdShard, 'a1'), 'a2'));
-
-        expect(resolvedAtThirdShard.status).toBe('playing');
-        expect(resolvedAtThirdShard.lives).toBe(4);
-        expect(resolvedAtThirdShard.stats.currentStreak).toBe(6);
-        expect(resolvedAtThirdShard.stats.comboShards).toBe(0);
-
-        const atStreakEight = {
-            ...createRun(tiles),
-            lives: 4,
-            stats: {
-                ...createRun(tiles).stats,
-                tries: 1,
-                currentStreak: 7,
-                guardTokens: 1,
-                comboShards: 2
-            }
-        };
-        const resolvedAtEight = resolveBoardTurn(flipTile(flipTile(atStreakEight, 'a1'), 'a2'));
-
-        expect(resolvedAtEight.status).toBe('playing');
-        expect(resolvedAtEight.lives).toBe(5);
-        expect(resolvedAtEight.stats.currentStreak).toBe(8);
-        expect(resolvedAtEight.stats.guardTokens).toBe(2);
-        expect(resolvedAtEight.stats.comboShards).toBe(0);
-    });
-
-    it('caps stored shards and other sustain rewards at their max values', () => {
+    it('caps stored shards at their max value', () => {
         const tiles: Tile[] = [
             createTile('a1', 'A', 'A'),
             createTile('a2', 'A', 'A'),
@@ -1258,7 +1022,6 @@ describe('game rules', () => {
         ];
         const shardCapped = {
             ...createRun(tiles),
-            lives: 5,
             stats: {
                 ...createRun(tiles).stats,
                 tries: 1,
@@ -1269,27 +1032,22 @@ describe('game rules', () => {
         const resolvedShardCap = resolveBoardTurn(flipTile(flipTile(shardCapped, 'a1'), 'a2'));
 
         expect(resolvedShardCap.status).toBe('playing');
-        expect(resolvedShardCap.lives).toBe(5);
         expect(resolvedShardCap.stats.currentStreak).toBe(2);
         expect(resolvedShardCap.stats.comboShards).toBe(2);
 
         const started = {
             ...createRun(tiles),
-            lives: 5,
             stats: {
                 ...createRun(tiles).stats,
                 tries: 1,
                 currentStreak: 15,
-                guardTokens: 2,
                 comboShards: 2
             }
         };
         const resolved = resolveBoardTurn(flipTile(flipTile(started, 'a1'), 'a2'));
 
         expect(resolved.status).toBe('playing');
-        expect(resolved.lives).toBe(5);
         expect(resolved.stats.currentStreak).toBe(16);
-        expect(resolved.stats.guardTokens).toBe(2);
         expect(resolved.stats.comboShards).toBe(2);
     });
 
@@ -1306,7 +1064,6 @@ describe('game rules', () => {
                 bestStreak: 3,
                 perfectClears: 1,
                 highestLevel: 1,
-                guardTokens: 2,
                 comboShards: 2
             },
             timerState: {
@@ -1323,14 +1080,13 @@ describe('game rules', () => {
         expect(nextRun.stats.tries).toBe(0);
         expect(nextRun.stats.currentLevelScore).toBe(0);
         expect(nextRun.stats.currentStreak).toBe(0);
-        // Arriving on a floor also seats its resident, and some of them hand over a token, a
+        // Arriving on a floor also seats its resident, and some of them hand over a peek, a
         // shuffle or a longer look. Read the resident's contribution from the same seed the
         // advance used, so this stays an assertion about what carries over rather than a bet on
         // who happened to be downstairs.
         const resident = pickFloorCurio(finishedLevel.runSeed, 2, finishedLevel.runRulesVersion);
 
         expect(nextRun.floorCurioId).toBe(resident.id);
-        expect(nextRun.stats.guardTokens).toBe(2 + resident.effect.guardTokens);
         expect(nextRun.stats.comboShards).toBe(2);
         expect(nextRun.stats.totalScore).toBe(300);
         expect(nextRun.timerState.memorizeRemainingMs).toBe(
@@ -1356,18 +1112,15 @@ describe('game rules', () => {
                 level: 1,
                 scoreGained: 100,
                 rating: 'S' as const,
-                livesRemaining: 4,
                 perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'perfect' as const,
-                clearLifeGained: 0
+                mistakes: 0
             }
         };
         expect(advanceToNextLevel(base).destroyPairCharges).toBe(0);
 
         const clean = {
             ...base,
-            lastLevelResult: { ...base.lastLevelResult!, perfect: false, mistakes: 1, clearLifeReason: 'clean' as const }
+            lastLevelResult: { ...base.lastLevelResult!, perfect: false, mistakes: 1 }
         };
         expect(advanceToNextLevel(clean).destroyPairCharges).toBe(0);
 
@@ -1596,23 +1349,6 @@ describe('board powers', () => {
         });
     });
 
-    it('resets parasite floor counter on destroy when score_parasite is active', () => {
-        const tiles: Tile[] = [
-            createTile('a1', 'A', 'A'),
-            createTile('a2', 'A', 'A'),
-            createTile('b1', 'B', 'B'),
-            createTile('b2', 'B', 'B')
-        ];
-        const run = {
-            ...createRun(tiles),
-            activeMutators: ['score_parasite'] as MutatorId[],
-            destroyPairCharges: 1,
-            parasiteFloors: 3
-        };
-        const after = applyDestroyPair(run, 'a1');
-        expect(after.parasiteFloors).toBe(0);
-    });
-
     describe('glass_floor decoy and board completion', () => {
         it('isBoardComplete when all real tiles are matched and the decoy trap stays hidden', () => {
             const board = buildBoard(2, {
@@ -1719,7 +1455,7 @@ describe('board powers', () => {
             expect(a.tiles.map((t) => [t.id, t.findableKind])).toEqual(b.tiles.map((t) => [t.id, t.findableKind]));
         });
 
-        it('claims shard spark, converts through the shard-to-life path, and clears carrier flags', () => {
+        it('claims shard spark, banks it to the shard cap, and clears carrier flags', () => {
             const tiles: Tile[] = [
                 { ...createTile('a1', 'A', 'A'), findableKind: 'shard_spark' },
                 { ...createTile('a2', 'A', 'A'), findableKind: 'shard_spark' },
@@ -1728,20 +1464,18 @@ describe('board powers', () => {
             ];
             const started = {
                 ...createRun(tiles),
-                lives: 3,
                 findablesClaimedThisFloor: 0,
                 findablesTotalThisFloor: 1,
                 stats: {
                     ...createRun(tiles).stats,
-                    comboShards: 2
+                    comboShards: 1
                 }
             };
             const resolved = resolveBoardTurn(flipTile(flipTile(started, 'a1'), 'a2'));
             const base = calculateMatchScore(1, 1, 1);
             expect(FINDABLE_MATCH_COMBO_SHARDS.shard_spark).toBe(1);
             expect(resolved.stats.totalScore).toBe(base + FINDABLE_MATCH_SCORE.shard_spark);
-            expect(resolved.lives).toBe(4);
-            expect(resolved.stats.comboShards).toBe(0);
+            expect(resolved.stats.comboShards).toBe(2);
             expect(resolved.findablesClaimedThisFloor).toBe(1);
             expect(resolved.gameplayCommandJournal).toEqual([
                 expect.objectContaining({ type: 'board.turn_resolve' })
@@ -2084,11 +1818,8 @@ describe('wildTileId bookkeeping', () => {
                 level: b.level,
                 scoreGained: 100,
                 rating: 'S' as const,
-                livesRemaining: start.lives,
                 perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'perfect' as const,
-                clearLifeGained: 0
+                mistakes: 0
             },
             board: {
                 ...b,

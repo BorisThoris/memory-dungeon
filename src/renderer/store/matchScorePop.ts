@@ -82,7 +82,7 @@ export type MatchScorePopPayoffChip = {
     id: 'score' | 'streak' | 'cascade' | 'tier' | 'trait' | 'pickup' | 'route' | 'chainReward' | 'next';
     label: string;
     value: string;
-    tone: 'score' | 'chain' | 'trait' | 'pickup' | 'route' | 'reward' | 'guard' | 'heal';
+    tone: 'score' | 'chain' | 'trait' | 'pickup' | 'route' | 'reward';
 };
 
 export type MatchScorePopPayoffLaneId = 'route' | 'pickup' | 'trait' | 'chain' | 'build';
@@ -132,18 +132,9 @@ export const BOARD_FLOATER_POP_CLEAR = {
     mismatchScorePop: null as MismatchScorePop | null
 };
 
-const nextRewardPayoffLabel = (cue: ChainRewardForecastCue): string => {
-    if (cue.tone === 'guard') {
-        return `${cue.actionLabel} guard`;
-    }
-    if (cue.tone === 'heal') {
-        return `${cue.actionLabel} life`;
-    }
-    return `${cue.actionLabel} shard`;
-};
+const nextRewardPayoffLabel = (cue: ChainRewardForecastCue): string => `${cue.actionLabel} shard`;
 
-const formatGain = (amount: number, singular: string, plural = `${singular}s`): string =>
-    `+${amount} ${amount === 1 ? singular : plural}`;
+const formatGain = (amount: number, singular: string): string => `+${amount} ${amount === 1 ? singular : `${singular}s`}`;
 
 const matchScoreChainDepth = (chainDepth: number): number => Math.max(1, runNonNegativeInteger(chainDepth));
 
@@ -157,14 +148,7 @@ const buildChainRewardText = (facts: BoardTurnAnnouncementFacts, chainDepth: num
         return undefined;
     }
     const comboShardGain = Math.max(0, facts.comboShardsAfter - facts.comboShardsBefore);
-    const guardGain = Math.max(0, facts.guardTokensAfter - facts.guardTokensBefore);
-    const lifeGain = Math.max(0, facts.livesAfter - facts.livesBefore);
-    const parts = [
-        comboShardGain > 0 ? formatGain(comboShardGain, 'combo shard') : null,
-        guardGain > 0 ? formatGain(guardGain, 'guard token') : null,
-        lifeGain > 0 ? formatGain(lifeGain, 'life', 'lives') : null
-    ].filter((part): part is string => part != null);
-    return parts.length > 0 ? parts.join(' / ') : undefined;
+    return comboShardGain > 0 ? formatGain(comboShardGain, 'combo shard') : undefined;
 };
 
 export const getMatchScorePopChainMilestone = (
@@ -769,7 +753,7 @@ export function buildMatchScorePopPayload(
     const nonce = keyNonce ?? turnEvent.eventId;
     const key = `${facts.level}-${nonce}-${tileIdA}-${tileIdB}`;
     const chainRewardForecastCues =
-        chainDepth >= 3 ? getChainRewardForecastCues(chainDepth, facts.comboShardsAfter, facts.livesAfter) : [];
+        chainDepth >= 3 ? getChainRewardForecastCues(chainDepth, facts.comboShardsAfter) : [];
     const rewardBurst = buildMatchScorePopRewardBurst({
         chainDepth,
         chainMilestone,
@@ -889,11 +873,7 @@ export function buildMismatchScorePopPayload(
     }
     if (brokenChainDepth > 0) {
         payload.brokenChainDepth = brokenChainDepth;
-        const brokenChainRewardCue = getChainRewardForecastCues(
-            brokenChainDepth,
-            facts.comboShardsBefore,
-            facts.livesBefore
-        )[0];
+        const brokenChainRewardCue = getChainRewardForecastCues(brokenChainDepth, facts.comboShardsBefore)[0];
         if (brokenChainRewardCue) {
             payload.brokenChainRewardCue = brokenChainRewardCue;
         }

@@ -4,7 +4,7 @@ export interface PremiumEconomyPolicyRow {
     id:
         | 'product_stance'
         | 'ads_iap'
-        | 'continues_lives_fairness'
+        | 'continues_fairness'
         | 'accessibility'
         | 'core_power_access'
         | 'run_currency'
@@ -33,10 +33,10 @@ export const PREMIUM_ECONOMY_POLICY_ROWS: readonly PremiumEconomyPolicyRow[] = [
         allowedInSaveData: false
     },
     {
-        id: 'continues_lives_fairness',
+        id: 'continues_fairness',
         title: 'Fairness is never monetized',
         status: 'forbidden',
-        copy: 'Continues, lives, daily fairness, and core power access remain gameplay/balance systems only.',
+        copy: 'Continues, daily fairness, and core power access remain gameplay/balance systems only.',
         allowedInSaveData: false
     },
     {
@@ -50,8 +50,8 @@ export const PREMIUM_ECONOMY_POLICY_ROWS: readonly PremiumEconomyPolicyRow[] = [
         id: 'core_power_access',
         title: 'Core power access',
         status: 'never_monetized',
-        copy: 'Core powers, continues, lives, fairness, and accessibility settings are never monetized.',
-        uiCopy: 'Core powers, continues, lives, fairness, and accessibility settings are never monetized.',
+        copy: 'Core powers, continues, fairness, and accessibility settings are never monetized.',
+        uiCopy: 'Core powers, continues, fairness, and accessibility settings are never monetized.',
         allowedInSaveData: false,
         paymentLike: false
     },
@@ -59,7 +59,7 @@ export const PREMIUM_ECONOMY_POLICY_ROWS: readonly PremiumEconomyPolicyRow[] = [
         id: 'run_currency',
         title: 'Run currency is temporary',
         status: 'shipped',
-        copy: 'Combo shards, guard tokens, and power charges are local run systems; they expire or reset by design.',
+        copy: 'Combo shards and power charges are local run systems; they expire or reset by design.',
         allowedInSaveData: false
     },
     {
@@ -74,12 +74,12 @@ export const PREMIUM_ECONOMY_POLICY_ROWS: readonly PremiumEconomyPolicyRow[] = [
 export const getPremiumEconomyPolicyRows = (): readonly PremiumEconomyPolicyRow[] => PREMIUM_ECONOMY_POLICY_ROWS;
 
 export const premiumEconomyCopyAuditPasses = (copy: string): boolean =>
-    !/\b(ad pack|rewarded ad|iap|microtransaction|subscription|premium currency|pay.?to.?win|buy lives|buy continues)\b/i.test(copy);
+    !/\b(ad pack|rewarded ad|iap|microtransaction|subscription|premium currency|pay.?to.?win|buy continues)\b/i.test(copy);
 
 export const PREMIUM_ECONOMY_POLICY = {
     productStance: 'premium_offline_first',
     prohibitedMonetization: ['ads', 'IAP currencies', 'subscriptions', 'pay-to-win boosters'],
-    neverMonetize: ['continues', 'lives', 'fairness', 'accessibility_settings', 'core_power_access'],
+    neverMonetize: ['continues', 'fairness', 'accessibility_settings', 'core_power_access'],
     futureMonetizationRequiresDecision: true
 } as const;
 
@@ -92,12 +92,12 @@ export interface PremiumEconomySurfacePolicy {
 
 export const PREMIUM_ECONOMY_SURFACE_ROWS: readonly PremiumEconomySurfacePolicy[] = [
     {
-        // The run has no currency: shards, guard tokens and charges are the only things it banks,
-        // and all of them reset with the run. Nothing on this surface can look like a balance.
+        // The run has no currency: shards and charges are the only things it banks, and both
+        // reset with the run. Nothing on this surface can look like a balance.
         id: 'run_resources',
         status: 'allowed_gameplay_system',
         paymentLike: false,
-        uiCopy: 'Combo shards, guard tokens, and power charges are run-scoped resources, not a purchasable balance.'
+        uiCopy: 'Combo shards and power charges are run-scoped resources, not a purchasable balance.'
     },
     {
         id: 'cosmetics',
@@ -109,7 +109,7 @@ export const PREMIUM_ECONOMY_SURFACE_ROWS: readonly PremiumEconomySurfacePolicy[
         id: 'core_power_access',
         status: 'never_monetized',
         paymentLike: false,
-        uiCopy: 'Core powers, lives, continues, and accessibility settings are never monetized.'
+        uiCopy: 'Core powers, continues, and accessibility settings are never monetized.'
     }
 ];
 

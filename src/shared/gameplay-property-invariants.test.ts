@@ -50,7 +50,8 @@ const expectValidBoardPairShape = (board: BoardState): void => {
 };
 
 const expectRunResourceBounds = (run: RunState): void => {
-    expect(run.lives).toBeGreaterThanOrEqual(0);
+    // The run's end reason is set exactly when the run is over, and never before.
+    expect(run.runEndReason == null).toBe(run.status !== 'gameOver');
     expect(run.shuffleCharges).toBeGreaterThanOrEqual(0);
     expect(run.destroyPairCharges).toBeGreaterThanOrEqual(0);
     expect(run.regionShuffleCharges).toBeGreaterThanOrEqual(0);
@@ -106,7 +107,8 @@ describe('gameplay property invariants', () => {
                 const report = inspectRunFairness(run);
 
                 expect(report.issues).toEqual([]);
-                expect(run.lives).toBeGreaterThan(0);
+                expect(run.status).toBe('memorize');
+                expect(run.runEndReason).toBeNull();
                 expect(run.shuffleCharges).toBeGreaterThanOrEqual(0);
                 expect(run.destroyPairCharges).toBeGreaterThanOrEqual(0);
             }),
@@ -290,7 +292,7 @@ describe('gameplay property invariants', () => {
                 };
 
                 const next = advanceToNextLevel(run);
-                expect(next.lives).toBeGreaterThanOrEqual(0);
+                expect(next.runEndReason).toBeNull();
                 expect(next.shuffleCharges).toBeGreaterThanOrEqual(0);
                 expect(next.destroyPairCharges).toBeGreaterThanOrEqual(0);
 

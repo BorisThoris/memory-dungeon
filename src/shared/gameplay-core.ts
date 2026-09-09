@@ -37,7 +37,6 @@ import {
 import { runNonNegativeInteger } from './run-number-guards';
 import { runStringArray } from './run-array-guards';
 import { normalizeSessionStats } from './session-stats-rules';
-import { advanceScoreParasiteFloor } from './score-parasite-rules';
 import { hasMutator } from './mutators';
 import { tilesArePairMatch } from './scoring-rules';
 import {
@@ -91,7 +90,6 @@ const CURIO_GREET_SOURCE: GameplaySource = { kind: 'system', id: 'floor_curio' }
 const TILE_FLIP_SOURCE: GameplaySource = { kind: 'system', id: 'tile_flip' };
 const MEMORIZE_SOURCE: GameplaySource = { kind: 'system', id: 'memorize' };
 const RUN_TIMER_SOURCE: GameplaySource = { kind: 'system', id: 'run_timer' };
-const SCORE_PARASITE_SOURCE: GameplaySource = { kind: 'system', id: 'score_parasite' };
 const FLOOR_ADVANCE_SOURCE: GameplaySource = { kind: 'system', id: 'floor_advance' };
 const DEBUG_REVEAL_SOURCE: GameplaySource = { kind: 'system', id: 'debug_reveal' };
 const WILD_JOKER_SOURCE: GameplaySource = { kind: 'system', id: 'wild_joker' };
@@ -252,8 +250,6 @@ const applyDestroyPairCommand = (
         matchedPairsAfter: runNonNegativeInteger(nextRun.board?.matchedPairs),
         recallFocusBefore: runNonNegativeInteger(run.recallFocus),
         recallFocusAfter: runNonNegativeInteger(nextRun.recallFocus),
-        parasitePressureBefore: runNonNegativeInteger(run.parasiteFloors),
-        parasitePressureAfter: runNonNegativeInteger(nextRun.parasiteFloors),
         shiftingSpotlightNonceBefore: runNonNegativeInteger(run.shiftingSpotlightNonce),
         shiftingSpotlightNonceAfter: runNonNegativeInteger(nextRun.shiftingSpotlightNonce),
         boardComplete: transition.boardComplete
@@ -521,8 +517,6 @@ const applyGreetCurioCommand = (
         curioId: greeting.curioId,
         peekChargesBefore: runNonNegativeInteger(run.peekCharges),
         peekChargesAfter: runNonNegativeInteger(nextRun.peekCharges),
-        guardTokensBefore: runNonNegativeInteger(run.stats.guardTokens),
-        guardTokensAfter: runNonNegativeInteger(nextRun.stats.guardTokens),
         strayChargesBefore: runNonNegativeInteger(run.strayRemoveCharges),
         strayChargesAfter: runNonNegativeInteger(nextRun.strayRemoveCharges),
         undoUsesBefore: runNonNegativeInteger(run.undoUsesThisFloor),
@@ -576,47 +570,6 @@ const applyUndoResolveCommand = (
     return { run: nextRun, command, events, accepted: true };
 };
 
-const applyParasiteAdvanceCommand = (
-    run: RunState,
-    command: Extract<GameplayCommand, { type: 'floor.parasite_advance' }>
-): GameplayCommandResult => {
-    if (run.status !== 'levelComplete' || !run.board) {
-        return rejectedResult(run, command.commandId, 'Score-parasite pressure advances only from a cleared floor.', command);
-    }
-    const pressureBefore = runNonNegativeInteger(run.parasiteFloors);
-    const livesBefore = runNonNegativeInteger(run.lives);
-    const advanced = advanceScoreParasiteFloor(run);
-    const nextRun: RunState = {
-        ...run,
-        lives: advanced.lives,
-        parasiteFloors: advanced.parasiteFloors
-    };
-    const active = hasMutator(run, 'score_parasite');
-    const thresholdTriggered = active && pressureBefore + 1 >= 4;
-    const lifeLost = advanced.lives < livesBefore;
-    const events: GameplayEvent[] = [];
-    const writeEvent = makeEventWriter(command.commandId, SCORE_PARASITE_SOURCE, events);
-    writeEvent({
-        type: 'score_parasite.advanced',
-        active,
-        pressureBefore,
-        pressureAfter: advanced.parasiteFloors,
-        livesBefore,
-        livesAfter: advanced.lives,
-        thresholdTriggered,
-        lifeLost
-    });
-    if (lifeLost) {
-        writeEvent({
-            type: 'feedback.requested',
-            cue: 'hazard.score_parasite.life_lost',
-            message: `Score Parasite consumed one life; ${advanced.lives} ${advanced.lives === 1 ? 'life remains' : 'lives remain'}.`,
-            tone: 'warning'
-        });
-    }
-    return { run: nextRun, command, events, accepted: true };
-};
-
 const applyFloorAdvanceCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'floor.advance' }>
@@ -624,27 +577,9 @@ const applyFloorAdvanceCommand = (
     if (run.status !== 'levelComplete' || !run.board) {
         return rejectedResult(run, command.commandId, 'Floor advancement requires a cleared floor.', command);
     }
-    if (runNonNegativeInteger(run.lives) <= 0) {
-        return rejectedResult(run, command.commandId, 'A defeated run cannot advance to another floor.', command);
-    }
     const fromFloor = run.board.level;
     const events: GameplayEvent[] = [];
-    const parasiteResult = applyParasiteAdvanceCommand(run, {
-        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
-        commandId: command.commandId,
-        type: 'floor.parasite_advance'
-    });
-    if (!parasiteResult.accepted) {
-        return rejectedResult(run, command.commandId, 'Floor parasite pressure could not be resolved.', command);
-    }
-    appendReindexedEvents(command.commandId, parasiteResult.events, events);
-
-    const nextRun = advanceToNextLevel(run, {
-        parasiteAdvance: {
-            lives: parasiteResult.run.lives,
-            parasiteFloors: parasiteResult.run.parasiteFloors
-        }
-    });
+    const nextRun = advanceToNextLevel(run);
 
     const nextBoard = nextRun.status === 'memorize' ? nextRun.board : null;
     const writeEvent = makeEventWriter(command.commandId, FLOOR_ADVANCE_SOURCE, events);
@@ -661,10 +596,6 @@ const applyFloorAdvanceCommand = (
         memorizeRemainingMs: nextRun.status === 'memorize'
             ? nextRun.timerState?.memorizeRemainingMs ?? null
             : null,
-        livesBefore: runNonNegativeInteger(run.lives),
-        livesAfter: runNonNegativeInteger(nextRun.lives),
-        parasitePressureBefore: runNonNegativeInteger(run.parasiteFloors),
-        parasitePressureAfter: runNonNegativeInteger(nextRun.parasiteFloors),
         destroyChargesBefore: runNonNegativeInteger(run.destroyPairCharges),
         destroyChargesAfter: runNonNegativeInteger(nextRun.destroyPairCharges)
     });
@@ -714,8 +645,7 @@ const resolveBoardTurnFindableReward = (
         matchedTraits: [],
         adjacentTraits: [],
         matchedFindables: [findableKind],
-        featuredObjectiveCompleted: false,
-        scoreParasiteActive: false
+        featuredObjectiveCompleted: false
     };
     const transition = applyGameplayDefinitionTransition(
         run,
@@ -847,8 +777,6 @@ const applyBoardTurnResolveCommand = (
         boardComplete: nextRun.board ? isBoardComplete(nextRun.board) : false,
         statusBefore: run.status,
         statusAfter: nextRun.status,
-        livesBefore: runNonNegativeInteger(run.lives),
-        livesAfter: runNonNegativeInteger(nextRun.lives),
         totalScoreBefore: statsBefore.totalScore,
         totalScoreAfter: statsAfter.totalScore,
         triesBefore: statsBefore.tries,
@@ -1132,9 +1060,6 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'board.curio_greet') {
         return applyGreetCurioCommand(run, command);
-    }
-    if (command.type === 'floor.parasite_advance') {
-        return applyParasiteAdvanceCommand(run, command);
     }
     if (command.type === 'floor.advance') {
         return applyFloorAdvanceCommand(run, command);

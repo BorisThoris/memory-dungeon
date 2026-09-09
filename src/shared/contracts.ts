@@ -8,10 +8,8 @@
  */
 export const SAVE_SCHEMA_VERSION = 8;
 /** Bump when generation rules change (tile order, mutators, pair layout). */
-export const GAME_RULES_VERSION = 38;
-export const INITIAL_LIVES = 4;
+export const GAME_RULES_VERSION = 39;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
-export const MAX_LIVES = 5;
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_MAX = 50;
@@ -33,12 +31,6 @@ export const MEMORIZE_PER_TILE_MIN_MS = 110;
 export const MEMORIZE_MAX_MS = 6000;
 /** Memorize time drops by MEMORIZE_STEP_MS once per this many levels (so pairs and timer do not spike together every floor). */
 export const MEMORIZE_DECAY_EVERY_N_LEVELS = 2;
-/** After a life is lost to a mismatch, this many ms are banked for the next level's memorize phase (capped). */
-export const MEMORIZE_BONUS_PER_LIFE_LOST_MS = 160;
-export const MAX_PENDING_MEMORIZE_BONUS_MS = 500;
-export const COMBO_GUARD_STREAK_STEP = 4;
-export const CHAIN_HEAL_STREAK_STEP = 8;
-export const MAX_GUARD_TOKENS = 2;
 export const MAX_COMBO_SHARDS = 2;
 export const INITIAL_SHUFFLE_CHARGES = 1;
 export const INITIAL_REGION_SHUFFLE_CHARGES = 1;
@@ -71,7 +63,12 @@ export type TileState = 'hidden' | 'flipped' | 'matched' | 'removed';
  */
 export type TileSuit = 'ember' | 'tide' | 'moss' | 'bone';
 export type Rating = 'S++' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
-export type ClearLifeReason = 'none' | 'clean' | 'perfect';
+/**
+ * How a run ended (thesis §42.2). There are no lives: a run ends when the player stops, when a
+ * floor is not cleared within its turn ceiling, when a contract's mismatch limit is passed, or
+ * when a shared game's last floor is done. Null while the run is alive.
+ */
+export type RunEndReason = 'turn_ceiling' | 'quit' | 'contract' | 'pass_and_play_final_floor';
 export type FeaturedObjectiveId = 'scholar_style' | 'glass_witness' | 'cursed_last' | 'flip_par';
 export type ViewState =
     | 'boot'
@@ -123,7 +120,6 @@ export interface BuiltinPuzzleDefinition {
 export const MUTATOR_IDS = [
     'glass_floor',
     'sticky_fingers',
-    'score_parasite',
     'category_letters',
     'short_memorize',
     'wide_recall',
@@ -339,7 +335,6 @@ export interface SessionStats {
     currentStreak: number;
     bestStreak: number;
     perfectClears: number;
-    guardTokens: number;
     comboShards: number;
     tileTraitMatches: Record<TileTraitKind, number>;
     tileTraitMismatches: Record<TileTraitKind, number>;
@@ -351,11 +346,8 @@ export interface LevelResult {
     level: number;
     scoreGained: number;
     rating: Rating;
-    livesRemaining: number;
     perfect: boolean;
     mistakes: number;
-    clearLifeReason: ClearLifeReason;
-    clearLifeGained: number;
     /** Optional objective bonuses (e.g. scholar_style, glass_witness, cursed_last, flip_par). */
     bonusTags?: string[];
     /** Extra score from bonusTags (included in scoreGained). */
@@ -418,6 +410,8 @@ export interface RunSummary {
     practiceMode?: boolean;
     wildMenuRun?: boolean;
     activeContract?: ContractFlags | null;
+    /** How the run ended; absent on summaries written before the turn ceiling (Gen 183). */
+    runEndReason?: RunEndReason;
     /** Bounded, schema-validated command evidence from the completed run. */
     gameplayCommandJournal?: GameplayCommandJournalEntry[];
     /** Bounded, schema-validated event evidence from the completed run. */
@@ -484,10 +478,11 @@ export interface PassAndPlayState {
 
 export interface RunState {
     status: RunStatus;
-    lives: number;
+    /** Set once the run is over, and only then: what ended it. */
+    runEndReason: RunEndReason | null;
     /**
-     * Same-device multiplayer seats, or null on every single-player run. Lives and the board stay
-     * shared — only the credit is split — so nothing else in the run has to know this is here.
+     * Same-device multiplayer seats, or null on every single-player run. The board stays shared —
+     * only the credit is split — so nothing else in the run has to know this is here.
      */
     passAndPlay?: PassAndPlayState | null;
     board: BoardState | null;
@@ -495,8 +490,6 @@ export interface RunState {
     achievementsEnabled: boolean;
     debugUsed: boolean;
     debugPeekActive: boolean;
-    /** Banked extra memorize time (ms) applied on the next level's memorize phase, then cleared. */
-    pendingMemorizeBonusMs: number;
     shuffleCharges: number;
     destroyPairCharges: number;
     pinnedTileIds: string[];
@@ -529,8 +522,6 @@ export interface RunState {
     puzzleId: string | null;
     /** Sticky fingers: flat index blocked for the next opening flip after a match. */
     stickyBlockIndex: number | null;
-    /** Score parasite: floors advanced since last life loss from mutator. */
-    parasiteFloors: number;
     /** Last run flip tile ids (local ghost / export). */
     flipHistory: string[];
     /** H1 Peek: charges and ephemeral reveals (do not count as committed flips). */
@@ -622,8 +613,6 @@ export interface RunState {
     largestChunkScoreThisFloor: number;
     /** Pairs the magpie has taken back on this floor. */
     magpieTheftsThisFloor: number;
-    /** Times a guard token drove the magpie off on this floor. */
-    magpieScaredOffThisFloor: number;
     /** `shifting_spotlight`: increments each time ward/bounty rotates this floor (seed step for next pick). */
     shiftingSpotlightNonce: number;
 }

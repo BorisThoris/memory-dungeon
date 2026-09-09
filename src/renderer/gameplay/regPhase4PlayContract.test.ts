@@ -20,10 +20,13 @@ describe('REG-103–108 gameplay shell contract', () => {
         expect(reg104ShellAttributes('playing')['data-reg-gameplay-shell']).toBe('playing');
     });
 
-    it('REG-106: primary HUD always lists score / floor / lives lane ids', () => {
+    it('REG-106: primary HUD always lists score / floor / par lane ids, and no life or guard lane', () => {
         expect(REG106_HUD_IA.primary).toContain('score');
         expect(REG106_HUD_IA.primary).toContain('floor');
-        expect(REG106_HUD_IA.primary).toContain('lives');
+        expect(REG106_HUD_IA.primary).toContain('par');
+        expect([...REG106_HUD_IA.primary, ...REG106_HUD_IA.detailsDrawer]).not.toEqual(
+            expect.arrayContaining(['lives', 'guard', 'forgiveness'])
+        );
     });
 
     it('REG-108: material lanes include match and mismatch for feedback system parity', () => {

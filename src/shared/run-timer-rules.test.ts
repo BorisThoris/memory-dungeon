@@ -44,10 +44,8 @@ describe('run timer rules', () => {
         expect(resumed.timerState.pausedFromStatus).toBeNull();
     });
 
-    it('does not resume dead or corrupted paused resolving runs into play', () => {
+    it('does not resume corrupted paused resolving runs into play', () => {
         const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
-        const pausedDead = { ...pauseRun(playing), lives: 0 };
-        expect(resumeRun(pausedDead).status).toBe('gameOver');
 
         const missingBoardPause: RunState = {
             ...playing,

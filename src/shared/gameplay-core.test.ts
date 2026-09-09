@@ -21,7 +21,6 @@ import {
     createGameplayFlashPairCommand,
     createGameplayFloorAdvanceCommand,
     createGameplayGambitCommitCommand,
-    createGameplayParasiteAdvanceCommand,
     createGameplayPeekCommand,
     createGameplayRegionShuffleCommand,
     createGameplayShuffleCommand,
@@ -71,7 +70,7 @@ const run = (overrides: Partial<RunState> = {}): RunState =>
         forgottenTileIdsThisFloor: [],
         pinnedTileIds: [],
         peekRevealedTileIds: [],
-        stats: { totalScore: 0, currentLevelScore: 0, comboShards: 0, guardTokens: 0, currentStreak: 0 },
+        stats: { totalScore: 0, currentLevelScore: 0, comboShards: 0, currentStreak: 0 },
         ...overrides
     }) as RunState;
 
@@ -202,8 +201,6 @@ describe('deterministic gameplay core', () => {
         const initial = run({
             destroyPairCharges: 2,
             recallFocus: 2,
-            parasiteFloors: 3,
-            activeMutators: ['score_parasite'],
             shiftingSpotlightNonce: 0
         });
         const command = createGameplayDestroyPairCommand('destroy-echo', 'echo-a');
@@ -219,7 +216,6 @@ describe('deterministic gameplay core', () => {
                 destroyPairCharges: 1,
                 destroyUsedThisFloor: true,
                 recallFocus: 1,
-                parasiteFloors: 0,
                 board: { matchedPairs: 1 },
                 stats: { matchesFound: 1, pairsDestroyed: 1 }
             }
@@ -247,8 +243,6 @@ describe('deterministic gameplay core', () => {
                 matchedPairsAfter: 1,
                 recallFocusBefore: 2,
                 recallFocusAfter: 1,
-                parasitePressureBefore: 3,
-                parasitePressureAfter: 0,
                 boardComplete: false
             }),
             expect.objectContaining({ type: 'feedback.requested', cue: 'power.destroy_pair.used' })
@@ -288,74 +282,21 @@ describe('deterministic gameplay core', () => {
         });
     });
 
-    it('advances score-parasite pressure through a typed floor command and records the life outcome', () => {
-        const pressured = run({
-            status: 'levelComplete',
-            activeMutators: ['score_parasite'],
-            parasiteFloors: 3,
-            lives: 2
-        });
-        const belowThreshold = reduceGameplayCommand(
-            { ...pressured, parasiteFloors: 1 },
-            createGameplayParasiteAdvanceCommand('parasite-building')
-        );
-        const hitResult = reduceGameplayCommand(
-            pressured,
-            createGameplayParasiteAdvanceCommand('parasite-hit')
-        );
-
-        expect(belowThreshold).toMatchObject({
-            accepted: true,
-            run: { parasiteFloors: 2, lives: 2 }
-        });
-        expect(belowThreshold.events).toEqual([
-            expect.objectContaining({
-                type: 'score_parasite.advanced',
-                thresholdTriggered: false,
-                lifeLost: false
-            })
-        ]);
-        expect(hitResult).toMatchObject({
-            accepted: true,
-            run: { parasiteFloors: 0, lives: 1 }
-        });
-        expect(hitResult.events).toEqual([
-            expect.objectContaining({
-                type: 'score_parasite.advanced',
-                thresholdTriggered: true,
-                lifeLost: true
-            }),
-            expect.objectContaining({
-                type: 'feedback.requested',
-                cue: 'hazard.score_parasite.life_lost'
-            })
-        ]);
-    });
-
     it('advances a complete floor through one flat replayable command', () => {
         const fixtureRun = createPlayablePathFixture('floorClearWithRouteChoices').run!;
         const initial: RunState = {
             ...fixtureRun,
-            activeMutators: ['score_parasite'],
-            parasiteFloors: 3,
-            lives: 3,
             destroyPairCharges: 0
         };
         const command = createGameplayFloorAdvanceCommand('floor-advance-flat');
         const legacy = advanceToNextLevel(initial);
         const result = reduceGameplayCommand(initial, command);
 
-        expect(result).toMatchObject({ accepted: true, run: { status: 'memorize', parasiteFloors: 0 } });
+        expect(result).toMatchObject({ accepted: true, run: { status: 'memorize', runEndReason: null } });
         expect(result.run).toEqual(legacy);
         expect(result.run.gameplayCommandJournal).toEqual(initial.gameplayCommandJournal);
         expect(result.run.gameplayEventJournal).toEqual(initial.gameplayEventJournal);
         expect(result.events).toEqual(expect.arrayContaining([
-            expect.objectContaining({
-                type: 'score_parasite.advanced',
-                commandId: command.commandId,
-                thresholdTriggered: true,
-                lifeLost: true
-            }),
             expect.objectContaining({
                 type: 'floor.advanced',
                 commandId: command.commandId,
@@ -363,11 +304,7 @@ describe('deterministic gameplay core', () => {
                 toFloor: initial.board!.level + 1,
                 outcome: 'memorize',
                 boardPairCount: result.run.board!.pairCount,
-                boardTileCount: result.run.board!.tiles.length,
-                livesBefore: initial.lives,
-                livesAfter: result.run.lives,
-                parasitePressureBefore: 3,
-                parasitePressureAfter: 0
+                boardTileCount: result.run.board!.tiles.length
             }),
             expect.objectContaining({
                 type: 'feedback.requested',
@@ -381,16 +318,7 @@ describe('deterministic gameplay core', () => {
             event.eventId === `${command.commandId}:${sequence}`
         )).toBe(true);
         expect(replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))]).run).toEqual(result.run);
-
-        const defeated = reduceGameplayCommand(
-            { ...initial, lives: 1 },
-            createGameplayFloorAdvanceCommand('floor-advance-defeated')
-        );
-        expect(defeated).toMatchObject({ accepted: true, run: { status: 'gameOver', lives: 0 } });
-        expect(defeated.events).toEqual(expect.arrayContaining([
-            expect.objectContaining({ type: 'floor.advanced', outcome: 'game_over', boardPairCount: 0 }),
-            expect.objectContaining({ type: 'feedback.requested', cue: 'floor.advance.defeated', tone: 'warning' })
-        ]));
+        expect(result.events.some((event) => event.type === 'feedback.requested' && /\blives?\b/i.test(event.message))).toBe(false);
     });
 
     it('consumes exactly one Wild Match token for a resolved wildcard bridge', () => {

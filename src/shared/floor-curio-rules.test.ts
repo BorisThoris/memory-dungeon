@@ -68,14 +68,14 @@ describe('what they actually do', () => {
         const after = applyFloorCurio(before, curio('nervous_torchbearer'));
         expect(after.timerState.memorizeRemainingMs).toBeGreaterThan(before.timerState.memorizeRemainingMs!);
         expect(after.peekCharges).toBe(before.peekCharges + 1);
-        // `pendingMemorizeBonusMs` is spent by the NEXT transition. Writing there would give the
-        // longer look to a floor the torchbearer is not standing on.
-        expect(after.pendingMemorizeBonusMs).toBe(before.pendingMemorizeBonusMs);
     });
 
-    it('the off-duty guard hands over a token, which is the one thing that stops the magpie', () => {
-        const after = applyFloorCurio(run(), curio('off_duty_guard'));
-        expect(after.stats.guardTokens).toBe(run().stats.guardTokens + 1);
+    it('the off-duty guard lends a look round, now that there is no token to lend', () => {
+        const before = run();
+        const after = applyFloorCurio(before, curio('off_duty_guard'));
+        expect(after.peekCharges).toBe(before.peekCharges + 1);
+        expect(after.timerState.memorizeRemainingMs).toBe(before.timerState.memorizeRemainingMs);
+        expect(after.shuffleCharges).toBe(before.shuffleCharges);
     });
 
     it('the skull costs attention', () => {
@@ -88,7 +88,7 @@ describe('what they actually do', () => {
         const before = run();
         const after = applyFloorCurio(before, curio('lost_sock'));
         expect(after.peekCharges).toBe(before.peekCharges);
-        expect(after.stats.guardTokens).toBe(before.stats.guardTokens);
+        expect(after.shuffleCharges).toBe(before.shuffleCharges);
         expect(after.timerState.memorizeRemainingMs).toBe(before.timerState.memorizeRemainingMs);
     });
 
@@ -115,9 +115,7 @@ describe('they actually move in', () => {
         const base = run();
         const next = createNextFloorRunState(base, {
             board: { ...base.board!, level: 2 },
-            lives: base.lives,
             activeMutators: [],
-            parasiteFloors: 0,
             memorizeRemainingMs: 6_000
         });
 
@@ -142,9 +140,7 @@ describe('they actually move in', () => {
         const base = run();
         const next = createNextFloorRunState(base, {
             board: { ...base.board!, level: 4 },
-            lives: base.lives,
             activeMutators: [],
-            parasiteFloors: 0,
             memorizeRemainingMs: 6_000
         });
 

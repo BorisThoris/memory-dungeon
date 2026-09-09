@@ -13,11 +13,11 @@ Everything that governs **time and phase** within a run: memorize → play → r
 | `finishMemorizePhase` | **Shippable** | Pure state transition when timer hits zero (store schedules timers). |
 | Pause | **Shippable** | `pauseRun` — snapshots `pausedFromStatus`, freezes meaningful timers in contract shape. |
 | Resume | **Shippable** | `resumeRun`. |
+| Run end | **Shippable** | Two ways only (Gen 183, thesis §42.2): the player stops (`runEndReason: 'quit'`), or a floor is not cleared within its turn ceiling, par × 3 (`turnCeilingForFloor`, `floor-par.ts`; `applyTurnCeiling` in `board-turn-transition.ts` after every resolved turn, `runEndReason: 'turn_ceiling'`). A contract's mismatch cap (`'contract'`) and the shared game's last floor (`'pass_and_play_final_floor'`) are the other recorded reasons. A floor cleared on its ceiling turn is a clear. There are no lives; a miss costs the chain and nothing else. |
 | Level complete gate | **Shippable** | `status === 'levelComplete'`; the floor-clear beat (`FloorClearBeat`, no buttons) sits on the board for ~1.6s after the last-pair hold and then `continueToNextLevel` runs on its own (Gen 182, thesis §41.4). The floor-clear dialog with Continue / Main Menu is gone; a run is left from the pause menu. |
 | Relic pick blocking | **Shippable** | `openRelicOffer` vs `advanceToNextLevel` in store. |
 | Undo resolving | **Shippable** | `cancelResolvingWithUndo` — requires `undoUsesThisFloor >= 1`, returns to `playing` with flips cleared per rules. Sets `powersUsedThisRun`. |
 | Debug peek | **Functional** | `enableDebugPeek` / `disableDebugPeek`; `debugRevealRemainingMs`; gated by `debugFlags.allowBoardReveal`; can disable achievements. |
-| `pendingMemorizeBonusMs` | **Shippable** | Banked time applied on next floor’s memorize (from life-loss / relic logic in `game.ts`). |
 
 ## Rough edges
 

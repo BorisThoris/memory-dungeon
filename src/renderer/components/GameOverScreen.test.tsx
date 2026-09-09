@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { RunState } from '../../shared/contracts';
+import type { RunEndReason, RunState } from '../../shared/contracts';
 import { createNewRun, createRunSummary, finishMemorizePhase } from '../../shared/game-core';
 import { createDefaultSaveData } from '../../shared/save-data';
 import { getGameOverNextRunRows } from '../../shared/game-over-next-run';
@@ -46,11 +46,42 @@ vi.mock('../store/useAppStore', () => ({
         } as never)
 }));
 
-const gameOverRunFixture = (totalScore = 0): RunState => {
+const gameOverRunFixture = (totalScore = 0, runEndReason: RunEndReason | null = 'turn_ceiling'): RunState => {
     let run = finishMemorizePhase(createNewRun(100, { runSeed: 0xabc }));
-    run = { ...run, lives: 0, stats: { ...run.stats, totalScore }, status: 'gameOver' };
+    run = { ...run, runEndReason, stats: { ...run.stats, totalScore }, status: 'gameOver' };
     return createRunSummary(run, []);
 };
+
+describe('how the run ended', () => {
+    const withReason = (runEndReason: RunEndReason | undefined): RunState => {
+        const run = gameOverRunFixture(0, runEndReason ?? null);
+        return {
+            ...run,
+            lastRunSummary: run.lastRunSummary ? { ...run.lastRunSummary, highestLevel: 7, runEndReason } : null
+        };
+    };
+
+    it('says the ceiling ran out, without a word about failing', () => {
+        render(<GameOverScreen run={withReason('turn_ceiling')} />);
+        const line = screen.getByTestId('game-over-end-reason');
+        expect(line).toHaveTextContent('The turn ceiling ran out on floor 7.');
+        expect(line).not.toHaveTextContent(/life|lives|lost|fail|died|death/i);
+    });
+
+    it('says the player stopped, the contract ended it, or the table finished', () => {
+        const { rerender } = render(<GameOverScreen run={withReason('quit')} />);
+        expect(screen.getByTestId('game-over-end-reason')).toHaveTextContent('You stopped on floor 7.');
+        rerender(<GameOverScreen run={withReason('contract')} />);
+        expect(screen.getByTestId('game-over-end-reason')).toHaveTextContent(/contract.*floor 7\./);
+        rerender(<GameOverScreen run={withReason('pass_and_play_final_floor')} />);
+        expect(screen.getByTestId('game-over-end-reason')).toHaveTextContent(/last floor, floor 7\./);
+    });
+
+    it('says nothing about it for a summary from before the reason was recorded', () => {
+        render(<GameOverScreen run={withReason(undefined)} />);
+        expect(screen.queryByTestId('game-over-end-reason')).toBeNull();
+    });
+});
 
 describe('the table at game over', () => {
     it('shows each seat\'s best chain on the standings, and says nothing for a seat that never chained', () => {

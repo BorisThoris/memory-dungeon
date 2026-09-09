@@ -13,7 +13,6 @@ Rendered under **Settings → Controls → “Future tuning (not wired)”** in 
 |---------------------|---------------|--------------------------------------|--------|
 | Difficulty | Disabled placeholder buttons | `difficulty` / `future_rules_variant` | Copy states no live setting; balance curve is fixed. |
 | Timer Mode | Disabled placeholder | `timer_mode` / `future_rules_variant` | Not connected to save or rules. |
-| Max Lives | Disabled placeholder | `max_lives` / `future_rules_variant` | Lives follow game rules (`MAX_LIVES` etc.). |
 | Card Theme | Disabled placeholder | `card_theme` / `cosmetic_theme` | Asset slots only; no theme picker in schema. |
 | Tutorial Hints | Disabled placeholder | `tutorial_hints` / `future_ui_preference` | Current onboarding flags are persisted (`onboardingDismissed`, `powersFtueSeen`); no independent settings toggle. |
 

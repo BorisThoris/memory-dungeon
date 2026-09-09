@@ -1,6 +1,7 @@
 import {
     type AchievementId,
     type MutatorId,
+    type RunEndReason,
     type RunState
 } from './contracts';
 import { runArray } from './run-array-guards';
@@ -40,18 +41,23 @@ export const createRunSummary = (run: RunState, unlockedAchievements: Achievemen
             practiceMode: run.practiceMode,
             wildMenuRun: run.wildMenuRun,
             activeContract: run.activeContract ? { ...run.activeContract } : null,
+            runEndReason: run.runEndReason ?? undefined,
             ...getGameplayJournalSummaryFields(run)
         };
     })()
 });
 
 /**
- * Terminal game-over transition: forces the terminal status and zeroes lives before
- * building the summary, so callers cannot persist a summary for a run that still
- * reads as playable.
+ * Terminal game-over transition: forces the terminal status and names how the run ended before
+ * building the summary, so callers cannot persist a summary for a run that still reads as
+ * playable. A run the rules already ended keeps its reason; one ended from outside was quit.
  */
-export const createGameOverRunSummary = (run: RunState, unlockedAchievements: AchievementId[]): RunState =>
-    createRunSummary({ ...run, status: 'gameOver', lives: 0 }, unlockedAchievements);
+export const createGameOverRunSummary = (
+    run: RunState,
+    unlockedAchievements: AchievementId[],
+    reason: RunEndReason = 'quit'
+): RunState =>
+    createRunSummary({ ...run, status: 'gameOver', runEndReason: run.runEndReason ?? reason }, unlockedAchievements);
 
 /**
  * Same transition, with the summary round-tripped through save normalization so what

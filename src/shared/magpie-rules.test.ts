@@ -33,7 +33,6 @@ const board = (): BoardState =>
 const visit = (overrides: Partial<Parameters<typeof resolveMagpieVisit>[0]> = {}) =>
     resolveMagpieVisit({
         board: board(),
-        guardTokens: 0,
         mismatchCount: MAGPIE_MISS_INTERVAL,
         rulesVersion: 1,
         runSeed: 4242,
@@ -55,24 +54,6 @@ describe('when the magpie turns up', () => {
     it('turns up with nothing to take when no pair has been cleared', () => {
         const empty = { ...board(), matchedPairs: 0, tiles: board().tiles.map((t) => ({ ...t, state: 'hidden' as const })) };
         expect(visit({ board: empty })).toMatchObject({ kind: 'nothing_to_take', theft: null });
-    });
-});
-
-describe('the guard token', () => {
-    it('scares it off and is spent doing so', () => {
-        const scared = visit({ guardTokens: 2 });
-        expect(scared.kind).toBe('scared_off');
-        expect(scared.guardTokens).toBe(1);
-        expect(scared.theft).toBeNull();
-    });
-
-    it('protects rather than refunds: nothing is taken at all', () => {
-        expect(visit({ guardTokens: 1 }).theft).toBeNull();
-    });
-
-    it('cannot be spent below zero by a malformed count', () => {
-        expect(visit({ guardTokens: -5 }).guardTokens).toBe(0);
-        expect(visit({ guardTokens: Number.NaN }).kind).toBe('theft');
     });
 });
 
@@ -127,7 +108,6 @@ describe('the theft', () => {
         };
         const taken = resolveMagpieVisit({
             board: nearlyClear,
-            guardTokens: 0,
             mismatchCount: MAGPIE_MISS_INTERVAL,
             rulesVersion: 1,
             runSeed: 4242

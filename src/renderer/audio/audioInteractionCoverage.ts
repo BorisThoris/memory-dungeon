@@ -140,7 +140,7 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
     {
         id: 'chain_reward_cashout',
         domain: 'gameplay',
-        interaction: 'Clean streak match grants combo shard, guard token, or life payoff',
+        interaction: 'Clean streak match banks a combo shard',
         cue: 'none',
         callsite: 'applyResolveBoardTurn -> playResolveSfx chain-reward cashout accent layer',
         semanticMoment: 'reward',

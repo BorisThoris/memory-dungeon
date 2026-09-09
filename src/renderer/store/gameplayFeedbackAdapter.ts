@@ -11,7 +11,6 @@ export type GameplayFeedbackAudioCategory =
     | 'match-resolution'
     | 'peek'
     | 'floor-advance'
-    | 'parasite'
     | 'wild-match'
     | 'undo'
     | 'curio-greet';
@@ -50,9 +49,6 @@ const audioCategoryFor = (
     }
     if (feedback.source.kind === 'power' && feedback.cue === 'power.undo_resolve.used') {
         return 'undo';
-    }
-    if (feedback.source.kind === 'system' && feedback.source.id === 'score_parasite') {
-        return 'parasite';
     }
     if (feedback.source.kind === 'system' && feedback.source.id === 'floor_advance') {
         return 'floor-advance';

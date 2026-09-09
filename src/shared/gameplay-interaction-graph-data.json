@@ -1,5 +1,5 @@
 {
-    "version": 32,
+    "version": 33,
     "mechanics": [
         {
             "id": "trait.echo",
@@ -110,7 +110,6 @@
             ],
             "writes": [
                 "stickyBlockIndex",
-                "guardTokens",
                 "interactionTags"
             ],
             "enables": [
@@ -234,7 +233,6 @@
                 "noDestroy",
                 "tileStates",
                 "recallFocus",
-                "parasiteFloors",
                 "shiftingSpotlightNonce"
             ],
             "writes": [
@@ -244,7 +242,6 @@
                 "forgottenTileIdsThisFloor",
                 "powersUsedThisRun",
                 "recallFocus",
-                "parasiteFloors",
                 "shiftingSpotlightNonce",
                 "gameplayCommands",
                 "gameplayEvents",
@@ -352,11 +349,9 @@
             "reads": [
                 "interactionTags",
                 "peekCharges",
-                "guardTokens",
                 "comboShards",
                 "comboShardRequests",
                 "destroyPairCharges",
-                "lives",
                 "triesDelta",
                 "lastLevelResult",
                 "feedbackLines",
@@ -433,16 +428,11 @@
                 "levelComplete",
                 "lastLevelResult",
                 "powersUsedThisRun",
-                "nextFloor",
-                "lives",
-                "parasiteFloors",
-                "pendingMemorizeBonusMs"
+                "nextFloor"
             ],
             "writes": [
                 "nextFloor",
                 "tileStates",
-                "lives",
-                "parasiteFloors",
                 "destroyPairCharges",
                 "timerState",
                 "gameplayCommandJournal",
@@ -544,66 +534,6 @@
             ]
         },
         {
-            "id": "inventory.guard_token",
-            "label": "Guard Token Inventory",
-            "kind": "inventory",
-            "role": "bounded_damage_buffer",
-            "evidence": [
-                "src/shared/run-inventory.ts",
-                "src/shared/gameplay-core.ts",
-                "src/shared/turn-mismatch-rules.ts"
-            ],
-            "reads": [
-                "guardTokens"
-            ],
-            "writes": [
-                "guardTokens"
-            ],
-            "enables": [
-                "safety.guard_absorption"
-            ],
-            "blocks": [],
-            "softlockGuards": [
-                "non-negative-counter",
-                "two-token-cap",
-                "guard-before-life"
-            ],
-            "tests": [
-                "src/shared/run-inventory.test.ts",
-                "src/shared/turn-mismatch-rules.test.ts",
-                "src/shared/gameplay-core.test.ts"
-            ]
-        },
-        {
-            "id": "safety.guard_absorption",
-            "label": "Guard Damage Absorption",
-            "kind": "safety",
-            "role": "resource_consequence",
-            "evidence": [
-                "src/shared/turn-mismatch-rules.ts"
-            ],
-            "reads": [
-                "guardTokens",
-                "lives"
-            ],
-            "writes": [
-                "guardTokens",
-                "lives",
-                "feedbackLines"
-            ],
-            "enables": [
-                "safety.softlock_fairness"
-            ],
-            "blocks": [],
-            "softlockGuards": [
-                "guard-spent-before-life",
-                "damage-floor"
-            ],
-            "tests": [
-                "src/shared/turn-mismatch-rules.test.ts"
-            ]
-        },
-        {
             "id": "findable.shard_spark",
             "label": "Shard Spark Findable",
             "kind": "findable",
@@ -641,7 +571,7 @@
             "id": "inventory.combo_shard",
             "label": "Combo Shard Inventory",
             "kind": "inventory",
-            "role": "bounded_life_conversion_resource",
+            "role": "bounded_bank",
             "evidence": [
                 "src/shared/run-inventory.ts",
                 "src/shared/combo-shard-rules.ts",
@@ -655,9 +585,7 @@
             "writes": [
                 "comboShards"
             ],
-            "enables": [
-                "progression.shard_to_life"
-            ],
+            "enables": [],
             "blocks": [],
             "softlockGuards": [
                 "non-negative-counter",
@@ -669,43 +597,6 @@
                 "src/shared/combo-shard-rules.test.ts",
                 "src/shared/turn-match-reward-rules.test.ts",
                 "src/shared/gameplay-core.test.ts"
-            ]
-        },
-        {
-            "id": "progression.shard_to_life",
-            "label": "Shard to Life Conversion",
-            "kind": "progression",
-            "role": "resource_consequence",
-            "evidence": [
-                "src/shared/combo-shard-rules.ts",
-                "src/shared/turn-match-reward-rules.ts",
-                "src/shared/game.ts",
-                "src/shared/mechanics-encyclopedia.ts"
-            ],
-            "reads": [
-                "comboShards",
-                "comboShardRequests",
-                "lives",
-                "gameMode"
-            ],
-            "writes": [
-                "comboShards",
-                "lives",
-                "feedbackLines"
-            ],
-            "enables": [
-                "progression.run_flow"
-            ],
-            "blocks": [],
-            "softlockGuards": [
-                "max-life-cap",
-                "meditation-opt-out",
-                "remainder-preserved"
-            ],
-            "tests": [
-                "src/shared/combo-shard-rules.test.ts",
-                "src/shared/turn-match-reward-rules.test.ts",
-                "src/shared/game.test.ts"
             ]
         },
         {
@@ -911,47 +802,6 @@
             ]
         },
         {
-            "id": "hazard.score_parasite",
-            "label": "Score Parasite Pressure",
-            "kind": "hazard",
-            "role": "chapter_pressure_and_objective_counterplay",
-            "evidence": [
-                "src/shared/score-parasite-rules.ts",
-                "src/shared/board-power-actions.ts",
-                "src/shared/gameplay-core.ts",
-                "src/shared/next-floor-transition-rules.ts",
-                "src/shared/next-floor-run-state-rules.ts",
-                "src/shared/game.ts"
-            ],
-            "reads": [
-                "parasiteFloors"
-            ],
-            "writes": [
-                "parasiteFloors",
-                "lives",
-                "gameplayEvents",
-                "gameplayCommandJournal",
-                "gameplayEventJournal",
-                "feedbackLines"
-            ],
-            "enables": [],
-            "blocks": [
-                "score_bank"
-            ],
-            "softlockGuards": [
-                "four-floor-cycle",
-                "destroy-pair-resets-pressure",
-                "typed-floor-transition"
-            ],
-            "tests": [
-                "src/shared/score-parasite-rules.test.ts",
-                "src/shared/board-power-actions.test.ts",
-                "src/shared/next-floor-run-state-rules.test.ts",
-                "src/shared/gameplay-core.test.ts",
-                "src/shared/game.test.ts"
-            ]
-        },
-        {
             "id": "core.gameplay_commands",
             "label": "Deterministic Gameplay Command Core",
             "kind": "core",
@@ -974,7 +824,6 @@
                 "shuffleNonce",
                 "strayRemoveCharges",
                 "pinnedTileIds",
-                "guardTokens",
                 "comboShards",
                 "destroyPairCharges",
                 "featuredObjectiveStreak",
@@ -982,7 +831,6 @@
                 "gambitAvailableThisFloor",
                 "gambitThirdFlipUsed",
                 "flippedTileIds",
-                "parasiteFloors",
                 "tileTraitKind",
                 "adjacentTraits",
                 "matchResolutionsThisFloor"
@@ -1001,11 +849,8 @@
                 "strayRemoveCharges",
                 "pinnedTileIds",
                 "pinsPlacedCountThisRun",
-                "guardTokens",
                 "comboShards",
                 "destroyPairCharges",
-                "parasiteFloors",
-                "lives",
                 "score",
                 "peekRevealedTileIds",
                 "forgottenTileIdsThisFloor",
@@ -1286,7 +1131,6 @@
             ],
             "reads": [
                 "memorizeMs",
-                "pendingMemorizeBonusMs",
                 "activeMutators",
                 "gameMode"
             ],
@@ -1662,7 +1506,6 @@
             ],
             "writes": [],
             "enables": [
-                "hazard.score_parasite",
                 "phase.memorize",
                 "progression.run_flow"
             ],
@@ -1795,11 +1638,8 @@
             ],
             "reads": [
                 "gameplayEvents",
-                "lives",
                 "totalScore",
-                "guardTokens",
-                "comboShards",
-                "pendingMemorizeBonusMs"
+                "comboShards"
             ],
             "writes": [
                 "balanceProfileReport"
@@ -1847,7 +1687,6 @@
                 "tileStates",
                 "matchedPairs",
                 "score",
-                "lives",
                 "tries",
                 "gameplayCommands",
                 "gameplayEvents"
@@ -2052,36 +1891,6 @@
             "label": "shows target and balance"
         },
         {
-            "source": "core.gameplay_commands",
-            "target": "inventory.guard_token",
-            "kind": "modifies",
-            "label": "applies capped guard effects"
-        },
-        {
-            "source": "inventory.guard_token",
-            "target": "safety.guard_absorption",
-            "kind": "enables",
-            "label": "buffers the next damage source"
-        },
-        {
-            "source": "inventory.guard_token",
-            "target": "feedback.gameplay_hud",
-            "kind": "displays",
-            "label": "shows current guard balance"
-        },
-        {
-            "source": "safety.guard_absorption",
-            "target": "inventory.guard_token",
-            "kind": "consumes",
-            "label": "spends guard before life"
-        },
-        {
-            "source": "safety.guard_absorption",
-            "target": "feedback.gameplay_hud",
-            "kind": "displays",
-            "label": "forecasts guard before life"
-        },
-        {
             "source": "findable.shard_spark",
             "target": "core.gameplay_commands",
             "kind": "triggers",
@@ -2106,34 +1915,10 @@
             "label": "applies capped shard effects and requests"
         },
         {
-            "source": "core.gameplay_commands",
-            "target": "progression.shard_to_life",
-            "kind": "triggers",
-            "label": "emits typed match shard request"
-        },
-        {
-            "source": "inventory.combo_shard",
-            "target": "progression.shard_to_life",
-            "kind": "enables",
-            "label": "funds life conversion"
-        },
-        {
             "source": "inventory.combo_shard",
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "shows current shard bank"
-        },
-        {
-            "source": "progression.shard_to_life",
-            "target": "inventory.combo_shard",
-            "kind": "consumes",
-            "label": "spends three shards for life"
-        },
-        {
-            "source": "progression.shard_to_life",
-            "target": "feedback.gameplay_hud",
-            "kind": "displays",
-            "label": "shows life conversion consequence"
         },
         {
             "source": "power.peek",
@@ -2322,40 +2107,10 @@
             "label": "shows retained streak"
         },
         {
-            "source": "power.destroy_pair",
-            "target": "hazard.score_parasite",
-            "kind": "counterplay",
-            "label": "destroying a pair resets parasite pressure"
-        },
-        {
-            "source": "hazard.score_parasite",
-            "target": "power.destroy_pair",
-            "kind": "guarded_by",
-            "label": "pressure reset before the four-floor bite"
-        },
-        {
-            "source": "hazard.score_parasite",
-            "target": "feedback.gameplay_hud",
-            "kind": "displays",
-            "label": "shows parasite pressure"
-        },
-        {
-            "source": "hazard.score_parasite",
-            "target": "core.gameplay_commands",
-            "kind": "triggers",
-            "label": "advances through typed floor command"
-        },
-        {
             "source": "core.gameplay_commands",
             "target": "objective.featured_streak",
             "kind": "triggers",
             "label": "resolves featured streak inside the typed floor clear"
-        },
-        {
-            "source": "core.gameplay_commands",
-            "target": "hazard.score_parasite",
-            "kind": "triggers",
-            "label": "advances parasite pressure through the typed floor command"
         },
         {
             "source": "core.gameplay_commands",
@@ -2623,12 +2378,6 @@
         },
         {
             "source": "inventory.mutator_loadout",
-            "target": "hazard.score_parasite",
-            "kind": "triggers",
-            "label": "activates scheduled parasite pressure when selected"
-        },
-        {
-            "source": "inventory.mutator_loadout",
             "target": "phase.memorize",
             "kind": "modifies",
             "label": "projects timing mutators into the study window"
@@ -2710,12 +2459,6 @@
             "target": "progression.run_flow",
             "kind": "modifies",
             "label": "owns parasite pressure board construction and floor-start perk consequences"
-        },
-        {
-            "source": "progression.run_flow",
-            "target": "hazard.score_parasite",
-            "kind": "triggers",
-            "label": "advances chapter pressure before constructing the next board"
         },
         {
             "source": "progression.run_flow",

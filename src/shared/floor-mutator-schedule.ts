@@ -83,10 +83,10 @@ export const FLOOR_ARCHETYPE_CATALOG: Record<FloorArchetypeId, FloorArchetypeDef
         encounterRole: 'boss'
     },
     parasite_tithe: {
-        title: 'Parasite Tithe',
-        hint: 'The parasite taxes slow descents. Play clean and keep the chain up.',
-        theme: 'Parasite',
-        riskProfile: 'Parasite clock; guard tokens and a clean floor matter.'
+        title: 'Static Hall',
+        hint: 'The channel hisses over the study window. Read past the noise and keep the chain up.',
+        theme: 'Static',
+        riskProfile: 'Distraction on the memorize window; a clean floor matters.'
     },
     spotlight_hunt: {
         title: 'Spotlight Hunt',
@@ -196,11 +196,11 @@ export const CHAPTER_ACT_BIOME_STRUCTURE: readonly ChapterActBiomeDefinition[] =
         lastCycleFloor: 12,
         biomeId: 'spire_convergence',
         biomeTitle: 'Spire Convergence',
-        biomeTone: 'A second boss floor, a pickup reset, parasite sustain, and a spotlight finale.',
+        biomeTone: 'A second boss floor, a pickup reset, a static hall, and a spotlight finale.',
         paletteHook: 'spire_prismatic_alarm',
         audioHook: 'spire_recall_alarm',
         pressureCue: 'The cycle\'s second boss floor and sustain pressure frame the final read.',
-        routePreview: 'Expect a second boss floor, a pickup reset, parasite sustain, then spotlight rotation.',
+        routePreview: 'Expect a second boss floor, a pickup reset, a static hall, then spotlight rotation.',
         gateRule: 'Floors 9-12 of each endless cycle.'
     }
 ] as const;
@@ -377,7 +377,7 @@ const ENDLESS_FLOOR_CYCLE: FloorScheduleEntry[] = [
      * without shuffle or destroy, floor 10 asks for one under par.
      */
     makeEntry(10, 'treasure_gallery', 'flip_par', ['findables_floor'], 'breather'),
-    makeEntry(11, 'parasite_tithe', 'scholar_style', ['score_parasite'], 'normal'),
+    makeEntry(11, 'parasite_tithe', 'scholar_style', ['distraction_channel'], 'normal'),
     makeEntry(12, 'spotlight_hunt', 'cursed_last', ['shifting_spotlight'], 'normal')
 ];
 

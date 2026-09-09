@@ -23,7 +23,6 @@ describe('session-stats-rules', () => {
             currentStreak: 0,
             bestStreak: 0,
             perfectClears: 0,
-            guardTokens: 0,
             comboShards: 0,
             tileTraitMatches: { echo: 0, heavy: 0, conduit: 0, stasis: 0 },
             tileTraitMismatches: { echo: 0, heavy: 0, conduit: 0, stasis: 0 },

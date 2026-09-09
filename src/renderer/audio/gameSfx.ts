@@ -258,7 +258,6 @@ const hasResolvedResourceReward = (before: RunState, after: RunState): boolean =
     const afterStats = after.stats;
     return (
         runFiniteNumber(afterStats.comboShards) > runFiniteNumber(beforeStats.comboShards) ||
-        runFiniteNumber(afterStats.guardTokens) > runFiniteNumber(beforeStats.guardTokens) ||
         runFiniteNumber(after.flashPairCharges) > runFiniteNumber(before.flashPairCharges)
     );
 };
@@ -275,11 +274,7 @@ const hasResolvedChainRewardCashout = (before: RunState, after: RunState): boole
     if (runFiniteNumber(after.stats.currentStreak) < 3) {
         return false;
     }
-    return (
-        runFiniteNumber(after.stats.comboShards) > runFiniteNumber(before.stats.comboShards) ||
-        runFiniteNumber(after.stats.guardTokens) > runFiniteNumber(before.stats.guardTokens) ||
-        runFiniteNumber(after.lives) > runFiniteNumber(before.lives)
-    );
+    return runFiniteNumber(after.stats.comboShards) > runFiniteNumber(before.stats.comboShards);
 };
 
 const resolvedRewardChannelCount = (
@@ -310,11 +305,8 @@ const resolvedTraitMismatchCount = (before: RunState, after: RunState): number =
 
 const hasNearBrokenChainReward = (before: RunState, chainDepthLost: number): boolean =>
     chainDepthLost > 0 &&
-    (getChainRewardForecastCues(
-        chainDepthLost,
-        runFiniteNumber(before.stats.comboShards),
-        runFiniteNumber(before.lives)
-    )[0]?.distance ?? Number.POSITIVE_INFINITY) <= 2;
+    (getChainRewardForecastCues(chainDepthLost, runFiniteNumber(before.stats.comboShards))[0]?.distance ??
+        Number.POSITIVE_INFINITY) <= 2;
 
 const hasArmedNearChainReward = (before: RunState, after: RunState): boolean => {
     if (hasResolvedChainRewardCashout(before, after)) {
@@ -324,13 +316,7 @@ const hasArmedNearChainReward = (before: RunState, after: RunState): boolean => 
     if (chainDepth < 4) {
         return false;
     }
-    return (
-        getChainRewardForecastCues(
-            chainDepth,
-            runFiniteNumber(after.stats.comboShards),
-            runFiniteNumber(after.lives)
-        )[0]?.distance === 1
-    );
+    return getChainRewardForecastCues(chainDepth, runFiniteNumber(after.stats.comboShards))[0]?.distance === 1;
 };
 
 const chainMilestoneAccentFrequency = (milestone: ChainMilestoneFeedback): number => {

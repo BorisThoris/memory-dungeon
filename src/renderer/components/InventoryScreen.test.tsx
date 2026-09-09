@@ -44,7 +44,8 @@ describe('InventoryScreen', () => {
         render(<InventoryScreen />);
         const header = screen.getByTestId('inventory-meta-frame-run');
         expect(header).toHaveTextContent(/Run snapshot/);
-        expect(screen.getByTestId('inventory-run-line')).toHaveTextContent(/Floor 1 · .* · Score 0 · Lives \d/);
+        expect(screen.getByTestId('inventory-run-line')).toHaveTextContent(/Floor 1 · .* · Score 0$/);
+        expect(screen.getByTestId('inventory-run-line')).not.toHaveTextContent(/Lives/);
         // The build identity, contract and economy frames restated the codex and are gone.
         expect(screen.queryByTestId('inventory-meta-frame-build')).toBeNull();
         expect(screen.queryByTestId('inventory-meta-frame-economy')).toBeNull();
@@ -60,7 +61,8 @@ describe('InventoryScreen', () => {
 
         const charges = screen.getByTestId('inventory-charges-panel');
         expect(charges).toHaveTextContent(/Peek\s*\d/);
-        expect(charges).toHaveTextContent(/Guard tokens\s*\d/);
+        expect(charges).toHaveTextContent(/Combo shards\s*\d/);
+        expect(charges).not.toHaveTextContent(/Guard tokens/);
         expect(charges).toHaveTextContent(/Match score multiplier/);
     });
 
@@ -70,14 +72,14 @@ describe('InventoryScreen', () => {
             ...base,
             shuffleCharges: -2,
             peekCharges: -4,
-            stats: { ...base.stats, guardTokens: -2, comboShards: Number.POSITIVE_INFINITY }
+            stats: { ...base.stats, comboShards: Number.POSITIVE_INFINITY }
         };
         render(<InventoryScreen />);
         const charges = screen.getByTestId('inventory-charges-panel');
         expect(charges).not.toHaveTextContent(/Infinity|NaN|-\d/);
         expect(charges).toHaveTextContent(/Full shuffle\s*0/);
         expect(charges).toHaveTextContent(/Peek\s*0/);
-        expect(charges).toHaveTextContent(/Guard tokens\s*0/);
+        expect(charges).toHaveTextContent(/Combo shards\s*0/);
     });
 
     it('shows the empty state and Back when no run is active', () => {

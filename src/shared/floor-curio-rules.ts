@@ -31,7 +31,6 @@ export type FloorCurioId =
 export interface FloorCurioEffect {
     /** Added to the memorize window for this floor. Negative shortens it. */
     readonly memorizeBonusMs: number;
-    readonly guardTokens: number;
     readonly peekCharges: number;
     readonly shuffleCharges: number;
 }
@@ -48,7 +47,6 @@ export interface FloorCurio {
 }
 
 const NOTHING: FloorCurioEffect = {
-    guardTokens: 0,
     memorizeBonusMs: 0,
     peekCharges: 0,
     shuffleCharges: 0
@@ -92,9 +90,9 @@ export const FLOOR_CURIOS: readonly FloorCurio[] = [
     {
         id: 'off_duty_guard',
         name: 'An off-duty guard',
-        line: 'Not paid enough to fight anything. Will absolutely lend you a token and look the other way.',
-        effectSummary: 'One guard token, no questions.',
-        effect: { ...NOTHING, guardTokens: 1 }
+        line: 'Not paid enough to fight anything. Will absolutely let you have a look and look the other way.',
+        effectSummary: 'One peek, no questions.',
+        effect: { ...NOTHING, peekCharges: 1 }
     },
     {
         id: 'sticky_toffee',
@@ -168,9 +166,5 @@ export const applyFloorCurio = (run: RunState, curio: FloorCurio): RunState => (
     },
     peekCharges: Math.max(0, runNonNegativeInteger(run.peekCharges) + curio.effect.peekCharges),
     shuffleCharges: Math.max(0, runNonNegativeInteger(run.shuffleCharges) + curio.effect.shuffleCharges),
-    stats: {
-        ...run.stats,
-        guardTokens: Math.max(0, runNonNegativeInteger(run.stats.guardTokens) + curio.effect.guardTokens)
-    },
     floorCurioId: curio.id
 });

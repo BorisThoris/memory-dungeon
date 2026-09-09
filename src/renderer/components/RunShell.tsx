@@ -1,7 +1,7 @@
 import { memo, useEffect, useRef, useState, type CSSProperties, type ReactElement } from 'react';
 import type { RunState } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
-import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
+import { parTurnsForRun, turnCeilingForRun, turnsTakenThisFloor, turnsToCeiling } from '../../shared/floor-par';
 import { MUTATOR_CATALOG } from '../../shared/mechanics-encyclopedia';
 import { GameplayMenuIcon } from '../ui/gameplayIcons';
 import styles from './RunShell.module.css';
@@ -82,6 +82,7 @@ const useChainMeterDrop = (momentum: number, cleanRung: number): boolean => {
 const Stat = ({
     label,
     children,
+    ceilingNear = false,
     meter = null,
     personalBest = false,
     primary = false,
@@ -89,6 +90,8 @@ const Stat = ({
 }: {
     label: string;
     children: ReactElement | string;
+    /** The floor is within two turns of its ceiling; only the Par stat carries this. */
+    ceilingNear?: boolean;
     /** A bar under the value, the stat's full width; only the Chain stat carries one. */
     meter?: ReactElement | null;
     /** A small tag beside the label; only the Floor stat carries one, once the run is the deepest. */
@@ -98,6 +101,7 @@ const Stat = ({
 }): ReactElement => (
     <div
         className={`${styles.stat} ${primary ? styles.statPrimary : ''}`.trim()}
+        data-ceiling-near={ceilingNear ? 'true' : undefined}
         data-personal-best={personalBest ? 'true' : undefined}
         data-testid={testId}
     >
@@ -124,7 +128,6 @@ const RunShell = ({
     tools,
     onPause
 }: RunShellProps): ReactElement => {
-    const maxLives = Math.max(run.lives, 5);
     const mutatorTitles = run.activeMutators.map((id) => MUTATOR_CATALOG[id]?.title ?? id);
     const chainMeterView = runChainMeter(run);
     const chainMeterDropping = useChainMeterDrop(chainMeterView.momentum, chainTierRungs(run.board?.pairCount ?? null).clean);
@@ -143,30 +146,19 @@ const RunShell = ({
                         ? PASS_AND_PLAY_COPY.floorProgress(run.board?.level ?? 1, PASS_AND_PLAY_FLOORS)
                         : String(run.board?.level ?? 1)}
                 </Stat>
-                <Stat label="Lives" testId="hud-lives">
-                    {/* role="img": every heart inside is aria-hidden, so the label is the only text a screen
-                        reader has. Without a role, aria-label is prohibited here and gets ignored — the
-                        life count then reads as nothing at all. */}
-                    <span aria-label={`${run.lives} of ${maxLives} lives`} className={styles.hearts} role="img">
-                        {Array.from({ length: maxLives }, (_, index) => (
-                            <span
-                                aria-hidden="true"
-                                className={index < run.lives ? styles.heart : styles.heartLost}
-                                key={index}
-                            >
-                                &#9829;
-                            </span>
-                        ))}
-                    </span>
-                </Stat>
                 <Stat label="Score" primary testId="hud-score">
                     {runNonNegativeInteger(run.stats.totalScore).toLocaleString()}
                 </Stat>
                 {/* The par: a visible goal at every moment. Turns resolved on this floor over the
                     turns a competent player needs; beating it pays the floor-end efficiency bonus,
-                    missing it costs nothing else. */}
-                <Stat label="Par" testId="hud-par">
-                    <span aria-label={`${turnsTakenThisFloor(run)} of ${parTurnsForRun(run)} turns`} role="img">
+                    missing it costs nothing else. The ceiling, three times the par, is where the run
+                    ends if the floor is still open (§42.2), and the pressure of thesis §43 reads
+                    here, on the par, once it is two turns away: no hearts, no separate counter. */}
+                <Stat ceilingNear={turnsToCeiling(run) <= 2} label="Par" testId="hud-par">
+                    <span
+                        aria-label={`${turnsTakenThisFloor(run)} of ${parTurnsForRun(run)} turns, ceiling ${turnCeilingForRun(run)}`}
+                        role="img"
+                    >
                         {turnsTakenThisFloor(run)} / {parTurnsForRun(run)}
                     </span>
                 </Stat>
@@ -252,11 +244,6 @@ const RunShell = ({
                 <Stat label="Shards" testId="hud-combo-shards">
                     {String(run.stats.comboShards)}
                 </Stat>
-                {run.stats.guardTokens > 0 ? (
-                    <Stat label="Guards" testId="hud-guards">
-                        {String(run.stats.guardTokens)}
-                    </Stat>
-                ) : null}
                 {mutatorTitles.length > 0 ? (
                     <Stat label="Mutator" testId="hud-mutators">
                         <span style={{ fontSize: '0.95rem', letterSpacing: '0.04em' }}>{mutatorTitles.join(' · ')}</span>

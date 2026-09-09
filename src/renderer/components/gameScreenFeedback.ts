@@ -55,7 +55,6 @@ export const getVisualHudAnnouncementSignal = (
     const normalized = announcement.toLowerCase();
     if (
         priority === 'error' ||
-        normalized.includes('life lost') ||
         normalized.includes('lost reward target') ||
         normalized.includes('reward lost') ||
         normalized.includes('no match') ||
@@ -90,7 +89,7 @@ export const getVisualHudAnnouncementSignal = (
     ) {
         return { label: 'Reward', tone: 'reward' };
     }
-    if (normalized.includes('guard token') || normalized.includes('ward blocked') || normalized.includes('hazard warded')) {
+    if (normalized.includes('ward blocked') || normalized.includes('hazard warded')) {
         return { label: 'Guard', tone: 'guard' };
     }
     if (normalized.includes('trait') || normalized.includes('perk pop')) {
@@ -139,17 +138,9 @@ export const getVisualHudAnnouncementImpact = (
     const normalizedAnnouncement = announcement.toLowerCase();
     const chainLabel = getChainMultiplierLabel(normalizedAnnouncement);
     const hasFutureRewardSetup =
-        normalizedAnnouncement.includes('combo setup') ||
-        normalizedAnnouncement.includes('guard setup') ||
-        normalizedAnnouncement.includes('heal setup') ||
-        normalizedAnnouncement.includes('combo prime') ||
-        normalizedAnnouncement.includes('guard prime') ||
-        normalizedAnnouncement.includes('heal prime');
+        normalizedAnnouncement.includes('combo setup') || normalizedAnnouncement.includes('combo prime');
     const hasImmediateRewardTarget =
-        normalizedAnnouncement.includes('one-away cashout') ||
-        normalizedAnnouncement.includes('one-away guard') ||
-        normalizedAnnouncement.includes('one-away heal') ||
-        normalizedAnnouncement.includes('cashout armed');
+        normalizedAnnouncement.includes('one-away cashout') || normalizedAnnouncement.includes('cashout armed');
 
     if (chainLabel) {
         pushUniqueDetail(details, { label: `Chain ${chainLabel}`, tone: 'chain' });
@@ -219,33 +210,17 @@ export const getVisualHudAnnouncementImpact = (
         pushUniqueDetail(details, { label: 'One-away cashout', tone: 'reward' });
     } else if (normalizedAnnouncement.includes('cashout armed')) {
         pushUniqueDetail(details, { label: 'Cashout armed', tone: 'reward' });
-    } else if (normalizedAnnouncement.includes('one-away guard')) {
-        pushUniqueDetail(details, { label: 'One-away guard', tone: 'guard' });
-    } else if (normalizedAnnouncement.includes('one-away heal')) {
-        pushUniqueDetail(details, { label: 'One-away heal', tone: 'reward' });
     } else if (normalizedAnnouncement.includes('combo setup') || normalizedAnnouncement.includes('combo prime')) {
         pushUniqueDetail(details, { label: 'Combo prime', tone: 'reward' });
-    } else if (normalizedAnnouncement.includes('guard setup') || normalizedAnnouncement.includes('guard prime')) {
-        pushUniqueDetail(details, { label: 'Guard prime', tone: 'guard' });
-    } else if (normalizedAnnouncement.includes('heal setup') || normalizedAnnouncement.includes('heal prime')) {
-        pushUniqueDetail(details, { label: 'Heal prime', tone: 'reward' });
     }
     if (normalizedAnnouncement.includes('shop gold') || normalizedAnnouncement.includes('gold')) {
         pushUniqueDetail(details, { label: '+Gold', tone: 'reward' });
     }
-    if (normalizedAnnouncement.includes('life restored')) {
-        pushUniqueDetail(details, { label: '+Life', tone: 'reward' });
-    }
     if (normalizedAnnouncement.includes('claimed:') || normalizedAnnouncement.includes('pickup')) {
         pushUniqueDetail(details, { label: 'Pickup', tone: 'reward' });
     }
-    if (normalizedAnnouncement.includes('guard token') || normalizedAnnouncement.includes('ward blocked') || normalizedAnnouncement.includes('hazard warded')) {
-        const guardLabel = normalizedAnnouncement.includes('spent')
-            ? 'Guard spent'
-            : normalizedAnnouncement.includes('gained')
-              ? '+Guard'
-              : 'Guarded';
-        pushUniqueDetail(details, { label: guardLabel, tone: 'guard' });
+    if (normalizedAnnouncement.includes('ward blocked') || normalizedAnnouncement.includes('hazard warded')) {
+        pushUniqueDetail(details, { label: 'Guarded', tone: 'guard' });
     }
     if (normalizedAnnouncement.includes('trait routes') || normalizedAnnouncement.includes('trait route')) {
         pushUniqueDetail(details, { label: normalizedAnnouncement.includes('complete') ? 'Route paid' : 'Route progress', tone: 'trait' });
@@ -272,8 +247,8 @@ export const getVisualHudAnnouncementImpact = (
     if (normalizedAnnouncement.includes('moving enemy defeated') || normalizedAnnouncement.includes('dungeon enemy defeated')) {
         pushUniqueDetail(details, { label: 'Threat down', tone: 'guard' });
     }
-    if (priority === 'error' || normalizedAnnouncement.includes('life lost') || normalizedAnnouncement.includes('no match')) {
-        pushUniqueDetail(details, { label: normalizedAnnouncement.includes('no match') ? 'Miss' : 'Life lost', tone: 'risk' });
+    if (priority === 'error' || normalizedAnnouncement.includes('no match')) {
+        pushUniqueDetail(details, { label: 'Miss', tone: 'risk' });
     }
     if (
         normalizedAnnouncement.includes('no match') &&
@@ -325,14 +300,12 @@ export const getVisualHudAnnouncementFollowup = ({
     announcement,
     priority,
     runStatus,
-    remainingPairCount,
-    lives
+    remainingPairCount
 }: {
     announcement: string;
     priority: 'info' | 'error';
     runStatus: RunState['status'];
     remainingPairCount: number;
-    lives: number;
 }): string | null => {
     if (!announcement) {
         return null;
@@ -340,11 +313,7 @@ export const getVisualHudAnnouncementFollowup = ({
     const normalizedAnnouncement = announcement.toLowerCase();
 
     if (runStatus === 'gameOver') {
-        if (
-            normalizedAnnouncement.includes('moving enemy contact') ||
-            normalizedAnnouncement.includes('life lost') ||
-            normalizedAnnouncement.includes('mimic cache bit')
-        ) {
+        if (normalizedAnnouncement.includes('moving enemy contact') || normalizedAnnouncement.includes('mimic cache bit')) {
             return 'Next: review the run summary before starting the next descent.';
         }
         return null;
@@ -359,9 +328,7 @@ export const getVisualHudAnnouncementFollowup = ({
     }
 
     if (normalizedAnnouncement.includes('moving enemy contact')) {
-        return lives <= 1
-            ? 'Next: track the patrol path before risking the last life.'
-            : 'Next: pause on the patrol path and choose a safe pair away from it.';
+        return 'Next: pause on the patrol path and choose a safe pair away from it.';
     }
 
     if (normalizedAnnouncement.includes('moving enemy defeated') || normalizedAnnouncement.includes('moving enemies defeated')) {
@@ -381,19 +348,7 @@ export const getVisualHudAnnouncementFollowup = ({
     }
 
     if (normalizedAnnouncement.includes('mimic cache bit')) {
-        return lives <= 1
-            ? 'Next: recover control before touching another risky cache.'
-            : 'Next: treat unknown cache pairs as dangerous until confirmed.';
-    }
-
-    if (normalizedAnnouncement.includes('life lost')) {
-        return lives <= 1
-            ? 'Next: protect the last life before taking risks.'
-            : 'Next: slow down and protect remaining lives.';
-    }
-
-    if (normalizedAnnouncement.includes('life restored')) {
-        return 'Next: extra life secured; spend it only on controlled risks.';
+        return 'Next: treat unknown cache pairs as dangerous until confirmed.';
     }
 
     if (
@@ -413,22 +368,12 @@ export const getVisualHudAnnouncementFollowup = ({
 
     if (
         normalizedAnnouncement.includes('next reward') &&
-        (normalizedAnnouncement.includes('combo setup') ||
-            normalizedAnnouncement.includes('guard setup') ||
-            normalizedAnnouncement.includes('heal setup') ||
-            normalizedAnnouncement.includes('combo prime') ||
-            normalizedAnnouncement.includes('guard prime') ||
-            normalizedAnnouncement.includes('heal prime'))
+        (normalizedAnnouncement.includes('combo setup') || normalizedAnnouncement.includes('combo prime'))
     ) {
         return 'Next: prime the cashout with the safest confirmed match.';
     }
 
-    if (
-        normalizedAnnouncement.includes('next reward') &&
-        (normalizedAnnouncement.includes('one-away cashout') ||
-            normalizedAnnouncement.includes('one-away guard') ||
-            normalizedAnnouncement.includes('one-away heal'))
-    ) {
+    if (normalizedAnnouncement.includes('next reward') && normalizedAnnouncement.includes('one-away cashout')) {
         return 'Next: cashout is one match away; take the safest confirmed match.';
     }
 
@@ -475,16 +420,10 @@ export const getVisualHudAnnouncementFollowup = ({
             : 'Next: line up another trait interaction before the floor ends.';
     }
 
+    // The line after a miss (thesis §67): the cards reset, pick a remembered pair, and nothing about
+    // what it cost, because it cost nothing.
     if (normalizedAnnouncement.includes('no match')) {
         return 'Next: cards reset; pick a remembered pair.';
-    }
-
-    if (normalizedAnnouncement.includes('guard token spent')) {
-        return 'Next: guard absorbed the mistake; keep lives protected.';
-    }
-
-    if (normalizedAnnouncement.includes('guard token') && normalizedAnnouncement.includes('gained')) {
-        return 'Next: guard can absorb the next unsafe hit before lives drop.';
     }
 
     if (normalizedAnnouncement.includes('guard cache ward blocked')) {
@@ -509,10 +448,6 @@ export const getVisualHudAnnouncementFollowup = ({
 
     if (normalizedAnnouncement.includes('catalyst altar')) {
         return 'Next: shard value converted; reassess remaining power charges.';
-    }
-
-    if (normalizedAnnouncement.includes('parasite vessel')) {
-        return 'Next: pressure is reduced; keep the parasite answer controlled.';
     }
 
     if (normalizedAnnouncement.includes('pin lattice')) {
@@ -581,10 +516,8 @@ export const getVisualHudAnnouncementFollowup = ({
         return 'Next: take the third flip only if the wager is worth it.';
     }
 
-    if (priority === 'error' && lives > 0) {
-        return lives === 1
-            ? 'Next: protect the last life before taking risks.'
-            : 'Next: slow down and protect remaining lives.';
+    if (priority === 'error') {
+        return 'Next: cards reset; pick a remembered pair.';
     }
 
     return null;

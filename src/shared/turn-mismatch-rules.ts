@@ -1,30 +1,23 @@
 import { type BoardState, type RunState, type RunStatus, type Tile } from './contracts';
 import { applyMagpieTheft, resolveMagpieVisit } from './magpie-rules';
 import { hasMutator } from './mutators';
-import { hasFirstMismatchGrace } from './mismatch-grace-rules';
-import {
-    addPendingMemorizeBonusForLostLives,
-    decreaseRecallFocus,
-    rememberForgottenTiles
-} from './recall-rules';
-import {
-    clearResolveState
-} from './run-timer-rules';
-import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
+import { decreaseRecallFocus, rememberForgottenTiles } from './recall-rules';
+import { clearResolveState } from './run-timer-rules';
+import { runNonNegativeInteger } from './run-number-guards';
 import { calculateRating } from './scoring-rules';
 import { addTileTraitCountStats, normalizeSessionStats } from './session-stats-rules';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
 import { hideTileAfterTurn } from './tile-state-rules';
 import { calculateTileTraitMismatchPenalty } from './tile-trait-rules';
 
+/**
+ * What a miss costs (thesis §34, §42.2, §67). No life, because there are no lives: a miss is a
+ * try against the rating, a turn against the par, and the chain's momentum gone. A contract's
+ * mismatch limit is the one miss that can end a run here; the turn ceiling is applied after the
+ * turn, in `board-turn-transition.ts`, for a match and a miss alike.
+ */
 export interface MismatchPenalty {
-    consumesGuardToken: boolean;
     contractFail: boolean;
-    guardTokens: number;
-    hasGraceMismatch: boolean;
-    lives: number;
-    lostLife: boolean;
-    pendingMemorizeBonusMs: number;
     status: RunStatus;
     tries: number;
 }
@@ -41,37 +34,13 @@ export const createHiddenMismatchBoard = (
     };
 };
 
-export const calculateMismatchPenalty = (
-    run: RunState,
-    board: BoardState,
-    triesDelta: number
-): MismatchPenalty => {
+export const calculateMismatchPenalty = (run: RunState, triesDelta: number): MismatchPenalty => {
     const stats = normalizeSessionStats(run.stats);
-    const safeTries = runNonNegativeInteger(stats.tries);
-    const safeTriesDelta = runNonNegativeInteger(triesDelta);
-    const safeGuardTokens = runNonNegativeInteger(stats.guardTokens);
-    const safeLives = runNonNegativeInteger(run.lives);
-    const tries = safeTries + safeTriesDelta;
-    const hasGraceMismatch = hasFirstMismatchGrace(
-        { ...run, lives: safeLives, stats: { ...stats, guardTokens: safeGuardTokens, tries: safeTries } },
-        board
-    );
-    const consumesGuardToken = !hasGraceMismatch && safeGuardTokens > 0;
-    const lostLife = !hasGraceMismatch && !consumesGuardToken;
+    const tries = runNonNegativeInteger(stats.tries) + runNonNegativeInteger(triesDelta);
     const contractFail = run.activeContract?.maxMismatches != null && tries > run.activeContract.maxMismatches;
-    const lives = contractFail ? 0 : lostLife ? safeLives - 1 : safeLives;
-    const status: RunStatus = lives <= 0 || contractFail ? 'gameOver' : 'playing';
-    const guardTokens = consumesGuardToken ? decrementRunCounter(safeGuardTokens) : safeGuardTokens;
-
     return {
-        consumesGuardToken,
         contractFail,
-        guardTokens,
-        hasGraceMismatch,
-        lives,
-        lostLife,
-        pendingMemorizeBonusMs: addPendingMemorizeBonusForLostLives(run.pendingMemorizeBonusMs, lostLife ? 1 : 0),
-        status,
+        status: contractFail ? 'gameOver' : 'playing',
         tries
     };
 };
@@ -96,19 +65,18 @@ export const resolveMismatchTurnTransition = ({
     const stats = normalizeSessionStats(run.stats);
     const normalizedRun = { ...run, stats };
     const traitPenalty = calculateTileTraitMismatchPenalty(normalizedRun, sourceTiles, board);
-    const penalty = calculateMismatchPenalty(normalizedRun, board, triesDelta + traitPenalty.triesDelta);
+    const penalty = calculateMismatchPenalty(normalizedRun, triesDelta + traitPenalty.triesDelta);
     const hiddenBoard = createHiddenMismatchBoard(board, tileIds);
     const spunMiss = rotateRunShiftingSpotlight(run, hiddenBoard);
 
     /*
      * The magpie arrives last, after every other consequence of the miss has landed. It takes back
-     * a pair the player already cleared rather than a life or a point, so it has to act on the
-     * board the turn actually produced — otherwise it would steal from a state the player never saw.
+     * a pair the player already cleared rather than a point, so it has to act on the board the
+     * turn actually produced — otherwise it would steal from a state the player never saw.
      */
     const magpie = hasMutator(run, 'magpie_thief')
         ? resolveMagpieVisit({
               board: spunMiss.board,
-              guardTokens: penalty.guardTokens,
               mismatchCount: runNonNegativeInteger(stats.mismatches) + 1,
               rulesVersion: run.runRulesVersion,
               runSeed: run.runSeed
@@ -120,14 +88,11 @@ export const resolveMismatchTurnTransition = ({
     return {
         ...run,
         status: penalty.status,
-        lives: Math.max(penalty.lives, 0),
+        runEndReason: penalty.contractFail ? 'contract' : run.runEndReason ?? null,
         board: boardAfterMagpie,
         shiftingSpotlightNonce: spunMiss.shiftingSpotlightNonce,
         magpieTheftsThisFloor:
             runNonNegativeInteger(run.magpieTheftsThisFloor) + (magpie?.kind === 'theft' ? 1 : 0),
-        magpieScaredOffThisFloor:
-            runNonNegativeInteger(run.magpieScaredOffThisFloor) + (magpie?.kind === 'scared_off' ? 1 : 0),
-        pendingMemorizeBonusMs: penalty.pendingMemorizeBonusMs,
         stickyBlockIndex: null,
         recallFocus: decreaseRecallFocus(run),
         recallMistakesThisFloor: runNonNegativeInteger(run.recallMistakesThisFloor) + 1,
@@ -145,17 +110,6 @@ export const resolveMismatchTurnTransition = ({
             currentStreak: Math.floor(runNonNegativeInteger(stats.currentStreak) / 2),
             rating: calculateRating(penalty.tries),
             highestLevel: Math.max(runNonNegativeInteger(stats.highestLevel), runNonNegativeInteger(board.level)),
-            /*
-             * The magpie's token is spent here, not inside its own rules: it decides whether it
-             * was driven off, and the run is what actually holds the tokens. A visit that reports
-             * a spend and never deducts one is a protection the player pays nothing for.
-             */
-            guardTokens: Math.min(
-                runNonNegativeInteger(penalty.guardTokens),
-                magpie?.kind === 'scared_off'
-                    ? runNonNegativeInteger(magpie.guardTokens)
-                    : runNonNegativeInteger(penalty.guardTokens)
-            ),
             tileTraitMismatches: addTileTraitCountStats(stats.tileTraitMismatches, sourceTiles)
         },
         timerState: clearResolveState(run)

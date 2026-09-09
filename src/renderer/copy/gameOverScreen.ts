@@ -1,3 +1,5 @@
+import type { RunEndReason, RunSummary } from '../../shared/contracts';
+
 /**
  * User-visible strings for the post-run summary (GameOverScreen). Centralized for a11y review and future i18n.
  */
@@ -72,8 +74,27 @@ export const gameOverScreenCopy = {
             : 'No flip history stored for this run.',
     achievementEyebrow: 'Unlocked',
     achievementHeading: 'New archive entries',
-    flipTimelineSummary: 'Flip timeline'
+    flipTimelineSummary: 'Flip timeline',
+    /**
+     * How the run ended, one line under the score. A run ends two ways (thesis §42.2): the player
+     * stops, or a floor is still open at its turn ceiling. A contract's mismatch limit and a shared
+     * game's last floor are the other two exits the rules have. None of them is a verdict on the
+     * player - the ceiling line names the rule, not a failure.
+     */
+    endReason: {
+        turn_ceiling: (floor: number) => `The turn ceiling ran out on floor ${floor}.`,
+        quit: (floor: number) => `You stopped on floor ${floor}.`,
+        contract: (floor: number) => `The contract's mismatch limit ended the run on floor ${floor}.`,
+        pass_and_play_final_floor: (floor: number) => `The table played its last floor, floor ${floor}.`
+    } satisfies Record<RunEndReason, (floor: number) => string>
 } as const;
+
+/**
+ * The end-reason line for a summary, or nothing for one that predates the reason being recorded:
+ * an older summary reads as unknown rather than as any one of the four.
+ */
+export const runEndReasonLine = (summary: Pick<RunSummary, 'highestLevel' | 'runEndReason'>): string | null =>
+    summary.runEndReason ? gameOverScreenCopy.endReason[summary.runEndReason](summary.highestLevel) : null;
 
 /**
  * The achievements line for a run, picked by the reason they were off rather than by assuming one.

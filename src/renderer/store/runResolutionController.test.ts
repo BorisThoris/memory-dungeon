@@ -244,7 +244,6 @@ describe('runResolutionController', () => {
         const gameOverRun: RunState = {
             ...baseRun,
             achievementsEnabled: false,
-            lives: 0,
             status: 'gameOver',
             stats: {
                 ...baseRun.stats,
@@ -279,7 +278,6 @@ describe('runResolutionController', () => {
             ...baseRun,
             achievementsEnabled: false,
             activeMutators: { length: 3 },
-            lives: 0,
             status: 'gameOver',
             stats: {
                 ...baseRun.stats,
@@ -477,7 +475,6 @@ describe('runResolutionController', () => {
         harness.controller.applyImmediateGameOverFromTilePress({
             ...baseRun,
             achievementsEnabled: false,
-            lives: 0,
             status: 'gameOver'
         });
 
@@ -495,7 +492,6 @@ describe('runResolutionController', () => {
 
         harness.controller.applyResolvedRun({
             ...baseRun,
-            lives: 0,
             status: 'gameOver',
             stats: { ...baseRun.stats, bestScore: 700, highestLevel: 5, totalScore: 700 }
         });
@@ -527,7 +523,6 @@ describe('runResolutionController', () => {
 
         harness.controller.applyResolvedRun({
             ...baseRun,
-            lives: 0,
             status: 'gameOver',
             stats: { ...baseRun.stats, bestScore: 700, highestLevel: 5, totalScore: 700 }
         });

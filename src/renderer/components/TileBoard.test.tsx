@@ -56,7 +56,6 @@ const renderBoard = (props: {
     chainContext?: {
         comboShards: number;
         currentStreak: number;
-        lives: number;
     };
     recoveryContext?: {
         action: string;

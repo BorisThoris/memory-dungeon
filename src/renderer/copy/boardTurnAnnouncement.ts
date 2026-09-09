@@ -8,8 +8,8 @@ import { getFindableAnnouncementText } from './hudActionFeedback';
 /** Chain lengths that earn a called-out milestone announcement. */
 export const CHAIN_MILESTONE_THRESHOLDS = [3, 6, 10] as const;
 
-const chainRewardAnnouncementLine = (streak: number, comboShards: number, lives: number): string => {
-    const cue = getChainRewardForecastCues(streak, comboShards, lives)[0];
+const chainRewardAnnouncementLine = (streak: number, comboShards: number): string => {
+    const cue = getChainRewardForecastCues(streak, comboShards)[0];
     return cue ? ` Next reward: ${getChainRewardUrgencyCopy(cue)}: ${cue.label} in ${cue.distanceLabel}.` : '';
 };
 
@@ -18,7 +18,7 @@ const chainRewardAnnouncementLine = (streak: number, comboShards: number, lives:
  * streak the core reported rather than from a remembered previous streak.
  */
 export const chainMilestoneAnnouncement = (turnEvent: BoardTurnResolvedEvent): string | null => {
-    const { currentStreakBefore, currentStreakAfter, comboShardsAfter, livesAfter } = turnEvent.announcement;
+    const { currentStreakBefore, currentStreakAfter, comboShardsAfter } = turnEvent.announcement;
     if (currentStreakAfter <= currentStreakBefore) {
         return null;
     }
@@ -29,7 +29,7 @@ export const chainMilestoneAnnouncement = (turnEvent: BoardTurnResolvedEvent): s
         return null;
     }
     const milestone = getChainMilestoneFeedback(currentStreakBefore, currentStreakAfter);
-    const rewardLine = chainRewardAnnouncementLine(currentStreakAfter, comboShardsAfter, livesAfter);
+    const rewardLine = chainRewardAnnouncementLine(currentStreakAfter, comboShardsAfter);
     return milestone
         ? `${milestone.label}: ${milestone.target}. ${milestone.value}.${rewardLine}`
         : `Chain times ${crossed} - keep the chain for bigger match payouts.${rewardLine}`;
@@ -108,12 +108,8 @@ export interface BoardTurnAnnouncementResult {
  * be reconstructing what the core already said.
  */
 export const magpieAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): string[] => {
-    const { magpieTheftsBefore, magpieTheftsAfter, magpieScaredOffBefore, magpieScaredOffAfter } =
-        turnEvent.announcement;
-    return [
-        ...(magpieTheftsAfter > magpieTheftsBefore ? [MAGPIE_BEAT_COPY.theftAnnouncement] : []),
-        ...(magpieScaredOffAfter > magpieScaredOffBefore ? [MAGPIE_BEAT_COPY.scaredAnnouncement] : [])
-    ];
+    const { magpieTheftsBefore, magpieTheftsAfter } = turnEvent.announcement;
+    return magpieTheftsAfter > magpieTheftsBefore ? [MAGPIE_BEAT_COPY.theftAnnouncement] : [];
 };
 
 /**

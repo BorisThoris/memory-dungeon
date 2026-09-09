@@ -856,7 +856,7 @@ async function discoverMismatchPair(
 }
 
 /**
- * Burn lives with mismatches until game over (level 1). Flake patterns:
+ * Miss until the turn ceiling ends the run (level 1: three times the par). Flake patterns:
  * - Same as `discoverMismatchPair` for the discovery phase; burn loop waits for board reset or overlay via polling
  *   (slow machines can exceed a fixed `MATCH_SETTLE_MS`).
  * - If CI keeps failing here, increase the visual scenario timeout before weakening the live game-over path.

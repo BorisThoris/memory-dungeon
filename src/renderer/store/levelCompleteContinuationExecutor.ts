@@ -25,37 +25,6 @@ export interface LevelCompleteContinuationExecutorDeps {
     setState: (patch: ContinuationPatch) => void;
 }
 
-/*
- * A run that reached the floor-clear interlude with no lives left is over, whatever else the
- * interlude was about to offer. This used to live in the side-room surface, which went with the
- * route layer in Gen 173; the guard stays because dying on the last match of a floor still lands
- * here.
- */
-const createDeadInterludeGameOverRun = (run: RunState): RunState | null => {
-    if (run.status !== 'gameOver' && run.lives > 0) {
-        return null;
-    }
-    return {
-        ...run,
-        status: 'gameOver',
-        lives: 0
-    };
-};
-
-const routeDeadInterludeRunToGameOver = (
-    run: RunState,
-    applyResolvedRun: (run: RunState) => void
-): boolean => {
-    const gameOverRun = createDeadInterludeGameOverRun(run);
-
-    if (!gameOverRun) {
-        return false;
-    }
-
-    applyResolvedRun(gameOverRun);
-    return true;
-};
-
 const routePassAndPlayFinalFloorToGameOver = (
     run: RunState,
     applyResolvedRun: (run: RunState) => void
@@ -64,7 +33,7 @@ const routePassAndPlayFinalFloorToGameOver = (
     if (!isPassAndPlayRun(run.passAndPlay) || !isPassAndPlayFinalFloor(clearedLevel)) {
         return false;
     }
-    applyResolvedRun({ ...run, status: 'gameOver' });
+    applyResolvedRun({ ...run, status: 'gameOver', runEndReason: 'pass_and_play_final_floor' });
     return true;
 };
 
@@ -91,14 +60,10 @@ export const executeContinueToNextLevel = (deps: LevelCompleteContinuationExecut
         return;
     }
 
-    if (routeDeadInterludeRunToGameOver(run, deps.applyResolvedRun)) {
-        return;
-    }
-
     /*
      * A shared game is a contest of an agreed length, not an endless descent: once the last floor
      * is cleared the table is done and the standings decide it. Ending here rather than inside the
-     * turn rules keeps the board, the floors and the lives exactly as a solo run has them — the
+     * turn rules keeps the board, the floors and the ceiling exactly as a solo run has them — the
      * only thing multiplayer changes is when the run stops.
      */
     if (routePassAndPlayFinalFloorToGameOver(run, deps.applyResolvedRun)) {

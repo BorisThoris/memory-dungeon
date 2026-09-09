@@ -15,11 +15,5 @@ export const MAGPIE_BEAT_COPY = {
     /** The run line, which is one sentence and has to carry the whole event. */
     theftLine: 'The magpie took a pair you had already found.',
     /** Spoken to a screen reader, where nothing on the board is visible to lean on. */
-    theftAnnouncement: 'The magpie took back a pair you had already matched and hid it somewhere else on the board.',
-
-    /** A guard token was spent, which the player has to be told or they will never hold one again. */
-    scaredTitle: 'The magpie thought better of it',
-    scaredBody: 'Your guard token saw it off. It cost you the token.',
-    scaredLine: 'A guard token drove the magpie off.',
-    scaredAnnouncement: 'A guard token drove the magpie off. The token is spent and nothing was taken.'
+    theftAnnouncement: 'The magpie took back a pair you had already matched and hid it somewhere else on the board.'
 } as const;

@@ -615,8 +615,7 @@ export const resolveTileTraitEffects = ({
             matchedTraits: [...traits],
             adjacentTraits: [...adjacentTraitKinds],
             matchedFindables: [],
-            featuredObjectiveCompleted: false,
-            scoreParasiteActive: false
+            featuredObjectiveCompleted: false
         };
         const sourceHash = hashStringToSeed(sourceTiles.map((tile) => tile.id).sort().join('|'));
         const command = createGameplayDefinitionCommand(

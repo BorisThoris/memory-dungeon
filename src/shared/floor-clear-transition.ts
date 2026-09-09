@@ -1,8 +1,4 @@
-import {
-    MAX_LIVES,
-    type BoardState,
-    type RunState
-} from './contracts';
+import type { BoardState, RunState } from './contracts';
 import { getFloorClearLevelResultTags } from './secondary-objectives';
 import { calculateRating } from './scoring-rules';
 import {
@@ -13,8 +9,7 @@ import {
 import {
     calculateFloorClearBonus,
     calculateFloorClearScore,
-    createFloorClearLevelResult,
-    getClearLifeReason
+    createFloorClearLevelResult
 } from './level-clear-rules';
 import { parTurnsForFloor, turnsTakenThisFloor } from './floor-par';
 import { getFloorClearObjectiveResult } from './secondary-objective-rules';
@@ -27,12 +22,9 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
     const board: BoardState = { ...clearedBoard, flippedTileIds: [] };
     const stats = normalizeSessionStats(run.stats);
     const tries = runNonNegativeInteger(stats.tries);
-    const livesBeforeClear = runNonNegativeInteger(run.lives);
     const currentLevelScoreBeforeClear = runNonNegativeInteger(stats.currentLevelScore);
     const totalScoreBeforeClear = runNonNegativeInteger(stats.totalScore);
     const perfect = tries === 0;
-    const clearLifeReason = getClearLifeReason(tries);
-    const clearLifeGained = clearLifeReason !== 'none' && livesBeforeClear < MAX_LIVES ? 1 : 0;
     const floorClearObjective = getFloorClearObjectiveResult(run, board);
     const bonusTags: string[] = [...floorClearObjective.bonusTags];
     const objectiveBonus = floorClearObjective.objectiveBonus;
@@ -72,7 +64,6 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
     const totalScore = bankedScoreBeforeClear + scoreGained;
     const bestScore = Math.max(runNonNegativeInteger(stats.bestScore), totalScore);
     const rating = calculateRating(tries);
-    const lives = Math.min(MAX_LIVES, livesBeforeClear + clearLifeGained);
     if (momentumBonus.tier === 'fever') {
         bonusTags.push(EXTREME_FEVER_BONUS_TAG);
     }
@@ -81,15 +72,12 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
     const floorChainTier = getChainTier(runNonNegativeInteger(run.bestChainThisFloor), board.pairCount);
     const lastLevelResult = createFloorClearLevelResult({
         bonusTags,
-        clearLifeGained,
-        clearLifeReason,
         featuredObjectiveCompleted,
         featuredObjectiveId,
         featuredObjectiveStreak: featuredObjectiveClear.featuredObjectiveStreak,
         featuredObjectiveStreakBonus: featuredObjectiveClear.featuredObjectiveStreakBonus,
         floorBonus,
         level: board.level,
-        livesRemaining: lives,
         mistakes: tries,
         momentumBonus,
         objectiveBonusScore: objectiveBonus,
@@ -105,7 +93,6 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
     return {
         ...run,
         status: 'levelComplete',
-        lives,
         featuredObjectiveStreak: featuredObjectiveClear.featuredObjectiveStreak,
         board,
         pinnedTileIds: [],

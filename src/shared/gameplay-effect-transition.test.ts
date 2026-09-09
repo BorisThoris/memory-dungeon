@@ -19,7 +19,6 @@ const run = (overrides: Partial<RunState> = {}): RunState => ({
         totalScore: 0,
         currentLevelScore: 0,
         comboShards: 0,
-        guardTokens: 0,
         currentStreak: 0
     },
     ...overrides

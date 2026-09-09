@@ -16,7 +16,7 @@ export interface SaveFieldPolicy {
     recoveryPolicy: string;
 }
 
-export const SAVE_FIELD_POLICY_VERSION = 'save-178-v7';
+export const SAVE_FIELD_POLICY_VERSION = 'save-183-v8';
 
 const SAVE_FIELD_POLICIES: readonly SaveFieldPolicy[] = [
     {
@@ -48,6 +48,14 @@ const SAVE_FIELD_POLICIES: readonly SaveFieldPolicy[] = [
         owner: 'RunSummary',
         migrationRequiredWhenChanged: true,
         recoveryPolicy: 'Rules-version summaries are preserved for current and older schema versions.'
+    },
+    {
+        field: 'lastRunSummary.runEndReason',
+        scope: 'persisted_save',
+        owner: 'RunSummary',
+        migrationRequiredWhenChanged: false,
+        recoveryPolicy:
+            'How the run ended (turn ceiling, quit, contract, or a shared game\'s last floor). Absent on summaries from before Gen 183 and read as unknown; nothing is inferred from the older lives count.'
     },
     {
         field: 'lastRunSummary.gameMode',

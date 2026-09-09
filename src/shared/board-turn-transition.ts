@@ -1,6 +1,5 @@
 import {
     MAX_COMBO_SHARDS,
-    MAX_GUARD_TOKENS,
     type BoardState,
     type FindableKind,
     type RunState,
@@ -15,6 +14,7 @@ import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
 import { deriveMatchClaimContext } from './match-claim-rules';
 import { selectGambitMatchedPair } from './gambit-match-rules';
 import { resolveMismatchTurnTransition } from './turn-mismatch-rules';
+import { floorHitTurnCeiling } from './floor-par';
 import { calculateResolvedMatchSurvivalReward } from './turn-match-reward-rules';
 import { resolveTurnMatchFollowup } from './turn-match-followup-rules';
 import { resolveTurnMatchBoardCleanup } from './turn-match-board-cleanup-rules';
@@ -92,6 +92,22 @@ interface ResolvedMatchInput {
     commandTag: 'gambit' | 'match';
     execution?: BoardTurnExecutionContext;
 }
+
+/**
+ * The turn ceiling (thesis §42.2), applied after a match and a miss alike: a floor still open on
+ * its ceiling turn ends the run. A floor that cleared on that turn has already left `playing`
+ * and is a clear. Nothing else ends a run mid-floor.
+ */
+export const applyTurnCeiling = (run: RunState): RunState =>
+    floorHitTurnCeiling(run)
+        ? {
+              ...run,
+              status: 'gameOver',
+              runEndReason: 'turn_ceiling',
+              board: run.board ? { ...run.board, flippedTileIds: [] } : run.board,
+              timerState: clearResolveState(run)
+          }
+        : run;
 
 export const createResolveBoardTurnTransition = ({
     finalizeLevel,
@@ -220,7 +236,6 @@ export const createResolveBoardTurnTransition = ({
         const nextRun: RunState = {
             ...journaledRun,
             status: 'playing',
-            lives: survivalReward.lives,
             board: spun.board,
             shiftingSpotlightNonce: spun.shiftingSpotlightNonce,
             powersUsedThisRun: usedWild ? true : run.powersUsedThisRun,
@@ -250,7 +265,6 @@ export const createResolveBoardTurnTransition = ({
                 currentStreak: runNonNegativeInteger(scoring.currentStreak),
                 bestStreak: Math.max(runNonNegativeInteger(stats.bestStreak), runNonNegativeInteger(scoring.currentStreak)),
                 highestLevel: Math.max(runNonNegativeInteger(stats.highestLevel), runNonNegativeInteger(board.level)),
-                guardTokens: Math.min(MAX_GUARD_TOKENS, runNonNegativeInteger(survivalReward.guardTokens)),
                 comboShards: Math.min(MAX_COMBO_SHARDS, runNonNegativeInteger(survivalReward.comboShards)),
                 tileTraitMatches: addTileTraitCountStats(stats.tileTraitMatches, [firstTile, secondTile])
             },
@@ -381,12 +395,12 @@ export const createResolveBoardTurnTransition = ({
             return run;
         }
         if (flippedTileIds.length === 3) {
-            return resolveGambitThree(run, encorePairKeys, execution);
+            return applyTurnCeiling(resolveGambitThree(run, encorePairKeys, execution));
         }
         if (flippedTileIds.length !== 2) {
             return run;
         }
-        return resolveTwoFlippedTiles(run, encorePairKeys, execution);
+        return applyTurnCeiling(resolveTwoFlippedTiles(run, encorePairKeys, execution));
     };
     return resolveBoardTurn;
 };

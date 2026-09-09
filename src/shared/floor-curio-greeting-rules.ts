@@ -20,7 +20,6 @@ import { runNonNegativeInteger } from './run-number-guards';
  */
 export interface FloorCurioGreetingEffect {
     readonly peekCharges: number;
-    readonly guardTokens: number;
     readonly strayRemoveCharges: number;
     readonly undoUses: number;
 }
@@ -37,7 +36,6 @@ export interface FloorCurioGreeting {
 }
 
 const NOTHING: FloorCurioGreetingEffect = {
-    guardTokens: 0,
     peekCharges: 0,
     strayRemoveCharges: 0,
     undoUses: 0
@@ -83,9 +81,12 @@ export const FLOOR_CURIO_GREETINGS: Readonly<Record<FloorCurioId, FloorCurioGree
     },
     off_duty_guard: {
         curioId: 'off_duty_guard',
-        reply: '"Bird about," he says, without looking up. "Takes things. Have one of these, I have plenty."',
-        gained: 'A guard token, and a warning about the magpie you were going to need anyway.',
-        effect: { ...NOTHING, guardTokens: 1 }
+        reply: '"Bird about," he says, without looking up. "Takes things. Already looked the other way once for you; twice gets noticed."',
+        gained: 'Nothing more - the look was on the way in - and a warning about the magpie you were going to need anyway.',
+        // Gen 183: the token he lent bought a life, and there are no lives. His gift is the peek on
+        // arrival (`floor-curio-rules.ts`); the torchbearer's greeting is the one that pays a peek,
+        // and a cast where two residents hand over the same thing is one button with two labels.
+        effect: NOTHING
     },
     sticky_toffee: {
         curioId: 'sticky_toffee',
@@ -124,11 +125,7 @@ export const greetFloorCurio = (run: RunState): RunState => {
         floorCurioGreeted: true,
         peekCharges: runNonNegativeInteger(run.peekCharges) + greeting.effect.peekCharges,
         strayRemoveCharges: runNonNegativeInteger(run.strayRemoveCharges) + greeting.effect.strayRemoveCharges,
-        undoUsesThisFloor: runNonNegativeInteger(run.undoUsesThisFloor) + greeting.effect.undoUses,
-        stats: {
-            ...run.stats,
-            guardTokens: runNonNegativeInteger(run.stats.guardTokens) + greeting.effect.guardTokens
-        }
+        undoUsesThisFloor: runNonNegativeInteger(run.undoUsesThisFloor) + greeting.effect.undoUses
     };
 };
 

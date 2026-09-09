@@ -224,7 +224,7 @@ describe('tile trait rules', () => {
             board,
             matchResolutionsThisFloor: Number.NaN,
             peekCharges: Number.POSITIVE_INFINITY,
-            stats: { ...makeRun([]).stats, currentStreak: Number.POSITIVE_INFINITY, guardTokens: Number.NaN }
+            stats: { ...makeRun([]).stats, currentStreak: Number.POSITIVE_INFINITY, comboShards: Number.NaN }
         });
         const malformedStats = { ...run, stats: Number.NaN as unknown as RunState['stats'] };
 
@@ -352,7 +352,7 @@ describe('tile trait rules', () => {
         expect(calculateTileTraitMismatchPenalty(makeRun([], { peekCharges: 1 }), [heavyA, b1])).toEqual({ triesDelta: 1 });
         expect(
             calculateTileTraitMismatchPenalty(
-                makeRun([], { stats: { ...makeRun([]).stats, guardTokens: Number.POSITIVE_INFINITY } }),
+                makeRun([], { stats: { ...makeRun([]).stats, tries: Number.POSITIVE_INFINITY } }),
                 [a1, b1]
             )
         ).toEqual({ triesDelta: 0 });

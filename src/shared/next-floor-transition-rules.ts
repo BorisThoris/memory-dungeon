@@ -10,38 +10,14 @@ import {
     pickFloorScheduleEntry,
     usesEndlessFloorSchedule
 } from './floor-mutator-schedule';
-import { createTimerState } from './run-timer-rules';
 import { getMemorizeDurationForRun } from './scoring-rules';
 import { buildBoard } from './board-build-rules';
 import { createNextFloorRunState } from './next-floor-run-state-rules';
 import { runArray } from './run-array-guards';
-import {
-    advanceScoreParasiteFloor,
-    type ScoreParasiteFloorAdvance
-} from './score-parasite-rules';
 
-export interface AdvanceToNextLevelOptions {
-    parasiteAdvance?: ScoreParasiteFloorAdvance;
-}
-
-export const advanceToNextLevel = (
-    run: RunState,
-    options: AdvanceToNextLevelOptions = {}
-): RunState => {
+export const advanceToNextLevel = (run: RunState): RunState => {
     if (run.status !== 'levelComplete' || !run.board) {
         return run;
-    }
-
-    if (run.lives <= 0) {
-        return {
-            ...run,
-            status: 'gameOver',
-            lives: 0,
-            lastLevelResult: run.lastLevelResult
-                ? { ...run.lastLevelResult, livesRemaining: 0 }
-                : run.lastLevelResult,
-            timerState: createTimerState()
-        };
     }
 
     const nextLevelNum = run.board.level + 1;
@@ -59,27 +35,7 @@ export const advanceToNextLevel = (
         nextCycleFloor = entry.cycleFloor;
     }
 
-    const parasiteAdvance = options.parasiteAdvance ?? advanceScoreParasiteFloor(run);
-    const transitionRun: RunState = {
-        ...run,
-        lives: parasiteAdvance.lives,
-        parasiteFloors: parasiteAdvance.parasiteFloors
-    };
-    const parasiteFloors = transitionRun.parasiteFloors;
-    const lives = transitionRun.lives;
-
-    if (lives <= 0) {
-        return {
-            ...transitionRun,
-            status: 'gameOver',
-            lives: 0,
-            parasiteFloors,
-            lastLevelResult: run.lastLevelResult
-                ? { ...run.lastLevelResult, livesRemaining: 0 }
-                : run.lastLevelResult,
-            timerState: createTimerState()
-        };
-    }
+    const transitionRun: RunState = run;
 
     const nextBoard = buildBoard(nextLevelNum, {
         runSeed: run.runSeed,
@@ -94,13 +50,10 @@ export const advanceToNextLevel = (
     });
     const runForNextMemorize: RunState = { ...transitionRun, activeMutators: nextActiveMutators, board: nextBoard };
     const baseMemorizeMs = getMemorizeDurationForRun(runForNextMemorize, nextBoard.level);
-    const memorizeWithBonus = baseMemorizeMs + run.pendingMemorizeBonusMs;
 
     return createNextFloorRunState(transitionRun, {
-        lives,
         activeMutators: nextActiveMutators,
         board: nextBoard,
-        parasiteFloors,
-        memorizeRemainingMs: memorizeWithBonus
+        memorizeRemainingMs: baseMemorizeMs
     });
 };

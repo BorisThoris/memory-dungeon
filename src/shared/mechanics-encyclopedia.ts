@@ -3,7 +3,7 @@
  * (mutators, the one mode, achievements) plus explicit articles for powers, pickups, board specials, and contracts.
  *
  * Every entry describes a rule that exists in `src/shared` today. When a system is removed, its entries go
- * with it rather than staying as history; the history lives in docs/REMOVED_DUNGEON_LAYER.md.
+ * with it rather than staying as history; the history is in the docs/REMOVED_*.md files.
  *
  * **Version** bumps when entries are added, removed, or meaningfully rewritten (helps audits and saves).
  * Gameplay rules remain in `game.ts`; this file is **labels + reference only**.
@@ -11,7 +11,7 @@
 import type { AchievementId, GameMode, MutatorId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 31 as const;
+export const ENCYCLOPEDIA_VERSION = 32 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -43,8 +43,6 @@ export type EncyclopediaTopic = CodexCoreTopic;
 
 export interface MechanicsGlossaryTerm {
     id:
-        | 'lives'
-        | 'guard_tokens'
         | 'combo_shards'
         | 'mutators'
         | 'contracts'
@@ -61,23 +59,9 @@ export interface MechanicsGlossaryTerm {
 
 export const MECHANICS_GLOSSARY_TERMS: readonly MechanicsGlossaryTerm[] = [
     {
-        id: 'lives',
-        preferredLabel: 'Lives',
-        shortDefinition: 'Run-wide health. Lives carry between floors; mismatches can remove them after grace/guard protection.',
-        avoidLabels: ['hearts as currency', 'energy'],
-        surfaces: ['HUD', 'Game over', 'Settings']
-    },
-    {
-        id: 'guard_tokens',
-        preferredLabel: 'Guard tokens',
-        shortDefinition: 'Mismatch protection earned from long match streaks; capped and run-scoped.',
-        avoidLabels: ['shield currency', 'premium shield'],
-        surfaces: ['HUD', 'Inventory', 'Codex']
-    },
-    {
         id: 'combo_shards',
         preferredLabel: 'Combo shards',
-        shortDefinition: 'Streak resource: every second consecutive match adds one, and three convert into a life when you are below the cap.',
+        shortDefinition: 'Streak resource: every second consecutive match adds one, chunk breaks and shard sparks add more; the bank is small and resets with the run.',
         avoidLabels: ['gems', 'paid shards'],
         surfaces: ['HUD', 'Inventory', 'Findables']
     },
@@ -133,11 +117,11 @@ export const MECHANICS_GLOSSARY_TERMS: readonly MechanicsGlossaryTerm[] = [
 ];
 
 const DEFAULT_MECHANICS_GLOSSARY_TERM: MechanicsGlossaryTerm = {
-    id: 'lives',
-    preferredLabel: 'Lives',
-    shortDefinition: 'Run-wide health. Lives carry between floors; mismatches can remove them after grace/guard protection.',
-    avoidLabels: ['hearts as currency', 'energy'],
-    surfaces: ['HUD', 'Game over', 'Settings']
+    id: 'mutators',
+    preferredLabel: 'Mutators',
+    shortDefinition: 'Rule modifiers that change floor pressure, presentation, scoring, or board constraints.',
+    avoidLabels: ['debuffs only', 'mods'],
+    surfaces: ['HUD', 'Codex', 'Floor banner']
 };
 
 export const glossaryTermById = (id: MechanicsGlossaryTerm['id']): MechanicsGlossaryTerm =>
@@ -173,9 +157,11 @@ export const ACHIEVEMENT_CATALOG: Record<AchievementId, AchievementCodexEntry> =
         description: 'Clear a floor with zero mismatches and no powers that run. Pins are allowed.'
     },
     ACH_LAST_LIFE: {
+        // The id is a Steam API name and stays; the achievement it names changed in Gen 183, when
+        // lives went and the turn ceiling came in (docs/REMOVED_LIVES.md).
         id: 'ACH_LAST_LIFE',
-        title: 'One Heart Wonder',
-        description: 'Finish a level with exactly one life remaining.'
+        title: 'Last Turn Standing',
+        description: 'Clear a floor on the final turn before its ceiling.'
     },
     ACH_ENDLESS_TEN: {
         id: 'ACH_ENDLESS_TEN',
@@ -255,12 +241,6 @@ export const MUTATOR_CATALOG: Record<MutatorId, MutatorDefinition> = {
         description:
             'After a match, **one board slot** is reserved so your **next opening flip** must start elsewhere—flip-order pressure only (often highlighted in the HUD).'
     },
-    score_parasite: {
-        id: 'score_parasite',
-        title: 'Score parasite',
-        description:
-            'While active, each **floor advance** counts toward parasite pressure; every **fourth** advance costs **one life**. Nothing absorbs the hit, so pace long runs accordingly.'
-    },
     category_letters: {
         id: 'category_letters',
         title: 'Letters only',
@@ -310,7 +290,7 @@ export const MUTATOR_CATALOG: Record<MutatorId, MutatorDefinition> = {
         id: 'magpie_thief',
         title: 'The magpie',
         description:
-            'Something bright-eyed is nesting on this floor. Every **third miss** it drops in, takes a **pair you already cleared**, and hides it again somewhere you have never looked. Your **score keeps the points** — what it takes is the knowing. A **guard token** scares it off, if you are holding one when it arrives.'
+            'Something bright-eyed is nesting on this floor. Every **third miss** it drops in, takes a **pair you already cleared**, and hides it again somewhere you have never looked. Your **score keeps the points** — what it takes is the knowing.'
     }
 };
 
@@ -335,12 +315,13 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
         id: 'memorize',
         title: 'Memorize phase',
         description:
-            'Each floor begins with tiles face-up briefly, then play continues hidden. Mutators such as Short memorize can shorten this window, and losing a life banks a little extra study time for the next floor.'
+            'Each floor begins with tiles face-up briefly, then play continues hidden. Mutators such as Short memorize can shorten this window, and some floor residents lend or take a little of it.'
     },
     {
-        id: 'lives',
-        title: 'Lives and clears',
-        description: 'Mismatches cost lives. Lives carry across the run instead of resetting each floor; clears advance the floor.'
+        id: 'turn_ceiling',
+        title: 'The turn ceiling',
+        description:
+            'Every floor has a **ceiling** of **three times its par** in turns; a floor not cleared within it ends the run, and that is the only way a run ends on its own - otherwise it ends when you stop. A bad floor costs nothing beyond that: a miss resets the chain and a slow clear pays a smaller floor-end bonus, and the next floor begins like any other. The run bar shows turns against par and marks the last two turns before the ceiling.'
     },
     {
         id: 'scoring',
@@ -427,7 +408,7 @@ export const ENCYCLOPEDIA_POWER_TOPICS: readonly EncyclopediaTopic[] = [
 ];
 
 /**
- * Floor bonuses, streak rewards, and optional rules that affect score/lives — mirrors `finalizeLevel` / match resolution in `game.ts`.
+ * Floor bonuses, streak rewards, and optional rules that affect score — mirrors `finalizeLevel` / match resolution in `game.ts`.
  */
 export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopic[] = [
     {
@@ -474,15 +455,9 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
     },
     {
         id: 'sys_combo_shards',
-        title: 'Combo shards → extra life',
+        title: 'Combo shards',
         description:
-            'Each **even-numbered** consecutive match adds a **combo shard** (bank capped low). At **three** shards, if you are below max lives, shards convert to **+1 life** (remainder stays in the bank). Shard sparks on the board add shards to the same bank.'
-    },
-    {
-        id: 'sys_chain_heal_and_guard',
-        title: 'Chain heal & combo guard tokens',
-        description:
-            'Long **match streaks** can **restore a life** (every 8th consecutive match) and earn **guard tokens** (every 4th consecutive match, capped). The **first mismatch of a floor** is free (no life); after that, a **guard token** can absorb a mismatch instead of losing a life when available.'
+            'Each **even-numbered** consecutive match adds a **combo shard**; chunk breaks and shard sparks on the board add to the same bank. The bank is small and resets with the run: shards are a reading of momentum, not something to spend.'
     },
     {
         id: 'sys_shuffle_score_tax',
@@ -501,12 +476,6 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         title: 'Presentation mutators (match score)',
         description:
             '**Wide recall**, **Silhouette twist**, and **Distraction channel** apply a small **flat penalty to each successful match score** while active (rules stay consistent between logic and renderer).'
-    },
-    {
-        id: 'sys_clear_life_bonus',
-        title: 'Bonus life on level clear',
-        description:
-            'Clearing a floor with **zero tries** can grant **+1 life** when you are below the life cap (**perfect** clear path). A **single** mismatch clear may still grant a smaller **clean** life bonus—see the results summary for that floor.'
     }
 ];
 
@@ -543,7 +512,7 @@ export const ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS: readonly EncyclopediaTopi
         id: 'meta_memorize_pacing',
         title: 'Memorize pacing',
         description:
-            'Study time starts from a **base**, adjusts in **steps** toward a **floor minimum**, and **relaxes** every few levels so memorize does not shrink every single floor. Losing a life **banks** a small memorize bonus for the **next** floor (capped).'
+            'Study time starts from a **base**, adjusts in **steps** toward a **floor minimum**, and **relaxes** every few levels so memorize does not shrink every single floor. A floor resident can lend or take a little of the **next** floor\'s study time (capped).'
     },
     {
         id: 'meta_floor_cycle_boss',

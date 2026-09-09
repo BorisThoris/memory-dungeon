@@ -132,7 +132,7 @@ export const consumeWildMatchThroughGameplayCore = (
     return { run: result.run, commands: [command], events: result.events };
 };
 
-/** Owns one complete floor transition without journaling nested parasite or floor-start perk commands. */
+/** Owns one complete floor transition without journaling nested floor-start perk commands. */
 export const advanceFloorThroughGameplayCore = (
     run: RunState,
     commandId: string

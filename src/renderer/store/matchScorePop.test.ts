@@ -29,8 +29,7 @@ const minimalRun = (partial: Partial<RunState>): RunState =>
             currentStreak: 0,
             bestStreak: 0,
             levelsCleared: 0,
-            mismatches: 0,
-            guardTokens: 0
+            mismatches: 0
         },
         board: null,
         ...partial
@@ -83,8 +82,6 @@ const turnEventFor = (
         boardComplete: false,
         statusBefore: 'resolving',
         statusAfter: 'playing',
-        livesBefore: run.lives ?? 3,
-        livesAfter: next.lives ?? 3,
         totalScoreBefore: run.stats.totalScore ?? 0,
         totalScoreAfter: next.stats.totalScore ?? 0,
         triesBefore: run.stats.tries ?? 0,
@@ -319,7 +316,6 @@ describe('buildMatchScorePopPayload', () => {
 
     it('adds chain reward forecast cues to streak floaters', () => {
         const run = minimalRun({
-            lives: 4,
             board: {
                 level: 3,
                 rows: 2,
@@ -348,30 +344,6 @@ describe('buildMatchScorePopPayload', () => {
                 targetStreak: 6,
                 tone: 'reward',
                 urgency: 'soon'
-            },
-            {
-                actionLabel: 'Later',
-                chaseLabel: 'Hold streak',
-                distance: 4,
-                distanceLabel: '4 matches',
-                id: 'guard-8',
-                label: 'x8 +1 guard',
-                stackSize: 2,
-                targetStreak: 8,
-                tone: 'guard',
-                urgency: 'later'
-            },
-            {
-                actionLabel: 'Later',
-                chaseLabel: 'Hold streak',
-                distance: 4,
-                distanceLabel: '4 matches',
-                id: 'heal-8',
-                label: 'x8 +1 life',
-                stackSize: 2,
-                targetStreak: 8,
-                tone: 'heal',
-                urgency: 'later'
             }
         ]);
         expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'chain'), 'chain')?.payoffChips).toEqual([
@@ -387,38 +359,8 @@ describe('buildMatchScorePopPayload', () => {
         });
     });
 
-    it('names next payoff chips by reward type for guard and life cashouts', () => {
-        const baseRun = minimalRun({
-            lives: 5,
-            board: {
-                level: 3,
-                rows: 2,
-                columns: 2,
-                flippedTileIds: ['t1', 't2'],
-                tiles: [
-                    { id: 't1', pairKey: 'pk', symbol: 'a', label: 'a', state: 'flipped' },
-                    { id: 't2', pairKey: 'pk', symbol: 'a', label: 'a', state: 'flipped' }
-                ]
-            } as unknown as BoardState,
-            stats: { ...minimalRun({}).stats, matchesFound: 2, totalScore: 40, comboShards: 3, currentStreak: 7 }
-        });
-
-        expect(
-            buildMatchScorePopPayload(turnEventFor(baseRun, { ...baseRun, stats: { ...baseRun.stats, matchesFound: 3, totalScore: 65, currentStreak: 8 } }, 'match', 'guard'), 'guard')?.payoffChips
-        ).toContainEqual({ arcadeCue: 'Combo chase', id: 'next', label: 'Later guard', value: 'x12 +1 guard', tone: 'guard' });
-
-        expect(
-            buildMatchScorePopPayload(turnEventFor({ ...baseRun, lives: 3, stats: { ...baseRun.stats, comboShards: 2, currentStreak: 3 } }, {
-                    ...baseRun,
-                    lives: 3,
-                    stats: { ...baseRun.stats, comboShards: 2, matchesFound: 3, totalScore: 65, currentStreak: 4 }
-                }, 'match', 'life'), 'life')?.payoffChips
-        ).toContainEqual({ arcadeCue: 'Heal prime', id: 'next', label: 'Soon life', value: 'x6 +1 life', tone: 'heal' });
-    });
-
     it('promotes one-away chain rewards as armed cashouts on the match floater', () => {
         const run = minimalRun({
-            lives: 4,
             board: {
                 level: 3,
                 rows: 2,
@@ -451,7 +393,6 @@ describe('buildMatchScorePopPayload', () => {
 
     it('surfaces chain reward cashouts from resource gains on the matched turn', () => {
         const baseRun = minimalRun({
-            lives: 4,
             board: {
                 level: 3,
                 rows: 2,
@@ -467,31 +408,28 @@ describe('buildMatchScorePopPayload', () => {
                 matchesFound: 2,
                 totalScore: 40,
                 comboShards: 1,
-                guardTokens: 0,
                 currentStreak: 3
             }
         });
         const pop = buildMatchScorePopPayload(turnEventFor(baseRun, {
                 ...baseRun,
-                lives: 5,
                 stats: {
                     ...baseRun.stats,
                     comboShards: 2,
-                    guardTokens: 1,
                     matchesFound: 3,
                     totalScore: 75,
                     currentStreak: 4
                 }
             }, 'match', 'cashout'), 'cashout');
 
-        expect(pop?.chainRewardText).toBe('+1 combo shard / +1 guard token / +1 life');
+        expect(pop?.chainRewardText).toBe('+1 combo shard');
         expect(pop).toMatchObject({
             feedbackHeadline: 'Reward',
             feedbackIntensity: 'high'
         });
         expect(pop?.payoffSummary).toEqual({
             label: 'Chain cashout',
-            value: '+1 combo shard / +1 guard token / +1 life',
+            value: '+1 combo shard',
             tier: 'reward'
         });
         expect(pop?.impactCue).toEqual({ label: 'Cashout now', tone: 'reward' });
@@ -499,7 +437,7 @@ describe('buildMatchScorePopPayload', () => {
             arcadeCue: 'Chain cashout',
             id: 'chainReward',
             label: 'Cashout',
-            value: '+1 combo shard / +1 guard token / +1 life',
+            value: '+1 combo shard',
             tone: 'reward'
         });
         expect(pop?.payoffChips).toContainEqual({
@@ -524,7 +462,6 @@ describe('buildMatchScorePopPayload', () => {
 
     it('normalizes malformed chain reward counters before building cashout copy', () => {
         const baseRun = minimalRun({
-            lives: Number.NaN,
             board: {
                 level: 3,
                 rows: 2,
@@ -540,17 +477,14 @@ describe('buildMatchScorePopPayload', () => {
                 matchesFound: 2,
                 totalScore: 40,
                 comboShards: Number.POSITIVE_INFINITY,
-                guardTokens: Number.NaN,
                 currentStreak: 3
             }
         });
         const pop = buildMatchScorePopPayload(turnEventFor(baseRun, {
                 ...baseRun,
-                lives: Number.POSITIVE_INFINITY,
                 stats: {
                     ...baseRun.stats,
                     comboShards: Number.POSITIVE_INFINITY,
-                    guardTokens: Number.POSITIVE_INFINITY,
                     matchesFound: 3,
                     totalScore: 75,
                     currentStreak: 4
@@ -584,7 +518,6 @@ describe('buildMatchScorePopPayload', () => {
 
     it('marks surge and combo streaks as live momentum states in payoff chips', () => {
         const run = minimalRun({
-            lives: 4,
             board: {
                 level: 3,
                 rows: 2,
@@ -669,7 +602,6 @@ describe('buildMatchScorePopPayload', () => {
 
     it('adds the crossed chain milestone to the match floater payload', () => {
         const run = minimalRun({
-            lives: 4,
             board: {
                 level: 3,
                 rows: 2,
@@ -1071,7 +1003,6 @@ describe('buildMismatchScorePopPayload', () => {
                 distanceLabel: '2 matches',
                 id: 'shard-8',
                 label: 'x8 +1 shard',
-                stackSize: 3,
                 targetStreak: 8,
                 tone: 'reward',
                 urgency: 'soon'

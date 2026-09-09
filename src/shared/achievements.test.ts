@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { parTurnsForFloor, turnCeilingForFloor } from './floor-par';
 import type { AchievementId, RunState } from './contracts';
 import {
     ACHIEVEMENT_BY_ID,
@@ -62,11 +63,11 @@ describe('achievement rules', () => {
                 level: 5,
                 scoreGained: 100,
                 rating: 'S++' as const,
-                livesRemaining: 1,
                 perfect: true,
                 mistakes: 0,
-                clearLifeReason: 'perfect' as const,
-                clearLifeGained: 1
+                // Gen 183: Last Turn Standing - the floor cleared on the ceiling's final turn.
+                parTurns: parTurnsForFloor(createNewRun(0).board!.pairCount),
+                turnsTaken: turnCeilingForFloor(createNewRun(0).board!.pairCount)
             }
         };
         const unlocked = evaluateAchievementUnlocks(run, createDefaultSaveData());
@@ -94,11 +95,8 @@ describe('achievement rules', () => {
                 level: 5,
                 scoreGained: 100,
                 rating: 'S++' as const,
-                livesRemaining: 3,
                 perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'perfect' as const,
-                clearLifeGained: 0
+                mistakes: 0
             }
         };
         const unlocked = evaluateAchievementUnlocks(run, createDefaultSaveData());
@@ -227,11 +225,8 @@ describe('the chain loop achievements', () => {
                     level: 3,
                     scoreGained: 100,
                     rating: 'S',
-                    livesRemaining: 5,
                     perfect: false,
                     mistakes: 1,
-                    clearLifeReason: 'none',
-                    clearLifeGained: 0,
                     momentumBonusTier: 'fever'
                 }
             },

@@ -40,7 +40,6 @@ export const getInventoryRunLoopSignals = (run: RunState): InventoryRunLoopSigna
     const comboShards = runNonNegativeInteger(run.stats.comboShards);
     const currentStreak = runNonNegativeInteger(run.stats.currentStreak);
     const bestStreak = runNonNegativeInteger(run.stats.bestStreak);
-    const guardTokens = runNonNegativeInteger(run.stats.guardTokens);
     const chainTarget = getChainTargetFeedback(Math.max(currentStreak, bestStreak));
     return [
         {
@@ -70,8 +69,8 @@ export const getInventoryRunLoopSignals = (run: RunState): InventoryRunLoopSigna
         {
             id: 'resource',
             label: 'Burst bank',
-            value: `${comboShards} shards / ${guardTokens} guards`,
-            detail: 'Shards push burst rewards; guards preserve tempo after misses.',
+            value: `${comboShards} shards`,
+            detail: 'Shards push burst rewards.',
             nextCue: comboShards >= 2 ? 'Shard burst is primed' : 'Build x6 chain pressure',
             tone: 'resource'
         }
@@ -95,10 +94,7 @@ export const getInventoryPayoffEngineSignal = (
                 runNonNegativeInteger(run.findablesClaimedThisFloor)
             );
         }
-        return (
-            runNonNegativeInteger(run.stats.comboShards) >= 2 ||
-            runNonNegativeInteger(run.stats.guardTokens) > 0
-        );
+        return runNonNegativeInteger(run.stats.comboShards) >= 2;
     });
     const activeCount = activeLanes.length;
     const topLaneNames = activeLanes.map((signal) => signal.label.replace(' loop', '').replace(' bank', ''));
@@ -176,14 +172,9 @@ const TOOL_ACTION_CUES: Record<RunInventoryItemId, InventoryToolActionCue> = {
         detail: 'Bridge an awkward symbol into a valid match when joker pressure appears.',
         tone: 'chain'
     },
-    guard_token: {
-        label: 'Miss shield',
-        detail: 'Automatically protects lives so a chain miss does not end the run.',
-        tone: 'recovery'
-    },
     combo_shard: {
         label: 'Burst payoff',
-        detail: 'Stack shards until the sustain threshold converts chain pressure into survival.',
+        detail: 'Clean chains bank shards up to the cap.',
         tone: 'chain'
     },
     mutator_loadout: {

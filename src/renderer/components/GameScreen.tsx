@@ -1,6 +1,5 @@
 import { ACHIEVEMENTS } from '../../shared/achievements';
 import {
-    MAX_LIVES,
     MAX_PINNED_TILES,
     RECALL_FOCUS_MAX,
     type AchievementId,
@@ -22,7 +21,8 @@ import { useNotificationStore } from '@cross-repo-libs/notifications';
 import type { CSSProperties } from 'react';
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { ABANDON_DIALOG_COPY, FLOOR_STATUS_COPY, PAUSE_DIALOG_COPY, PERFECT_MEMORY_COPY, RUN_TOOL_REASONS, SHORTCUTS_COPY } from '../copy/runDialogCopy';
+import { ABANDON_DIALOG_COPY, PAUSE_DIALOG_COPY, PERFECT_MEMORY_COPY, RUN_TOOL_REASONS, SHORTCUTS_COPY } from '../copy/runDialogCopy';
+import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
 import {
     BOARD_SHUFFLE_COPY,
     FLASH_PAIR_COPY,
@@ -146,9 +146,7 @@ const MATCH_PAYOFF_CHIP_TONES: readonly MatchScorePopPayoffChip['tone'][] = [
     'trait',
     'pickup',
     'route',
-    'reward',
-    'guard',
-    'heal'
+    'reward'
 ];
 
 const isMatchPayoffChip = (value: unknown): value is MatchScorePopPayoffChip => {
@@ -172,22 +170,6 @@ const matchTraitInteractionTexts = (value: unknown): string[] => runFilteredStri
 
 /** PLAY-009: pair-index rings on face-down DOM tiles only for very early floors + until FTUE flag clears after tutorial floors. */
 const TUTORIAL_PAIR_MARKER_MAX_LEVEL = 2;
-
-const getClearLifeBonusLabel = (result: NonNullable<RunState['lastLevelResult']>): string | null => {
-    if (result.clearLifeGained !== 1) {
-        return null;
-    }
-
-    if (result.clearLifeReason === 'perfect') {
-        return FLOOR_STATUS_COPY.perfectFloorBonus;
-    }
-
-    if (result.clearLifeReason === 'clean') {
-        return FLOOR_STATUS_COPY.cleanFloorBonus;
-    }
-
-    return null;
-};
 
 
 
@@ -229,8 +211,7 @@ const getPickupStackToastText = (turnEvent: BoardTurnResolvedEvent): string | nu
     const baseText = getFindableToastText(claimedKind);
     const nextReward = getChainRewardForecastCues(
         runNonNegativeInteger(turnEvent.announcement.currentStreakAfter),
-        runNonNegativeInteger(turnEvent.announcement.comboShardsAfter),
-        runNonNegativeInteger(turnEvent.announcement.livesAfter)
+        runNonNegativeInteger(turnEvent.announcement.comboShardsAfter)
     )[0];
     const pickupClaimed = runNonNegativeInteger(turnEvent.findablesClaimedAfter);
     const pickupTotal = runNonNegativeInteger(turnEvent.findablesTotalAfter);
@@ -928,7 +909,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const nBackMutatorActive = run.activeMutators.includes('n_back_anchor');
     const viewportWantsMobileCamera = compactTouchChrome;
     const cameraViewportMode = deriveCameraViewportMode(settingsCameraViewportModePreference, viewportWantsMobileCamera);
-    const clearLifeBonusLabel = run.lastLevelResult ? getClearLifeBonusLabel(run.lastLevelResult) : null;
     const endlessChapterActive =
         run.gameMode === 'endless' && usesEndlessFloorSchedule(run.gameMode, run.runRulesVersion);
     const featuredObjectiveResultLine = run.lastLevelResult ? formatLevelResultObjectiveLine(run.lastLevelResult) : null;
@@ -1023,7 +1003,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
               pickFloorCurio(run.runSeed, run.lastLevelResult.level + 1, run.runRulesVersion)
           )
         : null;
-    const floorClearNotes = [clearLifeBonusLabel, floorClearObjectiveLine, nextFloorResidentLine].filter(
+    const floorClearNotes = [floorClearObjectiveLine, nextFloorResidentLine].filter(
         (line): line is string => typeof line === 'string' && line.length > 0
     );
     const nextFloorIdentity = nextFloorPreview
@@ -1108,14 +1088,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         boardTurnEvent: typedBoardTurnEvent,
         gameplayFeedback: typedGameplayFeedback,
         boardLevel: run.board?.level ?? null,
-        lives: run.lives,
-        guardTokens: run.stats.guardTokens,
         comboShards: run.stats.comboShards,
         shuffleCharges: run.shuffleCharges,
         regionShuffleCharges: run.regionShuffleCharges,
         stickyBlockIndex: run.stickyBlockIndex,
-        parasiteFloors: run.parasiteFloors,
-        scoreParasiteActive: run.activeMutators.includes('score_parasite'),
         recallFocus: run.recallFocus,
         recallFocusMax: RECALL_FOCUS_MAX,
         recallMatchesThisFloor: run.recallMatchesThisFloor,
@@ -1518,8 +1494,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 guidedTargetTileIds={onboardingBoardTargetIds}
                                 chainContext={{
                                     comboShards: run.stats.comboShards,
-                                    currentStreak: run.stats.currentStreak,
-                                    lives: run.lives
+                                    currentStreak: run.stats.currentStreak
                                 }}
                                 recoveryContext={boardRecoveryContext}
                                 interactive={run.status === 'playing' || gambitThirdPickActive}
@@ -1730,9 +1705,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 <dd>{runNonNegativeInteger(run.stats.totalScore).toLocaleString()}</dd>
                             </div>
                             <div>
-                                <dt>Lives</dt>
-                                <dd>
-                                    {run.lives} / {MAX_LIVES}
+                                <dt>Turns</dt>
+                                <dd data-testid="pause-turns">
+                                    {turnsTakenThisFloor(run)} / {parTurnsForRun(run)}
                                 </dd>
                             </div>
                         </dl>

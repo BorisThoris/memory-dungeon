@@ -131,7 +131,7 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
     {
         evidence: 'src/renderer/store/levelCompleteContinuationExecutor.ts',
         id: 'pass-and-play-length',
-        label: 'A shared game runs to a stated number of floors and ends with standings, rather than until the lives run out',
+        label: 'A shared game runs to a stated number of floors and ends with standings, rather than until the ceiling ends it',
         owner: 'repo',
         section: 'Steam integration'
     },

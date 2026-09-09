@@ -70,7 +70,6 @@ const run = (overrides: Partial<RunState> = {}): RunState => ({
     powersUsedThisRun: false,
     shuffleUsedThisFloor: false,
     destroyUsedThisFloor: false,
-    parasiteFloors: 2,
     recallFocus: 2,
     stats: {
         shufflesUsed: 0,
@@ -90,8 +89,6 @@ describe('board power actions', () => {
                 tile('b2', 'B')
             ]),
             pinnedTileIds: ['a1', 'b1'],
-            activeMutators: ['score_parasite'],
-            parasiteFloors: 3,
             recallFocus: 2
         });
 
@@ -111,7 +108,6 @@ describe('board power actions', () => {
         expect(result.run.pinnedTileIds).toEqual(['b1']);
         expect(result.run.recallFocus).toBe(1);
         expect(result.run.forgottenTileIdsThisFloor).toEqual(expect.arrayContaining(['a1', 'a2']));
-        expect(result.run.parasiteFloors).toBe(0);
         expect(result.run.stats.matchesFound).toBe(1);
         expect(result.run.stats.pairsDestroyed).toBe(1);
         expect(result.run.shiftingSpotlightNonce).toBe(4);
@@ -148,8 +144,7 @@ describe('board power actions', () => {
     it('normalizes fractional destroy charges and malformed destroy stats before spending', () => {
         const state = run({
             destroyPairCharges: 1.8,
-            board: { ...defaultBoard(), matchedPairs: Number.NaN },
-            parasiteFloors: Number.POSITIVE_INFINITY
+            board: { ...defaultBoard(), matchedPairs: Number.NaN }
         });
         const result = applyDestroyPairTransition({
             ...state,
@@ -168,7 +163,6 @@ describe('board power actions', () => {
         expect(result.run.stats.matchesFound).toBe(1);
         expect(result.run.stats.pairsDestroyed).toBe(1);
         expect(result.run.board!.matchedPairs).toBe(1);
-        expect(result.run.parasiteFloors).toBe(0);
     });
 
     it('normalizes malformed stat blocks before applying destroy accounting', () => {

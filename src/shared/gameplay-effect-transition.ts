@@ -75,8 +75,6 @@ const conditionFailure = (
                 : `floor match resolutions are ${runNonNegativeInteger(run.matchResolutionsThisFloor)}, expected ${condition.amount}`;
         case 'featured_objective.completed':
             return facts.featuredObjectiveCompleted ? null : 'featured objective was not completed';
-        case 'score_parasite.active':
-            return facts.scoreParasiteActive ? null : 'score parasite is not active';
     }
 };
 

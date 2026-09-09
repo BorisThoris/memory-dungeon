@@ -521,12 +521,13 @@ describe('save normalization', () => {
     it('documents which persisted fields require save migrations', () => {
         const policies = getSaveFieldPolicies();
 
-        expect(SAVE_FIELD_POLICY_VERSION).toBe('save-178-v7');
+        expect(SAVE_FIELD_POLICY_VERSION).toBe('save-183-v8');
         expect(policies.map((policy) => policy.field)).toEqual([
             'runHistory',
             'runHistory.shareKey',
             'lastRunSummary.runSeed',
             'lastRunSummary.runRulesVersion',
+            'lastRunSummary.runEndReason',
             'lastRunSummary.gameMode',
             'playerStats.encorePairKeysLastRun',
             'playerStats.dailyStreakGraceAvailable',

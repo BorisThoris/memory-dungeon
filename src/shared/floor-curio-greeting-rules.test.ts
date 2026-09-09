@@ -78,9 +78,14 @@ describe('when you can say it', () => {
 });
 
 describe('what the greeting actually hands over', () => {
-    it('the guard lends a token', () => {
+    it('the guard already looked the other way on the way in, and does not twice', () => {
+        // His peek is the arrival gift (floor-curio-rules); the greeting is the warning alone.
         const run = standingOn('off_duty_guard');
-        expect(greetFloorCurio(run).stats.guardTokens).toBe(run.stats.guardTokens + 1);
+        const greeted = greetFloorCurio(run);
+        expect(greeted.floorCurioGreeted).toBe(true);
+        expect(greeted.peekCharges).toBe(run.peekCharges);
+        expect(greeted.undoUsesThisFloor).toBe(run.undoUsesThisFloor);
+        expect(greeted.strayRemoveCharges).toBe(run.strayRemoveCharges);
     });
 
     it('the torchbearer points at something', () => {
@@ -142,7 +147,7 @@ describe('a run can reach the verb at all', () => {
         // about, quietly changing the starting peeks, is variance the player can never account for.
         const seeds = [1, 2, 3, 4, 5, 6, 7, 8].map((runSeed) => createNewRun(0, { runSeed }));
         const budgets = seeds.map(
-            (run) => `${run.peekCharges}:${run.shuffleCharges}:${run.stats.guardTokens}`
+            (run) => `${run.peekCharges}:${run.shuffleCharges}:${run.undoUsesThisFloor}`
         );
 
         expect(new Set(budgets).size).toBe(1);
@@ -155,9 +160,7 @@ describe('a run can reach the verb at all', () => {
 
         const next = createNextFloorRunState(base, {
             board: { ...base.board!, level: 3 },
-            lives: base.lives,
             activeMutators: [],
-            parasiteFloors: 0,
             memorizeRemainingMs: 6_000
         });
 

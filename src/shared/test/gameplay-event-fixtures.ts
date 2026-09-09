@@ -8,10 +8,6 @@ const DEFAULT_ANNOUNCEMENT: BoardTurnAnnouncementFacts = {
     currentStreakAfter: 1,
     comboShardsBefore: 0,
     comboShardsAfter: 0,
-    guardTokensBefore: 0,
-    guardTokensAfter: 0,
-    livesBefore: 3,
-    livesAfter: 3,
     findablesClaimedBefore: 0,
     findablesClaimedAfter: 0,
     findablesTotalBefore: 0,
@@ -30,8 +26,6 @@ const DEFAULT_ANNOUNCEMENT: BoardTurnAnnouncementFacts = {
     chunkRippleWaves: 0,
     magpieTheftsBefore: 0,
     magpieTheftsAfter: 0,
-    magpieScaredOffBefore: 0,
-    magpieScaredOffAfter: 0,
     matchedTraitKinds: [],
     shuffleChargesBefore: 0,
     shuffleChargesAfter: 0,
@@ -55,8 +49,6 @@ export interface BoardTurnResolvedEventFixtureOverrides {
     boardComplete?: boolean;
     statusBefore?: 'memorize' | 'playing' | 'resolving' | 'paused' | 'levelComplete' | 'gameOver';
     statusAfter?: 'memorize' | 'playing' | 'resolving' | 'paused' | 'levelComplete' | 'gameOver';
-    livesBefore?: number;
-    livesAfter?: number;
     totalScoreBefore?: number;
     totalScoreAfter?: number;
     triesBefore?: number;
@@ -88,8 +80,6 @@ export const createBoardTurnResolvedEventFixture = ({
     boardComplete = false,
     statusBefore = 'resolving',
     statusAfter = 'playing',
-    livesBefore = 3,
-    livesAfter = 3,
     totalScoreBefore = 0,
     totalScoreAfter = 10,
     triesBefore = 0,
@@ -116,8 +106,6 @@ export const createBoardTurnResolvedEventFixture = ({
         boardComplete,
         statusBefore,
         statusAfter,
-        livesBefore,
-        livesAfter,
         totalScoreBefore,
         totalScoreAfter,
         triesBefore,

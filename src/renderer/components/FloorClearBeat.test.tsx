@@ -7,11 +7,8 @@ const result: LevelResult = {
     level: 3,
     scoreGained: 2400,
     rating: 'A',
-    livesRemaining: 4,
     perfect: false,
     mistakes: 2,
-    clearLifeReason: 'none',
-    clearLifeGained: 0,
     parTurns: 5,
     turnsTaken: 3,
     playScore: 900,
@@ -41,7 +38,7 @@ describe('FloorClearBeat', () => {
     it('marks a new deepest floor and lists the notes it was given', () => {
         render(
             <FloorClearBeat
-                notes={['Perfect floor bonus: +1 Life', 'Flip par: Complete (+30 score)']}
+                notes={['Flip par: Complete (+30 score)', 'Someone is waiting downstairs.']}
                 personalBest
                 result={{ ...result, parTurns: 4, turnsTaken: 6, floorBonus: 300, floorBonusTierMult: 1, floorEfficiencyBonus: undefined, momentumBonusTier: undefined }}
                 totalScore={300}
@@ -52,8 +49,8 @@ describe('FloorClearBeat', () => {
         expect(screen.getByTestId('floor-clear-par')).toHaveTextContent('6 turns, par 4');
         expect(screen.getByTestId('floor-clear-bonus')).toHaveTextContent('Floor bonus +300: cleared cold.');
         const notes = screen.getByTestId('floor-clear-notes');
-        expect(notes).toHaveTextContent('Perfect floor bonus: +1 Life');
         expect(notes).toHaveTextContent('Flip par: Complete (+30 score)');
+        expect(notes).toHaveTextContent('Someone is waiting downstairs.');
     });
 
     it('says nothing it cannot read: a result from before the par has no par line or bonus line, and never NaN', () => {

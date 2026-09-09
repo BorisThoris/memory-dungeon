@@ -1,9 +1,4 @@
-import {
-    MAX_COMBO_SHARDS,
-    MAX_GUARD_TOKENS,
-    type MutatorId,
-    type RunState
-} from './contracts';
+import { MAX_COMBO_SHARDS, type MutatorId, type RunState } from './contracts';
 import { runArray } from './run-array-guards';
 import { runRecord } from './run-record-guards';
 import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
@@ -136,15 +131,6 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
         source: 'Wild/Joker setup and future rare pickups.',
         useRule: 'Spend by matching with a wild joker tile when one is present.'
     },
-    guard_token: {
-        id: 'guard_token',
-        kind: 'consumable',
-        label: 'Guard token',
-        stackLimit: MAX_GUARD_TOKENS,
-        mutableAt: 'floor_only',
-        source: 'Streak rewards, lantern events, and guard relics.',
-        useRule: 'Automatically absorbs mismatch life loss before hearts are spent.'
-    },
     combo_shard: {
         id: 'combo_shard',
         kind: 'consumable',
@@ -152,7 +138,7 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
         stackLimit: MAX_COMBO_SHARDS,
         mutableAt: 'floor_only',
         source: 'Match streaks and shard-spark pickups.',
-        useRule: 'Automatically converts into life sustain when the shard threshold is met.'
+        useRule: 'Banked automatically from clean chains, up to the cap.'
     },
     mutator_loadout: {
         id: 'mutator_loadout',
@@ -208,8 +194,6 @@ export const getRunInventoryItemQuantity = (run: RunState, id: RunInventoryItemI
             return run.gambitAvailableThisFloor && !run.gambitThirdFlipUsed ? 1 : 0;
         case 'wild_match_token':
             return runNonNegativeInteger(run.wildMatchesRemaining);
-        case 'guard_token':
-            return runNonNegativeInteger(stats.guardTokens);
         case 'combo_shard':
             return runNonNegativeInteger(stats.comboShards);
         case 'mutator_loadout':
@@ -310,7 +294,7 @@ export const getRunInventoryLoadoutRows = (run: RunState): RunLoadoutSlotRow[] =
 export const buildRunInventory = (run: RunState): RunInventorySnapshot => ({
     offlineOnly: true,
     consumables: getRunConsumableRows(run)
-        .filter((row) => row.id !== 'guard_token' && row.id !== 'combo_shard')
+        .filter((row) => row.id !== 'combo_shard')
         .map((row) => ({ ...row })),
     loadout: getRunInventoryLoadoutRows(run)
 });
@@ -392,7 +376,6 @@ const PICKUP_GAIN_LABELS: Record<RunInventoryItemId, { singular: string; plural:
     undo_charge: { singular: 'undo charge', plural: 'undo charges' },
     gambit_token: { singular: 'Gambit token', plural: 'Gambit tokens' },
     wild_match_token: { singular: 'wild match', plural: 'wild matches' },
-    guard_token: { singular: 'guard token', plural: 'guard tokens' },
     combo_shard: { singular: 'combo shard', plural: 'combo shards' },
     mutator_loadout: { singular: 'mutator loadout', plural: 'mutator loadouts' },
     contract_loadout: { singular: 'contract loadout', plural: 'contract loadouts' }
@@ -405,7 +388,6 @@ const inventoryGainLabelFor = (itemId: RunInventoryItemId, amount: number): stri
 
 const CAPPED_GAIN_LABELS: Partial<Record<RunInventoryItemId, string>> = {
     peek_charge: 'Peek charges already full',
-    guard_token: 'Guard tokens already full',
     combo_shard: 'Combo shards already full'
 };
 
@@ -481,14 +463,6 @@ export const gainRunInventoryItem = (
             return { ...run, gambitAvailableThisFloor: true, gambitThirdFlipUsed: false };
         case 'wild_match_token':
             return { ...run, wildMatchesRemaining: runNonNegativeInteger(run.wildMatchesRemaining) + gain };
-        case 'guard_token':
-            {
-                const stats = normalizeSessionStats(run.stats);
-                return {
-                    ...run,
-                    stats: { ...stats, guardTokens: Math.min(MAX_GUARD_TOKENS, runNonNegativeInteger(stats.guardTokens) + gain) }
-                };
-            }
         case 'combo_shard':
             {
                 const stats = normalizeSessionStats(run.stats);

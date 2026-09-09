@@ -62,7 +62,7 @@ const initialRun = {
     powersUsedThisRun: false,
     forgottenTileIdsThisFloor: [],
     peekRevealedTileIds: [],
-    stats: { totalScore: 0, currentLevelScore: 0, comboShards: 0, guardTokens: 0, currentStreak: 0 }
+    stats: { totalScore: 0, currentLevelScore: 0, comboShards: 0, currentStreak: 0 }
 } as unknown as RunState;
 const report = runGameplayCoreSimulation(initialRun, { seed, steps });
 

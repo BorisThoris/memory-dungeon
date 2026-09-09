@@ -38,19 +38,9 @@ export const RUN_ECONOMY_DEFINITIONS = [
         id: 'combo_shards',
         label: 'Combo shards',
         bucket: 'temporary_run',
-        purpose: 'Temporary run currency for sustain.',
+        purpose: 'Temporary run bank.',
         source: 'match streaks and shard-spark pickups',
-        sink: 'three shards convert into one life during the run',
-        persistence: 'temporary_run',
-        maxValue: 2
-    },
-    {
-        id: 'guard_tokens',
-        label: 'Guard tokens',
-        bucket: 'temporary_run',
-        purpose: 'Temporary run protection token.',
-        source: 'four-step streak rewards and trait matches',
-        sink: 'absorbs mismatch life loss before health is spent',
+        sink: 'banked to the cap and shown on the HUD; nothing spends it',
         persistence: 'temporary_run',
         maxValue: 2
     },
@@ -94,8 +84,6 @@ const valueFor = (run: RunState, id: string): string => {
             return String(stats.totalScore);
         case 'combo_shards':
             return `${stats.comboShards}/2`;
-        case 'guard_tokens':
-            return `${stats.guardTokens}/2`;
         case 'findable_pickups':
             return `${runNonNegativeInteger(run.findablesClaimedThisFloor)}/${runNonNegativeInteger(run.findablesTotalThisFloor)}`;
         case 'assist_charges':
@@ -112,8 +100,6 @@ const numericValueFor = (run: RunState, id: string): number => {
             return stats.totalScore;
         case 'combo_shards':
             return stats.comboShards;
-        case 'guard_tokens':
-            return stats.guardTokens;
         case 'findable_pickups':
             return runNonNegativeInteger(run.findablesClaimedThisFloor);
         case 'assist_charges':

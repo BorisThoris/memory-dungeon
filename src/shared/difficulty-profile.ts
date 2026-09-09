@@ -1,6 +1,4 @@
 import {
-    INITIAL_LIVES,
-    MAX_LIVES,
     MEMORIZE_BASE_MS,
     MEMORIZE_DECAY_EVERY_N_LEVELS,
     MEMORIZE_MIN_MS,
@@ -23,16 +21,6 @@ export interface DifficultyProfileRuleSummary {
         minMs: number;
         decayEveryNLevels: number;
     };
-    lives: {
-        initial: number;
-        max: number;
-    };
-    forgiveness: {
-        firstMismatchFreePerFloor: true;
-        cleanClearLifeThresholdMistakes: number;
-        guardTokensFromStreak: true;
-        comboShardsConvertToLife: true;
-    };
     playerCopy: string;
 }
 
@@ -48,18 +36,8 @@ export const SHIPPED_FAIR_DIFFICULTY_PROFILE: DifficultyProfileRuleSummary = {
         minMs: MEMORIZE_MIN_MS,
         decayEveryNLevels: MEMORIZE_DECAY_EVERY_N_LEVELS
     },
-    lives: {
-        initial: INITIAL_LIVES,
-        max: MAX_LIVES
-    },
-    forgiveness: {
-        firstMismatchFreePerFloor: true,
-        cleanClearLifeThresholdMistakes: 1,
-        guardTokensFromStreak: true,
-        comboShardsConvertToLife: true
-    },
     playerCopy:
-        'Default: one free mismatch per floor, clean clears can restore a life, and streaks build guards/shards. No selectable difficulty profile changes rules yet.'
+        'Default: every floor states a par and a ceiling of three times par; a run ends when you stop or when a floor is not cleared within its ceiling, and a miss costs nothing beyond the chain. No selectable difficulty profile changes rules yet.'
 } as const;
 
 export const listDifficultyProfiles = (): DifficultyProfileRuleSummary[] => [
@@ -74,8 +52,6 @@ export interface DifficultyProfileRow {
     status: DifficultyProfileRowStatus;
     dailyComparable: boolean;
     constants: {
-        initialLives: number;
-        maxLives: number;
         memorizeBaseMs: number;
         memorizeStepMs: number;
         memorizeMinMs: number;
@@ -84,8 +60,6 @@ export interface DifficultyProfileRow {
 }
 
 const currentConstants = {
-    initialLives: INITIAL_LIVES,
-    maxLives: MAX_LIVES,
     memorizeBaseMs: MEMORIZE_BASE_MS,
     memorizeStepMs: MEMORIZE_STEP_MS,
     memorizeMinMs: MEMORIZE_MIN_MS
@@ -97,7 +71,7 @@ export const getCurrentDifficultyProfile = (): DifficultyProfileRow => ({
     status: 'shipped',
     dailyComparable: true,
     constants: currentConstants,
-    rules: 'first mismatch each floor is life-free; clean clears can restore a life; streaks grant guards and shards'
+    rules: 'one curve for everyone: a par per floor, a ceiling at three times par, and a miss that resets the chain and nothing else'
 });
 
 export const getDifficultyProfileRows = (): DifficultyProfileRow[] => [

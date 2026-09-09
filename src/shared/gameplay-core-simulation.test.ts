@@ -50,7 +50,7 @@ const initialRun = (seed: number): RunState => ({
     forgottenTileIdsThisFloor: [],
     pinnedTileIds: [],
     peekRevealedTileIds: [],
-    stats: { totalScore: 0, currentLevelScore: 0, comboShards: 0, guardTokens: 0, currentStreak: 2 }
+    stats: { totalScore: 0, currentLevelScore: 0, comboShards: 0, currentStreak: 2 }
 } as unknown as RunState);
 
 describe('seeded gameplay core simulation', () => {

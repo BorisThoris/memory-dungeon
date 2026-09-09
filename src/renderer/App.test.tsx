@@ -196,68 +196,6 @@ describe('desktop app flow', () => {
         expect(parsed.onboardingDismissed).toBe(false);
     });
 
-    it('shows the life-bonus reason on the floor-clear beat', async () => {
-        const saveData = createDefaultSaveData();
-        const baseRun = createNewRun(0);
-        const run = {
-            ...baseRun,
-            status: 'levelComplete' as const,
-            lives: 5,
-            stats: {
-                ...baseRun.stats,
-                totalScore: 120,
-                currentLevelScore: 120,
-                tries: 1,
-                rating: 'S' as const,
-                levelsCleared: 1,
-                matchesFound: 2,
-                highestLevel: 1,
-                currentStreak: 2,
-                bestStreak: 2,
-                comboShards: 1
-            },
-            timerState: {
-                memorizeRemainingMs: null,
-                resolveRemainingMs: null,
-                debugRevealRemainingMs: null,
-                pausedFromStatus: null
-            },
-            lastLevelResult: {
-                level: 1,
-                scoreGained: 120,
-                rating: 'S' as const,
-                livesRemaining: 5,
-                perfect: false,
-                mistakes: 1,
-                clearLifeReason: 'clean' as const,
-                clearLifeGained: 1
-            }
-        };
-
-        act(() => {
-            useAppStore.setState({
-                hydrated: true,
-                hydrating: false,
-                steamConnected: false,
-                view: 'playing',
-                settingsReturnView: 'menu',
-                subscreenReturnView: 'menu',
-                saveData,
-                settings: saveData.settings,
-                run,
-                newlyUnlockedAchievements: [],
-                hydrate: async () => {}
-            });
-        });
-
-        renderApp();
-
-        // The floor clears in place (Gen 182): a status over the board, not a dialog.
-        expect(await screen.findByTestId('floor-clear-beat')).toBeInTheDocument();
-        expect(screen.queryByRole('dialog', { name: /floor cleared/i })).not.toBeInTheDocument();
-        expect(screen.getByText(/clean floor bonus: \+1 life/i)).toBeInTheDocument();
-    });
-
     it('hides the forgiveness hint after the floor has started', async () => {
         const saveData = createDefaultSaveData();
         const baseRun = createNewRun(0);
@@ -340,7 +278,6 @@ describe('desktop app flow', () => {
         const run: RunState = {
             ...baseRun,
             status: 'levelComplete' as const,
-            lives: 5,
             stats: {
                 ...baseRun.stats,
                 totalScore: 120,
@@ -364,11 +301,8 @@ describe('desktop app flow', () => {
                 level: 1,
                 scoreGained: 120,
                 rating: 'S' as const,
-                livesRemaining: 5,
                 perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'none' as const,
-                clearLifeGained: 0
+                mistakes: 0
             }
         };
 

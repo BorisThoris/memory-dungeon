@@ -1,7 +1,5 @@
 import {
     INITIAL_RECALL_FOCUS,
-    MAX_PENDING_MEMORIZE_BONUS_MS,
-    MEMORIZE_BONUS_PER_LIFE_LOST_MS,
     RECALL_FOCUS_MATCH_SCORE,
     RECALL_FOCUS_MAX,
     type RunState
@@ -45,18 +43,6 @@ export const increaseRecallFocus = (run: RunState): number => normalizeRecallFoc
 
 export const decreaseRecallFocus = (run: RunState, amount = 1): number =>
     normalizeRecallFocus(run.recallFocus - amount);
-
-export const addPendingMemorizeBonusForLostLives = (
-    pendingMemorizeBonusMs: number,
-    lostLives: number
-): number =>
-    runNonNegativeInteger(lostLives) <= 0
-        ? runNonNegativeInteger(pendingMemorizeBonusMs)
-        : Math.min(
-              MAX_PENDING_MEMORIZE_BONUS_MS,
-              runNonNegativeInteger(pendingMemorizeBonusMs) +
-                  MEMORIZE_BONUS_PER_LIFE_LOST_MS * runNonNegativeInteger(lostLives)
-          );
 
 export const getMemorizePhaseRecallFocus = (run: RunState): number => {
     const previous = run.lastLevelResult;

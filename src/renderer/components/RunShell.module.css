@@ -102,19 +102,10 @@
     color: var(--theme-gold-bright);
 }
 
-.hearts {
-    display: inline-flex;
-    gap: 0.14rem;
-    font-size: 1.15rem;
-    line-height: 1;
-}
-
-.heart {
-    color: #e0655a;
-}
-
-.heartLost {
-    color: rgba(224, 101, 90, 0.26);
+/* The par two turns from its ceiling: the one pressure read on the bar, on the number itself. */
+.stat[data-ceiling-near='true'] .value {
+    color: var(--theme-danger);
+    text-shadow: 0 0 14px color-mix(in srgb, var(--theme-danger) 70%, transparent);
 }
 
 /* ---- feedback line ---------------------------------------------------------------- */

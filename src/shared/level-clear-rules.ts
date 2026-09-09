@@ -1,6 +1,5 @@
 import {
     BOSS_FLOOR_SCORE_MULTIPLIER,
-    type ClearLifeReason,
     type FeaturedObjectiveId,
     type FloorTag,
     type LevelResult,
@@ -50,12 +49,6 @@ export const calculateFloorClearBonus = ({
     const turnsUnderPar = Math.max(0, runNonNegativeInteger(parTurns) - runNonNegativeInteger(turnsTaken));
     const efficiencyBonus = turnsUnderPar * FLOOR_EFFICIENCY_PER_TURN_PER_LEVEL * safeLevel;
     return { base, tier, tierMult, tierBonus, turnsUnderPar, efficiencyBonus, total: tierBonus + efficiencyBonus };
-};
-
-export const getClearLifeReason = (tries: number): ClearLifeReason => {
-    if (tries === 0) return 'perfect';
-    if (tries === 1) return 'clean';
-    return 'none';
 };
 
 export type FloorClearStatLevelResultFields = Pick<
@@ -117,15 +110,12 @@ export const calculateFloorClearScore = ({
 
 export interface CreateFloorClearLevelResultInput {
     bonusTags: readonly string[];
-    clearLifeGained: number;
-    clearLifeReason: ClearLifeReason;
     featuredObjectiveCompleted: boolean;
     featuredObjectiveId: FeaturedObjectiveId | null;
     featuredObjectiveStreak: number;
     featuredObjectiveStreakBonus: number;
     floorBonus: FloorClearBonus;
     level: number;
-    livesRemaining: number;
     mistakes: number;
     momentumBonus: FloorClearMomentumBonus;
     objectiveBonusScore: number;
@@ -140,15 +130,12 @@ export interface CreateFloorClearLevelResultInput {
 
 export const createFloorClearLevelResult = ({
     bonusTags,
-    clearLifeGained,
-    clearLifeReason,
     featuredObjectiveCompleted,
     featuredObjectiveId,
     featuredObjectiveStreak,
     featuredObjectiveStreakBonus,
     floorBonus,
     level,
-    livesRemaining,
     mistakes,
     momentumBonus,
     objectiveBonusScore,
@@ -163,11 +150,8 @@ export const createFloorClearLevelResult = ({
     level,
     scoreGained,
     rating,
-    livesRemaining,
     perfect,
     mistakes,
-    clearLifeReason,
-    clearLifeGained,
     bonusTags: bonusTags.length > 0 ? [...new Set(bonusTags)] : undefined,
     objectiveBonusScore: objectiveBonusScore > 0 ? objectiveBonusScore : undefined,
     featuredObjectiveId: featuredObjectiveId ?? undefined,

@@ -57,7 +57,7 @@ describe('gameplay interaction graph', () => {
     });
 
     it('keeps the executable graph connected and guarded', () => {
-        expect(gameplayInteractionGraph.version).toBe(32);
+        expect(gameplayInteractionGraph.version).toBe(33);
         expect(validateGameplayInteractionGraph()).toEqual([]);
     });
 
@@ -116,8 +116,7 @@ describe('gameplay interaction graph', () => {
             expect.arrayContaining([
                 'trait.stasis',
                 'power.destroy_pair',
-                'safety.softlock_fairness',
-                'hazard.score_parasite'
+                'safety.softlock_fairness'
             ])
         );
         expect(blockers.every((mechanic) => mechanic.softlockGuards.length > 0)).toBe(true);
@@ -140,30 +139,19 @@ describe('gameplay interaction graph', () => {
         expect(blockersWithoutProtectiveEdges).toEqual([]);
     });
 
-    it('connects floor-clear and parasite pressure through safety edges', () => {
+    it('connects floor-clear through the fairness gate', () => {
         const byId = mechanicById();
         expect(byId.get('safety.softlock_fairness')).toMatchObject({
             kind: 'safety',
             role: 'invariant_gate',
             softlockGuards: ['inspectBoardFairness']
         });
-        expect(byId.get('hazard.score_parasite')).toMatchObject({
-            kind: 'hazard',
-            role: 'chapter_pressure_and_objective_counterplay',
-            evidence: expect.arrayContaining(['src/shared/score-parasite-rules.ts', 'src/shared/board-power-actions.ts']),
-            tests: expect.arrayContaining(['src/shared/score-parasite-rules.test.ts', 'src/shared/game.test.ts']),
-            softlockGuards: expect.arrayContaining(['four-floor-cycle', 'destroy-pair-resets-pressure'])
-        });
+        // Gen 183: the score parasite is gone with the lives it ate; no hazard hangs off the floor clear.
+        expect(byId.get('hazard.score_parasite')).toBeUndefined();
         expect(gameplayInteractionGraph.edges).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({ source: 'safety.softlock_fairness', target: 'objective.floor_clear' }),
-                expect.objectContaining({ source: 'board.cleanup', target: 'safety.softlock_fairness' }),
-                expect.objectContaining({ source: 'power.destroy_pair', target: 'hazard.score_parasite', kind: 'counterplay' }),
-                expect.objectContaining({ source: 'hazard.score_parasite', target: 'power.destroy_pair', kind: 'guarded_by' }),
-                expect.objectContaining({ source: 'hazard.score_parasite', target: 'core.gameplay_commands', kind: 'triggers' }),
-                expect.objectContaining({ source: 'core.gameplay_commands', target: 'hazard.score_parasite', kind: 'triggers' }),
-                expect.objectContaining({ source: 'inventory.mutator_loadout', target: 'hazard.score_parasite', kind: 'triggers' }),
-                expect.objectContaining({ source: 'hazard.score_parasite', target: 'feedback.gameplay_hud', kind: 'displays' })
+                expect.objectContaining({ source: 'board.cleanup', target: 'safety.softlock_fairness' })
             ])
         );
     });
@@ -176,8 +164,10 @@ describe('gameplay interaction graph', () => {
             edgeCount: gameplayInteractionGraph.edges.length,
             traitCount: TILE_TRAIT_KINDS.length
         });
-        expect(audit.blockerCount).toBe(4);
-        expect(audit.counterplayEdgeCount).toBeGreaterThanOrEqual(16);
+        // Gen 183: the score parasite went with the lives it ate, and its blocker with it.
+        expect(audit.blockerCount).toBe(3);
+        // 16 down to 14 in Gen 183: the parasite's two counterplay edges went with it.
+        expect(audit.counterplayEdgeCount).toBeGreaterThanOrEqual(14);
         expect(audit.blockerWithoutProtectiveEdgeIds).toEqual([]);
         expect(audit.generatedFloorCoverageGapIds).toEqual(expect.arrayContaining(['trait.echo']));
         expect(audit.playerVisibleWriteWithoutHudIds).toEqual([]);
@@ -185,7 +175,6 @@ describe('gameplay interaction graph', () => {
             expect.arrayContaining([
                 'trait.stasis',
                 'power.destroy_pair',
-                'hazard.score_parasite',
                 'safety.softlock_fairness',
                 'core.gameplay_commands',
                 'progression.run_flow'
@@ -221,32 +210,21 @@ describe('gameplay interaction graph', () => {
         );
     });
 
-    it('connects Guard Token inventory through capped guard and damage absorption', () => {
+    it('has no guard token, no life, and no parasite left in it', () => {
         const byId = mechanicById();
-        expect(byId.get('inventory.guard_token')).toMatchObject({
-            kind: 'inventory',
-            role: 'bounded_damage_buffer',
-            evidence: expect.arrayContaining(['src/shared/run-inventory.ts', 'src/shared/turn-mismatch-rules.ts']),
-            tests: expect.arrayContaining(['src/shared/run-inventory.test.ts', 'src/shared/turn-mismatch-rules.test.ts'])
-        });
-        expect(byId.get('safety.guard_absorption')).toMatchObject({
-            kind: 'safety',
-            role: 'resource_consequence',
-            evidence: ['src/shared/turn-mismatch-rules.ts'],
-            tests: ['src/shared/turn-mismatch-rules.test.ts']
-        });
-        expect(gameplayInteractionGraph.edges).toEqual(
-            expect.arrayContaining([
-                expect.objectContaining({ source: 'core.gameplay_commands', target: 'inventory.guard_token', kind: 'modifies' }),
-                expect.objectContaining({ source: 'inventory.guard_token', target: 'safety.guard_absorption', kind: 'enables' }),
-                expect.objectContaining({ source: 'safety.guard_absorption', target: 'inventory.guard_token', kind: 'consumes' }),
-                expect.objectContaining({ source: 'inventory.guard_token', target: 'feedback.gameplay_hud', kind: 'displays' }),
-                expect.objectContaining({ source: 'safety.guard_absorption', target: 'feedback.gameplay_hud', kind: 'displays' })
-            ])
-        );
+        for (const id of ['inventory.guard_token', 'safety.guard_absorption', 'progression.shard_to_life', 'hazard.score_parasite']) {
+            expect(byId.get(id), id).toBeUndefined();
+        }
+        for (const mechanic of gameplayInteractionGraph.mechanics) {
+            const fields = [...mechanic.reads, ...mechanic.writes];
+            expect(fields, mechanic.id).not.toContain('lives');
+            expect(fields, mechanic.id).not.toContain('guardTokens');
+            expect(fields, mechanic.id).not.toContain('parasiteFloors');
+        }
     });
 
-    it('connects Shard Spark through typed match requests into life conversion', () => {
+    it('connects Shard Spark through typed match requests into the shard bank', () => {
+        // Gen 183: the bank no longer converts to a life; the shard itself goes in Gen 184.
         const byId = mechanicById();
         expect(byId.get('findable.shard_spark')).toMatchObject({
             kind: 'findable',
@@ -254,16 +232,12 @@ describe('gameplay interaction graph', () => {
         });
         expect(byId.get('inventory.combo_shard')).toMatchObject({
             kind: 'inventory',
-            role: 'bounded_life_conversion_resource'
+            role: 'bounded_bank'
         });
-        expect(byId.get('progression.shard_to_life')).toMatchObject({ kind: 'progression', role: 'resource_consequence' });
         expect(gameplayInteractionGraph.edges).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({ source: 'findable.shard_spark', target: 'core.gameplay_commands', kind: 'triggers' }),
                 expect.objectContaining({ source: 'findable.shard_spark', target: 'inventory.combo_shard', kind: 'grants' }),
-                expect.objectContaining({ source: 'core.gameplay_commands', target: 'progression.shard_to_life', kind: 'triggers' }),
-                expect.objectContaining({ source: 'inventory.combo_shard', target: 'progression.shard_to_life', kind: 'enables' }),
-                expect.objectContaining({ source: 'progression.shard_to_life', target: 'inventory.combo_shard', kind: 'consumes' }),
                 expect.objectContaining({ source: 'board.chain_chunk_fever', target: 'inventory.combo_shard', kind: 'grants' })
             ])
         );
@@ -400,7 +374,6 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'progression.run_setup', target: 'inventory.mutator_loadout', kind: 'grants' }),
             expect.objectContaining({ source: 'progression.run_setup', target: 'inventory.contract_loadout', kind: 'grants' }),
             expect.objectContaining({ source: 'progression.run_flow', target: 'inventory.mutator_loadout', kind: 'modifies' }),
-            expect.objectContaining({ source: 'inventory.mutator_loadout', target: 'hazard.score_parasite', kind: 'triggers' }),
             expect.objectContaining({ source: 'inventory.contract_loadout', target: 'power.shuffle', kind: 'gates' }),
             expect.objectContaining({ source: 'inventory.contract_loadout', target: 'power.destroy_pair', kind: 'gates' }),
             expect.objectContaining({ source: 'inventory.contract_loadout', target: 'power.pin', kind: 'gates' }),
@@ -466,7 +439,6 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'objective.floor_clear', target: 'progression.run_flow', kind: 'enables' }),
             expect.objectContaining({ source: 'progression.run_flow', target: 'core.gameplay_commands', kind: 'triggers' }),
             expect.objectContaining({ source: 'core.gameplay_commands', target: 'progression.run_flow', kind: 'modifies' }),
-            expect.objectContaining({ source: 'progression.run_flow', target: 'hazard.score_parasite', kind: 'triggers' }),
             expect.objectContaining({ source: 'progression.run_flow', target: 'phase.memorize', kind: 'enables' }),
             expect.objectContaining({ source: 'progression.run_flow', target: 'feedback.gameplay_hud', kind: 'displays' }),
             expect.objectContaining({ source: 'progression.run_flow', target: 'persistence.run_summary', kind: 'persists' }),

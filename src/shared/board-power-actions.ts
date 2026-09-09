@@ -93,7 +93,6 @@ export const applyDestroyPairTransition = (
         shiftingSpotlightNonce: spunDestroy.shiftingSpotlightNonce,
         recallFocus: decreaseRecallFocus(run),
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, pairTileIds),
-        parasiteFloors: hasMutator(run, 'score_parasite') ? 0 : runNonNegativeInteger(run.parasiteFloors),
         stats: {
             ...stats,
             matchesFound: runNonNegativeInteger(stats.matchesFound) + 1,

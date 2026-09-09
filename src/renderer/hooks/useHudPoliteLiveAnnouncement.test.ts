@@ -9,10 +9,6 @@ import { createBoardTurnResolvedEventFixture } from '../../shared/test/gameplay-
 import { formatHudActionFeedbackText, useHudPoliteLiveAnnouncement } from './useHudPoliteLiveAnnouncement';
 
 const base = {
-    scoreParasiteActive: true,
-    parasiteFloors: 0,
-    lives: 3,
-    guardTokens: 0,
     comboShards: 0,
     shuffleCharges: 0,
     regionShuffleCharges: 0,
@@ -172,47 +168,6 @@ describe('useHudPoliteLiveAnnouncement', () => {
             label: 'Miss',
             tone: 'danger'
         });
-        expect(getHudActionFeedbackProfile('Life lost. 1 life remains.', 'error')).toEqual({
-            label: 'Critical',
-            tone: 'danger'
-        });
-    });
-
-    it('announces score parasite one-floor-before-drain', async () => {
-        const { result, rerender } = renderHook(
-            (p: { level: number; pf: number }) =>
-                useHudPoliteLiveAnnouncement({
-                    ...base,
-                    boardLevel: p.level,
-                    parasiteFloors: p.pf
-                }),
-            { initialProps: { level: 3, pf: 2 } }
-        );
-        await act(async () => {
-            rerender({ level: 4, pf: 3 });
-        });
-        await flushRaf();
-        expect(result.current.message).toBe(
-            'Score parasite: next cleared floor triggers the drain.'
-        );
-    });
-
-    it('announces score parasite life drain', async () => {
-        const { result, rerender } = renderHook(
-            (p: { level: number; pf: number; lives: number }) =>
-                useHudPoliteLiveAnnouncement({
-                    ...base,
-                    boardLevel: p.level,
-                    parasiteFloors: p.pf,
-                    lives: p.lives
-                }),
-            { initialProps: { level: 4, pf: 3, lives: 3 } }
-        );
-        await act(async () => {
-            rerender({ level: 5, pf: 0, lives: 2 });
-        });
-        await flushRaf();
-        expect(result.current.message).toBe('Score parasite drained one life.');
     });
 
     it('announces match chain milestones with arcade payoff copy while playing', async () => {
@@ -239,7 +194,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
         await flushRaf();
 
         expect(result.current.message).toBe(
-            'Chain started: x3. Reward loop online. Next reward: Double cashout: x4 +1 shard in 1 match.'
+            'Chain started: x3. Reward loop online. Next reward: One-away cashout: x4 +1 shard in 1 match.'
         );
     });
 
@@ -274,7 +229,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
         await flushRaf();
 
         expect(result.current.message).toBe(
-            'Surge hit: x6. Surge tier live. Next reward: Triple prime: x8 +1 shard in 2 matches.'
+            'Surge hit: x6. Surge tier live. Next reward: Combo prime: x8 +1 shard in 2 matches.'
         );
     });
 
@@ -403,46 +358,43 @@ describe('useHudPoliteLiveAnnouncement', () => {
             commandId: 'reward-1',
             cue: 'findable.shard_spark.matched',
             eventId: 'reward-1:2',
-            message: 'Bonus Shards added one combo shard and one guard token.',
+            message: 'Bonus Shards added one combo shard.',
             priority: 'info',
             source: { kind: 'findable', id: 'shard_spark' },
             tone: 'reward'
         };
         const { result, rerender } = renderHook(
-            (p: { feedback: GameplayFeedbackPresentation | null; guards: number; shards: number }) =>
+            (p: { feedback: GameplayFeedbackPresentation | null; shards: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     gameplayFeedback: p.feedback ? [p.feedback] : [],
-                    guardTokens: p.guards,
                     comboShards: p.shards
                 }),
-            { initialProps: { feedback: null as GameplayFeedbackPresentation | null, guards: 0, shards: 0 } }
+            { initialProps: { feedback: null as GameplayFeedbackPresentation | null, shards: 0 } }
         );
 
         await act(async () => {
-            rerender({ feedback, guards: 1, shards: 1 });
+            rerender({ feedback, shards: 1 });
         });
         await flushRaf();
 
-        expect(result.current.message).toBe('Bonus Shards added one combo shard and one guard token.');
+        expect(result.current.message).toBe('Bonus Shards added one combo shard.');
         expect(result.current.message).not.toContain('available');
     });
 
     it('summarizes stacked reward cashouts in the live-region action summary', async () => {
         const { result, rerender } = renderHook(
-            (p: { turnEvent: BoardTurnResolvedEvent | null; shards: number; guards: number; gold: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null; shards: number; gold: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 2,
                     boardTurnEvent: p.turnEvent,
-                    comboShards: p.shards,
-                    guardTokens: p.guards
+                    comboShards: p.shards
                 }),
             {
                 initialProps: {
                     turnEvent: null as BoardTurnResolvedEvent | null,
                     shards: 0,
-                    guards: 0,
                     gold: 0
                 }
             }
@@ -456,14 +408,13 @@ describe('useHudPoliteLiveAnnouncement', () => {
                     matchedTraitKinds: ['echo', 'stasis']
                 }),
                 shards: 1,
-                guards: 1,
                 gold: 2
             });
         });
         await flushRaf();
 
         expect(result.current.message).toBe(
-            '1 guard token gained. 1 available. Match resolved. 1/4 pairs cleared. Trait combo surge: Echo and Stasis resolved. Combo shard gained. 1 available. Cashout hit: 3 payoffs paid together. Keep the chain live.'
+            'Match resolved. 1/4 pairs cleared. Trait combo surge: Echo and Stasis resolved. Combo shard gained. 1 available. Cashout hit: 2 payoffs paid together. Keep the chain live.'
         );
     });
 
@@ -749,90 +700,45 @@ describe('useHudPoliteLiveAnnouncement', () => {
         );
     });
 
-    it('announces life loss before generic mismatch feedback', async () => {
+    it('keeps a miss quiet: the cards reset and the chain does, and nothing is said to have been lost', async () => {
+        // Thesis §67: a bad floor is unremarkable. A miss is routine information, not an error.
         const { result, rerender } = renderHook(
-            (p: { lives: number; turnEvent: BoardTurnResolvedEvent | null }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 2,
-                    lives: p.lives,
                     boardTurnEvent: p.turnEvent
                 }),
-            { initialProps: { lives: 3, turnEvent: null as BoardTurnResolvedEvent | null } }
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
         );
 
         await act(async () => {
-            rerender({ lives: 2, turnEvent: mismatchTurn('life-loss-turn', { livesBefore: 3, livesAfter: 2 }) });
+            rerender({ turnEvent: mismatchTurn('miss-turn') });
         });
         await flushRaf();
 
-        expect(result.current.message).toBe('Life lost. 2 lives remain.');
-        expect(result.current.priority).toBe('error');
+        expect(result.current.message).toBe('No match. Recover with a safe match. Chain reset.');
+        expect(result.current.message).not.toMatch(/\b(life|lives|lost|penalty|punish)\b/i);
+        expect(result.current.priority).toBe('info');
     });
 
-    it('announces guard-token mismatch absorption', async () => {
+    it('announces shard spending deltas', async () => {
         const { result, rerender } = renderHook(
-            (p: { guards: number; turnEvent: BoardTurnResolvedEvent | null }) =>
+            (p: { shards: number; gold: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 2,
-                    guardTokens: p.guards,
-                    boardTurnEvent: p.turnEvent
-                }),
-            { initialProps: { guards: 1, turnEvent: null as BoardTurnResolvedEvent | null } }
-        );
-
-        await act(async () => {
-            rerender({
-                guards: 0,
-                turnEvent: mismatchTurn('guard-absorb-turn', { guardTokensBefore: 1, guardTokensAfter: 0 })
-            });
-        });
-        await flushRaf();
-
-        expect(result.current.message).toBe('Guard token spent. 0 guard tokens remain.');
-    });
-
-    it('announces recovery and resource spending deltas', async () => {
-        const { result, rerender } = renderHook(
-            (p: { lives: number; guards: number; shards: number; gold: number }) =>
-                useHudPoliteLiveAnnouncement({
-                    ...base,
-                    boardLevel: 2,
-                    lives: p.lives,
-                    guardTokens: p.guards,
                     comboShards: p.shards
                 }),
-            { initialProps: { lives: 2, guards: 0, shards: 3, gold: 8 } }
+            { initialProps: { shards: 3, gold: 8 } }
         );
 
         await act(async () => {
-            rerender({ lives: 3, guards: 1, shards: 1, gold: 5 });
+            rerender({ shards: 1, gold: 5 });
         });
         await flushRaf();
 
-        expect(result.current.message).toBe(
-            'Life restored. 3 lives available. 2 combo shards spent. 1 available.'
-        );
-    });
-
-    it('announces guard token gains when no higher-priority health delta is present', async () => {
-        const { result, rerender } = renderHook(
-            (p: { guards: number }) =>
-                useHudPoliteLiveAnnouncement({
-                    ...base,
-                    boardLevel: 2,
-                    guardTokens: p.guards
-                }),
-            { initialProps: { guards: 0 } }
-        );
-
-        await act(async () => {
-            rerender({ guards: 2 });
-        });
-        await flushRaf();
-
-        expect(result.current.message).toBe('2 guard tokens gained. 2 available.');
+        expect(result.current.message).toBe('2 combo shards spent. 1 available.');
     });
 
     it('stays silent when a turn changes none of the announced counters', async () => {
@@ -843,7 +749,6 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    scoreParasiteActive: false,
                     boardTurnEvent: p.turnEvent
                 }),
             { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
@@ -1085,7 +990,6 @@ describe('useHudPoliteLiveAnnouncement', () => {
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 2,
-                    scoreParasiteActive: false,
                     gambitThirdPickActive: p.active,
                     gambitOpportunityFlippedIds: p.ids
                 }),

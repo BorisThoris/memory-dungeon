@@ -2,7 +2,7 @@
 
 **Purpose:** Single checklist of **every** rule-level mechanic and player action, mapped to code. Use this to verify nothing is missing from epics or future design docs.
 
-**Maintenance:** Hand-edited (not generated from source). When simulation rules change, update the relevant rows; align player-facing blurbs with `src/shared/mechanics-encyclopedia.ts` where applicable. Systems the game no longer has (the dungeon layer: hazards, routes, shops, relics, wagers, keys, exits, wardens, the retired mode cards) are listed in [REMOVED_DUNGEON_LAYER.md](../REMOVED_DUNGEON_LAYER.md), not here.
+**Maintenance:** Hand-edited (not generated from source). When simulation rules change, update the relevant rows; align player-facing blurbs with `src/shared/mechanics-encyclopedia.ts` where applicable. Systems the game no longer has (the dungeon layer: hazards, routes, shops, relics, wagers, keys, exits, wardens, the retired mode cards) are listed in [REMOVED_DUNGEON_LAYER.md](../REMOVED_DUNGEON_LAYER.md), and the life economy (lives, guard tokens, the first-mismatch grace, chain heal, shards to a life, the clear-life bonus, the score parasite) in [REMOVED_LIVES.md](../REMOVED_LIVES.md), not here.
 
 **Machine snapshot:** [`GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md`](./GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md) — regenerated with `yarn docs:mechanics-appendix` (rule versions, catalog entry counts).
 
@@ -25,6 +25,7 @@
 | Level complete → next floor, in place: the floor-clear beat (`FloorClearBeat`) shows for `FLOOR_CLEAR_BEAT_MS` after the last-pair hold, then the store's continuation runs on its own | `finalizeLevel` (`floor-clear-transition.ts`), `advanceToNextLevel` (`next-floor-transition-rules.ts`); store `continueToNextLevel` | [epic-run-session-flow](./epic-run-session-flow.md) |
 | Floor resident (curio) chosen for the next floor and applied on arrival | `pickFloorCurio`, `applyFloorCurio` (`floor-curio-rules.ts`) | [epic-run-session-flow](./epic-run-session-flow.md) |
 | Greet the floor resident (once per floor, free) | `greetFloorCurio`, `canGreetFloorCurio` (`floor-curio-greeting-rules.ts`); store `greetFloorResident` | [epic-run-session-flow](./epic-run-session-flow.md) |
+| How a run ends: the turn ceiling, a quit, a contract's mismatch cap, or the shared game's last floor; recorded as `RunEndReason` | `applyTurnCeiling` (`board-turn-transition.ts`), `RunState.runEndReason`, `RunSummary.runEndReason` | [epic-run-session-flow](./epic-run-session-flow.md) |
 | Game over / summary | `createRunSummary` (`run-summary-rules.ts`), store `applyResolvedRun` | [epic-meta-progression](./epic-meta-progression.md) |
 | Restart / end run | store `restartRun`, `endRun` | [epic-modes-and-runs](./epic-modes-and-runs.md), [epic-run-session-flow](./epic-run-session-flow.md) |
 | Debug peek (face reveal) | `enableDebugPeek`, `disableDebugPeek`, `debugRevealRemainingMs` | [epic-run-session-flow](./epic-run-session-flow.md) |
@@ -69,7 +70,7 @@
 | Cursed pair early match flag | `cursedMatchedEarlyThisFloor` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Findables on match, spilled by a break, forfeited by Destroy | `findableKind`, `findablesClaimedThisFloor`, `resolveFindableMatchRewardThroughGameplayCore` | [epic-mutators](./epic-mutators.md) |
 | Tile trait match rewards / mismatch penalties | `resolveTileTraitEffects`, `calculateTileTraitMatchRewards`, `calculateTileTraitMismatchPenalty`, `releaseStrandedStasisBlock` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
-| Magpie theft every third miss, scared off by a guard token | `isMagpieVisitTurn`, `resolveMagpieVisit`, `applyMagpieTheft` (`magpie-rules.ts`) | [epic-mutators](./epic-mutators.md) |
+| Magpie theft every third miss | `isMagpieVisitTurn`, `resolveMagpieVisit`, `applyMagpieTheft` (`magpie-rules.ts`) | [epic-mutators](./epic-mutators.md) |
 | Recall Focus and forgotten tiles | `increaseRecallFocus`, `decreaseRecallFocus`, `rememberForgottenTiles`, `settleForgottenTiles` (`recall-rules.ts`); `getMemoryRecallFeedback` | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | N-back anchor counter / key | `nBackMatchCounter`, `nBackAnchorPairKey` | [epic-mutators](./epic-mutators.md), [epic-board-rendering-assists](./epic-board-rendering-assists.md) |
 | Encore pair keys (spaced bonus) | `matchedPairKeysThisRun`, `encorePairKeysLastRun` | [epic-scoring-objectives](./epic-scoring-objectives.md) |
@@ -93,16 +94,16 @@
 
 ---
 
-## 5. Lives, mistakes & pressure
+## 5. The turn ceiling, mistakes & pressure
 
 | Mechanic | Where | Epic / note |
 |-----------|--------|-------------|
-| Lives loss / guard / combo shards / chain heal | `calculateResolvedMatchSurvivalReward` (`turn-match-reward-rules.ts`), `applyComboShardGain` (`combo-shard-rules.ts`), mismatch path in board-turn resolution | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
-| Contract max mismatches → game over | `activeContract.maxMismatches` | [epic-contracts-challenge-runs](./epic-contracts-challenge-runs.md) |
-| Score parasite: every fourth advance costs a life | `advanceScoreParasiteFloor` (`score-parasite-rules.ts`), `parasiteFloors` | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
+| The turn ceiling: a floor not cleared within par × 3 ends the run (`runEndReason: 'turn_ceiling'`); a floor cleared on its ceiling turn is a clear | `TURN_CEILING_PAR_MULTIPLIER`, `turnCeilingForFloor`, `turnsToCeiling` (`floor-par.ts`), `applyTurnCeiling` (`board-turn-transition.ts`), `RunState.runEndReason` | [epic-run-session-flow](./epic-run-session-flow.md), [epic-scoring-objectives](./epic-scoring-objectives.md) |
+| A miss: the chain resets, a try (rating) and a turn (par) are counted, nothing else | mismatch path in board-turn resolution (`turn-mismatch-rules.ts`) | [epic-scoring-objectives](./epic-scoring-objectives.md) |
+| Combo shards banked from the chain, breaks and shard sparks (capped; leave in Gen 184) | `applyComboShardGain` (`combo-shard-rules.ts`), `calculateResolvedMatchSurvivalReward` (`turn-match-reward-rules.ts`) | [epic-scoring-objectives](./epic-scoring-objectives.md) |
+| Contract max mismatches → game over (`runEndReason: 'contract'`) | `activeContract.maxMismatches` | [epic-contracts-challenge-runs](./epic-contracts-challenge-runs.md) |
 | Echo feedback (resolve delay) | `echoFeedbackEnabled`, `computeFlipResolveDelayMs` | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
 | Resolve delay multiplier | `resolveDelayMultiplier` (from settings or the setup sheet's calm pacing at run start) | Settings + [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
-| Lost life banks memorize time for the next floor | `addPendingMemorizeBonusForLostLives`, `pendingMemorizeBonusMs` | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
 
 ---
 
@@ -234,14 +235,13 @@ Source: [`RunState`](../../src/shared/contracts.ts) interface.
 | Field | Role | Epic / pointer |
 |-------|------|----------------|
 | `status` | memorize / playing / resolving / levelComplete / gameOver / paused | [epic-run-session-flow](./epic-run-session-flow.md) |
-| `lives` | Current life count | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
-| `passAndPlay` | Same-device seats, or null on every single-player run; lives and board stay shared, only credit is split | [epic-modes-and-runs](./epic-modes-and-runs.md) |
+| `runEndReason` | Null while the run is alive; `turn_ceiling`, `quit`, `contract` or `pass_and_play_final_floor` once it ended | [epic-run-session-flow](./epic-run-session-flow.md) |
+| `passAndPlay` | Same-device seats, or null on every single-player run; the board stays shared, only credit is split | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | `board` | Current floor grid; null when no board | Appendix C |
 | `stats` | Cumulative run counters | Appendix B |
 | `achievementsEnabled` | When false (practice, or an unrecorded run from the setup sheet), achievement unlock evaluation skipped | [epic-meta-progression](./epic-meta-progression.md) |
 | `debugUsed` | Set when debug-only paths affect the run | [epic-run-session-flow](./epic-run-session-flow.md) |
 | `debugPeekActive` | Longer face reveal when debug peek active | [epic-run-session-flow](./epic-run-session-flow.md) |
-| `pendingMemorizeBonusMs` | Banked ms applied on next floor memorize | [epic-run-session-flow](./epic-run-session-flow.md) |
 | `shuffleCharges` | Full-board shuffle budget | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `destroyPairCharges` | Destroy-pair power budget | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `pinnedTileIds` | Tiles user pinned | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
@@ -262,7 +262,6 @@ Source: [`RunState`](../../src/shared/contracts.ts) interface.
 | `dailyDateKeyUtc` | Create-run option nothing live sets; kept on the type so old saves still parse | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | `puzzleId` | Create-run option nothing live sets; kept on the type so old saves still parse | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | `stickyBlockIndex` | Sticky fingers: blocked slot for next opening flip | [epic-mutators](./epic-mutators.md) |
-| `parasiteFloors` | Score parasite pressure counter | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
 | `flipHistory` | Recent flip ids (ghost / export) | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | `peekCharges` | Peek power budget | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `peekRevealedTileIds` | Ephemeral peek faces | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
@@ -316,7 +315,6 @@ Source: [`RunState`](../../src/shared/contracts.ts) interface.
 | `bestRippleThisFloor` | Longest ripple this floor, in waves | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | `bestRippleThisRun` | Longest ripple this run, in waves | [epic-meta-progression](./epic-meta-progression.md) |
 | `magpieTheftsThisFloor` | Pairs the magpie has taken back on this floor | [epic-mutators](./epic-mutators.md) |
-| `magpieScaredOffThisFloor` | Times a guard token drove the magpie off on this floor | [epic-mutators](./epic-mutators.md) |
 | `shiftingSpotlightNonce` | Ward/bounty rotation seed step | [epic-mutators](./epic-mutators.md) |
 
 ### Appendix A2 — `RunTimerState` (nested in `RunState.timerState`)
@@ -339,17 +337,16 @@ Nested under `RunState.stats`. Drives score display, rating, and HUD.
 | `totalScore` | Run total score | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | `currentLevelScore` | Score accrued this floor | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | `bestScore` | Best score seen this run session | [epic-scoring-objectives](./epic-scoring-objectives.md) |
-| `tries` | Mismatch / mistake counter (rating input) | [epic-scoring-objectives](./epic-scoring-objectives.md), [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
+| `tries` | Mismatch / mistake counter (rating input) | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | `rating` | Letter grade from `calculateRating(tries)` | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | `levelsCleared` | Floors finished | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | `matchesFound` | Successful pair clears | [epic-scoring-objectives](./epic-scoring-objectives.md) |
-| `mismatches` | Failed match count | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
+| `mismatches` | Failed match count | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | `highestLevel` | Max floor reached | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | `currentStreak` | Match streak (the chain) | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | `bestStreak` | Best streak this run | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | `perfectClears` | Floors with zero tries | [epic-scoring-objectives](./epic-scoring-objectives.md) |
-| `guardTokens` | Mismatch buffer tokens | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
-| `comboShards` | Combo shard progress toward a life | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
+| `comboShards` | Combo shard bank, capped at `MAX_COMBO_SHARDS`; a reading of momentum, converts into nothing (leaves in Gen 184) | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | `tileTraitMatches` | Clean matches per trait kind (feeds `ACH_TRAIT_SCHOLAR`) | [epic-meta-progression](./epic-meta-progression.md) |
 | `tileTraitMismatches` | Misses per trait kind | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | `shufflesUsed` | Position-changing shuffle/swap powers consumed | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |

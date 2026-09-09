@@ -44,11 +44,8 @@ describe('REG-048 secondary objective clarity', () => {
                 level: 1,
                 scoreGained: 100,
                 rating: 'S++' as const,
-                livesRemaining: 5,
                 perfect: true,
                 mistakes: 0,
-                clearLifeReason: 'perfect' as const,
-                clearLifeGained: 1,
                 featuredObjectiveId: 'flip_par' as const,
                 featuredObjectiveCompleted: true,
                 objectiveBonusScore: 30
@@ -63,11 +60,8 @@ describe('REG-048 secondary objective clarity', () => {
                 level: 1,
                 scoreGained: 100,
                 rating: 'S++',
-                livesRemaining: 5,
                 perfect: true,
                 mistakes: 0,
-                clearLifeReason: 'perfect',
-                clearLifeGained: 1,
                 featuredObjectiveId: 'flip_par',
                 featuredObjectiveCompleted: true,
                 objectiveBonusScore: Number.POSITIVE_INFINITY

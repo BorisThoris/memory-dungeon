@@ -13,7 +13,6 @@ describe('REG-024 run economy taxonomy', () => {
         expect(RUN_ECONOMY_DEFINITIONS.map((entry) => entry.id)).toEqual([
             'score',
             'combo_shards',
-            'guard_tokens',
             'findable_pickups',
             'assist_charges'
         ]);
@@ -37,8 +36,7 @@ describe('REG-024 run economy taxonomy', () => {
             stats: {
                 ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false })).stats,
                 totalScore: 120,
-                comboShards: 1,
-                guardTokens: 1
+                comboShards: 1
             }
         };
         const snapshot = getRunEconomySnapshot(run);
@@ -46,14 +44,12 @@ describe('REG-024 run economy taxonomy', () => {
         expect(snapshot.score.value).toBe('120');
         expect(snapshot.temporaryRunCurrencies.map((entry) => entry.id)).toEqual([
             'combo_shards',
-            'guard_tokens',
             'findable_pickups',
             'assist_charges'
         ]);
         expect(getRunEconomyRows(run).map((row) => `${row.key}:${row.value}`)).toEqual([
             'score:120',
             'combo_shards:1/2',
-            'guard_tokens:1/2',
             'findable_pickups:1/2',
             'assist_charges:Shuffle 1 · Row 1 · Destroy 0 · Peek 1 · Stray 0'
         ]);
@@ -72,8 +68,7 @@ describe('REG-024 run economy taxonomy', () => {
             stats: {
                 ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false })).stats,
                 totalScore: Number.POSITIVE_INFINITY,
-                comboShards: Number.NaN,
-                guardTokens: 1.9
+                comboShards: Number.NaN
             }
         };
 
@@ -82,7 +77,6 @@ describe('REG-024 run economy taxonomy', () => {
         expect(rows.map((row) => `${row.key}:${row.value}`)).toEqual([
             'score:0',
             'combo_shards:0/2',
-            'guard_tokens:1/2',
             'findable_pickups:0/0',
             'assist_charges:Shuffle 0 · Row 1 · Destroy 0 · Peek 0 · Stray 2'
         ]);
@@ -98,7 +92,6 @@ describe('REG-024 run economy taxonomy', () => {
         expect(getRunEconomyRows(run).map((row) => `${row.key}:${row.value}`)).toEqual([
             'score:0',
             'combo_shards:0/2',
-            'guard_tokens:0/2',
             'findable_pickups:0/1',
             'assist_charges:Shuffle 1 · Row 1 · Destroy 0 · Peek 1 · Stray 0'
         ]);

@@ -158,7 +158,6 @@ const levelCompleteRunFixture = (): RunState => {
     return {
         ...baseRun,
         status: 'levelComplete',
-        lives: 5,
         stats: {
             ...baseRun.stats,
             totalScore: 120,
@@ -182,11 +181,8 @@ const levelCompleteRunFixture = (): RunState => {
             level: 1,
             scoreGained: 120,
             rating: 'S',
-            livesRemaining: 5,
             perfect: true,
-            mistakes: 0,
-            clearLifeReason: 'none',
-            clearLifeGained: 0
+            mistakes: 0
         }
     };
 };
@@ -312,7 +308,8 @@ describe('GameScreen (OVR-014)', () => {
 
         const greeted = useAppStore.getState().run!;
         expect(greeted.floorCurioGreeted).toBe(true);
-        expect(greeted.stats.guardTokens).toBe(run.stats.guardTokens + 1);
+        // The guard's peek is his arrival gift; the greeting is the warning alone (Gen 183).
+        expect(greeted.peekCharges).toBe(run.peekCharges);
         expect(
             (greeted.gameplayEventJournal as { type: string }[]).some(
                 (event) => event.type === 'board.curio_greeted'
@@ -322,7 +319,10 @@ describe('GameScreen (OVR-014)', () => {
         act(() => {
             fireEvent.click(greet);
         });
-        expect(useAppStore.getState().run!.stats.guardTokens).toBe(run.stats.guardTokens + 1);
+        const greetings = (useAppStore.getState().run!.gameplayEventJournal as { type: string }[]).filter(
+            (event) => event.type === 'board.curio_greeted'
+        );
+        expect(greetings).toHaveLength(1);
     });
 
     it('defers achievement toasts while the floor-clear beat is up, then emits after leaving levelComplete', () => {
@@ -359,7 +359,7 @@ describe('GameScreen (OVR-014)', () => {
         render(
             <PlatformTiltProvider>
                 <NotificationHost>
-                    <GameScreen achievements={[]} run={{ ...levelCompleteRunFixture(), lives: 3 }} />
+                    <GameScreen achievements={[]} run={levelCompleteRunFixture()} />
                 </NotificationHost>
             </PlatformTiltProvider>
         );
@@ -374,7 +374,9 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.queryByRole('button', { name: /^continue$/i })).toBeNull();
         expect(screen.queryByRole('button', { name: /^main menu$/i })).toBeNull();
         expect(screen.getByTestId('board-stage').closest('[inert]')).toBeNull();
-        expect(beat).not.toHaveTextContent(/Lives carry across the run|payoff stack|Carry forward|Next floor loop/i);
+        expect(beat).not.toHaveTextContent(/payoff stack|Carry forward|Next floor loop/i);
+        // No lives (Gen 183): the beat has no life bonus to note and never mentions one.
+        expect(beat).not.toHaveTextContent(/\blives?\b/i);
     });
 
     it('normalizes malformed floor-clear counters before rendering overlay copy', () => {
@@ -394,7 +396,6 @@ describe('GameScreen (OVR-014)', () => {
                 level: Number.POSITIVE_INFINITY,
                 scoreGained: Number.NaN,
                 mistakes: Number.POSITIVE_INFINITY,
-                livesRemaining: Number.POSITIVE_INFINITY,
                 featuredObjectiveId: 'flip_par',
                 featuredObjectiveCompleted: true,
                 objectiveBonusScore: Number.POSITIVE_INFINITY,
@@ -476,7 +477,6 @@ describe('GameScreen (OVR-014)', () => {
             ...baseRun,
             findablesClaimedThisFloor: 0,
             findablesTotalThisFloor: 2,
-            lives: 4,
             stats: {
                 ...baseRun.stats,
                 comboShards: 1,
@@ -495,7 +495,6 @@ describe('GameScreen (OVR-014)', () => {
             announcement: {
                 comboShardsAfter: 1,
                 currentStreakAfter: 3,
-                livesAfter: 4,
                 findablesClaimedBefore: 0,
                 findablesClaimedAfter: 1,
                 findablesTotalBefore: 2,
@@ -534,7 +533,7 @@ describe('GameScreen (OVR-014)', () => {
                 .getState()
                 .notifications.find((notification) => notification.stackKey === `pickup:${claimEvent.eventId}`);
             expect(pickupToast?.message).toBe(
-                'Stack prime: Shard spark +1 combo shard. Double cashout: x4 +1 shard in 1 match. Pickups 1/2.'
+                'Stack prime: Shard spark +1 combo shard. One-away cashout: x4 +1 shard in 1 match. Pickups 1/2.'
             );
         });
     });
@@ -588,7 +587,7 @@ describe('GameScreen (OVR-014)', () => {
             label: 'Trait',
             tone: 'trait'
         });
-        expect(getVisualHudAnnouncementSignal('Guard token spent. 0 guard tokens remain.', 'info')).toEqual({
+        expect(getVisualHudAnnouncementSignal('Guard Cache ward blocked a hazard.', 'info')).toEqual({
             label: 'Guard',
             tone: 'guard'
         });
@@ -614,14 +613,7 @@ describe('GameScreen (OVR-014)', () => {
             ],
             level: 'high'
         });
-        expect(getVisualHudAnnouncementImpact('2 guard tokens gained. 2 available.', 'info')).toEqual({
-            burstTier: 'reward',
-            details: [
-                { label: '+Guard', tone: 'guard' }
-            ],
-            level: 'low'
-        });
-        expect(getVisualHudAnnouncementImpact('Life lost. No match.', 'error')).toEqual({
+        expect(getVisualHudAnnouncementImpact('No match.', 'error')).toEqual({
             burstTier: 'risk',
             details: [
                 { label: 'Miss', tone: 'risk' }
@@ -780,41 +772,46 @@ describe('GameScreen (OVR-014)', () => {
         });
     });
 
-    it('adds next-step lines for guard, hazard, and resource feedback rail messages', () => {
+    it('keeps the line after a miss quiet: a reset and a suggestion, nothing about what it cost', () => {
+        // Thesis §67: a bad floor is unremarkable. Whatever the miss carried, the follow-up never
+        // names a life, a loss or a penalty.
+        const followup = (announcement: string): string | null =>
+            getVisualHudAnnouncementFollowup({ announcement, priority: 'error', runStatus: 'playing', remainingPairCount: 3 });
+        expect(followup('No match. Recover with a safe match. Chain reset.')).toBe('Next: cards reset; pick a remembered pair.');
+        expect(followup('No match. Chain x4 broken.')).toBe('Next: rebuild from a confirmed pair before chasing rewards.');
+        for (const announcement of [
+            'No match. Recover with a safe match. Chain reset.',
+            'No match. Chain x4 broken.',
+            'Moving enemy contact. No match.',
+            'Mimic Cache bit. Reduced loot claimed.'
+        ]) {
+            expect(followup(announcement)).not.toMatch(/\b(life|lives|lost|penalty|punish)\b/i);
+        }
         expect(
             getVisualHudAnnouncementFollowup({
-                announcement: 'Guard token spent. 0 guard tokens remain.',
-                priority: 'info',
+                announcement: 'Something unnamed went wrong.',
+                priority: 'error',
                 runStatus: 'playing',
-                remainingPairCount: 3,
-                lives: 3
+                remainingPairCount: 3
             })
-        ).toBe('Next: guard absorbed the mistake; keep lives protected.');
+        ).toBe('Next: cards reset; pick a remembered pair.');
+    });
+
+    it('adds next-step lines for hazard and resource feedback rail messages', () => {
         expect(
             getVisualHudAnnouncementFollowup({
                 announcement: 'Guard Cache ward blocked a hazard.',
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: hazard blocked; continue from the best safe match.');
-        expect(
-            getVisualHudAnnouncementFollowup({
-                announcement: '2 guard tokens gained. 2 available.',
-                priority: 'info',
-                runStatus: 'playing',
-                remainingPairCount: 3,
-                lives: 3
-            })
-        ).toBe('Next: guard can absorb the next unsafe hit before lives drop.');
         expect(
             getVisualHudAnnouncementFollowup({
                 announcement: '2 combo shards spent. 1 available.',
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: spend shards on powers when the board gets risky.');
         expect(
@@ -823,7 +820,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: rebuild from a confirmed pair before chasing rewards.');
         expect(
@@ -832,7 +828,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 4,
-                lives: 3
             })
         ).toBe('Next: rebuild from a confirmed pair before chasing the lost reward again.');
         expect(
@@ -841,7 +836,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: pickup reward applied; keep the streak alive with a confirmed pair.');
         expect(
@@ -850,7 +844,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: cashout is armed; take the safest confirmed match now.');
         expect(
@@ -859,7 +852,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: prime the cashout with the safest confirmed match.');
         expect(
@@ -868,7 +860,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: cashout is one match away; take the safest confirmed match.');
         expect(
@@ -877,7 +868,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: route value is banked; chase the safest chainable payoff.');
         expect(
@@ -886,7 +876,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: trait payoff landed; look for the next connected trait card.');
     });
@@ -898,7 +887,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: use the revealed threat marker to route around danger.');
         expect(
@@ -907,7 +895,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: treat the marked danger as known information before flipping.');
         expect(
@@ -916,7 +903,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: pressure is frozen; clear the best confirmed pair now.');
         expect(
@@ -925,7 +911,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: planning paid out; preserve pins for uncertain pairs.');
     });
@@ -937,25 +922,22 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: board order changed; recheck positions before pairing.');
         expect(
             getVisualHudAnnouncementFollowup({
-                announcement: 'Mimic Cache bit. Life lost; reduced loot claimed.',
+                announcement: 'Mimic Cache bit. Reduced loot claimed.',
                 priority: 'error',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 1
             })
-        ).toBe('Next: recover control before touching another risky cache.');
+        ).toBe('Next: treat unknown cache pairs as dangerous until confirmed.');
         expect(
             getVisualHudAnnouncementFollowup({
                 announcement: 'Fuse Cache claimed late. Fuse expired; consolation gold gained.',
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 2,
-                lives: 3
             })
         ).toBe('Next: late fuse still pays consolation gold; clear safer pairs.');
     });
@@ -963,20 +945,18 @@ describe('GameScreen (OVR-014)', () => {
     it('adds specific next-step lines for moving enemy combat feedback', () => {
         expect(
             getVisualHudAnnouncementFollowup({
-                announcement: 'Life lost. 1 life remains. Moving enemy contact.',
+                announcement: 'Moving enemy contact.',
                 priority: 'error',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 1
             })
-        ).toBe('Next: track the patrol path before risking the last life.');
+        ).toBe('Next: pause on the patrol path and choose a safe pair away from it.');
         expect(
             getVisualHudAnnouncementFollowup({
                 announcement: 'Match resolved. 2/4 pairs cleared. Moving enemy defeated. 1 cleared this floor.',
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 2,
-                lives: 3
             })
         ).toBe('Next: threat removed; use the opened space to clear confirmed pairs.');
         expect(
@@ -985,37 +965,25 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 2,
-                lives: 3
             })
         ).toBe('Next: pressure is down; keep clearing confirmed pairs.');
         expect(
             getVisualHudAnnouncementFollowup({
-                announcement: 'Life lost. 0 lives remain. Moving enemy contact.',
+                announcement: 'Moving enemy contact.',
                 priority: 'error',
                 runStatus: 'gameOver',
                 remainingPairCount: 3,
-                lives: 0
             })
         ).toBe('Next: review the run summary before starting the next descent.');
     });
 
-    it('adds next-step lines for health recovery, pickups, chains, and Gambit feedback', () => {
-        expect(
-            getVisualHudAnnouncementFollowup({
-                announcement: 'Life restored. 3 lives available.',
-                priority: 'info',
-                runStatus: 'playing',
-                remainingPairCount: 3,
-                lives: 3
-            })
-        ).toBe('Next: extra life secured; spend it only on controlled risks.');
+    it('adds next-step lines for pickups, chains, and Gambit feedback', () => {
         expect(
             getVisualHudAnnouncementFollowup({
                 announcement: 'Shard spark claimed: +1 combo shard.',
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: pickup reward applied; keep clearing confirmed pairs.');
         expect(
@@ -1024,7 +992,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 2,
-                lives: 3
             })
         ).toBe('Next: preserve the streak with the best safe match.');
         expect(
@@ -1033,7 +1000,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 2,
-                lives: 3
             })
         ).toBe('Next: take the third flip only if the wager is worth it.');
     });
@@ -1045,7 +1011,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: use Swap on the marked cards to create the route.');
 
@@ -1055,7 +1020,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: line up another trait interaction before the floor ends.');
 
@@ -1065,7 +1029,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 2,
-                lives: 3
             })
         ).toBe('Next: route cashout banked; spend it when the board gets risky.');
     });
@@ -1077,7 +1040,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: spend shards on powers when the board gets risky.');
 
@@ -1087,7 +1049,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: trait payoff landed; look for the next chainable interaction.');
 
@@ -1097,7 +1058,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: perk payoff landed; route the next trait or chain cashout.');
 
@@ -1107,7 +1067,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: trait penalty landed; rebuild from a confirmed pair.');
 
@@ -1117,7 +1076,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: multiple trait penalties landed; use the safest confirmed pair before touching that cluster again.');
 
@@ -1127,7 +1085,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: combo burst landed; cash the safest remaining payoff before the chain cools.');
 
@@ -1137,7 +1094,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: reward burst landed; keep the payoff loop alive with a safe match.');
 
@@ -1147,7 +1103,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: trait surge landed; look for the next multi-trait route.');
 
@@ -1157,7 +1112,6 @@ describe('GameScreen (OVR-014)', () => {
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
-                lives: 3
             })
         ).toBe('Next: trait surge landed; look for the next multi-trait route.');
     });
@@ -1592,11 +1546,8 @@ describe('GameScreen (OVR-014)', () => {
                 level: 1,
                 scoreGained: 120,
                 rating: 'S++',
-                livesRemaining: 5,
                 perfect: true,
                 mistakes: 0,
-                clearLifeReason: 'perfect',
-                clearLifeGained: 1,
                 featuredObjectiveId: 'flip_par',
                 featuredObjectiveCompleted: true,
                 featuredObjectiveStreak: 2,
@@ -1616,8 +1567,8 @@ describe('GameScreen (OVR-014)', () => {
 
         expect(screen.getByTestId('floor-clear-score')).toHaveTextContent('+120');
         const notes = screen.getByTestId('floor-clear-notes');
-        expect(notes).toHaveTextContent('Perfect floor bonus: +1 Life');
         expect(notes).toHaveTextContent('Flip par: Complete (+30 score)');
+        expect(notes).not.toHaveTextContent(/life/i);
         // No route is offered between floors any more (Gen 173), and no screen at all since
         // Gen 182: the beat sits on the board and the floor clear goes straight on.
         expect(screen.queryByTestId('route-choice-panel')).toBeNull();

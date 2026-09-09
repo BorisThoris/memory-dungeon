@@ -231,7 +231,7 @@ export const SYSTEM_OCCUPANCY_BANDS = {
  * recording these. It did not empty because eleven quiet systems woke up. It emptied because they
  * were deleted: every one of them counted something the dungeon layer put on the board - a seal,
  * an altar, a roaming hazard, a mirror decoy, a shuffle snare, a lantern ward, a magpie, a mimic
- * cache, a parasite vessel, a pin lattice, a safe-hazard ward - and there is no dungeon layer.
+ * cache, a pin lattice, a safe-hazard ward - and there is no dungeon layer.
  * `docs/REMOVED_DUNGEON_LAYER.md` is the record of what each one did.
  *
  * That distinction is worth keeping in front of whoever reads this next, because the two readings

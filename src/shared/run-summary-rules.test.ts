@@ -12,14 +12,15 @@ import { reduceGameplayCommand } from './gameplay-core';
 import { appendGameplayJournal } from './gameplay-journal';
 
 describe('createRunSummary', () => {
-    it('owns terminal status, life normalization, and save-valid summary construction', () => {
+    it('owns terminal status, the end reason, and save-valid summary construction', () => {
         const run = finishMemorizePhase(createNewRun(100, { runSeed: 0x6601 }));
         const terminal = createGameOverRunSummary(run, []);
         const validated = createValidatedGameOverRunSummary(run, []);
 
-        expect(terminal).toMatchObject({ status: 'gameOver', lives: 0 });
-        expect(terminal.lastRunSummary).not.toBeNull();
-        expect(validated).toMatchObject({ status: 'gameOver', lives: 0 });
+        // A run ended from outside the rules was quit; the summary carries the reason.
+        expect(terminal).toMatchObject({ status: 'gameOver', runEndReason: 'quit' });
+        expect(terminal.lastRunSummary).toMatchObject({ runEndReason: 'quit' });
+        expect(validated).toMatchObject({ status: 'gameOver', runEndReason: 'quit' });
         expect(validated.lastRunSummary).toEqual(
             normalizeSaveData({ lastRunSummary: terminal.lastRunSummary }).lastRunSummary
         );

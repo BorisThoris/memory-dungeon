@@ -27,12 +27,6 @@ describe('the magpie says something', () => {
         ]);
     });
 
-    it('announces a guard token being spent, or nobody would keep holding one', () => {
-        expect(magpieAnnouncementLines(turnEvent({ magpieScaredOffBefore: 0, magpieScaredOffAfter: 1 }))).toEqual([
-            MAGPIE_BEAT_COPY.scaredAnnouncement
-        ]);
-    });
-
     it('says nothing on a turn it did not visit', () => {
         expect(magpieAnnouncementLines(turnEvent({}))).toEqual([]);
     });

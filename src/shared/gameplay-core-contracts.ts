@@ -30,7 +30,6 @@ export const gameplayFactsSchema = z
         adjacentTraits: z.array(z.enum(GAMEPLAY_TILE_TRAIT_KINDS)).default([]),
         matchedFindables: z.array(z.enum(GAMEPLAY_FINDABLE_KINDS)).default([]),
         featuredObjectiveCompleted: z.boolean().default(false),
-        scoreParasiteActive: z.boolean().default(false)
     })
     .strict();
 
@@ -86,11 +85,6 @@ export const gameplayConditionSchema = z.discriminatedUnion('kind', [
     z
         .object({
             kind: z.literal('featured_objective.completed')
-        })
-        .strict(),
-    z
-        .object({
-            kind: z.literal('score_parasite.active')
         })
         .strict()
 ]);
@@ -266,10 +260,6 @@ export const boardTurnAnnouncementFactsSchema = z
         currentStreakAfter: z.number().int().nonnegative(),
         comboShardsBefore: z.number().int().nonnegative(),
         comboShardsAfter: z.number().int().nonnegative(),
-        guardTokensBefore: z.number().int().nonnegative(),
-        guardTokensAfter: z.number().int().nonnegative(),
-        livesBefore: z.number().int().nonnegative(),
-        livesAfter: z.number().int().nonnegative(),
         findablesClaimedBefore: z.number().int().nonnegative(),
         findablesClaimedAfter: z.number().int().nonnegative(),
         chunkBreaksBefore: z.number().int().nonnegative().default(0),
@@ -287,8 +277,6 @@ export const boardTurnAnnouncementFactsSchema = z
         chunkRippleWaves: z.number().int().nonnegative().default(0),
         magpieTheftsBefore: z.number().int().nonnegative().default(0),
         magpieTheftsAfter: z.number().int().nonnegative().default(0),
-        magpieScaredOffBefore: z.number().int().nonnegative().default(0),
-        magpieScaredOffAfter: z.number().int().nonnegative().default(0),
         findablesTotalBefore: z.number().int().nonnegative(),
         findablesTotalAfter: z.number().int().nonnegative(),
         matchedTraitKinds: z.array(z.string().min(1).max(40)).default([]),
@@ -318,7 +306,6 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
                 adjacentTraits: [],
                 matchedFindables: [],
                 featuredObjectiveCompleted: false,
-                scoreParasiteActive: false
             })
         })
         .strict(),
@@ -394,12 +381,6 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
         .object({
             ...commandBase,
             type: z.literal('board.curio_greet')
-        })
-        .strict(),
-    z
-        .object({
-            ...commandBase,
-            type: z.literal('floor.parasite_advance')
         })
         .strict(),
     z
@@ -546,8 +527,6 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             matchedPairsAfter: z.number().int().nonnegative(),
             recallFocusBefore: z.number().int().nonnegative(),
             recallFocusAfter: z.number().int().nonnegative(),
-            parasitePressureBefore: z.number().int().nonnegative(),
-            parasitePressureAfter: z.number().int().nonnegative(),
             shiftingSpotlightNonceBefore: z.number().int().nonnegative(),
             shiftingSpotlightNonceAfter: z.number().int().nonnegative(),
             boardComplete: z.boolean()
@@ -601,8 +580,6 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             curioId: z.string().min(1).max(64),
             peekChargesBefore: z.number().int().nonnegative(),
             peekChargesAfter: z.number().int().nonnegative(),
-            guardTokensBefore: z.number().int().nonnegative(),
-            guardTokensAfter: z.number().int().nonnegative(),
             strayChargesBefore: z.number().int().nonnegative(),
             strayChargesAfter: z.number().int().nonnegative(),
             undoUsesBefore: z.number().int().nonnegative(),
@@ -634,19 +611,6 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
-            type: z.literal('score_parasite.advanced'),
-            active: z.boolean(),
-            pressureBefore: z.number().int().nonnegative(),
-            pressureAfter: z.number().int().nonnegative(),
-            livesBefore: z.number().int().nonnegative(),
-            livesAfter: z.number().int().nonnegative(),
-            thresholdTriggered: z.boolean(),
-            lifeLost: z.boolean()
-        })
-        .strict(),
-    z
-        .object({
-            ...eventBase,
             type: z.literal('floor.advanced'),
             fromFloor: z.number().int().nonnegative(),
             toFloor: z.number().int().positive(),
@@ -657,10 +621,6 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             boardPairCount: z.number().int().nonnegative(),
             boardTileCount: z.number().int().nonnegative(),
             memorizeRemainingMs: z.number().int().nonnegative().nullable(),
-            livesBefore: z.number().int().nonnegative(),
-            livesAfter: z.number().int().nonnegative(),
-            parasitePressureBefore: z.number().int().nonnegative(),
-            parasitePressureAfter: z.number().int().nonnegative(),
             destroyChargesBefore: z.number().int().nonnegative(),
             destroyChargesAfter: z.number().int().nonnegative()
         })
@@ -675,8 +635,6 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             boardComplete: z.boolean(),
             statusBefore: z.enum(['memorize', 'playing', 'resolving', 'paused', 'levelComplete', 'gameOver']),
             statusAfter: z.enum(['memorize', 'playing', 'resolving', 'paused', 'levelComplete', 'gameOver']),
-            livesBefore: z.number().int().nonnegative(),
-            livesAfter: z.number().int().nonnegative(),
             totalScoreBefore: z.number().int().nonnegative(),
             totalScoreAfter: z.number().int().nonnegative(),
             triesBefore: z.number().int().nonnegative(),
@@ -912,13 +870,6 @@ export const createGameplayUndoResolveCommand = (commandId: string): GameplayCom
         schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
         commandId,
         type: 'board.undo_resolve'
-    });
-
-export const createGameplayParasiteAdvanceCommand = (commandId: string): GameplayCommand =>
-    gameplayCommandSchema.parse({
-        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
-        commandId,
-        type: 'floor.parasite_advance'
     });
 
 export const createGameplayFloorAdvanceCommand = (commandId: string): GameplayCommand =>

@@ -296,7 +296,6 @@ describe('useAppStore timers', () => {
         await vi.advanceTimersByTimeAsync(1200);
 
         expect(useAppStore.getState().run?.stats.tries).toBe(0);
-        expect(useAppStore.getState().run?.lives).toBe(4);
 
         useAppStore.getState().closeSettings();
         expect(useAppStore.getState().view).toBe('playing');
@@ -306,7 +305,6 @@ describe('useAppStore timers', () => {
 
         expect(useAppStore.getState().run?.status).toBe('playing');
         expect(useAppStore.getState().run?.stats.tries).toBe(expectedTriesAfterResolve);
-        expect(useAppStore.getState().run?.lives).toBe(4);
     });
 
 
@@ -537,38 +535,6 @@ describe('useAppStore timers', () => {
 
 
 
-    it('lets death win over the floor-clear interlude when continuing a completed floor', () => {
-        const makeDeadCompleteRun = (overrides: Partial<RunState> = {}): RunState => {
-            const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 12_359 });
-            return {
-                ...baseRun,
-                status: 'levelComplete',
-                lives: 0,
-                lastLevelResult: {
-                    level: 1,
-                    scoreGained: 100,
-                    rating: 'B',
-                    livesRemaining: 0,
-                    perfect: false,
-                    mistakes: 1,
-                    clearLifeReason: 'none',
-                    clearLifeGained: 0
-                },
-                ...overrides
-            };
-        };
-
-        resetStore();
-        useAppStore.setState({ view: 'playing', run: makeDeadCompleteRun() });
-
-        useAppStore.getState().continueToNextLevel();
-
-        expect(useAppStore.getState().view).toBe('gameOver');
-        expect(useAppStore.getState().run?.status).toBe('gameOver');
-        expect(useAppStore.getState().run?.lives).toBe(0);
-        expect(useAppStore.getState().run?.lastRunSummary).not.toBeNull();
-    });
-
     it('GLD-P0-003: continueToNextLevel ignores non-complete runs', () => {
         const base = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_003 });
         const statuses: RunState['status'][] = ['memorize', 'playing', 'resolving', 'paused', 'gameOver'];
@@ -679,32 +645,6 @@ describe('useAppStore timers', () => {
         expect(uiSfxMocks.playPauseResumeSfx).not.toHaveBeenCalled();
     });
 
-    it('turns a paused zero-health run into game over instead of resuming play', () => {
-        const pausedDead: RunState = {
-            ...createNewRun(0),
-            status: 'paused',
-            lives: 0,
-            timerState: {
-                ...createNewRun(0).timerState,
-                pausedFromStatus: 'playing'
-            }
-        };
-        useAppStore.setState({ view: 'playing', run: pausedDead });
-
-        useAppStore.getState().resume();
-
-        expect(useAppStore.getState().view).toBe('gameOver');
-        expect(useAppStore.getState().run?.status).toBe('gameOver');
-        expect(useAppStore.getState().run?.lives).toBe(0);
-        expect(useAppStore.getState().run?.gameplayCommandJournal).toEqual([
-            expect.objectContaining({ type: 'run.resume' })
-        ]);
-        expect(useAppStore.getState().run?.gameplayEventJournal).toEqual(
-            expect.arrayContaining([expect.objectContaining({ type: 'run.resumed', outcome: 'game_over' })])
-        );
-        expect(uiSfxMocks.playPauseResumeSfx).not.toHaveBeenCalled();
-    });
-
     it('turns an impossible paused resolving snapshot into game over without a resume cue', () => {
         const run = createNewRun(0);
         const pausedResolvingWithoutBoard: RunState = {
@@ -723,49 +663,7 @@ describe('useAppStore timers', () => {
 
         expect(useAppStore.getState().view).toBe('gameOver');
         expect(useAppStore.getState().run?.status).toBe('gameOver');
-        expect(useAppStore.getState().run?.lives).toBe(0);
         expect(uiSfxMocks.playPauseResumeSfx).not.toHaveBeenCalled();
-    });
-
-    it('routes dead paused in-run overlay snapshots to game over instead of a blank playing shell', () => {
-        const makePausedDead = (): RunState => {
-            const run = createNewRun(0);
-            return {
-                ...run,
-                status: 'paused',
-                lives: 0,
-                timerState: {
-                    ...run.timerState,
-                    pausedFromStatus: 'playing'
-                }
-            };
-        };
-
-        useAppStore.setState({
-            view: 'settings',
-            settingsReturnView: 'playing',
-            run: makePausedDead()
-        });
-        useAppStore.getState().closeSettings();
-
-        expect(useAppStore.getState().view).toBe('gameOver');
-        expect(useAppStore.getState().run?.status).toBe('gameOver');
-        expect(useAppStore.getState().run?.lives).toBe(0);
-        expect(useAppStore.getState().settingsReturnView).toBe('menu');
-
-        resetStore();
-        useAppStore.setState({
-            view: 'inventory',
-            subscreenReturnView: 'playing',
-            run: makePausedDead()
-        });
-        useAppStore.getState().closeSubscreen();
-
-        expect(useAppStore.getState().view).toBe('gameOver');
-        expect(useAppStore.getState().run?.status).toBe('gameOver');
-        expect(useAppStore.getState().run?.lives).toBe(0);
-        expect(useAppStore.getState().subscreenReturnView).toBe('menu');
-
     });
 
     it('does not arm board action modes outside an actionable playing run', () => {
@@ -1010,7 +908,7 @@ describe('useAppStore restartRun menu modes', () => {
             const started = useAppStore.getState().run;
 
             useAppStore.setState({
-                run: createRunSummary({ ...started!, status: 'gameOver', lives: 0 }, []),
+                run: createRunSummary({ ...started!, status: 'gameOver', runEndReason: 'quit' }, []),
                 view: 'gameOver'
             });
 

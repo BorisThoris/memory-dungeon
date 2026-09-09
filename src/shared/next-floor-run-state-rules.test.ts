@@ -10,8 +10,6 @@ describe('createNextFloorRunState', () => {
         const run = {
             ...baseRun,
             status: 'levelComplete' as const,
-            lives: 2,
-            pendingMemorizeBonusMs: 900,
             pinnedTileIds: ['old'],
             matchResolutionsThisFloor: 7,
             findablesClaimedThisFloor: 2,
@@ -34,16 +32,14 @@ describe('createNextFloorRunState', () => {
         const nextBoard = createNewRun(0, { runSeed: 12 }).board!;
 
         const next = createNextFloorRunState(run, {
-            lives: 2,
             activeMutators: run.activeMutators,
             board: { ...nextBoard, level: 4 },
-            parasiteFloors: 1,
             memorizeRemainingMs: 2500
         });
 
         expect(next.status).toBe('memorize');
         expect(next.activeMutators).toEqual(run.activeMutators);
-        expect(next.pendingMemorizeBonusMs).toBe(0);
+        expect(next.runEndReason).toBeNull();
         expect(next.pinnedTileIds).toEqual([]);
         expect(next.matchResolutionsThisFloor).toBe(0);
         expect(next.findablesClaimedThisFloor).toBe(0);
@@ -73,10 +69,8 @@ describe('createNextFloorRunState', () => {
             stats: Number.NaN as unknown as RunState['stats']
         };
         const next = createNextFloorRunState(run, {
-            lives: run.lives,
             activeMutators: run.activeMutators,
             board: { ...run.board!, level: 4 },
-            parasiteFloors: run.parasiteFloors,
             memorizeRemainingMs: 1000
         });
 

@@ -4,7 +4,7 @@
  * REG-029 listed the gamepad path as deferred while keyboard and pointer shipped. This module is
  * the half of it that has no browser in it: a `Gamepad`-shaped snapshot goes in, a list of discrete
  * actions comes out. Everything stateful about a held stick — the wait before a direction starts
- * repeating, and the cadence once it does — lives in a plain value the caller threads through, so
+ * repeating, and the cadence once it does — is held in a plain value the caller threads through, so
  * the whole feel of the pad is testable without a pad.
  */
 

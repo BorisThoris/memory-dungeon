@@ -39,7 +39,7 @@ describe('mechanics-encyclopedia', () => {
         expect(MECHANICS_GLOSSARY.find((row) => row.id === 'recall_focus')?.preferredLabel).toBe('Recall Focus');
         expect(MECHANICS_GLOSSARY.find((row) => row.id === 'combo_shards')?.avoidLabels).toContain('paid shards');
         expect(MECHANICS_GLOSSARY.every((row) => row.shortDefinition.length > 0)).toBe(true);
-        expect(glossaryTermById('missing_term' as Parameters<typeof glossaryTermById>[0]).id).toBe('lives');
+        expect(glossaryTermById('missing_term' as Parameters<typeof glossaryTermById>[0]).id).toBe('mutators');
     });
 
     it('REG-101 glossary avoids forbidden monetization and internal labels', () => {
@@ -71,6 +71,57 @@ describe('mechanics-encyclopedia', () => {
             expect(topic.description, topic.id).not.toMatch(removed);
             expect(topic.title, topic.id).not.toMatch(removed);
         }
+    });
+
+    it('names no part of the life economy Gen 183 removed', () => {
+        // Lives, guard tokens, the first-mismatch grace, chain heal, the shard-to-life conversion,
+        // the clear-life bonus and the score parasite are gone from the rules (docs/REMOVED_LIVES.md).
+        // No reference copy may describe them as if a player could still meet them; the glossary
+        // has no term for them and the sections have no entry for them.
+        const removed = /\blives\b|\blife\b|guard token|parasite|mismatch grace|chain heal|one heart/i;
+        const glossaryIds = MECHANICS_GLOSSARY.map((term) => term.id);
+        expect(glossaryIds).not.toContain('lives');
+        expect(glossaryIds).not.toContain('guard_tokens');
+        for (const term of MECHANICS_GLOSSARY) {
+            expect(term.shortDefinition, term.id).not.toMatch(removed);
+            expect(term.preferredLabel, term.id).not.toMatch(removed);
+        }
+        const topics = [
+            ...CODEX_CORE_TOPICS,
+            ...ENCYCLOPEDIA_POWER_TOPICS,
+            ...ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS,
+            ...ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS,
+            ...ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS,
+            ...ENCYCLOPEDIA_CONTRACT_TOPICS,
+            ...ENCYCLOPEDIA_FEATURED_RUN_TOPICS,
+            ...GAME_MODE_CODEX,
+            ...Object.values(MUTATOR_CATALOG),
+            ...Object.values(ACHIEVEMENT_CATALOG)
+        ];
+        const topicIds = topics.map((topic) => topic.id);
+        for (const gone of ['lives', 'sys_chain_heal_and_guard', 'sys_clear_life_bonus', 'score_parasite']) {
+            expect(topicIds).not.toContain(gone);
+        }
+        for (const topic of topics) {
+            expect(topic.description, topic.id).not.toMatch(removed);
+            expect(topic.title, topic.id).not.toMatch(removed);
+        }
+    });
+
+    it('describes how a run ends by the turn ceiling, and re-reads ACH_LAST_LIFE against it', () => {
+        // Thesis §42.2: a run ends when the player stops or a floor is not cleared within three
+        // times its par. The Steam API name ACH_LAST_LIFE stays; the achievement it names is now
+        // clearing a floor on the ceiling's final turn.
+        const ceiling = CODEX_CORE_TOPICS.find((topic) => topic.id === 'turn_ceiling');
+        expect(ceiling?.title).toBe('The turn ceiling');
+        expect(ceiling?.description).toContain('three times its par');
+        expect(ceiling?.description).toContain('ends the run');
+        expect(ceiling?.description).toContain('when you stop');
+        expect(ACHIEVEMENT_CATALOG.ACH_LAST_LIFE.title).toBe('Last Turn Standing');
+        expect(ACHIEVEMENT_CATALOG.ACH_LAST_LIFE.description).toBe(
+            'Clear a floor on the final turn before its ceiling.'
+        );
+        expect(MUTATOR_CATALOG.magpie_thief.description).not.toMatch(/scare/i);
     });
 
     it('ACHIEVEMENT_CATALOG has an entry per AchievementId with id/title/description aligned to keys', () => {

@@ -71,8 +71,10 @@ describe('chainMomentum copy helpers', () => {
         });
     });
 
-    it('forecasts the next real chain reward thresholds', () => {
-        expect(getChainRewardForecastCues(3, 1, 4)).toEqual([
+    it('forecasts the next shard, the one thing a chain still pays out', () => {
+        // Guard tokens and the chain heal were the other two lanes until Gen 183; with no lives
+        // there is nothing for them to protect or restore, so the forecast is one cue or none.
+        expect(getChainRewardForecastCues(3, 1)).toEqual([
             {
                 actionLabel: 'Next',
                 chaseLabel: 'Hit now',
@@ -80,50 +82,29 @@ describe('chainMomentum copy helpers', () => {
                 distanceLabel: '1 match',
                 id: 'shard-4',
                 label: 'x4 +1 shard',
-                stackSize: 2,
                 targetStreak: 4,
                 tone: 'reward',
                 urgency: 'next'
-            },
-            {
-                actionLabel: 'Next',
-                chaseLabel: 'Hit now',
-                distance: 1,
-                distanceLabel: '1 match',
-                id: 'guard-4',
-                label: 'x4 +1 guard',
-                stackSize: 2,
-                targetStreak: 4,
-                tone: 'guard',
-                urgency: 'next'
-            },
-            {
-                actionLabel: 'Later',
-                chaseLabel: 'Hold streak',
-                distance: 5,
-                distanceLabel: '5 matches',
-                id: 'heal-8',
-                label: 'x8 +1 life',
-                targetStreak: 8,
-                tone: 'heal',
-                urgency: 'later'
             }
         ]);
-        expect(getChainRewardForecastCues(1, 2, 4)[0]).toEqual({
+        expect(getChainRewardForecastCues(1, 1)[0]).toMatchObject({
             actionLabel: 'Next',
-            chaseLabel: 'Hit now',
             distance: 1,
-            distanceLabel: '1 match',
-            id: 'shard-life-2',
-            label: 'x2 +1 life',
-            targetStreak: 2,
-            tone: 'heal',
+            id: 'shard-2',
+            label: 'x2 +1 shard',
             urgency: 'next'
         });
+        expect(getChainRewardForecastCues(4, 1)[0]).toMatchObject({ actionLabel: 'Soon', distance: 2, urgency: 'soon' });
+        expect(getChainRewardForecastCues(3, 1).map((cue) => cue.label).join(' ')).not.toMatch(/life|guard|heal/i);
     });
 
-    it('builds reward progress pips from the active reward cadence', () => {
-        const shardCue = getChainRewardForecastCues(3, 1, 4)[0]!;
+    it('forecasts nothing once the shard bank is full', () => {
+        expect(getChainRewardForecastCues(3, 2)).toEqual([]);
+        expect(getChainRewardForecastCues(9, 3)).toEqual([]);
+    });
+
+    it('builds reward progress pips from the shard cadence', () => {
+        const shardCue = getChainRewardForecastCues(3, 1)[0]!;
         expect(getChainRewardProgress(3, shardCue)).toEqual({
             filled: 1,
             label: '1/2',
@@ -131,41 +112,24 @@ describe('chainMomentum copy helpers', () => {
             targetLabel: 'x4 +1 shard',
             total: 2
         });
-        expect(shardCue.stackSize).toBe(2);
+        expect(shardCue.stackSize).toBeUndefined();
 
-        const singleShardCue = getChainRewardForecastCues(4, 1, 4)[0]!;
-        expect(singleShardCue.stackSize).toBeUndefined();
-        expect(getChainRewardProgress(4, singleShardCue)).toEqual({
+        const nextShardCue = getChainRewardForecastCues(4, 1)[0]!;
+        expect(getChainRewardProgress(4, nextShardCue)).toEqual({
             filled: 0,
             label: '0/2',
             remainingLabel: '2 matches left',
             targetLabel: 'x6 +1 shard',
             total: 2
         });
-
-        const guardCue = getChainRewardForecastCues(5, 2, 4).find((cue) => cue.tone === 'guard')!;
-        expect(getChainRewardProgress(5, guardCue)).toMatchObject({
-            filled: 1,
-            label: '1/4',
-            remainingLabel: '3 matches left',
-            targetLabel: 'x8 +1 guard',
-            total: 4
-        });
-
-        const healCue = getChainRewardForecastCues(1, 2, 4)[0]!;
-        expect(getChainRewardProgress(1, healCue)).toEqual({
-            filled: 1,
-            label: '1/2',
-            remainingLabel: '1 match left',
-            targetLabel: 'x2 +1 life',
-            total: 2
-        });
     });
 
     it('names arcade urgency for reward forecast chips', () => {
-        expect(getChainRewardUrgencyCopy(getChainRewardForecastCues(3, 1, 4)[0]!)).toBe('Double cashout');
-        expect(getChainRewardUrgencyCopy(getChainRewardForecastCues(5, 1, 4).find((cue) => cue.tone === 'guard')!)).toBe('Double prime');
-        expect(getChainRewardUrgencyCopy(getChainRewardForecastCues(3, 1, 4).find((cue) => cue.tone === 'heal')!)).toBe('Combo chase');
+        expect(getChainRewardUrgencyCopy(getChainRewardForecastCues(3, 1)[0]!)).toBe('One-away cashout');
+        expect(getChainRewardUrgencyCopy(getChainRewardForecastCues(4, 1)[0]!)).toBe('Combo prime');
+        expect(getChainRewardUrgencyCopy({ distance: 5, tone: 'reward', urgency: 'later' })).toBe('Combo chase');
+        expect(getChainRewardUrgencyCopy({ distance: 6, tone: 'reward', urgency: 'later' })).toBe('Future payoff');
+        expect(getChainRewardUrgencyCopy({ distance: 1, stackSize: 2, tone: 'reward', urgency: 'next' })).toBe('Double cashout');
         expect(
             getChainRewardUrgencyCopy({
                 distance: 1,
@@ -191,7 +155,7 @@ describe('chainMomentum copy helpers', () => {
     });
 
     it('normalizes malformed reward forecast inputs before building visible copy', () => {
-        const cues = getChainRewardForecastCues(Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY);
+        const cues = getChainRewardForecastCues(Number.NaN, Number.NEGATIVE_INFINITY);
 
         expect(cues).toEqual([
             {
@@ -204,28 +168,6 @@ describe('chainMomentum copy helpers', () => {
                 targetStreak: 2,
                 tone: 'reward',
                 urgency: 'soon'
-            },
-            {
-                actionLabel: 'Later',
-                chaseLabel: 'Hold streak',
-                distance: 4,
-                distanceLabel: '4 matches',
-                id: 'guard-4',
-                label: 'x4 +1 guard',
-                targetStreak: 4,
-                tone: 'guard',
-                urgency: 'later'
-            },
-            {
-                actionLabel: 'Later',
-                chaseLabel: 'Hold streak',
-                distance: 8,
-                distanceLabel: '8 matches',
-                id: 'heal-8',
-                label: 'x8 +1 life',
-                targetStreak: 8,
-                tone: 'heal',
-                urgency: 'later'
             }
         ]);
         expect(cues.map((cue) => `${cue.id} ${cue.label} ${cue.distanceLabel}`).join(' ')).not.toMatch(
@@ -234,7 +176,7 @@ describe('chainMomentum copy helpers', () => {
     });
 
     it('normalizes fractional and malformed progress values for reward pips', () => {
-        const cue = getChainRewardForecastCues(3.9, 1.9, 4.9)[0]!;
+        const cue = getChainRewardForecastCues(3.9, 1.9)[0]!;
 
         expect(cue).toMatchObject({
             distance: 1,

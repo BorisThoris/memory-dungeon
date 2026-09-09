@@ -47,23 +47,12 @@ export const resumeRun = (run: RunState): RunState => {
     if (run.status !== 'paused' || !pausedFromStatus || !isResumableStatus(pausedFromStatus)) {
         return run;
     }
-    if (run.lives <= 0) {
-        return {
-            ...run,
-            status: 'gameOver',
-            lives: 0,
-            timerState: {
-                ...timerState,
-                pausedFromStatus: null
-            }
-        };
-    }
     if (pausedFromStatus === 'resolving') {
         if (!run.board) {
             return {
                 ...run,
                 status: 'gameOver',
-                lives: 0,
+                runEndReason: run.runEndReason ?? 'quit',
                 timerState: {
                     ...timerState,
                     resolveRemainingMs: null,

@@ -19,9 +19,9 @@ export const REG105_DATA_STAGEVIEW = 'data-reg-stage-viewport';
 
 /** REG-106: HUD information architecture — primary / secondary / deferred regions (RunShell bar / line / dock). */
 export const REG106_HUD_IA = {
-    primary: ['score', 'floor', 'lives', 'streak', 'ward_bounty'] as const,
+    primary: ['score', 'floor', 'par', 'streak', 'ward_bounty'] as const,
     secondary: ['objective', 'mutators', 'run_meta'] as const,
-    detailsDrawer: ['guard', 'combo', 'distraction', 'forgiveness'] as const
+    detailsDrawer: ['combo', 'distraction'] as const
 } as const;
 
 /** REG-107: where power-verb teaching rows surface (RunShell dock). */

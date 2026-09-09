@@ -7,7 +7,6 @@ export interface SettingsReferenceControlRow {
     id:
         | 'difficulty'
         | 'timer_mode'
-        | 'max_lives'
         | 'card_theme'
         | 'tutorial_hints'
         | 'resolve_delay'
@@ -38,10 +37,10 @@ export const SETTINGS_REFERENCE_CONTROL_ROWS: readonly SettingsReferenceControlR
         persistedField: null,
         visibleInSettings: true,
         copy: 'Reference-only. Shipped balance uses the Standard fair curve; enabling variants requires rules identity and achievement/daily copy.',
-        hint: 'Reference only: shipped balance is the Standard profile (4/5 lives, first mismatch grace, softened memorize curve).',
+        hint: 'Reference only: shipped balance is the Standard profile (one par curve, a turn ceiling at three times par, softened memorize curve).',
         options: ['Easy', 'Normal', 'Hard', 'Nightmare'],
         persistedSettingKey: null,
-        ruleImpact: 'Would require GAME_RULES_VERSION because scoring, lives, and fairness identity change.',
+        ruleImpact: 'Would require GAME_RULES_VERSION because scoring, the turn ceiling, and fairness identity change.',
         achievementImplication: 'Daily fairness and achievement eligibility need explicit per-profile copy before enabling.',
         saveMigrationImplication: 'Add a Settings field and normalize/migrate previous SaveData before enabling.',
         migrationRequiredWhenEnabled: true,
@@ -60,23 +59,6 @@ export const SETTINGS_REFERENCE_CONTROL_ROWS: readonly SettingsReferenceControlR
         persistedSettingKey: null,
         ruleImpact: 'Would require GAME_RULES_VERSION for run identity and export strings.',
         achievementImplication: 'Daily and achievement comparability must state which timer modes count.',
-        saveMigrationImplication: 'Add a Settings field and migration/default before enabling.',
-        migrationRequiredWhenEnabled: true,
-        rulesVersionRequiredWhenEnabled: true
-    },
-    {
-        id: 'max_lives',
-        label: 'Max lives',
-        status: 'future_placeholder',
-        impact: 'rules_variant',
-        persistedField: null,
-        visibleInSettings: true,
-        copy: 'Reference-only. Lives are fixed by game constants for daily fairness and achievement comparability.',
-        hint: 'Max lives follow game constants until a future settings schema.',
-        options: ['2', '3', '4', '5'],
-        persistedSettingKey: null,
-        ruleImpact: 'Would require GAME_RULES_VERSION because max lives alter run survival balance.',
-        achievementImplication: 'Achievement and daily fairness copy must explain whether altered lives count.',
         saveMigrationImplication: 'Add a Settings field and migration/default before enabling.',
         migrationRequiredWhenEnabled: true,
         rulesVersionRequiredWhenEnabled: true

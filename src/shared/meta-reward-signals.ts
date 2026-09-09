@@ -154,7 +154,6 @@ export const getInventoryRewardSignals = (run: RunState | null): MetaRewardSigna
     }
     const mutatorCount = runArray<MutatorId>(run.activeMutators).length;
     const stats = normalizeSessionStats(run.stats);
-    const lives = runNonNegativeInteger(run.lives);
     return [
         {
             id: 'inventory_build_value',
@@ -169,7 +168,7 @@ export const getInventoryRewardSignals = (run: RunState | null): MetaRewardSigna
             screen: 'inventory',
             kind: 'progress',
             title: `Floor ${run.board?.level ?? stats.highestLevel}`,
-            body: `${stats.totalScore.toLocaleString()} score | ${lives} life/lives remaining.`,
+            body: `${stats.totalScore.toLocaleString()} score.`,
             cta: run.achievementsEnabled ? 'Achievements remain eligible.' : 'Practice/debug state: achievements disabled.'
         }
     ];

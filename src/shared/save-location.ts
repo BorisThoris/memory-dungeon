@@ -1,5 +1,5 @@
 /**
- * Where the save lives, said once, so Steam can be told the same thing the game does.
+ * Where the save is kept, said once, so Steam can be told the same thing the game does.
  *
  * Steam Auto-Cloud needs no code in the game at all: it syncs files matching a pattern under a
  * named root while the game is not running. What it does need is a path that will not drift, and

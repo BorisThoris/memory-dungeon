@@ -12,10 +12,8 @@ import { calculateRating } from './scoring-rules';
 import { normalizeSessionStats } from './session-stats-rules';
 
 export interface CreateNextFloorRunStateOptions {
-    lives: number;
     activeMutators: MutatorId[];
     board: BoardState;
-    parasiteFloors: number;
     memorizeRemainingMs: number;
 }
 
@@ -29,14 +27,11 @@ export const createNextFloorRunState = (
     const nextRun: RunState = {
         ...run,
         status: 'memorize',
-        lives: options.lives,
         activeMutators: options.activeMutators,
         board: nextBoard,
         debugPeekActive: false,
-        pendingMemorizeBonusMs: 0,
         pinnedTileIds: [],
         destroyPairCharges: run.destroyPairCharges,
-        parasiteFloors: options.parasiteFloors,
         stickyBlockIndex: null,
         undoUsesThisFloor: 1,
         gambitAvailableThisFloor: true,
@@ -67,7 +62,6 @@ export const createNextFloorRunState = (
         turnsThisFloor: 0,
         largestChunkScoreThisFloor: 0,
         magpieTheftsThisFloor: 0,
-        magpieScaredOffThisFloor: 0,
         shiftingSpotlightNonce: 0,
         flashPairRevealedTileIds: [],
         regionShuffleCharges: INITIAL_REGION_SHUFFLE_CHARGES,

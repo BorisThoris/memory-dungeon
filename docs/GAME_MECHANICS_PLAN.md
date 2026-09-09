@@ -1,6 +1,6 @@
 # Board powers — fleshed implementation plan
 
-This document turns [GAME_MECHANICS_IDEAS.md](./GAME_MECHANICS_IDEAS.md) into a **sequenced, buildable spec**. It assumes the current core loop in `src/shared/game.ts` (memorize → play → resolve; lives; grace; guards; shards; soft streak; pending memorize bonus).
+This document turns [GAME_MECHANICS_IDEAS.md](./GAME_MECHANICS_IDEAS.md) into a **sequenced, buildable spec**. It assumes the current core loop in `src/shared/game.ts` (memorize → play → resolve; the par and the turn ceiling; shards; soft streak; pending memorize bonus). The life economy this plan first assumed - lives, grace, guards, chain heal - went in Gen 183 ([REMOVED_LIVES.md](./REMOVED_LIVES.md)); a miss resets the chain and nothing else.
 
 ## Stored summary (single source of truth)
 
@@ -39,9 +39,9 @@ This document turns [GAME_MECHANICS_IDEAS.md](./GAME_MECHANICS_IDEAS.md) into a 
 
 | Principle | Implication |
 |-----------|-------------|
-| **Powers ≠ forgiveness** | Grace, guards, shards, soft streak, life-loss memorize bonus stay the “mistake economy.” Powers are **tools**, not extra lives. |
+| **Powers ≠ forgiveness** | The soft streak and the par are the “mistake economy”: a miss resets the chain and counts a turn, nothing more (Gen 183). Powers are **tools**, not forgiveness. |
 | **Costs are visible** | Player always sees charges before spending; confirm for high-impact actions if needed. |
-| **One primary cost dimension (v1)** | Use **charges per run** first. Score tax or life cost can be **v2 tuning** once telemetry feels right. |
+| **One primary cost dimension (v1)** | Use **charges per run** first. Score tax can be **v2 tuning** once telemetry feels right. |
 | **Memorize phase is sacred** | No shuffle, pin, or destroy during **`memorize`** (avoids weird timing with timers). |
 | **Resolving is locked** | No powers while **`resolving`** (two tiles face-up waiting for resolve), unless we later add an explicit exception. |
 | **Paused / level complete / game over** | No powers. |
@@ -153,7 +153,7 @@ This document turns [GAME_MECHANICS_IDEAS.md](./GAME_MECHANICS_IDEAS.md) into a 
 
 **Streak / scoring**
 
-- **Recommend**: counts as **+1 match** for `matchedPairs` and **level clear**, but **does not** increase `currentStreak` (avoids farming guards/shards). Optional: grant **0 score** or **flat 10** for destroy — **recommend**: `0` match score for destroy so it is pure tempo, not score exploit.
+- **Recommend**: counts as **+1 match** for `matchedPairs` and **level clear**, but **does not** increase `currentStreak` (avoids farming the chain). Optional: grant **0 score** or **flat 10** for destroy — **recommend**: `0` match score for destroy so it is pure tempo, not score exploit.
 
 **Edge cases**
 
@@ -194,7 +194,7 @@ Pure functions in `game.ts`:
 ## 6. UI / UX checklist
 
 - [x] Shuffle button: disabled states + tooltip (“No charges”, “Finish flip”, “Not during memorize”). — **Shipped** in `GameLeftToolbar` / board chrome (`useAppStore` guards).
-- [x] Destroy: two-step **confirm** optional for v1 (mobile: confirm modal) — **recommend**: **no modal** if charges are scarce; **yes modal** if we add life-cost later. — **Resolved:** no confirm modal in v1 per plan; revisit if life-cost added.
+- [x] Destroy: two-step **confirm** optional for v1 (mobile: confirm modal) — **recommend**: **no modal** if charges are scarce. — **Resolved:** no confirm modal in v1 per plan.
 - [x] Pin mode: visible **active** state on chrome; ESC / tap outside cancels mode. — **Shipped** in toolbar + tile input paths.
 - [x] **Reduce motion**: pin and shuffle animations respect `settings.reduceMotion`. — **Shipped** in board / motion hooks.
 - [x] Screen reader: `aria-label` on actions; live region when charge spent. — **Shipped** on power controls + HUD patterns; extend labels if new actions added.
@@ -208,7 +208,7 @@ Pure functions in `game.ts`:
 **Gating (implement in `evaluateAchievementUnlocks` or equivalent)**:
 
 - **`ACH_PERFECT_CLEAR`**: **Locked**: if `powersUsedThisRun`, **do not** unlock this achievement for that run (even if floor was mistake-free). Other achievements stay eligible. Document the exact predicate next to code.
-- **All other current IDs** (`ACH_FIRST_CLEAR`, `ACH_LEVEL_FIVE`, `ACH_SCORE_THOUSAND`, `ACH_LAST_LIFE`, etc.): **remain eligible** when powers are used unless a future achievement explicitly says otherwise.
+- **All other current IDs** (`ACH_FIRST_CLEAR`, `ACH_LEVEL_FIVE`, `ACH_SCORE_THOUSAND`, `ACH_LAST_LIFE` - Last Turn Standing since Gen 183 - etc.): **remain eligible** when powers are used unless a future achievement explicitly says otherwise.
 
 **Option A (not v1)**  
 Full-run `achievementsEnabled = false` when any power used — reserved for a future “purist” mode if needed.

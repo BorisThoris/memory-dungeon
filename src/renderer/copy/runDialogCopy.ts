@@ -20,9 +20,7 @@ export const SHORTCUTS_COPY = {
 
 /** Lines the board shows about the floor itself rather than about a power. */
 export const FLOOR_STATUS_COPY = {
-    cleanFloorBonus: 'Clean floor bonus: +1 Life',
-    noKeySource: 'No key source remains; clear the remaining pairs to force this exit open.',
-    perfectFloorBonus: 'Perfect floor bonus: +1 Life'
+    noKeySource: 'No key source remains; clear the remaining pairs to force this exit open.'
 } as const;
 
 /** The route step after a floor clears: what the three doors mean and which one moves on. */

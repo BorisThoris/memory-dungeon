@@ -1,10 +1,5 @@
-import {
-    CHAIN_HEAL_STREAK_STEP,
-    COMBO_GUARD_STREAK_STEP,
-    MAX_COMBO_SHARDS,
-    MAX_LIVES
-} from '../../shared/contracts';
-import { COMBO_SHARDS_PER_LIFE, COMBO_SHARD_STREAK_STEP } from '../../shared/combo-shard-rules';
+import { MAX_COMBO_SHARDS } from '../../shared/contracts';
+import { COMBO_SHARD_STREAK_STEP } from '../../shared/combo-shard-rules';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 
 type ChainMomentumTier = 'building' | 'chain' | 'surge' | 'combo';
@@ -18,7 +13,7 @@ export interface ChainRewardForecastCue {
     label: string;
     stackSize?: number;
     targetStreak: number;
-    tone: 'reward' | 'guard' | 'heal';
+    tone: 'reward';
     urgency: 'next' | 'soon' | 'later';
 }
 
@@ -135,16 +130,6 @@ const nextMultipleAfter = (streak: number, step: number): number => {
     return Math.max(step, Math.ceil((safeStreak + 1) / step) * step);
 };
 
-const stepForRewardCue = (cue: ChainRewardForecastCue): number => {
-    if (cue.id.startsWith('guard-')) {
-        return COMBO_GUARD_STREAK_STEP;
-    }
-    if (cue.id.startsWith('heal-')) {
-        return CHAIN_HEAL_STREAK_STEP;
-    }
-    return COMBO_SHARD_STREAK_STEP;
-};
-
 const chainRewardStackSize = (stackSize: number | undefined): number =>
     Math.max(1, runNonNegativeInteger(stackSize ?? 1));
 
@@ -156,7 +141,7 @@ export const getChainRewardProgress = (
         return null;
     }
     const safeStreak = runNonNegativeInteger(streak);
-    const total = stepForRewardCue(cue);
+    const total = COMBO_SHARD_STREAK_STEP;
     const previousTarget = Math.max(0, cue.targetStreak - total);
     const filled = Math.max(0, Math.min(total, safeStreak - previousTarget));
     const remaining = Math.max(0, cue.targetStreak - safeStreak);
@@ -183,10 +168,10 @@ export const getChainRewardUrgencyCopy = (cue: Pick<ChainRewardForecastCue, 'dis
         return 'Future stack';
     }
     if (cue.urgency === 'next') {
-        return cue.tone === 'heal' ? 'One-away heal' : cue.tone === 'guard' ? 'One-away guard' : 'One-away cashout';
+        return 'One-away cashout';
     }
     if (cue.urgency === 'soon') {
-        return cue.tone === 'heal' ? 'Heal prime' : cue.tone === 'guard' ? 'Guard prime' : 'Combo prime';
+        return 'Combo prime';
     }
     return cue.distance <= 5 ? 'Combo chase' : 'Future payoff';
 };
@@ -208,80 +193,30 @@ export const getChainRewardLaneAction = (
     return 'Hold streak';
 };
 
-export const getChainRewardForecastCues = (
-    streak: number,
-    comboShards: number,
-    lives: number
-): ChainRewardForecastCue[] => {
-    const shardStreak = nextMultipleAfter(streak, COMBO_SHARD_STREAK_STEP);
-    const guardStreak = nextMultipleAfter(streak, COMBO_GUARD_STREAK_STEP);
-    const healStreak = nextMultipleAfter(streak, CHAIN_HEAL_STREAK_STEP);
-    const cues: ChainRewardForecastCue[] = [];
+/**
+ * The chain's next payoff: the shard the next streak step banks, or nothing once the bank is full.
+ * Guard tokens and the chain heal were the other two lanes here until Gen 183; with no lives to
+ * protect or restore, the shard is the only thing a chain still pays out.
+ */
+export const getChainRewardForecastCues = (streak: number, comboShards: number): ChainRewardForecastCue[] => {
+    if (runNonNegativeInteger(comboShards) >= MAX_COMBO_SHARDS) {
+        return [];
+    }
     const safeStreak = runNonNegativeInteger(streak);
-    const safeComboShards = runNonNegativeInteger(comboShards);
-    const safeLives = runNonNegativeInteger(lives);
-    const cueMeta = (
-        targetStreak: number
-    ): Pick<ChainRewardForecastCue, 'actionLabel' | 'chaseLabel' | 'distance' | 'distanceLabel' | 'targetStreak' | 'urgency'> => {
-        const distance = Math.max(1, targetStreak - safeStreak);
-        const urgency = distance <= 1 ? 'next' : distance <= 3 ? 'soon' : 'later';
-        return {
+    const targetStreak = nextMultipleAfter(streak, COMBO_SHARD_STREAK_STEP);
+    const distance = Math.max(1, targetStreak - safeStreak);
+    const urgency = distance <= 1 ? 'next' : distance <= 3 ? 'soon' : 'later';
+    return [
+        {
             actionLabel: urgency === 'next' ? 'Next' : urgency === 'soon' ? 'Soon' : 'Later',
             chaseLabel: urgency === 'next' ? 'Hit now' : urgency === 'soon' ? 'Prime' : 'Hold streak',
             distance,
             distanceLabel: distance === 1 ? '1 match' : `${distance} matches`,
+            id: `shard-${targetStreak}`,
+            label: `x${targetStreak} +1 shard`,
             targetStreak,
+            tone: 'reward',
             urgency
-        };
-    };
-
-    if (safeComboShards >= COMBO_SHARDS_PER_LIFE - 1 && safeLives < MAX_LIVES) {
-        cues.push({
-            ...cueMeta(shardStreak),
-            id: `shard-life-${shardStreak}`,
-            label: `x${shardStreak} +1 life`,
-            tone: 'heal'
-        });
-    } else if (safeComboShards < MAX_COMBO_SHARDS) {
-        cues.push({
-            ...cueMeta(shardStreak),
-            id: `shard-${shardStreak}`,
-            label: `x${shardStreak} +1 shard`,
-            tone: 'reward'
-        });
-    }
-
-    cues.push({
-        ...cueMeta(guardStreak),
-        id: `guard-${guardStreak}`,
-        label: `x${guardStreak} +1 guard`,
-        tone: 'guard'
-    });
-
-    if (safeLives < MAX_LIVES) {
-        cues.push({
-            ...cueMeta(healStreak),
-            id: `heal-${healStreak}`,
-            label: `x${healStreak} +1 life`,
-            tone: 'heal'
-        });
-    }
-
-    const dedupedCues = cues
-        .filter((cue, index, all) => all.findIndex((candidate) => candidate.label === cue.label) === index)
-        .sort((a, b) => {
-            const aMatch = Number(a.label.match(/^x(\d+)/)?.[1] ?? 0);
-            const bMatch = Number(b.label.match(/^x(\d+)/)?.[1] ?? 0);
-            return aMatch - bMatch;
-        });
-    const stackSizeByTarget = new Map<number, number>();
-    for (const cue of dedupedCues) {
-        stackSizeByTarget.set(cue.targetStreak, (stackSizeByTarget.get(cue.targetStreak) ?? 0) + 1);
-    }
-    return dedupedCues
-        .map((cue) => {
-            const stackSize = stackSizeByTarget.get(cue.targetStreak) ?? 1;
-            return stackSize > 1 ? { ...cue, stackSize } : cue;
-        })
-        .slice(0, 3);
+        }
+    ];
 };

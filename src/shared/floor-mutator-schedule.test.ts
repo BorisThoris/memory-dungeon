@@ -186,7 +186,7 @@ describe('pickFloorScheduleEntry', () => {
             paletteHook: 'spire_prismatic_alarm',
             audioHook: 'spire_recall_alarm'
         });
-        expect(identity.routePreview).toContain('parasite sustain');
+        expect(identity.routePreview).toContain('a static hall');
     });
 
     const cycleLen = 12;

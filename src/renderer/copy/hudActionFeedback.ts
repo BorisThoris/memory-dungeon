@@ -62,7 +62,7 @@ export const getHudActionFeedbackProfile = (
     priority: 'info' | 'error' = 'info'
 ): HudActionFeedbackProfile => {
     const normalized = text.toLowerCase();
-    if (priority === 'error' || /\b(life lost|contact|bit)\b/.test(normalized)) {
+    if (priority === 'error' || /\b(contact|bit)\b/.test(normalized)) {
         return { label: 'Critical', tone: 'danger' };
     }
     if (/\bchain\s+x?\d+\s+broken\b/.test(normalized)) {
@@ -92,7 +92,7 @@ export const getHudActionFeedbackProfile = (
     if (/\bcashout armed\b/.test(normalized)) {
         return { label: 'Cashout armed', tone: 'reward' };
     }
-    if (/\b(cashout|claimed|gained|reward|gold|shard|life restored|cache|favor)\b/.test(normalized)) {
+    if (/\b(cashout|claimed|gained|reward|gold|shard|cache|favor)\b/.test(normalized)) {
         return { label: 'Reward burst', tone: 'reward' };
     }
     return { label: 'Action result', tone: 'info' };

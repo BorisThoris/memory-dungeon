@@ -29,11 +29,10 @@ export interface MagpieTheft {
     readonly toIndices: readonly number[];
 }
 
+/** Gen 183: nothing drives it off any more - the guard token went with the lives it protected. */
 export interface MagpieVisit {
-    readonly kind: 'theft' | 'scared_off' | 'nothing_to_take' | 'not_yet';
+    readonly kind: 'theft' | 'nothing_to_take' | 'not_yet';
     readonly theft: MagpieTheft | null;
-    /** Guard tokens left after the visit; a scared-off magpie costs one. */
-    readonly guardTokens: number;
 }
 
 /** True on the misses the magpie shows up for. */
@@ -76,34 +75,23 @@ const hiddenIndices = (board: BoardState, exceptPairKey: string): number[] =>
  */
 export const resolveMagpieVisit = ({
     board,
-    guardTokens,
     mismatchCount,
     runSeed,
     rulesVersion
 }: {
     board: BoardState;
-    guardTokens: number;
     mismatchCount: number;
     runSeed: number;
     rulesVersion: number;
 }): MagpieVisit => {
-    const tokens = Number.isFinite(guardTokens) ? Math.max(0, Math.trunc(guardTokens)) : 0;
     if (!isMagpieVisitTurn(mismatchCount)) {
-        return { guardTokens: tokens, kind: 'not_yet', theft: null };
+        return { kind: 'not_yet', theft: null };
     }
 
     const candidates = matchedPairKeys(board);
     if (candidates.length === 0) {
         // Nothing cleared yet, so nothing to take. It still turns up, which is the joke.
-        return { guardTokens: tokens, kind: 'nothing_to_take', theft: null };
-    }
-
-    /*
-     * A guard token is spent to drive it off before the pick is made, so holding one is genuinely
-     * protection rather than a refund after the fact.
-     */
-    if (tokens > 0) {
-        return { guardTokens: tokens - 1, kind: 'scared_off', theft: null };
+        return { kind: 'nothing_to_take', theft: null };
     }
 
     const rng = createMulberry32(hashStringToSeed(`magpie:${runSeed}:${rulesVersion}:${board.level}:${mismatchCount}`));
@@ -129,7 +117,6 @@ export const resolveMagpieVisit = ({
             : stolenIndices;
 
     return {
-        guardTokens: tokens,
         kind: 'theft',
         theft: {
             pairKey,
