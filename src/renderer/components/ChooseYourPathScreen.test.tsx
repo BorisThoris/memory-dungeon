@@ -225,7 +225,7 @@ describe('ChooseYourPathScreen', () => {
         expect(screen.queryByRole('button', { name: /^Endless Mode\. Open details\.$/i })).toBeNull();
     });
 
-    it('offers the run clock in the setup sheet, where Gauntlet went', async () => {
+    it('starts the run the setup sheet describes, with no clock on offer', async () => {
         const user = userEvent.setup();
         render(<ChooseYourPathScreen />);
 
@@ -233,9 +233,12 @@ describe('ChooseYourPathScreen', () => {
         await user.click(screen.getByRole('button', { name: new RegExp(`^${CLASSIC_SETUP_COPY.title}$`, 'iu') }));
 
         const sheet = screen.getByTestId('classic-setup-sheet');
-        await user.click(within(sheet).getByRole('radio', { name: /10 minutes/i }));
+        // The clock left with the timer: the sheet asks about vows, pacing and chaos, never minutes.
+        expect(within(sheet).queryByRole('radio')).toBeNull();
+        expect(within(sheet).queryByText(/minutes|clock/i)).toBeNull();
+        await user.click(within(sheet).getByRole('checkbox', { name: new RegExp(CLASSIC_SETUP_COPY.calmLabel, 'iu') }));
         await user.click(within(sheet).getByRole('button', { name: /^start run$/i }));
-        expect(storeSpies.startRun).toHaveBeenCalledWith(expect.objectContaining({ pressure: 'timed_10' }));
+        expect(storeSpies.startRun).toHaveBeenCalledWith(expect.objectContaining({ pacing: 'calm' }));
     });
 
     it('offers the seat counts in the order a person counts them', async () => {

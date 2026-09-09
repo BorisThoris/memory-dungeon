@@ -9,7 +9,6 @@ import {
     DEFAULT_CLASSIC_RUN_SETUP,
     describeClassicRunSetup,
     isDefaultClassicRunSetup,
-    pressureDurationMs,
     type ClassicRunSetup
 } from './classic-run-setup';
 
@@ -27,12 +26,6 @@ describe('the default setup', () => {
 });
 
 describe('the retired cards, as options', () => {
-    it('carries the Gauntlet timer', () => {
-        expect(buildClassicRunOptions(setup({ pressure: 'timed_10' })).gauntletDurationMs).toBe(600_000);
-        expect(pressureDurationMs('timed_5')).toBe(300_000);
-        expect(pressureDurationMs('none')).toBeNull();
-    });
-
     it('carries the Wild joker, its charge and its mutators', () => {
         const options = buildClassicRunOptions(setup({ chaos: true }));
         expect(options.enableWildJoker).toBe(true);
@@ -82,11 +75,8 @@ describe('vows combine', () => {
 });
 
 describe('combinations the old menu could not express', () => {
-    it('lets a timed chaos run under a vow exist', () => {
-        const options = buildClassicRunOptions(
-            setup({ chaos: true, pressure: 'timed_5', vows: ['scholar'] })
-        );
-        expect(options.gauntletDurationMs).toBe(300_000);
+    it('lets a chaos run under a vow exist', () => {
+        const options = buildClassicRunOptions(setup({ chaos: true, vows: ['scholar'] }));
         expect(options.enableWildJoker).toBe(true);
         expect(options.activeContract).toMatchObject({ noShuffle: true });
     });
@@ -101,15 +91,15 @@ describe('describeClassicRunSetup', () => {
     it('names what the player asked for, so the run can say it back to them', () => {
         expect(
             describeClassicRunSetup(
-                setup({ chaos: true, pacing: 'calm', pressure: 'timed_15', unrecorded: true, vows: ['scholar', 'pin_vow'] })
+                setup({ chaos: true, pacing: 'calm', unrecorded: true, vows: ['scholar', 'pin_vow'] })
             )
-        ).toEqual(['Scholar vow', 'Pin vow', 'Wild', 'Calm', '15 min', 'Unrecorded']);
+        ).toEqual(['Scholar vow', 'Pin vow', 'Wild', 'Calm', 'Unrecorded']);
     });
 });
 
 describe('classicRunSetupFromRun', () => {
     it('reads a whole setup back off the run it started, so a retry keeps all of it', () => {
-        const chosen = setup({ chaos: true, pacing: 'calm', pressure: 'timed_10', unrecorded: true, vows: ['scholar', 'pin_vow'] });
+        const chosen = setup({ chaos: true, pacing: 'calm', unrecorded: true, vows: ['scholar', 'pin_vow'] });
         const run = createNewRun(0, buildClassicRunOptions(chosen));
         expect(classicRunSetupFromRun(run)).toEqual({ ...chosen, focusMutators: [] });
     });

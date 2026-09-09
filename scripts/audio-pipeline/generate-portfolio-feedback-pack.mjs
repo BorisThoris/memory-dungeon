@@ -7,7 +7,6 @@ import { writePcmWavFile } from './proceduralBeatPrimitives.mjs';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.join(__dirname, '../..');
 const outDir = path.join(repoRoot, 'assets/audio/portfolio-feedback-pack');
-const rendererSfxDir = path.join(repoRoot, 'src/renderer/assets/audio/sfx');
 const SR = 22050;
 
 function tone(durSec, partials) {
@@ -65,20 +64,16 @@ function renderDemoAmbienceLoop(durSec) {
 const cues = {
     'match-success.wav': tone(0.16, [[612, 0.16], [820, 0.12], [1224, 0.05]]),
     'mistake.wav': tone(0.18, [[180, 0.16], [120, 0.12], [72, 0.04]]),
-    'relic-offer-shimmer.wav': tone(0.22, [[620, 0.12], [960, 0.1], [1480, 0.06]]),
-    'countdown-pressure.wav': tone(0.11, [[220, 0.13], [310, 0.1], [440, 0.04]]),
     'floor-clear.wav': tone(0.24, [[300, 0.12], [540, 0.1], [1080, 0.08]])
 };
 
 fs.mkdirSync(outDir, { recursive: true });
-fs.mkdirSync(rendererSfxDir, { recursive: true });
 
 for (const [name, samples] of Object.entries(cues)) {
     writePcmWavFile(path.join(outDir, name), samples, SR);
 }
 
 writePcmWavFile(path.join(outDir, 'demo-ambience-loop.wav'), renderDemoAmbienceLoop(16), SR);
-writePcmWavFile(path.join(rendererSfxDir, 'countdown-pressure.wav'), cues['countdown-pressure.wav'], SR);
 
 fs.writeFileSync(
     path.join(outDir, 'README.md'),
@@ -89,8 +84,6 @@ fs.writeFileSync(
         '',
         '- `match-success.ogg` (`.wav` master): successful pair resolve',
         '- `mistake.ogg` (`.wav` master): failed pair resolve',
-        '- `relic-offer-shimmer.ogg` (`.wav` master): relic draft appears',
-        '- `countdown-pressure.ogg` (`.wav` master): final gauntlet seconds',
         '- `floor-clear.ogg` (`.wav` master): floor complete sting',
         '- `demo-ambience-loop.ogg` (`.wav` master): subtle looped room tone for the featured browser demo',
         '',

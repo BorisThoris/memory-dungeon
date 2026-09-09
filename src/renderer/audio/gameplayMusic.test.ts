@@ -58,15 +58,15 @@ describe('musicGainFromSettings', () => {
 });
 
 describe('REG-038 adaptive music state', () => {
-    it('derives pressure/release/suppression from view and run state without owning gameplay', () => {
+    it('derives focus/release/suppression from view and run state without owning gameplay', () => {
         expect(getAdaptiveMusicState({ active: true, track: 'menu' })).toMatchObject({
             intensity: 'calm',
             shouldPlay: true,
             track: 'menu'
         });
 
-        expect(getAdaptiveMusicState({ active: true, runStatus: 'playing', track: 'run', gauntletPressure: true })).toMatchObject({
-            intensity: 'pressure',
+        expect(getAdaptiveMusicState({ active: true, runStatus: 'playing', track: 'run' })).toMatchObject({
+            intensity: 'focus',
             shouldPlay: true
         });
 
@@ -95,7 +95,6 @@ describe('REG-038 adaptive music state', () => {
                     activeMutators: [],
                     board: null,
                     gameMode: 'endless',
-                    gauntletDeadlineMs: null,
                     status: 'playing'
                 } as unknown as RunState,
                 view: 'playing'
@@ -114,7 +113,6 @@ describe('REG-038 adaptive music state', () => {
             activeMutators: [],
             board: null,
             gameMode: 'endless',
-            gauntletDeadlineMs: null,
             status: 'levelComplete'
         } as unknown as RunState;
 

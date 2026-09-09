@@ -26,7 +26,7 @@ describe('buildRunHistoryRecord', () => {
     });
 
     it('carries the key that replays the run', () => {
-        expect(buildRunHistoryRecord(createNewRun(0, { gauntletDurationMs: 600_000 }), AT).shareKey).toMatch(/^md1:gauntlet:\d+:\d+:600000$/u);
+        expect(buildRunHistoryRecord(createWildRun(0), AT).shareKey).toMatch(/^md1:wild:\d+:\d+$/u);
     });
 
 });
@@ -78,7 +78,7 @@ describe('appendRunHistory', () => {
 
 describe('the chain in the history', () => {
     it('records the longest chain and the biggest chunk, and reads a row without them as zero', () => {
-        const run = createNewRun(0, { gauntletDurationMs: 600_000 });
+        const run = createNewRun(0);
         const chained = { ...run, biggestChunkPairs: 7, bestChainThisRun: 9 };
         const record = buildRunHistoryRecord(chained, AT);
         expect(record.bestChain).toBe(9);

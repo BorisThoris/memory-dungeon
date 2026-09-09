@@ -27,7 +27,6 @@
 | Greet the floor resident (once per floor, free) | `greetFloorCurio`, `canGreetFloorCurio` (`floor-curio-greeting-rules.ts`); store `greetFloorResident` | [epic-run-session-flow](./epic-run-session-flow.md) |
 | Game over / summary | `createRunSummary` (`run-summary-rules.ts`), store `applyResolvedRun` | [epic-meta-progression](./epic-meta-progression.md) |
 | Restart / end run | store `restartRun`, `endRun` | [epic-modes-and-runs](./epic-modes-and-runs.md), [epic-run-session-flow](./epic-run-session-flow.md) |
-| Run clock expiry (setup-sheet pressure option) | `isGauntletExpired`, `gauntletDeadlineMs` | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
 | Debug peek (face reveal) | `enableDebugPeek`, `disableDebugPeek`, `debugRevealRemainingMs` | [epic-run-session-flow](./epic-run-session-flow.md) |
 
 ---
@@ -263,8 +262,6 @@ Source: [`RunState`](../../src/shared/contracts.ts) interface.
 | `puzzleId` | Create-run option nothing live sets; kept on the type so old saves still parse | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | `stickyBlockIndex` | Sticky fingers: blocked slot for next opening flip | [epic-mutators](./epic-mutators.md) |
 | `parasiteFloors` | Score parasite pressure counter | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
-| `gauntletDeadlineMs` | Run-wide clock deadline (setup-sheet pressure option) or null | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
-| `gauntletSessionDurationMs` | Configured clock length (ms) at run start; used for **restart** and to recognise the setup | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
 | `flipHistory` | Recent flip ids (ghost / export) | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | `peekCharges` | Peek power budget | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `peekRevealedTileIds` | Ephemeral peek faces | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
@@ -328,7 +325,6 @@ Source: [`RunState`](../../src/shared/contracts.ts) interface.
 | `resolveRemainingMs` | Delay before the board turn resolves | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | `debugRevealRemainingMs` | Debug peek countdown | [epic-run-session-flow](./epic-run-session-flow.md) |
 | `pausedFromStatus` | Resume target | [epic-run-session-flow](./epic-run-session-flow.md) |
-| `gauntletPausedAtMs` | Wall-clock moment the run clock was paused, so the deadline can be shifted on resume | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
 
 ---
 

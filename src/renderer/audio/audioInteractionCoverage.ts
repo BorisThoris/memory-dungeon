@@ -366,18 +366,6 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
         reducedMotionSafe: true
     },
     {
-        id: 'gauntlet_pressure',
-        domain: 'gameplay',
-        interaction: 'Final gauntlet countdown seconds',
-        cue: 'countdown-pressure',
-        callsite: 'GameScreen gauntletRemainingMs effect',
-        semanticMoment: 'pressure',
-        decision: 'sampled_with_fallback',
-        cooldownPolicy: 'one pulse per visible final second; pressure category polyphony cap',
-        mixRole: 'low countdown pulse',
-        reducedMotionSafe: true
-    },
-    {
         id: 'pause_resume',
         domain: 'overlay',
         interaction: 'Pause and resume',

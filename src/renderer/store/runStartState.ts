@@ -75,17 +75,18 @@ export const createRunStartPlan = ({
     switch (request.kind) {
         case 'endless': {
             /*
-             * The one mode, and the only place the old preset cards now live. Gauntlet's timer,
-             * Wild's joker, Scholar's and Pin Vow's contracts, Practice's unrecorded flag and
-             * Meditation's pacing are all `createNewRun` options, so they arrive here as a setup
-             * the player chose rather than as separate menu entries that started the same run.
+             * The one mode, and the only place the old preset cards now live. Wild's joker,
+             * Scholar's and Pin Vow's contracts, Practice's unrecorded flag and Meditation's
+             * pacing are all `createNewRun` options, so they arrive here as a setup the player
+             * chose rather than as separate menu entries that started the same run. The old
+             * timed card's clock is not among them: the game has no timer.
              */
             const setup = request.setup ?? DEFAULT_CLASSIC_RUN_SETUP;
             run = createNewRun(bestScore, {
                 ...meta,
                 ...buildClassicRunOptions(setup),
                 // The safe first floor is for someone's first run, not for someone who has just
-                // asked for a timed chaos descent under a vow.
+                // asked for a chaos descent under a vow.
                 onboardingSafeFirstFloor: !saveData.onboardingDismissed && isDefaultClassicRunSetup(setup)
             });
             telemetryExtra = {
@@ -129,7 +130,7 @@ export const createRestartRun = (previousRun: RunState | null, saveData: SaveDat
     }
 
     /*
-     * A Classic run started from the setup sheet is several choices at once — a clock, a pace,
+     * A Classic run started from the setup sheet is several choices at once — a pace,
      * vows, the joker, the record toggle — and the one-flag branches below each restart one of
      * them and forget the rest. Read the whole setup back off the run and restart all of it.
      */

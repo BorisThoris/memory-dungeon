@@ -4,15 +4,18 @@ import type { CreateRunOptions } from './run-creation-rules';
 /**
  * How a Classic run is set up before it starts.
  *
- * The catalog used to answer this question with menu entries: Gauntlet was Classic with a timer,
- * Wild was Classic with three mutators and a joker, Scholar and Pin Vow were Classic with a
- * contract, Practice was Classic with records off, Meditation was Classic with a longer memorize
- * window. Twelve cards, one game — and the player paid for that with a fork in the road every time
- * they sat down, before they knew anything about the run they were about to play.
+ * The catalog used to answer this question with menu entries: Wild was Classic with three mutators
+ * and a joker, Scholar and Pin Vow were Classic with a contract, Practice was Classic with records
+ * off, Meditation was Classic with a longer memorize window. Twelve cards, one game — and the
+ * player paid for that with a fork in the road every time they sat down, before they knew anything
+ * about the run they were about to play.
  *
  * They are choices about *this* run, so they live here, together, in front of the run. Nothing is
  * lost in the move: every field below is an option `createNewRun` already took, and the rules they
  * switch on are the same rules the retired cards switched on.
+ *
+ * The sheet once offered a clock too, inherited from the Gauntlet card. A timer is the one thing
+ * the game's thesis rules out, so that option is gone rather than hidden.
  */
 
 /** Self-imposed restrictions. They make a run harder and are the player's own idea. */
@@ -21,13 +24,9 @@ export type ClassicRunVowId = 'scholar' | 'pin_vow';
 /** How long the memorize window runs and how much time the board gives. */
 export type ClassicRunPacingId = 'standard' | 'calm';
 
-/** An optional clock on the whole run. */
-export type ClassicRunPressureId = 'none' | 'timed_5' | 'timed_10' | 'timed_15';
-
 export interface ClassicRunSetup {
     readonly vows: readonly ClassicRunVowId[];
     readonly pacing: ClassicRunPacingId;
-    readonly pressure: ClassicRunPressureId;
     /** The old Wild run: a joker tile, a stray-remove charge and a chaotic mutator set. */
     readonly chaos: boolean;
     /** The old Practice run: nothing this run does is written to the profile. */
@@ -40,23 +39,12 @@ export const DEFAULT_CLASSIC_RUN_SETUP: ClassicRunSetup = {
     chaos: false,
     focusMutators: [],
     pacing: 'standard',
-    pressure: 'none',
     unrecorded: false,
     vows: []
 };
 
 /** The chaotic set the Wild card used to start. */
 export const CHAOS_MUTATORS: readonly MutatorId[] = ['sticky_fingers', 'short_memorize', 'findables_floor'];
-
-const PRESSURE_DURATION_MS: Record<ClassicRunPressureId, number | null> = {
-    none: null,
-    timed_5: 5 * 60 * 1000,
-    timed_10: 10 * 60 * 1000,
-    timed_15: 15 * 60 * 1000
-};
-
-export const pressureDurationMs = (pressure: ClassicRunPressureId): number | null =>
-    PRESSURE_DURATION_MS[pressure] ?? null;
 
 /**
  * The contract a set of vows adds up to.
@@ -88,7 +76,6 @@ export const buildClassicRunOptions = (setup: ClassicRunSetup): CreateRunOptions
         // `wildMenuRun` is the flag the HUD identity and the restart precedence read for a wild run;
         // without it a chaos descent said "Classic Dungeon" on the bar and retried as one.
         ...(setup.chaos ? { enableWildJoker: true, initialStrayRemoveCharges: 1, wildMenuRun: true } : {}),
-        ...(setup.pressure !== 'none' ? { gauntletDurationMs: pressureDurationMs(setup.pressure) } : {}),
         ...(setup.pacing === 'calm' ? { resolveDelayMultiplier: 1.35 } : {}),
         ...(setup.unrecorded ? { practiceMode: true } : {}),
         // A vow is a claim about how the run was played, so the shuffle it forbids has to be the
@@ -100,15 +87,12 @@ export const buildClassicRunOptions = (setup: ClassicRunSetup): CreateRunOptions
 /**
  * The setup a run was started with, read back from the run's own flags, so a retry restarts the
  * run the player asked for. Restart precedence predates the sheet: it kept a vow or the wild flag
- * and dropped the clock and the pace, because each retired card had been one flag and the sheet
- * is several at once. Null for anything that is not a Classic run; the focus mutators are not
+ * and dropped the pace, because each retired card had been one flag and the sheet is several at
+ * once. Null for anything that is not a Classic run; the focus mutators are not
  * recoverable from a run (the floor schedule writes the same field) and come back empty.
  */
 export const classicRunSetupFromRun = (
-    run: Pick<
-        RunState,
-        'gameMode' | 'activeContract' | 'wildMenuRun' | 'practiceMode' | 'gauntletSessionDurationMs' | 'resolveDelayMultiplier'
-    >
+    run: Pick<RunState, 'gameMode' | 'activeContract' | 'wildMenuRun' | 'practiceMode' | 'resolveDelayMultiplier'>
 ): ClassicRunSetup | null => {
     if (run.gameMode !== 'endless') {
         return null;
@@ -117,15 +101,10 @@ export const classicRunSetupFromRun = (
     const vows: ClassicRunVowId[] = [];
     if (contract?.noShuffle === true && contract.noDestroy === true) vows.push('scholar');
     if (contract?.maxPinsTotalRun != null) vows.push('pin_vow');
-    const pressure =
-        (Object.keys(PRESSURE_DURATION_MS) as ClassicRunPressureId[]).find(
-            (id) => PRESSURE_DURATION_MS[id] !== null && PRESSURE_DURATION_MS[id] === run.gauntletSessionDurationMs
-        ) ?? 'none';
     return {
         chaos: run.wildMenuRun === true,
         focusMutators: [],
         pacing: Number.isFinite(run.resolveDelayMultiplier) && run.resolveDelayMultiplier > 1 ? 'calm' : 'standard',
-        pressure,
         unrecorded: run.practiceMode === true,
         vows
     };
@@ -136,7 +115,6 @@ export const isDefaultClassicRunSetup = (setup: ClassicRunSetup): boolean =>
     setup.vows.length === 0 &&
     setup.focusMutators.length === 0 &&
     setup.pacing === 'standard' &&
-    setup.pressure === 'none' &&
     !setup.chaos &&
     !setup.unrecorded;
 
@@ -154,9 +132,6 @@ export const describeClassicRunSetup = (setup: ClassicRunSetup): string[] => {
     }
     if (setup.pacing === 'calm') {
         parts.push('Calm');
-    }
-    if (setup.pressure !== 'none') {
-        parts.push(`${(pressureDurationMs(setup.pressure) ?? 0) / 60000} min`);
     }
     if (setup.unrecorded) {
         parts.push('Unrecorded');

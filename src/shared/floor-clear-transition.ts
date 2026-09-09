@@ -1,5 +1,4 @@
 import {
-    GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS,
     MAX_LIVES,
     type BoardState,
     type RunState
@@ -17,7 +16,7 @@ import {
     getClearLifeReason
 } from './level-clear-rules';
 import { getFloorClearObjectiveResult } from './secondary-objective-rules';
-import { clearResolveState, extendTimerTimestampMs } from './run-timer-rules';
+import { clearResolveState } from './run-timer-rules';
 import { normalizeSessionStats } from './session-stats-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 import { getChainTier } from './chain-tier-rules';
@@ -94,10 +93,6 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
         status: 'levelComplete',
         lives,
         featuredObjectiveStreak: featuredObjectiveClear.featuredObjectiveStreak,
-        gauntletDeadlineMs:
-            run.gauntletDeadlineMs !== null
-                ? extendTimerTimestampMs(run.gauntletDeadlineMs, GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS)
-                : run.gauntletDeadlineMs,
         board,
         pinnedTileIds: [],
         peekRevealedTileIds: [],

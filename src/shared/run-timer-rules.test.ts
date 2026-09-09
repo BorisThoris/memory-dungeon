@@ -22,8 +22,7 @@ describe('run timer rules', () => {
             memorizeRemainingMs: null,
             resolveRemainingMs: 120,
             debugRevealRemainingMs: null,
-            pausedFromStatus: null,
-            gauntletPausedAtMs: null
+            pausedFromStatus: null
         });
         expect(clearResolveState({ ...createNewRun(0), timerState }).resolveRemainingMs).toBeNull();
     });
@@ -95,41 +94,6 @@ describe('run timer rules', () => {
         expect(malformedFlips.timerState.resolveRemainingMs).toBeNull();
     });
 
-    it('extends gauntlet deadlines by paused wall-clock time', () => {
-        vi.useFakeTimers();
-        vi.setSystemTime(1_000);
-        const playing = finishMemorizePhase(createNewRun(0, { gauntletDurationMs: 60_000 }));
-        const paused = pauseRun(playing);
-        vi.setSystemTime(2_500);
-        const resumed = resumeRun(paused);
-        expect(resumed.gauntletDeadlineMs).toBe((playing.gauntletDeadlineMs ?? 0) + 1_500);
-        expect(resumed.timerState.gauntletPausedAtMs).toBeNull();
-    });
-
-    it('normalizes malformed gauntlet timer fields while pausing and resuming', () => {
-        const playing = finishMemorizePhase(createNewRun(0, { gauntletDurationMs: 60_000 }));
-        const malformedDeadline = pauseRun({
-            ...playing,
-            gauntletDeadlineMs: Number.POSITIVE_INFINITY
-        });
-        expect(malformedDeadline.gauntletDeadlineMs).toBeNull();
-        expect(malformedDeadline.timerState.gauntletPausedAtMs).toBeNull();
-
-        vi.useFakeTimers();
-        vi.setSystemTime(2_000);
-        const malformedPauseTime = resumeRun({
-            ...playing,
-            status: 'paused',
-            timerState: {
-                ...playing.timerState,
-                pausedFromStatus: 'playing',
-                gauntletPausedAtMs: Number.NaN
-            }
-        });
-        expect(malformedPauseTime.gauntletDeadlineMs).toBe(playing.gauntletDeadlineMs);
-        expect(malformedPauseTime.timerState.gauntletPausedAtMs).toBeNull();
-    });
-
     it('normalizes malformed timer state objects at transition boundaries', () => {
         const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
         const malformedTimerRun = {
@@ -143,8 +107,7 @@ describe('run timer rules', () => {
         expect(paused.status).toBe('paused');
         expect(paused.timerState).toMatchObject({
             pausedFromStatus: 'playing',
-            resolveRemainingMs: null,
-            gauntletPausedAtMs: null
+            resolveRemainingMs: null
         });
 
         const invalidPaused = {

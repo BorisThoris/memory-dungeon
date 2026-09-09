@@ -10,7 +10,7 @@ The old repository folder name, `my-react-native-game`, and the previous tech-st
 
 ## What We Have Now
 
-- A playable Memory Dungeon desktop game loop with choose-path flow, classic runs, daily challenge, gauntlet, puzzle, meditation, scholar, wild, practice, and related featured run variants.
+- A playable Memory Dungeon desktop game loop with choose-path flow, classic runs, daily challenge, puzzle, meditation, scholar, wild, practice, and related featured run variants.
 - A deterministic shared gameplay core under `src/shared/`, covering run state, floor schedules, route/shop/side-room systems, relics, mutators, objectives, hazards, findables, economy, and softlock fairness.
 - A React renderer under `src/renderer/` with main menu, mode selection, gameplay, HUD, inventory, codex, collection, settings, overlays, game over, and dev fixtures.
 - A WebGL tile board with DOM fallback/error handling coverage, camera fit/pan/zoom behavior, tile-face rendering checks, and mobile/short-height layout regression tests.

@@ -34,8 +34,6 @@ export interface RunShellTool {
 
 export interface RunShellProps {
     run: RunState;
-    /** Precomputed from the host clock, or null when the gauntlet is off. */
-    gauntletRemainingMs: number | null;
     /**
      * True once this run's floor passes the profile's deepest on record and the run counts. The
      * marker is the one piece of the profile the bar shows, because the moment it appears is the
@@ -52,13 +50,6 @@ export interface RunShellProps {
     tools: readonly RunShellTool[];
     onPause: () => void;
 }
-
-const formatTimer = (ms: number): string => {
-    const total = Math.max(0, Math.ceil(ms / 1000));
-    const minutes = Math.floor(total / 60);
-    const seconds = total % 60;
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-};
 
 /** How long the meter reads as draining after a chain drops. */
 const CHAIN_METER_DROP_MS = 700;
@@ -124,7 +115,6 @@ const Stat = ({
 
 const RunShell = ({
     run,
-    gauntletRemainingMs,
     personalBestDepth,
     feedback,
     feedbackPriority = 'info',
@@ -256,16 +246,6 @@ const RunShell = ({
                 {run.stats.guardTokens > 0 ? (
                     <Stat label="Guards" testId="hud-guards">
                         {String(run.stats.guardTokens)}
-                    </Stat>
-                ) : null}
-                {gauntletRemainingMs !== null ? (
-                    <Stat label="Clock" testId="hud-gauntlet-timer">
-                        <span
-                            className={`${styles.timer} ${gauntletRemainingMs <= 30_000 ? styles.timerLow : ''}`.trim()}
-                            role="timer"
-                        >
-                            {formatTimer(gauntletRemainingMs)}
-                        </span>
                     </Stat>
                 ) : null}
                 {mutatorTitles.length > 0 ? (

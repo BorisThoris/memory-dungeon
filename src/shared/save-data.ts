@@ -244,8 +244,6 @@ export const normalizeRunSummary = (input: unknown): RunSummary | null => {
     const runRulesVersion =
         source.runRulesVersion === undefined ? undefined : finiteNonNegativeInteger(source.runRulesVersion, Number.NaN);
     const gameMode = isGameMode(source.gameMode) ? source.gameMode : undefined;
-    const gauntletSessionDurationMs =
-        source.gauntletSessionDurationMs == null ? null : finiteNonNegativeInteger(source.gauntletSessionDurationMs, 0);
     const activeContract = normalizeContractFlags(source.activeContract);
     const activeMutators = Array.isArray(source.activeMutators)
         ? [...new Set(runFilteredArray(source.activeMutators, isMutatorId))]
@@ -296,7 +294,6 @@ export const normalizeRunSummary = (input: unknown): RunSummary | null => {
         ...(Number.isFinite(runSeed) ? { runSeed } : {}),
         ...(Number.isFinite(runRulesVersion) ? { runRulesVersion } : {}),
         ...(gameMode ? { gameMode } : {}),
-        ...(gauntletSessionDurationMs != null ? { gauntletSessionDurationMs } : {}),
         ...(activeMutators ? { activeMutators } : {}),
         ...(Number.isFinite(payoffPickupClaimed) ? { payoffPickupClaimed } : {}),
         ...(Number.isFinite(payoffPickupTotal) ? { payoffPickupTotal } : {}),

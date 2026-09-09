@@ -81,7 +81,7 @@ export const UI_STATE_COPY_ROWS: readonly UiStateCopyRow[] = [
         title: 'Mode staged for later',
         body: 'Locked mode cards state whether the ruleset is future content or gated by local save progress.',
         actionLabel: 'Pick another mode',
-        action: 'Use Classic, Daily, Gauntlet, puzzles, or training modes',
+        action: 'Start a Classic run, or set one up from the sheet',
         localOnly: true,
         onlineAssumption: false
     },

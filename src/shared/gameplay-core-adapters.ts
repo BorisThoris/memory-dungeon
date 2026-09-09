@@ -8,7 +8,6 @@ import {
     createGameplayMemorizeCompleteCommand,
     createGameplayPauseCommand,
     createGameplayResumeCommand,
-    createGameplayGauntletExpireCommand,
     createGameplayDebugRevealActivateCommand,
     createGameplayDebugRevealDeactivateCommand,
     type GameplayCommand,
@@ -215,13 +214,3 @@ export const deactivateDebugRevealThroughGameplayCore = (
 ): GameplayRunTransitionAdapterResult =>
     reduceThroughGameplayCore(run, createGameplayDebugRevealDeactivateCommand(commandId, reason));
 
-/**
- * Rejected rather than thrown on while time remains: the gauntlet watcher polls every
- * 300ms, so `accepted: false` is the normal case and only the firing tick transitions.
- */
-export const expireGauntletThroughGameplayCore = (
-    run: RunState,
-    observedAtMs: number,
-    commandId = `gauntlet-expire:${run.runSeed}:${run.gauntletDeadlineMs ?? 'none'}:${observedAtMs}`
-): GameplayRunTransitionAdapterResult =>
-    reduceThroughGameplayCore(run, createGameplayGauntletExpireCommand(commandId, observedAtMs));

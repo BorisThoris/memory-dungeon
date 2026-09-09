@@ -2,7 +2,6 @@ import type { RunState, ViewState } from '../../shared/contracts';
 import {
     completeMemorizePhaseThroughGameplayCore,
     deactivateDebugRevealThroughGameplayCore,
-    expireGauntletThroughGameplayCore,
     pauseRunThroughGameplayCore,
     resumeRunThroughGameplayCore
 } from '../../shared/gameplay-core-adapters';
@@ -26,7 +25,6 @@ interface RunTimerStoreSnapshot {
 interface RunTimerControllerOptions {
     getState: () => RunTimerStoreSnapshot;
     onResolveBoardTurn: (run: RunState) => void;
-    onResolvedRun: (run: RunState) => void;
     setRun: (run: RunState) => void;
 }
 
@@ -43,33 +41,23 @@ interface RunTimerController {
     scheduleResolveTimer: (duration: number) => void;
     /** Ends the study period early on the player's word. True when a phase was actually ended. */
     skipMemorizePhase: () => boolean;
-    syncGauntletExpiryWatch: () => void;
 }
 
 export const createRunTimerController = ({
     getState,
     onResolveBoardTurn,
-    onResolvedRun,
     setRun
 }: RunTimerControllerOptions): RunTimerController => {
     let memorizeTimer: ActiveTimer | null = null;
     let resolveTimer: ActiveTimer | null = null;
     let debugRevealTimer: ActiveTimer | null = null;
     let pendingMemorizeBoardKey: string | null = null;
-    let gauntletExpiryIntervalId: ReturnType<typeof setInterval> | null = null;
 
     const completeMemorizePhase = (run: RunState): RunState =>
         completeMemorizePhaseThroughGameplayCore(
             run,
             `memorize-complete:${run.runSeed}:${run.board?.level ?? 0}`
         ).run;
-
-    const expireGauntlet = (run: RunState, observedAtMs: number) =>
-        expireGauntletThroughGameplayCore(
-            run,
-            observedAtMs,
-            `gauntlet-expire:${run.runSeed}:${run.gauntletDeadlineMs ?? 'none'}:${observedAtMs}`
-        );
 
     const commandJournalLength = (run: RunState): number =>
         Array.isArray(run.gameplayCommandJournal) ? run.gameplayCommandJournal.length : 0;
@@ -120,56 +108,10 @@ export const createRunTimerController = ({
         debugRevealTimer = null;
     };
 
-    const clearGauntletExpiryWatch = (): void => {
-        if (gauntletExpiryIntervalId !== null) {
-            clearInterval(gauntletExpiryIntervalId);
-            gauntletExpiryIntervalId = null;
-        }
-    };
-
-    const syncGauntletExpiryWatch = (): void => {
-        const { run, view } = getState();
-        const shouldWatch =
-            view === 'playing' &&
-            run &&
-            run.gauntletDeadlineMs !== null &&
-            run.status !== 'paused' &&
-            run.status !== 'gameOver';
-
-        if (!shouldWatch) {
-            clearGauntletExpiryWatch();
-            return;
-        }
-
-        if (gauntletExpiryIntervalId !== null) {
-            return;
-        }
-
-        gauntletExpiryIntervalId = setInterval(() => {
-            const { run: currentRun, view: currentView } = getState();
-            if (
-                !currentRun ||
-                currentView !== 'playing' ||
-                currentRun.gauntletDeadlineMs === null ||
-                currentRun.status === 'paused' ||
-                currentRun.status === 'gameOver'
-            ) {
-                clearGauntletExpiryWatch();
-                return;
-            }
-            const expiry = expireGauntlet(currentRun, Date.now());
-            if (expiry.accepted) {
-                clearGauntletExpiryWatch();
-                onResolvedRun(expiry.run);
-            }
-        }, 300);
-    };
-
     const clearAllTimers = (): void => {
         clearMemorizeTimer();
         clearResolveTimer();
         clearDebugRevealTimer();
-        clearGauntletExpiryWatch();
         pendingMemorizeBoardKey = null;
     };
 
@@ -361,7 +303,6 @@ export const createRunTimerController = ({
         resumeRunWithTimers,
         scheduleDebugRevealTimer,
         scheduleResolveTimer,
-        skipMemorizePhase,
-        syncGauntletExpiryWatch
+        skipMemorizePhase
     };
 };

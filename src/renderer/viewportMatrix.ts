@@ -130,7 +130,7 @@ export const RESPONSIVE_SCREEN_ROUTES: readonly ResponsiveScreenRoute[] = [
     {
         screen: 'choose_path',
         requiredViewportIds: ['phone_390x844', 'phone_landscape_844x390', 'desktop_1440x900'],
-        primaryActionSelector: '[data-testid="choose-path-launcher"] button, [data-gauntlet-presets] button, button[aria-label^="Play"]',
+        primaryActionSelector: '[data-testid="choose-path-launcher"] button, button[aria-label^="Play"]',
         rationale: 'Mode selection must keep at least one selectable/locked-path control visible.',
         maxContentColumns: 3,
         mustAvoidHorizontalScroll: true

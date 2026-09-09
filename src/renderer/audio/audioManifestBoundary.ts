@@ -19,7 +19,7 @@ const matchTierRangeSchema = z
 export const sfxManifestSchema = z
     .object({
         version: z.number().int().positive(),
-        entries: manifestEntriesSchema(z.enum(['flip', 'match', 'mismatch', 'power', 'pressure', 'shuffle'])),
+        entries: manifestEntriesSchema(z.enum(['flip', 'match', 'mismatch', 'power', 'shuffle'])),
         matchTierDepthRanges: z
             .object({
                 'match-tier-low': matchTierRangeSchema,

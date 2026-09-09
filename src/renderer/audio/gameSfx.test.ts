@@ -11,7 +11,6 @@ import {
 import {
     __resetGameSfxEngineForTests,
     playChainOpportunityBeatSfx,
-    playCountdownPressureSfx,
     playFlipSfx,
     playGambitCommitSfx,
     playFloorClearSfx,
@@ -1068,48 +1067,6 @@ describe('gameSfx', () => {
         expect(createOscillator).toHaveBeenCalled();
     });
 
-    it('uses one pressure voice for countdown pulses', () => {
-        const stops: string[] = [];
-        let index = 0;
-        const createOscillator = vi.fn(() => {
-            const id = `pressure-${index}`;
-            index += 1;
-            return {
-                id,
-                type: 'sine' as OscillatorType,
-                frequency: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
-                connect: vi.fn(),
-                start: vi.fn(),
-                stop: vi.fn(() => {
-                    stops.push(id);
-                }),
-                addEventListener: vi.fn()
-            };
-        });
-        const createGain = vi.fn(() => ({
-            gain: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
-            connect: vi.fn()
-        }));
-
-        vi.stubGlobal(
-            'AudioContext',
-            class {
-                currentTime = 0;
-                destination = {};
-                createOscillator = createOscillator;
-                createGain = createGain;
-                close = (): Promise<void> => Promise.resolve();
-            }
-        );
-
-        const gain = sfxGainFromSettings(1, 1);
-        playCountdownPressureSfx(gain);
-        playCountdownPressureSfx(gain);
-
-        expect(createOscillator).toHaveBeenCalledTimes(2);
-        expect(stops.length).toBeGreaterThanOrEqual(1);
-    });
-
     it('keeps sampled gameplay coverage backed by manifest entries and files', () => {
         expect(Object.keys(sfxManifest.entries)).toEqual([...SFX_SAMPLE_KEYS]);
         expect(Object.keys(sfxManifest.matchTierDepthRanges)).toEqual([...MATCH_TIER_SAMPLE_KEYS]);
@@ -1142,14 +1099,4 @@ describe('gameSfx', () => {
         expect(resolveMatchTierSampleKey(99)).toBe('match-tier-high');
     });
 
-    it('keeps the countdown pressure cue covered by first-run asset checks', () => {
-        const coverageRow = AUDIO_INTERACTION_COVERAGE.find((row) => row.id === 'gauntlet_pressure');
-        const manifestEntry = sfxManifest.entries['countdown-pressure'];
-
-        expect(coverageRow?.cue).toBe('countdown-pressure');
-        expect(manifestEntry.file).toBe('countdown-pressure.ogg');
-        expect(
-            fs.existsSync(path.resolve(process.cwd(), 'src/renderer/assets/audio/sfx', manifestEntry.file))
-        ).toBe(true);
-    });
 });

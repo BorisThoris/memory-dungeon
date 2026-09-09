@@ -521,7 +521,7 @@ describe('save normalization', () => {
     it('documents which persisted fields require save migrations', () => {
         const policies = getSaveFieldPolicies();
 
-        expect(SAVE_FIELD_POLICY_VERSION).toBe('save-176-v6');
+        expect(SAVE_FIELD_POLICY_VERSION).toBe('save-178-v7');
         expect(policies.map((policy) => policy.field)).toEqual([
             'runHistory',
             'runHistory.shareKey',
@@ -610,6 +610,84 @@ describe('save normalization', () => {
             }
         ]);
         assertNoUndefinedDeep(normalized, 'schema6.');
+    });
+
+    it('loads a schema-7 profile with its records intact and without the clock it recorded', () => {
+        // Schema 7 summaries could carry `gauntletSessionDurationMs`, the clock a run was played
+        // against, and their journals could name the command that ended a run when the clock ran
+        // out. The game has no timer now, so the field is dropped on load and the journal entries
+        // fail their schema and go with it; everything else in the profile is kept.
+        const normalized = normalizeUnknownSaveDataOrThrow({
+            schemaVersion: 7,
+            bestScore: 5120,
+            achievements: { ...createAchievementState(), ACH_FIRST_CLEAR: true },
+            playerStats: { bestFloorNoPowers: 6, encorePairKeysLastRun: ['C'], sharpFloors: 2, feverFloors: 1 },
+            lastRunSummary: {
+                totalScore: 5120,
+                bestScore: 5120,
+                levelsCleared: 7,
+                highestLevel: 8,
+                achievementsEnabled: true,
+                unlockedAchievements: ['ACH_FIRST_CLEAR'],
+                bestStreak: 4,
+                perfectClears: 1,
+                runSeed: 77_001,
+                runRulesVersion: 35,
+                gameMode: 'endless',
+                gauntletSessionDurationMs: 600_000,
+                gameplayCommandJournal: [
+                    { schemaVersion: 1, commandId: 'shuffle:1', type: 'board.region_shuffle', rowIndex: 0 },
+                    { schemaVersion: 1, commandId: 'gauntlet-expire:1', type: 'run.gauntlet_expire', observedAtMs: 1 }
+                ],
+                gameplayEventJournal: [
+                    {
+                        schemaVersion: 1,
+                        eventId: 'gauntlet-expire:1:0',
+                        commandId: 'gauntlet-expire:1',
+                        sequence: 0,
+                        source: { kind: 'system', id: 'run_timer' },
+                        type: 'run.gauntlet_expired',
+                        observedAtMs: 1,
+                        deadlineMs: 0,
+                        overdueMs: 1
+                    }
+                ]
+            },
+            runHistory: [
+                {
+                    endedAtIso: '2026-09-08T10:00:00.000Z',
+                    highestLevel: 8,
+                    mode: 'Timed Run',
+                    shareKey: 'md1:gauntlet:35:77001:600000',
+                    totalScore: 5120
+                }
+            ]
+        });
+
+        expect(normalized.schemaVersion).toBe(SAVE_SCHEMA_VERSION);
+        expect(normalized.bestScore).toBe(5120);
+        expect(normalized.playerStats).toEqual({
+            bestFloorNoPowers: 6,
+            encorePairKeysLastRun: ['C'],
+            sharpFloors: 2,
+            feverFloors: 1
+        });
+        expect(normalized.lastRunSummary).toMatchObject({
+            totalScore: 5120,
+            highestLevel: 8,
+            runSeed: 77_001,
+            runRulesVersion: 35,
+            gameMode: 'endless'
+        });
+        expect(normalized.lastRunSummary).not.toHaveProperty('gauntletSessionDurationMs');
+        expect(normalized.lastRunSummary?.gameplayCommandJournal?.map((command) => command.commandId)).toEqual([
+            'shuffle:1'
+        ]);
+        expect(normalized.lastRunSummary?.gameplayEventJournal ?? []).toEqual([]);
+        // The history row is kept as a record of the run; its key no longer parses, which the
+        // share-key tests cover.
+        expect(normalized.runHistory).toHaveLength(1);
+        assertNoUndefinedDeep(normalized, 'schema7.');
     });
 });
 

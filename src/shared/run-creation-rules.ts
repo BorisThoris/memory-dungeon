@@ -16,7 +16,7 @@ import { countFindablePairs } from './board-tile-generation-rules';
 import { boardHasGlassDecoy } from './board-inspection';
 import { getMemorizeDurationForRun } from './scoring-rules';
 import { createSessionStats } from './session-stats-rules';
-import { createTimerState, normalizeTimerTimestampMs } from './run-timer-rules';
+import { createTimerState } from './run-timer-rules';
 import { buildBoard } from './board-build-rules';
 import { createPassAndPlayState } from './pass-and-play-rules';
 
@@ -28,7 +28,6 @@ export interface CreateRunOptions {
     activeContract?: RunState['activeContract'];
     dailyDateKeyUtc?: string | null;
     puzzleId?: string | null;
-    gauntletDurationMs?: number | null;
     fixedBoard?: BoardState | null;
     /** Import / debug: use historical rules version for same tile order. */
     runRulesVersionOverride?: number;
@@ -123,9 +122,6 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         puzzleId: options.puzzleId ?? null,
         stickyBlockIndex: null,
         parasiteFloors: 0,
-        gauntletDeadlineMs:
-            options.gauntletDurationMs != null ? Date.now() + options.gauntletDurationMs : null,
-        gauntletSessionDurationMs: options.gauntletDurationMs ?? null,
         flipHistory: [],
         peekCharges,
         peekRevealedTileIds: [],
@@ -204,9 +200,3 @@ export const createWildRun = (bestScore: number, extra: Partial<CreateRunOptions
         activeMutators: ['sticky_fingers', 'short_memorize', 'findables_floor'],
         ...extra
     });
-
-export const isGauntletExpired = (run: RunState): boolean => {
-    const gauntletDeadlineMs = normalizeTimerTimestampMs(run.gauntletDeadlineMs);
-    const nowMs = normalizeTimerTimestampMs(Date.now());
-    return run.status !== 'paused' && gauntletDeadlineMs !== null && nowMs !== null && nowMs > gauntletDeadlineMs;
-};

@@ -14,14 +14,14 @@ describe('getModeRecords', () => {
     it('keeps the best run in each mode rather than one number across all of them', () => {
         const records = getModeRecords([
             run('Classic Dungeon', 900),
-            run('Gauntlet', 400),
+            run('Pin vow', 400),
             run('Classic Dungeon', 2200),
-            run('Gauntlet', 150)
+            run('Pin vow', 150)
         ]);
 
         expect(records.map((record) => [record.mode, record.totalScore])).toEqual([
             ['Classic Dungeon', 2200],
-            ['Gauntlet', 400]
+            ['Pin vow', 400]
         ]);
     });
 
@@ -39,9 +39,9 @@ describe('getModeRecords', () => {
     });
 
     it('orders by score, then by name so a tie does not shuffle between renders', () => {
-        const records = getModeRecords([run('Wild Run', 500), run('Classic Dungeon', 500), run('Gauntlet', 900)]);
+        const records = getModeRecords([run('Wild Run', 500), run('Classic Dungeon', 500), run('Pin vow', 900)]);
 
-        expect(records.map((record) => record.mode)).toEqual(['Gauntlet', 'Classic Dungeon', 'Wild Run']);
+        expect(records.map((record) => record.mode)).toEqual(['Pin vow', 'Classic Dungeon', 'Wild Run']);
     });
 
     it('lists no mode the player has never recorded a run in', () => {
@@ -61,9 +61,9 @@ describe('the chain records by mode', () => {
         const records = getModeRecords([
             { ...run('Classic Dungeon', 900), bestChain: 12, biggestChunk: 3 },
             { ...run('Classic Dungeon', 2200), bestChain: 5, biggestChunk: 7 },
-            run('Gauntlet', 400)
+            run('Pin vow', 400)
         ]);
         expect(records[0]).toMatchObject({ mode: 'Classic Dungeon', totalScore: 2200, bestChain: 12, biggestChunk: 7 });
-        expect(records[1]).toMatchObject({ mode: 'Gauntlet', bestChain: 0, biggestChunk: 0 });
+        expect(records[1]).toMatchObject({ mode: 'Pin vow', bestChain: 0, biggestChunk: 0 });
     });
 });

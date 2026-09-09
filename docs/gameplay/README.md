@@ -22,7 +22,7 @@ Epics below are **narrative deep dives** + refinement notes; they must stay cons
 | [epic-board-rendering-assists](./epic-board-rendering-assists.md) | WebGL board, findables/shifting spotlight, pair-distance hints, focus assist, presentation mutator **3D tints** |
 | [epic-mutators](./epic-mutators.md) | All mutator IDs, endless floor schedule |
 | [epic-scoring-objectives](./epic-scoring-objectives.md) | Match score, floor clear, flip par, boss multiplier, penalties |
-| [epic-lives-and-pressure](./epic-lives-and-pressure.md) | Lives, guard, combo shards, echo, run clock, score parasite |
+| [epic-lives-and-pressure](./epic-lives-and-pressure.md) | Lives, guard, combo shards, echo, score parasite |
 | [epic-powers-and-interactions](./epic-powers-and-interactions.md) | Peek, shuffle, region shuffle, tile swap, destroy, pin, stray, undo, flash pair |
 | [epic-modes-and-runs](./epic-modes-and-runs.md) | Classic Run and its setup sheet, Pass and Play, practice/scholar/pin vow/wild, import/export |
 | [epic-meta-progression](./epic-meta-progression.md) | Achievements, telemetry, saves, `powersUsedThisRun` |

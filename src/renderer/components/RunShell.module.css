@@ -55,7 +55,7 @@
     border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 55%, var(--theme-border));
     background: color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
     color: var(--theme-gold-bright);
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     letter-spacing: 0.12em;
 }
 
@@ -115,14 +115,6 @@
 
 .heartLost {
     color: rgba(224, 101, 90, 0.26);
-}
-
-.timer {
-    font-variant-numeric: tabular-nums;
-}
-
-.timerLow {
-    color: #e0655a;
 }
 
 /* ---- feedback line ---------------------------------------------------------------- */

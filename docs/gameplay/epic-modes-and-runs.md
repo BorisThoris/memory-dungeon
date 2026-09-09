@@ -2,7 +2,7 @@
 
 ## Scope
 
-`GameMode`: `endless`, `daily`, `puzzle`, `gauntlet`, `meditation` — plus **flagged** variants that still use `endless` (`practiceMode`, `wildMenuRun`, scholar contract, pin vow, etc.).
+`GameMode`: `endless` — plus **flagged** variants that still use `endless` (`practiceMode`, `wildMenuRun`, scholar contract, pin vow, etc.).
 
 ## Implementation status
 
@@ -11,7 +11,6 @@
 | Endless / “Classic” | **Shippable** | `startRun`; floor mutator schedule when rules version allows. |
 | Daily | **Shippable** | `createDailyRun`; UTC date key; one mutator from daily table; save merge on complete. |
 | Puzzle | **Functional** | `BUILTIN_PUZZLES` only (`starter_pairs`, `mirror_craft`); tiny set; see core epic for fixed-board objective gaps. |
-| Gauntlet | **Functional** | Run-wide deadline; **5 / 10 / 15** minute presets from **Choose Your Path**; `gauntletSessionDurationMs` preserves preset across **restart**; HUD integrated. |
 | Meditation | **Functional** | Longer memorize; calmer framing; optional mutators from **Choose Your Path** setup modal. |
 | Practice / Scholar / Pin Vow / Wild | **Functional** | Use `endless` + flags; started from **Choose Your Path** (`useAppStore` handlers). |
 | Choose Your Path | **Shippable** | Mode-selection shell (hero + **drag-first** library, magnifier search, catalog, modals). **UI / interaction deep dive:** [epic-choose-your-path](./epic-choose-your-path.md). |
@@ -25,7 +24,7 @@
 
 ## Primary code
 
-- `src/shared/game.ts` — `createNewRun`, `createDailyRun`, `createPuzzleRun`, `createGauntletRun`, `createMeditationRun`, `createRunFromExportPayload`, etc.
+- `src/shared/game.ts` — `createNewRun`, `createDailyRun`, `createPuzzleRun`, `createMeditationRun`, `createRunFromExportPayload`, etc.
 - `src/shared/builtin-puzzles.ts`
 - `src/shared/run-export.ts`
 - `src/shared/puzzle-import.ts` — JSON validation for user puzzle files
@@ -36,7 +35,7 @@
 
 ## Refinement
 
-**Shippable** for classic/daily/gauntlet/meditation shells and the built-in puzzle library. **Functional** for puzzle library size and export replay guarantees; ad-hoc puzzle JSON playtests remain unwired.
+**Shippable** for classic/daily/meditation shells and the built-in puzzle library. **Functional** for puzzle library size and export replay guarantees; ad-hoc puzzle JSON playtests remain unwired.
 
 ## Tasks (polish backlog)
 

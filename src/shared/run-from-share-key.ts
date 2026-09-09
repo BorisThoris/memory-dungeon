@@ -30,23 +30,12 @@ export const createRunFromShareKey = (
     };
 
     switch (key.variant) {
-        case 'gauntlet':
-            return createNewRun(bestScore, { ...seeded, gauntletDurationMs: key.durationMs ?? 0 });
-        case 'meditation':
-            return createNewRun(bestScore, {
-                ...seeded,
-                ...(key.mutators && key.mutators.length > 0 ? { activeMutators: [...key.mutators] } : {}),
-                resolveDelayMultiplier: 1.35
-            });
         case 'pin_vow':
             return createNewRun(bestScore, { ...seeded, activeContract: CONTRACT_PIN_VOW });
         case 'practice':
             return createNewRun(bestScore, { ...seeded, practiceMode: true });
         case 'scholar':
             return createNewRun(bestScore, { ...seeded, activeContract: CONTRACT_SCHOLAR });
-        case 'showcase':
-            // The dungeon showcase went with the dungeon layer; its key plays as a seeded run.
-            return createNewRun(bestScore, seeded);
         case 'wild':
             return createWildRun(bestScore, seeded);
         default:

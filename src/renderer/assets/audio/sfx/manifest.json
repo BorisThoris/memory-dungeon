@@ -13,8 +13,7 @@
         "stray-power": { "file": "stray-power.ogg", "category": "power" },
         "shuffle-full": { "file": "shuffle-full.ogg", "category": "shuffle" },
         "shuffle-quick": { "file": "shuffle-quick.ogg", "category": "shuffle" },
-        "floor-clear": { "file": "floor-clear.ogg", "category": "power" },
-        "countdown-pressure": { "file": "countdown-pressure.ogg", "category": "pressure" }
+        "floor-clear": { "file": "floor-clear.ogg", "category": "power" }
     },
     "matchTierDepthRanges": {
         "match-tier-low": [1, 5],

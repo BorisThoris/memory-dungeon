@@ -6,7 +6,6 @@ import { createRunTimerController } from './runTimerController';
 
 interface Harness {
     onResolveBoardTurn: ReturnType<typeof vi.fn>;
-    onResolvedRun: ReturnType<typeof vi.fn>;
     setRun: ReturnType<typeof vi.fn>;
     setState: (patch: Partial<{ run: RunState | null; view: ViewState }>) => void;
     state: { run: RunState | null; view: ViewState };
@@ -22,17 +21,14 @@ const createHarnessWithCallbacks = (initialRun: RunState | null): Harness => {
         state.run = run;
     });
     const onResolveBoardTurn = vi.fn();
-    const onResolvedRun = vi.fn();
     const timer = createRunTimerController({
         getState: () => state,
         onResolveBoardTurn: onResolveBoardTurn as (run: RunState) => void,
-        onResolvedRun: onResolvedRun as (run: RunState) => void,
         setRun
     });
 
     return {
         onResolveBoardTurn,
-        onResolvedRun,
         setRun,
         setState: (patch) => {
             Object.assign(state, patch);
@@ -226,36 +222,6 @@ describe('runTimerController', () => {
                 expect.objectContaining({ type: 'feedback.requested', cue: 'debug.reveal.timer_elapsed' })
             ]
         });
-    });
-
-    it('routes expired gauntlet runs through the resolved-run callback', async () => {
-        vi.useFakeTimers();
-        vi.setSystemTime(10_000);
-        const base = createNewRun(0, { echoFeedbackEnabled: false });
-        const run: RunState = {
-            ...base,
-            gauntletDeadlineMs: 9_999,
-            status: 'playing'
-        };
-        const harness = createHarnessWithCallbacks(run);
-
-        harness.timer.syncGauntletExpiryWatch();
-        await vi.advanceTimersByTimeAsync(301);
-
-        expect(harness.onResolvedRun).toHaveBeenCalledWith(expect.objectContaining({
-            lives: 0,
-            status: 'gameOver',
-            gameplayCommandJournal: [expect.objectContaining({ type: 'run.gauntlet_expire' })],
-            gameplayEventJournal: [
-                expect.objectContaining({
-                    type: 'run.gauntlet_expired',
-                    observedAtMs: 10_300,
-                    deadlineMs: 9_999,
-                    overdueMs: 301
-                }),
-                expect.objectContaining({ type: 'feedback.requested', cue: 'mode.gauntlet.expired' })
-            ]
-        }));
     });
 
     it('clears pending resolve timers without clearing memorize board readiness', async () => {

@@ -230,7 +230,7 @@ describe('REG-087 run-start fairness coverage', () => {
     it('accepts current local/offline run starts after memorize', () => {
         const runs = [
             createNewRun(0, { runSeed: 11 }),
-            createNewRun(0, { gauntletDurationMs: 5 * 60 * 1000, runSeed: 12 }),
+            createNewRun(0, { practiceMode: true, runSeed: 12 }),
             createNewRun(0, { resolveDelayMultiplier: 1.35, runSeed: 13 })
         ];
 

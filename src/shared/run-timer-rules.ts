@@ -4,14 +4,12 @@ import {
     type RunState
 } from './contracts';
 import { isResumableLifecycleState, lifecycleStateFromRunStatus } from './run-lifecycle-machine';
-import { runFiniteNumberOrNull } from './run-number-guards';
 
 export const createTimerState = (overrides?: Partial<RunState['timerState']>): RunState['timerState'] => ({
     memorizeRemainingMs: null,
     resolveRemainingMs: null,
     debugRevealRemainingMs: null,
     pausedFromStatus: null,
-    gauntletPausedAtMs: null,
     ...overrides
 });
 
@@ -19,17 +17,6 @@ const timerStateForRun = (value: unknown): RunState['timerState'] =>
     value && typeof value === 'object' && !Array.isArray(value)
         ? createTimerState(value as Partial<RunState['timerState']>)
         : createTimerState();
-
-export const normalizeTimerTimestampMs = (value: unknown): number | null =>
-    runFiniteNumberOrNull(value);
-
-export const extendTimerTimestampMs = (value: unknown, deltaMs: number): number | null => {
-    const timestamp = normalizeTimerTimestampMs(value);
-    const safeDelta = normalizeTimerTimestampMs(deltaMs);
-    return timestamp !== null && safeDelta !== null
-        ? normalizeTimerTimestampMs(timestamp + Math.max(0, safeDelta))
-        : timestamp;
-};
 
 export const clearResolveState = (run: RunState): RunState['timerState'] => ({
     ...timerStateForRun(run.timerState),
@@ -44,21 +31,12 @@ export const pauseRun = (run: RunState): RunState => {
     if (!isResumableStatus(run.status)) {
         return run;
     }
-    const timerState = timerStateForRun(run.timerState);
-    const gauntletDeadlineMs = normalizeTimerTimestampMs(run.gauntletDeadlineMs);
-    const gauntletPausedAtMs =
-        gauntletDeadlineMs !== null
-            ? normalizeTimerTimestampMs(Date.now())
-            : (timerState.gauntletPausedAtMs ?? null);
-
     return {
         ...run,
-        gauntletDeadlineMs,
         status: 'paused',
         timerState: {
-            ...timerState,
-            pausedFromStatus: run.status,
-            gauntletPausedAtMs
+            ...timerStateForRun(run.timerState),
+            pausedFromStatus: run.status
         }
     };
 };
@@ -76,8 +54,7 @@ export const resumeRun = (run: RunState): RunState => {
             lives: 0,
             timerState: {
                 ...timerState,
-                pausedFromStatus: null,
-                gauntletPausedAtMs: null
+                pausedFromStatus: null
             }
         };
     }
@@ -90,8 +67,7 @@ export const resumeRun = (run: RunState): RunState => {
                 timerState: {
                     ...timerState,
                     resolveRemainingMs: null,
-                    pausedFromStatus: null,
-                    gauntletPausedAtMs: null
+                    pausedFromStatus: null
                 }
             };
         }
@@ -102,27 +78,17 @@ export const resumeRun = (run: RunState): RunState => {
                 timerState: {
                     ...timerState,
                     resolveRemainingMs: null,
-                    pausedFromStatus: null,
-                    gauntletPausedAtMs: null
+                    pausedFromStatus: null
                 }
             };
         }
     }
-    const gauntletDeadlineMs = normalizeTimerTimestampMs(run.gauntletDeadlineMs);
-    const gauntletPausedAtMs = normalizeTimerTimestampMs(timerState.gauntletPausedAtMs);
-    const gauntletPauseDeltaMs =
-        gauntletDeadlineMs !== null && gauntletPausedAtMs !== null
-            ? Math.max(0, Date.now() - gauntletPausedAtMs)
-            : 0;
-
     return {
         ...run,
-        gauntletDeadlineMs: extendTimerTimestampMs(gauntletDeadlineMs, gauntletPauseDeltaMs),
         status: pausedFromStatus,
         timerState: {
             ...timerState,
-            pausedFromStatus: null,
-            gauntletPausedAtMs: null
+            pausedFromStatus: null
         }
     };
 };

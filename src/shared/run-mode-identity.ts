@@ -28,10 +28,6 @@ export const describeRunModeIdentity = (run: RunState): RunModeIdentity => {
     if (contract?.maxPinsTotalRun != null) {
         return { detail: `Pins ${contract.maxPinsTotalRun} this run`, label: 'Pin vow' };
     }
-    if (run.gauntletDeadlineMs !== null) {
-        // The clock is already its own stat; repeating the minutes here would say it twice.
-        return { detail: null, label: 'Timed Run' };
-    }
     if (run.wildMenuRun) {
         return { detail: `Wild matches ${run.wildMatchesRemaining}`, label: 'Wild Run' };
     }

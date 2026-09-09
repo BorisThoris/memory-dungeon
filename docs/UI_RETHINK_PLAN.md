@@ -94,8 +94,8 @@ Rebuilt green-field: `ChooseYourPathScreen.tsx` 1,380 → ~430 lines, its styles
 poster panel with one sentence, three first-run beats, Start run + Browse modes; the
 library as a search box and a grid of cards that each carry a group label, a title and one
 description, with locked modes visible, dimmed and tagged "In the full game". The detail
-modal keeps the mode's promise, eligibility, start contract, local gate row and the gauntlet
-duration presets; the meditation setup modal is unchanged. The pace / payoff / pressure lane
+modal keeps the mode's promise, eligibility, start contract and local gate row; the
+meditation setup modal is unchanged. The pace / payoff / pressure lane
 data and every strip that rendered it are gone, and the tile's accessible name is the title
 again, so the e2e harness's locators match.
 
@@ -132,7 +132,7 @@ boxed over the board (F1, F2 in §7).
 
 - **One bar** across the top, set into a gradient backplate that fades into the void colour
   (F6): FLOOR · LIVES · SCORE · SHARDS as Cinzel numerals (25–42 px) with 12 px small-caps
-  labels; GUARDS, the gauntlet CLOCK and the active MUTATOR appear only when non-zero.
+  labels; GUARDS and the active MUTATOR appear only when non-zero. There is no clock.
 - **One line** under the numerals, inside the bar: the last action's feedback, else the
   first-run instruction (until the first clear), else the standing objective. It is the
   only coaching surface.

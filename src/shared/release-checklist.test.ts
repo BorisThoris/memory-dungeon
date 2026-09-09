@@ -635,8 +635,13 @@ describe('release checklist', () => {
         expect(releaseChecklistByOwner('person').length).toBeGreaterThan(0);
     });
 
+    /*
+     * A minute, not the default ten seconds. The cascade row replays forty-eight seeds of the
+     * balance simulation, six seconds on an idle machine and more than ten under the full suite's
+     * load, and a verifier that fails on the machine's timing rather than the game's is noise.
+     */
     for (const [id, verify] of Object.entries(VERIFIERS)) {
-        it(`proves the "${id}" row is still true`, verify);
+        it(`proves the "${id}" row is still true`, verify, 60_000);
     }
 
     it('renders every row into the generated document', () => {

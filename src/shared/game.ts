@@ -97,7 +97,7 @@ export {
     buildBoard,
     type BuildBoardOptions
 } from './board-build-rules';
-export { createNewRun, createWildRun, isGauntletExpired, type CreateRunOptions } from './run-creation-rules';
+export { createNewRun, createWildRun, type CreateRunOptions } from './run-creation-rules';
 export {
     advanceToNextLevel
 } from './next-floor-transition-rules';

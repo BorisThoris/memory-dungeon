@@ -43,11 +43,6 @@ describe('createRunFromShareKey', () => {
         }
     });
 
-    it('replays a gauntlet against the same clock', () => {
-        const replayed = createRunFromShareKey(keyOf(createNewRun(0, { gauntletDurationMs: 900_000 })), 0);
-        expect(replayed.gauntletSessionDurationMs).toBe(900_000);
-    });
-
     it('honours the rules version in the key, since tile order comes from seed and rules together', () => {
         const current = createNewRun(0);
         const older = createRunFromShareKey({ ...keyOf(current), rulesVersion: current.runRulesVersion - 1 }, 0);

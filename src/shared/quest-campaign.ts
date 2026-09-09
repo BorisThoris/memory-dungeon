@@ -1,15 +1,13 @@
 import type { RunState, SaveData } from './contracts';
 import { runNonNegativeInteger } from './run-number-guards';
-import { normalizeSessionStats } from './session-stats-rules';
 
 export type QuestCampaignStepId =
     | 'first_lantern'
     | 'scholar_oath'
-    | 'timed_proof'
     | 'chain_rhythm';
 
 export type QuestCampaignStatus = 'completed' | 'active' | 'locked' | 'failed';
-export type QuestContractRetryPolicy = 'retry_next_run' | 'retry_same_mode' | 'persistent';
+export type QuestContractRetryPolicy = 'retry_next_run' | 'persistent';
 
 export interface QuestCampaignDefinition {
     id: QuestCampaignStepId;
@@ -58,18 +56,6 @@ export const QUEST_CAMPAIGN_LADDER: readonly QuestCampaignDefinition[] = [
         offlineOnly: true
     },
     {
-        id: 'timed_proof',
-        order: 3,
-        title: 'Timed Proof',
-        description: 'Clear one floor in a run started with a clock.',
-        target: 1,
-        saveFields: ['lastRunSummary.gauntletSessionDurationMs', 'lastRunSummary.levelsCleared'],
-        contractFlag: 'gauntletDeadlineMs',
-        retryPolicy: 'retry_same_mode',
-        reward: 'Timed proof progress.',
-        offlineOnly: true
-    },
-    {
         id: 'chain_rhythm',
         order: 5,
         title: 'Chain Rhythm',
@@ -89,10 +75,6 @@ const progressFor = (save: SaveData, id: QuestCampaignStepId): number => {
             return save.achievements.ACH_FIRST_CLEAR ? 1 : 0;
         case 'scholar_oath':
             return runNonNegativeInteger(save.playerStats?.bestFloorNoPowers);
-        case 'timed_proof':
-            return save.lastRunSummary?.gauntletSessionDurationMs != null
-                ? runNonNegativeInteger(save.lastRunSummary.levelsCleared)
-                : 0;
         case 'chain_rhythm':
             return runNonNegativeInteger(save.playerStats?.sharpFloors);
         default:
@@ -141,7 +123,6 @@ export interface ActiveQuestContractRow {
 
 export const buildActiveQuestContractRows = (run: RunState): ActiveQuestContractRow[] => {
     const rows: ActiveQuestContractRow[] = [];
-    const stats = normalizeSessionStats(run.stats);
     if (run.activeContract?.noShuffle && run.activeContract.noDestroy) {
         const failed = run.shuffleUsedThisFloor || run.destroyUsedThisFloor;
         rows.push({
@@ -168,18 +149,6 @@ export const buildActiveQuestContractRows = (run: RunState): ActiveQuestContract
             offlineOnly: true
         });
     }
-    if (run.gauntletDeadlineMs != null) {
-        const levelsCleared = stats.levelsCleared;
-        rows.push({
-            id: 'timed_proof',
-            label: 'Timed Proof',
-            status: levelsCleared >= 1 ? 'completed' : 'active',
-            progressLabel: `${Math.min(levelsCleared, 1)}/1 timed clears`,
-            failureReason: run.gauntletDeadlineMs != null && Date.now() > run.gauntletDeadlineMs ? 'Timer expired; retry the same preset.' : null,
-            retryPolicy: 'retry_same_mode',
-            offlineOnly: true
-        });
-    }
     return rows;
 };
 
@@ -187,13 +156,8 @@ export const getQuestCampaignRows = buildQuestCampaignRows;
 
 export const questCampaignSummary = getQuestCampaignSummary;
 
-export const getQuestContractForRunSummary = (
-    summary: { gauntletSessionDurationMs?: number | null; levelsCleared?: number } | null
-): QuestCampaignStepId | null => {
+export const getQuestContractForRunSummary = (summary: { levelsCleared?: number } | null): QuestCampaignStepId | null => {
     const levelsCleared = runNonNegativeInteger(summary?.levelsCleared);
-    if (summary?.gauntletSessionDurationMs != null && levelsCleared >= 1) {
-        return 'timed_proof';
-    }
     if (levelsCleared >= 1) {
         return 'first_lantern';
     }

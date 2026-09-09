@@ -29,16 +29,6 @@ describe('describeRunShareKey', () => {
         expect(keyOf(createNewRun(0, { activeContract: scholarContract })).variant).toBe('scholar');
         expect(keyOf(createNewRun(0, { activeContract: pinVowContract })).variant).toBe('pin_vow');
     });
-
-
-    it('carries the clock a gauntlet was played against, since the seed alone is a different run', () => {
-        const key = keyOf(createNewRun(0, { gauntletDurationMs: 600_000 }));
-        expect(key.variant).toBe('gauntlet');
-        expect(key.durationMs).toBe(600_000);
-    });
-
-
-
 });
 
 describe('encode and parse', () => {
@@ -48,8 +38,7 @@ describe('encode and parse', () => {
             createWildRun(0),
             createNewRun(0, { practiceMode: true }),
             createNewRun(0, { activeContract: scholarContract }),
-            createNewRun(0, { activeContract: pinVowContract }),
-            createNewRun(0, { gauntletDurationMs: 900_000 })
+            createNewRun(0, { activeContract: pinVowContract })
         ]) {
             const key = keyOf(run);
             expect(parseRunShareKey(encodeRunShareKey(key)), key.variant).toEqual(key);
@@ -72,13 +61,16 @@ describe('encode and parse', () => {
         }
     });
 
-    it('refuses a gauntlet key with no clock, which would silently become a different run', () => {
-        expect(parseRunShareKey('md1:gauntlet:33:912')).toBeNull();
-        expect(parseRunShareKey('md1:gauntlet:33:912:0')).toBeNull();
-    });
-
-    it('drops mutator ids this build does not have rather than failing the whole key', () => {
-        const parsed = parseRunShareKey('md1:meditation:33:912:short_memorize+not_a_mutator');
-        expect(parsed?.mutators).toEqual(['short_memorize']);
+    it('refuses a key for a run this build cannot make, rather than replaying it as a Classic run', () => {
+        // Each of these named a real variant once: a timed run, a calm run with chosen mutators,
+        // a dungeon showcase. None can be reproduced now, and a Classic run on the same seed would
+        // be a different run under the same name.
+        for (const input of [
+            'md1:gauntlet:33:912:600000',
+            'md1:meditation:33:912:short_memorize',
+            'md1:showcase:33:912'
+        ]) {
+            expect(parseRunShareKey(input), input).toBeNull();
+        }
     });
 });

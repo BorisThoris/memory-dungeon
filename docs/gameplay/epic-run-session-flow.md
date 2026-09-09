@@ -15,7 +15,6 @@ Everything that governs **time and phase** within a run: memorize → play → r
 | Resume | **Shippable** | `resumeRun`. |
 | Level complete gate | **Shippable** | `status === 'levelComplete'`; `continueToNextLevel` opens relic or `advanceToNextLevel`. |
 | Relic pick blocking | **Shippable** | `openRelicOffer` vs `advanceToNextLevel` in store. |
-| Gauntlet clock | **Shippable** | `gauntletDeadlineMs`; `gauntletSessionDurationMs` preserves preset for **restart**; expiry checked on key actions (`pressTile`, etc.) and store interval. |
 | Undo resolving | **Shippable** | `cancelResolvingWithUndo` — requires `undoUsesThisFloor >= 1`, returns to `playing` with flips cleared per rules. Sets `powersUsedThisRun`. |
 | Debug peek | **Functional** | `enableDebugPeek` / `disableDebugPeek`; `debugRevealRemainingMs`; gated by `debugFlags.allowBoardReveal`; can disable achievements. |
 | `pendingMemorizeBonusMs` | **Shippable** | Banked time applied on next floor’s memorize (from life-loss / relic logic in `game.ts`). |
@@ -32,7 +31,7 @@ Everything that governs **time and phase** within a run: memorize → play → r
 
 ## Refinement
 
-**Shippable** for standard session pacing. **Functional** where debug and timer code paths multiply (always test with pause + gauntlet).
+**Shippable** for standard session pacing. **Functional** where debug and timer code paths multiply (always test with pause).
 
 ## Tasks (polish backlog)
 

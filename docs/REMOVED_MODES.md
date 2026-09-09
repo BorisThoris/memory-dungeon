@@ -35,6 +35,13 @@ Fixed handcrafted boards from the built-in puzzle set; puzzle JSON menu import i
 
 A **run-wide wall-clock deadline** from the menu duration preset (commonly **5 / 10 / 15** minutes). When time runs out you hit **game over** even with lives left—pace your clears against the clock.
 
+The card went in Gen 171, but the clock did not: it lived on as the setup sheet's **Pressure** option
+(`timed_5`, `timed_10`, `timed_15`) and a run could still be ended by the wall clock with lives left.
+The thesis says no timer, ever (§43.4), so Gen 178 removed the clock end to end — the run and timer
+fields, the expire command, the pause extension, the HUD Clock stat, the countdown music layer and
+cue, the timed-run identity and the share-key variant. The last run summary had recorded the clock's
+length, so that was a save shape change (schema 8, one-way, the field dropped on load).
+
 ### Meditation `meditation`
 
 Longer memorize windows and calmer pacing for practice-style runs.

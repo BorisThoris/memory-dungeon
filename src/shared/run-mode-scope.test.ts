@@ -39,7 +39,7 @@ describe('run mode scope', () => {
 
     it('calls the option-bag entries what they are', () => {
         // Each of these is createNewRun with a field set; none builds a different board.
-        for (const modeId of ['gauntlet', 'wild', 'practice', 'scholar', 'pin_vow', 'meditation', 'endless', 'dungeon_showcase']) {
+        for (const modeId of ['wild', 'practice', 'scholar', 'pin_vow', 'meditation', 'endless', 'dungeon_showcase']) {
             expect(getRunModeScope(modeId)?.kind, modeId).toBe('preset');
         }
     });

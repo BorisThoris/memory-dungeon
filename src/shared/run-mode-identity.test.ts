@@ -56,7 +56,7 @@ describe('describeRunModeIdentity', () => {
     });
 
     it('reads as one line for a tooltip, with and without a detail', () => {
-        expect(runModeIdentityText({ detail: null, label: 'Gauntlet' })).toBe('Gauntlet');
+        expect(runModeIdentityText({ detail: null, label: 'Classic Dungeon' })).toBe('Classic Dungeon');
         expect(runModeIdentityText({ detail: 'Achievements off', label: 'Practice' })).toBe(
             'Practice — Achievements off'
         );

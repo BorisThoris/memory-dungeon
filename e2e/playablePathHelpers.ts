@@ -90,12 +90,6 @@ export async function startModeFromLibrary(page: Page, modeTitle: string): Promi
     await expectGameplayReady(page);
 }
 
-export async function startGauntletFromLibrary(page: Page, presetLabel = '5m'): Promise<void> {
-    const modal = await openModeDetail(page, 'Gauntlet');
-    await modal.getByRole('button', { name: new RegExp(`^${escapeRegExp(presetLabel)}$`, 'i') }).click();
-    await expectGameplayReady(page);
-}
-
 export async function startMeditationWithSelection(page: Page): Promise<void> {
     const modal = await openModeDetail(page, 'Meditation');
     await modal.getByRole('button', { name: /set up run/i }).click();

@@ -552,26 +552,6 @@ const ChooseYourPathScreen = (): ReactElement => {
                         </fieldset>
 
                         <fieldset className={styles.setupGroup}>
-                            <legend className={styles.setupLegend}>{CLASSIC_SETUP_COPY.pressureLabel}</legend>
-                            {([
-                                ['none', CLASSIC_SETUP_COPY.noClockLabel],
-                                ['timed_5', '5 minutes'],
-                                ['timed_10', '10 minutes'],
-                                ['timed_15', '15 minutes']
-                            ] as const).map(([pressure, label]) => (
-                                <label className={styles.setupRow} key={pressure}>
-                                    <input
-                                        checked={setup.pressure === pressure}
-                                        name="classic-setup-pressure"
-                                        onChange={() => setSetup((current) => ({ ...current, pressure }))}
-                                        type="radio"
-                                    />
-                                    <span>{label}</span>
-                                </label>
-                            ))}
-                        </fieldset>
-
-                        <fieldset className={styles.setupGroup}>
                             <legend className={styles.setupLegend}>{CLASSIC_SETUP_COPY.pacingLabel}</legend>
                             <label className={styles.setupRow}>
                                 <input

@@ -1543,3 +1543,29 @@ occupancy ratchet were already at their measurements.
 - The relic ladder debt - `CASCADE_RELIC_BANDS.feverCleanOverReference` relaxed 2 → 1.6 in Gen 172
   because three chain relics cut the clean player's Fever to a third - went with the relics in
   Gen 175. The bare band it was relaxed from is the only one left, and it holds at 2.3.
+
+## Gen 178: no timer
+
+The Gauntlet card went in Gen 171; its clock did not. The setup sheet's Pressure option could still
+start a run against five, ten or fifteen minutes and end it by the wall clock with lives left, which
+is the one thing the thesis rules out in so many words (§43.4, §23.5(b)). The clock is gone end to
+end: the run and timer fields, the expire command and event, the pause extension that shifted the
+deadline, the HUD Clock stat, the polite countdown announcements, the countdown music layer and its
+sampled cue, the timed-run identity, the gauntlet quest and the share-key variant. `GAME_RULES_VERSION`
+is 36. The last run summary and the run history recorded the clock's length, so the save schema is 8
+and the normalizer drops the field on load, one-way, with every record kept; a journal entry naming
+the expire command fails its schema and is dropped. The save-field policy table is `save-178-v7`.
+
+No balance constant changed. Every band, re-run on rules 36 with the Gen 177 sample sizes:
+
+| | Gen 177 | Gen 178 |
+|---|---|---|
+| Fever share, clean / 10% miss / reference (`sim:cascade`, 48 seeds) | 0.46 / 0.37 / 0.20 | 0.48 / 0.35 / 0.20 |
+| clean/reference Fever ratio | 2.30 | 2.40 |
+| Turns to clear, clean / reference | 4.1 / 6.3 | 4.1 / 6.3 |
+| Pop ladder spread (`sim:pop --check`) | 4.89 | 4.79 |
+| Silent / thin / dominant systems (`sim:occupancy`) | 0 / 0 / 0 | 0 / 0 / 0 |
+| `sim:endless --floors=200`, fairness and playable issues | 0 / 0 | 0 / 0 |
+
+The rules-version bump alone moves the Fever shares by a few hundredths and the ladder by a tenth,
+which is the seed noise Gen 177 measured; every band holds with the margin it was given.

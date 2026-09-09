@@ -92,11 +92,10 @@
 
 ---
 
-## 8. Lives, pressure, run clock
+## 8. Lives and pressure
 
 | Item | Status | Notes | Epic |
 |------|--------|-------|------|
-| Run clock | **Functional** | The setup sheet's pressure option puts a clock on the whole run; `gauntletSessionDurationMs` on `RunState` preserves the length for **restart**. No extra in-run curve beyond base game. | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
 | Score parasite | **Shippable** | Every fourth floor advance costs a life while the mutator is active; tooltips/aria match the life-drain rule (not score). Nothing absorbs the hit. | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
 
 ---
@@ -197,7 +196,7 @@ From [GAMEPLAY_SYSTEMS_ANALYSIS.md](../GAMEPLAY_SYSTEMS_ANALYSIS.md) §10:
 | [epic-scoring-objectives](./epic-scoring-objectives.md) | Thematic clarity when visuals stubbed |
 | [epic-run-session-flow](./epic-run-session-flow.md) | Timer pairing, undo edge cases |
 | [epic-contracts-challenge-runs](./epic-contracts-challenge-runs.md) | Discoverability |
-| [epic-lives-and-pressure](./epic-lives-and-pressure.md) | Run clock depth, parasite explanation |
+| [epic-lives-and-pressure](./epic-lives-and-pressure.md) | Parasite explanation |
 | [epic-content-symbols-and-generation](./epic-content-symbols-and-generation.md) | Readability curve |
 | [epic-readonly-meta-ui](./epic-readonly-meta-ui.md) | Illustrative vs live data |
 | [epic-choose-your-path](./epic-choose-your-path.md) | CYP: drag-first library, magnifier search, touch + mouse; optional per-mode art later |

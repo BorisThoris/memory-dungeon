@@ -53,8 +53,6 @@ export const CLASSIC_SETUP_COPY = {
     pinVowLabel: 'Pin vow: ten pins for the whole run',
     pacingLabel: 'Pacing',
     calmLabel: 'Calm: slower resolves',
-    pressureLabel: 'Clock',
-    noClockLabel: 'No clock',
     chaosLabel: 'Wild: a joker tile and a chaotic floor set',
     unrecordedLabel: 'Do not record this run',
     startLabel: 'Start run',

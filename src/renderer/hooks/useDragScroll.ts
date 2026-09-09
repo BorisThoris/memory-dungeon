@@ -42,11 +42,11 @@ function suppressNextScrollerClick(scroller: HTMLElement): DragSessionCleanup {
  * Keyboard: `tabIndex={0}` plus capture-phase Arrow/Page/Home/End on the scroller (including when
  * focus is on nested controls). Skips when the event targets editable fields.
  *
- * - Skips drag when the pointer targets form controls, links, or Gauntlet duration buttons.
+ * - Skips drag when the pointer targets form controls or links.
  * - Library mode rows are `<button>` inside `[data-library-card-cell]` (stable; CSS module class names are
  *   hashed and must not be used in `closest()`). Those presses use a movement slop so a tap still fires
  *   `click`, while a drag scrolls the tray. Completed drags suppress only their bounded in-tray click;
- *   cancellation never suppresses a later command. Gauntlet preset buttons live under `[data-gauntlet-presets]`.
+ *   cancellation never suppresses a later command.
  * - Other non-interactive surfaces inside the scroller drag immediately (legacy behavior).
  *
  * **Modals:** When an `aria-modal="true"` dialog is mounted (e.g. gameplay `OverlayModal`), pointer and keyboard
@@ -170,9 +170,6 @@ export function useDragScroll(scrollerRef: RefObject<HTMLElement | null>): {
             }
 
             if (target.closest('input, textarea, select, a')) {
-                return;
-            }
-            if (target.closest('[data-gauntlet-presets] button')) {
                 return;
             }
 

@@ -3,10 +3,10 @@ import type { RunHistoryRecord } from './contracts';
 /**
  * The player's best run in each mode they have actually played.
  *
- * `bestScore` is one number across everything, so a strong Gauntlet and a strong Classic run
- * compete for a single slot and the loser is invisible. The modes score differently on purpose — a
- * five-minute Gauntlet cannot reach a long Classic descent's total — which makes one shared record
- * a comparison the game never intended.
+ * `bestScore` is one number across everything, so a strong Wild run and a strong Classic run
+ * compete for a single slot and the loser is invisible. The setups score differently on purpose —
+ * a run under a pin vow cannot reach a long unrestricted descent's total — which makes one shared
+ * record a comparison the game never intended.
  *
  * Derived from the run history rather than stored: a record is a fact about the runs already kept,
  * and a second copy of it in the save is a second thing that can disagree.

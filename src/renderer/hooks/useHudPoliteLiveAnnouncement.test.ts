@@ -9,8 +9,6 @@ import { createBoardTurnResolvedEventFixture } from '../../shared/test/gameplay-
 import { formatHudActionFeedbackText, useHudPoliteLiveAnnouncement } from './useHudPoliteLiveAnnouncement';
 
 const base = {
-    gauntletRemainingMs: null as number | null,
-    gauntletActive: false,
     scoreParasiteActive: true,
     parasiteFloors: 0,
     lives: 3,
@@ -199,26 +197,6 @@ describe('useHudPoliteLiveAnnouncement', () => {
             label: 'Critical',
             tone: 'danger'
         });
-    });
-
-    it('announces when gauntlet crosses the sixty-second bucket', async () => {
-        const { result, rerender } = renderHook(
-            (p: { ms: number }) =>
-                useHudPoliteLiveAnnouncement({
-                    ...base,
-                    gauntletActive: true,
-                    gauntletRemainingMs: p.ms
-                }),
-            { initialProps: { ms: 90_000 } }
-        );
-        expect(result.current.message).toBe('');
-        rerender({ ms: 90_000 });
-        expect(result.current.message).toBe('');
-        await act(async () => {
-            rerender({ ms: 59_000 });
-        });
-        await flushRaf();
-        expect(result.current.message).toBe('Gauntlet: one minute or less remaining.');
     });
 
     it('announces score parasite one-floor-before-drain', async () => {

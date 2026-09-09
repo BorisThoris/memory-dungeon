@@ -81,7 +81,6 @@ import TileBoard, { type TileBoardHandle } from './TileBoard';
 
 const MemoTileBoard = memo(TileBoard);
 import {
-    playCountdownPressureSfx,
     playMismatchRecoveryCrescendoSfx,
     resumeAudioContext,
     sfxGainFromSettings
@@ -317,21 +316,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const compactTouchChrome = isPhoneViewport || isNarrowShortLandscapeForMenuStack(width, height);
     const [, setRulesHintsExpanded] = useState(false);
     const [viewportResetToken, setViewportResetToken] = useState(0);
-    const [gauntletNowMs, setGauntletNowMs] = useState(() => Date.now());
     const [abandonRunConfirmOpen, setAbandonRunConfirmOpen] = useState(false);
     const [shortcutsHelpOpen, setShortcutsHelpOpen] = useState(false);
     const gamepadConnected = useGamepadConnected();
-    useEffect(() => {
-        if (run.gauntletDeadlineMs === null) {
-            return;
-        }
-        const tick = (): void => {
-            setGauntletNowMs(Date.now());
-        };
-        tick();
-        const id = window.setInterval(tick, 300);
-        return () => window.clearInterval(id);
-    }, [run.gauntletDeadlineMs]);
     useEffect(() => {
         if (!compactTouchChrome) {
             return;
@@ -671,7 +658,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         undoResolvingFlip
     } = gameScreenActions;
 
-    const previousCountdownPressureSecondRef = useRef<number | null>(null);
     const playMenuOpen = useCallback((): void => {
         resumeUiSfxContext();
         playMenuOpenSfx(uiGain);
@@ -1090,23 +1076,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         }
     }
 
-    const gauntletRemainingMs =
-        run.gauntletDeadlineMs !== null ? Math.max(0, run.gauntletDeadlineMs - gauntletNowMs) : null;
-
-    const gauntletActive = run.gauntletDeadlineMs !== null;
-    useEffect(() => {
-        if (!gauntletActive || run.status !== 'playing' || gauntletRemainingMs === null) {
-            previousCountdownPressureSecondRef.current = null;
-            return;
-        }
-        const remainingSec = Math.ceil(gauntletRemainingMs / 1000);
-        if (remainingSec <= 0 || remainingSec > 10 || remainingSec === previousCountdownPressureSecondRef.current) {
-            return;
-        }
-        previousCountdownPressureSecondRef.current = remainingSec;
-        void resumeAudioContext();
-        playCountdownPressureSfx(shuffleSfxGain);
-    }, [gauntletActive, gauntletRemainingMs, run.status, shuffleSfxGain]);
     // Passed as just the journal, which is all the projector reads. Handing it the whole
     // run made the memo's real dependency the run object, so it recomputed on every state
     // change and the compiler could not preserve the memoization at all.
@@ -1131,8 +1100,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         boardTurnEvent: typedBoardTurnEvent,
         gameplayFeedback: typedGameplayFeedback,
         boardLevel: run.board?.level ?? null,
-        gauntletActive,
-        gauntletRemainingMs,
         lives: run.lives,
         guardTokens: run.stats.guardTokens,
         comboShards: run.stats.comboShards,
@@ -1478,7 +1445,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         <RunShell
                             feedback={visualHudAnnouncement}
                             feedbackPriority={actionFeedbackPriority}
-                            gauntletRemainingMs={gauntletRemainingMs}
                             onboardingLine={onboardingStep && run.status === 'playing' ? onboardingStep.prompt : null}
                             onPause={pause}
                             personalBestDepth={run.achievementsEnabled && (run.board?.level ?? 0) > profileDeepestFloor(saveData)}

@@ -7,8 +7,6 @@ import type {
     SaveData,
     SubscreenReturnView
 } from '../../shared/contracts';
-import { expireGauntletThroughGameplayCore } from '../../shared/gameplay-core-adapters';
-import { isGauntletExpired } from '../../shared/game-core';
 import { parseRunShareKey } from '../../shared/run-share-key';
 import { trackEvent } from '../../shared/telemetry';
 import { executeRunStartRequest } from './runStartExecutor';
@@ -139,7 +137,6 @@ const applyImmediateGameOverFromTilePress = (resolvedRun: RunState): void =>
 const runTimerController = createRunTimerController({
     getState: () => useAppStore.getState(),
     onResolveBoardTurn: applyResolveBoardTurn,
-    onResolvedRun: applyResolvedRun,
     setRun: (run) => useAppStore.setState({ run })
 });
 
@@ -153,7 +150,6 @@ const prepareMemorizeTimerForBoardReady = (run: RunState): void =>
 const resumeRunWithTimers = (run: RunState): RunState => runTimerController.resumeRunWithTimers(run);
 const scheduleDebugRevealTimer = (duration: number): void => runTimerController.scheduleDebugRevealTimer(duration);
 const scheduleResolveTimer = (duration: number): void => runTimerController.scheduleResolveTimer(duration);
-const syncGauntletExpiryWatch = (): void => runTimerController.syncGauntletExpiryWatch();
 
 
 const runLifecycleController = createRunLifecycleController({
@@ -425,10 +421,6 @@ export const useAppStore = create<AppState>((set, get) => ({
             run.board.flippedTileIds.length === 2;
 
         if (gambitThirdPick) {
-            if (isGauntletExpired(run)) {
-                applyResolvedRun({ ...run, status: 'gameOver', lives: 0 });
-                return;
-            }
             const result = createGambitThirdPickPressResult(run, tileId);
             if (result.kind === 'unchanged') {
                 return;
@@ -453,14 +445,6 @@ export const useAppStore = create<AppState>((set, get) => ({
         }
 
         if (run.status !== 'playing') {
-            return;
-        }
-
-        if (isGauntletExpired(run)) {
-            // Through the command, not a direct mutation: an expiry that ends the run has
-            // to appear in the journal, or a replay of this run never ends.
-            const expiry = expireGauntletThroughGameplayCore(run, Date.now());
-            applyResolvedRun(expiry.accepted ? expiry.run : { ...run, status: 'gameOver', lives: 0 });
             return;
         }
 
@@ -688,10 +672,6 @@ export const useAppStore = create<AppState>((set, get) => ({
         runLifecycleController.triggerDebugReveal();
     }
 }));
-
-useAppStore.subscribe(() => {
-    syncGauntletExpiryWatch();
-});
 
 registerPersistenceWriteFailureHandler(({ consecutive }) => {
     useAppStore.setState({

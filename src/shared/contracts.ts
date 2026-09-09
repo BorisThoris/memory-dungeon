@@ -6,9 +6,9 @@
  * (`.github/pull_request_template.md`). See docs/refinement-tasks REF-066. For optional payloads, consider aligning
  * with TypeScript `exactOptionalPropertyTypes` when feasible.
  */
-export const SAVE_SCHEMA_VERSION = 7;
+export const SAVE_SCHEMA_VERSION = 8;
 /** Bump when generation rules change (tile order, mutators, pair layout). */
-export const GAME_RULES_VERSION = 35;
+export const GAME_RULES_VERSION = 36;
 export const INITIAL_LIVES = 4;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MAX_LIVES = 5;
@@ -16,8 +16,6 @@ export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_MAX = 50;
 export const FEATURED_OBJECTIVE_STREAK_MISS_DECAY = 2;
-/** Timed gauntlet reward for clearing a floor before the clock expires. */
-export const GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS = 30_000;
 /** Minimum value for Settings -> Gameplay -> Resolve Delay and resolve-animation timing. */
 export const RESOLVE_DELAY_MULTIPLIER_MIN = 0.5;
 export const DEBUG_REVEAL_MS = 1500;
@@ -98,7 +96,8 @@ export type SubscreenReturnView = Exclude<ViewState, 'boot' | 'settings'>;
  * The game had five: `endless`, `daily`, `puzzle`, `gauntlet` and `meditation`. Four of them were
  * variants of a loop that is not finished, and shipping four variants of an unfinished thing is
  * shipping four unfinished things - it quadruples the surface every change has to be checked
- * against while the loop itself is still being built.
+ * against while the loop itself is still being built. The gauntlet's clock outlived the mode for a
+ * while as a setup-sheet option; the thesis says no timer, so that went too.
  *
  * `daily` in particular is a good, cheap feature and it is coming back once the loop is finished:
  * see `docs/THESIS_THE_ADDICTIVE_LOOP.md` Appendix C.7, which states the precondition rather than
@@ -413,8 +412,6 @@ export interface RunSummary {
     runSeed?: number;
     runRulesVersion?: number;
     gameMode?: GameMode;
-    /** The clock the run was played against, when the setup sheet's Pressure option set one. */
-    gauntletSessionDurationMs?: number;
     activeMutators?: MutatorId[];
     /** Archive-safe payoff lanes copied from the final run state for Profile / Collection recap surfaces. */
     payoffPickupClaimed?: number;
@@ -452,7 +449,6 @@ export interface RunTimerState {
     resolveRemainingMs: number | null;
     debugRevealRemainingMs: number | null;
     pausedFromStatus: ResumableRunStatus | null;
-    gauntletPausedAtMs?: number | null;
 }
 
 /**
@@ -537,10 +533,6 @@ export interface RunState {
     stickyBlockIndex: number | null;
     /** Score parasite: floors advanced since last life loss from mutator. */
     parasiteFloors: number;
-    /** Gauntlet: ms remaining for whole run; null = off. */
-    gauntletDeadlineMs: number | null;
-    /** Gauntlet: configured session length (ms) at run start; used for restart and diagnostics. */
-    gauntletSessionDurationMs: number | null;
     /** Last run flip tile ids (local ghost / export). */
     flipHistory: string[];
     /** H1 Peek: charges and ephemeral reveals (do not count as committed flips). */

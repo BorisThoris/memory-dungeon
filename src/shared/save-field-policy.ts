@@ -16,7 +16,7 @@ export interface SaveFieldPolicy {
     recoveryPolicy: string;
 }
 
-export const SAVE_FIELD_POLICY_VERSION = 'save-176-v6';
+export const SAVE_FIELD_POLICY_VERSION = 'save-178-v7';
 
 const SAVE_FIELD_POLICIES: readonly SaveFieldPolicy[] = [
     {

@@ -19,7 +19,6 @@
 | shuffle-full | `shuffle-full.ogg` |
 | shuffle-quick | `shuffle-quick.ogg` |
 | floor-clear | `floor-clear.ogg` |
-| countdown-pressure | `countdown-pressure.ogg` |
 
 Match streak depth maps to low / mid / high in `manifest.json`.
 

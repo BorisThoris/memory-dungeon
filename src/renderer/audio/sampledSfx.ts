@@ -9,7 +9,7 @@ import { sfxManifestSchema } from './audioManifestBoundary';
 import { preloadAudioBuffers } from './preloadAudioBuffers';
 import { getSharedAudioContext } from './webAudioContext';
 
-type SfxCategory = 'flip' | 'match' | 'mismatch' | 'power' | 'pressure' | 'shuffle';
+type SfxCategory = 'flip' | 'match' | 'mismatch' | 'power' | 'shuffle';
 
 export type SfxSampleKey = keyof typeof sfxManifest.entries;
 
@@ -28,8 +28,7 @@ export const SFX_SAMPLE_KEYS = [
     'stray-power',
     'shuffle-full',
     'shuffle-quick',
-    'floor-clear',
-    'countdown-pressure'
+    'floor-clear'
 ] as const satisfies readonly SfxSampleKey[];
 
 export const MATCH_TIER_SAMPLE_KEYS = [
@@ -50,7 +49,6 @@ const MAX_POLYPHONY: Record<SfxCategory, number> = {
     match: 4,
     mismatch: 4,
     power: 5,
-    pressure: 1,
     shuffle: 4
 };
 

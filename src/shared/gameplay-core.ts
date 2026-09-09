@@ -1050,37 +1050,6 @@ const applyResumeCommand = (
     return { run: nextRun, command, events, accepted: true };
 };
 
-const applyGauntletExpireCommand = (
-    run: RunState,
-    command: Extract<GameplayCommand, { type: 'run.gauntlet_expire' }>
-): GameplayCommandResult => {
-    const deadlineMs = run.gauntletDeadlineMs;
-    if (deadlineMs === null || deadlineMs === undefined) {
-        return rejectedResult(run, command.commandId, 'Run has no deadline to expire.', command);
-    }
-    if (run.status === 'gameOver') {
-        return rejectedResult(run, command.commandId, 'Gauntlet run has already ended.', command);
-    }
-    if (command.observedAtMs < deadlineMs) {
-        return rejectedResult(run, command.commandId, 'Gauntlet deadline has not elapsed yet.', command);
-    }
-    const events: GameplayEvent[] = [];
-    const writeExpiryEvent = makeEventWriter(command.commandId, RUN_TIMER_SOURCE, events);
-    writeExpiryEvent({
-        type: 'run.gauntlet_expired',
-        observedAtMs: command.observedAtMs,
-        deadlineMs,
-        overdueMs: command.observedAtMs - deadlineMs
-    });
-    writeExpiryEvent({
-        type: 'feedback.requested',
-        cue: 'mode.gauntlet.expired',
-        message: 'Gauntlet time is up.',
-        tone: 'warning'
-    });
-    return { run: { ...run, status: 'gameOver', lives: 0 }, command, events, accepted: true };
-};
-
 const applyDebugRevealActivateCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'debug.reveal_activate' }>
@@ -1184,9 +1153,6 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'run.resume') {
         return applyResumeCommand(run, command);
-    }
-    if (command.type === 'run.gauntlet_expire') {
-        return applyGauntletExpireCommand(run, command);
     }
     if (command.type === 'debug.reveal_activate') {
         return applyDebugRevealActivateCommand(run, command);

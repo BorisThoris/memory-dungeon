@@ -26,7 +26,7 @@ flowchart LR
   mm[MainMenu Play CTA]
   store[useAppStore openModeSelect]
   cyp[ChooseYourPathScreen]
-  actions[startRun startDailyRun startGauntletRun ...]
+  actions[startRun startDailyRun ...]
   modals[OverlayModal import meditation]
   mm --> store --> cyp
   cyp --> actions
@@ -97,7 +97,7 @@ Hero uses **`cardGrid`** (`auto-fit`, `minmax(240px, 1fr)`), so Featured cards g
 
 **Navigation:** Dot buttons use `scrollTo({ left: i * clientWidth, behavior: 'smooth' })` (optional jump). There are **no** labeled Previous/Next controls — horizontal **drag / swipe** is the primary navigation. Dots render **only if** `libraryPageCount > 1`.
 
-**Drag:** [`useDragScroll`](../../src/renderer/hooks/useDragScroll.ts) on `onPointerDownCapture`. Skips **form controls and links**; skips **Gauntlet duration** buttons (`[data-gauntlet-presets] button`). **Library mode** rows are `<button>`s inside **`data-library-card-cell`** (do not use CSS-module class names in `closest()` — they are hashed). Those buttons use a small **movement slop** (~7px) so a **tap** still starts the run, while a horizontal **drag** scrolls the tray. Other non-button tray surfaces drag immediately. Remaining `button` / `[role="button"]` targets (outside that pattern) do not start drag-scroll.
+**Drag:** [`useDragScroll`](../../src/renderer/hooks/useDragScroll.ts) on `onPointerDownCapture`. Skips **form controls and links**. **Library mode** rows are `<button>`s inside **`data-library-card-cell`** (do not use CSS-module class names in `closest()` — they are hashed). Those buttons use a small **movement slop** (~7px) so a **tap** still starts the run, while a horizontal **drag** scrolls the tray. Other non-button tray surfaces drag immediately. Remaining `button` / `[role="button"]` targets (outside that pattern) do not start drag-scroll.
 
 ---
 
@@ -122,7 +122,7 @@ Hero uses **`cardGrid`** (`auto-fit`, `minmax(240px, 1fr)`), so Featured cards g
 |----------|------|
 | [`src/shared/run-mode-catalog.ts`](../../src/shared/run-mode-catalog.ts) | Single ordered `RUN_MODE_CATALOG` with stable `id`, `group`, `availability`, `posterKey`, `testId?`, discriminated **`RunModeAction`**. |
 | `CHOOSE_PATH_HERO_MODE_IDS` | `classic`, `daily`, `endless`. |
-| `choosePathHeroModes()` / `choosePathLibraryModes()` | UI split: three featured cards vs all other entries (Gauntlet, puzzles, training, utilities). |
+| `choosePathHeroModes()` / `choosePathLibraryModes()` | UI split: three featured cards vs all other entries (puzzles, training, utilities). |
 | [`modeArt.ts`](../../src/renderer/assets/ui/modeArt.ts) | `MODE_CARD_ART`, `resolveModePosterUrl()`; fallback `bg-mode-placeholder-v1.webp`. See [`ASSET_SOURCES.md`](../../src/renderer/assets/ASSET_SOURCES.md). |
 
 ---
@@ -148,10 +148,6 @@ Hero uses **`cardGrid`** (`auto-fit`, `minmax(240px, 1fr)`), so Featured cards g
 - **Tray:** `libraryScrollerWrap` (edge fades) around `libraryScroller` (`aria-label` describes swipe/drag). Snap pages, `data-poster-key` remains available for poster-specific styling hooks.
 - Scroller + pages as in **Library pager**; each card cell wraps **MetaFrame** + `renderModeSurface`.
 
-### Gauntlet special case
-
-- Renders as a **`div.card`** (not a `<button>`) with inner **UiButton**s for 5m / 10m / 15m — avoids nested interactive elements.
-
 ### Modals and hidden inputs
 
 - **Import run:** `OverlayModal` `testId="run-import-modal"`, textarea `run-import-json`, errors `run-import-error`.
@@ -167,7 +163,6 @@ Hero uses **`cardGrid`** (`auto-fit`, `minmax(240px, 1fr)`), so Featured cards g
 - Search: magnifier toggle has `aria-expanded`, `aria-controls` → panel; labels + `htmlFor` when the field is mounted; **Escape** closes expanded search (window `keydown` listener while open).
 - Horizontal tray: `aria-label` on the scroller describes swipe/drag browsing.
 - Dot buttons expose `aria-label="Page N of M"` and `aria-current` on the active page.
-- Gauntlet duration group: `role="group"` `aria-label="Gauntlet duration"`.
 
 ---
 

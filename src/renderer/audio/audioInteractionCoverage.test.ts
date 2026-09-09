@@ -38,8 +38,7 @@ describe('REG-037 audio interaction coverage', () => {
             'chain_break_miss',
             'trait_mismatch_surge',
             'mismatch_recovery_crescendo',
-            'board_power',
-            'gauntlet_pressure'
+            'board_power'
         ]);
         expect(gameplay.find((row) => row.id === 'resolve_match')?.mixRole).toMatch(/reward/i);
         expect(gameplay.find((row) => row.id === 'trait_route_cashout')).toMatchObject({
@@ -166,7 +165,6 @@ describe('REG-037 audio interaction coverage', () => {
         expect(gameplay.find((row) => row.id === 'mismatch_recovery_crescendo')?.mixRole).toMatch(
             /two-beat recover.*five-beat trait surge.*expanded lanes\/chips.*screen cues/i
         );
-        expect(gameplay.find((row) => row.id === 'gauntlet_pressure')?.cue).toBe('countdown-pressure');
     });
 
     it('documents floor-clear overlay feedback cue roles', () => {

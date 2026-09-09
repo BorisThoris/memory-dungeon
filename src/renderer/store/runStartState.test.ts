@@ -48,14 +48,7 @@ describe('runStartState', () => {
             run: { gameMode: 'endless', resolveDelayMultiplier: 1.5 },
             telemetry: { mode: 'endless', practice: false }
         });
-        // The timer and the joker are Classic setup options now, not their own start requests.
-        expect(
-            createRunStartPlan({
-                request: { kind: 'endless', setup: { ...DEFAULT_CLASSIC_RUN_SETUP, pressure: 'timed_5' } },
-                saveData,
-                settings
-            })?.run
-        ).toMatchObject({ gauntletSessionDurationMs: 300_000 });
+        // The joker is a Classic setup option now, not its own start request.
         expect(
             createRunStartPlan({
                 request: { kind: 'endless', setup: { ...DEFAULT_CLASSIC_RUN_SETUP, chaos: true } },
@@ -86,11 +79,10 @@ describe('runStartState', () => {
     it('restarts a setup-sheet run from the previous run type', () => {
         const saveData = createDefaultSaveData();
 
-        // A setup-sheet run: the clock, the pace and both vows all come back, not only the vow.
-        const chosen = createNewRun(0, buildClassicRunOptions({ ...DEFAULT_CLASSIC_RUN_SETUP, pacing: 'calm', pressure: 'timed_5', vows: ['scholar', 'pin_vow'] }));
+        // A setup-sheet run: the pace and both vows all come back, not only the vow.
+        const chosen = createNewRun(0, buildClassicRunOptions({ ...DEFAULT_CLASSIC_RUN_SETUP, pacing: 'calm', vows: ['scholar', 'pin_vow'] }));
         expect(createRestartRun(chosen, saveData)).toMatchObject({
             gameMode: 'endless',
-            gauntletSessionDurationMs: 5 * 60 * 1000,
             resolveDelayMultiplier: 1.35,
             activeContract: { noShuffle: true, noDestroy: true, maxPinsTotalRun: 10 }
         });

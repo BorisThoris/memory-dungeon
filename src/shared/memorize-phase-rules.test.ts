@@ -47,8 +47,7 @@ describe('finishMemorizePhase', () => {
         expect(next.timerState).toMatchObject({
             memorizeRemainingMs: null,
             resolveRemainingMs: null,
-            pausedFromStatus: null,
-            gauntletPausedAtMs: null
+            pausedFromStatus: null
         });
     });
 });

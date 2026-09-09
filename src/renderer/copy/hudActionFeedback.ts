@@ -3,21 +3,6 @@ import { getFindableKindLabel, getFindableRewardCopy } from '../../shared/findab
 import { TILE_TRAIT_COUNT_KINDS } from '../../shared/session-stats-rules';
 import { TILE_TRAIT_COPY } from '../../shared/tile-trait-rules';
 
-export const GAUNTLET_WARN_SECS = [60, 30, 10, 5] as const;
-
-export const gauntletMessageForThreshold = (secs: number): string => {
-    if (secs <= 5) {
-        return 'Gauntlet: five seconds or less remaining.';
-    }
-    if (secs <= 10) {
-        return 'Gauntlet: ten seconds or less remaining.';
-    }
-    if (secs <= 30) {
-        return 'Gauntlet: thirty seconds or less remaining.';
-    }
-    return 'Gauntlet: one minute or less remaining.';
-};
-
 export const getFindableAnnouncementText = (kind: FindableKind): string =>
     `${getFindableKindLabel(kind)} claimed: ${getFindableRewardCopy(kind)}.`;
 

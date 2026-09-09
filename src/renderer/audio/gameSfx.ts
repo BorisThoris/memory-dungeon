@@ -54,7 +54,7 @@ const clamp01 = (v: number): number => Math.max(0, Math.min(1, v));
 export const sfxGainFromSettings = (masterVolume: number, sfxVolume: number): number =>
     clamp01(masterVolume) * clamp01(sfxVolume);
 
-type SfxCategory = 'flip' | 'match' | 'mismatch' | 'power' | 'pressure' | 'shuffle';
+type SfxCategory = 'flip' | 'match' | 'mismatch' | 'power' | 'shuffle';
 type ChainOpportunityBeatSfxTier = 'cashout' | 'follow-up' | 'route' | 'setup' | 'surge';
 type MismatchRecoveryCrescendoSfxTier = 'break' | 'lost-reward' | 'recover' | 'risk' | 'trait-surge';
 type MatchPayoffSfxPayload = {
@@ -78,7 +78,6 @@ const MAX_POLYPHONY: Record<SfxCategory, number> = {
     match: 4,
     mismatch: 4,
     power: 5,
-    pressure: 1,
     shuffle: 4
 };
 
@@ -817,19 +816,5 @@ export const playFloorClearSfx = (gain: number): void => {
             category: 'power'
         });
     }, 0);
-};
-
-export const playCountdownPressureSfx = (gain: number): void => {
-    if (tryPlaySampled('countdown-pressure', gain)) {
-        return;
-    }
-    playTone({
-        frequency: 220,
-        frequencyEnd: 310,
-        durationSec: 0.09,
-        gain: gain * 0.48,
-        type: 'triangle',
-        category: 'pressure'
-    });
 };
 

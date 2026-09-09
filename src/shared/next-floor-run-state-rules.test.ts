@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { type RunState } from './contracts';
 import { createNewRun } from './game';
 import { createNextFloorRunState } from './next-floor-run-state-rules';
+import { pickFloorCurio } from './floor-curio-rules';
 
 describe('createNextFloorRunState', () => {
     it('resets per-floor counters and prepares memorize timing for the next board', () => {
@@ -47,8 +48,12 @@ describe('createNextFloorRunState', () => {
         expect(next.matchResolutionsThisFloor).toBe(0);
         expect(next.findablesClaimedThisFloor).toBe(0);
         expect(next.recallMatchesThisFloor).toBe(0);
+        // The floor's resident is picked from seed, level and rules version, and some of them
+        // change the memorize window; this test is about the reset, not the resident, so the
+        // expectation carries whatever the resident adds rather than pinning one rules version.
+        const curioMemorizeBonusMs = pickFloorCurio(run.runSeed, 4, run.runRulesVersion).effect.memorizeBonusMs;
         expect(next.timerState).toMatchObject({
-            memorizeRemainingMs: 2500,
+            memorizeRemainingMs: 2500 + curioMemorizeBonusMs,
             resolveRemainingMs: null,
             debugRevealRemainingMs: null,
             pausedFromStatus: null

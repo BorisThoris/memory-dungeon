@@ -93,7 +93,7 @@ describe('ProfileScreen', () => {
         expect(rows[1]).not.toHaveTextContent(/copied/i);
     });
 
-    it('keeps a record per mode, so a Gauntlet and a Classic run stop competing for one slot', () => {
+    it('keeps a record per mode, so a Wild and a Classic run stop competing for one slot', () => {
         const saveData = createDefaultSaveData();
         saveData.runHistory = [
             {
@@ -106,15 +106,15 @@ describe('ProfileScreen', () => {
             {
                 endedAtIso: '2026-09-03T12:00:00.000Z',
                 highestLevel: 3,
-                mode: 'Gauntlet',
-                shareKey: 'md1:gauntlet:33:2:600000',
+                mode: 'Wild Run',
+                shareKey: 'md1:wild:33:2',
                 totalScore: 700
             },
             {
                 endedAtIso: '2026-09-02T12:00:00.000Z',
                 highestLevel: 2,
-                mode: 'Gauntlet',
-                shareKey: 'md1:gauntlet:33:3:600000',
+                mode: 'Wild Run',
+                shareKey: 'md1:wild:33:3',
                 totalScore: 200
             }
         ];
@@ -127,8 +127,8 @@ describe('ProfileScreen', () => {
         expect(rows).toHaveLength(2);
         expect(rows[0]).toHaveTextContent('Classic Dungeon');
         expect(rows[0]).toHaveTextContent('3,400');
-        // The Gauntlet record is its own best, and says how many runs stand behind it.
-        expect(rows[1]).toHaveTextContent('Gauntlet');
+        // The Wild record is its own best, and says how many runs stand behind it.
+        expect(rows[1]).toHaveTextContent('Wild Run');
         expect(rows[1]).toHaveTextContent('700');
         expect(rows[1]).toHaveTextContent('2 runs');
     });

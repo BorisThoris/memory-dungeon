@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import type { RunState } from './contracts';
 import { createDefaultSaveData } from './save-data';
 import {
     buildActiveQuestContractRows,
@@ -36,7 +35,7 @@ describe('REG-082 quest contract campaign ladder', () => {
         expect(rows.find((row) => row.id === 'chain_rhythm')?.status).toBe('active');
         expect(rows.every((row) => row.offlineOnly)).toBe(true);
         expect(rows.every((row) => row.retryRule.includes('local'))).toBe(true);
-        expect(questCampaignSummary(save)).toMatchObject({ total: 4, completed: 2, active: 2, locked: 0 });
+        expect(questCampaignSummary(save)).toMatchObject({ total: 3, completed: 2, active: 1, locked: 0 });
     });
 
     it('counts Sharp floors toward the chain quest, and completes it at three', () => {
@@ -50,7 +49,6 @@ describe('REG-082 quest contract campaign ladder', () => {
     });
 
     it('maps run summaries back to campaign contract rows', () => {
-        expect(getQuestContractForRunSummary({ gauntletSessionDurationMs: 600_000, levelsCleared: 1 })).toBe('timed_proof');
         expect(getQuestContractForRunSummary({ levelsCleared: 1 })).toBe('first_lantern');
     });
 
@@ -75,7 +73,6 @@ describe('REG-082 quest contract campaign ladder', () => {
         const rows = getQuestCampaignRows(save);
 
         expect(rows.find((row) => row.id === 'scholar_oath')?.progressLabel).toBe('0/5');
-        expect(rows.find((row) => row.id === 'timed_proof')?.progressLabel).toBe('0/1');
         expect(rows.find((row) => row.id === 'chain_rhythm')?.progressLabel).toBe('0/3');
         expect(getQuestContractForRunSummary({ levelsCleared: Number.POSITIVE_INFINITY })).toBeNull();
     });
@@ -91,18 +88,6 @@ describe('REG-082 quest contract campaign ladder', () => {
             status: 'active',
             progressLabel: '0/1 pins',
             failureReason: null
-        });
-    });
-
-    it('normalizes malformed run stats before projecting active contracts', () => {
-        const rows = buildActiveQuestContractRows({
-            ...createNewRun(0, { gauntletDurationMs: 600_000 }),
-            stats: Number.NaN
-        } as unknown as RunState);
-
-        expect(rows.find((row) => row.id === 'timed_proof')).toMatchObject({
-            status: 'active',
-            progressLabel: '0/1 timed clears'
         });
     });
 });

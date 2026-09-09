@@ -3,7 +3,7 @@ export {
     createRunSummary,
     finishMemorizePhase,
 } from './game';
-export { createNewRun, createWildRun, isGauntletExpired } from './run-creation-rules';
+export { createNewRun, createWildRun } from './run-creation-rules';
 export {
     disableDebugPeek,
     enableDebugPeek,

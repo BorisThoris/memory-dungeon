@@ -461,13 +461,6 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...commandBase,
-            type: z.literal('run.gauntlet_expire'),
-            observedAtMs: z.number().int().nonnegative()
-        })
-        .strict(),
-    z
-        .object({
-            ...commandBase,
             type: z.literal('debug.reveal_activate'),
             disableAchievementsOnDebug: z.boolean()
         })
@@ -798,15 +791,6 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
-            type: z.literal('run.gauntlet_expired'),
-            observedAtMs: z.number().int().nonnegative(),
-            deadlineMs: z.number().int().nonnegative(),
-            overdueMs: z.number().int().nonnegative()
-        })
-        .strict(),
-    z
-        .object({
-            ...eventBase,
             type: z.literal('debug.reveal_activated'),
             outcome: z.enum(['activated']),
             disableAchievementsOnDebug: z.boolean()
@@ -1009,14 +993,6 @@ export const createGameplayResumeCommand = (commandId: string, resumedAtMs: numb
         commandId,
         type: 'run.resume',
         resumedAtMs
-    });
-
-export const createGameplayGauntletExpireCommand = (commandId: string, observedAtMs: number): GameplayCommand =>
-    gameplayCommandSchema.parse({
-        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
-        commandId,
-        type: 'run.gauntlet_expire',
-        observedAtMs
     });
 
 export const createGameplayDebugRevealActivateCommand = (

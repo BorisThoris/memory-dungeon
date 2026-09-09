@@ -47,7 +47,7 @@ export const DEMO_MUTATOR_IDS: readonly MutatorId[] = [
 ];
 
 export const FULL_GAME_LEDGER: readonly string[] = [
-    'Four more modes: Daily Challenge, Gauntlet, Puzzle sets and Meditation',
+    'Three more modes: Daily Challenge, Puzzle sets and Meditation',
     'Endless Mode with the full twelve-floor cycle of mutators',
     'Steam achievements and the complete collection'
 ];

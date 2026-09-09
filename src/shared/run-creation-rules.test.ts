@@ -1,11 +1,7 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { GAME_RULES_VERSION } from './contracts';
-import {
-    createNewRun,
-    createWildRun,
-    isGauntletExpired
-} from './run-creation-rules';
+import { createNewRun, createWildRun } from './run-creation-rules';
 
 describe('run creation rules', () => {
     it('creates a deterministic base run with an initialized board', () => {
@@ -34,23 +30,4 @@ describe('run creation rules', () => {
         expect(run.activeMutators).toEqual(['sticky_fingers', 'short_memorize', 'findables_floor']);
     });
 
-
-    it('carries the clock the setup sheet asked for', () => {
-        const timed = createNewRun(0, { gauntletDurationMs: 60_000, runSeed: 20_005 });
-
-        expect(timed.gameMode).toBe('endless');
-        expect(timed.gauntletSessionDurationMs).toBe(60_000);
-    });
-
-    it('reports clock expiration only while unpaused', () => {
-        vi.useFakeTimers();
-        vi.setSystemTime(1_000);
-        const run = createNewRun(0, { gauntletDurationMs: 500, runSeed: 20_006 });
-
-        vi.setSystemTime(2_000);
-
-        expect(isGauntletExpired(run)).toBe(true);
-        expect(isGauntletExpired({ ...run, status: 'paused' })).toBe(false);
-        vi.useRealTimers();
-    });
 });

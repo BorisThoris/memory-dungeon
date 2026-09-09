@@ -6,9 +6,7 @@ import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
 import type { GameplayFeedbackPresentation } from '../store/gameplayFeedbackAdapter';
 import {
-    GAUNTLET_WARN_SECS,
     tileTraitKindLabels,
-    gauntletMessageForThreshold,
     joinReadableList,
     pluralize,
     resourceDeltaCopy
@@ -64,8 +62,6 @@ interface HudPoliteLiveAnnouncementInput {
      * — and announcing only the last of them dropped the rest on the floor.
      */
     gameplayFeedback?: readonly GameplayFeedbackPresentation[];
-    gauntletRemainingMs: number | null;
-    gauntletActive: boolean;
     scoreParasiteActive: boolean;
     parasiteFloors: number;
     lives: number;
@@ -109,7 +105,7 @@ const normalizeRecallFocusForAnnouncement = (focus: number, max: number): { focu
 };
 
 /**
- * HUD-015: polite `aria-live` source text for gauntlet deadline buckets and score-parasite milestones.
+ * HUD-015: polite `aria-live` source text for score-parasite milestones and resource changes.
  * Batches concurrent announcements on `requestAnimationFrame`, dedupes by key, prefers higher priority,
  * and throttles display cadence so screen readers get summaries, not chatter.
  */
@@ -117,8 +113,6 @@ const normalizeRecallFocusForAnnouncement = (focus: number, max: number): { focu
 export const useHudPoliteLiveAnnouncement = ({
     boardTurnEvent = null,
     gameplayFeedback = EMPTY_FEEDBACK,
-    gauntletRemainingMs,
-    gauntletActive,
     scoreParasiteActive,
     parasiteFloors,
     lives,
@@ -140,7 +134,6 @@ export const useHudPoliteLiveAnnouncement = ({
 }: HudPoliteLiveAnnouncementInput): UseHudPoliteLiveAnnouncementResult => {
     const [message, setMessage] = useState('');
     const [messagePriority, setMessagePriority] = useState<HudAnnouncePriority>('info');
-    const prevGauntletSecsRef = useRef<number | null>(null);
     const parasiteSnapRef = useRef<{
         level: number;
         parasiteFloors: number;
@@ -303,28 +296,6 @@ export const useHudPoliteLiveAnnouncement = ({
         },
         []
     );
-
-    useEffect(() => {
-        if (!gauntletActive || gauntletRemainingMs === null) {
-            prevGauntletSecsRef.current = null;
-            return;
-        }
-        const secs = Math.ceil(gauntletRemainingMs / 1000);
-        const prev = prevGauntletSecsRef.current;
-        prevGauntletSecsRef.current = secs;
-        if (prev === null) {
-            return;
-        }
-        for (const bound of GAUNTLET_WARN_SECS) {
-            if (prev > bound && secs <= bound) {
-                queuePoliteAnnouncement(gauntletMessageForThreshold(secs), {
-                    dedupeKey: `gauntlet:${bound}`,
-                    priority: 'info'
-                });
-                return;
-            }
-        }
-    }, [gauntletActive, gauntletRemainingMs, queuePoliteAnnouncement]);
 
     useEffect(() => {
         if (!scoreParasiteActive || boardLevel === null) {

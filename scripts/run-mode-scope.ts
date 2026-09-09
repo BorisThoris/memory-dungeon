@@ -5,10 +5,12 @@ import { getRunModeCatalog } from '../src/shared/run-mode-catalog';
  *
  * The catalog grew to twelve entries. Reading what each one actually starts, eleven of them call
  * `createNewRun` with an option bag: Wild is three mutators and a joker, Scholar and Pin Vow are
- * contracts, Practice is a boolean, Meditation is pacing, Gauntlet is a timer, Endless is Classic
- * with the length turned up, and Dungeon Showcase is a staged board for showing the game off. Only
- * the handcrafted Puzzles build a different board, only Daily fixes the seed for everyone, and only
- * Pass and Play changes who is holding the device.
+ * contracts, Practice is a boolean, Meditation is pacing, Endless is Classic with the length turned
+ * up, and Dungeon Showcase is a staged board for showing the game off. Only the handcrafted Puzzles
+ * build a different board, only Daily fixes the seed for everyone, and only Pass and Play changes
+ * who is holding the device. (Gauntlet was the twelfth: Classic with a countdown. Its row is not
+ * here because the countdown itself is gone — the game has no timer — so there is no setup option
+ * for the record to point at.)
  *
  * A menu of twelve is not twelve games; it is one game asked twelve ways, and it costs the player
  * the decision every single time they sit down. The premium dungeon crawlers this game is aimed at
@@ -54,12 +56,6 @@ export const RUN_MODE_SCOPE: readonly RunModeScopeRow[] = [
         kind: 'preset',
         changes: 'Starts Classic on a staged dungeon floor with achievements and records off.',
         reason: 'A way to show the dungeon off, not a way to play it. Its own card says results do not count.'
-    },
-    {
-        modeId: 'gauntlet',
-        kind: 'preset',
-        changes: 'Classic with a countdown that ends the run.',
-        reason: 'A timer is the clearest example of a knob: the board, the floors and the rules are Classic’s throughout.'
     },
     {
         modeId: 'wild',

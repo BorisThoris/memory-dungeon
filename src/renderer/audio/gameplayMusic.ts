@@ -121,15 +121,13 @@ export const resolveAdaptiveMusicState = ({ hidden = false, run, view }: Adaptiv
 
 export const getAdaptiveMusicState = ({
     active,
-    gauntletPressure = false,
     runStatus,
     track
 }: {
     active: boolean;
-    gauntletPressure?: boolean;
     runStatus?: RunState['status'];
     track: 'menu' | 'run';
-}): { intensity: 'calm' | 'focus' | 'pressure' | 'release' | 'silent'; shouldPlay: boolean; track: 'menu' | 'run' } => {
+}): { intensity: 'calm' | 'focus' | 'release' | 'silent'; shouldPlay: boolean; track: 'menu' | 'run' } => {
     if (!active || runStatus === 'gameOver' || runStatus === 'paused') {
         return { intensity: 'silent', shouldPlay: false, track };
     }
@@ -138,9 +136,6 @@ export const getAdaptiveMusicState = ({
     }
     if (runStatus === 'levelComplete') {
         return { intensity: 'release', shouldPlay: true, track };
-    }
-    if (gauntletPressure) {
-        return { intensity: 'pressure', shouldPlay: true, track };
     }
     return { intensity: 'focus', shouldPlay: true, track };
 };

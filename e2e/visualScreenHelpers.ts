@@ -145,7 +145,7 @@ export const buildVisualSaveJson = (onboardingDismissed: boolean, reduceMotion =
  * asked to fit when it is full, not when it is blank.
  */
 export const buildPopulatedProfileSaveJson = (reduceMotion = true): string => {
-    const modes = ['Classic', 'Daily Challenge', 'Gauntlet', 'Meditation', 'Puzzle', 'Wild', 'Practice', 'Scholar'];
+    const modes = ['Classic', 'Daily Challenge', 'Pin Vow', 'Meditation', 'Puzzle', 'Wild', 'Practice', 'Scholar'];
     const runHistory = Array.from({ length: 20 }, (_, index) => ({
         mode: modes[index % modes.length] ?? 'Classic',
         highestLevel: 3 + (index % 11),

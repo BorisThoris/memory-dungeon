@@ -48,7 +48,6 @@ export const gameOverScreenCopy = {
     },
     runModeHeadings: {
         daily: (dateKey: string) => `Daily ${dateKey}`,
-        gauntlet: 'Gauntlet descent',
         meditation: 'Meditation descent',
         puzzle: 'Puzzle descent',
         scholar: 'Scholar contract',
@@ -58,7 +57,6 @@ export const gameOverScreenCopy = {
         classic: 'Classic descent'
     },
     modeIdentity: {
-        gauntlet: 'Timed pressure: achievements still count, but the wall-clock can end the run.',
         meditation: 'Focused comfort: calmer memorize pacing for study and mutator practice.',
         puzzle: 'Curated challenge: fixed board and local completion tracking.',
         daily: 'Shared UTC seed: local-only comparison, no online leaderboard.',
