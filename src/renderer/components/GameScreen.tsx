@@ -103,7 +103,8 @@ import { useGameScreenPowerTileHints } from './useGameScreenPowerTileHints';
 import type { MatchScorePop, MatchScorePopPayoffChip, MismatchScorePop } from '../store/matchScorePop';
 
 import { MUTATOR_CATALOG } from '../../shared/mechanics-encyclopedia';
-import { matchScoreFloaterChainCue, matchScoreFloaterLiveRegionText } from '../copy/matchScoreFloater';
+import { matchScoreFloaterChainCue, matchScoreFloaterLiveRegionText, scoreTermsLiveRegionText } from '../copy/matchScoreFloater';
+import ScoreTermsLine from './ScoreTermsLine';
 import {
     mismatchFloaterLiveRegionText,
     mismatchFloaterNextAction,
@@ -446,13 +447,19 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         if (!boardFloaterPayload) {
             return '';
         }
-        return boardFloaterPayload.kind === 'match'
-            ? matchScoreFloaterLiveRegionText(boardFloaterPayload.amount, {
-                  chainDepth: boardFloaterPayload.chainDepth,
-                  headline: boardFloaterPayload.feedbackHeadline,
-                  reason: boardFloaterReason
-              })
-            : mismatchFloaterLiveRegionText(boardFloaterSignalLabel, boardFloaterReason);
+        if (boardFloaterPayload.kind !== 'match') {
+            return mismatchFloaterLiveRegionText(boardFloaterSignalLabel, boardFloaterReason);
+        }
+        const line = matchScoreFloaterLiveRegionText(boardFloaterPayload.amount, {
+            chainDepth: boardFloaterPayload.chainDepth,
+            headline: boardFloaterPayload.feedbackHeadline,
+            reason: boardFloaterReason
+        });
+        // The construction is said as well as shown: a screen reader hears the terms the sighted
+        // player watches arrive (thesis §40.4).
+        return boardFloaterPayload.scoreTerms
+            ? `${line}. ${scoreTermsLiveRegionText(boardFloaterPayload.scoreTerms)}`
+            : line;
     }, [boardFloaterPayload, boardFloaterReason, boardFloaterSignalLabel]);
     const boardRecoveryContext =
         boardFloaterPayload?.kind === 'miss' && boardFloaterMismatchNextAction
@@ -1565,6 +1572,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         >
                                             +{runNonNegativeInteger(boardFloaterPayload.amount).toLocaleString()}
                                         </span>
+                                    ) : null}
+                                    {boardFloaterPayload.kind === 'match' && boardFloaterPayload.scoreTerms ? (
+                                        <ScoreTermsLine
+                                            breakdown={boardFloaterPayload.scoreTerms}
+                                            reduceMotion={reduceMotion}
+                                        />
                                     ) : null}
                                     {boardFloaterReason ? (
                                         <span

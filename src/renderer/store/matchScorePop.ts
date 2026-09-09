@@ -4,6 +4,7 @@ import type { BoardTurnAnnouncementFacts } from '../../shared/board-turn-event-f
 import type { BoardTurnResolvedEvent } from './gameplayFeedbackAdapter';
 import { runArray } from '../../shared/run-array-guards';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
+import { getBreakScoreBreakdown, type BreakScoreBreakdown } from '../../shared/score-terms-rules';
 import { getChainMilestoneFeedback, type ChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
 
 export type MatchScorePop = {
@@ -18,6 +19,8 @@ export type MatchScorePop = {
     impactCue: MatchScorePopImpactCue;
     crescendo?: MatchScorePopCrescendo;
     payoffSummary?: MatchScorePopPayoffSummary;
+    /** The break's score as the terms it is made of, so the floater can build it (thesis §40.4). */
+    scoreTerms?: BreakScoreBreakdown;
     payoffChips?: MatchScorePopPayoffChip[];
     payoffLaneMap?: MatchScorePopPayoffLaneMapEntry[];
     pickupRewardText?: string;
@@ -663,6 +666,15 @@ export function buildMatchScorePopPayload(
     const traitInteractionTexts = formatTileTraitInteractionTags(turnEvent.traitInteractionTags);
     const chainDepth = matchScoreChainDepth(facts.currentStreakAfter);
     const chainMilestone = getMatchScorePopChainMilestone(facts.currentStreakBefore, chainDepth);
+    // The break's own score, term by term. Read from the facts the rules stamped, and rebuilt with
+    // the same functions the rule multiplied, so the line cannot promise a product the run did not
+    // award.
+    const scoreTerms = getBreakScoreBreakdown({
+        level: facts.level,
+        pairs: runNonNegativeInteger(facts.chunkPairsBrokenAfter) - runNonNegativeInteger(facts.chunkPairsBrokenBefore),
+        tier: facts.chainTierAfter,
+        waves: facts.chunkRippleWaves
+    });
     const feedbackProfile = pickupRewardText
         ? { feedbackHeadline: 'Reward' as const, feedbackIntensity: 'high' as const }
         : getMatchScorePopFeedbackProfile(chainDepth, traitInteractionTexts.length);
@@ -750,6 +762,9 @@ export function buildMatchScorePopPayload(
     }
     if (traitInteractionTexts.length > 0) {
         payload.traitInteractionTexts = traitInteractionTexts;
+    }
+    if (scoreTerms) {
+        payload.scoreTerms = scoreTerms;
     }
     return payload;
 }

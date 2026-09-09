@@ -1319,3 +1319,17 @@ where that rule
     outline: 2px solid var(--theme-gold);
     outline-offset: -3px;
 }
+
+/* The break's score being built: one term per beat, the total climbing with them (thesis §40.4). */
+.boardFloaterTerms {
+    max-width: 100%;
+    overflow: hidden;
+    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+    font-size: 0.68em;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
