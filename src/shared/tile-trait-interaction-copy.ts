@@ -1,47 +1,22 @@
+/*
+ * The interactions a match can preview. Nineteen tags stood here across nine traits; the trait
+ * triage kept four traits, and an interaction survives only when both of its halves did. Every
+ * one that remains fires on a clean match - the miss-side tags all belonged to cut traits.
+ */
 export const TILE_TRAIT_INTERACTION_TEXT = {
-    'echo:sealed-combo': 'Echo + Sealed: combo shard',
-    'mirror:stasis-guard': 'Mirror + Stasis: guard ward',
-    'sealed:heavy-score': 'Sealed + Heavy: score surge',
-    'cursed:volatile-greed': 'Cursed + Volatile: risky greed',
-    'volatile:heavy-guard': 'Volatile + Heavy: guard spark',
-    'drift:row-shuffle': 'Drift: row/swap charge',
-    'drift:volatile-full-shuffle': 'Drift + Volatile: full shuffle',
     'conduit:adjacent-score': 'Conduit: adjacent trait charge',
-    'conduit:mirror-guard': 'Conduit + Mirror: guard spark',
     'conduit:echo-peek': 'Conduit + Echo: peek spark',
     'conduit:stasis-lock': 'Conduit + Stasis: lock pulse',
-    'sealed:conduit-spark': 'Sealed + Conduit: shard spark',
-    'echo:mirror-focus': 'Echo + Mirror: recall focus',
-    'heavy:mirror-guard': 'Heavy + Mirror: braced guard',
-    'stasis:nearby-block': 'Stasis: nearby trait blocked',
-    'conduit:danger-recall': 'Conduit near danger: recall pressure',
-    'stasis:sealed-buffer': 'Stasis buffered Sealed',
-    'stasis:cursed-volatile-buffer': 'Stasis buffered Cursed + Volatile',
-    'cursed:volatile-danger': 'Cursed + Volatile: recall pressure',
+    'stasis:nearby-block': 'Stasis: nearby trait blocked'
 } as const;
 
 export type TileTraitInteractionTag = keyof typeof TILE_TRAIT_INTERACTION_TEXT;
 
 export const TILE_TRAIT_INTERACTION_TAGS = [
-    'echo:sealed-combo',
-    'mirror:stasis-guard',
-    'sealed:heavy-score',
-    'cursed:volatile-greed',
-    'volatile:heavy-guard',
-    'drift:row-shuffle',
-    'drift:volatile-full-shuffle',
     'conduit:adjacent-score',
-    'conduit:mirror-guard',
     'conduit:echo-peek',
     'conduit:stasis-lock',
-    'sealed:conduit-spark',
-    'echo:mirror-focus',
-    'heavy:mirror-guard',
-    'stasis:nearby-block',
-    'conduit:danger-recall',
-    'stasis:sealed-buffer',
-    'stasis:cursed-volatile-buffer',
-    'cursed:volatile-danger',
+    'stasis:nearby-block'
 ] as const satisfies readonly TileTraitInteractionTag[];
 
 const isTileTraitInteractionTag = (value: string): value is TileTraitInteractionTag =>

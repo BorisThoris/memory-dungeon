@@ -36,7 +36,7 @@ export const createRunSummary = (run: RunState, unlockedAchievements: Achievemen
             activeMutators: [...runArray<MutatorId>(run.activeMutators)],
             payoffPickupClaimed: Math.min(runNonNegativeInteger(run.findablesClaimedThisFloor), payoffPickupTotal),
             payoffPickupTotal,
-            payoffPressureExtra: stats.mismatches + stats.volatileTraitShuffles,
+            payoffPressureExtra: stats.mismatches,
             practiceMode: run.practiceMode,
             wildMenuRun: run.wildMenuRun,
             activeContract: run.activeContract ? { ...run.activeContract } : null,

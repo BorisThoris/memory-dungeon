@@ -66,8 +66,8 @@ describe('tileBoardDomSurfaceModel', () => {
         const result = buildTileBoardDomSurfaceModel({
             allowGambitThirdFlip: false,
             board: board([
-                tile('echo', 'echo', 'hidden', { tileTraitKind: 'echo' }),
-                tile('sealed', 'sealed', 'hidden', { tileTraitKind: 'sealed' }),
+                tile('conduit', 'conduit', 'hidden', { tileTraitKind: 'conduit' }),
+                tile('heavy', 'heavy', 'hidden', { tileTraitKind: 'heavy' }),
                 tile('x1', 'x', 'hidden'),
                 tile('x2', 'x', 'hidden')
             ]),
@@ -79,7 +79,7 @@ describe('tileBoardDomSurfaceModel', () => {
             peekRevealedTileIds: new Set(),
             previewActive: false,
             runStatus: 'playing',
-            traitRewardHotTileIds: ['echo', 'sealed']
+            traitRewardHotTileIds: ['conduit', 'heavy']
         });
 
         expect(result.cardFeedbackActionCuesAttr).toBe('cash-now:2');
@@ -89,10 +89,10 @@ describe('tileBoardDomSurfaceModel', () => {
         expect(result.cardFeedbackPrimaryCardCueAttr).toBe('cash-now:cashout:5:cashout:payoff-stack');
         expect(result.cardFeedbackPrimaryActionAttr).toBe('cash-now');
         expect(result.cardFeedbackRouteGlyphsAttr).toBe('payoff-stack:2');
-        expect(result.cardFeedbackTraitLaneActionsAttr).toBe('shard:Cash shard:1');
-        expect(result.cardFeedbackTraitLaneBeatsAttr).toBe('shard:4');
-        expect(result.cardFeedbackTraitLaneCuesAttr).toBe('shard:1');
-        expect(result.cardFeedbackTraitLanePrimaryActionAttr).toBe('shard:Cash shard:1');
+        expect(result.cardFeedbackTraitLaneActionsAttr).toBe('tool:Use tool:1');
+        expect(result.cardFeedbackTraitLaneBeatsAttr).toBe('tool:3');
+        expect(result.cardFeedbackTraitLaneCuesAttr).toBe('tool:1');
+        expect(result.cardFeedbackTraitLanePrimaryActionAttr).toBe('tool:Use tool:1');
         expect(result.cardFeedbackTraitRouteIntensitiesAttr).toBe('stack:2');
         expect(result.cardFeedbackTraitRouteTiersAttr).toBe('payoff-stack:2');
     });
@@ -101,10 +101,10 @@ describe('tileBoardDomSurfaceModel', () => {
         const result = buildTileBoardDomSurfaceModel({
             allowGambitThirdFlip: false,
             board: board([
-                tile('echo', 'echo', 'flipped', { tileTraitKind: 'echo' }),
-                tile('sealed', 'sealed', 'hidden', { tileTraitKind: 'sealed' })
+                tile('conduit', 'conduit', 'flipped', { tileTraitKind: 'conduit' }),
+                tile('echo', 'echo', 'hidden', { tileTraitKind: 'echo' })
             ], {
-                flippedTileIds: ['echo']
+                flippedTileIds: ['conduit']
             }),
             boardApplicationFocused: false,
             debugPeekActive: false,
@@ -123,12 +123,12 @@ describe('tileBoardDomSurfaceModel', () => {
         const result = buildTileBoardDomSurfaceModel({
             allowGambitThirdFlip: false,
             board: board([
-                tile('echo-a', 'echo', 'flipped', { tileTraitKind: 'echo' }),
-                tile('sealed-a', 'sealed', 'matched', { tileTraitKind: 'sealed' }),
-                tile('echo-b', 'echo', 'hidden', { tileTraitKind: 'echo' }),
+                tile('conduit-a', 'conduit', 'flipped', { tileTraitKind: 'conduit' }),
+                tile('echo-a', 'echo', 'matched', { tileTraitKind: 'echo' }),
+                tile('conduit-b', 'conduit', 'hidden', { tileTraitKind: 'conduit' }),
                 tile('plain', 'plain', 'hidden')
             ], {
-                flippedTileIds: ['echo-a']
+                flippedTileIds: ['conduit-a']
             }),
             boardApplicationFocused: false,
             debugPeekActive: false,
@@ -138,7 +138,7 @@ describe('tileBoardDomSurfaceModel', () => {
             peekRevealedTileIds: new Set(),
             previewActive: false,
             runStatus: 'playing',
-            selectedTraitFollowupTileIds: ['echo-b'],
+            selectedTraitFollowupTileIds: ['conduit-b'],
             traitRouteTargetTileIds: ['plain']
         });
 

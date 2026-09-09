@@ -14,12 +14,12 @@ describe('codexScreenModel', () => {
     it('filters topics by title or description and preserves all rows for blank queries', () => {
         const topics = [
             { id: 'one', title: 'Echo', description: 'Copies adjacent trait payoff' },
-            { id: 'two', title: 'Sealed', description: 'Blocks one next-turn match lane' }
+            { id: 'two', title: 'Stasis', description: 'Blocks one next-turn match lane' }
         ];
 
         expect(filterTopics(topics, '').map((topic) => topic.id)).toEqual(['one', 'two']);
         expect(filterTopics(topics, 'adjacent').map((topic) => topic.id)).toEqual(['one']);
-        expect(filterTopics(topics, 'sealed').map((topic) => topic.id)).toEqual(['two']);
+        expect(filterTopics(topics, 'stasis').map((topic) => topic.id)).toEqual(['two']);
     });
 
     it('keeps guide and table visibility aligned with the active tab', () => {

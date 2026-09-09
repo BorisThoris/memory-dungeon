@@ -122,26 +122,11 @@ const emptyFindableKindCounts = (): Record<FindableKind, number> => ({
     score_glint: 0
 });
 
-export const BALANCE_SIMULATION_TILE_TRAIT_KINDS: readonly TileTraitKind[] = [
-    'echo',
-    'volatile',
-    'mirror',
-    'cursed',
-    'sealed',
-    'heavy',
-    'drift',
-    'conduit',
-    'stasis'
-];
+export const BALANCE_SIMULATION_TILE_TRAIT_KINDS: readonly TileTraitKind[] = ['echo', 'heavy', 'conduit', 'stasis'];
 
 const emptyTileTraitKindCounts = (): Record<TileTraitKind, number> => ({
     echo: 0,
-    volatile: 0,
-    mirror: 0,
-    cursed: 0,
-    sealed: 0,
     heavy: 0,
-    drift: 0,
     conduit: 0,
     stasis: 0
 });

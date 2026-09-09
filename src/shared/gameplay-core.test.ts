@@ -169,7 +169,7 @@ describe('deterministic gameplay core', () => {
 
     it('validates commands, effects, conditions, and definitions as strict serializable contracts', () => {
         expect(GAMEPLAY_CONTENT_DEFINITIONS.map((definition) => definition.id)).toEqual([
-            'trait.volatile_heavy_guard',
+            'trait.conduit_echo_peek',
             'findable.shard_spark',
             'findable.score_glint'
         ]);
@@ -179,7 +179,7 @@ describe('deterministic gameplay core', () => {
                 schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
                 commandId: 'bad',
                 type: 'effects.apply',
-                definitionId: 'trait.volatile_heavy_guard',
+                definitionId: 'trait.conduit_echo_peek',
                 definitionVersion: 1,
                 facts: {},
                 undocumentedMutation: true
@@ -454,8 +454,8 @@ describe('deterministic gameplay core', () => {
         const initial = run();
         const result = reduceGameplayCommand(
             initial,
-            createGameplayDefinitionCommand('bad-adjacency', 'trait.volatile_heavy_guard', {
-                matchedTraits: ['volatile'],
+            createGameplayDefinitionCommand('bad-adjacency', 'trait.conduit_echo_peek', {
+                matchedTraits: ['conduit'],
                 adjacentTraits: []
             })
         );
@@ -463,7 +463,7 @@ describe('deterministic gameplay core', () => {
         expect(result.accepted).toBe(false);
         expect(result.run).toBe(initial);
         expect(result.events).toEqual([
-            expect.objectContaining({ type: 'command.rejected', reason: expect.stringContaining('heavy was not adjacent') })
+            expect.objectContaining({ type: 'command.rejected', reason: expect.stringContaining('echo was not adjacent') })
         ]);
     });
 
@@ -636,9 +636,9 @@ describe('deterministic gameplay core', () => {
     it('replays a JSON-round-tripped build sequence deterministically', () => {
         const initial = run({ peekCharges: 1 });
         const commands = [
-            createGameplayDefinitionCommand('01-guard', 'trait.volatile_heavy_guard', {
-                matchedTraits: ['volatile'],
-                adjacentTraits: ['heavy']
+            createGameplayDefinitionCommand('01-peek', 'trait.conduit_echo_peek', {
+                matchedTraits: ['conduit'],
+                adjacentTraits: ['echo']
             }),
             createGameplayDefinitionCommand('02-spark', 'findable.shard_spark', {
                 matchedFindables: ['shard_spark']
@@ -650,10 +650,10 @@ describe('deterministic gameplay core', () => {
         const replayB = replayGameplayCommands(initial, JSON.parse(serialized) as unknown[]);
 
         expect(replayA).toEqual(replayB);
-        expect(replayA.acceptedCommandIds).toEqual(['01-guard', '02-spark', '03-peek']);
+        expect(replayA.acceptedCommandIds).toEqual(['01-peek', '02-spark', '03-peek']);
         expect(replayA.rejectedCommandIds).toEqual([]);
-        expect(replayA.run.peekCharges).toBe(0);
-        expect(replayA.run.stats.guardTokens).toBe(1);
+        // One charge to start, one relayed by Conduit beside Echo, one spent on the peek.
+        expect(replayA.run.peekCharges).toBe(1);
         expect(JSON.parse(JSON.stringify(replayA.events))).toEqual(replayA.events);
     });
 
@@ -661,7 +661,7 @@ describe('deterministic gameplay core', () => {
         const initial = run();
         const malformed = reduceGameplayCommand(initial, { type: 'effects.apply' });
         const staleCommand = {
-            ...createGameplayDefinitionCommand('stale', 'trait.volatile_heavy_guard'),
+            ...createGameplayDefinitionCommand('stale', 'trait.conduit_echo_peek'),
             definitionVersion: 99
         };
         const stale = reduceGameplayCommand(initial, staleCommand);

@@ -285,8 +285,7 @@ export const TileBoardReadabilityMarkers = ({
         faceUp && board && tile.tileTraitKind
             ? [
                   ...new Set([
-                      ...getTileTraitInteractionPreviewLines(board, [tile.id], 'match'),
-                      ...getTileTraitInteractionPreviewLines(board, [tile.id], 'mismatch')
+                      ...getTileTraitInteractionPreviewLines(board, [tile.id])
                   ])
               ].slice(0, 3)
             : [];
@@ -583,7 +582,7 @@ export const TileBoardReadabilityMarkers = ({
                             </mesh>
                             {/*
                               * The trait's mark. Every trait used to draw this same rotated pip, so
-                              * hue was the only thing separating nine rules — and on a hidden tile
+                              * hue was the only thing separating the rules — and on a hidden tile
                               * in a memory game a shape is the more memorable of the two anyway.
                               * Shape and count come from `tile-trait-marks`; the Codex lists them.
                               */}
@@ -598,7 +597,6 @@ export const TileBoardReadabilityMarkers = ({
                                     position={[offsetX, 0.034, 0.00004]}
                                     raycast={noopMeshRaycast}
                                     renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
-                                    rotation={[0, 0, traitMark?.shape === 'diamond' ? Math.PI / 4 : 0]}
                                 >
                                     <meshBasicMaterial
                                         color="#100d14"

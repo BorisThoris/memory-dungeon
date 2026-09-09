@@ -7,8 +7,9 @@ import type { TileTraitKind } from './contracts';
 /**
  * The board says which trait a tile carries by tinting a marker, so two traits that look the same
  * are two rules the player cannot tell apart. This is the gate that would have caught the palette
- * as it shipped: Sealed and Stasis sat dE 2.1 apart under deuteranopia — under the just-noticeable
- * step, so for those players they were one colour.
+ * as it first shipped, when two of the nine traits sat dE 2.1 apart under deuteranopia — under the
+ * just-noticeable step, so for those players they were one colour. Four traits remain; the four
+ * hues are the ones they had, so the gate still has to hold for that set.
  */
 const MIN_TRAIT_COLOR_DISTANCE = 25;
 

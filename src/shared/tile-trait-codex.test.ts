@@ -10,9 +10,9 @@ describe('tile trait codex rows', () => {
 
         expect(rows).toHaveLength(Object.keys(TILE_TRAIT_COPY).length);
         // Each row leads with the trait's label and then the mark drawn on a hidden tile, so a
-        // player can look up "two bars" as readily as "Sealed".
+        // player can look up "three bars" as readily as "Heavy".
         expect(rows.map((row) => row.title)).toEqual(
-            expect.arrayContaining(['Echo · 2 dots', 'Volatile · 3 diamonds', 'Conduit · 1 dot'])
+            expect.arrayContaining(['Echo · 2 dots', 'Heavy · 3 bars', 'Conduit · 1 dot'])
         );
         for (const kind of Object.keys(TILE_TRAIT_COPY) as TileTraitKind[]) {
             const row = rows.find((candidate) => candidate.id === `trait-${kind}`);

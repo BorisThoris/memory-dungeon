@@ -24,9 +24,9 @@ const run = (overrides: Partial<RunState> = {}): RunState =>
 describe('gameplay command and event journal', () => {
     it('retains complete schema-validated command payloads and events', () => {
         const initial = run();
-        const command = createGameplayDefinitionCommand('journal-guard', 'trait.volatile_heavy_guard', {
-            matchedTraits: ['volatile'],
-            adjacentTraits: ['heavy']
+        const command = createGameplayDefinitionCommand('journal-peek', 'trait.conduit_echo_peek', {
+            matchedTraits: ['conduit'],
+            adjacentTraits: ['echo']
         });
         const result = reduceGameplayCommand(initial, command);
         const journaled = appendGameplayJournal(result.run, [command], result.events);

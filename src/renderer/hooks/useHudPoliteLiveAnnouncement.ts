@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { runNonNegativeInteger, runNonNegativeIntegerWithFallback } from '../../shared/run-number-guards';
-import { buildBoardTurnAnnouncement, volatileShuffleAnnouncementLine } from '../copy/boardTurnAnnouncement';
+import { buildBoardTurnAnnouncement } from '../copy/boardTurnAnnouncement';
 import { buildGameplayEventBatchAnnouncement } from '../copy/gameplayEventAnnouncement';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
@@ -487,11 +487,6 @@ export const useHudPoliteLiveAnnouncement = ({
                     ? `Trait surge: ${traitMismatchLabels.length} penalties applied: ${joinReadableList(traitMismatchLabels)}.`
                     : `${joinReadableList(traitMismatchLabels)} trait penalty applied.`
             );
-        }
-
-        const volatileShuffleLine = boardTurnEvent ? volatileShuffleAnnouncementLine(boardTurnEvent) : null;
-        if (volatileShuffleLine) {
-            lines.push(volatileShuffleLine);
         }
 
         if (shardDelta > 0 && coreSaidNothing) {

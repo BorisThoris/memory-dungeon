@@ -4,7 +4,7 @@ import { runRecord } from './run-record-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { ENDLESS_CYCLE_FLOOR_COUNT } from './floor-mutator-schedule';
 import { ACHIEVEMENT_IDS } from './save-data';
-import { normalizeSessionStats } from './session-stats-rules';
+import { normalizeSessionStats, TILE_TRAIT_COUNT_KINDS } from './session-stats-rules';
 
 export type AchievementDefinition = AchievementCodexEntry;
 
@@ -97,9 +97,11 @@ export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): A
     award('ACH_ENDLESS_TWENTY', run.gameMode === 'endless' && stats.highestLevel >= 20);
     award('ACH_SCORE_TEN_THOUSAND', stats.totalScore >= 10_000);
     award('ACH_STREAK_TEN', runNonNegativeInteger(stats.bestStreak) >= 10);
+    // Every trait kind matched at least once. Five of nine used to be enough; with four kinds left
+    // the scholar has to have met all of them.
     award(
         'ACH_TRAIT_SCHOLAR',
-        Object.values(stats.tileTraitMatches ?? {}).filter((count) => runNonNegativeInteger(count) > 0).length >= 5
+        TILE_TRAIT_COUNT_KINDS.every((kind) => runNonNegativeInteger(stats.tileTraitMatches?.[kind]) > 0)
     );
     award('ACH_NO_POWERS_TEN', runNonNegativeInteger(saveData.playerStats?.bestFloorNoPowers) >= 10);
     // The chain loop's own four: reached through play a fixture proves (achievement-reachability.test.ts).

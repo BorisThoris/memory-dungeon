@@ -77,8 +77,6 @@ export interface BoardTurnAnnouncementFacts {
     pairTotal: number;
     mismatchesBefore: number;
     mismatchesAfter: number;
-    volatileTraitShufflesBefore: number;
-    volatileTraitShufflesAfter: number;
 }
 
 const firstTileValue = <T>(
@@ -224,8 +222,6 @@ export const getBoardTurnAnnouncementFacts = (
         matchedPairsAfter: runNonNegativeInteger(after.board?.matchedPairs),
         pairTotal: runNonNegativeInteger(after.board?.pairCount ?? before.board?.pairCount),
         mismatchesBefore: statsBefore.mismatches,
-        mismatchesAfter: statsAfter.mismatches,
-        volatileTraitShufflesBefore: runNonNegativeInteger(statsBefore.volatileTraitShuffles),
-        volatileTraitShufflesAfter: runNonNegativeInteger(statsAfter.volatileTraitShuffles)
+        mismatchesAfter: statsAfter.mismatches
     };
 };

@@ -3,26 +3,11 @@ import { runRecord } from './run-record-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { calculateRating } from './scoring-rules';
 
-export const TILE_TRAIT_COUNT_KINDS: readonly TileTraitKind[] = [
-    'echo',
-    'volatile',
-    'mirror',
-    'cursed',
-    'sealed',
-    'heavy',
-    'drift',
-    'conduit',
-    'stasis'
-];
+export const TILE_TRAIT_COUNT_KINDS: readonly TileTraitKind[] = ['echo', 'heavy', 'conduit', 'stasis'];
 
 export const createTileTraitCountStats = (): Record<TileTraitKind, number> => ({
     echo: 0,
-    volatile: 0,
-    mirror: 0,
-    cursed: 0,
-    sealed: 0,
     heavy: 0,
-    drift: 0,
     conduit: 0,
     stasis: 0
 });
@@ -76,7 +61,6 @@ export const createSessionStats = (bestScore: number): SessionStats => ({
     comboShards: 0,
     tileTraitMatches: createTileTraitCountStats(),
     tileTraitMismatches: createTileTraitCountStats(),
-    volatileTraitShuffles: 0,
     shufflesUsed: 0,
     pairsDestroyed: 0
 });
@@ -101,7 +85,6 @@ export const normalizeSessionStats = (stats: unknown, bestScoreFallback = 0): Se
         comboShards: runNonNegativeInteger(source.comboShards),
         tileTraitMatches: normalizeTileTraitCountStats(source.tileTraitMatches),
         tileTraitMismatches: normalizeTileTraitCountStats(source.tileTraitMismatches),
-        volatileTraitShuffles: runNonNegativeInteger(source.volatileTraitShuffles),
         shufflesUsed: runNonNegativeInteger(source.shufflesUsed),
         pairsDestroyed: runNonNegativeInteger(source.pairsDestroyed)
     };

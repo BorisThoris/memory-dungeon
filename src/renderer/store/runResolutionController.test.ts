@@ -393,15 +393,15 @@ describe('runResolutionController', () => {
             {
                 ...tile('a1', 'a', 'flipped'),
                 findableKind: 'score_glint',
-                tileTraitKind: 'echo'
+                tileTraitKind: 'conduit'
             },
             tile('b1', 'b'),
             {
                 ...tile('a2', 'a', 'flipped'),
                 findableKind: 'score_glint',
-                tileTraitKind: 'echo'
+                tileTraitKind: 'conduit'
             },
-            { ...tile('b2', 'b'), tileTraitKind: 'sealed' }
+            { ...tile('b2', 'b'), tileTraitKind: 'echo' }
         ], { flippedTileIds: ['a1', 'a2'] });
         const run: RunState = {
             ...baseRun,
@@ -423,13 +423,13 @@ describe('runResolutionController', () => {
         expect(harness.state.matchScorePop).not.toBeNull();
         expect(harness.state.matchScorePop).toMatchObject({
             pickupRewardText: expect.any(String),
-            traitInteractionTexts: ['Echo + Sealed: combo shard'],
+            traitInteractionTexts: ['Conduit: adjacent trait charge', 'Conduit + Echo: peek spark'],
             key: expect.stringContaining('board-turn:')
         });
         expect(harness.state.run?.gameplayEventJournal).toContainEqual(expect.objectContaining({
             type: 'board.turn_resolved',
             matchedFindableKind: 'score_glint',
-            traitInteractionTags: ['echo:sealed-combo'],
+            traitInteractionTags: ['conduit:adjacent-score', 'conduit:echo-peek'],
             floaterTileIds: ['a1', 'a2']
         }));
         expect(harness.state.run?.gameplayCommandJournal).toContainEqual(expect.objectContaining({

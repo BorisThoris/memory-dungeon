@@ -86,7 +86,7 @@ export const getHudActionFeedbackProfile = (
     if (/\b(chain times|chain started|surge hit|combo hit|surge)\b/.test(normalized)) {
         return { label: 'Chain', tone: 'chain' };
     }
-    if (/\b(trait|stasis|volatile|row\/swap|shuffle charge)\b/.test(normalized)) {
+    if (/\b(trait|stasis|row\/swap|shuffle charge)\b/.test(normalized)) {
         return { label: 'Trait play', tone: 'trait' };
     }
     if (/\bcashout armed\b/.test(normalized)) {

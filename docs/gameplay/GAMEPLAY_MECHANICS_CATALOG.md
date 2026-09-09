@@ -46,7 +46,7 @@
 | Board complete check | `isBoardComplete`, `countFullyHiddenPairs` (`board-inspection.ts`) | Sim |
 | Pair proximity hint (Manhattan) | `getPairProximityGridDistance` | [epic-board-rendering-assists](./epic-board-rendering-assists.md) |
 | Focus dim set (assist) | `computeFocusDimmedTileIds` in `focusDimmedTileIds.ts` | [epic-board-rendering-assists](./epic-board-rendering-assists.md) |
-| Tile traits assigned from floor 2 | `assignTileTraitsToGeneratedBoard` (`tile-trait-rules.ts`), `Tile.tileTraitKind` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
+| Tile traits assigned from floor 4 (the three authored floors carry none) | `assignTileTraitsToGeneratedBoard` (`tile-trait-rules.ts`), `Tile.tileTraitKind` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Findable pickup pairs assigned | `assignFindableKindsToTiles` (`board-tile-generation-rules.ts`), `Tile.findableKind` | [epic-mutators](./epic-mutators.md), [FINDABLES.md](../FINDABLES.md) |
 
 ---
@@ -68,7 +68,7 @@
 | Shifting spotlight scoring + rotation | `shiftingSpotlightMatchDelta` (`shifting-spotlight-rules.ts`), `shiftingSpotlightNonce` | [epic-mutators](./epic-mutators.md), [epic-board-rendering-assists](./epic-board-rendering-assists.md) |
 | Cursed pair early match flag | `cursedMatchedEarlyThisFloor` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Findables on match, spilled by a break, forfeited by Destroy | `findableKind`, `findablesClaimedThisFloor`, `resolveFindableMatchRewardThroughGameplayCore` | [epic-mutators](./epic-mutators.md) |
-| Tile trait match rewards / mismatch penalties | `resolveTileTraitEffects`, `calculateTileTraitMatchRewards`, `calculateTileTraitMismatchPenalty`, `applyVolatileMismatchTrait`, `releaseStrandedStasisBlock` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
+| Tile trait match rewards / mismatch penalties | `resolveTileTraitEffects`, `calculateTileTraitMatchRewards`, `calculateTileTraitMismatchPenalty`, `releaseStrandedStasisBlock` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Magpie theft every third miss, scared off by a guard token | `isMagpieVisitTurn`, `resolveMagpieVisit`, `applyMagpieTheft` (`magpie-rules.ts`) | [epic-mutators](./epic-mutators.md) |
 | Recall Focus and forgotten tiles | `increaseRecallFocus`, `decreaseRecallFocus`, `rememberForgottenTiles`, `settleForgottenTiles` (`recall-rules.ts`); `getMemoryRecallFeedback` | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | N-back anchor counter / key | `nBackMatchCounter`, `nBackAnchorPairKey` | [epic-mutators](./epic-mutators.md), [epic-board-rendering-assists](./epic-board-rendering-assists.md) |
@@ -115,7 +115,7 @@
 | Scholar: shuffle used flag | `shuffleUsedThisFloor` | — | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | Region shuffle | `canRegionShuffle`, `canRegionShuffleRow`, `applyRegionShuffle`; typed command carries the chosen row directly | `toggleRegionShuffleArmed`, `pressTile`; no serialized arm state | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Tile swap | `canSwapHiddenTiles`, `applyTileSwap` | `toggleTileSwapArmed`, `pressTile` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
-| Region charges | `regionShuffleCharges`; spent by row shuffle and tile swap alike; a clean Drift match grants one | — | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
+| Region charges | `regionShuffleCharges`; spent by row shuffle and tile swap alike | — | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Destroy pair | `applyDestroyPair`, `canDestroyPair` | `toggleDestroyPairArmed`, `pressTile` when armed | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Destroy charges | `destroyPairCharges` | — | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Destroy used floor flag | `destroyUsedThisFloor` | — | objectives |
@@ -350,7 +350,6 @@ Nested under `RunState.stats`. Drives score display, rating, and HUD.
 | `comboShards` | Combo shard progress toward a life | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
 | `tileTraitMatches` | Clean matches per trait kind (feeds `ACH_TRAIT_SCHOLAR`) | [epic-meta-progression](./epic-meta-progression.md) |
 | `tileTraitMismatches` | Misses per trait kind | [epic-core-memory-loop](./epic-core-memory-loop.md) |
-| `volatileTraitShuffles` | Times a Volatile miss shuffled safe hidden tiles | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | `shufflesUsed` | Position-changing shuffle/swap powers consumed | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `pairsDestroyed` | Pairs removed via destroy power | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 
@@ -401,7 +400,7 @@ Elements of `BoardState.tiles`. Source: [`Tile`](../../src/shared/contracts.ts).
 | `brokenAtWave` | Which wave of the ripple took this tile (0 = the match's own region) | [epic-presentation-motion-fx](./epic-presentation-motion-fx.md) |
 | `atomicVariant` | Optional deck art variant index | [epic-content-symbols-and-generation](./epic-content-symbols-and-generation.md) |
 | `findableKind` | Optional pickup kind: `shard_spark` or `score_glint` | [epic-mutators](./epic-mutators.md) |
-| `tileTraitKind` | Optional pair modifier: echo, volatile, mirror, cursed, sealed, heavy, drift, conduit, or stasis | [epic-core-memory-loop](./epic-core-memory-loop.md) |
+| `tileTraitKind` | Optional pair modifier: echo, heavy, conduit, or stasis (floor 4 onward) | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 
 ---
 

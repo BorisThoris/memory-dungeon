@@ -1569,3 +1569,71 @@ No balance constant changed. Every band, re-run on rules 36 with the Gen 177 sam
 
 The rules-version bump alone moves the Fever shares by a few hundredths and the ladder by a tenth,
 which is the seed noise Gen 177 measured; every band holds with the margin it was given.
+
+## Gen 179: the tempered curve, the three authored floors, four traits
+
+Phase 2 opens with the floor itself (thesis T2.1, T2.2, T2.11).
+
+### The curve
+
+`pairsForFloor(n) = clamp(round(3 + 2.6 * sqrt(n - 1)), 2, 24)` in `pair-curve.ts`, replacing
+`level + 1`. Floors 1–6 deal 3, 6, 7, 8, 8, 9 pairs where they dealt 2–7; floor 12 deals 12 where it
+dealt 13; floor 30 deals 17 where the old line had already hit its cap of 24. Larger early because a
+two-pair board cannot pop and a three-pair board barely can; slower deep because interference makes
+memory difficulty superlinear in board size (§23.3). The memorize window follows the same curve.
+
+### The authored floors
+
+Floors 1–3 are laid once, the same for everyone, with the symbols still dealt from the seed
+(`authored-floors.ts`). Floor 1 is six tiles of one suit in a 3×2 grid, so any correct match pops
+at least one other pair; floor 2 is six pairs in two solid clumps with one boundary line, so a break
+stops at a colour; floor 3 is seven pairs with one pair split, its far half touching only the other
+suit, so a Clean chain pulls a tile out of nowhere. `authored-floors.test.ts` drives the real break
+rule over eight seeds and asserts the three teaching moments (N6, N7) and the board invariants
+(N1, N2) on every one. Traits start on floor 4.
+
+### The traits
+
+The roster is the thesis's four: echo, heavy, conduit, stasis. Mirror, cursed, sealed, volatile and
+drift go with their effects, copy, marks, colours, interaction tags, counters and simulation metrics
+(§32.4's verdicts: a board that changes under the player's reading, a rule you must read, a stop).
+The four surviving interaction tags are conduit's three and stasis's block; the effects engine's one
+trait definition is now the conduit–echo peek. The interaction graph loses five nodes and fifteen
+edges (version 32) and gains the two heavy–stasis synergies and a swap counterplay for the stasis
+block. `ACH_TRAIT_SCHOLAR` asks for all four kinds; it asked for five of nine and was unreachable.
+
+### The bands, on the new floors
+
+`GAME_RULES_VERSION` is 37. Forty-eight seeds on the cascade as before:
+
+| | Gen 178 | Gen 179 |
+|---|---|---|
+| Pairs per floor over floors 1–24, clean | 9.4 | **7.7** |
+| Turns to clear, clean / reference | 4.1 / 6.3 | **3.6 / 5.2** |
+| Fever share, clean / 10% miss / reference | 0.48 / 0.35 / 0.20 | **0.37 / 0.29 / 0.17** |
+| clean/reference Fever ratio | 2.40 | 2.18 |
+| Extreme Fever, clean / reference | 0.71 / 0.38 | 0.78 / 0.47 |
+| Chunk share of score, clean | 0.31 | 0.30 |
+| Pop ladder none / clean / sharp / fever | 1.98 / 3.31 / 3.63 / 6.77 | 1.95 / 3.27 / 3.57 / 7.06 |
+| Pop ladder spread | 4.79 | **5.10** |
+| Fever breaks on the census (15% miss, 160 floors) | 0.18 | **0.11** |
+| Silent / thin / dominant systems | 0 / 0 / 0 | 0 / 0 / 0 |
+| `sim:endless --floors=200`, fairness / playable issues | 0 / 0 | 0 / 0 |
+
+Two things moved and both are the curve. Floors are smaller over the first twenty-four (7.7
+pairs against 9.4) because the tempered line is below the linear one from floor seven on, and a
+floor with fewer pairs has fewer matches to climb a ladder whose Fever rung is half the floor's
+pairs: the clean player's Fever share reads 0.37 where it read 0.48, and the census at its 15%
+miss rate reads 0.11 where it read 0.18, just over the `common` floor of 0.1. The separation the
+band cares about holds at 2.18, the big-floor share holds at 0.35 against 0.3, and floors clear
+faster with the same chunk share. This is §52's finding reproduced: Fever is rarer on small floors,
+and the thesis's answer is to show the ladder before the player climbs it (option C), not to
+lower the rung. The severance drop (T2.3) and multiplicative scoring (T2.5) are the next two
+generations and both change what a floor is worth, so the Fever bands are re-read then rather
+than moved now.
+
+**One band recalibrated.** `POP_REACH_BANDS.ladderMinStep` 0.3 → 0.25: Sharp pays 0.30 over
+Clean on the tempered curve where it paid 0.33 on the linear one. The early floors are bigger but
+still one or two suits, so Clean's two waves sweep most of what Sharp's full reaction could reach;
+the ladder still rises at every rung (spread 5.10, up from 4.79). The severance drop is the rung
+that gives Sharp something back, and this band is re-read there.

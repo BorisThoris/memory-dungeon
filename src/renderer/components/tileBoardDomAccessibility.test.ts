@@ -69,36 +69,36 @@ describe('tile board DOM accessibility helpers', () => {
         const traitBoard: BoardState = {
             ...board,
             tiles: [
-                { ...board.tiles[0]!, pairKey: 'echo', tileTraitKind: 'echo' },
-                { ...board.tiles[1]!, pairKey: 'sealed', tileTraitKind: 'sealed' },
+                { ...board.tiles[0]!, pairKey: 'conduit', tileTraitKind: 'conduit' },
+                { ...board.tiles[1]!, pairKey: 'heavy', tileTraitKind: 'heavy' },
                 board.tiles[2]!,
                 board.tiles[3]!
             ]
         };
 
-        expect(getTileTraitPreviewText(traitBoard, traitBoard.tiles[0]!)).toContain('Echo + Sealed: combo shard');
+        expect(getTileTraitPreviewText(traitBoard, traitBoard.tiles[0]!)).toContain('Conduit: adjacent trait charge');
         expect(getTileTraitPreviewText(traitBoard, traitBoard.tiles[0]!)).toContain('Chain-ready trait card');
         expect(getTileTraitPreviewText(traitBoard, traitBoard.tiles[0]!)).toContain('Match now');
         expect(getTileBeatAccessibilityText(traitBoard, traitBoard.tiles[0]!, false)).toBe(
             ' Beat: route. Action: Match route. 3-beat pulse. Match to build chain.'
         );
         expect(getTileAriaLabel(traitBoard, traitBoard.tiles[0]!, true, 1, 1)).toContain(
-            'Match now: Echo + Sealed: combo shard'
+            'Match now: Conduit: adjacent trait charge'
         );
         expect(getTileAriaLabel(traitBoard, traitBoard.tiles[0]!, false, 1, 1)).toContain(
             'Beat: route. Action: Match route. 3-beat pulse. Match to build chain.'
         );
-        expect(getTileTraitPreviewText(traitBoard, traitBoard.tiles[1]!)).toContain('Echo + Sealed: combo shard');
+        expect(getTileTraitPreviewText(traitBoard, traitBoard.tiles[1]!)).toContain('Conduit: adjacent trait charge');
         expect(getTileAriaLabel(traitBoard, traitBoard.tiles[1]!, true, 1, 2)).toContain(
-            'Echo + Sealed: combo shard'
+            'Conduit: adjacent trait charge'
         );
         const comboSurgeBoard: BoardState = {
             ...board,
             tiles: [
+                { id: 'conduit', pairKey: 'conduit', symbol: 'C', label: 'Conduit', state: 'hidden', tileTraitKind: 'conduit' },
                 { id: 'echo', pairKey: 'echo', symbol: 'E', label: 'Echo', state: 'hidden', tileTraitKind: 'echo' },
-                { id: 'sealed', pairKey: 'sealed', symbol: 'S', label: 'Sealed', state: 'hidden', tileTraitKind: 'sealed' },
-                { id: 'mirror', pairKey: 'mirror', symbol: 'M', label: 'Mirror', state: 'hidden', tileTraitKind: 'mirror' },
-                { id: 'conduit', pairKey: 'conduit', symbol: 'C', label: 'Conduit', state: 'hidden', tileTraitKind: 'conduit' }
+                { id: 'stasis', pairKey: 'stasis', symbol: 'T', label: 'Stasis', state: 'hidden', tileTraitKind: 'stasis' },
+                { id: 'relay', pairKey: 'relay', symbol: 'R', label: 'Relay', state: 'hidden', tileTraitKind: 'conduit' }
             ]
         };
         expect(getTileTraitPreviewText(comboSurgeBoard, comboSurgeBoard.tiles[1]!)).toContain(
@@ -106,13 +106,13 @@ describe('tile board DOM accessibility helpers', () => {
         );
         const comboSurgeLabel = getTileAriaLabel(comboSurgeBoard, comboSurgeBoard.tiles[1]!, false, 1, 2);
         expect(comboSurgeLabel).toContain('Combo-surge trait card');
-        expect(comboSurgeLabel).toContain('Sealed + Conduit: shard spark');
+        expect(comboSurgeLabel).toContain('Conduit + Echo: peek spark');
         expect(comboSurgeLabel).toContain('Conduit: adjacent trait charge');
         expect(comboSurgeLabel).toContain('Beat: surge. Action: Route surge. 4-beat pulse. Multiple trait routes are live.');
         const swapBoard: BoardState = {
             ...board,
             tiles: [
-                { id: 's1', pairKey: 'sealed', symbol: 'S', label: 'Sealed', state: 'hidden', tileTraitKind: 'sealed' },
+                { id: 's1', pairKey: 'conduit', symbol: 'C', label: 'Conduit', state: 'hidden', tileTraitKind: 'conduit' },
                 { id: 'f1', pairKey: 'filler', symbol: 'F', label: 'Filler', state: 'hidden' },
                 { id: 'x1', pairKey: 'origin', symbol: 'O', label: 'Origin', state: 'hidden' },
                 { id: 'h1', pairKey: 'heavy', symbol: 'H', label: 'Heavy', state: 'hidden', tileTraitKind: 'heavy' }
@@ -134,7 +134,7 @@ describe('tile board DOM accessibility helpers', () => {
                 swapBoard
             )
         ).toContain(
-            'Chain prime target. Swap preview: Creates trait route: Sealed + Heavy: score surge; Sealed + Heavy: score surge.'
+            'Chain prime target. Swap preview: Creates trait route: Conduit: adjacent trait charge; Conduit: adjacent trait charge.'
         );
 
         expect(
@@ -155,10 +155,10 @@ describe('tile board DOM accessibility helpers', () => {
                 tileSwapEligibleTileIds: new Set(),
                 tileSwapFirstTileId: null,
                 tileSwapPowerVisualActive: false,
-                traitRouteHintText: 'Swap Sealed with Filler: Sealed + Heavy: score surge',
+                traitRouteHintText: 'Swap Conduit with Filler: Conduit: adjacent trait charge',
                 traitRouteTargetTileIds: ['s1', 'f1']
             })
-        ).toContain('Chain prime target. Swap Sealed with Filler: Sealed + Heavy: score surge.');
+        ).toContain('Chain prime target. Swap Conduit with Filler: Conduit: adjacent trait charge.');
         expect(
             getFocusedTileLiveLabel({
                 board: swapBoard,
@@ -177,7 +177,7 @@ describe('tile board DOM accessibility helpers', () => {
                 tileSwapEligibleTileIds: new Set(),
                 tileSwapFirstTileId: null,
                 tileSwapPowerVisualActive: false,
-                traitRouteHintText: 'Swap Sealed with Filler: Sealed + Heavy: score surge',
+                traitRouteHintText: 'Swap Conduit with Filler: Conduit: adjacent trait charge',
                 traitRouteTargetTileIds: ['s1', 'f1']
             })
         ).toContain('Beat: prime. Action: Prime payoff. 2-beat pulse. Set this route up.');
@@ -231,9 +231,9 @@ describe('tile board DOM accessibility helpers', () => {
             ...board,
             flippedTileIds: ['a1'],
             tiles: [
-                { id: 'a1', pairKey: 'echo', symbol: 'E', label: 'Echo', state: 'flipped', tileTraitKind: 'echo' },
-                { id: 's1', pairKey: 'sealed', symbol: 'S', label: 'Sealed', state: 'hidden', tileTraitKind: 'sealed' },
-                { id: 'a2', pairKey: 'echo', symbol: 'E', label: 'Echo', state: 'hidden', tileTraitKind: 'echo' },
+                { id: 'a1', pairKey: 'conduit', symbol: 'C', label: 'Conduit', state: 'flipped', tileTraitKind: 'conduit' },
+                { id: 's1', pairKey: 'heavy', symbol: 'H', label: 'Heavy', state: 'hidden', tileTraitKind: 'heavy' },
+                { id: 'a2', pairKey: 'conduit', symbol: 'C', label: 'Conduit', state: 'hidden', tileTraitKind: 'conduit' },
                 { id: 'b2', pairKey: 'B', symbol: 'B', label: 'B', state: 'hidden' }
             ]
         };
@@ -296,29 +296,29 @@ describe('tile board DOM accessibility helpers', () => {
             tileSwapEligibleTileIds: new Set(['s1']),
             tileSwapFirstTileId: 'x1',
             tileSwapPowerVisualActive: true,
-            traitRouteHintText: 'Swap Sealed with Filler: Sealed + Heavy: score surge',
+            traitRouteHintText: 'Swap Conduit with Filler: Conduit: adjacent trait charge',
             traitRouteTargetTileIds: ['s1', 'f1']
         });
         expect(armedSwapLabel).toContain('Swap target: valid');
-        expect(armedSwapLabel).toContain('Swap preview: Creates trait route: Sealed + Heavy: score surge');
-        expect(armedSwapLabel).not.toContain('Chain prime target. Swap Sealed with Filler');
+        expect(armedSwapLabel).toContain('Swap preview: Creates trait route: Conduit: adjacent trait charge');
+        expect(armedSwapLabel).not.toContain('Chain prime target. Swap Conduit with Filler');
     });
 
     it('summarizes board-level chain readability for cashout, surge, setup, and idle states', () => {
         const traitBoard: BoardState = {
             ...board,
             tiles: [
+                { id: 'conduit', pairKey: 'conduit', symbol: 'C', label: 'Conduit', state: 'hidden', tileTraitKind: 'conduit' },
                 { id: 'echo', pairKey: 'echo', symbol: 'E', label: 'Echo', state: 'hidden', tileTraitKind: 'echo' },
-                { id: 'sealed', pairKey: 'sealed', symbol: 'S', label: 'Sealed', state: 'hidden', tileTraitKind: 'sealed' },
-                { id: 'mirror', pairKey: 'mirror', symbol: 'M', label: 'Mirror', state: 'hidden', tileTraitKind: 'mirror' },
-                { id: 'conduit', pairKey: 'conduit', symbol: 'C', label: 'Conduit', state: 'hidden', tileTraitKind: 'conduit' }
+                { id: 'stasis', pairKey: 'stasis', symbol: 'T', label: 'Stasis', state: 'hidden', tileTraitKind: 'stasis' },
+                { id: 'relay', pairKey: 'relay', symbol: 'R', label: 'Relay', state: 'hidden', tileTraitKind: 'conduit' }
             ]
         };
 
         expect(
             getBoardChainAccessibilitySummary(traitBoard, {
                 rewardHotText: 'Next reward x6 +1 shard in 1 match',
-                rewardHotTileIds: new Set(['echo', 'sealed']),
+                rewardHotTileIds: new Set(['conduit', 'echo']),
                 sequenceText: 'Sequence: First match lit route. Then cash reward. Keep chain target live'
             })
         ).toMatchObject({
@@ -332,9 +332,9 @@ describe('tile board DOM accessibility helpers', () => {
         });
 
         expect(getBoardChainAccessibilitySummary(traitBoard)).toMatchObject({
-            label: expect.stringContaining('4 surge cards. Next: Combo surge ready: Echo + Sealed: combo shard.'),
-            primaryLine: 'Echo + Sealed: combo shard',
-            secondaryLine: 'Echo + Mirror: recall focus',
+            label: expect.stringContaining('4 surge cards. Next: Combo surge ready: Conduit: adjacent trait charge.'),
+            primaryLine: 'Conduit: adjacent trait charge',
+            secondaryLine: 'Conduit + Echo: peek spark',
             followupCount: 0,
             readyCount: 4,
             rewardHotCount: 0,
@@ -345,18 +345,18 @@ describe('tile board DOM accessibility helpers', () => {
 
         const selectedFollowupBoard: BoardState = {
             ...board,
-            flippedTileIds: ['echo-a'],
+            flippedTileIds: ['conduit-a'],
             tiles: [
-                { id: 'echo-a', pairKey: 'echo', symbol: 'E', label: 'Echo', state: 'flipped', tileTraitKind: 'echo' },
-                { id: 'sealed-a', pairKey: 'sealed', symbol: 'S', label: 'Sealed', state: 'hidden', tileTraitKind: 'sealed' },
-                { id: 'echo-b', pairKey: 'echo', symbol: 'E', label: 'Echo', state: 'hidden', tileTraitKind: 'echo' },
+                { id: 'conduit-a', pairKey: 'conduit', symbol: 'C', label: 'Conduit', state: 'flipped', tileTraitKind: 'conduit' },
+                { id: 'heavy-a', pairKey: 'heavy', symbol: 'H', label: 'Heavy', state: 'hidden', tileTraitKind: 'heavy' },
+                { id: 'conduit-b', pairKey: 'conduit', symbol: 'C', label: 'Conduit', state: 'hidden', tileTraitKind: 'conduit' },
                 board.tiles[3]!
             ]
         };
 
         expect(getBoardChainAccessibilitySummary(selectedFollowupBoard)).toMatchObject({
             label: expect.stringContaining(
-                'Chain board: 2 chain-ready cards, 1 selected follow-up. Next: follow up the marked mate: Echo + Sealed: combo shard.'
+                'Chain board: 2 chain-ready cards, 1 selected follow-up. Next: follow up the marked mate: Conduit: adjacent trait charge.'
             ),
             primaryLine: '1 selected follow-up',
             followupCount: 1,
@@ -369,11 +369,11 @@ describe('tile board DOM accessibility helpers', () => {
 
         expect(
             getBoardChainAccessibilitySummary(board, {
-                hintText: 'Swap toward Sealed + Heavy',
+                hintText: 'Swap toward Conduit + Heavy',
                 targetTileIds: new Set(['a1', 'b2'])
             })
         ).toMatchObject({
-            label: 'Chain board: 2 prime targets. Next: Swap toward Sealed + Heavy.',
+            label: 'Chain board: 2 prime targets. Next: Swap toward Conduit + Heavy.',
             readyCount: 0,
             primaryLine: 'Match or move traits together to light a route.',
             rewardHotCount: 0,
@@ -385,7 +385,7 @@ describe('tile board DOM accessibility helpers', () => {
         const setupBoard: BoardState = {
             ...board,
             tiles: [
-                { id: 's1', pairKey: 'sealed', symbol: 'S', label: 'Sealed', state: 'hidden', tileTraitKind: 'sealed' },
+                { id: 's1', pairKey: 'conduit', symbol: 'C', label: 'Conduit', state: 'hidden', tileTraitKind: 'conduit' },
                 { id: 'f1', pairKey: 'filler', symbol: 'F', label: 'Filler', state: 'hidden' },
                 { id: 'x1', pairKey: 'origin', symbol: 'O', label: 'Origin', state: 'hidden' },
                 { id: 'h1', pairKey: 'heavy', symbol: 'H', label: 'Heavy', state: 'hidden', tileTraitKind: 'heavy' }
@@ -393,8 +393,8 @@ describe('tile board DOM accessibility helpers', () => {
         };
 
         expect(getBoardChainAccessibilitySummary(setupBoard)).toMatchObject({
-            label: 'Chain board: 2 prime targets. Next: One swap primes route: Swap Sealed with Filler: Sealed + Heavy: score surge.',
-            primaryLine: 'Swap Sealed with Filler: Sealed + Heavy: score surge',
+            label: 'Chain board: 2 prime targets. Next: One swap primes route: Swap Conduit with Filler: Conduit: adjacent trait charge.',
+            primaryLine: 'Swap Conduit with Filler: Conduit: adjacent trait charge',
             secondaryLine: null,
             readyCount: 0,
             rewardHotCount: 0,

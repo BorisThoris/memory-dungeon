@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { MATCH_DELAY_MS } from './contracts';
 import { createNewRun } from './game-core';
+import { pairsForFloor } from './pair-curve';
 import {
     calculateLevelClearBonus,
     calculateMatchScore,
@@ -9,21 +10,24 @@ import {
     computeFlipResolveDelayMs,
     getMemorizeDuration,
     getMemorizeDurationForRun,
+    getMemorizePerTileBudget,
     getPresentationMutatorMatchPenalty,
     tilesArePairMatch
 } from './scoring-rules';
 
 describe('scoring-rules', () => {
     it('calculates memorize duration and run modifiers', () => {
-        // Per-tile budget × default board: 4 tiles at floor 1, 8 at floor 3, 60 (capped) at floor 29.
-        expect(getMemorizeDuration(1)).toBe(1300);
-        expect(getMemorizeDuration(1.9)).toBe(1300);
-        expect(getMemorizeDuration(3)).toBe(2408);
-        expect(getMemorizeDuration(29)).toBe(6000);
+        // Per-tile budget × the curve's default board: 6 tiles at floor 1, 14 at floor 3, 34 at
+        // floor 29, which the tempered curve keeps under the cap.
+        expect(getMemorizeDuration(1)).toBe(1950);
+        expect(getMemorizeDuration(1.9)).toBe(1950);
+        expect(getMemorizeDuration(3)).toBe(4214);
+        expect(getMemorizeDuration(29)).toBe(3740);
+        expect(getMemorizeDuration(29)).toBe(getMemorizePerTileBudget(29) * pairsForFloor(29) * 2);
         // A real board wins over the default size: a 10-tile floor 3 gets its own budget.
         expect(getMemorizeDuration(3, 10)).toBe(3010);
-        expect(getMemorizeDuration(Number.NaN)).toBe(1300);
-        expect(getMemorizeDuration(Number.POSITIVE_INFINITY)).toBe(1300);
+        expect(getMemorizeDuration(Number.NaN)).toBe(1950);
+        expect(getMemorizeDuration(Number.POSITIVE_INFINITY)).toBe(1950);
 
         // Run modifiers apply on top of the real board's budget (the level-1 board carries a wild tile).
         const short = createNewRun(0, { activeMutators: ['short_memorize'] });

@@ -177,8 +177,8 @@ describe('tileBoardRows', () => {
 
     it('marks hidden cards that have actionable trait combo routes', () => {
         const b = board([
-            tile('echo-a', 'echo', 'hidden', { tileTraitKind: 'echo' }),
-            tile('sealed-a', 'sealed', 'hidden', { tileTraitKind: 'sealed' }),
+            tile('conduit-a', 'conduit', 'hidden', { tileTraitKind: 'conduit' }),
+            tile('heavy-a', 'heavy', 'hidden', { tileTraitKind: 'heavy' }),
             tile('plain-a', 'plain')
         ]);
 
@@ -189,18 +189,19 @@ describe('tileBoardRows', () => {
         expect(result.map((row) => row.traitRouteBeatTier)).toEqual(['route', 'route', null]);
         expect(result.map((row) => row.traitRouteCadence)).toEqual(['route', 'route', 'none']);
         expect(result.map((row) => row.traitRouteCadenceAction)).toEqual(['Match route', 'Match route', null]);
-        expect(result[0]!.traitInteractionPreviewLines).toContain('Echo + Sealed: combo shard');
-        expect(result[0]!.traitLaneBack).toBe('shard');
+        expect(result[0]!.traitInteractionPreviewLines).toContain('Conduit: adjacent trait charge');
+        expect(result[0]!.traitLaneBack).toBe('tool');
+        // Heavy is lit by the Conduit beside it but previews nothing of its own, so it carries no lane.
         expect(result[1]!.traitLaneBack).toBeNull();
         expect(result[2]!.traitLaneBack).toBeNull();
     });
 
     it('marks hidden trait cards as combo surge cards when multiple trait routes are live', () => {
         const b = board([
+            tile('conduit-a', 'conduit', 'hidden', { tileTraitKind: 'conduit' }),
             tile('echo-a', 'echo', 'hidden', { tileTraitKind: 'echo' }),
-            tile('sealed-a', 'sealed', 'hidden', { tileTraitKind: 'sealed' }),
-            tile('mirror-a', 'mirror', 'hidden', { tileTraitKind: 'mirror' }),
-            tile('conduit-a', 'conduit', 'hidden', { tileTraitKind: 'conduit' })
+            tile('stasis-a', 'stasis', 'hidden', { tileTraitKind: 'stasis' }),
+            tile('relay-a', 'relay', 'hidden', { tileTraitKind: 'conduit' })
         ]);
 
         const result = rows({ board: b });
@@ -215,32 +216,36 @@ describe('tileBoardRows', () => {
             'Route surge',
             'Route surge'
         ]);
-        expect(result.map((row) => row.traitLaneBack)).toEqual(['shard', 'shard', null, 'shard']);
+        expect(result.map((row) => row.traitLaneBack)).toEqual(['shard', null, null, 'shard']);
     });
 
-    it('derives guard lane markers from per-card mirror and stasis interaction previews', () => {
+    it('derives block and tool lane markers from per-card stasis and conduit interaction previews', () => {
+        // Two full pairs stay hidden so the Stasis block is allowed to stand.
         const b = board([
-            tile('mirror-a', 'mirror', 'hidden', { tileTraitKind: 'mirror' }),
             tile('stasis-a', 'stasis', 'hidden', { tileTraitKind: 'stasis' }),
-            tile('plain-a', 'plain')
+            tile('conduit-a', 'conduit', 'hidden', { tileTraitKind: 'conduit' }),
+            tile('x1', 'x'),
+            tile('x2', 'x'),
+            tile('y1', 'y'),
+            tile('y2', 'y')
         ]);
 
         const result = rows({ board: b });
 
-        expect(result.map((row) => row.traitComboBack)).toEqual([true, true, false]);
-        expect(result.map((row) => row.traitLaneBack)).toEqual(['guard', null, null]);
+        expect(result.map((row) => row.traitComboBack)).toEqual([true, true, false, false, false, false]);
+        expect(result.map((row) => row.traitLaneBack)).toEqual(['block', 'tool', null, null, null, null]);
     });
 
     it('marks ready trait cards as chain reward hot when the board model supplies hot ids', () => {
         const b = board([
-            tile('echo-a', 'echo', 'hidden', { tileTraitKind: 'echo' }),
-            tile('sealed-a', 'sealed', 'hidden', { tileTraitKind: 'sealed' }),
+            tile('conduit-a', 'conduit', 'hidden', { tileTraitKind: 'conduit' }),
+            tile('heavy-a', 'heavy', 'hidden', { tileTraitKind: 'heavy' }),
             tile('plain-a', 'plain')
         ]);
 
         const result = rows({
             board: b,
-            traitRewardHotTileIds: new Set(['echo-a', 'sealed-a'])
+            traitRewardHotTileIds: new Set(['conduit-a', 'heavy-a'])
         });
 
         expect(result.map((row) => row.traitRewardHotBack)).toEqual([true, true, false]);
@@ -253,16 +258,16 @@ describe('tileBoardRows', () => {
     it('marks setup and follow-up card beat tiers without needing HUD aggregation', () => {
         const b = board(
             [
-                tile('echo-a', 'echo', 'flipped', { tileTraitKind: 'echo' }),
-                tile('sealed-a', 'sealed', 'hidden', { tileTraitKind: 'sealed' }),
+                tile('conduit-a', 'conduit', 'flipped', { tileTraitKind: 'conduit' }),
+                tile('heavy-a', 'heavy', 'hidden', { tileTraitKind: 'heavy' }),
                 tile('route-a', 'route', 'hidden')
             ],
-            { flippedTileIds: ['echo-a'] }
+            { flippedTileIds: ['conduit-a'] }
         );
 
         const result = rows({
             board: b,
-            selectedTraitFollowupTileIds: new Set(['sealed-a']),
+            selectedTraitFollowupTileIds: new Set(['heavy-a']),
             traitRouteTargetTileIds: new Set(['route-a'])
         });
 
@@ -274,30 +279,30 @@ describe('tileBoardRows', () => {
 
     it('marks the hidden matching mate as a selected trait followup after one combo trait card is flipped', () => {
         const b = board([
-            tile('echo-a', 'echo', 'flipped', { tileTraitKind: 'echo' }),
-            tile('sealed-a', 'sealed', 'hidden', { tileTraitKind: 'sealed' }),
-            tile('echo-b', 'echo', 'hidden', { tileTraitKind: 'echo' }),
+            tile('conduit-a', 'conduit', 'flipped', { tileTraitKind: 'conduit' }),
+            tile('echo-a', 'echo', 'hidden', { tileTraitKind: 'echo' }),
+            tile('conduit-b', 'conduit', 'hidden', { tileTraitKind: 'conduit' }),
             tile('plain-a', 'plain')
         ]);
 
-        const result = rows({ board: { ...b, flippedTileIds: ['echo-a'] } });
+        const result = rows({ board: { ...b, flippedTileIds: ['conduit-a'] } });
 
         expect(result.map((row) => row.selectedTraitFollowupBack)).toEqual([false, false, true, false]);
     });
 
     it('carries semantic trait lane labels and actions for hidden payoff routes', () => {
         const b = board([
-            tile('echo-a', 'echo', 'hidden', { tileTraitKind: 'echo' }),
-            tile('sealed-a', 'sealed', 'hidden', { tileTraitKind: 'sealed' }),
+            tile('conduit-a', 'conduit', 'hidden', { tileTraitKind: 'conduit' }),
+            tile('heavy-a', 'heavy', 'hidden', { tileTraitKind: 'heavy' }),
             tile('plain-a', 'plain')
         ]);
 
         const result = rows({ board: b });
 
         expect(result[0]).toMatchObject({
-            traitLaneAction: 'Cash shard',
-            traitLaneBack: 'shard',
-            traitLaneLabel: 'Shard'
+            traitLaneAction: 'Use tool',
+            traitLaneBack: 'tool',
+            traitLaneLabel: 'Tool'
         });
         expect(result[1]).toMatchObject({
             traitLaneAction: null,
@@ -313,7 +318,7 @@ describe('tileBoardRows', () => {
 
     it('marks plain hidden cards that are swap targets for trait chain setup', () => {
         const b = board([
-            tile('sealed-a', 'sealed', 'hidden', { tileTraitKind: 'sealed' }),
+            tile('conduit-a', 'conduit', 'hidden', { tileTraitKind: 'conduit' }),
             tile('plain-a', 'plain'),
             tile('origin-a', 'origin'),
             tile('heavy-a', 'heavy', 'hidden', { tileTraitKind: 'heavy' })
@@ -321,7 +326,7 @@ describe('tileBoardRows', () => {
 
         const result = rows({
             board: b,
-            traitRouteTargetTileIds: new Set(['sealed-a', 'plain-a'])
+            traitRouteTargetTileIds: new Set(['conduit-a', 'plain-a'])
         });
 
         expect(result.map((row) => row.traitRouteTargetBack)).toEqual([true, true, false, false]);

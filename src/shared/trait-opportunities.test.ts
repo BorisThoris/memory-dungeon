@@ -35,48 +35,52 @@ const board = (tiles: Tile[]): BoardState =>
 describe('trait opportunities', () => {
     it('summarizes actionable trait tiles, interaction lines, build labels, and reward reason', () => {
         const b = board([
-            tile('echo-a', 'echo', { tileTraitKind: 'echo' }),
-            tile('sealed-a', 'sealed', { tileTraitKind: 'sealed' }),
+            tile('conduit-a', 'conduit', { tileTraitKind: 'conduit' }),
+            tile('heavy-a', 'heavy', { tileTraitKind: 'heavy' }),
             tile('plain-a', 'plain'),
             tile('plain-b', 'plain')
         ]);
 
         const summary = getTraitOpportunitySummary(b);
 
-        expect(summary.tiles.map((row) => row.tileId)).toEqual(['echo-a', 'sealed-a']);
-        expect(summary.tiles.map((row) => row.label)).toEqual(['echo-a', 'sealed-a']);
-        expect(summary.interactionLines).toEqual(expect.arrayContaining(['Echo + Sealed: combo shard']));
+        // Heavy previews nothing of its own; it is listed because the Conduit beside it pays for it.
+        expect(summary.tiles.map((row) => row.tileId)).toEqual(['conduit-a', 'heavy-a']);
+        expect(summary.tiles.map((row) => row.label)).toEqual(['conduit-a', 'heavy-a']);
+        expect(summary.interactionLines).toEqual(['Conduit: adjacent trait charge']);
         expect(summary.reason).toContain('Offered for current trait route');
-        expect([...getTraitOpportunityTileIds(b)]).toEqual(['echo-a', 'sealed-a']);
+        expect([...getTraitOpportunityTileIds(b)]).toEqual(['conduit-a', 'heavy-a']);
         expect([...getTraitComboSurgeTileIds(b)]).toEqual([]);
         expect(getTraitOpportunityHighlight(b)).toMatchObject({
             active: true,
             buildLabel: '2 combo-ready cards',
             headline: 'Chain route ready',
-            primaryLine: 'Echo + Sealed: combo shard',
+            primaryLine: 'Conduit: adjacent trait charge',
             secondaryLine: null,
-            tileIds: ['echo-a', 'sealed-a'],
+            tileIds: ['conduit-a', 'heavy-a'],
             tone: 'ready'
         });
     });
 
     it('marks trait opportunities as combo-surge cards when multiple route interactions are live', () => {
         const b = board([
+            tile('conduit-a', 'conduit', { tileTraitKind: 'conduit' }),
             tile('echo-a', 'echo', { tileTraitKind: 'echo' }),
-            tile('sealed-a', 'sealed', { tileTraitKind: 'sealed' }),
-            tile('mirror-a', 'mirror', { tileTraitKind: 'mirror' }),
-            tile('conduit-a', 'conduit', { tileTraitKind: 'conduit' })
+            tile('stasis-a', 'stasis', { tileTraitKind: 'stasis' }),
+            tile('heavy-a', 'heavy', { tileTraitKind: 'heavy' })
         ]);
 
-        expect(getTraitOpportunitySummary(b).interactionLines).toEqual(
-            expect.arrayContaining(['Echo + Sealed: combo shard', 'Sealed + Conduit: shard spark'])
-        );
-        expect([...getTraitComboSurgeTileIds(b)]).toEqual(['echo-a', 'sealed-a', 'mirror-a', 'conduit-a']);
+        expect(getTraitOpportunitySummary(b).interactionLines).toEqual([
+            'Conduit: adjacent trait charge',
+            'Conduit + Echo: peek spark',
+            'Conduit + Stasis: lock pulse'
+        ]);
+        // Heavy sits beside Echo and Stasis, neither of which previews anything, so it stays unlit.
+        expect([...getTraitComboSurgeTileIds(b)]).toEqual(['conduit-a', 'echo-a', 'stasis-a']);
         expect(getTraitOpportunityHighlight(b)).toMatchObject({
             active: true,
             headline: 'Combo surge ready',
-            primaryLine: 'Echo + Sealed: combo shard',
-            secondaryLine: 'Echo + Mirror: recall focus',
+            primaryLine: 'Conduit: adjacent trait charge',
+            secondaryLine: 'Conduit + Echo: peek spark',
             tone: 'surge'
         });
     });
@@ -84,8 +88,8 @@ describe('trait opportunities', () => {
     it('builds a compact HUD model with route count, first route, and routing tools', () => {
         const model = getTraitOpportunityHudModel(
             board([
-                tile('echo-a', 'echo', { tileTraitKind: 'echo' }),
-                tile('sealed-a', 'sealed', { tileTraitKind: 'sealed' })
+                tile('conduit-a', 'conduit', { tileTraitKind: 'conduit' }),
+                tile('heavy-a', 'heavy', { tileTraitKind: 'heavy' })
             ]),
             {
                 peekCharges: 1,
@@ -97,16 +101,16 @@ describe('trait opportunities', () => {
         expect(model).toMatchObject({
             active: true,
             buildLabel: '2 combo-ready cards',
-            primaryLine: 'Echo + Sealed: combo shard',
+            primaryLine: 'Conduit: adjacent trait charge',
             routeCountLabel: '1 route',
             toolLine: 'Tools: row/swap 2, peek 1, shuffle 0'
         });
-        expect(model.title).toContain('Routes: Echo + Sealed: combo shard.');
+        expect(model.title).toContain('Routes: Conduit: adjacent trait charge.');
     });
 
     it('finds swap hints that would create new trait routes when routing tools are available', () => {
         const b = board([
-            tile('sealed-a', 'sealed', { tileTraitKind: 'sealed' }),
+            tile('conduit-a', 'conduit', { tileTraitKind: 'conduit' }),
             tile('plain-a', 'plain'),
             tile('origin-a', 'origin'),
             tile('heavy-a', 'heavy', { tileTraitKind: 'heavy' })
@@ -114,14 +118,13 @@ describe('trait opportunities', () => {
 
         expect(getTraitSwapRouteHints(b, 1)).toEqual([
             {
-                firstTileId: 'sealed-a',
+                firstTileId: 'conduit-a',
                 secondTileId: 'plain-a',
-                firstLabel: 'sealed-a',
+                firstLabel: 'conduit-a',
                 secondLabel: 'plain-a',
-                createdLines: ['Sealed + Heavy: score surge'],
-                matchCreatedLines: ['Sealed + Heavy: score surge'],
+                createdLines: ['Conduit: adjacent trait charge'],
                 brokenLines: [],
-                text: 'Swap sealed-a with plain-a: Sealed + Heavy: score surge'
+                text: 'Swap conduit-a with plain-a: Conduit: adjacent trait charge'
             }
         ]);
         expect(
@@ -133,24 +136,24 @@ describe('trait opportunities', () => {
         ).toMatchObject({
             active: true,
             buildLabel: 'Route prime',
-            primaryLine: 'Swap sealed-a with plain-a: Sealed + Heavy: score surge',
+            primaryLine: 'Swap conduit-a with plain-a: Conduit: adjacent trait charge',
             routeCountLabel: 'setup',
-            title: expect.stringContaining('Swap hint: Swap sealed-a with plain-a: Sealed + Heavy: score surge.')
+            title: expect.stringContaining('Swap hint: Swap conduit-a with plain-a: Conduit: adjacent trait charge.')
         });
         expect(getTraitOpportunityHighlight(b)).toMatchObject({
             active: true,
             buildLabel: 'Route prime',
             headline: 'One swap primes route',
-            primaryLine: 'Swap sealed-a with plain-a: Sealed + Heavy: score surge',
+            primaryLine: 'Swap conduit-a with plain-a: Conduit: adjacent trait charge',
             secondaryLine: null,
-            tileIds: ['sealed-a', 'plain-a'],
+            tileIds: ['conduit-a', 'plain-a'],
             tone: 'setup'
         });
     });
 
     it('does not advertise swap-created setup routes when a no-shuffle contract locks row/swap tools', () => {
         const b = board([
-            tile('sealed-a', 'sealed', { tileTraitKind: 'sealed' }),
+            tile('conduit-a', 'conduit', { tileTraitKind: 'conduit' }),
             tile('plain-a', 'plain'),
             tile('origin-a', 'origin'),
             tile('heavy-a', 'heavy', { tileTraitKind: 'heavy' })
@@ -175,8 +178,8 @@ describe('trait opportunities', () => {
 
     it('ignores matched and removed trait cards so stale combos do not drive rewards', () => {
         const b = board([
-            tile('echo-a', 'echo', { state: 'matched', tileTraitKind: 'echo' }),
-            tile('sealed-a', 'sealed', { state: 'removed', tileTraitKind: 'sealed' })
+            tile('conduit-a', 'conduit', { state: 'matched', tileTraitKind: 'conduit' }),
+            tile('echo-a', 'echo', { state: 'removed', tileTraitKind: 'echo' })
         ]);
 
         expect(getTraitOpportunitySummary(b)).toEqual({
@@ -194,13 +197,13 @@ describe('trait opportunities', () => {
 
     it('marks hidden mate cards as selected trait followups after one comboable trait card is flipped', () => {
         const b = board([
-            tile('echo-a', 'echo', { state: 'flipped', tileTraitKind: 'echo' }),
-            tile('sealed-a', 'sealed', { tileTraitKind: 'sealed' }),
-            tile('echo-b', 'echo', { tileTraitKind: 'echo' }),
+            tile('conduit-a', 'conduit', { state: 'flipped', tileTraitKind: 'conduit' }),
+            tile('echo-a', 'echo', { tileTraitKind: 'echo' }),
+            tile('conduit-b', 'conduit', { tileTraitKind: 'conduit' }),
             tile('plain-a', 'plain')
         ]);
 
-        expect([...getSelectedTraitFollowupTileIds({ ...b, flippedTileIds: ['echo-a'] })]).toEqual(['echo-b']);
+        expect([...getSelectedTraitFollowupTileIds({ ...b, flippedTileIds: ['conduit-a'] })]).toEqual(['conduit-b']);
         expect([...getSelectedTraitFollowupTileIds({ ...b, flippedTileIds: [] })]).toEqual([]);
         expect([
             ...getSelectedTraitFollowupTileIds({
@@ -219,43 +222,43 @@ describe('trait opportunities', () => {
 
     it('explains whether a tile swap creates or breaks a trait route', () => {
         const b = board([
-            tile('sealed-a', 'sealed', { tileTraitKind: 'sealed' }),
+            tile('conduit-a', 'conduit', { tileTraitKind: 'conduit' }),
             tile('plain-a', 'plain'),
             tile('origin-a', 'origin'),
             tile('heavy-a', 'heavy', { tileTraitKind: 'heavy' })
         ]);
 
-        expect(getTraitSwapOpportunityPreview(b, 'origin-a', 'sealed-a')).toMatchObject({
-            createdLines: ['Sealed + Heavy: score surge'],
-            matchCreatedLines: ['Sealed + Heavy: score surge'],
-            routeText: 'Creates trait route: Sealed + Heavy: score surge'
+        expect(getTraitSwapOpportunityPreview(b, 'origin-a', 'conduit-a')).toMatchObject({
+            createdLines: ['Conduit: adjacent trait charge'],
+            routeText: 'Creates trait route: Conduit: adjacent trait charge'
         });
         expect(
             getTraitSwapOpportunityPreview(
                 board([
-                    tile('echo-a', 'echo', { tileTraitKind: 'echo' }),
-                    tile('sealed-a', 'sealed', { tileTraitKind: 'sealed' }),
+                    tile('conduit-a', 'conduit', { tileTraitKind: 'conduit' }),
+                    tile('heavy-a', 'heavy', { tileTraitKind: 'heavy' }),
                     tile('plain-a', 'plain'),
                     tile('plain-b', 'plain')
                 ]),
-                'sealed-a',
+                'heavy-a',
                 'plain-b'
             ).routeText
-        ).toBe('Breaks trait route: Echo + Sealed: combo shard');
+        ).toBe('Breaks trait route: Conduit: adjacent trait charge');
     });
 
-    it('does not offer proactive swap hints for mismatch-only route creation', () => {
+    it('offers no swap hint when no arrangement of the traits on the board lights a route', () => {
+        // Echo and Heavy pay on their own match; with no Conduit or Stasis there is nothing to prime.
         const b = board([
-            tile('sealed-a', 'sealed', { tileTraitKind: 'sealed' }),
+            tile('echo-a', 'echo', { tileTraitKind: 'echo' }),
             tile('plain-a', 'plain'),
             tile('origin-a', 'origin'),
-            tile('stasis-a', 'stasis', { tileTraitKind: 'stasis' })
+            tile('heavy-a', 'heavy', { tileTraitKind: 'heavy' })
         ]);
 
-        expect(getTraitSwapOpportunityPreview(b, 'plain-a', 'sealed-a')).toMatchObject({
-            createdLines: ['Stasis buffered Sealed'],
-            matchCreatedLines: []
+        expect(getTraitSwapRouteHints(b, 3)).toEqual([]);
+        expect(getTraitSwapOpportunityPreview(b, 'plain-a', 'echo-a')).toMatchObject({
+            createdLines: [],
+            routeText: null
         });
-        expect(getTraitSwapRouteHints(b, 1)).toEqual([]);
     });
 });

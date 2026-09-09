@@ -35,8 +35,7 @@ describe('createRunSummary', () => {
                 findablesTotalThisFloor: 2,
                 stats: {
                     ...run.stats,
-                    mismatches: 1,
-                    volatileTraitShuffles: 2
+                    mismatches: 1
                 }
             },
             []
@@ -45,7 +44,7 @@ describe('createRunSummary', () => {
         expect(summarized.lastRunSummary).toMatchObject({
             payoffPickupClaimed: 2,
             payoffPickupTotal: 2,
-            payoffPressureExtra: 3
+            payoffPressureExtra: 1
         });
     });
 
@@ -61,9 +60,9 @@ describe('createRunSummary', () => {
                 runSeed: 0xcafe
             })
         );
-        const command = createGameplayDefinitionCommand('summary-guard', 'trait.volatile_heavy_guard', {
-            matchedTraits: ['volatile'],
-            adjacentTraits: ['heavy']
+        const command = createGameplayDefinitionCommand('summary-peek', 'trait.conduit_echo_peek', {
+            matchedTraits: ['conduit'],
+            adjacentTraits: ['echo']
         });
         const commandResult = reduceGameplayCommand(run, command);
         const journaledRun = appendGameplayJournal(commandResult.run, [command], commandResult.events);
@@ -98,8 +97,7 @@ describe('createRunSummary', () => {
                     highestLevel: Number.POSITIVE_INFINITY,
                     bestStreak: 3.9,
                     perfectClears: 5,
-                    mismatches: Number.NaN,
-                    volatileTraitShuffles: 2.8
+                    mismatches: Number.NaN
                 }
             } as unknown as RunState,
             []
@@ -114,7 +112,7 @@ describe('createRunSummary', () => {
             perfectClears: 1,
             payoffPickupClaimed: 2,
             payoffPickupTotal: 2,
-            payoffPressureExtra: 2,
+            payoffPressureExtra: 0,
             activeMutators: []
         });
     });

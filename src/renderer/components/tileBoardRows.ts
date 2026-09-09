@@ -236,7 +236,7 @@ export const buildTileBoardRows = ({
         });
 
         const traitInteractionPreviewLines = traitOpportunity?.previewLines ?? [];
-        const traitLanePreviewLines = !faceUp ? getTileTraitInteractionPreviewLines(board, [tile.id], 'match') : [];
+        const traitLanePreviewLines = !faceUp ? getTileTraitInteractionPreviewLines(board, [tile.id]) : [];
         const traitLaneBack = buildTraitInteractionLaneMap(traitLanePreviewLines)[0]?.id ?? null;
         const selectedTraitFollowupBack = selectedTraitFollowupTileIdSet.has(tile.id) && !faceUp;
         const traitComboBack = Boolean(traitOpportunity && !faceUp);

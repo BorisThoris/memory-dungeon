@@ -35,12 +35,6 @@ export function mismatchFloaterRecoveryHint(traitInteractionTexts: readonly stri
     if (text.includes('blocked') || text.includes('lock')) {
         return 'Next - choose another opener';
     }
-    if (text.includes('volatile') || text.includes('cursed')) {
-        return 'Recover - peek or route away';
-    }
-    if (text.includes('sealed')) {
-        return 'Recover - peek before Sealed';
-    }
     return 'Recover - prime with tools';
 }
 

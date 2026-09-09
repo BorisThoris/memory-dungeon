@@ -46,14 +46,14 @@ describe('pure gameplay effect transition', () => {
         const initial = run();
         const command = createGameplayDefinitionCommand(
             'effect-parity-accepted',
-            'trait.volatile_heavy_guard',
-            { matchedTraits: ['volatile'], adjacentTraits: ['heavy'] }
+            'trait.conduit_echo_peek',
+            { matchedTraits: ['conduit'], adjacentTraits: ['echo'] }
         );
         const pure = applyPure(initial, command);
         const core = reduceGameplayCommand(initial, command);
 
         expect(pure).toMatchObject({ accepted: true, rejectionReason: null });
-        expect(pure.run.stats.guardTokens).toBe(1);
+        expect(pure.run.peekCharges).toBe(initial.peekCharges + 1);
         expect({ run: pure.run, events: pure.events, accepted: pure.accepted }).toEqual({
             run: core.run,
             events: core.events,
@@ -67,14 +67,14 @@ describe('pure gameplay effect transition', () => {
         const initial = run();
         const command = createGameplayDefinitionCommand(
             'effect-parity-rejected',
-            'trait.volatile_heavy_guard',
-            { matchedTraits: ['volatile'], adjacentTraits: ['echo'] }
+            'trait.conduit_echo_peek',
+            { matchedTraits: ['conduit'], adjacentTraits: ['heavy'] }
         );
         const pure = applyPure(initial, command);
         const core = reduceGameplayCommand(initial, command);
 
         expect(pure).toMatchObject({ accepted: false, run: initial });
-        expect(pure.rejectionReason).toContain('heavy was not adjacent');
+        expect(pure.rejectionReason).toContain('echo was not adjacent');
         expect({ run: pure.run, events: pure.events, accepted: pure.accepted }).toEqual({
             run: core.run,
             events: core.events,

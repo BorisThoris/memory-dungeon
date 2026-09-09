@@ -1,5 +1,4 @@
 import {
-    DEFAULT_PAIR_COUNT_CAP,
     MATCH_DELAY_MS,
     MEMORIZE_BASE_MS,
     MEMORIZE_DECAY_EVERY_N_LEVELS,
@@ -15,6 +14,7 @@ import {
 } from './contracts';
 import { hasMutator } from './mutators';
 import { runFiniteNumber, runFiniteNumberOrFallback, runNonNegativeInteger } from './run-number-guards';
+import { pairsForFloor } from './pair-curve';
 import { DECOY_PAIR_KEY, isWildPairKey } from './tile-identity';
 
 const ECHO_EXTRA_RESOLVE_MS = 380;
@@ -56,11 +56,8 @@ export const getMemorizePerTileBudget = (level: number): number => {
     return Math.max(MEMORIZE_PER_TILE_MIN_MS, MEMORIZE_PER_TILE_BASE_MS - MEMORIZE_PER_TILE_STEP_MS * (safeLevel - 1));
 };
 
-/** Tile count a floor builds before encounter deltas: (level + 1) pairs, capped by the symbol catalog. */
-export const getDefaultTileCount = (level: number): number => {
-    const safeLevel = Math.max(1, runNonNegativeInteger(level));
-    return Math.min(DEFAULT_PAIR_COUNT_CAP, Math.max(2, safeLevel + 1)) * 2;
-};
+/** Tile count a floor builds by default: the pair curve's pairs for the floor, two tiles each. */
+export const getDefaultTileCount = (level: number): number => pairsForFloor(Math.max(1, runNonNegativeInteger(level))) * 2;
 
 /**
  * Memorize window for a floor: per-tile budget × tiles, clamped to [MEMORIZE_MIN_MS, MEMORIZE_MAX_MS].

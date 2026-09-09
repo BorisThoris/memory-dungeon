@@ -180,11 +180,13 @@ export const POP_REACH_BANDS = {
     /**
      * The ladder. Every rung has to be worth climbing, and the whole climb has to be worth
      * something - the two ways a chain ladder fails, and the game had shipped both. `minStep` is
-     * set below the thinnest rung the shipped ladder has (Sharp, at 0.39 pairs) rather than at a
-     * round number: it is a ratchet against the 0.01 that rung used to pay, not a target to tune
-     * toward.
+     * set below the thinnest rung the shipped ladder has rather than at a round number: it is a
+     * ratchet against the 0.01 that rung used to pay, not a target to tune toward. Sharp paid 0.39
+     * over Clean on the linear curve and 0.30 on the tempered one (Gen 179): the early floors are
+     * bigger but still one or two suits, so Clean's two waves sweep most of what Sharp's reaction
+     * could reach. The severance drop (thesis §37.3) is the rung that gives Sharp something back.
      */
-    ladderMinStep: { min: 0.3 },
+    ladderMinStep: { min: 0.25 },
     /** Fever over a lone match. Was 1.66 before the reach ladder and the bigger suits. */
     ladderSpread: { min: 2.2 }
 } as const;

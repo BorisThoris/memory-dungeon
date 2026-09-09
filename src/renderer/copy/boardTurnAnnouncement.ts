@@ -14,15 +14,6 @@ const chainRewardAnnouncementLine = (streak: number, comboShards: number, lives:
 };
 
 /**
- * The volatile trait reshuffling hidden cards. Reported from the event so the announcer
- * never has to diff a run-stats counter it also renders.
- */
-export const volatileShuffleAnnouncementLine = (turnEvent: BoardTurnResolvedEvent): string | null =>
-    turnEvent.announcement.volatileTraitShufflesAfter > turnEvent.announcement.volatileTraitShufflesBefore
-        ? 'Volatile trait shuffled hidden cards.'
-        : null;
-
-/**
  * Chain-milestone announcement for a turn that crossed a threshold, derived from the
  * streak the core reported rather than from a remembered previous streak.
  */

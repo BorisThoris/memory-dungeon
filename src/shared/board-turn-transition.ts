@@ -1,7 +1,6 @@
 import {
     MAX_COMBO_SHARDS,
     MAX_GUARD_TOKENS,
-    RECALL_FOCUS_MAX,
     type BoardState,
     type FindableKind,
     type RunState,
@@ -171,10 +170,7 @@ export const createResolveBoardTurnTransition = ({
         const survivalReward = calculateResolvedMatchSurvivalReward({
             currentStreak: scoring.currentStreak,
             findableComboShardGain:
-                resolvedFindableComboShardGain +
-                traitReward.comboShardGain +
-                chunkBreak.comboShardGain +
-                chunkFindable.comboShardGain,
+                resolvedFindableComboShardGain + chunkBreak.comboShardGain + chunkFindable.comboShardGain,
             run
         });
         execution?.traitInteractionTags?.push(...traitReward.interactionTags);
@@ -230,15 +226,16 @@ export const createResolveBoardTurnTransition = ({
             powersUsedThisRun: usedWild ? true : run.powersUsedThisRun,
             wildMatchesRemaining: runNonNegativeInteger(journaledRun.wildMatchesRemaining),
             peekCharges: runNonNegativeInteger(run.peekCharges) + runNonNegativeInteger(traitReward.peekChargeGain),
-            shuffleCharges: runNonNegativeInteger(run.shuffleCharges) + runNonNegativeInteger(traitReward.shuffleChargeGain),
-            regionShuffleCharges:
-                runNonNegativeInteger(run.regionShuffleCharges) + runNonNegativeInteger(traitReward.regionShuffleChargeGain),
-            flashPairCharges: runNonNegativeInteger(run.flashPairCharges) + runNonNegativeInteger(traitReward.flashPairChargeGain),
+            // No trait pays in these any more; they are carried through normalized, as every other
+            // counter a resolved match writes back is.
+            shuffleCharges: runNonNegativeInteger(run.shuffleCharges),
+            regionShuffleCharges: runNonNegativeInteger(run.regionShuffleCharges),
+            flashPairCharges: runNonNegativeInteger(run.flashPairCharges),
             nBackMatchCounter: followup.nBackMatchCounter,
             nBackAnchorPairKey: followup.nBackAnchorPairKey,
             matchedPairKeysThisRun: [...runStringArray(run.matchedPairKeysThisRun), scoring.encoreKey],
             pinnedTileIds: boardCleanup.pinnedTileIds,
-            recallFocus: Math.min(RECALL_FOCUS_MAX, boardCleanup.recallFocus + traitReward.recallFocusGain),
+            recallFocus: boardCleanup.recallFocus,
             recallMatchesThisFloor: boardCleanup.recallMatchesThisFloor,
             recallBonusScoreThisFloor: boardCleanup.recallBonusScoreThisFloor,
             forgottenTileIdsThisFloor: boardCleanup.forgottenTileIdsThisFloor,
@@ -253,10 +250,7 @@ export const createResolveBoardTurnTransition = ({
                 currentStreak: runNonNegativeInteger(scoring.currentStreak),
                 bestStreak: Math.max(runNonNegativeInteger(stats.bestStreak), runNonNegativeInteger(scoring.currentStreak)),
                 highestLevel: Math.max(runNonNegativeInteger(stats.highestLevel), runNonNegativeInteger(board.level)),
-                guardTokens: Math.min(
-                    MAX_GUARD_TOKENS,
-                    runNonNegativeInteger(survivalReward.guardTokens) + runNonNegativeInteger(traitReward.guardTokenGain)
-                ),
+                guardTokens: Math.min(MAX_GUARD_TOKENS, runNonNegativeInteger(survivalReward.guardTokens)),
                 comboShards: Math.min(MAX_COMBO_SHARDS, runNonNegativeInteger(survivalReward.comboShards)),
                 tileTraitMatches: addTileTraitCountStats(stats.tileTraitMatches, [firstTile, secondTile])
             },

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { GAME_RULES_VERSION, type FloorArchetypeId, type Tile } from './contracts';
 import { buildBoard } from './board-build-rules';
+import { pairsForFloor } from './pair-curve';
 
 const tile = (id: string, pairKey: string): Tile => ({
     id,
@@ -50,6 +51,7 @@ describe('board build rules', () => {
                         }
                         expect([...counts.entries()].filter(([, count]) => count !== 2), where).toEqual([]);
                         expect(counts.size, where).toBe(board.pairCount);
+                        expect(board.pairCount, where).toBe(pairsForFloor(level));
                         expect(board.tiles.filter((boardTile) => boardTile.pairKey.startsWith('__')), where).toEqual([]);
                     }
                 }

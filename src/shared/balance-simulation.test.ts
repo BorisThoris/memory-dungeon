@@ -75,12 +75,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
                 'trait_board_power_interaction_floor_share',
                 'dead_trait_floor_share',
                 'tile_trait_share_echo',
-                'tile_trait_share_volatile',
-                'tile_trait_share_mirror',
-                'tile_trait_share_cursed',
-                'tile_trait_share_sealed',
                 'tile_trait_share_heavy',
-                'tile_trait_share_drift',
                 'tile_trait_share_conduit',
                 'tile_trait_share_stasis',
                 'findable_share_shard_spark',
@@ -181,16 +176,13 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             expect(result.aggregate.traitSwapSetupOpportunities).toBeGreaterThan(0);
 
             const shares = getTileTraitKindShares(result.aggregate.tileTraitKindCounts);
+            // Four kinds share the pool; the seeds lean on Conduit because it is the trait that pays
+            // for a neighbour, so it may sit above an even quarter and the others a little below.
             const bounds: Record<TileTraitKind, { min: number; max: number }> = {
-                echo: { min: 0.06, max: 0.35 },
-                volatile: { min: 0.05, max: 0.35 },
-                mirror: { min: 0.05, max: 0.35 },
-                cursed: { min: 0.04, max: 0.28 },
-                sealed: { min: 0.04, max: 0.28 },
-                heavy: { min: 0.04, max: 0.28 },
-                drift: { min: 0.04, max: 0.28 },
-                conduit: { min: 0.08, max: 0.35 },
-                stasis: { min: 0.04, max: 0.28 }
+                echo: { min: 0.12, max: 0.4 },
+                heavy: { min: 0.12, max: 0.4 },
+                conduit: { min: 0.2, max: 0.5 },
+                stasis: { min: 0.12, max: 0.4 }
             };
 
             for (const kind of BALANCE_SIMULATION_TILE_TRAIT_KINDS) {

@@ -35,8 +35,7 @@ export const getTilePosition = (index: number, columns: number): { row: number; 
 export const getTileTraitPreviewText = (board: BoardState, tile: Tile): string => {
     const opportunity = getTraitOpportunitySummary(board).tiles.find((entry) => entry.tileId === tile.id);
     const lines = opportunity?.previewLines ?? [
-        ...getTileTraitInteractionPreviewLines(board, [tile.id], 'match'),
-        ...getTileTraitInteractionPreviewLines(board, [tile.id], 'mismatch')
+        ...getTileTraitInteractionPreviewLines(board, [tile.id])
     ];
     const unique = [...new Set(lines)];
     if (unique.length === 0) {

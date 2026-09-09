@@ -8,7 +8,7 @@
  */
 export const SAVE_SCHEMA_VERSION = 8;
 /** Bump when generation rules change (tile order, mutators, pair layout). */
-export const GAME_RULES_VERSION = 36;
+export const GAME_RULES_VERSION = 37;
 export const INITIAL_LIVES = 4;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MAX_LIVES = 5;
@@ -31,8 +31,6 @@ export const MEMORIZE_PER_TILE_BASE_MS = 325;
 export const MEMORIZE_PER_TILE_STEP_MS = 12;
 export const MEMORIZE_PER_TILE_MIN_MS = 110;
 export const MEMORIZE_MAX_MS = 6000;
-/** Default pair count for a floor before encounter deltas: level + 1, capped by the symbol catalog. */
-export const DEFAULT_PAIR_COUNT_CAP = 30;
 /** Memorize time drops by MEMORIZE_STEP_MS once per this many levels (so pairs and timer do not spike together every floor). */
 export const MEMORIZE_DECAY_EVERY_N_LEVELS = 2;
 /** After a life is lost to a mismatch, this many ms are banked for the next level's memorize phase (capped). */
@@ -345,7 +343,6 @@ export interface SessionStats {
     comboShards: number;
     tileTraitMatches: Record<TileTraitKind, number>;
     tileTraitMismatches: Record<TileTraitKind, number>;
-    volatileTraitShuffles: number;
     shufflesUsed: number;
     pairsDestroyed: number;
 }
@@ -381,16 +378,7 @@ export interface LevelResult {
     momentumBonusShards?: number;
 }
 
-export type TileTraitKind =
-    | 'echo'
-    | 'volatile'
-    | 'mirror'
-    | 'cursed'
-    | 'sealed'
-    | 'heavy'
-    | 'drift'
-    | 'conduit'
-    | 'stasis';
+export type TileTraitKind = 'echo' | 'heavy' | 'conduit' | 'stasis';
 export interface RunSummary {
     totalScore: number;
     bestScore: number;

@@ -71,7 +71,7 @@ describe('seeded gameplay core simulation', () => {
         expect(first.acceptedCommandIds.length + first.rejectedCommandIds.length).toBe(384);
         expect(Object.keys(first.commandTypeCounts)).toEqual(
             expect.arrayContaining([
-                'trait.volatile_heavy_guard',
+                'trait.conduit_echo_peek',
                 'findable.shard_spark',
                 'findable.score_glint',
                 'board.peek',

@@ -11,19 +11,9 @@ import type { TileTraitKind } from './contracts';
 import { FINDABLE_REWARD_ROWS } from './findables';
 import { RUN_INVENTORY_ITEM_IDS } from './run-inventory-contracts';
 
-const TILE_TRAIT_KINDS: readonly TileTraitKind[] = [
-    'echo',
-    'volatile',
-    'mirror',
-    'cursed',
-    'sealed',
-    'heavy',
-    'drift',
-    'conduit',
-    'stasis'
-];
+const TILE_TRAIT_KINDS: readonly TileTraitKind[] = ['echo', 'heavy', 'conduit', 'stasis'];
 
-const REMOVED_MECHANIC_ID_PATTERN = /^(boss|exit|lock|room|shop|build|reward|relic|perk)\./;
+const REMOVED_MECHANIC_ID_PATTERN = /^(boss|exit|lock|room|shop|build|reward|relic|perk)\.|^trait\.(volatile|mirror|cursed|sealed|drift)$/;
 const REMOVED_MECHANIC_IDS = new Set([
     'hazard.tile_pressure',
     'hazard.enemy_patrol',
@@ -67,7 +57,7 @@ describe('gameplay interaction graph', () => {
     });
 
     it('keeps the executable graph connected and guarded', () => {
-        expect(gameplayInteractionGraph.version).toBe(31);
+        expect(gameplayInteractionGraph.version).toBe(32);
         expect(validateGameplayInteractionGraph()).toEqual([]);
     });
 
@@ -125,10 +115,6 @@ describe('gameplay interaction graph', () => {
         expect(blockers.map((mechanic) => mechanic.id)).toEqual(
             expect.arrayContaining([
                 'trait.stasis',
-                'trait.volatile',
-                'trait.cursed',
-                'trait.sealed',
-                'trait.drift',
                 'power.destroy_pair',
                 'safety.softlock_fairness',
                 'hazard.score_parasite'
@@ -190,8 +176,8 @@ describe('gameplay interaction graph', () => {
             edgeCount: gameplayInteractionGraph.edges.length,
             traitCount: TILE_TRAIT_KINDS.length
         });
-        expect(audit.blockerCount).toBe(8);
-        expect(audit.counterplayEdgeCount).toBeGreaterThanOrEqual(19);
+        expect(audit.blockerCount).toBe(4);
+        expect(audit.counterplayEdgeCount).toBeGreaterThanOrEqual(16);
         expect(audit.blockerWithoutProtectiveEdgeIds).toEqual([]);
         expect(audit.generatedFloorCoverageGapIds).toEqual(expect.arrayContaining(['trait.echo']));
         expect(audit.playerVisibleWriteWithoutHudIds).toEqual([]);

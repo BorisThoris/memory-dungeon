@@ -1,7 +1,9 @@
 import type { BoardState, RunState, TileTraitKind } from './contracts';
 import {
+    getBoardTraitInteractionPreviewKeys,
     getBoardTraitInteractionPreviewLines,
-    getTileTraitInteractionPreviewLines
+    getTileTraitInteractionPreviewLines,
+    traitInteractionPreviewKeyLines
 } from './tile-trait-rules';
 
 export interface TraitOpportunityTile {
@@ -21,7 +23,6 @@ export interface TraitOpportunitySummary {
 
 export interface TraitSwapOpportunityPreview {
     createdLines: string[];
-    matchCreatedLines: string[];
     brokenLines: string[];
     unchangedLines: string[];
     routeText: string | null;
@@ -53,14 +54,17 @@ export interface TraitSwapRouteHint {
     firstLabel: string;
     secondLabel: string;
     createdLines: string[];
-    matchCreatedLines: string[];
     brokenLines: string[];
     text: string;
 }
 
+/*
+ * A swap is judged tile by tile: the keys are `tileId|line`, so a route counts as created when a
+ * tile gains a line it did not have, even if the same line already stood elsewhere on the board.
+ * With four interaction lines in the game, a whole-board comparison would almost never see one.
+ */
 interface TraitSwapPreviewContext {
-    beforeLines: ReadonlySet<string>;
-    beforeMatchLines: ReadonlySet<string>;
+    beforeKeys: ReadonlySet<string>;
 }
 
 const unique = <T>(items: readonly T[]): T[] => [...new Set(items)];
@@ -100,11 +104,9 @@ export const getTraitOpportunitySummary = (board: BoardState | null | undefined)
         .filter((tile) => tile.tileTraitKind && tile.state !== 'matched' && tile.state !== 'removed')
         .map((tile): TraitOpportunityTile | null => {
             const previewLines = unique([
-                ...getTileTraitInteractionPreviewLines(board, [tile.id], 'match'),
-                ...getTileTraitInteractionPreviewLines(board, [tile.id], 'mismatch'),
+                ...getTileTraitInteractionPreviewLines(board, [tile.id]),
                 ...getAdjacentTileIds(board, tile.id).flatMap((neighborId) => [
-                    ...getTileTraitInteractionPreviewLines(board, [neighborId], 'match'),
-                    ...getTileTraitInteractionPreviewLines(board, [neighborId], 'mismatch')
+                    ...getTileTraitInteractionPreviewLines(board, [neighborId])
                 ])
             ]);
             if (previewLines.length === 0 || !tile.tileTraitKind) {
@@ -149,8 +151,7 @@ export const getSelectedTraitFollowupTileIds = (board: BoardState | null | undef
     }
 
     const selectedPreviewLines = [
-        ...getTileTraitInteractionPreviewLines(board, [selectedTile.id], 'match'),
-        ...getTileTraitInteractionPreviewLines(board, [selectedTile.id], 'mismatch')
+        ...getTileTraitInteractionPreviewLines(board, [selectedTile.id])
     ];
     if (selectedPreviewLines.length === 0) {
         return new Set();
@@ -196,7 +197,7 @@ export const getTraitOpportunityHighlight = (board: BoardState | null | undefine
             buildLabel: 'Route prime',
             headline: 'One swap primes route',
             primaryLine: setupHint.text,
-            secondaryLine: setupHint.matchCreatedLines[1] ?? null,
+            secondaryLine: setupHint.createdLines[1] ?? null,
             tileIds: [setupHint.firstTileId, setupHint.secondTileId],
             tone: 'setup'
         };
@@ -224,8 +225,7 @@ export const getTraitSwapRouteHints = (
     const hints: Array<TraitSwapRouteHint & { order: number }> = [];
     const seen = new Set<string>();
     const context: TraitSwapPreviewContext = {
-        beforeLines: new Set(getTraitOpportunitySummary(board).interactionLines),
-        beforeMatchLines: new Set(getBoardTraitInteractionPreviewLines(board, 'match'))
+        beforeKeys: getBoardTraitInteractionPreviewKeys(board)
     };
     let order = 0;
     for (let i = 0; i < hiddenTiles.length; i += 1) {
@@ -236,11 +236,10 @@ export const getTraitSwapRouteHints = (
                 continue;
             }
             const preview = getTraitSwapOpportunityPreviewWithContext(board, first.id, second.id, context);
-            if (preview.matchCreatedLines.length === 0) {
+            if (preview.createdLines.length === 0) {
                 continue;
             }
             const createdLines = preview.createdLines.slice(0, 2);
-            const matchCreatedLines = preview.matchCreatedLines.slice(0, 2);
             const key = `${first.id}:${second.id}:${createdLines.join('|')}`;
             if (seen.has(key)) {
                 continue;
@@ -252,9 +251,8 @@ export const getTraitSwapRouteHints = (
                 firstLabel: first.label,
                 secondLabel: second.label,
                 createdLines,
-                matchCreatedLines,
                 brokenLines: preview.brokenLines,
-                text: `Swap ${first.label} with ${second.label}: ${matchCreatedLines.join('; ')}`,
+                text: `Swap ${first.label} with ${second.label}: ${createdLines.join('; ')}`,
                 order
             });
             order += 1;
@@ -262,7 +260,6 @@ export const getTraitSwapRouteHints = (
     }
     return hints
         .sort((a, b) =>
-            b.matchCreatedLines.length - a.matchCreatedLines.length ||
             b.createdLines.length - a.createdLines.length ||
             a.brokenLines.length - b.brokenLines.length ||
             a.order - b.order
@@ -274,7 +271,6 @@ export const getTraitSwapRouteHints = (
             firstLabel: hint.firstLabel,
             secondLabel: hint.secondLabel,
             createdLines: hint.createdLines,
-            matchCreatedLines: hint.matchCreatedLines,
             brokenLines: hint.brokenLines,
             text: hint.text
         }));
@@ -346,8 +342,7 @@ export const getTraitSwapOpportunityPreview = (
     secondTileId: string
 ): TraitSwapOpportunityPreview => {
     const context: TraitSwapPreviewContext = {
-        beforeLines: new Set(getTraitOpportunitySummary(board).interactionLines),
-        beforeMatchLines: new Set(getBoardTraitInteractionPreviewLines(board, 'match'))
+        beforeKeys: getBoardTraitInteractionPreviewKeys(board)
     };
     return getTraitSwapOpportunityPreviewWithContext(board, firstTileId, secondTileId, context);
 };
@@ -359,18 +354,16 @@ const getTraitSwapOpportunityPreviewWithContext = (
     context: TraitSwapPreviewContext
 ): TraitSwapOpportunityPreview => {
     if (!firstTileId || firstTileId === secondTileId) {
-        return { createdLines: [], matchCreatedLines: [], brokenLines: [], unchangedLines: [], routeText: null };
+        return { createdLines: [], brokenLines: [], unchangedLines: [], routeText: null };
     }
     const swapped = createBoardWithSwappedTiles(board, firstTileId, secondTileId);
     if (!swapped) {
-        return { createdLines: [], matchCreatedLines: [], brokenLines: [], unchangedLines: [], routeText: null };
+        return { createdLines: [], brokenLines: [], unchangedLines: [], routeText: null };
     }
-    const afterLines = new Set(getTraitOpportunitySummary(swapped).interactionLines);
-    const afterMatchLines = new Set(getBoardTraitInteractionPreviewLines(swapped, 'match'));
-    const createdLines = [...afterLines].filter((line) => !context.beforeLines.has(line));
-    const matchCreatedLines = [...afterMatchLines].filter((line) => !context.beforeMatchLines.has(line));
-    const brokenLines = [...context.beforeLines].filter((line) => !afterLines.has(line));
-    const unchangedLines = [...afterLines].filter((line) => context.beforeLines.has(line));
+    const afterKeys = getBoardTraitInteractionPreviewKeys(swapped);
+    const createdLines = traitInteractionPreviewKeyLines([...afterKeys].filter((key) => !context.beforeKeys.has(key)));
+    const brokenLines = traitInteractionPreviewKeyLines([...context.beforeKeys].filter((key) => !afterKeys.has(key)));
+    const unchangedLines = traitInteractionPreviewKeyLines([...afterKeys].filter((key) => context.beforeKeys.has(key)));
     const routeText =
         createdLines.length > 0
             ? `Creates trait route: ${createdLines.slice(0, 2).join('; ')}`
@@ -382,7 +375,6 @@ const getTraitSwapOpportunityPreviewWithContext = (
 
     return {
         createdLines,
-        matchCreatedLines,
         brokenLines,
         unchangedLines,
         routeText

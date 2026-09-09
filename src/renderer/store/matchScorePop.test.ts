@@ -702,12 +702,12 @@ describe('buildMatchScorePopPayload', () => {
                 level: 3,
                 rows: 2,
                 columns: 2,
-                flippedTileIds: ['e1', 'e2'],
+                flippedTileIds: ['c1', 'c2'],
                 tiles: [
-                    { id: 'e1', pairKey: 'echo', symbol: 'e', label: 'Echo', state: 'flipped', tileTraitKind: 'echo' },
-                    { id: 's1', pairKey: 'sealed', symbol: 's', label: 'Sealed', state: 'hidden', tileTraitKind: 'sealed' },
-                    { id: 'e2', pairKey: 'echo', symbol: 'e', label: 'Echo', state: 'flipped', tileTraitKind: 'echo' },
-                    { id: 's2', pairKey: 'sealed', symbol: 's', label: 'Sealed', state: 'hidden', tileTraitKind: 'sealed' }
+                    { id: 'c1', pairKey: 'conduit', symbol: 'c', label: 'Conduit', state: 'flipped', tileTraitKind: 'conduit' },
+                    { id: 'h1', pairKey: 'heavy', symbol: 'h', label: 'Heavy', state: 'hidden', tileTraitKind: 'heavy' },
+                    { id: 'c2', pairKey: 'conduit', symbol: 'c', label: 'Conduit', state: 'flipped', tileTraitKind: 'conduit' },
+                    { id: 'h2', pairKey: 'heavy', symbol: 'h', label: 'Heavy', state: 'hidden', tileTraitKind: 'heavy' }
                 ]
             } as unknown as BoardState,
             stats: { matchesFound: 2, totalScore: 40, comboShards: 0 } as RunState['stats']
@@ -716,16 +716,16 @@ describe('buildMatchScorePopPayload', () => {
             ...run,
             stats: { ...run.stats, matchesFound: 3, totalScore: 60 }
         };
-        expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'trait'), 'trait')?.traitInteractionTexts).toContain(
-            'Echo + Sealed: combo shard'
-        );
+        expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'trait'), 'trait')?.traitInteractionTexts).toEqual([
+            'Conduit: adjacent trait charge'
+        ]);
         expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'trait'), 'trait')).toMatchObject({
             feedbackHeadline: 'Surge',
             feedbackIntensity: 'high',
             feedbackSignal: { label: 'Trait', tone: 'trait' },
             payoffChips: [
                 { id: 'score', label: 'Score', value: '+20', tone: 'score' },
-                { id: 'trait', label: 'Trait', value: 'Echo + Sealed: combo shard', tone: 'trait' }
+                { id: 'trait', label: 'Trait', value: 'Conduit: adjacent trait charge', tone: 'trait' }
             ]
         });
     });
@@ -1122,18 +1122,18 @@ describe('buildMismatchScorePopPayload', () => {
         });
     });
 
-    it('adds trait interaction copy from risky adjacent misses', () => {
+    it('carries no trait interaction copy on a miss, since every kept interaction fires on a match', () => {
         const run = minimalRun({
             board: {
                 level: 4,
                 rows: 2,
                 columns: 2,
-                flippedTileIds: ['c1', 'v1'],
+                flippedTileIds: ['h1', 'c1'],
                 tiles: [
-                    { id: 'c1', pairKey: 'cursed', symbol: 'c', label: 'Cursed', state: 'flipped', tileTraitKind: 'cursed' },
-                    { id: 'z1', pairKey: 'nearby-volatile', symbol: 'z', label: 'Nearby Volatile', state: 'hidden', tileTraitKind: 'volatile' },
-                    { id: 'v1', pairKey: 'volatile', symbol: 'v', label: 'Volatile', state: 'flipped', tileTraitKind: 'volatile' },
-                    { id: 'c2', pairKey: 'cursed', symbol: 'c', label: 'Cursed', state: 'hidden', tileTraitKind: 'cursed' }
+                    { id: 'h1', pairKey: 'heavy', symbol: 'h', label: 'Heavy', state: 'flipped', tileTraitKind: 'heavy' },
+                    { id: 'e1', pairKey: 'echo', symbol: 'e', label: 'Echo', state: 'hidden', tileTraitKind: 'echo' },
+                    { id: 'c1', pairKey: 'conduit', symbol: 'c', label: 'Conduit', state: 'flipped', tileTraitKind: 'conduit' },
+                    { id: 'h2', pairKey: 'heavy', symbol: 'h', label: 'Heavy', state: 'hidden', tileTraitKind: 'heavy' }
                 ]
             } as unknown as BoardState,
             stats: { mismatches: 1 } as RunState['stats']
@@ -1142,8 +1142,6 @@ describe('buildMismatchScorePopPayload', () => {
             ...run,
             stats: { ...run.stats, mismatches: 2 }
         };
-        expect(buildMismatchScorePopPayload(turnEventFor(run, next, 'mismatch', 'trait'), 'trait')?.traitInteractionTexts).toContain(
-            'Cursed + Volatile: recall pressure'
-        );
+        expect(buildMismatchScorePopPayload(turnEventFor(run, next, 'mismatch', 'trait'), 'trait')?.traitInteractionTexts ?? []).toEqual([]);
     });
 });

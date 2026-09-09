@@ -56,13 +56,13 @@ export const getTraitInteractionLaneId = (line: string): TraitInteractionLaneId 
     if (/\b(row|tool|shuffle|swap|peek|pin|destroy|charge)\b/.test(text)) {
         return 'tool';
     }
-    if (/\b(risk|risky|danger|curse|cursed|volatile|penalty|damage|doom)\b/.test(text)) {
+    if (/\b(risk|risky|danger|penalty|damage|doom)\b/.test(text)) {
         return 'risk';
     }
-    if (/\b(block|blocked|buffer|buffered|seal|sealed|stasis|freeze|frozen|lock)\b/.test(text)) {
+    if (/\b(block|blocked|buffer|buffered|stasis|freeze|frozen|lock)\b/.test(text)) {
         return 'block';
     }
-    if (/\b(recall|echo|mirror|focus|memory)\b/.test(text)) {
+    if (/\b(recall|echo|focus|memory)\b/.test(text)) {
         return 'recall';
     }
 

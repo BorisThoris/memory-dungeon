@@ -33,13 +33,13 @@ const accents = (overrides: Partial<TileBoardHiddenBackAccentsInput> = {}) =>
 
 describe('tileBoardHiddenBackAccents', () => {
     it('does not surface hidden-back accents for face-up or non-hidden tiles', () => {
-        expect(accents({ faceUp: true, tile: tile({ tileTraitKind: 'volatile' }) })).toEqual({
+        expect(accents({ faceUp: true, tile: tile({ tileTraitKind: 'heavy' }) })).toEqual({
             destroyBlockedDecoyBack: false,
             nonPickableBack: false,
             powerBackAccent: null,
             traitBackAccent: null
         });
-        expect(accents({ tile: tile({ state: 'flipped', tileTraitKind: 'volatile' }) })).toEqual({
+        expect(accents({ tile: tile({ state: 'flipped', tileTraitKind: 'heavy' }) })).toEqual({
             destroyBlockedDecoyBack: false,
             nonPickableBack: false,
             powerBackAccent: null,
@@ -53,7 +53,7 @@ describe('tileBoardHiddenBackAccents', () => {
     });
 
     it('surfaces trait accents for hidden backs', () => {
-        expect(accents({ tile: tile({ tileTraitKind: 'volatile' }) }).traitBackAccent).toBe('volatile');
+        expect(accents({ tile: tile({ tileTraitKind: 'heavy' }) }).traitBackAccent).toBe('heavy');
     });
 
     it('applies power accent precedence and blocks destroy on decoys', () => {

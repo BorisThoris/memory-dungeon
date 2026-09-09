@@ -6,17 +6,7 @@ export const GAMEPLAY_CORE_SCHEMA_VERSION = 1 as const;
 
 export const GAMEPLAY_FINDABLE_KINDS = ['shard_spark', 'score_glint'] as const satisfies readonly FindableKind[];
 
-export const GAMEPLAY_TILE_TRAIT_KINDS = [
-    'echo',
-    'volatile',
-    'mirror',
-    'cursed',
-    'sealed',
-    'heavy',
-    'drift',
-    'conduit',
-    'stasis'
-] as const satisfies readonly TileTraitKind[];
+export const GAMEPLAY_TILE_TRAIT_KINDS = ['echo', 'heavy', 'conduit', 'stasis'] as const satisfies readonly TileTraitKind[];
 
 export const GAMEPLAY_RUN_STATUSES = [
     'memorize',
@@ -177,22 +167,27 @@ export const gameplayContentDefinitionSchema = z
  * findable pickups.
  */
 export const GAMEPLAY_CONTENT_DEFINITIONS = z.array(gameplayContentDefinitionSchema).parse([
+    /*
+     * Volatile beside Heavy held this slot until the trait triage cut Volatile. Conduit beside
+     * Echo is the kept interaction with the same shape - a match, a neighbour, one charge granted -
+     * so it is the one that pays through the engine now.
+     */
     {
-        id: 'trait.volatile_heavy_guard',
+        id: 'trait.conduit_echo_peek',
         version: 1,
-        buildId: 'guard_tank',
-        source: { kind: 'trait', id: 'volatile_heavy_guard' },
+        buildId: 'peek_relay',
+        source: { kind: 'trait', id: 'conduit_echo_peek' },
         trigger: 'trait.match',
         conditions: [
-            { kind: 'trait.matched', trait: 'volatile' },
-            { kind: 'trait.adjacent', trait: 'heavy' }
+            { kind: 'trait.matched', trait: 'conduit' },
+            { kind: 'trait.adjacent', trait: 'echo' }
         ],
         effects: [
-            { kind: 'inventory.grant', itemId: 'guard_token', amount: 1 },
+            { kind: 'inventory.grant', itemId: 'peek_charge', amount: 1 },
             {
                 kind: 'feedback.emit',
-                cue: 'build.volatile_heavy_guard.triggered',
-                message: 'Volatile pressure met Heavy bracing and created one guard token.',
+                cue: 'build.conduit_echo_peek.triggered',
+                message: 'Conduit relayed the Echo beside it into one peek charge.',
                 tone: 'reward'
             }
         ]
@@ -307,9 +302,7 @@ export const boardTurnAnnouncementFactsSchema = z
         matchedPairsAfter: z.number().int().nonnegative().default(0),
         pairTotal: z.number().int().nonnegative().default(0),
         mismatchesBefore: z.number().int().nonnegative().default(0),
-        mismatchesAfter: z.number().int().nonnegative().default(0),
-        volatileTraitShufflesBefore: z.number().int().nonnegative().default(0),
-        volatileTraitShufflesAfter: z.number().int().nonnegative().default(0)
+        mismatchesAfter: z.number().int().nonnegative().default(0)
     })
     .strict();
 

@@ -18,19 +18,28 @@ describe('trait marks', () => {
         expect(new Set(signatures).size).toBe(signatures.length);
     });
 
-    it('uses three shapes across three counts, so no mark needs more than three parts', () => {
+    it('uses two shapes across three counts, so no mark needs more than three parts', () => {
         const counts = Object.values(TILE_TRAIT_MARKS).map((mark) => mark.count);
         expect(new Set(counts)).toEqual(new Set([1, 2, 3]));
         // Four pips in a row on a rail this size would not be countable at a glance.
         expect(Math.max(...counts)).toBe(3);
-        expect(new Set(Object.values(TILE_TRAIT_MARKS).map((mark) => mark.shape)).size).toBe(3);
+        expect(new Set(Object.values(TILE_TRAIT_MARKS).map((mark) => mark.shape))).toEqual(new Set(['pip', 'bar']));
+    });
+
+    it('keeps the marks the four traits shipped with, so a returning player reads them unchanged', () => {
+        expect(TILE_TRAIT_MARKS).toEqual({
+            conduit: { count: 1, shape: 'pip' },
+            echo: { count: 2, shape: 'pip' },
+            stasis: { count: 1, shape: 'bar' },
+            heavy: { count: 3, shape: 'bar' }
+        });
     });
 
     it('describes a mark the way a player would say it', () => {
         expect(describeTraitMark(tileTraitMark('conduit'))).toBe('1 dot');
         expect(describeTraitMark(tileTraitMark('echo'))).toBe('2 dots');
         expect(describeTraitMark(tileTraitMark('heavy'))).toBe('3 bars');
-        expect(describeTraitMark(tileTraitMark('mirror'))).toBe('1 diamond');
+        expect(describeTraitMark(tileTraitMark('stasis'))).toBe('1 bar');
     });
 });
 

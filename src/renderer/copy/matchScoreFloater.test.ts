@@ -35,9 +35,9 @@ describe('matchScoreFloaterLiveRegionText', () => {
             matchScoreFloaterLiveRegionText(99, {
                 chainDepth: 6,
                 headline: 'Surge',
-                reason: 'Echo + Sealed: combo shard.'
+                reason: 'Conduit + Echo: peek spark.'
             })
-        ).toBe('Surge. Plus 99 points. 6 match streak. Echo + Sealed: combo shard');
+        ).toBe('Surge. Plus 99 points. 6 match streak. Conduit + Echo: peek spark');
     });
 
     it('still exposes the chain momentum cue the floater falls back to', () => {

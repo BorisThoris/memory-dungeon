@@ -72,13 +72,6 @@ const getStepCopy = (
                 detail: 'A miss costs tempo, not the run. Use the marked pair to rebuild streak before spending a rescue tool.'
             };
         }
-        if (runNonNegativeInteger(run.board?.matchedPairs) >= runNonNegativeInteger(run.board?.pairCount) - 1) {
-            return {
-                title: 'Exit in sight',
-                prompt: 'Clear the final pair',
-                detail: 'The first match paid score and streak. One more clean pair clears the room and opens your first route choice.'
-            };
-        }
         return {
             title: 'First reward banked',
             prompt: 'Keep the streak clean',
@@ -153,7 +146,7 @@ export const getPlayableOnboardingScenario = ({
         {
             id: 'recovery',
             title: 'Use recovery tools',
-            body: 'Shards, peek, shuffle, and route rewards help you recover after the board gets harder.',
+            body: 'Shards, peek and shuffle help you recover after the board gets harder.',
             status: activeId === 'recovery' ? 'active' : stepIndex > 1 ? 'complete' : 'locked',
             targetTileIds,
             mobilePlacement: 'bottom'

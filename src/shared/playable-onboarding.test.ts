@@ -133,7 +133,7 @@ describe('REG-026 playable onboarding', () => {
         expect(malformedStatsStep?.title).toBe('Make your first match');
     });
 
-    it('turns the first reward into the final-pair route-choice setup on the safe first room', () => {
+    it('banks the first reward with pairs still to find on the three-pair first floor, then hands off', () => {
         const run = finishMemorizePhase(createNewRun(0, { onboardingSafeFirstFloor: true }));
         const first = getPlayableOnboardingStep(run, { onboardingDismissed: false, powersFtueSeen: false })!;
         const afterFirstReward = {
@@ -156,14 +156,32 @@ describe('REG-026 playable onboarding', () => {
             }
         };
 
+        // Floor 1 is authored as three pairs (`authored-floors.ts`), so the first match never
+        // leaves the final pair on its own: the reward banks with two pairs still on the board.
+        expect(run.board!.pairCount).toBe(3);
         const step = getPlayableOnboardingStep(afterFirstReward, {
             onboardingDismissed: false,
             powersFtueSeen: false
         });
 
-        expect(step?.title).toBe('Exit in sight');
-        expect(step?.prompt).toBe('Clear the final pair');
-        expect(step?.detail).toMatch(/opens your first route choice/i);
+        expect(step?.title).toBe('First reward banked');
+        expect(step?.prompt).toBe('Keep the streak clean');
+        expect(step?.detail).toMatch(/one more clean pair/i);
+
+        // The guide hands control back after the second match; the last pair is the player's.
+        const lastKey = run.board!.tiles.find((tile) => !first.targetTileIds.includes(tile.id))!.pairKey;
+        const beforeLastPair = {
+            ...afterFirstReward,
+            board: {
+                ...afterFirstReward.board!,
+                matchedPairs: 2,
+                tiles: afterFirstReward.board!.tiles.map((tile) =>
+                    tile.pairKey === lastKey ? tile : { ...tile, state: 'matched' as const }
+                )
+            },
+            stats: { ...afterFirstReward.stats, matchesFound: 2, currentStreak: 2 }
+        };
+        expect(getPlayableOnboardingStep(beforeLastPair, { onboardingDismissed: false, powersFtueSeen: false }) ?? null).toBeNull();
     });
 
     it('uses onboardingDismissed as the durable completion flag', () => {

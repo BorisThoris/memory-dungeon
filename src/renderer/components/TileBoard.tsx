@@ -1415,8 +1415,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         }
         const traitLines = [
             ...new Set([
-                ...getTileTraitInteractionPreviewLines(board, [focusedTile.id], 'match'),
-                ...getTileTraitInteractionPreviewLines(board, [focusedTile.id], 'mismatch')
+                ...getTileTraitInteractionPreviewLines(board, [focusedTile.id])
             ])
         ].slice(0, 2);
         if (traitLines.length > 0) {
@@ -1595,7 +1594,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             if (tile.state !== 'hidden') {
                 continue;
             }
-            const traitInteractionLines = getTileTraitInteractionPreviewLines(board, [tile.id], 'match');
+            const traitInteractionLines = getTileTraitInteractionPreviewLines(board, [tile.id]);
             if (traitInteractionLines.length > 0) {
                 traitInteractionLines.forEach((line) => readyExamples.add(line));
             }

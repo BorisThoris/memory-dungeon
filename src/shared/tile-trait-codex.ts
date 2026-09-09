@@ -13,38 +13,14 @@ export interface TileTraitCodexRow {
     description: string;
 }
 
-const TRAIT_KIND_ORDER: readonly TileTraitKind[] = [
-    'echo',
-    'sealed',
-    'mirror',
-    'stasis',
-    'heavy',
-    'volatile',
-    'cursed',
-    'drift',
-    'conduit'
-];
+/* Listed in the order a player meets them: the two that pay on their own, then the two that pay for neighbours. */
+const TRAIT_KIND_ORDER: readonly TileTraitKind[] = ['echo', 'heavy', 'conduit', 'stasis'];
 
 const INTERACTION_DESCRIPTIONS: Record<TileTraitInteractionTag, string> = {
-    'echo:sealed-combo': 'Match Echo next to a different Sealed trait pair to convert the clean read into a combo shard.',
-    'mirror:stasis-guard': 'Match Mirror beside Stasis to turn a risky memory tile into guard and score.',
-    'sealed:heavy-score': 'Match Sealed beside Heavy to trade a stricter tile for a larger score spike.',
-    'cursed:volatile-greed': 'Match Cursed beside Volatile for extra score, accepting that misses around the same cluster hurt recall.',
-    'volatile:heavy-guard': 'Match Volatile beside Heavy to turn an unstable tile into guard.',
-    'drift:row-shuffle': 'Match Drift to earn a row/swap charge, letting positioning become a repeatable board tool.',
-    'drift:volatile-full-shuffle': 'Match Drift beside Volatile to add a full shuffle charge on top of the row/swap charge.',
     'conduit:adjacent-score': 'Match Conduit beside any other trait to convert local board texture into score.',
-    'conduit:mirror-guard': 'Match Conduit beside Mirror to add guard to the Conduit payoff.',
     'conduit:echo-peek': 'Match Conduit beside Echo to add a peek charge to the Conduit payoff.',
     'conduit:stasis-lock': 'Match Conduit beside Stasis to add score and pulse a safe next-turn trait block when the board can support it.',
-    'sealed:conduit-spark': 'Match Sealed beside Conduit to turn the sealed pair into extra shard value and score.',
-    'echo:mirror-focus': 'Match Echo beside Mirror to build recall focus for a stronger future clean-match memory bonus.',
-    'heavy:mirror-guard': 'Match Heavy beside Mirror to turn the heavier commitment into guard and extra score.',
-    'stasis:nearby-block': 'Match Stasis while another safe pair remains to block a nearby trait tile from being opened first next turn.',
-    'conduit:danger-recall': 'Miss Conduit near Volatile or Cursed and the nearby danger deepens recall pressure.',
-    'stasis:sealed-buffer': 'Place Stasis beside Sealed to stop the Sealed miss from draining peek or deepening recall.',
-    'stasis:cursed-volatile-buffer': 'Place Stasis near a Cursed and Volatile cluster to buffer the extra recall danger on a miss.',
-    'cursed:volatile-danger': 'Miss Cursed beside Volatile and the greedy cluster adds recall pressure.',
+    'stasis:nearby-block': 'Match Stasis while another safe pair remains to block a nearby trait tile from being opened first next turn.'
 };
 
 export const getTileTraitCodexRows = (): TileTraitCodexRow[] =>

@@ -21,7 +21,7 @@ describe('mismatchFloaterLiveRegionText', () => {
 describe('mismatchFloaterSignal', () => {
     it('reads Miss, Risk on a trait penalty, and Break on a deep broken chain', () => {
         expect(mismatchFloaterSignal()).toEqual({ label: 'Miss', tone: 'miss' });
-        expect(mismatchFloaterSignal(['Volatile + Sealed: risk'])).toEqual({ label: 'Risk', tone: 'penalty' });
+        expect(mismatchFloaterSignal(['Heavy: extra try'])).toEqual({ label: 'Risk', tone: 'penalty' });
         expect(mismatchFloaterSignal([], { brokenChainDepth: 4 })).toEqual({ label: 'Break', tone: 'break' });
         expect(mismatchFloaterSignal([], { brokenChainDepth: 2 })).toEqual({ label: 'Miss', tone: 'miss' });
     });
@@ -36,8 +36,6 @@ describe('mismatchFloaterRecoveryHint', () => {
         expect(mismatchFloaterRecoveryHint()).toBe('Recover - safe match');
         expect(mismatchFloaterRecoveryHint(['Echo buffered the hit'])).toBe('Buffered - open a safe match');
         expect(mismatchFloaterRecoveryHint(['Warden blocked the pair'])).toBe('Next - choose another opener');
-        expect(mismatchFloaterRecoveryHint(['Cursed tile flared'])).toBe('Recover - peek or route away');
-        expect(mismatchFloaterRecoveryHint(['Sealed pair held'])).toBe('Recover - peek before Sealed');
         expect(mismatchFloaterRecoveryHint(['Something else entirely'])).toBe('Recover - prime with tools');
     });
 });
@@ -51,9 +49,9 @@ describe('mismatchFloaterNextAction', () => {
             })
         ).toMatchObject({ tone: 'lost-reward', value: 'Rebuild toward x6 +1 shard' });
         expect(mismatchFloaterNextAction([], { brokenChainDepth: 3 })).toMatchObject({ tone: 'risk' });
-        expect(mismatchFloaterNextAction(['Cursed tile flared'])).toMatchObject({
+        expect(mismatchFloaterNextAction(['Heavy: extra try'])).toMatchObject({
             tone: 'risk',
-            value: 'peek or route away'
+            value: 'prime with tools'
         });
         expect(mismatchFloaterNextAction()).toMatchObject({ tone: 'recover', value: 'Safe match' });
     });

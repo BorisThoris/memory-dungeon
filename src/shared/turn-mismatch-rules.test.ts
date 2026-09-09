@@ -147,8 +147,8 @@ describe('turn mismatch rules', () => {
 
     it('normalizes malformed persisted counters during mismatch transition bookkeeping', () => {
         const b = board([
-            tile('sealed-a', 'flipped', { pairKey: 'sealed', tileTraitKind: 'sealed' }),
-            tile('sealed-b', 'flipped', { pairKey: 'sealed', tileTraitKind: 'sealed' })
+            tile('heavy-a', 'flipped', { pairKey: 'heavy', tileTraitKind: 'heavy' }),
+            tile('heavy-b', 'flipped', { pairKey: 'heavy', tileTraitKind: 'heavy' })
         ]);
         const base = run(b, {
             peekCharges: 2.9,
@@ -159,28 +159,26 @@ describe('turn mismatch rules', () => {
                 mismatches: Number.POSITIVE_INFINITY,
                 currentStreak: Number.POSITIVE_INFINITY,
                 highestLevel: Number.NaN,
-                guardTokens: Number.NaN,
-                volatileTraitShuffles: Number.POSITIVE_INFINITY
+                guardTokens: Number.NaN
             }
         });
 
         const resolved = resolveMismatchTurnTransition({
             run: base,
             board: b,
-            tileIds: ['sealed-a', 'sealed-b'],
+            tileIds: ['heavy-a', 'heavy-b'],
             sourceTiles: b.tiles,
             triesDelta: 1.9,
             decoyTouched: false
         });
 
-        expect(resolved.peekCharges).toBe(1);
         expect(resolved.recallMistakesThisFloor).toBe(1);
-        expect(resolved.stats.tries).toBe(1);
+        // 1.9 normalizes to 1, and Heavy's extra try lands on top of it.
+        expect(resolved.stats.tries).toBe(2);
         expect(resolved.stats.mismatches).toBe(1);
         expect(resolved.stats.currentStreak).toBe(0);
         expect(resolved.stats.highestLevel).toBe(1);
         expect(resolved.stats.guardTokens).toBe(0);
-        expect(resolved.stats.volatileTraitShuffles).toBe(0);
     });
 
     it('normalizes malformed stat blocks during mismatch transition bookkeeping', () => {
@@ -206,10 +204,10 @@ describe('turn mismatch rules', () => {
     });
 
 
-    it('tracks trait mismatch and volatile shuffle counters', () => {
+    it('tracks trait mismatch counters per kind', () => {
         const b = board([
-            tile('volatile-a', 'flipped', { pairKey: 'volatile', tileTraitKind: 'volatile' }),
-            tile('mirror-a', 'flipped', { pairKey: 'mirror', tileTraitKind: 'mirror' }),
+            tile('heavy-a', 'flipped', { pairKey: 'heavy', tileTraitKind: 'heavy' }),
+            tile('echo-a', 'flipped', { pairKey: 'echo', tileTraitKind: 'echo' }),
             tile('safe-a', 'hidden', { pairKey: 'safe' }),
             tile('safe-b', 'hidden', { pairKey: 'safe' }),
             tile('extra-a', 'hidden', { pairKey: 'extra' }),
@@ -222,15 +220,16 @@ describe('turn mismatch rules', () => {
         const resolved = resolveMismatchTurnTransition({
             run: base,
             board: b,
-            tileIds: ['volatile-a', 'mirror-a'],
+            tileIds: ['heavy-a', 'echo-a'],
             sourceTiles: [b.tiles[0]!, b.tiles[1]!],
             triesDelta: 1,
             decoyTouched: false
         });
 
-        expect(resolved.stats.tileTraitMismatches.volatile).toBe(1);
-        expect(resolved.stats.tileTraitMismatches.mirror).toBe(1);
-        expect(resolved.stats.volatileTraitShuffles).toBe(1);
+        expect(resolved.stats.tileTraitMismatches.heavy).toBe(1);
+        expect(resolved.stats.tileTraitMismatches.echo).toBe(1);
+        // Heavy is the one kept trait with a miss cost: one extra try on top of the miss itself.
+        expect(resolved.stats.tries).toBe(3);
     });
 
 

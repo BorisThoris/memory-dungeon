@@ -5,14 +5,15 @@ import { flipTile, resolveBoardTurn } from './turn-resolution';
 import { makeBoard, makePair, makeRun, makeTile } from './test/game-fixtures';
 import { getTraitOpportunityHudModel, getTraitOpportunitySummary } from './trait-opportunities';
 import {
-    applyVolatileMismatchTrait,
     assignTileTraitsToGeneratedBoard,
     calculateTileTraitMatchRewards,
     calculateTileTraitMismatchPenalty,
+    FIRST_TRAIT_FLOOR,
     formatTileTraitInteractionTags,
     getBoardTraitInteractionPreviewLines,
     getTileSwapTraitPreviewLines,
     getTileTraitInteractionPreviewLines,
+    TILE_TRAIT_COPY,
     TILE_TRAIT_INTERACTION_TAGS,
     TILE_TRAIT_INTERACTION_TEXT,
     releaseStrandedStasisBlock,
@@ -26,15 +27,15 @@ describe('tile trait rules', () => {
     it('formats trait interaction tags as unique player-facing lines', () => {
         expect(
             formatTileTraitInteractionTags([
-                'echo:sealed-combo',
-                'echo:sealed-combo',
+                'conduit:echo-peek',
+                'conduit:echo-peek',
                 'unknown',
                 '__proto__',
                 'constructor',
                 'toString',
-                'cursed:volatile-danger'
+                'stasis:nearby-block'
             ])
-        ).toEqual(['Echo + Sealed: combo shard', 'Cursed + Volatile: recall pressure']);
+        ).toEqual(['Conduit + Echo: peek spark', 'Stasis: nearby trait blocked']);
     });
 
     it('keeps every known interaction tag backed by player-facing copy', () => {
@@ -45,20 +46,40 @@ describe('tile trait rules', () => {
         }
     });
 
+    it('keeps the four traits and only the interactions whose both halves survived the triage', () => {
+        expect(Object.keys(TILE_TRAIT_COPY).sort()).toEqual(['conduit', 'echo', 'heavy', 'stasis']);
+        expect([...TILE_TRAIT_INTERACTION_TAGS]).toEqual([
+            'conduit:adjacent-score',
+            'conduit:echo-peek',
+            'conduit:stasis-lock',
+            'stasis:nearby-block'
+        ]);
+        // A cut trait must not survive as a word in the copy of a kept one.
+        for (const copy of Object.values(TILE_TRAIT_COPY)) {
+            expect(`${copy.match} ${copy.mismatch}`).not.toMatch(/\b(Mirror|Cursed|Sealed|Volatile|Drift)\b/);
+        }
+    });
+
     it('previews nearby trait interactions before a match or swap is committed', () => {
         const board = makeBoard(
             [
+                makeTile('c1', 'c', 'C', { tileTraitKind: 'conduit' }),
                 makeTile('e1', 'e', 'E', { tileTraitKind: 'echo' }),
-                makeTile('s1', 's', 'S', { tileTraitKind: 'sealed' }),
                 makeTile('x1', 'x', 'X'),
-                makeTile('h1', 'h', 'H', { tileTraitKind: 'heavy' })
+                makeTile('t1', 't', 'T', { tileTraitKind: 'stasis' })
             ],
             { columns: 2, rows: 2 }
         );
 
-        expect(getTileTraitInteractionPreviewLines(board, ['e1'], 'match')).toContain('Echo + Sealed: combo shard');
-        expect(getTileSwapTraitPreviewLines(board, 'x1', 's1')).toEqual(
-            expect.arrayContaining(['Sealed + Heavy: score surge'])
+        expect(getTileTraitInteractionPreviewLines(board, ['c1'])).toEqual([
+            'Conduit: adjacent trait charge',
+            'Conduit + Echo: peek spark'
+        ]);
+        // Echo pays on its own match and has nothing to preview as a source.
+        expect(getTileTraitInteractionPreviewLines(board, ['e1'])).toEqual([]);
+        // Moving the Conduit down beside the Stasis is what lights the lock pulse.
+        expect(getTileSwapTraitPreviewLines(board, 'c1', 'x1')).toEqual(
+            expect.arrayContaining(['Conduit + Stasis: lock pulse'])
         );
     });
 
@@ -88,23 +109,17 @@ describe('tile trait rules', () => {
         expect(getBoardTraitInteractionPreviewLines(board).length).toBeGreaterThan(0);
     });
 
-    it('keeps the opener readable while still introducing traits as a core mechanic', () => {
-        const [a1, a2] = makePair('a', 'A');
-        const tiles = assignTileTraitsToGeneratedBoard([a1, a2], 1, 30, 1);
-        expect(uniqueTraitPairCount(tiles)).toBe(1);
-        expect(tiles.every((tile) => ['echo', 'mirror', 'heavy'].includes(tile.tileTraitKind ?? ''))).toBe(true);
-    });
+    it('leaves the three authored floors traitless and starts traits on the fourth', () => {
+        const baseTiles = Array.from({ length: 6 }, (_, index) => makePair(`pair-${index}`, String(index))).flat();
 
-    it('introduces a match-triggerable trait route on normal opener boards', () => {
-        const baseTiles = Array.from({ length: 4 }, (_, index) => makePair(`pair-${index}`, String(index))).flat();
-        const tiles = assignTileTraitsToGeneratedBoard(baseTiles, 1, 30, 1);
-        const board = makeBoard(tiles, { columns: 3, rows: 3 });
-        const openerTraits = tiles.map((tile) => tile.tileTraitKind).filter(Boolean);
-
-        expect(uniqueTraitPairCount(tiles)).toBe(2);
-        expect(openerTraits).not.toContain('cursed');
-        expect(openerTraits).not.toContain('volatile');
-        expect(getBoardTraitInteractionPreviewLines(board, 'match').length).toBeGreaterThan(0);
+        expect(FIRST_TRAIT_FLOOR).toBe(4);
+        for (const level of [1, 2, 3]) {
+            const tiles = assignTileTraitsToGeneratedBoard(baseTiles, 1, 30, level);
+            expect(uniqueTraitPairCount(tiles), `floor ${level}`).toBe(0);
+            // Untouched means untouched: the same tiles come back, only copied.
+            expect(tiles).toEqual(baseTiles);
+        }
+        expect(uniqueTraitPairCount(assignTileTraitsToGeneratedBoard(baseTiles, 1, 30, 4))).toBeGreaterThanOrEqual(2);
     });
 
     it('scales trait density into a normal board layer and seeds combo adjacency', () => {
@@ -114,9 +129,8 @@ describe('tile trait rules', () => {
         const board = makeBoard(tiles, { columns: 4, rows: 4 });
 
         expect(uniqueTraitPairCount(tiles)).toBe(4);
-        expect(getBoardTraitInteractionPreviewLines(board, 'match').length).toBeGreaterThanOrEqual(2);
+        expect(getBoardTraitInteractionPreviewLines(board).length).toBeGreaterThanOrEqual(1);
     });
-
 
     it('does not hard-cap trait count on larger eligible boards', () => {
         const baseTiles = Array.from({ length: 18 }, (_, index) => makePair(`pair-${index}`, String(index))).flat();
@@ -125,8 +139,8 @@ describe('tile trait rules', () => {
         expect(uniqueTraitPairCount(tiles)).toBe(9);
     });
 
-    it('keeps generated post-opener trait floors from becoming isolated flavor', () => {
-        const levels = [2, 4, 7, 9, 12] as const;
+    it('keeps generated trait floors from becoming isolated flavor', () => {
+        const levels = [4, 5, 7, 9, 12] as const;
         const seeds = [11, 42_001, 91_337] as const;
 
         for (const runSeed of seeds) {
@@ -157,7 +171,7 @@ describe('tile trait rules', () => {
         }
     }, 15_000);
 
-    it('surfaces the newer interaction traits through the seeded pool', () => {
+    it('draws every kept trait through the seeded pool', () => {
         const baseTiles = Array.from({ length: 12 }, (_, index) => makePair(`pair-${index}`, String(index))).flat();
         const seen = new Set(
             Array.from({ length: 120 }, (_, index) => assignTileTraitsToGeneratedBoard(baseTiles, index + 1, 30, 12))
@@ -166,7 +180,7 @@ describe('tile trait rules', () => {
                 .filter((kind): kind is NonNullable<typeof kind> => kind != null)
         );
 
-        expect([...seen]).toEqual(expect.arrayContaining(['drift', 'conduit', 'stasis']));
+        expect([...seen].sort()).toEqual(['conduit', 'echo', 'heavy', 'stasis']);
     });
 
     it('guarantees generated trait boards have match-triggerable routes when enough trait pairs exist', () => {
@@ -177,74 +191,49 @@ describe('tile trait rules', () => {
             const board = makeBoard(tiles, { columns: 5, rows: 4 });
 
             expect(uniqueTraitPairCount(tiles)).toBeGreaterThanOrEqual(2);
-            expect(getBoardTraitInteractionPreviewLines(board, 'match').length).toBeGreaterThan(0);
+            expect(getBoardTraitInteractionPreviewLines(board).length).toBeGreaterThan(0);
         }
     });
 
-    it('turns echo and mirror clean matches into resource rewards', () => {
+    it('turns echo and heavy clean matches into their own rewards', () => {
         const run = makeRun([]);
         const [echoA, echoB] = makePair('echo', 'E');
-        const [mirrorA, mirrorB] = makePair('mirror', 'M');
+        const [heavyA, heavyB] = makePair('heavy', 'H');
 
         expect(calculateTileTraitMatchRewards(run, [{ ...echoA, tileTraitKind: 'echo' }, echoB])).toEqual({
-            comboShardGain: 0,
-            guardTokenGain: 0,
             peekChargeGain: 1,
             scoreBonus: 0
         });
-        expect(calculateTileTraitMatchRewards(run, [{ ...mirrorA, tileTraitKind: 'mirror' }, mirrorB])).toEqual({
-            comboShardGain: 0,
-            guardTokenGain: 1,
+        expect(calculateTileTraitMatchRewards(run, [{ ...heavyA, tileTraitKind: 'heavy' }, heavyB])).toEqual({
             peekChargeGain: 0,
-            scoreBonus: 0
+            scoreBonus: 35
         });
-    });
-
-    it('turns cursed, sealed, and heavy matches into build rewards', () => {
-        const run = makeRun([]);
-        const [cursedA, cursedB] = makePair('cursed', 'C');
-        const [sealedA, sealedB] = makePair('sealed', 'S');
-        const [heavyA, heavyB] = makePair('heavy', 'H');
-
-        expect(calculateTileTraitMatchRewards(run, [{ ...cursedA, tileTraitKind: 'cursed' }, cursedB]).scoreBonus).toBe(15);
-        expect(calculateTileTraitMatchRewards(run, [{ ...sealedA, tileTraitKind: 'sealed' }, sealedB]).comboShardGain).toBe(1);
-        expect(calculateTileTraitMatchRewards(run, [{ ...heavyA, tileTraitKind: 'heavy' }, heavyB]).scoreBonus).toBe(35);
     });
 
     it('normalizes malformed resource counters before calculating trait match rewards', () => {
-        const run = makeRun([], {
+        const board = makeBoard(
+            [
+                makeTile('c1', 'c', 'C', { tileTraitKind: 'conduit', state: 'flipped' }),
+                makeTile('c2', 'c', 'C', { tileTraitKind: 'conduit', state: 'flipped' }),
+                makeTile('e1', 'e', 'E', { tileTraitKind: 'echo' }),
+                makeTile('x1', 'x', 'X')
+            ],
+            { columns: 2, rows: 2 }
+        );
+        const run = makeRun(board.tiles, {
+            board,
             matchResolutionsThisFloor: Number.NaN,
             peekCharges: Number.POSITIVE_INFINITY,
-            recallFocus: Number.POSITIVE_INFINITY,
-            stats: {
-                ...makeRun([]).stats,
-                comboShards: Number.POSITIVE_INFINITY,
-                currentStreak: Number.POSITIVE_INFINITY,
-                guardTokens: Number.NaN
-            }
+            stats: { ...makeRun([]).stats, currentStreak: Number.POSITIVE_INFINITY, guardTokens: Number.NaN }
         });
-        const [sealedA, sealedB] = makePair('sealed', 'S');
-        const [mirrorA, mirrorB] = makePair('mirror', 'M');
+        const malformedStats = { ...run, stats: Number.NaN as unknown as RunState['stats'] };
 
-        expect(calculateTileTraitMatchRewards(run, [{ ...sealedA, tileTraitKind: 'sealed' }, sealedB]).comboShardGain).toBe(1);
-        expect(resolveTileTraitEffects({
-            run,
-            source: 'match',
-            sourceTiles: [{ ...sealedA, tileTraitKind: 'sealed' }, sealedB]
-        }).flashPairChargeGain).toBe(0);
-        expect(calculateTileTraitMatchRewards(run, [{ ...mirrorA, tileTraitKind: 'mirror' }, mirrorB]).guardTokenGain).toBe(1);
-    });
-
-    it('normalizes malformed stat records before calculating trait match rewards', () => {
-        const run = {
-            ...makeRun([]),
-            stats: Number.NaN as unknown as RunState['stats']
-        };
-        const [sealedA, sealedB] = makePair('sealed', 'S');
-        const [mirrorA, mirrorB] = makePair('mirror', 'M');
-
-        expect(calculateTileTraitMatchRewards(run, [{ ...sealedA, tileTraitKind: 'sealed' }, sealedB]).comboShardGain).toBe(1);
-        expect(calculateTileTraitMatchRewards(run, [{ ...mirrorA, tileTraitKind: 'mirror' }, mirrorB]).guardTokenGain).toBe(1);
+        for (const candidate of [run, malformedStats]) {
+            expect(calculateTileTraitMatchRewards(candidate, [board.tiles[0]!, board.tiles[1]!], board)).toEqual({
+                peekChargeGain: 1,
+                scoreBonus: 12
+            });
+        }
     });
 
     it('applies echo reward through normal two-card resolution', () => {
@@ -258,62 +247,19 @@ describe('tile trait rules', () => {
         expect(resolved.stats.tileTraitMatches.echo).toBe(1);
     });
 
-    it('turns drift adjacency into row and full shuffle charges', () => {
-        const board = makeBoard(
-            [
-                makeTile('d1', 'd', 'D', { tileTraitKind: 'drift', state: 'flipped' }),
-                makeTile('d2', 'd', 'D', { tileTraitKind: 'drift', state: 'flipped' }),
-                makeTile('v2', 'v', 'V', { tileTraitKind: 'volatile' }),
-                makeTile('v1', 'v', 'V', { tileTraitKind: 'volatile' })
-            ],
-            { columns: 2, rows: 2 }
-        );
-        const run = makeRun(board.tiles, { board });
-
-        const effect = resolveTileTraitEffects({
-            run,
-            board,
-            sourceTiles: [board.tiles[0]!, board.tiles[1]!],
-            source: 'match'
-        });
-
-        expect(effect.regionShuffleChargeGain).toBe(1);
-        expect(effect.shuffleChargeGain).toBe(1);
-        expect(effect.interactionTags).toContain('drift:volatile-full-shuffle');
-    });
-
-    it('applies drift charges through normal two-card resolution', () => {
-        const board = makeBoard(
-            [
-                makeTile('d1', 'd', 'D', { tileTraitKind: 'drift' }),
-                makeTile('d2', 'd', 'D', { tileTraitKind: 'drift' }),
-                makeTile('v2', 'v', 'V', { tileTraitKind: 'volatile' }),
-                makeTile('v1', 'v', 'V', { tileTraitKind: 'volatile' })
-            ],
-            { columns: 2, rows: 2 }
-        );
-        const run = makeRun(board.tiles, { board, shuffleCharges: 0, regionShuffleCharges: 0 });
-
-        const resolved = resolveBoardTurn(flipTile(flipTile(run, 'd1'), 'd2'));
-
-        expect(resolved.regionShuffleCharges).toBe(1);
-        expect(resolved.shuffleCharges).toBe(1);
-        expect(resolved.stats.tileTraitMatches.drift).toBe(1);
-    });
-
-    it('converts nearby echo and mirror traits into conduit score and resources', () => {
+    it('converts nearby heavy and echo traits into conduit score and a relayed peek charge', () => {
         const board = makeBoard(
             [
                 makeTile('c1', 'c', 'C', { tileTraitKind: 'conduit', state: 'flipped' }),
                 makeTile('c2', 'c', 'C', { tileTraitKind: 'conduit', state: 'flipped' }),
-                makeTile('m1', 'm', 'M', { tileTraitKind: 'mirror' }),
+                makeTile('h1', 'h', 'H', { tileTraitKind: 'heavy' }),
                 makeTile('e1', 'e', 'E', { tileTraitKind: 'echo' }),
                 makeTile('x1', 'x', 'X'),
                 makeTile('x2', 'x', 'X')
             ],
             { columns: 3, rows: 2 }
         );
-        const run = makeRun(board.tiles, { board });
+        const run = makeRun(board.tiles, { board, peekCharges: 2 });
 
         const effect = resolveTileTraitEffects({
             run,
@@ -323,169 +269,46 @@ describe('tile trait rules', () => {
         });
 
         expect(effect.scoreBonus).toBe(24);
-        expect(effect.guardTokenGain).toBe(1);
         expect(effect.peekChargeGain).toBe(1);
+        expect(effect.interactionTags).toEqual(['conduit:adjacent-score', 'conduit:echo-peek']);
+        // The peek half pays through the effects engine, so the turn journals a definition command for it.
+        expect(effect.gameplayCommands?.map((command) => (command.type === 'effects.apply' ? command.definitionId : command.type))).toEqual([
+            'trait.conduit_echo_peek'
+        ]);
+        expect(effect.gameplayEvents).toContainEqual(
+            expect.objectContaining({ type: 'inventory.changed', itemId: 'peek_charge', applied: 1 })
+        );
+
+        const resolved = resolveBoardTurn(flipTile(flipTile({ ...run, board: { ...board, tiles: board.tiles.map((tile) => ({ ...tile, state: 'hidden' as const })) } }, 'c1'), 'c2'));
+        expect(resolved.peekCharges).toBe(3);
     });
 
-    it('turns second-order trait adjacencies into additional board-control payoffs', () => {
+    it('turns conduit beside stasis into a lock pulse on the nearby trait tile', () => {
         const board = makeBoard(
             [
                 makeTile('c1', 'conduit', 'C', { tileTraitKind: 'conduit', state: 'flipped' }),
                 makeTile('c2', 'conduit', 'C', { tileTraitKind: 'conduit', state: 'flipped' }),
-                makeTile('s1', 'stasis', 'T', { tileTraitKind: 'stasis' }),
+                makeTile('t1', 'stasis', 'T', { tileTraitKind: 'stasis' }),
                 makeTile('x1', 'x', 'X'),
-                makeTile('sealed1', 'sealed', 'S', { tileTraitKind: 'sealed', state: 'flipped' }),
-                makeTile('sealed2', 'sealed', 'S', { tileTraitKind: 'sealed', state: 'flipped' }),
-                makeTile('conduit-near', 'conduit-near', 'C', { tileTraitKind: 'conduit' }),
-                makeTile('x2', 'x2', 'X'),
-                makeTile('h1', 'heavy', 'H', { tileTraitKind: 'heavy', state: 'flipped' }),
-                makeTile('h2', 'heavy', 'H', { tileTraitKind: 'heavy', state: 'flipped' }),
-                makeTile('m1', 'mirror', 'M', { tileTraitKind: 'mirror' }),
                 makeTile('y1', 'y', 'Y'),
                 makeTile('y2', 'y', 'Y'),
                 makeTile('z1', 'z', 'Z'),
                 makeTile('z2', 'z', 'Z')
             ],
-            { columns: 4, rows: 3 }
-        );
-        const run = makeRun(board.tiles, { board });
-
-        const conduitEffect = resolveTileTraitEffects({
-            run,
-            board,
-            sourceTiles: [board.tiles[0]!, board.tiles[1]!],
-            source: 'match'
-        });
-        const sealedEffect = resolveTileTraitEffects({
-            run,
-            board,
-            sourceTiles: [board.tiles[4]!, board.tiles[5]!],
-            source: 'match'
-        });
-        const heavyEffect = resolveTileTraitEffects({
-            run,
-            board,
-            sourceTiles: [board.tiles[8]!, board.tiles[9]!],
-            source: 'match'
-        });
-
-        expect(conduitEffect.stickyBlockIndex).toBe(2);
-        expect(conduitEffect.interactionTags).toContain('conduit:stasis-lock');
-        expect(sealedEffect.comboShardGain).toBe(2);
-        expect(sealedEffect.interactionTags).toContain('sealed:conduit-spark');
-        expect(heavyEffect.guardTokenGain).toBe(1);
-        expect(heavyEffect.scoreBonus).toBe(50);
-        expect(heavyEffect.interactionTags).toContain('heavy:mirror-guard');
-    });
-
-    it('lets older traits interact through nearby trait layout', () => {
-        const board = makeBoard(
-            [
-                makeTile('e1', 'e', 'E', { tileTraitKind: 'echo', state: 'flipped' }),
-                makeTile('e2', 'e', 'E', { tileTraitKind: 'echo', state: 'flipped' }),
-                makeTile('s1', 's', 'S', { tileTraitKind: 'sealed' }),
-                makeTile('h1', 'h', 'H', { tileTraitKind: 'heavy' }),
-                makeTile('m1', 'm', 'M', { tileTraitKind: 'mirror' }),
-                makeTile('t1', 't', 'T', { tileTraitKind: 'stasis' }),
-                makeTile('x1', 'x', 'X'),
-                makeTile('x2', 'x', 'X')
-            ],
             { columns: 4, rows: 2 }
         );
         const run = makeRun(board.tiles, { board });
 
-        const echoEffect = resolveTileTraitEffects({
-            run,
-            board,
-            sourceTiles: [board.tiles[0]!, board.tiles[1]!],
-            source: 'match'
-        });
-        const mirrorEffect = resolveTileTraitEffects({
-            run,
-            board,
-            sourceTiles: [{ ...board.tiles[4]!, state: 'flipped' }, { ...board.tiles[4]!, id: 'm2', state: 'flipped' }],
-            source: 'match'
-        });
-
-        expect(echoEffect.comboShardGain).toBe(1);
-        expect(echoEffect.interactionTags).toContain('echo:sealed-combo');
-        expect(mirrorEffect.guardTokenGain).toBe(2);
-        expect(mirrorEffect.scoreBonus).toBe(10);
-        expect(mirrorEffect.interactionTags).toContain('mirror:stasis-guard');
-    });
-
-    it('turns echo beside mirror into recall focus for the next clean match', () => {
-        const board = makeBoard(
-            [
-                makeTile('e1', 'e', 'E', { tileTraitKind: 'echo' }),
-                makeTile('m1', 'm', 'M', { tileTraitKind: 'mirror' }),
-                makeTile('e2', 'e', 'E', { tileTraitKind: 'echo' }),
-                makeTile('x1', 'x', 'X')
-            ],
-            { columns: 2, rows: 2 }
-        );
-        const run = makeRun(board.tiles, { board, recallFocus: 1 });
-
         const effect = resolveTileTraitEffects({
             run,
             board,
-            sourceTiles: [{ ...board.tiles[0]!, state: 'flipped' }, { ...board.tiles[2]!, state: 'flipped' }],
-            source: 'match'
-        });
-        const resolved = resolveBoardTurn(flipTile(flipTile({ ...run, board }, 'e1'), 'e2'));
-
-        expect(effect.recallFocusGain).toBe(1);
-        expect(effect.interactionTags).toContain('echo:mirror-focus');
-        expect(resolved.recallFocus).toBe(3);
-    });
-
-    it('turns risky cursed and volatile adjacency into greed upside and miss pressure', () => {
-        const board = makeBoard(
-            [
-                makeTile('c1', 'c', 'C', { tileTraitKind: 'cursed', state: 'flipped' }),
-                makeTile('c2', 'c', 'C', { tileTraitKind: 'cursed', state: 'flipped' }),
-                makeTile('v1', 'v', 'V', { tileTraitKind: 'volatile' }),
-                makeTile('x1', 'x', 'X')
-            ],
-            { columns: 2, rows: 2 }
-        );
-        const run = makeRun(board.tiles, { board });
-
-        const matchEffect = resolveTileTraitEffects({
-            run,
-            board,
             sourceTiles: [board.tiles[0]!, board.tiles[1]!],
             source: 'match'
         });
-        const missPenalty = calculateTileTraitMismatchPenalty(run, [board.tiles[0]!, board.tiles[3]!], board);
 
-        expect(matchEffect.scoreBonus).toBe(35);
-        expect(matchEffect.interactionTags).toContain('cursed:volatile-greed');
-        expect(missPenalty).toMatchObject({ triesDelta: 1, recallMistakesDelta: 1 });
-    });
-
-    it('lets stasis buffer sealed mismatch drain and recall pressure', () => {
-        const board = makeBoard(
-            [
-                makeTile('s1', 'sealed', 'S', { tileTraitKind: 'sealed', state: 'flipped' }),
-                makeTile('t1', 'stasis', 'T', { tileTraitKind: 'stasis' }),
-                makeTile('x1', 'x', 'X', { state: 'flipped' }),
-                makeTile('y1', 'y', 'Y')
-            ],
-            { columns: 2, rows: 2 }
-        );
-        const run = makeRun(board.tiles, { board, peekCharges: 1 });
-        const penalty = calculateTileTraitMismatchPenalty(run, [board.tiles[0]!, board.tiles[2]!], board);
-
-        expect(penalty).toMatchObject({ peekChargeLoss: 0, recallMistakesDelta: 0 });
-        expect(
-            resolveTileTraitEffects({
-                run,
-                board,
-                sourceTiles: [board.tiles[0]!, board.tiles[2]!],
-                source: 'mismatch'
-            }).interactionTags
-        ).toContain('stasis:sealed-buffer');
+        expect(effect.stickyBlockIndex).toBe(2);
+        expect(effect.scoreBonus).toBe(22);
+        expect(effect.interactionTags).toEqual(['conduit:adjacent-score', 'conduit:stasis-lock']);
     });
 
     it('lets stasis block a nearby trait only when another hidden pair remains', () => {
@@ -521,126 +344,52 @@ describe('tile trait rules', () => {
         expect(unsafeEffect.stickyBlockIndex).toBeNull();
     });
 
-    it('adds mirror mismatch pressure without hiding the base miss bookkeeping', () => {
-        const [a1] = makePair('a', 'A');
-        const [b1] = makePair('b', 'B');
-        const run = makeRun([], { peekCharges: 1 });
-        const penalty = calculateTileTraitMismatchPenalty(run, [{ ...a1, tileTraitKind: 'mirror' }, b1]);
+    it('makes Heavy misses cost an extra try and nothing else', () => {
+        const [a1, a2] = makePair('a', 'A');
+        const [b1, b2] = makePair('b', 'B');
+        const heavyA = { ...a1, tileTraitKind: 'heavy' as const };
 
-        expect(penalty).toMatchObject({ triesDelta: 1, recallMistakesDelta: 1, peekChargeLoss: 0 });
+        expect(calculateTileTraitMismatchPenalty(makeRun([], { peekCharges: 1 }), [heavyA, b1])).toEqual({ triesDelta: 1 });
+        expect(
+            calculateTileTraitMismatchPenalty(
+                makeRun([], { stats: { ...makeRun([]).stats, guardTokens: Number.POSITIVE_INFINITY } }),
+                [a1, b1]
+            )
+        ).toEqual({ triesDelta: 0 });
+
+        const run = makeRun([heavyA, { ...a2, tileTraitKind: 'heavy' }, b1, b2], { peekCharges: 1 });
+        const resolved = resolveBoardTurn(flipTile(flipTile(run, 'a-a'), 'b-a'));
+        expect(resolved.stats.tries).toBe(run.stats.tries + 2);
+        expect(resolved.peekCharges).toBe(1);
+        expect(resolved.stats.tileTraitMismatches.heavy).toBe(1);
     });
 
-    it('drains peek on sealed mismatch before adding deeper recall pressure', () => {
-        const [a1] = makePair('a', 'A');
-        const [b1] = makePair('b', 'B');
-        const withPeek = calculateTileTraitMismatchPenalty(makeRun([], { peekCharges: 1 }), [
-            { ...a1, tileTraitKind: 'sealed' },
-            b1
-        ]);
-        const withoutPeek = calculateTileTraitMismatchPenalty(makeRun([], { peekCharges: 0 }), [
-            { ...a1, tileTraitKind: 'sealed' },
-            b1
-        ]);
-
-        expect(withPeek).toMatchObject({ peekChargeLoss: 1, recallMistakesDelta: 0 });
-        expect(withoutPeek).toMatchObject({ peekChargeLoss: 0, recallMistakesDelta: 1 });
-    });
-
-    it('normalizes malformed mismatch resource counters before trait penalties', () => {
-        const [sealedA] = makePair('sealed', 'S');
-        const [volatileA] = makePair('volatile', 'V');
-        const [plainA] = makePair('plain', 'P');
-
-        expect(calculateTileTraitMismatchPenalty(
-            makeRun([], { peekCharges: Number.POSITIVE_INFINITY }),
-            [{ ...sealedA, tileTraitKind: 'sealed' }, plainA]
-        )).toMatchObject({
-            peekChargeLoss: 0,
-            recallMistakesDelta: 1
-        });
-        expect(calculateTileTraitMismatchPenalty(
-            makeRun([], { stats: { ...makeRun([]).stats, guardTokens: Number.POSITIVE_INFINITY } }),
-            [{ ...volatileA, tileTraitKind: 'volatile' }, plainA]
-        )).toMatchObject({ peekChargeLoss: 0, recallMistakesDelta: 0, triesDelta: 0 });
-    });
-
-    it('normalizes malformed flip history before volatile mismatch shuffles', () => {
-        const board = makeBoard([
-            makeTile('v1', 'v', 'V', { tileTraitKind: 'volatile', state: 'flipped' }),
-            makeTile('x1', 'x', 'X', { state: 'flipped' }),
-            makeTile('a1', 'a', 'A'),
-            makeTile('b1', 'b', 'B')
-        ]);
-        const result = applyVolatileMismatchTrait(
-            board,
-            makeRun(board.tiles, { board, flipHistory: Number.NaN as unknown as string[] }),
-            [board.tiles[0]!, board.tiles[1]!]
-        );
-
-        expect(result.triggered).toBe(true);
-    });
-
-    it('normalizes malformed stat records before volatile mismatch shuffles', () => {
-        const board = makeBoard([
-            makeTile('v1', 'v', 'V', { tileTraitKind: 'volatile', state: 'flipped' }),
-            makeTile('x1', 'x', 'X', { state: 'flipped' }),
-            makeTile('a1', 'a', 'A'),
-            makeTile('b1', 'b', 'B')
-        ]);
-        const result = applyVolatileMismatchTrait(
-            board,
-            {
-                ...makeRun(board.tiles, { board }),
-                stats: Number.NaN as unknown as RunState['stats']
-            },
-            [board.tiles[0]!, board.tiles[1]!]
-        );
-
-        expect(result.triggered).toBe(true);
-    });
-    it('makes Heavy misses cost extra tries without draining peek value', () => {
-        const [a1] = makePair('a', 'A');
-        const [b1] = makePair('b', 'B');
-        const penalty = calculateTileTraitMismatchPenalty(makeRun([], { peekCharges: 1 }), [
-            { ...a1, tileTraitKind: 'heavy' },
-            b1
-        ]);
-
-        expect(penalty).toMatchObject({ triesDelta: 1, recallMistakesDelta: 0, peekChargeLoss: 0 });
-    });
-
-    it('deepens conduit mismatch recall pressure near cursed or volatile traits', () => {
+    it('previews nothing for a miss: the surviving interactions all fire on a match', () => {
         const board = makeBoard(
             [
-                makeTile('c1', 'c', 'C', { tileTraitKind: 'conduit', state: 'flipped' }),
+                makeTile('h1', 'h', 'H', { tileTraitKind: 'heavy', state: 'flipped' }),
+                makeTile('c1', 'c', 'C', { tileTraitKind: 'conduit' }),
                 makeTile('x1', 'x', 'X', { state: 'flipped' }),
-                makeTile('y1', 'y', 'Y'),
-                makeTile('v1', 'v', 'V', { tileTraitKind: 'volatile' })
+                makeTile('t1', 't', 'T', { tileTraitKind: 'stasis' })
             ],
             { columns: 2, rows: 2 }
         );
         const run = makeRun(board.tiles, { board });
 
-        const penalty = calculateTileTraitMismatchPenalty(run, [board.tiles[0]!, board.tiles[1]!], board);
+        const effect = resolveTileTraitEffects({
+            run,
+            board,
+            sourceTiles: [board.tiles[0]!, board.tiles[2]!],
+            source: 'mismatch'
+        });
 
-        expect(penalty).toMatchObject({ recallMistakesDelta: 1, triesDelta: 0 });
-    });
-
-    it('shuffles safe hidden tiles when a volatile pair is missed', () => {
-        const board = makeBoard([
-            makeTile('v1', 'v', 'V', { tileTraitKind: 'volatile', state: 'flipped' }),
-            makeTile('x1', 'x', 'X', { state: 'flipped' }),
-            makeTile('a1', 'a', 'A'),
-            makeTile('a2', 'a', 'A'),
-            makeTile('b1', 'b', 'B'),
-            makeTile('b2', 'b', 'B')
-        ]);
-        const run = makeRun(board.tiles, { board });
-
-        const result = applyVolatileMismatchTrait(board, run, [board.tiles[0]!, board.tiles[1]!]);
-        expect(result.triggered).toBe(true);
-        expect(result.board.tiles.slice(2).map((tile) => tile.id)).not.toEqual(board.tiles.slice(2).map((tile) => tile.id));
-        expect(result.board.tiles.slice(2).map((tile) => tile.id).sort()).toEqual(board.tiles.slice(2).map((tile) => tile.id).sort());
+        expect(effect).toEqual({
+            interactionTags: [],
+            peekChargeGain: 0,
+            scoreBonus: 0,
+            stickyBlockIndex: null,
+            triesDelta: 1
+        });
     });
 });
 

@@ -129,8 +129,7 @@ export const getCardFeedbackVisibleTraitPreviewCount = ({
             continue;
         }
         const previewLines = [
-            ...getTileTraitInteractionPreviewLines(board, [tile.id], 'match'),
-            ...getTileTraitInteractionPreviewLines(board, [tile.id], 'mismatch')
+            ...getTileTraitInteractionPreviewLines(board, [tile.id])
         ];
         if (previewLines.length > 0) {
             count += 1;
@@ -575,7 +574,7 @@ export const getCardFeedbackTraitLaneCuesAttr = (board: BoardState): string => {
         if (!tile || tile.state !== 'hidden') {
             continue;
         }
-        for (const lane of buildTraitInteractionLaneMap(getTileTraitInteractionPreviewLines(board, [tileId], 'match'))) {
+        for (const lane of buildTraitInteractionLaneMap(getTileTraitInteractionPreviewLines(board, [tileId]))) {
             laneCounts.set(lane.id, (laneCounts.get(lane.id) ?? 0) + 1);
         }
     }

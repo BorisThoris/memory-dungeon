@@ -41,7 +41,7 @@ describe('the detector itself', () => {
         for (const source of [
             `className="settingsScreenPanelHeader"`,
             `<div data-testid="relic-draft-offer-panel" />`,
-            `const id = 'trait-interaction-echo:sealed-combo';`,
+            `const id = 'trait-interaction-conduit:echo-peek';`,
             `const label = 'Shop gold';`,
             `const url = 'https://store.steampowered.com/app/1';`
         ]) {

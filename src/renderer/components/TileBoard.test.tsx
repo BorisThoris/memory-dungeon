@@ -502,7 +502,7 @@ describe('TileBoard touch and click controls', () => {
             board: {
                 ...board,
                 tiles: [
-                    { id: 's1', pairKey: 'sealed', symbol: 'S', label: 'Sealed', state: 'hidden', tileTraitKind: 'sealed' },
+                    { id: 's1', pairKey: 'conduit', symbol: 'C', label: 'Conduit', state: 'hidden', tileTraitKind: 'conduit' },
                     { id: 'f1', pairKey: 'filler', symbol: 'F', label: 'Filler', state: 'hidden' },
                     { id: 'x1', pairKey: 'origin', symbol: 'O', label: 'Origin', state: 'hidden' },
                     { id: 'h1', pairKey: 'heavy', symbol: 'H', label: 'Heavy', state: 'hidden', tileTraitKind: 'heavy' }
@@ -513,7 +513,7 @@ describe('TileBoard touch and click controls', () => {
             onTileSelect: vi.fn(),
             previewActive: false,
             reduceMotion: false,
-            traitRouteHintText: 'Swap Sealed with Filler: Sealed + Heavy: score surge',
+            traitRouteHintText: 'Swap Conduit with Filler: Conduit: adjacent trait charge',
             traitRouteTargetTileIds: ['s1', 'f1']
         });
 

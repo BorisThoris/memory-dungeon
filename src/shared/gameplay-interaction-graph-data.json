@@ -1,5 +1,5 @@
 {
-    "version": 31,
+    "version": 32,
     "mechanics": [
         {
             "id": "trait.echo",
@@ -21,149 +21,11 @@
                 "interactionTags"
             ],
             "enables": [
-                "trait.conduit",
-                "trait.mirror",
-                "trait.sealed"
+                "trait.conduit"
             ],
             "blocks": [],
             "softlockGuards": [
                 "trait-interaction-coverage"
-            ],
-            "tests": [
-                "src/shared/tile-trait-rules.test.ts"
-            ]
-        },
-        {
-            "id": "trait.volatile",
-            "label": "Volatile Trait",
-            "kind": "trait",
-            "role": "risk_reward",
-            "evidence": [
-                "src/shared/tile-trait-rules.ts",
-                "src/shared/turn-mismatch-rules.ts",
-                "src/renderer/components/RunShell.tsx"
-            ],
-            "reads": [
-                "tileTraitKind",
-                "guardTokens"
-            ],
-            "writes": [
-                "volatileTraitShuffles",
-                "interactionTags",
-                "triesDelta"
-            ],
-            "enables": [
-                "trait.drift",
-                "trait.heavy",
-                "trait.cursed"
-            ],
-            "blocks": [
-                "stable_board_layout"
-            ],
-            "softlockGuards": [
-                "volatile-can-be-buffered",
-                "no-completion-block"
-            ],
-            "tests": [
-                "src/shared/tile-trait-rules.test.ts",
-                "src/shared/turn-mismatch-rules.test.ts"
-            ]
-        },
-        {
-            "id": "trait.mirror",
-            "label": "Mirror Trait",
-            "kind": "trait",
-            "role": "reflection_reward",
-            "evidence": [
-                "src/shared/tile-trait-rules.ts",
-                "src/shared/tile-trait-codex.ts",
-                "src/renderer/components/RunShell.tsx"
-            ],
-            "reads": [
-                "tileTraitKind",
-                "adjacentTraits"
-            ],
-            "writes": [
-                "guardTokens",
-                "recallFocus",
-                "interactionTags"
-            ],
-            "enables": [
-                "trait.stasis",
-                "trait.conduit",
-                "trait.echo"
-            ],
-            "blocks": [],
-            "softlockGuards": [
-                "trait-interaction-coverage"
-            ],
-            "tests": [
-                "src/shared/tile-trait-rules.test.ts",
-                "src/shared/tile-trait-codex.test.ts"
-            ]
-        },
-        {
-            "id": "trait.cursed",
-            "label": "Cursed Trait",
-            "kind": "trait",
-            "role": "danger_reward",
-            "evidence": [
-                "src/shared/tile-trait-rules.ts",
-                "src/renderer/components/RunShell.tsx"
-            ],
-            "reads": [
-                "tileTraitKind",
-                "firstPair",
-                "stasisBuffer"
-            ],
-            "writes": [
-                "triesDelta",
-                "interactionTags"
-            ],
-            "enables": [
-                "trait.volatile",
-                "trait.conduit"
-            ],
-            "blocks": [
-                "clean_recall"
-            ],
-            "softlockGuards": [
-                "trait-cleanse-counterplay",
-                "stasis-buffer-counterplay"
-            ],
-            "tests": [
-                "src/shared/tile-trait-rules.test.ts"
-            ]
-        },
-        {
-            "id": "trait.sealed",
-            "label": "Sealed Trait",
-            "kind": "trait",
-            "role": "delayed_value",
-            "evidence": [
-                "src/shared/tile-trait-rules.ts",
-                "src/renderer/components/RunShell.tsx"
-            ],
-            "reads": [
-                "tileTraitKind",
-                "stasisBuffer"
-            ],
-            "writes": [
-                "comboShards",
-                "score",
-                "interactionTags"
-            ],
-            "enables": [
-                "trait.echo",
-                "trait.heavy",
-                "trait.conduit"
-            ],
-            "blocks": [
-                "immediate_trait_value"
-            ],
-            "softlockGuards": [
-                "stasis-buffer-counterplay",
-                "matchable-pair-remains"
             ],
             "tests": [
                 "src/shared/tile-trait-rules.test.ts"
@@ -185,13 +47,10 @@
             ],
             "writes": [
                 "score",
-                "guardTokens",
                 "interactionTags"
             ],
             "enables": [
-                "trait.sealed",
-                "trait.volatile",
-                "trait.mirror"
+                "trait.stasis"
             ],
             "blocks": [],
             "softlockGuards": [
@@ -200,43 +59,6 @@
             "tests": [
                 "src/shared/tile-trait-rules.test.ts",
                 "src/shared/balance-simulation.test.ts"
-            ]
-        },
-        {
-            "id": "trait.drift",
-            "label": "Drift Trait",
-            "kind": "trait",
-            "role": "routing_tool",
-            "evidence": [
-                "src/shared/tile-trait-rules.ts",
-                "src/shared/board-power-actions.ts",
-                "src/renderer/components/RunShell.tsx"
-            ],
-            "reads": [
-                "tileTraitKind",
-                "boardRows",
-                "shuffleCharges"
-            ],
-            "writes": [
-                "regionShuffleCharges",
-                "shuffleCharges",
-                "interactionTags"
-            ],
-            "enables": [
-                "power.tile_swap",
-                "power.region_shuffle",
-                "trait.volatile"
-            ],
-            "blocks": [
-                "fixed_trait_layout"
-            ],
-            "softlockGuards": [
-                "shuffle-legality-checks",
-                "matchable-pair-remains"
-            ],
-            "tests": [
-                "src/shared/tile-trait-rules.test.ts",
-                "src/shared/board-power-actions.test.ts"
             ]
         },
         {
@@ -262,9 +84,7 @@
             ],
             "enables": [
                 "trait.echo",
-                "trait.mirror",
-                "trait.stasis",
-                "trait.sealed"
+                "trait.stasis"
             ],
             "blocks": [],
             "softlockGuards": [
@@ -294,17 +114,14 @@
                 "interactionTags"
             ],
             "enables": [
-                "trait.mirror",
                 "trait.conduit",
-                "trait.sealed"
+                "trait.heavy"
             ],
             "blocks": [
-                "nearby_trait_match",
-                "cursed_volatile_penalty"
+                "nearby_trait_match"
             ],
             "softlockGuards": [
-                "nearby-block-never-final-pair",
-                "stasis-buffer-counterplay"
+                "nearby-block-never-final-pair"
             ],
             "tests": [
                 "src/shared/tile-trait-rules.test.ts",
@@ -339,7 +156,6 @@
             ],
             "enables": [
                 "trait.conduit",
-                "trait.drift",
                 "trait.stasis",
                 "objective.floor_clear"
             ],
@@ -383,7 +199,6 @@
                 "feedbackLines"
             ],
             "enables": [
-                "trait.drift",
                 "trait.conduit",
                 "objective.floor_clear"
             ],
@@ -2123,106 +1938,16 @@
             "label": "peek spark"
         },
         {
-            "source": "trait.echo",
-            "target": "trait.mirror",
-            "kind": "synergy",
-            "label": "recall focus"
-        },
-        {
-            "source": "trait.echo",
-            "target": "trait.sealed",
-            "kind": "synergy",
-            "label": "combo shard"
-        },
-        {
-            "source": "trait.volatile",
-            "target": "trait.heavy",
-            "kind": "synergy",
-            "label": "guard spark"
-        },
-        {
-            "source": "trait.volatile",
-            "target": "trait.drift",
-            "kind": "synergy",
-            "label": "shuffle route"
-        },
-        {
-            "source": "trait.cursed",
-            "target": "trait.volatile",
-            "kind": "risk",
-            "label": "greed pressure"
-        },
-        {
-            "source": "trait.stasis",
-            "target": "trait.cursed",
-            "kind": "counterplay",
-            "label": "buffers cursed risk"
-        },
-        {
-            "source": "trait.stasis",
-            "target": "trait.volatile",
-            "kind": "counterplay",
-            "label": "blocks volatile risk"
-        },
-        {
-            "source": "trait.mirror",
-            "target": "trait.stasis",
-            "kind": "synergy",
-            "label": "guard ward"
-        },
-        {
-            "source": "trait.sealed",
-            "target": "trait.heavy",
-            "kind": "synergy",
-            "label": "score surge"
-        },
-        {
-            "source": "trait.sealed",
-            "target": "trait.conduit",
-            "kind": "synergy",
-            "label": "spark"
-        },
-        {
-            "source": "trait.heavy",
-            "target": "trait.mirror",
-            "kind": "synergy",
-            "label": "braced guard"
-        },
-        {
-            "source": "trait.conduit",
-            "target": "trait.mirror",
-            "kind": "synergy",
-            "label": "guard spark"
-        },
-        {
             "source": "trait.conduit",
             "target": "trait.stasis",
             "kind": "risk",
             "label": "lock pulse"
         },
         {
-            "source": "trait.drift",
-            "target": "power.region_shuffle",
-            "kind": "enables",
-            "label": "grants routing charge"
-        },
-        {
-            "source": "trait.stasis",
-            "target": "trait.sealed",
-            "kind": "counterplay",
-            "label": "buffers sealed drain"
-        },
-        {
             "source": "power.tile_swap",
             "target": "trait.conduit",
             "kind": "counterplay",
             "label": "sets adjacency"
-        },
-        {
-            "source": "power.region_shuffle",
-            "target": "trait.drift",
-            "kind": "counterplay",
-            "label": "repositions route"
         },
         {
             "source": "power.destroy_pair",
@@ -3105,17 +2830,30 @@
             "target": "core.gameplay_commands",
             "kind": "triggers",
             "label": "chunk facts on the board.turn_resolved event"
+        },
+        {
+            "source": "trait.stasis",
+            "target": "trait.heavy",
+            "kind": "synergy",
+            "label": "held brace"
+        },
+        {
+            "source": "trait.heavy",
+            "target": "trait.stasis",
+            "kind": "synergy",
+            "label": "brace beside the lock"
+        },
+        {
+            "source": "power.tile_swap",
+            "target": "trait.stasis",
+            "kind": "counterplay",
+            "label": "swap the blocked pair away"
         }
     ],
     "coverage": {
         "tileTraits": [
             "echo",
-            "volatile",
-            "mirror",
-            "cursed",
-            "sealed",
             "heavy",
-            "drift",
             "conduit",
             "stasis"
         ],

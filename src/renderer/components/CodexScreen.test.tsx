@@ -61,14 +61,14 @@ describe('CodexScreen', () => {
             const input = screen.getByLabelText(/filter topics/i) as HTMLInputElement;
             act(() => {
                 const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!;
-                setter.call(input, 'combo shard');
+                setter.call(input, 'spark');
                 input.dispatchEvent(new Event('input', { bubbles: true }));
             });
             act(() => {
                 vi.advanceTimersByTime(200);
             });
             const entries = screen.getByTestId('codex-entries');
-            expect(entries).toHaveTextContent(/combo shard/i);
+            expect(entries).toHaveTextContent(/spark/i);
             // Every hit carries the section it came from, whichever section that is.
             const sections = within(entries)
                 .getAllByRole('listitem')
@@ -77,9 +77,9 @@ describe('CodexScreen', () => {
             expect(sections).toContain('scoring');
             // The trait interaction lives in another section and the one filter reaches it.
             expect(sections).toContain('traits');
-            // The first fitted page has six slots and "combo shard" now hits the chain article too,
-            // so the interaction line may sit on a later page. Page to it: the pager is how a
-            // player reaches it, and this proves the pager under a filter.
+            // "spark" hits the shard article, the findables article and the Conduit + Echo
+            // interaction. The first fitted page has six slots, so all three fit on it today; the
+            // pager is still walked, because it is how a player reaches a hit that does not.
             const pageTo = (text: string): void => {
                 for (let page = 0; page < 6 && !entries.textContent?.includes(text); page += 1) {
                     const next = screen.getByRole('button', { name: /^next$/i });
@@ -89,8 +89,8 @@ describe('CodexScreen', () => {
                     });
                 }
             };
-            pageTo('Echo + Sealed: combo shard');
-            expect(entries).toHaveTextContent('Echo + Sealed: combo shard');
+            pageTo('Conduit + Echo: peek spark');
+            expect(entries).toHaveTextContent('Conduit + Echo: peek spark');
         } finally {
             vi.useRealTimers();
         }

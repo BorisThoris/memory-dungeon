@@ -11,7 +11,7 @@
 import type { AchievementId, GameMode, MutatorId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 28 as const;
+export const ENCYCLOPEDIA_VERSION = 29 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -105,7 +105,7 @@ export const MECHANICS_GLOSSARY_TERMS: readonly MechanicsGlossaryTerm[] = [
     {
         id: 'tile_traits',
         preferredLabel: 'Tile traits',
-        shortDefinition: 'Pair-level modifiers such as Echo, Volatile, Mirror, Cursed, Sealed, and Heavy that add match rewards or miss drawbacks.',
+        shortDefinition: 'Pair-level modifiers - Echo, Heavy, Conduit, and Stasis - that add match rewards or a miss drawback.',
         avoidLabels: ['random punishments', 'status ailments'],
         surfaces: ['Board', 'Tile a11y', 'Codex']
     },
@@ -205,7 +205,7 @@ export const ACHIEVEMENT_CATALOG: Record<AchievementId, AchievementCodexEntry> =
     ACH_TRAIT_SCHOLAR: {
         id: 'ACH_TRAIT_SCHOLAR',
         title: 'Trait Scholar',
-        description: 'Match five different tile traits in a single run.'
+        description: 'Match all four tile traits in a single run.'
     },
     ACH_NO_POWERS_TEN: {
         id: 'ACH_NO_POWERS_TEN',
@@ -368,13 +368,13 @@ export const ENCYCLOPEDIA_POWER_TOPICS: readonly EncyclopediaTopic[] = [
         id: 'power_full_shuffle',
         title: 'Full-board shuffle',
         description:
-            'Spends a shuffle charge to permute hidden tiles (rules may use weaker “rows only” shuffle). May incur shuffle score tax when enabled. A clean match on a Drift tile next to Volatile can grant an extra charge.'
+            'Spends a shuffle charge to permute hidden tiles (rules may use weaker “rows only” shuffle). May incur shuffle score tax when enabled.'
     },
     {
         id: 'power_region_shuffle',
         title: 'Row / region shuffle',
         description:
-            'Shuffles tiles within a single row (charges per run; a clean Drift match grants one). Distinct from full-board shuffle.'
+            'Shuffles tiles within a single row (charges per run). Distinct from full-board shuffle.'
     },
     {
         id: 'power_destroy_pair',
@@ -476,7 +476,7 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         id: 'sys_combo_shards',
         title: 'Combo shards → extra life',
         description:
-            'Each **even-numbered** consecutive match adds a **combo shard** (bank capped low). At **three** shards, if you are below max lives, shards convert to **+1 life** (remainder stays in the bank). Shard sparks on the board and clean Sealed matches add shards to the same bank.'
+            'Each **even-numbered** consecutive match adds a **combo shard** (bank capped low). At **three** shards, if you are below max lives, shards convert to **+1 life** (remainder stays in the bank). Shard sparks on the board add shards to the same bank.'
     },
     {
         id: 'sys_chain_heal_and_guard',
@@ -612,7 +612,7 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         id: 'board_tile_traits',
         title: 'Tile traits',
         description:
-            '**Tile traits** are pair-level rules layered onto ordinary match pairs from floor 2 onward. **Echo** grants a peek charge on clean match. **Volatile** shuffles safe hidden tiles on a miss. **Mirror** grants a guard token on clean match but a miss counts as a deeper memory slip. **Cursed** adds score on clean match but counts as an extra mistake on miss. **Sealed** grants a combo shard on clean match and drains a peek charge on miss. **Heavy** grants +35 score on clean match and a miss costs an extra try. **Drift** grants a row/swap charge on clean match. **Conduit** converts nearby traits into score and small resource sparks. **Stasis** locks a nearby trait tile from being opened first next turn. Traits standing next to each other add to these effects — Echo beside Sealed also grants a shard, Volatile beside Heavy a guard, Stasis buffers a Cursed or Volatile miss.'
+            '**Tile traits** are pair-level rules layered onto ordinary match pairs from floor 4 onward; the first three floors carry none. **Echo** grants a peek charge on clean match. **Heavy** grants +35 score on clean match and a miss costs an extra try. **Conduit** converts nearby traits into score. **Stasis** locks a nearby trait tile from being opened first next turn. Traits standing next to each other add to these effects — Conduit beside Echo also grants a peek charge, Conduit beside Stasis adds score and pulses the same lock.'
     },
     {
         id: 'board_shifting_spotlight',

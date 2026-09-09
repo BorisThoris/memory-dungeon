@@ -949,7 +949,7 @@ describe('gameSfx', () => {
                 matchesFound: 2,
                 tries: 2,
                 currentStreak: 1,
-                tileTraitMismatches: { volatile: 0, mirror: 0 }
+                tileTraitMismatches: { heavy: 0, stasis: 0 }
             }
         } as unknown as RunState;
         const after = {
@@ -957,7 +957,7 @@ describe('gameSfx', () => {
                 matchesFound: 2,
                 tries: 3,
                 currentStreak: 0,
-                tileTraitMismatches: { volatile: 1, mirror: 1, missing_trait: 99 }
+                tileTraitMismatches: { heavy: 1, stasis: 1, missing_trait: 99 }
             }
         } as unknown as RunState;
 

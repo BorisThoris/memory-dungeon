@@ -70,7 +70,7 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
         label: 'Row/swap charge',
         stackLimit: null,
         mutableAt: 'mid_run',
-        source: 'Run start and Drift trait matches.',
+        source: 'Run start.',
         useRule: 'Spend during play to reshuffle one row or swap two hidden tiles; disabled by no-shuffle contracts.'
     },
     destroy_charge: {
@@ -88,7 +88,7 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
         label: 'Peek charge',
         stackLimit: null,
         mutableAt: 'mid_run',
-        source: 'Run start, Echo trait matches, and explicit pickups.',
+        source: 'Run start, Echo trait matches, Conduit beside Echo, and explicit pickups.',
         useRule: 'Spend during play to reveal tiles without committing flips.'
     },
     stray_remove_charge: {

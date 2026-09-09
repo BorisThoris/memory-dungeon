@@ -9,13 +9,14 @@ import {
     type Tile
 } from './contracts';
 import { getChapterActBiomeForCycleFloor } from './floor-mutator-schedule';
-import { NUMBER_SYMBOLS } from './tile-symbol-catalog';
 import {
     assignFindableKindsToTiles,
     createTiles,
     pickCursedPairKey
 } from './board-tile-generation-rules';
 import { assignTileTraitsToGeneratedBoard } from './tile-trait-rules';
+import { authoredFloorLayout, layAuthoredFloorTiles } from './authored-floors';
+import { pairsForFloor } from './pair-curve';
 import { isSingletonUtilityPairKey } from './tile-identity';
 import { dealBoardSuits, getSuitDealProfile } from './tile-suit-rules';
 import { pickShiftingSpotlightKeys } from './shifting-spotlight-rules';
@@ -87,7 +88,9 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
         };
     }
 
-    const pairCount = clamp(level + 1, Math.min(2, NUMBER_SYMBOLS.length), NUMBER_SYMBOLS.length);
+    // The pair curve (`pair-curve.ts`): square-root-tempered, so the floors a player meets first
+    // are real boards and the deep ones do not run away. It caps well inside the symbol catalog.
+    const pairCount = pairsForFloor(level);
     /*
      * The dungeon layer used to sit here: a card recipe, a filler pass, an exit tile, a shop tile,
      * a room tile, a hazard pass and a layout plan that pinned all of them (Gen 172). The six route
@@ -111,16 +114,36 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
               rulesVersion,
               level
           );
-    const tileCount = layoutTiles.length;
-    const columns = clamp(Math.ceil(Math.sqrt(tileCount)), 2, 8);
-    // Suits go on before anything reads positions: pairs are dealt in clumps so the floor opens as
-    // a map rather than a field.
-    const tiles = dealBoardSuits(layoutTiles, columns, runSeed, level, rulesVersion, getSuitDealProfile(floorArchetypeId));
-    const rows = Math.ceil(tileCount / columns);
+    // The cursed pair is picked before the tiles are placed: an authored floor keeps it out of
+    // the split slot, because a break never takes the cursed pair and the split pair is there to
+    // be taken.
     const cursedPairKey =
         featuredObjectiveId === 'cursed_last' || featuredObjectiveId === null
-            ? pickCursedPairKey(tiles, runSeed, rulesVersion, level)
+            ? pickCursedPairKey(layoutTiles, runSeed, rulesVersion, level)
             : null;
+    const tileCount = layoutTiles.length;
+    /*
+     * The first three floors are authored (`authored-floors.ts`): the grid and the suit of every
+     * cell are fixed so the pop, the boundary and the reach are each guaranteed where a new
+     * player meets them. Symbols and which pair sits where still come from the seed. A board the
+     * layout cannot hold - it never happens on the curve, but the fallback is the honest deal,
+     * not a wrong shape - is dealt the way every later floor is.
+     */
+    const authored = authoredFloorLayout(level);
+    const authoredTiles = authored
+        ? layAuthoredFloorTiles(layoutTiles, authored, {
+              reservedPairKeys: [
+                  ...(cursedPairKey ? [cursedPairKey] : []),
+                  ...layoutTiles.filter((tile) => tile.findableKind != null).map((tile) => tile.pairKey)
+              ]
+          })
+        : null;
+    const columns = authoredTiles && authored ? authored.columns : clamp(Math.ceil(Math.sqrt(tileCount)), 2, 8);
+    // Suits go on before anything reads positions: pairs are dealt in clumps so the floor opens as
+    // a map rather than a field.
+    const tiles =
+        authoredTiles ?? dealBoardSuits(layoutTiles, columns, runSeed, level, rulesVersion, getSuitDealProfile(floorArchetypeId));
+    const rows = Math.ceil(tileCount / columns);
     const baseBoard: BoardState = {
         level,
         pairCount,

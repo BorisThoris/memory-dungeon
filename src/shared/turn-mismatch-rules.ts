@@ -15,10 +15,7 @@ import { calculateRating } from './scoring-rules';
 import { addTileTraitCountStats, normalizeSessionStats } from './session-stats-rules';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
 import { hideTileAfterTurn } from './tile-state-rules';
-import {
-    applyVolatileMismatchTrait,
-    calculateTileTraitMismatchPenalty
-} from './tile-trait-rules';
+import { calculateTileTraitMismatchPenalty } from './tile-trait-rules';
 
 export interface MismatchPenalty {
     consumesGuardToken: boolean;
@@ -101,8 +98,7 @@ export const resolveMismatchTurnTransition = ({
     const traitPenalty = calculateTileTraitMismatchPenalty(normalizedRun, sourceTiles, board);
     const penalty = calculateMismatchPenalty(normalizedRun, board, triesDelta + traitPenalty.triesDelta);
     const hiddenBoard = createHiddenMismatchBoard(board, tileIds);
-    const volatileTrait = applyVolatileMismatchTrait(hiddenBoard, run, sourceTiles);
-    const spunMiss = rotateRunShiftingSpotlight(run, volatileTrait.board);
+    const spunMiss = rotateRunShiftingSpotlight(run, hiddenBoard);
 
     /*
      * The magpie arrives last, after every other consequence of the miss has landed. It takes back
@@ -132,11 +128,9 @@ export const resolveMismatchTurnTransition = ({
         magpieScaredOffThisFloor:
             runNonNegativeInteger(run.magpieScaredOffThisFloor) + (magpie?.kind === 'scared_off' ? 1 : 0),
         pendingMemorizeBonusMs: penalty.pendingMemorizeBonusMs,
-        peekCharges: decrementRunCounter(run.peekCharges, traitPenalty.peekChargeLoss),
         stickyBlockIndex: null,
         recallFocus: decreaseRecallFocus(run),
-        recallMistakesThisFloor:
-            runNonNegativeInteger(run.recallMistakesThisFloor) + 1 + runNonNegativeInteger(traitPenalty.recallMistakesDelta),
+        recallMistakesThisFloor: runNonNegativeInteger(run.recallMistakesThisFloor) + 1,
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, tileIds),
         decoyFlippedThisFloor: run.decoyFlippedThisFloor || decoyTouched,
         // A miss keeps half the streak (the score multiplier forgives) but the cascade's momentum
@@ -160,9 +154,7 @@ export const resolveMismatchTurnTransition = ({
                     ? runNonNegativeInteger(magpie.guardTokens)
                     : runNonNegativeInteger(penalty.guardTokens)
             ),
-            tileTraitMismatches: addTileTraitCountStats(stats.tileTraitMismatches, sourceTiles),
-            volatileTraitShuffles:
-                runNonNegativeInteger(stats.volatileTraitShuffles) + (volatileTrait.triggered ? 1 : 0)
+            tileTraitMismatches: addTileTraitCountStats(stats.tileTraitMismatches, sourceTiles)
         },
         timerState: clearResolveState(run)
     };

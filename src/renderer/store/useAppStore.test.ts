@@ -433,8 +433,9 @@ describe('useAppStore timers', () => {
         expect(matchedBoard.tiles.find((tile) => tile.id === matchingTile!.id)?.state).toBe('matched');
 
         /*
-         * Floor one is two pairs of one suit, so the match's pop can take the other pair and end
-         * the floor there and then. Either way the turn resolved without waiting: if the floor is
+         * Floor one is three pairs of one suit, authored so the match's pop takes at least one of
+         * the other two - and when it takes both, the floor ends there and then. Either way the
+         * turn resolved without waiting: if the floor is
          * still open the next tile flips on the next press, and if it is not, nothing is left to
          * flip because the break took it.
          */

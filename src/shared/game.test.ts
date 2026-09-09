@@ -66,6 +66,7 @@ import {
 } from './turn-resolution';
 import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 import { MIN_CURIO_MEMORIZE_MS, pickFloorCurio } from './floor-curio-rules';
+import { pairsForFloor } from './pair-curve';
 import { makeBoard as createBoard, makePair as createPair, makeRun as createRun, makeTile as createTile } from './test/game-fixtures';
 import {
     DEFAULT_SOFTLOCK_GENERATOR_SCENARIOS,
@@ -821,15 +822,20 @@ describe('game rules', () => {
     it('builds a progressively larger board and memorize duration falls on a gentler step than pair growth', () => {
         const board = buildBoard(4);
 
+        // Floor 4 is the first procedural floor, and the pair curve (`pair-curve.ts`) deals it.
         expect(board.level).toBe(4);
-        expect(board.pairCount).toBe(5);
-        expect(board.tiles).toHaveLength(10);
+        expect(board.pairCount).toBe(pairsForFloor(4));
+        expect(board.pairCount).toBe(8);
+        expect(board.tiles).toHaveLength(16);
         expect(board.columns).toBeGreaterThanOrEqual(2);
-        expect(getMemorizeDuration(1)).toBe(1300);
-        expect(getMemorizeDuration(2)).toBe(1878);
-        expect(getMemorizeDuration(3)).toBe(2408);
-        expect(getMemorizeDuration(20)).toBe(4620);
-        expect(getMemorizeDuration(29)).toBe(6000);
+        // Per-tile budget over the curve's board: 6 tiles at floor 1, 12 at floor 2, 14 at floor 3,
+        // 28 at floor 20 on the floor of the per-tile budget, 34 at floor 29 - under the cap now
+        // that the curve is tempered.
+        expect(getMemorizeDuration(1)).toBe(1950);
+        expect(getMemorizeDuration(2)).toBe(3756);
+        expect(getMemorizeDuration(3)).toBe(4214);
+        expect(getMemorizeDuration(20)).toBe(3080);
+        expect(getMemorizeDuration(29)).toBe(3740);
     });
 
     it('uses staged symbol bands by level when category_letters is off', () => {

@@ -190,13 +190,13 @@ describe('achievements that point at the rest of the game', () => {
         expect(unlocksFor(baseRun({ stats: { ...stats, bestStreak: 10 } }))).toContain('ACH_STREAK_TEN');
         expect(unlocksFor(baseRun({ stats: { ...stats, totalScore: 10_000 } }))).toContain('ACH_SCORE_TEN_THOUSAND');
 
-        const fourTraits = {
+        const threeTraits = {
             ...stats,
-            tileTraitMatches: { ...stats.tileTraitMatches, echo: 1, mirror: 2, sealed: 1, heavy: 3 }
+            tileTraitMatches: { ...stats.tileTraitMatches, echo: 1, heavy: 3, conduit: 2 }
         };
-        expect(unlocksFor(baseRun({ stats: fourTraits }))).not.toContain('ACH_TRAIT_SCHOLAR');
+        expect(unlocksFor(baseRun({ stats: threeTraits }))).not.toContain('ACH_TRAIT_SCHOLAR');
         expect(
-            unlocksFor(baseRun({ stats: { ...fourTraits, tileTraitMatches: { ...fourTraits.tileTraitMatches, drift: 1 } } }))
+            unlocksFor(baseRun({ stats: { ...threeTraits, tileTraitMatches: { ...threeTraits.tileTraitMatches, stasis: 1 } } }))
         ).toContain('ACH_TRAIT_SCHOLAR');
     });
 

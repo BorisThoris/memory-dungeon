@@ -622,7 +622,7 @@ describe('GameScreen (OVR-014)', () => {
         });
         expect(
             getVisualHudAnnouncementImpact(
-                'Trait penalty. No match. Next action: Recover route: peek or route away. Cursed + Volatile: recall pressure. Recover - peek or route away',
+                'Trait penalty. No match. Next action: Recover route: prime with tools. Heavy: extra try. Recover - prime with tools',
                 'info'
             )
         ).toEqual({
@@ -698,7 +698,7 @@ describe('GameScreen (OVR-014)', () => {
             details: [{ label: 'Perk pop', tone: 'trait' }],
             level: 'low'
         });
-        expect(getVisualHudAnnouncementImpact('Trait cashout: Echo + Sealed: combo shard.', 'info')).toEqual({
+        expect(getVisualHudAnnouncementImpact('Trait cashout: Conduit + Echo: peek spark, combo shard.', 'info')).toEqual({
             burstTier: 'reward',
             details: [
                 { label: 'Shard cashout', tone: 'reward' },
@@ -715,7 +715,7 @@ describe('GameScreen (OVR-014)', () => {
             ],
             level: 'medium'
         });
-        expect(getVisualHudAnnouncementImpact('Trait combo surge: Drift and Stasis resolved.', 'info')).toEqual({
+        expect(getVisualHudAnnouncementImpact('Trait combo surge: Conduit and Stasis resolved.', 'info')).toEqual({
             burstTier: 'trait',
             details: [{ label: 'Trait surge', tone: 'trait' }],
             level: 'medium'
@@ -851,7 +851,7 @@ describe('GameScreen (OVR-014)', () => {
         ).toBe('Next: route value is banked; chase the safest chainable payoff.');
         expect(
             getVisualHudAnnouncementFollowup({
-                announcement: 'Trait cashout: Echo + Sealed combo shard.',
+                announcement: 'Trait cashout: Conduit + Echo peek spark, combo shard.',
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
@@ -1010,7 +1010,7 @@ describe('GameScreen (OVR-014)', () => {
     it('adds next-step lines for trait route objective feedback', () => {
         expect(
             getVisualHudAnnouncementFollowup({
-                announcement: 'Trait route prime found. Use swap: Swap Sealed with Filler: Sealed + Heavy: score surge.',
+                announcement: 'Trait route prime found. Use swap: Swap Conduit with Filler: Conduit: adjacent trait charge.',
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
@@ -1082,7 +1082,7 @@ describe('GameScreen (OVR-014)', () => {
 
         expect(
             getVisualHudAnnouncementFollowup({
-                announcement: 'No match. Recover with a safe match. Chain reset. Trait surge: 2 penalties applied: Volatile and Mirror.',
+                announcement: 'No match. Recover with a safe match. Chain reset. Trait surge: 2 penalties applied: Heavy and Stasis.',
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
@@ -1122,7 +1122,7 @@ describe('GameScreen (OVR-014)', () => {
 
         expect(
             getVisualHudAnnouncementFollowup({
-                announcement: 'Match resolved. 1/4 pairs cleared. Trait combo surge: Drift and Stasis resolved.',
+                announcement: 'Match resolved. 1/4 pairs cleared. Trait combo surge: Conduit and Stasis resolved.',
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,

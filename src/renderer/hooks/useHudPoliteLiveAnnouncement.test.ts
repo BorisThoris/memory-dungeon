@@ -22,29 +22,8 @@ const base = {
     matchedPairs: 0,
     pairCount: 2,
     mismatches: 0,
-    tileTraitMatches: {
-        echo: 0,
-        volatile: 0,
-        mirror: 0,
-        cursed: 0,
-        sealed: 0,
-        heavy: 0,
-        drift: 0,
-        conduit: 0,
-        stasis: 0
-    },
-    tileTraitMismatches: {
-        echo: 0,
-        volatile: 0,
-        mirror: 0,
-        cursed: 0,
-        sealed: 0,
-        heavy: 0,
-        drift: 0,
-        conduit: 0,
-        stasis: 0
-    },
-    volatileTraitShuffles: 0,
+    tileTraitMatches: { echo: 0, heavy: 0, conduit: 0, stasis: 0 },
+    tileTraitMismatches: { echo: 0, heavy: 0, conduit: 0, stasis: 0 },
     findablesClaimedThisFloor: 0,
     recallFocus: 1,
     recallFocusMax: 3,
@@ -121,7 +100,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
     it('keeps compact visual action feedback readable for long multi-event updates', () => {
         expect(
             formatHudActionFeedbackText(
-                'Shuffle Snare fired. Hidden safe tiles reordered. Cascade Cache fired. One safe hidden pair cleared. Mirror Decoy misled the mismatch. It cannot form a pair.'
+                'Shuffle Snare fired. Hidden safe tiles reordered. Cascade Cache fired. One safe hidden pair cleared. Decoy misled the mismatch. It cannot form a pair.'
             )
         ).toBe('Shuffle Snare fired. Hidden safe tiles reordered. +4 more updates.');
     });
@@ -149,7 +128,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             label: 'Trait play',
             tone: 'trait'
         });
-        expect(getHudActionFeedbackProfile('Trait combo surge: Drift and Stasis resolved.')).toEqual({
+        expect(getHudActionFeedbackProfile('Trait combo surge: Conduit and Stasis resolved.')).toEqual({
             label: 'Trait surge',
             tone: 'trait'
         });
@@ -507,7 +486,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
         expect(result.current.message).toBe('Match resolved. 1/4 pairs cleared. Echo trait resolved.');
     });
 
-    it('announces trait-driven shuffle charges and stasis locks with the resolved match', async () => {
+    it('announces trait combo surges, charge gains, and stasis locks with the resolved match', async () => {
         const { result, rerender } = renderHook(
             (p: { turnEvent: BoardTurnResolvedEvent | null; rowCharges: number; fullCharges: number; sticky: number | null }) =>
                 useHudPoliteLiveAnnouncement({
@@ -530,7 +509,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
         await act(async () => {
             rerender({
-                turnEvent: matchTurn('drift-turn', { matchedTraitKinds: ['drift', 'stasis'] }),
+                turnEvent: matchTurn('conduit-turn', { matchedTraitKinds: ['conduit', 'stasis'] }),
                 rowCharges: 1,
                 fullCharges: 1,
                 sticky: 3
@@ -539,11 +518,11 @@ describe('useHudPoliteLiveAnnouncement', () => {
         await flushRaf();
 
         expect(result.current.message).toBe(
-            'Match resolved. 1/4 pairs cleared. Trait combo surge: Drift and Stasis resolved. 1 row/swap charge gained. 1 full shuffle charge gained. Stasis blocked a nearby trait tile from opening first next turn.'
+            'Match resolved. 1/4 pairs cleared. Trait combo surge: Conduit and Stasis resolved. 1 row/swap charge gained. 1 full shuffle charge gained. Stasis blocked a nearby trait tile from opening first next turn.'
         );
     });
 
-    it('announces tile trait mismatch penalties and volatile shuffles', async () => {
+    it('announces tile trait mismatch penalties', async () => {
         const { result, rerender } = renderHook(
             (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
@@ -556,17 +535,15 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
         await act(async () => {
             rerender({
-                turnEvent: mismatchTurn('mirror-miss-turn', {
-                    matchedTraitKinds: ['mirror'],
-                    volatileTraitShufflesBefore: 0,
-                    volatileTraitShufflesAfter: 1
+                turnEvent: mismatchTurn('heavy-miss-turn', {
+                    matchedTraitKinds: ['heavy']
                 })
             });
         });
         await flushRaf();
 
         expect(result.current.message).toBe(
-            'No match. Recover with a safe match. Chain reset. Mirror trait penalty applied. Volatile trait shuffled hidden cards.'
+            'No match. Recover with a safe match. Chain reset. Heavy trait penalty applied.'
         );
     });
 
@@ -584,14 +561,14 @@ describe('useHudPoliteLiveAnnouncement', () => {
         await act(async () => {
             rerender({
                 turnEvent: mismatchTurn('multi-trait-miss-turn', {
-                    matchedTraitKinds: ['volatile', 'mirror']
+                    matchedTraitKinds: ['heavy', 'stasis']
                 })
             });
         });
         await flushRaf();
 
         expect(result.current.message).toBe(
-            'No match. Recover with a safe match. Chain reset. Trait surge: 2 penalties applied: Volatile and Mirror.'
+            'No match. Recover with a safe match. Chain reset. Trait surge: 2 penalties applied: Heavy and Stasis.'
         );
     });
 

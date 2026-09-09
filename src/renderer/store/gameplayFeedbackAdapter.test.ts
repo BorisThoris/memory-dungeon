@@ -152,13 +152,13 @@ describe('gameplayFeedbackAdapter', () => {
                 totalAfter: 120,
                 currentLevelBefore: 40,
                 currentLevelAfter: 60,
-                source: { kind: 'trait', id: 'mirror' }
+                source: { kind: 'trait', id: 'conduit' }
             }),
             event(1, {
                 type: 'feedback.requested',
-                cue: 'trait.mirror.overflow',
-                message: 'Mirror paid its reward as overflow score.',
-                source: { kind: 'trait', id: 'mirror' },
+                cue: 'trait.conduit.overflow',
+                message: 'Conduit paid its reward as overflow score.',
+                source: { kind: 'trait', id: 'conduit' },
                 tone: 'reward'
             })
         ])[0];

@@ -112,10 +112,10 @@ describe('tile board DOM telemetry helpers', () => {
         const traitBoard: BoardState = {
             ...board,
             tiles: [
-                { ...board.tiles[0]!, pairKey: 'echo', tileTraitKind: 'echo' },
-                { ...board.tiles[1]!, pairKey: 'sealed', tileTraitKind: 'sealed' },
-                { ...board.tiles[2]!, pairKey: 'mirror', tileTraitKind: 'mirror' },
-                { ...board.tiles[3]!, pairKey: 'stasis', tileTraitKind: 'stasis' }
+                { ...board.tiles[0]!, pairKey: 'conduit', tileTraitKind: 'conduit' },
+                { ...board.tiles[1]!, pairKey: 'echo', tileTraitKind: 'echo' },
+                { ...board.tiles[2]!, pairKey: 'stasis', tileTraitKind: 'stasis' },
+                { ...board.tiles[3]!, pairKey: 'relay', tileTraitKind: 'conduit' }
             ]
         };
 
@@ -136,11 +136,13 @@ describe('tile board DOM telemetry helpers', () => {
         expect(states).toContain('trait-combo:4');
         expect(states).toContain('trait-combo-surge:4');
         expect(getCardFeedbackMarkerShapesAttr({ board: traitBoard })).toBe('combo-surge:4;linked-route:4');
-        expect(getCardFeedbackTraitLaneCuesAttr(traitBoard)).toBe('shard:1>guard:1>recall:1');
-        expect(getCardFeedbackTraitLanePrimaryActionAttr(traitBoard)).toBe('shard:Cash shard:1');
-        expect(getCardFeedbackTraitLaneBeatsAttr(traitBoard)).toBe('shard:4>guard:3>recall:3');
+        // Two Conduits, each beside the Echo and the Stasis: a peek spark, a score charge and a lock
+        // pulse apiece, so every lane counts two cards.
+        expect(getCardFeedbackTraitLaneCuesAttr(traitBoard)).toBe('shard:2>tool:2>block:2');
+        expect(getCardFeedbackTraitLanePrimaryActionAttr(traitBoard)).toBe('shard:Cash shard:2');
+        expect(getCardFeedbackTraitLaneBeatsAttr(traitBoard)).toBe('shard:4>tool:3>block:4');
         expect(getCardFeedbackTraitLaneActionsAttr(traitBoard)).toBe(
-            'shard:Cash shard:1>guard:Protect run:1>recall:Set memory:1'
+            'shard:Cash shard:2>tool:Use tool:2>block:Deny match:2'
         );
         expect(getCardFeedbackTraitRouteIntensitiesAttr({ board: traitBoard })).toBe('surge:4');
         expect(getCardFeedbackTraitRouteTiersAttr({ board: traitBoard })).toBe('surge:4');
@@ -151,8 +153,8 @@ describe('tile board DOM telemetry helpers', () => {
         const traitBoard: BoardState = {
             ...board,
             tiles: [
-                { ...board.tiles[0]!, pairKey: 'echo', tileTraitKind: 'echo' },
-                { ...board.tiles[1]!, pairKey: 'sealed', tileTraitKind: 'sealed' },
+                { ...board.tiles[0]!, pairKey: 'conduit', tileTraitKind: 'conduit' },
+                { ...board.tiles[1]!, pairKey: 'heavy', tileTraitKind: 'heavy' },
                 board.tiles[2]!,
                 board.tiles[3]!
             ]
@@ -172,18 +174,20 @@ describe('tile board DOM telemetry helpers', () => {
         const traitBoard: BoardState = {
             ...board,
             tiles: [
-                { ...board.tiles[0]!, pairKey: 'echo', tileTraitKind: 'echo' },
-                { ...board.tiles[1]!, pairKey: 'sealed', tileTraitKind: 'sealed' },
-                { ...board.tiles[2]!, pairKey: 'mirror', tileTraitKind: 'mirror' },
-                { ...board.tiles[3]!, pairKey: 'stasis', tileTraitKind: 'stasis' }
+                { ...board.tiles[0]!, pairKey: 'conduit', tileTraitKind: 'conduit' },
+                { ...board.tiles[1]!, pairKey: 'echo', tileTraitKind: 'echo' },
+                { ...board.tiles[2]!, pairKey: 'stasis', tileTraitKind: 'stasis' },
+                { ...board.tiles[3]!, pairKey: 'relay', tileTraitKind: 'conduit' }
             ]
         };
 
-        expect(getCardFeedbackTraitLaneCuesAttr(traitBoard)).toBe('shard:1>guard:1>recall:1');
-        expect(getCardFeedbackTraitLanePrimaryActionAttr(traitBoard)).toBe('shard:Cash shard:1');
-        expect(getCardFeedbackTraitLaneBeatsAttr(traitBoard)).toBe('shard:4>guard:3>recall:3');
+        // Two Conduits, each beside the Echo and the Stasis: a peek spark, a score charge and a lock
+        // pulse apiece, so every lane counts two cards.
+        expect(getCardFeedbackTraitLaneCuesAttr(traitBoard)).toBe('shard:2>tool:2>block:2');
+        expect(getCardFeedbackTraitLanePrimaryActionAttr(traitBoard)).toBe('shard:Cash shard:2');
+        expect(getCardFeedbackTraitLaneBeatsAttr(traitBoard)).toBe('shard:4>tool:3>block:4');
         expect(getCardFeedbackTraitLaneActionsAttr(traitBoard)).toBe(
-            'shard:Cash shard:1>guard:Protect run:1>recall:Set memory:1'
+            'shard:Cash shard:2>tool:Use tool:2>block:Deny match:2'
         );
     });
 
@@ -191,10 +195,10 @@ describe('tile board DOM telemetry helpers', () => {
         const traitBoard: BoardState = {
             ...board,
             tiles: [
-                { ...board.tiles[0]!, pairKey: 'echo', tileTraitKind: 'echo' },
-                { ...board.tiles[1]!, pairKey: 'sealed', tileTraitKind: 'sealed' },
-                { ...board.tiles[2]!, pairKey: 'mirror', tileTraitKind: 'mirror' },
-                { ...board.tiles[3]!, pairKey: 'conduit', tileTraitKind: 'conduit' }
+                { ...board.tiles[0]!, pairKey: 'conduit', tileTraitKind: 'conduit' },
+                { ...board.tiles[1]!, pairKey: 'echo', tileTraitKind: 'echo' },
+                { ...board.tiles[2]!, pairKey: 'stasis', tileTraitKind: 'stasis' },
+                { ...board.tiles[3]!, pairKey: 'relay', tileTraitKind: 'conduit' }
             ]
         };
 
@@ -224,8 +228,8 @@ describe('tile board DOM telemetry helpers', () => {
         const traitBoard: BoardState = {
             ...board,
             tiles: [
-                { ...board.tiles[0]!, pairKey: 'echo', tileTraitKind: 'echo' },
-                { ...board.tiles[1]!, pairKey: 'sealed', tileTraitKind: 'sealed' },
+                { ...board.tiles[0]!, pairKey: 'conduit', tileTraitKind: 'conduit' },
+                { ...board.tiles[1]!, pairKey: 'heavy', tileTraitKind: 'heavy' },
                 board.tiles[2]!,
                 board.tiles[3]!
             ]
@@ -316,9 +320,9 @@ describe('tile board DOM telemetry helpers', () => {
             ...board,
             flippedTileIds: ['a1'],
             tiles: [
-                { ...board.tiles[0]!, pairKey: 'echo', state: 'flipped', tileTraitKind: 'echo' },
-                { ...board.tiles[1]!, pairKey: 'sealed', tileTraitKind: 'sealed' },
-                { ...board.tiles[2]!, pairKey: 'echo', tileTraitKind: 'echo' },
+                { ...board.tiles[0]!, pairKey: 'conduit', state: 'flipped', tileTraitKind: 'conduit' },
+                { ...board.tiles[1]!, pairKey: 'heavy', tileTraitKind: 'heavy' },
+                { ...board.tiles[2]!, pairKey: 'conduit', tileTraitKind: 'conduit' },
                 board.tiles[3]!
             ]
         };
