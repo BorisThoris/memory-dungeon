@@ -54,7 +54,6 @@ export const getVisualHudAnnouncementSignal = (
         priority === 'error' ||
         normalized.includes('no match') ||
         normalized.includes('shuffle snare fired') ||
-        normalized.includes('mirror decoy') ||
         normalized.includes('fragile cache broke') ||
         (normalized.includes('chain') && normalized.includes('broken'))
     ) {
@@ -204,7 +203,6 @@ export const getVisualHudAnnouncementImpact = (
         pushUniqueDetail(details, { label: 'Auto-clear', tone: 'chain' });
     } else if (
         normalizedAnnouncement.includes('shuffle snare fired') ||
-        normalizedAnnouncement.includes('mirror decoy') ||
         normalizedAnnouncement.includes('fragile cache broke')
     ) {
         pushUniqueDetail(details, { label: 'Hazard trigger', tone: 'risk' });
@@ -408,10 +406,6 @@ export const getVisualHudAnnouncementFollowup = ({
 
     if (normalizedAnnouncement.includes('cascade cache fired')) {
         return 'Next: one safe pair cleared itself; update your mental map.';
-    }
-
-    if (normalizedAnnouncement.includes('mirror decoy')) {
-        return 'Next: ignore the decoy result and return to confirmed pairs.';
     }
 
     if (normalizedAnnouncement.includes('fragile cache broke')) {

@@ -1,5 +1,5 @@
 import type { BoardState } from './contracts';
-import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
+import { WILD_PAIR_KEY } from './tile-identity';
 
 /**
  * Board-only checks for destroy targeting (mirrors `canDestroyPair` tile rules).
@@ -7,7 +7,7 @@ import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
  */
 export const tileIsDestroyEligiblePreview = (board: BoardState, tileId: string): boolean => {
     const tile = board.tiles.find((t) => t.id === tileId);
-    if (!tile || tile.state !== 'hidden' || tile.pairKey === DECOY_PAIR_KEY) {
+    if (!tile || tile.state !== 'hidden') {
         return false;
     }
     const pairTiles = board.tiles.filter((t) => t.pairKey === tile.pairKey);
@@ -59,7 +59,6 @@ export const tileIsCompletionSafeStrayTarget = (board: BoardState, tileId: strin
     return Boolean(
         tile &&
             tile.state === 'hidden' &&
-            tile.pairKey !== DECOY_PAIR_KEY &&
             isCompletionSafeStrayPairKey(tile.pairKey)
     );
 };

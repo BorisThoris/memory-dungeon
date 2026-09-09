@@ -61,7 +61,7 @@ import {
     resolveBoardTurn,
     tilesArePairMatch
 } from './turn-resolution';
-import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
+import { WILD_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
 import { MIN_CURIO_MEMORIZE_MS, pickFloorCurio } from './floor-curio-rules';
 import { pairsForFloor } from './pair-curve';
 import { parTurnsForFloor } from './floor-par';
@@ -80,17 +80,12 @@ describe('tilesArePairMatch', () => {
         expect(tilesArePairMatch(createTile('a', 'p1', 'x'), createTile('b', 'p2', 'y'))).toBe(false);
     });
 
-    it('never matches when a decoy is involved', () => {
-        expect(tilesArePairMatch(createTile('a', DECOY_PAIR_KEY, 'x'), createTile('b', 'p1', 'y'))).toBe(false);
-        expect(tilesArePairMatch(createTile('a', 'p1', 'x'), createTile('b', DECOY_PAIR_KEY, 'y'))).toBe(false);
-    });
-
     it('matches wild with any non-wild real pairKey', () => {
         expect(tilesArePairMatch(createTile('w', WILD_PAIR_KEY, 'x'), createTile('b', 'p9', 'y'))).toBe(true);
         expect(tilesArePairMatch(createTile('a', 'p9', 'x'), createTile('w', WILD_PAIR_KEY, 'y'))).toBe(true);
     });
 
-    it('matches two wild tiles (same pairKey, not decoy)', () => {
+    it('matches two wild tiles that share a pairKey', () => {
         expect(tilesArePairMatch(createTile('w1', WILD_PAIR_KEY, 'x'), createTile('w2', WILD_PAIR_KEY, 'y'))).toBe(
             true
         );
@@ -376,7 +371,7 @@ const clearRealPairs = (run: RunState): RunState => {
     return current;
 };
 
-const SOLVER_IGNORED_PAIR_KEYS = new Set([WILD_PAIR_KEY, DECOY_PAIR_KEY]);
+const SOLVER_IGNORED_PAIR_KEYS = new Set([WILD_PAIR_KEY]);
 
 const solveBoardByExhaustingPairs = (board: BoardState, runSeed: number): RunState => {
     const base = finishMemorizePhase(
@@ -1185,17 +1180,17 @@ describe('board powers', () => {
     });
 
     describe('board power preview helpers', () => {
-        it('destroy preview collects fully hidden non-decoy pairs only', () => {
+        it('destroy preview collects fully hidden real pairs only', () => {
             const tiles: Tile[] = [
                 createTile('a1', 'A', 'A'),
                 createTile('a2', 'A', 'A'),
-                createTile('d1', DECOY_PAIR_KEY, '?'),
+                createTile('w1', WILD_PAIR_KEY, '*'),
                 createTile('b1', 'B', 'B'),
                 createTile('b2', 'B', 'B')
             ];
             const board = createRun(tiles).board!;
             expect(tileIsDestroyEligiblePreview(board, 'a1')).toBe(true);
-            expect(tileIsDestroyEligiblePreview(board, 'd1')).toBe(false);
+            expect(tileIsDestroyEligiblePreview(board, 'w1')).toBe(false);
             const eligible = collectDestroyEligibleTileIds(board);
             expect(eligible).toEqual(new Set(['a1', 'a2', 'b1', 'b2']));
         });
@@ -1215,12 +1210,10 @@ describe('board powers', () => {
             const tiles: Tile[] = [
                 createTile('a1', 'A', 'A'),
                 createTile('a2', 'A', 'A'),
-                createTile('d1', DECOY_PAIR_KEY, '?'),
                 createTile('w1', WILD_PAIR_KEY, '*')
             ];
             const board = createRun(tiles).board!;
             expect(tileIsStrayEligiblePreview(board, 'a1')).toBe(false);
-            expect(tileIsStrayEligiblePreview(board, 'd1')).toBe(false);
             expect(tileIsStrayEligiblePreview(board, 'w1')).toBe(true);
         });
 
@@ -1256,19 +1249,17 @@ describe('board powers', () => {
         });
     });
 
-    describe('glass_floor decoy and board completion', () => {
-        it('isBoardComplete when all real tiles are matched and the decoy trap stays hidden', () => {
+    describe('board completion', () => {
+        it('isBoardComplete once every real pair is matched, whatever a singleton is doing', () => {
             const board = buildBoard(2, {
-                activeMutators: ['glass_floor'],
+                activeMutators: [],
                 runSeed: 90210,
                 runRulesVersion: GAME_RULES_VERSION
             });
-            const decoy = board.tiles.find((t) => t.pairKey === '__decoy__');
-            expect(decoy).toBeDefined();
             const cleared: BoardState = {
                 ...board,
                 tiles: board.tiles.map((t) =>
-                    t.pairKey === '__decoy__' ? t : { ...t, state: 'matched' as const }
+                    isSingletonUtilityPairKey(t.pairKey) ? t : { ...t, state: 'matched' as const }
                 )
             };
             expect(isBoardComplete(cleared)).toBe(true);
@@ -1295,7 +1286,7 @@ describe('board powers', () => {
             });
             const tagged = board.tiles.filter((t) => t.findableKind != null);
             expect([2, 4]).toContain(tagged.length);
-            expect(tagged.every((t) => t.pairKey !== '__decoy__' && t.pairKey !== '__wild__')).toBe(true);
+            expect(tagged.every((t) => t.pairKey !== '__wild__')).toBe(true);
         });
 
         it('dense-pickup mutator guarantees two pickup pairs on new rules', () => {
@@ -1336,7 +1327,7 @@ describe('board powers', () => {
             expect(seededBoardWithoutMutator!.tiles.some((tile) => tile.findableKind != null)).toBe(false);
         });
 
-        it('tags only whole real pairs and never the decoy or wild singleton', () => {
+        it('tags only whole real pairs and never the wild singleton', () => {
             const board = buildBoard(2, {
                 activeMutators: ['findables_floor'],
                 runSeed: 90210,
@@ -1347,7 +1338,7 @@ describe('board powers', () => {
             expect(tagged.length).toBeLessThanOrEqual(4);
             const keys = new Set(tagged.map((t) => t.pairKey));
             expect(keys.size * 2).toBe(tagged.length);
-            expect(tagged.every((t) => t.pairKey !== '__decoy__' && t.pairKey !== '__wild__')).toBe(true);
+            expect(tagged.every((t) => t.pairKey !== '__wild__')).toBe(true);
         });
 
 
@@ -1711,7 +1702,7 @@ describe('wild run with scholar-style contracts', () => {
         const wild = finishMemorizePhase(createWildRun(0));
         expect(wild.board).not.toBeNull();
         const target = wild.board!.tiles.find(
-            (t) => t.state === 'hidden' && t.pairKey !== WILD_PAIR_KEY && t.pairKey !== '__decoy__'
+            (t) => t.state === 'hidden' && t.pairKey !== WILD_PAIR_KEY
         );
         expect(target).toBeDefined();
         const run: RunState = {

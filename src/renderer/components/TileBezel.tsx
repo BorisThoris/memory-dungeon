@@ -146,7 +146,6 @@ interface TileBezelProps {
     traitRouteReadabilityIntensity?: TileTraitRouteReadabilityIntensity;
     selectedTraitFollowupBack?: boolean;
     nonPickableBack?: boolean;
-    destroyBlockedDecoyBack?: boolean;
     traitComboSurgeBack?: boolean;
 }
 
@@ -216,7 +215,6 @@ const TileBezelInner = ({
     traitRouteReadabilityIntensity = 'none',
     selectedTraitFollowupBack = false,
     nonPickableBack = false,
-    destroyBlockedDecoyBack = false,
     focusDimmed = false,
     stickyFingerSlotMark = false,
     traitComboBack = false,
@@ -776,7 +774,6 @@ const TileBezelInner = ({
                         rimTopMatRef={hoverRimTopMatRef}
                     />
                     <TileBoardReadabilityMarkers
-                        destroyBlockedDecoyBack={destroyBlockedDecoyBack}
                         faceUp={faceUp}
                         faceZ={faceZ}
                         findableCornerRingGeometry={findableCornerRingGeometry}

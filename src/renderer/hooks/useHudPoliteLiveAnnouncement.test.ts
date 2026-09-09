@@ -95,7 +95,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
     it('keeps compact visual action feedback readable for long multi-event updates', () => {
         expect(
             formatHudActionFeedbackText(
-                'Shuffle Snare fired. Hidden safe tiles reordered. Cascade Cache fired. One safe hidden pair cleared. Decoy misled the mismatch. It cannot form a pair.'
+                'Shuffle Snare fired. Hidden safe tiles reordered. Cascade Cache fired. One safe hidden pair cleared. Ripple carried a second wave. The chain held at Sharp.'
             )
         ).toBe('Shuffle Snare fired. Hidden safe tiles reordered. +4 more updates.');
     });

@@ -64,9 +64,9 @@ export const FLOOR_ARCHETYPE_CATALOG: Record<FloorArchetypeId, FloorArchetypeDef
     },
     trap_hall: {
         title: 'Trap Hall',
-        hint: 'A glass decoy stalks the board. Keep it out of every miss.',
+        hint: 'Sticky fingers punish every miss. Learn a tile before you spend it.',
         theme: 'Trap',
-        riskProfile: 'Glass decoy plus sticky pressure; do not drag the trap into a miss.',
+        riskProfile: 'Sticky pressure on a boss budget; a mismatch costs a tile you already knew.',
         encounterRole: 'boss'
     },
     script_room: {
@@ -104,7 +104,6 @@ export const FLOOR_ARCHETYPE_CATALOG: Record<FloorArchetypeId, FloorArchetypeDef
 
 export const FEATURED_OBJECTIVE_LABELS: Record<FeaturedObjectiveId, string> = {
     scholar_style: 'Scholar style',
-    glass_witness: 'Glass witness',
     cursed_last: 'Cursed last',
     flip_par: 'Flip par'
 };
@@ -114,7 +113,6 @@ export const FEATURED_OBJECTIVE_HUD_TOOLTIPS: Record<FeaturedObjectiveId, string
     flip_par:
         'Turns this floor (each pair of flips resolved, match or miss; the gambit is one turn) must stay at or below the floor par, ceil(pairs × 0.85).',
     scholar_style: 'Do not use board shuffle, tile swap, or destroy pair on this floor.',
-    glass_witness: 'With a glass decoy, it must never be flipped into a mismatch.',
     cursed_last: 'The cursed pair must be the last real pair you clear on this floor (not resolved early).'
 };
 
@@ -368,7 +366,12 @@ const ENDLESS_FLOOR_CYCLE: FloorScheduleEntry[] = [
      * missing three times will find out what it is for.
      */
     makeEntry(6, 'breather', 'scholar_style', ['magpie_thief'], 'breather'),
-    makeEntry(7, 'trap_hall', 'glass_witness', ['glass_floor', 'sticky_fingers'], 'boss'),
+    /*
+     * Floor 7 lost the glass decoy with the rest of the fake cards (Gen 196). Sticky fingers still
+     * makes it the awkward floor of the cycle, and the objective it carries is the one the decoy
+     * used to guard: get through the floor without a mismatch taking a tile you already learned.
+     */
+    makeEntry(7, 'trap_hall', 'scholar_style', ['sticky_fingers'], 'boss'),
     makeEntry(8, 'script_room', 'flip_par', ['category_letters'], 'normal'),
     makeEntry(9, 'rush_recall', 'flip_par', ['short_memorize', 'wide_recall'], 'boss'),
     /*
@@ -392,7 +395,7 @@ const ENDLESS_FLOOR_CYCLE: FloorScheduleEntry[] = [
  */
 const POSITION_NINE_ROTATION: readonly FloorScheduleEntry[] = [
     makeEntry(9, 'rush_recall', 'flip_par', ['short_memorize', 'wide_recall'], 'boss'),
-    makeEntry(9, 'treasure_gallery', 'glass_witness', ['findables_floor'], 'boss'),
+    makeEntry(9, 'treasure_gallery', 'scholar_style', ['findables_floor'], 'boss'),
     makeEntry(9, 'spotlight_hunt', 'flip_par', ['shifting_spotlight'], 'boss')
 ];
 
@@ -454,7 +457,7 @@ const budgetExpectationForRole = (role: FloorArchetypePressureRole): string => {
         case 'recovery':
             return 'lower pressure budget for resource recovery';
         case 'boss':
-            return 'boss-multiplier floor with a decoy or trap-style mutator';
+            return 'boss-multiplier floor with a trap-style mutator';
         case 'mystery':
             return 'information budget with altered tile reading';
     }

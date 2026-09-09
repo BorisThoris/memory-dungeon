@@ -1,5 +1,5 @@
 import type { BoardState, Tile } from '../../shared/contracts';
-import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from '../../shared/tile-identity';
+import { WILD_PAIR_KEY } from '../../shared/tile-identity';
 
 export const getTutorialPairOrdinalByKey = (
     board: BoardState,
@@ -13,7 +13,7 @@ export const getTutorialPairOrdinalByKey = (
         ...new Set(
             board.tiles
                 .map((tile) => tile.pairKey)
-                .filter((key) => key !== DECOY_PAIR_KEY && key !== WILD_PAIR_KEY)
+                .filter((key) => key !== WILD_PAIR_KEY)
         )
     ].sort();
     const ordinalByKey = new Map<string, number>();

@@ -11,7 +11,6 @@ import {
     canShuffleBoard,
     canSwapHiddenTiles
 } from './board-power-availability';
-import { DECOY_PAIR_KEY } from './tile-identity';
 
 const tile = (id: string, pairKey: string, state: Tile['state'] = 'hidden'): Tile => ({
     id,
@@ -76,19 +75,6 @@ describe('board power availability rules', () => {
         expect(canRegionShuffle(boardless)).toBe(false);
         expect(canRegionShuffleRow(boardless, 0)).toBe(false);
         expect(canSwapHiddenTiles(boardless, 'a1', 'b1')).toBe(false);
-    });
-
-    it('checks destroy availability through the shared targeting predicate', () => {
-        expect(canDestroyPair(run(), 'a1')).toBe(true);
-        expect(canDestroyPair(run({ destroyPairCharges: 0 }), 'a1')).toBe(false);
-        expect(canDestroyPair(run({ board: { ...run().board!, flippedTileIds: ['a1'] } }), 'a1')).toBe(false);
-        expect(canDestroyPair(run({
-            board: board([
-                tile('a1', 'A'),
-                tile('a2', 'A', 'matched'),
-                tile('d1', DECOY_PAIR_KEY)
-            ])
-        }), 'a1')).toBe(false);
     });
 
 

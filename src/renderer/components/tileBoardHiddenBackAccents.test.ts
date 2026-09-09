@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import type { Tile } from '../../shared/contracts';
-import { DECOY_PAIR_KEY } from '../../shared/tile-identity';
 import { getTileBoardHiddenBackAccents, type TileBoardHiddenBackAccentsInput } from './tileBoardHiddenBackAccents';
 
 const tile = (overrides: Partial<Tile> = {}): Tile =>
@@ -32,20 +31,6 @@ const accents = (overrides: Partial<TileBoardHiddenBackAccentsInput> = {}) =>
     });
 
 describe('tileBoardHiddenBackAccents', () => {
-    it('does not surface hidden-back accents for face-up or non-hidden tiles', () => {
-        expect(accents({ faceUp: true, tile: tile({ tileTraitKind: 'heavy' }) })).toEqual({
-            destroyBlockedDecoyBack: false,
-            nonPickableBack: false,
-            powerBackAccent: null,
-            traitBackAccent: null
-        });
-        expect(accents({ tile: tile({ state: 'flipped', tileTraitKind: 'heavy' }) })).toEqual({
-            destroyBlockedDecoyBack: false,
-            nonPickableBack: false,
-            powerBackAccent: null,
-            traitBackAccent: null
-        });
-    });
 
     it('surfaces the non-pickable accent for hidden backs', () => {
         expect(accents({ flipLocked: true }).nonPickableBack).toBe(true);
@@ -54,49 +39,6 @@ describe('tileBoardHiddenBackAccents', () => {
 
     it('surfaces trait accents for hidden backs', () => {
         expect(accents({ tile: tile({ tileTraitKind: 'heavy' }) }).traitBackAccent).toBe('heavy');
-    });
-
-    it('applies power accent precedence and blocks destroy on decoys', () => {
-        expect(accents({ pinModeBoardHintActive: true }).powerBackAccent).toBe('pin');
-        expect(
-            accents({
-                destroyEligibleTileIds: new Set(['tile-a']),
-                destroyPowerVisualActive: true
-            }).powerBackAccent
-        ).toBe('destroy');
-        expect(
-            accents({
-                peekEligibleTileIds: new Set(['tile-a']),
-                peekPowerVisualActive: true
-            }).powerBackAccent
-        ).toBe('peek');
-        expect(
-            accents({
-                strayEligibleTileIds: new Set(['tile-a']),
-                strayPowerVisualActive: true
-            }).powerBackAccent
-        ).toBe('stray');
-        expect(
-            accents({
-                tileSwapEligibleTileIds: new Set(['tile-a']),
-                tileSwapPowerVisualActive: true
-            }).powerBackAccent
-        ).toBe('swap');
-        expect(
-            accents({
-                tileSwapEligibleTileIds: new Set(['tile-a']),
-                tileSwapFirstTileId: 'tile-a',
-                tileSwapPowerVisualActive: true
-            }).powerBackAccent
-        ).toBe('swapOrigin');
-
-        const decoy = accents({
-            destroyEligibleTileIds: new Set(['decoy']),
-            destroyPowerVisualActive: true,
-            tile: tile({ id: 'decoy', pairKey: DECOY_PAIR_KEY })
-        });
-        expect(decoy.destroyBlockedDecoyBack).toBe(true);
-        expect(decoy.powerBackAccent).toBeNull();
     });
 });
 

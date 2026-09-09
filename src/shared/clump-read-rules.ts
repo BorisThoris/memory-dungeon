@@ -60,7 +60,7 @@ const previewBreakAt = (
 ): ClumpReadTierPreview => {
     const tier = getChainTier(chain, board.pairCount);
     if (matchedTileIds.length !== 2) {
-        // A singleton has no match to preview: the wild joker and the decoy never pair off.
+        // A singleton has no match to preview: the wild joker never pairs off.
         return { tier, tileIds: [], pairs: 0 };
     }
     const broke = resolveChunkBreak({ board, run: context.run, matchedTileIds, chain });

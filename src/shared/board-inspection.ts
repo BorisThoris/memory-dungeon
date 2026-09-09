@@ -1,12 +1,10 @@
 import type { BoardState, RunState, RunStatus, Tile } from './contracts';
-import { DECOY_PAIR_KEY, WILD_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
+import { WILD_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
 
 /** When the board includes a wild joker, returns its tile id; otherwise null. */
 export const getWildTileIdFromBoard = (board: BoardState): string | null =>
     board.tiles.find((tile) => tile.pairKey === WILD_PAIR_KEY)?.id ?? null;
 
-export const boardHasGlassDecoy = (board: BoardState): boolean =>
-    board.tiles.some((tile) => tile.pairKey === DECOY_PAIR_KEY);
 
 /** Pairs where both tiles are still hidden (eligible for shuffle / destroy targeting). */
 export const countFullyHiddenPairs = (board: BoardState): number => {
@@ -30,30 +28,18 @@ export const countFullyHiddenPairs = (board: BoardState): number => {
 
 const tileIsCleared = (tile: Tile): boolean => tile.state === 'matched' || tile.state === 'removed';
 
-/**
- * Floor completion ignores singleton utility tiles and allows a glass decoy to stay hidden after
- * every real tile has been cleared.
- */
+/** Floor completion ignores singleton utility tiles: only real pairs must be cleared. */
 export const isBoardComplete = (board: BoardState): boolean =>
     board.tiles.every((tile) => {
-        if (isSingletonUtilityPairKey(tile.pairKey) && tile.pairKey !== DECOY_PAIR_KEY) {
+        if (isSingletonUtilityPairKey(tile.pairKey)) {
             return true;
         }
-        if (tileIsCleared(tile)) {
-            return true;
-        }
-        if (tile.pairKey === DECOY_PAIR_KEY && tile.state === 'hidden') {
-            return board.tiles
-                .filter((candidate) => !isSingletonUtilityPairKey(candidate.pairKey))
-                .every(tileIsCleared);
-        }
-        return false;
+        return tileIsCleared(tile);
     });
 
 export type BoardFairnessIssueCode =
     | 'real_pair_incomplete'
     | 'real_pair_missing_actionable_tile'
-    | 'decoy_flipped_or_cleared_before_completion'
     | 'wild_singleton_unmatched_without_route'
     | 'matched_pairs_counter_mismatch'
     | 'board_tile_count_mismatch'
@@ -77,7 +63,6 @@ export interface BoardFairnessReport {
     realPairKeys: string[];
     actionableRealPairKeys: string[];
     hiddenRealPairKeys: string[];
-    decoyTileIds: string[];
     wildTileIds: string[];
     hasCompletionRoute: boolean;
 }
@@ -91,9 +76,8 @@ const pairIsCleared = (tiles: readonly Tile[]): boolean => tiles.every(tileIsCle
  * REG-087 anti-softlock inspection for board structure and completion reachability.
  *
  * This is intentionally rules-only and side-effect free: it does not solve perfect play, but it catches
- * malformed/orphaned pairs, stale completion counters, flipped decoys, and singleton wild boards that no longer have
- * a legal path to finish. Decoys are allowed as hidden singleton traps; wild tiles are allowed only while at least one
- * real actionable tile or stray-removal route remains.
+ * malformed/orphaned pairs, stale completion counters, and singleton wild boards that no longer have a legal path
+ * to finish. Wild tiles are allowed only while at least one real actionable tile or stray-removal route remains.
  */
 export const inspectBoardFairness = (board: BoardState): BoardFairnessReport => {
     const issues: BoardFairnessIssue[] = [];
@@ -107,7 +91,6 @@ export const inspectBoardFairness = (board: BoardState): BoardFairnessReport => 
     const realPairKeys: string[] = [];
     const actionableRealPairKeys: string[] = [];
     const hiddenRealPairKeys: string[] = [];
-    const decoyTileIds = groups.get(DECOY_PAIR_KEY)?.map((tile) => tile.id) ?? [];
     const wildTiles = groups.get(WILD_PAIR_KEY) ?? [];
     const wildTileIds = wildTiles.map((tile) => tile.id);
 
@@ -168,19 +151,6 @@ export const inspectBoardFairness = (board: BoardState): BoardFairnessReport => 
         });
     }
 
-    const realTilesComplete = realPairKeys.length > 0 && realPairKeys.length === matchedOrRemovedRealPairs;
-    for (const decoy of groups.get(DECOY_PAIR_KEY) ?? []) {
-        if (decoy.state !== 'hidden' && !realTilesComplete) {
-            structurallyClearable = false;
-            issues.push({
-                code: 'decoy_flipped_or_cleared_before_completion',
-                message: 'Glass decoy must stay hidden until all real pairs are cleared.',
-                pairKey: DECOY_PAIR_KEY,
-                tileIds: [decoy.id]
-            });
-        }
-    }
-
     const actionableRealTileExists = actionableRealPairKeys.length > 0;
     const hiddenRealTileExists = board.tiles.some(
         (tile) => !isSingletonUtilityPairKey(tile.pairKey) && tile.state === 'hidden'
@@ -228,7 +198,6 @@ export const inspectBoardFairness = (board: BoardState): BoardFairnessReport => 
         realPairKeys,
         actionableRealPairKeys,
         hiddenRealPairKeys,
-        decoyTileIds,
         wildTileIds,
         hasCompletionRoute
     };
@@ -253,7 +222,6 @@ export const inspectRunFairness = (run: RunState): RunFairnessReport => {
             realPairKeys: [],
             actionableRealPairKeys: [],
             hiddenRealPairKeys: [],
-            decoyTileIds: [],
             wildTileIds: [],
             hasCompletionRoute: false,
             status: 'missingBoard',

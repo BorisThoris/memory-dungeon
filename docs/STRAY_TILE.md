@@ -5,7 +5,7 @@
 ## Rules
 
 1. **Charge** - consumes `strayRemoveCharges` (earned like destroy or granted at run start for testing).
-2. **Target** - player arms **Stray**, then taps a legal hidden singleton/special tile such as a wild joker, shop marker, or room marker. Normal real-pair tiles, the decoy (`DECOY_PAIR_KEY`), exits, Keystone Pair, Final Ward, and Omen Seal are blocked.
+2. **Target** - player arms **Stray**, then taps a legal hidden singleton/special tile — the wild joker is the only one left. Normal real-pair tiles are blocked, so Stray can never orphan a partner.
 3. **Effect** - that tile becomes `state: 'removed'` (invisible / inert). Normal pairs are never split, so Stray cannot create an orphaned partner.
 4. **Win** - `matchedPairs === pairCount` and no unfinished business. Legal Stray use must preserve board completion fairness.
 5. **Achievements** - counts as **power used** (`powersUsedThisRun`).

@@ -48,12 +48,11 @@ describe('scoring-rules', () => {
         expect(calculateMatchScore(2, 3, 1.5)).toBe(82);
     });
 
-    it('matches regular, wild, and decoy pair keys', () => {
+    it('matches regular and wild pair keys', () => {
         const tile = (id: string, pairKey: string) => ({ id, pairKey, symbol: id, label: id, state: 'hidden' as const });
 
         expect(tilesArePairMatch(tile('a', 'p'), tile('b', 'p'))).toBe(true);
         expect(tilesArePairMatch(tile('a', '__wild__'), tile('b', 'p'))).toBe(true);
-        expect(tilesArePairMatch(tile('a', '__decoy__'), tile('b', '__decoy__'))).toBe(false);
         expect(tilesArePairMatch(tile('a', 'p'), tile('b', 'q'))).toBe(false);
     });
 

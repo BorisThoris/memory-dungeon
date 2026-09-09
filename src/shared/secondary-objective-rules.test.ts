@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import {
     CURSED_LAST_BONUS_SCORE,
     FLIP_PAR_BONUS_SCORE,
-    GLASS_WITNESS_BONUS_SCORE,
     SCHOLAR_STYLE_FLOOR_BONUS_SCORE
 } from './contracts';
 import {
@@ -21,7 +20,6 @@ describe('secondary objective rules', () => {
     it('keeps featured objective bonuses tied to contract constants', () => {
         expect(FEATURED_OBJECTIVE_BONUS_SCORES).toEqual({
             scholar_style: SCHOLAR_STYLE_FLOOR_BONUS_SCORE,
-            glass_witness: GLASS_WITNESS_BONUS_SCORE,
             cursed_last: CURSED_LAST_BONUS_SCORE,
             flip_par: FLIP_PAR_BONUS_SCORE
         });
@@ -49,12 +47,6 @@ describe('secondary objective rules', () => {
 
         expect(isFeaturedObjectiveCompleted(run, board, 'scholar_style')).toBe(true);
         expect(isFeaturedObjectiveCompleted({ ...run, shuffleUsedThisFloor: true }, board, 'scholar_style')).toBe(false);
-        expect(isFeaturedObjectiveCompleted({ ...run, glassDecoyActiveThisFloor: true }, board, 'glass_witness')).toBe(true);
-        expect(isFeaturedObjectiveCompleted(
-            { ...run, glassDecoyActiveThisFloor: true, decoyFlippedThisFloor: true },
-            board,
-            'glass_witness'
-        )).toBe(false);
         expect(isFeaturedObjectiveCompleted(run, { ...board, cursedPairKey: 'curse' }, 'cursed_last')).toBe(true);
         expect(isFeaturedObjectiveCompleted({ ...run, cursedMatchedEarlyThisFloor: true }, { ...board, cursedPairKey: 'curse' }, 'cursed_last')).toBe(false);
         expect(isFeaturedObjectiveCompleted(run, { ...board, pairCount: 4 }, 'flip_par')).toBe(true);
@@ -69,19 +61,15 @@ describe('secondary objective rules', () => {
     });
 
     it('collects default clear objective bonuses when no featured objective is scheduled', () => {
-        const run = {
-            ...createNewRun(0),
-            glassDecoyActiveThisFloor: true
-        };
+        const run = createNewRun(0);
         const board = { ...run.board!, cursedPairKey: 'curse', pairCount: 4 };
 
         expect(getDefaultClearObjectiveBonus(run, board)).toEqual({
             bonusScore:
                 SCHOLAR_STYLE_FLOOR_BONUS_SCORE +
-                GLASS_WITNESS_BONUS_SCORE +
                 CURSED_LAST_BONUS_SCORE +
                 FLIP_PAR_BONUS_SCORE,
-            bonusTags: ['scholar_style', 'glass_witness', 'cursed_last', 'flip_par']
+            bonusTags: ['scholar_style', 'cursed_last', 'flip_par']
         });
         expect(
             getDefaultClearObjectiveBonus(
@@ -96,8 +84,6 @@ describe('secondary objective rules', () => {
             ...createNewRun(0),
             shuffleUsedThisFloor: true,
             destroyUsedThisFloor: true,
-            glassDecoyActiveThisFloor: true,
-            decoyFlippedThisFloor: true,
             cursedMatchedEarlyThisFloor: true,
             turnsThisFloor: 99
         };
@@ -112,8 +98,7 @@ describe('secondary objective rules', () => {
     it('creates default floor-clear objective results when no featured objective is active', () => {
         const run = {
             ...createNewRun(0),
-            gameMode: 'endless' as const,
-            glassDecoyActiveThisFloor: true
+            gameMode: 'endless' as const
         };
         const board = { ...run.board!, featuredObjectiveId: null, cursedPairKey: 'curse', pairCount: 4 };
 
@@ -122,10 +107,9 @@ describe('secondary objective rules', () => {
             featuredObjectiveCompleted: false,
             objectiveBonus:
                 SCHOLAR_STYLE_FLOOR_BONUS_SCORE +
-                GLASS_WITNESS_BONUS_SCORE +
                 CURSED_LAST_BONUS_SCORE +
                 FLIP_PAR_BONUS_SCORE,
-            bonusTags: ['scholar_style', 'glass_witness', 'cursed_last', 'flip_par'],
+            bonusTags: ['scholar_style', 'cursed_last', 'flip_par'],
             featuredObjectiveClear: {
                 featuredObjectiveStreak: run.featuredObjectiveStreak,
                 featuredObjectiveStreakBonus: 0

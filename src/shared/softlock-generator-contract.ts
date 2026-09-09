@@ -13,7 +13,6 @@ import { countFindablePairs } from './board-generation';
 import {
     inspectBoardFairness,
     inspectRunFairness,
-    boardHasGlassDecoy,
     type BoardFairnessIssue
 } from './board-inspection';
 import { advanceToNextLevel } from './next-floor-transition-rules';
@@ -111,7 +110,6 @@ export const createGeneratedBoardSolverRun = (
         ...createNewRun(0, { runSeed: seed, runRulesVersionOverride: rulesVersion }),
         board,
         status: 'playing',
-        glassDecoyActiveThisFloor: boardHasGlassDecoy(board),
         findablesTotalThisFloor: countFindablePairs(board.tiles)
     };
 };
@@ -320,7 +318,7 @@ export const scheduledSoftlockFloorArchetype = (floor: number): FloorArchetypeId
               : null;
 
 export const scheduledSoftlockFloorMutators = (floor: number): MutatorId[] =>
-    floor === 7 ? ['glass_floor', 'sticky_fingers'] : floor === 9 ? ['short_memorize', 'wide_recall'] : [];
+    floor === 7 ? ['sticky_fingers'] : floor === 9 ? ['short_memorize', 'wide_recall'] : [];
 
 export const getScheduledSoftlockFloorOptions = (floor: number): ScheduledSoftlockFloorOptions => ({
     floorTag: scheduledSoftlockFloorTag(floor),

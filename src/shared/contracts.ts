@@ -8,7 +8,7 @@
  */
 export const SAVE_SCHEMA_VERSION = 8;
 /** Bump when generation rules change (tile order, mutators, pair layout). */
-export const GAME_RULES_VERSION = 44;
+export const GAME_RULES_VERSION = 45;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -42,8 +42,6 @@ export const RECALL_CLUE_MATCH_SCORE = 12;
 /** Bonus score when the floor is cleared without shuffle or destroy (per-floor). */
 /** Rules v16 higher-tension rebalance: optional objectives pay harder, but missed streaks decay faster. */
 export const SCHOLAR_STYLE_FLOOR_BONUS_SCORE = 50;
-/** Bonus when glass_floor decoy was never involved in a mismatch this floor. */
-export const GLASS_WITNESS_BONUS_SCORE = 45;
 /** GP-O02: match cursed pair last among real pairs. */
 export const CURSED_LAST_BONUS_SCORE = 65;
 /** GP-O03: clear within flip par (match resolutions). */
@@ -68,7 +66,7 @@ export type Rating = 'S++' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
  * when a shared game's last floor is done. Null while the run is alive.
  */
 export type RunEndReason = 'turn_ceiling' | 'quit' | 'contract' | 'pass_and_play_final_floor';
-export type FeaturedObjectiveId = 'scholar_style' | 'glass_witness' | 'cursed_last' | 'flip_par';
+export type FeaturedObjectiveId = 'scholar_style' | 'cursed_last' | 'flip_par';
 export type ViewState =
     | 'boot'
     | 'menu'
@@ -117,7 +115,6 @@ export interface BuiltinPuzzleDefinition {
 }
 
 export const MUTATOR_IDS = [
-    'glass_floor',
     'sticky_fingers',
     'category_letters',
     'short_memorize',
@@ -244,7 +241,7 @@ export interface Settings {
     shuffleScoreTaxEnabled: boolean;
     /**
      * While face-up on a committed flip, show Manhattan grid distance to the nearest tile that can complete the pair
-     * (helps on larger boards; decoys show no number).
+     * (helps on larger boards).
      */
     pairProximityHintsEnabled: boolean;
 }
@@ -340,7 +337,7 @@ export interface LevelResult {
     rating: Rating;
     perfect: boolean;
     mistakes: number;
-    /** Optional objective bonuses (e.g. scholar_style, glass_witness, cursed_last, flip_par). */
+    /** Optional objective bonuses (e.g. scholar_style, cursed_last, flip_par). */
     bonusTags?: string[];
     /** Extra score from bonusTags (included in scoreGained). */
     objectiveBonusScore?: number;
@@ -544,10 +541,6 @@ export interface RunState {
     shuffleUsedThisFloor: boolean;
     /** GP-O04: destroy used this floor. */
     destroyUsedThisFloor: boolean;
-    /** GP-O01: decoy tile was part of a mismatch resolution this floor. */
-    decoyFlippedThisFloor: boolean;
-    /** True when current board includes the glass decoy tile. */
-    glassDecoyActiveThisFloor: boolean;
     /** GP-O02: cursed pair matched before all other real pairs cleared. */
     cursedMatchedEarlyThisFloor: boolean;
     /** GP-O03: number of successful match resolutions (two flips → match) this floor. */

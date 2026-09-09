@@ -524,32 +524,6 @@ describe('TileBoard touch and click controls', () => {
         );
     });
 
-    it('announces decoy trap language for face-up decoy tiles', async () => {
-        const decoyBoard: BoardState = {
-            ...board,
-            tiles: [
-                { id: 'd1', pairKey: '__decoy__', symbol: 'X', label: 'Decoy', state: 'hidden' },
-                { id: 'a1', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
-                { id: 'a2', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
-                { id: 'b1', pairKey: 'B', symbol: 'B', label: 'B', state: 'hidden' }
-            ]
-        };
-
-        renderBoard({
-            board: decoyBoard,
-            debugPeekActive: false,
-            interactive: true,
-            onTileSelect: vi.fn(),
-            previewActive: true,
-            reduceMotion: false
-        });
-
-        fireEvent.focus(screen.getByTestId('tile-board-application'));
-        await waitFor(() => {
-            expect(screen.getByText(/Focus: Decoy trap tile, row 1, column 1/i)).toBeInTheDocument();
-        });
-    });
-
     it('exposes board grid dimensions on the frame for tests and assistive tech', () => {
         renderBoard({
             board,

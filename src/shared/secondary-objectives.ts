@@ -41,14 +41,6 @@ export const LEVEL_RESULT_TAG_DEFINITIONS: Record<LevelResultTagId, LevelResultT
         priority: 60,
         rewardBearing: true
     },
-    glass_witness: {
-        id: 'glass_witness',
-        label: 'Glass witness',
-        shortCopy: 'Glass decoy avoided.',
-        journalCopy: 'Kept the glass decoy out of every mismatch.',
-        priority: 55,
-        rewardBearing: true
-    },
     cursed_last: {
         id: 'cursed_last',
         label: 'Cursed last',
@@ -151,12 +143,6 @@ export const getSecondaryObjectiveProgress = (run: RunState): SecondaryObjective
             condition = 'Clear without shuffle, swap, or destroy.';
             failureReason = state === 'failed' ? 'Shuffle, swap, or destroy was used this floor.' : null;
             detail = state === 'failed' ? `Failed: ${failureReason}` : 'Do not use shuffle, swap, or destroy this floor.';
-            break;
-        case 'glass_witness':
-            state = run.decoyFlippedThisFloor ? 'failed' : 'active';
-            condition = 'Keep the glass decoy out of every mismatch.';
-            failureReason = state === 'failed' ? 'The glass decoy entered a mismatch.' : null;
-            detail = state === 'failed' ? `Failed: ${failureReason}` : 'Keep the glass decoy out of every mismatch.';
             break;
         case 'cursed_last':
             state = run.cursedMatchedEarlyThisFloor ? 'failed' : 'active';

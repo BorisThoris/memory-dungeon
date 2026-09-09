@@ -44,7 +44,6 @@ interface TileTraitRouteReadabilityFlags {
 }
 
 interface TileBoardReadabilityInput {
-    destroyBlockedDecoyBack: boolean;
     faceUp: boolean;
     nonPickableBack: boolean;
     powerBackAccent: TileBoardPowerBackAccent | null;
@@ -324,7 +323,6 @@ export const getTraitRouteCadenceAction = (
 };
 
 export const getTileBoardReadabilityState = ({
-    destroyBlockedDecoyBack,
     faceUp,
     nonPickableBack,
     powerBackAccent,
@@ -400,7 +398,6 @@ export const getTileBoardReadabilityState = ({
         tile.state === 'hidden' &&
         (spotlightWardOnBack ||
             spotlightBountyOnBack ||
-            destroyBlockedDecoyBack ||
             powerBackAccent != null ||
             nonPickableBack ||
             isFindableCard ||

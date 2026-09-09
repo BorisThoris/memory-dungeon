@@ -5,7 +5,6 @@ import {
     FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP,
     FEATURED_OBJECTIVE_STREAK_MISS_DECAY,
     FLIP_PAR_BONUS_SCORE,
-    GLASS_WITNESS_BONUS_SCORE,
     type RunState,
     SCHOLAR_STYLE_FLOOR_BONUS_SCORE,
     type FeaturedObjectiveId
@@ -16,7 +15,6 @@ import { runNonNegativeInteger } from './run-number-guards';
 
 export const FEATURED_OBJECTIVE_BONUS_SCORES: Record<FeaturedObjectiveId, number> = {
     scholar_style: SCHOLAR_STYLE_FLOOR_BONUS_SCORE,
-    glass_witness: GLASS_WITNESS_BONUS_SCORE,
     cursed_last: CURSED_LAST_BONUS_SCORE,
     flip_par: FLIP_PAR_BONUS_SCORE
 };
@@ -41,8 +39,6 @@ export const isFeaturedObjectiveCompleted = (
     switch (objectiveId) {
         case 'scholar_style':
             return !run.shuffleUsedThisFloor && !run.destroyUsedThisFloor;
-        case 'glass_witness':
-            return run.glassDecoyActiveThisFloor && !run.decoyFlippedThisFloor;
         case 'cursed_last':
             return Boolean(board.cursedPairKey) && !run.cursedMatchedEarlyThisFloor;
         case 'flip_par':
@@ -67,10 +63,6 @@ export const getDefaultClearObjectiveBonus = (
     if (!run.shuffleUsedThisFloor && !run.destroyUsedThisFloor) {
         bonusScore += FEATURED_OBJECTIVE_BONUS_SCORES.scholar_style;
         bonusTags.push('scholar_style');
-    }
-    if (run.glassDecoyActiveThisFloor && !run.decoyFlippedThisFloor) {
-        bonusScore += FEATURED_OBJECTIVE_BONUS_SCORES.glass_witness;
-        bonusTags.push('glass_witness');
     }
     if (board.cursedPairKey && !run.cursedMatchedEarlyThisFloor) {
         bonusScore += FEATURED_OBJECTIVE_BONUS_SCORES.cursed_last;

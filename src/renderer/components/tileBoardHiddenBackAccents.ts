@@ -1,5 +1,4 @@
 import type { Tile, TileTraitKind } from '../../shared/contracts';
-import { DECOY_PAIR_KEY } from '../../shared/tile-identity';
 import { isTilePickable } from './tileBoardPick';
 
 export type TileBoardPowerBackAccent =
@@ -13,7 +12,6 @@ export type TileBoardPowerBackAccent =
     | 'clumpNext';
 
 interface TileBoardHiddenBackAccents {
-    destroyBlockedDecoyBack: boolean;
     nonPickableBack: boolean;
     powerBackAccent: TileBoardPowerBackAccent | null;
     traitBackAccent: TileTraitKind | null;
@@ -58,12 +56,8 @@ export const getTileBoardHiddenBackAccents = ({
     tileSwapPowerVisualActive,
     tile
 }: TileBoardHiddenBackAccentsInput): TileBoardHiddenBackAccents => {
-    const destroyBlockedDecoyBack =
-        destroyPowerVisualActive && !faceUp && tile.state === 'hidden' && tile.pairKey === DECOY_PAIR_KEY;
-
     if (tile.state !== 'hidden' || faceUp) {
         return {
-            destroyBlockedDecoyBack,
             nonPickableBack: false,
             powerBackAccent: null,
             traitBackAccent: null
@@ -73,8 +67,6 @@ export const getTileBoardHiddenBackAccents = ({
     let powerBackAccent: TileBoardPowerBackAccent | null = null;
     if (pinModeBoardHintActive) {
         powerBackAccent = 'pin';
-    } else if (destroyBlockedDecoyBack) {
-        powerBackAccent = null;
     } else if (destroyPowerVisualActive && destroyEligibleTileIds.has(tile.id)) {
         powerBackAccent = 'destroy';
     } else if (tileSwapPowerVisualActive && tileSwapFirstTileId === tile.id) {
@@ -94,7 +86,6 @@ export const getTileBoardHiddenBackAccents = ({
     }
 
     return {
-        destroyBlockedDecoyBack,
         nonPickableBack: !isTilePickable(tile, interactive, flipLocked),
         powerBackAccent,
         traitBackAccent: tile.tileTraitKind ?? null

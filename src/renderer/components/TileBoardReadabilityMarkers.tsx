@@ -42,7 +42,6 @@ const BOARD_READABILITY_ROUTE_GLYPH_SHORT_BAR_GEOMETRY = new PlaneGeometry(0.12,
 const NON_PICKABLE_RAIL_GEOMETRY = new PlaneGeometry(CARD_WIDTH, HOVER_GOLD_RIM_STRIP, 1, 1);
 
 interface TileBoardReadabilityMarkersProps {
-    destroyBlockedDecoyBack: boolean;
     faceUp: boolean;
     faceZ: number;
     findableCornerRingGeometry: BufferGeometry;
@@ -174,7 +173,6 @@ const SignalCapRow = ({
 );
 
 export const TileBoardReadabilityMarkers = ({
-    destroyBlockedDecoyBack,
     faceUp,
     faceZ,
     findableCornerRingGeometry,
@@ -213,7 +211,6 @@ export const TileBoardReadabilityMarkers = ({
         traitLaneReadabilityId,
         traitLaneReadabilityPattern
     } = getTileBoardReadabilityState({
-        destroyBlockedDecoyBack,
         faceUp,
         nonPickableBack,
         powerBackAccent,
@@ -413,24 +410,6 @@ export const TileBoardReadabilityMarkers = ({
                                 depthTest
                                 depthWrite={false}
                                 opacity={0.88}
-                                side={DoubleSide}
-                                toneMapped={false}
-                                transparent
-                            />
-                        </mesh>
-                    ) : null}
-                    {destroyBlockedDecoyBack ? (
-                        <mesh
-                            geometry={findableCornerRingGeometry}
-                            position={[0, CARD_HEIGHT * 0.38, 0.00053]}
-                            raycast={noopMeshRaycast}
-                            renderOrder={10}
-                        >
-                            <meshBasicMaterial
-                                color="#9480a8"
-                                depthTest
-                                depthWrite={false}
-                                opacity={0.82}
                                 side={DoubleSide}
                                 toneMapped={false}
                                 transparent

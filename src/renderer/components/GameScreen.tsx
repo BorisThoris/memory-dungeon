@@ -112,7 +112,7 @@ import {
     mismatchFloaterSignal
 } from '../copy/mismatchFloater';
 
-/** OVR-007 / HUD-020: decoy readout for `distraction_channel` — not gameplay state; hidden when reduce motion or assist toggle is off. */
+/** OVR-007 / HUD-020: chaff readout for `distraction_channel` — not gameplay state; hidden when reduce motion or assist toggle is off. */
 const DISTRACTION_CHANNEL_LABEL = 'Chaff';
 
 const DESKTOP_FULL_BLEED_TILE_BOARD_FRAME_STYLE: CSSProperties = {

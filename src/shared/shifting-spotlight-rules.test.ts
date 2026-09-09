@@ -14,7 +14,7 @@ import {
     rotateShiftingSpotlight,
     shiftingSpotlightMatchDelta
 } from './shifting-spotlight-rules';
-import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
+import { WILD_PAIR_KEY } from './tile-identity';
 
 const tile = (id: string, pairKey: string, state: Tile['state'] = 'hidden'): Tile => ({
     id,
@@ -26,7 +26,7 @@ const tile = (id: string, pairKey: string, state: Tile['state'] = 'hidden'): Til
 
 const board = (tiles: Tile[], overrides: Partial<BoardState> = {}): BoardState => ({
     level: 3,
-    pairCount: new Set(tiles.map((t) => t.pairKey).filter((pairKey) => pairKey !== DECOY_PAIR_KEY && pairKey !== WILD_PAIR_KEY)).size,
+    pairCount: new Set(tiles.map((t) => t.pairKey).filter((pairKey) => pairKey !== WILD_PAIR_KEY)).size,
     columns: 2,
     rows: Math.ceil(tiles.length / 2),
     tiles,
@@ -58,7 +58,6 @@ describe('shifting spotlight rules', () => {
             tile('b2', 'B', 'matched'),
             tile('c1', 'C'),
             tile('c2', 'C', 'removed'),
-            tile('d', DECOY_PAIR_KEY),
             tile('w', WILD_PAIR_KEY)
         ]);
 

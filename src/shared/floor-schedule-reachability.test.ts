@@ -9,7 +9,6 @@ import type { FeaturedObjectiveId } from './contracts';
 
 const FEATURED_OBJECTIVE_IDS: readonly FeaturedObjectiveId[] = [
     'scholar_style',
-    'glass_witness',
     'cursed_last',
     'flip_par'
 ];

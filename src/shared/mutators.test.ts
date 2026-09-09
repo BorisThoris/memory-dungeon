@@ -20,7 +20,7 @@ describe('mutators', () => {
     it('hasMutator reflects activeMutators', () => {
         const run = { activeMutators: ['wide_recall'] as MutatorId[] } as RunState;
         expect(hasMutator(run, 'wide_recall')).toBe(true);
-        expect(hasMutator(run, 'glass_floor')).toBe(false);
+        expect(hasMutator(run, 'sticky_fingers')).toBe(false);
     });
 
     it('treats malformed activeMutators as empty', () => {

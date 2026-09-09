@@ -9,21 +9,19 @@ import {
     pickCursedPairKey
 } from './board-tile-generation-rules';
 import {
-    DECOY_PAIR_KEY,
     WILD_PAIR_KEY
 } from './tile-identity';
 
 describe('board tile generation rules', () => {
-    it('creates deterministic paired tiles with optional decoy and wild singleton', () => {
-        const tiles = createTiles(2, 3, 123, 20, ['glass_floor'], true);
-        const repeat = createTiles(2, 3, 123, 20, ['glass_floor'], true);
+    it('creates deterministic paired tiles with an optional wild singleton', () => {
+        const tiles = createTiles(2, 3, 123, 20, [], true);
+        const repeat = createTiles(2, 3, 123, 20, [], true);
 
         expect(tiles).toEqual(repeat);
         expect(tiles.filter((tile) => tile.pairKey.startsWith('2-')).length).toBe(6);
-        expect(tiles).toEqual(expect.arrayContaining([
-            expect.objectContaining({ pairKey: DECOY_PAIR_KEY, symbol: 'X' }),
-            expect.objectContaining({ pairKey: WILD_PAIR_KEY, symbol: '?' })
-        ]));
+        expect(tiles).toEqual(
+            expect.arrayContaining([expect.objectContaining({ pairKey: WILD_PAIR_KEY, symbol: '?' })])
+        );
         expect(new Set(tiles.filter((tile) => tile.pairKey === '2-0').map((tile) => tile.atomicVariant))).toEqual(
             new Set([atomicVariantForPairKey('2-0')])
         );
@@ -41,8 +39,7 @@ describe('board tile generation rules', () => {
             tile('a2', 'a'),
             tile('b1', 'b'),
             tile('b2', 'b'),
-            tile('wild', WILD_PAIR_KEY),
-            tile('decoy', DECOY_PAIR_KEY)
+            tile('wild', WILD_PAIR_KEY)
         ];
         const assigned = assignFindableKindsToTiles(tiles, ['findables_floor'], 5, 20, 4);
         const tagged = assigned.filter((candidate) => candidate.findableKind != null);

@@ -124,7 +124,7 @@ export interface LayAuthoredFloorOptions {
  * Every real pair takes the suit of the cells it is laid into, so both halves share it. Pairs are
  * assigned to suits in the order the seed shuffled them, and tiles fill their suit's cells in
  * that same shuffled order, so the seed decides which pair sits where and no new randomness is
- * introduced. Singletons the floor carries (a wild, a decoy) are not part of the shape: they go
+ * introduced. Singletons the floor carries (a wild) are not part of the shape: they go
  * after the authored cells, in a trailing row.
  *
  * Returns null when the tiles do not fit the layout - a different pair count, or a pair with

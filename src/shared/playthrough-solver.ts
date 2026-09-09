@@ -1,6 +1,6 @@
 import type { BoardState, RunState, Tile } from './contracts';
 import { flipTile, resolveBoardTurn } from './game';
-import { DECOY_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
+import { isSingletonUtilityPairKey } from './tile-identity';
 
 export type PlaythroughSolverStopReason =
     | 'missing_board'
@@ -25,8 +25,7 @@ const unresolvedPlayablePairGroups = (board: BoardState): Tile[][] => {
         if (
             tile.state === 'matched' ||
             tile.state === 'removed' ||
-            isSingletonUtilityPairKey(tile.pairKey) ||
-            tile.pairKey === DECOY_PAIR_KEY
+            isSingletonUtilityPairKey(tile.pairKey)
         ) {
             continue;
         }

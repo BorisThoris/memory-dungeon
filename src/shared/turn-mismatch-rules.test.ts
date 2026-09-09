@@ -106,43 +106,10 @@ describe('turn mismatch rules', () => {
             tileIds: ['a', 'b'],
             sourceTiles: b.tiles,
             triesDelta: 1,
-            decoyTouched: false
         });
 
         expect(resolved.status).toBe('gameOver');
         expect(resolved.runEndReason).toBe('contract');
-    });
-
-    it('resolves mismatch transition bookkeeping', () => {
-        const b = board([tile('a'), tile('b')]);
-        const base = run(b, {
-            recallFocus: 2,
-            forgottenTileIdsThisFloor: ['old'],
-            stats: { ...run(b).stats, currentStreak: 5, tries: 1, mismatches: 2 }
-        });
-
-        const resolved = resolveMismatchTurnTransition({
-            run: base,
-            board: b,
-            tileIds: ['a', 'b'],
-            sourceTiles: b.tiles,
-            triesDelta: 1,
-            decoyTouched: true
-        });
-
-        expect(resolved.status).toBe('playing');
-        expect(resolved.runEndReason).toBeNull();
-        expect(resolved.board?.flippedTileIds).toEqual([]);
-        expect(resolved.board?.tiles.map((candidate) => candidate.state)).toEqual(['hidden', 'hidden']);
-        expect(resolved.recallFocus).toBe(1);
-        expect(resolved.recallMistakesThisFloor).toBe(base.recallMistakesThisFloor + 1);
-        expect(resolved.forgottenTileIdsThisFloor).toEqual(['old', 'a', 'b']);
-        expect(resolved.decoyFlippedThisFloor).toBe(true);
-        expect(resolved.turnsThisFloor).toBe(base.turnsThisFloor + 1);
-        expect(resolved.stats.tries).toBe(2);
-        expect(resolved.stats.mismatches).toBe(3);
-        expect(resolved.stats.currentStreak).toBe(2);
-        expect(resolved.stickyBlockIndex).toBeNull();
     });
 
     it('normalizes malformed persisted counters during mismatch transition bookkeeping', () => {
@@ -168,7 +135,6 @@ describe('turn mismatch rules', () => {
             tileIds: ['heavy-a', 'heavy-b'],
             sourceTiles: b.tiles,
             triesDelta: 1.9,
-            decoyTouched: false
         });
 
         expect(resolved.recallMistakesThisFloor).toBe(1);
@@ -191,7 +157,6 @@ describe('turn mismatch rules', () => {
             tileIds: ['a', 'b'],
             sourceTiles: b.tiles,
             triesDelta: 1,
-            decoyTouched: false
         });
 
         expect(resolved.stats.tries).toBe(1);
@@ -220,7 +185,6 @@ describe('turn mismatch rules', () => {
             tileIds: ['heavy-a', 'echo-a'],
             sourceTiles: [b.tiles[0]!, b.tiles[1]!],
             triesDelta: 1,
-            decoyTouched: false
         });
 
         expect(resolved.stats.tileTraitMismatches.heavy).toBe(1);
@@ -256,7 +220,6 @@ describe('the magpie on a real miss', () => {
             tileIds: ['x-A', 'y-A'],
             sourceTiles: [b.tiles[0]!, b.tiles[1]!],
             triesDelta: 1,
-            decoyTouched: false
         });
     };
 

@@ -17,14 +17,11 @@ export {
     countFindablePairs
 } from './board-tile-generation-rules';
 export {
-    DECOY_PAIR_KEY,
-    EXIT_PAIR_KEY,
     WILD_PAIR_KEY,
     isSingletonUtilityPairKey,
     isWildPairKey
 } from './tile-identity';
 export {
-    boardHasGlassDecoy,
     getWildTileIdFromBoard,
     inspectBoardFairness,
     inspectRunFairness,

@@ -44,7 +44,6 @@ export type { TileBoardPowerBackAccent } from './tileBoardHiddenBackAccents';
 export { getTutorialPairOrdinalByKey } from './tileBoardTutorialMarkers';
 
 export interface TileBoardRow {
-    destroyBlockedDecoyBack: boolean;
     faceUp: boolean;
     fieldAmp: number;
     focusDimmed: boolean;
@@ -219,7 +218,7 @@ export const buildTileBoardRows = ({
             stickyBlockedTileId,
             tile
         });
-        const { destroyBlockedDecoyBack, nonPickableBack, powerBackAccent } = getTileBoardHiddenBackAccents({
+        const { nonPickableBack, powerBackAccent } = getTileBoardHiddenBackAccents({
             clumpReadNextTileIds,
             clumpReadTileIds,
             destroyEligibleTileIds,
@@ -259,7 +258,6 @@ export const buildTileBoardRows = ({
         const traitRouteCadence = getTraitRouteReadabilityCadence(traitRouteReadabilityTier);
 
         return {
-            destroyBlockedDecoyBack,
             faceUp,
             fieldAmp: getTileFieldAmplification(index, totalColumns, totalRows),
             focusDimmed: Boolean(dimmedTileIds?.has(tile.id)),

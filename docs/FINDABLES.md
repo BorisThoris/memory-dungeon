@@ -5,9 +5,15 @@
 
 **Authoritative kinds and numbers:** [`FindableKind`](../src/shared/contracts.ts), `FINDABLE_MATCH_SCORE` and `FINDABLE_KIND_SPAWN_WEIGHTS` in [`contracts.ts`](../src/shared/contracts.ts). Spawn logic: `assignFindableKindsToTiles` in [`game.ts`](../src/shared/game.ts).
 
-## Not to be confused with the **“?” glass decoy**
+## The “?” glass decoy is gone
 
-The **`glass_floor`** mutator adds a **singleton** tile with label **`?`** / `pairKey` **`__decoy__`**. It is **not** a findable pickup: it **never forms a pair** (by design), exists to tempt mis-flips, and supports the **glass witness** bonus when it stays face-down. **Findables** are optional **reward markers** on **normal pairs** (corner ring in WebGL when face-up). Rewards grant score. If you saw a “?” and could not finish the floor, that was a **completion-rule bug** (decoy could not be `matched` or `removed` under the old `isBoardComplete` check) — fixed so a **hidden** decoy clears once all **non-decoy** tiles are matched or removed (`game.ts` `isBoardComplete`).
+Older builds carried a **`glass_floor`** mutator that dealt a partnerless **`?`** card (`pairKey`
+**`__decoy__`**) to tempt mis-flips, and a **glass witness** bonus for leaving it alone. All three —
+the mutator, the card and the objective — were removed at **Gen 196**; see
+[`REMOVED_DECOY.md`](./REMOVED_DECOY.md). Every card on the board now has a partner, with the wild
+joker as the only exception. **Findables** are, and always were, a different thing: optional
+**reward markers** on **normal pairs** (corner ring in WebGL when face-up), granting score when the
+carrier pair is matched.
 
 ## Purpose
 
@@ -40,7 +46,7 @@ Spawn runs inside `assignFindableKindsToTiles` (`game.ts`).
   - With mutator **`findables_floor`**: **2** findable pairs (capped by eligible real pairs on the floor).
   - Without that mutator: **levels 1–3** → **1** pair; **level 4+** → **1** or **2** pairs (50% each), capped by eligible pairs.
 - **Kind per pair:** weighted roll from `FINDABLE_KIND_SPAWN_WEIGHTS`: `score_glint` **100** (one kind, so the roll is a formality kept for the day a second kind earns its place).
-- **Never** on decoy (`DECOY_PAIR_KEY`) or wild (`WILD_PAIR_KEY`) pairs.
+- **Never** on wild (`WILD_PAIR_KEY`) singletons.
 - **Fixed / handcrafted boards** (`buildBoard` with `fixedTiles`): `assignFindableKindsToTiles` is **not** applied — no spawned findables unless the fixed payload already sets `findableKind`.
 
 ### Claim condition
@@ -55,7 +61,7 @@ Values are in **`FINDABLE_MATCH_SCORE`** (`contracts.ts`). On claim, the score r
 |------|------------------|
 | `score_glint` | **+25** |
 
-Tune so rewards **do not** obsolete secondary objectives (scholar style, glass witness, etc.) — findables are **extra sugar**, not the main economy.
+Tune so rewards **do not** obsolete secondary objectives (scholar style, cursed last, flip par) — findables are **extra sugar**, not the main economy.
 
 ### Interactions
 
@@ -66,7 +72,6 @@ Tune so rewards **do not** obsolete secondary objectives (scholar style, glass w
 | **Shuffle (full or row)** | Findables **move with tiles** (identity keyed by `tile.id`); still claimable on later match. |
 | **Peek** | Does not claim; may reveal carrier is special if UI shows marker only when face-up / peek face-up. |
 | **Perfect Memory** | Findable claims are Perfect Memory-safe; they are match rewards, not assist powers. |
-| **Decoy / glass** | Findable never on decoy tile (`DECOY_PAIR_KEY`). |
 
 ### Floor advance
 

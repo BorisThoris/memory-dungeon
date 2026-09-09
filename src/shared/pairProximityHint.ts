@@ -1,6 +1,5 @@
 import type { BoardState, Tile } from './contracts';
 import { getSafeBoardColumns } from './board-grid-dimensions';
-import { DECOY_PAIR_KEY } from './tile-identity';
 import { tilesArePairMatch } from './turn-resolution';
 
 const indexToPos = (board: BoardState, index: number): { col: number; row: number } => {
@@ -19,7 +18,7 @@ const isPartnerCandidate = (t: Tile): boolean => t.state === 'hidden' || t.state
 
 /**
  * Manhattan grid distance from this flipped tile to the nearest tile that could legally match it.
- * Returns `null` for hidden tiles, decoys, or when no candidate exists.
+ * Returns `null` for hidden tiles, singletons, or when no candidate exists.
  */
 export const getPairProximityGridDistance = (board: BoardState, tileId: string): number | null => {
     const selfIndex = board.tiles.findIndex((t) => t.id === tileId);
@@ -33,10 +32,6 @@ export const getPairProximityGridDistance = (board: BoardState, tileId: string):
     if (tile.state !== 'flipped') {
         return null;
     }
-    if (tile.pairKey === DECOY_PAIR_KEY) {
-        return null;
-    }
-
     const selfPos = indexToPos(board, selfIndex);
 
     const candidates = board.tiles.filter((c, i) => {

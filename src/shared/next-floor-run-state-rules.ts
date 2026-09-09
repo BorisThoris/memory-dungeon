@@ -5,7 +5,6 @@ import {
     type RunState
 } from './contracts';
 import { applyFloorCurio, pickFloorCurio } from './floor-curio-rules';
-import { boardHasGlassDecoy } from './board-inspection';
 import { countFindablePairs } from './board-tile-generation-rules';
 import { createTimerState } from './run-timer-rules';
 import { calculateRating } from './scoring-rules';
@@ -39,8 +38,6 @@ export const createNextFloorRunState = (
         peekRevealedTileIds: [],
         shuffleUsedThisFloor: false,
         destroyUsedThisFloor: false,
-        decoyFlippedThisFloor: false,
-        glassDecoyActiveThisFloor: boardHasGlassDecoy(nextBoard),
         cursedMatchedEarlyThisFloor: false,
         matchResolutionsThisFloor: 0,
         findablesClaimedThisFloor: 0,

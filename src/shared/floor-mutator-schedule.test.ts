@@ -73,7 +73,7 @@ describe('pickFloorScheduleEntry', () => {
         expect(pickFloorScheduleEntry(0, rv, 7, 'endless')).toMatchObject({
             floorTag: 'boss',
             floorArchetypeId: 'trap_hall',
-            featuredObjectiveId: 'glass_witness',
+            featuredObjectiveId: 'scholar_style',
             title: 'Trap Hall',
             theme: 'Trap',
             actTitle: 'Act II — Shadow Archive',
@@ -219,15 +219,14 @@ describe('pickFloorScheduleEntry', () => {
         expect(foundWithout, 'expected a boss seed where distraction_channel not appended').not.toBeNull();
         const withDistraction = pickFloorScheduleEntry(foundWith!, rv, 7, 'endless');
         expect(withDistraction.floorArchetypeId).toBe('trap_hall');
-        expect(withDistraction.featuredObjectiveId).toBe('glass_witness');
+        expect(withDistraction.featuredObjectiveId).toBe('scholar_style');
     });
 
     it('uses the same boss-floor shape for BALANCE_NOTES sim default seed (42001) at level 7', () => {
         const e = pickFloorScheduleEntry(42_001, rv, 7, 'endless');
         expect(e.floorTag).toBe('boss');
         expect(e.floorArchetypeId).toBe('trap_hall');
-        expect(e.featuredObjectiveId).toBe('glass_witness');
-        expect(e.mutators).toContain('glass_floor');
+        expect(e.featuredObjectiveId).toBe('scholar_style');
         expect(e.mutators).toContain('sticky_fingers');
     });
 
@@ -291,7 +290,7 @@ describe('floor archetype progression contract', () => {
         expect(byArchetype.get('trap_hall:7')).toMatchObject({
             role: 'boss',
             floorTag: 'boss',
-            featuredObjectiveId: 'glass_witness'
+            featuredObjectiveId: 'scholar_style'
         });
         expect(byArchetype.get('script_room:8')).toMatchObject({
             role: 'mystery',

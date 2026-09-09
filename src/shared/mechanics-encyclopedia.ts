@@ -11,7 +11,7 @@
 import type { AchievementId, GameMode, MutatorId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 37 as const;
+export const ENCYCLOPEDIA_VERSION = 38 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -221,12 +221,6 @@ export const ACHIEVEMENT_CATALOG: Record<AchievementId, AchievementCodexEntry> =
  * Mutators — must include **every** `MutatorId`.
  */
 export const MUTATOR_CATALOG: Record<MutatorId, MutatorDefinition> = {
-    glass_floor: {
-        id: 'glass_floor',
-        title: 'Glass floor',
-        description:
-            'Adds a fragile **singleton decoy trap** tile that never pairs; avoid dragging it into a mismatch for the glass-witness bonus. Distinct from reward pickups on normal pairs.'
-    },
     sticky_fingers: {
         id: 'sticky_fingers',
         title: 'Sticky fingers',
@@ -353,7 +347,7 @@ export const ENCYCLOPEDIA_POWER_TOPICS: readonly EncyclopediaTopic[] = [
         id: 'power_destroy_pair',
         title: 'Destroy pair',
         description:
-            'Spends destroy charges to remove a fully hidden **pair** without match score—counts as a power for perfect-clear rules. Findable bonus pickups on that pair are **forfeited**. Cannot target the glass decoy tile.'
+            'Spends destroy charges to remove a fully hidden **pair** without match score—counts as a power for perfect-clear rules. Findable bonus pickups on that pair are **forfeited**.'
     },
     {
         id: 'power_peek',
@@ -371,7 +365,7 @@ export const ENCYCLOPEDIA_POWER_TOPICS: readonly EncyclopediaTopic[] = [
         id: 'power_stray_remove',
         title: 'Stray remove',
         description:
-            'Arms removal of **one** hidden completion-safe singleton tile, such as a wild joker; does not score. Normal matched pairs are blocked so Stray cannot orphan a partner. Cannot remove the glass decoy trap tile.'
+            'Arms removal of **one** hidden completion-safe singleton tile, such as a wild joker; does not score. Normal matched pairs are blocked so Stray cannot orphan a partner.'
     },
     {
         id: 'power_flash_pair',
@@ -434,10 +428,10 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
             'The **flip par** objective is worth **+30**. Clear the floor within its stated **par** of turns (`ceil(pairs × 0.85)`, the same par the run bar shows) and you get the bonus. A turn is a pair of flips resolved, match or miss; the gambit\'s three flips are one turn. Outside scheduled endless chapters this can stack with other floor objectives; in modern endless chapters it pays out only when **Flip par** is the **featured objective** for that floor.'
     },
     {
-        id: 'sys_glass_witness_and_cursed_last',
-        title: 'Glass witness & cursed last objectives',
+        id: 'sys_cursed_last',
+        title: 'Cursed last objective',
         description:
-            '**Glass witness** is worth **+35**: with a glass decoy on the board, you keep the bonus only if the decoy is **never involved in a mismatch**. **Cursed last** is worth **+50**: one pair is marked cursed, and you must match it **last** among real pairs. Outside scheduled endless chapters these behave like normal floor objectives. In modern endless chapters, they only appear when they are the floor\'s **featured objective**; endless floors also generate the cursed pair only on **Cursed last** chapters.'
+            '**Cursed last** is worth **+50**: one pair is marked cursed, and you must match it **last** among real pairs. Outside scheduled endless chapters it behaves like a normal floor objective. In modern endless chapters it only appears when it is the floor\'s **featured objective**, and endless floors generate the cursed pair only on **Cursed last** chapters.'
     },
     {
         id: 'sys_boss_floor_multiplier',
@@ -546,12 +540,6 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         title: 'Findables (bonus pickups)',
         description:
             'Procedural floors spawn **real** pickup pairs by default: floors 1–3 have one pair, later floors have one or two, and **Dense pickups** guarantees two. There is one kind: the **score glint**, +25 score. Matching the carrier pair claims it, a chunk break that takes it spills it and pays it out, Destroy forfeits it, and Peek only reveals it.'
-    },
-    {
-        id: 'board_glass_decoy',
-        title: 'Glass decoy trap (singleton)',
-        description:
-            'From **Glass floor**: one extra decoy tile that **never** forms a pair. The **glass witness** payout requires the decoy to **never appear in a mismatch** (or a failed **gambit** that includes it). Any such flip marks the witness failed for the floor. It is a trap, not a pickup.'
     },
     {
         id: 'board_wild_tile',

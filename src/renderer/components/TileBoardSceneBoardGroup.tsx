@@ -88,7 +88,6 @@ export const TileBoardSceneBoardGroup = ({
         ) : null}
         {tileBezelRows.map(
             ({
-                destroyBlockedDecoyBack,
                 faceUp,
                 fieldAmp,
                 focusDimmed,
@@ -120,7 +119,6 @@ export const TileBoardSceneBoardGroup = ({
             }) => (
                 <TileBezel
                     key={tile.id}
-                    destroyBlockedDecoyBack={destroyBlockedDecoyBack}
                     faceUp={faceUp}
                     fieldAmp={fieldAmp}
                     fieldTiltRef={fieldTiltRef}

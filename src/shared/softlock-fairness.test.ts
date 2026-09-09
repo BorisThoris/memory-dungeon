@@ -28,8 +28,6 @@ import {
 } from './tile-identity';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
 
-const DECOY_PAIR_KEY = '__decoy__';
-
 const testSeeds = [1, 42_001, 867_5309] as const;
 
 const issueCodes = (board: BoardState): string[] =>
@@ -57,14 +55,14 @@ const tile = (id: string, pairKey: string, state: Tile['state'] = 'hidden'): Til
 
 const boardFromTiles = (tiles: Tile[], overrides: Partial<BoardState> = {}): BoardState => ({
     level: 1,
-    pairCount: new Set(tiles.map((t) => t.pairKey).filter((key) => key !== DECOY_PAIR_KEY && key !== WILD_PAIR_KEY)).size,
+    pairCount: new Set(tiles.map((t) => t.pairKey).filter((key) => key !== WILD_PAIR_KEY)).size,
     columns: 2,
     rows: Math.ceil(tiles.length / 2),
     tiles,
     flippedTileIds: tiles.filter((t) => t.state === 'flipped').map((t) => t.id),
     matchedPairs: Math.floor(
         [...new Set(tiles.map((t) => t.pairKey))]
-            .filter((key) => key !== DECOY_PAIR_KEY && key !== WILD_PAIR_KEY)
+            .filter((key) => key !== WILD_PAIR_KEY)
             .filter((key) => tiles.filter((t) => t.pairKey === key).every((t) => t.state === 'matched' || t.state === 'removed'))
             .length
     ),
@@ -93,13 +91,13 @@ describe('REG-087 board fairness inspection', () => {
                     runRulesVersion: run.runRulesVersion,
                     activeMutators:
                         level === 7
-                            ? ['glass_floor', 'sticky_fingers']
+                            ? ['sticky_fingers', 'distraction_channel']
                             : level === 9
                               ? ['short_memorize', 'wide_recall']
                               : [],
                     floorTag: level === 7 || level === 9 ? 'boss' : 'normal',
                     floorArchetypeId: level === 7 ? 'trap_hall' : null,
-                    featuredObjectiveId: level === 7 ? 'glass_witness' : null
+                    featuredObjectiveId: level === 7 ? 'scholar_style' : null
                 });
                 expectBoardFair(advancedBoard);
             }
@@ -132,7 +130,7 @@ describe('REG-087 board fairness inspection', () => {
         const rows: MutatorId[][] = [
             ['category_letters', 'findables_floor'],
             ['wide_recall', 'silhouette_twist'],
-            ['glass_floor', 'sticky_fingers'],
+            ['sticky_fingers', 'distraction_channel'],
             ['shifting_spotlight'],
             ['short_memorize', 'wide_recall']
         ];
@@ -144,10 +142,23 @@ describe('REG-087 board fairness inspection', () => {
                 activeMutators
             });
             expectBoardFair(board);
-            expect(board.tiles.filter((t) => t.findableKind).every((t) => t.pairKey !== DECOY_PAIR_KEY && t.pairKey !== WILD_PAIR_KEY)).toBe(
-                true
-            );
+            expect(board.tiles.filter((t) => t.findableKind).every((t) => t.pairKey !== WILD_PAIR_KEY)).toBe(true);
         }
+    });
+
+    it('reports a board complete once every real pair is cleared, hidden wild or not', () => {
+        const withWild = boardFromTiles(
+            [tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched'), tile('wild', WILD_PAIR_KEY)],
+            { matchedPairs: 1 }
+        );
+        expect(isBoardComplete(withWild)).toBe(true);
+        expect(inspectBoardFairness(withWild).complete).toBe(true);
+        expect(inspectBoardFairness(withWild).issues).toEqual([]);
+
+        const halfCleared = boardFromTiles([tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched'), tile('b1', 'b'), tile('b2', 'b')], {
+            matchedPairs: 1
+        });
+        expect(isBoardComplete(halfCleared)).toBe(false);
     });
 
     it('flags orphaned real pairs and stale flipped ids', () => {
@@ -160,69 +171,6 @@ describe('REG-087 board fairness inspection', () => {
         );
         expect(inspectBoardFairness(board).hasCompletionRoute).toBe(false);
     });
-
-    it('treats hidden glass decoys as allowed traps but flags flipped decoys before completion', () => {
-        const hiddenDecoy = boardFromTiles([tile('a1', 'a'), tile('a2', 'a'), tile('decoy', DECOY_PAIR_KEY)]);
-        expectBoardFair(hiddenDecoy);
-
-        const flippedDecoy = boardFromTiles([
-            tile('a1', 'a'),
-            tile('a2', 'a'),
-            tile('decoy', DECOY_PAIR_KEY, 'flipped')
-        ]);
-        expect(issueCodes(flippedDecoy)).toContain('decoy_flipped_or_cleared_before_completion');
-    });
-
-    it('keeps complete glass-decoy boards complete when the trap stayed hidden', () => {
-        const board = boardFromTiles(
-            [tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched'), tile('decoy', DECOY_PAIR_KEY)],
-            { matchedPairs: 1 }
-        );
-        expect(isBoardComplete(board)).toBe(true);
-        expect(inspectBoardFairness(board).complete).toBe(true);
-        expect(inspectBoardFairness(board).issues).toEqual([]);
-    });
-
-    it('keeps a late hidden decoy from blocking completion after the last real pair clears', () => {
-        const board = boardFromTiles(
-            [
-                tile('a1', 'a', 'matched'),
-                tile('a2', 'a', 'matched'),
-                tile('b1', 'b', 'matched'),
-                tile('b2', 'b', 'matched'),
-                tile('decoy', DECOY_PAIR_KEY)
-            ],
-            { matchedPairs: 2 }
-        );
-        const report = inspectBoardFairness(board);
-
-        expect(isBoardComplete(board)).toBe(true);
-        expect(report.complete).toBe(true);
-        expect(report.hasCompletionRoute).toBe(true);
-        expect(report.issues).toEqual([]);
-    });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 });
 
@@ -270,19 +218,17 @@ describe('REG-087 run-start fairness coverage', () => {
 });
 
 describe('REG-087 action eligibility edge cases', () => {
-    it('destroy, peek, and stray previews expose only legal completion routes around decoys and wilds', () => {
+    it('destroy, peek, and stray previews expose only legal completion routes around wilds', () => {
         const board = boardFromTiles([
             tile('a1', 'a'),
             tile('a2', 'a'),
-            tile('decoy', DECOY_PAIR_KEY),
             tile('wild', WILD_PAIR_KEY)
         ]);
 
         expect(countFullyHiddenPairs(board)).toBe(1);
         expect(collectDestroyEligibleTileIds(board)).toEqual(new Set(['a1', 'a2']));
-        expect(collectPeekEligibleTileIds(board, [])).toEqual(new Set(['a1', 'a2', 'decoy', 'wild']));
+        expect(collectPeekEligibleTileIds(board, [])).toEqual(new Set(['a1', 'a2', 'wild']));
         expect(tileIsStrayEligiblePreview(board, 'a1')).toBe(false);
-        expect(tileIsStrayEligiblePreview(board, 'decoy')).toBe(false);
         expect(tileIsStrayEligiblePreview(board, 'wild')).toBe(true);
     });
 

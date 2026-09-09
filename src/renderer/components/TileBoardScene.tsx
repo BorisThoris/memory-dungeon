@@ -65,7 +65,6 @@ import {
 export type { TileHoverTiltState } from './TileBezel';
 
 /** FX-006 / HOVER_DOM_WEBGL_TOKENS: border emphasis -> warm tint lerp (~20% toward `#fff0d4` in sRGB mix space). */
-/** Glass decoy pair key - keep in sync with `game.ts`. */
 const EMPTY_TILE_IDS: ReadonlySet<string> = new Set();
 /** Emissive base (theme `goldBright`); intensity scaled by graphics quality when DOM-hover-parity applies. */
 /** Matched face tint on `low` only (no ember-rim shader); medium+ relies on the edge effect + neutral card albedo. */

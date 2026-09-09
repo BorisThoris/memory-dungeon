@@ -215,13 +215,6 @@ export const getFindableDistributionRows = (run: RunState): FindableDistribution
 
 export const LONG_RUN_TERMINOLOGY_ROWS: readonly TerminologyContractRow[] = [
     {
-        id: 'decoy',
-        term: 'Decoy',
-        contract: 'Non-matching pressure tile or mutator fakeout that changes memory routing.',
-        stateOwner: 'pairKey or mutator-specific board fields',
-        playerCopyRule: 'Use decoy for fake pair pressure, not for hidden rewards.'
-    },
-    {
         id: 'objective',
         term: 'Objective',
         contract: 'Floor goal with progress, completion, and HUD detail.',

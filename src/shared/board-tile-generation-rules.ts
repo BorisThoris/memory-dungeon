@@ -12,7 +12,6 @@ import {
     getSymbolSetForLevel as getSymbolSetForLevelFromCatalog
 } from './tile-symbol-catalog';
 import {
-    DECOY_PAIR_KEY,
     WILD_PAIR_KEY,
     isSingletonUtilityPairKey
 } from './tile-identity';
@@ -84,17 +83,6 @@ export const createTiles = (
             }
         ];
     });
-
-    if (mutators.includes('glass_floor')) {
-        pairs.push({
-            id: `${level}-decoy`,
-            pairKey: DECOY_PAIR_KEY,
-            state: 'hidden' as const,
-            symbol: 'X',
-            label: 'Decoy',
-            atomicVariant: 0
-        });
-    }
 
     if (includeWildTile) {
         pairs.push({

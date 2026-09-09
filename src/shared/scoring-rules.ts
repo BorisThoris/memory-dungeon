@@ -15,7 +15,7 @@ import {
 import { hasMutator } from './mutators';
 import { runFiniteNumber, runFiniteNumberOrFallback, runNonNegativeInteger } from './run-number-guards';
 import { pairsForFloor } from './pair-curve';
-import { DECOY_PAIR_KEY, isWildPairKey } from './tile-identity';
+import { isWildPairKey } from './tile-identity';
 
 const ECHO_EXTRA_RESOLVE_MS = 380;
 
@@ -107,11 +107,8 @@ export const calculateMatchScore = (
 
 /** Exported for UI resolving highlights (gambit 3-flip) - keep in sync with `resolveGambitThree`. */
 export const tilesArePairMatch = (a: Tile, b: Tile): boolean => {
-    if (a.pairKey === b.pairKey && a.pairKey !== DECOY_PAIR_KEY) {
+    if (a.pairKey === b.pairKey) {
         return true;
-    }
-    if (a.pairKey === DECOY_PAIR_KEY || b.pairKey === DECOY_PAIR_KEY) {
-        return false;
     }
     if (isWildPairKey(a.pairKey) && !isWildPairKey(b.pairKey)) {
         return true;

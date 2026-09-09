@@ -6,7 +6,7 @@ import {
 } from './contracts';
 import { chunkBreakMomentumPairs } from './chunk-break-rules';
 import { isBoardComplete } from './board-inspection';
-import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
+import { WILD_PAIR_KEY } from './tile-identity';
 import { tilesArePairMatch } from './scoring-rules';
 import { clearResolveState } from './run-timer-rules';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
@@ -306,15 +306,12 @@ export const createResolveBoardTurnTransition = ({
             });
         }
 
-        const gambitDecoy =
-            ta.pairKey === DECOY_PAIR_KEY || tb.pairKey === DECOY_PAIR_KEY || tc.pairKey === DECOY_PAIR_KEY;
         const mismatch = resolveMismatchTurnTransition({
             run,
             board: run.board,
             tileIds: [aId, bId, cId],
             sourceTiles: [ta, tb, tc],
             triesDelta: GAMBIT_FAIL_EXTRA_TRIES,
-            decoyTouched: gambitDecoy
         });
         return {
             ...mismatch,
@@ -353,15 +350,12 @@ export const createResolveBoardTurnTransition = ({
             });
         }
 
-        const decoyTouch =
-            firstTile.pairKey === DECOY_PAIR_KEY || secondTile.pairKey === DECOY_PAIR_KEY;
         return resolveMismatchTurnTransition({
             run,
             board: run.board,
             tileIds: [firstId, secondId],
             sourceTiles: [firstTile, secondTile],
             triesDelta: 1,
-            decoyTouched: decoyTouch
         });
     };
 

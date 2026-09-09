@@ -56,16 +56,6 @@ describe('getPairProximityGridDistance', () => {
         expect(getPairProximityGridDistance(b, 'a')).toBe(2);
     });
 
-    it('returns null for decoy tiles', () => {
-        const b = board2x2([
-            tile('a', '__decoy__', 'flipped'),
-            tile('b', '__decoy__', 'hidden'),
-            tile('c', 'p1', 'hidden'),
-            tile('d', 'p1', 'hidden')
-        ]);
-        expect(getPairProximityGridDistance(b, 'a')).toBeNull();
-    });
-
     it('uses minimum distance among wild-card legal partners', () => {
         const b = board2x2([
             tile('w', WILD_PAIR_KEY, 'flipped'),

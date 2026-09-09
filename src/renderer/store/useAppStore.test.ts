@@ -82,7 +82,7 @@ const notifyCurrentBoardReady = (): void => {
 const normalPairGroups = (board: BoardState): Tile[][] => {
     const groups = new Map<string, Tile[]>();
     for (const tile of board.tiles) {
-        if (tile.pairKey === '__decoy__' || tile.pairKey === '__wild__') {
+        if (tile.pairKey === '__wild__') {
             continue;
         }
         const group = groups.get(tile.pairKey) ?? [];
@@ -804,9 +804,7 @@ describe('useAppStore timers', () => {
             const pairGroups = new Map<string, string[]>();
             for (const tile of run!.board!.tiles) {
                 if (
-                    tile.pairKey === '__decoy__' ||
                     tile.pairKey === '__wild__' ||
-                    tile.pairKey === '__exit__' ||
                     tile.pairKey === '__shop__'
                 ) {
                     continue;

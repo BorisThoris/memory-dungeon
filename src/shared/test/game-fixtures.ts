@@ -1,7 +1,7 @@
 import type { BoardState, RunState, Tile } from '../contracts';
 import { countFindablePairs } from '../board-generation';
 import { createNewRun, finishMemorizePhase } from '../game-core';
-import { EXIT_PAIR_KEY } from '../tile-identity';
+import { isSingletonUtilityPairKey } from '../tile-identity';
 import { flipTile, resolveBoardTurn } from '../turn-resolution';
 
 export const makeTile = (id: string, pairKey: string, symbol: string, overrides: Partial<Tile> = {}): Tile => ({
@@ -57,7 +57,7 @@ export const playPerfectFloor = (run: RunState): RunState => {
     let current = run;
     const groups = new Map<string, string[]>();
     for (const tile of current.board?.tiles ?? []) {
-        if (tile.pairKey === EXIT_PAIR_KEY || tile.state !== 'hidden') {
+        if (isSingletonUtilityPairKey(tile.pairKey) || tile.state !== 'hidden') {
             continue;
         }
         groups.set(tile.pairKey, [...(groups.get(tile.pairKey) ?? []), tile.id]);

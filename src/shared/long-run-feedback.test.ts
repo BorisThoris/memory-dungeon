@@ -127,7 +127,7 @@ describe('GLD-FB long-run feedback read models', () => {
     });
 
     it('publishes the terminology contract matrix', () => {
-        expect(LONG_RUN_TERMINOLOGY_ROWS.map((row) => row.id)).toEqual(['decoy', 'objective']);
+        expect(LONG_RUN_TERMINOLOGY_ROWS.map((row) => row.id)).toEqual(['objective']);
     });
 
     it('reports weighted findable distribution targets and active floor counts', () => {

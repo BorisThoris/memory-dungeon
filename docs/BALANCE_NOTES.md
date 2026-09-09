@@ -2159,3 +2159,34 @@ because three suits over nine to eleven pairs is three pairs to a suit and a thr
 not always hold two whole pairs within reach. Every band still passes, and the scattered-floor cap
 from Gen 191 keeps the worst floors where they were. It is the price of the palette and it is worth
 watching: if it drops further, the lever is the pair curve, not the palette.
+
+## Gen 196 — the decoy left, and nothing moved
+
+The `glass_floor` mutator, the `__decoy__` card and the `glass_witness` objective all went, along
+with the `__exit__` pair key that had outlived the exit card by twenty generations. The full record
+is in [`REMOVED_DECOY.md`](./REMOVED_DECOY.md); this is the measurement.
+
+| | Lone match, pairs | Sharp step | Spread | Score rungs | Ripple | Fever, reference | Occupancy |
+|---|---|---|---|---|---|---|---|
+| Gen 195 | 1.46 | 0.44 | 6.13 | ×3.56 / ×2.49 / ×5.11 | 0.16 | 0.44 | 11 counters, baseline |
+| Gen 196 | 1.46 | 0.44 | 6.13 | ×3.56 / ×2.49 / ×5.11 | 0.16 | 0.44 | 11 counters, unchanged |
+
+Every number is identical to four significant figures, which is the correct result and worth saying
+out loud rather than skipping past. The decoy was an *extra* card, dealt on top of the pair budget,
+on two floors of a twelve-floor cycle. It never entered a clump, never popped, never rippled, never
+dropped, and never appeared in a chain-tier calculation. Taking it away therefore moves nothing the
+cascade measures.
+
+That is the whole indictment. A mechanic that costs nothing to remove was, by the same arithmetic,
+contributing nothing — and it was doing that while occupying a Codex entry, a mutator slot, an
+objective slot, two `RunState` fields, a fairness issue code, a renderer prop chain through five
+components, and a corner ring in the WebGL board. The Gen 194 accountability audit exists to find
+exactly this shape: a mechanic on the board with no counter answering for it. The decoy was on the
+exemption list, and the honest resolution of an exemption is sometimes deletion rather than
+instrumentation.
+
+Two lines did change, and both are administrative rather than behavioural: `MUTATOR_CATALOG` is 10
+entries rather than 11, and `SINGLETON_UTILITY_PAIR_KEYS` holds one key rather than two.
+`tile-identity.test.ts` now pins that count, so the next singleton anyone adds has to argue for
+itself against the rule the removal doc states: **every card on the board has a partner**, and the
+wild joker's exception is one that makes the player's read worth *more*, not worthless.

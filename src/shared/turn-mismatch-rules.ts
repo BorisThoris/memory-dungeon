@@ -51,7 +51,6 @@ export interface MismatchTurnTransitionInput {
     tileIds: readonly string[];
     sourceTiles: readonly Tile[];
     triesDelta: number;
-    decoyTouched: boolean;
 }
 
 export const resolveMismatchTurnTransition = ({
@@ -60,7 +59,6 @@ export const resolveMismatchTurnTransition = ({
     tileIds,
     sourceTiles,
     triesDelta,
-    decoyTouched
 }: MismatchTurnTransitionInput): RunState => {
     const stats = normalizeSessionStats(run.stats);
     const normalizedRun = { ...run, stats };
@@ -99,7 +97,6 @@ export const resolveMismatchTurnTransition = ({
         // A miss is a turn against the par as much as a match is; the gambit's three flips are one.
         turnsThisFloor: runNonNegativeInteger(run.turnsThisFloor) + 1,
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, tileIds),
-        decoyFlippedThisFloor: run.decoyFlippedThisFloor || decoyTouched,
         // A miss keeps half the streak (the score multiplier forgives) but the cascade's momentum
         // is gone: the fire goes out, and the ladder is climbed again from what was remembered.
         chunkPairsThisChain: 0,

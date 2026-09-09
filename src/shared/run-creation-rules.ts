@@ -12,7 +12,6 @@ import { filterMutatorsByContentLock } from './content-lock-state';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import { pickFloorCurio, seatFloorCurio } from './floor-curio-rules';
 import { countFindablePairs } from './board-tile-generation-rules';
-import { boardHasGlassDecoy } from './board-inspection';
 import { getMemorizeDurationForRun } from './scoring-rules';
 import { createSessionStats } from './session-stats-rules';
 import { createTimerState } from './run-timer-rules';
@@ -138,8 +137,6 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         wildMenuRun: options.wildMenuRun ?? false,
         shuffleUsedThisFloor: false,
         destroyUsedThisFloor: false,
-        decoyFlippedThisFloor: false,
-        glassDecoyActiveThisFloor: boardHasGlassDecoy(board),
         cursedMatchedEarlyThisFloor: false,
         matchResolutionsThisFloor: 0,
         flashPairCharges:

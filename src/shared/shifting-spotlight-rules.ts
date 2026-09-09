@@ -8,7 +8,7 @@ import {
 import { isBoardComplete } from './board-inspection';
 import { hasMutator } from './mutators';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
-import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
+import { WILD_PAIR_KEY } from './tile-identity';
 
 export interface ShiftingSpotlightKeys {
     wardPairKey: string | null;
@@ -24,7 +24,7 @@ export interface RotatedShiftingSpotlight {
 export const eligibleSpotlightPairKeys = (board: BoardState): string[] => {
     const groups = new Map<string, Tile[]>();
     for (const tile of board.tiles) {
-        if (tile.pairKey === DECOY_PAIR_KEY || tile.pairKey === WILD_PAIR_KEY) {
+        if (tile.pairKey === WILD_PAIR_KEY) {
             continue;
         }
         const list = groups.get(tile.pairKey) ?? [];

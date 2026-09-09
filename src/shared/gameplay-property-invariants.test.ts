@@ -14,7 +14,7 @@ import { createNewRun, finishMemorizePhase } from './game-core';
 import { advanceToNextLevel } from './next-floor-transition-rules';
 import { solveRunByExhaustingPlayablePairs } from './playthrough-solver';
 import { createGeneratedBoardSolverRun } from './softlock-generator-contract';
-import { DECOY_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
+import { isSingletonUtilityPairKey } from './tile-identity';
 import { flipTile, resolveBoardTurn } from './turn-resolution';
 
 const propertyRuns = Number(process.env.GAMEPLAY_PROPERTY_RUNS ?? 80);
@@ -39,7 +39,7 @@ const expectValidBoardPairShape = (board: BoardState): void => {
 
     const realPairCounts = new Map<string, number>();
     for (const tile of board.tiles) {
-        if (isSingletonUtilityPairKey(tile.pairKey) || tile.pairKey === DECOY_PAIR_KEY) {
+        if (isSingletonUtilityPairKey(tile.pairKey)) {
             continue;
         }
         realPairCounts.set(tile.pairKey, (realPairCounts.get(tile.pairKey) ?? 0) + 1);
@@ -71,7 +71,7 @@ const expectFlippedTileReferencesExist = (run: RunState): void => {
 const hiddenRealPairGroups = (board: BoardState): Tile[][] => {
     const groups = new Map<string, Tile[]>();
     for (const tile of board.tiles) {
-        if (tile.state !== 'hidden' || isSingletonUtilityPairKey(tile.pairKey) || tile.pairKey === DECOY_PAIR_KEY) {
+        if (tile.state !== 'hidden' || isSingletonUtilityPairKey(tile.pairKey)) {
             continue;
         }
         const group = groups.get(tile.pairKey) ?? [];
@@ -194,10 +194,9 @@ describe('gameplay property invariants', () => {
                     expect(inspectRunFairness(flashed).issues).toEqual([]);
                 }
 
-                const strayTarget = hiddenTiles.find((candidate) => candidate.pairKey === DECOY_PAIR_KEY) ?? tile;
-                const strayRemoved = strayTarget
-                    ? applyStrayRemove(run, strayTarget.id)
-                    : run;
+                // Stray only takes a singleton; on a floor with none it is a no-op, which is also legal shape.
+                const strayTarget = hiddenTiles.find((candidate) => isSingletonUtilityPairKey(candidate.pairKey)) ?? tile;
+                const strayRemoved = strayTarget ? applyStrayRemove(run, strayTarget.id) : run;
                 expectRunResourceBounds(strayRemoved);
                 expectFlippedTileReferencesExist(strayRemoved);
                 if (strayRemoved !== run && strayRemoved.status !== 'gameOver') {

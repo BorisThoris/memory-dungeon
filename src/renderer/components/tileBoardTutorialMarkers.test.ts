@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { BoardState, Tile } from '../../shared/contracts';
-import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from '../../shared/tile-identity';
+import { WILD_PAIR_KEY } from '../../shared/tile-identity';
 import { getTileBoardTutorialPairOrdinal, getTutorialPairOrdinalByKey } from './tileBoardTutorialMarkers';
 
 const tile = (id: string, pairKey: string, state: Tile['state'] = 'hidden'): Tile =>
@@ -25,14 +25,9 @@ const board = (tiles: Tile[]): BoardState =>
     }) as BoardState;
 
 describe('tileBoardTutorialMarkers', () => {
-    it('builds sorted tutorial pair ordinals while skipping decoy and wild pair keys', () => {
+    it('builds sorted tutorial pair ordinals while skipping the wild singleton', () => {
         const result = getTutorialPairOrdinalByKey(
-            board([
-                tile('d', DECOY_PAIR_KEY),
-                tile('w', WILD_PAIR_KEY),
-                tile('b', 'beta'),
-                tile('a', 'alpha')
-            ]),
+            board([tile('w', WILD_PAIR_KEY), tile('b', 'beta'), tile('a', 'alpha')]),
             true
         );
 

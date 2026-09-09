@@ -4,7 +4,7 @@ Puzzles are **fixed layouts** keyed by id in `src/shared/builtin-puzzles.ts` (or
 
 ## Authored payload validation
 
-`puzzle-import.ts` validates the layout-only tile payload shape used by builtins, tests, and future local authoring tools: **4–64** hidden tiles, unique tile ids, non-empty text fields, and **exactly two** tiles per non-decoy `pairKey`. Unknown tile metadata is rejected. The current menu exposes the built-in puzzle library only; it does not provide a puzzle JSON file picker or parser. Shipping puzzles still go through `BUILTIN_PUZZLES` and PR review.
+`puzzle-import.ts` validates the layout-only tile payload shape used by builtins, tests, and future local authoring tools: **4–64** hidden tiles, unique tile ids, non-empty text fields, and **exactly two** tiles per non-singleton `pairKey`. Unknown tile metadata is rejected. The current menu exposes the built-in puzzle library only; it does not provide a puzzle JSON file picker or parser. Shipping puzzles still go through `BUILTIN_PUZZLES` and PR review.
 
 ## Optional systems (`fixedTiles`)
 

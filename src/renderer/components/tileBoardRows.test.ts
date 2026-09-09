@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { BoardState, Tile } from '../../shared/contracts';
-import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from '../../shared/tile-identity';
+import { WILD_PAIR_KEY } from '../../shared/tile-identity';
 import {
     buildTileBoardRows,
     getTileBoardOverlayPrewarmDemandPairKeys,
@@ -69,13 +69,8 @@ const rows = (input: Partial<Parameters<typeof buildTileBoardRows>[0]> = {}) => 
 };
 
 describe('tileBoardRows', () => {
-    it('builds tutorial pair ordinals while skipping decoy and wild pair keys', () => {
-        const b = board([
-            tile('d', DECOY_PAIR_KEY),
-            tile('w', WILD_PAIR_KEY),
-            tile('b', 'beta'),
-            tile('a', 'alpha')
-        ]);
+    it('builds tutorial pair ordinals while skipping the wild singleton', () => {
+        const b = board([tile('w', WILD_PAIR_KEY), tile('b', 'beta'), tile('a', 'alpha')]);
 
         expect([...getTutorialPairOrdinalByKey(b, true)!.entries()]).toEqual([
             ['alpha', 1],
@@ -96,15 +91,14 @@ describe('tileBoardRows', () => {
         ]);
     });
 
-    it('assigns hidden-back power accents with pin precedence and decoy destroy blocking', () => {
-        const b = board([tile('decoy', DECOY_PAIR_KEY), tile('real', 'real'), tile('peek', 'peek')]);
+    it('assigns hidden-back power accents with pin taking precedence over every other read', () => {
+        const b = board([tile('wild', WILD_PAIR_KEY), tile('real', 'real'), tile('peek', 'peek')]);
 
         const destroyRows = rows({
             board: b,
-            destroyEligibleTileIds: new Set(['decoy', 'real']),
+            destroyEligibleTileIds: new Set(['real']),
             destroyPowerVisualActive: true
         });
-        expect(destroyRows[0]!.destroyBlockedDecoyBack).toBe(true);
         expect(destroyRows[0]!.powerBackAccent).toBeNull();
         expect(destroyRows[1]!.powerBackAccent).toBe('destroy');
 

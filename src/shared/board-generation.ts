@@ -6,7 +6,6 @@ export {
     countFindablePairs
 } from './board-tile-generation-rules';
 export {
-    boardHasGlassDecoy,
     countFullyHiddenPairs,
     getWildTileIdFromBoard,
     inspectBoardFairness,

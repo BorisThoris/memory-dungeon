@@ -18,7 +18,7 @@ import {
     TILE_SUIT_CATALOG,
     TILE_SUITS
 } from './tile-suit-rules';
-import { EXIT_PAIR_KEY } from './tile-identity';
+import { WILD_PAIR_KEY } from './tile-identity';
 
 const pairs = (count: number): Tile[] =>
     Array.from({ length: count }, (_, index) => `p${index}`).flatMap((pairKey) => [
@@ -98,10 +98,10 @@ describe('clumping', () => {
 
     it('leaves pinned tiles exactly where the layout plan put them', () => {
         const suited = assignSuitsToTiles(pairs(10), 8, 2, 1);
-        const exit: Tile = { id: 'exit', pairKey: EXIT_PAIR_KEY, symbol: 'E', label: 'Exit', state: 'hidden' };
-        const withExit = [...suited.slice(0, 7), exit, ...suited.slice(7)];
-        const dealt = dealTilesInClumps(withExit, 5, 8, 2, 1, isLayoutPinnedTile);
-        expect(dealt[7]?.id).toBe('exit');
+        const wild: Tile = { id: 'wild', pairKey: WILD_PAIR_KEY, symbol: 'W', label: 'Wild', state: 'hidden' };
+        const withWild = [...suited.slice(0, 7), wild, ...suited.slice(7)];
+        const dealt = dealTilesInClumps(withWild, 5, 8, 2, 1, isLayoutPinnedTile);
+        expect(dealt[7]?.id).toBe('wild');
     });
 });
 

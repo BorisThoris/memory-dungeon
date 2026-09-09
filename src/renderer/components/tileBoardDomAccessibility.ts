@@ -3,7 +3,6 @@ import { getFindableRewardText } from '../../shared/findables';
 import { getPairProximityGridDistance } from '../../shared/pairProximityHint';
 import { getTileSuit } from '../../shared/tile-suit-rules';
 import { getClumpRead, type ClumpReadContext } from '../../shared/clump-read-rules';
-import { DECOY_PAIR_KEY } from '../../shared/tile-identity';
 import {
     getTileSwapTraitPreviewLines,
     getTileTraitInteractionPreviewLines,
@@ -206,9 +205,7 @@ export const getTileAriaLabel = (
     clumpReadContext: ClumpReadContext = { chain: 1, run: { floorCurioId: null } }
 ): string => {
     const base = faceUp
-        ? tile.pairKey === DECOY_PAIR_KEY
-            ? `Decoy trap tile, row ${row}, column ${column}. It never forms a pair.`
-            : `Tile ${tile.label}, row ${row}, column ${column}`
+        ? `Tile ${tile.label}, row ${row}, column ${column}`
         : `Hidden tile, row ${row}, column ${column}`;
     // The suit is the one thing a face-down tile shows, so it is the one thing its name says.
     // A hidden tile also says how big a clump it stands in: the read a sighted player gets from the

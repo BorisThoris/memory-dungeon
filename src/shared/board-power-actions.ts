@@ -13,7 +13,6 @@ import {
     decreaseRecallFocus,
     rememberForgottenTiles
 } from './recall-rules';
-import { DECOY_PAIR_KEY } from './tile-identity';
 import {
     canDestroyPair,
     hasClearFlipState,
@@ -291,7 +290,7 @@ export const applyFlashPair = (run: RunState): RunState => {
     }
     const hiddenByKey = new Map<string, string[]>();
     for (const t of run.board.tiles) {
-        if (t.state !== 'hidden' || t.pairKey === DECOY_PAIR_KEY) {
+        if (t.state !== 'hidden') {
             continue;
         }
         const list = hiddenByKey.get(t.pairKey) ?? [];

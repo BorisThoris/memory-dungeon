@@ -46,8 +46,8 @@ describe('REG-076 boss and elite encounter identity', () => {
             getFloorIdentityContract({
                 floorTag: 'boss',
                 floorArchetypeId: 'trap_hall',
-                mutators: ['glass_floor', 'sticky_fingers'],
-                featuredObjectiveLabel: 'Glass witness'
+                mutators: ['sticky_fingers'],
+                featuredObjectiveLabel: 'Scholar style'
             }),
             getFloorIdentityContract({
                 floorTag: 'breather',

@@ -220,8 +220,6 @@ describe('getMemoryRecallFeedback', () => {
         const run = makeRun([
             makeTile('a1', 'A', 'Rune A'),
             makeTile('a2', 'A', 'Rune A'),
-            makeTile('exit', '__exit__', 'Exit'),
-            makeTile('decoy', '__decoy__', 'Decoy'),
             makeTile('wild', '__wild__', 'Wild')
         ]);
 

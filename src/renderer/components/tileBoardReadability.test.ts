@@ -27,7 +27,6 @@ const tile = (overrides: Partial<Tile> = {}): Tile => ({
 
 const state = (overrides: Partial<Parameters<typeof getTileBoardReadabilityState>[0]> = {}) =>
     getTileBoardReadabilityState({
-        destroyBlockedDecoyBack: false,
         faceUp: false,
         nonPickableBack: false,
         powerBackAccent: null,

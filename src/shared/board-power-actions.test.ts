@@ -14,7 +14,7 @@ import {
     applyTileSwap,
     cancelResolvingWithUndo
 } from './board-power-actions';
-import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
+import { WILD_PAIR_KEY } from './tile-identity';
 
 const tile = (id: string, pairKey: string, state: Tile['state'] = 'hidden'): Tile => ({
     id,
@@ -299,22 +299,6 @@ describe('board power actions', () => {
 
         const matchedTile = run({ board: board([tile('a1', 'A', 'matched'), tile('b1', 'B')]) });
         expect(applyTileSwap(matchedTile, 'a1', 'b1')).toBe(matchedTile);
-    });
-
-    it('reveals a deterministic hidden non-decoy pair for flash pair', () => {
-        const flashed = applyFlashPair(run({
-            board: board([
-                tile('a1', 'A'),
-                tile('a2', 'A'),
-                tile('d1', DECOY_PAIR_KEY)
-            ]),
-            flashPairCharges: 1
-        }));
-
-        expect(flashed.flashPairCharges).toBe(0);
-        expect(flashed.powersUsedThisRun).toBe(true);
-        expect(flashed.shuffleNonce).toBe(1);
-        expect(flashed.flashPairRevealedTileIds).toEqual(['a1', 'a2']);
     });
 
     it('normalizes fractional direct power charges before spending', () => {

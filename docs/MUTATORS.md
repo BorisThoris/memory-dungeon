@@ -6,15 +6,14 @@ Hooks in `src/shared/game.ts` consult `activeMutators` via `hasMutator` / `src/s
 
 | Phase | Mutators may affect |
 |--------|---------------------|
-| **Memorize** | `short_memorize`, `category_letters` (symbol set), `glass_floor` (extra decoy in pair list), `findables_floor` (spawn 0–2 bonus pair markers on generation), `shifting_spotlight` (ward/bounty pair keys on `BoardState`) |
-| **Playing / flip** | `sticky_fingers` (block index after match), `glass_floor` (decoy mismatch handling) |
+| **Memorize** | `short_memorize`, `category_letters` (symbol set), `findables_floor` (spawn 0–2 bonus pair markers on generation), `shifting_spotlight` (ward/bounty pair keys on `BoardState`) |
+| **Playing / flip** | `sticky_fingers` (block index after match) |
 | **Powers** | Contracts (`activeContract`) gate shuffle/destroy — combine with mutators in tests (`game.test.ts` also has an `it.each` matrix over `noShuffle` × `noDestroy` vs `canShuffleBoard` / `applyDestroyPair`, plus wild-run contract rows) |
 | **Scoring / floor advance** | `score_parasite` (life drain on cadence), `category_letters`, `n_back_anchor` (anchor cadence), `findables_floor` (flat score on match claim; destroy forfeits pickup), `shifting_spotlight` (bounty/ward match score delta; rotates after each flip resolution / destroy), `wide_recall` / `silhouette_twist` / `distraction_channel` (flat per-match penalty stacked with presentation—see `getPresentationMutatorMatchPenalty` in `game.ts`) |
 | **Presentation** | `wide_recall` (label-first play on flipped tiles), `silhouette_twist` (silhouette styling), `distraction_channel` (optional **numeric** HUD overlay in `GameScreen`—cyclically changing digit for visual noise; local React tick, **not** `RunState`; **off** in settings by default; disabled when reduced motion), `shifting_spotlight` (ward/bounty tile highlights when face-up / memorize) |
 
 ## Shipped IDs (`MutatorId`)
 
-- `glass_floor` — decoy `pairKey` (`DECOY_PAIR_KEY`); destroy/peek rules in `applyDestroyPair` / flip flow.
 - `sticky_fingers` — `stickyBlockIndex` on match path.
 - `score_parasite` — `parasiteFloors` increments in `advanceToNextLevel` toward life loss every **four** clears; **`applyDestroyPair` resets `parasiteFloors` to `0`** while this mutator is active (counts as parasite “pressure relief”).
 - `category_letters` — forces the letter symbol band for generation (overrides floor-based `getSymbolSetForLevel` rotation).
