@@ -2426,3 +2426,30 @@ Also: the findable reward row carried a `destroyText` field, the Codex's `mechan
 called an effect "a hazard", the meta-reward copy pointed players at tables of relics, the inventory
 prep hint promised rows that "update between floor decisions" for rests and shops, and the viewport
 matrix reasoned about "route/shop decisions". All repointed at what ships.
+
+## Gen 203 — the ledger, so "every system" is checkable rather than asserted
+
+Generations 200–202 worked system by system. This records the result of that pass in a shape a test
+can walk, because a claim about coverage is worth exactly what the thing checking it is worth.
+
+`src/shared/system-refinement-ledger.ts` carries one entry per system: an id, a verdict, the
+generation that last passed over it, and a note saying what was found. Forty-seven entries — the
+forty-one mechanics the interaction graph models, plus six surfaces it does not (the floor coaching,
+the boss identity, the trait lanes, the Codex, the audio, and the record of the removed powers).
+
+Nineteen **changed**, twenty-seven **confirmed**, one **removed**.
+
+`confirmed` is the verdict worth being suspicious of, so it is the one the gate constrains hardest:
+every note must be a real sentence over sixty characters and must say what was checked and what the
+evidence was. "Occupancy 0.512, banded common" is a finding; a tick in a box is not.
+
+Three checks hold it up:
+
+- every mechanic in the graph must have an entry — a new mechanic cannot ship without someone
+  writing down what state it is in, because the graph will list it and the gate will fail;
+- no entry may name a mechanic the graph does not have, so the ledger cannot drift into fiction;
+- the verdict counts are pinned, so the pass cannot be quietly downgraded to all-confirmed later.
+
+The ledger is printed into `docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md` by the same
+generator that emits the version snapshot. A record of what state every system is in belongs where
+a person will read it, not in a source file only its own gate opens.

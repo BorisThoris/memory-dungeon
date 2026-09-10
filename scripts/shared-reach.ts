@@ -61,6 +61,8 @@ export const SHARED_REACH_EXEMPTIONS: Record<string, string> = {
     'regPhase6Closure.ts': 'REG phase contract tokens; the record of what that phase closed.',
     'regPhase7Ship.ts': 'REG phase contract tokens; the record of what that phase closed.',
     'social-play-scope.ts': 'Scope record for what social play does and does not include offline.',
+    'system-refinement-ledger.ts':
+        'What state every system in the game is in, and which generation last passed over it. Read by its own completeness gate and printed into the mechanics appendix; nothing in a run needs it.',
 
     // Test fixtures.
     'game-fixtures.ts': 'Shared test fixtures.',

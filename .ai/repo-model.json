@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2433,
-    "codeFileCount": 874,
-    "exportedSymbolCount": 2658,
+    "trackedFileCount": 2435,
+    "codeFileCount": 876,
+    "exportedSymbolCount": 2664,
     "contentItemCount": 10,
     "mechanicCount": 41,
     "stateFieldCount": 80,
-    "relationshipCount": 6742
+    "relationshipCount": 6754
   },
   "inventory": [
     {
@@ -255,8 +255,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 353287,
-      "sha256": "f59161d9017d7cb54118ccfb4438b339f2724215cea5a547671092083b76c170"
+      "bytes": 354987,
+      "sha256": "24f1fc7affa9783d3781e86e82f3ac0b821c0c22b9e4160c52aff9f36fa76637"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -747,8 +747,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 394,
-      "sha256": "bb3b8d22a173883d065a26671b97e2bd25b9916014b434a3821e92d1c450fcf6"
+      "bytes": 10835,
+      "sha256": "92a476f35f62f007776a839f61f703ba79d1b3c0af61a6536a6c697083a6a7d4"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2326,7 +2326,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33472,
-      "sha256": "4d561ca5d2be5410463f51a84a9f551112354696a0d613787b464a0f1700a8dc"
+      "sha256": "9643f95bbe637f98f2ea99f05973780faf9576bfff1e6e751bcb9beaba1a717e"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4029,8 +4029,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 29466,
-      "sha256": "ca080aabd67fa61f760668fec57d8fdd3a4393c61e9587df68fcc2e25fcebea5"
+      "bytes": 29566,
+      "sha256": "ecf252e4fec43767dec169f3336a953a47976f3f7a7315fee4bcc2d20ff77d4d"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4881,8 +4881,8 @@
     {
       "path": "scripts/shared-reach.ts",
       "category": "script",
-      "bytes": 9255,
-      "sha256": "820dd8fc651af0bac4e27946d9db9ec7ec31830e341ffbc17906069613f32a7f"
+      "bytes": 9488,
+      "sha256": "b24c3a8b4b5fc8392143616d0ce32c7f5dbdb205dff9d79775e85e87fb25518d"
     },
     {
       "path": "scripts/sim-cascade.ts",
@@ -10293,8 +10293,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 562,
-      "sha256": "290cf9342dd96ebb2695f2bb42a4f1b23d1784390e314c8c365f8066d3280a93"
+      "bytes": 11097,
+      "sha256": "ef5b01a0c9bc78dc610d955f7391f330ac313727a3d2c32e9407dc4a4e1439eb"
     },
     {
       "path": "src/shared/achievement-reachability.test.ts",
@@ -11313,8 +11313,8 @@
     {
       "path": "src/shared/mechanics-catalog-appendix-builder.ts",
       "category": "source",
-      "bytes": 1328,
-      "sha256": "046079dcc2254691daddd868a2322e1b7b23dfb7b53805374bde2ab5adecd37c"
+      "bytes": 2436,
+      "sha256": "d7010bcadc5ed7c8502d7585d86342b03fca85b4b912414e0c9dc381630365a0"
     },
     {
       "path": "src/shared/mechanics-encyclopedia.test.ts",
@@ -12155,6 +12155,18 @@
       "category": "source",
       "bytes": 37418,
       "sha256": "f33150b8902f356877fd979470167804b59bb66866834c90744b549dc7c5f5ee"
+    },
+    {
+      "path": "src/shared/system-refinement-ledger.test.ts",
+      "category": "test",
+      "bytes": 2734,
+      "sha256": "383c609b78d6c85f0043467a6eaa5dc5a2830449e13da79d929c6bc91fcf468c"
+    },
+    {
+      "path": "src/shared/system-refinement-ledger.ts",
+      "category": "source",
+      "bytes": 17030,
+      "sha256": "01beee56d5255e06d1b799f30c27263e6b58bda39d726de6581162e117a615bc"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -26604,7 +26616,8 @@
       ],
       "testedBy": [
         "file:src/shared/gameplay-interaction-graph.test.ts",
-        "file:src/shared/mechanic-accountability.test.ts"
+        "file:src/shared/mechanic-accountability.test.ts",
+        "file:src/shared/system-refinement-ledger.test.ts"
       ]
     },
     {
@@ -27300,11 +27313,12 @@
       "path": "src/shared/mechanics-catalog-appendix-builder.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 31,
+      "lineCount": 52,
       "imports": [
         "file:src/shared/achievements.ts",
         "file:src/shared/contracts.ts",
-        "file:src/shared/mechanics-encyclopedia.ts"
+        "file:src/shared/mechanics-encyclopedia.ts",
+        "file:src/shared/system-refinement-ledger.ts"
       ],
       "exports": [
         "symbol:src/shared/mechanics-catalog-appendix-builder.ts#buildMechanicsCatalogAppendixMarkdown"
@@ -30066,6 +30080,40 @@
       "testedBy": [
         "file:src/shared/mechanic-accountability.test.ts",
         "file:src/shared/system-occupancy-simulation.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/shared/system-refinement-ledger.test.ts",
+      "path": "src/shared/system-refinement-ledger.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 48,
+      "imports": [
+        "file:src/shared/gameplay-interaction-graph.ts",
+        "file:src/shared/system-refinement-ledger.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/system-refinement-ledger.ts",
+      "path": "src/shared/system-refinement-ledger.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 349,
+      "imports": [
+        "file:src/shared/gameplay-interaction-graph.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/system-refinement-ledger.ts#strandedLedgerIds",
+        "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_LEDGER",
+        "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementEntry",
+        "symbol:src/shared/system-refinement-ledger.ts#systemRefinementLedgerById",
+        "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementVerdict",
+        "symbol:src/shared/system-refinement-ledger.ts#unexaminedSystemIds"
+      ],
+      "testedBy": [
+        "file:src/shared/system-refinement-ledger.test.ts"
       ]
     },
     {
@@ -46754,8 +46802,8 @@
       "name": "buildMechanicsCatalogAppendixMarkdown",
       "kind": "function",
       "file": "src/shared/mechanics-catalog-appendix-builder.ts",
-      "line": 9,
-      "endLine": 30
+      "line": 10,
+      "endLine": 51
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ACHIEVEMENT_CATALOG",
@@ -50812,6 +50860,54 @@
       "file": "src/shared/system-occupancy-simulation.ts",
       "line": 217,
       "endLine": 229
+    },
+    {
+      "id": "symbol:src/shared/system-refinement-ledger.ts#strandedLedgerIds",
+      "name": "strandedLedgerIds",
+      "kind": "value",
+      "file": "src/shared/system-refinement-ledger.ts",
+      "line": 343,
+      "endLine": 348
+    },
+    {
+      "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_LEDGER",
+      "name": "SYSTEM_REFINEMENT_LEDGER",
+      "kind": "value",
+      "file": "src/shared/system-refinement-ledger.ts",
+      "line": 33,
+      "endLine": 331
+    },
+    {
+      "id": "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementEntry",
+      "name": "SystemRefinementEntry",
+      "kind": "interface",
+      "file": "src/shared/system-refinement-ledger.ts",
+      "line": 24,
+      "endLine": 31
+    },
+    {
+      "id": "symbol:src/shared/system-refinement-ledger.ts#systemRefinementLedgerById",
+      "name": "systemRefinementLedgerById",
+      "kind": "value",
+      "file": "src/shared/system-refinement-ledger.ts",
+      "line": 333,
+      "endLine": 334
+    },
+    {
+      "id": "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementVerdict",
+      "name": "SystemRefinementVerdict",
+      "kind": "type",
+      "file": "src/shared/system-refinement-ledger.ts",
+      "line": 22,
+      "endLine": 22
+    },
+    {
+      "id": "symbol:src/shared/system-refinement-ledger.ts#unexaminedSystemIds",
+      "name": "unexaminedSystemIds",
+      "kind": "value",
+      "file": "src/shared/system-refinement-ledger.ts",
+      "line": 337,
+      "endLine": 340
     },
     {
       "id": "symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
@@ -70593,6 +70689,42 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/system-refinement-ledger.ts->symbol:src/shared/system-refinement-ledger.ts#strandedLedgerIds",
+      "source": "file:src/shared/system-refinement-ledger.ts",
+      "target": "symbol:src/shared/system-refinement-ledger.ts#strandedLedgerIds",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/system-refinement-ledger.ts->symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_LEDGER",
+      "source": "file:src/shared/system-refinement-ledger.ts",
+      "target": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_LEDGER",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/system-refinement-ledger.ts->symbol:src/shared/system-refinement-ledger.ts#SystemRefinementEntry",
+      "source": "file:src/shared/system-refinement-ledger.ts",
+      "target": "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementEntry",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/system-refinement-ledger.ts->symbol:src/shared/system-refinement-ledger.ts#systemRefinementLedgerById",
+      "source": "file:src/shared/system-refinement-ledger.ts",
+      "target": "symbol:src/shared/system-refinement-ledger.ts#systemRefinementLedgerById",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/system-refinement-ledger.ts->symbol:src/shared/system-refinement-ledger.ts#SystemRefinementVerdict",
+      "source": "file:src/shared/system-refinement-ledger.ts",
+      "target": "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementVerdict",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/system-refinement-ledger.ts->symbol:src/shared/system-refinement-ledger.ts#unexaminedSystemIds",
+      "source": "file:src/shared/system-refinement-ledger.ts",
+      "target": "symbol:src/shared/system-refinement-ledger.ts#unexaminedSystemIds",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/telemetry.ts->symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
       "source": "file:src/shared/telemetry.ts",
       "target": "symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
@@ -84196,6 +84328,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/mechanics-catalog-appendix-builder.ts->src/shared/system-refinement-ledger.ts",
+      "source": "file:src/shared/mechanics-catalog-appendix-builder.ts",
+      "target": "file:src/shared/system-refinement-ledger.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/mechanics-encyclopedia.test.ts->src/shared/contracts.ts",
       "source": "file:src/shared/mechanics-encyclopedia.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -86581,6 +86719,24 @@
       "id": "imports:src/shared/system-occupancy-simulation.ts->src/shared/tile-identity.ts",
       "source": "file:src/shared/system-occupancy-simulation.ts",
       "target": "file:src/shared/tile-identity.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/system-refinement-ledger.test.ts->src/shared/gameplay-interaction-graph.ts",
+      "source": "file:src/shared/system-refinement-ledger.test.ts",
+      "target": "file:src/shared/gameplay-interaction-graph.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/system-refinement-ledger.test.ts->src/shared/system-refinement-ledger.ts",
+      "source": "file:src/shared/system-refinement-ledger.test.ts",
+      "target": "file:src/shared/system-refinement-ledger.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/system-refinement-ledger.ts->src/shared/gameplay-interaction-graph.ts",
+      "source": "file:src/shared/system-refinement-ledger.ts",
+      "target": "file:src/shared/gameplay-interaction-graph.ts",
       "kind": "imports"
     },
     {
@@ -93111,6 +93267,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/gameplay-interaction-graph.ts->file:src/shared/system-refinement-ledger.test.ts",
+      "source": "file:src/shared/gameplay-interaction-graph.ts",
+      "target": "file:src/shared/system-refinement-ledger.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/gameplay-journal.ts->file:src/shared/gameplay-journal-cost.test.ts",
       "source": "file:src/shared/gameplay-journal.ts",
       "target": "file:src/shared/gameplay-journal-cost.test.ts",
@@ -94422,6 +94584,12 @@
       "id": "tested_by:src/shared/system-occupancy-simulation.ts->file:src/shared/system-occupancy-simulation.test.ts",
       "source": "file:src/shared/system-occupancy-simulation.ts",
       "target": "file:src/shared/system-occupancy-simulation.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/system-refinement-ledger.ts->file:src/shared/system-refinement-ledger.test.ts",
+      "source": "file:src/shared/system-refinement-ledger.ts",
+      "target": "file:src/shared/system-refinement-ledger.test.ts",
       "kind": "tested_by"
     },
     {
