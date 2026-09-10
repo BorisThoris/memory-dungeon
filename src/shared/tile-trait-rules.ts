@@ -20,6 +20,11 @@ import { formatTileTraitInteractionTags, type TileTraitInteractionTag } from './
 import { describeTraitMark, tileTraitMark } from './tile-trait-marks';
 
 /*
+ * Gen 201 cut a clause from Heavy's mismatch line. It read "costs +1 extra try but never drains
+ * peek charges", and nothing in the game drains a peek charge on a mismatch - no rule, on any
+ * trait, in any mutator. The clause promised the absence of a penalty that cannot happen, which
+ * teaches a player to fear something the game does not do. The half that is true stayed.
+ *
  * Four traits. Nine shipped; Mirror, Cursed, Sealed, Volatile and Drift were cut in the trait
  * triage (thesis §32.4) because each of them was a rule the player had to hold in memory that paid
  * in a resource the game no longer builds around - guard tokens, combo shards (both gone since), shuffle charges -
@@ -36,7 +41,7 @@ export const TILE_TRAIT_COPY: Record<TileTraitKind, { label: string; match: stri
     heavy: {
         label: 'Heavy',
         match: 'Clean match grants +35 score.',
-        mismatch: 'Mismatch costs +1 extra try but never drains peek charges.'
+        mismatch: 'Mismatch costs +1 extra try.'
     },
     conduit: {
         label: 'Conduit',

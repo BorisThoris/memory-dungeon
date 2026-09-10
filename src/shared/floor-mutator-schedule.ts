@@ -48,7 +48,7 @@ export const FLOOR_ARCHETYPE_CATALOG: Record<FloorArchetypeId, FloorArchetypeDef
         title: 'Treasure Gallery',
         hint: 'Pickup pairs are dense here. Clean play keeps Scholar style alive.',
         theme: 'Treasure',
-        riskProfile: 'Pickup-rich breather; avoid destroy if you want rewards.'
+        riskProfile: 'Pickup-rich breather; the pickups pay on the match, so take the carrier pairs.'
     },
     shadow_read: {
         title: 'Shadow Read',
@@ -112,7 +112,7 @@ export const FEATURED_OBJECTIVE_LABELS: Record<FeaturedObjectiveId, string> = {
 export const FEATURED_OBJECTIVE_HUD_TOOLTIPS: Record<FeaturedObjectiveId, string> = {
     flip_par:
         'Turns this floor (each pair of flips resolved, match or miss; the gambit is one turn) must stay at or below the floor par, ceil(pairs × 0.85).',
-    scholar_style: 'Do not use board shuffle, tile swap, or destroy pair on this floor.',
+    scholar_style: 'Do not use board shuffle or tile swap on this floor.',
     cursed_last: 'The cursed pair must be the last real pair you clear on this floor (not resolved early).'
 };
 
@@ -377,7 +377,7 @@ const ENDLESS_FLOOR_CYCLE: FloorScheduleEntry[] = [
     /*
      * Floor 10 is the back half's pickup breather. The shrine mutator that once told it apart from
      * floor 3 went with the relic draft, so the objective does instead: floor 3 asks for a floor
-     * without shuffle or destroy, floor 10 asks for one under par.
+     * without moving the board, floor 10 asks for one under par.
      */
     makeEntry(10, 'treasure_gallery', 'flip_par', ['findables_floor'], 'breather'),
     makeEntry(11, 'parasite_tithe', 'scholar_style', ['distraction_channel'], 'normal'),

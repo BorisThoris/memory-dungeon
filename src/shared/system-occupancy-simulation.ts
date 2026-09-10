@@ -16,7 +16,9 @@ import { createWildRun } from './run-creation-rules';
 import { TILE_TRAIT_COUNT_KINDS } from './session-stats-rules';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { getUnresolvedPlayablePairGroups } from './playthrough-solver-rules';
+import { orthogonalNeighbours } from './chunk-break-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
+import { runStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 
@@ -86,6 +88,22 @@ export interface SystemOccupancyCounter {
     player: 'reference' | 'tooled' | 'setup';
 }
 
+/*
+ * The rule Gen 201 learned, written down where the next counter is added:
+ *
+ * A counter the census presses unconditionally measures the census, not the game.
+ *
+ * The setup pass used to press the pin, the swap and the flash on floor open regardless of what
+ * the board looked like. All three then read exactly 1.000 x 1.00 on every floor of every seed,
+ * and all three were banded `core` - a claim that the game does this on nearly every floor, which
+ * nothing had ever measured. It was constructed.
+ *
+ * So a press in either tooled or setup pass has to sit behind a condition the board can fail: the
+ * pin and the flash want a miss to have happened, the swap wants a pair whose halves are not
+ * already touching. When a press genuinely has a reason on every floor - the opening peek always
+ * has an unrevealed card, the joker always has a partner - 1.000 is a real answer and stays.
+ */
+
 export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
     { id: 'chunkBreaks', key: 'chunkBreaksThisFloor', label: 'A match popped the clump it touched', family: 'cascade', cadence: 'core', kind: 'tally', player: 'reference' },
     { id: 'chunkPairsDropped', key: 'chunkPairsDroppedThisFloor', label: 'The drop took a severed suit’s last pairs', family: 'cascade', cadence: 'common', kind: 'tally', player: 'reference' },
@@ -104,7 +122,14 @@ export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
      * there, which is why none of it had a counter until now: the census played plain endless
      * floors, so it could only ever have reported the setup it chose rather than the game.
      */
-    { id: 'flashPair', key: 'flashPairCharges', label: 'A pair was flashed', family: 'tools', cadence: 'core', kind: 'spend', player: 'setup' },
+    /*
+     * Gen 201 re-banded this from `core` to `common`, against the first honest measurement it has
+     * ever had. It read 1.000 while the census pressed it on floor open regardless of the board;
+     * pressed when a player would press it - after a miss, when the floor has just refused to give
+     * anything up - it reads 0.158, which is the reference miss rate. That is the right shape: the
+     * flash answers being stuck, and a player is stuck about as often as they miss.
+     */
+    { id: 'flashPair', key: 'flashPairCharges', label: 'A pair was flashed', family: 'tools', cadence: 'common', kind: 'spend', player: 'setup' },
     /*
      * Gen 200 re-banded this from `common` to `core`, against the measurement. Stray was the only
      * thing that ever took the wild joker off the board before the setup player could spend it, and
@@ -112,6 +137,11 @@ export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
      * describes what the game does, so it moves rather than the number being argued down.
      */
     { id: 'wildMatch', key: 'wildMatchesRemaining', label: 'The wild joker was spent on a match', family: 'tools', cadence: 'core', kind: 'spend', player: 'setup' },
+    /*
+     * Stays `core`, and now on evidence rather than construction: 0.988. A swap has a real target
+     * on nearly every board, because nearly every board deals at least one pair whose halves are
+     * not already touching - which is exactly what Gen 198's separation rule set out to produce.
+     */
     { id: 'tileSwap', key: 'regionShuffleCharges', label: 'Two tiles were swapped', family: 'tools', cadence: 'core', kind: 'spend', player: 'setup' },
     {
         id: 'gambit',
@@ -131,7 +161,13 @@ export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
         read: (run) => runNonNegativeInteger(run.pinsPlacedCountThisRun),
         label: 'A tile was pinned',
         family: 'tools',
-        cadence: 'core',
+        /*
+         * Gen 201 re-banded this from `core` to `common`, for the same reason as the flash. The pin
+         * marks a card you have seen and cannot pair yet, so it cannot have a reason before the
+         * first miss; pressed there it reads 0.158 rather than the 1.000 a floor-open press
+         * manufactured. Pinning is a response to going wrong, and going wrong is `common`.
+         */
+        cadence: 'common',
         kind: 'tally',
         player: 'setup'
     },
@@ -221,29 +257,77 @@ const spendTools = (run: RunState, phase: 'opening' | 'midway'): RunState => {
 };
 
 /**
- * What a player does with what a run *setup* hands them: pin a tile, swap two, flash a pair, and
- * spend the stray on the singleton the wild joker leaves standing. The wild match itself is spent
- * by the ordinary turn loop, because the joker matches whatever it is put beside.
+ * What a player does with what a run *setup* hands them.
  *
- * As with the tooled player, it is deliberately not clever. The census asks whether a system can
- * happen on a real board, not whether a good player would reach for it.
+ * Gen 201 rewrote this, because the version before it pressed the pin, the swap and the flash
+ * unconditionally on floor open, before a single card had been turned. Three tools therefore read
+ * exactly 1.000 x 1.00 on every floor of every seed - a number produced by the census script, not
+ * by the game, and then banded `core`, which is a claim that the game does this on nearly every
+ * floor. That claim was never measured; it was constructed.
+ *
+ * So each tool is now reached for when the board gives it the reason the tool exists for, and the
+ * share falls where it falls:
+ *
+ *   - **Pin** marks a card you have seen and cannot pair yet. It needs a miss to have happened, so
+ *     it moved out of the floor-open block and into the turn loop.
+ *   - **Tile swap** moves a card toward its partner. It needs two hidden halves of one pair that
+ *     are not already touching - on a tight board they often are, and then there is nothing to fix.
+ *   - **Flash pair** is for being stuck, which on a floor's first turn nobody is.
+ *
+ * It is still not a clever player. The census asks whether a system happens on real boards at a
+ * plausible rate, not whether an expert would squeeze more from it.
  */
-const spendSetupTools = (run: RunState): RunState => {
+const setupSwapTargets = (run: RunState): [string, string] | null => {
+    const board = run.board;
+    if (!board) return null;
+    const columns = Math.max(1, board.columns);
+    const total = board.tiles.length;
+    const indexById = new Map(board.tiles.map((tile, index) => [tile.id, index]));
+    const byPair = new Map<string, Tile[]>();
+    for (const tile of board.tiles) {
+        if (tile.state !== 'hidden' || isSingletonUtilityPairKey(tile.pairKey)) continue;
+        const group = byPair.get(tile.pairKey);
+        if (group) group.push(tile);
+        else byPair.set(tile.pairKey, [tile]);
+    }
+    for (const group of byPair.values()) {
+        if (group.length !== 2) continue;
+        const [left, right] = group as [Tile, Tile];
+        const leftIndex = indexById.get(left.id);
+        const rightIndex = indexById.get(right.id);
+        if (leftIndex == null || rightIndex == null) continue;
+        const neighbours = orthogonalNeighbours(leftIndex, columns, total);
+        if (neighbours.includes(rightIndex)) continue;
+        // Move the right half into a cell touching the left one, so the pair ends up adjacent.
+        for (const cell of neighbours) {
+            const occupant = board.tiles[cell];
+            if (!occupant || occupant.state !== 'hidden') continue;
+            if (occupant.id === right.id || occupant.pairKey === left.pairKey) continue;
+            return [occupant.id, right.id];
+        }
+    }
+    return null;
+};
+
+const spendSetupTools = (run: RunState, phase: 'opening' | 'afterMiss'): RunState => {
     const board = run.board;
     if (!board || run.status !== 'playing') {
         return run;
     }
-    const hidden = board.tiles.filter((tile) => tile.state === 'hidden');
-    let next = run;
-    const first = hidden[0];
-    if (first) next = togglePinnedTile(next, first.id);
-    const swapA = hidden[1];
-    const swapB = hidden[hidden.length - 1];
-    if (swapA && swapB && swapA.id !== swapB.id) {
-        next = applyTileSwap(next, swapA.id, swapB.id);
+    if (phase === 'opening') {
+        // The one tool with a reason at floor open: nothing is known yet, and a swap made now is a
+        // swap made while every card is still face down, which is when a player would make it.
+        const targets = setupSwapTargets(run);
+        return targets ? applyTileSwap(run, targets[0], targets[1]) : run;
     }
-    next = applyFlashPair(next);
-    return next;
+    // After a miss: two cards were just seen. Pin one to hold it, and flash when the miss leaves
+    // the player with nothing they can act on.
+    let next = run;
+    const seen = board.tiles.find(
+        (tile) => tile.state === 'hidden' && !isSingletonUtilityPairKey(tile.pairKey) && !runStringArray(next.pinnedTileIds).includes(tile.id)
+    );
+    if (seen) next = togglePinnedTile(next, seen.id);
+    return applyFlashPair(next);
 };
 
 const readCounter = (counter: SystemOccupancyCounter, run: RunState): number =>
@@ -317,7 +401,7 @@ const playFloor = (
         step(spendTools(run, 'opening'));
     }
     if (setup) {
-        step(spendSetupTools(run));
+        step(spendSetupTools(run, 'opening'));
     }
     let wildSpent = false;
     while (run.status === 'playing' && turns < maxTurns) {
@@ -388,6 +472,12 @@ const playFloor = (
         }
         step(resolveBoardTurn(flipped));
         turns += 1;
+        if (setup && wantsMiss && run.status === 'playing') {
+            // The pin and the flash have a reason only once a miss has happened: two cards were
+            // just seen and not paired. Pressed here rather than at floor open, which is what made
+            // both read 1.000 by construction before Gen 201.
+            step(spendSetupTools(run, 'afterMiss'));
+        }
         if (tooled && run.status === 'playing' && run.board!.matchedPairs * 2 >= openingPairs) {
             step(spendTools(run, 'midway'));
         }

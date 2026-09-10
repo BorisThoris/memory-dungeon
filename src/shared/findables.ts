@@ -6,7 +6,8 @@ export interface FindableRewardRow {
     marker: string;
     rewardText: string;
     claimRule: string;
-    destroyRule: string;
+    /** What happens when a chunk break takes the carrier instead of a match. */
+    breakRule: string;
 }
 
 /** Gen 184: one kind. The Shard Spark paid a combo shard, and the shard is gone (docs/REMOVED_LIVES.md). */
@@ -19,7 +20,7 @@ const FINDABLE_REWARD_ROW_BY_KIND = {
         marker: 'Cyan ring corner glyph',
         rewardText: `+${FINDABLE_MATCH_SCORE.score_glint} score`,
         claimRule: 'Match the carrier pair.',
-        destroyRule: 'Destroy forfeits the score.'
+        breakRule: 'A break that takes the carrier spills the glint and pays it anyway.'
     }
 } as const satisfies Record<FindableKind, FindableRewardRow>;
 

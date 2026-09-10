@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2432,
     "codeFileCount": 873,
-    "exportedSymbolCount": 2657,
+    "exportedSymbolCount": 2658,
     "contentItemCount": 10,
     "mechanicCount": 41,
     "stateFieldCount": 80,
-    "relationshipCount": 6739
+    "relationshipCount": 6742
   },
   "inventory": [
     {
@@ -255,8 +255,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 346043,
-      "sha256": "89c4d102b57961cdb1bcc6b41d4358a773cd47f4226141ab9e6bfb83529b9b0b"
+      "bytes": 350367,
+      "sha256": "884820498767023f82b864402302d62f6731f699ec5e111659a70479ef2288e7"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -748,7 +748,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 394,
-      "sha256": "49bdf2071224152e0353fd2c8d0dde0aa19b0da4de7315e5e023b5524ac387da"
+      "sha256": "95965ce7913ceba8f1910a1808a39741381203f1ae419d223c3333b247c4dc05"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2326,7 +2326,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33472,
-      "sha256": "f21043cccbaaa9be964e2f987b7bb564a44ba9044a86d6424d63b7e34927ef2a"
+      "sha256": "1d4adc80a9b6bd8894153b13f8fb9d6c31af69760dce861a8b72b7dae47eee1c"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -10509,14 +10509,14 @@
     {
       "path": "src/shared/boss-encounters.test.ts",
       "category": "test",
-      "bytes": 4013,
-      "sha256": "6c79a0c957a33dc6de1792ed42008091c773dcab141b50e645b90e684f49e8f8"
+      "bytes": 6227,
+      "sha256": "ba649cad2fdb0a33f8ab60807299e8af28e323ad9f06d04bec1d07673f1b7d8c"
     },
     {
       "path": "src/shared/boss-encounters.ts",
       "category": "source",
-      "bytes": 12509,
-      "sha256": "477afb822891eeb5581383f41b92d1b7d8301818c3d613df6b3cc040c1e57b5d"
+      "bytes": 15151,
+      "sha256": "7da1af0b33dbac08a3f899f59cea9d3e06328913f041fb3dd820876331dfa07f"
     },
     {
       "path": "src/shared/bridge-reachability.test.ts",
@@ -10683,8 +10683,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 30832,
-      "sha256": "e91a0dcb1773ab1bba87fce657263e42fcd74b815d90029872d7486eae766cb9"
+      "bytes": 31379,
+      "sha256": "a2f59611bf3327d37cef0fb0adaea15a2438cfce019a36359726e9aafc94a1dc"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -10803,8 +10803,8 @@
     {
       "path": "src/shared/findables.ts",
       "category": "source",
-      "bytes": 2039,
-      "sha256": "2ca80782a5b56d1ba1ec956de1898be7f1c392f42f7391ef0b9dd5d33439a1ea"
+      "bytes": 2156,
+      "sha256": "918796cbf78847f1aa4fb9f951a01954c3d528feea3ac49aea688dfeb52deb27"
     },
     {
       "path": "src/shared/first-run-help-center.test.ts",
@@ -10875,8 +10875,8 @@
     {
       "path": "src/shared/floor-mutator-schedule.ts",
       "category": "source",
-      "bytes": 24105,
-      "sha256": "9cba1646b00209b4be3fb71d8d5cfdb38696ad4fcced610b2a71eb5a5f11e24b"
+      "bytes": 24110,
+      "sha256": "6c51415ce26bb34883e2ccf15b81fecdc7ee097de86a6d9445069af72d5303ff"
     },
     {
       "path": "src/shared/floor-par.ts",
@@ -11319,8 +11319,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 31459,
-      "sha256": "3314546a4a5d81442ea077928f230d94128be286332903addd022524b3fe3df1"
+      "bytes": 31378,
+      "sha256": "975cfbea29be0bf77c9f5ba3c528a038ab73b3c51edecf8946dc5ebf392e0b31"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -12033,8 +12033,8 @@
     {
       "path": "src/shared/secondary-objectives.ts",
       "category": "source",
-      "bytes": 7474,
-      "sha256": "0d6b3134e9246b89431862c32575b89cb9b72dea9fca325969a2182d2b7147ac"
+      "bytes": 7427,
+      "sha256": "92777d0a4449ed54d0cb2e94fbf2a56c6a8a1f5de2acf74d61a2882d6feabb72"
     },
     {
       "path": "src/shared/seed-sweep-options.test.ts",
@@ -12147,8 +12147,8 @@
     {
       "path": "src/shared/system-occupancy-simulation.ts",
       "category": "source",
-      "bytes": 32100,
-      "sha256": "f614fb839bee9b925517dd7d9416eedb60a2fbf47c8692aaf749e8c7a6a15208"
+      "bytes": 37418,
+      "sha256": "f33150b8902f356877fd979470167804b59bb66866834c90744b549dc7c5f5ee"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -12279,8 +12279,8 @@
     {
       "path": "src/shared/tile-trait-rules.ts",
       "category": "source",
-      "bytes": 29611,
-      "sha256": "193fed6f0348a5029598db5e8e3c6acf838b1e4e2edc03a5057ac4c693e463ca"
+      "bytes": 29963,
+      "sha256": "797b20a03239be149ccee0dd654d2ce96d8560fb62124bb034b801530a3e1943"
     },
     {
       "path": "src/shared/trait-opportunities.test.ts",
@@ -24367,7 +24367,7 @@
       "path": "src/shared/boss-encounters.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 94,
+      "lineCount": 130,
       "imports": [
         "file:src/shared/boss-encounters.ts",
         "file:src/shared/contracts.ts",
@@ -24381,7 +24381,7 @@
       "path": "src/shared/boss-encounters.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 265,
+      "lineCount": 301,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-mutator-schedule.ts",
@@ -24955,7 +24955,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 716,
+      "lineCount": 726,
       "imports": [],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -24982,6 +24982,7 @@
         "symbol:src/shared/contracts.ts#FINDABLE_MATCH_SCORE",
         "symbol:src/shared/contracts.ts#FindableKind",
         "symbol:src/shared/contracts.ts#FLIP_PAR_BONUS_SCORE",
+        "symbol:src/shared/contracts.ts#FLOOR_ARCHETYPE_IDS",
         "symbol:src/shared/contracts.ts#FloorArchetypeId",
         "symbol:src/shared/contracts.ts#FloorTag",
         "symbol:src/shared/contracts.ts#GAME_RULES_VERSION",
@@ -25480,7 +25481,7 @@
       "path": "src/shared/findables.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 55,
+      "lineCount": 56,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -30013,17 +30014,19 @@
       "path": "src/shared/system-occupancy-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 625,
+      "lineCount": 715,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/board-power-state.ts",
         "file:src/shared/board-tile-generation-rules.ts",
+        "file:src/shared/chunk-break-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/game.ts",
         "file:src/shared/playthrough-solver-rules.ts",
         "file:src/shared/rng.ts",
+        "file:src/shared/run-array-guards.ts",
         "file:src/shared/run-creation-rules.ts",
         "file:src/shared/run-number-guards.ts",
         "file:src/shared/session-stats-rules.ts",
@@ -30481,7 +30484,7 @@
       "path": "src/shared/tile-trait-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 723,
+      "lineCount": 728,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -41487,8 +41490,8 @@
       "name": "BOSS_ENCOUNTER_IDENTITY",
       "kind": "value",
       "file": "src/shared/boss-encounters.ts",
-      "line": 63,
-      "endLine": 78
+      "line": 70,
+      "endLine": 85
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#BossEliteEncounterIdentity",
@@ -41519,56 +41522,56 @@
       "name": "EncounterIdentityRow",
       "kind": "interface",
       "file": "src/shared/boss-encounters.ts",
-      "line": 113,
-      "endLine": 120
+      "line": 120,
+      "endLine": 127
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#FloorIdentityContract",
       "name": "FloorIdentityContract",
       "kind": "interface",
       "file": "src/shared/boss-encounters.ts",
-      "line": 124,
-      "endLine": 134
+      "line": 131,
+      "endLine": 141
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#FloorIdentityWarningLevel",
       "name": "FloorIdentityWarningLevel",
       "kind": "type",
       "file": "src/shared/boss-encounters.ts",
-      "line": 122,
-      "endLine": 122
+      "line": 129,
+      "endLine": 129
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#getBossEncounterIdentityForFloor",
       "name": "getBossEncounterIdentityForFloor",
       "kind": "value",
       "file": "src/shared/boss-encounters.ts",
-      "line": 80,
-      "endLine": 102
+      "line": 87,
+      "endLine": 109
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#getBossFloorHudTitle",
       "name": "getBossFloorHudTitle",
       "kind": "value",
       "file": "src/shared/boss-encounters.ts",
-      "line": 104,
-      "endLine": 111
+      "line": 111,
+      "endLine": 118
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#getEncounterIdentityForFloor",
       "name": "getEncounterIdentityForFloor",
       "kind": "value",
       "file": "src/shared/boss-encounters.ts",
-      "line": 259,
-      "endLine": 264
+      "line": 295,
+      "endLine": 300
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#getFloorIdentityContract",
       "name": "getFloorIdentityContract",
       "kind": "value",
       "file": "src/shared/boss-encounters.ts",
-      "line": 139,
-      "endLine": 248
+      "line": 161,
+      "endLine": 284
     },
     {
       "id": "symbol:src/shared/cameraViewportMode.ts#deriveCameraViewportMode",
@@ -42663,16 +42666,16 @@
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 599,
-      "endLine": 599
+      "line": 609,
+      "endLine": 609
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 663,
-      "endLine": 665
+      "line": 673,
+      "endLine": 675
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
@@ -42695,8 +42698,8 @@
       "name": "BoardState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 284,
-      "endLine": 312
+      "line": 294,
+      "endLine": 322
     },
     {
       "id": "symbol:src/shared/contracts.ts#BOSS_FLOOR_SCORE_MULTIPLIER",
@@ -42735,8 +42738,8 @@
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 671,
-      "endLine": 676
+      "line": 681,
+      "endLine": 686
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -42767,8 +42770,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 689,
-      "endLine": 715
+      "line": 699,
+      "endLine": 725
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -42843,12 +42846,20 @@
       "endLine": 48
     },
     {
+      "id": "symbol:src/shared/contracts.ts#FLOOR_ARCHETYPE_IDS",
+      "name": "FLOOR_ARCHETYPE_IDS",
+      "kind": "value",
+      "file": "src/shared/contracts.ts",
+      "line": 279,
+      "endLine": 291
+    },
+    {
       "id": "symbol:src/shared/contracts.ts#FloorArchetypeId",
       "name": "FloorArchetypeId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 271,
-      "endLine": 282
+      "line": 292,
+      "endLine": 292
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorTag",
@@ -42879,16 +42890,16 @@
       "name": "GameplayCommandJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 408,
-      "endLine": 412
+      "line": 418,
+      "endLine": 422
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameplayEventJournalEntry",
       "name": "GameplayEventJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 414,
-      "endLine": 424
+      "line": 424,
+      "endLine": 434
     },
     {
       "id": "symbol:src/shared/contracts.ts#GraphicsQualityPreset",
@@ -42927,8 +42938,8 @@
       "name": "LevelResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 333,
-      "endLine": 368
+      "line": 343,
+      "endLine": 378
     },
     {
       "id": "symbol:src/shared/contracts.ts#MATCH_DELAY_MS",
@@ -43031,24 +43042,24 @@
       "name": "PassAndPlaySeat",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 437,
-      "endLine": 449
+      "line": 447,
+      "endLine": 459
     },
     {
       "id": "symbol:src/shared/contracts.ts#PassAndPlayState",
       "name": "PassAndPlayState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 451,
-      "endLine": 464
+      "line": 461,
+      "endLine": 474
     },
     {
       "id": "symbol:src/shared/contracts.ts#PlayerStatsPersisted",
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 601,
-      "endLine": 608
+      "line": 611,
+      "endLine": 618
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
@@ -43111,16 +43122,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 679,
-      "endLine": 679
+      "line": 689,
+      "endLine": 689
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 682,
-      "endLine": 687
+      "line": 692,
+      "endLine": 697
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -43143,16 +43154,16 @@
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 656,
-      "endLine": 660
+      "line": 666,
+      "endLine": 670
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 654,
-      "endLine": 654
+      "line": 664,
+      "endLine": 664
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
@@ -43167,16 +43178,16 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 615,
-      "endLine": 627
+      "line": 625,
+      "endLine": 637
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
       "name": "RunState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 466,
-      "endLine": 597
+      "line": 476,
+      "endLine": 607
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
@@ -43191,16 +43202,16 @@
       "name": "RunSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 371,
-      "endLine": 406
+      "line": 381,
+      "endLine": 416
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunTimerState",
       "name": "RunTimerState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 426,
-      "endLine": 431
+      "line": 436,
+      "endLine": 441
     },
     {
       "id": "symbol:src/shared/contracts.ts#SAVE_SCHEMA_VERSION",
@@ -43215,8 +43226,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 629,
-      "endLine": 648
+      "line": 639,
+      "endLine": 658
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -43231,8 +43242,8 @@
       "name": "SessionStats",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 314,
-      "endLine": 331
+      "line": 324,
+      "endLine": 341
     },
     {
       "id": "symbol:src/shared/contracts.ts#Settings",
@@ -43295,8 +43306,8 @@
       "name": "TileTraitKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 370,
-      "endLine": 370
+      "line": 380,
+      "endLine": 380
     },
     {
       "id": "symbol:src/shared/contracts.ts#ViewState",
@@ -43695,8 +43706,8 @@
       "name": "FINDABLE_REWARD_ROWS",
       "kind": "value",
       "file": "src/shared/findables.ts",
-      "line": 26,
-      "endLine": 28
+      "line": 27,
+      "endLine": 29
     },
     {
       "id": "symbol:src/shared/findables.ts#FindableRewardRow",
@@ -43704,55 +43715,55 @@
       "kind": "interface",
       "file": "src/shared/findables.ts",
       "line": 3,
-      "endLine": 10
+      "endLine": 11
     },
     {
       "id": "symbol:src/shared/findables.ts#getFindableKindLabel",
       "name": "getFindableKindLabel",
       "kind": "value",
       "file": "src/shared/findables.ts",
-      "line": 32,
-      "endLine": 32
+      "line": 33,
+      "endLine": 33
     },
     {
       "id": "symbol:src/shared/findables.ts#getFindableRewardCopy",
       "name": "getFindableRewardCopy",
       "kind": "value",
       "file": "src/shared/findables.ts",
-      "line": 34,
-      "endLine": 34
+      "line": 35,
+      "endLine": 35
     },
     {
       "id": "symbol:src/shared/findables.ts#getFindableRewardRow",
       "name": "getFindableRewardRow",
       "kind": "value",
       "file": "src/shared/findables.ts",
-      "line": 30,
-      "endLine": 30
+      "line": 31,
+      "endLine": 31
     },
     {
       "id": "symbol:src/shared/findables.ts#getFindableRewardText",
       "name": "getFindableRewardText",
       "kind": "value",
       "file": "src/shared/findables.ts",
-      "line": 36,
-      "endLine": 37
+      "line": 37,
+      "endLine": 38
     },
     {
       "id": "symbol:src/shared/findables.ts#getFindableRows",
       "name": "getFindableRows",
       "kind": "value",
       "file": "src/shared/findables.ts",
-      "line": 39,
-      "endLine": 47
+      "line": 40,
+      "endLine": 48
     },
     {
       "id": "symbol:src/shared/findables.ts#getFindableSpawnWeightRows",
       "name": "getFindableSpawnWeightRows",
       "kind": "value",
       "file": "src/shared/findables.ts",
-      "line": 49,
-      "endLine": 54
+      "line": 50,
+      "endLine": 55
     },
     {
       "id": "symbol:src/shared/first-run-help-center.ts#firstRunHelpCenterComplete",
@@ -50687,104 +50698,104 @@
       "name": "dominantSystemKeys",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 613,
-      "endLine": 614
+      "line": 703,
+      "endLine": 704
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
       "name": "judgeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 588,
-      "endLine": 610
+      "line": 678,
+      "endLine": 700
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancyAgainstBaseline",
       "name": "judgeSystemOccupancyAgainstBaseline",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 564,
-      "endLine": 586
+      "line": 654,
+      "endLine": 676
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OCCUPANCY_SEEDS",
       "name": "OCCUPANCY_SEEDS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 403,
-      "endLine": 403
+      "line": 493,
+      "endLine": 493
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OccupancyFloorResult",
       "name": "OccupancyFloorResult",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 254,
-      "endLine": 258
+      "line": 338,
+      "endLine": 342
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#simulateSystemOccupancy",
       "name": "simulateSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 405,
-      "endLine": 450
+      "line": 495,
+      "endLine": 540
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#summarizeSystemOccupancy",
       "name": "summarizeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 616,
-      "endLine": 624
+      "line": 706,
+      "endLine": 714
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BANDS",
       "name": "SYSTEM_OCCUPANCY_BANDS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 457,
-      "endLine": 468
+      "line": 547,
+      "endLine": 558
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE",
       "name": "SYSTEM_OCCUPANCY_BASELINE",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 518,
-      "endLine": 538
+      "line": 608,
+      "endLine": 628
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "name": "SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 555,
-      "endLine": 555
+      "line": 645,
+      "endLine": 645
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_COUNTERS",
       "name": "SYSTEM_OCCUPANCY_COUNTERS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 89,
-      "endLine": 150
+      "line": 107,
+      "endLine": 186
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SystemOccupancyCounter",
       "name": "SystemOccupancyCounter",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 40,
-      "endLine": 87
+      "line": 42,
+      "endLine": 89
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SystemOccupancyReport",
       "name": "SystemOccupancyReport",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 181,
-      "endLine": 193
+      "line": 217,
+      "endLine": 229
     },
     {
       "id": "symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
@@ -51431,48 +51442,48 @@
       "name": "assignTileTraitsToGeneratedBoard",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 407,
-      "endLine": 497
+      "line": 412,
+      "endLine": 502
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#calculateTileTraitMatchRewards",
       "name": "calculateTileTraitMatchRewards",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 696,
-      "endLine": 709
+      "line": 701,
+      "endLine": 714
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#calculateTileTraitMismatchPenalty",
       "name": "calculateTileTraitMismatchPenalty",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 711,
-      "endLine": 722
+      "line": 716,
+      "endLine": 727
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#countTraitComboOpportunityPairs",
       "name": "countTraitComboOpportunityPairs",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 187,
-      "endLine": 198
+      "line": 192,
+      "endLine": 203
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#countTraitInteractionLines",
       "name": "countTraitInteractionLines",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 257,
-      "endLine": 258
+      "line": 262,
+      "endLine": 263
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#FIRST_TRAIT_FLOOR",
       "name": "FIRST_TRAIT_FLOOR",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 310,
-      "endLine": 310
+      "line": 315,
+      "endLine": 315
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#formatTileTraitInteractionTags",
@@ -51487,88 +51498,88 @@
       "name": "getBoardTraitInteractionPreviewKeys",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 208,
-      "endLine": 219
+      "line": 213,
+      "endLine": 224
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#getBoardTraitInteractionPreviewLines",
       "name": "getBoardTraitInteractionPreviewLines",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 174,
-      "endLine": 185
+      "line": 179,
+      "endLine": 190
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#getTileSwapTraitPreviewLines",
       "name": "getTileSwapTraitPreviewLines",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 154,
-      "endLine": 172
+      "line": 159,
+      "endLine": 177
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#getTileTraitInteractionPreviewLines",
       "name": "getTileTraitInteractionPreviewLines",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 112,
-      "endLine": 135
+      "line": 117,
+      "endLine": 140
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#getTileTraitText",
       "name": "getTileTraitText",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 383,
-      "endLine": 391
+      "line": 388,
+      "endLine": 396
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#hasTraitBoardPowerInteractionOpportunity",
       "name": "hasTraitBoardPowerInteractionOpportunity",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 271,
-      "endLine": 272
+      "line": 276,
+      "endLine": 277
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#hasTraitRewardInteractionFloor",
       "name": "hasTraitRewardInteractionFloor",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 260,
-      "endLine": 263
+      "line": 265,
+      "endLine": 268
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#hasTraitSwapSetupOpportunity",
       "name": "hasTraitSwapSetupOpportunity",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 230,
-      "endLine": 255
+      "line": 235,
+      "endLine": 260
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#releaseStrandedStasisBlock",
       "name": "releaseStrandedStasisBlock",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 577,
-      "endLine": 582
+      "line": 582,
+      "endLine": 587
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#resolveTileTraitEffects",
       "name": "resolveTileTraitEffects",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 596,
-      "endLine": 694
+      "line": 601,
+      "endLine": 699
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#TILE_TRAIT_COPY",
       "name": "TILE_TRAIT_COPY",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 30,
-      "endLine": 51
+      "line": 35,
+      "endLine": 56
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#TILE_TRAIT_INTERACTION_TAGS",
@@ -51591,32 +51602,32 @@
       "name": "TILE_TRAIT_MATCH_SCORE_BONUS",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 53,
-      "endLine": 55
+      "line": 58,
+      "endLine": 60
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#tileTraitColor",
       "name": "tileTraitColor",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 305,
-      "endLine": 305
+      "line": 310,
+      "endLine": 310
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#TileTraitEffectContext",
       "name": "TileTraitEffectContext",
       "kind": "interface",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 67,
-      "endLine": 76
+      "line": 72,
+      "endLine": 81
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#TileTraitEffectResult",
       "name": "TileTraitEffectResult",
       "kind": "interface",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 57,
-      "endLine": 65
+      "line": 62,
+      "endLine": 70
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#TileTraitInteractionTag",
@@ -51631,24 +51642,24 @@
       "name": "tileTraitKindsInTiles",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 393,
-      "endLine": 405
+      "line": 398,
+      "endLine": 410
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#tileTraitPalette",
       "name": "tileTraitPalette",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 303,
-      "endLine": 303
+      "line": 308,
+      "endLine": 308
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#traitInteractionPreviewKeyLines",
       "name": "traitInteractionPreviewKeyLines",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 222,
-      "endLine": 228
+      "line": 227,
+      "endLine": 233
     },
     {
       "id": "symbol:src/shared/trait-opportunities.ts#getSelectedTraitFollowupTileIds",
@@ -52220,7 +52231,7 @@
       "expectedMechanicId": "findable.score_glint",
       "source": {
         "path": "src/shared/findables.ts",
-        "line": 13
+        "line": 14
       }
     },
     {
@@ -64599,6 +64610,12 @@
       "id": "exports:src/shared/contracts.ts->symbol:src/shared/contracts.ts#FLIP_PAR_BONUS_SCORE",
       "source": "file:src/shared/contracts.ts",
       "target": "symbol:src/shared/contracts.ts#FLIP_PAR_BONUS_SCORE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/contracts.ts->symbol:src/shared/contracts.ts#FLOOR_ARCHETYPE_IDS",
+      "source": "file:src/shared/contracts.ts",
+      "target": "symbol:src/shared/contracts.ts#FLOOR_ARCHETYPE_IDS",
       "kind": "exports"
     },
     {
@@ -86485,6 +86502,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/system-occupancy-simulation.ts->src/shared/chunk-break-rules.ts",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "file:src/shared/chunk-break-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/system-occupancy-simulation.ts->src/shared/contracts.ts",
       "source": "file:src/shared/system-occupancy-simulation.ts",
       "target": "file:src/shared/contracts.ts",
@@ -86512,6 +86535,12 @@
       "id": "imports:src/shared/system-occupancy-simulation.ts->src/shared/rng.ts",
       "source": "file:src/shared/system-occupancy-simulation.ts",
       "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/system-occupancy-simulation.ts->src/shared/run-array-guards.ts",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "file:src/shared/run-array-guards.ts",
       "kind": "imports"
     },
     {

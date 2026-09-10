@@ -74,7 +74,7 @@ export const MECHANICS_GLOSSARY_TERMS: readonly MechanicsGlossaryTerm[] = [
     {
         id: 'findables',
         preferredLabel: 'Findables',
-        shortDefinition: 'Bonus pickup pairs on the board; match to claim, Destroy forfeits.',
+        shortDefinition: 'Bonus pickup pairs on the board; match to claim, or let a chunk break spill one.',
         avoidLabels: ['loot boxes', 'random drops'],
         surfaces: ['Tile a11y', 'HUD', 'Codex']
     },
@@ -102,7 +102,7 @@ export const MECHANICS_GLOSSARY_TERMS: readonly MechanicsGlossaryTerm[] = [
     {
         id: 'powers',
         preferredLabel: 'Powers',
-        shortDefinition: 'Player-triggered board tools such as shuffle, peek, destroy, pin, stray remove, and flash pair.',
+        shortDefinition: 'Player-triggered board tools such as shuffle, row shuffle, tile swap, peek, pin, and flash pair.',
         avoidLabels: ['boosters for sale'],
         surfaces: ['Toolbar', 'Inventory', 'Codex']
     }
@@ -264,13 +264,13 @@ export const MUTATOR_CATALOG: Record<MutatorId, MutatorDefinition> = {
         id: 'findables_floor',
         title: 'Dense pickups',
         description:
-            'Baseline procedural floors already spawn pickups. This mutator makes the floor denser by guaranteeing **two** pickup pairs; Destroy still forfeits the reward.'
+            'Baseline procedural floors already spawn pickups. This mutator makes the floor denser by guaranteeing **two** pickup pairs.'
     },
     shifting_spotlight: {
         id: 'shifting_spotlight',
         title: 'Shifting spotlight',
         description:
-            'Each flip sequence (match, miss, gambit, or destroy) moves a Ward pair (lower match score) and a Bounty pair (bonus score) among remaining pairs. Distinct from the cursed “match last” pair.'
+            'Each flip sequence (match, miss, or gambit) moves a Ward pair (lower match score) and a Bounty pair (bonus score) among remaining pairs. Distinct from the cursed “match last” pair.'
     },
     magpie_thief: {
         id: 'magpie_thief',
@@ -319,7 +319,7 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
         id: 'powers',
         title: 'Powers and charges (overview)',
         description:
-            'Board tools (shuffle, destroy, peek, pins, stray, region shuffle, flash) and meta-actions (undo resolve, gambit third flip) use charges or per-floor budgets. See **Powers & tools** in this Codex for each one. Scholar contracts can disable shuffle and destroy.'
+            'Board tools (shuffle, row shuffle, tile swap, peek, pins, flash) and meta-actions (undo resolve, gambit third flip) use charges or per-floor budgets. See **Powers & tools** in this Codex for each one. A Scholar contract disables board shuffle.'
     },
     {
         id: 'mutators',
@@ -395,19 +395,19 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         id: 'sys_perfect_floor_vs_achievement',
         title: 'Perfect floor vs Perfect Memory (achievement)',
         description:
-            'A **perfect floor** means **zero tries** (no failed mismatches) on that level: you get the perfect-clear **score** bonus and a top **rating** tier. The **Perfect Memory** achievement additionally requires you **never used disallowed powers in that run**—no **shuffle** (full-board or row/region), destroy, peek, undo resolve, gambit, stray, flash, or wild match (pins are still fine). Do not confuse “perfect floor score” with the achievement gate.'
+            'A **perfect floor** means **zero tries** (no failed mismatches) on that level: you get the perfect-clear **score** bonus and a top **rating** tier. The **Perfect Memory** achievement additionally requires you **never used disallowed powers in that run**—no **shuffle** (full-board or row/region), tile swap, peek, undo resolve, gambit, flash, or wild match (pins are still fine). Do not confuse “perfect floor score” with the achievement gate.'
     },
     {
         id: 'sys_recall_focus',
         title: 'Recall Focus and forgotten tiles',
         description:
-            '**Recall Focus** is the floor-level memory readout. Clean remembered matches raise focus and can add memory score; mismatches, shuffles, peeks, destroy, stray, and other memory aids can lower focus and mark affected tile memories as unstable. If you later match a pair containing those tiles, the forgotten markers are removed, so the HUD distinguishes a lapse from a recovered memory.'
+            '**Recall Focus** is the floor-level memory readout. Clean remembered matches raise focus and can add memory score; mismatches, shuffles, swaps, peeks and other memory aids can lower focus and mark affected tile memories as unstable. If you later match a pair containing those tiles, the forgotten markers are removed, so the HUD distinguishes a lapse from a recovered memory.'
     },
     {
         id: 'sys_scholar_style_floor',
         title: 'Scholar-style floor bonus (not only the contract)',
         description:
-            'The **scholar-style** objective is worth **+40**. Outside scheduled endless chapters, it still behaves like a normal stackable floor objective: clear the floor **without using full-board shuffle or destroy pair on that floor** and you get the bonus. In modern endless chapters, you earn it only on floors where **Scholar style** is the **featured objective**.'
+            'The **scholar-style** objective is worth **+40**. Outside scheduled endless chapters, it still behaves like a normal stackable floor objective: clear the floor **without moving the board on that floor** — no full-board shuffle, row shuffle or tile swap — and you get the bonus. In modern endless chapters, you earn it only on floors where **Scholar style** is the **featured objective**.'
     },
     {
         id: 'sys_flip_par_floor',
@@ -528,7 +528,7 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         id: 'pickup_findables',
         title: 'Findables (bonus pickups)',
         description:
-            'Procedural floors spawn **real** pickup pairs by default: floors 1–3 have one pair, later floors have one or two, and **Dense pickups** guarantees two. There is one kind: the **score glint**, +25 score. Matching the carrier pair claims it, a chunk break that takes it spills it and pays it out, Destroy forfeits it, and Peek only reveals it.'
+            'Procedural floors spawn **real** pickup pairs by default: floors 1–3 have one pair, later floors have one or two, and **Dense pickups** guarantees two. There is one kind: the **score glint**, +25 score. Matching the carrier pair claims it, a chunk break that takes it spills it and pays it out, and Peek only reveals it.'
     },
     {
         id: 'board_wild_tile',
@@ -552,7 +552,7 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         id: 'board_shifting_spotlight',
         title: 'Ward & bounty (shifting spotlight)',
         description:
-            'With **Shifting spotlight**, a Ward pair scores less if matched while highlighted; a Bounty pair grants extra score. Rotates on match, miss, gambit, or destroy.'
+            'With **Shifting spotlight**, a Ward pair scores less if matched while highlighted; a Bounty pair grants extra score. Rotates on match, miss, or gambit.'
     }
 ];
 
@@ -562,7 +562,7 @@ export const ENCYCLOPEDIA_CONTRACT_TOPICS: readonly EncyclopediaTopic[] = [
         id: 'contract_scholar',
         title: 'Scholar contract',
         description:
-            'Menu / run flag: **no full-board shuffle** and **no destroy pair** for the contract (row/region tools follow current rules). Separate from the **scholar-style per-floor bonus**, which any run can earn floor-by-floor by not using shuffle/destroy on that floor.'
+            'Menu / run flag: **no full-board shuffle** for the whole contract (row/region tools follow current rules). Separate from the **scholar-style per-floor bonus**, which any run can earn floor-by-floor by not moving the board on that floor.'
     },
     {
         id: 'contract_pin_vow',

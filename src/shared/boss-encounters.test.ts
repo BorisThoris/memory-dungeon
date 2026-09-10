@@ -4,7 +4,7 @@ import {
     getEncounterIdentityForFloor,
     getFloorIdentityContract
 } from './boss-encounters';
-import { GAME_RULES_VERSION } from './contracts';
+import { FLOOR_ARCHETYPE_IDS, GAME_RULES_VERSION, type MutatorId } from './contracts';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
 
 describe('REG-076 boss and elite encounter identity', () => {
@@ -73,13 +73,49 @@ describe('REG-076 boss and elite encounter identity', () => {
             'baseline_floor',
             'boss_trophy_moment',
             'recovery_study_room',
-            'locked_gallery_late',
-            'parasite_tithe'
+            'pickup_gallery_dense',
+            'anchor_floor'
         ]);
         expect(rows[1]).toMatchObject({
             label: 'Keystone chamber',
-            activeReminder: 'Keystone Warden: finish the boss objective before leaving.'
+            activeReminder: 'Keystone: scattered suits, short chains.'
         });
+        /*
+         * Gen 201: these sentences are read in a run, so they have to describe the run. The whole
+         * table used to teach traps, disarms, keys, locks, guard, the parasite clock and finding
+         * the exit - every one of them removed with the dungeon layer. The check below is the one
+         * that would have caught it: no floor may coach a noun the game does not have.
+         */
+        const removedNouns = /\b(trap|disarm|key|keys|lock|locked|guard|parasite|exit|cache|relic|gold|shop|life|lives|destroy|stray|favor)\b/i;
+        /*
+         * Over EVERY floor the schedule can produce, not the five sampled above: eleven archetypes
+         * times three tags, plus the null-archetype fallback, each with and without a mutator that
+         * changes the branch taken. The five-row sample is what let the old table rot in the first
+         * place - four of its seven branches were never looked at.
+         */
+        const everyFloor = FLOOR_ARCHETYPE_IDS.flatMap((floorArchetypeId) =>
+            (['normal', 'breather', 'boss'] as const).flatMap((floorTag) =>
+                [[], ['findables_floor'], ['short_memorize']].map((mutators) =>
+                    getFloorIdentityContract({
+                        floorTag,
+                        floorArchetypeId,
+                        mutators: mutators as MutatorId[],
+                        featuredObjectiveLabel: null
+                    })
+                )
+            )
+        ).concat(
+            getFloorIdentityContract({ floorTag: 'normal', floorArchetypeId: null, mutators: [], featuredObjectiveLabel: null })
+        );
+        expect(everyFloor.length).toBe(100);
+        for (const row of [...rows, ...everyFloor]) {
+            for (const sentence of [row.teachingSentence, row.counterplaySentence, row.floorClearSentence, row.activeReminder]) {
+                expect(sentence, `${row.id} coaches a removed system: ${sentence}`).not.toMatch(removedNouns);
+            }
+            expect(row.teachingSentence.length).toBeGreaterThan(20);
+            expect(row.counterplaySentence.length).toBeGreaterThan(20);
+            expect(row.activeReminder.length).toBeGreaterThan(10);
+        }
         for (const row of rows) {
             expect(row.teachingSentence.length).toBeGreaterThan(20);
             expect(row.counterplaySentence.length).toBeGreaterThan(20);

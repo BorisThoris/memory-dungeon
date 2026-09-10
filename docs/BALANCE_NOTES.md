@@ -2312,3 +2312,69 @@ saying out loud so the number is not read as progress on instrumentation.
 power was reachable in a plain endless run, so neither had ever appeared in those numbers. The
 absence of movement here is itself the confirmation that Destroy was dead code and Stray was a
 setup-only button.
+
+## Gen 201 — every system read back against the game that exists
+
+Not a balance change so much as a truth pass, so the numbers below are the ones that moved and the
+rest of the entry is what was found. The method: take each system in turn, read what it *claims* —
+in its band, in its Codex entry, in the sentence a player reads mid-run — and check the claim
+against the code that runs.
+
+### The tools' occupancy numbers were measuring the census
+
+Three of them read exactly `1.000 x 1.00` on every floor of every seed. That is not a measurement,
+it is a construction: the setup-pass census player pressed the pin, the swap and the flash on floor
+open, unconditionally, before a card had been turned. All three were then banded `core` — a claim
+that the game does this on nearly every floor, which nothing had ever checked.
+
+Each is now reached for when the board gives it the reason the tool exists for, and the share falls
+where it falls:
+
+| Tool | Reason it is now pressed | Before | After | Band |
+|---|---|---|---|---|
+| Pin | a miss happened; there is a seen card to hold | 1.000 (constructed) | **0.158** | core → common |
+| Flash pair | a miss happened; the floor gave nothing up | 1.000 (constructed) | **0.158** | core → common |
+| Tile swap | a pair's halves are dealt not touching | 1.000 (constructed) | **0.988** | core (now earned) |
+| Peek | an unrevealed card exists at floor open | 1.000 | 1.000 | core (already honest) |
+| Wild joker | the joker always has a partner | 1.000 | 1.000 | core (already honest) |
+
+0.158 is the reference miss rate, and that is the right shape: the pin and the flash both answer
+going wrong, so they happen about as often as going wrong. The swap staying `core` is now a fact
+about the deal rather than about the script — Gen 198's separation rule is what puts a non-touching
+pair on nearly every board.
+
+The rule is written into `SYSTEM_OCCUPANCY_COUNTERS` so the next counter added has to face it: **a
+counter the census presses unconditionally measures the census.**
+
+### The in-run coaching taught a game removed twenty-five generations ago
+
+`getFloorIdentityContract` is four sentences a player reads on the floor they are standing on. Its
+seven branches named trap bounties and clean disarms, the Trap Workshop and the Rune Seal, keys and
+locks and cache extraction, guard and scout value, the parasite clock, boss blockers and finding
+the exit. Every one of those left with the dungeon layer, the hazards, the lives and the exits.
+
+A floor archetype now decides exactly one thing — how the deal lays the suits out, `clumped`,
+`scattered` or `two_suit` — and that is what decides how far a pop reaches. So the coaching says
+that instead. A scattered floor tells you a swap is worth more there than anywhere else; a
+two-suit floor tells you it is where the deepest chains of the run live; a breather tells you it is
+the cheapest place to spend a charge.
+
+The boss identity was worse than stale: it promised `+2 Favor` (a currency removed in Gen 175) and
+a "Keystone Pair board anchor" that appears nowhere in the game — no field, no rule, no generator —
+in a string shown in the HUD title.
+
+Why it rotted: `FloorArchetypeId` was a bare type union, so nothing could enumerate the archetypes
+at runtime and the table's tests only ever sampled five of its branches. It is now
+`FLOOR_ARCHETYPE_IDS`, a list, and the test walks all 100 floor variants (eleven archetypes × three
+tags × three mutator sets, plus the null fallback) asserting that no floor coaches a removed noun.
+
+### Eleven Codex entries and four objective strings said the same kind of thing
+
+Findables, powers, dense pickups, shifting spotlight, charges, perfect memory, recall focus, the
+scholar objective and the scholar contract all still taught Destroy and Stray, one day after both
+were removed. The scholar objective's copy also named three tools while its rule watched one field
+— though that one turned out to be honest, because `applyTileSwap` sets `shuffleUsedThisFloor` too.
+
+Heavy's trait line promised "costs +1 extra try but never drains peek charges". Nothing in the game
+drains a peek charge on a mismatch — no trait, no mutator, no rule. The clause promised the absence
+of a penalty that cannot happen, which is a way of teaching a player to fear the game wrongly.

@@ -268,18 +268,28 @@ export interface Tile {
 }
 
 export type FloorTag = 'normal' | 'breather' | 'boss';
-export type FloorArchetypeId =
-    | 'survey_hall'
-    | 'speed_trial'
-    | 'treasure_gallery'
-    | 'shadow_read'
-    | 'anchor_chain'
-    | 'trap_hall'
-    | 'script_room'
-    | 'rush_recall'
-    | 'parasite_tithe'
-    | 'spotlight_hunt'
-    | 'breather';
+/*
+ * Gen 201 turned this from a bare union into a list the code can walk.
+ *
+ * As a union it could be exhaustively *type*-checked but never exhaustively *tested*: nothing could
+ * enumerate the archetypes at runtime, so the floor-coaching table's seven branches were only ever
+ * sampled five at a time, and four of them sat for twenty-five generations describing traps, keys
+ * and a currency the game had removed. A list makes "every floor" a thing a test can say.
+ */
+export const FLOOR_ARCHETYPE_IDS = [
+    'survey_hall',
+    'speed_trial',
+    'treasure_gallery',
+    'shadow_read',
+    'anchor_chain',
+    'trap_hall',
+    'script_room',
+    'rush_recall',
+    'parasite_tithe',
+    'spotlight_hunt',
+    'breather'
+] as const;
+export type FloorArchetypeId = (typeof FLOOR_ARCHETYPE_IDS)[number];
 
 export interface BoardState {
     level: number;

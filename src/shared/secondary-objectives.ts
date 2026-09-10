@@ -36,8 +36,8 @@ export const LEVEL_RESULT_TAG_DEFINITIONS: Record<LevelResultTagId, LevelResultT
     scholar_style: {
         id: 'scholar_style',
         label: 'Scholar style',
-        shortCopy: 'No shuffle, swap, or destroy.',
-        journalCopy: 'Cleared without spending shuffle, swap, or destroy tools.',
+        shortCopy: 'No shuffle and no swap.',
+        journalCopy: 'Cleared without spending a shuffle or a swap.',
         priority: 60,
         rewardBearing: true
     },
@@ -77,7 +77,7 @@ export const LEVEL_RESULT_TAG_DEFINITIONS: Record<LevelResultTagId, LevelResultT
         id: 'perfect_scout',
         label: 'Perfect scout',
         shortCopy: 'Perfect scout.',
-        journalCopy: 'Cleared with no mistakes, no peek reveal, and no shuffle/swap/destroy tools.',
+        journalCopy: 'Cleared with no mistakes, no peek reveal, and no shuffle or swap.',
         priority: 65,
         rewardBearing: false
     }
@@ -139,9 +139,9 @@ export const getSecondaryObjectiveProgress = (run: RunState): SecondaryObjective
     switch (id) {
         case 'scholar_style':
             state = run.shuffleUsedThisFloor ? 'failed' : 'active';
-            condition = 'Clear without shuffle, swap, or destroy.';
-            failureReason = state === 'failed' ? 'Shuffle, swap, or destroy was used this floor.' : null;
-            detail = state === 'failed' ? `Failed: ${failureReason}` : 'Do not use shuffle, swap, or destroy this floor.';
+            condition = 'Clear without a shuffle or a swap.';
+            failureReason = state === 'failed' ? 'A shuffle or a swap was used this floor.' : null;
+            detail = state === 'failed' ? `Failed: ${failureReason}` : 'Do not use a shuffle or a swap this floor.';
             break;
         case 'cursed_last':
             state = run.cursedMatchedEarlyThisFloor ? 'failed' : 'active';
