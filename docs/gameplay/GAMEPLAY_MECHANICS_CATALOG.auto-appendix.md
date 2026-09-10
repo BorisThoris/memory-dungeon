@@ -1,6 +1,6 @@
 # Gameplay mechanics — machine snapshot
 
-**Generated:** 2026-09-10T08:50:41.286Z
+**Generated:** 2026-09-10T10:16:10.635Z
 
 > Regenerate with `yarn docs:mechanics-appendix`. Do not edit by hand.
 
@@ -14,7 +14,7 @@
 
 ## System refinement ledger
 
-Every system in the game, with the last generation that passed over it. 19 changed, 27 confirmed already in their refined state, 1 removed outright.
+Every system in the game, with the last generation that passed over it. 20 changed, 26 confirmed already in their refined state, 1 removed outright.
 
 | System | Verdict | Gen | What was found |
 | --- | --- | --- | --- |
@@ -22,7 +22,7 @@ Every system in the game, with the last generation that passed over it. 19 chang
 | `board.cleanup` | confirmed | 201 | The pop takes only cards in contact (Gen 197) and the drop fires on 0.177 of chain-one matches at 1.17 pairs a drop. Both numbers come from sim:pop rather than from the rule being read back. |
 | `core.board_turn_resolution` | confirmed | 201 | Occupancy 1.000 x 4.46 on the reference pass: every floor resolves turns, which is the one row in the census that would be alarming at any other value. |
 | `objective.floor_clear` | changed | 201 | The in-run line at zero remaining pairs said "Next: exit is ready." There is no exit; a floor ends when the board does. It now says the floor is clear. |
-| `trait.echo` | confirmed | 201 | Occupancy 0.342, banded common. Pays in peek charges, which is a currency the run still spends - the peek reads 1.000 on the tooled pass. |
+| `trait.echo` | changed | 205 | Occupancy 0.392, banded common. Pays in peek charges, which is a currency the run still spends - the peek reads 1.000 on the tooled pass. Gen 205: it was the rarest of the four at 0.342, because two of the three interaction couples spend Conduit and Stasis and the fill that was meant to even the floor out drew uniformly instead. |
 | `trait.heavy` | changed | 201 | Its mismatch line promised "costs +1 extra try but never drains peek charges". Nothing in the game drains a peek charge on a mismatch, so the clause promised the absence of an impossible penalty. Cut; the true half stayed. |
 | `trait.conduit` | changed | 202 | Its Echo payoff line, "Conduit + Echo: peek spark", was being sorted into a lane called Shard and drawn on the card back as a combo shard - a currency removed in Gen 184. It reads Tool now, which is what a returned peek charge is. |
 | `trait.stasis` | confirmed | 202 | Occupancy 0.512, banded common. Both its interaction lines land in the block lane, which is what a lock does, and the lane survived the Gen 202 cull on evidence. |
@@ -30,8 +30,8 @@ Every system in the game, with the last generation that passed over it. 19 chang
 | `power.pin` | changed | 201 | Re-banded core to common. It read 1.000 while the census pressed it at floor open regardless of the board; pressed after a miss, where a pin has a reason, it reads 0.158 - the reference miss rate. |
 | `power.flash_pair` | changed | 201 | Re-banded core to common, same cause as the pin: 1.000 constructed became 0.158 measured. The flash answers being stuck, and a player is stuck about as often as they miss. |
 | `power.tile_swap` | changed | 201 | Stays core, but now on evidence: 0.988, because nearly every board deals a pair whose halves are not touching. Before, it was pressed unconditionally and read 1.000 by construction. |
-| `power.shuffle` | confirmed | 201 | Occupancy 0.975 on the tooled pass, banded core. Its Codex entry was repointed in Gen 201: a Scholar contract disables board shuffle and nothing else, which is what the code does. |
-| `power.region_shuffle` | confirmed | 201 | Occupancy 0.967, banded core. It sets shuffleUsedThisFloor like the full shuffle, so the scholar-style objective catches it - checked against the rule, not the field name. |
+| `power.shuffle` | confirmed | 205 | Occupancy 1.000 on the tooled pass, banded core. Its Codex entry was repointed in Gen 201: a Scholar contract disables board shuffle and nothing else, which is what the code does. Gen 205 moved the census press off the halfway mark, where a break that empties the board in one turn skips it entirely. |
+| `power.region_shuffle` | confirmed | 205 | Occupancy 1.000, banded core - it sat at exactly 0.900 against a 0.900 bar until Gen 205 asked what the missing tenth was, and it was the census pressing at a moment a cascade can skip. It sets shuffleUsedThisFloor like the full shuffle, so the scholar-style objective catches it - checked against the rule, not the field name. |
 | `power.undo_resolve` | confirmed | 201 | Occupancy 0.475, banded common, and correctly bounded: undo only exists while a pair is resolving, so it cannot exceed the miss rate by much. |
 | `power.gambit` | confirmed | 201 | Occupancy 0.408, banded common. One third flip per floor, spent on the first miss, which is the only moment it can be spent. |
 | `power.wild_match` | confirmed | 200 | Re-banded common to core in Gen 200 against measurement: 1.000. Stray was the only thing that took the joker off the board before it could be spent, and Stray is gone. |

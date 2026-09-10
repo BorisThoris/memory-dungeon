@@ -1,12 +1,16 @@
 /**
  * The pair-count curve: how many pairs a floor deals.
  *
- * Two regimes, because the first three floors are not on a curve at all. They are authored
- * (`authored-floors.ts`): four pairs on two suits to teach the pop and the boundary at once, six
- * on three suits to widen the palette, seven with a split pair to teach the reach. Their sizes are
- * part of the proofs those layouts carry, and a board the layout cannot hold is silently dealt the
- * ordinary way instead - so the curve has to agree with them rather than the other way round.
+ * Two regimes, because the first three floors are not on a curve at all. Their sizes belong to the
+ * lessons they carry (`authored-floors.ts`): four pairs on two suits to teach the pop and the
+ * boundary at once, six on three suits to widen the palette, seven with a pair pulled apart. All
+ * three carry a hand-drawn suit map, and a board a layout cannot hold is silently dealt the
+ * ordinary way instead, so the curve has to agree with them rather than the other way round.
  * `AUTHORED_FLOOR_PAIRS` is that agreement, and `authored-floors.test.ts` fails if it drifts.
+ *
+ * Note what four pairs is NOT: `suitCountForPairs(4)` is one suit, so floor 1's two suits come from
+ * its layout and not from its size. Gen 205 nearly dropped that layout on a measurement that had
+ * only ever looked at one-suit boards.
  *
  * From floor 4 the curve takes over, anchored on the last authored floor so there is no step at
  * the seam. Square-root-tempered growth, because memory difficulty is superlinear in board size:

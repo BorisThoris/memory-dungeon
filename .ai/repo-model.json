@@ -255,8 +255,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 354987,
-      "sha256": "24f1fc7affa9783d3781e86e82f3ac0b821c0c22b9e4160c52aff9f36fa76637"
+      "bytes": 361970,
+      "sha256": "84d3c19556077624a1f50742e5234afd6d0e4e6c02299ecf9368bfc0593cdea9"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -747,8 +747,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 10835,
-      "sha256": "b4839362dde7821073fd62b356cfd2965a3ee4795da6b87ad2e6b91a2bff27fb"
+      "bytes": 11303,
+      "sha256": "6a2376ea50c7bdebdf371ccb6aa233c0c8e77f07516a1f6643a4f75f9629662e"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -10329,14 +10329,14 @@
     {
       "path": "src/shared/authored-floors.test.ts",
       "category": "test",
-      "bytes": 18322,
-      "sha256": "ca5af7bc99932f59a1c44e510ab45e4cbc877ba22e8ceaa04ed861d8bb8b7273"
+      "bytes": 23697,
+      "sha256": "8c3848abe5f7533405acc7219e61d5e211ec276d194452df04b4a2637400ddd0"
     },
     {
       "path": "src/shared/authored-floors.ts",
       "category": "source",
-      "bytes": 8968,
-      "sha256": "a06188e42b5b572463a069ffb920b8c715eba9fbbc5a751e963c2676a561a512"
+      "bytes": 10468,
+      "sha256": "4928c829d35f9fa3427a9ea05ec0275ce21a2cd9fbb47d1a3a9e7aa8d6aef7fa"
     },
     {
       "path": "src/shared/bad-floor-is-quiet.test.ts",
@@ -10389,8 +10389,8 @@
     {
       "path": "src/shared/board-build-rules.ts",
       "category": "source",
-      "bytes": 8827,
-      "sha256": "018f4737a300dbb7a618a052e49ce2ed56a7dd0602327d690b5ea3d5d1e43ee4"
+      "bytes": 8865,
+      "sha256": "36235c943ec3103f8192a11bb596bab1b11d9e142e7156ac1ae0fdb3a06243bf"
     },
     {
       "path": "src/shared/board-generation.ts",
@@ -11475,8 +11475,8 @@
     {
       "path": "src/shared/pair-curve.ts",
       "category": "source",
-      "bytes": 2607,
-      "sha256": "181c020872369833779b5f4e7284af0623b0097313bd22c4216ff7ab4fe4b560"
+      "bytes": 2844,
+      "sha256": "d69a0d91ebff7372449e1571c29bbc828230829acd56ca7bbba3a6097fb5da1e"
     },
     {
       "path": "src/shared/pairProximityHint.test.ts",
@@ -12153,8 +12153,8 @@
     {
       "path": "src/shared/system-occupancy-simulation.ts",
       "category": "source",
-      "bytes": 37418,
-      "sha256": "f33150b8902f356877fd979470167804b59bb66866834c90744b549dc7c5f5ee"
+      "bytes": 38578,
+      "sha256": "244210c9a3f9649e63216c9efc564c519e05337769d8005738b0fc13d8303044"
     },
     {
       "path": "src/shared/system-refinement-ledger.test.ts",
@@ -12165,8 +12165,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 17030,
-      "sha256": "01beee56d5255e06d1b799f30c27263e6b58bda39d726de6581162e117a615bc"
+      "bytes": 17498,
+      "sha256": "8fe333f394b61a2422deeaaacc95afe0d5fd67d46fce3a26433fb5079b0f4537"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -12297,8 +12297,8 @@
     {
       "path": "src/shared/tile-trait-rules.ts",
       "category": "source",
-      "bytes": 29963,
-      "sha256": "797b20a03239be149ccee0dd654d2ce96d8560fb62124bb034b801530a3e1943"
+      "bytes": 31156,
+      "sha256": "9cee27ecd43714cdf811bd2f90da956e08c807e42248a1d51888c37aff69b708"
     },
     {
       "path": "src/shared/trait-opportunities.test.ts",
@@ -23779,7 +23779,7 @@
       "path": "src/shared/authored-floors.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 344,
+      "lineCount": 435,
       "imports": [
         "file:src/shared/authored-floors.ts",
         "file:src/shared/board-build-rules.ts",
@@ -23798,7 +23798,7 @@
       "path": "src/shared/authored-floors.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 207,
+      "lineCount": 232,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/tile-identity.ts"
@@ -27832,7 +27832,7 @@
       "path": "src/shared/pair-curve.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 46,
+      "lineCount": 50,
       "imports": [],
       "exports": [
         "symbol:src/shared/pair-curve.ts#AUTHORED_FLOOR_PAIRS",
@@ -30044,7 +30044,7 @@
       "path": "src/shared/system-occupancy-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 715,
+      "lineCount": 730,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-power-actions.ts",
@@ -30548,7 +30548,7 @@
       "path": "src/shared/tile-trait-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 728,
+      "lineCount": 748,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -40850,56 +40850,56 @@
       "name": "AUTHORED_FLOOR_LAST_LEVEL",
       "kind": "value",
       "file": "src/shared/authored-floors.ts",
-      "line": 38,
-      "endLine": 38
+      "line": 56,
+      "endLine": 56
     },
     {
       "id": "symbol:src/shared/authored-floors.ts#authoredFloorLayout",
       "name": "authoredFloorLayout",
       "kind": "value",
       "file": "src/shared/authored-floors.ts",
-      "line": 109,
-      "endLine": 110
+      "line": 134,
+      "endLine": 135
     },
     {
       "id": "symbol:src/shared/authored-floors.ts#AuthoredFloorLayout",
       "name": "AuthoredFloorLayout",
       "kind": "interface",
       "file": "src/shared/authored-floors.ts",
-      "line": 43,
-      "endLine": 52
+      "line": 61,
+      "endLine": 70
     },
     {
       "id": "symbol:src/shared/authored-floors.ts#authoredSplitPairKey",
       "name": "authoredSplitPairKey",
       "kind": "value",
       "file": "src/shared/authored-floors.ts",
-      "line": 203,
-      "endLine": 206
+      "line": 228,
+      "endLine": 231
     },
     {
       "id": "symbol:src/shared/authored-floors.ts#isAuthoredFloor",
       "name": "isAuthoredFloor",
       "kind": "value",
       "file": "src/shared/authored-floors.ts",
-      "line": 40,
-      "endLine": 41
+      "line": 58,
+      "endLine": 59
     },
     {
       "id": "symbol:src/shared/authored-floors.ts#LayAuthoredFloorOptions",
       "name": "LayAuthoredFloorOptions",
       "kind": "interface",
       "file": "src/shared/authored-floors.ts",
-      "line": 112,
-      "endLine": 119
+      "line": 137,
+      "endLine": 144
     },
     {
       "id": "symbol:src/shared/authored-floors.ts#layAuthoredFloorTiles",
       "name": "layAuthoredFloorTiles",
       "kind": "value",
       "file": "src/shared/authored-floors.ts",
-      "line": 133,
-      "endLine": 200
+      "line": 158,
+      "endLine": 225
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#assertBalanceSimulationWithinBaseline",
@@ -47634,48 +47634,48 @@
       "name": "AUTHORED_FLOOR_PAIRS",
       "kind": "value",
       "file": "src/shared/pair-curve.ts",
-      "line": 30,
-      "endLine": 30
+      "line": 34,
+      "endLine": 34
     },
     {
       "id": "symbol:src/shared/pair-curve.ts#PAIRS_BASE",
       "name": "PAIRS_BASE",
       "kind": "value",
       "file": "src/shared/pair-curve.ts",
-      "line": 32,
-      "endLine": 32
+      "line": 36,
+      "endLine": 36
     },
     {
       "id": "symbol:src/shared/pair-curve.ts#PAIRS_GROWTH",
       "name": "PAIRS_GROWTH",
       "kind": "value",
       "file": "src/shared/pair-curve.ts",
-      "line": 33,
-      "endLine": 33
+      "line": 37,
+      "endLine": 37
     },
     {
       "id": "symbol:src/shared/pair-curve.ts#PAIRS_MAX",
       "name": "PAIRS_MAX",
       "kind": "value",
       "file": "src/shared/pair-curve.ts",
-      "line": 34,
-      "endLine": 34
+      "line": 38,
+      "endLine": 38
     },
     {
       "id": "symbol:src/shared/pair-curve.ts#PAIRS_MIN",
       "name": "PAIRS_MIN",
       "kind": "value",
       "file": "src/shared/pair-curve.ts",
-      "line": 35,
-      "endLine": 35
+      "line": 39,
+      "endLine": 39
     },
     {
       "id": "symbol:src/shared/pair-curve.ts#pairsForFloor",
       "name": "pairsForFloor",
       "kind": "value",
       "file": "src/shared/pair-curve.ts",
-      "line": 37,
-      "endLine": 45
+      "line": 41,
+      "endLine": 49
     },
     {
       "id": "symbol:src/shared/pairProximityHint.ts#getPairProximityGridDistance",
@@ -50762,80 +50762,80 @@
       "name": "dominantSystemKeys",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 703,
-      "endLine": 704
+      "line": 718,
+      "endLine": 719
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
       "name": "judgeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 678,
-      "endLine": 700
+      "line": 693,
+      "endLine": 715
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancyAgainstBaseline",
       "name": "judgeSystemOccupancyAgainstBaseline",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 654,
-      "endLine": 676
+      "line": 669,
+      "endLine": 691
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OCCUPANCY_SEEDS",
       "name": "OCCUPANCY_SEEDS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 493,
-      "endLine": 493
+      "line": 508,
+      "endLine": 508
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OccupancyFloorResult",
       "name": "OccupancyFloorResult",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 338,
-      "endLine": 342
+      "line": 352,
+      "endLine": 356
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#simulateSystemOccupancy",
       "name": "simulateSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 495,
-      "endLine": 540
+      "line": 510,
+      "endLine": 555
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#summarizeSystemOccupancy",
       "name": "summarizeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 706,
-      "endLine": 714
+      "line": 721,
+      "endLine": 729
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BANDS",
       "name": "SYSTEM_OCCUPANCY_BANDS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 547,
-      "endLine": 558
+      "line": 562,
+      "endLine": 573
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE",
       "name": "SYSTEM_OCCUPANCY_BASELINE",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 608,
-      "endLine": 628
+      "line": 623,
+      "endLine": 643
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "name": "SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 645,
-      "endLine": 645
+      "line": 660,
+      "endLine": 660
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_COUNTERS",
@@ -51555,23 +51555,23 @@
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
       "line": 412,
-      "endLine": 502
+      "endLine": 522
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#calculateTileTraitMatchRewards",
       "name": "calculateTileTraitMatchRewards",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 701,
-      "endLine": 714
+      "line": 721,
+      "endLine": 734
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#calculateTileTraitMismatchPenalty",
       "name": "calculateTileTraitMismatchPenalty",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 716,
-      "endLine": 727
+      "line": 736,
+      "endLine": 747
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#countTraitComboOpportunityPairs",
@@ -51674,16 +51674,16 @@
       "name": "releaseStrandedStasisBlock",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 582,
-      "endLine": 587
+      "line": 602,
+      "endLine": 607
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#resolveTileTraitEffects",
       "name": "resolveTileTraitEffects",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 601,
-      "endLine": 699
+      "line": 621,
+      "endLine": 719
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#TILE_TRAIT_COPY",

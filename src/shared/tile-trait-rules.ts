@@ -449,12 +449,32 @@ export const assignTileTraitsToGeneratedBoard = (
             seedIndex += 1;
         }
     }
-    shuffledPairKeys.forEach((pairKey, index) => {
+    /*
+     * The pairs the couples did not take are filled with whichever trait the floor has least of.
+     *
+     * Gen 205: this used to reshuffle the pool inside the loop and then index it by the pair's
+     * position - a uniform draw wearing a round-robin's shape, which is the shape that would have
+     * evened the floor out. It matters because the couples are not even: Conduit and Stasis each
+     * appear in two of the three interactions and Echo and Heavy in one, so the seeding spends the
+     * first two twice as often, and a uniform fill leaves that skew exactly where it found it.
+     * Measured over 240 floors, the four traits sat at 0.35 / 0.38 / 0.52 / 0.53 of floors.
+     * Filling from the back of the queue is the same idea `assignSuitsToTiles` uses to keep a
+     * floor's suits within one pair of each other.
+     */
+    const fillOrder = shuffleWithRng(() => rng(), pool);
+    const dealt = new Map<TileTraitKind, number>(fillOrder.map((trait) => [trait, 0]));
+    for (const trait of traitByPairKey.values()) {
+        dealt.set(trait, (dealt.get(trait) ?? 0) + 1);
+    }
+    shuffledPairKeys.forEach((pairKey) => {
         if (traitByPairKey.size >= traitCount || traitByPairKey.has(pairKey)) {
             return;
         }
-        const shuffledPool = shuffleWithRng(() => rng(), pool);
-        const trait = shuffledPool[index % pool.length] ?? shuffledPool[0] ?? pool[0] ?? DEFAULT_TRAIT_INTERACTION_SEED[0];
+        const trait = fillOrder.reduce(
+            (fewest, candidate) => ((dealt.get(candidate) ?? 0) < (dealt.get(fewest) ?? 0) ? candidate : fewest),
+            fillOrder[0] ?? DEFAULT_TRAIT_INTERACTION_SEED[0]
+        );
+        dealt.set(trait, (dealt.get(trait) ?? 0) + 1);
         traitByPairKey.set(pairKey, trait);
     });
 

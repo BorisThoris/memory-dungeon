@@ -60,9 +60,9 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
     // ---- The four traits. ----------------------------------------------------------------------
     {
         id: 'trait.echo',
-        verdict: 'confirmed',
-        generation: 201,
-        note: 'Occupancy 0.342, banded common. Pays in peek charges, which is a currency the run still spends - the peek reads 1.000 on the tooled pass.'
+        verdict: 'changed',
+        generation: 205,
+        note: 'Occupancy 0.392, banded common. Pays in peek charges, which is a currency the run still spends - the peek reads 1.000 on the tooled pass. Gen 205: it was the rarest of the four at 0.342, because two of the three interaction couples spend Conduit and Stasis and the fill that was meant to even the floor out drew uniformly instead.'
     },
     {
         id: 'trait.heavy',
@@ -111,14 +111,14 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
     {
         id: 'power.shuffle',
         verdict: 'confirmed',
-        generation: 201,
-        note: 'Occupancy 0.975 on the tooled pass, banded core. Its Codex entry was repointed in Gen 201: a Scholar contract disables board shuffle and nothing else, which is what the code does.'
+        generation: 205,
+        note: 'Occupancy 1.000 on the tooled pass, banded core. Its Codex entry was repointed in Gen 201: a Scholar contract disables board shuffle and nothing else, which is what the code does. Gen 205 moved the census press off the halfway mark, where a break that empties the board in one turn skips it entirely.'
     },
     {
         id: 'power.region_shuffle',
         verdict: 'confirmed',
-        generation: 201,
-        note: 'Occupancy 0.967, banded core. It sets shuffleUsedThisFloor like the full shuffle, so the scholar-style objective catches it - checked against the rule, not the field name.'
+        generation: 205,
+        note: 'Occupancy 1.000, banded core - it sat at exactly 0.900 against a 0.900 bar until Gen 205 asked what the missing tenth was, and it was the census pressing at a moment a cascade can skip. It sets shuffleUsedThisFloor like the full shuffle, so the scholar-style objective catches it - checked against the rule, not the field name.'
     },
     {
         id: 'power.undo_resolve',

@@ -231,12 +231,26 @@ export interface SystemOccupancyReport {
 /**
  * What a player does with the tools a plain endless run hands them, expressed as the least
  * interesting policy that still presses every button: peek the first hidden tile, take back the
- * first flip that was going to be a mismatch, and shuffle once the floor is half gone.
+ * first flip that was going to be a mismatch, and shuffle once the floor is underway.
  *
  * It is deliberately not clever. The census asks whether a system can happen on a real board, not
  * whether it is worth using - a power a good player would never touch still has to be reachable.
+ *
+ * **Gen 205 moved the shuffle off the halfway mark.** It used to be pressed the first time half the
+ * pairs were gone, and both shuffles read exactly 0.900 against a core bar of 0.900 - a gate
+ * passing by nothing at all, which the redrawn authored floors then failed by one floor in 240.
+ * The 24 floors that missed were not floors where a shuffle was impossible: they were floors where
+ * a break carried the board from under half to empty in one turn, so the halfway state never
+ * existed to press anything in. That is a fact about the cascade, and the census was reporting it
+ * as a fact about the shuffle. A floor with one match resolved and cards still hidden is a board a
+ * player would shuffle, and it is a state every floor that lasts a turn reaches.
+ *
+ * Both shuffles read 1.000 now, and that is a reachability claim rather than a rate: the census
+ * presses each of them once per floor, so 1.000 says every floor offers the press, not that a
+ * player shuffles on every floor. It can still fail - a row needs two hidden cards left in it -
+ * which is the difference between this and the floor-open presses Gen 201 took out.
  */
-const spendTools = (run: RunState, phase: 'opening' | 'midway'): RunState => {
+const spendTools = (run: RunState, phase: 'opening' | 'underway'): RunState => {
     const board = run.board;
     if (!board || run.status !== 'playing') {
         return run;
@@ -381,7 +395,6 @@ const playFloor = (
         findablesTotalThisFloor: countFindablePairs(board.tiles)
     };
     const rng = createMulberry32(hashStringToSeed(`occupancy:${seed}:${floor}:${missRate}:${rulesVersion}`));
-    const openingPairs = board.pairCount;
     const spends = new Map<string, number>();
     /** Take the next run state, and record every watched charge that fell on the way to it. */
     const step = (next: RunState): RunState => {
@@ -397,6 +410,7 @@ const playFloor = (
     let turns = 0;
     let undone = false;
     let gambited = false;
+    let shuffled = false;
     if (tooled) {
         step(spendTools(run, 'opening'));
     }
@@ -478,8 +492,9 @@ const playFloor = (
             // both read 1.000 by construction before Gen 201.
             step(spendSetupTools(run, 'afterMiss'));
         }
-        if (tooled && run.status === 'playing' && run.board!.matchedPairs * 2 >= openingPairs) {
-            step(spendTools(run, 'midway'));
+        if (tooled && run.status === 'playing' && !shuffled && run.board!.matchedPairs > 0) {
+            shuffled = true;
+            step(spendTools(run, 'underway'));
         }
     }
     /*

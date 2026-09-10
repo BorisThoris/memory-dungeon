@@ -57,6 +57,57 @@ const orthogonalNeighbours = (index: number, columns: number, total: number): nu
     return out;
 };
 
+/** Share of a layout's orthogonal neighbour pairs that share a suit; a shuffle's rate is the target. */
+const sameSuitOrthogonalRate = (layout: { columns: number; cells: readonly string[] }): number => {
+    const total = layout.cells.length;
+    let same = 0;
+    let counted = 0;
+    for (let cell = 0; cell < total; cell += 1) {
+        for (const n of orthogonalNeighbours(cell, layout.columns, total)) {
+            counted += 1;
+            if (layout.cells[n] === layout.cells[cell]) same += 1;
+        }
+    }
+    return counted === 0 ? 0 : same / counted;
+};
+
+/** Every cell a wave of `reach` reaches from `seeds`, walking same-suit cells the way a break does. */
+const boundedWave = (
+    layout: { columns: number; cells: readonly string[] },
+    seeds: readonly number[],
+    reach: number
+): Set<number> => {
+    const total = layout.cells.length;
+    const suit = layout.cells[seeds[0]!];
+    const seen = new Set<number>(seeds);
+    const region = new Set<number>();
+    let frontier = [...seeds];
+    for (let step = 0; step < reach && frontier.length > 0; step += 1) {
+        const next: number[] = [];
+        for (const from of frontier) {
+            const row = Math.floor(from / layout.columns);
+            const column = from % layout.columns;
+            // Corners count: Gen 204 made every tier's wave walk diagonals.
+            for (const [dr, dc] of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]] as const) {
+                const nextRow = row + dr;
+                const nextColumn = column + dc;
+                if (nextRow < 0 || nextColumn < 0 || nextColumn >= layout.columns) continue;
+                const cell = nextRow * layout.columns + nextColumn;
+                if (cell < 0 || cell >= total || seen.has(cell) || layout.cells[cell] !== suit) continue;
+                seen.add(cell);
+                region.add(cell);
+                next.push(cell);
+            }
+        }
+        frontier = next;
+    }
+    return region;
+};
+
+/** Every way the seed could pair up a suit's cells: any two of them can be the matched pair. */
+const pairings = (cells: readonly number[]): Array<[number, number]> =>
+    cells.flatMap((a, index) => cells.slice(index + 1).map((b) => [a, b] as [number, number]));
+
 const boardsUnderTest = (level: number): Array<[string, BoardState]> =>
     SEEDS.flatMap((seed) => [
         [`seed ${seed} scheduled`, scheduledBoard(level, seed)] as [string, BoardState],
@@ -65,7 +116,7 @@ const boardsUnderTest = (level: number): Array<[string, BoardState]> =>
     ]);
 
 describe('the authored floors', () => {
-    it('are the first three, and their sizes are the curve\'s', () => {
+    it('are the first three, and every one of them carries a layout', () => {
         expect(AUTHORED_FLOOR_LAST_LEVEL).toBe(3);
         for (const level of [1, 2, 3]) {
             const layout = authoredFloorLayout(level)!;
@@ -84,7 +135,7 @@ describe('the authored floors', () => {
     it('N1/N2: every tile has its partner and the board is exactly two tiles per pair, on every seed', () => {
         for (const level of [1, 2, 3]) {
             for (const [where, board] of boardsUnderTest(level)) {
-                const layout = authoredFloorLayout(level)!;
+                const layout = authoredFloorLayout(level);
                 const pairs = realPairs(board);
                 expect(board.pairCount, `${level} ${where}`).toBe(pairsForFloor(level));
                 expect(board.tiles.length, `${level} ${where}`).toBe(2 * board.pairCount);
@@ -93,6 +144,7 @@ describe('the authored floors', () => {
                     expect(halves.length, `${level} ${where} ${key}`).toBe(2);
                     expect(halves[0]!.suit, `${level} ${where} ${key} halves share a suit`).toBe(halves[1]!.suit);
                 }
+                if (!layout) continue;
                 expect(board.columns).toBe(layout.columns);
                 expect(board.rows).toBe(layout.rows);
                 // The shape is the authored one, whatever the seed did to the symbols.
@@ -127,15 +179,15 @@ describe('the authored floors', () => {
     });
 
     it('puts a singleton after the authored cells rather than inside the shape', () => {
-        const board = buildBoard(1, { runSeed: 5, runRulesVersion: GAME_RULES_VERSION, includeWildTile: true });
-        const layout = authoredFloorLayout(1)!;
+        const board = buildBoard(2, { runSeed: 5, runRulesVersion: GAME_RULES_VERSION, includeWildTile: true });
+        const layout = authoredFloorLayout(2)!;
         expect(board.tiles.length).toBe(layout.cells.length + 1);
         expect(board.tiles.at(-1)?.pairKey).toBe(WILD_PAIR_KEY);
         expect(board.tiles.slice(0, layout.cells.length).map((tile) => tile.suit)).toEqual([...layout.cells]);
     });
 
     it('falls back to the procedural deal when the tiles do not fit the layout', () => {
-        const layout = authoredFloorLayout(1)!;
+        const layout = authoredFloorLayout(2)!;
         const twoPairs: Tile[] = ['a', 'b'].flatMap((key) => [
             { id: `${key}1`, pairKey: key, symbol: key, label: key, state: 'hidden' as const },
             { id: `${key}2`, pairKey: key, symbol: key, label: key, state: 'hidden' as const }
@@ -156,14 +208,26 @@ describe('N6: the first pop', () => {
         }
     });
 
-    it('floor 1 is two suits, and the pop stops at the line between them', () => {
+    it('floor 1: two suits, and a pop that never leaves the one it started in', () => {
+        /*
+         * Gen 205 kept floor 1's layout and redrew it. The measurement that nearly removed it -
+         * every match pops on 300 of 300 ordinary deals at four pairs - was measuring a board of
+         * ONE suit, because `suitCountForPairs(4)` is one. A one-colour board is a board with no
+         * map on it (Gen 193), and given two suits only 0.371 of the arrangements of eight cells
+         * pop from every pair. The layout buys both; what it no longer buys is two solid blocks.
+         *
+         * The old test here asserted "the pop stops at the line between them", which was a property
+         * of those blocks rather than of the rule. The rule is that a pop never leaves the suit it
+         * started in, and that is what is asserted now - line or no line.
+         */
         for (const [where, board] of boardsUnderTest(1)) {
-            expect(new Set(board.tiles.map((tile) => tile.suit)), where).toEqual(new Set(['ember', 'tide']));
+            expect(new Set(board.tiles.map((tile) => tile.suit)).size, where).toBe(2);
             for (const [key, halves] of realPairs(board)) {
                 const suit = halves[0]!.suit;
                 const result = resolveChunkBreak({ board, run, matchedTileIds: halves.map((t) => t.id), chain: 0 });
+                expect(result.brokenPairKeys.length, `${where} match ${key} pops`).toBeGreaterThanOrEqual(1);
                 const taken = board.tiles.filter((tile) => result.brokenTileIds.includes(tile.id));
-                expect(taken.map((tile) => tile.suit), `${where} match ${key}`).toEqual(taken.map(() => suit));
+                expect(taken.map((tile) => tile.suit), `${where} match ${key} stays in suit`).toEqual(taken.map(() => suit));
             }
         }
     });
@@ -196,43 +260,74 @@ describe('N6: the first pop', () => {
         }
     });
 
-    it('floor 2: three bands, each one solid clump of its own suit', () => {
+    it('floor 2: three suits, interleaved, each still one reachable group', () => {
+        /*
+         * Gen 205: this used to require each suit be one ORTHOGONALLY connected clump - which is to
+         * say, a band. The lesson never needed a band; it needs each suit to be one group the wave
+         * can walk, and the wave walks corners. Interleaved, floor 2 reads 0.294 same-suit
+         * orthogonal neighbours instead of 0.529, and the guarantee below is unchanged.
+         */
         const layout = authoredFloorLayout(2)!;
         const total = layout.cells.length;
         const suits = [...new Set(layout.cells)];
         expect(suits.length).toBe(3);
+        /*
+         * The board has to read like a shuffle of its own tiles - which means near the rate a
+         * shuffle gives, on BOTH sides. Three suits of four over twelve cells put a same-suit tile
+         * beside you 3/11 of the time; the bands read 0.529 and a checkerboard reads 0.000, and a
+         * checkerboard is as obviously drawn by hand as a block is.
+         */
+        const chance = 3 / 11;
+        expect(sameSuitOrthogonalRate(layout), 'floor 2 reads as a shuffle: neither bands nor a checkerboard').toBeCloseTo(
+            chance,
+            1
+        );
+
         for (const suit of suits) {
             const cells = layout.cells.flatMap((s, cell) => (s === suit ? [cell] : []));
             expect(cells.length, `${suit} is a whole number of pairs`).toBe(total / 3);
             expect(cells.length % 2, `${suit} is a whole number of pairs`).toBe(0);
+            // One group, walked the way the wave walks it: corners count (Gen 204).
             const seen = new Set<number>([cells[0]!]);
             const stack = [cells[0]!];
             while (stack.length > 0) {
                 const cell = stack.pop()!;
-                for (const n of orthogonalNeighbours(cell, layout.columns, total)) {
-                    if (layout.cells[n] === suit && !seen.has(n)) {
-                        seen.add(n);
-                        stack.push(n);
-                    }
+                const row = Math.floor(cell / layout.columns);
+                const column = cell % layout.columns;
+                for (const [dr, dc] of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]] as const) {
+                    const nextRow = row + dr;
+                    const nextColumn = column + dc;
+                    if (nextRow < 0 || nextColumn < 0 || nextColumn >= layout.columns) continue;
+                    const n = nextRow * layout.columns + nextColumn;
+                    if (n < 0 || n >= total || seen.has(n)) continue;
+                    if (layout.cells[n] !== suit) continue;
+                    seen.add(n);
+                    stack.push(n);
                 }
             }
-            expect(seen.size, `${suit} is one clump`).toBe(cells.length);
+            expect(seen.size, `${suit} is one group the wave can walk`).toBe(cells.length);
         }
     });
 
-    it('floor 2: any two cells of a band are within a bounded wave of each other, so every band pops', () => {
-        const layout = authoredFloorLayout(2)!;
-        const step = (a: number, b: number) =>
-            Math.abs((a % layout.columns) - (b % layout.columns)) +
-            Math.abs(Math.floor(a / layout.columns) - Math.floor(b / layout.columns));
-        for (const suit of new Set(layout.cells)) {
-            const cells = layout.cells.flatMap((s, cell) => (s === suit ? [cell] : []));
-            // However the seed splits a band's cells into pairs, one matched pair leaves the other
-            // with both halves inside the wave: every cell of the band is close enough to some cell
-            // of every other pair in it.
-            for (const cell of cells) {
-                const reachable = cells.filter((other) => other !== cell && step(cell, other) <= BOUNDED_BREAK_REACH);
-                expect(reachable.length, `${suit} cell ${cell}`).toBeGreaterThanOrEqual(cells.length - 2);
+    it('floors 1 and 2: however the seed pairs a suit, matching one pair leaves the other inside the wave', () => {
+        /*
+         * The geometric statement of the guarantee the two floors above assert on real boards. It
+         * is stated on the layout as well because the layout is what has to hold it: which two of a
+         * suit's four cells become a pair is the seed's business, so all three pairings have to
+         * work. Until Gen 205 this was written as a Manhattan distance, which was a fair reading of
+         * the wave when the wave walked orthogonally; it walks corners now (Gen 204), so it is
+         * written as the walk.
+         */
+        for (const level of [1, 2]) {
+            const layout = authoredFloorLayout(level)!;
+            for (const suit of new Set(layout.cells)) {
+                const cells = layout.cells.flatMap((s, cell) => (s === suit ? [cell] : []));
+                expect(cells.length, `floor ${level} ${suit} is two pairs`).toBe(4);
+                for (const matched of pairings(cells)) {
+                    const rest = cells.filter((cell) => !matched.includes(cell));
+                    const region = boundedWave(layout, matched, BOUNDED_BREAK_REACH);
+                    expect(rest.every((cell) => region.has(cell)), `floor ${level} ${suit} match ${matched}`).toBe(true);
+                }
             }
         }
     });
@@ -316,28 +411,24 @@ describe('N7: the split pair on floor 3', () => {
         const total = layout.cells.length;
         const [near] = layout.splitCells!;
         const clump = layout.cells.flatMap((suit, cell) => (suit === 'ember' && cell !== near && cell !== layout.splitCells![1] ? [cell] : []));
-        const reaches = (seeds: number[], blocked: Set<number>): boolean => {
-            let frontier = seeds;
-            const seen = new Set([...seeds, ...blocked]);
-            for (let step = 0; step < BOUNDED_BREAK_REACH; step += 1) {
-                const next: number[] = [];
-                for (const from of frontier) {
-                    for (const n of orthogonalNeighbours(from, layout.columns, total)) {
-                        if (seen.has(n) || layout.cells[n] !== 'ember') continue;
-                        if (n === near) return true;
-                        seen.add(n);
-                        next.push(n);
-                    }
-                }
-                frontier = next;
-            }
-            return false;
-        };
-        for (const a of clump) {
-            for (const b of clump) {
-                if (a >= b) continue;
-                expect(reaches([a, b], new Set()), `pair at ${a},${b}`).toBe(true);
-            }
+        expect(clump.length, 'the clump is two pairs').toBe(4);
+        for (const matched of pairings(clump)) {
+            const region = boundedWave(layout, matched, BOUNDED_BREAK_REACH);
+            expect(region.has(near), `pair at ${matched}`).toBe(true);
+            // And the clump's other pair goes, which is what the player sees the wave do.
+            const rest = clump.filter((cell) => !matched.includes(cell));
+            expect(rest.every((cell) => region.has(cell)), `pair at ${matched} pops the other pair`).toBe(true);
+        }
+        // The far half is out of reach of every cell of its own suit, at any tier: nothing Ember
+        // touches it, so no wave can step into it however far it runs.
+        const far = layout.splitCells![1];
+        for (const [dr, dc] of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]] as const) {
+            const row = Math.floor(far / layout.columns) + dr;
+            const column = (far % layout.columns) + dc;
+            if (row < 0 || column < 0 || column >= layout.columns) continue;
+            const cell = row * layout.columns + column;
+            if (cell < 0 || cell >= total) continue;
+            expect(layout.cells[cell], `far half touches ${cell}`).not.toBe('ember');
         }
     });
 });

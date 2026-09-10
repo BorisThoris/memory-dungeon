@@ -101,8 +101,8 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
      * Every one of them is a *stop*: a tile the player has to resolve before the floor will let
      * them go, in a loop that is about momentum. `docs/REMOVED_DUNGEON_LAYER.md` has what each did.
      *
-     * What is left is the floor as the thesis states it (Part V): a board of pairs, dealt in
-     * clumps, and nothing on it that is not a pair. The floor ends when the board is empty, which
+     * What is left is the floor as the thesis states it (Part V): a board of pairs, shuffled, and
+     * nothing on it that is not a pair. The floor ends when the board is empty, which
      * `isBoardComplete` already said the moment there was no exit tile to activate.
      */
     const layoutTiles = options.suppressFindables
@@ -147,8 +147,8 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
           })
         : null;
     const columns = authoredTiles && authored ? authored.columns : clamp(Math.ceil(Math.sqrt(tileCount)), 2, 8);
-    // Suits go on before anything reads positions: pairs are dealt in clumps so the floor opens as
-    // a map rather than a field.
+    // Suits go on before anything reads positions. Gen 204: shuffled, then repaired so no run of
+    // one suit is long enough to read as a painted zone (`tile-suit-rules.ts`).
     const tiles =
         authoredTiles ?? dealBoardSuits(layoutTiles, columns, runSeed, level, rulesVersion, getSuitDealProfile(floorArchetypeId));
     const rows = Math.ceil(tileCount / columns);

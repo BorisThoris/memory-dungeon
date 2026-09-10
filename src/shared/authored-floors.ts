@@ -2,38 +2,56 @@ import type { Tile, TileSuit } from './contracts';
 import { isSingletonUtilityPairKey } from './tile-identity';
 
 /**
- * The three authored floors.
+ * The authored floors.
  *
- * A generated floor is a board of pairs dealt in clumps, and the chunk break decides what a match
+ * A generated floor is a board of pairs dealt at random, and the chunk break decides what a match
  * does to the board around it (`chunk-break-rules.ts`). That loop has three rules a new player has
- * to meet - a match pops what it is touching, a pop stops at a colour boundary, and a chain
- * reaches a partner across the board - and a procedural deal makes each of them *likely* on the
- * first floors, not certain. Measured, a two-pair floor could not pop at all, so the first thing
- * the game showed a player was a match that did nothing.
+ * to meet - a match pops what it is touching, a pop stops at a colour boundary, and a pair pulled
+ * apart is yours to remember - and a procedural deal makes each of them *likely* on the first
+ * floors, not certain. So the grid and the suit of every cell are written here once and are the
+ * same for everyone; what the symbols are and which pair lands where still come from the run seed.
+ * Thesis §51.
  *
- * So floors 1 to 3 are authored: the grid, the suit of every cell, and on floor 3 which two cells
- * hold the split pair, are written here once and are the same for everyone. What the symbols are
- * and which pair lands in which cell still come from the run seed, so two runs differ in what is
- * where; the *shape* is fixed, because the shape is what guarantees the lesson. Thesis §51.
+ * **Gen 205 redrew all three, because they were the most arranged boards in the game.**
  *
- * Floor 1 teaches the pop and the boundary together. Four pairs, two suits, a 4×2 grid: a solid
- * 2×2 of Ember beside a solid 2×2 of Tide, two pairs each. Every cell of a suit is within
- * `BOUNDED_BREAK_REACH` steps of every other, so whatever the player matches first, the wave holds
- * both halves of the suit's other pair and it pops - and it visibly stops at the colour it started
- * in. Two suits from the first board, because a board of one colour is not a board with a map on
- * it, only a field (Gen 193).
+ * These are the first boards anyone sees, and every one of them was solid colour blocks. Measured
+ * as the share of a cell's orthogonal neighbours sharing its suit: floor 1 read 0.800 - two 2x2
+ * blocks - floor 2 0.529 as three bands of four, floor 3 0.600. A shuffle of the same tiles reads
+ * 0.430, 0.273 and 0.296. Gen 204 had just finished making the procedural deal read like a shuffle;
+ * these three boards still announced themselves as drawn by hand.
  *
- * Floor 2 widens the palette. Six pairs, three suits, a 4×3 grid dealt in bands: Ember across the
- * top, Tide across the middle, Moss across the bottom, two pairs to a band. A row of four holds any
- * two pairs within reach of each other however the seed lays them, so a match anywhere pops, and
- * three bands make the boundary a rule rather than a coincidence of one line.
+ * Each was re-derived by exhaustive search over every arrangement that satisfies its lesson, and
+ * the one taken is the one whose same-suit neighbour rate sits closest to what a shuffle of the
+ * same tiles gives: 0.400, 0.294, 0.300. **Closest to chance, not lowest.** The lowest is a
+ * checkerboard - floor 1 has two valid arrangements reading 0.000 - and a checkerboard is the same
+ * lie as a block, told backwards; `mixMaxRunForSuits` exists because Gen 204 made exactly that
+ * mistake on two-suit boards. No suit forms a run longer than two here, which is what a shuffle of
+ * this size usually does.
  *
- * Floor 3 teaches the reach. Seven pairs, three suits on a 5×3 grid, and one Ember pair split: one
- * half inside the Ember clump, the other alone at the far end with nothing but Moss and Tide around
- * it. Below Clean a pair goes only when the wave holds both halves, so the split pair stays whole -
- * and at Clean the wave reaches partners, so the far half flies out of a corner nobody was looking
- * at. The in-clump half sits at the one cell every other clump pair is within two steps of, so the
- * reach is guaranteed from any pair, not most.
+ * What the layouts buy is unchanged, and it is worth stating in numbers, because the honest answer
+ * to "does the deal already do this?" is no:
+ *
+ * - Floor 1 is four pairs, and `suitCountForPairs(4)` is **one suit**: dealt ordinarily it is a
+ *   board of one colour, which is a board with no map on it (Gen 193). Given two suits, only
+ *   **0.371** of the arrangements of eight cells pop from every pair.
+ * - At floor 2's and floor 3's sizes an ordinary deal pops every match on 0.757 and 0.707 of seeds.
+ *
+ * The lesson each carries is a property of the shape rather than of the blocks:
+ *
+ * Floor 1 teaches the pop and the boundary. Four pairs, two suits, 4x2. Whichever pair the seed
+ * puts where, matching one leaves the suit's other pair whole inside one bounded wave, so the first
+ * match anyone makes pops something - and it stops at the other colour.
+ *
+ * Floor 2 says it again wider. Six pairs, three suits, 4x3, interleaved: every cell of a suit is
+ * within `BOUNDED_BREAK_REACH` steps of every other *through that suit*, corners included, so
+ * whatever the player matches first, the wave holds both halves of the suit's other pair. The
+ * boundary is now a thing to read rather than a line drawn across the board.
+ *
+ * Floor 3 teaches the split pair. Seven pairs, three suits on a 5x3, and one Ember pair pulled
+ * apart: five Ember cells that all reach each other, and one - cell 4, the far corner - with no
+ * Ember touching it at all, so no wave of any tier can take it. Its partner sits in the clump and
+ * is washed over by every break that happens there. The pair leaves when the player remembers it,
+ * or when the severance drop takes the suit's last pair; nothing else takes it.
  */
 export const AUTHORED_FLOOR_LAST_LEVEL = 3;
 
@@ -55,8 +73,12 @@ const E: TileSuit = 'ember';
 const T: TileSuit = 'tide';
 const M: TileSuit = 'moss';
 
-/* Two solid 2x2 blocks. Every cell of a suit is within two steps of every other, so a match
- * anywhere pops the suit's other pair, and the wave stops dead at the colour boundary. */
+/*
+ * Two suits of four, each a pair of dominoes across the diagonal. Every cell of a suit reaches
+ * every other within BOUNDED_BREAK_REACH walking corners through that suit, so whichever two cells
+ * the seed makes a pair, matching it leaves the other pair whole inside the wave. Same-suit
+ * orthogonal neighbours 0.400 against the 0.430 a shuffle gives, down from 0.800 as two blocks.
+ */
 const FLOOR_ONE: AuthoredFloorLayout = {
     level: 1,
     pairs: 4,
@@ -64,32 +86,35 @@ const FLOOR_ONE: AuthoredFloorLayout = {
     rows: 2,
     cells: [
         E, E, T, T,
-        E, E, T, T
+        T, T, E, E
     ],
     splitCells: null
 };
 
-/* Three bands. A row of four holds any two pairs within reach of each other however the seed
- * lays them out, so every band pops from any of its pairs. */
+/*
+ * Three suits of four, interleaved, no suit touching itself more than twice. Each suit's four cells
+ * reach each other the same way, so a match anywhere pops that suit's other pair and nothing else.
+ * Same-suit orthogonal neighbours 0.294 against a shuffle's 0.273, down from 0.529 as bands.
+ */
 const FLOOR_TWO: AuthoredFloorLayout = {
     level: 2,
     pairs: 6,
     columns: 4,
     rows: 3,
     cells: [
-        E, E, E, E,
-        T, T, T, T,
-        M, M, M, M
+        E, T, T, M,
+        E, M, M, T,
+        M, E, E, T
     ],
     splitCells: null
 };
 
 /*
- * Ember is the right-hand column and a step in, plus one cell below; Moss holds the top-left 2x2
- * and Tide the rest. Cell 8 is the Ember centre: every other Ember cell is within two steps of it,
- * so one matched pair cannot stand between a Clean break and the split. Cell 10 is the far half,
- * and its only neighbours are Moss and Tide - three grid steps from the nearest Ember, so no
- * bounded wave reaches it.
+ * Ember takes six cells. Five of them - 0, 1, 5, 11, 12 - reach each other through Ember; the
+ * sixth, cell 4 in the far corner, has no Ember cell touching it at all, orthogonally or at a
+ * corner, so no wave reaches it at any tier. Cell 0 is its partner, sitting in the clump where
+ * every break there washes over it. Tide and Moss take four each, each set within reach of itself.
+ * Same-suit orthogonal neighbours 0.300 against a shuffle's 0.296, down from 0.600.
  */
 const FLOOR_THREE: AuthoredFloorLayout = {
     level: 3,
@@ -97,11 +122,11 @@ const FLOOR_THREE: AuthoredFloorLayout = {
     columns: 5,
     rows: 3,
     cells: [
-        M, M, T, E, E,
-        M, M, T, E, E,
-        E, T, T, E
+        E, E, T, M, E,
+        E, M, M, T, T,
+        M, E, E, T
     ],
-    splitCells: [8, 10]
+    splitCells: [0, 4]
 };
 
 const LAYOUTS: readonly AuthoredFloorLayout[] = [FLOOR_ONE, FLOOR_TWO, FLOOR_THREE];
