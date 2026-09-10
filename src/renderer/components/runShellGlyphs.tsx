@@ -1,11 +1,9 @@
 import {
-    GameplayDestroyIcon,
     GameplayExitIcon,
     GameplayGreetIcon,
     GameplayPeekIcon,
     GameplayPinIcon,
     GameplayShuffleIcon,
-    GameplayStrayIcon,
     GameplayUndoIcon
 } from '../ui/gameplayIcons';
 
@@ -13,10 +11,8 @@ import {
 export const RUN_SHELL_GLYPHS = {
     shuffle: <GameplayShuffleIcon />,
     pin: <GameplayPinIcon />,
-    destroy: <GameplayDestroyIcon />,
     peek: <GameplayPeekIcon />,
     undo: <GameplayUndoIcon />,
-    stray: <GameplayStrayIcon />,
     greet: <GameplayGreetIcon />,
     exit: <GameplayExitIcon />
 } as const;

@@ -6,7 +6,6 @@ type AppStoreInitialState = Pick<
     AppState,
     | 'achievementBridgeNotice'
     | 'boardPinMode'
-    | 'destroyPairArmed'
     | 'regionShuffleArmed'
     | 'hydrated'
     | 'hydrating'
@@ -24,7 +23,6 @@ type AppStoreInitialState = Pick<
     | 'settings'
     | 'settingsReturnView'
     | 'steamConnected'
-    | 'strayRemoveArmed'
     | 'subscreenReturnView'
     | 'tileSwapArmed'
     | 'tileSwapFirstTileId'
@@ -51,9 +49,7 @@ export const createAppStoreInitialState = (): AppStoreInitialState => {
         saveReadFailureNotice: null,
         saveWritesBlockedByReadFailure: false,
         boardPinMode: false,
-        destroyPairArmed: false,
         peekModeArmed: false,
-        strayRemoveArmed: false,
         regionShuffleArmed: false,
         tileSwapArmed: false,
         tileSwapFirstTileId: null,

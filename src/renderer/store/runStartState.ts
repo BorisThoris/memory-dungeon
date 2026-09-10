@@ -156,7 +156,7 @@ export const createRestartRun = (previousRun: RunState | null, saveData: SaveDat
         return createNewRun(bestScore, { practiceMode: true, ...meta });
     }
 
-    if (previousRun?.activeContract?.noShuffle && previousRun.activeContract.noDestroy) {
+    if (previousRun?.activeContract?.noShuffle) {
         return createNewRun(bestScore, {
             ...meta,
             activeContract: previousRun.activeContract

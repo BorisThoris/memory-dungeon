@@ -11,7 +11,7 @@
 import type { AchievementId, GameMode, MutatorId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 39 as const;
+export const ENCYCLOPEDIA_VERSION = 40 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -344,12 +344,6 @@ export const ENCYCLOPEDIA_POWER_TOPICS: readonly EncyclopediaTopic[] = [
             'Shuffles tiles within a single row (charges per run). Distinct from full-board shuffle.'
     },
     {
-        id: 'power_destroy_pair',
-        title: 'Destroy pair',
-        description:
-            'Spends destroy charges to remove a fully hidden **pair** without match score—counts as a power for perfect-clear rules. Findable bonus pickups on that pair are **forfeited**.'
-    },
-    {
         id: 'power_peek',
         title: 'Peek',
         description:
@@ -360,12 +354,6 @@ export const ENCYCLOPEDIA_POWER_TOPICS: readonly EncyclopediaTopic[] = [
         title: 'Pin tiles',
         description:
             'Marks tiles to track mentally (pin budget per run; scholar contracts may cap total pins). Pins do **not** disqualify perfect clear by themselves.'
-    },
-    {
-        id: 'power_stray_remove',
-        title: 'Stray remove',
-        description:
-            'Arms removal of **one** hidden completion-safe singleton tile, such as a wild joker; does not score. Normal matched pairs are blocked so Stray cannot orphan a partner.'
     },
     {
         id: 'power_flash_pair',

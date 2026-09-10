@@ -24,7 +24,6 @@ vi.mock('../../shared/telemetry', () => telemetryMocks);
 type ResolutionPatch = Partial<{
     achievementBridgeNotice: string | null;
     boardPinMode: boolean;
-    destroyPairArmed: boolean;
     matchScorePop: MatchScorePop | null;
     mismatchScorePop: MismatchScorePop | null;
     newlyUnlockedAchievements: AchievementId[];
@@ -33,7 +32,6 @@ type ResolutionPatch = Partial<{
     runStartSaveData: SaveData | null;
     saveData: SaveData;
     settings: Settings;
-    strayRemoveArmed: boolean;
     tileSwapArmed: boolean;
     tileSwapFirstTileId: string | null;
     view: ViewState;
@@ -53,11 +51,9 @@ interface Harness {
 
 const runSurfaceReset = {
     boardPinMode: false,
-    destroyPairArmed: false,
     matchScorePop: null,
     mismatchScorePop: null,
     peekModeArmed: false,
-    strayRemoveArmed: false,
     tileSwapArmed: false,
     tileSwapFirstTileId: null
 } satisfies ResolutionPatch;
@@ -236,7 +232,6 @@ describe('runResolutionController', () => {
         const harness = createHarness(baseRun);
         Object.assign(harness.state, {
             boardPinMode: true,
-            destroyPairArmed: true,
             peekModeArmed: true,
             tileSwapArmed: true,
             tileSwapFirstTileId: baseRun.board!.tiles[0]?.id ?? null
@@ -261,7 +256,6 @@ describe('runResolutionController', () => {
         expect(harness.state.saveData.lastRunSummary).toEqual(harness.state.run?.lastRunSummary);
         expect(harness.state.saveData.bestScore).toBe(500);
         expect(harness.state.boardPinMode).toBe(false);
-        expect(harness.state.destroyPairArmed).toBe(false);
         expect(harness.state.peekModeArmed).toBe(false);
         expect(harness.state.tileSwapArmed).toBe(false);
         expect(harness.state.tileSwapFirstTileId).toBeNull();

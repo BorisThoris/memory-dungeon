@@ -206,7 +206,6 @@ describe('GameScreen (OVR-014)', () => {
                 saveData,
                 settings: saveData.settings,
                 boardPinMode: false,
-                destroyPairArmed: false,
                 peekModeArmed: false,
                 ...BOARD_FLOATER_POP_CLEAR
             });

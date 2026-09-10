@@ -42,27 +42,15 @@ describe('tile board DOM accessibility helpers', () => {
 
     it('describes board power target validity', () => {
         const hidden = board.tiles[0]!;
-        expect(
-            getPowerTargetAriaText(hidden, true, new Set(['a1']), false, new Set(), false, new Set(), false, new Set(), null)
-        ).toContain(
-            'Destroy target: valid'
-        );
-        expect(
-            getPowerTargetAriaText(hidden, false, new Set(), true, new Set(['a1']), false, new Set(), false, new Set(), null)
-        ).toContain(
+        expect(getPowerTargetAriaText(hidden, true, new Set(['a1']), false, new Set(), null)).toContain(
             'Peek target: valid'
         );
-        expect(
-            getPowerTargetAriaText(hidden, false, new Set(), false, new Set(), true, new Set(['a1']), false, new Set(), null)
-        ).toContain(
-            'Stray target: valid'
+        expect(getPowerTargetAriaText(hidden, false, new Set(), true, new Set(['a1']), null)).toContain(
+            'Swap target: valid'
         );
-        expect(
-            getPowerTargetAriaText(hidden, false, new Set(), false, new Set(), false, new Set(), true, new Set(['a1']), null)
-        ).toContain('Swap target: valid');
-        expect(
-            getPowerTargetAriaText(hidden, false, new Set(), false, new Set(), false, new Set(), true, new Set(['a1']), 'a1')
-        ).toContain('Swap origin selected');
+        expect(getPowerTargetAriaText(hidden, false, new Set(), true, new Set(['a1']), 'a1')).toContain(
+            'Swap origin selected'
+        );
     });
 
     it('announces nearby trait interactions and swap-created trait previews', () => {
@@ -120,19 +108,7 @@ describe('tile board DOM accessibility helpers', () => {
         };
 
         expect(
-            getPowerTargetAriaText(
-                swapBoard.tiles[0]!,
-                false,
-                new Set(),
-                false,
-                new Set(),
-                false,
-                new Set(),
-                true,
-                new Set(['s1']),
-                'x1',
-                swapBoard
-            )
+            getPowerTargetAriaText(swapBoard.tiles[0]!, false, new Set(), true, new Set(['s1']), 'x1', swapBoard)
         ).toContain(
             'Chain prime target. Swap preview: Creates trait route: Conduit: adjacent trait charge; Conduit: adjacent trait charge.'
         );
@@ -141,8 +117,6 @@ describe('tile board DOM accessibility helpers', () => {
             getFocusedTileLiveLabel({
                 board: swapBoard,
                 debugPeekActive: false,
-                destroyEligibleTileIds: new Set(),
-                destroyPowerVisualActive: false,
                 focusedTileId: 's1',
                 pairProximityHintsEnabled: true,
                 peekEligibleTileIds: new Set(),
@@ -150,8 +124,6 @@ describe('tile board DOM accessibility helpers', () => {
                 peekRevealedTileIds: new Set(),
                 previewActive: false,
                 runStatus: 'playing',
-                strayEligibleTileIds: new Set(),
-                strayPowerVisualActive: false,
                 tileSwapEligibleTileIds: new Set(),
                 tileSwapFirstTileId: null,
                 tileSwapPowerVisualActive: false,
@@ -163,8 +135,6 @@ describe('tile board DOM accessibility helpers', () => {
             getFocusedTileLiveLabel({
                 board: swapBoard,
                 debugPeekActive: false,
-                destroyEligibleTileIds: new Set(),
-                destroyPowerVisualActive: false,
                 focusedTileId: 's1',
                 pairProximityHintsEnabled: true,
                 peekEligibleTileIds: new Set(),
@@ -172,8 +142,6 @@ describe('tile board DOM accessibility helpers', () => {
                 peekRevealedTileIds: new Set(),
                 previewActive: false,
                 runStatus: 'playing',
-                strayEligibleTileIds: new Set(),
-                strayPowerVisualActive: false,
                 tileSwapEligibleTileIds: new Set(),
                 tileSwapFirstTileId: null,
                 tileSwapPowerVisualActive: false,
@@ -186,8 +154,6 @@ describe('tile board DOM accessibility helpers', () => {
             getFocusedTileLiveLabel({
                 board: traitBoard,
                 debugPeekActive: false,
-                destroyEligibleTileIds: new Set(),
-                destroyPowerVisualActive: false,
                 focusedTileId: 'a1',
                 pairProximityHintsEnabled: true,
                 peekEligibleTileIds: new Set(),
@@ -195,8 +161,6 @@ describe('tile board DOM accessibility helpers', () => {
                 peekRevealedTileIds: new Set(),
                 previewActive: false,
                 runStatus: 'playing',
-                strayEligibleTileIds: new Set(),
-                strayPowerVisualActive: false,
                 tileSwapEligibleTileIds: new Set(),
                 tileSwapFirstTileId: null,
                 tileSwapPowerVisualActive: false,
@@ -208,8 +172,6 @@ describe('tile board DOM accessibility helpers', () => {
             getFocusedTileLiveLabel({
                 board: traitBoard,
                 debugPeekActive: false,
-                destroyEligibleTileIds: new Set(),
-                destroyPowerVisualActive: false,
                 focusedTileId: 'a1',
                 pairProximityHintsEnabled: true,
                 peekEligibleTileIds: new Set(),
@@ -217,8 +179,6 @@ describe('tile board DOM accessibility helpers', () => {
                 peekRevealedTileIds: new Set(),
                 previewActive: false,
                 runStatus: 'playing',
-                strayEligibleTileIds: new Set(),
-                strayPowerVisualActive: false,
                 tileSwapEligibleTileIds: new Set(),
                 tileSwapFirstTileId: null,
                 tileSwapPowerVisualActive: false,
@@ -242,8 +202,6 @@ describe('tile board DOM accessibility helpers', () => {
             getFocusedTileLiveLabel({
                 board: selectedTraitBoard,
                 debugPeekActive: false,
-                destroyEligibleTileIds: new Set(),
-                destroyPowerVisualActive: false,
                 focusedTileId: 'a2',
                 pairProximityHintsEnabled: true,
                 peekEligibleTileIds: new Set(),
@@ -251,8 +209,6 @@ describe('tile board DOM accessibility helpers', () => {
                 peekRevealedTileIds: new Set(),
                 previewActive: false,
                 runStatus: 'playing',
-                strayEligibleTileIds: new Set(),
-                strayPowerVisualActive: false,
                 tileSwapEligibleTileIds: new Set(),
                 tileSwapFirstTileId: null,
                 tileSwapPowerVisualActive: false
@@ -262,8 +218,6 @@ describe('tile board DOM accessibility helpers', () => {
             getFocusedTileLiveLabel({
                 board: selectedTraitBoard,
                 debugPeekActive: false,
-                destroyEligibleTileIds: new Set(),
-                destroyPowerVisualActive: false,
                 focusedTileId: 'a2',
                 pairProximityHintsEnabled: true,
                 peekEligibleTileIds: new Set(),
@@ -271,8 +225,6 @@ describe('tile board DOM accessibility helpers', () => {
                 peekRevealedTileIds: new Set(),
                 previewActive: false,
                 runStatus: 'playing',
-                strayEligibleTileIds: new Set(),
-                strayPowerVisualActive: false,
                 tileSwapEligibleTileIds: new Set(),
                 tileSwapFirstTileId: null,
                 tileSwapPowerVisualActive: false
@@ -282,8 +234,6 @@ describe('tile board DOM accessibility helpers', () => {
         const armedSwapLabel = getFocusedTileLiveLabel({
             board: swapBoard,
             debugPeekActive: false,
-            destroyEligibleTileIds: new Set(),
-            destroyPowerVisualActive: false,
             focusedTileId: 's1',
             pairProximityHintsEnabled: true,
             peekEligibleTileIds: new Set(),
@@ -291,8 +241,6 @@ describe('tile board DOM accessibility helpers', () => {
             peekRevealedTileIds: new Set(),
             previewActive: false,
             runStatus: 'playing',
-            strayEligibleTileIds: new Set(),
-            strayPowerVisualActive: false,
             tileSwapEligibleTileIds: new Set(['s1']),
             tileSwapFirstTileId: 'x1',
             tileSwapPowerVisualActive: true,
@@ -445,8 +393,6 @@ describe('tile board DOM accessibility helpers', () => {
             getFocusedTileLiveLabel({
                 board: { ...board, columns: 2, rows: 2, flippedTileIds: ['a1'], tiles },
                 debugPeekActive: false,
-                destroyEligibleTileIds: new Set(),
-                destroyPowerVisualActive: false,
                 focusedTileId: 'a1',
                 pairProximityHintsEnabled: true,
                 peekEligibleTileIds: new Set(),
@@ -454,8 +400,6 @@ describe('tile board DOM accessibility helpers', () => {
                 peekRevealedTileIds: new Set(),
                 previewActive: false,
                 runStatus: 'playing',
-                strayEligibleTileIds: new Set(),
-                strayPowerVisualActive: false,
                 tileSwapEligibleTileIds: new Set(),
                 tileSwapFirstTileId: null,
                 tileSwapPowerVisualActive: false
@@ -486,24 +430,23 @@ describe('tile board DOM accessibility helpers', () => {
         const label = getFocusedTileLiveLabel({
             board: focusedBoard,
             debugPeekActive: false,
-            destroyEligibleTileIds: new Set(['a1']),
-            destroyPowerVisualActive: true,
             focusedTileId: 'a1',
             pairProximityHintsEnabled: true,
-            peekEligibleTileIds: new Set(),
-            peekPowerVisualActive: false,
+            // Gen 200 repointed this at Peek. It read Destroy before, and Destroy is gone; the
+            // claim was never about that power, it is that a focused tile says what an armed
+            // power would do to it. Peek is the targeted power the run still has.
+            peekEligibleTileIds: new Set(['a1']),
+            peekPowerVisualActive: true,
             peekRevealedTileIds: new Set(),
             previewActive: false,
             runStatus: 'playing',
-            strayEligibleTileIds: new Set(),
-            strayPowerVisualActive: false,
             tileSwapEligibleTileIds: new Set(),
             tileSwapFirstTileId: null,
             tileSwapPowerVisualActive: false
         });
 
         expect(label).toContain('Tile A, row 1, column 1');
-        expect(label).toContain('Destroy target: valid');
+        expect(label).toContain('Peek target: valid');
         expect(label).toContain('Pair distance: 1 grid steps');
     });
 
@@ -512,8 +455,6 @@ describe('tile board DOM accessibility helpers', () => {
             getFocusedTileLiveLabel({
                 board,
                 debugPeekActive: false,
-                destroyEligibleTileIds: new Set(),
-                destroyPowerVisualActive: false,
                 focusedTileId: null,
                 pairProximityHintsEnabled: true,
                 peekEligibleTileIds: new Set(),
@@ -521,8 +462,6 @@ describe('tile board DOM accessibility helpers', () => {
                 peekRevealedTileIds: new Set(),
                 previewActive: false,
                 runStatus: 'playing',
-                strayEligibleTileIds: new Set(),
-                strayPowerVisualActive: false,
                 tileSwapEligibleTileIds: new Set(),
                 tileSwapFirstTileId: null,
                 tileSwapPowerVisualActive: false
@@ -532,8 +471,6 @@ describe('tile board DOM accessibility helpers', () => {
             getFocusedTileLiveLabel({
                 board,
                 debugPeekActive: false,
-                destroyEligibleTileIds: new Set(),
-                destroyPowerVisualActive: false,
                 focusedTileId: 'missing',
                 pairProximityHintsEnabled: true,
                 peekEligibleTileIds: new Set(),
@@ -541,8 +478,6 @@ describe('tile board DOM accessibility helpers', () => {
                 peekRevealedTileIds: new Set(),
                 previewActive: false,
                 runStatus: 'playing',
-                strayEligibleTileIds: new Set(),
-                strayPowerVisualActive: false,
                 tileSwapEligibleTileIds: new Set(),
                 tileSwapFirstTileId: null,
                 tileSwapPowerVisualActive: false

@@ -226,7 +226,6 @@ describe('GameOverScreen (REF-031)', () => {
             ...run,
             activeContract: {
                 noShuffle: true,
-                noDestroy: false,
                 maxMismatches: null
             },
             lastRunSummary: run.lastRunSummary
@@ -234,7 +233,6 @@ describe('GameOverScreen (REF-031)', () => {
                       ...run.lastRunSummary,
                       activeContract: {
                           noShuffle: true,
-                          noDestroy: false,
                           maxMismatches: null
                       }
                   }

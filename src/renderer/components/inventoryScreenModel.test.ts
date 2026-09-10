@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { createDefaultSaveData } from '../../shared/save-data';
 import { createNewRun } from '../../shared/game-core';
 import {
-    createInventoryQuantityMap,
     createInventoryScreenModel,
     getInventoryPayoffEngineSignal,
     getInventoryRunLoopSignals,
@@ -16,23 +15,6 @@ describe('inventoryScreenModel', () => {
         expect(modeTitle('custom_lab')).toBe('custom_lab');
     });
 
-    it('normalizes charge and token quantities through the run inventory model', () => {
-        const run = {
-            ...createNewRun(0),
-            shuffleCharges: -2,
-            destroyPairCharges: -1,
-            peekCharges: -4,
-            stats: createNewRun(0).stats
-        };
-
-        const quantityById = createInventoryQuantityMap(run);
-
-        expect(quantityById.get('shuffle_charge')).toBe(0);
-        expect(quantityById.get('destroy_charge')).toBe(0);
-        expect(quantityById.get('peek_charge')).toBe(0);
-        expect(quantityById.has('guard_token')).toBe(false);
-        expect(quantityById.has('combo_shard')).toBe(false);
-    });
 
 
     it('creates the inventory screen model without reaching into renderer store state', () => {
@@ -42,23 +24,6 @@ describe('inventoryScreenModel', () => {
         expect(model.equippedCosmetic?.id).toBe('title_seeker');
     });
 
-    it('adds tactical action cues to inventory rows without changing the shared row contract', () => {
-        const run = {
-            ...createNewRun(0),
-            shuffleCharges: 1
-        };
-        const model = createInventoryScreenModel(run, createDefaultSaveData());
-
-        expect(model.inventoryRows.find((row) => row.id === 'shuffle_charge')?.actionCue).toMatchObject({
-            label: 'Route reset',
-            tone: 'route'
-        });
-        expect(model.inventoryRows.find((row) => row.id === 'destroy_charge')?.actionCue).toMatchObject({
-            label: 'Restock first',
-            detail: 'No charges currently banked.',
-            tone: 'chain'
-        });
-    });
 
     it('keeps the inventory tool action cue helper deterministic for unavailable rows', () => {
         const row = createInventoryScreenModel(createNewRun(0), createDefaultSaveData()).inventoryRows.find(

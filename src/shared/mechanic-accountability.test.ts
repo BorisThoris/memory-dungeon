@@ -43,13 +43,16 @@ describe('every mechanic answers for itself', () => {
         // Not a target, a measurement, and the one that says whether "every system in the game
         // answers for itself" is a claim or a slogan. Gen 194 measured seven of forty-five. Gen 195
         // took it to fifteen by spending what a plain endless run hands out. Gen 199 took it to
-        // thirty-two by giving the census a player that starts from a run setup.
+        // thirty-two by giving the census a player that starts from a run setup. Gen 200 removed
+        // Destroy and Stray outright, so the graph is forty-one and the two UNREACHABLE lines are
+        // gone with the powers they described - the ratio went up by deleting the debt, not by
+        // covering it.
         const censused = Object.keys(MECHANIC_CENSUS_COUNTERS).length;
-        expect(censused).toBe(32);
-        expect(gameplayInteractionGraph.mechanics.length).toBe(45);
+        expect(censused).toBe(30);
+        expect(gameplayInteractionGraph.mechanics.length).toBe(41);
         // Nothing is blind by family any more: every remaining mechanic carries its own argued
-        // exemption. Thirteen of them, and two of those thirteen say UNREACHABLE rather than
-        // exempt - Destroy and its charge, which no code path in the game can grant.
+        // exemption. Eleven of them, and every one is a real exemption rather than a debt: no line
+        // here says a mechanic cannot be reached.
         const stillBlind = gameplayInteractionGraph.mechanics.filter(
             (mechanic) =>
                 MECHANIC_CENSUS_COUNTERS[mechanic.id] == null && MECHANIC_CENSUS_EXEMPTIONS[mechanic.id] == null

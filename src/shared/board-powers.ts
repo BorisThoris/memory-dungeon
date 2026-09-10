@@ -1,5 +1,4 @@
 export {
-    applyDestroyPair,
 } from './game';
 
 export {
@@ -7,13 +6,11 @@ export {
     applyPeek,
     applyRegionShuffle,
     applyShuffle,
-    applyStrayRemove,
     applyTileSwap,
     cancelResolvingWithUndo
 } from './board-power-actions';
 
 export {
-    canDestroyPair,
     canRegionShuffle,
     canRegionShuffleRow,
     canShuffleBoard,
@@ -23,9 +20,6 @@ export {
 export { togglePinnedTile } from './board-power-state';
 
 export {
-    collectDestroyEligibleTileIds,
     collectPeekEligibleTileIds,
-    tileIsDestroyEligiblePreview,
     tileIsPeekEligiblePreview,
-    tileIsStrayEligiblePreview
 } from './board-power-targeting';

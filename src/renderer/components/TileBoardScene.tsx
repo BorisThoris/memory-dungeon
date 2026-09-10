@@ -122,14 +122,10 @@ interface TileBoardSceneProps {
     nBackAnchorPairKey?: string | null;
     nBackMutatorActive?: boolean;
     shiftingSpotlightActive?: boolean;
-    destroyPowerVisualActive?: boolean;
-    destroyEligibleTileIds?: ReadonlySet<string>;
     peekPowerVisualActive?: boolean;
     peekEligibleTileIds?: ReadonlySet<string>;
     clumpReadNextTileIds?: ReadonlySet<string>;
     clumpReadTileIds?: ReadonlySet<string>;
-    strayPowerVisualActive?: boolean;
-    strayEligibleTileIds?: ReadonlySet<string>;
     tileSwapPowerVisualActive?: boolean;
     tileSwapEligibleTileIds?: ReadonlySet<string>;
     tileSwapFirstTileId?: string | null;
@@ -183,14 +179,10 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     nBackMutatorActive = false,
     showTutorialPairMarkers = true,
     shiftingSpotlightActive = false,
-    destroyPowerVisualActive = false,
-    destroyEligibleTileIds = EMPTY_TILE_IDS,
     peekPowerVisualActive = false,
     peekEligibleTileIds = EMPTY_TILE_IDS,
     clumpReadNextTileIds = EMPTY_TILE_IDS,
     clumpReadTileIds = EMPTY_TILE_IDS,
-    strayPowerVisualActive = false,
-    strayEligibleTileIds = EMPTY_TILE_IDS,
     tileSwapPowerVisualActive = false,
     tileSwapEligibleTileIds = EMPTY_TILE_IDS,
     tileSwapFirstTileId = null,
@@ -233,8 +225,6 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
             compact,
             cursedPairKey,
             debugPeekActive,
-            destroyEligibleTileIds,
-            destroyPowerVisualActive,
             dimmedTileIds,
             interactionSuppressed,
             interactive,
@@ -254,8 +244,6 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
             shiftingSpotlightActive,
             showTutorialPairMarkers,
             silhouetteDuringPlay,
-            strayEligibleTileIds,
-            strayPowerVisualActive,
             stickyBlockedTileId,
             tileSwapEligibleTileIds,
             tileSwapFirstTileId,
@@ -274,8 +262,6 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         compact,
         cursedPairKey,
         debugPeekActive,
-        destroyEligibleTileIds,
-        destroyPowerVisualActive,
         dimmedTileIds,
         interactionSuppressed,
         interactive,
@@ -295,8 +281,6 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         shiftingSpotlightActive,
         showTutorialPairMarkers,
         silhouetteDuringPlay,
-        strayEligibleTileIds,
-        strayPowerVisualActive,
         stickyBlockedTileId,
         tileSwapEligibleTileIds,
         tileSwapFirstTileId,

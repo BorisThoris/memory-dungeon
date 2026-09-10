@@ -6,8 +6,8 @@ import {
     createWildRun
 } from './run-creation-rules';
 
-const scholarContract = { bonusRelicDraftPick: true, maxMismatches: null, noDestroy: true, noShuffle: true };
-const pinVowContract = { maxMismatches: null, maxPinsTotalRun: 10, noDestroy: false, noShuffle: false };
+const scholarContract = { bonusRelicDraftPick: true, maxMismatches: null, noShuffle: true };
+const pinVowContract = { maxMismatches: null, maxPinsTotalRun: 10, noShuffle: false };
 
 describe('describeRunModeIdentity', () => {
     it('names a plain endless run after the mode a player picked', () => {

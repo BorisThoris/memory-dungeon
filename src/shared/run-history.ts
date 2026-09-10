@@ -63,7 +63,7 @@ const getPersistedSummaryPayoffStack = (
 };
 
 const contractLabel = (run: Pick<RunState, 'activeContract' | 'practiceMode'>): string => {
-    if (run.activeContract?.noShuffle && run.activeContract?.noDestroy) {
+    if (run.activeContract?.noShuffle) {
         return 'Scholar contract';
     }
     if (run.activeContract?.maxPinsTotalRun != null) {

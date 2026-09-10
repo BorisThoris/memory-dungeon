@@ -116,8 +116,8 @@ export const buildRunObjectiveProgressRows = (run: RunState): RunObjectiveProgre
             detail: run.board.featuredObjectiveId
         });
     }
-    if (run.activeContract?.noShuffle && run.activeContract.noDestroy) {
-        const failed = run.shuffleUsedThisFloor || run.destroyUsedThisFloor;
+    if (run.activeContract?.noShuffle) {
+        const failed = run.shuffleUsedThisFloor;
         rows.push({
             id: 'scholar_contract',
             label: 'Scholar contract',

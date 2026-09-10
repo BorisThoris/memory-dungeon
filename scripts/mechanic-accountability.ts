@@ -59,13 +59,11 @@ export const MECHANIC_CENSUS_COUNTERS: Record<string, readonly string[]> = {
     'inventory.undo_charge': ['undo'],
 
     /* The setup pass (Gen 199): every mechanic a run setup puts on the board, and the traits. */
-    'power.stray_remove': ['strayRemove'],
     'power.flash_pair': ['flashPair'],
     'power.wild_match': ['wildMatch'],
     'power.tile_swap': ['tileSwap'],
     'power.gambit': ['gambit'],
     'power.pin': ['pin'],
-    'inventory.stray_remove_charge': ['strayRemove'],
     'inventory.flash_pair_charge': ['flashPair'],
     'inventory.wild_match_token': ['wildMatch'],
     'inventory.gambit_token': ['gambit'],
@@ -99,22 +97,8 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, string> = {
     'simulation.build_evaluation': 'A tool for tuning the game, not a rule inside it.',
     'simulation.gameplay_replay': 'A tool for verifying the game, not a rule inside it.',
     'inventory.contract_loadout': 'A run setup, chosen before the first floor and unchanged by any of them.',
-    'inventory.mutator_loadout': 'A run setup, chosen before the first floor; what it selects is censused, it is not.',
-    'power.destroy_pair': 'UNREACHABLE, not exempt. Nothing in the game grants a destroy charge - see the note below.',
-    'inventory.destroy_charge': 'UNREACHABLE, not exempt. `destroyPairCharges` is created at 0 and only ever decremented.'
+    'inventory.mutator_loadout': 'A run setup, chosen before the first floor; what it selects is censused, it is not.'
 };
-
-/*
- * Two of those lines are not exemptions and should not be read as ones.
- *
- * Destroy is **unreachable**. `destroyPairCharges` is set to 0 in `run-creation-rules.ts` and every
- * other reference to it decrements or reads it; no code path in the game ever adds one. The power
- * has an action, an availability rule, a targeting preview, a disabled-reason string, copy, a Codex
- * entry and a card-back accent, and a player can never press it. It is listed here rather than
- * removed because the call is the designer's: either a setup grants the charge, or Destroy goes the
- * way of the decoy. What it must not do is stay as it is, which is a mechanic zeroed rather than
- * removed - the exact shape `docs/REMOVED_DECOY.md` was written about.
- */
 
 /*
  * The blanket blind-spot list is empty as of Gen 199, and the empty list is the point.

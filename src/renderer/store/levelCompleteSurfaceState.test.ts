@@ -20,7 +20,6 @@ describe('levelCompleteSurfaceState', () => {
         if (result.kind === 'nextLevel') {
             expect(result.patch).toMatchObject({
                 boardPinMode: false,
-                destroyPairArmed: false,
                 matchScorePop: null,
                 mismatchScorePop: null,
                 newlyUnlockedAchievements: [],

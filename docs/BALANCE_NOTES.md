@@ -2282,3 +2282,33 @@ the bottom two rungs now round to the same number of pairs. That is the case Gen
 on — the meter shows the **multiplier**, precisely because pairs alone can read flat while the payoff
 doubles — and the rung test now asserts the strict climb on the multiplier and allows one level step
 in pairs.
+
+## Gen 200 — the two dead powers, and what their absence moved
+
+Rules version 47 → 48. This entry records the measurements the removal changed, not the argument
+for the removal itself; that lives in [REMOVED_POWERS.md](./REMOVED_POWERS.md).
+
+**The wild joker re-banded from `common` to `core`.** The occupancy census bands each system by how
+much of the game it occupies: `core` wants 0.9 or more of the floors it can act on, `common` wants
+0.1 to 0.9. The wild joker had been sitting in `common`, and after Gen 200 it reads **1.000** on the
+setup pass — the census failed with "wildMatch is now dominant and is not in the baseline".
+
+That is not a regression to tune away. Stray was the only thing in the game that could take the
+joker off the board before it was spent, because after Gen 196 the joker was Stray's only legal
+target. Remove Stray and a run that holds the token spends it on every single floor. The band moved
+to match the measurement, which is the direction that rule is supposed to travel.
+
+**Counterplay edges: floor 14 → 11.** Both powers were the graph's named answer to other mechanics,
+so pulling them pulled the edges pointing at them. Re-baselined against the graph rather than
+propped up; a counterplay edge to a power nobody can press was never counterplay.
+
+**The census now reads 30 of 41 mechanics, not 30 of 45.** The four that left were Destroy, its
+charge, Stray and its charge. Two of them carried UNREACHABLE exemption lines — the census's way of
+recording that no code path in the game could reach them — and those lines are gone with the
+mechanics. The coverage ratio improved by deleting the debt rather than covering it, which is worth
+saying out loud so the number is not read as progress on instrumentation.
+
+**Nothing moved in the cascade.** `sim:cascade`, `sim:pop` and `sim:endless` are unchanged: neither
+power was reachable in a plain endless run, so neither had ever appeared in those numbers. The
+absence of movement here is itself the confirmation that Destroy was dead code and Stray was a
+setup-only button.

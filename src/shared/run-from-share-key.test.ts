@@ -30,10 +30,10 @@ describe('createRunFromShareKey', () => {
             createWildRun(0),
             createNewRun(0, { practiceMode: true }),
             createNewRun(0, {
-                activeContract: { maxMismatches: null, noDestroy: true, noShuffle: true }
+                activeContract: { maxMismatches: null, noShuffle: true }
             }),
             createNewRun(0, {
-                activeContract: { maxMismatches: null, maxPinsTotalRun: 10, noDestroy: false, noShuffle: false }
+                activeContract: { maxMismatches: null, maxPinsTotalRun: 10, noShuffle: false }
             })
         ]) {
             const replayed = createRunFromShareKey(keyOf(original), 0);

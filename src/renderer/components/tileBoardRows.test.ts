@@ -38,8 +38,6 @@ const rows = (input: Partial<Parameters<typeof buildTileBoardRows>[0]> = {}) => 
         compact: false,
         cursedPairKey: null,
         debugPeekActive: false,
-        destroyEligibleTileIds: new Set(),
-        destroyPowerVisualActive: false,
         dimmedTileIds: undefined,
         interactive: true,
         nBackAnchorPairKey: null,
@@ -56,8 +54,6 @@ const rows = (input: Partial<Parameters<typeof buildTileBoardRows>[0]> = {}) => 
         shiftingSpotlightActive: false,
         showTutorialPairMarkers: true,
         silhouetteDuringPlay: false,
-        strayEligibleTileIds: new Set(),
-        strayPowerVisualActive: false,
         stickyBlockedTileId: null,
         tileSwapEligibleTileIds: new Set(),
         tileSwapFirstTileId: null,
@@ -94,18 +90,16 @@ describe('tileBoardRows', () => {
     it('assigns hidden-back power accents with pin taking precedence over every other read', () => {
         const b = board([tile('wild', WILD_PAIR_KEY), tile('real', 'real'), tile('peek', 'peek')]);
 
-        const destroyRows = rows({
+        const peekRows = rows({
             board: b,
-            destroyEligibleTileIds: new Set(['real']),
-            destroyPowerVisualActive: true
+            peekEligibleTileIds: new Set(['peek']),
+            peekPowerVisualActive: true
         });
-        expect(destroyRows[0]!.powerBackAccent).toBeNull();
-        expect(destroyRows[1]!.powerBackAccent).toBe('destroy');
+        expect(peekRows[0]!.powerBackAccent).toBeNull();
+        expect(peekRows[2]!.powerBackAccent).toBe('peek');
 
         const pinRows = rows({
             board: b,
-            destroyEligibleTileIds: new Set(['real']),
-            destroyPowerVisualActive: true,
             peekEligibleTileIds: new Set(['peek']),
             peekPowerVisualActive: true,
             pinModeBoardHintActive: true

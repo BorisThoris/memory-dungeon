@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import { createNewRun } from './run-creation-rules';
-import { describeRunModeIdentity } from './run-mode-identity';
 import {
     buildClassicRunOptions,
     classicRunSetupFromRun,
@@ -26,19 +25,10 @@ describe('the default setup', () => {
 });
 
 describe('the retired cards, as options', () => {
-    it('carries the Wild joker, its charge and its mutators', () => {
-        const options = buildClassicRunOptions(setup({ chaos: true }));
-        expect(options.enableWildJoker).toBe(true);
-        expect(options.initialStrayRemoveCharges).toBe(1);
-        expect(options.activeMutators).toEqual([...CHAOS_MUTATORS]);
-        // The bar and the retry read this flag, not the joker: a chaos run has to carry it.
-        expect(options.wildMenuRun).toBe(true);
-        expect(describeRunModeIdentity(createNewRun(0, options)).label).toBe('Wild Run');
-    });
 
-    it('carries the Scholar contract, including the shuffle it has to forbid', () => {
+    it('carries the Scholar contract, which is now the shuffle vow alone', () => {
         const options = buildClassicRunOptions(setup({ vows: ['scholar'] }));
-        expect(options.activeContract).toMatchObject({ noShuffle: true, noDestroy: true });
+        expect(options.activeContract).toMatchObject({ noShuffle: true });
         // Otherwise "no shuffle" would only mean "no button": the weaker shuffle stays available.
         expect(options.weakerShuffleMode).toBe('rows_only');
     });
@@ -64,7 +54,6 @@ describe('vows combine', () => {
     it('holds both vows at once, which a menu of separate cards could never offer', () => {
         expect(buildVowContract(['scholar', 'pin_vow'])).toMatchObject({
             maxPinsTotalRun: 10,
-            noDestroy: true,
             noShuffle: true
         });
     });

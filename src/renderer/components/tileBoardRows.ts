@@ -89,8 +89,6 @@ export interface BuildTileBoardRowsInput {
     compact: boolean;
     cursedPairKey: string | null;
     debugPeekActive: boolean;
-    destroyEligibleTileIds: ReadonlySet<string>;
-    destroyPowerVisualActive: boolean;
     dimmedTileIds?: ReadonlySet<string>;
     interactive: boolean;
     nBackAnchorPairKey: string | null;
@@ -107,8 +105,6 @@ export interface BuildTileBoardRowsInput {
     shiftingSpotlightActive: boolean;
     showTutorialPairMarkers: boolean;
     silhouetteDuringPlay: boolean;
-    strayEligibleTileIds: ReadonlySet<string>;
-    strayPowerVisualActive: boolean;
     stickyBlockedTileId: string | null;
     tileSwapEligibleTileIds: ReadonlySet<string>;
     tileSwapFirstTileId: string | null;
@@ -129,8 +125,6 @@ export const buildTileBoardRows = ({
     compact,
     cursedPairKey,
     debugPeekActive,
-    destroyEligibleTileIds,
-    destroyPowerVisualActive,
     dimmedTileIds,
     interactive,
     nBackAnchorPairKey,
@@ -147,8 +141,6 @@ export const buildTileBoardRows = ({
     shiftingSpotlightActive,
     showTutorialPairMarkers,
     silhouetteDuringPlay,
-    strayEligibleTileIds,
-    strayPowerVisualActive,
     stickyBlockedTileId,
     tileSwapEligibleTileIds,
     tileSwapFirstTileId,
@@ -221,16 +213,12 @@ export const buildTileBoardRows = ({
         const { nonPickableBack, powerBackAccent } = getTileBoardHiddenBackAccents({
             clumpReadNextTileIds,
             clumpReadTileIds,
-            destroyEligibleTileIds,
-            destroyPowerVisualActive,
             faceUp,
             flipLocked,
             interactive,
             peekEligibleTileIds,
             peekPowerVisualActive,
             pinModeBoardHintActive,
-            strayEligibleTileIds,
-            strayPowerVisualActive,
             tileSwapEligibleTileIds,
             tileSwapFirstTileId,
             tileSwapPowerVisualActive,

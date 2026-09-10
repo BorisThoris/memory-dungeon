@@ -363,9 +363,9 @@ const VERIFIERS: Record<string, () => void> = {
     'board-controls-answer': () => {
         /*
          * Reachable and responsive are different, and both were wrong this week: a browse card
-         * that hit-tested fine and did nothing, and Stray and Undo sitting lit while dropping
-         * every press. The gate presses each tool and clicks the board; the dock takes its
-         * enabled state from the same rule the action applies.
+         * that hit-tested fine and did nothing, and Undo sitting lit while dropping every press.
+         * The gate presses each tool and clicks the board; the dock takes its enabled state from
+         * the same rule the action applies.
          */
         const gate = readFileSync('e2e/ui-reachability-gate.spec.ts', 'utf8');
         expect(gate).toContain('the board tools answer a press');
@@ -375,7 +375,7 @@ const VERIFIERS: Record<string, () => void> = {
         const screen = readFileSync('src/renderer/components/GameScreen.tsx', 'utf8');
         // Undo is live only while a pair resolves, which is the rule its action already applies.
         expect(screen).toContain("disabled: run.status !== 'resolving'");
-        expect(screen).toContain('RUN_TOOL_REASONS.stray.noCharges');
+        expect(screen).toContain('RUN_TOOL_REASONS.undo.notResolving');
     },
     'ui-reachability': () => {
         /*

@@ -75,7 +75,7 @@ const valueFor = (run: RunState, id: string): string => {
         case 'findable_pickups':
             return `${runNonNegativeInteger(run.findablesClaimedThisFloor)}/${runNonNegativeInteger(run.findablesTotalThisFloor)}`;
         case 'assist_charges':
-            return `Shuffle ${runNonNegativeInteger(run.shuffleCharges)} · Row ${runNonNegativeInteger(run.regionShuffleCharges)} · Destroy ${runNonNegativeInteger(run.destroyPairCharges)} · Peek ${runNonNegativeInteger(run.peekCharges)} · Stray ${runNonNegativeInteger(run.strayRemoveCharges)}`;
+            return `Shuffle ${runNonNegativeInteger(run.shuffleCharges)} · Row ${runNonNegativeInteger(run.regionShuffleCharges)} · Peek ${runNonNegativeInteger(run.peekCharges)}`;
         default:
             return '0';
     }
@@ -92,9 +92,7 @@ const numericValueFor = (run: RunState, id: string): number => {
             return (
                 runNonNegativeInteger(run.shuffleCharges) +
                 runNonNegativeInteger(run.regionShuffleCharges) +
-                runNonNegativeInteger(run.destroyPairCharges) +
-                runNonNegativeInteger(run.peekCharges) +
-                runNonNegativeInteger(run.strayRemoveCharges)
+                runNonNegativeInteger(run.peekCharges)
             );
         default:
             return 0;

@@ -36,9 +36,9 @@
 | [MARKET_SIMILAR_GAMES_RESEARCH.md](../MARKET_SIMILAR_GAMES_RESEARCH.md) | Market / comps research |
 | [MEMORY_DUNGEON_PROJECT_REPORT.md](../MEMORY_DUNGEON_PROJECT_REPORT.md) | Current project report for the Windows-first Electron desktop game |
 | [MUTATORS.md](../MUTATORS.md) | Mutator reference checklist |
+| [REMOVED_POWERS.md](../REMOVED_POWERS.md) | Why Destroy and Stray left the game (Gen 200) |
 | [PICTURE_SUPERIORITY_CHECKLIST.md](../PICTURE_SUPERIORITY_CHECKLIST.md) | Picture-superiority UX checklist |
 | [PUZZLE_CONTRIBUTING.md](../PUZZLE_CONTRIBUTING.md) | Contributing puzzles |
-| [STRAY_TILE.md](../STRAY_TILE.md) | Stray tile mechanic |
 | [SYMBOL_GUIDELINES.md](../SYMBOL_GUIDELINES.md) | Symbol art / semantics guidelines |
 | [VIEWPORT_FIT_UI.md](../VIEWPORT_FIT_UI.md) | Viewport fit / shell behavior |
 | [AUDIO_ASSET_INVENTORY.md](../AUDIO_ASSET_INVENTORY.md) | Shipped WAV roles, ACE batch, references, procedural fallbacks |

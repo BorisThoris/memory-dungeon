@@ -91,8 +91,7 @@ const isLevelResultTagId = (value: string): value is LevelResultTagId =>
 export const getFloorClearLevelResultTags = (run: RunState, perfect: boolean): LevelResultTagId[] =>
     perfect &&
     runArrayCount(run.peekRevealedTileIds) === 0 &&
-    !run.shuffleUsedThisFloor &&
-    !run.destroyUsedThisFloor
+    !run.shuffleUsedThisFloor
         ? ['perfect_scout']
         : [];
 
@@ -139,7 +138,7 @@ export const getSecondaryObjectiveProgress = (run: RunState): SecondaryObjective
 
     switch (id) {
         case 'scholar_style':
-            state = run.shuffleUsedThisFloor || run.destroyUsedThisFloor ? 'failed' : 'active';
+            state = run.shuffleUsedThisFloor ? 'failed' : 'active';
             condition = 'Clear without shuffle, swap, or destroy.';
             failureReason = state === 'failed' ? 'Shuffle, swap, or destroy was used this floor.' : null;
             detail = state === 'failed' ? `Failed: ${failureReason}` : 'Do not use shuffle, swap, or destroy this floor.';

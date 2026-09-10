@@ -38,7 +38,7 @@ export const isFeaturedObjectiveCompleted = (
 ): boolean => {
     switch (objectiveId) {
         case 'scholar_style':
-            return !run.shuffleUsedThisFloor && !run.destroyUsedThisFloor;
+            return !run.shuffleUsedThisFloor;
         case 'cursed_last':
             return Boolean(board.cursedPairKey) && !run.cursedMatchedEarlyThisFloor;
         case 'flip_par':
@@ -60,7 +60,7 @@ export const getDefaultClearObjectiveBonus = (
     let bonusScore = 0;
     const bonusTags: FeaturedObjectiveId[] = [];
 
-    if (!run.shuffleUsedThisFloor && !run.destroyUsedThisFloor) {
+    if (!run.shuffleUsedThisFloor) {
         bonusScore += FEATURED_OBJECTIVE_BONUS_SCORES.scholar_style;
         bonusTags.push('scholar_style');
     }

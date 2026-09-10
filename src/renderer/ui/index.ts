@@ -18,7 +18,6 @@ export type { FittedGridProps } from './FittedGrid';
 export { default as OverlayActionDock } from './OverlayActionDock';
 export type { OverlayAction, OverlayActionPlacement } from './OverlayActionDock';
 export {
-    GameplayDestroyIcon,
     GameplayFitBoardIcon,
     GameplayMenuIcon,
     GameplayPeekIcon,
@@ -27,7 +26,6 @@ export {
     GameplayPauseIcon,
     GameplaySettingsIcon,
     GameplayShuffleIcon,
-    GameplayStrayIcon,
     GameplayUndoIcon
 } from './gameplayIcons';
 export type { GameplayIconProps } from './gameplayIcons';

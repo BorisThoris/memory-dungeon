@@ -35,7 +35,6 @@ export interface CreateRunOptions {
     shuffleScoreTaxActive?: boolean;
     /** Hook powers: defaults on if undefined. */
     enablePeek?: boolean;
-    initialStrayRemoveCharges?: number;
     resolveDelayMultiplier?: number;
     echoFeedbackEnabled?: boolean;
     wildMenuRun?: boolean;
@@ -101,7 +100,6 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         debugUsed: false,
         debugPeekActive: false,
         shuffleCharges: INITIAL_SHUFFLE_CHARGES,
-        destroyPairCharges: 0,
         pinnedTileIds: [],
         powersUsedThisRun: false,
         timerState: createTimerState({ memorizeRemainingMs: null }),
@@ -125,7 +123,6 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         gambitAvailableThisFloor: true,
         gambitThirdFlipUsed: false,
         wildMatchesRemaining: enableWildJoker ? 1 : 0,
-        strayRemoveCharges: options.initialStrayRemoveCharges ?? 0,
         matchScoreMultiplier: 1,
         nBackMatchCounter: 0,
         nBackAnchorPairKey: null,
@@ -136,7 +133,6 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         echoFeedbackEnabled: options.echoFeedbackEnabled ?? true,
         wildMenuRun: options.wildMenuRun ?? false,
         shuffleUsedThisFloor: false,
-        destroyUsedThisFloor: false,
         cursedMatchedEarlyThisFloor: false,
         matchResolutionsThisFloor: 0,
         flashPairCharges:
@@ -190,7 +186,6 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
 export const createWildRun = (bestScore: number, extra: Partial<CreateRunOptions> = {}): RunState =>
     createNewRun(bestScore, {
         enableWildJoker: true,
-        initialStrayRemoveCharges: 1,
         wildMenuRun: true,
         activeMutators: ['sticky_fingers', 'short_memorize', 'findables_floor'],
         ...extra

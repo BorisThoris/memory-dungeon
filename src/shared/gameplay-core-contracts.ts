@@ -301,20 +301,6 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...commandBase,
-            type: z.literal('board.stray_remove'),
-            targetTileId: z.string().min(1).max(160)
-        })
-        .strict(),
-    z
-        .object({
-            ...commandBase,
-            type: z.literal('board.destroy_pair'),
-            targetTileId: z.string().min(1).max(160)
-        })
-        .strict(),
-    z
-        .object({
-            ...commandBase,
             type: z.literal('board.gambit_commit'),
             targetTileId: z.string().min(1).max(160)
         })
@@ -478,38 +464,6 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
-            type: z.literal('board.stray_removed'),
-            targetTileId: z.string().min(1).max(160),
-            strayChargesBefore: z.number().int().nonnegative(),
-            strayChargesAfter: z.number().int().nonnegative(),
-            recallFocusBefore: z.number().int().nonnegative(),
-            recallFocusAfter: z.number().int().nonnegative()
-        })
-        .strict(),
-    z
-        .object({
-            ...eventBase,
-            type: z.literal('board.pair_destroyed'),
-            targetTileId: z.string().min(1).max(160),
-            pairKey: z.string().min(1).max(160),
-            destroyedTileIds: z.tuple([
-                z.string().min(1).max(160),
-                z.string().min(1).max(160)
-            ]),
-            destroyChargesBefore: z.number().int().positive(),
-            destroyChargesAfter: z.number().int().nonnegative(),
-            matchedPairsBefore: z.number().int().nonnegative(),
-            matchedPairsAfter: z.number().int().nonnegative(),
-            recallFocusBefore: z.number().int().nonnegative(),
-            recallFocusAfter: z.number().int().nonnegative(),
-            shiftingSpotlightNonceBefore: z.number().int().nonnegative(),
-            shiftingSpotlightNonceAfter: z.number().int().nonnegative(),
-            boardComplete: z.boolean()
-        })
-        .strict(),
-    z
-        .object({
-            ...eventBase,
             type: z.literal('board.gambit_commit.requested'),
             targetTileId: z.string().min(1).max(160),
             committedTileIds: z.tuple([
@@ -555,8 +509,6 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             curioId: z.string().min(1).max(64),
             peekChargesBefore: z.number().int().nonnegative(),
             peekChargesAfter: z.number().int().nonnegative(),
-            strayChargesBefore: z.number().int().nonnegative(),
-            strayChargesAfter: z.number().int().nonnegative(),
             undoUsesBefore: z.number().int().nonnegative(),
             undoUsesAfter: z.number().int().nonnegative()
         })
@@ -596,8 +548,6 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             boardPairCount: z.number().int().nonnegative(),
             boardTileCount: z.number().int().nonnegative(),
             memorizeRemainingMs: z.number().int().nonnegative().nullable(),
-            destroyChargesBefore: z.number().int().nonnegative(),
-            destroyChargesAfter: z.number().int().nonnegative()
         })
         .strict(),
     z
@@ -762,22 +712,6 @@ export const createGameplayPinToggleCommand = (commandId: string, targetTileId: 
         schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
         commandId,
         type: 'board.pin_toggle',
-        targetTileId
-    });
-
-export const createGameplayStrayRemoveCommand = (commandId: string, targetTileId: string): GameplayCommand =>
-    gameplayCommandSchema.parse({
-        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
-        commandId,
-        type: 'board.stray_remove',
-        targetTileId
-    });
-
-export const createGameplayDestroyPairCommand = (commandId: string, targetTileId: string): GameplayCommand =>
-    gameplayCommandSchema.parse({
-        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
-        commandId,
-        type: 'board.destroy_pair',
         targetTileId
     });
 

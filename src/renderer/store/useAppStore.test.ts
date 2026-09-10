@@ -10,7 +10,6 @@ import { BOARD_FLOATER_POP_CLEAR } from './matchScorePop';
 import { useAppStore } from './useAppStore';
 
 const gameSfxMocks = vi.hoisted(() => ({
-    playDestroyPairSfx: vi.fn(),
     playFlipSfx: vi.fn(),
     playFloorClearSfx: vi.fn(),
     playGambitCommitSfx: vi.fn(),
@@ -18,7 +17,6 @@ const gameSfxMocks = vi.hoisted(() => ({
     playPeekPowerSfx: vi.fn(),
     playPowerArmSfx: vi.fn(),
     playResolveSfx: vi.fn(),
-    playStrayPowerSfx: vi.fn(),
     resumeAudioContext: vi.fn(),
     sfxGainFromSettings: (masterVolume: number, sfxVolume: number) =>
         Math.max(0, Math.min(1, masterVolume)) * Math.max(0, Math.min(1, sfxVolume))
@@ -55,9 +53,7 @@ const resetStore = (): void => {
         saveReadFailureNotice: null,
         saveWritesBlockedByReadFailure: false,
         boardPinMode: false,
-        destroyPairArmed: false,
         peekModeArmed: false,
-        strayRemoveArmed: false,
         tileSwapArmed: false,
         tileSwapFirstTileId: null,
         ...BOARD_FLOATER_POP_CLEAR
@@ -666,21 +662,6 @@ describe('useAppStore timers', () => {
         expect(uiSfxMocks.playPauseResumeSfx).not.toHaveBeenCalled();
     });
 
-    it('does not arm board action modes outside an actionable playing run', () => {
-        useAppStore.getState().toggleBoardPinMode();
-        useAppStore.getState().toggleDestroyPairArmed();
-        expect(useAppStore.getState().boardPinMode).toBe(false);
-        expect(useAppStore.getState().destroyPairArmed).toBe(false);
-
-        const paused = { ...createNewRun(0), status: 'paused' as const };
-        useAppStore.setState({ view: 'playing', run: paused });
-
-        useAppStore.getState().toggleBoardPinMode();
-        useAppStore.getState().toggleDestroyPairArmed();
-        expect(useAppStore.getState().boardPinMode).toBe(false);
-        expect(useAppStore.getState().destroyPairArmed).toBe(false);
-        expect(gameSfxMocks.playPowerArmSfx).not.toHaveBeenCalled();
-    });
 
 
 
@@ -694,7 +675,6 @@ describe('useAppStore timers', () => {
             view: 'playing',
             run: createNewRun(0),
             boardPinMode: true,
-            destroyPairArmed: true,
             peekModeArmed: true,
             tileSwapArmed: true,
             tileSwapFirstTileId: 'stale-tile'
@@ -703,14 +683,12 @@ describe('useAppStore timers', () => {
         useAppStore.getState().goToMenu();
 
         expect(useAppStore.getState().boardPinMode).toBe(false);
-        expect(useAppStore.getState().destroyPairArmed).toBe(false);
         expect(useAppStore.getState().peekModeArmed).toBe(false);
         expect(useAppStore.getState().tileSwapArmed).toBe(false);
         expect(useAppStore.getState().tileSwapFirstTileId).toBeNull();
 
         useAppStore.setState({
             boardPinMode: true,
-            destroyPairArmed: true,
             peekModeArmed: true,
             tileSwapArmed: true,
             tileSwapFirstTileId: 'stale-tile'
@@ -719,14 +697,12 @@ describe('useAppStore timers', () => {
 
         expect(useAppStore.getState().view).toBe('playing');
         expect(useAppStore.getState().boardPinMode).toBe(false);
-        expect(useAppStore.getState().destroyPairArmed).toBe(false);
         expect(useAppStore.getState().peekModeArmed).toBe(false);
         expect(useAppStore.getState().tileSwapArmed).toBe(false);
         expect(useAppStore.getState().tileSwapFirstTileId).toBeNull();
 
         useAppStore.setState({
             boardPinMode: true,
-            destroyPairArmed: true,
             peekModeArmed: true,
             tileSwapArmed: true,
             tileSwapFirstTileId: 'stale-tile'
@@ -734,14 +710,12 @@ describe('useAppStore timers', () => {
         useAppStore.getState().restartRun();
 
         expect(useAppStore.getState().boardPinMode).toBe(false);
-        expect(useAppStore.getState().destroyPairArmed).toBe(false);
         expect(useAppStore.getState().peekModeArmed).toBe(false);
         expect(useAppStore.getState().tileSwapArmed).toBe(false);
         expect(useAppStore.getState().tileSwapFirstTileId).toBeNull();
 
         useAppStore.setState({
             boardPinMode: true,
-            destroyPairArmed: true,
             peekModeArmed: true,
             tileSwapArmed: true,
             tileSwapFirstTileId: 'stale-tile'
@@ -749,41 +723,11 @@ describe('useAppStore timers', () => {
         useAppStore.getState().startRun({ ...DEFAULT_CLASSIC_RUN_SETUP, chaos: true });
 
         expect(useAppStore.getState().boardPinMode).toBe(false);
-        expect(useAppStore.getState().destroyPairArmed).toBe(false);
         expect(useAppStore.getState().peekModeArmed).toBe(false);
         expect(useAppStore.getState().tileSwapArmed).toBe(false);
         expect(useAppStore.getState().tileSwapFirstTileId).toBeNull();
     });
 
-    it('only arms destroy mode when a valid destroy target and charge exist', () => {
-        const playing = {
-            ...createNewRun(0),
-            status: 'playing' as const,
-            destroyPairCharges: 0
-        };
-        useAppStore.setState({ view: 'playing', run: playing });
-
-        useAppStore.getState().toggleDestroyPairArmed();
-        expect(useAppStore.getState().destroyPairArmed).toBe(false);
-
-        useAppStore.setState({
-            run: {
-                ...playing,
-                destroyPairCharges: 1,
-                activeContract: { noShuffle: false, noDestroy: true, maxMismatches: null }
-            }
-        });
-        useAppStore.getState().toggleDestroyPairArmed();
-        expect(useAppStore.getState().destroyPairArmed).toBe(false);
-
-        useAppStore.setState({ run: { ...playing, destroyPairCharges: 1 } });
-        useAppStore.getState().toggleDestroyPairArmed();
-        expect(useAppStore.getState().destroyPairArmed).toBe(true);
-        expect(gameSfxMocks.playPowerArmSfx).toHaveBeenCalledTimes(1);
-
-        useAppStore.getState().toggleDestroyPairArmed();
-        expect(useAppStore.getState().destroyPairArmed).toBe(false);
-    });
 
 
 
@@ -850,35 +794,6 @@ describe('useAppStore timers', () => {
     });
 });
 
-describe('useAppStore scholar contract', () => {
-    beforeEach(() => {
-        window.localStorage.clear();
-        vi.useFakeTimers();
-        resetStore();
-    });
-
-    afterEach(() => {
-        vi.runOnlyPendingTimers();
-        vi.useRealTimers();
-    });
-
-
-    it('scholar contract blocks destroy arming even with banked charges', async () => {
-        useAppStore.getState().startRun({ ...DEFAULT_CLASSIC_RUN_SETUP, vows: ['scholar'] });
-        notifyCurrentBoardReady();
-        const memorizeDuration = useAppStore.getState().run?.timerState.memorizeRemainingMs ?? 0;
-        await vi.advanceTimersByTimeAsync(memorizeDuration + 1);
-
-        const playing = useAppStore.getState().run!;
-        useAppStore.setState({
-            run: { ...playing, destroyPairCharges: 1 }
-        });
-        useAppStore.getState().toggleDestroyPairArmed();
-        expect(useAppStore.getState().destroyPairArmed).toBe(false);
-        expect(useAppStore.getState().run?.destroyPairCharges).toBe(1);
-    });
-
-});
 
 describe('useAppStore restartRun menu modes', () => {
     beforeEach(() => {
@@ -928,7 +843,6 @@ describe('useAppStore restartRun menu modes', () => {
         const started = useAppStore.getState().run;
         expect(started?.activeContract).toEqual({
             noShuffle: false,
-            noDestroy: false,
             maxMismatches: null,
             maxPinsTotalRun: 10
         });
@@ -941,7 +855,6 @@ describe('useAppStore restartRun menu modes', () => {
 
         expect(useAppStore.getState().run?.activeContract).toEqual({
             noShuffle: false,
-            noDestroy: false,
             maxMismatches: null,
             maxPinsTotalRun: 10
         });

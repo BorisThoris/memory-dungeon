@@ -5,7 +5,6 @@ import {
 } from '../../shared/gameplay-core-contracts';
 
 export type GameplayFeedbackAudioCategory =
-    | 'destroy-pair'
     | 'flash-pair'
     | 'gambit-commit'
     | 'match-resolution'
@@ -37,9 +36,6 @@ const audioCategoryFor = (
 ): GameplayFeedbackAudioCategory => {
     if (feedback.source.kind === 'power' && feedback.cue === 'power.peek.used') {
         return 'peek';
-    }
-    if (feedback.source.kind === 'power' && feedback.cue === 'power.destroy_pair.used') {
-        return 'destroy-pair';
     }
     if (feedback.source.kind === 'power' && feedback.cue === 'power.gambit.committed') {
         return 'gambit-commit';

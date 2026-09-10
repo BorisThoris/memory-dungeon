@@ -47,7 +47,7 @@ interface TileBoardReadabilityMarkersProps {
     findableCornerRingGeometry: BufferGeometry;
     matchedEdgeGeometry: BufferGeometry;
     nonPickableBack: boolean;
-    powerBackAccent: 'destroy' | 'peek' | 'stray' | 'pin' | 'swap' | 'swapOrigin' | 'clump' | 'clumpNext' | null;
+    powerBackAccent: 'peek' | 'pin' | 'swap' | 'swapOrigin' | 'clump' | 'clumpNext' | null;
     selectedTraitFollowupBack: boolean;
     spotlightBountyOnBack: boolean;
     spotlightWardOnBack: boolean;
@@ -416,24 +416,6 @@ export const TileBoardReadabilityMarkers = ({
                             />
                         </mesh>
                     ) : null}
-                    {powerBackAccent === 'destroy' ? (
-                        <mesh
-                            geometry={findableCornerRingGeometry}
-                            position={[-CARD_WIDTH * 0.36, -CARD_HEIGHT * 0.4, 0.00054]}
-                            raycast={noopMeshRaycast}
-                            renderOrder={10}
-                        >
-                            <meshBasicMaterial
-                                color="#d94848"
-                                depthTest
-                                depthWrite={false}
-                                opacity={0.92}
-                                side={DoubleSide}
-                                toneMapped={false}
-                                transparent
-                            />
-                        </mesh>
-                    ) : null}
                     {powerBackAccent === 'peek' ? (
                         <mesh
                             geometry={findableCornerRingGeometry}
@@ -443,24 +425,6 @@ export const TileBoardReadabilityMarkers = ({
                         >
                             <meshBasicMaterial
                                 color="#59b4d9"
-                                depthTest
-                                depthWrite={false}
-                                opacity={0.9}
-                                side={DoubleSide}
-                                toneMapped={false}
-                                transparent
-                            />
-                        </mesh>
-                    ) : null}
-                    {powerBackAccent === 'stray' ? (
-                        <mesh
-                            geometry={findableCornerRingGeometry}
-                            position={[CARD_WIDTH * 0.36, -CARD_HEIGHT * 0.4, 0.00054]}
-                            raycast={noopMeshRaycast}
-                            renderOrder={10}
-                        >
-                            <meshBasicMaterial
-                                color="#d4a03d"
                                 depthTest
                                 depthWrite={false}
                                 opacity={0.9}

@@ -78,15 +78,6 @@ describe('when you can say it', () => {
 });
 
 describe('what the greeting actually hands over', () => {
-    it('the guard already looked the other way on the way in, and does not twice', () => {
-        // His peek is the arrival gift (floor-curio-rules); the greeting is the warning alone.
-        const run = standingOn('off_duty_guard');
-        const greeted = greetFloorCurio(run);
-        expect(greeted.floorCurioGreeted).toBe(true);
-        expect(greeted.peekCharges).toBe(run.peekCharges);
-        expect(greeted.undoUsesThisFloor).toBe(run.undoUsesThisFloor);
-        expect(greeted.strayRemoveCharges).toBe(run.strayRemoveCharges);
-    });
 
     it('the torchbearer points at something', () => {
         const run = standingOn('nervous_torchbearer');
@@ -98,10 +89,6 @@ describe('what the greeting actually hands over', () => {
         expect(greetFloorCurio(run).undoUsesThisFloor).toBe(run.undoUsesThisFloor + 1);
     });
 
-    it('the toffee removes a stray tile by accident', () => {
-        const run = standingOn('sticky_toffee');
-        expect(greetFloorCurio(run).strayRemoveCharges).toBe(run.strayRemoveCharges + 1);
-    });
 
     it('the sock changes nothing but the fact that you tried', () => {
         const run = standingOn('lost_sock');

@@ -16,7 +16,6 @@ describe('runStartState', () => {
 
         expect(createRunStartStatePatch(run, saveData)).toMatchObject({
             boardPinMode: false,
-            destroyPairArmed: false,
             matchScorePop: null,
             mismatchScorePop: null,
             newlyUnlockedAchievements: [],
@@ -84,7 +83,7 @@ describe('runStartState', () => {
         expect(createRestartRun(chosen, saveData)).toMatchObject({
             gameMode: 'endless',
             resolveDelayMultiplier: 1.35,
-            activeContract: { noShuffle: true, noDestroy: true, maxPinsTotalRun: 10 }
+            activeContract: { noShuffle: true, maxPinsTotalRun: 10 }
         });
     });
 
@@ -104,10 +103,10 @@ describe('runStartState', () => {
             onboardingDismissed: false
         };
         const pinVow = createNewRun(0, {
-            activeContract: { noShuffle: false, noDestroy: false, maxMismatches: null, maxPinsTotalRun: 10 }
+            activeContract: { noShuffle: false, maxMismatches: null, maxPinsTotalRun: 10 }
         });
         const scholar = createNewRun(0, {
-            activeContract: { noShuffle: true, noDestroy: true, maxMismatches: null }
+            activeContract: { noShuffle: true, maxMismatches: null }
         });
 
         expect(createRestartRun(pinVow, saveData).activeContract).toEqual(pinVow.activeContract);

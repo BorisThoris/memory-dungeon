@@ -47,7 +47,6 @@ interface RunResolutionState {
 type RunResolutionPatch = Partial<{
     achievementBridgeNotice: string | null;
     boardPinMode: boolean;
-    destroyPairArmed: boolean;
     matchScorePop: MatchScorePop | null;
     mismatchScorePop: MismatchScorePop | null;
     newlyUnlockedAchievements: AchievementId[];

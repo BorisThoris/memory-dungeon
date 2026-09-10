@@ -83,15 +83,6 @@ export function GameplayPinIcon({ className, ...rest }: GameplayIconProps) {
     );
 }
 
-export function GameplayDestroyIcon({ className, ...rest }: GameplayIconProps) {
-    return (
-        <svg {...base} className={className} {...rest}>
-            <path d="M6 6l12 12" />
-            <path d="M18 6L6 18" />
-            <rect height="14" rx="1.5" width="10" x="7" y="5" />
-        </svg>
-    );
-}
 
 export function GameplayPeekIcon({ className, ...rest }: GameplayIconProps) {
     return (
@@ -128,15 +119,6 @@ export function GameplayExitIcon({ className, ...rest }: GameplayIconProps) {
             <path d="M14 4H6v16h8" />
             <path d="M11 12h9" />
             <path d="m17 9 3 3-3 3" />
-        </svg>
-    );
-}
-
-export function GameplayStrayIcon({ className, ...rest }: GameplayIconProps) {
-    return (
-        <svg {...base} className={className} {...rest}>
-            <path d="M7 7h10v10H7z" />
-            <path d="M10 10h4v4h-4z" fill="currentColor" opacity="0.35" />
         </svg>
     );
 }

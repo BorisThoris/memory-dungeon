@@ -13,16 +13,12 @@ const tile = (overrides: Partial<Tile> = {}): Tile =>
 
 const accents = (overrides: Partial<TileBoardHiddenBackAccentsInput> = {}) =>
     getTileBoardHiddenBackAccents({
-        destroyEligibleTileIds: new Set(),
-        destroyPowerVisualActive: false,
         faceUp: false,
         flipLocked: false,
         interactive: true,
         peekEligibleTileIds: new Set(),
         peekPowerVisualActive: false,
         pinModeBoardHintActive: false,
-        strayEligibleTileIds: new Set(),
-        strayPowerVisualActive: false,
         tileSwapEligibleTileIds: new Set(),
         tileSwapFirstTileId: null,
         tileSwapPowerVisualActive: false,

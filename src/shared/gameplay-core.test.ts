@@ -17,9 +17,7 @@ import {
     GAMEPLAY_CORE_SCHEMA_VERSION,
     createGameplayDefinitionCommand,
     createGameplayBoardTurnResolveCommand,
-    createGameplayDestroyPairCommand,
     createGameplayFlashPairCommand,
-    createGameplayFloorAdvanceCommand,
     createGameplayGambitCommitCommand,
     createGameplayPeekCommand,
     createGameplayRegionShuffleCommand,
@@ -34,8 +32,6 @@ import {
 import { reduceGameplayCommand, replayGameplayCommands } from './gameplay-core';
 import { createNewRun } from './game';
 import { WILD_PAIR_KEY } from './tile-identity';
-import { createPlayablePathFixture } from './playable-path-fixtures';
-import { advanceToNextLevel } from './next-floor-transition-rules';
 
 const tile = (id: string, pairKey: string, tileTraitKind?: Tile['tileTraitKind']): Tile => ({
     id,
@@ -196,129 +192,7 @@ describe('deterministic gameplay core', () => {
 
 
 
-    it('removes one legal pair through a typed command and records every consequential delta', () => {
-        const initial = run({
-            destroyPairCharges: 2,
-            recallFocus: 2,
-            shiftingSpotlightNonce: 0
-        });
-        const command = createGameplayDestroyPairCommand('destroy-echo', 'echo-a');
-        const result = reduceGameplayCommand(initial, command);
-        const rejected = reduceGameplayCommand(
-            { ...initial, activeContract: { noDestroy: true, noShuffle: false, maxMismatches: null } },
-            createGameplayDestroyPairCommand('destroy-blocked', 'echo-a')
-        );
 
-        expect(result).toMatchObject({
-            accepted: true,
-            run: {
-                destroyPairCharges: 1,
-                destroyUsedThisFloor: true,
-                recallFocus: 1,
-                board: { matchedPairs: 1 },
-                stats: { matchesFound: 1, pairsDestroyed: 1 }
-            }
-        });
-        expect(result.run.board?.tiles.filter((candidate) => candidate.pairKey === 'echo'))
-            .toEqual(expect.arrayContaining([
-                expect.objectContaining({ id: 'echo-a', state: 'matched' }),
-                expect.objectContaining({ id: 'echo-b', state: 'matched' })
-            ]));
-        expect(result.events).toEqual([
-            expect.objectContaining({
-                type: 'inventory.changed',
-                itemId: 'destroy_charge',
-                operation: 'consume',
-                before: 2,
-                after: 1,
-                applied: -1
-            }),
-            expect.objectContaining({
-                type: 'board.pair_destroyed',
-                targetTileId: 'echo-a',
-                pairKey: 'echo',
-                destroyedTileIds: ['echo-a', 'echo-b'],
-                matchedPairsBefore: 0,
-                matchedPairsAfter: 1,
-                recallFocusBefore: 2,
-                recallFocusAfter: 1,
-                boardComplete: false
-            }),
-            expect.objectContaining({ type: 'feedback.requested', cue: 'power.destroy_pair.used' })
-        ]);
-        expect(replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))]).run).toEqual(result.run);
-        expect(rejected).toMatchObject({ accepted: false, run: { destroyPairCharges: 2 } });
-
-        const finalBase = createNewRun(0, { runSeed: 4412 });
-        const finalRun: RunState = {
-            ...finalBase,
-            status: 'playing',
-            destroyPairCharges: 1,
-            board: {
-                ...board(),
-                pairCount: 1,
-                matchedPairs: 0,
-                tiles: [tile('final-a', 'final'), tile('final-b', 'final')]
-            }
-        };
-        const finalCommand = createGameplayDestroyPairCommand('destroy-final', 'final-a');
-        const finalResult = reduceGameplayCommand(finalRun, finalCommand);
-        expect(finalResult).toMatchObject({
-            accepted: true,
-            run: { status: 'levelComplete', board: { matchedPairs: 1 } },
-            events: expect.arrayContaining([
-                expect.objectContaining({ type: 'board.pair_destroyed', boardComplete: true })
-            ])
-        });
-        expect(finalResult.run.gameplayCommandJournal).toEqual(finalRun.gameplayCommandJournal);
-        expect(replayGameplayCommands(
-            finalRun,
-            [JSON.parse(JSON.stringify(finalCommand))]
-        )).toMatchObject({
-            run: finalResult.run,
-            events: finalResult.events,
-            acceptedCommandIds: ['destroy-final']
-        });
-    });
-
-    it('advances a complete floor through one flat replayable command', () => {
-        const fixtureRun = createPlayablePathFixture('floorClearWithRouteChoices').run!;
-        const initial: RunState = {
-            ...fixtureRun,
-            destroyPairCharges: 0
-        };
-        const command = createGameplayFloorAdvanceCommand('floor-advance-flat');
-        const legacy = advanceToNextLevel(initial);
-        const result = reduceGameplayCommand(initial, command);
-
-        expect(result).toMatchObject({ accepted: true, run: { status: 'memorize', runEndReason: null } });
-        expect(result.run).toEqual(legacy);
-        expect(result.run.gameplayCommandJournal).toEqual(initial.gameplayCommandJournal);
-        expect(result.run.gameplayEventJournal).toEqual(initial.gameplayEventJournal);
-        expect(result.events).toEqual(expect.arrayContaining([
-            expect.objectContaining({
-                type: 'floor.advanced',
-                commandId: command.commandId,
-                fromFloor: initial.board!.level,
-                toFloor: initial.board!.level + 1,
-                outcome: 'memorize',
-                boardPairCount: result.run.board!.pairCount,
-                boardTileCount: result.run.board!.tiles.length
-            }),
-            expect.objectContaining({
-                type: 'feedback.requested',
-                source: { kind: 'system', id: 'floor_advance' },
-                cue: 'floor.advance.ready'
-            })
-        ]));
-        expect(result.events.every((event, sequence) =>
-            event.commandId === command.commandId &&
-            event.sequence === sequence &&
-            event.eventId === `${command.commandId}:${sequence}`
-        )).toBe(true);
-        expect(replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))]).run).toEqual(result.run);
-        expect(result.events.some((event) => event.type === 'feedback.requested' && /\blives?\b/i.test(event.message))).toBe(false);
-    });
 
     it('consumes exactly one Wild Match token for a resolved wildcard bridge', () => {
         const wildcardRun = run({

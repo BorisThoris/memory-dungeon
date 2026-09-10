@@ -601,7 +601,7 @@ export const playResolveSfx = (before: RunState, after: RunState, gain: number):
     }
 };
 
-/** Arming destroy / peek / stray / pin: short affirming chirp (not played on disarm). */
+/** Arming peek / swap / pin: short affirming chirp (not played on disarm). */
 export const playPowerArmSfx = (gain: number): void => {
     if (tryPlaySampled('power-arm', gain)) {
         return;
@@ -612,21 +612,6 @@ export const playPowerArmSfx = (gain: number): void => {
         durationSec: 0.07,
         gain: gain * 0.82,
         type: 'sine',
-        category: 'power'
-    });
-};
-
-/** Destroy pair resolved: heavy break (distinct from match). */
-export const playDestroyPairSfx = (gain: number): void => {
-    if (tryPlaySampled('destroy-pair', gain)) {
-        return;
-    }
-    playTone({
-        frequency: 132,
-        frequencyEnd: 88,
-        durationSec: 0.22,
-        gain: gain * 1.05,
-        type: 'sawtooth',
         category: 'power'
     });
 };
@@ -642,21 +627,6 @@ export const playPeekPowerSfx = (gain: number): void => {
         durationSec: 0.1,
         gain: gain * 0.72,
         type: 'sine',
-        category: 'power'
-    });
-};
-
-/** Stray remove: quick scrape. */
-export const playStrayPowerSfx = (gain: number): void => {
-    if (tryPlaySampled('stray-power', gain)) {
-        return;
-    }
-    playTone({
-        frequency: 380,
-        frequencyEnd: 240,
-        durationSec: 0.14,
-        gain: gain * 0.92,
-        type: 'triangle',
         category: 'power'
     });
 };

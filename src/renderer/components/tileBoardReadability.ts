@@ -380,19 +380,15 @@ export const getTileBoardReadabilityState = ({
                   ? '#5dd6ff'
                   : tile.tileTraitKind
                     ? tileTraitColor(tile.tileTraitKind)
-                    : powerBackAccent === 'destroy'
-                      ? '#d94848'
-                      : powerBackAccent === 'peek'
-                        ? '#59b4d9'
-                        : powerBackAccent === 'stray'
-                          ? '#d4a03d'
-                          : powerBackAccent === 'pin'
-                            ? '#e8c878'
-                            : powerBackAccent === 'swap'
-                              ? '#5dd6ff'
-                              : powerBackAccent === 'swapOrigin'
-                                ? '#f2f9ff'
-                                : '#b6a4bd';
+                    : powerBackAccent === 'peek'
+                      ? '#59b4d9'
+                      : powerBackAccent === 'pin'
+                        ? '#e8c878'
+                        : powerBackAccent === 'swap'
+                          ? '#5dd6ff'
+                          : powerBackAccent === 'swapOrigin'
+                            ? '#f2f9ff'
+                            : '#b6a4bd';
     const showHiddenReadabilityRing =
         !faceUp &&
         tile.state === 'hidden' &&

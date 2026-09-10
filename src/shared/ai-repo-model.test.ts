@@ -44,8 +44,10 @@ describe('AI repository model', () => {
         expect(model.repository.trackedFileCount).toBeGreaterThan(2_000);
         expect(model.repository.codeFileCount).toBeGreaterThan(800);
         expect(model.repository.exportedSymbolCount).toBeGreaterThan(1_000);
-        // Findables and inventory items are the content registries left after Gen 176.
-        expect(model.repository.contentItemCount).toBeGreaterThan(10);
+        // Findables and inventory items are the content registries left after Gen 176. Gen 200 took
+        // the stray-remove charge out of the inventory with the power that spent it, so eleven
+        // became ten and the floor moved with the measurement rather than the bound being defended.
+        expect(model.repository.contentItemCount).toBeGreaterThanOrEqual(10);
         expect(model.repository.mechanicCount).toBeGreaterThan(20);
         expect(model.repository.stateFieldCount).toBeGreaterThan(20);
         expect(model.repository.relationshipCount).toBeGreaterThan(2_000);

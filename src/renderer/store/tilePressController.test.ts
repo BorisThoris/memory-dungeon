@@ -17,7 +17,6 @@ describe('tile press controller', () => {
 
         const result = createPlayingTilePressSurfaceResult({
             boardPinMode: false,
-            destroyPairArmed: false,
             peekModeArmed: false,
             run,
             tileId: tile.id
@@ -40,7 +39,6 @@ describe('tile press controller', () => {
 
         const result = createPlayingTilePressSurfaceResult({
             boardPinMode: true,
-            destroyPairArmed: false,
             peekModeArmed: false,
             run,
             tileId: tile.id
@@ -67,7 +65,6 @@ describe('tile press controller', () => {
 
         const result = createPlayingTilePressSurfaceResult({
             boardPinMode: false,
-            destroyPairArmed: false,
             peekModeArmed: true,
             run,
             tileId: tile.id
@@ -88,7 +85,6 @@ describe('tile press controller', () => {
 
         const selected = createPlayingTilePressSurfaceResult({
             boardPinMode: false,
-            destroyPairArmed: false,
             peekModeArmed: false,
             run,
             tileSwapArmed: true,
@@ -103,7 +99,6 @@ describe('tile press controller', () => {
 
         const deselected = createPlayingTilePressSurfaceResult({
             boardPinMode: false,
-            destroyPairArmed: false,
             peekModeArmed: false,
             run,
             tileSwapArmed: true,
@@ -118,7 +113,6 @@ describe('tile press controller', () => {
 
         const swapped = createPlayingTilePressSurfaceResult({
             boardPinMode: false,
-            destroyPairArmed: false,
             peekModeArmed: false,
             run,
             tileSwapArmed: true,

@@ -8,7 +8,6 @@ import {
     applyPeek,
     applyRegionShuffle,
     applyShuffle,
-    applyStrayRemove,
     applyTileSwap,
     cancelResolvingWithUndo
 } from './board-power-actions';
@@ -105,12 +104,14 @@ export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
      * there, which is why none of it had a counter until now: the census played plain endless
      * floors, so it could only ever have reported the setup it chose rather than the game.
      */
-        // Common by construction, not by weakness: the census alternates the stray against the wild
-    // match because after Gen 196 the two compete for the same card, so each is pressed on half
-    // the floors. See `spendSetupTools`.
-    { id: 'strayRemove', key: 'strayRemoveCharges', label: 'A stray singleton was removed', family: 'tools', cadence: 'common', kind: 'spend', player: 'setup' },
     { id: 'flashPair', key: 'flashPairCharges', label: 'A pair was flashed', family: 'tools', cadence: 'core', kind: 'spend', player: 'setup' },
-    { id: 'wildMatch', key: 'wildMatchesRemaining', label: 'The wild joker was spent on a match', family: 'tools', cadence: 'common', kind: 'spend', player: 'setup' },
+    /*
+     * Gen 200 re-banded this from `common` to `core`, against the measurement. Stray was the only
+     * thing that ever took the wild joker off the board before the setup player could spend it, and
+     * Stray is gone: a run that is granted the token now spends it on every floor, 1.000. The band
+     * describes what the game does, so it moves rather than the number being argued down.
+     */
+    { id: 'wildMatch', key: 'wildMatchesRemaining', label: 'The wild joker was spent on a match', family: 'tools', cadence: 'core', kind: 'spend', player: 'setup' },
     { id: 'tileSwap', key: 'regionShuffleCharges', label: 'Two tiles were swapped', family: 'tools', cadence: 'core', kind: 'spend', player: 'setup' },
     {
         id: 'gambit',
@@ -227,7 +228,7 @@ const spendTools = (run: RunState, phase: 'opening' | 'midway'): RunState => {
  * As with the tooled player, it is deliberately not clever. The census asks whether a system can
  * happen on a real board, not whether a good player would reach for it.
  */
-const spendSetupTools = (run: RunState, takeTheStray: boolean): RunState => {
+const spendSetupTools = (run: RunState): RunState => {
     const board = run.board;
     if (!board || run.status !== 'playing') {
         return run;
@@ -242,21 +243,6 @@ const spendSetupTools = (run: RunState, takeTheStray: boolean): RunState => {
         next = applyTileSwap(next, swapA.id, swapB.id);
     }
     next = applyFlashPair(next);
-    /*
-     * Stray and the wild match want the same card, always. Stray only takes a completion-safe
-     * singleton, and after Gen 196 the wild joker is the only singleton left in the game - so a run
-     * that spends its stray has thrown away its wild match, and one that keeps the wild has nothing
-     * to stray. The census cannot see both on one floor, so it alternates: even floors take the
-     * stray, odd floors keep the joker and match it. Both then answer across the sweep, and the
-     * trade is on the record rather than hidden inside whichever one the census happened to press.
-     */
-    if (!takeTheStray) {
-        return next;
-    }
-    const singleton = next.board?.tiles.find(
-        (tile) => tile.state === 'hidden' && isSingletonUtilityPairKey(tile.pairKey)
-    );
-    if (singleton) next = applyStrayRemove(next, singleton.id);
     return next;
 };
 
@@ -330,11 +316,10 @@ const playFloor = (
     if (tooled) {
         step(spendTools(run, 'opening'));
     }
-    const takeTheStray = floor % 2 === 0;
     if (setup) {
-        step(spendSetupTools(run, takeTheStray));
+        step(spendSetupTools(run));
     }
-    let wildSpent = takeTheStray;
+    let wildSpent = false;
     while (run.status === 'playing' && turns < maxTurns) {
         const groups = getUnresolvedPlayablePairGroups(run.board!).filter((group) =>
             group.every((tile) => tile.state === 'hidden' || tile.state === 'flipped')

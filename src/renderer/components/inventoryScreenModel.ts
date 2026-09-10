@@ -125,20 +125,10 @@ const TOOL_ACTION_CUES: Record<RunInventoryItemId, InventoryToolActionCue> = {
         detail: 'Move one row or swap two hidden cards to line up trait interactions.',
         tone: 'route'
     },
-    destroy_charge: {
-        label: 'Cashout save',
-        detail: 'Remove a bad hidden pair when it would break reward tempo.',
-        tone: 'chain'
-    },
     peek_charge: {
         label: 'Confirm pair',
         detail: 'Reveal safely before committing the next chain or pickup match.',
         tone: 'chain'
-    },
-    stray_remove_charge: {
-        label: 'Clean route',
-        detail: 'Delete a stray blocker so real pairs and trait routes stay readable.',
-        tone: 'route'
     },
     flash_pair_charge: {
         label: 'Find target',

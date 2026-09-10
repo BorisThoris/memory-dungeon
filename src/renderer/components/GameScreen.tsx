@@ -311,11 +311,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             resume: state.resume,
             shuffleBoard: state.shuffleBoard,
             toggleBoardPinMode: state.toggleBoardPinMode,
-            toggleDestroyPairArmed: state.toggleDestroyPairArmed,
             togglePeekMode: state.togglePeekMode,
             toggleRegionShuffleArmed: state.toggleRegionShuffleArmed,
             toggleTileSwapArmed: state.toggleTileSwapArmed,
-            toggleStrayArm: state.toggleStrayArm,
             undoResolvingFlip: state.undoResolvingFlip
         }))
     );
@@ -343,20 +341,16 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const onboardingBoardTargetIds = useMemo(() => onboardingStep?.targetTileIds ?? [], [onboardingStep]);
     const {
         boardPinMode,
-        destroyPairArmed,
         peekModeArmed,
         regionShuffleArmed,
-        strayRemoveArmed,
         tileSwapArmed,
         tileSwapFirstTileId
     } =
         useAppStore(
             useShallow((state) => ({
                 boardPinMode: state.boardPinMode,
-                destroyPairArmed: state.destroyPairArmed,
                 peekModeArmed: state.peekModeArmed,
                 regionShuffleArmed: state.regionShuffleArmed,
-                strayRemoveArmed: state.strayRemoveArmed,
                 tileSwapArmed: state.tileSwapArmed,
                 tileSwapFirstTileId: state.tileSwapFirstTileId
             }))
@@ -615,11 +609,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         resume,
         shuffleBoard,
         toggleBoardPinMode,
-        toggleDestroyPairArmed,
         togglePeekMode,
         toggleRegionShuffleArmed,
         toggleTileSwapArmed,
-        toggleStrayArm,
         undoResolvingFlip
     } = gameScreenActions;
 
@@ -1146,22 +1138,16 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     );
     const tileSwapPowerVisualActive = run.status === 'playing' && tileSwapArmed && !tileSwapDisabled;
     const {
-        destroyEligibleTileIds,
-        destroyPowerVisualActive,
         peekEligibleTileIds,
         peekPowerVisualActive,
         pinModeBoardHintActive,
         shiftingSpotlightActive,
-        strayEligibleTileIds,
-        strayPowerVisualActive,
         tileSwapEligibleTileIds
     } = useGameScreenPowerTileHints({
         boardPinMode,
-        destroyPairArmed,
         mergedPeekTileIds,
         peekModeArmed,
         run,
-        strayRemoveArmed,
         tileSwapPowerVisualActive
     });
 
@@ -1226,7 +1212,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             : settingsBoardPresentation === 'breathing' && !reduceMotion
               ? styles.boardStageBreathing
               : '';
-    const destroyDisabled = run.destroyPairCharges < 1 && !destroyPairArmed;
 
     // Ids and labels come from the catalog rather than being retyped here, so a tool the catalog
     // names but the dock forgets to build is a type error rather than a missing button.
@@ -1272,15 +1257,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 onClick: toggleBoardPinMode
             },
             {
-                ...toolSpec('destroy'),
-                glyph: RUN_SHELL_GLYPHS.destroy,
-                charges: run.destroyPairCharges,
-                armed: destroyPairArmed,
-                disabled: destroyDisabled,
-                title: 'Destroy a pair',
-                onClick: toggleDestroyPairArmed
-            },
-            {
                 ...toolSpec('peek'),
                 glyph: RUN_SHELL_GLYPHS.peek,
                 charges: run.peekCharges,
@@ -1300,23 +1276,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                       }
                   ]
                 : []),
-            {
-                /*
-                 * Disabled on the same rule the action itself applies: arming needs a charge, and
-                 * disarming is always allowed. The two used to be able to disagree, and did — the
-                 * button stayed lit with no charges and the press was dropped in silence.
-                 */
-                ...toolSpec('stray'),
-                glyph: RUN_SHELL_GLYPHS.stray,
-                armed: strayRemoveArmed,
-                charges: run.strayRemoveCharges,
-                disabled: !strayRemoveArmed && runNonNegativeInteger(run.strayRemoveCharges) <= 0,
-                title:
-                    !strayRemoveArmed && runNonNegativeInteger(run.strayRemoveCharges) <= 0
-                        ? RUN_TOOL_REASONS.stray.noCharges
-                        : RUN_TOOL_REASONS.stray.available,
-                onClick: toggleStrayArm
-            },
             {
                 /*
                  * The one control that talks rather than moves tiles. Disabled on exactly the rule
@@ -1499,12 +1458,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 viewportResetToken={viewportResetToken}
                                 wideRecallInPlay={wideRecallInPlay}
                                 shiftingSpotlightActive={shiftingSpotlightActive}
-                                destroyPowerVisualActive={destroyPowerVisualActive}
-                                destroyEligibleTileIds={destroyEligibleTileIds}
                                 peekPowerVisualActive={peekPowerVisualActive}
                                 peekEligibleTileIds={peekEligibleTileIds}
-                                strayPowerVisualActive={strayPowerVisualActive}
-                                strayEligibleTileIds={strayEligibleTileIds}
                                 tileSwapPowerVisualActive={tileSwapPowerVisualActive}
                                 tileSwapEligibleTileIds={tileSwapEligibleTileIds}
                                 tileSwapFirstTileId={tileSwapFirstTileId}

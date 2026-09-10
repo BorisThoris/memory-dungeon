@@ -8,7 +8,7 @@
  */
 export const SAVE_SCHEMA_VERSION = 8;
 /** Bump when generation rules change (tile order, mutators, pair layout). */
-export const GAME_RULES_VERSION = 47;
+export const GAME_RULES_VERSION = 48;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -152,7 +152,6 @@ export type WeakerShuffleMode = 'full' | 'rows_only';
 
 export interface ContractFlags {
     noShuffle: boolean;
-    noDestroy: boolean;
     maxMismatches: number | null;
     /** GP-C01: max pins allowed this run (null = default cap). */
     maxPinsTotalRun?: number | null;
@@ -479,7 +478,6 @@ export interface RunState {
     debugUsed: boolean;
     debugPeekActive: boolean;
     shuffleCharges: number;
-    destroyPairCharges: number;
     pinnedTileIds: string[];
     /**
      * Set when the player uses a **meta power or assist** that disqualifies the perfect-clear achievement
@@ -521,8 +519,6 @@ export interface RunState {
     gambitAvailableThisFloor: boolean;
     gambitThirdFlipUsed: boolean;
     wildMatchesRemaining: number;
-    /** Stray remover power charges (remove one completion-safe hidden singleton from play). */
-    strayRemoveCharges: number;
     /** Match score multiplier (shuffle tax stacks). */
     matchScoreMultiplier: number;
     /** N-back mutator: matches since last anchor highlight. */
@@ -540,7 +536,6 @@ export interface RunState {
     /** GP-O04: shuffle used this floor (for scholar-style bonus). */
     shuffleUsedThisFloor: boolean;
     /** GP-O04: destroy used this floor. */
-    destroyUsedThisFloor: boolean;
     /** GP-O02: cursed pair matched before all other real pairs cleared. */
     cursedMatchedEarlyThisFloor: boolean;
     /** GP-O03: number of successful match resolutions (two flips → match) this floor. */

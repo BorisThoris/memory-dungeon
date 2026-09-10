@@ -48,7 +48,7 @@ const variantOf = (run: RunState): RunShareVariant | RunShareRefusal => {
     if (run.practiceMode) {
         return 'practice';
     }
-    if (run.activeContract?.noShuffle === true && run.activeContract.noDestroy) {
+    if (run.activeContract?.noShuffle === true) {
         return 'scholar';
     }
     return 'classic';

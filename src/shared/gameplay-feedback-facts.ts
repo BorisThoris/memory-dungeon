@@ -11,10 +11,8 @@ export interface GameplayFeedbackCriticalSnapshot {
     mismatches: number;
     shuffleCharges: number;
     regionShuffleCharges: number;
-    destroyPairCharges: number;
     peekCharges: number;
     flashPairCharges: number;
-    strayRemoveCharges: number;
     pinnedTileCount: number;
     recallFocus: number;
     recallMatchesThisFloor: number;
@@ -37,10 +35,8 @@ export const GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES = {
     mismatches: 'mismatches',
     shuffleCharges: 'shuffleCharges',
     regionShuffleCharges: 'regionShuffleCharges',
-    destroyPairCharges: 'destroyPairCharges',
     peekCharges: 'peekCharges',
     flashPairCharges: 'flashPairCharges',
-    strayRemoveCharges: 'strayRemoveCharges',
     pinnedTileCount: 'pinnedTileIds',
     recallFocus: 'recallFocus',
     recallMatchesThisFloor: 'recallMatchesThisFloor',
@@ -70,10 +66,8 @@ export const getGameplayFeedbackCriticalSnapshot = (
         mismatches: stats.mismatches,
         shuffleCharges: runNonNegativeInteger(run.shuffleCharges),
         regionShuffleCharges: runNonNegativeInteger(run.regionShuffleCharges),
-        destroyPairCharges: runNonNegativeInteger(run.destroyPairCharges),
         peekCharges: runNonNegativeInteger(run.peekCharges),
         flashPairCharges: runNonNegativeInteger(run.flashPairCharges),
-        strayRemoveCharges: runNonNegativeInteger(run.strayRemoveCharges),
         pinnedTileCount: runArrayCount(run.pinnedTileIds),
         recallFocus: runNonNegativeInteger(run.recallFocus),
         recallMatchesThisFloor: runNonNegativeInteger(run.recallMatchesThisFloor),

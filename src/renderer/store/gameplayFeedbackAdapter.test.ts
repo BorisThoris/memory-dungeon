@@ -93,19 +93,6 @@ describe('gameplayFeedbackAdapter', () => {
         expect(presentations.map((item) => item.audioCategory)).toEqual(['flash-pair', 'undo']);
     });
 
-    it('classifies Destroy Pair feedback from its typed power source', () => {
-        const presentation = projectGameplayFeedback([
-            event(0, {
-                type: 'feedback.requested',
-                cue: 'power.destroy_pair.used',
-                message: 'Pair removed.',
-                source: { kind: 'power', id: 'destroy_pair' },
-                tone: 'information'
-            })
-        ])[0];
-
-        expect(presentation).toMatchObject({ audioCategory: 'destroy-pair' });
-    });
 
     it('classifies Wild Joker bridge feedback from the typed system source', () => {
         const presentation = projectGameplayFeedback([

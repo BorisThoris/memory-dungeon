@@ -20,7 +20,7 @@ import { runNonNegativeInteger } from './run-number-guards';
  */
 export interface FloorCurioGreetingEffect {
     readonly peekCharges: number;
-    readonly strayRemoveCharges: number;
+    readonly shuffleCharges: number;
     readonly undoUses: number;
 }
 
@@ -37,7 +37,7 @@ export interface FloorCurioGreeting {
 
 const NOTHING: FloorCurioGreetingEffect = {
     peekCharges: 0,
-    strayRemoveCharges: 0,
+    shuffleCharges: 0,
     undoUses: 0
 };
 
@@ -90,9 +90,16 @@ export const FLOOR_CURIO_GREETINGS: Readonly<Record<FloorCurioId, FloorCurioGree
     },
     sticky_toffee: {
         curioId: 'sticky_toffee',
-        reply: 'You address the toffee. The toffee does not answer, but a tile comes away on your boot.',
-        gained: 'A stray tile, removed by accident.',
-        effect: { ...NOTHING, strayRemoveCharges: 1 }
+        reply: 'You address the toffee. The toffee does not answer, but the whole floor comes unstuck.',
+        /*
+         * Gen 200: the toffee used to hand over a stray charge, and Stray left with the last card
+         * it could legally take. The first replacement paid an undo - and the test above caught it
+         * immediately, because the torchbearer already pays that lever and a cast where two
+         * residents hand over the same thing is one button with two faces. A shuffle is the third
+         * lever the game still has, and "comes unstuck" is the same joke about a sticky floor.
+         */
+        gained: 'One shuffle, on the house.',
+        effect: { ...NOTHING, shuffleCharges: 1 }
     }
 };
 
@@ -124,7 +131,7 @@ export const greetFloorCurio = (run: RunState): RunState => {
         ...run,
         floorCurioGreeted: true,
         peekCharges: runNonNegativeInteger(run.peekCharges) + greeting.effect.peekCharges,
-        strayRemoveCharges: runNonNegativeInteger(run.strayRemoveCharges) + greeting.effect.strayRemoveCharges,
+        shuffleCharges: runNonNegativeInteger(run.shuffleCharges) + greeting.effect.shuffleCharges,
         undoUsesThisFloor: runNonNegativeInteger(run.undoUsesThisFloor) + greeting.effect.undoUses
     };
 };

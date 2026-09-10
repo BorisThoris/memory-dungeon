@@ -47,7 +47,7 @@ describe('REG-024 run economy taxonomy', () => {
         expect(getRunEconomyRows(run).map((row) => `${row.key}:${row.value}`)).toEqual([
             'score:120',
             'findable_pickups:1/2',
-            'assist_charges:Shuffle 1 · Row 1 · Destroy 0 · Peek 1 · Stray 0'
+            'assist_charges:Shuffle 1 · Row 1 · Peek 1'
         ]);
     });
 
@@ -58,9 +58,7 @@ describe('REG-024 run economy taxonomy', () => {
             findablesTotalThisFloor: Number.POSITIVE_INFINITY,
             shuffleCharges: Number.NaN,
             regionShuffleCharges: 1.9,
-            destroyPairCharges: Number.POSITIVE_INFINITY,
             peekCharges: -4,
-            strayRemoveCharges: 2.9,
             stats: {
                 ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false })).stats,
                 totalScore: Number.POSITIVE_INFINITY
@@ -72,7 +70,7 @@ describe('REG-024 run economy taxonomy', () => {
         expect(rows.map((row) => `${row.key}:${row.value}`)).toEqual([
             'score:0',
             'findable_pickups:0/0',
-            'assist_charges:Shuffle 0 · Row 1 · Destroy 0 · Peek 0 · Stray 2'
+            'assist_charges:Shuffle 0 · Row 1 · Peek 0'
         ]);
         expect(rows.map((row) => row.numericValue).every(Number.isFinite)).toBe(true);
     });
@@ -86,7 +84,7 @@ describe('REG-024 run economy taxonomy', () => {
         expect(getRunEconomyRows(run).map((row) => `${row.key}:${row.value}`)).toEqual([
             'score:0',
             'findable_pickups:0/1',
-            'assist_charges:Shuffle 1 · Row 1 · Destroy 0 · Peek 1 · Stray 0'
+            'assist_charges:Shuffle 1 · Row 1 · Peek 1'
         ]);
     });
 });

@@ -67,15 +67,6 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
         source: 'Run start.',
         useRule: 'Spend during play to reshuffle one row or swap two hidden tiles; disabled by no-shuffle contracts.'
     },
-    destroy_charge: {
-        id: 'destroy_charge',
-        kind: 'consumable',
-        label: 'Destroy charge',
-        stackLimit: null,
-        mutableAt: 'mid_run',
-        source: 'Run start and explicit pickups.',
-        useRule: 'Spend during play to remove a hidden pair; disabled by no-destroy contracts.'
-    },
     peek_charge: {
         id: 'peek_charge',
         kind: 'consumable',
@@ -84,15 +75,6 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
         mutableAt: 'mid_run',
         source: 'Run start, Echo trait matches, Conduit beside Echo, and explicit pickups.',
         useRule: 'Spend during play to reveal tiles without committing flips.'
-    },
-    stray_remove_charge: {
-        id: 'stray_remove_charge',
-        kind: 'consumable',
-        label: 'Stray remover',
-        stackLimit: null,
-        mutableAt: 'mid_run',
-        source: 'Wild/practice setup.',
-        useRule: 'Spend during play to remove one hidden stray tile from the board.'
     },
     flash_pair_charge: {
         id: 'flash_pair_charge',
@@ -169,12 +151,8 @@ export const getRunInventoryItemQuantity = (run: RunState, id: RunInventoryItemI
             return runNonNegativeInteger(run.shuffleCharges);
         case 'region_shuffle_charge':
             return runNonNegativeInteger(run.regionShuffleCharges);
-        case 'destroy_charge':
-            return runNonNegativeInteger(run.destroyPairCharges);
         case 'peek_charge':
             return runNonNegativeInteger(run.peekCharges);
-        case 'stray_remove_charge':
-            return runNonNegativeInteger(run.strayRemoveCharges);
         case 'flash_pair_charge':
             return runNonNegativeInteger(run.flashPairCharges);
         case 'undo_charge':
@@ -195,9 +173,6 @@ export const getRunInventoryItemQuantity = (run: RunState, id: RunInventoryItemI
 const unavailableReasonFor = (run: RunState, id: RunInventoryItemId, quantity: number): string | null => {
     if ((id === 'shuffle_charge' || id === 'region_shuffle_charge') && run.activeContract?.noShuffle) {
         return 'No-shuffle contract locks this consumable.';
-    }
-    if (id === 'destroy_charge' && run.activeContract?.noDestroy) {
-        return 'No-destroy contract locks this consumable.';
     }
     if (quantity <= 0 && RUN_INVENTORY_CATALOG[id].kind === 'consumable') {
         return 'No charges currently banked.';
@@ -354,9 +329,7 @@ export const previewRunInventoryItemGain = (
 const PICKUP_GAIN_LABELS: Record<RunInventoryItemId, { singular: string; plural: string }> = {
     shuffle_charge: { singular: 'shuffle charge', plural: 'shuffle charges' },
     region_shuffle_charge: { singular: 'row/swap charge', plural: 'row/swap charges' },
-    destroy_charge: { singular: 'destroy charge', plural: 'destroy charges' },
     peek_charge: { singular: 'peek charge', plural: 'peek charges' },
-    stray_remove_charge: { singular: 'stray remover', plural: 'stray removers' },
     flash_pair_charge: { singular: 'flash pair', plural: 'flash pairs' },
     undo_charge: { singular: 'undo charge', plural: 'undo charges' },
     gambit_token: { singular: 'Gambit token', plural: 'Gambit tokens' },
@@ -432,12 +405,8 @@ export const gainRunInventoryItem = (
             return { ...run, shuffleCharges: runNonNegativeInteger(run.shuffleCharges) + gain };
         case 'region_shuffle_charge':
             return { ...run, regionShuffleCharges: runNonNegativeInteger(run.regionShuffleCharges) + gain };
-        case 'destroy_charge':
-            return { ...run, destroyPairCharges: runNonNegativeInteger(run.destroyPairCharges) + gain };
         case 'peek_charge':
             return { ...run, peekCharges: runNonNegativeInteger(run.peekCharges) + gain };
-        case 'stray_remove_charge':
-            return { ...run, strayRemoveCharges: runNonNegativeInteger(run.strayRemoveCharges) + gain };
         case 'flash_pair_charge':
             return { ...run, flashPairCharges: runNonNegativeInteger(run.flashPairCharges) + gain };
         case 'undo_charge':
@@ -461,12 +430,8 @@ export const useRunInventoryItem = (run: RunState, itemId: RunInventoryItemId): 
             return { run: { ...run, shuffleCharges: decrementRunCounter(run.shuffleCharges) }, itemId, applied: true };
         case 'region_shuffle_charge':
             return { run: { ...run, regionShuffleCharges: decrementRunCounter(run.regionShuffleCharges) }, itemId, applied: true };
-        case 'destroy_charge':
-            return { run: { ...run, destroyPairCharges: decrementRunCounter(run.destroyPairCharges) }, itemId, applied: true };
         case 'peek_charge':
             return { run: { ...run, peekCharges: decrementRunCounter(run.peekCharges) }, itemId, applied: true };
-        case 'stray_remove_charge':
-            return { run: { ...run, strayRemoveCharges: decrementRunCounter(run.strayRemoveCharges) }, itemId, applied: true };
         case 'flash_pair_charge':
             return { run: { ...run, flashPairCharges: decrementRunCounter(run.flashPairCharges) }, itemId, applied: true };
         case 'undo_charge':

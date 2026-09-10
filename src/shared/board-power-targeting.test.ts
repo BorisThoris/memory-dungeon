@@ -1,12 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import type { BoardState, Tile } from './contracts';
 import {
-    collectDestroyEligibleTileIds,
     collectPeekEligibleTileIds,
-    isCompletionSafeStrayPairKey,
-    tileIsDestroyEligiblePreview,
     tileIsPeekEligiblePreview,
-    tileIsStrayEligiblePreview
 } from './board-power-targeting';
 import { WILD_PAIR_KEY } from './tile-identity';
 
@@ -31,20 +27,6 @@ const board = (tiles: Tile[]): BoardState => ({
 });
 
 describe('board power targeting rules', () => {
-    it('collects only fully hidden real pairs for destroy targeting', () => {
-        const state = board([
-            tile('a1', 'A'),
-            tile('a2', 'A'),
-            tile('b1', 'B'),
-            tile('b2', 'B', 'matched'),
-            tile('w1', WILD_PAIR_KEY)
-        ]);
-
-        expect(tileIsDestroyEligiblePreview(state, 'a1')).toBe(true);
-        expect(tileIsDestroyEligiblePreview(state, 'b1')).toBe(false);
-        expect(tileIsDestroyEligiblePreview(state, 'w1')).toBe(false);
-        expect(collectDestroyEligibleTileIds(state)).toEqual(new Set(['a1', 'a2']));
-    });
 
     it('allows peek targeting hidden tiles that have not already been revealed by peek', () => {
         const state = board([
@@ -59,17 +41,4 @@ describe('board power targeting rules', () => {
         expect(collectPeekEligibleTileIds(state, ['w1'])).toEqual(new Set(['a1']));
     });
 
-    it('limits stray targeting to hidden completion-safe singleton tiles', () => {
-        const state = board([
-            tile('a1', 'A'),
-            tile('w1', WILD_PAIR_KEY),
-            tile('matchedWild', WILD_PAIR_KEY, 'matched')
-        ]);
-
-        expect(isCompletionSafeStrayPairKey(WILD_PAIR_KEY)).toBe(true);
-        expect(isCompletionSafeStrayPairKey('A')).toBe(false);
-        expect(tileIsStrayEligiblePreview(state, 'w1')).toBe(true);
-        expect(tileIsStrayEligiblePreview(state, 'a1')).toBe(false);
-        expect(tileIsStrayEligiblePreview(state, 'matchedWild')).toBe(false);
-    });
 });

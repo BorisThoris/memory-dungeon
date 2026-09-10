@@ -1,10 +1,8 @@
 import {
-    applyDestroyPairTransition,
     applyFlashPair,
     applyPeek,
     applyRegionShuffle,
     applyShuffle,
-    applyStrayRemove,
     applyTileSwap,
     cancelResolvingWithUndo
 } from './board-power-actions';
@@ -42,7 +40,6 @@ import {
 } from './gameplay-feedback-facts';
 import { WILD_PAIR_KEY } from './tile-identity';
 import { isBoardComplete } from './board-inspection';
-import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
 import {
     canGreetFloorCurio,
     floorCurioGreetingReply,
@@ -75,8 +72,6 @@ export interface GameplayReplayResult {
 const SYSTEM_SOURCE: GameplaySource = { kind: 'system', id: 'gameplay-core' };
 const PEEK_SOURCE: GameplaySource = { kind: 'power', id: 'peek' };
 const PIN_SOURCE: GameplaySource = { kind: 'power', id: 'pin' };
-const STRAY_REMOVE_SOURCE: GameplaySource = { kind: 'power', id: 'stray_remove' };
-const DESTROY_PAIR_SOURCE: GameplaySource = { kind: 'power', id: 'destroy_pair' };
 const GAMBIT_SOURCE: GameplaySource = { kind: 'power', id: 'gambit' };
 const SHUFFLE_SOURCE: GameplaySource = { kind: 'power', id: 'shuffle' };
 const REGION_SHUFFLE_SOURCE: GameplaySource = { kind: 'power', id: 'region_shuffle' };
@@ -150,101 +145,6 @@ const applyPinToggleCommand = (
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
-};
-
-const applyStrayRemoveCommand = (
-    run: RunState,
-    command: Extract<GameplayCommand, { type: 'board.stray_remove' }>
-): GameplayCommandResult => {
-    const nextRun = applyStrayRemove(run, command.targetTileId);
-    if (nextRun === run) {
-        return rejectedResult(run, command.commandId, 'Stray Remove is not legal for the current run and target.', command);
-    }
-    const events: GameplayEvent[] = [];
-    const writeEvent = makeEventWriter(command.commandId, STRAY_REMOVE_SOURCE, events);
-    const before = runNonNegativeInteger(run.strayRemoveCharges);
-    const after = runNonNegativeInteger(nextRun.strayRemoveCharges);
-    writeEvent({
-        type: 'inventory.changed',
-        itemId: 'stray_remove_charge',
-        operation: 'consume',
-        requested: 1,
-        applied: after - before,
-        before,
-        after
-    });
-    writeEvent({
-        type: 'board.stray_removed',
-        targetTileId: command.targetTileId,
-        strayChargesBefore: before,
-        strayChargesAfter: after,
-        recallFocusBefore: runNonNegativeInteger(run.recallFocus),
-        recallFocusAfter: runNonNegativeInteger(nextRun.recallFocus)
-    });
-    writeEvent({
-        type: 'feedback.requested',
-        cue: 'power.stray_remove.used',
-        message: `Stray Remove cleared ${command.targetTileId}; ${after} charge${after === 1 ? '' : 's'} remain.`,
-        tone: 'information'
-    });
-    return { run: nextRun, command, events, accepted: true };
-};
-
-const applyDestroyPairCommand = (
-    run: RunState,
-    command: Extract<GameplayCommand, { type: 'board.destroy_pair' }>
-): GameplayCommandResult => {
-    const target = run.board?.tiles.find((tile) => tile.id === command.targetTileId);
-    const destroyedTileIds = target
-        ? (run.board?.tiles ?? []).filter((tile) => tile.pairKey === target.pairKey).map((tile) => tile.id)
-        : [];
-    const transition = applyDestroyPairTransition(run, command.targetTileId, {
-        isBoardComplete,
-        rotateShiftingSpotlight: rotateRunShiftingSpotlight
-    });
-    if (!transition.changed || !target || destroyedTileIds.length !== 2) {
-        return rejectedResult(run, command.commandId, 'Destroy Pair is not legal for this target.', command);
-    }
-
-    const nextRun = transition.run;
-    const destroyChargesBefore = runNonNegativeInteger(run.destroyPairCharges);
-    const destroyChargesAfter = runNonNegativeInteger(nextRun.destroyPairCharges);
-    const events: GameplayEvent[] = [];
-    const writeEvent = makeEventWriter(command.commandId, DESTROY_PAIR_SOURCE, events);
-    writeEvent({
-        type: 'inventory.changed',
-        itemId: 'destroy_charge',
-        operation: 'consume',
-        requested: 1,
-        applied: destroyChargesAfter - destroyChargesBefore,
-        before: destroyChargesBefore,
-        after: destroyChargesAfter
-    });
-    writeEvent({
-        type: 'board.pair_destroyed',
-        targetTileId: command.targetTileId,
-        pairKey: target.pairKey,
-        destroyedTileIds: [destroyedTileIds[0]!, destroyedTileIds[1]!],
-        destroyChargesBefore,
-        destroyChargesAfter,
-        matchedPairsBefore: runNonNegativeInteger(run.board?.matchedPairs),
-        matchedPairsAfter: runNonNegativeInteger(nextRun.board?.matchedPairs),
-        recallFocusBefore: runNonNegativeInteger(run.recallFocus),
-        recallFocusAfter: runNonNegativeInteger(nextRun.recallFocus),
-        shiftingSpotlightNonceBefore: runNonNegativeInteger(run.shiftingSpotlightNonce),
-        shiftingSpotlightNonceAfter: runNonNegativeInteger(nextRun.shiftingSpotlightNonce),
-        boardComplete: transition.boardComplete
-    });
-    writeEvent({
-        type: 'feedback.requested',
-        cue: 'power.destroy_pair.used',
-        message: `${target.label} pair removed; ${destroyChargesAfter} Destroy charge${destroyChargesAfter === 1 ? '' : 's'} remain${transition.boardComplete ? ' and the floor route is clear' : ''}.`,
-        tone: 'information'
-    });
-    const resolvedRun = transition.boardComplete && nextRun.board
-        ? finalizeLevel(nextRun, nextRun.board)
-        : nextRun;
-    return { run: resolvedRun, command, events, accepted: true };
 };
 
 const applyPeekCommand = (
@@ -498,8 +398,6 @@ const applyGreetCurioCommand = (
         curioId: greeting.curioId,
         peekChargesBefore: runNonNegativeInteger(run.peekCharges),
         peekChargesAfter: runNonNegativeInteger(nextRun.peekCharges),
-        strayChargesBefore: runNonNegativeInteger(run.strayRemoveCharges),
-        strayChargesAfter: runNonNegativeInteger(nextRun.strayRemoveCharges),
         undoUsesBefore: runNonNegativeInteger(run.undoUsesThisFloor),
         undoUsesAfter: runNonNegativeInteger(nextRun.undoUsesThisFloor)
     });
@@ -577,8 +475,6 @@ const applyFloorAdvanceCommand = (
         memorizeRemainingMs: nextRun.status === 'memorize'
             ? nextRun.timerState?.memorizeRemainingMs ?? null
             : null,
-        destroyChargesBefore: runNonNegativeInteger(run.destroyPairCharges),
-        destroyChargesAfter: runNonNegativeInteger(nextRun.destroyPairCharges)
     });
     writeEvent({
         type: 'feedback.requested',
@@ -1003,12 +899,6 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'board.pin_toggle') {
         return applyPinToggleCommand(run, command);
-    }
-    if (command.type === 'board.stray_remove') {
-        return applyStrayRemoveCommand(run, command);
-    }
-    if (command.type === 'board.destroy_pair') {
-        return applyDestroyPairCommand(run, command);
     }
     if (command.type === 'board.gambit_commit') {
         return applyGambitCommitCommand(run, command);

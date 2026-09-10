@@ -5,16 +5,13 @@ import type {
     Tile
 } from './contracts';
 import {
-    applyDestroyPairTransition,
     applyFlashPair,
     applyPeek,
     applyRegionShuffle,
     applyShuffle,
-    applyStrayRemove,
     applyTileSwap,
     cancelResolvingWithUndo
 } from './board-power-actions';
-import { WILD_PAIR_KEY } from './tile-identity';
 
 const tile = (id: string, pairKey: string, state: Tile['state'] = 'hidden'): Tile => ({
     id,
@@ -50,13 +47,11 @@ const run = (overrides: Partial<RunState> = {}): RunState => ({
     runRulesVersion: 1,
     shuffleNonce: 0,
     shuffleCharges: 1,
-    destroyPairCharges: 1,
     freeShuffleThisFloor: false,
     regionShuffleCharges: 1,
     regionShuffleFreeThisFloor: false,
     flashPairCharges: 1,
     peekCharges: 1,
-    strayRemoveCharges: 1,
     practiceMode: true,
     wildMenuRun: false,
     weakerShuffleMode: null,
@@ -69,7 +64,6 @@ const run = (overrides: Partial<RunState> = {}): RunState => ({
     flashPairRevealedTileIds: [],
     powersUsedThisRun: false,
     shuffleUsedThisFloor: false,
-    destroyUsedThisFloor: false,
     recallFocus: 2,
     stats: {
         shufflesUsed: 0,
@@ -80,104 +74,10 @@ const run = (overrides: Partial<RunState> = {}): RunState => ({
 } as RunState);
 
 describe('board power actions', () => {
-    it('applies destroy-pair transition accounting without finalizing the level', () => {
-        const state = run({
-            board: board([
-                tile('a1', 'A'),
-                tile('a2', 'A'),
-                tile('b1', 'B'),
-                tile('b2', 'B')
-            ]),
-            pinnedTileIds: ['a1', 'b1'],
-            recallFocus: 2
-        });
 
-        const result = applyDestroyPairTransition(state, 'a1', {
-            isBoardComplete: () => false,
-            rotateShiftingSpotlight: (_run, rotatedBoard) => ({
-                board: { ...rotatedBoard, wardPairKey: 'B', bountyPairKey: 'C' },
-                shiftingSpotlightNonce: 4
-            })
-        });
 
-        expect(result.changed).toBe(true);
-        expect(result.boardComplete).toBe(false);
-        expect(result.run.destroyPairCharges).toBe(0);
-        expect(result.run.destroyUsedThisFloor).toBe(true);
-        expect(result.run.powersUsedThisRun).toBe(true);
-        expect(result.run.pinnedTileIds).toEqual(['b1']);
-        expect(result.run.recallFocus).toBe(1);
-        expect(result.run.forgottenTileIdsThisFloor).toEqual(expect.arrayContaining(['a1', 'a2']));
-        expect(result.run.stats.matchesFound).toBe(1);
-        expect(result.run.stats.pairsDestroyed).toBe(1);
-        expect(result.run.shiftingSpotlightNonce).toBe(4);
-        expect(result.run.board!.matchedPairs).toBe(1);
-        const destroyedTile = result.run.board!.tiles.find((t) => t.id === 'a1')!;
-        expect(destroyedTile.state).toBe('matched');
-        expect(destroyedTile.findableKind).toBeUndefined();
-    });
 
-    it('returns an unchanged destroy transition when run rules refuse the target', () => {
-        const noDestroy = run({ activeContract: { noDestroy: true } as RunState['activeContract'] });
-        expect(applyDestroyPairTransition(noDestroy, 'a1', {
-            isBoardComplete: () => false,
-            rotateShiftingSpotlight: (_run, rotatedBoard) => ({ board: rotatedBoard, shiftingSpotlightNonce: 0 })
-        })).toEqual({ run: noDestroy, boardComplete: false, changed: false });
 
-        const noCharge = run({ destroyPairCharges: 0 });
-        expect(applyDestroyPairTransition(noCharge, 'a1', {
-            isBoardComplete: () => false,
-            rotateShiftingSpotlight: (_run, rotatedBoard) => ({ board: rotatedBoard, shiftingSpotlightNonce: 0 })
-        })).toEqual({ run: noCharge, boardComplete: false, changed: false });
-    });
-
-    it('reports board completion from the supplied completion rule', () => {
-        const result = applyDestroyPairTransition(run(), 'a1', {
-            isBoardComplete: () => true,
-            rotateShiftingSpotlight: (_run, rotatedBoard) => ({ board: rotatedBoard, shiftingSpotlightNonce: 0 })
-        });
-
-        expect(result.changed).toBe(true);
-        expect(result.boardComplete).toBe(true);
-    });
-
-    it('normalizes fractional destroy charges and malformed destroy stats before spending', () => {
-        const state = run({
-            destroyPairCharges: 1.8,
-            board: { ...defaultBoard(), matchedPairs: Number.NaN }
-        });
-        const result = applyDestroyPairTransition({
-            ...state,
-            stats: {
-                ...state.stats,
-                matchesFound: Number.NaN,
-                pairsDestroyed: Number.POSITIVE_INFINITY
-            }
-        }, 'a1', {
-            isBoardComplete: () => false,
-            rotateShiftingSpotlight: (_run, rotatedBoard) => ({ board: rotatedBoard, shiftingSpotlightNonce: 0 })
-        });
-
-        expect(result.changed).toBe(true);
-        expect(result.run.destroyPairCharges).toBe(0);
-        expect(result.run.stats.matchesFound).toBe(1);
-        expect(result.run.stats.pairsDestroyed).toBe(1);
-        expect(result.run.board!.matchedPairs).toBe(1);
-    });
-
-    it('normalizes malformed stat blocks before applying destroy accounting', () => {
-        const result = applyDestroyPairTransition(run({
-            stats: Number.NaN as unknown as RunState['stats']
-        }), 'a1', {
-            isBoardComplete: () => false,
-            rotateShiftingSpotlight: (_run, rotatedBoard) => ({ board: rotatedBoard, shiftingSpotlightNonce: 0 })
-        });
-
-        expect(result.changed).toBe(true);
-        expect(result.run.stats.matchesFound).toBe(1);
-        expect(result.run.stats.pairsDestroyed).toBe(1);
-        expect(result.run.stats.highestLevel).toBe(1);
-    });
 
     it('applies full-board shuffle accounting without disturbing visible matched tiles', () => {
         const state = run({
@@ -301,72 +201,7 @@ describe('board power actions', () => {
         expect(applyTileSwap(matchedTile, 'a1', 'b1')).toBe(matchedTile);
     });
 
-    it('normalizes fractional direct power charges before spending', () => {
-        const undoBoard = defaultBoard();
-        const flashed = applyFlashPair(run({
-            board: board([
-                tile('a1', 'A'),
-                tile('a2', 'A')
-            ]),
-            flashPairCharges: 1.8,
-            shuffleNonce: Number.NaN
-        }));
-        const peeked = applyPeek(run({ peekCharges: 1.8 }), 'a1');
-        const removed = applyStrayRemove(run({
-            board: board([
-                tile('w1', WILD_PAIR_KEY),
-                tile('a1', 'A')
-            ]),
-            strayRemoveCharges: 1.8
-        }), 'w1');
-        const undone = cancelResolvingWithUndo(run({
-            status: 'resolving',
-            board: {
-                ...undoBoard,
-                flippedTileIds: ['a1'],
-                tiles: undoBoard.tiles.map((t) => (t.id === 'a1' ? { ...t, state: 'flipped' } : t))
-            },
-            undoUsesThisFloor: 1.8,
-            timerState: {
-                memorizeRemainingMs: null,
-                resolveRemainingMs: 100,
-                debugRevealRemainingMs: null,
-                pausedFromStatus: null
-            }
-        }));
 
-        expect(flashed.flashPairCharges).toBe(0);
-        expect(flashed.shuffleNonce).toBe(1);
-        expect(peeked.peekCharges).toBe(0);
-        expect(removed.strayRemoveCharges).toBe(0);
-        expect(undone.undoUsesThisFloor).toBe(0);
-    });
-
-    it('fails closed when direct power action open-flip state is malformed', () => {
-        const malformedBoard = {
-            ...defaultBoard(),
-            flippedTileIds: Number.NaN as unknown as string[]
-        };
-        const malformed = run({ board: malformedBoard });
-
-        expect(applyShuffle(malformed)).toBe(malformed);
-        expect(applyRegionShuffle(malformed, 0)).toBe(malformed);
-        expect(applyTileSwap(malformed, 'a1', 'b1')).toBe(malformed);
-        expect(applyFlashPair(malformed)).toBe(malformed);
-        expect(applyPeek(malformed, 'a1')).toBe(malformed);
-        expect(applyStrayRemove(malformed, 'a1')).toBe(malformed);
-        expect(applyDestroyPairTransition(malformed, 'a1', {
-            isBoardComplete: () => false,
-            rotateShiftingSpotlight: (_run, rotatedBoard) => ({ board: rotatedBoard, shiftingSpotlightNonce: 0 })
-        })).toEqual({ run: malformed, boardComplete: false, changed: false });
-
-        const resolving = run({
-            status: 'resolving',
-            board: malformedBoard,
-            undoUsesThisFloor: 1
-        });
-        expect(cancelResolvingWithUndo(resolving)).toBe(resolving);
-    });
 
     it('does not flash pair outside practice or wild menu runs', () => {
         const state = run({ practiceMode: false, wildMenuRun: false });
@@ -399,27 +234,7 @@ describe('board power actions', () => {
         expect(applyPeek(matchedTile, 'a1')).toBe(matchedTile);
     });
 
-    it('removes completion-safe stray tiles', () => {
-        const state = run({
-            board: board([tile('w1', WILD_PAIR_KEY), tile('a1', 'A')]),
-            strayRemoveCharges: 1,
-            recallFocus: 2
-        });
 
-        const removed = applyStrayRemove(state, 'w1');
-
-        expect(removed.strayRemoveCharges).toBe(0);
-        expect(removed.powersUsedThisRun).toBe(true);
-        expect(removed.recallFocus).toBe(1);
-        expect(removed.forgottenTileIdsThisFloor).toEqual(['w1']);
-        expect(removed.board!.tiles.find((t) => t.id === 'w1')?.state).toBe('removed');
-        expect(removed.board!.tiles.find((t) => t.id === 'a1')?.state).toBe('hidden');
-    });
-
-    it('refuses stray removal for normal pair tiles', () => {
-        const normalPair = run({ board: board([tile('a1', 'A'), tile('a2', 'A')]) });
-        expect(applyStrayRemove(normalPair, 'a1')).toBe(normalPair);
-    });
 
     it('undoes resolving flips and hides the flipped tiles again', () => {
         const resolving = run({

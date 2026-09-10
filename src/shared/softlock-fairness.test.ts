@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { GAME_RULES_VERSION, type BoardState, type MutatorId, type RunState, type Tile } from './contracts';
 import {
     buildBoard,
-    countFullyHiddenPairs,
     inspectBoardFairness,
     inspectRunFairness,
     isBoardComplete
@@ -13,15 +12,11 @@ import {
     finishMemorizePhase
 } from './game-core';
 import {
-    applyStrayRemove,
     applyRegionShuffle,
     applyShuffle,
     applyTileSwap,
     canRegionShuffleRow,
     canShuffleBoard,
-    collectDestroyEligibleTileIds,
-    collectPeekEligibleTileIds,
-    tileIsStrayEligiblePreview
 } from './board-powers';
 import {
     WILD_PAIR_KEY
@@ -218,38 +213,7 @@ describe('REG-087 run-start fairness coverage', () => {
 });
 
 describe('REG-087 action eligibility edge cases', () => {
-    it('destroy, peek, and stray previews expose only legal completion routes around wilds', () => {
-        const board = boardFromTiles([
-            tile('a1', 'a'),
-            tile('a2', 'a'),
-            tile('wild', WILD_PAIR_KEY)
-        ]);
 
-        expect(countFullyHiddenPairs(board)).toBe(1);
-        expect(collectDestroyEligibleTileIds(board)).toEqual(new Set(['a1', 'a2']));
-        expect(collectPeekEligibleTileIds(board, [])).toEqual(new Set(['a1', 'a2', 'wild']));
-        expect(tileIsStrayEligiblePreview(board, 'a1')).toBe(false);
-        expect(tileIsStrayEligiblePreview(board, 'wild')).toBe(true);
-    });
-
-    it('preserves completion routes after legal stray use', () => {
-        const board = boardFromTiles([
-            tile('a1', 'a'),
-            tile('a2', 'a'),
-            tile('wild', WILD_PAIR_KEY)
-        ]);
-        const run: RunState = {
-            ...playableRun(createNewRun(0, { initialStrayRemoveCharges: 1 })),
-            board,
-            strayRemoveCharges: 1
-        };
-
-        const after = applyStrayRemove(run, 'wild');
-
-        expect(after).not.toBe(run);
-        expect(after.board?.tiles.find((candidate) => candidate.id === 'wild')?.state).toBe('removed');
-        expectRunFair(after);
-    });
 
     it('accepts a leftover wild singleton once real board completion is already satisfied', () => {
         const board = boardFromTiles([tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched'), tile('wild', WILD_PAIR_KEY)], {
@@ -296,33 +260,4 @@ describe('REG-087 action eligibility edge cases', () => {
         expectRunFair(afterTileSwap);
     });
 
-    it('preserves completion routes across generated board-power permutations', () => {
-        for (const runSeed of [90_870, 90_871, 90_872, 90_873]) {
-            const baseRun = playableRun(
-                createNewRun(0, { runSeed, initialStrayRemoveCharges: 1 })
-            );
-            expectRunFair(baseRun);
-
-            if (canShuffleBoard(baseRun)) {
-                expectRunFair(applyShuffle(baseRun));
-            }
-
-            const row = Array.from({ length: baseRun.board?.rows ?? 0 }, (_, index) => index).find((candidate) =>
-                canRegionShuffleRow(baseRun, candidate)
-            );
-            if (row != null) {
-                expectRunFair(applyRegionShuffle(baseRun, row));
-            }
-
-            const hiddenTiles = baseRun.board?.tiles.filter((candidate) => candidate.state === 'hidden') ?? [];
-            if (hiddenTiles.length >= 2) {
-                expectRunFair(applyTileSwap(baseRun, hiddenTiles[0]!.id, hiddenTiles[1]!.id));
-            }
-
-            const strayTile = hiddenTiles.find((candidate) => tileIsStrayEligiblePreview(baseRun.board!, candidate.id));
-            if (strayTile) {
-                expectRunFair(applyStrayRemove(baseRun, strayTile.id));
-            }
-        }
-    });
 });

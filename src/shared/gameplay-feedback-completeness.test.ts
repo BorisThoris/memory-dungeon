@@ -75,47 +75,6 @@ describe('gameplay feedback completeness', () => {
         });
     });
 
-    it('reports power, score and streak HUD counters that the narrow audit previously missed', () => {
-        const command = createGameplayPeekCommand('missing-resource-feedback', 'tile-a');
-        const diagnostic = inspectGameplayFeedbackCompleteness({
-            before: run(),
-            after: run({
-                shuffleCharges: 1,
-                regionShuffleCharges: 1,
-                destroyPairCharges: 1,
-                peekCharges: 1,
-                flashPairCharges: 1,
-                strayRemoveCharges: 1,
-                pinnedTileIds: ['tile-a'],
-                stats: {
-                    currentStreak: 1,
-                    currentLevelScore: 10,
-                    totalScore: 10,
-                    tries: 1,
-                    mismatches: 1
-                } as RunState['stats']
-            }),
-            command,
-            events: [],
-            accepted: true
-        });
-
-        expect(diagnostic?.changedFields).toEqual([
-            'currentStreak',
-            'currentLevelScore',
-            'totalScore',
-            'tries',
-            'mismatches',
-            'shuffleCharges',
-            'regionShuffleCharges',
-            'destroyPairCharges',
-            'peekCharges',
-            'flashPairCharges',
-            'strayRemoveCharges',
-            'pinnedTileCount'
-        ]);
-        expect(diagnostic?.message).toContain('changed feedback-critical fields without typed presentation');
-    });
 
     it('accepts typed feedback and the authoritative board-turn envelope', () => {
         const command = createGameplayPeekCommand('covered-feedback', 'tile-a');

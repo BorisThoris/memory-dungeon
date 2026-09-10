@@ -80,7 +80,7 @@ describe('REG-082 quest contract campaign ladder', () => {
     it('normalizes malformed pin vow counters before projecting active contracts', () => {
         const run = {
             ...createNewRun(0),
-            activeContract: { noDestroy: false, noShuffle: false, maxMismatches: null, maxPinsTotalRun: 1.9 },
+            activeContract: { noShuffle: false, maxMismatches: null, maxPinsTotalRun: 1.9 },
             pinsPlacedCountThisRun: Number.POSITIVE_INFINITY
         };
 

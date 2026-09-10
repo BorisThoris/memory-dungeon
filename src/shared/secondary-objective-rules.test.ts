@@ -83,7 +83,6 @@ describe('secondary objective rules', () => {
         const run = {
             ...createNewRun(0),
             shuffleUsedThisFloor: true,
-            destroyUsedThisFloor: true,
             cursedMatchedEarlyThisFloor: true,
             turnsThisFloor: 99
         };

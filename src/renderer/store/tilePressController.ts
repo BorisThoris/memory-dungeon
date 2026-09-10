@@ -12,20 +12,14 @@ import {
     createRunWithPeekDisarmedPatch
 } from './runSurfaceState';
 
-export type TilePressAudioCue =
-    | { kind: 'destroyPair' }
-    | { kind: 'flip' }
-    | { kind: 'peekPower' }
-    | { kind: 'strayPower' };
+export type TilePressAudioCue = { kind: 'flip' } | { kind: 'peekPower' };
 
 type TilePressPatch = Partial<{
     boardPinMode: boolean;
-    destroyPairArmed: boolean;
     matchScorePop: MatchScorePop | null;
     mismatchScorePop: MismatchScorePop | null;
     peekModeArmed: boolean;
     run: RunState;
-    strayRemoveArmed: boolean;
     tileSwapArmed: boolean;
     tileSwapFirstTileId: string | null;
     view: ViewState;
@@ -39,21 +33,17 @@ export type PlayingTilePressSurfaceResult =
 
 export const createPlayingTilePressSurfaceResult = ({
     boardPinMode,
-    destroyPairArmed,
     peekModeArmed,
     regionShuffleArmed = false,
     run,
-    strayRemoveArmed = false,
     tileSwapArmed = false,
     tileSwapFirstTileId = null,
     tileId
 }: {
     boardPinMode: boolean;
-    destroyPairArmed: boolean;
     peekModeArmed: boolean;
     regionShuffleArmed?: boolean;
     run: RunState;
-    strayRemoveArmed?: boolean;
     tileSwapArmed?: boolean;
     tileSwapFirstTileId?: string | null;
     tileId: string;
@@ -79,11 +69,9 @@ export const createPlayingTilePressSurfaceResult = ({
     }
 
     const armedPowerPressResult = createArmedBoardPowerPressResult({
-        destroyPairArmed,
         peekModeArmed,
         regionShuffleArmed,
         run,
-        strayRemoveArmed,
         tileSwapArmed,
         tileSwapFirstTileId,
         tileId
@@ -91,18 +79,6 @@ export const createPlayingTilePressSurfaceResult = ({
     if (armedPowerPressResult.kind !== 'notArmed') {
         if (armedPowerPressResult.kind === 'handled') {
             return { kind: 'ignored', audio };
-        }
-        if (armedPowerPressResult.kind === 'strayApplied') {
-            audio.push({ kind: 'strayPower' });
-            // Stray remove is single-use, so it disarms once it fires. That used to happen
-            // inside applyStrayRemove when the flag lived on RunState; arming is surface
-            // state now, so the disarm belongs in the patch.
-            return {
-                kind: 'patch',
-                patch: { run: armedPowerPressResult.run, strayRemoveArmed: false },
-                audio,
-                resolveDelayMs: null
-            };
         }
         if (armedPowerPressResult.kind === 'peekApplied') {
             if (projectGameplayFeedback(armedPowerPressResult.events).some((feedback) => feedback.audioCategory === 'peek')) {
@@ -150,16 +126,7 @@ export const createPlayingTilePressSurfaceResult = ({
             };
         }
 
-        if (projectGameplayFeedback(armedPowerPressResult.events).some((feedback) => feedback.audioCategory === 'destroy-pair')) {
-            audio.push({ kind: 'destroyPair' });
-        }
-        return {
-            kind: armedPowerPressResult.resolvesRun ? 'applyResolvedRun' : 'patch',
-            run: armedPowerPressResult.run,
-            patch: createRunWithBoardPowersDisarmedPatch(armedPowerPressResult.run),
-            audio,
-            resolveDelayMs: null
-        } as PlayingTilePressSurfaceResult;
+        return { kind: 'handled', audio } as unknown as PlayingTilePressSurfaceResult;
     }
 
     const ordinaryFlipResult = createOrdinaryTileFlipResult({

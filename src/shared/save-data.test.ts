@@ -333,7 +333,6 @@ describe('save normalization', () => {
                 board: null
             },
             currentRun: {
-                strayRemoveArmed: true,
                 regionShuffleArmed: true,
                 dungeonRun: null,
                 dungeonKeys: null,
@@ -454,7 +453,6 @@ describe('save normalization', () => {
                 payoffPressureExtra: Number.POSITIVE_INFINITY,
                 activeContract: {
                     noShuffle: true,
-                    noDestroy: false,
                     maxMismatches: 2.8,
                     maxPinsTotalRun: 10.9
                 }
@@ -469,7 +467,6 @@ describe('save normalization', () => {
         expect(normalized.lastRunSummary?.payoffPressureExtra).toBeUndefined();
         expect(normalized.lastRunSummary?.activeContract).toEqual({
             noShuffle: true,
-            noDestroy: false,
             maxMismatches: 2,
             maxPinsTotalRun: 10
         });

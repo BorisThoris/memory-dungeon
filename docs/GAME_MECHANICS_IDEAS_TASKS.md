@@ -69,7 +69,7 @@ Check off as you ship or reject. **Roadmap-scale work** (dailies, relics, mutato
 
 - [x] `[Research]` **Weaker shuffle** — `Settings.weakerShuffleMode` / `rows_only` path in `applyShuffle`.
 - [x] `[P2]` **Shuffle score tax** — `shuffleScoreTaxEnabled` + `matchScoreMultiplier` decay on shuffle.
-- [x] `[Research]` **Remove one stray tile** — [STRAY_TILE.md](./STRAY_TILE.md) + `applyStrayRemove` / Wild run starter charge.
+- [x] `[Removed]` **Remove one stray tile** — shipped, then removed in Gen 200 once the wild joker was the only legal target it had left. See [REMOVED_POWERS.md](./REMOVED_POWERS.md).
 
 ---
 

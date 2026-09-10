@@ -34,7 +34,7 @@ export const describeRunModeIdentity = (run: RunState): RunModeIdentity => {
     if (run.practiceMode) {
         return { detail: 'Achievements off', label: 'Practice' };
     }
-    if (contract?.noShuffle === true && contract.noDestroy) {
+    if (contract?.noShuffle === true) {
         return { detail: 'No shuffle, no destroy', label: 'Scholar Contract' };
     }
     return CLASSIC;

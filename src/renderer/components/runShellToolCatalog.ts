@@ -17,10 +17,8 @@ export type RunShellToolId =
     | 'swap'
     | 'row'
     | 'pin'
-    | 'destroy'
     | 'peek'
     | 'flash'
-    | 'stray'
     | 'undo'
     | 'greet';
 
@@ -29,10 +27,8 @@ export type RunPowerChargeField = Extract<
     keyof RunState,
     | 'shuffleCharges'
     | 'regionShuffleCharges'
-    | 'destroyPairCharges'
     | 'peekCharges'
     | 'flashPairCharges'
-    | 'strayRemoveCharges'
 >;
 
 export interface RunShellToolSpec {
@@ -50,11 +46,9 @@ export const RUN_SHELL_TOOL_CATALOG: readonly RunShellToolSpec[] = [
     // Swap and Row spend the same currency; the game calls it "row/swap" everywhere for that reason.
     { conditional: false, id: 'row', label: 'Row', spends: 'regionShuffleCharges' },
     { conditional: false, id: 'pin', label: 'Pin', spends: null },
-    { conditional: false, id: 'destroy', label: 'Destroy', spends: 'destroyPairCharges' },
     { conditional: false, id: 'peek', label: 'Peek', spends: 'peekCharges' },
     // Only Practice and Wild runs carry flash charges, so the dock hides it elsewhere.
     { conditional: true, id: 'flash', label: 'Flash', spends: 'flashPairCharges' },
-    { conditional: false, id: 'stray', label: 'Stray', spends: 'strayRemoveCharges' },
     { conditional: false, id: 'undo', label: 'Undo', spends: null },
     // Greeting the floor's resident costs nothing and is governed by a once-per-floor rule rather
     // than a counter, so it spends no charge.

@@ -57,7 +57,7 @@ describe('gameplay interaction graph', () => {
     });
 
     it('keeps the executable graph connected and guarded', () => {
-        expect(gameplayInteractionGraph.version).toBe(36);
+        expect(gameplayInteractionGraph.version).toBe(37);
         expect(validateGameplayInteractionGraph()).toEqual([]);
     });
 
@@ -115,7 +115,6 @@ describe('gameplay interaction graph', () => {
         expect(blockers.map((mechanic) => mechanic.id)).toEqual(
             expect.arrayContaining([
                 'trait.stasis',
-                'power.destroy_pair',
                 'safety.softlock_fairness'
             ])
         );
@@ -165,16 +164,19 @@ describe('gameplay interaction graph', () => {
             traitCount: TILE_TRAIT_KINDS.length
         });
         // Gen 183: the score parasite went with the lives it ate, and its blocker with it.
-        expect(audit.blockerCount).toBe(3);
+        // Gen 200: Destroy went too, and it was the third blocker.
+        expect(audit.blockerCount).toBe(2);
         // 16 down to 14 in Gen 183: the parasite's two counterplay edges went with it.
-        expect(audit.counterplayEdgeCount).toBeGreaterThanOrEqual(14);
+        // 14 down to 11 in Gen 200: Destroy and Stray answered other mechanics, so pulling the
+        // powers pulled the edges that named them as the answer. Re-baselined against the graph
+        // rather than propped up - a counterplay edge to a power nobody can press is not counterplay.
+        expect(audit.counterplayEdgeCount).toBeGreaterThanOrEqual(11);
         expect(audit.blockerWithoutProtectiveEdgeIds).toEqual([]);
         expect(audit.generatedFloorCoverageGapIds).toEqual(expect.arrayContaining(['trait.echo']));
         expect(audit.playerVisibleWriteWithoutHudIds).toEqual([]);
         expect(audit.highLeverageMechanicIds).toEqual(
             expect.arrayContaining([
                 'trait.stasis',
-                'power.destroy_pair',
                 'safety.softlock_fairness',
                 'core.gameplay_commands',
                 'progression.run_flow'
@@ -202,7 +204,6 @@ describe('gameplay interaction graph', () => {
             expect.arrayContaining([
                 expect.objectContaining({ source: 'inventory.peek_charge', target: 'power.peek', kind: 'enables' }),
                 expect.objectContaining({ source: 'power.peek', target: 'inventory.peek_charge', kind: 'consumes' }),
-                expect.objectContaining({ source: 'power.peek', target: 'power.destroy_pair', kind: 'synergy' }),
                 expect.objectContaining({ source: 'core.gameplay_commands', target: 'feedback.gameplay_hud', kind: 'displays' }),
                 expect.objectContaining({ source: 'core.gameplay_commands', target: 'persistence.run_summary', kind: 'persists' }),
                 expect.objectContaining({ source: 'core.gameplay_commands', target: 'simulation.gameplay_replay', kind: 'tested_by' })
@@ -242,17 +243,6 @@ describe('gameplay interaction graph', () => {
         );
     });
 
-    it('connects Destroy charges into deterministic pair removal', () => {
-        const byId = mechanicById();
-        expect(byId.get('inventory.destroy_charge')).toMatchObject({ kind: 'inventory', role: 'pair_removal_resource' });
-        expect(gameplayInteractionGraph.edges).toEqual(
-            expect.arrayContaining([
-                expect.objectContaining({ source: 'core.gameplay_commands', target: 'inventory.destroy_charge', kind: 'modifies' }),
-                expect.objectContaining({ source: 'inventory.destroy_charge', target: 'power.destroy_pair', kind: 'enables' }),
-                expect.objectContaining({ source: 'power.destroy_pair', target: 'inventory.destroy_charge', kind: 'consumes' })
-            ])
-        );
-    });
 
     it('connects the Gambit token from per-floor grant through mismatch rescue', () => {
         const byId = mechanicById();
@@ -348,7 +338,6 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'power.wild_match', target: 'inventory.wild_match_token', kind: 'consumes' }),
             expect.objectContaining({ source: 'power.wild_match', target: 'objective.floor_clear', kind: 'counterplay' }),
             expect.objectContaining({ source: 'power.gambit', target: 'power.wild_match', kind: 'synergy' }),
-            expect.objectContaining({ source: 'power.stray_remove', target: 'board.wild_joker_tile', kind: 'counterplay' }),
             expect.objectContaining({ source: 'power.wild_match', target: 'feedback.gameplay_hud', kind: 'displays' })
         ]));
     });
@@ -374,33 +363,12 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'progression.run_setup', target: 'inventory.contract_loadout', kind: 'grants' }),
             expect.objectContaining({ source: 'progression.run_flow', target: 'inventory.mutator_loadout', kind: 'modifies' }),
             expect.objectContaining({ source: 'inventory.contract_loadout', target: 'power.shuffle', kind: 'gates' }),
-            expect.objectContaining({ source: 'inventory.contract_loadout', target: 'power.destroy_pair', kind: 'gates' }),
             expect.objectContaining({ source: 'inventory.contract_loadout', target: 'power.pin', kind: 'gates' }),
             expect.objectContaining({ source: 'inventory.mutator_loadout', target: 'feedback.gameplay_hud', kind: 'displays' }),
             expect.objectContaining({ source: 'inventory.contract_loadout', target: 'feedback.gameplay_hud', kind: 'displays' })
         ]));
     });
 
-    it('connects typed Destroy Pair from charge and target choice through replayable floor consequence', () => {
-        const byId = mechanicById();
-        expect(byId.get('power.destroy_pair')).toMatchObject({
-            kind: 'power',
-            role: 'flat_typed_completion_safe_pair_removal_and_floor_clear',
-            tests: expect.arrayContaining([
-                'src/shared/gameplay-core.test.ts',
-                'src/renderer/store/runSurfaceState.test.ts'
-            ])
-        });
-        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
-            expect.objectContaining({ source: 'inventory.destroy_charge', target: 'power.destroy_pair', kind: 'enables' }),
-            expect.objectContaining({ source: 'power.destroy_pair', target: 'inventory.destroy_charge', kind: 'consumes' }),
-            expect.objectContaining({ source: 'core.gameplay_commands', target: 'power.destroy_pair', kind: 'modifies' }),
-            expect.objectContaining({ source: 'power.destroy_pair', target: 'objective.floor_clear', kind: 'counterplay' }),
-            expect.objectContaining({ source: 'power.destroy_pair', target: 'progression.run_flow', kind: 'enables' }),
-            expect.objectContaining({ source: 'power.destroy_pair', target: 'feedback.gameplay_hud', kind: 'displays' }),
-            expect.objectContaining({ source: 'power.destroy_pair', target: 'simulation.gameplay_replay', kind: 'tested_by' })
-        ]));
-    });
 
     it('evaluates route strategy through typed outcomes instead of parallel reward arithmetic', () => {
         const byId = mechanicById();

@@ -18,7 +18,6 @@ export type LevelCompleteContinuationSurfaceResult =
           patch: Pick<
               RunSurfaceState,
               | 'boardPinMode'
-              | 'destroyPairArmed'
               | 'matchScorePop'
               | 'mismatchScorePop'
               | 'peekModeArmed'

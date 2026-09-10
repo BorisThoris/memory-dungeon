@@ -199,7 +199,6 @@ const normalizeContractFlags = (input: unknown): ContractFlags | null => {
     if (
         !isUnknownRecord(input) ||
         typeof input.noShuffle !== 'boolean' ||
-        typeof input.noDestroy !== 'boolean' ||
         (input.maxMismatches !== null &&
             (typeof input.maxMismatches !== 'number' || !Number.isFinite(input.maxMismatches)))
     ) {
@@ -214,7 +213,6 @@ const normalizeContractFlags = (input: unknown): ContractFlags | null => {
     }
     return {
         noShuffle: input.noShuffle,
-        noDestroy: input.noDestroy,
         maxMismatches:
             input.maxMismatches === null ? null : finiteNonNegativeInteger(input.maxMismatches, 0),
         ...(input.maxPinsTotalRun === null

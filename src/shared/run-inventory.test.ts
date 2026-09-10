@@ -5,59 +5,14 @@ import {
     gainRunInventoryItem,
     getRunConsumableRows,
     getRunInventoryGainFeedback,
-    getRunInventoryItemPayoutRows,
     getRunInventoryLoadoutRows,
     previewRunInventoryItemGain,
-    RUN_INVENTORY_CATALOG,
-    RUN_INVENTORY_ITEM_IDS,
     RUN_LOADOUT_SLOT_LIMIT,
     useRunInventoryItem
 } from './run-inventory';
 
 describe('REG-079 run inventory, consumables, and loadout model', () => {
-    it('derives run-scoped consumables from current charges and stack limits', () => {
-        const run = createNewRun(0);
-        const inventory = buildRunInventory(run);
 
-        expect(inventory.offlineOnly).toBe(true);
-        expect(Object.keys(RUN_INVENTORY_CATALOG)).toEqual([...RUN_INVENTORY_ITEM_IDS]);
-        expect(getRunConsumableRows(run).map((row) => row.id)).toEqual(
-            RUN_INVENTORY_ITEM_IDS.filter((id) => RUN_INVENTORY_CATALOG[id].kind === 'consumable')
-        );
-        expect(inventory.consumables.map((row) => row.id)).toEqual([
-            'shuffle_charge',
-            'region_shuffle_charge',
-            'destroy_charge',
-            'peek_charge',
-            'stray_remove_charge',
-            'flash_pair_charge',
-            'undo_charge',
-            'gambit_token',
-            'wild_match_token'
-        ]);
-        expect(inventory.consumables.find((row) => row.id === 'destroy_charge')?.stackLimit).toBeNull();
-        expect(inventory.consumables.find((row) => row.id === 'destroy_charge')?.source).toBe(
-            'Run start and explicit pickups.'
-        );
-        expect(inventory.consumables.find((row) => row.id === 'region_shuffle_charge')).toMatchObject({
-            label: 'Row/swap charge',
-            useRule: 'Spend during play to reshuffle one row or swap two hidden tiles; disabled by no-shuffle contracts.'
-        });
-        expect(getRunConsumableRows({ ...run, shuffleCharges: 99 }).find((row) => row.id === 'shuffle_charge')?.quantity).toBe(99);
-        expect(getRunConsumableRows({ ...run, destroyPairCharges: 7 }).find((row) => row.id === 'destroy_charge')?.quantityLabel).toBe('7');
-    });
-
-    it('grants uncapped destroy charges through the shared pickup path', () => {
-        const run = { ...createNewRun(0), destroyPairCharges: 2 };
-        const charged = gainRunInventoryItem(run, 'destroy_charge', 3);
-
-        expect(charged.destroyPairCharges).toBe(5);
-        expect(buildRunInventory(charged).consumables.find((row) => row.id === 'destroy_charge')).toMatchObject({
-            quantity: 5,
-            quantityLabel: '5',
-            stackLimit: null
-        });
-    });
 
     it('re-arms a spent gambit token when a pickup grants one later in the floor', () => {
         const spent = {
@@ -164,20 +119,6 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
     });
 
 
-    it('builds bounded inventory payout rows in catalog order', () => {
-        const rows = getRunInventoryItemPayoutRows({
-            peek_charge: 2.8,
-            destroy_charge: Number.NaN,
-            undo_charge: -1,
-            missing_item: 99
-        });
-
-        expect(rows.map((row) => row.id)).toEqual([...RUN_INVENTORY_ITEM_IDS]);
-        expect(rows.find((row) => row.id === 'peek_charge')?.amount).toBe(2);
-        expect(rows.find((row) => row.id === 'destroy_charge')?.amount).toBe(0);
-        expect(rows.find((row) => row.id === 'undo_charge')?.amount).toBe(0);
-        expect(getRunInventoryItemPayoutRows(['peek_charge']).every((row) => row.amount === 0)).toBe(true);
-    });
 
     it('ignores malformed reward amounts before they can poison inventory counters', () => {
         const run = { ...createNewRun(0), peekCharges: 2 };
@@ -232,7 +173,7 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
 
         expect(peeked.applied).toBe(true);
         expect(peeked.run.peekCharges).toBe(run.peekCharges - 1);
-        expect(useRunInventoryItem({ ...run, activeContract: { noShuffle: true, noDestroy: false, maxMismatches: null } }, 'shuffle_charge')).toMatchObject({
+        expect(useRunInventoryItem({ ...run, activeContract: { noShuffle: true, maxMismatches: null } }, 'shuffle_charge')).toMatchObject({
             applied: false,
             reason: 'unavailable'
         });
@@ -258,7 +199,7 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
     it('separates mutable mid-run consumables from fixed loadout slots', () => {
         const run = createNewRun(0, {
             activeMutators: ['short_memorize', 'wide_recall'],
-            activeContract: { noShuffle: true, noDestroy: true, maxMismatches: null }
+            activeContract: { noShuffle: true, maxMismatches: null }
         });
         const loadout = getRunInventoryLoadoutRows(run);
 

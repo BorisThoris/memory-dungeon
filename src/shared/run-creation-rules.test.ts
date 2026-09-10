@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { GAME_RULES_VERSION } from './contracts';
-import { createNewRun, createWildRun } from './run-creation-rules';
+import { createNewRun } from './run-creation-rules';
 
 describe('run creation rules', () => {
     it('creates a deterministic base run with an initialized board', () => {
@@ -18,16 +18,5 @@ describe('run creation rules', () => {
         expect(run.timerState.memorizeRemainingMs).toBeGreaterThan(0);
     });
 
-    it('creates wild menu runs with wild and stray affordances', () => {
-        const run = createWildRun(0, {
-            runSeed: 20_002,
-            runRulesVersionOverride: GAME_RULES_VERSION
-        });
-
-        expect(run.wildMenuRun).toBe(true);
-        expect(run.wildMatchesRemaining).toBe(1);
-        expect(run.strayRemoveCharges).toBe(1);
-        expect(run.activeMutators).toEqual(['sticky_fingers', 'short_memorize', 'findables_floor']);
-    });
 
 });

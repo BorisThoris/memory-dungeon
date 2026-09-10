@@ -23,9 +23,7 @@ export const SFX_SAMPLE_KEYS = [
     'match-tier-high',
     'mismatch',
     'power-arm',
-    'destroy-pair',
     'peek-power',
-    'stray-power',
     'shuffle-full',
     'shuffle-quick',
     'floor-clear'

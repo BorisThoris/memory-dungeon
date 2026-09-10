@@ -16,8 +16,6 @@ export type PowerVerbId =
     | 'tile_swap'
     | 'pin'
     | 'peek'
-    | 'destroy_pair'
-    | 'stray_remove'
     | 'flash_pair'
     | 'undo_resolve'
     | 'gambit';
@@ -54,15 +52,6 @@ const powerVerbArrayIncludes = (value: unknown, item: string): boolean => runStr
 const hasOpenFlip = (run: RunState): boolean =>
     run.board ? !Array.isArray(run.board.flippedTileIds) || run.board.flippedTileIds.length > 0 : false;
 
-const hasDestroyTarget = (run: RunState): boolean => {
-    const tiles = run.board?.tiles ?? [];
-    return tiles.some((tile) => {
-        if (tile.state !== 'hidden') return false;
-        const pair = tiles.filter((candidate) => candidate.pairKey === tile.pairKey);
-        return pair.length === 2 && pair.every((candidate) => candidate.state === 'hidden');
-    });
-};
-
 const hasPeekTarget = (run: RunState): boolean =>
     (run.board?.tiles ?? []).some(
         (tile) => tile.state === 'hidden' && !powerVerbArrayIncludes(run.peekRevealedTileIds, tile.id)
@@ -84,24 +73,10 @@ const peekDisabledReason = (run: RunState, peekCharges: number): string | null =
             ? 'No hidden peek targets.'
             : null);
 
-const destroyDisabledReason = (run: RunState, destroyPairCharges: number): string | null =>
-    onlyWhilePlaying(run) ??
-    (run.activeContract?.noDestroy
-        ? 'Scholar contract disables destroy.'
-        : destroyPairCharges < 1
-          ? 'No destroy charges.'
-          : hasOpenFlip(run)
-            ? 'Resolve the current flip first.'
-            : !hasDestroyTarget(run)
-              ? 'No fully hidden pair to destroy.'
-              : null);
-
 export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => {
     const shuffleCharges = runNonNegativeInteger(run.shuffleCharges);
     const regionShuffleCharges = runNonNegativeInteger(run.regionShuffleCharges);
     const peekCharges = runNonNegativeInteger(run.peekCharges);
-    const destroyPairCharges = runNonNegativeInteger(run.destroyPairCharges);
-    const strayRemoveCharges = runNonNegativeInteger(run.strayRemoveCharges);
     const flashPairCharges = runNonNegativeInteger(run.flashPairCharges);
     const undoUsesThisFloor = runNonNegativeInteger(run.undoUsesThisFloor);
     const pinsPlacedCountThisRun = runNonNegativeInteger(run.pinsPlacedCountThisRun);
@@ -225,34 +200,6 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => {
                     : hiddenTileCount(run) < 2
                       ? 'Need two hidden tiles to swap.'
                       : null)
-    },
-    {
-        id: 'destroy_pair',
-        label: 'Destroy',
-        job: 'Damage control',
-        mechanicClass: 'bailout',
-        tokens: ['cost', 'forfeit', 'resolved', 'locked'],
-        purpose: 'Remove a fully hidden pair for no match score.',
-        cost: `${destroyPairCharges} destroy charge(s).`,
-        consequence: 'Forfeits match score and pickups/rewards on that pair.',
-        perfectMemoryImpact: 'locks_perfect_memory',
-        perfectMemoryCopy: locksPerfectMemory,
-        memoryTax: { ...CORE_SAFE_MEMORY_TAX, mistakeRecovery: 2, boardCompletionRisk: 1, uiComprehensionLoad: 1 },
-        disabledReason: destroyDisabledReason(run, destroyPairCharges)
-    },
-    {
-        id: 'stray_remove',
-        label: 'Stray',
-        job: 'Damage control',
-        mechanicClass: 'bailout',
-        tokens: ['cost', 'forfeit', 'resolved'],
-        purpose: 'Remove one completion-safe hidden singleton to reduce overload.',
-        cost: `${strayRemoveCharges} stray-remove charge(s).`,
-        consequence: 'Blocks normal pairs, removes one legal singleton tile, and counts as an assist.',
-        perfectMemoryImpact: 'locks_perfect_memory',
-        perfectMemoryCopy: locksPerfectMemory,
-        memoryTax: { ...CORE_SAFE_MEMORY_TAX, mistakeRecovery: 1, boardCompletionRisk: 1, uiComprehensionLoad: 1 },
-        disabledReason: onlyWhilePlaying(run) ?? (strayRemoveCharges < 1 ? 'No stray-remove charges.' : null)
     },
     {
         id: 'undo_resolve',

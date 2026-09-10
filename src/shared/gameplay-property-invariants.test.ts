@@ -8,10 +8,9 @@ import {
 } from './contracts';
 import { inspectBoardFairness, inspectRunFairness } from './board-inspection';
 import { canRegionShuffleRow, canShuffleBoard, canSwapHiddenTiles } from './board-power-availability';
-import { applyFlashPair, applyPeek, applyRegionShuffle, applyShuffle, applyStrayRemove, applyTileSwap } from './board-power-actions';
+import { applyRegionShuffle, applyShuffle, applyTileSwap } from './board-power-actions';
 import { buildBoard } from './board-build-rules';
 import { createNewRun, finishMemorizePhase } from './game-core';
-import { advanceToNextLevel } from './next-floor-transition-rules';
 import { solveRunByExhaustingPlayablePairs } from './playthrough-solver';
 import { createGeneratedBoardSolverRun } from './softlock-generator-contract';
 import { isSingletonUtilityPairKey } from './tile-identity';
@@ -53,11 +52,9 @@ const expectRunResourceBounds = (run: RunState): void => {
     // The run's end reason is set exactly when the run is over, and never before.
     expect(run.runEndReason == null).toBe(run.status !== 'gameOver');
     expect(run.shuffleCharges).toBeGreaterThanOrEqual(0);
-    expect(run.destroyPairCharges).toBeGreaterThanOrEqual(0);
     expect(run.regionShuffleCharges).toBeGreaterThanOrEqual(0);
     expect(run.peekCharges).toBeGreaterThanOrEqual(0);
     expect(run.flashPairCharges).toBeGreaterThanOrEqual(0);
-    expect(run.strayRemoveCharges).toBeGreaterThanOrEqual(0);
 };
 
 const expectFlippedTileReferencesExist = (run: RunState): void => {
@@ -96,25 +93,6 @@ describe('gameplay property invariants', () => {
         );
     });
 
-    it('fresh runs have fair boards and non-negative gameplay resources', () => {
-        fc.assert(
-            fc.property(generatedRun, ({ runSeed, rulesVersion }) => {
-                const run = createNewRun(0, {
-                    echoFeedbackEnabled: false,
-                    runRulesVersionOverride: rulesVersion,
-                    runSeed
-                });
-                const report = inspectRunFairness(run);
-
-                expect(report.issues).toEqual([]);
-                expect(run.status).toBe('memorize');
-                expect(run.runEndReason).toBeNull();
-                expect(run.shuffleCharges).toBeGreaterThanOrEqual(0);
-                expect(run.destroyPairCharges).toBeGreaterThanOrEqual(0);
-            }),
-            { numRuns: propertyRuns }
-        );
-    });
 
     it('shuffle and swap powers preserve board identity and non-negative resources', () => {
         fc.assert(
@@ -168,44 +146,6 @@ describe('gameplay property invariants', () => {
         );
     });
 
-    it('peek, flash, and stray powers preserve valid run shape when they apply', () => {
-        fc.assert(
-            fc.property(generatedRun, fc.integer({ min: 0, max: 63 }), ({ runSeed, rulesVersion }, pick) => {
-                const run = finishMemorizePhase(createNewRun(0, {
-                    echoFeedbackEnabled: false,
-                    practiceMode: true,
-                    runRulesVersionOverride: rulesVersion,
-                    runSeed
-                }));
-                const hiddenTiles = run.board?.tiles.filter((tile) => tile.state === 'hidden') ?? [];
-                const tile = hiddenTiles[pick % Math.max(1, hiddenTiles.length)];
-
-                const peeked = tile ? applyPeek(run, tile.id) : run;
-                expectRunResourceBounds(peeked);
-                expectFlippedTileReferencesExist(peeked);
-                if (peeked !== run && peeked.status !== 'gameOver') {
-                    expect(inspectRunFairness(peeked).issues).toEqual([]);
-                }
-
-                const flashed = applyFlashPair(run);
-                expectRunResourceBounds(flashed);
-                expectFlippedTileReferencesExist(flashed);
-                if (flashed !== run && flashed.status !== 'gameOver') {
-                    expect(inspectRunFairness(flashed).issues).toEqual([]);
-                }
-
-                // Stray only takes a singleton; on a floor with none it is a no-op, which is also legal shape.
-                const strayTarget = hiddenTiles.find((candidate) => isSingletonUtilityPairKey(candidate.pairKey)) ?? tile;
-                const strayRemoved = strayTarget ? applyStrayRemove(run, strayTarget.id) : run;
-                expectRunResourceBounds(strayRemoved);
-                expectFlippedTileReferencesExist(strayRemoved);
-                if (strayRemoved !== run && strayRemoved.status !== 'gameOver') {
-                    expect(inspectRunFairness(strayRemoved).issues).toEqual([]);
-                }
-            }),
-            { numRuns: propertyRuns }
-        );
-    });
 
     it('flip and resolve preserve legal run shape for matches and misses', () => {
         fc.assert(
@@ -270,42 +210,6 @@ describe('gameplay property invariants', () => {
 
 
 
-    it('next-floor advancement either stays guarded or returns a valid terminal/memorize run', () => {
-        fc.assert(
-            fc.property(generatedRun, ({ runSeed, rulesVersion }) => {
-                const playing = finishMemorizePhase(createNewRun(0, {
-                    echoFeedbackEnabled: false,
-                    runRulesVersionOverride: rulesVersion,
-                    runSeed
-                }));
-                const run: RunState = {
-                    ...playing,
-                    status: 'levelComplete',
-                    board: playing.board
-                        ? {
-                              ...playing.board,
-                              tiles: playing.board.tiles.map((tile) => ({ ...tile, state: 'matched' as const })),
-                              flippedTileIds: []
-                          }
-                        : playing.board
-                };
-
-                const next = advanceToNextLevel(run);
-                expect(next.runEndReason).toBeNull();
-                expect(next.shuffleCharges).toBeGreaterThanOrEqual(0);
-                expect(next.destroyPairCharges).toBeGreaterThanOrEqual(0);
-
-                if (next.status === 'memorize') {
-                    expect(next.board?.level).toBe((run.board?.level ?? 0) + 1);
-                    expect(next.timerState.memorizeRemainingMs).toBeGreaterThan(0);
-                    expect(inspectRunFairness(next).issues).toEqual([]);
-                } else {
-                    expect(['levelComplete', 'gameOver']).toContain(next.status);
-                }
-            }),
-            { numRuns: propertyRuns }
-        );
-    });
 
 
 

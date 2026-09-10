@@ -85,7 +85,7 @@ describe('turn mismatch rules', () => {
     it('forces game over when mismatch contract is exceeded', () => {
         const b = board([tile('a'), tile('b')]);
         const penalty = calculateMismatchPenalty(run(b, {
-            activeContract: { noShuffle: false, noDestroy: false, maxMismatches: 2 },
+            activeContract: { noShuffle: false, maxMismatches: 2 },
             stats: { ...run(b).stats, tries: 2 }
         }), 1);
 
@@ -96,7 +96,7 @@ describe('turn mismatch rules', () => {
     it('names the contract as the reason the run ended', () => {
         const b = board([tile('a'), tile('b')]);
         const base = run(b, {
-            activeContract: { noShuffle: false, noDestroy: false, maxMismatches: 2 },
+            activeContract: { noShuffle: false, maxMismatches: 2 },
             stats: { ...run(b).stats, tries: 2 }
         });
 

@@ -405,12 +405,8 @@ interface TileBoardProps {
     /** `shifting_spotlight` — show ward/bounty corner markers on face-down tiles. */
     shiftingSpotlightActive?: boolean;
     /** Board power affordances: destroy pair armed and valid run + board state. */
-    destroyPowerVisualActive?: boolean;
-    destroyEligibleTileIds?: ReadonlySet<string>;
     peekPowerVisualActive?: boolean;
     peekEligibleTileIds?: ReadonlySet<string>;
-    strayPowerVisualActive?: boolean;
-    strayEligibleTileIds?: ReadonlySet<string>;
     tileSwapPowerVisualActive?: boolean;
     tileSwapEligibleTileIds?: ReadonlySet<string>;
     tileSwapFirstTileId?: string | null;
@@ -672,12 +668,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         pairProximityHintsEnabled = true,
         onTileSelect,
         shiftingSpotlightActive = false,
-        destroyPowerVisualActive = false,
-        destroyEligibleTileIds = EMPTY_TILE_IDS,
         peekPowerVisualActive = false,
         peekEligibleTileIds = EMPTY_TILE_IDS,
-        strayPowerVisualActive = false,
-        strayEligibleTileIds = EMPTY_TILE_IDS,
         tileSwapPowerVisualActive = false,
         tileSwapEligibleTileIds = EMPTY_TILE_IDS,
         tileSwapFirstTileId = null,
@@ -1051,8 +1043,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         return getFocusedTileLiveLabel({
             board,
             debugPeekActive,
-            destroyEligibleTileIds,
-            destroyPowerVisualActive,
             focusedTileId,
             pairProximityHintsEnabled,
             peekEligibleTileIds,
@@ -1060,8 +1050,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             peekRevealedTileIds: peekSet,
             previewActive,
             runStatus,
-            strayEligibleTileIds,
-            strayPowerVisualActive,
             tileSwapEligibleTileIds,
             tileSwapFirstTileId,
             tileSwapPowerVisualActive,
@@ -1071,8 +1059,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     }, [
         board,
         debugPeekActive,
-        destroyEligibleTileIds,
-        destroyPowerVisualActive,
         focusedTileId,
         pairProximityHintsEnabled,
         peekEligibleTileIds,
@@ -1080,8 +1066,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         peekSet,
         previewActive,
         runStatus,
-        strayEligibleTileIds,
-        strayPowerVisualActive,
         tileSwapEligibleTileIds,
         tileSwapFirstTileId,
         tileSwapPowerVisualActive,
@@ -1793,16 +1777,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                       tone: 'setup'
                   };
         }
-        if (destroyPowerVisualActive) {
-            return {
-                beats: 3,
-                label: 'Destroy armed',
-                detail: 'Tap hidden pair',
-                first: 'Mark pair',
-                then: 'Clear blocker',
-                tone: 'control'
-            };
-        }
         if (peekPowerVisualActive) {
             return {
                 beats: 3,
@@ -1811,16 +1785,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 first: 'Reveal one',
                 then: 'Lock memory route',
                 tone: 'recall'
-            };
-        }
-        if (strayPowerVisualActive) {
-            return {
-                beats: 3,
-                label: 'Stray armed',
-                detail: 'Remove singleton',
-                first: 'Find stray',
-                then: 'Open board space',
-                tone: 'control'
             };
         }
         if (pinModeBoardHintActive) {
@@ -1835,11 +1799,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         }
         return null;
     }, [
-        destroyPowerVisualActive,
         peekPowerVisualActive,
         pinModeBoardHintActive,
         runStatus,
-        strayPowerVisualActive,
         tileSwapFirstTileId,
         tileSwapPowerVisualActive
     ]);
@@ -3360,14 +3322,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         silhouetteDuringPlay={silhouetteDuringPlay}
                                         wideRecallInPlay={wideRecallInPlay}
                                         shiftingSpotlightActive={shiftingSpotlightActive}
-                                        destroyPowerVisualActive={destroyPowerVisualActive}
-                                        destroyEligibleTileIds={destroyEligibleTileIds}
                                         peekPowerVisualActive={peekPowerVisualActive}
                                         clumpReadNextTileIds={clumpReadNextTileIds}
                                         clumpReadTileIds={clumpReadTileIds}
                                         peekEligibleTileIds={peekEligibleTileIds}
-                                        strayPowerVisualActive={strayPowerVisualActive}
-                                        strayEligibleTileIds={strayEligibleTileIds}
                                         tileSwapPowerVisualActive={tileSwapPowerVisualActive}
                                         tileSwapEligibleTileIds={tileSwapEligibleTileIds}
                                         tileSwapFirstTileId={tileSwapFirstTileId}

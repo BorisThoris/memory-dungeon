@@ -3,8 +3,6 @@ import { createFlipTileTransition } from './flip-tile-transition';
 import { createResolveBoardTurnTransition } from './board-turn-transition';
 import { finalizeLevel } from './floor-clear-transition';
 import { appendGameplayJournal } from './gameplay-journal';
-import { createGameplayDestroyPairCommand } from './gameplay-core-contracts';
-import { reduceGameplayCommand } from './gameplay-core';
 import {
     consumeWildMatchThroughGameplayCore,
     resolveBoardTurnThroughGameplayCore,
@@ -43,24 +41,18 @@ export {
     getMismatchFloaterAnchorTileIds
 } from './tile-floater-anchor-rules';
 export {
-    collectDestroyEligibleTileIds,
     collectPeekEligibleTileIds,
-    tileIsDestroyEligiblePreview,
     tileIsPeekEligiblePreview,
-    tileIsStrayEligiblePreview
 } from './board-power-targeting';
 export {
     applyFlashPair,
     applyPeek,
     applyRegionShuffle,
     applyShuffle,
-    applyStrayRemove,
     applyTileSwap,
-    applyDestroyPairTransition,
     cancelResolvingWithUndo
 } from './board-power-actions';
 export {
-    canDestroyPair,
     canRegionShuffle,
     canRegionShuffleRow,
     canShuffleBoard,
@@ -112,18 +104,6 @@ export {
 export { finalizeLevel };
 
 export const flipTile = createFlipTileTransition({ finalizeLevel });
-
-export const applyDestroyPair = (run: RunState, tileId: string): RunState => {
-    const command = createGameplayDestroyPairCommand(
-        `destroy-pair:${run.runSeed}:${run.board?.level ?? 0}:${run.destroyPairCharges}:${tileId}`,
-        tileId
-    );
-    const result = reduceGameplayCommand(run, command);
-    if (!result.accepted) {
-        return run;
-    }
-    return appendGameplayJournal(result.run, [command], result.events);
-};
 
 const resolveBoardTurnCompatibility = createResolveBoardTurnTransition({
     finalizeLevel,

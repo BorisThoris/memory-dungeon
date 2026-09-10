@@ -60,7 +60,6 @@ export const buildVowContract = (vows: readonly ClassicRunVowId[]): ContractFlag
     return {
         maxMismatches: null,
         maxPinsTotalRun: vows.includes('pin_vow') ? 10 : null,
-        noDestroy: scholar,
         noShuffle: scholar
     };
 };
@@ -75,7 +74,7 @@ export const buildClassicRunOptions = (setup: ClassicRunSetup): CreateRunOptions
         ...(activeMutators.length > 0 ? { activeMutators } : {}),
         // `wildMenuRun` is the flag the HUD identity and the restart precedence read for a wild run;
         // without it a chaos descent said "Classic Dungeon" on the bar and retried as one.
-        ...(setup.chaos ? { enableWildJoker: true, initialStrayRemoveCharges: 1, wildMenuRun: true } : {}),
+        ...(setup.chaos ? { enableWildJoker: true, wildMenuRun: true } : {}),
         ...(setup.pacing === 'calm' ? { resolveDelayMultiplier: 1.35 } : {}),
         ...(setup.unrecorded ? { practiceMode: true } : {}),
         // A vow is a claim about how the run was played, so the shuffle it forbids has to be the
@@ -99,7 +98,7 @@ export const classicRunSetupFromRun = (
     }
     const contract = run.activeContract;
     const vows: ClassicRunVowId[] = [];
-    if (contract?.noShuffle === true && contract.noDestroy === true) vows.push('scholar');
+    if (contract?.noShuffle === true) vows.push('scholar');
     if (contract?.maxPinsTotalRun != null) vows.push('pin_vow');
     return {
         chaos: run.wildMenuRun === true,

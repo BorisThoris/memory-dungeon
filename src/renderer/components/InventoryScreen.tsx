@@ -26,8 +26,6 @@ const CHARGE_ROWS: readonly { id: string; label: string }[] = [
     { id: 'shuffle_charge', label: 'Full shuffle' },
     { id: 'region_shuffle_charge', label: 'Row / swap' },
     { id: 'peek_charge', label: 'Peek' },
-    { id: 'destroy_charge', label: 'Destroy pair' },
-    { id: 'stray_remove_charge', label: 'Stray remove' },
     { id: 'undo_charge', label: 'Undo this floor' }
 ];
 

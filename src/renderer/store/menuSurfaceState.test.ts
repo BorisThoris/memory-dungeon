@@ -6,7 +6,6 @@ describe('menuSurfaceState', () => {
         expect(createMenuSurfacePatch()).toMatchObject({
             achievementBridgeNotice: null,
             boardPinMode: false,
-            destroyPairArmed: false,
             matchScorePop: null,
             mismatchScorePop: null,
             newlyUnlockedAchievements: [],

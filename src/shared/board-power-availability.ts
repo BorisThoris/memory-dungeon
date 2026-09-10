@@ -1,6 +1,5 @@
 import type { RunState } from './contracts';
 import { countFullyHiddenPairs } from './board-inspection';
-import { tileIsDestroyEligiblePreview } from './board-power-targeting';
 import { runNonNegativeInteger } from './run-number-guards';
 
 export const hasClearFlipState = (run: RunState): boolean => Array.isArray(run.board?.flippedTileIds) && run.board.flippedTileIds.length === 0;
@@ -15,14 +14,6 @@ export const canShuffleBoard = (run: RunState): boolean => {
         runNonNegativeInteger(run.shuffleCharges) > 0 &&
         countFullyHiddenPairs(board) >= 2
     );
-};
-
-export const canDestroyPair = (run: RunState, tileId: string): boolean => {
-    if (run.status !== 'playing' || !run.board || !hasClearFlipState(run) || runNonNegativeInteger(run.destroyPairCharges) <= 0) {
-        return false;
-    }
-
-    return tileIsDestroyEligiblePreview(run.board, tileId);
 };
 
 export const canRegionShuffle = (run: RunState): boolean => {

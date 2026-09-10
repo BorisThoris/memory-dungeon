@@ -236,35 +236,18 @@ export const getTileAriaLabel = (
 
 export const getPowerTargetAriaText = (
     tile: Tile,
-    destroyPowerVisualActive: boolean,
-    destroyEligibleTileIds: ReadonlySet<string>,
     peekPowerVisualActive: boolean,
     peekEligibleTileIds: ReadonlySet<string>,
-    strayPowerVisualActive: boolean,
-    strayEligibleTileIds: ReadonlySet<string>,
     tileSwapPowerVisualActive: boolean,
     tileSwapEligibleTileIds: ReadonlySet<string>,
     tileSwapFirstTileId: string | null,
     board?: BoardState
 ): string => {
-    if (destroyPowerVisualActive) {
-        if (destroyEligibleTileIds.has(tile.id)) {
-            return ' Destroy target: valid. Forfeits match score and pickups or rewards on this pair.';
-        }
-        return tile.state === 'hidden' ? ' Destroy target: invalid for this power.' : '';
-    }
     if (peekPowerVisualActive) {
         return peekEligibleTileIds.has(tile.id)
             ? ' Peek target: valid. Reveals this one tile and locks Perfect Memory.'
             : tile.state === 'hidden'
               ? ' Peek target: invalid or already revealed.'
-              : '';
-    }
-    if (strayPowerVisualActive) {
-        return strayEligibleTileIds.has(tile.id)
-            ? ' Stray target: valid. Removes this safe singleton tile from play and locks Perfect Memory.'
-            : tile.state === 'hidden'
-              ? ' Stray target: invalid, paired, or protected.'
               : '';
     }
     if (tileSwapPowerVisualActive) {
@@ -351,8 +334,6 @@ export const moveFocusInGrid = (
 export const getFocusedTileLiveLabel = ({
     board,
     debugPeekActive,
-    destroyEligibleTileIds,
-    destroyPowerVisualActive,
     focusedTileId,
     pairProximityHintsEnabled,
     peekEligibleTileIds,
@@ -360,8 +341,6 @@ export const getFocusedTileLiveLabel = ({
     peekRevealedTileIds,
     previewActive,
     runStatus,
-    strayEligibleTileIds,
-    strayPowerVisualActive,
     tileSwapEligibleTileIds,
     tileSwapFirstTileId,
     tileSwapPowerVisualActive,
@@ -372,8 +351,6 @@ export const getFocusedTileLiveLabel = ({
 }: {
     board: BoardState;
     debugPeekActive: boolean;
-    destroyEligibleTileIds: ReadonlySet<string>;
-    destroyPowerVisualActive: boolean;
     focusedTileId: string | null;
     pairProximityHintsEnabled: boolean;
     peekEligibleTileIds: ReadonlySet<string>;
@@ -381,8 +358,6 @@ export const getFocusedTileLiveLabel = ({
     peekRevealedTileIds: ReadonlySet<string>;
     previewActive: boolean;
     runStatus: RunStatus;
-    strayEligibleTileIds: ReadonlySet<string>;
-    strayPowerVisualActive: boolean;
     tileSwapEligibleTileIds: ReadonlySet<string>;
     tileSwapFirstTileId: string | null;
     tileSwapPowerVisualActive: boolean;
@@ -415,12 +390,8 @@ export const getFocusedTileLiveLabel = ({
     });
     label += getPowerTargetAriaText(
         tile,
-        destroyPowerVisualActive,
-        destroyEligibleTileIds,
         peekPowerVisualActive,
         peekEligibleTileIds,
-        strayPowerVisualActive,
-        strayEligibleTileIds,
         tileSwapPowerVisualActive,
         tileSwapEligibleTileIds,
         tileSwapFirstTileId,

@@ -10,8 +10,8 @@ import {
     createWildRun
 } from './run-creation-rules';
 
-const scholarContract = { bonusRelicDraftPick: true, maxMismatches: null, noDestroy: true, noShuffle: true };
-const pinVowContract = { maxMismatches: null, maxPinsTotalRun: 10, noDestroy: false, noShuffle: false };
+const scholarContract = { bonusRelicDraftPick: true, maxMismatches: null, noShuffle: true };
+const pinVowContract = { maxMismatches: null, maxPinsTotalRun: 10, noShuffle: false };
 
 const keyOf = (run: Parameters<typeof describeRunShareKey>[0]): RunShareKey => {
     const described = describeRunShareKey(run);

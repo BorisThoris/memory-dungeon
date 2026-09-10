@@ -160,7 +160,7 @@ describe('trait opportunities', () => {
         ]);
 
         const model = getTraitOpportunityHudModel(b, {
-            activeContract: { maxMismatches: null, noDestroy: false, noShuffle: true },
+            activeContract: { maxMismatches: null, noShuffle: true },
             peekCharges: 0,
             regionShuffleCharges: 1,
             shuffleCharges: 0

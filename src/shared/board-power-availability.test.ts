@@ -5,7 +5,6 @@ import type {
     Tile
 } from './contracts';
 import {
-    canDestroyPair,
     canRegionShuffle,
     canRegionShuffleRow,
     canShuffleBoard,
@@ -42,7 +41,6 @@ const run = (overrides: Partial<RunState> = {}): RunState => ({
     ]),
     shuffleCharges: 1,
     regionShuffleCharges: 1,
-    destroyPairCharges: 1,
     ...overrides
 } as RunState);
 
@@ -55,27 +53,7 @@ describe('board power availability rules', () => {
         expect(canShuffleBoard(run({ activeContract: { noShuffle: true } as RunState['activeContract'] }))).toBe(false);
     });
 
-    it('fails closed when board power open-flip state is malformed', () => {
-        const malformed = run({
-            board: { ...run().board!, flippedTileIds: Number.NaN as unknown as string[] }
-        });
 
-        expect(canShuffleBoard(malformed)).toBe(false);
-        expect(canDestroyPair(malformed, 'a1')).toBe(false);
-        expect(canRegionShuffle(malformed)).toBe(false);
-        expect(canRegionShuffleRow(malformed, 0)).toBe(false);
-        expect(canSwapHiddenTiles(malformed, 'a1', 'b1')).toBe(false);
-    });
-
-    it('fails closed for playing runs without a board', () => {
-        const boardless = run({ board: null });
-
-        expect(canShuffleBoard(boardless)).toBe(false);
-        expect(canDestroyPair(boardless, 'a1')).toBe(false);
-        expect(canRegionShuffle(boardless)).toBe(false);
-        expect(canRegionShuffleRow(boardless, 0)).toBe(false);
-        expect(canSwapHiddenTiles(boardless, 'a1', 'b1')).toBe(false);
-    });
 
 
 

@@ -40,9 +40,7 @@ export interface AppState {
      */
     recoverUnreadableSave: () => Promise<void>;
     boardPinMode: boolean;
-    destroyPairArmed: boolean;
     peekModeArmed: boolean;
-    strayRemoveArmed: boolean;
     regionShuffleArmed: boolean;
     tileSwapArmed: boolean;
     tileSwapFirstTileId: string | null;
@@ -86,7 +84,6 @@ export interface AppState {
     togglePeekMode: () => void;
     toggleTileSwapArmed: () => void;
     undoResolvingFlip: () => void;
-    toggleStrayArm: () => void;
     toggleRegionShuffleArmed: () => void;
     shuffleBoard: () => void;
     notifyMemorizeBoardReady: (boardKey: string) => void;
@@ -96,7 +93,6 @@ export interface AppState {
     /** Say hello to the floor's resident. Free, once per floor. */
     greetFloorResident: () => void;
     toggleBoardPinMode: () => void;
-    toggleDestroyPairArmed: () => void;
     pause: () => void;
     resume: () => void;
     continueToNextLevel: () => void;

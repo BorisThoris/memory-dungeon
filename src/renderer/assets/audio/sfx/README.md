@@ -13,9 +13,7 @@
 | match-tier-high | `match-tier-high.ogg` |
 | mismatch | `mismatch.ogg` |
 | power-arm | `power-arm.ogg` |
-| destroy-pair | `destroy-pair.ogg` |
 | peek-power | `peek-power.ogg` |
-| stray-power | `stray-power.ogg` |
 | shuffle-full | `shuffle-full.ogg` |
 | shuffle-quick | `shuffle-quick.ogg` |
 | floor-clear | `floor-clear.ogg` |

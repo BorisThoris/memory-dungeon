@@ -14,13 +14,11 @@ import {
     rememberForgottenTiles
 } from './recall-rules';
 import {
-    canDestroyPair,
     hasClearFlipState,
     canRegionShuffle,
     canSwapHiddenTiles,
     canShuffleBoard
 } from './board-power-availability';
-import { tileIsCompletionSafeStrayTarget } from './board-power-targeting';
 import { clearResolveState } from './run-timer-rules';
 import { normalizeSessionStats } from './session-stats-rules';
 import { hideTileAfterTurn } from './tile-state-rules';
@@ -32,77 +30,6 @@ const SHUFFLE_SCORE_TAX_FACTOR = 0.94;
 type TileEntry = {
     index: number;
     tile: BoardState['tiles'][number];
-};
-
-export interface DestroyPairTransitionOptions {
-    isBoardComplete: (board: BoardState) => boolean;
-    rotateShiftingSpotlight: (
-        run: RunState,
-        board: BoardState
-    ) => { board: BoardState; shiftingSpotlightNonce: number };
-}
-
-export interface DestroyPairTransitionResult {
-    run: RunState;
-    boardComplete: boolean;
-    changed: boolean;
-}
-
-export const applyDestroyPairTransition = (
-    run: RunState,
-    tileId: string,
-    options: DestroyPairTransitionOptions
-): DestroyPairTransitionResult => {
-    if (run.activeContract?.noDestroy || !canDestroyPair(run, tileId) || !run.board) {
-        return { run, boardComplete: false, changed: false };
-    }
-
-    const tile = run.board.tiles.find((t) => t.id === tileId);
-    if (!tile) {
-        return { run, boardComplete: false, changed: false };
-    }
-    const pairTileIds = run.board.tiles.filter((t) => t.pairKey === tile.pairKey).map((t) => t.id);
-
-    const board: BoardState = {
-        ...run.board,
-        matchedPairs: runNonNegativeInteger(run.board.matchedPairs) + 1,
-        tiles: run.board.tiles.map((t) =>
-            pairTileIds.includes(t.id)
-                ? {
-                      ...t,
-                      state: 'matched' as const,
-                      findableKind: undefined
-                  }
-                : t
-        )
-    };
-
-    const pinnedTileIds = runFilteredStringArray(run.pinnedTileIds).filter((id) => !pairTileIds.includes(id));
-    const spunDestroy = options.rotateShiftingSpotlight(run, board);
-    const stats = normalizeSessionStats(run.stats);
-
-    const nextRun: RunState = {
-        ...run,
-        powersUsedThisRun: true,
-        destroyUsedThisFloor: true,
-        destroyPairCharges: decrementRunCounter(run.destroyPairCharges),
-        pinnedTileIds,
-        board: spunDestroy.board,
-        shiftingSpotlightNonce: spunDestroy.shiftingSpotlightNonce,
-        recallFocus: decreaseRecallFocus(run),
-        forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, pairTileIds),
-        stats: {
-            ...stats,
-            matchesFound: runNonNegativeInteger(stats.matchesFound) + 1,
-            pairsDestroyed: runNonNegativeInteger(stats.pairsDestroyed) + 1
-        }
-    };
-
-    return {
-        run: nextRun,
-        boardComplete: options.isBoardComplete(spunDestroy.board),
-        changed: true
-    };
 };
 
 export const applyShuffle = (run: RunState): RunState => {
@@ -342,32 +269,6 @@ export const applyPeek = (run: RunState, tileId: string): RunState => {
         recallFocus: decreaseRecallFocus(run),
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, [tileId]),
         peekRevealedTileIds: [...peekRevealedTileIds, tileId]
-    };
-};
-
-export const applyStrayRemove = (run: RunState, tileId: string): RunState => {
-    const strayRemoveCharges = runNonNegativeInteger(run.strayRemoveCharges);
-    if (run.status !== 'playing' || !run.board || strayRemoveCharges < 1) {
-        return run;
-    }
-    if (!hasClearFlipState(run)) {
-        return run;
-    }
-    const tile = run.board.tiles.find((t) => t.id === tileId);
-    if (!tile || !tileIsCompletionSafeStrayTarget(run.board, tileId)) {
-        return run;
-    }
-    const board: BoardState = {
-        ...run.board,
-        tiles: run.board.tiles.map((t) => (t.id === tileId ? { ...t, state: 'removed' as const } : t))
-    };
-    return {
-        ...run,
-        powersUsedThisRun: true,
-        strayRemoveCharges: decrementRunCounter(strayRemoveCharges),
-        recallFocus: decreaseRecallFocus(run),
-        forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, [tileId]),
-        board
     };
 };
 

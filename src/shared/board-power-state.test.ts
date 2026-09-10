@@ -36,7 +36,6 @@ const run = (overrides: Partial<RunState> = {}): RunState => ({
     board: board(),
     pinnedTileIds: [],
     pinsPlacedCountThisRun: 0,
-    strayRemoveCharges: 1,
     ...overrides
 } as RunState);
 

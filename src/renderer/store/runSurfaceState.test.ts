@@ -2,13 +2,11 @@ import { describe, expect, it } from 'vitest';
 import { createNewRun } from '../../shared/game-core';
 import { BOARD_FLOATER_POP_CLEAR } from './matchScorePop';
 import type { BoardState, RunState, Tile } from '../../shared/contracts';
-import { WILD_PAIR_KEY } from '../../shared/tile-identity';
 import {
     canPauseRunSurface,
     clearRunSurfaceArmedModes,
     createArmedBoardPowerPressResult,
     createBoardPinModeToggleResult,
-    createDestroyPairArmedToggleResult,
     createFlashPairSurfaceResult,
     createGambitThirdPickPressResult,
     createOrdinaryTileFlipResult,
@@ -18,7 +16,6 @@ import {
     createRegionShuffleSurfaceResult,
     createRunSurfaceReset,
     createShuffleBoardSurfaceResult,
-    createStrayArmToggleResult,
     createTileSwapToggleResult,
     createUndoResolvingSurfaceResult,
     createRunWithArmedModesClearedPatch,
@@ -44,9 +41,7 @@ const playingRun = (overrides: Partial<RunState> = {}): RunState =>
         id: 'run-1',
         activeContract: null,
         board: board(),
-        destroyPairCharges: 1,
         peekCharges: 1,
-        strayRemoveCharges: 1,
         status: 'playing',
         ...overrides
     }) as RunState;
@@ -65,9 +60,7 @@ describe('run surface state helpers', () => {
     it('resets board interaction modes, shop return, and floaters', () => {
         expect(createRunSurfaceReset()).toEqual({
             boardPinMode: false,
-            destroyPairArmed: false,
             peekModeArmed: false,
-            strayRemoveArmed: false,
             regionShuffleArmed: false,
             tileSwapArmed: false,
             tileSwapFirstTileId: null,
@@ -88,9 +81,7 @@ describe('run surface state helpers', () => {
     it('clears only mutually exclusive board armed modes', () => {
         expect(clearRunSurfaceArmedModes()).toEqual({
             boardPinMode: false,
-            destroyPairArmed: false,
             peekModeArmed: false,
-            strayRemoveArmed: false,
             regionShuffleArmed: false,
             tileSwapArmed: false,
             tileSwapFirstTileId: null
@@ -101,7 +92,6 @@ describe('run surface state helpers', () => {
         expect(createRunWithPeekDisarmedPatch(run)).toEqual({
             run,
             peekModeArmed: false,
-            strayRemoveArmed: false,
             tileSwapArmed: false,
             tileSwapFirstTileId: null
         });
@@ -110,9 +100,7 @@ describe('run surface state helpers', () => {
     it('creates a run patch that disarms board powers without changing board pin mode', () => {
         expect(createRunWithBoardPowersDisarmedPatch(run)).toEqual({
             run,
-            destroyPairArmed: false,
             peekModeArmed: false,
-            strayRemoveArmed: false,
             tileSwapArmed: false,
             tileSwapFirstTileId: null
         });
@@ -122,9 +110,7 @@ describe('run surface state helpers', () => {
         expect(createRunWithArmedModesClearedPatch(run)).toEqual({
             run,
             boardPinMode: false,
-            destroyPairArmed: false,
             peekModeArmed: false,
-            strayRemoveArmed: false,
             regionShuffleArmed: false,
             tileSwapArmed: false,
             tileSwapFirstTileId: null
@@ -135,9 +121,7 @@ describe('run surface state helpers', () => {
         expect(createRunWithBoardInteractionClearedPatch(run)).toEqual({
             run,
             boardPinMode: false,
-            destroyPairArmed: false,
             peekModeArmed: false,
-            strayRemoveArmed: false,
             regionShuffleArmed: false,
             tileSwapArmed: false,
             tileSwapFirstTileId: null,
@@ -164,9 +148,7 @@ describe('run surface state helpers', () => {
             kind: 'applied',
             patch: {
                 boardPinMode: true,
-                destroyPairArmed: false,
                 peekModeArmed: false,
-                strayRemoveArmed: false,
                 regionShuffleArmed: false,
                 tileSwapArmed: false,
                 tileSwapFirstTileId: null
@@ -184,9 +166,7 @@ describe('run surface state helpers', () => {
             kind: 'applied',
             patch: {
                 boardPinMode: false,
-                destroyPairArmed: false,
                 peekModeArmed: false,
-                strayRemoveArmed: false,
                 regionShuffleArmed: false,
                 tileSwapArmed: false,
                 tileSwapFirstTileId: null
@@ -212,85 +192,13 @@ describe('run surface state helpers', () => {
         ).toEqual({ kind: 'ignored' });
     });
 
-    it('arms and disarms destroy-pair mode while clearing other armed modes', () => {
-        expect(
-            createDestroyPairArmedToggleResult({
-                destroyPairArmed: false,
-                run: playingRun(),
-                view: 'playing'
-            })
-        ).toEqual({
-            kind: 'applied',
-            patch: {
-                boardPinMode: false,
-                destroyPairArmed: true,
-                peekModeArmed: false,
-                strayRemoveArmed: false,
-                regionShuffleArmed: false,
-                tileSwapArmed: false,
-                tileSwapFirstTileId: null
-            },
-            playArmSfx: true
-        });
 
-        expect(
-            createDestroyPairArmedToggleResult({
-                destroyPairArmed: true,
-                run: null,
-                view: 'menu'
-            })
-        ).toEqual({
-            kind: 'applied',
-            patch: {
-                boardPinMode: false,
-                destroyPairArmed: false,
-                peekModeArmed: false,
-                strayRemoveArmed: false,
-                regionShuffleArmed: false,
-                tileSwapArmed: false,
-                tileSwapFirstTileId: null
-            },
-            playArmSfx: false
-        });
-    });
-
-    it('ignores destroy-pair arming when charges, contracts, board state, or eligibility block it', () => {
-        expect(
-            createDestroyPairArmedToggleResult({
-                destroyPairArmed: false,
-                run: playingRun({ destroyPairCharges: 0 }),
-                view: 'playing'
-            })
-        ).toEqual({ kind: 'ignored' });
-        expect(
-            createDestroyPairArmedToggleResult({
-                destroyPairArmed: false,
-                run: playingRun({ activeContract: { noDestroy: true, noShuffle: false, maxMismatches: null } }),
-                view: 'playing'
-            })
-        ).toEqual({ kind: 'ignored' });
-        expect(
-            createDestroyPairArmedToggleResult({
-                destroyPairArmed: false,
-                run: playingRun({ board: board({ flippedTileIds: ['a1'] }) }),
-                view: 'playing'
-            })
-        ).toEqual({ kind: 'ignored' });
-        expect(
-            createDestroyPairArmedToggleResult({
-                destroyPairArmed: false,
-                run: playingRun({ board: board({ tiles: [] }) }),
-                view: 'playing'
-            })
-        ).toEqual({ kind: 'ignored' });
-    });
 
     it('arms and disarms peek mode while keeping other armed modes clear', () => {
         const activeRun = playingRun();
         expect(
             createPeekModeToggleResult({
                 boardPinMode: false,
-                destroyPairArmed: false,
                 peekModeArmed: false,
                 run: activeRun,
                 view: 'playing'
@@ -299,9 +207,7 @@ describe('run surface state helpers', () => {
             kind: 'applied',
             patch: {
                 boardPinMode: false,
-                destroyPairArmed: false,
                 peekModeArmed: true,
-                strayRemoveArmed: false,
                 regionShuffleArmed: false,
                 tileSwapArmed: false,
                 tileSwapFirstTileId: null,
@@ -313,7 +219,6 @@ describe('run surface state helpers', () => {
         expect(
             createPeekModeToggleResult({
                 boardPinMode: false,
-                destroyPairArmed: false,
                 peekModeArmed: true,
                 run: activeRun,
                 view: 'playing'
@@ -322,9 +227,7 @@ describe('run surface state helpers', () => {
             kind: 'applied',
             patch: {
                 boardPinMode: false,
-                destroyPairArmed: false,
                 peekModeArmed: false,
-                strayRemoveArmed: false,
                 regionShuffleArmed: false,
                 tileSwapArmed: false,
                 tileSwapFirstTileId: null,
@@ -334,38 +237,11 @@ describe('run surface state helpers', () => {
         });
     });
 
-    it('clears stray-remove arming when peek mode toggles', () => {
-        const activeRun = playingRun();
-        expect(
-            createPeekModeToggleResult({
-                boardPinMode: false,
-                destroyPairArmed: false,
-                peekModeArmed: false,
-                run: activeRun,
-                view: 'playing'
-            })
-        ).toEqual({
-            kind: 'applied',
-            patch: {
-                boardPinMode: false,
-                destroyPairArmed: false,
-                peekModeArmed: true,
-                // Arming is surface state now, so the disarm lands in the patch.
-                strayRemoveArmed: false,
-                regionShuffleArmed: false,
-                tileSwapArmed: false,
-                tileSwapFirstTileId: null,
-                run: activeRun
-            },
-            playArmSfx: true
-        });
-    });
 
     it('ignores peek toggles outside its active surface conditions', () => {
         expect(
             createPeekModeToggleResult({
                 boardPinMode: false,
-                destroyPairArmed: false,
                 peekModeArmed: false,
                 run: null,
                 view: 'playing'
@@ -374,7 +250,6 @@ describe('run surface state helpers', () => {
         expect(
             createPeekModeToggleResult({
                 boardPinMode: false,
-                destroyPairArmed: false,
                 peekModeArmed: false,
                 run: playingRun({ status: 'memorize' }),
                 view: 'playing'
@@ -383,7 +258,6 @@ describe('run surface state helpers', () => {
         expect(
             createPeekModeToggleResult({
                 boardPinMode: false,
-                destroyPairArmed: false,
                 peekModeArmed: false,
                 run: playingRun({ peekCharges: 0 }),
                 view: 'playing'
@@ -392,67 +266,20 @@ describe('run surface state helpers', () => {
         expect(
             createPeekModeToggleResult({
                 boardPinMode: true,
-                destroyPairArmed: false,
                 peekModeArmed: true,
                 run: playingRun(),
                 view: 'playing'
             })
         ).toEqual({ kind: 'ignored' });
-        expect(
-            createPeekModeToggleResult({
-                boardPinMode: false,
-                destroyPairArmed: true,
-                peekModeArmed: true,
-                run: playingRun(),
-                view: 'playing'
-            })
-        ).toEqual({ kind: 'ignored' });
+        /*
+         * Gen 200 dropped a sixth case here. It armed Destroy and asserted the peek toggle stayed
+         * ignored - the exclusion was the whole claim, and with Destroy gone there is nothing to
+         * exclude. Disarming an armed peek is an applied toggle, so keeping the case with the flag
+         * stripped would have asserted the opposite of the rule.
+         */
     });
 
-    it('toggles stray arm and clears mutually exclusive board modes', () => {
-        const activeRun = playingRun({ strayRemoveCharges: 1 });
-        const result = createStrayArmToggleResult({ run: activeRun, strayRemoveArmed: false, view: 'playing' });
 
-        expect(result).toMatchObject({
-            kind: 'applied',
-            patch: {
-                boardPinMode: false,
-                destroyPairArmed: false,
-                peekModeArmed: false,
-                strayRemoveArmed: true
-            },
-            playArmSfx: true
-        });
-    });
-
-    it('ignores stray arm outside active playing conditions or without charges', () => {
-        expect(createStrayArmToggleResult({ run: null, strayRemoveArmed: false, view: 'playing' })).toEqual({
-            kind: 'ignored'
-        });
-        expect(
-            createStrayArmToggleResult({
-                run: playingRun({ status: 'memorize' }),
-                strayRemoveArmed: false,
-                view: 'playing'
-            })
-        ).toEqual({ kind: 'ignored' });
-        expect(
-            createStrayArmToggleResult({
-                run: playingRun({ strayRemoveCharges: 0 }),
-                strayRemoveArmed: false,
-                view: 'playing'
-            })
-        ).toEqual({ kind: 'ignored' });
-
-        // Disarming stays legal with no charges left, so a player cannot get stuck armed.
-        expect(
-            createStrayArmToggleResult({
-                run: playingRun({ strayRemoveCharges: 0 }),
-                strayRemoveArmed: true,
-                view: 'playing'
-            })
-        ).toMatchObject({ kind: 'applied', patch: { strayRemoveArmed: false } });
-    });
 
     it('creates full-board shuffle patches for active playable runs', () => {
         const activeRun = { ...createNewRun(0), status: 'playing' as const };
@@ -485,7 +312,7 @@ describe('run surface state helpers', () => {
         const armed = createRegionShuffleArmToggleSurfaceResult({ armed: false, run: activeRun, view: 'playing' });
         expect(armed).toMatchObject({
             kind: 'applied',
-            patch: { boardPinMode: false, destroyPairArmed: false, peekModeArmed: false, regionShuffleArmed: true }
+            patch: { boardPinMode: false, peekModeArmed: false, regionShuffleArmed: true }
         });
         expect(
             createRegionShuffleArmToggleSurfaceResult({ armed: true, run: activeRun, view: 'playing' })
@@ -514,7 +341,6 @@ describe('run surface state helpers', () => {
 
         expect(
             createTileSwapToggleResult({
-                destroyPairArmed: false,
                 peekModeArmed: false,
                 run: activeRun,
                 tileSwapArmed: false,
@@ -524,9 +350,7 @@ describe('run surface state helpers', () => {
             kind: 'applied',
             patch: {
                 boardPinMode: false,
-                destroyPairArmed: false,
                 peekModeArmed: false,
-                strayRemoveArmed: false,
                 regionShuffleArmed: false,
                 tileSwapArmed: true,
                 tileSwapFirstTileId: null
@@ -536,7 +360,6 @@ describe('run surface state helpers', () => {
 
         expect(
             createTileSwapToggleResult({
-                destroyPairArmed: false,
                 peekModeArmed: false,
                 run: { ...activeRun, regionShuffleCharges: 0 },
                 tileSwapArmed: false,
@@ -608,55 +431,11 @@ describe('run surface state helpers', () => {
 
 
 
-    it('applies stray remove presses and treats a failed stray press as handled', () => {
-        const activeRun = playingRun({
-            board: board({
-                tiles: [
-                    { id: 'wild', pairKey: WILD_PAIR_KEY, label: '*', state: 'hidden', symbol: '*' },
-                    { id: 'a1', pairKey: 'a', label: 'A', state: 'hidden', symbol: 'A' },
-                    { id: 'a2', pairKey: 'a', label: 'A', state: 'hidden', symbol: 'A' }
-                ]
-            }),
-            strayRemoveCharges: 1
-        });
-
-        const applied = createArmedBoardPowerPressResult({
-            destroyPairArmed: false,
-            peekModeArmed: false,
-            run: activeRun,
-            strayRemoveArmed: true,
-            tileId: 'wild'
-        });
-        expect(applied.kind).toBe('strayApplied');
-        if (applied.kind === 'strayApplied') {
-            expect(applied.run.board!.tiles.find((tile) => tile.id === 'wild')!.state).toBe('removed');
-            expect(applied.run.strayRemoveCharges).toBe(activeRun.strayRemoveCharges - 1);
-            expect(applied.run.gameplayCommandJournal).toEqual([
-                expect.objectContaining({ type: 'board.stray_remove', targetTileId: 'wild' })
-            ]);
-            expect(applied.run.gameplayEventJournal).toEqual(expect.arrayContaining([
-                expect.objectContaining({ type: 'inventory.changed', itemId: 'stray_remove_charge', applied: -1 }),
-                expect.objectContaining({ type: 'board.stray_removed', targetTileId: 'wild' }),
-                expect.objectContaining({ type: 'feedback.requested', cue: 'power.stray_remove.used' })
-            ]));
-        }
-
-        expect(
-            createArmedBoardPowerPressResult({
-                destroyPairArmed: false,
-                peekModeArmed: false,
-                run: activeRun,
-                strayRemoveArmed: true,
-                tileId: 'a1'
-            })
-        ).toEqual({ kind: 'handled' });
-    });
 
     it('applies peek presses and treats blocked peek presses as handled', () => {
         const activeRun = { ...createNewRun(0), peekCharges: 1, status: 'playing' as const };
         const tileId = activeRun.board!.tiles[0]!.id;
         const applied = createArmedBoardPowerPressResult({
-            destroyPairArmed: false,
             peekModeArmed: true,
             run: activeRun,
             tileId
@@ -682,7 +461,6 @@ describe('run surface state helpers', () => {
         const blockedTileId = blockedRun.board!.tiles[0]!.id;
         expect(
             createArmedBoardPowerPressResult({
-                destroyPairArmed: false,
                 peekModeArmed: true,
                 run: blockedRun,
                 tileId: 'missing-tile'
@@ -691,7 +469,6 @@ describe('run surface state helpers', () => {
 
         expect(
             createArmedBoardPowerPressResult({
-                destroyPairArmed: false,
                 peekModeArmed: true,
                 run: {
                     ...blockedRun,
@@ -702,43 +479,6 @@ describe('run surface state helpers', () => {
         ).toEqual({ kind: 'notArmed' });
     });
 
-    it('applies destroy-pair presses and reports whether the resulting run needs resolution routing', () => {
-        const activeRun = { ...createNewRun(0), destroyPairCharges: 1, status: 'playing' as const };
-        const tileId = activeRun.board!.tiles.find(
-            (tile) =>
-                tile.state === 'hidden' &&
-                activeRun.board!.tiles.filter((candidate) => candidate.pairKey === tile.pairKey).length === 2
-        )!.id;
-        const applied = createArmedBoardPowerPressResult({
-            destroyPairArmed: true,
-            peekModeArmed: false,
-            run: activeRun,
-            tileId
-        });
-
-        expect(applied.kind).toBe('destroyApplied');
-        if (applied.kind === 'destroyApplied') {
-            expect(applied.run.destroyPairCharges).toBe(activeRun.destroyPairCharges - 1);
-            expect(applied.run.board!.tiles.filter((tile) => tile.state === 'matched')).toHaveLength(2);
-            expect(applied.resolvesRun).toBe(false);
-            expect(applied.events).toEqual(expect.arrayContaining([
-                expect.objectContaining({ type: 'board.pair_destroyed', targetTileId: tileId }),
-                expect.objectContaining({ type: 'feedback.requested', cue: 'power.destroy_pair.used' })
-            ]));
-            expect(applied.run.gameplayCommandJournal).toEqual(expect.arrayContaining([
-                expect.objectContaining({ type: 'board.destroy_pair', targetTileId: tileId })
-            ]));
-        }
-
-        expect(
-            createArmedBoardPowerPressResult({
-                destroyPairArmed: true,
-                peekModeArmed: false,
-                run: playingRun({ destroyPairCharges: 0 }),
-                tileId: 'a1'
-            })
-        ).toEqual({ kind: 'handled' });
-    });
 
     it('reports unchanged ordinary flips', () => {
         const activeRun = { ...createNewRun(0), status: 'playing' as const };

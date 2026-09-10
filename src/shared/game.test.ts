@@ -23,7 +23,6 @@ import {
     countFindablePairs,
     countFullyHiddenPairs,
     getWildTileIdFromBoard,
-    inspectBoardFairness,
     isBoardComplete
 } from './board-generation';
 import {
@@ -37,19 +36,13 @@ import {
     advanceToNextLevel
 } from './game-core';
 import {
-    applyDestroyPair,
     applyFlashPair,
     applyRegionShuffle,
     applyShuffle,
-    applyStrayRemove,
     canRegionShuffle,
-    canRegionShuffleRow,
     canShuffleBoard,
-    collectDestroyEligibleTileIds,
     collectPeekEligibleTileIds,
-    tileIsDestroyEligiblePreview,
     tileIsPeekEligiblePreview,
-    tileIsStrayEligiblePreview,
     togglePinnedTile
 } from './board-powers';
 import {
@@ -1004,38 +997,6 @@ describe('game rules', () => {
         expect(nextRun.pinnedTileIds).toEqual([]);
     });
 
-    it('does not grant destroy charges from clean clears when advancing floors', () => {
-        const base = {
-            ...createNewRun(0),
-            status: 'levelComplete' as const,
-            board: buildBoard(1),
-            destroyPairCharges: 0,
-            lastLevelResult: {
-                level: 1,
-                scoreGained: 100,
-                rating: 'S' as const,
-                perfect: true,
-                mistakes: 0
-            }
-        };
-        expect(advanceToNextLevel(base).destroyPairCharges).toBe(0);
-
-        const clean = {
-            ...base,
-            lastLevelResult: { ...base.lastLevelResult!, perfect: false, mistakes: 1 }
-        };
-        expect(advanceToNextLevel(clean).destroyPairCharges).toBe(0);
-
-        const dirty = { ...base, lastLevelResult: { ...base.lastLevelResult!, mistakes: 2 } };
-        expect(advanceToNextLevel(dirty).destroyPairCharges).toBe(0);
-
-        const stocked = {
-            ...base,
-            destroyPairCharges: 7,
-            lastLevelResult: { ...base.lastLevelResult!, mistakes: 0 }
-        };
-        expect(advanceToNextLevel(stocked).destroyPairCharges).toBe(7);
-    });
 
     it('can disable achievements when debug reveal is used', () => {
         const run = enableDebugPeek(finishMemorizePhase(createNewRun(0)), true);
@@ -1124,76 +1085,8 @@ describe('board powers', () => {
         expect(run.pinnedTileIds).not.toContain('a1');
     });
 
-    it('destroy pair does not add score or streak and can clear the floor', () => {
-        const tiles: Tile[] = [
-            createTile('a1', 'A', 'A'),
-            createTile('a2', 'A', 'A'),
-            createTile('b1', 'B', 'B'),
-            createTile('b2', 'B', 'B')
-        ];
-        const run = {
-            ...createRun(tiles),
-            destroyPairCharges: 1,
-            stats: {
-                ...createRun(tiles).stats,
-                currentStreak: 4,
-                totalScore: 100,
-                currentLevelScore: 50
-            }
-        };
-        const after = applyDestroyPair(run, 'a1');
-        expect(after.stats.totalScore).toBe(100);
-        expect(after.stats.currentLevelScore).toBe(50);
-        expect(after.stats.currentStreak).toBe(4);
-        expect(after.stats.matchesFound).toBe(1);
-        expect(after.stats.pairsDestroyed).toBe(1);
-        expect(after.destroyPairCharges).toBe(0);
-        expect(after.powersUsedThisRun).toBe(true);
-        expect(after.status).toBe('playing');
-        expect(after.gameplayCommandJournal).toEqual(expect.arrayContaining([
-            expect.objectContaining({ type: 'board.destroy_pair', targetTileId: 'a1' })
-        ]));
-        expect(after.gameplayEventJournal).toEqual(expect.arrayContaining([
-            expect.objectContaining({ type: 'board.pair_destroyed', boardComplete: false }),
-            expect.objectContaining({ type: 'feedback.requested', cue: 'power.destroy_pair.used' })
-        ]));
-
-        const lastPairRun = {
-            ...createRun(tiles),
-            board: {
-                ...createRun(tiles).board!,
-                matchedPairs: 1,
-                tiles: tiles.map((t) => (t.pairKey === 'A' ? { ...t, state: 'matched' as const } : t))
-            },
-            destroyPairCharges: 1
-        };
-        const cleared = applyDestroyPair(lastPairRun, 'b1');
-        expect(cleared.status).toBe('levelComplete');
-        expect(cleared.lastLevelResult?.level).toBe(1);
-        expect(cleared.gameplayCommandJournal).toEqual([
-            expect.objectContaining({ type: 'board.destroy_pair', targetTileId: 'b1' })
-        ]);
-        expect(cleared.gameplayCommandJournal?.map((command) => command.type)).not.toContain('effects.apply');
-        expect(cleared.gameplayEventJournal).toEqual(expect.arrayContaining([
-            expect.objectContaining({ type: 'board.pair_destroyed', boardComplete: true })
-        ]));
-    });
 
     describe('board power preview helpers', () => {
-        it('destroy preview collects fully hidden real pairs only', () => {
-            const tiles: Tile[] = [
-                createTile('a1', 'A', 'A'),
-                createTile('a2', 'A', 'A'),
-                createTile('w1', WILD_PAIR_KEY, '*'),
-                createTile('b1', 'B', 'B'),
-                createTile('b2', 'B', 'B')
-            ];
-            const board = createRun(tiles).board!;
-            expect(tileIsDestroyEligiblePreview(board, 'a1')).toBe(true);
-            expect(tileIsDestroyEligiblePreview(board, 'w1')).toBe(false);
-            const eligible = collectDestroyEligibleTileIds(board);
-            expect(eligible).toEqual(new Set(['a1', 'a2', 'b1', 'b2']));
-        });
 
         it('peek preview excludes tiles already peek-revealed', () => {
             const tiles: Tile[] = [
@@ -1206,47 +1099,8 @@ describe('board powers', () => {
             expect(collectPeekEligibleTileIds(board, ['a1'])).toEqual(new Set(['a2']));
         });
 
-        it('stray preview matches completion-safe hidden singleton tiles', () => {
-            const tiles: Tile[] = [
-                createTile('a1', 'A', 'A'),
-                createTile('a2', 'A', 'A'),
-                createTile('w1', WILD_PAIR_KEY, '*')
-            ];
-            const board = createRun(tiles).board!;
-            expect(tileIsStrayEligiblePreview(board, 'a1')).toBe(false);
-            expect(tileIsStrayEligiblePreview(board, 'w1')).toBe(true);
-        });
 
-        it('stray remove refuses normal pair tiles without spending a charge', () => {
-            const run = {
-                ...createRun([createTile('a1', 'A', 'A'), createTile('a2', 'A', 'A')]),
-                status: 'playing' as const,
-                strayRemoveCharges: 1
-            };
 
-            const after = applyStrayRemove(run, 'a1');
-
-            expect(after).toBe(run);
-            expect(after.strayRemoveCharges).toBe(1);
-        });
-
-        it('stray remove can remove a completion-safe singleton', () => {
-            const tiles = [createTile('a1', 'A', 'A'), createTile('a2', 'A', 'A'), createTile('w1', WILD_PAIR_KEY, '*')];
-            const board = createBoard(tiles, { pairCount: 1 });
-            const run = {
-                ...createRun(tiles, { board }),
-                status: 'playing' as const,
-                strayRemoveCharges: 1
-            };
-
-            const after = applyStrayRemove(run, 'w1');
-
-            expect(after).not.toBe(run);
-            expect(after.board!.tiles.find((tile) => tile.id === 'w1')?.state).toBe('removed');
-            expect(after.strayRemoveCharges).toBe(0);
-            expect(after.powersUsedThisRun).toBe(true);
-            expect(inspectBoardFairness(after.board!).issues).toEqual([]);
-        });
     });
 
     describe('board completion', () => {
@@ -1376,26 +1230,6 @@ describe('board powers', () => {
 
 
 
-        it('forfeits findable on destroy without score or claim counter', () => {
-            const tiles: Tile[] = [
-                { ...createTile('a1', 'A', 'A'), findableKind: 'score_glint' },
-                { ...createTile('a2', 'A', 'A'), findableKind: 'score_glint' },
-                createTile('b1', 'B', 'B'),
-                createTile('b2', 'B', 'B')
-            ];
-            const run = {
-                ...createRun(tiles),
-                destroyPairCharges: 1,
-                findablesClaimedThisFloor: 0,
-                findablesTotalThisFloor: 1
-            };
-            const after = applyDestroyPair(run, 'a1');
-            expect(after.findablesClaimedThisFloor).toBe(0);
-            expect(after.stats.totalScore).toBe(0);
-            expect(after.board?.tiles.filter((t) => t.pairKey === 'A').every((t) => t.findableKind === undefined)).toBe(
-                true
-            );
-        });
 
         it('preserves findableKind on tile ids through shuffle', () => {
             const tiles: Tile[] = [
@@ -1578,7 +1412,7 @@ describe('gambit third flip', () => {
         const base = createRun(threePairTiles);
         let run: RunState = {
             ...base,
-            activeContract: { noShuffle: false, noDestroy: false, maxMismatches: 1 },
+            activeContract: { noShuffle: false, maxMismatches: 1 },
             stats: { ...base.stats, tries: 1 }
         };
         run = flipTile(run, 'a1');
@@ -1603,7 +1437,7 @@ describe('gambit third flip', () => {
         const base = createRun(threePairTiles);
         let run: RunState = {
             ...base,
-            activeContract: { noShuffle: false, noDestroy: false, maxMismatches: 0 },
+            activeContract: { noShuffle: false, maxMismatches: 0 },
             stats: { ...base.stats, tries: 0 }
         };
         run = flipTile(run, 'a1');
@@ -1698,21 +1532,6 @@ describe('wildTileId bookkeeping', () => {
 });
 
 describe('wild run with scholar-style contracts', () => {
-    it('noDestroy blocks destroy on a real wild board', () => {
-        const wild = finishMemorizePhase(createWildRun(0));
-        expect(wild.board).not.toBeNull();
-        const target = wild.board!.tiles.find(
-            (t) => t.state === 'hidden' && t.pairKey !== WILD_PAIR_KEY
-        );
-        expect(target).toBeDefined();
-        const run: RunState = {
-            ...wild,
-            status: 'playing',
-            activeContract: { noShuffle: false, noDestroy: true, maxMismatches: null },
-            destroyPairCharges: 1
-        };
-        expect(applyDestroyPair(run, target!.id)).toBe(run);
-    });
 
     it('noShuffle blocks full-board shuffle on a real wild run', () => {
         let wild = finishMemorizePhase(createWildRun(0));
@@ -1720,7 +1539,7 @@ describe('wild run with scholar-style contracts', () => {
             ...wild,
             status: 'playing',
             shuffleCharges: 1,
-            activeContract: { noShuffle: true, noDestroy: false, maxMismatches: null }
+            activeContract: { noShuffle: true, maxMismatches: null }
         };
         expect(canShuffleBoard(wild)).toBe(false);
         expect(applyShuffle(wild)).toBe(wild);
@@ -1738,7 +1557,7 @@ describe('active contract limits', () => {
     it('ends the run when mismatches exceed maxMismatches', () => {
         const run: RunState = {
             ...createRun(fourPairTiles),
-            activeContract: { noShuffle: false, noDestroy: false, maxMismatches: 0 }
+            activeContract: { noShuffle: false, maxMismatches: 0 }
         };
         const mismatching = resolveBoardTurn(flipTile(flipTile(run, 'a1'), 'b1'));
         expect(mismatching.status).toBe('gameOver');
@@ -1748,25 +1567,17 @@ describe('active contract limits', () => {
         const run: RunState = {
             ...createRun(fourPairTiles),
             shuffleCharges: 1,
-            activeContract: { noShuffle: true, noDestroy: false, maxMismatches: null }
+            activeContract: { noShuffle: true, maxMismatches: null }
         };
         expect(canShuffleBoard(run)).toBe(false);
         expect(applyShuffle(run)).toBe(run);
     });
 
-    it('blocks destroy when contract sets noDestroy', () => {
-        const run: RunState = {
-            ...createRun(fourPairTiles),
-            destroyPairCharges: 1,
-            activeContract: { noShuffle: false, noDestroy: true, maxMismatches: null }
-        };
-        expect(applyDestroyPair(run, 'a1')).toBe(run);
-    });
 
     it('respects maxPinsTotalRun when adding new pins', () => {
         let run: RunState = {
             ...createRun(fourPairTiles),
-            activeContract: { noShuffle: false, noDestroy: false, maxMismatches: null, maxPinsTotalRun: 1 }
+            activeContract: { noShuffle: false, maxMismatches: null, maxPinsTotalRun: 1 }
         };
         run = togglePinnedTile(run, 'a1');
         expect(run.pinnedTileIds).toEqual(['a1']);
@@ -1780,7 +1591,7 @@ describe('active contract limits', () => {
         let run: RunState = {
             ...createRun(fourPairTiles),
             activeMutators: ['wide_recall'] as MutatorId[],
-            activeContract: { noShuffle: false, noDestroy: false, maxMismatches: null, maxPinsTotalRun: 1 }
+            activeContract: { noShuffle: false, maxMismatches: null, maxPinsTotalRun: 1 }
         };
         run = togglePinnedTile(run, 'a1');
         expect(run.pinnedTileIds).toEqual(['a1']);
@@ -1802,7 +1613,7 @@ describe('active contract limits', () => {
         const run: RunState = {
             ...createRun(sixTiles),
             activeMutators: ['wide_recall', 'silhouette_twist'] as MutatorId[],
-            activeContract: { noShuffle: false, noDestroy: false, maxMismatches: 1 }
+            activeContract: { noShuffle: false, maxMismatches: 1 }
         };
         const afterFirstMiss = resolveBoardTurn(flipTile(flipTile(run, 'a1'), 'b1'));
         expect(afterFirstMiss.status).toBe('playing');
@@ -1820,7 +1631,7 @@ describe('active contract limits', () => {
                 createTile('b2', 'B', 'B')
             ]),
             activeMutators: ['distraction_channel'] as MutatorId[],
-            activeContract: { noShuffle: true, noDestroy: true, maxMismatches: null }
+            activeContract: { noShuffle: true, maxMismatches: null }
         };
         const penalty = getPresentationMutatorMatchPenalty(run);
         expect(penalty).toBe(4);
@@ -1834,82 +1645,30 @@ describe('active contract limits', () => {
             ...createRun(fourPairTiles),
             shuffleCharges: 1,
             activeMutators: ['wide_recall', 'distraction_channel'] as MutatorId[],
-            activeContract: { noShuffle: true, noDestroy: false, maxMismatches: null }
+            activeContract: { noShuffle: true, maxMismatches: null }
         };
         expect(canShuffleBoard(run)).toBe(false);
         expect(applyShuffle(run)).toBe(run);
     });
 
-    it('blocks destroy under noDestroy with presentation mutators active', () => {
-        const run: RunState = {
-            ...createRun(fourPairTiles),
-            destroyPairCharges: 1,
-            activeMutators: ['wide_recall', 'distraction_channel'] as MutatorId[],
-            activeContract: { noShuffle: false, noDestroy: true, maxMismatches: null }
-        };
-        expect(applyDestroyPair(run, 'a1')).toBe(run);
-    });
 
-    it('allows shuffle when contract only blocks destroy with presentation mutators active', () => {
-        const run: RunState = {
-            ...createRun(fourPairTiles),
-            shuffleCharges: 1,
-            activeMutators: ['silhouette_twist'] as MutatorId[],
-            activeContract: { noShuffle: false, noDestroy: true, maxMismatches: null }
-        };
-        expect(canShuffleBoard(run)).toBe(true);
-        const shuffled = applyShuffle(run);
-        expect(shuffled).not.toBe(run);
-        expect(shuffled.shuffleNonce).toBe(run.shuffleNonce + 1);
-    });
 
     it('blocks region shuffle under noShuffle with presentation mutators active', () => {
         const run: RunState = {
             ...createRun(fourPairTiles),
             activeMutators: ['wide_recall'] as MutatorId[],
-            activeContract: { noShuffle: true, noDestroy: false, maxMismatches: null }
+            activeContract: { noShuffle: true, maxMismatches: null }
         };
         expect(canRegionShuffle(run)).toBe(false);
         expect(applyRegionShuffle(run, 0)).toBe(run);
     });
 
-    it('allows region shuffle when contract only blocks destroy with presentation mutators active', () => {
-        const run: RunState = {
-            ...createRun(fourPairTiles),
-            activeMutators: ['distraction_channel'] as MutatorId[],
-            activeContract: { noShuffle: false, noDestroy: true, maxMismatches: null }
-        };
-        expect(canRegionShuffle(run)).toBe(true);
-        expect(canRegionShuffleRow(run, 0)).toBe(true);
-        const shuffled = applyRegionShuffle(run, 0);
-        expect(shuffled).not.toBe(run);
-        expect(shuffled.shuffleNonce).toBe(run.shuffleNonce + 1);
-    });
 
 
 
 
 
 
-    it.each([
-        [false, false],
-        [false, true],
-        [true, false],
-        [true, true]
-    ])('contract matrix noShuffle=%s noDestroy=%s gates shuffle and destroy', (noShuffle, noDestroy) => {
-        const run: RunState = {
-            ...createRun(fourPairTiles),
-            shuffleCharges: 1,
-            destroyPairCharges: 1,
-            activeContract: { noShuffle, noDestroy, maxMismatches: null }
-        };
-        expect(canShuffleBoard(run)).toBe(!noShuffle);
-        if (noDestroy) {
-            expect(applyDestroyPair(run, 'a1')).toBe(run);
-        } else {
-            expect(applyDestroyPair(run, 'a1')).not.toBe(run);
-        }
-    });
 });
 
 

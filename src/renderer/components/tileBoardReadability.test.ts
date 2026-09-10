@@ -57,8 +57,8 @@ describe('tileBoardReadability', () => {
         expect(state({ traitComboBack: true, traitLaneBack: 'guard' }).hiddenReadabilityAccentColor).toBe(TRAIT_LANE_COLORS.guard);
         expect(state({ traitRouteTargetBack: true }).hiddenReadabilityAccentColor).toBe('#5dd6ff');
         expect(state({ tile: tile({ tileTraitKind: 'stasis' }) }).hiddenReadabilityAccentColor).toBe(tileTraitColor('stasis'));
-        expect(state({ powerBackAccent: 'destroy' }).hiddenReadabilityAccentColor).toBe('#d94848');
-        expect(state({ powerBackAccent: 'stray' }).hiddenReadabilityAccentColor).toBe('#d4a03d');
+        expect(state({ powerBackAccent: 'peek' }).hiddenReadabilityAccentColor).toBe('#59b4d9');
+        expect(state({ powerBackAccent: 'pin' }).hiddenReadabilityAccentColor).toBe('#e8c878');
         expect(state({ powerBackAccent: 'swap' }).hiddenReadabilityAccentColor).toBe('#5dd6ff');
         expect(state({ powerBackAccent: 'swapOrigin' }).hiddenReadabilityAccentColor).toBe('#f2f9ff');
     });

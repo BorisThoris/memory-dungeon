@@ -9,8 +9,8 @@ exports[`mechanics-catalog-appendix-builder > matches stable appendix snapshot 1
 
 | Constant / count | Value |
 | --- | --- |
-| \`GAME_RULES_VERSION\` | 47 |
-| \`ENCYCLOPEDIA_VERSION\` | 39 |
+| \`GAME_RULES_VERSION\` | 48 |
+| \`ENCYCLOPEDIA_VERSION\` | 40 |
 | Mutator entries (\`MUTATOR_CATALOG\`) | 10 |
 | Achievement entries (\`ACHIEVEMENT_CATALOG\`) | 17 |
 | \`GameMode\` codex ids | endless |

@@ -1,5 +1,5 @@
 {
-    "version": 36,
+    "version": 37,
     "mechanics": [
         {
             "id": "trait.echo",
@@ -212,59 +212,6 @@
                 "src/shared/board-power-actions.test.ts",
                 "src/shared/board-power-availability.test.ts",
                 "src/shared/gameplay-core.test.ts",
-                "src/renderer/store/runSurfaceState.test.ts"
-            ]
-        },
-        {
-            "id": "power.destroy_pair",
-            "label": "Destroy Pair",
-            "kind": "power",
-            "role": "flat_typed_completion_safe_pair_removal_and_floor_clear",
-            "evidence": [
-                "src/shared/gameplay-core-contracts.ts",
-                "src/shared/gameplay-core.ts",
-                "src/shared/board-power-actions.ts",
-                "src/shared/board-power-availability.ts",
-                "src/shared/floor-clear-transition.ts",
-                "src/renderer/store/runSurfaceState.ts"
-            ],
-            "reads": [
-                "destroyPairCharges",
-                "noDestroy",
-                "tileStates",
-                "recallFocus",
-                "shiftingSpotlightNonce"
-            ],
-            "writes": [
-                "destroyPairCharges",
-                "tileStates",
-                "matchedPairs",
-                "forgottenTileIdsThisFloor",
-                "powersUsedThisRun",
-                "recallFocus",
-                "shiftingSpotlightNonce",
-                "gameplayCommands",
-                "gameplayEvents",
-                "feedbackLines"
-            ],
-            "enables": [
-                "objective.floor_clear"
-            ],
-            "blocks": [
-                "pair_rewards"
-            ],
-            "softlockGuards": [
-                "exactly-two-hidden-pair",
-                "clear-flip-state",
-                "noDestroy-contract",
-                "destroy-forfeits-pair-reward",
-                "single-outer-command-finalize"
-            ],
-            "tests": [
-                "src/shared/gameplay-core.test.ts",
-                "src/shared/board-power-actions.test.ts",
-                "src/shared/board-power-availability.test.ts",
-                "src/shared/game.test.ts",
                 "src/renderer/store/runSurfaceState.test.ts"
             ]
         },
@@ -528,40 +475,6 @@
                 "src/shared/turn-match-board-cleanup-rules.test.ts",
                 "src/shared/softlock-fairness.test.ts",
                 "src/shared/board-inspection.test.ts"
-            ]
-        },
-        {
-            "id": "inventory.destroy_charge",
-            "label": "Destroy Charge Inventory",
-            "kind": "inventory",
-            "role": "pair_removal_resource",
-            "evidence": [
-                "src/shared/run-inventory.ts",
-                "src/shared/board-power-actions.ts",
-                "src/shared/board-power-availability.ts",
-                "src/shared/gameplay-core.ts"
-            ],
-            "reads": [
-                "destroyPairCharges",
-                "noDestroy"
-            ],
-            "writes": [
-                "destroyPairCharges"
-            ],
-            "enables": [
-                "power.destroy_pair"
-            ],
-            "blocks": [],
-            "softlockGuards": [
-                "non-negative-counter",
-                "no-destroy-contract",
-                "completion-safe-target"
-            ],
-            "tests": [
-                "src/shared/run-inventory.test.ts",
-                "src/shared/board-power-actions.test.ts",
-                "src/shared/board-power-availability.test.ts",
-                "src/shared/gameplay-core.test.ts"
             ]
         },
         {
@@ -867,72 +780,6 @@
                 "src/shared/gameplay-core.test.ts",
                 "src/renderer/store/runSurfaceState.test.ts",
                 "src/renderer/store/tilePressController.test.ts"
-            ]
-        },
-        {
-            "id": "inventory.stray_remove_charge",
-            "label": "Stray Remove Charge",
-            "kind": "inventory",
-            "role": "bounded_board_control_resource",
-            "evidence": [
-                "src/shared/run-inventory.ts",
-                "src/shared/board-power-actions.ts",
-                "src/shared/gameplay-core.ts"
-            ],
-            "reads": [
-                "strayRemoveCharges"
-            ],
-            "writes": [
-                "strayRemoveCharges"
-            ],
-            "enables": [
-                "power.stray_remove"
-            ],
-            "blocks": [],
-            "softlockGuards": [
-                "non-negative-counter",
-                "completion-safe-stray-target"
-            ],
-            "tests": [
-                "src/shared/run-inventory.test.ts",
-                "src/shared/board-power-actions.test.ts",
-                "src/shared/gameplay-core.test.ts"
-            ]
-        },
-        {
-            "id": "power.stray_remove",
-            "label": "Stray Remove",
-            "kind": "power",
-            "role": "completion_safe_board_control",
-            "evidence": [
-                "src/shared/board-power-actions.ts",
-                "src/shared/gameplay-core.ts",
-                "src/renderer/store/runSurfaceState.ts"
-            ],
-            "reads": [
-                "strayRemoveCharges",
-                "tileStates",
-                "recallFocus"
-            ],
-            "writes": [
-                "strayRemoveCharges",
-                "tileStates",
-                "forgottenTileIdsThisFloor",
-                "powersUsedThisRun",
-                "feedbackLines"
-            ],
-            "enables": [
-                "objective.floor_clear"
-            ],
-            "blocks": [],
-            "softlockGuards": [
-                "completion-safe-stray-target",
-                "clear-flip-state"
-            ],
-            "tests": [
-                "src/shared/board-power-actions.test.ts",
-                "src/shared/gameplay-core.test.ts",
-                "src/renderer/store/runSurfaceState.test.ts"
             ]
         },
         {
@@ -1714,18 +1561,6 @@
             "label": "sets adjacency"
         },
         {
-            "source": "power.destroy_pair",
-            "target": "objective.floor_clear",
-            "kind": "counterplay",
-            "label": "removes pair safely"
-        },
-        {
-            "source": "power.destroy_pair",
-            "target": "progression.run_flow",
-            "kind": "enables",
-            "label": "produces the completed-floor result when the removed pair is last"
-        },
-        {
             "source": "safety.softlock_fairness",
             "target": "objective.floor_clear",
             "kind": "guarded_by",
@@ -1814,54 +1649,6 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "shows target and balance"
-        },
-        {
-            "source": "power.peek",
-            "target": "power.destroy_pair",
-            "kind": "synergy",
-            "label": "reveals the pair worth removing"
-        },
-        {
-            "source": "core.gameplay_commands",
-            "target": "inventory.destroy_charge",
-            "kind": "modifies",
-            "label": "applies destroy charge grants"
-        },
-        {
-            "source": "inventory.destroy_charge",
-            "target": "power.destroy_pair",
-            "kind": "enables",
-            "label": "funds pair removal"
-        },
-        {
-            "source": "inventory.destroy_charge",
-            "target": "feedback.gameplay_hud",
-            "kind": "displays",
-            "label": "shows destroy bank"
-        },
-        {
-            "source": "power.destroy_pair",
-            "target": "inventory.destroy_charge",
-            "kind": "consumes",
-            "label": "spends one charge"
-        },
-        {
-            "source": "core.gameplay_commands",
-            "target": "power.destroy_pair",
-            "kind": "modifies",
-            "label": "validates journals and replays exact pair removal"
-        },
-        {
-            "source": "power.destroy_pair",
-            "target": "feedback.gameplay_hud",
-            "kind": "displays",
-            "label": "shows removed pair remaining charges and floor consequence"
-        },
-        {
-            "source": "power.destroy_pair",
-            "target": "simulation.gameplay_replay",
-            "kind": "tested_by",
-            "label": "schema-valid deterministic rejection and accepted parity"
         },
         {
             "source": "core.gameplay_commands",
@@ -2009,51 +1796,9 @@
         },
         {
             "source": "core.gameplay_commands",
-            "target": "inventory.stray_remove_charge",
-            "kind": "modifies",
-            "label": "applies and consumes typed stray charges"
-        },
-        {
-            "source": "core.gameplay_commands",
             "target": "power.pin",
             "kind": "modifies",
             "label": "executes typed pin decisions"
-        },
-        {
-            "source": "core.gameplay_commands",
-            "target": "power.stray_remove",
-            "kind": "modifies",
-            "label": "executes typed stray removal"
-        },
-        {
-            "source": "inventory.stray_remove_charge",
-            "target": "power.stray_remove",
-            "kind": "enables",
-            "label": "funds one safe correction"
-        },
-        {
-            "source": "inventory.stray_remove_charge",
-            "target": "feedback.gameplay_hud",
-            "kind": "displays",
-            "label": "shows remaining corrections"
-        },
-        {
-            "source": "power.stray_remove",
-            "target": "inventory.stray_remove_charge",
-            "kind": "consumes",
-            "label": "spends one charge"
-        },
-        {
-            "source": "power.stray_remove",
-            "target": "objective.floor_clear",
-            "kind": "counterplay",
-            "label": "removes only completion-safe singleton tiles"
-        },
-        {
-            "source": "power.stray_remove",
-            "target": "feedback.gameplay_hud",
-            "kind": "displays",
-            "label": "shows removed target and balance"
         },
         {
             "source": "power.pin",
@@ -2242,12 +1987,6 @@
             "label": "third-flip rescue can complete a wildcard pair"
         },
         {
-            "source": "power.stray_remove",
-            "target": "board.wild_joker_tile",
-            "kind": "counterplay",
-            "label": "safely removes an unwanted joker singleton"
-        },
-        {
             "source": "progression.run_setup",
             "target": "inventory.mutator_loadout",
             "kind": "grants",
@@ -2300,12 +2039,6 @@
             "target": "power.tile_swap",
             "kind": "gates",
             "label": "noShuffle disables chosen tile swap"
-        },
-        {
-            "source": "inventory.contract_loadout",
-            "target": "power.destroy_pair",
-            "kind": "gates",
-            "label": "noDestroy disables pair removal"
         },
         {
             "source": "inventory.contract_loadout",

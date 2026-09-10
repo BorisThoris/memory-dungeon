@@ -2,9 +2,7 @@ import type { Tile, TileTraitKind } from '../../shared/contracts';
 import { isTilePickable } from './tileBoardPick';
 
 export type TileBoardPowerBackAccent =
-    | 'destroy'
     | 'peek'
-    | 'stray'
     | 'pin'
     | 'swap'
     | 'swapOrigin'
@@ -22,16 +20,12 @@ export interface TileBoardHiddenBackAccentsInput {
     clumpReadTileIds?: ReadonlySet<string>;
     /** What the next rung would add on top of that: the ghost, so the hold decision is visible (thesis §30.3b). */
     clumpReadNextTileIds?: ReadonlySet<string>;
-    destroyEligibleTileIds: ReadonlySet<string>;
-    destroyPowerVisualActive: boolean;
     faceUp: boolean;
     flipLocked: boolean;
     interactive: boolean;
     peekEligibleTileIds: ReadonlySet<string>;
     peekPowerVisualActive: boolean;
     pinModeBoardHintActive: boolean;
-    strayEligibleTileIds: ReadonlySet<string>;
-    strayPowerVisualActive: boolean;
     tileSwapEligibleTileIds: ReadonlySet<string>;
     tileSwapFirstTileId: string | null;
     tileSwapPowerVisualActive: boolean;
@@ -41,16 +35,12 @@ export interface TileBoardHiddenBackAccentsInput {
 export const getTileBoardHiddenBackAccents = ({
     clumpReadNextTileIds,
     clumpReadTileIds,
-    destroyEligibleTileIds,
-    destroyPowerVisualActive,
     faceUp,
     flipLocked,
     interactive,
     peekEligibleTileIds,
     peekPowerVisualActive,
     pinModeBoardHintActive,
-    strayEligibleTileIds,
-    strayPowerVisualActive,
     tileSwapEligibleTileIds,
     tileSwapFirstTileId,
     tileSwapPowerVisualActive,
@@ -67,16 +57,12 @@ export const getTileBoardHiddenBackAccents = ({
     let powerBackAccent: TileBoardPowerBackAccent | null = null;
     if (pinModeBoardHintActive) {
         powerBackAccent = 'pin';
-    } else if (destroyPowerVisualActive && destroyEligibleTileIds.has(tile.id)) {
-        powerBackAccent = 'destroy';
     } else if (tileSwapPowerVisualActive && tileSwapFirstTileId === tile.id) {
         powerBackAccent = 'swapOrigin';
     } else if (tileSwapPowerVisualActive && tileSwapEligibleTileIds.has(tile.id)) {
         powerBackAccent = 'swap';
     } else if (peekPowerVisualActive && peekEligibleTileIds.has(tile.id)) {
         powerBackAccent = 'peek';
-    } else if (strayPowerVisualActive && strayEligibleTileIds.has(tile.id)) {
-        powerBackAccent = 'stray';
     } else if (clumpReadTileIds?.has(tile.id)) {
         // Lowest priority: a power that is armed always outranks a read.
         powerBackAccent = 'clump';

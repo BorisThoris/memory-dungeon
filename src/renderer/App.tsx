@@ -217,7 +217,6 @@ const App = () => {
                     saveData: fixture.saveData,
                     settings: fixture.saveData.settings,
                     boardPinMode: false,
-                    destroyPairArmed: false,
                     peekModeArmed: false,
                     tileSwapArmed: false,
                     tileSwapFirstTileId: null,

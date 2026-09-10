@@ -35,7 +35,6 @@ import {
 } from './persistBridge';
 import {
     createBoardPinModeToggleResult,
-    createDestroyPairArmedToggleResult,
     createFlashPairSurfaceResult,
     createGreetCurioSurfaceResult,
     createGambitThirdPickPressResult,
@@ -43,7 +42,6 @@ import {
     createRegionShuffleArmToggleSurfaceResult,
     createRunSurfaceReset,
     createShuffleBoardSurfaceResult,
-    createStrayArmToggleResult,
     createTileSwapToggleResult,
     createUndoResolvingSurfaceResult,
     createRunWithPeekDisarmedPatch
@@ -69,12 +67,10 @@ import {
 import { createMenuSurfacePatch } from './menuSurfaceState';
 import { projectGameplayFeedback } from './gameplayFeedbackAdapter';
 import {
-    playDestroyPairSfx,
     playFlipSfx,
     playGambitCommitSfx,
     playPeekPowerSfx,
     playPowerArmSfx,
-    playStrayPowerSfx,
     resumeAudioContext,
     sfxGainFromSettings
 } from '../audio/gameSfx';
@@ -388,10 +384,8 @@ export const useAppStore = create<AppState>((set, get) => ({
             run: pressedRun,
             view,
             boardPinMode,
-            destroyPairArmed,
             peekModeArmed,
             regionShuffleArmed,
-            strayRemoveArmed,
             tileSwapArmed,
             tileSwapFirstTileId
         } = get();
@@ -451,11 +445,9 @@ export const useAppStore = create<AppState>((set, get) => ({
         applyPlayingTilePressSurfaceResult(
             createPlayingTilePressSurfaceResult({
                 boardPinMode,
-                destroyPairArmed,
                 peekModeArmed,
                 regionShuffleArmed,
                 run,
-                strayRemoveArmed,
                 tileSwapArmed,
                 tileSwapFirstTileId,
                 tileId
@@ -468,11 +460,9 @@ export const useAppStore = create<AppState>((set, get) => ({
                 playTilePressAudioCues: (audio) => {
                     playTilePressAudioCues(audio, {
                         getSfxGain: sfxGainFromStore,
-                        playDestroyPairSfx,
-                        playFlipSfx,
+                                            playFlipSfx,
                         playPeekPowerSfx,
-                        playStrayPowerSfx,
-                        resumeAudioContext
+                                            resumeAudioContext
                     });
                 },
                 scheduleResolveTimer,
@@ -482,10 +472,9 @@ export const useAppStore = create<AppState>((set, get) => ({
     },
 
     togglePeekMode: () => {
-        const { run, view, boardPinMode, destroyPairArmed, peekModeArmed, tileSwapArmed } = get();
+        const { run, view, boardPinMode, peekModeArmed, tileSwapArmed } = get();
         const result = createPeekModeToggleResult({
             boardPinMode,
-            destroyPairArmed,
             peekModeArmed,
             tileSwapArmed,
             run,
@@ -502,9 +491,8 @@ export const useAppStore = create<AppState>((set, get) => ({
     },
 
     toggleTileSwapArmed: () => {
-        const { run, view, destroyPairArmed, peekModeArmed, tileSwapArmed } = get();
+        const { run, view, peekModeArmed, tileSwapArmed } = get();
         const result = createTileSwapToggleResult({
-            destroyPairArmed,
             peekModeArmed,
             run,
             tileSwapArmed,
@@ -530,18 +518,6 @@ export const useAppStore = create<AppState>((set, get) => ({
         set(result.patch);
     },
 
-    toggleStrayArm: () => {
-        const { run, strayRemoveArmed, view } = get();
-        const result = createStrayArmToggleResult({ run, strayRemoveArmed, view });
-        if (result.kind === 'ignored') {
-            return;
-        }
-        if (result.playArmSfx) {
-            void resumeAudioContext();
-            playPowerArmSfx(sfxGainFromStore());
-        }
-        set(result.patch);
-    },
 
     shuffleBoard: () => {
         const { run, view } = get();
@@ -608,18 +584,6 @@ export const useAppStore = create<AppState>((set, get) => ({
         set(result.patch);
     },
 
-    toggleDestroyPairArmed: () => {
-        const { destroyPairArmed, run, view } = get();
-        const result = createDestroyPairArmedToggleResult({ destroyPairArmed, run, view });
-        if (result.kind === 'ignored') {
-            return;
-        }
-        if (result.playArmSfx) {
-            void resumeAudioContext();
-            playPowerArmSfx(sfxGainFromStore());
-        }
-        set(result.patch);
-    },
 
     pause: () => {
         executePauseRun({

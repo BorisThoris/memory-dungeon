@@ -48,8 +48,6 @@ const initialRun = {
     wildTileId: 'wild',
     wildMatchesRemaining: 1,
     peekCharges: 0,
-    strayRemoveCharges: 1,
-    strayRemoveArmed: true,
     recallFocus: 3,
     rewardPerkIds: [],
     powersUsedThisRun: false,

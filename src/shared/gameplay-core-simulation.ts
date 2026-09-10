@@ -1,10 +1,8 @@
 import type { RunState } from './contracts';
-import { collectDestroyEligibleTileIds, tileIsStrayEligiblePreview } from './board-power-targeting';
 import {
     GAMEPLAY_CONTENT_DEFINITIONS,
     createGameplayBoardTurnResolveCommand,
     createGameplayDefinitionCommand,
-    createGameplayDestroyPairCommand,
     createGameplayFlashPairCommand,
     createGameplayFloorAdvanceCommand,
     createGameplayGambitCommitCommand,
@@ -12,7 +10,6 @@ import {
     createGameplayPinToggleCommand,
     createGameplayRegionShuffleCommand,
     createGameplayShuffleCommand,
-    createGameplayStrayRemoveCommand,
     createGameplayTileSwapCommand,
     createGameplayUndoResolveCommand,
     createGameplayWildMatchConsumeCommand,
@@ -67,16 +64,6 @@ const availablePeekTargets = (run: RunState): string[] => {
         .sort((left, right) => left.localeCompare(right));
 };
 
-const availableStrayTargets = (run: RunState): string[] => {
-    const board = run.board;
-    return board
-        ? board.tiles
-              .filter((tile) => tileIsStrayEligiblePreview(board, tile.id))
-              .map((tile) => tile.id)
-              .sort((left, right) => left.localeCompare(right))
-        : [];
-};
-
 const availableWildMatchPair = (run: RunState): { wildTileId: string; pairedTileId: string } | null => {
     if (getRunInventoryItemQuantity(run, 'wild_match_token') <= 0) {
         return null;
@@ -98,7 +85,7 @@ const commandForStep = (
 ): GameplayCommand => {
     const definitions = GAMEPLAY_CONTENT_DEFINITIONS;
     const commandId = `sim:${seed}:${String(step).padStart(4, '0')}`;
-    const actionIndex = pickRngIndex(rng, definitions.length + 9);
+    const actionIndex = pickRngIndex(rng, definitions.length + 8);
     if (step === 0) {
         return createGameplayBoardTurnResolveCommand(commandId);
     }
@@ -111,13 +98,6 @@ const commandForStep = (
         );
     }
     if (step === 2) {
-        const targets = run.board
-            ? [...collectDestroyEligibleTileIds(run.board)].sort((left, right) => left.localeCompare(right))
-            : [];
-        const target = targets[pickRngIndex(rng, targets.length)] ?? 'missing-destroy-target';
-        return createGameplayDestroyPairCommand(commandId, target);
-    }
-    if (step === 3) {
         return createGameplayFloorAdvanceCommand(commandId);
     }
     if (actionIndex === definitions.length) {
@@ -135,33 +115,28 @@ const commandForStep = (
         }
     }
     if (actionIndex === definitions.length + 2) {
-        const targets = availableStrayTargets(run);
-        const target = targets[pickRngIndex(rng, targets.length)] ?? 'missing-stray-target';
-        return createGameplayStrayRemoveCommand(commandId, target);
-    }
-    if (actionIndex === definitions.length + 3) {
         const targets = availablePeekTargets(run);
         const target = targets[pickRngIndex(rng, targets.length)] ?? 'missing-gambit-target';
         return createGameplayGambitCommitCommand(commandId, target);
     }
-    if (actionIndex === definitions.length + 4) {
+    if (actionIndex === definitions.length + 3) {
         return createGameplayShuffleCommand(commandId);
     }
-    if (actionIndex === definitions.length + 5) {
+    if (actionIndex === definitions.length + 4) {
         const rowCount = Math.max(1, run.board?.rows ?? 1);
         return createGameplayRegionShuffleCommand(commandId, pickRngIndex(rng, rowCount));
     }
-    if (actionIndex === definitions.length + 6) {
+    if (actionIndex === definitions.length + 5) {
         const targets = availablePeekTargets(run);
         const firstTileId = targets[pickRngIndex(rng, targets.length)] ?? 'missing-swap-first';
         const remaining = targets.filter((target) => target !== firstTileId);
         const secondTileId = remaining[pickRngIndex(rng, remaining.length)] ?? 'missing-swap-second';
         return createGameplayTileSwapCommand(commandId, firstTileId, secondTileId);
     }
-    if (actionIndex === definitions.length + 7) {
+    if (actionIndex === definitions.length + 6) {
         return createGameplayFlashPairCommand(commandId);
     }
-    if (actionIndex === definitions.length + 8) {
+    if (actionIndex === definitions.length + 7) {
         return createGameplayUndoResolveCommand(commandId);
     }
     const definition = definitions[actionIndex % definitions.length] ?? definitions[0];

@@ -16,8 +16,6 @@ describe('REG-045 power verb teaching', () => {
             'shuffle',
             'region_shuffle',
             'tile_swap',
-            'destroy_pair',
-            'stray_remove',
             'undo_resolve',
             'gambit'
         ]);
@@ -65,14 +63,12 @@ describe('REG-045 power verb teaching', () => {
         const run = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
         const rows = getPowerVerbRows({
             ...run,
-            activeContract: { noDestroy: false, noShuffle: false, maxMismatches: null, maxPinsTotalRun: 1.9 },
             board: run.board
                 ? {
                       ...run.board,
                       flippedTileIds: Number.NaN as unknown as string[]
                   }
                 : null,
-            destroyPairCharges: Number.POSITIVE_INFINITY,
             flashPairCharges: Number.NaN,
             peekCharges: Number.NaN,
             peekRevealedTileIds: Number.NaN as unknown as string[],
@@ -80,7 +76,7 @@ describe('REG-045 power verb teaching', () => {
             pinsPlacedCountThisRun: 1.9,
             regionShuffleCharges: Number.POSITIVE_INFINITY,
             shuffleCharges: Number.NaN,
-            strayRemoveCharges: Number.NaN,
+            activeContract: { noShuffle: false, maxMismatches: null, maxPinsTotalRun: 1.9 },
             undoUsesThisFloor: Number.NaN
         });
 
@@ -93,8 +89,6 @@ describe('REG-045 power verb teaching', () => {
         expect(rows.find((row) => row.id === 'region_shuffle')?.cost).toBe(
             '0 row/swap charge(s); build effects may make the first row shuffle or tile swap free.'
         );
-        expect(rows.find((row) => row.id === 'destroy_pair')?.cost).toBe('0 destroy charge(s).');
-        expect(rows.find((row) => row.id === 'stray_remove')?.disabledReason).toBe('No stray-remove charges.');
         expect(rows.find((row) => row.id === 'undo_resolve')?.disabledReason).toBe('No undo uses this floor.');
     });
 
@@ -108,7 +102,6 @@ describe('REG-045 power verb teaching', () => {
                       flippedTileIds: Number.NaN as unknown as string[]
                   }
                 : null,
-            destroyPairCharges: 1,
             peekCharges: 1,
             regionShuffleCharges: 1,
             shuffleCharges: 1
@@ -118,6 +111,5 @@ describe('REG-045 power verb teaching', () => {
         expect(rows.find((row) => row.id === 'shuffle')?.disabledReason).toBe('Resolve the current flip first.');
         expect(rows.find((row) => row.id === 'region_shuffle')?.disabledReason).toBe('Resolve the current flip first.');
         expect(rows.find((row) => row.id === 'tile_swap')?.disabledReason).toBe('Resolve the current flip first.');
-        expect(rows.find((row) => row.id === 'destroy_pair')?.disabledReason).toBe('Resolve the current flip first.');
     });
 });

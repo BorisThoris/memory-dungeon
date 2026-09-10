@@ -54,7 +54,6 @@ describe('createRunSummary', () => {
             createNewRun(100, {
                 activeContract: {
                     noShuffle: true,
-                    noDestroy: false,
                     maxMismatches: 3,
                     maxPinsTotalRun: 10
                 },
