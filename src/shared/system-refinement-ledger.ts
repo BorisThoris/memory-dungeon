@@ -28,6 +28,16 @@ export interface SystemRefinementEntry {
     /** Which generation last passed over it. */
     readonly generation: number;
     readonly note: string;
+    /**
+     * The occupancy counter this entry's note quotes a number from (Gen 208).
+     *
+     * A note that says "Occupancy 0.408" is a measurement, and a measurement written into prose
+     * goes stale the moment the game moves - `power.gambit` said 0.408 while the census said 0.446,
+     * and the turn resolution said 4.46 a floor while the census said 4.95. Naming the counter lets
+     * `system-refinement-ledger.test.ts` re-measure it instead of trusting the sentence, and a note
+     * that quotes a number without naming its counter fails the same test.
+     */
+    readonly counter?: string;
 }
 
 export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
@@ -46,9 +56,10 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
     },
     {
         id: 'core.board_turn_resolution',
+        counter: 'matchResolutions',
         verdict: 'confirmed',
         generation: 201,
-        note: 'Occupancy 1.000 x 4.46 on the reference pass: every floor resolves turns, which is the one row in the census that would be alarming at any other value.'
+        note: 'Occupancy 1.000 x 4.95 on the reference pass: every floor resolves turns, which is the one row in the census that would be alarming at any other value.'
     },
     {
         id: 'objective.floor_clear',
@@ -60,6 +71,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
     // ---- The four traits. ----------------------------------------------------------------------
     {
         id: 'trait.echo',
+        counter: 'trait.echo',
         verdict: 'changed',
         generation: 205,
         note: 'Occupancy 0.392, banded common. Pays in peek charges, which is a currency the run still spends - the peek reads 1.000 on the tooled pass. Gen 205: it was the rarest of the four at 0.342, because two of the three interaction couples spend Conduit and Stasis and the fill that was meant to even the floor out drew uniformly instead.'
@@ -78,6 +90,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
     },
     {
         id: 'trait.stasis',
+        counter: 'trait.stasis',
         verdict: 'confirmed',
         generation: 202,
         note: 'Occupancy 0.512, banded common. Both its interaction lines land in the block lane, which is what a lock does, and the lane survived the Gen 202 cull on evidence.'
@@ -86,9 +99,10 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
     // ---- The powers a player can press. --------------------------------------------------------
     {
         id: 'power.peek',
+        counter: 'peek',
         verdict: 'confirmed',
-        generation: 201,
-        note: 'Occupancy 1.000 and honestly so: the census presses it at floor open, where an unrevealed card always exists. The reason is real on every floor, so 1.000 is a measurement rather than a construction.'
+        generation: 208,
+        note: 'Occupancy 0.904 across whole runs, banded core, and it is the one run-scoped charge that clears that bar honestly: a run starts with a single peek and three of the floor curios grant another, so the charge keeps coming back. Read a floor at a time it was 1.000, which was true of 240 first floors rather than of a run (Gen 207).'
     },
     {
         id: 'power.pin',
@@ -116,21 +130,24 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
     },
     {
         id: 'power.region_shuffle',
+        counter: 'regionShuffle',
         verdict: 'confirmed',
         generation: 205,
         note: 'Occupancy 1.000, banded core - it sat at exactly 0.900 against a 0.900 bar until Gen 205 asked what the missing tenth was, and it was the census pressing at a moment a cascade can skip. It sets shuffleUsedThisFloor like the full shuffle, so the scholar-style objective catches it - checked against the rule, not the field name.'
     },
     {
         id: 'power.undo_resolve',
+        counter: 'undo',
         verdict: 'confirmed',
         generation: 201,
         note: 'Occupancy 0.475, banded common, and correctly bounded: undo only exists while a pair is resolving, so it cannot exceed the miss rate by much.'
     },
     {
         id: 'power.gambit',
+        counter: 'gambit',
         verdict: 'confirmed',
         generation: 201,
-        note: 'Occupancy 0.408, banded common. One third flip per floor, spent on the first miss, which is the only moment it can be spent.'
+        note: 'Occupancy 0.446, banded common. One third flip per floor, spent on the first miss, which is the only moment it can be spent.'
     },
     {
         id: 'power.wild_match',
@@ -195,6 +212,13 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         verdict: 'confirmed',
         generation: 201,
         note: 'Exempt from the census by argument rather than omission: every floor opens with it, so a counter would read 1.00 on every row and prove nothing.'
+    },
+    {
+        id: 'hazard.magpie_thief',
+        counter: 'magpieThefts',
+        verdict: 'changed',
+        generation: 208,
+        note: 'Occupancy 0.013 across whole runs, banded rare, and until Gen 208 it had no counter at all and was not in the interaction graph - so the ledger\'s claim to cover every system in the game had never covered the one mechanic that takes finished work back off the player. The floor census reads it SILENT, which is true of 240 first floors and false of the game: the bird arrives on every third mismatch OF THE RUN, so a census that starts a new run every floor almost never reaches it. It is announced when it steals (Gen 113) and the graph now records that reader.'
     },
     {
         id: 'safety.softlock_fairness',

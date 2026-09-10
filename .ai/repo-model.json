@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2439,
     "codeFileCount": 878,
-    "exportedSymbolCount": 2668,
+    "exportedSymbolCount": 2669,
     "contentItemCount": 10,
-    "mechanicCount": 41,
+    "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6761
+    "relationshipCount": 6777
   },
   "inventory": [
     {
@@ -255,8 +255,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 367204,
-      "sha256": "da784263eebe48af48c3e476b130ad0f1423413c027de9ee49b41efd10ffd269"
+      "bytes": 369770,
+      "sha256": "33f1570d3381007c1b8dc6938efd094f668a04076d5c407be4ed3de06d5f1120"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -747,8 +747,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 11816,
-      "sha256": "fe025bfdba890baf418142de7ad04d34114f03278ca819d879ed7c75b7a3434f"
+      "bytes": 12552,
+      "sha256": "c2e2474629a74ac397a2248f97af65e761de500805c11378c781354950bf74ad"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2326,7 +2326,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33472,
-      "sha256": "bae1189c2814256450a2e270db6ee28bc51644cbdda0119d90857d752d600b82"
+      "sha256": "a47dceb7f79e52e2a84cbc0895e9dfdeec51b667bbc75822bbd7cab0a1c6e7f9"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4821,8 +4821,8 @@
     {
       "path": "scripts/mechanic-accountability.ts",
       "category": "script",
-      "bytes": 10281,
-      "sha256": "bdddc31a1e07b3b4d236632af0f361c83165a4c358bf04bb2974693db2bc7ed6"
+      "bytes": 10808,
+      "sha256": "30c4b4e4c3fb12cbef0427dec9016e5c937af7dfd58717b9fa47d6cba312f558"
     },
     {
       "path": "scripts/min-type-size.ts",
@@ -10305,8 +10305,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 12078,
-      "sha256": "065e13b091967d5f02d4b5f3b7f92879a77d3337a8534dff8f8e74b96be42be2"
+      "bytes": 12816,
+      "sha256": "99e2251e738cf5e735476d8aa0f6a04eacb5583259bbb448e236dcd17822df83"
     },
     {
       "path": "src/shared/achievement-reachability.test.ts",
@@ -11067,14 +11067,14 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 74896,
-      "sha256": "afc5fdd590b78a8ea950222084a4996eb31cc37a9bc373c67782f3bd69dc32a1"
+      "bytes": 76613,
+      "sha256": "af0ddf434cc331a923df8f2d1c3561ecf4024d74b2dd5dcddfa70e67c62d7ba5"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "category": "test",
-      "bytes": 24621,
-      "sha256": "32f7516dfef3c1a803797013765f2d52d2fe188cbceb5fe5a9946f3e8ec31466"
+      "bytes": 26056,
+      "sha256": "c2080a7d2dc74ee4b5d896dffb29a806333ce204304920382797569ad8e16512"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.ts",
@@ -11307,8 +11307,8 @@
     {
       "path": "src/shared/mechanic-accountability.test.ts",
       "category": "test",
-      "bytes": 3316,
-      "sha256": "753e8631e107e1e355f9e3b969041b373300c656e7cb2d1df5fc2bd8780aa7a2"
+      "bytes": 3455,
+      "sha256": "fd3247cf4ae4569fcf8a0f88dad0a0172ac17860573b1edcf70a7b2390fccecf"
     },
     {
       "path": "src/shared/mechanic-feedback.test.ts",
@@ -11901,8 +11901,8 @@
     {
       "path": "src/shared/run-occupancy-simulation.test.ts",
       "category": "test",
-      "bytes": 4768,
-      "sha256": "c59afadeea6295c208af3e57e7080d1f999562ffbaf40e4ca5b79dfd43b6f8ba"
+      "bytes": 5852,
+      "sha256": "470ecb474bb8c04ae7d632519c7ba1f7e933f8287bdaad595e4e5319f9282de6"
     },
     {
       "path": "src/shared/run-record-guards.test.ts",
@@ -12171,26 +12171,26 @@
     {
       "path": "src/shared/system-occupancy-simulation.test.ts",
       "category": "test",
-      "bytes": 6883,
-      "sha256": "70d7c08d279b2f5170f8021d1d7dcda8bdcf9f65092d57d4ffc462dd16cbdbf0"
+      "bytes": 7226,
+      "sha256": "cf489b8ff10791cac861aac57d1c4304f5510d95d24f9de7f0ded340613adf3b"
     },
     {
       "path": "src/shared/system-occupancy-simulation.ts",
       "category": "source",
-      "bytes": 51586,
-      "sha256": "b74baad81978b3b1333d52f24fee566fde047c3d5826e2f787d10b6f11af3266"
+      "bytes": 54723,
+      "sha256": "5008a3e702f602cc57fedbb6f90cb0ce663ba95bddaff65bf4cceb7c4f99f100"
     },
     {
       "path": "src/shared/system-refinement-ledger.test.ts",
       "category": "test",
-      "bytes": 2734,
-      "sha256": "383c609b78d6c85f0043467a6eaa5dc5a2830449e13da79d929c6bc91fcf468c"
+      "bytes": 5870,
+      "sha256": "0ee88bbb03607201b9d29fd4d54d48e554fe4911d2282ac3fce665611f783ced"
     },
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 18011,
-      "sha256": "2dc757528546cbcaa78453880d5da547cdb4da4c0f3a47e613d7735a02680966"
+      "bytes": 19675,
+      "sha256": "44d583b5bbae2cdde30cdd3c2df4a03f6260396c114a104f13dae162f5777735"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -26593,7 +26593,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2239,
+      "lineCount": 2287,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -26603,7 +26603,7 @@
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 445,
+      "lineCount": 473,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/findables.ts",
@@ -27280,7 +27280,7 @@
       "path": "src/shared/mechanic-accountability.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 64,
+      "lineCount": 65,
       "imports": [
         "file:src/shared/gameplay-interaction-graph.ts",
         "file:src/shared/system-occupancy-simulation.ts"
@@ -29195,7 +29195,7 @@
       "path": "src/shared/run-occupancy-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 94,
+      "lineCount": 112,
       "imports": [
         "file:src/shared/system-occupancy-simulation.ts"
       ],
@@ -30078,7 +30078,7 @@
       "path": "src/shared/system-occupancy-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 128,
+      "lineCount": 132,
       "imports": [
         "file:src/shared/system-occupancy-simulation.ts"
       ],
@@ -30090,13 +30090,14 @@
       "path": "src/shared/system-occupancy-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1006,
+      "lineCount": 1055,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/board-power-state.ts",
         "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/chunk-break-rules.ts",
+        "file:src/shared/content-lock-state.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/game.ts",
@@ -30111,6 +30112,7 @@
       ],
       "exports": [
         "symbol:src/shared/system-occupancy-simulation.ts#dominantSystemKeys",
+        "symbol:src/shared/system-occupancy-simulation.ts#floorBandedRows",
         "symbol:src/shared/system-occupancy-simulation.ts#judgeRunOccupancy",
         "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
         "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancyAgainstBaseline",
@@ -30131,7 +30133,8 @@
       "testedBy": [
         "file:src/shared/mechanic-accountability.test.ts",
         "file:src/shared/run-occupancy-simulation.test.ts",
-        "file:src/shared/system-occupancy-simulation.test.ts"
+        "file:src/shared/system-occupancy-simulation.test.ts",
+        "file:src/shared/system-refinement-ledger.test.ts"
       ]
     },
     {
@@ -30139,9 +30142,10 @@
       "path": "src/shared/system-refinement-ledger.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 48,
+      "lineCount": 109,
       "imports": [
         "file:src/shared/gameplay-interaction-graph.ts",
+        "file:src/shared/system-occupancy-simulation.ts",
         "file:src/shared/system-refinement-ledger.ts"
       ],
       "exports": [],
@@ -30152,7 +30156,7 @@
       "path": "src/shared/system-refinement-ledger.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 349,
+      "lineCount": 373,
       "imports": [
         "file:src/shared/gameplay-interaction-graph.ts"
       ],
@@ -50814,152 +50818,160 @@
       "name": "dominantSystemKeys",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 992,
-      "endLine": 995
+      "line": 1033,
+      "endLine": 1036
+    },
+    {
+      "id": "symbol:src/shared/system-occupancy-simulation.ts#floorBandedRows",
+      "name": "floorBandedRows",
+      "kind": "value",
+      "file": "src/shared/system-occupancy-simulation.ts",
+      "line": 950,
+      "endLine": 955
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeRunOccupancy",
       "name": "judgeRunOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 950,
-      "endLine": 990
+      "line": 991,
+      "endLine": 1031
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
       "name": "judgeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 916,
-      "endLine": 938
+      "line": 957,
+      "endLine": 979
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancyAgainstBaseline",
       "name": "judgeSystemOccupancyAgainstBaseline",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 877,
-      "endLine": 899
+      "line": 917,
+      "endLine": 940
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OCCUPANCY_SEEDS",
       "name": "OCCUPANCY_SEEDS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 716,
-      "endLine": 716
+      "line": 756,
+      "endLine": 756
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OccupancyFloorResult",
       "name": "OccupancyFloorResult",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 377,
-      "endLine": 381
+      "line": 393,
+      "endLine": 397
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#RunOccupancyReport",
       "name": "RunOccupancyReport",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 582,
-      "endLine": 600
+      "line": 617,
+      "endLine": 635
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#simulateRunOccupancy",
       "name": "simulateRunOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 602,
-      "endLine": 704
+      "line": 637,
+      "endLine": 744
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#simulateSystemOccupancy",
       "name": "simulateSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 718,
-      "endLine": 763
+      "line": 758,
+      "endLine": 803
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#summarizeRunOccupancy",
       "name": "summarizeRunOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 706,
-      "endLine": 714
+      "line": 746,
+      "endLine": 754
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#summarizeSystemOccupancy",
       "name": "summarizeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 997,
-      "endLine": 1005
+      "line": 1038,
+      "endLine": 1054
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BANDS",
       "name": "SYSTEM_OCCUPANCY_BANDS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 770,
-      "endLine": 781
+      "line": 810,
+      "endLine": 821
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE",
       "name": "SYSTEM_OCCUPANCY_BASELINE",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 831,
-      "endLine": 851
+      "line": 871,
+      "endLine": 891
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "name": "SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 868,
-      "endLine": 868
+      "line": 908,
+      "endLine": 908
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_COUNTERS",
       "name": "SYSTEM_OCCUPANCY_COUNTERS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 121,
-      "endLine": 211
+      "line": 122,
+      "endLine": 227
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SystemOccupancyCounter",
       "name": "SystemOccupancyCounter",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 43,
-      "endLine": 103
+      "line": 44,
+      "endLine": 104
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SystemOccupancyReport",
       "name": "SystemOccupancyReport",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 242,
-      "endLine": 254
+      "line": 258,
+      "endLine": 270
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#strandedLedgerIds",
       "name": "strandedLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 343,
-      "endLine": 348
+      "line": 367,
+      "endLine": 372
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_LEDGER",
       "name": "SYSTEM_REFINEMENT_LEDGER",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 33,
-      "endLine": 331
+      "line": 43,
+      "endLine": 355
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementEntry",
@@ -50967,15 +50979,15 @@
       "kind": "interface",
       "file": "src/shared/system-refinement-ledger.ts",
       "line": 24,
-      "endLine": 31
+      "endLine": 41
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#systemRefinementLedgerById",
       "name": "systemRefinementLedgerById",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 333,
-      "endLine": 334
+      "line": 357,
+      "endLine": 358
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementVerdict",
@@ -50990,8 +51002,8 @@
       "name": "unexaminedSystemIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 337,
-      "endLine": 340
+      "line": 361,
+      "endLine": 364
     },
     {
       "id": "symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
@@ -52880,6 +52892,10 @@
           "line": 1
         },
         {
+          "path": "src/renderer/copy/magpieBeat.ts",
+          "line": 1
+        },
+        {
           "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
           "line": 4
         }
@@ -52950,6 +52966,48 @@
         "matched-pair-only",
         "typed-score-request",
         "destroy-forfeits-findable"
+      ]
+    },
+    {
+      "id": "mechanic:hazard.magpie_thief",
+      "mechanicId": "hazard.magpie_thief",
+      "label": "The magpie",
+      "kind": "hazard",
+      "role": "takes_back_a_cleared_pair_on_every_third_mismatch_of_the_run",
+      "evidence": [
+        {
+          "path": "src/shared/magpie-rules.ts",
+          "line": 5
+        },
+        {
+          "path": "src/shared/turn-mismatch-rules.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/floor-mutator-schedule.ts",
+          "line": 362
+        },
+        {
+          "path": "src/shared/board-turn-event-facts.ts",
+          "line": 42
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/magpie-rules.test.ts",
+          "line": 4
+        },
+        {
+          "path": "src/shared/run-occupancy-simulation.test.ts",
+          "line": 80
+        }
+      ],
+      "enables": [],
+      "blocks": [],
+      "softlockGuards": [
+        "steals-only-cleared-pairs",
+        "lands-only-on-hidden-cells",
+        "returns-the-pair-in-place-when-there-is-nowhere-to-land"
       ]
     },
     {
@@ -54494,6 +54552,7 @@
       "id": "state:activeMutators",
       "name": "activeMutators",
       "readBy": [
+        "mechanic:hazard.magpie_thief",
         "mechanic:inventory.mutator_loadout",
         "mechanic:phase.memorize"
       ],
@@ -54603,18 +54662,6 @@
         "mechanic:trait.conduit"
       ],
       "writtenBy": []
-    },
-    {
-      "id": "state:destroyPairCharges",
-      "name": "destroyPairCharges",
-      "readBy": [
-        "mechanic:core.gameplay_commands",
-        "mechanic:feedback.gameplay_hud"
-      ],
-      "writtenBy": [
-        "mechanic:core.gameplay_commands",
-        "mechanic:progression.run_flow"
-      ]
     },
     {
       "id": "state:encorePairKeys",
@@ -54872,6 +54919,16 @@
       ]
     },
     {
+      "id": "state:magpieTheftsThisFloor",
+      "name": "magpieTheftsThisFloor",
+      "readBy": [
+        "mechanic:feedback.gameplay_hud"
+      ],
+      "writtenBy": [
+        "mechanic:hazard.magpie_thief"
+      ]
+    },
+    {
       "id": "state:matchedFindables",
       "name": "matchedFindables",
       "readBy": [
@@ -54912,6 +54969,14 @@
       "name": "memorizeMs",
       "readBy": [
         "mechanic:phase.memorize"
+      ],
+      "writtenBy": []
+    },
+    {
+      "id": "state:mismatches",
+      "name": "mismatches",
+      "readBy": [
+        "mechanic:hazard.magpie_thief"
       ],
       "writtenBy": []
     },
@@ -54972,6 +55037,7 @@
         "mechanic:board.chain_chunk_fever",
         "mechanic:board.wild_joker_tile",
         "mechanic:core.board_turn_resolution",
+        "mechanic:hazard.magpie_thief",
         "mechanic:power.wild_match"
       ],
       "writtenBy": []
@@ -55111,6 +55177,7 @@
       "name": "runSeed",
       "readBy": [
         "mechanic:board.chain_chunk_fever",
+        "mechanic:hazard.magpie_thief",
         "mechanic:inventory.mutator_loadout"
       ],
       "writtenBy": []
@@ -55216,16 +55283,6 @@
       ]
     },
     {
-      "id": "state:strayRemoveCharges",
-      "name": "strayRemoveCharges",
-      "readBy": [
-        "mechanic:core.gameplay_commands"
-      ],
-      "writtenBy": [
-        "mechanic:core.gameplay_commands"
-      ]
-    },
-    {
       "id": "state:tilePositions",
       "name": "tilePositions",
       "readBy": [
@@ -55244,6 +55301,7 @@
         "mechanic:board.wild_joker_tile",
         "mechanic:core.board_turn_resolution",
         "mechanic:findable.score_glint",
+        "mechanic:hazard.magpie_thief",
         "mechanic:inventory.wild_match_token",
         "mechanic:objective.floor_clear",
         "mechanic:power.flash_pair",
@@ -55261,6 +55319,7 @@
         "mechanic:board.cleanup",
         "mechanic:board.wild_joker_tile",
         "mechanic:core.board_turn_resolution",
+        "mechanic:hazard.magpie_thief",
         "mechanic:power.region_shuffle",
         "mechanic:power.shuffle",
         "mechanic:power.tile_swap",
@@ -55393,6 +55452,13 @@
       "target": "mechanic:board.chain_chunk_fever",
       "kind": "consequence",
       "label": "a match at Clean or better breaks the clump around it"
+    },
+    {
+      "id": "consequence:mechanic:hazard.magpie_thief->mechanic:core.board_turn_resolution:a third mismatch of the run puts a cleared pair back face down",
+      "source": "mechanic:hazard.magpie_thief",
+      "target": "mechanic:core.board_turn_resolution",
+      "kind": "consequence",
+      "label": "a third mismatch of the run puts a cleared pair back face down"
     },
     {
       "id": "consumes:mechanic:power.flash_pair->mechanic:inventory.flash_pair_charge:spends one Flash charge",
@@ -55606,6 +55672,13 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "displays",
       "label": "shows score source"
+    },
+    {
+      "id": "displays:mechanic:hazard.magpie_thief->mechanic:feedback.gameplay_hud:the turn announcement says the bird took a pair back",
+      "source": "mechanic:hazard.magpie_thief",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "the turn announcement says the bird took a pair back"
     },
     {
       "id": "displays:mechanic:inventory.contract_loadout->mechanic:feedback.gameplay_hud:shows locked restrictions beside affected powers",
@@ -70701,6 +70774,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/system-occupancy-simulation.ts->symbol:src/shared/system-occupancy-simulation.ts#floorBandedRows",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "symbol:src/shared/system-occupancy-simulation.ts#floorBandedRows",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/system-occupancy-simulation.ts->symbol:src/shared/system-occupancy-simulation.ts#judgeRunOccupancy",
       "source": "file:src/shared/system-occupancy-simulation.ts",
       "target": "symbol:src/shared/system-occupancy-simulation.ts#judgeRunOccupancy",
@@ -71929,6 +72008,13 @@
       "label": "noShuffle disables chosen tile swap"
     },
     {
+      "id": "gates:mechanic:inventory.mutator_loadout->mechanic:hazard.magpie_thief:only a floor carrying magpie_thief has a bird on it",
+      "source": "mechanic:inventory.mutator_loadout",
+      "target": "mechanic:hazard.magpie_thief",
+      "kind": "gates",
+      "label": "only a floor carrying magpie_thief has a bird on it"
+    },
+    {
       "id": "gates:mechanic:objective.featured_streak->mechanic:objective.floor_clear:resolves streak bonus at floor clear",
       "source": "mechanic:objective.featured_streak",
       "target": "mechanic:objective.floor_clear",
@@ -72172,6 +72258,12 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:feedback.gameplay_hud->file:src/renderer/copy/magpieBeat.ts",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "file:src/renderer/copy/magpieBeat.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:feedback.gameplay_hud->file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
@@ -72199,6 +72291,30 @@
       "id": "implemented_by:mechanic:findable.score_glint->file:src/shared/match-claim-rules.ts",
       "source": "mechanic:findable.score_glint",
       "target": "file:src/shared/match-claim-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:hazard.magpie_thief->file:src/shared/board-turn-event-facts.ts",
+      "source": "mechanic:hazard.magpie_thief",
+      "target": "file:src/shared/board-turn-event-facts.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:hazard.magpie_thief->file:src/shared/floor-mutator-schedule.ts",
+      "source": "mechanic:hazard.magpie_thief",
+      "target": "file:src/shared/floor-mutator-schedule.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:hazard.magpie_thief->file:src/shared/magpie-rules.ts",
+      "source": "mechanic:hazard.magpie_thief",
+      "target": "file:src/shared/magpie-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:hazard.magpie_thief->file:src/shared/turn-mismatch-rules.ts",
+      "source": "mechanic:hazard.magpie_thief",
+      "target": "file:src/shared/turn-mismatch-rules.ts",
       "kind": "implemented_by"
     },
     {
@@ -86776,6 +86892,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/system-occupancy-simulation.ts->src/shared/content-lock-state.ts",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "file:src/shared/content-lock-state.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/system-occupancy-simulation.ts->src/shared/contracts.ts",
       "source": "file:src/shared/system-occupancy-simulation.ts",
       "target": "file:src/shared/contracts.ts",
@@ -86845,6 +86967,12 @@
       "id": "imports:src/shared/system-refinement-ledger.test.ts->src/shared/gameplay-interaction-graph.ts",
       "source": "file:src/shared/system-refinement-ledger.test.ts",
       "target": "file:src/shared/gameplay-interaction-graph.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/system-refinement-ledger.test.ts->src/shared/system-occupancy-simulation.ts",
+      "source": "file:src/shared/system-refinement-ledger.test.ts",
+      "target": "file:src/shared/system-occupancy-simulation.ts",
       "kind": "imports"
     },
     {
@@ -87892,12 +88020,6 @@
       "kind": "reads"
     },
     {
-      "id": "reads:mechanic:core.gameplay_commands->state:destroyPairCharges",
-      "source": "mechanic:core.gameplay_commands",
-      "target": "state:destroyPairCharges",
-      "kind": "reads"
-    },
-    {
       "id": "reads:mechanic:core.gameplay_commands->state:featuredObjectiveCompleted",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:featuredObjectiveCompleted",
@@ -87976,12 +88098,6 @@
       "kind": "reads"
     },
     {
-      "id": "reads:mechanic:core.gameplay_commands->state:strayRemoveCharges",
-      "source": "mechanic:core.gameplay_commands",
-      "target": "state:strayRemoveCharges",
-      "kind": "reads"
-    },
-    {
       "id": "reads:mechanic:core.gameplay_commands->state:tileTraitKind",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:tileTraitKind",
@@ -88030,12 +88146,6 @@
       "kind": "reads"
     },
     {
-      "id": "reads:mechanic:feedback.gameplay_hud->state:destroyPairCharges",
-      "source": "mechanic:feedback.gameplay_hud",
-      "target": "state:destroyPairCharges",
-      "kind": "reads"
-    },
-    {
       "id": "reads:mechanic:feedback.gameplay_hud->state:feedbackLines",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "state:feedbackLines",
@@ -88051,6 +88161,12 @@
       "id": "reads:mechanic:feedback.gameplay_hud->state:lastLevelResult",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "state:lastLevelResult",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:magpieTheftsThisFloor",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:magpieTheftsThisFloor",
       "kind": "reads"
     },
     {
@@ -88092,6 +88208,36 @@
     {
       "id": "reads:mechanic:findable.score_glint->state:tileStates",
       "source": "mechanic:findable.score_glint",
+      "target": "state:tileStates",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:hazard.magpie_thief->state:activeMutators",
+      "source": "mechanic:hazard.magpie_thief",
+      "target": "state:activeMutators",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:hazard.magpie_thief->state:mismatches",
+      "source": "mechanic:hazard.magpie_thief",
+      "target": "state:mismatches",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:hazard.magpie_thief->state:pairKeys",
+      "source": "mechanic:hazard.magpie_thief",
+      "target": "state:pairKeys",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:hazard.magpie_thief->state:runSeed",
+      "source": "mechanic:hazard.magpie_thief",
+      "target": "state:runSeed",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:hazard.magpie_thief->state:tileStates",
+      "source": "mechanic:hazard.magpie_thief",
       "target": "state:tileStates",
       "kind": "reads"
     },
@@ -88941,6 +89087,18 @@
       "id": "tested_by:mechanic:findable.score_glint->file:src/shared/gameplay-core.test.ts",
       "source": "mechanic:findable.score_glint",
       "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:hazard.magpie_thief->file:src/shared/magpie-rules.test.ts",
+      "source": "mechanic:hazard.magpie_thief",
+      "target": "file:src/shared/magpie-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:hazard.magpie_thief->file:src/shared/run-occupancy-simulation.test.ts",
+      "source": "mechanic:hazard.magpie_thief",
+      "target": "file:src/shared/run-occupancy-simulation.test.ts",
       "kind": "tested_by"
     },
     {
@@ -94713,6 +94871,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/system-occupancy-simulation.ts->file:src/shared/system-refinement-ledger.test.ts",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "file:src/shared/system-refinement-ledger.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/system-refinement-ledger.ts->file:src/shared/system-refinement-ledger.test.ts",
       "source": "file:src/shared/system-refinement-ledger.ts",
       "target": "file:src/shared/system-refinement-ledger.test.ts",
@@ -95322,12 +95486,6 @@
       "kind": "writes"
     },
     {
-      "id": "writes:mechanic:core.gameplay_commands->state:destroyPairCharges",
-      "source": "mechanic:core.gameplay_commands",
-      "target": "state:destroyPairCharges",
-      "kind": "writes"
-    },
-    {
       "id": "writes:mechanic:core.gameplay_commands->state:feedbackLines",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:feedbackLines",
@@ -95418,12 +95576,6 @@
       "kind": "writes"
     },
     {
-      "id": "writes:mechanic:core.gameplay_commands->state:strayRemoveCharges",
-      "source": "mechanic:core.gameplay_commands",
-      "target": "state:strayRemoveCharges",
-      "kind": "writes"
-    },
-    {
       "id": "writes:mechanic:economy.score_and_rewards->state:currentLevelScore",
       "source": "mechanic:economy.score_and_rewards",
       "target": "state:currentLevelScore",
@@ -95457,6 +95609,18 @@
       "id": "writes:mechanic:findable.score_glint->state:scoreRequests",
       "source": "mechanic:findable.score_glint",
       "target": "state:scoreRequests",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:hazard.magpie_thief->state:magpieTheftsThisFloor",
+      "source": "mechanic:hazard.magpie_thief",
+      "target": "state:magpieTheftsThisFloor",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:hazard.magpie_thief->state:tileStates",
+      "source": "mechanic:hazard.magpie_thief",
+      "target": "state:tileStates",
       "kind": "writes"
     },
     {
@@ -95907,12 +96071,6 @@
       "id": "writes:mechanic:power.wild_match->state:wildMatchesRemaining",
       "source": "mechanic:power.wild_match",
       "target": "state:wildMatchesRemaining",
-      "kind": "writes"
-    },
-    {
-      "id": "writes:mechanic:progression.run_flow->state:destroyPairCharges",
-      "source": "mechanic:progression.run_flow",
-      "target": "state:destroyPairCharges",
       "kind": "writes"
     },
     {

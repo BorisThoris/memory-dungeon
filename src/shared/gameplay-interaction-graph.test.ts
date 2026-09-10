@@ -57,7 +57,7 @@ describe('gameplay interaction graph', () => {
     });
 
     it('keeps the executable graph connected and guarded', () => {
-        expect(gameplayInteractionGraph.version).toBe(37);
+        expect(gameplayInteractionGraph.version).toBe(38);
         expect(validateGameplayInteractionGraph()).toEqual([]);
     });
 
@@ -97,6 +97,34 @@ describe('gameplay interaction graph', () => {
             requiredSafetyNodes: ['safety.softlock_fairness']
         });
         expect(gameplayInteractionGraph.edges.filter((edge) => edge.kind === 'unblocks' || edge.kind === 'priority_guard')).toEqual([]);
+    });
+
+    it('declares no state field belonging to a mechanic the game removed', () => {
+        /*
+         * Gen 208. Gen 200 deleted the Destroy and Stray powers; their charge fields stayed declared
+         * here for seven generations - `destroyPairCharges` read by the HUD and the command core,
+         * written by the run flow, `strayRemoveCharges` read and written by the command core - and
+         * nothing noticed, because the graph's validator only asks that a write have a reader, and
+         * these had each other.
+         *
+         * Not every name here is a field: the graph deliberately speaks in concepts a mechanic reads
+         * and writes (`tileStates`, `repairPlan`, `nearbyTraits`) and those resolve to no single
+         * identifier. So the rule is the narrow, checkable one - a removed thing's state may not be
+         * named - rather than the sweeping one that would force the vocabulary into field names.
+         */
+        const removedStateFields = [
+            'destroyPairCharges',
+            'strayRemoveCharges',
+            'comboShards',
+            'lives',
+            'guardTokens',
+            'gold',
+            'relicIds'
+        ];
+        const declared = new Set(
+            gameplayInteractionGraph.mechanics.flatMap((mechanic) => [...mechanic.reads, ...mechanic.writes])
+        );
+        expect(removedStateFields.filter((field) => declared.has(field))).toEqual([]);
     });
 
     it('keeps a mechanic node for every findable and run inventory item the source rosters declare', () => {

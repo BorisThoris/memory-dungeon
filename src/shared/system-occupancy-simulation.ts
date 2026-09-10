@@ -2,6 +2,7 @@ import type { BoardState, RunState, Tile } from './contracts';
 import { GAME_RULES_VERSION } from './contracts';
 import { buildBoard } from './board-generation';
 import { countFindablePairs } from './board-tile-generation-rules';
+import { filterMutatorsByContentLock } from './content-lock-state';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
 import {
     applyFlashPair,
@@ -126,6 +127,21 @@ export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
     { id: 'recallMistakes', key: 'recallMistakesThisFloor', label: 'A mismatch was made', family: 'memory', cadence: 'common', kind: 'tally', player: 'reference' },
     { id: 'matchResolutions', key: 'matchResolutionsThisFloor', label: 'A turn resolved', family: 'memory', cadence: 'core', kind: 'tally', player: 'reference' },
     { id: 'findablesClaimed', key: 'findablesClaimedThisFloor', label: 'A pickup was claimed', family: 'reward', cadence: 'core', kind: 'tally', player: 'reference' },
+    /*
+     * The magpie, which had no counter at all until Gen 208 (task 156) - a mechanic that takes a
+     * matched pair back off the player and left no trace in the census that exists to catch exactly
+     * that. Filed under memory rather than reward because a stolen pair is a pair to remember again,
+     * which is what the player actually has to do about it.
+     *
+     * Run-scoped, and it is the cleanest demonstration of why that distinction had to exist. The
+     * bird arrives on every third mismatch OF THE RUN (`stats.mismatches`, MAGPIE_MISS_INTERVAL),
+     * and only on a floor carrying its mutator. Given a fresh run every floor, the third mismatch
+     * almost never arrives before the board is cleared, so the floor census reported the magpie
+     * SILENT across 240 floors - a mechanic that ships, works, and is invisible to the instrument
+     * built to find exactly that. Across whole runs it reads 0.013, banded `rare`. Gen 207 caught
+     * a system called `core` on a fresh-run-per-floor reading; this is the same error inverted.
+     */
+    { id: 'magpieThefts', key: 'magpieTheftsThisFloor', label: 'The magpie took a matched pair back', family: 'memory', cadence: 'rare', kind: 'tally', player: 'reference', scope: 'run' },
     // The four charges below are handed out once and never refilled by the floor transition, so
     // the run census is what bands them (Gen 207). The peek survives its `core` bar on the strength
     // of the floor curios: three of them grant a peek charge, and it reads 0.904 across a run.
@@ -537,6 +553,19 @@ const playFloor = (
     const setup = pass === 'setup';
     const board = scheduledFloorBoard(seed, floor, setup);
     /*
+     * Gen 208: the floor's mutators go on the RUN as well as on the board.
+     *
+     * They were only ever passed to `buildBoard`, and eight rules read them off the run instead -
+     * the magpie, sticky fingers, the n-back anchor, the shifting spotlight and the four the
+     * memorize window reads. None of them could fire in this census, so the magpie read SILENT
+     * across 240 floors while the run census, whose floors after the first get their mutators from
+     * the game's own `advanceToNextLevel`, saw it steal. A census that cannot see a mutator cannot
+     * answer the question it exists to answer.
+     */
+    const activeMutators = filterMutatorsByContentLock(
+        pickFloorScheduleEntry(seed, GAME_RULES_VERSION, floor, 'endless').mutators
+    );
+    /*
      * The setup pass builds the run the way the setup sheet builds one - the wild joker on the
      * board, a stray charge, a flash charge - so the powers a plain endless run never hands out are
      * there to be spent. Everything else about the floor is identical, so the two passes differ by
@@ -548,7 +577,13 @@ const playFloor = (
             : createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed })
     );
     return playFloorFrom(
-        { ...base, board, status: 'playing', findablesTotalThisFloor: countFindablePairs(board.tiles) },
+        {
+            ...base,
+            activeMutators,
+            board,
+            status: 'playing',
+            findablesTotalThisFloor: countFindablePairs(board.tiles)
+        },
         seed,
         floor,
         missRate,
@@ -629,6 +664,11 @@ export const simulateRunOccupancy = ({
             );
             run = {
                 ...run,
+                // Floor 1 needs its mutators put on by hand for the same reason (Gen 208); every
+                // floor after it gets them from `advanceToNextLevel`, which is the game's own path.
+                activeMutators: filterMutatorsByContentLock(
+                    pickFloorScheduleEntry(seed, GAME_RULES_VERSION, 1, 'endless').mutators
+                ),
                 board: firstBoard,
                 status: 'playing',
                 findablesTotalThisFloor: countFindablePairs(firstBoard.tiles)
@@ -877,8 +917,9 @@ export const SYSTEM_OCCUPANCY_BASELINE_FLOORS = 24;
 export const judgeSystemOccupancyAgainstBaseline = (
     report: SystemOccupancyReport
 ): { ok: boolean; issues: string[] } => {
-    const silent = report.rows.filter((row) => row.floorShare === 0).map((row) => row.key);
-    const thin = report.rows
+    const banded = floorBandedRows(report);
+    const silent = banded.filter((row) => row.floorShare === 0).map((row) => row.key);
+    const thin = banded
         .filter((row) => row.floorShare > 0 && row.floorShare < SYSTEM_OCCUPANCY_BANDS[row.cadence].min)
         .map((row) => row.key);
     const issues: string[] = [];
@@ -906,7 +947,7 @@ export const judgeSystemOccupancyAgainstBaseline = (
  * floor, which is how the wild joker came to be filed as the loop (Gen 207). It is still reported
  * in the table - the number is real, it is just a number about first floors.
  */
-const floorBandedRows = (report: SystemOccupancyReport): SystemOccupancyReport['rows'] => {
+export const floorBandedRows = (report: SystemOccupancyReport): SystemOccupancyReport['rows'] => {
     const runScoped = new Set(
         SYSTEM_OCCUPANCY_COUNTERS.filter((counter) => counter.scope === 'run').map((counter) => counter.id)
     );
@@ -994,12 +1035,20 @@ export const dominantSystemKeys = (report: SystemOccupancyReport): string[] =>
         .filter((row) => row.floorShare > SYSTEM_OCCUPANCY_BANDS[row.cadence].max)
         .map((row) => row.key);
 
-export const summarizeSystemOccupancy = (report: SystemOccupancyReport): string =>
-    [...report.rows]
+export const summarizeSystemOccupancy = (report: SystemOccupancyReport): string => {
+    // A run-scoped row is printed but not judged here, and it is marked so nobody reads its zero as
+    // a fault: the magpie reads SILENT on this census because it arrives on the third mismatch of a
+    // RUN, and this census starts a new run every floor. `yarn sim:run` is where it answers.
+    const runScoped = new Set(
+        SYSTEM_OCCUPANCY_COUNTERS.filter((counter) => counter.scope === 'run').map((counter) => counter.id)
+    );
+    return [...report.rows]
         .sort((a, b) => a.floorShare - b.floorShare)
         .map(
             (row) =>
                 `${row.floorShare === 0 ? 'SILENT' : row.floorShare.toFixed(3).padStart(6)} ` +
-                `x${row.perFloor.toFixed(2).padStart(6)} ${row.cadence.padEnd(6)} ${row.family.padEnd(8)} ${row.key}`
+                `x${row.perFloor.toFixed(2).padStart(6)} ${row.cadence.padEnd(6)} ${row.family.padEnd(8)} ` +
+                `${row.key}${runScoped.has(row.key) ? ' (banded by sim:run)' : ''}`
         )
         .join('\n');
+};

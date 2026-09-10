@@ -77,11 +77,29 @@ describe('the run census', () => {
          * the setup sheet sells it.
          */
         const runScoped = SYSTEM_OCCUPANCY_COUNTERS.filter((counter) => counter.scope === 'run').map((c) => c.id);
-        expect(runScoped).toEqual(['peek', 'shuffle', 'flashPair', 'wildMatch']);
+        expect(runScoped).toEqual(['magpieThefts', 'peek', 'shuffle', 'flashPair', 'wildMatch']);
         const floorReport = simulateSystemOccupancy({ floors: SYSTEM_OCCUPANCY_BASELINE_FLOORS });
         const wildOnFloors = floorReport.rows.find((row) => row.key === 'wildMatch')!;
         expect(wildOnFloors.floorShare).toBeGreaterThan(SYSTEM_OCCUPANCY_BANDS.rare.max);
         expect(judgeSystemOccupancy(floorReport).ok).toBe(true);
+    });
+
+    it('sees the magpie steal in a real run, which the floor census cannot', () => {
+        /*
+         * Task 156, open since Gen 113: the magpie had no counter, and no test that it ever steals
+         * in a run. It arrives on every third mismatch OF THE RUN and only on a floor carrying its
+         * mutator, so a census that starts a fresh run every floor almost never reaches the third
+         * mismatch before the board is cleared - it reported the bird SILENT across 240 floors.
+         * A mechanic that ships, works, and is invisible to the instrument built to find exactly
+         * that is the whole argument for this file.
+         */
+        const magpie = report.rows.find((row) => row.key === 'magpieThefts')!;
+        expect(magpie.runFloorShare).toBeGreaterThan(0);
+        expect(magpie.lastFloorSeen).toBeGreaterThan(1);
+        const onFloors = simulateSystemOccupancy({ floors: SYSTEM_OCCUPANCY_BASELINE_FLOORS }).rows.find(
+            (row) => row.key === 'magpieThefts'
+        )!;
+        expect(onFloors.floorShare).toBe(0);
     });
 
     it('says where each system was last seen, which is the number a floor census cannot have', () => {

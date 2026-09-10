@@ -1,5 +1,5 @@
 {
-    "version": 37,
+    "version": 38,
     "mechanics": [
         {
             "id": "trait.echo",
@@ -291,12 +291,12 @@
             "evidence": [
                 "src/renderer/components/RunShell.tsx",
                 "src/renderer/components/gameScreenFeedback.ts",
+                "src/renderer/copy/magpieBeat.ts",
                 "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts"
             ],
             "reads": [
                 "interactionTags",
                 "peekCharges",
-                "destroyPairCharges",
                 "triesDelta",
                 "lastLevelResult",
                 "feedbackLines",
@@ -304,7 +304,8 @@
                 "currentLevelScore",
                 "sessionStats",
                 "achievementProgress",
-                "nextFloor"
+                "nextFloor",
+                "magpieTheftsThisFloor"
             ],
             "writes": [
                 "feedbackLines"
@@ -377,7 +378,6 @@
             "writes": [
                 "nextFloor",
                 "tileStates",
-                "destroyPairCharges",
                 "timerState",
                 "gameplayCommandJournal",
                 "gameplayEventJournal",
@@ -666,9 +666,7 @@
                 "shuffleCharges",
                 "regionShuffleCharges",
                 "shuffleNonce",
-                "strayRemoveCharges",
                 "pinnedTileIds",
-                "destroyPairCharges",
                 "featuredObjectiveStreak",
                 "featuredObjectiveCompleted",
                 "gambitAvailableThisFloor",
@@ -688,10 +686,8 @@
                 "shuffleCharges",
                 "regionShuffleCharges",
                 "shuffleNonce",
-                "strayRemoveCharges",
                 "pinnedTileIds",
                 "pinsPlacedCountThisRun",
-                "destroyPairCharges",
                 "score",
                 "peekRevealedTileIds",
                 "forgottenTileIdsThisFloor",
@@ -1539,6 +1535,40 @@
                 "src/renderer/components/RunShell.test.tsx",
                 "src/renderer/components/tileBoardBreakWave.test.ts"
             ]
+        },
+        {
+            "id": "hazard.magpie_thief",
+            "label": "The magpie",
+            "kind": "hazard",
+            "role": "takes_back_a_cleared_pair_on_every_third_mismatch_of_the_run",
+            "evidence": [
+                "src/shared/magpie-rules.ts",
+                "src/shared/turn-mismatch-rules.ts",
+                "src/shared/floor-mutator-schedule.ts",
+                "src/shared/board-turn-event-facts.ts"
+            ],
+            "reads": [
+                "activeMutators",
+                "mismatches",
+                "tileStates",
+                "pairKeys",
+                "runSeed"
+            ],
+            "writes": [
+                "tileStates",
+                "magpieTheftsThisFloor"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "steals-only-cleared-pairs",
+                "lands-only-on-hidden-cells",
+                "returns-the-pair-in-place-when-there-is-nowhere-to-land"
+            ],
+            "tests": [
+                "src/shared/magpie-rules.test.ts",
+                "src/shared/run-occupancy-simulation.test.ts"
+            ]
         }
     ],
     "edges": [
@@ -2213,6 +2243,24 @@
             "target": "trait.stasis",
             "kind": "counterplay",
             "label": "swap the blocked pair away"
+        },
+        {
+            "source": "hazard.magpie_thief",
+            "target": "core.board_turn_resolution",
+            "kind": "consequence",
+            "label": "a third mismatch of the run puts a cleared pair back face down"
+        },
+        {
+            "source": "inventory.mutator_loadout",
+            "target": "hazard.magpie_thief",
+            "kind": "gates",
+            "label": "only a floor carrying magpie_thief has a bird on it"
+        },
+        {
+            "source": "hazard.magpie_thief",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the turn announcement says the bird took a pair back"
         }
     ],
     "coverage": {

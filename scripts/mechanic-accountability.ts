@@ -1,11 +1,18 @@
 /**
  * Every mechanic the game declares has to answer for itself.
  *
- * The interaction graph names 45 mechanics. The occupancy census watches seven counters. Nothing
- * joined the two, and the gap is where this repo's most expensive failures have lived: the pop
- * shipped dead for six floors, the ripple went from 7% of breaks to zero and stayed there for
- * three generations, and the magpie has been taking back cleared pairs on every fourth miss with
- * no counter, no graph node and no test that it ever happens in a real run.
+ * The interaction graph names the game's mechanics and the occupancy census watches its counters.
+ * Nothing joined the two, and the gap is where this repo's most expensive failures have lived: the
+ * pop shipped dead for six floors, and the ripple went from 7% of breaks to zero and stayed there
+ * for three generations.
+ *
+ * The third example this comment used to give was the magpie - "taking back cleared pairs with no
+ * counter, no graph node and no test that it ever happens in a real run". Gen 194 wrote that down
+ * and left it there; Gen 208 closed it, and the closing is worth keeping because of how the bird
+ * read once it was counted: SILENT across 240 floors of the floor census, 0.013 across whole runs.
+ * It arrives on every third mismatch OF THE RUN, so an instrument that starts a new run every floor
+ * cannot see it at all. A mechanic can be counted and still be invisible if the counting is done
+ * over the wrong unit.
  *
  * None of those were bugs a unit test could see. Every one had passing tests, because a fixture is
  * built to make the rule fire, which is exactly what hides a rule that never fires on a real board.
@@ -49,6 +56,7 @@ export const MECHANIC_CENSUS_COUNTERS: Record<string, readonly string[]> = {
     'findable.score_glint': ['findablesClaimed'],
     'objective.floor_clear': ['matchResolutions'],
     'stats.session_tracking': ['recallMistakes'],
+    'hazard.magpie_thief': ['magpieThefts'],
     'power.peek': ['peek'],
     'power.shuffle': ['shuffle'],
     'power.region_shuffle': ['regionShuffle'],

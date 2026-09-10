@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
     dominantSystemKeys,
+    floorBandedRows,
     judgeSystemOccupancy,
     simulateSystemOccupancy,
     summarizeSystemOccupancy,
@@ -51,7 +52,10 @@ describe('what actually happens to a player', () => {
     });
 
     it('names exactly the systems that never happen, so a new silence cannot hide in the crowd', () => {
-        const silent = report.rows
+        // `floorBandedRows` and not `report.rows`: a run-scoped charge is banded by `sim:run`, and
+        // reading its zero here would report the magpie as a silence when what it actually is is a
+        // mechanic this census cannot see - it arrives on the third mismatch of a RUN (Gen 208).
+        const silent = floorBandedRows(report)
             .filter((row) => row.floorShare === 0)
             .map((row) => row.key)
             .sort();
@@ -59,7 +63,7 @@ describe('what actually happens to a player', () => {
     });
 
     it('names exactly the systems a player meets too rarely to learn', () => {
-        const thin = report.rows
+        const thin = floorBandedRows(report)
             .filter((row) => row.floorShare > 0 && row.floorShare < SYSTEM_OCCUPANCY_BANDS[row.cadence].min)
             .map((row) => row.key)
             .sort();

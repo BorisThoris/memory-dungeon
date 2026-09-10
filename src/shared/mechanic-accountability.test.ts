@@ -46,10 +46,11 @@ describe('every mechanic answers for itself', () => {
         // thirty-two by giving the census a player that starts from a run setup. Gen 200 removed
         // Destroy and Stray outright, so the graph is forty-one and the two UNREACHABLE lines are
         // gone with the powers they described - the ratio went up by deleting the debt, not by
-        // covering it.
+        // covering it. Gen 208 added the magpie, which had been on this file's own list of
+        // uncounted mechanics since Gen 194: thirty-one of forty-two.
         const censused = Object.keys(MECHANIC_CENSUS_COUNTERS).length;
-        expect(censused).toBe(30);
-        expect(gameplayInteractionGraph.mechanics.length).toBe(41);
+        expect(censused).toBe(31);
+        expect(gameplayInteractionGraph.mechanics.length).toBe(42);
         // Nothing is blind by family any more: every remaining mechanic carries its own argued
         // exemption. Eleven of them, and every one is a real exemption rather than a debt: no line
         // here says a mechanic cannot be reached.
