@@ -31,26 +31,30 @@ describe('every mechanic answers for itself', () => {
     it('catches a mechanic that names a counter the census does not watch', () => {
         const named = new Set(Object.values(MECHANIC_CENSUS_COUNTERS).flat());
         for (const key of named) {
-            expect(SYSTEM_OCCUPANCY_COUNTERS.some((counter) => counter.key === key), key).toBe(true);
+            expect(SYSTEM_OCCUPANCY_COUNTERS.some((counter) => counter.id === key), key).toBe(true);
         }
         // And the other way: a counter nobody claims is a counter measuring nothing.
         for (const counter of SYSTEM_OCCUPANCY_COUNTERS) {
-            expect(named.has(counter.key), counter.key).toBe(true);
+            expect(named.has(counter.id), counter.id).toBe(true);
         }
     });
 
     it('records how much of the game the census can actually see', () => {
-        // Not a target, a measurement: seven mechanics of forty-five, and most of the rest are
-        // invisible for one reason - the census player never spends a charge or arms a power.
+        // Not a target, a measurement, and the one that says whether "every system in the game
+        // answers for itself" is a claim or a slogan. Gen 194 measured seven of forty-five. Gen 195
+        // took it to fifteen by spending what a plain endless run hands out. Gen 199 took it to
+        // thirty-two by giving the census a player that starts from a run setup.
         const censused = Object.keys(MECHANIC_CENSUS_COUNTERS).length;
-        expect(censused).toBe(15);
+        expect(censused).toBe(32);
         expect(gameplayInteractionGraph.mechanics.length).toBe(45);
-        // Gen 195 taught the census player to spend what a plain endless run hands it, which took
-        // four powers and their four charges off the blind list. The eighteen left are the powers
-        // a run setup grants and the four traits.
+        // Nothing is blind by family any more: every remaining mechanic carries its own argued
+        // exemption. Thirteen of them, and two of those thirteen say UNREACHABLE rather than
+        // exempt - Destroy and its charge, which no code path in the game can grant.
         const stillBlind = gameplayInteractionGraph.mechanics.filter(
-            (mechanic) => /^(power|inventory|trait)\./u.test(mechanic.id) && MECHANIC_CENSUS_COUNTERS[mechanic.id] == null
+            (mechanic) =>
+                MECHANIC_CENSUS_COUNTERS[mechanic.id] == null && MECHANIC_CENSUS_EXEMPTIONS[mechanic.id] == null
         ).length;
-        expect(stillBlind).toBe(18);
+        expect(stillBlind).toBe(0);
+        expect(censused + Object.keys(MECHANIC_CENSUS_EXEMPTIONS).length).toBe(gameplayInteractionGraph.mechanics.length);
     });
 });

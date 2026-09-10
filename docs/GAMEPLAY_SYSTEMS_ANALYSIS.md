@@ -269,3 +269,73 @@ Pair, the pin, the gambit, the tile swap and the wild match all start at zero an
 setup - their seven charges, and the four traits, which pay on a match that touches them where the
 census player picks pairs without reading them. Both are a census that plays a *setup*, not a plain
 floor, which is the next step.
+
+## Gen 199 — every system in the game answers for itself
+
+The directive was "refine every system in the game", and the first honest thing to do with it was to
+find out how many there are and which of them can be observed at all. The answer, from
+`scripts/mechanic-accountability.ts` joined to the occupancy census:
+
+| | Mechanics | Censused | Exempt, with a reason | **Unaccounted** |
+|---|---|---|---|---|
+| Gen 194 (the audit shipped) | 45 | 7 | 12 | 26 |
+| Gen 195 (the census spends its tools) | 45 | 15 | 12 | 18 |
+| **Gen 199** | **45** | **32** | **13** | **0** |
+
+Every mechanic in the game now either has a counter that moved on real generated floors, or an
+individually argued line saying why it cannot have one. Nothing is excused by family.
+
+### What was blocking it
+
+A blanket blind-spot list. Three prefixes — `power.`, `inventory.`, `trait.` — excused eighteen
+mechanics on the grounds that "the census player never spends a charge or arms a power". That is a
+statement about the census, not about the game: it is a debt register wearing an exemption list's
+clothes, and it had been growing quietly since Gen 194.
+
+Gen 199 pays it off with a third census pass. The `setup` player starts from a run setup rather than
+a plain endless run, so the wild joker is on the board and Stray, Flash, the pin, the tile swap, the
+gambit's third flip and the wild match token are all there to be spent. It presses them the way the
+tooled player presses its own: the least interesting policy that still touches every button.
+
+`REFERENCE_PLAYER_BLIND` is now an empty list. The mechanism stays because the next family may earn
+one; the empty list is easier to defend than a missing one.
+
+### What the census found the moment it could see
+
+Three things, none of which any test had caught, which is the argument for the whole exercise.
+
+**Destroy is unreachable.** `destroyPairCharges` is created at 0 in `run-creation-rules.ts`, and
+every other reference in the codebase decrements or reads it. No code path grants one. The power has
+an action, an availability rule, a targeting preview, a disabled-reason string, player copy, a Codex
+entry and a card-back accent — and a player can never press it. It is recorded as UNREACHABLE rather
+than exempt, and it is left for a design call rather than removed unilaterally: either a setup grants
+the charge, or Destroy goes the way of the decoy. What it must not do is stay as it is, which is a
+mechanic zeroed rather than removed — the exact shape `REMOVED_DECOY.md` was written about.
+
+**Stray and the wild match compete for the same card, always.** Stray takes a completion-safe
+singleton; after Gen 196 removed the decoy and the exit key, the wild joker is the only singleton
+left in the game. So a run that spends its stray has thrown away its wild match, and one that keeps
+the joker has nothing to stray. The census cannot see both on one floor, so it alternates — even
+floors take the stray, odd floors match the joker — and the trade is on the record instead of hidden
+inside whichever one the census happened to press first. It is a real design question: two powers
+that cannot both be used is either a deliberate choice or an accident of the decoy's removal, and
+nobody has decided which.
+
+**Two cadences were wrong, and the first measurement corrected them.** The gambit was filed `core`
+and measures 0.400 — it is spent on a miss, and the reference miss rate does not produce one on
+every floor, which is the undo's shape for the same reason. The four traits were filed `rare` and
+measure 0.379 to 0.550; four traits spread over a floor's tiles is not an occasional event. Both are
+now `common`. Guessing a cadence and letting the census correct it is the intended workflow; the
+mistake would have been to widen the band instead.
+
+### The census as it now reads
+
+| Cadence | Systems |
+|---|---|
+| core (≥0.90) | chunk breaks, recall matches, turn resolutions, pickups, peek, shuffle, row shuffle, flash, tile swap, pin |
+| common (0.10–0.90) | Fever breaks, the drop, mismatches, undo, gambit, stray, wild match, and the four traits |
+| exempt (13) | the command bus, the HUD, the memorize phase, run flow, run setup loadouts, the featured streak, the run summary, softlock fairness, the two simulation tools, and Destroy with its charge (unreachable) |
+
+`yarn sim:occupancy --check` bands every row and `audit:mechanic-accountability` fails if a mechanic
+appears in the graph with neither a counter nor a reason, so the next mechanic added to this game
+cannot land unmeasured without the gate saying so by name.

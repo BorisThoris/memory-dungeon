@@ -3,12 +3,23 @@ import { GAME_RULES_VERSION } from './contracts';
 import { buildBoard } from './board-generation';
 import { countFindablePairs } from './board-tile-generation-rules';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
-import { applyPeek, applyRegionShuffle, applyShuffle, cancelResolvingWithUndo } from './board-power-actions';
+import {
+    applyFlashPair,
+    applyPeek,
+    applyRegionShuffle,
+    applyShuffle,
+    applyStrayRemove,
+    applyTileSwap,
+    cancelResolvingWithUndo
+} from './board-power-actions';
+import { togglePinnedTile } from './board-power-state';
+import { createWildRun } from './run-creation-rules';
+import { TILE_TRAIT_COUNT_KINDS } from './session-stats-rules';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { getUnresolvedPlayablePairGroups } from './playthrough-solver-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
-import { isSingletonUtilityPairKey } from './tile-identity';
+import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 
 /**
  * Does this system ever happen to a player?
@@ -28,8 +39,15 @@ import { isSingletonUtilityPairKey } from './tile-identity';
  * census is decoration, and the report says so by name.
  */
 export interface SystemOccupancyCounter {
+    /** Unique row id. Two passes may watch the same field for different reasons, so the key alone
+     *  is not an identity: the tooled player spends a row/swap charge on a row shuffle and the
+     *  setup player spends the same charge on a tile swap, and those are two different systems. */
+    id: string;
     /** The `RunState` field this system moves. */
-    key: keyof RunState & string;
+    key: string;
+    /** How the field is read, when it is not a plain number on the run. Traits live in a record on
+     *  `run.stats`, and the gambit and the pin are a flag and a list rather than a tally. */
+    read?: (run: RunState) => number;
     label: string;
     /** What the game would lose if this never fired. Sorted into the report by it. */
     family: 'cascade' | 'memory' | 'reward' | 'tools';
@@ -58,22 +76,76 @@ export interface SystemOccupancyCounter {
      * and every charge was invisible until Gen 195; the `tooled` player spends what a plain endless
      * run hands it. They are separate passes on purpose, so a shuffled board never moves the
      * cascade counters the reference baseline is ratcheted against.
+     *
+     * The `setup` player is the third pass, added at Gen 199: a run built the way the setup sheet
+     * builds one, so the powers and tokens a plain endless run never hands out - the wild joker and
+     * its match token, Stray, Flash, the gambit's third flip, the pin, the tile swap - are on the
+     * board to be spent, and the trait tiles that come with that setup get matched. Without it
+     * eighteen of the game's forty-five mechanics had no counter at all and sat on an exemption
+     * list, which is a debt register rather than a census.
      */
-    player: 'reference' | 'tooled';
+    player: 'reference' | 'tooled' | 'setup';
 }
 
 export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
-    { key: 'chunkBreaksThisFloor', label: 'A match popped the clump it touched', family: 'cascade', cadence: 'core', kind: 'tally', player: 'reference' },
-    { key: 'chunkPairsDroppedThisFloor', label: 'The drop took a severed suit’s last pairs', family: 'cascade', cadence: 'common', kind: 'tally', player: 'reference' },
-    { key: 'feverBreaksThisFloor', label: 'A break landed at Fever', family: 'cascade', cadence: 'common', kind: 'tally', player: 'reference' },
-    { key: 'recallMatchesThisFloor', label: 'A pair was matched from memory', family: 'memory', cadence: 'core', kind: 'tally', player: 'reference' },
-    { key: 'recallMistakesThisFloor', label: 'A mismatch was made', family: 'memory', cadence: 'common', kind: 'tally', player: 'reference' },
-    { key: 'matchResolutionsThisFloor', label: 'A turn resolved', family: 'memory', cadence: 'core', kind: 'tally', player: 'reference' },
-    { key: 'findablesClaimedThisFloor', label: 'A pickup was claimed', family: 'reward', cadence: 'core', kind: 'tally', player: 'reference' },
-    { key: 'peekCharges', label: 'A peek was spent on a hidden tile', family: 'tools', cadence: 'core', kind: 'spend', player: 'tooled' },
-    { key: 'shuffleCharges', label: 'The board was shuffled', family: 'tools', cadence: 'core', kind: 'spend', player: 'tooled' },
-    { key: 'regionShuffleCharges', label: 'A row was shuffled', family: 'tools', cadence: 'core', kind: 'spend', player: 'tooled' },
-    { key: 'undoUsesThisFloor', label: 'A flip was taken back before it resolved', family: 'tools', cadence: 'common', kind: 'spend', player: 'tooled' }
+    { id: 'chunkBreaks', key: 'chunkBreaksThisFloor', label: 'A match popped the clump it touched', family: 'cascade', cadence: 'core', kind: 'tally', player: 'reference' },
+    { id: 'chunkPairsDropped', key: 'chunkPairsDroppedThisFloor', label: 'The drop took a severed suit’s last pairs', family: 'cascade', cadence: 'common', kind: 'tally', player: 'reference' },
+    { id: 'feverBreaks', key: 'feverBreaksThisFloor', label: 'A break landed at Fever', family: 'cascade', cadence: 'common', kind: 'tally', player: 'reference' },
+    { id: 'recallMatches', key: 'recallMatchesThisFloor', label: 'A pair was matched from memory', family: 'memory', cadence: 'core', kind: 'tally', player: 'reference' },
+    { id: 'recallMistakes', key: 'recallMistakesThisFloor', label: 'A mismatch was made', family: 'memory', cadence: 'common', kind: 'tally', player: 'reference' },
+    { id: 'matchResolutions', key: 'matchResolutionsThisFloor', label: 'A turn resolved', family: 'memory', cadence: 'core', kind: 'tally', player: 'reference' },
+    { id: 'findablesClaimed', key: 'findablesClaimedThisFloor', label: 'A pickup was claimed', family: 'reward', cadence: 'core', kind: 'tally', player: 'reference' },
+    { id: 'peek', key: 'peekCharges', label: 'A peek was spent on a hidden tile', family: 'tools', cadence: 'core', kind: 'spend', player: 'tooled' },
+    { id: 'shuffle', key: 'shuffleCharges', label: 'The board was shuffled', family: 'tools', cadence: 'core', kind: 'spend', player: 'tooled' },
+    { id: 'regionShuffle', key: 'regionShuffleCharges', label: 'A row was shuffled', family: 'tools', cadence: 'core', kind: 'spend', player: 'tooled' },
+    { id: 'undo', key: 'undoUsesThisFloor', label: 'A flip was taken back before it resolved', family: 'tools', cadence: 'common', kind: 'spend', player: 'tooled' },
+
+    /*
+     * The setup pass (Gen 199). Everything below is on the board only because a run setup put it
+     * there, which is why none of it had a counter until now: the census played plain endless
+     * floors, so it could only ever have reported the setup it chose rather than the game.
+     */
+        // Common by construction, not by weakness: the census alternates the stray against the wild
+    // match because after Gen 196 the two compete for the same card, so each is pressed on half
+    // the floors. See `spendSetupTools`.
+    { id: 'strayRemove', key: 'strayRemoveCharges', label: 'A stray singleton was removed', family: 'tools', cadence: 'common', kind: 'spend', player: 'setup' },
+    { id: 'flashPair', key: 'flashPairCharges', label: 'A pair was flashed', family: 'tools', cadence: 'core', kind: 'spend', player: 'setup' },
+    { id: 'wildMatch', key: 'wildMatchesRemaining', label: 'The wild joker was spent on a match', family: 'tools', cadence: 'common', kind: 'spend', player: 'setup' },
+    { id: 'tileSwap', key: 'regionShuffleCharges', label: 'Two tiles were swapped', family: 'tools', cadence: 'core', kind: 'spend', player: 'setup' },
+    {
+        id: 'gambit',
+        key: 'gambitThirdFlipUsed',
+        read: (run) => (run.gambitThirdFlipUsed === true ? 1 : 0),
+        label: 'The gambit took a third flip',
+        family: 'tools',
+        // Common, not core: the gambit is spent on a miss, and the reference miss rate does not
+        // produce one on every floor. Measured 0.458, which is the undo's shape for the same reason.
+        cadence: 'common',
+        kind: 'tally',
+        player: 'setup'
+    },
+    {
+        id: 'pin',
+        key: 'pinnedTileIds',
+        read: (run) => runNonNegativeInteger(run.pinsPlacedCountThisRun),
+        label: 'A tile was pinned',
+        family: 'tools',
+        cadence: 'core',
+        kind: 'tally',
+        player: 'setup'
+    },
+    ...TILE_TRAIT_COUNT_KINDS.map((kind): SystemOccupancyCounter => ({
+        id: `trait.${kind}`,
+        key: 'stats',
+        read: (run) => runNonNegativeInteger(run.stats?.tileTraitMatches?.[kind]),
+        label: `A ${kind} tile was matched`,
+        family: 'memory',
+        // Measured 0.33 to 0.57 of floors at Gen 199. Filed as rare on the first pass and corrected
+        // by the first measurement: four traits over a floor's tiles is not an occasional event.
+        cadence: 'common',
+        kind: 'tally',
+        player: 'setup'
+    }))
 ];
 
 /*
@@ -147,7 +219,51 @@ const spendTools = (run: RunState, phase: 'opening' | 'midway'): RunState => {
     return shuffled;
 };
 
-const SPEND_KEYS = SYSTEM_OCCUPANCY_COUNTERS.filter((counter) => counter.kind === 'spend').map((counter) => counter.key);
+/**
+ * What a player does with what a run *setup* hands them: pin a tile, swap two, flash a pair, and
+ * spend the stray on the singleton the wild joker leaves standing. The wild match itself is spent
+ * by the ordinary turn loop, because the joker matches whatever it is put beside.
+ *
+ * As with the tooled player, it is deliberately not clever. The census asks whether a system can
+ * happen on a real board, not whether a good player would reach for it.
+ */
+const spendSetupTools = (run: RunState, takeTheStray: boolean): RunState => {
+    const board = run.board;
+    if (!board || run.status !== 'playing') {
+        return run;
+    }
+    const hidden = board.tiles.filter((tile) => tile.state === 'hidden');
+    let next = run;
+    const first = hidden[0];
+    if (first) next = togglePinnedTile(next, first.id);
+    const swapA = hidden[1];
+    const swapB = hidden[hidden.length - 1];
+    if (swapA && swapB && swapA.id !== swapB.id) {
+        next = applyTileSwap(next, swapA.id, swapB.id);
+    }
+    next = applyFlashPair(next);
+    /*
+     * Stray and the wild match want the same card, always. Stray only takes a completion-safe
+     * singleton, and after Gen 196 the wild joker is the only singleton left in the game - so a run
+     * that spends its stray has thrown away its wild match, and one that keeps the wild has nothing
+     * to stray. The census cannot see both on one floor, so it alternates: even floors take the
+     * stray, odd floors keep the joker and match it. Both then answer across the sweep, and the
+     * trade is on the record rather than hidden inside whichever one the census happened to press.
+     */
+    if (!takeTheStray) {
+        return next;
+    }
+    const singleton = next.board?.tiles.find(
+        (tile) => tile.state === 'hidden' && isSingletonUtilityPairKey(tile.pairKey)
+    );
+    if (singleton) next = applyStrayRemove(next, singleton.id);
+    return next;
+};
+
+const readCounter = (counter: SystemOccupancyCounter, run: RunState): number =>
+    counter.read ? counter.read(run) : runNonNegativeInteger((run as unknown as Record<string, number>)[counter.key]);
+
+const SPEND_COUNTERS = SYSTEM_OCCUPANCY_COUNTERS.filter((counter) => counter.kind === 'spend');
 
 export interface OccupancyFloorResult {
     run: RunState;
@@ -160,8 +276,10 @@ const playFloor = (
     floor: number,
     missRate: number,
     maxTurns: number,
-    tooled = false
+    pass: SystemOccupancyCounter['player'] = 'reference'
 ): OccupancyFloorResult => {
+    const tooled = pass === 'tooled';
+    const setup = pass === 'setup';
     const rulesVersion = GAME_RULES_VERSION;
     const schedule = pickFloorScheduleEntry(seed, rulesVersion, floor, 'endless');
     const board = buildBoard(floor, {
@@ -172,9 +290,20 @@ const playFloor = (
         featuredObjectiveId: schedule.featuredObjectiveId,
         cycleFloor: schedule.cycleFloor,
         gameMode: 'endless',
-        activeMutators: schedule.mutators
+        activeMutators: schedule.mutators,
+        includeWildTile: setup
     });
-    const base = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed }));
+    /*
+     * The setup pass builds the run the way the setup sheet builds one - the wild joker on the
+     * board, a stray charge, a flash charge - so the powers a plain endless run never hands out are
+     * there to be spent. Everything else about the floor is identical, so the two passes differ by
+     * the setup and nothing else.
+     */
+    const base = finishMemorizePhase(
+        setup
+            ? createWildRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed })
+            : createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed })
+    );
     let run: RunState = {
         ...base,
         board,
@@ -186,11 +315,10 @@ const playFloor = (
     const spends = new Map<string, number>();
     /** Take the next run state, and record every watched charge that fell on the way to it. */
     const step = (next: RunState): RunState => {
-        for (const key of SPEND_KEYS) {
-            const fell =
-                runNonNegativeInteger(run[key] as number) - runNonNegativeInteger(next[key] as number);
+        for (const counter of SPEND_COUNTERS) {
+            const fell = readCounter(counter, run) - readCounter(counter, next);
             if (fell > 0) {
-                spends.set(key, (spends.get(key) ?? 0) + fell);
+                spends.set(counter.id, (spends.get(counter.id) ?? 0) + fell);
             }
         }
         run = next;
@@ -198,9 +326,15 @@ const playFloor = (
     };
     let turns = 0;
     let undone = false;
+    let gambited = false;
     if (tooled) {
         step(spendTools(run, 'opening'));
     }
+    const takeTheStray = floor % 2 === 0;
+    if (setup) {
+        step(spendSetupTools(run, takeTheStray));
+    }
+    let wildSpent = takeTheStray;
     while (run.status === 'playing' && turns < maxTurns) {
         const groups = getUnresolvedPlayablePairGroups(run.board!).filter((group) =>
             group.every((tile) => tile.state === 'hidden' || tile.state === 'flipped')
@@ -221,11 +355,43 @@ const playFloor = (
             first = group[0]!;
             second = group[1]!;
         }
+        /*
+         * The wild joker is a singleton, so it is never in a playable pair group and the ordinary
+         * loop never reaches for it - which is exactly why `wildMatch` read zero on all 240 floors
+         * the first time this pass ran. It is a button, like the peek: the census presses it.
+         */
+        if (setup && !wildSpent && runNonNegativeInteger(run.wildMatchesRemaining) > 0) {
+            const wild = run.board!.tiles.find((tile) => tile.state === 'hidden' && isWildPairKey(tile.pairKey));
+            const partner = hidden.find((tile) => !isSingletonUtilityPairKey(tile.pairKey));
+            if (wild && partner) {
+                wildSpent = true;
+                step(resolveBoardTurn(flipTile(flipTile(run, wild.id), partner.id)));
+                turns += 1;
+                continue;
+            }
+        }
         const flipped = flipTile(flipTile(run, first.id), second.id);
         /*
          * The undo is the one tool that has to be spent mid-turn: it takes back a pair the player
          * has flipped but not yet resolved. Spent on the first miss, which is when a player would.
          */
+        if (setup && wantsMiss && !gambited) {
+            /*
+             * The gambit is the one power that only exists mid-turn: two tiles are down and wrong,
+             * and it buys a third look before they turn back. Spent on the first miss, which is the
+             * only moment a player could.
+             */
+            const third = run.board!.tiles.find(
+                (tile) => tile.state === 'hidden' && tile.id !== first.id && tile.id !== second.id
+            );
+            const gambit = third ? flipTile(flipped, third.id) : flipped;
+            if (gambit !== flipped) {
+                gambited = true;
+                step(resolveBoardTurn(gambit));
+                turns += 1;
+                continue;
+            }
+        }
         if (tooled && wantsMiss && !undone) {
             const cancelled = cancelResolvingWithUndo(flipped);
             if (cancelled !== flipped) {
@@ -264,23 +430,20 @@ export const simulateSystemOccupancy = ({
 } = {}): SystemOccupancyReport => {
     const hits = new Map<string, { floors: number; total: number }>();
     let played = 0;
-    const passes: Array<SystemOccupancyCounter['player']> = ['reference', 'tooled'];
+    const passes: Array<SystemOccupancyCounter['player']> = ['reference', 'tooled', 'setup'];
     for (const seed of seeds) {
         for (let floor = 1; floor <= floors; floor += 1) {
             played += 1;
             for (const pass of passes) {
                 const counters = SYSTEM_OCCUPANCY_COUNTERS.filter((counter) => counter.player === pass);
                 if (counters.length === 0) continue;
-                const { run, spends } = playFloor(seed, floor, missRate, maxTurns, pass === 'tooled');
+                const { run, spends } = playFloor(seed, floor, missRate, maxTurns, pass);
                 for (const counter of counters) {
-                    const value =
-                        counter.kind === 'spend'
-                            ? spends.get(counter.key) ?? 0
-                            : runNonNegativeInteger(run[counter.key] as number);
-                    const row = hits.get(counter.key) ?? { floors: 0, total: 0 };
+                    const value = counter.kind === 'spend' ? spends.get(counter.id) ?? 0 : readCounter(counter, run);
+                    const row = hits.get(counter.id) ?? { floors: 0, total: 0 };
                     if (value > 0) row.floors += 1;
                     row.total += value;
-                    hits.set(counter.key, row);
+                    hits.set(counter.id, row);
                 }
             }
         }
@@ -288,9 +451,9 @@ export const simulateSystemOccupancy = ({
     return {
         floors: played,
         rows: SYSTEM_OCCUPANCY_COUNTERS.map((counter) => {
-            const row = hits.get(counter.key) ?? { floors: 0, total: 0 };
+            const row = hits.get(counter.id) ?? { floors: 0, total: 0 };
             return {
-                key: counter.key,
+                key: counter.id,
                 label: counter.label,
                 family: counter.family,
                 cadence: counter.cadence,

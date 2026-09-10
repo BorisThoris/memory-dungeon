@@ -35,22 +35,47 @@ const ROOT = resolve(import.meta.dirname, '..');
  * the chain, the chunk and Fever are one node and three counters - but a counter that stands for
  * nothing is as bad as a mechanic that is counted by nothing.
  */
+/**
+ * Which census row each mechanic points at. The values are counter **ids**, not `RunState` field
+ * names: since Gen 199 two passes can watch the same field for different systems - the tooled
+ * player spends a row/swap charge on a row shuffle, the setup player spends the same charge on a
+ * tile swap - so the field alone is not an identity.
+ */
 export const MECHANIC_CENSUS_COUNTERS: Record<string, readonly string[]> = {
-    'board.chain_chunk_fever': ['chunkBreaksThisFloor', 'chunkPairsDroppedThisFloor', 'feverBreaksThisFloor'],
-    'board.cleanup': ['matchResolutionsThisFloor'],
-    'core.board_turn_resolution': ['matchResolutionsThisFloor'],
-    'economy.score_and_rewards': ['recallMatchesThisFloor'],
-    'findable.score_glint': ['findablesClaimedThisFloor'],
-    'objective.floor_clear': ['matchResolutionsThisFloor'],
-    'stats.session_tracking': ['recallMistakesThisFloor'],
-    'power.peek': ['peekCharges'],
-    'power.shuffle': ['shuffleCharges'],
-    'power.region_shuffle': ['regionShuffleCharges'],
-    'power.undo_resolve': ['undoUsesThisFloor'],
-    'inventory.peek_charge': ['peekCharges'],
-    'inventory.shuffle_charge': ['shuffleCharges'],
-    'inventory.region_shuffle_charge': ['regionShuffleCharges'],
-    'inventory.undo_charge': ['undoUsesThisFloor']
+    'board.chain_chunk_fever': ['chunkBreaks', 'chunkPairsDropped', 'feverBreaks'],
+    'board.cleanup': ['matchResolutions'],
+    'core.board_turn_resolution': ['matchResolutions'],
+    'economy.score_and_rewards': ['recallMatches'],
+    'findable.score_glint': ['findablesClaimed'],
+    'objective.floor_clear': ['matchResolutions'],
+    'stats.session_tracking': ['recallMistakes'],
+    'power.peek': ['peek'],
+    'power.shuffle': ['shuffle'],
+    'power.region_shuffle': ['regionShuffle'],
+    'power.undo_resolve': ['undo'],
+    'inventory.peek_charge': ['peek'],
+    'inventory.shuffle_charge': ['shuffle'],
+    'inventory.region_shuffle_charge': ['regionShuffle'],
+    'inventory.undo_charge': ['undo'],
+
+    /* The setup pass (Gen 199): every mechanic a run setup puts on the board, and the traits. */
+    'power.stray_remove': ['strayRemove'],
+    'power.flash_pair': ['flashPair'],
+    'power.wild_match': ['wildMatch'],
+    'power.tile_swap': ['tileSwap'],
+    'power.gambit': ['gambit'],
+    'power.pin': ['pin'],
+    'inventory.stray_remove_charge': ['strayRemove'],
+    'inventory.flash_pair_charge': ['flashPair'],
+    'inventory.wild_match_token': ['wildMatch'],
+    'inventory.gambit_token': ['gambit'],
+    'board.wild_joker_tile': ['wildMatch'],
+    'mode.wild_run': ['wildMatch'],
+    'progression.run_setup': ['wildMatch'],
+    'trait.echo': ['trait.echo'],
+    'trait.heavy': ['trait.heavy'],
+    'trait.conduit': ['trait.conduit'],
+    'trait.stasis': ['trait.stasis']
 };
 
 /**
@@ -64,32 +89,47 @@ export const MECHANIC_CENSUS_COUNTERS: Record<string, readonly string[]> = {
  * spends its charges, which is its own generation.
  */
 export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, string> = {
-    'board.wild_joker_tile': 'Dealt only when the run setup asks for chaos; the census plays plain endless floors.',
     'core.gameplay_commands': 'The command bus every other mechanic runs on; counted by everything, so counting it says nothing.',
     'feedback.gameplay_hud': 'A projection of the run, not an event in it. Its coverage gate is the HUD audit.',
-    'mode.wild_run': 'A run setup, chosen before the first floor: the census plays endless floors only.',
     'objective.featured_streak': 'Spans floors, and the census resets between them. Needs the run-level census (task Gen 150).',
     'persistence.run_summary': 'Written once when a run ends; the census plays floors, not runs.',
     'phase.memorize': 'Every floor opens with it, so a counter would read 1.00 on every row and prove nothing.',
     'progression.run_flow': 'The frame the census itself drives; it cannot observe the thing stepping it.',
-    'progression.run_setup': 'Chosen before the run starts, outside every floor the census plays.',
     'safety.softlock_fairness': 'A guarantee, not an occurrence: its gate is the softlock seed sweep, which proves it never fails.',
     'simulation.build_evaluation': 'A tool for tuning the game, not a rule inside it.',
-    'simulation.gameplay_replay': 'A tool for verifying the game, not a rule inside it.'
+    'simulation.gameplay_replay': 'A tool for verifying the game, not a rule inside it.',
+    'inventory.contract_loadout': 'A run setup, chosen before the first floor and unchanged by any of them.',
+    'inventory.mutator_loadout': 'A run setup, chosen before the first floor; what it selects is censused, it is not.',
+    'power.destroy_pair': 'UNREACHABLE, not exempt. Nothing in the game grants a destroy charge - see the note below.',
+    'inventory.destroy_charge': 'UNREACHABLE, not exempt. `destroyPairCharges` is created at 0 and only ever decremented.'
 };
 
-/** Prefixes whose mechanics are all invisible for the same reason: the census player never spends one. */
-const REFERENCE_PLAYER_BLIND: ReadonlyArray<{ prefix: string; reason: string }> = [
-    {
-        prefix: 'power.',
-        reason: 'Granted only by a run setup - Destroy, Stray Remove, Flash Pair, the pin, the gambit, the tile swap and the wild match all start a plain endless run at zero, so a census that reported them silent would be reporting its own setup.'
-    },
-    {
-        prefix: 'inventory.',
-        reason: 'The charge behind a power a plain endless run never hands out; it cannot be spent where the census plays.'
-    },
-    { prefix: 'trait.', reason: 'Traits pay on a match that touches them, and the census player picks pairs without reading traits.' }
-];
+/*
+ * Two of those lines are not exemptions and should not be read as ones.
+ *
+ * Destroy is **unreachable**. `destroyPairCharges` is set to 0 in `run-creation-rules.ts` and every
+ * other reference to it decrements or reads it; no code path in the game ever adds one. The power
+ * has an action, an availability rule, a targeting preview, a disabled-reason string, copy, a Codex
+ * entry and a card-back accent, and a player can never press it. It is listed here rather than
+ * removed because the call is the designer's: either a setup grants the charge, or Destroy goes the
+ * way of the decoy. What it must not do is stay as it is, which is a mechanic zeroed rather than
+ * removed - the exact shape `docs/REMOVED_DECOY.md` was written about.
+ */
+
+/*
+ * The blanket blind-spot list is empty as of Gen 199, and the empty list is the point.
+ *
+ * It used to carry three prefixes - `power.`, `inventory.` and `trait.` - which between them
+ * excused eighteen of the game's forty-five mechanics from ever answering for themselves. That is
+ * not an exemption list, it is a debt register: every line said "the thing playing the game does
+ * not use this", which is a statement about the census rather than about the game.
+ *
+ * Gen 199 paid it off by giving the census a third player - one that starts from a run setup and
+ * presses what the setup hands it. Every one of those eighteen now has a counter or an individual,
+ * argued line above. The prefix mechanism stays because the next family of mechanics may earn one,
+ * and an empty list is easier to defend than a missing one.
+ */
+const REFERENCE_PLAYER_BLIND: ReadonlyArray<{ prefix: string; reason: string }> = [];
 
 const blindReason = (id: string): string | null =>
     MECHANIC_CENSUS_COUNTERS[id]
@@ -103,7 +143,7 @@ export interface MechanicAccountabilityFinding {
 
 export const auditMechanicAccountability = (): MechanicAccountabilityFinding[] => {
     const findings: MechanicAccountabilityFinding[] = [];
-    const censusKeys = new Set<string>(SYSTEM_OCCUPANCY_COUNTERS.map((counter) => counter.key));
+    const censusKeys = new Set<string>(SYSTEM_OCCUPANCY_COUNTERS.map((counter) => counter.id));
     const claimed = new Set<string>();
 
     for (const mechanic of gameplayInteractionGraph.mechanics) {
