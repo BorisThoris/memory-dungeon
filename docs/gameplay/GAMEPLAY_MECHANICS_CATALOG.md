@@ -100,7 +100,6 @@
 |-----------|--------|-------------|
 | The turn ceiling: a floor not cleared within par × 3 ends the run (`runEndReason: 'turn_ceiling'`); a floor cleared on its ceiling turn is a clear | `TURN_CEILING_PAR_MULTIPLIER`, `turnCeilingForFloor`, `turnsToCeiling` (`floor-par.ts`), `applyTurnCeiling` (`board-turn-transition.ts`), `RunState.runEndReason` | [epic-run-session-flow](./epic-run-session-flow.md), [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | A miss: the chain resets, a try (rating) and a turn (par) are counted, nothing else | mismatch path in board-turn resolution (`turn-mismatch-rules.ts`) | [epic-scoring-objectives](./epic-scoring-objectives.md) |
-| Combo shards banked from the chain, breaks and shard sparks (capped; leave in Gen 184) | `applyComboShardGain` (`combo-shard-rules.ts`), `calculateResolvedMatchSurvivalReward` (`turn-match-reward-rules.ts`) | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | Contract max mismatches → game over (`runEndReason: 'contract'`) | `activeContract.maxMismatches` | [epic-contracts-challenge-runs](./epic-contracts-challenge-runs.md) |
 | Echo feedback (resolve delay) | `echoFeedbackEnabled`, `computeFlipResolveDelayMs` | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
 | Resolve delay multiplier | `resolveDelayMultiplier` (from settings or the setup sheet's calm pacing at run start) | Settings + [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
@@ -346,7 +345,6 @@ Nested under `RunState.stats`. Drives score display, rating, and HUD.
 | `currentStreak` | Match streak (the chain) | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | `bestStreak` | Best streak this run | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | `perfectClears` | Floors with zero tries | [epic-scoring-objectives](./epic-scoring-objectives.md) |
-| `comboShards` | Combo shard bank, capped at `MAX_COMBO_SHARDS`; a reading of momentum, converts into nothing (leaves in Gen 184) | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | `tileTraitMatches` | Clean matches per trait kind (feeds `ACH_TRAIT_SCHOLAR`) | [epic-meta-progression](./epic-meta-progression.md) |
 | `tileTraitMismatches` | Misses per trait kind | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | `shufflesUsed` | Position-changing shuffle/swap powers consumed | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |

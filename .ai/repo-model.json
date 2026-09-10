@@ -3,8 +3,8 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2435,
-    "codeFileCount": 876,
+    "trackedFileCount": 2437,
+    "codeFileCount": 877,
     "exportedSymbolCount": 2664,
     "contentItemCount": 10,
     "mechanicCount": 41,
@@ -255,8 +255,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 361970,
-      "sha256": "84d3c19556077624a1f50742e5234afd6d0e4e6c02299ecf9368bfc0593cdea9"
+      "bytes": 364353,
+      "sha256": "5c8a05900874ab4907a213f3d21738439db44f06b0bd18734d569c574a42e667"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -681,8 +681,8 @@
     {
       "path": "docs/gameplay/epic-lives-and-pressure.md",
       "category": "documentation",
-      "bytes": 3420,
-      "sha256": "3c75058ec65ce1d2f982364567e0c240628770a79f37cc4112e6a1ea311bd932"
+      "bytes": 3496,
+      "sha256": "ccadf8ee4f629a5c8203aafd1cdf9b1c311eae8938b331cac0e0c4b9077fc506"
     },
     {
       "path": "docs/gameplay/epic-meta-progression.md",
@@ -748,13 +748,13 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 11303,
-      "sha256": "6a2376ea50c7bdebdf371ccb6aa233c0c8e77f07516a1f6643a4f75f9629662e"
+      "sha256": "5d8b2211cd6d832509236dd5a32f4c23bc45359a40a5d161696252c311faeab3"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
       "category": "documentation",
-      "bytes": 39897,
-      "sha256": "87804c8871d9b95762616c8e2c28aa48eefbae1103ec55a87897b140f58fbe78"
+      "bytes": 39437,
+      "sha256": "b49f66a391b6268b89d6b0f5bb45d54cd986866d78a3126f115850525253eab2"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_POLISH_AND_GAPS.md",
@@ -2326,7 +2326,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33472,
-      "sha256": "2bbf2d5a6eda62d386dd565f0a6048b2598466b4dfc28d64fe53b3d0a57bb016"
+      "sha256": "a64d7be73ecb31961034fe3917f93989b03a3f5db12e4f583b5a7cbef72f0a13"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4029,8 +4029,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 29566,
-      "sha256": "ecf252e4fec43767dec169f3336a953a47976f3f7a7315fee4bcc2d20ff77d4d"
+      "bytes": 29659,
+      "sha256": "b5e9539caa94f98d0e7af917e5c1102b9fc09143433379b7db0a12edccd00c7c"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4475,6 +4475,12 @@
       "category": "script",
       "bytes": 3707,
       "sha256": "5d2a848ac96da3adb3fb44d310c9b116c4b3cd5f6d2574da98429a9feb4c1dd4"
+    },
+    {
+      "path": "scripts/audit-generation-claims.ts",
+      "category": "script",
+      "bytes": 9238,
+      "sha256": "dbe948bfb6d17c061c4c3dc348ae5d3bd292be49c9051d6c4846839e17b60179"
     },
     {
       "path": "scripts/audit-renderer-assets.mjs",
@@ -10293,8 +10299,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 11097,
-      "sha256": "2c9bbe0ed0c0e718bf99ec907967df3b56cd81470e5b9f7efc401e033fc6fbb6"
+      "bytes": 11565,
+      "sha256": "e1d7fd14195046514c339d7a6f4ac64344af3ab3dc411055ad1383a9d4252dbf"
     },
     {
       "path": "src/shared/achievement-reachability.test.ts",
@@ -11129,6 +11135,12 @@
       "category": "source",
       "bytes": 278,
       "sha256": "8c0b9c6600938bef96b4dcd3ed0f981a2b5e2bcf2d4d544e5f20e85564eab99b"
+    },
+    {
+      "path": "src/shared/generation-claim-audit.test.ts",
+      "category": "test",
+      "bytes": 4917,
+      "sha256": "09cee95deb60f9d61176e80fa3c0d5b043feee3cc1a2826a9eef7c2a6f05a637"
     },
     {
       "path": "src/shared/graphicsQuality.test.ts",
@@ -26763,6 +26775,16 @@
       "testedBy": [
         "file:src/shared/blueprintGlossaryGen.test.ts"
       ]
+    },
+    {
+      "id": "file:src/shared/generation-claim-audit.test.ts",
+      "path": "src/shared/generation-claim-audit.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 96,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
     },
     {
       "id": "file:src/shared/graphicsQuality.test.ts",

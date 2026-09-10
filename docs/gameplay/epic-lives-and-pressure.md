@@ -21,7 +21,7 @@ There is no run clock: the game has no timer.
 |----------|--------|--------|
 | Lives (max/cap) | **Removed (Gen 183)** | Was `INITIAL_LIVES` 4 / `MAX_LIVES` 5; lost on a mismatch after grace, or absorbed by a guard. |
 | Guard tokens | **Removed (Gen 183)** | Were spent before a life on a miss, or to scare off the magpie. |
-| Combo shards / chain heal | **Chain heal removed (Gen 183); shards leave in Gen 184** | Shards still bank from the chain, breaks and sparks; they no longer convert into a life. |
+| Combo shards / chain heal | **Chain heal removed (Gen 183); shards removed (Gen 184)** | Shards banked from the chain, breaks and sparks and converted into nothing once the life they bought was gone; recorded in [REMOVED_LIVES.md](../REMOVED_LIVES.md). |
 | Mismatch "grace" | **Removed (Gen 183)** | Only decided whether a life was lost; `mismatch-grace-rules.ts` is deleted. |
 | Memorize phase | **Shippable** | `getMemorizeDuration` / `getMemorizeDurationForRun`; mutators and floor residents adjust it. |
 | Echo feedback | **Shippable** | User `echoFeedbackEnabled`; extends mismatch visibility window (`ECHO_EXTRA_RESOLVE_MS` path). |
