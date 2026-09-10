@@ -2229,3 +2229,56 @@ break reach.
 The bridge also had to be capped, and the measurement is the argument: uncounted, a Sharp break took
 **8.26** pairs against Clean's 2.10, because a clump touches several others at once and the fire ran
 until the floor was gone. One clump at Sharp, three at Fever, and the bridge fires on one wave only.
+
+## Gen 198 — the deal did not feel random, and the measurement agreed
+
+> "the algorithm for spawning needs to mesh all the cards together. It doesnt feel random. We get a
+> bunch of cards spawning next to eachother that are matching etc."
+
+Measured before touching anything, over six seeds × twenty floors (1512 pairs): **0.228 of pairs
+landed with their two halves orthogonally touching**, and a further **0.144 at a corner**. More than
+a third of every floor's pairs sat beside their own twin.
+
+The interesting part is that this is roughly what *chance* gives. On a board of twenty cells a given
+cell has about four of the other nineteen as orthogonal neighbours, so a shuffle lands a pair's
+halves adjacent about one time in five on its own. The deal was not biased; it was uniform, and
+uniform is the problem. A memory game whose boards hand the player one free pair in five reads as
+arranged rather than random, because they keep finding pairs they never had to remember — and the
+lesson generalises: **in a game about remembering where things are, a uniform shuffle is not neutral,
+it is generous.**
+
+The fix is in the last step of `dealTilesInClumps`, which used to shuffle a suit's tiles into that
+suit's cells. It now lays whole pairs first, drawing the second half at random from every cell at
+least `PAIR_HALF_SEPARATION` (3) grid steps from the first, then a repair sweep of swaps for pairs
+that a greedy placement painted into a corner. It is a floor with a random draw above it, not a
+target: the halves end up as far apart as the board happens to put them.
+
+| | Mean distance between halves | Touching | At a corner | Either |
+|---|---|---|---|---|
+| Gen 197 | 3.02 | 0.228 | 0.144 | 0.372 |
+| Gen 198 | 3.60 | **0.053** | 0.104 | **0.157** |
+
+**The residual is structural and worth stating rather than chasing.** Four suits over twenty cells
+gives each suit about five cells, dealt as a clump — and a tight clump's own diameter is often two,
+so a pair inside it *cannot* be three apart. The suit clumping is what the pop needs; the separation
+is what the memory needs; on a small board they genuinely compete. The rule takes the farthest cell
+available rather than refusing to place a tile, and `tile-suit-rules.test.ts` ratchets both rates so
+a regression cannot creep back.
+
+Two side effects, both in the game's favour:
+
+| | Lone match | Clean | Sharp | Fever | Severance floors |
+|---|---|---|---|---|---|
+| Gen 197 | 1.46 | 2.10 | 5.79 | 8.46 | 0.779 |
+| Gen 198 | 1.70 | 2.17 | 5.91 | 8.74 | 0.667 |
+
+**A chain-one pop got bigger, not smaller** — 1.46 to 1.70 pairs. Spreading a pair's halves through
+its suit's clump puts more *whole* pairs inside any given wave, which is exactly what the contact
+rule needs. And the severance drop fell back from 0.779 to 0.667 of floors, because a pop that takes
+more whole pairs strands fewer suits.
+
+The one cost is on the meter's hover sentence. `CHAIN_RUNG_PAIRS` re-baselined to `{2, 2, 6, 9}`, so
+the bottom two rungs now round to the same number of pairs. That is the case Gen 189 already ruled
+on — the meter shows the **multiplier**, precisely because pairs alone can read flat while the payoff
+doubles — and the rung test now asserts the strict climb on the multiplier and allows one level step
+in pairs.

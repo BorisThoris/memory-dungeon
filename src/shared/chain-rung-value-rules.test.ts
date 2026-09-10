@@ -53,7 +53,13 @@ describe('what the meter promises a rung is worth', () => {
     });
 
     it('climbs on both counts, so the rung a player reaches is always worth more', () => {
-        expect(chainRungPairs('none')).toBeLessThan(chainRungPairs('clean'));
+        // In pairs the ladder never goes backwards, and it is allowed to sit level for one rung:
+        // Gen 198 raised the chain-one pop to 1.68 pairs against Clean's 2.17 by laying pair halves
+        // apart, and both round to two. That is the case Gen 189 already ruled on - the meter shows
+        // the multiplier precisely because pairs alone can read flat while the payoff doubles - so
+        // the strict climb is asserted on the multiplier, and on the pairs across the whole ladder.
+        expect(chainRungPairs('none')).toBeLessThanOrEqual(chainRungPairs('clean'));
+        expect(chainRungPairs('clean')).toBeLessThan(chainRungPairs('sharp'));
         expect(chainRungPairs('sharp')).toBeLessThan(chainRungPairs('fever'));
         expect(chainRungScoreMultiplier('none')).toBeLessThan(chainRungScoreMultiplier('clean'));
         expect(chainRungScoreMultiplier('clean')).toBeLessThan(chainRungScoreMultiplier('sharp'));

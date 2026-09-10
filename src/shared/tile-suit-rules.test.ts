@@ -12,6 +12,7 @@ import {
     getSuitDealProfile,
     isLayoutPinnedTile,
     largestHiddenSuitClump,
+    PAIR_HALF_SEPARATION,
     sameSuitNeighbourRate,
     suitCountForPairs,
     SUIT_DEAL_PROFILE_BY_ARCHETYPE,
@@ -19,6 +20,7 @@ import {
     TILE_SUITS
 } from './tile-suit-rules';
 import { WILD_PAIR_KEY } from './tile-identity';
+import { makeTile } from './test/game-fixtures';
 
 const pairs = (count: number): Tile[] =>
     Array.from({ length: count }, (_, index) => `p${index}`).flatMap((pairKey) => [
@@ -102,6 +104,61 @@ describe('clumping', () => {
         const withWild = [...suited.slice(0, 7), wild, ...suited.slice(7)];
         const dealt = dealTilesInClumps(withWild, 5, 8, 2, 1, isLayoutPinnedTile);
         expect(dealt[7]?.id).toBe('wild');
+    });
+});
+
+describe('a pair is laid apart from its own other half', () => {
+    const gridDistance = (columns: number, a: number, b: number): number =>
+        Math.abs(Math.floor(a / columns) - Math.floor(b / columns)) + Math.abs((a % columns) - (b % columns));
+
+    it('keeps the two halves off each other across real generated floors', () => {
+        // Measured before Gen 198, on this same sweep: 0.228 of pairs landed orthogonally touching
+        // and a further 0.144 at a corner - about what chance gives on a board of twenty cells,
+        // which is why the deal read as arranged rather than random. A memory game whose boards
+        // hand the player one free pair in five is showing them pairs they never had to remember.
+        let pairs = 0;
+        let touching = 0;
+        let corner = 0;
+        for (const runSeed of [101, 42_001, 90_123, 7, 555, 8_675_309]) {
+            for (let level = 1; level <= 20; level += 1) {
+                const board = buildBoard(level, { runSeed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless' });
+                const at = new Map<string, number[]>();
+                board.tiles.forEach((tile, index) => at.set(tile.pairKey, [...(at.get(tile.pairKey) ?? []), index]));
+                for (const [, indexes] of at) {
+                    if (indexes.length !== 2) continue;
+                    const [a, b] = indexes as [number, number];
+                    pairs += 1;
+                    const distance = gridDistance(board.columns, a, b);
+                    if (distance === 1) touching += 1;
+                    if (
+                        distance === 2 &&
+                        Math.floor(a / board.columns) !== Math.floor(b / board.columns) &&
+                        a % board.columns !== b % board.columns
+                    ) {
+                        corner += 1;
+                    }
+                }
+            }
+        }
+        expect(pairs).toBeGreaterThan(1_000);
+        // Never zero: a suit squeezed into a corner has nowhere far enough, and the deal takes the
+        // farthest cell it has rather than refusing to place a tile. Well under the old rate is the
+        // guarantee, and it is a ratchet - if it climbs back, the separation stopped being applied.
+        expect(touching / pairs, 'pair halves orthogonally touching').toBeLessThan(0.08);
+        expect((touching + corner) / pairs, 'pair halves touching or at a corner').toBeLessThan(0.19);
+    });
+
+    it('places the halves at least the separation apart when the suit has room', () => {
+        // A single suit in one long row: there is always somewhere far enough, so the floor holds.
+        const tiles: Tile[] = Array.from({ length: 12 }, (_, index) =>
+            makeTile(`t${index}`, `p${Math.floor(index / 2)}`, 'x', { suit: 'ember' })
+        );
+        const dealt = dealTilesInClumps(tiles, 12, 4_242, 3, GAME_RULES_VERSION);
+        const at = new Map<string, number[]>();
+        dealt.forEach((tile, index) => at.set(tile.pairKey, [...(at.get(tile.pairKey) ?? []), index]));
+        for (const [pairKey, indexes] of at) {
+            expect(gridDistance(12, indexes[0]!, indexes[1]!), pairKey).toBeGreaterThanOrEqual(PAIR_HALF_SEPARATION);
+        }
     });
 });
 

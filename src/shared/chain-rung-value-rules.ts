@@ -22,20 +22,23 @@ export const CHAIN_RUNG_SCORE_MULTIPLIER: Readonly<Record<ChainTier, number>> = 
  * levels and rounded. Kept because the sentence a player reads on hover is more useful with both -
  * what a rung finds and what it pays - but the number on screen is the multiplier.
  *
- * Measured at Gen 197, once the pop stopped reaching cards it was not touching: none 1.46, clean
- * 2.10, sharp 5.79, fever 8.46. (Gen 193, with the partner reach and the halo still in: 1.47, 2.61,
- * 3.04, 7.55. Gen 186, before any of it: 1.91, 3.19, 3.50, 6.95.)
+ * Measured at Gen 198, with the pop touching-only and the pair halves dealt apart: none 1.68,
+ * clean 2.17, sharp 5.88, fever 8.74. (Gen 197, before the deal changed: 1.46, 2.10, 5.79, 8.46.
+ * Gen 193, with the partner reach and the halo still in: 1.47, 2.61, 3.04, 7.55. Gen 186, before
+ * any of it: 1.91, 3.19, 3.50, 6.95.)
  *
  * Clean and Sharp used to both round to three - the dead middle Gen 189 answered by showing the
- * multiplier instead of the pairs. They no longer do. Sharp is where the bridge starts, so it is
- * the rung where a break stops being one clump and becomes two, and the pairs now say so on their
- * own. The meter still shows the multiplier, because that is still what the player is paid.
+ * multiplier instead of the pairs. Sharp has since moved well clear of Clean, because it is where
+ * the bridge starts and a break stops being one clump. It is the *bottom* two that now round
+ * together, and for a different and better reason: laying a pair's halves apart (Gen 198) put more
+ * whole pairs inside every wave, so a chain-one pop climbed from 1.46 pairs to 1.68 and closed most
+ * of the gap to Clean on its own. Clean still pays twice per pair, which is what the meter shows.
  */
 export const CHAIN_RUNG_PAIRS: Readonly<Record<ChainTier, number>> = {
-    none: 1,
+    none: 2,
     clean: 2,
     sharp: 6,
-    fever: 8
+    fever: 9
 };
 
 /**

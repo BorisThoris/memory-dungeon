@@ -126,6 +126,23 @@ const orthogonalNeighbours = (index: number, columns: number, total: number): nu
  * Deterministic from the seed. A replay deals the same map.
  */
 /** A suit with this many loose tiles (three pairs) is dealt as two islands rather than one clump. */
+/**
+ * How far apart the two halves of a pair are laid, in grid steps, within their suit's cells.
+ *
+ * Until Gen 198 the suit's tiles were shuffled into the suit's cells, which put a pair's halves
+ * orthogonally touching on 0.228 of pairs and at a corner on a further 0.144 - so more than a
+ * third of every floor's pairs sat beside their own twin. That is roughly what chance gives on a
+ * board of twenty cells, and it is exactly why the deal did not feel random: a memory game whose
+ * boards hand you one free pair in five reads as arranged, because the player keeps finding pairs
+ * they never had to remember.
+ *
+ * Three steps is the smallest separation that clears both the touch and the corner. It is a floor,
+ * not a target: the cell is drawn at random from everything at least this far away, so the halves
+ * are as far apart as the board happens to put them and no two floors look alike. A suit squeezed
+ * into a corner with nothing far enough takes the farthest cell it has rather than refusing.
+ */
+export const PAIR_HALF_SEPARATION = 3;
+
 export const ISLAND_MIN_TILES = 6;
 export const ISLANDS_PER_SUIT = 2;
 
@@ -248,19 +265,95 @@ export const dealTilesInClumps = (
         out[index] = tile;
     }
     const placed = new Set<Tile>();
+    const gridDistance = (a: number, b: number): number =>
+        Math.abs(Math.floor(a / columns) - Math.floor(b / columns)) + Math.abs((a % columns) - (b % columns));
     for (const suit of suits) {
         const cells = cellSuit.flatMap((cell, index) => (cell === suit ? [index] : []));
         const own = shuffleWithRng(
             () => rng(),
             loose.filter((tile) => (tile.suit ?? TILE_SUITS[0]) === suit)
         );
-        own.forEach((tile, i) => {
-            const cell = cells[i];
-            if (cell !== undefined) {
-                out[cell] = tile;
-                placed.add(tile);
+        // Halves of the same pair are laid apart, the singletons after them. Shuffling the suit's
+        // tiles into its cells - which is what this did until Gen 198 - lands the two halves of a
+        // pair beside each other about as often as chance does, and on a board of twenty cells
+        // chance is one pair in five. See PAIR_HALF_SEPARATION.
+        const byPair = new Map<string, Tile[]>();
+        for (const tile of own) byPair.set(tile.pairKey, [...(byPair.get(tile.pairKey) ?? []), tile]);
+        const wholePairs = [...byPair.values()].filter((halves) => halves.length === 2);
+        const rest = [...byPair.values()].filter((halves) => halves.length !== 2).flat();
+        const free = [...cells];
+        const takeAt = (index: number): number => free.splice(index, 1)[0]!;
+        const put = (cell: number | undefined, tile: Tile): void => {
+            if (cell === undefined) return;
+            out[cell] = tile;
+            placed.add(tile);
+        };
+        for (const [first, second] of wholePairs as [Tile, Tile][]) {
+            if (free.length === 0) break;
+            const a = takeAt(pickRngIndex(rng, free.length));
+            put(a, first);
+            if (free.length === 0) break;
+            const apart = free.flatMap((cell, index) =>
+                gridDistance(a, cell) >= PAIR_HALF_SEPARATION ? [index] : []
+            );
+            // No cell is far enough - a suit squeezed into a corner - so take the farthest there is
+            // rather than refuse: every tile still gets a cell, which is the invariant that matters.
+            const farthest = free.reduce(
+                (best, cell, index) => (gridDistance(a, cell) > gridDistance(a, free[best]!) ? index : best),
+                0
+            );
+            put(takeAt(apart.length > 0 ? apart[pickRngIndex(rng, apart.length)]! : farthest), second);
+        }
+        for (const tile of rest) {
+            if (free.length === 0) break;
+            put(takeAt(pickRngIndex(rng, free.length)), tile);
+        }
+
+        /*
+         * The repair pass. Placing the pairs one at a time is greedy, so a pair dealt late can find
+         * every remaining cell of its suit huddled together - the halves end up beside each other
+         * even on a board with room elsewhere. One sweep of swaps fixes most of it: for a pair that
+         * came out too close, look for a tile to trade cells with that leaves both pairs no worse
+         * and this one better. Bounded and deterministic; a board with genuinely nowhere to go keeps
+         * what it has.
+         */
+        const cellOf = new Map<Tile, number>();
+        for (const cell of cells) {
+            const tile = out[cell];
+            if (tile) cellOf.set(tile, cell);
+        }
+        const separation = (halves: Tile[]): number => {
+            const [x, y] = halves;
+            const a = x ? cellOf.get(x) : undefined;
+            const b = y ? cellOf.get(y) : undefined;
+            return a === undefined || b === undefined ? Number.POSITIVE_INFINITY : gridDistance(a, b);
+        };
+        const swap = (one: Tile, other: Tile): void => {
+            const a = cellOf.get(one)!;
+            const b = cellOf.get(other)!;
+            out[a] = other;
+            out[b] = one;
+            cellOf.set(one, b);
+            cellOf.set(other, a);
+        };
+        for (const halves of wholePairs) {
+            if (separation(halves) >= PAIR_HALF_SEPARATION) continue;
+            const [, moving] = halves as [Tile, Tile];
+            for (const candidate of shuffleWithRng(() => rng(), [...cellOf.keys()])) {
+                if (candidate === halves[0] || candidate === moving) continue;
+                const candidatePair = byPair.get(candidate.pairKey) ?? [];
+                const before = Math.min(separation(halves), separation(candidatePair));
+                swap(moving, candidate);
+                const after = Math.min(separation(halves), separation(candidatePair));
+                if (after <= before) {
+                    swap(moving, candidate);
+                    continue;
+                }
+                // Keep the trade, but keep looking: a swap that only moves a pair from touching to
+                // a corner has not finished the job, and a corner is still a pair beside its twin.
+                if (separation(halves) >= PAIR_HALF_SEPARATION) break;
             }
-        });
+        }
     }
     // Any cell the growth left unassigned takes a leftover tile; nothing is ever dropped.
     const leftovers = loose.filter((tile) => !placed.has(tile));
