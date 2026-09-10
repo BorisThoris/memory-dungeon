@@ -260,8 +260,10 @@ describe('the turn ceiling', () => {
 
     it('is three times par', () => {
         expect(TURN_CEILING_PAR_MULTIPLIER).toBe(3);
-        expect(parTurnsForFloor(2)).toBe(1);
-        expect(ceiling).toBe(3);
+        // Gen 210 gave floors at or below thirteen pairs a turn back, so a two-pair fixture's par
+        // is 2 rather than 1 and its ceiling 6 rather than 3. The rule is unchanged: three times.
+        expect(parTurnsForFloor(2)).toBe(2);
+        expect(ceiling).toBe(6);
         expect(turnCeilingForFloor(14)).toBe(parTurnsForFloor(14) * 3);
     });
 
@@ -283,8 +285,19 @@ describe('the turn ceiling', () => {
         expect(ended.board?.tiles.every((t) => t.state === 'hidden')).toBe(true);
     });
 
+    /*
+     * Missed up to the turn before the ceiling. Written as a loop rather than as a fixed number of
+     * misses because Gen 210 moved par on small floors and these two tests are about the ceiling
+     * TURN, not about the number three.
+     */
+    const missedToTheCeilingTurn = (turnsToLeave = 1): RunState => {
+        let run = twoPairRun();
+        for (let turn = 0; turn < ceiling - turnsToLeave; turn += 1) run = miss(run);
+        return run;
+    };
+
     it('ends the run on a match that leaves the floor open on the ceiling turn', () => {
-        const ended = play(miss(miss(twoPairRun())), 'a-1', 'a-2');
+        const ended = play(missedToTheCeilingTurn(), 'a-1', 'a-2');
 
         expect(ended.turnsThisFloor).toBe(ceiling);
         expect(ended.board?.matchedPairs).toBe(1);
@@ -294,7 +307,7 @@ describe('the turn ceiling', () => {
     });
 
     it('is a clear, not an end, when the floor clears on that same turn', () => {
-        const cleared = play(play(miss(twoPairRun()), 'a-1', 'a-2'), 'b-1', 'b-2');
+        const cleared = play(play(missedToTheCeilingTurn(2), 'a-1', 'a-2'), 'b-1', 'b-2');
 
         expect(cleared.turnsThisFloor).toBe(ceiling);
         expect(cleared.status).toBe('levelComplete');

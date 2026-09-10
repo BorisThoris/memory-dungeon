@@ -69,15 +69,15 @@ describe('RunShell', () => {
         const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={calm} tools={[]} />);
 
         const par = screen.getByTestId('hud-par');
-        expect(within(par).getByRole('img')).toHaveAttribute('aria-label', '4 of 6 turns, ceiling 18');
-        expect(par).toHaveTextContent('4 / 6');
+        expect(within(par).getByRole('img')).toHaveAttribute('aria-label', '4 of 7 turns, ceiling 21');
+        expect(par).toHaveTextContent('4 / 7');
         expect(par).not.toHaveAttribute('data-ceiling-near');
 
-        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...calm, turnsThisFloor: 16 }} tools={[]} />);
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...calm, turnsThisFloor: 19 }} tools={[]} />);
         expect(screen.getByTestId('hud-par')).toHaveAttribute('data-ceiling-near', 'true');
         expect(within(screen.getByTestId('hud-par')).getByRole('img')).toHaveAttribute(
             'aria-label',
-            '16 of 6 turns, ceiling 18'
+            '19 of 7 turns, ceiling 21'
         );
     });
 

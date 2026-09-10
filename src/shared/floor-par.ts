@@ -24,8 +24,33 @@ import { runNonNegativeInteger } from './run-number-guards';
  */
 export const PAR_TURNS_PER_PAIR = 0.45;
 
-export const parTurnsForFloor = (pairs: number): number =>
-    Math.max(1, Math.ceil(runNonNegativeInteger(pairs) * PAR_TURNS_PER_PAIR));
+/**
+ * Gen 210: the small floors get a turn back, because a linear par is the wrong shape for them.
+ *
+ * Par is one rate times the board, and the pop is what makes that rate work - a break takes pairs
+ * the player never spent a turn on. But the pop's share of a board GROWS with the board: measured
+ * across the opening, a floor of four pairs has two taken by pops and a floor of fourteen has 9.6,
+ * so the same rate that is generous at twelve pairs is the theoretical minimum at four.
+ *
+ * Measured (`yarn sim:opening`, ten seeds, 15% miss), a clean player came in OVER par on floors 1,
+ * 2 and 6 and level with it on floor 5 - the first floors anyone plays were the only ones in the
+ * game where competent play failed the target, which is backwards for an opening. Floor 1 was the
+ * clearest: par 2 against a mean of 2.4, and 2 is exactly what four pairs and two popped leave, so
+ * it could only be met by never missing at all.
+ *
+ * One turn back at or below thirteen pairs - floors 1 to 10 - and nothing above it changes. The
+ * line is where the measurement put it rather than where the story wanted it: eleven pairs was
+ * tried first and floor 10 came out level with par at 6.0 turns to 6, which is not a target a
+ * competent player beats, it is one they tie.
+ */
+export const PAR_SMALL_FLOOR_PAIRS = 13;
+export const PAR_SMALL_FLOOR_SLACK = 1;
+
+export const parTurnsForFloor = (pairs: number): number => {
+    const count = runNonNegativeInteger(pairs);
+    const slack = count > 0 && count <= PAR_SMALL_FLOOR_PAIRS ? PAR_SMALL_FLOOR_SLACK : 0;
+    return Math.max(1, Math.ceil(count * PAR_TURNS_PER_PAIR) + slack);
+};
 
 /** Turns the run has resolved on this floor, read from its own ledger. */
 export const turnsTakenThisFloor = (run: Pick<RunState, 'turnsThisFloor'>): number =>
