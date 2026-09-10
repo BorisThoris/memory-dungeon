@@ -138,11 +138,11 @@ describe('tile board DOM telemetry helpers', () => {
         expect(getCardFeedbackMarkerShapesAttr({ board: traitBoard })).toBe('combo-surge:4;linked-route:4');
         // Two Conduits, each beside the Echo and the Stasis: a peek spark, a score charge and a lock
         // pulse apiece, so every lane counts two cards.
-        expect(getCardFeedbackTraitLaneCuesAttr(traitBoard)).toBe('shard:2>tool:2>block:2');
-        expect(getCardFeedbackTraitLanePrimaryActionAttr(traitBoard)).toBe('shard:Cash shard:2');
-        expect(getCardFeedbackTraitLaneBeatsAttr(traitBoard)).toBe('shard:4>tool:3>block:4');
+        expect(getCardFeedbackTraitLaneCuesAttr(traitBoard)).toBe('tool:2>block:2');
+        expect(getCardFeedbackTraitLanePrimaryActionAttr(traitBoard)).toBe('tool:Use tool:2');
+        expect(getCardFeedbackTraitLaneBeatsAttr(traitBoard)).toBe('tool:3>block:4');
         expect(getCardFeedbackTraitLaneActionsAttr(traitBoard)).toBe(
-            'shard:Cash shard:2>tool:Use tool:2>block:Deny match:2'
+            'tool:Use tool:2>block:Deny match:2'
         );
         expect(getCardFeedbackTraitRouteIntensitiesAttr({ board: traitBoard })).toBe('surge:4');
         expect(getCardFeedbackTraitRouteTiersAttr({ board: traitBoard })).toBe('surge:4');
@@ -183,11 +183,11 @@ describe('tile board DOM telemetry helpers', () => {
 
         // Two Conduits, each beside the Echo and the Stasis: a peek spark, a score charge and a lock
         // pulse apiece, so every lane counts two cards.
-        expect(getCardFeedbackTraitLaneCuesAttr(traitBoard)).toBe('shard:2>tool:2>block:2');
-        expect(getCardFeedbackTraitLanePrimaryActionAttr(traitBoard)).toBe('shard:Cash shard:2');
-        expect(getCardFeedbackTraitLaneBeatsAttr(traitBoard)).toBe('shard:4>tool:3>block:4');
+        expect(getCardFeedbackTraitLaneCuesAttr(traitBoard)).toBe('tool:2>block:2');
+        expect(getCardFeedbackTraitLanePrimaryActionAttr(traitBoard)).toBe('tool:Use tool:2');
+        expect(getCardFeedbackTraitLaneBeatsAttr(traitBoard)).toBe('tool:3>block:4');
         expect(getCardFeedbackTraitLaneActionsAttr(traitBoard)).toBe(
-            'shard:Cash shard:2>tool:Use tool:2>block:Deny match:2'
+            'tool:Use tool:2>block:Deny match:2'
         );
     });
 

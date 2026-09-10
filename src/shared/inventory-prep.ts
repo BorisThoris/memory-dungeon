@@ -60,7 +60,7 @@ export const getInventoryPrepRows = (run: RunState | null): InventoryPrepRow[] =
             title: 'Mutable windows',
             value: `${mutable} usable consumable row(s)`,
             detail: 'Each row names whether it changes mid-run, on floor rewards, in shops/rests, or only during drafts.',
-            actionHint: 'Use charges in play; rest/shop/draft rows update between floor decisions.',
+            actionHint: 'Use charges in play; the rows update as a floor spends them.',
             status: mutable > 0 ? 'ready' : 'empty',
             localOnly: true
         }

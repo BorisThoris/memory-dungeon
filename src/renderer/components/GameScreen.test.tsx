@@ -560,14 +560,6 @@ describe('GameScreen (OVR-014)', () => {
             label: 'Reward',
             tone: 'reward'
         });
-        expect(getVisualHudAnnouncementSignal('Cascade Cache fired. One safe hidden pair cleared.', 'info')).toEqual({
-            label: 'Reward',
-            tone: 'reward'
-        });
-        expect(getVisualHudAnnouncementSignal('Shuffle Snare fired. Hidden safe tiles reordered.', 'info')).toEqual({
-            label: 'Risk',
-            tone: 'risk'
-        });
         expect(getVisualHudAnnouncementSignal('Echo and Stasis trait resolved.', 'info')).toEqual({
             label: 'Trait',
             tone: 'trait'
@@ -575,10 +567,6 @@ describe('GameScreen (OVR-014)', () => {
         expect(getVisualHudAnnouncementSignal('Perk pop: Echo Conduit Lens doubles the route.', 'info')).toEqual({
             label: 'Trait',
             tone: 'trait'
-        });
-        expect(getVisualHudAnnouncementSignal('Guard Cache ward blocked a hazard.', 'info')).toEqual({
-            label: 'Guard',
-            tone: 'guard'
         });
     });
 
@@ -638,13 +626,12 @@ describe('GameScreen (OVR-014)', () => {
             ],
             level: 'medium'
         });
-        expect(getVisualHudAnnouncementImpact('Route cashout: Greed Cache +2 gold +25 score.', 'info')).toEqual({
+        // Gen 201: the +Gold chip went with the gold. Gold left in Gen 174 with the shop it bought
+        // from, so the chip could only ever have fired on an announcement nothing can produce.
+        expect(getVisualHudAnnouncementImpact('Route cashout: +25 score.', 'info')).toEqual({
             burstTier: 'reward',
-            details: [
-                { label: 'Route cashout', tone: 'reward' },
-                { label: '+Gold', tone: 'reward' }
-            ],
-            level: 'medium'
+            details: [{ label: 'Route cashout', tone: 'reward' }],
+            level: 'low'
         });
         expect(getVisualHudAnnouncementImpact('Perk pop: Echo Conduit Lens doubles the route.', 'info')).toEqual({
             burstTier: 'trait',
@@ -685,19 +672,11 @@ describe('GameScreen (OVR-014)', () => {
             ],
             level: 'medium'
         });
-        expect(getVisualHudAnnouncementImpact('Cascade Cache fired. One safe pair cleared itself.', 'info')).toEqual({
-            burstTier: 'combo',
-            details: [
-                { label: 'Hazard payoff', tone: 'reward' },
-                { label: 'Auto-clear', tone: 'chain' }
-            ],
-            level: 'medium'
-        });
-        expect(getVisualHudAnnouncementImpact('Shuffle Snare fired. Hidden safe tiles reordered.', 'info')).toEqual({
-            burstTier: 'risk',
-            details: [{ label: 'Hazard trigger', tone: 'risk' }],
-            level: 'high'
-        });
+        /*
+         * Gen 201 removed a Cascade Cache row and a Shuffle Snare row from here. Both were hazards,
+         * both left with the hazard layer in Gen 176, and the chips they asserted were the last
+         * thing holding those branches in the projector.
+         */
     });
 
     it('keeps the line after a miss quiet: a reset and a suggestion, nothing about what it cost', () => {
@@ -710,7 +689,6 @@ describe('GameScreen (OVR-014)', () => {
         for (const announcement of [
             'No match. Recover with a safe match. Chain reset.',
             'No match. Chain x4 broken.',
-            'Moving enemy contact. No match.',
             'Mimic Cache bit. Reduced loot claimed.'
         ]) {
             expect(followup(announcement)).not.toMatch(/\b(life|lives|lost|penalty|punish)\b/i);
@@ -725,15 +703,12 @@ describe('GameScreen (OVR-014)', () => {
         ).toBe('Next: cards reset; pick a remembered pair.');
     });
 
-    it('adds next-step lines for hazard and resource feedback rail messages', () => {
-        expect(
-            getVisualHudAnnouncementFollowup({
-                announcement: 'Guard Cache ward blocked a hazard.',
-                priority: 'info',
-                runStatus: 'playing',
-                remainingPairCount: 3,
-            })
-        ).toBe('Next: hazard blocked; continue from the best safe match.');
+    it('adds next-step lines for chain and reward feedback rail messages', () => {
+        /*
+         * Gen 201: the Guard Cache row went with the branch it was testing. Nothing in the game has
+         * said "Guard Cache ward blocked" since Gen 176, so the assertion proved only that a dead
+         * branch was still there - which is how the branch survived five years of removals.
+         */
         expect(
             getVisualHudAnnouncementFollowup({
                 announcement: 'Chain x5 broken - recover with a remembered pair.',
@@ -752,7 +727,7 @@ describe('GameScreen (OVR-014)', () => {
         ).toBe('Next: pickup reward applied; keep the streak alive with a confirmed pair.');
         expect(
             getVisualHudAnnouncementFollowup({
-                announcement: 'Route cashout: Greed Cache +2 gold +25 score.',
+                announcement: 'Route cashout: +25 score.',
                 priority: 'info',
                 runStatus: 'playing',
                 remainingPairCount: 3,
@@ -768,102 +743,8 @@ describe('GameScreen (OVR-014)', () => {
         ).toBe('Next: trait payoff landed; look for the next connected trait card.');
     });
 
-    it('adds next-step lines for scout and route-special feedback rail messages', () => {
-        expect(
-            getVisualHudAnnouncementFollowup({
-                announcement: 'Lantern Ward scouted a hidden threat.',
-                priority: 'info',
-                runStatus: 'playing',
-                remainingPairCount: 3,
-            })
-        ).toBe('Next: use the revealed threat marker to route around danger.');
-        expect(
-            getVisualHudAnnouncementFollowup({
-                announcement: 'Omen Seal revealed hidden danger.',
-                priority: 'info',
-                runStatus: 'playing',
-                remainingPairCount: 3,
-            })
-        ).toBe('Next: treat the marked danger as known information before flipping.');
-        expect(
-            getVisualHudAnnouncementFollowup({
-                announcement: 'Anchor Seal froze rotating pressure.',
-                priority: 'info',
-                runStatus: 'playing',
-                remainingPairCount: 3,
-            })
-        ).toBe('Next: pressure is frozen; clear the best confirmed pair now.');
-        expect(
-            getVisualHudAnnouncementFollowup({
-                announcement: 'Pin Lattice rewarded deliberate planning.',
-                priority: 'info',
-                runStatus: 'playing',
-                remainingPairCount: 3,
-            })
-        ).toBe('Next: planning paid out; preserve pins for uncertain pairs.');
-    });
 
-    it('adds specific next-step lines for disruptive hazard and mimic feedback', () => {
-        expect(
-            getVisualHudAnnouncementFollowup({
-                announcement: 'Shuffle Snare fired. Hidden safe tiles reordered.',
-                priority: 'info',
-                runStatus: 'playing',
-                remainingPairCount: 3,
-            })
-        ).toBe('Next: board order changed; recheck positions before pairing.');
-        expect(
-            getVisualHudAnnouncementFollowup({
-                announcement: 'Mimic Cache bit. Reduced loot claimed.',
-                priority: 'error',
-                runStatus: 'playing',
-                remainingPairCount: 3,
-            })
-        ).toBe('Next: treat unknown cache pairs as dangerous until confirmed.');
-        expect(
-            getVisualHudAnnouncementFollowup({
-                announcement: 'Fuse Cache claimed late. Fuse expired; consolation gold gained.',
-                priority: 'info',
-                runStatus: 'playing',
-                remainingPairCount: 2,
-            })
-        ).toBe('Next: late fuse still pays consolation gold; clear safer pairs.');
-    });
 
-    it('adds specific next-step lines for moving enemy combat feedback', () => {
-        expect(
-            getVisualHudAnnouncementFollowup({
-                announcement: 'Moving enemy contact.',
-                priority: 'error',
-                runStatus: 'playing',
-                remainingPairCount: 3,
-            })
-        ).toBe('Next: pause on the patrol path and choose a safe pair away from it.');
-        expect(
-            getVisualHudAnnouncementFollowup({
-                announcement: 'Match resolved. 2/4 pairs cleared. Moving enemy defeated. 1 cleared this floor.',
-                priority: 'info',
-                runStatus: 'playing',
-                remainingPairCount: 2,
-            })
-        ).toBe('Next: threat removed; use the opened space to clear confirmed pairs.');
-        expect(
-            getVisualHudAnnouncementFollowup({
-                announcement: 'Match resolved. 2/4 pairs cleared. Dungeon enemy defeated. 1 defeated this floor.',
-                priority: 'info',
-                runStatus: 'playing',
-                remainingPairCount: 2,
-            })
-        ).toBe('Next: pressure is down; keep clearing confirmed pairs.');
-        expect(
-            getVisualHudAnnouncementFollowup({
-                announcement: 'Moving enemy contact.',
-                priority: 'error',
-                runStatus: 'gameOver',
-                remainingPairCount: 3,
-            })
-        ).toBe('Next: review the run summary before starting the next descent.');
-    });
 
     it('adds next-step lines for pickups, chains, and Gambit feedback', () => {
         expect(

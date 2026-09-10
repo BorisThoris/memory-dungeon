@@ -204,7 +204,7 @@ describe('tileBoardRows', () => {
             'Route surge',
             'Route surge'
         ]);
-        expect(result.map((row) => row.traitLaneBack)).toEqual(['shard', null, null, 'shard']);
+        expect(result.map((row) => row.traitLaneBack)).toEqual(['tool', null, null, 'tool']);
     });
 
     it('derives block and tool lane markers from per-card stasis and conduit interaction previews', () => {

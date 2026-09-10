@@ -1,3 +1,18 @@
+/*
+ * Gen 201 removed twenty-one branches from this file.
+ *
+ * Everything here keys off the text of a run announcement, so a branch survives exactly as long as
+ * something can still say the words it is watching for. Twenty-one could not: guard caches and
+ * lantern wards, omen and anchor seals, loaded gateways, mimic caches, shuffle snares, cascade,
+ * fragile, toll and fuse caches, shop gold, hazard wards, moving and dungeon enemies, and the exit
+ * being ready. Every one of those left with the dungeon layer and the hazards, and no code path in
+ * the game has produced any of them since Gen 176.
+ *
+ * They were not harmless. Each was a sentence of in-run advice - "pause on the patrol path",
+ * "bank gold for shops, rests, or route events" - waiting to tell a player to manage something the
+ * game does not have. Checked mechanically: collect every string the shipping code can emit, and
+ * a branch whose needle appears nowhere in that corpus cannot fire.
+ */
 import type { RunState } from '../../shared/contracts';
 
 export type VisualHudAnnouncementSignalTone = 'chain' | 'reward' | 'risk' | 'guard' | 'trait' | 'objective' | 'info';
@@ -53,8 +68,6 @@ export const getVisualHudAnnouncementSignal = (
     if (
         priority === 'error' ||
         normalized.includes('no match') ||
-        normalized.includes('shuffle snare fired') ||
-        normalized.includes('fragile cache broke') ||
         (normalized.includes('chain') && normalized.includes('broken'))
     ) {
         return { label: 'Risk', tone: 'risk' };
@@ -74,21 +87,14 @@ export const getVisualHudAnnouncementSignal = (
         normalized.includes('combo cascade') ||
         normalized.includes('claimed:') ||
         normalized.includes('cashout') ||
-        normalized.includes('reward') ||
-        normalized.includes('shop gold') ||
-        normalized.includes('cascade cache fired') ||
-        normalized.includes('toll cache claimed') ||
-        normalized.includes('fuse cache claimed late')
+        normalized.includes('reward')
     ) {
         return { label: 'Reward', tone: 'reward' };
-    }
-    if (normalized.includes('ward blocked') || normalized.includes('hazard warded')) {
-        return { label: 'Guard', tone: 'guard' };
     }
     if (normalized.includes('trait') || normalized.includes('perk pop')) {
         return { label: 'Trait', tone: 'trait' };
     }
-    if (normalized.includes('objective') || normalized.includes('exit is ready') || normalized.includes('match resolved')) {
+    if (normalized.includes('objective') || normalized.includes('match resolved')) {
         return { label: 'Objective', tone: 'objective' };
     }
     return { label: 'Action', tone: 'info' };
@@ -179,14 +185,8 @@ export const getVisualHudAnnouncementImpact = (
     } else if (normalizedAnnouncement.includes('chain hit')) {
         pushUniqueDetail(details, { label: 'Chain hit', tone: 'chain' });
     }
-    if (normalizedAnnouncement.includes('shop gold') || normalizedAnnouncement.includes('gold')) {
-        pushUniqueDetail(details, { label: '+Gold', tone: 'reward' });
-    }
     if (normalizedAnnouncement.includes('claimed:') || normalizedAnnouncement.includes('pickup')) {
         pushUniqueDetail(details, { label: 'Pickup', tone: 'reward' });
-    }
-    if (normalizedAnnouncement.includes('ward blocked') || normalizedAnnouncement.includes('hazard warded')) {
-        pushUniqueDetail(details, { label: 'Guarded', tone: 'guard' });
     }
     if (normalizedAnnouncement.includes('trait routes') || normalizedAnnouncement.includes('trait route')) {
         pushUniqueDetail(details, { label: normalizedAnnouncement.includes('complete') ? 'Route paid' : 'Route progress', tone: 'trait' });
@@ -197,20 +197,6 @@ export const getVisualHudAnnouncementImpact = (
     }
     if (normalizedAnnouncement.includes('objective')) {
         pushUniqueDetail(details, { label: normalizedAnnouncement.includes('missed') || normalizedAnnouncement.includes('failed') ? 'Objective missed' : 'Objective', tone: 'objective' });
-    }
-    if (normalizedAnnouncement.includes('cascade cache fired')) {
-        pushUniqueDetail(details, { label: 'Hazard payoff', tone: 'reward' });
-        pushUniqueDetail(details, { label: 'Auto-clear', tone: 'chain' });
-    } else if (
-        normalizedAnnouncement.includes('shuffle snare fired') ||
-        normalizedAnnouncement.includes('fragile cache broke')
-    ) {
-        pushUniqueDetail(details, { label: 'Hazard trigger', tone: 'risk' });
-    } else if (normalizedAnnouncement.includes('toll cache claimed') || normalizedAnnouncement.includes('fuse cache claimed late')) {
-        pushUniqueDetail(details, { label: 'Hazard payout', tone: 'reward' });
-    }
-    if (normalizedAnnouncement.includes('moving enemy defeated') || normalizedAnnouncement.includes('dungeon enemy defeated')) {
-        pushUniqueDetail(details, { label: 'Threat down', tone: 'guard' });
     }
     if (priority === 'error' || normalizedAnnouncement.includes('no match')) {
         pushUniqueDetail(details, { label: 'Miss', tone: 'risk' });
@@ -278,9 +264,6 @@ export const getVisualHudAnnouncementFollowup = ({
     const normalizedAnnouncement = announcement.toLowerCase();
 
     if (runStatus === 'gameOver') {
-        if (normalizedAnnouncement.includes('moving enemy contact') || normalizedAnnouncement.includes('mimic cache bit')) {
-            return 'Next: review the run summary before starting the next descent.';
-        }
         return null;
     }
 
@@ -289,28 +272,14 @@ export const getVisualHudAnnouncementFollowup = ({
     }
 
     if (remainingPairCount === 0) {
-        return 'Next: exit is ready.';
-    }
-
-    if (normalizedAnnouncement.includes('moving enemy contact')) {
-        return 'Next: pause on the patrol path and choose a safe pair away from it.';
-    }
-
-    if (normalizedAnnouncement.includes('moving enemy defeated') || normalizedAnnouncement.includes('moving enemies defeated')) {
-        return 'Next: threat removed; use the opened space to clear confirmed pairs.';
-    }
-
-    if (normalizedAnnouncement.includes('dungeon enemy defeated') || normalizedAnnouncement.includes('dungeon enemies defeated')) {
-        return 'Next: pressure is down; keep clearing confirmed pairs.';
+        // Gen 201: this said "exit is ready". There is no exit - a floor ends when the board does.
+        return 'Next: the floor is clear.';
     }
 
     if (normalizedAnnouncement.includes('chain') && normalizedAnnouncement.includes('broken')) {
         return 'Next: rebuild from a confirmed pair before chasing rewards.';
     }
 
-    if (normalizedAnnouncement.includes('mimic cache bit')) {
-        return 'Next: treat unknown cache pairs as dangerous until confirmed.';
-    }
 
     if (
         normalizedAnnouncement.includes('trait route prime found') ||
@@ -372,53 +341,20 @@ export const getVisualHudAnnouncementFollowup = ({
         return 'Next: cards reset; pick a remembered pair.';
     }
 
-    if (normalizedAnnouncement.includes('guard cache ward blocked')) {
-        return 'Next: hazard blocked; continue from the best safe match.';
-    }
 
-    if (normalizedAnnouncement.includes('lantern ward scouted')) {
-        return 'Next: use the revealed threat marker to route around danger.';
-    }
 
-    if (normalizedAnnouncement.includes('omen seal revealed')) {
-        return 'Next: treat the marked danger as known information before flipping.';
-    }
 
-    if (normalizedAnnouncement.includes('anchor seal')) {
-        return 'Next: pressure is frozen; clear the best confirmed pair now.';
-    }
 
-    if (normalizedAnnouncement.includes('loaded gateway')) {
-        return 'Next: finish this floor knowing the next route is prepared.';
-    }
 
     if (normalizedAnnouncement.includes('pin lattice')) {
         return 'Next: planning paid out; preserve pins for uncertain pairs.';
     }
 
-    if (normalizedAnnouncement.includes('mimic cache controlled')) {
-        return 'Next: full loot is secured; resume clearing safe pairs.';
-    }
 
-    if (normalizedAnnouncement.includes('shuffle snare fired')) {
-        return 'Next: board order changed; recheck positions before pairing.';
-    }
 
-    if (normalizedAnnouncement.includes('cascade cache fired')) {
-        return 'Next: one safe pair cleared itself; update your mental map.';
-    }
 
-    if (normalizedAnnouncement.includes('fragile cache broke')) {
-        return 'Next: reward broke, but the pair still counts as cleared.';
-    }
 
-    if (normalizedAnnouncement.includes('fuse cache claimed late')) {
-        return 'Next: late fuse still pays consolation gold; clear safer pairs.';
-    }
 
-    if (normalizedAnnouncement.includes('toll cache claimed')) {
-        return 'Next: gold gained, score toll paid; continue toward the exit.';
-    }
 
     if (normalizedAnnouncement.includes('claimed:')) {
         return 'Next: pickup reward applied; keep clearing confirmed pairs.';
@@ -438,9 +374,6 @@ export const getVisualHudAnnouncementFollowup = ({
             : 'Next: trait payoff landed; look for the next chainable interaction.';
     }
 
-    if (normalizedAnnouncement.includes('shop gold')) {
-        return 'Next: bank gold for shops, rests, or route events.';
-    }
 
     if (normalizedAnnouncement.includes('match resolved')) {
         return `Next: ${remainingPairCount} ${remainingPairCount === 1 ? 'pair' : 'pairs'} left.`;

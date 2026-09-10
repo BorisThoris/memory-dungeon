@@ -147,7 +147,7 @@ export const RESPONSIVE_SCREEN_ROUTES: readonly ResponsiveScreenRoute[] = [
         screen: 'inventory',
         requiredViewportIds: ['phone_390x844', 'phone_landscape_844x390', 'desktop_1440x900'],
         primaryActionSelector: '[data-testid="inventory-prep-strip"]',
-        rationale: 'Run prep/loadout/economy rows must remain reachable in menu and in-run shells.',
+        rationale: 'Run prep and charge rows must remain reachable in menu and in-run shells.',
         maxContentColumns: 3,
         mustAvoidHorizontalScroll: true
     },
@@ -187,7 +187,7 @@ export const RESPONSIVE_SCREEN_ROUTES: readonly ResponsiveScreenRoute[] = [
         screen: 'floor_clear_overlay',
         requiredViewportIds: ['phone_390x844', 'phone_landscape_844x390', 'short_wide_1366x640'],
         primaryActionSelector: '[role="dialog"] button',
-        rationale: 'Continue and route/shop decisions must be reachable.',
+        rationale: 'Continue and floor-clear decisions must be reachable.',
         maxContentColumns: 2,
         mustAvoidHorizontalScroll: true
     },

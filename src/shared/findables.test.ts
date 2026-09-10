@@ -12,7 +12,7 @@ describe('REG-049 findable reward copy', () => {
                 rewardText: '+25 score',
                 score: FINDABLE_MATCH_SCORE.score_glint,
                 spawnWeight: FINDABLE_KIND_SPAWN_WEIGHTS.score_glint,
-                destroyText: 'Destroy forfeits the score glint.'
+                breakText: 'A break that takes the carrier spills the glint and pays it.'
             }
         ]);
         expect(getFindableRewardText('score_glint')).toBe('Score glint pickup: +25 score.');

@@ -68,7 +68,6 @@ const run = (overrides: Partial<RunState> = {}): RunState => ({
     stats: {
         shufflesUsed: 0,
         matchesFound: 0,
-        pairsDestroyed: 0
     },
     ...overrides
 } as RunState);

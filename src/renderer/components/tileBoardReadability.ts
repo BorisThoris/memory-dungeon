@@ -19,10 +19,7 @@ export type TileTraitRouteReadabilityIntensity = 'none' | 'setup' | 'ready' | 's
 export type TileTraitRouteBeatTier = 'setup' | 'route' | 'follow-up' | 'surge' | 'cashout';
 export type TileTraitRouteCadence = 'none' | 'prime' | 'route' | 'follow-up' | 'surge' | 'cashout';
 type TraitLaneReadabilityPattern =
-    | 'cash-pip'
-    | 'guard-ward'
     | 'tool-cross'
-    | 'risk-slash'
     | 'block-bars'
     | 'recall-pair'
     | 'score-pip';
@@ -88,28 +85,17 @@ interface TileBoardReadabilityState {
  * as shipped, guard and the fallback were dE 1.0 apart for a protanope, and tool and recall only
  * 11.5 apart in ordinary vision. Gated in `tileBoardReadability.test.ts`.
  */
+/* Gen 201: the shard, guard and risk lanes went with the currencies and hazards they named. */
 export const TRAIT_LANE_COLORS = {
     block: '#9e6ffe',
-    guard: '#5fbe5f',
     other: '#f8ecbe',
     recall: '#b9fefe',
-    risk: '#f83226',
-    shard: '#fdbe21',
     tool: '#41cffd'
 } as const;
 
 export const getTraitLaneReadabilityColor = (lane: TraitInteractionLaneId): string => {
-    if (lane === 'shard') {
-        return TRAIT_LANE_COLORS.shard;
-    }
-    if (lane === 'guard') {
-        return TRAIT_LANE_COLORS.guard;
-    }
     if (lane === 'tool') {
         return TRAIT_LANE_COLORS.tool;
-    }
-    if (lane === 'risk') {
-        return TRAIT_LANE_COLORS.risk;
     }
     if (lane === 'block') {
         return TRAIT_LANE_COLORS.block;
@@ -121,17 +107,8 @@ export const getTraitLaneReadabilityColor = (lane: TraitInteractionLaneId): stri
 };
 
 export const getTraitLaneReadabilityPattern = (lane: TraitInteractionLaneId): TraitLaneReadabilityPattern => {
-    if (lane === 'shard') {
-        return 'cash-pip';
-    }
-    if (lane === 'guard') {
-        return 'guard-ward';
-    }
     if (lane === 'tool') {
         return 'tool-cross';
-    }
-    if (lane === 'risk') {
-        return 'risk-slash';
     }
     if (lane === 'block') {
         return 'block-bars';

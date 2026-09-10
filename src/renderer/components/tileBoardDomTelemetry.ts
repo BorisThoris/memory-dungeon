@@ -28,15 +28,7 @@ import {
 } from './tileBoardReadability';
 
 const CARD_FEEDBACK_ACTION_PRIORITY = ['cash-now', 'follow-up', 'build-lane', 'route-setup', 'bank-lane'] as const;
-const CARD_FEEDBACK_TRAIT_LANE_ORDER: readonly TraitInteractionLaneId[] = [
-    'shard',
-    'guard',
-    'tool',
-    'risk',
-    'block',
-    'recall',
-    'score'
-];
+const CARD_FEEDBACK_TRAIT_LANE_ORDER: readonly TraitInteractionLaneId[] = ['tool', 'block', 'recall', 'score'];
 const CARD_FEEDBACK_BEAT_TIER_ORDER = ['cashout', 'surge', 'follow-up', 'route', 'setup'] as const;
 export const CARD_FEEDBACK_BEAT_TIER_CONTRACT = CARD_FEEDBACK_BEAT_TIER_ORDER.join(' ');
 const CARD_FEEDBACK_CADENCE_ORDER = ['cashout', 'surge', 'follow-up', 'route', 'prime'] as const;
@@ -56,13 +48,12 @@ type CardFeedbackBeatCount = Exclude<ReturnType<typeof getTraitRouteReadabilityB
 type CardFeedbackRouteGlyph = Extract<TileTraitRouteReadabilityGlyph, (typeof CARD_FEEDBACK_ROUTE_GLYPH_ORDER)[number]>;
 
 export const getTraitLaneFeedbackBeatCount = (lane: TraitInteractionLaneId): 2 | 3 | 4 => {
-    if (lane === 'shard' || lane === 'score' || lane === 'risk' || lane === 'block') {
+    // Gen 201: the shard, guard and risk lanes went, so the four-beat tier is score and block and
+    // the three-beat tier is tool and recall. The ordering is unchanged for the lanes that stayed.
+    if (lane === 'score' || lane === 'block') {
         return 4;
     }
-    if (lane === 'guard' || lane === 'tool' || lane === 'recall') {
-        return 3;
-    }
-    return 2;
+    return 3;
 };
 
 const slotListFor = (

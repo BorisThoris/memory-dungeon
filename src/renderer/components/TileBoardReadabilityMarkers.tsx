@@ -592,9 +592,7 @@ export const TileBoardReadabilityMarkers = ({
                                 renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 2}
                                 scale={[0.82, 0.72, 1]}
                             />
-                            {traitLaneReadabilityPattern === 'cash-pip' ||
-                            traitLaneReadabilityPattern === 'score-pip' ||
-                            traitLaneReadabilityPattern === 'guard-ward' ||
+                            {traitLaneReadabilityPattern === 'score-pip' ||
                             traitLaneReadabilityPattern === 'recall-pair' ? (
                                 <ReadabilityMaterialMesh
                                     color={traitLaneReadabilityColor}
@@ -606,12 +604,7 @@ export const TileBoardReadabilityMarkers = ({
                                         0.00006
                                     ]}
                                     renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 3}
-                                    scale={
-                                        traitLaneReadabilityPattern === 'cash-pip' ||
-                                        traitLaneReadabilityPattern === 'guard-ward'
-                                            ? [0.86, 0.86, 1]
-                                            : [0.68, 0.68, 1]
-                                    }
+                                    scale={[0.68, 0.68, 1]}
                                 />
                             ) : null}
                             {traitLaneReadabilityPattern === 'recall-pair' ? (
@@ -622,16 +615,6 @@ export const TileBoardReadabilityMarkers = ({
                                     position={[0.08, 0.001, 0.00006]}
                                     renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 3}
                                     scale={[0.68, 0.68, 1]}
-                                />
-                            ) : null}
-                            {traitLaneReadabilityPattern === 'guard-ward' ? (
-                                <ReadabilityMaterialMesh
-                                    color="#d9ffe8"
-                                    geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
-                                    opacity={0.86}
-                                    position={[0.08, 0.001, 0.00007]}
-                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 4}
-                                    scale={[0.72, 0.68, 1]}
                                 />
                             ) : null}
                             {traitLaneReadabilityPattern === 'tool-cross' ? (
@@ -652,16 +635,6 @@ export const TileBoardReadabilityMarkers = ({
                                         scale={[0.48, 0.76, 1]}
                                     />
                                 </>
-                            ) : null}
-                            {traitLaneReadabilityPattern === 'risk-slash' ? (
-                                <ReadabilityMaterialMesh
-                                    color={traitLaneReadabilityColor}
-                                    geometry={BOARD_READABILITY_BAR_GEOMETRY}
-                                    opacity={0.92}
-                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 3}
-                                    rotation={[0, 0, Math.PI / 6]}
-                                    scale={[0.84, 0.72, 1]}
-                                />
                             ) : null}
                             {traitLaneReadabilityPattern === 'block-bars' ? (
                                 <>

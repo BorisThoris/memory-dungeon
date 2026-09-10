@@ -337,7 +337,6 @@ export interface SessionStats {
     tileTraitMatches: Record<TileTraitKind, number>;
     tileTraitMismatches: Record<TileTraitKind, number>;
     shufflesUsed: number;
-    pairsDestroyed: number;
 }
 
 export interface LevelResult {

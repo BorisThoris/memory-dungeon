@@ -3,8 +3,8 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2432,
-    "codeFileCount": 873,
+    "trackedFileCount": 2433,
+    "codeFileCount": 874,
     "exportedSymbolCount": 2658,
     "contentItemCount": 10,
     "mechanicCount": 41,
@@ -255,8 +255,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 350367,
-      "sha256": "884820498767023f82b864402302d62f6731f699ec5e111659a70479ef2288e7"
+      "bytes": 353287,
+      "sha256": "f59161d9017d7cb54118ccfb4438b339f2724215cea5a547671092083b76c170"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -748,7 +748,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 394,
-      "sha256": "95965ce7913ceba8f1910a1808a39741381203f1ae419d223c3333b247c4dc05"
+      "sha256": "bb3b8d22a173883d065a26671b97e2bd25b9916014b434a3821e92d1c450fcf6"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2326,7 +2326,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33472,
-      "sha256": "1d4adc80a9b6bd8894153b13f8fb9d6c31af69760dce861a8b72b7dae47eee1c"
+      "sha256": "4d561ca5d2be5410463f51a84a9f551112354696a0d613787b464a0f1700a8dc"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -7845,8 +7845,8 @@
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
       "category": "test",
-      "bytes": 62608,
-      "sha256": "5ec0f5ac80a3e18818a4c45244dc08b93e86ae90ae1bb9238ca970e2e05671af"
+      "bytes": 57615,
+      "sha256": "0e54b698b6ffa47b80d43e0df0b7c90ddbd6762248af0358b979efe021224c4a"
     },
     {
       "path": "src/renderer/components/GameScreen.tsx",
@@ -7857,8 +7857,14 @@
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
       "category": "source",
-      "bytes": 18976,
-      "sha256": "dbce5f117d7e0da82baa0cf6a7b4457f1312f5e177f12c139719e33221651049"
+      "bytes": 15558,
+      "sha256": "a14d6a7e7127dcab0aeea9917555ff61c6bf86f0c8dcdad923e12a363a7ce32b"
+    },
+    {
+      "path": "src/renderer/components/gameScreenFeedbackReach.test.ts",
+      "category": "test",
+      "bytes": 2866,
+      "sha256": "4db14a1f6ac9127b4662621c7df288a267f41bc6b673ad7dbbb60c2776c95c8b"
     },
     {
       "path": "src/renderer/components/gameScreenStoreSelectors.ts",
@@ -8319,14 +8325,14 @@
     {
       "path": "src/renderer/components/tileBoardDomTelemetry.test.ts",
       "category": "test",
-      "bytes": 17359,
-      "sha256": "9da4799092cd8412ede6b7fb6e50c8566287425a1cee61b0643ad17e05f262bb"
+      "bytes": 17283,
+      "sha256": "052b07e2d0adc670254062df48b4bcdcba639e6cdeb637c1a3f07a4266e3f88d"
     },
     {
       "path": "src/renderer/components/tileBoardDomTelemetry.ts",
       "category": "source",
-      "bytes": 28654,
-      "sha256": "4ff8e631b06735b214679ddc827e969a6615c0b2683cf2844fd763a9ac25f9ed"
+      "bytes": 28666,
+      "sha256": "4f7161bc3033657676fc3c39dcafa25c3e0ddba30cc925e02c3bd76bf6c90ac2"
     },
     {
       "path": "src/renderer/components/TileBoardEffectOverlays.tsx",
@@ -8601,20 +8607,20 @@
     {
       "path": "src/renderer/components/tileBoardReadability.test.ts",
       "category": "test",
-      "bytes": 14507,
-      "sha256": "dc947d5bee1e44f1ba4d19d67c264c04321db76c0ff38ca5997f964e10c7a4e5"
+      "bytes": 14610,
+      "sha256": "38450074ed1ab058478ee91be9f64b057d70ef16ff2697f548bb24c025a2d0c5"
     },
     {
       "path": "src/renderer/components/tileBoardReadability.ts",
       "category": "source",
-      "bytes": 13321,
-      "sha256": "a96bddf8e57757753a6bccdf0ad19f8ffa420c76b0b70ed7198ea647911c03e3"
+      "bytes": 12891,
+      "sha256": "43dabf36ccc0312814b35e189c76cc4a563779c84ac9f509ccb82038679cab95"
     },
     {
       "path": "src/renderer/components/TileBoardReadabilityMarkers.tsx",
       "category": "source",
-      "bytes": 76237,
-      "sha256": "97aed19a6d4b26173e77d1153013b571113bd2d41522d038713a986986815f56"
+      "bytes": 74483,
+      "sha256": "9024ea3263edcd6eb1bbfbbc017820d87dc67b3ab0751a51be4821631e05da1d"
     },
     {
       "path": "src/renderer/components/tileBoardRegistry.test.ts",
@@ -8667,8 +8673,8 @@
     {
       "path": "src/renderer/components/tileBoardRows.test.ts",
       "category": "test",
-      "bytes": 14740,
-      "sha256": "8fd6a1722231f4ac020d7c6b6605b3ec6958febf867ca6a89645c9cb11b1014a"
+      "bytes": 14738,
+      "sha256": "a2583f1024a8b726d273061986034f6701543b8ed0b4ead144f0855b574e4a4c"
     },
     {
       "path": "src/renderer/components/tileBoardRows.ts",
@@ -9249,14 +9255,14 @@
     {
       "path": "src/renderer/copy/traitInteractionLaneMap.test.ts",
       "category": "test",
-      "bytes": 2915,
-      "sha256": "d371cb635ffd39dc1d76f0501db078b63f2d671e0b27b7f88e47b40ba1fe6080"
+      "bytes": 3548,
+      "sha256": "bb8dd385ebd3490f13f2d5472414f06fb11b4fdcf3cf1bf592cf30b1d03b5681"
     },
     {
       "path": "src/renderer/copy/traitInteractionLaneMap.ts",
       "category": "source",
-      "bytes": 3855,
-      "sha256": "d28ab0e6b4472ee0a43741b1a0eb486697b0912d06db38c06e8a170aa3b73ced"
+      "bytes": 4353,
+      "sha256": "76fa325685665a4b4553bf9c9963c3bee4b946e7978e26a387675a4c250b09c5"
     },
     {
       "path": "src/renderer/desktop-client.test.ts",
@@ -10281,8 +10287,8 @@
     {
       "path": "src/renderer/viewportMatrix.ts",
       "category": "source",
-      "bytes": 11202,
-      "sha256": "3e1a6946e6bceece82f0a523173e6db9391b0a0be14bbcc0868588784e69f111"
+      "bytes": 11198,
+      "sha256": "776a75e47866edadebd2c3b8ed8e3d7714530028d0fabd068174970673b2460f"
     },
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
@@ -10419,8 +10425,8 @@
     {
       "path": "src/shared/board-power-actions.test.ts",
       "category": "test",
-      "bytes": 9505,
-      "sha256": "63e7894510ab894ed1a15a2e19cbe75919ce4c40dab76ff1cb2fdcd262ba9e57"
+      "bytes": 9479,
+      "sha256": "42d3e09eb463bc58c4cee6e61fc410ce1d8dce98e7e2ba77976ae1b8b1468adf"
     },
     {
       "path": "src/shared/board-power-actions.ts",
@@ -10683,8 +10689,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 31379,
-      "sha256": "a2f59611bf3327d37cef0fb0adaea15a2438cfce019a36359726e9aafc94a1dc"
+      "bytes": 31351,
+      "sha256": "c49c91e757f9f66c07edb11f7ae79edb97cf2c226deddc06cb020f08b74880f7"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -10797,14 +10803,14 @@
     {
       "path": "src/shared/findables.test.ts",
       "category": "test",
-      "bytes": 1132,
-      "sha256": "5ef5348800e84c391c783085e7273607e40f76bbf02df81b8bac243e5db5b0d7"
+      "bytes": 1157,
+      "sha256": "0185c8e13f6b7064aea16825179925ee371975edefab7a8e9dde8924e30273bb"
     },
     {
       "path": "src/shared/findables.ts",
       "category": "source",
-      "bytes": 2156,
-      "sha256": "918796cbf78847f1aa4fb9f951a01954c3d528feea3ac49aea688dfeb52deb27"
+      "bytes": 2181,
+      "sha256": "c2316db65543df948211c4ff05fd42dc3e73ddc4edb7288868fe46765e7fe623"
     },
     {
       "path": "src/shared/first-run-help-center.test.ts",
@@ -11175,8 +11181,8 @@
     {
       "path": "src/shared/inventory-prep.ts",
       "category": "source",
-      "bytes": 2759,
-      "sha256": "2cc4354ec01a96d9cef8dd32e6f6e5d4c8befb3e59621442a9acf697c4d3f804"
+      "bytes": 2746,
+      "sha256": "3febf59054df9179afda4ddfbc5f7102815b01c142bf3466e2b46f815c39fba7"
     },
     {
       "path": "src/shared/ipc-channels.ts",
@@ -11241,8 +11247,8 @@
     {
       "path": "src/shared/long-run-feedback.ts",
       "category": "source",
-      "bytes": 7957,
-      "sha256": "974651894950b53649f7e7d7b450b695ee56649090d93eaea6f10d8b03743f5e"
+      "bytes": 7893,
+      "sha256": "fa5ff20dbf6fa3712c09c32602be444892b5ee5fc54eef000916137507ce6d99"
     },
     {
       "path": "src/shared/magpie-rules.test.ts",
@@ -11295,8 +11301,8 @@
     {
       "path": "src/shared/mechanic-feedback.ts",
       "category": "source",
-      "bytes": 4967,
-      "sha256": "48b2a6d8b92205caddbbba348212cb7155f167aafa5f08d64b404c24e7029466"
+      "bytes": 4958,
+      "sha256": "f731f369e1be4c76f6cf3dd926aaf6de79a2abce33d19d68a0914d80a1ab35bf"
     },
     {
       "path": "src/shared/mechanics-catalog-appendix-builder.test.ts",
@@ -11379,8 +11385,8 @@
     {
       "path": "src/shared/meta-reward-signals.ts",
       "category": "source",
-      "bytes": 9317,
-      "sha256": "8ff4ac5d5984f7bceb2c51b2a04d4fb9f83b427f3fb45b3ba41ecd2470325361"
+      "bytes": 9300,
+      "sha256": "22976b60d246419b0d5ccd214c7516dd33a70c2ad601a10a9b12b6011acec52f"
     },
     {
       "path": "src/shared/min-type-size.test.ts",
@@ -12045,14 +12051,14 @@
     {
       "path": "src/shared/session-stats-rules.test.ts",
       "category": "test",
-      "bytes": 2631,
-      "sha256": "099f398b471b65b6fe98d9de4d2092d3094120471fe68b73f1c01526a60faf8a"
+      "bytes": 2601,
+      "sha256": "1c282e38839ee6b63c8dd6f833893245027523a35d0574d1f96dbc007c78b2ff"
     },
     {
       "path": "src/shared/session-stats-rules.ts",
       "category": "source",
-      "bytes": 3356,
-      "sha256": "01a8d84defd7add4a5e99763c38e8a5bfd8a0307d2de37083608eb1bc1f99bab"
+      "bytes": 3265,
+      "sha256": "8eea0f1dcea5507cfdb61448c2882f260b2a7e14c83c03044fd6afbb7042a35d"
     },
     {
       "path": "src/shared/settings-control-model.test.ts",
@@ -17004,7 +17010,7 @@
       "path": "src/renderer/components/GameScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1514,
+      "lineCount": 1395,
       "imports": [
         "file:src/renderer/components/GameScreen.tsx",
         "file:src/renderer/components/gameScreenFeedback.ts",
@@ -17102,7 +17108,7 @@
       "path": "src/renderer/components/gameScreenFeedback.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 459,
+      "lineCount": 392,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -17117,6 +17123,16 @@
       "testedBy": [
         "file:src/renderer/components/GameScreen.test.tsx"
       ]
+    },
+    {
+      "id": "file:src/renderer/components/gameScreenFeedbackReach.test.ts",
+      "path": "src/renderer/components/gameScreenFeedbackReach.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 69,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/components/gameScreenStoreSelectors.ts",
@@ -18375,7 +18391,7 @@
       "path": "src/renderer/components/tileBoardDomTelemetry.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 788,
+      "lineCount": 779,
       "imports": [
         "file:src/renderer/components/tileBoardDomAccessibility.ts",
         "file:src/renderer/components/tileBoardReadability.ts",
@@ -19154,7 +19170,7 @@
       "path": "src/renderer/components/tileBoardReadability.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 284,
+      "lineCount": 287,
       "imports": [
         "file:src/renderer/components/tileBoardReadability.ts",
         "file:src/shared/color-vision.ts",
@@ -19169,7 +19185,7 @@
       "path": "src/renderer/components/tileBoardReadability.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 436,
+      "lineCount": 413,
       "imports": [
         "file:src/renderer/components/tileBoardRows.ts",
         "file:src/renderer/copy/traitInteractionLaneMap.ts",
@@ -19205,7 +19221,7 @@
       "path": "src/renderer/components/TileBoardReadabilityMarkers.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1433,
+      "lineCount": 1406,
       "imports": [
         "file:src/renderer/components/tileBoardPick.ts",
         "file:src/renderer/components/tileBoardReadability.ts",
@@ -21038,7 +21054,7 @@
       "path": "src/renderer/copy/traitInteractionLaneMap.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 60,
+      "lineCount": 72,
       "imports": [
         "file:src/renderer/copy/traitInteractionLaneMap.ts"
       ],
@@ -21050,7 +21066,7 @@
       "path": "src/renderer/copy/traitInteractionLaneMap.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 121,
+      "lineCount": 115,
       "imports": [
         "file:src/shared/run-array-guards.ts"
       ],
@@ -24063,7 +24079,7 @@
       "path": "src/shared/board-power-actions.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 281,
+      "lineCount": 280,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/contracts.ts"
@@ -24955,7 +24971,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 726,
+      "lineCount": 725,
       "imports": [],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -27079,7 +27095,7 @@
       "path": "src/shared/long-run-feedback.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 225,
+      "lineCount": 224,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/findables.ts",
@@ -29703,7 +29719,7 @@
       "path": "src/shared/session-stats-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 78,
+      "lineCount": 77,
       "imports": [
         "file:src/shared/session-stats-rules.ts",
         "file:src/shared/test/game-fixtures.ts"
@@ -29716,7 +29732,7 @@
       "path": "src/shared/session-stats-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 88,
+      "lineCount": 86,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-number-guards.ts",
@@ -33530,48 +33546,48 @@
       "name": "getStackCashoutLaneCount",
       "kind": "value",
       "file": "src/renderer/components/gameScreenFeedback.ts",
-      "line": 21,
-      "endLine": 31
+      "line": 36,
+      "endLine": 46
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getVisualHudAnnouncementFollowup",
       "name": "getVisualHudAnnouncementFollowup",
       "kind": "value",
       "file": "src/renderer/components/gameScreenFeedback.ts",
-      "line": 264,
-      "endLine": 458
+      "line": 250,
+      "endLine": 391
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getVisualHudAnnouncementImpact",
       "name": "getVisualHudAnnouncementImpact",
       "kind": "value",
       "file": "src/renderer/components/gameScreenFeedback.ts",
-      "line": 122,
-      "endLine": 262
+      "line": 128,
+      "endLine": 248
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getVisualHudAnnouncementSignal",
       "name": "getVisualHudAnnouncementSignal",
       "kind": "value",
       "file": "src/renderer/components/gameScreenFeedback.ts",
-      "line": 45,
-      "endLine": 95
+      "line": 60,
+      "endLine": 101
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#VisualHudAnnouncementDetail",
       "name": "VisualHudAnnouncementDetail",
       "kind": "interface",
       "file": "src/renderer/components/gameScreenFeedback.ts",
-      "line": 10,
-      "endLine": 13
+      "line": 25,
+      "endLine": 28
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#VisualHudAnnouncementSignalTone",
       "name": "VisualHudAnnouncementSignalTone",
       "kind": "type",
       "file": "src/renderer/components/gameScreenFeedback.ts",
-      "line": 3,
-      "endLine": 3
+      "line": 18,
+      "endLine": 18
     },
     {
       "id": "symbol:src/renderer/components/gameScreenStoreSelectors.ts#useGameScreenBoardVisualSettings",
@@ -34770,200 +34786,200 @@
       "name": "CARD_FEEDBACK_BEAT_TIER_CONTRACT",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 41,
-      "endLine": 41
+      "line": 33,
+      "endLine": 33
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#CARD_FEEDBACK_CADENCE_CONTRACT",
       "name": "CARD_FEEDBACK_CADENCE_CONTRACT",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 43,
-      "endLine": 43
+      "line": 35,
+      "endLine": 35
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#CARD_FEEDBACK_ROUTE_GLYPH_CONTRACT",
       "name": "CARD_FEEDBACK_ROUTE_GLYPH_CONTRACT",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 52,
-      "endLine": 52
+      "line": 44,
+      "endLine": 44
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#getCardFeedbackActionCuesAttr",
       "name": "getCardFeedbackActionCuesAttr",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 319,
-      "endLine": 338
+      "line": 310,
+      "endLine": 329
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#getCardFeedbackActionPriorityAttr",
       "name": "getCardFeedbackActionPriorityAttr",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 391,
-      "endLine": 402
+      "line": 382,
+      "endLine": 393
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#getCardFeedbackBeatCountsAttr",
       "name": "getCardFeedbackBeatCountsAttr",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 504,
-      "endLine": 531
+      "line": 495,
+      "endLine": 522
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#getCardFeedbackBeatTiersAttr",
       "name": "getCardFeedbackBeatTiersAttr",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 459,
-      "endLine": 502
+      "line": 450,
+      "endLine": 493
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#getCardFeedbackCadencesAttr",
       "name": "getCardFeedbackCadencesAttr",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 533,
-      "endLine": 566
+      "line": 524,
+      "endLine": 557
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#getCardFeedbackMarkerShapesAttr",
       "name": "getCardFeedbackMarkerShapesAttr",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 265,
-      "endLine": 317
+      "line": 256,
+      "endLine": 308
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#getCardFeedbackPrimaryActionAttr",
       "name": "getCardFeedbackPrimaryActionAttr",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 404,
-      "endLine": 412
+      "line": 395,
+      "endLine": 403
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#getCardFeedbackPrimaryCardCueAttr",
       "name": "getCardFeedbackPrimaryCardCueAttr",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 414,
-      "endLine": 434
+      "line": 405,
+      "endLine": 425
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#getCardFeedbackRouteGlyphsAttr",
       "name": "getCardFeedbackRouteGlyphsAttr",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 732,
-      "endLine": 755
+      "line": 723,
+      "endLine": 746
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#getCardFeedbackStatesAttr",
       "name": "getCardFeedbackStatesAttr",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 160,
-      "endLine": 263
+      "line": 151,
+      "endLine": 254
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#getCardFeedbackTraitLaneActionsAttr",
       "name": "getCardFeedbackTraitLaneActionsAttr",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 607,
-      "endLine": 625
+      "line": 598,
+      "endLine": 616
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#getCardFeedbackTraitLaneBeatsAttr",
       "name": "getCardFeedbackTraitLaneBeatsAttr",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 588,
-      "endLine": 605
+      "line": 579,
+      "endLine": 596
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#getCardFeedbackTraitLaneCuesAttr",
       "name": "getCardFeedbackTraitLaneCuesAttr",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 568,
-      "endLine": 586
+      "line": 559,
+      "endLine": 577
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#getCardFeedbackTraitLanePrimaryActionAttr",
       "name": "getCardFeedbackTraitLanePrimaryActionAttr",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 627,
-      "endLine": 648
+      "line": 618,
+      "endLine": 639
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#getCardFeedbackTraitRouteIntensitiesAttr",
       "name": "getCardFeedbackTraitRouteIntensitiesAttr",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 694,
-      "endLine": 730
+      "line": 685,
+      "endLine": 721
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#getCardFeedbackTraitRouteTiersAttr",
       "name": "getCardFeedbackTraitRouteTiersAttr",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 650,
-      "endLine": 692
+      "line": 641,
+      "endLine": 683
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#getCardFeedbackVisibleTraitPreviewCount",
       "name": "getCardFeedbackVisibleTraitPreviewCount",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 109,
-      "endLine": 139
+      "line": 100,
+      "endLine": 130
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#getDevE2ePairPositionsJson",
       "name": "getDevE2ePairPositionsJson",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 757,
-      "endLine": 787
+      "line": 748,
+      "endLine": 778
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#getHiddenSlotsAttr",
       "name": "getHiddenSlotsAttr",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 86,
-      "endLine": 87
+      "line": 77,
+      "endLine": 78
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#getHiddenTileCount",
       "name": "getHiddenTileCount",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 83,
-      "endLine": 84
+      "line": 74,
+      "endLine": 75
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#getPickableHiddenSlotsAttr",
       "name": "getPickableHiddenSlotsAttr",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 141,
-      "endLine": 158
+      "line": 132,
+      "endLine": 149
     },
     {
       "id": "symbol:src/renderer/components/tileBoardDomTelemetry.ts#getTraitLaneFeedbackBeatCount",
       "name": "getTraitLaneFeedbackBeatCount",
       "kind": "value",
       "file": "src/renderer/components/tileBoardDomTelemetry.ts",
-      "line": 58,
-      "endLine": 66
+      "line": 50,
+      "endLine": 57
     },
     {
       "id": "symbol:src/renderer/components/TileBoardEffectOverlays.tsx#TileBoardEffectOverlays",
@@ -35554,96 +35570,96 @@
       "name": "getTileBoardReadabilityState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 325,
-      "endLine": 435
+      "line": 302,
+      "endLine": 412
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitLaneReadabilityColor",
       "name": "getTraitLaneReadabilityColor",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 101,
-      "endLine": 121
+      "line": 96,
+      "endLine": 107
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitLaneReadabilityPattern",
       "name": "getTraitLaneReadabilityPattern",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 123,
-      "endLine": 143
+      "line": 109,
+      "endLine": 120
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitPreviewReadabilityBeatCount",
       "name": "getTraitPreviewReadabilityBeatCount",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 279,
-      "endLine": 290
+      "line": 256,
+      "endLine": 267
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitPreviewReadabilityTone",
       "name": "getTraitPreviewReadabilityTone",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 292,
-      "endLine": 302
+      "line": 269,
+      "endLine": 279
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitRouteCadenceAction",
       "name": "getTraitRouteCadenceAction",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 304,
-      "endLine": 323
+      "line": 281,
+      "endLine": 300
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitRouteReadabilityBeatCount",
       "name": "getTraitRouteReadabilityBeatCount",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 216,
-      "endLine": 232
+      "line": 193,
+      "endLine": 209
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitRouteReadabilityBeatTier",
       "name": "getTraitRouteReadabilityBeatTier",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 195,
-      "endLine": 214
+      "line": 172,
+      "endLine": 191
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitRouteReadabilityCadence",
       "name": "getTraitRouteReadabilityCadence",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 258,
-      "endLine": 277
+      "line": 235,
+      "endLine": 254
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitRouteReadabilityGlyph",
       "name": "getTraitRouteReadabilityGlyph",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 234,
-      "endLine": 256
+      "line": 211,
+      "endLine": 233
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitRouteReadabilityIntensity",
       "name": "getTraitRouteReadabilityIntensity",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 174,
-      "endLine": 193
+      "line": 151,
+      "endLine": 170
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitRouteReadabilityTier",
       "name": "getTraitRouteReadabilityTier",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 145,
-      "endLine": 172
+      "line": 122,
+      "endLine": 149
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#TileTraitRouteBeatTier",
@@ -35666,8 +35682,8 @@
       "name": "TileTraitRouteReadabilityGlyph",
       "kind": "type",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 29,
-      "endLine": 36
+      "line": 26,
+      "endLine": 33
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#TileTraitRouteReadabilityIntensity",
@@ -35690,8 +35706,8 @@
       "name": "TRAIT_LANE_COLORS",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 91,
-      "endLine": 99
+      "line": 89,
+      "endLine": 94
     },
     {
       "id": "symbol:src/renderer/components/TileBoardReadabilityMarkers.tsx#TileBoardReadabilityMarkers",
@@ -35699,7 +35715,7 @@
       "kind": "value",
       "file": "src/renderer/components/TileBoardReadabilityMarkers.tsx",
       "line": 175,
-      "endLine": 1432
+      "endLine": 1405
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRegistry.ts#createTileBoardItemRegistry",
@@ -37914,64 +37930,64 @@
       "name": "buildTraitInteractionLaneMap",
       "kind": "value",
       "file": "src/renderer/copy/traitInteractionLaneMap.ts",
-      "line": 72,
-      "endLine": 103
+      "line": 66,
+      "endLine": 97
     },
     {
       "id": "symbol:src/renderer/copy/traitInteractionLaneMap.ts#formatTraitInteractionLaneMapLabel",
       "name": "formatTraitInteractionLaneMapLabel",
       "kind": "value",
       "file": "src/renderer/copy/traitInteractionLaneMap.ts",
-      "line": 111,
-      "endLine": 120
+      "line": 105,
+      "endLine": 114
     },
     {
       "id": "symbol:src/renderer/copy/traitInteractionLaneMap.ts#getTraitInteractionLaneAction",
       "name": "getTraitInteractionLaneAction",
       "kind": "value",
       "file": "src/renderer/copy/traitInteractionLaneMap.ts",
-      "line": 42,
-      "endLine": 43
+      "line": 44,
+      "endLine": 45
     },
     {
       "id": "symbol:src/renderer/copy/traitInteractionLaneMap.ts#getTraitInteractionLaneId",
       "name": "getTraitInteractionLaneId",
       "kind": "value",
       "file": "src/renderer/copy/traitInteractionLaneMap.ts",
-      "line": 47,
-      "endLine": 70
+      "line": 49,
+      "endLine": 64
     },
     {
       "id": "symbol:src/renderer/copy/traitInteractionLaneMap.ts#TRAIT_INTERACTION_LANE_LABELS",
       "name": "TRAIT_INTERACTION_LANE_LABELS",
       "kind": "value",
       "file": "src/renderer/copy/traitInteractionLaneMap.ts",
-      "line": 22,
-      "endLine": 30
+      "line": 30,
+      "endLine": 35
     },
     {
       "id": "symbol:src/renderer/copy/traitInteractionLaneMap.ts#traitInteractionLaneActionMapAttr",
       "name": "traitInteractionLaneActionMapAttr",
       "kind": "value",
       "file": "src/renderer/copy/traitInteractionLaneMap.ts",
-      "line": 108,
-      "endLine": 109
+      "line": 102,
+      "endLine": 103
     },
     {
       "id": "symbol:src/renderer/copy/traitInteractionLaneMap.ts#TraitInteractionLaneId",
       "name": "TraitInteractionLaneId",
       "kind": "type",
       "file": "src/renderer/copy/traitInteractionLaneMap.ts",
-      "line": 3,
-      "endLine": 3
+      "line": 19,
+      "endLine": 19
     },
     {
       "id": "symbol:src/renderer/copy/traitInteractionLaneMap.ts#traitInteractionLaneMapAttr",
       "name": "traitInteractionLaneMapAttr",
       "kind": "value",
       "file": "src/renderer/copy/traitInteractionLaneMap.ts",
-      "line": 105,
-      "endLine": 106
+      "line": 99,
+      "endLine": 100
     },
     {
       "id": "symbol:src/renderer/desktop-client.ts#desktopClient",
@@ -42666,16 +42682,16 @@
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 609,
-      "endLine": 609
+      "line": 608,
+      "endLine": 608
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 673,
-      "endLine": 675
+      "line": 672,
+      "endLine": 674
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
@@ -42738,8 +42754,8 @@
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 681,
-      "endLine": 686
+      "line": 680,
+      "endLine": 685
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -42770,8 +42786,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 699,
-      "endLine": 725
+      "line": 698,
+      "endLine": 724
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -42890,16 +42906,16 @@
       "name": "GameplayCommandJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 418,
-      "endLine": 422
+      "line": 417,
+      "endLine": 421
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameplayEventJournalEntry",
       "name": "GameplayEventJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 424,
-      "endLine": 434
+      "line": 423,
+      "endLine": 433
     },
     {
       "id": "symbol:src/shared/contracts.ts#GraphicsQualityPreset",
@@ -42938,8 +42954,8 @@
       "name": "LevelResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 343,
-      "endLine": 378
+      "line": 342,
+      "endLine": 377
     },
     {
       "id": "symbol:src/shared/contracts.ts#MATCH_DELAY_MS",
@@ -43042,24 +43058,24 @@
       "name": "PassAndPlaySeat",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 447,
-      "endLine": 459
+      "line": 446,
+      "endLine": 458
     },
     {
       "id": "symbol:src/shared/contracts.ts#PassAndPlayState",
       "name": "PassAndPlayState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 461,
-      "endLine": 474
+      "line": 460,
+      "endLine": 473
     },
     {
       "id": "symbol:src/shared/contracts.ts#PlayerStatsPersisted",
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 611,
-      "endLine": 618
+      "line": 610,
+      "endLine": 617
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
@@ -43122,16 +43138,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 689,
-      "endLine": 689
+      "line": 688,
+      "endLine": 688
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 692,
-      "endLine": 697
+      "line": 691,
+      "endLine": 696
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -43154,16 +43170,16 @@
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 666,
-      "endLine": 670
+      "line": 665,
+      "endLine": 669
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 664,
-      "endLine": 664
+      "line": 663,
+      "endLine": 663
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
@@ -43178,16 +43194,16 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 625,
-      "endLine": 637
+      "line": 624,
+      "endLine": 636
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
       "name": "RunState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 476,
-      "endLine": 607
+      "line": 475,
+      "endLine": 606
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
@@ -43202,16 +43218,16 @@
       "name": "RunSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 381,
-      "endLine": 416
+      "line": 380,
+      "endLine": 415
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunTimerState",
       "name": "RunTimerState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 436,
-      "endLine": 441
+      "line": 435,
+      "endLine": 440
     },
     {
       "id": "symbol:src/shared/contracts.ts#SAVE_SCHEMA_VERSION",
@@ -43226,8 +43242,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 639,
-      "endLine": 658
+      "line": 638,
+      "endLine": 657
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -43243,7 +43259,7 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 324,
-      "endLine": 341
+      "endLine": 340
     },
     {
       "id": "symbol:src/shared/contracts.ts#Settings",
@@ -43306,8 +43322,8 @@
       "name": "TileTraitKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 380,
-      "endLine": 380
+      "line": 379,
+      "endLine": 379
     },
     {
       "id": "symbol:src/shared/contracts.ts#ViewState",
@@ -46466,16 +46482,16 @@
       "name": "getFindableDistributionRows",
       "kind": "value",
       "file": "src/shared/long-run-feedback.ts",
-      "line": 190,
-      "endLine": 214
+      "line": 189,
+      "endLine": 213
     },
     {
       "id": "symbol:src/shared/long-run-feedback.ts#getInRunCauseRows",
       "name": "getInRunCauseRows",
       "kind": "value",
       "file": "src/shared/long-run-feedback.ts",
-      "line": 101,
-      "endLine": 155
+      "line": 100,
+      "endLine": 154
     },
     {
       "id": "symbol:src/shared/long-run-feedback.ts#getPerfectMemoryAttribution",
@@ -46483,23 +46499,23 @@
       "kind": "value",
       "file": "src/shared/long-run-feedback.ts",
       "line": 72,
-      "endLine": 99
+      "endLine": 98
     },
     {
       "id": "symbol:src/shared/long-run-feedback.ts#getTouchHudDetailRows",
       "name": "getTouchHudDetailRows",
       "kind": "value",
       "file": "src/shared/long-run-feedback.ts",
-      "line": 157,
-      "endLine": 188
+      "line": 156,
+      "endLine": 187
     },
     {
       "id": "symbol:src/shared/long-run-feedback.ts#LONG_RUN_TERMINOLOGY_ROWS",
       "name": "LONG_RUN_TERMINOLOGY_ROWS",
       "kind": "value",
       "file": "src/shared/long-run-feedback.ts",
-      "line": 216,
-      "endLine": 224
+      "line": 215,
+      "endLine": 223
     },
     {
       "id": "symbol:src/shared/long-run-feedback.ts#PerfectMemoryAttribution",
@@ -50315,7 +50331,7 @@
       "kind": "value",
       "file": "src/shared/session-stats-rules.ts",
       "line": 47,
-      "endLine": 64
+      "endLine": 63
     },
     {
       "id": "symbol:src/shared/session-stats-rules.ts#createTileTraitCountStats",
@@ -50330,8 +50346,8 @@
       "name": "normalizeSessionStats",
       "kind": "value",
       "file": "src/shared/session-stats-rules.ts",
-      "line": 66,
-      "endLine": 87
+      "line": 65,
+      "endLine": 85
     },
     {
       "id": "symbol:src/shared/session-stats-rules.ts#normalizeTileTraitCountStats",

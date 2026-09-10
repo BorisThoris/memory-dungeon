@@ -60,7 +60,6 @@ export const createSessionStats = (bestScore: number): SessionStats => ({
     tileTraitMatches: createTileTraitCountStats(),
     tileTraitMismatches: createTileTraitCountStats(),
     shufflesUsed: 0,
-    pairsDestroyed: 0
 });
 
 export const normalizeSessionStats = (stats: unknown, bestScoreFallback = 0): SessionStats => {
@@ -82,6 +81,5 @@ export const normalizeSessionStats = (stats: unknown, bestScoreFallback = 0): Se
         tileTraitMatches: normalizeTileTraitCountStats(source.tileTraitMatches),
         tileTraitMismatches: normalizeTileTraitCountStats(source.tileTraitMismatches),
         shufflesUsed: runNonNegativeInteger(source.shufflesUsed),
-        pairsDestroyed: runNonNegativeInteger(source.pairsDestroyed)
     };
 };

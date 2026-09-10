@@ -41,7 +41,7 @@ export const MECHANIC_TOKEN_DEFINITIONS: Record<MechanicTokenId, MechanicTokenDe
     armed: {
         id: 'armed',
         label: 'Armed',
-        purpose: 'A hazard or effect is active and can matter on future turns.',
+        purpose: 'An effect is active and can matter on future turns.',
         a11yHint: 'Identifies an active threat or primed effect.'
     },
     resolved: {

@@ -54,7 +54,7 @@ describe('tileBoardReadability', () => {
         expect(state({ traitRewardHotBack: true }).hiddenReadabilityAccentColor).toBe('#ffe48a');
         expect(state({ traitComboSurgeBack: true }).hiddenReadabilityAccentColor).toBe('#ffd166');
         expect(state({ traitComboBack: true }).hiddenReadabilityAccentColor).toBe('#f7f1c2');
-        expect(state({ traitComboBack: true, traitLaneBack: 'guard' }).hiddenReadabilityAccentColor).toBe(TRAIT_LANE_COLORS.guard);
+        expect(state({ traitComboBack: true, traitLaneBack: 'tool' }).hiddenReadabilityAccentColor).toBe(TRAIT_LANE_COLORS.tool);
         expect(state({ traitRouteTargetBack: true }).hiddenReadabilityAccentColor).toBe('#5dd6ff');
         expect(state({ tile: tile({ tileTraitKind: 'stasis' }) }).hiddenReadabilityAccentColor).toBe(tileTraitColor('stasis'));
         expect(state({ powerBackAccent: 'peek' }).hiddenReadabilityAccentColor).toBe('#59b4d9');
@@ -221,29 +221,32 @@ describe('tileBoardReadability', () => {
 
     it('reports trait lane readability colors for hidden card lane markers', () => {
         // Lane colours are owned by the colour-vision gate; this pins the mapping, not the hex.
-        for (const lane of ['shard', 'guard', 'tool', 'risk', 'block', 'recall'] as const) {
+        /*
+         * Gen 201: four lanes, down from seven. The shard lane was reachable only by matching the
+         * word "spark" in "Conduit + Echo: peek spark" - so a peek charge was drawn and labelled as
+         * a combo shard, a currency removed in Gen 184. Guard and risk matched nothing any of the
+         * four live interactions says.
+         */
+        for (const lane of ['tool', 'block', 'recall'] as const) {
             expect(getTraitLaneReadabilityColor(lane)).toBe(TRAIT_LANE_COLORS[lane]);
         }
         expect(getTraitLaneReadabilityColor('score')).toBe(TRAIT_LANE_COLORS.other);
-        expect(getTraitLaneReadabilityPattern('shard')).toBe('cash-pip');
-        expect(getTraitLaneReadabilityPattern('guard')).toBe('guard-ward');
         expect(getTraitLaneReadabilityPattern('tool')).toBe('tool-cross');
-        expect(getTraitLaneReadabilityPattern('risk')).toBe('risk-slash');
         expect(getTraitLaneReadabilityPattern('block')).toBe('block-bars');
         expect(getTraitLaneReadabilityPattern('recall')).toBe('recall-pair');
         expect(getTraitLaneReadabilityPattern('score')).toBe('score-pip');
 
-        expect(state({ traitComboBack: true, traitLaneBack: 'shard', tile: tile({ tileTraitKind: 'echo' }) })).toMatchObject({
-            hiddenReadabilityAccentColor: TRAIT_LANE_COLORS.shard,
-            traitLaneReadabilityAction: 'Cash shard',
-            traitLaneReadabilityColor: TRAIT_LANE_COLORS.shard,
-            traitLaneReadabilityId: 'shard',
-            traitLaneReadabilityLabel: 'Shard',
-            traitLaneReadabilityPattern: 'cash-pip',
+        expect(state({ traitComboBack: true, traitLaneBack: 'tool', tile: tile({ tileTraitKind: 'echo' }) })).toMatchObject({
+            hiddenReadabilityAccentColor: TRAIT_LANE_COLORS.tool,
+            traitLaneReadabilityAction: 'Use tool',
+            traitLaneReadabilityColor: TRAIT_LANE_COLORS.tool,
+            traitLaneReadabilityId: 'tool',
+            traitLaneReadabilityLabel: 'Tool',
+            traitLaneReadabilityPattern: 'tool-cross',
             traitRouteReadabilityIntensity: 'ready',
             traitRouteReadabilityTier: 'combo'
         });
-        expect(state({ faceUp: true, traitComboBack: true, traitLaneBack: 'shard' })).toMatchObject({
+        expect(state({ faceUp: true, traitComboBack: true, traitLaneBack: 'tool' })).toMatchObject({
             traitLaneReadabilityAction: null,
             traitLaneReadabilityColor: null,
             traitLaneReadabilityId: null,

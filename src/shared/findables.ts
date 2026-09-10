@@ -44,7 +44,7 @@ export const getFindableRows = () =>
         rewardText: row.rewardText,
         score: FINDABLE_MATCH_SCORE[row.kind],
         spawnWeight: FINDABLE_KIND_SPAWN_WEIGHTS[row.kind],
-        destroyText: 'Destroy forfeits the score glint.'
+        breakText: 'A break that takes the carrier spills the glint and pays it.'
     }));
 
 export const getFindableSpawnWeightRows = () =>

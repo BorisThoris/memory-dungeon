@@ -184,7 +184,7 @@ export const getCodexRewardSignals = (save: SaveData): MetaRewardSignalRow[] => 
             kind: nextReward ? 'next_goal' : 'progress',
             title: nextReward ? `Learn toward: ${nextReward.title}` : 'Codex mastery',
             body: nextReward?.gate ?? 'All visible progression goals are currently satisfied.',
-            cta: 'Use Guides for rules, Tables for relics/mutators/achievements.'
+            cta: 'Use Guides for rules, Tables for mutators and achievements.'
         },
         {
             id: 'codex_empty_filter_help',
@@ -223,7 +223,7 @@ const DEFAULT_CODEX_REWARD_SIGNAL: MetaRewardSignalRow = {
     screen: 'codex',
     kind: 'next_goal',
     title: 'Learn toward mastery',
-    body: 'Guides explain rules while tables reveal relic, mutator, mode, and achievement value.',
+    body: 'Guides explain rules while tables reveal mutator and achievement value.',
     cta: 'Use Guides for rules, Tables for discoveries.'
 };
 

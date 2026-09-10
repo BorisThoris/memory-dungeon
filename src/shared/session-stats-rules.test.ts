@@ -26,7 +26,6 @@ describe('session-stats-rules', () => {
             tileTraitMatches: { echo: 0, heavy: 0, conduit: 0, stasis: 0 },
             tileTraitMismatches: { echo: 0, heavy: 0, conduit: 0, stasis: 0 },
             shufflesUsed: 0,
-            pairsDestroyed: 0
         });
     });
 

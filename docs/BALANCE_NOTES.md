@@ -2378,3 +2378,51 @@ were removed. The scholar objective's copy also named three tools while its rule
 Heavy's trait line promised "costs +1 extra try but never drains peek charges". Nothing in the game
 drains a peek charge on a mismatch — no trait, no mutator, no rule. The clause promised the absence
 of a penalty that cannot happen, which is a way of teaching a player to fear the game wrongly.
+
+## Gen 202 — the surfaces that talk to the player, checked the same way
+
+Same method as Gen 201, pointed at the three systems that speak: the in-run feedback rail, the
+trait interaction lanes on the card backs, and the session stats.
+
+### Twenty-one in-run feedback branches could never fire
+
+`gameScreenFeedback.ts` reads the *text* of a run announcement and decides what chip to show and
+what to advise. That makes it rot in a way the type checker cannot see: remove the system that
+produced "Guard Cache ward blocked" and the branch watching for those words still compiles, is
+still tested, and is now unreachable.
+
+Twenty-one were: guard caches and lantern wards, omen and anchor seals, loaded gateways, mimic
+caches, shuffle snares, cascade/fragile/toll/fuse caches, shop gold, hazard wards, moving and
+dungeon enemies, and the exit being ready. Each was a line of advice waiting to tell a player to
+manage something the game does not have — "pause on the patrol path", "bank gold for shops, rests,
+or route events". Checked mechanically: collect every string the shipping code can emit, and a
+branch whose needle appears nowhere in that corpus cannot fire.
+
+`gameScreenFeedbackReach.test.ts` now runs that check on every build.
+
+### A peek charge was being drawn on the board as a combo shard
+
+The trait interaction lane map had seven lanes. Four interactions exist. Against those four:
+
+| Lane | Verdict |
+|---|---|
+| `shard` | reachable, and **wrong** — "Conduit + Echo: peek spark" matched on the word *spark*, so a payoff that hands the player a peek charge was labelled "Shard · Cash shard". Combo shards left in Gen 184. |
+| `guard` | matched guard/ward/braced/shield/armor; no live interaction says any of them |
+| `risk` | matched risk/danger/penalty/damage/doom; nor any of those |
+| `tool`, `block`, `recall`, `score` | reachable and correct |
+
+Three lanes gone, and the peek spark now reads "Tool · Use tool", which is what it is. The lane
+colours, the marker patterns drawn on the card back, and the beat-count tiers all went with them.
+The test that "proved" the dead lanes worked was feeding the grouper phrases — "Braced guard ward",
+"Doom pays penalty" — that no trait has ever said; it is rebuilt on `TILE_TRAIT_INTERACTION_TAGS`.
+
+### `pairsDestroyed` was a stat that could only ever be zero
+
+Destroy was its only writer. It survived Gen 200 as a `SessionStats` field, a normalizer entry, and
+a branch in the long-run feedback that listed "destroy pair" among the actions a player took. All
+three are gone.
+
+Also: the findable reward row carried a `destroyText` field, the Codex's `mechanic-feedback` token
+called an effect "a hazard", the meta-reward copy pointed players at tables of relics, the inventory
+prep hint promised rows that "update between floor decisions" for rests and shops, and the viewport
+matrix reasoned about "route/shop decisions". All repointed at what ships.

@@ -1,41 +1,43 @@
 import { runFilteredArray } from '../../shared/run-array-guards';
 
-export type TraitInteractionLaneId = 'shard' | 'guard' | 'tool' | 'risk' | 'block' | 'recall' | 'score';
+/*
+ * Gen 201 cut two lanes and re-pointed a third.
+ *
+ * Four trait interactions exist (`TILE_TRAIT_INTERACTION_TAGS`): the conduit's adjacent charge, its
+ * Echo peek spark, its Stasis lock pulse, and Stasis blocking a neighbour. Against those four:
+ *
+ *   - `shard` was reachable, and wrongly. "Conduit + Echo: peek spark" matched on the word "spark",
+ *     so a payoff that hands the player a PEEK CHARGE was labelled "Shard - Cash shard" on the
+ *     board. Combo shards left in Gen 184 with the life economy they fed. That line is a tool.
+ *   - `guard` matched guard/ward/braced/shield/armor, and no live interaction says any of those.
+ *     Guard tokens went with the hazards.
+ *   - `risk` matched risk/danger/penalty/damage/doom, none of which any of the four says either.
+ *     No trait carries a mismatch penalty except Heavy, which has no interaction line at all.
+ *
+ * What is left is the four lanes the four tags can actually produce.
+ */
+export type TraitInteractionLaneId = 'tool' | 'block' | 'recall' | 'score';
 
 interface TraitInteractionLaneMapEntry {
     id: TraitInteractionLaneId;
-    label: 'Shard' | 'Guard' | 'Tool' | 'Risk' | 'Block' | 'Recall' | 'Score';
+    label: 'Tool' | 'Block' | 'Recall' | 'Score';
     count: number;
     cue: string;
 }
 
-const TRAIT_INTERACTION_LANE_ORDER: readonly TraitInteractionLaneId[] = [
-    'shard',
-    'guard',
-    'tool',
-    'risk',
-    'block',
-    'recall',
-    'score'
-];
+const TRAIT_INTERACTION_LANE_ORDER: readonly TraitInteractionLaneId[] = ['tool', 'block', 'recall', 'score'];
 
 export const TRAIT_INTERACTION_LANE_LABELS: Record<TraitInteractionLaneId, TraitInteractionLaneMapEntry['label']> = {
     block: 'Block',
-    guard: 'Guard',
     recall: 'Recall',
-    risk: 'Risk',
     score: 'Score',
-    shard: 'Shard',
     tool: 'Tool'
 };
 
 const TRAIT_INTERACTION_LANE_ACTIONS: Record<TraitInteractionLaneId, string> = {
     block: 'Deny match',
-    guard: 'Protect run',
     recall: 'Set memory',
-    risk: 'Watch hazard',
     score: 'Cash score',
-    shard: 'Cash shard',
     tool: 'Use tool'
 };
 
@@ -47,17 +49,9 @@ const trimTerminalPunctuation = (value: string): string => value.trim().replace(
 export const getTraitInteractionLaneId = (line: string): TraitInteractionLaneId => {
     const text = line.toLowerCase();
 
-    if (/\b(shard|spark|combo shard|shard spark|shard engine)\b/.test(text)) {
-        return 'shard';
-    }
-    if (/\b(guard|ward|braced|shield|armor)\b/.test(text)) {
-        return 'guard';
-    }
-    if (/\b(row|tool|shuffle|swap|peek|pin|destroy|charge)\b/.test(text)) {
+    // "peek spark" lands here now, which is what it always was: a charge handed back.
+    if (/\b(row|tool|shuffle|swap|peek|pin|charge|spark)\b/.test(text)) {
         return 'tool';
-    }
-    if (/\b(risk|risky|danger|penalty|damage|doom)\b/.test(text)) {
-        return 'risk';
     }
     if (/\b(block|blocked|buffer|buffered|stasis|freeze|frozen|lock)\b/.test(text)) {
         return 'block';
