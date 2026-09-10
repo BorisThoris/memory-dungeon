@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2439,
-    "codeFileCount": 878,
+    "trackedFileCount": 2441,
+    "codeFileCount": 879,
     "exportedSymbolCount": 2669,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6777
+    "relationshipCount": 6779
   },
   "inventory": [
     {
@@ -255,8 +255,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 369770,
-      "sha256": "33f1570d3381007c1b8dc6938efd094f668a04076d5c407be4ed3de06d5f1120"
+      "bytes": 371588,
+      "sha256": "cad63aa0818ae2c47a96d7dbdc8b45e35189b06a7d1b82774c44950ac703ec67"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -748,7 +748,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 12552,
-      "sha256": "c2e2474629a74ac397a2248f97af65e761de500805c11378c781354950bf74ad"
+      "sha256": "84317fec2ab7e4cec6d40881263c6b064eeaab39bdfdc6f14bf089c65d9da48c"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2326,7 +2326,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33472,
-      "sha256": "a47dceb7f79e52e2a84cbc0895e9dfdeec51b667bbc75822bbd7cab0a1c6e7f9"
+      "sha256": "a5d5197ba4a860a621d7b1a4ee63070998e2ca9e54df737ea24440d263351c63"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4029,8 +4029,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 29807,
-      "sha256": "795fd8aa8a1fa95987a658317634fd5fbb9945b4aee44789cf8216988326154e"
+      "bytes": 29905,
+      "sha256": "cbcbe25671d0a4be91f303ff28ccc147881718704037f185fe64aff4f2794cc1"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4829,6 +4829,12 @@
       "category": "script",
       "bytes": 7469,
       "sha256": "c17dfb7ba71c881fe3497620e0714a13754f2f30b359ef69767a1b75898e8223"
+    },
+    {
+      "path": "scripts/mutator-effect-audit.ts",
+      "category": "script",
+      "bytes": 9448,
+      "sha256": "164367b510a9e844499807cb3b3b0084c8fa4e34aaa0d52e527979617a7061ab"
     },
     {
       "path": "scripts/postinstall.cjs",
@@ -11423,6 +11429,12 @@
       "category": "source",
       "bytes": 3081,
       "sha256": "946c284162986a9d00234ec91ac81f5dd048f2bc58fcf383f46ccb580b33f3fd"
+    },
+    {
+      "path": "src/shared/mutator-effect-audit.test.ts",
+      "category": "test",
+      "bytes": 2310,
+      "sha256": "9b2cb93f3d359332fec88b0933b5b2dbbed8a71d0732c8f0af99ef58908d4421"
     },
     {
       "path": "src/shared/mutators.test.ts",
@@ -25203,6 +25215,7 @@
         "file:src/shared/memory-recall-feedback.test.ts",
         "file:src/shared/meta-reward-signals.test.ts",
         "file:src/shared/mode-records.test.ts",
+        "file:src/shared/mutator-effect-audit.test.ts",
         "file:src/shared/mutators.test.ts",
         "file:src/shared/next-floor-run-state-rules.test.ts",
         "file:src/shared/p2-contracts.test.ts",
@@ -27671,6 +27684,18 @@
         "file:src/renderer/store/runResolutionController.test.ts",
         "file:src/shared/mode-records.test.ts"
       ]
+    },
+    {
+      "id": "file:src/shared/mutator-effect-audit.test.ts",
+      "path": "src/shared/mutator-effect-audit.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 52,
+      "imports": [
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [],
+      "testedBy": []
     },
     {
       "id": "file:src/shared/mutators.test.ts",
@@ -84798,6 +84823,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/mutator-effect-audit.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/mutator-effect-audit.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/mutators.test.ts->src/shared/contracts.ts",
       "source": "file:src/shared/mutators.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -92600,6 +92631,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/mode-records.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/mode-records.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/mutator-effect-audit.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/mutator-effect-audit.test.ts",
       "kind": "tested_by"
     },
     {
