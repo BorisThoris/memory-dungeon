@@ -111,21 +111,19 @@ const orthogonalNeighbours = (index: number, columns: number, total: number): nu
  * and rewards where it wants them, and a deal that undid that would be a second layout fighting
  * the first. Only the free cells are dealt.
  *
- * Grows one region per suit from a random free seed cell, each suit claiming a random free
- * neighbour of its own frontier on its turn, jumping to a fresh free cell only when its frontier
- * is exhausted. Every suit gets exactly as many cells as it has unpinned tiles, so the multiset
- * of tiles is untouched — only their order changes. Which tile of a suit lands in which of that
- * suit's cells is shuffled, so the two halves of a pair are not predictably adjacent.
+ * Deals every free cell a suit uniformly at random from the quota, then repairs whatever the
+ * shuffle happened to stack: any connected same-suit run over `MIX_MAX_RUN` is cut by swapping one
+ * of its cells with a differently-suited cell that is not itself in a run. Every suit gets exactly
+ * as many cells as it has unpinned tiles, so the multiset of tiles is untouched - only their order
+ * changes.
  *
- * Islands. A suit with `ISLAND_MIN_TILES` loose tiles or more is dealt as two clumps, seeded
- * apart from each other, so about half its pairs straddle them. That is what the ripple is for
- * (`chunk-break-rules.ts`): a lone match pops the island it is in, and the chain is what reaches
- * the partner on the other island and pops that one too. One clump per suit, measured, gave the
- * ripple nothing to bridge — partners sat inside the clump that had just gone.
+ * Until Gen 204 this grew one solid region per suit, on purpose, because the pop reaches through
+ * same-suit contact and a region is contact by construction. It overshot badly: 0.569 same-suit
+ * neighbours against the 0.25 a shuffle gives, and a single blob covering 30% of the board. See
+ * the long note inside `dealTilesInClumps`.
  *
  * Deterministic from the seed. A replay deals the same map.
  */
-/** A suit with this many loose tiles (three pairs) is dealt as two islands rather than one clump. */
 /**
  * How far apart the two halves of a pair are laid, in grid steps, within their suit's cells.
  *
@@ -143,8 +141,36 @@ const orthogonalNeighbours = (index: number, columns: number, total: number): nu
  */
 export const PAIR_HALF_SEPARATION = 3;
 
-export const ISLAND_MIN_TILES = 6;
-export const ISLANDS_PER_SUIT = 2;
+/**
+ * The largest connected run of one suit the deal will leave standing.
+ *
+ * Four, because that is the size at which a run stops reading as coincidence. Three same-suit tiles
+ * in a line is something a shuffle does often and nobody notices; six is a wall, and a player who
+ * sees a wall stops believing the board was dealt. It is a ceiling on the *worst* case rather than
+ * a target for the average - most runs come out at one or two on their own.
+ */
+export const MIX_MAX_RUN = 4;
+
+/**
+ * The cap, adjusted for how many suits the floor carries.
+ *
+ * A shuffle's runs get longer as the palette shrinks: over two suits, a same-suit tile sits beside
+ * you half the time by arithmetic alone, and holding such a board to the four-suit cap makes it
+ * *less* random than chance - measured at 0.358 same-suit neighbours against the 0.5 two suits
+ * should give, which is a checkerboard, not a shuffle. Over-ordering is the same lie as clumping,
+ * told backwards.
+ */
+export const mixMaxRunForSuits = (suitCount: number): number =>
+    suitCount <= 2 ? MIX_MAX_RUN * 2 : MIX_MAX_RUN;
+
+/**
+ * How many times the repair pass sweeps the board looking for runs over the cap.
+ *
+ * Bounded rather than run to a fixed point on purpose: a small board can reach a state where no
+ * single swap improves it, and a deal that always finishes is worth more than a deal that is
+ * perfectly even. Measured, one sweep clears almost everything and the rest converge by three.
+ */
+export const MIX_REPAIR_ROUNDS = 4;
 
 export const dealTilesInClumps = (
     tiles: readonly Tile[],
@@ -176,87 +202,104 @@ export const dealTilesInClumps = (
     }
     const suits = TILE_SUITS.filter((suit) => (quota.get(suit) ?? 0) > 0);
 
+    /*
+     * Gen 204 replaced region-growing with a true mix.
+     *
+     * What was here grew one suit at a time to completion, on purpose: each suit took a solid
+     * region, and the file said so - "growing the suits in round-robin turns interleaves them ...
+     * which at small board sizes is indistinguishable from a shuffle". That was the goal then,
+     * because the pop reaches through same-suit contact and a region is contact by construction.
+     *
+     * Measured, it went much further than intended. A uniform shuffle over four suits sits near
+     * 0.25 same-suit neighbours; the grown deal measured **0.569**, with the single biggest blob
+     * covering 30% of the board (49% on a two-suit floor). The `scattered` profile - the one whose
+     * whole job was to not do this - measured 0.496, barely different from `clumped`. A board that
+     * reads as four painted zones is not a board anyone believes was shuffled.
+     *
+     * So the suits are dealt uniformly at random, then a repair pass breaks up whatever the shuffle
+     * happened to stack. Two passes, in this order, because the second cannot be done first:
+     *
+     *   1. **Deal.** Every cell takes a suit from the quota, uniformly, with no regard for its
+     *      neighbours. This alone lands near 0.25 but leaves the occasional natural blob - random
+     *      really does clump sometimes, and a player reads a natural blob as a rigged one.
+     *   2. **Break the blobs.** Any connected same-suit run larger than MIX_MAX_RUN is cut by
+     *      swapping one of its cells with a cell of another suit that is not touching its own kind.
+     *      A swap that would create a new oversized run is rejected, so the pass converges.
+     *
+     * The `two_suit` profile keeps its higher floor for the obvious arithmetic reason: with two
+     * suits over a board, chance alone puts a same-suit tile beside you half the time. It is dealt
+     * by the same code and lands where two suits land.
+     */
     const cellSuit = new Array<TileSuit | null>(total).fill(null);
-    const frontier = new Map<TileSuit, number[]>(suits.map((suit) => [suit, []]));
-    let unassigned = loose.length;
-    const isFree = (cell: number): boolean => cellSuit[cell] === null && !pinnedAt.has(cell);
-    const freeCells = (): number[] => cellSuit.flatMap((_, index) => (isFree(index) ? [index] : []));
+    const openCells: number[] = [];
+    for (let cell = 0; cell < total; cell += 1) {
+        if (!pinnedAt.has(cell)) openCells.push(cell);
+    }
+    const bag: TileSuit[] = [];
+    for (const suit of suits) {
+        for (let n = quota.get(suit) ?? 0; n > 0; n -= 1) bag.push(suit);
+    }
+    const shuffledBag = shuffleWithRng(() => rng(), bag);
+    shuffleWithRng(() => rng(), [...openCells]).forEach((cell, index) => {
+        const suit = shuffledBag[index];
+        if (suit) cellSuit[cell] = suit;
+    });
 
-    const claim = (suit: TileSuit, cell: number): void => {
-        cellSuit[cell] = suit;
-        frontier.get(suit)!.push(cell);
-        quota.set(suit, (quota.get(suit) ?? 0) - 1);
-        unassigned -= 1;
+    /** The connected same-suit run containing `cell`, walked orthogonally. */
+    const runAt = (cell: number): number[] => {
+        const suit = cellSuit[cell];
+        if (!suit) return [];
+        const seen = new Set([cell]);
+        const stack = [cell];
+        const run: number[] = [];
+        while (stack.length > 0) {
+            const current = stack.pop()!;
+            run.push(current);
+            for (const neighbour of orthogonalNeighbours(current, columns, total)) {
+                if (seen.has(neighbour) || cellSuit[neighbour] !== suit) continue;
+                seen.add(neighbour);
+                stack.push(neighbour);
+            }
+        }
+        return run;
     };
+    const runSizeAt = (cell: number): number => runAt(cell).length;
 
     /*
-     * Grow one suit at a time, to completion. Growing the suits in round-robin turns interleaves
-     * them — every region ends up bordering every other, which at small board sizes is
-     * indistinguishable from a shuffle. Letting each suit finish its clump before the next starts
-     * produces solid regions; the last suit takes whatever is left, which is why Bone is "the suit
-     * that breaks the others up".
+     * Break every run over the cap. Bounded by MIX_REPAIR_ROUNDS rather than run to a fixed point:
+     * a board can be small enough that no swap improves it, and a deal that finishes is worth more
+     * than a deal that is perfectly even.
      */
-    /*
-     * A new suit starts next to what has already been claimed rather than anywhere free: seeding
-     * at random leaves the last suits picking through the gaps between earlier regions, which on
-     * a small board is most of the board.
-     */
-    const touchesSuit = (cell: number, suit: TileSuit): boolean =>
-        orthogonalNeighbours(cell, columns, total).some((n) => cellSuit[n] === suit);
-    const seedCellFor = (suit: TileSuit, apartFromOwn: boolean): number | null => {
-        const free = freeCells();
-        if (free.length === 0) return null;
-        const bordering = free.filter((cell) =>
-            orthogonalNeighbours(cell, columns, total).some((n) => cellSuit[n] !== null)
-        );
-        // A second island seeds away from the first, or it is the first island grown larger.
-        const apart = apartFromOwn ? bordering.filter((cell) => !touchesSuit(cell, suit)) : bordering;
-        const pool = apart.length > 0 ? apart : bordering.length > 0 ? bordering : free;
-        return pool[pickRngIndex(rng, pool.length)]!;
-    };
-    const growIsland = (suit: TileSuit, cells: number, apartFromOwn: boolean): void => {
-        const seed = seedCellFor(suit, apartFromOwn);
-        if (seed === null) return;
-        const island: number[] = [];
-        const claimHere = (cell: number): void => {
-            claim(suit, cell);
-            island.push(cell);
-        };
-        claimHere(seed);
-        let remaining = cells - 1;
-        while (remaining > 0 && (quota.get(suit) ?? 0) > 0 && unassigned > 0) {
-            let picked: number | null = null;
-            for (let attempt = 0; attempt < island.length * 2 && picked === null; attempt += 1) {
-                const from = island[pickRngIndex(rng, island.length)]!;
-                const open = orthogonalNeighbours(from, columns, total).filter(isFree);
-                if (open.length > 0) {
-                    picked = open[pickRngIndex(rng, open.length)]!;
+    const maxRun = mixMaxRunForSuits(suits.length);
+    for (let round = 0; round < MIX_REPAIR_ROUNDS; round += 1) {
+        let repaired = false;
+        for (const cell of openCells) {
+            const suit = cellSuit[cell];
+            if (!suit) continue;
+            const run = runAt(cell);
+            if (run.length <= maxRun) continue;
+            // Swap the run's cell with a differently-suited cell that is alone among its own kind,
+            // so the cut does not just move the blob somewhere else.
+            const candidates = shuffleWithRng(
+                () => rng(),
+                openCells.filter((other) => {
+                    const otherSuit = cellSuit[other];
+                    return otherSuit != null && otherSuit !== suit && runSizeAt(other) <= maxRun;
+                })
+            );
+            for (const other of candidates) {
+                const otherSuit = cellSuit[other]!;
+                cellSuit[cell] = otherSuit;
+                cellSuit[other] = suit;
+                if (runSizeAt(cell) <= maxRun && runSizeAt(other) <= maxRun) {
+                    repaired = true;
+                    break;
                 }
+                cellSuit[cell] = suit;
+                cellSuit[other] = otherSuit;
             }
-            if (picked === null) {
-                const free = freeCells();
-                if (free.length === 0) break;
-                picked = free[pickRngIndex(rng, free.length)]!;
-            }
-            claimHere(picked);
-            remaining -= 1;
         }
-    };
-    for (const suit of shuffleWithRng(() => rng(), [...suits])) {
-        const own = quota.get(suit) ?? 0;
-        const islands = own >= ISLAND_MIN_TILES ? ISLANDS_PER_SUIT : 1;
-        const first = islands === 1 ? own : Math.ceil(own / 2);
-        growIsland(suit, first, false);
-        if (islands > 1 && (quota.get(suit) ?? 0) > 0) {
-            growIsland(suit, quota.get(suit) ?? 0, true);
-        }
-        // Whatever the islands could not place (a board with no free cell left beside them) goes
-        // wherever is free, so every suit still gets exactly its count.
-        while ((quota.get(suit) ?? 0) > 0 && unassigned > 0) {
-            const free = freeCells();
-            if (free.length === 0) break;
-            claim(suit, free[pickRngIndex(rng, free.length)]!);
-        }
+        if (!repaired) break;
     }
 
     // Lay each suit's loose tiles into that suit's cells, shuffled within the suit.
@@ -397,23 +440,6 @@ export const SUIT_DEAL_PROFILE_BY_ARCHETYPE: Readonly<Record<FloorArchetypeId, S
 export const getSuitDealProfile = (floorArchetypeId: FloorArchetypeId | null | undefined): SuitDealProfile =>
     floorArchetypeId ? SUIT_DEAL_PROFILE_BY_ARCHETYPE[floorArchetypeId] : 'clumped';
 
-/** A uniform shuffle of the loose tiles around the pinned ones: the scattered deal. */
-export const scatterTiles = (
-    tiles: readonly Tile[],
-    runSeed: number,
-    level: number,
-    rulesVersion: number,
-    isPinned: (tile: Tile) => boolean = () => false
-): Tile[] => {
-    const rng = suitRng(runSeed, level, rulesVersion, 'scatter');
-    const loose = shuffleWithRng(
-        () => rng(),
-        tiles.filter((tile) => !isPinned(tile))
-    );
-    let next = 0;
-    return tiles.map((tile) => (isPinned(tile) ? tile : loose[next++]!));
-};
-
 /**
  * Pairs a break could take, which is what the palette has to be measured against. Mirrors
  * `tileCanBreakInChunk` in shape without importing the break rule; a singleton is not a pair.
@@ -507,9 +533,21 @@ export const dealBoardSuits = (
     profile: SuitDealProfile = 'clumped'
 ): Tile[] => {
     const suitCount = suitCountForDeal(profile, breakablePairCount(tiles));
-    if (profile === 'scattered') {
-        return scatterTiles(assignSuitsToTiles(tiles, runSeed, level, rulesVersion, suitCount), runSeed, level, rulesVersion, isLayoutPinnedTile);
-    }
+    /*
+     * Gen 204: one deal for every floor.
+     *
+     * `scattered` used to take a separate path - `scatterTiles`, a bare shuffle of the loose tiles.
+     * Measured, that path was the worst of the three: 0.496 same-suit neighbours and 0.144 of pairs
+     * with their halves touching, against 0.025 on the dealt path. Not because the shuffle was
+     * wrong, but because it skipped everything the dealt path does *after* the shuffle - the blob
+     * repair and the pair-half separation - and because a scattered floor deals two suits, where
+     * chance alone puts a same-suit tile beside you half the time.
+     *
+     * The profile is still a real lever; it just stopped being a clustering lever. What it decides
+     * now is how many suits the floor carries (`suitCountForDeal`), which is a different puzzle -
+     * two suits is a board where almost everything can chain, four is a board where you have to
+     * find the route. Every floor is mixed the same way.
+     */
     return dealTilesInClumps(
         assignSuitsToTiles(tiles, runSeed, level, rulesVersion, suitCount),
         columns,

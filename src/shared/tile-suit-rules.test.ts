@@ -9,6 +9,7 @@ import {
     assignSuitsToTiles,
     dealBoardSuits,
     dealTilesInClumps,
+    mixMaxRunForSuits,
     getSuitDealProfile,
     isLayoutPinnedTile,
     largestHiddenSuitClump,
@@ -74,20 +75,75 @@ describe('clumping', () => {
         );
     });
 
-    it('beats a uniform shuffle at every board size the game deals', () => {
-        // Uniform over four equal suits sits near 0.25. The deal has to be visibly clumpier than
-        // that at the small boards too, or floor one opens as noise and the map is a late-game idea.
+    it('reads as a shuffle at every board size the game deals, never as painted zones', () => {
+        /*
+         * Gen 204 turned this test around. It used to require the deal be **clumpier** than a
+         * uniform shuffle by at least 0.2, because the pop reaches through same-suit contact and a
+         * grown region is contact by construction. Measured on real floors, that produced 0.569
+         * same-suit neighbours against the 0.25 a shuffle gives, with one suit covering 30% of the
+         * board - four painted zones, which no player believes was dealt.
+         *
+         * The requirement now runs the other way: near a shuffle, never far above it. A little
+         * above is expected and wanted - the repair pass only cuts runs over the cap, so what is
+         * left is a shuffle with its worst blobs trimmed, not an anti-clustered lattice.
+         */
         for (const pairCount of [4, 6, 8, 12, 16, 20, 30]) {
             const columns = Math.max(2, Math.min(8, Math.ceil(Math.sqrt(pairCount * 2))));
-            let clumped = 0;
+            let mixed = 0;
             let uniform = 0;
             const samples = 12;
             for (let seed = 1; seed <= samples; seed += 1) {
                 const suited = assignSuitsToTiles(pairs(pairCount), seed, 1, 1);
-                clumped += rate(dealTilesInClumps(suited, columns, seed, 1, 1), columns);
+                mixed += rate(dealTilesInClumps(suited, columns, seed, 1, 1), columns);
                 uniform += rate(shuffleWithRng(createMulberry32(seed), [...suited]), columns);
             }
-            expect(clumped / samples, `${pairCount} pairs`).toBeGreaterThan(uniform / samples + 0.2);
+            const dealt = mixed / samples;
+            const shuffled = uniform / samples;
+            expect(dealt, `${pairCount} pairs: clumpier than a shuffle`).toBeLessThan(shuffled + 0.12);
+            // And not scrubbed below one either: a checkerboard is as arranged as a blob.
+            expect(dealt, `${pairCount} pairs: more ordered than a shuffle`).toBeGreaterThan(shuffled - 0.2);
+        }
+    });
+
+    it('leaves no same-suit run longer than the cap, which is what a blob is', () => {
+        /*
+         * The average being near a shuffle is not enough - a shuffle produces the occasional long
+         * run on its own, and one wall of six is what a player points at. This is the worst case.
+         */
+        for (const pairCount of [8, 12, 20, 30]) {
+            const columns = Math.max(2, Math.min(8, Math.ceil(Math.sqrt(pairCount * 2))));
+            for (let seed = 1; seed <= 20; seed += 1) {
+                const suited = assignSuitsToTiles(pairs(pairCount), seed, 1, 1);
+                const dealt = dealTilesInClumps(suited, columns, seed, 1, 1);
+                const suits = new Set(dealt.map((tile) => tile.suit).filter(Boolean));
+                const cap = mixMaxRunForSuits(suits.size);
+                const seen = new Set<number>();
+                let longest = 0;
+                dealt.forEach((tile, index) => {
+                    if (!tile.suit || seen.has(index)) return;
+                    const stack = [index];
+                    seen.add(index);
+                    let size = 0;
+                    while (stack.length > 0) {
+                        const current = stack.pop()!;
+                        size += 1;
+                        const row = Math.floor(current / columns);
+                        const column = current % columns;
+                        for (const [dr, dc] of [[1, 0], [-1, 0], [0, 1], [0, -1]] as const) {
+                            const nextRow = row + dr;
+                            const nextColumn = column + dc;
+                            if (nextRow < 0 || nextColumn < 0 || nextColumn >= columns) continue;
+                            const neighbour = nextRow * columns + nextColumn;
+                            if (neighbour >= dealt.length || seen.has(neighbour)) continue;
+                            if (dealt[neighbour]?.suit !== tile.suit) continue;
+                            seen.add(neighbour);
+                            stack.push(neighbour);
+                        }
+                    }
+                    longest = Math.max(longest, size);
+                });
+                expect(longest, `${pairCount} pairs, seed ${seed}`).toBeLessThanOrEqual(cap);
+            }
         }
     });
 
@@ -196,28 +252,30 @@ describe('a built board', () => {
         expect(previous).toBe(4);
     });
 
-    it('opens clumped, not scattered, on every floor big enough to have a palette', () => {
-        // A floor dealt one suit reads as perfectly clumped and perfectly shuffled at once - the
-        // measure needs two suits to mean anything - so this starts where the palette does.
-        //
-        // Eight seeds, not four. The control here is a real shuffle, and on four seeds its own
-        // variance is wider than the effect: at floor 10 the shuffled board landed at 0.56 on one
-        // sample against a 0.48 mean, which is enough to fail a margin the deal clears everywhere.
-        // Averaging the control over twice as many boards fixes the measurement rather than the
-        // margin, which is the honest way round.
+    it('opens mixed on every floor big enough to have a palette', () => {
+        /*
+         * Gen 204 turned this around with the deal. It used to demand a built floor come out at
+         * least 0.15 clumpier than the same tiles shuffled; it now demands the opposite, that a
+         * built floor sit near its shuffle. The margin is one-sided and generous upward, because
+         * the repair only trims the worst runs - the deal is a shuffle with the walls knocked
+         * down, and a shuffle sometimes clusters.
+         *
+         * Eight seeds, not four, and the reason still holds: the control is a real shuffle and its
+         * own variance is wider than the effect at four samples.
+         */
         for (const level of [10, 14, 18]) {
-            let clumped = 0;
+            let dealt = 0;
             let uniform = 0;
             const seeds = [11, 12, 13, 14, 21, 34, 55, 89];
             for (const runSeed of seeds) {
                 const board = buildBoard(level, { runSeed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless' });
-                clumped += sameSuitNeighbourRate(board);
+                dealt += sameSuitNeighbourRate(board);
                 uniform += sameSuitNeighbourRate({
                     columns: board.columns,
                     tiles: shuffleWithRng(createMulberry32(runSeed), [...board.tiles])
                 });
             }
-            expect(clumped / seeds.length, `floor ${level}`).toBeGreaterThan(uniform / seeds.length + 0.15);
+            expect(dealt / seeds.length, `floor ${level}`).toBeLessThan(uniform / seeds.length + 0.1);
         }
     });
 
@@ -238,31 +296,37 @@ describe('the deal profile', () => {
         expect(getSuitDealProfile('spotlight_hunt')).toBe('two_suit');
     });
 
-    it('scatters a rush floor and clumps a breather, on the same tiles', () => {
-        const tiles = pairs(18);
+    it('changes the palette rather than the clustering: a rush floor deals fewer suits than a breather', () => {
         /*
-         * Eight seeds, averaged. A scatter is a shuffle, and one shuffle in ten lands half its
-         * pairs beside their own suit anyway: on a single seed the margin read 0.32 under one
-         * rules version and 0.10 under the next, with the deal untouched. Over eight seeds it
-         * reads the profile and not the draw.
+         * Gen 204: the profile stopped being a clustering lever, because every floor is mixed now.
+         * This used to require a clumped floor read 0.15 over chance against a scattered one; it
+         * measured -0.007 the moment both went through the same deal, which is the correct answer
+         * to a question that had stopped meaning anything.
          *
-         * Measured over chance rather than raw, because the two profiles no longer carry the same
-         * palette (Gen 191 caps a scattered floor at two suits). A board of `s` suits laid at
-         * random puts a tile beside its own suit about one time in `s`, so a raw rate compares a
-         * four-suit board against a two-suit one and says nothing about how either was dealt.
+         * What the profile still decides is how many suits the floor carries, and that is a real
+         * difference a player feels: two suits is a board where almost everything can chain, four
+         * is a board where the route has to be found.
          */
+        const tiles = pairs(18);
         const seeds = [91, 7, 13, 42, 77, 101, 123, 555];
-        const overChance = (dealt: Tile[]): number =>
-            sameSuitNeighbourRate({ columns: 6, tiles: dealt }) - 1 / new Set(dealt.map((tile) => tile.suit)).size;
-        const margin =
-            seeds.reduce(
-                (sum, seed) =>
-                    sum +
-                    overChance(dealBoardSuits(tiles, 6, seed, 9, GAME_RULES_VERSION, 'clumped')) -
-                    overChance(dealBoardSuits(tiles, 6, seed, 9, GAME_RULES_VERSION, 'scattered')),
-                0
-            ) / seeds.length;
-        expect(margin).toBeGreaterThan(0.15);
+        for (const seed of seeds) {
+            const clumpedSuits = new Set(
+                dealBoardSuits(tiles, 6, seed, 9, GAME_RULES_VERSION, 'clumped').map((tile) => tile.suit)
+            ).size;
+            const scatteredSuits = new Set(
+                dealBoardSuits(tiles, 6, seed, 9, GAME_RULES_VERSION, 'scattered').map((tile) => tile.suit)
+            ).size;
+            expect(scatteredSuits, `seed ${seed}`).toBeLessThan(clumpedSuits);
+        }
+
+        // And both are dealt the same way: neither reads as painted zones.
+        for (const profile of ['clumped', 'scattered'] as const) {
+            const dealt = dealBoardSuits(tiles, 6, 91, 9, GAME_RULES_VERSION, profile);
+            const suitCount = new Set(dealt.map((tile) => tile.suit)).size;
+            const overChance = sameSuitNeighbourRate({ columns: 6, tiles: dealt }) - 1 / suitCount;
+            expect(overChance, profile).toBeLessThan(0.12);
+        }
+
         const scattered = dealBoardSuits(tiles, 6, 91, 9, GAME_RULES_VERSION, 'scattered');
         // Same tiles either way, and both halves of every pair still share a suit.
         expect(scattered.map((t) => t.id).sort()).toEqual(tiles.map((t) => t.id).sort());
@@ -271,28 +335,36 @@ describe('the deal profile', () => {
         }
     });
 
-    it('deals a spotlight floor in two suits only, still clumped', () => {
+    it('deals a spotlight floor in two suits only, and mixes them like every other floor', () => {
         const tiles = pairs(12);
         const two = dealBoardSuits(tiles, 6, 5, 12, GAME_RULES_VERSION, 'two_suit');
         expect(new Set(two.map((t) => t.suit)).size).toBe(2);
-        expect(largestHiddenSuitClump({ columns: 6, tiles: two })?.size).toBeGreaterThanOrEqual(8);
+        /*
+         * Gen 204: this used to require a run of eight or more - a spotlight floor was the most
+         * clumped board in the game, measured at 0.733 same-suit neighbours with one suit covering
+         * half the board. It is dealt like everything else now, and its cap is the two-suit one
+         * (`mixMaxRunForSuits`), which is looser than the four-suit cap precisely because a
+         * two-suit shuffle really does run longer.
+         */
+        const largest = largestHiddenSuitClump({ columns: 6, tiles: two })?.size ?? 0;
+        expect(largest).toBeGreaterThan(1);
+        expect(largest).toBeLessThanOrEqual(mixMaxRunForSuits(2));
     });
 
-    it('reads the profile off the built floor: a rush floor opens scattered, a breather clumped', () => {
-        let clumped = 0;
-        let scattered = 0;
-        // Over chance, as above: the two archetypes carry different palettes on the same floor.
-        const overChance = (board: { columns: number; tiles: Tile[] }): number =>
-            sameSuitNeighbourRate(board) - 1 / new Set(board.tiles.map((tile) => tile.suit)).size;
+    it('reads the profile off the built floor: a rush floor carries fewer suits than a breather', () => {
+        // Gen 204: the same turn as above, on real built floors rather than bare tiles.
         for (const runSeed of [21, 22, 23, 24]) {
-            // Floor 14: deep enough that both archetypes carry more than one suit, which the
-            // measure needs (a one-suit floor reads as clumped and shuffled at the same time).
+            // Floor 14: deep enough that both archetypes carry more than one suit.
             const breather = buildBoard(14, { runSeed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', floorArchetypeId: 'breather' });
             const rush = buildBoard(14, { runSeed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', floorArchetypeId: 'rush_recall' });
-            clumped += overChance(breather);
-            scattered += overChance(rush);
+            const suits = (board: { tiles: Tile[] }): number => new Set(board.tiles.map((tile) => tile.suit)).size;
+            expect(suits(rush), `seed ${runSeed}`).toBeLessThan(suits(breather));
+            // Neither is clumped: both sit within a shuffle's reach of their own chance baseline.
+            for (const [name, board] of [['breather', breather], ['rush', rush]] as const) {
+                const overChance = sameSuitNeighbourRate(board) - 1 / suits(board);
+                expect(overChance, `${name} seed ${runSeed}`).toBeLessThan(0.15);
+            }
         }
-        expect(clumped / 4).toBeGreaterThan(scattered / 4 + 0.1);
     });
 });
 

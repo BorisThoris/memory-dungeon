@@ -748,7 +748,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 10835,
-      "sha256": "92a476f35f62f007776a839f61f703ba79d1b3c0af61a6536a6c697083a6a7d4"
+      "sha256": "b4839362dde7821073fd62b356cfd2965a3ee4795da6b87ad2e6b91a2bff27fb"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2320,13 +2320,13 @@
       "path": "docs/system-diagrams/AUDIT.md",
       "category": "documentation",
       "bytes": 10613,
-      "sha256": "390d8dd969f8548a06656b5b9e2c844bba97bf33d74c04ce0d25373e1be2cc6d"
+      "sha256": "f18ecb157c41a6cfd935499979942ea704367273fe984895728d084966f55487"
     },
     {
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33472,
-      "sha256": "9643f95bbe637f98f2ea99f05973780faf9576bfff1e6e751bcb9beaba1a717e"
+      "sha256": "2bbf2d5a6eda62d386dd565f0a6048b2598466b4dfc28d64fe53b3d0a57bb016"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -8061,8 +8061,8 @@
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 11262,
-      "sha256": "77a7abedc4c7b65379ff16cd58c34852a51d57ccd0bffde44ee728fda993a112"
+      "bytes": 11324,
+      "sha256": "c2cbfae01d4b403429696de72b1ed33a89a5ee732f3ad7c3bf148018e8e290c5"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
@@ -10294,7 +10294,7 @@
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
       "bytes": 11097,
-      "sha256": "ef5b01a0c9bc78dc610d955f7391f330ac313727a3d2c32e9407dc4a4e1439eb"
+      "sha256": "2c9bbe0ed0c0e718bf99ec907967df3b56cd81470e5b9f7efc401e033fc6fbb6"
     },
     {
       "path": "src/shared/achievement-reachability.test.ts",
@@ -10515,14 +10515,14 @@
     {
       "path": "src/shared/boss-encounters.test.ts",
       "category": "test",
-      "bytes": 6227,
-      "sha256": "ba649cad2fdb0a33f8ab60807299e8af28e323ad9f06d04bec1d07673f1b7d8c"
+      "bytes": 6220,
+      "sha256": "9b385690dff558aaa4cd2bb2c33872d62e8d437eef6c663221d00a5ff31725ab"
     },
     {
       "path": "src/shared/boss-encounters.ts",
       "category": "source",
-      "bytes": 15151,
-      "sha256": "7da1af0b33dbac08a3f899f59cea9d3e06328913f041fb3dd820876331dfa07f"
+      "bytes": 15122,
+      "sha256": "041f3b51ace27f6d0e0935c453e182426d3b63376dca6d4e49ac6c3ff3b2fd77"
     },
     {
       "path": "src/shared/bridge-reachability.test.ts",
@@ -10563,8 +10563,8 @@
     {
       "path": "src/shared/chain-rung-value-rules.ts",
       "category": "source",
-      "bytes": 3085,
-      "sha256": "9fd987f239ac1c4ba018bc76a2c700c2bed5253130d9e1197f58a7d57eb210db"
+      "bytes": 3534,
+      "sha256": "a3ae1cfa52d377bbec60c607138d9d7d2f345ef7ba7f2d910e0cb39630c7c964"
     },
     {
       "path": "src/shared/chain-targets.test.ts",
@@ -10617,8 +10617,8 @@
     {
       "path": "src/shared/chunk-break-rules.ts",
       "category": "source",
-      "bytes": 29311,
-      "sha256": "7dff16245bc13865d5af280e0a09652e63b4f837df00cdc52da1930264b0c0dd"
+      "bytes": 30033,
+      "sha256": "46ea37ba6e982493cbda6660b346c044770f6c85d50b150dd9581017add23990"
     },
     {
       "path": "src/shared/classic-run-setup.test.ts",
@@ -10690,7 +10690,7 @@
       "path": "src/shared/contracts.ts",
       "category": "source",
       "bytes": 31351,
-      "sha256": "c49c91e757f9f66c07edb11f7ae79edb97cf2c226deddc06cb020f08b74880f7"
+      "sha256": "c74e13d57a61fbf6a6a8f25099d8b7592826a9a815e8ead465cfcbd5bd9d7b69"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -10887,8 +10887,8 @@
     {
       "path": "src/shared/floor-par.ts",
       "category": "source",
-      "bytes": 2861,
-      "sha256": "98af11db55fdb6797867ef7fe427c9fc14b5b07b6539c5e2c57d33a6bff30cad"
+      "bytes": 3274,
+      "sha256": "f59e642b1208f10d16f07e61e756f7b68c32404ac72063a919ccc4a5fd9a3098"
     },
     {
       "path": "src/shared/floor-schedule-reachability.test.ts",
@@ -11325,8 +11325,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 31378,
-      "sha256": "975cfbea29be0bf77c9f5ba3c528a038ab73b3c51edecf8946dc5ebf392e0b31"
+      "bytes": 31333,
+      "sha256": "90a3e4c43436219fcd144b6dc76ad2fb5b5b170b09859017ea80d941046f83cb"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -12021,8 +12021,8 @@
     {
       "path": "src/shared/secondary-objective-rules.test.ts",
       "category": "test",
-      "bytes": 7492,
-      "sha256": "eacacf2ac3705e5ec283fffc70caa6e1607b0c0832c5c7629f765d2ac26c73e2"
+      "bytes": 7615,
+      "sha256": "754c5b4fa34373aa19738dd7a23545627db8d8f5fe37763b1c926d921bc3ef26"
     },
     {
       "path": "src/shared/secondary-objective-rules.ts",
@@ -12231,14 +12231,14 @@
     {
       "path": "src/shared/tile-suit-rules.test.ts",
       "category": "test",
-      "bytes": 15444,
-      "sha256": "78adf19bebedebb2414e6e5181b602f81ea4360296e3460318c1ccad202d28e9"
+      "bytes": 19561,
+      "sha256": "111705899c3c0a62d4a2b0c2a83007fa74265ba29651a29147be8dc9ca977f0d"
     },
     {
       "path": "src/shared/tile-suit-rules.ts",
       "category": "source",
-      "bytes": 27405,
-      "sha256": "e3a9013df5871286a880a5db7a74da50fcab6ec9c12e7aefe1b40067b3ff50dc"
+      "bytes": 29599,
+      "sha256": "250975e44c290be4bdc341dd229e4e1d388e93b74810ade4ec9ca84140a8029d"
     },
     {
       "path": "src/shared/tile-symbol-catalog.test.ts",
@@ -12418,7 +12418,7 @@
       "path": "src/shared/version-gate.test.ts",
       "category": "test",
       "bytes": 7336,
-      "sha256": "6bc2e74b0e41efe18d85646ffe577b622614971e95a50a0ae399ce01ee48757c"
+      "sha256": "56651dff887fa98e3cb523b1e1c7d9bea9f1934c569881162be5f7ba17b231df"
     },
     {
       "path": "src/shared/version-gate.ts",
@@ -17580,7 +17580,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 209,
+      "lineCount": 210,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/shared/contracts.ts",
@@ -24543,7 +24543,7 @@
       "path": "src/shared/chain-rung-value-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 56,
+      "lineCount": 63,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/chunk-break-rules.ts"
@@ -24710,7 +24710,7 @@
       "path": "src/shared/chunk-break-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 564,
+      "lineCount": 580,
       "imports": [
         "file:src/shared/board-grid-dimensions.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -25792,7 +25792,7 @@
       "path": "src/shared/floor-par.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 51,
+      "lineCount": 57,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-number-guards.ts"
@@ -29633,7 +29633,7 @@
       "path": "src/shared/secondary-objective-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 206,
+      "lineCount": 207,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/game-core.ts",
@@ -30323,7 +30323,7 @@
       "path": "src/shared/tile-suit-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 299,
+      "lineCount": 371,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/contracts.ts",
@@ -30342,7 +30342,7 @@
       "path": "src/shared/tile-suit-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 574,
+      "lineCount": 612,
       "imports": [
         "file:src/shared/board-grid-dimensions.ts",
         "file:src/shared/contracts.ts",
@@ -30355,15 +30355,15 @@
         "symbol:src/shared/tile-suit-rules.ts#dealTilesInClumps",
         "symbol:src/shared/tile-suit-rules.ts#getSuitDealProfile",
         "symbol:src/shared/tile-suit-rules.ts#getTileSuit",
-        "symbol:src/shared/tile-suit-rules.ts#ISLAND_MIN_TILES",
-        "symbol:src/shared/tile-suit-rules.ts#ISLANDS_PER_SUIT",
         "symbol:src/shared/tile-suit-rules.ts#isLayoutPinnedTile",
         "symbol:src/shared/tile-suit-rules.ts#largestHiddenSuitClump",
         "symbol:src/shared/tile-suit-rules.ts#MIN_PAIRS_FOR_TWO_SUITS",
+        "symbol:src/shared/tile-suit-rules.ts#MIX_MAX_RUN",
+        "symbol:src/shared/tile-suit-rules.ts#MIX_REPAIR_ROUNDS",
+        "symbol:src/shared/tile-suit-rules.ts#mixMaxRunForSuits",
         "symbol:src/shared/tile-suit-rules.ts#PAIR_HALF_SEPARATION",
         "symbol:src/shared/tile-suit-rules.ts#sameSuitNeighbourRate",
         "symbol:src/shared/tile-suit-rules.ts#SCATTERED_SUIT_CEILING",
-        "symbol:src/shared/tile-suit-rules.ts#scatterTiles",
         "symbol:src/shared/tile-suit-rules.ts#SUIT_DEAL_PROFILE_BY_ARCHETYPE",
         "symbol:src/shared/tile-suit-rules.ts#SUIT_TARGET_PAIRS",
         "symbol:src/shared/tile-suit-rules.ts#suitCountForDeal",
@@ -41762,16 +41762,16 @@
       "name": "CHAIN_RUNG_PAIRS",
       "kind": "value",
       "file": "src/shared/chain-rung-value-rules.ts",
-      "line": 37,
-      "endLine": 42
+      "line": 44,
+      "endLine": 49
     },
     {
       "id": "symbol:src/shared/chain-rung-value-rules.ts#CHAIN_RUNG_PAIRS_TOLERANCE",
       "name": "CHAIN_RUNG_PAIRS_TOLERANCE",
       "kind": "value",
       "file": "src/shared/chain-rung-value-rules.ts",
-      "line": 49,
-      "endLine": 49
+      "line": 56,
+      "endLine": 56
     },
     {
       "id": "symbol:src/shared/chain-rung-value-rules.ts#CHAIN_RUNG_SCORE_MULTIPLIER",
@@ -41786,16 +41786,16 @@
       "name": "chainRungPairs",
       "kind": "value",
       "file": "src/shared/chain-rung-value-rules.ts",
-      "line": 55,
-      "endLine": 55
+      "line": 62,
+      "endLine": 62
     },
     {
       "id": "symbol:src/shared/chain-rung-value-rules.ts#chainRungScoreMultiplier",
       "name": "chainRungScoreMultiplier",
       "kind": "value",
       "file": "src/shared/chain-rung-value-rules.ts",
-      "line": 52,
-      "endLine": 52
+      "line": 59,
+      "endLine": 59
     },
     {
       "id": "symbol:src/shared/chain-targets.ts#ChainTargetBand",
@@ -42066,8 +42066,8 @@
       "name": "BREAK_BRIDGE_CLUMPS",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 145,
-      "endLine": 150
+      "line": 161,
+      "endLine": 166
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#BREAK_CLUMP_REACH",
@@ -42082,16 +42082,16 @@
       "name": "BREAK_DIAGONAL_TIERS",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 117,
-      "endLine": 117
+      "line": 128,
+      "endLine": 133
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#breakBridgeClumps",
       "name": "breakBridgeClumps",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 152,
-      "endLine": 152
+      "line": 168,
+      "endLine": 168
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#breakClumpReach",
@@ -42106,48 +42106,48 @@
       "name": "breakWalksDiagonals",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 119,
-      "endLine": 119
+      "line": 135,
+      "endLine": 135
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#CHAIN_MULT",
       "name": "CHAIN_MULT",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 162,
-      "endLine": 162
+      "line": 178,
+      "endLine": 178
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#chunkBreakMomentumPairs",
       "name": "chunkBreakMomentumPairs",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 337,
-      "endLine": 346
+      "line": 353,
+      "endLine": 362
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#ChunkBreakResult",
       "name": "ChunkBreakResult",
       "kind": "interface",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 197,
-      "endLine": 213
+      "line": 213,
+      "endLine": 229
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#chunkBreakScore",
       "name": "chunkBreakScore",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 321,
-      "endLine": 325
+      "line": 337,
+      "endLine": 341
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#chunkScorePerPair",
       "name": "chunkScorePerPair",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 311,
-      "endLine": 311
+      "line": 327,
+      "endLine": 327
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#CLEAN_BREAK_REACH",
@@ -42170,24 +42170,24 @@
       "name": "diagonalNeighbours",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 238,
-      "endLine": 249
+      "line": 254,
+      "endLine": 265
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#findSuitRegion",
       "name": "findSuitRegion",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 263,
-      "endLine": 304
+      "line": 279,
+      "endLine": 320
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#orthogonalNeighbours",
       "name": "orthogonalNeighbours",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 227,
-      "endLine": 236
+      "line": 243,
+      "endLine": 252
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#POP_WAVES",
@@ -42202,96 +42202,96 @@
       "name": "resolveChunkBreak",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 383,
-      "endLine": 563
+      "line": 399,
+      "endLine": 579
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#RIPPLE_MAX_WAVES",
       "name": "RIPPLE_MAX_WAVES",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 164,
-      "endLine": 164
+      "line": 180,
+      "endLine": 180
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#rippleWaves",
       "name": "rippleWaves",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 192,
-      "endLine": 195
+      "line": 208,
+      "endLine": 211
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#SEVERANCE_DROP_MAX_PAIRS",
       "name": "SEVERANCE_DROP_MAX_PAIRS",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 189,
-      "endLine": 189
+      "line": 205,
+      "endLine": 205
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#SEVERANCE_DROP_REACH",
       "name": "SEVERANCE_DROP_REACH",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 180,
-      "endLine": 180
+      "line": 196,
+      "endLine": 196
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#suitCanStillPop",
       "name": "suitCanStillPop",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 353,
-      "endLine": 381
+      "line": 369,
+      "endLine": 397
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#SuitRegionOptions",
       "name": "SuitRegionOptions",
       "kind": "interface",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 251,
-      "endLine": 256
+      "line": 267,
+      "endLine": 272
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#tileCanBreakInChunk",
       "name": "tileCanBreakInChunk",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 224,
-      "endLine": 225
+      "line": 240,
+      "endLine": 241
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#tileIsPlainApartFromFindable",
       "name": "tileIsPlainApartFromFindable",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 220,
-      "endLine": 221
+      "line": 236,
+      "endLine": 237
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#WAVE_MULT_CAP",
       "name": "WAVE_MULT_CAP",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 160,
-      "endLine": 160
+      "line": 176,
+      "endLine": 176
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#WAVE_MULT_STEP",
       "name": "WAVE_MULT_STEP",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 159,
-      "endLine": 159
+      "line": 175,
+      "endLine": 175
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#waveMult",
       "name": "waveMult",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 307,
-      "endLine": 308
+      "line": 323,
+      "endLine": 324
     },
     {
       "id": "symbol:src/shared/classic-run-setup.ts#buildClassicRunOptions",
@@ -44258,72 +44258,72 @@
       "name": "floorHitTurnCeiling",
       "kind": "value",
       "file": "src/shared/floor-par.ts",
-      "line": 49,
-      "endLine": 50
+      "line": 55,
+      "endLine": 56
     },
     {
       "id": "symbol:src/shared/floor-par.ts#PAR_TURNS_PER_PAIR",
       "name": "PAR_TURNS_PER_PAIR",
       "kind": "value",
       "file": "src/shared/floor-par.ts",
-      "line": 19,
-      "endLine": 19
+      "line": 25,
+      "endLine": 25
     },
     {
       "id": "symbol:src/shared/floor-par.ts#parTurnsForFloor",
       "name": "parTurnsForFloor",
       "kind": "value",
       "file": "src/shared/floor-par.ts",
-      "line": 21,
-      "endLine": 22
+      "line": 27,
+      "endLine": 28
     },
     {
       "id": "symbol:src/shared/floor-par.ts#parTurnsForRun",
       "name": "parTurnsForRun",
       "kind": "value",
       "file": "src/shared/floor-par.ts",
-      "line": 28,
-      "endLine": 29
+      "line": 34,
+      "endLine": 35
     },
     {
       "id": "symbol:src/shared/floor-par.ts#TURN_CEILING_PAR_MULTIPLIER",
       "name": "TURN_CEILING_PAR_MULTIPLIER",
       "kind": "value",
       "file": "src/shared/floor-par.ts",
-      "line": 37,
-      "endLine": 37
+      "line": 43,
+      "endLine": 43
     },
     {
       "id": "symbol:src/shared/floor-par.ts#turnCeilingForFloor",
       "name": "turnCeilingForFloor",
       "kind": "value",
       "file": "src/shared/floor-par.ts",
-      "line": 39,
-      "endLine": 39
+      "line": 45,
+      "endLine": 45
     },
     {
       "id": "symbol:src/shared/floor-par.ts#turnCeilingForRun",
       "name": "turnCeilingForRun",
       "kind": "value",
       "file": "src/shared/floor-par.ts",
-      "line": 41,
-      "endLine": 42
+      "line": 47,
+      "endLine": 48
     },
     {
       "id": "symbol:src/shared/floor-par.ts#turnsTakenThisFloor",
       "name": "turnsTakenThisFloor",
       "kind": "value",
       "file": "src/shared/floor-par.ts",
-      "line": 25,
-      "endLine": 26
+      "line": 31,
+      "endLine": 32
     },
     {
       "id": "symbol:src/shared/floor-par.ts#turnsToCeiling",
       "name": "turnsToCeiling",
       "kind": "value",
       "file": "src/shared/floor-par.ts",
-      "line": 45,
-      "endLine": 46
+      "line": 51,
+      "endLine": 52
     },
     {
       "id": "symbol:src/shared/focusDimmedTileIds.ts#computeFocusDimmedTileIds",
@@ -51138,24 +51138,24 @@
       "name": "dealBoardSuits",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 501,
-      "endLine": 521
+      "line": 527,
+      "endLine": 559
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#dealTilesInClumps",
       "name": "dealTilesInClumps",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 149,
-      "endLine": 364
+      "line": 175,
+      "endLine": 407
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#getSuitDealProfile",
       "name": "getSuitDealProfile",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 397,
-      "endLine": 398
+      "line": 440,
+      "endLine": 441
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#getTileSuit",
@@ -51166,116 +51166,116 @@
       "endLine": 66
     },
     {
-      "id": "symbol:src/shared/tile-suit-rules.ts#ISLAND_MIN_TILES",
-      "name": "ISLAND_MIN_TILES",
-      "kind": "value",
-      "file": "src/shared/tile-suit-rules.ts",
-      "line": 146,
-      "endLine": 146
-    },
-    {
-      "id": "symbol:src/shared/tile-suit-rules.ts#ISLANDS_PER_SUIT",
-      "name": "ISLANDS_PER_SUIT",
-      "kind": "value",
-      "file": "src/shared/tile-suit-rules.ts",
-      "line": 147,
-      "endLine": 147
-    },
-    {
       "id": "symbol:src/shared/tile-suit-rules.ts#isLayoutPinnedTile",
       "name": "isLayoutPinnedTile",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 370,
-      "endLine": 370
+      "line": 413,
+      "endLine": 413
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#largestHiddenSuitClump",
       "name": "largestHiddenSuitClump",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 547,
-      "endLine": 573
+      "line": 585,
+      "endLine": 611
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#MIN_PAIRS_FOR_TWO_SUITS",
       "name": "MIN_PAIRS_FOR_TWO_SUITS",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 472,
-      "endLine": 472
+      "line": 498,
+      "endLine": 498
+    },
+    {
+      "id": "symbol:src/shared/tile-suit-rules.ts#MIX_MAX_RUN",
+      "name": "MIX_MAX_RUN",
+      "kind": "value",
+      "file": "src/shared/tile-suit-rules.ts",
+      "line": 152,
+      "endLine": 152
+    },
+    {
+      "id": "symbol:src/shared/tile-suit-rules.ts#MIX_REPAIR_ROUNDS",
+      "name": "MIX_REPAIR_ROUNDS",
+      "kind": "value",
+      "file": "src/shared/tile-suit-rules.ts",
+      "line": 173,
+      "endLine": 173
+    },
+    {
+      "id": "symbol:src/shared/tile-suit-rules.ts#mixMaxRunForSuits",
+      "name": "mixMaxRunForSuits",
+      "kind": "value",
+      "file": "src/shared/tile-suit-rules.ts",
+      "line": 163,
+      "endLine": 164
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#PAIR_HALF_SEPARATION",
       "name": "PAIR_HALF_SEPARATION",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 144,
-      "endLine": 144
+      "line": 142,
+      "endLine": 142
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#sameSuitNeighbourRate",
       "name": "sameSuitNeighbourRate",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 527,
-      "endLine": 541
+      "line": 565,
+      "endLine": 579
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#SCATTERED_SUIT_CEILING",
       "name": "SCATTERED_SUIT_CEILING",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 493,
-      "endLine": 493
-    },
-    {
-      "id": "symbol:src/shared/tile-suit-rules.ts#scatterTiles",
-      "name": "scatterTiles",
-      "kind": "value",
-      "file": "src/shared/tile-suit-rules.ts",
-      "line": 401,
-      "endLine": 415
+      "line": 519,
+      "endLine": 519
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#SUIT_DEAL_PROFILE_BY_ARCHETYPE",
       "name": "SUIT_DEAL_PROFILE_BY_ARCHETYPE",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 383,
-      "endLine": 395
+      "line": 426,
+      "endLine": 438
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#SUIT_TARGET_PAIRS",
       "name": "SUIT_TARGET_PAIRS",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 471,
-      "endLine": 471
+      "line": 497,
+      "endLine": 497
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#suitCountForDeal",
       "name": "suitCountForDeal",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 495,
-      "endLine": 499
+      "line": 521,
+      "endLine": 525
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#suitCountForPairs",
       "name": "suitCountForPairs",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 474,
-      "endLine": 478
+      "line": 500,
+      "endLine": 504
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#SuitDealProfile",
       "name": "SuitDealProfile",
       "kind": "type",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 381,
-      "endLine": 381
+      "line": 424,
+      "endLine": 424
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#TILE_SUIT_CATALOG",
@@ -52494,7 +52494,7 @@
         },
         {
           "path": "src/shared/tile-suit-rules.test.ts",
-          "line": 1
+          "line": 307
         },
         {
           "path": "src/shared/cascade-balance-simulation.test.ts",
@@ -70917,18 +70917,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/shared/tile-suit-rules.ts->symbol:src/shared/tile-suit-rules.ts#ISLAND_MIN_TILES",
-      "source": "file:src/shared/tile-suit-rules.ts",
-      "target": "symbol:src/shared/tile-suit-rules.ts#ISLAND_MIN_TILES",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/tile-suit-rules.ts->symbol:src/shared/tile-suit-rules.ts#ISLANDS_PER_SUIT",
-      "source": "file:src/shared/tile-suit-rules.ts",
-      "target": "symbol:src/shared/tile-suit-rules.ts#ISLANDS_PER_SUIT",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/shared/tile-suit-rules.ts->symbol:src/shared/tile-suit-rules.ts#isLayoutPinnedTile",
       "source": "file:src/shared/tile-suit-rules.ts",
       "target": "symbol:src/shared/tile-suit-rules.ts#isLayoutPinnedTile",
@@ -70947,6 +70935,24 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/tile-suit-rules.ts->symbol:src/shared/tile-suit-rules.ts#MIX_MAX_RUN",
+      "source": "file:src/shared/tile-suit-rules.ts",
+      "target": "symbol:src/shared/tile-suit-rules.ts#MIX_MAX_RUN",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/tile-suit-rules.ts->symbol:src/shared/tile-suit-rules.ts#MIX_REPAIR_ROUNDS",
+      "source": "file:src/shared/tile-suit-rules.ts",
+      "target": "symbol:src/shared/tile-suit-rules.ts#MIX_REPAIR_ROUNDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/tile-suit-rules.ts->symbol:src/shared/tile-suit-rules.ts#mixMaxRunForSuits",
+      "source": "file:src/shared/tile-suit-rules.ts",
+      "target": "symbol:src/shared/tile-suit-rules.ts#mixMaxRunForSuits",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/tile-suit-rules.ts->symbol:src/shared/tile-suit-rules.ts#PAIR_HALF_SEPARATION",
       "source": "file:src/shared/tile-suit-rules.ts",
       "target": "symbol:src/shared/tile-suit-rules.ts#PAIR_HALF_SEPARATION",
@@ -70962,12 +70968,6 @@
       "id": "exports:src/shared/tile-suit-rules.ts->symbol:src/shared/tile-suit-rules.ts#SCATTERED_SUIT_CEILING",
       "source": "file:src/shared/tile-suit-rules.ts",
       "target": "symbol:src/shared/tile-suit-rules.ts#SCATTERED_SUIT_CEILING",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/tile-suit-rules.ts->symbol:src/shared/tile-suit-rules.ts#scatterTiles",
-      "source": "file:src/shared/tile-suit-rules.ts",
-      "target": "symbol:src/shared/tile-suit-rules.ts#scatterTiles",
       "kind": "exports"
     },
     {

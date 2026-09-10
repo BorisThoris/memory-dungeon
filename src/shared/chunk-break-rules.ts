@@ -108,13 +108,29 @@ export const BREAK_CLUMP_REACH: Readonly<Record<ChainTier, number>> = {
 export const breakClumpReach = (tier: ChainTier): number => BREAK_CLUMP_REACH[tier];
 
 /**
- * Fever walks corners. Every tier below it steps orthogonally, so a clump that meets another only
- * at a diagonal is two clumps; at Fever it is one. That is the last privilege the ladder sells and
- * it is the only kind left that a player can see coming, because it never leaves the cards that
- * are actually touching (Gen 197). The `sticky_toffee` curio grants the same corner step at every
- * tier, which is what that curio has always been for.
+ * Every tier walks corners.
+ *
+ * This was Fever's privilege until Gen 204 mixed the deal. On a board of grown regions, orthogonal
+ * contact was plenty - a card of your suit was beside you 0.569 of the time - so reserving the
+ * corner step for the top rung was a real prize. On a shuffled board a card has four orthogonal
+ * neighbours and about a quarter of them share its suit, and the pop measured 0.51 pairs at chain
+ * one: a match took its own pair and nothing else, on most floors, most of the time.
+ *
+ * A corner touch is a touch. Two cards that meet at a corner have no gap between them - which is
+ * the whole rule the pop is built on (Gen 197) - so counting corners does not loosen the promise
+ * that a pop never crosses a gap. It just stops pretending that a card diagonally adjacent to the
+ * match is somewhere else. Eight neighbours instead of four, on a board where a quarter of them
+ * match, is what makes a shuffled board poppable at all.
+ *
+ * The ladder still sells reach, waves and bridges; it stopped selling the definition of "touching",
+ * which should never have been a thing a player had to buy.
  */
-export const BREAK_DIAGONAL_TIERS: ReadonlySet<ChainTier> = new Set<ChainTier>(['fever']);
+export const BREAK_DIAGONAL_TIERS: ReadonlySet<ChainTier> = new Set<ChainTier>([
+    'none',
+    'clean',
+    'sharp',
+    'fever'
+]);
 
 export const breakWalksDiagonals = (tier: ChainTier): boolean => BREAK_DIAGONAL_TIERS.has(tier);
 

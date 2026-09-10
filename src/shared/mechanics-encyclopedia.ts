@@ -11,7 +11,7 @@
 import type { AchievementId, GameMode, MutatorId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 40 as const;
+export const ENCYCLOPEDIA_VERSION = 41 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -285,7 +285,7 @@ export const GAME_MODE_CODEX: GameModeCodexEntry[] = [
         id: 'endless',
         title: 'Classic Run',
         description:
-            'The one mode. Procedural floors whose suits are dealt in clumps, so every board opens as a map. Every match pops the clump around it, and the chain that builds from pop to pop climbs toward Fever. Each floor is named, carries a hint, and features one objective that pays a floor bonus. Everything the retired mode cards used to switch on — a clock, calm pacing, vows, chaos, an unrecorded run — is a choice on the setup sheet in front of the run. (Internal mode id: endless.)'
+            'The one mode. Procedural floors whose suits are shuffled, so no board is arranged for you. Every match pops the cards of its own suit that it is touching, and the chain that builds from pop to pop climbs toward Fever. Each floor is named, carries a hint, and features one objective that pays a floor bonus. Everything the retired mode cards used to switch on — a clock, calm pacing, vows, chaos, an unrecorded run — is a choice on the setup sheet in front of the run. (Internal mode id: endless.)'
     },
 ];
 
@@ -506,7 +506,7 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
             'A pop only ever takes what it is touching - a pair goes when the wave holds **both** halves, and nothing is ever taken across a gap. ' +
             'What the chain buys is how far the wave walks: two steps with no chain, four from chain 3 (Clean). ' +
             'Sharp, about two-fifths of the floor\'s pairs of momentum and four at least, runs the reaction on from where the wave stopped and lets it **bridge** - crossing into the one clump its cards were touching, whatever that suit is. ' +
-            'Fever, about two-thirds and seven at least, bridges into three clumps and walks diagonals, so corners connect too. Every pair a break takes adds to the chain\'s momentum. ' +
+            'Fever, about two-thirds and seven at least, bridges into three clumps. Every pair a break takes adds to the chain\'s momentum. ' +
             'Treasure inside a break spills and pays as if you had matched it. A break pays a pair\'s worth times the pairs, times the tier it landed at (Clean ×2, Sharp ×4, Fever ×8), times the ripple (×1.75 for a second wave, up to ×6): a huge Fever reaction is worth hundreds of pops. Broken pairs give no recall credit - memory still pays best - but they ' +
             'clear the floor faster, and a longer ripple pays more. A miss halves the chain and puts the fire out. ' +
             'A suit that can no longer pop - no two of its pairs within reach of each other - loses its last pairs on its own: that is the drop, and it happens at any chain, so breaking the two pairs that hold a third up is a thing you can aim. ' +
@@ -518,10 +518,10 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         title: 'Suits',
         description:
             'Every tile wears one of four suits on its back — Ember, Tide, Moss or Bone — and both halves of a pair share it. ' +
-            'Suits are dealt in clumps, so the floor opens as a map you can plan against before you flip anything. ' +
+            'Suits are shuffled across the board, so nothing is laid out for you and no two floors look alike. ' +
             'A floor carries about one suit for every four pairs it deals, rounded up: the very first board shows two, the second shows three, and all four are out by around the tenth floor. '
-            + 'The floor decides the shape: a breather or a treasure hall deals big clumps, a rush, speed or trap floor deals its suits scattered - and a scattered floor keeps to two suits however big it is, because a scattered third suit thins the board until a match touches nothing of its own kind. A spotlight floor deals only two by design. ' +
-            'Focus or select a hidden tile and the board outlines the clump it stands in and says how many pairs a Sharp break there would take. ' +
+            + 'What the floor decides is the palette, not the layout: a breather or a treasure hall deals four suits, a rush, speed or trap floor deals two, and a spotlight floor deals two by design. Two suits is a board where almost everything can chain; four is a board where the route has to be found. ' +
+            'Focus or select a hidden tile and the board outlines the cards it is touching that share its suit, and says how many pairs a Sharp break there would take. ' +
             'The symbol on the front is still the thing to remember; the suit is the thing you can see.'
     },
     {

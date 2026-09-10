@@ -78,7 +78,7 @@ describe('REG-076 boss and elite encounter identity', () => {
         ]);
         expect(rows[1]).toMatchObject({
             label: 'Keystone chamber',
-            activeReminder: 'Keystone: scattered suits, short chains.'
+            activeReminder: 'Keystone: two suits, long chains.'
         });
         /*
          * Gen 201: these sentences are read in a run, so they have to describe the run. The whole

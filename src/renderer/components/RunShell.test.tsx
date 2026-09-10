@@ -62,21 +62,22 @@ describe('RunShell', () => {
     });
 
     it('reads the ceiling on the par, and marks it once the floor is two turns from it', () => {
-        // Twelve pairs: par 5, ceiling 15. The pressure of thesis §43 lives on the par stat.
+        // Twelve pairs: par 6, ceiling 18 (Gen 204 moved par to 0.45 with the shuffled deal). The
+        // pressure of thesis §43 lives on the par stat.
         const base = playingRun();
         const calm: RunState = { ...base, board: { ...base.board!, pairCount: 12 }, turnsThisFloor: 4 };
         const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={calm} tools={[]} />);
 
         const par = screen.getByTestId('hud-par');
-        expect(within(par).getByRole('img')).toHaveAttribute('aria-label', '4 of 5 turns, ceiling 15');
-        expect(par).toHaveTextContent('4 / 5');
+        expect(within(par).getByRole('img')).toHaveAttribute('aria-label', '4 of 6 turns, ceiling 18');
+        expect(par).toHaveTextContent('4 / 6');
         expect(par).not.toHaveAttribute('data-ceiling-near');
 
-        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...calm, turnsThisFloor: 13 }} tools={[]} />);
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...calm, turnsThisFloor: 16 }} tools={[]} />);
         expect(screen.getByTestId('hud-par')).toHaveAttribute('data-ceiling-near', 'true');
         expect(within(screen.getByTestId('hud-par')).getByRole('img')).toHaveAttribute(
             'aria-label',
-            '13 of 5 turns, ceiling 15'
+            '16 of 6 turns, ceiling 18'
         );
     });
 

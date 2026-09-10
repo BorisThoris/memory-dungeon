@@ -173,13 +173,13 @@ export const getFloorIdentityContract = ({
         return {
             id: 'boss_trophy_moment',
             label: 'Keystone chamber',
-            teachingSentence: `A keystone floor deals its suits scattered, so a match takes only what it touches and chains are short.${objectiveSuffix(featuredObjectiveLabel)}`,
+            teachingSentence: `A keystone floor deals two suits, so more of what you match is touching its own kind than on an ordinary floor.${objectiveSuffix(featuredObjectiveLabel)}`,
             counterplaySentence: mutators.includes('short_memorize')
                 ? 'The study window is short here: learn the board in one look, then let the tools carry the floor rather than the memory.'
                 : 'Take the pairs whose suit still has neighbours first; the isolated ones pay the same whenever you take them.',
             floorClearSentence: 'Keystone cleared. On a scattered deal the score comes from many small pops rather than one big one.',
             atmosphericFeedback: 'The Keystone chamber goes quiet, but the last matched pair still hangs in the air.',
-            activeReminder: 'Keystone: scattered suits, short chains.',
+            activeReminder: 'Keystone: two suits, long chains.',
             warningLevel: 'danger',
             tokens: ['objective', 'risk', 'reward', 'momentum']
         };
@@ -187,13 +187,13 @@ export const getFloorIdentityContract = ({
 
     if (floorArchetypeId === 'trap_hall' || floorArchetypeId === 'speed_trial') {
         return {
-            id: 'scattered_hall',
-            label: floorArchetypeId === 'speed_trial' ? 'Speed trial' : 'Scattered hall',
-            teachingSentence: `The suits are scattered on this floor, so most matches pop alone and the chain ladder is hard to climb.${objectiveSuffix(featuredObjectiveLabel)}`,
-            counterplaySentence: 'A swap is worth more here than anywhere else: move one half of a pair against its own suit and the pop finds something to take.',
-            floorClearSentence: 'Scattered floor cleared. Every pop that took more than its own pair was one you built.',
+            id: 'narrow_palette_hall',
+            label: floorArchetypeId === 'speed_trial' ? 'Speed trial' : 'Narrow hall',
+            teachingSentence: `Two suits on this floor, so almost every card has its own kind somewhere against it.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: 'A narrow palette is a chaining floor. Hold a known pair until a match has popped beside it and the tier will carry.',
+            floorClearSentence: 'Cleared. On a two-suit floor the pops are wide; what you choose is the order.',
             atmosphericFeedback: 'The chalk rings fade one at a time, in the order you found them.',
-            activeReminder: 'Scattered suits: build contact before you match.',
+            activeReminder: 'Two suits: the pops here are the widest of the run.',
             warningLevel: 'warning',
             tokens: ['risk', 'reward', 'resolved', 'momentum']
         };
@@ -203,9 +203,9 @@ export const getFloorIdentityContract = ({
         return {
             id: 'two_suit_hunt',
             label: 'Spotlight hunt',
-            teachingSentence: `Two suits only, whatever the board's size - so almost everything touches something of its own kind.${objectiveSuffix(featuredObjectiveLabel)}`,
+            teachingSentence: `Two suits only, whatever the board's size - the narrowest palette the deal ever gives you.${objectiveSuffix(featuredObjectiveLabel)}`,
             counterplaySentence: 'This is the floor to chain on. Hold a known pair back until a match has already popped beside it and the tier will carry.',
-            floorClearSentence: 'Spotlight cleared. Two suits is the widest reach the deal ever gives you.',
+            floorClearSentence: 'Spotlight cleared. Two suits is the widest reach a pop ever gets.',
             atmosphericFeedback: 'The spotlight swings off the last pair and the hall goes even.',
             activeReminder: 'Two suits: the deepest chains of the run live here.',
             warningLevel: 'reward',
@@ -218,7 +218,7 @@ export const getFloorIdentityContract = ({
         return {
             id: dense ? 'pickup_gallery_dense' : 'pickup_gallery',
             label: dense ? 'Dense gallery' : 'Gallery',
-            teachingSentence: `Pickup pairs are on the board and the suits are clumped, so a pop can spill a glint you have not found yet.${objectiveSuffix(featuredObjectiveLabel)}`,
+            teachingSentence: `Pickup pairs are shuffled in with everything else, so a pop can spill a glint you have not found yet.${objectiveSuffix(featuredObjectiveLabel)}`,
             counterplaySentence: 'Matching a carrier pair claims its glint; a break that takes the carrier spills it and pays it anyway. Either way the score arrives.',
             floorClearSentence: 'Gallery cleared. Claimed glints and spilled ones are worth the same, which is why the chain never costs you a pickup.',
             atmosphericFeedback: 'The gallery shutters click shut behind the weight of what you carried out.',
@@ -232,11 +232,11 @@ export const getFloorIdentityContract = ({
         return {
             id: 'recovery_study_room',
             label: 'Recovery study',
-            teachingSentence: `A breather deals big clumps and asks for less, which makes it the cheapest place to spend a peek or a flash.${objectiveSuffix(featuredObjectiveLabel)}`,
+            teachingSentence: `A breather asks for less and deals the full palette, which makes it the cheapest place to spend a peek or a flash.${objectiveSuffix(featuredObjectiveLabel)}`,
             counterplaySentence: 'Charges do not carry a premium for being saved. Spend them on the floor that is easy to read and bank the score.',
-            floorClearSentence: 'Breather cleared. Big clumps mean the pops were wide even when the floor was gentle.',
+            floorClearSentence: 'Breather cleared. Four suits means the pops were narrow, but the floor never pushed back.',
             atmosphericFeedback: 'The study lamps keep burning after you leave, holding the next route in soft focus.',
-            activeReminder: 'Breather: wide clumps, cheap floor to spend on.',
+            activeReminder: 'Breather: full palette, cheap floor to spend on.',
             warningLevel: 'safe',
             tokens: ['safe', 'hidden_known', 'reward', 'momentum']
         };
@@ -246,7 +246,7 @@ export const getFloorIdentityContract = ({
         return {
             id: 'anchor_floor',
             label: floorArchetypeId === 'anchor_chain' ? 'Anchor chain' : 'Tithe hall',
-            teachingSentence: `Clumped suits and a floor that keeps asking you to remember one particular pair.${objectiveSuffix(featuredObjectiveLabel)}`,
+            teachingSentence: `A floor that keeps asking you to remember one particular pair, on a board that hides it as well as any other.${objectiveSuffix(featuredObjectiveLabel)}`,
             counterplaySentence: 'Pin the anchor rather than trusting it to memory; the pin costs nothing and survives a shuffle it would not otherwise.',
             floorClearSentence: 'Anchor floor cleared. The pairs the floor kept pointing at were the ones worth holding.',
             atmosphericFeedback: 'The mortar settles, and the pair the room kept asking for goes quiet with it.',
@@ -260,7 +260,7 @@ export const getFloorIdentityContract = ({
         return {
             id: 'scout_read_floor',
             label: floorArchetypeId === 'script_room' ? 'Script read' : 'Shadow read',
-            teachingSentence: `The cards are harder to read here, but the suits are clumped, so the backs still tell you where the chains are.${objectiveSuffix(featuredObjectiveLabel)}`,
+            teachingSentence: `The cards are harder to read here, but the suit on every back still tells you what a match would take.${objectiveSuffix(featuredObjectiveLabel)}`,
             counterplaySentence: 'Read the suit on the back rather than trying to hold the face. Contact is what the pop cares about, not identity.',
             floorClearSentence: 'Read floor cleared. Suit on the back was enough; the faces were never the whole puzzle.',
             atmosphericFeedback: 'The remaining shadows keep their names, but the route you proved stays legible.',
@@ -273,7 +273,7 @@ export const getFloorIdentityContract = ({
     return {
         id: 'baseline_floor',
         label: 'Baseline descent',
-        teachingSentence: `Clumped suits and no twist: clear the board, and take the matches that touch their own kind first.${objectiveSuffix(featuredObjectiveLabel)}`,
+        teachingSentence: `No twist on this floor: clear the board, and take the matches that touch their own kind first.${objectiveSuffix(featuredObjectiveLabel)}`,
         counterplaySentence: 'A tool spent here is a tool not spent on a harder floor, but an unspent charge scores nothing either.',
         floorClearSentence: 'Floor cleared. The board is empty, which is the only condition the floor ever had.',
         atmosphericFeedback: 'The corridor remembers the clean pairs first and lets the rest fade into the stone.',

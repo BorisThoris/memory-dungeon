@@ -2453,3 +2453,71 @@ Three checks hold it up:
 The ledger is printed into `docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md` by the same
 generator that emits the version snapshot. A record of what state every system is in belongs where
 a person will read it, not in a source file only its own gate opens.
+
+## Gen 204 — the deal is a shuffle now, and a corner counts as touching
+
+Two changes, one asked for and one forced by it.
+
+### Yes, the clustering was on purpose. It went much further than intended.
+
+`SUIT_DEAL_PROFILE_BY_ARCHETYPE` deals `clumped` on eight of eleven archetypes, and the dealer grew
+each suit as a solid region — its own comment said round-robin growth "at small board sizes is
+indistinguishable from a shuffle", which is exactly what it was avoiding. The reason was real: the
+pop reaches through same-suit contact, and a grown region is contact by construction.
+
+Measured against what a shuffle gives, it overshot badly:
+
+| profile | suits | a shuffle gives | before | after |
+|---|---|---|---|---|
+| `clumped` (8 of 11 floors) | 4 | 0.25 | **0.569** | **0.287** |
+| `scattered` | 2 | 0.50 | 0.496 | **0.463** |
+| `two_suit` | 2 | 0.50 | **0.733** | **0.460** |
+
+Biggest single-suit blob, as a share of the board: 30% → 17%, 35% → 22%, 49% → 24%.
+
+The deal is now a uniform shuffle followed by one repair pass that cuts any connected same-suit run
+over `MIX_MAX_RUN` — four cells on a four-suit board, eight on a two-suit one, because a shuffle's
+runs get longer as the palette shrinks and holding a two-suit board to the four-suit cap produces a
+checkerboard, which is as arranged as a blob. Every profile now sits just *under* its own chance
+baseline: a shuffle with the walls knocked down, not an anti-clustered lattice.
+
+`scattered` also stopped taking its own code path. It was a bare shuffle that skipped both the blob
+repair and the Gen 198 pair-half separation, which is why 0.144 of its pairs sat touching their own
+twin against 0.025 on the dealt path. One deal for every floor; the profile still decides the
+palette, which is a real difference — two suits is a board where almost everything can chain, four
+is a board where the route has to be found.
+
+### The pop collapsed, and the fix was to stop charging for the word "touching"
+
+A mixed board has far less same-suit contact, so the contact-only pop (Gen 197) nearly stopped
+firing at the bottom of the ladder:
+
+| tier | clumped board | mixed, orthogonal only | mixed + corners |
+|---|---|---|---|
+| none | 1.72 pairs | **0.51** | **1.52** |
+| clean | 2.19 | 0.62 | **2.08** |
+| sharp | 6.03 | 2.51 | **5.57** |
+| fever | 8.64 | 7.28 | **7.28** |
+
+0.51 means a match took its own pair and nothing else, on most floors, most of the time — the pop
+rate fell to 0.464 overall and 0.135 on some floors.
+
+The corner step used to be Fever's privilege. That was defensible on a board of grown regions,
+where orthogonal contact was already plentiful; on a shuffled board it meant the game charged the
+top rung for the *definition* of touching. Two cards meeting at a corner have no gap between them,
+which is the whole rule the pop is built on, so counting them does not loosen the promise — it stops
+pretending a card diagonally against the match is somewhere else. Eight neighbours instead of four,
+on a board where a quarter of them share your suit, is what makes a shuffled board poppable.
+
+The ladder still sells reach, waves and bridges. It stopped selling what "touching" means.
+
+### What moved with it
+
+- **Par: 0.4 → 0.45 turns per pair.** A clean player took 4.3 turns a floor on the clumped board and
+  4.7 on the shuffled one, because the pairs a break takes now have to be found rather than handed
+  over. Held at 0.4, the clean player came in under par on 0.862 of floors against the 0.9 that
+  target means to hold. Par follows the board rather than the board being clumped back to fit par.
+- **`CHAIN_RUNG_PAIRS` fever: 9 → 7.** Only the top rung moved. A mixed board has no painted region
+  left for Fever to swallow whole, so its take is what its waves and bridges reach.
+- **Floors run longer and score the same**: 4.7 turns against 4.3, 10543 against 10062 at a clean
+  clear. More of the floor is remembered rather than collected.

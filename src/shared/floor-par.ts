@@ -10,13 +10,19 @@ import { runNonNegativeInteger } from './run-number-guards';
  * player who is missing will not. It is a target, not a gate: missing it costs the floor-end
  * efficiency bonus (§40.5) and nothing else. Phase 2's turn ceiling (§42.2) is three times it.
  *
- * Two turns in five pairs, not the thesis's 0.85. Measured (Gen 181, `sim:cascade`, 48 seeds,
- * floors 1-24): with every match popping, a player who never misses clears a twelve-pair floor
- * in 3.5 turns and one who misses a quarter of them in 4.6, so a par of eleven was under on
- * every floor at every miss rate and said nothing. At 0.4 a twelve-pair floor pars at five: the
- * clean player is under it on most floors, the reference player on about half.
+ * Not the thesis's 0.85. Measured (Gen 181, `sim:cascade`, 48 seeds, floors 1-24): with every
+ * match popping, a player who never misses clears a twelve-pair floor in 3.5 turns and one who
+ * misses a quarter of them in 4.6, so a par of eleven was under on every floor at every miss rate
+ * and said nothing.
+ *
+ * Gen 204 moved it from 0.4 to 0.45, because the board it was measured against no longer exists.
+ * The deal used to grow each suit a solid region, so a match popped what the deal had already
+ * stacked for it and floors fell in 4.3 turns; shuffled, the same clean player takes 4.7, because
+ * the pairs a break takes now have to be found rather than handed over. Held at 0.4 the clean
+ * player came in under par on 0.862 of floors against the 0.9 this target means to hold - so par
+ * follows the board rather than the board being clumped back to fit par.
  */
-export const PAR_TURNS_PER_PAIR = 0.4;
+export const PAR_TURNS_PER_PAIR = 0.45;
 
 export const parTurnsForFloor = (pairs: number): number =>
     Math.max(1, Math.ceil(runNonNegativeInteger(pairs) * PAR_TURNS_PER_PAIR));

@@ -34,11 +34,18 @@ export const CHAIN_RUNG_SCORE_MULTIPLIER: Readonly<Record<ChainTier, number>> = 
  * whole pairs inside every wave, so a chain-one pop climbed from 1.46 pairs to 1.68 and closed most
  * of the gap to Clean on its own. Clean still pays twice per pair, which is what the meter shows.
  */
+/*
+ * Gen 204 re-baselined this against the shuffled deal: measured none 1.52, clean 2.08, sharp 5.57,
+ * fever 7.28, so the promise reads 2 / 2 / 6 / 7. Only Fever moved, from 9 - a mixed board has no
+ * painted region left for the top rung to swallow whole, so Fever's take is what its waves and
+ * bridges reach rather than what the deal had already stacked. The rest of the ladder came back
+ * intact once every tier counted corner contact.
+ */
 export const CHAIN_RUNG_PAIRS: Readonly<Record<ChainTier, number>> = {
     none: 2,
     clean: 2,
     sharp: 6,
-    fever: 9
+    fever: 7
 };
 
 /**

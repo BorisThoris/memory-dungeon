@@ -29,9 +29,10 @@ describe('secondary objective rules', () => {
     it('reads within-par from the floor par and the turns taken, match or miss', () => {
         const run = createNewRun(0);
         const board = { ...run.board!, pairCount: 12 };
-        // Twelve pairs par at five turns (ceil(12 × 0.4)).
-        expect(isWithinFloorPar({ ...run, turnsThisFloor: 5 }, board)).toBe(true);
-        expect(isWithinFloorPar({ ...run, turnsThisFloor: 6 }, board)).toBe(false);
+        // Twelve pairs par at six turns (ceil(12 × 0.45)). Gen 204 moved par with the shuffled
+        // deal: the pairs a break takes now have to be found rather than handed over.
+        expect(isWithinFloorPar({ ...run, turnsThisFloor: 6 }, board)).toBe(true);
+        expect(isWithinFloorPar({ ...run, turnsThisFloor: 7 }, board)).toBe(false);
         expect(isWithinFloorPar(run, { ...board, pairCount: 1 })).toBe(false);
     });
 
