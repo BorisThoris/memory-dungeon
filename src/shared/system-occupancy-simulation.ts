@@ -1,4 +1,4 @@
-import type { RunState, Tile } from './contracts';
+import type { BoardState, RunState, Tile } from './contracts';
 import { GAME_RULES_VERSION } from './contracts';
 import { buildBoard } from './board-generation';
 import { countFindablePairs } from './board-tile-generation-rules';
@@ -15,6 +15,7 @@ import { togglePinnedTile } from './board-power-state';
 import { createWildRun } from './run-creation-rules';
 import { TILE_TRAIT_COUNT_KINDS } from './session-stats-rules';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
+import { advanceToNextLevel } from './next-floor-transition-rules';
 import { getUnresolvedPlayablePairGroups } from './playthrough-solver-rules';
 import { orthogonalNeighbours } from './chunk-break-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
@@ -52,6 +53,19 @@ export interface SystemOccupancyCounter {
     label: string;
     /** What the game would lose if this never fired. Sorted into the report by it. */
     family: 'cascade' | 'memory' | 'reward' | 'tools';
+    /**
+     * Which census decides this system's band (Gen 207).
+     *
+     * `floor` is the default and means the floor census: everything the floor hands back at full
+     * strength - the region shuffle refilled by the floor transition, the undo, the gambit, and
+     * every tally that resets with the board.
+     *
+     * `run` means the charge is handed out once and the run never refills it, so measuring it a
+     * floor at a time measures a fresh run every floor and reports a once-a-run button as the loop.
+     * The wild joker read 1.000 x 1.00 and `core` on the floor census; in a run it is spent on
+     * floor 1 and never seen again, on every seed. `simulateRunOccupancy` bands these.
+     */
+    scope?: 'floor' | 'run';
     /**
      * The share of floors this is expected to touch, at the reference miss rate. `rare` systems
      * are meant to be occasional; `core` ones are the loop. Both must be greater than zero: a
@@ -112,8 +126,13 @@ export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
     { id: 'recallMistakes', key: 'recallMistakesThisFloor', label: 'A mismatch was made', family: 'memory', cadence: 'common', kind: 'tally', player: 'reference' },
     { id: 'matchResolutions', key: 'matchResolutionsThisFloor', label: 'A turn resolved', family: 'memory', cadence: 'core', kind: 'tally', player: 'reference' },
     { id: 'findablesClaimed', key: 'findablesClaimedThisFloor', label: 'A pickup was claimed', family: 'reward', cadence: 'core', kind: 'tally', player: 'reference' },
-    { id: 'peek', key: 'peekCharges', label: 'A peek was spent on a hidden tile', family: 'tools', cadence: 'core', kind: 'spend', player: 'tooled' },
-    { id: 'shuffle', key: 'shuffleCharges', label: 'The board was shuffled', family: 'tools', cadence: 'core', kind: 'spend', player: 'tooled' },
+    // The four charges below are handed out once and never refilled by the floor transition, so
+    // the run census is what bands them (Gen 207). The peek survives its `core` bar on the strength
+    // of the floor curios: three of them grant a peek charge, and it reads 0.904 across a run.
+    { id: 'peek', key: 'peekCharges', label: 'A peek was spent on a hidden tile', family: 'tools', cadence: 'core', kind: 'spend', player: 'tooled', scope: 'run' },
+    // Was `core` on the floor census's 1.000. A run starts with one shuffle charge and one curio
+    // grants another, so it lands on 0.196 of a run's floors: a tool you keep for when you need it.
+    { id: 'shuffle', key: 'shuffleCharges', label: 'The board was shuffled', family: 'tools', cadence: 'common', kind: 'spend', player: 'tooled', scope: 'run' },
     { id: 'regionShuffle', key: 'regionShuffleCharges', label: 'A row was shuffled', family: 'tools', cadence: 'core', kind: 'spend', player: 'tooled' },
     { id: 'undo', key: 'undoUsesThisFloor', label: 'A flip was taken back before it resolved', family: 'tools', cadence: 'common', kind: 'spend', player: 'tooled' },
 
@@ -129,14 +148,20 @@ export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
      * anything up - it reads 0.158, which is the reference miss rate. That is the right shape: the
      * flash answers being stuck, and a player is stuck about as often as they miss.
      */
-    { id: 'flashPair', key: 'flashPairCharges', label: 'A pair was flashed', family: 'tools', cadence: 'common', kind: 'spend', player: 'setup' },
+    // A setup charge, spent once and gone: 0.042 of a run's floors, not the 0.158 a fresh run every
+    // floor reported. Rare is what a once-a-run charge is.
+    { id: 'flashPair', key: 'flashPairCharges', label: 'A pair was flashed', family: 'tools', cadence: 'rare', kind: 'spend', player: 'setup', scope: 'run' },
     /*
      * Gen 200 re-banded this from `common` to `core`, against the measurement. Stray was the only
      * thing that ever took the wild joker off the board before the setup player could spend it, and
      * Stray is gone: a run that is granted the token now spends it on every floor, 1.000. The band
      * describes what the game does, so it moves rather than the number being argued down.
      */
-    { id: 'wildMatch', key: 'wildMatchesRemaining', label: 'The wild joker was spent on a match', family: 'tools', cadence: 'core', kind: 'spend', player: 'setup' },
+    // The clearest case Gen 207 found: `core` - the loop, nearly every floor - on the strength of a
+    // census that built a new setup run for every floor. In a run the joker is spent on floor 1 and
+    // never seen again, on all ten seeds. That is the setup sheet working as written; the band was
+    // describing the instrument.
+    { id: 'wildMatch', key: 'wildMatchesRemaining', label: 'The wild joker was spent on a match', family: 'tools', cadence: 'rare', kind: 'spend', player: 'setup', scope: 'run' },
     /*
      * Stays `core`, and now on evidence rather than construction: 0.988. A swap has a real target
      * on nearly every board, because nearly every board deals at least one pair whose halves are
@@ -355,7 +380,32 @@ export interface OccupancyFloorResult {
     spends: Map<string, number>;
 }
 
-const playFloor = (
+/** The floor as the schedule builds it, which is the board a run is handed on that level. */
+const scheduledFloorBoard = (seed: number, floor: number, includeWildTile: boolean): BoardState => {
+    const rulesVersion = GAME_RULES_VERSION;
+    const schedule = pickFloorScheduleEntry(seed, rulesVersion, floor, 'endless');
+    return buildBoard(floor, {
+        runSeed: seed,
+        runRulesVersion: rulesVersion,
+        floorTag: schedule.floorTag,
+        floorArchetypeId: schedule.floorArchetypeId,
+        featuredObjectiveId: schedule.featuredObjectiveId,
+        cycleFloor: schedule.cycleFloor,
+        gameMode: 'endless',
+        activeMutators: schedule.mutators,
+        includeWildTile
+    });
+};
+
+/**
+ * One floor, played from the run state it is handed.
+ *
+ * Split out at Gen 207 so the run census and the floor census play the floor the same way. A second
+ * player would diverge from this one within a generation or two, and then the two censuses would be
+ * measuring different games while reporting the same units.
+ */
+const playFloorFrom = (
+    startingRun: RunState,
     seed: number,
     floor: number,
     missRate: number,
@@ -365,35 +415,7 @@ const playFloor = (
     const tooled = pass === 'tooled';
     const setup = pass === 'setup';
     const rulesVersion = GAME_RULES_VERSION;
-    const schedule = pickFloorScheduleEntry(seed, rulesVersion, floor, 'endless');
-    const board = buildBoard(floor, {
-        runSeed: seed,
-        runRulesVersion: rulesVersion,
-        floorTag: schedule.floorTag,
-        floorArchetypeId: schedule.floorArchetypeId,
-        featuredObjectiveId: schedule.featuredObjectiveId,
-        cycleFloor: schedule.cycleFloor,
-        gameMode: 'endless',
-        activeMutators: schedule.mutators,
-        includeWildTile: setup
-    });
-    /*
-     * The setup pass builds the run the way the setup sheet builds one - the wild joker on the
-     * board, a stray charge, a flash charge - so the powers a plain endless run never hands out are
-     * there to be spent. Everything else about the floor is identical, so the two passes differ by
-     * the setup and nothing else.
-     */
-    const base = finishMemorizePhase(
-        setup
-            ? createWildRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed })
-            : createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed })
-    );
-    let run: RunState = {
-        ...base,
-        board,
-        status: 'playing',
-        findablesTotalThisFloor: countFindablePairs(board.tiles)
-    };
+    let run: RunState = startingRun;
     const rng = createMulberry32(hashStringToSeed(`occupancy:${seed}:${floor}:${missRate}:${rulesVersion}`));
     const spends = new Map<string, number>();
     /** Take the next run state, and record every watched charge that fell on the way to it. */
@@ -504,6 +526,192 @@ const playFloor = (
      */
     return { run, spends };
 };
+
+const playFloor = (
+    seed: number,
+    floor: number,
+    missRate: number,
+    maxTurns: number,
+    pass: SystemOccupancyCounter['player'] = 'reference'
+): OccupancyFloorResult => {
+    const setup = pass === 'setup';
+    const board = scheduledFloorBoard(seed, floor, setup);
+    /*
+     * The setup pass builds the run the way the setup sheet builds one - the wild joker on the
+     * board, a stray charge, a flash charge - so the powers a plain endless run never hands out are
+     * there to be spent. Everything else about the floor is identical, so the two passes differ by
+     * the setup and nothing else.
+     */
+    const base = finishMemorizePhase(
+        setup
+            ? createWildRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed })
+            : createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed })
+    );
+    return playFloorFrom(
+        { ...base, board, status: 'playing', findablesTotalThisFloor: countFindablePairs(board.tiles) },
+        seed,
+        floor,
+        missRate,
+        maxTurns,
+        pass
+    );
+};
+
+/**
+ * The census, played as a run rather than as a heap of floors.
+ *
+ * Every simulation in this repository builds a fresh run for every floor - this one did too, and
+ * `sim:cascade` and `sim:endless` still do. That is the right instrument for asking what a *board*
+ * does, and the wrong one for asking what a *run* does, because the run is where the game keeps
+ * everything that does not reset: the charges a player spends and does not get back, the score, the
+ * turn ceiling that ends the whole thing. Measured floor by floor, a system that a player meets
+ * once and never again reads exactly like a system they meet on every floor.
+ *
+ * So this plays one continuous run per seed, floor 1 upward, through the game's own transition
+ * (`advanceToNextLevel`), and stops when the run does. It reports the same counters as the floor
+ * census, plus the two numbers only a run can answer:
+ *
+ *   - `runFloorShare`: floors *inside a run* where the counter moved.
+ *   - `lastFloorSeen`: the deepest floor at which it ever moved. A system whose last sighting is
+ *     floor 1 while runs reach floor 20 is a system a player meets once and never again, and no
+ *     per-floor share can see that.
+ *
+ * Task 191 (Gen 150) asked for this and it stayed open for fifty-odd generations, which is about
+ * how long the peek has read `core` on the strength of 240 first floors.
+ */
+export interface RunOccupancyReport {
+    /** Runs played, and the floors they reached between them. */
+    runs: number;
+    floors: number;
+    deepestFloor: number;
+    meanFloorsPerRun: number;
+    endReasons: Record<string, number>;
+    rows: Array<{
+        key: string;
+        label: string;
+        family: SystemOccupancyCounter['family'];
+        cadence: SystemOccupancyCounter['cadence'];
+        /** Floors within a run where this counter moved, over floors played. */
+        runFloorShare: number;
+        perFloor: number;
+        /** The deepest floor this was ever seen on; 0 if it never happened. */
+        lastFloorSeen: number;
+    }>;
+}
+
+export const simulateRunOccupancy = ({
+    floors = 24,
+    seeds = OCCUPANCY_SEEDS,
+    missRate = 0.15,
+    maxTurns = 240
+}: {
+    floors?: number;
+    seeds?: readonly number[];
+    missRate?: number;
+    maxTurns?: number;
+} = {}): RunOccupancyReport => {
+    const hits = new Map<string, { floors: number; total: number; lastFloor: number }>();
+    const endReasons: Record<string, number> = {};
+    let played = 0;
+    let deepestFloor = 0;
+    const passes: Array<SystemOccupancyCounter['player']> = ['reference', 'tooled', 'setup'];
+
+    for (const seed of seeds) {
+        for (const pass of passes) {
+            const counters = SYSTEM_OCCUPANCY_COUNTERS.filter((counter) => counter.player === pass);
+            if (counters.length === 0) continue;
+            const setup = pass === 'setup';
+            const firstBoard = scheduledFloorBoard(seed, 1, setup);
+            let run: RunState = finishMemorizePhase(
+                setup
+                    ? createWildRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed })
+                    : createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed })
+            );
+            run = {
+                ...run,
+                board: firstBoard,
+                status: 'playing',
+                findablesTotalThisFloor: countFindablePairs(firstBoard.tiles)
+            };
+            let floor = 1;
+            let ended = 'reached the cap';
+            while (floor <= floors) {
+                /*
+                 * What each counter read when the floor opened. A tally that resets on the floor
+                 * transition reads zero here and the delta is the floor's own count; a tally the run
+                 * keeps - the pins placed this run, the trait matches in the session stats - does
+                 * not reset, and reading its end-of-floor value would report a running total as a
+                 * rate and call every floor after the first one busy. Deltas make both honest.
+                 */
+                const before = new Map(counters.map((counter) => [counter.id, readCounter(counter, run)]));
+                const result = playFloorFrom(run, seed, floor, missRate, maxTurns, pass);
+                // Only the reference pass counts a floor, so a floor is counted once however many
+                // passes walk it - the same arithmetic the floor census uses.
+                if (pass === 'reference') played += 1;
+                deepestFloor = Math.max(deepestFloor, floor);
+                for (const counter of counters) {
+                    const value =
+                        counter.kind === 'spend'
+                            ? result.spends.get(counter.id) ?? 0
+                            : Math.max(0, readCounter(counter, result.run) - (before.get(counter.id) ?? 0));
+                    const row = hits.get(counter.id) ?? { floors: 0, total: 0, lastFloor: 0 };
+                    if (value > 0) {
+                        row.floors += 1;
+                        row.lastFloor = Math.max(row.lastFloor, floor);
+                    }
+                    row.total += value;
+                    hits.set(counter.id, row);
+                }
+                run = result.run;
+                if (run.status === 'gameOver') {
+                    ended = run.runEndReason ?? 'gameOver';
+                    break;
+                }
+                // The game's own transition, so the run census cannot drift from the run a player
+                // is handed: the charges it does not refill are the charges the player does not get.
+                const next = advanceToNextLevel({ ...run, status: 'levelComplete' });
+                if (!next.board || next.board.level === floor) {
+                    ended = 'the floor did not advance';
+                    break;
+                }
+                run = finishMemorizePhase(next);
+                floor += 1;
+            }
+            if (pass === 'reference') endReasons[ended] = (endReasons[ended] ?? 0) + 1;
+        }
+    }
+
+    const runs = seeds.length;
+    return {
+        runs,
+        floors: played,
+        deepestFloor,
+        meanFloorsPerRun: runs === 0 ? 0 : played / runs,
+        endReasons,
+        rows: SYSTEM_OCCUPANCY_COUNTERS.map((counter) => {
+            const row = hits.get(counter.id) ?? { floors: 0, total: 0, lastFloor: 0 };
+            return {
+                key: counter.id,
+                label: counter.label,
+                family: counter.family,
+                cadence: counter.cadence,
+                runFloorShare: played === 0 ? 0 : row.floors / played,
+                perFloor: played === 0 ? 0 : row.total / played,
+                lastFloorSeen: row.lastFloor
+            };
+        })
+    };
+};
+
+export const summarizeRunOccupancy = (report: RunOccupancyReport): string =>
+    [...report.rows]
+        .sort((a, b) => a.runFloorShare - b.runFloorShare)
+        .map(
+            (row) =>
+                `${row.runFloorShare.toFixed(3).padStart(6)} x ${row.perFloor.toFixed(2).padStart(5)}  last floor ` +
+                `${String(row.lastFloorSeen).padStart(3)}  ${row.cadence.padEnd(6)} ${row.family.padEnd(8)} ${row.key}`
+        )
+        .join('\n');
 
 export const OCCUPANCY_SEEDS = [11, 202, 3003, 40404, 555, 6006, 77, 8888, 91_919, 1_234] as const;
 
@@ -690,13 +898,28 @@ export const judgeSystemOccupancyAgainstBaseline = (
     return { ok: issues.length === 0, issues };
 };
 
+/**
+ * The rows the FLOOR census is entitled to band.
+ *
+ * A run-scoped charge is left to `judgeRunOccupancy`, which is the only census that can see it
+ * handed out once and never refilled; graded here it would be graded against a fresh run every
+ * floor, which is how the wild joker came to be filed as the loop (Gen 207). It is still reported
+ * in the table - the number is real, it is just a number about first floors.
+ */
+const floorBandedRows = (report: SystemOccupancyReport): SystemOccupancyReport['rows'] => {
+    const runScoped = new Set(
+        SYSTEM_OCCUPANCY_COUNTERS.filter((counter) => counter.scope === 'run').map((counter) => counter.id)
+    );
+    return report.rows.filter((row) => !runScoped.has(row.key));
+};
+
 export const judgeSystemOccupancy = (
     report: SystemOccupancyReport
 ): { ok: boolean; issues: string[]; silent: string[]; dominant: string[] } => {
     const issues: string[] = [];
     const silent: string[] = [];
     const dominant: string[] = [];
-    for (const row of report.rows) {
+    for (const row of floorBandedRows(report)) {
         if (row.floorShare === 0) {
             silent.push(`${row.key} (${row.label}) never fired on any of ${report.floors} floors`);
             continue;
@@ -715,8 +938,61 @@ export const judgeSystemOccupancy = (
 };
 
 /** Systems firing above their cadence's ceiling: the other half of the census. */
+
+/**
+ * The run census's verdict, which covers the charges the floor census cannot see honestly.
+ *
+ * Same three failure modes as the floor judge - silent, thin, dominant - read off a run rather than
+ * off a heap of first floors. A system whose last sighting is floor 1 while runs reach floor 24 is
+ * called out by name even when its share clears its band, because "happens once a run" and "happens
+ * rarely" are different games and only one of them is a cadence.
+ */
+export const judgeRunOccupancy = (
+    report: RunOccupancyReport
+): { ok: boolean; issues: string[]; silent: string[]; dominant: string[]; onceOnly: string[] } => {
+    const issues: string[] = [];
+    const silent: string[] = [];
+    const dominant: string[] = [];
+    const onceOnly: string[] = [];
+    const banded = new Set(
+        SYSTEM_OCCUPANCY_COUNTERS.filter((counter) => counter.scope === 'run').map((counter) => counter.id)
+    );
+    for (const row of report.rows) {
+        if (row.lastFloorSeen === 1 && report.deepestFloor > 1 && row.runFloorShare > 0) {
+            onceOnly.push(
+                `${row.key} (${row.label}) was last seen on floor 1, and runs reach floor ${report.deepestFloor}`
+            );
+        }
+        if (!banded.has(row.key)) continue;
+        if (row.runFloorShare === 0) {
+            silent.push(`${row.key} (${row.label}) never fired across ${report.floors} floors of real runs`);
+            continue;
+        }
+        const band = SYSTEM_OCCUPANCY_BANDS[row.cadence];
+        if (row.runFloorShare < band.min) {
+            issues.push(
+                `${row.key} runFloorShare ${row.runFloorShare.toFixed(3)} below ${band.min} for a ${row.cadence} system`
+            );
+        }
+        if (row.runFloorShare > band.max) {
+            dominant.push(
+                `${row.key} (${row.label}) fired on ${row.runFloorShare.toFixed(3)} of a run's floors, above ${band.max} for a ${row.cadence} system`
+            );
+        }
+    }
+    return {
+        ok: issues.length === 0 && silent.length === 0 && dominant.length === 0,
+        issues,
+        silent,
+        dominant,
+        onceOnly
+    };
+};
+
 export const dominantSystemKeys = (report: SystemOccupancyReport): string[] =>
-    report.rows.filter((row) => row.floorShare > SYSTEM_OCCUPANCY_BANDS[row.cadence].max).map((row) => row.key);
+    floorBandedRows(report)
+        .filter((row) => row.floorShare > SYSTEM_OCCUPANCY_BANDS[row.cadence].max)
+        .map((row) => row.key);
 
 export const summarizeSystemOccupancy = (report: SystemOccupancyReport): string =>
     [...report.rows]

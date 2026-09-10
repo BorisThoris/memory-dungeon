@@ -99,8 +99,8 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
     {
         id: 'power.flash_pair',
         verdict: 'changed',
-        generation: 201,
-        note: 'Re-banded core to common, same cause as the pin: 1.000 constructed became 0.158 measured. The flash answers being stuck, and a player is stuck about as often as they miss.'
+        generation: 207,
+        note: 'Re-banded common -> rare at Gen 207. A setup charge the run hands out once and never refills: 0.042 of the floors in a run against the 0.158 a fresh run every floor reported. Rare is what a once-a-run charge is.'
     },
     {
         id: 'power.tile_swap',
@@ -110,9 +110,9 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
     },
     {
         id: 'power.shuffle',
-        verdict: 'confirmed',
-        generation: 205,
-        note: 'Occupancy 1.000 on the tooled pass, banded core. Its Codex entry was repointed in Gen 201: a Scholar contract disables board shuffle and nothing else, which is what the code does. Gen 205 moved the census press off the halfway mark, where a break that empties the board in one turn skips it entirely.'
+        verdict: 'changed',
+        generation: 207,
+        note: 'Re-banded core -> common at Gen 207. It read 1.000 of floors on a census that built a fresh run for every floor; across a real run it is 0.196, because a run starts with one shuffle charge and only one floor curio grants another. Nothing about the tool changed - the band was describing the instrument. Its Codex entry was repointed in Gen 201: a Scholar contract disables board shuffle and nothing else, which is what the code does. Gen 205 moved the census press off the halfway mark, where a break that empties the board in one turn skips it entirely.'
     },
     {
         id: 'power.region_shuffle',
@@ -134,9 +134,9 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
     },
     {
         id: 'power.wild_match',
-        verdict: 'confirmed',
-        generation: 200,
-        note: 'Re-banded common to core in Gen 200 against measurement: 1.000. Stray was the only thing that took the joker off the board before it could be spent, and Stray is gone.'
+        verdict: 'changed',
+        generation: 207,
+        note: 'Re-banded core -> rare at Gen 207, and it is the clearest thing the run census found: the joker read 1.000 x 1.00 of floors because the census built a new setup run for every floor, and across a real run it is spent on floor 1 and never seen again, on all ten seeds. That is the setup sheet working exactly as written - one joker a run - so the power is unchanged and the claim about it is.'
     },
 
     // ---- The charges behind those powers. ------------------------------------------------------

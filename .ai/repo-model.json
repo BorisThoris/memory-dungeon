@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2437,
-    "codeFileCount": 877,
-    "exportedSymbolCount": 2664,
+    "trackedFileCount": 2439,
+    "codeFileCount": 878,
+    "exportedSymbolCount": 2668,
     "contentItemCount": 10,
     "mechanicCount": 41,
     "stateFieldCount": 80,
-    "relationshipCount": 6754
+    "relationshipCount": 6761
   },
   "inventory": [
     {
@@ -255,8 +255,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 364353,
-      "sha256": "5c8a05900874ab4907a213f3d21738439db44f06b0bd18734d569c574a42e667"
+      "bytes": 367204,
+      "sha256": "da784263eebe48af48c3e476b130ad0f1423413c027de9ee49b41efd10ffd269"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -747,8 +747,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 11303,
-      "sha256": "5d8b2211cd6d832509236dd5a32f4c23bc45359a40a5d161696252c311faeab3"
+      "bytes": 11816,
+      "sha256": "fe025bfdba890baf418142de7ad04d34114f03278ca819d879ed7c75b7a3434f"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2326,7 +2326,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33472,
-      "sha256": "a64d7be73ecb31961034fe3917f93989b03a3f5db12e4f583b5a7cbef72f0a13"
+      "sha256": "bae1189c2814256450a2e270db6ee28bc51644cbdda0119d90857d752d600b82"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4029,8 +4029,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 29659,
-      "sha256": "b5e9539caa94f98d0e7af917e5c1102b9fc09143433379b7db0a12edccd00c7c"
+      "bytes": 29807,
+      "sha256": "795fd8aa8a1fa95987a658317634fd5fbb9945b4aee44789cf8216988326154e"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4919,6 +4919,12 @@
       "category": "script",
       "bytes": 1014,
       "sha256": "6e18de7eba2eea8e5bf737af8323beda6c4acf257e08b972dfc74d2778a35808"
+    },
+    {
+      "path": "scripts/sim-run-occupancy.ts",
+      "category": "script",
+      "bytes": 2128,
+      "sha256": "7465ee3fc2ba8f1097c95d3feece1e50ec7a59f7576370eb5d5d4f56cf9464a7"
     },
     {
       "path": "scripts/steam-cloud-config.ts",
@@ -10299,8 +10305,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 11565,
-      "sha256": "e1d7fd14195046514c339d7a6f4ac64344af3ab3dc411055ad1383a9d4252dbf"
+      "bytes": 12078,
+      "sha256": "065e13b091967d5f02d4b5f3b7f92879a77d3337a8534dff8f8e74b96be42be2"
     },
     {
       "path": "src/shared/achievement-reachability.test.ts",
@@ -11893,6 +11899,12 @@
       "sha256": "ff0c5988d4d7140a809aeb4005bafb6f0dc8798e21156a24fca0b181b63b4e0b"
     },
     {
+      "path": "src/shared/run-occupancy-simulation.test.ts",
+      "category": "test",
+      "bytes": 4768,
+      "sha256": "c59afadeea6295c208af3e57e7080d1f999562ffbaf40e4ca5b79dfd43b6f8ba"
+    },
+    {
       "path": "src/shared/run-record-guards.test.ts",
       "category": "test",
       "bytes": 609,
@@ -12165,8 +12177,8 @@
     {
       "path": "src/shared/system-occupancy-simulation.ts",
       "category": "source",
-      "bytes": 38578,
-      "sha256": "244210c9a3f9649e63216c9efc564c519e05337769d8005738b0fc13d8303044"
+      "bytes": 51586,
+      "sha256": "b74baad81978b3b1333d52f24fee566fde047c3d5826e2f787d10b6f11af3266"
     },
     {
       "path": "src/shared/system-refinement-ledger.test.ts",
@@ -12177,8 +12189,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 17498,
-      "sha256": "8fe333f394b61a2422deeaaacc95afe0d5fd67d46fce3a26433fb5079b0f4537"
+      "bytes": 18011,
+      "sha256": "2dc757528546cbcaa78453880d5da547cdb4da4c0f3a47e613d7735a02680966"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -29179,6 +29191,18 @@
       ]
     },
     {
+      "id": "file:src/shared/run-occupancy-simulation.test.ts",
+      "path": "src/shared/run-occupancy-simulation.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 94,
+      "imports": [
+        "file:src/shared/system-occupancy-simulation.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/shared/run-record-guards.test.ts",
       "path": "src/shared/run-record-guards.test.ts",
       "layer": "shared",
@@ -30066,7 +30090,7 @@
       "path": "src/shared/system-occupancy-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 730,
+      "lineCount": 1006,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-power-actions.ts",
@@ -30076,6 +30100,7 @@
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/game.ts",
+        "file:src/shared/next-floor-transition-rules.ts",
         "file:src/shared/playthrough-solver-rules.ts",
         "file:src/shared/rng.ts",
         "file:src/shared/run-array-guards.ts",
@@ -30086,11 +30111,15 @@
       ],
       "exports": [
         "symbol:src/shared/system-occupancy-simulation.ts#dominantSystemKeys",
+        "symbol:src/shared/system-occupancy-simulation.ts#judgeRunOccupancy",
         "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
         "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancyAgainstBaseline",
         "symbol:src/shared/system-occupancy-simulation.ts#OCCUPANCY_SEEDS",
         "symbol:src/shared/system-occupancy-simulation.ts#OccupancyFloorResult",
+        "symbol:src/shared/system-occupancy-simulation.ts#RunOccupancyReport",
+        "symbol:src/shared/system-occupancy-simulation.ts#simulateRunOccupancy",
         "symbol:src/shared/system-occupancy-simulation.ts#simulateSystemOccupancy",
+        "symbol:src/shared/system-occupancy-simulation.ts#summarizeRunOccupancy",
         "symbol:src/shared/system-occupancy-simulation.ts#summarizeSystemOccupancy",
         "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BANDS",
         "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE",
@@ -30101,6 +30130,7 @@
       ],
       "testedBy": [
         "file:src/shared/mechanic-accountability.test.ts",
+        "file:src/shared/run-occupancy-simulation.test.ts",
         "file:src/shared/system-occupancy-simulation.test.ts"
       ]
     },
@@ -50784,104 +50814,136 @@
       "name": "dominantSystemKeys",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 718,
-      "endLine": 719
+      "line": 992,
+      "endLine": 995
+    },
+    {
+      "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeRunOccupancy",
+      "name": "judgeRunOccupancy",
+      "kind": "value",
+      "file": "src/shared/system-occupancy-simulation.ts",
+      "line": 950,
+      "endLine": 990
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
       "name": "judgeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 693,
-      "endLine": 715
+      "line": 916,
+      "endLine": 938
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancyAgainstBaseline",
       "name": "judgeSystemOccupancyAgainstBaseline",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 669,
-      "endLine": 691
+      "line": 877,
+      "endLine": 899
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OCCUPANCY_SEEDS",
       "name": "OCCUPANCY_SEEDS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 508,
-      "endLine": 508
+      "line": 716,
+      "endLine": 716
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OccupancyFloorResult",
       "name": "OccupancyFloorResult",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 352,
-      "endLine": 356
+      "line": 377,
+      "endLine": 381
+    },
+    {
+      "id": "symbol:src/shared/system-occupancy-simulation.ts#RunOccupancyReport",
+      "name": "RunOccupancyReport",
+      "kind": "interface",
+      "file": "src/shared/system-occupancy-simulation.ts",
+      "line": 582,
+      "endLine": 600
+    },
+    {
+      "id": "symbol:src/shared/system-occupancy-simulation.ts#simulateRunOccupancy",
+      "name": "simulateRunOccupancy",
+      "kind": "value",
+      "file": "src/shared/system-occupancy-simulation.ts",
+      "line": 602,
+      "endLine": 704
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#simulateSystemOccupancy",
       "name": "simulateSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 510,
-      "endLine": 555
+      "line": 718,
+      "endLine": 763
+    },
+    {
+      "id": "symbol:src/shared/system-occupancy-simulation.ts#summarizeRunOccupancy",
+      "name": "summarizeRunOccupancy",
+      "kind": "value",
+      "file": "src/shared/system-occupancy-simulation.ts",
+      "line": 706,
+      "endLine": 714
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#summarizeSystemOccupancy",
       "name": "summarizeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 721,
-      "endLine": 729
+      "line": 997,
+      "endLine": 1005
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BANDS",
       "name": "SYSTEM_OCCUPANCY_BANDS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 562,
-      "endLine": 573
+      "line": 770,
+      "endLine": 781
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE",
       "name": "SYSTEM_OCCUPANCY_BASELINE",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 623,
-      "endLine": 643
+      "line": 831,
+      "endLine": 851
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "name": "SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 660,
-      "endLine": 660
+      "line": 868,
+      "endLine": 868
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_COUNTERS",
       "name": "SYSTEM_OCCUPANCY_COUNTERS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 107,
-      "endLine": 186
+      "line": 121,
+      "endLine": 211
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SystemOccupancyCounter",
       "name": "SystemOccupancyCounter",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 42,
-      "endLine": 89
+      "line": 43,
+      "endLine": 103
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SystemOccupancyReport",
       "name": "SystemOccupancyReport",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 217,
-      "endLine": 229
+      "line": 242,
+      "endLine": 254
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#strandedLedgerIds",
@@ -70639,6 +70701,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/system-occupancy-simulation.ts->symbol:src/shared/system-occupancy-simulation.ts#judgeRunOccupancy",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "symbol:src/shared/system-occupancy-simulation.ts#judgeRunOccupancy",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/system-occupancy-simulation.ts->symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
       "source": "file:src/shared/system-occupancy-simulation.ts",
       "target": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
@@ -70663,9 +70731,27 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/system-occupancy-simulation.ts->symbol:src/shared/system-occupancy-simulation.ts#RunOccupancyReport",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "symbol:src/shared/system-occupancy-simulation.ts#RunOccupancyReport",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/system-occupancy-simulation.ts->symbol:src/shared/system-occupancy-simulation.ts#simulateRunOccupancy",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "symbol:src/shared/system-occupancy-simulation.ts#simulateRunOccupancy",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/system-occupancy-simulation.ts->symbol:src/shared/system-occupancy-simulation.ts#simulateSystemOccupancy",
       "source": "file:src/shared/system-occupancy-simulation.ts",
       "target": "symbol:src/shared/system-occupancy-simulation.ts#simulateSystemOccupancy",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/system-occupancy-simulation.ts->symbol:src/shared/system-occupancy-simulation.ts#summarizeRunOccupancy",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "symbol:src/shared/system-occupancy-simulation.ts#summarizeRunOccupancy",
       "kind": "exports"
     },
     {
@@ -85880,6 +85966,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/run-occupancy-simulation.test.ts->src/shared/system-occupancy-simulation.ts",
+      "source": "file:src/shared/run-occupancy-simulation.test.ts",
+      "target": "file:src/shared/system-occupancy-simulation.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/run-record-guards.test.ts->src/shared/run-record-guards.ts",
       "source": "file:src/shared/run-record-guards.test.ts",
       "target": "file:src/shared/run-record-guards.ts",
@@ -86699,6 +86791,12 @@
       "id": "imports:src/shared/system-occupancy-simulation.ts->src/shared/game.ts",
       "source": "file:src/shared/system-occupancy-simulation.ts",
       "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/system-occupancy-simulation.ts->src/shared/next-floor-transition-rules.ts",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "file:src/shared/next-floor-transition-rules.ts",
       "kind": "imports"
     },
     {
@@ -94600,6 +94698,12 @@
       "id": "tested_by:src/shared/system-occupancy-simulation.ts->file:src/shared/mechanic-accountability.test.ts",
       "source": "file:src/shared/system-occupancy-simulation.ts",
       "target": "file:src/shared/mechanic-accountability.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/system-occupancy-simulation.ts->file:src/shared/run-occupancy-simulation.test.ts",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "file:src/shared/run-occupancy-simulation.test.ts",
       "kind": "tested_by"
     },
     {

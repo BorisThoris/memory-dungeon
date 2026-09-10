@@ -1,6 +1,6 @@
 # Gameplay mechanics — machine snapshot
 
-**Generated:** 2026-09-10T10:34:17.981Z
+**Generated:** 2026-09-10T21:01:25.728Z
 
 > Regenerate with `yarn docs:mechanics-appendix`. Do not edit by hand.
 
@@ -14,7 +14,7 @@
 
 ## System refinement ledger
 
-Every system in the game, with the last generation that passed over it. 20 changed, 26 confirmed already in their refined state, 1 removed outright.
+Every system in the game, with the last generation that passed over it. 22 changed, 24 confirmed already in their refined state, 1 removed outright.
 
 | System | Verdict | Gen | What was found |
 | --- | --- | --- | --- |
@@ -28,13 +28,13 @@ Every system in the game, with the last generation that passed over it. 20 chang
 | `trait.stasis` | confirmed | 202 | Occupancy 0.512, banded common. Both its interaction lines land in the block lane, which is what a lock does, and the lane survived the Gen 202 cull on evidence. |
 | `power.peek` | confirmed | 201 | Occupancy 1.000 and honestly so: the census presses it at floor open, where an unrevealed card always exists. The reason is real on every floor, so 1.000 is a measurement rather than a construction. |
 | `power.pin` | changed | 201 | Re-banded core to common. It read 1.000 while the census pressed it at floor open regardless of the board; pressed after a miss, where a pin has a reason, it reads 0.158 - the reference miss rate. |
-| `power.flash_pair` | changed | 201 | Re-banded core to common, same cause as the pin: 1.000 constructed became 0.158 measured. The flash answers being stuck, and a player is stuck about as often as they miss. |
+| `power.flash_pair` | changed | 207 | Re-banded common -> rare at Gen 207. A setup charge the run hands out once and never refills: 0.042 of the floors in a run against the 0.158 a fresh run every floor reported. Rare is what a once-a-run charge is. |
 | `power.tile_swap` | changed | 201 | Stays core, but now on evidence: 0.988, because nearly every board deals a pair whose halves are not touching. Before, it was pressed unconditionally and read 1.000 by construction. |
-| `power.shuffle` | confirmed | 205 | Occupancy 1.000 on the tooled pass, banded core. Its Codex entry was repointed in Gen 201: a Scholar contract disables board shuffle and nothing else, which is what the code does. Gen 205 moved the census press off the halfway mark, where a break that empties the board in one turn skips it entirely. |
+| `power.shuffle` | changed | 207 | Re-banded core -> common at Gen 207. It read 1.000 of floors on a census that built a fresh run for every floor; across a real run it is 0.196, because a run starts with one shuffle charge and only one floor curio grants another. Nothing about the tool changed - the band was describing the instrument. Its Codex entry was repointed in Gen 201: a Scholar contract disables board shuffle and nothing else, which is what the code does. Gen 205 moved the census press off the halfway mark, where a break that empties the board in one turn skips it entirely. |
 | `power.region_shuffle` | confirmed | 205 | Occupancy 1.000, banded core - it sat at exactly 0.900 against a 0.900 bar until Gen 205 asked what the missing tenth was, and it was the census pressing at a moment a cascade can skip. It sets shuffleUsedThisFloor like the full shuffle, so the scholar-style objective catches it - checked against the rule, not the field name. |
 | `power.undo_resolve` | confirmed | 201 | Occupancy 0.475, banded common, and correctly bounded: undo only exists while a pair is resolving, so it cannot exceed the miss rate by much. |
 | `power.gambit` | confirmed | 201 | Occupancy 0.408, banded common. One third flip per floor, spent on the first miss, which is the only moment it can be spent. |
-| `power.wild_match` | confirmed | 200 | Re-banded common to core in Gen 200 against measurement: 1.000. Stray was the only thing that took the joker off the board before it could be spent, and Stray is gone. |
+| `power.wild_match` | changed | 207 | Re-banded core -> rare at Gen 207, and it is the clearest thing the run census found: the joker read 1.000 x 1.00 of floors because the census built a new setup run for every floor, and across a real run it is spent on floor 1 and never seen again, on all ten seeds. That is the setup sheet working exactly as written - one joker a run - so the power is unchanged and the claim about it is. |
 | `inventory.peek_charge` | confirmed | 201 | Spent as a fall rather than read as a value, so an Echo refund mid-floor cannot hide a spend. That distinction is the reason the census reports charges the way it does. |
 | `inventory.shuffle_charge` | confirmed | 201 | One charge, one dock tool, one spend path; the run-shell tool catalog gate proves no charge field exists without a tool that spends it. |
 | `inventory.region_shuffle_charge` | confirmed | 201 | Shared by the row shuffle and the tile swap, which is why the census gives them separate counter ids on separate passes rather than one row. |
