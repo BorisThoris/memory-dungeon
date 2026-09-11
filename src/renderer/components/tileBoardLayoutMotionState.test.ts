@@ -5,7 +5,7 @@ import {
     computeTileBoardCardGroupMotionState,
     computeTileBoardLayoutMotionState
 } from './tileBoardLayoutMotionState';
-import { GAMEPLAY_BOARD_VISUALS } from './gameplayVisualConfig';
+import { sampleTraumaShake, TILE_SHAKE_MAXIMA, TRAUMA_BY_SOURCE } from './boardTrauma';
 
 const createGroupMotionTarget = () => ({
     position: { x: 0, y: 0, z: 0 },
@@ -224,6 +224,7 @@ describe('tileBoardLayoutMotionState', () => {
             layoutMotionActive: true,
             liftSmooth: 0.11,
             matchPulse: 0.5,
+            trauma: 0,
             posLambda: 9,
             reduceMotion: false,
             resolvingSelection: 'match',
@@ -246,8 +247,16 @@ describe('tileBoardLayoutMotionState', () => {
         expect(state.posLambda).toBe(9);
     });
 
-    it('applies mismatch shake only when motion is allowed', () => {
-        const animated = computeTileBoardCardGroupMotionState({
+    it('shakes a card from its own trauma, and not at all under reduced motion', () => {
+        /*
+         * Gen 220. This used to assert `Math.sin(wobbleTime * 36) * mismatchShakeX` directly, which
+         * is a test of the expression rather than of the behaviour: the shake was on whenever the
+         * card was resolving a mismatch and off the frame that stopped. It comes off the card's own
+         * trauma now, so `resolvingSelection` no longer decides it - a card still settling from a
+         * miss shakes after the state has gone, and a card with no trauma is still whatever its
+         * state says.
+         */
+        const base = {
             entranceMotion: TILE_BOARD_ZERO_LAYOUT_MOTION,
             fieldDepth: 0,
             fieldLift: 0,
@@ -263,44 +272,39 @@ describe('tileBoardLayoutMotionState', () => {
             liftSmooth: 0,
             matchPulse: 0,
             posLambda: 200,
+            resolvingSelection: 'mismatch' as const,
+            rotationDamp: 16,
+            settle: 0,
+            shuffleMotion: TILE_BOARD_ZERO_LAYOUT_MOTION,
+            structDepth: 0,
+            transform,
+            wobbleTime: 0.37
+        };
+        const shaken = computeTileBoardCardGroupMotionState({
+            ...base,
             reduceMotion: false,
-            resolvingSelection: 'mismatch',
-            rotationDamp: 16,
-            settle: 0,
-            shuffleMotion: TILE_BOARD_ZERO_LAYOUT_MOTION,
-            structDepth: 0,
-            transform,
-            wobbleTime: 0
+            trauma: TRAUMA_BY_SOURCE.mismatchTile
         });
+        const still = computeTileBoardCardGroupMotionState({ ...base, reduceMotion: false, trauma: 0 });
         const reduced = computeTileBoardCardGroupMotionState({
-            entranceMotion: TILE_BOARD_ZERO_LAYOUT_MOTION,
-            fieldDepth: 0,
-            fieldLift: 0,
-            fieldRotX: 0,
-            fieldRotZ: 0,
-            flipPopScaleMultiplier: 1,
-            flipPopZ: 0,
-            hoverDepth: 0,
-            hoverTiltX: 0,
-            hoverTiltZ: 0,
-            idleDrift: 0,
-            layoutMotionActive: false,
-            liftSmooth: 0,
-            matchPulse: 0,
-            posLambda: 200,
+            ...base,
             reduceMotion: true,
-            resolvingSelection: 'mismatch',
-            rotationDamp: 16,
-            settle: 0,
-            shuffleMotion: TILE_BOARD_ZERO_LAYOUT_MOTION,
-            structDepth: 0,
-            transform,
-            wobbleTime: 0
+            trauma: TRAUMA_BY_SOURCE.mismatchTile
+        });
+        const expected = sampleTraumaShake({
+            maxima: TILE_SHAKE_MAXIMA,
+            seconds: base.wobbleTime,
+            trauma: TRAUMA_BY_SOURCE.mismatchTile
         });
 
-        expect(animated.positionXTarget).toBeCloseTo(reduced.positionXTarget);
-        expect(animated.positionYTarget).toBeCloseTo(
-            reduced.positionYTarget + GAMEPLAY_BOARD_VISUALS.mismatchShakeY
-        );
+        expect(shaken.positionXTarget - still.positionXTarget).toBeCloseTo(expected.offsetX, 9);
+        expect(shaken.positionYTarget - still.positionYTarget).toBeCloseTo(expected.offsetY, 9);
+        // Translational AND rotational, which is the source's advice for 2D and what the sine lacked.
+        expect(shaken.rotationZTarget - still.rotationZTarget).toBeCloseTo(expected.angleZ, 9);
+        expect(Math.abs(expected.offsetX) + Math.abs(expected.angleZ)).toBeGreaterThan(0);
+        // Reduced motion is still, however much trauma the card is carrying.
+        expect(reduced.positionXTarget).toBeCloseTo(still.positionXTarget, 9);
+        expect(reduced.positionYTarget).toBeCloseTo(still.positionYTarget, 9);
+        expect(reduced.rotationZTarget).toBeCloseTo(still.rotationZTarget, 9);
     });
 });

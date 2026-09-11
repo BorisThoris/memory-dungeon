@@ -354,6 +354,7 @@ const TileBezelInner = ({
     const prevResolvingRef = useRef<ResolvingSelectionState | null>(null);
     const lastResolvingWaveKeyRef = useRef<string | null>(null);
     const matchPulseRef = useRef(0);
+    const traumaRef = useRef(0);
     const liftSmoothRef = useRef(0);
     const frontCardMatRef = useRef<MeshStandardMaterial | null>(null);
     const backCardMatRef = useRef<MeshStandardMaterial | null>(null);
@@ -443,6 +444,7 @@ const TileBezelInner = ({
             prevResolvingRef,
             lastResolvingWaveKeyRef,
             matchPulseRef,
+            traumaRef,
             liftSmoothRef,
             frontCardMatRef,
             backCardMatRef,

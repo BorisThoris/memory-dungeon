@@ -34,6 +34,8 @@ export interface TileBezelFrameBag {
     prevResolvingRef: MutableRefObject<ResolvingSelectionState | null>;
     lastResolvingWaveKeyRef: MutableRefObject<string | null>;
     matchPulseRef: MutableRefObject<number>;
+    /** This card's own trauma, the shake it does when the miss was its (`boardTrauma.ts`). */
+    traumaRef: MutableRefObject<number>;
     liftSmoothRef: MutableRefObject<number>;
     frontCardMatRef: MutableRefObject<MeshStandardMaterial | null>;
     backCardMatRef: MutableRefObject<MeshStandardMaterial | null>;

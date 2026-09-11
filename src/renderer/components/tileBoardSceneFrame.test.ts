@@ -123,4 +123,64 @@ describe('tileBoardSceneFrame', () => {
         expect(uniforms.uMotion.value).toBe(0.06);
         expect(uniforms.grid).toEqual({ x: 12, y: 8 });
     });
+
+    it('shakes the whole board off its trauma, without letting the shake drift the pan', () => {
+        /*
+         * Gen 220. The shake has to sit ON TOP of the damped pan rather than in it: folded into the
+         * target the damp would smear it into a drift, and read back off the group's own position
+         * each frame the board would chase its own shake away from centre. So the pan is state the
+         * caller owns and the shake is an offset - and after twenty frames of shaking the pan is
+         * still converging on the viewport's own target, not somewhere else.
+         */
+        const group = new Group();
+        const pan = { x: 0, y: 0 };
+        const frame = (shake: { angleZ: number; offsetX: number; offsetY: number }): void => {
+            runTileBoardSceneFrame({
+                accumulatePerfPhases: () => undefined,
+                advanceTileFrame: () => undefined,
+                bags: new Map(),
+                boardGroup: group,
+                boardRuneFieldMetrics: { centerX: 0, centerY: 0, height: 4, width: 6 },
+                boardViewport,
+                clockElapsedTime: 10,
+                delta: 0.016,
+                idleStreaks: new Map(),
+                interactionSuppressed: false,
+                now: () => 100,
+                pan,
+                perfOn: false,
+                reduceMotion: false,
+                runeFieldUniforms: null,
+                sceneRenderQuality: gameplayRenderQualityProfile('medium'),
+                shake,
+                tileStepLegacy: false
+            });
+        };
+
+        frame({ angleZ: 0, offsetX: 0, offsetY: 0 });
+        const settledX = group.position.x;
+        expect(group.rotation.z).toBe(0);
+
+        frame({ angleZ: 0.03, offsetX: 0.05, offsetY: -0.04 });
+        expect(group.position.x).toBeGreaterThan(settledX);
+        // Translational and rotational together, which is the source's advice for 2D.
+        expect(group.rotation.z).toBeCloseTo(0.03, 9);
+        expect(group.position.x - pan.x).toBeCloseTo(0.05, 9);
+        expect(group.position.y - pan.y).toBeCloseTo(-0.04, 9);
+
+        for (let step = 0; step < 300; step += 1) {
+            frame({ angleZ: 0.03, offsetX: 0.05, offsetY: -0.04 });
+        }
+        // The pan converged on the viewport target; only the shake separates the group from it.
+        expect(pan.x).toBeCloseTo(boardViewport.panX, 3);
+        expect(pan.y).toBeCloseTo(boardViewport.panY, 3);
+        expect(group.position.x).toBeCloseTo(boardViewport.panX + 0.05, 3);
+
+        // And a board at rest sits exactly on the target, with no tilt left over.
+        for (let step = 0; step < 300; step += 1) {
+            frame({ angleZ: 0, offsetX: 0, offsetY: 0 });
+        }
+        expect(group.position.x).toBeCloseTo(boardViewport.panX, 3);
+        expect(group.rotation.z).toBe(0);
+    });
 });

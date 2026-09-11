@@ -44,8 +44,16 @@ import {
 } from './tileBoardRuneField';
 import { buildTileBoardSceneModel } from './tileBoardSceneModel';
 import {
+    advanceBoardTrauma,
+    BOARD_TRAUMA_AT_START,
+    type BoardTraumaMemory,
+    readBoardTrauma,
+    sampleTraumaShake
+} from './boardTrauma';
+import {
     applyInitialTileBoardViewportMotionState,
-    computeInitialTileBoardViewportMotionState
+    computeInitialTileBoardViewportMotionState,
+    type TileBoardPanState
 } from './tileBoardViewportMotionState';
 import {
     useTileBoardItemRegistry
@@ -203,6 +211,15 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         () => getResolvingMatchWaveKey(board, runStatus),
         [board, runStatus]
     );
+    /*
+     * The shake, on the trauma model (`boardTrauma.ts`). Read off the board the same way the match
+     * wave key is, so no event has to be threaded from the store through six components; integrated
+     * in the frame below, where the clock this game slows and holds on a Fever break already lives.
+     */
+    const boardTraumaReading = useMemo(() => readBoardTrauma(board, runStatus), [board, runStatus]);
+    const boardTraumaRef = useRef(0);
+    const boardTraumaMemoryRef = useRef<BoardTraumaMemory>(BOARD_TRAUMA_AT_START);
+    const boardPanRef = useRef<TileBoardPanState>({ x: boardViewport.panX, y: boardViewport.panY });
     const totalColumns = board.columns;
     const totalRows = board.rows;
     const textureRevision = useTileBoardTextureRevision();
@@ -348,6 +365,15 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
 
     useFrame((state, delta) => {
         const perfOn = boardWebglPerfSampleEnabled() || boardWebglPerfSampleVerboseEnabled();
+        const advancedTrauma = advanceBoardTrauma({
+            delta,
+            previous: boardTraumaMemoryRef.current,
+            reading: boardTraumaReading,
+            reduceMotion,
+            trauma: boardTraumaRef.current
+        });
+        boardTraumaMemoryRef.current = advancedTrauma.previous;
+        boardTraumaRef.current = advancedTrauma.trauma;
         runTileBoardSceneFrame({
             accumulatePerfPhases: boardWebglPerfSampleAccumulatePhases,
             advanceTileFrame: (bag) => advanceTileBezelFrame(bag, state, delta),
@@ -360,8 +386,10 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
             idleStreaks: tileFrameIdleStreakRef.current,
             interactionSuppressed,
             now: () => performance.now(),
+            pan: boardPanRef.current,
             perfOn,
             reduceMotion,
+            shake: sampleTraumaShake({ seconds: state.clock.elapsedTime, trauma: boardTraumaRef.current }),
             runeFieldUniforms: (boardRuneFieldMatRef.current?.uniforms as TileBoardRuneFieldUniformTarget | undefined) ?? null,
             sceneRenderQuality,
             tileStepLegacy

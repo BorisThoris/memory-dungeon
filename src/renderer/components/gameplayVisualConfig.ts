@@ -182,9 +182,7 @@ export const GAMEPLAY_BOARD_VISUALS = {
     mismatchEmissive: {
         base: 0.16,
         pulse: 0.1
-    },
-    mismatchShakeX: 0.022,
-    mismatchShakeY: 0.018
+    }
 } as const;
 
 export const GAMEPLAY_CARD_VISUALS = {

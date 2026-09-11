@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+
+import { BOARD_SHAKE_AT_REST } from './boardTrauma';
 import {
     BOARD_VIEWPORT_ACTIVE_DAMPING,
     BOARD_VIEWPORT_ACTIVE_SCALE_DAMPING,
@@ -133,6 +135,7 @@ describe('tile board viewport motion state', () => {
             target,
             {
                 instant: true,
+                shake: BOARD_SHAKE_AT_REST,
                 panDamping: BOARD_VIEWPORT_IDLE_DAMPING,
                 scaleDamping: BOARD_VIEWPORT_IDLE_SCALE_DAMPING,
                 targetPanX: -2,
@@ -155,6 +158,7 @@ describe('tile board viewport motion state', () => {
             target,
             {
                 instant: false,
+                shake: BOARD_SHAKE_AT_REST,
                 panDamping: BOARD_VIEWPORT_IDLE_DAMPING,
                 scaleDamping: BOARD_VIEWPORT_IDLE_SCALE_DAMPING,
                 targetPanX: 10,

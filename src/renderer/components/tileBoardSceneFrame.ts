@@ -1,4 +1,5 @@
 import type { Group } from 'three';
+import { BOARD_SHAKE_AT_REST, type BoardShakeSample } from './boardTrauma';
 import type { TileBoardViewportState } from './tileBoardViewport';
 import {
     advanceScheduledTileBezelFrames,
@@ -12,7 +13,8 @@ import {
 } from './tileBoardRuneField';
 import {
     applyTileBoardViewportMotionState,
-    computeTileBoardViewportMotionState
+    computeTileBoardViewportMotionState,
+    type TileBoardPanState
 } from './tileBoardViewportMotionState';
 import type { GameplayRenderQualityProfile } from './gameplayRenderProfile';
 import type { TileBezelFrameBag } from './tileBoardFrameBag';
@@ -37,10 +39,12 @@ export const runTileBoardSceneFrame = ({
     idleStreaks,
     interactionSuppressed,
     now,
+    pan,
     perfOn,
     reduceMotion,
     runeFieldUniforms,
     sceneRenderQuality,
+    shake = BOARD_SHAKE_AT_REST,
     tileStepLegacy
 }: {
     accumulatePerfPhases: (phases: { tileStepMs: number; viewportMs: number }) => void;
@@ -54,10 +58,13 @@ export const runTileBoardSceneFrame = ({
     idleStreaks: Map<string, number>;
     interactionSuppressed: boolean;
     now: () => number;
+    /** The damped pan, owned by the caller so the shake can sit on top of it without feeding back. */
+    pan?: TileBoardPanState;
     perfOn: boolean;
     reduceMotion: boolean;
     runeFieldUniforms: TileBoardRuneFieldUniformTarget | null;
     sceneRenderQuality: GameplayRenderQualityProfile;
+    shake?: BoardShakeSample;
     tileStepLegacy: boolean;
 }): TileBoardSceneFrameResult => {
     let tileStepMs = 0;
@@ -88,9 +95,10 @@ export const runTileBoardSceneFrame = ({
         const viewportMotion = computeTileBoardViewportMotionState({
             boardViewport,
             interactionSuppressed,
-            reduceMotion
+            reduceMotion,
+            shake
         });
-        applyTileBoardViewportMotionState(boardGroup, viewportMotion, delta);
+        applyTileBoardViewportMotionState(boardGroup, viewportMotion, delta, pan);
         viewportUpdated = true;
     }
 

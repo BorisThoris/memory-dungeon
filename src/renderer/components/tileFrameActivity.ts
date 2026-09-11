@@ -1,6 +1,7 @@
 import type { MutableRefObject, RefObject } from 'react';
 import { MathUtils, type Group } from 'three';
 import type { GraphicsQualityPreset, Tile } from '../../shared/contracts';
+import { sampleTraumaShake, TILE_SHAKE_MAXIMA } from './boardTrauma';
 import { GAMEPLAY_BOARD_VISUALS } from './gameplayVisualConfig';
 import type { ResolvingSelectionState } from './tileResolvingSelection';
 
@@ -49,6 +50,7 @@ export type TileBezelActivityBag = {
     faceUpStructBlendRef: MutableRefObject<number>;
     faceUpStructT0Ref: MutableRefObject<number | null>;
     matchPulseRef: MutableRefObject<number>;
+    traumaRef: MutableRefObject<number>;
     matchedVictoryBurstT0Ref: MutableRefObject<number | null>;
     liftSmoothRef: MutableRefObject<number>;
     pressingOnCardRef: MutableRefObject<boolean>;
@@ -349,18 +351,20 @@ export function shouldAdvanceTileBezelThisFrame(
     const baseTargetX = p.transform.baseX + p.transform.imperfectionX + p.transform.layoutJitterX;
     const baseTargetY =
         p.transform.baseY + p.transform.imperfectionY + p.transform.layoutJitterY + liftSmooth + fieldLift;
-    const mismatchShakeX =
-        p.resolvingSelection === 'mismatch'
-            ? Math.sin(clockElapsedTime * 36) * GAMEPLAY_BOARD_VISUALS.mismatchShakeX
-            : 0;
-    const mismatchShakeY =
-        p.resolvingSelection === 'mismatch'
-            ? Math.cos(clockElapsedTime * 29) * GAMEPLAY_BOARD_VISUALS.mismatchShakeY
-            : 0;
+    /*
+     * The same shake the frame draws, from the same function - this used to be a second copy of the
+     * sine with its own time variable, which is a divergence waiting to happen and the reason a
+     * still card could be judged idle while the frame was moving it.
+     */
+    const shake = sampleTraumaShake({
+        maxima: TILE_SHAKE_MAXIMA,
+        seconds: clockElapsedTime,
+        trauma: bag.traumaRef.current
+    });
 
     if (
-        Math.abs(group.position.x - (baseTargetX + mismatchShakeX)) > POS_EPS ||
-        Math.abs(group.position.y - (baseTargetY + mismatchShakeY)) > POS_EPS
+        Math.abs(group.position.x - (baseTargetX + shake.offsetX)) > POS_EPS ||
+        Math.abs(group.position.y - (baseTargetY + shake.offsetY)) > POS_EPS
     ) {
         return true;
     }

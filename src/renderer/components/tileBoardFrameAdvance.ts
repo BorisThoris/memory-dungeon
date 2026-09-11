@@ -52,6 +52,7 @@ export const advanceTileBezelFrame = (bag: TileBezelFrameBag, state: RootState, 
             matchPulse: bag.matchPulseRef.current,
             prevFaceUp: bag.prevFaceUpRef.current,
             prevResolvingSelection: bag.prevResolvingRef.current,
+            trauma: bag.traumaRef.current,
             wasMatched: bag.prevTileMatchedRef.current
         },
         delta,
@@ -72,6 +73,7 @@ export const advanceTileBezelFrame = (bag: TileBezelFrameBag, state: RootState, 
     bag.matchPulseRef.current = pulseRefs.matchPulse;
     bag.prevFaceUpRef.current = pulseRefs.prevFaceUp;
     bag.prevResolvingRef.current = pulseRefs.prevResolvingSelection;
+    bag.traumaRef.current = pulseRefs.trauma;
     bag.prevTileMatchedRef.current = pulseRefs.wasMatched;
     const matchPulse = bag.matchPulseRef.current;
     const matchedVictoryBurst = pulseTransition.matchedVictoryBurst;
@@ -207,6 +209,7 @@ export const advanceTileBezelFrame = (bag: TileBezelFrameBag, state: RootState, 
         shuffleMotion,
         structDepth,
         transform: p.transform,
+        trauma: bag.traumaRef.current,
         wobbleTime: clock.elapsedTime
     });
     applyTileBoardCardGroupMotionState(

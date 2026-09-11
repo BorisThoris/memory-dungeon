@@ -24,6 +24,7 @@ describe('tileBoardFramePulseState', () => {
                 lastResolvingWaveKey: null,
                 matchedVictoryBurstStartedAt: null,
                 matchPulse: 0,
+                trauma: 0,
                 prevFaceUp: false,
                 prevResolvingSelection: null,
                 wasMatched: false
@@ -60,6 +61,7 @@ describe('tileBoardFramePulseState', () => {
                 lastResolvingWaveKey: 'wave-a',
                 matchedVictoryBurstStartedAt: null,
                 matchPulse: 0.8,
+                trauma: 0,
                 prevFaceUp: true,
                 prevResolvingSelection: 'match',
                 wasMatched: false
@@ -86,6 +88,7 @@ describe('tileBoardFramePulseState', () => {
             flipPopStartedAt: 4,
             lastResolvingWaveKey: 'wave-a',
             matchPulse: 0.45,
+            trauma: 0,
             prevResolvingSelection: 'match' as const
         };
 

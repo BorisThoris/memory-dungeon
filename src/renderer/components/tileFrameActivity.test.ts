@@ -27,6 +27,7 @@ const makeBag = (opts: {
             | 'faceUpStructBlendRef'
             | 'faceUpStructT0Ref'
             | 'matchPulseRef'
+            | 'traumaRef'
             | 'matchedVictoryBurstT0Ref'
             | 'liftSmoothRef'
             | 'pressingOnCardRef'
@@ -40,6 +41,7 @@ const makeBag = (opts: {
     const faceUpStructBlendRef = { current: opts.refs?.faceUpStructBlendRef?.current ?? 0 };
     const faceUpStructT0Ref = { current: opts.refs?.faceUpStructT0Ref?.current ?? null };
     const matchPulseRef = { current: opts.refs?.matchPulseRef?.current ?? 0 };
+    const traumaRef = { current: opts.refs?.traumaRef?.current ?? 0 };
     const matchedVictoryBurstT0Ref = { current: opts.refs?.matchedVictoryBurstT0Ref?.current ?? null };
     const liftSmoothRef = { current: opts.refs?.liftSmoothRef?.current ?? 0 };
     const pressingOnCardRef = { current: opts.refs?.pressingOnCardRef?.current ?? false };
@@ -61,6 +63,7 @@ const makeBag = (opts: {
         faceUpStructBlendRef,
         faceUpStructT0Ref,
         matchPulseRef,
+        traumaRef,
         matchedVictoryBurstT0Ref,
         liftSmoothRef,
         pressingOnCardRef,

@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2441,
-    "codeFileCount": 873,
-    "exportedSymbolCount": 2628,
+    "trackedFileCount": 2443,
+    "codeFileCount": 875,
+    "exportedSymbolCount": 2654,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6682
+    "relationshipCount": 6722
   },
   "inventory": [
     {
@@ -748,7 +748,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "a0777dbb6c33e1fa0e5d4c44332ef40656522c05069feaa5a5c5a0925ab6482a"
+      "sha256": "2b1d5aad55e3df4db27afd597d92522d455ca033a9dfcdd5ca1d6bad67dc2666"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2332,7 +2332,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "3315f7386361ae6c1d892833f08353bcd460e673eb2880ae54ecd02eb2727de2"
+      "sha256": "4a472b5a87c6c6ac05f811da2d47941b42a42cc978045d61ce291388b73bac39"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -7729,6 +7729,18 @@
       "sha256": "5ea2579e9b47f7664a89383604aec4078a58f6040420484a0d16ba56e14e2552"
     },
     {
+      "path": "src/renderer/components/boardTrauma.test.ts",
+      "category": "test",
+      "bytes": 14938,
+      "sha256": "ebd0d4119f25528d1686ca5acc78c3ce0788a74a0c156a3792cae5afb66b7baa"
+    },
+    {
+      "path": "src/renderer/components/boardTrauma.ts",
+      "category": "source",
+      "bytes": 13810,
+      "sha256": "2d969004565e6656f3e1bed6b91c8c3b72beeb17d23c84c9e7a5c3b565d61c84"
+    },
+    {
       "path": "src/renderer/components/cardArcaneGlowMaterial.test.ts",
       "category": "test",
       "bytes": 2142,
@@ -7887,8 +7899,8 @@
     {
       "path": "src/renderer/components/gameplayVisualConfig.ts",
       "category": "source",
-      "bytes": 13311,
-      "sha256": "2497c63cd382c25d79a0d028e3b6c91fb1a2366a8c2d652e706f323da02a4d3a"
+      "bytes": 13257,
+      "sha256": "2ca81e3ad859f7f8220362c0f42b3806b2b6ca958406e9e1df63b7c763bbba20"
     },
     {
       "path": "src/renderer/components/GameScreen.module.css",
@@ -8253,8 +8265,8 @@
     {
       "path": "src/renderer/components/TileBezel.tsx",
       "category": "source",
-      "bytes": 32599,
-      "sha256": "3c815fb6bcfd10084efd5362affcdb0b37d314c4503b3feb0c1aebe218f09f6a"
+      "bytes": 32655,
+      "sha256": "5c9f4aa58e15fea30efe295a0fc89e69fc8e9b53aca070c2fc2fd8e3151e03b6"
     },
     {
       "path": "src/renderer/components/TileBoard.module.css",
@@ -8421,20 +8433,20 @@
     {
       "path": "src/renderer/components/tileBoardFrameAdvance.ts",
       "category": "source",
-      "bytes": 11850,
-      "sha256": "995ed7e34dc5905b755ca10e3ab03915bcb59017a707d1ae44d9bcc231dbbde4"
+      "bytes": 11978,
+      "sha256": "39c9f9c9b97e85d034a9cbc4d7668e44a82884117161ee4f480f927bdffe5da0"
     },
     {
       "path": "src/renderer/components/tileBoardFrameBag.test.ts",
       "category": "test",
-      "bytes": 3824,
-      "sha256": "10eb53eaa16af6d11b02dc9b19843fa7ebb312505a8f196c6bf83a46f0865c82"
+      "bytes": 3847,
+      "sha256": "bdc2cc0222ff7e95928c95c4a8694c9dcc515b6eaa6104c0c8c1509765db5a43"
     },
     {
       "path": "src/renderer/components/tileBoardFrameBag.ts",
       "category": "source",
-      "bytes": 4040,
-      "sha256": "781cb322166c5a647c110af105756cd444ad719342c8533870598862c413c6f5"
+      "bytes": 4176,
+      "sha256": "32341aeebcb0380df0aa3076819802aa51ff5a6a9b09a995ee766e27f630bdef"
     },
     {
       "path": "src/renderer/components/tileBoardFrameDeparture.test.ts",
@@ -8469,14 +8481,14 @@
     {
       "path": "src/renderer/components/tileBoardFramePulseState.test.ts",
       "category": "test",
-      "bytes": 11102,
-      "sha256": "0ca33c66dc37e4b54ee75fee9a8d46aba4738a532f4df9872c7270e614f6267e"
+      "bytes": 11179,
+      "sha256": "176e0beda9db460884b278e116360dcc4b71992ded567de2f526ed6f544d98f9"
     },
     {
       "path": "src/renderer/components/tileBoardFramePulseState.ts",
       "category": "source",
-      "bytes": 10168,
-      "sha256": "9dc56cece5c42865f5c976473c25824a969564a07be667d1a64ba9b2489b4208"
+      "bytes": 11940,
+      "sha256": "dc36d9725bc06f882a006ab0979be20fd6c9dd53228dab387895f864a18ee56e"
     },
     {
       "path": "src/renderer/components/tileBoardFrameVisualState.test.ts",
@@ -8583,14 +8595,14 @@
     {
       "path": "src/renderer/components/tileBoardLayoutMotionState.test.ts",
       "category": "test",
-      "bytes": 10920,
-      "sha256": "a5840c148f5a71b700ffa1d6ea337885db4d8c460b24b71c5bff70092497cd1f"
+      "bytes": 11895,
+      "sha256": "e82466b8be4ff42ba81c952ce58f9532d8cdb9b9b74a7b27608fb2e09d13d92e"
     },
     {
       "path": "src/renderer/components/tileBoardLayoutMotionState.ts",
       "category": "source",
-      "bytes": 7984,
-      "sha256": "907c47a68afa734cfd9f73bf0a5c97aa5518dc05c52b9d61865c89fe0afce5c5"
+      "bytes": 8335,
+      "sha256": "c991d1a8be8d112a94b7a4e2088edd1f223f1620d7d6509e199b9595d70d73ec"
     },
     {
       "path": "src/renderer/components/tileBoardMaterialVisualState.test.ts",
@@ -8751,8 +8763,8 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 16347,
-      "sha256": "0e3877744af772aa791f196a4263019de843b92f2f364e71bcd6928cb53e9fd4"
+      "bytes": 17681,
+      "sha256": "7ef129a6cd428ab0bde6f190cd410be977c7c60e835b2446f659f005b16eac42"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
@@ -8763,14 +8775,14 @@
     {
       "path": "src/renderer/components/tileBoardSceneFrame.test.ts",
       "category": "test",
-      "bytes": 4546,
-      "sha256": "9e642f703398ab470c450bd56e10ca2bba37e270b66eb332e27378c7cee713ae"
+      "bytes": 7396,
+      "sha256": "637e1facd0d6f54bac3101f8e55f3a2c1c056eac5f0d54e25ea0070eeb3dd818"
     },
     {
       "path": "src/renderer/components/tileBoardSceneFrame.ts",
       "category": "source",
-      "bytes": 3515,
-      "sha256": "5e043095d63d6b6e468fd551a393bd39ed7c0e8a3cff1bed21bed53d86f2b35c"
+      "bytes": 3847,
+      "sha256": "0fc2f466f0f00b81d1a5f0d33584807826673e34d65d8eee0e7b44046d51ad4a"
     },
     {
       "path": "src/renderer/components/tileBoardSceneLighting.test.ts",
@@ -8937,14 +8949,14 @@
     {
       "path": "src/renderer/components/tileBoardViewportMotionState.test.ts",
       "category": "test",
-      "bytes": 5684,
-      "sha256": "41f58b714e6044c12ca06d6b06d22d2dd5966a7903f649f2cf75605ac525c6e0"
+      "bytes": 5826,
+      "sha256": "8ab2312d32d6d04f10b409520800776827f059f35ecfb6f0e62b4b7d3406db66"
     },
     {
       "path": "src/renderer/components/tileBoardViewportMotionState.ts",
       "category": "source",
-      "bytes": 3229,
-      "sha256": "460823bd487b3bf04eed9dc4897b3e6ebbca1052b6f0c8c86b41cb19223d8bf8"
+      "bytes": 4391,
+      "sha256": "dde76f0f0e9642ac544ffecaf3857fa731b493af8d1484625467554df9db7445"
     },
     {
       "path": "src/renderer/components/tileBoardVisualTiers.test.ts",
@@ -8991,14 +9003,14 @@
     {
       "path": "src/renderer/components/tileFrameActivity.test.ts",
       "category": "test",
-      "bytes": 15595,
-      "sha256": "5f4709eb2ab4104a0cab364ea6356b7be90ed9d17e3a568d93d70115be7c4b11"
+      "bytes": 15711,
+      "sha256": "f3d2c102c669a2bf6e8d5bfb01385ac6f8550dca87e112fa192deb572ccfd905"
     },
     {
       "path": "src/renderer/components/tileFrameActivity.ts",
       "category": "source",
-      "bytes": 13182,
-      "sha256": "fddc7f219659aa56dd6a48002bb7406e540aa73f5195599100318565b27732bc"
+      "bytes": 13380,
+      "sha256": "8f6b530afe0baba2f36afcc507426198604188dbdf6572f30740c4a3bf89c63c"
     },
     {
       "path": "src/renderer/components/tileResolvingSelection.test.ts",
@@ -16645,6 +16657,62 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/boardTrauma.test.ts",
+      "path": "src/renderer/components/boardTrauma.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 297,
+      "imports": [
+        "file:src/renderer/components/boardTrauma.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/boardTrauma.ts",
+      "path": "src/renderer/components/boardTrauma.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 299,
+      "imports": [
+        "file:src/renderer/components/tileResolvingSelection.ts",
+        "file:src/shared/chain-tier-rules.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/boardTrauma.ts#addTrauma",
+        "symbol:src/renderer/components/boardTrauma.ts#advanceBoardTrauma",
+        "symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_AT_REST",
+        "symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_CHANNEL_OFFSETS",
+        "symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_FREQUENCY_HZ",
+        "symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_MAX_ANGLE",
+        "symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_MAX_OFFSET_X",
+        "symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_MAX_OFFSET_Y",
+        "symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_MAXIMA",
+        "symbol:src/renderer/components/boardTrauma.ts#BOARD_TRAUMA_AT_START",
+        "symbol:src/renderer/components/boardTrauma.ts#BoardShakeSample",
+        "symbol:src/renderer/components/boardTrauma.ts#BoardTraumaMemory",
+        "symbol:src/renderer/components/boardTrauma.ts#BoardTraumaReading",
+        "symbol:src/renderer/components/boardTrauma.ts#BoardTraumaSource",
+        "symbol:src/renderer/components/boardTrauma.ts#decayTrauma",
+        "symbol:src/renderer/components/boardTrauma.ts#readBoardTrauma",
+        "symbol:src/renderer/components/boardTrauma.ts#sampleTraumaShake",
+        "symbol:src/renderer/components/boardTrauma.ts#TILE_SHAKE_MAXIMA",
+        "symbol:src/renderer/components/boardTrauma.ts#TRAUMA_BY_SOURCE",
+        "symbol:src/renderer/components/boardTrauma.ts#TRAUMA_DECAY_PER_SECOND",
+        "symbol:src/renderer/components/boardTrauma.ts#TRAUMA_EXPONENT",
+        "symbol:src/renderer/components/boardTrauma.ts#traumaNoise",
+        "symbol:src/renderer/components/boardTrauma.ts#traumaShakeAmount",
+        "symbol:src/renderer/components/boardTrauma.ts#TraumaShakeMaxima"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/boardTrauma.test.ts",
+        "file:src/renderer/components/tileBoardLayoutMotionState.test.ts",
+        "file:src/renderer/components/tileBoardViewportMotionState.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/cardArcaneGlowMaterial.test.ts",
       "path": "src/renderer/components/cardArcaneGlowMaterial.test.ts",
       "layer": "renderer",
@@ -17030,7 +17098,7 @@
       "path": "src/renderer/components/gameplayVisualConfig.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 282,
+      "lineCount": 280,
       "imports": [
         "file:src/renderer/components/gameplayRenderProfile.ts",
         "file:src/shared/contracts.ts"
@@ -17046,7 +17114,6 @@
         "file:src/renderer/components/tileBoardFramePulseState.test.ts",
         "file:src/renderer/components/tileBoardHoverGoldVisualState.test.ts",
         "file:src/renderer/components/tileBoardInteractionMotionState.test.ts",
-        "file:src/renderer/components/tileBoardLayoutMotionState.test.ts",
         "file:src/renderer/components/tileBoardMaterialVisualState.test.ts",
         "file:src/renderer/components/tileBoardRimVisualState.test.ts",
         "file:src/renderer/components/tileBoardVisualTiers.test.ts",
@@ -17985,7 +18052,7 @@
       "path": "src/renderer/components/TileBezel.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 847,
+      "lineCount": 849,
       "imports": [
         "file:src/renderer/components/cardArcaneGlowMaterial.ts",
         "file:src/renderer/components/cardSvgPlaneGeometry.ts",
@@ -18546,7 +18613,7 @@
       "path": "src/renderer/components/tileBoardFrameAdvance.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 305,
+      "lineCount": 308,
       "imports": [
         "file:src/renderer/components/tileBoardCardBend.ts",
         "file:src/renderer/components/tileBoardFrameBag.ts",
@@ -18568,7 +18635,7 @@
       "path": "src/renderer/components/tileBoardFrameBag.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 110,
+      "lineCount": 111,
       "imports": [
         "file:src/renderer/components/tileBoardFrameBag.ts"
       ],
@@ -18580,7 +18647,7 @@
       "path": "src/renderer/components/tileBoardFrameBag.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 92,
+      "lineCount": 94,
       "imports": [
         "file:src/renderer/components/tileBoardFramePropsSnapshot.ts",
         "file:src/renderer/components/tileResolvingSelection.ts",
@@ -18679,7 +18746,7 @@
       "path": "src/renderer/components/tileBoardFramePulseState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 316,
+      "lineCount": 319,
       "imports": [
         "file:src/renderer/components/gameplayVisualConfig.ts",
         "file:src/renderer/components/tileBoardFramePulseState.ts"
@@ -18692,8 +18759,9 @@
       "path": "src/renderer/components/tileBoardFramePulseState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 334,
+      "lineCount": 381,
       "imports": [
+        "file:src/renderer/components/boardTrauma.ts",
         "file:src/renderer/components/gameplayVisualConfig.ts",
         "file:src/renderer/components/tileResolvingSelection.ts",
         "file:src/shared/contracts.ts"
@@ -18709,6 +18777,7 @@
         "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardMatchedBurstState",
         "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardMatchPulseState",
         "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardResolvingWaveFrameState",
+        "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardTraumaState",
         "symbol:src/renderer/components/tileBoardFramePulseState.ts#MATCH_PULSE_DECAY_PER_SECOND"
       ],
       "testedBy": [
@@ -19001,9 +19070,9 @@
       "path": "src/renderer/components/tileBoardLayoutMotionState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 307,
+      "lineCount": 311,
       "imports": [
-        "file:src/renderer/components/gameplayVisualConfig.ts",
+        "file:src/renderer/components/boardTrauma.ts",
         "file:src/renderer/components/tileBoardLayoutMotionState.ts"
       ],
       "exports": [],
@@ -19014,9 +19083,9 @@
       "path": "src/renderer/components/tileBoardLayoutMotionState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 242,
+      "lineCount": 247,
       "imports": [
-        "file:src/renderer/components/gameplayVisualConfig.ts",
+        "file:src/renderer/components/boardTrauma.ts",
         "file:src/renderer/components/shuffleFlipAnimation.ts",
         "file:src/renderer/components/tileBoardTransform.ts",
         "file:src/renderer/components/tileResolvingSelection.ts"
@@ -19508,8 +19577,9 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 419,
+      "lineCount": 447,
       "imports": [
+        "file:src/renderer/components/boardTrauma.ts",
         "file:src/renderer/components/gameplayRenderProfile.ts",
         "file:src/renderer/components/TileBezel.tsx",
         "file:src/renderer/components/tileBoardFrameAdvance.ts",
@@ -19568,7 +19638,7 @@
       "path": "src/renderer/components/tileBoardSceneFrame.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 127,
+      "lineCount": 187,
       "imports": [
         "file:src/renderer/components/gameplayRenderProfile.ts",
         "file:src/renderer/components/tileBoardRuneField.ts",
@@ -19582,8 +19652,9 @@
       "path": "src/renderer/components/tileBoardSceneFrame.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 122,
+      "lineCount": 130,
       "imports": [
+        "file:src/renderer/components/boardTrauma.ts",
         "file:src/renderer/components/gameplayRenderProfile.ts",
         "file:src/renderer/components/tileBoardFrameBag.ts",
         "file:src/renderer/components/tileBoardRuneField.ts",
@@ -20042,8 +20113,9 @@
       "path": "src/renderer/components/tileBoardViewportMotionState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 177,
+      "lineCount": 181,
       "imports": [
+        "file:src/renderer/components/boardTrauma.ts",
         "file:src/renderer/components/tileBoardViewportMotionState.ts"
       ],
       "exports": [],
@@ -20054,8 +20126,9 @@
       "path": "src/renderer/components/tileBoardViewportMotionState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 90,
+      "lineCount": 119,
       "imports": [
+        "file:src/renderer/components/boardTrauma.ts",
         "file:src/renderer/components/tileBoardViewport.ts"
       ],
       "exports": [
@@ -20067,6 +20140,7 @@
         "symbol:src/renderer/components/tileBoardViewportMotionState.ts#BOARD_VIEWPORT_IDLE_SCALE_DAMPING",
         "symbol:src/renderer/components/tileBoardViewportMotionState.ts#computeInitialTileBoardViewportMotionState",
         "symbol:src/renderer/components/tileBoardViewportMotionState.ts#computeTileBoardViewportMotionState",
+        "symbol:src/renderer/components/tileBoardViewportMotionState.ts#TileBoardPanState",
         "symbol:src/renderer/components/tileBoardViewportMotionState.ts#TileBoardViewportMotionTarget"
       ],
       "testedBy": [
@@ -20179,7 +20253,7 @@
       "path": "src/renderer/components/tileFrameActivity.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 445,
+      "lineCount": 448,
       "imports": [
         "file:src/renderer/components/tileFrameActivity.ts",
         "file:src/shared/contracts.ts"
@@ -20192,8 +20266,9 @@
       "path": "src/renderer/components/tileFrameActivity.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 370,
+      "lineCount": 374,
       "imports": [
+        "file:src/renderer/components/boardTrauma.ts",
         "file:src/renderer/components/gameplayVisualConfig.ts",
         "file:src/renderer/components/tileResolvingSelection.ts",
         "file:src/shared/contracts.ts"
@@ -25104,6 +25179,7 @@
         "file:src/renderer/audio/gameSfx.test.ts",
         "file:src/renderer/cardFace/programmaticCardFace.test.ts",
         "file:src/renderer/cardFace/resolveCardIllustrationUrl.test.ts",
+        "file:src/renderer/components/boardTrauma.test.ts",
         "file:src/renderer/components/codexScreenModel.test.ts",
         "file:src/renderer/components/CollectionScreen.test.tsx",
         "file:src/renderer/components/FloorClearBeat.test.tsx",
@@ -33216,6 +33292,198 @@
       "endLine": 63
     },
     {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#addTrauma",
+      "name": "addTrauma",
+      "kind": "value",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 174,
+      "endLine": 174
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#advanceBoardTrauma",
+      "name": "advanceBoardTrauma",
+      "kind": "value",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 245,
+      "endLine": 273
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_AT_REST",
+      "name": "BOARD_SHAKE_AT_REST",
+      "kind": "value",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 186,
+      "endLine": 186
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_CHANNEL_OFFSETS",
+      "name": "BOARD_SHAKE_CHANNEL_OFFSETS",
+      "kind": "value",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 102,
+      "endLine": 102
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_FREQUENCY_HZ",
+      "name": "BOARD_SHAKE_FREQUENCY_HZ",
+      "kind": "value",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 96,
+      "endLine": 96
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_MAX_ANGLE",
+      "name": "BOARD_SHAKE_MAX_ANGLE",
+      "kind": "value",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 73,
+      "endLine": 73
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_MAX_OFFSET_X",
+      "name": "BOARD_SHAKE_MAX_OFFSET_X",
+      "kind": "value",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 70,
+      "endLine": 70
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_MAX_OFFSET_Y",
+      "name": "BOARD_SHAKE_MAX_OFFSET_Y",
+      "kind": "value",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 71,
+      "endLine": 71
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_MAXIMA",
+      "name": "BOARD_SHAKE_MAXIMA",
+      "kind": "value",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 81,
+      "endLine": 85
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#BOARD_TRAUMA_AT_START",
+      "name": "BOARD_TRAUMA_AT_START",
+      "kind": "value",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 239,
+      "endLine": 239
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#BoardShakeSample",
+      "name": "BoardShakeSample",
+      "kind": "interface",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 180,
+      "endLine": 184
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#BoardTraumaMemory",
+      "name": "BoardTraumaMemory",
+      "kind": "interface",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 234,
+      "endLine": 237
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#BoardTraumaReading",
+      "name": "BoardTraumaReading",
+      "kind": "interface",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 228,
+      "endLine": 232
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#BoardTraumaSource",
+      "name": "BoardTraumaSource",
+      "kind": "type",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 112,
+      "endLine": 112
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#decayTrauma",
+      "name": "decayTrauma",
+      "kind": "value",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 177,
+      "endLine": 178
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#readBoardTrauma",
+      "name": "readBoardTrauma",
+      "kind": "value",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 278,
+      "endLine": 298
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#sampleTraumaShake",
+      "name": "sampleTraumaShake",
+      "kind": "value",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 193,
+      "endLine": 212
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#TILE_SHAKE_MAXIMA",
+      "name": "TILE_SHAKE_MAXIMA",
+      "kind": "value",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 94,
+      "endLine": 94
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#TRAUMA_BY_SOURCE",
+      "name": "TRAUMA_BY_SOURCE",
+      "kind": "value",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 119,
+      "endLine": 129
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#TRAUMA_DECAY_PER_SECOND",
+      "name": "TRAUMA_DECAY_PER_SECOND",
+      "kind": "value",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 110,
+      "endLine": 110
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#TRAUMA_EXPONENT",
+      "name": "TRAUMA_EXPONENT",
+      "kind": "value",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 104,
+      "endLine": 104
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#traumaNoise",
+      "name": "traumaNoise",
+      "kind": "value",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 161,
+      "endLine": 168
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#traumaShakeAmount",
+      "name": "traumaShakeAmount",
+      "kind": "value",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 171,
+      "endLine": 171
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#TraumaShakeMaxima",
+      "name": "TraumaShakeMaxima",
+      "kind": "interface",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 75,
+      "endLine": 79
+    },
+    {
       "id": "symbol:src/renderer/components/cardArcaneGlowMaterial.ts#CardArcaneGlowUniforms",
       "name": "CardArcaneGlowUniforms",
       "kind": "interface",
@@ -33444,8 +33712,8 @@
       "name": "CARD_INTERACTION_FEEDBACK",
       "kind": "value",
       "file": "src/renderer/components/gameplayVisualConfig.ts",
-      "line": 210,
-      "endLine": 267
+      "line": 208,
+      "endLine": 265
     },
     {
       "id": "symbol:src/renderer/components/gameplayVisualConfig.ts#GAMEPLAY_BOARD_VISUALS",
@@ -33453,15 +33721,15 @@
       "kind": "value",
       "file": "src/renderer/components/gameplayVisualConfig.ts",
       "line": 74,
-      "endLine": 188
+      "endLine": 186
     },
     {
       "id": "symbol:src/renderer/components/gameplayVisualConfig.ts#GAMEPLAY_CARD_VISUALS",
       "name": "GAMEPLAY_CARD_VISUALS",
       "kind": "value",
       "file": "src/renderer/components/gameplayVisualConfig.ts",
-      "line": 190,
-      "endLine": 208
+      "line": 188,
+      "endLine": 206
     },
     {
       "id": "symbol:src/renderer/components/gameplayVisualConfig.ts#GAMEPLAY_VISUAL_CSS_VARS",
@@ -34132,8 +34400,8 @@
       "name": "TileBezel",
       "kind": "value",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 846,
-      "endLine": 846
+      "line": 848,
+      "endLine": 848
     },
     {
       "id": "symbol:src/renderer/components/TileBezel.tsx#TileHoverTiltState",
@@ -34933,23 +35201,23 @@
       "kind": "value",
       "file": "src/renderer/components/tileBoardFrameAdvance.ts",
       "line": 32,
-      "endLine": 304
+      "endLine": 307
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFrameBag.ts#createOrUpdateTileBezelFrameBag",
       "name": "createOrUpdateTileBezelFrameBag",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFrameBag.ts",
-      "line": 81,
-      "endLine": 91
+      "line": 83,
+      "endLine": 93
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFrameBag.ts#CreateTileBezelFrameBagInput",
       "name": "CreateTileBezelFrameBagInput",
       "kind": "type",
       "file": "src/renderer/components/tileBoardFrameBag.ts",
-      "line": 77,
-      "endLine": 79
+      "line": 79,
+      "endLine": 81
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFrameBag.ts#TileBezelFrameBag",
@@ -34957,7 +35225,7 @@
       "kind": "interface",
       "file": "src/renderer/components/tileBoardFrameBag.ts",
       "line": 20,
-      "endLine": 75
+      "endLine": 77
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFrameBag.ts#TileBezelPlaneGeometries",
@@ -35004,88 +35272,96 @@
       "name": "BREAK_DEPARTURE_SECONDS",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 75,
-      "endLine": 75
+      "line": 79,
+      "endLine": 79
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#CARD_FACE_UP_SURFACE_SECONDS",
       "name": "CARD_FACE_UP_SURFACE_SECONDS",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 5,
-      "endLine": 5
+      "line": 6,
+      "endLine": 6
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#CARD_FLIP_POP_SECONDS",
       "name": "CARD_FLIP_POP_SECONDS",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 6,
-      "endLine": 6
+      "line": 7,
+      "endLine": 7
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardFaceUpStructState",
       "name": "computeTileBoardFaceUpStructState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 123,
-      "endLine": 156
+      "line": 127,
+      "endLine": 160
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardFlipPopStart",
       "name": "computeTileBoardFlipPopStart",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 103,
-      "endLine": 121
+      "line": 107,
+      "endLine": 125
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardFlipPopVisualState",
       "name": "computeTileBoardFlipPopVisualState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 230,
-      "endLine": 254
+      "line": 267,
+      "endLine": 291
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardFramePulseTransitionState",
       "name": "computeTileBoardFramePulseTransitionState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 256,
-      "endLine": 333
+      "line": 293,
+      "endLine": 380
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardMatchedBurstState",
       "name": "computeTileBoardMatchedBurstState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 180,
-      "endLine": 228
+      "line": 217,
+      "endLine": 265
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardMatchPulseState",
       "name": "computeTileBoardMatchPulseState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 158,
-      "endLine": 178
+      "line": 162,
+      "endLine": 182
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardResolvingWaveFrameState",
       "name": "computeTileBoardResolvingWaveFrameState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 84,
-      "endLine": 101
+      "line": 88,
+      "endLine": 105
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardTraumaState",
+      "name": "computeTileBoardTraumaState",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardFramePulseState.ts",
+      "line": 195,
+      "endLine": 215
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#MATCH_PULSE_DECAY_PER_SECOND",
       "name": "MATCH_PULSE_DECAY_PER_SECOND",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 7,
-      "endLine": 7
+      "line": 8,
+      "endLine": 8
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFrameVisualState.ts#applyTileBoardFrameVisualState",
@@ -35324,32 +35600,32 @@
       "name": "applyTileBoardCardGroupMotionState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardLayoutMotionState.ts",
-      "line": 151,
-      "endLine": 185
+      "line": 153,
+      "endLine": 187
     },
     {
       "id": "symbol:src/renderer/components/tileBoardLayoutMotionState.ts#computeTileBoardCardGroupMotionState",
       "name": "computeTileBoardCardGroupMotionState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardLayoutMotionState.ts",
-      "line": 187,
-      "endLine": 241
+      "line": 189,
+      "endLine": 246
     },
     {
       "id": "symbol:src/renderer/components/tileBoardLayoutMotionState.ts#computeTileBoardLayoutMotionState",
       "name": "computeTileBoardLayoutMotionState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardLayoutMotionState.ts",
-      "line": 83,
-      "endLine": 149
+      "line": 85,
+      "endLine": 151
     },
     {
       "id": "symbol:src/renderer/components/tileBoardLayoutMotionState.ts#TILE_BOARD_ZERO_LAYOUT_MOTION",
       "name": "TILE_BOARD_ZERO_LAYOUT_MOTION",
       "kind": "value",
       "file": "src/renderer/components/tileBoardLayoutMotionState.ts",
-      "line": 74,
-      "endLine": 81
+      "line": 76,
+      "endLine": 83
     },
     {
       "id": "symbol:src/renderer/components/tileBoardMaterialVisualState.ts#applyCardMaterialEmissive",
@@ -35948,24 +36224,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 418,
-      "endLine": 418
+      "line": 446,
+      "endLine": 446
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
       "name": "TileBoardSceneHandle",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 140,
-      "endLine": 140
+      "line": 148,
+      "endLine": 148
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 65,
-      "endLine": 65
+      "line": 73,
+      "endLine": 73
     },
     {
       "id": "symbol:src/renderer/components/TileBoardSceneBoardGroup.tsx#TileBoardSceneBoardGroup",
@@ -35980,8 +36256,8 @@
       "name": "runTileBoardSceneFrame",
       "kind": "value",
       "file": "src/renderer/components/tileBoardSceneFrame.ts",
-      "line": 28,
-      "endLine": 121
+      "line": 30,
+      "endLine": 129
     },
     {
       "id": "symbol:src/renderer/components/tileBoardSceneLighting.ts#getTileBoardSceneLightProps",
@@ -36444,72 +36720,80 @@
       "name": "applyInitialTileBoardViewportMotionState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewportMotionState.ts",
-      "line": 59,
-      "endLine": 70
+      "line": 77,
+      "endLine": 88
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewportMotionState.ts#applyTileBoardViewportMotionState",
       "name": "applyTileBoardViewportMotionState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewportMotionState.ts",
-      "line": 72,
-      "endLine": 89
+      "line": 90,
+      "endLine": 118
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewportMotionState.ts#BOARD_VIEWPORT_ACTIVE_DAMPING",
       "name": "BOARD_VIEWPORT_ACTIVE_DAMPING",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewportMotionState.ts",
-      "line": 5,
-      "endLine": 5
+      "line": 6,
+      "endLine": 6
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewportMotionState.ts#BOARD_VIEWPORT_ACTIVE_SCALE_DAMPING",
       "name": "BOARD_VIEWPORT_ACTIVE_SCALE_DAMPING",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewportMotionState.ts",
-      "line": 7,
-      "endLine": 7
+      "line": 8,
+      "endLine": 8
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewportMotionState.ts#BOARD_VIEWPORT_IDLE_DAMPING",
       "name": "BOARD_VIEWPORT_IDLE_DAMPING",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewportMotionState.ts",
-      "line": 4,
-      "endLine": 4
+      "line": 5,
+      "endLine": 5
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewportMotionState.ts#BOARD_VIEWPORT_IDLE_SCALE_DAMPING",
       "name": "BOARD_VIEWPORT_IDLE_SCALE_DAMPING",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewportMotionState.ts",
-      "line": 6,
-      "endLine": 6
+      "line": 7,
+      "endLine": 7
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewportMotionState.ts#computeInitialTileBoardViewportMotionState",
       "name": "computeInitialTileBoardViewportMotionState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewportMotionState.ts",
-      "line": 49,
-      "endLine": 57
+      "line": 67,
+      "endLine": 75
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewportMotionState.ts#computeTileBoardViewportMotionState",
       "name": "computeTileBoardViewportMotionState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewportMotionState.ts",
-      "line": 32,
-      "endLine": 47
+      "line": 47,
+      "endLine": 65
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardViewportMotionState.ts#TileBoardPanState",
+      "name": "TileBoardPanState",
+      "kind": "interface",
+      "file": "src/renderer/components/tileBoardViewportMotionState.ts",
+      "line": 27,
+      "endLine": 30
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewportMotionState.ts#TileBoardViewportMotionTarget",
       "name": "TileBoardViewportMotionTarget",
       "kind": "interface",
       "file": "src/renderer/components/tileBoardViewportMotionState.ts",
-      "line": 18,
-      "endLine": 30
+      "line": 32,
+      "endLine": 45
     },
     {
       "id": "symbol:src/renderer/components/tileBoardVisualTiers.ts#getFaceUpHoverRimOpacityMul",
@@ -36580,40 +36864,40 @@
       "name": "advanceScheduledTileBezelFrames",
       "kind": "value",
       "file": "src/renderer/components/tileFrameActivity.ts",
-      "line": 98,
-      "endLine": 124
+      "line": 100,
+      "endLine": 126
     },
     {
       "id": "symbol:src/renderer/components/tileFrameActivity.ts#AdvanceScheduledTileBezelFramesResult",
       "name": "AdvanceScheduledTileBezelFramesResult",
       "kind": "interface",
       "file": "src/renderer/components/tileFrameActivity.ts",
-      "line": 81,
-      "endLine": 84
+      "line": 83,
+      "endLine": 86
     },
     {
       "id": "symbol:src/renderer/components/tileFrameActivity.ts#scheduleTileBezelFrameActivity",
       "name": "scheduleTileBezelFrameActivity",
       "kind": "value",
       "file": "src/renderer/components/tileFrameActivity.ts",
-      "line": 86,
-      "endLine": 96
+      "line": 88,
+      "endLine": 98
     },
     {
       "id": "symbol:src/renderer/components/tileFrameActivity.ts#shouldAdvanceTileBezelThisFrame",
       "name": "shouldAdvanceTileBezelThisFrame",
       "kind": "function",
       "file": "src/renderer/components/tileFrameActivity.ts",
-      "line": 126,
-      "endLine": 369
+      "line": 128,
+      "endLine": 373
     },
     {
       "id": "symbol:src/renderer/components/tileFrameActivity.ts#TileBezelActivityBag",
       "name": "TileBezelActivityBag",
       "kind": "type",
       "file": "src/renderer/components/tileFrameActivity.ts",
-      "line": 12,
-      "endLine": 62
+      "line": 13,
+      "endLine": 64
     },
     {
       "id": "symbol:src/renderer/components/tileResolvingSelection.ts#getMatchResolvingPairTileIds",
@@ -57198,6 +57482,150 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#addTrauma",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#addTrauma",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#advanceBoardTrauma",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#advanceBoardTrauma",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_AT_REST",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_AT_REST",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_CHANNEL_OFFSETS",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_CHANNEL_OFFSETS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_FREQUENCY_HZ",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_FREQUENCY_HZ",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_MAX_ANGLE",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_MAX_ANGLE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_MAX_OFFSET_X",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_MAX_OFFSET_X",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_MAX_OFFSET_Y",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_MAX_OFFSET_Y",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_MAXIMA",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_MAXIMA",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#BOARD_TRAUMA_AT_START",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#BOARD_TRAUMA_AT_START",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#BoardShakeSample",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#BoardShakeSample",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#BoardTraumaMemory",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#BoardTraumaMemory",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#BoardTraumaReading",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#BoardTraumaReading",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#BoardTraumaSource",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#BoardTraumaSource",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#decayTrauma",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#decayTrauma",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#readBoardTrauma",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#readBoardTrauma",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#sampleTraumaShake",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#sampleTraumaShake",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#TILE_SHAKE_MAXIMA",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#TILE_SHAKE_MAXIMA",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#TRAUMA_BY_SOURCE",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#TRAUMA_BY_SOURCE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#TRAUMA_DECAY_PER_SECOND",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#TRAUMA_DECAY_PER_SECOND",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#TRAUMA_EXPONENT",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#TRAUMA_EXPONENT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#traumaNoise",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#traumaNoise",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#traumaShakeAmount",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#traumaShakeAmount",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#TraumaShakeMaxima",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#TraumaShakeMaxima",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/cardArcaneGlowMaterial.ts->symbol:src/renderer/components/cardArcaneGlowMaterial.ts#CardArcaneGlowUniforms",
       "source": "file:src/renderer/components/cardArcaneGlowMaterial.ts",
       "target": "symbol:src/renderer/components/cardArcaneGlowMaterial.ts#CardArcaneGlowUniforms",
@@ -58596,6 +59024,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/tileBoardFramePulseState.ts->symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardTraumaState",
+      "source": "file:src/renderer/components/tileBoardFramePulseState.ts",
+      "target": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardTraumaState",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/tileBoardFramePulseState.ts->symbol:src/renderer/components/tileBoardFramePulseState.ts#MATCH_PULSE_DECAY_PER_SECOND",
       "source": "file:src/renderer/components/tileBoardFramePulseState.ts",
       "target": "symbol:src/renderer/components/tileBoardFramePulseState.ts#MATCH_PULSE_DECAY_PER_SECOND",
@@ -59661,6 +60095,12 @@
       "id": "exports:src/renderer/components/tileBoardViewportMotionState.ts->symbol:src/renderer/components/tileBoardViewportMotionState.ts#computeTileBoardViewportMotionState",
       "source": "file:src/renderer/components/tileBoardViewportMotionState.ts",
       "target": "symbol:src/renderer/components/tileBoardViewportMotionState.ts#computeTileBoardViewportMotionState",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileBoardViewportMotionState.ts->symbol:src/renderer/components/tileBoardViewportMotionState.ts#TileBoardPanState",
+      "source": "file:src/renderer/components/tileBoardViewportMotionState.ts",
+      "target": "symbol:src/renderer/components/tileBoardViewportMotionState.ts#TileBoardPanState",
       "kind": "exports"
     },
     {
@@ -73724,6 +74164,36 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/boardTrauma.test.ts->src/renderer/components/boardTrauma.ts",
+      "source": "file:src/renderer/components/boardTrauma.test.ts",
+      "target": "file:src/renderer/components/boardTrauma.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/boardTrauma.test.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/boardTrauma.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/boardTrauma.ts->src/renderer/components/tileResolvingSelection.ts",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "file:src/renderer/components/tileResolvingSelection.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/boardTrauma.ts->src/shared/chain-tier-rules.ts",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "file:src/shared/chain-tier-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/boardTrauma.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/cardArcaneGlowMaterial.test.ts->src/renderer/components/boardRuneFieldMaterial.ts",
       "source": "file:src/renderer/components/cardArcaneGlowMaterial.test.ts",
       "target": "file:src/renderer/components/boardRuneFieldMaterial.ts",
@@ -76574,6 +77044,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/tileBoardFramePulseState.ts->src/renderer/components/boardTrauma.ts",
+      "source": "file:src/renderer/components/tileBoardFramePulseState.ts",
+      "target": "file:src/renderer/components/boardTrauma.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/tileBoardFramePulseState.ts->src/renderer/components/gameplayVisualConfig.ts",
       "source": "file:src/renderer/components/tileBoardFramePulseState.ts",
       "target": "file:src/renderer/components/gameplayVisualConfig.ts",
@@ -76826,9 +77302,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/tileBoardLayoutMotionState.test.ts->src/renderer/components/gameplayVisualConfig.ts",
+      "id": "imports:src/renderer/components/tileBoardLayoutMotionState.test.ts->src/renderer/components/boardTrauma.ts",
       "source": "file:src/renderer/components/tileBoardLayoutMotionState.test.ts",
-      "target": "file:src/renderer/components/gameplayVisualConfig.ts",
+      "target": "file:src/renderer/components/boardTrauma.ts",
       "kind": "imports"
     },
     {
@@ -76838,9 +77314,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/tileBoardLayoutMotionState.ts->src/renderer/components/gameplayVisualConfig.ts",
+      "id": "imports:src/renderer/components/tileBoardLayoutMotionState.ts->src/renderer/components/boardTrauma.ts",
       "source": "file:src/renderer/components/tileBoardLayoutMotionState.ts",
-      "target": "file:src/renderer/components/gameplayVisualConfig.ts",
+      "target": "file:src/renderer/components/boardTrauma.ts",
       "kind": "imports"
     },
     {
@@ -77318,6 +77794,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/boardTrauma.ts",
+      "source": "file:src/renderer/components/TileBoardScene.tsx",
+      "target": "file:src/renderer/components/boardTrauma.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/gameplayRenderProfile.ts",
       "source": "file:src/renderer/components/TileBoardScene.tsx",
       "target": "file:src/renderer/components/gameplayRenderProfile.ts",
@@ -77525,6 +78007,12 @@
       "id": "imports:src/renderer/components/tileBoardSceneFrame.test.ts->src/renderer/components/tileBoardSceneFrame.ts",
       "source": "file:src/renderer/components/tileBoardSceneFrame.test.ts",
       "target": "file:src/renderer/components/tileBoardSceneFrame.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileBoardSceneFrame.ts->src/renderer/components/boardTrauma.ts",
+      "source": "file:src/renderer/components/tileBoardSceneFrame.ts",
+      "target": "file:src/renderer/components/boardTrauma.ts",
       "kind": "imports"
     },
     {
@@ -77834,9 +78322,21 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/tileBoardViewportMotionState.test.ts->src/renderer/components/boardTrauma.ts",
+      "source": "file:src/renderer/components/tileBoardViewportMotionState.test.ts",
+      "target": "file:src/renderer/components/boardTrauma.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/tileBoardViewportMotionState.test.ts->src/renderer/components/tileBoardViewportMotionState.ts",
       "source": "file:src/renderer/components/tileBoardViewportMotionState.test.ts",
       "target": "file:src/renderer/components/tileBoardViewportMotionState.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileBoardViewportMotionState.ts->src/renderer/components/boardTrauma.ts",
+      "source": "file:src/renderer/components/tileBoardViewportMotionState.ts",
+      "target": "file:src/renderer/components/boardTrauma.ts",
       "kind": "imports"
     },
     {
@@ -77897,6 +78397,12 @@
       "id": "imports:src/renderer/components/tileFrameActivity.test.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/components/tileFrameActivity.test.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileFrameActivity.ts->src/renderer/components/boardTrauma.ts",
+      "source": "file:src/renderer/components/tileFrameActivity.ts",
+      "target": "file:src/renderer/components/boardTrauma.ts",
       "kind": "imports"
     },
     {
@@ -89149,6 +89655,24 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/boardTrauma.ts->file:src/renderer/components/boardTrauma.test.ts",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "file:src/renderer/components/boardTrauma.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/boardTrauma.ts->file:src/renderer/components/tileBoardLayoutMotionState.test.ts",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "file:src/renderer/components/tileBoardLayoutMotionState.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/boardTrauma.ts->file:src/renderer/components/tileBoardViewportMotionState.test.ts",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "file:src/renderer/components/tileBoardViewportMotionState.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/cardArcaneGlowMaterial.ts->file:src/renderer/components/cardArcaneGlowMaterial.test.ts",
       "source": "file:src/renderer/components/cardArcaneGlowMaterial.ts",
       "target": "file:src/renderer/components/cardArcaneGlowMaterial.test.ts",
@@ -89260,12 +89784,6 @@
       "id": "tested_by:src/renderer/components/gameplayVisualConfig.ts->file:src/renderer/components/tileBoardInteractionMotionState.test.ts",
       "source": "file:src/renderer/components/gameplayVisualConfig.ts",
       "target": "file:src/renderer/components/tileBoardInteractionMotionState.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/renderer/components/gameplayVisualConfig.ts->file:src/renderer/components/tileBoardLayoutMotionState.test.ts",
-      "source": "file:src/renderer/components/gameplayVisualConfig.ts",
-      "target": "file:src/renderer/components/tileBoardLayoutMotionState.test.ts",
       "kind": "tested_by"
     },
     {
@@ -91030,6 +91548,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/cardFace/resolveCardIllustrationUrl.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/cardFace/resolveCardIllustrationUrl.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/boardTrauma.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/renderer/components/boardTrauma.test.ts",
       "kind": "tested_by"
     },
     {

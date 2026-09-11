@@ -53,6 +53,7 @@ const createInput = (
     matchedVictoryFlameMatRef: ref(null),
     matchedVictoryFlameMeshRef: ref(null),
     matchPulseRef: ref(0),
+    traumaRef: ref(0),
     overlayBaseRef: ref<Float32Array | null>(null),
     overlayPersistentRef: ref(new Float32Array(1)),
     planeGeometries,

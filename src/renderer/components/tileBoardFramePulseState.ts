@@ -1,4 +1,5 @@
 import type { Tile } from '../../shared/contracts';
+import { addTrauma, decayTrauma, TRAUMA_BY_SOURCE } from './boardTrauma';
 import { GAMEPLAY_BOARD_VISUALS } from './gameplayVisualConfig';
 import type { ResolvingSelectionState } from './tileResolvingSelection';
 
@@ -46,6 +47,8 @@ interface TileBoardFramePulseRefsState {
     matchPulse: number;
     prevFaceUp: boolean;
     prevResolvingSelection: ResolvingSelectionState | null;
+    /** This card's own trauma, for the shake it does when the miss was its (`boardTrauma.ts`). */
+    trauma: number;
     wasMatched: boolean;
 }
 
@@ -69,6 +72,7 @@ interface TileBoardFramePulseTransitionState {
     flipPopZ: number;
     matchedVictoryBurst: number;
     refs: TileBoardFramePulseRefsState;
+    trauma: number;
 }
 
 /** How long a removed tile takes to scale away after its burst. */
@@ -175,6 +179,39 @@ export const computeTileBoardMatchPulseState = ({
         pulse: Math.max(0, triggeredPulse - delta * MATCH_PULSE_DECAY_PER_SECOND),
         prevResolvingSelection: resolvingSelection
     };
+};
+
+/**
+ * A card's own trauma (Eiserloh's model, `boardTrauma.ts`). The same shape as the match pulse above
+ * and for the same reason - a scalar that an event raises and time lowers - but the decay is the
+ * model's linear one rather than a chosen rate, and a second miss on the same card stacks rather
+ * than restarting.
+ *
+ * The wobble this replaces was a sine switched on while `resolvingSelection === 'mismatch'`: it
+ * could not stack, it stopped mid-swing when the state left, and it was the only shake in the game,
+ * so a Fever break shook nothing. The board's own trauma covers the break (`readBoardTrauma`); this
+ * is the card saying the miss was its.
+ */
+export const computeTileBoardTraumaState = ({
+    currentTrauma,
+    delta,
+    prevResolvingSelection,
+    reduceMotion,
+    resolvingSelection
+}: {
+    currentTrauma: number;
+    delta: number;
+    prevResolvingSelection: ResolvingSelectionState | null;
+    reduceMotion: boolean;
+    resolvingSelection: ResolvingSelectionState;
+}): number => {
+    if (reduceMotion) {
+        return 0;
+    }
+    const decayed = decayTrauma(currentTrauma, delta);
+    return resolvingSelection === 'mismatch' && prevResolvingSelection !== 'mismatch'
+        ? addTrauma(decayed, TRAUMA_BY_SOURCE.mismatchTile)
+        : decayed;
 };
 
 export const computeTileBoardMatchedBurstState = ({
@@ -298,6 +335,14 @@ export const computeTileBoardFramePulseTransitionState = ({
         resolvingSelection
     });
 
+    const trauma = computeTileBoardTraumaState({
+        currentTrauma: current.trauma,
+        delta,
+        prevResolvingSelection: resolvingWaveState.prevResolvingSelection,
+        reduceMotion,
+        resolvingSelection
+    });
+
     const matchedBurstState = computeTileBoardMatchedBurstState({
         breakWaveDelaySec,
         reduceMotion,
@@ -318,6 +363,7 @@ export const computeTileBoardFramePulseTransitionState = ({
         flipPopScaleMultiplier: flipPopVisualState.scaleMultiplier,
         flipPopZ: flipPopVisualState.z,
         matchedVictoryBurst: matchedBurstState.burst,
+        trauma,
         refs: {
             faceUpStructBlend: faceUpStructState.blend,
             faceUpStructStartedAt: faceUpStructState.startedAt,
@@ -327,6 +373,7 @@ export const computeTileBoardFramePulseTransitionState = ({
             matchPulse: matchPulseState.pulse,
             prevFaceUp: faceUp,
             prevResolvingSelection: matchPulseState.prevResolvingSelection,
+            trauma,
             wasMatched: matchedBurstState.wasMatched
         }
     };
