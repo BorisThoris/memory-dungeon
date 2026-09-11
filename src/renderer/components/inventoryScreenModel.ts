@@ -1,13 +1,20 @@
-import { getChainTargetFeedback } from '../../shared/chain-targets';
-import type { RunState, SaveData } from '../../shared/contracts';
-import { getCosmeticCollectionRows } from '../../shared/cosmetics';
+/**
+ * What the Inventory screen needs from a run: the mode's title and the charge counts.
+ *
+ * Gen 214: this file also held `createInventoryScreenModel`, which assembled eleven projections -
+ * economy rows, prep rows, a loadout summary, perfect-memory attribution, two reward signals, a
+ * payoff-engine beat, run-loop signals, the equipped cosmetic - and the two helpers that fed it.
+ * Nothing rendered any of it. The screen was rebuilt green-field around a run line, the mutator
+ * chips and a charge table, and the model lost its caller in that rebuild without losing its test,
+ * so every one of those projections went on being maintained and verified for nobody.
+ *
+ * The module audit could not see it, because the module IS imported - the screen takes these two
+ * helpers from it. `yarn audit:test-only-exports` is the audit that can, and this is the first
+ * thing it was pointed at.
+ */
+import type { RunState } from '../../shared/contracts';
 import { GAME_MODE_CODEX } from '../../shared/game-catalog';
-import { getInventoryPrepRows } from '../../shared/inventory-prep';
-import { getPerfectMemoryAttribution } from '../../shared/long-run-feedback';
-import { getInventoryRewardSignal } from '../../shared/meta-reward-signals';
-import { getRunEconomyRows } from '../../shared/run-economy';
-import { getRunInventoryRows, getRunLoadoutSummary, type RunInventoryItemId, type RunInventoryRow } from '../../shared/run-inventory';
-import { runNonNegativeInteger } from '../../shared/run-number-guards';
+import { getRunInventoryRows } from '../../shared/run-inventory';
 
 export const modeTitle = (gameMode: string): string =>
     GAME_MODE_CODEX.find((mode) => mode.id === gameMode)?.title ?? gameMode;
@@ -15,186 +22,4 @@ export const modeTitle = (gameMode: string): string =>
 export const createInventoryQuantityMap = (run: RunState): Map<string, number> => {
     const inventoryRows = getRunInventoryRows(run);
     return new Map(inventoryRows.map((row) => [row.id, row.quantity]));
-};
-
-type InventoryRunLoopSignal = {
-    id: 'chain' | 'pickup';
-    label: string;
-    value: string;
-    detail: string;
-    nextCue: string;
-    tone: 'chain' | 'reward';
-};
-
-type InventoryPayoffEngineSignal = {
-    label: 'Payoff engine' | 'Prime payoff';
-    value: string;
-    detail: string;
-    nextCue: string;
-    tone: 'burst' | 'setup';
-};
-
-export const getInventoryRunLoopSignals = (run: RunState): InventoryRunLoopSignal[] => {
-    const pickupClaimed = runNonNegativeInteger(run.findablesClaimedThisFloor);
-    const pickupTotal = runNonNegativeInteger(run.findablesTotalThisFloor);
-    const currentStreak = runNonNegativeInteger(run.stats.currentStreak);
-    const bestStreak = runNonNegativeInteger(run.stats.bestStreak);
-    const chainTarget = getChainTargetFeedback(Math.max(currentStreak, bestStreak));
-    return [
-        {
-            id: 'chain',
-            label: 'Chain loop',
-            value: currentStreak > 0 ? `x${currentStreak}` : bestStreak > 0 ? `best x${bestStreak}` : 'ready',
-            detail:
-                currentStreak >= 3
-                    ? 'Clean matches are actively feeding reward thresholds.'
-                    : bestStreak >= 3
-                      ? 'Previous chain showed the reward cadence; rebuild it on this board.'
-                      : 'Start with a safe match to light the chain.',
-            nextCue: chainTarget.value,
-            tone: 'chain'
-        },
-        {
-            id: 'pickup',
-            label: 'Pickup loop',
-            value: pickupTotal > 0 ? `${pickupClaimed}/${pickupTotal}` : `${pickupClaimed}`,
-            detail: pickupTotal > 0 ? 'Claim marked reward pairs before the floor ends.' : 'No live pickup route on this floor yet.',
-            nextCue:
-                pickupTotal > pickupClaimed
-                    ? `${pickupTotal - pickupClaimed} marked pickup${pickupTotal - pickupClaimed === 1 ? '' : 's'} left`
-                    : 'Watch for the next marked carrier',
-            tone: 'reward'
-        }
-    ];
-};
-
-export const getInventoryPayoffEngineSignal = (
-    run: RunState,
-    runLoopSignals = getInventoryRunLoopSignals(run)
-): InventoryPayoffEngineSignal => {
-    const activeLanes = runLoopSignals.filter((signal) => {
-        if (signal.id === 'chain') {
-            return (
-                runNonNegativeInteger(run.stats.currentStreak) >= 3 ||
-                runNonNegativeInteger(run.stats.bestStreak) >= 3
-            );
-        }
-        return (
-            runNonNegativeInteger(run.findablesTotalThisFloor) >
-            runNonNegativeInteger(run.findablesClaimedThisFloor)
-        );
-    });
-    const activeCount = activeLanes.length;
-    const topLaneNames = activeLanes.map((signal) => signal.label.replace(' loop', ''));
-
-    if (activeCount >= 2) {
-        return {
-            label: 'Payoff engine',
-            value: `${activeCount} payoffs live`,
-            detail: topLaneNames.slice(0, 3).join(' + '),
-            nextCue: activeLanes[0]?.nextCue ?? 'Keep stacking reward payoffs',
-            tone: 'burst'
-        };
-    }
-
-    return {
-        label: 'Prime payoff',
-        value: activeCount === 1 ? '1 payoff primed' : 'Prime beat',
-        detail: topLaneNames[0] ?? 'Open with a safe match to light chain or pickup payoffs.',
-        nextCue: runLoopSignals.find((signal) => signal.id === 'chain')?.nextCue ?? 'Start x3 loop',
-        tone: 'setup'
-    };
-};
-
-type InventoryToolActionCueTone = 'chain' | 'route' | 'recovery' | 'build';
-
-interface InventoryToolActionCue {
-    label: string;
-    detail: string;
-    tone: InventoryToolActionCueTone;
-}
-
-const TOOL_ACTION_CUES: Record<RunInventoryItemId, InventoryToolActionCue> = {
-    shuffle_charge: {
-        label: 'Route reset',
-        detail: 'Spend when the board shape blocks a chain or trait adjacency route.',
-        tone: 'route'
-    },
-    region_shuffle_charge: {
-        label: 'Adjacency setup',
-        detail: 'Move one row or swap two hidden cards to line up trait interactions.',
-        tone: 'route'
-    },
-    peek_charge: {
-        label: 'Confirm pair',
-        detail: 'Reveal safely before committing the next chain or pickup match.',
-        tone: 'chain'
-    },
-    flash_pair_charge: {
-        label: 'Find target',
-        detail: 'Flash one pair when the next chain step needs a confirmed anchor.',
-        tone: 'chain'
-    },
-    undo_charge: {
-        label: 'Recover tempo',
-        detail: 'Cancel a bad result before it spends the floor momentum.',
-        tone: 'recovery'
-    },
-    gambit_token: {
-        label: 'Third-flip rescue',
-        detail: 'Use the risk window to turn a miss into one more matching chance.',
-        tone: 'recovery'
-    },
-    wild_match_token: {
-        label: 'Wildcard bridge',
-        detail: 'Bridge an awkward symbol into a valid match when joker pressure appears.',
-        tone: 'chain'
-    },
-    mutator_loadout: {
-        label: 'Pressure rule',
-        detail: 'Mutators change what the board asks you to solve next.',
-        tone: 'build'
-    },
-    contract_loadout: {
-        label: 'Constraint plan',
-        detail: 'Contract limits decide which tools and rewards matter most.',
-        tone: 'build'
-    }
-};
-
-export const getInventoryToolActionCue = (row: RunInventoryRow): InventoryToolActionCue => {
-    const cue = TOOL_ACTION_CUES[row.id];
-    if (row.available || row.kind === 'loadout') {
-        return cue;
-    }
-    return {
-        ...cue,
-        label: 'Restock first',
-        detail: row.unavailableReason ?? cue.detail
-    };
-};
-
-type InventoryScreenInventoryRow = RunInventoryRow & {
-    actionCue: InventoryToolActionCue;
-};
-
-export const createInventoryScreenModel = (run: RunState, saveData: SaveData) => {
-    const inventoryRows: InventoryScreenInventoryRow[] = getRunInventoryRows(run).map((row) => ({
-        ...row,
-        actionCue: getInventoryToolActionCue(row)
-    }));
-    const runLoopSignals = getInventoryRunLoopSignals(run);
-
-    return {
-        economyRows: getRunEconomyRows(run),
-        equippedCosmetic: getCosmeticCollectionRows(saveData).find((row) => row.equipped) ?? null,
-        inventoryQuantityById: new Map(inventoryRows.map((row) => [row.id, row.quantity])),
-        inventoryRows,
-        loadoutSummary: getRunLoadoutSummary(run),
-        perfectMemoryAttribution: getPerfectMemoryAttribution(run),
-        prepRows: getInventoryPrepRows(run),
-        payoffEngineSignal: getInventoryPayoffEngineSignal(run, runLoopSignals),
-        rewardSignal: getInventoryRewardSignal(run),
-        runLoopSignals
-    };
 };

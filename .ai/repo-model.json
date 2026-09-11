@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2443,
-    "codeFileCount": 880,
-    "exportedSymbolCount": 2676,
+    "trackedFileCount": 2437,
+    "codeFileCount": 871,
+    "exportedSymbolCount": 2629,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6790
+    "relationshipCount": 6678
   },
   "inventory": [
     {
@@ -255,8 +255,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 381444,
-      "sha256": "2d0387d11abb7236d88a5ce0e4865c8732c606931ba864cf83e56723cb676664"
+      "bytes": 384989,
+      "sha256": "8affbd4c353efa92de3b9f68ce33de60938ddae02bc91c31cee11cc6f99d6c2f"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -747,8 +747,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 17589,
-      "sha256": "de2dcf14dfc994ddc39522a9d166c09bced9d0557ad60edd7f51a1acaf6a4739"
+      "bytes": 17793,
+      "sha256": "1b27ca534848716a645e97a01288f0c8bfdbabb67449f1b3620490df098444ec"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2263,6 +2263,12 @@
       "sha256": "26afdf8734b9aedb1235743f61b9a20ec9381101b9a3f18248a1f5f67f2b6b18"
     },
     {
+      "path": "docs/REMOVED_READ_MODELS.md",
+      "category": "documentation",
+      "bytes": 3821,
+      "sha256": "14eaf7bc61e67d05a2fec4cc6e9a40b79c4e0786c1de858a6ab8e4553e65a411"
+    },
+    {
       "path": "docs/REMOVED_SETTLE.md",
       "category": "documentation",
       "bytes": 4785,
@@ -2313,20 +2319,20 @@
     {
       "path": "docs/system-diagrams/actions.json",
       "category": "documentation",
-      "bytes": 5902,
-      "sha256": "89e302b1e466bbbac47e05adc40713d00221eed10a4aaf7bcf2c1381a70ef508"
+      "bytes": 5895,
+      "sha256": "98472f746ae6aa288aafe9bad9dcefde87de93027da0126a1644a6126e15f3e5"
     },
     {
       "path": "docs/system-diagrams/AUDIT.md",
       "category": "documentation",
-      "bytes": 10613,
-      "sha256": "f18ecb157c41a6cfd935499979942ea704367273fe984895728d084966f55487"
+      "bytes": 10619,
+      "sha256": "acfaa8e6e24fb90f224cb3b57cbae867e3326b1be963285212ec7109e294905c"
     },
     {
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
-      "bytes": 33472,
-      "sha256": "dde2845102ec77656bae046051f7738a91c83100ca47f27236547735b250185f"
+      "bytes": 33560,
+      "sha256": "22c8906f6614bb67d96f708a6952d664c047bdd342224edd7ad979b953312c23"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4029,8 +4035,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 30067,
-      "sha256": "22da1c5ed718a82be3089d7dc3db00a6a2d60ac66249d7894a31e553c115ea79"
+      "bytes": 30150,
+      "sha256": "45dec7f47038eb84e173d034f539daf3a19031b983f441e6d9062f7172aecd3c"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4965,8 +4971,20 @@
     {
       "path": "scripts/system-diagrams.mjs",
       "category": "script",
-      "bytes": 51938,
-      "sha256": "7752afdf3f16807e09ee7e2dd2198f0ed64e5c3e97028115b35ea0111e8d6c80"
+      "bytes": 52428,
+      "sha256": "8a962d70e6fd0aa17a6dfb1d696c6e12a5f7c44caea657f89fd42e3c43de0c2b"
+    },
+    {
+      "path": "scripts/test-only-exports-baseline.json",
+      "category": "script",
+      "bytes": 11740,
+      "sha256": "23f73b06602c6463d9a43290aa6979b28472877dcde7c9155048e898a3f09382"
+    },
+    {
+      "path": "scripts/test-only-exports.ts",
+      "category": "script",
+      "bytes": 12776,
+      "sha256": "3983d9e57e577e48d51d990eddbb419c152c933c7505f3c97391684f5c9dccbd"
     },
     {
       "path": "scripts/test-only-modules.ts",
@@ -7437,8 +7455,8 @@
     {
       "path": "src/renderer/breakpoints.test.ts",
       "category": "test",
-      "bytes": 4960,
-      "sha256": "463a1a30d87efd7451b1bce41713fb6dcc01b5866bd9ec2d99ab13b773b16c68"
+      "bytes": 7963,
+      "sha256": "a9ae29246221f2c7bc5bfe94f36807ac3fba452598062732df08c2981666b8dc"
     },
     {
       "path": "src/renderer/breakpoints.ts",
@@ -7917,14 +7935,14 @@
     {
       "path": "src/renderer/components/inventoryScreenModel.test.ts",
       "category": "test",
-      "bytes": 3784,
-      "sha256": "6da999b44c1ed6be0199300fb4ae98f983ac3f6170382590d201f4cb4ec9e714"
+      "bytes": 1154,
+      "sha256": "978cd099e7b86f1a87f93c666f8c2fdd6524a45d815dff1551a787c4883b4d52"
     },
     {
       "path": "src/renderer/components/inventoryScreenModel.ts",
       "category": "source",
-      "bytes": 7649,
-      "sha256": "8dd1fa333f16327e7bd669007b97739640784d871c9595d33812fa2bd9f8509b"
+      "bytes": 1429,
+      "sha256": "bdf5f818ebdd71ab83ea78aff84accace931c780b1b0a610fd166d5204708317"
     },
     {
       "path": "src/renderer/components/MainMenu.module.css",
@@ -10311,14 +10329,14 @@
     {
       "path": "src/renderer/viewportMatrix.ts",
       "category": "source",
-      "bytes": 11198,
-      "sha256": "776a75e47866edadebd2c3b8ed8e3d7714530028d0fabd068174970673b2460f"
+      "bytes": 11462,
+      "sha256": "aca66e9927623850e264e5bfccc0ecfd798c3fab4987df186ff2e7034709a006"
     },
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 17853,
-      "sha256": "dde8436497b3475577e034ce4dabc0cd2919ccaa7ab834fc263f7e2b50dbdebb"
+      "bytes": 18057,
+      "sha256": "85587643ab42feaa7af7c9a6dbf88390532c9fe3a0c3579d53593cea4429d47b"
     },
     {
       "path": "src/shared/achievement-reachability.test.ts",
@@ -11085,8 +11103,8 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 76613,
-      "sha256": "af0ddf434cc331a923df8f2d1c3561ecf4024d74b2dd5dcddfa70e67c62d7ba5"
+      "bytes": 76606,
+      "sha256": "e683ba1ffc0d65739db3471f5386f9620ea34fb0931b8784d965d7e5fd447297"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
@@ -11209,18 +11227,6 @@
       "sha256": "07308e6a56df27fd7a7a02862ebe2c319acc1b8ce6cf0bf56e04ce4bab250c45"
     },
     {
-      "path": "src/shared/inventory-prep.test.ts",
-      "category": "test",
-      "bytes": 1148,
-      "sha256": "d66785d724fee359fc76b576ca96ccae1b817a9187c644d7acd4fe8ab0115fa9"
-    },
-    {
-      "path": "src/shared/inventory-prep.ts",
-      "category": "source",
-      "bytes": 2746,
-      "sha256": "3febf59054df9179afda4ddfbc5f7102815b01c142bf3466e2b46f815c39fba7"
-    },
-    {
       "path": "src/shared/ipc-channels.ts",
       "category": "source",
       "bytes": 2310,
@@ -11273,18 +11279,6 @@
       "category": "source",
       "bytes": 5112,
       "sha256": "5c03d2601cfac2442c63ccfa630157a9c80065fe3e5cdfca374c57abf9825feb"
-    },
-    {
-      "path": "src/shared/long-run-feedback.test.ts",
-      "category": "test",
-      "bytes": 6481,
-      "sha256": "f710c808e02bc7e825afb9ec3d249eb836697636fed5a2ce47d0d01c3030d125"
-    },
-    {
-      "path": "src/shared/long-run-feedback.ts",
-      "category": "source",
-      "bytes": 7893,
-      "sha256": "fa5ff20dbf6fa3712c09c32602be444892b5ee5fc54eef000916137507ce6d99"
     },
     {
       "path": "src/shared/magpie-rules.test.ts",
@@ -11377,18 +11371,6 @@
       "sha256": "93aee30c7db2d27c17986060dc212519ed8e40927a0333fda65d73a4cf01050a"
     },
     {
-      "path": "src/shared/memory-recall-feedback.test.ts",
-      "category": "test",
-      "bytes": 12478,
-      "sha256": "fdae211ebf0bcf81f93b0996173e791fdbc04a5025c88d47cc066de49e094ec5"
-    },
-    {
-      "path": "src/shared/memory-recall-feedback.ts",
-      "category": "source",
-      "bytes": 19630,
-      "sha256": "caefe5da7d14296ba1e41f82d9ad7f35608512dd9ec9e998eecd96e4bbc237ea"
-    },
-    {
       "path": "src/shared/meta-progression-delta.test.ts",
       "category": "test",
       "bytes": 2816,
@@ -11411,18 +11393,6 @@
       "category": "source",
       "bytes": 20982,
       "sha256": "d6450098e465b7b351f082c8d97abd81c9fe01b9c5ea754a7b08fa686d4fd865"
-    },
-    {
-      "path": "src/shared/meta-reward-signals.test.ts",
-      "category": "test",
-      "bytes": 3265,
-      "sha256": "4590539da54819fd6088bca01df79b4f85f52dde0e1878b5db291bf74ef839da"
-    },
-    {
-      "path": "src/shared/meta-reward-signals.ts",
-      "category": "source",
-      "bytes": 9300,
-      "sha256": "22976b60d246419b0d5ccd214c7516dd33a70c2ad601a10a9b12b6011acec52f"
     },
     {
       "path": "src/shared/min-type-size.test.ts",
@@ -11801,18 +11771,6 @@
       "category": "source",
       "bytes": 8056,
       "sha256": "c233c0878b4e0bc7f6e7c0736eeca0c12ae527b62d00a63b50a0543fe1886db2"
-    },
-    {
-      "path": "src/shared/run-economy.test.ts",
-      "category": "test",
-      "bytes": 3493,
-      "sha256": "34ed2797148538775b6acf32db428c352a01ed90d1080f6c15f0d4e344fb2bea"
-    },
-    {
-      "path": "src/shared/run-economy.ts",
-      "category": "source",
-      "bytes": 5342,
-      "sha256": "dcb542f23417df4de2d293e563ba5141c32d20af335f9d9d0c526da50b8ceaf4"
     },
     {
       "path": "src/shared/run-from-share-key.test.ts",
@@ -12213,8 +12171,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 30026,
-      "sha256": "3a6136b32f2599cf2ffb262002c6abfca22ee01e3669f8ade22ccf8be71ce03e"
+      "bytes": 30287,
+      "sha256": "96092d14eb034519909a9aeaaf5da2ca9d3d1ef4af61157fdff6b3d140990ff0"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -12227,6 +12185,12 @@
       "category": "source",
       "bytes": 4203,
       "sha256": "76ac16244aed945c869ea02172f7818b06c2b00370ecabc3503eb99a92a7d13a"
+    },
+    {
+      "path": "src/shared/test-only-export-audit.test.ts",
+      "category": "test",
+      "bytes": 5682,
+      "sha256": "128472273a8bda060cd5c43d7934ba98eff37b26c311e27f5a61b5d796732b64"
     },
     {
       "path": "src/shared/test/game-fixtures.ts",
@@ -15943,7 +15907,7 @@
       "path": "src/renderer/breakpoints.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 129,
+      "lineCount": 187,
       "imports": [
         "file:src/renderer/breakpoints.ts",
         "file:src/renderer/viewportMatrix.ts"
@@ -17248,11 +17212,10 @@
       "path": "src/renderer/components/inventoryScreenModel.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 109,
+      "lineCount": 25,
       "imports": [
         "file:src/renderer/components/inventoryScreenModel.ts",
-        "file:src/shared/game-core.ts",
-        "file:src/shared/save-data.ts"
+        "file:src/shared/game-core.ts"
       ],
       "exports": [],
       "testedBy": []
@@ -17262,25 +17225,14 @@
       "path": "src/renderer/components/inventoryScreenModel.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 201,
+      "lineCount": 26,
       "imports": [
-        "file:src/shared/chain-targets.ts",
         "file:src/shared/contracts.ts",
-        "file:src/shared/cosmetics.ts",
         "file:src/shared/game-catalog.ts",
-        "file:src/shared/inventory-prep.ts",
-        "file:src/shared/long-run-feedback.ts",
-        "file:src/shared/meta-reward-signals.ts",
-        "file:src/shared/run-economy.ts",
-        "file:src/shared/run-inventory.ts",
-        "file:src/shared/run-number-guards.ts"
+        "file:src/shared/run-inventory.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/inventoryScreenModel.ts#createInventoryQuantityMap",
-        "symbol:src/renderer/components/inventoryScreenModel.ts#createInventoryScreenModel",
-        "symbol:src/renderer/components/inventoryScreenModel.ts#getInventoryPayoffEngineSignal",
-        "symbol:src/renderer/components/inventoryScreenModel.ts#getInventoryRunLoopSignals",
-        "symbol:src/renderer/components/inventoryScreenModel.ts#getInventoryToolActionCue",
         "symbol:src/renderer/components/inventoryScreenModel.ts#modeTitle"
       ],
       "testedBy": [
@@ -23711,7 +23663,7 @@
       "path": "src/renderer/viewportMatrix.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 287,
+      "lineCount": 290,
       "imports": [
         "file:src/renderer/breakpoints.ts"
       ],
@@ -25215,17 +25167,13 @@
         "file:src/shared/gameplay-interaction-graph.test.ts",
         "file:src/shared/gameplay-journal.test.ts",
         "file:src/shared/gameplay-property-invariants.test.ts",
-        "file:src/shared/inventory-prep.test.ts",
         "file:src/shared/level-clear-rules.test.ts",
         "file:src/shared/long-run-depth.test.ts",
-        "file:src/shared/long-run-feedback.test.ts",
         "file:src/shared/magpie-rules.test.ts",
         "file:src/shared/match-claim-rules.test.ts",
         "file:src/shared/mechanics-catalog-appendix-builder.test.ts",
         "file:src/shared/mechanics-encyclopedia.test.ts",
         "file:src/shared/memorize-phase-rules.test.ts",
-        "file:src/shared/memory-recall-feedback.test.ts",
-        "file:src/shared/meta-reward-signals.test.ts",
         "file:src/shared/mode-records.test.ts",
         "file:src/shared/mutator-effect-audit.test.ts",
         "file:src/shared/mutators.test.ts",
@@ -25236,7 +25184,6 @@
         "file:src/shared/playthrough-solver.test.ts",
         "file:src/shared/recall-rules.test.ts",
         "file:src/shared/run-creation-rules.test.ts",
-        "file:src/shared/run-economy.test.ts",
         "file:src/shared/run-history.test.ts",
         "file:src/shared/run-settings-rules.test.ts",
         "file:src/shared/run-summary-rules.test.ts",
@@ -26058,9 +26005,6 @@
         "file:src/shared/game.test.ts",
         "file:src/shared/gameplay-core-playthrough-solver.test.ts",
         "file:src/shared/gameplay-property-invariants.test.ts",
-        "file:src/shared/inventory-prep.test.ts",
-        "file:src/shared/long-run-feedback.test.ts",
-        "file:src/shared/meta-reward-signals.test.ts",
         "file:src/shared/objective-board.test.ts",
         "file:src/shared/playable-onboarding.test.ts",
         "file:src/shared/playthrough-solver.test.ts",
@@ -26068,7 +26012,6 @@
         "file:src/shared/quest-campaign.test.ts",
         "file:src/shared/recall-rules.test.ts",
         "file:src/shared/release-checklist.test.ts",
-        "file:src/shared/run-economy.test.ts",
         "file:src/shared/run-history.test.ts",
         "file:src/shared/run-inventory.test.ts",
         "file:src/shared/run-settings-rules.test.ts",
@@ -26963,39 +26906,6 @@
       ]
     },
     {
-      "id": "file:src/shared/inventory-prep.test.ts",
-      "path": "src/shared/inventory-prep.test.ts",
-      "layer": "shared",
-      "role": "test",
-      "lineCount": 26,
-      "imports": [
-        "file:src/shared/contracts.ts",
-        "file:src/shared/game-core.ts",
-        "file:src/shared/inventory-prep.ts"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/shared/inventory-prep.ts",
-      "path": "src/shared/inventory-prep.ts",
-      "layer": "shared",
-      "role": "production",
-      "lineCount": 69,
-      "imports": [
-        "file:src/shared/contracts.ts",
-        "file:src/shared/run-inventory.ts",
-        "file:src/shared/session-stats-rules.ts"
-      ],
-      "exports": [
-        "symbol:src/shared/inventory-prep.ts#getInventoryPrepRows",
-        "symbol:src/shared/inventory-prep.ts#InventoryPrepRow"
-      ],
-      "testedBy": [
-        "file:src/shared/inventory-prep.test.ts"
-      ]
-    },
-    {
       "id": "file:src/shared/ipc-channels.ts",
       "path": "src/shared/ipc-channels.ts",
       "layer": "shared",
@@ -27164,54 +27074,6 @@
       ],
       "testedBy": [
         "file:src/shared/long-run-depth.test.ts"
-      ]
-    },
-    {
-      "id": "file:src/shared/long-run-feedback.test.ts",
-      "path": "src/shared/long-run-feedback.test.ts",
-      "layer": "shared",
-      "role": "test",
-      "lineCount": 159,
-      "imports": [
-        "file:src/shared/contracts.ts",
-        "file:src/shared/game-core.ts",
-        "file:src/shared/long-run-feedback.ts"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/shared/long-run-feedback.ts",
-      "path": "src/shared/long-run-feedback.ts",
-      "layer": "shared",
-      "role": "production",
-      "lineCount": 224,
-      "imports": [
-        "file:src/shared/contracts.ts",
-        "file:src/shared/findables.ts",
-        "file:src/shared/mechanic-feedback.ts",
-        "file:src/shared/memory-recall-feedback.ts",
-        "file:src/shared/run-array-guards.ts",
-        "file:src/shared/run-economy.ts",
-        "file:src/shared/run-number-guards.ts",
-        "file:src/shared/session-stats-rules.ts"
-      ],
-      "exports": [
-        "symbol:src/shared/long-run-feedback.ts#FeedbackCauseKind",
-        "symbol:src/shared/long-run-feedback.ts#FeedbackCauseRow",
-        "symbol:src/shared/long-run-feedback.ts#FindableDistributionRow",
-        "symbol:src/shared/long-run-feedback.ts#getFindableDistributionRows",
-        "symbol:src/shared/long-run-feedback.ts#getInRunCauseRows",
-        "symbol:src/shared/long-run-feedback.ts#getPerfectMemoryAttribution",
-        "symbol:src/shared/long-run-feedback.ts#getTouchHudDetailRows",
-        "symbol:src/shared/long-run-feedback.ts#LONG_RUN_TERMINOLOGY_ROWS",
-        "symbol:src/shared/long-run-feedback.ts#PerfectMemoryAttribution",
-        "symbol:src/shared/long-run-feedback.ts#TerminologyContractRow",
-        "symbol:src/shared/long-run-feedback.ts#TouchHudDetailKind",
-        "symbol:src/shared/long-run-feedback.ts#TouchHudDetailRow"
-      ],
-      "testedBy": [
-        "file:src/shared/long-run-feedback.test.ts"
       ]
     },
     {
@@ -27487,44 +27349,6 @@
       ]
     },
     {
-      "id": "file:src/shared/memory-recall-feedback.test.ts",
-      "path": "src/shared/memory-recall-feedback.test.ts",
-      "layer": "shared",
-      "role": "test",
-      "lineCount": 328,
-      "imports": [
-        "file:src/shared/contracts.ts",
-        "file:src/shared/memory-recall-feedback.ts",
-        "file:src/shared/test/game-fixtures.ts"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/shared/memory-recall-feedback.ts",
-      "path": "src/shared/memory-recall-feedback.ts",
-      "layer": "shared",
-      "role": "production",
-      "lineCount": 538,
-      "imports": [
-        "file:src/shared/contracts.ts",
-        "file:src/shared/recall-rules.ts",
-        "file:src/shared/run-array-guards.ts",
-        "file:src/shared/tile-identity.ts"
-      ],
-      "exports": [
-        "symbol:src/shared/memory-recall-feedback.ts#getMemoryRecallFeedback",
-        "symbol:src/shared/memory-recall-feedback.ts#MemoryBurdenFeedback",
-        "symbol:src/shared/memory-recall-feedback.ts#MemoryFeedbackLine",
-        "symbol:src/shared/memory-recall-feedback.ts#MemoryFeedbackTone",
-        "symbol:src/shared/memory-recall-feedback.ts#MemoryRecallFeedback",
-        "symbol:src/shared/memory-recall-feedback.ts#MemorySymbolMap"
-      ],
-      "testedBy": [
-        "file:src/shared/memory-recall-feedback.test.ts"
-      ]
-    },
-    {
       "id": "file:src/shared/meta-progression-delta.test.ts",
       "path": "src/shared/meta-progression-delta.test.ts",
       "layer": "shared",
@@ -27624,54 +27448,6 @@
       ],
       "testedBy": [
         "file:src/shared/meta-progression.test.ts"
-      ]
-    },
-    {
-      "id": "file:src/shared/meta-reward-signals.test.ts",
-      "path": "src/shared/meta-reward-signals.test.ts",
-      "layer": "shared",
-      "role": "test",
-      "lineCount": 75,
-      "imports": [
-        "file:src/shared/contracts.ts",
-        "file:src/shared/game-core.ts",
-        "file:src/shared/meta-reward-signals.ts",
-        "file:src/shared/save-data.ts"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/shared/meta-reward-signals.ts",
-      "path": "src/shared/meta-reward-signals.ts",
-      "layer": "shared",
-      "role": "production",
-      "lineCount": 236,
-      "imports": [
-        "file:src/shared/contracts.ts",
-        "file:src/shared/meta-progression.ts",
-        "file:src/shared/objective-board.ts",
-        "file:src/shared/run-array-guards.ts",
-        "file:src/shared/run-number-guards.ts",
-        "file:src/shared/session-stats-rules.ts"
-      ],
-      "exports": [
-        "symbol:src/shared/meta-reward-signals.ts#buildMetaRewardSignals",
-        "symbol:src/shared/meta-reward-signals.ts#getCodexRewardSignal",
-        "symbol:src/shared/meta-reward-signals.ts#getCodexRewardSignals",
-        "symbol:src/shared/meta-reward-signals.ts#getCollectionRewardSignal",
-        "symbol:src/shared/meta-reward-signals.ts#getCollectionRewardSignals",
-        "symbol:src/shared/meta-reward-signals.ts#getInventoryRewardSignal",
-        "symbol:src/shared/meta-reward-signals.ts#getInventoryRewardSignals",
-        "symbol:src/shared/meta-reward-signals.ts#getMetaProgressionRunImpactRows",
-        "symbol:src/shared/meta-reward-signals.ts#MetaProgressionRunImpactRow",
-        "symbol:src/shared/meta-reward-signals.ts#MetaProgressionRunImpactTone",
-        "symbol:src/shared/meta-reward-signals.ts#MetaRewardSignalKind",
-        "symbol:src/shared/meta-reward-signals.ts#MetaRewardSignalRow",
-        "symbol:src/shared/meta-reward-signals.ts#MetaScreenId"
-      ],
-      "testedBy": [
-        "file:src/shared/meta-reward-signals.test.ts"
       ]
     },
     {
@@ -28849,47 +28625,6 @@
       ]
     },
     {
-      "id": "file:src/shared/run-economy.test.ts",
-      "path": "src/shared/run-economy.test.ts",
-      "layer": "shared",
-      "role": "test",
-      "lineCount": 91,
-      "imports": [
-        "file:src/shared/contracts.ts",
-        "file:src/shared/game-core.ts",
-        "file:src/shared/run-economy.ts"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/shared/run-economy.ts",
-      "path": "src/shared/run-economy.ts",
-      "layer": "shared",
-      "role": "production",
-      "lineCount": 137,
-      "imports": [
-        "file:src/shared/contracts.ts",
-        "file:src/shared/run-number-guards.ts",
-        "file:src/shared/session-stats-rules.ts"
-      ],
-      "exports": [
-        "symbol:src/shared/run-economy.ts#getRunEconomyEntry",
-        "symbol:src/shared/run-economy.ts#getRunEconomyRows",
-        "symbol:src/shared/run-economy.ts#getRunEconomySnapshot",
-        "symbol:src/shared/run-economy.ts#RUN_ECONOMY_DEFINITIONS",
-        "symbol:src/shared/run-economy.ts#RUN_ECONOMY_RESOURCE_PURPOSES",
-        "symbol:src/shared/run-economy.ts#RunEconomyBucket",
-        "symbol:src/shared/run-economy.ts#RunEconomyDefinition",
-        "symbol:src/shared/run-economy.ts#runEconomyDefinitionById",
-        "symbol:src/shared/run-economy.ts#RunEconomyPersistence",
-        "symbol:src/shared/run-economy.ts#RunEconomyRow"
-      ],
-      "testedBy": [
-        "file:src/shared/run-economy.test.ts"
-      ]
-    },
-    {
       "id": "file:src/shared/run-from-share-key.test.ts",
       "path": "src/shared/run-from-share-key.test.ts",
       "layer": "shared",
@@ -29526,7 +29261,6 @@
         "file:src/renderer/components/CollectionScreen.test.tsx",
         "file:src/renderer/components/GameOverScreen.test.tsx",
         "file:src/renderer/components/GameScreen.test.tsx",
-        "file:src/renderer/components/inventoryScreenModel.test.ts",
         "file:src/renderer/components/MainMenu.test.tsx",
         "file:src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
         "file:src/renderer/components/PlayableOnboardingHarness.test.tsx",
@@ -29557,7 +29291,6 @@
         "file:src/shared/main-menu-hub-quality.test.ts",
         "file:src/shared/meta-progression-delta.test.ts",
         "file:src/shared/meta-progression.test.ts",
-        "file:src/shared/meta-reward-signals.test.ts",
         "file:src/shared/objective-board.test.ts",
         "file:src/shared/perfect-memory-status.test.ts",
         "file:src/shared/personal-best.test.ts",
@@ -30267,6 +30000,16 @@
       ]
     },
     {
+      "id": "file:src/shared/test-only-export-audit.test.ts",
+      "path": "src/shared/test-only-export-audit.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 126,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/shared/test/game-fixtures.ts",
       "path": "src/shared/test/game-fixtures.ts",
       "layer": "shared",
@@ -30292,7 +30035,6 @@
         "file:src/shared/chunk-break-rules.test.ts",
         "file:src/shared/clump-read-rules.test.ts",
         "file:src/shared/game.test.ts",
-        "file:src/shared/memory-recall-feedback.test.ts",
         "file:src/shared/release-checklist.test.ts",
         "file:src/shared/session-stats-rules.test.ts",
         "file:src/shared/tile-suit-rules.test.ts",
@@ -33773,48 +33515,16 @@
       "name": "createInventoryQuantityMap",
       "kind": "value",
       "file": "src/renderer/components/inventoryScreenModel.ts",
-      "line": 15,
-      "endLine": 18
-    },
-    {
-      "id": "symbol:src/renderer/components/inventoryScreenModel.ts#createInventoryScreenModel",
-      "name": "createInventoryScreenModel",
-      "kind": "value",
-      "file": "src/renderer/components/inventoryScreenModel.ts",
-      "line": 181,
-      "endLine": 200
-    },
-    {
-      "id": "symbol:src/renderer/components/inventoryScreenModel.ts#getInventoryPayoffEngineSignal",
-      "name": "getInventoryPayoffEngineSignal",
-      "kind": "value",
-      "file": "src/renderer/components/inventoryScreenModel.ts",
-      "line": 71,
-      "endLine": 107
-    },
-    {
-      "id": "symbol:src/renderer/components/inventoryScreenModel.ts#getInventoryRunLoopSignals",
-      "name": "getInventoryRunLoopSignals",
-      "kind": "value",
-      "file": "src/renderer/components/inventoryScreenModel.ts",
-      "line": 37,
-      "endLine": 69
-    },
-    {
-      "id": "symbol:src/renderer/components/inventoryScreenModel.ts#getInventoryToolActionCue",
-      "name": "getInventoryToolActionCue",
-      "kind": "value",
-      "file": "src/renderer/components/inventoryScreenModel.ts",
-      "line": 165,
-      "endLine": 175
+      "line": 22,
+      "endLine": 25
     },
     {
       "id": "symbol:src/renderer/components/inventoryScreenModel.ts#modeTitle",
       "name": "modeTitle",
       "kind": "value",
       "file": "src/renderer/components/inventoryScreenModel.ts",
-      "line": 12,
-      "endLine": 13
+      "line": 19,
+      "endLine": 20
     },
     {
       "id": "symbol:src/renderer/components/MainMenu.tsx#default",
@@ -40805,24 +40515,24 @@
       "name": "classifyResponsiveViewport",
       "kind": "value",
       "file": "src/renderer/viewportMatrix.ts",
-      "line": 212,
-      "endLine": 226
+      "line": 215,
+      "endLine": 229
     },
     {
       "id": "symbol:src/renderer/viewportMatrix.ts#getFinalDeviceGridSummary",
       "name": "getFinalDeviceGridSummary",
       "kind": "value",
       "file": "src/renderer/viewportMatrix.ts",
-      "line": 231,
-      "endLine": 256
+      "line": 234,
+      "endLine": 259
     },
     {
       "id": "symbol:src/renderer/viewportMatrix.ts#getViewportRegressionExpectations",
       "name": "getViewportRegressionExpectations",
       "kind": "value",
       "file": "src/renderer/viewportMatrix.ts",
-      "line": 260,
-      "endLine": 286
+      "line": 263,
+      "endLine": 289
     },
     {
       "id": "symbol:src/renderer/viewportMatrix.ts#HIGH_TRAFFIC_VIEWPORT_MATRIX",
@@ -40838,7 +40548,7 @@
       "kind": "value",
       "file": "src/renderer/viewportMatrix.ts",
       "line": 121,
-      "endLine": 210
+      "endLine": 213
     },
     {
       "id": "symbol:src/renderer/viewportMatrix.ts#RESPONSIVE_VIEWPORT_MATRIX",
@@ -40853,16 +40563,16 @@
       "name": "responsiveMatrixFinalDeviceGridSummary",
       "kind": "value",
       "file": "src/renderer/viewportMatrix.ts",
-      "line": 258,
-      "endLine": 258
+      "line": 261,
+      "endLine": 261
     },
     {
       "id": "symbol:src/renderer/viewportMatrix.ts#responsiveViewportIdsForScreen",
       "name": "responsiveViewportIdsForScreen",
       "kind": "value",
       "file": "src/renderer/viewportMatrix.ts",
-      "line": 228,
-      "endLine": 229
+      "line": 231,
+      "endLine": 232
     },
     {
       "id": "symbol:src/shared/achievements.ts#ACHIEVEMENT_BY_ID",
@@ -46361,22 +46071,6 @@
       "endLine": 109
     },
     {
-      "id": "symbol:src/shared/inventory-prep.ts#getInventoryPrepRows",
-      "name": "getInventoryPrepRows",
-      "kind": "value",
-      "file": "src/shared/inventory-prep.ts",
-      "line": 16,
-      "endLine": 68
-    },
-    {
-      "id": "symbol:src/shared/inventory-prep.ts#InventoryPrepRow",
-      "name": "InventoryPrepRow",
-      "kind": "interface",
-      "file": "src/shared/inventory-prep.ts",
-      "line": 5,
-      "endLine": 14
-    },
-    {
       "id": "symbol:src/shared/ipc-channels.ts#DESKTOP_IPC_CHANNELS",
       "name": "DESKTOP_IPC_CHANNELS",
       "kind": "value",
@@ -46647,102 +46341,6 @@
       "file": "src/shared/long-run-depth.ts",
       "line": 130,
       "endLine": 153
-    },
-    {
-      "id": "symbol:src/shared/long-run-feedback.ts#FeedbackCauseKind",
-      "name": "FeedbackCauseKind",
-      "kind": "type",
-      "file": "src/shared/long-run-feedback.ts",
-      "line": 10,
-      "endLine": 15
-    },
-    {
-      "id": "symbol:src/shared/long-run-feedback.ts#FeedbackCauseRow",
-      "name": "FeedbackCauseRow",
-      "kind": "interface",
-      "file": "src/shared/long-run-feedback.ts",
-      "line": 17,
-      "endLine": 27
-    },
-    {
-      "id": "symbol:src/shared/long-run-feedback.ts#FindableDistributionRow",
-      "name": "FindableDistributionRow",
-      "kind": "interface",
-      "file": "src/shared/long-run-feedback.ts",
-      "line": 55,
-      "endLine": 62
-    },
-    {
-      "id": "symbol:src/shared/long-run-feedback.ts#getFindableDistributionRows",
-      "name": "getFindableDistributionRows",
-      "kind": "value",
-      "file": "src/shared/long-run-feedback.ts",
-      "line": 189,
-      "endLine": 213
-    },
-    {
-      "id": "symbol:src/shared/long-run-feedback.ts#getInRunCauseRows",
-      "name": "getInRunCauseRows",
-      "kind": "value",
-      "file": "src/shared/long-run-feedback.ts",
-      "line": 100,
-      "endLine": 154
-    },
-    {
-      "id": "symbol:src/shared/long-run-feedback.ts#getPerfectMemoryAttribution",
-      "name": "getPerfectMemoryAttribution",
-      "kind": "value",
-      "file": "src/shared/long-run-feedback.ts",
-      "line": 72,
-      "endLine": 98
-    },
-    {
-      "id": "symbol:src/shared/long-run-feedback.ts#getTouchHudDetailRows",
-      "name": "getTouchHudDetailRows",
-      "kind": "value",
-      "file": "src/shared/long-run-feedback.ts",
-      "line": 156,
-      "endLine": 187
-    },
-    {
-      "id": "symbol:src/shared/long-run-feedback.ts#LONG_RUN_TERMINOLOGY_ROWS",
-      "name": "LONG_RUN_TERMINOLOGY_ROWS",
-      "kind": "value",
-      "file": "src/shared/long-run-feedback.ts",
-      "line": 215,
-      "endLine": 223
-    },
-    {
-      "id": "symbol:src/shared/long-run-feedback.ts#PerfectMemoryAttribution",
-      "name": "PerfectMemoryAttribution",
-      "kind": "interface",
-      "file": "src/shared/long-run-feedback.ts",
-      "line": 29,
-      "endLine": 35
-    },
-    {
-      "id": "symbol:src/shared/long-run-feedback.ts#TerminologyContractRow",
-      "name": "TerminologyContractRow",
-      "kind": "interface",
-      "file": "src/shared/long-run-feedback.ts",
-      "line": 47,
-      "endLine": 53
-    },
-    {
-      "id": "symbol:src/shared/long-run-feedback.ts#TouchHudDetailKind",
-      "name": "TouchHudDetailKind",
-      "kind": "type",
-      "file": "src/shared/long-run-feedback.ts",
-      "line": 37,
-      "endLine": 37
-    },
-    {
-      "id": "symbol:src/shared/long-run-feedback.ts#TouchHudDetailRow",
-      "name": "TouchHudDetailRow",
-      "kind": "interface",
-      "file": "src/shared/long-run-feedback.ts",
-      "line": 39,
-      "endLine": 45
     },
     {
       "id": "symbol:src/shared/magpie-rules.ts#applyMagpieTheft",
@@ -47121,54 +46719,6 @@
       "endLine": 22
     },
     {
-      "id": "symbol:src/shared/memory-recall-feedback.ts#getMemoryRecallFeedback",
-      "name": "getMemoryRecallFeedback",
-      "kind": "value",
-      "file": "src/shared/memory-recall-feedback.ts",
-      "line": 421,
-      "endLine": 537
-    },
-    {
-      "id": "symbol:src/shared/memory-recall-feedback.ts#MemoryBurdenFeedback",
-      "name": "MemoryBurdenFeedback",
-      "kind": "interface",
-      "file": "src/shared/memory-recall-feedback.ts",
-      "line": 20,
-      "endLine": 25
-    },
-    {
-      "id": "symbol:src/shared/memory-recall-feedback.ts#MemoryFeedbackLine",
-      "name": "MemoryFeedbackLine",
-      "kind": "interface",
-      "file": "src/shared/memory-recall-feedback.ts",
-      "line": 13,
-      "endLine": 18
-    },
-    {
-      "id": "symbol:src/shared/memory-recall-feedback.ts#MemoryFeedbackTone",
-      "name": "MemoryFeedbackTone",
-      "kind": "type",
-      "file": "src/shared/memory-recall-feedback.ts",
-      "line": 11,
-      "endLine": 11
-    },
-    {
-      "id": "symbol:src/shared/memory-recall-feedback.ts#MemoryRecallFeedback",
-      "name": "MemoryRecallFeedback",
-      "kind": "interface",
-      "file": "src/shared/memory-recall-feedback.ts",
-      "line": 27,
-      "endLine": 46
-    },
-    {
-      "id": "symbol:src/shared/memory-recall-feedback.ts#MemorySymbolMap",
-      "name": "MemorySymbolMap",
-      "kind": "interface",
-      "file": "src/shared/memory-recall-feedback.ts",
-      "line": 48,
-      "endLine": 56
-    },
-    {
       "id": "symbol:src/shared/meta-progression-delta.ts#buildMetaProgressionRunDelta",
       "name": "buildMetaProgressionRunDelta",
       "kind": "value",
@@ -47495,110 +47045,6 @@
       "file": "src/shared/meta-progression.ts",
       "line": 38,
       "endLine": 46
-    },
-    {
-      "id": "symbol:src/shared/meta-reward-signals.ts#buildMetaRewardSignals",
-      "name": "buildMetaRewardSignals",
-      "kind": "value",
-      "file": "src/shared/meta-reward-signals.ts",
-      "line": 200,
-      "endLine": 200
-    },
-    {
-      "id": "symbol:src/shared/meta-reward-signals.ts#getCodexRewardSignal",
-      "name": "getCodexRewardSignal",
-      "kind": "value",
-      "file": "src/shared/meta-reward-signals.ts",
-      "line": 234,
-      "endLine": 235
-    },
-    {
-      "id": "symbol:src/shared/meta-reward-signals.ts#getCodexRewardSignals",
-      "name": "getCodexRewardSignals",
-      "kind": "value",
-      "file": "src/shared/meta-reward-signals.ts",
-      "line": 177,
-      "endLine": 198
-    },
-    {
-      "id": "symbol:src/shared/meta-reward-signals.ts#getCollectionRewardSignal",
-      "name": "getCollectionRewardSignal",
-      "kind": "value",
-      "file": "src/shared/meta-reward-signals.ts",
-      "line": 230,
-      "endLine": 231
-    },
-    {
-      "id": "symbol:src/shared/meta-reward-signals.ts#getCollectionRewardSignals",
-      "name": "getCollectionRewardSignals",
-      "kind": "value",
-      "file": "src/shared/meta-reward-signals.ts",
-      "line": 104,
-      "endLine": 140
-    },
-    {
-      "id": "symbol:src/shared/meta-reward-signals.ts#getInventoryRewardSignal",
-      "name": "getInventoryRewardSignal",
-      "kind": "value",
-      "file": "src/shared/meta-reward-signals.ts",
-      "line": 232,
-      "endLine": 233
-    },
-    {
-      "id": "symbol:src/shared/meta-reward-signals.ts#getInventoryRewardSignals",
-      "name": "getInventoryRewardSignals",
-      "kind": "value",
-      "file": "src/shared/meta-reward-signals.ts",
-      "line": 142,
-      "endLine": 175
-    },
-    {
-      "id": "symbol:src/shared/meta-reward-signals.ts#getMetaProgressionRunImpactRows",
-      "name": "getMetaProgressionRunImpactRows",
-      "kind": "value",
-      "file": "src/shared/meta-reward-signals.ts",
-      "line": 88,
-      "endLine": 102
-    },
-    {
-      "id": "symbol:src/shared/meta-reward-signals.ts#MetaProgressionRunImpactRow",
-      "name": "MetaProgressionRunImpactRow",
-      "kind": "interface",
-      "file": "src/shared/meta-reward-signals.ts",
-      "line": 23,
-      "endLine": 31
-    },
-    {
-      "id": "symbol:src/shared/meta-reward-signals.ts#MetaProgressionRunImpactTone",
-      "name": "MetaProgressionRunImpactTone",
-      "kind": "type",
-      "file": "src/shared/meta-reward-signals.ts",
-      "line": 21,
-      "endLine": 21
-    },
-    {
-      "id": "symbol:src/shared/meta-reward-signals.ts#MetaRewardSignalKind",
-      "name": "MetaRewardSignalKind",
-      "kind": "type",
-      "file": "src/shared/meta-reward-signals.ts",
-      "line": 9,
-      "endLine": 9
-    },
-    {
-      "id": "symbol:src/shared/meta-reward-signals.ts#MetaRewardSignalRow",
-      "name": "MetaRewardSignalRow",
-      "kind": "interface",
-      "file": "src/shared/meta-reward-signals.ts",
-      "line": 11,
-      "endLine": 19
-    },
-    {
-      "id": "symbol:src/shared/meta-reward-signals.ts#MetaScreenId",
-      "name": "MetaScreenId",
-      "kind": "type",
-      "file": "src/shared/meta-reward-signals.ts",
-      "line": 8,
-      "endLine": 8
     },
     {
       "id": "symbol:src/shared/mode-records.ts#getModeRecords",
@@ -49039,86 +48485,6 @@
       "file": "src/shared/run-creation-rules.ts",
       "line": 186,
       "endLine": 192
-    },
-    {
-      "id": "symbol:src/shared/run-economy.ts#getRunEconomyEntry",
-      "name": "getRunEconomyEntry",
-      "kind": "value",
-      "file": "src/shared/run-economy.ts",
-      "line": 135,
-      "endLine": 136
-    },
-    {
-      "id": "symbol:src/shared/run-economy.ts#getRunEconomyRows",
-      "name": "getRunEconomyRows",
-      "kind": "value",
-      "file": "src/shared/run-economy.ts",
-      "line": 119,
-      "endLine": 120
-    },
-    {
-      "id": "symbol:src/shared/run-economy.ts#getRunEconomySnapshot",
-      "name": "getRunEconomySnapshot",
-      "kind": "value",
-      "file": "src/shared/run-economy.ts",
-      "line": 122,
-      "endLine": 133
-    },
-    {
-      "id": "symbol:src/shared/run-economy.ts#RUN_ECONOMY_DEFINITIONS",
-      "name": "RUN_ECONOMY_DEFINITIONS",
-      "kind": "value",
-      "file": "src/shared/run-economy.ts",
-      "line": 45,
-      "endLine": 65
-    },
-    {
-      "id": "symbol:src/shared/run-economy.ts#RUN_ECONOMY_RESOURCE_PURPOSES",
-      "name": "RUN_ECONOMY_RESOURCE_PURPOSES",
-      "kind": "value",
-      "file": "src/shared/run-economy.ts",
-      "line": 67,
-      "endLine": 70
-    },
-    {
-      "id": "symbol:src/shared/run-economy.ts#RunEconomyBucket",
-      "name": "RunEconomyBucket",
-      "kind": "type",
-      "file": "src/shared/run-economy.ts",
-      "line": 5,
-      "endLine": 5
-    },
-    {
-      "id": "symbol:src/shared/run-economy.ts#RunEconomyDefinition",
-      "name": "RunEconomyDefinition",
-      "kind": "interface",
-      "file": "src/shared/run-economy.ts",
-      "line": 8,
-      "endLine": 17
-    },
-    {
-      "id": "symbol:src/shared/run-economy.ts#runEconomyDefinitionById",
-      "name": "runEconomyDefinitionById",
-      "kind": "value",
-      "file": "src/shared/run-economy.ts",
-      "line": 72,
-      "endLine": 78
-    },
-    {
-      "id": "symbol:src/shared/run-economy.ts#RunEconomyPersistence",
-      "name": "RunEconomyPersistence",
-      "kind": "type",
-      "file": "src/shared/run-economy.ts",
-      "line": 6,
-      "endLine": 6
-    },
-    {
-      "id": "symbol:src/shared/run-economy.ts#RunEconomyRow",
-      "name": "RunEconomyRow",
-      "kind": "interface",
-      "file": "src/shared/run-economy.ts",
-      "line": 19,
-      "endLine": 23
     },
     {
       "id": "symbol:src/shared/run-from-share-key.ts#createRunFromShareKey",
@@ -53746,8 +53112,8 @@
           "line": 3
         },
         {
-          "path": "src/shared/memory-recall-feedback.ts",
-          "line": 364
+          "path": "src/shared/run-timer-rules.ts",
+          "line": 9
         }
       ],
       "tests": [
@@ -55850,12 +55216,6 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "displays",
       "label": "shows retained streak"
-    },
-    {
-      "id": "displays:mechanic:phase.memorize->file:src/shared/memory-recall-feedback.ts",
-      "source": "mechanic:phase.memorize",
-      "target": "file:src/shared/memory-recall-feedback.ts",
-      "kind": "displays"
     },
     {
       "id": "displays:mechanic:power.flash_pair->mechanic:feedback.gameplay_hud:shows revealed pair and remaining charges",
@@ -58058,30 +57418,6 @@
       "id": "exports:src/renderer/components/inventoryScreenModel.ts->symbol:src/renderer/components/inventoryScreenModel.ts#createInventoryQuantityMap",
       "source": "file:src/renderer/components/inventoryScreenModel.ts",
       "target": "symbol:src/renderer/components/inventoryScreenModel.ts#createInventoryQuantityMap",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/inventoryScreenModel.ts->symbol:src/renderer/components/inventoryScreenModel.ts#createInventoryScreenModel",
-      "source": "file:src/renderer/components/inventoryScreenModel.ts",
-      "target": "symbol:src/renderer/components/inventoryScreenModel.ts#createInventoryScreenModel",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/inventoryScreenModel.ts->symbol:src/renderer/components/inventoryScreenModel.ts#getInventoryPayoffEngineSignal",
-      "source": "file:src/renderer/components/inventoryScreenModel.ts",
-      "target": "symbol:src/renderer/components/inventoryScreenModel.ts#getInventoryPayoffEngineSignal",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/inventoryScreenModel.ts->symbol:src/renderer/components/inventoryScreenModel.ts#getInventoryRunLoopSignals",
-      "source": "file:src/renderer/components/inventoryScreenModel.ts",
-      "target": "symbol:src/renderer/components/inventoryScreenModel.ts#getInventoryRunLoopSignals",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/inventoryScreenModel.ts->symbol:src/renderer/components/inventoryScreenModel.ts#getInventoryToolActionCue",
-      "source": "file:src/renderer/components/inventoryScreenModel.ts",
-      "target": "symbol:src/renderer/components/inventoryScreenModel.ts#getInventoryToolActionCue",
       "kind": "exports"
     },
     {
@@ -67499,18 +66835,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/shared/inventory-prep.ts->symbol:src/shared/inventory-prep.ts#getInventoryPrepRows",
-      "source": "file:src/shared/inventory-prep.ts",
-      "target": "symbol:src/shared/inventory-prep.ts#getInventoryPrepRows",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/inventory-prep.ts->symbol:src/shared/inventory-prep.ts#InventoryPrepRow",
-      "source": "file:src/shared/inventory-prep.ts",
-      "target": "symbol:src/shared/inventory-prep.ts#InventoryPrepRow",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/shared/ipc-channels.ts->symbol:src/shared/ipc-channels.ts#DESKTOP_IPC_CHANNELS",
       "source": "file:src/shared/ipc-channels.ts",
       "target": "symbol:src/shared/ipc-channels.ts#DESKTOP_IPC_CHANNELS",
@@ -67712,78 +67036,6 @@
       "id": "exports:src/shared/long-run-depth.ts->symbol:src/shared/long-run-depth.ts#runLongRunSoak",
       "source": "file:src/shared/long-run-depth.ts",
       "target": "symbol:src/shared/long-run-depth.ts#runLongRunSoak",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/long-run-feedback.ts->symbol:src/shared/long-run-feedback.ts#FeedbackCauseKind",
-      "source": "file:src/shared/long-run-feedback.ts",
-      "target": "symbol:src/shared/long-run-feedback.ts#FeedbackCauseKind",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/long-run-feedback.ts->symbol:src/shared/long-run-feedback.ts#FeedbackCauseRow",
-      "source": "file:src/shared/long-run-feedback.ts",
-      "target": "symbol:src/shared/long-run-feedback.ts#FeedbackCauseRow",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/long-run-feedback.ts->symbol:src/shared/long-run-feedback.ts#FindableDistributionRow",
-      "source": "file:src/shared/long-run-feedback.ts",
-      "target": "symbol:src/shared/long-run-feedback.ts#FindableDistributionRow",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/long-run-feedback.ts->symbol:src/shared/long-run-feedback.ts#getFindableDistributionRows",
-      "source": "file:src/shared/long-run-feedback.ts",
-      "target": "symbol:src/shared/long-run-feedback.ts#getFindableDistributionRows",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/long-run-feedback.ts->symbol:src/shared/long-run-feedback.ts#getInRunCauseRows",
-      "source": "file:src/shared/long-run-feedback.ts",
-      "target": "symbol:src/shared/long-run-feedback.ts#getInRunCauseRows",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/long-run-feedback.ts->symbol:src/shared/long-run-feedback.ts#getPerfectMemoryAttribution",
-      "source": "file:src/shared/long-run-feedback.ts",
-      "target": "symbol:src/shared/long-run-feedback.ts#getPerfectMemoryAttribution",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/long-run-feedback.ts->symbol:src/shared/long-run-feedback.ts#getTouchHudDetailRows",
-      "source": "file:src/shared/long-run-feedback.ts",
-      "target": "symbol:src/shared/long-run-feedback.ts#getTouchHudDetailRows",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/long-run-feedback.ts->symbol:src/shared/long-run-feedback.ts#LONG_RUN_TERMINOLOGY_ROWS",
-      "source": "file:src/shared/long-run-feedback.ts",
-      "target": "symbol:src/shared/long-run-feedback.ts#LONG_RUN_TERMINOLOGY_ROWS",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/long-run-feedback.ts->symbol:src/shared/long-run-feedback.ts#PerfectMemoryAttribution",
-      "source": "file:src/shared/long-run-feedback.ts",
-      "target": "symbol:src/shared/long-run-feedback.ts#PerfectMemoryAttribution",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/long-run-feedback.ts->symbol:src/shared/long-run-feedback.ts#TerminologyContractRow",
-      "source": "file:src/shared/long-run-feedback.ts",
-      "target": "symbol:src/shared/long-run-feedback.ts#TerminologyContractRow",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/long-run-feedback.ts->symbol:src/shared/long-run-feedback.ts#TouchHudDetailKind",
-      "source": "file:src/shared/long-run-feedback.ts",
-      "target": "symbol:src/shared/long-run-feedback.ts#TouchHudDetailKind",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/long-run-feedback.ts->symbol:src/shared/long-run-feedback.ts#TouchHudDetailRow",
-      "source": "file:src/shared/long-run-feedback.ts",
-      "target": "symbol:src/shared/long-run-feedback.ts#TouchHudDetailRow",
       "kind": "exports"
     },
     {
@@ -68069,42 +67321,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/shared/memory-recall-feedback.ts->symbol:src/shared/memory-recall-feedback.ts#getMemoryRecallFeedback",
-      "source": "file:src/shared/memory-recall-feedback.ts",
-      "target": "symbol:src/shared/memory-recall-feedback.ts#getMemoryRecallFeedback",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/memory-recall-feedback.ts->symbol:src/shared/memory-recall-feedback.ts#MemoryBurdenFeedback",
-      "source": "file:src/shared/memory-recall-feedback.ts",
-      "target": "symbol:src/shared/memory-recall-feedback.ts#MemoryBurdenFeedback",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/memory-recall-feedback.ts->symbol:src/shared/memory-recall-feedback.ts#MemoryFeedbackLine",
-      "source": "file:src/shared/memory-recall-feedback.ts",
-      "target": "symbol:src/shared/memory-recall-feedback.ts#MemoryFeedbackLine",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/memory-recall-feedback.ts->symbol:src/shared/memory-recall-feedback.ts#MemoryFeedbackTone",
-      "source": "file:src/shared/memory-recall-feedback.ts",
-      "target": "symbol:src/shared/memory-recall-feedback.ts#MemoryFeedbackTone",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/memory-recall-feedback.ts->symbol:src/shared/memory-recall-feedback.ts#MemoryRecallFeedback",
-      "source": "file:src/shared/memory-recall-feedback.ts",
-      "target": "symbol:src/shared/memory-recall-feedback.ts#MemoryRecallFeedback",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/memory-recall-feedback.ts->symbol:src/shared/memory-recall-feedback.ts#MemorySymbolMap",
-      "source": "file:src/shared/memory-recall-feedback.ts",
-      "target": "symbol:src/shared/memory-recall-feedback.ts#MemorySymbolMap",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/shared/meta-progression-delta.ts->symbol:src/shared/meta-progression-delta.ts#buildMetaProgressionRunDelta",
       "source": "file:src/shared/meta-progression-delta.ts",
       "target": "symbol:src/shared/meta-progression-delta.ts#buildMetaProgressionRunDelta",
@@ -68348,84 +67564,6 @@
       "id": "exports:src/shared/meta-progression.ts->symbol:src/shared/meta-progression.ts#PermanentUpgradeRow",
       "source": "file:src/shared/meta-progression.ts",
       "target": "symbol:src/shared/meta-progression.ts#PermanentUpgradeRow",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/meta-reward-signals.ts->symbol:src/shared/meta-reward-signals.ts#buildMetaRewardSignals",
-      "source": "file:src/shared/meta-reward-signals.ts",
-      "target": "symbol:src/shared/meta-reward-signals.ts#buildMetaRewardSignals",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/meta-reward-signals.ts->symbol:src/shared/meta-reward-signals.ts#getCodexRewardSignal",
-      "source": "file:src/shared/meta-reward-signals.ts",
-      "target": "symbol:src/shared/meta-reward-signals.ts#getCodexRewardSignal",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/meta-reward-signals.ts->symbol:src/shared/meta-reward-signals.ts#getCodexRewardSignals",
-      "source": "file:src/shared/meta-reward-signals.ts",
-      "target": "symbol:src/shared/meta-reward-signals.ts#getCodexRewardSignals",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/meta-reward-signals.ts->symbol:src/shared/meta-reward-signals.ts#getCollectionRewardSignal",
-      "source": "file:src/shared/meta-reward-signals.ts",
-      "target": "symbol:src/shared/meta-reward-signals.ts#getCollectionRewardSignal",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/meta-reward-signals.ts->symbol:src/shared/meta-reward-signals.ts#getCollectionRewardSignals",
-      "source": "file:src/shared/meta-reward-signals.ts",
-      "target": "symbol:src/shared/meta-reward-signals.ts#getCollectionRewardSignals",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/meta-reward-signals.ts->symbol:src/shared/meta-reward-signals.ts#getInventoryRewardSignal",
-      "source": "file:src/shared/meta-reward-signals.ts",
-      "target": "symbol:src/shared/meta-reward-signals.ts#getInventoryRewardSignal",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/meta-reward-signals.ts->symbol:src/shared/meta-reward-signals.ts#getInventoryRewardSignals",
-      "source": "file:src/shared/meta-reward-signals.ts",
-      "target": "symbol:src/shared/meta-reward-signals.ts#getInventoryRewardSignals",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/meta-reward-signals.ts->symbol:src/shared/meta-reward-signals.ts#getMetaProgressionRunImpactRows",
-      "source": "file:src/shared/meta-reward-signals.ts",
-      "target": "symbol:src/shared/meta-reward-signals.ts#getMetaProgressionRunImpactRows",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/meta-reward-signals.ts->symbol:src/shared/meta-reward-signals.ts#MetaProgressionRunImpactRow",
-      "source": "file:src/shared/meta-reward-signals.ts",
-      "target": "symbol:src/shared/meta-reward-signals.ts#MetaProgressionRunImpactRow",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/meta-reward-signals.ts->symbol:src/shared/meta-reward-signals.ts#MetaProgressionRunImpactTone",
-      "source": "file:src/shared/meta-reward-signals.ts",
-      "target": "symbol:src/shared/meta-reward-signals.ts#MetaProgressionRunImpactTone",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/meta-reward-signals.ts->symbol:src/shared/meta-reward-signals.ts#MetaRewardSignalKind",
-      "source": "file:src/shared/meta-reward-signals.ts",
-      "target": "symbol:src/shared/meta-reward-signals.ts#MetaRewardSignalKind",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/meta-reward-signals.ts->symbol:src/shared/meta-reward-signals.ts#MetaRewardSignalRow",
-      "source": "file:src/shared/meta-reward-signals.ts",
-      "target": "symbol:src/shared/meta-reward-signals.ts#MetaRewardSignalRow",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/meta-reward-signals.ts->symbol:src/shared/meta-reward-signals.ts#MetaScreenId",
-      "source": "file:src/shared/meta-reward-signals.ts",
-      "target": "symbol:src/shared/meta-reward-signals.ts#MetaScreenId",
       "kind": "exports"
     },
     {
@@ -69506,66 +68644,6 @@
       "id": "exports:src/shared/run-creation-rules.ts->symbol:src/shared/run-creation-rules.ts#createWildRun",
       "source": "file:src/shared/run-creation-rules.ts",
       "target": "symbol:src/shared/run-creation-rules.ts#createWildRun",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/run-economy.ts->symbol:src/shared/run-economy.ts#getRunEconomyEntry",
-      "source": "file:src/shared/run-economy.ts",
-      "target": "symbol:src/shared/run-economy.ts#getRunEconomyEntry",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/run-economy.ts->symbol:src/shared/run-economy.ts#getRunEconomyRows",
-      "source": "file:src/shared/run-economy.ts",
-      "target": "symbol:src/shared/run-economy.ts#getRunEconomyRows",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/run-economy.ts->symbol:src/shared/run-economy.ts#getRunEconomySnapshot",
-      "source": "file:src/shared/run-economy.ts",
-      "target": "symbol:src/shared/run-economy.ts#getRunEconomySnapshot",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/run-economy.ts->symbol:src/shared/run-economy.ts#RUN_ECONOMY_DEFINITIONS",
-      "source": "file:src/shared/run-economy.ts",
-      "target": "symbol:src/shared/run-economy.ts#RUN_ECONOMY_DEFINITIONS",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/run-economy.ts->symbol:src/shared/run-economy.ts#RUN_ECONOMY_RESOURCE_PURPOSES",
-      "source": "file:src/shared/run-economy.ts",
-      "target": "symbol:src/shared/run-economy.ts#RUN_ECONOMY_RESOURCE_PURPOSES",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/run-economy.ts->symbol:src/shared/run-economy.ts#RunEconomyBucket",
-      "source": "file:src/shared/run-economy.ts",
-      "target": "symbol:src/shared/run-economy.ts#RunEconomyBucket",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/run-economy.ts->symbol:src/shared/run-economy.ts#RunEconomyDefinition",
-      "source": "file:src/shared/run-economy.ts",
-      "target": "symbol:src/shared/run-economy.ts#RunEconomyDefinition",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/run-economy.ts->symbol:src/shared/run-economy.ts#runEconomyDefinitionById",
-      "source": "file:src/shared/run-economy.ts",
-      "target": "symbol:src/shared/run-economy.ts#runEconomyDefinitionById",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/run-economy.ts->symbol:src/shared/run-economy.ts#RunEconomyPersistence",
-      "source": "file:src/shared/run-economy.ts",
-      "target": "symbol:src/shared/run-economy.ts#RunEconomyPersistence",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/run-economy.ts->symbol:src/shared/run-economy.ts#RunEconomyRow",
-      "source": "file:src/shared/run-economy.ts",
-      "target": "symbol:src/shared/run-economy.ts#RunEconomyRow",
       "kind": "exports"
     },
     {
@@ -72757,6 +71835,12 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:phase.memorize->file:src/shared/run-timer-rules.ts",
+      "source": "mechanic:phase.memorize",
+      "target": "file:src/shared/run-timer-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:phase.memorize->file:src/shared/scoring-rules.ts",
       "source": "mechanic:phase.memorize",
       "target": "file:src/shared/scoring-rules.ts",
@@ -75643,27 +74727,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/inventoryScreenModel.test.ts->src/shared/save-data.ts",
-      "source": "file:src/renderer/components/inventoryScreenModel.test.ts",
-      "target": "file:src/shared/save-data.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/inventoryScreenModel.ts->src/shared/chain-targets.ts",
-      "source": "file:src/renderer/components/inventoryScreenModel.ts",
-      "target": "file:src/shared/chain-targets.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/inventoryScreenModel.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/components/inventoryScreenModel.ts",
       "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/inventoryScreenModel.ts->src/shared/cosmetics.ts",
-      "source": "file:src/renderer/components/inventoryScreenModel.ts",
-      "target": "file:src/shared/cosmetics.ts",
       "kind": "imports"
     },
     {
@@ -75673,39 +74739,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/inventoryScreenModel.ts->src/shared/inventory-prep.ts",
-      "source": "file:src/renderer/components/inventoryScreenModel.ts",
-      "target": "file:src/shared/inventory-prep.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/inventoryScreenModel.ts->src/shared/long-run-feedback.ts",
-      "source": "file:src/renderer/components/inventoryScreenModel.ts",
-      "target": "file:src/shared/long-run-feedback.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/inventoryScreenModel.ts->src/shared/meta-reward-signals.ts",
-      "source": "file:src/renderer/components/inventoryScreenModel.ts",
-      "target": "file:src/shared/meta-reward-signals.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/inventoryScreenModel.ts->src/shared/run-economy.ts",
-      "source": "file:src/renderer/components/inventoryScreenModel.ts",
-      "target": "file:src/shared/run-economy.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/inventoryScreenModel.ts->src/shared/run-inventory.ts",
       "source": "file:src/renderer/components/inventoryScreenModel.ts",
       "target": "file:src/shared/run-inventory.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/inventoryScreenModel.ts->src/shared/run-number-guards.ts",
-      "source": "file:src/renderer/components/inventoryScreenModel.ts",
-      "target": "file:src/shared/run-number-guards.ts",
       "kind": "imports"
     },
     {
@@ -84331,42 +83367,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/shared/inventory-prep.test.ts->src/shared/contracts.ts",
-      "source": "file:src/shared/inventory-prep.test.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/inventory-prep.test.ts->src/shared/game-core.ts",
-      "source": "file:src/shared/inventory-prep.test.ts",
-      "target": "file:src/shared/game-core.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/inventory-prep.test.ts->src/shared/inventory-prep.ts",
-      "source": "file:src/shared/inventory-prep.test.ts",
-      "target": "file:src/shared/inventory-prep.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/inventory-prep.ts->src/shared/contracts.ts",
-      "source": "file:src/shared/inventory-prep.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/inventory-prep.ts->src/shared/run-inventory.ts",
-      "source": "file:src/shared/inventory-prep.ts",
-      "target": "file:src/shared/run-inventory.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/inventory-prep.ts->src/shared/session-stats-rules.ts",
-      "source": "file:src/shared/inventory-prep.ts",
-      "target": "file:src/shared/session-stats-rules.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/shared/ipc-channels.ts->src/shared/contracts.ts",
       "source": "file:src/shared/ipc-channels.ts",
       "target": "file:src/shared/contracts.ts",
@@ -84490,72 +83490,6 @@
       "id": "imports:src/shared/long-run-depth.ts->src/shared/floor-mutator-schedule.ts",
       "source": "file:src/shared/long-run-depth.ts",
       "target": "file:src/shared/floor-mutator-schedule.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/long-run-feedback.test.ts->src/shared/contracts.ts",
-      "source": "file:src/shared/long-run-feedback.test.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/long-run-feedback.test.ts->src/shared/game-core.ts",
-      "source": "file:src/shared/long-run-feedback.test.ts",
-      "target": "file:src/shared/game-core.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/long-run-feedback.test.ts->src/shared/long-run-feedback.ts",
-      "source": "file:src/shared/long-run-feedback.test.ts",
-      "target": "file:src/shared/long-run-feedback.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/long-run-feedback.ts->src/shared/contracts.ts",
-      "source": "file:src/shared/long-run-feedback.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/long-run-feedback.ts->src/shared/findables.ts",
-      "source": "file:src/shared/long-run-feedback.ts",
-      "target": "file:src/shared/findables.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/long-run-feedback.ts->src/shared/mechanic-feedback.ts",
-      "source": "file:src/shared/long-run-feedback.ts",
-      "target": "file:src/shared/mechanic-feedback.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/long-run-feedback.ts->src/shared/memory-recall-feedback.ts",
-      "source": "file:src/shared/long-run-feedback.ts",
-      "target": "file:src/shared/memory-recall-feedback.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/long-run-feedback.ts->src/shared/run-array-guards.ts",
-      "source": "file:src/shared/long-run-feedback.ts",
-      "target": "file:src/shared/run-array-guards.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/long-run-feedback.ts->src/shared/run-economy.ts",
-      "source": "file:src/shared/long-run-feedback.ts",
-      "target": "file:src/shared/run-economy.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/long-run-feedback.ts->src/shared/run-number-guards.ts",
-      "source": "file:src/shared/long-run-feedback.ts",
-      "target": "file:src/shared/run-number-guards.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/long-run-feedback.ts->src/shared/session-stats-rules.ts",
-      "source": "file:src/shared/long-run-feedback.ts",
-      "target": "file:src/shared/session-stats-rules.ts",
       "kind": "imports"
     },
     {
@@ -84781,48 +83715,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/shared/memory-recall-feedback.test.ts->src/shared/contracts.ts",
-      "source": "file:src/shared/memory-recall-feedback.test.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/memory-recall-feedback.test.ts->src/shared/memory-recall-feedback.ts",
-      "source": "file:src/shared/memory-recall-feedback.test.ts",
-      "target": "file:src/shared/memory-recall-feedback.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/memory-recall-feedback.test.ts->src/shared/test/game-fixtures.ts",
-      "source": "file:src/shared/memory-recall-feedback.test.ts",
-      "target": "file:src/shared/test/game-fixtures.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/memory-recall-feedback.ts->src/shared/contracts.ts",
-      "source": "file:src/shared/memory-recall-feedback.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/memory-recall-feedback.ts->src/shared/recall-rules.ts",
-      "source": "file:src/shared/memory-recall-feedback.ts",
-      "target": "file:src/shared/recall-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/memory-recall-feedback.ts->src/shared/run-array-guards.ts",
-      "source": "file:src/shared/memory-recall-feedback.ts",
-      "target": "file:src/shared/run-array-guards.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/memory-recall-feedback.ts->src/shared/tile-identity.ts",
-      "source": "file:src/shared/memory-recall-feedback.ts",
-      "target": "file:src/shared/tile-identity.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/shared/meta-progression-delta.test.ts->src/shared/meta-progression-delta.ts",
       "source": "file:src/shared/meta-progression-delta.test.ts",
       "target": "file:src/shared/meta-progression-delta.ts",
@@ -84886,66 +83778,6 @@
       "id": "imports:src/shared/meta-progression.ts->src/shared/run-number-guards.ts",
       "source": "file:src/shared/meta-progression.ts",
       "target": "file:src/shared/run-number-guards.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/meta-reward-signals.test.ts->src/shared/contracts.ts",
-      "source": "file:src/shared/meta-reward-signals.test.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/meta-reward-signals.test.ts->src/shared/game-core.ts",
-      "source": "file:src/shared/meta-reward-signals.test.ts",
-      "target": "file:src/shared/game-core.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/meta-reward-signals.test.ts->src/shared/meta-reward-signals.ts",
-      "source": "file:src/shared/meta-reward-signals.test.ts",
-      "target": "file:src/shared/meta-reward-signals.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/meta-reward-signals.test.ts->src/shared/save-data.ts",
-      "source": "file:src/shared/meta-reward-signals.test.ts",
-      "target": "file:src/shared/save-data.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/meta-reward-signals.ts->src/shared/contracts.ts",
-      "source": "file:src/shared/meta-reward-signals.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/meta-reward-signals.ts->src/shared/meta-progression.ts",
-      "source": "file:src/shared/meta-reward-signals.ts",
-      "target": "file:src/shared/meta-progression.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/meta-reward-signals.ts->src/shared/objective-board.ts",
-      "source": "file:src/shared/meta-reward-signals.ts",
-      "target": "file:src/shared/objective-board.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/meta-reward-signals.ts->src/shared/run-array-guards.ts",
-      "source": "file:src/shared/meta-reward-signals.ts",
-      "target": "file:src/shared/run-array-guards.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/meta-reward-signals.ts->src/shared/run-number-guards.ts",
-      "source": "file:src/shared/meta-reward-signals.ts",
-      "target": "file:src/shared/run-number-guards.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/meta-reward-signals.ts->src/shared/session-stats-rules.ts",
-      "source": "file:src/shared/meta-reward-signals.ts",
-      "target": "file:src/shared/session-stats-rules.ts",
       "kind": "imports"
     },
     {
@@ -85965,42 +84797,6 @@
     {
       "id": "imports:src/shared/run-creation-rules.ts->src/shared/session-stats-rules.ts",
       "source": "file:src/shared/run-creation-rules.ts",
-      "target": "file:src/shared/session-stats-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/run-economy.test.ts->src/shared/contracts.ts",
-      "source": "file:src/shared/run-economy.test.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/run-economy.test.ts->src/shared/game-core.ts",
-      "source": "file:src/shared/run-economy.test.ts",
-      "target": "file:src/shared/game-core.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/run-economy.test.ts->src/shared/run-economy.ts",
-      "source": "file:src/shared/run-economy.test.ts",
-      "target": "file:src/shared/run-economy.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/run-economy.ts->src/shared/contracts.ts",
-      "source": "file:src/shared/run-economy.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/run-economy.ts->src/shared/run-number-guards.ts",
-      "source": "file:src/shared/run-economy.ts",
-      "target": "file:src/shared/run-number-guards.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/run-economy.ts->src/shared/session-stats-rules.ts",
-      "source": "file:src/shared/run-economy.ts",
       "target": "file:src/shared/session-stats-rules.ts",
       "kind": "imports"
     },
@@ -92706,12 +91502,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/contracts.ts->file:src/shared/inventory-prep.test.ts",
-      "source": "file:src/shared/contracts.ts",
-      "target": "file:src/shared/inventory-prep.test.ts",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/level-clear-rules.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/level-clear-rules.test.ts",
@@ -92721,12 +91511,6 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/long-run-depth.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/long-run-depth.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/contracts.ts->file:src/shared/long-run-feedback.test.ts",
-      "source": "file:src/shared/contracts.ts",
-      "target": "file:src/shared/long-run-feedback.test.ts",
       "kind": "tested_by"
     },
     {
@@ -92757,18 +91541,6 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/memorize-phase-rules.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/memorize-phase-rules.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/contracts.ts->file:src/shared/memory-recall-feedback.test.ts",
-      "source": "file:src/shared/contracts.ts",
-      "target": "file:src/shared/memory-recall-feedback.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/contracts.ts->file:src/shared/meta-reward-signals.test.ts",
-      "source": "file:src/shared/contracts.ts",
-      "target": "file:src/shared/meta-reward-signals.test.ts",
       "kind": "tested_by"
     },
     {
@@ -92829,12 +91601,6 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/run-creation-rules.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/run-creation-rules.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/contracts.ts->file:src/shared/run-economy.test.ts",
-      "source": "file:src/shared/contracts.ts",
-      "target": "file:src/shared/run-economy.test.ts",
       "kind": "tested_by"
     },
     {
@@ -93366,24 +92132,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/game-core.ts->file:src/shared/inventory-prep.test.ts",
-      "source": "file:src/shared/game-core.ts",
-      "target": "file:src/shared/inventory-prep.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/game-core.ts->file:src/shared/long-run-feedback.test.ts",
-      "source": "file:src/shared/game-core.ts",
-      "target": "file:src/shared/long-run-feedback.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/game-core.ts->file:src/shared/meta-reward-signals.test.ts",
-      "source": "file:src/shared/game-core.ts",
-      "target": "file:src/shared/meta-reward-signals.test.ts",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/game-core.ts->file:src/shared/objective-board.test.ts",
       "source": "file:src/shared/game-core.ts",
       "target": "file:src/shared/objective-board.test.ts",
@@ -93423,12 +92171,6 @@
       "id": "tested_by:src/shared/game-core.ts->file:src/shared/release-checklist.test.ts",
       "source": "file:src/shared/game-core.ts",
       "target": "file:src/shared/release-checklist.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/game-core.ts->file:src/shared/run-economy.test.ts",
-      "source": "file:src/shared/game-core.ts",
-      "target": "file:src/shared/run-economy.test.ts",
       "kind": "tested_by"
     },
     {
@@ -93792,12 +92534,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/inventory-prep.ts->file:src/shared/inventory-prep.test.ts",
-      "source": "file:src/shared/inventory-prep.ts",
-      "target": "file:src/shared/inventory-prep.test.ts",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/ipc-channels.ts->file:src/main/ipc.test.ts",
       "source": "file:src/shared/ipc-channels.ts",
       "target": "file:src/main/ipc.test.ts",
@@ -93843,12 +92579,6 @@
       "id": "tested_by:src/shared/long-run-depth.ts->file:src/shared/long-run-depth.test.ts",
       "source": "file:src/shared/long-run-depth.ts",
       "target": "file:src/shared/long-run-depth.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/long-run-feedback.ts->file:src/shared/long-run-feedback.test.ts",
-      "source": "file:src/shared/long-run-feedback.ts",
-      "target": "file:src/shared/long-run-feedback.test.ts",
       "kind": "tested_by"
     },
     {
@@ -93912,12 +92642,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/memory-recall-feedback.ts->file:src/shared/memory-recall-feedback.test.ts",
-      "source": "file:src/shared/memory-recall-feedback.ts",
-      "target": "file:src/shared/memory-recall-feedback.test.ts",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/meta-progression-delta.ts->file:src/shared/meta-progression-delta.test.ts",
       "source": "file:src/shared/meta-progression-delta.ts",
       "target": "file:src/shared/meta-progression-delta.test.ts",
@@ -93927,12 +92651,6 @@
       "id": "tested_by:src/shared/meta-progression.ts->file:src/shared/meta-progression.test.ts",
       "source": "file:src/shared/meta-progression.ts",
       "target": "file:src/shared/meta-progression.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/meta-reward-signals.ts->file:src/shared/meta-reward-signals.test.ts",
-      "source": "file:src/shared/meta-reward-signals.ts",
-      "target": "file:src/shared/meta-reward-signals.test.ts",
       "kind": "tested_by"
     },
     {
@@ -94416,12 +93134,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/run-economy.ts->file:src/shared/run-economy.test.ts",
-      "source": "file:src/shared/run-economy.ts",
-      "target": "file:src/shared/run-economy.test.ts",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/run-from-share-key.ts->file:src/shared/run-from-share-key.test.ts",
       "source": "file:src/shared/run-from-share-key.ts",
       "target": "file:src/shared/run-from-share-key.test.ts",
@@ -94632,12 +93344,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/save-data.ts->file:src/renderer/components/inventoryScreenModel.test.ts",
-      "source": "file:src/shared/save-data.ts",
-      "target": "file:src/renderer/components/inventoryScreenModel.test.ts",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/save-data.ts->file:src/renderer/components/MainMenu.test.tsx",
       "source": "file:src/shared/save-data.ts",
       "target": "file:src/renderer/components/MainMenu.test.tsx",
@@ -94815,12 +93521,6 @@
       "id": "tested_by:src/shared/save-data.ts->file:src/shared/meta-progression.test.ts",
       "source": "file:src/shared/save-data.ts",
       "target": "file:src/shared/meta-progression.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/save-data.ts->file:src/shared/meta-reward-signals.test.ts",
-      "source": "file:src/shared/save-data.ts",
-      "target": "file:src/shared/meta-reward-signals.test.ts",
       "kind": "tested_by"
     },
     {
@@ -95103,12 +93803,6 @@
       "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/shared/game.test.ts",
       "source": "file:src/shared/test/game-fixtures.ts",
       "target": "file:src/shared/game.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/shared/memory-recall-feedback.test.ts",
-      "source": "file:src/shared/test/game-fixtures.ts",
-      "target": "file:src/shared/memory-recall-feedback.test.ts",
       "kind": "tested_by"
     },
     {

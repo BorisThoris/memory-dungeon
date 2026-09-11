@@ -50,7 +50,7 @@
             "id": "economy-taxonomy-gate",
             "priority": "P1",
             "system": "Rewards And Economy",
-            "title": "Name every currency in the run economy taxonomy",
+            "title": "Score every source the run can earn from",
             "status": "done",
             "command": "yarn gate:rewards-economy",
             "minimumEvidence": 4

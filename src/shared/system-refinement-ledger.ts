@@ -290,7 +290,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         verdict: 'changed',
         generation: 213,
         gone: ['destroyText', 'forfeited by destroying the carrier'],
-        note: 'Its reward row carried a field saying Destroy forfeits the score. Replaced with the rule that is true: a break which takes the carrier spills the glint and pays it. Gen 213 found the same dead promise a second time, in the economy row for findable pickups, and repointed that sentence at the same rule.'
+        note: 'Its reward row carried a field saying Destroy forfeits the score. Replaced with the rule that is true: a break which takes the carrier spills the glint and pays it. Gen 213 found the same dead promise a second time in the economy row for findable pickups and repointed it; Gen 214 found that row had no reader at all and removed it, so the rule now lives in one place rather than two.'
     },
     {
         id: 'objective.featured_streak',
@@ -302,10 +302,10 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
     {
         id: 'economy.score_and_rewards',
         verdict: 'changed',
-        generation: 213,
-        gone: ['stray-remove'],
-        present: ['RUN_ECONOMY_DEFINITIONS'],
-        note: 'Gen 200 took the Destroy and Stray rows out of the economy projection rather than showing them at zero - and Gen 213 read the rows that stayed. Both temporary-run rows still described sinks the game does not have: a pickup "forfeited by destroying the carrier", and charges spent on "destroy" and "stray-remove" actions. The row-level fix had been checked and the prose inside the rows never had. The charge row now names exactly the three charge fields it sums.'
+        generation: 214,
+        gone: ['stray-remove', 'RUN_ECONOMY_DEFINITIONS'],
+        present: ['turn-match-scoring-summary-rules', 'level-clear-rules'],
+        note: 'Gen 200 took the Destroy and Stray rows out of the economy projection rather than showing them at zero; Gen 213 read the rows that stayed and found both still describing sinks the game does not have - a pickup "forfeited by destroying the carrier", charges spent on "destroy" and "stray-remove". Gen 214 then asked who reads that projection and the answer was nobody: it hung off the dead Inventory screen model, and it is gone. The score itself is unaffected and always was somewhere else - the two modules named here are what the interaction graph has always cited as this mechanic.'
     },
     {
         id: 'stats.session_tracking',

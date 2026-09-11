@@ -146,15 +146,18 @@ export const RESPONSIVE_SCREEN_ROUTES: readonly ResponsiveScreenRoute[] = [
     {
         screen: 'inventory',
         requiredViewportIds: ['phone_390x844', 'phone_landscape_844x390', 'desktop_1440x900'],
-        primaryActionSelector: '[data-testid="inventory-prep-strip"]',
-        rationale: 'Run prep and charge rows must remain reachable in menu and in-run shells.',
+        // Gen 214: this named a run-prep strip no screen has rendered since the meta-screen
+        // rebuild - the read model behind it went the same generation, for having no caller.
+        primaryActionSelector: '[data-testid="inventory-charges-panel"]',
+        rationale: 'Charge and token rows must remain reachable in menu and in-run shells.',
         maxContentColumns: 3,
         mustAvoidHorizontalScroll: true
     },
     {
         screen: 'codex',
         requiredViewportIds: ['phone_390x844', 'tablet_768x1024', 'desktop_1440x900'],
-        primaryActionSelector: '[data-testid="codex-knowledge-base-summary"]',
+        // Gen 214: `codex-knowledge-base-summary` is not rendered either; the entry list is.
+        primaryActionSelector: '[data-testid="codex-entry"]',
         rationale: 'Knowledge base filters, tabs, and TOC must stay usable without wide text overflow.',
         maxContentColumns: 3,
         mustAvoidHorizontalScroll: true

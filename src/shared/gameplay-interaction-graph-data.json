@@ -898,7 +898,7 @@
             "evidence": [
                 "src/shared/scoring-rules.ts",
                 "src/renderer/store/runTimerController.ts",
-                "src/shared/memory-recall-feedback.ts"
+                "src/shared/run-timer-rules.ts"
             ],
             "reads": [
                 "memorizeMs",

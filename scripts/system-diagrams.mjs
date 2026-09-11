@@ -370,20 +370,27 @@ const buildBoardGenerationDiagram = (repoRoot) => {
     };
 };
 
+/*
+ * Gen 214: this cited `run-economy.ts` and its test, a projection removed that generation for
+ * having no reader, and described the economy as "shards, guard tokens and findable pickups" -
+ * the shard went in Gen 184 and the guard token with the dungeon layer. What a run earns now is
+ * score and charges, and the modules that decide both are the ones the interaction graph has
+ * always cited for this mechanic.
+ */
 const buildRewardsEconomyDiagram = (repoRoot) => {
     const rewardEvidence = evidence(repoRoot, [
-        'src/shared/run-economy.ts',
-        'src/shared/run-economy.test.ts',
+        'src/shared/turn-match-scoring-summary-rules.ts',
+        'src/shared/level-clear-rules.ts',
         'src/shared/findables.ts',
         'src/shared/balance-simulation.ts'
     ]);
     return {
         id: 'rewards-economy',
         title: 'Rewards And Economy',
-        summary: 'Shards, guard tokens and findable pickups are what a run earns. Gold and the shop went in Gen 174, the relics and bonus rewards in Gen 175 and 176; nothing is bought or drafted.',
+        summary: 'Score and the run charges are what a run earns. Gold and the shop went in Gen 174, relics and bonus rewards in Gen 175 and 176, the combo shard in Gen 184; nothing is bought or drafted.',
         nodes: [
-            node('findables', 'Findables', 'domain', 'shared', 'Findable pairs pay score, shards or a ward when matched.', evidence(repoRoot, ['src/shared/findables.ts'])),
-            node('run_economy', 'Run Economy', 'state', 'shared', 'The run economy taxonomy names every temporary currency, its source and its sink.', evidence(repoRoot, ['src/shared/run-economy.ts'])),
+            node('findables', 'Findables', 'domain', 'shared', 'Findable pairs pay score or a charge when matched.', evidence(repoRoot, ['src/shared/findables.ts'])),
+            node('run_economy', 'Run Economy', 'state', 'shared', 'The match and floor-clear rules are where every point a run earns is decided.', evidence(repoRoot, ['src/shared/turn-match-scoring-summary-rules.ts', 'src/shared/level-clear-rules.ts'])),
             node('balance_sim', 'Balance Simulation', 'analysis', 'shared', 'Simulation watches pressure, cascade and trait floor share.', evidence(repoRoot, ['src/shared/balance-simulation.ts'])),
             node('reward_ui', 'Reward UI', 'ui', 'renderer', 'The floor-clear dialog and the inventory show what the run holds.', evidence(repoRoot, ['src/renderer/components', 'src/renderer/App.tsx']))
         ],
@@ -396,8 +403,8 @@ const buildRewardsEconomyDiagram = (repoRoot) => {
             finding(
                 'economy-is-small',
                 'info',
-                'The run economy is three counters',
-                'Shards, guard tokens and charges are all a run earns now. A new source or sink must be named in the run-economy taxonomy and sampled by the balance simulation.',
+                'The run economy is score and charges',
+                'Score and the run charges are all a run earns now. A new source or sink has to be scored by the match and floor-clear rules and sampled by the balance simulation.',
                 rewardEvidence
             )
         ],
@@ -406,9 +413,9 @@ const buildRewardsEconomyDiagram = (repoRoot) => {
                 'economy-taxonomy-gate',
                 'P1',
                 'Rewards And Economy',
-                'Name every currency in the run economy taxonomy',
-                'Any new source or sink must appear in the run-economy taxonomy with its source and sink and keep the balance simulation bands.',
-                'No currency is earned or spent that the taxonomy does not name.',
+                'Score every source the run can earn from',
+                'Any new source or sink must be scored by the match and floor-clear rules and keep the balance simulation bands.',
+                'Nothing is earned or spent that the scoring rules do not account for.',
                 rewardEvidence,
                 'done',
                 'yarn gate:rewards-economy'
