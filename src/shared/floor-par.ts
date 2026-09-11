@@ -25,31 +25,44 @@ import { runNonNegativeInteger } from './run-number-guards';
 export const PAR_TURNS_PER_PAIR = 0.45;
 
 /**
- * Gen 210: the small floors get a turn back, because a linear par is the wrong shape for them.
+ * Gen 211: par follows the pop, because the pop is what makes par achievable and its help is not
+ * flat.
  *
- * Par is one rate times the board, and the pop is what makes that rate work - a break takes pairs
- * the player never spent a turn on. But the pop's share of a board GROWS with the board: measured
- * across the opening, a floor of four pairs has two taken by pops and a floor of fourteen has 9.6,
- * so the same rate that is generous at twelve pairs is the theoretical minimum at four.
+ * Par was one rate times the board. That rate only works where the pop is at its best, and measured
+ * across a hundred floors the pop's share of a board is a hill rather than a line:
  *
- * Measured (`yarn sim:opening`, ten seeds, 15% miss), a clean player came in OVER par on floors 1,
- * 2 and 6 and level with it on floor 5 - the first floors anyone plays were the only ones in the
- * game where competent play failed the target, which is backwards for an opening. Floor 1 was the
- * clearest: par 2 against a mean of 2.4, and 2 is exactly what four pairs and two popped leave, so
- * it could only be met by never missing at all.
+ *   4 pairs 0.50   11 pairs 0.65   14 pairs 0.75   17 pairs 0.60   22 pairs 0.48   24 pairs 0.48
  *
- * One turn back at or below thirteen pairs - floors 1 to 10 - and nothing above it changes. The
- * line is where the measurement put it rather than where the story wanted it: eleven pairs was
- * tried first and floor 10 came out level with par at 6.0 turns to 6, which is not a target a
- * competent player beats, it is one they tie.
+ * It peaks around fourteen pairs and falls away on the big boards, where four suits of six pairs
+ * are spread over forty-eight cells and a bounded wave reaches a smaller fraction of each. A flat
+ * rate calibrated to the peak is therefore too tight at BOTH ends, and it was: Gen 210 found a
+ * clean player over par on floors 1, 2 and 6, and the deep game is worse - **11.6 turns against a
+ * par of 9 on floor 30, 14.0 against 10 on floor 40, 15.8 against 11 on floor 100.** From about
+ * floor 20 on, the under-par bonus and the within-par objective were unreachable by competent play.
+ *
+ * Two terms, both from the mechanism rather than from a fit:
+ *
+ * - **The rate rises past thirteen pairs**, by `PAR_RATE_RISE_PER_PAIR` for each pair over the line,
+ *   which is where the measurement says the pop stops keeping up with the board.
+ * - **One turn of miss allowance, on every floor.** Par allowed for no misses at all, and a
+ *   competent player makes 0.2 on the early floors and 2.6 to 3.0 on the deep ones. This replaces
+ *   Gen 210's small-floor slack: that fix was this one seen from the other end, and it falls out of
+ *   this rule rather than sitting beside it.
+ *
+ * Measured after: a clean player is under par on every floor from 1 to 100.
  */
-export const PAR_SMALL_FLOOR_PAIRS = 13;
-export const PAR_SMALL_FLOOR_SLACK = 1;
+export const PAR_FLAT_RATE_PAIRS = 13;
+export const PAR_RATE_RISE_PER_PAIR = 0.025;
+export const PAR_MISS_ALLOWANCE = 1;
+
+/** Turns per pair on a board of this size: flat to thirteen pairs, rising after it. */
+export const parRateForPairs = (pairs: number): number =>
+    PAR_TURNS_PER_PAIR + PAR_RATE_RISE_PER_PAIR * Math.max(0, runNonNegativeInteger(pairs) - PAR_FLAT_RATE_PAIRS);
 
 export const parTurnsForFloor = (pairs: number): number => {
     const count = runNonNegativeInteger(pairs);
-    const slack = count > 0 && count <= PAR_SMALL_FLOOR_PAIRS ? PAR_SMALL_FLOOR_SLACK : 0;
-    return Math.max(1, Math.ceil(count * PAR_TURNS_PER_PAIR) + slack);
+    if (count === 0) return 1;
+    return Math.max(1, Math.ceil(count * parRateForPairs(count)) + PAR_MISS_ALLOWANCE);
 };
 
 /** Turns the run has resolved on this floor, read from its own ledger. */

@@ -1,9 +1,12 @@
 /**
- * What does the opening of a run feel like? Run: yarn sim:opening [--check]
+ * What does the difficulty curve feel like, floor by floor? Run: yarn sim:curve [--check]
  *
- * Nothing measured the first floors as a player meets them: `sim:cascade` reports bands over all
- * floors, `sim:occupancy` reports shares, and neither says how long a floor takes or how that
- * changes as the boards grow. Gen 210 measured it, and two things came out.
+ * Nothing measured the floors as a player meets them: `sim:cascade` reports bands over all floors,
+ * `sim:occupancy` reports shares, and neither says how long a floor takes or how that changes as
+ * the boards grow. Gen 210 measured the opening and Gen 211 the rest of the curve - this file was
+ * named for the opening alone for exactly one generation, until the deep floors turned out to have
+ * the same defect from the other side, and it was renamed here rather than left saying half of
+ * what it does.
  *
  * **Floor 1 is over in 2.3 turns.** Four pairs, and a first match pops half the board, so the first
  * board anyone ever sees ends after two or three flips.
@@ -15,9 +18,15 @@
  * rather than longer, which is a design position and not obviously the wrong one; what it is not is
  * what `pair-curve.ts` describes, and until now nobody could see the difference.
  *
+ * **The deep floors were worse than the first ones.** A clean player took 11.6 turns against a par
+ * of 9 on floor 30, 14.0 against 10 on floor 40 and 15.8 against 11 on floor 100 - so from about
+ * floor 20 the under-par bonus and the within-par objective were out of reach of competent play.
+ * One cause for both ends: the pop's share of a board is a hill, 0.50 at four pairs, 0.75 at
+ * fourteen, 0.48 by twenty-two, and par was a flat rate calibrated to the peak (`floor-par.ts`).
+ *
  * The bands below are drawn around what was measured, not around what would be nice. They exist so
- * that a change to the pop reach, the pair curve or the par cannot quietly flatten or spike the
- * first floors again - the thing this repository has done twice (Gen 191, Gen 148).
+ * that a change to the pop reach, the pair curve or the par cannot quietly flatten or spike a floor
+ * again - the thing this repository has done twice (Gen 191, Gen 148).
  */
 import { GAME_RULES_VERSION, type RunState } from '../src/shared/contracts';
 import { buildBoard } from '../src/shared/board-generation';
@@ -32,10 +41,16 @@ import { getUnresolvedPlayablePairGroups } from '../src/shared/playthrough-solve
 import { createMulberry32, hashStringToSeed, pickRngIndex } from '../src/shared/rng';
 import { isSingletonUtilityPairKey } from '../src/shared/tile-identity';
 
-export const OPENING_SEEDS = [11, 202, 3003, 40404, 555, 6006, 77, 8888, 91_919, 1_234] as const;
-export const OPENING_FLOORS = 12;
+export const CURVE_SEEDS = [11, 202, 3003, 40404, 555, 6006, 77, 8888, 91_919, 1_234] as const;
+export const CURVE_FLOORS = 52;
 
-export interface OpeningFloorRow {
+/**
+ * The floors the report prints. Every floor of the opening, then the deep game where the boards
+ * stop growing - twenty-four pairs from floor 52 on, so the curve has nothing left to say after it.
+ */
+export const CURVE_REPORT_FLOORS: readonly number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 16, 20, 25, 30, 40, 52];
+
+export interface CurveFloorRow {
     floor: number;
     pairs: number;
     suits: number;
@@ -44,11 +59,11 @@ export interface OpeningFloorRow {
     poppedPairs: number;
 }
 
-export const simulateOpeningCurve = ({
-    seeds = OPENING_SEEDS,
-    floors = OPENING_FLOORS,
+export const simulateDifficultyCurve = ({
+    seeds = CURVE_SEEDS,
+    floors = CURVE_FLOORS,
     missRate = 0.15
-}: { seeds?: readonly number[]; floors?: number; missRate?: number } = {}): OpeningFloorRow[] => {
+}: { seeds?: readonly number[]; floors?: number; missRate?: number } = {}): CurveFloorRow[] => {
     const gathered = new Map<number, { turns: number[]; suits: number[]; popped: number[] }>();
     for (const seed of seeds) {
         const entry = pickFloorScheduleEntry(seed, GAME_RULES_VERSION, 1, 'endless');
@@ -123,42 +138,43 @@ export const simulateOpeningCurve = ({
 };
 
 /**
- * The bands, drawn around the measurement (Gen 210). Every floor of the opening has to be playable
- * in a handful of turns and under its par, the first board must not become a slog, and the pop must
- * keep taking a real share of every board - the three ways this opening has actually gone wrong.
+ * The bands, drawn around the measurement (Gen 210, widened for the deep game at Gen 211). Every
+ * floor has to be beatable under its par, no floor may end instantly or run to a slog, and the pop
+ * must keep taking a real share of every board - the ways this curve has actually gone wrong.
  */
-export const OPENING_BANDS = {
-    /** No floor of the opening may run long: this is a game of short floors, by design. */
-    maxTurns: 9,
+export const CURVE_BANDS = {
+    /** No floor may run long. Measured, the deepest floors sit at 14-16 turns on a 48-tile board. */
+    maxTurns: 20,
     /** Nor may one end instantly. Floor 1 sits at 2.3 and is the reason this floor exists. */
     minTurns: 2,
-    /** Every floor stays under its par for a clean player, which is what par is for. */
+    /** Every floor stays under its par for a clean player, which is what par is for (Gen 211). */
     parHeadroom: 0,
     /** A pop that stops taking pairs is Gen 148 returning; measured 2.0 on floor 1, 9.8 by floor 12. */
     minPoppedPairs: 1.5
 } as const;
 
-export const judgeOpeningCurve = (rows: readonly OpeningFloorRow[]): string[] => {
+export const judgeDifficultyCurve = (rows: readonly CurveFloorRow[]): string[] => {
     const issues: string[] = [];
     for (const row of rows) {
-        if (row.turns > OPENING_BANDS.maxTurns) {
-            issues.push(`floor ${row.floor} takes ${row.turns.toFixed(1)} turns, over ${OPENING_BANDS.maxTurns}`);
+        if (row.turns > CURVE_BANDS.maxTurns) {
+            issues.push(`floor ${row.floor} takes ${row.turns.toFixed(1)} turns, over ${CURVE_BANDS.maxTurns}`);
         }
-        if (row.turns < OPENING_BANDS.minTurns) {
-            issues.push(`floor ${row.floor} is over in ${row.turns.toFixed(1)} turns, under ${OPENING_BANDS.minTurns}`);
+        if (row.turns < CURVE_BANDS.minTurns) {
+            issues.push(`floor ${row.floor} is over in ${row.turns.toFixed(1)} turns, under ${CURVE_BANDS.minTurns}`);
         }
-        if (row.turns > row.par + OPENING_BANDS.parHeadroom) {
+        if (row.turns > row.par + CURVE_BANDS.parHeadroom) {
             issues.push(`floor ${row.floor} takes ${row.turns.toFixed(1)} turns against a par of ${row.par}`);
         }
-        if (row.poppedPairs < OPENING_BANDS.minPoppedPairs) {
-            issues.push(`floor ${row.floor} pops ${row.poppedPairs.toFixed(1)} pairs, under ${OPENING_BANDS.minPoppedPairs}`);
+        if (row.poppedPairs < CURVE_BANDS.minPoppedPairs) {
+            issues.push(`floor ${row.floor} pops ${row.poppedPairs.toFixed(1)} pairs, under ${CURVE_BANDS.minPoppedPairs}`);
         }
     }
     return issues;
 };
 
 const main = (): void => {
-    const rows = simulateOpeningCurve();
+    const measured = simulateDifficultyCurve();
+    const rows = measured.filter((row) => CURVE_REPORT_FLOORS.includes(row.floor));
     process.stdout.write('floor  pairs  suits  turns   par  pairs popped\n');
     for (const row of rows) {
         process.stdout.write(
@@ -166,20 +182,20 @@ const main = (): void => {
                 `${row.turns.toFixed(1).padStart(5)} ${row.par.toFixed(1).padStart(5)}  ${row.poppedPairs.toFixed(1).padStart(6)}\n`
         );
     }
-    const issues = judgeOpeningCurve(rows);
+    const issues = judgeDifficultyCurve(measured);
     if (issues.length > 0) {
-        process.stdout.write(`\nThe opening moved:\n${issues.map((issue) => `- ${issue}`).join('\n')}\n`);
+        process.stdout.write(`\nThe curve moved:\n${issues.map((issue) => `- ${issue}`).join('\n')}\n`);
     }
     if (process.argv.includes('--check')) {
         if (issues.length > 0) {
-            process.stderr.write('Opening curve check failed\n');
+            process.stderr.write('Difficulty curve check failed\n');
             process.exitCode = 1;
             return;
         }
-        process.stdout.write('\nOpening curve check passed\n');
+        process.stdout.write('\nDifficulty curve check passed\n');
     }
 };
 
-if (process.argv[1]?.includes('sim-opening-curve')) {
+if (process.argv[1]?.includes('sim-difficulty-curve')) {
     main();
 }
