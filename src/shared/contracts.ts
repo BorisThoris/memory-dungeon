@@ -180,6 +180,17 @@ export type AchievementId =
     | 'ACH_CHUNK_SIX'
     | 'ACH_EXTREME_FEVER'
     | 'ACH_NOTHING_HELD_IT'
+    /*
+     * Repeat play, graded. Every other achievement here is a lifetime unlock: it cannot tell a
+     * player who did something once from one who did it five hundred times, which is exactly what
+     * the market survey found across nine comparable products (`docs/MARKET_SURVEY.md` §3). These
+     * five are the one curve that answers "where do our players stop".
+     */
+    | 'ACH_RUNS_FIVE'
+    | 'ACH_RUNS_TEN'
+    | 'ACH_RUNS_TWENTY_FIVE'
+    | 'ACH_RUNS_FIFTY'
+    | 'ACH_RUNS_HUNDRED'
     | 'ACH_CHAIN_REACTION';
 
 export interface DebugFlags {
@@ -614,6 +625,12 @@ export interface PlayerStatsPersisted {
     /** Cleared floors whose chain reached Sharp, and Fever, across local runs. The chain quest reads the first. */
     sharpFloors?: number;
     feverFloors?: number;
+    /**
+     * Runs this profile has finished, ever. Monotone and never reset - the run history is capped at
+     * `RUN_HISTORY_LIMIT` (20), so it can show a player their last twenty runs and cannot count
+     * past that, which is why this is a counter of its own rather than a length.
+     */
+    runsFinished?: number;
 }
 
 /**

@@ -518,7 +518,7 @@ describe('save normalization', () => {
     it('documents which persisted fields require save migrations', () => {
         const policies = getSaveFieldPolicies();
 
-        expect(SAVE_FIELD_POLICY_VERSION).toBe('save-183-v8');
+        expect(SAVE_FIELD_POLICY_VERSION).toBe('save-224-v9');
         expect(policies.map((policy) => policy.field)).toEqual([
             'runHistory',
             'runHistory.shareKey',
@@ -528,6 +528,7 @@ describe('save normalization', () => {
             'lastRunSummary.gameMode',
             'playerStats.encorePairKeysLastRun',
             'playerStats.dailyStreakGraceAvailable',
+            'playerStats.runsFinished',
             'playerStats.sharpFloors',
             'playerStats.feverFloors',
             'settings.cameraViewportModePreference',
@@ -586,7 +587,10 @@ describe('save normalization', () => {
             bestFloorNoPowers: 4,
             encorePairKeysLastRun: ['A', 'B'],
             sharpFloors: 3,
-            feverFloors: 1
+            feverFloors: 1,
+            // A schema-6 profile predates the lifetime run counter, so it is seeded from the one
+            // history row this fixture carries: a floor on what this player has finished, not a count.
+            runsFinished: 1
         });
         expect(normalized.lastRunSummary).toMatchObject({
             totalScore: 4321,
@@ -668,7 +672,8 @@ describe('save normalization', () => {
             bestFloorNoPowers: 6,
             encorePairKeysLastRun: ['C'],
             sharpFloors: 2,
-            feverFloors: 1
+            feverFloors: 1,
+            runsFinished: 1
         });
         expect(normalized.lastRunSummary).toMatchObject({
             totalScore: 5120,

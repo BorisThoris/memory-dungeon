@@ -1,6 +1,6 @@
 # Gameplay mechanics — machine snapshot
 
-**Generated:** 2026-09-11T16:38:39.314Z
+**Generated:** 2026-09-11T17:18:25.284Z
 
 > Regenerate with `yarn docs:mechanics-appendix`. Do not edit by hand.
 
@@ -9,7 +9,7 @@
 | `GAME_RULES_VERSION` | 49 |
 | `ENCYCLOPEDIA_VERSION` | 41 |
 | Mutator entries (`MUTATOR_CATALOG`) | 10 |
-| Achievement entries (`ACHIEVEMENT_CATALOG`) | 17 |
+| Achievement entries (`ACHIEVEMENT_CATALOG`) | 22 |
 | `GameMode` codex ids | endless |
 
 ## System refinement ledger

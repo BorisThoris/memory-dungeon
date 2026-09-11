@@ -19,6 +19,26 @@ export const CHUNK_SIX_PAIRS = 6;
 /** A ripple worth an achievement: the pop, a partner's clump, and that partner's clump. */
 export const CHAIN_REACTION_WAVES = 3;
 
+/**
+ * The repeat-play ladder, at the spacing of the only comparable product that publishes one.
+ *
+ * `docs/MARKET_SURVEY.md` §3: across nine products almost every published statistic is a one-time
+ * lifetime unlock, which cannot separate a player who did something once from one who did it five
+ * hundred times. Luck be a Landlord is the exception, and its curve - 41.1% at 5 wins, 30.8% at 10,
+ * 8.1% at 25, 2.2% at 50, 0.9% at 100 - is the only real engagement data in public anywhere in the
+ * survey. The shape is the finding: a near-fourfold fall between 10 and 25, then a long flat tail.
+ *
+ * These rungs are that spacing, so after launch this game's own curve can be read against the one
+ * that exists. They are instrumentation, not content: nothing in the game unlocks behind them.
+ */
+export const RUNS_FINISHED_THRESHOLDS: ReadonlyArray<readonly [AchievementId, number]> = [
+    ['ACH_RUNS_FIVE', 5],
+    ['ACH_RUNS_TEN', 10],
+    ['ACH_RUNS_TWENTY_FIVE', 25],
+    ['ACH_RUNS_FIFTY', 50],
+    ['ACH_RUNS_HUNDRED', 100]
+] as const;
+
 /** Re-export encyclopedia copy (single source of truth). */
 export const ACHIEVEMENT_BY_ID: Record<AchievementId, AchievementDefinition> = ACHIEVEMENT_CATALOG;
 
@@ -112,6 +132,16 @@ export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): A
             unlocked.push(id);
         }
     };
+
+    /*
+     * Repeat play. `runsFinished` is the profile's lifetime count and it has already been
+     * incremented for this run by the time the unlocks are evaluated - the run that takes a player
+     * to five is the run that unlocks the fifth-run achievement, not the sixth.
+     */
+    const runsFinished = runNonNegativeInteger(saveData.playerStats?.runsFinished);
+    for (const [id, threshold] of RUNS_FINISHED_THRESHOLDS) {
+        award(id, runsFinished >= threshold);
+    }
 
     award('ACH_ENDLESS_CYCLE', run.gameMode === 'endless' && stats.highestLevel >= ENDLESS_CYCLE_FLOOR_COUNT);
     award('ACH_ENDLESS_TWENTY', run.gameMode === 'endless' && stats.highestLevel >= 20);

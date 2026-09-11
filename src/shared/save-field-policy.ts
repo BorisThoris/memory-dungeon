@@ -16,7 +16,7 @@ export interface SaveFieldPolicy {
     recoveryPolicy: string;
 }
 
-export const SAVE_FIELD_POLICY_VERSION = 'save-183-v8';
+export const SAVE_FIELD_POLICY_VERSION = 'save-224-v9';
 
 const SAVE_FIELD_POLICIES: readonly SaveFieldPolicy[] = [
     {
@@ -78,6 +78,14 @@ const SAVE_FIELD_POLICIES: readonly SaveFieldPolicy[] = [
         migrationRequiredWhenChanged: true,
         recoveryPolicy:
             'A missing or invalid grace flag reads as available, so an older save is forgiven its next missed day rather than punished for having no record of one.'
+    },
+    {
+        field: 'playerStats.runsFinished',
+        scope: 'persisted_save',
+        owner: 'PlayerStatsPersisted',
+        migrationRequiredWhenChanged: true,
+        recoveryPolicy:
+            'A profile without the counter seeds it from its run history, capped at the history limit - a floor on how many runs it has finished, never the count, because the history holds twenty. An unreadable value reads as that same floor rather than as zero, and the counter only ever climbs.'
     },
     {
         field: 'playerStats.sharpFloors',

@@ -150,6 +150,20 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Input and display'
     },
     {
+        /*
+         * Instrumentation, not content. Across nine comparable products the market survey found
+         * almost every published statistic is a one-time lifetime unlock, so nobody can tell a
+         * player who tried a game once from one who played it for a year; exactly one publishes a
+         * repeat-play curve. These five rungs sit at that spacing so this game's own curve can be
+         * read against it after launch. Nothing in the game is locked behind them.
+         */
+        evidence: 'src/shared/achievements.ts',
+        id: 'repeat-play-instrumented',
+        label: 'Five graded run-count achievements exist to be read after launch, at the one comparable curve\u2019s spacing',
+        owner: 'repo',
+        section: 'Steam integration'
+    },
+    {
         evidence: 'src/renderer/store/runResolutionController.ts',
         id: 'shared-game-not-recorded',
         label: 'A shared game sets no personal best and writes no run history, exactly as its card promises',

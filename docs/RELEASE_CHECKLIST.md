@@ -52,6 +52,7 @@ achievement on the Partner site or shoot a trailer.
 | A finished run is recorded, so it survives the next one starting | done | the repository | `src/shared/run-history-log.ts` |
 | Two to four people can play one board on one device, and the game says whose turn it is | done | the repository | `src/shared/pass-and-play-rules.ts` |
 | A shared game runs to a stated number of floors and ends with standings, rather than until the ceiling ends it | done | the repository | `src/renderer/store/levelCompleteContinuationExecutor.ts` |
+| Five graded run-count achievements exist to be read after launch, at the one comparable curve’s spacing | done | the repository | `src/shared/achievements.ts` |
 | A shared game sets no personal best and writes no run history, exactly as its card promises | done | the repository | `src/renderer/store/runResolutionController.ts` |
 | A player can find their own save file from inside the game | done | the repository | `src/main/ipc.ts` |
 

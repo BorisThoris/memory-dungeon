@@ -23,6 +23,7 @@ export interface ProfileSaveShellSummary {
     progressionMotivationCopy: string;
     cosmeticOwned: number;
     runHistoryEntries: number;
+    runsFinished: number;
     sharpFloors: number;
     saveLocationCopy: string;
     cloudSyncState: CloudSyncState;
@@ -33,7 +34,7 @@ export interface ProfileSaveShellSummary {
 }
 
 export interface ProfileSummaryRow {
-    id: 'profile_level' | 'honor_marks' | 'best_score' | 'cosmetics' | 'history' | 'sharp_floors';
+    id: 'profile_level' | 'honor_marks' | 'best_score' | 'cosmetics' | 'history' | 'runs_finished' | 'sharp_floors';
     label: string;
     value: string;
     source: string;
@@ -67,6 +68,7 @@ export const buildProfileSaveShellSummary = (
         progressionMotivationCopy: progression.motivationCopy,
         cosmeticOwned: board.summary.cosmeticOwned,
         runHistoryEntries: buildRunJournalRowsFromSave(save).length,
+        runsFinished: runNonNegativeInteger(save.playerStats?.runsFinished),
         sharpFloors: runNonNegativeInteger(save.playerStats?.sharpFloors),
         saveLocationCopy: 'Single local profile on this device. Steam/cloud sync is not required for v1.',
         cloudSyncState: cloudSaveAvailable ? 'available' : 'not_available',
@@ -102,7 +104,20 @@ export const getProfileSummaryRows = (save: SaveData): ProfileSummaryRow[] => {
             value: title ?? 'None',
             source: `${crest ?? 'No crest'} · ${summary.cosmeticOwned} owned`
         },
-        { id: 'history', label: 'Run history rows', value: String(summary.runHistoryEntries), source: 'last run journal' },
+        /*
+         * Two different numbers on one row, because the difference is the point and a seventh row
+         * does not fit: the journal holds the last twenty runs and the counter holds every run this
+         * profile has ever finished. Showing only the first is how a player who has played two
+         * hundred runs sees "20" and reads it as a total. It was a row of its own for one run of the
+         * fit contract, which clipped an objective card on a phone - `runs_finished` stays in the
+         * id union so the source line has a name, and the value lives beside the rows it corrects.
+         */
+        {
+            id: 'history',
+            label: 'Run history rows',
+            value: String(summary.runHistoryEntries),
+            source: `last run journal \u00b7 ${summary.runsFinished} runs finished`
+        },
         { id: 'sharp_floors', label: 'Sharp floors', value: String(summary.sharpFloors), source: 'playerStats.sharpFloors' }
     ];
 };

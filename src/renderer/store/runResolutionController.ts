@@ -11,6 +11,7 @@ import { createValidatedGameOverRunSummary } from '../../shared/run-summary-rule
 import { mergeHonorUnlockTags } from '../../shared/honorUnlocks';
 import { runArrayCount } from '../../shared/run-array-guards';
 import { appendRunHistory, buildRunHistoryRecord } from '../../shared/run-history-log';
+import { mergeRunsFinished } from '../../shared/save-data';
 import {
     mergeBestFloorNoPowers,
     mergeChainFloorStats,
@@ -159,6 +160,9 @@ export const createRunResolutionController = ({
             // has to show the table what happened. Only the writes to the save are skipped.
             nextRun = createValidatedGameOverRunSummary(nextRun, unlockedAchievements);
             if (!sharedTable) {
+                // Counted before the unlocks are evaluated, so the run that reaches a rung is the
+                // run that unlocks it. The history cannot do this job: it is capped at twenty.
+                nextSave = mergeRunsFinished(nextSave);
                 nextSave = mergeEncoreFromRun(nextSave, nextRun.matchedPairKeysThisRun);
                 if (!nextRun.powersUsedThisRun) {
                     nextSave = mergeBestFloorNoPowers(nextSave, nextRun.stats.highestLevel);

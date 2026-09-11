@@ -214,6 +214,40 @@ export const ACHIEVEMENT_CATALOG: Record<AchievementId, AchievementCodexEntry> =
         id: 'ACH_CHAIN_REACTION',
         title: 'Chain reaction',
         description: 'Send a pop three waves deep: the wave walks on from where it stopped, and on again.'
+    },
+    /*
+     * The retention curve, graded. Across nine comparable products the market survey found almost
+     * every published statistic is a one-time unlock, so nobody can tell a player who tried a game
+     * once from one who played it for a year. Exactly one - Luck be a Landlord - instruments repeat
+     * play, and its numbers are the only real engagement data in public anywhere in the survey:
+     * 41.1% reach 5 wins, 30.8% reach 10, 8.1% reach 25, 2.2% reach 50, 0.9% reach 100. The spacing
+     * here is that spacing, so this game's own curve can be read against the one comparable that
+     * publishes theirs. These exist to be read after launch; they are not content.
+     */
+    ACH_RUNS_FIVE: {
+        id: 'ACH_RUNS_FIVE',
+        title: 'Five Descents',
+        description: 'Finish five runs.'
+    },
+    ACH_RUNS_TEN: {
+        id: 'ACH_RUNS_TEN',
+        title: 'Ten Descents',
+        description: 'Finish ten runs.'
+    },
+    ACH_RUNS_TWENTY_FIVE: {
+        id: 'ACH_RUNS_TWENTY_FIVE',
+        title: 'Twenty-Five Descents',
+        description: 'Finish twenty-five runs.'
+    },
+    ACH_RUNS_FIFTY: {
+        id: 'ACH_RUNS_FIFTY',
+        title: 'Fifty Descents',
+        description: 'Finish fifty runs.'
+    },
+    ACH_RUNS_HUNDRED: {
+        id: 'ACH_RUNS_HUNDRED',
+        title: 'A Hundred Descents',
+        description: 'Finish a hundred runs.'
     }
 };
 

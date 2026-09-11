@@ -2,7 +2,8 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { RELEASE_CHECKLIST, releaseChecklistByOwner, renderReleaseChecklistMarkdown } from './release-checklist';
-import { ACHIEVEMENT_IDS, createDefaultSaveData, mergeChainFloorStats } from './save-data';
+import { RUNS_FINISHED_THRESHOLDS } from './achievements';
+import { ACHIEVEMENT_IDS, createDefaultSaveData, mergeChainFloorStats, mergeRunsFinished } from './save-data';
 import { createNewRun } from './game';
 import { RUN_MODE_CATALOG } from './run-mode-catalog';
 import {
@@ -518,6 +519,26 @@ const VERIFIERS: Record<string, () => void> = {
         // action, with a test asserting both existed.
         expect(labelsAreAmbiguous('Back to board', 'Return to board')).toBe(true);
         expect(labelsAreAmbiguous('Back to board', 'Back to floor summary')).toBe(false);
+    },
+    'repeat-play-instrumented': () => {
+        /*
+         * The rungs are the one comparable curve's spacing (`docs/MARKET_SURVEY.md` §3): 5, 10, 25,
+         * 50, 100. What makes this row worth re-proving is the counter behind them - the run
+         * history holds twenty entries, so anything derived from it would leave the last two rungs
+         * dead, and only a field of its own can count to a hundred.
+         */
+        expect(RUNS_FINISHED_THRESHOLDS.map(([, threshold]) => threshold)).toEqual([5, 10, 25, 50, 100]);
+        expect(RUNS_FINISHED_THRESHOLDS.every(([id]) => ACHIEVEMENT_IDS.includes(id))).toBe(true);
+        let save = createDefaultSaveData();
+        for (let run = 0; run < RUN_HISTORY_LIMIT + 5; run += 1) {
+            save = mergeRunsFinished(save);
+        }
+        expect(save.playerStats?.runsFinished).toBe(RUN_HISTORY_LIMIT + 5);
+        expect(save.playerStats?.runsFinished).toBeGreaterThan(RUN_HISTORY_LIMIT);
+        // Every rung has a Steam API name, or it cannot be read off the dashboard after launch.
+        for (const [id] of RUNS_FINISHED_THRESHOLDS) {
+            expect(STEAM_ACHIEVEMENT_API_NAME[id], `${id} API name`).toBe(id);
+        }
     },
     'shared-game-not-recorded': () => {
         // Nothing about a shared game reaches the save: achievements are off at creation, and the

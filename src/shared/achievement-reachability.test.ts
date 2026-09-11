@@ -1,11 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { GAME_RULES_VERSION, type AchievementId } from './contracts';
-import { CHAIN_REACTION_WAVES, CHUNK_SIX_PAIRS, evaluateAchievementUnlocks } from './achievements';
+import {
+    CHAIN_REACTION_WAVES,
+    CHUNK_SIX_PAIRS,
+    evaluateAchievementUnlocks,
+    RUNS_FINISHED_THRESHOLDS
+} from './achievements';
 import { resolveChunkBreak } from './chunk-break-rules';
 import { createPlayablePathFixture } from './playable-path-fixtures';
 import { ENDLESS_CYCLE_FLOOR_COUNT } from './floor-mutator-schedule';
 import { createNewRun } from './run-creation-rules';
-import { ACHIEVEMENT_IDS, createDefaultSaveData } from './save-data';
+import { ACHIEVEMENT_IDS, createDefaultSaveData, mergeRunsFinished } from './save-data';
 import { makeBoard, makeTile } from './test/game-fixtures';
 
 /**
@@ -41,8 +46,38 @@ describe('achievement thresholds against real content', () => {
         // reachable — and that removing what earns one means removing the id, which is why the
         // four mode-tied marks went with their modes (docs/REMOVED_MODES.md).
         const known: AchievementId[] = [...ACHIEVEMENT_IDS];
-        expect(known).toHaveLength(17);
+        expect(known).toHaveLength(22);
         expect(GAME_RULES_VERSION).toBeGreaterThan(0);
+    });
+
+    it('lets a profile actually reach a hundred runs, which the run history could not count to', () => {
+        /*
+         * The repeat-play ladder is the one place a threshold could be unreachable for a reason
+         * that has nothing to do with play: the run history is capped at twenty entries, so a
+         * counter derived from it would stop at twenty and the last two rungs would be dead. The
+         * counter is its own field for that reason, and this is the check that it climbs past the
+         * cap - a hundred finished runs, counted, with every rung unlocking on the run that
+         * reaches it rather than the one after.
+         */
+        let save = createDefaultSaveData();
+        const unlockedAt = new Map<AchievementId, number>();
+        const finishedRun = { ...createNewRun(0), achievementsEnabled: true } as ReturnType<typeof createNewRun>;
+        for (let run = 1; run <= 100; run += 1) {
+            save = mergeRunsFinished(save);
+            for (const id of evaluateAchievementUnlocks(finishedRun, save)) {
+                if (!unlockedAt.has(id)) {
+                    unlockedAt.set(id, run);
+                }
+                save = { ...save, achievements: { ...save.achievements, [id]: true } };
+            }
+        }
+        expect(save.playerStats?.runsFinished).toBe(100);
+        expect(RUNS_FINISHED_THRESHOLDS.map(([id]) => unlockedAt.get(id))).toEqual([5, 10, 25, 50, 100]);
+        // And the bar bites: none of them is already true on a profile that has finished nothing.
+        const fresh = createDefaultSaveData();
+        for (const [id] of RUNS_FINISHED_THRESHOLDS) {
+            expect(fresh.achievements[id], `${id} on a fresh profile`).toBe(false);
+        }
     });
 });
 

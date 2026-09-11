@@ -99,7 +99,12 @@ export const ACHIEVEMENT_IDS = [
     'ACH_CHUNK_SIX',
     'ACH_EXTREME_FEVER',
     'ACH_NOTHING_HELD_IT',
-    'ACH_CHAIN_REACTION'
+    'ACH_CHAIN_REACTION',
+    'ACH_RUNS_FIVE',
+    'ACH_RUNS_TEN',
+    'ACH_RUNS_TWENTY_FIVE',
+    'ACH_RUNS_FIFTY',
+    'ACH_RUNS_HUNDRED'
 ] as const satisfies readonly AchievementId[];
 
 export const createAchievementState = (): AchievementState =>
@@ -116,8 +121,16 @@ const defaultPlayerStats = (): PlayerStatsPersisted => ({
     bestFloorNoPowers: 0,
     encorePairKeysLastRun: [],
     sharpFloors: 0,
-    feverFloors: 0
+    feverFloors: 0,
+    runsFinished: 0
 });
+
+/**
+ * How far a pre-counter profile's history may seed `runsFinished`. It is `RUN_HISTORY_LIMIT`'s
+ * value written here rather than imported, because `run-history-log.ts` imports this module.
+ * `save-data.test.ts` holds the two to the same number.
+ */
+export const RUN_HISTORY_SEED_CAP = 20;
 
 const ACHIEVEMENT_ID_SET: ReadonlySet<string> = new Set(ACHIEVEMENT_IDS);
 const MUTATOR_ID_SET: ReadonlySet<string> = new Set(MUTATOR_IDS);
@@ -554,7 +567,17 @@ export const normalizeSaveData = (input?: SaveDataNormalizationInput | null): Sa
                 ? normalizeStringLedger(psIn.encorePairKeysLastRun, PERSISTED_COLLECTION_LIMITS.encorePairKeys)
                 : playerStatsDefaults.encorePairKeysLastRun,
             sharpFloors: finiteNonNegativeInteger(psIn.sharpFloors, 0),
-            feverFloors: finiteNonNegativeInteger(psIn.feverFloors, 0)
+            feverFloors: finiteNonNegativeInteger(psIn.feverFloors, 0),
+            /*
+             * A profile that predates this counter has no number to read, and its history is capped
+             * at twenty - so the history's length is a FLOOR on how many runs it has finished, not
+             * the count. Seeding from it is the honest choice between resetting a returning player
+             * to zero and inventing a number: it undercounts anyone past twenty, and says so.
+             */
+            runsFinished: finiteNonNegativeInteger(
+                psIn.runsFinished,
+                Array.isArray(input.runHistory) ? Math.min(input.runHistory.length, RUN_HISTORY_SEED_CAP) : 0
+            )
         },
         unlocks: normalizeUnlocks(input.unlocks),
         powersFtueSeen: typeof input.powersFtueSeen === 'boolean' ? input.powersFtueSeen : defaults.powersFtueSeen ?? false
@@ -578,6 +601,18 @@ export const mergeChainFloorStats = (save: SaveData, floorChainTier: ChainTier):
             sharpFloors: runNonNegativeIntegerOrFallback(ps.sharpFloors, 0) + 1,
             feverFloors: runNonNegativeIntegerOrFallback(ps.feverFloors, 0) + (floorChainTier === 'fever' ? 1 : 0)
         }
+    });
+};
+
+/**
+ * One finished run, counted. Called once per run that reaches game over on a profile that records
+ * (a shared table does not touch the save), beside the history append that cannot count this far.
+ */
+export const mergeRunsFinished = (save: SaveData): SaveData => {
+    const ps = save.playerStats ?? defaultPlayerStats();
+    return normalizeSaveData({
+        ...save,
+        playerStats: { ...ps, runsFinished: runNonNegativeIntegerOrFallback(ps.runsFinished, 0) + 1 }
     });
 };
 
