@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2449,
-    "codeFileCount": 878,
+    "trackedFileCount": 2450,
+    "codeFileCount": 879,
     "exportedSymbolCount": 2660,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6736
+    "relationshipCount": 6744
   },
   "inventory": [
     {
@@ -748,7 +748,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "ec9164a965e0f77d53f904d95b72eb336f2189dd5b39455dc5f493a53c61fd1e"
+      "sha256": "6e1342e8ba5b84ee679531c35f2f58d4cd2230260c23ff8f05592749d31805b6"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2332,7 +2332,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "4d97f7da970d02262cda25dc55ce8e03ed5021d6a7b4bba2e1224c17e6840def"
+      "sha256": "1cdba8cf0f090fcc8b91beeb089243eef70dbca3d8593a9960a0c16446a9d1c3"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3057,8 +3057,8 @@
     {
       "path": "docs/VIEWPORT_FIT_UI.md",
       "category": "documentation",
-      "bytes": 9045,
-      "sha256": "724cfe92eb675b44fc82227c707303bb46bdd54c89ba919425c36e4542e75410"
+      "bytes": 11385,
+      "sha256": "9c96504e291e118dba60b6da999ce3c3542072036b6708309bc799c7d1e7cd68"
     },
     {
       "path": "docs/visual-capture/.gitignore",
@@ -3627,8 +3627,8 @@
     {
       "path": "e2e/cascade-chain.spec.ts",
       "category": "test",
-      "bytes": 7257,
-      "sha256": "79f30c64a0ab2b0d01e86231b5355faf6d4f8c60c6549eec1cd1c4783fd4ef80"
+      "bytes": 9435,
+      "sha256": "6fe9c918543974f0c80d72e811ad555fc450f21ecb7b0e2f97b773fc9694737e"
     },
     {
       "path": "e2e/chain-review-capture.spec.ts",
@@ -4053,8 +4053,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 30340,
-      "sha256": "af8ce6c4f2459d477d4c76c698af66700dc9703ceb5caeb19a00177be0f54e16"
+      "bytes": 30603,
+      "sha256": "7004bd404db499c4c50223e5ef0d95c8c65e3739a3f77501a6e10ed195404051"
     },
     {
       "path": "packages/notifications/package.json",
@@ -10657,6 +10657,12 @@
       "sha256": "8d9ba2d6a2c6b95530198e7164a71dbf43233901f0dc8068a0d85b912bcb89fb"
     },
     {
+      "path": "src/shared/cascade-clump-fixture.test.ts",
+      "category": "test",
+      "bytes": 3625,
+      "sha256": "8f82d28d972346bb2e3e315a13b38aa71552e42633f76c5d3f10c715ed368acd"
+    },
+    {
       "path": "src/shared/chain-rung-value-rules.test.ts",
       "category": "test",
       "bytes": 3656,
@@ -11631,8 +11637,8 @@
     {
       "path": "src/shared/playable-path-fixtures.ts",
       "category": "source",
-      "bytes": 6996,
-      "sha256": "0622f8b69cfdfd4f2171cc6267f6347b01acb0af750b053be4bc7a7033f9e9ca"
+      "bytes": 7639,
+      "sha256": "f6f88f6eb2c4fe7b66fc262603befaff4bcbe90268cec442b97b6a41a70cce9f"
     },
     {
       "path": "src/shared/playthrough-solver-rules.ts",
@@ -24708,6 +24714,21 @@
       ]
     },
     {
+      "id": "file:src/shared/cascade-clump-fixture.test.ts",
+      "path": "src/shared/cascade-clump-fixture.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 70,
+      "imports": [
+        "file:src/shared/chain-tier-rules.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/game.ts",
+        "file:src/shared/playable-path-fixtures.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/shared/chain-rung-value-rules.test.ts",
       "path": "src/shared/chain-rung-value-rules.test.ts",
       "layer": "shared",
@@ -24814,6 +24835,7 @@
       ],
       "testedBy": [
         "file:src/shared/authored-floors.test.ts",
+        "file:src/shared/cascade-clump-fixture.test.ts",
         "file:src/shared/chain-tier-rules.test.ts",
         "file:src/shared/clump-read-rules.test.ts"
       ]
@@ -25328,6 +25350,7 @@
         "file:src/shared/board-tile-generation-rules.test.ts",
         "file:src/shared/board-turn-event-facts.chunk-style.test.ts",
         "file:src/shared/boss-encounters.test.ts",
+        "file:src/shared/cascade-clump-fixture.test.ts",
         "file:src/shared/chunk-break-rules.test.ts",
         "file:src/shared/clump-read-rules.test.ts",
         "file:src/shared/content-lock.test.ts",
@@ -26378,6 +26401,7 @@
         "file:src/renderer/components/runShellToolCatalog.test.ts",
         "file:src/renderer/store/rowShuffleReachability.test.ts",
         "file:src/shared/bad-floor-is-quiet.test.ts",
+        "file:src/shared/cascade-clump-fixture.test.ts",
         "file:src/shared/chunk-break-rules.test.ts",
         "file:src/shared/floor-clear-momentum-bonus-rules.test.ts",
         "file:src/shared/gameplay-core.test.ts",
@@ -28131,7 +28155,7 @@
       "path": "src/shared/playable-path-fixtures.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 222,
+      "lineCount": 230,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/game-core.ts",
@@ -28150,6 +28174,7 @@
         "file:src/renderer/store/levelCompleteSurfaceState.test.ts",
         "file:src/renderer/store/useAppStore.test.ts",
         "file:src/shared/achievement-reachability.test.ts",
+        "file:src/shared/cascade-clump-fixture.test.ts",
         "file:src/shared/playable-path-fixtures.test.ts",
         "file:src/shared/release-checklist.test.ts"
       ]
@@ -82294,6 +82319,30 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/cascade-clump-fixture.test.ts->src/shared/chain-tier-rules.ts",
+      "source": "file:src/shared/cascade-clump-fixture.test.ts",
+      "target": "file:src/shared/chain-tier-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/cascade-clump-fixture.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/cascade-clump-fixture.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/cascade-clump-fixture.test.ts->src/shared/game.ts",
+      "source": "file:src/shared/cascade-clump-fixture.test.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/cascade-clump-fixture.test.ts->src/shared/playable-path-fixtures.ts",
+      "source": "file:src/shared/cascade-clump-fixture.test.ts",
+      "target": "file:src/shared/playable-path-fixtures.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/chain-rung-value-rules.test.ts->src/shared/chain-rung-value-rules.ts",
       "source": "file:src/shared/chain-rung-value-rules.test.ts",
       "target": "file:src/shared/chain-rung-value-rules.ts",
@@ -91587,6 +91636,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/chain-tier-rules.ts->file:src/shared/cascade-clump-fixture.test.ts",
+      "source": "file:src/shared/chain-tier-rules.ts",
+      "target": "file:src/shared/cascade-clump-fixture.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/chain-tier-rules.ts->file:src/shared/chain-tier-rules.test.ts",
       "source": "file:src/shared/chain-tier-rules.ts",
       "target": "file:src/shared/chain-tier-rules.test.ts",
@@ -92154,6 +92209,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/boss-encounters.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/boss-encounters.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/cascade-clump-fixture.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/cascade-clump-fixture.test.ts",
       "kind": "tested_by"
     },
     {
@@ -93051,6 +93112,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/game.ts->file:src/shared/cascade-clump-fixture.test.ts",
+      "source": "file:src/shared/game.ts",
+      "target": "file:src/shared/cascade-clump-fixture.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/game.ts->file:src/shared/chunk-break-rules.test.ts",
       "source": "file:src/shared/game.ts",
       "target": "file:src/shared/chunk-break-rules.test.ts",
@@ -93624,6 +93691,12 @@
       "id": "tested_by:src/shared/playable-path-fixtures.ts->file:src/shared/achievement-reachability.test.ts",
       "source": "file:src/shared/playable-path-fixtures.ts",
       "target": "file:src/shared/achievement-reachability.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/playable-path-fixtures.ts->file:src/shared/cascade-clump-fixture.test.ts",
+      "source": "file:src/shared/playable-path-fixtures.ts",
+      "target": "file:src/shared/cascade-clump-fixture.test.ts",
       "kind": "tested_by"
     },
     {

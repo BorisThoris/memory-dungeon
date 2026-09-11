@@ -81,9 +81,17 @@ const baseEndlessRun = (): RunState =>
 
 /**
  * A board built to be chained: twelve plain pairs in three suit columns, each pair side by side.
- * Matching row by row climbs the ladder on its own — Clean on the third pair, Sharp once the
- * first break adds momentum, Fever before the fourth row — so an end-to-end pass can watch the
- * clump go, the halo take its neighbours and the floor clear, on a board nothing random shaped.
+ * Matching row by row climbs the ladder on its own, so an end-to-end pass can watch the clump go,
+ * the halo take its neighbours and the floor clear, on a board nothing random shaped.
+ *
+ * What it does, measured from the rules rather than described from memory
+ * (`cascade-clump-fixture.test.ts`): **Clean on the first match, Sharp on the second, Fever on the
+ * third** - at momentum 3, 6 and 9 against rungs of 3, 6 and 8. This used to say "Fever before the
+ * fourth row", which is a row later than it happens, and the difference matters: **the third match
+ * is also the one that clears the floor**, because twelve pairs in three suit columns means every
+ * match pops two more pairs and momentum runs out at the same moment the board does. Anything
+ * watching for Fever here has to read the floor-clear beat's own tier rather than the board's,
+ * which is what `e2e/cascade-chain.spec.ts` got wrong for several generations.
  */
 const cascadeClumpRun = (): RunState => {
     const base = finishMemorizePhase(
