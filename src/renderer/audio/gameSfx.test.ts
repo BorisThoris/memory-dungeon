@@ -602,8 +602,15 @@ describe('gameSfx', () => {
         playResolveSfx(beforeMilestone, afterMilestone, gain);
         expect(createOscillator).toHaveBeenCalledTimes(3);
         expect(oscillators[1]?.type).toBe('sine');
+        /*
+         * D7, where the milestone accent used to ramp to 2048 - a note, where that was a number.
+         * Since Gen 225 the accent starts on a note the run loop plays and sweeps to another one,
+         * the beats deciding how far up the set it reaches rather than how many Hz it is lifted by
+         * (`musicalScale.ts`). `musicalScale.test.ts` holds the set; this holds that the call site
+         * uses it. The oscillator below is the chain-drop sting, which is not on the set.
+         */
         expect(createOscillator.mock.results[1]?.value.frequency.exponentialRampToValueAtTime).toHaveBeenCalledWith(
-            2048,
+            expect.closeTo(2349.3, 1),
             expect.any(Number)
         );
         expect(oscillators[2]?.type).toBe('sine');

@@ -4,6 +4,7 @@ import { runFiniteNumber, runNonNegativeInteger } from '../../shared/run-number-
 import { TILE_TRAIT_COUNT_KINDS } from '../../shared/session-stats-rules';
 import { getChainMilestoneFeedback, type ChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
 import { runChainTier, type ChainTier } from '../../shared/chain-tier-rules';
+import { CHAIN_MILESTONE_SEMITONES, cascadeNoteHz, chunkBreakNoteHz } from './musicalScale';
 import { audioNeverThrows, audioNeverThrowsBoolean } from './audioSafety';
 import {
     maybePreloadSampledSfx,
@@ -287,22 +288,17 @@ const resolvedTraitMismatchCount = (before: RunState, after: RunState): number =
         tileTraitCountTotal(after.stats.tileTraitMismatches) - tileTraitCountTotal(before.stats.tileTraitMismatches)
     );
 
-const chainMilestoneAccentFrequency = (milestone: ChainMilestoneFeedback): number => {
-    if (milestone.tone === 'combo') {
-        return 1960;
-    }
-    if (milestone.tone === 'surge') {
-        return 1680;
-    }
-    return 1360;
-};
-
 const playChainMilestoneAccentSfx = (gain: number, milestone: ChainMilestoneFeedback): void => {
-    const base = chainMilestoneAccentFrequency(milestone);
-    const beatLift = milestone.beatCount * 28;
+    /*
+     * The beats decide how far up the set the accent sweeps, not how many Hz it is lifted by. It
+     * used to be `base + beatCount * 28` sweeping to `base + 520 + beatCount * 56` - both ends a
+     * number rather than a note, so however well the base was chosen the sound never arrived on it.
+     * Now both ends are notes the loop plays and a longer milestone reaches further up.
+     */
+    const semitones = CHAIN_MILESTONE_SEMITONES[milestone.tone === 'combo' ? 'combo' : milestone.tone === 'surge' ? 'surge' : 'chain'];
     playTone({
-        frequency: base + beatLift,
-        frequencyEnd: base + (milestone.tone === 'combo' ? 760 : 520) + beatLift * 2,
+        frequency: cascadeNoteHz(semitones, 0),
+        frequencyEnd: cascadeNoteHz(semitones, Math.max(1, milestone.beatCount)),
         durationSec: 0.066 + milestone.beatCount * 0.012,
         gain: gain * (milestone.tone === 'combo' ? 0.38 : 0.2 + milestone.beatCount * 0.035),
         type: 'sine',
@@ -321,14 +317,22 @@ export const CHUNK_BREAK_MAX_NOTES = 9;
 const playChunkBreakSfx = (gain: number, pairs: number, tier: ChainTier): void => {
     const count = Math.max(1, Math.min(pairs, CHUNK_BREAK_MAX_NOTES));
     for (let index = 0; index < count; index += 1) {
-        const lift = index * 46;
+        /*
+         * The next step UP THE KEY, not the next 46Hz. The phrase used to be `720 + index * 46`
+         * sweeping to `1080 + lift * 1.4` - a straight line through frequency space whose steps ran
+         * 107 cents, then 101, then 96, down to 75, landing on no note at any point and gliding
+         * through the gaps besides. Nine of those is not a scale; it is a siren with rhythm. The
+         * notes come from the measured key of the run loop now (`musicalScale.ts`), and each one
+         * holds its pitch instead of sweeping, because a note that slides has no place in a melody.
+         */
+        const note = chunkBreakNoteHz(index);
         // Each later note sits a little under the one before it, so the phrase climbs in pitch
         // without climbing in level and the sting on top still has room.
         const taper = 1 / (1 + index * 0.08);
         window.setTimeout(() => {
             playTone({
-                frequency: 720 + lift,
-                frequencyEnd: 1080 + lift * 1.4,
+                frequency: note,
+                frequencyEnd: note,
                 durationSec: 0.09,
                 gain: gain * (tier === 'fever' ? 0.3 : 0.22) * taper,
                 type: 'triangle',

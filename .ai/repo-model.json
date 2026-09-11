@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2450,
-    "codeFileCount": 879,
-    "exportedSymbolCount": 2663,
+    "trackedFileCount": 2454,
+    "codeFileCount": 881,
+    "exportedSymbolCount": 2672,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6747
+    "relationshipCount": 6759
   },
   "inventory": [
     {
@@ -251,6 +251,12 @@
       "category": "documentation",
       "bytes": 9328,
       "sha256": "64c01bbac4e36200a092d1b080d33f0228cf40c12748237d99b6c783e3328ff1"
+    },
+    {
+      "path": "docs/AUDIO_PHRASE_SIZING.md",
+      "category": "documentation",
+      "bytes": 4510,
+      "sha256": "61547e82452e5c1e5a21852f00da87c78e9f30e7fc35a4542acd70e2f6c8b442"
     },
     {
       "path": "docs/BALANCE_NOTES.md",
@@ -748,7 +754,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "96409f13e0a79ccf13d0b04ced9ab252d5bd6471ddf12fe554715e70e82976f3"
+      "sha256": "3a013ca7af954f7df7c54079e97a09f2684d6f52d49a35fe88b6ac77e22b71a0"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2332,7 +2338,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "1cdba8cf0f090fcc8b91beeb089243eef70dbca3d8593a9960a0c16446a9d1c3"
+      "sha256": "57e6b36fbb7dc33d05968fbeae3d51345ed43bf42146472b9d7db095f404726b"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4053,8 +4059,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 30603,
-      "sha256": "7004bd404db499c4c50223e5ef0d95c8c65e3739a3f77501a6e10ed195404051"
+      "bytes": 30686,
+      "sha256": "a37e9e896dcb4a290531052a788b0bceef6f16beb3d8d30bfa96f80c328ea837"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4865,6 +4871,12 @@
       "category": "script",
       "bytes": 7469,
       "sha256": "c17dfb7ba71c881fe3497620e0714a13754f2f30b359ef69767a1b75898e8223"
+    },
+    {
+      "path": "scripts/music-key.ts",
+      "category": "script",
+      "bytes": 10424,
+      "sha256": "6d4d2b08d352093e6eaf59feae33232e9d079ac5204a8eec3b7c81ef2659afe7"
     },
     {
       "path": "scripts/mutator-effect-audit.ts",
@@ -7431,14 +7443,26 @@
     {
       "path": "src/renderer/audio/gameSfx.test.ts",
       "category": "test",
-      "bytes": 35207,
-      "sha256": "e5872560470248866b4834e123b7e225de84a3358ac63c34bd503323254d5620"
+      "bytes": 35739,
+      "sha256": "ed271dfc319da7c88cc4c2bd94d1bf3fba073a22c429af4ab01c0f467a00d19b"
     },
     {
       "path": "src/renderer/audio/gameSfx.ts",
       "category": "source",
-      "bytes": 24449,
-      "sha256": "8cf746988ff0ebd9e250da94914c25865940976df95e2a5d417ff5544872a96a"
+      "bytes": 25352,
+      "sha256": "4e033b32fd2c1d1a33068bf3f24abf1725ee0e4d7f7bbc4a8fd27663407c6468"
+    },
+    {
+      "path": "src/renderer/audio/musicalScale.test.ts",
+      "category": "test",
+      "bytes": 5322,
+      "sha256": "079a4fbaa066cff73048eb323c1503439362dca977a026568eaff6d2b3b683d1"
+    },
+    {
+      "path": "src/renderer/audio/musicalScale.ts",
+      "category": "source",
+      "bytes": 6349,
+      "sha256": "8e9cdd6febe6d9fa412afd6df40e748013804bde70cb0c95d4e39e2d96b0079a"
     },
     {
       "path": "src/renderer/audio/preloadAudioBuffers.test.ts",
@@ -15792,7 +15816,7 @@
       "path": "src/renderer/audio/gameSfx.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 959,
+      "lineCount": 966,
       "imports": [
         "file:src/renderer/assets/audio/sfx/manifest.json",
         "file:src/renderer/audio/audioInteractionCoverage.ts",
@@ -15808,9 +15832,10 @@
       "path": "src/renderer/audio/gameSfx.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 700,
+      "lineCount": 704,
       "imports": [
         "file:src/renderer/audio/audioSafety.ts",
+        "file:src/renderer/audio/musicalScale.ts",
         "file:src/renderer/audio/sampledSfx.ts",
         "file:src/renderer/audio/webAudioContext.ts",
         "file:src/renderer/copy/chainMilestoneFeedback.ts",
@@ -15840,6 +15865,40 @@
       "testedBy": [
         "file:src/renderer/audio/audioCueSafety.test.ts",
         "file:src/renderer/audio/gameSfx.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/audio/musicalScale.test.ts",
+      "path": "src/renderer/audio/musicalScale.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 103,
+      "imports": [
+        "file:src/renderer/audio/musicalScale.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/audio/musicalScale.ts",
+      "path": "src/renderer/audio/musicalScale.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 109,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/audio/musicalScale.ts#A4_HZ",
+        "symbol:src/renderer/audio/musicalScale.ts#CASCADE_PITCH_CLASSES",
+        "symbol:src/renderer/audio/musicalScale.ts#cascadeNoteHz",
+        "symbol:src/renderer/audio/musicalScale.ts#CHAIN_MILESTONE_SEMITONES",
+        "symbol:src/renderer/audio/musicalScale.ts#CHUNK_BREAK_ROOT_SEMITONES",
+        "symbol:src/renderer/audio/musicalScale.ts#chunkBreakNoteHz",
+        "symbol:src/renderer/audio/musicalScale.ts#isCascadeNote",
+        "symbol:src/renderer/audio/musicalScale.ts#RUN_MUSIC_KEY",
+        "symbol:src/renderer/audio/musicalScale.ts#semitoneHz"
+      ],
+      "testedBy": [
+        "file:src/renderer/audio/musicalScale.test.ts"
       ]
     },
     {
@@ -32176,120 +32235,192 @@
       "name": "__resetGameSfxEngineForTests",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 30,
-      "endLine": 35
+      "line": 31,
+      "endLine": 36
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#CHUNK_BREAK_MAX_NOTES",
       "name": "CHUNK_BREAK_MAX_NOTES",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 319,
-      "endLine": 319
+      "line": 315,
+      "endLine": 315
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playChainOpportunityBeatSfx",
       "name": "playChainOpportunityBeatSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 386,
-      "endLine": 411
+      "line": 390,
+      "endLine": 415
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playFlipSfx",
       "name": "playFlipSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 185,
-      "endLine": 190
+      "line": 186,
+      "endLine": 191
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playFloorClearSfx",
       "name": "playFloorClearSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 681,
-      "endLine": 698
+      "line": 685,
+      "endLine": 702
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playGambitCommitSfx",
       "name": "playGambitCommitSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 193,
-      "endLine": 208
+      "line": 194,
+      "endLine": 209
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playMatchPayoffSfx",
       "name": "playMatchPayoffSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 504,
-      "endLine": 534
+      "line": 508,
+      "endLine": 538
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playMatchSfx",
       "name": "playMatchSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 211,
-      "endLine": 239
+      "line": 212,
+      "endLine": 240
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playMismatchRecoveryCrescendoSfx",
       "name": "playMismatchRecoveryCrescendoSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 413,
-      "endLine": 437
+      "line": 417,
+      "endLine": 441
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playPeekPowerSfx",
       "name": "playPeekPowerSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 620,
-      "endLine": 632
+      "line": 624,
+      "endLine": 636
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playPowerArmSfx",
       "name": "playPowerArmSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 605,
-      "endLine": 617
+      "line": 609,
+      "endLine": 621
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playResolveSfx",
       "name": "playResolveSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 540,
-      "endLine": 602
+      "line": 544,
+      "endLine": 606
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playShuffleSfx",
       "name": "playShuffleSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 638,
-      "endLine": 676
+      "line": 642,
+      "endLine": 680
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#resumeAudioContext",
       "name": "resumeAudioContext",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 39,
-      "endLine": 44
+      "line": 40,
+      "endLine": 45
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#sfxGainFromSettings",
       "name": "sfxGainFromSettings",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 53,
+      "line": 54,
+      "endLine": 55
+    },
+    {
+      "id": "symbol:src/renderer/audio/musicalScale.ts#A4_HZ",
+      "name": "A4_HZ",
+      "kind": "value",
+      "file": "src/renderer/audio/musicalScale.ts",
+      "line": 48,
+      "endLine": 48
+    },
+    {
+      "id": "symbol:src/renderer/audio/musicalScale.ts#CASCADE_PITCH_CLASSES",
+      "name": "CASCADE_PITCH_CLASSES",
+      "kind": "value",
+      "file": "src/renderer/audio/musicalScale.ts",
+      "line": 54,
       "endLine": 54
+    },
+    {
+      "id": "symbol:src/renderer/audio/musicalScale.ts#cascadeNoteHz",
+      "name": "cascadeNoteHz",
+      "kind": "value",
+      "file": "src/renderer/audio/musicalScale.ts",
+      "line": 75,
+      "endLine": 82
+    },
+    {
+      "id": "symbol:src/renderer/audio/musicalScale.ts#CHAIN_MILESTONE_SEMITONES",
+      "name": "CHAIN_MILESTONE_SEMITONES",
+      "kind": "value",
+      "file": "src/renderer/audio/musicalScale.ts",
+      "line": 108,
+      "endLine": 108
+    },
+    {
+      "id": "symbol:src/renderer/audio/musicalScale.ts#CHUNK_BREAK_ROOT_SEMITONES",
+      "name": "CHUNK_BREAK_ROOT_SEMITONES",
+      "kind": "value",
+      "file": "src/renderer/audio/musicalScale.ts",
+      "line": 98,
+      "endLine": 98
+    },
+    {
+      "id": "symbol:src/renderer/audio/musicalScale.ts#chunkBreakNoteHz",
+      "name": "chunkBreakNoteHz",
+      "kind": "value",
+      "file": "src/renderer/audio/musicalScale.ts",
+      "line": 101,
+      "endLine": 101
+    },
+    {
+      "id": "symbol:src/renderer/audio/musicalScale.ts#isCascadeNote",
+      "name": "isCascadeNote",
+      "kind": "value",
+      "file": "src/renderer/audio/musicalScale.ts",
+      "line": 85,
+      "endLine": 95
+    },
+    {
+      "id": "symbol:src/renderer/audio/musicalScale.ts#RUN_MUSIC_KEY",
+      "name": "RUN_MUSIC_KEY",
+      "kind": "value",
+      "file": "src/renderer/audio/musicalScale.ts",
+      "line": 57,
+      "endLine": 65
+    },
+    {
+      "id": "symbol:src/renderer/audio/musicalScale.ts#semitoneHz",
+      "name": "semitoneHz",
+      "kind": "value",
+      "file": "src/renderer/audio/musicalScale.ts",
+      "line": 68,
+      "endLine": 68
     },
     {
       "id": "symbol:src/renderer/audio/preloadAudioBuffers.ts#preloadAudioBuffers",
@@ -56832,6 +56963,60 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/audio/musicalScale.ts->symbol:src/renderer/audio/musicalScale.ts#A4_HZ",
+      "source": "file:src/renderer/audio/musicalScale.ts",
+      "target": "symbol:src/renderer/audio/musicalScale.ts#A4_HZ",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/musicalScale.ts->symbol:src/renderer/audio/musicalScale.ts#CASCADE_PITCH_CLASSES",
+      "source": "file:src/renderer/audio/musicalScale.ts",
+      "target": "symbol:src/renderer/audio/musicalScale.ts#CASCADE_PITCH_CLASSES",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/musicalScale.ts->symbol:src/renderer/audio/musicalScale.ts#cascadeNoteHz",
+      "source": "file:src/renderer/audio/musicalScale.ts",
+      "target": "symbol:src/renderer/audio/musicalScale.ts#cascadeNoteHz",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/musicalScale.ts->symbol:src/renderer/audio/musicalScale.ts#CHAIN_MILESTONE_SEMITONES",
+      "source": "file:src/renderer/audio/musicalScale.ts",
+      "target": "symbol:src/renderer/audio/musicalScale.ts#CHAIN_MILESTONE_SEMITONES",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/musicalScale.ts->symbol:src/renderer/audio/musicalScale.ts#CHUNK_BREAK_ROOT_SEMITONES",
+      "source": "file:src/renderer/audio/musicalScale.ts",
+      "target": "symbol:src/renderer/audio/musicalScale.ts#CHUNK_BREAK_ROOT_SEMITONES",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/musicalScale.ts->symbol:src/renderer/audio/musicalScale.ts#chunkBreakNoteHz",
+      "source": "file:src/renderer/audio/musicalScale.ts",
+      "target": "symbol:src/renderer/audio/musicalScale.ts#chunkBreakNoteHz",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/musicalScale.ts->symbol:src/renderer/audio/musicalScale.ts#isCascadeNote",
+      "source": "file:src/renderer/audio/musicalScale.ts",
+      "target": "symbol:src/renderer/audio/musicalScale.ts#isCascadeNote",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/musicalScale.ts->symbol:src/renderer/audio/musicalScale.ts#RUN_MUSIC_KEY",
+      "source": "file:src/renderer/audio/musicalScale.ts",
+      "target": "symbol:src/renderer/audio/musicalScale.ts#RUN_MUSIC_KEY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/musicalScale.ts->symbol:src/renderer/audio/musicalScale.ts#semitoneHz",
+      "source": "file:src/renderer/audio/musicalScale.ts",
+      "target": "symbol:src/renderer/audio/musicalScale.ts#semitoneHz",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/audio/preloadAudioBuffers.ts->symbol:src/renderer/audio/preloadAudioBuffers.ts#preloadAudioBuffers",
       "source": "file:src/renderer/audio/preloadAudioBuffers.ts",
       "target": "symbol:src/renderer/audio/preloadAudioBuffers.ts#preloadAudioBuffers",
@@ -73766,6 +73951,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/audio/gameSfx.ts->src/renderer/audio/musicalScale.ts",
+      "source": "file:src/renderer/audio/gameSfx.ts",
+      "target": "file:src/renderer/audio/musicalScale.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/audio/gameSfx.ts->src/renderer/audio/sampledSfx.ts",
       "source": "file:src/renderer/audio/gameSfx.ts",
       "target": "file:src/renderer/audio/sampledSfx.ts",
@@ -73811,6 +74002,12 @@
       "id": "imports:src/renderer/audio/gameSfx.ts->src/shared/session-stats-rules.ts",
       "source": "file:src/renderer/audio/gameSfx.ts",
       "target": "file:src/shared/session-stats-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/musicalScale.test.ts->src/renderer/audio/musicalScale.ts",
+      "source": "file:src/renderer/audio/musicalScale.test.ts",
+      "target": "file:src/renderer/audio/musicalScale.ts",
       "kind": "imports"
     },
     {
@@ -89794,6 +89991,12 @@
       "id": "tested_by:src/renderer/audio/gameSfx.ts->file:src/renderer/audio/gameSfx.test.ts",
       "source": "file:src/renderer/audio/gameSfx.ts",
       "target": "file:src/renderer/audio/gameSfx.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/audio/musicalScale.ts->file:src/renderer/audio/musicalScale.test.ts",
+      "source": "file:src/renderer/audio/musicalScale.ts",
+      "target": "file:src/renderer/audio/musicalScale.test.ts",
       "kind": "tested_by"
     },
     {
