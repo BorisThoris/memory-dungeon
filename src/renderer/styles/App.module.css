@@ -105,6 +105,20 @@
     zoom: var(--ui-scale);
     transform-origin: top center;
     transition: zoom 180ms ease;
+    /*
+     * The window's height, in the units a screen INSIDE the zoom lays out in.
+     *
+     * `dvh` is a viewport unit and a viewport does not zoom: a `100dvh` box inside this element
+     * lays out at the window's height and then the zoom renders it that much taller again, so at
+     * scale 1.15 it ends 15% of the window past the bottom edge. That is not theory - it is how
+     * the Settings screen lost its own Back and Save buttons at every scale the slider offered
+     * above 1, on both a 1280x800 Deck panel and a 1440x900 desktop, identically, because the
+     * surplus is proportional to the scale rather than to the window (Gen 222,
+     * `e2e/ui-scale-ceiling.spec.ts`). Anything inside here that wants the window's height asks
+     * for these instead of for `dvh` directly.
+     */
+    --ui-zoomed-dvh: calc(100dvh / var(--ui-scale));
+    --ui-zoomed-svh: calc(100svh / var(--ui-scale));
 }
 
 .menuLayer {

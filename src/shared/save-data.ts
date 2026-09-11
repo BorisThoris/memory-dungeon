@@ -67,11 +67,18 @@ type NumericSettingsKey =
     | 'uiScale'
     | 'resolveDelayMultiplier';
 
+/**
+ * The slider's own travel. `uiScale` stops where the app stops applying it (`UI_SCALE_MAX` in
+ * `src/renderer/uiScaleLimits.ts`): it used to run to 1.4 while the app never applied more than
+ * 1.15, so the top fifth of the slider moved and changed nothing on screen. The two are held
+ * together by `uiScaleLimits.test.ts` rather than by hope - this file is shared and must not import
+ * the renderer.
+ */
 export const SETTINGS_NUMERIC_RANGES = {
     masterVolume: { min: 0, max: 1 },
     musicVolume: { min: 0, max: 1 },
     sfxVolume: { min: 0, max: 1 },
-    uiScale: { min: 0.8, max: 1.4 },
+    uiScale: { min: 0.8, max: 1.05 },
     resolveDelayMultiplier: { min: RESOLVE_DELAY_MULTIPLIER_MIN, max: 2.5 }
 } as const satisfies Record<NumericSettingsKey, { min: number; max: number }>;
 

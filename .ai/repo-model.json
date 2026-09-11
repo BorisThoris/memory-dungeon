@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2443,
-    "codeFileCount": 875,
-    "exportedSymbolCount": 2654,
+    "trackedFileCount": 2449,
+    "codeFileCount": 878,
+    "exportedSymbolCount": 2660,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6722
+    "relationshipCount": 6736
   },
   "inventory": [
     {
@@ -255,8 +255,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 400509,
-      "sha256": "b12b04a8c8c9656616cb796b986babc477ce32dee1e181932594ca2c6f4a7b0a"
+      "bytes": 403407,
+      "sha256": "fd3ab0624e9291427bab81b302ddf8bcee7c5c124db4363506062caff09c1767"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -748,7 +748,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "2b1d5aad55e3df4db27afd597d92522d455ca033a9dfcdd5ca1d6bad67dc2666"
+      "sha256": "ec9164a965e0f77d53f904d95b72eb336f2189dd5b39455dc5f493a53c61fd1e"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2332,7 +2332,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "4a472b5a87c6c6ac05f811da2d47941b42a42cc978045d61ce291388b73bac39"
+      "sha256": "4d97f7da970d02262cda25dc55ce8e03ed5021d6a7b4bba2e1224c17e6840def"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3879,8 +3879,8 @@
     {
       "path": "e2e/ui-fit-contract.spec.ts",
       "category": "test",
-      "bytes": 21418,
-      "sha256": "92f0cc91743d9becd8d1d1721303b5733c54692561463533bf337e59864df989"
+      "bytes": 12476,
+      "sha256": "d25a7d023c808924dec36f581755a9fecc7319aaaddc2152c8075ec9a3b9d6cf"
     },
     {
       "path": "e2e/ui-reachability-gate.spec.ts",
@@ -3895,10 +3895,22 @@
       "sha256": "fbf36843bb6f4f36ae7d71061e0eb061b783f7ad4466c2bffd8618e9b78193ed"
     },
     {
+      "path": "e2e/ui-scale-ceiling.spec.ts",
+      "category": "test",
+      "bytes": 4733,
+      "sha256": "8b90307dcffdf6a04aa412c85b651b8de12cc7b812318be45e00e8dbe92ef4e0"
+    },
+    {
       "path": "e2e/ui-screenshots.spec.ts",
       "category": "test",
       "bytes": 1767,
       "sha256": "59ea1c07254525c75dfe49d427a20d3a8b97ccb2450c59bc84ce6022c0323770"
+    },
+    {
+      "path": "e2e/uiFit.ts",
+      "category": "test",
+      "bytes": 9581,
+      "sha256": "b1d33f16be7990955933276556e95485f7729b2f7ce5cb6b5bacfbe397e1a05b"
     },
     {
       "path": "e2e/uiReachability.ts",
@@ -4041,8 +4053,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 30237,
-      "sha256": "b9b9e08d2c4d455a0482d707caed9b2d7372cd35c9d7e3ba4759aeab73529690"
+      "bytes": 30340,
+      "sha256": "af8ce6c4f2459d477d4c76c698af66700dc9703ceb5caeb19a00177be0f54e16"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4229,6 +4241,12 @@
       "category": "documentation",
       "bytes": 6832,
       "sha256": "9cfd6bee852712afe9bb292578707802cf4d2f56b1abfba77ccd4792cab5fec3"
+    },
+    {
+      "path": "scripts/accessibility-targets.ts",
+      "category": "script",
+      "bytes": 9429,
+      "sha256": "412e9c6f0eeae94e3704a30cafd89ee255ae871e8c9f45ab4d75943c24f55745"
     },
     {
       "path": "scripts/ai-repo-model.mjs",
@@ -5271,8 +5289,8 @@
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 20243,
-      "sha256": "d0e58f8444bee9837b5fb71e2d403bf0e260201fd911c23d30f6013e283a3e46"
+      "bytes": 20199,
+      "sha256": "a4b1a159df9a7b2657c14f3042efe9fef8b5a8f8b3fa014a427b6b577d610acb"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -8181,8 +8199,8 @@
     {
       "path": "src/renderer/components/SettingsScreen.module.css",
       "category": "source",
-      "bytes": 32408,
-      "sha256": "5c88434de830cd80472a6c115edbf94159da5ea63c050bfa1c7cce89373ba6b1"
+      "bytes": 32543,
+      "sha256": "b9814ace7397885a0f81367a493464c862b519e1dfe1d967d7f60881e2af7210"
     },
     {
       "path": "src/renderer/components/SettingsScreen.test.tsx",
@@ -9315,8 +9333,8 @@
     {
       "path": "src/renderer/copy/settingsHints.ts",
       "category": "source",
-      "bytes": 2248,
-      "sha256": "b4a790dc9554370bb82518df8eade9e8c0c87adf8e650086d905ac0c0a371002"
+      "bytes": 2305,
+      "sha256": "0a8b676b5a76c4f2448e0da2f0317cff3f6c1a469edf3dcbc664860a028d3c7d"
     },
     {
       "path": "src/renderer/copy/traitInteractionLaneMap.test.ts",
@@ -10137,8 +10155,8 @@
     {
       "path": "src/renderer/styles/App.module.css",
       "category": "source",
-      "bytes": 4641,
-      "sha256": "df59ae747a8946b858d937e9740af13110189906d55f1cab53b615b40521e8d3"
+      "bytes": 5556,
+      "sha256": "6809e656d14c0c2a23f1d8113d84afe6bb46fc31f2300f36690e451543bf17a5"
     },
     {
       "path": "src/renderer/styles/global.css",
@@ -10351,6 +10369,18 @@
       "sha256": "693ce26ddf6aea1d1599b4b682f1f00acc6842082cadeb0d1496df7b8a1db432"
     },
     {
+      "path": "src/renderer/uiScaleLimits.test.ts",
+      "category": "test",
+      "bytes": 3348,
+      "sha256": "6ea6194b558ea273d5f3956495f1c68dbf9e57d587e2ccde18adb67b49173312"
+    },
+    {
+      "path": "src/renderer/uiScaleLimits.ts",
+      "category": "source",
+      "bytes": 3882,
+      "sha256": "5c70d44c7e207df16939fa533f6f3687eb0c2942986419643663bcc392038982"
+    },
+    {
       "path": "src/renderer/viewportMatrix.ts",
       "category": "source",
       "bytes": 11462,
@@ -10361,6 +10391,12 @@
       "category": "source",
       "bytes": 18298,
       "sha256": "af78d89d3b4b7ac6d14b3b018e39111ec4b9d380d3cad600fb5a8d82ca008ae0"
+    },
+    {
+      "path": "src/shared/accessibility-targets-audit.test.ts",
+      "category": "test",
+      "bytes": 2420,
+      "sha256": "d008b1a3fceace75332b6c023fd8c73fca087ba45699de43f3f7720204827ee1"
     },
     {
       "path": "src/shared/achievement-reachability.test.ts",
@@ -12003,8 +12039,8 @@
     {
       "path": "src/shared/save-data.ts",
       "category": "source",
-      "bytes": 24951,
-      "sha256": "630d96afd6ca84ed456859050d52c06e2f00ed1945ed5dfafcbd3003a7fbac8d"
+      "bytes": 25364,
+      "sha256": "dd3981a0d109aef9afb592457983e471d4888c991bd44d37f21b78290c2f827c"
     },
     {
       "path": "src/shared/save-field-policy.test.ts",
@@ -15330,7 +15366,7 @@
       "path": "src/renderer/App.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 418,
+      "lineCount": 416,
       "imports": [
         "file:src/renderer/audio/feverDuck.ts",
         "file:src/renderer/audio/gameplayMusic.ts",
@@ -15354,6 +15390,7 @@
         "file:src/renderer/store/navigationModel.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/styles/theme.ts",
+        "file:src/renderer/uiScaleLimits.ts",
         "file:src/shared/playable-path-fixtures.ts",
         "file:src/shared/run-summary-rules.ts",
         "file:src/shared/telemetry.ts"
@@ -15969,7 +16006,8 @@
         "symbol:src/renderer/breakpoints.ts#VIEWPORT_TABLET_MAX"
       ],
       "testedBy": [
-        "file:src/renderer/breakpoints.test.ts"
+        "file:src/renderer/breakpoints.test.ts",
+        "file:src/renderer/uiScaleLimits.test.ts"
       ]
     },
     {
@@ -23758,6 +23796,41 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/uiScaleLimits.test.ts",
+      "path": "src/renderer/uiScaleLimits.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 59,
+      "imports": [
+        "file:src/renderer/breakpoints.ts",
+        "file:src/renderer/uiScaleLimits.ts",
+        "file:src/shared/save-data.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/uiScaleLimits.ts",
+      "path": "src/renderer/uiScaleLimits.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 70,
+      "imports": [
+        "file:src/renderer/breakpoints.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/uiScaleLimits.ts#isCompactUiViewport",
+        "symbol:src/renderer/uiScaleLimits.ts#isShortLandscapeDesktop",
+        "symbol:src/renderer/uiScaleLimits.ts#safeUiScaleFor",
+        "symbol:src/renderer/uiScaleLimits.ts#UI_SCALE_COMPACT",
+        "symbol:src/renderer/uiScaleLimits.ts#UI_SCALE_MAX",
+        "symbol:src/renderer/uiScaleLimits.ts#UiScaleViewport"
+      ],
+      "testedBy": [
+        "file:src/renderer/uiScaleLimits.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/viewportMatrix.ts",
       "path": "src/renderer/viewportMatrix.ts",
       "layer": "renderer",
@@ -23779,6 +23852,16 @@
       "testedBy": [
         "file:src/renderer/breakpoints.test.ts"
       ]
+    },
+    {
+      "id": "file:src/shared/accessibility-targets-audit.test.ts",
+      "path": "src/shared/accessibility-targets-audit.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 49,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
     },
     {
       "id": "file:src/shared/achievement-reachability.test.ts",
@@ -29346,7 +29429,7 @@
       "path": "src/shared/save-data.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 598,
+      "lineCount": 605,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
@@ -29404,6 +29487,7 @@
         "file:src/renderer/store/savePreferenceSurfaceState.test.ts",
         "file:src/renderer/store/saveReadRecovery.test.ts",
         "file:src/renderer/store/useAppStore.test.ts",
+        "file:src/renderer/uiScaleLimits.test.ts",
         "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/achievements.test.ts",
         "file:src/shared/challenge-progression.test.ts",
@@ -31608,16 +31692,16 @@
       "name": "APP_MAIN_LANDMARK_ID",
       "kind": "value",
       "file": "src/renderer/App.tsx",
-      "line": 36,
-      "endLine": 36
+      "line": 37,
+      "endLine": 37
     },
     {
       "id": "symbol:src/renderer/App.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/App.tsx",
-      "line": 417,
-      "endLine": 417
+      "line": 415,
+      "endLine": 415
     },
     {
       "id": "symbol:src/renderer/assets/assetDropInReadiness.ts#ASSET_DROP_IN_CATEGORIES",
@@ -40844,6 +40928,54 @@
       "endLine": 4
     },
     {
+      "id": "symbol:src/renderer/uiScaleLimits.ts#isCompactUiViewport",
+      "name": "isCompactUiViewport",
+      "kind": "value",
+      "file": "src/renderer/uiScaleLimits.ts",
+      "line": 58,
+      "endLine": 60
+    },
+    {
+      "id": "symbol:src/renderer/uiScaleLimits.ts#isShortLandscapeDesktop",
+      "name": "isShortLandscapeDesktop",
+      "kind": "value",
+      "file": "src/renderer/uiScaleLimits.ts",
+      "line": 55,
+      "endLine": 56
+    },
+    {
+      "id": "symbol:src/renderer/uiScaleLimits.ts#safeUiScaleFor",
+      "name": "safeUiScaleFor",
+      "kind": "value",
+      "file": "src/renderer/uiScaleLimits.ts",
+      "line": 63,
+      "endLine": 69
+    },
+    {
+      "id": "symbol:src/renderer/uiScaleLimits.ts#UI_SCALE_COMPACT",
+      "name": "UI_SCALE_COMPACT",
+      "kind": "value",
+      "file": "src/renderer/uiScaleLimits.ts",
+      "line": 47,
+      "endLine": 47
+    },
+    {
+      "id": "symbol:src/renderer/uiScaleLimits.ts#UI_SCALE_MAX",
+      "name": "UI_SCALE_MAX",
+      "kind": "value",
+      "file": "src/renderer/uiScaleLimits.ts",
+      "line": 39,
+      "endLine": 39
+    },
+    {
+      "id": "symbol:src/renderer/uiScaleLimits.ts#UiScaleViewport",
+      "name": "UiScaleViewport",
+      "kind": "interface",
+      "file": "src/renderer/uiScaleLimits.ts",
+      "line": 49,
+      "endLine": 52
+    },
+    {
       "id": "symbol:src/renderer/viewportMatrix.ts#classifyResponsiveViewport",
       "name": "classifyResponsiveViewport",
       "kind": "value",
@@ -49664,24 +49796,24 @@
       "name": "ACHIEVEMENT_IDS",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 78,
-      "endLine": 96
+      "line": 85,
+      "endLine": 103
     },
     {
       "id": "symbol:src/shared/save-data.ts#createAchievementState",
       "name": "createAchievementState",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 98,
-      "endLine": 105
+      "line": 105,
+      "endLine": 112
     },
     {
       "id": "symbol:src/shared/save-data.ts#createDefaultSaveData",
       "name": "createDefaultSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 315,
-      "endLine": 327
+      "line": 322,
+      "endLine": 334
     },
     {
       "id": "symbol:src/shared/save-data.ts#DEFAULT_SETTINGS",
@@ -49696,96 +49828,96 @@
       "name": "mergeBestFloorNoPowers",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 577,
-      "endLine": 588
+      "line": 584,
+      "endLine": 595
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeChainFloorStats",
       "name": "mergeChainFloorStats",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 562,
-      "endLine": 575
+      "line": 569,
+      "endLine": 582
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeEncoreFromRun",
       "name": "mergeEncoreFromRun",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 590,
-      "endLine": 597
+      "line": 597,
+      "endLine": 604
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeRunSummary",
       "name": "normalizeRunSummary",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 226,
-      "endLine": 313
+      "line": 233,
+      "endLine": 320
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeSaveData",
       "name": "normalizeSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 514,
-      "endLine": 555
+      "line": 521,
+      "endLine": 562
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSaveData",
       "name": "normalizeUnknownSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 482,
-      "endLine": 485
+      "line": 489,
+      "endLine": 492
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSaveDataOrThrow",
       "name": "normalizeUnknownSaveDataOrThrow",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 487,
-      "endLine": 499
+      "line": 494,
+      "endLine": 506
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSettings",
       "name": "normalizeUnknownSettings",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 501,
-      "endLine": 504
+      "line": 508,
+      "endLine": 511
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSettingsOrThrow",
       "name": "normalizeUnknownSettingsOrThrow",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 506,
-      "endLine": 512
+      "line": 513,
+      "endLine": 519
     },
     {
       "id": "symbol:src/shared/save-data.ts#saveDataBoundarySchema",
       "name": "saveDataBoundarySchema",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 359,
-      "endLine": 374
+      "line": 366,
+      "endLine": 381
     },
     {
       "id": "symbol:src/shared/save-data.ts#SETTINGS_NUMERIC_RANGES",
       "name": "SETTINGS_NUMERIC_RANGES",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 70,
-      "endLine": 76
+      "line": 77,
+      "endLine": 83
     },
     {
       "id": "symbol:src/shared/save-data.ts#settingsBoundarySchema",
       "name": "settingsBoundarySchema",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 335,
-      "endLine": 355
+      "line": 342,
+      "endLine": 362
     },
     {
       "id": "symbol:src/shared/save-field-policy.ts#getSaveFieldPolicies",
@@ -63146,6 +63278,42 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/uiScaleLimits.ts->symbol:src/renderer/uiScaleLimits.ts#isCompactUiViewport",
+      "source": "file:src/renderer/uiScaleLimits.ts",
+      "target": "symbol:src/renderer/uiScaleLimits.ts#isCompactUiViewport",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/uiScaleLimits.ts->symbol:src/renderer/uiScaleLimits.ts#isShortLandscapeDesktop",
+      "source": "file:src/renderer/uiScaleLimits.ts",
+      "target": "symbol:src/renderer/uiScaleLimits.ts#isShortLandscapeDesktop",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/uiScaleLimits.ts->symbol:src/renderer/uiScaleLimits.ts#safeUiScaleFor",
+      "source": "file:src/renderer/uiScaleLimits.ts",
+      "target": "symbol:src/renderer/uiScaleLimits.ts#safeUiScaleFor",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/uiScaleLimits.ts->symbol:src/renderer/uiScaleLimits.ts#UI_SCALE_COMPACT",
+      "source": "file:src/renderer/uiScaleLimits.ts",
+      "target": "symbol:src/renderer/uiScaleLimits.ts#UI_SCALE_COMPACT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/uiScaleLimits.ts->symbol:src/renderer/uiScaleLimits.ts#UI_SCALE_MAX",
+      "source": "file:src/renderer/uiScaleLimits.ts",
+      "target": "symbol:src/renderer/uiScaleLimits.ts#UI_SCALE_MAX",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/uiScaleLimits.ts->symbol:src/renderer/uiScaleLimits.ts#UiScaleViewport",
+      "source": "file:src/renderer/uiScaleLimits.ts",
+      "target": "symbol:src/renderer/uiScaleLimits.ts#UiScaleViewport",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/viewportMatrix.ts->symbol:src/renderer/viewportMatrix.ts#classifyResponsiveViewport",
       "source": "file:src/renderer/viewportMatrix.ts",
       "target": "symbol:src/renderer/viewportMatrix.ts#classifyResponsiveViewport",
@@ -73282,6 +73450,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/App.tsx->src/renderer/uiScaleLimits.ts",
+      "source": "file:src/renderer/App.tsx",
+      "target": "file:src/renderer/uiScaleLimits.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/App.tsx->src/shared/playable-path-fixtures.ts",
       "source": "file:src/renderer/App.tsx",
       "target": "file:src/shared/playable-path-fixtures.ts",
@@ -81085,6 +81259,30 @@
       "id": "imports:src/renderer/ui/strings/pairProximityUi.test.ts->src/renderer/ui/strings/pairProximityUi.ts",
       "source": "file:src/renderer/ui/strings/pairProximityUi.test.ts",
       "target": "file:src/renderer/ui/strings/pairProximityUi.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/uiScaleLimits.test.ts->src/renderer/breakpoints.ts",
+      "source": "file:src/renderer/uiScaleLimits.test.ts",
+      "target": "file:src/renderer/breakpoints.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/uiScaleLimits.test.ts->src/renderer/uiScaleLimits.ts",
+      "source": "file:src/renderer/uiScaleLimits.test.ts",
+      "target": "file:src/renderer/uiScaleLimits.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/uiScaleLimits.test.ts->src/shared/save-data.ts",
+      "source": "file:src/renderer/uiScaleLimits.test.ts",
+      "target": "file:src/shared/save-data.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/uiScaleLimits.ts->src/renderer/breakpoints.ts",
+      "source": "file:src/renderer/uiScaleLimits.ts",
+      "target": "file:src/renderer/breakpoints.ts",
       "kind": "imports"
     },
     {
@@ -89541,6 +89739,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/breakpoints.ts->file:src/renderer/uiScaleLimits.test.ts",
+      "source": "file:src/renderer/breakpoints.ts",
+      "target": "file:src/renderer/uiScaleLimits.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/cardFace/cardFaceOverlayPalette.ts->file:src/renderer/cardFace/cardFaceOverlayPalette.test.ts",
       "source": "file:src/renderer/cardFace/cardFaceOverlayPalette.ts",
       "target": "file:src/renderer/cardFace/cardFaceOverlayPalette.test.ts",
@@ -91068,6 +91272,12 @@
       "id": "tested_by:src/renderer/ui/strings/pairProximityUi.ts->file:src/renderer/ui/strings/pairProximityUi.test.ts",
       "source": "file:src/renderer/ui/strings/pairProximityUi.ts",
       "target": "file:src/renderer/ui/strings/pairProximityUi.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/uiScaleLimits.ts->file:src/renderer/uiScaleLimits.test.ts",
+      "source": "file:src/renderer/uiScaleLimits.ts",
+      "target": "file:src/renderer/uiScaleLimits.test.ts",
       "kind": "tested_by"
     },
     {
@@ -94038,6 +94248,12 @@
       "id": "tested_by:src/shared/save-data.ts->file:src/renderer/store/useAppStore.test.ts",
       "source": "file:src/shared/save-data.ts",
       "target": "file:src/renderer/store/useAppStore.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/save-data.ts->file:src/renderer/uiScaleLimits.test.ts",
+      "source": "file:src/shared/save-data.ts",
+      "target": "file:src/renderer/uiScaleLimits.test.ts",
       "kind": "tested_by"
     },
     {

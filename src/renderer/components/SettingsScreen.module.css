@@ -67,8 +67,9 @@
 }
 
 .shell {
-    min-height: 100dvh;
-    max-height: 100dvh;
+    /* Inside the UI-scale zoom: `dvh` does not shrink with it, `--ui-zoomed-dvh` does. */
+    min-height: var(--ui-zoomed-dvh, 100dvh);
+    max-height: var(--ui-zoomed-dvh, 100dvh);
     display: flex;
     flex-direction: column;
     padding: var(--ui-shell-screen-pad-block) var(--ui-shell-screen-pad-inline);

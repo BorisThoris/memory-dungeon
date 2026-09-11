@@ -1,5 +1,35 @@
 # Viewport-fitted UI (no page scroll)
 
+## What the UI scale actually does (Gen 222)
+
+**Nothing in this repository had ever looked at the UI at any scale but 1.** The fit contract
+(`e2e/ui-fit-contract.spec.ts`) checks six viewports and pins `uiScale: 1` in every save it seeds.
+`e2e/ui-scale-ceiling.spec.ts` runs the contract's own report - the same `describeFit`, lifted into
+`e2e/uiFit.ts` so the two cannot drift - across the scale range instead. Three things were wrong.
+
+- **The slider's top fifth did nothing.** `SETTINGS_NUMERIC_RANGES.uiScale` ran to 1.4 while
+  `App.tsx` capped what it applied at 1.15, behind a variable called `safeUiScale` that nothing
+  checked. Dragging past 1.15 moved the handle and changed nothing on screen.
+- **The Settings screen lost its own Back and Save buttons at every scale above 1**, on a 1280x800
+  Deck panel and a 1440x900 desktop *identically* - which is the tell. `.shell` was `100dvh` tall
+  inside `.content`'s `zoom`, and **a viewport unit does not zoom**: the shell laid out at the
+  window's height and then rendered that much taller again, so the footer ran past the bottom edge
+  by exactly the scale rather than by anything to do with the window. A player who turned the scale
+  up could not save it, undo it, or leave the screen by its own controls. `--ui-zoomed-dvh` in
+  `App.module.css` is the fix, and the same variable is what anything else inside the zoom should
+  ask for instead of `dvh`.
+- **The main menu has no layout below about 700px of container height.** Its container-query ladder
+  ends at `max-height: 760px`, which is why the *shorter* Deck panel fits at 1.1 where the taller
+  desktop does not: at 1280x800 the zoomed container falls under 760 and picks the compact
+  arrangement, and at 1440x900 it does not. Task #245; a missing rung, not a unit bug.
+
+So `UI_SCALE_MAX` (`src/renderer/uiScaleLimits.ts`) is **1.05** - the largest scale every screen was
+measured to hold - and the slider stops there too, held together by `uiScaleLimits.test.ts` because
+`save-data.ts` is shared and must not import the renderer. That is a small number and it is not a
+considered answer to Xbox's "scalable to 200%": it is what this build can render without losing a
+control, and it rises when #245 lands. `yarn audit:accessibility` states that in those words rather
+than letting the gap read as a design position.
+
 ## Policy: no DOM scrollports
 
 Shipped chrome (main menu, meta shells, settings, modals, panels) must not use **`overflow-y: auto` / `scroll`** on HTML. Prefer **`@media` / `@container` reflow**, **row→column** layout, **progressive disclosure** (group or hide secondary actions), then **uniform `zoom`** via [`useFitShellZoom`](../src/renderer/hooks/useFitShellZoom.ts). [`VIEWPORT_SHORT_LANDSCAPE_MAX_HEIGHT`](../src/renderer/breakpoints.ts) (860px) defines short landscape in TS helpers, while shell CSS uses its own `max-height` / `@container` numbers (often tighter, e.g. 760px)—do not assume a literal `860px` breakpoint in stylesheets.

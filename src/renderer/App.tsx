@@ -15,6 +15,7 @@ import StartupIntro from './components/StartupIntro';
 import type { IntroPlaybackState } from './components/startupIntroConfig';
 import { resolveStartupIntroAppContract } from './components/startupIntroContract';
 import { VIEWPORT_MOBILE_MAX, VIEWPORT_TABLET_MAX } from './breakpoints';
+import { isCompactUiViewport, safeUiScaleFor } from './uiScaleLimits';
 import { useViewportSize } from './hooks/useViewportSize';
 import { useEffectiveReducedMotion } from './hooks/useEffectiveReducedMotion';
 import { useGamepadNavigation } from './hooks/useGamepadNavigation';
@@ -84,16 +85,13 @@ const App = () => {
             view: state.view
         }))
     );
-    /** Wide short landscape (e.g. 1280×720): use roomy density + outer ui-scale; phones/tablet stays compact. */
-    const shortLandscapeDesktop =
-        width > VIEWPORT_TABLET_MAX && width > height && height > 0 && height <= VIEWPORT_MOBILE_MAX;
-    const isCompactViewport =
-        width <= VIEWPORT_MOBILE_MAX || (height <= VIEWPORT_MOBILE_MAX && !shortLandscapeDesktop);
-    const safeUiScale = isCompactViewport
-        ? 1
-        : width <= VIEWPORT_TABLET_MAX
-          ? Math.min(settings.uiScale, 1.08)
-          : Math.min(settings.uiScale, 1.15);
+    /*
+     * The scale the app applies, and whether this window lays out roomy or compact. Both used to be
+     * three literals here behind a variable called `safeUiScale` that nothing checked; they live in
+     * `uiScaleLimits.ts` now, with the measurement that says what is actually safe.
+     */
+    const isCompactViewport = isCompactUiViewport({ height, width });
+    const safeUiScale = safeUiScaleFor(settings.uiScale, { height, width });
     const reduceMotion = useEffectiveReducedMotion(settings.reduceMotion);
     const themeStyle = buildRendererThemeStyle(
         safeUiScale,
