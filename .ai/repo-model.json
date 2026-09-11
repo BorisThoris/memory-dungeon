@@ -3,8 +3,8 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2437,
-    "codeFileCount": 871,
+    "trackedFileCount": 2439,
+    "codeFileCount": 872,
     "exportedSymbolCount": 2624,
     "contentItemCount": 10,
     "mechanicCount": 42,
@@ -255,8 +255,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 392595,
-      "sha256": "1b7f9fad9cd0031eabaf4338d46caecb35f12827d7d47686afd56d0726da6f05"
+      "bytes": 394877,
+      "sha256": "2ce9dc9f7784d2d37193b86ad54d4550b53858cacfa0e29ea9d55c0862498f9d"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -748,7 +748,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "18753ec317faace16a34fca6ec2b55e28a742e182ef4cb34dfd88767c42dff1d"
+      "sha256": "c891b0e4c56d1e55c3ee51b3aafed4dcb74861b3b3c1e7f4ecc85d01cbc4cdd4"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2277,8 +2277,8 @@
     {
       "path": "docs/RESEARCH_NOTES_2.md",
       "category": "documentation",
-      "bytes": 19596,
-      "sha256": "5e4b5de94308ff531048652b40edd04439e47c35c294699453544d8cd701075f"
+      "bytes": 20310,
+      "sha256": "91e924aae9fd8721805189e03794e0d52a29d7caec9a6093ff080e73aac94146"
     },
     {
       "path": "docs/RESEARCH_NOTES.md",
@@ -2332,7 +2332,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "22c8906f6614bb67d96f708a6952d664c047bdd342224edd7ad979b953312c23"
+      "sha256": "eb09e2f7ead030bc0c22e4f3b38974c138a94f3bb7eb8feb52b7e0b0f2c2993e"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4035,8 +4035,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 30150,
-      "sha256": "45dec7f47038eb84e173d034f539daf3a19031b983f441e6d9062f7172aecd3c"
+      "bytes": 30237,
+      "sha256": "b9b9e08d2c4d455a0482d707caed9b2d7372cd35c9d7e3ba4759aeab73529690"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4823,6 +4823,12 @@
       "category": "script",
       "bytes": 4829,
       "sha256": "f58a4fea4c13b6a5efe05a65e2ab28aed0ae4aa4b909eb5fc796cbbee26f051a"
+    },
+    {
+      "path": "scripts/health-claims.ts",
+      "category": "script",
+      "bytes": 7719,
+      "sha256": "7baa4853aec97e5dc077483bb7d8515ed410a99cdcb0e17ec9256dc44f92556e"
     },
     {
       "path": "scripts/mechanic-accountability.ts",
@@ -11207,6 +11213,12 @@
       "category": "source",
       "bytes": 311,
       "sha256": "5014693db03565751b18a0299f43a30dcf873f28d2145b47a6a2a44b17db74c5"
+    },
+    {
+      "path": "src/shared/health-claims-audit.test.ts",
+      "category": "test",
+      "bytes": 4187,
+      "sha256": "6898ac27ae075e010eda163a511020167abdeca36e5360b4de02e9f531598071"
     },
     {
       "path": "src/shared/honor-unlock-ids.ts",
@@ -26843,6 +26855,16 @@
         "file:src/renderer/cardFace/cardRasterDeck.test.ts",
         "file:src/shared/hashPairKey.test.ts"
       ]
+    },
+    {
+      "id": "file:src/shared/health-claims-audit.test.ts",
+      "path": "src/shared/health-claims-audit.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 84,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
     },
     {
       "id": "file:src/shared/honor-unlock-ids.ts",

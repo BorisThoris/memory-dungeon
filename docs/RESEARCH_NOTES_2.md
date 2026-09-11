@@ -130,6 +130,8 @@ The design consequence is narrow and worth stating plainly: **this game should m
 benefit claim of any kind**, in store copy, achievements, or tutorial text. It is entertainment
 built on a memory verb, and that is the only claim it can support.
 
+> **Gen 218: that sentence now has a gate behind it.** It sat here for generations as a paragraph in a research note - read by whoever happened to open the file - which is the shape of every claim this repository has later had to go back and fix. `yarn audit:health-claims` checks every shipped string and the package description against eleven claim shapes drawn from the FTC complaint, and `src/shared/health-claims-audit.test.ts` holds those sentences open as fixtures so the gate is known to bite. The design vocabulary that shares words with a claim - cognitive load, cognitive accessibility - is allowed by phrase rather than excused by file, because the ban is on promising an outcome and not on the word.
+
 ## 5. CONFIRMED by the automated panel (before the limit)
 
 - **Steam Next Fest requires a live demo.** "Steam Next Fest only includes games with demos, so
