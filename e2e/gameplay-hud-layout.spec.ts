@@ -139,4 +139,55 @@ test.describe('gameplay HUD layout', () => {
 
         expect(undersized, 'must-read HUD lanes below 12px').toEqual([]);
     });
+
+    test('reads a deep run\'s numbers without clipping them', async ({ page }) => {
+        // Starting a run costs most of the default budget before this test does anything.
+        test.setTimeout(180_000);
+        /*
+         * Gen 212. Every layout test here starts a fresh run, so the HUD had only ever been laid
+         * out around the smallest numbers the game makes: a three-digit score on floor 1. The run
+         * census (Gen 207) says a real run carries seven digits by floor 60 - measured, 1,605,856
+         * after sixty floors at a 15% miss rate - and the score lane is a fixed `min-width` box
+         * with `overflow: hidden` under it at small sizes. Nobody plays sixty floors in a browser
+         * to find out, so the dev seam hands the shell the numbers.
+         */
+        await startRun(page);
+        await page.evaluate(() => {
+            const w = window as Window & {
+                __memoryDungeonE2e?: { setRunProgress: (p: { totalScore: number; level: number; turnsThisFloor: number }) => void };
+            };
+            if (!w.__memoryDungeonE2e) {
+                throw new Error('window.__memoryDungeonE2e missing; the deep-run HUD check requires Vite dev mode.');
+            }
+            w.__memoryDungeonE2e.setRunProgress({ totalScore: 1_605_856, level: 60, turnsThisFloor: 14 });
+        });
+        await expect(page.getByTestId('hud-score')).toContainText('1,605,856');
+
+        for (const size of [
+            { width: 1440, height: 900 },
+            { width: 1280, height: 800 },
+            { width: 960, height: 600 },
+            // The Deck, and the narrowest layout the shell claims to support.
+            { width: 1280, height: 720 },
+            { width: 620, height: 900 }
+        ]) {
+            await page.setViewportSize(size);
+            const clipped = await page.evaluate(() =>
+                ['hud-score', 'hud-floor', 'hud-par']
+                    .map((id) => {
+                        const lane = document.querySelector(`[data-testid="${id}"]`);
+                        if (!lane) return { id, missing: true, overflowBy: 0 };
+                        // Every text node inside the lane has to fit the box it is painted in.
+                        const worst = Array.from(lane.querySelectorAll('*'))
+                            .concat([lane])
+                            .filter((el) => el.children.length === 0)
+                            .map((el) => el.scrollWidth - el.clientWidth)
+                            .reduce((most, over) => Math.max(most, over), 0);
+                        return { id, missing: false, overflowBy: worst };
+                    })
+                    .filter((lane) => lane.missing || lane.overflowBy > 1)
+            );
+            expect(clipped, `HUD lanes clipped at ${size.width}x${size.height}`).toEqual([]);
+        }
+    });
 });

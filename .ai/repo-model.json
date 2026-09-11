@@ -255,8 +255,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 376047,
-      "sha256": "d04a29417d13024a8616be85c43025c22ac4262d95852a14460bcfabe19c74e2"
+      "bytes": 377356,
+      "sha256": "8cb09571a4cf75be21eab52d96ed6ae44fd99604136b6dd59841a9ae30d08a1e"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -748,7 +748,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 12552,
-      "sha256": "aa931f201f785b35e5a6cb3bc73b50d9127489c3930bd9a0c1f4101b27760acf"
+      "sha256": "c1dacf7abd7ebbe6557576bdf651819bdcda1c7166904bff1270385a9d738309"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -3663,8 +3663,8 @@
     {
       "path": "e2e/gameplay-hud-layout.spec.ts",
       "category": "test",
-      "bytes": 6712,
-      "sha256": "108e065dba65b9dcad171fe958f4e6439456484604558110e71d735732e7fdff"
+      "bytes": 9557,
+      "sha256": "d86bc22ef2502d6191b9422092033487fd374b65b1af65f24515251f2bd03206"
     },
     {
       "path": "e2e/gameplay-readability.spec.ts",
@@ -5241,8 +5241,8 @@
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 18482,
-      "sha256": "27bdeb981c7b75ac687076b672fe93b836b70db60bbbcf68d339305a51bc6f44"
+      "bytes": 20243,
+      "sha256": "d0e58f8444bee9837b5fb71e2d403bf0e260201fd911c23d30f6013e283a3e46"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -15330,7 +15330,7 @@
       "path": "src/renderer/App.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 387,
+      "lineCount": 418,
       "imports": [
         "file:src/renderer/audio/feverDuck.ts",
         "file:src/renderer/audio/gameplayMusic.ts",
@@ -31746,8 +31746,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/App.tsx",
-      "line": 386,
-      "endLine": 386
+      "line": 417,
+      "endLine": 417
     },
     {
       "id": "symbol:src/renderer/assets/assetDropInReadiness.ts#ASSET_DROP_IN_CATEGORIES",

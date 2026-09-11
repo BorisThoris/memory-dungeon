@@ -189,6 +189,7 @@ const App = () => {
                 forceGameOver: () => void;
                 startClassicGameOver: () => void;
                 startFixture: (id: PlayablePathFixtureId) => Promise<void>;
+                setRunProgress: (progress: { totalScore?: number; level?: number; turnsThisFloor?: number }) => void;
             };
         };
         const forceCurrentRunGameOver = (): void => {
@@ -201,8 +202,38 @@ const App = () => {
                 run: createGameOverRunSummary(current, [], 'quit')
             });
         };
+        /*
+         * Put a deep run's numbers into a shell that is standing on floor 1 (Gen 212).
+         *
+         * Every layout test this repository has ever run starts a fresh run, so the HUD has only
+         * been laid out around the smallest numbers the game produces - a three-digit score and a
+         * one-digit floor. The run census (Gen 207) says a real run carries **seven digits by floor
+         * 60**, and the score lane is a fixed `min-width` box with `overflow: hidden` under it.
+         * Playing sixty floors in a browser to find out is not a test anybody runs, so the seam
+         * hands the shell the numbers instead.
+         */
+        const setRunProgress = (progress: { totalScore?: number; level?: number; turnsThisFloor?: number }): void => {
+            const current = useAppStore.getState().run;
+            if (!current) {
+                return;
+            }
+            useAppStore.setState({
+                run: {
+                    ...current,
+                    turnsThisFloor: progress.turnsThisFloor ?? current.turnsThisFloor,
+                    board: current.board && progress.level != null ? { ...current.board, level: progress.level } : current.board,
+                    stats: {
+                        ...current.stats,
+                        totalScore: progress.totalScore ?? current.stats.totalScore,
+                        currentLevelScore: progress.totalScore ?? current.stats.currentLevelScore,
+                        highestLevel: progress.level ?? current.stats.highestLevel
+                    }
+                }
+            });
+        };
         w.__memoryDungeonE2e = {
             forceGameOver: forceCurrentRunGameOver,
+            setRunProgress,
             startClassicGameOver: () => {
                 useAppStore.getState().startRun();
                 forceCurrentRunGameOver();
