@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { openPlayablePathFixture } from './playablePathHelpers';
-import { flipTileAtGridCellKeyboard, readPairTileCells, waitForBoardPlayPhase } from './tileBoardGameFlow';
+import { flipTileAtGridCellViaDevHook, readPairTileCells, waitForBoardPlayPhase } from './tileBoardGameFlow';
 import { isFloorClearedOrAdvanced, readHudFloorText } from './visualScreenHelpers';
 
 /**
@@ -28,9 +28,9 @@ test.describe('chain, chunk and Fever in the app', () => {
             return false;
         }
         const [first, second] = pair as [[number, number], [number, number]];
-        await flipTileAtGridCellKeyboard(page, first[0], first[1]);
+        await flipTileAtGridCellViaDevHook(page, first[0], first[1]);
         await page.waitForTimeout(220);
-        await flipTileAtGridCellKeyboard(page, second[0], second[1]);
+        await flipTileAtGridCellViaDevHook(page, second[0], second[1]);
         return true;
     };
 

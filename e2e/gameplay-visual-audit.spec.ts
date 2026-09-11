@@ -4,7 +4,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { forceCoarsePointerMedia } from './mobileTouchHelpers';
 import { readDevPairPositionsFromFrame, type MemorizePairPositions } from './memorizeSnapshot';
 import {
-    flipTileAtGridCellKeyboard,
+    flipTileAtGridCellViaDevHook,
     readFrameHiddenTileCount,
     readTileClientRectAtGrid,
     openRunSettings,
@@ -78,18 +78,18 @@ async function captureGameplayStates(page: Page, viewportId: string): Promise<vo
     await page.waitForTimeout(160);
     await capture(page, viewportId, '02-card-hover-focus');
 
-    await flipTileAtGridCellKeyboard(page, firstPair[0]!.row, firstPair[0]!.col);
+    await flipTileAtGridCellViaDevHook(page, firstPair[0]!.row, firstPair[0]!.col);
     await expectCardFeedbackState(page, /flipped:1/);
-    await flipTileAtGridCellKeyboard(page, secondPair[0]!.row, secondPair[0]!.col);
+    await flipTileAtGridCellViaDevHook(page, secondPair[0]!.row, secondPair[0]!.col);
     await expectLastResolutionFeedback(page, /mismatch:2/);
     await expect(page.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-reduced-motion', 'static-state-cues');
     await capture(page, viewportId, '03-mismatch-resolve');
     await waitForBoardPlayPhase(page);
     await expect.poll(async () => readFrameHiddenTileCount(page), { timeout: 20_000 }).toBe(startingHidden);
 
-    await flipTileAtGridCellKeyboard(page, firstPair[0]!.row, firstPair[0]!.col);
+    await flipTileAtGridCellViaDevHook(page, firstPair[0]!.row, firstPair[0]!.col);
     await expectCardFeedbackState(page, /flipped:1/);
-    await flipTileAtGridCellKeyboard(page, firstPair[1]!.row, firstPair[1]!.col);
+    await flipTileAtGridCellViaDevHook(page, firstPair[1]!.row, firstPair[1]!.col);
     await expectLastResolutionFeedback(page, /match:2/);
     await capture(page, viewportId, '04-match-resolve');
     await waitForBoardPlayPhase(page);
@@ -188,8 +188,8 @@ async function clearLevelForAudit(page: Page): Promise<void> {
             return;
         }
         await waitForBoardPlayPhase(page);
-        await flipTileAtGridCellKeyboard(page, pair[0]!.row, pair[0]!.col);
-        await flipTileAtGridCellKeyboard(page, pair[1]!.row, pair[1]!.col);
+        await flipTileAtGridCellViaDevHook(page, pair[0]!.row, pair[0]!.col);
+        await flipTileAtGridCellViaDevHook(page, pair[1]!.row, pair[1]!.col);
         await page.waitForTimeout(1_100);
     }
 
@@ -233,8 +233,8 @@ async function forceGameOverForAudit(page: Page, pairs: MemorizePairPositions | 
             return;
         }
         await waitForBoardPlayPhase(page);
-        await flipTileAtGridCellKeyboard(page, mismatchA.row, mismatchA.col);
-        await flipTileAtGridCellKeyboard(page, mismatchB.row, mismatchB.col);
+        await flipTileAtGridCellViaDevHook(page, mismatchA.row, mismatchA.col);
+        await flipTileAtGridCellViaDevHook(page, mismatchB.row, mismatchB.col);
         await waitForMismatchBurnSettle(page, expectedHidden);
     }
 }

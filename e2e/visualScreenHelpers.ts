@@ -3,7 +3,7 @@ import { join, resolve } from 'node:path';
 import { expect, type Locator, type Page } from '@playwright/test';
 import { SAVE_SCHEMA_VERSION } from '../src/shared/contracts';
 import {
-    flipTileAtGridCellKeyboard,
+    flipTileAtGridCellViaDevHook,
     readFrameHiddenTileCount,
     STORAGE_KEY,
     waitForBoardPlayPhase
@@ -659,7 +659,7 @@ export async function waitLevel1VisualReady(page: Page): Promise<void> {
 }
 
 async function clickHiddenTile(page: Page, row: number, col: number): Promise<void> {
-    await flipTileAtGridCellKeyboard(page, row, col);
+    await flipTileAtGridCellViaDevHook(page, row, col);
 }
 
 /** Proceeding through the exit clears the floor: the beat follows, and the run advances on its own. */

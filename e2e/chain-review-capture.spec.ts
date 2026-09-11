@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { openPlayablePathFixture } from './playablePathHelpers';
 import { dismissStartupIntro } from './startupIntroHelpers';
 import {
-    flipTileAtGridCellKeyboard,
+    flipTileAtGridCellViaDevHook,
     readPairTileCells,
     readTileClientRectAtGrid,
     waitForBoardPlayPhase
@@ -66,9 +66,9 @@ test.describe('chain review captures', () => {
         const pair = [...byPair.values()].find((cells) => cells.length >= 2);
         expect(pair, 'the fixture offered a pair to match').toBeTruthy();
         const [first, second] = pair as [[number, number], [number, number]];
-        await flipTileAtGridCellKeyboard(page, first[0], first[1]);
+        await flipTileAtGridCellViaDevHook(page, first[0], first[1]);
         await page.waitForTimeout(220);
-        await flipTileAtGridCellKeyboard(page, second[0], second[1]);
+        await flipTileAtGridCellViaDevHook(page, second[0], second[1]);
         // Mid-shatter: the wave is still spreading, which is the frame worth looking at.
         await page.waitForTimeout(320);
         await page.screenshot({ path: `${OUT}/pop-during.png` });

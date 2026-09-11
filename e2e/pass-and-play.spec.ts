@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { buildVisualSaveJson, gotoWithSave, mainMenuPlayButton } from './visualScreenHelpers';
 import {
     clearFloorByMatchingPairs,
-    flipTileAtGridCellKeyboard,
+    flipTileAtGridCellViaDevHook,
     flipRemainingHiddenTiles,
     waitForBoardPlayPhase
 } from './tileBoardGameFlow';
@@ -139,7 +139,7 @@ test.describe('pass and play', () => {
         expect(first, 'the board has tiles to pick').toBeDefined();
         expect(other, 'the board has two different pairs, so a miss is possible').toBeDefined();
 
-        await flipTileAtGridCellKeyboard(page, first?.cell[0] ?? 0, first?.cell[1] ?? 0);
+        await flipTileAtGridCellViaDevHook(page, first?.cell[0] ?? 0, first?.cell[1] ?? 0);
         await page.waitForTimeout(400);
         // A floor objective can complete on a flip and put a route prompt over the board; staying
         // on the floor is the answer here, since the turn under test has not resolved yet.
@@ -148,7 +148,7 @@ test.describe('pass and play', () => {
             await exitPrompt.getByRole('button', { name: /^stay$/i }).click();
             await page.waitForTimeout(300);
         }
-        await flipTileAtGridCellKeyboard(page, other?.cell[0] ?? 0, other?.cell[1] ?? 1);
+        await flipTileAtGridCellViaDevHook(page, other?.cell[0] ?? 0, other?.cell[1] ?? 1);
         await expect
             .poll(async () => (await readSeats())[1]?.active === true, { timeout: 20_000 })
             .toBe(true);
@@ -188,7 +188,7 @@ test.describe('pass and play', () => {
         );
 
         // And it clears when that player acts, rather than sitting over their board.
-        await flipTileAtGridCellKeyboard(page, first?.cell[0] ?? 0, first?.cell[1] ?? 0);
+        await flipTileAtGridCellViaDevHook(page, first?.cell[0] ?? 0, first?.cell[1] ?? 0);
         await page.waitForTimeout(600);
         await expect(banner, 'the pass clears once the next player acts').toBeHidden();
     });

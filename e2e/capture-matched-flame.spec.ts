@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
 import { GAMEPLAY_BOARD_VISUALS } from '../src/renderer/components/gameplayVisualConfig';
 import { buildMatchedFlameCaptureSaveJson, openLevel1PlayWithSave, waitLevel1VisualReady } from './visualScreenHelpers';
-import { flipTileAtGridCellKeyboard, readFrameHiddenTileCount, waitForBoardPlayPhase } from './tileBoardGameFlow';
+import { flipTileAtGridCellViaDevHook, readFrameHiddenTileCount, waitForBoardPlayPhase } from './tileBoardGameFlow';
 
 /** Aligned with `GAMEPLAY_BOARD_VISUALS.matchedEdgeEffect.burstDuration` + small buffer for GPU/frame jitter. */
 const MATCHED_RIM_BURST_WAIT_MS = Math.ceil(GAMEPLAY_BOARD_VISUALS.matchedEdgeEffect.burstDuration.default * 1000) + 220;
@@ -80,8 +80,8 @@ async function flipFirstMatchingPairWebGl(page: Page): Promise<void> {
     for (const [i, j] of indexPairs) {
         const a = positions[i];
         const b = positions[j];
-        await flipTileAtGridCellKeyboard(page, a.row, a.col);
-        await flipTileAtGridCellKeyboard(page, b.row, b.col);
+        await flipTileAtGridCellViaDevHook(page, a.row, a.col);
+        await flipTileAtGridCellViaDevHook(page, b.row, b.col);
 
         const deadline = Date.now() + 22_000;
         let matched = false;

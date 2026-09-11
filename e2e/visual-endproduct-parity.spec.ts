@@ -2,7 +2,7 @@ import { join } from 'node:path';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { readDevPairPositionsFromFrame, type MemorizePairPositions } from './memorizeSnapshot';
 import {
-    flipTileAtGridCellKeyboard,
+    flipTileAtGridCellViaDevHook,
     readFrameHiddenTileCount,
     readTileClientRectAtGrid,
     type E2eClientRect
@@ -268,7 +268,7 @@ test.describe('Endproduct parity captures', () => {
         await hoverTile(page, focusTile);
         await screenshotSingleTile(page, 'card-hover.png', focusTile, 'disabled');
 
-        await flipTileAtGridCellKeyboard(page, focusTile.row, focusTile.col);
+        await flipTileAtGridCellViaDevHook(page, focusTile.row, focusTile.col);
         await page.waitForTimeout(FLIP_TRANSITION_CAPTURE_MS);
         await screenshotSingleTile(page, 'interaction-flip.png', focusTile, 'allow', {
             top: 54,
@@ -293,8 +293,8 @@ test.describe('Endproduct parity captures', () => {
         await parkPointer(page);
 
         const { firstPair, mismatchPair } = getCapturePairs(await readDevPairPositionsFromFrame(page));
-        await flipTileAtGridCellKeyboard(page, firstPair[0].row, firstPair[0].col);
-        await flipTileAtGridCellKeyboard(page, firstPair[1].row, firstPair[1].col);
+        await flipTileAtGridCellViaDevHook(page, firstPair[0].row, firstPair[0].col);
+        await flipTileAtGridCellViaDevHook(page, firstPair[1].row, firstPair[1].col);
         await expect.poll(async () => readFrameHiddenTileCount(page)).toBe(2);
         await page.waitForTimeout(MATCH_INTERACTION_CAPTURE_MS);
         await screenshotTilePair(page, 'interaction-match.png', firstPair, 'allow');

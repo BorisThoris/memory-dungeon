@@ -13,7 +13,7 @@ import {
     waitLevel1PlayReady
 } from './visualScreenHelpers';
 import { readDevPairPositionsFromFrame } from './memorizeSnapshot';
-import { flipTileAtGridCellKeyboard, readFrameHiddenTileCount, waitForBoardPlayPhase } from './tileBoardGameFlow';
+import { flipTileAtGridCellViaDevHook, readFrameHiddenTileCount, waitForBoardPlayPhase } from './tileBoardGameFlow';
 import { dismissStartupIntro } from './startupIntroHelpers';
 
 export type PlayablePathFixtureId =
@@ -129,8 +129,8 @@ export async function forceClassicGameOver(page: Page): Promise<void> {
             await expect
                 .poll(async () => readFrameHiddenTileCount(page), { timeout: 20_000 })
                 .toBeGreaterThanOrEqual(2);
-            await flipTileAtGridCellKeyboard(page, a.row, a.col);
-            await flipTileAtGridCellKeyboard(page, b.row, b.col);
+            await flipTileAtGridCellViaDevHook(page, a.row, a.col);
+            await flipTileAtGridCellViaDevHook(page, b.row, b.col);
             await expect
                 .poll(
                     async () => {

@@ -156,7 +156,20 @@ export async function navigateToLevel1PlayPhase(
  * Under WebGL, arrow-key roving skips removed tiles, so “N× ArrowRight” is not the same as column N after a match.
  * Playwright runs against Vite dev — we call `window.__e2ePickTileAtGrid1` (see `TileBoard.tsx`) for stable grid picks.
  */
-export async function flipTileAtGridCellKeyboard(page: Page, row: number, column: number): Promise<void> {
+/**
+ * Flips a tile through the dev-only pick hook. NOT the keyboard.
+ *
+ * Gen 219: this was called `flipTileAtGridCellKeyboard` and it has never pressed a key - it calls
+ * `window.__e2ePickTileAtGrid1` and flips the tile directly, so every "keyboard" flip in this suite
+ * was bypassing `handleBoardApplicationKeyDown`. A helper named for the thing it skips is worse
+ * than no helper, because it reads as coverage: the board's own key path, which is what a Steam
+ * Deck controller drives, had nothing behind it until `deck-controller-reach.spec.ts`.
+ *
+ * The hook stays, because most specs want a tile flipped rather than the input path exercised, and
+ * driving the grid cursor to a named cell by arrow keys would make every one of them slower and
+ * more brittle. It just has to say what it is.
+ */
+export async function flipTileAtGridCellViaDevHook(page: Page, row: number, column: number): Promise<void> {
     await page.evaluate(
         ([r, c]) => {
             const w = window as Window & { __e2ePickTileAtGrid1?: (row: number, col: number) => void };
@@ -209,7 +222,7 @@ export async function readTileClientRectAtGrid(page: Page, row: number, column: 
  * Select a hidden tile at (row, column) and wait for the board to register a flip.
  */
 export async function clickHiddenTileRowCol(page: Page, row: number, column: number, hiddenBefore?: number): Promise<void> {
-    await flipTileAtGridCellKeyboard(page, row, column);
+    await flipTileAtGridCellViaDevHook(page, row, column);
     if (hiddenBefore != null) {
         await expect
             .poll(async () => readFrameHiddenTileCount(page), { timeout: 12_000 })
@@ -217,9 +230,9 @@ export async function clickHiddenTileRowCol(page: Page, row: number, column: num
     }
 }
 
-/** @deprecated Alias for `flipTileAtGridCellKeyboard` — kept for specs that still say “click canvas”. */
+/** @deprecated Alias for `flipTileAtGridCellViaDevHook` — kept for specs that still say “click canvas”. */
 export async function clickCanvasTile(page: Page, row: number, column: number): Promise<void> {
-    await flipTileAtGridCellKeyboard(page, row, column);
+    await flipTileAtGridCellViaDevHook(page, row, column);
 }
 
 /**
@@ -294,9 +307,9 @@ export async function clearFloorByMatchingPairs(page: Page, maxPairs = 40): Prom
             return matched;
         }
         const [first, second] = pair as [[number, number], [number, number]];
-        await flipTileAtGridCellKeyboard(page, first[0], first[1]);
+        await flipTileAtGridCellViaDevHook(page, first[0], first[1]);
         await page.waitForTimeout(220);
-        await flipTileAtGridCellKeyboard(page, second[0], second[1]);
+        await flipTileAtGridCellViaDevHook(page, second[0], second[1]);
         await page.waitForTimeout(700);
         matched += 1;
     }
@@ -339,7 +352,7 @@ export async function flipRemainingHiddenTiles(page: Page, span = 8, maxFlips = 
         if (!cell) {
             return flipped;
         }
-        await flipTileAtGridCellKeyboard(page, cell[0], cell[1]);
+        await flipTileAtGridCellViaDevHook(page, cell[0], cell[1]);
         await page.waitForTimeout(900);
         flipped += 1;
     }

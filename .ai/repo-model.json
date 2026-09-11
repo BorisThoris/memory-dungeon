@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2439,
+    "trackedFileCount": 2440,
     "codeFileCount": 872,
     "exportedSymbolCount": 2624,
     "contentItemCount": 10,
@@ -255,8 +255,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 394877,
-      "sha256": "2ce9dc9f7784d2d37193b86ad54d4550b53858cacfa0e29ea9d55c0862498f9d"
+      "bytes": 397421,
+      "sha256": "bd1904e5e8066e80025b16f7774ac8e5adcefd4c0a00b2a35b43a3f3307f9bca"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -748,7 +748,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "c891b0e4c56d1e55c3ee51b3aafed4dcb74861b3b3c1e7f4ecc85d01cbc4cdd4"
+      "sha256": "77e3f4a739635b7db356d228b3bdf52414a9ea037fb43635c2c9770ab7677b13"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -3621,20 +3621,20 @@
     {
       "path": "e2e/capture-matched-flame.spec.ts",
       "category": "test",
-      "bytes": 6951,
-      "sha256": "8d268ea4c69d05d8fafa777d01d5b8b00d24139365526f47a492582c085ac7c0"
+      "bytes": 6957,
+      "sha256": "088b4fd7b1e2ccdcca204c9f89f088252ea18d24ba559deec25c31cca171d33b"
     },
     {
       "path": "e2e/cascade-chain.spec.ts",
       "category": "test",
-      "bytes": 7251,
-      "sha256": "0abfdf5c17f46128b8ac88caee0e9886c1c9b275388b14c486ca72ee22cda446"
+      "bytes": 7257,
+      "sha256": "79f30c64a0ab2b0d01e86231b5355faf6d4f8c60c6549eec1cd1c4783fd4ef80"
     },
     {
       "path": "e2e/chain-review-capture.spec.ts",
       "category": "test",
-      "bytes": 5834,
-      "sha256": "1b810b369085c13578f724bc3967b4e6f8a921b6a8c19cd9a09d50a628aff6d6"
+      "bytes": 5840,
+      "sha256": "a1f3642f7deee5fb07d20fba3c0d97011ee9d62a6054b60fb028b83d9f5355f4"
     },
     {
       "path": "e2e/controller-navigation.spec.ts",
@@ -3647,6 +3647,12 @@
       "category": "test",
       "bytes": 2354,
       "sha256": "c1bc14282b3806211a4144b50eeb30821d99bc40b48cb2046db9c8568a9c5346"
+    },
+    {
+      "path": "e2e/deck-controller-reach.spec.ts",
+      "category": "test",
+      "bytes": 4136,
+      "sha256": "7977da1a51ace75c30ec7dd1820752911d3a71d4b34fb36b1d0d8a85ad8f0ca3"
     },
     {
       "path": "e2e/demo-readiness.spec.ts",
@@ -3681,8 +3687,8 @@
     {
       "path": "e2e/gameplay-visual-audit.spec.ts",
       "category": "test",
-      "bytes": 12337,
-      "sha256": "b732dfa466823dd1892b6e237b426c39c2c284f993404b0dc44e4022d66c38a3"
+      "bytes": 12355,
+      "sha256": "9e8bdf47bf4dd2bc8033433c7c2f9bcc03088f2540de2fda4b0a5b93a8d81af4"
     },
     {
       "path": "e2e/long-run-feedback-hud.spec.ts",
@@ -3729,8 +3735,8 @@
     {
       "path": "e2e/pass-and-play.spec.ts",
       "category": "test",
-      "bytes": 13225,
-      "sha256": "a9d771ec249c1e9d58dc8dc400d9bdb8095ec85ee59ea86bcb649b77d9b1d3b2"
+      "bytes": 13233,
+      "sha256": "b1c72b08612e725ecbc229305a713d92d9dcf6ad7ac7605f0c6133b4274b831f"
     },
     {
       "path": "e2e/pause-controls-reference.spec.ts",
@@ -3759,8 +3765,8 @@
     {
       "path": "e2e/playablePathHelpers.ts",
       "category": "test",
-      "bytes": 11761,
-      "sha256": "8f053847eb7ea95ceb5f1f7b2ca422bd7dec8e16842a27364c185410b90c6c38"
+      "bytes": 11767,
+      "sha256": "7a61b606dccc0e121e85c7ce3ab7695c9ff2f18fcd96a34c518ad8b663ed08d3"
     },
     {
       "path": "e2e/pngDiff.ts",
@@ -3861,8 +3867,8 @@
     {
       "path": "e2e/tileBoardGameFlow.ts",
       "category": "test",
-      "bytes": 14465,
-      "sha256": "28ececea923fece206aff15dcff867070651730d5af70ba899682c9b08c39eb1"
+      "bytes": 15286,
+      "sha256": "f9046d914fb011d59a58fa2e71519f4b09a074635eab245f77a645032ec3332a"
     },
     {
       "path": "e2e/ui-design-reference.spec.ts",
@@ -3909,8 +3915,8 @@
     {
       "path": "e2e/visual-endproduct-parity.spec.ts",
       "category": "test",
-      "bytes": 12746,
-      "sha256": "b8b2500ad51d6a40c139e9fb4222a3d196f1bd96f82ac2e16c100ba3b712632c"
+      "bytes": 12754,
+      "sha256": "45398aa09b4c0be0ae13b479b778c1dcd6b3b84cb18b400d97c324a4b2d806c0"
     },
     {
       "path": "e2e/visual-inventory-capture.spec.ts",
@@ -3945,8 +3951,8 @@
     {
       "path": "e2e/visualScreenHelpers.ts",
       "category": "test",
-      "bytes": 36264,
-      "sha256": "733e755ec02864cfa51f32cc2e26e9a2ee7fa6c8bee5e5c0bb18df5924fb80f1"
+      "bytes": 36268,
+      "sha256": "a0736d4851d027efc52e2b1cf180e3273d934077e9758b58fb51c311c569fe5d"
     },
     {
       "path": "e2e/visualScreenScenarios.ts",
