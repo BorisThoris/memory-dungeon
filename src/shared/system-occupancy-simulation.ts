@@ -142,6 +142,23 @@ export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
      * a system called `core` on a fresh-run-per-floor reading; this is the same error inverted.
      */
     { id: 'magpieThefts', key: 'magpieTheftsThisFloor', label: 'The magpie took a matched pair back', family: 'memory', cadence: 'rare', kind: 'tally', player: 'reference', scope: 'run' },
+    /*
+     * The featured objective, uncounted since the census existed (Gen 216).
+     *
+     * Its exemption in `mechanic-accountability.ts` read "spans floors, and the census resets
+     * between them - needs the run-level census (task Gen 150)". The run-level census shipped at
+     * Gen 207 and nobody came back: the blocker named in the exemption had been gone for eight
+     * generations while the line went on excusing the mechanic. An exemption that names its own
+     * blocker is a debt with a due date, and this one was overdue.
+     *
+     * Run-scoped and read as a delta, which is what makes the streak usable as a counter at all.
+     * `featuredObjectiveStreak` is a run-cumulative number settled by `advanceToNextLevel` - the
+     * game's own transition, which the run census steps - and it *decays* on a miss. The census
+     * clamps a delta at zero, so a rise means the floor cleared its objective and a decay reads as
+     * a silent floor, which is the right reading: the row counts floors that completed, not the
+     * height of the streak.
+     */
+    { id: 'featuredStreak', key: 'featuredObjectiveStreak', label: 'A floor cleared its featured objective', family: 'reward', cadence: 'common', kind: 'tally', player: 'reference', scope: 'run' },
     // The four charges below are handed out once and never refilled by the floor transition, so
     // the run census is what bands them (Gen 207). The peek survives its `core` bar on the strength
     // of the floor curios: three of them grant a peek charge, and it reads 0.904 across a run.

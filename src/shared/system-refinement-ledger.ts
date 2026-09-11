@@ -294,10 +294,11 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
     },
     {
         id: 'objective.featured_streak',
+        counter: 'featuredStreak',
         verdict: 'changed',
-        generation: 213,
+        generation: 216,
         gone: ['no shuffle, swap, or destroy'],
-        note: 'The scholar-style objective told the player "no shuffle, swap, or destroy" while its rule watched one field. The field turned out to cover swap too, so only the dead third was cut - and Gen 213 found the same three-way phrasing still describing the Scholar preset in the mode-scope record, and cut it there too.'
+        note: 'The scholar-style objective told the player "no shuffle, swap, or destroy" while its rule watched one field that covers swap too, so only the dead third was cut; Gen 213 found the same phrasing describing the Scholar preset and cut it there. Gen 216 finally counted the thing: 0.829 of a run’s floors clear their featured objective, and every floor carries one. Its census exemption had said it needed the run-level census, which shipped at Gen 207 - the line went on excusing the mechanic for eight generations after its own stated blocker was gone.'
     },
     {
         id: 'economy.score_and_rewards',

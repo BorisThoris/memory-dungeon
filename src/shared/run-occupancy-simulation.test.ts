@@ -77,7 +77,10 @@ describe('the run census', () => {
          * the setup sheet sells it.
          */
         const runScoped = SYSTEM_OCCUPANCY_COUNTERS.filter((counter) => counter.scope === 'run').map((c) => c.id);
-        expect(runScoped).toEqual(['magpieThefts', 'peek', 'shuffle', 'flashPair', 'wildMatch']);
+        // Gen 216 added the featured objective, which is run-scoped for a different reason than
+        // the charges: the streak is settled by the floor transition the run census steps, and the
+        // floor census never runs one, so on a fresh run every floor it would read exactly zero.
+        expect(runScoped).toEqual(['magpieThefts', 'featuredStreak', 'peek', 'shuffle', 'flashPair', 'wildMatch']);
         const floorReport = simulateSystemOccupancy({ floors: SYSTEM_OCCUPANCY_BASELINE_FLOORS });
         const wildOnFloors = floorReport.rows.find((row) => row.key === 'wildMatch')!;
         expect(wildOnFloors.floorShare).toBeGreaterThan(SYSTEM_OCCUPANCY_BANDS.rare.max);

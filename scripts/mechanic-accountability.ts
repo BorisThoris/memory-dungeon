@@ -56,6 +56,8 @@ export const MECHANIC_CENSUS_COUNTERS: Record<string, readonly string[]> = {
     'findable.score_glint': ['findablesClaimed'],
     'objective.floor_clear': ['matchResolutions'],
     'stats.session_tracking': ['recallMistakes'],
+    // Gen 216: countable since the run census shipped at Gen 207; see the exemption note below.
+    'objective.featured_streak': ['featuredStreak'],
     'hazard.magpie_thief': ['magpieThefts'],
     'power.peek': ['peek'],
     'power.shuffle': ['shuffle'],
@@ -88,6 +90,13 @@ export const MECHANIC_CENSUS_COUNTERS: Record<string, readonly string[]> = {
  * Mechanics the census cannot reach, each with the reason, because "why is this uncounted" is the
  * whole question. Every line here is work someone has not done yet.
  *
+ * Gen 216 took one out, and how it read is the reason to re-read the rest. `objective.featured_streak`
+ * said "spans floors, and the census resets between them - needs the run-level census (task Gen
+ * 150)". That census shipped at Gen 207. The line went on excusing the mechanic for eight
+ * generations after the blocker it named was gone, because nothing re-reads an exemption: an
+ * exemption that names its own blocker is a debt with a due date on it, and nothing was checking
+ * the dates. Every line below is now suspect in the same way until someone looks.
+ *
  * The big one is the reference player. The census plays real generated floors, but it only ever
  * flips pairs: it never spends a charge, never arms a power, never picks a loadout. So every power
  * and every inventory charge is invisible to it - not because the game does not have them, but
@@ -97,7 +106,6 @@ export const MECHANIC_CENSUS_COUNTERS: Record<string, readonly string[]> = {
 export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, string> = {
     'core.gameplay_commands': 'The command bus every other mechanic runs on; counted by everything, so counting it says nothing.',
     'feedback.gameplay_hud': 'A projection of the run, not an event in it. Its coverage gate is the HUD audit.',
-    'objective.featured_streak': 'Spans floors, and the census resets between them. Needs the run-level census (task Gen 150).',
     'persistence.run_summary': 'Written once when a run ends; the census plays floors, not runs.',
     'phase.memorize': 'Every floor opens with it, so a counter would read 1.00 on every row and prove nothing.',
     'progression.run_flow': 'The frame the census itself drives; it cannot observe the thing stepping it.',

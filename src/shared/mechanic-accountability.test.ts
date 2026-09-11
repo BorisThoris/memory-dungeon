@@ -47,13 +47,22 @@ describe('every mechanic answers for itself', () => {
         // Destroy and Stray outright, so the graph is forty-one and the two UNREACHABLE lines are
         // gone with the powers they described - the ratio went up by deleting the debt, not by
         // covering it. Gen 208 added the magpie, which had been on this file's own list of
-        // uncounted mechanics since Gen 194: thirty-one of forty-two.
+        // uncounted mechanics since Gen 194: thirty-one of forty-two. Gen 216 took it to
+        // thirty-two by counting the featured objective, whose exemption had said it needed the
+        // run-level census - which shipped at Gen 207, eight generations before anyone re-read the
+        // line.
         const censused = Object.keys(MECHANIC_CENSUS_COUNTERS).length;
-        expect(censused).toBe(31);
+        expect(censused).toBe(32);
         expect(gameplayInteractionGraph.mechanics.length).toBe(42);
-        // Nothing is blind by family any more: every remaining mechanic carries its own argued
-        // exemption. Eleven of them, and every one is a real exemption rather than a debt: no line
-        // here says a mechanic cannot be reached.
+        /*
+         * Nothing is blind by family any more: every remaining mechanic carries its own argued
+         * exemption. Ten of them.
+         *
+         * This comment used to add "and every one is a real exemption rather than a debt: no line
+         * here says a mechanic cannot be reached". That was not true when it was written - the
+         * featured objective's line named a census that already existed - and the sentence is gone
+         * rather than re-asserted about the ten that remain. Nothing has re-read them either.
+         */
         const stillBlind = gameplayInteractionGraph.mechanics.filter(
             (mechanic) =>
                 MECHANIC_CENSUS_COUNTERS[mechanic.id] == null && MECHANIC_CENSUS_EXEMPTIONS[mechanic.id] == null
