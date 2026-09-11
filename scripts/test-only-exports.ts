@@ -23,7 +23,7 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 import baseline from './test-only-exports-baseline.json';
-import { readRelativeImports } from './test-only-modules';
+import { readRelativeImports, TEST_ONLY_EXEMPTIONS } from './test-only-modules';
 
 /**
  * Exports meant to have no runtime caller: a record whose test IS the consumer, checked so a claim
@@ -31,6 +31,22 @@ import { readRelativeImports } from './test-only-modules';
  * unreachable" is the whole question - the same contract the module audit's exemptions keep.
  */
 export const TEST_ONLY_EXPORT_EXEMPTIONS: Record<string, string> = {};
+
+/**
+ * A module the *module* audit already exempts exempts its exports too (Gen 215).
+ *
+ * `TEST_ONLY_EXEMPTIONS` names ten modules that are meant to have no runtime importer: contract
+ * tables, coverage matrices and readiness records that exist so a claim about the game can be
+ * checked rather than so the game can call them. Their test IS the consumer, which is the same
+ * sentence one level down - every export of such a module is reached only by its own test, by
+ * design. Reporting those 29 symbols was the audit restating an argument the repository had
+ * already accepted, and 29 lines of known-good noise is how a baseline stops being read.
+ *
+ * Inheriting rather than re-listing matters: a module that stops being exempt at the module level
+ * stops being exempt here on the same day, and nobody has to remember to keep two lists in step.
+ */
+const exemptModule = (file: string): boolean =>
+    TEST_ONLY_EXEMPTIONS[file.slice(file.lastIndexOf('/') + 1)] !== undefined;
 
 /**
  * What the audit found the day it was written, as `path name` lines in a sibling JSON file.
@@ -130,6 +146,26 @@ const readImportEdges = (
         if (!target) continue;
         edges.push({ target: resolve(target), ...readImportedNames(match[1]!) });
     }
+    /*
+     * A re-export is a consumer too (Gen 215).
+     *
+     * `export { getMatchFloaterAnchorTileIds } from './game'` puts the symbol on another module's
+     * surface, and whoever imports it from there is reaching the original. Counting only `import`
+     * statements reported everything that travels through a barrel as unreachable - the floater
+     * anchor rules are exported by `tile-floater-anchor-rules.ts`, re-exported by `game.ts` and
+     * `turn-resolution.ts`, and used by `board-turn-event-facts.ts`, which imports them from the
+     * barrel. Twenty-five re-export statements in this repository, all of them invisible until now.
+     */
+    for (const match of text.matchAll(/\bexport\s+(?:type\s+)?\{([^}]*)\}\s*from\s*['"](\.[^'"]+)['"]/gu)) {
+        const target = candidatePaths(file, match[2]!).find((candidate) => known.has(resolve(candidate)));
+        if (!target) continue;
+        // The name written inside the braces is the original's name; the alias is the new surface.
+        const names = match[1]!
+            .split(',')
+            .map((clause) => clause.trim().replace(/^type\s+/u, '').split(/\s+as\s+/u)[0]?.trim() ?? '')
+            .filter((name) => /^[A-Za-z_$][\w$]*$/u.test(name));
+        edges.push({ target: resolve(target), names, namespace: false });
+    }
     // A bare `import './x'` and a dynamic `import('./x')` take no names but are still importers.
     for (const specifier of readRelativeImports(source)) {
         const target = candidatePaths(file, specifier).find((candidate) => known.has(resolve(candidate)));
@@ -196,7 +232,7 @@ export const findTestOnlyExports = (
     for (const file of files) {
         if (isTestFile(file)) continue;
         const key = resolve(file);
-        if (namespaceImported.has(key)) continue;
+        if (namespaceImported.has(key) || exemptModule(file)) continue;
         const source = sources.get(key) ?? readSource(file);
         const byName = consumers.get(key) ?? new Map<string, string[]>();
         const ownTest = resolve(moduleUnderTest(file));

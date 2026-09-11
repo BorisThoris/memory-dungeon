@@ -123,11 +123,6 @@ const ownedCosmeticTags = (save: SaveData): Set<string> => new Set(save.unlocks 
 
 export const cosmeticUnlockTag = (id: string): string => `${COSMETIC_UNLOCK_PREFIX}${id}`;
 
-export const unlockedCosmeticIds = (save: SaveData): CosmeticId[] =>
-    getCosmeticCatalogRows()
-        .map((row) => row.id)
-        .filter((id) => ownedCosmeticTags(save).has(cosmeticUnlockTag(id)) && !COSMETIC_CATALOG[id].defaultOwned);
-
 export const cosmeticIsOwned = (save: SaveData, id: string): boolean => {
     const def = getCosmeticCatalogRows().find((entry) => entry.id === id);
     if (!def) {
@@ -170,8 +165,11 @@ export const deriveCosmeticStates = (save: SaveData): CosmeticStateRow[] => {
     });
 };
 
-export const getCosmeticRows = deriveCosmeticStates;
-
+/*
+ * Gen 215: `getCosmeticRows` was a second name for `deriveCosmeticStates`, the same alias
+ * `getCosmeticCollectionRows` already is, and the Collection screen calls that one. Two names for
+ * one function is how a caller ends up reading whichever it happened to find.
+ */
 export const getCosmeticCollectionRows = deriveCosmeticStates;
 
 export const getOwnedCosmeticIds = (save: SaveData): CosmeticId[] =>
@@ -190,7 +188,6 @@ export const getCardThemeRows = (save: SaveData): CardThemeRow[] => {
 export const getEquippedCardTheme = (save: SaveData): CardThemeRow =>
     getCardThemeRows(save).find((row) => row.equipped) ?? buildClassicCardThemeRow();
 
-export const resolveEquippedCardTheme = getEquippedCardTheme;
-
+// Gen 215: `resolveEquippedCardTheme` was a third name for `getEquippedCardTheme`; nothing used it.
 /** Re-exported from meta-progression (implementation there avoids a circular import). */
 export { getCosmeticTrackDefinitionRows as getCosmeticProgressTrackRows, getCosmeticTrackProgressSummary as getCosmeticTrackRows } from './meta-progression';

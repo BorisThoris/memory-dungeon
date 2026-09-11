@@ -35,11 +35,10 @@ export const describeRunModeIdentity = (run: RunState): RunModeIdentity => {
         return { detail: 'Achievements off', label: 'Practice' };
     }
     if (contract?.noShuffle === true) {
-        return { detail: 'No shuffle, no destroy', label: 'Scholar Contract' };
+        // Gen 215: this said "No shuffle, no destroy" - Destroy left in Gen 200, and what the
+        // contract flag actually gates is the two shuffle charges, which is what the swap spends.
+        return { detail: 'No shuffle, no swap', label: 'Scholar Contract' };
     }
     return CLASSIC;
 };
 
-/** One line for screen readers and tooltips: the label, plus the rule when there is one. */
-export const runModeIdentityText = (identity: RunModeIdentity): string =>
-    identity.detail === null ? identity.label : `${identity.label} — ${identity.detail}`;

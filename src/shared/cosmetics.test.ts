@@ -7,9 +7,9 @@ import {
     getCosmeticCatalogRows,
     getCosmeticTrackRows,
     getCardThemeRows,
-    getCosmeticRows,
-    resolveEquippedCardTheme,
-    unlockedCosmeticIds,
+    getCosmeticCollectionRows,
+    getEquippedCardTheme,
+    getOwnedCosmeticIds,
     type CosmeticId
 } from './cosmetics';
 
@@ -20,9 +20,19 @@ describe('REG-025 cosmetics catalog', () => {
 
         expect(Object.keys(COSMETIC_CATALOG)).toEqual(COSMETIC_IDS satisfies readonly CosmeticId[]);
         expect(getCosmeticCatalogRows().map((row) => row.id)).toEqual(COSMETIC_IDS);
-        expect(unlockedCosmeticIds(save)).toEqual(['crest_daily_bronze', 'title_ascendant_v']);
+        /*
+         * Gen 215: this called `unlockedCosmeticIds`, `getCosmeticRows` and
+         * `resolveEquippedCardTheme` - three exports nothing in the game reached, two of them
+         * second names for functions that at least had one live caller. Repointing the suite at
+         * those showed the plainer half of the truth: `getCosmeticCollectionRows` is reached by
+         * the Collection screen, and `getOwnedCosmeticIds` and `getEquippedCardTheme` are not
+         * reached by anything either. They stay listed as debt rather than relabelled as design.
+         */
+        expect(getOwnedCosmeticIds(save)).toEqual(
+            expect.arrayContaining(['crest_daily_bronze', 'title_ascendant_v'])
+        );
 
-        const rows = getCosmeticRows(save);
+        const rows = getCosmeticCollectionRows(save);
         expect(rows.find((row) => row.id === 'crest_daily_bronze')?.status).toBe('owned');
         expect(rows.find((row) => row.id === 'title_ascendant_v')?.status).toBe('owned');
         expect(rows.some((row) => row.label.includes('Relic Gold'))).toBe(false);
@@ -34,8 +44,8 @@ describe('REG-025 cosmetics catalog', () => {
         save.unlocks = ['cosmetic:obsolete_card_back'];
 
         expect(Object.keys(CARD_THEME_CATALOG)).toEqual(['card_back_classic']);
-        expect(resolveEquippedCardTheme(save).id).toBe('classic_card_back');
-        expect(resolveEquippedCardTheme(save).asset.back).toBe('/src/renderer/assets/textures/cards/authored-card-back.svg');
+        expect(getEquippedCardTheme(save).id).toBe('classic_card_back');
+        expect(getEquippedCardTheme(save).asset.back).toBe('/src/renderer/assets/textures/cards/authored-card-back.svg');
 
         const rows = getCardThemeRows(save);
         expect(rows).toHaveLength(1);

@@ -68,6 +68,27 @@ describe('what counts as the module using its own export', () => {
     });
 });
 
+describe('a re-export is a consumer', () => {
+    const sources: Record<string, string> = {
+        'src/deep.ts': 'export const travelled = 1;\n',
+        'src/barrel.ts': "export { travelled } from './deep';\n",
+        'src/screen.ts': "import { travelled } from './barrel';\n",
+        'src/deep.test.ts': "import { travelled } from './deep';\n"
+    };
+    const files = Object.keys(sources);
+
+    it('does not report a symbol the game reaches through a barrel', () => {
+        /*
+         * Gen 215: the floater anchor rules are exported by `tile-floater-anchor-rules.ts`,
+         * re-exported by `game.ts` and `turn-resolution.ts`, and used by `board-turn-event-facts`,
+         * which imports them from the barrel. Counting only `import` statements called both of
+         * them unreachable.
+         */
+        const { found } = findTestOnlyExports(files, files, (file) => sources[file.replace(/^\.\//u, '')] ?? '');
+        expect(found.map((entry) => entry.name)).toEqual([]);
+    });
+});
+
 describe('the audit as a whole', () => {
     const sources: Record<string, string> = {
         'src/thing.ts': "export const reachable = 1;\nexport const orphan = 2;\nexport const internal = 3;\nconst x = internal;\n",
@@ -109,12 +130,13 @@ describe('the audit as a whole', () => {
 describe('the baseline', () => {
     it('is a ratchet rather than a list of excuses: it only ever shrinks', () => {
         /*
-         * 149 on the day Gen 214 wrote it, after the Inventory read-model chain came out. The
-         * number is asserted so a later generation cannot quietly re-record a new finding as
-         * known debt - adding a line fails this, and the audit itself fails on a line that no
-         * longer applies.
+         * 152 when Gen 214 wrote the audit, 149 after the Inventory read-model chain came out, 114
+         * after Gen 215 stopped the audit reporting what the module audit already exempts, taught
+         * it to follow a re-export, and removed the plainly dead. The number is asserted so a
+         * later generation cannot quietly re-record a new finding as known debt - adding a line
+         * fails this, and the audit itself fails on a line that no longer applies.
          */
-        expect(TEST_ONLY_EXPORT_BASELINE.size).toBeLessThanOrEqual(149);
+        expect(TEST_ONLY_EXPORT_BASELINE.size).toBeLessThanOrEqual(114);
     });
 
     it('names a file and a symbol on every line', () => {

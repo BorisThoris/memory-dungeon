@@ -4,7 +4,7 @@ import { createNewRun, createRunSummary, finishMemorizePhase } from './game-core
 import {
     buildRunHistoryEntry,
     buildRunHistoryExportString,
-    buildRunJournalRows,
+    buildRunJournalEntry,
     buildRunJournalRowsFromSave,
     buildRunShareKey
 } from './run-history';
@@ -44,7 +44,9 @@ describe('REG-085 run history, share keys, and journal', () => {
     it('produces privacy-safe share keys and journal rows', () => {
         const run = completedRun();
         const link = buildRunShareKey(run);
-        const rows = buildRunJournalRows(run);
+        // Gen 215: was `buildRunJournalRows`, which read one field off the entry and had no
+        // caller in the game; the screens build the entry, so the test builds it too.
+        const rows = buildRunJournalEntry(run).rows;
 
         expect(link.shareString).toContain('local share');
         expect(link.shareString).not.toMatch(/account|token|path|email/i);

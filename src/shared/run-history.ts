@@ -164,9 +164,13 @@ export const buildRunHistoryEntry = (run: RunState): RunHistoryEntry => {
     };
 };
 
-export const buildRunJournalRows = (run: RunState): RunHistoryJournalRow[] =>
-    buildRunHistoryEntry(run).journalRows;
-
+/*
+ * Gen 215: `buildRunJournalRows` read one field off `buildRunHistoryEntry` and had no caller.
+ * Its test now builds the entry instead - which promptly showed that `buildRunJournalEntry` has
+ * no caller either. The one journal builder the game reaches is `buildRunJournalRowsFromSave`,
+ * through `profile-summary.ts`; the run-shaped pair are still listed as debt rather than quietly
+ * relabelled as design.
+ */
 export const buildRunJournalEntry = (run: RunState): {
     journalId: string;
     buildSummary: string;

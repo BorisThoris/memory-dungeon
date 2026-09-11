@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2437,
     "codeFileCount": 871,
-    "exportedSymbolCount": 2629,
+    "exportedSymbolCount": 2624,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6678
+    "relationshipCount": 6673
   },
   "inventory": [
     {
@@ -255,8 +255,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 384989,
-      "sha256": "8affbd4c353efa92de3b9f68ce33de60938ddae02bc91c31cee11cc6f99d6c2f"
+      "bytes": 388038,
+      "sha256": "8610dacc828a246a0711bc0c79381f18fb6a15b209e186cd587942d894497f9a"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -748,7 +748,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 17793,
-      "sha256": "1b27ca534848716a645e97a01288f0c8bfdbabb67449f1b3620490df098444ec"
+      "sha256": "18bc9df0ad0f9821a0a799c85e3c8b44420a227e98553ffcdb4d68ae5b3c9dbd"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -4977,14 +4977,14 @@
     {
       "path": "scripts/test-only-exports-baseline.json",
       "category": "script",
-      "bytes": 11740,
-      "sha256": "23f73b06602c6463d9a43290aa6979b28472877dcde7c9155048e898a3f09382"
+      "bytes": 9088,
+      "sha256": "e7a15b50b0d35199e04ec274fddbe53abdd1b75c47350a1a4f9048dc9858ec7d"
     },
     {
       "path": "scripts/test-only-exports.ts",
       "category": "script",
-      "bytes": 12776,
-      "sha256": "3983d9e57e577e48d51d990eddbb419c152c933c7505f3c97391684f5c9dccbd"
+      "bytes": 15121,
+      "sha256": "0d7d392bf13d5766ef34ad11ff47d041461bb804ce9a6e76fe82348b55970945"
     },
     {
       "path": "scripts/test-only-modules.ts",
@@ -10761,14 +10761,14 @@
     {
       "path": "src/shared/cosmetics.test.ts",
       "category": "test",
-      "bytes": 2617,
-      "sha256": "ce90f722724edfd4da0f3e331defac8a23d9b3e3ba72aa28a43afed06d8d9fcc"
+      "bytes": 3253,
+      "sha256": "8707af9ffa7536fcd5c23a565338e7b5747aa6f4f0778151bcb4bacb9948860d"
     },
     {
       "path": "src/shared/cosmetics.ts",
       "category": "source",
-      "bytes": 7155,
-      "sha256": "9b5b7fb90354eb194dba90aa61770656285fc56e753dba93829ecbedeb271311"
+      "bytes": 7171,
+      "sha256": "270399fdd32c933ac7c0cf6e8e24f2c543236c594fbae53313a8f46d71c0f1d8"
     },
     {
       "path": "src/shared/crash-report-summary.test.ts",
@@ -11799,14 +11799,14 @@
     {
       "path": "src/shared/run-history.test.ts",
       "category": "test",
-      "bytes": 5181,
-      "sha256": "e57502df9a39711c7ac938f9dd6fdf25690a7ee5e9a74adc5dc35bbb80b31dc8"
+      "bytes": 5368,
+      "sha256": "98379fac3e19249fff2446fe4db2fa4834a94a0bb87c25959156cd8312d40d80"
     },
     {
       "path": "src/shared/run-history.ts",
       "category": "source",
-      "bytes": 8436,
-      "sha256": "47bb930076a47fb617418b610e2f767e3baaa8066fc53c79cb1ceef400237666"
+      "bytes": 8732,
+      "sha256": "80a4bfa7b104146b884abb756570c9cac180eea907930b306b87b083594d7164"
     },
     {
       "path": "src/shared/run-inventory-contracts.ts",
@@ -11853,14 +11853,14 @@
     {
       "path": "src/shared/run-mode-identity.test.ts",
       "category": "test",
-      "bytes": 3147,
-      "sha256": "148dc34497768430952cd4f931700e8b636fd1094c03b305e83477f138cb01c7"
+      "bytes": 3365,
+      "sha256": "f0262311a120e3e3fcbbc66ee08d60a87ed18e64a6f1f931ed954dc65f181d59"
     },
     {
       "path": "src/shared/run-mode-identity.ts",
       "category": "source",
-      "bytes": 1969,
-      "sha256": "0fe2121fb77c7784ee5266e974111b7596706e454dde569b563cffa424abb3d3"
+      "bytes": 1901,
+      "sha256": "e5d2371ac809557626661930eaf7cf8e3b447c774fbe3b41b4f22ac3b31a477f"
     },
     {
       "path": "src/shared/run-mode-scope.test.ts",
@@ -12189,8 +12189,8 @@
     {
       "path": "src/shared/test-only-export-audit.test.ts",
       "category": "test",
-      "bytes": 5682,
-      "sha256": "128472273a8bda060cd5c43d7934ba98eff37b26c311e27f5a61b5d796732b64"
+      "bytes": 6851,
+      "sha256": "5ae3d3a8fedb946c729e9d1f01c5cb74f7199a70407eeca9c2f74b08c0d5df59"
     },
     {
       "path": "src/shared/test/game-fixtures.ts",
@@ -25264,7 +25264,7 @@
       "path": "src/shared/cosmetics.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 60,
+      "lineCount": 70,
       "imports": [
         "file:src/shared/cosmetics.ts",
         "file:src/shared/save-data.ts"
@@ -25277,7 +25277,7 @@
       "path": "src/shared/cosmetics.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 197,
+      "lineCount": 194,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/cosmetic-ids.ts",
@@ -25302,13 +25302,10 @@
         "symbol:src/shared/cosmetics.ts#getCosmeticCatalogRows",
         "symbol:src/shared/cosmetics.ts#getCosmeticCollectionRows",
         "symbol:src/shared/cosmetics.ts#getCosmeticProgressTrackRows",
-        "symbol:src/shared/cosmetics.ts#getCosmeticRows",
         "symbol:src/shared/cosmetics.ts#getCosmeticTrackRows",
         "symbol:src/shared/cosmetics.ts#getEquippedCardTheme",
         "symbol:src/shared/cosmetics.ts#getEquippedCosmeticId",
-        "symbol:src/shared/cosmetics.ts#getOwnedCosmeticIds",
-        "symbol:src/shared/cosmetics.ts#resolveEquippedCardTheme",
-        "symbol:src/shared/cosmetics.ts#unlockedCosmeticIds"
+        "symbol:src/shared/cosmetics.ts#getOwnedCosmeticIds"
       ],
       "testedBy": [
         "file:src/shared/cosmetic-reachability.test.ts",
@@ -28701,7 +28698,7 @@
       "path": "src/shared/run-history.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 133,
+      "lineCount": 135,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/game-core.ts",
@@ -28716,7 +28713,7 @@
       "path": "src/shared/run-history.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 238,
+      "lineCount": 242,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-array-guards.ts",
@@ -28726,7 +28723,6 @@
         "symbol:src/shared/run-history.ts#buildRunHistoryEntry",
         "symbol:src/shared/run-history.ts#buildRunHistoryExportString",
         "symbol:src/shared/run-history.ts#buildRunJournalEntry",
-        "symbol:src/shared/run-history.ts#buildRunJournalRows",
         "symbol:src/shared/run-history.ts#buildRunJournalRowsFromSave",
         "symbol:src/shared/run-history.ts#buildRunReplayLink",
         "symbol:src/shared/run-history.ts#buildRunShareKey",
@@ -28906,7 +28902,7 @@
       "path": "src/shared/run-mode-identity.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 83,
+      "lineCount": 86,
       "imports": [
         "file:src/shared/run-creation-rules.ts",
         "file:src/shared/run-mode-catalog.ts",
@@ -28920,14 +28916,13 @@
       "path": "src/shared/run-mode-identity.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 46,
+      "lineCount": 45,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
       "exports": [
         "symbol:src/shared/run-mode-identity.ts#describeRunModeIdentity",
-        "symbol:src/shared/run-mode-identity.ts#RunModeIdentity",
-        "symbol:src/shared/run-mode-identity.ts#runModeIdentityText"
+        "symbol:src/shared/run-mode-identity.ts#RunModeIdentity"
       ],
       "testedBy": [
         "file:src/shared/run-from-share-key.test.ts",
@@ -30004,7 +29999,7 @@
       "path": "src/shared/test-only-export-audit.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 126,
+      "lineCount": 148,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -43299,8 +43294,8 @@
       "name": "cosmeticIsOwned",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 131,
-      "endLine": 137
+      "line": 126,
+      "endLine": 132
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#CosmeticSlot",
@@ -43339,16 +43334,16 @@
       "name": "deriveCosmeticStates",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 150,
-      "endLine": 171
+      "line": 145,
+      "endLine": 166
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getCardThemeRows",
       "name": "getCardThemeRows",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 185,
-      "endLine": 188
+      "line": 183,
+      "endLine": 186
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getCosmeticCatalogRows",
@@ -43363,72 +43358,48 @@
       "name": "getCosmeticCollectionRows",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 175,
-      "endLine": 175
+      "line": 173,
+      "endLine": 173
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getCosmeticProgressTrackRows",
       "name": "getCosmeticProgressTrackRows",
       "kind": "ExportSpecifier",
       "file": "src/shared/cosmetics.ts",
-      "line": 196,
-      "endLine": 196
-    },
-    {
-      "id": "symbol:src/shared/cosmetics.ts#getCosmeticRows",
-      "name": "getCosmeticRows",
-      "kind": "value",
-      "file": "src/shared/cosmetics.ts",
-      "line": 173,
-      "endLine": 173
+      "line": 193,
+      "endLine": 193
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getCosmeticTrackRows",
       "name": "getCosmeticTrackRows",
       "kind": "ExportSpecifier",
       "file": "src/shared/cosmetics.ts",
-      "line": 196,
-      "endLine": 196
+      "line": 193,
+      "endLine": 193
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getEquippedCardTheme",
       "name": "getEquippedCardTheme",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 190,
-      "endLine": 191
+      "line": 188,
+      "endLine": 189
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getEquippedCosmeticId",
       "name": "getEquippedCosmeticId",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 182,
-      "endLine": 183
+      "line": 180,
+      "endLine": 181
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getOwnedCosmeticIds",
       "name": "getOwnedCosmeticIds",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 177,
-      "endLine": 180
-    },
-    {
-      "id": "symbol:src/shared/cosmetics.ts#resolveEquippedCardTheme",
-      "name": "resolveEquippedCardTheme",
-      "kind": "value",
-      "file": "src/shared/cosmetics.ts",
-      "line": 193,
-      "endLine": 193
-    },
-    {
-      "id": "symbol:src/shared/cosmetics.ts#unlockedCosmeticIds",
-      "name": "unlockedCosmeticIds",
-      "kind": "value",
-      "file": "src/shared/cosmetics.ts",
-      "line": 126,
-      "endLine": 129
+      "line": 175,
+      "endLine": 178
     },
     {
       "id": "symbol:src/shared/crash-report-summary.ts#describeCrashReports",
@@ -48555,32 +48526,24 @@
       "name": "buildRunHistoryExportString",
       "kind": "value",
       "file": "src/shared/run-history.ts",
-      "line": 222,
-      "endLine": 237
+      "line": 226,
+      "endLine": 241
     },
     {
       "id": "symbol:src/shared/run-history.ts#buildRunJournalEntry",
       "name": "buildRunJournalEntry",
       "kind": "value",
       "file": "src/shared/run-history.ts",
-      "line": 170,
-      "endLine": 185
-    },
-    {
-      "id": "symbol:src/shared/run-history.ts#buildRunJournalRows",
-      "name": "buildRunJournalRows",
-      "kind": "value",
-      "file": "src/shared/run-history.ts",
-      "line": 167,
-      "endLine": 168
+      "line": 174,
+      "endLine": 189
     },
     {
       "id": "symbol:src/shared/run-history.ts#buildRunJournalRowsFromSave",
       "name": "buildRunJournalRowsFromSave",
       "kind": "value",
       "file": "src/shared/run-history.ts",
-      "line": 187,
-      "endLine": 220
+      "line": 191,
+      "endLine": 224
     },
     {
       "id": "symbol:src/shared/run-history.ts#buildRunReplayLink",
@@ -49060,7 +49023,7 @@
       "kind": "value",
       "file": "src/shared/run-mode-identity.ts",
       "line": 26,
-      "endLine": 41
+      "endLine": 43
     },
     {
       "id": "symbol:src/shared/run-mode-identity.ts#RunModeIdentity",
@@ -49069,14 +49032,6 @@
       "file": "src/shared/run-mode-identity.ts",
       "line": 14,
       "endLine": 19
-    },
-    {
-      "id": "symbol:src/shared/run-mode-identity.ts#runModeIdentityText",
-      "name": "runModeIdentityText",
-      "kind": "value",
-      "file": "src/shared/run-mode-identity.ts",
-      "line": 44,
-      "endLine": 45
     },
     {
       "id": "symbol:src/shared/run-number-guards.ts#decrementRunCounter",
@@ -64813,12 +64768,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/shared/cosmetics.ts->symbol:src/shared/cosmetics.ts#getCosmeticRows",
-      "source": "file:src/shared/cosmetics.ts",
-      "target": "symbol:src/shared/cosmetics.ts#getCosmeticRows",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/shared/cosmetics.ts->symbol:src/shared/cosmetics.ts#getCosmeticTrackRows",
       "source": "file:src/shared/cosmetics.ts",
       "target": "symbol:src/shared/cosmetics.ts#getCosmeticTrackRows",
@@ -64840,18 +64789,6 @@
       "id": "exports:src/shared/cosmetics.ts->symbol:src/shared/cosmetics.ts#getOwnedCosmeticIds",
       "source": "file:src/shared/cosmetics.ts",
       "target": "symbol:src/shared/cosmetics.ts#getOwnedCosmeticIds",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/cosmetics.ts->symbol:src/shared/cosmetics.ts#resolveEquippedCardTheme",
-      "source": "file:src/shared/cosmetics.ts",
-      "target": "symbol:src/shared/cosmetics.ts#resolveEquippedCardTheme",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/cosmetics.ts->symbol:src/shared/cosmetics.ts#unlockedCosmeticIds",
-      "source": "file:src/shared/cosmetics.ts",
-      "target": "symbol:src/shared/cosmetics.ts#unlockedCosmeticIds",
       "kind": "exports"
     },
     {
@@ -68707,12 +68644,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/shared/run-history.ts->symbol:src/shared/run-history.ts#buildRunJournalRows",
-      "source": "file:src/shared/run-history.ts",
-      "target": "symbol:src/shared/run-history.ts#buildRunJournalRows",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/shared/run-history.ts->symbol:src/shared/run-history.ts#buildRunJournalRowsFromSave",
       "source": "file:src/shared/run-history.ts",
       "target": "symbol:src/shared/run-history.ts#buildRunJournalRowsFromSave",
@@ -69082,12 +69013,6 @@
       "id": "exports:src/shared/run-mode-identity.ts->symbol:src/shared/run-mode-identity.ts#RunModeIdentity",
       "source": "file:src/shared/run-mode-identity.ts",
       "target": "symbol:src/shared/run-mode-identity.ts#RunModeIdentity",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/run-mode-identity.ts->symbol:src/shared/run-mode-identity.ts#runModeIdentityText",
-      "source": "file:src/shared/run-mode-identity.ts",
-      "target": "symbol:src/shared/run-mode-identity.ts#runModeIdentityText",
       "kind": "exports"
     },
     {

@@ -1,12 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { RUN_MODE_CATALOG } from './run-mode-catalog';
-import { describeRunModeIdentity, runModeIdentityText } from './run-mode-identity';
+import { describeRunModeIdentity } from './run-mode-identity';
 import {
     createNewRun,
     createWildRun
 } from './run-creation-rules';
 
-const scholarContract = { bonusRelicDraftPick: true, maxMismatches: null, noShuffle: true };
+// Gen 215: this fixture carried `bonusRelicDraftPick`, a field ContractFlags has not had
+// since the relic draft left in Gen 175.
+const scholarContract = { maxMismatches: null, noShuffle: true };
 const pinVowContract = { maxMismatches: null, maxPinsTotalRun: 10, noShuffle: false };
 
 describe('describeRunModeIdentity', () => {
@@ -36,9 +38,11 @@ describe('describeRunModeIdentity', () => {
         });
     });
 
-    it('names the scholar contract and its two bans', () => {
+    it('names the scholar contract and the two things it bans', () => {
+        // Gen 215: this asserted "No shuffle, no destroy". Destroy left in Gen 200; the flag gates
+        // the shuffle charges, and the row-shuffle charge is what the tile swap spends.
         expect(describeRunModeIdentity(createNewRun(0, { activeContract: scholarContract }))).toEqual({
-            detail: 'No shuffle, no destroy',
+            detail: 'No shuffle, no swap',
             label: 'Scholar Contract'
         });
     });
@@ -55,12 +59,11 @@ describe('describeRunModeIdentity', () => {
         expect(describeRunModeIdentity(run).label).toBe('Pin vow');
     });
 
-    it('reads as one line for a tooltip, with and without a detail', () => {
-        expect(runModeIdentityText({ detail: null, label: 'Classic Dungeon' })).toBe('Classic Dungeon');
-        expect(runModeIdentityText({ detail: 'Achievements off', label: 'Practice' })).toBe(
-            'Practice — Achievements off'
-        );
-    });
+    /*
+     * Gen 215: a case for `runModeIdentityText` stood here - a one-line formatter for "a tooltip"
+     * that no tooltip, and nothing else in the game, ever called. The identity itself is read by
+     * the pause menu, which the contract check below holds to.
+     */
 });
 
 describe('the catalog start contracts this exists to honour', () => {
