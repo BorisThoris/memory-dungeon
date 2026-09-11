@@ -102,7 +102,15 @@ export const getBossEncounterIdentityForFloor = (
         mechanics: [
             `${BOSS_ENCOUNTER_IDENTITY.label} boss tag.`,
             ...mechanicCopy(entry.mutators, entry.floorArchetypeId),
-            'Keystone Pair board anchor.',
+            /*
+             * Gen 213: this line was 'Keystone Pair board anchor.' - the same phantom the comment
+             * above BOSS_ENCOUNTER_IDENTITY says appears nowhere in the game. Gen 201 took it out
+             * of the constant and left it in the builder that a real floor goes through, so the
+             * mechanics list every boss floor actually produced still named it. What a boss floor
+             * really does to the board is deal the suits scattered, which the constant already
+             * says and this now says too.
+             */
+            'Scattered suit deal: short chains, many small pops.',
             entry.riskProfile ? `Risk read: ${entry.riskProfile}` : 'Risk read: boss pressure.'
         ]
     };

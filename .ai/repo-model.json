@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2443,
     "codeFileCount": 880,
-    "exportedSymbolCount": 2673,
+    "exportedSymbolCount": 2676,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6787
+    "relationshipCount": 6790
   },
   "inventory": [
     {
@@ -255,8 +255,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 377356,
-      "sha256": "8cb09571a4cf75be21eab52d96ed6ae44fd99604136b6dd59841a9ae30d08a1e"
+      "bytes": 381444,
+      "sha256": "2d0387d11abb7236d88a5ce0e4865c8732c606931ba864cf83e56723cb676664"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -747,8 +747,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 12552,
-      "sha256": "c1dacf7abd7ebbe6557576bdf651819bdcda1c7166904bff1270385a9d738309"
+      "bytes": 17589,
+      "sha256": "de2dcf14dfc994ddc39522a9d166c09bced9d0557ad60edd7f51a1acaf6a4739"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -4869,8 +4869,8 @@
     {
       "path": "scripts/run-mode-scope.ts",
       "category": "script",
-      "bytes": 5978,
-      "sha256": "4f71a047c496708e828fce64245c01d0967031ed36161b3bab468cb5725780b3"
+      "bytes": 6824,
+      "sha256": "744019eb71087c33b25a0e2cd9df66acebd7723c63ae34d9a1aa6a0dd190e71b"
     },
     {
       "path": "scripts/save-field-policy.ts",
@@ -8241,8 +8241,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 146936,
-      "sha256": "3b388a94a53abe6b034adb8c5de712527d881fae48fe33bc70dcb312db342a64"
+      "bytes": 147726,
+      "sha256": "c0001215288947dd8e2cc4f75b282b6b5cc32c050eab5d9eed3df4bee7c7825c"
     },
     {
       "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -10317,8 +10317,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 12816,
-      "sha256": "99e2251e738cf5e735476d8aa0f6a04eacb5583259bbb448e236dcd17822df83"
+      "bytes": 17853,
+      "sha256": "dde8436497b3475577e034ce4dabc0cd2919ccaa7ab834fc263f7e2b50dbdebb"
     },
     {
       "path": "src/shared/achievement-reachability.test.ts",
@@ -10539,14 +10539,14 @@
     {
       "path": "src/shared/boss-encounters.test.ts",
       "category": "test",
-      "bytes": 6220,
-      "sha256": "9b385690dff558aaa4cd2bb2c33872d62e8d437eef6c663221d00a5ff31725ab"
+      "bytes": 6838,
+      "sha256": "684ed1e4a29556d61277bff4b21e661b605d7941b0bb604511993d5975c1e856"
     },
     {
       "path": "src/shared/boss-encounters.ts",
       "category": "source",
-      "bytes": 15122,
-      "sha256": "041f3b51ace27f6d0e0935c453e182426d3b63376dca6d4e49ac6c3ff3b2fd77"
+      "bytes": 15710,
+      "sha256": "6c546282780309d58f0845a73bcb46543261ce1018e763d0c1f5299914e40dbf"
     },
     {
       "path": "src/shared/bridge-reachability.test.ts",
@@ -11811,8 +11811,8 @@
     {
       "path": "src/shared/run-economy.ts",
       "category": "source",
-      "bytes": 4540,
-      "sha256": "5443575466048d94ced862ad71726c278108e3d4dfb042080ebd52943ace14ed"
+      "bytes": 5342,
+      "sha256": "dcb542f23417df4de2d293e563ba5141c32d20af335f9d9d0c526da50b8ceaf4"
     },
     {
       "path": "src/shared/run-from-share-key.test.ts",
@@ -12207,14 +12207,14 @@
     {
       "path": "src/shared/system-refinement-ledger.test.ts",
       "category": "test",
-      "bytes": 5870,
-      "sha256": "0ee88bbb03607201b9d29fd4d54d48e554fe4911d2282ac3fce665611f783ced"
+      "bytes": 10593,
+      "sha256": "c4365a1b8bceaf9e1652ffedac80a81e55fbcdfb38fac7566b89b23781276a2a"
     },
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 19675,
-      "sha256": "44d583b5bbae2cdde30cdd3c2df4a03f6260396c114a104f13dae162f5777735"
+      "bytes": 30026,
+      "sha256": "3a6136b32f2599cf2ffb262002c6abfca22ee01e3669f8ade22ccf8be71ce03e"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -18068,7 +18068,7 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3425,
+      "lineCount": 3418,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -24443,7 +24443,7 @@
       "path": "src/shared/boss-encounters.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 130,
+      "lineCount": 139,
       "imports": [
         "file:src/shared/boss-encounters.ts",
         "file:src/shared/contracts.ts",
@@ -24457,7 +24457,7 @@
       "path": "src/shared/boss-encounters.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 301,
+      "lineCount": 309,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-mutator-schedule.ts",
@@ -28867,7 +28867,7 @@
       "path": "src/shared/run-economy.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 127,
+      "lineCount": 137,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-number-guards.ts",
@@ -30198,7 +30198,7 @@
       "path": "src/shared/system-refinement-ledger.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 109,
+      "lineCount": 204,
       "imports": [
         "file:src/shared/gameplay-interaction-graph.ts",
         "file:src/shared/system-occupancy-simulation.ts",
@@ -30212,16 +30212,19 @@
       "path": "src/shared/system-refinement-ledger.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 373,
+      "lineCount": 479,
       "imports": [
         "file:src/shared/gameplay-interaction-graph.ts"
       ],
       "exports": [
+        "symbol:src/shared/system-refinement-ledger.ts#staleLedgerIds",
         "symbol:src/shared/system-refinement-ledger.ts#strandedLedgerIds",
         "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_LEDGER",
+        "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_SWEEP_GENERATION",
         "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementEntry",
         "symbol:src/shared/system-refinement-ledger.ts#systemRefinementLedgerById",
         "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementVerdict",
+        "symbol:src/shared/system-refinement-ledger.ts#unevidencedLedgerIds",
         "symbol:src/shared/system-refinement-ledger.ts#unexaminedSystemIds"
       ],
       "testedBy": [
@@ -34386,8 +34389,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 3424,
-      "endLine": 3424
+      "line": 3417,
+      "endLine": 3417
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
@@ -41698,24 +41701,24 @@
       "name": "EncounterIdentityRow",
       "kind": "interface",
       "file": "src/shared/boss-encounters.ts",
-      "line": 120,
-      "endLine": 127
+      "line": 128,
+      "endLine": 135
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#FloorIdentityContract",
       "name": "FloorIdentityContract",
       "kind": "interface",
       "file": "src/shared/boss-encounters.ts",
-      "line": 131,
-      "endLine": 141
+      "line": 139,
+      "endLine": 149
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#FloorIdentityWarningLevel",
       "name": "FloorIdentityWarningLevel",
       "kind": "type",
       "file": "src/shared/boss-encounters.ts",
-      "line": 129,
-      "endLine": 129
+      "line": 137,
+      "endLine": 137
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#getBossEncounterIdentityForFloor",
@@ -41723,31 +41726,31 @@
       "kind": "value",
       "file": "src/shared/boss-encounters.ts",
       "line": 87,
-      "endLine": 109
+      "endLine": 117
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#getBossFloorHudTitle",
       "name": "getBossFloorHudTitle",
       "kind": "value",
       "file": "src/shared/boss-encounters.ts",
-      "line": 111,
-      "endLine": 118
+      "line": 119,
+      "endLine": 126
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#getEncounterIdentityForFloor",
       "name": "getEncounterIdentityForFloor",
       "kind": "value",
       "file": "src/shared/boss-encounters.ts",
-      "line": 295,
-      "endLine": 300
+      "line": 303,
+      "endLine": 308
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#getFloorIdentityContract",
       "name": "getFloorIdentityContract",
       "kind": "value",
       "file": "src/shared/boss-encounters.ts",
-      "line": 161,
-      "endLine": 284
+      "line": 169,
+      "endLine": 292
     },
     {
       "id": "symbol:src/shared/cameraViewportMode.ts#deriveCameraViewportMode",
@@ -49042,40 +49045,40 @@
       "name": "getRunEconomyEntry",
       "kind": "value",
       "file": "src/shared/run-economy.ts",
-      "line": 125,
-      "endLine": 126
+      "line": 135,
+      "endLine": 136
     },
     {
       "id": "symbol:src/shared/run-economy.ts#getRunEconomyRows",
       "name": "getRunEconomyRows",
       "kind": "value",
       "file": "src/shared/run-economy.ts",
-      "line": 109,
-      "endLine": 110
+      "line": 119,
+      "endLine": 120
     },
     {
       "id": "symbol:src/shared/run-economy.ts#getRunEconomySnapshot",
       "name": "getRunEconomySnapshot",
       "kind": "value",
       "file": "src/shared/run-economy.ts",
-      "line": 112,
-      "endLine": 123
+      "line": 122,
+      "endLine": 133
     },
     {
       "id": "symbol:src/shared/run-economy.ts#RUN_ECONOMY_DEFINITIONS",
       "name": "RUN_ECONOMY_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/run-economy.ts",
-      "line": 35,
-      "endLine": 55
+      "line": 45,
+      "endLine": 65
     },
     {
       "id": "symbol:src/shared/run-economy.ts#RUN_ECONOMY_RESOURCE_PURPOSES",
       "name": "RUN_ECONOMY_RESOURCE_PURPOSES",
       "kind": "value",
       "file": "src/shared/run-economy.ts",
-      "line": 57,
-      "endLine": 60
+      "line": 67,
+      "endLine": 70
     },
     {
       "id": "symbol:src/shared/run-economy.ts#RunEconomyBucket",
@@ -49098,8 +49101,8 @@
       "name": "runEconomyDefinitionById",
       "kind": "value",
       "file": "src/shared/run-economy.ts",
-      "line": 62,
-      "endLine": 68
+      "line": 72,
+      "endLine": 78
     },
     {
       "id": "symbol:src/shared/run-economy.ts#RunEconomyPersistence",
@@ -51046,36 +51049,52 @@
       "endLine": 270
     },
     {
+      "id": "symbol:src/shared/system-refinement-ledger.ts#staleLedgerIds",
+      "name": "staleLedgerIds",
+      "kind": "value",
+      "file": "src/shared/system-refinement-ledger.ts",
+      "line": 475,
+      "endLine": 478
+    },
+    {
       "id": "symbol:src/shared/system-refinement-ledger.ts#strandedLedgerIds",
       "name": "strandedLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 367,
-      "endLine": 372
+      "line": 455,
+      "endLine": 460
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_LEDGER",
       "name": "SYSTEM_REFINEMENT_LEDGER",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 43,
-      "endLine": 355
+      "line": 79,
+      "endLine": 443
+    },
+    {
+      "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_SWEEP_GENERATION",
+      "name": "SYSTEM_REFINEMENT_SWEEP_GENERATION",
+      "kind": "value",
+      "file": "src/shared/system-refinement-ledger.ts",
+      "line": 38,
+      "endLine": 38
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementEntry",
       "name": "SystemRefinementEntry",
       "kind": "interface",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 24,
-      "endLine": 41
+      "line": 40,
+      "endLine": 77
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#systemRefinementLedgerById",
       "name": "systemRefinementLedgerById",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 357,
-      "endLine": 358
+      "line": 445,
+      "endLine": 446
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementVerdict",
@@ -51086,12 +51105,20 @@
       "endLine": 22
     },
     {
+      "id": "symbol:src/shared/system-refinement-ledger.ts#unevidencedLedgerIds",
+      "name": "unevidencedLedgerIds",
+      "kind": "value",
+      "file": "src/shared/system-refinement-ledger.ts",
+      "line": 469,
+      "endLine": 472
+    },
+    {
       "id": "symbol:src/shared/system-refinement-ledger.ts#unexaminedSystemIds",
       "name": "unexaminedSystemIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 361,
-      "endLine": 364
+      "line": 449,
+      "endLine": 452
     },
     {
       "id": "symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
@@ -70988,6 +71015,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/system-refinement-ledger.ts->symbol:src/shared/system-refinement-ledger.ts#staleLedgerIds",
+      "source": "file:src/shared/system-refinement-ledger.ts",
+      "target": "symbol:src/shared/system-refinement-ledger.ts#staleLedgerIds",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/system-refinement-ledger.ts->symbol:src/shared/system-refinement-ledger.ts#strandedLedgerIds",
       "source": "file:src/shared/system-refinement-ledger.ts",
       "target": "symbol:src/shared/system-refinement-ledger.ts#strandedLedgerIds",
@@ -70997,6 +71030,12 @@
       "id": "exports:src/shared/system-refinement-ledger.ts->symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_LEDGER",
       "source": "file:src/shared/system-refinement-ledger.ts",
       "target": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_LEDGER",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/system-refinement-ledger.ts->symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_SWEEP_GENERATION",
+      "source": "file:src/shared/system-refinement-ledger.ts",
+      "target": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_SWEEP_GENERATION",
       "kind": "exports"
     },
     {
@@ -71015,6 +71054,12 @@
       "id": "exports:src/shared/system-refinement-ledger.ts->symbol:src/shared/system-refinement-ledger.ts#SystemRefinementVerdict",
       "source": "file:src/shared/system-refinement-ledger.ts",
       "target": "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementVerdict",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/system-refinement-ledger.ts->symbol:src/shared/system-refinement-ledger.ts#unevidencedLedgerIds",
+      "source": "file:src/shared/system-refinement-ledger.ts",
+      "target": "symbol:src/shared/system-refinement-ledger.ts#unevidencedLedgerIds",
       "kind": "exports"
     },
     {

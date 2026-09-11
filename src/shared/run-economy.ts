@@ -32,6 +32,16 @@ const SCORE_RUN_ECONOMY_DEFINITION = {
     persistence: 'run_summary'
 } as const satisfies RunEconomyDefinition;
 
+/*
+ * Gen 213: both temporary-run rows described sinks the game does not have. The pickup row said a
+ * pickup is "forfeited by destroying the carrier" and the charge row listed "destroy" and
+ * "stray-remove" among the actions charges pay for - two powers removed in Gen 200, one of them
+ * (Destroy) the very thing Gen 202 rewrote the score glint's reward row to stop promising. The
+ * ledger recorded that the economy projection "lost Destroy and Stray in Gen 200 rather than
+ * showing them at zero", and it had: the rows went, and the prose inside the rows that stayed was
+ * never read. A row's `sink` is the sentence that says where the resource goes, so it has to name
+ * spends that exist - the charge row now names exactly the three charge fields it sums.
+ */
 export const RUN_ECONOMY_DEFINITIONS = [
     SCORE_RUN_ECONOMY_DEFINITION,
     {
@@ -40,7 +50,7 @@ export const RUN_ECONOMY_DEFINITIONS = [
         bucket: 'temporary_run',
         purpose: 'Temporary floor pickup progress.',
         source: 'pickup-marked pairs on eligible floors',
-        sink: 'claimed by matching the carrier pair; forfeited by destroying the carrier',
+        sink: 'claimed by matching the carrier pair; a break that takes the carrier spills the glint and pays it',
         persistence: 'temporary_run'
     },
     {
@@ -49,7 +59,7 @@ export const RUN_ECONOMY_DEFINITIONS = [
         bucket: 'temporary_run',
         purpose: 'Temporary run action budget.',
         source: 'run start and pickup rewards',
-        sink: 'shuffle, row shuffle, tile swap, destroy, peek, and stray-remove actions',
+        sink: 'shuffle, row shuffle, tile swap and peek - the three charge fields this row sums',
         persistence: 'temporary_run'
     }
 ] as const satisfies readonly RunEconomyDefinition[];

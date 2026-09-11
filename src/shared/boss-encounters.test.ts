@@ -21,7 +21,16 @@ describe('REG-076 boss and elite encounter identity', () => {
         });
         expect(identity!.mechanics.length).toBeGreaterThanOrEqual(2);
         expect(identity!.mechanics.join(' ')).toContain('Keystone Warden');
-        expect(identity!.mechanics).toEqual(expect.arrayContaining([expect.stringContaining('Keystone Pair')]));
+        /*
+         * Gen 213: this asserted the mechanics list contains a "Keystone Pair" board anchor - a
+         * thing that has never existed in the game, which the module's own comment said so plainly
+         * that Gen 201 cut it from the constant and left it in the builder. The test was what kept
+         * the builder honest to the phantom instead of to the game. A boss floor's board change is
+         * the scattered deal; that is what the list has to carry, and the anchor is what it must
+         * not.
+         */
+        expect(identity!.mechanics).toEqual(expect.arrayContaining([expect.stringContaining('Scattered suit deal')]));
+        expect(identity!.mechanics.join(' ')).not.toContain('Keystone Pair');
         expect(identity!.placeholderNeeded).toBe(true);
         expect(identity!.placeholderSlots).toContain('boss intro stinger');
         expect(floorIdentity.payoffCopy).toContain('Offline-safe fallback art and audio');

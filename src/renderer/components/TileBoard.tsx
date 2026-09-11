@@ -445,10 +445,18 @@ const BOARD_MARKER_READABILITY_CONTRACT =
 const BOARD_MARKER_SHAPE_CONTRACT = 'linked-route combo-surge payoff-bar payoff-stack swap-target-crossbar followup-target';
 const BOARD_MARKER_ACTION_CUE_CONTRACT = 'bank-lane build-lane cash-now follow-up route-setup';
 const BOARD_MARKER_ACTION_PRIORITY_CONTRACT = 'cash-now follow-up build-lane route-setup bank-lane';
-const BOARD_MARKER_TRAIT_LANE_CONTRACT = 'shard guard tool risk block recall score';
-const CARD_TRAIT_LANE_ORDER_SET = new Set<TraitInteractionLaneId>(
-    BOARD_MARKER_TRAIT_LANE_CONTRACT.split(' ') as TraitInteractionLaneId[]
-);
+/*
+ * Gen 213: this read 'shard guard tool risk block recall score' and was cast to the lane id type
+ * to make it compile. Gen 202 cut the shard, guard and risk lanes; `TraitInteractionLaneId` and
+ * `CARD_FEEDBACK_TRAIT_LANE_ORDER` have carried the four survivors ever since, and the board went
+ * on publishing a seven-lane taxonomy in a contract attribute and admitting all seven to the set
+ * that decides whether a lane gets a label. The set is the reason this matters rather than only
+ * being untidy: membership was the test for "this is a real lane", so it answered yes for three
+ * ids whose label lookup returns undefined. The order is the lane order, not a second list.
+ */
+const CARD_TRAIT_LANE_ORDER: readonly TraitInteractionLaneId[] = ['tool', 'block', 'recall', 'score'];
+const BOARD_MARKER_TRAIT_LANE_CONTRACT = CARD_TRAIT_LANE_ORDER.join(' ');
+const CARD_TRAIT_LANE_ORDER_SET = new Set<TraitInteractionLaneId>(CARD_TRAIT_LANE_ORDER);
 const BOARD_MARKER_BEAT_TIER_CONTRACT = CARD_FEEDBACK_BEAT_TIER_CONTRACT;
 const BOARD_MARKER_CADENCE_CONTRACT = CARD_FEEDBACK_CADENCE_CONTRACT;
 const BOARD_MARKER_ROUTE_GLYPH_CONTRACT = CARD_FEEDBACK_ROUTE_GLYPH_CONTRACT;
@@ -575,45 +583,30 @@ const cardPrimaryShotFocus = (
     return 'setup';
 };
 
-const cardTraitLaneAudioCue = (
-    laneId: TraitInteractionLaneId | string
-):
-    | 'trait-lane-block'
-    | 'trait-lane-guard'
-    | 'trait-lane-recall'
-    | 'trait-lane-risk'
-    | 'trait-lane-shard'
-    | 'trait-lane-tool' => {
-    if (laneId === 'guard') {
-        return 'trait-lane-guard';
-    }
-    if (laneId === 'tool') {
-        return 'trait-lane-tool';
-    }
-    if (laneId === 'risk') {
-        return 'trait-lane-risk';
-    }
-    if (laneId === 'block') {
-        return 'trait-lane-block';
-    }
-    if (laneId === 'recall') {
-        return 'trait-lane-recall';
-    }
-    return 'trait-lane-shard';
+/*
+ * Gen 213: these branched on the three cut lanes and fell through to 'trait-lane-shard' - so the
+ * one lane that reached the default, `score`, was announced under the name of a currency removed
+ * in Gen 184, and the guard and risk arms could never be taken. A cue per lane, no default.
+ */
+const CARD_TRAIT_LANE_AUDIO_CUES: Record<TraitInteractionLaneId, string> = {
+    block: 'trait-lane-block',
+    recall: 'trait-lane-recall',
+    score: 'trait-lane-score',
+    tool: 'trait-lane-tool'
 };
 
-const cardTraitLaneScreenCue = (laneId: TraitInteractionLaneId | string): 'burst' | 'guard' | 'pulse' | 'risk' => {
-    if (laneId === 'risk' || laneId === 'block') {
-        return 'risk';
-    }
-    if (laneId === 'guard' || laneId === 'tool') {
-        return 'guard';
-    }
-    if (laneId === 'recall') {
-        return 'pulse';
-    }
-    return 'burst';
+const CARD_TRAIT_LANE_SCREEN_CUES: Record<TraitInteractionLaneId, 'burst' | 'guard' | 'pulse' | 'risk'> = {
+    block: 'risk',
+    recall: 'pulse',
+    score: 'burst',
+    tool: 'guard'
 };
+
+const cardTraitLaneAudioCue = (laneId: TraitInteractionLaneId | string): string =>
+    CARD_TRAIT_LANE_AUDIO_CUES[laneId as TraitInteractionLaneId] ?? 'none';
+
+const cardTraitLaneScreenCue = (laneId: TraitInteractionLaneId | string): 'burst' | 'guard' | 'none' | 'pulse' | 'risk' =>
+    CARD_TRAIT_LANE_SCREEN_CUES[laneId as TraitInteractionLaneId] ?? 'none';
 
 
 

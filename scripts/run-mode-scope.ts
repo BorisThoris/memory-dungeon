@@ -36,7 +36,13 @@ export const RUN_MODE_SCOPE: readonly RunModeScopeRow[] = [
     {
         modeId: 'classic',
         kind: 'distinct',
-        changes: 'The procedural descent itself: floors, routes, shop gold, relic milestones.',
+        /*
+         * Gen 213: this said "floors, routes, shop gold, relic milestones" - and three of those
+         * four went in Gen 173-175 with the whole between-floor layer. This is the row every other
+         * row is measured against, so it was the worst place in the file to describe a game that
+         * no longer exists. What a Classic run is now: boards that grow, the cascade, and a par.
+         */
+        changes: 'The descent itself: a growing board every floor, the chain-chunk-Fever cascade, a par to beat and a turn ceiling.',
         reason: 'The main game. Everything else is measured against it.'
     },
     {
@@ -54,13 +60,15 @@ export const RUN_MODE_SCOPE: readonly RunModeScopeRow[] = [
     {
         modeId: 'dungeon_showcase',
         kind: 'preset',
-        changes: 'Starts Classic on a staged dungeon floor with achievements and records off.',
+        // Gen 213: the staged dungeon floor went with the dungeon layer itself in Gen 176.
+        changes: 'Started Classic on a staged floor with achievements and records off; the staging went with the dungeon.',
         reason: 'A way to show the dungeon off, not a way to play it. Its own card says results do not count.'
     },
     {
         modeId: 'wild',
         kind: 'preset',
-        changes: 'Classic with a joker tile, a stray-remove charge and three mutators.',
+        // Gen 213: the stray-remove charge left with Stray in Gen 200; the joker is the whole grant.
+        changes: 'Classic with a joker tile and the three chaos mutators.',
         reason: 'A mutator preset. Every part of it is something a Classic run can already carry.'
     },
     {
@@ -72,7 +80,9 @@ export const RUN_MODE_SCOPE: readonly RunModeScopeRow[] = [
     {
         modeId: 'scholar',
         kind: 'preset',
-        changes: 'Classic with a contract forbidding shuffle, swap and destroy.',
+        // Gen 213: Destroy was never one of the three - `noShuffle` gates the shuffle charges, and
+        // the row-shuffle charge is what the tile swap spends.
+        changes: 'Classic with a contract forbidding board shuffle, row shuffle and the tile swap.',
         reason: 'A self-imposed restriction, which is a choice about how to play a Classic run.'
     },
     {
