@@ -103,17 +103,87 @@ export const MECHANIC_CENSUS_COUNTERS: Record<string, readonly string[]> = {
  * because the thing playing the game does not use them. Fixing that means a census player that
  * spends its charges, which is its own generation.
  */
-export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, string> = {
-    'core.gameplay_commands': 'The command bus every other mechanic runs on; counted by everything, so counting it says nothing.',
-    'feedback.gameplay_hud': 'A projection of the run, not an event in it. Its coverage gate is the HUD audit.',
-    'persistence.run_summary': 'Written once when a run ends; the census plays floors, not runs.',
-    'phase.memorize': 'Every floor opens with it, so a counter would read 1.00 on every row and prove nothing.',
-    'progression.run_flow': 'The frame the census itself drives; it cannot observe the thing stepping it.',
-    'safety.softlock_fairness': 'A guarantee, not an occurrence: its gate is the softlock seed sweep, which proves it never fails.',
-    'simulation.build_evaluation': 'A tool for tuning the game, not a rule inside it.',
-    'simulation.gameplay_replay': 'A tool for verifying the game, not a rule inside it.',
-    'inventory.contract_loadout': 'A run setup, chosen before the first floor and unchanged by any of them.',
-    'inventory.mutator_loadout': 'A run setup, chosen before the first floor; what it selects is censused, it is not.'
+export interface MechanicCensusExemption {
+    /** The generation this argument was last read against the game, not the day it was written. */
+    readonly generation: number;
+    readonly reason: string;
+}
+
+/**
+ * The generation every exemption below was last re-read against the game as it stands.
+ *
+ * Gen 217. Gen 216 took `objective.featured_streak` off this list and found why it had survived:
+ * its reason named the run-level census as a blocker, that census shipped at Gen 207, and the line
+ * went on excusing the mechanic for eight generations. Nothing re-reads a reason once it is
+ * written - the summary line counts exemptions, and a count cannot tell a live argument from a
+ * dead one.
+ *
+ * So each line now carries the generation it was last read, and the gate requires all of them to
+ * be at or after this constant. Raising it is the act of re-reading all ten; a reason that has
+ * gone stale in the meantime has to be rewritten or paid off, because the alternative - a number
+ * that goes up while the arguments underneath it rot - is what this list already did once.
+ */
+export const MECHANIC_CENSUS_EXEMPTION_SWEEP_GENERATION = 217;
+
+/**
+ * Mechanics the census cannot reach, each with the reason, because "why is this uncounted" is the
+ * whole question. Every line here is work someone has not done yet.
+ *
+ * Gen 217 re-read all ten. Two were describing a game that had moved:
+ *
+ * - `inventory.mutator_loadout` said "a run setup, chosen before the first floor and unchanged by
+ *   any of them". The floor schedule hands a *different* mutator to every floor - wide recall,
+ *   short memorize, findables floor, silhouette twist, n-back anchor, the magpie, sticky fingers,
+ *   category letters on floors one to eight of seed 42001. It is a per-floor selection and has
+ *   been for a long time.
+ * - `persistence.run_summary` said "written once when a run ends; the census plays floors, not
+ *   runs". The census has played runs since Gen 207. The exemption survives, but for the opposite
+ *   reason to the one written down: no censused run ever *ends*. All ten reference runs reach the
+ *   floor cap at 24 without a game over, which is its own reading of the game at a 15% miss rate.
+ *
+ * The other eight arguments held, and are restated in current terms rather than left as they were.
+ */
+export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption> = {
+    'core.gameplay_commands': {
+        generation: 217,
+        reason: 'The command bus every other mechanic runs on, so every counter in the census is already a count of it; a row of its own would be the census counting itself.'
+    },
+    'feedback.gameplay_hud': {
+        generation: 217,
+        reason: 'A projection of the run rather than an event in it. Its coverage gate is the HUD reach test, which holds every feedback branch to an announcement the game can actually produce.'
+    },
+    'persistence.run_summary': {
+        generation: 217,
+        reason: 'Written once when a run ends, and no censused run ends: all ten reference runs reach the floor cap at 24 without a game over, so there is no summary for the census to see. The save-field policy gate covers the shape instead.'
+    },
+    'phase.memorize': {
+        generation: 217,
+        reason: 'Every floor opens with it, so a counter would read 1.00 on every row and prove nothing. What can be pressed is pressed: the mutator-effect audit moves the window and requires the change to show.'
+    },
+    'progression.run_flow': {
+        generation: 217,
+        reason: 'The frame the census itself steps, so it cannot observe the thing stepping it. The endless simulation clearing 1.00 of floors at every miss rate is what stands behind it instead.'
+    },
+    'safety.softlock_fairness': {
+        generation: 217,
+        reason: 'A guarantee rather than an occurrence: a counter would read zero on a healthy game and zero on a broken one. Its gate is the softlock seed sweep, which proves it never fails.'
+    },
+    'simulation.build_evaluation': {
+        generation: 217,
+        reason: 'A tool for tuning the game rather than a rule inside it; it feeds the long-run depth gate, so a broken evaluator fails a gate rather than quietly agreeing with whatever it is asked.'
+    },
+    'simulation.gameplay_replay': {
+        generation: 217,
+        reason: 'A tool for verifying the game rather than a rule inside it; its own gate is the 384-step deterministic, schema-clean run.'
+    },
+    'inventory.contract_loadout': {
+        generation: 217,
+        reason: 'Chosen at run creation and unchanged by any floor, and no census pass takes a contract - so the census could only ever report it absent. What it gates is censused: the shuffle charges it forbids each carry a row.'
+    },
+    'inventory.mutator_loadout': {
+        generation: 217,
+        reason: 'Not a run setup - the schedule hands a different mutator to every floor - but a per-floor selection rather than an event, and the census counts what accumulates within a floor. Its accountability is the mutator-effect audit, which presses all ten and requires each to move a channel a player could notice.'
+    }
 };
 
 /*
@@ -148,7 +218,7 @@ export const auditMechanicAccountability = (): MechanicAccountabilityFinding[] =
 
     for (const mechanic of gameplayInteractionGraph.mechanics) {
         const counters = MECHANIC_CENSUS_COUNTERS[mechanic.id];
-        const exemption = MECHANIC_CENSUS_EXEMPTIONS[mechanic.id] ?? blindReason(mechanic.id);
+        const exemption = MECHANIC_CENSUS_EXEMPTIONS[mechanic.id]?.reason ?? blindReason(mechanic.id);
 
         if (counters && exemption) {
             findings.push({ id: mechanic.id, problem: 'is both censused and exempt; pick one' });

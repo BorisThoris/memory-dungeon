@@ -255,8 +255,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 390215,
-      "sha256": "1c7343b2c0d94f393ddab15548d13086eeb995ff6b67fab2c76c19bba10935b2"
+      "bytes": 392595,
+      "sha256": "1b7f9fad9cd0031eabaf4338d46caecb35f12827d7d47686afd56d0726da6f05"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -748,7 +748,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "b12e7ef58b16b67f9798c33cecd4689381435f223824df596ec2d49a6ad35e0c"
+      "sha256": "18753ec317faace16a34fca6ec2b55e28a742e182ef4cb34dfd88767c42dff1d"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -4827,8 +4827,8 @@
     {
       "path": "scripts/mechanic-accountability.ts",
       "category": "script",
-      "bytes": 11399,
-      "sha256": "aa60ac062e70ed3b77c12b4618c6d2f61944e09d69214b0f9463640fae3beccc"
+      "bytes": 15402,
+      "sha256": "cf70767f5eb4c53b9a783332515e2a823c6f9876ae38f4f01831fd1e8aecb235"
     },
     {
       "path": "scripts/min-type-size.ts",
@@ -11319,8 +11319,8 @@
     {
       "path": "src/shared/mechanic-accountability.test.ts",
       "category": "test",
-      "bytes": 3996,
-      "sha256": "e5c1902ac43fdf9e1e2cd94b8d7818aa36e39509b038318969ce45a2ca009b2c"
+      "bytes": 5338,
+      "sha256": "18dd2335091358e055eb0703b27b94457a00a6112e9dabbbfbaac67768222e06"
     },
     {
       "path": "src/shared/mechanic-feedback.test.ts",
@@ -27182,7 +27182,7 @@
       "path": "src/shared/mechanic-accountability.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 74,
+      "lineCount": 96,
       "imports": [
         "file:src/shared/gameplay-interaction-graph.ts",
         "file:src/shared/system-occupancy-simulation.ts"

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
     MECHANIC_CENSUS_COUNTERS,
+    MECHANIC_CENSUS_EXEMPTION_SWEEP_GENERATION,
     MECHANIC_CENSUS_EXEMPTIONS,
     auditMechanicAccountability
 } from '../../scripts/mechanic-accountability';
@@ -22,9 +23,30 @@ describe('every mechanic answers for itself', () => {
     });
 
     it('gives every exemption a reason worth reading, not a shrug', () => {
-        for (const [id, reason] of Object.entries(MECHANIC_CENSUS_EXEMPTIONS)) {
-            expect(reason.length, id).toBeGreaterThan(40);
-            expect(reason.endsWith('.'), id).toBe(true);
+        for (const [id, exemption] of Object.entries(MECHANIC_CENSUS_EXEMPTIONS)) {
+            expect(exemption.reason.length, id).toBeGreaterThan(40);
+            expect(exemption.reason.endsWith('.'), id).toBe(true);
+        }
+    });
+
+    it('has re-read every exemption against the game as it stands', () => {
+        /*
+         * Gen 217. An exemption is an argument, and an argument goes stale without saying so:
+         * `objective.featured_streak` named the run-level census as its blocker, that census
+         * shipped at Gen 207, and the line went on excusing the mechanic for eight generations
+         * until Gen 216 read it. The summary counts exemptions, and a count cannot tell a live
+         * argument from a dead one.
+         *
+         * So every line carries the generation it was last read, and raising the sweep constant is
+         * the act of re-reading all of them. Two of the ten were describing a game that had moved
+         * when Gen 217 looked - the mutator loadout called itself a run setup while the schedule
+         * hands a different mutator to every floor, and the run summary said the census plays
+         * floors rather than runs, which stopped being true at Gen 207.
+         */
+        for (const [id, exemption] of Object.entries(MECHANIC_CENSUS_EXEMPTIONS)) {
+            expect(exemption.generation, `${id} predates the current sweep`).toBeGreaterThanOrEqual(
+                MECHANIC_CENSUS_EXEMPTION_SWEEP_GENERATION
+            );
         }
     });
 
