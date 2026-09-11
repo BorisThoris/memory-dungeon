@@ -1,4 +1,5 @@
 import type { RunState } from './contracts';
+import { pairsForFloor } from './pair-curve';
 import { runNonNegativeInteger } from './run-number-guards';
 
 /**
@@ -59,10 +60,54 @@ export const PAR_MISS_ALLOWANCE = 1;
 export const parRateForPairs = (pairs: number): number =>
     PAR_TURNS_PER_PAIR + PAR_RATE_RISE_PER_PAIR * Math.max(0, runNonNegativeInteger(pairs) - PAR_FLAT_RATE_PAIRS);
 
+/**
+ * Gen 220: the opening gets a turn, because measured against par it was the tightest part of the
+ * game and it is where the player knows least.
+ *
+ * PopCap's Jason Kapalka on Peggle, quoted in `docs/RESEARCH_NOTES_2.md`: *"We do apply a lot of
+ * extra 'luck' to players in their first half-dozen levels or so to keep them from getting
+ * frustrated while learning the ropes."* The reference product for a cascade that feels good tilts
+ * the first six levels toward the new player. This game tilted them the other way, and nothing said
+ * so, because every reading of the curve until now was in turns rather than in turns against par.
+ *
+ * Measured (`sim:curve`, ten seeds, all fifty-two floors, turns divided by par):
+ *
+ *   floors 1-6    mean 0.797   worst 0.900 (floors 2 and 6)
+ *   floors 7-52   mean 0.640   worst 0.857
+ *
+ * So the learning player was spending four fifths of their allowance while the veteran spent two
+ * thirds, and the two tightest floors in the whole curve were the second and the sixth. Gen 211 saw
+ * half of this - it fixed the rate where the pop stops keeping up with a growing board - but the
+ * small boards were left on the flat rate plus a constant, and a constant is not a rate correction.
+ *
+ * **One turn, on every board the opening deals.** Floors 1-6 are 4, 6, 7, 9, 10 and 11 pairs and
+ * floor 7 is twelve, so `pairsForFloor(PAR_OPENING_FLOORS)` separates them exactly; the strictness
+ * of that step is not assumed, `floor-par.test.ts` fails if the pair curve ever closes it. After:
+ * floors 1-6 mean 0.658, worst 0.771 - under the deep game's worst on every floor, which is the
+ * property being claimed rather than a number that looked right.
+ *
+ * **Why it stops at one turn.** A second would put floor 1's par at five turns on a four-pair
+ * board, and par above the pair count is a target a player with a perfect memory cannot miss even
+ * if the pop never fires once - at which point par has stopped measuring anything. Par stays at or
+ * under the board's own pair count on every reachable floor, floor 1 sits exactly on that line, and
+ * `floor-par.test.ts` holds it there.
+ */
+export const PAR_OPENING_FLOORS = 6;
+export const PAR_OPENING_ALLOWANCE = 1;
+
+/** The largest board the opening deals. Read from the curve so the two cannot drift apart. */
+export const parOpeningPairs = (): number => pairsForFloor(PAR_OPENING_FLOORS);
+
+export const parOpeningAllowanceForPairs = (pairs: number): number =>
+    runNonNegativeInteger(pairs) <= parOpeningPairs() ? PAR_OPENING_ALLOWANCE : 0;
+
 export const parTurnsForFloor = (pairs: number): number => {
     const count = runNonNegativeInteger(pairs);
     if (count === 0) return 1;
-    return Math.max(1, Math.ceil(count * parRateForPairs(count)) + PAR_MISS_ALLOWANCE);
+    return Math.max(
+        1,
+        Math.ceil(count * parRateForPairs(count)) + PAR_MISS_ALLOWANCE + parOpeningAllowanceForPairs(count)
+    );
 };
 
 /** Turns the run has resolved on this floor, read from its own ledger. */

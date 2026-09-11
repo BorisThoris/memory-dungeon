@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2440,
-    "codeFileCount": 872,
-    "exportedSymbolCount": 2624,
+    "trackedFileCount": 2441,
+    "codeFileCount": 873,
+    "exportedSymbolCount": 2628,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6673
+    "relationshipCount": 6682
   },
   "inventory": [
     {
@@ -255,8 +255,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 397421,
-      "sha256": "bd1904e5e8066e80025b16f7774ac8e5adcefd4c0a00b2a35b43a3f3307f9bca"
+      "bytes": 400509,
+      "sha256": "b12b04a8c8c9656616cb796b986babc477ce32dee1e181932594ca2c6f4a7b0a"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -748,7 +748,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "77e3f4a739635b7db356d228b3bdf52414a9ea037fb43635c2c9770ab7677b13"
+      "sha256": "a0777dbb6c33e1fa0e5d4c44332ef40656522c05069feaa5a5c5a0925ab6482a"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2332,7 +2332,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "eb09e2f7ead030bc0c22e4f3b38974c138a94f3bb7eb8feb52b7e0b0f2c2993e"
+      "sha256": "3315f7386361ae6c1d892833f08353bcd460e673eb2880ae54ecd02eb2727de2"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4923,8 +4923,8 @@
     {
       "path": "scripts/sim-difficulty-curve.ts",
       "category": "script",
-      "bytes": 10222,
-      "sha256": "e27149c0c8b21fc44e659a50a806eb50075ab8eb4e8325d02974ffefb9838d16"
+      "bytes": 13205,
+      "sha256": "2e9e3df13f5ec184b231f1871afd44ecfcb6fe8610489fff80c669d480fb223b"
     },
     {
       "path": "scripts/sim-endless.ts",
@@ -10821,8 +10821,8 @@
     {
       "path": "src/shared/difficulty-curve-simulation.test.ts",
       "category": "test",
-      "bytes": 3486,
-      "sha256": "bb0008546710d93505a4f25658f9d0cc7f124d5ef84d6d5e5ee143fb55695f8b"
+      "bytes": 5515,
+      "sha256": "e03cebf9281b5df2304ffa77b475b378add16153af0dc03594c2b0bc5543ac3a"
     },
     {
       "path": "src/shared/difficulty-profile.test.ts",
@@ -10945,10 +10945,16 @@
       "sha256": "6c51415ce26bb34883e2ccf15b81fecdc7ee097de86a6d9445069af72d5303ff"
     },
     {
+      "path": "src/shared/floor-par.test.ts",
+      "category": "test",
+      "bytes": 3880,
+      "sha256": "00390dc98796d5624480283c7eeb8e6001c6b8fd86bb118bb56e006c3b7f6e96"
+    },
+    {
       "path": "src/shared/floor-par.ts",
       "category": "source",
-      "bytes": 5419,
-      "sha256": "d34056832cd15649b2c099226c6cf8ca3389e0609adac9c281f68cf0f2f295b6"
+      "bytes": 8073,
+      "sha256": "1085649f720993946a7942e28edb948c52d8b8571d144cceeb2ec3ac49de3ad8"
     },
     {
       "path": "src/shared/floor-schedule-reachability.test.ts",
@@ -11013,8 +11019,8 @@
     {
       "path": "src/shared/game.test.ts",
       "category": "test",
-      "bytes": 66848,
-      "sha256": "4f8682bda4d2225a604c4ac883b83d100d4ef26a1ad3df2e0dd5f0a9323d3bcf"
+      "bytes": 67513,
+      "sha256": "5b4af02eeea22104ad8ab6543e72ef35a811e09c3f02d87bd37ec97c86c3bc80"
     },
     {
       "path": "src/shared/game.ts",
@@ -12417,8 +12423,8 @@
     {
       "path": "src/shared/turn-mismatch-rules.test.ts",
       "category": "test",
-      "bytes": 12330,
-      "sha256": "bfa76164d536b45c9af904e52d05b53440de11cbb522ff7eb1473fae81df7a77"
+      "bytes": 12412,
+      "sha256": "16cc0177f2ea0f1217d0874272d315f54e6de667d6d756e331d9532cac3d3c87"
     },
     {
       "path": "src/shared/turn-mismatch-rules.ts",
@@ -25419,7 +25425,7 @@
       "path": "src/shared/difficulty-curve-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 71,
+      "lineCount": 110,
       "imports": [
         "file:src/shared/floor-par.ts",
         "file:src/shared/pair-curve.ts"
@@ -25812,21 +25818,39 @@
       ]
     },
     {
+      "id": "file:src/shared/floor-par.test.ts",
+      "path": "src/shared/floor-par.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 76,
+      "imports": [
+        "file:src/shared/floor-par.ts",
+        "file:src/shared/pair-curve.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/shared/floor-par.ts",
       "path": "src/shared/floor-par.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 95,
+      "lineCount": 140,
       "imports": [
         "file:src/shared/contracts.ts",
+        "file:src/shared/pair-curve.ts",
         "file:src/shared/run-number-guards.ts"
       ],
       "exports": [
         "symbol:src/shared/floor-par.ts#floorHitTurnCeiling",
         "symbol:src/shared/floor-par.ts#PAR_FLAT_RATE_PAIRS",
         "symbol:src/shared/floor-par.ts#PAR_MISS_ALLOWANCE",
+        "symbol:src/shared/floor-par.ts#PAR_OPENING_ALLOWANCE",
+        "symbol:src/shared/floor-par.ts#PAR_OPENING_FLOORS",
         "symbol:src/shared/floor-par.ts#PAR_RATE_RISE_PER_PAIR",
         "symbol:src/shared/floor-par.ts#PAR_TURNS_PER_PAIR",
+        "symbol:src/shared/floor-par.ts#parOpeningAllowanceForPairs",
+        "symbol:src/shared/floor-par.ts#parOpeningPairs",
         "symbol:src/shared/floor-par.ts#parRateForPairs",
         "symbol:src/shared/floor-par.ts#parTurnsForFloor",
         "symbol:src/shared/floor-par.ts#parTurnsForRun",
@@ -25840,6 +25864,7 @@
         "file:src/shared/achievements.test.ts",
         "file:src/shared/bad-floor-is-quiet.test.ts",
         "file:src/shared/difficulty-curve-simulation.test.ts",
+        "file:src/shared/floor-par.test.ts",
         "file:src/shared/game.test.ts",
         "file:src/shared/turn-mismatch-rules.test.ts"
       ]
@@ -26082,7 +26107,7 @@
       "path": "src/shared/game.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1694,
+      "lineCount": 1702,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-powers.ts",
@@ -27736,6 +27761,7 @@
         "file:src/shared/authored-floors.test.ts",
         "file:src/shared/board-build-rules.test.ts",
         "file:src/shared/difficulty-curve-simulation.test.ts",
+        "file:src/shared/floor-par.test.ts",
         "file:src/shared/game.test.ts",
         "file:src/shared/pair-curve.test.ts",
         "file:src/shared/scoring-rules.test.ts",
@@ -30734,7 +30760,7 @@
       "path": "src/shared/turn-mismatch-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 326,
+      "lineCount": 327,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-par.ts",
@@ -44082,104 +44108,136 @@
       "name": "floorHitTurnCeiling",
       "kind": "value",
       "file": "src/shared/floor-par.ts",
-      "line": 93,
-      "endLine": 94
+      "line": 138,
+      "endLine": 139
     },
     {
       "id": "symbol:src/shared/floor-par.ts#PAR_FLAT_RATE_PAIRS",
       "name": "PAR_FLAT_RATE_PAIRS",
       "kind": "value",
       "file": "src/shared/floor-par.ts",
-      "line": 54,
-      "endLine": 54
+      "line": 55,
+      "endLine": 55
     },
     {
       "id": "symbol:src/shared/floor-par.ts#PAR_MISS_ALLOWANCE",
       "name": "PAR_MISS_ALLOWANCE",
       "kind": "value",
       "file": "src/shared/floor-par.ts",
-      "line": 56,
-      "endLine": 56
+      "line": 57,
+      "endLine": 57
+    },
+    {
+      "id": "symbol:src/shared/floor-par.ts#PAR_OPENING_ALLOWANCE",
+      "name": "PAR_OPENING_ALLOWANCE",
+      "kind": "value",
+      "file": "src/shared/floor-par.ts",
+      "line": 96,
+      "endLine": 96
+    },
+    {
+      "id": "symbol:src/shared/floor-par.ts#PAR_OPENING_FLOORS",
+      "name": "PAR_OPENING_FLOORS",
+      "kind": "value",
+      "file": "src/shared/floor-par.ts",
+      "line": 95,
+      "endLine": 95
     },
     {
       "id": "symbol:src/shared/floor-par.ts#PAR_RATE_RISE_PER_PAIR",
       "name": "PAR_RATE_RISE_PER_PAIR",
       "kind": "value",
       "file": "src/shared/floor-par.ts",
-      "line": 55,
-      "endLine": 55
+      "line": 56,
+      "endLine": 56
     },
     {
       "id": "symbol:src/shared/floor-par.ts#PAR_TURNS_PER_PAIR",
       "name": "PAR_TURNS_PER_PAIR",
       "kind": "value",
       "file": "src/shared/floor-par.ts",
-      "line": 25,
-      "endLine": 25
+      "line": 26,
+      "endLine": 26
+    },
+    {
+      "id": "symbol:src/shared/floor-par.ts#parOpeningAllowanceForPairs",
+      "name": "parOpeningAllowanceForPairs",
+      "kind": "value",
+      "file": "src/shared/floor-par.ts",
+      "line": 101,
+      "endLine": 102
+    },
+    {
+      "id": "symbol:src/shared/floor-par.ts#parOpeningPairs",
+      "name": "parOpeningPairs",
+      "kind": "value",
+      "file": "src/shared/floor-par.ts",
+      "line": 99,
+      "endLine": 99
     },
     {
       "id": "symbol:src/shared/floor-par.ts#parRateForPairs",
       "name": "parRateForPairs",
       "kind": "value",
       "file": "src/shared/floor-par.ts",
-      "line": 59,
-      "endLine": 60
+      "line": 60,
+      "endLine": 61
     },
     {
       "id": "symbol:src/shared/floor-par.ts#parTurnsForFloor",
       "name": "parTurnsForFloor",
       "kind": "value",
       "file": "src/shared/floor-par.ts",
-      "line": 62,
-      "endLine": 66
+      "line": 104,
+      "endLine": 111
     },
     {
       "id": "symbol:src/shared/floor-par.ts#parTurnsForRun",
       "name": "parTurnsForRun",
       "kind": "value",
       "file": "src/shared/floor-par.ts",
-      "line": 72,
-      "endLine": 73
+      "line": 117,
+      "endLine": 118
     },
     {
       "id": "symbol:src/shared/floor-par.ts#TURN_CEILING_PAR_MULTIPLIER",
       "name": "TURN_CEILING_PAR_MULTIPLIER",
       "kind": "value",
       "file": "src/shared/floor-par.ts",
-      "line": 81,
-      "endLine": 81
+      "line": 126,
+      "endLine": 126
     },
     {
       "id": "symbol:src/shared/floor-par.ts#turnCeilingForFloor",
       "name": "turnCeilingForFloor",
       "kind": "value",
       "file": "src/shared/floor-par.ts",
-      "line": 83,
-      "endLine": 83
+      "line": 128,
+      "endLine": 128
     },
     {
       "id": "symbol:src/shared/floor-par.ts#turnCeilingForRun",
       "name": "turnCeilingForRun",
       "kind": "value",
       "file": "src/shared/floor-par.ts",
-      "line": 85,
-      "endLine": 86
+      "line": 130,
+      "endLine": 131
     },
     {
       "id": "symbol:src/shared/floor-par.ts#turnsTakenThisFloor",
       "name": "turnsTakenThisFloor",
       "kind": "value",
       "file": "src/shared/floor-par.ts",
-      "line": 69,
-      "endLine": 70
+      "line": 114,
+      "endLine": 115
     },
     {
       "id": "symbol:src/shared/floor-par.ts#turnsToCeiling",
       "name": "turnsToCeiling",
       "kind": "value",
       "file": "src/shared/floor-par.ts",
-      "line": 89,
-      "endLine": 90
+      "line": 134,
+      "endLine": 135
     },
     {
       "id": "symbol:src/shared/focusDimmedTileIds.ts#computeFocusDimmedTileIds",
@@ -65324,6 +65382,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/floor-par.ts->symbol:src/shared/floor-par.ts#PAR_OPENING_ALLOWANCE",
+      "source": "file:src/shared/floor-par.ts",
+      "target": "symbol:src/shared/floor-par.ts#PAR_OPENING_ALLOWANCE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/floor-par.ts->symbol:src/shared/floor-par.ts#PAR_OPENING_FLOORS",
+      "source": "file:src/shared/floor-par.ts",
+      "target": "symbol:src/shared/floor-par.ts#PAR_OPENING_FLOORS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/floor-par.ts->symbol:src/shared/floor-par.ts#PAR_RATE_RISE_PER_PAIR",
       "source": "file:src/shared/floor-par.ts",
       "target": "symbol:src/shared/floor-par.ts#PAR_RATE_RISE_PER_PAIR",
@@ -65333,6 +65403,18 @@
       "id": "exports:src/shared/floor-par.ts->symbol:src/shared/floor-par.ts#PAR_TURNS_PER_PAIR",
       "source": "file:src/shared/floor-par.ts",
       "target": "symbol:src/shared/floor-par.ts#PAR_TURNS_PER_PAIR",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/floor-par.ts->symbol:src/shared/floor-par.ts#parOpeningAllowanceForPairs",
+      "source": "file:src/shared/floor-par.ts",
+      "target": "symbol:src/shared/floor-par.ts#parOpeningAllowanceForPairs",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/floor-par.ts->symbol:src/shared/floor-par.ts#parOpeningPairs",
+      "source": "file:src/shared/floor-par.ts",
+      "target": "symbol:src/shared/floor-par.ts#parOpeningPairs",
       "kind": "exports"
     },
     {
@@ -82192,9 +82274,27 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/floor-par.test.ts->src/shared/floor-par.ts",
+      "source": "file:src/shared/floor-par.test.ts",
+      "target": "file:src/shared/floor-par.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/floor-par.test.ts->src/shared/pair-curve.ts",
+      "source": "file:src/shared/floor-par.test.ts",
+      "target": "file:src/shared/pair-curve.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/floor-par.ts->src/shared/contracts.ts",
       "source": "file:src/shared/floor-par.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/floor-par.ts->src/shared/pair-curve.ts",
+      "source": "file:src/shared/floor-par.ts",
+      "target": "file:src/shared/pair-curve.ts",
       "kind": "imports"
     },
     {
@@ -91911,6 +92011,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/floor-par.ts->file:src/shared/floor-par.test.ts",
+      "source": "file:src/shared/floor-par.ts",
+      "target": "file:src/shared/floor-par.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/floor-par.ts->file:src/shared/game.test.ts",
       "source": "file:src/shared/floor-par.ts",
       "target": "file:src/shared/game.test.ts",
@@ -92670,6 +92776,12 @@
       "id": "tested_by:src/shared/pair-curve.ts->file:src/shared/difficulty-curve-simulation.test.ts",
       "source": "file:src/shared/pair-curve.ts",
       "target": "file:src/shared/difficulty-curve-simulation.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/pair-curve.ts->file:src/shared/floor-par.test.ts",
+      "source": "file:src/shared/pair-curve.ts",
+      "target": "file:src/shared/floor-par.test.ts",
       "kind": "tested_by"
     },
     {

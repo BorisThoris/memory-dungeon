@@ -24,6 +24,14 @@
  * One cause for both ends: the pop's share of a board is a hill, 0.50 at four pairs, 0.75 at
  * fourteen, 0.48 by twenty-two, and par was a flat rate calibrated to the peak (`floor-par.ts`).
  *
+ * **Gen 220 added the reading that found the last one: turns against par, not turns.** In turns the
+ * opening is the shortest part of the game and looks generous. Divided by par it was the tightest -
+ * floors 1-6 spent a mean 0.797 of their allowance while floors 7-52 spent 0.640, and the two
+ * tightest floors in the whole curve were the second and the sixth. That is the reference product's
+ * advice inverted (`docs/RESEARCH_NOTES_2.md`, Peggle's "first half-dozen levels"), and no reading
+ * here could see it, because every one of them was in turns. `PAR_OPENING_FLOORS` is the fix and
+ * the two opening bands below are what keeps it.
+ *
  * The bands below are drawn around what was measured, not around what would be nice. They exist so
  * that a change to the pop reach, the pair curve or the par cannot quietly flatten or spike a floor
  * again - the thing this repository has done twice (Gen 191, Gen 148).
@@ -138,9 +146,18 @@ export const simulateDifficultyCurve = ({
 };
 
 /**
- * The bands, drawn around the measurement (Gen 210, widened for the deep game at Gen 211). Every
- * floor has to be beatable under its par, no floor may end instantly or run to a slog, and the pop
- * must keep taking a real share of every board - the ways this curve has actually gone wrong.
+ * How much of its allowance a floor costs a clean player: turns divided by par. Turns alone say a
+ * floor is short; this says whether it is generous, and the two disagree - floor 3 is the third
+ * shortest floor in the game and one of the roomiest, floor 6 is longer and among the tightest.
+ */
+export const curveParRatio = (row: Pick<CurveFloorRow, 'turns' | 'par'>): number =>
+    row.par <= 0 ? 0 : row.turns / row.par;
+
+/**
+ * The bands, drawn around the measurement (Gen 210, widened for the deep game at Gen 211, given the
+ * opening's tilt at Gen 220). Every floor has to be beatable under its par, no floor may end
+ * instantly or run to a slog, the pop must keep taking a real share of every board, and the opening
+ * must be the forgiving end rather than the tight one - the ways this curve has actually gone wrong.
  */
 export const CURVE_BANDS = {
     /** No floor may run long. Measured, the deepest floors sit at 14-16 turns on a 48-tile board. */
@@ -150,7 +167,18 @@ export const CURVE_BANDS = {
     /** Every floor stays under its par for a clean player, which is what par is for (Gen 211). */
     parHeadroom: 0,
     /** A pop that stops taking pairs is Gen 148 returning; measured 2.0 on floor 1, 9.8 by floor 12. */
-    minPoppedPairs: 1.5
+    minPoppedPairs: 1.5,
+    /**
+     * The span the reference product tilts toward a new player (`docs/RESEARCH_NOTES_2.md`, Peggle's
+     * "first half-dozen levels"), and the span `PAR_OPENING_FLOORS` gives a turn to.
+     */
+    openingFloors: 6,
+    /**
+     * No opening floor may cost a clean player more of its allowance than this. Measured after the
+     * tilt: worst 0.771 on floor 6, mean 0.658. Before it, floors 2 and 6 sat at 0.900 - which is
+     * what this band exists to catch, and what it does catch with the tilt taken out.
+     */
+    maxOpeningParRatio: 0.8
 } as const;
 
 export const judgeDifficultyCurve = (rows: readonly CurveFloorRow[]): string[] => {
@@ -169,17 +197,40 @@ export const judgeDifficultyCurve = (rows: readonly CurveFloorRow[]): string[] =
             issues.push(`floor ${row.floor} pops ${row.poppedPairs.toFixed(1)} pairs, under ${CURVE_BANDS.minPoppedPairs}`);
         }
     }
+    const opening = rows.filter((row) => row.floor <= CURVE_BANDS.openingFloors);
+    const rest = rows.filter((row) => row.floor > CURVE_BANDS.openingFloors);
+    for (const row of opening) {
+        const ratio = curveParRatio(row);
+        if (ratio > CURVE_BANDS.maxOpeningParRatio) {
+            issues.push(
+                `floor ${row.floor} spends ${ratio.toFixed(3)} of its par, over the opening's ` +
+                    `${CURVE_BANDS.maxOpeningParRatio}`
+            );
+        }
+    }
+    if (opening.length > 0 && rest.length > 0) {
+        const worstOpening = opening.reduce((worst, row) => (curveParRatio(row) > curveParRatio(worst) ? row : worst));
+        const worstRest = rest.reduce((worst, row) => (curveParRatio(row) > curveParRatio(worst) ? row : worst));
+        if (curveParRatio(worstOpening) > curveParRatio(worstRest)) {
+            issues.push(
+                `the opening is the tight end: floor ${worstOpening.floor} spends ` +
+                    `${curveParRatio(worstOpening).toFixed(3)} of its par against floor ${worstRest.floor}'s ` +
+                    `${curveParRatio(worstRest).toFixed(3)} deeper in`
+            );
+        }
+    }
     return issues;
 };
 
 const main = (): void => {
     const measured = simulateDifficultyCurve();
     const rows = measured.filter((row) => CURVE_REPORT_FLOORS.includes(row.floor));
-    process.stdout.write('floor  pairs  suits  turns   par  pairs popped\n');
+    process.stdout.write('floor  pairs  suits  turns   par  of par  pairs popped\n');
     for (const row of rows) {
         process.stdout.write(
             `  ${String(row.floor).padStart(2)}   ${String(row.pairs).padStart(4)}   ${row.suits.toFixed(1)}  ` +
-                `${row.turns.toFixed(1).padStart(5)} ${row.par.toFixed(1).padStart(5)}  ${row.poppedPairs.toFixed(1).padStart(6)}\n`
+                `${row.turns.toFixed(1).padStart(5)} ${row.par.toFixed(1).padStart(5)}   ` +
+                `${curveParRatio(row).toFixed(3)}  ${row.poppedPairs.toFixed(1).padStart(6)}\n`
         );
     }
     const issues = judgeDifficultyCurve(measured);

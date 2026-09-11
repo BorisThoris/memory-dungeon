@@ -260,10 +260,11 @@ describe('the turn ceiling', () => {
 
     it('is three times par', () => {
         expect(TURN_CEILING_PAR_MULTIPLIER).toBe(3);
-        // Gen 210 gave floors at or below thirteen pairs a turn back, so a two-pair fixture's par
-        // is 2 rather than 1 and its ceiling 6 rather than 3. The rule is unchanged: three times.
-        expect(parTurnsForFloor(2)).toBe(2);
-        expect(ceiling).toBe(6);
+        // Gen 210 gave every floor a miss allowance and Gen 220 gave the opening's board sizes a
+        // second turn, so a two-pair fixture's par is 3 rather than the bare 1 and its ceiling 9.
+        // The rule itself is unchanged through both: three times whatever par is.
+        expect(parTurnsForFloor(2)).toBe(3);
+        expect(ceiling).toBe(9);
         expect(turnCeilingForFloor(14)).toBe(parTurnsForFloor(14) * 3);
     });
 
