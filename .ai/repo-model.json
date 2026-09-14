@@ -9,7 +9,7 @@
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6784
+    "relationshipCount": 6785
   },
   "inventory": [
     {
@@ -8085,14 +8085,14 @@
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "category": "test",
-      "bytes": 12317,
-      "sha256": "a692ba106052b465114a9049985ef3e009f289aee4fa299cdd5267c1c6762dc6"
+      "bytes": 13030,
+      "sha256": "ae8645c8fdffdb3d8b9493f00741f29c0fdee04412b001d1eded570388c44747"
     },
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 21769,
-      "sha256": "4d64482e21dcd90f380afdb098603991ef76de5596c9543f13e77867ad1f57c4"
+      "bytes": 23450,
+      "sha256": "1174a2b6e84fc0800bbfb3221e4f23dedc97c6ee2500ec17eda6d592cdc48a6c"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -9429,8 +9429,8 @@
     {
       "path": "src/renderer/copy/gameOverScreen.ts",
       "category": "source",
-      "bytes": 6459,
-      "sha256": "96aa7f33d038c4b19b94163ed8c3a0c11c14ee3dee8bfd2a30c45436ac7ba162"
+      "bytes": 6685,
+      "sha256": "746e2990df6839906b6938705ad2e33475799d9e4c982a0c5d8e430d53f78989"
     },
     {
       "path": "src/renderer/copy/gameplayEventAnnouncement.test.ts",
@@ -17353,7 +17353,7 @@
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 265,
+      "lineCount": 280,
       "imports": [
         "file:src/renderer/components/GameOverScreen.tsx",
         "file:src/shared/contracts.ts",
@@ -17369,7 +17369,7 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 434,
+      "lineCount": 464,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -17390,6 +17390,7 @@
         "file:src/shared/game-over-next-run.ts",
         "file:src/shared/pass-and-play-rules.ts",
         "file:src/shared/personal-best.ts",
+        "file:src/shared/run-share-key.ts",
         "file:src/shared/run-share-text.ts"
       ],
       "exports": [
@@ -21218,7 +21219,7 @@
       "path": "src/renderer/copy/gameOverScreen.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 131,
+      "lineCount": 134,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -34218,8 +34219,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 433,
-      "endLine": 433
+      "line": 463,
+      "endLine": 463
     },
     {
       "id": "symbol:src/renderer/components/gameplayRenderProfile.ts#GAMEPLAY_RENDER_PROFILE",
@@ -38258,8 +38259,8 @@
       "name": "achievementsNote",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 111,
-      "endLine": 130
+      "line": 114,
+      "endLine": 133
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy",
@@ -38267,15 +38268,15 @@
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
       "line": 6,
-      "endLine": 97
+      "endLine": 100
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#runEndReasonLine",
       "name": "runEndReasonLine",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 103,
-      "endLine": 104
+      "line": 106,
+      "endLine": 107
     },
     {
       "id": "symbol:src/renderer/copy/gameplayEventAnnouncement.ts#buildGameplayEventAnnouncement",
@@ -75545,6 +75546,12 @@
       "id": "imports:src/renderer/components/GameOverScreen.tsx->src/shared/personal-best.ts",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "file:src/shared/personal-best.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameOverScreen.tsx->src/shared/run-share-key.ts",
+      "source": "file:src/renderer/components/GameOverScreen.tsx",
+      "target": "file:src/shared/run-share-key.ts",
       "kind": "imports"
     },
     {

@@ -27,6 +27,9 @@ export const gameOverScreenCopy = {
     actionHeading: 'Continue the archive',
     playAgainLabel: 'Play Again',
     playAgainAriaLabel: 'Play Again - start a new run after this expedition',
+    /* Thesis §56.3: the same board again. Nothing granted, the record stands; you know it now. */
+    rematchLabel: 'Rematch this board',
+    rematchAriaLabel: 'Rematch - play this exact board again, same layout and rules',
     mainMenuLabel: 'Main Menu',
     mainMenuAriaLabel: 'Return to the main menu',
     /**

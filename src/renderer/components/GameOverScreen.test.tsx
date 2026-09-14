@@ -26,13 +26,17 @@ vi.mock('zustand/react/shallow', () => ({
     useShallow: <T,>(fn: T) => fn
 }));
 /** The best score as it stood when the run started; the personal-best line is read off this. */
-const gameOverStoreMocks = vi.hoisted(() => ({ bestScoreAtRunStart: null as number | null }));
+const gameOverStoreMocks = vi.hoisted(() => ({
+    bestScoreAtRunStart: null as number | null,
+    startSharedRun: vi.fn()
+}));
 
 vi.mock('../store/useAppStore', () => ({
     useAppStore: (selector: (s: never) => unknown) =>
         selector({
             goToMenu: vi.fn(),
             restartRun: vi.fn(),
+            startSharedRun: gameOverStoreMocks.startSharedRun,
             runStartSaveData:
                 gameOverStoreMocks.bestScoreAtRunStart === null
                     ? null
@@ -61,6 +65,17 @@ describe('the record set', () => {
         expect(screen.getByText('Largest Break')).toBeInTheDocument();
         expect(screen.getByText('5 pairs')).toBeInTheDocument();
         expect(screen.queryByText('Floors Cleared')).not.toBeInTheDocument();
+    });
+
+    it('offers a rematch of the exact board, through the same key a shared run uses', async () => {
+        // Thesis §56.3. The seed and rules ride the share key, so a rematch and a pasted key can
+        // never start different boards.
+        const run = gameOverRunFixture();
+        render(<GameOverScreen run={run} />);
+        const rematch = screen.getByTestId('game-over-rematch');
+        expect(rematch).toHaveTextContent('Rematch this board');
+        rematch.click();
+        expect(gameOverStoreMocks.startSharedRun).toHaveBeenCalledWith(`md1:classic:${run.runRulesVersion}:${run.runSeed}`);
     });
 
     it('says so plainly when nothing broke', () => {

@@ -11,6 +11,7 @@ import { playGameOverOpenSfx, playUiBackSfx, playUiCopySfx, resumeUiSfxContext, 
 import { achievementsNote, gameOverScreenCopy, runEndReasonLine } from '../copy/gameOverScreen';
 import { personalBestResult } from '../../shared/personal-best';
 import { buildRunShareText } from '../../shared/run-share-text';
+import { describeRunShareKey, encodeRunShareKey } from '../../shared/run-share-key';
 import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
 import { useViewportSize } from '../hooks/useViewportSize';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
@@ -62,10 +63,11 @@ const runModeHeading = (summary: NonNullable<RunState['lastRunSummary']>): strin
 const GameOverScreen = ({ run }: GameOverScreenProps) => {
     const shellRef = useRef<HTMLElement | null>(null);
     const { height, width } = useViewportSize();
-    const { goToMenu, restartRun, runStartSaveData, saveData, settings } = useAppStore(
+    const { goToMenu, restartRun, runStartSaveData, saveData, settings, startSharedRun } = useAppStore(
         useShallow((state) => ({
             goToMenu: state.goToMenu,
             restartRun: state.restartRun,
+            startSharedRun: state.startSharedRun,
             runStartSaveData: state.runStartSaveData,
             saveData: state.saveData,
             settings: state.settings
@@ -100,6 +102,21 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
         resumeUiSfxContext();
         playUiCopySfx(uiGain);
         copyToClipboard(runShare.text);
+    };
+    /*
+     * The rematch (thesis §56.3): the same board again, seed and rules and all. "I know this
+     * board now" is the cheapest reason to go again, and it is the honest one: nothing is granted,
+     * the record stands, the player just gets to prove they learned it. It rides the share key,
+     * which already reproduces a run exactly, so a rematch and a shared run can never disagree.
+     */
+    const rematch = isPassAndPlayRun(run.passAndPlay) ? null : describeRunShareKey(run);
+    const rematchKey = rematch && 'key' in rematch ? encodeRunShareKey(rematch.key) : null;
+    const startRematch = (): void => {
+        if (rematchKey === null) {
+            return;
+        }
+        resumeUiSfxContext();
+        startSharedRun(rematchKey);
     };
     const contentLock = getActiveContentLock();
     const steamStoreUrl = getSteamStorePageUrl();
@@ -337,6 +354,19 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                 >
                                     {gameOverScreenCopy.playAgainLabel}
                                 </UiButton>
+                                {rematchKey !== null ? (
+                                    <UiButton
+                                        fullWidth
+                                        aria-label={gameOverScreenCopy.rematchAriaLabel}
+                                        className={styles.desktopActionButton}
+                                        data-testid="game-over-rematch"
+                                        onClick={startRematch}
+                                        size="lg"
+                                        variant="secondary"
+                                    >
+                                        {gameOverScreenCopy.rematchLabel}
+                                    </UiButton>
+                                ) : null}
                                 <UiButton
                                     fullWidth
                                     aria-label={gameOverScreenCopy.mainMenuAriaLabel}
