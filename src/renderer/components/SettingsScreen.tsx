@@ -433,11 +433,10 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                         {activeCategory === 'controls' && showSubsection('input') ? (
                                             <SettingsSection title="Input">
                                                 <p className={styles.headerCopy}>
-                                                    Primary control is pointer or touch: tap a hidden tile to flip it. When
-                                                    only one tile is face-up, the next tap attempts a match. Board powers
-                                                    use the left rail. Press P to pause or resume; pause freezes timers.
-                                                    Settings opened from a run opens the modal shell without ending the
-                                                    descent.
+                                                    Click or tap a hidden card to flip it. With one card face-up, the next
+                                                    flip attempts a match. The board powers sit on the dock under the
+                                                    board. Press P to pause or resume; pausing freezes the timers. Opening
+                                                    Settings during a run does not end the run.
                                                 </p>
                                             </SettingsSection>
                                         ) : null}

@@ -97,7 +97,8 @@ export const getProfileSummaryRows = (save: SaveData): ProfileSummaryRow[] => {
     return [
         { id: 'profile_level', label: 'Profile level', value: String(summary.profileLevel), source: 'Honor marks' },
         { id: 'honor_marks', label: 'Honor marks', value: String(summary.honorMarks), source: 'Achievements/dailies/mastery' },
-        { id: 'best_score', label: 'Best score', value: runNonNegativeInteger(save.bestScore).toLocaleString('en-US'), source: 'SaveData.bestScore' },
+        /* The source line is shown to the player under the value; it used to print the save field's name. */
+        { id: 'best_score', label: 'Best score', value: runNonNegativeInteger(save.bestScore).toLocaleString('en-US'), source: 'Highest single-run score' },
         {
             id: 'cosmetics',
             label: 'Title',

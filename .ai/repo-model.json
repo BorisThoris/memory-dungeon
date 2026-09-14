@@ -8373,8 +8373,8 @@
     {
       "path": "src/renderer/components/settingsNavigationModel.ts",
       "category": "source",
-      "bytes": 1986,
-      "sha256": "749aace7fd6f830fcccecf40d6ef3197abfbb3ee0b188f398059afe863642682"
+      "bytes": 2008,
+      "sha256": "461acd4603f456467450d44f8403798406870cb3528209c868feb4730fd3eaf1"
     },
     {
       "path": "src/renderer/components/SettingsScreen.module.css",
@@ -8391,8 +8391,8 @@
     {
       "path": "src/renderer/components/SettingsScreen.tsx",
       "category": "source",
-      "bytes": 46740,
-      "sha256": "f2a27773fdca7d5db68fc6c64a85050aa573a150b4ccfa5fb9f583b7319143a0"
+      "bytes": 46652,
+      "sha256": "5676f2b010278e9beb73bccac983628c99db2d465229b502dbbe9e64661593bc"
     },
     {
       "path": "src/renderer/components/shuffleFlipAnimation.test.ts",
@@ -11895,8 +11895,8 @@
     {
       "path": "src/shared/profile-summary.ts",
       "category": "source",
-      "bytes": 7296,
-      "sha256": "56729479aef8f636d9121529084a6c60c05184418e857670630e4c850295adab"
+      "bytes": 7412,
+      "sha256": "5cd9573858699ff10aa82775c4b64185cd6c1fc96a74a382e196b566b8d3ea08"
     },
     {
       "path": "src/shared/qa/regPhase5Hardening.test.ts",
@@ -18125,7 +18125,7 @@
       "path": "src/renderer/components/SettingsScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 742,
+      "lineCount": 741,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -28644,7 +28644,7 @@
       "path": "src/shared/profile-summary.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 163,
+      "lineCount": 164,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/cosmetics.ts",
@@ -34626,8 +34626,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/SettingsScreen.tsx",
-      "line": 741,
-      "endLine": 741
+      "line": 740,
+      "endLine": 740
     },
     {
       "id": "symbol:src/renderer/components/shuffleFlipAnimation.ts#computeBoardEntranceMotionBudgetMs",
@@ -48683,15 +48683,15 @@
       "kind": "value",
       "file": "src/shared/profile-summary.ts",
       "line": 90,
-      "endLine": 123
+      "endLine": 124
     },
     {
       "id": "symbol:src/shared/profile-summary.ts#getSaveTrustRows",
       "name": "getSaveTrustRows",
       "kind": "value",
       "file": "src/shared/profile-summary.ts",
-      "line": 125,
-      "endLine": 162
+      "line": 126,
+      "endLine": 163
     },
     {
       "id": "symbol:src/shared/profile-summary.ts#ProfileSaveShellSummary",
