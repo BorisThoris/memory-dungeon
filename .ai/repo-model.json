@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2478,
+    "trackedFileCount": 2480,
     "codeFileCount": 883,
     "exportedSymbolCount": 2672,
     "contentItemCount": 10,
@@ -37,10 +37,22 @@
       "sha256": "31544ea928200e1818e7288a2c0ee3cca23f17d466d7538f1f29a4e94833abdb"
     },
     {
+      "path": ".githooks/pre-push",
+      "category": "other",
+      "bytes": 1097,
+      "sha256": "3599e12b54a8f09768191764421d3fac13610be24d7f0c8e1d1f76e7877c348b"
+    },
+    {
       "path": ".github/pull_request_template.md",
       "category": "other",
       "bytes": 338,
       "sha256": "0e47ab278b7a1059d0917f7e784fdabc50ebe4607f210c6a8c44d5010d50b15c"
+    },
+    {
+      "path": ".github/workflows/project-meta.yml",
+      "category": "configuration",
+      "bytes": 652,
+      "sha256": "aae4d8f2ddaab19ca7f006c84d3f67641fde273830415f17551de7af1a63f99f"
     },
     {
       "path": ".gitignore",
@@ -4215,8 +4227,8 @@
     {
       "path": "project.meta.json",
       "category": "configuration",
-      "bytes": 11602,
-      "sha256": "2d3e0bec5079777983898d0d3505f9ea1acffb1744831bf2535b3fcde4145248"
+      "bytes": 11592,
+      "sha256": "41de7c44a8e387aebfa4884f4d6f6d56c5b4741696d46117478da968adfc9955"
     },
     {
       "path": "public/apple-touch-icon.png",
@@ -5031,8 +5043,8 @@
     {
       "path": "scripts/refresh-project-meta.mjs",
       "category": "script",
-      "bytes": 2185,
-      "sha256": "2e4dffb109c8bcd30abd4dcda40928d46e618402e23a8769fffdff82e1c68b0b"
+      "bytes": 2821,
+      "sha256": "07676222dedbdcc64a464779f1cd4ac7243031cae6e9bdf9e9f6895a16f4214e"
     },
     {
       "path": "scripts/release-checklist.ts",
