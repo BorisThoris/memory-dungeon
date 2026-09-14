@@ -505,7 +505,10 @@
     opacity: 0.82;
 }
 
-.boardStage > :global(*) {
+/* Every stage child is lifted onto its own layer - except screen-reader-only text. `.srOnly` is
+   absolute and clipped; the same-specificity `position: relative` here used to win by source order
+   and park the match live-region sentence, visible, in the stage's top-left corner. */
+.boardStage > :global(*):not(.srOnly) {
     position: relative;
     z-index: 1;
 }
