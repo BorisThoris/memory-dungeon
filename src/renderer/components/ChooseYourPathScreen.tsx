@@ -222,9 +222,9 @@ const ChooseYourPathScreen = (): ReactElement => {
                     <p className={styles.launchSummary}>{launchSummary(def, freshClassic)}</p>
                     {freshClassic ? (
                         <ol className={styles.beats} data-testid="choose-path-first-run-beats">
-                            <li>Match the marked pair.</li>
-                            <li>Clear the room for score and streak.</li>
-                            <li>Pick Safe, Greed, or Mystery for room two.</li>
+                            <li>Remember the symbols, then find a pair.</li>
+                            <li>Match beside a clump to set off a cascade.</li>
+                            <li>Build momentum: Clean → Sharp → Fever.</li>
                         </ol>
                     ) : null}
                     <div className={styles.launchActions}>
@@ -254,7 +254,7 @@ const ChooseYourPathScreen = (): ReactElement => {
                                 {CLASSIC_SETUP_COPY.title}
                             </UiButton>
                         ) : null}
-                        <UiButton
+                        {browseModes.length > 1 ? <UiButton
                             aria-controls="choose-path-more-modes"
                             aria-expanded={browseOpen}
                             onClick={() => {
@@ -266,7 +266,7 @@ const ChooseYourPathScreen = (): ReactElement => {
                             variant="secondary"
                         >
                             {browseOpen ? 'Hide modes' : 'Browse modes'}
-                        </UiButton>
+                        </UiButton> : null}
                     </div>
                 </div>
             </section>
@@ -351,6 +351,7 @@ const ChooseYourPathScreen = (): ReactElement => {
                         data-testid="choose-path-more-modes"
                         id="choose-path-more-modes"
                     >
+                        {browseModes.length > 1 ? <>
                         <div className={styles.browseHead}>
                             <Eyebrow tone="menu">Browse modes</Eyebrow>
                             <label className={styles.search}>
@@ -399,6 +400,7 @@ const ChooseYourPathScreen = (): ReactElement => {
                                 </button>
                             ))}
                         </div>
+                        </> : <Eyebrow tone="menu">Play together or share a run</Eyebrow>}
                         <form
                             className={styles.sharedRun}
                             data-testid="choose-path-shared-run"
@@ -435,13 +437,13 @@ const ChooseYourPathScreen = (): ReactElement => {
                                 </p>
                             ) : null}
                         </form>
-                        <p
+                        {browseModes.length > 1 ? <p
                             aria-live="polite"
                             className={styles.browseCount}
                             data-testid="choose-path-mode-count"
                         >
                             {CHOOSE_YOUR_PATH_COPY.modeCount(visibleModes.length, browseModes.length)}
-                        </p>
+                        </p> : null}
                         <FittedGrid
                             ariaLabel="Modes"
                             emptyState={CHOOSE_YOUR_PATH_COPY.noSearchResults}

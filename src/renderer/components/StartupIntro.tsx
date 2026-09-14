@@ -572,6 +572,7 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
     const exitStartedRef = useRef(false);
     const assetsReadyRef = useRef(false);
     const skipRequestedRef = useRef(false);
+    const autoExitDueRef = useRef(false);
     const introStartMsRef = useRef<number | null>(null);
     const timeGateTimeoutRef = useRef<number | null>(null);
     const manualExitTimeoutRef = useRef<number | null>(null);
@@ -628,13 +629,10 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
         if (!assetsReadyRef.current) {
             return;
         }
-        const startMs = introStartMsRef.current ?? performance.now();
-        introStartMsRef.current = startMs;
-        const elapsed = performance.now() - startMs;
-        if (skipRequestedRef.current || elapsed >= introTimingValuesRef.current.autoExitDelay) {
+        if (skipRequestedRef.current || autoExitDueRef.current) {
             beginExit();
         }
-    }, [beginExit, introTimingValuesRef]);
+    }, [beginExit]);
 
     const requestSkip = useCallback(() => {
         skipRequestedRef.current = true;
@@ -732,7 +730,11 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
         const startMs = introStartMsRef.current ?? now;
         introStartMsRef.current = startMs;
         const remainingMs = Math.max(0, autoExitDelay - (now - startMs));
+        autoExitDueRef.current = false;
         timeGateTimeoutRef.current = window.setTimeout(() => {
+            // The timer firing satisfies the time gate. Rechecking performance.now() here
+            // could read a fraction early and strand the intro with no future wake-up.
+            autoExitDueRef.current = true;
             tryBeginExitWhenReady();
         }, remainingMs);
 
@@ -894,6 +896,15 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
                     )}
                 </div>
             </div>
+            <button
+                className={styles.continueButton}
+                disabled={skipPending}
+                onClick={requestSkip}
+                onPointerDown={(event) => event.stopPropagation()}
+                type="button"
+            >
+                {skipPending ? 'Opening game…' : 'Continue to game'}
+            </button>
             {showIntroMotionCta ? (
                 <button
                     aria-label={introMotionLabels.ariaLabel}

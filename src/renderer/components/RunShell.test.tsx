@@ -103,6 +103,10 @@ describe('RunShell', () => {
         expect(meter).toHaveAttribute('data-meter-fill', '0.750');
         expect(meter).toHaveAttribute('data-meter-full', 'false');
         expect(meter).toHaveAttribute('aria-label', expect.stringContaining('Fever meter: momentum 6 of 8.'));
+        const goal = screen.getByTestId('hud-chain-goal');
+        expect(goal).toHaveTextContent('2 momentum to Fever');
+        expect(goal).toHaveTextContent('Chain into three clumps');
+        expect(goal).toHaveTextContent('×8 per pair');
     });
 
     it('drains the meter for a beat when a chain of Clean or better drops to nothing', () => {
@@ -143,6 +147,8 @@ describe('RunShell', () => {
         expect(meter).toHaveAttribute('data-meter-full', 'true');
         expect(meter).toHaveAttribute('data-meter-fill', '1.000');
         expect(meter).toHaveAttribute('aria-label', expect.stringContaining('Fever meter full: momentum 10.'));
+        expect(screen.getByTestId('hud-chain-goal')).toHaveTextContent('Fever active');
+        expect(screen.getByTestId('hud-chain-goal')).not.toHaveTextContent('momentum to');
     });
 
     it('marks the Floor stat as a personal best only when told the run is the deepest yet', () => {

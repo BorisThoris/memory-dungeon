@@ -131,6 +131,16 @@ const RunShell = ({
 }: RunShellProps): ReactElement => {
     const mutatorTitles = run.activeMutators.map((id) => MUTATOR_CATALOG[id]?.title ?? id);
     const chainMeterView = runChainMeter(run);
+    const rungs = chainTierRungs(run.board?.pairCount ?? null);
+    const nextTier = chainMeterView.momentum < rungs.clean ? 'clean'
+        : chainMeterView.momentum < rungs.sharp ? 'sharp'
+        : chainMeterView.momentum < rungs.fever ? 'fever' : null;
+    const nextTierLabel = nextTier
+        ? `${rungs[nextTier] - chainMeterView.momentum} momentum to ${CHAIN_TIER_LABELS[nextTier]}`
+        : 'Fever active';
+    const nextTierBenefit = nextTier === 'clean' ? 'Reach deeper into the clump'
+        : nextTier === 'sharp' ? 'Chain into the next clump'
+        : nextTier === 'fever' ? 'Chain into three clumps' : 'Keep matching to hold the fire';
     const chainMeterDropping = useChainMeterDrop(chainMeterView.momentum, chainTierRungs(run.board?.pairCount ?? null).clean);
     const line = feedback ?? onboardingLine ?? null;
     const lineTone = feedback ? feedbackPriority : 'info';
@@ -262,6 +272,11 @@ const RunShell = ({
                         <span style={{ fontSize: '0.95rem', letterSpacing: '0.04em' }}>{mutatorTitles.join(' · ')}</span>
                     </Stat>
                 ) : null}
+                </div>
+                <div className={styles.chainGoal} data-testid="hud-chain-goal" data-chain-tier={nextTier ?? 'fever'}>
+                    <strong>{nextTierLabel}</strong>
+                    <span>{nextTierBenefit}</span>
+                    <span className={styles.chainGoalValue}>×{chainRungScoreMultiplier(nextTier ?? 'fever')} per pair</span>
                 </div>
             {line ? (
                 <p
