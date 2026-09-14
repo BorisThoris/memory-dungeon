@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2480,
-    "codeFileCount": 883,
-    "exportedSymbolCount": 2672,
+    "trackedFileCount": 2482,
+    "codeFileCount": 885,
+    "exportedSymbolCount": 2675,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6765
+    "relationshipCount": 6771
   },
   "inventory": [
     {
@@ -8109,8 +8109,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 79872,
-      "sha256": "7dd270f9d1c6be3bcfa6a145dfb07bf5ffad772b3438dac12c39831a8e2d9115"
+      "bytes": 79928,
+      "sha256": "cacd6734b1a5621970bb8a12015a4ec4a98ab9a63bab09f7efc497e136615955"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -8331,8 +8331,8 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 17284,
-      "sha256": "646a09baea98fb461209aedb7174e1a7b0f645029645e17df6474d476da9dc6b"
+      "bytes": 17728,
+      "sha256": "2581e2e59def640490b5c3c76579808736352b9eeaca61b5f07ece7179ca5f39"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -9689,6 +9689,18 @@
       "category": "source",
       "bytes": 1781,
       "sha256": "b7f704e7dd54c4ad7d2de4998ae81c1ddf13f0ed0acc84c91d686aa78bffb61c"
+    },
+    {
+      "path": "src/renderer/hooks/useCountUp.test.ts",
+      "category": "test",
+      "bytes": 3220,
+      "sha256": "c0a5eb9637eaeef7477945a59d70c8b76a6e40cd0d9566392996f971b47fdf99"
+    },
+    {
+      "path": "src/renderer/hooks/useCountUp.ts",
+      "category": "source",
+      "bytes": 2713,
+      "sha256": "3390612c6001354ee6c6c8b8f9f0cb45878abe7c38537e0acde267682b0e3ef8"
     },
     {
       "path": "src/renderer/hooks/useDistractionChannelTick.integration.test.tsx",
@@ -17420,7 +17432,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1732,
+      "lineCount": 1733,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -17969,11 +17981,12 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 345,
+      "lineCount": 352,
       "imports": [
         "file:src/renderer/copy/chainBeat.ts",
         "file:src/renderer/copy/passAndPlay.ts",
         "file:src/renderer/copy/runDialogCopy.ts",
+        "file:src/renderer/hooks/useCountUp.ts",
         "file:src/renderer/ui/gameplayIcons.tsx",
         "file:src/shared/chain-rung-value-rules.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -21827,6 +21840,34 @@
         "symbol:src/renderer/hooks/useCopyToClipboard.ts#useCopyToClipboard"
       ],
       "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/hooks/useCountUp.test.ts",
+      "path": "src/renderer/hooks/useCountUp.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 90,
+      "imports": [
+        "file:src/renderer/hooks/useCountUp.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/hooks/useCountUp.ts",
+      "path": "src/renderer/hooks/useCountUp.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 67,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/hooks/useCountUp.ts#COUNT_UP_MS",
+        "symbol:src/renderer/hooks/useCountUp.ts#countUpValue",
+        "symbol:src/renderer/hooks/useCountUp.ts#useCountUp"
+      ],
+      "testedBy": [
+        "file:src/renderer/hooks/useCountUp.test.ts"
+      ]
     },
     {
       "id": "file:src/renderer/hooks/useDistractionChannelTick.integration.test.tsx",
@@ -34170,8 +34211,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 1731,
-      "endLine": 1731
+      "line": 1732,
+      "endLine": 1732
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
@@ -34450,24 +34491,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 344,
-      "endLine": 344
+      "line": 351,
+      "endLine": 351
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 37,
-      "endLine": 54
+      "line": 38,
+      "endLine": 57
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 26,
-      "endLine": 35
+      "line": 27,
+      "endLine": 36
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
@@ -38924,6 +38965,30 @@
       "file": "src/renderer/hooks/useCopyToClipboard.ts",
       "line": 17,
       "endLine": 54
+    },
+    {
+      "id": "symbol:src/renderer/hooks/useCountUp.ts#COUNT_UP_MS",
+      "name": "COUNT_UP_MS",
+      "kind": "value",
+      "file": "src/renderer/hooks/useCountUp.ts",
+      "line": 15,
+      "endLine": 15
+    },
+    {
+      "id": "symbol:src/renderer/hooks/useCountUp.ts#countUpValue",
+      "name": "countUpValue",
+      "kind": "value",
+      "file": "src/renderer/hooks/useCountUp.ts",
+      "line": 19,
+      "endLine": 30
+    },
+    {
+      "id": "symbol:src/renderer/hooks/useCountUp.ts#useCountUp",
+      "name": "useCountUp",
+      "kind": "value",
+      "file": "src/renderer/hooks/useCountUp.ts",
+      "line": 32,
+      "endLine": 66
     },
     {
       "id": "symbol:src/renderer/hooks/useDistractionChannelTick.ts#useDistractionChannelTick",
@@ -52880,7 +52945,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 137
+          "line": 144
         }
       ],
       "tests": [
@@ -61937,6 +62002,24 @@
       "id": "exports:src/renderer/hooks/useCopyToClipboard.ts->symbol:src/renderer/hooks/useCopyToClipboard.ts#useCopyToClipboard",
       "source": "file:src/renderer/hooks/useCopyToClipboard.ts",
       "target": "symbol:src/renderer/hooks/useCopyToClipboard.ts#useCopyToClipboard",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/hooks/useCountUp.ts->symbol:src/renderer/hooks/useCountUp.ts#COUNT_UP_MS",
+      "source": "file:src/renderer/hooks/useCountUp.ts",
+      "target": "symbol:src/renderer/hooks/useCountUp.ts#COUNT_UP_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/hooks/useCountUp.ts->symbol:src/renderer/hooks/useCountUp.ts#countUpValue",
+      "source": "file:src/renderer/hooks/useCountUp.ts",
+      "target": "symbol:src/renderer/hooks/useCountUp.ts#countUpValue",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/hooks/useCountUp.ts->symbol:src/renderer/hooks/useCountUp.ts#useCountUp",
+      "source": "file:src/renderer/hooks/useCountUp.ts",
+      "target": "symbol:src/renderer/hooks/useCountUp.ts#useCountUp",
       "kind": "exports"
     },
     {
@@ -76342,6 +76425,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/hooks/useCountUp.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/renderer/hooks/useCountUp.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/ui/gameplayIcons.tsx",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/renderer/ui/gameplayIcons.tsx",
@@ -79711,6 +79800,12 @@
       "id": "imports:src/renderer/hooks/useCoarsePointer.test.tsx->src/renderer/hooks/useCoarsePointer.ts",
       "source": "file:src/renderer/hooks/useCoarsePointer.test.tsx",
       "target": "file:src/renderer/hooks/useCoarsePointer.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/hooks/useCountUp.test.ts->src/renderer/hooks/useCountUp.ts",
+      "source": "file:src/renderer/hooks/useCountUp.test.ts",
+      "target": "file:src/renderer/hooks/useCountUp.ts",
       "kind": "imports"
     },
     {
@@ -91296,6 +91391,12 @@
       "id": "tested_by:src/renderer/hooks/useCoarsePointer.ts->file:src/renderer/hooks/useCoarsePointer.test.tsx",
       "source": "file:src/renderer/hooks/useCoarsePointer.ts",
       "target": "file:src/renderer/hooks/useCoarsePointer.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/hooks/useCountUp.ts->file:src/renderer/hooks/useCountUp.test.ts",
+      "source": "file:src/renderer/hooks/useCountUp.ts",
+      "target": "file:src/renderer/hooks/useCountUp.test.ts",
       "kind": "tested_by"
     },
     {

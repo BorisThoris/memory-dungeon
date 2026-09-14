@@ -1366,6 +1366,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             onPause={pause}
                             personalBestDepth={run.achievementsEnabled && (run.board?.level ?? 0) > profileDeepestFloor(saveData)}
                             politeAnnouncement={politeHudAnnouncement}
+                            reduceMotion={reduceMotion}
                             run={run}
                             tools={runShellTools}
                         />

@@ -4,6 +4,7 @@ import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { parTurnsForRun, turnCeilingForRun, turnsTakenThisFloor, turnsToCeiling } from '../../shared/floor-par';
 import { MUTATOR_CATALOG } from '../../shared/mechanics-encyclopedia';
 import { GameplayMenuIcon } from '../ui/gameplayIcons';
+import { useCountUp } from '../hooks/useCountUp';
 import styles from './RunShell.module.css';
 import { RUN_SHELL_LABELS } from '../copy/runDialogCopy';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
@@ -49,6 +50,8 @@ export interface RunShellProps {
     onboardingLine?: string | null;
     /** Screen-reader status line, unchanged from the previous HUD's contract. */
     politeAnnouncement?: string;
+    /** Reduced motion: the score total changes on the frame rather than counting up. */
+    reduceMotion?: boolean;
     tools: readonly RunShellTool[];
     onPause: () => void;
 }
@@ -127,9 +130,13 @@ const RunShell = ({
     onboardingLine,
     politeAnnouncement,
     tools,
-    onPause
+    onPause,
+    reduceMotion = false
 }: RunShellProps): ReactElement => {
     const mutatorTitles = run.activeMutators.map((id) => MUTATOR_CATALOG[id]?.title ?? id);
+    // The total counts up to what a break paid (thesis §45.2): the rise is the part the player
+    // watches land, and a number that snaps from 70 to 575 gives it nothing to look at.
+    const shownScore = useCountUp(runNonNegativeInteger(run.stats.totalScore), { reduceMotion });
     const chainMeterView = runChainMeter(run);
     const rungs = chainTierRungs(run.board?.pairCount ?? null);
     const nextTier = chainMeterView.momentum < rungs.clean ? 'clean'
@@ -157,7 +164,7 @@ const RunShell = ({
                         : String(run.board?.level ?? 1)}
                 </Stat>
                 <Stat label="Score" primary testId="hud-score">
-                    {runNonNegativeInteger(run.stats.totalScore).toLocaleString()}
+                    {shownScore.toLocaleString()}
                 </Stat>
                 {/* The par: a visible goal at every moment. Turns resolved on this floor over the
                     turns a competent player needs; beating it pays the floor-end efficiency bonus,
