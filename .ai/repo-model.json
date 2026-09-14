@@ -9,7 +9,7 @@
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6785
+    "relationshipCount": 6789
   },
   "inventory": [
     {
@@ -3771,8 +3771,8 @@
     {
       "path": "e2e/playable-path-interludes.spec.ts",
       "category": "test",
-      "bytes": 4297,
-      "sha256": "37da61019b6bdb636dc4c88e16fa35eb006c31d4934cf65ff2ac52a1dce631c9"
+      "bytes": 4282,
+      "sha256": "142315c387461f6f677c5f76d767ad8e5ae9485fd6fd8ac281494c3306017d91"
     },
     {
       "path": "e2e/playable-path-mode-matrix.spec.ts",
@@ -10887,14 +10887,14 @@
     {
       "path": "src/shared/chain-targets.test.ts",
       "category": "test",
-      "bytes": 913,
-      "sha256": "5d3ae0577c358f424523c4a361b662da1098df26ab3e887259e4f22cb7d829b0"
+      "bytes": 1457,
+      "sha256": "9049cd62c7adc769458828b702fc95d47f314e011dca00de56e5787cb6a3b9e3"
     },
     {
       "path": "src/shared/chain-targets.ts",
       "category": "source",
-      "bytes": 2280,
-      "sha256": "c1fd43d0113369705ea870e76741f4dcc685876c3e6942843c31da569b939551"
+      "bytes": 3290,
+      "sha256": "fc11ee89d7a6750214beb8435851a70d852b28486ea50032bf39e052c7c99c4f"
     },
     {
       "path": "src/shared/chain-tier-rules.test.ts",
@@ -11271,8 +11271,8 @@
     {
       "path": "src/shared/game-over-next-run.test.ts",
       "category": "test",
-      "bytes": 6520,
-      "sha256": "61517808aa320b8d28157b73ee2cb8c2e588e74b574195ec28a2bb939bf8f844"
+      "bytes": 6494,
+      "sha256": "c4df0385d78b032808893f172d18be7c791e8a9b7ef421a39ffac37d1f14593b"
     },
     {
       "path": "src/shared/game-over-next-run.ts",
@@ -25095,7 +25095,8 @@
         "symbol:src/shared/chain-rung-value-rules.ts#chainRungScoreMultiplier"
       ],
       "testedBy": [
-        "file:src/shared/chain-rung-value-rules.test.ts"
+        "file:src/shared/chain-rung-value-rules.test.ts",
+        "file:src/shared/chain-targets.test.ts"
       ]
     },
     {
@@ -25103,8 +25104,9 @@
       "path": "src/shared/chain-targets.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 28,
+      "lineCount": 36,
       "imports": [
+        "file:src/shared/chain-rung-value-rules.ts",
         "file:src/shared/chain-targets.ts"
       ],
       "exports": [],
@@ -25115,8 +25117,10 @@
       "path": "src/shared/chain-targets.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 60,
+      "lineCount": 76,
       "imports": [
+        "file:src/shared/chain-rung-value-rules.ts",
+        "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/run-number-guards.ts"
       ],
       "exports": [
@@ -42579,24 +42583,24 @@
       "name": "ChainTargetBand",
       "kind": "type",
       "file": "src/shared/chain-targets.ts",
-      "line": 3,
-      "endLine": 3
+      "line": 5,
+      "endLine": 5
     },
     {
       "id": "symbol:src/shared/chain-targets.ts#ChainTargetFeedback",
       "name": "ChainTargetFeedback",
       "kind": "interface",
       "file": "src/shared/chain-targets.ts",
-      "line": 5,
-      "endLine": 13
+      "line": 7,
+      "endLine": 15
     },
     {
       "id": "symbol:src/shared/chain-targets.ts#getChainTargetFeedback",
       "name": "getChainTargetFeedback",
       "kind": "value",
       "file": "src/shared/chain-targets.ts",
-      "line": 15,
-      "endLine": 59
+      "line": 26,
+      "endLine": 75
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#CHAIN_TIER_CLEAN_FROM",
@@ -83037,9 +83041,27 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/chain-targets.test.ts->src/shared/chain-rung-value-rules.ts",
+      "source": "file:src/shared/chain-targets.test.ts",
+      "target": "file:src/shared/chain-rung-value-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/chain-targets.test.ts->src/shared/chain-targets.ts",
       "source": "file:src/shared/chain-targets.test.ts",
       "target": "file:src/shared/chain-targets.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/chain-targets.ts->src/shared/chain-rung-value-rules.ts",
+      "source": "file:src/shared/chain-targets.ts",
+      "target": "file:src/shared/chain-rung-value-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/chain-targets.ts->src/shared/chain-tier-rules.ts",
+      "source": "file:src/shared/chain-targets.ts",
+      "target": "file:src/shared/chain-tier-rules.ts",
       "kind": "imports"
     },
     {
@@ -92327,6 +92349,12 @@
       "id": "tested_by:src/shared/chain-rung-value-rules.ts->file:src/shared/chain-rung-value-rules.test.ts",
       "source": "file:src/shared/chain-rung-value-rules.ts",
       "target": "file:src/shared/chain-rung-value-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/chain-rung-value-rules.ts->file:src/shared/chain-targets.test.ts",
+      "source": "file:src/shared/chain-rung-value-rules.ts",
+      "target": "file:src/shared/chain-targets.test.ts",
       "kind": "tested_by"
     },
     {

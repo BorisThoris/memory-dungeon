@@ -1,3 +1,5 @@
+import { chainRungScoreMultiplier } from './chain-rung-value-rules';
+import { CHAIN_TIER_CLEAN_FROM, CHAIN_TIER_FEVER_FROM, CHAIN_TIER_SHARP_FROM } from './chain-tier-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 
 export type ChainTargetBand = 'seed' | 'reward' | 'combo' | 'mastery';
@@ -12,48 +14,62 @@ export interface ChainTargetFeedback {
     payoffValue: string;
 }
 
+/**
+ * The next rung to chase, in the ladder's own words.
+ *
+ * Shown at the moment the player decides whether to go again (the run summary), after a miss
+ * that dropped a chain (the board's recovery line) and as the aim guide's plan. It used to speak
+ * a chain economy the game no longer has - "x3 reward loop", "combo engine", "x10 pressure" -
+ * while the HUD spoke of Clean, Sharp and Fever. The bands are the ladder's default rungs
+ * (`chainTierRungs` with no floor), and the pay each rung names is the multiplier the HUD shows.
+ */
 export const getChainTargetFeedback = (bestStreakInput: number | null | undefined): ChainTargetFeedback => {
     const bestStreak = runNonNegativeInteger(bestStreakInput);
-    if (bestStreak >= 10) {
+    const sharpPays = chainRungScoreMultiplier('sharp');
+    const feverPays = chainRungScoreMultiplier('fever');
+    if (bestStreak >= CHAIN_TIER_FEVER_FROM) {
         return {
             band: 'mastery',
             bestStreak,
-            value: 'Hold x10 pressure',
-            detail: `Best chain x${bestStreak}; keep the combo engine alive while routing pickups and side rewards.`,
-            actionHint: 'Use early safe pairs to bank momentum, then spend tools to protect the chain.',
+            value: 'Hold Fever',
+            detail: `Best chain ×${bestStreak}, at Fever. The record now is how long you keep it.`,
+            actionHint: 'Bank the pairs you are sure of first, then spend tools to protect the chain.',
             payoffLabel: 'Chain mastery',
-            payoffValue: 'hold x10'
+            payoffValue: 'hold Fever'
         };
     }
-    if (bestStreak >= 6) {
+    if (bestStreak >= CHAIN_TIER_SHARP_FROM) {
         return {
             band: 'combo',
             bestStreak,
-            value: 'Break into x10',
-            detail: `Best chain x${bestStreak}; one cleaner floor can turn reward-threshold chains into a combo-tier burst.`,
-            actionHint: 'Prioritize visible pairs and use peek/shuffle before the chain drops.',
+            value: 'Reach Fever',
+            detail: `Best chain ×${bestStreak}. Fever chains into three clumps and pays ×${feverPays} a pair.`,
+            actionHint: 'Hold the chain through the clumps you know; peek before you guess.',
             payoffLabel: 'Chain chase',
-            payoffValue: 'x10 next'
+            payoffValue: 'Fever next'
         };
     }
-    if (bestStreak >= 3) {
+    if (bestStreak >= CHAIN_TIER_CLEAN_FROM) {
         return {
             band: 'reward',
             bestStreak,
-            value: 'Push x6 reward',
-            detail: `Best chain x${bestStreak}; extend the x3 reward loop before chasing greedy pickups.`,
-            actionHint: 'Open with confirmed pairs, then convert tools into one longer streak.',
+            value: 'Reach Sharp',
+            detail: `Best chain ×${bestStreak}. Sharp chains into the next clump and pays ×${sharpPays} a pair.`,
+            actionHint: 'Open with pairs you are sure of, then carry the chain into the next clump.',
             payoffLabel: 'Chain chase',
-            payoffValue: 'x6 next'
+            payoffValue: 'Sharp next'
         };
     }
     return {
         band: 'seed',
         bestStreak,
-        value: 'Start x3 loop',
-        detail: bestStreak > 0 ? `Best chain x${bestStreak}; reach x3 to make rewards feel online.` : 'No chain started; reach x3 to turn matching into a reward engine.',
-        actionHint: 'Memorize one cluster first, then clear those pairs before risky exploration.',
+        value: 'Reach Clean',
+        detail:
+            bestStreak > 0
+                ? `Best chain ×${bestStreak}. ${CHAIN_TIER_CLEAN_FROM} matches in a row reach Clean, where a break reaches deeper into the clump.`
+                : `No chain yet. ${CHAIN_TIER_CLEAN_FROM} matches in a row reach Clean, where a break reaches deeper into the clump.`,
+        actionHint: 'Memorize one clump first, then clear those pairs before exploring.',
         payoffLabel: 'Chain chase',
-        payoffValue: 'x3 next'
+        payoffValue: 'Clean next'
     };
 };

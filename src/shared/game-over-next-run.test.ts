@@ -25,9 +25,9 @@ describe('REG-096 game over next-run loop', () => {
         expect(rows.find((row) => row.id === 'run_it_back')?.detail).toContain('pickups 1/2');
         expect(rows.find((row) => row.id === 'chain_target')).toMatchObject({
             title: 'Chain target',
-            value: 'Push x6 reward',
-            detail: 'Best chain x5; extend the x3 reward loop before chasing greedy pickups.',
-            actionHint: 'Open with confirmed pairs, then convert tools into one longer streak.'
+            value: 'Reach Sharp',
+            detail: 'Best chain ×5. Sharp chains into the next clump and pays ×4 a pair.',
+            actionHint: 'Open with pairs you are sure of, then carry the chain into the next clump.'
         });
         expect(rows.find((row) => row.id === 'local_share')?.detail).toMatch(/online rank/i);
     });
@@ -47,8 +47,8 @@ describe('REG-096 game over next-run loop', () => {
         const row = getGameOverNextRunRows(run).find((entry) => entry.id === 'chain_target');
 
         expect(row).toMatchObject({
-            value: 'Break into x10',
-            detail: 'Best chain x8; one cleaner floor can turn reward-threshold chains into a combo-tier burst.'
+            value: 'Reach Fever',
+            detail: 'Best chain ×8. Fever chains into three clumps and pays ×8 a pair.'
         });
     });
 

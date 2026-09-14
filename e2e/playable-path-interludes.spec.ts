@@ -43,7 +43,7 @@ test.describe('Expanded playable interludes and post-run loop', () => {
         await forceGameOverViaE2eHook(page);
         await expect(page.getByTestId('game-over-next-run-loop')).toBeVisible();
         await expect(page.getByTestId('game-over-next-run-loop')).toContainText(/Chain target/i);
-        await expect(page.getByTestId('game-over-next-run-loop')).toContainText(/Start x3 loop|Push x6 reward|Break into x10|Hold x10 pressure/i);
+        await expect(page.getByTestId('game-over-next-run-loop')).toContainText(/Reach Clean|Reach Sharp|Reach Fever|Hold Fever/i);
         // The mode is named once now, in the hero eyebrow; the rail carries only what
         // changes the next run.
         await expect(page.getByTestId('game-over-mode-heading')).toContainText(/run complete/i);
