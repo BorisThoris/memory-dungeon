@@ -59,11 +59,16 @@
     letter-spacing: 0.12em;
 }
 
+/* Five lanes once a mutator is on and the chain has a name. Below about 700px they are wider
+   than the bar, and a centred flex row that cannot wrap overflows both ends at once: the Floor
+   label lost its first letters and the mutator chip left the bar. Wrapping costs nothing where
+   they fit and puts the mutator on a second row where they do not. */
 .stats {
     display: flex;
+    flex-wrap: wrap;
     align-items: flex-end;
     justify-content: center;
-    gap: clamp(1.4rem, 3.2vw, 3rem);
+    gap: 0.35rem clamp(1.4rem, 3.2vw, 3rem);
 }
 
 .chainGoal {
@@ -318,6 +323,13 @@
 }
 
 /* Narrow phones: the bar wraps its stats and the dock keeps every tool on screen. */
+/* The bar's 2rem side padding is a desktop margin; on a narrow window it is a fifth of the row. */
+@media (max-width: 760px) {
+    .bar {
+        padding: 0.6rem 0.9rem 0.5rem;
+    }
+}
+
 @media (max-width: 520px) {
     .bar {
         width: calc(100% - 1rem);
@@ -325,8 +337,6 @@
     }
 
     .stats {
-        flex-wrap: wrap;
-        justify-content: center;
         gap: 0.5rem 0.9rem;
     }
 

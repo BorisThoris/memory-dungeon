@@ -26,6 +26,7 @@ import { resolveAdaptiveMusicState, useGameplayMusic } from './audio/gameplayMus
 import { useFeverDuck } from './audio/feverDuck';
 import { setTelemetrySink } from '../shared/telemetry';
 import { createGameOverRunSummary } from '../shared/run-summary-rules';
+import type { MutatorId } from '../shared/contracts';
 import {
     createPlayablePathFixture,
     type PlayablePathFixtureId
@@ -187,7 +188,13 @@ const App = () => {
                 forceGameOver: () => void;
                 startClassicGameOver: () => void;
                 startFixture: (id: PlayablePathFixtureId) => Promise<void>;
-                setRunProgress: (progress: { totalScore?: number; level?: number; turnsThisFloor?: number }) => void;
+                setRunProgress: (progress: {
+                    totalScore?: number;
+                    level?: number;
+                    turnsThisFloor?: number;
+                    activeMutators?: MutatorId[];
+                    currentStreak?: number;
+                }) => void;
             };
         };
         const forceCurrentRunGameOver = (): void => {
@@ -210,7 +217,15 @@ const App = () => {
          * Playing sixty floors in a browser to find out is not a test anybody runs, so the seam
          * hands the shell the numbers instead.
          */
-        const setRunProgress = (progress: { totalScore?: number; level?: number; turnsThisFloor?: number }): void => {
+        const setRunProgress = (progress: {
+            totalScore?: number;
+            level?: number;
+            turnsThisFloor?: number;
+            /* The HUD grows a fifth lane once a mutator is on, and the chain lane grows a tier
+               name and a multiplier chip once a streak holds. A fresh run has neither. */
+            activeMutators?: MutatorId[];
+            currentStreak?: number;
+        }): void => {
             const current = useAppStore.getState().run;
             if (!current) {
                 return;
@@ -218,12 +233,14 @@ const App = () => {
             useAppStore.setState({
                 run: {
                     ...current,
+                    activeMutators: progress.activeMutators ?? current.activeMutators,
                     turnsThisFloor: progress.turnsThisFloor ?? current.turnsThisFloor,
                     board: current.board && progress.level != null ? { ...current.board, level: progress.level } : current.board,
                     stats: {
                         ...current.stats,
                         totalScore: progress.totalScore ?? current.stats.totalScore,
                         currentLevelScore: progress.totalScore ?? current.stats.currentLevelScore,
+                        currentStreak: progress.currentStreak ?? current.stats.currentStreak,
                         highestLevel: progress.level ?? current.stats.highestLevel
                     }
                 }
