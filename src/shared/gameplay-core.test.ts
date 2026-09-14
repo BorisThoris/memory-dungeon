@@ -20,6 +20,7 @@ import {
     createGameplayFlashPairCommand,
     createGameplayGambitCommitCommand,
     createGameplayPeekCommand,
+    createGameplayPinToggleCommand,
     createGameplayRegionShuffleCommand,
     createGameplayShuffleCommand,
     createGameplayTileSwapCommand,
@@ -27,7 +28,8 @@ import {
     createGameplayWildMatchConsumeCommand,
     gameplayCommandSchema,
     gameplayContentDefinitionSchema,
-    gameplayEventSchema
+    gameplayEventSchema,
+    type GameplayEvent
 } from './gameplay-core-contracts';
 import { reduceGameplayCommand, replayGameplayCommands } from './gameplay-core';
 import { createNewRun } from './game';
@@ -283,6 +285,47 @@ describe('deterministic gameplay core', () => {
         expect(result.events.every((event) => gameplayEventSchema.safeParse(event).success)).toBe(true);
     });
 
+    it('names tiles in feedback by grid place or symbol, never by id', () => {
+        // The feedback line is shown on the HUD and read by a screen reader. It used to say
+        // "3-1-A was pinned", the tile's internal id. A face-down tile is named by where it is,
+        // so a pin or a swap does not say what is under it; a tile the command just turned over
+        // is named by its symbol. The fixture board is two columns: echo-a and echo-b on row 1,
+        // conduit-a and plain-a on row 2.
+        const feedbackMessage = (events: readonly { type: string }[]): string => {
+            const feedback = events.find(
+                (event): event is Extract<GameplayEvent, { type: 'feedback.requested' }> =>
+                    event.type === 'feedback.requested'
+            );
+            return feedback?.message ?? '';
+        };
+
+        const pinned = reduceGameplayCommand(run(), createGameplayPinToggleCommand('pin', 'conduit-a'));
+        expect(feedbackMessage(pinned.events)).toBe('Tile at row 2, column 1 pinned; 1/3 pins active.');
+
+        const peeked = reduceGameplayCommand(
+            run({ peekCharges: 1, recallFocus: 2 }),
+            createGameplayPeekCommand('peek', 'echo-b')
+        );
+        expect(feedbackMessage(peeked.events)).toBe('Peek revealed echo-b at row 1, column 2; 0 charges remain.');
+
+        const swapped = reduceGameplayCommand(
+            run({ regionShuffleCharges: 2, shuffleNonce: 0, forgottenTileIdsThisFloor: [] }),
+            createGameplayTileSwapCommand('swap', 'echo-a', 'plain-a')
+        );
+        expect(feedbackMessage(swapped.events)).toBe(
+            'Tile at row 1, column 1 swapped with tile at row 2, column 2; 1 row/swap charge remains.'
+        );
+
+        const flashed = reduceGameplayCommand(
+            run({ practiceMode: true, flashPairCharges: 1, flashPairRevealedTileIds: [], shuffleNonce: 0 }),
+            createGameplayFlashPairCommand('flash')
+        );
+        expect(feedbackMessage(flashed.events)).toBe('Flash Pair revealed the echo-a pair; 0 charges remain.');
+
+        for (const result of [pinned, peeked, swapped, flashed]) {
+            expect(result.accepted).toBe(true);
+        }
+    });
 
     it('validates and records a Gambit third-flip commitment without preempting board resolution', () => {
         const gambitBoard = board();

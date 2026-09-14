@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2454,
-    "codeFileCount": 881,
+    "trackedFileCount": 2456,
+    "codeFileCount": 883,
     "exportedSymbolCount": 2672,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6759
+    "relationshipCount": 6765
   },
   "inventory": [
     {
@@ -45,8 +45,8 @@
     {
       "path": ".gitignore",
       "category": "other",
-      "bytes": 734,
-      "sha256": "f2a5c8011ae8d6da3882d20b38e930f85ce53ccf8e560f24e3c7fa9094a90ccf"
+      "bytes": 770,
+      "sha256": "ed337601fd16e3211010ec5e50c051e8d57aa4376efe354f75e1ef58f3435d58"
     },
     {
       "path": ".idea/.gitignore",
@@ -261,8 +261,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 403407,
-      "sha256": "fd3ab0624e9291427bab81b302ddf8bcee7c5c124db4363506062caff09c1767"
+      "bytes": 406105,
+      "sha256": "75e04607a4ddf37ab475b2d38fedabae0f0c9d2478f2a6b8fdda4b53c456bea8"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -3663,8 +3663,8 @@
     {
       "path": "e2e/demo-readiness.spec.ts",
       "category": "test",
-      "bytes": 6017,
-      "sha256": "d4f99a23f111ccf6f57b380cd58339fa4ddc655327ef84d406b9ee13efd4fe71"
+      "bytes": 6270,
+      "sha256": "05281bace5d819daf3a0b98c5562aab66bad13d7bc4c1c664fcb4b92ae07fdd1"
     },
     {
       "path": "e2e/fixtures/tile-card-face-illustration-contact-sheet.png",
@@ -3681,8 +3681,8 @@
     {
       "path": "e2e/gameplay-hud-layout.spec.ts",
       "category": "test",
-      "bytes": 9557,
-      "sha256": "d86bc22ef2502d6191b9422092033487fd374b65b1af65f24515251f2bd03206"
+      "bytes": 11099,
+      "sha256": "41895eb412f0f13956d18eefc3f2ea6121ea48984c23f5a00abb4dde07b632fd"
     },
     {
       "path": "e2e/gameplay-readability.spec.ts",
@@ -3741,8 +3741,8 @@
     {
       "path": "e2e/pass-and-play.spec.ts",
       "category": "test",
-      "bytes": 13233,
-      "sha256": "b1c72b08612e725ecbc229305a713d92d9dcf6ad7ac7605f0c6133b4274b831f"
+      "bytes": 13049,
+      "sha256": "1065cbfc55147cb8be320a1056262a1f32a3ecf970a2e82a69c1b3eaba033647"
     },
     {
       "path": "e2e/pause-controls-reference.spec.ts",
@@ -3765,8 +3765,8 @@
     {
       "path": "e2e/playable-path-navigation.spec.ts",
       "category": "test",
-      "bytes": 10698,
-      "sha256": "bfcf95ee063ba1964ebc06125f414d409bcc035514a88017c5838d18a50d83da"
+      "bytes": 10412,
+      "sha256": "7273c0568f6695e94822265ddceaef9b9aa8970d042e29deb552669d55e544b9"
     },
     {
       "path": "e2e/playablePathHelpers.ts",
@@ -3831,8 +3831,8 @@
     {
       "path": "e2e/startupIntroHelpers.ts",
       "category": "test",
-      "bytes": 2181,
-      "sha256": "e314ed2e1c6cc2da6a468778043d8f1d6478fd5e613858e3db0ed23fe7d15616"
+      "bytes": 1317,
+      "sha256": "c6cb193909b55d9bd80009da1ff65b624791a58f338c8545644e7ecdf856401c"
     },
     {
       "path": "e2e/tile-board-raycast.spec.ts",
@@ -3885,8 +3885,8 @@
     {
       "path": "e2e/ui-fit-contract.spec.ts",
       "category": "test",
-      "bytes": 12476,
-      "sha256": "d25a7d023c808924dec36f581755a9fecc7319aaaddc2152c8075ec9a3b9d6cf"
+      "bytes": 12377,
+      "sha256": "cd5e989555173a83e278e775d0dc188719089698d48047a29658b425f9cab121"
     },
     {
       "path": "e2e/ui-reachability-gate.spec.ts",
@@ -5301,8 +5301,8 @@
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 20199,
-      "sha256": "a4b1a159df9a7b2657c14f3042efe9fef8b5a8f8b3fa014a427b6b577d610acb"
+      "bytes": 20915,
+      "sha256": "8f93daa5ed216529b3f358848a3ef8fee50d74a15fa052023c916a714a086f62"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -7449,8 +7449,14 @@
     {
       "path": "src/renderer/audio/gameSfx.ts",
       "category": "source",
-      "bytes": 25352,
-      "sha256": "4e033b32fd2c1d1a33068bf3f24abf1725ee0e4d7f7bbc4a8fd27663407c6468"
+      "bytes": 25816,
+      "sha256": "34a2ad330298deec09058a60ddf502e12e8b619aae61e45368a3fb96c7d1e2aa"
+    },
+    {
+      "path": "src/renderer/audio/gameSfxCancellation.test.ts",
+      "category": "test",
+      "bytes": 2312,
+      "sha256": "a37b63f28005815ab48cb3745f6a8de71505c48ce2de41647ed2430e459a0ef2"
     },
     {
       "path": "src/renderer/audio/musicalScale.test.ts",
@@ -7815,20 +7821,20 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
       "category": "source",
-      "bytes": 17829,
-      "sha256": "c0b93fea16020d51d3adcc83e1776d03df0551b342544501e059fd92bc206c80"
+      "bytes": 17428,
+      "sha256": "523d05d684983380ce6bb35ded3d954d40f080e18adf9c861bf8433dbcd028e4"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "category": "test",
-      "bytes": 13556,
-      "sha256": "649f323b8036dd6098512c8c914c16a8d0e05d4e41d17b0d946f9541b6a68e00"
+      "bytes": 8495,
+      "sha256": "7a2e6b772b4d5d2b490d0c0b9f97157ac320b76ffc9d96d719024227af268d7e"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 28416,
-      "sha256": "b86ce0464fd676cbf9c4929c23df1dc94df1ad2da06d4004949f8d4e30e0d9c8"
+      "bytes": 28651,
+      "sha256": "2987fbd8236f0f0c87f9e97cfe053cc5c47ee565420e898bd0ce31fa692ab32d"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -7947,8 +7953,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 44861,
-      "sha256": "c232abac640579d1f91cddea50a11e9f862ed29a55806aa0ae7cc0c4b36af0cb"
+      "bytes": 45159,
+      "sha256": "48d3021e2014f0c559647ede093eaa622b1cab4f2dfe5265d92457f00b404cea"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -7973,6 +7979,12 @@
       "category": "test",
       "bytes": 2866,
       "sha256": "4db14a1f6ac9127b4662621c7df288a267f41bc6b673ad7dbbb60c2776c95c8b"
+    },
+    {
+      "path": "src/renderer/components/gameScreenSrOnlyCss.test.ts",
+      "category": "test",
+      "bytes": 1528,
+      "sha256": "96579cda936ea760461d62a1551d83ce77e102c9ad7b98702cc9e9ab29aa98ec"
     },
     {
       "path": "src/renderer/components/gameScreenStoreSelectors.ts",
@@ -8163,20 +8175,20 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 13920,
-      "sha256": "7e2ae3fe91e12763a5d6c1d3854ca949f0e2cb9b5173ebbf4b111542df41fcb4"
+      "bytes": 15588,
+      "sha256": "9daf930f13e9dd4f2846eba459748f4d7a7b0bb576321ed876a2c714079bfb1c"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 11324,
-      "sha256": "99b6c895097c4c7f77f6f012f4817fa71314bd829b917f58942903fb866b17f7"
+      "bytes": 11748,
+      "sha256": "ce14f99255c7f6c786c9784480d9b167bdb38abc80044c9b3e72b383d8c7aaa9"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 16446,
-      "sha256": "58f7c8e2a847b86226d4e961b32162244aaf4b8f61929f820d77175a526834be"
+      "bytes": 17472,
+      "sha256": "798f772d59010e63efe9c1c6886315f558a39795582004b8a92539346c605334"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -8253,8 +8265,8 @@
     {
       "path": "src/renderer/components/StartupIntro.module.css",
       "category": "source",
-      "bytes": 10156,
-      "sha256": "cce9e10bbad8f305b3044ebbb070a93416f1adcce802863e0da185411b60092d"
+      "bytes": 10821,
+      "sha256": "951bfabd3b45823c59582689eaf9f8ced4365d5afed083fd82084ab3af8d4d3f"
     },
     {
       "path": "src/renderer/components/startupIntro.test.ts",
@@ -8265,14 +8277,14 @@
     {
       "path": "src/renderer/components/StartupIntro.tsx",
       "category": "source",
-      "bytes": 35031,
-      "sha256": "972a8822482c0042ec3f90079d41871d8b716c399c3eddf605211b6cf5fc2157"
+      "bytes": 35467,
+      "sha256": "a874a9081de8a852f219d9a6f8ff66f90a9ebb984ab1ec9263e59460dadf32c7"
     },
     {
       "path": "src/renderer/components/startupIntroComponent.test.tsx",
       "category": "test",
-      "bytes": 15762,
-      "sha256": "d43bcf42f3d5a63375587d6047bffb8d9bcea1760623b5c08a4eb2a7939efdb2"
+      "bytes": 16921,
+      "sha256": "0e6b04f920b45d3acd41bb3a17dc5b64d4a7becd83b2212663488ec4c92973c4"
     },
     {
       "path": "src/renderer/components/startupIntroConfig.ts",
@@ -9351,8 +9363,8 @@
     {
       "path": "src/renderer/copy/screenCopy.ts",
       "category": "source",
-      "bytes": 2908,
-      "sha256": "b11fea79d8dcf95f374dfa294a3bb4179fbb54227018fd756c75c879dd256c67"
+      "bytes": 2876,
+      "sha256": "6e7ce0f0f3bf7d8b7b89c7d6f3f88c432dfb2f2c9c6e33c856f95fb155f3a2e1"
     },
     {
       "path": "src/renderer/copy/settingsHints.ts",
@@ -11157,14 +11169,14 @@
     {
       "path": "src/shared/gameplay-core.test.ts",
       "category": "test",
-      "bytes": 19093,
-      "sha256": "c58fd8e1d6176115a3a4db4b863824cdfc3d5b31b4c39eb824f062fbf0523700"
+      "bytes": 21353,
+      "sha256": "4ce795f0fc4a2851c3776a56448ece21815a0377f96d4add141c531d3f52ab5e"
     },
     {
       "path": "src/shared/gameplay-core.ts",
       "category": "source",
-      "bytes": 39935,
-      "sha256": "17d8a95e98852b87f76ce7908afe488fc83ccbe3e69a04e6d699461e6f4d4d24"
+      "bytes": 40999,
+      "sha256": "227581d1be58ab8ef8926ac4c68582762ba1fa3aab99c046c9b024bcbaf98aa1"
     },
     {
       "path": "src/shared/gameplay-effect-transition.test.ts",
@@ -14715,8 +14727,8 @@
     {
       "path": "vite.config.mts",
       "category": "configuration",
-      "bytes": 5900,
-      "sha256": "926e9aaf74229dd1bc61176d42c2327ec8e72adc160b3f2f7b0fa95c909eff04"
+      "bytes": 6521,
+      "sha256": "67d9cc702768d80c00f73b20afd069d717953d6319bb7f2b79ef1e20f6e8b292"
     },
     {
       "path": "vitest.setup.ts",
@@ -15396,7 +15408,7 @@
       "path": "src/renderer/App.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 416,
+      "lineCount": 433,
       "imports": [
         "file:src/renderer/audio/feverDuck.ts",
         "file:src/renderer/audio/gameplayMusic.ts",
@@ -15421,6 +15433,7 @@
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/styles/theme.ts",
         "file:src/renderer/uiScaleLimits.ts",
+        "file:src/shared/contracts.ts",
         "file:src/shared/playable-path-fixtures.ts",
         "file:src/shared/run-summary-rules.ts",
         "file:src/shared/telemetry.ts"
@@ -15832,7 +15845,7 @@
       "path": "src/renderer/audio/gameSfx.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 704,
+      "lineCount": 717,
       "imports": [
         "file:src/renderer/audio/audioSafety.ts",
         "file:src/renderer/audio/musicalScale.ts",
@@ -15864,8 +15877,22 @@
       ],
       "testedBy": [
         "file:src/renderer/audio/audioCueSafety.test.ts",
-        "file:src/renderer/audio/gameSfx.test.ts"
+        "file:src/renderer/audio/gameSfx.test.ts",
+        "file:src/renderer/audio/gameSfxCancellation.test.ts"
       ]
+    },
+    {
+      "id": "file:src/renderer/audio/gameSfxCancellation.test.ts",
+      "path": "src/renderer/audio/gameSfxCancellation.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 58,
+      "imports": [
+        "file:src/renderer/audio/gameSfx.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/audio/musicalScale.test.ts",
@@ -16899,7 +16926,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 271,
+      "lineCount": 183,
       "imports": [
         "file:src/renderer/components/ChooseYourPathScreen.tsx",
         "file:src/renderer/components/chooseYourPathScreenModel.ts",
@@ -16915,7 +16942,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 599,
+      "lineCount": 601,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/modeArt.ts",
@@ -17353,6 +17380,16 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/gameScreenSrOnlyCss.test.ts",
+      "path": "src/renderer/components/gameScreenSrOnlyCss.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 36,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/gameScreenStoreSelectors.ts",
       "path": "src/renderer/components/gameScreenStoreSelectors.ts",
       "layer": "renderer",
@@ -17774,7 +17811,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 210,
+      "lineCount": 216,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/shared/contracts.ts",
@@ -17788,7 +17825,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 331,
+      "lineCount": 346,
       "imports": [
         "file:src/renderer/copy/chainBeat.ts",
         "file:src/renderer/copy/passAndPlay.ts",
@@ -18026,7 +18063,7 @@
       "path": "src/renderer/components/StartupIntro.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 919,
+      "lineCount": 930,
       "imports": [
         "file:src/renderer/a11y/focusables.ts",
         "file:src/renderer/assets/preloadStartupAssets.ts",
@@ -18056,7 +18093,7 @@
       "path": "src/renderer/components/startupIntroComponent.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 448,
+      "lineCount": 472,
       "imports": [
         "file:src/renderer/components/StartupIntro.tsx",
         "file:src/renderer/components/startupIntroConfig.ts",
@@ -25342,6 +25379,7 @@
         "file:src/renderer/audio/feverDuck.test.ts",
         "file:src/renderer/audio/gameplayMusic.test.ts",
         "file:src/renderer/audio/gameSfx.test.ts",
+        "file:src/renderer/audio/gameSfxCancellation.test.ts",
         "file:src/renderer/cardFace/programmaticCardFace.test.ts",
         "file:src/renderer/cardFace/resolveCardIllustrationUrl.test.ts",
         "file:src/renderer/components/boardTrauma.test.ts",
@@ -26705,7 +26743,7 @@
       "path": "src/shared/gameplay-core.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 477,
+      "lineCount": 520,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/contracts.ts",
@@ -26722,8 +26760,9 @@
       "path": "src/shared/gameplay-core.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 980,
+      "lineCount": 1003,
       "imports": [
+        "file:src/shared/board-grid-dimensions.ts",
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/board-power-state.ts",
@@ -31779,16 +31818,16 @@
       "name": "APP_MAIN_LANDMARK_ID",
       "kind": "value",
       "file": "src/renderer/App.tsx",
-      "line": 37,
-      "endLine": 37
+      "line": 38,
+      "endLine": 38
     },
     {
       "id": "symbol:src/renderer/App.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/App.tsx",
-      "line": 415,
-      "endLine": 415
+      "line": 432,
+      "endLine": 432
     },
     {
       "id": "symbol:src/renderer/assets/assetDropInReadiness.ts#ASSET_DROP_IN_CATEGORIES",
@@ -32243,96 +32282,96 @@
       "name": "CHUNK_BREAK_MAX_NOTES",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 315,
-      "endLine": 315
+      "line": 329,
+      "endLine": 329
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playChainOpportunityBeatSfx",
       "name": "playChainOpportunityBeatSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 390,
-      "endLine": 415
+      "line": 404,
+      "endLine": 429
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playFlipSfx",
       "name": "playFlipSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 186,
-      "endLine": 191
+      "line": 200,
+      "endLine": 205
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playFloorClearSfx",
       "name": "playFloorClearSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 685,
-      "endLine": 702
+      "line": 699,
+      "endLine": 716
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playGambitCommitSfx",
       "name": "playGambitCommitSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 194,
-      "endLine": 209
+      "line": 208,
+      "endLine": 223
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playMatchPayoffSfx",
       "name": "playMatchPayoffSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 508,
-      "endLine": 538
+      "line": 522,
+      "endLine": 552
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playMatchSfx",
       "name": "playMatchSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 212,
-      "endLine": 240
+      "line": 226,
+      "endLine": 254
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playMismatchRecoveryCrescendoSfx",
       "name": "playMismatchRecoveryCrescendoSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 417,
-      "endLine": 441
+      "line": 431,
+      "endLine": 455
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playPeekPowerSfx",
       "name": "playPeekPowerSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 624,
-      "endLine": 636
+      "line": 638,
+      "endLine": 650
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playPowerArmSfx",
       "name": "playPowerArmSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 609,
-      "endLine": 621
+      "line": 623,
+      "endLine": 635
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playResolveSfx",
       "name": "playResolveSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 544,
-      "endLine": 606
+      "line": 558,
+      "endLine": 620
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playShuffleSfx",
       "name": "playShuffleSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 642,
-      "endLine": 680
+      "line": 656,
+      "endLine": 694
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#resumeAudioContext",
@@ -33803,8 +33842,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ChooseYourPathScreen.tsx",
-      "line": 598,
-      "endLine": 598
+      "line": 600,
+      "endLine": 600
     },
     {
       "id": "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows",
@@ -34267,8 +34306,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 330,
-      "endLine": 330
+      "line": 345,
+      "endLine": 345
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
@@ -34515,8 +34554,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/StartupIntro.tsx",
-      "line": 918,
-      "endLine": 918
+      "line": 929,
+      "endLine": 929
     },
     {
       "id": "symbol:src/renderer/components/startupIntroConfig.ts#createIntroSeed",
@@ -46235,32 +46274,32 @@
       "name": "GameplayCommandResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 58,
-      "endLine": 63
+      "line": 59,
+      "endLine": 64
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#GameplayReplayResult",
       "name": "GameplayReplayResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 65,
-      "endLine": 70
+      "line": 66,
+      "endLine": 71
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#reduceGameplayCommand",
       "name": "reduceGameplayCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 891,
-      "endLine": 964
+      "line": 914,
+      "endLine": 987
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#replayGameplayCommands",
       "name": "replayGameplayCommands",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 966,
-      "endLine": 979
+      "line": 989,
+      "endLine": 1002
     },
     {
       "id": "symbol:src/shared/gameplay-effect-transition.ts#applyGameplayDefinitionTransition",
@@ -52697,7 +52736,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 205
+          "line": 137
         }
       ],
       "tests": [
@@ -53078,7 +53117,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 69
+          "line": 71
         }
       ],
       "enables": [],
@@ -53536,7 +53575,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 27
+          "line": 28
         },
         {
           "path": "src/shared/game.test.ts",
@@ -53963,7 +54002,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 67
+          "line": 23
         },
         {
           "path": "src/renderer/store/tilePressController.test.ts",
@@ -54200,7 +54239,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 27
+          "line": 28
         },
         {
           "path": "src/shared/game.test.ts",
@@ -54395,7 +54434,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 749
+          "line": 772
         }
       ],
       "tests": [
@@ -73711,6 +73750,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/App.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/App.tsx",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/App.tsx->src/shared/playable-path-fixtures.ts",
       "source": "file:src/renderer/App.tsx",
       "target": "file:src/shared/playable-path-fixtures.ts",
@@ -74002,6 +74047,18 @@
       "id": "imports:src/renderer/audio/gameSfx.ts->src/shared/session-stats-rules.ts",
       "source": "file:src/renderer/audio/gameSfx.ts",
       "target": "file:src/shared/session-stats-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/gameSfxCancellation.test.ts->src/renderer/audio/gameSfx.ts",
+      "source": "file:src/renderer/audio/gameSfxCancellation.test.ts",
+      "target": "file:src/renderer/audio/gameSfx.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/gameSfxCancellation.test.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/audio/gameSfxCancellation.test.ts",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -83923,6 +83980,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/gameplay-core.ts->src/shared/board-grid-dimensions.ts",
+      "source": "file:src/shared/gameplay-core.ts",
+      "target": "file:src/shared/board-grid-dimensions.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/gameplay-core.ts->src/shared/board-inspection.ts",
       "source": "file:src/shared/gameplay-core.ts",
       "target": "file:src/shared/board-inspection.ts",
@@ -89994,6 +90057,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/audio/gameSfx.ts->file:src/renderer/audio/gameSfxCancellation.test.ts",
+      "source": "file:src/renderer/audio/gameSfx.ts",
+      "target": "file:src/renderer/audio/gameSfxCancellation.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/audio/musicalScale.ts->file:src/renderer/audio/musicalScale.test.ts",
       "source": "file:src/renderer/audio/musicalScale.ts",
       "target": "file:src/renderer/audio/musicalScale.test.ts",
@@ -92049,6 +92118,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/audio/gameSfx.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/audio/gameSfx.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/audio/gameSfxCancellation.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/renderer/audio/gameSfxCancellation.test.ts",
       "kind": "tested_by"
     },
     {

@@ -40,6 +40,7 @@ import {
 } from './gameplay-feedback-facts';
 import { WILD_PAIR_KEY } from './tile-identity';
 import { isBoardComplete } from './board-inspection';
+import { getSafeBoardColumns } from './board-grid-dimensions';
 import {
     canGreetFloorCurio,
     floorCurioGreetingReply,
@@ -117,6 +118,28 @@ const applyDefinition = (
         accepted: transition.accepted
     };
 };
+/**
+ * A tile, named for a player. The feedback line a command writes is shown on the HUD and read by
+ * a screen reader, and a tile id like `3-1-A` is meaningless to both. A face-down tile is its
+ * place on the grid, so a pin or a swap does not say what is under it; a tile the command has
+ * just turned over is its symbol.
+ */
+const tilePlace = (run: RunState, tileId: string): string => {
+    const board = run.board;
+    const index = board?.tiles.findIndex((tile) => tile.id === tileId) ?? -1;
+    if (!board || index < 0) {
+        return 'a tile';
+    }
+    const columns = getSafeBoardColumns(board);
+    return `row ${Math.floor(index / columns) + 1}, column ${(index % columns) + 1}`;
+};
+
+const tileName = (run: RunState, tileId: string): string =>
+    run.board?.tiles.find((tile) => tile.id === tileId)?.label ?? 'a tile';
+
+const chargesLeft = (count: number, noun: string): string =>
+    count === 1 ? `1 ${noun} remains` : `${count} ${noun}s remain`;
+
 const applyPinToggleCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'board.pin_toggle' }>
@@ -141,7 +164,7 @@ const applyPinToggleCommand = (
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.pin.toggled',
-        message: `${command.targetTileId} was ${pinned ? 'pinned' : 'unpinned'}; ${after.length}/${maxPinnedTilesForRun(nextRun)} pins active.`,
+        message: `Tile at ${tilePlace(run, command.targetTileId)} ${pinned ? 'pinned' : 'unpinned'}; ${after.length}/${maxPinnedTilesForRun(nextRun)} pins active.`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -179,7 +202,7 @@ const applyPeekCommand = (
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.peek.used',
-        message: `Peek revealed ${command.targetTileId}; ${after} charge${after === 1 ? '' : 's'} remain.`,
+        message: `Peek revealed ${tileName(run, command.targetTileId)} at ${tilePlace(run, command.targetTileId)}; ${chargesLeft(after, 'charge')}.`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -219,7 +242,7 @@ const applyGambitCommitCommand = (
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.gambit.committed',
-        message: `Gambit committed ${committedTileIds.join(', ')} as a three-tile rescue.`,
+        message: `Gambit committed the tile at ${tilePlace(run, command.targetTileId)} as a three-tile rescue.`,
         tone: 'warning'
     });
     return { run, command, events, accepted: true };
@@ -257,7 +280,7 @@ const applyShuffleCommand = (
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.shuffle.used',
-        message: `Full-board shuffle committed; ${afterCharges} charge${afterCharges === 1 ? '' : 's'} remain.`,
+        message: `Full-board shuffle committed; ${chargesLeft(afterCharges, 'charge')}.`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -297,7 +320,7 @@ const applyRegionShuffleCommand = (
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.region_shuffle.used',
-        message: `Row ${command.rowIndex + 1} shuffled; ${afterCharges} row/swap charge${afterCharges === 1 ? '' : 's'} remain.`,
+        message: `Row ${command.rowIndex + 1} shuffled; ${chargesLeft(afterCharges, 'row/swap charge')}.`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -334,7 +357,7 @@ const applyTileSwapCommand = (
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.tile_swap.used',
-        message: `${command.firstTileId} swapped with ${command.secondTileId}; ${afterCharges} row/swap charge${afterCharges === 1 ? '' : 's'} remain.`,
+        message: `Tile at ${tilePlace(run, command.firstTileId)} swapped with tile at ${tilePlace(run, command.secondTileId)}; ${chargesLeft(afterCharges, 'row/swap charge')}.`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -376,7 +399,7 @@ const applyFlashPairCommand = (
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.flash_pair.used',
-        message: `Flash Pair revealed ${revealedTileIds.join(' and ')}; ${afterCharges} charge${afterCharges === 1 ? '' : 's'} remain.`,
+        message: `Flash Pair revealed the ${tileName(run, revealedTileIds[0]!)} pair; ${chargesLeft(afterCharges, 'charge')}.`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -443,7 +466,7 @@ const applyUndoResolveCommand = (
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.undo_resolve.used',
-        message: `Pending flip cancelled; ${afterUses} undo use${afterUses === 1 ? '' : 's'} remain this floor.`,
+        message: `Pending flip cancelled; ${chargesLeft(afterUses, 'undo use')} this floor.`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
