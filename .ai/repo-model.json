@@ -10683,8 +10683,8 @@
     {
       "path": "src/shared/cascade-balance-simulation.test.ts",
       "category": "test",
-      "bytes": 5012,
-      "sha256": "b113ae183f7e4a3a51260e8575a2e4bff516e8d7311cea015b269466a3c90a68"
+      "bytes": 5208,
+      "sha256": "c8d21778eb8ead438ceb69a6842396f3471c1d68c9927effa7289693b73d5e31"
     },
     {
       "path": "src/shared/cascade-balance-simulation.ts",
@@ -24765,7 +24765,7 @@
       "path": "src/shared/cascade-balance-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 91,
+      "lineCount": 93,
       "imports": [
         "file:src/shared/cascade-balance-simulation.ts"
       ],
