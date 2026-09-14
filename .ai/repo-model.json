@@ -9267,8 +9267,8 @@
     {
       "path": "src/renderer/copy/gameOverScreen.ts",
       "category": "source",
-      "bytes": 5823,
-      "sha256": "50eef29a9a7b159cd9a837c651f9a71b05038aa88d7e7822b843db402a4b05f3"
+      "bytes": 6055,
+      "sha256": "3761afe270491e274db101fd5fe9c9db04241a0d0680301b50ef589521b1d8c7"
     },
     {
       "path": "src/renderer/copy/gameplayEventAnnouncement.test.ts",
@@ -21008,7 +21008,7 @@
       "path": "src/renderer/copy/gameOverScreen.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 124,
+      "lineCount": 126,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -38002,8 +38002,8 @@
       "name": "achievementsNote",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 104,
-      "endLine": 123
+      "line": 106,
+      "endLine": 125
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy",
@@ -38011,15 +38011,15 @@
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
       "line": 6,
-      "endLine": 90
+      "endLine": 92
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#runEndReasonLine",
       "name": "runEndReasonLine",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 96,
-      "endLine": 97
+      "line": 98,
+      "endLine": 99
     },
     {
       "id": "symbol:src/renderer/copy/gameplayEventAnnouncement.ts#buildGameplayEventAnnouncement",

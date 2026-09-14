@@ -66,7 +66,9 @@ export const gameOverScreenCopy = {
         pinVow: 'Pin vow: route planning mattered because pinned notes were capped across the run.',
         wild: 'Wild Run: joker-style matching pressure stayed attached through the final summary.',
         practice: 'Practice descent: training rules were explicit, with progression expectations reduced.',
-        classic: 'Long-run core: chains and featured objectives.'
+        /* Every run summary opens with this line; the old "Long-run core: chains and featured
+           objectives" was the design's name for the mode, not something said to a player. */
+        classic: 'Classic descent: chain matches and clear each floor within its turns, as deep as you can.'
     },
     flipHistoryCopy: (flipCount: number) =>
         flipCount > 0
