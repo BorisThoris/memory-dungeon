@@ -1,0 +1,66 @@
+{
+  "slug": "memory-dungeon",
+  "capturedAt": "2026-09-14T20:20:39.118Z",
+  "source": "deployment",
+  "url": "https://memory-dungeon-git.pages.dev/",
+  "recipe": {
+    "route": "/",
+    "actions": [
+      {
+        "type": "click",
+        "target": {
+          "text": "Continue to game"
+        },
+        "label": "leave the studio splash"
+      },
+      {
+        "type": "wait",
+        "ms": 1500,
+        "label": "let the title screen settle"
+      }
+    ],
+    "waitAfterReadyMs": 2200
+  },
+  "profiles": [
+    {
+      "profile": "card",
+      "file": "card.jpg",
+      "width": 1600,
+      "height": 900,
+      "bytes": 156703,
+      "status": "captured"
+    },
+    {
+      "profile": "desktop",
+      "file": "desktop.jpg",
+      "width": 1440,
+      "height": 900,
+      "bytes": 146921,
+      "status": "captured"
+    },
+    {
+      "profile": "mobile",
+      "file": "mobile.jpg",
+      "width": 430,
+      "height": 932,
+      "bytes": 48577,
+      "status": "captured"
+    },
+    {
+      "profile": "full",
+      "file": "full.jpg",
+      "width": 1440,
+      "height": 900,
+      "bytes": 120436,
+      "status": "captured"
+    },
+    {
+      "profile": "og",
+      "file": "og.jpg",
+      "width": 1200,
+      "height": 630,
+      "bytes": 110517,
+      "status": "captured"
+    }
+  ]
+}
