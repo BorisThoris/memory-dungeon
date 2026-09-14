@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2482,
+    "trackedFileCount": 2483,
     "codeFileCount": 885,
     "exportedSymbolCount": 2675,
     "contentItemCount": 10,
@@ -47,6 +47,12 @@
       "category": "other",
       "bytes": 338,
       "sha256": "0e47ab278b7a1059d0917f7e784fdabc50ebe4607f210c6a8c44d5010d50b15c"
+    },
+    {
+      "path": ".github/workflows/project-meta-refresh.yml",
+      "category": "configuration",
+      "bytes": 2828,
+      "sha256": "e2a7bf8da613847eba0643b44c391e05e4b79fff19b9f459c7f592b9ad2f5c04"
     },
     {
       "path": ".github/workflows/project-meta.yml",
@@ -2350,7 +2356,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "240edfd6c72e7a6b81d7ae463992ff86b6e1f7382e858fedbc180a9fff92e19b"
+      "sha256": "4ad70c7d3cf53ccf18a84265c3328ac5620e89a83e54990c5e2174b86114abbf"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4227,8 +4233,8 @@
     {
       "path": "project.meta.json",
       "category": "configuration",
-      "bytes": 11592,
-      "sha256": "41de7c44a8e387aebfa4884f4d6f6d56c5b4741696d46117478da968adfc9955"
+      "bytes": 11594,
+      "sha256": "c2b8ef7593aae3934f3fbad6064b2f301d36ceabee05321dffe3de076c231831"
     },
     {
       "path": "public/apple-touch-icon.png",
@@ -4959,8 +4965,8 @@
     {
       "path": "scripts/generate-project-meta.mjs",
       "category": "script",
-      "bytes": 19842,
-      "sha256": "363a7f025af06aafdfac68dfad8d57a2220332bec34c49babe7bbaebd1b01a7d"
+      "bytes": 20199,
+      "sha256": "5077d7f057083a78237fd198fd491c70b461acf846e302b43968cd3c1d3c644e"
     },
     {
       "path": "scripts/generate-social-preview.mjs",
