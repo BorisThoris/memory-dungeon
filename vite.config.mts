@@ -105,7 +105,10 @@ export default defineConfig(({ mode }) => ({
     test: {
         environment: 'happy-dom',
         setupFiles: './vitest.setup.ts',
-        testTimeout: 10_000,
+        /* 30s, not 10s: the full parallel run on the Windows build machine timed out a different
+           test each pass (gate-changed, the cascade replay, App's intro flow), every one of
+           which passes in seconds on its own. A hung test still fails, half a minute later. */
+        testTimeout: 30_000,
         restoreMocks: true,
         clearMocks: true,
         /* Windows / sandbox: fork pool teardown can throw EPERM on process.kill; threads avoid it. */
