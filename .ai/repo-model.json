@@ -8121,8 +8121,8 @@
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
       "category": "test",
-      "bytes": 57615,
-      "sha256": "0e54b698b6ffa47b80d43e0df0b7c90ddbd6762248af0358b979efe021224c4a"
+      "bytes": 57636,
+      "sha256": "1f4c9eb546dc2175ec259ee6865c3b36426e86bde40b7a186d6b9e89a6fdb627"
     },
     {
       "path": "src/renderer/components/GameScreen.tsx",
@@ -8133,8 +8133,8 @@
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
       "category": "source",
-      "bytes": 15558,
-      "sha256": "a14d6a7e7127dcab0aeea9917555ff61c6bf86f0c8dcdad923e12a363a7ce32b"
+      "bytes": 15497,
+      "sha256": "ed7a996fc1349abcb3f031f8f46635a347f33b5bf72f099d3aa9b5737c4e8db0"
     },
     {
       "path": "src/renderer/components/gameScreenFeedbackReach.test.ts",
@@ -9351,14 +9351,14 @@
     {
       "path": "src/renderer/copy/chainMilestoneFeedback.test.ts",
       "category": "test",
-      "bytes": 1542,
-      "sha256": "4ae32e1991926fe6f9ae1abc2c1a514996adb311debf84ef63b2d935fa9ac6be"
+      "bytes": 1622,
+      "sha256": "f101b7ab0eb0a469c0be36a041b6a2e5d83c37c1af005cbd7a8fe0238ea597e5"
     },
     {
       "path": "src/renderer/copy/chainMilestoneFeedback.ts",
       "category": "source",
-      "bytes": 1756,
-      "sha256": "b5088000005c0bd1ea749f25b06b639fe46d6c0d5b55dd8c0485b0f41c77dcf3"
+      "bytes": 1868,
+      "sha256": "ed22e99277728c994effe4de2b9895809fc7512a099f10919a51ad905ec087ac"
     },
     {
       "path": "src/renderer/copy/chainMomentum.test.ts",
@@ -9453,8 +9453,8 @@
     {
       "path": "src/renderer/copy/hudActionFeedback.ts",
       "category": "source",
-      "bytes": 4554,
-      "sha256": "b4e05c98a3a5461d727372d57b791f01bf49aa93a77582c0b3bd9fc3b589e11c"
+      "bytes": 4550,
+      "sha256": "fe1d9756e31a396c7f9aedad33982c195ad9ce12d6195763327a64fbec33d87c"
     },
     {
       "path": "src/renderer/copy/magpieBeat.test.ts",
@@ -9801,8 +9801,8 @@
     {
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "category": "test",
-      "bytes": 40868,
-      "sha256": "9d7a5c05b4f05d0c5a1feade6328f1004fa77afe37c77f5de8e7a3aaee5bd0bd"
+      "bytes": 40926,
+      "sha256": "f6a4419a0a47961a60749d9b2508c8d4040012650332ecc96ad4d5dcb8acc49e"
     },
     {
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
@@ -10095,8 +10095,8 @@
     {
       "path": "src/renderer/store/matchScorePop.test.ts",
       "category": "test",
-      "bytes": 33710,
-      "sha256": "e40a1b4dff6a6c573abeeef330017ca881972fc2ac17c4bc3a2e166974aa4812"
+      "bytes": 33829,
+      "sha256": "eb419f1b841ca64b60181ba473506363de2e67505d11730be0b1437fe5cbdddc"
     },
     {
       "path": "src/renderer/store/matchScorePop.ts",
@@ -17563,7 +17563,7 @@
       "path": "src/renderer/components/gameScreenFeedback.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 392,
+      "lineCount": 390,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -34319,16 +34319,16 @@
       "name": "getVisualHudAnnouncementFollowup",
       "kind": "value",
       "file": "src/renderer/components/gameScreenFeedback.ts",
-      "line": 250,
-      "endLine": 391
+      "line": 248,
+      "endLine": 389
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getVisualHudAnnouncementImpact",
       "name": "getVisualHudAnnouncementImpact",
       "kind": "value",
       "file": "src/renderer/components/gameScreenFeedback.ts",
-      "line": 128,
-      "endLine": 248
+      "line": 126,
+      "endLine": 246
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getVisualHudAnnouncementSignal",
@@ -34336,7 +34336,7 @@
       "kind": "value",
       "file": "src/renderer/components/gameScreenFeedback.ts",
       "line": 60,
-      "endLine": 101
+      "endLine": 99
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#VisualHudAnnouncementDetail",

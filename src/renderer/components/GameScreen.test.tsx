@@ -536,7 +536,7 @@ describe('GameScreen (OVR-014)', () => {
             label: 'Chain',
             tone: 'chain'
         });
-        expect(getVisualHudAnnouncementSignal('Surge hit: x6. Surge tier live.', 'info')).toEqual({
+        expect(getVisualHudAnnouncementSignal('Sharp reached: x6. Breaks chain into the next clump.', 'info')).toEqual({
             label: 'Chain',
             tone: 'chain'
         });

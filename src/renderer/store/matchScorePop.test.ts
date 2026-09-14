@@ -383,34 +383,34 @@ describe('buildMatchScorePopPayload', () => {
 
     it('emits arcade milestone badges only when chain tiers are crossed', () => {
         expect(getMatchScorePopChainMilestone(2, 3)).toEqual({
-            action: 'Start chain',
+            action: 'Hold the chain',
             audioCue: 'chain-start-ping',
             beatCount: 3,
-            label: 'Chain started',
+            label: 'Clean reached',
             screenCue: 'reward-loop',
             target: 'x3',
             tone: 'chain',
-            value: 'Reward loop online'
+            value: 'Breaks reach deeper into the clump'
         });
         expect(getMatchScorePopChainMilestone(5, 6)).toEqual({
-            action: 'Push surge',
+            action: 'Carry it into the next clump',
             audioCue: 'surge-hit-ping',
             beatCount: 4,
-            label: 'Surge hit',
+            label: 'Sharp reached',
             screenCue: 'surge-live',
             target: 'x6',
             tone: 'surge',
-            value: 'Surge tier live'
+            value: 'Breaks chain into the next clump'
         });
         expect(getMatchScorePopChainMilestone(9, 10)).toEqual({
-            action: 'Hold combo',
+            action: 'Keep the fire',
             audioCue: 'combo-hit-ping',
             beatCount: 5,
-            label: 'Combo hit',
+            label: 'Fever reached',
             screenCue: 'combo-live',
             target: 'x10',
             tone: 'combo',
-            value: 'Combo tier live'
+            value: 'Breaks chain into three clumps'
         });
         expect(getMatchScorePopChainMilestone(6, 7)).toBeUndefined();
     });
@@ -432,14 +432,14 @@ describe('buildMatchScorePopPayload', () => {
         const pop = buildMatchScorePopPayload(turnEventFor(run, { ...run, stats: { ...run.stats, matchesFound: 3, totalScore: 70, currentStreak: 6 } }, 'match', 'surge-milestone'), 'surge-milestone');
 
         expect(pop?.chainMilestone).toEqual({
-            action: 'Push surge',
+            action: 'Carry it into the next clump',
             audioCue: 'surge-hit-ping',
             beatCount: 4,
-            label: 'Surge hit',
+            label: 'Sharp reached',
             screenCue: 'surge-live',
             target: 'x6',
             tone: 'surge',
-            value: 'Surge tier live'
+            value: 'Breaks chain into the next clump'
         });
     });
 

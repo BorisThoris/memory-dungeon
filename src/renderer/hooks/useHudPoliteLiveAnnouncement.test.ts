@@ -156,7 +156,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             label: 'Chain',
             tone: 'chain'
         });
-        expect(getHudActionFeedbackProfile('Surge hit: x6. Surge tier live.')).toEqual({
+        expect(getHudActionFeedbackProfile('Sharp reached: x6. Breaks chain into the next clump.')).toEqual({
             label: 'Chain',
             tone: 'chain'
         });
@@ -193,7 +193,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
         });
         await flushRaf();
 
-        expect(result.current.message).toBe('Chain started: x3. Reward loop online.');
+        expect(result.current.message).toBe('Clean reached: x3. Breaks reach deeper into the clump.');
     });
 
     it('announces surge chain milestones', async () => {
@@ -223,7 +223,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
         });
         await flushRaf();
 
-        expect(result.current.message).toBe('Surge hit: x6. Surge tier live.');
+        expect(result.current.message).toBe('Sharp reached: x6. Breaks chain into the next clump.');
     });
 
     it('announces when a meaningful match chain breaks', async () => {

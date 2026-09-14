@@ -1,10 +1,10 @@
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 
 export type ChainMilestoneFeedback = {
-    action: 'Start chain' | 'Push surge' | 'Hold combo';
+    action: 'Hold the chain' | 'Carry it into the next clump' | 'Keep the fire';
     audioCue: 'chain-start-ping' | 'surge-hit-ping' | 'combo-hit-ping';
     beatCount: 3 | 4 | 5;
-    label: 'Chain started' | 'Surge hit' | 'Combo hit';
+    label: 'Clean reached' | 'Sharp reached' | 'Fever reached';
     screenCue: 'reward-loop' | 'surge-live' | 'combo-live';
     target: 'x3' | 'x6' | 'x10';
     tone: 'chain' | 'surge' | 'combo';
@@ -19,38 +19,38 @@ export const getChainMilestoneFeedback = (
     const next = runNonNegativeInteger(nextStreak);
     if (previous < 10 && next >= 10) {
         return {
-            action: 'Hold combo',
+            action: 'Keep the fire',
             audioCue: 'combo-hit-ping',
             beatCount: 5,
-            label: 'Combo hit',
+            label: 'Fever reached',
             screenCue: 'combo-live',
             target: 'x10',
             tone: 'combo',
-            value: 'Combo tier live'
+            value: 'Breaks chain into three clumps'
         };
     }
     if (previous < 6 && next >= 6) {
         return {
-            action: 'Push surge',
+            action: 'Carry it into the next clump',
             audioCue: 'surge-hit-ping',
             beatCount: 4,
-            label: 'Surge hit',
+            label: 'Sharp reached',
             screenCue: 'surge-live',
             target: 'x6',
             tone: 'surge',
-            value: 'Surge tier live'
+            value: 'Breaks chain into the next clump'
         };
     }
     if (previous < 3 && next >= 3) {
         return {
-            action: 'Start chain',
+            action: 'Hold the chain',
             audioCue: 'chain-start-ping',
             beatCount: 3,
-            label: 'Chain started',
+            label: 'Clean reached',
             screenCue: 'reward-loop',
             target: 'x3',
             tone: 'chain',
-            value: 'Reward loop online'
+            value: 'Breaks reach deeper into the clump'
         };
     }
     return undefined;
