@@ -286,8 +286,8 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             />
                             <StatTile
                                 density="minimal"
-                                label={gameOverScreenCopy.statLabels.floorsCleared}
-                                value={summary.levelsCleared}
+                                label={gameOverScreenCopy.statLabels.largestBreak}
+                                value={gameOverScreenCopy.largestBreakValue(summary.biggestChunk ?? 0)}
                             />
                             <StatTile
                                 density="minimal"

@@ -45,9 +45,14 @@ export const gameOverScreenCopy = {
         highestFloor: 'Highest Floor',
         bestStreak: 'Best Streak',
         perfectFloors: 'Perfect Floors',
-        floorsCleared: 'Floors Cleared',
+        /* Thesis §55.2: the largest single break is "the one players will screenshot". It took the
+           tile "Floors Cleared" held, which the floor headline already says. */
+        largestBreak: 'Largest Break',
         bestScore: 'Best Score'
     },
+    /** The largest break's tile value: pairs, because that is the number a screenshot shows. */
+    largestBreakValue: (pairs: number): string =>
+        pairs <= 0 ? 'None yet' : pairs === 1 ? '1 pair' : `${pairs} pairs`,
     runModeHeadings: {
         daily: (dateKey: string) => `Daily ${dateKey}`,
         meditation: 'Meditation descent',

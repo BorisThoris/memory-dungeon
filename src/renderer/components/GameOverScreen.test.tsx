@@ -52,6 +52,23 @@ const gameOverRunFixture = (totalScore = 0, runEndReason: RunEndReason | null = 
     return createRunSummary(run, []);
 };
 
+describe('the record set', () => {
+    it('shows the largest single break in pairs, the record a player screenshots', () => {
+        // Thesis §55.2. The tile replaced "Floors Cleared", which the floor headline already says.
+        let run = finishMemorizePhase(createNewRun(100, { runSeed: 0xabc }));
+        run = { ...run, biggestChunkPairs: 5, runEndReason: 'turn_ceiling', status: 'gameOver' };
+        render(<GameOverScreen run={createRunSummary(run, [])} />);
+        expect(screen.getByText('Largest Break')).toBeInTheDocument();
+        expect(screen.getByText('5 pairs')).toBeInTheDocument();
+        expect(screen.queryByText('Floors Cleared')).not.toBeInTheDocument();
+    });
+
+    it('says so plainly when nothing broke', () => {
+        render(<GameOverScreen run={gameOverRunFixture()} />);
+        expect(screen.getByText('None yet')).toBeInTheDocument();
+    });
+});
+
 describe('how the run ended', () => {
     const withReason = (runEndReason: RunEndReason | undefined): RunState => {
         const run = gameOverRunFixture(0, runEndReason ?? null);
