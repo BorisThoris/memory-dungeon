@@ -24,6 +24,7 @@ import styles from './styles/App.module.css';
 import { buildRendererThemeStyle } from './styles/theme';
 import { resolveAdaptiveMusicState, useGameplayMusic } from './audio/gameplayMusic';
 import { useFeverDuck } from './audio/feverDuck';
+import { resolutionGapDuckMultiplier } from './audio/resolutionGapDuck';
 import { setTelemetrySink } from '../shared/telemetry';
 import { createGameOverRunSummary } from '../shared/run-summary-rules';
 import type { MutatorId } from '../shared/contracts';
@@ -132,11 +133,12 @@ const App = () => {
     const musicShellActive = hydrated && (visualView === 'menu' || visualView === 'playing');
 
     const feverDuck = useFeverDuck(run);
+    const gapDuck = resolutionGapDuckMultiplier(run);
     useGameplayMusic({
         active: musicShellActive && musicState.active,
         track: musicState.track,
         masterVolume: settings.masterVolume,
-        musicVolume: settings.musicVolume * musicState.volumeMultiplier * feverDuck,
+        musicVolume: settings.musicVolume * musicState.volumeMultiplier * feverDuck * gapDuck,
         suppressed: musicState.suppressed
     });
 

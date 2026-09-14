@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2483,
-    "codeFileCount": 885,
-    "exportedSymbolCount": 2675,
+    "trackedFileCount": 2485,
+    "codeFileCount": 887,
+    "exportedSymbolCount": 2677,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6771
+    "relationshipCount": 6784
   },
   "inventory": [
     {
@@ -5451,8 +5451,8 @@
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 20915,
-      "sha256": "8f93daa5ed216529b3f358848a3ef8fee50d74a15fa052023c916a714a086f62"
+      "bytes": 21052,
+      "sha256": "21abb1a29d93eff88cb02fa9932a2f570d4f75691c3befdd0072791034f407bd"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -7551,8 +7551,8 @@
     {
       "path": "src/renderer/audio/audioMixDuckingPolicy.ts",
       "category": "source",
-      "bytes": 1920,
-      "sha256": "4950962f5503c223be4411306041bdc1c6a24190aad33dea85115adfba6f53b4"
+      "bytes": 2246,
+      "sha256": "827d1b319ef52d8d6f812ad236c83048f172755190c5fc60e5fc5f685986bcbc"
     },
     {
       "path": "src/renderer/audio/audioSafety.test.ts",
@@ -7631,6 +7631,18 @@
       "category": "source",
       "bytes": 3182,
       "sha256": "ea81516ad1fd20b3b3c34a44e8115f35a7f1048a6dcf2b13e9f05e9ce2eafee7"
+    },
+    {
+      "path": "src/renderer/audio/resolutionGapDuck.test.ts",
+      "category": "test",
+      "bytes": 1430,
+      "sha256": "160b7ddf6af4743df0f306402c11d480fc82f3f7b992a02c3cc4952b65e3e230"
+    },
+    {
+      "path": "src/renderer/audio/resolutionGapDuck.ts",
+      "category": "source",
+      "bytes": 1037,
+      "sha256": "9f7f6ebb17dcc5e19d88ec710615008bf9b343f6eead991d6cd87e1142658228"
     },
     {
       "path": "src/renderer/audio/sampledSfx.ts",
@@ -15570,10 +15582,11 @@
       "path": "src/renderer/App.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 433,
+      "lineCount": 435,
       "imports": [
         "file:src/renderer/audio/feverDuck.ts",
         "file:src/renderer/audio/gameplayMusic.ts",
+        "file:src/renderer/audio/resolutionGapDuck.ts",
         "file:src/renderer/breakpoints.ts",
         "file:src/renderer/components/ChooseYourPathScreen.tsx",
         "file:src/renderer/components/CodexScreen.tsx",
@@ -15877,7 +15890,7 @@
       "path": "src/renderer/audio/audioMixDuckingPolicy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 35,
+      "lineCount": 37,
       "imports": [],
       "exports": [
         "symbol:src/renderer/audio/audioMixDuckingPolicy.ts#getReg114DuckRow",
@@ -15885,7 +15898,8 @@
         "symbol:src/renderer/audio/audioMixDuckingPolicy.ts#Reg114DuckId"
       ],
       "testedBy": [
-        "file:src/renderer/audio/audioMixDuckingPolicy.test.ts"
+        "file:src/renderer/audio/audioMixDuckingPolicy.test.ts",
+        "file:src/renderer/audio/resolutionGapDuck.test.ts"
       ]
     },
     {
@@ -16116,6 +16130,39 @@
       ],
       "testedBy": [
         "file:src/renderer/audio/preloadAudioBuffers.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/audio/resolutionGapDuck.test.ts",
+      "path": "src/renderer/audio/resolutionGapDuck.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 26,
+      "imports": [
+        "file:src/renderer/audio/audioMixDuckingPolicy.ts",
+        "file:src/renderer/audio/resolutionGapDuck.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/game-core.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/audio/resolutionGapDuck.ts",
+      "path": "src/renderer/audio/resolutionGapDuck.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 19,
+      "imports": [
+        "file:src/renderer/audio/audioMixDuckingPolicy.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/audio/resolutionGapDuck.ts#RESOLUTION_GAP_DUCK_MULTIPLIER",
+        "symbol:src/renderer/audio/resolutionGapDuck.ts#resolutionGapDuckMultiplier"
+      ],
+      "testedBy": [
+        "file:src/renderer/audio/resolutionGapDuck.test.ts"
       ]
     },
     {
@@ -25571,6 +25618,7 @@
         "file:src/renderer/audio/gameplayMusic.test.ts",
         "file:src/renderer/audio/gameSfx.test.ts",
         "file:src/renderer/audio/gameSfxCancellation.test.ts",
+        "file:src/renderer/audio/resolutionGapDuck.test.ts",
         "file:src/renderer/cardFace/programmaticCardFace.test.ts",
         "file:src/renderer/cardFace/resolveCardIllustrationUrl.test.ts",
         "file:src/renderer/components/boardTrauma.test.ts",
@@ -26495,6 +26543,7 @@
       "testedBy": [
         "file:src/renderer/App.test.tsx",
         "file:src/renderer/audio/feverDuck.test.ts",
+        "file:src/renderer/audio/resolutionGapDuck.test.ts",
         "file:src/renderer/components/GameOverScreen.test.tsx",
         "file:src/renderer/components/GameScreen.test.tsx",
         "file:src/renderer/components/InventoryScreen.test.tsx",
@@ -32009,16 +32058,16 @@
       "name": "APP_MAIN_LANDMARK_ID",
       "kind": "value",
       "file": "src/renderer/App.tsx",
-      "line": 38,
-      "endLine": 38
+      "line": 39,
+      "endLine": 39
     },
     {
       "id": "symbol:src/renderer/App.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/App.tsx",
-      "line": 432,
-      "endLine": 432
+      "line": 434,
+      "endLine": 434
     },
     {
       "id": "symbol:src/renderer/assets/assetDropInReadiness.ts#ASSET_DROP_IN_CATEGORIES",
@@ -32353,16 +32402,16 @@
       "name": "getReg114DuckRow",
       "kind": "value",
       "file": "src/renderer/audio/audioMixDuckingPolicy.ts",
-      "line": 33,
-      "endLine": 34
+      "line": 35,
+      "endLine": 36
     },
     {
       "id": "symbol:src/renderer/audio/audioMixDuckingPolicy.ts#REG114_MIX_DUCKING_TABLE",
       "name": "REG114_MIX_DUCKING_TABLE",
       "kind": "value",
       "file": "src/renderer/audio/audioMixDuckingPolicy.ts",
-      "line": 24,
-      "endLine": 31
+      "line": 25,
+      "endLine": 33
     },
     {
       "id": "symbol:src/renderer/audio/audioMixDuckingPolicy.ts#Reg114DuckId",
@@ -32370,7 +32419,7 @@
       "kind": "type",
       "file": "src/renderer/audio/audioMixDuckingPolicy.ts",
       "line": 5,
-      "endLine": 11
+      "endLine": 12
     },
     {
       "id": "symbol:src/renderer/audio/audioSafety.ts#audioNeverThrows",
@@ -32659,6 +32708,22 @@
       "file": "src/renderer/audio/preloadAudioBuffers.ts",
       "line": 30,
       "endLine": 92
+    },
+    {
+      "id": "symbol:src/renderer/audio/resolutionGapDuck.ts#RESOLUTION_GAP_DUCK_MULTIPLIER",
+      "name": "RESOLUTION_GAP_DUCK_MULTIPLIER",
+      "kind": "value",
+      "file": "src/renderer/audio/resolutionGapDuck.ts",
+      "line": 14,
+      "endLine": 14
+    },
+    {
+      "id": "symbol:src/renderer/audio/resolutionGapDuck.ts#resolutionGapDuckMultiplier",
+      "name": "resolutionGapDuckMultiplier",
+      "kind": "value",
+      "file": "src/renderer/audio/resolutionGapDuck.ts",
+      "line": 17,
+      "endLine": 18
     },
     {
       "id": "symbol:src/renderer/audio/sampledSfx.ts#MATCH_TIER_SAMPLE_KEYS",
@@ -57277,6 +57342,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/audio/resolutionGapDuck.ts->symbol:src/renderer/audio/resolutionGapDuck.ts#RESOLUTION_GAP_DUCK_MULTIPLIER",
+      "source": "file:src/renderer/audio/resolutionGapDuck.ts",
+      "target": "symbol:src/renderer/audio/resolutionGapDuck.ts#RESOLUTION_GAP_DUCK_MULTIPLIER",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/resolutionGapDuck.ts->symbol:src/renderer/audio/resolutionGapDuck.ts#resolutionGapDuckMultiplier",
+      "source": "file:src/renderer/audio/resolutionGapDuck.ts",
+      "target": "symbol:src/renderer/audio/resolutionGapDuck.ts#resolutionGapDuckMultiplier",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/audio/sampledSfx.ts->symbol:src/renderer/audio/sampledSfx.ts#MATCH_TIER_SAMPLE_KEYS",
       "source": "file:src/renderer/audio/sampledSfx.ts",
       "target": "symbol:src/renderer/audio/sampledSfx.ts#MATCH_TIER_SAMPLE_KEYS",
@@ -73857,6 +73934,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/App.tsx->src/renderer/audio/resolutionGapDuck.ts",
+      "source": "file:src/renderer/App.tsx",
+      "target": "file:src/renderer/audio/resolutionGapDuck.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/App.tsx->src/renderer/breakpoints.ts",
       "source": "file:src/renderer/App.tsx",
       "target": "file:src/renderer/breakpoints.ts",
@@ -74310,6 +74393,42 @@
       "id": "imports:src/renderer/audio/preloadAudioBuffers.ts->src/shared/run-number-guards.ts",
       "source": "file:src/renderer/audio/preloadAudioBuffers.ts",
       "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/resolutionGapDuck.test.ts->src/renderer/audio/audioMixDuckingPolicy.ts",
+      "source": "file:src/renderer/audio/resolutionGapDuck.test.ts",
+      "target": "file:src/renderer/audio/audioMixDuckingPolicy.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/resolutionGapDuck.test.ts->src/renderer/audio/resolutionGapDuck.ts",
+      "source": "file:src/renderer/audio/resolutionGapDuck.test.ts",
+      "target": "file:src/renderer/audio/resolutionGapDuck.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/resolutionGapDuck.test.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/audio/resolutionGapDuck.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/resolutionGapDuck.test.ts->src/shared/game-core.ts",
+      "source": "file:src/renderer/audio/resolutionGapDuck.test.ts",
+      "target": "file:src/shared/game-core.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/resolutionGapDuck.ts->src/renderer/audio/audioMixDuckingPolicy.ts",
+      "source": "file:src/renderer/audio/resolutionGapDuck.ts",
+      "target": "file:src/renderer/audio/audioMixDuckingPolicy.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/resolutionGapDuck.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/audio/resolutionGapDuck.ts",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -90266,6 +90385,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/audio/audioMixDuckingPolicy.ts->file:src/renderer/audio/resolutionGapDuck.test.ts",
+      "source": "file:src/renderer/audio/audioMixDuckingPolicy.ts",
+      "target": "file:src/renderer/audio/resolutionGapDuck.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/audio/audioSafety.ts->file:src/renderer/audio/audioSafety.test.ts",
       "source": "file:src/renderer/audio/audioSafety.ts",
       "target": "file:src/renderer/audio/audioSafety.test.ts",
@@ -90317,6 +90442,12 @@
       "id": "tested_by:src/renderer/audio/preloadAudioBuffers.ts->file:src/renderer/audio/preloadAudioBuffers.test.ts",
       "source": "file:src/renderer/audio/preloadAudioBuffers.ts",
       "target": "file:src/renderer/audio/preloadAudioBuffers.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/audio/resolutionGapDuck.ts->file:src/renderer/audio/resolutionGapDuck.test.ts",
+      "source": "file:src/renderer/audio/resolutionGapDuck.ts",
+      "target": "file:src/renderer/audio/resolutionGapDuck.test.ts",
       "kind": "tested_by"
     },
     {
@@ -92378,6 +92509,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/audio/resolutionGapDuck.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/renderer/audio/resolutionGapDuck.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/cardFace/programmaticCardFace.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/cardFace/programmaticCardFace.test.ts",
@@ -93431,6 +93568,12 @@
       "id": "tested_by:src/shared/game-core.ts->file:src/renderer/audio/feverDuck.test.ts",
       "source": "file:src/shared/game-core.ts",
       "target": "file:src/renderer/audio/feverDuck.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/game-core.ts->file:src/renderer/audio/resolutionGapDuck.test.ts",
+      "source": "file:src/shared/game-core.ts",
+      "target": "file:src/renderer/audio/resolutionGapDuck.test.ts",
       "kind": "tested_by"
     },
     {

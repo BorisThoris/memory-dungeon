@@ -8,6 +8,7 @@ export type Reg114DuckId =
     | 'game_over'
     | 'run_critical_sfx' /** match, floor clear — keep music slightly under SFX */
     | 'fever_break' /** the Fever sting and its shatter phrase read over the bed for one beat */
+    | 'resolution_gap' /** the second flip is down and the turn is not yet resolved (thesis §46.4) */
     | 'ui_click';
 
 interface Reg114DuckRow {
@@ -27,6 +28,7 @@ export const REG114_MIX_DUCKING_TABLE: readonly Reg114DuckRow[] = [
     { id: 'game_over', musicVolumeMultiplier: 0, reason: 'Results screen is own layer', audioInteractionCoverage: true },
     { id: 'run_critical_sfx', musicVolumeMultiplier: 0.88, reason: 'Light duck so board SFX read over bed', audioInteractionCoverage: true },
     { id: 'fever_break', musicVolumeMultiplier: 0.6, reason: 'A Fever break is the loudest thing on the floor; the bed steps aside for one beat and comes back on a curve', audioInteractionCoverage: true },
+    { id: 'resolution_gap', musicVolumeMultiplier: 0.78, reason: 'Second flip down, turn not yet resolved: a slight dip before the answer is the cheapest tension there is (thesis §46.4)', audioInteractionCoverage: true },
     { id: 'ui_click', musicVolumeMultiplier: 1, reason: 'UI SFX is short; no automatic music duck in v1', audioInteractionCoverage: true }
 ] as const;
 
