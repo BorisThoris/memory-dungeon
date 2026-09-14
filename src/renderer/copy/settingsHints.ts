@@ -6,27 +6,28 @@
  * keeps the mapping checkable against `Settings` in `contracts.ts`.
  */
 export const SETTINGS_HINTS = {
-    boardBloomEnabled: 'Soft board-stage glow. Disabled on Low quality for performance.',
-    boardPresentation: 'Choose the current live board framing mode.',
-    boardScreenSpaceAA: 'Board WebGL edge smoothing. Auto follows the motion setting unless you override it.',
+    boardBloomEnabled: 'A soft glow around the board. Stays off on Low quality.',
+    boardPresentation: 'How the board is framed on screen.',
+    boardScreenSpaceAA: 'Smooths the edges of the cards. Auto follows Reduce Motion unless you choose.',
     cameraViewportModePreference:
-        'Auto follows phone / narrow-short-landscape breakpoints. Always or Never override.',
-    displayMode: 'Switch between current supported desktop display modes.',
-    distractionChannelEnabled: 'Enables the distraction mutator overlay when the daily includes it.',
+        'A close-up camera that follows the board on phones and short, narrow screens. Auto turns it on for those; Always and Never decide for you.',
+    displayMode: 'Play in a window or full screen.',
+    distractionChannelEnabled: 'Shows the distraction overlay when a daily run includes that mutator.',
     echoFeedbackEnabled: 'Keeps mismatched faces visible a little longer.',
     graphicsQuality:
-        'Low caps board pixel ratio and menu atmosphere resolution; high allows sharper WebGL. Bloom stays off unless you enable it below.',
-    masterVolume: 'Overall mix applied across the whole run.',
-    musicVolume: 'Menu and ambient music level.',
-    reduceMotion: 'Turns off the board shake, board breathing, tilt-heavy UI motion, and visual drift.',
+        'Low draws the board and the menu backdrop at a lower resolution; High keeps them sharp. Bloom stays off unless you turn it on below.',
+    masterVolume: 'Overall volume for everything.',
+    musicVolume: 'Menu and ambient music.',
+    reduceMotion: 'Turns off the board shake, board breathing, tilting menus, and background drift.',
     resolveDelayMultiplier: 'How long matches and mismatches linger, and above 1x the memorize window with them. Applies to new runs.',
     sfxVolume: 'Tile flips, rewards, and hit feedback.',
-    shuffleScorePenalty: 'Applies the current live score penalty after each shuffle.',
-    tileFocusAssist: 'Dims non-adjacent hidden tiles after the first pick on the fallback board.',
-    tileFocusAssistRepeat: 'Repeats the live focus assist toggle here for faster access.',
+    shuffleScorePenalty: 'Each full shuffle costs some score. Applies to new runs.',
+    tileFocusAssist: 'After your first pick, dims the hidden cards that are not beside it.',
+    tileFocusAssistRepeat: 'The same Focus Assist switch as under Gameplay, here for quick reach.',
+    /* Kept as the reference row's own words: `settings-control-model.ts` documents this placeholder. */
     tutorialHints: 'Tutorial hint visibility is presented here for layout fidelity only.',
-    uiScale: 'Scales the renderer UI on desktop and tablet viewports.',
-    weakerShuffleMode: 'Full shuffle preserves the original challenge. Rows only is the softer live option.'
+    uiScale: 'Makes the menus and HUD larger or smaller on desktop and tablet screens.',
+    weakerShuffleMode: 'Full shuffle keeps the original challenge. Rows only is the gentler option.'
 } as const;
 
 /** The button row that closes the screen. */
