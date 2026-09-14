@@ -51,8 +51,8 @@
     {
       "path": ".github/workflows/project-meta-refresh.yml",
       "category": "configuration",
-      "bytes": 2828,
-      "sha256": "e2a7bf8da613847eba0643b44c391e05e4b79fff19b9f459c7f592b9ad2f5c04"
+      "bytes": 2976,
+      "sha256": "cb5c3e68429ba62d286736180409107b72fe0dc9ca30ef31d2c5a896e4121575"
     },
     {
       "path": ".github/workflows/project-meta.yml",
