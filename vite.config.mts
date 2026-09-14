@@ -88,6 +88,16 @@ export default defineConfig(({ mode }) => ({
          * and nothing reloads under it.
          */
         hmr: process.env.E2E_DISABLE_HMR === '1' ? false : undefined,
+        fs: {
+            /*
+             * A git worktree links `node_modules` to the main checkout. Vite serves files by their
+             * real path, and the fonts under `@fontsource` then resolve outside the worktree root,
+             * so every `.woff2` came back 403 and the app (and every Playwright layout measurement
+             * run from a worktree) fell back to system fonts. Allowing the resolved directory
+             * keeps a worktree's dev server serving what the main checkout's does.
+             */
+            allow: [__dirname, fs.realpathSync(path.join(__dirname, 'node_modules'))]
+        },
         watch: {
             ignored: ['**/.codex-run/**', '**/output/**', '**/release/**', '**/dist/**', '**/dist-build/**', '**/dist-electron/**']
         }
