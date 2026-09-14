@@ -2338,7 +2338,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "57e6b36fbb7dc33d05968fbeae3d51345ed43bf42146472b9d7db095f404726b"
+      "sha256": "240edfd6c72e7a6b81d7ae463992ff86b6e1f7382e858fedbc180a9fff92e19b"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4515,8 +4515,8 @@
     {
       "path": "scripts/audit-generation-claims.ts",
       "category": "script",
-      "bytes": 9238,
-      "sha256": "dbe948bfb6d17c061c4c3dc348ae5d3bd292be49c9051d6c4846839e17b60179"
+      "bytes": 9612,
+      "sha256": "d531f353387c38dd668bc3df9417d1f273bbf562c7eac8618795ed4030d8b16c"
     },
     {
       "path": "scripts/audit-renderer-assets.mjs",
@@ -5025,8 +5025,8 @@
     {
       "path": "scripts/test-only-exports.ts",
       "category": "script",
-      "bytes": 15121,
-      "sha256": "0d7d392bf13d5766ef34ad11ff47d041461bb804ce9a6e76fe82348b55970945"
+      "bytes": 15578,
+      "sha256": "05d367829856b928a473b8536ff7f9f29f6c9dea000deb50b6daa6115203fc54"
     },
     {
       "path": "scripts/test-only-modules.ts",
@@ -11289,8 +11289,8 @@
     {
       "path": "src/shared/generation-claim-audit.test.ts",
       "category": "test",
-      "bytes": 4917,
-      "sha256": "09cee95deb60f9d61176e80fa3c0d5b043feee3cc1a2826a9eef7c2a6f05a637"
+      "bytes": 5656,
+      "sha256": "f0ea944e04615f265ec1e90d6e1693d6bc28ff1b9696f4737612c7e093c24a20"
     },
     {
       "path": "src/shared/graphicsQuality.test.ts",
@@ -27101,7 +27101,7 @@
       "path": "src/shared/generation-claim-audit.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 96,
+      "lineCount": 111,
       "imports": [],
       "exports": [],
       "testedBy": []
