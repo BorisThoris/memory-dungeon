@@ -115,11 +115,11 @@ export const getProfileSummaryRows = (save: SaveData): ProfileSummaryRow[] => {
          */
         {
             id: 'history',
-            label: 'Run history rows',
+            label: 'Recent runs kept',
             value: String(summary.runHistoryEntries),
-            source: `last run journal \u00b7 ${summary.runsFinished} runs finished`
+            source: `of ${summary.runsFinished} runs finished`
         },
-        { id: 'sharp_floors', label: 'Sharp floors', value: String(summary.sharpFloors), source: 'playerStats.sharpFloors' }
+        { id: 'sharp_floors', label: 'Sharp floors', value: String(summary.sharpFloors), source: 'Floors cleared with the chain at Sharp or above' }
     ];
 };
 

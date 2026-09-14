@@ -8326,7 +8326,7 @@
       "path": "src/renderer/components/ProfileScreen.test.tsx",
       "category": "test",
       "bytes": 12812,
-      "sha256": "5f6bf1dd34083b1ee59594b55da3afb79a05b7801290d2c3ea3e48a768c46101"
+      "sha256": "3074acaea1ba707aa3a56d143612806268c3ef30a035292493e870f8e9d728f2"
     },
     {
       "path": "src/renderer/components/ProfileScreen.tsx",
@@ -11925,8 +11925,8 @@
     {
       "path": "src/shared/profile-summary.ts",
       "category": "source",
-      "bytes": 7412,
-      "sha256": "5cd9573858699ff10aa82775c4b64185cd6c1fc96a74a382e196b566b8d3ea08"
+      "bytes": 7415,
+      "sha256": "4b3d375c7c790514982920e13e9f2c7298d9b26676e52355ab9e0ce05f44af88"
     },
     {
       "path": "src/shared/qa/regPhase5Hardening.test.ts",
