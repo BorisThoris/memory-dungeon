@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { auditGenerationClaims, readRepositoryFiles } from '../../scripts/audit-generation-claims';
+import {
+    auditGenerationClaims,
+    readRepositoryFiles,
+    type RepositoryFile
+} from '../../scripts/audit-generation-claims';
 
 /**
  * This repository keeps its history in its prose: six hundred sentences that name a generation and
@@ -14,6 +18,9 @@ import { auditGenerationClaims, readRepositoryFiles } from '../../scripts/audit-
  */
 describe('the generation claim audit', () => {
     const file = (path: string, text: string) => ({ path, text });
+    /** The whole repository, read once for the two cases that walk it. */
+    let repositoryFiles: RepositoryFile[] | null = null;
+    const repository = (): RepositoryFile[] => (repositoryFiles ??= readRepositoryFiles());
 
     it('names a claim whose file no longer exists', () => {
         const report = auditGenerationClaims([
@@ -85,8 +92,16 @@ describe('the generation claim audit', () => {
         expect(report.issues).toEqual([]);
     });
 
+    it('spells repository paths the way a claim does, whatever the platform separator', () => {
+        // On Windows the paths came back as `docs\BALANCE_NOTES.md`, so no claim matched a file,
+        // no basename split off, the shipped record was not found and every claim read as stale.
+        const paths = repository().map((file) => file.path);
+        expect(paths.some((path) => path.includes('\\'))).toBe(false);
+        expect(paths).toContain('docs/BALANCE_NOTES.md');
+    });
+
     it('holds over the whole repository, which is the point of it', () => {
-        const report = auditGenerationClaims(readRepositoryFiles());
+        const report = auditGenerationClaims(repository());
         expect(report.issues).toEqual([]);
         // A count, so a rewrite that quietly drops the record from a document is visible here.
         expect(report.claims).toBeGreaterThan(500);

@@ -20,7 +20,7 @@
  *      is the highest one the repository mentions, so this needs no constant to keep up to date.
  */
 import { readdirSync, readFileSync, statSync } from 'node:fs';
-import { extname, join, relative } from 'node:path';
+import { extname, join, relative, sep } from 'node:path';
 
 const ROOT = join(import.meta.dirname, '..');
 const SKIPPED_DIRECTORIES = new Set([
@@ -83,9 +83,17 @@ export interface RepositoryFile {
     readonly text: string;
 }
 
-/** Every file the audit can see, read once. */
+/**
+ * Every file the audit can see, read once. Paths are spelled with `/` whatever the platform
+ * separator is: a claim writes `docs/BALANCE_NOTES.md`, and on Windows `relative()` answered
+ * `docs\BALANCE_NOTES.md`, so no path matched, no basename could be split off, the shipped
+ * record was never found and the audit reported every claim in the repository as stale.
+ */
 export const readRepositoryFiles = (): RepositoryFile[] =>
-    collectFiles(ROOT).map((file) => ({ path: relative(ROOT, file), text: readFileSync(file, 'utf8') }));
+    collectFiles(ROOT).map((file) => ({
+        path: relative(ROOT, file).split(sep).join('/'),
+        text: readFileSync(file, 'utf8')
+    }));
 
 export const auditGenerationClaims = (files: readonly RepositoryFile[] = readRepositoryFiles()): GenerationClaimReport => {
     const paths = new Set([...files.map((file) => file.path.slice(file.path.lastIndexOf('/') + 1)), ...files.map((file) => file.path)]);
