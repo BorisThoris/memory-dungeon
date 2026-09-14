@@ -135,12 +135,11 @@ const RunShell = ({
     const nextTier = chainMeterView.momentum < rungs.clean ? 'clean'
         : chainMeterView.momentum < rungs.sharp ? 'sharp'
         : chainMeterView.momentum < rungs.fever ? 'fever' : null;
-    const nextTierLabel = nextTier
-        ? `${rungs[nextTier] - chainMeterView.momentum} momentum to ${CHAIN_TIER_LABELS[nextTier]}`
-        : 'Fever active';
-    const nextTierBenefit = nextTier === 'clean' ? 'Reach deeper into the clump'
-        : nextTier === 'sharp' ? 'Chain into the next clump'
-        : nextTier === 'fever' ? 'Chain into three clumps' : 'Keep matching to hold the fire';
+    const nextTierLabel = CHAIN_BEAT_COPY.goalLabel(
+        nextTier ? rungs[nextTier] - chainMeterView.momentum : 0,
+        nextTier
+    );
+    const nextTierBenefit = CHAIN_BEAT_COPY.goalBenefit(nextTier);
     const chainMeterDropping = useChainMeterDrop(chainMeterView.momentum, chainTierRungs(run.board?.pairCount ?? null).clean);
     const line = feedback ?? onboardingLine ?? null;
     const lineTone = feedback ? feedbackPriority : 'info';

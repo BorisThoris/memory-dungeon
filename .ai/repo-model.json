@@ -8187,8 +8187,8 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 17472,
-      "sha256": "798f772d59010e63efe9c1c6886315f558a39795582004b8a92539346c605334"
+      "bytes": 17284,
+      "sha256": "646a09baea98fb461209aedb7174e1a7b0f645029645e17df6474d476da9dc6b"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -9183,8 +9183,8 @@
     {
       "path": "src/renderer/copy/chainBeat.ts",
       "category": "source",
-      "bytes": 7362,
-      "sha256": "7d2cf761f2e203250d61d0cae75b47b0dea07da9e50270ff0cc916f5d10abe91"
+      "bytes": 8108,
+      "sha256": "971110b2acbfcf530c0c7878143a48fc6904821640cd7780caacc769031e8a07"
     },
     {
       "path": "src/renderer/copy/chainMilestoneFeedback.test.ts",
@@ -11817,8 +11817,8 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 39082,
-      "sha256": "9c9ca5d4614687429a677bf8fc488c2c81b81125d2a62cba4059c62575acbba8"
+      "bytes": 39178,
+      "sha256": "1c99c48b4612127b265ef7c1e139273270fc9817f821cbc41b6bcb2d7653bd4f"
     },
     {
       "path": "src/shared/release-checklist.ts",
@@ -14733,8 +14733,8 @@
     {
       "path": "vitest.setup.ts",
       "category": "configuration",
-      "bytes": 3828,
-      "sha256": "e82a3b7ddac17cf9dc806200a3e4fc4a607fae58960ac4b41eccc6d949d29a59"
+      "bytes": 4523,
+      "sha256": "80c6e3b49d9cd36cb4b07ced1a29fda32c2916e6be25322388670d6bdf3102e3"
     },
     {
       "path": "wrangler.toml",
@@ -17825,7 +17825,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 346,
+      "lineCount": 345,
       "imports": [
         "file:src/renderer/copy/chainBeat.ts",
         "file:src/renderer/copy/passAndPlay.ts",
@@ -20801,7 +20801,7 @@
       "path": "src/renderer/copy/chainBeat.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 117,
+      "lineCount": 131,
       "imports": [
         "file:src/shared/chain-rung-value-rules.ts",
         "file:src/shared/chain-tier-rules.ts"
@@ -28714,7 +28714,7 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 677,
+      "lineCount": 678,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
@@ -34306,8 +34306,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 345,
-      "endLine": 345
+      "line": 344,
+      "endLine": 344
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
@@ -37835,7 +37835,7 @@
       "kind": "value",
       "file": "src/renderer/copy/chainBeat.ts",
       "line": 34,
-      "endLine": 116
+      "endLine": 130
     },
     {
       "id": "symbol:src/renderer/copy/chainBeat.ts#CHAIN_STYLE_LONG_SPAN",
