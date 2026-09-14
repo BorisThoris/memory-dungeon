@@ -8337,8 +8337,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 147726,
-      "sha256": "c0001215288947dd8e2cc4f75b282b6b5cc32c050eab5d9eed3df4bee7c7825c"
+      "bytes": 148300,
+      "sha256": "124fdb9a5898287bb64c37498914fcf587e79b3ee842361d1ff6cfd51f3ef70d"
     },
     {
       "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -18251,7 +18251,7 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3418,
+      "lineCount": 3428,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -34698,8 +34698,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 3417,
-      "endLine": 3417
+      "line": 3427,
+      "endLine": 3427
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",

@@ -463,12 +463,20 @@ const BOARD_MARKER_ROUTE_GLYPH_CONTRACT = CARD_FEEDBACK_ROUTE_GLYPH_CONTRACT;
 
 const PRELOAD_READY_TIMEOUT_MS = 320;
 
+/**
+ * A label and its rows as one spoken paragraph. A row that already ends a sentence keeps its own
+ * stop: the preview lines do ("...Clean reaches no further here."), and adding another made the
+ * chip's accessible name end in "..".
+ */
 const formatBoardFeedbackLabel = (
     label: string,
     rows: readonly (string | null | undefined)[]
 ): string => {
-    const rowCopy = rows.filter((row): row is string => Boolean(row)).join('. ');
-    return rowCopy ? `${label}. ${rowCopy}.` : label;
+    const sentences = rows
+        .filter((row): row is string => Boolean(row))
+        .map((row) => row.trim())
+        .map((row) => (/[.!?]$/u.test(row) ? row : `${row}.`));
+    return sentences.length > 0 ? `${label}. ${sentences.join(' ')}` : label;
 };
 
 
@@ -3384,14 +3392,16 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         <small>{focusedPreviewChip.eyebrow}</small>
                                         <b>{traitPreviewSummaryLabel}</b>
                                     </span>
-                                    <span className={styles.traitPreviewSignal}>
-                                        {focusedPreviewChip.kind === 'pickup' ? 'Reward' : 'Combo'}
-                                        {previewDensity > 0
-                                            ? focusedPreviewChip.kind === 'trait'
+                                    {/* The signal pill says how much is lit. With nothing lit it only
+                                        repeated the summary's word one line down, so it waits. */}
+                                    {previewDensity > 0 ? (
+                                        <span className={styles.traitPreviewSignal}>
+                                            {focusedPreviewChip.kind === 'pickup' ? 'Reward' : 'Combo'}
+                                            {focusedPreviewChip.kind === 'trait'
                                                 ? ` · ${previewDensity} ${previewDensity === 1 ? 'combo card' : 'combo cards'} lit`
-                                                : ` · ${previewDensity} ${previewDensity === 1 ? 'route' : 'routes'} lit`
-                                            : ''}
-                                    </span>
+                                                : ` · ${previewDensity} ${previewDensity === 1 ? 'route' : 'routes'} lit`}
+                                        </span>
+                                    ) : null}
                                     <b className={styles.traitPreviewAction}>{focusedPreviewChip.action}</b>
                                     {focusedPreviewChip.lines.map((line, index) => (
                                         <span
