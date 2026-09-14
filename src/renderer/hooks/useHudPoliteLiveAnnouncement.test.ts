@@ -77,10 +77,11 @@ const mismatchTurn = (
         }
     }) as BoardTurnResolvedEvent;
 
+/** Lets the announcer's zero-delay flush run, then the microtask that publishes the line. */
 const flushRaf = async (): Promise<void> => {
     await act(async () => {
         await new Promise<void>((resolve) => {
-            requestAnimationFrame(() => resolve());
+            setTimeout(resolve, 0);
         });
         await Promise.resolve();
     });
@@ -847,11 +848,16 @@ describe('useHudPoliteLiveAnnouncement', () => {
     it('drops an older queued live-region publish when a newer delivery overtakes it', async () => {
         const pendingFrames: FrameRequestCallback[] = [];
         const pendingMicrotasks: VoidFunction[] = [];
-        vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback): number => {
-            pendingFrames.push(callback);
-            return pendingFrames.length;
-        });
-        vi.stubGlobal('cancelAnimationFrame', vi.fn());
+        // The flush is a zero-delay timer; hold those so the test decides when a batch lands,
+        // and let the throttle's real timers through.
+        const realSetTimeout = globalThis.setTimeout;
+        vi.stubGlobal('setTimeout', ((callback: FrameRequestCallback, delay?: number, ...args: unknown[]) => {
+            if (delay === 0) {
+                pendingFrames.push(callback);
+                return pendingFrames.length;
+            }
+            return realSetTimeout(callback, delay, ...args);
+        }) as typeof setTimeout);
         vi.spyOn(globalThis, 'queueMicrotask').mockImplementation((callback) => {
             pendingMicrotasks.push(callback);
         });
@@ -908,11 +914,16 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
     it('throttles a second delivery when the first delivery timestamp is zero', async () => {
         const pendingFrames: FrameRequestCallback[] = [];
-        vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback): number => {
-            pendingFrames.push(callback);
-            return pendingFrames.length;
-        });
-        vi.stubGlobal('cancelAnimationFrame', vi.fn());
+        // The flush is a zero-delay timer; hold those so the test decides when a batch lands,
+        // and let the throttle's real timers through.
+        const realSetTimeout = globalThis.setTimeout;
+        vi.stubGlobal('setTimeout', ((callback: FrameRequestCallback, delay?: number, ...args: unknown[]) => {
+            if (delay === 0) {
+                pendingFrames.push(callback);
+                return pendingFrames.length;
+            }
+            return realSetTimeout(callback, delay, ...args);
+        }) as typeof setTimeout);
         vi.spyOn(performance, 'now').mockReturnValue(0);
         const { result, unmount } = renderHook(() =>
             useHudPoliteLiveAnnouncement({

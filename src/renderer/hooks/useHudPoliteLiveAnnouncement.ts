@@ -69,7 +69,7 @@ const normalizeRecallFocusForAnnouncement = (focus: number, max: number): { focu
 
 /**
  * HUD-015: polite `aria-live` source text for resolved turns and resource changes.
- * Batches concurrent announcements on `requestAnimationFrame`, dedupes by key, prefers higher priority,
+ * Batches concurrent announcements on a zero-delay timer, dedupes by key, prefers higher priority,
  * and throttles display cadence so screen readers get summaries, not chatter.
  */
 
@@ -118,7 +118,7 @@ export const useHudPoliteLiveAnnouncement = ({
     );
 
     const queueRef = useRef(new Map<string, { text: string; priority: HudAnnouncePriority }>());
-    const rafIdRef = useRef<number | null>(null);
+    const flushTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const lastDisplayedAtRef = useRef<number | null>(null);
     const throttleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const pendingThrottledAnnouncementRef = useRef<{ text: string; priority: HudAnnouncePriority } | null>(null);
@@ -207,13 +207,17 @@ export const useHudPoliteLiveAnnouncement = ({
     }, [tryDeliver]);
 
     const scheduleQueueFlush = useCallback(() => {
-        if (rafIdRef.current != null) {
+        if (flushTimerRef.current != null) {
             return;
         }
-        rafIdRef.current = requestAnimationFrame(() => {
-            rafIdRef.current = null;
+        // A zero-delay timer, not an animation frame: everything queued in this task still
+        // lands as one line, and a window that is not painting (minimised, covered, or a
+        // headless preview) still hears its announcements. On a frame they waited, sometimes
+        // for minutes, and then arrived all at once.
+        flushTimerRef.current = setTimeout(() => {
+            flushTimerRef.current = null;
             flushAnnouncementQueue();
-        });
+        }, 0);
     }, [flushAnnouncementQueue]);
 
     const queuePoliteAnnouncement = useCallback(
@@ -247,8 +251,8 @@ export const useHudPoliteLiveAnnouncement = ({
 
     useEffect(
         () => () => {
-            if (rafIdRef.current != null) {
-                cancelAnimationFrame(rafIdRef.current);
+            if (flushTimerRef.current != null) {
+                clearTimeout(flushTimerRef.current);
             }
             if (throttleTimerRef.current) {
                 clearTimeout(throttleTimerRef.current);
