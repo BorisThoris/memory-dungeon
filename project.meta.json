@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-14T22:06:29.324Z",
+  "generatedAt": "2026-09-14T23:28:11.274Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -273,53 +273,53 @@
   },
   "media": {
     "source": "repo-local",
-    "directory": "C:/Users/Gaming PC/Desktop/Repos/memory-dungeon/project-media",
+    "directory": "/home/runner/work/memory-dungeon/memory-dungeon/project-media",
     "primary": "project-media/card.jpg",
     "images": [
       {
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 156703,
+        "bytes": 157258,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-14T20:19:40.783Z"
+        "capturedAt": "2026-09-14T23:27:07.605Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 146921,
+        "bytes": 147565,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-14T20:19:50.945Z"
+        "capturedAt": "2026-09-14T23:27:26.745Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 120436,
+        "bytes": 120626,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-14T20:20:19.524Z"
+        "capturedAt": "2026-09-14T23:27:51.934Z"
       },
       {
         "profile": "mobile",
         "file": "mobile.jpg",
         "path": "project-media/mobile.jpg",
-        "bytes": 48577,
+        "bytes": 52928,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-14T20:19:59.877Z"
+        "capturedAt": "2026-09-14T23:27:35.802Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 110517,
+        "bytes": 110768,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-14T20:20:38.843Z"
+        "capturedAt": "2026-09-14T23:28:11.049Z"
       }
     ]
   },
@@ -381,13 +381,13 @@
     "devDependencyCount": 49
   },
   "metrics": {
-    "sourceFiles": 1095,
-    "testFiles": 472,
-    "sourceLines": 174511,
+    "sourceFiles": 1087,
+    "testFiles": 474,
+    "sourceLines": 166287,
     "largestDirectories": [
       {
         "directory": "src",
-        "files": 914
+        "files": 918
       },
       {
         "directory": "scripts",
@@ -402,8 +402,8 @@
         "files": 14
       },
       {
-        "directory": "dist-build",
-        "files": 9
+        "directory": ".",
+        "files": 5
       }
     ],
     "hasReadme": true,
@@ -422,11 +422,11 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "3cc9748b",
-    "lastCommitDate": "2026-09-15T01:06:27+03:00",
-    "lastCommitSubject": "Refresh screenshots, card, icons and metadata after every deployment",
-    "commitCount": 1444,
-    "remote": "https://github.com/BorisThoris/memory-dungeon.git"
+    "head": "e0efc418",
+    "lastCommitDate": "2026-09-15T01:52:30+03:00",
+    "lastCommitSubject": "Refresh the diagram counts and repo model after merging main",
+    "commitCount": 1458,
+    "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
     "file": "README.md",
