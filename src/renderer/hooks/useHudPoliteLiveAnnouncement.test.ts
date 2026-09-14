@@ -297,6 +297,32 @@ describe('useHudPoliteLiveAnnouncement', () => {
         expect(result.current.priority).toBe('info');
     });
 
+    it('clears the last floor\'s line when the next floor opens with nothing new to say', async () => {
+        // "Match resolved. 2/4 pairs cleared." stood on the HUD through the whole memorize phase
+        // of the next floor, describing a board that had already left.
+        const { result, rerender } = renderHook(
+            (p: { level: number; turnEvent: BoardTurnResolvedEvent | null }) =>
+                useHudPoliteLiveAnnouncement({
+                    ...base,
+                    boardLevel: p.level,
+                    boardTurnEvent: p.turnEvent
+                }),
+            { initialProps: { level: 1, turnEvent: null as BoardTurnResolvedEvent | null } }
+        );
+
+        await act(async () => {
+            rerender({ level: 1, turnEvent: matchTurn('last-match-of-floor-1') });
+        });
+        await flushRaf();
+        expect(result.current.message).toBe('Match resolved. 1/4 pairs cleared.');
+
+        await act(async () => {
+            rerender({ level: 2, turnEvent: matchTurn('last-match-of-floor-1') });
+        });
+        await flushRaf();
+        expect(result.current.message).toBe('');
+    });
+
     it('announces every event one command raised, not just the last of them', async () => {
         // A single flip can claim a findable and trip a hazard. The hook used to take the latest
         // feedback event and drop the rest, so the player heard one of the two.

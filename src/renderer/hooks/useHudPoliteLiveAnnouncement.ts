@@ -135,6 +135,17 @@ export const useHudPoliteLiveAnnouncement = ({
         });
     }, []);
 
+    /** Takes the standing line down, and cancels any publish still in flight ahead of it. */
+    const clearMessage = useCallback((): void => {
+        const token = livePublishTokenRef.current + 1;
+        livePublishTokenRef.current = token;
+        queueMicrotask(() => {
+            if (livePublishTokenRef.current === token) {
+                setMessage('');
+            }
+        });
+    }, []);
+
     const tryDeliver = useCallback((text: string, priority: HudAnnouncePriority) => {
         const now = nowMs();
         const last = lastDisplayedAtRef.current;
@@ -288,6 +299,18 @@ export const useHudPoliteLiveAnnouncement = ({
 
         if (snap === null || snap.level !== boardLevel) {
             actionSnapRef.current = nextSnap;
+            if (snap !== null && newGameplayFeedback.length === 0) {
+                // A new floor with nothing new to say. The last floor's line ("Match
+                // resolved. 2/4 pairs cleared.") stood on the HUD through the whole memorize
+                // phase of the next one, describing a board that was no longer there.
+                pendingThrottledAnnouncementRef.current = null;
+                if (throttleTimerRef.current) {
+                    clearTimeout(throttleTimerRef.current);
+                    throttleTimerRef.current = null;
+                }
+                clearMessage();
+                return;
+            }
             announceGameplayFeedbackBatch(newGameplayFeedback);
             return;
         }
@@ -388,6 +411,7 @@ export const useHudPoliteLiveAnnouncement = ({
     }, [
         announceGameplayFeedbackBatch,
         boardLevel,
+        clearMessage,
         unannouncedGameplayFeedback,
         queuePoliteAnnouncement,
         regionShuffleCharges,
