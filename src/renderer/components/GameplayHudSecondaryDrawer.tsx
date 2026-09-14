@@ -117,15 +117,17 @@ const GameplayHudSecondaryDrawer = ({
             ) : null}
             <div className={styles.hudTouchDetailRows} data-testid="hud-touch-detail-rows">
                 {touchHudDetailRows.map((row) => (
-                    <div
-                        className={styles.statPillCompact}
+                    <details
+                        className={styles.hudTouchDetail}
                         data-testid={`hud-touch-detail-${row.id}`}
                         key={row.id}
-                        title={row.detail}
                     >
-                        <span className={styles.statKey}>{row.label}</span>
-                        <span className={styles.statVal}>{row.value}</span>
-                    </div>
+                        <summary className={`${styles.statPillCompact} ${styles.hudTouchDetailSummary}`}>
+                            <span className={styles.statKey}>{row.label}</span>
+                            <span className={styles.statVal}>{row.value}</span>
+                        </summary>
+                        <p className={styles.hudTouchDetailCopy}>{row.detail}</p>
+                    </details>
                 ))}
             </div>
         </div>

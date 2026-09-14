@@ -7188,6 +7188,50 @@
     gap: var(--gameplay-hud-context-gap, 0.35rem);
     width: 100%;
     margin-top: 0.35rem;
+    align-items: start;
+}
+
+.hudTouchDetail {
+    min-width: 0;
+}
+
+.hudTouchDetail > .hudTouchDetailSummary {
+    position: relative;
+    cursor: pointer;
+    list-style: none;
+    padding-right: 1.4rem;
+    min-height: 2.75rem;
+}
+
+.hudTouchDetailSummary::-webkit-details-marker {
+    display: none;
+}
+
+.hudTouchDetailSummary::after {
+    content: '+';
+    position: absolute;
+    right: 0.45rem;
+    top: 0.45rem;
+    color: var(--theme-gold-bright);
+}
+
+.hudTouchDetail[open] > .hudTouchDetailSummary::after {
+    content: '−';
+}
+
+.hudTouchDetailSummary:focus-visible {
+    outline: 2px solid var(--theme-cyan-bright);
+    outline-offset: 2px;
+}
+
+.hudTouchDetailCopy {
+    margin: 0.35rem 0 0;
+    padding: 0.45rem;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--theme-text-muted);
+    white-space: normal;
+    overflow-wrap: anywhere;
 }
 
 .hudDensityPrimary {

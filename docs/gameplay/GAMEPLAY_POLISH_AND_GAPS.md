@@ -52,7 +52,7 @@
 |------|--------|-------|------|
 | `powersUsedThisRun` vs contract comment | **Functional** | Authoritative list lives on [`RunState.powersUsedThisRun`](../../src/shared/contracts.ts) JSDoc (shuffle / row shuffle / tile swap / destroy / peek / undo / gambit / stray / flash / wild match, etc.; pins excluded). **`ACH_PERFECT_CLEAR`** reads this flag—treat UI copy as separate from the type contract. | [epic-powers-and-interactions](./epic-powers-and-interactions.md), [epic-meta-progression](./epic-meta-progression.md) |
 | Flash pair | **Functional** | `applyFlashPair` in `game.ts` and `applyFlashPairPower` in `useAppStore` both require practice or wild menu run; toolbar only shows the control in those modes. | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
-| Perfect clear discoverability | **Functional** | Players may not realize undo/peek/gambit disqualify perfect—**UI hint or rename** worth considering. | [epic-meta-progression](./epic-meta-progression.md) |
+| Perfect clear discoverability | **Shippable** | Power copy explains disqualification. HUD, inventory, cause rows, and touch details report recorded first/latest assist actions across floors; older runs without history get an explicit unknown-source fallback. | [epic-meta-progression](./epic-meta-progression.md) |
 
 ---
 

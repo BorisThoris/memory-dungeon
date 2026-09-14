@@ -18,7 +18,7 @@ Steam-style achievements, anonymous telemetry hooks, save schema, and how they i
 ## Rough edges
 
 - **Telemetry:** Product analytics remains host-injected by design; no bundled remote sink ships in-repo.
-- **Achievement fairness:** Players may not realize undo/peek/gambit disqualify “perfect” — consider UI hint or rename.
+- **Achievement fairness:** Power descriptions explain disqualification. Perfect Memory feedback records the actual first/latest assist across floors; older runs without history use an explicit unknown-source fallback.
 
 ## Primary code
 
@@ -30,7 +30,7 @@ Steam-style achievements, anonymous telemetry hooks, save schema, and how they i
 
 ## Refinement
 
-**Shippable** for achievements + save. **Functional** for privacy-first telemetry: no-op in production unless a host injects a sink, dev console logging when enabled. Perfect-clear **rules** are documented on `RunState`; **player expectations** may still need UI polish (tooltip / achievement copy).
+**Shippable** for achievements + save. **Functional** for privacy-first telemetry: no-op in production unless a host injects a sink, dev console logging when enabled. Perfect-clear rules are documented on `RunState`; action attribution is shared by HUD, inventory, cause rows, and touch details (2026-09-14 refinement).
 
 ## Tasks (polish backlog)
 

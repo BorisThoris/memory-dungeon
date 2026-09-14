@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createNewRun } from './game-core';
+import { applyPeek, applyShuffle } from './board-powers';
+import { makePair, makeRun } from './test/game-fixtures';
 import { HAZARD_TILE_DEFINITIONS } from './hazard-tiles';
 import {
     LONG_RUN_TERMINOLOGY_ROWS,
@@ -13,21 +15,16 @@ import {
 
 describe('GLD-FB long-run feedback read models', () => {
     it('attributes Perfect Memory locks without adding scoring side effects', () => {
-        const run = {
-            ...createNewRun(0, { runSeed: 91_001, activeMutators: [] }),
-            powersUsedThisRun: true,
-            gambitThirdFlipUsed: true,
-            stats: {
-                ...createNewRun(0, { runSeed: 91_001, activeMutators: [] }).stats,
-                shufflesUsed: 1
-            }
-        };
+        const base = makeRun([...makePair('A', 'A'), ...makePair('B', 'B')], {
+            peekCharges: 1, shuffleCharges: 1
+        });
+        const run = applyShuffle(applyPeek(base, 'A-a'));
 
         expect(getPerfectMemoryAttribution(run)).toEqual({
             locked: true,
-            firstAction: 'gambit',
-            latestAction: 'shuffle or swap',
-            summary: 'Perfect Memory locked by gambit.',
+            firstAction: 'peek',
+            latestAction: 'shuffle',
+            summary: 'Perfect Memory locked by peek. Latest assist: shuffle.',
             tokens: ['locked', 'forfeit']
         });
     });
@@ -86,6 +83,20 @@ describe('GLD-FB long-run feedback read models', () => {
         expect(getTouchHudDetailRows(run).find((row) => row.id === 'memory')?.detail).toContain(
             'Next memory move: Resolve the safest known pair'
         );
+    });
+
+    it('does not invent action order for older runs with no recorded history', () => {
+        const run = makeRun(makePair('A', 'A'), {
+            powersUsedThisRun: true, gambitThirdFlipUsed: true, shuffleUsedThisFloor: true
+        });
+        expect(getPerfectMemoryAttribution(run)).toMatchObject({
+            locked: true, firstAction: null, latestAction: null,
+            summary: 'Perfect Memory locked by an earlier assist or wild action.'
+        });
+        expect(getPerfectMemoryAttribution(applyPeek({ ...run, peekCharges: 1 }, 'A-a'))).toMatchObject({
+            firstAction: null, latestAction: 'peek',
+            summary: 'Perfect Memory locked by an earlier assist or wild action. Latest assist: peek.'
+        });
     });
 
     it('normalizes stale Recall Focus before long-run summaries render', () => {

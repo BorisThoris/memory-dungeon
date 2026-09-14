@@ -871,6 +871,10 @@ export interface RunTimerState {
     gauntletPausedAtMs?: number | null;
 }
 
+export type PerfectMemoryAction =
+    | 'shuffle' | 'region_shuffle' | 'tile_swap' | 'destroy_pair' | 'peek'
+    | 'undo' | 'gambit' | 'stray_remove' | 'flash_pair' | 'wild_match';
+
 export interface RunState {
     status: RunStatus;
     lives: number;
@@ -890,6 +894,11 @@ export interface RunState {
      * gambit third pick, stray remove, flash pair, wild match, etc. Pins do **not** set this flag.
      */
     powersUsedThisRun: boolean;
+    /** Run-local feedback history; absent on older runs. Does not affect achievement eligibility. */
+    perfectMemoryActions?: {
+        first: PerfectMemoryAction | null;
+        latest: PerfectMemoryAction;
+    };
     timerState: RunTimerState;
     lastLevelResult: LevelResult | null;
     lastRunSummary: RunSummary | null;

@@ -1,4 +1,4 @@
-import { FINDABLE_KIND_SPAWN_WEIGHTS, RECALL_FOCUS_MAX, type FindableKind, type RunState } from './contracts';
+import { FINDABLE_KIND_SPAWN_WEIGHTS, RECALL_FOCUS_MAX, type FindableKind, type PerfectMemoryAction, type RunState } from './contracts';
 import { getFindableKindLabel, getFindableRewardCopy } from './findables';
 import {
     getDungeonBoardPresentation,
@@ -86,6 +86,19 @@ const causeRow = (
     ariaLive: row.ariaLive ?? `${row.label}: ${row.summary}. ${row.detail}`
 });
 
+const PERFECT_MEMORY_ACTION_LABELS: Record<PerfectMemoryAction, string> = {
+    shuffle: 'shuffle',
+    region_shuffle: 'row shuffle',
+    tile_swap: 'tile swap',
+    destroy_pair: 'destroy pair',
+    peek: 'peek',
+    undo: 'undo',
+    gambit: 'gambit',
+    stray_remove: 'stray remove',
+    flash_pair: 'flash pair',
+    wild_match: 'wild match'
+};
+
 export const getPerfectMemoryAttribution = (run: RunState): PerfectMemoryAttribution => {
     if (!run.powersUsedThisRun) {
         return {
@@ -97,19 +110,23 @@ export const getPerfectMemoryAttribution = (run: RunState): PerfectMemoryAttribu
         };
     }
 
-    const actions: string[] = [];
-    if (run.gambitThirdFlipUsed) actions.push('gambit');
-    if (run.shuffleUsedThisFloor || run.stats.shufflesUsed > 0) actions.push('shuffle or swap');
-    if (run.stats.pairsDestroyed > 0) actions.push('destroy pair');
-    if (run.peekRevealedTileIds.length > 0) actions.push('peek');
-    const firstAction = actions[0] ?? 'assist or wild action';
-    const latestAction = actions[actions.length - 1] ?? firstAction;
+    const firstAction = run.perfectMemoryActions?.first
+        ? PERFECT_MEMORY_ACTION_LABELS[run.perfectMemoryActions.first]
+        : null;
+    const latestAction = run.perfectMemoryActions
+        ? PERFECT_MEMORY_ACTION_LABELS[run.perfectMemoryActions.latest]
+        : null;
+    const lockSummary = firstAction
+        ? `Perfect Memory locked by ${firstAction}.`
+        : 'Perfect Memory locked by an earlier assist or wild action.';
 
     return {
         locked: true,
         firstAction,
         latestAction,
-        summary: `Perfect Memory locked by ${firstAction}.`,
+        summary: latestAction && latestAction !== firstAction
+            ? `${lockSummary} Latest assist: ${latestAction}.`
+            : lockSummary,
         tokens: ['locked', 'forfeit']
     };
 };
@@ -223,7 +240,9 @@ export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
                 kind: 'perfect_memory_locked',
                 label: 'Perfect Memory',
                 summary: pm.summary,
-                detail: `Latest lock source: ${pm.latestAction}.`,
+                detail: pm.latestAction
+                    ? `Latest assist: ${pm.latestAction}.`
+                    : 'The original action was not recorded for this run.',
                 tokens: pm.tokens,
                 priority: 50
             })

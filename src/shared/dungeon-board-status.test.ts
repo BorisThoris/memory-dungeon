@@ -324,7 +324,8 @@ describe('dungeon board status', () => {
     it('reads boss lifecycle from moving patrol hazards', () => {
         const board = {
             dungeonBossId: 'rush_sentinel',
-            tiles: [],
+            // Patrols remain active only while a real pair is still on the board.
+            tiles: [tile({ id: 'a' }), tile({ id: 'b' })],
             enemyHazards: [
                 {
                     id: 'boss-hazard',
@@ -349,6 +350,9 @@ describe('dungeon board status', () => {
             hp: 1,
             maxHp: 3,
             pressureCopy: 'Rush Sentinel shortens study time; board movement is the clean counterplay.'
+        });
+        expect(getDungeonBossReadModel(run({ ...board, tiles: [] }))).toMatchObject({
+            lifecycleSource: 'none', phase: 'defeated', hp: 0
         });
     });
 

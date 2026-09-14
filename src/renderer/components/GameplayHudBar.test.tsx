@@ -2172,7 +2172,10 @@ describe('GameplayHudBar', () => {
 
     it('shows Perfect Memory locked after a disqualifying assist', () => {
         const base = finishMemorizePhase(createDailyRun(0, { echoFeedbackEnabled: false }));
-        const run = { ...base, powersUsedThisRun: true, gambitThirdFlipUsed: true };
+        const run = {
+            ...base, powersUsedThisRun: true, gambitThirdFlipUsed: true,
+            perfectMemoryActions: { first: 'peek' as const, latest: 'gambit' as const }
+        };
 
         render(
             <GameplayHudBar
@@ -2183,8 +2186,12 @@ describe('GameplayHudBar', () => {
             />
         );
 
-        expect(screen.getByTestId('hud-perfect-memory')).toHaveTextContent('Locked: gambit');
-        expect(screen.getByTestId('hud-perfect-memory').getAttribute('title')).toContain('locked by gambit');
+        expect(screen.getByTestId('hud-perfect-memory')).toHaveTextContent('Locked: peek');
+        expect(screen.getByTestId('hud-perfect-memory').getAttribute('title')).toContain('locked by peek');
+        expect(screen.getByTestId('hud-perfect-memory').getAttribute('title')).toContain('Latest assist: gambit');
+        expect(screen.getByTestId('hud-touch-detail-perfect_memory')).toHaveTextContent(
+            'Perfect Memory locked by peek. Latest assist: gambit.'
+        );
     });
 
     it('renders shared cause strip and touch HUD detail rows', () => {

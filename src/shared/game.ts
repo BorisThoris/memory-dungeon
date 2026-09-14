@@ -9,6 +9,7 @@ import {
     type RunState
 } from './contracts';
 import { getDungeonLevelResultTags } from './secondary-objectives';
+import { recordPerfectMemoryAction } from './perfect-memory-actions';
 import {
     applyTraitRouteObjectiveProgress
 } from './trait-route-objectives';
@@ -618,7 +619,7 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             ...run,
             gambitThirdFlipUsed: true,
             gambitAvailableThisFloor: false,
-            powersUsedThisRun: true,
+            ...recordPerfectMemoryAction(run, 'gambit'),
             status: mimicCacheFatalBite ? 'gameOver' : 'playing',
             lives,
             board: spunG.board,
@@ -684,7 +685,7 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
         ...mismatch,
         gambitThirdFlipUsed: true,
         gambitAvailableThisFloor: false,
-        powersUsedThisRun: true
+        ...recordPerfectMemoryAction(run, 'gambit')
     };
 };
 
@@ -866,7 +867,7 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             lives,
             board: spun.board,
             shiftingSpotlightNonce: spun.shiftingSpotlightNonce,
-            powersUsedThisRun: usedWild ? true : run.powersUsedThisRun,
+            ...(usedWild ? recordPerfectMemoryAction(run, 'wild_match') : {}),
             wildMatchesRemaining,
             peekCharges: run.peekCharges + traitReward.peekChargeGain,
             shuffleCharges: run.shuffleCharges + traitReward.shuffleChargeGain,

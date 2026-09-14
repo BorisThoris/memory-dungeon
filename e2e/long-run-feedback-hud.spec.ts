@@ -38,6 +38,16 @@ test.describe('Long-run feedback HUD readability', () => {
             await expectLocatorFullyInWindowViewport(page, touchRows, 8);
             await expect(page.getByTestId('hud-perfect-memory')).toContainText(/Eligible|Locked/);
 
+            const memoryDetail = page.getByTestId('hud-touch-detail-perfect_memory');
+            const memorySummary = memoryDetail.locator('summary');
+            await memorySummary.click();
+            await expect(memoryDetail).toHaveAttribute('open', '');
+            await expect(memoryDetail.locator('p')).toBeVisible();
+            await expect(memoryDetail.locator('p')).toContainText('Perfect Memory');
+            await memorySummary.focus();
+            await page.keyboard.press('Enter');
+            await expect(memoryDetail).not.toHaveAttribute('open', '');
+
             await expectNoHorizontalOverflow(page);
             await expectFeedbackHudTextBoxesStayCoherent(page);
         });

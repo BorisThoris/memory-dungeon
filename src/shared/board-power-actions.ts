@@ -26,6 +26,7 @@ import {
 } from './board-power-targeting';
 import { clearResolveState } from './run-timer-rules';
 import { hiddenUnlessSprungTrap } from './tile-state-rules';
+import { recordPerfectMemoryAction } from './perfect-memory-actions';
 
 const SHUFFLE_SCORE_TAX_FACTOR = 0.94;
 
@@ -80,7 +81,7 @@ export const applyDestroyPairTransition = (
 
     const nextRun: RunState = {
         ...run,
-        powersUsedThisRun: true,
+        ...recordPerfectMemoryAction(run, 'destroy_pair'),
         destroyUsedThisFloor: true,
         destroyPairCharges: run.destroyPairCharges - 1,
         pinnedTileIds,
@@ -160,7 +161,7 @@ export const applyShuffle = (run: RunState): RunState => {
 
     return {
         ...run,
-        powersUsedThisRun: true,
+        ...recordPerfectMemoryAction(run, 'shuffle'),
         shuffleUsedThisFloor: true,
         shuffleCharges: nextCharges,
         shuffleNonce: run.shuffleNonce + 1,
@@ -218,7 +219,7 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
 
     return {
         ...run,
-        powersUsedThisRun: true,
+        ...recordPerfectMemoryAction(run, 'region_shuffle'),
         shuffleUsedThisFloor: true,
         shuffleNonce: run.shuffleNonce + 1,
         regionShuffleCharges: nextCharges,
@@ -265,7 +266,7 @@ export const applyTileSwap = (run: RunState, firstTileId: string, secondTileId: 
 
     return {
         ...run,
-        powersUsedThisRun: true,
+        ...recordPerfectMemoryAction(run, 'tile_swap'),
         shuffleUsedThisFloor: true,
         shuffleNonce: run.shuffleNonce + 1,
         regionShuffleCharges: nextCharges,
@@ -316,7 +317,7 @@ export const applyFlashPair = (run: RunState): RunState => {
     return {
         ...run,
         flashPairCharges: run.flashPairCharges - 1,
-        powersUsedThisRun: true,
+        ...recordPerfectMemoryAction(run, 'flash_pair'),
         shuffleNonce: run.shuffleNonce + 1,
         flashPairRevealedTileIds: pairIds
     };
@@ -351,7 +352,7 @@ export const applyPeek = (run: RunState, tileId: string): RunState => {
         ...run,
         board,
         peekCharges: run.peekCharges - 1,
-        powersUsedThisRun: true,
+        ...recordPerfectMemoryAction(run, 'peek'),
         recallFocus: decreaseRecallFocus(run),
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, [tileId]),
         peekRevealedTileIds: [...run.peekRevealedTileIds, tileId]
@@ -398,7 +399,7 @@ export const applyStrayRemove = (run: RunState, tileId: string): RunState => {
     };
     return {
         ...run,
-        powersUsedThisRun: true,
+        ...recordPerfectMemoryAction(run, 'stray_remove'),
         strayRemoveCharges: run.strayRemoveCharges - 1,
         strayRemoveArmed: false,
         recallFocus: decreaseRecallFocus(run),
@@ -422,7 +423,7 @@ export const cancelResolvingWithUndo = (run: RunState): RunState => {
         status: 'playing',
         board,
         undoUsesThisFloor: run.undoUsesThisFloor - 1,
-        powersUsedThisRun: true,
+        ...recordPerfectMemoryAction(run, 'undo'),
         recallFocus: decreaseRecallFocus(run),
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, ids),
         timerState: clearResolveState(run)
