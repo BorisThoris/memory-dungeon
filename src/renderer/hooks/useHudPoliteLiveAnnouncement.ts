@@ -306,17 +306,17 @@ export const useHudPoliteLiveAnnouncement = ({
 
         if (snap === null || snap.level !== boardLevel) {
             actionSnapRef.current = nextSnap;
-            if (snap !== null && newGameplayFeedback.length === 0) {
-                // A new floor with nothing new to say. The last floor's line ("Match
-                // resolved. 2/4 pairs cleared.") stood on the HUD through the whole memorize
-                // phase of the next one, describing a board that was no longer there.
+            if (snap !== null) {
+                // A new floor. The last floor's line ("No match. Recover with a safe match.")
+                // stood on the HUD through the whole memorize phase of the next one, describing
+                // a board that was no longer there. Take it down, and anything still queued
+                // behind it, before the new floor says its own piece.
                 pendingThrottledAnnouncementRef.current = null;
                 if (throttleTimerRef.current) {
                     clearTimeout(throttleTimerRef.current);
                     throttleTimerRef.current = null;
                 }
                 clearMessage();
-                return;
             }
             announceGameplayFeedbackBatch(newGameplayFeedback);
             return;

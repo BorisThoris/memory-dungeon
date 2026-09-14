@@ -323,6 +323,46 @@ describe('useHudPoliteLiveAnnouncement', () => {
         expect(result.current.message).toBe('');
     });
 
+    it('replaces the last floor\'s line with what the next floor has to say', async () => {
+        const opening: GameplayFeedbackPresentation = {
+            audioCategory: 'match-resolution',
+            commandId: 'floor-2-open',
+            cue: 'floor.opened',
+            eventId: 'floor-2-open:1',
+            message: 'Short memorize: the cards turn sooner this floor.',
+            priority: 'info',
+            source: { kind: 'system', id: 'mutator' },
+            tone: 'information'
+        };
+        const { result, rerender } = renderHook(
+            (p: { level: number; turnEvent: BoardTurnResolvedEvent | null; feedback: GameplayFeedbackPresentation[] }) =>
+                useHudPoliteLiveAnnouncement({
+                    ...base,
+                    boardLevel: p.level,
+                    boardTurnEvent: p.turnEvent,
+                    gameplayFeedback: p.feedback
+                }),
+            { initialProps: { level: 1, turnEvent: null as BoardTurnResolvedEvent | null, feedback: [] as GameplayFeedbackPresentation[] } }
+        );
+
+        await act(async () => {
+            rerender({ level: 1, turnEvent: mismatchTurn('miss-on-floor-1'), feedback: [] });
+        });
+        await flushRaf();
+        expect(result.current.message).toContain('No match.');
+
+        await act(async () => {
+            rerender({ level: 2, turnEvent: mismatchTurn('miss-on-floor-1'), feedback: [opening] });
+        });
+        await flushRaf();
+        // The old line is down at once; the new one lands once the polite throttle allows it.
+        expect(result.current.message).toBe('');
+        await act(async () => {
+            await new Promise<void>((r) => setTimeout(r, 420));
+        });
+        expect(result.current.message).toBe('Short memorize: the cards turn sooner this floor.');
+    });
+
     it('does not announce a turn that resolved on a floor that has already left', async () => {
         // The floor's last match and the next floor's opening land in one update, so the turn
         // is first seen standing on a board it did not happen on. The floor-clear beat says the
