@@ -4911,8 +4911,8 @@
     {
       "path": "scripts/gate-reachability.ts",
       "category": "script",
-      "bytes": 5991,
-      "sha256": "de46b6454f9dd1d38ed9633ce6aea0da2461a8d4bdc621478d0f140bffcdb0ba"
+      "bytes": 6708,
+      "sha256": "601c980c185d3559a8868c0789ea48ef498c1afb44212e0bad89ab0d82de1d94"
     },
     {
       "path": "scripts/gate-softlock-seeds.ts",
@@ -9513,8 +9513,8 @@
     {
       "path": "src/renderer/copy/settingsHints.ts",
       "category": "source",
-      "bytes": 2305,
-      "sha256": "0a8b676b5a76c4f2448e0da2f0317cff3f6c1a469edf3dcbc664860a028d3c7d"
+      "bytes": 2415,
+      "sha256": "cbbba57b52be522318b93cc797eeced44d95d14a570c55785e192e089506dca2"
     },
     {
       "path": "src/renderer/copy/traitInteractionLaneMap.test.ts",
@@ -21436,7 +21436,7 @@
       "path": "src/renderer/copy/settingsHints.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 34,
+      "lineCount": 35,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/settingsHints.ts#SETTINGS_FOOTER_HINT",
@@ -38546,8 +38546,8 @@
       "name": "SETTINGS_FOOTER_HINT",
       "kind": "value",
       "file": "src/renderer/copy/settingsHints.ts",
-      "line": 33,
-      "endLine": 33
+      "line": 34,
+      "endLine": 34
     },
     {
       "id": "symbol:src/renderer/copy/settingsHints.ts#SETTINGS_HINTS",
@@ -38555,7 +38555,7 @@
       "kind": "value",
       "file": "src/renderer/copy/settingsHints.ts",
       "line": 8,
-      "endLine": 30
+      "endLine": 31
     },
     {
       "id": "symbol:src/renderer/copy/traitInteractionLaneMap.ts#buildTraitInteractionLaneMap",
