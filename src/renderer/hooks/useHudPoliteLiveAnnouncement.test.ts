@@ -263,7 +263,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent
                 }),
             { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
@@ -282,7 +282,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent
                 }),
             { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
@@ -321,6 +321,33 @@ describe('useHudPoliteLiveAnnouncement', () => {
         });
         await flushRaf();
         expect(result.current.message).toBe('');
+    });
+
+    it('does not announce a turn that resolved on a floor that has already left', async () => {
+        // The floor's last match and the next floor's opening land in one update, so the turn
+        // is first seen standing on a board it did not happen on. The floor-clear beat says the
+        // floor was cleared; the HUD line stays free for the new floor.
+        const { result, rerender } = renderHook(
+            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
+                useHudPoliteLiveAnnouncement({
+                    ...base,
+                    boardLevel: 2,
+                    boardTurnEvent: p.turnEvent
+                }),
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
+        );
+
+        await act(async () => {
+            rerender({ turnEvent: matchTurn('final-match-floor-1', { level: 1, matchedPairsAfter: 4 }) });
+        });
+        await flushRaf();
+        expect(result.current.message).toBe('');
+
+        await act(async () => {
+            rerender({ turnEvent: matchTurn('first-match-floor-2', { level: 2 }) });
+        });
+        await flushRaf();
+        expect(result.current.message).toBe('Match resolved. 1/4 pairs cleared.');
     });
 
     it('announces every event one command raised, not just the last of them', async () => {
@@ -401,7 +428,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent
                 }),
             { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
@@ -420,7 +447,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null; rowCharges: number; fullCharges: number; sticky: number | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent,
                     regionShuffleCharges: p.rowCharges,
                     shuffleCharges: p.fullCharges,
@@ -456,7 +483,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent
                 }),
             { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
@@ -481,7 +508,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent
                 }),
             { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
@@ -506,7 +533,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null; recallFocus: number; recallMatches: number; recallBonus: number; forgotten?: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent,
                     recallFocus: p.recallFocus,
                     recallMatchesThisFloor: p.recallMatches,
@@ -538,7 +565,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null; recallFocus: number; recallMatches: number; recallBonus: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent,
                     recallFocus: p.recallFocus,
                     recallMatchesThisFloor: p.recallMatches,
@@ -569,7 +596,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null; recallFocus: number; recallFocusMax: number; recallMatches: number; recallBonus: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent,
                     recallFocus: p.recallFocus,
                     recallFocusMax: p.recallFocusMax,
@@ -608,7 +635,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null; recallFocus: number; recallMatches: number; recallBonus: number; forgotten: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent,
                     recallFocus: p.recallFocus,
                     recallMatchesThisFloor: p.recallMatches,
@@ -647,7 +674,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null; recallFocus: number; recallMistakes: number; forgotten: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent,
                     recallFocus: p.recallFocus,
                     recallMistakesThisFloor: p.recallMistakes,
@@ -684,7 +711,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent
                 }),
             { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
@@ -948,7 +975,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { active: boolean; ids: readonly string[] | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     gambitThirdPickActive: p.active,
                     gambitOpportunityFlippedIds: p.ids
                 }),

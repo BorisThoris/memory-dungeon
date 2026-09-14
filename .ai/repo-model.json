@@ -9627,14 +9627,14 @@
     {
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "category": "test",
-      "bytes": 37138,
-      "sha256": "b6bedd8a23d72d1e143675a45113f721f7b2c54ee5b32bd06d1641d7eb6c2801"
+      "bytes": 38361,
+      "sha256": "62b9ff72763109fb4ed99f3ebbd85cc5c72a95a71b490b6b1ab02dbb360dd870"
     },
     {
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "category": "source",
-      "bytes": 19812,
-      "sha256": "1758c70fad6e4193aaa02823ebcf75e633488706aaf2aa602b942e103c1a5736"
+      "bytes": 20495,
+      "sha256": "142e821405288faf4e2d6531af41d485a58d99194ce6a0d16ba742f75e2cd379"
     },
     {
       "path": "src/renderer/hooks/useLatestRef.ts",
@@ -21867,7 +21867,7 @@
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 964,
+      "lineCount": 991,
       "imports": [
         "file:src/renderer/copy/gameplayHints.ts",
         "file:src/renderer/copy/hudActionFeedback.ts",
@@ -21885,7 +21885,7 @@
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 459,
+      "lineCount": 468,
       "imports": [
         "file:src/renderer/copy/boardTurnAnnouncement.ts",
         "file:src/renderer/copy/gameplayEventAnnouncement.ts",
@@ -38883,7 +38883,7 @@
       "kind": "value",
       "file": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "line": 76,
-      "endLine": 458
+      "endLine": 467
     },
     {
       "id": "symbol:src/renderer/hooks/useLatestRef.ts#useLatestRef",

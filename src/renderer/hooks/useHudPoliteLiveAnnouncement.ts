@@ -266,6 +266,13 @@ export const useHudPoliteLiveAnnouncement = ({
         if (!boardTurnEvent || unannouncedGameplayFeedback().some((item) => item.source.kind === 'findable')) {
             return;
         }
+        // The floor's last match resolves and the next floor opens in the same update, so this
+        // effect first sees that turn standing on a board it did not happen on. Saying "Match
+        // resolved. 6/6 pairs cleared." over the new floor's memorize phase described a board
+        // that had already left; the floor-clear beat is what says the floor was cleared.
+        if (boardLevel !== null && boardTurnEvent.announcement.level !== boardLevel) {
+            return;
+        }
         const announcement = buildBoardTurnAnnouncement(boardTurnEvent, { reduceMotion });
         if (!announcement) {
             return;
@@ -274,7 +281,7 @@ export const useHudPoliteLiveAnnouncement = ({
             dedupeKey: announcement.dedupeKey,
             priority: announcement.priority
         });
-    }, [boardTurnEvent, queuePoliteAnnouncement, reduceMotion, unannouncedGameplayFeedback]);
+    }, [boardLevel, boardTurnEvent, queuePoliteAnnouncement, reduceMotion, unannouncedGameplayFeedback]);
 
     useEffect(() => {
         const newGameplayFeedback = unannouncedGameplayFeedback();
@@ -322,7 +329,9 @@ export const useHudPoliteLiveAnnouncement = ({
         // Turn outcomes come from the resolved-turn event, not from diffing this render
         // against the previous one. The core already decided what the turn did; inferring
         // it here could disagree, and did whenever a render was skipped or coalesced.
-        const turnFacts = boardTurnEvent?.announcement ?? null;
+        // A turn from the floor that just closed is not this floor's news (see the turn effect).
+        const turnFacts =
+            boardTurnEvent && boardTurnEvent.announcement.level === boardLevel ? boardTurnEvent.announcement : null;
         const matchDelta = turnFacts ? turnFacts.matchedPairsAfter - turnFacts.matchedPairsBefore : 0;
         const mismatchDelta = turnFacts ? turnFacts.mismatchesAfter - turnFacts.mismatchesBefore : 0;
         const traitLabels = tileTraitKindLabels(turnFacts?.matchedTraitKinds ?? []);
