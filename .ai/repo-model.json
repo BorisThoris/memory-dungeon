@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2456,
+    "trackedFileCount": 2478,
     "codeFileCount": 883,
     "exportedSymbolCount": 2672,
     "contentItemCount": 10,
@@ -3993,8 +3993,8 @@
     {
       "path": "index.html",
       "category": "other",
-      "bytes": 707,
-      "sha256": "6a278beff11eeabc7dc7a74404406377e0f13aa1d63e3f8ef45dfdbbd3803f37"
+      "bytes": 2957,
+      "sha256": "8a3389fdadfe2a49d0755638662f9c636f414a366278f3f578333a6d3e169d14"
     },
     {
       "path": "knip.json",
@@ -4059,8 +4059,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 30686,
-      "sha256": "a37e9e896dcb4a290531052a788b0bceef6f16beb3d8d30bfa96f80c328ea837"
+      "bytes": 31172,
+      "sha256": "d6e7a637841382586db756bcb478e24ec16da436ee95ff35ad84fac73cf16b2a"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4171,10 +4171,100 @@
       "sha256": "24b13d8ad32ef882a7e51484c80353a418c5a0ee8c20318a2df02a9917d01972"
     },
     {
+      "path": "project-media/capture.json",
+      "category": "configuration",
+      "bytes": 1305,
+      "sha256": "482aab9d1e2f79637eaeb453267be84f10f2e621611eb7be91c34b7d1ba47b62"
+    },
+    {
+      "path": "project-media/card.jpg",
+      "category": "asset",
+      "bytes": 156703,
+      "sha256": "14cb990d43591c8457734db8866194bf8b86f78990cd1c7907a110ab6b08004a"
+    },
+    {
+      "path": "project-media/desktop.jpg",
+      "category": "asset",
+      "bytes": 146921,
+      "sha256": "ae3e0e73333e83a462366bbc721aef882b4b98aab249bab05f271edc45ee9dcd"
+    },
+    {
+      "path": "project-media/full.jpg",
+      "category": "asset",
+      "bytes": 120436,
+      "sha256": "ce9ea0218d4ad0e1ab69dfab205e87adec1bb82204a21f7aba0749a23c7ab14e"
+    },
+    {
+      "path": "project-media/icons.json",
+      "category": "configuration",
+      "bytes": 366,
+      "sha256": "33f6d553399d699dd4d0de8713a7fbc401d61f6dd5fe16a6aab6760c342b2865"
+    },
+    {
+      "path": "project-media/mobile.jpg",
+      "category": "asset",
+      "bytes": 48577,
+      "sha256": "c2c4985eb6c77a946c7bf419ef860d9ace224b364287d56066bff1238b11a074"
+    },
+    {
+      "path": "project-media/og.jpg",
+      "category": "asset",
+      "bytes": 110517,
+      "sha256": "df4adbf99674288110e0ef2ec18469b5675985c29839a1ba14e83b560c3b4c0e"
+    },
+    {
+      "path": "project.meta.json",
+      "category": "configuration",
+      "bytes": 11602,
+      "sha256": "2d3e0bec5079777983898d0d3505f9ea1acffb1744831bf2535b3fcde4145248"
+    },
+    {
+      "path": "public/apple-touch-icon.png",
+      "category": "asset",
+      "bytes": 1637,
+      "sha256": "0145206fb2d1e66fc1066faac868571d055581fdd1788ed52f5fd76e4354ee2e"
+    },
+    {
+      "path": "public/favicon.ico",
+      "category": "asset",
+      "bytes": 1489,
+      "sha256": "2ced9a264279a648b6892ed3ca4be496da341a092b8f5e520d62e910fda40d8a"
+    },
+    {
       "path": "public/favicon.svg",
       "category": "asset",
       "bytes": 351,
       "sha256": "2b73a08382bcb9aad2d03713592e6301b2433c38e413f303920b93408db27f4e"
+    },
+    {
+      "path": "public/icon-192.png",
+      "category": "asset",
+      "bytes": 2599,
+      "sha256": "bc800e057f94137330d973b1d8dab13775acdd60324365c0260da87d50aa913a"
+    },
+    {
+      "path": "public/icon-512.png",
+      "category": "asset",
+      "bytes": 7949,
+      "sha256": "a5b720bf69029ba1b92004f9920c87c0ac6dfbff3a95747cd2cee84b0e46f734"
+    },
+    {
+      "path": "public/icon-maskable-512.png",
+      "category": "asset",
+      "bytes": 4663,
+      "sha256": "38434f2badf17768e15ceddbd555ddcf8c980e225ca172921ce0722f4ee645b6"
+    },
+    {
+      "path": "public/og-image.jpg",
+      "category": "asset",
+      "bytes": 110517,
+      "sha256": "df4adbf99674288110e0ef2ec18469b5675985c29839a1ba14e83b560c3b4c0e"
+    },
+    {
+      "path": "public/site.webmanifest",
+      "category": "other",
+      "bytes": 693,
+      "sha256": "f906cacd5152b33d528b6d1b136863d815dcc500fc158599ee6c9ec2ac6439ff"
     },
     {
       "path": "public/wip-assets/svg/board-a-card-states.svg",
@@ -4561,6 +4651,12 @@
       "sha256": "cc03f1ab51f8709cd0c5e809e8464790826487d390fcdbf665eea47a06c1c4a1"
     },
     {
+      "path": "scripts/capture-project-shots.mjs",
+      "category": "script",
+      "bytes": 10370,
+      "sha256": "54439dfd883c663e124fa9543c55ef5d90587f351a79260c1570c70d6e07bb13"
+    },
+    {
       "path": "scripts/card-pipeline/batch_local_card_backs.py",
       "category": "script",
       "bytes": 669,
@@ -4819,6 +4915,12 @@
       "sha256": "d9703f7f772382d7af7eda2121424fd8bad156e26b4a218ef994cbe2605ff861"
     },
     {
+      "path": "scripts/generate-app-icons.mjs",
+      "category": "script",
+      "bytes": 17978,
+      "sha256": "255b9f476dac97df0e09dcd5aa768db1695d536a113110d353fde07efbd7ea17"
+    },
+    {
       "path": "scripts/generate-card-plates.ts",
       "category": "script",
       "bytes": 923,
@@ -4841,6 +4943,18 @@
       "category": "script",
       "bytes": 5654,
       "sha256": "5e678b1403174e28cd132a4328063d7962c4b60b37b87d310a3f7345c9893496"
+    },
+    {
+      "path": "scripts/generate-project-meta.mjs",
+      "category": "script",
+      "bytes": 19842,
+      "sha256": "363a7f025af06aafdfac68dfad8d57a2220332bec34c49babe7bbaebd1b01a7d"
+    },
+    {
+      "path": "scripts/generate-social-preview.mjs",
+      "category": "script",
+      "bytes": 7384,
+      "sha256": "743a84a346ae0aab472c9dd92e3898e345de29a092b459638bbe433f59eef916"
     },
     {
       "path": "scripts/generate-visual-inventory-md.mjs",
@@ -4897,10 +5011,28 @@
       "sha256": "497a651005180ed6e7461e509f46c647ae37fcb9beb9934ee5d319c6518b6289"
     },
     {
+      "path": "scripts/project-meta.config.mjs",
+      "category": "script",
+      "bytes": 2966,
+      "sha256": "06d3f047c77f57e2b3f1d9b1a53a3cc6ee73c75023d53908424f1005d2e7a04c"
+    },
+    {
+      "path": "scripts/project.meta.schema.json",
+      "category": "script",
+      "bytes": 6610,
+      "sha256": "60108aff591eb3a3bce785759705c462995a0e026ddcfafbd25d0aa531e33cf9"
+    },
+    {
       "path": "scripts/README-card-motifs.md",
       "category": "script",
       "bytes": 4367,
       "sha256": "8925dd84c374f193ab7cee6c7183c49c57f2862ec3b5030e371733e25b561575"
+    },
+    {
+      "path": "scripts/refresh-project-meta.mjs",
+      "category": "script",
+      "bytes": 2185,
+      "sha256": "2e4dffb109c8bcd30abd4dcda40928d46e618402e23a8769fffdff82e1c68b0b"
     },
     {
       "path": "scripts/release-checklist.ts",
@@ -14727,8 +14859,8 @@
     {
       "path": "vite.config.mts",
       "category": "configuration",
-      "bytes": 6521,
-      "sha256": "67d9cc702768d80c00f73b20afd069d717953d6319bb7f2b79ef1e20f6e8b292"
+      "bytes": 6808,
+      "sha256": "c35e44bb25b5c14066884d4c13780ef643d38b5d5468d00af7eb9db6e604f30d"
     },
     {
       "path": "vitest.setup.ts",
