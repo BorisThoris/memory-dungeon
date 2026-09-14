@@ -347,7 +347,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             commandId: 'reward-1',
             cue: 'findable.score_glint.matched',
             eventId: 'reward-1:2',
-            message: 'Score Glint requested 25 score through match resolution.',
+            message: 'Score Glint claimed: +25 score.',
             priority: 'info',
             source: { kind: 'findable', id: 'score_glint' },
             tone: 'reward'
@@ -366,7 +366,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
         });
         await flushRaf();
 
-        expect(result.current.message).toBe('Score Glint requested 25 score through match resolution.');
+        expect(result.current.message).toBe('Score Glint claimed: +25 score.');
         expect(result.current.message).not.toContain('available');
     });
 

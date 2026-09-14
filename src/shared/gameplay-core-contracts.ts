@@ -192,7 +192,9 @@ export const GAMEPLAY_CONTENT_DEFINITIONS = z.array(gameplayContentDefinitionSch
             {
                 kind: 'feedback.emit',
                 cue: 'build.score_glint.matched',
-                message: 'Score Glint requested 25 score through match resolution.',
+                /* Shown on the HUD and spoken. "Requested 25 score through match resolution"
+                   was the reducer describing itself; the player claimed a glint. */
+                message: 'Score Glint claimed: +25 score.',
                 tone: 'reward'
             }
         ]
