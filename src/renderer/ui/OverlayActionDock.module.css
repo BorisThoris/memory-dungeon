@@ -117,14 +117,7 @@
         gap: 0.45rem;
     }
 
-    .primaryGroup {
-        order: 1;
-    }
-
-    .secondaryGroup {
-        order: 2;
-    }
-
+    /* Primary then secondaries is now the DOM order (see the dock); only the leading slot moves. */
     .leading {
         order: 3;
         padding-top: 0.22rem;

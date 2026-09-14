@@ -8133,8 +8133,8 @@
     {
       "path": "src/renderer/components/OverlayModal.test.tsx",
       "category": "test",
-      "bytes": 8331,
-      "sha256": "f7222aed6358a660e55394dff9780f3cd3209e82376f78028b2d27b504762a5e"
+      "bytes": 9484,
+      "sha256": "8c74917d88c35224e132a9e066cc8d486c1fdc304a2056a5cdf7f8e741831e5a"
     },
     {
       "path": "src/renderer/components/OverlayModal.tsx",
@@ -10323,14 +10323,14 @@
     {
       "path": "src/renderer/ui/OverlayActionDock.module.css",
       "category": "source",
-      "bytes": 3685,
-      "sha256": "388d34ca1da2d62d4132ada8a289e7b341c216060ad1b4ce1d03d66fe22660aa"
+      "bytes": 3694,
+      "sha256": "d545184f1a055102dcaf7db8b265b36aa4a3cb3c984c63128792ef541fc15be2"
     },
     {
       "path": "src/renderer/ui/OverlayActionDock.tsx",
       "category": "source",
-      "bytes": 2717,
-      "sha256": "5c6105b084868689aa037da93f1133ca98e2405a92a815a764b96dd1515a212f"
+      "bytes": 3116,
+      "sha256": "16fc76322e4977adf074659934b0203c7efc677209c7b01460c68c3af7e365e6"
     },
     {
       "path": "src/renderer/ui/Panel.module.css",
@@ -17703,7 +17703,7 @@
       "path": "src/renderer/components/OverlayModal.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 221,
+      "lineCount": 246,
       "imports": [
         "file:src/renderer/a11y/toolbarRoving.ts",
         "file:src/renderer/components/OverlayModal.tsx",
@@ -23788,7 +23788,7 @@
       "path": "src/renderer/ui/OverlayActionDock.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 87,
+      "lineCount": 91,
       "imports": [
         "file:src/renderer/ui/UiButton.tsx"
       ],
@@ -40962,8 +40962,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/ui/OverlayActionDock.tsx",
-      "line": 86,
-      "endLine": 86
+      "line": 90,
+      "endLine": 90
     },
     {
       "id": "symbol:src/renderer/ui/OverlayActionDock.tsx#OverlayAction",

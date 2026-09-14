@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import OverlayModal from './OverlayModal';
@@ -67,6 +67,31 @@ describe('OverlayModal (REF-061)', () => {
 
         expect(onFirstEscape).not.toHaveBeenCalled();
         expect(onSecondEscape).toHaveBeenCalledTimes(1);
+    });
+
+    it('opens with focus on the primary action even when it is listed after the secondaries', async () => {
+        // The pause menu lists Resume first, Fit board second. The dock drew Resume first but
+        // rendered it last, so the focus trap opened on Fit board and Tab walked the menu in
+        // the opposite order to the one on screen.
+        render(
+            <OverlayModal
+                actions={[
+                    { label: 'Fit board', onClick: () => {}, variant: 'secondary' },
+                    { label: 'Retreat', onClick: () => {}, variant: 'danger' },
+                    { label: 'Resume', onClick: () => {}, variant: 'primary' }
+                ]}
+                testId="unit-modal"
+                title="Paused"
+            >
+                <p>Run so far</p>
+            </OverlayModal>
+        );
+
+        await waitFor(() => {
+            expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Resume' }));
+        });
+        const buttons = screen.getAllByRole('button').map((button) => button.textContent);
+        expect(buttons).toEqual(['Resume', 'Fit board', 'Retreat']);
     });
 
     it('Tab cycles only between modal actions while the dialog is open', async () => {
