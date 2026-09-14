@@ -11289,8 +11289,8 @@
     {
       "path": "src/shared/generation-claim-audit.test.ts",
       "category": "test",
-      "bytes": 5656,
-      "sha256": "f0ea944e04615f265ec1e90d6e1693d6bc28ff1b9696f4737612c7e093c24a20"
+      "bytes": 5935,
+      "sha256": "4fe943d98f212b308e1931cdc9fd036c8e9d647ff61c8d5caa433aaa79fec99b"
     },
     {
       "path": "src/shared/graphicsQuality.test.ts",
@@ -27101,7 +27101,7 @@
       "path": "src/shared/generation-claim-audit.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 111,
+      "lineCount": 114,
       "imports": [],
       "exports": [],
       "testedBy": []

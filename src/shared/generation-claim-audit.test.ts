@@ -20,6 +20,9 @@ describe('the generation claim audit', () => {
     const file = (path: string, text: string) => ({ path, text });
     /** The whole repository, read once for the two cases that walk it. */
     let repositoryFiles: RepositoryFile[] | null = null;
+    /* Reading two thousand files takes seconds, and under a full parallel run it passed the 10s
+       default; whichever of the two cases runs first pays for the read. */
+    const WHOLE_REPOSITORY_TIMEOUT_MS = 60_000;
     const repository = (): RepositoryFile[] => (repositoryFiles ??= readRepositoryFiles());
 
     it('names a claim whose file no longer exists', () => {
@@ -98,7 +101,7 @@ describe('the generation claim audit', () => {
         const paths = repository().map((file) => file.path);
         expect(paths.some((path) => path.includes('\\'))).toBe(false);
         expect(paths).toContain('docs/BALANCE_NOTES.md');
-    });
+    }, WHOLE_REPOSITORY_TIMEOUT_MS);
 
     it('holds over the whole repository, which is the point of it', () => {
         const report = auditGenerationClaims(repository());
@@ -106,5 +109,5 @@ describe('the generation claim audit', () => {
         // A count, so a rewrite that quietly drops the record from a document is visible here.
         expect(report.claims).toBeGreaterThan(500);
         expect(report.files).toBeGreaterThan(90);
-    });
+    }, WHOLE_REPOSITORY_TIMEOUT_MS);
 });
