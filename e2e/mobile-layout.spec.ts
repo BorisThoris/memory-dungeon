@@ -142,6 +142,20 @@ async function expectSettingsCategoryStripReadable(container: Locator): Promise<
     expect(segBox!.height, 'segment control height').toBeGreaterThanOrEqual(22);
 }
 
+/**
+ * Opens a settings category through whichever chooser the viewport renders: the tab strip where
+ * there is width for it, the single `<select>` where the shell stacks. Waiting on a tab that a
+ * stacked shell never draws used to hang until the test timed out.
+ */
+async function chooseSettingsCategory(container: Locator, label: RegExp, id: string): Promise<void> {
+    const tab = container.getByRole('button', { name: label }).first();
+    if (await tab.isVisible().catch(() => false)) {
+        await tab.click();
+        return;
+    }
+    await container.getByTestId('settings-category-menu').selectOption(id);
+}
+
 async function readBoardViewportState(frame: Locator): Promise<{
     mobileCameraMode: boolean;
     panX: number;
@@ -382,12 +396,18 @@ test.describe('Mobile layout (renderer)', () => {
         await navigateToLevel1PlayPhase(page);
         const controls = page.getByRole('toolbar', { name: /game controls/i });
         await expect(controls).toBeVisible();
-        for (const name of [/fit board/i, /open codex/i, /settings/i]) {
-            const btn = controls.getByRole('button', { name });
+        // Every tool on the dock, not a named few: Codex and Settings moved behind the pause menu,
+        // and a list of names went stale with them. Disabled tools count; a finger still lands on them.
+        const buttons = controls.getByRole('button', { includeHidden: false });
+        const count = await buttons.count();
+        expect(count).toBeGreaterThanOrEqual(3);
+        for (let index = 0; index < count; index += 1) {
+            const btn = buttons.nth(index);
+            const name = await btn.getAttribute('aria-label');
             const box = await btn.boundingBox();
             expect(box, `bounding box for ${name}`).toBeTruthy();
-            expect(box!.width).toBeGreaterThanOrEqual(43);
-            expect(box!.height).toBeGreaterThanOrEqual(43);
+            expect(box!.width, `width of ${name}`).toBeGreaterThanOrEqual(43);
+            expect(box!.height, `height of ${name}`).toBeGreaterThanOrEqual(43);
         }
     });
 
@@ -562,7 +582,7 @@ test.describe('Mobile layout (renderer)', () => {
             .first();
         await expect(settingsSection).toBeVisible();
         await expect(settingsSection).toHaveAttribute('data-settings-layout', 'short-stacked');
-        await settingsSection.getByRole('button', { name: /about/i }).first().click();
+        await chooseSettingsCategory(settingsSection, /^about$/i, 'about');
         await settingsSection.getByTestId('settings-subsection-nav').getByRole('button', { name: /^reset$/i }).click();
         const reset = settingsSection.getByRole('button', { name: /reset to defaults/i });
         await expect(reset).toBeVisible();
@@ -578,7 +598,7 @@ test.describe('Mobile layout (renderer)', () => {
         const dialog = page.getByRole('dialog', { name: /run settings/i });
         await expect(dialog).toBeVisible();
         await expect(dialog).toHaveAttribute('data-settings-layout', 'short-stacked');
-        await dialog.getByRole('button', { name: /about/i }).first().click();
+        await chooseSettingsCategory(dialog, /^about$/i, 'about');
         await dialog.getByTestId('settings-subsection-nav').getByRole('button', { name: /^reset$/i }).click();
         const reset = dialog.getByRole('button', { name: /reset to defaults/i });
         await expect(reset).toBeVisible();
