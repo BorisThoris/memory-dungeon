@@ -1,6 +1,6 @@
 {
   "slug": "memory-dungeon",
-  "capturedAt": "2026-09-14T23:28:11.098Z",
+  "capturedAt": "2026-09-15T12:20:30.123Z",
   "source": "deployment",
   "url": "https://memory-dungeon-git.pages.dev/",
   "recipe": {
@@ -51,7 +51,7 @@
       "file": "full.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 120626,
+      "bytes": 120996,
       "status": "captured"
     },
     {
