@@ -297,8 +297,10 @@
 }
 
 .shell[data-mobile-camera-mode='true'] .distractionHud {
-    /* HUD-020: full-bleed board extends under the HUD; keep the numeric pulse in the visible playfield. */
-    padding-top: calc(env(safe-area-inset-top, 0px) + 4rem);
+    /* HUD-020: full-bleed board extends under the HUD; keep the numeric pulse in the visible playfield.
+       The HUD's measured height when the shell has published it (a phone sideways has a shorter bar
+       than the 4rem guess, and the guess left the pulse floating mid-board); the guess until then. */
+    padding-top: calc(var(--gameplay-hud-top-clearance, calc(env(safe-area-inset-top, 0px) + 4rem)) + 0.25rem);
 }
 
 .boardStage {
@@ -507,8 +509,14 @@
 
 /* Every stage child is lifted onto its own layer - except screen-reader-only text. `.srOnly` is
    absolute and clipped; the same-specificity `position: relative` here used to win by source order
-   and park the match live-region sentence, visible, in the stage's top-left corner. */
-.boardStage > :global(*):not(.srOnly) {
+   and park the match live-region sentence, visible, in the stage's top-left corner.
+
+   The floaters and the distraction HUD are excluded for the same reason. They position themselves
+   absolutely against the stage, and this rule outranked their own `position` and `z-index`. On a
+   desktop the board frame is itself absolute, so the floater's flow position happened to be the
+   stage's corner and the offsets still landed; in the phone camera shell the frame is in flow, and
+   the score pop was placed a full board height below it - off the screen, every match. */
+.boardStage > :global(*):not(.srOnly):not(.matchScoreFloater):not(.mismatchScoreFloater):not(.distractionHud) {
     position: relative;
     z-index: 1;
 }
@@ -830,6 +838,73 @@ subdued cool palette. */
     animation-name: matchScoreFloaterFade;
 }
 
+/* ---- floater placement -----------------------------------------------------------------
+   `data-floater-placement` is decided in TS (`boardFloaterPlacement.ts`) from the shell's
+   `data-shell-layout` / `data-shell-input`; the CSS only draws each placement. */
+
+/* Above the pair (touch, and any phone upright): same rise as the centroid, but the anchor is the
+   pair's top edge, so the number is never born under the thumb that flipped the card. */
+.matchScoreFloater[data-floater-placement='above-pair'],
+.mismatchScoreFloater[data-floater-placement='above-pair'] {
+    transform: translate(-50%, -112%);
+}
+
+/* A phone upright is read at arm's length: the number gets the size the width can spare. */
+.shell[data-shell-layout='phone-portrait'] .matchScoreFloater,
+.shell[data-shell-layout='phone-portrait'] .mismatchScoreFloater {
+    font-size: clamp(1.05rem, 4.4vi, 1.42rem);
+    gap: 0.12rem;
+}
+
+/* Docked strip (phone sideways): one row under the HUD - signal, number, and the reason - on its
+   own plate. There is no height for a floater to rise through; the strip fades in place. */
+.matchScoreFloater[data-floater-placement='stage-top'],
+.mismatchScoreFloater[data-floater-placement='stage-top'] {
+    transform: translate(-50%, 0);
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    max-width: min(46rem, calc(100% - 1rem));
+    padding: 0.16rem 0.72rem 0.2rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 26%, transparent);
+    background: color-mix(in srgb, var(--theme-void) 66%, transparent);
+    backdrop-filter: blur(6px) saturate(1.1);
+    font-size: clamp(0.88rem, 3.2vb, 1.08rem);
+    animation-name: matchScoreFloaterDock;
+}
+
+.mismatchScoreFloater[data-floater-placement='stage-top'] {
+    border-color: color-mix(in srgb, var(--theme-rune) 30%, transparent);
+}
+
+/* The plate is the glow now. */
+.matchScoreFloater[data-floater-placement='stage-top']::before {
+    display: none;
+}
+
+.matchScoreFloater[data-floater-placement='stage-top'].matchScoreFloaterReduced,
+.mismatchScoreFloater[data-floater-placement='stage-top'].matchScoreFloaterReduced {
+    animation-name: matchScoreFloaterFade;
+}
+
+[data-floater-placement='stage-top'] .boardFloaterAmount {
+    font-size: 1.22em;
+}
+
+[data-floater-placement='stage-top'] .boardFloaterReason,
+[data-floater-placement='stage-top'] .boardFloaterTerms {
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 18rem;
+}
+
+[data-floater-placement='stage-top'] .boardFloaterSignal {
+    flex: 0 0 auto;
+}
+
 /* The floater's number: the one thing a player reads mid-flip. */
 .boardFloaterAmount {
     font-size: 1.35em;
@@ -1052,6 +1127,28 @@ not one central dashboard box. */
     100% {
         opacity: 0;
         transform: translate(-50%, -148%);
+    }
+}
+
+@keyframes matchScoreFloaterDock {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -6px);
+    }
+
+    18% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+
+    78% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, 3px);
     }
 }
 

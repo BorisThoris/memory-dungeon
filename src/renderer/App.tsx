@@ -297,6 +297,8 @@ const App = () => {
      *       `.matchScoreFloater` / `.mismatchScoreFloater` 5 — transient +score or “Miss” pop
      *       (`data-testid` `match-score-floater` / `mismatch-score-floater`); above distraction HUD, under in-run
      *       OverlayModal shells (21+).
+     *       Anchored per `data-shell-layout` (`boardFloaterPlacement.ts`): pair centroid for a pointer, above
+     *       the pair for touch / phone upright, a docked strip under the HUD for a phone sideways.
      */
     return (
         <div
@@ -308,6 +310,7 @@ const App = () => {
             data-viewport={
                 width <= VIEWPORT_MOBILE_MAX ? 'mobile' : width <= VIEWPORT_TABLET_MAX ? 'tablet' : 'desktop'
             }
+            data-orientation={width > height ? 'landscape' : 'portrait'}
             style={themeStyle}
         >
             <a

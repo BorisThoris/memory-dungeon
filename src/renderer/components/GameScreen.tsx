@@ -50,6 +50,9 @@ import {
     useHudPoliteLiveAnnouncement
 } from '../hooks/useHudPoliteLiveAnnouncement';
 import { useViewportSize } from '../hooks/useViewportSize';
+import { useCoarsePointer } from '../hooks/useCoarsePointer';
+import { resolveGameShellProfile } from '../gameShellLayout';
+import { resolveBoardFloaterAnchor, type BoardFloaterAnchor, type StageRelativeRect } from './boardFloaterPlacement';
 import { GAMBIT_KEYBOARD_HELP_TIP } from '../copy/gameplayHints';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { describePassAndPlayChainLost } from '../../shared/pass-and-play-rules';
@@ -271,6 +274,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const mismatchRecoveryCrescendoSfxSignatureRef = useRef<string | null>(null);
     const tileBoardRef = useRef<TileBoardHandle>(null);
     const { height, width } = useViewportSize();
+    const coarsePointer = useCoarsePointer();
+    const shellProfile = useMemo(() => resolveGameShellProfile(width, height, coarsePointer), [coarsePointer, height, width]);
     const [phoneViewportLatched, setPhoneViewportLatched] = useState(() =>
         latchPhoneWidthForMobileCamera(width, false)
     );
@@ -328,6 +333,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         pairProximityHintsEnabled: settingsPairProximityHintsEnabled,
         tileFocusAssist: settingsTileFocusAssist
     } = useGameScreenBoardVisualSettings();
+    const viewportWantsMobileCamera = compactTouchChrome;
+    const cameraViewportMode = deriveCameraViewportMode(settingsCameraViewportModePreference, viewportWantsMobileCamera);
     const showTutorialPairMarkers = useMemo(
         () =>
             Boolean(
@@ -466,7 +473,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
               }
             : null;
 
-    const [boardFloaterPos, setBoardFloaterPos] = useState<{ x: number; y: number } | null>(null);
+    const [boardFloaterPos, setBoardFloaterPos] = useState<BoardFloaterAnchor | null>(null);
 
     useLayoutEffect(() => {
         if (!boardFloaterPayload) {
@@ -490,30 +497,33 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             boardFloaterPayload.kind === 'miss' && boardFloaterPayload.tileIdC
                 ? handle?.getTileClientRectById?.(boardFloaterPayload.tileIdC) ?? null
                 : null;
+        // The pair is the anchor; a gambit's third card joins it when it can be measured. A pair
+        // with one measured card would anchor on that card alone, so it is the stage center instead.
+        const measured = ra && rb ? [ra, rb, ...(rc ? [rc] : [])] : [];
+        const tiles: StageRelativeRect[] = measured.map((rect) => ({
+            left: rect.left - stageRect.left,
+            top: rect.top - stageRect.top,
+            width: rect.width,
+            height: rect.height
+        }));
+        /*
+         * In camera mode the stage runs under the HUD; otherwise the stage already starts below it.
+         * Measured here rather than read from the clearance the shell publishes: the HUD grows by a
+         * feedback line on the same commit as the match, and the published number is a frame behind.
+         */
+        const hud = cameraViewportMode ? shellRef.current?.querySelector<HTMLElement>('[data-testid="game-hud"]') : null;
+        const hudClearance = hud ? Math.max(0, hud.getBoundingClientRect().bottom - stageRect.top) : 0;
 
-        let cx = stageRect.width / 2;
-        let cy = stageRect.height / 2;
-
-        if (ra && rb && rc) {
-            const ax = ra.left + ra.width / 2 - stageRect.left;
-            const ay = ra.top + ra.height / 2 - stageRect.top;
-            const bx = rb.left + rb.width / 2 - stageRect.left;
-            const by = rb.top + rb.height / 2 - stageRect.top;
-            const cx3 = rc.left + rc.width / 2 - stageRect.left;
-            const cy3 = rc.top + rc.height / 2 - stageRect.top;
-            cx = (ax + bx + cx3) / 3;
-            cy = (ay + by + cy3) / 3;
-        } else if (ra && rb) {
-            const ax = ra.left + ra.width / 2 - stageRect.left;
-            const ay = ra.top + ra.height / 2 - stageRect.top;
-            const bx = rb.left + rb.width / 2 - stageRect.left;
-            const by = rb.top + rb.height / 2 - stageRect.top;
-            cx = (ax + bx) / 2;
-            cy = (ay + by) / 2;
-        }
-
-        setBoardFloaterPos({ x: cx, y: cy });
-    }, [boardFloaterPayload]);
+        setBoardFloaterPos(
+            resolveBoardFloaterAnchor({
+                hudClearance,
+                profile: shellProfile,
+                stage: { width: stageRect.width, height: stageRect.height },
+                tiles,
+                viewportWidth: width
+            })
+        );
+    }, [boardFloaterPayload, cameraViewportMode, shellProfile, width]);
 
     useEffect(() => {
         if (!boardFloaterPayload || !boardFloaterPos) {
@@ -878,8 +888,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const wideRecallInPlay = run.activeMutators.includes('wide_recall');
     const silhouetteDuringPlay = run.activeMutators.includes('silhouette_twist');
     const nBackMutatorActive = run.activeMutators.includes('n_back_anchor');
-    const viewportWantsMobileCamera = compactTouchChrome;
-    const cameraViewportMode = deriveCameraViewportMode(settingsCameraViewportModePreference, viewportWantsMobileCamera);
     const endlessChapterActive =
         run.gameMode === 'endless' && usesEndlessFloorSchedule(run.gameMode, run.runRulesVersion);
     const featuredObjectiveResultLine = run.lastLevelResult ? formatLevelResultObjectiveLine(run.lastLevelResult) : null;
@@ -1315,6 +1323,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         <section
             className={`${styles.shell} ${cameraViewportMode ? styles.mobileCameraShell : ''}`}
             data-mobile-camera-mode={cameraViewportMode ? 'true' : 'false'}
+            data-shell-layout={shellProfile.layout}
+            data-shell-input={shellProfile.input}
+            data-shell-orientation={shellProfile.orientation}
             {...{ [REG104_DATA_SHELL]: reg104GameplayShellVariant }}
             data-testid="game-shell"
             ref={shellRef}
@@ -1497,6 +1508,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             : 'mismatch-score-floater'
                                     }
                                     data-feedback-intensity={boardFloaterIntensity}
+                                    data-floater-placement={boardFloaterPos.placement}
                                     data-match-floater-heat={
                                         boardFloaterPayload.kind === 'match'
                                             ? getMatchFloaterHeat(boardFloaterPayload)

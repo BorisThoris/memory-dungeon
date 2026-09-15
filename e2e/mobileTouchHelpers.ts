@@ -73,7 +73,11 @@ export async function forceCoarsePointerMedia(page: Page): Promise<void> {
                 } as MediaQueryList;
             }
 
-            if (query.includes('(pointer: fine)')) {
+            /*
+             * A phone has no fine pointer and cannot hover. Headless Chromium says it has both, and
+             * `useCoarsePointer` reads that pairing as a touch laptop with a mouse, i.e. not touch.
+             */
+            if (query.includes('(pointer: fine)') || query.includes('(any-pointer: fine)') || query.includes('(hover: hover)')) {
                 return {
                     matches: false,
                     media: query,

@@ -297,6 +297,34 @@ test.describe('Mobile layout (renderer)', () => {
         expect(layout.flexDirection).toBe('row');
     });
 
+    /*
+     * The shell names its shape once (`data-shell-layout`) so the CSS and the TS-positioned overlays
+     * (the match floater above all) agree on it; a phone upright and a phone sideways are different
+     * shapes, not one "mobile" with a media query each.
+     */
+    for (const shape of [
+        { width: 390, height: 844, layout: 'phone-portrait', orientation: 'portrait' },
+        { width: 844, height: 390, layout: 'phone-landscape', orientation: 'landscape' },
+        { width: 1024, height: 768, layout: 'tablet', orientation: 'landscape' },
+        { width: 1440, height: 900, layout: 'desktop', orientation: 'landscape' }
+    ]) {
+        test(`${shape.width}x${shape.height} names the game shell shape ${shape.layout}`, async ({ page }) => {
+            await page.setViewportSize({ width: shape.width, height: shape.height });
+            await navigateToLevel1PlayPhase(page);
+            const shell = page.getByTestId('game-shell');
+            await expect(shell).toHaveAttribute('data-shell-layout', shape.layout);
+            await expect(shell).toHaveAttribute('data-shell-orientation', shape.orientation);
+            await expect(page.locator('[data-orientation]').first()).toHaveAttribute('data-orientation', shape.orientation);
+        });
+    }
+
+    test('a coarse pointer names the shell input touch', async ({ page }) => {
+        await forceCoarsePointerMedia(page);
+        await page.setViewportSize({ width: 390, height: 844 });
+        await navigateToLevel1PlayPhase(page);
+        await expect(page.getByTestId('game-shell')).toHaveAttribute('data-shell-input', 'touch');
+    });
+
     test('wide short landscape keeps desktop mobile-camera mode off (parity with main menu)', async ({ page }) => {
         await page.setViewportSize({ width: 1280, height: 720 });
         await navigateToLevel1PlayPhase(page);
