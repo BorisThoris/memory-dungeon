@@ -368,16 +368,21 @@
     }
 
     /*
-     * Eight tools with 12px labels need about 420px in one row; a 390px phone has 370. One row
-     * ran "SHUFFLE" into "SWAP". Two rows of four give every label its width and keep every
-     * tool's target at 44px; the stage pays about 45px for it, which the portrait fit margin
-     * (Gen 134) more than gives back.
+     * Nine tools and the menu with 12px labels need about 470px in one row; a 390px phone has 370.
+     * One row ran "SHUFFLE" into "SWAP"; four to a row left the menu alone on a third. Two rows
+     * of five give every label its width (74px a tool, "SHUFFLE" takes 58) and keep every tool's
+     * target at 44px; the stage pays about 45px for it, which the portrait fit margin (Gen 134)
+     * more than gives back. The divider before the menu is a one-row device and goes.
      */
     .tool {
         min-width: 0;
-        flex: 1 1 22%;
+        flex: 1 1 18%;
         padding: 0.4rem 0.2rem 0.35rem;
         min-height: 3rem;
+    }
+
+    .dockDivider {
+        display: none;
     }
 }
 
