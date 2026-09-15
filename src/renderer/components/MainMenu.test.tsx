@@ -14,8 +14,10 @@ vi.mock('../hooks/useFitShellZoom', () => ({
 vi.mock('../platformTilt/usePlatformTiltField', () => ({
     usePlatformTiltField: () => ({ tiltRef: { current: null } })
 }));
+// A browser tab, as far as the menu can tell: no Electron bridge, so no window to exit.
 vi.mock('../desktop-client', () => ({
-    desktopClient: { quitApp: vi.fn() }
+    desktopClient: { quitApp: vi.fn() },
+    hasDesktopBridge: () => false
 }));
 vi.mock('../audio/uiSfx', () => ({
     playMenuOpenSfx: vi.fn(),
@@ -63,6 +65,8 @@ describe('MainMenu REG-009 mobile landscape density', () => {
         // The showcase button is gone: it started Classic on a staged board with records off,
         // which is a way to show the dungeon rather than a way to play it.
         expect(screen.queryByRole('button', { name: 'Dungeon Showcase' })).toBeNull();
+        // Exit Game closes an Electron window; in a browser tab it closed nothing, so it is not offered.
+        expect(screen.queryByRole('button', { name: /exit game/i })).toBeNull();
         await user.click(screen.getByRole('button', { name: 'Profile' }));
         expect(onOpenProfile).toHaveBeenCalledTimes(1);
     });

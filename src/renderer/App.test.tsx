@@ -614,12 +614,18 @@ describe('desktop app flow', () => {
     });
 
     it('invokes quitApp when Exit Game is clicked', async () => {
+        // The menu offers Exit Game only inside the Electron shell, where `window.desktop` exists.
+        Object.defineProperty(window, 'desktop', { configurable: true, value: { ...desktopClient } });
         const quitSpy = vi.spyOn(desktopClient, 'quitApp').mockResolvedValue(undefined);
         const user = userEvent.setup();
-        renderApp();
-        await dismissStartupIntro(user);
-        await user.click(await screen.findByRole('button', { name: /exit game/i }));
-        expect(quitSpy).toHaveBeenCalled();
-        quitSpy.mockRestore();
+        try {
+            renderApp();
+            await dismissStartupIntro(user);
+            await user.click(await screen.findByRole('button', { name: /exit game/i }));
+            expect(quitSpy).toHaveBeenCalled();
+        } finally {
+            quitSpy.mockRestore();
+            Reflect.deleteProperty(window, 'desktop');
+        }
     });
 });

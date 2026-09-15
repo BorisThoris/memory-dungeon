@@ -89,6 +89,7 @@ const Stat = ({
     label,
     children,
     ceilingNear = false,
+    chip = false,
     meter = null,
     personalBest = false,
     primary = false,
@@ -103,10 +104,16 @@ const Stat = ({
     /** A small tag beside the label; only the Floor stat carries one, once the run is the deepest. */
     personalBest?: boolean;
     primary?: boolean;
+    /**
+     * A name rather than a number (the mutator). On a phone the stat folds to a chip: the label
+     * goes and the name stays, because "MUTATOR" over "Wide recall" was a second row of the bar
+     * spent on a word the chip's shape already says.
+     */
+    chip?: boolean;
     testId: string;
 }): ReactElement => (
     <div
-        className={`${styles.stat} ${primary ? styles.statPrimary : ''}`.trim()}
+        className={`${styles.stat} ${primary ? styles.statPrimary : ''} ${chip ? styles.statChip : ''}`.trim()}
         data-ceiling-near={ceilingNear ? 'true' : undefined}
         data-personal-best={personalBest ? 'true' : undefined}
         data-testid={testId}
@@ -276,14 +283,14 @@ const RunShell = ({
                     </span>
                 </Stat>
                 {mutatorTitles.length > 0 ? (
-                    <Stat label="Mutator" testId="hud-mutators">
-                        <span style={{ fontSize: '0.95rem', letterSpacing: '0.04em' }}>{mutatorTitles.join(' · ')}</span>
+                    <Stat chip label="Mutator" testId="hud-mutators">
+                        <span className={styles.mutatorValue}>{mutatorTitles.join(' · ')}</span>
                     </Stat>
                 ) : null}
                 </div>
                 <div className={styles.chainGoal} data-testid="hud-chain-goal" data-chain-tier={nextTier ?? 'fever'}>
                     <strong>{nextTierLabel}</strong>
-                    <span>{nextTierBenefit}</span>
+                    <span className={styles.chainGoalBenefit}>{nextTierBenefit}</span>
                     <span className={styles.chainGoalValue}>×{chainRungScoreMultiplier(nextTier ?? 'fever')} per pair</span>
                 </div>
             {line ? (

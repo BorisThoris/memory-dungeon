@@ -85,6 +85,7 @@
 }
 
 .chainGoal strong { color: var(--theme-gold-bright); font-variant-numeric: tabular-nums; }
+.chainGoalBenefit { color: var(--theme-text-muted); }
 .chainGoalValue { color: var(--theme-text); white-space: nowrap; }
 .chainGoal[data-chain-tier='fever'] strong { color: var(--theme-cyan-bright); }
 
@@ -140,6 +141,11 @@
 .valuePrimary {
     font-size: 2.6rem;
     color: var(--theme-gold-bright);
+}
+
+.mutatorValue {
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
 }
 
 /* The par two turns from its ceiling: the one pressure read on the bar, on the number itself. */
@@ -576,4 +582,79 @@
     background: color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
     color: #ffd27a;
     box-shadow: 0 0 6px color-mix(in srgb, var(--theme-glow-gold) 70%, transparent);
+}
+
+/* ---- what a phone does without ---------------------------------------------------------
+   Keyed on the shape the game shell publishes (`data-shell-layout`, `gameShellLayout.ts`) rather
+   than a width, so a phone upright and a phone sideways each lose what their own axis cannot pay
+   for. A desktop or a tablet keeps the full bar.
+
+   Upright, the bar was a quarter of the screen: four stats, a MUTATOR stat on its own row, and
+   the chain goal as three centred lines. Sideways, the goal's sentence and the feedback pill
+   stacked in the bar's right column and ran over the top row of cards.
+
+   Cut on both: the goal's benefit sentence ("Reach deeper into the clump") - the rung name and
+   its multiplier are the goal, the sentence is the Codex's - and the mutator's label, which the
+   chip's shape carries. The feedback line keeps one line: its first clause is the news, and the
+   floater over the board has already said it. */
+
+:global([data-shell-layout='phone-portrait']) .chainGoalBenefit,
+:global([data-shell-layout='phone-landscape']) .chainGoalBenefit {
+    display: none;
+}
+
+:global([data-shell-layout='phone-portrait']) .chainGoal,
+:global([data-shell-layout='phone-landscape']) .chainGoal {
+    flex-wrap: nowrap;
+    gap: 0.45rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+:global([data-shell-layout='phone-portrait']) .statChip .label,
+:global([data-shell-layout='phone-landscape']) .statChip .label {
+    display: none;
+}
+
+:global([data-shell-layout='phone-portrait']) .statChip,
+:global([data-shell-layout='phone-landscape']) .statChip {
+    min-width: 0;
+    align-self: center;
+}
+
+:global([data-shell-layout='phone-portrait']) .statChip .value,
+:global([data-shell-layout='phone-landscape']) .statChip .value {
+    padding: 0.14rem 0.55rem 0.18rem;
+    border-radius: var(--ui-radius-pill);
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 32%, transparent);
+    background: color-mix(in srgb, var(--theme-gold-bright) 9%, transparent);
+    text-shadow: none;
+}
+
+:global([data-shell-layout='phone-portrait']) .mutatorValue,
+:global([data-shell-layout='phone-landscape']) .mutatorValue {
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+}
+
+:global([data-shell-layout='phone-portrait']) .feedback,
+:global([data-shell-layout='phone-landscape']) .feedback {
+    max-width: 100%;
+    overflow: hidden;
+    padding: 0.16rem 0.7rem;
+    font-size: 0.8rem;
+    text-overflow: ellipsis;
+    text-wrap: nowrap;
+    white-space: nowrap;
+}
+
+/* Upright: the bar gives the board back what the cuts above freed. */
+:global([data-shell-layout='phone-portrait']) .bar {
+    gap: 0.3rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.4rem;
+}
+
+:global([data-shell-layout='phone-portrait']) .stats {
+    gap: 0.3rem 1.1rem;
 }

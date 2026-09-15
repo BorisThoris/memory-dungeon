@@ -5,7 +5,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { getHubShellFitPadding } from '../hooks/hubShellFit';
 import { useFitShellZoom } from '../hooks/useFitShellZoom';
 import { UI_ART } from '../assets/ui';
-import { desktopClient } from '../desktop-client';
+import { desktopClient, hasDesktopBridge } from '../desktop-client';
 import {
     isNarrowShortLandscapeForMenuStack,
     isShortLandscapeViewport,
@@ -300,21 +300,23 @@ const MainMenu = ({
                                                         </UiButton>
                                                     ))}
                                                 </div>
-                                                <UiButton
-                                                    aria-label="Exit Game"
-                                                    className={styles.ctaButton}
-                                                    fullWidth
-                                                    size={hubButtonSize}
-                                                    variant="ghost"
-                                                    onClick={() => {
-                                                        playUiBack();
-                                                        void desktopClient.quitApp();
-                                                    }}
-                                                >
-                                                    <span className={styles.ctaContent}>
-                                                        <span className={styles.ctaTitle}>Exit Game</span>
-                                                    </span>
-                                                </UiButton>
+                                                {hasDesktopBridge() ? (
+                                                    <UiButton
+                                                        aria-label="Exit Game"
+                                                        className={styles.ctaButton}
+                                                        fullWidth
+                                                        size={hubButtonSize}
+                                                        variant="ghost"
+                                                        onClick={() => {
+                                                            playUiBack();
+                                                            void desktopClient.quitApp();
+                                                        }}
+                                                    >
+                                                        <span className={styles.ctaContent}>
+                                                            <span className={styles.ctaTitle}>Exit Game</span>
+                                                        </span>
+                                                    </UiButton>
+                                                ) : null}
                                             </div>
                                         </Panel>
                                     </MetaFrame>
