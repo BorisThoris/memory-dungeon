@@ -102,6 +102,16 @@ export function GameplayUndoIcon({ className, ...rest }: GameplayIconProps) {
     );
 }
 
+/** Four corners closing on a frame: the camera control, bringing the whole board back on screen. */
+export function GameplayFitIcon({ className, ...rest }: GameplayIconProps) {
+    return (
+        <svg {...base} className={className} {...rest}>
+            <path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" />
+            <rect height="6" rx="1" width="8" x="8" y="9" />
+        </svg>
+    );
+}
+
 /** A speech bubble: the dock's one control that talks to something rather than moving tiles. */
 export function GameplayGreetIcon({ className, ...rest }: GameplayIconProps) {
     return (

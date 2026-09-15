@@ -288,6 +288,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const compactTouchChrome = isPhoneViewport || isNarrowShortLandscapeForMenuStack(width, height);
     const [, setRulesHintsExpanded] = useState(false);
     const [viewportResetToken, setViewportResetToken] = useState(0);
+    const [boardViewportAtRest, setBoardViewportAtRest] = useState(true);
     const [abandonRunConfirmOpen, setAbandonRunConfirmOpen] = useState(false);
     const [shortcutsHelpOpen, setShortcutsHelpOpen] = useState(false);
     const gamepadConnected = useGamepadConnected();
@@ -1306,6 +1307,19 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         ? RUN_TOOL_REASONS.undo.available
                         : RUN_TOOL_REASONS.undo.notResolving,
                 onClick: undoResolvingFlip
+            },
+            {
+                /*
+                 * The camera's way back. A pinch or a wheel can leave the board half off the screen,
+                 * and the only reset used to sit behind the pause menu. Disabled, with the reason,
+                 * while the board already fits: a lit control that does nothing is the worse signal.
+                 */
+                ...toolSpec('fit'),
+                name: 'Fit board',
+                glyph: RUN_SHELL_GLYPHS.fit,
+                disabled: boardViewportAtRest,
+                title: boardViewportAtRest ? RUN_TOOL_REASONS.fit.atRest : RUN_TOOL_REASONS.fit.available,
+                onClick: () => setViewportResetToken((token) => token + 1)
             }
         ];
 
@@ -1468,6 +1482,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 showTutorialPairMarkers={showTutorialPairMarkers}
                                 silhouetteDuringPlay={silhouetteDuringPlay}
                                 viewportResetToken={viewportResetToken}
+                                onViewportRestChange={setBoardViewportAtRest}
                                 wideRecallInPlay={wideRecallInPlay}
                                 shiftingSpotlightActive={shiftingSpotlightActive}
                                 peekPowerVisualActive={peekPowerVisualActive}

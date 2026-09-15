@@ -20,7 +20,8 @@ export type RunShellToolId =
     | 'peek'
     | 'flash'
     | 'undo'
-    | 'greet';
+    | 'greet'
+    | 'fit';
 
 /** The charge fields on RunState that a dock tool is expected to spend. */
 export type RunPowerChargeField = Extract<
@@ -52,7 +53,11 @@ export const RUN_SHELL_TOOL_CATALOG: readonly RunShellToolSpec[] = [
     { conditional: false, id: 'undo', label: 'Undo', spends: null },
     // Greeting the floor's resident costs nothing and is governed by a once-per-floor rule rather
     // than a counter, so it spends no charge.
-    { conditional: false, id: 'greet', label: 'Greet', spends: null }
+    { conditional: false, id: 'greet', label: 'Greet', spends: null },
+    // The camera, not a power: brings a zoomed or panned board back to the screen. Always on the
+    // dock and disabled while the board already fits, so a finger that pinched too far has a way
+    // back that does not go through the pause menu.
+    { conditional: false, id: 'fit', label: 'Fit', spends: null }
 ];
 
 export const runShellToolIds = (): RunShellToolId[] => RUN_SHELL_TOOL_CATALOG.map((tool) => tool.id);

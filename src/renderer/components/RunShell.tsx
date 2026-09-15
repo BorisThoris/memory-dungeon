@@ -27,6 +27,8 @@ import { isPassAndPlayRun, PASS_AND_PLAY_FLOORS } from '../../shared/pass-and-pl
 export interface RunShellTool {
     id: string;
     label: string;
+    /** Accessible name when the short dock label is not it (e.g. "Fit board" for "Fit"). */
+    name?: string;
     glyph: ReactElement;
     charges?: number;
     armed?: boolean;
@@ -299,7 +301,7 @@ const RunShell = ({
             <div className={styles.dock} data-testid="game-action-dock" role="toolbar" aria-label="Game controls">
                 {visibleTools.map((tool) => (
                     <button
-                        aria-label={tool.title ?? tool.label}
+                        aria-label={tool.name ?? tool.title ?? tool.label}
                         aria-pressed={tool.armed !== undefined ? tool.armed : undefined}
                         className={`${styles.tool} ${tool.armed ? styles.toolArmed : ''}`.trim()}
                         data-testid={`tool-${tool.id}`}

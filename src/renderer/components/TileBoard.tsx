@@ -55,6 +55,7 @@ import TileBoardScene, { type TileBoardSceneHandle, type TileHoverTiltState } fr
 import { getResolvingSelectionState } from './tileResolvingSelection';
 import { DUNGEON_BOARD_STAGE_LAYER_POLICY, DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET } from './tileBoardStageLayers';
 import {
+    isBoardViewportAtRest,
     COMPACT_BOARD_FIT_MARGIN,
     getCameraFitMargin,
     ROOMY_BOARD_FIT_MARGIN,
@@ -417,6 +418,8 @@ interface TileBoardProps {
     stickyBlockedTileId?: string | null;
     /** Fired once the board has finished prestage/deal-in and is stable enough to begin memorize timing. */
     onMemorizeBoardReady?: (boardKey: string) => void;
+    /** Whether the board sits in its fitted frame (no zoom, no pan); the dock's Fit tool listens. */
+    onViewportRestChange?: (atRest: boolean) => void;
 }
 
 interface StageWorldViewport {
@@ -677,7 +680,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         pinModeBoardHintActive = false,
         shuffleSfxGain = 1,
         stickyBlockedTileId = null,
-        onMemorizeBoardReady
+        onMemorizeBoardReady,
+        onViewportRestChange
     },
     ref
 ) {
@@ -2464,6 +2468,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 : nextViewport
         );
     }, [setStageWorldViewport]);
+
+    useEffect(() => {
+        onViewportRestChange?.(isBoardViewportAtRest(renderedViewportState));
+    }, [onViewportRestChange, renderedViewportState]);
 
     useEffect(() => {
         viewportStateRef.current = renderedViewportState;

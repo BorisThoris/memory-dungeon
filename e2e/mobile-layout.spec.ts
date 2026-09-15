@@ -181,11 +181,11 @@ async function expectCoreGameplayChromeFits(page: Page): Promise<void> {
     await expectLocatorFullyInWindowViewport(page, page.getByTestId('game-hud'), 8);
     await expectLocatorFullyInWindowViewport(page, page.getByTestId('tile-board-frame'), 8);
     await expectLocatorFullyInWindowViewport(page, page.getByTestId('game-action-dock'), 8);
-    // "Run settings (toolbar)" is deliberately absent: the run-shell rebuild moved settings behind
-    // the pause menu, so what has to stay reachable on a small screen is the menu button itself.
-    for (const name of [/fit board/i, /open codex/i, /open inventory/i, /return to main menu/i]) {
-        await expectLocatorFullyInWindowViewport(page, page.getByRole('button', { name }), 8);
-    }
+    // Settings, Codex, Inventory and Retreat live behind the pause menu since the run-shell rebuild,
+    // so what has to stay reachable on a small screen is the menu button itself, and the camera's
+    // Fit board next to it.
+    await expectLocatorFullyInWindowViewport(page, page.getByRole('button', { name: /^fit board$/i }), 8);
+    await expectLocatorFullyInWindowViewport(page, page.getByTestId('game-toolbar-main-menu'), 8);
 }
 
 async function expectDialogFitsWithPrimaryActions(page: Page, dialogName: RegExp): Promise<void> {
@@ -358,13 +358,22 @@ test.describe('Mobile layout (renderer)', () => {
         expect(frameBox).toBeTruthy();
         expect(dockBox).toBeTruthy();
 
-        expect(frameBox!.y).toBeLessThanOrEqual(shellBox!.y + 2);
+        /*
+         * Full width, and the full height between the chrome: the stage is inset by the measured
+         * HUD and dock clearances (`useGameplayChromeClearance`), so no card row sits under the run
+         * stats or the tool dock. It used to bleed under both, and printed the score across two
+         * card faces at 1280x800.
+         */
+        const hudBottom = hudBox!.y + hudBox!.height;
+        const frameBottom = frameBox!.y + frameBox!.height;
         expect(Math.abs(frameBox!.x - shellBox!.x)).toBeLessThanOrEqual(2);
         expect(Math.abs(frameBox!.width - shellBox!.width)).toBeLessThanOrEqual(4);
-        expect(Math.abs(frameBox!.height - shellBox!.height)).toBeLessThanOrEqual(4);
-        expect(hudBox!.y).toBeLessThan(frameBox!.y + frameBox!.height * 0.18);
-        expect(dockBox!.y).toBeGreaterThan(frameBox!.y + frameBox!.height * 0.72);
-        expect(dockBox!.y + dockBox!.height).toBeLessThanOrEqual(frameBox!.y + frameBox!.height + 2);
+        expect(frameBox!.y).toBeGreaterThanOrEqual(hudBottom - 2);
+        expect(frameBox!.y).toBeLessThanOrEqual(hudBottom + 12);
+        expect(frameBottom).toBeLessThanOrEqual(dockBox!.y + 2);
+        expect(frameBottom).toBeGreaterThanOrEqual(dockBox!.y - 12);
+        expect(frameBox!.height).toBeGreaterThan(shellBox!.height * 0.6);
+        expect(dockBox!.y + dockBox!.height).toBeLessThanOrEqual(shellBox!.y + shellBox!.height + 2);
     });
 
     test('game control icons meet minimum touch target on compact touch viewport', async ({ page }) => {

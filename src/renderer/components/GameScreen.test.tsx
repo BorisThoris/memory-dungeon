@@ -64,6 +64,8 @@ vi.mock('./TileBoard', () => ({
                 armedPerkPayoff?: string | null;
             };
             guidedTargetTileIds?: string[];
+            onViewportRestChange?: (atRest: boolean) => void;
+            viewportResetToken?: number;
             recoveryContext?: {
                 action: string;
                 detail: string;
@@ -125,7 +127,15 @@ vi.mock('./TileBoard', () => ({
                 data-recovery-tone={props.recoveryContext?.tone ?? 'none'}
                 data-recovery-value={props.recoveryContext?.value ?? 'none'}
                 data-testid="tile-board-stub"
-            />
+                data-viewport-reset-token={props.viewportResetToken ?? 0}
+            >
+                {/* Stands in for a pinch or a wheel: the board reports it has left its fitted frame. */}
+                <button
+                    data-testid="tile-board-stub-move-camera"
+                    onClick={() => props.onViewportRestChange?.(false)}
+                    type="button"
+                />
+            </div>
         );
     })
 }));
@@ -1062,6 +1072,36 @@ describe('GameScreen (OVR-014)', () => {
         } finally {
             vi.useRealTimers();
         }
+    });
+
+    it('offers Fit board on the dock, lit only once the camera has moved', () => {
+        const base = createNewRun(0, { echoFeedbackEnabled: false });
+        const playing = finishMemorizePhase(base);
+        render(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={playing} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        const fit = screen.getByRole('button', { name: /^fit board$/i });
+        expect(fit).toHaveAttribute('data-testid', 'tool-fit');
+        expect(fit).toBeDisabled();
+        expect(fit).toHaveAttribute('title', 'The board already fits the screen');
+
+        act(() => {
+            fireEvent.click(screen.getByTestId('tile-board-stub-move-camera'));
+        });
+        expect(fit).toBeEnabled();
+        expect(fit).toHaveAttribute('title', 'Bring the whole board back on screen');
+
+        const stub = screen.getByTestId('tile-board-stub');
+        expect(stub).toHaveAttribute('data-viewport-reset-token', '0');
+        act(() => {
+            fireEvent.click(fit);
+        });
+        expect(stub).toHaveAttribute('data-viewport-reset-token', '1');
     });
 
     describe('floater placement follows the shell layout', () => {

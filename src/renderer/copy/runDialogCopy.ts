@@ -62,6 +62,10 @@ export const RUN_TOOL_REASONS = {
     exit: {
         available: 'Open the exit you found on this floor',
         locked: 'The exit is found, but not open yet'
+    },
+    fit: {
+        available: 'Bring the whole board back on screen',
+        atRest: 'The board already fits the screen'
     }
 } as const;
 
