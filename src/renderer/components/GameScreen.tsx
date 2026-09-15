@@ -1596,14 +1596,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     <OverlayModal
                         actions={[
                             { label: 'Resume', onClick: resume, variant: 'primary' },
-                            {
-                                label: 'Fit board',
-                                onClick: () => {
-                                    setViewportResetToken((token) => token + 1);
-                                    resume();
-                                },
-                                variant: 'secondary'
-                            },
+                            /* Fit board left this menu for the dock, where the camera is: a pinch
+                               is undone next to where it happened, without pausing. */
                             { label: 'Inventory', onClick: openInventoryFromPlaying, variant: 'secondary' },
                             { label: 'Codex', onClick: openCodexFromPlaying, variant: 'secondary' },
                             /*
@@ -1612,14 +1606,24 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                              * shortcuts — and a controller has neither key. Pause is where you
                              * look, and it is reachable from the dock and from Start.
                              */
-                            {
-                                label: 'Controls',
-                                onClick: () => {
-                                    playMenuOpen();
-                                    setShortcutsHelpOpen(true);
-                                },
-                                variant: 'secondary'
-                            },
+                            /*
+                             * The shortcuts are keys and controller buttons. A phone under a finger
+                             * has neither, so the reference is not offered there unless a controller
+                             * is actually connected; on a touch screen the list was six rows of keys
+                             * the player could not press.
+                             */
+                            ...(shellProfile.input === 'touch' && !gamepadConnected
+                                ? []
+                                : [
+                                      {
+                                          label: 'Controls',
+                                          onClick: () => {
+                                              playMenuOpen();
+                                              setShortcutsHelpOpen(true);
+                                          },
+                                          variant: 'secondary' as const
+                                      }
+                                  ]),
                             { label: 'Settings', onClick: openSettingsPlayingMode, variant: 'secondary' },
                             {
                                 label: 'Retreat',
@@ -1633,7 +1637,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         headerPlateTone="pause"
                         onEscape={resume}
                         ornamentalHeaderPlate
-                        subtitle={PAUSE_DIALOG_COPY.subtitle}
+                        subtitle={shellProfile.input === 'touch' ? PAUSE_DIALOG_COPY.subtitleTouch : PAUSE_DIALOG_COPY.subtitle}
                         testId="game-pause-overlay"
                         title="Run paused"
                     >

@@ -11,7 +11,7 @@ vi.mock('../hooks/useFitShellZoom', () => ({ useFitShellZoom: () => ({ fitZoom: 
 vi.mock('../platformTilt/usePlatformTiltField', () => ({
     usePlatformTiltField: () => ({ tiltRef: { current: null } })
 }));
-vi.mock('../desktop-client', () => ({ desktopClient: { quitApp: vi.fn() } }));
+vi.mock('../desktop-client', () => ({ desktopClient: { quitApp: vi.fn() }, hasDesktopBridge: () => false }));
 vi.mock('../audio/uiSfx', () => ({
     playMenuOpenSfx: vi.fn(),
     playUiBackSfx: vi.fn(),

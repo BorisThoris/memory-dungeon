@@ -5,7 +5,9 @@
  * destroys progress, so the sentence explaining that has to stay blunt through translation.
  */
 export const PAUSE_DIALOG_COPY = {
-    subtitle: 'The board and its timers stay frozen. Press P to resume.'
+    subtitle: 'The board and its timers stay frozen. Press P to resume.',
+    /** A finger has no P key; the shell picks this line when its input is touch. */
+    subtitleTouch: 'The board and its timers stay frozen.'
 } as const;
 
 export const ABANDON_DIALOG_COPY = {

@@ -505,8 +505,16 @@ describe('desktop app flow', () => {
         await dismissStartupIntro(user);
         await chooseClassicRun(user);
 
+        // The camera's reset lives on the dock, next to the pinch it undoes, not behind a pause.
+        const dock = await screen.findByRole('toolbar', { name: /game controls/i });
+        expect(within(dock).getByRole('button', { name: /^fit board$/i })).toBeInTheDocument();
+
         await user.click(await screen.findByRole('button', { name: /pause and open the run menu/i }));
-        expect(await screen.findByRole('button', { name: /fit board/i })).toBeInTheDocument();
+        const pause = await screen.findByTestId('game-pause-overlay');
+        expect(within(pause).queryByRole('button', { name: /fit board/i })).toBeNull();
+        // A finger has no keys: the shortcuts reference and the "press P" line are not offered.
+        expect(within(pause).queryByRole('button', { name: /^controls$/i })).toBeNull();
+        expect(within(pause).queryByText(/press p to resume/i)).toBeNull();
     });
 
     it('shows the Fit board control on desktop gameplay too', async () => {
@@ -517,8 +525,14 @@ describe('desktop app flow', () => {
         await dismissStartupIntro(user);
         await chooseClassicRun(user);
 
+        const dock = await screen.findByRole('toolbar', { name: /game controls/i });
+        expect(within(dock).getByRole('button', { name: /^fit board$/i })).toBeInTheDocument();
+
         await user.click(await screen.findByRole('button', { name: /pause and open the run menu/i }));
-        expect(await screen.findByRole('button', { name: /fit board/i })).toBeInTheDocument();
+        const pause = await screen.findByTestId('game-pause-overlay');
+        // A keyboard is assumed on a desktop: the shortcuts reference stays, with its P hint.
+        expect(within(pause).getByRole('button', { name: /^controls$/i })).toBeInTheDocument();
+        expect(within(pause).getByText(/press p to resume/i)).toBeInTheDocument();
     });
 
     it('opens Choose Your Path from Play and keeps Endless Mode locked in Browse modes', async () => {
