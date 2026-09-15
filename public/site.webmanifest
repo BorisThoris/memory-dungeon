@@ -1,7 +1,7 @@
 {
   "name": "Memory Dungeon",
   "short_name": "Memory Dungeon",
-  "description": "A Windows-first arcade rebuild with run modes, relics, procedural boards, local saves, Electron shell, and polished long-run gameplay feedback.",
+  "description": "A memory roguelite: read the board, match the pairs and protect the streak while relics bend the rules and every run deals deeper, harder boards. Run modes, a collection to unlock, local saves and an Electron build aimed at Steam.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
