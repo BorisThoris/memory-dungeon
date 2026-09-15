@@ -1,7 +1,11 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
+<<<<<<< Updated upstream
   "generatedAt": "2026-09-14T23:28:11.274Z",
+=======
+  "generatedAt": "2026-09-15T12:15:29.471Z",
+>>>>>>> Stashed changes
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -9,13 +13,14 @@
     "packageName": "memory-dungeon",
     "version": "1.0.0",
     "title": "Memory Dungeon",
-    "subtitle": "Steam-focused memory roguelite",
-    "description": "A Windows-first arcade rebuild with run modes, relics, procedural boards, local saves, Electron shell, and polished long-run gameplay feedback.",
+    "subtitle": "Seeker of Shards: a memory roguelite",
+    "description": "A memory roguelite: read the board, match the pairs and protect the streak while relics bend the rules and every run deals deeper, harder boards. Run modes, a collection to unlock, local saves and an Electron build aimed at Steam.",
     "tags": [
+      "Roguelite",
+      "Memory Game",
       "React",
-      "Three.js",
       "Electron",
-      "TypeScript"
+      "Steam"
     ],
     "accent": "#f59e0b",
     "classification": "web-app",
@@ -381,9 +386,15 @@
     "devDependencyCount": 49
   },
   "metrics": {
+<<<<<<< Updated upstream
     "sourceFiles": 1087,
     "testFiles": 474,
     "sourceLines": 166287,
+=======
+    "sourceFiles": 1099,
+    "testFiles": 474,
+    "sourceLines": 174863,
+>>>>>>> Stashed changes
     "largestDirectories": [
       {
         "directory": "src",
@@ -422,11 +433,19 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
+<<<<<<< Updated upstream
     "head": "e0efc418",
     "lastCommitDate": "2026-09-15T01:52:30+03:00",
     "lastCommitSubject": "Refresh the diagram counts and repo model after merging main",
     "commitCount": 1458,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
+=======
+    "head": "9104862b",
+    "lastCommitDate": "2026-09-15T01:47:33+03:00",
+    "lastCommitSubject": "Let the refresh wait up to 90 minutes for a queued Cloudflare build [meta-bot]",
+    "commitCount": 1454,
+    "remote": "https://github.com/BorisThoris/memory-dungeon.git"
+>>>>>>> Stashed changes
   },
   "readme": {
     "file": "README.md",

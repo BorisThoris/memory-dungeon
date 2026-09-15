@@ -19,13 +19,14 @@ export default {
   curated: {
     "deploymentUrl": "https://memory-dungeon-git.pages.dev/",
     "title": "Memory Dungeon",
-    "subtitle": "Steam-focused memory roguelite",
-    "description": "A Windows-first arcade rebuild with run modes, relics, procedural boards, local saves, Electron shell, and polished long-run gameplay feedback.",
+    "subtitle": "Seeker of Shards: a memory roguelite",
+    "description": "A memory roguelite: read the board, match the pairs and protect the streak while relics bend the rules and every run deals deeper, harder boards. Run modes, a collection to unlock, local saves and an Electron build aimed at Steam.",
     "tags": [
+      "Roguelite",
+      "Memory Game",
       "React",
-      "Three.js",
       "Electron",
-      "TypeScript"
+      "Steam"
     ],
     "accent": "#f59e0b",
     "localUrl": "http://127.0.0.1:4102/",
@@ -69,6 +70,7 @@ export default {
   // Graph tags, and the static directory the image is published from.
   social: {
     "htmlFile": "index.html",
+    "pageTitle": "Memory Dungeon",
     "staticDir": "public",
     "imageName": "og-image.jpg",
     "imageUrlPath": "/og-image.jpg"
