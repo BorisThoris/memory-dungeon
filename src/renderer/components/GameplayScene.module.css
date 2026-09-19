@@ -44,17 +44,10 @@
 
 .ringGlow {
     opacity: var(--scene-ring-glow, 0.72);
+    filter: hue-rotate(var(--scene-ring-hue, 0deg)) saturate(var(--scene-ring-saturate, 1));
     transition:
         opacity 900ms ease,
         filter 900ms ease;
-}
-
-.scene[data-scene-tier='sharp'] .ringGlow {
-    filter: saturate(1.15);
-}
-
-.scene[data-scene-tier='fever'] .ringGlow {
-    filter: hue-rotate(-38deg) saturate(1.35);
 }
 
 /* While the board is memorised the ring breathes: the room is waiting with the player. */
@@ -63,30 +56,17 @@
     animation: sceneBreathe 3.6s ease-in-out infinite;
 }
 
-/* A break: the floor light flashes and settles, harder for the higher tier. */
+/* A break: the floor light flashes and settles; the peak grows with the chain (`--scene-pulse-peak`). */
 .ringPulse {
     opacity: 0;
     animation: scenePulse 720ms cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
 }
 
-.scene[data-scene-pulse='pop'] .ringPulse {
-    --scene-pulse-peak: 0.45;
-}
-
-.scene[data-scene-pulse='clean'] .ringPulse {
-    --scene-pulse-peak: 0.7;
-}
-
-.scene[data-scene-pulse='sharp'] .ringPulse {
-    --scene-pulse-peak: 0.95;
-}
-
 .scene[data-scene-pulse='fever'] .ringPulse {
-    --scene-pulse-peak: 1.2;
     animation-duration: 1100ms;
 }
 
-/* ------------------------------------------------------------------ the torches */
+/* ------------------------------------------------------------------ the torches: always lit */
 .torchLightL,
 .torchGlow {
     opacity: 0.82;

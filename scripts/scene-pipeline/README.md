@@ -31,10 +31,11 @@ bash scripts/scene-pipeline/scene.sh        # segment → Blender passes → PNG
 
 `src/renderer/components/GameplayScene.tsx` stacks the layers with `mix-blend-mode: plus-lighter`
 inside an isolated group. The base sinks to the shell's 42 %; the light does not. Intensities:
-the ring follows the chain tier (`gameplaySceneLevels.ts`; `fever` also rotates the glow toward
-rose), breathes during memorize, and its floor light flashes on a break (remounted per event so two
-breaks in a row both flash); the torches flicker on two stepped clocks. Reduce motion freezes
-everything; `low` quality drops the three light passes.
+the ring follows the chain meter's *fill* continuously (`gameplaySceneLevels.ts`: light, glow,
+hue toward rose, saturation and the break-flash peak all ease up from chain 0 to Fever), breathes
+during memorize, and its floor light flashes on a break (remounted per event so two breaks in a
+row both flash); the torches always burn, flickering on two stepped clocks, whatever the run is
+doing. Reduce motion freezes everything; `low` quality drops the three light passes.
 
 ## Extending
 

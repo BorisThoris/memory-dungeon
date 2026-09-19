@@ -1,9 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { GameplayScene, type GameplaySceneProps } from './GameplayScene';
-import { SCENE_RING_LEVELS } from './gameplaySceneLevels';
+import { sceneRingLevels } from './gameplaySceneLevels';
 
 const base: GameplaySceneProps = {
+    fill: 0,
     memorize: false,
     pulse: 'none',
     pulseKey: null,
@@ -24,21 +25,40 @@ describe('GameplayScene', () => {
         expect(scene).toHaveAttribute('data-still', 'false');
     });
 
-    it('sets the ring to the tier: each tier lifts both the floor light and the glow', () => {
-        const tiers = ['none', 'clean', 'sharp', 'fever'] as const;
-        let lastLight = -1;
-        let lastGlow = -1;
-        for (const tier of tiers) {
-            const [light, glow] = SCENE_RING_LEVELS[tier];
-            expect(light).toBeGreaterThan(lastLight);
-            expect(glow).toBeGreaterThan(lastGlow);
-            lastLight = light;
-            lastGlow = glow;
+    it('warms the ring with the chain, continuously: every step of fill lifts light, glow, hue and flash', () => {
+        let last = sceneRingLevels(0);
+        expect(last).toEqual({ light: 0.5, glow: 0.68, hueDeg: 0, saturate: 1, pulsePeak: 0.35 });
+        for (let step = 1; step <= 20; step += 1) {
+            const next = sceneRingLevels(step / 20);
+            expect(next.light).toBeGreaterThan(last.light);
+            expect(next.glow).toBeGreaterThan(last.glow);
+            expect(next.hueDeg).toBeLessThanOrEqual(last.hueDeg);
+            expect(next.pulsePeak).toBeGreaterThan(last.pulsePeak);
+            last = next;
         }
-        render(<GameplayScene {...base} tier="fever" />);
-        const style = screen.getByTestId('gameplay-scene').getAttribute('style') ?? '';
-        expect(style).toContain(`--scene-ring-light: ${SCENE_RING_LEVELS.fever[0]}`);
-        expect(style).toContain(`--scene-ring-glow: ${SCENE_RING_LEVELS.fever[1]}`);
+        expect(last).toEqual({ light: 1.3, glow: 1.4, hueDeg: -40, saturate: 1.4, pulsePeak: 1.25 });
+        // Out-of-range input is clamped, never NaN in a CSS variable.
+        expect(sceneRingLevels(Number.NaN)).toEqual(sceneRingLevels(0));
+        expect(sceneRingLevels(4)).toEqual(sceneRingLevels(1));
+        render(<GameplayScene {...base} fill={0.5} tier="clean" />);
+        const scene = screen.getByTestId('gameplay-scene');
+        const style = scene.getAttribute('style') ?? '';
+        expect(scene).toHaveAttribute('data-scene-fill', '0.50');
+        expect(style).toContain(`--scene-ring-light: ${sceneRingLevels(0.5).light}`);
+        expect(style).toContain(`--scene-ring-hue: ${sceneRingLevels(0.5).hueDeg}deg`);
+        expect(style).toContain(`--scene-pulse-peak: ${sceneRingLevels(0.5).pulsePeak}`);
+    });
+
+    it('keeps the torches burning whatever the chain does', () => {
+        const torchesAt = (fill: number) => {
+            const { unmount } = render(<GameplayScene {...base} fill={fill} />);
+            const scene = screen.getByTestId('gameplay-scene');
+            const torches = [...scene.children].filter((el) => /torch/i.test(el.className)).map((el) => el.getAttribute('style'));
+            unmount();
+            return torches;
+        };
+        expect(torchesAt(0)).toHaveLength(3);
+        expect(torchesAt(0)).toEqual(torchesAt(1));
     });
 
     it('flashes the floor on a break and restarts for a second break of the same tier', () => {
