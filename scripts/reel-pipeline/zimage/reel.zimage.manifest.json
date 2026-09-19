@@ -1,0 +1,42 @@
+{
+  "$comment": "Z-Image-Turbo plates for the Instagram reel: four hero card faces for the Blender card shots, a vertical dungeon plate behind them, and a vertical cathedral plate for the end card.",
+  "defaults": { "width": 1136, "height": 1296, "steps": 8, "candidates": 2 },
+  "entries": [
+    {
+      "id": "hero-face-chalice",
+      "seed": 77010,
+      "prompt": "an ornate golden chalice brimming with cool cyan light, a dark fantasy concept painting that fills the whole image edge to edge, the deep midnight blue-black void stone background and drifting arcane mist reaching all four borders with nothing framing them, the single inanimate subject centered and glowing in antique gold and cool cyan light, painterly brushwork, vertical composition, cropped like a detail of a larger mural, clean readable shapes."
+    },
+    {
+      "id": "hero-face-tower",
+      "seed": 77020,
+      "prompt": "a lone black spire tower under a cyan crescent moon, a dark fantasy concept painting that fills the whole image edge to edge, the deep midnight blue-black void stone background and drifting arcane mist reaching all four borders with nothing framing them, the single inanimate subject centered and lit in antique gold and cool cyan light, painterly brushwork, vertical composition, cropped like a detail of a larger mural, clean readable shapes."
+    },
+    {
+      "id": "hero-face-serpent",
+      "seed": 77030,
+      "prompt": "a jade serpent coiled into a ring around a glowing gold rune, a dark fantasy concept painting that fills the whole image edge to edge, the deep midnight blue-black void stone background and drifting arcane mist reaching all four borders with nothing framing them, the single inanimate subject centered and glowing in antique gold and cool cyan light, painterly brushwork, vertical composition, cropped like a detail of a larger mural, clean readable shapes."
+    },
+    {
+      "id": "hero-face-crystal",
+      "seed": 77040,
+      "prompt": "a glowing cyan crystal obelisk rising from cracked dark stone, a dark fantasy concept painting that fills the whole image edge to edge, the deep midnight blue-black void stone background and drifting arcane mist reaching all four borders with nothing framing them, the single inanimate subject centered and glowing in antique gold and cool cyan light, painterly brushwork, vertical composition, cropped like a detail of a larger mural, clean readable shapes."
+    },
+    {
+      "id": "plate-corridor",
+      "seed": 77100,
+      "width": 1024,
+      "height": 1808,
+      "candidates": 2,
+      "prompt": "Dark fantasy digital painting, tall vertical cinematic shot looking straight down a vaulted stone dungeon corridor that descends into darkness, wet flagstones, iron sconces with warm torch flames on both walls, a cool cyan arcane glow rising from a carved rune circle on the floor in the foreground, drifting mist, deep midnight blue-black palette with antique gold accents, painterly, symmetrical one-point perspective, empty and still, no text, no letters, no watermark, no people."
+    },
+    {
+      "id": "plate-cathedral",
+      "seed": 77200,
+      "width": 1024,
+      "height": 1808,
+      "candidates": 2,
+      "prompt": "Dark fantasy digital painting, tall vertical cinematic shot of a vast gothic cathedral nave at night, towering pointed arches and ribbed vaults receding into deep midnight blue-black darkness, hundreds of candles along the pillars casting warm gold light, a faint cool cyan glow hanging in the air above a stone altar in the far distance, drifting dust and mist, painterly, symmetrical composition with the upper half left dark and quiet, no text, no letters, no watermark, no people."
+    }
+  ]
+}

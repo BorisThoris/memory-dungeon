@@ -159,6 +159,7 @@
     "wip:extract-endproduct:react": "node scripts/extract-endproduct-wip-assets.mjs --emit-react",
     "wip:extract-endproduct:png-only": "node scripts/extract-endproduct-wip-assets.mjs --no-svg",
     "imagegen": "node scripts/card-pipeline/image_gen.mjs",
+    "reel": "bash scripts/reel-pipeline/reel.sh",
     "card-backs:local": "py -3 scripts/card-pipeline/batch_local_card_backs.py",
     "card-backs:local:dry": "py -3 scripts/card-pipeline/batch_local_card_backs.py --dry-run",
     "face-panels:local": "py -3 scripts/card-pipeline/batch_local_face_panels.py",

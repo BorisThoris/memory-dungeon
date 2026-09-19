@@ -1,0 +1,60 @@
+{
+    "jobs": [
+        {
+            "id": "fx-card-flip",
+            "task_type": "text2music",
+            "caption": "Foley sound effect, one single short event then silence: a stiff playing card flipped over on a stone table, a crisp paper snap and a soft tap, dry close-miked, no music, no melody, no drums, no reverb.",
+            "lyrics": "[Instrumental]", "instrumental": true, "duration": 4,
+            "inference_steps": 16, "shift": 3.0, "infer_method": "ode", "guidance_scale": 7.0, "seed": 620001
+        },
+        {
+            "id": "fx-card-whoosh",
+            "task_type": "text2music",
+            "caption": "Cinematic sound effect, one single event then silence: a heavy magical card turning slowly through the air, a deep airy whoosh with a soft arcane shimmer that swells and lands, no music, no melody, no drums.",
+            "lyrics": "[Instrumental]", "instrumental": true, "duration": 4,
+            "inference_steps": 16, "shift": 3.0, "infer_method": "ode", "guidance_scale": 7.0, "seed": 620101
+        },
+        {
+            "id": "fx-reveal",
+            "task_type": "text2music",
+            "caption": "Magical sound effect, one single event then silence: an enchanted card face is revealed, a bright glassy bell chime with a sparkling arcane shimmer tail that fades out, no music, no drums, no melody line.",
+            "lyrics": "[Instrumental]", "instrumental": true, "duration": 4,
+            "inference_steps": 16, "shift": 3.0, "infer_method": "ode", "guidance_scale": 7.0, "seed": 620201
+        },
+        {
+            "id": "fx-match",
+            "task_type": "text2music",
+            "caption": "Game sound effect, one single event then silence: two matching cards found, a satisfying two-note ascending bell chime with a warm golden shimmer, short, clean, no music, no drums.",
+            "lyrics": "[Instrumental]", "instrumental": true, "duration": 4,
+            "inference_steps": 16, "shift": 3.0, "infer_method": "ode", "guidance_scale": 7.0, "seed": 620301
+        },
+        {
+            "id": "fx-clump-pop",
+            "task_type": "text2music",
+            "caption": "Game sound effect, one single event then silence: a cluster of magic cards shatter and burst apart, a deep punchy impact with a crumbling debris crackle and a cascade of glittering high sparkles scattering away, no music, no drums, no melody.",
+            "lyrics": "[Instrumental]", "instrumental": true, "duration": 4,
+            "inference_steps": 16, "shift": 3.0, "infer_method": "ode", "guidance_scale": 7.0, "seed": 620401
+        },
+        {
+            "id": "fx-floor-clear",
+            "task_type": "text2music",
+            "caption": "Short victory sting, one single phrase then silence: a triumphant three-note brass and choir fanfare in a stone cathedral, resolving on a bright major chord with a long reverb tail, cinematic, no drums.",
+            "lyrics": "[Instrumental]", "instrumental": true, "duration": 5,
+            "inference_steps": 16, "shift": 3.0, "infer_method": "ode", "guidance_scale": 7.0, "seed": 620501
+        },
+        {
+            "id": "fx-riser",
+            "task_type": "text2music",
+            "caption": "Cinematic sound effect, one single event: a two-second rising tension riser, a whooshing string tremolo and reversed cymbal crescendo climbing upward and stopping dead at the top, no drums, no melody.",
+            "lyrics": "[Instrumental]", "instrumental": true, "duration": 4,
+            "inference_steps": 16, "shift": 3.0, "infer_method": "ode", "guidance_scale": 7.0, "seed": 620601
+        },
+        {
+            "id": "fx-logo-boom",
+            "task_type": "text2music",
+            "caption": "Cinematic sound effect, one single event then silence: a massive deep sub-bass boom like a giant stone door slamming shut in a cathedral, with a dark low reverb tail decaying slowly, no music, no drums, no melody.",
+            "lyrics": "[Instrumental]", "instrumental": true, "duration": 5,
+            "inference_steps": 16, "shift": 3.0, "infer_method": "ode", "guidance_scale": 7.0, "seed": 620701
+        }
+    ]
+}

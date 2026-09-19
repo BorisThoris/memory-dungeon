@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2490,
+    "trackedFileCount": 2530,
     "codeFileCount": 891,
     "exportedSymbolCount": 2693,
     "contentItemCount": 10,
@@ -3493,6 +3493,114 @@
       "sha256": "b34a253eee4735ce50e62c5cbc3142f9e95154a9656ebf42ba91a9dc722198de"
     },
     {
+      "path": "docs/wip-assets/reel/ace/fx/fx-card-flip-seed635839.wav",
+      "category": "documentation",
+      "bytes": 1966168,
+      "sha256": "098018aa98fba89ff5b425f1a97c6f99c115a1b09174b2710bb903785126ed8a"
+    },
+    {
+      "path": "docs/wip-assets/reel/ace/fx/fx-card-whoosh-seed635939.wav",
+      "category": "documentation",
+      "bytes": 1966168,
+      "sha256": "05d01e215bcd8ee50d82306b087bcb750ab5fe66b178f15d1e283522628ac8aa"
+    },
+    {
+      "path": "docs/wip-assets/reel/ace/fx/fx-clump-pop-seed620401.wav",
+      "category": "documentation",
+      "bytes": 1966168,
+      "sha256": "833179ae9aac6494b4b81f67a7ad313d5377abf0785bb4d9a117793931783a20"
+    },
+    {
+      "path": "docs/wip-assets/reel/ace/fx/fx-floor-clear-seed628420.wav",
+      "category": "documentation",
+      "bytes": 1966168,
+      "sha256": "46e825d5b706cde761742231d27673558b6c72322f265193287fb5ec1afeee61"
+    },
+    {
+      "path": "docs/wip-assets/reel/ace/fx/fx-logo-boom-seed628620.wav",
+      "category": "documentation",
+      "bytes": 1966168,
+      "sha256": "bfc796349ab962488d9348e2aba749054c752f4661c36cb56c089c142c60d4d9"
+    },
+    {
+      "path": "docs/wip-assets/reel/ace/fx/fx-match-seed644058.wav",
+      "category": "documentation",
+      "bytes": 1966168,
+      "sha256": "a6f236e07e769d632ddf3c6e71e2b157477716b37f5b028400fae693af9aecf4"
+    },
+    {
+      "path": "docs/wip-assets/reel/ace/fx/fx-reveal-seed620201.wav",
+      "category": "documentation",
+      "bytes": 1966168,
+      "sha256": "ffaed869b468661e050dd69fe13889215d5b91c4437097e6c96bbda17e164295"
+    },
+    {
+      "path": "docs/wip-assets/reel/ace/fx/fx-riser-seed636439.wav",
+      "category": "documentation",
+      "bytes": 1966168,
+      "sha256": "7d564b8893fc0ff0dbf36ac96186454699fa7805cef5eb1783a36586b485c37c"
+    },
+    {
+      "path": "docs/wip-assets/reel/ace/fx/picks.json",
+      "category": "documentation",
+      "bytes": 2920,
+      "sha256": "36a1d0415a4bc953cce813f3fc92d71c7586e4d06a4de79e5d71f072cd1b8d02"
+    },
+    {
+      "path": "docs/wip-assets/reel/ace/score/score-hybrid-v02-seed621020.wav",
+      "category": "documentation",
+      "bytes": 4608088,
+      "sha256": "fd174173e1803415c3c5f6fdd9af5a866bc60e0f35224bad14fe25c52a838be2"
+    },
+    {
+      "path": "docs/wip-assets/reel/README.md",
+      "category": "documentation",
+      "bytes": 2639,
+      "sha256": "a801a183da790331f12b66ed1414b2d871cd1b8322542623400beb5d822a49a3"
+    },
+    {
+      "path": "docs/wip-assets/reel/zimage/hero-face-chalice-c02.png",
+      "category": "documentation",
+      "bytes": 1835382,
+      "sha256": "a1b70c0de89a1e2e91aef21139435a5ac5441a755743a78c1d90dc65972bd32f"
+    },
+    {
+      "path": "docs/wip-assets/reel/zimage/hero-face-crystal-c02.png",
+      "category": "documentation",
+      "bytes": 1562230,
+      "sha256": "e082ca163c02e830ccf4378383644f90291d4af33e1d8ba1c484208cddad316b"
+    },
+    {
+      "path": "docs/wip-assets/reel/zimage/hero-face-serpent-c02.png",
+      "category": "documentation",
+      "bytes": 1823714,
+      "sha256": "ff2f4f817679b9448f2897aed453bb186f2741de91b93a6ce17f6f8173ab70e5"
+    },
+    {
+      "path": "docs/wip-assets/reel/zimage/hero-face-tower-c01.png",
+      "category": "documentation",
+      "bytes": 1494554,
+      "sha256": "7b02d5fad0432becd8edfe47003f8aca24b6003f61665e7eb0cba801f3be3fa7"
+    },
+    {
+      "path": "docs/wip-assets/reel/zimage/plate-cathedral-c01.png",
+      "category": "documentation",
+      "bytes": 2035854,
+      "sha256": "55ca1e5d2aa1fdc654feb264d43cda5dd0440d0fd1150cd38ab589ed58805556"
+    },
+    {
+      "path": "docs/wip-assets/reel/zimage/plate-corridor-c01.png",
+      "category": "documentation",
+      "bytes": 2219381,
+      "sha256": "1f4f711d8c6a1773387df02a0881a7749a672ffc1fe426c49f0b53331cc592c2"
+    },
+    {
+      "path": "docs/wip-assets/reel/zimage/plate-corridor-c02.png",
+      "category": "documentation",
+      "bytes": 2114391,
+      "sha256": "bba05d0ce246adaeb1042fbe473dc6546c6b548cd167b7a70371dc4ba59bb411"
+    },
+    {
       "path": "docs/wip-assets/svg/board-a-card-states.svg",
       "category": "documentation",
       "bytes": 818854,
@@ -4083,8 +4191,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 31252,
-      "sha256": "5b885faacd2722fbf14126cc080f34dd3dc3016334c5fe426c2726899639c1f8"
+      "bytes": 31717,
+      "sha256": "51e4f4cdcc48669dfdb68f8c0ad34b894a415d969a00456a20ee0be31e7d6785"
     },
     {
       "path": "packages/notifications/package.json",
@@ -5051,6 +5159,138 @@
       "category": "script",
       "bytes": 4367,
       "sha256": "8925dd84c374f193ab7cee6c7183c49c57f2862ec3b5030e371733e25b561575"
+    },
+    {
+      "path": "scripts/reel-pipeline/ace/fx_shape.py",
+      "category": "script",
+      "bytes": 3849,
+      "sha256": "4d14c951482cebf3da4f0ebbc876d9faf33bbb06719638ae9d85e697664a57e9"
+    },
+    {
+      "path": "scripts/reel-pipeline/ace/jobs-fx.json",
+      "category": "script",
+      "bytes": 4130,
+      "sha256": "b2307c9875ba9c8f6c07785901b7d405c87c57349664b58bc937c63550c6d9d8"
+    },
+    {
+      "path": "scripts/reel-pipeline/ace/jobs-score.json",
+      "category": "script",
+      "bytes": 2958,
+      "sha256": "fec8e14c9c837c860786c2de5923b758105ceae697d8b915748ab36e257655d3"
+    },
+    {
+      "path": "scripts/reel-pipeline/ace/pick_fx.py",
+      "category": "script",
+      "bytes": 5625,
+      "sha256": "b26c69ceec34bd46de573a9ab1b7fd53daf89c4987d563a927d9112be382c9e7"
+    },
+    {
+      "path": "scripts/reel-pipeline/ace/pick_score.py",
+      "category": "script",
+      "bytes": 3427,
+      "sha256": "55150e2eef23440e4a92d6552e1c8781615363738f830b0160f4fc11dca08cf7"
+    },
+    {
+      "path": "scripts/reel-pipeline/arc.py",
+      "category": "script",
+      "bytes": 3309,
+      "sha256": "856713b156079582f91fb82ff58f25567b743bb31f715494408cdcff16ed593c"
+    },
+    {
+      "path": "scripts/reel-pipeline/blender_reel.py",
+      "category": "script",
+      "bytes": 18246,
+      "sha256": "c924645fc919f86ed42c325f8ed7f87acb80b52aadf64f87e7370dca5d57f6a3"
+    },
+    {
+      "path": "scripts/reel-pipeline/build60.sh",
+      "category": "script",
+      "bytes": 5193,
+      "sha256": "a95229b3844f969a8213679365d4b5cb3042b31621a387fa34f3f9297d50cede"
+    },
+    {
+      "path": "scripts/reel-pipeline/capture/capture.mjs",
+      "category": "script",
+      "bytes": 9965,
+      "sha256": "5690b798cc87bf3285d5f5d88f741da7d3611009beae2bb461ce99270903025d"
+    },
+    {
+      "path": "scripts/reel-pipeline/capture/scenarios/reel-floor2.mjs",
+      "category": "script",
+      "bytes": 3035,
+      "sha256": "2dc30cf0c238f570b320505fd316bad7568c0ce1a80848618524c48b1205b0ca"
+    },
+    {
+      "path": "scripts/reel-pipeline/cards2.mjs",
+      "category": "script",
+      "bytes": 5471,
+      "sha256": "0f2ac17774db5dc4ee8672080ec9d2b69f4475867a2ef495ffceb1c08802e352"
+    },
+    {
+      "path": "scripts/reel-pipeline/compose_card.py",
+      "category": "script",
+      "bytes": 1876,
+      "sha256": "75351172dc9c98dd6ead7791d161c521e1fdbaac765db2cf4df0256bcc8b9dd0"
+    },
+    {
+      "path": "scripts/reel-pipeline/copy_lm.py",
+      "category": "script",
+      "bytes": 2300,
+      "sha256": "cf660dae201a28fff686acfdb3927a899e39f7da48f4197b29afee9660248c85"
+    },
+    {
+      "path": "scripts/reel-pipeline/edit60.mjs",
+      "category": "script",
+      "bytes": 3409,
+      "sha256": "cf4d8020ff4b0b73574b7b64c9a6e0973e9e38ae219c30311eb6a5365e3fa487"
+    },
+    {
+      "path": "scripts/reel-pipeline/frozen.sha256",
+      "category": "script",
+      "bytes": 2033,
+      "sha256": "b7198968ecf6c2208f35351268ce737ea60b9838d46cb3148c157268e6b15813"
+    },
+    {
+      "path": "scripts/reel-pipeline/fx_stem60.py",
+      "category": "script",
+      "bytes": 3847,
+      "sha256": "1b60e46e7cf76501c413917d7d41e75a66a8423febab5013e9b13e24eec04498"
+    },
+    {
+      "path": "scripts/reel-pipeline/lines.json",
+      "category": "script",
+      "bytes": 116,
+      "sha256": "aa6d9f055cac09a53a6571ec6217b26cdcecbae0b714b700a334bc45bce0971c"
+    },
+    {
+      "path": "scripts/reel-pipeline/master2.sh",
+      "category": "script",
+      "bytes": 4798,
+      "sha256": "2fbd574ab9e140418927c169c7dc58651af3c5e968e09ea2d9dfbd2f4e2b3720"
+    },
+    {
+      "path": "scripts/reel-pipeline/README.md",
+      "category": "script",
+      "bytes": 5240,
+      "sha256": "d14166280ecc039df60eebede1b657c18f2d996c574af0433b0e236aa2a13551"
+    },
+    {
+      "path": "scripts/reel-pipeline/reel.sh",
+      "category": "script",
+      "bytes": 11042,
+      "sha256": "13bbc078fc0f33e970cfe3d94342a3146f66613af5760a965339cdb3954e801e"
+    },
+    {
+      "path": "scripts/reel-pipeline/report.py",
+      "category": "script",
+      "bytes": 3456,
+      "sha256": "95e9ba36340dc241fe66961992eb1140f53cfd76b3d7fd425d337bebfb03093c"
+    },
+    {
+      "path": "scripts/reel-pipeline/zimage/reel.zimage.manifest.json",
+      "category": "script",
+      "bytes": 3716,
+      "sha256": "72c719b3228826737d6a1f71210576dbbbf81b5a88468cfb0b3d7adfe31a5fc3"
     },
     {
       "path": "scripts/refresh-project-meta.mjs",
