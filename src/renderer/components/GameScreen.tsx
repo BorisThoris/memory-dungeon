@@ -95,6 +95,7 @@ import {
     uiSfxGainFromSettings
 } from '../audio/uiSfx';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
+import { GameplayScene } from './GameplayScene';
 import { REG104_DATA_SHELL } from '../gameplay/regPhase4PlayContract';
 import styles from './GameScreen.module.css';
 import {
@@ -1352,11 +1353,16 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 reduceMotion={reduceMotion}
                 width={width}
             />
-            <div
-                aria-hidden="true"
-                className={styles.stageBackdrop}
-                style={{ backgroundImage: `url(${UI_ART.gameplayScene})` }}
-            />
+            <div aria-hidden="true" className={styles.stageBackdrop}>
+                <GameplayScene
+                    memorize={run.status === 'memorize'}
+                    pulse={breakPulseTier}
+                    pulseKey={pulseEventId}
+                    quality={settingsGraphicsQuality}
+                    reduceMotion={reduceMotion}
+                    tier={runChainTier(run)}
+                />
+            </div>
             <div className={`${styles.gameForeground} ${cameraViewportMode ? styles.mobileCameraForeground : ''}`}>
                 <div
                     aria-hidden={gameplayShellInert ? true : undefined}

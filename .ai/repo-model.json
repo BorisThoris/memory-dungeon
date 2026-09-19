@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2530,
-    "codeFileCount": 891,
-    "exportedSymbolCount": 2693,
+    "trackedFileCount": 2552,
+    "codeFileCount": 894,
+    "exportedSymbolCount": 2696,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6815
+    "relationshipCount": 6828
   },
   "inventory": [
     {
@@ -3543,8 +3543,8 @@
     {
       "path": "docs/wip-assets/reel/ace/fx/picks.json",
       "category": "documentation",
-      "bytes": 2920,
-      "sha256": "36a1d0415a4bc953cce813f3fc92d71c7586e4d06a4de79e5d71f072cd1b8d02"
+      "bytes": 2799,
+      "sha256": "d01e03eb27d2f53c4598a7f00a128cfcd25414ec44e28688a7040b82611070f8"
     },
     {
       "path": "docs/wip-assets/reel/ace/score/score-hybrid-v02-seed621020.wav",
@@ -3555,8 +3555,8 @@
     {
       "path": "docs/wip-assets/reel/README.md",
       "category": "documentation",
-      "bytes": 2639,
-      "sha256": "a801a183da790331f12b66ed1414b2d871cd1b8322542623400beb5d822a49a3"
+      "bytes": 2601,
+      "sha256": "b924ffe83cd854cb9930022bd1e058a7ec605488e7a08860cf6c233e763e7f02"
     },
     {
       "path": "docs/wip-assets/reel/zimage/hero-face-chalice-c02.png",
@@ -4191,8 +4191,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 31717,
-      "sha256": "51e4f4cdcc48669dfdb68f8c0ad34b894a415d969a00456a20ee0be31e7d6785"
+      "bytes": 31302,
+      "sha256": "bebfd126d418fa29000a6d6ca44ba4b4f23661a0b75b08dad7569bff1825cd3f"
     },
     {
       "path": "packages/notifications/package.json",
@@ -5163,8 +5163,8 @@
     {
       "path": "scripts/reel-pipeline/ace/fx_shape.py",
       "category": "script",
-      "bytes": 3849,
-      "sha256": "4d14c951482cebf3da4f0ebbc876d9faf33bbb06719638ae9d85e697664a57e9"
+      "bytes": 3752,
+      "sha256": "eaa673374bd7f1983199db5391f38573cd591cc10ccd7b3f050e5467f826921a"
     },
     {
       "path": "scripts/reel-pipeline/ace/jobs-fx.json",
@@ -5193,8 +5193,8 @@
     {
       "path": "scripts/reel-pipeline/arc.py",
       "category": "script",
-      "bytes": 3309,
-      "sha256": "856713b156079582f91fb82ff58f25567b743bb31f715494408cdcff16ed593c"
+      "bytes": 3260,
+      "sha256": "834a975481f1745668bc72243eb8beec99a3c25f9128df41b57684967f9fbb9d"
     },
     {
       "path": "scripts/reel-pipeline/blender_reel.py",
@@ -5205,20 +5205,20 @@
     {
       "path": "scripts/reel-pipeline/build60.sh",
       "category": "script",
-      "bytes": 5193,
-      "sha256": "a95229b3844f969a8213679365d4b5cb3042b31621a387fa34f3f9297d50cede"
+      "bytes": 5130,
+      "sha256": "693d88ac0a95fcd9d54fe19eff8ca4145911889db134b1d6955418faaa563650"
     },
     {
       "path": "scripts/reel-pipeline/capture/capture.mjs",
       "category": "script",
-      "bytes": 9965,
-      "sha256": "5690b798cc87bf3285d5f5d88f741da7d3611009beae2bb461ce99270903025d"
+      "bytes": 10196,
+      "sha256": "d6f35853d1b11fcc8cda1758a46ea15d908a52609b8423f791a3dba3a0ba1515"
     },
     {
       "path": "scripts/reel-pipeline/capture/scenarios/reel-floor2.mjs",
       "category": "script",
-      "bytes": 3035,
-      "sha256": "2dc30cf0c238f570b320505fd316bad7568c0ce1a80848618524c48b1205b0ca"
+      "bytes": 2975,
+      "sha256": "9ab74a9fbd594777882203ababdc403b12098ab67f8ae8bc7371009814c81c51"
     },
     {
       "path": "scripts/reel-pipeline/cards2.mjs",
@@ -5253,8 +5253,8 @@
     {
       "path": "scripts/reel-pipeline/fx_stem60.py",
       "category": "script",
-      "bytes": 3847,
-      "sha256": "1b60e46e7cf76501c413917d7d41e75a66a8423febab5013e9b13e24eec04498"
+      "bytes": 3751,
+      "sha256": "fdcebf66c251ede66785d94f4f531b04735606fede1c7e5200504ce3c422d92b"
     },
     {
       "path": "scripts/reel-pipeline/lines.json",
@@ -5271,14 +5271,14 @@
     {
       "path": "scripts/reel-pipeline/README.md",
       "category": "script",
-      "bytes": 5240,
-      "sha256": "d14166280ecc039df60eebede1b657c18f2d996c574af0433b0e236aa2a13551"
+      "bytes": 5665,
+      "sha256": "a0d6247273399a4a7630505a45b818e12aa2255603455260bb3dae93a3295409"
     },
     {
       "path": "scripts/reel-pipeline/reel.sh",
       "category": "script",
-      "bytes": 11042,
-      "sha256": "13bbc078fc0f33e970cfe3d94342a3146f66613af5760a965339cdb3954e801e"
+      "bytes": 10853,
+      "sha256": "3486ff5f10fc12c687d5b9bd28d613fc4586a8e7704de9efd491b01989fd050e"
     },
     {
       "path": "scripts/reel-pipeline/report.py",
@@ -5321,6 +5321,30 @@
       "category": "script",
       "bytes": 3343,
       "sha256": "177712c6dc73b7d5ad3a75a9b5d59367e4502ed75fb4bbd35c527aa18f546894"
+    },
+    {
+      "path": "scripts/scene-pipeline/blender_scene_lights.py",
+      "category": "script",
+      "bytes": 9732,
+      "sha256": "9cd8394f158106e0e365e4bd9ac0b8673ee482baf6875b308424e64f42804d0f"
+    },
+    {
+      "path": "scripts/scene-pipeline/README.md",
+      "category": "script",
+      "bytes": 2891,
+      "sha256": "f3e81a2a4a048a45a319c1295a6ade0ec846599b784f738ee4cd04a9ec0cc9c1"
+    },
+    {
+      "path": "scripts/scene-pipeline/scene.sh",
+      "category": "script",
+      "bytes": 2265,
+      "sha256": "b846a7d3c74668d3d66ab858116722bc01c42dfbfe8bf8a3c80d04c50cec9e03"
+    },
+    {
+      "path": "scripts/scene-pipeline/segment_scene.py",
+      "category": "script",
+      "bytes": 7152,
+      "sha256": "056652ae002961d7ba61ea0de1259adbba2b5c34bea2eceeac7b03735246abd4"
     },
     {
       "path": "scripts/script-paths.ts",
@@ -7435,6 +7459,90 @@
       "sha256": "f88cacc7c74b7ad67188eed4254e05032ae5a14b437339b3ae6b243a2c088e7d"
     },
     {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-base.png",
+      "category": "source",
+      "bytes": 1810309,
+      "sha256": "39ca2539b196993a8f5fc5df2e011f087f3bc0ef1b80ef1f407cbeb9f5291648"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-base.webp",
+      "category": "source",
+      "bytes": 172470,
+      "sha256": "a5b166c016cf335161debb43ce53f21f3d5f3f6f8c78feb636a4f11bba4574d8"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-glow-ring.png",
+      "category": "source",
+      "bytes": 2189812,
+      "sha256": "49dd9e5ee32283ecacb3d4a4b3f43c0806fd4e9a3236f7bafccfaa83453df2a2"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-glow-ring.webp",
+      "category": "source",
+      "bytes": 44160,
+      "sha256": "9c287c7687424c905036359b277212595d4a67601a37dcbb0b8ac755d98f7dd3"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-glow-runes.png",
+      "category": "source",
+      "bytes": 2229546,
+      "sha256": "24920bbbc44cc7b582c9323d01d7aa3117732f9c7a2348d715ba766cd282f117"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-glow-runes.webp",
+      "category": "source",
+      "bytes": 10932,
+      "sha256": "7f70d5b3fce5bf19528b2bb6495b34f175501215300f0a08fc0d2ca7724cf346"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-glow-torches.png",
+      "category": "source",
+      "bytes": 2197324,
+      "sha256": "11fecca36c1416f77e09969e4c999230558fc35e43fad1f5f50fec4f4d94bd94"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-glow-torches.webp",
+      "category": "source",
+      "bytes": 108312,
+      "sha256": "51cd042d1cb24723ea325796974d9898642766ff5970590b98183d3c686645f8"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-light-ring.png",
+      "category": "source",
+      "bytes": 1289682,
+      "sha256": "29869a8c7f9e24acb594670db50c6bbfd8406a0b829d0ac6b0af91036e92be39"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-light-ring.webp",
+      "category": "source",
+      "bytes": 41694,
+      "sha256": "11ddb2c07b966b7f1b252f1465a6d2cf76ea2d6fc25407d7c9c01bd31ee08d30"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-light-torches-l.png",
+      "category": "source",
+      "bytes": 1461772,
+      "sha256": "7995690081614aa5384feea6ccca7095ec5e33ba0ff004909988ef66464fe476"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-light-torches-l.webp",
+      "category": "source",
+      "bytes": 82412,
+      "sha256": "fd09b9a0bea74893de81407cc2de3475fcf423733905d2399a16fb7b698f4ccd"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-light-torches-r.png",
+      "category": "source",
+      "bytes": 1525121,
+      "sha256": "2f61b46e318d2cca4c210a84b2cb41d4dd4623331dcc080659a9dc3d75e929ea"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-light-torches-r.webp",
+      "category": "source",
+      "bytes": 99602,
+      "sha256": "18d877fea4d6f5381586a8eefdab41066bdc865b0e293b808b97140d65b9a6cc"
+    },
+    {
       "path": "src/renderer/assets/ui/backgrounds/bg-main-menu-cathedral-v1.png",
       "category": "source",
       "bytes": 1599870,
@@ -7713,8 +7821,8 @@
     {
       "path": "src/renderer/assets/ui/index.ts",
       "category": "source",
-      "bytes": 1621,
-      "sha256": "78e03c6c16f6d791062d10ec12e0c1dc80208a60cd4d3fa2cd23e2e904d60277"
+      "bytes": 2752,
+      "sha256": "f455fba3864141d97142114cfedd11188fd4eb0c30a3401a7db793f7a98623c3"
     },
     {
       "path": "src/renderer/assets/ui/menu-emblem.svg",
@@ -8359,6 +8467,30 @@
       "sha256": "10774369f069e79620cd014b655acfbdcea8162e2a1c5246cbad3a480aae73ff"
     },
     {
+      "path": "src/renderer/components/GameplayScene.module.css",
+      "category": "source",
+      "bytes": 4255,
+      "sha256": "f583d3e9d0b8659e6d6e7686492c19c99fa8968bcc4ba4e1725f4a0f265299b4"
+    },
+    {
+      "path": "src/renderer/components/GameplayScene.test.tsx",
+      "category": "test",
+      "bytes": 3334,
+      "sha256": "5014b6252b7ac0d9e1726b4019a9ebc7b5321fdd973a1e6594fd822af247c39b"
+    },
+    {
+      "path": "src/renderer/components/GameplayScene.tsx",
+      "category": "source",
+      "bytes": 3886,
+      "sha256": "41e1fa83c024c01f2b4e9b96b79e98a07564c04b8da671d72c7fd4c587c4e48c"
+    },
+    {
+      "path": "src/renderer/components/gameplaySceneLevels.ts",
+      "category": "source",
+      "bytes": 445,
+      "sha256": "c0ba8e98d2648c7e6da29c965475b5dcf65d7caae78619a8b56b17144d794f20"
+    },
+    {
       "path": "src/renderer/components/gameplayVisualConfig.test.ts",
       "category": "test",
       "bytes": 3291,
@@ -8373,8 +8505,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 46955,
-      "sha256": "4826bca4ae456928f697d0e70264393bc713a6e80512a2aa4c6c967809166efb"
+      "bytes": 48599,
+      "sha256": "6c5adf3a24a843a7ab5a823d016d4dd8833b9825b1adbb852390f1de421d553a"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -8385,8 +8517,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 82921,
-      "sha256": "8ae31edf05afca0d023ee09864e6a90083d94fa4f1318ca91e0eda658312510f"
+      "bytes": 84985,
+      "sha256": "678ca55ff07ac00b2d55a01ee2a148f03881eb75bb2ab54e3d540e782153b78f"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -15986,7 +16118,7 @@
       "path": "src/renderer/assets/ui/index.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 49,
+      "lineCount": 64,
       "imports": [
         "file:src/renderer/assets/ui/modeArt.ts"
       ],
@@ -17724,6 +17856,55 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/GameplayScene.test.tsx",
+      "path": "src/renderer/components/GameplayScene.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 71,
+      "imports": [
+        "file:src/renderer/components/GameplayScene.tsx",
+        "file:src/renderer/components/gameplaySceneLevels.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/GameplayScene.tsx",
+      "path": "src/renderer/components/GameplayScene.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 75,
+      "imports": [
+        "file:src/renderer/assets/ui/index.ts",
+        "file:src/renderer/components/gameplaySceneLevels.ts",
+        "file:src/shared/chain-tier-rules.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/GameplayScene.tsx#GameplayScene",
+        "symbol:src/renderer/components/GameplayScene.tsx#GameplaySceneProps"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/GameplayScene.test.tsx"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/gameplaySceneLevels.ts",
+      "path": "src/renderer/components/gameplaySceneLevels.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 13,
+      "imports": [
+        "file:src/shared/chain-tier-rules.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/gameplaySceneLevels.ts#SCENE_RING_LEVELS"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/GameplayScene.test.tsx"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/gameplayVisualConfig.test.ts",
       "path": "src/renderer/components/gameplayVisualConfig.test.ts",
       "layer": "renderer",
@@ -17789,7 +17970,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1772,
+      "lineCount": 1778,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -17797,6 +17978,7 @@
         "file:src/renderer/breakpoints.ts",
         "file:src/renderer/components/boardFloaterPlacement.ts",
         "file:src/renderer/components/FloorClearBeat.tsx",
+        "file:src/renderer/components/GameplayScene.tsx",
         "file:src/renderer/components/gameplayVisualConfig.ts",
         "file:src/renderer/components/gameScreenStoreSelectors.ts",
         "file:src/renderer/components/MainMenuBackground.tsx",
@@ -32519,32 +32701,32 @@
       "name": "getUiArtRows",
       "kind": "value",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 42,
-      "endLine": 46
+      "line": 57,
+      "endLine": 61
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#MODE_CARD_ART",
       "name": "MODE_CARD_ART",
       "kind": "ExportSpecifier",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 48,
-      "endLine": 48
+      "line": 63,
+      "endLine": 63
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#MODE_POSTER_KEYS",
       "name": "MODE_POSTER_KEYS",
       "kind": "ExportSpecifier",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 48,
-      "endLine": 48
+      "line": 63,
+      "endLine": 63
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#resolveModePosterUrl",
       "name": "resolveModePosterUrl",
       "kind": "ExportSpecifier",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 48,
-      "endLine": 48
+      "line": 63,
+      "endLine": 63
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UI_ART",
@@ -32552,31 +32734,31 @@
       "kind": "value",
       "file": "src/renderer/assets/ui/index.ts",
       "line": 8,
-      "endLine": 20
+      "endLine": 28
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UI_ART_KEYS",
       "name": "UI_ART_KEYS",
       "kind": "value",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 24,
-      "endLine": 35
+      "line": 32,
+      "endLine": 50
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UiArtKey",
       "name": "UiArtKey",
       "kind": "type",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 22,
-      "endLine": 22
+      "line": 30,
+      "endLine": 30
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UiArtRow",
       "name": "UiArtRow",
       "kind": "interface",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 37,
-      "endLine": 40
+      "line": 52,
+      "endLine": 55
     },
     {
       "id": "symbol:src/renderer/assets/ui/modeArt.ts#getModePosterArtRows",
@@ -34635,6 +34817,30 @@
       "endLine": 22
     },
     {
+      "id": "symbol:src/renderer/components/GameplayScene.tsx#GameplayScene",
+      "name": "GameplayScene",
+      "kind": "function",
+      "file": "src/renderer/components/GameplayScene.tsx",
+      "line": 38,
+      "endLine": 74
+    },
+    {
+      "id": "symbol:src/renderer/components/GameplayScene.tsx#GameplaySceneProps",
+      "name": "GameplaySceneProps",
+      "kind": "interface",
+      "file": "src/renderer/components/GameplayScene.tsx",
+      "line": 25,
+      "endLine": 34
+    },
+    {
+      "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#SCENE_RING_LEVELS",
+      "name": "SCENE_RING_LEVELS",
+      "kind": "value",
+      "file": "src/renderer/components/gameplaySceneLevels.ts",
+      "line": 7,
+      "endLine": 12
+    },
+    {
       "id": "symbol:src/renderer/components/gameplayVisualConfig.ts#CARD_INTERACTION_FEEDBACK",
       "name": "CARD_INTERACTION_FEEDBACK",
       "kind": "value",
@@ -34671,24 +34877,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 1771,
-      "endLine": 1771
+      "line": 1777,
+      "endLine": 1777
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 192,
-      "endLine": 192
+      "line": 193,
+      "endLine": 193
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 186,
-      "endLine": 186
+      "line": 187,
+      "endLine": 187
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -59001,6 +59207,24 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/GameplayScene.tsx->symbol:src/renderer/components/GameplayScene.tsx#GameplayScene",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "symbol:src/renderer/components/GameplayScene.tsx#GameplayScene",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/GameplayScene.tsx->symbol:src/renderer/components/GameplayScene.tsx#GameplaySceneProps",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "symbol:src/renderer/components/GameplayScene.tsx#GameplaySceneProps",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/gameplaySceneLevels.ts->symbol:src/renderer/components/gameplaySceneLevels.ts#SCENE_RING_LEVELS",
+      "source": "file:src/renderer/components/gameplaySceneLevels.ts",
+      "target": "symbol:src/renderer/components/gameplaySceneLevels.ts#SCENE_RING_LEVELS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/gameplayVisualConfig.ts->symbol:src/renderer/components/gameplayVisualConfig.ts#CARD_INTERACTION_FEEDBACK",
       "source": "file:src/renderer/components/gameplayVisualConfig.ts",
       "target": "symbol:src/renderer/components/gameplayVisualConfig.ts#CARD_INTERACTION_FEEDBACK",
@@ -76157,6 +76381,48 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameplayScene.test.tsx->src/renderer/components/GameplayScene.tsx",
+      "source": "file:src/renderer/components/GameplayScene.test.tsx",
+      "target": "file:src/renderer/components/GameplayScene.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameplayScene.test.tsx->src/renderer/components/gameplaySceneLevels.ts",
+      "source": "file:src/renderer/components/GameplayScene.test.tsx",
+      "target": "file:src/renderer/components/gameplaySceneLevels.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/assets/ui/index.ts",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "file:src/renderer/assets/ui/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/gameplaySceneLevels.ts",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "file:src/renderer/components/gameplaySceneLevels.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/shared/chain-tier-rules.ts",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "file:src/shared/chain-tier-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneLevels.ts->src/shared/chain-tier-rules.ts",
+      "source": "file:src/renderer/components/gameplaySceneLevels.ts",
+      "target": "file:src/shared/chain-tier-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/gameplayVisualConfig.test.ts->src/renderer/components/gameplayRenderProfile.ts",
       "source": "file:src/renderer/components/gameplayVisualConfig.test.ts",
       "target": "file:src/renderer/components/gameplayRenderProfile.ts",
@@ -76274,6 +76540,12 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/FloorClearBeat.tsx",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/FloorClearBeat.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/GameplayScene.tsx",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/components/GameplayScene.tsx",
       "kind": "imports"
     },
     {
@@ -91357,6 +91629,18 @@
       "id": "tested_by:src/renderer/components/gameplayRenderProfile.ts->file:src/renderer/components/tileBoardSceneLighting.test.ts",
       "source": "file:src/renderer/components/gameplayRenderProfile.ts",
       "target": "file:src/renderer/components/tileBoardSceneLighting.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/GameplayScene.tsx->file:src/renderer/components/GameplayScene.test.tsx",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "file:src/renderer/components/GameplayScene.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/gameplaySceneLevels.ts->file:src/renderer/components/GameplayScene.test.tsx",
+      "source": "file:src/renderer/components/gameplaySceneLevels.ts",
+      "target": "file:src/renderer/components/GameplayScene.test.tsx",
       "kind": "tested_by"
     },
     {

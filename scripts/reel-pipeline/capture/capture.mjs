@@ -60,7 +60,8 @@ if (args.plate) {
     // Artwork behind the board: the game's scene layer, replaced by a generated plate and lifted.
     const b64 = fs.readFileSync(args.plate).toString('base64');
     const mime = args.plate.endsWith('.png') ? 'image/png' : 'image/webp';
-    await page.addStyleTag({ content: `[class*="stageBackdrop"] { background-image: url(data:${mime};base64,${b64}) !important; opacity: ${args.plateOpacity ?? 0.6} !important; filter: saturate(1.0) contrast(1.05) !important; }` });
+    // The shell's own relightable room (GameplayScene) is hidden; the plate takes its place.
+    await page.addStyleTag({ content: `[data-testid="gameplay-scene"] { display: none !important; } [class*="stageBackdrop"] { background-image: url(data:${mime};base64,${b64}) !important; background-size: cover !important; background-position: center !important; opacity: ${args.plateOpacity ?? 0.6} !important; filter: saturate(1.0) contrast(1.05) !important; }` });
 }
 const intro = page.getByRole('dialog', { name: /startup relic intro/i });
 for (let i = 0; i < 60; i++) {

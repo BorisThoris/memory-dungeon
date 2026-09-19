@@ -96,12 +96,13 @@
     mask-image: radial-gradient(ellipse 110% 100% at 50% 50%, black 20%, rgba(0, 0, 0, 0.85) 55%, transparent 100%);
 }
 
-/* The Margin: the head and the foot are set on ink, so the scene darkens toward both. */
+/* The Margin: the head and the foot are set on ink, so the scene darkens toward both. It sits over
+   the relightable room's layers (`GameplayScene`), which paint the scene itself. */
 .stageBackdrop::before {
     content: '';
     position: absolute;
     inset: 0;
-    z-index: 0;
+    z-index: 1;
     pointer-events: none;
     background: linear-gradient(
         180deg,
@@ -956,9 +957,10 @@ subdued cool palette. */
         0 0 1.25rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
 }
 
-/* UI-REFINE: final chrome pass for the HTML gameplay shell. */
+/* UI-REFINE: final chrome pass for the HTML gameplay shell. The stone sinks to 42 % (the base layer
+   inside `GameplayScene` carries it); the room's own lights stay at full strength over it. */
 .stageBackdrop {
-    opacity: 0.42;
+    --scene-base-opacity: 0.42;
     filter: saturate(0.8) contrast(1.04);
 }
 
