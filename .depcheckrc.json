@@ -1,6 +1,8 @@
 {
     "ignores": [
         "@fontsource/cinzel",
+        "@fontsource/cormorant-garamond",
+        "@fontsource/lora",
         "@fontsource/source-sans-3",
         "cross-env",
         "rimraf"

@@ -1355,7 +1355,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             <div
                 aria-hidden="true"
                 className={styles.stageBackdrop}
-                style={{ backgroundImage: `url(${UI_ART.gameplayWorkshopScene})` }}
+                style={{ backgroundImage: `url(${UI_ART.gameplayScene})` }}
             />
             <div className={`${styles.gameForeground} ${cameraViewportMode ? styles.mobileCameraForeground : ''}`}>
                 <div
@@ -1636,8 +1636,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         ]}
                         headerPlateTone="pause"
                         onEscape={resume}
-                        ornamentalHeaderPlate
                         subtitle={shellProfile.input === 'touch' ? PAUSE_DIALOG_COPY.subtitleTouch : PAUSE_DIALOG_COPY.subtitle}
+                        surface="margin"
                         testId="game-pause-overlay"
                         title="Run paused"
                     >
@@ -1657,6 +1657,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     </div>
                                 );
                             })()}
+                            {run.activeMutators.length > 0 ? (
+                                <div>
+                                    <dt>Mutator</dt>
+                                    <dd data-testid="pause-mutators">
+                                        {run.activeMutators.map((id) => MUTATOR_CATALOG[id]?.title ?? id).join(' · ')}
+                                    </dd>
+                                </div>
+                            ) : null}
                             {(() => {
                                 const perfectMemory = perfectMemoryStatus(run, saveData);
                                 return perfectMemory === null ? null : (

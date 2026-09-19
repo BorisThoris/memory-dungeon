@@ -205,8 +205,12 @@ test.describe('gameplay HUD layout', () => {
                             .filter((el) => el.children.length === 0)
                             .map((el) => el.scrollWidth - el.clientWidth)
                             .reduce((most, over) => Math.max(most, over), 0);
-                        // And the lane itself has to sit inside the bar it belongs to.
-                        const bar = document.querySelector('[data-testid="game-hud"]')?.getBoundingClientRect();
+                        // And the lane itself has to sit inside the chrome it belongs to. The chain is
+                        // the one lane the head does not box: on a desktop it stands as a ladder in
+                        // the left margin (The Margin, `RunShell`), so its box is the run shell.
+                        const bar = document
+                            .querySelector(id === 'hud-chain' ? '[data-testid="run-shell"]' : '[data-testid="game-hud"]')
+                            ?.getBoundingClientRect();
                         const box = lane.getBoundingClientRect();
                         const outsideBarBy = bar
                             ? Math.max(0, bar.left - box.left, box.right - bar.right)

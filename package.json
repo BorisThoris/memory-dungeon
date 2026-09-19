@@ -230,6 +230,8 @@
   },
   "dependencies": {
     "@fontsource/cinzel": "5.2.5",
+    "@fontsource/cormorant-garamond": "5.3.0",
+    "@fontsource/lora": "5.3.0",
     "@fontsource/source-sans-3": "5.2.5",
     "@react-three/fiber": "^9.5.0",
     "electron-store": "11.0.2",

@@ -373,15 +373,29 @@ test.describe('Mobile layout (renderer)', () => {
         expect(dockBox).toBeTruthy();
 
         /*
-         * Full width, and the full height between the chrome: the stage is inset by the measured
-         * HUD and dock clearances (`useGameplayChromeClearance`), so no card row sits under the run
-         * stats or the tool dock. It used to bleed under both, and printed the score across two
-         * card faces at 1280x800.
+         * The full height between the chrome, and the full width between the margins: the stage
+         * is inset by the measured HUD and dock clearances (`useGameplayChromeClearance`), so no
+         * card row sits under the run stats or the tool dock — it used to bleed under both, and
+         * printed the score across two card faces at 1280x800 — and, since The Margin, by the
+         * chain ladder's column at the left and the head's gutter at the right, which the shell
+         * publishes as `--margin-stage-inline-start` / `--margin-stage-inline-end`.
          */
         const hudBottom = hudBox!.y + hudBox!.height;
         const frameBottom = frameBox!.y + frameBox!.height;
-        expect(Math.abs(frameBox!.x - shellBox!.x)).toBeLessThanOrEqual(2);
-        expect(Math.abs(frameBox!.width - shellBox!.width)).toBeLessThanOrEqual(4);
+        const chainBox = await page.getByTestId('hud-chain').boundingBox();
+        // Read off the stage's resolved insets: a custom property's computed value keeps its
+        // `clamp()` unresolved, while `left` / `right` on the stage come back in pixels.
+        const margins = await page.getByTestId('board-stage').evaluate((el) => {
+            const style = getComputedStyle(el);
+            return { start: parseFloat(style.left) || 0, end: parseFloat(style.right) || 0 };
+        });
+        expect(margins.start, 'a desktop window keeps a margin for the ladder').toBeGreaterThan(0);
+        expect(Math.abs(frameBox!.x - (shellBox!.x + margins.start))).toBeLessThanOrEqual(2);
+        expect(Math.abs(frameBox!.width - (shellBox!.width - margins.start - margins.end))).toBeLessThanOrEqual(4);
+        // The ladder stands in that margin, clear of the cards.
+        expect(chainBox).toBeTruthy();
+        expect(chainBox!.x).toBeGreaterThanOrEqual(shellBox!.x);
+        expect(chainBox!.x).toBeLessThan(frameBox!.x);
         expect(frameBox!.y).toBeGreaterThanOrEqual(hudBottom - 2);
         expect(frameBox!.y).toBeLessThanOrEqual(hudBottom + 12);
         expect(frameBottom).toBeLessThanOrEqual(dockBox!.y + 2);

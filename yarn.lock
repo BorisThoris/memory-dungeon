@@ -800,6 +800,16 @@
   resolved "https://registry.yarnpkg.com/@fontsource/cinzel/-/cinzel-5.2.5.tgz#f962c1baa3a7aa88df1d3a1622cbedc6bb2ff49f"
   integrity sha512-rtWRRViKOMLsCx0j+duTUIDuuDf3ke9uJoss108M/yFHPdxowxTvkehP0D1IrfzR+xM7pFU/tJGGmBflVHohHA==
 
+"@fontsource/cormorant-garamond@5.3.0":
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/@fontsource/cormorant-garamond/-/cormorant-garamond-5.3.0.tgz#4d6baee3e9257be403a9fc406f42a8a75356824e"
+  integrity sha512-weuGsCirGVWBWqpt6YUp0yLThTe4G8YO45noq8wxeJCRvEpq5lFrxNMFSTxcyOyV5k5otzJ8guDzYegdYlcLMQ==
+
+"@fontsource/lora@5.3.0":
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/@fontsource/lora/-/lora-5.3.0.tgz#dea87bc5e22737252f02102777f88f128a99b812"
+  integrity sha512-OK1g1z01rHVPqO5aw/FOIoDqc46KKYZdgL3NOLkxLWDk6QhDHhdr/h2BV1cke6gTvR1tzpDfdKyUkGsC+sQLeQ==
+
 "@fontsource/source-sans-3@5.2.5":
   version "5.2.5"
   resolved "https://registry.yarnpkg.com/@fontsource/source-sans-3/-/source-sans-3-5.2.5.tgz#2ffdaf69c0943b2ede7b1a214d85dd13b9dcf369"

@@ -41,6 +41,7 @@ const OverlayActionDock = ({
         <UiButton
             aria-label={action.ariaLabel}
             className={`${styles.actionButton} ${actionClassName}`.trim()}
+            data-variant={action.variant ?? 'primary'}
             disabled={action.disabled}
             key={`${action.label}:${index}`}
             onClick={action.onClick}

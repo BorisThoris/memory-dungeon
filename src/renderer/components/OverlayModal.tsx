@@ -43,6 +43,12 @@ interface OverlayModalProps {
     actionPlacement?: OverlayModalActionPlacement;
     /** Optional keyboard back path for overlays with an existing safe cancel/resume action. */
     onEscape?: () => void;
+    /**
+     * `margin`: the in-run surface of "The Margin" — ink, one hairline of gold, the title in
+     * display type and the actions as outlined words. Used by the pause dialog so it reads as
+     * part of the run shell rather than as a meta screen dropped over it.
+     */
+    surface?: 'default' | 'margin';
 }
 
 const modalKindFor = (actions: readonly ModalAction[], hasChildren: boolean): 'alert' | 'decision' | 'sheet' => {
@@ -141,7 +147,8 @@ const OverlayModal = ({
     quietHeaderPlate = false,
     headerPlateTone = 'neutral',
     actionPlacement = 'auto',
-    onEscape
+    onEscape,
+    surface = 'default'
 }: OverlayModalProps) => {
     const modalRef = useRef<HTMLElement | null>(null);
     const titleId = useId();
@@ -181,7 +188,7 @@ const OverlayModal = ({
 
     return (
         <div
-            className={`${styles.backdrop} ${overlayToneClass(headerPlateTone)}`.trim()}
+            className={`${styles.backdrop} ${overlayToneClass(headerPlateTone)} ${surface === 'margin' ? styles.backdropMargin : ''}`.trim()}
             onWheel={(event) => {
                 if (event.target === event.currentTarget) {
                     event.preventDefault();
@@ -194,7 +201,8 @@ const OverlayModal = ({
                 aria-modal="true"
                 className={`${styles.modal} ${overlayToneClass(headerPlateTone)} ${
                     actions.length === 0 ? styles.modalNoActions : ''
-                }`.trim()}
+                } ${surface === 'margin' ? styles.modalMargin : ''}`.trim()}
+                data-surface={surface}
                 data-action-placement={resolvedActionPlacement}
                 data-modal-kind={modalKind}
                 data-overlay-size={modalKind}

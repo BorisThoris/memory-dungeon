@@ -72,6 +72,24 @@ export const RUN_TOOL_REASONS = {
 } as const;
 
 /**
+ * The caption under the board: a kicker naming the moment, then the run line under it. The
+ * kicker is the standing the sentence is read from — which chain, which rung — so a line about a
+ * pickup or a miss still says where the run is.
+ */
+export const RUN_SHELL_LINE_COPY = {
+    chainKicker: (chain: number, tierLabel: string): string =>
+        chain <= 0 ? 'No chain' : tierLabel ? `Chain ${chain} · ${tierLabel}` : `Chain ${chain}`,
+    firstFloorKicker: 'First floor',
+    missKicker: 'No match',
+    /** `6 pairs. Every face shows for 4 seconds; then the floor begins.` */
+    study: (pairs: number, seconds: number): string =>
+        `${pairs} ${pairs === 1 ? 'pair' : 'pairs'}. Every face shows for ${seconds} ${
+            seconds === 1 ? 'second' : 'seconds'
+        }; then the floor begins.`,
+    studyKicker: 'Study the board'
+} as const;
+
+/**
  * The study period ends itself on a clock. This is the line that tells the player they can end
  * it themselves, and the label the same control carries for a screen reader.
  */

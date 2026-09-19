@@ -149,6 +149,35 @@ renderer suite lost 20 specs that asserted the deleted rails, floaters and onboa
 Known gap: the 3D board still fits itself to the full viewport, so the top card row's edge
 sits under the bar's translucent tail. Phase 2 passes a top/bottom inset to `TileBoard`'s fit.
 
+### 3.1 The Margin (built 2026-09-19)
+
+The bar-and-backplate shell was redrawn as *The Margin* from the Claude Design project
+"Game View — Redesign" (`docs/design/game-view-redesign.md` records the import): chrome as
+type and hairlines, nothing boxed and nothing glowing. Cormorant Garamond carries every
+number and title, Lora every sentence; both ship via `@fontsource` beside Cinzel and Source
+Sans, which the meta screens keep.
+
+- **Running head.** Floor, par and the active mutator on one gold rule at the top, the score
+  as a 56 px folio at the right. During the study period the rule carries the clock as a bar
+  and "Memorize · N" sits on it; the double-tap hint moved there from the board.
+- **Chain ladder.** On a desktop the meter stands in the left margin: Lone / Clean / Sharp /
+  Fever rungs at this floor.s momentum, a marker climbing the rail, the rung.s multiplier set
+  large beside it with "Chain N · Tier" and the distance to the next rung. The board is inset
+  past it (`--margin-stage-inline-start`). Tablets and phones lay the same ladder on its side
+  under the head, multiplier at its left.
+- **Caption and tools.** The run line is a caption under the board — a small-caps kicker
+  naming the chain over one italic sentence — and the tools are set into the same bottom
+  rule as glyph over word, Pause outlined in gold at the end. A phone upright stacks the
+  caption over two rows of five.
+- **Floater, colophon, pause.** The score floater is the number alone in display type over a
+  small-caps signal and an italic reason. The floor-clear beat is a ruled colophon in the
+  middle of the stage with the floor.s numeral as a watermark. The pause dialog uses
+  `OverlayModal surface="margin"`: ink, one hairline, a ruled table of Run / Mutator /
+  Perfect memory / Floor / Score / Turns, and outlined-word actions.
+
+Every `data-testid` the harness reads (`game-hud`, `hud-*`, `run-shell-line`,
+`game-action-dock`, `tool-*`, `floor-clear-*`, `game-pause-overlay`) is unchanged.
+
 ## 4. The retry loop: floor clear, relic draft, shop, side room, game over
 
 **Status: built, then superseded.** Floor clear was the `FloorClearDialog` (score, four stats, notes, three doors,

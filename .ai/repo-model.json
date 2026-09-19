@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2485,
-    "codeFileCount": 887,
-    "exportedSymbolCount": 2677,
+    "trackedFileCount": 2490,
+    "codeFileCount": 891,
+    "exportedSymbolCount": 2693,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6789
+    "relationshipCount": 6815
   },
   "inventory": [
     {
@@ -27,8 +27,8 @@
     {
       "path": ".depcheckrc.json",
       "category": "configuration",
-      "bytes": 132,
-      "sha256": "97feed7f59250aa767f2eb965b80bed6e233bb21874e67c336f7727e88c7a4a0"
+      "bytes": 202,
+      "sha256": "baebde1fedcbfdddd9b90771e58cb6f1bc8909596fd73efa92639ca94e7bdf4f"
     },
     {
       "path": ".gitattributes",
@@ -51,8 +51,8 @@
     {
       "path": ".github/workflows/project-meta-refresh.yml",
       "category": "configuration",
-      "bytes": 2976,
-      "sha256": "cb5c3e68429ba62d286736180409107b72fe0dc9ca30ef31d2c5a896e4121575"
+      "bytes": 4200,
+      "sha256": "70d01e365f37b09c1394e6556136f2d8c14711fb00d9da404c7eb450a9d8cafd"
     },
     {
       "path": ".github/workflows/project-meta.yml",
@@ -305,6 +305,12 @@
       "category": "documentation",
       "bytes": 12418,
       "sha256": "b4db9135c12d3e5c6ded8a514f8b2fd8b5d520fbe6c6d144f38b9022a48209a9"
+    },
+    {
+      "path": "docs/design/game-view-redesign.md",
+      "category": "documentation",
+      "bytes": 2372,
+      "sha256": "857e01d6d64f03aeda3ef853f337fc483d87b91577144da0a38c591379ed5380"
     },
     {
       "path": "docs/DOC_CHECKBOX_INVENTORY.md",
@@ -2356,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "f4471871ddd4f4b8fd3d347004a85004ecd43ae63a053e8e66591a42907aeb65"
+      "sha256": "4d827cc530339c308d0727420268dc24aba7e21d145e399bb8fb63572cc68c1f"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -2367,8 +2373,8 @@
     {
       "path": "docs/UI_RETHINK_PLAN.md",
       "category": "documentation",
-      "bytes": 21458,
-      "sha256": "137b68d7118805a52d1b0d85e7949ad6732804f66f7a69fca691b826803bb399"
+      "bytes": 23470,
+      "sha256": "2e8d86e6466d98f645dc326e18e8373bd6b488642a84c1daaaf940415b0f7e99"
     },
     {
       "path": "docs/UI_TASKS/README.md",
@@ -3609,8 +3615,8 @@
     {
       "path": "e2e/a11y-intro-pause.spec.ts",
       "category": "test",
-      "bytes": 3185,
-      "sha256": "9c3d245c1764a35b31c9ba70b04b8632ccc89c7d257f1896149efd40286e97b7"
+      "bytes": 3370,
+      "sha256": "8dc378004d133a2f0617081ebc1d840e9793464490771f4051292efb12025067"
     },
     {
       "path": "e2e/a11y-scoped-routes.spec.ts",
@@ -3699,8 +3705,8 @@
     {
       "path": "e2e/gameplay-hud-layout.spec.ts",
       "category": "test",
-      "bytes": 11099,
-      "sha256": "41895eb412f0f13956d18eefc3f2ea6121ea48984c23f5a00abb4dde07b632fd"
+      "bytes": 11423,
+      "sha256": "6f922d17d860dab0e81306eeb8eef0e79c40a7104b643ca67ad8860e089c05b5"
     },
     {
       "path": "e2e/gameplay-readability.spec.ts",
@@ -3735,14 +3741,14 @@
     {
       "path": "e2e/mobile-layout.spec.ts",
       "category": "test",
-      "bytes": 40953,
-      "sha256": "0bce91d1b0a8cbf4c13ab14457c24af13728d0275ee681d3db3ba60b44396942"
+      "bytes": 45269,
+      "sha256": "a86eceab8fedfcf97a8e32b82afb7ba9eaabfc2081d9502958495a09d471a367"
     },
     {
       "path": "e2e/mobileTouchHelpers.ts",
       "category": "test",
-      "bytes": 2913,
-      "sha256": "83ee379f37d63a6f28f878310d7b6460db3d7fccd83c4d1c0f86aa68081f2ded"
+      "bytes": 3223,
+      "sha256": "da4dc686ae92a2aeaa95e651a951b5699caa05ea0df99ebbe5dd22754fd618a6"
     },
     {
       "path": "e2e/navigation-flow.spec.ts",
@@ -4011,14 +4017,14 @@
     {
       "path": "index.html",
       "category": "other",
-      "bytes": 2957,
-      "sha256": "8a3389fdadfe2a49d0755638662f9c636f414a366278f3f578333a6d3e169d14"
+      "bytes": 3582,
+      "sha256": "94ba49e5240ed347fb9f0c1126ee9e5739ec6cdd23a9f005f21cd55955a15617"
     },
     {
       "path": "knip.json",
       "category": "configuration",
-      "bytes": 2002,
-      "sha256": "dc6e36cd73fde126472d801b488f526a497d57c8507258f4526bdffcec885a07"
+      "bytes": 2056,
+      "sha256": "6881477ab45083623a11bdd11f762e6d096e7d8020fdc9774f92ae89073894e0"
     },
     {
       "path": "legacy/README.md",
@@ -4077,8 +4083,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 31172,
-      "sha256": "d6e7a637841382586db756bcb478e24ec16da436ee95ff35ad84fac73cf16b2a"
+      "bytes": 31252,
+      "sha256": "5b885faacd2722fbf14126cc080f34dd3dc3016334c5fe426c2726899639c1f8"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4191,8 +4197,8 @@
     {
       "path": "project-media/capture.json",
       "category": "configuration",
-      "bytes": 1305,
-      "sha256": "482aab9d1e2f79637eaeb453267be84f10f2e621611eb7be91c34b7d1ba47b62"
+      "bytes": 1303,
+      "sha256": "2ef526e50a2d86bcb4c080569e7966c9f9cddacabb52dff99a0719bbef71c2f4"
     },
     {
       "path": "project-media/card.jpg",
@@ -4209,14 +4215,14 @@
     {
       "path": "project-media/full.jpg",
       "category": "asset",
-      "bytes": 120436,
-      "sha256": "ce9ea0218d4ad0e1ab69dfab205e87adec1bb82204a21f7aba0749a23c7ab14e"
+      "bytes": 120215,
+      "sha256": "992d60fcefd7ca2697a002d7bd2308a1c8a0a5923d06044337e1b3a242a4fab6"
     },
     {
       "path": "project-media/icons.json",
       "category": "configuration",
       "bytes": 366,
-      "sha256": "33f6d553399d699dd4d0de8713a7fbc401d61f6dd5fe16a6aab6760c342b2865"
+      "sha256": "e566063ac9f9c785deb4baed90aeb891c151150f558b762a0da53307f0cc6f55"
     },
     {
       "path": "project-media/mobile.jpg",
@@ -4227,14 +4233,14 @@
     {
       "path": "project-media/og.jpg",
       "category": "asset",
-      "bytes": 110517,
-      "sha256": "df4adbf99674288110e0ef2ec18469b5675985c29839a1ba14e83b560c3b4c0e"
+      "bytes": 110844,
+      "sha256": "b2be663a3cc684080496f817d83bafb6a3cbba007212e7c1a883a1e0fd2f925a"
     },
     {
       "path": "project.meta.json",
       "category": "configuration",
-      "bytes": 11594,
-      "sha256": "c2b8ef7593aae3934f3fbad6064b2f301d36ceabee05321dffe3de076c231831"
+      "bytes": 11692,
+      "sha256": "a37a81cc26ef82e01d157e1fa4589dee21f3994d8d9148a1ee4df6617c129478"
     },
     {
       "path": "public/apple-touch-icon.png",
@@ -4275,14 +4281,14 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 110517,
-      "sha256": "df4adbf99674288110e0ef2ec18469b5675985c29839a1ba14e83b560c3b4c0e"
+      "bytes": 110844,
+      "sha256": "b2be663a3cc684080496f817d83bafb6a3cbba007212e7c1a883a1e0fd2f925a"
     },
     {
       "path": "public/site.webmanifest",
       "category": "other",
-      "bytes": 693,
-      "sha256": "f906cacd5152b33d528b6d1b136863d815dcc500fc158599ee6c9ec2ac6439ff"
+      "bytes": 780,
+      "sha256": "0d93130799f66c03da908caf6d3ad2f00b1e0b416fe78d87e68933d04d6fc8be"
     },
     {
       "path": "public/wip-assets/svg/board-a-card-states.svg",
@@ -4971,8 +4977,8 @@
     {
       "path": "scripts/generate-social-preview.mjs",
       "category": "script",
-      "bytes": 7384,
-      "sha256": "743a84a346ae0aab472c9dd92e3898e345de29a092b459638bbe433f59eef916"
+      "bytes": 9516,
+      "sha256": "17c5546bea55db53076b464a084e5c12fb2dedd4f9ea7a8e6e514935ebc5cdbe"
     },
     {
       "path": "scripts/generate-visual-inventory-md.mjs",
@@ -5031,8 +5037,8 @@
     {
       "path": "scripts/project-meta.config.mjs",
       "category": "script",
-      "bytes": 2966,
-      "sha256": "06d3f047c77f57e2b3f1d9b1a53a3cc6ee73c75023d53908424f1005d2e7a04c"
+      "bytes": 3111,
+      "sha256": "35538993a9dcf8f9235861cf5a4d43067eb5b065a28446889c69b4ffc5748238"
     },
     {
       "path": "scripts/project.meta.schema.json",
@@ -5445,14 +5451,14 @@
     {
       "path": "src/renderer/App.test.tsx",
       "category": "test",
-      "bytes": 26404,
-      "sha256": "76122130f22a1f765b9fe901105ab05b75dd7d2b238ea8835c450204ac4b391f"
+      "bytes": 27764,
+      "sha256": "65f8b7cde1a252e46a11f447d697988f04af575c390f038274595bc47f594858"
     },
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 21052,
-      "sha256": "21abb1a29d93eff88cb02fa9932a2f570d4f75691c3befdd0072791034f407bd"
+      "bytes": 21336,
+      "sha256": "8a16394ea54d19abf0d9c36b5d36f6014c87884803f4e3546cee5433371e11f0"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -7927,6 +7933,18 @@
       "sha256": "df48f8bbfb972d5bcfc7320ebd96589830890e4dd6a147b5747c73fdfbf78489"
     },
     {
+      "path": "src/renderer/components/boardFloaterPlacement.test.ts",
+      "category": "test",
+      "bytes": 4252,
+      "sha256": "c6d726ec9982f05a4dee677663b81316cd8409f2d627eec8eedcc339fe47ec52"
+    },
+    {
+      "path": "src/renderer/components/boardFloaterPlacement.ts",
+      "category": "source",
+      "bytes": 3891,
+      "sha256": "5470dd100d54a16abe91f18d63dc3a12b53a933c3ddad5cbc5a05870002ba412"
+    },
+    {
       "path": "src/renderer/components/boardRuneFieldMaterial.ts",
       "category": "source",
       "bytes": 1977,
@@ -8061,8 +8079,8 @@
     {
       "path": "src/renderer/components/FloorClearBeat.module.css",
       "category": "source",
-      "bytes": 3074,
-      "sha256": "d3848b8abb0c11851f6ce0687e9f1656f0fea0ce269e2b399240b4f04d7c7529"
+      "bytes": 4222,
+      "sha256": "42131b93ff82e56c5341ac1dbce585ae8d467848b699a4baf10e4f82b5f95d61"
     },
     {
       "path": "src/renderer/components/FloorClearBeat.test.tsx",
@@ -8073,8 +8091,8 @@
     {
       "path": "src/renderer/components/FloorClearBeat.tsx",
       "category": "source",
-      "bytes": 3014,
-      "sha256": "10972ab95feacadc2e72b38f128488b689986e269a42d736bb9661a1ca74b342"
+      "bytes": 4377,
+      "sha256": "80c9d81035d3250354dea4686ec84de9aaf629e6b65c4a353a21afcce6b46169"
     },
     {
       "path": "src/renderer/components/GameOverScreen.module.css",
@@ -8115,20 +8133,20 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 45159,
-      "sha256": "48d3021e2014f0c559647ede093eaa622b1cab4f2dfe5265d92457f00b404cea"
+      "bytes": 46955,
+      "sha256": "4826bca4ae456928f697d0e70264393bc713a6e80512a2aa4c6c967809166efb"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
       "category": "test",
-      "bytes": 57636,
-      "sha256": "1f4c9eb546dc2175ec259ee6865c3b36426e86bde40b7a186d6b9e89a6fdb627"
+      "bytes": 63660,
+      "sha256": "4fe27ade9d0a191895424fa437be4565b3a981b0cd66dcd4b1dec060e98eac7c"
     },
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 79928,
-      "sha256": "cacd6734b1a5621970bb8a12015a4ec4a98ab9a63bab09f7efc497e136615955"
+      "bytes": 82921,
+      "sha256": "8ae31edf05afca0d023ee09864e6a90083d94fa4f1318ca91e0eda658312510f"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -8145,8 +8163,8 @@
     {
       "path": "src/renderer/components/gameScreenSrOnlyCss.test.ts",
       "category": "test",
-      "bytes": 1528,
-      "sha256": "96579cda936ea760461d62a1551d83ce77e102c9ad7b98702cc9e9ab29aa98ec"
+      "bytes": 2448,
+      "sha256": "e930b5b13b86c62d9e1b87a3e8041f3b622b7bb7b4059f90a88ae64f9bb4dac2"
     },
     {
       "path": "src/renderer/components/gameScreenStoreSelectors.ts",
@@ -8193,14 +8211,14 @@
     {
       "path": "src/renderer/components/MainMenu.test.tsx",
       "category": "test",
-      "bytes": 3546,
-      "sha256": "8cec112f8d11d9738ea2fdbae121aaffb17ebd21e84658721bfee08bf9e82891"
+      "bytes": 3857,
+      "sha256": "f14fbc228f46c05a91abfe2dd86383f619b9aaf6225abaa9ada156d65033258e"
     },
     {
       "path": "src/renderer/components/MainMenu.tsx",
       "category": "source",
-      "bytes": 16173,
-      "sha256": "ce16e8151b61854ec6d9c5b9399fd323a5a09b2aabb7dfb6e8006cb9d570f0db"
+      "bytes": 16381,
+      "sha256": "ff5195c3db67afaadc7b1b2e4bd7a385f79609964217c41f2cb508a4d965a06c"
     },
     {
       "path": "src/renderer/components/MainMenuBackground.module.css",
@@ -8223,8 +8241,8 @@
     {
       "path": "src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
       "category": "test",
-      "bytes": 4035,
-      "sha256": "75e38e0d6406196d6ba7a116ec202612f9a8e8138b014598e184df9bee4c2f49"
+      "bytes": 4066,
+      "sha256": "644f59efe8d571ca02fcddcf101882d20ca2b157dfe19bd2497a34e90ad21068"
     },
     {
       "path": "src/renderer/components/matchedCardRimFireMaterial.ts",
@@ -8265,8 +8283,8 @@
     {
       "path": "src/renderer/components/MemorizeSkipLayer.tsx",
       "category": "source",
-      "bytes": 1907,
-      "sha256": "64f57a51b3dfec433b7e25b43d7f3056db2022ca9b22d93c38f2c1630b495a72"
+      "bytes": 1945,
+      "sha256": "57d4d8528181874dd3fb3ac479d7d36bec4a19bab24798ccb2811a53231cdcd2"
     },
     {
       "path": "src/renderer/components/MetaScreen.module.css",
@@ -8289,8 +8307,8 @@
     {
       "path": "src/renderer/components/OverlayModal.module.css",
       "category": "source",
-      "bytes": 13548,
-      "sha256": "b3bf54fed81e5d60de90cdb60375fec3dcb0292de97f0364b7031730f54ce968"
+      "bytes": 18703,
+      "sha256": "e30743b2b93f9dc91d50b9f335796e4ba7e17d15ea7f80d1069c5efcd80949e0"
     },
     {
       "path": "src/renderer/components/OverlayModal.test.tsx",
@@ -8301,8 +8319,8 @@
     {
       "path": "src/renderer/components/OverlayModal.tsx",
       "category": "source",
-      "bytes": 9173,
-      "sha256": "f6be37812e33479e271dac58faf1a46d40a6440d64bb52ad9dc0525994f4f406"
+      "bytes": 9658,
+      "sha256": "2fd07f552eaffe9021d370292f73cef732cbbcb109c75c419f2308665f9c03d0"
     },
     {
       "path": "src/renderer/components/PairProximityHintPlane.tsx",
@@ -8337,26 +8355,26 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 15588,
-      "sha256": "9daf930f13e9dd4f2846eba459748f4d7a7b0bb576321ed876a2c714079bfb1c"
+      "bytes": 26977,
+      "sha256": "0db10e575dc4ce3b8e2f491f1b677d2ed0acb056d14787a357dacf9204136e57"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 11748,
-      "sha256": "ce14f99255c7f6c786c9784480d9b167bdb38abc80044c9b3e72b383d8c7aaa9"
+      "bytes": 14599,
+      "sha256": "49a7d27cbda03e25ca453634db76bed8ce03e2cee66d509a3a44a64ee3d48581"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 17728,
-      "sha256": "2581e2e59def640490b5c3c76579808736352b9eeaca61b5f07ece7179ca5f39"
+      "bytes": 23118,
+      "sha256": "1f950fbbe27661cd756eb4e2eb7311147aa0c3fcb77561fc78a6beb76be5d367"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
       "category": "source",
-      "bytes": 478,
-      "sha256": "54975e240f5476cc46aaa3937c0b07d48d08ee9ce4cd1bf94db29e6da9522660"
+      "bytes": 529,
+      "sha256": "23e10b3bd9438894ee3d886f8cc02fc9f42a3ee984ae883a25d27a049ba2c1c0"
     },
     {
       "path": "src/renderer/components/runShellToolCatalog.test.ts",
@@ -8367,8 +8385,8 @@
     {
       "path": "src/renderer/components/runShellToolCatalog.ts",
       "category": "source",
-      "bytes": 2902,
-      "sha256": "abc377ba57e9f3f0be17db92ce8acd23205de4eb3f7de58579ef89b8c0590e47"
+      "bytes": 3230,
+      "sha256": "b9124d84d7ca595dfd822c78f0c0ee1a9e4a0ae4ad5ba072c3bdb9aac7e099c0"
     },
     {
       "path": "src/renderer/components/ScoreTermsLine.test.tsx",
@@ -8499,8 +8517,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 148300,
-      "sha256": "124fdb9a5898287bb64c37498914fcf587e79b3ee842361d1ff6cfd51f3ef70d"
+      "bytes": 148669,
+      "sha256": "0a12a20ba4319a9162f63ac8a7098b58b143fb0b18cb876703b693bb55c6ef46"
     },
     {
       "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -9153,14 +9171,14 @@
     {
       "path": "src/renderer/components/tileBoardViewport.test.ts",
       "category": "test",
-      "bytes": 10960,
-      "sha256": "97661c994a915bb87818e490e295e91cda0e04f4654fe46906fbc2275f559429"
+      "bytes": 11545,
+      "sha256": "15196b82af941744f2f300e00a86074e97adc41dca22b95ee4fdba4152905779"
     },
     {
       "path": "src/renderer/components/tileBoardViewport.ts",
       "category": "source",
-      "bytes": 13340,
-      "sha256": "0be06e10086c08d8c952ed816f72b6df198890094546a336c16915bc7e8cbc6c"
+      "bytes": 13698,
+      "sha256": "6a8fb47531bd54a332376ba187c5df96dc8ad5e2acc6751d5322c7d9316f957e"
     },
     {
       "path": "src/renderer/components/tileBoardViewportMotionState.test.ts",
@@ -9507,8 +9525,8 @@
     {
       "path": "src/renderer/copy/runDialogCopy.ts",
       "category": "source",
-      "bytes": 3656,
-      "sha256": "ba3985579762e536bcb65aac12366739433756adecb04134952c5330cf1b9d84"
+      "bytes": 4798,
+      "sha256": "9f5889de8f061df1c671b187864a39b87d3dd1a7c5703c31f2c2e0012992eb29"
     },
     {
       "path": "src/renderer/copy/runHistory.ts",
@@ -9555,8 +9573,8 @@
     {
       "path": "src/renderer/desktop-client.ts",
       "category": "source",
-      "bytes": 3898,
-      "sha256": "2a56b4b70d917df7395188587b95823be8b8bbfb89fda440a3fe0042688dbcce"
+      "bytes": 4204,
+      "sha256": "f5ba411d9e0845e9eacf7a19cc76201712b99eb552fc6f4a757fbd0cd3fa572f"
     },
     {
       "path": "src/renderer/desktop.d.ts",
@@ -9677,6 +9695,18 @@
       "category": "source",
       "bytes": 689,
       "sha256": "c4ce68e2946d810a766c2c15b73a5dcaf1a3939d03dc9c150784e9f4d5c83289"
+    },
+    {
+      "path": "src/renderer/gameShellLayout.test.ts",
+      "category": "test",
+      "bytes": 1545,
+      "sha256": "143cdffe6cf62d43f721f1baeba9c51bfca8c8f69e6bc53ffe9c653307122214"
+    },
+    {
+      "path": "src/renderer/gameShellLayout.ts",
+      "category": "source",
+      "bytes": 2047,
+      "sha256": "b9675f75fa176f047f2fd0e4999e151dbf46b29692dec2bd31e03e35abd36659"
     },
     {
       "path": "src/renderer/hooks/hubShellFit.test.ts",
@@ -10371,8 +10401,8 @@
     {
       "path": "src/renderer/styles/global.css",
       "category": "source",
-      "bytes": 6286,
-      "sha256": "6843f66d5f3e92461296829aaba95aa35c637687b56e5ca22844b9aa685068c7"
+      "bytes": 6830,
+      "sha256": "a61c3fef4c158261b0fb8578614feba1726c3d330067e59b4d99c62736266559"
     },
     {
       "path": "src/renderer/styles/notificationsGame.css",
@@ -10455,8 +10485,8 @@
     {
       "path": "src/renderer/ui/gameplayIcons.tsx",
       "category": "source",
-      "bytes": 3879,
-      "sha256": "ead001b44be624757110edbc4cc76eefe4f7cc4a678b7d41dc9ea141e3e2eb21"
+      "bytes": 4288,
+      "sha256": "536a19cf14e479b3cea19f722d0efebea5dfb1d6d367cf0b248419dbb292361e"
     },
     {
       "path": "src/renderer/ui/index.ts",
@@ -10503,8 +10533,8 @@
     {
       "path": "src/renderer/ui/OverlayActionDock.tsx",
       "category": "source",
-      "bytes": 3116,
-      "sha256": "16fc76322e4977adf074659934b0203c7efc677209c7b01460c68c3af7e365e6"
+      "bytes": 3171,
+      "sha256": "889db780d492ad61b444ef7458bb88dfb1e06fb2757154ab765167f558ea3cd5"
     },
     {
       "path": "src/renderer/ui/Panel.module.css",
@@ -14919,8 +14949,8 @@
     {
       "path": "yarn.lock",
       "category": "other",
-      "bytes": 311975,
-      "sha256": "f0c3d3a1507e8f47e3faf20065b6178b5515836abc33f710ab9de83f50b713b0"
+      "bytes": 312557,
+      "sha256": "1519500e17c5695d96b36ddd3f87a4f07aed7ae4638f4655fe4fc041658d5f72"
     }
   ],
   "files": [
@@ -15563,7 +15593,7 @@
       "path": "src/renderer/App.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 626,
+      "lineCount": 646,
       "imports": [
         "file:src/renderer/App.tsx",
         "file:src/renderer/desktop-client.ts",
@@ -15582,7 +15612,7 @@
       "path": "src/renderer/App.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 435,
+      "lineCount": 438,
       "imports": [
         "file:src/renderer/audio/feverDuck.ts",
         "file:src/renderer/audio/gameplayMusic.ts",
@@ -16966,6 +16996,38 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/boardFloaterPlacement.test.ts",
+      "path": "src/renderer/components/boardFloaterPlacement.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 116,
+      "imports": [
+        "file:src/renderer/components/boardFloaterPlacement.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/boardFloaterPlacement.ts",
+      "path": "src/renderer/components/boardFloaterPlacement.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 100,
+      "imports": [
+        "file:src/renderer/gameShellLayout.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/boardFloaterPlacement.ts#BoardFloaterAnchor",
+        "symbol:src/renderer/components/boardFloaterPlacement.ts#BoardFloaterPlacement",
+        "symbol:src/renderer/components/boardFloaterPlacement.ts#clampFloaterX",
+        "symbol:src/renderer/components/boardFloaterPlacement.ts#resolveBoardFloaterAnchor",
+        "symbol:src/renderer/components/boardFloaterPlacement.ts#StageRelativeRect"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/boardFloaterPlacement.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/boardRuneFieldMaterial.ts",
       "path": "src/renderer/components/boardRuneFieldMaterial.ts",
       "layer": "renderer",
@@ -17335,10 +17397,11 @@
       "path": "src/renderer/components/FloorClearBeat.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 73,
+      "lineCount": 115,
       "imports": [
         "file:src/renderer/copy/floorClearChain.ts",
-        "file:src/shared/contracts.ts"
+        "file:src/shared/contracts.ts",
+        "file:src/shared/run-number-guards.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/FloorClearBeat.tsx#default",
@@ -17465,7 +17528,7 @@
       "path": "src/renderer/components/GameScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1395,
+      "lineCount": 1534,
       "imports": [
         "file:src/renderer/components/GameScreen.tsx",
         "file:src/renderer/components/gameScreenFeedback.ts",
@@ -17486,12 +17549,13 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1733,
+      "lineCount": 1772,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/breakpoints.ts",
+        "file:src/renderer/components/boardFloaterPlacement.ts",
         "file:src/renderer/components/FloorClearBeat.tsx",
         "file:src/renderer/components/gameplayVisualConfig.ts",
         "file:src/renderer/components/gameScreenStoreSelectors.ts",
@@ -17514,6 +17578,8 @@
         "file:src/renderer/copy/runDialogCopy.ts",
         "file:src/renderer/gameplay/regPhase4PlayContract.ts",
         "file:src/renderer/gameplay/stickyFingersBlockedTileId.ts",
+        "file:src/renderer/gameShellLayout.ts",
+        "file:src/renderer/hooks/useCoarsePointer.ts",
         "file:src/renderer/hooks/useDistractionChannelTick.ts",
         "file:src/renderer/hooks/useEffectiveReducedMotion.ts",
         "file:src/renderer/hooks/useGamepadNavigation.ts",
@@ -17594,7 +17660,7 @@
       "path": "src/renderer/components/gameScreenSrOnlyCss.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 36,
+      "lineCount": 53,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -17685,7 +17751,7 @@
       "path": "src/renderer/components/MainMenu.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 91,
+      "lineCount": 95,
       "imports": [
         "file:src/renderer/components/MainMenu.tsx",
         "file:src/shared/save-data.ts"
@@ -17698,7 +17764,7 @@
       "path": "src/renderer/components/MainMenu.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 334,
+      "lineCount": 336,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -17871,7 +17937,7 @@
       "path": "src/renderer/components/MemorizeSkipLayer.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 57,
+      "lineCount": 56,
       "imports": [
         "file:src/renderer/components/memorizeSkipGesture.ts",
         "file:src/renderer/copy/runDialogCopy.ts"
@@ -17927,7 +17993,7 @@
       "path": "src/renderer/components/OverlayModal.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 261,
+      "lineCount": 269,
       "imports": [
         "file:src/renderer/a11y/overlayModalBodyState.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -18021,7 +18087,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 216,
+      "lineCount": 272,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/shared/contracts.ts",
@@ -18035,7 +18101,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 352,
+      "lineCount": 441,
       "imports": [
         "file:src/renderer/copy/chainBeat.ts",
         "file:src/renderer/copy/passAndPlay.ts",
@@ -18064,7 +18130,7 @@
       "path": "src/renderer/components/runShellGlyphs.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 19,
+      "lineCount": 21,
       "imports": [
         "file:src/renderer/ui/gameplayIcons.tsx"
       ],
@@ -18091,7 +18157,7 @@
       "path": "src/renderer/components/runShellToolCatalog.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 64,
+      "lineCount": 69,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -18462,7 +18528,7 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3428,
+      "lineCount": 3436,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -20411,7 +20477,7 @@
       "path": "src/renderer/components/tileBoardViewport.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 295,
+      "lineCount": 306,
       "imports": [
         "file:src/renderer/components/tileBoardViewport.ts"
       ],
@@ -20423,7 +20489,7 @@
       "path": "src/renderer/components/tileBoardViewport.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 443,
+      "lineCount": 447,
       "imports": [],
       "exports": [
         "symbol:src/renderer/components/tileBoardViewport.ts#carryBoardViewportForward",
@@ -20438,6 +20504,7 @@
         "symbol:src/renderer/components/tileBoardViewport.ts#getCameraFitMargin",
         "symbol:src/renderer/components/tileBoardViewport.ts#getGestureCentroid",
         "symbol:src/renderer/components/tileBoardViewport.ts#getGestureDistance",
+        "symbol:src/renderer/components/tileBoardViewport.ts#isBoardViewportAtRest",
         "symbol:src/renderer/components/tileBoardViewport.ts#MOBILE_CAMERA_FIT_MARGIN",
         "symbol:src/renderer/components/tileBoardViewport.ts#PORTRAIT_CAMERA_FIT_MARGIN",
         "symbol:src/renderer/components/tileBoardViewport.ts#resolveAnchoredBoardViewport",
@@ -21432,7 +21499,7 @@
       "path": "src/renderer/copy/runDialogCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 86,
+      "lineCount": 110,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/runDialogCopy.ts#ABANDON_DIALOG_COPY",
@@ -21442,6 +21509,7 @@
         "symbol:src/renderer/copy/runDialogCopy.ts#PERFECT_MEMORY_COPY",
         "symbol:src/renderer/copy/runDialogCopy.ts#ROUTE_CHOICE_COPY",
         "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LABELS",
+        "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LINE_COPY",
         "symbol:src/renderer/copy/runDialogCopy.ts#RUN_TOOL_REASONS",
         "symbol:src/renderer/copy/runDialogCopy.ts#SHORTCUTS_COPY"
       ],
@@ -21564,13 +21632,14 @@
       "path": "src/renderer/desktop-client.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 113,
+      "lineCount": 119,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/save-data.ts"
       ],
       "exports": [
-        "symbol:src/renderer/desktop-client.ts#desktopClient"
+        "symbol:src/renderer/desktop-client.ts#desktopClient",
+        "symbol:src/renderer/desktop-client.ts#hasDesktopBridge"
       ],
       "testedBy": [
         "file:src/renderer/App.test.tsx",
@@ -21828,6 +21897,40 @@
       ],
       "testedBy": [
         "file:src/renderer/gameplay/stickyFingersBlockedTileId.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/gameShellLayout.test.ts",
+      "path": "src/renderer/gameShellLayout.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 37,
+      "imports": [
+        "file:src/renderer/gameShellLayout.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/gameShellLayout.ts",
+      "path": "src/renderer/gameShellLayout.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 49,
+      "imports": [
+        "file:src/renderer/viewportMatrix.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/gameShellLayout.ts#GameShellInputMode",
+        "symbol:src/renderer/gameShellLayout.ts#GameShellLayout",
+        "symbol:src/renderer/gameShellLayout.ts#GameShellOrientation",
+        "symbol:src/renderer/gameShellLayout.ts#GameShellProfile",
+        "symbol:src/renderer/gameShellLayout.ts#resolveGameShellLayout",
+        "symbol:src/renderer/gameShellLayout.ts#resolveGameShellOrientation",
+        "symbol:src/renderer/gameShellLayout.ts#resolveGameShellProfile"
+      ],
+      "testedBy": [
+        "file:src/renderer/gameShellLayout.test.ts"
       ]
     },
     {
@@ -23914,11 +24017,12 @@
       "path": "src/renderer/ui/gameplayIcons.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 125,
+      "lineCount": 135,
       "imports": [],
       "exports": [
         "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayExitIcon",
         "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayFitBoardIcon",
+        "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayFitIcon",
         "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayGreetIcon",
         "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayIconProps",
         "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayMenuIcon",
@@ -24027,7 +24131,7 @@
       "path": "src/renderer/ui/OverlayActionDock.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 91,
+      "lineCount": 92,
       "imports": [
         "file:src/renderer/ui/UiButton.tsx"
       ],
@@ -32071,8 +32175,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/App.tsx",
-      "line": 434,
-      "endLine": 434
+      "line": 437,
+      "endLine": 437
     },
     {
       "id": "symbol:src/renderer/assets/assetDropInReadiness.ts#ASSET_DROP_IN_CATEGORIES",
@@ -33811,6 +33915,46 @@
       "endLine": 71
     },
     {
+      "id": "symbol:src/renderer/components/boardFloaterPlacement.ts#BoardFloaterAnchor",
+      "name": "BoardFloaterAnchor",
+      "kind": "interface",
+      "file": "src/renderer/components/boardFloaterPlacement.ts",
+      "line": 17,
+      "endLine": 21
+    },
+    {
+      "id": "symbol:src/renderer/components/boardFloaterPlacement.ts#BoardFloaterPlacement",
+      "name": "BoardFloaterPlacement",
+      "kind": "type",
+      "file": "src/renderer/components/boardFloaterPlacement.ts",
+      "line": 15,
+      "endLine": 15
+    },
+    {
+      "id": "symbol:src/renderer/components/boardFloaterPlacement.ts#clampFloaterX",
+      "name": "clampFloaterX",
+      "kind": "value",
+      "file": "src/renderer/components/boardFloaterPlacement.ts",
+      "line": 49,
+      "endLine": 57
+    },
+    {
+      "id": "symbol:src/renderer/components/boardFloaterPlacement.ts#resolveBoardFloaterAnchor",
+      "name": "resolveBoardFloaterAnchor",
+      "kind": "value",
+      "file": "src/renderer/components/boardFloaterPlacement.ts",
+      "line": 59,
+      "endLine": 99
+    },
+    {
+      "id": "symbol:src/renderer/components/boardFloaterPlacement.ts#StageRelativeRect",
+      "name": "StageRelativeRect",
+      "kind": "interface",
+      "file": "src/renderer/components/boardFloaterPlacement.ts",
+      "line": 23,
+      "endLine": 28
+    },
+    {
       "id": "symbol:src/renderer/components/boardRuneFieldMaterial.ts#clampBoardRuneFieldDriverUniforms",
       "name": "clampBoardRuneFieldDriverUniforms",
       "kind": "value",
@@ -34207,16 +34351,16 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/FloorClearBeat.tsx",
-      "line": 72,
-      "endLine": 72
+      "line": 114,
+      "endLine": 114
     },
     {
       "id": "symbol:src/renderer/components/FloorClearBeat.tsx#FloorClearBeatProps",
       "name": "FloorClearBeatProps",
       "kind": "interface",
       "file": "src/renderer/components/FloorClearBeat.tsx",
-      "line": 15,
-      "endLine": 22
+      "line": 17,
+      "endLine": 24
     },
     {
       "id": "symbol:src/renderer/components/GameOverScreen.tsx#default",
@@ -34287,24 +34431,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 1732,
-      "endLine": 1732
+      "line": 1771,
+      "endLine": 1771
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 189,
-      "endLine": 189
+      "line": 192,
+      "endLine": 192
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 183,
-      "endLine": 183
+      "line": 186,
+      "endLine": 186
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -34391,8 +34535,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/MainMenu.tsx",
-      "line": 333,
-      "endLine": 333
+      "line": 335,
+      "endLine": 335
     },
     {
       "id": "symbol:src/renderer/components/MainMenuBackground.tsx#default",
@@ -34511,16 +34655,16 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/MemorizeSkipLayer.tsx",
-      "line": 56,
-      "endLine": 56
+      "line": 55,
+      "endLine": 55
     },
     {
       "id": "symbol:src/renderer/components/MemorizeSkipLayer.tsx#MemorizeSkipLayer",
       "name": "MemorizeSkipLayer",
       "kind": "value",
       "file": "src/renderer/components/MemorizeSkipLayer.tsx",
-      "line": 23,
-      "endLine": 54
+      "line": 26,
+      "endLine": 53
     },
     {
       "id": "symbol:src/renderer/components/metaStackedShellLayout.ts#getMetaSubscreenLayout",
@@ -34535,8 +34679,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/OverlayModal.tsx",
-      "line": 260,
-      "endLine": 260
+      "line": 268,
+      "endLine": 268
     },
     {
       "id": "symbol:src/renderer/components/OverlayModal.tsx#ModalAction",
@@ -34567,16 +34711,16 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 351,
-      "endLine": 351
+      "line": 440,
+      "endLine": 440
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 38,
-      "endLine": 57
+      "line": 40,
+      "endLine": 59
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
@@ -34584,39 +34728,39 @@
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
       "line": 27,
-      "endLine": 36
+      "endLine": 38
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
       "name": "RUN_SHELL_GLYPHS",
       "kind": "value",
       "file": "src/renderer/components/runShellGlyphs.tsx",
-      "line": 11,
-      "endLine": 18
+      "line": 12,
+      "endLine": 20
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#chargeFieldsWithATool",
       "name": "chargeFieldsWithATool",
       "kind": "value",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 61,
-      "endLine": 63
+      "line": 66,
+      "endLine": 68
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RUN_SHELL_TOOL_CATALOG",
       "name": "RUN_SHELL_TOOL_CATALOG",
       "kind": "value",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 43,
-      "endLine": 56
+      "line": 44,
+      "endLine": 61
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RunPowerChargeField",
       "name": "RunPowerChargeField",
       "kind": "type",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 26,
-      "endLine": 32
+      "line": 27,
+      "endLine": 33
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolId",
@@ -34624,23 +34768,23 @@
       "kind": "type",
       "file": "src/renderer/components/runShellToolCatalog.ts",
       "line": 15,
-      "endLine": 23
+      "endLine": 24
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#runShellToolIds",
       "name": "runShellToolIds",
       "kind": "value",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 58,
-      "endLine": 58
+      "line": 63,
+      "endLine": 63
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolSpec",
       "name": "RunShellToolSpec",
       "kind": "interface",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 34,
-      "endLine": 41
+      "line": 35,
+      "endLine": 42
     },
     {
       "id": "symbol:src/renderer/components/ScoreTermsLine.tsx#default",
@@ -34959,24 +35103,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 3427,
-      "endLine": 3427
+      "line": 3435,
+      "endLine": 3435
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
       "name": "TileBoardClientRect",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 326,
-      "endLine": 333
+      "line": 327,
+      "endLine": 334
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardHandle",
       "name": "TileBoardHandle",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 335,
-      "endLine": 339
+      "line": 336,
+      "endLine": 340
     },
     {
       "id": "symbol:src/renderer/components/tileBoardBreakWave.ts#BREAK_WAVE_MAX_DELAY_SECONDS",
@@ -37039,24 +37183,24 @@
       "name": "carryBoardViewportForward",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewport.ts",
-      "line": 177,
-      "endLine": 214
+      "line": 181,
+      "endLine": 218
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewport.ts#clampBoardViewport",
       "name": "clampBoardViewport",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewport.ts",
-      "line": 139,
-      "endLine": 167
+      "line": 143,
+      "endLine": 171
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewport.ts#clampBoardZoom",
       "name": "clampBoardZoom",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewport.ts",
-      "line": 92,
-      "endLine": 92
+      "line": 96,
+      "endLine": 96
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewport.ts#COMPACT_BOARD_FIT_MARGIN",
@@ -37079,16 +37223,16 @@
       "name": "createPinchBoardGestureSnapshot",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewport.ts",
-      "line": 309,
-      "endLine": 333
+      "line": 313,
+      "endLine": 337
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewport.ts#createRafCoalescedViewportNotifier",
       "name": "createRafCoalescedViewportNotifier",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewport.ts",
-      "line": 220,
-      "endLine": 257
+      "line": 224,
+      "endLine": 261
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewport.ts#DESKTOP_STAGE_FIT_MARGIN",
@@ -37119,16 +37263,24 @@
       "name": "getGestureCentroid",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewport.ts",
-      "line": 298,
-      "endLine": 304
+      "line": 302,
+      "endLine": 308
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewport.ts#getGestureDistance",
       "name": "getGestureDistance",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewport.ts",
-      "line": 306,
-      "endLine": 307
+      "line": 310,
+      "endLine": 311
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardViewport.ts#isBoardViewportAtRest",
+      "name": "isBoardViewportAtRest",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardViewport.ts",
+      "line": 93,
+      "endLine": 94
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewport.ts#MOBILE_CAMERA_FIT_MARGIN",
@@ -37151,32 +37303,32 @@
       "name": "resolveAnchoredBoardViewport",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewport.ts",
-      "line": 335,
-      "endLine": 362
+      "line": 339,
+      "endLine": 366
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewport.ts#resolveDraggedBoardViewport",
       "name": "resolveDraggedBoardViewport",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewport.ts",
-      "line": 418,
-      "endLine": 442
+      "line": 422,
+      "endLine": 446
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewport.ts#resolvePinchBoardViewport",
       "name": "resolvePinchBoardViewport",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewport.ts",
-      "line": 387,
-      "endLine": 416
+      "line": 391,
+      "endLine": 420
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewport.ts#resolveWheelBoardViewport",
       "name": "resolveWheelBoardViewport",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewport.ts",
-      "line": 364,
-      "endLine": 385
+      "line": 368,
+      "endLine": 389
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewport.ts#ROOMY_BOARD_FIT_MARGIN",
@@ -37191,24 +37343,24 @@
       "name": "safelyReleasePointerCapture",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewport.ts",
-      "line": 285,
-      "endLine": 296
+      "line": 289,
+      "endLine": 300
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewport.ts#safelySetPointerCapture",
       "name": "safelySetPointerCapture",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewport.ts",
-      "line": 276,
-      "endLine": 283
+      "line": 280,
+      "endLine": 287
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewport.ts#screenPointToWorld",
       "name": "screenPointToWorld",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewport.ts",
-      "line": 259,
-      "endLine": 274
+      "line": 263,
+      "endLine": 278
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewport.ts#TileBoardGesturePoint",
@@ -38503,24 +38655,24 @@
       "name": "ABANDON_DIALOG_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 11,
-      "endLine": 13
+      "line": 13,
+      "endLine": 15
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#FLOOR_STATUS_COPY",
       "name": "FLOOR_STATUS_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 22,
-      "endLine": 24
+      "line": 24,
+      "endLine": 26
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#MEMORIZE_SKIP_COPY",
       "name": "MEMORIZE_SKIP_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 72,
-      "endLine": 75
+      "line": 96,
+      "endLine": 99
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#PAUSE_DIALOG_COPY",
@@ -38528,47 +38680,55 @@
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
       "line": 7,
-      "endLine": 9
+      "endLine": 11
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#PERFECT_MEMORY_COPY",
       "name": "PERFECT_MEMORY_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 81,
-      "endLine": 85
+      "line": 105,
+      "endLine": 109
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#ROUTE_CHOICE_COPY",
       "name": "ROUTE_CHOICE_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 27,
-      "endLine": 35
+      "line": 29,
+      "endLine": 37
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LABELS",
       "name": "RUN_SHELL_LABELS",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 38,
-      "endLine": 43
+      "line": 40,
+      "endLine": 45
+    },
+    {
+      "id": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LINE_COPY",
+      "name": "RUN_SHELL_LINE_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/runDialogCopy.ts",
+      "line": 79,
+      "endLine": 90
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_TOOL_REASONS",
       "name": "RUN_TOOL_REASONS",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 52,
-      "endLine": 66
+      "line": 54,
+      "endLine": 72
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#SHORTCUTS_COPY",
       "name": "SHORTCUTS_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 15,
-      "endLine": 19
+      "line": 17,
+      "endLine": 21
     },
     {
       "id": "symbol:src/renderer/copy/runHistory.ts#formatRunHistoryDate",
@@ -38745,6 +38905,14 @@
       "file": "src/renderer/desktop-client.ts",
       "line": 112,
       "endLine": 112
+    },
+    {
+      "id": "symbol:src/renderer/desktop-client.ts#hasDesktopBridge",
+      "name": "hasDesktopBridge",
+      "kind": "value",
+      "file": "src/renderer/desktop-client.ts",
+      "line": 118,
+      "endLine": 118
     },
     {
       "id": "symbol:src/renderer/dev/BlueprintExplorer.tsx#default",
@@ -39009,6 +39177,62 @@
       "file": "src/renderer/gameplay/stickyFingersBlockedTileId.ts",
       "line": 4,
       "endLine": 21
+    },
+    {
+      "id": "symbol:src/renderer/gameShellLayout.ts#GameShellInputMode",
+      "name": "GameShellInputMode",
+      "kind": "type",
+      "file": "src/renderer/gameShellLayout.ts",
+      "line": 18,
+      "endLine": 18
+    },
+    {
+      "id": "symbol:src/renderer/gameShellLayout.ts#GameShellLayout",
+      "name": "GameShellLayout",
+      "kind": "type",
+      "file": "src/renderer/gameShellLayout.ts",
+      "line": 15,
+      "endLine": 15
+    },
+    {
+      "id": "symbol:src/renderer/gameShellLayout.ts#GameShellOrientation",
+      "name": "GameShellOrientation",
+      "kind": "type",
+      "file": "src/renderer/gameShellLayout.ts",
+      "line": 20,
+      "endLine": 20
+    },
+    {
+      "id": "symbol:src/renderer/gameShellLayout.ts#GameShellProfile",
+      "name": "GameShellProfile",
+      "kind": "interface",
+      "file": "src/renderer/gameShellLayout.ts",
+      "line": 22,
+      "endLine": 26
+    },
+    {
+      "id": "symbol:src/renderer/gameShellLayout.ts#resolveGameShellLayout",
+      "name": "resolveGameShellLayout",
+      "kind": "value",
+      "file": "src/renderer/gameShellLayout.ts",
+      "line": 28,
+      "endLine": 39
+    },
+    {
+      "id": "symbol:src/renderer/gameShellLayout.ts#resolveGameShellOrientation",
+      "name": "resolveGameShellOrientation",
+      "kind": "value",
+      "file": "src/renderer/gameShellLayout.ts",
+      "line": 41,
+      "endLine": 42
+    },
+    {
+      "id": "symbol:src/renderer/gameShellLayout.ts#resolveGameShellProfile",
+      "name": "resolveGameShellProfile",
+      "kind": "value",
+      "file": "src/renderer/gameShellLayout.ts",
+      "line": 44,
+      "endLine": 48
     },
     {
       "id": "symbol:src/renderer/hooks/hubShellFit.ts#getHubShellFitPadding",
@@ -40831,8 +41055,8 @@
       "name": "GameplayExitIcon",
       "kind": "function",
       "file": "src/renderer/ui/gameplayIcons.tsx",
-      "line": 116,
-      "endLine": 124
+      "line": 126,
+      "endLine": 134
     },
     {
       "id": "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayFitBoardIcon",
@@ -40843,12 +41067,20 @@
       "endLine": 64
     },
     {
-      "id": "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayGreetIcon",
-      "name": "GameplayGreetIcon",
+      "id": "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayFitIcon",
+      "name": "GameplayFitIcon",
       "kind": "function",
       "file": "src/renderer/ui/gameplayIcons.tsx",
       "line": 106,
       "endLine": 113
+    },
+    {
+      "id": "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayGreetIcon",
+      "name": "GameplayGreetIcon",
+      "kind": "function",
+      "file": "src/renderer/ui/gameplayIcons.tsx",
+      "line": 116,
+      "endLine": 123
     },
     {
       "id": "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayIconProps",
@@ -41247,8 +41479,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/ui/OverlayActionDock.tsx",
-      "line": 90,
-      "endLine": 90
+      "line": 91,
+      "endLine": 91
     },
     {
       "id": "symbol:src/renderer/ui/OverlayActionDock.tsx#OverlayAction",
@@ -53021,7 +53253,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 144
+          "line": 155
         }
       ],
       "tests": [
@@ -58169,6 +58401,36 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/boardFloaterPlacement.ts->symbol:src/renderer/components/boardFloaterPlacement.ts#BoardFloaterAnchor",
+      "source": "file:src/renderer/components/boardFloaterPlacement.ts",
+      "target": "symbol:src/renderer/components/boardFloaterPlacement.ts#BoardFloaterAnchor",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardFloaterPlacement.ts->symbol:src/renderer/components/boardFloaterPlacement.ts#BoardFloaterPlacement",
+      "source": "file:src/renderer/components/boardFloaterPlacement.ts",
+      "target": "symbol:src/renderer/components/boardFloaterPlacement.ts#BoardFloaterPlacement",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardFloaterPlacement.ts->symbol:src/renderer/components/boardFloaterPlacement.ts#clampFloaterX",
+      "source": "file:src/renderer/components/boardFloaterPlacement.ts",
+      "target": "symbol:src/renderer/components/boardFloaterPlacement.ts#clampFloaterX",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardFloaterPlacement.ts->symbol:src/renderer/components/boardFloaterPlacement.ts#resolveBoardFloaterAnchor",
+      "source": "file:src/renderer/components/boardFloaterPlacement.ts",
+      "target": "symbol:src/renderer/components/boardFloaterPlacement.ts#resolveBoardFloaterAnchor",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardFloaterPlacement.ts->symbol:src/renderer/components/boardFloaterPlacement.ts#StageRelativeRect",
+      "source": "file:src/renderer/components/boardFloaterPlacement.ts",
+      "target": "symbol:src/renderer/components/boardFloaterPlacement.ts#StageRelativeRect",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/boardRuneFieldMaterial.ts->symbol:src/renderer/components/boardRuneFieldMaterial.ts#clampBoardRuneFieldDriverUniforms",
       "source": "file:src/renderer/components/boardRuneFieldMaterial.ts",
       "target": "symbol:src/renderer/components/boardRuneFieldMaterial.ts#clampBoardRuneFieldDriverUniforms",
@@ -60659,6 +60921,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/tileBoardViewport.ts->symbol:src/renderer/components/tileBoardViewport.ts#isBoardViewportAtRest",
+      "source": "file:src/renderer/components/tileBoardViewport.ts",
+      "target": "symbol:src/renderer/components/tileBoardViewport.ts#isBoardViewportAtRest",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/tileBoardViewport.ts->symbol:src/renderer/components/tileBoardViewport.ts#MOBILE_CAMERA_FIT_MARGIN",
       "source": "file:src/renderer/components/tileBoardViewport.ts",
       "target": "symbol:src/renderer/components/tileBoardViewport.ts#MOBILE_CAMERA_FIT_MARGIN",
@@ -61727,6 +61995,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/runDialogCopy.ts->symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LINE_COPY",
+      "source": "file:src/renderer/copy/runDialogCopy.ts",
+      "target": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LINE_COPY",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/runDialogCopy.ts->symbol:src/renderer/copy/runDialogCopy.ts#RUN_TOOL_REASONS",
       "source": "file:src/renderer/copy/runDialogCopy.ts",
       "target": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_TOOL_REASONS",
@@ -61868,6 +62142,12 @@
       "id": "exports:src/renderer/desktop-client.ts->symbol:src/renderer/desktop-client.ts#desktopClient",
       "source": "file:src/renderer/desktop-client.ts",
       "target": "symbol:src/renderer/desktop-client.ts#desktopClient",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/desktop-client.ts->symbol:src/renderer/desktop-client.ts#hasDesktopBridge",
+      "source": "file:src/renderer/desktop-client.ts",
+      "target": "symbol:src/renderer/desktop-client.ts#hasDesktopBridge",
       "kind": "exports"
     },
     {
@@ -62066,6 +62346,48 @@
       "id": "exports:src/renderer/gameplay/stickyFingersBlockedTileId.ts->symbol:src/renderer/gameplay/stickyFingersBlockedTileId.ts#getStickyBlockedTileId",
       "source": "file:src/renderer/gameplay/stickyFingersBlockedTileId.ts",
       "target": "symbol:src/renderer/gameplay/stickyFingersBlockedTileId.ts#getStickyBlockedTileId",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/gameShellLayout.ts->symbol:src/renderer/gameShellLayout.ts#GameShellInputMode",
+      "source": "file:src/renderer/gameShellLayout.ts",
+      "target": "symbol:src/renderer/gameShellLayout.ts#GameShellInputMode",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/gameShellLayout.ts->symbol:src/renderer/gameShellLayout.ts#GameShellLayout",
+      "source": "file:src/renderer/gameShellLayout.ts",
+      "target": "symbol:src/renderer/gameShellLayout.ts#GameShellLayout",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/gameShellLayout.ts->symbol:src/renderer/gameShellLayout.ts#GameShellOrientation",
+      "source": "file:src/renderer/gameShellLayout.ts",
+      "target": "symbol:src/renderer/gameShellLayout.ts#GameShellOrientation",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/gameShellLayout.ts->symbol:src/renderer/gameShellLayout.ts#GameShellProfile",
+      "source": "file:src/renderer/gameShellLayout.ts",
+      "target": "symbol:src/renderer/gameShellLayout.ts#GameShellProfile",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/gameShellLayout.ts->symbol:src/renderer/gameShellLayout.ts#resolveGameShellLayout",
+      "source": "file:src/renderer/gameShellLayout.ts",
+      "target": "symbol:src/renderer/gameShellLayout.ts#resolveGameShellLayout",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/gameShellLayout.ts->symbol:src/renderer/gameShellLayout.ts#resolveGameShellOrientation",
+      "source": "file:src/renderer/gameShellLayout.ts",
+      "target": "symbol:src/renderer/gameShellLayout.ts#resolveGameShellOrientation",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/gameShellLayout.ts->symbol:src/renderer/gameShellLayout.ts#resolveGameShellProfile",
+      "source": "file:src/renderer/gameShellLayout.ts",
+      "target": "symbol:src/renderer/gameShellLayout.ts#resolveGameShellProfile",
       "kind": "exports"
     },
     {
@@ -63440,6 +63762,12 @@
       "id": "exports:src/renderer/ui/gameplayIcons.tsx->symbol:src/renderer/ui/gameplayIcons.tsx#GameplayFitBoardIcon",
       "source": "file:src/renderer/ui/gameplayIcons.tsx",
       "target": "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayFitBoardIcon",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/ui/gameplayIcons.tsx->symbol:src/renderer/ui/gameplayIcons.tsx#GameplayFitIcon",
+      "source": "file:src/renderer/ui/gameplayIcons.tsx",
+      "target": "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayFitIcon",
       "kind": "exports"
     },
     {
@@ -75007,6 +75335,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/boardFloaterPlacement.test.ts->src/renderer/components/boardFloaterPlacement.ts",
+      "source": "file:src/renderer/components/boardFloaterPlacement.test.ts",
+      "target": "file:src/renderer/components/boardFloaterPlacement.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/boardFloaterPlacement.ts->src/renderer/gameShellLayout.ts",
+      "source": "file:src/renderer/components/boardFloaterPlacement.ts",
+      "target": "file:src/renderer/gameShellLayout.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/boardRuneFieldMaterial.ts->src/renderer/components/boardRuneFieldShaderGlsl.ts",
       "source": "file:src/renderer/components/boardRuneFieldMaterial.ts",
       "target": "file:src/renderer/components/boardRuneFieldShaderGlsl.ts",
@@ -75409,6 +75749,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/FloorClearBeat.tsx->src/shared/run-number-guards.ts",
+      "source": "file:src/renderer/components/FloorClearBeat.tsx",
+      "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameOverScreen.test.tsx->src/renderer/components/GameOverScreen.tsx",
       "source": "file:src/renderer/components/GameOverScreen.test.tsx",
       "target": "file:src/renderer/components/GameOverScreen.tsx",
@@ -75679,6 +76025,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/boardFloaterPlacement.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/components/boardFloaterPlacement.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/FloorClearBeat.tsx",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/FloorClearBeat.tsx",
@@ -75808,6 +76160,18 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/gameplay/stickyFingersBlockedTileId.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/gameplay/stickyFingersBlockedTileId.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/gameShellLayout.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/gameShellLayout.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/hooks/useCoarsePointer.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/hooks/useCoarsePointer.ts",
       "kind": "imports"
     },
     {
@@ -79924,6 +80288,18 @@
       "id": "imports:src/renderer/gameplay/stickyFingersBlockedTileId.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/gameplay/stickyFingersBlockedTileId.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/gameShellLayout.test.ts->src/renderer/gameShellLayout.ts",
+      "source": "file:src/renderer/gameShellLayout.test.ts",
+      "target": "file:src/renderer/gameShellLayout.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/gameShellLayout.ts->src/renderer/viewportMatrix.ts",
+      "source": "file:src/renderer/gameShellLayout.ts",
+      "target": "file:src/renderer/viewportMatrix.ts",
       "kind": "imports"
     },
     {
@@ -90624,6 +91000,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/boardFloaterPlacement.ts->file:src/renderer/components/boardFloaterPlacement.test.ts",
+      "source": "file:src/renderer/components/boardFloaterPlacement.ts",
+      "target": "file:src/renderer/components/boardFloaterPlacement.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/boardRuneFieldMaterial.ts->file:src/renderer/components/cardArcaneGlowMaterial.test.ts",
       "source": "file:src/renderer/components/boardRuneFieldMaterial.ts",
       "target": "file:src/renderer/components/cardArcaneGlowMaterial.test.ts",
@@ -91545,6 +91927,12 @@
       "id": "tested_by:src/renderer/gameplay/stickyFingersBlockedTileId.ts->file:src/renderer/gameplay/stickyFingersBlockedTileId.test.ts",
       "source": "file:src/renderer/gameplay/stickyFingersBlockedTileId.ts",
       "target": "file:src/renderer/gameplay/stickyFingersBlockedTileId.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/gameShellLayout.ts->file:src/renderer/gameShellLayout.test.ts",
+      "source": "file:src/renderer/gameShellLayout.ts",
+      "target": "file:src/renderer/gameShellLayout.test.ts",
       "kind": "tested_by"
     },
     {

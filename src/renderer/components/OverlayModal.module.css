@@ -418,3 +418,177 @@
     backdrop-filter: none;
     animation: none;
 }
+
+/* ══════════════════════════════════════════════════════════════════════════════════════════
+   The Margin surface (`surface="margin"`): the in-run dialog as a page, not a plate.
+   Ink, one hairline of gold, the title in display type and the actions as outlined words —
+   the same voice as the run shell it opens over. The `--margin-*` tokens are the game shell's.
+   ══════════════════════════════════════════════════════════════════════════════════════ */
+
+.backdropMargin {
+    background: color-mix(in srgb, var(--margin-ink, #131111) 72%, transparent);
+    backdrop-filter: blur(8px);
+}
+
+.modalMargin {
+    --overlay-accent: color-mix(in srgb, var(--margin-gold, #e1ad66) 55%, transparent);
+    --overlay-accent-soft: transparent;
+    width: min(520px, 100%);
+    gap: 0.9rem 1.4rem;
+    padding: clamp(1.4rem, 3vw, 1.75rem);
+    border: 1px solid var(--overlay-accent);
+    border-radius: 7px;
+    background: var(--margin-ink, #131111);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+    color: var(--margin-paper, #f8f4f4);
+    font-family: var(--margin-body-font, 'Lora', Georgia, serif);
+}
+
+.modalMargin[data-action-placement='dock'] {
+    width: min(520px, 100%);
+}
+
+.modalMargin::before,
+.modalMargin::after {
+    display: none;
+}
+
+.modalMargin .title {
+    font-family: var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif);
+    font-weight: 400;
+    font-size: 2.5rem;
+    line-height: 1.05;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--margin-paper, #f8f4f4);
+    text-shadow: none;
+}
+
+.modalMargin .subtitle {
+    margin-top: 0.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--margin-paper-2, #d7d3d3);
+}
+
+.modalMargin .body {
+    margin-top: 0.6rem;
+}
+
+/* The actions: outlined words, primary in gold, the rest in paper, the dangerous one no louder. */
+.modalMargin .modalAction {
+    min-width: 0;
+    padding: 0.6rem 1.05rem;
+    border: 1px solid color-mix(in srgb, var(--margin-paper, #f8f4f4) 28%, transparent);
+    border-radius: 4px;
+    background: transparent;
+    box-shadow: none;
+    color: var(--margin-paper-2, #d7d3d3);
+    font-family: var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif);
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    text-shadow: none;
+}
+
+.modalMargin .modalAction:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--margin-paper, #f8f4f4) 7%, transparent);
+}
+
+.modalMargin .modalAction[data-variant='primary'] {
+    border-color: var(--margin-gold, #e1ad66);
+    color: var(--margin-gold, #e1ad66);
+}
+
+.modalMargin .modalAction[data-variant='primary']:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--margin-gold, #e1ad66) 12%, transparent);
+}
+
+.modalMargin .modalAction:focus-visible {
+    outline: 2px solid var(--margin-gold, #e1ad66);
+    outline-offset: 2px;
+    box-shadow: none;
+}
+
+/* A phone: the dialog rises from the bottom edge as a sheet, one action to a row. */
+@media (max-width: 520px) {
+    .backdropMargin {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .modalMargin {
+        width: 100%;
+        max-height: min(calc(100dvh - 2rem), calc(100svh - 2rem));
+        padding: 1.6rem 1.15rem max(1.6rem, env(safe-area-inset-bottom, 0px));
+        border-width: 1px 0 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .modalMargin .title {
+        font-size: 2.125rem;
+    }
+
+    .modalMargin .modalAction {
+        width: 100%;
+        min-height: 3rem;
+    }
+}
+
+/*
+ * The margin dialog's actions are one row of outlined words, right-aligned, the primary last —
+ * not the plated rail. The dock's groups are flattened so every action wraps as one row; the DOM
+ * order (primary first, for the focus trap) is untouched and `order` puts it last on screen.
+ */
+.modalMargin .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 0.9rem;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+}
+
+.modalMargin .actions > * {
+    display: contents;
+}
+
+.modalMargin .actions > *:first-child > * {
+    order: 2;
+}
+
+.modalMargin .actions .modalAction {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 0 !important;
+}
+
+.modalMargin .modalAction::before,
+.modalMargin .modalAction::after {
+    display: none;
+}
+
+@media (max-width: 520px) {
+    .modalMargin .actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: none;
+        gap: 0.5rem;
+    }
+
+    /* Resume first and full width on a phone: the one action a thumb reaches for. */
+    .modalMargin .actions > *:first-child > * {
+        order: 0;
+        grid-column: 1 / -1;
+    }
+
+    .modalMargin .actions .modalAction {
+        width: 100%;
+    }
+}
