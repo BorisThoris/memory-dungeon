@@ -30,18 +30,20 @@ describe('the UI scale limits', () => {
 
     it('caps a desktop window at the smallest screen ceiling, and derives it rather than restating it', () => {
         /*
-         * 1.05, and the screen that sets it is THE RUN - measured at Gen 238, the first time the
-         * screen a player actually plays on was probed at any scale but 1 (`ui-scale-ceiling.spec.ts`).
-         * At 1.1, which this constant was until that measurement, the chain goal line overlaps the
-         * chain state on a 1280x800 Deck panel. Every earlier blocker named here - the main menu,
-         * then Profile, then Codex - was a screen on the way in.
+         * 1.05, and what sets it is THE FLOOR-CLEAR BEAT - a moment inside the run rather than a
+         * screen, which is why nothing had ever measured it. At 1.1 on a 1280x800 Deck panel the
+         * chain rail sits on the beat's title, par line and personal best. Gen 238 put the run
+         * itself here at 1.05 and Gen 239 fixed what held it there (the rail was placed in
+         * viewport units inside a zoom), taking the run to 1.2; the beat inherited the cap. Every
+         * blocker this constant has named before - the main menu, then Profile, then Codex - was a
+         * screen on the way in rather than anything in the game.
          * The cap is the minimum of the ceilings rather than a fourth number, so a screen whose
          * layout improves raises the cap by moving its own row and cannot leave this stale.
          */
         expect(UI_SCALE_MAX).toBe(Math.min(...Object.values(SCREEN_SCALE_CEILINGS)));
         expect(UI_SCALE_MAX).toBe(1.05);
         // The blocker, named rather than implied: whoever is lowest is what the player is held to.
-        expect(SCREEN_SCALE_CEILINGS['in run']).toBe(UI_SCALE_MAX);
+        expect(SCREEN_SCALE_CEILINGS['floor clear']).toBe(UI_SCALE_MAX);
         // Every ceiling is a scale the app could actually be asked for, and above the floor.
         for (const ceiling of Object.values(SCREEN_SCALE_CEILINGS)) {
             expect(ceiling).toBeGreaterThan(SETTINGS_NUMERIC_RANGES.uiScale.min);

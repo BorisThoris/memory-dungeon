@@ -32,18 +32,26 @@ import { VIEWPORT_MOBILE_MAX, VIEWPORT_TABLET_MAX } from './breakpoints';
  * the chain state on a 1280x800 Deck panel. Measured on the two windows a launch checklist names,
  * at 1 / 1.05 / 1.1 / 1.2 / 1.4 / 1.6 / 1.8 / 2:
  *
- *   screen      holds to   first failure and what it is
- *   main menu   1.6        1.8: entry notes hit their ellipsis, title and numeral overlap at 1280
- *   profile     1.6        1.8: objective cards clip their progress line
- *   codex       1.4        1.6: two entry summaries clip on the Deck panel
- *   settings    1.4        1.6: the layout-style row starts scrolling on the Deck panel
- *   in run      1.05       1.1: the chain goal overlaps the chain state on the Deck panel
+ *   screen       holds to   first failure and what it is
+ *   main menu    1.6        1.8: entry notes hit their ellipsis, title and numeral overlap at 1280
+ *   profile      1.6        1.8: objective cards clip their progress line
+ *   codex        1.4        1.6: two entry summaries clip on the Deck panel
+ *   settings     1.4        1.6: the layout-style row starts scrolling on the Deck panel
+ *   in run       1.2        1.4: the rung goal meets the run line under the board
+ *   floor clear  1.05       1.1: the chain rail sits on the beat's title, par and best
  *
- * So the cap comes DOWN, from 1.1 to 1.05, and it is the first time it has been set by a screen
- * that is actually in the game rather than in front of it. A slider that offers a rung the game
- * cannot render in play is worse than a shorter slider: the player who most needs large text is
- * the one who reaches the top of it. Raising it again means fixing the run's chain HUD (task
- * #249), and that would take it to 1.4 - Codex's and Settings' number - not to 1.6.
+ * So the cap came DOWN from 1.1 to 1.05 at Gen 238, and it is still 1.05 - but for a different
+ * reason than it was an hour ago, which is the point of recording a row per screen rather than one
+ * number. **Gen 239 fixed what set it.** The chain rail was placed with `44vh` and `27vh`, and a
+ * viewport does not zoom: measured on a Deck panel it sat at 216..672 layout px at 1, 1.05, 1.1
+ * AND 1.2 - frozen - while the shell around it shrank 800 -> 667. Asked against the box
+ * (`--ui-zoomed-dvh`, `RunShell.module.css`) the run holds to 1.2, up from 1.05.
+ *
+ * **And the floor-clear beat, measured for the first time, is now the lowest.** The same rail is
+ * drawn over it, and at 1.1 on the Deck it lands on the beat's own title, par line and personal
+ * best. The beat is a moment inside the run rather than a screen of its own, which is exactly why
+ * nothing had ever given it a row. Fixing it (task #250) takes the cap to 1.2 - the run's number -
+ * and after that to 1.4, where Codex and Settings are waiting.
  *
  * The cap is the smallest of them, so it is derived rather than restated: a screen that gets its
  * layout fixed raises the cap by moving its own row, and one that regresses lowers it in the same
@@ -56,7 +64,8 @@ import { VIEWPORT_MOBILE_MAX, VIEWPORT_TABLET_MAX } from './breakpoints';
  * without losing a control.
  */
 export const SCREEN_SCALE_CEILINGS = {
-    'in run': 1.05,
+    'floor clear': 1.05,
+    'in run': 1.2,
     'main menu': 1.6,
     codex: 1.4,
     profile: 1.6,

@@ -244,12 +244,29 @@
    rung labels and as tall as the rail plus the read that hangs beside the marker, so every cell
    the head draws keeps a readable box and nothing spills past it (the long-run HUD gate measures
    exactly that). The rail is drawn at the box's left edge. */
+/*
+ * The meter rail, placed against the BOX it lives in rather than the window.
+ *
+ * These two were `44vh` and `27vh`, and `vh` is a viewport unit: a viewport does not zoom, so
+ * inside the UI scale's `zoom` they resolve to a share of the WINDOW and are then used as layout
+ * lengths. Measured on a 1280x800 Deck panel, this block sat at 216..672 layout px at scale 1,
+ * 1.05, 1.1 AND 1.2 - identical, frozen - while the shell it lives in shrank 800 -> 762 -> 727 ->
+ * 667. Everything else in the run moves with the box, so at 1.1 the run line under the board rose
+ * into the rung's goal ("3 momentum to Clean" / "x2 per pair") and covered it, and by 1.4 the
+ * whole block was past the bottom edge. That was the SHIPPED cap: a player on a Deck at maximum
+ * text size was playing with the chain read sitting under the caption.
+ *
+ * `--ui-zoomed-dvh` is the window's height in the units a screen inside the zoom lays out in -
+ * `App.module.css` publishes it for this exact reason - so a share of it is a share of the box.
+ * At scale 1 it is the same number `vh` gave, which is why nothing moves at the size everything
+ * was drawn at.
+ */
 .chain {
-    --ladder-h: clamp(15rem, 44vh, 25rem);
+    --ladder-h: clamp(15rem, calc(var(--ui-zoomed-dvh, 100dvh) * 0.44), 25rem);
 
     position: absolute;
     left: var(--margin-x);
-    top: clamp(11rem, 27vh, 15.5rem);
+    top: clamp(11rem, calc(var(--ui-zoomed-dvh, 100dvh) * 0.27), 15.5rem);
     width: 13rem;
     height: calc(var(--ladder-h) + 6.5rem);
     pointer-events: auto;

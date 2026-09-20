@@ -2,6 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { SCREEN_SCALE_CEILINGS, UI_SCALE_MAX } from '../src/renderer/uiScaleLimits';
 import { describeFit } from './uiFit';
 import { dismissStartupIntro } from './startupIntroHelpers';
+import { openPlayablePathFixture } from './playablePathHelpers';
 import {
     buildPopulatedProfileSaveJson,
     buildVisualSaveJson,
@@ -213,6 +214,53 @@ test.describe('the UI scale ceiling', () => {
         expect(
             breaks.length,
             `in run: nothing breaks at ${above}, so the recorded ceiling of ${ceiling} is understated - raise it in SCREEN_SCALE_CEILINGS`
+        ).toBeGreaterThan(0);
+    });
+
+    /**
+     * The floor-clear beat, which is a MOMENT rather than a screen: it clears itself and play
+     * resumes. An earlier probe opened it once and then changed the scale three times, and two
+     * runs of it disagreed about the same scale - it was reading three different instants of a
+     * surface that had moved on. Each scale re-arrives at the fixture for that reason.
+     */
+    test(`the floor clear beat holds its layout up to ${SCREEN_SCALE_CEILINGS['floor clear']} and not past it`, async ({
+        page
+    }) => {
+        test.setTimeout(720_000);
+        const ceiling = SCREEN_SCALE_CEILINGS['floor clear'];
+        const arrive = async (viewport: { width: number; height: number }, uiScale: number): Promise<string[]> => {
+            await page.setViewportSize({ width: viewport.width, height: viewport.height });
+            try {
+                await openPlayablePathFixture(page, 'floorClearWithRouteChoices');
+            } catch {
+                await page.waitForTimeout(1500);
+                await openPlayablePathFixture(page, 'floorClearWithRouteChoices');
+            }
+            await forceScale(page, uiScale);
+            const report = await describeFit(page);
+            return Object.values(report).flat() as string[];
+        };
+
+        const failures: string[] = [];
+        for (const uiScale of PROBE_LADDER.filter((step) => step <= ceiling)) {
+            for (const viewport of SCALE_VIEWPORTS) {
+                const rows = await arrive(viewport, uiScale);
+                console.log(`SCALE floor clear @ ${viewport.id} x${uiScale}: ${rows.length === 0 ? 'fits' : rows.join(' | ')}`);
+                failures.push(...rows.map((row) => `floor clear @ ${viewport.id} x${uiScale} ${row}`));
+            }
+        }
+        expect(failures, `floor clear: fit failures at or under its recorded ceiling ${ceiling}`).toEqual([]);
+
+        const above = stepAbove(ceiling);
+        const breaks: string[] = [];
+        for (const viewport of SCALE_VIEWPORTS) {
+            const rows = await arrive(viewport, above);
+            console.log(`SCALE floor clear @ ${viewport.id} x${above} (above the ceiling): ${rows.length === 0 ? 'fits' : rows.join(' | ')}`);
+            breaks.push(...rows);
+        }
+        expect(
+            breaks.length,
+            `floor clear: nothing breaks at ${above}, so the recorded ceiling of ${ceiling} is understated - raise it in SCREEN_SCALE_CEILINGS`
         ).toBeGreaterThan(0);
     });
 
