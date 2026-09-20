@@ -414,6 +414,23 @@
     .nextRunGrid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    /*
+     * The next moves go two-up once the window is this narrow, for the same reason the next-run
+     * cards above do: the rail has the width and does not have the height.
+     *
+     * Measured stacked, they are 231px of buttons in a rail 350-365px wide, and that is what puts
+     * the screen over the edge at both of the sizes still failing - 866px of page in an 844px
+     * phone, 419px of rail in a 375px landscape. Two columns turn four rows into two and give back
+     * about 110px, which is more than either needs. The rail is wide enough for it at both: 365px
+     * on the phone, 350px in the landscape column.
+     *
+     * Width was never the problem on these two screens; height was, and a column of full-width
+     * buttons spends the one to save nothing of the other.
+     */
+    .actionButtons {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 /*
@@ -610,6 +627,22 @@
 
 @media (max-height: 820px) {
     .nextRunGrid > *:nth-child(n + 4) {
+        display: none;
+    }
+}
+
+/*
+ * The mode identity line goes on a phone too, for the reason the short-landscape block below
+ * already gives: the heading directly above it names the mode, so the line spends its height
+ * saying the same thing twice. Measured at 390x844 it is 40px of a page that is 866 in an 844
+ * window - the overflow is 29, so this alone clears it, and the two next-run cards and the action
+ * buttons are already two-up here and had nothing left to give.
+ *
+ * It stays wherever there is room for it, which is every window that is not a phone or a short
+ * landscape: the line is the one place a run summary says what the mode's contract actually was.
+ */
+@media (max-width: 430px) {
+    .modeIdentity {
         display: none;
     }
 }
