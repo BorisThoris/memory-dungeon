@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "6a4c261ff739157d0ce59a8626e919e39cf89789f86f270b4a99f7bcf3893d62"
+      "sha256": "08140d89027b3d25c7ea010b49ce38fa7baf1ee85d141b6983345d0b1f17f1ca"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -3903,8 +3903,8 @@
     {
       "path": "e2e/playablePathHelpers.ts",
       "category": "test",
-      "bytes": 11767,
-      "sha256": "7a61b606dccc0e121e85c7ce3ab7695c9ff2f18fcd96a34c518ad8b663ed08d3"
+      "bytes": 12777,
+      "sha256": "97f047064b4a2927e3cdf413220e52136750efecef51926f312e8d78d1a83f0a"
     },
     {
       "path": "e2e/pngDiff.ts",
@@ -4017,8 +4017,8 @@
     {
       "path": "e2e/ui-fit-contract.spec.ts",
       "category": "test",
-      "bytes": 12377,
-      "sha256": "cd5e989555173a83e278e775d0dc188719089698d48047a29658b425f9cab121"
+      "bytes": 13084,
+      "sha256": "884109a274c56e61303387ad3b4417a9537bd3c6dfac014a77cf207b01236429"
     },
     {
       "path": "e2e/ui-reachability-gate.spec.ts",
@@ -4306,7 +4306,7 @@
       "path": "project-media/capture.json",
       "category": "configuration",
       "bytes": 1305,
-      "sha256": "10ee07485b7538ddcc1ebd4e07e53ae63e523fa9572bf303c38c084b7dd44c56"
+      "sha256": "f516f782f07c9f3cdedd8a5630c7ff26d0e0bee7fe16305aa01dfea69a6d8c1d"
     },
     {
       "path": "project-media/card.jpg",
@@ -4347,8 +4347,8 @@
     {
       "path": "project.meta.json",
       "category": "configuration",
-      "bytes": 11699,
-      "sha256": "099b21ee4e6b4b97f7b157d96de156b0219196f7ed16576f1b8163f28be9d2b4"
+      "bytes": 11727,
+      "sha256": "85739101ba33b95d8eee7e228e8b4c4e8bb5eb9e41831abd13449abbad2103d5"
     },
     {
       "path": "public/apple-touch-icon.png",
@@ -8361,8 +8361,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 32469,
-      "sha256": "33e820aa1e9b29d75fbdb3c3498bc1482a4eaf4fd93ae523c249081fc71a7385"
+      "bytes": 33460,
+      "sha256": "385612df434c4d5e584734eee030fba9d6c37e2b3b728fb989e7aae2c45003ac"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -8727,8 +8727,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 28400,
-      "sha256": "bbe0014ae8e6bbfb5f3a3735ecf3bd4a7903a4e49c639926d4f8f531c9e9d35b"
+      "bytes": 29543,
+      "sha256": "d44c622be18661b24560860f9a4925aad56a89159b385eb593af486c8208f1ea"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
@@ -11727,8 +11727,8 @@
     {
       "path": "src/shared/gameplay-core.ts",
       "category": "source",
-      "bytes": 40999,
-      "sha256": "227581d1be58ab8ef8926ac4c68582762ba1fa3aab99c046c9b024bcbaf98aa1"
+      "bytes": 41352,
+      "sha256": "0ae79a5bb28023efd1040d33dac886e7c72c64e86ff6161cbee9ea80e117cb85"
     },
     {
       "path": "src/shared/gameplay-effect-transition.test.ts",
@@ -17573,7 +17573,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 643,
+      "lineCount": 655,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/modeArt.ts",
@@ -27466,7 +27466,7 @@
       "path": "src/shared/gameplay-core.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1003,
+      "lineCount": 1009,
       "imports": [
         "file:src/shared/board-grid-dimensions.ts",
         "file:src/shared/board-inspection.ts",
@@ -34638,8 +34638,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ChooseYourPathScreen.tsx",
-      "line": 642,
-      "endLine": 642
+      "line": 654,
+      "endLine": 654
     },
     {
       "id": "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows",
@@ -47238,16 +47238,16 @@
       "name": "reduceGameplayCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 914,
-      "endLine": 987
+      "line": 920,
+      "endLine": 993
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#replayGameplayCommands",
       "name": "replayGameplayCommands",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 989,
-      "endLine": 1002
+      "line": 995,
+      "endLine": 1008
     },
     {
       "id": "symbol:src/shared/gameplay-effect-transition.ts#applyGameplayDefinitionTransition",

@@ -59,6 +59,22 @@ export async function openModeDetail(page: Page, modeTitle: string): Promise<Loc
          * first page timed out here instead of failing.
          */
         const filter = page.getByLabel(/filter modes/i);
+        /*
+         * A library of one mode has no filter and no group chips - `hasLibrary` in
+         * `ChooseYourPathScreen.tsx` is `browseModes.length > 1`, so the whole browse head is
+         * absent by design. Before this check, asking for a mode that is not on the page timed out
+         * here on a missing filter, which reads as the filter having been renamed rather than as
+         * the mode not existing. Say which it is, and name what IS on the page.
+         */
+        if ((await filter.count()) === 0) {
+            const offered = await page
+                .getByRole('button', { name: /\. Open details\.$/i })
+                .evaluateAll((nodes) => nodes.map((node) => node.getAttribute('aria-label') ?? '').join(', '));
+            throw new Error(
+                `openModeDetail("${modeTitle}"): no tile for it and no filter to search with - the browse ` +
+                    `library is too short for a filter. Modes on the page: ${offered || '(none)'}.`
+            );
+        }
         await expect(filter).toBeVisible();
         await filter.fill(modeTitle);
         modeTile = page.getByRole('button', {

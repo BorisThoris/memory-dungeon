@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { choosePathLibraryModes } from '../src/shared/run-mode-catalog';
 import { openModeDetail, openPlayablePathFixture, openRunMenuItem } from './playablePathHelpers';
 import { describeFit } from './uiFit';
 import { findUnreachableControls } from './uiReachability';
@@ -223,15 +224,25 @@ test.describe('UI fit contract', () => {
         );
     });
 
+    /*
+     * The sheet belongs to the library cards: Classic is the recommended run and sits on the launch
+     * panel, which has a setup door rather than a detail sheet. Which library mode is asked for is
+     * read off the catalog rather than written here, because the last name written here was
+     * 'Puzzle' - a mode the catalog has not held since it collapsed to two (task #208) - and the
+     * spec failed for many generations on a mode that did not exist. A name in a test is a claim
+     * about the game, and this one had stopped being true without anything saying so.
+     */
     test('the mode detail sheet fits every window', async ({ page }) => {
         test.setTimeout(420_000);
         const save = buildVisualSaveJson(true);
-        await atEverySize(page, 'mode detail', async () => {
+        const libraryMode = choosePathLibraryModes()[0];
+        if (!libraryMode) {
+            throw new Error('the mode detail sheet has no library mode to open: the catalog is down to the hero row');
+        }
+        await atEverySize(page, `mode detail (${libraryMode.title})`, async () => {
             await gotoWithSave(page, save);
             await mainMenuPlayButton(page).waitFor({ state: 'visible', timeout: 30_000 });
-            // Classic is the recommended run and sits on the launch panel, which has a setup door
-            // rather than a detail sheet; the sheet belongs to the library cards, so open one of those.
-            await openModeDetail(page, 'Puzzle');
+            await openModeDetail(page, libraryMode.title);
             await page.waitForTimeout(500);
         });
     });

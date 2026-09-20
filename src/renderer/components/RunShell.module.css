@@ -1023,11 +1023,26 @@
     margin-bottom: 0.4rem;
 }
 
+/*
+ * The run's feedback line WRAPS here; it does not ellipsise.
+ *
+ * This used to be one nowrap line with `text-overflow: ellipsis`, which on a 812x375 window gave
+ * the line 267px for 329px of sentence: the pause message reached the player as "Run paused.
+ * Timers are frozen un..." and the rest was gone with nothing to scroll it back. The fit contract
+ * caught it and had been reporting it on three separate specs (in-run inventory, codex and
+ * settings) - the only reason it looked like three problems is that all three pause the run to
+ * open, so all three read the same truncated line.
+ *
+ * Ellipsis is the wrong tool for this element in particular. It is the run's voice - it says what
+ * just happened and what to do next - and its content is not a label of known length but whichever
+ * message the turn produced, so any fixed line budget is a guess about the longest sentence the
+ * game will ever want to say. Wrapping has no such guess in it. The caption sits in a footer
+ * anchored to the bottom with `align-items: flex-end`, so extra lines grow UPWARDS over the board
+ * rather than pushing the dock off the screen, which is why this is affordable in a 375px window.
+ */
 :global([data-shell-layout='phone-landscape']) .line {
-    overflow: hidden;
     font-size: 0.9375rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: normal;
 }
 
 :global([data-shell-layout='phone-landscape']) .footRule {

@@ -525,10 +525,22 @@ const ChooseYourPathScreen = (): ReactElement => {
                     {detailMode.promise ? <p className={styles.detailLine}>{detailMode.promise}</p> : null}
                     {detailMode.eligibilityNote ? <p className={styles.detailMuted}>{detailMode.eligibilityNote}</p> : null}
                     {detailMode.availabilityDetail ? <p className={styles.detailLine}>{detailMode.availabilityDetail}</p> : null}
-                    {detailGate ? (
+                    {/*
+                      * The gate line appears only while the mode is actually gated. On an unlocked
+                      * mode it read "Gate: <condition> · 1/1 · Unlocked locally" - a requirement
+                      * stated to the one player who has already met it, beside a paragraph that
+                      * had just said the same thing in words ("Offline and local. It needs no
+                      * account."). That is the duplication §105 exists to remove, and it was also
+                      * the line the sheet ran out of room for: at 812x375 the body clipped at
+                      * y=307 with this line laid out at 310-330 and the action row painted over it
+                      * at 321-357, so it was cut AND covered. The cost, stated rather than left to
+                      * be noticed: a player who wants reassurance that a mode is unlocked no
+                      * longer gets it in those words - the mode simply opens and plays.
+                      */}
+                    {detailGate && detailGate.status !== 'available' ? (
                         <p className={styles.detailMuted}>
-                            Gate: {detailGate.entryCondition} · {detailGate.progress.current}/{detailGate.progress.target} ·{' '}
-                            {detailGate.status === 'available' ? 'Unlocked locally' : 'Locked locally'}
+                            Gate: {detailGate.entryCondition} · {detailGate.progress.current}/{detailGate.progress.target} ·
+                            Locked locally
                         </p>
                     ) : null}
                     {detailMode.availability !== 'available' ? (
