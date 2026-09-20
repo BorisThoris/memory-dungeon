@@ -286,7 +286,7 @@
         "bytes": 143993,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-20T19:45:48.593Z"
+        "capturedAt": "2026-09-20T19:50:44.825Z"
       },
       {
         "profile": "desktop",
@@ -295,7 +295,7 @@
         "bytes": 134991,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-20T19:45:54.724Z"
+        "capturedAt": "2026-09-20T19:51:04.270Z"
       },
       {
         "profile": "full",
@@ -304,7 +304,7 @@
         "bytes": 112331,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-20T19:46:10.204Z"
+        "capturedAt": "2026-09-20T19:51:33.936Z"
       },
       {
         "profile": "mobile",
@@ -313,7 +313,7 @@
         "bytes": 50945,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-20T19:46:01.457Z"
+        "capturedAt": "2026-09-20T19:51:14.635Z"
       },
       {
         "profile": "og",
@@ -322,7 +322,7 @@
         "bytes": 106849,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-20T19:46:22.279Z"
+        "capturedAt": "2026-09-20T19:51:53.042Z"
       }
     ]
   },
@@ -425,10 +425,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "f053657c",
-    "lastCommitDate": "2026-09-20T19:42:23Z",
+    "head": "09cc0a2d",
+    "lastCommitDate": "2026-09-20T19:46:50Z",
     "lastCommitSubject": "Merge remote-tracking branch 'origin/main' into claude/main-branch-code-review-5w7bph",
-    "commitCount": 1515,
+    "commitCount": 1518,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
