@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 425247,
-      "sha256": "d1da46a3a2b52f40c562abb4b61025c72abf4e8364d000633ab4eb626ef24aa7"
+      "bytes": 427645,
+      "sha256": "f9941820776da179e0f964dcaf1418e157f1ee1f2bcc11d6dca80038ee2635c5"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "8d36f8307805bf48533d23a87b5d5d298776aefd3856039af9f8835b400ab0b0"
+      "sha256": "667f2c6465fd4c28926d7d8b89ff4a244d4de439b3380ad7da386dde378a4eff"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -8727,8 +8727,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 29543,
-      "sha256": "d44c622be18661b24560860f9a4925aad56a89159b385eb593af486c8208f1ea"
+      "bytes": 31418,
+      "sha256": "1cf9fc566d23d2bd6a37fdf8a05405ebf3ff3faa1e6a0f0041a44ec6da1fc9ac"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",

@@ -757,6 +757,11 @@
     height: auto;
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
+    /*
+     * Two rows here, and the depth and the goal share the `read` cell - one pinned to each edge.
+     * That holds while the cell is wider than both of them, which on a tablet and a phone held
+     * upright it is. The short-landscape override below is where it stops holding.
+     */
     grid-template-areas:
         'mult read'
         'mult ladder';
@@ -794,6 +799,39 @@
     grid-area: read;
     justify-self: end;
     font-size: 0.75rem;
+}
+
+/*
+ * A phone held sideways: the read is two lines, not two ends of one.
+ *
+ * `.chainRead` dissolves at the compact layouts (`display: contents`) so its three children can
+ * take named areas, and the depth and the goal are both given `read` - one `justify-self: start`,
+ * one `justify-self: end`. Two grid items in one cell pinned to opposite edges, which reads as a
+ * neat row for exactly as long as the cell is wider than both. At 812x375 it is not: the cell is
+ * 222.6px, "Chain 2 · Sharp" is 122 and "3 momentum to Fever" is 118, so they collide by the 17px
+ * they are over - one word printed on another, which the fit contract counts as two text leaves
+ * sharing pixels.
+ *
+ * Giving the goal its own row is also what the dissolved `.chainRead` asked for in the first place
+ * with its `flex-direction: column` and 0.15rem gap - properties `display: contents` threw away
+ * along with the box they applied to.
+ *
+ * Scoped to THIS layout on measurement, not on taste: applied to all three compact layouts it
+ * added a row of height to the tablet HUD too, and since Gen 230 the floor-clear beat is inset by
+ * the HUD's published clearance, that pushed the beat's notes past the board stage's clip on a
+ * 1024x768 laptop. The collision is a short-landscape problem; the cure belongs where the problem
+ * is.
+ */
+:global([data-shell-layout='phone-landscape']) .chain {
+    grid-template-areas:
+        'mult read'
+        'mult goal'
+        'mult ladder';
+}
+
+:global([data-shell-layout='phone-landscape']) .chainGoal {
+    grid-area: goal;
+    justify-self: start;
 }
 
 /* The goal's worth is the ladder's own labels on a phone; the sentence is the goal. */
