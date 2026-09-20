@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2550,
-    "codeFileCount": 892,
-    "exportedSymbolCount": 2702,
+    "trackedFileCount": 2553,
+    "codeFileCount": 894,
+    "exportedSymbolCount": 2703,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6833
+    "relationshipCount": 6837
   },
   "inventory": [
     {
@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 434037,
-      "sha256": "1a39b0dea7994737837679a64da60dd114f098daf7f2e8f11b3387116d99d9b0"
+      "bytes": 436364,
+      "sha256": "359c94da41ced133b45f5c1acc3925dc945951c8dfa4780490fbda463afe0ec4"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "d7b2707c52dd04a13f9f8ecff9381b24e60977989a22ead54e8ed3d89226dccc"
+      "sha256": "ae8922b89f69077c0161a4c7f9f478a1cabbcf33102266da9fa2d2f03c52e1d0"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "ec7604a5cb7fd699280db64ed15dc3a39b4cc9c61f257af8687ea4a1388cc60b"
+      "sha256": "a7d761ec683816016f071a6165f525b4b982cb4d16c0024e3e91f1b0d38af750"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3811,6 +3811,12 @@
       "sha256": "c909914f3fad76248356595b51717d4c0889d1b85fe7e584ff91403b57ed0163"
     },
     {
+      "path": "e2e/gameplay-chrome-clearance.spec.ts",
+      "category": "test",
+      "bytes": 7575,
+      "sha256": "3c4c7d4a7a219ef6fea6664c08dbb457595ccbb2beb8c3f406edc6dd531acb50"
+    },
+    {
       "path": "e2e/gameplay-hud-layout.spec.ts",
       "category": "test",
       "bytes": 11423,
@@ -4191,8 +4197,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 31388,
-      "sha256": "4b8f0e0b43a7de0cf0ef7bdeb76d15f093279501caf850d2e22da05d7f3c3923"
+      "bytes": 31426,
+      "sha256": "d18131ed1866ae3ea44958a62138e3a66423d9b4199138cced0fcc71f74fc9d1"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4306,7 +4312,7 @@
       "path": "project-media/capture.json",
       "category": "configuration",
       "bytes": 1305,
-      "sha256": "392b2d6e32616e2ef17636b0e22c964788db2add57fe28cb3e98fb3a04b9585e"
+      "sha256": "8df00a594de063583a8e2701f057dd37bd8d87d6e1e2a0d91d1a27032076c83a"
     },
     {
       "path": "project-media/card.jpg",
@@ -4347,8 +4353,8 @@
     {
       "path": "project.meta.json",
       "category": "configuration",
-      "bytes": 11717,
-      "sha256": "2a7672fb870077b79a8560c089598996c870aa49b482625a36f6a330554196a7"
+      "bytes": 11702,
+      "sha256": "08f0924700c740effc948c4764d81e52a99f442bcf6913bd712db5956cfe7113"
     },
     {
       "path": "public/apple-touch-icon.png",
@@ -10173,8 +10179,8 @@
     {
       "path": "src/renderer/hooks/useGameplayChromeClearance.ts",
       "category": "source",
-      "bytes": 4894,
-      "sha256": "3eb74c199f6750cd3676ffd4c4efaa09990277489d47e9d6a802bcefc222e42b"
+      "bytes": 5966,
+      "sha256": "8f4360574f30812b897da3c46ab469bbf8dd92bd122c74d6f800baff8c552ef6"
     },
     {
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
@@ -10793,6 +10799,18 @@
       "category": "source",
       "bytes": 494,
       "sha256": "ffb46b986c7ea439e7919c3cd18de78b7053eedb969871d18e412c1fbc63da28"
+    },
+    {
+      "path": "src/renderer/ui/cssZoom.test.ts",
+      "category": "test",
+      "bytes": 1387,
+      "sha256": "4aa3048145dd157fadff05718f0ecb5f1465fcc06d75606915b2eb11adc04ae9"
+    },
+    {
+      "path": "src/renderer/ui/cssZoom.ts",
+      "category": "source",
+      "bytes": 1437,
+      "sha256": "d18129c6abc7cfa33519ee0a7fed8e5a52564e86686fedddfec0239a45f92a58"
     },
     {
       "path": "src/renderer/ui/Eyebrow.module.css",
@@ -22551,8 +22569,10 @@
       "path": "src/renderer/hooks/useGameplayChromeClearance.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 111,
-      "imports": [],
+      "lineCount": 124,
+      "imports": [
+        "file:src/renderer/ui/cssZoom.ts"
+      ],
       "exports": [
         "symbol:src/renderer/hooks/useGameplayChromeClearance.ts#useGameplayChromeClearance"
       ],
@@ -24307,6 +24327,32 @@
         "symbol:src/renderer/ui/AccentBanner.tsx#default"
       ],
       "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/ui/cssZoom.test.ts",
+      "path": "src/renderer/ui/cssZoom.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 32,
+      "imports": [
+        "file:src/renderer/ui/cssZoom.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/ui/cssZoom.ts",
+      "path": "src/renderer/ui/cssZoom.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 26,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/ui/cssZoom.ts#readCssZoom"
+      ],
+      "testedBy": [
+        "file:src/renderer/ui/cssZoom.test.ts"
+      ]
     },
     {
       "id": "file:src/renderer/ui/Eyebrow.tsx",
@@ -39782,8 +39828,8 @@
       "name": "useGameplayChromeClearance",
       "kind": "value",
       "file": "src/renderer/hooks/useGameplayChromeClearance.ts",
-      "line": 27,
-      "endLine": 110
+      "line": 37,
+      "endLine": 123
     },
     {
       "id": "symbol:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts#formatHudActionFeedbackText",
@@ -41392,6 +41438,14 @@
       "file": "src/renderer/ui/AccentBanner.tsx",
       "line": 15,
       "endLine": 15
+    },
+    {
+      "id": "symbol:src/renderer/ui/cssZoom.ts#readCssZoom",
+      "name": "readCssZoom",
+      "kind": "value",
+      "file": "src/renderer/ui/cssZoom.ts",
+      "line": 17,
+      "endLine": 25
     },
     {
       "id": "symbol:src/renderer/ui/Eyebrow.tsx#default",
@@ -64180,6 +64234,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/ui/cssZoom.ts->symbol:src/renderer/ui/cssZoom.ts#readCssZoom",
+      "source": "file:src/renderer/ui/cssZoom.ts",
+      "target": "symbol:src/renderer/ui/cssZoom.ts#readCssZoom",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/ui/Eyebrow.tsx->symbol:src/renderer/ui/Eyebrow.tsx#default",
       "source": "file:src/renderer/ui/Eyebrow.tsx",
       "target": "symbol:src/renderer/ui/Eyebrow.tsx#default",
@@ -80922,6 +80982,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/hooks/useGameplayChromeClearance.ts->src/renderer/ui/cssZoom.ts",
+      "source": "file:src/renderer/hooks/useGameplayChromeClearance.ts",
+      "target": "file:src/renderer/ui/cssZoom.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts->src/renderer/copy/gameplayHints.ts",
       "source": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "target": "file:src/renderer/copy/gameplayHints.ts",
@@ -82749,6 +82815,12 @@
       "id": "imports:src/renderer/styles/theme.wcag.test.ts->src/renderer/styles/theme.ts",
       "source": "file:src/renderer/styles/theme.wcag.test.ts",
       "target": "file:src/renderer/styles/theme.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/ui/cssZoom.test.ts->src/renderer/ui/cssZoom.ts",
+      "source": "file:src/renderer/ui/cssZoom.test.ts",
+      "target": "file:src/renderer/ui/cssZoom.ts",
       "kind": "imports"
     },
     {
@@ -92984,6 +93056,12 @@
       "id": "tested_by:src/renderer/styles/theme.ts->file:src/renderer/styles/theme.wcag.test.ts",
       "source": "file:src/renderer/styles/theme.ts",
       "target": "file:src/renderer/styles/theme.wcag.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/ui/cssZoom.ts->file:src/renderer/ui/cssZoom.test.ts",
+      "source": "file:src/renderer/ui/cssZoom.ts",
+      "target": "file:src/renderer/ui/cssZoom.test.ts",
       "kind": "tested_by"
     },
     {

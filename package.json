@@ -96,7 +96,7 @@
     "audit:min-type-size": "tsx scripts/min-type-size.ts",
     "gate:demo-readiness": "yarn test:e2e:demo-readiness",
     "gate:ui-reachability": "playwright test e2e/ui-reachability-gate.spec.ts --workers=1",
-    "gate:ui-fit": "playwright test e2e/ui-fit-contract.spec.ts",
+    "gate:ui-fit": "playwright test e2e/ui-fit-contract.spec.ts e2e/gameplay-chrome-clearance.spec.ts",
     "audit:save-field-policy": "tsx scripts/save-field-policy.ts",
     "audit:script-paths": "tsx scripts/script-paths.ts",
     "audit:generations": "tsx scripts/audit-generation-claims.ts",
