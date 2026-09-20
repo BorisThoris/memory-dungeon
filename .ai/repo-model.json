@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2553,
-    "codeFileCount": 894,
-    "exportedSymbolCount": 2703,
+    "trackedFileCount": 2554,
+    "codeFileCount": 895,
+    "exportedSymbolCount": 2705,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6837
+    "relationshipCount": 6842
   },
   "inventory": [
     {
@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 443520,
-      "sha256": "86939712e0afe8bfaec743c51c760a1db77210ded557b76bc37a53c36264a01c"
+      "bytes": 446087,
+      "sha256": "84a9d4a0c44437305a01de9686dced0ff4710da51417a7d93e5aef6c3cc34fbb"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "203f892470699637d9a04abef2be84a301ea53c521b83ee00290a31d6e693b38"
+      "sha256": "b5ae5950680b56c84681f1ece810a5b3522666361d6ee9698976de1600ee511b"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "a7d761ec683816016f071a6165f525b4b982cb4d16c0024e3e91f1b0d38af750"
+      "sha256": "718f139e6cc16023cb7397f311ca2766cbce268b49140fa9815d5dc418328d59"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3993,8 +3993,8 @@
     {
       "path": "e2e/tile-card-face-illustration-regression.spec.ts",
       "category": "test",
-      "bytes": 12536,
-      "sha256": "9a53bacf7cf919de8f072b2a01fdc8116f91a8d4f8bcaf7070b944bf7171243b"
+      "bytes": 12625,
+      "sha256": "9a6b2127dc01d78dde5460d7f88f6e4f8c41f0fa5ec30949963a35fadbf9a75b"
     },
     {
       "path": "e2e/tile-card-face-overlay-regression.spec.ts",
@@ -4312,7 +4312,7 @@
       "path": "project-media/capture.json",
       "category": "configuration",
       "bytes": 1305,
-      "sha256": "43ec58f435ebd01ce6e500e3f809eafc2cc3ade6821d917f38f9d19e488a44b6"
+      "sha256": "3d88976aea26de4fe514051f6c71ed7df62580dde581d04a780d092c19b3276f"
     },
     {
       "path": "project-media/card.jpg",
@@ -4354,7 +4354,7 @@
       "path": "project.meta.json",
       "category": "configuration",
       "bytes": 11738,
-      "sha256": "9ab6d5b37d5b64cc4fad26c4e601e3da0713185992feb3cf43ebd2effbcdf6a4"
+      "sha256": "50f4ba612beb3f8a8c89648ea87ca8449780f6a1ed0cffd9a6260ab4106641cc"
     },
     {
       "path": "public/apple-touch-icon.png",
@@ -5445,8 +5445,8 @@
     {
       "path": "scripts/test-only-exports-baseline.json",
       "category": "script",
-      "bytes": 9088,
-      "sha256": "e7a15b50b0d35199e04ec274fddbe53abdd1b75c47350a1a4f9048dc9858ec7d"
+      "bytes": 8549,
+      "sha256": "690afac24dfd2a971d18754da2459fc578871f49e46b895252c540447409b0df"
     },
     {
       "path": "scripts/test-only-exports.ts",
@@ -8109,8 +8109,8 @@
     {
       "path": "src/renderer/cardFace/cardRasterDeck.ts",
       "category": "source",
-      "bytes": 5426,
-      "sha256": "4f9087e2f1ea5dbc142680a6b53cbc93eb1cddee2ca4b5757b1bb2b952a067bd"
+      "bytes": 4946,
+      "sha256": "842748f4fcf8e6bef1f341b7ee0d8001876bfa52e211a7db3c168280d518fd8f"
     },
     {
       "path": "src/renderer/cardFace/facePanelRasterUrls.ts",
@@ -8243,6 +8243,12 @@
       "category": "source",
       "bytes": 1761,
       "sha256": "c30812a35cb8724281c246a9b831b63e4e0f212f9d93b53ea54244fe41ffab4d"
+    },
+    {
+      "path": "src/renderer/cardFace/staticCardTextureSize.ts",
+      "category": "source",
+      "bytes": 1718,
+      "sha256": "56d7ab09ea924f83bb299ce1df10e537ff9a9f3dcbd44563ed585794ced2f0bb"
     },
     {
       "path": "src/renderer/cardFace/svgMarkup.test.ts",
@@ -9651,14 +9657,14 @@
     {
       "path": "src/renderer/components/tileTextures.test.ts",
       "category": "test",
-      "bytes": 14295,
-      "sha256": "5556221daf81ed615eaf7460c60ee2ac3cc499adaca8912868fab36515a0d8b9"
+      "bytes": 14343,
+      "sha256": "cbb7e33acc3d1f2f69555cd6983cee24362d542ac3ca48a6ce1e080f0327403d"
     },
     {
       "path": "src/renderer/components/tileTextures.ts",
       "category": "source",
-      "bytes": 61054,
-      "sha256": "880cce2f22cc85e9f8560bf939575d40900e611d3f9619697f3157203ded2027"
+      "bytes": 60661,
+      "sha256": "596b85b617957f82a42dbbbdf5fab26e58da9c8fcf80ec1cd1b705467088978b"
     },
     {
       "path": "src/renderer/components/TutorialPairMarkerPlane.tsx",
@@ -16889,15 +16895,15 @@
       "path": "src/renderer/cardFace/cardRasterDeck.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 138,
+      "lineCount": 129,
       "imports": [
         "file:src/renderer/cardFace/cardFaceOverlayPalette.ts",
         "file:src/renderer/cardFace/cardIllustrationDraw.ts",
         "file:src/renderer/cardFace/cardIllustrationRect.ts",
         "file:src/renderer/cardFace/overlayDrawTier.ts",
         "file:src/renderer/cardFace/proceduralIllustration/illustrationSchemaVersion.ts",
+        "file:src/renderer/cardFace/staticCardTextureSize.ts",
         "file:src/renderer/components/gameplayVisualConfig.ts",
-        "file:src/renderer/components/tileShatter.ts",
         "file:src/shared/feature-flags.ts",
         "file:src/shared/hashPairKey.ts",
         "file:src/shared/run-number-guards.ts"
@@ -17282,6 +17288,24 @@
       "testedBy": [
         "file:src/renderer/cardFace/cardIllustrationRegistry.test.ts",
         "file:src/renderer/cardFace/resolveCardIllustrationUrl.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/cardFace/staticCardTextureSize.ts",
+      "path": "src/renderer/cardFace/staticCardTextureSize.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 32,
+      "imports": [
+        "file:src/renderer/components/tileShatter.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/cardFace/staticCardTextureSize.ts#getStaticCardTexturePixelSize",
+        "symbol:src/renderer/cardFace/staticCardTextureSize.ts#STATIC_CARD_TEXTURE_HEIGHT",
+        "symbol:src/renderer/cardFace/staticCardTextureSize.ts#STATIC_CARD_TEXTURE_WIDTH"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/tileTextures.test.ts"
       ]
     },
     {
@@ -21218,6 +21242,7 @@
       "role": "test",
       "lineCount": 364,
       "imports": [
+        "file:src/renderer/cardFace/staticCardTextureSize.ts",
         "file:src/renderer/components/tileShatter.ts",
         "file:src/renderer/components/tileTextures.ts",
         "file:src/shared/contracts.ts",
@@ -21231,7 +21256,7 @@
       "path": "src/renderer/components/tileTextures.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1738,
+      "lineCount": 1734,
       "imports": [
         "file:src/renderer/cardFace/cardFaceOverlayPalette.ts",
         "file:src/renderer/cardFace/cardIllustrationDraw.ts",
@@ -21244,8 +21269,8 @@
         "file:src/renderer/cardFace/proceduralIllustration/illustrationSchemaVersion.ts",
         "file:src/renderer/cardFace/programmaticCardFace.ts",
         "file:src/renderer/cardFace/resolveCardIllustrationUrl.ts",
+        "file:src/renderer/cardFace/staticCardTextureSize.ts",
         "file:src/renderer/components/gameplayVisualConfig.ts",
-        "file:src/renderer/components/tileShatter.ts",
         "file:src/renderer/styles/theme.ts",
         "file:src/shared/contracts.ts"
       ],
@@ -21266,7 +21291,6 @@
         "symbol:src/renderer/components/tileTextures.ts#getIllustrationPipelineDebugState",
         "symbol:src/renderer/components/tileTextures.ts#getOverlayPrewarmDebugState",
         "symbol:src/renderer/components/tileTextures.ts#getOverlayTextureCacheDebugState",
-        "symbol:src/renderer/components/tileTextures.ts#getStaticCardTexturePixelSize",
         "symbol:src/renderer/components/tileTextures.ts#getTileFaceOverlayRegressionStamp",
         "symbol:src/renderer/components/tileTextures.ts#getTileFaceOverlayTexture",
         "symbol:src/renderer/components/tileTextures.ts#getTileFaceOverlayTextureCacheKey",
@@ -33820,48 +33844,48 @@
       "name": "CARD_RASTER_SLOT_COUNT",
       "kind": "value",
       "file": "src/renderer/cardFace/cardRasterDeck.ts",
-      "line": 28,
-      "endLine": 28
+      "line": 19,
+      "endLine": 19
     },
     {
       "id": "symbol:src/renderer/cardFace/cardRasterDeck.ts#clearRasterDeckPanelCache",
       "name": "clearRasterDeckPanelCache",
       "kind": "value",
       "file": "src/renderer/cardFace/cardRasterDeck.ts",
-      "line": 96,
-      "endLine": 98
+      "line": 87,
+      "endLine": 89
     },
     {
       "id": "symbol:src/renderer/cardFace/cardRasterDeck.ts#drawRasterDeckComposedOverlay",
       "name": "drawRasterDeckComposedOverlay",
       "kind": "value",
       "file": "src/renderer/cardFace/cardRasterDeck.ts",
-      "line": 104,
-      "endLine": 130
+      "line": 95,
+      "endLine": 121
     },
     {
       "id": "symbol:src/renderer/cardFace/cardRasterDeck.ts#getRasterDeckPanelPixelSize",
       "name": "getRasterDeckPanelPixelSize",
       "kind": "value",
       "file": "src/renderer/cardFace/cardRasterDeck.ts",
-      "line": 133,
-      "endLine": 137
+      "line": 124,
+      "endLine": 128
     },
     {
       "id": "symbol:src/renderer/cardFace/cardRasterDeck.ts#isCardRasterDeckEnabled",
       "name": "isCardRasterDeckEnabled",
       "kind": "value",
       "file": "src/renderer/cardFace/cardRasterDeck.ts",
-      "line": 81,
-      "endLine": 93
+      "line": 72,
+      "endLine": 84
     },
     {
       "id": "symbol:src/renderer/cardFace/cardRasterDeck.ts#rasterDeckPairKeyForSlot",
       "name": "rasterDeckPairKeyForSlot",
       "kind": "value",
       "file": "src/renderer/cardFace/cardRasterDeck.ts",
-      "line": 34,
-      "endLine": 37
+      "line": 25,
+      "endLine": 28
     },
     {
       "id": "symbol:src/renderer/cardFace/facePanelRasterUrls.ts#ALL_FACE_PANEL_URLS_ORDERED",
@@ -34294,6 +34318,30 @@
       "file": "src/renderer/cardFace/resolveCardIllustrationUrl.ts",
       "line": 18,
       "endLine": 48
+    },
+    {
+      "id": "symbol:src/renderer/cardFace/staticCardTextureSize.ts#getStaticCardTexturePixelSize",
+      "name": "getStaticCardTexturePixelSize",
+      "kind": "value",
+      "file": "src/renderer/cardFace/staticCardTextureSize.ts",
+      "line": 28,
+      "endLine": 31
+    },
+    {
+      "id": "symbol:src/renderer/cardFace/staticCardTextureSize.ts#STATIC_CARD_TEXTURE_HEIGHT",
+      "name": "STATIC_CARD_TEXTURE_HEIGHT",
+      "kind": "value",
+      "file": "src/renderer/cardFace/staticCardTextureSize.ts",
+      "line": 20,
+      "endLine": 20
+    },
+    {
+      "id": "symbol:src/renderer/cardFace/staticCardTextureSize.ts#STATIC_CARD_TEXTURE_WIDTH",
+      "name": "STATIC_CARD_TEXTURE_WIDTH",
+      "kind": "value",
+      "file": "src/renderer/cardFace/staticCardTextureSize.ts",
+      "line": 22,
+      "endLine": 25
     },
     {
       "id": "symbol:src/renderer/cardFace/svgMarkup.ts#svgLinearGradientDef",
@@ -38276,272 +38324,264 @@
       "name": "applyAnisotropyToCachedTileTextures",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 588,
-      "endLine": 598
+      "line": 584,
+      "endLine": 594
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#clearTileTextureCachesForDebug",
       "name": "clearTileTextureCachesForDebug",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1713,
-      "endLine": 1721
+      "line": 1709,
+      "endLine": 1717
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#CubeFace",
       "name": "CubeFace",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 94,
-      "endLine": 94
+      "line": 97,
+      "endLine": 97
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#CubeLayer",
       "name": "CubeLayer",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 95,
-      "endLine": 95
+      "line": 98,
+      "endLine": 98
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#FaceVariant",
       "name": "FaceVariant",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 47,
-      "endLine": 47
+      "line": 50,
+      "endLine": 50
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#forceIllustrationOverlayCacheVersionForTest",
       "name": "forceIllustrationOverlayCacheVersionForTest",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1725,
-      "endLine": 1727
+      "line": 1721,
+      "endLine": 1723
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#formatTileFaceOverlayRegressionLogLine",
       "name": "formatTileFaceOverlayRegressionLogLine",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1288,
-      "endLine": 1292
+      "line": 1284,
+      "endLine": 1288
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCachedTileTextureKeysForDebug",
       "name": "getCachedTileTextureKeysForDebug",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1723,
-      "endLine": 1723
+      "line": 1719,
+      "endLine": 1719
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardBackRasterNormalMapTexture",
       "name": "getCardBackRasterNormalMapTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 625,
-      "endLine": 637
+      "line": 621,
+      "endLine": 633
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardFaceRasterNormalMapTexture",
       "name": "getCardFaceRasterNormalMapTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 610,
-      "endLine": 622
+      "line": 606,
+      "endLine": 618
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardFaceStaticTexture",
       "name": "getCardFaceStaticTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1666,
-      "endLine": 1683
+      "line": 1662,
+      "endLine": 1679
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardPanelDisplacementTexture",
       "name": "getCardPanelDisplacementTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 723,
-      "endLine": 740
+      "line": 719,
+      "endLine": 736
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardPanelNormalTexture",
       "name": "getCardPanelNormalTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 670,
-      "endLine": 687
+      "line": 666,
+      "endLine": 683
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getIllustrationPipelineDebugState",
       "name": "getIllustrationPipelineDebugState",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1729,
-      "endLine": 1737
+      "line": 1725,
+      "endLine": 1733
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getOverlayPrewarmDebugState",
       "name": "getOverlayPrewarmDebugState",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1708,
-      "endLine": 1711
+      "line": 1704,
+      "endLine": 1707
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getOverlayTextureCacheDebugState",
       "name": "getOverlayTextureCacheDebugState",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1693,
-      "endLine": 1706
-    },
-    {
-      "id": "symbol:src/renderer/components/tileTextures.ts#getStaticCardTexturePixelSize",
-      "name": "getStaticCardTexturePixelSize",
-      "kind": "value",
-      "file": "src/renderer/components/tileTextures.ts",
-      "line": 110,
-      "endLine": 113
+      "line": 1689,
+      "endLine": 1702
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getTileFaceOverlayRegressionStamp",
       "name": "getTileFaceOverlayRegressionStamp",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1270,
-      "endLine": 1286
+      "line": 1266,
+      "endLine": 1282
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getTileFaceOverlayTexture",
       "name": "getTileFaceOverlayTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1434,
-      "endLine": 1448
+      "line": 1430,
+      "endLine": 1444
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getTileFaceOverlayTextureCacheKey",
       "name": "getTileFaceOverlayTextureCacheKey",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1264,
-      "endLine": 1268
+      "line": 1260,
+      "endLine": 1264
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getTileFaceRoughnessTexture",
       "name": "getTileFaceRoughnessTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1422,
-      "endLine": 1432
+      "line": 1418,
+      "endLine": 1428
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getTileFaceTexture",
       "name": "getTileFaceTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1408,
-      "endLine": 1420
+      "line": 1404,
+      "endLine": 1416
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#invalidateVersionedTileFaceTextureCaches",
       "name": "invalidateVersionedTileFaceTextureCaches",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 260,
-      "endLine": 268
+      "line": 256,
+      "endLine": 264
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#OverlayPrewarmDebugState",
       "name": "OverlayPrewarmDebugState",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 80,
-      "endLine": 89
+      "line": 83,
+      "endLine": 92
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#preloadTileTextureImages",
       "name": "preloadTileTextureImages",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 400,
-      "endLine": 406
+      "line": 396,
+      "endLine": 402
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#prewarmTileFaceOverlayTextures",
       "name": "prewarmTileFaceOverlayTextures",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1495,
-      "endLine": 1573
+      "line": 1491,
+      "endLine": 1569
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#resetDemandDrivenOverlayPrewarmForTest",
       "name": "resetDemandDrivenOverlayPrewarmForTest",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1660,
-      "endLine": 1664
+      "line": 1656,
+      "endLine": 1660
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#runDemandDrivenTileFaceOverlayPrewarmSession",
       "name": "runDemandDrivenTileFaceOverlayPrewarmSession",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1627,
-      "endLine": 1657
+      "line": 1623,
+      "endLine": 1653
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#setTileTextureSamplingQuality",
       "name": "setTileTextureSamplingQuality",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 128,
-      "endLine": 147
+      "line": 124,
+      "endLine": 143
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#subscribeTextureImageUpdates",
       "name": "subscribeTextureImageUpdates",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1685,
-      "endLine": 1691
+      "line": 1681,
+      "endLine": 1687
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#TILE_TEXTURE_IMAGE_IDS",
       "name": "TILE_TEXTURE_IMAGE_IDS",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 287,
-      "endLine": 295
+      "line": 283,
+      "endLine": 291
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#TileFace",
       "name": "TileFace",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 48,
-      "endLine": 48
+      "line": 51,
+      "endLine": 51
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#TileFaceOverlayRegressionStamp",
       "name": "TileFaceOverlayRegressionStamp",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 70,
-      "endLine": 78
+      "line": 73,
+      "endLine": 81
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#TileLayer",
       "name": "TileLayer",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 49,
-      "endLine": 49
+      "line": 52,
+      "endLine": 52
     },
     {
       "id": "symbol:src/renderer/components/TutorialPairMarkerPlane.tsx#TutorialPairMarkerPlane",
@@ -58876,6 +58916,24 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/cardFace/staticCardTextureSize.ts->symbol:src/renderer/cardFace/staticCardTextureSize.ts#getStaticCardTexturePixelSize",
+      "source": "file:src/renderer/cardFace/staticCardTextureSize.ts",
+      "target": "symbol:src/renderer/cardFace/staticCardTextureSize.ts#getStaticCardTexturePixelSize",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/cardFace/staticCardTextureSize.ts->symbol:src/renderer/cardFace/staticCardTextureSize.ts#STATIC_CARD_TEXTURE_HEIGHT",
+      "source": "file:src/renderer/cardFace/staticCardTextureSize.ts",
+      "target": "symbol:src/renderer/cardFace/staticCardTextureSize.ts#STATIC_CARD_TEXTURE_HEIGHT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/cardFace/staticCardTextureSize.ts->symbol:src/renderer/cardFace/staticCardTextureSize.ts#STATIC_CARD_TEXTURE_WIDTH",
+      "source": "file:src/renderer/cardFace/staticCardTextureSize.ts",
+      "target": "symbol:src/renderer/cardFace/staticCardTextureSize.ts#STATIC_CARD_TEXTURE_WIDTH",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/cardFace/svgMarkup.ts->symbol:src/renderer/cardFace/svgMarkup.ts#svgLinearGradientDef",
       "source": "file:src/renderer/cardFace/svgMarkup.ts",
       "target": "symbol:src/renderer/cardFace/svgMarkup.ts#svgLinearGradientDef",
@@ -61951,12 +62009,6 @@
       "id": "exports:src/renderer/components/tileTextures.ts->symbol:src/renderer/components/tileTextures.ts#getOverlayTextureCacheDebugState",
       "source": "file:src/renderer/components/tileTextures.ts",
       "target": "symbol:src/renderer/components/tileTextures.ts#getOverlayTextureCacheDebugState",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/tileTextures.ts->symbol:src/renderer/components/tileTextures.ts#getStaticCardTexturePixelSize",
-      "source": "file:src/renderer/components/tileTextures.ts",
-      "target": "symbol:src/renderer/components/tileTextures.ts#getStaticCardTexturePixelSize",
       "kind": "exports"
     },
     {
@@ -75576,15 +75628,15 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/cardFace/cardRasterDeck.ts->src/renderer/components/gameplayVisualConfig.ts",
+      "id": "imports:src/renderer/cardFace/cardRasterDeck.ts->src/renderer/cardFace/staticCardTextureSize.ts",
       "source": "file:src/renderer/cardFace/cardRasterDeck.ts",
-      "target": "file:src/renderer/components/gameplayVisualConfig.ts",
+      "target": "file:src/renderer/cardFace/staticCardTextureSize.ts",
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/cardFace/cardRasterDeck.ts->src/renderer/components/tileShatter.ts",
+      "id": "imports:src/renderer/cardFace/cardRasterDeck.ts->src/renderer/components/gameplayVisualConfig.ts",
       "source": "file:src/renderer/cardFace/cardRasterDeck.ts",
-      "target": "file:src/renderer/components/tileShatter.ts",
+      "target": "file:src/renderer/components/gameplayVisualConfig.ts",
       "kind": "imports"
     },
     {
@@ -75855,6 +75907,12 @@
       "id": "imports:src/renderer/cardFace/resolveCardIllustrationUrl.ts->src/shared/hashPairKey.ts",
       "source": "file:src/renderer/cardFace/resolveCardIllustrationUrl.ts",
       "target": "file:src/shared/hashPairKey.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/cardFace/staticCardTextureSize.ts->src/renderer/components/tileShatter.ts",
+      "source": "file:src/renderer/cardFace/staticCardTextureSize.ts",
+      "target": "file:src/renderer/components/tileShatter.ts",
       "kind": "imports"
     },
     {
@@ -80304,6 +80362,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/tileTextures.test.ts->src/renderer/cardFace/staticCardTextureSize.ts",
+      "source": "file:src/renderer/components/tileTextures.test.ts",
+      "target": "file:src/renderer/cardFace/staticCardTextureSize.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/tileTextures.test.ts->src/renderer/components/tileShatter.ts",
       "source": "file:src/renderer/components/tileTextures.test.ts",
       "target": "file:src/renderer/components/tileShatter.ts",
@@ -80394,15 +80458,15 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/tileTextures.ts->src/renderer/components/gameplayVisualConfig.ts",
+      "id": "imports:src/renderer/components/tileTextures.ts->src/renderer/cardFace/staticCardTextureSize.ts",
       "source": "file:src/renderer/components/tileTextures.ts",
-      "target": "file:src/renderer/components/gameplayVisualConfig.ts",
+      "target": "file:src/renderer/cardFace/staticCardTextureSize.ts",
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/tileTextures.ts->src/renderer/components/tileShatter.ts",
+      "id": "imports:src/renderer/components/tileTextures.ts->src/renderer/components/gameplayVisualConfig.ts",
       "source": "file:src/renderer/components/tileTextures.ts",
-      "target": "file:src/renderer/components/tileShatter.ts",
+      "target": "file:src/renderer/components/gameplayVisualConfig.ts",
       "kind": "imports"
     },
     {
@@ -91616,6 +91680,12 @@
       "id": "tested_by:src/renderer/cardFace/resolveCardIllustrationUrl.ts->file:src/renderer/cardFace/resolveCardIllustrationUrl.test.ts",
       "source": "file:src/renderer/cardFace/resolveCardIllustrationUrl.ts",
       "target": "file:src/renderer/cardFace/resolveCardIllustrationUrl.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/cardFace/staticCardTextureSize.ts->file:src/renderer/components/tileTextures.test.ts",
+      "source": "file:src/renderer/cardFace/staticCardTextureSize.ts",
+      "target": "file:src/renderer/components/tileTextures.test.ts",
       "kind": "tested_by"
     },
     {

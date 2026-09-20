@@ -12,18 +12,9 @@ import type { CardFaceOverlayColors } from './cardFaceOverlayPalette';
 import { drawProceduralTarotIllustrationPanel } from './cardIllustrationDraw';
 import { computeIllustrationPixelRect } from './cardIllustrationRect';
 import type { OverlayDrawTier } from './overlayDrawTier';
-import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from '../components/tileShatter';
 import { GAMEPLAY_CARD_VISUALS } from '../components/gameplayVisualConfig';
 import { ILLUSTRATION_GEN_SCHEMA_VERSION } from './proceduralIllustration/illustrationSchemaVersion';
-
-/** Match [`tileTextures.ts`](../components/tileTextures.ts) static overlay canvas dimensions (no import — avoids cycles). */
-const STATIC_CARD_TEXTURE_HEIGHT = 1024;
-const STATIC_CARD_TEXTURE_WIDTH = Math.max(2, Math.round(STATIC_CARD_TEXTURE_HEIGHT * (CARD_PLANE_WIDTH / CARD_PLANE_HEIGHT)));
-
-const getStaticCardTexturePixelSizeLocal = (): { width: number; height: number } => ({
-    width: STATIC_CARD_TEXTURE_WIDTH,
-    height: STATIC_CARD_TEXTURE_HEIGHT
-});
+import { getStaticCardTexturePixelSize } from './staticCardTextureSize';
 
 export const CARD_RASTER_SLOT_COUNT = 30;
 
@@ -131,7 +122,7 @@ export const drawRasterDeckComposedOverlay = (
 
 /** Panel dimensions for the current static card texture size (matches overlay illustration rect). */
 export const getRasterDeckPanelPixelSize = (): { width: number; height: number } => {
-    const { height: ch, width: cw } = getStaticCardTexturePixelSizeLocal();
+    const { height: ch, width: cw } = getStaticCardTexturePixelSize();
     const rect = computeIllustrationPixelRect(cw, ch);
     return { width: rect.width, height: rect.height };
 };

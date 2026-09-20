@@ -1,4 +1,5 @@
 import type { Tile } from '../../shared/contracts';
+import { getStaticCardTexturePixelSize } from '../cardFace/staticCardTextureSize';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { installCanvas2dMock } from '../../test/installCanvas2dMock';
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
@@ -6,7 +7,6 @@ import {
     clearTileTextureCachesForDebug,
     forceIllustrationOverlayCacheVersionForTest,
     getIllustrationPipelineDebugState,
-    getStaticCardTexturePixelSize,
     getTileFaceOverlayTexture,
     preloadTileTextureImages,
     prewarmTileFaceOverlayTextures,

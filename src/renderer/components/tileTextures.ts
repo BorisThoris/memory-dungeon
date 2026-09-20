@@ -10,7 +10,6 @@ import {
 } from 'three';
 import type { GraphicsQualityPreset, Tile } from '../../shared/contracts';
 import { RENDERER_THEME } from '../styles/theme';
-import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
 import referenceBackTextureUrl from '../assets/textures/cards/authored-card-back.svg?url';
 import cardBackNormalTextureUrl from '../assets/textures/cards/back-normal.webp';
 import cardFaceTextureUrl from '../assets/textures/cards/front.svg?url';
@@ -36,6 +35,10 @@ import { CARD_ILLUSTRATION_REGISTRY } from '../cardFace/cardIllustrationRegistry
 import { getCardIllustrationImageByUrl } from '../cardFace/cardIllustrationImages';
 import { resolveCardIllustrationUrl } from '../cardFace/resolveCardIllustrationUrl';
 import { drawRasterDeckComposedOverlay, isCardRasterDeckEnabled } from '../cardFace/cardRasterDeck';
+import {
+    STATIC_CARD_TEXTURE_HEIGHT,
+    STATIC_CARD_TEXTURE_WIDTH
+} from '../cardFace/staticCardTextureSize';
 import { computeIllustrationPixelRect } from '../cardFace/cardIllustrationRect';
 import {
     getIllustrationVersionStamp,
@@ -100,17 +103,10 @@ export type CubeLayer = 'shell' | 'core';
  */
 const TEXTURE_SIZE = 512;
 /** Taller canvas for WebGL static card PNGs so 1403×2048 sources aren’t over-downscaled (was 512 — felt cropped/soft). */
-const STATIC_CARD_TEXTURE_HEIGHT = 1024;
-const STATIC_CARD_TEXTURE_WIDTH = Math.max(2, Math.round(STATIC_CARD_TEXTURE_HEIGHT * (CARD_PLANE_WIDTH / CARD_PLANE_HEIGHT)));
+
 
 let tileTextureSamplingQuality: GraphicsQualityPreset = 'medium';
 let lastOverlayTextureQuality: GraphicsQualityPreset | null = null;
-
-/** Regression anchor: static card bitmap dimensions must track `CARD_PLANE_*` in `tileShatter`. */
-export const getStaticCardTexturePixelSize = (): { width: number; height: number } => ({
-    width: STATIC_CARD_TEXTURE_WIDTH,
-    height: STATIC_CARD_TEXTURE_HEIGHT
-});
 
 const applyCanvasTileTextureSampling = (texture: CanvasTexture | Texture, quality: GraphicsQualityPreset): void => {
     if (quality === 'low') {

@@ -78,6 +78,7 @@ test.describe('Procedural illustration regression', () => {
             const illustrationMod = await import('/src/renderer/cardFace/cardIllustrationDraw.ts');
             const paletteMod = await import('/src/renderer/cardFace/cardFaceOverlayPalette.ts');
             const texturesMod = await import('/src/renderer/components/tileTextures.ts');
+            const sizeMod = await import('/src/renderer/cardFace/staticCardTextureSize.ts');
 
             const qualityByTier = {
                 full: 'high',
@@ -97,7 +98,7 @@ test.describe('Procedural illustration regression', () => {
                 return toHex(new Uint8Array(digest));
             };
 
-            const { width, height } = texturesMod.getStaticCardTexturePixelSize();
+            const { width, height } = sizeMod.getStaticCardTexturePixelSize();
             const palette = paletteMod.getCardFaceOverlayColors('active');
             const hashes: Record<string, string> = {};
             const regressionStamps: unknown[] = [];
