@@ -55,6 +55,7 @@ import TileBoardScene, { type TileBoardSceneHandle, type TileHoverTiltState } fr
 import { getResolvingSelectionState } from './tileResolvingSelection';
 import { DUNGEON_BOARD_STAGE_LAYER_POLICY, DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET } from './tileBoardStageLayers';
 import {
+    isBoardViewportAtRest,
     COMPACT_BOARD_FIT_MARGIN,
     getCameraFitMargin,
     ROOMY_BOARD_FIT_MARGIN,
@@ -417,6 +418,8 @@ interface TileBoardProps {
     stickyBlockedTileId?: string | null;
     /** Fired once the board has finished prestage/deal-in and is stable enough to begin memorize timing. */
     onMemorizeBoardReady?: (boardKey: string) => void;
+    /** Whether the board sits in its fitted frame (no zoom, no pan); the dock's Fit tool listens. */
+    onViewportRestChange?: (atRest: boolean) => void;
 }
 
 interface StageWorldViewport {
@@ -463,12 +466,20 @@ const BOARD_MARKER_ROUTE_GLYPH_CONTRACT = CARD_FEEDBACK_ROUTE_GLYPH_CONTRACT;
 
 const PRELOAD_READY_TIMEOUT_MS = 320;
 
+/**
+ * A label and its rows as one spoken paragraph. A row that already ends a sentence keeps its own
+ * stop: the preview lines do ("...Clean reaches no further here."), and adding another made the
+ * chip's accessible name end in "..".
+ */
 const formatBoardFeedbackLabel = (
     label: string,
     rows: readonly (string | null | undefined)[]
 ): string => {
-    const rowCopy = rows.filter((row): row is string => Boolean(row)).join('. ');
-    return rowCopy ? `${label}. ${rowCopy}.` : label;
+    const sentences = rows
+        .filter((row): row is string => Boolean(row))
+        .map((row) => row.trim())
+        .map((row) => (/[.!?]$/u.test(row) ? row : `${row}.`));
+    return sentences.length > 0 ? `${label}. ${sentences.join(' ')}` : label;
 };
 
 
@@ -669,7 +680,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         pinModeBoardHintActive = false,
         shuffleSfxGain = 1,
         stickyBlockedTileId = null,
-        onMemorizeBoardReady
+        onMemorizeBoardReady,
+        onViewportRestChange
     },
     ref
 ) {
@@ -2458,6 +2470,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     }, [setStageWorldViewport]);
 
     useEffect(() => {
+        onViewportRestChange?.(isBoardViewportAtRest(renderedViewportState));
+    }, [onViewportRestChange, renderedViewportState]);
+
+    useEffect(() => {
         viewportStateRef.current = renderedViewportState;
         viewportMetricsRef.current = {
             boardHeight: boardWorldHeight,
@@ -3384,14 +3400,16 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         <small>{focusedPreviewChip.eyebrow}</small>
                                         <b>{traitPreviewSummaryLabel}</b>
                                     </span>
-                                    <span className={styles.traitPreviewSignal}>
-                                        {focusedPreviewChip.kind === 'pickup' ? 'Reward' : 'Combo'}
-                                        {previewDensity > 0
-                                            ? focusedPreviewChip.kind === 'trait'
+                                    {/* The signal pill says how much is lit. With nothing lit it only
+                                        repeated the summary's word one line down, so it waits. */}
+                                    {previewDensity > 0 ? (
+                                        <span className={styles.traitPreviewSignal}>
+                                            {focusedPreviewChip.kind === 'pickup' ? 'Reward' : 'Combo'}
+                                            {focusedPreviewChip.kind === 'trait'
                                                 ? ` · ${previewDensity} ${previewDensity === 1 ? 'combo card' : 'combo cards'} lit`
-                                                : ` · ${previewDensity} ${previewDensity === 1 ? 'route' : 'routes'} lit`
-                                            : ''}
-                                    </span>
+                                                : ` · ${previewDensity} ${previewDensity === 1 ? 'route' : 'routes'} lit`}
+                                        </span>
+                                    ) : null}
                                     <b className={styles.traitPreviewAction}>{focusedPreviewChip.action}</b>
                                     {focusedPreviewChip.lines.map((line, index) => (
                                         <span

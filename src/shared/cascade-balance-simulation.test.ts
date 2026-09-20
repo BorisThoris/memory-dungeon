@@ -56,10 +56,12 @@ const MISS_RATES = [0, 0.1, CASCADE_BALANCE_BANDS.referenceMissRate];
 describe('the cascade, measured', () => {
     const report = runCascadeBalanceSimulation({ seeds: SEEDS, floors: FLOORS, missRates: MISS_RATES });
 
+    // The only case that runs the whole simulation a second time; under a full parallel run on
+    // a loaded machine it passed the 10s default while the report itself is deterministic.
     it('is the same report on a replay', () => {
         const again = runCascadeBalanceSimulation({ seeds: SEEDS, floors: FLOORS, missRates: MISS_RATES });
         expect(again.bands).toEqual(report.bands);
-    });
+    }, 60_000);
 
     it('never leaves a floor stuck at any miss rate, and a clean player clears every one', () => {
         for (const band of report.bands) {

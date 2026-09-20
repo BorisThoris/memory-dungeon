@@ -16,7 +16,7 @@ export type SettingsSubsection =
 
 export const SETTINGS_CATEGORIES: ReadonlyArray<{ id: SettingsCategory; label: string; note: string }> = [
     { id: 'gameplay', label: 'Gameplay', note: 'Run rules, board flow, and helper systems.' },
-    { id: 'controls', label: 'Controls', note: 'Input reference and future tuning (UI-only).' },
+    { id: 'controls', label: 'Controls', note: 'How to play with pointer, touch, or pad, and tuning still to come.' },
     { id: 'audio', label: 'Audio', note: 'Master, music, and effect mix.' },
     { id: 'video', label: 'Video', note: 'Display mode and interface scale.' },
     { id: 'accessibility', label: 'Accessibility', note: 'Motion, clarity, and tutorial support.' },

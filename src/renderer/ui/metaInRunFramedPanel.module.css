@@ -1,19 +1,14 @@
 /**
- * Surfaces for Panel children inside MetaFrame when stacked on gameplay.
- * MetaFrame stamps `data-meta-framed` so Panel strips default rim; these classes restore a readable plate.
+ * Surfaces for Panel children stacked on gameplay: the same ruled region as anywhere else,
+ * on solid ink so the board underneath does not show through the text.
  */
 .inRunHeroPanel,
 .inRunPanel {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
-    background:
-        linear-gradient(180deg, rgba(255, 243, 217, 0.03), transparent 48%),
-        color-mix(in srgb, var(--theme-void) 36%, transparent);
-    box-shadow: var(--theme-elevation-card);
+    border-color: var(--margin-hairline);
+    background: color-mix(in srgb, var(--margin-ink) 92%, transparent);
+    box-shadow: none;
 }
 
 .inRunHeroPanel {
-    background:
-        radial-gradient(ellipse 110% 68% at 50% 0%, rgba(255, 232, 190, 0.04), transparent 56%),
-        linear-gradient(180deg, rgba(255, 243, 217, 0.035), transparent 42%),
-        color-mix(in srgb, var(--theme-void) 32%, transparent);
+    border-color: var(--margin-rule);
 }

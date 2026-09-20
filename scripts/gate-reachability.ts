@@ -35,7 +35,14 @@ export const STANDALONE_GATES: Record<string, string> = {
         'The 250-floor, 64-seed stress variant of gate:sim-softlock-seeds, which fullcheck already runs at release scale.',
     'gate:softlock-full':
         'The multi-hour stress variant of gate:sim-softlock-seeds, which fullcheck already runs at release scale.',
-    'test:e2e:startup': 'Needs a dev server and a browser; run before packaging rather than on every change.'
+    'test:e2e:startup': 'Needs a dev server and a browser; run before packaging rather than on every change.',
+    /* The portfolio meta toolkit. The pre-push hook (.githooks/pre-push) runs the icon and card
+       checks on every push and the project-meta workflow runs the metadata check on CI; they
+       compare generated files against scripts/project-meta.config.mjs rather than test the game. */
+    'icons:check': 'Run by the pre-push hook on every push; checks the generated icon set against the config.',
+    'social:check': 'Run by the pre-push hook on every push; checks the link-preview card against the config.',
+    'meta:check':
+        'Run by the project-meta workflow on CI, and warns in the pre-push hook; project.meta.json moves with every commit, so it is refreshed on release rather than gated locally.'
 };
 
 /**

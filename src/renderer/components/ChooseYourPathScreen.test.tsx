@@ -3,9 +3,8 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { getMutatorCatalogRows } from '../../shared/game-catalog';
-import { RUN_MODE_CATALOG, RUN_MODE_GROUP_LABEL } from '../../shared/run-mode-catalog';
+import { RUN_MODE_CATALOG } from '../../shared/run-mode-catalog';
 
-const escapeForRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
 import ChooseYourPathScreen from './ChooseYourPathScreen';
 import { buildMeditationPickMutatorRows } from './chooseYourPathScreenModel';
 
@@ -64,19 +63,19 @@ describe('ChooseYourPathScreen', () => {
         expect(storeSpies.startRun).toHaveBeenCalledTimes(1);
     });
 
-    it('says how much of the library the filters left, since the grid only shows a page of it', async () => {
-        const user = userEvent.setup();
+
+    it('shows every alternate mode directly without filters for a one-item library', () => {
         render(<ChooseYourPathScreen />);
-
-        const count = screen.getByTestId('choose-path-mode-count');
-        const total = Number(count.textContent?.match(/of (\d+)/u)?.[1]);
-        expect(total).toBeGreaterThan(0);
-        expect(count).toHaveTextContent(new RegExp(`^${total} of ${total} modes$`, 'u'));
-
-        await user.type(screen.getByLabelText(/filter modes/i), 'nothing matches this');
-        expect(screen.getByTestId('choose-path-mode-count')).toHaveTextContent(`0 of ${total} modes`);
+        expect(screen.queryByRole('searchbox')).not.toBeInTheDocument();
+        expect(screen.queryByRole('group', { name: /narrow by kind/i })).not.toBeInTheDocument();
+        expect(screen.queryByTestId('choose-path-mode-count')).not.toBeInTheDocument();
+        const browse = screen.getByRole('region', { name: /browse modes/i });
+        for (const mode of RUN_MODE_CATALOG.filter((entry) => entry.id !== 'classic')) {
+            expect(within(browse).getByRole('button', { name: `${mode.title}. Open details.` })).toBeInTheDocument();
+        }
+        expect(screen.getByTestId('choose-path-first-run-beats')).toHaveTextContent('Clean → Sharp → Fever');
+        expect(screen.queryByText(/Safe, Greed, or Mystery/i)).not.toBeInTheDocument();
     });
-
     it('plays a run someone pasted, whole sentence and all', async () => {
         const user = userEvent.setup();
         render(<ChooseYourPathScreen />);
@@ -106,83 +105,8 @@ describe('ChooseYourPathScreen', () => {
 
 
 
-    it('reaches every mode from the group chips too, for a player who does not know a name', async () => {
-        // The filter answers "show me Pin vow". The chips answer "show me a puzzle", which is the
-        // question someone browsing actually has, and between them no mode is stranded on page 3.
-        const user = userEvent.setup();
-        render(<ChooseYourPathScreen />);
 
-        const launcher = screen.getByRole('region', { name: /recommended run/i });
-        const launchTitle = within(launcher).getByRole('heading', { level: 2 }).textContent?.trim() ?? '';
-        const chips = screen.getByRole('group', { name: /narrow by kind/i });
-        const browse = screen.getByRole('region', { name: /browse modes/i });
 
-        const unreachable: string[] = [];
-        for (const def of RUN_MODE_CATALOG.filter((mode) => mode.title !== launchTitle)) {
-            // Back to All first: a second press on the chip already held is a deselect, and this
-            // loop walks consecutive modes that share a group.
-            await user.click(within(chips).getByRole('button', { name: /^All/iu }));
-            await user.click(within(chips).getByRole('button', { name: new RegExp(`^${RUN_MODE_GROUP_LABEL[def.group]}`, 'iu') }));
-            const tile = within(browse).queryAllByRole('button', {
-                name: new RegExp(`^${escapeForRegExp(def.title)}\\. Open details\\.$`, 'iu')
-            });
-            if (tile.length === 0) {
-                unreachable.push(def.id);
-            }
-        }
-        expect(unreachable, 'catalog modes no group chip surfaces').toEqual([]);
-    });
-
-    it('counts what each chip holds, and adds up to the whole library', async () => {
-        const user = userEvent.setup();
-        render(<ChooseYourPathScreen />);
-
-        const chips = screen.getByRole('group', { name: /narrow by kind/i });
-        const all = within(chips).getByRole('button', { name: /^All/iu });
-        const total = Number(all.textContent?.replace(/\D/gu, ''));
-        const perGroup = within(chips)
-            .getAllByRole('button')
-            .filter((button) => button !== all)
-            .map((button) => Number(button.textContent?.replace(/\D/gu, '')));
-        expect(perGroup.reduce((sum, n) => sum + n, 0)).toBe(total);
-
-        // Pressing a chip twice returns to the whole library rather than stranding the player.
-        const first = within(chips).getAllByRole('button').filter((button) => button !== all)[0]!;
-        await user.click(first);
-        expect(first).toHaveAttribute('aria-pressed', 'true');
-        await user.click(first);
-        expect(all).toHaveAttribute('aria-pressed', 'true');
-    });
-
-    it('lets a player reach every catalog mode through the filter, paged grid or not', async () => {
-        // The browse grid is paged, so "is the tile on screen right now" is the wrong question: the
-        // filter is how a player asks for a mode by name. Every mode the catalog declares has to
-        // come back from it, or the mode is content nothing can start.
-        const user = userEvent.setup();
-        render(<ChooseYourPathScreen />);
-
-        // The one mode that is never in the browse grid is the one already on the launcher, which
-        // is reachable in one click instead. Which mode that is depends on the profile, so read it
-        // off the launcher rather than hardcoding a title.
-        const launcher = screen.getByRole('region', { name: /recommended run/i });
-        const launchTitle = within(launcher).getByRole('heading', { level: 2 }).textContent?.trim() ?? '';
-        expect(within(launcher).getByRole('button', { name: /^start run$/i })).toBeInTheDocument();
-
-        const browse = screen.getByRole('region', { name: /browse modes/i });
-        const filter = screen.getByLabelText(/filter modes/i);
-        const unreachable: string[] = [];
-        for (const def of RUN_MODE_CATALOG.filter((mode) => mode.title !== launchTitle)) {
-            await user.clear(filter);
-            await user.type(filter, def.title);
-            const tile = within(browse).queryAllByRole('button', {
-                name: new RegExp(`^${escapeForRegExp(def.title)}\\. Open details\\.$`, 'iu')
-            });
-            if (tile.length === 0) {
-                unreachable.push(def.id);
-            }
-        }
-        expect(unreachable, 'catalog modes the filter cannot surface').toEqual([]);
-    });
 
     it('states each browse mode once: group, title, one description, locked tag where it applies', () => {
         render(<ChooseYourPathScreen />);
@@ -194,18 +118,6 @@ describe('ChooseYourPathScreen', () => {
         expect(browse).not.toHaveTextContent(/launch loop|chain leads|read pressure|chase reward/i);
     });
 
-    it('filters the library by title or description', async () => {
-        const user = userEvent.setup();
-        render(<ChooseYourPathScreen />);
-
-        await user.type(screen.getByRole('searchbox', { name: /filter modes/i }), 'device');
-        const browse = screen.getByRole('region', { name: /browse modes/i });
-        expect(within(browse).getByRole('button', { name: /^Pass and Play\. Open details\.$/i })).toBeInTheDocument();
-
-        await user.clear(screen.getByRole('searchbox', { name: /filter modes/i }));
-        await user.type(screen.getByRole('searchbox', { name: /filter modes/i }), 'nothing matches this');
-        expect(within(browse).queryByRole('button', { name: /^Pass and Play\. Open details\.$/i })).not.toBeInTheDocument();
-    });
 
     it('opens a mode in the detail modal and plays it from there', async () => {
         const user = userEvent.setup();

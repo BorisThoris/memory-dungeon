@@ -4,34 +4,34 @@ import { getChainMilestoneFeedback } from './chainMilestoneFeedback';
 describe('getChainMilestoneFeedback', () => {
     it('returns actionized feedback when crossing milestone tiers', () => {
         expect(getChainMilestoneFeedback(2, 3)).toEqual({
-            action: 'Start chain',
+            action: 'Hold the chain',
             audioCue: 'chain-start-ping',
             beatCount: 3,
-            label: 'Chain started',
+            label: 'Clean reached',
             screenCue: 'reward-loop',
             target: 'x3',
             tone: 'chain',
-            value: 'Reward loop online'
+            value: 'Breaks reach deeper into the clump'
         });
         expect(getChainMilestoneFeedback(5, 6)).toEqual({
-            action: 'Push surge',
+            action: 'Carry it into the next clump',
             audioCue: 'surge-hit-ping',
             beatCount: 4,
-            label: 'Surge hit',
+            label: 'Sharp reached',
             screenCue: 'surge-live',
             target: 'x6',
             tone: 'surge',
-            value: 'Surge tier live'
+            value: 'Breaks chain into the next clump'
         });
         expect(getChainMilestoneFeedback(9, 10)).toEqual({
-            action: 'Hold combo',
+            action: 'Keep the fire',
             audioCue: 'combo-hit-ping',
             beatCount: 5,
-            label: 'Combo hit',
+            label: 'Fever reached',
             screenCue: 'combo-live',
             target: 'x10',
             tone: 'combo',
-            value: 'Combo tier live'
+            value: 'Breaks chain into three clumps'
         });
     });
 

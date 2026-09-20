@@ -22,7 +22,6 @@ import {
     resumeUiSfxContext,
     uiSfxGainFromSettings
 } from '../audio/uiSfx';
-import { FittedGrid, Eyebrow, ScreenTitle, UiButton } from '../ui';
 import { useAppStore } from '../store/useAppStore';
 import OverlayModal from './OverlayModal';
 import styles from './ChooseYourPathScreen.module.css';
@@ -30,14 +29,21 @@ import { CHOOSE_YOUR_PATH_COPY, CLASSIC_SETUP_COPY } from '../copy/screenCopy';
 import { DEFAULT_CLASSIC_RUN_SETUP, type ClassicRunSetup } from '../../shared/classic-run-setup';
 
 /**
- * Mode select. One recommended run a new player can start in one click, and a library of
- * the rest. Each mode states what it is once: a group label, a title, one sentence. The
- * detail modal carries everything else on demand.
+ * Mode select as the first chapter page of the book the run is set in ("The Margin"): the
+ * chapter title on one side, the roads down on the other as a numbered ladder with leader
+ * rules — the recommended run first and in gold, opened out with its summary, its first-run
+ * beats and its two actions; the rest of the library as one line each; and a shared run as
+ * the last entry, a field to paste a key into. Each mode states what it is once; the detail
+ * dialog carries everything else on demand.
  */
+
+const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII'] as const;
+
+const numeral = (index: number): string => NUMERALS[index] ?? String(index + 1);
 
 const BackChevron = (): ReactElement => (
     <svg aria-hidden="true" className={styles.chevron} fill="none" viewBox="0 0 24 24">
-        <path d="M15 6l-6 6 6 6" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" />
+        <path d="M15 6l-6 6 6 6" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
     </svg>
 );
 
@@ -112,10 +118,9 @@ const ChooseYourPathScreen = (): ReactElement => {
         [heroModes, launchMode?.id]
     );
     /*
-     * The grid pages, and a 1440x900 screen fits four cards, so eleven of the twelve modes were
-     * behind Next presses a player had no reason to make. The catalog already sorts every mode into
-     * a group; these chips make that taxonomy the way you narrow the library, so the kind of run
-     * you want is one click away instead of three pages deep.
+     * The catalog sorts every mode into a group; when the library is long these chips make that
+     * taxonomy the way you narrow it, so the kind of run you want is one click away. A library
+     * of one line needs neither the chips nor the search and prints without them.
      */
     const groupCounts = useMemo(() => {
         const counts = new Map<RunModeGroup, number>();
@@ -135,6 +140,7 @@ const ChooseYourPathScreen = (): ReactElement => {
         );
     }, [browseModes, group, query]);
     const gateRows = useMemo(() => getChallengeModeGateRows(saveData), [saveData]);
+    const hasLibrary = browseModes.length > 1;
 
     const runModeAction = useCallback(
         (def: RunModeDefinition): void => {
@@ -208,77 +214,78 @@ const ChooseYourPathScreen = (): ReactElement => {
         ];
     };
 
+    /* Entry I: the recommended run, opened out — summary, first-run beats, Start and its door. */
     const renderLaunch = (def: RunModeDefinition): ReactElement => {
         const freshClassic = def.id === 'classic' && !saveData.onboardingDismissed;
         const canStart = def.availability === 'available';
         return (
             <section aria-label="Recommended run" className={styles.launch} data-testid="choose-path-launcher">
-                <img alt="" className={styles.launchPoster} src={resolveModePosterUrl(def.posterKey)} />
+                <div className={styles.launchLine}>
+                    <span className={styles.numeral}>{numeral(0)}</span>
+                    <h2 className={styles.launchTitle}>{def.title}</h2>
+                    <span aria-hidden="true" className={styles.leader} />
+                    <span className={styles.launchNote}>Recommended</span>
+                </div>
                 <div className={styles.launchBody}>
-                    <Eyebrow tone="menu">Recommended</Eyebrow>
-                    <ScreenTitle as="h2" className={styles.launchTitle} role="screenMd">
-                        {def.title}
-                    </ScreenTitle>
                     <p className={styles.launchSummary}>{launchSummary(def, freshClassic)}</p>
                     {freshClassic ? (
                         <ol className={styles.beats} data-testid="choose-path-first-run-beats">
-                            <li>Match the marked pair.</li>
-                            <li>Clear the room for score and streak.</li>
-                            <li>Pick Safe, Greed, or Mystery for room two.</li>
+                            <li>Remember the symbols, then find a pair.</li>
+                            <li>Match beside a clump to set off a cascade.</li>
+                            <li>Build momentum: Clean → Sharp → Fever.</li>
                         </ol>
                     ) : null}
                     <div className={styles.launchActions}>
-                        <UiButton
-                            className={styles.launchPrimary}
+                        <button
+                            className={`${styles.word} ${styles.wordGold}`}
                             disabled={!canStart}
                             onClick={() => runModeAction(def)}
-                            size="lg"
                             type="button"
-                            variant="primary"
                         >
                             Start run
-                        </UiButton>
+                        </button>
                         {/* The door beside Start, not in front of it: the eight retired preset
                             cards live behind this, and a player who just wants to play never has
                             to open it. */}
                         {def.action.type === 'startRun' ? (
-                            <UiButton
+                            <button
+                                className={styles.word}
                                 onClick={() => {
                                     playOpen();
                                     setSetupOpen(true);
                                 }}
-                                size="lg"
                                 type="button"
-                                variant="secondary"
                             >
                                 {CLASSIC_SETUP_COPY.title}
-                            </UiButton>
+                            </button>
                         ) : null}
-                        <UiButton
-                            aria-controls="choose-path-more-modes"
-                            aria-expanded={browseOpen}
-                            onClick={() => {
-                                playClick();
-                                setBrowseOpen((open) => !open);
-                            }}
-                            size="lg"
-                            type="button"
-                            variant="secondary"
-                        >
-                            {browseOpen ? 'Hide modes' : 'Browse modes'}
-                        </UiButton>
+                        {hasLibrary ? (
+                            <button
+                                aria-controls="choose-path-more-modes"
+                                aria-expanded={browseOpen}
+                                className={`${styles.word} ${styles.wordQuiet}`}
+                                onClick={() => {
+                                    playClick();
+                                    setBrowseOpen((open) => !open);
+                                }}
+                                type="button"
+                            >
+                                {browseOpen ? 'Hide modes' : 'Browse modes'}
+                            </button>
+                        ) : null}
                     </div>
                 </div>
             </section>
         );
     };
 
-    const renderCard = (def: RunModeDefinition): ReactElement => {
+    /* A library entry: one line of the contents, the whole line the button. */
+    const renderEntry = (def: RunModeDefinition, index: number): ReactElement => {
         const locked = def.availability !== 'available';
         return (
             <button
                 aria-label={`${def.title}. Open details.`}
-                className={`${styles.card} ${locked ? styles.cardLocked : ''}`.trim()}
+                className={`${styles.entry} ${locked ? styles.entryLocked : ''}`.trim()}
                 data-testid={def.testId}
                 key={def.id}
                 onClick={() => {
@@ -289,179 +296,212 @@ const ChooseYourPathScreen = (): ReactElement => {
             >
                 <img
                     alt=""
-                    className={styles.cardPoster}
+                    className={styles.entryPoster}
                     data-mode-art-fallback={isModePosterFallback(def.posterKey) ? 'true' : 'false'}
                     src={resolveModePosterUrl(def.posterKey)}
                 />
-                <span className={styles.cardBody}>
-                    <span className={styles.cardKicker}>{RUN_MODE_GROUP_LABEL[def.group]}</span>
-                    <span className={styles.cardTitle}>{def.title}</span>
-                    <span className={styles.cardDescription}>{def.shortDescription}</span>
-                </span>
-                {locked ? <span className={styles.lockedTag}>In the full game</span> : null}
+                <span className={styles.numeral}>{numeral(index)}</span>
+                <span className={styles.entryTitle}>{def.title}</span>
+                <span aria-hidden="true" className={styles.leader} />
+                <span className={styles.entryNote}>{locked ? 'In the full game' : RUN_MODE_GROUP_LABEL[def.group]}</span>
+                <span className={styles.entryDescription}>{def.shortDescription}</span>
             </button>
         );
     };
 
     const detailGate = detailMode ? gateRows.find((row) => row.modeId === detailMode.id) : null;
+    const sharedEntryIndex = (launchMode ? 1 : 0) + browseModes.length;
 
     return (
         <section aria-label="Choose your path" className={styles.screen} role="region">
-            <div aria-hidden="true" className={styles.scene} data-testid="choose-path-scene-layer" style={{ backgroundImage: `url(${UI_ART.choosePathScene})` }} />
+            {/* The recommended run's poster is the scene behind the page, sunk into the ink as the
+                cathedral is behind the title page; the stage art stands in when there is none. */}
+            <div
+                aria-hidden="true"
+                className={styles.scene}
+                data-testid="choose-path-scene-layer"
+                style={{ backgroundImage: `url(${launchMode ? resolveModePosterUrl(launchMode.posterKey) : UI_ART.choosePathScene})` }}
+            />
             <div aria-hidden="true" className={styles.scrim} />
-            <div className={styles.column}>
-                <header className={styles.header}>
-                    <div className={styles.headerRow}>
-                        <button
-                            className={styles.ghost}
-                            data-testid="choose-path-inline-back"
-                            onClick={() => {
-                                playBack();
-                                closeSubscreen();
-                            }}
-                            type="button"
-                        >
-                            <BackChevron />
-                            <span>Back</span>
-                        </button>
-                        <button
-                            className={styles.ghost}
-                            data-testid="choose-path-settings"
-                            onClick={() => {
-                                playOpen();
-                                openSettings('modeSelect');
-                            }}
-                            type="button"
-                        >
-                            Settings
-                        </button>
-                    </div>
-                    <Eyebrow tone="menu">Start a run</Eyebrow>
-                    <ScreenTitle as="h1" className={styles.title} role="display">
-                        Choose Your Path
-                    </ScreenTitle>
+
+            <div className={styles.page}>
+                {/* The running head: the way back on the left, the settings on the right, one rule. */}
+                <header className={styles.runningHead}>
+                    <button
+                        className={styles.headWord}
+                        data-testid="choose-path-inline-back"
+                        onClick={() => {
+                            playBack();
+                            closeSubscreen();
+                        }}
+                        type="button"
+                    >
+                        <BackChevron />
+                        <span>Back</span>
+                    </button>
+                    <span className={styles.headKicker}>Chapter One</span>
+                    <button
+                        className={styles.headWord}
+                        data-testid="choose-path-settings"
+                        onClick={() => {
+                            playOpen();
+                            openSettings('modeSelect');
+                        }}
+                        type="button"
+                    >
+                        Settings
+                    </button>
                 </header>
 
-                {launchMode ? renderLaunch(launchMode) : null}
+                <div className={styles.spread}>
+                    <div className={styles.titleBlock}>
+                        <p className={styles.eyebrow}>Start a run</p>
+                        <h1 className={styles.title}>
+                            <span>Choose</span>
+                            <span>Your Path</span>
+                        </h1>
+                        <span aria-hidden="true" className={styles.rule} />
+                        <p className={styles.tagline}>Every descent begins with a road taken.</p>
+                    </div>
 
-                {browseOpen ? (
-                    <section
-                        aria-label="Browse modes"
-                        className={styles.browse}
-                        data-testid="choose-path-more-modes"
-                        id="choose-path-more-modes"
-                    >
-                        <div className={styles.browseHead}>
-                            <Eyebrow tone="menu">Browse modes</Eyebrow>
-                            <label className={styles.search}>
-                                <span className={styles.srOnly}>Filter modes</span>
-                                <input
-                                    autoComplete="off"
-                                    id="choose-path-mode-filter"
-                                    onChange={(event) => setQuery(event.target.value)}
-                                    placeholder="Search modes"
-                                    type="search"
-                                    value={query}
-                                />
-                            </label>
-                        </div>
-                        <div
-                            aria-label={CHOOSE_YOUR_PATH_COPY.groupFilterLabel}
-                            className={styles.groupChips}
-                            data-testid="choose-path-group-filter"
-                            role="group"
-                        >
-                            <button
-                                aria-pressed={group === null}
-                                className={`${styles.chip} ${group === null ? styles.chipOn : ''}`.trim()}
-                                onClick={() => {
-                                    playClick();
-                                    setGroup(null);
-                                }}
-                                type="button"
+                    <main className={styles.contents}>
+                        <p className={styles.contentsHead}>The runs</p>
+
+                        {launchMode ? renderLaunch(launchMode) : null}
+
+                        {browseOpen ? (
+                            <section
+                                aria-label="Browse modes"
+                                className={styles.browse}
+                                data-testid="choose-path-more-modes"
+                                id="choose-path-more-modes"
                             >
-                                {CHOOSE_YOUR_PATH_COPY.groupFilterAll}
-                                <span className={styles.chipCount}>{browseModes.length}</span>
-                            </button>
-                            {RUN_MODE_GROUP_ORDER.filter((name) => (groupCounts.get(name) ?? 0) > 0).map((name) => (
-                                <button
-                                    aria-pressed={group === name}
-                                    className={`${styles.chip} ${group === name ? styles.chipOn : ''}`.trim()}
-                                    key={name}
-                                    onClick={() => {
+                                {hasLibrary ? (
+                                    <>
+                                        <div className={styles.browseHead}>
+                                            <label className={styles.search}>
+                                                <span className={styles.srOnly}>Filter modes</span>
+                                                <input
+                                                    autoComplete="off"
+                                                    id="choose-path-mode-filter"
+                                                    onChange={(event) => setQuery(event.target.value)}
+                                                    placeholder="Search modes"
+                                                    type="search"
+                                                    value={query}
+                                                />
+                                            </label>
+                                            <p
+                                                aria-live="polite"
+                                                className={styles.browseCount}
+                                                data-testid="choose-path-mode-count"
+                                            >
+                                                {CHOOSE_YOUR_PATH_COPY.modeCount(visibleModes.length, browseModes.length)}
+                                            </p>
+                                        </div>
+                                        <div
+                                            aria-label={CHOOSE_YOUR_PATH_COPY.groupFilterLabel}
+                                            className={styles.groupChips}
+                                            data-testid="choose-path-group-filter"
+                                            role="group"
+                                        >
+                                            <button
+                                                aria-pressed={group === null}
+                                                className={`${styles.chip} ${group === null ? styles.chipOn : ''}`.trim()}
+                                                onClick={() => {
+                                                    playClick();
+                                                    setGroup(null);
+                                                }}
+                                                type="button"
+                                            >
+                                                {CHOOSE_YOUR_PATH_COPY.groupFilterAll}
+                                                <span className={styles.chipCount}>{browseModes.length}</span>
+                                            </button>
+                                            {RUN_MODE_GROUP_ORDER.filter((name) => (groupCounts.get(name) ?? 0) > 0).map((name) => (
+                                                <button
+                                                    aria-pressed={group === name}
+                                                    className={`${styles.chip} ${group === name ? styles.chipOn : ''}`.trim()}
+                                                    key={name}
+                                                    onClick={() => {
+                                                        playClick();
+                                                        setGroup(group === name ? null : name);
+                                                    }}
+                                                    type="button"
+                                                >
+                                                    {RUN_MODE_GROUP_LABEL[name]}
+                                                    <span className={styles.chipCount}>{groupCounts.get(name)}</span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </>
+                                ) : null}
+
+                                {visibleModes.length > 0 ? (
+                                    <div aria-label="Modes" className={styles.entries} data-testid="choose-path-mode-grid" role="list">
+                                        {visibleModes.map((def, index) => (
+                                            <div key={def.id} role="listitem">
+                                                {renderEntry(def, (launchMode ? 1 : 0) + index)}
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className={styles.empty} data-testid="choose-path-mode-grid">
+                                        {CHOOSE_YOUR_PATH_COPY.noSearchResults}
+                                    </p>
+                                )}
+
+                                {/* The last entry: a run someone else played, pasted in. */}
+                                <form
+                                    className={styles.sharedRun}
+                                    data-testid="choose-path-shared-run"
+                                    onSubmit={(event) => {
+                                        event.preventDefault();
                                         playClick();
-                                        setGroup(group === name ? null : name);
-                                    }}
-                                    type="button"
-                                >
-                                    {RUN_MODE_GROUP_LABEL[name]}
-                                    <span className={styles.chipCount}>{groupCounts.get(name)}</span>
-                                </button>
-                            ))}
-                        </div>
-                        <form
-                            className={styles.sharedRun}
-                            data-testid="choose-path-shared-run"
-                            onSubmit={(event) => {
-                                event.preventDefault();
-                                playClick();
-                                if (!parseRunShareKey(sharedKeyText)) {
-                                    setSharedKeyRejected(true);
-                                    return;
-                                }
-                                setSharedKeyRejected(false);
-                                startSharedRun(sharedKeyText);
-                            }}
-                        >
-                            <label className={styles.sharedRunField}>
-                                <span className={styles.srOnly}>{CHOOSE_YOUR_PATH_COPY.sharedRunLabel}</span>
-                                <input
-                                    autoComplete="off"
-                                    onChange={(event) => {
-                                        setSharedKeyText(event.target.value);
+                                        if (!parseRunShareKey(sharedKeyText)) {
+                                            setSharedKeyRejected(true);
+                                            return;
+                                        }
                                         setSharedKeyRejected(false);
+                                        startSharedRun(sharedKeyText);
                                     }}
-                                    placeholder={CHOOSE_YOUR_PATH_COPY.sharedRunPlaceholder}
-                                    type="text"
-                                    value={sharedKeyText}
-                                />
-                            </label>
-                            <UiButton disabled={sharedKeyText.trim() === ''} size="md" type="submit" variant="secondary">
-                                {CHOOSE_YOUR_PATH_COPY.sharedRunPlay}
-                            </UiButton>
-                            {sharedKeyRejected ? (
-                                <p className={styles.sharedRunError} data-testid="choose-path-shared-run-error" role="alert">
-                                    {CHOOSE_YOUR_PATH_COPY.sharedRunUnreadable}
-                                </p>
-                            ) : null}
-                        </form>
-                        <p
-                            aria-live="polite"
-                            className={styles.browseCount}
-                            data-testid="choose-path-mode-count"
-                        >
-                            {CHOOSE_YOUR_PATH_COPY.modeCount(visibleModes.length, browseModes.length)}
-                        </p>
-                        <FittedGrid
-                            ariaLabel="Modes"
-                            emptyState={CHOOSE_YOUR_PATH_COPY.noSearchResults}
-                            items={visibleModes}
-                            itemNoun="modes"
-                            keyForItem={(def) => def.id}
-                            minColumnWidth={260}
-                            renderItem={(def) => renderCard(def)}
-                            resetKey={`${group ?? 'all'}:${query}`}
-                            rowHeight={152}
-                            testId="choose-path-mode-grid"
-                        />
-                    </section>
-                ) : null}
+                                >
+                                    <span className={styles.numeral}>{numeral(sharedEntryIndex)}</span>
+                                    <span className={styles.entryTitle}>{CHOOSE_YOUR_PATH_COPY.sharedRunLabel}</span>
+                                    <label className={styles.sharedRunField}>
+                                        <span className={styles.srOnly}>{CHOOSE_YOUR_PATH_COPY.sharedRunLabel}</span>
+                                        <input
+                                            autoComplete="off"
+                                            onChange={(event) => {
+                                                setSharedKeyText(event.target.value);
+                                                setSharedKeyRejected(false);
+                                            }}
+                                            placeholder={CHOOSE_YOUR_PATH_COPY.sharedRunPlaceholder}
+                                            type="text"
+                                            value={sharedKeyText}
+                                        />
+                                    </label>
+                                    <button
+                                        className={`${styles.word} ${styles.wordSmall}`}
+                                        disabled={sharedKeyText.trim() === ''}
+                                        type="submit"
+                                    >
+                                        {CHOOSE_YOUR_PATH_COPY.sharedRunPlay}
+                                    </button>
+                                    {sharedKeyRejected ? (
+                                        <p className={styles.sharedRunError} data-testid="choose-path-shared-run-error" role="alert">
+                                            {CHOOSE_YOUR_PATH_COPY.sharedRunUnreadable}
+                                        </p>
+                                    ) : null}
+                                </form>
+                            </section>
+                        ) : null}
+                    </main>
+                </div>
 
                 {/* Built from the scope decision table, not restated here: this line was still
                     promising "share strings only" after same-device play shipped. */}
-                <p className={styles.footnote} data-testid="choose-path-offline-note">
+                <footer className={styles.colophon} data-testid="choose-path-offline-note">
                     {socialScopeNote}
-                </p>
+                </footer>
             </div>
 
             {detailMode ? (
@@ -524,6 +564,7 @@ const ChooseYourPathScreen = (): ReactElement => {
                     subtitle={CLASSIC_SETUP_COPY.subtitle}
                     testId="classic-setup-sheet"
                     title={CLASSIC_SETUP_COPY.title}
+                    wide
                 >
                     <div className={styles.setupGroups}>
                         <fieldset className={styles.setupGroup}>
@@ -546,6 +587,7 @@ const ChooseYourPathScreen = (): ReactElement => {
                                         }
                                         type="checkbox"
                                     />
+                                    <span className={styles.setupMark} aria-hidden="true" />
                                     <span>{label}</span>
                                 </label>
                             ))}
@@ -564,6 +606,7 @@ const ChooseYourPathScreen = (): ReactElement => {
                                     }
                                     type="checkbox"
                                 />
+                                <span className={styles.setupMark} aria-hidden="true" />
                                 <span>{CLASSIC_SETUP_COPY.calmLabel}</span>
                             </label>
                             <label className={styles.setupRow}>
@@ -574,6 +617,7 @@ const ChooseYourPathScreen = (): ReactElement => {
                                     }
                                     type="checkbox"
                                 />
+                                <span className={styles.setupMark} aria-hidden="true" />
                                 <span>{CLASSIC_SETUP_COPY.chaosLabel}</span>
                             </label>
                             <label className={styles.setupRow}>
@@ -584,13 +628,13 @@ const ChooseYourPathScreen = (): ReactElement => {
                                     }
                                     type="checkbox"
                                 />
+                                <span className={styles.setupMark} aria-hidden="true" />
                                 <span>{CLASSIC_SETUP_COPY.unrecordedLabel}</span>
                             </label>
                         </fieldset>
                     </div>
                 </OverlayModal>
             ) : null}
-
         </section>
     );
 };

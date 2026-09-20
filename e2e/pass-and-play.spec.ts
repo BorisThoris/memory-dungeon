@@ -24,12 +24,8 @@ const openPassAndPlay = async (page: import('@playwright/test').Page, seats = 2)
     await mainMenuPlayButton(page).waitFor({ state: 'visible', timeout: 30_000 });
     await mainMenuPlayButton(page).click();
     await page.waitForTimeout(900);
-    /*
-     * Filter rather than hunt. The browse grid is paged to fit without scrollbars, and at 390x844
-     * that is one card per page out of thirteen — a spec that clicks the card by name works at
-     * desktop and waits forever on a phone.
-     */
-    await page.getByRole('searchbox', { name: /filter modes/i }).fill('Pass and Play');
+    // The only alternate mode is visible directly, including on a phone.
+
     await page.waitForTimeout(600);
     await page.getByRole('button', { name: /pass and play/i }).first().click();
     // The card opens a detail sheet; its Play button is scoped to that dialog. An unscoped
@@ -64,6 +60,7 @@ test.describe('pass and play', () => {
             ['hud-seat-seat-2', 'false']
         ]);
 
+        await waitForBoardPlayPhase(page);
         expect(await findUnreachableControls(page), 'pass and play board').toEqual([]);
     });
 
@@ -76,6 +73,7 @@ test.describe('pass and play', () => {
         // most common defect wearing a different hat.
         await expect(page.getByTestId('hud-seat-seat-3')).toBeVisible();
         await expect(page.getByTestId('hud-seat-seat-4')).toHaveCount(0);
+        await waitForBoardPlayPhase(page);
         expect(await findUnreachableControls(page), 'three-seat board').toEqual([]);
     });
 

@@ -10,6 +10,9 @@ import { GAMBIT_KEYBOARD_HELP_TIP } from '../copy/gameplayHints';
 import { PlatformTiltProvider } from '../platformTilt/PlatformTiltProvider';
 import { useAppStore } from '../store/useAppStore';
 import GameScreen, { FLOOR_CLEAR_BEAT_MS, LAST_PAIR_HOLD_MS } from './GameScreen';
+
+/** The beat counts rendered frames (16 ms rAF ticks under fake timers); the first tick only starts the count. */
+const TWO_PAINTED_FRAMES_MS = 3 * 16;
 import {
     getStackCashoutLaneCount,
     getVisualHudAnnouncementFollowup,
@@ -64,6 +67,8 @@ vi.mock('./TileBoard', () => ({
                 armedPerkPayoff?: string | null;
             };
             guidedTargetTileIds?: string[];
+            onViewportRestChange?: (atRest: boolean) => void;
+            viewportResetToken?: number;
             recoveryContext?: {
                 action: string;
                 detail: string;
@@ -125,7 +130,15 @@ vi.mock('./TileBoard', () => ({
                 data-recovery-tone={props.recoveryContext?.tone ?? 'none'}
                 data-recovery-value={props.recoveryContext?.value ?? 'none'}
                 data-testid="tile-board-stub"
-            />
+                data-viewport-reset-token={props.viewportResetToken ?? 0}
+            >
+                {/* Stands in for a pinch or a wheel: the board reports it has left its fitted frame. */}
+                <button
+                    data-testid="tile-board-stub-move-camera"
+                    onClick={() => props.onViewportRestChange?.(false)}
+                    type="button"
+                />
+            </div>
         );
     })
 }));
@@ -246,7 +259,7 @@ describe('GameScreen (OVR-014)', () => {
             expect(continueSpy).not.toHaveBeenCalled();
 
             act(() => {
-                vi.advanceTimersByTime(FLOOR_CLEAR_BEAT_MS + 10);
+                vi.advanceTimersByTime(FLOOR_CLEAR_BEAT_MS + TWO_PAINTED_FRAMES_MS + 10);
             });
             expect(continueSpy).toHaveBeenCalledTimes(1);
         } finally {
@@ -268,7 +281,7 @@ describe('GameScreen (OVR-014)', () => {
             );
             expect(screen.getByTestId('floor-clear-beat')).toBeInTheDocument();
             act(() => {
-                vi.advanceTimersByTime(FLOOR_CLEAR_BEAT_MS + 10);
+                vi.advanceTimersByTime(FLOOR_CLEAR_BEAT_MS + TWO_PAINTED_FRAMES_MS + 10);
             });
             expect(continueSpy).toHaveBeenCalledTimes(1);
         } finally {
@@ -536,7 +549,7 @@ describe('GameScreen (OVR-014)', () => {
             label: 'Chain',
             tone: 'chain'
         });
-        expect(getVisualHudAnnouncementSignal('Surge hit: x6. Surge tier live.', 'info')).toEqual({
+        expect(getVisualHudAnnouncementSignal('Sharp reached: x6. Breaks chain into the next clump.', 'info')).toEqual({
             label: 'Chain',
             tone: 'chain'
         });
@@ -1062,6 +1075,135 @@ describe('GameScreen (OVR-014)', () => {
         } finally {
             vi.useRealTimers();
         }
+    });
+
+    it('offers Fit board on the dock, lit only once the camera has moved', () => {
+        const base = createNewRun(0, { echoFeedbackEnabled: false });
+        const playing = finishMemorizePhase(base);
+        render(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={playing} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        const fit = screen.getByRole('button', { name: /^fit board$/i });
+        expect(fit).toHaveAttribute('data-testid', 'tool-fit');
+        expect(fit).toBeDisabled();
+        expect(fit).toHaveAttribute('title', 'The board already fits the screen');
+
+        act(() => {
+            fireEvent.click(screen.getByTestId('tile-board-stub-move-camera'));
+        });
+        expect(fit).toBeEnabled();
+        expect(fit).toHaveAttribute('title', 'Bring the whole board back on screen');
+
+        const stub = screen.getByTestId('tile-board-stub');
+        expect(stub).toHaveAttribute('data-viewport-reset-token', '0');
+        act(() => {
+            fireEvent.click(fit);
+        });
+        expect(stub).toHaveAttribute('data-viewport-reset-token', '1');
+    });
+
+    describe('floater placement follows the shell layout', () => {
+        const stageRectSpy = () => {
+            const origBound = HTMLElement.prototype.getBoundingClientRect;
+            return vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (
+                this: HTMLElement
+            ) {
+                if (this.getAttribute('data-testid') === 'board-stage') {
+                    return {
+                        left: 10,
+                        top: 20,
+                        width: 1000,
+                        height: 800,
+                        right: 1010,
+                        bottom: 820,
+                        x: 10,
+                        y: 20,
+                        toJSON: () => ({})
+                    } as DOMRect;
+                }
+                return origBound.call(this);
+            });
+        };
+
+        const renderWithViewport = (width: number, height: number) => {
+            const original = { ...viewportSizeMock };
+            viewportSizeMock.width = width;
+            viewportSizeMock.height = height;
+            const base = createNewRun(0, { echoFeedbackEnabled: false });
+            const playing = finishMemorizePhase(base);
+            render(
+                <PlatformTiltProvider>
+                    <NotificationHost>
+                        <GameScreen achievements={[]} run={playing} />
+                    </NotificationHost>
+                </PlatformTiltProvider>
+            );
+            act(() => {
+                useAppStore.setState({
+                    mismatchScorePop: { tileIdA: 'ga', tileIdB: 'gb', key: `layout-${width}x${height}` },
+                    matchScorePop: null
+                });
+            });
+            return () => {
+                viewportSizeMock.width = original.width;
+                viewportSizeMock.height = original.height;
+            };
+        };
+
+        it('rises from above the pair on a phone held upright', () => {
+            const spy = stageRectSpy();
+            vi.useFakeTimers();
+            const restore = renderWithViewport(390, 844);
+            try {
+                expect(screen.getByTestId('game-shell')).toHaveAttribute('data-shell-layout', 'phone-portrait');
+                const floater = screen.getByTestId('mismatch-score-floater');
+                expect(floater).toHaveAttribute('data-floater-placement', 'above-pair');
+                // Tiles top at 220 in the viewport, 200 in the stage: the pair's top edge, not its middle.
+                expect(floater).toHaveStyle({ left: '270px', top: '200px' });
+            } finally {
+                restore();
+                spy.mockRestore();
+                vi.useRealTimers();
+            }
+        });
+
+        it('docks a centered strip under the HUD on a phone held sideways', () => {
+            const spy = stageRectSpy();
+            vi.useFakeTimers();
+            const restore = renderWithViewport(844, 390);
+            try {
+                expect(screen.getByTestId('game-shell')).toHaveAttribute('data-shell-layout', 'phone-landscape');
+                const floater = screen.getByTestId('mismatch-score-floater');
+                expect(floater).toHaveAttribute('data-floater-placement', 'stage-top');
+                expect(floater).toHaveStyle({ left: '500px' });
+            } finally {
+                restore();
+                spy.mockRestore();
+                vi.useRealTimers();
+            }
+        });
+
+        it('keeps the pair centroid for a pointer on a desktop', () => {
+            const spy = stageRectSpy();
+            vi.useFakeTimers();
+            const restore = renderWithViewport(1440, 900);
+            try {
+                expect(screen.getByTestId('game-shell')).toHaveAttribute('data-shell-layout', 'desktop');
+                expect(screen.getByTestId('game-shell')).toHaveAttribute('data-shell-input', 'pointer');
+                const floater = screen.getByTestId('mismatch-score-floater');
+                expect(floater).toHaveAttribute('data-floater-placement', 'centroid');
+                expect(floater).toHaveStyle({ left: '270px', top: '220px' });
+            } finally {
+                restore();
+                spy.mockRestore();
+                vi.useRealTimers();
+            }
+        });
     });
 
     it('positions gambit mismatch floater at centroid of three tile rects (tileIdC)', () => {

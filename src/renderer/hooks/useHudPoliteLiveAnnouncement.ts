@@ -69,7 +69,7 @@ const normalizeRecallFocusForAnnouncement = (focus: number, max: number): { focu
 
 /**
  * HUD-015: polite `aria-live` source text for resolved turns and resource changes.
- * Batches concurrent announcements on `requestAnimationFrame`, dedupes by key, prefers higher priority,
+ * Batches concurrent announcements on a zero-delay timer, dedupes by key, prefers higher priority,
  * and throttles display cadence so screen readers get summaries, not chatter.
  */
 
@@ -118,7 +118,7 @@ export const useHudPoliteLiveAnnouncement = ({
     );
 
     const queueRef = useRef(new Map<string, { text: string; priority: HudAnnouncePriority }>());
-    const rafIdRef = useRef<number | null>(null);
+    const flushTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const lastDisplayedAtRef = useRef<number | null>(null);
     const throttleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const pendingThrottledAnnouncementRef = useRef<{ text: string; priority: HudAnnouncePriority } | null>(null);
@@ -131,6 +131,17 @@ export const useHudPoliteLiveAnnouncement = ({
         queueMicrotask(() => {
             if (livePublishTokenRef.current === token) {
                 setMessage(text);
+            }
+        });
+    }, []);
+
+    /** Takes the standing line down, and cancels any publish still in flight ahead of it. */
+    const clearMessage = useCallback((): void => {
+        const token = livePublishTokenRef.current + 1;
+        livePublishTokenRef.current = token;
+        queueMicrotask(() => {
+            if (livePublishTokenRef.current === token) {
+                setMessage('');
             }
         });
     }, []);
@@ -196,13 +207,17 @@ export const useHudPoliteLiveAnnouncement = ({
     }, [tryDeliver]);
 
     const scheduleQueueFlush = useCallback(() => {
-        if (rafIdRef.current != null) {
+        if (flushTimerRef.current != null) {
             return;
         }
-        rafIdRef.current = requestAnimationFrame(() => {
-            rafIdRef.current = null;
+        // A zero-delay timer, not an animation frame: everything queued in this task still
+        // lands as one line, and a window that is not painting (minimised, covered, or a
+        // headless preview) still hears its announcements. On a frame they waited, sometimes
+        // for minutes, and then arrived all at once.
+        flushTimerRef.current = setTimeout(() => {
+            flushTimerRef.current = null;
             flushAnnouncementQueue();
-        });
+        }, 0);
     }, [flushAnnouncementQueue]);
 
     const queuePoliteAnnouncement = useCallback(
@@ -236,8 +251,8 @@ export const useHudPoliteLiveAnnouncement = ({
 
     useEffect(
         () => () => {
-            if (rafIdRef.current != null) {
-                cancelAnimationFrame(rafIdRef.current);
+            if (flushTimerRef.current != null) {
+                clearTimeout(flushTimerRef.current);
             }
             if (throttleTimerRef.current) {
                 clearTimeout(throttleTimerRef.current);
@@ -255,6 +270,13 @@ export const useHudPoliteLiveAnnouncement = ({
         if (!boardTurnEvent || unannouncedGameplayFeedback().some((item) => item.source.kind === 'findable')) {
             return;
         }
+        // The floor's last match resolves and the next floor opens in the same update, so this
+        // effect first sees that turn standing on a board it did not happen on. Saying "Match
+        // resolved. 6/6 pairs cleared." over the new floor's memorize phase described a board
+        // that had already left; the floor-clear beat is what says the floor was cleared.
+        if (boardLevel !== null && boardTurnEvent.announcement.level !== boardLevel) {
+            return;
+        }
         const announcement = buildBoardTurnAnnouncement(boardTurnEvent, { reduceMotion });
         if (!announcement) {
             return;
@@ -263,7 +285,7 @@ export const useHudPoliteLiveAnnouncement = ({
             dedupeKey: announcement.dedupeKey,
             priority: announcement.priority
         });
-    }, [boardTurnEvent, queuePoliteAnnouncement, reduceMotion, unannouncedGameplayFeedback]);
+    }, [boardLevel, boardTurnEvent, queuePoliteAnnouncement, reduceMotion, unannouncedGameplayFeedback]);
 
     useEffect(() => {
         const newGameplayFeedback = unannouncedGameplayFeedback();
@@ -288,6 +310,18 @@ export const useHudPoliteLiveAnnouncement = ({
 
         if (snap === null || snap.level !== boardLevel) {
             actionSnapRef.current = nextSnap;
+            if (snap !== null) {
+                // A new floor. The last floor's line ("No match. Recover with a safe match.")
+                // stood on the HUD through the whole memorize phase of the next one, describing
+                // a board that was no longer there. Take it down, and anything still queued
+                // behind it, before the new floor says its own piece.
+                pendingThrottledAnnouncementRef.current = null;
+                if (throttleTimerRef.current) {
+                    clearTimeout(throttleTimerRef.current);
+                    throttleTimerRef.current = null;
+                }
+                clearMessage();
+            }
             announceGameplayFeedbackBatch(newGameplayFeedback);
             return;
         }
@@ -299,7 +333,9 @@ export const useHudPoliteLiveAnnouncement = ({
         // Turn outcomes come from the resolved-turn event, not from diffing this render
         // against the previous one. The core already decided what the turn did; inferring
         // it here could disagree, and did whenever a render was skipped or coalesced.
-        const turnFacts = boardTurnEvent?.announcement ?? null;
+        // A turn from the floor that just closed is not this floor's news (see the turn effect).
+        const turnFacts =
+            boardTurnEvent && boardTurnEvent.announcement.level === boardLevel ? boardTurnEvent.announcement : null;
         const matchDelta = turnFacts ? turnFacts.matchedPairsAfter - turnFacts.matchedPairsBefore : 0;
         const mismatchDelta = turnFacts ? turnFacts.mismatchesAfter - turnFacts.mismatchesBefore : 0;
         const traitLabels = tileTraitKindLabels(turnFacts?.matchedTraitKinds ?? []);
@@ -388,6 +424,7 @@ export const useHudPoliteLiveAnnouncement = ({
     }, [
         announceGameplayFeedbackBatch,
         boardLevel,
+        clearMessage,
         unannouncedGameplayFeedback,
         queuePoliteAnnouncement,
         regionShuffleCharges,

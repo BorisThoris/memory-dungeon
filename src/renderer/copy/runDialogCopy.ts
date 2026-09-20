@@ -5,7 +5,9 @@
  * destroys progress, so the sentence explaining that has to stay blunt through translation.
  */
 export const PAUSE_DIALOG_COPY = {
-    subtitle: 'The board and its timers stay frozen. Press P to resume.'
+    subtitle: 'The board and its timers stay frozen. Press P to resume.',
+    /** A finger has no P key; the shell picks this line when its input is touch. */
+    subtitleTouch: 'The board and its timers stay frozen.'
 } as const;
 
 export const ABANDON_DIALOG_COPY = {
@@ -62,7 +64,29 @@ export const RUN_TOOL_REASONS = {
     exit: {
         available: 'Open the exit you found on this floor',
         locked: 'The exit is found, but not open yet'
+    },
+    fit: {
+        available: 'Bring the whole board back on screen',
+        atRest: 'The board already fits the screen'
     }
+} as const;
+
+/**
+ * The caption under the board: a kicker naming the moment, then the run line under it. The
+ * kicker is the standing the sentence is read from — which chain, which rung — so a line about a
+ * pickup or a miss still says where the run is.
+ */
+export const RUN_SHELL_LINE_COPY = {
+    chainKicker: (chain: number, tierLabel: string): string =>
+        chain <= 0 ? 'No chain' : tierLabel ? `Chain ${chain} · ${tierLabel}` : `Chain ${chain}`,
+    firstFloorKicker: 'First floor',
+    missKicker: 'No match',
+    /** `6 pairs. Every face shows for 4 seconds; then the floor begins.` */
+    study: (pairs: number, seconds: number): string =>
+        `${pairs} ${pairs === 1 ? 'pair' : 'pairs'}. Every face shows for ${seconds} ${
+            seconds === 1 ? 'second' : 'seconds'
+        }; then the floor begins.`,
+    studyKicker: 'Study the board'
 } as const;
 
 /**

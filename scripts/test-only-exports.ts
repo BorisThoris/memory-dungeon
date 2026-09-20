@@ -21,7 +21,7 @@
  * every export at once. Those modules are listed in the summary rather than silently skipped.
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs';
-import { join, relative, resolve } from 'node:path';
+import { join, relative, resolve, sep } from 'node:path';
 import baseline from './test-only-exports-baseline.json';
 import { readRelativeImports, TEST_ONLY_EXEMPTIONS } from './test-only-modules';
 
@@ -63,9 +63,17 @@ export const TEST_ONLY_EXPORT_BASELINE: ReadonlySet<string> = new Set(baseline.e
 const SOURCE_ROOTS = ['src'] as const;
 const IMPORTER_ROOTS = ['src', 'scripts', 'e2e'] as const;
 
+/**
+ * Paths are spelled with `/` whatever the platform separator is. The baseline lines, the
+ * exemption lookup and the basename split all assume it, and on Windows `join()` and `relative()`
+ * answer with `\`: every baseline line then failed to match, every symbol in the repository was
+ * reported as new, and no module exemption applied.
+ */
+const posixPath = (path: string): string => path.split(sep).join('/');
+
 const walk = (dir: string, out: string[] = []): string[] => {
     for (const entry of readdirSync(dir)) {
-        const path = join(dir, entry);
+        const path = posixPath(join(dir, entry));
         if (statSync(path).isDirectory()) walk(path, out);
         else if (/\.(ts|tsx)$/u.test(path) && !/\.d\.ts$/u.test(path)) out.push(path);
     }
@@ -256,7 +264,7 @@ const main = (): void => {
     const files = SOURCE_ROOTS.flatMap((root) => walk(root));
     const importerFiles = IMPORTER_ROOTS.flatMap((root) => walk(root));
     const { found, namespaceImported } = findTestOnlyExports(files, importerFiles);
-    const key = ({ file, name }: TestOnlyExport): string => `${relative('.', file)} ${name}`;
+    const key = ({ file, name }: TestOnlyExport): string => `${posixPath(relative('.', file))} ${name}`;
     const fresh = found.filter((entry) => !TEST_ONLY_EXPORT_BASELINE.has(key(entry)));
     const stale = [...TEST_ONLY_EXPORT_BASELINE].filter(
         (entry) => !found.some((candidate) => key(candidate) === entry)
@@ -265,7 +273,7 @@ const main = (): void => {
     for (const entry of fresh) {
         console.log(
             `export reached only by its own test: ${key(entry)} (${entry.importers
-                .map((importer) => relative('.', importer))
+                .map((importer) => posixPath(relative('.', importer)))
                 .join(', ')})`
         );
     }

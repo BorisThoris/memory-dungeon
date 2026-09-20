@@ -3,6 +3,21 @@ import { cleanup } from '@testing-library/react';
 import { afterEach } from 'vitest';
 
 /**
+ * The game's copy is English and the tests assert English number formatting ("1,200 points").
+ * `toLocaleString()` with no locale takes the machine's: on a Windows box set to bg-BG it prints
+ * "1200", and three tests fail for a reason that has nothing to do with the code. Tests read the
+ * locale the copy was written in; the shipped game still follows the player's machine.
+ */
+const localeFreeToLocaleString = Number.prototype.toLocaleString;
+Number.prototype.toLocaleString = function toLocaleString(
+    this: number,
+    locales?: string | string[],
+    options?: Intl.NumberFormatOptions
+): string {
+    return localeFreeToLocaleString.call(this, locales ?? 'en-US', options);
+};
+
+/**
  * Test DOM (happy-dom) provides `matchMedia` with desktop-like defaults: `(pointer: coarse)` → false,
  * `(pointer: fine)` → true. Tests that need touch-first behavior should assign `window.matchMedia` in that file.
  *

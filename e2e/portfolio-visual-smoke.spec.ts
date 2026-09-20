@@ -106,17 +106,23 @@ async function startFeaturedRun(page: Page) {
 }
 
 async function assertBoardVisible(page: Page) {
-  const board = page
-    .locator(
-      [
-        '[data-testid*="board" i]',
-        '[aria-label*="board" i]',
-        'canvas',
-        '.game-board',
-        '.memory-board',
-      ].join(', '),
-    )
-    .first();
+  // The board frame when the shell has one; the looser selectors are a fallback for other
+  // shells. They cannot be one comma list: `.first()` picks by DOM order, and the run shell's
+  // dock (which precedes the board) has a 128 px "Fit board" tool that would win.
+  const frame = page.getByTestId('tile-board-frame');
+  const board = (await frame.count()) > 0
+    ? frame
+    : page
+        .locator(
+          [
+            '[data-testid*="board" i]',
+            '[aria-label*="board" i]',
+            'canvas',
+            '.game-board',
+            '.memory-board',
+          ].join(', '),
+        )
+        .first();
 
   await expect(board, 'active board must render').toBeVisible({ timeout: 15_000 });
 
@@ -148,6 +154,13 @@ async function assertBoardVisible(page: Page) {
 }
 
 async function openSettings(page: Page) {
+  // In a run, Settings lives behind the pause menu since the run-shell rebuild; open that first
+  // when the shell shows its pause control and no settings control of its own.
+  const pause = page.getByTestId('game-toolbar-main-menu');
+  if (!(await settingsControl(page).isVisible().catch(() => false)) && (await pause.isVisible().catch(() => false))) {
+    await pause.click();
+    await expect(page.getByRole('dialog', { name: /run paused/i })).toBeVisible();
+  }
   const settings = settingsControl(page);
   await expect(settings, 'settings control must be visible').toBeVisible();
   await settings.click();

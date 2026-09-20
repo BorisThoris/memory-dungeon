@@ -86,6 +86,30 @@ describe('StartupIntro', () => {
         expect(uiSfxMocks.playIntroStingSfx).toHaveBeenCalledTimes(1);
     });
 
+    it('completes when the timer fires slightly before the high-resolution clock reaches its deadline', async () => {
+        const onComplete = vi.fn();
+        renderIntro(<StartupIntro onComplete={onComplete} reduceMotion={false} />);
+        await flushIntroPreload();
+        const now = performance.now.bind(performance);
+        const clock = vi.spyOn(performance, 'now').mockImplementation(() => now() - 0.5);
+        try {
+            act(() => { vi.advanceTimersByTime(4200); });
+            expect(onComplete).toHaveBeenCalledTimes(1);
+        } finally {
+            clock.mockRestore();
+        }
+    });
+
+    it('lets the player continue with the visible button', async () => {
+        const onComplete = vi.fn();
+        renderIntro(<StartupIntro onComplete={onComplete} reduceMotion={false} />);
+        await flushIntroPreload();
+        fireEvent.click(screen.getByRole('button', { name: 'Continue to game' }));
+        expect(screen.getByRole('button', { name: 'Opening game…' })).toBeDisabled();
+        act(() => { vi.advanceTimersByTime(getIntroExitDurationMs(false)); });
+        expect(onComplete).toHaveBeenCalledTimes(1);
+    });
+
     it('does not restart critical asset preload when the completion callback changes', () => {
         mockHasWebGLSupport.mockReturnValue(true);
         mockPreloadStartupCriticalAssets.mockImplementation(() => new Promise(() => {}));

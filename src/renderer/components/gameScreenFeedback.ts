@@ -74,9 +74,7 @@ export const getVisualHudAnnouncementSignal = (
     }
     if (
         normalized.includes('chain times') ||
-        normalized.includes('chain started') ||
-        normalized.includes('surge hit') ||
-        normalized.includes('combo hit') ||
+        /\b(clean|sharp|fever) reached\b/.test(normalized) ||
         normalized.includes('streak') ||
         normalized.includes('chain cascade')
     ) {
@@ -115,7 +113,7 @@ const getChainMultiplierLabel = (normalizedAnnouncement: string): string | null 
         return `x${numericMatch[1]}`;
     }
 
-    const milestoneMatch = normalizedAnnouncement.match(/\b(?:chain started|surge hit|combo hit):\s*x(\d+)\b/i);
+    const milestoneMatch = normalizedAnnouncement.match(/\b(?:clean|sharp|fever) reached:\s*x(\d+)\b/i);
     if (milestoneMatch?.[1]) {
         return `x${milestoneMatch[1]}`;
     }
@@ -180,8 +178,8 @@ export const getVisualHudAnnouncementImpact = (
         pushUniqueDetail(details, { label: 'Pickup cashout', tone: 'reward' });
     } else if (normalizedAnnouncement.includes('route cashout')) {
         pushUniqueDetail(details, { label: 'Route cashout', tone: 'reward' });
-    } else if (normalizedAnnouncement.includes('combo hit')) {
-        pushUniqueDetail(details, { label: 'Combo hit', tone: 'chain' });
+    } else if (/\b(clean|sharp|fever) reached\b/.test(normalizedAnnouncement)) {
+        pushUniqueDetail(details, { label: 'Rung reached', tone: 'chain' });
     } else if (normalizedAnnouncement.includes('chain hit')) {
         pushUniqueDetail(details, { label: 'Chain hit', tone: 'chain' });
     }

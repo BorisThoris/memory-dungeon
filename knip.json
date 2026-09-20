@@ -42,5 +42,5 @@
         "src/renderer/a11y/**/*.{ts,tsx}": ["exports", "types", "nsExports", "nsTypes"]
     },
     "ignoreBinaries": ["py"],
-    "ignoreDependencies": ["@fontsource/cinzel", "@fontsource/source-sans-3"]
+    "ignoreDependencies": ["@fontsource/cinzel", "@fontsource/cormorant-garamond", "@fontsource/lora", "@fontsource/source-sans-3"]
 }

@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { clickHiddenTileRowCol, readFrameHiddenTileCount, waitForBoardPlayPhase } from './tileBoardGameFlow';
+import { readFrameHiddenTileCount, waitForBoardPlayPhase } from './tileBoardGameFlow';
 import { openRunMenuItem } from './playablePathHelpers';
 import { dismissStartupIntro } from './startupIntroHelpers';
 import { mainMenuPlayButton } from './visualScreenHelpers';
@@ -107,7 +107,11 @@ async function expectInteractiveBoard(page: Page) {
     await waitForBoardPlayPhase(page);
     const hiddenBefore = await readFrameHiddenTileCount(page);
     expect(hiddenBefore).toBeGreaterThan(0);
-    await clickHiddenTileRowCol(page, 1, 1, hiddenBefore);
+    // Exercise the shipped input path, including on a production build without dev hooks.
+    const application = page.getByRole('application', { name: /^Memory tile board/ });
+    await application.focus();
+    await application.press('Enter');
+    await expect.poll(() => readFrameHiddenTileCount(page)).toBeLessThan(hiddenBefore);
 }
 
 /*

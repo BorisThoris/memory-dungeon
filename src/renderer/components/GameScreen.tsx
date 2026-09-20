@@ -51,13 +51,16 @@ import {
     useHudPoliteLiveAnnouncement
 } from '../hooks/useHudPoliteLiveAnnouncement';
 import { useViewportSize } from '../hooks/useViewportSize';
+import { useCoarsePointer } from '../hooks/useCoarsePointer';
+import { resolveGameShellProfile } from '../gameShellLayout';
+import { resolveBoardFloaterAnchor, type BoardFloaterAnchor, type StageRelativeRect } from './boardFloaterPlacement';
 import { GAMBIT_KEYBOARD_HELP_TIP } from '../copy/gameplayHints';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { describePassAndPlayChainLost } from '../../shared/pass-and-play-rules';
 import { floorClearResidentLine } from '../copy/floorCurioBeat';
 import { pickFloorCurio } from '../../shared/floor-curio-rules';
 import { canGreetFloorCurio } from '../../shared/floor-curio-greeting-rules';
-import { chainMomentum, runChainTier, type ChainTier } from '../../shared/chain-tier-rules';
+import { chainMomentum, runChainMeter, runChainTier, type ChainTier } from '../../shared/chain-tier-rules';
 import { GAMEPAD_SHORTCUT_ROWS, GAMEPLAY_SHORTCUT_ROWS } from '../keyboard/gameplayShortcuts';
 import { useGamepadConnected } from '../hooks/useGamepadNavigation';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
@@ -93,6 +96,7 @@ import {
     uiSfxGainFromSettings
 } from '../audio/uiSfx';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
+import { GameplayScene } from './GameplayScene';
 import { REG104_DATA_SHELL } from '../gameplay/regPhase4PlayContract';
 import styles from './GameScreen.module.css';
 import {
@@ -188,6 +192,10 @@ export const LAST_PAIR_HOLD_MS = 650;
  * player has finished reading them. Not shortened under reduced motion; reading is not motion.
  */
 export const FLOOR_CLEAR_BEAT_MS = 1600;
+/** A frame gap longer than this is a stall, not a slow frame; it counts as one slow frame. */
+export const FLOOR_CLEAR_BEAT_FRAME_CAP_MS = 100;
+/** The beat never holds the run longer than this on the wall clock, whatever the frames do. */
+export const FLOOR_CLEAR_BEAT_STALL_CAP_MS = 8000;
 
 type NextFloorSignalRow = {
     detail: string | null;
@@ -272,6 +280,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const mismatchRecoveryCrescendoSfxSignatureRef = useRef<string | null>(null);
     const tileBoardRef = useRef<TileBoardHandle>(null);
     const { height, width } = useViewportSize();
+    const coarsePointer = useCoarsePointer();
+    const shellProfile = useMemo(() => resolveGameShellProfile(width, height, coarsePointer), [coarsePointer, height, width]);
     const [phoneViewportLatched, setPhoneViewportLatched] = useState(() =>
         latchPhoneWidthForMobileCamera(width, false)
     );
@@ -284,6 +294,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const compactTouchChrome = isPhoneViewport || isNarrowShortLandscapeForMenuStack(width, height);
     const [, setRulesHintsExpanded] = useState(false);
     const [viewportResetToken, setViewportResetToken] = useState(0);
+    const [boardViewportAtRest, setBoardViewportAtRest] = useState(true);
     const [abandonRunConfirmOpen, setAbandonRunConfirmOpen] = useState(false);
     const [shortcutsHelpOpen, setShortcutsHelpOpen] = useState(false);
     const gamepadConnected = useGamepadConnected();
@@ -329,6 +340,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         pairProximityHintsEnabled: settingsPairProximityHintsEnabled,
         tileFocusAssist: settingsTileFocusAssist
     } = useGameScreenBoardVisualSettings();
+    const viewportWantsMobileCamera = compactTouchChrome;
+    const cameraViewportMode = deriveCameraViewportMode(settingsCameraViewportModePreference, viewportWantsMobileCamera);
     const showTutorialPairMarkers = useMemo(
         () =>
             Boolean(
@@ -467,7 +480,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
               }
             : null;
 
-    const [boardFloaterPos, setBoardFloaterPos] = useState<{ x: number; y: number } | null>(null);
+    const [boardFloaterPos, setBoardFloaterPos] = useState<BoardFloaterAnchor | null>(null);
 
     useLayoutEffect(() => {
         if (!boardFloaterPayload) {
@@ -491,30 +504,33 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             boardFloaterPayload.kind === 'miss' && boardFloaterPayload.tileIdC
                 ? handle?.getTileClientRectById?.(boardFloaterPayload.tileIdC) ?? null
                 : null;
+        // The pair is the anchor; a gambit's third card joins it when it can be measured. A pair
+        // with one measured card would anchor on that card alone, so it is the stage center instead.
+        const measured = ra && rb ? [ra, rb, ...(rc ? [rc] : [])] : [];
+        const tiles: StageRelativeRect[] = measured.map((rect) => ({
+            left: rect.left - stageRect.left,
+            top: rect.top - stageRect.top,
+            width: rect.width,
+            height: rect.height
+        }));
+        /*
+         * In camera mode the stage runs under the HUD; otherwise the stage already starts below it.
+         * Measured here rather than read from the clearance the shell publishes: the HUD grows by a
+         * feedback line on the same commit as the match, and the published number is a frame behind.
+         */
+        const hud = cameraViewportMode ? shellRef.current?.querySelector<HTMLElement>('[data-testid="game-hud"]') : null;
+        const hudClearance = hud ? Math.max(0, hud.getBoundingClientRect().bottom - stageRect.top) : 0;
 
-        let cx = stageRect.width / 2;
-        let cy = stageRect.height / 2;
-
-        if (ra && rb && rc) {
-            const ax = ra.left + ra.width / 2 - stageRect.left;
-            const ay = ra.top + ra.height / 2 - stageRect.top;
-            const bx = rb.left + rb.width / 2 - stageRect.left;
-            const by = rb.top + rb.height / 2 - stageRect.top;
-            const cx3 = rc.left + rc.width / 2 - stageRect.left;
-            const cy3 = rc.top + rc.height / 2 - stageRect.top;
-            cx = (ax + bx + cx3) / 3;
-            cy = (ay + by + cy3) / 3;
-        } else if (ra && rb) {
-            const ax = ra.left + ra.width / 2 - stageRect.left;
-            const ay = ra.top + ra.height / 2 - stageRect.top;
-            const bx = rb.left + rb.width / 2 - stageRect.left;
-            const by = rb.top + rb.height / 2 - stageRect.top;
-            cx = (ax + bx) / 2;
-            cy = (ay + by) / 2;
-        }
-
-        setBoardFloaterPos({ x: cx, y: cy });
-    }, [boardFloaterPayload]);
+        setBoardFloaterPos(
+            resolveBoardFloaterAnchor({
+                hudClearance,
+                profile: shellProfile,
+                stage: { width: stageRect.width, height: stageRect.height },
+                tiles,
+                viewportWidth: width
+            })
+        );
+    }, [boardFloaterPayload, cameraViewportMode, shellProfile, width]);
 
     useEffect(() => {
         if (!boardFloaterPayload || !boardFloaterPos) {
@@ -879,8 +895,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const wideRecallInPlay = run.activeMutators.includes('wide_recall');
     const silhouetteDuringPlay = run.activeMutators.includes('silhouette_twist');
     const nBackMutatorActive = run.activeMutators.includes('n_back_anchor');
-    const viewportWantsMobileCamera = compactTouchChrome;
-    const cameraViewportMode = deriveCameraViewportMode(settingsCameraViewportModePreference, viewportWantsMobileCamera);
     const endlessChapterActive =
         run.gameMode === 'endless' && usesEndlessFloorSchedule(run.gameMode, run.runRulesVersion);
     const featuredObjectiveResultLine = run.lastLevelResult ? formatLevelResultObjectiveLine(run.lastLevelResult) : null;
@@ -966,8 +980,34 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         if (!floorClearBeatShown || abandonRunConfirmOpen) {
             return undefined;
         }
-        const timer = window.setTimeout(() => continueToNextLevel(), FLOOR_CLEAR_BEAT_MS);
-        return () => window.clearTimeout(timer);
+        // The beat is given its time in *rendered* frames, not on the wall clock. A phone building
+        // the next board's WebGL scene (or a headless test runner) can block the main thread for
+        // seconds right after the clear; a timer started at mount would run out inside that block
+        // and the beat would be gone before anyone saw it. Only frames that arrive at a rendering
+        // cadence count, and a stalled tab is capped so the run can never hang on the beat.
+        let elapsed = 0;
+        let last: number | null = null;
+        let frame = 0;
+        const tick = (now: number) => {
+            if (last !== null) {
+                elapsed += Math.min(now - last, FLOOR_CLEAR_BEAT_FRAME_CAP_MS);
+            }
+            last = now;
+            if (elapsed >= FLOOR_CLEAR_BEAT_MS) {
+                continueToNextLevel();
+                return;
+            }
+            frame = window.requestAnimationFrame(tick);
+        };
+        frame = window.requestAnimationFrame(tick);
+        const safety = window.setTimeout(() => {
+            window.cancelAnimationFrame(frame);
+            continueToNextLevel();
+        }, FLOOR_CLEAR_BEAT_STALL_CAP_MS);
+        return () => {
+            window.cancelAnimationFrame(frame);
+            window.clearTimeout(safety);
+        };
     }, [floorClearBeatShown, floorClearKey, abandonRunConfirmOpen, continueToNextLevel]);
 
     const nextFloorResidentLine = run.lastLevelResult
@@ -1305,6 +1345,19 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         ? RUN_TOOL_REASONS.undo.available
                         : RUN_TOOL_REASONS.undo.notResolving,
                 onClick: undoResolvingFlip
+            },
+            {
+                /*
+                 * The camera's way back. A pinch or a wheel can leave the board half off the screen,
+                 * and the only reset used to sit behind the pause menu. Disabled, with the reason,
+                 * while the board already fits: a lit control that does nothing is the worse signal.
+                 */
+                ...toolSpec('fit'),
+                name: 'Fit board',
+                glyph: RUN_SHELL_GLYPHS.fit,
+                disabled: boardViewportAtRest,
+                title: boardViewportAtRest ? RUN_TOOL_REASONS.fit.atRest : RUN_TOOL_REASONS.fit.available,
+                onClick: () => setViewportResetToken((token) => token + 1)
             }
         ];
 
@@ -1322,6 +1375,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         <section
             className={`${styles.shell} ${cameraViewportMode ? styles.mobileCameraShell : ''}`}
             data-mobile-camera-mode={cameraViewportMode ? 'true' : 'false'}
+            data-shell-layout={shellProfile.layout}
+            data-shell-input={shellProfile.input}
+            data-shell-orientation={shellProfile.orientation}
             {...{ [REG104_DATA_SHELL]: reg104GameplayShellVariant }}
             data-testid="game-shell"
             ref={shellRef}
@@ -1334,11 +1390,17 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 reduceMotion={reduceMotion}
                 width={width}
             />
-            <div
-                aria-hidden="true"
-                className={styles.stageBackdrop}
-                style={{ backgroundImage: `url(${UI_ART.gameplayWorkshopScene})` }}
-            />
+            <div aria-hidden="true" className={styles.stageBackdrop}>
+                <GameplayScene
+                    fill={runChainMeter(run).fill}
+                    memorize={run.status === 'memorize'}
+                    pulse={breakPulseTier}
+                    pulseKey={pulseEventId}
+                    quality={settingsGraphicsQuality}
+                    reduceMotion={reduceMotion}
+                    tier={runChainTier(run)}
+                />
+            </div>
             <div className={`${styles.gameForeground} ${cameraViewportMode ? styles.mobileCameraForeground : ''}`}>
                 <div
                     aria-hidden={gameplayShellInert ? true : undefined}
@@ -1373,7 +1435,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             onPause={pause}
                             personalBestDepth={run.achievementsEnabled && (run.board?.level ?? 0) > profileDeepestFloor(saveData)}
                             politeAnnouncement={politeHudAnnouncement}
+                            reduceMotion={reduceMotion}
                             run={run}
+                            shellLayout={shellProfile.layout}
                             tools={runShellTools}
                         />
 
@@ -1463,6 +1527,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 showTutorialPairMarkers={showTutorialPairMarkers}
                                 silhouetteDuringPlay={silhouetteDuringPlay}
                                 viewportResetToken={viewportResetToken}
+                                onViewportRestChange={setBoardViewportAtRest}
                                 wideRecallInPlay={wideRecallInPlay}
                                 shiftingSpotlightActive={shiftingSpotlightActive}
                                 peekPowerVisualActive={peekPowerVisualActive}
@@ -1503,6 +1568,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             : 'mismatch-score-floater'
                                     }
                                     data-feedback-intensity={boardFloaterIntensity}
+                                    data-floater-placement={boardFloaterPos.placement}
                                     data-match-floater-heat={
                                         boardFloaterPayload.kind === 'match'
                                             ? getMatchFloaterHeat(boardFloaterPayload)
@@ -1575,14 +1641,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     <OverlayModal
                         actions={[
                             { label: 'Resume', onClick: resume, variant: 'primary' },
-                            {
-                                label: 'Fit board',
-                                onClick: () => {
-                                    setViewportResetToken((token) => token + 1);
-                                    resume();
-                                },
-                                variant: 'secondary'
-                            },
+                            /* Fit board left this menu for the dock, where the camera is: a pinch
+                               is undone next to where it happened, without pausing. */
                             { label: 'Inventory', onClick: openInventoryFromPlaying, variant: 'secondary' },
                             { label: 'Codex', onClick: openCodexFromPlaying, variant: 'secondary' },
                             /*
@@ -1591,14 +1651,24 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                              * shortcuts — and a controller has neither key. Pause is where you
                              * look, and it is reachable from the dock and from Start.
                              */
-                            {
-                                label: 'Controls',
-                                onClick: () => {
-                                    playMenuOpen();
-                                    setShortcutsHelpOpen(true);
-                                },
-                                variant: 'secondary'
-                            },
+                            /*
+                             * The shortcuts are keys and controller buttons. A phone under a finger
+                             * has neither, so the reference is not offered there unless a controller
+                             * is actually connected; on a touch screen the list was six rows of keys
+                             * the player could not press.
+                             */
+                            ...(shellProfile.input === 'touch' && !gamepadConnected
+                                ? []
+                                : [
+                                      {
+                                          label: 'Controls',
+                                          onClick: () => {
+                                              playMenuOpen();
+                                              setShortcutsHelpOpen(true);
+                                          },
+                                          variant: 'secondary' as const
+                                      }
+                                  ]),
                             { label: 'Settings', onClick: openSettingsPlayingMode, variant: 'secondary' },
                             {
                                 label: 'Retreat',
@@ -1611,8 +1681,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         ]}
                         headerPlateTone="pause"
                         onEscape={resume}
-                        ornamentalHeaderPlate
-                        subtitle={PAUSE_DIALOG_COPY.subtitle}
+                        subtitle={shellProfile.input === 'touch' ? PAUSE_DIALOG_COPY.subtitleTouch : PAUSE_DIALOG_COPY.subtitle}
+                        surface="margin"
                         testId="game-pause-overlay"
                         title="Run paused"
                     >
@@ -1632,6 +1702,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     </div>
                                 );
                             })()}
+                            {run.activeMutators.length > 0 ? (
+                                <div>
+                                    <dt>Mutator</dt>
+                                    <dd data-testid="pause-mutators">
+                                        {run.activeMutators.map((id) => MUTATOR_CATALOG[id]?.title ?? id).join(' · ')}
+                                    </dd>
+                                </div>
+                            ) : null}
                             {(() => {
                                 const perfectMemory = perfectMemoryStatus(run, saveData);
                                 return perfectMemory === null ? null : (
@@ -1681,6 +1759,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         }
                         testId="game-shortcuts-help-overlay"
                         title={gamepadConnected ? 'Controller shortcuts' : 'Keyboard shortcuts'}
+                        wide
                     >
                         {/* One list, not two: a player holding a pad is told what the pad does. */}
                         <ul

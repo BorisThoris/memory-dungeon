@@ -1,1243 +1,940 @@
-/* REF-034 — save write failure (above settings shell; fixed so modal presentation still shows it) */
-.persistWriteBanner {
-    position: fixed;
-    top: max(10px, env(safe-area-inset-top, 0px));
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 26;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: var(--theme-space-md);
-    width: min(calc(100% - 24px), 48rem);
-    padding: var(--theme-space-sm) var(--theme-space-md);
-    border-radius: var(--ui-radius-md);
-    background: color-mix(in srgb, var(--theme-ember) 16%, var(--theme-backdrop-body-shade-deep));
-    border: 1px solid color-mix(in srgb, var(--theme-ember-soft) 40%, transparent);
-    font-size: 0.85rem;
-    line-height: 1.35;
-    color: color-mix(in srgb, var(--theme-rune) 92%, white);
-    box-sizing: border-box;
-    box-shadow: 0 4px 14px color-mix(in srgb, black 26%, transparent);
-}
-
-.persistWriteBannerDismiss {
-    flex-shrink: 0;
-    margin: 0;
-    padding: 0.15rem 0.5rem;
-    border-radius: var(--ui-radius-sm);
-    border: 1px solid color-mix(in srgb, var(--theme-gold) 28%, transparent);
-    background: color-mix(in srgb, var(--theme-backdrop-body-shade-mid) 40%, transparent);
-    color: inherit;
-    font: inherit;
-    cursor: pointer;
-}
-
-.persistWriteBannerDismiss:focus-visible {
-    outline: 2px solid color-mix(in srgb, var(--theme-gold-bright) 70%, transparent);
-    outline-offset: 2px;
-}
-
-.profileSummaryGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
-    gap: var(--theme-space-sm);
-}
-
-.profileSummaryCard,
-.saveTrustCard {
-    padding: var(--ui-card-pad-md);
-    border-radius: var(--ui-radius-md);
-    border: 1px solid var(--theme-divider-hairline);
-    background: color-mix(in srgb, var(--theme-panel-alt) 84%, transparent);
-}
-
-.profileSummaryCard strong,
-.saveTrustCard strong {
-    display: block;
-    margin-bottom: var(--theme-space-2xs);
-}
-
-.profileSummaryCard span,
-.saveTrustCard span {
-    display: block;
-    color: var(--theme-text-muted);
-    font-size: var(--ui-font-caption);
-    line-height: 1.3;
-}
+/*
+ * Settings as a page of "The Margin". The categories are a numbered contents ladder in the left
+ * margin; the chosen one is a chapter on the right — a title on a gold rule, ruled sections, each
+ * control a line with its name, its note and its value at the line's end; the actions are
+ * outlined words on the foot rule. Set over the board in a run, the same page is a dialog: ink,
+ * one hairline of gold, the shell's gutter around it.
+ *
+ * Four layouts, decided from the viewport by the component and reported on
+ * `data-settings-layout`: `desktop` and `wide-short` keep the ladder beside the chapter (the
+ * chapter scrolls); `stacked` (a phone, a narrow short landscape) puts one <select> above the
+ * chapter; `short-stacked` tightens that further and shows one subsection at a time. Nothing is
+ * zoomed. Text never below 12px; every control at least 44px, or 32px where the page is short.
+ */
 
 .shell {
+    --settings-gutter: clamp(0.75rem, 3vw, 2.5rem);
+    --settings-column-gap: clamp(1.25rem, 3vw, 3rem);
+    --settings-row: var(--margin-touch);
+
     /* Inside the UI-scale zoom: `dvh` does not shrink with it, `--ui-zoomed-dvh` does. */
-    min-height: var(--ui-zoomed-dvh, 100dvh);
-    max-height: var(--ui-zoomed-dvh, 100dvh);
+    position: relative;
     display: flex;
     flex-direction: column;
-    padding: var(--ui-shell-screen-pad-block) var(--ui-shell-screen-pad-inline);
+    min-height: var(--ui-zoomed-dvh, 100dvh);
+    max-height: var(--ui-zoomed-dvh, 100dvh);
+    padding:
+        calc(clamp(0.6rem, 2vh, 1.5rem) + env(safe-area-inset-top, 0px))
+        calc(var(--settings-gutter) + env(safe-area-inset-right, 0px))
+        calc(clamp(0.5rem, 1.5vh, 1rem) + env(safe-area-inset-bottom, 0px))
+        calc(var(--settings-gutter) + env(safe-area-inset-left, 0px));
     overflow: hidden;
+    isolation: isolate;
+    color: var(--margin-paper);
+    background:
+        radial-gradient(ellipse 60% 50% at 50% 0%, color-mix(in srgb, var(--margin-gold) 7%, transparent), transparent 70%),
+        var(--margin-ink);
+    font-family: var(--margin-body-font);
 }
 
+/* In a run: the same page as a dialog over the board. */
 .shellModal {
     position: fixed;
     inset: 0;
+    z-index: 24;
     min-height: 0;
     padding:
-        max(var(--ui-shell-screen-pad-block), env(safe-area-inset-top, 0px))
-        max(var(--ui-shell-screen-pad-inline), env(safe-area-inset-right, 0px))
-        max(var(--ui-shell-screen-pad-block), env(safe-area-inset-bottom, 0px))
-        max(var(--ui-shell-screen-pad-inline), env(safe-area-inset-left, 0px));
-    background: var(--gameplay-overlay-scrim-bg, var(--theme-modal-scrim-bg, var(--theme-scrim-dialog)));
-    backdrop-filter: var(
-        --gameplay-overlay-scrim-filter,
-        var(--theme-modal-scrim-backdrop-filter, blur(14px) saturate(130%))
-    );
-    z-index: 24;
+        max(clamp(0.6rem, 2vh, 1.5rem), env(safe-area-inset-top, 0px))
+        max(var(--settings-gutter), env(safe-area-inset-right, 0px))
+        max(clamp(0.6rem, 2vh, 1.5rem), env(safe-area-inset-bottom, 0px))
+        max(var(--settings-gutter), env(safe-area-inset-left, 0px));
+    background: color-mix(in srgb, var(--margin-ink) 72%, transparent);
+    backdrop-filter: blur(8px);
 }
 
-.stackedShell {
-    padding: 8px;
-}
-
+.stackedShell,
 .stackedShell.shellModal {
     padding:
         max(8px, env(safe-area-inset-top, 0px))
-        max(8px, env(safe-area-inset-right, 0px))
+        max(10px, env(safe-area-inset-right, 0px))
         max(8px, env(safe-area-inset-bottom, 0px))
-        max(8px, env(safe-area-inset-left, 0px));
+        max(10px, env(safe-area-inset-left, 0px));
 }
 
-.shortLandscapeShell {
-    padding-block: 6px;
-}
-
+.shortLandscapeShell,
 .shortLandscapeShell.shellModal {
     padding:
         max(6px, env(safe-area-inset-top, 0px))
-        max(8px, env(safe-area-inset-right, 0px))
+        max(10px, env(safe-area-inset-right, 0px))
         max(6px, env(safe-area-inset-bottom, 0px))
-        max(8px, env(safe-area-inset-left, 0px));
+        max(10px, env(safe-area-inset-left, 0px));
 }
 
+/* ------------------------------------------------------------------ the fit chain (no zoom) */
 .fitViewport {
     position: relative;
+    display: flex;
     flex: 1 1 auto;
-    min-height: 0;
+    align-items: stretch;
+    justify-content: center;
     width: 100%;
+    min-height: 0;
     max-height: 100%;
     overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     container-type: size;
     container-name: settings-shell;
-
-    --settings-sidebar-gap: var(--theme-space-xl);
-    --settings-sidebar-pad: var(--ui-card-pad-lg);
-    --settings-content-gap: var(--theme-space-xl);
-    --settings-content-pad: var(--ui-card-pad-lg);
-    --settings-header-gap: var(--theme-space-2xs);
-    --settings-section-gap: calc(var(--theme-space-lg) + var(--theme-space-2xs));
-    --settings-section-pad: var(--ui-card-pad-lg);
-    --settings-field-pad: var(--ui-card-pad-md);
-    --settings-footer-pad-top: var(--theme-space-xl);
 }
 
 .fitMeasureOuter {
-    flex: 0 0 auto;
-    width: min(1220px, 100%);
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    width: min(72rem, 100%);
     max-width: 100%;
-    box-sizing: border-box;
+    min-height: 0;
+    max-height: 100%;
 }
 
 .shellModal .fitMeasureOuter {
-    width: min(980px, 100%);
+    width: min(64rem, 100%);
 }
 
-/* Wide short desktop: modal matches page max width so multi-column settings do not wrap extra-tall. */
 .wideShortShell.shellModal .fitMeasureOuter {
-    width: min(1220px, 100%);
+    width: min(72rem, 100%);
 }
 
 .fitZoomInner {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
     width: 100%;
-}
-
-/* Non-stacked desktop + modal: sidebar/footer stay readable; only `.contentScroll` scrolls (no uniform zoom). */
-.shell:not(.stackedShell) .fitViewport {
-    align-items: stretch;
-}
-
-.shell:not(.stackedShell) .fitMeasureOuter {
-    flex: 1 1 auto;
-    min-height: 0;
-    max-height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.shell:not(.stackedShell) .fitZoomInner {
-    flex: 1 1 auto;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-}
-
-.shell:not(.stackedShell) .panel {
-    flex: 1 1 auto;
     min-height: 0;
 }
 
-.shell:not(.stackedShell) .frame {
-    flex: 1 1 auto;
-    min-height: 0;
-    height: 100%;
-}
-
-.shell:not(.stackedShell) .contentPane {
-    flex: 1 1 auto;
-    min-height: 0;
-}
-
-.shell:not(.stackedShell) .contentScroll {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-.shellModal:not(.stackedShell) .panel.panelModal {
-    max-height: min(
-        calc(
-            100dvh - max(var(--ui-shell-screen-pad-block), env(safe-area-inset-top, 0px)) -
-                max(var(--ui-shell-screen-pad-block), env(safe-area-inset-bottom, 0px))
-        ),
-        calc(
-            100svh - max(var(--ui-shell-screen-pad-block), env(safe-area-inset-top, 0px)) -
-                max(var(--ui-shell-screen-pad-block), env(safe-area-inset-bottom, 0px))
-        )
-    );
-}
-
-.panel,
-.panelModal {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    backdrop-filter: blur(12px);
-}
-
+/* The page itself. A page has no border; the dialog has one hairline of gold. */
 .panel {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 18%, var(--theme-border));
-    box-shadow: var(--theme-elevation-polished);
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    width: 100%;
+    min-height: 0;
 }
 
-/* OVR-001 — align in-run settings plate with OverlayModal shared frame tokens (Panel `strong` + layout unchanged). */
+/* The dialog sits in the middle of the board at the height its chapter needs, never past the
+   gutter; a short chapter still gets a page, not a strip. */
+.shellModal:not(.stackedShell) .fitViewport {
+    align-items: center;
+}
+
+.shellModal:not(.stackedShell) .fitMeasureOuter,
+.shellModal:not(.stackedShell) .fitZoomInner,
+.shellModal:not(.stackedShell) .panel {
+    flex: 0 1 auto;
+    max-height: 100%;
+}
+
+.shellModal:not(.stackedShell) .panel {
+    min-height: min(32rem, 100%);
+}
+
 .shellModal .panel.panelModal {
-    border-radius: var(--theme-overlay-plate-radius);
-    border: var(--gameplay-overlay-border, var(--theme-overlay-plate-border));
-    box-shadow: var(--gameplay-overlay-shadow, var(--theme-overlay-plate-shadow));
-    background: var(--gameplay-settings-shell-surface);
-    padding: var(--theme-modal-plate-padding);
-}
-
-.shellModal .panel.panelModal::before {
-    background:
-        radial-gradient(ellipse 92% 62% at 50% 0%, rgba(255, 232, 190, 0.05), transparent 56%),
-        linear-gradient(180deg, rgba(255, 243, 217, 0.03), transparent 22%);
-    opacity: 0.62;
-}
-
-/* Short-stacked run settings: modal plate + gameplay chrome eat vertical space; cap the plate and scroll content so bounds stay within `window.innerHeight` (mobile-layout). */
-.shortLandscapeShell.shellModal .panel.panelModal {
-    padding: max(0.5rem, clamp(0.55rem, 1.5vw, 0.82rem));
-    max-height: min(calc(100dvh - 2.5rem), calc(100svh - 2.5rem));
-}
-
-.shortLandscapeShell.shellModal .frame {
-    flex: 1 1 auto;
-    min-height: 0;
-    grid-template-rows: auto minmax(0, 1fr);
-}
-
-.shortLandscapeShell.shellModal .contentPane {
-    min-height: 0;
-    overflow: hidden;
-}
-
-.shortLandscapeShell.shellModal .contentScroll {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-.shellModal .panel.panelModal::after {
-    border-radius: calc(var(--theme-overlay-plate-radius) - 2px);
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+    padding: clamp(0.9rem, 2.4vh, 1.6rem) clamp(1rem, 2.6vw, 1.75rem);
+    border: 1px solid var(--margin-rule);
+    border-radius: 7px;
+    background: var(--margin-ink);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
 }
 
 .frame {
     display: grid;
-    grid-template-columns: minmax(240px, 300px) minmax(0, 1fr);
+    flex: 1 1 auto;
+    grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    gap: 0 var(--settings-column-gap);
+    height: 100%;
     min-height: 0;
     overflow: hidden;
 }
 
+/* ------------------------------------------------------------------ the margin: the ladder */
 .sidebar {
     display: flex;
     flex-direction: column;
-    gap: var(--settings-sidebar-gap);
-    padding: var(--settings-sidebar-pad);
-    border-right: 1px solid var(--theme-divider-hairline);
-    /* META-008: forged rail in the paint stack; stacked shells restore the two-layer wash below. */
-    background:
-        linear-gradient(
-            90deg,
-            color-mix(in srgb, var(--theme-meta-frame-accent) 14%, transparent) 0,
-            color-mix(in srgb, var(--theme-meta-frame-accent) 6%, transparent) 1px,
-            transparent 2px
-        ),
-        linear-gradient(180deg, var(--theme-backdrop-body-rim), transparent 18%),
-        linear-gradient(
-            160deg,
-            color-mix(in srgb, var(--theme-stone) 78%, transparent),
-            color-mix(in srgb, var(--theme-void-soft) 78%, transparent)
-        );
-}
-
-.shellModal .sidebar {
-    border-right-color: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
-    background: var(--gameplay-settings-sidebar-surface);
-    box-shadow:
-        inset -1px 0 0 color-mix(in srgb, var(--theme-shadow) 18%, transparent),
-        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    gap: clamp(0.6rem, 2vh, 1.25rem);
+    min-width: 0;
+    min-height: 0;
+    padding-right: var(--settings-column-gap);
+    border-right: 1px solid var(--margin-hairline);
 }
 
 .sidebarHeader {
-    display: grid;
-    gap: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
 }
 
-/* META-008: hairline under the sidebar title stack (two-column shells; out-of-flow, no height delta). */
-.shell:not(.stackedShell):not(.shortLandscapeShell) .sidebarHeader {
-    position: relative;
+.eyebrow {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--margin-gold);
 }
 
-.shell:not(.stackedShell):not(.shortLandscapeShell) .sidebarHeader::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0.75rem;
-    bottom: -0.35rem;
-    height: 1px;
-    background: linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--theme-meta-frame-accent) 34%, transparent),
-        transparent 92%
-    );
-    pointer-events: none;
-    opacity: 0.65;
+.shellTitle {
+    margin: 0;
+    font-family: var(--margin-heading-font);
+    font-size: clamp(1.9rem, 5vh, 2.8rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--margin-paper);
+    text-wrap: balance;
 }
 
 .categoryNav {
-    display: grid;
-    gap: 0.55rem;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
 }
 
+/* A category is a line of the contents: numeral, name, a leader. The whole line is the button. */
 .categoryButton {
-    appearance: none;
-    width: 100%;
     display: grid;
-    gap: 0.16rem;
+    grid-template-columns: 1.9rem auto minmax(0.5rem, 1fr);
+    align-items: baseline;
+    gap: 0.6rem;
+    width: 100%;
+    min-height: var(--settings-row);
+    margin: 0;
+    padding: clamp(0.25rem, 0.8vh, 0.45rem) 0.2rem;
+    border: 0;
+    border-bottom: 1px solid var(--margin-hairline);
+    background: transparent;
+    color: var(--margin-paper-soft);
+    font: inherit;
     text-align: left;
-    padding: 0.95rem 1rem;
-    border-radius: var(--ui-radius-lg);
-    border: 1px solid var(--theme-card-border-polished);
-    background: var(--theme-surface-control);
-    color: var(--theme-text-muted);
+    cursor: pointer;
     transition:
-        transform 140ms ease,
-        border-color 140ms ease,
-        background 140ms ease,
-        color 140ms ease,
-        box-shadow 140ms ease;
+        color 160ms ease,
+        background-color 160ms ease;
 }
 
-.categoryButton:hover {
-    transform: translateY(-1px);
-    border-color: var(--theme-hud-chrome-border);
-    color: var(--theme-text);
-    box-shadow: var(--theme-elevation-soft);
+.categoryButton:last-child {
+    border-bottom: 0;
 }
 
-.categoryButtonActive {
-    border-color: var(--theme-border-strong);
-    background:
-        radial-gradient(circle at top left, var(--theme-glow-gold), transparent 52%),
-        linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-deep) 56%, transparent), rgba(12, 10, 14, 0.9));
-    color: var(--theme-rune);
-    box-shadow:
-        0 18px 28px color-mix(in srgb, var(--theme-shadow) 20%, transparent),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+.categoryButton:hover,
+.categoryButton:focus-visible {
+    color: var(--margin-fever);
+    background: color-mix(in srgb, var(--margin-gold) 7%, transparent);
+    outline: none;
 }
 
-.shellModal .categoryButton {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
-    background:
-        linear-gradient(180deg, rgba(255, 243, 217, 0.03), transparent 54%),
-        color-mix(in srgb, var(--theme-void) 46%, transparent);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+.categoryButton:focus-visible .categoryLabel {
+    text-decoration: underline;
+    text-decoration-color: var(--margin-gold);
+    text-underline-offset: 0.18em;
 }
 
-.shellModal .categoryButton:hover {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
-    color: var(--theme-rune);
+.categoryButtonActive,
+.categoryButtonActive:hover {
+    color: var(--margin-gold);
 }
 
-.shellModal .categoryButtonActive {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
-    background:
-        radial-gradient(circle at top left, color-mix(in srgb, var(--theme-glow-gold) 82%, transparent), transparent 54%),
-        linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-deep) 62%, transparent), rgba(11, 9, 13, 0.92));
-    box-shadow:
-        0 16px 28px color-mix(in srgb, var(--theme-shadow) 22%, transparent),
-        inset 0 1px 0 rgba(255, 255, 255, 0.06),
-        inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 8%, transparent);
+.categoryButtonActive .leader {
+    background-image: linear-gradient(90deg, var(--margin-rule) 0 100%);
+}
+
+.numeral {
+    font-family: var(--margin-heading-font);
+    font-size: clamp(0.9rem, 2vh, 1.05rem);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--margin-gold);
 }
 
 .categoryLabel {
-    font-family: var(--theme-display-font);
-    font-size: 0.94rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    font-family: var(--margin-heading-font);
+    font-size: clamp(1.15rem, 2.7vh, 1.45rem);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
 }
 
-.categoryNote {
-    font-size: 0.78rem;
-    line-height: 1.35;
+.leader {
+    display: block;
+    align-self: center;
+    height: 1px;
+    background-image: linear-gradient(90deg, var(--margin-hairline) 0 2px, transparent 2px 6px);
+    background-size: 6px 1px;
+    background-repeat: repeat-x;
 }
 
-.shellTitle,
-.contentTitle {
-    margin: 0;
+/* The stacked shell's chooser: one field on a hairline, in the ladder's type. */
+.categoryMenu {
+    display: none;
+    position: relative;
+    min-width: 0;
 }
 
+.categorySelect {
+    width: 100%;
+    min-height: var(--settings-row);
+    padding: 0 2rem 0 0.2rem;
+    border: 0;
+    border-bottom: 1px solid var(--margin-rule);
+    border-radius: 0;
+    background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e1ad66' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
+        right 0.3rem center / 1.1rem no-repeat;
+    color: var(--margin-gold);
+    font-family: var(--margin-heading-font);
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    appearance: none;
+    cursor: pointer;
+}
+
+.categorySelect:focus-visible {
+    outline: none;
+    border-bottom-color: var(--margin-fever);
+}
+
+.categorySelect option {
+    color: var(--margin-paper);
+    background: var(--margin-ink);
+    font-family: var(--margin-body-font);
+}
+
+/* ------------------------------------------------------------------ the chapter */
 .contentPane {
     display: flex;
+    flex: 1 1 auto;
     flex-direction: column;
-    gap: var(--settings-content-gap);
+    gap: clamp(0.5rem, 1.5vh, 0.9rem);
     min-width: 0;
     min-height: 0;
-    padding: var(--settings-content-pad);
 }
 
 .contentHeader {
-    display: grid;
-    gap: var(--settings-header-gap);
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding-bottom: 0.45rem;
+    border-bottom: 1px solid var(--margin-rule);
+}
+
+.contentTitle {
+    margin: 0;
+    font-family: var(--margin-heading-font);
+    font-size: clamp(1.6rem, 4vh, 2.2rem);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: 0.01em;
+    color: var(--margin-paper);
+}
+
+.contentHeader > .headerCopy {
+    font-family: var(--margin-heading-font);
+    font-style: italic;
+    font-size: clamp(0.95rem, 2.1vh, 1.1rem);
+    color: var(--margin-paper-dim);
 }
 
 .headerCopy {
-    margin: 0.15rem 0 0;
-    color: var(--theme-text-muted);
-    line-height: 1.45;
+    max-width: 44rem;
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--margin-paper-soft);
 }
 
+.headerCopy strong {
+    font-weight: 600;
+    color: var(--margin-paper);
+}
 
-
-
-
-
+/* The subsections: small capitals on the rule, the open one underlined in gold. */
 .subsectionNav {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(5.6rem, 1fr));
-    gap: 0.4rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.4rem;
+    padding: 0 0.2rem;
+    border-bottom: 1px solid var(--margin-hairline);
 }
 
 .subsectionButton {
-    appearance: none;
-    min-height: 2.25rem;
-    padding: 0.45rem 0.7rem;
-    border-radius: var(--ui-radius-md);
-    border: 1px solid var(--theme-card-border-polished);
-    background: var(--theme-surface-control);
-    color: var(--theme-text-muted);
-    font-family: var(--theme-display-font);
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    margin: 0 0 -1px;
+    padding: 0;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    color: var(--margin-paper-dim);
+    font-family: var(--margin-body-font);
     font-size: 0.75rem;
-    letter-spacing: 0.08em;
+    font-weight: 500;
+    letter-spacing: 0.24em;
     text-transform: uppercase;
-    transition:
-        border-color 140ms ease,
-        background 140ms ease,
-        color 140ms ease;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color 160ms ease;
 }
 
-.subsectionButtonActive {
-    border-color: var(--theme-border-strong);
-    background:
-        radial-gradient(circle at top left, var(--theme-glow-gold), transparent 56%),
-        linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-deep) 68%, transparent), rgba(13, 11, 14, 0.92));
-    color: var(--theme-gold-bright);
+.subsectionButton:hover,
+.subsectionButton:focus-visible {
+    color: var(--margin-paper);
+    outline: none;
 }
 
-.shellModal .subsectionButton {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
-    background:
-        linear-gradient(180deg, rgba(255, 243, 217, 0.025), transparent 54%),
-        color-mix(in srgb, var(--theme-void) 44%, transparent);
+.subsectionButton:focus-visible {
+    text-decoration: underline;
+    text-decoration-color: var(--margin-gold);
+    text-underline-offset: 0.3em;
 }
 
-.shellModal .subsectionButtonActive {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 26%, transparent);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+.subsectionButtonActive,
+.subsectionButtonActive:hover {
+    color: var(--margin-gold);
+    border-bottom-color: var(--margin-gold);
 }
 
 .contentScroll {
-    display: grid;
-    gap: var(--settings-section-gap);
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: clamp(0.9rem, 2.4vh, 1.5rem);
     min-height: 0;
-    align-content: start;
-    overflow: visible;
+    padding-right: 0.25rem;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--margin-rule) transparent;
 }
 
+/* ------------------------------------------------------------------ a section: a ruled table */
 .section {
-    display: grid;
-    gap: var(--settings-section-gap);
-    padding: var(--settings-section-pad);
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-width: 0;
+}
+
+.section > .headerCopy {
+    padding: 0.5rem 0.2rem;
 }
 
 .sectionHeading {
     margin: 0;
+    padding: 0 0.2rem 0.3rem;
+    border-bottom: 1px solid var(--margin-hairline);
+    font-family: var(--margin-body-font);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--margin-gold);
 }
 
-.fieldCard {
+.toggleStack,
+.boardPresentationPair {
+    display: flex;
+    flex-direction: column;
+}
+
+/* A control is a line: name and note at the left, the control at the line's end. */
+.fieldCard,
+.toggleRow {
     display: grid;
-    gap: var(--theme-space-md);
-    padding: var(--settings-field-pad);
-    border-radius: var(--ui-radius-lg);
-    border: 1px solid var(--theme-card-border-polished);
-    background: var(--theme-surface-glass);
-    box-shadow: var(--theme-elevation-soft);
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.3rem 1.5rem;
+    min-height: var(--settings-row);
+    padding: clamp(0.4rem, 1.2vh, 0.65rem) 0.2rem;
+    border-bottom: 1px solid var(--margin-hairline-soft);
 }
 
-.shellModal .contentPane {
-    background:
-        radial-gradient(ellipse 115% 62% at 50% 0%, rgba(255, 232, 190, 0.04), transparent 60%),
-        linear-gradient(180deg, rgba(255, 243, 217, 0.02), transparent 16%);
+.toggleRow {
+    cursor: pointer;
 }
 
-.shellModal .fieldCard,
-.shellModal .toggleRow {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
-    background:
-        linear-gradient(180deg, rgba(255, 243, 217, 0.03), transparent 54%),
-        color-mix(in srgb, var(--theme-void) 36%, transparent);
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.03),
-        0 10px 18px color-mix(in srgb, var(--theme-shadow) 10%, transparent);
+.toggleRow:hover .fieldText strong {
+    color: var(--margin-fever);
 }
 
-.placeholderField {
-    opacity: 0.8;
+.toggleRowDisabled {
+    cursor: default;
+    opacity: 0.5;
+}
+
+.toggleRowDisabled:hover .fieldText strong {
+    color: var(--margin-paper);
+}
+
+.fieldText {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+}
+
+.fieldText strong {
+    font-family: var(--margin-heading-font);
+    font-size: clamp(1.05rem, 2.4vh, 1.25rem);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: 0.02em;
+    color: var(--margin-paper);
+    transition: color 160ms ease;
+}
+
+.fieldText span {
+    font-style: italic;
+    font-size: clamp(0.78rem, 1.7vh, 0.86rem);
+    line-height: 1.4;
+    color: var(--margin-paper-dim);
 }
 
 .placeholderLabelRow {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    gap: 0.45rem;
+    align-items: baseline;
+    gap: 0.6rem;
 }
 
 .futurePill {
-    flex: 0 0 auto;
     font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
+    font-style: normal;
+    letter-spacing: 0.24em;
     text-transform: uppercase;
-    color: var(--theme-text-muted);
-    border: 1px solid var(--theme-divider-hairline);
-    border-radius: 999px;
-    padding: 0.12rem 0.45rem;
+    color: var(--margin-gold);
 }
 
 .demoScopeNote {
-    color: var(--theme-text-muted);
-    font-size: 0.78rem;
-    font-style: italic;
-    line-height: 1.45;
+    font-size: 0.75rem;
 }
 
-.fieldText {
-    display: grid;
-    gap: 0.18rem;
+.placeholderField .fieldText strong {
+    color: var(--margin-paper-soft);
 }
 
-.fieldText strong {
-    color: var(--theme-text);
-    font-size: 0.92rem;
-    font-weight: 700;
-}
-
-.fieldText span {
-    color: var(--theme-text-muted);
-    font-size: 0.82rem;
-    line-height: 1.45;
-}
-
+/* A choice: a row of words, the chosen one underlined in gold. */
 .segmented {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.55rem;
+    justify-content: flex-end;
+    gap: 0 1.1rem;
 }
 
 .segmentButton,
 .segmentButtonDisabled {
-    appearance: none;
-    min-height: 2.5rem;
-    padding: 0.6rem 0.95rem;
-    border-radius: var(--ui-radius-md);
-    border: 1px solid var(--theme-card-border-polished);
-    background: var(--theme-surface-control);
-    color: var(--theme-text-muted);
-    font-family: var(--theme-display-font);
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.25rem;
+    padding: 0;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    color: var(--margin-paper-dim);
+    font-family: var(--margin-body-font);
     font-size: 0.75rem;
-    letter-spacing: 0.1em;
+    font-weight: 500;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
     transition:
-        transform 140ms ease,
-        border-color 140ms ease,
-        background 140ms ease,
-        color 140ms ease;
+        color 160ms ease,
+        border-color 160ms ease;
 }
 
-.segmentButton:hover {
-    transform: translateY(-1px);
-    border-color: var(--theme-border-strong);
-    color: var(--theme-text);
+.segmentButton:hover,
+.segmentButton:focus-visible {
+    color: var(--margin-paper);
+    outline: none;
 }
 
-.segmentButtonActive {
-    border-color: var(--theme-border-strong);
-    background:
-        radial-gradient(circle at top left, var(--theme-glow-gold), transparent 50%),
-        linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-deep) 72%, transparent), rgba(13, 11, 14, 0.92));
-    color: var(--theme-gold-bright);
+.segmentButton:focus-visible {
+    text-decoration: underline;
+    text-decoration-color: var(--margin-gold);
+    text-underline-offset: 0.3em;
+}
+
+.segmentButtonActive,
+.segmentButtonActive:hover {
+    color: var(--margin-gold);
+    border-bottom-color: var(--margin-gold);
 }
 
 .segmentButtonDisabled {
-    opacity: 0.42;
-    cursor: not-allowed;
+    color: color-mix(in srgb, var(--margin-paper-dim) 60%, transparent);
+    cursor: default;
 }
 
-.toggleStack {
-    display: grid;
-    gap: 0.75rem;
-}
-
-.toggleRow {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--theme-space-xl);
-    padding: var(--settings-field-pad);
-    border-radius: var(--ui-radius-lg);
-    border: 1px solid var(--theme-card-border-polished);
-    background: var(--theme-surface-glass);
-    box-shadow: var(--theme-elevation-soft);
-}
-
-.toggleRowDisabled {
-    opacity: 0.58;
-}
-
-.toggleRowDisabled .toggleShell {
-    pointer-events: none;
-}
-
+/* A toggle: a hairline switch that fills gold, and the word beside it. */
 .toggleShell {
-    position: relative;
-    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
 }
 
 .toggleShell input {
     position: absolute;
-    inset: 0;
-    opacity: 0;
-}
-
-.toggleTrack {
-    display: block;
-    width: 3.3rem;
-    height: 1.9rem;
-    border-radius: 999px;
-    border: 1px solid var(--theme-border);
-    background: var(--theme-surface-control);
-    box-shadow: inset 0 1px 0 var(--theme-hud-chrome-inset);
-    transition: border-color 140ms ease, background 140ms ease;
-}
-
-.toggleTrack::after {
-    content: '';
-    position: absolute;
-    top: 0.16rem;
-    left: 0.16rem;
-    width: 1.42rem;
-    height: 1.42rem;
-    border-radius: 50%;
-    background: linear-gradient(180deg, var(--theme-gold-bright), var(--theme-ash));
-    box-shadow: 0 8px 16px color-mix(in srgb, var(--theme-shadow) 20%, transparent);
-    transition: transform 140ms ease, background 140ms ease;
-}
-
-.toggleShell input:checked + .toggleTrack {
-    border-color: var(--theme-border-strong);
-    background:
-        radial-gradient(circle at center, var(--theme-glow-gold-soft), transparent 68%),
-        color-mix(in srgb, var(--theme-gold-deep) 68%, transparent);
-}
-
-.toggleShell input:checked + .toggleTrack::after {
-    transform: translateX(1.34rem);
-    background: linear-gradient(180deg, var(--theme-rune), var(--theme-gold));
-}
-
-.sliderField {
-    display: grid;
-    gap: 0.5rem;
-}
-
-.sliderValue {
-    font-family: var(--theme-display-font);
-    font-size: 1rem;
-    color: var(--theme-gold-bright);
-}
-
-.rangeInput {
-    width: 100%;
-    accent-color: var(--theme-gold-bright);
-}
-
-.footer {
-    position: sticky;
-    bottom: 0;
-    z-index: 2;
-    margin-top: auto;
-    padding-top: var(--settings-footer-pad-top);
-    padding-bottom: max(0.2rem, env(safe-area-inset-bottom, 0px));
-    border-top: 1px solid var(--theme-divider-hairline);
-    background: linear-gradient(180deg, rgba(7, 8, 12, 0), rgba(7, 8, 12, 0.94) 40%);
-}
-
-.shellModal .footer {
-    border-top-color: color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
-    background:
-        linear-gradient(180deg, rgba(7, 8, 12, 0), rgba(7, 8, 12, 0.92) 42%),
-        linear-gradient(90deg, rgba(255, 243, 217, 0.02), transparent 28%);
-}
-
-.footerActions {
-    margin-inline: auto 0;
-    width: min(32rem, 100%);
-}
-
-.stackedShell .fitViewport {
-    align-items: stretch;
-    justify-content: flex-start;
-    padding-block: max(4px, var(--theme-space-2xs));
-    box-sizing: border-box;
-
-    --settings-sidebar-gap: var(--theme-space-sm);
-    --settings-sidebar-pad: 0.7rem;
-    --settings-content-gap: var(--theme-space-sm);
-    --settings-content-pad: 0.7rem;
-    --settings-header-gap: 0.15rem;
-    --settings-section-gap: 0.55rem;
-    --settings-section-pad: 0.7rem;
-    --settings-field-pad: 0.6rem;
-    --settings-footer-pad-top: 0.55rem;
-}
-
-.stackedShell .fitMeasureOuter {
-    width: 100%;
-}
-
-.stackedShell.shellModal .fitMeasureOuter,
-.stackedShell.shellModal .fitZoomInner {
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    max-height: 100%;
-}
-
-.stackedShell.shellModal .panel.panelModal {
-    flex: 1 1 auto;
-    max-height: min(calc(100dvh - 16px), calc(100svh - 16px));
-    overflow: hidden;
-}
-
-.stackedShell .frame {
-    grid-template-columns: 1fr;
-    min-height: 0;
-}
-
-.stackedShell.shellModal .frame {
-    flex: 1 1 auto;
-    min-height: 0;
-}
-
-.stackedShell .sidebar {
-    border-right: none;
-    border-bottom: 1px solid var(--theme-divider-hairline);
-    padding-bottom: 0.55rem;
-    background:
-        linear-gradient(180deg, var(--theme-backdrop-body-rim), transparent 18%),
-        linear-gradient(
-            160deg,
-            color-mix(in srgb, var(--theme-stone) 78%, transparent),
-            color-mix(in srgb, var(--theme-void-soft) 78%, transparent)
-        );
-}
-
-.stackedShell .categoryNav {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.35rem;
-}
-
-.stackedShell .sidebarHeader {
-    gap: 0.15rem;
-}
-
-.stackedShell .shellTitle {
-    font-size: clamp(1.02rem, 2.8vw, 1.18rem);
-}
-
-.stackedShell .contentTitle {
-    font-size: clamp(0.98rem, 2.6vw, 1.12rem);
-}
-
-.stackedShell .categoryButton {
-    min-height: 2.2rem;
-    padding: 0.42rem 0.5rem;
-}
-
-.stackedShell .categoryLabel {
-    font-size: 0.75rem;
-}
-
-.stackedShell .categoryNote {
-    display: none;
-}
-
-.stackedShell .footerActions {
-    width: 100%;
-}
-
-.stackedShell .footerActions :global(button) {
-    width: 100%;
-}
-
-.stackedShell .contentPane {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    overflow: hidden;
-}
-
-.stackedShell .contentScroll {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 0.4rem;
-}
-
-.stackedShell .footer {
-    padding-top: 0.42rem;
-    background:
-        linear-gradient(180deg, rgba(7, 8, 12, 0), rgba(7, 8, 12, 0.96) 32%),
-        color-mix(in srgb, var(--theme-void) 68%, transparent);
-}
-
-.shortLandscapeShell .fitViewport {
-    align-items: flex-start;
-    justify-content: flex-start;
-    /* Tight: 390px-tall viewports must fit the panel with 44px category chips (mobile-layout QA). */
-    padding-block: 0;
-
-    --settings-sidebar-gap: 0.28rem;
-    --settings-sidebar-pad: 0.38rem;
-    --settings-content-gap: 0.38rem;
-    --settings-content-pad: 0.42rem;
-    --settings-header-gap: 0.08rem;
-    /*
-     * Tightened by roughly 12px of rhythm: the camera-mode segmented control rendered that far
-     * below the content pane's edge, and the pane clips at this size, so its three buttons were
-     * cut in half and a press at their middle landed on the pane instead of on a button.
-     */
-    --settings-section-gap: 0.26rem;
-    --settings-section-pad: 0.32rem;
-    --settings-field-pad: 0.3rem;
-    --settings-footer-pad-top: 0.28rem;
-}
-
-.shortLandscapeShell .fitMeasureOuter {
-    align-self: stretch;
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    max-height: 100%;
-}
-
-.shortLandscapeShell .fitZoomInner {
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-}
-
-.shortLandscapeShell .panel {
-    flex: 1 1 auto;
-    height: calc(100dvh - 12px);
-    max-height: calc(100dvh - 12px);
-    min-height: 0;
-}
-
-.shortLandscapeShell .frame {
-    flex: 1 1 auto;
-    min-height: 0;
-    height: 100%;
-    grid-template-rows: auto minmax(0, 1fr);
-}
-
-.shortLandscapeShell .sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: var(--settings-sidebar-gap);
-    padding: var(--settings-sidebar-pad);
-    padding-bottom: 0.28rem;
-}
-
-.shortLandscapeShell .categoryNav {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    gap: 0.22rem;
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding-bottom: 0;
-    margin-inline: calc(var(--settings-sidebar-pad) * -1);
-    padding-inline: var(--settings-sidebar-pad);
-    scrollbar-width: thin;
-    -webkit-overflow-scrolling: touch;
-}
-
-.shortLandscapeShell .categoryButton {
-    flex: 0 0 auto;
-    width: auto;
-    min-width: min(5.5rem, 22vw);
-    /* Match --ui-touch-target-min: short-landscape rail was ~1.72rem (~28px), failing coarse-pointer QA. */
-    min-height: max(2.75rem, var(--ui-touch-target-min));
-    padding: 0.34rem 0.5rem;
-    text-align: center;
-}
-
-.shortLandscapeShell .sidebarHeader {
-    gap: 0.05rem;
-}
-
-.shortLandscapeShell .sidebarHeader p {
-    display: none;
-}
-
-.shortLandscapeShell .contentHeader {
-    display: flex;
-    align-items: baseline;
-    flex-wrap: wrap;
-    column-gap: 0.35rem;
-    row-gap: 0.15rem;
-}
-
-.shortLandscapeShell .contentHeader > .headerCopy {
-    display: none;
-}
-
-.stackedShell .footer {
-    padding-bottom: max(0.38rem, env(safe-area-inset-bottom, 0px));
-}
-
-.shortLandscapeShell .subsectionNav {
-    gap: 0.3rem;
-}
-
-.shortLandscapeShell .subsectionButton {
-    min-height: 1.8rem;
-    padding: 0.28rem 0.48rem;
-    font-size: 0.75rem;
-}
-
-.shortLandscapeShell .sectionHeading {
-    font-size: 0.94rem;
-}
-
-.shortLandscapeShell .fieldCard {
-    gap: 0.35rem;
-}
-
-.shortLandscapeShell .categoryLabel {
-    font-size: 0.75rem;
-}
-
-/* Horizontal rail: label-only chips (notes read as body copy below). Saves vertical space vs stacked label+note. */
-.shortLandscapeShell .categoryNote {
-    display: none;
-}
-
-.shortLandscapeShell .fieldText strong {
-    font-size: 0.8rem;
-}
-
-.shortLandscapeShell .fieldText span {
-    font-size: 0.75rem;
-    line-height: 1.25;
-}
-
-.boardPresentationPair {
-    display: flex;
-    flex-direction: column;
-    gap: var(--settings-section-gap);
-}
-
-.shortLandscapeShell .boardPresentationPair {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 0.45rem;
-    align-items: start;
-}
-
-/*
- * Side by side at 812x375 each card is about 380px wide, and the camera shell's hint wraps to
- * a second line: the two lines put Auto / Always / Never under the pane's edge again, where a
- * press lands on the pane. The hints go here - "Layout Style" and "Mobile Camera Shell" with
- * their three named options read on their own, and the hints are back at any other size.
- */
-.shortLandscapeShell .boardPresentationPair .fieldText span {
-    display: none;
-}
-
-.shortLandscapeShell .segmentButton,
-.shortLandscapeShell .segmentButtonDisabled {
-    min-height: 2rem;
-    padding: 0.38rem 0.55rem;
-    font-size: 0.75rem;
-}
-
-.shortLandscapeShell .toggleStack {
-    gap: 0.45rem;
-}
-
-.shortLandscapeShell .toggleRow {
-    align-items: flex-start;
-    gap: var(--theme-space-sm);
-}
-
-.shortLandscapeShell .toggleTrack {
-    width: 2.9rem;
-    height: 1.7rem;
-}
-
-.shortLandscapeShell .toggleTrack::after {
-    top: 0.13rem;
-    left: 0.13rem;
-    width: 1.2rem;
-    height: 1.2rem;
-}
-
-.shortLandscapeShell .toggleShell input:checked + .toggleTrack::after {
-    transform: translateX(1.16rem);
-}
-
-.shortLandscapeShell .sliderValue {
-    font-size: 0.82rem;
-}
-
-.shortLandscapeShell .footer {
-    padding-top: 0.3rem;
-    padding-bottom: max(0.12rem, env(safe-area-inset-bottom, 0px));
-}
-
-.shortLandscapeShell .footerActions {
-    gap: 0.3rem;
-}
-
-.shortLandscapeShell .footerActions :global(button) {
-    min-height: 1.8rem;
-    padding: 0.34rem 0.65rem;
-    font-size: 0.75rem;
-}
-
-.wideShortShell .fitViewport {
-    --settings-sidebar-gap: var(--theme-space-sm);
-    --settings-sidebar-pad: calc(var(--theme-space-sm) + var(--theme-space-2xs));
-    --settings-content-gap: var(--theme-space-sm);
-    --settings-content-pad: calc(var(--theme-space-sm) + var(--theme-space-2xs));
-    --settings-section-gap: var(--theme-space-sm);
-    --settings-section-pad: calc(var(--theme-space-sm) + var(--theme-space-2xs));
-    --settings-field-pad: calc(var(--ui-card-pad-md) - var(--theme-space-xs));
-    --settings-footer-pad-top: var(--theme-space-sm);
-}
-
-.wideShortShell .frame {
-    grid-template-columns: minmax(220px, 272px) minmax(0, 1fr);
-}
-
-.wideShortShell .contentScroll {
-    /* Three columns when a category has three panels (e.g. gameplay) so 1280×720 stays mildly zoomed, not crushed. */
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    align-items: start;
-}
-
-.wideShortShell .contentScroll > :only-child {
-    grid-column: 1 / -1;
-}
-
-.wideShortShell .categoryButton {
-    padding: 0.8rem 0.9rem;
-}
-
-.wideShortShell .categoryLabel {
-    font-size: 0.86rem;
-}
-
-.wideShortShell .categoryNote {
-    font-size: 0.75rem;
-}
-
-.wideShortShell .fieldText strong {
-    font-size: 0.88rem;
-}
-
-.wideShortShell .fieldText span {
-    font-size: 0.78rem;
-}
-
-.wideShortShell .sliderValue {
-    font-size: 0.94rem;
-}
-
-@media (max-width: 560px) {
-    .stackedShell .sidebar {
-        gap: var(--theme-space-sm);
-    }
-
-    .stackedShell .categoryNav {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.45rem;
-        grid-template-columns: none;
-    }
-
-    .stackedShell .categoryButton {
-        flex: 1 1 calc(50% - 0.45rem);
-        min-height: var(--ui-touch-target-min);
-        padding: 0.75rem 0.82rem;
-    }
-
-    .stackedShell .categoryNote {
-        display: none;
-    }
-
-    .stackedShell .controlCenterStrip {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .stackedShell .controlCenterRow {
-        padding: 0.5rem;
-    }
-
-    .toggleRow {
-        align-items: flex-start;
-    }
-}
-
-:global([data-reduce-motion='false']) .shellModal .panel.panelModal {
-    animation: ovr-modal-plate-enter var(--theme-modal-plate-enter-duration, 220ms)
-        var(--theme-modal-plate-enter-ease, cubic-bezier(0.22, 1, 0.36, 1)) both;
-}
-
-:global([data-reduce-motion='true']) .shellModal,
-:global([data-reduce-motion='true']) .panel {
-    backdrop-filter: none;
-}
-
-:global([data-reduce-motion='true']) .shellModal .panel.panelModal {
-    animation: none;
-}
-
-:global([data-reduce-motion='true']) .categoryButton:hover,
-:global([data-reduce-motion='true']) .segmentButton:hover {
-    transform: none;
-}
-
-.visuallyHidden {
-    position: absolute;
     width: 1px;
     height: 1px;
-    padding: 0;
     margin: -1px;
+    padding: 0;
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
 }
 
-.saveTransferActions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--theme-space-md);
-    margin-top: var(--theme-space-sm);
+.toggleTrack {
+    position: relative;
+    display: inline-block;
+    width: 2.4rem;
+    height: 1.2rem;
+    border: 1px solid color-mix(in srgb, var(--margin-paper) 40%, transparent);
+    border-radius: 999px;
+    background: transparent;
+    transition:
+        border-color 160ms ease,
+        background-color 160ms ease;
 }
 
-/* Phones: the six category cards and the subsection tabs collapse into menus. */
-.categoryMenu {
+.toggleTrack::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0.2rem;
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+    background: var(--margin-paper-dim);
+    transform: translateY(-50%);
+    transition:
+        transform 160ms ease,
+        background-color 160ms ease;
+}
+
+.toggleShell input:checked + .toggleTrack {
+    border-color: var(--margin-gold);
+    background: color-mix(in srgb, var(--margin-gold) 18%, transparent);
+}
+
+.toggleShell input:checked + .toggleTrack::after {
+    background: var(--margin-gold);
+    transform: translate(1.2rem, -50%);
+}
+
+.toggleShell input:focus-visible + .toggleTrack {
+    outline: 2px solid var(--margin-gold);
+    outline-offset: 2px;
+}
+
+.toggleState {
+    min-width: 1.9rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--margin-paper-dim);
+}
+
+.toggleShell input:checked ~ .toggleState {
+    color: var(--margin-gold);
+}
+
+/* A slider: a gold thread, its value set beside it. */
+.sliderField {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.sliderValue {
+    min-width: 3.4rem;
+    font-family: var(--margin-heading-font);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--margin-gold);
+}
+
+.rangeInput {
+    --range-fill: 0%;
+
+    width: clamp(7rem, 16vw, 12rem);
+    height: 1.5rem;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    appearance: none;
+    cursor: pointer;
+}
+
+.rangeInput::-webkit-slider-runnable-track {
+    height: 1px;
+    background: linear-gradient(90deg, var(--margin-gold) var(--range-fill), var(--margin-hairline) var(--range-fill));
+}
+
+.rangeInput::-moz-range-track {
+    height: 1px;
+    background: var(--margin-hairline);
+}
+
+.rangeInput::-moz-range-progress {
+    height: 1px;
+    background: var(--margin-gold);
+}
+
+.rangeInput::-webkit-slider-thumb {
+    width: 0.8rem;
+    height: 0.8rem;
+    margin-top: calc(-0.4rem + 0.5px);
+    border: 1px solid var(--margin-gold);
+    border-radius: 50%;
+    background: var(--margin-ink);
+    appearance: none;
+    transition: background-color 160ms ease;
+}
+
+.rangeInput::-moz-range-thumb {
+    width: 0.8rem;
+    height: 0.8rem;
+    border: 1px solid var(--margin-gold);
+    border-radius: 50%;
+    background: var(--margin-ink);
+}
+
+.rangeInput:hover::-webkit-slider-thumb,
+.rangeInput:focus-visible::-webkit-slider-thumb {
+    background: var(--margin-gold);
+}
+
+.rangeInput:hover::-moz-range-thumb,
+.rangeInput:focus-visible::-moz-range-thumb {
+    background: var(--margin-gold);
+}
+
+.rangeInput:focus-visible {
+    outline: none;
+}
+
+/* The About tables: label, value, a note — each row on a hairline. */
+.profileSummaryGrid,
+.saveTrustGrid {
+    display: flex;
+    flex-direction: column;
+    margin: 0.35rem 0;
+}
+
+.profileSummaryRow,
+.saveTrustRow {
+    display: grid;
+    grid-template-columns: minmax(7rem, 11rem) auto;
+    grid-template-areas:
+        'label value'
+        'note note';
+    align-items: baseline;
+    gap: 0.1rem 1rem;
+    padding: 0.45rem 0.2rem;
+    border-bottom: 1px solid var(--margin-hairline-soft);
+}
+
+.profileSummaryRow strong,
+.saveTrustRow strong {
+    grid-area: label;
+    font-family: var(--margin-heading-font);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--margin-paper);
+}
+
+.profileSummaryRow span,
+.saveTrustRow span {
+    grid-area: value;
+    font-size: 0.9rem;
+    color: var(--margin-paper-soft);
+}
+
+.profileSummaryRow em,
+.saveTrustRow em {
+    grid-area: note;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: var(--margin-paper-dim);
+}
+
+/* An action inside the page: an outlined word, as in the dialogs. */
+.word {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    min-height: var(--settings-row);
+    margin: 0.6rem 0.2rem 0.3rem;
+    padding: 0 1.1rem;
+    border: 1px solid color-mix(in srgb, var(--margin-paper) 28%, transparent);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--margin-paper-soft);
+    font-family: var(--margin-heading-font);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+        background-color 160ms ease,
+        color 160ms ease;
+}
+
+.word:hover,
+.word:focus-visible {
+    background: color-mix(in srgb, var(--margin-paper) 7%, transparent);
+    color: var(--margin-paper);
+    outline: none;
+}
+
+.word:focus-visible {
+    outline: 2px solid var(--margin-gold);
+    outline-offset: 2px;
+}
+
+/* ------------------------------------------------------------------ the foot rule */
+.footer {
+    flex-shrink: 0;
+    padding-top: clamp(0.5rem, 1.5vh, 0.8rem);
+    border-top: 1px solid var(--margin-rule);
+}
+
+/* The dock is plain here: one row of outlined words, right-aligned, Back before Save. The DOM
+   keeps the primary first (for the focus trap); `order` draws it last. */
+.footer .footerActions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    grid-template-areas: none;
+    gap: 0.5rem;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+}
+
+.footer .footerActions > * {
+    display: flex;
+    gap: 0.5rem;
+    grid-area: auto;
+    min-width: 0;
+}
+
+.footer .footerActions > *:first-child {
+    order: 2;
+}
+
+.footer .footerActions .footerWord {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 0 !important;
+    min-height: var(--settings-row);
+    padding: 0 1.15rem;
+    border: 1px solid color-mix(in srgb, var(--margin-paper) 28%, transparent);
+    border-radius: 4px;
+    background: transparent;
+    box-shadow: none;
+    color: var(--margin-paper-soft);
+    font-family: var(--margin-heading-font);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: none;
+    text-shadow: none;
+}
+
+.footer .footerActions .footerWord::before,
+.footer .footerActions .footerWord::after {
     display: none;
 }
 
-.categorySelect {
-    width: 100%;
-    min-height: 44px;
-    padding: 0 0.9rem;
-    border-radius: var(--ui-radius-pill);
-    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 34%, var(--theme-border));
-    background: rgba(8, 8, 12, 0.78);
-    color: var(--theme-gold-bright);
-    font-family: var(--theme-display-font);
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
+.footer .footerActions .footerWord:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--margin-paper) 7%, transparent);
+    color: var(--margin-paper);
+}
+
+.footer .footerActions .footerWord[data-variant='primary'] {
+    border-color: var(--margin-gold);
+    color: var(--margin-gold);
+}
+
+.footer .footerActions .footerWord[data-variant='primary']:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--margin-gold) 12%, transparent);
+    color: var(--margin-fever);
+}
+
+.footer .footerActions .footerWord:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
+.footer .footerActions .footerWord:focus-visible {
+    outline: 2px solid var(--margin-gold);
+    outline-offset: 2px;
+    box-shadow: none;
+}
+
+/* ------------------------------------------------------------------ notices */
+.persistWriteBanner {
+    position: fixed;
+    top: max(0.75rem, env(safe-area-inset-top, 0px));
+    left: 50%;
+    z-index: 25;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    width: min(40rem, calc(100% - 2rem));
+    padding: 0.6rem 0.9rem;
+    border: 1px solid var(--margin-rule);
+    border-radius: 4px;
+    background: var(--margin-ink);
+    color: var(--margin-paper-soft);
+    font-size: 0.86rem;
+    transform: translateX(-50%);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+}
+
+.persistWriteBannerDismiss {
+    min-height: 2.25rem;
+    margin-left: auto;
+    padding: 0 0.7rem;
+    border: 1px solid var(--margin-rule);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--margin-gold);
+    font-family: var(--margin-body-font);
+    font-size: 0.75rem;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
+    cursor: pointer;
 }
 
-.categorySelect:focus-visible {
+.persistWriteBannerDismiss:hover,
+.persistWriteBannerDismiss:focus-visible {
+    background: color-mix(in srgb, var(--margin-gold) 12%, transparent);
     outline: none;
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--theme-cyan-bright) 55%, transparent);
-}
-
-@media (max-width: 720px), (max-height: 700px) {
-    /* Beat the stacked/short-landscape variants, which set their own display. */
-    .categoryNav,
-    .stackedShell .categoryNav,
-    .shortLandscapeShell .categoryNav {
-        display: none;
-    }
-
-    .categoryMenu {
-        display: block;
-    }
-
-    .sidebarHeader {
-        gap: 0.15rem;
-    }
 }
 
 .srOnly {
@@ -1250,4 +947,242 @@
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════════════════
+   Stacked: a phone, or a narrow short landscape. The margin becomes a band across the top —
+   the title beside one <select> — and the chapter takes the rest; the foot rule's words share
+   one row, each filling its half.
+   ══════════════════════════════════════════════════════════════════════════════════════ */
+.stackedShell .frame {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.stackedShell .sidebar {
+    flex: 0 0 auto;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.25rem 1.25rem;
+    width: 100%;
+    padding: 0 0 0.35rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--margin-hairline);
+}
+
+.stackedShell .categoryNav {
+    display: none;
+}
+
+.stackedShell .categoryMenu {
+    display: block;
+    justify-self: start;
+    width: auto;
+    min-width: 12rem;
+    max-width: 100%;
+}
+
+.stackedShell .categorySelect {
+    border-bottom-color: transparent;
+}
+
+.stackedShell .shellTitle {
+    font-size: clamp(1.5rem, 4.5vh, 2rem);
+}
+
+.stackedShell .contentPane {
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.stackedShell .contentScroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.stackedShell .footer .footerActions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.stackedShell .footer .footerActions > * {
+    display: flex;
+}
+
+.stackedShell .footer .footerActions .footerWord {
+    flex: 1 1 auto;
+    width: 100%;
+}
+
+/* A phone in portrait: the chooser takes a row of its own under the title, full width, so
+   nothing sits over it; a control's line breaks, the control under its name. */
+.stackedShell:not(.shortLandscapeShell) .sidebar {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+}
+
+.stackedShell:not(.shortLandscapeShell) .categoryMenu {
+    width: 100%;
+    max-width: none;
+}
+
+.stackedShell:not(.shortLandscapeShell) .fieldCard {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.stackedShell:not(.shortLandscapeShell) .segmented {
+    justify-content: flex-start;
+}
+
+.stackedShell:not(.shortLandscapeShell) .sliderField {
+    justify-content: space-between;
+}
+
+.stackedShell:not(.shortLandscapeShell) .rangeInput {
+    flex: 1 1 auto;
+    width: auto;
+}
+
+.stackedShell:not(.shortLandscapeShell) .profileSummaryRow,
+.stackedShell:not(.shortLandscapeShell) .saveTrustRow {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+        'label'
+        'value'
+        'note';
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════════════════
+   Short-stacked: 844×390, 900×700. Everything comes down a step — 32px rows, the eyebrow and
+   the chapter's note gone, one subsection at a time — so the chapter and the foot rule both
+   stay on the page.
+   ══════════════════════════════════════════════════════════════════════════════════════ */
+.shortLandscapeShell {
+    --settings-row: 32px;
+}
+
+.shortLandscapeShell .sidebar {
+    gap: 0 1rem;
+    padding-bottom: 0.2rem;
+}
+
+.shortLandscapeShell .sidebarHeader .eyebrow {
+    display: none;
+}
+
+.shortLandscapeShell .shellTitle {
+    font-size: 1.4rem;
+}
+
+.shortLandscapeShell .categorySelect {
+    min-height: 40px;
+    font-size: 1.1rem;
+}
+
+.shortLandscapeShell .contentPane {
+    gap: 0.3rem;
+}
+
+.shortLandscapeShell .contentHeader {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.8rem;
+    padding-bottom: 0.25rem;
+}
+
+.shortLandscapeShell .contentTitle {
+    font-size: 1.35rem;
+}
+
+.shortLandscapeShell .contentHeader > .headerCopy {
+    display: none;
+}
+
+.shortLandscapeShell .subsectionButton {
+    min-height: 2rem;
+}
+
+.shortLandscapeShell .contentScroll {
+    gap: 0.5rem;
+}
+
+.shortLandscapeShell .fieldCard,
+.shortLandscapeShell .toggleRow {
+    padding: 0.2rem 0.2rem;
+}
+
+.shortLandscapeShell .fieldText strong {
+    font-size: 1rem;
+}
+
+.shortLandscapeShell .fieldText span {
+    font-size: 0.76rem;
+}
+
+.shortLandscapeShell .segmentButton,
+.shortLandscapeShell .segmentButtonDisabled {
+    min-height: 1.75rem;
+}
+
+.shortLandscapeShell .toggleTrack {
+    width: 2.1rem;
+    height: 1.05rem;
+}
+
+.shortLandscapeShell .toggleTrack::after {
+    width: 0.6rem;
+    height: 0.6rem;
+}
+
+.shortLandscapeShell .toggleShell input:checked + .toggleTrack::after {
+    transform: translate(1.05rem, -50%);
+}
+
+.shortLandscapeShell .footer {
+    padding-top: 0.35rem;
+}
+
+.shortLandscapeShell .word,
+.shortLandscapeShell .footer .footerActions .footerWord {
+    min-height: 36px;
+    font-size: 0.95rem;
+}
+
+.shortLandscapeShell .word {
+    margin: 0.35rem 0.2rem 0.2rem;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════════════════
+   Wide-short: 1280×720 and its kin keep the two columns, a step tighter.
+   ══════════════════════════════════════════════════════════════════════════════════════ */
+.wideShortShell .sidebar {
+    gap: 0.5rem;
+}
+
+.wideShortShell .categoryButton {
+    padding-top: 0.15rem;
+    padding-bottom: 0.15rem;
+}
+
+.wideShortShell .shellTitle {
+    font-size: clamp(1.7rem, 4.5vh, 2.2rem);
+}
+
+.wideShortShell .contentScroll {
+    gap: 0.8rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .categoryButton,
+    .subsectionButton,
+    .segmentButton,
+    .toggleTrack,
+    .toggleTrack::after,
+    .word,
+    .fieldText strong {
+        transition: none;
+    }
 }

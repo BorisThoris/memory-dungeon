@@ -58,19 +58,15 @@ test.describe('Expanded playable navigation contract', () => {
         await expect(mainMenuPlayButton(page)).toBeVisible();
     });
 
-    test('Choose Your Path back, browse search, detail close, and locked detail all stay in the mode shell', async ({ page }) => {
+    test('Choose Your Path back and alternate-mode details stay in the mode shell', async ({ page }) => {
         test.setTimeout(90_000);
         await openModeLibrary(page);
 
-        await page.getByLabel(/filter modes/i).fill('scholar');
-        await expect(page.getByRole('button', { name: /^Scholar\. Open details\.$/i })).toBeVisible();
-        await expect(page.getByRole('button', { name: /^Wild Run\. Open details\.$/i })).toHaveCount(0);
-        await page.getByLabel(/filter modes/i).fill('');
-
-        await page.getByRole('button', { name: /^Endless Mode\. Open details\.$/i }).click({ force: true });
+        await expect(page.getByRole('searchbox', { name: /filter modes/i })).toHaveCount(0);
+        await page.getByRole('button', { name: /^Pass and Play\. Open details\.$/i }).click();
         const detail = page.getByTestId('library-mode-detail-modal');
         await expect(detail).toBeVisible();
-        await expect(detail).toContainText(/locked intentionally/i);
+        await expect(detail).toContainText(/one device/i);
         await detail.getByRole('button', { name: /^close$/i }).click();
         await expect(detail).toBeHidden();
 

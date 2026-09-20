@@ -77,10 +77,11 @@ const mismatchTurn = (
         }
     }) as BoardTurnResolvedEvent;
 
+/** Lets the announcer's zero-delay flush run, then the microtask that publishes the line. */
 const flushRaf = async (): Promise<void> => {
     await act(async () => {
         await new Promise<void>((resolve) => {
-            requestAnimationFrame(() => resolve());
+            setTimeout(resolve, 0);
         });
         await Promise.resolve();
     });
@@ -155,7 +156,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             label: 'Chain',
             tone: 'chain'
         });
-        expect(getHudActionFeedbackProfile('Surge hit: x6. Surge tier live.')).toEqual({
+        expect(getHudActionFeedbackProfile('Sharp reached: x6. Breaks chain into the next clump.')).toEqual({
             label: 'Chain',
             tone: 'chain'
         });
@@ -192,7 +193,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
         });
         await flushRaf();
 
-        expect(result.current.message).toBe('Chain started: x3. Reward loop online.');
+        expect(result.current.message).toBe('Clean reached: x3. Breaks reach deeper into the clump.');
     });
 
     it('announces surge chain milestones', async () => {
@@ -222,7 +223,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
         });
         await flushRaf();
 
-        expect(result.current.message).toBe('Surge hit: x6. Surge tier live.');
+        expect(result.current.message).toBe('Sharp reached: x6. Breaks chain into the next clump.');
     });
 
     it('announces when a meaningful match chain breaks', async () => {
@@ -263,7 +264,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent
                 }),
             { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
@@ -282,7 +283,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent
                 }),
             { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
@@ -295,6 +296,99 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
         expect(result.current.message).toBe('Match resolved. 1/4 pairs cleared.');
         expect(result.current.priority).toBe('info');
+    });
+
+    it('clears the last floor\'s line when the next floor opens with nothing new to say', async () => {
+        // "Match resolved. 2/4 pairs cleared." stood on the HUD through the whole memorize phase
+        // of the next floor, describing a board that had already left.
+        const { result, rerender } = renderHook(
+            (p: { level: number; turnEvent: BoardTurnResolvedEvent | null }) =>
+                useHudPoliteLiveAnnouncement({
+                    ...base,
+                    boardLevel: p.level,
+                    boardTurnEvent: p.turnEvent
+                }),
+            { initialProps: { level: 1, turnEvent: null as BoardTurnResolvedEvent | null } }
+        );
+
+        await act(async () => {
+            rerender({ level: 1, turnEvent: matchTurn('last-match-of-floor-1') });
+        });
+        await flushRaf();
+        expect(result.current.message).toBe('Match resolved. 1/4 pairs cleared.');
+
+        await act(async () => {
+            rerender({ level: 2, turnEvent: matchTurn('last-match-of-floor-1') });
+        });
+        await flushRaf();
+        expect(result.current.message).toBe('');
+    });
+
+    it('replaces the last floor\'s line with what the next floor has to say', async () => {
+        const opening: GameplayFeedbackPresentation = {
+            audioCategory: 'match-resolution',
+            commandId: 'floor-2-open',
+            cue: 'floor.opened',
+            eventId: 'floor-2-open:1',
+            message: 'Short memorize: the cards turn sooner this floor.',
+            priority: 'info',
+            source: { kind: 'system', id: 'mutator' },
+            tone: 'information'
+        };
+        const { result, rerender } = renderHook(
+            (p: { level: number; turnEvent: BoardTurnResolvedEvent | null; feedback: GameplayFeedbackPresentation[] }) =>
+                useHudPoliteLiveAnnouncement({
+                    ...base,
+                    boardLevel: p.level,
+                    boardTurnEvent: p.turnEvent,
+                    gameplayFeedback: p.feedback
+                }),
+            { initialProps: { level: 1, turnEvent: null as BoardTurnResolvedEvent | null, feedback: [] as GameplayFeedbackPresentation[] } }
+        );
+
+        await act(async () => {
+            rerender({ level: 1, turnEvent: mismatchTurn('miss-on-floor-1'), feedback: [] });
+        });
+        await flushRaf();
+        expect(result.current.message).toContain('No match.');
+
+        await act(async () => {
+            rerender({ level: 2, turnEvent: mismatchTurn('miss-on-floor-1'), feedback: [opening] });
+        });
+        await flushRaf();
+        // The old line is down at once; the new one lands once the polite throttle allows it.
+        expect(result.current.message).toBe('');
+        await act(async () => {
+            await new Promise<void>((r) => setTimeout(r, 420));
+        });
+        expect(result.current.message).toBe('Short memorize: the cards turn sooner this floor.');
+    });
+
+    it('does not announce a turn that resolved on a floor that has already left', async () => {
+        // The floor's last match and the next floor's opening land in one update, so the turn
+        // is first seen standing on a board it did not happen on. The floor-clear beat says the
+        // floor was cleared; the HUD line stays free for the new floor.
+        const { result, rerender } = renderHook(
+            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
+                useHudPoliteLiveAnnouncement({
+                    ...base,
+                    boardLevel: 2,
+                    boardTurnEvent: p.turnEvent
+                }),
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
+        );
+
+        await act(async () => {
+            rerender({ turnEvent: matchTurn('final-match-floor-1', { level: 1, matchedPairsAfter: 4 }) });
+        });
+        await flushRaf();
+        expect(result.current.message).toBe('');
+
+        await act(async () => {
+            rerender({ turnEvent: matchTurn('first-match-floor-2', { level: 2 }) });
+        });
+        await flushRaf();
+        expect(result.current.message).toBe('Match resolved. 1/4 pairs cleared.');
     });
 
     it('announces every event one command raised, not just the last of them', async () => {
@@ -347,7 +441,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             commandId: 'reward-1',
             cue: 'findable.score_glint.matched',
             eventId: 'reward-1:2',
-            message: 'Score Glint requested 25 score through match resolution.',
+            message: 'Score Glint claimed: +25 score.',
             priority: 'info',
             source: { kind: 'findable', id: 'score_glint' },
             tone: 'reward'
@@ -366,7 +460,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
         });
         await flushRaf();
 
-        expect(result.current.message).toBe('Score Glint requested 25 score through match resolution.');
+        expect(result.current.message).toBe('Score Glint claimed: +25 score.');
         expect(result.current.message).not.toContain('available');
     });
 
@@ -375,7 +469,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent
                 }),
             { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
@@ -394,7 +488,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null; rowCharges: number; fullCharges: number; sticky: number | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent,
                     regionShuffleCharges: p.rowCharges,
                     shuffleCharges: p.fullCharges,
@@ -430,7 +524,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent
                 }),
             { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
@@ -455,7 +549,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent
                 }),
             { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
@@ -480,7 +574,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null; recallFocus: number; recallMatches: number; recallBonus: number; forgotten?: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent,
                     recallFocus: p.recallFocus,
                     recallMatchesThisFloor: p.recallMatches,
@@ -512,7 +606,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null; recallFocus: number; recallMatches: number; recallBonus: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent,
                     recallFocus: p.recallFocus,
                     recallMatchesThisFloor: p.recallMatches,
@@ -543,7 +637,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null; recallFocus: number; recallFocusMax: number; recallMatches: number; recallBonus: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent,
                     recallFocus: p.recallFocus,
                     recallFocusMax: p.recallFocusMax,
@@ -582,7 +676,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null; recallFocus: number; recallMatches: number; recallBonus: number; forgotten: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent,
                     recallFocus: p.recallFocus,
                     recallMatchesThisFloor: p.recallMatches,
@@ -621,7 +715,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null; recallFocus: number; recallMistakes: number; forgotten: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent,
                     recallFocus: p.recallFocus,
                     recallMistakesThisFloor: p.recallMistakes,
@@ -658,7 +752,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     boardTurnEvent: p.turnEvent
                 }),
             { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
@@ -754,11 +848,16 @@ describe('useHudPoliteLiveAnnouncement', () => {
     it('drops an older queued live-region publish when a newer delivery overtakes it', async () => {
         const pendingFrames: FrameRequestCallback[] = [];
         const pendingMicrotasks: VoidFunction[] = [];
-        vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback): number => {
-            pendingFrames.push(callback);
-            return pendingFrames.length;
-        });
-        vi.stubGlobal('cancelAnimationFrame', vi.fn());
+        // The flush is a zero-delay timer; hold those so the test decides when a batch lands,
+        // and let the throttle's real timers through.
+        const realSetTimeout = globalThis.setTimeout;
+        vi.stubGlobal('setTimeout', ((callback: FrameRequestCallback, delay?: number, ...args: unknown[]) => {
+            if (delay === 0) {
+                pendingFrames.push(callback);
+                return pendingFrames.length;
+            }
+            return realSetTimeout(callback, delay, ...args);
+        }) as typeof setTimeout);
         vi.spyOn(globalThis, 'queueMicrotask').mockImplementation((callback) => {
             pendingMicrotasks.push(callback);
         });
@@ -815,11 +914,16 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
     it('throttles a second delivery when the first delivery timestamp is zero', async () => {
         const pendingFrames: FrameRequestCallback[] = [];
-        vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback): number => {
-            pendingFrames.push(callback);
-            return pendingFrames.length;
-        });
-        vi.stubGlobal('cancelAnimationFrame', vi.fn());
+        // The flush is a zero-delay timer; hold those so the test decides when a batch lands,
+        // and let the throttle's real timers through.
+        const realSetTimeout = globalThis.setTimeout;
+        vi.stubGlobal('setTimeout', ((callback: FrameRequestCallback, delay?: number, ...args: unknown[]) => {
+            if (delay === 0) {
+                pendingFrames.push(callback);
+                return pendingFrames.length;
+            }
+            return realSetTimeout(callback, delay, ...args);
+        }) as typeof setTimeout);
         vi.spyOn(performance, 'now').mockReturnValue(0);
         const { result, unmount } = renderHook(() =>
             useHudPoliteLiveAnnouncement({
@@ -922,7 +1026,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { active: boolean; ids: readonly string[] | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    boardLevel: 2,
+                    boardLevel: 1,
                     gambitThirdPickActive: p.active,
                     gambitOpportunityFlippedIds: p.ids
                 }),

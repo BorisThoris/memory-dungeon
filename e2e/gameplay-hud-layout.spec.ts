@@ -154,14 +154,33 @@ test.describe('gameplay HUD layout', () => {
         await startRun(page);
         await page.evaluate(() => {
             const w = window as Window & {
-                __memoryDungeonE2e?: { setRunProgress: (p: { totalScore: number; level: number; turnsThisFloor: number }) => void };
+                __memoryDungeonE2e?: {
+                    setRunProgress: (p: {
+                        totalScore: number;
+                        level: number;
+                        turnsThisFloor: number;
+                        activeMutators: string[];
+                        currentStreak: number;
+                    }) => void;
+                };
             };
             if (!w.__memoryDungeonE2e) {
                 throw new Error('window.__memoryDungeonE2e missing; the deep-run HUD check requires Vite dev mode.');
             }
-            w.__memoryDungeonE2e.setRunProgress({ totalScore: 1_605_856, level: 60, turnsThisFloor: 14 });
+            // A deep run also carries a mutator, which is a fifth lane, and a live chain, which
+            // gives the chain lane a tier name and a multiplier chip. A fresh run has neither, and
+            // with both the row was wider than the bar below about 700px: centred and unable to
+            // wrap, it overflowed both ends, clipping the Floor label and pushing the mutator out.
+            w.__memoryDungeonE2e.setRunProgress({
+                totalScore: 1_605_856,
+                level: 60,
+                turnsThisFloor: 14,
+                activeMutators: ['short_memorize'],
+                currentStreak: 5
+            });
         });
         await expect(page.getByTestId('hud-score')).toContainText('1,605,856');
+        await expect(page.getByTestId('hud-mutators')).toContainText('Short memorize');
 
         for (const size of [
             { width: 1440, height: 900 },
@@ -169,23 +188,36 @@ test.describe('gameplay HUD layout', () => {
             { width: 960, height: 600 },
             // The Deck, and the narrowest layout the shell claims to support.
             { width: 1280, height: 720 },
-            { width: 620, height: 900 }
+            { width: 700, height: 600 },
+            { width: 620, height: 900 },
+            // Just above the phone breakpoint, where the lanes are still full size.
+            { width: 560, height: 900 }
         ]) {
             await page.setViewportSize(size);
             const clipped = await page.evaluate(() =>
-                ['hud-score', 'hud-floor', 'hud-par']
+                ['hud-score', 'hud-floor', 'hud-par', 'hud-chain', 'hud-mutators']
                     .map((id) => {
                         const lane = document.querySelector(`[data-testid="${id}"]`);
-                        if (!lane) return { id, missing: true, overflowBy: 0 };
+                        if (!lane) return { id, missing: true, overflowBy: 0, outsideBarBy: 0 };
                         // Every text node inside the lane has to fit the box it is painted in.
                         const worst = Array.from(lane.querySelectorAll('*'))
                             .concat([lane])
                             .filter((el) => el.children.length === 0)
                             .map((el) => el.scrollWidth - el.clientWidth)
                             .reduce((most, over) => Math.max(most, over), 0);
-                        return { id, missing: false, overflowBy: worst };
+                        // And the lane itself has to sit inside the chrome it belongs to. The chain is
+                        // the one lane the head does not box: on a desktop it stands as a ladder in
+                        // the left margin (The Margin, `RunShell`), so its box is the run shell.
+                        const bar = document
+                            .querySelector(id === 'hud-chain' ? '[data-testid="run-shell"]' : '[data-testid="game-hud"]')
+                            ?.getBoundingClientRect();
+                        const box = lane.getBoundingClientRect();
+                        const outsideBarBy = bar
+                            ? Math.max(0, bar.left - box.left, box.right - bar.right)
+                            : 0;
+                        return { id, missing: false, overflowBy: worst, outsideBarBy };
                     })
-                    .filter((lane) => lane.missing || lane.overflowBy > 1)
+                    .filter((lane) => lane.missing || lane.overflowBy > 1 || lane.outsideBarBy > 1)
             );
             expect(clipped, `HUD lanes clipped at ${size.width}x${size.height}`).toEqual([]);
         }

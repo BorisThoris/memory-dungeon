@@ -1,0 +1,52 @@
+{
+    "jobs": [
+        {
+            "id": "score-orchestral",
+            "task_type": "text2music",
+            "caption": "Cinematic dark fantasy game trailer score, instrumental, 12 seconds, 100 bpm, D minor. Structure: 0-2s a hushed low string drone with a single struck bell and a soft harp figure; 2-4s taiko drums enter with a rising cello ostinato and building tension; 4.5s a huge orchestral impact with brass, choir and a sub boom; 5-8s driving epic percussion, full strings and choir at full power; 8-10s a triumphant brass chord resolving, then a short mystical choir and harp tail fading to silence. Dungeon atmosphere, epic, ominous, polished film-trailer mix, wide stereo, no vocals.",
+            "lyrics": "[Instrumental]",
+            "instrumental": true,
+            "duration": 12,
+            "bpm": 100,
+            "keyscale": "D minor",
+            "timesignature": "4/4",
+            "inference_steps": 16,
+            "shift": 3.0,
+            "infer_method": "ode",
+            "guidance_scale": 7.0,
+            "seed": 613001
+        },
+        {
+            "id": "score-hybrid",
+            "task_type": "text2music",
+            "caption": "Modern hybrid trailer music, instrumental, 12 seconds, 96 bpm, A minor. Structure: opens with a dark synth pulse, a low choir pad and a ticking celesta; a riser sweeps up through the fourth second into a massive braam hit at 4.5s with a sub drop; then heavy hybrid drums, distorted low brass and staccato strings drive forward; a final big hit at 8 seconds and a shimmering reverse-cymbal tail into silence. Dark fantasy dungeon mood, cinematic, punchy, polished, no vocals.",
+            "lyrics": "[Instrumental]",
+            "instrumental": true,
+            "duration": 12,
+            "bpm": 96,
+            "keyscale": "A minor",
+            "timesignature": "4/4",
+            "inference_steps": 16,
+            "shift": 3.0,
+            "infer_method": "ode",
+            "guidance_scale": 7.0,
+            "seed": 613101
+        },
+        {
+            "id": "score-choral",
+            "task_type": "text2music",
+            "caption": "Epic gothic choral trailer cue, instrumental with wordless choir, 12 seconds, 90 bpm, E minor. A cathedral choir hums a low chant over a pipe organ pedal tone; taiko and timpani rolls build under it; at 4.5 seconds the full choir and orchestra crash in on a thunderous hit; relentless percussion and soaring strings; a final cathedral-sized chord at 8 seconds ringing out into a long reverb tail. Dark fantasy, sacred and ominous, cinematic, wide, no lyrics.",
+            "lyrics": "[Instrumental]",
+            "instrumental": true,
+            "duration": 12,
+            "bpm": 90,
+            "keyscale": "E minor",
+            "timesignature": "4/4",
+            "inference_steps": 16,
+            "shift": 3.0,
+            "infer_method": "ode",
+            "guidance_scale": 7.0,
+            "seed": 613201
+        }
+    ]
+}

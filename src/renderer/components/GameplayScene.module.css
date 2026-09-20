@@ -1,0 +1,206 @@
+/*
+ * The relightable room. `isolation: isolate` keeps the additive layers blending with the base
+ * only, never with the page behind the scene; the parent (`.stageBackdrop` in GameScreen) still
+ * owns the mask, the ink gradient and the overall opacity.
+ */
+.scene {
+    position: absolute;
+    inset: 0;
+    isolation: isolate;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.base,
+.layer {
+    position: absolute;
+    inset: 0;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* The stone is sunk into the page; the light is not. */
+.base {
+    opacity: var(--scene-base-opacity, 1);
+}
+
+.layer {
+    mix-blend-mode: plus-lighter;
+    will-change: opacity;
+}
+
+@supports not (mix-blend-mode: plus-lighter) {
+    .layer {
+        mix-blend-mode: screen;
+    }
+}
+
+/* ------------------------------------------------------------------ the ring */
+.ringLight {
+    opacity: var(--scene-ring-light, 0.55);
+    transition: opacity 900ms ease;
+}
+
+.ringGlow {
+    opacity: var(--scene-ring-glow, 0.72);
+    filter: hue-rotate(var(--scene-ring-hue, 0deg)) saturate(var(--scene-ring-saturate, 1));
+    transition:
+        opacity 900ms ease,
+        filter 900ms ease;
+}
+
+/* While the board is memorised the ring breathes: the room is waiting with the player. */
+.scene[data-memorize='true'] .ringLight,
+.scene[data-memorize='true'] .ringGlow {
+    animation: sceneBreathe 3.6s ease-in-out infinite;
+}
+
+/* A break: the floor light flashes and settles; the peak grows with the chain (`--scene-pulse-peak`). */
+.ringPulse {
+    opacity: 0;
+    animation: scenePulse 720ms cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+}
+
+.scene[data-scene-pulse='fever'] .ringPulse {
+    animation-duration: 1100ms;
+}
+
+/* ------------------------------------------------------------------ the torches: always lit */
+.torchLightL,
+.torchGlow {
+    opacity: 0.82;
+    animation: sceneFlickerA 2.7s steps(1, end) infinite;
+}
+
+.torchLightR {
+    opacity: 0.82;
+    animation: sceneFlickerB 3.3s steps(1, end) infinite;
+}
+
+.torchGlow {
+    animation-duration: 2.1s;
+}
+
+.runeGlow {
+    opacity: 0.85;
+    animation: sceneBreathe 5.2s ease-in-out infinite;
+    animation-delay: -1.7s;
+}
+
+/* ------------------------------------------------------------------ still */
+.scene[data-still='true'] .layer,
+.scene[data-still='true'] .ringPulse {
+    animation: none;
+    transition: none;
+}
+
+.scene[data-still='true'] .ringPulse {
+    opacity: var(--scene-pulse-peak, 0.6);
+}
+
+@keyframes sceneBreathe {
+    0%,
+    100% {
+        opacity: var(--scene-ring-glow, 0.8);
+    }
+
+    50% {
+        opacity: calc(var(--scene-ring-glow, 0.8) * 1.22);
+    }
+}
+
+@keyframes scenePulse {
+    0% {
+        opacity: 0;
+    }
+
+    12% {
+        opacity: var(--scene-pulse-peak, 0.6);
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Torch flicker: stepped so it reads as a flame, not a fade. Two clocks, never in phase. */
+@keyframes sceneFlickerA {
+    0% {
+        opacity: 0.82;
+    }
+
+    9% {
+        opacity: 0.9;
+    }
+
+    17% {
+        opacity: 0.76;
+    }
+
+    31% {
+        opacity: 0.86;
+    }
+
+    44% {
+        opacity: 0.72;
+    }
+
+    52% {
+        opacity: 0.88;
+    }
+
+    68% {
+        opacity: 0.8;
+    }
+
+    79% {
+        opacity: 0.93;
+    }
+
+    90% {
+        opacity: 0.77;
+    }
+
+    100% {
+        opacity: 0.82;
+    }
+}
+
+@keyframes sceneFlickerB {
+    0% {
+        opacity: 0.8;
+    }
+
+    13% {
+        opacity: 0.7;
+    }
+
+    22% {
+        opacity: 0.9;
+    }
+
+    37% {
+        opacity: 0.78;
+    }
+
+    49% {
+        opacity: 0.92;
+    }
+
+    61% {
+        opacity: 0.74;
+    }
+
+    74% {
+        opacity: 0.86;
+    }
+
+    88% {
+        opacity: 0.79;
+    }
+
+    100% {
+        opacity: 0.8;
+    }
+}

@@ -258,7 +258,7 @@ describe('ProfileScreen', () => {
         render(<ProfileScreen />);
 
         const summary = screen.getByTestId('profile-summary-grid');
-        for (const label of ['Profile level', 'Honor marks', 'Best score', 'Title', 'Run history rows', 'Sharp floors']) {
+        for (const label of ['Profile level', 'Honor marks', 'Best score', 'Title', 'Recent runs kept', 'Sharp floors']) {
             expect(summary).toHaveTextContent(label);
         }
         expect(within(screen.getByTestId('profile-milestone-rail')).getAllByText(/^Lv \d+$/).length).toBeGreaterThan(0);

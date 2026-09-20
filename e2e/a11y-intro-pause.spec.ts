@@ -59,14 +59,16 @@ test.describe('E2E-002 / E2E-003 — startup intro + pause modal a11y', () => {
 
         await expectPauseModalFocusOn(page, /^resume$/i);
 
-        await page.keyboard.press('Tab');
+        /* Resume is first in the DOM and Retreat last (the dock's primary group leads, the
+           secondaries follow in menu order), so the trap's two wraps are the two ends. */
+        await page.keyboard.press('Shift+Tab');
         await expectPauseModalFocusOn(page, /^retreat$/i);
 
         await page.keyboard.press('Tab');
         await expectPauseModalFocusOn(page, /^resume$/i);
 
-        await page.keyboard.press('Shift+Tab');
-        await expectPauseModalFocusOn(page, /^retreat$/i);
+        await page.keyboard.press('Tab');
+        await expectPauseModalFocusOn(page, /^inventory$/i);
 
         await pause.getByRole('button', { name: /^resume$/i }).click();
         await expect(pause).toBeHidden();

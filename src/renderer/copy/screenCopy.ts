@@ -6,9 +6,9 @@
  * rather than being left behind in the markup.
  */
 export const CHOOSE_YOUR_PATH_COPY = {
-    dungeonBlurb: 'A clean descent: procedural floors of pairs, clumps, and chains.',
+    dungeonBlurb: 'Match pairs. Set off cascades. Clear each floor before you run out of turns.',
     guidedBlurb:
-        'Start with a guided first room: match the marked pair, clear the floor, then choose what the next room changes.',
+        'A memory game with chain reactions. Your first floor shows you how.',
     /** The "no group picked" chip on the library's group filter. */
     groupFilterAll: 'All',
     /* Not "Filter modes ...": the search box owns that label, and two of them make both ambiguous. */

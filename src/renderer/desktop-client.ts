@@ -110,3 +110,9 @@ const pickDesktopBridge = (): DesktopApi => {
 };
 
 export const desktopClient: DesktopApi = pickDesktopBridge();
+
+/**
+ * True inside the Electron shell, where "Exit Game" closes a window. In a browser tab, on a phone
+ * above all, there is no window to close and the button did nothing; the menu leaves it out.
+ */
+export const hasDesktopBridge = (): boolean => typeof window !== 'undefined' && window.desktop != null;

@@ -4,7 +4,7 @@ import FitScreen from '@fit-screen/react';
 
 /**
  * Keeps `@fit-screen/react` wired for branch spikes (see docs/VIEWPORT_FIT_UI.md).
- * Production shells use `useFitShellZoom` + CSS `zoom` instead.
+ * Production shells lay out fluidly (clamp() and dvh); the fit-zoom hook this spike led to was retired with the title-page menu.
  */
 describe('@fit-screen/react (viewport-fit spike)', () => {
     it('renders children inside a scaled design frame', () => {

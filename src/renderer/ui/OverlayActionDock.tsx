@@ -41,6 +41,7 @@ const OverlayActionDock = ({
         <UiButton
             aria-label={action.ariaLabel}
             className={`${styles.actionButton} ${actionClassName}`.trim()}
+            data-variant={action.variant ?? 'primary'}
             disabled={action.disabled}
             key={`${action.label}:${index}`}
             onClick={action.onClick}
@@ -77,8 +78,12 @@ const OverlayActionDock = ({
             data-testid={testId}
         >
             {leading ? <div className={styles.leading}>{leading}</div> : null}
-            <div className={styles.secondaryGroup}>{secondaryActions.map(renderAction)}</div>
+            {/* The primary action is first in the DOM: the focus trap lands on the first tabbable
+                control, and Tab from there walks the secondaries. On a wide dock the grid areas
+                still draw it at the right; on a narrow one the stack reads in this order, which is
+                the order it used to fake with CSS `order` while focus opened on the wrong button. */}
             <div className={styles.primaryGroup}>{primaryActions.map(renderAction)}</div>
+            <div className={styles.secondaryGroup}>{secondaryActions.map(renderAction)}</div>
         </div>
     );
 };

@@ -89,6 +89,10 @@ export const createFittedBoardViewport = (fitZoom: number): TileBoardViewportSta
     zoom: BOARD_CAMERA_FIT_ZOOM
 });
 
+/** True when nothing has zoomed or panned the board away from its fitted frame (what Fit board restores). */
+export const isBoardViewportAtRest = (viewport: Pick<TileBoardViewportState, 'panX' | 'panY' | 'zoom'>): boolean =>
+    Math.abs(viewport.zoom - BOARD_CAMERA_FIT_ZOOM) < 0.005 && Math.abs(viewport.panX) < 0.005 && Math.abs(viewport.panY) < 0.005;
+
 export const clampBoardZoom = (zoom: number): number => clamp(zoom, MOBILE_CAMERA_MIN_ZOOM, MOBILE_CAMERA_MAX_ZOOM);
 
 const getBoardPanBounds = ({

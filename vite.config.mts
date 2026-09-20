@@ -88,6 +88,16 @@ export default defineConfig(({ mode }) => ({
          * and nothing reloads under it.
          */
         hmr: process.env.E2E_DISABLE_HMR === '1' ? false : undefined,
+        fs: {
+            /*
+             * A git worktree links `node_modules` to the main checkout. Vite serves files by their
+             * real path, and the fonts under `@fontsource` then resolve outside the worktree root,
+             * so every `.woff2` came back 403 and the app (and every Playwright layout measurement
+             * run from a worktree) fell back to system fonts. Allowing the resolved directory
+             * keeps a worktree's dev server serving what the main checkout's does.
+             */
+            allow: [__dirname, fs.realpathSync(path.join(__dirname, 'node_modules'))]
+        },
         watch: {
             ignored: ['**/.codex-run/**', '**/output/**', '**/release/**', '**/dist/**', '**/dist-build/**', '**/dist-electron/**']
         }
@@ -95,7 +105,10 @@ export default defineConfig(({ mode }) => ({
     test: {
         environment: 'happy-dom',
         setupFiles: './vitest.setup.ts',
-        testTimeout: 10_000,
+        /* 30s, not 10s: the full parallel run on the Windows build machine timed out a different
+           test each pass (gate-changed, the cascade replay, App's intro flow), every one of
+           which passes in seconds on its own. A hung test still fails, half a minute later. */
+        testTimeout: 30_000,
         restoreMocks: true,
         clearMocks: true,
         /* Windows / sandbox: fork pool teardown can throw EPERM on process.kill; threads avoid it. */

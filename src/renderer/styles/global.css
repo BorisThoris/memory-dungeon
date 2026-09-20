@@ -6,8 +6,39 @@
 @import '@fontsource/source-sans-3/latin-500.css';
 @import '@fontsource/source-sans-3/latin-600.css';
 @import '@fontsource/source-sans-3/latin-700.css';
+/* The Margin (the in-run chrome): display type and the italic voice of the run line. */
+@import '@fontsource/cormorant-garamond/latin-400.css';
+@import '@fontsource/cormorant-garamond/latin-400-italic.css';
+@import '@fontsource/cormorant-garamond/latin-500.css';
+@import '@fontsource/cormorant-garamond/latin-600.css';
+@import '@fontsource/lora/latin-400.css';
+@import '@fontsource/lora/latin-400-italic.css';
+@import '@fontsource/lora/latin-500.css';
+@import '@fontsource/lora/latin-500-italic.css';
+@import '@fontsource/lora/latin-600.css';
 
 :root {
+    /*
+     * The Margin: the palette and type the run shell, the title page, the mode page, the
+     * settings and every dialog share. Ink under paper, one gold accent ramp, Cormorant
+     * Garamond for display and Lora for the body. Screens may redeclare these on their own
+     * shell; the values are the same.
+     */
+    --margin-ink: #131111;
+    --margin-ink-soft: #1c1918;
+    --margin-paper: #f8f4f4;
+    --margin-paper-soft: #d7d3d3;
+    --margin-paper-dim: #bab6b6;
+    --margin-paper-2: #d7d3d3;
+    --margin-gold: #e1ad66;
+    --margin-fever: #facb8d;
+    --margin-rule: color-mix(in srgb, var(--margin-gold) 45%, transparent);
+    --margin-hairline: color-mix(in srgb, var(--margin-paper) 18%, transparent);
+    --margin-hairline-soft: color-mix(in srgb, var(--margin-paper) 10%, transparent);
+    --margin-heading-font: 'Cormorant Garamond', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    --margin-body-font: 'Lora', 'Palatino Linotype', Georgia, serif;
+    --margin-touch: max(2.75rem, 44px);
+
     color: var(--theme-text, #f4ecdc);
     background: var(--theme-void, #05050a);
     font-family: var(--theme-body-font, 'Trebuchet MS', 'Segoe UI', sans-serif);

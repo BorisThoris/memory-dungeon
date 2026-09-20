@@ -33,6 +33,20 @@ const rungValueLine = (tier: ChainTier): string => {
 
 export const CHAIN_BEAT_COPY = {
     /**
+     * The HUD's standing goal under the stat row: how far the next rung is and what standing on
+     * it buys. `null` is the top of the ladder, where the goal is to stay there.
+     */
+    goalLabel: (momentumLeft: number, nextTier: Exclude<ChainTier, 'none'> | null): string =>
+        nextTier ? `${momentumLeft} momentum to ${CHAIN_TIER_LABELS[nextTier]}` : 'Fever active',
+    goalBenefit: (nextTier: Exclude<ChainTier, 'none'> | null): string =>
+        nextTier === 'clean'
+            ? 'Reach deeper into the clump'
+            : nextTier === 'sharp'
+              ? 'Chain into the next clump'
+              : nextTier === 'fever'
+                ? 'Chain into three clumps'
+                : 'Keep matching to hold the fire',
+    /**
      * The break's line: the one the feedback rail shows and a screen reader speaks, so it has to
      * carry size and cause in one sentence. A break with no chain behind it is the pop.
      */

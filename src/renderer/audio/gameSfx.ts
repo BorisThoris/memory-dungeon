@@ -82,6 +82,16 @@ const MAX_POLYPHONY: Record<SfxCategory, number> = {
 };
 
 const activeVoices: ScheduledVoice[] = [];
+const pendingCues = new Set<ReturnType<typeof globalThis.setTimeout>>();
+
+/** Queued notes belong to the current audio session, just like voices already playing. */
+const scheduleCue = (cue: () => void, delayMs: number): void => {
+    const timer = globalThis.setTimeout(() => {
+        pendingCues.delete(timer);
+        cue();
+    }, delayMs);
+    pendingCues.add(timer);
+};
 
 const removeVoice = (voice: ScheduledVoice): void => {
     const i = activeVoices.indexOf(voice);
@@ -120,6 +130,10 @@ const stealOldestInCategory = (category: SfxCategory): void => {
 };
 
 const silenceAllVoices = (): void => {
+    for (const timer of pendingCues) {
+        globalThis.clearTimeout(timer);
+    }
+    pendingCues.clear();
     while (activeVoices.length > 0) {
         const v = activeVoices[0];
         if (v) {
@@ -329,7 +343,7 @@ const playChunkBreakSfx = (gain: number, pairs: number, tier: ChainTier): void =
         // Each later note sits a little under the one before it, so the phrase climbs in pitch
         // without climbing in level and the sting on top still has room.
         const taper = 1 / (1 + index * 0.08);
-        window.setTimeout(() => {
+        scheduleCue(() => {
             playTone({
                 frequency: note,
                 frequencyEnd: note,
@@ -341,7 +355,7 @@ const playChunkBreakSfx = (gain: number, pairs: number, tier: ChainTier): void =
         }, index * 55);
     }
     if (tier === 'fever') {
-        window.setTimeout(() => {
+        scheduleCue(() => {
             playTone({
                 frequency: 660,
                 frequencyEnd: 1320,
@@ -686,7 +700,7 @@ export const playFloorClearSfx = (gain: number): void => {
     if (gain <= 0.001) {
         return;
     }
-    globalThis.setTimeout(() => {
+    scheduleCue(() => {
         if (tryPlaySampled('floor-clear', gain)) {
             return;
         }
@@ -700,4 +714,3 @@ export const playFloorClearSfx = (gain: number): void => {
         });
     }, 0);
 };
-

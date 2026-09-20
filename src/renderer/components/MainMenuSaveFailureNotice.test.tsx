@@ -7,11 +7,10 @@ import MainMenu from './MainMenu';
 
 vi.mock('./MainMenuBackground', () => ({ default: () => null }));
 vi.mock('../hooks/useViewportSize', () => ({ useViewportSize: () => ({ height: 800, width: 1280 }) }));
-vi.mock('../hooks/useFitShellZoom', () => ({ useFitShellZoom: () => ({ fitZoom: 1 }) }));
 vi.mock('../platformTilt/usePlatformTiltField', () => ({
     usePlatformTiltField: () => ({ tiltRef: { current: null } })
 }));
-vi.mock('../desktop-client', () => ({ desktopClient: { quitApp: vi.fn() } }));
+vi.mock('../desktop-client', () => ({ desktopClient: { quitApp: vi.fn() }, hasDesktopBridge: () => false }));
 vi.mock('../audio/uiSfx', () => ({
     playMenuOpenSfx: vi.fn(),
     playUiBackSfx: vi.fn(),

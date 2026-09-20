@@ -24,8 +24,10 @@ import styles from './styles/App.module.css';
 import { buildRendererThemeStyle } from './styles/theme';
 import { resolveAdaptiveMusicState, useGameplayMusic } from './audio/gameplayMusic';
 import { useFeverDuck } from './audio/feverDuck';
+import { resolutionGapDuckMultiplier } from './audio/resolutionGapDuck';
 import { setTelemetrySink } from '../shared/telemetry';
 import { createGameOverRunSummary } from '../shared/run-summary-rules';
+import type { MutatorId } from '../shared/contracts';
 import {
     createPlayablePathFixture,
     type PlayablePathFixtureId
@@ -131,11 +133,12 @@ const App = () => {
     const musicShellActive = hydrated && (visualView === 'menu' || visualView === 'playing');
 
     const feverDuck = useFeverDuck(run);
+    const gapDuck = resolutionGapDuckMultiplier(run);
     useGameplayMusic({
         active: musicShellActive && musicState.active,
         track: musicState.track,
         masterVolume: settings.masterVolume,
-        musicVolume: settings.musicVolume * musicState.volumeMultiplier * feverDuck,
+        musicVolume: settings.musicVolume * musicState.volumeMultiplier * feverDuck * gapDuck,
         suppressed: musicState.suppressed
     });
 
@@ -187,7 +190,13 @@ const App = () => {
                 forceGameOver: () => void;
                 startClassicGameOver: () => void;
                 startFixture: (id: PlayablePathFixtureId) => Promise<void>;
-                setRunProgress: (progress: { totalScore?: number; level?: number; turnsThisFloor?: number }) => void;
+                setRunProgress: (progress: {
+                    totalScore?: number;
+                    level?: number;
+                    turnsThisFloor?: number;
+                    activeMutators?: MutatorId[];
+                    currentStreak?: number;
+                }) => void;
             };
         };
         const forceCurrentRunGameOver = (): void => {
@@ -210,7 +219,15 @@ const App = () => {
          * Playing sixty floors in a browser to find out is not a test anybody runs, so the seam
          * hands the shell the numbers instead.
          */
-        const setRunProgress = (progress: { totalScore?: number; level?: number; turnsThisFloor?: number }): void => {
+        const setRunProgress = (progress: {
+            totalScore?: number;
+            level?: number;
+            turnsThisFloor?: number;
+            /* The HUD grows a fifth lane once a mutator is on, and the chain lane grows a tier
+               name and a multiplier chip once a streak holds. A fresh run has neither. */
+            activeMutators?: MutatorId[];
+            currentStreak?: number;
+        }): void => {
             const current = useAppStore.getState().run;
             if (!current) {
                 return;
@@ -218,12 +235,14 @@ const App = () => {
             useAppStore.setState({
                 run: {
                     ...current,
+                    activeMutators: progress.activeMutators ?? current.activeMutators,
                     turnsThisFloor: progress.turnsThisFloor ?? current.turnsThisFloor,
                     board: current.board && progress.level != null ? { ...current.board, level: progress.level } : current.board,
                     stats: {
                         ...current.stats,
                         totalScore: progress.totalScore ?? current.stats.totalScore,
                         currentLevelScore: progress.totalScore ?? current.stats.currentLevelScore,
+                        currentStreak: progress.currentStreak ?? current.stats.currentStreak,
                         highestLevel: progress.level ?? current.stats.highestLevel
                     }
                 }
@@ -278,6 +297,8 @@ const App = () => {
      *       `.matchScoreFloater` / `.mismatchScoreFloater` 5 — transient +score or “Miss” pop
      *       (`data-testid` `match-score-floater` / `mismatch-score-floater`); above distraction HUD, under in-run
      *       OverlayModal shells (21+).
+     *       Anchored per `data-shell-layout` (`boardFloaterPlacement.ts`): pair centroid for a pointer, above
+     *       the pair for touch / phone upright, a docked strip under the HUD for a phone sideways.
      */
     return (
         <div
@@ -289,6 +310,7 @@ const App = () => {
             data-viewport={
                 width <= VIEWPORT_MOBILE_MAX ? 'mobile' : width <= VIEWPORT_TABLET_MAX ? 'tablet' : 'desktop'
             }
+            data-orientation={width > height ? 'landscape' : 'portrait'}
             style={themeStyle}
         >
             <a

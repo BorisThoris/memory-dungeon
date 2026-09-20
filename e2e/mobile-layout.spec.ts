@@ -142,6 +142,20 @@ async function expectSettingsCategoryStripReadable(container: Locator): Promise<
     expect(segBox!.height, 'segment control height').toBeGreaterThanOrEqual(22);
 }
 
+/**
+ * Opens a settings category through whichever chooser the viewport renders: the tab strip where
+ * there is width for it, the single `<select>` where the shell stacks. Waiting on a tab that a
+ * stacked shell never draws used to hang until the test timed out.
+ */
+async function chooseSettingsCategory(container: Locator, label: RegExp, id: string): Promise<void> {
+    const tab = container.getByRole('button', { name: label }).first();
+    if (await tab.isVisible().catch(() => false)) {
+        await tab.click();
+        return;
+    }
+    await container.getByTestId('settings-category-menu').selectOption(id);
+}
+
 async function readBoardViewportState(frame: Locator): Promise<{
     mobileCameraMode: boolean;
     panX: number;
@@ -181,11 +195,11 @@ async function expectCoreGameplayChromeFits(page: Page): Promise<void> {
     await expectLocatorFullyInWindowViewport(page, page.getByTestId('game-hud'), 8);
     await expectLocatorFullyInWindowViewport(page, page.getByTestId('tile-board-frame'), 8);
     await expectLocatorFullyInWindowViewport(page, page.getByTestId('game-action-dock'), 8);
-    // "Run settings (toolbar)" is deliberately absent: the run-shell rebuild moved settings behind
-    // the pause menu, so what has to stay reachable on a small screen is the menu button itself.
-    for (const name of [/fit board/i, /open codex/i, /open inventory/i, /return to main menu/i]) {
-        await expectLocatorFullyInWindowViewport(page, page.getByRole('button', { name }), 8);
-    }
+    // Settings, Codex, Inventory and Retreat live behind the pause menu since the run-shell rebuild,
+    // so what has to stay reachable on a small screen is the menu button itself, and the camera's
+    // Fit board next to it.
+    await expectLocatorFullyInWindowViewport(page, page.getByRole('button', { name: /^fit board$/i }), 8);
+    await expectLocatorFullyInWindowViewport(page, page.getByTestId('game-toolbar-main-menu'), 8);
 }
 
 async function expectDialogFitsWithPrimaryActions(page: Page, dialogName: RegExp): Promise<void> {
@@ -297,6 +311,34 @@ test.describe('Mobile layout (renderer)', () => {
         expect(layout.flexDirection).toBe('row');
     });
 
+    /*
+     * The shell names its shape once (`data-shell-layout`) so the CSS and the TS-positioned overlays
+     * (the match floater above all) agree on it; a phone upright and a phone sideways are different
+     * shapes, not one "mobile" with a media query each.
+     */
+    for (const shape of [
+        { width: 390, height: 844, layout: 'phone-portrait', orientation: 'portrait' },
+        { width: 844, height: 390, layout: 'phone-landscape', orientation: 'landscape' },
+        { width: 1024, height: 768, layout: 'tablet', orientation: 'landscape' },
+        { width: 1440, height: 900, layout: 'desktop', orientation: 'landscape' }
+    ]) {
+        test(`${shape.width}x${shape.height} names the game shell shape ${shape.layout}`, async ({ page }) => {
+            await page.setViewportSize({ width: shape.width, height: shape.height });
+            await navigateToLevel1PlayPhase(page);
+            const shell = page.getByTestId('game-shell');
+            await expect(shell).toHaveAttribute('data-shell-layout', shape.layout);
+            await expect(shell).toHaveAttribute('data-shell-orientation', shape.orientation);
+            await expect(page.locator('[data-orientation]').first()).toHaveAttribute('data-orientation', shape.orientation);
+        });
+    }
+
+    test('a coarse pointer names the shell input touch', async ({ page }) => {
+        await forceCoarsePointerMedia(page);
+        await page.setViewportSize({ width: 390, height: 844 });
+        await navigateToLevel1PlayPhase(page);
+        await expect(page.getByTestId('game-shell')).toHaveAttribute('data-shell-input', 'touch');
+    });
+
     test('wide short landscape keeps desktop mobile-camera mode off (parity with main menu)', async ({ page }) => {
         await page.setViewportSize({ width: 1280, height: 720 });
         await navigateToLevel1PlayPhase(page);
@@ -330,13 +372,36 @@ test.describe('Mobile layout (renderer)', () => {
         expect(frameBox).toBeTruthy();
         expect(dockBox).toBeTruthy();
 
-        expect(frameBox!.y).toBeLessThanOrEqual(shellBox!.y + 2);
-        expect(Math.abs(frameBox!.x - shellBox!.x)).toBeLessThanOrEqual(2);
-        expect(Math.abs(frameBox!.width - shellBox!.width)).toBeLessThanOrEqual(4);
-        expect(Math.abs(frameBox!.height - shellBox!.height)).toBeLessThanOrEqual(4);
-        expect(hudBox!.y).toBeLessThan(frameBox!.y + frameBox!.height * 0.18);
-        expect(dockBox!.y).toBeGreaterThan(frameBox!.y + frameBox!.height * 0.72);
-        expect(dockBox!.y + dockBox!.height).toBeLessThanOrEqual(frameBox!.y + frameBox!.height + 2);
+        /*
+         * The full height between the chrome, and the full width between the margins: the stage
+         * is inset by the measured HUD and dock clearances (`useGameplayChromeClearance`), so no
+         * card row sits under the run stats or the tool dock — it used to bleed under both, and
+         * printed the score across two card faces at 1280x800 — and, since The Margin, by the
+         * chain ladder's column at the left and the head's gutter at the right, which the shell
+         * publishes as `--margin-stage-inline-start` / `--margin-stage-inline-end`.
+         */
+        const hudBottom = hudBox!.y + hudBox!.height;
+        const frameBottom = frameBox!.y + frameBox!.height;
+        const chainBox = await page.getByTestId('hud-chain').boundingBox();
+        // Read off the stage's resolved insets: a custom property's computed value keeps its
+        // `clamp()` unresolved, while `left` / `right` on the stage come back in pixels.
+        const margins = await page.getByTestId('board-stage').evaluate((el) => {
+            const style = getComputedStyle(el);
+            return { start: parseFloat(style.left) || 0, end: parseFloat(style.right) || 0 };
+        });
+        expect(margins.start, 'a desktop window keeps a margin for the ladder').toBeGreaterThan(0);
+        expect(Math.abs(frameBox!.x - (shellBox!.x + margins.start))).toBeLessThanOrEqual(2);
+        expect(Math.abs(frameBox!.width - (shellBox!.width - margins.start - margins.end))).toBeLessThanOrEqual(4);
+        // The ladder stands in that margin, clear of the cards.
+        expect(chainBox).toBeTruthy();
+        expect(chainBox!.x).toBeGreaterThanOrEqual(shellBox!.x);
+        expect(chainBox!.x).toBeLessThan(frameBox!.x);
+        expect(frameBox!.y).toBeGreaterThanOrEqual(hudBottom - 2);
+        expect(frameBox!.y).toBeLessThanOrEqual(hudBottom + 12);
+        expect(frameBottom).toBeLessThanOrEqual(dockBox!.y + 2);
+        expect(frameBottom).toBeGreaterThanOrEqual(dockBox!.y - 12);
+        expect(frameBox!.height).toBeGreaterThan(shellBox!.height * 0.6);
+        expect(dockBox!.y + dockBox!.height).toBeLessThanOrEqual(shellBox!.y + shellBox!.height + 2);
     });
 
     test('game control icons meet minimum touch target on compact touch viewport', async ({ page }) => {
@@ -345,12 +410,18 @@ test.describe('Mobile layout (renderer)', () => {
         await navigateToLevel1PlayPhase(page);
         const controls = page.getByRole('toolbar', { name: /game controls/i });
         await expect(controls).toBeVisible();
-        for (const name of [/fit board/i, /open codex/i, /settings/i]) {
-            const btn = controls.getByRole('button', { name });
+        // Every tool on the dock, not a named few: Codex and Settings moved behind the pause menu,
+        // and a list of names went stale with them. Disabled tools count; a finger still lands on them.
+        const buttons = controls.getByRole('button', { includeHidden: false });
+        const count = await buttons.count();
+        expect(count).toBeGreaterThanOrEqual(3);
+        for (let index = 0; index < count; index += 1) {
+            const btn = buttons.nth(index);
+            const name = await btn.getAttribute('aria-label');
             const box = await btn.boundingBox();
             expect(box, `bounding box for ${name}`).toBeTruthy();
-            expect(box!.width).toBeGreaterThanOrEqual(43);
-            expect(box!.height).toBeGreaterThanOrEqual(43);
+            expect(box!.width, `width of ${name}`).toBeGreaterThanOrEqual(43);
+            expect(box!.height, `height of ${name}`).toBeGreaterThanOrEqual(43);
         }
     });
 
@@ -525,7 +596,7 @@ test.describe('Mobile layout (renderer)', () => {
             .first();
         await expect(settingsSection).toBeVisible();
         await expect(settingsSection).toHaveAttribute('data-settings-layout', 'short-stacked');
-        await settingsSection.getByRole('button', { name: /about/i }).first().click();
+        await chooseSettingsCategory(settingsSection, /^about$/i, 'about');
         await settingsSection.getByTestId('settings-subsection-nav').getByRole('button', { name: /^reset$/i }).click();
         const reset = settingsSection.getByRole('button', { name: /reset to defaults/i });
         await expect(reset).toBeVisible();
@@ -541,7 +612,7 @@ test.describe('Mobile layout (renderer)', () => {
         const dialog = page.getByRole('dialog', { name: /run settings/i });
         await expect(dialog).toBeVisible();
         await expect(dialog).toHaveAttribute('data-settings-layout', 'short-stacked');
-        await dialog.getByRole('button', { name: /about/i }).first().click();
+        await chooseSettingsCategory(dialog, /^about$/i, 'about');
         await dialog.getByTestId('settings-subsection-nav').getByRole('button', { name: /^reset$/i }).click();
         const reset = dialog.getByRole('button', { name: /reset to defaults/i });
         await expect(reset).toBeVisible();

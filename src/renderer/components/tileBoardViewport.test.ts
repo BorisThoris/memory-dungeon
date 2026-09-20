@@ -8,6 +8,7 @@ import {
     getBoardFitZoom,
     getGestureCentroid,
     getGestureDistance,
+    isBoardViewportAtRest,
     MOBILE_CAMERA_FIT_MARGIN,
     resolveAnchoredBoardViewport,
     resolveDraggedBoardViewport,
@@ -290,5 +291,15 @@ describe('the portrait fit margin', () => {
         const before = getBoardFitZoom({ boardWidth: 6, boardHeight: 4, viewportWidth: 390, viewportHeight: 600, margin: MOBILE_CAMERA_FIT_MARGIN });
         const after = getBoardFitZoom({ boardWidth: 6, boardHeight: 4, viewportWidth: 390, viewportHeight: 600, margin: PORTRAIT_CAMERA_FIT_MARGIN });
         expect(after / before).toBeCloseTo(PORTRAIT_CAMERA_FIT_MARGIN / MOBILE_CAMERA_FIT_MARGIN, 5);
+    });
+});
+
+describe('isBoardViewportAtRest', () => {
+    it('is true only at the fitted frame, within a rounding hair', () => {
+        expect(isBoardViewportAtRest({ panX: 0, panY: 0, zoom: 1 })).toBe(true);
+        expect(isBoardViewportAtRest({ panX: 0.001, panY: -0.002, zoom: 1.003 })).toBe(true);
+        expect(isBoardViewportAtRest({ panX: 0, panY: 0, zoom: 1.2 })).toBe(false);
+        expect(isBoardViewportAtRest({ panX: 0.3, panY: 0, zoom: 1 })).toBe(false);
+        expect(isBoardViewportAtRest({ panX: 0, panY: -0.1, zoom: 1 })).toBe(false);
     });
 });

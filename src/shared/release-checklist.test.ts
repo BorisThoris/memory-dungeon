@@ -327,11 +327,12 @@ const VERIFIERS: Record<string, () => void> = {
         };
         const files = Object.keys(sources);
         // The walk resolves paths against the working directory, so the stand-in reader is keyed
-        // on the file name rather than on the relative path it was handed.
+        // on the file name rather than on the relative path it was handed - and the resolved path
+        // carries the platform separator, which is `\` on Windows.
         const reached = reachableFromEntries(
             ['src/entry.ts'],
             files,
-            (file) => sources[`src/${file.split('/').pop() ?? ''}`] ?? ''
+            (file) => sources[`src/${file.split(/[\\/]/u).pop() ?? ''}`] ?? ''
         );
 
         expect([...reached].some((path) => path.endsWith('used.ts'))).toBe(true);

@@ -11,7 +11,27 @@
 }
 
 .shell {
+    /*
+     * The Margin: the palette and type the in-run chrome is set in. Declared once here so the
+     * run shell, the floater, the floor-clear colophon and the pause dialog draw from the same
+     * ink and paper. Cormorant Garamond for every number and title, Lora for every sentence.
+     */
+    --margin-ink: #131111;
+    --margin-paper: #f8f4f4;
+    --margin-paper-2: #d7d3d3;
+    --margin-paper-3: #bab6b6;
+    --margin-gold: #e1ad66;
+    --margin-fever: #facb8d;
+    --margin-miss: #e0655a;
+    --margin-rule: color-mix(in srgb, var(--margin-gold) 45%, transparent);
+    --margin-hairline: color-mix(in srgb, var(--margin-paper) 18%, transparent);
+    --margin-heading-font: 'Cormorant Garamond', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    --margin-body-font: 'Lora', 'Palatino Linotype', Georgia, serif;
+    /* The board's own margins: the ladder's column at the left on a desktop, the head's gutter at the right. */
+    --margin-stage-inline-start: 0px;
+    --margin-stage-inline-end: 0px;
     --game-deck-blur: var(--gameplay-chrome-blur, 18px);
+    background: var(--margin-ink);
     /* `main` is a flex column; grow to available height and allow children to shrink (settings modal e2e). */
     flex: 1 1 auto;
     height: 100%;
@@ -72,51 +92,24 @@
     background-repeat: no-repeat;
     background-size: cover;
     mix-blend-mode: normal;
-    /* PLAY-006: arena spotlight — slightly tighter than the torch ring so the dais reads centered */
-    mask-image: radial-gradient(ellipse 108% 96% at 50% 47%, black 18%, rgba(0, 0, 0, 0.9) 55%, transparent 100%);
+    /* The Margin: the scene sunk into the ink and faded to the page edges. */
+    mask-image: radial-gradient(ellipse 110% 100% at 50% 50%, black 20%, rgba(0, 0, 0, 0.85) 55%, transparent 100%);
 }
 
-/* PLAY-006: radial floor vignette (multiplies scene art toward the edges). */
+/* The Margin: the head and the foot are set on ink, so the scene darkens toward both. It sits over
+   the relightable room's layers (`GameplayScene`), which paint the scene itself. */
 .stageBackdrop::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background: radial-gradient(
-        ellipse 116% 92% at 50% 54%,
-        transparent 18%,
-        color-mix(in srgb, var(--theme-shadow) 74%, transparent) 74%,
-        color-mix(in srgb, var(--theme-shadow) 94%, transparent) 100%
-    );
-    mix-blend-mode: multiply;
-    opacity: 0.74;
-}
-
-/* PLAY-006: warm outer “torch” ring at the spotlight rim (mask keeps center clear). */
-.stageBackdrop::after {
     content: '';
     position: absolute;
     inset: 0;
     z-index: 1;
     pointer-events: none;
-    background: radial-gradient(
-        ellipse 90% 82% at 50% 48%,
-        transparent 50%,
-        color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent) 62%,
-        color-mix(in srgb, var(--theme-gold-bright) 30%, transparent) 78%,
-        color-mix(in srgb, var(--theme-gold-bright) 9%, transparent) 88%,
-        transparent 100%
-    );
-    mix-blend-mode: soft-light;
-    opacity: 0.84;
-    mask-image: radial-gradient(
-        ellipse 90% 86% at 50% 47%,
-        transparent 0%,
-        transparent 66%,
-        black 74%,
-        black 86%,
-        transparent 100%
+    background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--margin-ink) 85%, transparent) 0%,
+        color-mix(in srgb, var(--margin-ink) 15%, transparent) 18%,
+        color-mix(in srgb, var(--margin-ink) 15%, transparent) 82%,
+        color-mix(in srgb, var(--margin-ink) 90%, transparent) 100%
     );
 }
 
@@ -297,8 +290,10 @@
 }
 
 .shell[data-mobile-camera-mode='true'] .distractionHud {
-    /* HUD-020: full-bleed board extends under the HUD; keep the numeric pulse in the visible playfield. */
-    padding-top: calc(env(safe-area-inset-top, 0px) + 4rem);
+    /* HUD-020: full-bleed board extends under the HUD; keep the numeric pulse in the visible playfield.
+       The HUD's measured height when the shell has published it (a phone sideways has a shorter bar
+       than the 4rem guess, and the guess left the pulse floating mid-board); the guess until then. */
+    padding-top: calc(var(--gameplay-hud-top-clearance, calc(env(safe-area-inset-top, 0px) + 4rem)) + 0.25rem);
 }
 
 .boardStage {
@@ -316,12 +311,8 @@
     z-index: 1;
     padding: 0.06rem 0.25rem 0.12rem;
     border-radius: calc(var(--ui-radius-lg) + 0.14rem);
-    background:
-        linear-gradient(180deg, color-mix(in srgb, var(--theme-shadow) 12%, transparent), color-mix(in srgb, var(--theme-shadow) 28%, transparent)),
-        var(--gameplay-workshop-table-image) center / cover no-repeat,
-        var(--theme-hud-stage-ellipse),
-        radial-gradient(ellipse at 50% 72%, color-mix(in srgb, var(--theme-shadow) 10%, transparent), transparent 66%),
-        var(--theme-hud-stage-linear);
+    /* The Margin: the stage draws no surface of its own; the cards stand on the scene the way
+       type stands on a page, and the dais and the ring under them stay faint. */
 }
 
 /* REG-002: desktop stage density — avoid a board floating in an oversized frame on 1366×768+.
@@ -334,9 +325,13 @@
      * harder to read for it. The clearances are the ones the chrome publishes about itself; with
      * no measurement yet, this is the full bleed it was.
      */
-    inset: var(--gameplay-hud-top-clearance, 0px) 0 var(--gameplay-dock-bottom-clearance, 0px);
+    inset:
+        var(--gameplay-hud-top-clearance, 0px)
+        var(--margin-stage-inline-end)
+        var(--gameplay-dock-bottom-clearance, 0px)
+        var(--margin-stage-inline-start);
     display: block;
-    width: 100%;
+    width: auto;
     max-width: none;
     margin: 0;
     padding: 0;
@@ -347,7 +342,7 @@
     --gameplay-stage-dais-height: 36%;
     --gameplay-stage-ring-bottom: -9%;
     --gameplay-stage-ring-size: min(92%, 66rem);
-    --gameplay-stage-ring-opacity: 0.24;
+    --gameplay-stage-ring-opacity: 0.16;
 }
 
 /* PLAY-006: elliptical “stone dais” under the playfield (no layout / sizing change). */
@@ -382,10 +377,7 @@
             transparent 24%,
             color-mix(in srgb, var(--theme-shadow) 16%, transparent) 100%
         );
-    box-shadow:
-        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 15%, transparent),
-        0 0 86px 34px color-mix(in srgb, var(--theme-shadow) 40%, transparent);
-    opacity: 0.62;
+    opacity: 0.28;
     background-blend-mode: soft-light, normal, normal, normal;
 }
 
@@ -411,13 +403,13 @@
     bottom: -18%;
     width: min(108%, 100dvi);
     height: 40%;
-    opacity: 0.82;
+    opacity: 0.24;
 }
 
 .shell[data-mobile-camera-mode='true'] .boardStage::after {
     bottom: -18%;
     width: min(118%, 100dvi);
-    opacity: 0.32;
+    opacity: 0.14;
 }
 
 /* FX-015: extra DOM glow under the board when board bloom is on + High quality (see PERFORMANCE_BUDGET.md). */
@@ -505,7 +497,16 @@
     opacity: 0.82;
 }
 
-.boardStage > :global(*) {
+/* Every stage child is lifted onto its own layer - except screen-reader-only text. `.srOnly` is
+   absolute and clipped; the same-specificity `position: relative` here used to win by source order
+   and park the match live-region sentence, visible, in the stage's top-left corner.
+
+   The floaters and the distraction HUD are excluded for the same reason. They position themselves
+   absolutely against the stage, and this rule outranked their own `position` and `z-index`. On a
+   desktop the board frame is itself absolute, so the floater's flow position happened to be the
+   stage's corner and the offsets still landed; in the phone camera shell the frame is in flow, and
+   the score pop was placed a full board height below it - off the screen, every match. */
+.boardStage > :global(*):not(.srOnly):not(.matchScoreFloater):not(.mismatchScoreFloater):not(.distractionHud) {
     position: relative;
     z-index: 1;
 }
@@ -603,16 +604,22 @@
     line-height: 1.45;
 }
 
+/* The key set in display type, gold, so the list reads as a ruled table of the dialog. */
 .shortcutsHelpKeys {
+    font-family: var(--margin-heading-font);
+    font-size: 1.05rem;
     font-weight: 600;
     letter-spacing: 0.02em;
+    color: var(--margin-gold);
 }
 
 .shortcutsHelpTip {
     margin: 0.75rem 0 0;
-    font-size: 0.88rem;
+    font-family: var(--margin-heading-font);
+    font-style: italic;
+    font-size: 1rem;
     line-height: 1.45;
-    color: color-mix(in srgb, var(--theme-text-muted) 92%, transparent);
+    color: var(--margin-paper-dim);
 }
 
 /* Match score floater: between board canvas and distraction HUD,
@@ -629,16 +636,14 @@ under pause/relic modals.
     max-width: min(18rem, 72vi);
     flex-direction: column;
     align-items: center;
-    gap: 0.08rem;
+    gap: 0.25rem;
     font-variant-numeric: tabular-nums;
-    font-weight: 700;
-    font-size: clamp(0.95rem, 2.4vi, 1.3rem);
-    letter-spacing: 0.04em;
-    color: var(--theme-gold-bright);
-    text-shadow:
-        0 0 10px color-mix(in srgb, var(--theme-void) 45%, transparent),
-        0 0 18px color-mix(in srgb, var(--theme-gold-bright) 35%, transparent),
-        0 1px 0 color-mix(in srgb, var(--theme-void) 70%, transparent);
+    font-family: var(--margin-body-font);
+    font-weight: 400;
+    font-size: clamp(0.8rem, 2vi, 0.95rem);
+    letter-spacing: 0;
+    color: var(--margin-paper);
+    text-shadow: 0 2px 24px color-mix(in srgb, var(--margin-ink) 90%, transparent);
     animation-name: matchScoreFloaterRise;
     animation-duration: var(--match-score-float-ms, 780ms);
     animation-timing-function: ease-out;
@@ -769,16 +774,14 @@ subdued cool palette. */
     max-width: min(18rem, 72vi);
     flex-direction: column;
     align-items: center;
-    gap: 0.08rem;
+    gap: 0.25rem;
     font-variant-numeric: tabular-nums;
-    font-weight: 700;
-    font-size: clamp(0.95rem, 2.4vi, 1.3rem);
-    letter-spacing: 0.06em;
-    color: color-mix(in srgb, var(--theme-rune) 88%, white);
-    text-shadow:
-        0 0 10px color-mix(in srgb, var(--theme-void) 45%, transparent),
-        0 0 18px color-mix(in srgb, var(--theme-rune) 28%, transparent),
-        0 1px 0 color-mix(in srgb, var(--theme-void) 70%, transparent);
+    font-family: var(--margin-body-font);
+    font-weight: 400;
+    font-size: clamp(0.8rem, 2vi, 0.95rem);
+    letter-spacing: 0;
+    color: var(--margin-paper);
+    text-shadow: 0 2px 24px color-mix(in srgb, var(--margin-ink) 90%, transparent);
     animation-name: matchScoreFloaterRise;
     animation-duration: var(--match-score-float-ms, 780ms);
     animation-timing-function: ease-out;
@@ -827,82 +830,130 @@ subdued cool palette. */
     animation-name: matchScoreFloaterFade;
 }
 
-/* The floater's number: the one thing a player reads mid-flip. */
+/* ---- floater placement -----------------------------------------------------------------
+   `data-floater-placement` is decided in TS (`boardFloaterPlacement.ts`) from the shell's
+   `data-shell-layout` / `data-shell-input`; the CSS only draws each placement. */
+
+/* Above the pair (touch, and any phone upright): same rise as the centroid, but the anchor is the
+   pair's top edge, so the number is never born under the thumb that flipped the card. */
+.matchScoreFloater[data-floater-placement='above-pair'],
+.mismatchScoreFloater[data-floater-placement='above-pair'] {
+    transform: translate(-50%, -112%);
+}
+
+/* A phone upright is read at arm's length: the number gets the size the width can spare. */
+.shell[data-shell-layout='phone-portrait'] .matchScoreFloater,
+.shell[data-shell-layout='phone-portrait'] .mismatchScoreFloater {
+    font-size: clamp(1.05rem, 4.4vi, 1.42rem);
+    gap: 0.12rem;
+}
+
+/* Docked strip (phone sideways): one row under the HUD - signal, number, and the reason - on its
+   own plate. There is no height for a floater to rise through; the strip fades in place. */
+.matchScoreFloater[data-floater-placement='stage-top'],
+.mismatchScoreFloater[data-floater-placement='stage-top'] {
+    transform: translate(-50%, 0);
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    max-width: min(46rem, calc(100% - 1rem));
+    padding: 0.16rem 0.72rem 0.2rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 26%, transparent);
+    background: color-mix(in srgb, var(--theme-void) 66%, transparent);
+    backdrop-filter: blur(6px) saturate(1.1);
+    font-size: clamp(0.88rem, 3.2vb, 1.08rem);
+    animation-name: matchScoreFloaterDock;
+}
+
+.mismatchScoreFloater[data-floater-placement='stage-top'] {
+    border-color: color-mix(in srgb, var(--theme-rune) 30%, transparent);
+}
+
+/* The plate is the glow now. */
+.matchScoreFloater[data-floater-placement='stage-top']::before {
+    display: none;
+}
+
+.matchScoreFloater[data-floater-placement='stage-top'].matchScoreFloaterReduced,
+.mismatchScoreFloater[data-floater-placement='stage-top'].matchScoreFloaterReduced {
+    animation-name: matchScoreFloaterFade;
+}
+
+[data-floater-placement='stage-top'] .boardFloaterAmount {
+    font-size: 1.22em;
+}
+
+[data-floater-placement='stage-top'] .boardFloaterReason,
+[data-floater-placement='stage-top'] .boardFloaterTerms {
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 18rem;
+}
+
+[data-floater-placement='stage-top'] .boardFloaterSignal {
+    flex: 0 0 auto;
+}
+
+/* The floater's number: the one thing a player reads mid-flip, set in the margin's display type. */
 .boardFloaterAmount {
-    font-size: 1.35em;
-    font-weight: 950;
+    font-family: var(--margin-heading-font);
+    font-size: clamp(2.6rem, 6vi, 4.5rem);
+    font-weight: 400;
     line-height: 1;
-    letter-spacing: 0.02em;
+    letter-spacing: 0;
+    color: var(--margin-fever);
 }
 
 /* One reason under the number, clamped to a single line so the board stays visible. */
 .boardFloaterReason {
     max-width: 100%;
     overflow: hidden;
-    color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
-    font-size: 0.7em;
-    font-weight: 700;
-    letter-spacing: 0.02em;
+    color: var(--margin-paper-2);
+    font-size: 0.9375rem;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: 0;
     line-height: 1.2;
     text-overflow: ellipsis;
     text-transform: none;
+    text-shadow: 0 1px 8px color-mix(in srgb, var(--margin-ink) 90%, transparent);
     white-space: nowrap;
 }
 
+/* The signal over the number: a small-caps word, no pill. Its colour says what kind of news it is. */
 .boardFloaterSignal {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     align-self: center;
     max-width: 100%;
-    padding: 0.08rem 0.42rem;
-    border: 1px solid color-mix(in srgb, var(--theme-text-muted) 28%, transparent);
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--theme-void) 58%, transparent);
-    color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.75em;
-    font-weight: 950;
-    letter-spacing: 0.04em;
+    color: var(--margin-paper);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.16em;
     line-height: 1;
     text-transform: uppercase;
+    text-shadow: 0 1px 8px color-mix(in srgb, var(--margin-ink) 90%, transparent);
 }
 
 .boardFloaterSignal[data-floater-signal='route'],
-.boardFloaterSignal[data-floater-signal='pickup'] {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, transparent);
-    background: color-mix(in srgb, var(--theme-gold-deep) 18%, transparent);
-    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+.boardFloaterSignal[data-floater-signal='pickup'],
+.boardFloaterSignal[data-floater-signal='chain'],
+.boardFloaterSignal[data-floater-signal='combo'],
+.boardFloaterSignal[data-floater-signal='break'] {
+    color: var(--margin-gold);
 }
 
 .boardFloaterSignal[data-floater-signal='trait'] {
-    border-color: color-mix(in srgb, var(--theme-violet-bright) 40%, transparent);
-    background: color-mix(in srgb, var(--theme-violet-bright) 12%, transparent);
-    color: color-mix(in srgb, var(--theme-violet-bright) 82%, white);
+    color: var(--margin-paper-2);
 }
 
-.boardFloaterSignal[data-floater-signal='chain'],
-.boardFloaterSignal[data-floater-signal='combo'] {
-    border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, transparent);
-    background: color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
-    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
-}
-
-.boardFloaterSignal[data-floater-signal='miss'] {
-    border-color: color-mix(in srgb, var(--theme-rune) 38%, transparent);
-    background: color-mix(in srgb, var(--theme-rune) 10%, transparent);
-    color: color-mix(in srgb, var(--theme-rune) 88%, white);
-}
-
-.boardFloaterSignal[data-floater-signal='break'] {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, transparent);
-    background: color-mix(in srgb, var(--theme-gold-bright) 13%, transparent);
-    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
-}
-
+.boardFloaterSignal[data-floater-signal='miss'],
 .boardFloaterSignal[data-floater-signal='penalty'] {
-    border-color: color-mix(in srgb, var(--theme-danger) 44%, transparent);
-    background: color-mix(in srgb, var(--theme-danger) 13%, transparent);
-    color: color-mix(in srgb, var(--theme-danger) 84%, white);
+    color: var(--margin-miss);
 }
 
 .boardStage[data-match-crescendo-screen-cue='burst'],
@@ -912,10 +963,11 @@ subdued cool palette. */
         0 0 1.25rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
 }
 
-/* UI-REFINE: final chrome pass for the HTML gameplay shell. */
+/* UI-REFINE: final chrome pass for the HTML gameplay shell. The stone sinks to 42 % (the base layer
+   inside `GameplayScene` carries it); the room's own lights stay at full strength over it. */
 .stageBackdrop {
-    opacity: 0.58;
-    filter: saturate(1.14) contrast(1.06) brightness(1.02);
+    --scene-base-opacity: 0.42;
+    filter: saturate(0.8) contrast(1.04);
 }
 
 .gameForeground,
@@ -975,26 +1027,12 @@ subdued cool palette. */
     opacity: 0.72;
 }
 
-.boardStage {
-    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
-    box-shadow:
-        inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent),
-        inset 0 0 0 2px color-mix(in srgb, var(--theme-gold-bright) 8%, transparent),
-        inset 0 28px 90px color-mix(in srgb, var(--theme-shadow) 38%, transparent),
-        0 24px 58px color-mix(in srgb, var(--theme-shadow) 26%, transparent),
-        0 0 48px color-mix(in srgb, var(--theme-glow-cyan-soft) 16%, transparent);
-}
-
 /*
- * Only what the decorative rule above needs cancelled on desktop. This used to repeat the whole
- * layout block declared earlier in this file — same selector, same properties — so an edit to the
- * first one changed nothing and said nothing, which is how a stage inset landed here and did not
- * move a pixel. Layout lives in the one place now.
+ * The stage has no frame in either layout (The Margin); on desktop it also has no radius, since
+ * it runs to the page edges. Layout lives in the one block declared earlier in this file.
  */
 .shell:not([data-mobile-camera-mode='true']) .boardStage {
-    border: 0;
     border-radius: 0;
-    box-shadow: none;
 }
 
 /* UIL-001: gameplay HTML layer v2. The board is the full-screen canvas; HUD chrome is a set of
@@ -1049,6 +1087,28 @@ not one central dashboard box. */
     100% {
         opacity: 0;
         transform: translate(-50%, -148%);
+    }
+}
+
+@keyframes matchScoreFloaterDock {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -6px);
+    }
+
+    18% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+
+    78% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, 3px);
     }
 }
 
@@ -1137,36 +1197,55 @@ where that rule
 }
 
 /* Pause dialog: three stats under the actions. */
+/* The pause dialog's table: a ruled list, label and value on one line (The Margin). */
 .pauseStats {
-    display: flex;
-    /* Five entries now that the run's name and its perfect-memory stakes sit here; a phone fits three. */
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1.4rem;
-    margin: 0.2rem 0 0;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 1.2rem;
+    row-gap: 0;
+    margin: 0.4rem 0 0;
+    font-family: var(--margin-body-font);
+    font-size: 0.875rem;
 }
 
 .pauseStats div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.2rem;
+    display: contents;
+}
+
+.pauseStats dt,
+.pauseStats dd {
+    margin: 0;
+    padding: 0.55rem 0;
+    border-top: 1px solid var(--margin-hairline);
+}
+
+.pauseStats div:last-child dt,
+.pauseStats div:last-child dd {
+    border-bottom: 1px solid var(--margin-hairline);
 }
 
 .pauseStats dt {
+    align-self: center;
     font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
+    font-weight: 400;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--theme-text-subtle);
+    color: var(--margin-paper-2);
 }
 
 .pauseStats dd {
-    margin: 0;
-    font-family: var(--theme-display-font);
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: var(--theme-gold-bright);
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--margin-paper);
+    font-variant-numeric: tabular-nums;
+}
+
+.pauseStats dd[data-state='eligible'] {
+    color: var(--margin-gold);
+}
+
+.pauseStats dd[data-state='locked'] {
+    color: var(--margin-paper-3);
 }
 /*
  * Short landscape. The draft's preamble - how many picks this visit, and the footnotes about
@@ -1197,10 +1276,17 @@ where that rule
      * ran under the overlay body's edge. The rows tighten to what a phone held sideways can
      * hold and every line stays on the plate.
      */
+    /* Two columns on a short page: the wide dialog has the width, not the height. */
     .shortcutsHelpList {
-        gap: 0.2rem;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.2rem 1.5rem;
         font-size: 0.88rem;
         line-height: 1.3;
+    }
+
+    .shortcutsHelpKeys {
+        font-size: 0.95rem;
     }
 
     .shortcutsHelpTip {
@@ -1290,10 +1376,8 @@ where that rule
     position: absolute;
     inset: 0;
     z-index: 3;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    padding: 0 0 1.1rem;
+    display: block;
+    padding: 0;
     border: 0;
     border-radius: inherit;
     background: transparent;
@@ -1301,18 +1385,6 @@ where that rule
     font: inherit;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
-}
-
-.memorizeSkipHint {
-    padding: 0.22rem 0.62rem 0.26rem;
-    border-radius: var(--ui-radius-md);
-    border: 1px solid color-mix(in srgb, var(--theme-text-subtle) 26%, transparent);
-    background: color-mix(in srgb, var(--theme-void-alt) 76%, transparent);
-    color: color-mix(in srgb, var(--theme-text-subtle) 82%, transparent);
-    font-size: var(--ui-font-caption);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    pointer-events: none;
 }
 
 .memorizeSkipLayer:focus-visible {
@@ -1324,12 +1396,38 @@ where that rule
 .boardFloaterTerms {
     max-width: 100%;
     overflow: hidden;
-    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
-    font-size: 0.68em;
-    font-weight: 700;
+    color: var(--margin-gold);
+    font-size: 0.9375rem;
+    font-weight: 400;
     font-variant-numeric: tabular-nums;
     letter-spacing: 0.02em;
     line-height: 1.2;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+/*
+ * The board's margins on a desktop: the ladder's column at the left (the rung labels, the
+ * marker and the multiplier beside it), the head's own gutter at the right. Only a desktop
+ * window has the width for the ladder to stand in; every narrower shape lays it under the head.
+ */
+.shell[data-shell-layout='desktop'] {
+    --margin-stage-inline-start: clamp(14rem, 22vw, 20.5rem);
+    --margin-stage-inline-end: 4rem;
+}
+
+/* The ladder's column is set on ink: the relit room's left torch would otherwise light the wall
+   exactly under the rung labels and the 12 px small caps vanish into the stone. */
+.shell[data-shell-layout='desktop'] .stageBackdrop::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--margin-ink) 88%, transparent) 0,
+        color-mix(in srgb, var(--margin-ink) 70%, transparent) calc(var(--margin-stage-inline-start) - 5rem),
+        transparent var(--margin-stage-inline-start)
+    );
 }

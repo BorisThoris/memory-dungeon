@@ -27,6 +27,9 @@ export const gameOverScreenCopy = {
     actionHeading: 'Continue the archive',
     playAgainLabel: 'Play Again',
     playAgainAriaLabel: 'Play Again - start a new run after this expedition',
+    /* Thesis §56.3: the same board again. Nothing granted, the record stands; you know it now. */
+    rematchLabel: 'Rematch this board',
+    rematchAriaLabel: 'Rematch - play this exact board again, same layout and rules',
     mainMenuLabel: 'Main Menu',
     mainMenuAriaLabel: 'Return to the main menu',
     /**
@@ -45,9 +48,14 @@ export const gameOverScreenCopy = {
         highestFloor: 'Highest Floor',
         bestStreak: 'Best Streak',
         perfectFloors: 'Perfect Floors',
-        floorsCleared: 'Floors Cleared',
+        /* Thesis §55.2: the largest single break is "the one players will screenshot". It took the
+           tile "Floors Cleared" held, which the floor headline already says. */
+        largestBreak: 'Largest Break',
         bestScore: 'Best Score'
     },
+    /** The largest break's tile value: pairs, because that is the number a screenshot shows. */
+    largestBreakValue: (pairs: number): string =>
+        pairs <= 0 ? 'None yet' : pairs === 1 ? '1 pair' : `${pairs} pairs`,
     runModeHeadings: {
         daily: (dateKey: string) => `Daily ${dateKey}`,
         meditation: 'Meditation descent',
@@ -66,7 +74,9 @@ export const gameOverScreenCopy = {
         pinVow: 'Pin vow: route planning mattered because pinned notes were capped across the run.',
         wild: 'Wild Run: joker-style matching pressure stayed attached through the final summary.',
         practice: 'Practice descent: training rules were explicit, with progression expectations reduced.',
-        classic: 'Long-run core: chains and featured objectives.'
+        /* Every run summary opens with this line; the old "Long-run core: chains and featured
+           objectives" was the design's name for the mode, not something said to a player. */
+        classic: 'Classic descent: chain matches and clear each floor within its turns, as deep as you can.'
     },
     flipHistoryCopy: (flipCount: number) =>
         flipCount > 0

@@ -26,13 +26,17 @@ vi.mock('zustand/react/shallow', () => ({
     useShallow: <T,>(fn: T) => fn
 }));
 /** The best score as it stood when the run started; the personal-best line is read off this. */
-const gameOverStoreMocks = vi.hoisted(() => ({ bestScoreAtRunStart: null as number | null }));
+const gameOverStoreMocks = vi.hoisted(() => ({
+    bestScoreAtRunStart: null as number | null,
+    startSharedRun: vi.fn()
+}));
 
 vi.mock('../store/useAppStore', () => ({
     useAppStore: (selector: (s: never) => unknown) =>
         selector({
             goToMenu: vi.fn(),
             restartRun: vi.fn(),
+            startSharedRun: gameOverStoreMocks.startSharedRun,
             runStartSaveData:
                 gameOverStoreMocks.bestScoreAtRunStart === null
                     ? null
@@ -51,6 +55,34 @@ const gameOverRunFixture = (totalScore = 0, runEndReason: RunEndReason | null = 
     run = { ...run, runEndReason, stats: { ...run.stats, totalScore }, status: 'gameOver' };
     return createRunSummary(run, []);
 };
+
+describe('the record set', () => {
+    it('shows the largest single break in pairs, the record a player screenshots', () => {
+        // Thesis §55.2. The tile replaced "Floors Cleared", which the floor headline already says.
+        let run = finishMemorizePhase(createNewRun(100, { runSeed: 0xabc }));
+        run = { ...run, biggestChunkPairs: 5, runEndReason: 'turn_ceiling', status: 'gameOver' };
+        render(<GameOverScreen run={createRunSummary(run, [])} />);
+        expect(screen.getByText('Largest Break')).toBeInTheDocument();
+        expect(screen.getByText('5 pairs')).toBeInTheDocument();
+        expect(screen.queryByText('Floors Cleared')).not.toBeInTheDocument();
+    });
+
+    it('offers a rematch of the exact board, through the same key a shared run uses', async () => {
+        // Thesis §56.3. The seed and rules ride the share key, so a rematch and a pasted key can
+        // never start different boards.
+        const run = gameOverRunFixture();
+        render(<GameOverScreen run={run} />);
+        const rematch = screen.getByTestId('game-over-rematch');
+        expect(rematch).toHaveTextContent('Rematch this board');
+        rematch.click();
+        expect(gameOverStoreMocks.startSharedRun).toHaveBeenCalledWith(`md1:classic:${run.runRulesVersion}:${run.runSeed}`);
+    });
+
+    it('says so plainly when nothing broke', () => {
+        render(<GameOverScreen run={gameOverRunFixture()} />);
+        expect(screen.getByText('None yet')).toBeInTheDocument();
+    });
+});
 
 describe('how the run ended', () => {
     const withReason = (runEndReason: RunEndReason | undefined): RunState => {

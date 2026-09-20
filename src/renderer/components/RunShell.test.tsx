@@ -22,7 +22,7 @@ describe('RunShell', () => {
         const stats = screen.getByRole('group', { name: /run stats/i });
         expect(within(stats).getByTestId('hud-floor')).toHaveTextContent(/floor/i);
         expect(within(stats).getByTestId('hud-score')).toHaveTextContent(/score/i);
-        expect(within(stats).getByTestId('hud-par')).toHaveTextContent(/par/i);
+        expect(within(stats).getByTestId('hud-par')).toHaveTextContent(/turns/i);
         expect(within(stats).getByTestId('hud-chain')).toHaveTextContent(/chain/i);
         // There are no lives (Gen 183): no hearts, no life count, and the mutator stat only
         // appears when it carries a value; there is no clock to show.
@@ -70,7 +70,7 @@ describe('RunShell', () => {
 
         const par = screen.getByTestId('hud-par');
         expect(within(par).getByRole('img')).toHaveAttribute('aria-label', '4 of 7 turns, ceiling 21');
-        expect(par).toHaveTextContent('4 / 7');
+        expect(par).toHaveTextContent('4 of 7 turns');
         expect(par).not.toHaveAttribute('data-ceiling-near');
 
         rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...calm, turnsThisFloor: 19 }} tools={[]} />);
@@ -91,7 +91,7 @@ describe('RunShell', () => {
         };
         render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={run} tools={[]} />);
 
-        const chain = within(screen.getByTestId('hud-chain')).getByText(/×3/);
+        const chain = within(screen.getByTestId('hud-chain')).getByText(/Chain 3/);
         // Twelve pairs: Sharp from 6, Fever from 8. A chain of 3 plus 3 cascaded pairs is Sharp.
         expect(chain).toHaveAttribute('data-chain-tier', 'sharp');
         expect(chain).toHaveTextContent(/Sharp/);
@@ -103,6 +103,9 @@ describe('RunShell', () => {
         expect(meter).toHaveAttribute('data-meter-fill', '0.750');
         expect(meter).toHaveAttribute('data-meter-full', 'false');
         expect(meter).toHaveAttribute('aria-label', expect.stringContaining('Fever meter: momentum 6 of 8.'));
+        const goal = screen.getByTestId('hud-chain-goal');
+        expect(goal).toHaveTextContent('2 momentum to Fever');
+        expect(goal).toHaveTextContent('×8 per pair');
     });
 
     it('drains the meter for a beat when a chain of Clean or better drops to nothing', () => {
@@ -143,6 +146,8 @@ describe('RunShell', () => {
         expect(meter).toHaveAttribute('data-meter-full', 'true');
         expect(meter).toHaveAttribute('data-meter-fill', '1.000');
         expect(meter).toHaveAttribute('aria-label', expect.stringContaining('Fever meter full: momentum 10.'));
+        expect(screen.getByTestId('hud-chain-goal')).toHaveTextContent('Fever active');
+        expect(screen.getByTestId('hud-chain-goal')).not.toHaveTextContent('momentum to');
     });
 
     it('marks the Floor stat as a personal best only when told the run is the deepest yet', () => {
@@ -205,5 +210,62 @@ describe('RunShell', () => {
 
         await user.click(within(dock).getByRole('button', { name: /pause and open the run menu/i }));
         expect(onPause).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe('RunShell — The Margin', () => {
+    it('sets the study period on the running head as a count, and says so in the caption', () => {
+        vi.useFakeTimers();
+        try {
+            const base = createNewRun(0, { echoFeedbackEnabled: false });
+            const run: RunState = { ...base, timerState: { ...base.timerState, memorizeRemainingMs: 4000 } };
+            expect(run.status).toBe('memorize');
+            render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={run} tools={[]} />);
+
+            const head = screen.getByTestId('hud-memorize');
+            expect(head).toHaveTextContent('Memorize · 4');
+            expect(head).toHaveTextContent('Double-tap the board to start early');
+            expect(screen.getByTestId('run-shell-line')).toHaveTextContent(/Every face shows for 4 seconds/);
+            expect(screen.getByTestId('game-action-dock')).toHaveTextContent('Study the board');
+
+            act(() => {
+                vi.advanceTimersByTime(1100);
+            });
+            expect(screen.getByTestId('hud-memorize')).toHaveTextContent('Memorize · 3');
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+
+    it('leaves the study count behind once the floor is in play, and names the chain over the line', () => {
+        const run = playingRun();
+        render(
+            <RunShell
+                feedback="No match. Chain reset."
+                feedbackPriority="error"
+                onPause={vi.fn()}
+                personalBestDepth={false}
+                run={run}
+                tools={[]}
+            />
+        );
+        expect(screen.queryByTestId('hud-memorize')).not.toBeInTheDocument();
+        expect(screen.getByTestId('game-action-dock')).toHaveTextContent('No match');
+        expect(screen.getByTestId('run-shell-line')).toHaveAttribute('data-run-shell-line-tone', 'error');
+    });
+
+    it('names every rung of the ladder with what standing on it pays', () => {
+        const base = playingRun();
+        const run: RunState = { ...base, board: { ...base.board!, pairCount: 12 }, stats: { ...base.stats, currentStreak: 3 } };
+        render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={run} tools={[]} />);
+        const ladder = screen.getByTestId('hud-chain-meter');
+        expect(ladder).toHaveTextContent('Fever×8');
+        expect(ladder).toHaveTextContent('Sharp×4');
+        expect(ladder).toHaveTextContent('Clean×2');
+        expect(ladder).toHaveTextContent('Lone×1');
+        // A chain of three stands on Clean: that rung and the ones below read as reached.
+        expect(ladder.querySelector('[data-rung="clean"]')).toHaveAttribute('data-rung-reached', 'true');
+        expect(ladder.querySelector('[data-rung="sharp"]')).toHaveAttribute('data-rung-reached', 'false');
+        expect(screen.getByTestId('hud-chain')).toHaveTextContent('Chain 3 · Clean');
     });
 });

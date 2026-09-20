@@ -208,7 +208,7 @@ test.describe('UI fit contract', () => {
                 await page.waitForTimeout(800);
                 // Filter rather than hunt: the browse grid is paged to fit, and on a phone that is
                 // one card per page out of thirteen.
-                await page.getByRole('searchbox', { name: /filter modes/i }).fill('Pass and Play');
+
                 await page.waitForTimeout(500);
                 await page.getByRole('button', { name: /pass and play/i }).first().click();
                 const detail = page.getByRole('dialog', { name: /pass and play/i });
