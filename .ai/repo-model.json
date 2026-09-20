@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 430079,
-      "sha256": "bbcb2b052c5627f2aac08da522a7fda0ef3aba7efaed21acc0c2616eb91da535"
+      "bytes": 434037,
+      "sha256": "1a39b0dea7994737837679a64da60dd114f098daf7f2e8f11b3387116d99d9b0"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -4191,8 +4191,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 31302,
-      "sha256": "bebfd126d418fa29000a6d6ca44ba4b4f23661a0b75b08dad7569bff1825cd3f"
+      "bytes": 31388,
+      "sha256": "4b8f0e0b43a7de0cf0ef7bdeb76d15f093279501caf850d2e22da05d7f3c3923"
     },
     {
       "path": "packages/notifications/package.json",
