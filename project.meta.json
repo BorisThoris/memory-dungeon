@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-20T14:35:14.669Z",
+  "generatedAt": "2026-09-20T15:20:17.476Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -285,7 +285,7 @@
         "bytes": 143993,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-20T14:34:26.158Z"
+        "capturedAt": "2026-09-20T15:19:52.529Z"
       },
       {
         "profile": "desktop",
@@ -294,7 +294,7 @@
         "bytes": 134991,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-20T14:34:40.021Z"
+        "capturedAt": "2026-09-20T15:20:01.971Z"
       },
       {
         "profile": "full",
@@ -303,7 +303,7 @@
         "bytes": 112331,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-20T14:34:59.003Z"
+        "capturedAt": "2026-09-20T15:20:12.652Z"
       },
       {
         "profile": "mobile",
@@ -312,7 +312,7 @@
         "bytes": 50945,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-20T14:34:44.733Z"
+        "capturedAt": "2026-09-20T15:20:07.938Z"
       },
       {
         "profile": "og",
@@ -321,7 +321,7 @@
         "bytes": 106849,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-20T14:35:14.433Z"
+        "capturedAt": "2026-09-20T15:20:17.313Z"
       }
     ]
   },
@@ -385,7 +385,7 @@
   "metrics": {
     "sourceFiles": 1097,
     "testFiles": 476,
-    "sourceLines": 168341,
+    "sourceLines": 168408,
     "largestDirectories": [
       {
         "directory": "src",
@@ -424,10 +424,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "eb2a8510",
-    "lastCommitDate": "2026-09-20T14:23:52Z",
-    "lastCommitSubject": "Gen 227: the screen the UI-scale cap was blamed on had become the most scalable one in the game",
-    "commitCount": 1487,
+    "head": "db69827d",
+    "lastCommitDate": "2026-09-20T15:05:48Z",
+    "lastCommitSubject": "Merge remote-tracking branch 'origin/main' into claude/main-branch-code-review-5w7bph",
+    "commitCount": 1490,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
