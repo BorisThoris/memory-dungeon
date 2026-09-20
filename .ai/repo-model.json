@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2550,
     "codeFileCount": 892,
-    "exportedSymbolCount": 2701,
+    "exportedSymbolCount": 2702,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6832
+    "relationshipCount": 6833
   },
   "inventory": [
     {
@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 411926,
-      "sha256": "01c637b8c78416c53a1dd5a3c04f7acd4a6e5f39308b226b03b1efec03bafa8f"
+      "bytes": 416471,
+      "sha256": "fd33ea1423fb5da5b5fa08b5b3624622ba88c4566e9a7b45f11a8268d2e0de28"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "bbd6eb60801508a6274c3fc2ef33ac70ddffeac3c90a079ab54f51b37d60166b"
+      "sha256": "6a4c261ff739157d0ce59a8626e919e39cf89789f86f270b4a99f7bcf3893d62"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -10815,20 +10815,20 @@
     {
       "path": "src/renderer/ui/FittedGrid.tsx",
       "category": "source",
-      "bytes": 5839,
-      "sha256": "7988ca9d52a06486a7c3c89f7fc06b897f4fcdec026ff212455a749d0c785b9f"
+      "bytes": 6756,
+      "sha256": "0276566171e8bec33e3a7efb121aead6a040e1ad1c6cdd8f78fea0f5e512bc7e"
     },
     {
       "path": "src/renderer/ui/fittedGridFit.test.ts",
       "category": "test",
-      "bytes": 2600,
-      "sha256": "dd5e8c0efecb0ad9bc9c931663e36bbbe064b7530322bea5b98a9842851eab3b"
+      "bytes": 4757,
+      "sha256": "513efbab055049b710d49f9e8fffaebf9431ebbe6d8c0d4340cb721e7f278592"
     },
     {
       "path": "src/renderer/ui/fittedGridFit.ts",
       "category": "source",
-      "bytes": 2952,
-      "sha256": "d35853e3bd40f898ae8c529dd73c20622c23f53f63085af6333ed9d5056d3290"
+      "bytes": 3978,
+      "sha256": "6134adbf041941f249b30222bbf3ae8efafdeba3f4d5e8244b8bffb18e156b4e"
     },
     {
       "path": "src/renderer/ui/gameplayIcons.tsx",
@@ -24325,7 +24325,7 @@
       "path": "src/renderer/ui/FittedGrid.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 150,
+      "lineCount": 161,
       "imports": [
         "file:src/renderer/ui/fittedGridFit.ts"
       ],
@@ -24340,7 +24340,7 @@
       "path": "src/renderer/ui/fittedGridFit.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 61,
+      "lineCount": 100,
       "imports": [
         "file:src/renderer/ui/fittedGridFit.ts"
       ],
@@ -24352,7 +24352,7 @@
       "path": "src/renderer/ui/fittedGridFit.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 69,
+      "lineCount": 86,
       "imports": [],
       "exports": [
         "symbol:src/renderer/ui/fittedGridFit.ts#computeGridFit",
@@ -24360,7 +24360,8 @@
         "symbol:src/renderer/ui/fittedGridFit.ts#GridFitInput",
         "symbol:src/renderer/ui/fittedGridFit.ts#growRowHeight",
         "symbol:src/renderer/ui/fittedGridFit.ts#MIN_CLICKABLE_ROW_HEIGHT",
-        "symbol:src/renderer/ui/fittedGridFit.ts#MIN_FITTED_ROW_HEIGHT"
+        "symbol:src/renderer/ui/fittedGridFit.ts#MIN_FITTED_ROW_HEIGHT",
+        "symbol:src/renderer/ui/fittedGridFit.ts#readFrameBox"
       ],
       "testedBy": [
         "file:src/renderer/ui/fittedGridFit.test.ts"
@@ -41405,8 +41406,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/ui/FittedGrid.tsx",
-      "line": 149,
-      "endLine": 149
+      "line": 160,
+      "endLine": 160
     },
     {
       "id": "symbol:src/renderer/ui/FittedGrid.tsx#FittedGridProps",
@@ -41463,6 +41464,14 @@
       "file": "src/renderer/ui/fittedGridFit.ts",
       "line": 36,
       "endLine": 36
+    },
+    {
+      "id": "symbol:src/renderer/ui/fittedGridFit.ts#readFrameBox",
+      "name": "readFrameBox",
+      "kind": "value",
+      "file": "src/renderer/ui/fittedGridFit.ts",
+      "line": 82,
+      "endLine": 85
     },
     {
       "id": "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayExitIcon",
@@ -64222,6 +64231,12 @@
       "id": "exports:src/renderer/ui/fittedGridFit.ts->symbol:src/renderer/ui/fittedGridFit.ts#MIN_FITTED_ROW_HEIGHT",
       "source": "file:src/renderer/ui/fittedGridFit.ts",
       "target": "symbol:src/renderer/ui/fittedGridFit.ts#MIN_FITTED_ROW_HEIGHT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/ui/fittedGridFit.ts->symbol:src/renderer/ui/fittedGridFit.ts#readFrameBox",
+      "source": "file:src/renderer/ui/fittedGridFit.ts",
+      "target": "symbol:src/renderer/ui/fittedGridFit.ts#readFrameBox",
       "kind": "exports"
     },
     {

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import styles from './FittedGrid.module.css';
-import { computeGridFit, growRowHeight, type GridFit } from './fittedGridFit';
+import { computeGridFit, growRowHeight, readFrameBox, type GridFit } from './fittedGridFit';
 
 /**
  * A grid that never scrolls. It measures the space it was given, works out how many cards fit,
@@ -52,7 +52,18 @@ const FittedGrid = <T,>({
         if (!frame) {
             return;
         }
-        const { width, height } = frame.getBoundingClientRect();
+        /*
+         * `clientWidth`/`clientHeight`, NOT `getBoundingClientRect()`, and the difference is the
+         * whole fit at any UI scale other than 1. The app applies the scale as `zoom` on the shell,
+         * and a rect is the VISUAL box - zoom already multiplied in - while the CSS this function
+         * goes on to emit (`minmax(${minColumnWidth}px, 1fr)`, `gridAutoRows`) is laid out in
+         * unzoomed px. Measuring in one unit and laying out in the other made the frame look 1.4x
+         * bigger than the grid it was describing at a scale of 1.4, so the fit claimed more columns
+         * and more rows than the CSS produced, `pageSize` overshot, and the surplus row fell past a
+         * frame that clips rather than scrolls - cards cut off with nothing to scroll them back.
+         * Same shape as the `100dvh`-inside-a-`zoom` defect Gen 222 found in the Settings shell.
+         */
+        const { width, height } = readFrameBox(frame);
         if (width <= 0 || height <= 0) {
             return;
         }

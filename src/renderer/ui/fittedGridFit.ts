@@ -66,3 +66,20 @@ export const growRowHeight = (fit: GridFit, visibleCount: number, gap: number, f
     const grown = Math.floor((frameHeight - gap * (usedRows - 1)) / usedRows);
     return Math.max(fit.rowHeight, Math.min(Math.floor(fit.rowHeight * 1.6), grown));
 };
+
+/**
+ * The frame's box in the units the grid's own CSS is laid out in.
+ *
+ * This exists as a named function rather than a property read because choosing the wrong one of
+ * the two boxes an element has is invisible until someone changes the UI scale. The app applies
+ * that scale as `zoom` on the shell: `getBoundingClientRect()` returns the VISUAL box, with the
+ * zoom already multiplied in, while `clientWidth`/`clientHeight` are the LAYOUT box - the same
+ * unit as the `minmax(...px, 1fr)` and `gridAutoRows` this module's answer is turned into. Measure
+ * in one and lay out in the other and the fit is wrong by exactly the scale, in the direction that
+ * hurts: at 1.05 on a 1280x800 panel a card was rendered past a frame that clips rather than
+ * scrolls, and at 0.8 the cards came out 101px tall in space that held 163.
+ */
+export const readFrameBox = (frame: Pick<Element, 'clientHeight' | 'clientWidth'>): { height: number; width: number } => ({
+    height: frame.clientHeight,
+    width: frame.clientWidth
+});
