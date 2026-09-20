@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2454,
-    "codeFileCount": 881,
-    "exportedSymbolCount": 2672,
+    "trackedFileCount": 2456,
+    "codeFileCount": 883,
+    "exportedSymbolCount": 2676,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6759
+    "relationshipCount": 6771
   },
   "inventory": [
     {
@@ -261,8 +261,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 403407,
-      "sha256": "fd3ab0624e9291427bab81b302ddf8bcee7c5c124db4363506062caff09c1767"
+      "bytes": 408914,
+      "sha256": "69938e4ac8d9297caab5c3be5cbf541efd8f6d79d7bfead7fd870e04936316ef"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -754,7 +754,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "3a013ca7af954f7df7c54079e97a09f2684d6f52d49a35fe88b6ac77e22b71a0"
+      "sha256": "3606db81227356352cf38c32edc6524d1fef43bb3c17e9e3872a9fa5a5c8151d"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2338,13 +2338,13 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "57e6b36fbb7dc33d05968fbeae3d51345ed43bf42146472b9d7db095f404726b"
+      "sha256": "29fc0ac046fc9991b6aef2f5b736d0e072706fc42dd9300dc9927ed04c200bd5"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
       "category": "documentation",
-      "bytes": 492277,
-      "sha256": "059877d4f87fbc936991b859fb418a663aba4ecd0c4c1e3b8225a7b73d59d8d8"
+      "bytes": 494025,
+      "sha256": "a590a366242d0a5c7e68726632d20e8d5a10ca6252e8acba0c6bcb7f9e993214"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -7959,8 +7959,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 79872,
-      "sha256": "7dd270f9d1c6be3bcfa6a145dfb07bf5ffad772b3438dac12c39831a8e2d9115"
+      "bytes": 80314,
+      "sha256": "9d987820cdca799f0c2cdbbce0d01cbaf9c02acc68cd57970f276faca15e750c"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -11309,6 +11309,18 @@
       "category": "test",
       "bytes": 4187,
       "sha256": "6898ac27ae075e010eda163a511020167abdeca36e5360b4de02e9f531598071"
+    },
+    {
+      "path": "src/shared/held-pair-rules.test.ts",
+      "category": "test",
+      "bytes": 4931,
+      "sha256": "ff25c49ed0567e7b13f55ec4a7cf708d8712c14880cad7bdd909fbe535cf9fc1"
+    },
+    {
+      "path": "src/shared/held-pair-rules.ts",
+      "category": "source",
+      "bytes": 5084,
+      "sha256": "c7b774a280d9833c479a8f90f854c856793bbe9cbdd074398f1510ce7b71a766"
     },
     {
       "path": "src/shared/honor-unlock-ids.ts",
@@ -17249,7 +17261,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1732,
+      "lineCount": 1739,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -17302,6 +17314,7 @@
         "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/floor-par.ts",
         "file:src/shared/focusDimmedTileIds.ts",
+        "file:src/shared/held-pair-rules.ts",
         "file:src/shared/mechanics-encyclopedia.ts",
         "file:src/shared/pass-and-play-rules.ts",
         "file:src/shared/perfect-memory-status.ts",
@@ -25433,6 +25446,7 @@
         "file:src/shared/gameplay-interaction-graph.test.ts",
         "file:src/shared/gameplay-journal.test.ts",
         "file:src/shared/gameplay-property-invariants.test.ts",
+        "file:src/shared/held-pair-rules.test.ts",
         "file:src/shared/level-clear-rules.test.ts",
         "file:src/shared/long-run-depth.test.ts",
         "file:src/shared/magpie-rules.test.ts",
@@ -27139,6 +27153,40 @@
       "imports": [],
       "exports": [],
       "testedBy": []
+    },
+    {
+      "id": "file:src/shared/held-pair-rules.test.ts",
+      "path": "src/shared/held-pair-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 83,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/held-pair-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/held-pair-rules.ts",
+      "path": "src/shared/held-pair-rules.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 94,
+      "imports": [
+        "file:src/shared/board-grid-dimensions.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/run-array-guards.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/held-pair-rules.ts#describeHeldPair",
+        "symbol:src/shared/held-pair-rules.ts#getHeldPairSpan",
+        "symbol:src/shared/held-pair-rules.ts#getHeldPairTileIds",
+        "symbol:src/shared/held-pair-rules.ts#HELD_PAIR_PIN_COUNT"
+      ],
+      "testedBy": [
+        "file:src/shared/held-pair-rules.test.ts"
+      ]
     },
     {
       "id": "file:src/shared/honor-unlock-ids.ts",
@@ -33987,24 +34035,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 1731,
-      "endLine": 1731
+      "line": 1738,
+      "endLine": 1738
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 189,
-      "endLine": 189
+      "line": 190,
+      "endLine": 190
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 183,
-      "endLine": 183
+      "line": 184,
+      "endLine": 184
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -46591,6 +46639,38 @@
       "endLine": 8
     },
     {
+      "id": "symbol:src/shared/held-pair-rules.ts#describeHeldPair",
+      "name": "describeHeldPair",
+      "kind": "value",
+      "file": "src/shared/held-pair-rules.ts",
+      "line": 87,
+      "endLine": 93
+    },
+    {
+      "id": "symbol:src/shared/held-pair-rules.ts#getHeldPairSpan",
+      "name": "getHeldPairSpan",
+      "kind": "value",
+      "file": "src/shared/held-pair-rules.ts",
+      "line": 70,
+      "endLine": 84
+    },
+    {
+      "id": "symbol:src/shared/held-pair-rules.ts#getHeldPairTileIds",
+      "name": "getHeldPairTileIds",
+      "kind": "value",
+      "file": "src/shared/held-pair-rules.ts",
+      "line": 50,
+      "endLine": 63
+    },
+    {
+      "id": "symbol:src/shared/held-pair-rules.ts#HELD_PAIR_PIN_COUNT",
+      "name": "HELD_PAIR_PIN_COUNT",
+      "kind": "value",
+      "file": "src/shared/held-pair-rules.ts",
+      "line": 47,
+      "endLine": 47
+    },
+    {
       "id": "symbol:src/shared/honor-unlock-ids.ts#HONOR_UNLOCK_IDS",
       "name": "HONOR_UNLOCK_IDS",
       "kind": "value",
@@ -53657,7 +53737,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 9
+          "line": 10
         }
       ],
       "tests": [
@@ -67643,6 +67723,30 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/held-pair-rules.ts->symbol:src/shared/held-pair-rules.ts#describeHeldPair",
+      "source": "file:src/shared/held-pair-rules.ts",
+      "target": "symbol:src/shared/held-pair-rules.ts#describeHeldPair",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/held-pair-rules.ts->symbol:src/shared/held-pair-rules.ts#getHeldPairSpan",
+      "source": "file:src/shared/held-pair-rules.ts",
+      "target": "symbol:src/shared/held-pair-rules.ts#getHeldPairSpan",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/held-pair-rules.ts->symbol:src/shared/held-pair-rules.ts#getHeldPairTileIds",
+      "source": "file:src/shared/held-pair-rules.ts",
+      "target": "symbol:src/shared/held-pair-rules.ts#getHeldPairTileIds",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/held-pair-rules.ts->symbol:src/shared/held-pair-rules.ts#HELD_PAIR_PIN_COUNT",
+      "source": "file:src/shared/held-pair-rules.ts",
+      "target": "symbol:src/shared/held-pair-rules.ts#HELD_PAIR_PIN_COUNT",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/honor-unlock-ids.ts->symbol:src/shared/honor-unlock-ids.ts#HONOR_UNLOCK_IDS",
       "source": "file:src/shared/honor-unlock-ids.ts",
       "target": "symbol:src/shared/honor-unlock-ids.ts#HONOR_UNLOCK_IDS",
@@ -75538,6 +75642,12 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/focusDimmedTileIds.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/shared/focusDimmedTileIds.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/held-pair-rules.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/shared/held-pair-rules.ts",
       "kind": "imports"
     },
     {
@@ -84373,6 +84483,36 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/held-pair-rules.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/held-pair-rules.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/held-pair-rules.test.ts->src/shared/held-pair-rules.ts",
+      "source": "file:src/shared/held-pair-rules.test.ts",
+      "target": "file:src/shared/held-pair-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/held-pair-rules.ts->src/shared/board-grid-dimensions.ts",
+      "source": "file:src/shared/held-pair-rules.ts",
+      "target": "file:src/shared/board-grid-dimensions.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/held-pair-rules.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/held-pair-rules.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/held-pair-rules.ts->src/shared/run-array-guards.ts",
+      "source": "file:src/shared/held-pair-rules.ts",
+      "target": "file:src/shared/run-array-guards.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/honorUnlocks.test.ts->src/shared/honorUnlocks.ts",
       "source": "file:src/shared/honorUnlocks.test.ts",
       "target": "file:src/shared/honorUnlocks.ts",
@@ -92598,6 +92738,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/held-pair-rules.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/held-pair-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/level-clear-rules.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/level-clear-rules.test.ts",
@@ -93633,6 +93779,12 @@
       "id": "tested_by:src/shared/hashPairKey.ts->file:src/shared/hashPairKey.test.ts",
       "source": "file:src/shared/hashPairKey.ts",
       "target": "file:src/shared/hashPairKey.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/held-pair-rules.ts->file:src/shared/held-pair-rules.test.ts",
+      "source": "file:src/shared/held-pair-rules.ts",
+      "target": "file:src/shared/held-pair-rules.test.ts",
       "kind": "tested_by"
     },
     {

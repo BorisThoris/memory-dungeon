@@ -1,4 +1,5 @@
 import { ACHIEVEMENTS } from '../../shared/achievements';
+import { describeHeldPair } from '../../shared/held-pair-rules';
 import {
     MAX_PINNED_TILES,
     RECALL_FOCUS_MAX,
@@ -1250,10 +1251,16 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 onClick: toggleRegionShuffleArmed
             },
             {
+                /*
+                 * The held pair (thesis §30.3(c), T3.4) has no control of its own: two pins ARE the
+                 * claim, so the only thing that changes is what this tool says it is holding. A
+                 * third pin lets the claim go. `held-pair-rules.ts` has the decision and why it
+                 * carries no new verb.
+                 */
                 ...toolSpec('pin'),
                 glyph: RUN_SHELL_GLYPHS.pin,
                 armed: boardPinMode,
-                title: `Pin up to ${MAX_PINNED_TILES} tiles`,
+                title: describeHeldPair(run, MAX_PINNED_TILES),
                 onClick: toggleBoardPinMode
             },
             {
