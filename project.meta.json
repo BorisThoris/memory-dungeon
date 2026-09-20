@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-20T01:33:35.126Z",
+  "generatedAt": "2026-09-20T13:00:32.108Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -282,46 +282,46 @@
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 158751,
+        "bytes": 143993,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-20T01:32:39.834Z"
+        "capturedAt": "2026-09-20T12:59:39.429Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 149031,
+        "bytes": 134991,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-20T01:32:58.974Z"
+        "capturedAt": "2026-09-20T12:59:55.258Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 112443,
+        "bytes": 112331,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-20T01:33:22.389Z"
+        "capturedAt": "2026-09-20T13:00:16.607Z"
       },
       {
         "profile": "mobile",
         "file": "mobile.jpg",
         "path": "project-media/mobile.jpg",
-        "bytes": 50369,
+        "bytes": 50945,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-20T01:33:08.286Z"
+        "capturedAt": "2026-09-20T13:00:04.538Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 105326,
+        "bytes": 106849,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-20T01:33:34.880Z"
+        "capturedAt": "2026-09-20T13:00:31.880Z"
       }
     ]
   },
@@ -385,7 +385,7 @@
   "metrics": {
     "sourceFiles": 1095,
     "testFiles": 475,
-    "sourceLines": 167899,
+    "sourceLines": 168079,
     "largestDirectories": [
       {
         "directory": "src",
@@ -424,10 +424,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "7a2470e2",
-    "lastCommitDate": "2026-09-20T01:01:12Z",
-    "lastCommitSubject": "Refresh the AI repo model after the media merge",
-    "commitCount": 1481,
+    "head": "505c4a49",
+    "lastCommitDate": "2026-09-20T15:40:58+03:00",
+    "lastCommitSubject": "Set the mode page, the settings and every dialog in The Margin",
+    "commitCount": 1483,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
