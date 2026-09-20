@@ -416,6 +416,32 @@
     }
 }
 
+/*
+ * A tablet held upright: 834px of width, 1112 of height. The width is there, so do not stack.
+ *
+ * This is the same argument the short-landscape rule below already makes in words - "the width is
+ * there, so the result and the next move stay side by side rather than stacking into a page twice
+ * the window's height" - keyed on the width it actually talks about rather than on a height. It
+ * had been keyed at `max-height: 560px`, so a tall tablet never reached it: 834x1112 stacked into
+ * a 1133px page in a 1112px window and dropped the chain target off the bottom.
+ *
+ * The block above records the previous attempt at this, and records it honestly: putting the two
+ * next-run cards side by side in the stacked rail saved 83px off a column that "already ran 44px
+ * past the bottom". Shaving 83 off 127 leaves 44, which is why the panel was still over the edge
+ * and why this fixes the stacking instead of shaving it again. With two columns the page is the
+ * taller of the two (666px measured), not their sum.
+ */
+@media (min-width: 700px) and (max-width: 960px) {
+    .layout {
+        grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
+    }
+
+    /* The rail is a narrow column again, so its cards stack inside it as they do on a desktop. */
+    .nextRunGrid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
 @media (max-width: 760px) {
     .foreground {
         gap: 0.55rem;

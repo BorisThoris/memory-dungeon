@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 419999,
-      "sha256": "389cc7ca8d6bee629b79216bde9397f06a49b42fb6610dba8274688a4a57578a"
+      "bytes": 425247,
+      "sha256": "d1da46a3a2b52f40c562abb4b61025c72abf4e8364d000633ab4eb626ef24aa7"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "9183b64cb4dd6b9562e2dee423038b1a22b935bce967f17900642644867fa4a7"
+      "sha256": "5a26d2014e7dbbc6b039d9759a060537840e88f7a89a63263da8dc4fe2dc065c"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -4017,8 +4017,8 @@
     {
       "path": "e2e/ui-fit-contract.spec.ts",
       "category": "test",
-      "bytes": 13084,
-      "sha256": "884109a274c56e61303387ad3b4417a9537bd3c6dfac014a77cf207b01236429"
+      "bytes": 14081,
+      "sha256": "16c47e709b5ec29a69b44616ed197fb3d4500da1a232f38218b700ce73cb4035"
     },
     {
       "path": "e2e/ui-reachability-gate.spec.ts",
@@ -4306,7 +4306,7 @@
       "path": "project-media/capture.json",
       "category": "configuration",
       "bytes": 1305,
-      "sha256": "9c3d48de3907e37fd937565dca01d9023640b5804a3a16e09474e072a0acae19"
+      "sha256": "392b2d6e32616e2ef17636b0e22c964788db2add57fe28cb3e98fb3a04b9585e"
     },
     {
       "path": "project-media/card.jpg",
@@ -4348,7 +4348,7 @@
       "path": "project.meta.json",
       "category": "configuration",
       "bytes": 11717,
-      "sha256": "19f83e2faa6f2363726d6ba75b2246bd9620d33da8e9cd0d78681dd469fcb34b"
+      "sha256": "2a7672fb870077b79a8560c089598996c870aa49b482625a36f6a330554196a7"
     },
     {
       "path": "public/apple-touch-icon.png",
@@ -8445,8 +8445,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.module.css",
       "category": "source",
-      "bytes": 17074,
-      "sha256": "7275878d0aa7cfd8405ec63d04f8616b84781131ad01f6203fff63454fd2ab95"
+      "bytes": 18418,
+      "sha256": "23585a5453fd9ab57f233e31af4a209e09f0d82ac7296b0a9c2fb51f8621b7e2"
     },
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",

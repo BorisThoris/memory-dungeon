@@ -34,22 +34,40 @@ const VIEWPORTS = [
     { id: 'landscape', width: 812, height: 375 }
 ] as const;
 
-const expectFits = async (page: Page, label: string, viewport: string): Promise<void> => {
+/** What each report key means when it is not empty, so a failure names the defect and not a field. */
+const FAILURE_KIND = {
+    belowFold: 'panels past the bottom edge',
+    clipped: 'text cut off instead of laid out',
+    covered: 'text another element paints over',
+    overlapping: 'text leaves that share pixels',
+    scrollers: 'scrollbars',
+    undersized: 'text below the 12px floor',
+    unreachable: 'controls a click cannot reach'
+} as const;
+
+/**
+ * Collect what does not fit at ONE viewport. It returns rather than asserts, and that is the point.
+ *
+ * It used to assert per viewport, so the sweep stopped at the first window that failed and the
+ * later ones were never measured. That cost four generations in a row: a desktop clip on the floor
+ * clear hid a phone defect, a tablet overflow on game over hid a phone one, and a stale locator on
+ * the mode sheet hid a landscape clip - each "fixed, and now a new failure appeared" was really one
+ * of a queue that had been there all along, invisible because nothing looked past the head of it.
+ * Collecting every viewport and asserting once at the end turns one run into the whole list.
+ */
+const fitFailures = async (page: Page, label: string, viewport: string): Promise<string[]> => {
     const report = { ...(await describeFit(page)), unreachable: await findUnreachableControls(page) };
     const summary = `${label} @ ${viewport}`;
-    // Name what broke before asserting, so a CI log says which element on which screen.
+    const failures: string[] = [];
+    // Name what broke as it is found, so a CI log says which element on which screen.
     for (const [kind, rows] of Object.entries(report)) {
         if (rows.length > 0) {
             console.log(`FIT ${summary} | ${kind}: ${rows.join(' | ')}`);
+            const what = FAILURE_KIND[kind as keyof typeof FAILURE_KIND] ?? kind;
+            failures.push(`${summary}: ${what} - ${rows.join(' | ')}`);
         }
     }
-    expect(report.scrollers, `${summary}: scrollbars`).toEqual([]);
-    expect(report.undersized, `${summary}: text below the 12px floor`).toEqual([]);
-    expect(report.clipped, `${summary}: text cut off instead of laid out`).toEqual([]);
-    expect(report.belowFold, `${summary}: panels past the bottom edge`).toEqual([]);
-    expect(report.covered, `${summary}: text another element paints over`).toEqual([]);
-    expect(report.overlapping, `${summary}: text leaves that share pixels`).toEqual([]);
-    expect(report.unreachable, `${summary}: controls a click cannot reach`).toEqual([]);
+    return failures;
 };
 
 /**
@@ -67,6 +85,7 @@ const atEverySize = async (
     if (settle) {
         await arrive();
     }
+    const failures: string[] = [];
     for (const viewport of VIEWPORTS) {
         await page.setViewportSize({ width: viewport.width, height: viewport.height });
         if (settle) {
@@ -75,8 +94,10 @@ const atEverySize = async (
             await arrive();
         }
         await page.waitForTimeout(700);
-        await expectFits(page, label, viewport.id);
+        failures.push(...(await fitFailures(page, label, viewport.id)));
     }
+    // One assertion for the whole sweep: every window that failed, not just the first.
+    expect(failures, `${label}: does not fit every window`).toEqual([]);
 };
 
 test.describe('UI fit contract', () => {
