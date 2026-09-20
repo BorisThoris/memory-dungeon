@@ -6,6 +6,7 @@ import {
     isCompactUiViewport,
     isShortLandscapeDesktop,
     safeUiScaleFor,
+    SCREEN_SCALE_CEILINGS,
     UI_SCALE_COMPACT,
     UI_SCALE_MAX
 } from './uiScaleLimits';
@@ -27,14 +28,21 @@ describe('the UI scale limits', () => {
         expect(SETTINGS_NUMERIC_RANGES.uiScale.min).toBeLessThan(UI_SCALE_MAX);
     });
 
-    it('caps a desktop window at the largest scale every screen was measured to hold', () => {
+    it('caps a desktop window at the smallest screen ceiling, and derives it rather than restating it', () => {
         /*
-         * 1.05, because at 1.1 the main menu loses its meta frame on a 1440x900 desktop - measured,
-         * not assumed (`e2e/ui-scale-ceiling.spec.ts`). It is a small number and the reason is a
-         * missing container-query rung in the main menu, not a judgement about how much scaling a
-         * player needs; Xbox's guidelines ask for 200% and this is nowhere near it.
+         * 1.1, and the screen that sets it is Profile - measured at Gen 227 with both caps lifted
+         * (`e2e/ui-scale-ceiling.spec.ts`), which also found the main menu holding to 1.6, so the
+         * blocker this constant used to name had become the most scalable screen of the three.
+         * The cap is the minimum of the ceilings rather than a fourth number, so a screen whose
+         * layout improves raises the cap by moving its own row and cannot leave this stale.
          */
-        expect(UI_SCALE_MAX).toBe(1.05);
+        expect(UI_SCALE_MAX).toBe(Math.min(...Object.values(SCREEN_SCALE_CEILINGS)));
+        expect(UI_SCALE_MAX).toBe(1.1);
+        expect(SCREEN_SCALE_CEILINGS.profile).toBe(UI_SCALE_MAX);
+        // Every ceiling is a scale the app could actually be asked for, and above the floor.
+        for (const ceiling of Object.values(SCREEN_SCALE_CEILINGS)) {
+            expect(ceiling).toBeGreaterThan(SETTINGS_NUMERIC_RANGES.uiScale.min);
+        }
         expect(safeUiScaleFor(2, { height: 900, width: 1440 })).toBe(UI_SCALE_MAX);
         expect(safeUiScaleFor(1.15, { height: 800, width: 1280 })).toBe(UI_SCALE_MAX);
         // Under the cap the player gets what they asked for, including scales below 1.
@@ -46,11 +54,11 @@ describe('the UI scale limits', () => {
 
     it('lays a phone out at 1 and a wide short landscape out as a desktop', () => {
         expect(isCompactUiViewport({ height: 844, width: 390 })).toBe(true);
-        expect(safeUiScaleFor(1.05, { height: 844, width: 390 })).toBe(UI_SCALE_COMPACT);
+        expect(safeUiScaleFor(UI_SCALE_MAX, { height: 844, width: 390 })).toBe(UI_SCALE_COMPACT);
         // 1280x720: wider than a tablet, shorter than the mobile bound, and landscape - a desktop.
         expect(isShortLandscapeDesktop({ height: 720, width: 1280 })).toBe(true);
         expect(isCompactUiViewport({ height: 720, width: 1280 })).toBe(false);
-        expect(safeUiScaleFor(1.05, { height: 720, width: 1280 })).toBe(1.05);
+        expect(safeUiScaleFor(UI_SCALE_MAX, { height: 720, width: 1280 })).toBe(UI_SCALE_MAX);
         // A short window that is NOT wide is compact, which is the case that separates the two.
         expect(isShortLandscapeDesktop({ height: 700, width: VIEWPORT_TABLET_MAX })).toBe(false);
         expect(isCompactUiViewport({ height: VIEWPORT_MOBILE_MAX, width: VIEWPORT_TABLET_MAX })).toBe(true);

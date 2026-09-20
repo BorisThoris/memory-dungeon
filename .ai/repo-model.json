@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2550,
     "codeFileCount": 892,
-    "exportedSymbolCount": 2700,
+    "exportedSymbolCount": 2701,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6831
+    "relationshipCount": 6832
   },
   "inventory": [
     {
@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 408914,
-      "sha256": "69938e4ac8d9297caab5c3be5cbf541efd8f6d79d7bfead7fd870e04936316ef"
+      "bytes": 411926,
+      "sha256": "01c637b8c78416c53a1dd5a3c04f7acd4a6e5f39308b226b03b1efec03bafa8f"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "712aa5e6fc56127ca393afb61ff4ef8c21875fe329c3c8b60f0862cc2d8b6aaa"
+      "sha256": "bbd6eb60801508a6274c3fc2ef33ac70ddffeac3c90a079ab54f51b37d60166b"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -4035,8 +4035,8 @@
     {
       "path": "e2e/ui-scale-ceiling.spec.ts",
       "category": "test",
-      "bytes": 4733,
-      "sha256": "8b90307dcffdf6a04aa412c85b651b8de12cc7b812318be45e00e8dbe92ef4e0"
+      "bytes": 7996,
+      "sha256": "657f2873429e942fca15526c06a3b5be64db7a2620f31acabd03f3b7c970e86d"
     },
     {
       "path": "e2e/ui-screenshots.spec.ts",
@@ -4473,8 +4473,8 @@
     {
       "path": "scripts/accessibility-targets.ts",
       "category": "script",
-      "bytes": 9429,
-      "sha256": "412e9c6f0eeae94e3704a30cafd89ee255ae871e8c9f45ab4d75943c24f55745"
+      "bytes": 9954,
+      "sha256": "39346aeb50be9e2f2ea5569363d01488293809a050256fc5b1c67c21f7ddb0c3"
     },
     {
       "path": "scripts/ai-repo-model.mjs",
@@ -10959,14 +10959,14 @@
     {
       "path": "src/renderer/uiScaleLimits.test.ts",
       "category": "test",
-      "bytes": 3348,
-      "sha256": "6ea6194b558ea273d5f3956495f1c68dbf9e57d587e2ccde18adb67b49173312"
+      "bytes": 3924,
+      "sha256": "629d0c2559898f1eb84e5fd20685486416c128a229ae114c40e0cb991f2d60cd"
     },
     {
       "path": "src/renderer/uiScaleLimits.ts",
       "category": "source",
-      "bytes": 3882,
-      "sha256": "5c70d44c7e207df16939fa533f6f3687eb0c2942986419643663bcc392038982"
+      "bytes": 4235,
+      "sha256": "97d698f30e75fb0b1d53a1400206880604379797c0c7c697c0e308dc9184719b"
     },
     {
       "path": "src/renderer/viewportMatrix.ts",
@@ -12645,8 +12645,8 @@
     {
       "path": "src/shared/save-data.ts",
       "category": "source",
-      "bytes": 26925,
-      "sha256": "26f2ac6f6385ba8e75f3a1e60af2731e4814bba9b99eac03d8e7c6da06adf1af"
+      "bytes": 26924,
+      "sha256": "b981ef22de4ee01125973e1b917d1bc1793cf3028968ccc854b540e8293c0e38"
     },
     {
       "path": "src/shared/save-field-policy.test.ts",
@@ -24599,7 +24599,7 @@
       "path": "src/renderer/uiScaleLimits.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 59,
+      "lineCount": 67,
       "imports": [
         "file:src/renderer/breakpoints.ts",
         "file:src/renderer/uiScaleLimits.ts",
@@ -24613,7 +24613,7 @@
       "path": "src/renderer/uiScaleLimits.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 70,
+      "lineCount": 77,
       "imports": [
         "file:src/renderer/breakpoints.ts"
       ],
@@ -24621,6 +24621,7 @@
         "symbol:src/renderer/uiScaleLimits.ts#isCompactUiViewport",
         "symbol:src/renderer/uiScaleLimits.ts#isShortLandscapeDesktop",
         "symbol:src/renderer/uiScaleLimits.ts#safeUiScaleFor",
+        "symbol:src/renderer/uiScaleLimits.ts#SCREEN_SCALE_CEILINGS",
         "symbol:src/renderer/uiScaleLimits.ts#UI_SCALE_COMPACT",
         "symbol:src/renderer/uiScaleLimits.ts#UI_SCALE_MAX",
         "symbol:src/renderer/uiScaleLimits.ts#UiScaleViewport"
@@ -42060,48 +42061,56 @@
       "name": "isCompactUiViewport",
       "kind": "value",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 58,
-      "endLine": 60
+      "line": 65,
+      "endLine": 67
     },
     {
       "id": "symbol:src/renderer/uiScaleLimits.ts#isShortLandscapeDesktop",
       "name": "isShortLandscapeDesktop",
       "kind": "value",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 55,
-      "endLine": 56
+      "line": 62,
+      "endLine": 63
     },
     {
       "id": "symbol:src/renderer/uiScaleLimits.ts#safeUiScaleFor",
       "name": "safeUiScaleFor",
       "kind": "value",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 63,
-      "endLine": 69
+      "line": 70,
+      "endLine": 76
+    },
+    {
+      "id": "symbol:src/renderer/uiScaleLimits.ts#SCREEN_SCALE_CEILINGS",
+      "name": "SCREEN_SCALE_CEILINGS",
+      "kind": "value",
+      "file": "src/renderer/uiScaleLimits.ts",
+      "line": 39,
+      "endLine": 43
     },
     {
       "id": "symbol:src/renderer/uiScaleLimits.ts#UI_SCALE_COMPACT",
       "name": "UI_SCALE_COMPACT",
       "kind": "value",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 47,
-      "endLine": 47
+      "line": 54,
+      "endLine": 54
     },
     {
       "id": "symbol:src/renderer/uiScaleLimits.ts#UI_SCALE_MAX",
       "name": "UI_SCALE_MAX",
       "kind": "value",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 39,
-      "endLine": 39
+      "line": 46,
+      "endLine": 46
     },
     {
       "id": "symbol:src/renderer/uiScaleLimits.ts#UiScaleViewport",
       "name": "UiScaleViewport",
       "kind": "interface",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 49,
-      "endLine": 52
+      "line": 56,
+      "endLine": 59
     },
     {
       "id": "symbol:src/renderer/viewportMatrix.ts#classifyResponsiveViewport",
@@ -64675,6 +64684,12 @@
       "id": "exports:src/renderer/uiScaleLimits.ts->symbol:src/renderer/uiScaleLimits.ts#safeUiScaleFor",
       "source": "file:src/renderer/uiScaleLimits.ts",
       "target": "symbol:src/renderer/uiScaleLimits.ts#safeUiScaleFor",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/uiScaleLimits.ts->symbol:src/renderer/uiScaleLimits.ts#SCREEN_SCALE_CEILINGS",
+      "source": "file:src/renderer/uiScaleLimits.ts",
+      "target": "symbol:src/renderer/uiScaleLimits.ts#SCREEN_SCALE_CEILINGS",
       "kind": "exports"
     },
     {

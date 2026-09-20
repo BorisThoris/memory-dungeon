@@ -78,7 +78,7 @@ export const SETTINGS_NUMERIC_RANGES = {
     masterVolume: { min: 0, max: 1 },
     musicVolume: { min: 0, max: 1 },
     sfxVolume: { min: 0, max: 1 },
-    uiScale: { min: 0.8, max: 1.05 },
+    uiScale: { min: 0.8, max: 1.1 },
     resolveDelayMultiplier: { min: RESOLVE_DELAY_MULTIPLIER_MIN, max: 2.5 }
 } as const satisfies Record<NumericSettingsKey, { min: number; max: number }>;
 

@@ -1,42 +1,49 @@
 import { VIEWPORT_MOBILE_MAX, VIEWPORT_TABLET_MAX } from './breakpoints';
 
 /**
- * How far the UI scale may actually be turned up, and why those numbers and not others.
+ * How far the UI scale may actually be turned up, and which screen decides it.
  *
  * These were three literals inside `App.tsx` behind a variable called `safeUiScale`, with a
- * one-line comment and nothing that ever checked the word "safe". Gen 222 checked it, by running
+ * one-line comment and nothing that ever checked the word "safe". Gen 222 checked it by running
  * the fit contract's own report at a scale other than 1 for the first time
- * (`e2e/ui-scale-ceiling.spec.ts`; every check the contract makes pins `uiScale: 1`). Measured, on
- * the two windows a launch checklist names:
+ * (`e2e/ui-scale-ceiling.spec.ts`; every check the contract makes pins `uiScale: 1`), and wrote
+ * down 1.05 with the main menu named as the blocker: its container-query ladder ended at
+ * `max-height: 760px` with no rung below it.
  *
- *   scale   Settings          main menu         Profile
- *   1.00    fits              fits              fits
- *   1.05    fits              fits              fits
- *   1.10    fits (see below)  Deck fits, desktop loses its meta frame
- *   1.15    fits (see below)  both lose the meta frame
- *   2.00    -                 -                 fits
+ * **Gen 227 re-measured, and the recorded reason was wrong twice over.** Gen 223 had already
+ * refuted the ladder story - the `@container` rungs were never winning the cascade, so widening
+ * them changed no output at any scale - and the menu has since been rebuilt as a fluid title page
+ * with no ladder at all. Measured again with both caps lifted, on the two windows a launch
+ * checklist names, at 1.1 / 1.4 / 1.6 / 1.8 / 2:
  *
- * Two separate defects behind that, one fixed here and one not:
+ *   screen      holds to   first failure and what it is
+ *   main menu   1.6        1.8: entry notes hit their ellipsis, title and numeral overlap at 1280
+ *   settings    1.4        1.6: the layout-style row starts scrolling on the Deck panel
+ *   profile     1.1        1.4: objective cards clip their progress line, the pager overlaps
  *
- * - **Settings could not be saved or left.** Its shell was `100dvh` tall inside a `zoom`, and a
- *   viewport unit does not zoom - so the shell ran past the bottom edge by exactly the scale, and
- *   Back and Save went with it, identically at 1280x800 and 1440x900 because the surplus follows
- *   the scale rather than the window. `--ui-zoomed-dvh` in `App.module.css` is the fix, and the
- *   screen now fits at every scale the app will apply.
- * - **The main menu has no layout below about 700px of container height.** Its container-query
- *   ladder ends at `max-height: 760px`, which is why the Deck's shorter panel FITS at 1.1 where the
- *   taller desktop does not: at 1280x800 the zoomed container falls under 760 and picks the compact
- *   arrangement, and at 1440x900 it does not. That is a missing rung, not a unit bug, and it is a
- *   layout job with its own task rather than something to guess at here.
+ * So the main menu is now the MOST scalable of the three, and the screen that actually sets the
+ * cap is **Profile** - the one nothing had ever named. The numbers are the largest *probed* scale
+ * that holds, not a bisection: settings' true ceiling is somewhere in [1.4, 1.6) and Profile's in
+ * [1.1, 1.4), and recording the probe step rather than a figure nothing measured is the point.
  *
- * So the cap is the largest scale at which every screen still holds: **1.05**. That is small, and
- * saying why is better than leaving a number that looks considered. It is not a judgement about how
- * much scaling players need - Xbox's guidelines ask for 200% and this is nowhere near it
- * (`docs/RESEARCH_NOTES.md` §3) - it is the most this build can render without losing a control.
- * The cap rises when the main menu gets its missing rung, and `uiScaleLimits.test.ts` fails if this
- * constant moves without the spec that measured it moving too.
+ * The cap is the smallest of them, so it is derived rather than restated: a screen that gets its
+ * layout fixed raises the cap by moving its own row, and one that regresses lowers it in the same
+ * place. `ui-scale-ceiling.spec.ts` holds both directions - every screen fits at its own ceiling,
+ * and every screen FAILS at the next step above it, because a ceiling nothing has been measured to
+ * break through is a ceiling nobody has checked and may simply be too low.
+ *
+ * It is still not a judgement about how much scaling players need: Xbox's guidelines ask for 200%
+ * (`docs/RESEARCH_NOTES.md` §3) and this is nowhere near it. It is the most this build can render
+ * without losing a control.
  */
-export const UI_SCALE_MAX = 1.05;
+export const SCREEN_SCALE_CEILINGS = {
+    'main menu': 1.6,
+    profile: 1.1,
+    settings: 1.4
+} as const satisfies Record<string, number>;
+
+/** The cap: the smallest screen ceiling, because the scale is one setting for the whole app. */
+export const UI_SCALE_MAX: number = Math.min(...Object.values(SCREEN_SCALE_CEILINGS));
 
 /**
  * Compact windows - phones, and short landscape that is not a wide desktop - lay out at 1 and do
