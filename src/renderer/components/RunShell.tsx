@@ -1,4 +1,5 @@
 import { memo, useEffect, useRef, useState, type CSSProperties, type ReactElement } from 'react';
+import type { GameShellLayout } from '../gameShellLayout';
 import type { RunState } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { parTurnsForRun, turnCeilingForRun, turnsTakenThisFloor, turnsToCeiling } from '../../shared/floor-par';
@@ -54,6 +55,12 @@ export interface RunShellProps {
     politeAnnouncement?: string;
     /** Reduced motion: the score total changes on the frame rather than counting up. */
     reduceMotion?: boolean;
+    /**
+     * The shell's layout, so the head can leave out what a layout has no room for instead of
+     * hiding it: a phone upright has one row for the head and the mutator's name is the lane that
+     * does not fit (the pause dialog states it in full). A cell that is not drawn is not in the DOM.
+     */
+    shellLayout?: GameShellLayout;
     tools: readonly RunShellTool[];
     onPause: () => void;
 }
@@ -140,7 +147,8 @@ const RunShell = ({
     politeAnnouncement,
     tools,
     onPause,
-    reduceMotion = false
+    reduceMotion = false,
+    shellLayout = 'desktop'
 }: RunShellProps): ReactElement => {
     const mutatorTitles = run.activeMutators.map((id) => MUTATOR_CATALOG[id]?.title ?? id);
     // The total counts up to what a break paid (thesis §45.2): the rise is the part the player
@@ -180,7 +188,8 @@ const RunShell = ({
     const ladderStyle = {
         '--chain-meter-clean': `${(meter.ticks.clean * 100).toFixed(1)}%`,
         '--chain-meter-sharp': `${(meter.ticks.sharp * 100).toFixed(1)}%`,
-        '--chain-meter-fill': `${(meter.fill * 100).toFixed(1)}%`
+        '--chain-meter-fill': `${(meter.fill * 100).toFixed(1)}%`,
+        '--chain-meter-fill-n': meter.fill.toFixed(3)
     } as CSSProperties;
 
     const rung = (
@@ -252,7 +261,7 @@ const RunShell = ({
                                 <span className={styles.parWord}> turns</span>
                             </span>
                         </span>
-                        {mutatorTitles.length > 0 ? (
+                        {mutatorTitles.length > 0 && shellLayout !== 'phone-portrait' ? (
                             <span className={styles.mutator} data-testid="hud-mutators" title="Mutator">
                                 {mutatorTitles.join(' · ')}
                             </span>

@@ -191,6 +191,10 @@ export const LAST_PAIR_HOLD_MS = 650;
  * player has finished reading them. Not shortened under reduced motion; reading is not motion.
  */
 export const FLOOR_CLEAR_BEAT_MS = 1600;
+/** A frame gap longer than this is a stall, not a slow frame; it counts as one slow frame. */
+export const FLOOR_CLEAR_BEAT_FRAME_CAP_MS = 100;
+/** The beat never holds the run longer than this on the wall clock, whatever the frames do. */
+export const FLOOR_CLEAR_BEAT_STALL_CAP_MS = 8000;
 
 type NextFloorSignalRow = {
     detail: string | null;
@@ -975,8 +979,34 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         if (!floorClearBeatShown || abandonRunConfirmOpen) {
             return undefined;
         }
-        const timer = window.setTimeout(() => continueToNextLevel(), FLOOR_CLEAR_BEAT_MS);
-        return () => window.clearTimeout(timer);
+        // The beat is given its time in *rendered* frames, not on the wall clock. A phone building
+        // the next board's WebGL scene (or a headless test runner) can block the main thread for
+        // seconds right after the clear; a timer started at mount would run out inside that block
+        // and the beat would be gone before anyone saw it. Only frames that arrive at a rendering
+        // cadence count, and a stalled tab is capped so the run can never hang on the beat.
+        let elapsed = 0;
+        let last: number | null = null;
+        let frame = 0;
+        const tick = (now: number) => {
+            if (last !== null) {
+                elapsed += Math.min(now - last, FLOOR_CLEAR_BEAT_FRAME_CAP_MS);
+            }
+            last = now;
+            if (elapsed >= FLOOR_CLEAR_BEAT_MS) {
+                continueToNextLevel();
+                return;
+            }
+            frame = window.requestAnimationFrame(tick);
+        };
+        frame = window.requestAnimationFrame(tick);
+        const safety = window.setTimeout(() => {
+            window.cancelAnimationFrame(frame);
+            continueToNextLevel();
+        }, FLOOR_CLEAR_BEAT_STALL_CAP_MS);
+        return () => {
+            window.cancelAnimationFrame(frame);
+            window.clearTimeout(safety);
+        };
     }, [floorClearBeatShown, floorClearKey, abandonRunConfirmOpen, continueToNextLevel]);
 
     const nextFloorResidentLine = run.lastLevelResult
@@ -1400,6 +1430,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             politeAnnouncement={politeHudAnnouncement}
                             reduceMotion={reduceMotion}
                             run={run}
+                            shellLayout={shellProfile.layout}
                             tools={runShellTools}
                         />
 

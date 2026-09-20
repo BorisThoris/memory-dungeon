@@ -7,7 +7,6 @@ import MainMenu from './MainMenu';
 
 vi.mock('./MainMenuBackground', () => ({ default: () => null }));
 vi.mock('../hooks/useViewportSize', () => ({ useViewportSize: () => ({ height: 800, width: 1280 }) }));
-vi.mock('../hooks/useFitShellZoom', () => ({ useFitShellZoom: () => ({ fitZoom: 1 }) }));
 vi.mock('../platformTilt/usePlatformTiltField', () => ({
     usePlatformTiltField: () => ({ tiltRef: { current: null } })
 }));

@@ -1,798 +1,446 @@
+/*
+ * The start menu as a title page ("The Margin"). Everything is fluid: type through clamp(),
+ * the spread through a grid that goes to one column when the page is narrow or short, the
+ * page through 100dvh with safe-area insets. No zoom, no fixed shell size.
+ */
 .shell {
+    --margin-ink: #131111;
+    --margin-paper: #f8f4f4;
+    --margin-paper-soft: #d7d3d3;
+    --margin-paper-dim: #bab6b6;
+    --margin-gold: #e1ad66;
+    --margin-fever: #facb8d;
+    --margin-rule: color-mix(in srgb, var(--margin-gold) 45%, transparent);
+    --margin-hairline: color-mix(in srgb, var(--margin-paper) 18%, transparent);
+    --margin-heading-font: 'Cormorant Garamond', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    --margin-body-font: 'Lora', 'Palatino Linotype', Georgia, serif;
+    --menu-gutter: clamp(1rem, 4vw, 3.5rem);
+    --menu-touch: max(2.75rem, 44px);
+
     position: relative;
     display: flex;
-    flex-direction: column;
     flex: 1 1 auto;
     min-height: 0;
     isolation: isolate;
     overflow: hidden;
+    color: var(--margin-paper);
+    background: var(--margin-ink);
+    font-family: var(--margin-body-font);
 }
 
+/* ------------------------------------------------------------------ the scene, sunk into ink */
 .sceneLayer {
     position: absolute;
     inset: 0;
-    pointer-events: none;
     z-index: 0;
-    opacity: 0.28;
-    background-position: center bottom;
+    pointer-events: none;
+    opacity: 0.34;
+    background-position: center 40%;
     background-repeat: no-repeat;
     background-size: cover;
-    mix-blend-mode: screen;
-    filter: saturate(1.08) contrast(1.04);
+    filter: saturate(0.85) contrast(1.05);
+    mask-image: radial-gradient(ellipse 100% 90% at 50% 45%, black 25%, rgba(0, 0, 0, 0.7) 60%, transparent 100%);
 }
 
 .scrim {
     position: absolute;
     inset: 0;
-    pointer-events: none;
     z-index: 0;
-    /* Slightly brighter core so title + CTAs separate from the scene. */
+    pointer-events: none;
     background:
-        radial-gradient(ellipse 80% 62% at 50% 20%, color-mix(in srgb, var(--theme-gold-bright) 7%, transparent), transparent 58%),
-        radial-gradient(
-            circle at 50% 38%,
-            rgba(255, 255, 255, 0),
-            rgba(255, 255, 255, 0) 22%,
-            var(--theme-backdrop-body-shade-mid) 52%,
-            var(--theme-backdrop-body-shade-deep) 100%
-        ),
         linear-gradient(
             180deg,
-            var(--theme-backdrop-body-rim),
-            transparent 14% 84%,
-            var(--theme-backdrop-body-rim)
-        );
-}
-
-.scrim::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background:
-        linear-gradient(
-            90deg,
-            color-mix(in srgb, var(--theme-gold-bright) 5%, transparent),
-            transparent 18%,
-            transparent 82%,
-            color-mix(in srgb, var(--theme-cyan-bright) 5%, transparent)
+            color-mix(in srgb, var(--margin-ink) 88%, transparent) 0%,
+            color-mix(in srgb, var(--margin-ink) 25%, transparent) 22%,
+            color-mix(in srgb, var(--margin-ink) 25%, transparent) 70%,
+            color-mix(in srgb, var(--margin-ink) 92%, transparent) 100%
         ),
-        radial-gradient(ellipse 64% 18% at 50% 100%, color-mix(in srgb, var(--theme-ember-soft) 8%, transparent), transparent 70%);
-    opacity: 0.9;
+        radial-gradient(ellipse 60% 50% at 50% 30%, color-mix(in srgb, var(--margin-gold) 6%, transparent), transparent 70%);
 }
 
-.fitViewport {
+/* ------------------------------------------------------------------ the page */
+.page {
     position: relative;
     z-index: 1;
+    display: flex;
     flex: 1 1 auto;
-    min-height: 0;
-    width: 100%;
-    max-height: 100%;
-    overflow: hidden;
-    display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    container-type: size;
-    container-name: menu-shell;
-
-    /* Shell spacing — defaults (roomy); @container / breakpoints override these only. */
-    --menu-content-gap: calc(var(--theme-space-xl) + var(--theme-space-2xs));
-    --menu-content-pad-block-start: var(--theme-space-xl);
-    --menu-content-pad-inline: calc(var(--theme-space-xl) + var(--theme-space-2xs));
-    --menu-content-pad-block-end: calc(var(--theme-space-xl) + var(--theme-space-xs));
-    --menu-meta-row-gap: var(--theme-space-md);
-    --menu-meta-card-pad-block: var(--theme-space-lg);
-    --menu-meta-card-pad-inline: var(--theme-space-xl);
-    --menu-layout-gap: var(--theme-space-2xl);
-    --menu-hero-gap: calc(var(--theme-space-xl) + var(--theme-space-2xs));
-    --menu-hero-pad-block: var(--theme-space-2xl) var(--theme-space-xl) var(--theme-space-md);
-    --menu-brand-gap: var(--theme-space-sm);
-    --menu-brand-pad-block: var(--theme-space-2xl) var(--theme-space-xl) var(--theme-space-md);
-    --menu-action-stack-gap: var(--theme-space-lg);
-    --menu-bottom-cards-gap: calc(var(--theme-space-lg) + var(--theme-space-2xs));
-    --menu-support-gap: calc(var(--theme-space-lg) + var(--theme-space-2xs));
-    --menu-support-pad-block-start: calc(var(--theme-space-sm) + var(--theme-space-2xs));
-    --menu-mode-grid-gap: var(--theme-space-md);
-    --menu-mode-grid-mt: var(--theme-space-xl);
-    --menu-archive-stats-gap: var(--theme-space-md);
-    --menu-archive-stats-mt: var(--theme-space-xl);
-    --menu-archive-stat-pad-block: var(--theme-space-lg);
-    --menu-archive-stat-pad-inline: calc(var(--theme-space-lg) + var(--theme-space-2xs));
-}
-
-.fitMeasureOuter {
-    flex: 0 0 auto;
-    width: min(1420px, 100%);
-    max-width: 100%;
-    box-sizing: border-box;
-}
-
-.content {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    gap: var(--menu-content-gap);
-    width: 100%;
-    margin: 0;
-    padding: var(--menu-content-pad-block-start) var(--menu-content-pad-inline) var(--menu-content-pad-block-end);
-    box-sizing: border-box;
-    min-height: 0;
-    will-change: zoom;
-}
-
-.steamBridgeNotice {
-    position: relative;
-    z-index: 3;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: var(--theme-space-md);
-    width: 100%;
-    margin-top: var(--theme-space-sm);
-    padding: var(--theme-space-sm) var(--theme-space-md);
-    border-radius: var(--ui-radius-md);
-    background: color-mix(in srgb, var(--theme-ember) 14%, transparent);
-    border: 1px solid color-mix(in srgb, var(--theme-ember-soft) 35%, transparent);
-    font-size: 0.85rem;
-    line-height: 1.35;
-    color: color-mix(in srgb, var(--theme-rune) 92%, white);
-    box-sizing: border-box;
-}
-
-.steamBridgeNoticeDismiss {
-    flex-shrink: 0;
-    margin: 0;
-    padding: 0.15rem 0.5rem;
-    border-radius: var(--ui-radius-sm);
-    border: 1px solid color-mix(in srgb, var(--theme-gold) 28%, transparent);
-    background: color-mix(in srgb, var(--theme-backdrop-body-shade-mid) 40%, transparent);
-    color: inherit;
-    font: inherit;
-    cursor: pointer;
-}
-
-.steamBridgeNoticeDismiss:focus-visible {
-    outline: 2px solid color-mix(in srgb, var(--theme-gold-bright) 70%, transparent);
-    outline-offset: 2px;
-}
-
-.saveFailureNotice {
-    composes: steamBridgeNotice;
-    flex-direction: column;
-    align-items: stretch;
-    gap: var(--theme-space-sm);
-    background: color-mix(in srgb, var(--theme-ember) 22%, transparent);
-    border-color: color-mix(in srgb, var(--theme-ember-soft) 55%, transparent);
-}
-
-.saveFailureNoticeTitle {
-    font-weight: 600;
-}
-
-.saveFailureNoticeDetail {
-    opacity: 0.85;
-}
-
-.saveFailureNoticeAction {
-    composes: steamBridgeNoticeDismiss;
-    align-self: flex-start;
-}
-
-.layout {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--menu-layout-gap);
-    flex: 1 1 auto;
-    min-height: 0;
-    width: 100%;
-    max-width: min(1280px, 100%);
-    margin-inline: auto;
-    box-sizing: border-box;
-}
-
-.heroColumn {
     min-width: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: var(--menu-hero-gap);
-    padding: var(--menu-hero-pad-block);
+    min-height: 0;
+    box-sizing: border-box;
+    padding:
+        calc(clamp(0.75rem, 3vh, 2.5rem) + env(safe-area-inset-top, 0px))
+        calc(var(--menu-gutter) + env(safe-area-inset-right, 0px))
+        calc(clamp(0.6rem, 2vh, 1.5rem) + env(safe-area-inset-bottom, 0px))
+        calc(var(--menu-gutter) + env(safe-area-inset-left, 0px));
+    overflow: auto;
+    overscroll-behavior: contain;
 }
 
-.brandLockup {
+/* The spread: title and contents side by side when the page is wide enough and not short;
+   otherwise stacked and centred. Both columns share one width so the leaders line up. */
+.spread {
+    display: grid;
+    flex: 1 1 auto;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-content: center;
+    justify-items: center;
+    gap: clamp(1rem, 3vh, 2.5rem) clamp(2rem, 6vw, 6rem);
+    width: 100%;
+    max-width: 68rem;
+    min-height: 0;
+    margin: 0 auto;
+}
+
+@media (min-width: 900px) and (min-height: 560px), (min-width: 760px) and (max-height: 559px) {
+    .spread {
+        grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+        grid-template-rows: auto;
+        align-items: center;
+        justify-items: stretch;
+    }
+}
+
+/* ------------------------------------------------------------------ the title */
+.titleBlock {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
+    max-width: 30rem;
     text-align: center;
-    gap: var(--menu-brand-gap);
-    width: min(100%, 780px);
-    padding: var(--menu-brand-pad-block);
+    justify-self: center;
 }
 
-.brandCrest {
-    width: clamp(4.25rem, 10vw, 5.8rem);
+.crest {
+    width: clamp(2rem, 6vh, 3.5rem);
     height: auto;
-    filter:
-        drop-shadow(0 0 18px color-mix(in srgb, var(--theme-glow-violet-drop) 62%, transparent))
-        drop-shadow(0 8px 18px color-mix(in srgb, var(--theme-shadow) 46%, transparent));
+    margin-bottom: clamp(0.4rem, 1.4vh, 0.9rem);
+    filter: drop-shadow(0 0 18px color-mix(in srgb, var(--margin-gold) 35%, transparent));
 }
 
-.heroEyebrow {
-    margin-bottom: 0;
+.eyebrow {
+    margin: 0 0 clamp(0.2rem, 1vh, 0.6rem);
+    font-family: var(--margin-body-font);
+    font-size: clamp(0.62rem, 1.5vh, 0.8rem);
+    font-weight: 500;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--margin-gold);
 }
 
-.heroTitle {
-    max-width: 8ch;
+.title {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    font-family: var(--margin-heading-font);
+    font-size: clamp(2.4rem, min(9vw, 11vh), 5.6rem);
+    font-weight: 600;
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--margin-paper);
+    text-shadow: 0 6px 40px color-mix(in srgb, var(--margin-ink) 90%, transparent);
+    text-wrap: balance;
 }
 
-.divider {
-    width: min(100%, 20rem);
-    height: auto;
-    opacity: 0.88;
+.rule {
+    display: block;
+    width: clamp(4rem, 12vw, 8rem);
+    height: 1px;
+    margin: clamp(0.6rem, 1.8vh, 1.1rem) auto;
+    background: var(--margin-rule);
+    box-shadow: 0 0 14px color-mix(in srgb, var(--margin-gold) 40%, transparent);
 }
 
 .tagline {
     margin: 0;
-    max-width: 28rem;
-    color: color-mix(in srgb, var(--theme-text-muted) 88%, var(--theme-rune) 12%);
-    font-size: 1rem;
-    letter-spacing: 0.08em;
+    font-family: var(--margin-heading-font);
+    font-style: italic;
+    font-size: clamp(1rem, 2.4vh, 1.35rem);
+    color: var(--margin-paper-soft);
+}
+
+/* ------------------------------------------------------------------ the contents */
+.contents {
+    width: 100%;
+    max-width: 30rem;
+    justify-self: center;
+    min-width: 0;
+}
+
+.contentsHead {
+    margin: 0 0 clamp(0.3rem, 1vh, 0.6rem);
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid var(--margin-hairline);
+    font-size: clamp(0.6rem, 1.4vh, 0.72rem);
+    font-weight: 500;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
-    text-wrap: balance;
+    color: var(--margin-paper-dim);
 }
 
-/*
- * META-004: hub CTA stack — width lives on a wrapper so MetaFrame’s host can stay `width: 100%`
- * of that wrapper (avoids fighting `.root { width: 100% }` without `!important`).
- * Hub labels are short; the old 32rem (~512px) column felt wider than the copy needs.
- */
-.ctaMetaFrameWrap {
-    width: min(100%, 22rem);
-    filter:
-        drop-shadow(0 14px 32px color-mix(in srgb, var(--theme-shadow) 38%, transparent))
-        drop-shadow(0 0 18px color-mix(in srgb, var(--theme-gold-bright) 8%, transparent));
-}
-
-.ctaPanel {
-    gap: var(--theme-space-sm);
-    min-width: 0;
-}
-
-.ctaIllustratedBand {
-    display: flex;
-    align-items: center;
-    gap: var(--theme-space-md);
-    margin-bottom: 0.1rem;
-}
-
-.ctaBandSeal {
-    width: 2.35rem;
-    height: 2.35rem;
-    flex: 0 0 auto;
-    opacity: 0.84;
-}
-
-.ctaBandFlourish {
-    flex: 1 1 auto;
-    min-width: 0;
-    max-height: 0.55rem;
-    width: auto;
-    object-fit: contain;
-    object-position: center left;
-    opacity: 0.72;
-}
-
-.actionStack {
-    width: 100%;
-    display: grid;
-    gap: var(--menu-action-stack-gap);
-}
-
-.ctaButton {
-    width: 100%;
-    justify-content: flex-start;
-    text-align: left;
-    align-items: center;
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 30%, var(--theme-border));
-}
-
-.ctaButton:hover:not(:disabled) {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 54%, var(--theme-border-strong));
-}
-
-/*
- * Single-line hub labels: default UiButton md/lg min-heights read as oversized dead space.
- * Slim on pointer-first layouts; touch / narrow shells restore targets below.
- */
-.shell .ctaButton {
-    min-height: 2.2rem !important;
-    padding: 0.4rem 0.85rem !important;
-}
-
-.shell .ctaButtonPlay {
-    min-height: 3rem !important;
-}
-
-.ctaButtonShowcase {
-    background:
-        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent), transparent 48%),
-        color-mix(in srgb, var(--theme-panel-solid) 76%, var(--theme-gold-deep) 24%);
-    border-color: color-mix(in srgb, var(--theme-cyan-bright) 34%, var(--theme-gold-bright) 28%);
-}
-
-.ctaButtonShowcase:hover:not(:disabled) {
-    border-color: color-mix(in srgb, var(--theme-cyan-bright) 54%, var(--theme-gold-bright) 34%);
-}
-
-.shell.touchCompactShell .ctaButton,
-.shell.shortTouchLandscapeShell .ctaButton,
-.shell.ultraCompactPhoneShell .ctaButton {
-    min-height: max(2.75rem, var(--ui-touch-target-min)) !important;
-    padding: 0.62rem 1rem !important;
-}
-
-.shell.touchCompactShell .ctaButtonPlay,
-.shell.shortTouchLandscapeShell .ctaButtonPlay,
-.shell.ultraCompactPhoneShell .ctaButtonPlay {
-    min-height: max(3.05rem, var(--ui-touch-target-min)) !important;
-}
-
-.secondaryActionGrid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--menu-action-stack-gap);
-    width: 100%;
-}
-
-.ctaContent {
+.ladder,
+.entries {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 0.16rem;
-    width: 100%;
+    min-width: 0;
 }
 
-.ctaTitle {
-    font-size: 0.82rem;
-    letter-spacing: 0.085em;
+.entries {
+    gap: 0;
 }
 
-.shell .ctaButtonPlay .ctaTitle {
-    font-size: 0.92rem;
-    letter-spacing: 0.09em;
-}
-
-.supportPanel {
-    width: min(100%, 32rem);
-    align-self: center;
-    transform:
-        perspective(1200px)
-        rotateX(calc(var(--tilt-y, 0) * -4deg))
-        rotateY(calc(var(--tilt-x, 0) * 4deg));
-    transform-style: preserve-3d;
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 18%, var(--theme-border));
-    background:
-        linear-gradient(180deg, rgba(255, 243, 217, 0.035), transparent 50%),
-        color-mix(in srgb, var(--theme-panel-solid) 78%, transparent);
-}
-
-.supportHeading {
-    display: block;
-    margin-top: 0.08rem;
-    font-family: var(--theme-display-font);
-    font-size: clamp(1rem, 2.3vw, 1.24rem);
-    line-height: 1.05;
-    color: var(--theme-rune);
-}
-
-.emptyState {
-    margin: 0.8rem 0 0;
-    color: var(--theme-text-muted);
-}
-
-.helpDisclosure {
+/* An entry is a line of the contents: numeral, title, a leader rule, a note. The whole line is
+   the button; its height is the touch target. */
+.entry {
     display: grid;
-    gap: 0.55rem;
-}
-
-.helpDisclosure summary {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--theme-space-md);
-    min-height: 2.35rem;
+    grid-template-columns: 2.2rem auto minmax(0.75rem, 1fr) auto;
+    align-items: baseline;
+    gap: 0.7rem;
+    width: 100%;
+    min-height: var(--menu-touch);
+    margin: 0;
+    padding: clamp(0.3rem, 0.9vh, 0.55rem) 0.25rem;
+    border: 0;
+    border-bottom: 1px solid var(--margin-hairline);
+    background: transparent;
+    color: var(--margin-paper);
+    font: inherit;
+    text-align: left;
     cursor: pointer;
-    list-style: none;
+    transition:
+        color 160ms ease,
+        background-color 160ms ease;
 }
 
-.helpDisclosure summary::-webkit-details-marker {
+.entry:last-child {
+    border-bottom: 0;
+}
+
+.entry:hover,
+.entry:focus-visible {
+    color: var(--margin-fever);
+    background: color-mix(in srgb, var(--margin-gold) 7%, transparent);
+    outline: none;
+}
+
+.entry:focus-visible .entryTitle {
+    text-decoration: underline;
+    text-decoration-color: var(--margin-gold);
+    text-underline-offset: 0.18em;
+}
+
+.entry:active {
+    background: color-mix(in srgb, var(--margin-gold) 14%, transparent);
+}
+
+.numeral {
+    font-family: var(--margin-heading-font);
+    font-size: clamp(0.95rem, 2.2vh, 1.15rem);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--margin-gold);
+}
+
+.entryTitle {
+    font-family: var(--margin-heading-font);
+    font-size: clamp(1.25rem, 3vh, 1.7rem);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+}
+
+.leader {
+    display: block;
+    align-self: center;
+    height: 1px;
+    background-image: linear-gradient(90deg, var(--margin-hairline) 0 2px, transparent 2px 6px);
+    background-size: 6px 1px;
+    background-repeat: repeat-x;
+}
+
+.entryNote {
+    font-size: clamp(0.72rem, 1.6vh, 0.86rem);
+    font-style: italic;
+    color: var(--margin-paper-dim);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.entry:hover .entryNote,
+.entry:focus-visible .entryNote {
+    color: var(--margin-paper-soft);
+}
+
+/* Play is the first and largest entry, and the only one in gold. */
+.entryPlay {
+    padding-top: clamp(0.45rem, 1.4vh, 0.9rem);
+    padding-bottom: clamp(0.45rem, 1.4vh, 0.9rem);
+    border-bottom: 1px solid var(--margin-rule);
+    color: var(--margin-gold);
+}
+
+.entryPlay .entryTitle {
+    font-size: clamp(1.9rem, 4.6vh, 2.6rem);
+    letter-spacing: 0.06em;
+}
+
+.entryPlay .numeral {
+    font-size: clamp(1.15rem, 2.8vh, 1.5rem);
+}
+
+.entryPlay .entryNote {
+    color: var(--margin-paper-soft);
+}
+
+.entryQuiet {
+    color: var(--margin-paper-dim);
+}
+
+/* ------------------------------------------------------------------ first-run note */
+.help {
+    width: 100%;
+    max-width: 44rem;
+    margin: clamp(0.75rem, 2vh, 1.5rem) auto 0;
+    border-top: 1px solid var(--margin-hairline);
+    border-bottom: 1px solid var(--margin-hairline);
+    font-size: clamp(0.8rem, 1.7vh, 0.92rem);
+    color: var(--margin-paper-soft);
+}
+
+.helpSummary {
+    display: grid;
+    grid-template-columns: auto auto minmax(0.75rem, 1fr) auto;
+    align-items: baseline;
+    gap: 0.7rem;
+    min-height: var(--menu-touch);
+    padding: 0.5rem 0.25rem;
+    list-style: none;
+    cursor: pointer;
+}
+
+.helpSummary::-webkit-details-marker {
     display: none;
 }
 
-.helpSummaryAction {
-    flex: 0 0 auto;
-    padding: 0.28rem 0.58rem;
-    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
-    border-radius: var(--ui-radius-pill);
-    color: var(--theme-text-subtle);
-    font-family: var(--theme-display-font);
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
+.helpKicker {
+    font-size: 0.66rem;
+    letter-spacing: 0.28em;
     text-transform: uppercase;
+    color: var(--margin-gold);
 }
 
-.helpDisclosure[open] .helpSummaryAction {
-    color: var(--theme-gold-bright);
+.helpTitle {
+    font-family: var(--margin-heading-font);
+    font-size: clamp(1.05rem, 2.3vh, 1.3rem);
+    font-weight: 600;
+    color: var(--margin-paper);
 }
 
-.howToGrid {
+.helpOpen {
+    font-style: italic;
+    color: var(--margin-paper-dim);
+}
+
+.help[open] .helpOpen {
+    visibility: hidden;
+}
+
+.helpLead {
+    margin: 0 0.25rem 0.5rem;
+    font-style: italic;
+    color: var(--margin-paper-dim);
+}
+
+.helpRows {
     display: grid;
-    gap: 0.52rem;
-    margin: 0.68rem 0 0.72rem;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 0.4rem 1.5rem;
+    margin: 0 0.25rem;
 }
 
-.howToGrid p {
+.helpRows p {
     margin: 0;
-    color: var(--theme-text-muted);
     line-height: 1.45;
 }
 
-.compactShell .fitViewport {
-    --menu-content-pad-block-end: var(--theme-space-xl);
+.helpRows strong {
+    font-weight: 600;
+    color: var(--margin-paper);
 }
 
-.touchCompactShell .fitViewport {
-    --menu-content-gap: var(--theme-space-md);
-    --menu-content-pad-block-start: var(--theme-space-md);
-    --menu-content-pad-inline: var(--ui-shell-screen-pad-inline);
-    --menu-content-pad-block-end: var(--theme-space-lg);
-    --menu-meta-row-gap: var(--theme-space-sm);
-    --menu-meta-card-pad-block: var(--theme-space-sm);
-    --menu-meta-card-pad-inline: var(--theme-space-md);
-    --menu-layout-gap: var(--theme-space-md);
-    --menu-hero-gap: var(--theme-space-md);
-    --menu-hero-pad-block: 0;
-    --menu-brand-gap: var(--theme-space-xs);
-    --menu-brand-pad-block: 0;
-    --menu-action-stack-gap: var(--theme-space-sm);
-    --menu-bottom-cards-gap: var(--theme-space-sm);
-    --menu-support-gap: var(--theme-space-sm);
-    --menu-support-pad-block-start: 0;
-    --menu-mode-grid-gap: var(--theme-space-sm);
-    --menu-mode-grid-mt: var(--theme-space-sm);
-    --menu-archive-stats-gap: var(--theme-space-sm);
-    --menu-archive-stats-mt: var(--theme-space-sm);
-    --menu-archive-stat-pad-block: var(--theme-space-md);
-    --menu-archive-stat-pad-inline: var(--theme-space-md);
-}
-
-.touchCompactShell .layout {
-    grid-template-columns: 1fr;
-    gap: var(--theme-space-md);
-}
-
-.touchCompactShell .heroColumn {
-    align-items: stretch;
-    justify-content: flex-start;
-    padding: 0;
-    gap: var(--theme-space-md);
-}
-
-.touchCompactShell .brandLockup {
-    width: 100%;
-    align-items: flex-start;
-    text-align: left;
-    padding: 0;
-}
-
-.touchCompactShell .brandCrest {
-    width: clamp(3.2rem, 14vw, 4.4rem);
-}
-
-.touchCompactShell .heroTitle {
-    max-width: none;
-    font-size: clamp(2.2rem, 12vw, 3.8rem);
-}
-
-.touchCompactShell .divider {
-    width: min(100%, 13rem);
-}
-
-.touchCompactShell .tagline {
-    max-width: none;
-    font-size: 0.82rem;
-    line-height: 1.35;
-}
-
-.touchCompactShell .ctaBandSeal {
-    width: 1.95rem;
-    height: 1.95rem;
-}
-
-.touchCompactShell .ctaIllustratedBand {
-    gap: var(--theme-space-sm);
-    margin-bottom: 0;
-}
-
-.touchCompactShell .ctaBandFlourish {
-    max-height: 0.42rem;
-    opacity: 0.62;
-}
-
-.touchCompactShell .actionStack {
-    width: 100%;
-    padding-bottom: 0.35rem;
-}
-
-.touchCompactShell .supportPanel {
-    padding: var(--ui-card-pad-md);
-    transform: none;
-}
-
-.touchCompactShell .howToGrid {
-    margin: 0.65rem 0 0.85rem;
-    gap: 0.45rem;
-}
-
-.shortTouchLandscapeShell .fitViewport {
-    --menu-content-pad-block-start: var(--theme-space-sm);
-    --menu-content-pad-block-end: var(--theme-space-sm);
-}
-
-.shortTouchLandscapeShell .heroColumn {
-    display: flex;
-    flex-direction: column;
+.helpDismiss,
+.noteAction {
+    display: inline-flex;
     align-items: center;
+    min-height: var(--menu-touch);
+    margin: 0.35rem 0.25rem 0.25rem;
+    padding: 0 0.9rem;
+    border: 1px solid var(--margin-rule);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--margin-gold);
+    font-family: var(--margin-body-font);
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    cursor: pointer;
 }
 
-.shortTouchLandscapeShell .heroTitle {
-    font-size: clamp(2rem, 8vw, 3rem);
+.helpDismiss:hover,
+.helpDismiss:focus-visible,
+.noteAction:hover,
+.noteAction:focus-visible {
+    background: color-mix(in srgb, var(--margin-gold) 12%, transparent);
+    outline: none;
 }
 
-.shortTouchLandscapeShell .brandCrest {
-    width: 2.6rem;
-}
-
-.shortTouchLandscapeShell .tagline {
-    display: none;
-}
-
-.shortTouchLandscapeShell .ctaIllustratedBand {
-    display: none;
-}
-
-.shortTouchLandscapeShell .ctaTitle {
-    font-size: 0.78rem;
-}
-
-/*
- * shortDesktopShell: do not set --menu-* on .fitViewport here — that beat @container menu-shell
- * (higher specificity) and crushed 1280×720. Spacing comes from .fitViewport defaults + @container.
- * Keep only touch/panel density helpers that are not overridden by the container ladder.
- */
-.shortDesktopShell .fitViewport {
-    --ui-touch-target-min: 2.35rem;
-    --ui-card-pad-md: 0.8rem;
-    --ui-card-pad-lg: 0.95rem;
-}
-
-.shortDesktopShell .layout {
-    grid-template-columns: minmax(0, 1fr);
-}
-
-.shortDesktopShell .heroColumn {
-    justify-content: flex-start;
-    padding: 0;
-}
-
-.shortDesktopShell .brandLockup {
-    width: min(100%, 34rem);
-    padding: 0.2rem 0 0;
-}
-
-.shortDesktopShell .brandCrest {
-    width: 3rem;
-}
-
-.shortDesktopShell .heroTitle {
-    font-size: clamp(3rem, 6.2vw, 4.75rem);
-}
-
-.shortDesktopShell .divider {
-    width: min(100%, 15rem);
-}
-
-.shortDesktopShell .tagline {
-    max-width: 24rem;
-    font-size: 0.78rem;
-}
-
-.shortDesktopShell .actionStack {
+/* ------------------------------------------------------------------ notices */
+.note {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
     width: 100%;
+    max-width: 44rem;
+    margin: 0 auto clamp(0.5rem, 1.5vh, 1rem);
+    padding: 0.5rem 0.25rem;
+    border-top: 1px solid var(--margin-rule);
+    border-bottom: 1px solid var(--margin-rule);
+    font-size: clamp(0.78rem, 1.6vh, 0.9rem);
+    color: var(--margin-paper-soft);
 }
 
-.shortDesktopShell .ctaTitle {
-    font-size: 0.8rem;
+.noteTitle {
+    font-family: var(--margin-heading-font);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--margin-paper);
 }
 
-.shortDesktopShell .supportPanel {
-    transform: none;
+.noteDetail {
+    flex-basis: 100%;
+    color: var(--margin-paper-dim);
 }
 
-.shortDesktopShell .howToGrid {
-    margin: 0.45rem 0 0.55rem;
-    gap: 0.38rem;
+/* ------------------------------------------------------------------ the colophon */
+.colophon {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.35rem 0.6rem;
+    margin-top: clamp(0.75rem, 2.5vh, 1.75rem);
+    font-size: clamp(0.62rem, 1.4vh, 0.74rem);
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--margin-paper-dim);
 }
 
-.ultraShortDesktopShell .fitViewport {
-    --menu-content-pad-inline: var(--theme-space-lg);
-    --menu-meta-card-pad-inline: var(--theme-space-md);
-    --menu-layout-gap: var(--theme-space-sm);
-    --menu-action-stack-gap: var(--theme-space-xs);
-    --menu-support-gap: var(--theme-space-sm);
-    --ui-touch-target-min: 2.15rem;
-    --ui-card-pad-md: 0.72rem;
-    --ui-card-pad-lg: 0.82rem;
-}
-
-.ultraShortDesktopShell .heroTitle {
-    font-size: clamp(2.65rem, 5.8vw, 4.1rem);
-}
-
-.ultraShortDesktopShell .tagline {
-    display: none;
-}
-
-.ultraShortDesktopShell .supportHeading {
-    font-size: 1.45rem;
-}
-
-.ultraCompactPhoneShell .fitViewport {
-    --menu-content-gap: var(--theme-space-sm);
-    --menu-content-pad-block-start: var(--theme-space-sm);
-    --menu-content-pad-block-end: var(--theme-space-sm);
-    --menu-meta-card-pad-block: 0.34rem;
-    --menu-meta-card-pad-inline: 0.48rem;
-    --menu-brand-gap: var(--theme-space-2xs);
-    --menu-action-stack-gap: var(--theme-space-xs);
-    --menu-support-gap: var(--theme-space-xs);
-}
-
-.ultraCompactPhoneShell .brandCrest {
-    width: 2.8rem;
-}
-
-.ultraCompactPhoneShell .heroTitle {
-    font-size: clamp(1.9rem, 12vw, 3rem);
-}
-
-.ultraCompactPhoneShell .tagline {
-    display: none;
-}
-
-.ultraCompactPhoneShell .supportPanel {
-    padding: 0.82rem;
-}
-
-:global([data-reduce-motion='true']) .supportPanel {
-    transform: none;
-}
-
-@media (max-width: 1180px) {
-    .layout {
-        grid-template-columns: 1fr;
+@media (prefers-reduced-motion: reduce) {
+    .entry {
+        transition: none;
     }
-}
-
-@media (max-width: 760px) {
-    .fitViewport {
-        --menu-content-gap: var(--theme-space-lg);
-        --menu-content-pad-block-start: var(--theme-space-lg);
-        --menu-content-pad-inline: var(--theme-space-lg);
-        --menu-content-pad-block-end: var(--theme-space-xl);
-        --menu-hero-pad-block: var(--theme-space-lg) 0 var(--theme-space-2xs);
-    }
-
-    .tagline {
-        font-size: 0.88rem;
-    }
-}
-
-@media (max-width: 430px), (max-height: 620px) {
-    .fitViewport {
-        --menu-brand-gap: var(--theme-space-xs);
-        --menu-brand-pad-block: var(--theme-space-md) var(--theme-space-xl) var(--theme-space-md);
-        --menu-action-stack-gap: var(--theme-space-md);
-    }
-
-    .ctaTitle {
-        font-size: 0.84rem;
-    }
-}
-
-/* Wide + very short (e.g. 844×390): keep chrome on-screen without relying only on scroll. */
-@media (orientation: landscape) and (max-height: 440px) {
-    .fitViewport {
-        --menu-content-gap: calc(var(--theme-space-sm) + var(--theme-space-2xs));
-        --menu-content-pad-block-start: calc(var(--theme-space-sm) + var(--theme-space-2xs));
-        --menu-content-pad-inline: var(--theme-space-lg);
-        --menu-content-pad-block-end: var(--theme-space-lg);
-        --menu-meta-card-pad-block: calc(var(--theme-space-sm) + var(--theme-space-2xs));
-        --menu-meta-card-pad-inline: calc(var(--theme-space-md) + var(--theme-space-2xs));
-        --menu-hero-gap: calc(var(--theme-space-sm) + var(--theme-space-2xs));
-        --menu-hero-pad-block: var(--theme-space-sm) var(--theme-space-sm) var(--theme-space-2xs);
-        --menu-brand-gap: var(--theme-space-2xs);
-        --menu-brand-pad-block: calc(var(--theme-space-sm) + var(--theme-space-2xs))
-            calc(var(--theme-space-md) + var(--theme-space-2xs)) var(--theme-space-xs);
-        --menu-action-stack-gap: var(--theme-space-sm);
-        --menu-support-gap: calc(var(--theme-space-sm) + var(--theme-space-2xs));
-        --menu-support-pad-block-start: var(--theme-space-2xs);
-        --menu-mode-grid-mt: calc(var(--theme-space-sm) + var(--theme-space-2xs));
-        --menu-mode-grid-gap: var(--theme-space-sm);
-        --menu-archive-stats-mt: calc(var(--theme-space-sm) + var(--theme-space-2xs));
-        --menu-archive-stats-gap: calc(var(--theme-space-sm) + var(--theme-space-2xs));
-    }
-
-    .brandCrest {
-        width: clamp(3.25rem, 8vw, 4.25rem);
-    }
-
-    .tagline {
-        font-size: 0.78rem;
-    }
-}
-
-/* Wide desktop, 720p-class height (e.g. 1280×720): shrink vertical rhythm so fit-zoom stays near 1. */
-@container menu-shell (min-width: 1024px) and (max-height: 760px) {
-    .fitViewport {
-        --menu-content-gap: calc(var(--theme-space-md) + var(--theme-space-2xs));
-        --menu-content-pad-block-start: calc(var(--theme-space-md) + var(--theme-space-2xs));
-        --menu-content-pad-inline: var(--theme-space-xl);
-        --menu-content-pad-block-end: var(--theme-space-lg);
-        --menu-meta-row-gap: var(--theme-space-sm);
-        --menu-meta-card-pad-block: var(--theme-space-sm);
-        --menu-meta-card-pad-inline: calc(var(--theme-space-md) + var(--theme-space-2xs));
-        --menu-layout-gap: var(--theme-space-lg);
-        --menu-hero-gap: calc(var(--theme-space-sm) + var(--theme-space-2xs));
-        --menu-hero-pad-block: var(--theme-space-sm) var(--theme-space-lg) var(--theme-space-xs);
-        --menu-brand-gap: var(--theme-space-2xs);
-        --menu-brand-pad-block: var(--theme-space-sm) var(--theme-space-lg) var(--theme-space-xs);
-        --menu-action-stack-gap: calc(var(--theme-space-sm) + var(--theme-space-2xs));
-        --menu-bottom-cards-gap: var(--theme-space-md);
-        --menu-support-gap: calc(var(--theme-space-sm) + var(--theme-space-2xs));
-        --menu-support-pad-block-start: var(--theme-space-2xs);
-        --menu-mode-grid-mt: var(--theme-space-sm);
-        --menu-mode-grid-gap: var(--theme-space-sm);
-        --menu-archive-stats-mt: var(--theme-space-sm);
-        --menu-archive-stats-gap: var(--theme-space-sm);
-        --menu-archive-stat-pad-block: var(--theme-space-md);
-        --menu-archive-stat-pad-inline: calc(var(--theme-space-md) + var(--theme-space-2xs));
-    }
-
-    .brandCrest {
-        width: clamp(3.35rem, 6.5vw, 4.5rem);
-    }
-
-    .tagline {
-        font-size: 0.86rem;
-    }
-
-    .ctaTitle {
-        font-size: 0.84rem;
-    }
-
-    .shell .ctaButtonPlay .ctaTitle {
-        font-size: 0.93rem;
-    }
-
-    .howToGrid {
-        margin: 0.55rem 0 0.55rem;
-        gap: 0.48rem;
-    }
-
 }

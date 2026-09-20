@@ -10,6 +10,9 @@ import { GAMBIT_KEYBOARD_HELP_TIP } from '../copy/gameplayHints';
 import { PlatformTiltProvider } from '../platformTilt/PlatformTiltProvider';
 import { useAppStore } from '../store/useAppStore';
 import GameScreen, { FLOOR_CLEAR_BEAT_MS, LAST_PAIR_HOLD_MS } from './GameScreen';
+
+/** The beat counts rendered frames (16 ms rAF ticks under fake timers); the first tick only starts the count. */
+const TWO_PAINTED_FRAMES_MS = 3 * 16;
 import {
     getStackCashoutLaneCount,
     getVisualHudAnnouncementFollowup,
@@ -256,7 +259,7 @@ describe('GameScreen (OVR-014)', () => {
             expect(continueSpy).not.toHaveBeenCalled();
 
             act(() => {
-                vi.advanceTimersByTime(FLOOR_CLEAR_BEAT_MS + 10);
+                vi.advanceTimersByTime(FLOOR_CLEAR_BEAT_MS + TWO_PAINTED_FRAMES_MS + 10);
             });
             expect(continueSpy).toHaveBeenCalledTimes(1);
         } finally {
@@ -278,7 +281,7 @@ describe('GameScreen (OVR-014)', () => {
             );
             expect(screen.getByTestId('floor-clear-beat')).toBeInTheDocument();
             act(() => {
-                vi.advanceTimersByTime(FLOOR_CLEAR_BEAT_MS + 10);
+                vi.advanceTimersByTime(FLOOR_CLEAR_BEAT_MS + TWO_PAINTED_FRAMES_MS + 10);
             });
             expect(continueSpy).toHaveBeenCalledTimes(1);
         } finally {

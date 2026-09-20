@@ -72,7 +72,7 @@ Co-located **`*.test.ts`** here: `persistence.test.ts`, `persistence-write-error
 | `components/` | Screens: `GameScreen`, `TileBoard`, menus, Codex, settings, HUD, modals, WebGL helpers |
 | `store/` | `useAppStore.ts` — orchestration; `desktopClient`; `persistBridge.ts` (`persistSaveData` / `persistSaveSettings`, write-failure UX hook); `achievementPersistence.ts` (save-then-unlock sequencing); memorize/resolve/gauntlet timers; `game.ts`; `gameSfx`; achievements/telemetry on run end |
 | `audio/` | `gameSfx.ts` — Web Audio procedural SFX (flip, match, mismatch) |
-| `hooks/` | Shell zoom (`hubShellFit`), HUD a11y announcements, drag scroll, etc. |
+| `hooks/` | Viewport size, HUD a11y announcements, drag scroll, etc. |
 | `keyboard/` | `gameplayShortcuts.ts` — `GAMEPLAY_SHORTCUT_ROWS` for in-run keyboard help overlay |
 | `a11y/` | Focus order / focusable queries, modal focus return stack |
 | `styles/` | Theme tokens, global CSS, app shell styles |

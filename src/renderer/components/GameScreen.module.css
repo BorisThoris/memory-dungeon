@@ -1402,3 +1402,19 @@ where that rule
     --margin-stage-inline-start: clamp(14rem, 22vw, 20.5rem);
     --margin-stage-inline-end: 4rem;
 }
+
+/* The ladder's column is set on ink: the relit room's left torch would otherwise light the wall
+   exactly under the rung labels and the 12 px small caps vanish into the stone. */
+.shell[data-shell-layout='desktop'] .stageBackdrop::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--margin-ink) 88%, transparent) 0,
+        color-mix(in srgb, var(--margin-ink) 70%, transparent) calc(var(--margin-stage-inline-start) - 5rem),
+        transparent var(--margin-stage-inline-start)
+    );
+}
