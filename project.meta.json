@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-19T16:42:11.542Z",
+  "generatedAt": "2026-09-19T23:40:36.729Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -184,6 +184,7 @@
       "wip:extract-endproduct:react",
       "wip:extract-endproduct:png-only",
       "imagegen",
+      "reel",
       "card-backs:local",
       "card-backs:local:dry",
       "face-panels:local",
@@ -281,28 +282,28 @@
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 158751,
+        "bytes": 158548,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-19T16:41:03.280Z"
+        "capturedAt": "2026-09-19T23:39:42.675Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 149031,
+        "bytes": 148775,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-19T16:41:22.488Z"
+        "capturedAt": "2026-09-19T23:39:57.694Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 122399,
+        "bytes": 122161,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-19T16:41:52.217Z"
+        "capturedAt": "2026-09-19T23:40:23.260Z"
       },
       {
         "profile": "mobile",
@@ -311,16 +312,16 @@
         "bytes": 50952,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-19T16:41:33.046Z"
+        "capturedAt": "2026-09-19T23:40:07.900Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 112761,
+        "bytes": 112948,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-19T16:42:11.324Z"
+        "capturedAt": "2026-09-19T23:40:36.514Z"
       }
     ]
   },
@@ -382,17 +383,17 @@
     "devDependencyCount": 49
   },
   "metrics": {
-    "sourceFiles": 1091,
-    "testFiles": 476,
-    "sourceLines": 167982,
+    "sourceFiles": 1099,
+    "testFiles": 477,
+    "sourceLines": 168775,
     "largestDirectories": [
       {
         "directory": "src",
-        "files": 922
+        "files": 926
       },
       {
         "directory": "scripts",
-        "files": 86
+        "files": 90
       },
       {
         "directory": "e2e",
@@ -423,10 +424,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "28fb7ba0",
-    "lastCommitDate": "2026-09-19T18:57:19+03:00",
-    "lastCommitSubject": "Redraw the in-run shell as The Margin",
-    "commitCount": 1471,
+    "head": "f0b5e348",
+    "lastCommitDate": "2026-09-20T02:36:14+03:00",
+    "lastCommitSubject": "Merge remote-tracking branch 'origin/main' into claude/game-view-redesign-6daf70",
+    "commitCount": 1477,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
