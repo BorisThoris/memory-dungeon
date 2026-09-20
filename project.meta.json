@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-20T13:00:32.108Z",
+  "generatedAt": "2026-09-20T14:35:14.669Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -285,7 +285,7 @@
         "bytes": 143993,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-20T12:59:39.429Z"
+        "capturedAt": "2026-09-20T14:34:26.158Z"
       },
       {
         "profile": "desktop",
@@ -294,7 +294,7 @@
         "bytes": 134991,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-20T12:59:55.258Z"
+        "capturedAt": "2026-09-20T14:34:40.021Z"
       },
       {
         "profile": "full",
@@ -303,7 +303,7 @@
         "bytes": 112331,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-20T13:00:16.607Z"
+        "capturedAt": "2026-09-20T14:34:59.003Z"
       },
       {
         "profile": "mobile",
@@ -312,7 +312,7 @@
         "bytes": 50945,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-20T13:00:04.538Z"
+        "capturedAt": "2026-09-20T14:34:44.733Z"
       },
       {
         "profile": "og",
@@ -321,7 +321,7 @@
         "bytes": 106849,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-20T13:00:31.880Z"
+        "capturedAt": "2026-09-20T14:35:14.433Z"
       }
     ]
   },
@@ -383,13 +383,13 @@
     "devDependencyCount": 49
   },
   "metrics": {
-    "sourceFiles": 1095,
-    "testFiles": 475,
-    "sourceLines": 168079,
+    "sourceFiles": 1097,
+    "testFiles": 476,
+    "sourceLines": 168341,
     "largestDirectories": [
       {
         "directory": "src",
-        "files": 922
+        "files": 924
       },
       {
         "directory": "scripts",
@@ -424,10 +424,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "505c4a49",
-    "lastCommitDate": "2026-09-20T15:40:58+03:00",
-    "lastCommitSubject": "Set the mode page, the settings and every dialog in The Margin",
-    "commitCount": 1483,
+    "head": "eb2a8510",
+    "lastCommitDate": "2026-09-20T14:23:52Z",
+    "lastCommitSubject": "Gen 227: the screen the UI-scale cap was blamed on had become the most scalable one in the game",
+    "commitCount": 1487,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
