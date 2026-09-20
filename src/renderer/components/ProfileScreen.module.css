@@ -305,13 +305,30 @@
 }
 
 /*
- * Short landscape. The six numbers go to one band and the tier rail tightens, so the next
- * goal stays on the page instead of falling past the bottom edge. The "Current" and
+ * A SHORT BOX - not a short window. The six numbers go to one band and the tier rail tightens, so
+ * the next goal stays on the page instead of falling past the bottom edge. The "Current" and
  * "Reached" notes step aside there: the tier's own border and fill already say it, while
  * an upcoming tier keeps its note because the marks it needs are a number nothing else
  * states.
+ *
+ * This was `@media (max-height: 560px)` and could only ever fire on a short window. The UI scale
+ * is a `zoom`, which shrinks the box this screen lays out in and leaves the viewport alone, so at
+ * 1.4 on a 1280x800 Deck panel Profile had a 914x571 box and a media query still reading 800px:
+ * the summary wrapped to two rows and the ledger, the only flexible region here, took the whole
+ * cost and measured a 44px frame that clipped every card. `MetaShell` is a size container so this
+ * asks the box.
+ *
+ * 640 rather than 560 is measured, not rounded up. Profile's box, top padding to bottom padding,
+ * is 571 at 1.4 on the Deck and 643 at 1.4 on a 1440x900 desktop, while the smallest any window
+ * gives it AT SCALE 1 is 768 on a 1024x768 laptop - so any threshold in [571, 768) fires where it
+ * is needed and nowhere it is not, and 640 is that interval's round middle. What the query itself
+ * compares is the CONTENT box, about 31px less than those figures once this shell's own padding
+ * comes off, which is why the Deck takes the compact arrangement from 1.2 and the desktop from
+ * 1.4 rather than from the scales those numbers would suggest. At scale 1 it fires on no window
+ * that did not already have it: short landscape, as it always did, and the phone through the
+ * narrow rung below.
  */
-@media (max-height: 560px) {
+@container meta-shell (max-height: 640px) {
     .summary {
         grid-template-columns: repeat(6, minmax(0, 1fr));
         gap: 0.35rem;
@@ -357,7 +374,7 @@
  * pager, and a three-line progress card lost its third line under the cell's edge. The kicker
  * ("Daily") is the line to lose - the title names the archive - and the card tightens to two.
  */
-@media (max-height: 560px) and (min-width: 700px) {
+@container meta-shell (max-height: 640px) and (min-width: 700px) {
     .progressKicker {
         display: none;
     }
@@ -405,7 +422,7 @@
  * smaller, and the tier rail steps aside as it does in short landscape: the subtitle already
  * states the level and the honor count.
  */
-@media (max-width: 560px) {
+@container meta-shell (max-width: 560px) {
     .summary {
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 0.25rem;

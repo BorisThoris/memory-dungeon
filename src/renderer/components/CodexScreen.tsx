@@ -63,6 +63,26 @@ const plainText = (text: string): string => text.replace(/\*\*/gu, '');
  */
 const CARD_SUMMARY_LIMIT = 78;
 
+/**
+ * What a card needs when its title takes two lines.
+ *
+ * It was 146, which is what the card needs when the title takes ONE - and the title takes one at
+ * the column widths this grid produces at scale 1, which is the only scale anything measured.
+ * Turn the UI scale up and the layout box narrows: at 1.1 on a 1280x800 Deck panel the columns
+ * come out 235px instead of 249, the longer entry titles wrap to a second line, and the 24px that
+ * takes comes out of the summary underneath - which then had 45px for the three lines it draws in
+ * 58, and lost its last line mid-sentence with no ellipsis to say so. At the SHIPPED cap of 1.1,
+ * on the panel this game is verified for.
+ *
+ * So the row is sized for the card's own worst case rather than its best: 24px of padding, 3px of
+ * rule, a 15px kicker, a title of two 24px lines, three 19.3px lines of summary and two 4.8px
+ * gaps - 158 by that sum, and 160 because at 158 the summary measured 57px against the 58 it
+ * wanted and lost its last line to a rounding error. A taller row means fewer cards to a page and
+ * the grid pages, so nothing is lost but a click; a shorter one means text cut off, which cannot
+ * be clicked back.
+ */
+const CODEX_CARD_ROW_HEIGHT = 160;
+
 const summarize = (description: string): string => {
     const plain = plainText(description).trim();
     const firstStop = plain.search(/[.!?](\s|$)/u);
@@ -248,7 +268,7 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
                         </button>
                     )}
                     resetKey={filtering ? `filter:${debouncedFilterQuery}` : `section:${activeSectionId}`}
-                    rowHeight={146}
+                    rowHeight={CODEX_CARD_ROW_HEIGHT}
                     testId="codex-entries"
                 />
             )}

@@ -13,18 +13,37 @@ import { VIEWPORT_MOBILE_MAX, VIEWPORT_TABLET_MAX } from './breakpoints';
  * **Gen 227 re-measured, and the recorded reason was wrong twice over.** Gen 223 had already
  * refuted the ladder story - the `@container` rungs were never winning the cascade, so widening
  * them changed no output at any scale - and the menu has since been rebuilt as a fluid title page
- * with no ladder at all. Measured again with both caps lifted, on the two windows a launch
- * checklist names, at 1.1 / 1.4 / 1.6 / 1.8 / 2:
+ * with no ladder at all.
+ *
+ * **Gen 238 fixed the screen Gen 227 found, and then found the screen none of this had looked
+ * at.** Profile was failing at 1.4 because its own compact arrangement - the one that hides the
+ * tier rail and puts the six numbers in a fixed six-column row - was written as
+ * `@media (max-height: 560px)`, and a media query reads the WINDOW. The UI scale is a `zoom`: it
+ * shrinks the box a screen lays out in and leaves the window alone, so at 1.4 on a Deck panel
+ * Profile was drawing the desktop arrangement into a 914x571 box with no rung able to fire. Asked
+ * against the box instead (`@container meta-shell`, `MetaShell.module.css`), Profile holds to 1.6.
+ * Codex was clipping an entry's summary from 1.1 because its card row was sized for a title of one
+ * line and the columns narrow as the scale rises until the longer titles take two; sized for its
+ * own worst case it holds to 1.4.
+ *
+ * **Then the run itself was measured, for the first time, and it is the lowest of them all.**
+ * Every row in this table was a menu screen. The screen a player spends the entire game on was
+ * never on it, and at 1.1 - THE CAP THIS FILE WAS ALREADY SHIPPING - the chain goal line sits on
+ * the chain state on a 1280x800 Deck panel. Measured on the two windows a launch checklist names,
+ * at 1 / 1.05 / 1.1 / 1.2 / 1.4 / 1.6 / 1.8 / 2:
  *
  *   screen      holds to   first failure and what it is
  *   main menu   1.6        1.8: entry notes hit their ellipsis, title and numeral overlap at 1280
+ *   profile     1.6        1.8: objective cards clip their progress line
+ *   codex       1.4        1.6: two entry summaries clip on the Deck panel
  *   settings    1.4        1.6: the layout-style row starts scrolling on the Deck panel
- *   profile     1.1        1.4: objective cards clip their progress line, the pager overlaps
+ *   in run      1.05       1.1: the chain goal overlaps the chain state on the Deck panel
  *
- * So the main menu is now the MOST scalable of the three, and the screen that actually sets the
- * cap is **Profile** - the one nothing had ever named. The numbers are the largest *probed* scale
- * that holds, not a bisection: settings' true ceiling is somewhere in [1.4, 1.6) and Profile's in
- * [1.1, 1.4), and recording the probe step rather than a figure nothing measured is the point.
+ * So the cap comes DOWN, from 1.1 to 1.05, and it is the first time it has been set by a screen
+ * that is actually in the game rather than in front of it. A slider that offers a rung the game
+ * cannot render in play is worse than a shorter slider: the player who most needs large text is
+ * the one who reaches the top of it. Raising it again means fixing the run's chain HUD (task
+ * #249), and that would take it to 1.4 - Codex's and Settings' number - not to 1.6.
  *
  * The cap is the smallest of them, so it is derived rather than restated: a screen that gets its
  * layout fixed raises the cap by moving its own row, and one that regresses lowers it in the same
@@ -37,8 +56,10 @@ import { VIEWPORT_MOBILE_MAX, VIEWPORT_TABLET_MAX } from './breakpoints';
  * without losing a control.
  */
 export const SCREEN_SCALE_CEILINGS = {
+    'in run': 1.05,
     'main menu': 1.6,
-    profile: 1.1,
+    codex: 1.4,
+    profile: 1.6,
     settings: 1.4
 } as const satisfies Record<string, number>;
 

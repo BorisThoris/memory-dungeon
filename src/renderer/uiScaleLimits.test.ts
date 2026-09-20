@@ -30,15 +30,18 @@ describe('the UI scale limits', () => {
 
     it('caps a desktop window at the smallest screen ceiling, and derives it rather than restating it', () => {
         /*
-         * 1.1, and the screen that sets it is Profile - measured at Gen 227 with both caps lifted
-         * (`e2e/ui-scale-ceiling.spec.ts`), which also found the main menu holding to 1.6, so the
-         * blocker this constant used to name had become the most scalable screen of the three.
+         * 1.05, and the screen that sets it is THE RUN - measured at Gen 238, the first time the
+         * screen a player actually plays on was probed at any scale but 1 (`ui-scale-ceiling.spec.ts`).
+         * At 1.1, which this constant was until that measurement, the chain goal line overlaps the
+         * chain state on a 1280x800 Deck panel. Every earlier blocker named here - the main menu,
+         * then Profile, then Codex - was a screen on the way in.
          * The cap is the minimum of the ceilings rather than a fourth number, so a screen whose
          * layout improves raises the cap by moving its own row and cannot leave this stale.
          */
         expect(UI_SCALE_MAX).toBe(Math.min(...Object.values(SCREEN_SCALE_CEILINGS)));
-        expect(UI_SCALE_MAX).toBe(1.1);
-        expect(SCREEN_SCALE_CEILINGS.profile).toBe(UI_SCALE_MAX);
+        expect(UI_SCALE_MAX).toBe(1.05);
+        // The blocker, named rather than implied: whoever is lowest is what the player is held to.
+        expect(SCREEN_SCALE_CEILINGS['in run']).toBe(UI_SCALE_MAX);
         // Every ceiling is a scale the app could actually be asked for, and above the floor.
         for (const ceiling of Object.values(SCREEN_SCALE_CEILINGS)) {
             expect(ceiling).toBeGreaterThan(SETTINGS_NUMERIC_RANGES.uiScale.min);

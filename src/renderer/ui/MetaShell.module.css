@@ -7,13 +7,36 @@
 
 .shell {
     position: relative;
+    /*
+     * The screen's own box is what its arrangement has to answer to, not the window's.
+     *
+     * The UI scale is a `zoom`, and a zoom changes the box a screen lays out in WITHOUT changing
+     * the viewport a media query reads. Measured on Profile: at scale 1.4 on a 1280x800 Deck panel
+     * this shell lays out in 914x571, a laptop-sized box - and every `@media (max-height: ...)`
+     * rung the meta screens have still saw 800px and stayed on the desktop arrangement. The
+     * compact arrangement Profile already owned, which hides the tier rail and puts the six
+     * numbers in a fixed six-column row, could not fire at the one size that needed it.
+     *
+     * A size container makes this box queryable, so a screen's rungs step at the size it was
+     * actually given, whether that came from a small window or a large scale.
+     */
+    container-type: size;
+    container-name: meta-shell;
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
     gap: clamp(0.6rem, 1.8vh, 1rem);
     width: 100%;
     min-height: 0;
-    max-height: min(100dvh, 100svh);
+    /*
+     * In the units a screen INSIDE the zoom lays out in. `dvh` is a viewport unit and a viewport
+     * does not zoom (`App.module.css` publishes these two for exactly this reason), so a plain
+     * `100dvh` here is the window's height used as a layout length: at 1.4 it caps this shell at
+     * 800 layout px, which paints 1120px tall in an 800px window. Flex sizing happens to bind
+     * first today, so nothing overflowed - which is why it went unnoticed rather than why it was
+     * right.
+     */
+    max-height: min(var(--ui-zoomed-dvh, 100dvh), var(--ui-zoomed-svh, 100svh));
     padding:
         calc(clamp(0.6rem, 2vh, 1.5rem) + env(safe-area-inset-top, 0px))
         calc(clamp(0.75rem, 3vw, 2.5rem) + env(safe-area-inset-right, 0px))

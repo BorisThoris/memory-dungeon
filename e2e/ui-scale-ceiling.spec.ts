@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { SCREEN_SCALE_CEILINGS, UI_SCALE_MAX } from '../src/renderer/uiScaleLimits';
 import { describeFit } from './uiFit';
+import { dismissStartupIntro } from './startupIntroHelpers';
 import {
     buildPopulatedProfileSaveJson,
     buildVisualSaveJson,
@@ -47,8 +48,22 @@ const SCALE_VIEWPORTS = [
     { id: 'desktop', width: 1440, height: 900 }
 ] as const;
 
-/** The probe ladder the ceilings were measured on; "above" is the next rung past a ceiling. */
-const PROBE_LADDER = [1, UI_SCALE_MAX, 1.4, 1.6, 1.8, 2] as const;
+/**
+ * The probe ladder the ceilings were measured on; "above" is the next rung past a ceiling.
+ *
+ * Deduplicated and sorted, because `UI_SCALE_MAX` is one of the rungs and is itself derived from
+ * the ceilings: when it lands on a rung already listed, an unsorted ladder measures that scale
+ * twice and steps out of order, and `stepAbove` stops meaning "the next one up".
+ *
+ * The close rungs are there because the failures are close together and not always monotonic: the
+ * run's chain HUD fits at 1.05 and overlaps at 1.1, and Codex used to clip at 1.2 and 1.25 and fit
+ * again from 1.3. A ladder that steps 1 -> 1.4 walks over both, and a control that looks for a
+ * break at the wrong rung finds none and reports the ceiling as understated - handing a screen
+ * scaling it cannot render, by the assertion written to prevent exactly that.
+ */
+const PROBE_LADDER: readonly number[] = [...new Set([1, UI_SCALE_MAX, 1.05, 1.1, 1.2, 1.4, 1.6, 1.8, 2])].sort(
+    (a, b) => a - b
+);
 
 const stepAbove = (ceiling: number): number => {
     const above = PROBE_LADDER.find((step) => step > ceiling);
@@ -61,8 +76,35 @@ const stepAbove = (ceiling: number): number => {
 const SCREENS = [
     { label: 'main menu', button: /^play$/i, ceiling: SCREEN_SCALE_CEILINGS['main menu'] },
     { label: 'settings', button: /^settings$/i, ceiling: SCREEN_SCALE_CEILINGS.settings },
-    { label: 'profile', button: /^profile$/i, ceiling: SCREEN_SCALE_CEILINGS.profile }
+    { label: 'profile', button: /^profile$/i, ceiling: SCREEN_SCALE_CEILINGS.profile },
+    { label: 'codex', button: /^codex$/i, ceiling: SCREEN_SCALE_CEILINGS.codex }
 ] as const;
+
+/**
+ * The run itself, which every row above is only the way into.
+ *
+ * It was not on this list until Gen 238, and it is the lowest of them: at 1.1 - the cap this spec
+ * was signing off at the time - the chain goal line sits on the chain state on a Deck panel. Every
+ * ceiling recorded before that was a menu screen's, so the cap was being justified by screens a
+ * player passes through and never by the one they play on.
+ */
+const startRun = async (page: Page): Promise<void> => {
+    await page.goto('/');
+    await dismissStartupIntro(page);
+    await page.getByRole('button', { name: /^play$/i }).waitFor({ state: 'visible', timeout: 30_000 });
+    const dismiss = page.getByRole('button', { name: /^dismiss$/i });
+    if (await dismiss.isVisible().catch(() => false)) {
+        await dismiss.click();
+    }
+    await page.getByRole('button', { name: /^play$/i }).click();
+    await page.getByRole('region', { name: /choose your path/i }).waitFor({ state: 'visible', timeout: 30_000 });
+    await page.locator('button', { hasText: /start run/i }).first().click();
+    await page
+        .getByRole('heading', { name: /level 1/i })
+        .waitFor({ state: 'visible', timeout: 60_000 })
+        .catch(() => undefined);
+    await page.waitForTimeout(3000);
+};
 
 const atScale = (saveJson: string, uiScale: number): string => {
     const save = JSON.parse(saveJson) as { settings: Record<string, unknown> };
@@ -138,6 +180,41 @@ test.describe('the UI scale ceiling', () => {
             ).toBeGreaterThan(0);
         });
     }
+
+    test(`the run holds its layout up to ${SCREEN_SCALE_CEILINGS['in run']} and not past it`, async ({ page }) => {
+        test.setTimeout(300_000);
+        const ceiling = SCREEN_SCALE_CEILINGS['in run'];
+        await startRun(page);
+        const failures: string[] = [];
+        for (const uiScale of PROBE_LADDER.filter((step) => step <= ceiling)) {
+            for (const viewport of SCALE_VIEWPORTS) {
+                await page.setViewportSize({ width: viewport.width, height: viewport.height });
+                await forceScale(page, uiScale);
+                const report = await describeFit(page);
+                const rows = Object.entries(report).flatMap(([kind, list]) =>
+                    (list as string[]).map((row) => `in run @ ${viewport.id} x${uiScale} ${kind}: ${row}`)
+                );
+                console.log(`SCALE in run @ ${viewport.id} x${uiScale}: ${rows.length === 0 ? 'fits' : rows.join(' | ')}`);
+                failures.push(...rows);
+            }
+        }
+        expect(failures, `in run: fit failures at or under its recorded ceiling ${ceiling}`).toEqual([]);
+
+        const above = stepAbove(ceiling);
+        const breaks: string[] = [];
+        for (const viewport of SCALE_VIEWPORTS) {
+            await page.setViewportSize({ width: viewport.width, height: viewport.height });
+            await forceScale(page, above);
+            const report = await describeFit(page);
+            const rows = Object.values(report).flat() as string[];
+            console.log(`SCALE in run @ ${viewport.id} x${above} (above the ceiling): ${rows.length === 0 ? 'fits' : rows.join(' | ')}`);
+            breaks.push(...rows);
+        }
+        expect(
+            breaks.length,
+            `in run: nothing breaks at ${above}, so the recorded ceiling of ${ceiling} is understated - raise it in SCREEN_SCALE_CEILINGS`
+        ).toBeGreaterThan(0);
+    });
 
     test('a phone lays out at 1 whatever the stored scale says', async ({ page }) => {
         test.setTimeout(120_000);

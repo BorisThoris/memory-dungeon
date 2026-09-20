@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 436364,
-      "sha256": "359c94da41ced133b45f5c1acc3925dc945951c8dfa4780490fbda463afe0ec4"
+      "bytes": 439099,
+      "sha256": "54e75f282d4a1fbc78a487c05b4280b52b52fe0d0a1d3657aa734ff784b2fb2b"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "ae8922b89f69077c0161a4c7f9f478a1cabbcf33102266da9fa2d2f03c52e1d0"
+      "sha256": "c48b7da42ac644e466332562cb3155d25c3d27f4ce06c7e58bcc3b83840cec99"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -4041,8 +4041,8 @@
     {
       "path": "e2e/ui-scale-ceiling.spec.ts",
       "category": "test",
-      "bytes": 7996,
-      "sha256": "657f2873429e942fca15526c06a3b5be64db7a2620f31acabd03f3b7c970e86d"
+      "bytes": 12128,
+      "sha256": "ca587822c5d49e4b4d4b58880630aff5e697440579123adb65bad09c99c0f3c2"
     },
     {
       "path": "e2e/ui-screenshots.spec.ts",
@@ -4312,7 +4312,7 @@
       "path": "project-media/capture.json",
       "category": "configuration",
       "bytes": 1305,
-      "sha256": "8df00a594de063583a8e2701f057dd37bd8d87d6e1e2a0d91d1a27032076c83a"
+      "sha256": "7b8ebd4a665fb36284d5803823adab123265236e7989061ee34ff6998cf27918"
     },
     {
       "path": "project-media/card.jpg",
@@ -4353,8 +4353,8 @@
     {
       "path": "project.meta.json",
       "category": "configuration",
-      "bytes": 11702,
-      "sha256": "08f0924700c740effc948c4764d81e52a99f442bcf6913bd712db5956cfe7113"
+      "bytes": 11738,
+      "sha256": "5bc2a3b6ed8a5731671914df2c04d9c9a03c3b7903471ea49740ea0da6305dcc"
     },
     {
       "path": "public/apple-touch-icon.png",
@@ -8391,8 +8391,8 @@
     {
       "path": "src/renderer/components/CodexScreen.tsx",
       "category": "source",
-      "bytes": 11639,
-      "sha256": "22d13735ec057acefbdc83c803ac9bb09e3cc4883d661910be2f6f0547b94c16"
+      "bytes": 12893,
+      "sha256": "658f0fcef980d10bd9bc1c1aad61f49331392e3ded3c8194d060b1c28e3893eb"
     },
     {
       "path": "src/renderer/components/codexScreenModel.test.ts",
@@ -8715,8 +8715,8 @@
     {
       "path": "src/renderer/components/ProfileScreen.module.css",
       "category": "source",
-      "bytes": 10488,
-      "sha256": "02680475fe651b18d150aca6cdd73346c6e03901329b7f676de2b4c1cf2f954d"
+      "bytes": 11862,
+      "sha256": "0b22eb3e1fdd3e5af095d142cbeecf89fd2c433a11d17ee9e89aab4bcdc89f75"
     },
     {
       "path": "src/renderer/components/ProfileScreen.test.tsx",
@@ -10881,8 +10881,8 @@
     {
       "path": "src/renderer/ui/MetaShell.module.css",
       "category": "source",
-      "bytes": 2729,
-      "sha256": "81c920b8d1d4819eec1fc3e75ef432054d39abfab31ef4d2c7c57105df816fb4"
+      "bytes": 4205,
+      "sha256": "0178174023ea2635d18e9fcd5c897554ca3fb9ba263ee5409740089c28d440e4"
     },
     {
       "path": "src/renderer/ui/MetaShell.tsx",
@@ -10977,14 +10977,14 @@
     {
       "path": "src/renderer/uiScaleLimits.test.ts",
       "category": "test",
-      "bytes": 3924,
-      "sha256": "629d0c2559898f1eb84e5fd20685486416c128a229ae114c40e0cb991f2d60cd"
+      "bytes": 4201,
+      "sha256": "1f18bb041f82b7a03c3ebd859fa38db353586a28b423935d79665bd62c33403b"
     },
     {
       "path": "src/renderer/uiScaleLimits.ts",
       "category": "source",
-      "bytes": 4235,
-      "sha256": "97d698f30e75fb0b1d53a1400206880604379797c0c7c697c0e308dc9184719b"
+      "bytes": 5723,
+      "sha256": "90bb80962d30e5ca2366e2c96c82b181dcb35a31524913a9c898f9436a44146c"
     },
     {
       "path": "src/renderer/viewportMatrix.ts",
@@ -12663,8 +12663,8 @@
     {
       "path": "src/shared/save-data.ts",
       "category": "source",
-      "bytes": 26924,
-      "sha256": "b981ef22de4ee01125973e1b917d1bc1793cf3028968ccc854b540e8293c0e38"
+      "bytes": 26925,
+      "sha256": "26f2ac6f6385ba8e75f3a1e60af2731e4814bba9b99eac03d8e7c6da06adf1af"
     },
     {
       "path": "src/shared/save-field-policy.test.ts",
@@ -17648,7 +17648,7 @@
       "path": "src/renderer/components/CodexScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 260,
+      "lineCount": 280,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/codexScreenModel.ts",
@@ -24646,7 +24646,7 @@
       "path": "src/renderer/uiScaleLimits.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 67,
+      "lineCount": 70,
       "imports": [
         "file:src/renderer/breakpoints.ts",
         "file:src/renderer/uiScaleLimits.ts",
@@ -24660,7 +24660,7 @@
       "path": "src/renderer/uiScaleLimits.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 77,
+      "lineCount": 98,
       "imports": [
         "file:src/renderer/breakpoints.ts"
       ],
@@ -34700,8 +34700,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/CodexScreen.tsx",
-      "line": 259,
-      "endLine": 259
+      "line": 279,
+      "endLine": 279
     },
     {
       "id": "symbol:src/renderer/components/codexScreenModel.ts#buildCodexModeRows",
@@ -42124,56 +42124,56 @@
       "name": "isCompactUiViewport",
       "kind": "value",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 65,
-      "endLine": 67
+      "line": 86,
+      "endLine": 88
     },
     {
       "id": "symbol:src/renderer/uiScaleLimits.ts#isShortLandscapeDesktop",
       "name": "isShortLandscapeDesktop",
       "kind": "value",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 62,
-      "endLine": 63
+      "line": 83,
+      "endLine": 84
     },
     {
       "id": "symbol:src/renderer/uiScaleLimits.ts#safeUiScaleFor",
       "name": "safeUiScaleFor",
       "kind": "value",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 70,
-      "endLine": 76
+      "line": 91,
+      "endLine": 97
     },
     {
       "id": "symbol:src/renderer/uiScaleLimits.ts#SCREEN_SCALE_CEILINGS",
       "name": "SCREEN_SCALE_CEILINGS",
       "kind": "value",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 39,
-      "endLine": 43
+      "line": 58,
+      "endLine": 64
     },
     {
       "id": "symbol:src/renderer/uiScaleLimits.ts#UI_SCALE_COMPACT",
       "name": "UI_SCALE_COMPACT",
       "kind": "value",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 54,
-      "endLine": 54
+      "line": 75,
+      "endLine": 75
     },
     {
       "id": "symbol:src/renderer/uiScaleLimits.ts#UI_SCALE_MAX",
       "name": "UI_SCALE_MAX",
       "kind": "value",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 46,
-      "endLine": 46
+      "line": 67,
+      "endLine": 67
     },
     {
       "id": "symbol:src/renderer/uiScaleLimits.ts#UiScaleViewport",
       "name": "UiScaleViewport",
       "kind": "interface",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 56,
-      "endLine": 59
+      "line": 77,
+      "endLine": 80
     },
     {
       "id": "symbol:src/renderer/viewportMatrix.ts#classifyResponsiveViewport",
