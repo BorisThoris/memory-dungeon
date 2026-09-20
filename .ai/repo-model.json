@@ -63,8 +63,8 @@
     {
       "path": ".gitignore",
       "category": "other",
-      "bytes": 770,
-      "sha256": "ed337601fd16e3211010ec5e50c051e8d57aa4376efe354f75e1ef58f3435d58"
+      "bytes": 734,
+      "sha256": "f2a5c8011ae8d6da3882d20b38e930f85ce53ccf8e560f24e3c7fa9094a90ccf"
     },
     {
       "path": ".idea/.gitignore",
@@ -3915,8 +3915,8 @@
     {
       "path": "e2e/portfolio-visual-smoke.spec.ts",
       "category": "test",
-      "bytes": 7988,
-      "sha256": "9ea6c3aab640dfde525a0dc5db4b6f452d0c32980e1990383ebff80e8db36f2e"
+      "bytes": 7772,
+      "sha256": "0fa0b19dd613b2838daa7b15d55ab10f89684aeb49e54c49591437e98eb77390"
     },
     {
       "path": "e2e/README.md",
@@ -4306,25 +4306,25 @@
       "path": "project-media/capture.json",
       "category": "configuration",
       "bytes": 1305,
-      "sha256": "5b656f9dea852b9413d7f18736b2a6e33739c9d11afec38e97b4249f0082215f"
+      "sha256": "6826788f503a61e973329fe23a1d3279d62387b788b6d45bdb6b88933ff528ee"
     },
     {
       "path": "project-media/card.jpg",
       "category": "asset",
-      "bytes": 158751,
-      "sha256": "a8323d9c164ccf366db84b938ab21be0b54f58c734d2917af3f64977082008cc"
+      "bytes": 158548,
+      "sha256": "a1bb1854e8bdab4c89956c9d343461efba7c2055e5bbe66a9483cf7c16a914c5"
     },
     {
       "path": "project-media/desktop.jpg",
       "category": "asset",
-      "bytes": 149031,
-      "sha256": "7bdb3918325e664608c5f7c1ac381b837f742ce7725cecc4855bdff0755ab5b7"
+      "bytes": 148775,
+      "sha256": "6aaa5a0099a4091997c2311ea89633c8d204aa678e146fc1c86c6fcebafcddb5"
     },
     {
       "path": "project-media/full.jpg",
       "category": "asset",
-      "bytes": 122399,
-      "sha256": "be40032453a167fa6df6979dcf0ab4d960251d20c7f6da47a7c6668287993271"
+      "bytes": 122161,
+      "sha256": "6d41408043ca7d42d35cbe37e64b95ab0bf14bbc3035c2b4ff8d6c6e094472d5"
     },
     {
       "path": "project-media/icons.json",
@@ -4341,14 +4341,14 @@
     {
       "path": "project-media/og.jpg",
       "category": "asset",
-      "bytes": 112761,
-      "sha256": "e0909e46f9eceb606dba2b447b0c271ed421b2fd6b43f71c08d0631312c05358"
+      "bytes": 112948,
+      "sha256": "1c17b9f83fcaf722c7efdb167793b6022b43ce49ebc7b76b17210ad83ea9aefd"
     },
     {
       "path": "project.meta.json",
       "category": "configuration",
-      "bytes": 11660,
-      "sha256": "3a5358d3f67560bc632bafd3b1de1afe60f7d9a64338ba2ec6d24e7a52c9f4cb"
+      "bytes": 11717,
+      "sha256": "e38fe2b1a1aeafe33b56671c4f2be661496770f5069f1f5e8a510ce827c2e805"
     },
     {
       "path": "public/apple-touch-icon.png",
@@ -4389,8 +4389,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 112761,
-      "sha256": "e0909e46f9eceb606dba2b447b0c271ed421b2fd6b43f71c08d0631312c05358"
+      "bytes": 112948,
+      "sha256": "1c17b9f83fcaf722c7efdb167793b6022b43ce49ebc7b76b17210ad83ea9aefd"
     },
     {
       "path": "public/site.webmanifest",
@@ -5331,8 +5331,8 @@
     {
       "path": "scripts/scene-pipeline/README.md",
       "category": "script",
-      "bytes": 3061,
-      "sha256": "cf60588fdaee6ab8bd05afabe8e5a30b7962c88974ca7a4b9068762fde69597b"
+      "bytes": 3015,
+      "sha256": "aefb655a7ef0cc4951c3e3919f7c2f21d71e293e61a72eb063f6a46a14ab405e"
     },
     {
       "path": "scripts/scene-pipeline/scene.sh",
@@ -8469,20 +8469,20 @@
     {
       "path": "src/renderer/components/GameplayScene.module.css",
       "category": "source",
-      "bytes": 3934,
-      "sha256": "5fc4f3d8d6c1381e9a6d6729788ce4ada7be5c778c21d9cc71b897dd14c9d49f"
+      "bytes": 3728,
+      "sha256": "b1a12a0c397d433b87606ba472d2732f876651a888495004685980fa32f4e216"
     },
     {
       "path": "src/renderer/components/GameplayScene.test.tsx",
       "category": "test",
-      "bytes": 4589,
-      "sha256": "9b2703c5ca8c100c6b65704d74ceb633454a33cfd951bea69dd70ba6767deb6d"
+      "bytes": 4499,
+      "sha256": "36c7b7509b6bdf3011ae31c6f8733d89d2e0fdd78966d8cb1cc5668ddb4c68fa"
     },
     {
       "path": "src/renderer/components/GameplayScene.tsx",
       "category": "source",
-      "bytes": 4404,
-      "sha256": "6ac01edffe5d7e9e1793c5789b62b81647992ad307fb748e4d9a69176d315311"
+      "bytes": 4317,
+      "sha256": "0077383d64f06b5c37b22067f0f3973ceb99975420f65b44cedbcc55cc08a39c"
     },
     {
       "path": "src/renderer/components/gameplaySceneLevels.ts",
