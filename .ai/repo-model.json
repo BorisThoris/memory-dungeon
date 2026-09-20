@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "5a26d2014e7dbbc6b039d9759a060537840e88f7a89a63263da8dc4fe2dc065c"
+      "sha256": "8d36f8307805bf48533d23a87b5d5d298776aefd3856039af9f8835b400ab0b0"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -8517,8 +8517,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 85271,
-      "sha256": "81d548e01ce61eb3e4391318f7901ea268554e84161f0230d99a053e39adedaa"
+      "bytes": 86391,
+      "sha256": "b237c0dc38fd8abe716993e544ba0f8ec3b4b171080c0643cd391ba44e8e4822"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -17956,7 +17956,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1818,
+      "lineCount": 1834,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -34854,40 +34854,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 1817,
-      "endLine": 1817
+      "line": 1833,
+      "endLine": 1833
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 196,
-      "endLine": 196
+      "line": 214,
+      "endLine": 214
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 194,
-      "endLine": 194
+      "line": 212,
+      "endLine": 212
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 198,
-      "endLine": 198
+      "line": 216,
+      "endLine": 216
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 188,
-      "endLine": 188
+      "line": 206,
+      "endLine": 206
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",

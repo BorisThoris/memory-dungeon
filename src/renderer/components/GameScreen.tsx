@@ -120,7 +120,25 @@ import {
 /** OVR-007 / HUD-020: chaff readout for `distraction_channel` — not gameplay state; hidden when reduce motion or assist toggle is off. */
 const DISTRACTION_CHANNEL_LABEL = 'Chaff';
 
-const DESKTOP_FULL_BLEED_TILE_BOARD_FRAME_STYLE: CSSProperties = {
+/**
+ * The board frame fills its stage. One box, applied the same way in both camera modes.
+ *
+ * It used to be desktop-only, on the reasoning that `.frameMobileCamera` in `TileBoard.module.css`
+ * declares the identical four properties for the phone path. Measured at 390x844 during the
+ * floor-clear beat, it does not hold: the real frame computes `position: relative` and lays out at
+ * y=398 with `height: 100%` of an 844px stage, so it runs to 1242 - nearly 400px past the window.
+ * A bare element carrying the same two classes computes `absolute`, so the rule is served and the
+ * classes are right; something in the frame's own ancestor chain beats it, which a class cannot be
+ * relied on to survive and an inline style cannot lose to.
+ *
+ * What that cost a player: the board's own `role="application"` node - the keyboard and controller
+ * entry point for the whole board - had its centre outside the window, so the fit contract counted
+ * it UNREACHABLE, and the stage sat below the fold with nothing able to scroll it back.
+ *
+ * Applying it in both modes also removes the divergence itself: two paths that are supposed to
+ * produce the same box, one of which was only checked on the viewport where it happened to work.
+ */
+const FULL_BLEED_TILE_BOARD_FRAME_STYLE: CSSProperties = {
     height: '100%',
     inset: 0,
     position: 'absolute',
@@ -1518,9 +1536,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 previewActive={run.status === 'memorize'}
                                 boardBloomEnabled={settingsBoardBloomEnabled}
                                 boardScreenSpaceAA={settingsBoardScreenSpaceAA}
-                                frameStyle={
-                                    cameraViewportMode ? undefined : DESKTOP_FULL_BLEED_TILE_BOARD_FRAME_STYLE
-                                }
+                                frameStyle={FULL_BLEED_TILE_BOARD_FRAME_STYLE}
                                 graphicsQuality={settingsGraphicsQuality}
                                 reduceMotion={reduceMotion}
                                 runStatus={run.status}
