@@ -1,6 +1,13 @@
-import type { ReactNode } from 'react';
-import { Panel, ScreenTitle } from '../ui';
+import type { CSSProperties, ReactNode } from 'react';
 import styles from './SettingsScreen.module.css';
+
+/**
+ * The controls of the settings page, in "The Margin": each one is a line of a ruled table —
+ * the name in display type, the note under it in the italic voice, and the control at the
+ * line's end. A toggle is a hairline switch that fills gold; a segmented choice is a row of
+ * words with the chosen one underlined in gold; a slider is a gold thread with its value set
+ * beside it.
+ */
 
 interface ToggleRowProps {
     label: string;
@@ -25,6 +32,9 @@ export const ToggleRow = ({ label, hint, checked, disabled = false, onChange }: 
                 type="checkbox"
             />
             <span className={styles.toggleTrack} />
+            <span aria-hidden="true" className={styles.toggleState}>
+                {checked ? 'On' : 'Off'}
+            </span>
         </span>
     </label>
 );
@@ -47,7 +57,6 @@ export const SliderRow = ({ label, hint, valueLabel, min, max, step, value, onCh
             <span>{hint}</span>
         </div>
         <div className={styles.sliderField}>
-            <div className={styles.sliderValue}>{valueLabel}</div>
             <input
                 aria-label={label}
                 className={styles.rangeInput}
@@ -55,9 +64,11 @@ export const SliderRow = ({ label, hint, valueLabel, min, max, step, value, onCh
                 min={String(min)}
                 onChange={(event) => onChange(Number(event.currentTarget.value))}
                 step={String(step)}
+                style={{ '--range-fill': `${((value - min) / (max - min)) * 100}%` } as CSSProperties}
                 type="range"
                 value={value}
             />
+            <div className={styles.sliderValue}>{valueLabel}</div>
         </div>
     </div>
 );
@@ -151,10 +162,8 @@ interface SettingsSectionProps {
 }
 
 export const SettingsSection = ({ title, children }: SettingsSectionProps) => (
-    <Panel className={styles.section} padding="none" variant="muted">
-        <ScreenTitle as="h3" className={styles.sectionHeading} role="section">
-            {title}
-        </ScreenTitle>
+    <section className={styles.section}>
+        <h3 className={styles.sectionHeading}>{title}</h3>
         {children}
-    </Panel>
+    </section>
 );

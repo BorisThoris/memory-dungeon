@@ -1,4 +1,10 @@
-/* META-001 — shared dim stage behind meta shells (collection, codex, inventory, path picker). */
+/*
+ * The shared meta-screen shell in "The Margin" (the Inventory page, and the plate the in-run
+ * Codex and Inventory sit on over the board): a page of ink with a running head on one gold
+ * rule, and a body that clips — screens fit the shell or page their content.
+ */
+
+/* The dim stage behind a meta shell opened from the menu. */
 .shellMetaStage::before {
     content: '';
     position: fixed;
@@ -6,23 +12,28 @@
     z-index: -1;
     pointer-events: none;
     background:
-        radial-gradient(ellipse 82% 48% at 50% 0%, color-mix(in srgb, var(--theme-gold-bright) 7%, transparent), transparent 62%),
-        var(--theme-meta-stage-wash);
+        radial-gradient(ellipse 60% 50% at 50% 0%, color-mix(in srgb, var(--margin-gold) 7%, transparent), transparent 70%),
+        var(--margin-ink);
 }
 
-/* Shared shell chrome: safe-area padding + column gap for full-viewport shells and modal stack. */
+/* Shared shell chrome: safe-area padding + column gap for full-viewport shells and the modal stack. */
 .shell,
 .modalOverlay {
-    padding: var(--ui-shell-screen-pad-safe);
+    padding:
+        calc(clamp(0.6rem, 2vh, 1.5rem) + env(safe-area-inset-top, 0px))
+        calc(clamp(0.75rem, 3vw, 2.5rem) + env(safe-area-inset-right, 0px))
+        calc(clamp(0.5rem, 1.5vh, 1rem) + env(safe-area-inset-bottom, 0px))
+        calc(clamp(0.75rem, 3vw, 2.5rem) + env(safe-area-inset-left, 0px));
 }
 
 .shell,
 .modalInner {
-    gap: var(--ui-shell-screen-gap);
+    gap: clamp(0.6rem, 1.8vh, 1rem);
 }
 
 .shell {
-    /* Flex child of `main`: min-height 0 so long pages shrink and `.body` scrolls instead of clipping below the viewport. */
+    /* Flex child of `main`: min-height 0 so long pages shrink and `.body` clips instead of running below the viewport. */
+    position: relative;
     flex: 1 1 auto;
     min-height: 0;
     width: 100%;
@@ -30,29 +41,35 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    color: var(--margin-paper);
+    font-family: var(--margin-body-font);
 }
 
 .header {
     display: flex;
     flex-wrap: wrap;
-    align-items: flex-start;
+    align-items: flex-end;
     justify-content: space-between;
-    gap: var(--theme-space-lg);
-    padding-bottom: var(--theme-space-sm);
-    border-bottom: 1px solid color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
+    gap: 0.5rem 1rem;
+    width: min(72rem, 100%);
+    margin: 0 auto;
+    padding-bottom: clamp(0.4rem, 1.2vh, 0.7rem);
+    border-bottom: 1px solid var(--margin-rule);
 }
 
 .headerText {
     display: grid;
-    gap: var(--theme-space-xs);
+    gap: 0.15rem;
     max-width: min(720px, 100%);
 }
 
 .subtitle {
-    margin: 0;
-    color: var(--theme-text-muted);
-    font-size: 0.9rem;
-    line-height: 1.45;
+    margin: 0.1rem 0 0;
+    color: var(--margin-paper-dim);
+    font-family: var(--margin-heading-font);
+    font-style: italic;
+    font-size: clamp(0.95rem, 2.1vh, 1.1rem);
+    line-height: 1.4;
     text-wrap: balance;
 }
 
@@ -61,8 +78,8 @@
     min-height: 0;
     display: flex;
     flex-direction: column;
-    gap: max(var(--theme-space-md), calc(var(--ui-shell-screen-gap) * 0.78));
-    width: min(1200px, 100%);
+    gap: clamp(0.6rem, 1.8vh, 1rem);
+    width: min(72rem, 100%);
     margin: 0 auto;
     /* No scrollbars: screens fit the shell or page their content (see ui/FittedGrid). */
     overflow: hidden;
@@ -70,216 +87,135 @@
 
 @media (max-height: 720px) {
     .body {
-        gap: var(--theme-space-md);
+        gap: 0.6rem;
     }
 }
 
-/* META-005–007: in-page TOC for long meta screens (keyboard: tab to links, Enter to jump). */
+/* In-page TOC for long meta screens (keyboard: tab to links, Enter to jump). */
 .inPageToc {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.42rem;
-    padding: 0.28rem 0 0.48rem;
-    border-bottom: 1px solid var(--theme-divider-hairline);
+    gap: 0 1.2rem;
+    padding: 0 0.2rem;
+    border-bottom: 1px solid var(--margin-hairline);
     position: sticky;
     top: 0;
     z-index: 1;
-    background:
-        linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 4%, transparent), transparent 48%),
-        var(--theme-meta-toc-sticky-bg);
-    backdrop-filter: blur(8px) saturate(118%);
+    background: var(--margin-ink);
 }
 
 .inPageToc a {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    min-height: var(--ui-touch-target-min);
-    padding: 0.22rem 0.62rem;
-    border-radius: var(--ui-radius-pill);
-    border: 1px solid var(--theme-card-border-polished);
-    background: var(--theme-surface-control);
+    min-height: var(--margin-touch);
+    margin-bottom: -1px;
+    padding: 0;
+    border-bottom: 1px solid transparent;
     font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
+    font-weight: 500;
+    letter-spacing: 0.24em;
     text-transform: uppercase;
-    color: var(--theme-text-subtle);
+    color: var(--margin-paper-dim);
     text-decoration: none;
 }
 
-.inPageToc a:hover {
-    color: var(--theme-gold-bright);
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
-    background: var(--theme-surface-control-hover);
+.inPageToc a:hover,
+.inPageToc a:focus-visible {
+    color: var(--margin-gold);
+    border-bottom-color: var(--margin-gold);
+    outline: none;
 }
 
 .sectionAnchor {
     scroll-margin-top: 5.5rem;
 }
 
-/*
- * REF-073: long meta lists (collection achievements, codex tables) — skip off-screen layout when possible.
- * Keyboard: links still exist in DOM; roving tabindex unchanged (TOC is separate).
- */
+/* Long meta lists (collection achievements, codex tables): skip off-screen layout when possible. */
 .metaLongList {
     content-visibility: auto;
     contain-intrinsic-size: 480px 600px;
 }
 
+/* ------------------------------------------------------------------ over the board */
 .modalOverlay {
     position: fixed;
     inset: 0;
     z-index: 22;
     display: flex;
     flex-direction: column;
-    background: var(--gameplay-overlay-scrim-bg, var(--theme-scrim-heavy));
-    backdrop-filter: var(--gameplay-overlay-scrim-filter, blur(12px) saturate(130%));
+    background: color-mix(in srgb, var(--margin-ink) 72%, transparent);
+    backdrop-filter: blur(8px);
     overflow: hidden;
 }
 
 .modalInner {
     flex: 1 1 auto;
-    width: min(900px, 100%);
+    width: min(64rem, 100%);
     max-height: min(92dvh, 100%);
-    margin: 0 auto;
+    margin: auto;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     min-height: 0;
 }
 
-/* In-run Codex/Inventory: do not force full viewport height inside capped modal plate. */
+/* In-run Codex/Inventory: do not force full viewport height inside the capped plate. */
 .modalInner .shell {
     flex: 1 1 auto;
     min-height: 0;
     max-height: 100%;
 }
 
-/*
- * META-010 — in-run Codex/Inventory: “desk / grimoire” plate on the modal chrome (OVR-008: z-index stays on .modalOverlay only).
- * Ornamental border + warm well; outer scrim uses .modalOverlayDesk so gameplay reads as paused study, not a flat blur sheet.
- */
+/* The plate the in-run Codex and Inventory sit on: ink, one hairline of gold, as the pause
+   dialog and the settings page. */
 .modalOverlayDesk {
-    background:
-        radial-gradient(ellipse 95% 72% at 50% 8%, rgba(242, 211, 157, 0.07), transparent 52%),
-        radial-gradient(ellipse 120% 90% at 50% 108%, rgba(107, 68, 27, 0.22), transparent 46%),
-        var(--gameplay-overlay-scrim-bg, var(--theme-scrim-heavy));
+    background: color-mix(in srgb, var(--margin-ink) 72%, transparent);
 }
 
 .modalInnerDesk {
     position: relative;
-    padding: max(0.55rem, calc(var(--ui-shell-screen-gap) * 0.45));
-    border-radius: calc(var(--ui-radius-modal) + 0.34rem);
-    background:
-        var(
-            --gameplay-meta-desk-surface,
-            radial-gradient(ellipse 120% 48% at 50% 0%, rgba(242, 211, 157, 0.09), transparent 58%),
-            radial-gradient(ellipse 80% 55% at 18% 88%, rgba(140, 98, 223, 0.06), transparent 52%),
-            linear-gradient(168deg, rgba(26, 20, 16, 0.98), rgba(7, 6, 10, 0.99))
-        );
-    border: 1px solid var(--gameplay-meta-desk-border, color-mix(in srgb, var(--theme-gold-bright) 30%, transparent));
-    box-shadow:
-        var(--gameplay-meta-desk-shadow, 0 28px 74px rgba(0, 0, 0, 0.56), inset 0 1px 0 rgba(255, 236, 205, 0.1)),
-        0 0 0 1px color-mix(in srgb, var(--theme-gold-deep) 44%, transparent);
+    padding: clamp(0.5rem, 1.6vh, 1rem) clamp(0.6rem, 1.8vw, 1.2rem);
+    border: 1px solid var(--margin-rule);
+    border-radius: 7px;
+    background: var(--margin-ink);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
 }
 
-.modalInnerDesk::before {
-    content: '';
-    position: absolute;
-    inset: 0.26rem;
-    border-radius: calc(var(--ui-radius-modal) + 0.18rem);
-    background:
-        radial-gradient(ellipse 130% 75% at 50% 0%, rgba(255, 232, 190, 0.05), transparent 56%),
-        linear-gradient(180deg, rgba(255, 243, 217, 0.025), transparent 32%);
-    pointer-events: none;
-    opacity: 0.68;
-}
-
-/* Corner hash — pointer-events none; no z-index so focus rings and children stay unaffected (OVR-008). */
-.modalInnerDesk::after {
-    content: '';
-    position: absolute;
-    inset: 0.42rem;
-    border-radius: calc(var(--ui-radius-modal) + 0.05rem);
-    pointer-events: none;
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-gold) 12%, transparent);
-    opacity: 0.72;
-}
-
-/* In-run meta: skip META-001 full-viewport wash (redundant with modal scrim; keeps the desk plate legible). */
+/* In-run meta: skip the full-viewport wash (redundant with the scrim; keeps the plate legible). */
 .shellInRunModal {
     background: transparent;
 }
 
 .modalInnerDesk .header {
-    padding: 0.2rem 0.2rem 0;
-    align-items: flex-start;
+    padding: 0.2rem 0.2rem 0.5rem;
+    align-items: flex-end;
     gap: 0.9rem;
 }
 
 .modalInnerDesk .header :global(button) {
     width: auto;
-    min-width: 7rem;
+    min-width: 6rem;
     align-self: center;
 }
 
-.modalInnerDesk .headerText {
-    padding: 0.85rem 1rem 0.95rem;
-    border-radius: calc(var(--ui-radius-lg) - 0.08rem);
-    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
-    background:
-        linear-gradient(180deg, rgba(255, 243, 217, 0.05), transparent 28%),
-        color-mix(in srgb, var(--theme-void) 54%, transparent);
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.04),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.24);
-}
-
 .modalInnerDesk .subtitle {
-    color: color-mix(in srgb, var(--theme-text-muted) 94%, white);
     max-width: min(54rem, 100%);
 }
 
 .modalInnerDesk .body {
-    gap: max(0.8rem, calc(var(--ui-shell-screen-gap) * 0.8));
+    gap: 0.8rem;
 }
 
 .modalInnerDesk .inPageToc {
     top: 0;
-    padding:
-        0.34rem
-        0.38rem
-        calc(var(--theme-space-xs) + 0.12rem);
-    border-bottom: none;
-    border-radius: calc(var(--ui-radius-lg) - 0.1rem);
-    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
-    background:
-        linear-gradient(180deg, rgba(255, 243, 217, 0.045), transparent 42%),
-        color-mix(in srgb, var(--theme-void) 58%, transparent);
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.04),
-        0 10px 22px color-mix(in srgb, var(--theme-shadow) 18%, transparent);
-}
-
-.modalInnerDesk .inPageToc a {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
-    background:
-        linear-gradient(180deg, rgba(255, 243, 217, 0.04), transparent 44%),
-        color-mix(in srgb, var(--theme-void) 48%, transparent);
-    color: color-mix(in srgb, var(--theme-text-subtle) 90%, var(--theme-rune));
-}
-
-.modalInnerDesk .inPageToc a:hover {
-    color: var(--theme-gold-bright);
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
 }
 
 :global([data-density='compact']) .shell {
     padding:
-        max(var(--theme-space-lg), env(safe-area-inset-top, 0px))
-        max(var(--theme-space-xl), env(safe-area-inset-right, 0px))
-        max(var(--theme-space-xl), env(safe-area-inset-bottom, 0px))
-        max(var(--theme-space-xl), env(safe-area-inset-left, 0px));
+        max(0.75rem, env(safe-area-inset-top, 0px))
+        max(1rem, env(safe-area-inset-right, 0px))
+        max(1rem, env(safe-area-inset-bottom, 0px))
+        max(1rem, env(safe-area-inset-left, 0px));
 }
 
 @media (max-width: 760px) {
@@ -293,7 +229,7 @@
     }
 
     .subtitle {
-        font-size: 0.88rem;
+        font-size: 0.9rem;
         line-height: 1.4;
     }
 
@@ -302,40 +238,39 @@
     }
 
     .inPageToc {
-        gap: 0.4rem;
-        padding-bottom: var(--theme-space-xs);
+        gap: 0 0.9rem;
     }
 
     .inPageToc a {
         min-height: 2.35rem;
-        padding: 0.18rem 0.58rem;
         font-size: 0.75rem;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.18em;
     }
 }
 
-/* REF-015 — shared “archive desk” catalog row density (Collection relic grid + Inventory loadout lists). */
+/* Shared catalog row density (Collection relic grid + Inventory loadout lists). */
 .archiveCatalogGrid {
     display: grid;
-    gap: 0.65rem;
+    gap: 0.5rem;
 }
 
 .archiveCatalogRow {
     margin: 0;
-    padding: 0.75rem 0.95rem;
-    border-radius: var(--ui-radius-md);
-    border: 1px solid var(--theme-card-border-polished);
-    background: var(--theme-surface-glass);
-    box-shadow: var(--theme-elevation-soft);
+    padding: 0.6rem 0.85rem;
+    border: 1px solid var(--margin-hairline-soft);
+    border-top: 2px solid var(--margin-hairline);
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--margin-ink) 55%, transparent);
     display: grid;
-    gap: var(--theme-space-2xs);
+    gap: 0.15rem;
 }
 
 .archiveCatalogRowTitle {
     margin: 0;
-    font-size: 0.98rem;
-    font-weight: 650;
-    color: var(--theme-text);
+    font-family: var(--margin-heading-font);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--margin-paper);
 }
 
 :global([data-reduce-motion='true']) .modalOverlay,
@@ -356,9 +291,5 @@
 
     .modalInnerDesk .header {
         gap: 0.5rem;
-    }
-
-    .modalInnerDesk .headerText {
-        padding: 0.55rem 0.8rem 0.6rem;
     }
 }

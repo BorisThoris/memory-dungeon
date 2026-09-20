@@ -1,6 +1,7 @@
 /*
- * Inventory. One header line for the run, then relics and mutators in the wide column and
- * charges in the narrow one. Type floor 12px, one statement of each fact.
+ * Inventory in "The Margin". One header line for the run, then relics and mutators in the
+ * wide column and charges in the narrow one as a ruled table. Type floor 12px, one statement
+ * of each fact.
  */
 
 .inRunShell {
@@ -29,12 +30,14 @@
 
 .sectionTitle {
     margin: 0;
-    font-family: var(--theme-display-font);
-    font-size: 0.9rem;
-    font-weight: 700;
-    letter-spacing: 0.16em;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--margin-hairline);
+    font-family: var(--margin-body-font);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
-    color: color-mix(in srgb, var(--theme-gold-bright) 85%, var(--theme-text) 15%);
+    color: var(--margin-gold);
 }
 
 .cards {
@@ -50,34 +53,33 @@
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
-    padding: 0.85rem 0.95rem;
-    border-radius: var(--ui-radius-lg);
-    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 16%, var(--theme-card-border-muted));
-    background:
-        linear-gradient(180deg, rgba(255, 243, 217, 0.05), transparent 34%),
-        rgba(8, 10, 16, 0.7);
+    padding: 0.7rem 0.85rem 0.8rem;
+    border: 1px solid var(--margin-hairline-soft);
+    border-top: 2px solid var(--margin-gold);
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--margin-ink) 55%, transparent);
 }
 
 .cardTitle {
-    font-family: var(--theme-display-font);
-    font-size: 1.05rem;
-    font-weight: 650;
+    font-family: var(--margin-heading-font);
+    font-size: 1.2rem;
+    font-weight: 600;
     letter-spacing: 0.02em;
-    line-height: 1.2;
-    color: var(--theme-text);
+    line-height: 1.15;
+    color: var(--margin-paper);
 }
 
 .cardLine {
     font-size: 0.88rem;
-    font-weight: 500;
-    line-height: 1.35;
-    color: var(--theme-text);
+    line-height: 1.4;
+    color: var(--margin-paper-soft);
 }
 
 .cardMuted {
     font-size: 0.8rem;
+    font-style: italic;
     line-height: 1.35;
-    color: var(--theme-text-muted);
+    color: var(--margin-paper-dim);
 }
 
 .chips {
@@ -89,27 +91,30 @@
     list-style: none;
 }
 
+/* A mutator is a note with a gold rule at its left. */
 .chip {
     display: flex;
     flex-direction: column;
     gap: 0.15rem;
     max-width: 22rem;
-    padding: 0.5rem 0.8rem;
-    border-radius: var(--ui-radius-md);
-    border: 1px solid color-mix(in srgb, #c08cff 36%, var(--theme-border));
-    background: rgba(140, 98, 223, 0.14);
+    padding: 0.35rem 0 0.35rem 0.8rem;
+    border-left: 1px solid var(--margin-rule);
     font-size: 0.85rem;
-    line-height: 1.3;
-    color: var(--theme-text);
+    line-height: 1.35;
+    color: var(--margin-paper-soft);
 }
 
 .chip strong {
-    font-weight: 700;
+    font-family: var(--margin-heading-font);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--margin-paper);
 }
 
 .chip span {
     font-size: 0.8rem;
-    color: var(--theme-text-muted);
+    font-style: italic;
+    color: var(--margin-paper-dim);
 }
 
 .charges {
@@ -118,37 +123,38 @@
     margin: 0;
 }
 
+/* A charge is a line of the table: its name, a leader, its count in gold. */
 .chargeRow {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: space-between;
     gap: 0.8rem;
-    min-height: 2.6rem;
-    padding: 0.45rem 0.8rem;
-    border-radius: var(--ui-radius-md);
-    border: 1px solid var(--theme-border);
-    background: rgba(8, 8, 12, 0.6);
+    min-height: 2.4rem;
+    padding: 0.3rem 0.2rem;
+    border-bottom: 1px solid var(--margin-hairline-soft);
 }
 
 .chargeRow dt {
     font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--theme-text);
+    color: var(--margin-paper-soft);
 }
 
 .chargeRow dd {
     margin: 0;
-    font-family: var(--theme-display-font);
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--theme-gold-bright);
+    font-family: var(--margin-heading-font);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--margin-gold);
+    font-variant-numeric: tabular-nums;
 }
 
 .empty {
     margin: 0;
-    font-size: 0.92rem;
+    font-family: var(--margin-heading-font);
+    font-style: italic;
+    font-size: 1.05rem;
     line-height: 1.45;
-    color: var(--theme-text-muted);
+    color: var(--margin-paper-dim);
 }
 
 /*

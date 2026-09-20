@@ -1752,6 +1752,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         }
                         testId="game-shortcuts-help-overlay"
                         title={gamepadConnected ? 'Controller shortcuts' : 'Keyboard shortcuts'}
+                        wide
                     >
                         {/* One list, not two: a player holding a pad is told what the pad does. */}
                         <ul

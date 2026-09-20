@@ -1,63 +1,68 @@
 /*
- * Collection. One section rail, one fitted grid of cards. Type floor 12px, rail buttons and
- * cards sized so nothing needs a scrollbar.
+ * Collection in "The Margin": one section rail, one fitted grid of entries. An entry is a
+ * ruled note — its kind in small capitals with its state at the line's end, its name in
+ * display type, one sentence under it; an earned one carries a gold rule. Type floor 12px,
+ * rail and entries sized so nothing needs a scrollbar.
  */
 
 .card {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: 0.3rem;
     height: 100%;
-    padding: 0.85rem 0.95rem;
-    border-radius: var(--ui-radius-lg);
-    border: 1px solid var(--theme-card-border-muted);
-    background:
-        linear-gradient(180deg, rgba(255, 243, 217, 0.04), transparent 34%),
-        rgba(8, 10, 16, 0.72);
+    padding: 0.7rem 0.85rem 0.8rem;
+    border: 1px solid var(--margin-hairline);
+    border-top-width: 2px;
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--margin-ink) 55%, transparent);
+    color: var(--margin-paper);
+    font-family: var(--margin-body-font);
 }
 
 .card[data-earned='true'] {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 34%, var(--theme-card-border-muted));
+    border-top-color: var(--margin-gold);
+    background: color-mix(in srgb, var(--margin-gold) 5%, color-mix(in srgb, var(--margin-ink) 55%, transparent));
 }
 
 .cardHead {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: space-between;
     gap: 0.5rem;
 }
 
 .cardKicker {
     font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
+    font-weight: 500;
+    letter-spacing: 0.26em;
     text-transform: uppercase;
-    color: var(--theme-text-subtle);
+    color: var(--margin-paper-dim);
 }
 
 .cardStatus {
-    padding: 0.2rem 0.5rem;
-    border-radius: var(--ui-radius-pill);
-    border: 1px solid var(--theme-border);
-    font-size: 0.75rem;
-    font-weight: 700;
+    font-family: var(--margin-heading-font);
+    font-style: italic;
+    font-size: 0.9rem;
     line-height: 1.2;
     white-space: nowrap;
-    color: var(--theme-text-muted);
+    color: var(--margin-paper-dim);
 }
 
 .card[data-earned='true'] .cardStatus {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, transparent);
-    color: var(--theme-gold-bright);
+    color: var(--margin-gold);
 }
 
 .cardTitle {
-    font-family: var(--theme-display-font);
-    font-size: 1.05rem;
-    font-weight: 650;
+    font-family: var(--margin-heading-font);
+    font-size: clamp(1.15rem, 2.6vh, 1.4rem);
+    font-weight: 600;
     letter-spacing: 0.02em;
-    line-height: 1.2;
-    color: var(--theme-text);
+    line-height: 1.15;
+    color: var(--margin-paper);
+}
+
+.card[data-earned='true'] .cardTitle {
+    color: var(--margin-fever);
 }
 
 .cardBody {
@@ -69,5 +74,5 @@
     margin: 0;
     font-size: 0.86rem;
     line-height: 1.4;
-    color: color-mix(in srgb, var(--theme-text-muted) 76%, var(--theme-text) 24%);
+    color: var(--margin-paper-soft);
 }

@@ -1,59 +1,61 @@
+/*
+ * A statistic in "The Margin": the value set large in display type over its name in small
+ * capitals, on one hairline — a line of a table, not a tile.
+ */
 .root {
     position: relative;
-    border-radius: var(--ui-radius-lg);
-    padding: var(--ui-space-lg);
-    background:
-        radial-gradient(ellipse 90% 70% at 18% 0%, rgba(195, 149, 79, 0.08), transparent 56%),
-        var(--theme-surface-glass);
-    border: 1px solid var(--theme-card-border-polished);
-    box-shadow: var(--theme-elevation-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+    padding: 0.55rem 0.2rem 0.6rem;
+    border-bottom: 1px solid var(--margin-hairline-soft);
+    font-family: var(--margin-body-font);
 }
 
 .compact {
-    border-radius: var(--ui-radius-md);
-    padding: var(--ui-space-md) var(--ui-space-lg);
+    padding: 0.4rem 0.2rem 0.45rem;
 }
 
 .dense {
-    padding: var(--ui-space-sm) var(--ui-space-md);
+    padding: 0.3rem 0.2rem;
 }
 
 .label {
     display: block;
-    color: var(--theme-text-muted);
-    letter-spacing: 0.12em;
+    color: var(--margin-paper-dim);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.26em;
     text-transform: uppercase;
-    font-size: var(--ui-font-label);
-    font-weight: 600;
     text-wrap: balance;
 }
 
 .value {
     display: block;
-    margin-top: var(--ui-space-2xs);
-    color: var(--theme-rune);
-    font-family: var(--theme-display-font);
-    font-size: var(--ui-font-stat);
-    line-height: 1.1;
+    color: var(--margin-paper);
+    font-family: var(--margin-heading-font);
+    font-size: clamp(1.4rem, 3.4vh, 1.9rem);
+    font-weight: 600;
+    line-height: 1.05;
     font-variant-numeric: tabular-nums;
 }
 
 .valueAccent {
-    color: var(--theme-gold-bright);
+    color: var(--margin-gold);
 }
 
 .valueLg {
-    font-size: var(--ui-font-stat-lg);
+    font-size: clamp(1.9rem, 4.6vh, 2.6rem);
 }
 
 .compact .value {
-    font-size: 1.05rem;
-    margin-top: 0.2rem;
+    font-size: 1.2rem;
 }
 
 .dense .label {
     font-size: 0.75rem;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.2em;
 }
 
 .dense .value {
@@ -61,47 +63,30 @@
 }
 
 .modalChild {
-    padding: var(--ui-space-lg);
+    padding: 0.5rem 0.2rem;
 }
 
 .modalChild .value {
-    font-size: var(--ui-font-stat-lg);
+    font-size: clamp(1.6rem, 4vh, 2.2rem);
 }
 
 .modalChild .label {
     font-size: 0.75rem;
-    margin-top: 0.2rem;
 }
 
 .valueFirst {
-    display: flex;
     flex-direction: column-reverse;
-    gap: 0.15rem;
-}
-
-.valueFirst .value {
-    margin-top: 0;
-}
-
-.valueFirst .label {
-    margin-top: 0.2rem;
 }
 
 .minimal {
-    border: 1px solid color-mix(in srgb, var(--theme-border) 55%, transparent);
-    background: linear-gradient(160deg, rgba(16, 14, 21, 0.68), rgba(9, 9, 13, 0.62));
-    box-shadow:
-        0 8px 18px color-mix(in srgb, var(--theme-shadow) 20%, transparent),
-        inset 0 1px 0 rgba(255, 255, 255, 0.03);
-    padding: 0.8rem 0.9rem;
+    padding: 0.45rem 0.2rem 0.5rem;
 }
 
 .minimal .label {
     font-size: 0.75rem;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.22em;
 }
 
 .minimal .value {
-    font-size: clamp(1.05rem, 2.4vw, 1.35rem);
-    margin-top: 0.2rem;
+    font-size: clamp(1.15rem, 2.6vh, 1.4rem);
 }

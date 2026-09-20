@@ -65,3 +65,50 @@ instead of hiding it; the score's digit cell keeps a minimum width; the pause sh
 keeps the 14 px gutter the safe-area contract asks for; the floor-clear beat's clock starts on
 its first painted frame; and the ladder's column of the relit backdrop is set on ink so the left
 torch cannot wash out the rung labels.
+
+## The mode page, the settings and every dialog (2026-09-20)
+
+The rest of the shell now speaks the same language, so a player never leaves the book.
+
+**Choose Your Path** is the first chapter page: the chapter title on one side, *the runs* on the
+other as a numbered ladder with leader rules — entry I is the recommended run in gold, opened out
+with its summary, the first-run beats and its two actions (Start run as a gold outlined word, the
+setup sheet beside it); each library mode is one line (numeral, title, group as the note, one
+sentence, its poster as a watermark at the line's end) and opens its detail dialog; the last
+entry is the shared run, a field on a hairline with *Play it* beside it. A running head carries
+Back and Settings on one gold rule; the offline note is the colophon. The layout is the title
+page's: a spread that goes to two columns at `≥ 900 px` (or `≥ 760 px` when short), stacks
+otherwise, and drops the tagline, beats and descriptions under 560 px of height. The filter
+chips and the search remain for a library long enough to need them.
+
+**Settings** (the page and the in-run dialog) is a chapter with a contents ladder in the margin:
+the categories numbered I–VI with leaders, the chosen one in gold; the chapter on the right with
+its title on a gold rule, its subsections as small capitals underlined in gold, ruled sections,
+and each control as a line — the name in display type, the note in the italic voice, the control
+at the line's end (a hairline switch that fills gold, a row of words with the chosen one
+underlined, a gold thread with its value beside it). Back and Save are outlined words on the foot
+rule. The four layouts (`desktop`, `wide-short`, `stacked`, `short-stacked`) and every test id
+are unchanged; a stacked shell's chooser is one field in the ladder's type.
+
+**Every dialog** is on the Margin surface by default (`OverlayModal surface` now defaults to
+`margin`): the mode detail, the setup sheet (`wide`), the shortcut list, the abandon
+confirmation, the unsaved-settings question. Plates and cornices are not drawn there; a `danger`
+tone only takes the hairline from gold to paper.
+
+**The primitives** the meta screens are built from were redrawn rather than each screen:
+`UiButton` is an outlined word (gold primary, paper secondary, the danger no louder); `Panel` is
+a ruled region; `Eyebrow` / `ScreenTitle` are the small capitals and the Cormorant display;
+`SectionRail` and the `FittedGrid` pager are small capitals on a rule; `StatTile` is a value in
+display type over its name on a hairline; `MetaShell` and `MetaScreen` are the page with a
+running head; `MetaFrame` draws no cornice. Collection, Codex, Profile, Inventory and the run's
+last page then carry ruled notes — a hairline box with a two-pixel head rule, gold where the
+thing is earned, current or unlocked — in place of the plated cards.
+
+| Design element | Repo |
+| --- | --- |
+| Shared `--margin-*` tokens | `src/renderer/styles/global.css` (`:root`) |
+| Chapter page, runs ladder, shared-run entry | `ChooseYourPathScreen.tsx` + `.module.css` |
+| Settings ladder, chapter, controls | `SettingsScreen.tsx` / `.module.css`, `SettingsControls.tsx` |
+| Dialogs on the Margin surface | `OverlayModal.tsx` / `.module.css` (`surface`, `wide`) |
+| Outlined words, ruled regions, rails, tiles | `src/renderer/ui/*.module.css` |
+| Meta screens' ruled notes | `CollectionScreen`, `CodexScreen`, `ProfileScreen`, `InventoryScreen`, `GameOverScreen`, `MetaScreen` `.module.css` |

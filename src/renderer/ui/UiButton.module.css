@@ -1,62 +1,32 @@
+/*
+ * A button in "The Margin" is an outlined word: display type inside one hairline, gold for
+ * the action the page is for, paper for the rest, the dangerous one no louder. No plate, no
+ * glow, no capitals.
+ */
 .root {
     position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.55rem;
+    gap: 0.5rem;
     min-width: 0;
-    border: 1px solid transparent;
-    border-radius: var(--ui-radius-button);
     padding: 0;
-    overflow: hidden;
-    font-family: var(--theme-display-font);
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    line-height: 1;
+    border: 1px solid color-mix(in srgb, var(--margin-paper) 28%, transparent);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--margin-paper-soft);
+    font-family: var(--margin-heading-font);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    line-height: 1.1;
+    text-transform: none;
     text-wrap: balance;
+    cursor: pointer;
     transition:
-        transform 140ms ease,
-        border-color 140ms ease,
-        box-shadow 140ms ease,
-        background 140ms ease,
-        color 140ms ease,
-        filter 140ms ease,
-        opacity 140ms ease;
-}
-
-.root::before,
-.root::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-}
-
-.root::before {
-    inset: 1px;
-    border-radius: calc(var(--ui-radius-button) - 2px);
-    border: 1px solid var(--theme-overlay-plate-inner-glow);
-    box-shadow: inset 0 0 18px color-mix(in srgb, var(--theme-card-inner-stroke) 80%, transparent);
-}
-
-.secondary::before,
-.ghost::before {
-    border-color: color-mix(in srgb, var(--theme-overlay-plate-inner-glow) 55%, transparent);
-}
-
-.root::after {
-    background: linear-gradient(
-        180deg,
-        color-mix(in srgb, var(--theme-text) 16%, transparent),
-        transparent 36%
-    );
-    opacity: 0.5;
-}
-
-.secondary::after,
-.ghost::after {
-    opacity: 0.28;
+        border-color 160ms ease,
+        background-color 160ms ease,
+        color 160ms ease,
+        opacity 160ms ease;
 }
 
 .root > * {
@@ -65,173 +35,85 @@
 }
 
 .sm {
-    min-height: var(--ui-touch-target-min);
-    padding: var(--ui-button-pad-sm);
-    font-size: 0.75rem;
+    min-height: max(2.5rem, var(--ui-touch-target-min, 44px));
+    padding: 0 0.85rem;
+    font-size: 0.95rem;
 }
 
 .md {
-    min-height: max(2.85rem, var(--ui-touch-target-min));
-    padding: var(--ui-button-pad-md);
-    font-size: 0.76rem;
+    min-height: max(2.75rem, var(--ui-touch-target-min, 44px));
+    padding: 0 1.1rem;
+    font-size: 1rem;
 }
 
 .lg {
-    min-height: max(3.2rem, var(--ui-touch-target-min));
-    min-width: 180px;
-    padding: var(--ui-button-pad-lg);
-    font-size: 0.86rem;
+    min-height: max(3rem, var(--ui-touch-target-min, 44px));
+    min-width: 10rem;
+    padding: 0 1.4rem;
+    font-size: 1.1rem;
 }
 
 .primary {
-    color: var(--theme-rune);
-    background:
-        radial-gradient(ellipse 140% 95% at 50% 0%, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), transparent 58%),
-        var(--theme-primary-surface);
-    box-shadow:
-        var(--theme-primary-shadow),
-        inset 0 -1px 0 color-mix(in srgb, var(--theme-gold-deep) 58%, transparent);
+    border-color: var(--margin-gold);
+    color: var(--margin-gold);
 }
 
-.primary::before {
-    border-color: var(--theme-border);
-}
-
-.secondary,
-.ghost {
-    color: var(--theme-text);
-    border-color: var(--theme-card-border-polished);
-    background: var(--theme-surface-control);
-    box-shadow:
-        0 10px 22px color-mix(in srgb, var(--theme-shadow) 34%, transparent),
-        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+.secondary {
+    color: var(--margin-paper-soft);
 }
 
 .ghost {
-    background:
-        linear-gradient(180deg, color-mix(in srgb, var(--theme-text) 5%, transparent), transparent),
-        color-mix(in srgb, var(--theme-panel) 78%, transparent);
+    border-color: transparent;
+    color: var(--margin-paper-dim);
 }
 
 .danger {
-    color: var(--theme-text);
-    border-color: color-mix(in srgb, var(--theme-danger) 42%, transparent);
-    background:
-        radial-gradient(circle at top left, color-mix(in srgb, var(--theme-danger) 18%, transparent), transparent 40%),
-        linear-gradient(180deg, rgba(67, 18, 18, 0.94), rgba(31, 10, 12, 0.94));
-    box-shadow:
-        0 18px 34px color-mix(in srgb, var(--theme-shadow) 48%, transparent),
-        0 0 16px color-mix(in srgb, var(--theme-glow-ember) 72%, transparent);
+    border-color: color-mix(in srgb, var(--margin-paper) 28%, transparent);
+    color: var(--margin-paper-soft);
 }
 
 .debug {
-    color: var(--theme-focus);
-    border-color: color-mix(in srgb, var(--theme-violet) 28%, transparent);
-    background:
-        radial-gradient(circle at top left, color-mix(in srgb, var(--theme-violet) 14%, transparent), transparent 36%),
-        linear-gradient(180deg, rgba(28, 22, 38, 0.94), rgba(12, 10, 16, 0.94));
-    box-shadow:
-        0 18px 34px color-mix(in srgb, var(--theme-shadow) 48%, transparent),
-        0 0 16px color-mix(in srgb, var(--theme-violet) 12%, transparent);
+    border-style: dashed;
+    color: var(--margin-paper-dim);
+    font-family: var(--margin-body-font);
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
 }
 
-.root:hover:not(:disabled) {
-    transform: translateY(-1px);
-    filter: saturate(1.07) brightness(1.03);
+.root:hover:not(:disabled),
+.root:focus-visible {
+    background: color-mix(in srgb, var(--margin-paper) 7%, transparent);
+    color: var(--margin-paper);
+    outline: none;
 }
 
-.root:active:not(:disabled) {
-    transform: translateY(1px) scale(0.992);
-}
-
-.primary:hover:not(:disabled) {
-    box-shadow:
-        0 18px 34px color-mix(in srgb, var(--theme-shadow) 48%, transparent),
-        0 0 18px color-mix(in srgb, var(--theme-glow-ember) 75%, transparent);
-}
-
-.secondary:hover:not(:disabled),
-.ghost:hover:not(:disabled) {
-    border-color: var(--theme-border-strong);
-    background: var(--theme-surface-control-hover);
-    box-shadow:
-        0 14px 30px color-mix(in srgb, var(--theme-shadow) 42%, transparent),
-        0 0 14px color-mix(in srgb, var(--theme-glow-gold-soft) 80%, transparent);
+.primary:hover:not(:disabled),
+.primary:focus-visible {
+    background: color-mix(in srgb, var(--margin-gold) 12%, transparent);
+    color: var(--margin-fever);
 }
 
 .root:focus-visible {
-    outline: none;
-    box-shadow:
-        var(--theme-focus-ring),
-        0 12px 28px color-mix(in srgb, var(--theme-shadow) 34%, transparent) !important;
+    outline: 2px solid var(--margin-gold);
+    outline-offset: 2px;
 }
 
-.danger:hover:not(:disabled) {
-    border-color: color-mix(in srgb, var(--theme-danger) 62%, transparent);
-}
-
-.debug:hover:not(:disabled) {
-    border-color: color-mix(in srgb, var(--theme-violet) 46%, transparent);
+.root:active:not(:disabled) {
+    background: color-mix(in srgb, var(--margin-gold) 16%, transparent);
 }
 
 .root:disabled {
     opacity: 0.45;
-    cursor: not-allowed;
-    transform: none;
-    filter: grayscale(0.18);
+    cursor: default;
 }
 
 .fullWidth {
     width: 100%;
-    min-width: 0;
 }
 
-:global([data-reduce-motion='true']) .root {
-    transition: none;
-}
-
-:global([data-reduce-motion='true']) .root:hover:not(:disabled),
-:global([data-reduce-motion='true']) .root:active:not(:disabled) {
-    transform: none;
-}
-
-/* MetaFrame: cornice only — no duplicate button rim / elevation. */
-.root[data-meta-framed='true']::before {
-    content: none;
-}
-
-.root[data-meta-framed='true'] {
-    box-shadow: none !important;
-}
-
-.root[data-meta-framed='true']:hover:not(:disabled),
-.root[data-meta-framed='true']:active:not(:disabled) {
-    box-shadow: none !important;
-}
-
-.root[data-meta-framed='true'].primary:hover:not(:disabled),
-.root[data-meta-framed='true'].secondary:hover:not(:disabled),
-.root[data-meta-framed='true'].ghost:hover:not(:disabled) {
-    box-shadow: none !important;
-}
-
-@media (max-width: 760px) {
-    .sm {
-        padding: 0.58rem 0.9rem;
-    }
-
-    .md {
-        padding: 0.72rem 1.05rem;
-    }
-
-    .lg {
-        min-height: 3rem;
-        padding: 0.82rem 1.05rem;
-        font-size: 0.8rem;
-    }
-
-    .lg {
-        width: 100%;
-        min-width: 0;
+@media (prefers-reduced-motion: reduce) {
+    .root {
+        transition: none;
     }
 }

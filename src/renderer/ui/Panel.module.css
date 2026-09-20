@@ -1,3 +1,9 @@
+/*
+ * A panel in "The Margin" is a ruled region of the page, not a plate: ink under one hairline,
+ * no glass, no inner rim. `strong` carries the gold rule and a solid ink ground (dialogs, the
+ * page that sits over the board); `muted` is a lighter hairline for a section inside another;
+ * `accent` is a gold hairline for the one region the page is about.
+ */
 .root {
     position: relative;
     z-index: 1;
@@ -5,66 +11,42 @@
     flex-direction: column;
     min-height: 0;
     overflow: hidden;
-    border: 1px solid var(--theme-border);
-    border-radius: var(--ui-radius-panel);
-    backdrop-filter: blur(12px) saturate(128%);
-    -webkit-backdrop-filter: blur(12px) saturate(128%);
-}
-
-.root::before,
-.root::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-}
-
-.root::before {
-    background:
-        linear-gradient(90deg, transparent, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), transparent),
-        var(--theme-panel-frame);
-    opacity: 0.54;
-}
-
-.root::after {
-    inset: 1px;
-    border-radius: calc(var(--ui-radius-panel) - 2px);
-    border: 1px solid var(--theme-overlay-plate-inner-glow);
+    border: 1px solid var(--margin-hairline);
+    border-radius: 4px;
+    color: var(--margin-paper);
+    font-family: var(--margin-body-font);
 }
 
 .default {
-    background: var(--theme-surface-glass);
-    box-shadow: var(--theme-elevation-polished);
+    background: color-mix(in srgb, var(--margin-ink) 55%, transparent);
 }
 
 .strong {
-    background: var(--theme-surface-glass-strong);
-    border-color: color-mix(in srgb, var(--theme-border-strong) 78%, var(--theme-cyan) 10%);
-    box-shadow: var(--theme-panel-shadow-strong);
+    border-color: var(--margin-rule);
+    background: var(--margin-ink);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
 }
 
 .muted {
-    background: var(--theme-panel-surface-muted);
-    box-shadow: var(--theme-panel-shadow-muted);
+    border-color: var(--margin-hairline-soft);
+    background: transparent;
 }
 
 .accent {
-    background:
-        radial-gradient(ellipse 120% 80% at 100% 0%, color-mix(in srgb, var(--theme-violet) 10%, transparent), transparent 62%),
-        var(--theme-surface-glass);
-    box-shadow: var(--theme-elevation-polished);
+    border-color: var(--margin-rule);
+    background: color-mix(in srgb, var(--margin-gold) 4%, color-mix(in srgb, var(--margin-ink) 55%, transparent));
 }
 
 .paddingMd {
-    padding: var(--ui-density-panel-pad-md, var(--ui-card-pad-md));
+    padding: clamp(0.7rem, 1.8vh, 1rem) clamp(0.8rem, 2vw, 1.1rem);
 }
 
 .paddingLg {
-    padding: var(--ui-density-panel-pad-lg, var(--ui-card-pad-lg));
+    padding: clamp(0.9rem, 2.4vh, 1.4rem) clamp(1rem, 2.6vw, 1.5rem);
 }
 
 .paddingSection {
-    padding: var(--ui-density-panel-pad-section, var(--ui-density-panel-pad-md, var(--ui-card-pad-md)));
+    padding: clamp(0.7rem, 1.8vh, 1rem) clamp(0.8rem, 2vw, 1.1rem);
 }
 
 .overflowAuto {
@@ -76,22 +58,7 @@
     max-height: calc(100dvh - 1.5rem);
 }
 
-:global([data-reduce-motion='true']) .root {
-    backdrop-filter: none;
-}
-
-/*
- * Inside MetaFrame: vector cornice is the frame — drop Panel’s glass rim, hairlines, and
- * variant shadows (stronger selectors than `.default` / `.strong` alone).
- */
+/* Inside MetaFrame the frame draws nothing now; the panel keeps its own hairline. */
 .root[data-meta-framed='true'] {
-    border: none !important;
-    box-shadow: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-}
-
-.root[data-meta-framed='true']::before,
-.root[data-meta-framed='true']::after {
-    content: none;
+    box-shadow: none;
 }

@@ -9,7 +9,7 @@
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6821
+    "relationshipCount": 6819
   },
   "inventory": [
     {
@@ -63,8 +63,8 @@
     {
       "path": ".gitignore",
       "category": "other",
-      "bytes": 734,
-      "sha256": "f2a5c8011ae8d6da3882d20b38e930f85ce53ccf8e560f24e3c7fa9094a90ccf"
+      "bytes": 770,
+      "sha256": "ed337601fd16e3211010ec5e50c051e8d57aa4376efe354f75e1ef58f3435d58"
     },
     {
       "path": ".idea/.gitignore",
@@ -309,8 +309,8 @@
     {
       "path": "docs/design/game-view-redesign.md",
       "category": "documentation",
-      "bytes": 4455,
-      "sha256": "b43ea1d45bf4c8dadf2c3be700e4dc4ae9ed362e54bd8ebeb770d495843b4d5d"
+      "bytes": 7968,
+      "sha256": "8dfef98a46666945befe15eae3df417b59330d1d419fa8228be186fcf71b12e8"
     },
     {
       "path": "docs/DOC_CHECKBOX_INVENTORY.md",
@@ -3915,8 +3915,8 @@
     {
       "path": "e2e/portfolio-visual-smoke.spec.ts",
       "category": "test",
-      "bytes": 7772,
-      "sha256": "0fa0b19dd613b2838daa7b15d55ab10f89684aeb49e54c49591437e98eb77390"
+      "bytes": 7988,
+      "sha256": "9ea6c3aab640dfde525a0dc5db4b6f452d0c32980e1990383ebff80e8db36f2e"
     },
     {
       "path": "e2e/README.md",
@@ -4306,25 +4306,25 @@
       "path": "project-media/capture.json",
       "category": "configuration",
       "bytes": 1305,
-      "sha256": "6826788f503a61e973329fe23a1d3279d62387b788b6d45bdb6b88933ff528ee"
+      "sha256": "c2a79f0a80ae1dc3af2c38b9a7bc0b7ff438ab213e8fc8c449a3e32892b9a9bc"
     },
     {
       "path": "project-media/card.jpg",
       "category": "asset",
-      "bytes": 158548,
-      "sha256": "a1bb1854e8bdab4c89956c9d343461efba7c2055e5bbe66a9483cf7c16a914c5"
+      "bytes": 158751,
+      "sha256": "a8323d9c164ccf366db84b938ab21be0b54f58c734d2917af3f64977082008cc"
     },
     {
       "path": "project-media/desktop.jpg",
       "category": "asset",
-      "bytes": 148775,
-      "sha256": "6aaa5a0099a4091997c2311ea89633c8d204aa678e146fc1c86c6fcebafcddb5"
+      "bytes": 149031,
+      "sha256": "7bdb3918325e664608c5f7c1ac381b837f742ce7725cecc4855bdff0755ab5b7"
     },
     {
       "path": "project-media/full.jpg",
       "category": "asset",
-      "bytes": 122161,
-      "sha256": "6d41408043ca7d42d35cbe37e64b95ab0bf14bbc3035c2b4ff8d6c6e094472d5"
+      "bytes": 112443,
+      "sha256": "fb38113a8a5e06bfe12ecb49642ed3bb863d94044e910f2860306fffcb7878e8"
     },
     {
       "path": "project-media/icons.json",
@@ -4335,20 +4335,20 @@
     {
       "path": "project-media/mobile.jpg",
       "category": "asset",
-      "bytes": 50952,
-      "sha256": "7632953bccec0df2d64fb9354248fb28cc78879a8efffeda61d8b6a590cbe9c4"
+      "bytes": 50369,
+      "sha256": "da14525a7a8c47589b321808229ade59bd1a9790c8516448275dd6f0a3c4e262"
     },
     {
       "path": "project-media/og.jpg",
       "category": "asset",
-      "bytes": 112948,
-      "sha256": "1c17b9f83fcaf722c7efdb167793b6022b43ce49ebc7b76b17210ad83ea9aefd"
+      "bytes": 105326,
+      "sha256": "39fd7023210c15f01b31a20dcf7a600c0e41c9753aad34d32dd6d42410275940"
     },
     {
       "path": "project.meta.json",
       "category": "configuration",
-      "bytes": 11717,
-      "sha256": "e38fe2b1a1aeafe33b56671c4f2be661496770f5069f1f5e8a510ce827c2e805"
+      "bytes": 11679,
+      "sha256": "d1bf271e74f5266b4bfeebe6178a31561c08fc235f90da02887863fce560f773"
     },
     {
       "path": "public/apple-touch-icon.png",
@@ -4389,8 +4389,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 112948,
-      "sha256": "1c17b9f83fcaf722c7efdb167793b6022b43ce49ebc7b76b17210ad83ea9aefd"
+      "bytes": 105326,
+      "sha256": "39fd7023210c15f01b31a20dcf7a600c0e41c9753aad34d32dd6d42410275940"
     },
     {
       "path": "public/site.webmanifest",
@@ -5331,8 +5331,8 @@
     {
       "path": "scripts/scene-pipeline/README.md",
       "category": "script",
-      "bytes": 3015,
-      "sha256": "aefb655a7ef0cc4951c3e3919f7c2f21d71e293e61a72eb063f6a46a14ab405e"
+      "bytes": 3061,
+      "sha256": "cf60588fdaee6ab8bd05afabe8e5a30b7962c88974ca7a4b9068762fde69597b"
     },
     {
       "path": "scripts/scene-pipeline/scene.sh",
@@ -8349,8 +8349,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
       "category": "source",
-      "bytes": 17428,
-      "sha256": "523d05d684983380ce6bb35ded3d954d40f080e18adf9c861bf8433dbcd028e4"
+      "bytes": 20465,
+      "sha256": "75e7d31404b0d4eb7576366b2dfb8f3c8990c4be2593f065cd3d3af34417a20e"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
@@ -8361,8 +8361,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 28651,
-      "sha256": "2987fbd8236f0f0c87f9e97cfe053cc5c47ee565420e898bd0ce31fa692ab32d"
+      "bytes": 32469,
+      "sha256": "33e820aa1e9b29d75fbdb3c3498bc1482a4eaf4fd93ae523c249081fc71a7385"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -8373,8 +8373,8 @@
     {
       "path": "src/renderer/components/CodexScreen.module.css",
       "category": "source",
-      "bytes": 3456,
-      "sha256": "b30a85ee1d95ddcbdb4118089faadc8446d23d6c092b1656f7fe37792a3695d0"
+      "bytes": 3655,
+      "sha256": "8ae083e911f5c4b0c1e9d0885d36c9c6a6b1056c2c3a1d571e218b5623881da8"
     },
     {
       "path": "src/renderer/components/CodexScreen.test.tsx",
@@ -8403,8 +8403,8 @@
     {
       "path": "src/renderer/components/CollectionScreen.module.css",
       "category": "source",
-      "bytes": 1850,
-      "sha256": "a97bf610231bb3dc42e251e063e4e84c63aa6282bc8853afba7a6ed98e8f5f9e"
+      "bytes": 2030,
+      "sha256": "ec6a2341ea9d14dbc46d3521c8bdad5bfc293772c9bdc89423e6518d9563afbe"
     },
     {
       "path": "src/renderer/components/CollectionScreen.test.tsx",
@@ -8445,8 +8445,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.module.css",
       "category": "source",
-      "bytes": 16816,
-      "sha256": "405348490b79abd49cf74b7ab13142fad64f668260629bbec160b0f3a2918366"
+      "bytes": 17074,
+      "sha256": "7275878d0aa7cfd8405ec63d04f8616b84781131ad01f6203fff63454fd2ab95"
     },
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
@@ -8469,20 +8469,20 @@
     {
       "path": "src/renderer/components/GameplayScene.module.css",
       "category": "source",
-      "bytes": 3728,
-      "sha256": "b1a12a0c397d433b87606ba472d2732f876651a888495004685980fa32f4e216"
+      "bytes": 3934,
+      "sha256": "5fc4f3d8d6c1381e9a6d6729788ce4ada7be5c778c21d9cc71b897dd14c9d49f"
     },
     {
       "path": "src/renderer/components/GameplayScene.test.tsx",
       "category": "test",
-      "bytes": 4499,
-      "sha256": "36c7b7509b6bdf3011ae31c6f8733d89d2e0fdd78966d8cb1cc5668ddb4c68fa"
+      "bytes": 4589,
+      "sha256": "9b2703c5ca8c100c6b65704d74ceb633454a33cfd951bea69dd70ba6767deb6d"
     },
     {
       "path": "src/renderer/components/GameplayScene.tsx",
       "category": "source",
-      "bytes": 4317,
-      "sha256": "0077383d64f06b5c37b22067f0f3973ceb99975420f65b44cedbcc55cc08a39c"
+      "bytes": 4404,
+      "sha256": "6ac01edffe5d7e9e1793c5789b62b81647992ad307fb748e4d9a69176d315311"
     },
     {
       "path": "src/renderer/components/gameplaySceneLevels.ts",
@@ -8505,8 +8505,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 47820,
-      "sha256": "f86d361e7ffeba569bfa6e9748b0c04ea138b2e94a8ae3eb59b8c6adc20accc1"
+      "bytes": 48274,
+      "sha256": "7ae99b9cf4d6290d6c5b3dfb6f58185d7b58abd877496c3b2f8798388f04e55a"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -8517,8 +8517,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 84800,
-      "sha256": "29251108d72aefae8d9cc9b3d097df04102deda42e3545febaf874b0c33a5335"
+      "bytes": 84829,
+      "sha256": "628ad61fe92ddfe8bad29e22fe440656de78bf148e4a16c65de7eb74bf808dfb"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -8547,8 +8547,8 @@
     {
       "path": "src/renderer/components/InventoryScreen.module.css",
       "category": "source",
-      "bytes": 6051,
-      "sha256": "c0c98496bab9a10d073a0bb24903ae1175e9bcd08fe115d1934a0902be34b824"
+      "bytes": 6249,
+      "sha256": "d9e903e25c508642c034b4bb4253b1d481dda6853f5d7ab13482b7e3399b2f68"
     },
     {
       "path": "src/renderer/components/InventoryScreen.test.tsx",
@@ -8577,8 +8577,8 @@
     {
       "path": "src/renderer/components/MainMenu.module.css",
       "category": "source",
-      "bytes": 11591,
-      "sha256": "2b6853cd7ae5800150443df7b4ff12ce45c203445bd26c764334991578c175cc"
+      "bytes": 11547,
+      "sha256": "cb9500143677b63a3e8fd2593b0cf97e89e80cb25c45707a00e4f09e7ca1558a"
     },
     {
       "path": "src/renderer/components/MainMenu.test.tsx",
@@ -8661,8 +8661,8 @@
     {
       "path": "src/renderer/components/MetaScreen.module.css",
       "category": "source",
-      "bytes": 10702,
-      "sha256": "a426a4898a635f2b76b910fe19832f50a81be82a96dc568f4c1929defb1a8614"
+      "bytes": 7253,
+      "sha256": "b2d0de61d7ba0a41e2540af63a75143dad75ae8d90f7472db8d74d75a1c0b1c6"
     },
     {
       "path": "src/renderer/components/metaStackedShellLayout.test.ts",
@@ -8679,8 +8679,8 @@
     {
       "path": "src/renderer/components/OverlayModal.module.css",
       "category": "source",
-      "bytes": 19111,
-      "sha256": "fe2b1273451f21410979aadf1e529f53b44a5d276d6ad78d175809779b1657e3"
+      "bytes": 21749,
+      "sha256": "7ed253db02bef7ff9a45ffcabff16825068f7897899ef8dc0f1a35474e047f1a"
     },
     {
       "path": "src/renderer/components/OverlayModal.test.tsx",
@@ -8691,8 +8691,8 @@
     {
       "path": "src/renderer/components/OverlayModal.tsx",
       "category": "source",
-      "bytes": 9658,
-      "sha256": "2fd07f552eaffe9021d370292f73cef732cbbcb109c75c419f2308665f9c03d0"
+      "bytes": 10845,
+      "sha256": "ecf2a045c09a04d26bea9061a00a471bc35f9c8cd6fdf781259c21ad12ce4cec"
     },
     {
       "path": "src/renderer/components/PairProximityHintPlane.tsx",
@@ -8709,8 +8709,8 @@
     {
       "path": "src/renderer/components/ProfileScreen.module.css",
       "category": "source",
-      "bytes": 8912,
-      "sha256": "15df5399cc9af3df2c05028bfb2a88040ffb0d021d50c3bcd25e17710ec99910"
+      "bytes": 10488,
+      "sha256": "02680475fe651b18d150aca6cdd73346c6e03901329b7f676de2b4c1cf2f954d"
     },
     {
       "path": "src/renderer/components/ProfileScreen.test.tsx",
@@ -8775,8 +8775,8 @@
     {
       "path": "src/renderer/components/SettingsControls.tsx",
       "category": "source",
-      "bytes": 4795,
-      "sha256": "a9404c840be2ec30b498b9a2b47f3701e64b7b5246bce8f8cb5946e67d92a000"
+      "bytes": 5305,
+      "sha256": "688db9107d59889482acae856893919ad6a1de291e516964aab52893d9c1630c"
     },
     {
       "path": "src/renderer/components/settingsNavigationModel.ts",
@@ -8787,8 +8787,8 @@
     {
       "path": "src/renderer/components/SettingsScreen.module.css",
       "category": "source",
-      "bytes": 32543,
-      "sha256": "b9814ace7397885a0f81367a493464c862b519e1dfe1d967d7f60881e2af7210"
+      "bytes": 29979,
+      "sha256": "c64866bb632eb40fb9249254e7f9798a87348c2ad1134c484fb4b3bbef70ef68"
     },
     {
       "path": "src/renderer/components/SettingsScreen.test.tsx",
@@ -8799,8 +8799,8 @@
     {
       "path": "src/renderer/components/SettingsScreen.tsx",
       "category": "source",
-      "bytes": 46652,
-      "sha256": "5676f2b010278e9beb73bccac983628c99db2d465229b502dbbe9e64661593bc"
+      "bytes": 47531,
+      "sha256": "37e600c7b25e5c91939cdc50c2866b3d530134e2873951ecf17777d9223e43f8"
     },
     {
       "path": "src/renderer/components/shuffleFlipAnimation.test.ts",
@@ -10749,8 +10749,8 @@
     {
       "path": "src/renderer/styles/global.css",
       "category": "source",
-      "bytes": 6830,
-      "sha256": "a61c3fef4c158261b0fb8578614feba1726c3d330067e59b4d99c62736266559"
+      "bytes": 7853,
+      "sha256": "1e38ef243fc2be6d9229f91cc1859633d2586c350a72c45138cb4ed87684b64e"
     },
     {
       "path": "src/renderer/styles/notificationsGame.css",
@@ -10785,8 +10785,8 @@
     {
       "path": "src/renderer/ui/AccentBanner.module.css",
       "category": "source",
-      "bytes": 711,
-      "sha256": "38e726da08df94d343f7a008ce53ca3a70be2a89afebcec16738e2b23ee67bf2"
+      "bytes": 418,
+      "sha256": "cb462189b508c83f86609fdcb7fd5328257864df554b5cd40d21a410fc09748f"
     },
     {
       "path": "src/renderer/ui/AccentBanner.tsx",
@@ -10797,8 +10797,8 @@
     {
       "path": "src/renderer/ui/Eyebrow.module.css",
       "category": "source",
-      "bytes": 373,
-      "sha256": "17a651f0afb80d2fd2b1e6c1ed4d076429a7f3c6ab6e41943579dabfff09b9bb"
+      "bytes": 412,
+      "sha256": "1c6cf77787c4a4fc7d90d041a179e5e058604ad7411c15ee8003afee6dcac151"
     },
     {
       "path": "src/renderer/ui/Eyebrow.tsx",
@@ -10809,8 +10809,8 @@
     {
       "path": "src/renderer/ui/FittedGrid.module.css",
       "category": "source",
-      "bytes": 2073,
-      "sha256": "ee34836a7d117889b1340c86a1378151d60c4e88289b85fe114ba0d24a92f15e"
+      "bytes": 2363,
+      "sha256": "6c718599fc109f69348ebf261ca004ca1ab0594727f5932e495d39ddfd17bbd6"
     },
     {
       "path": "src/renderer/ui/FittedGrid.tsx",
@@ -10845,8 +10845,8 @@
     {
       "path": "src/renderer/ui/MetaFrame.module.css",
       "category": "source",
-      "bytes": 1039,
-      "sha256": "2a5da9320d065ce3a29874a589e93f6e89588f303c4fab886ee3b527fb4cab26"
+      "bytes": 513,
+      "sha256": "04ac71000420c74138749eef9ba538b4fd868b1f19b3b3e9158ce6deb47c306e"
     },
     {
       "path": "src/renderer/ui/MetaFrame.tsx",
@@ -10857,14 +10857,14 @@
     {
       "path": "src/renderer/ui/metaInRunFramedPanel.module.css",
       "category": "source",
-      "bytes": 782,
-      "sha256": "2cd3775639670907c366b2a5a260e605ce0ddf13891735bd49e36d4e49e33ec9"
+      "bytes": 400,
+      "sha256": "8b684df78f3c70f31243a7425bec46a78d955bae84b8ab93785910b4396713f4"
     },
     {
       "path": "src/renderer/ui/MetaShell.module.css",
       "category": "source",
-      "bytes": 1647,
-      "sha256": "fe2f1c93cb0788666ea310fb6ae65cdcb9653dfc3efbc017284b2b4d8b3cd215"
+      "bytes": 2729,
+      "sha256": "81c920b8d1d4819eec1fc3e75ef432054d39abfab31ef4d2c7c57105df816fb4"
     },
     {
       "path": "src/renderer/ui/MetaShell.tsx",
@@ -10875,8 +10875,8 @@
     {
       "path": "src/renderer/ui/OverlayActionDock.module.css",
       "category": "source",
-      "bytes": 3694,
-      "sha256": "d545184f1a055102dcaf7db8b265b36aa4a3cb3c984c63128792ef541fc15be2"
+      "bytes": 2846,
+      "sha256": "a0cd97e069d2ac28a5d3de187e2ebf27cf3a083f5abe8517c552c8229bd95700"
     },
     {
       "path": "src/renderer/ui/OverlayActionDock.tsx",
@@ -10887,8 +10887,8 @@
     {
       "path": "src/renderer/ui/Panel.module.css",
       "category": "source",
-      "bytes": 2421,
-      "sha256": "1688bb9b1fa5587d7c2a0c96976439b7b35f9c8adf7f309ae20101d6e49f824a"
+      "bytes": 1643,
+      "sha256": "9ab910a7e046d21da7f90e5655263b84be281574a9689e7cbc89a0da059f0d14"
     },
     {
       "path": "src/renderer/ui/Panel.tsx",
@@ -10899,8 +10899,8 @@
     {
       "path": "src/renderer/ui/ScreenTitle.module.css",
       "category": "source",
-      "bytes": 1112,
-      "sha256": "bcc41f998801f240c776d6355bd481c829806074e9dd642896f789c5d271cb44"
+      "bytes": 1270,
+      "sha256": "7a11dd2d2ed34e855643e1bba248c90404723f7748efd5fa5e86827798bd3db4"
     },
     {
       "path": "src/renderer/ui/ScreenTitle.tsx",
@@ -10911,8 +10911,8 @@
     {
       "path": "src/renderer/ui/SectionRail.module.css",
       "category": "source",
-      "bytes": 2536,
-      "sha256": "2c8a4f3f53148dd38f26bc1d6ded24b28d7e46460debaf73468fa61d1d437c8e"
+      "bytes": 2934,
+      "sha256": "3fd84fd86b243dca1f3797c29bf1c30bbf891fd25f63f45d6926ee8780e67d62"
     },
     {
       "path": "src/renderer/ui/SectionRail.tsx",
@@ -10923,8 +10923,8 @@
     {
       "path": "src/renderer/ui/StatTile.module.css",
       "category": "source",
-      "bytes": 2149,
-      "sha256": "eef375366fabeef3a11eeb230bac94c811190047726e08ce6588c48e7b5813b0"
+      "bytes": 1609,
+      "sha256": "445a86b903b650f6341254ef0f8221bc83cb5465e3d3e92562471ff2f8ebd027"
     },
     {
       "path": "src/renderer/ui/StatTile.tsx",
@@ -10947,8 +10947,8 @@
     {
       "path": "src/renderer/ui/UiButton.module.css",
       "category": "source",
-      "bytes": 6168,
-      "sha256": "0c8a46009e3a5b9253e4b38374ed7772fe2e8be195c26e340a11138c2221d54b"
+      "bytes": 2569,
+      "sha256": "abf3c574bf4b7c7bd08791394f35386270b407ddb99adf54f7b67f299f1f5d4f"
     },
     {
       "path": "src/renderer/ui/UiButton.tsx",
@@ -17561,7 +17561,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 601,
+      "lineCount": 643,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/modeArt.ts",
@@ -17570,7 +17570,6 @@
         "file:src/renderer/copy/passAndPlay.ts",
         "file:src/renderer/copy/screenCopy.ts",
         "file:src/renderer/store/useAppStore.ts",
-        "file:src/renderer/ui/index.ts",
         "file:src/shared/challenge-progression.ts",
         "file:src/shared/classic-run-setup.ts",
         "file:src/shared/pass-and-play-rules.ts",
@@ -17945,7 +17944,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1810,
+      "lineCount": 1811,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -18389,7 +18388,7 @@
       "path": "src/renderer/components/OverlayModal.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 269,
+      "lineCount": 291,
       "imports": [
         "file:src/renderer/a11y/overlayModalBodyState.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -18607,10 +18606,8 @@
       "path": "src/renderer/components/SettingsControls.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 161,
-      "imports": [
-        "file:src/renderer/ui/index.ts"
-      ],
+      "lineCount": 170,
+      "imports": [],
       "exports": [
         "symbol:src/renderer/components/SettingsControls.tsx#PlaceholderControl",
         "symbol:src/renderer/components/SettingsControls.tsx#SegmentedControl",
@@ -18655,7 +18652,7 @@
       "path": "src/renderer/components/SettingsScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 741,
+      "lineCount": 752,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -34591,8 +34588,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ChooseYourPathScreen.tsx",
-      "line": 600,
-      "endLine": 600
+      "line": 642,
+      "endLine": 642
     },
     {
       "id": "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows",
@@ -34807,8 +34804,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 1809,
-      "endLine": 1809
+      "line": 1810,
+      "endLine": 1810
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -35071,8 +35068,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/OverlayModal.tsx",
-      "line": 268,
-      "endLine": 268
+      "line": 290,
+      "endLine": 290
     },
     {
       "id": "symbol:src/renderer/components/OverlayModal.tsx#ModalAction",
@@ -35199,40 +35196,40 @@
       "name": "PlaceholderControl",
       "kind": "value",
       "file": "src/renderer/components/SettingsControls.tsx",
-      "line": 113,
-      "endLine": 146
+      "line": 124,
+      "endLine": 157
     },
     {
       "id": "symbol:src/renderer/components/SettingsControls.tsx#SegmentedControl",
       "name": "SegmentedControl",
       "kind": "value",
       "file": "src/renderer/components/SettingsControls.tsx",
-      "line": 78,
-      "endLine": 104
+      "line": 89,
+      "endLine": 115
     },
     {
       "id": "symbol:src/renderer/components/SettingsControls.tsx#SettingsSection",
       "name": "SettingsSection",
       "kind": "value",
       "file": "src/renderer/components/SettingsControls.tsx",
-      "line": 153,
-      "endLine": 160
+      "line": 164,
+      "endLine": 169
     },
     {
       "id": "symbol:src/renderer/components/SettingsControls.tsx#SliderRow",
       "name": "SliderRow",
       "kind": "value",
       "file": "src/renderer/components/SettingsControls.tsx",
-      "line": 43,
-      "endLine": 63
+      "line": 53,
+      "endLine": 74
     },
     {
       "id": "symbol:src/renderer/components/SettingsControls.tsx#ToggleRow",
       "name": "ToggleRow",
       "kind": "value",
       "file": "src/renderer/components/SettingsControls.tsx",
-      "line": 13,
-      "endLine": 30
+      "line": 20,
+      "endLine": 40
     },
     {
       "id": "symbol:src/renderer/components/settingsNavigationModel.ts#DEFAULT_SUBSECTION_BY_CATEGORY",
@@ -35279,8 +35276,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/SettingsScreen.tsx",
-      "line": 740,
-      "endLine": 740
+      "line": 751,
+      "endLine": 751
     },
     {
       "id": "symbol:src/renderer/components/shuffleFlipAnimation.ts#computeBoardEntranceMotionBudgetMs",
@@ -75889,12 +75886,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/ui/index.ts",
-      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
-      "target": "file:src/renderer/ui/index.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/shared/challenge-progression.ts",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
       "target": "file:src/shared/challenge-progression.ts",
@@ -77440,12 +77431,6 @@
       "id": "imports:src/renderer/components/ScoreTermsLine.tsx->src/shared/score-terms-rules.ts",
       "source": "file:src/renderer/components/ScoreTermsLine.tsx",
       "target": "file:src/shared/score-terms-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/SettingsControls.tsx->src/renderer/ui/index.ts",
-      "source": "file:src/renderer/components/SettingsControls.tsx",
-      "target": "file:src/renderer/ui/index.ts",
       "kind": "imports"
     },
     {

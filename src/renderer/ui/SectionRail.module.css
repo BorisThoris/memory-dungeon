@@ -1,6 +1,7 @@
 /*
- * Section chooser. Tabs when there is room, a menu when there is not — a long rail must never
- * wrap into five rows and push the content off the screen.
+ * Section chooser in "The Margin": small capitals on one rule, the open section underlined in
+ * gold. Tabs when there is room, a field on a hairline when there is not — a long rail must
+ * never wrap into five rows and push the content off the screen.
  */
 
 .root {
@@ -10,79 +11,98 @@
 .tabs {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.35rem;
+    gap: 0 1.4rem;
+    width: 100%;
+    padding: 0 0.2rem;
+    border-bottom: 1px solid var(--margin-hairline);
 }
 
 .tab {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.5rem;
     min-height: 44px;
-    padding: 0 0.9rem;
-    border-radius: var(--ui-radius-pill);
-    border: 1px solid var(--theme-border);
+    margin-bottom: -1px;
+    padding: 0;
+    border: 0;
+    border-bottom: 1px solid transparent;
     background: transparent;
-    color: var(--theme-text-muted);
-    font-family: var(--theme-display-font);
+    color: var(--margin-paper-dim);
+    font-family: var(--margin-body-font);
     font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
+    font-weight: 500;
+    letter-spacing: 0.24em;
     text-transform: uppercase;
+    white-space: nowrap;
     cursor: pointer;
     transition:
-        border-color 120ms ease,
-        background-color 120ms ease,
-        color 120ms ease;
+        color 160ms ease,
+        border-color 160ms ease;
 }
 
 .tab:hover,
 .tab:focus-visible {
-    color: var(--theme-text);
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 40%, transparent);
+    color: var(--margin-paper);
     outline: none;
 }
 
 .tab:focus-visible {
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--theme-cyan-bright) 55%, transparent);
+    text-decoration: underline;
+    text-decoration-color: var(--margin-gold);
+    text-underline-offset: 0.3em;
 }
 
 .tab[aria-selected='true'] {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 40%, transparent);
-    background: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
-    color: var(--theme-gold-bright);
+    border-bottom-color: var(--margin-gold);
+    color: var(--margin-gold);
 }
 
 .badge {
-    font-family: var(--theme-body-font);
-    font-size: 0.75rem;
+    font-family: var(--margin-heading-font);
+    font-size: 0.9rem;
     font-weight: 600;
     letter-spacing: 0;
-    color: var(--theme-text-subtle);
+    color: var(--margin-paper-dim);
     font-variant-numeric: tabular-nums;
+}
+
+.tab[aria-selected='true'] .badge {
+    color: var(--margin-gold);
 }
 
 .menu {
     display: none;
+    position: relative;
 }
 
 .select {
     width: 100%;
     min-height: 44px;
-    padding: 0 0.9rem;
-    border-radius: var(--ui-radius-pill);
-    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 34%, var(--theme-border));
-    background: rgba(8, 8, 12, 0.78);
-    color: var(--theme-gold-bright);
-    font-family: var(--theme-display-font);
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    padding: 0 2rem 0 0.2rem;
+    border: 0;
+    border-bottom: 1px solid var(--margin-rule);
+    border-radius: 0;
+    background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e1ad66' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
+        right 0.3rem center / 1.1rem no-repeat;
+    color: var(--margin-gold);
+    font-family: var(--margin-heading-font);
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    appearance: none;
+    cursor: pointer;
 }
 
 .select:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--theme-cyan-bright) 55%, transparent);
+    border-bottom-color: var(--margin-fever);
+}
+
+.select option {
+    color: var(--margin-paper);
+    background: var(--margin-ink);
+    font-family: var(--margin-body-font);
 }
 
 .srOnly {
@@ -97,7 +117,7 @@
     border: 0;
 }
 
-/* Narrow or short: the rail becomes one menu row. */
+/* Narrow or short: the rail becomes one field. */
 @media (max-width: 720px), (max-height: 700px) {
     .tabs {
         display: none;

@@ -47,48 +47,59 @@
     display: flex;
     align-items: center;
     flex: 1 1 auto;
-    font-size: 0.92rem;
-    color: var(--theme-text-muted);
+    font-family: var(--margin-heading-font);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--margin-paper-dim);
 }
 
+/* The pager: small capitals on the foot rule, the count between them. */
 .pager {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 0.6rem;
+    gap: 1.2rem;
     flex: 0 0 auto;
+    padding-top: 0.2rem;
+    border-top: 1px solid var(--margin-hairline);
 }
 
 .pageLabel {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--theme-text-muted);
+    font-family: var(--margin-heading-font);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--margin-paper-dim);
     font-variant-numeric: tabular-nums;
 }
 
 .pageButton {
     min-height: 44px;
-    padding: 0 0.9rem;
-    border-radius: var(--ui-radius-pill);
-    border: 1px solid var(--theme-border);
+    padding: 0 0.2rem;
+    border: 0;
     background: transparent;
-    color: var(--theme-text);
-    font-family: var(--theme-display-font);
+    color: var(--margin-paper-soft);
+    font-family: var(--margin-body-font);
     font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
+    font-weight: 500;
+    letter-spacing: 0.24em;
     text-transform: uppercase;
     cursor: pointer;
+    transition: color 160ms ease;
 }
 
 .pageButton:hover:not(:disabled),
 .pageButton:focus-visible {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, transparent);
-    color: var(--theme-gold-bright);
+    color: var(--margin-fever);
     outline: none;
 }
 
+.pageButton:focus-visible {
+    text-decoration: underline;
+    text-decoration-color: var(--margin-gold);
+    text-underline-offset: 0.3em;
+}
+
 .pageButton:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
+    opacity: 0.35;
+    cursor: default;
 }
