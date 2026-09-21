@@ -7,7 +7,7 @@ import {
     calculateFloorClearScore,
     createFloorClearLevelResult
 } from './level-clear-rules';
-import { parTurnsForFloor, turnsTakenThisFloor } from './floor-par';
+import { parTurnsForBoard, turnsTakenThisFloor } from './floor-par';
 import { getFloorClearObjectiveResult } from './secondary-objective-rules';
 import { clearResolveState } from './run-timer-rules';
 import { normalizeSessionStats } from './session-stats-rules';
@@ -36,7 +36,7 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
         cascadedPairs: run.chunkPairsThisChain,
         pairsOnFloor: board.pairCount
     });
-    const parTurns = parTurnsForFloor(board.pairCount);
+    const parTurns = parTurnsForBoard(board);
     const turnsTaken = turnsTakenThisFloor(run);
     const floorBonus = calculateFloorClearBonus({
         level: board.level,

@@ -10,7 +10,7 @@ import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey } from './tile-identity';
 import { getSuitDealProfile, type SuitDealProfile } from './tile-suit-rules';
 import { calculateRating } from './scoring-rules';
-import { parTurnsForFloor } from './floor-par';
+import { parTurnsForBoard } from './floor-par';
 
 /**
  * The cascade, measured rather than felt.
@@ -235,7 +235,7 @@ export const playCascadeBalanceFloor = ({
         levelScore: runNonNegativeInteger(run.lastLevelResult?.scoreGained ?? run.stats.currentLevelScore),
         chunkScore: runNonNegativeInteger(run.chunkScoreThisFloor),
         largestBreakScore: runNonNegativeInteger(run.largestChunkScoreThisFloor),
-        parTurns: runNonNegativeInteger(run.lastLevelResult?.parTurns ?? parTurnsForFloor(pairsOnFloor)),
+        parTurns: runNonNegativeInteger(run.lastLevelResult?.parTurns ?? parTurnsForBoard(board)),
         floorBonus: runNonNegativeInteger(run.lastLevelResult?.floorBonus),
         playScore: runNonNegativeInteger(run.lastLevelResult?.playScore ?? run.stats.currentLevelScore),
         chunkBreaks: runNonNegativeInteger(run.chunkBreaksThisFloor),

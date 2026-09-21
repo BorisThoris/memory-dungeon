@@ -1,6 +1,7 @@
-import type { RunState } from './contracts';
+import type { BoardState, RunState } from './contracts';
 import { pairsForFloor } from './pair-curve';
 import { runNonNegativeInteger } from './run-number-guards';
+import { SCATTERED_SUIT_CEILING, TILE_SUITS, boardPaletteWidth } from './tile-suit-rules';
 
 /**
  * The par. Every floor states the number of turns a competent player should need, and the run
@@ -56,9 +57,76 @@ export const PAR_FLAT_RATE_PAIRS = 13;
 export const PAR_RATE_RISE_PER_PAIR = 0.025;
 export const PAR_MISS_ALLOWANCE = 1;
 
-/** Turns per pair on a board of this size: flat to thirteen pairs, rising after it. */
-export const parRateForPairs = (pairs: number): number =>
-    PAR_TURNS_PER_PAIR + PAR_RATE_RISE_PER_PAIR * Math.max(0, runNonNegativeInteger(pairs) - PAR_FLAT_RATE_PAIRS);
+/**
+ * Gen 259: par follows the pop for the palette too, not just for the board.
+ *
+ * Gen 211 made par follow the pop for board *size*. It never followed it for palette *width*, and a
+ * third of the game's floors deal a narrow one: `SCATTERED_SUIT_CEILING` holds every scattered and
+ * spotlight floor to two suits however big its board (`tile-suit-rules.ts`), which is correct and
+ * measured - a third suit halves a scattered floor's pop rate (Gen 191). Par did not know. Measured
+ * over 2080 boards and forty seeds, a clean player's turns divided by par:
+ *
+ *   two suits   mean 0.494 over 640 boards
+ *   three suits mean 0.658 over 240 boards
+ *   four suits  mean 0.731 over 1200 boards
+ *
+ * So the floor-end efficiency bonus and the within-par objective were most of a target on a clumped
+ * floor and half a target on a scattered one, decided by which archetype the schedule happened to
+ * draw. Relief landing where the seed puts it rather than where it is authored - and the game
+ * already has a `breather` archetype for authored relief.
+ *
+ * **The magnitude is a controlled measurement, not a fit.** Grouping live floors by palette confounds
+ * the palette with the archetype that chose it, so this was measured the other way: one board, built
+ * once per seed from a single archetype with no mutators, its suits re-dealt at two, three and four
+ * over twenty-four seeds and eight board sizes. Turns per pair, as a fraction of the same board's
+ * four-suit cost:
+ *
+ *   pairs      12     13     14     16     17     19     22     24    mean
+ *   two suits  0.736  0.766  0.711  0.820  0.728  0.688  0.733  0.727  0.739
+ *   three      0.943  0.873  0.855  1.093  0.937  0.952  1.106  0.948  0.963
+ *
+ * Two things fall out, and the first one killed the model this generation started with. The narrow
+ * palette's discount is a **constant fraction of the rate at every board size** - a two-suit board's
+ * cost per pair rises with the board exactly as steeply as a four-suit board's (0.358 to 0.412 over
+ * 12 to 24 pairs against 0.486 to 0.566), so this is a factor on the whole rate and emphatically not
+ * a later start to `PAR_RATE_RISE_PER_PAIR`. The first pass here assumed the latter, from the live
+ * floors, and the controlled deal says it was the archetype rather than the palette.
+ *
+ * Second: **three suits and four are the same board.** 0.963, with three of eight sizes above one -
+ * no effect to separate from noise. Which is what `tile-suit-rules.ts` already says in words: a
+ * clumped floor gives each suit one region, so a third and a fourth suit cost the break almost
+ * nothing, and it is the step down to two - where one suit holds half the board and almost every
+ * match touches its own kind - that changes the pop. So only the narrow palette takes a factor, and
+ * every clumped floor's par is unchanged to the turn.
+ *
+ * No reachable board deals one suit (none of the 2080 did; the deal's legibility floor is two on any
+ * board a player meets), and `boardPaletteWidth` reads an empty board as the full palette, so one
+ * suit takes the narrow factor rather than an invented number of its own.
+ */
+export const PAR_NARROW_PALETTE_RATE_FACTOR = 0.74;
+
+/**
+ * What a board's palette does to its par rate: one at three suits and four, the narrow factor at or
+ * below `SCATTERED_SUIT_CEILING`.
+ */
+export const parPaletteRateFactor = (suits: number): number => {
+    const palette = Math.max(1, Math.min(TILE_SUITS.length, Math.floor(runNonNegativeInteger(suits)) || 1));
+    return palette <= SCATTERED_SUIT_CEILING ? PAR_NARROW_PALETTE_RATE_FACTOR : 1;
+};
+
+/**
+ * Turns per pair on a board of this size and palette: flat to thirteen pairs and rising after it
+ * (Gen 211), the whole of it scaled by what the palette does to the pop (Gen 259).
+ *
+ * The palette defaults to the full one, because that is the board every rate here was calibrated
+ * against and a caller holding only a pair count cannot know better. So a caller that does not pass a
+ * palette gets exactly what it got before this parameter existed, at every pair count - which
+ * `floor-par.test.ts` holds, and which `suitCountForPairs` would not have done: it reads a six-pair
+ * board as two suits where the deal gives one three.
+ */
+export const parRateForPairs = (pairs: number, suits: number = TILE_SUITS.length): number =>
+    (PAR_TURNS_PER_PAIR + PAR_RATE_RISE_PER_PAIR * Math.max(0, runNonNegativeInteger(pairs) - PAR_FLAT_RATE_PAIRS)) *
+    parPaletteRateFactor(suits);
 
 /**
  * Gen 220: the opening gets a turn, because measured against par it was the tightest part of the
@@ -101,21 +169,48 @@ export const parOpeningPairs = (): number => pairsForFloor(PAR_OPENING_FLOORS);
 export const parOpeningAllowanceForPairs = (pairs: number): number =>
     runNonNegativeInteger(pairs) <= parOpeningPairs() ? PAR_OPENING_ALLOWANCE : 0;
 
-export const parTurnsForFloor = (pairs: number): number => {
+const parTurnsFromRate = (count: number, palette: number): number =>
+    Math.max(
+        1,
+        Math.ceil(count * parRateForPairs(count, palette)) + PAR_MISS_ALLOWANCE + parOpeningAllowanceForPairs(count)
+    );
+
+/**
+ * A bigger board is never cheaper - which the terms do not give for free once the palette scales the
+ * rate.
+ *
+ * `PAR_OPENING_ALLOWANCE` is a step *down* at the largest board the opening deals, and it sits on top
+ * of a rate rather than inside it. At the full palette the rate's own growth across that step happens
+ * to cover it, which is why nothing caught this before and why `floor-par.test.ts` asserts the step
+ * rather than assuming it. Scaled by `PAR_NARROW_PALETTE_RATE_FACTOR` the growth no longer does:
+ * measured, an eleven-pair two-suit board came out at six turns and a twelve-pair one at five, so a
+ * player crossing from floor 6 to floor 7 on scattered floors would have been given a *smaller*
+ * allowance for a bigger board.
+ *
+ * So par takes the larger of its own reading and the reading at the last board the allowance covers.
+ * The rate term is non-decreasing in pairs, so that one comparison is the whole of it - there is no
+ * other step to outrun. At the full palette it changes nothing, which the default-unchanged test
+ * holds.
+ */
+export const parTurnsForFloor = (pairs: number, suits?: number): number => {
     const count = runNonNegativeInteger(pairs);
     if (count === 0) return 1;
-    return Math.max(
-        1,
-        Math.ceil(count * parRateForPairs(count)) + PAR_MISS_ALLOWANCE + parOpeningAllowanceForPairs(count)
-    );
+    const palette = suits ?? TILE_SUITS.length;
+    const openingEdge = parOpeningPairs();
+    return count <= openingEdge
+        ? parTurnsFromRate(count, palette)
+        : Math.max(parTurnsFromRate(count, palette), parTurnsFromRate(openingEdge, palette));
 };
+
+/** Par for a board, read off the board: its pair count and the palette it was actually dealt. */
+export const parTurnsForBoard = (board: Pick<BoardState, 'pairCount' | 'tiles'> | null | undefined): number =>
+    parTurnsForFloor(board?.pairCount ?? 0, boardPaletteWidth(board));
 
 /** Turns the run has resolved on this floor, read from its own ledger. */
 export const turnsTakenThisFloor = (run: Pick<RunState, 'turnsThisFloor'>): number =>
     runNonNegativeInteger(run.turnsThisFloor);
 
-export const parTurnsForRun = (run: Pick<RunState, 'board'>): number =>
-    parTurnsForFloor(run.board?.pairCount ?? 0);
+export const parTurnsForRun = (run: Pick<RunState, 'board'>): number => parTurnsForBoard(run.board);
 
 /**
  * The turn ceiling (thesis §42.2). There are no lives; a run ends when a floor is not cleared
@@ -125,10 +220,14 @@ export const parTurnsForRun = (run: Pick<RunState, 'board'>): number =>
  */
 export const TURN_CEILING_PAR_MULTIPLIER = 3;
 
-export const turnCeilingForFloor = (pairs: number): number => parTurnsForFloor(pairs) * TURN_CEILING_PAR_MULTIPLIER;
+export const turnCeilingForFloor = (pairs: number, suits?: number): number =>
+    parTurnsForFloor(pairs, suits) * TURN_CEILING_PAR_MULTIPLIER;
 
-export const turnCeilingForRun = (run: Pick<RunState, 'board'>): number =>
-    turnCeilingForFloor(run.board?.pairCount ?? 0);
+/** The ceiling for a board, read off the board the same way its par is. */
+export const turnCeilingForBoard = (board: Pick<BoardState, 'pairCount' | 'tiles'> | null | undefined): number =>
+    parTurnsForBoard(board) * TURN_CEILING_PAR_MULTIPLIER;
+
+export const turnCeilingForRun = (run: Pick<RunState, 'board'>): number => turnCeilingForBoard(run.board);
 
 /** Turns left before the ceiling ends the run, never below zero. */
 export const turnsToCeiling = (run: Pick<RunState, 'board' | 'turnsThisFloor'>): number =>

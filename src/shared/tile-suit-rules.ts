@@ -423,6 +423,28 @@ export const isLayoutPinnedTile = (tile: Tile): boolean => isSingletonUtilityPai
  */
 export type SuitDealProfile = 'clumped' | 'scattered' | 'two_suit';
 
+/**
+ * Gen 260 moved the breather to two suits, because the narrow palette is the relief and the recovery
+ * floor was not getting it.
+ *
+ * Measured with the archetype as the only thing moving - one board per floor and seed, no mutators,
+ * the archetype id swapped and nothing else - every clumped archetype came out between 0.758 and
+ * 0.795 of its par and every narrow-palette one between 0.697 and 0.727. The archetype changes
+ * nothing about how hard a floor is; this table does. And read by the pacing role the schedule
+ * assigns (`pressureRoleForArchetype`), the narrow palette went only to `pressure` floors, so:
+ *
+ *   recovery 0.778    reward 0.795    mystery 0.767    baseline 0.758    pressure 0.739
+ *
+ * The floor whose job is to let a run heal spent more of its allowance than the average floor whose
+ * job is to press. That is the cycle's pacing upside down at the role level, and nothing read it
+ * until `sim:archetype-pressure`.
+ *
+ * Two suits is also the deal the breather's own hint asks for - *"A calmer floor to steady the board
+ * and rebuild the chain"*. One suit over half the board is a board where almost every match touches
+ * its own kind, so the pop reaches far and a broken chain is cheap to rebuild; measured, the floor
+ * goes from 0.743 of its par to 0.682 and from 0.498 turns per pair to 0.348. It is the one lever in
+ * this file that a floor can feel, and the recovery floor had been left off it.
+ */
 export const SUIT_DEAL_PROFILE_BY_ARCHETYPE: Readonly<Record<FloorArchetypeId, SuitDealProfile>> = {
     survey_hall: 'clumped',
     speed_trial: 'scattered',
@@ -434,7 +456,7 @@ export const SUIT_DEAL_PROFILE_BY_ARCHETYPE: Readonly<Record<FloorArchetypeId, S
     rush_recall: 'scattered',
     parasite_tithe: 'clumped',
     spotlight_hunt: 'two_suit',
-    breather: 'clumped'
+    breather: 'two_suit'
 };
 
 export const getSuitDealProfile = (floorArchetypeId: FloorArchetypeId | null | undefined): SuitDealProfile =>
@@ -556,6 +578,22 @@ export const dealBoardSuits = (
         rulesVersion,
         isLayoutPinnedTile
     );
+};
+
+/**
+ * How many suits a board is actually carrying, counted off its tiles rather than inferred.
+ *
+ * `suitCountForDeal` says how many a floor of this shape *may* carry; this says how many it got.
+ * The two differ on every scattered and spotlight floor, and the difference is what par has to be
+ * read against (`floor-par.ts`) - a board dealt two suits is a board whose pop reaches half of it.
+ */
+export const boardPaletteWidth = (board: Pick<BoardState, 'tiles'> | null | undefined): number => {
+    if (!board) return TILE_SUITS.length;
+    const suits = new Set<TileSuit>();
+    for (const tile of board.tiles) {
+        if (tile.suit) suits.add(tile.suit);
+    }
+    return suits.size === 0 ? TILE_SUITS.length : suits.size;
 };
 
 /**

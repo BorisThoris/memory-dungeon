@@ -10,7 +10,7 @@ import {
     type FeaturedObjectiveId
 } from './contracts';
 import { usesEndlessFloorSchedule } from './floor-mutator-schedule';
-import { parTurnsForFloor, turnsTakenThisFloor } from './floor-par';
+import { parTurnsForBoard, turnsTakenThisFloor } from './floor-par';
 import { runNonNegativeInteger } from './run-number-guards';
 
 export const FEATURED_OBJECTIVE_BONUS_SCORES: Record<FeaturedObjectiveId, number> = {
@@ -29,7 +29,7 @@ export const getFeaturedObjectiveBonusScore = (id: FeaturedObjectiveId): number 
  * pairs cannot resolve more than N matches, so it could not be failed. It reads the real par now.
  */
 export const isWithinFloorPar = (run: RunState, board: BoardState): boolean =>
-    board.pairCount >= 2 && turnsTakenThisFloor(run) <= parTurnsForFloor(board.pairCount);
+    board.pairCount >= 2 && turnsTakenThisFloor(run) <= parTurnsForBoard(board);
 
 export const isFeaturedObjectiveCompleted = (
     run: RunState,

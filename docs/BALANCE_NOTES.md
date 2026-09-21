@@ -3027,3 +3027,275 @@ resolves to a non-empty asset URL — content completeness).
 **Baseline 106 → 97** across nine entries: three wired live, three deleted (two pass-throughs and a
 superseded pair), three named as records. Still **not one plain debt entry** in fourteen resolved
 across Gens 245 and 258. Whatever that baseline is, it is not a list of things nobody needs.
+
+## Gen 259 — par knew how big a board was and not how wide its palette was
+
+`gate:difficulty-curve` prints a `suits` column beside every floor's turns and its par, and it had
+been printing a sawtooth for as long as the column existed. Floors 7, 9 and 12 drop to two suits
+between three- and four-suit neighbours, and those were the floors coming in furthest under par.
+Grouped by palette across all fifty-two floors:
+
+```
+suits  floors  mean of-par
+    2      16       0.496
+    3       6       0.682
+    4      30       0.712
+```
+
+A clean player spent **half** a two-suit floor's allowance and three quarters of a four-suit floor's.
+That is sixteen of fifty-two floors — the floor-end efficiency bonus and the within-par objective a
+formality on nearly a third of the game and a real target on the rest, decided by which archetype the
+schedule happened to draw. Relief landing where the seed puts it rather than where `breather` puts it.
+
+**The two suits are not the bug.** `SCATTERED_SUIT_CEILING` holds every scattered and spotlight floor
+to two however big its board, and that is measured: Gen 191 found a third suit halves a scattered
+floor's pop rate, 0.7 of matches to 0.36. What was wrong is that par did not know. `floor-par.ts`'s
+own doctrine, written at Gen 211, is *"par follows the pop, because the pop is what makes par
+achievable and its help is not flat"* — and Gen 211 made it follow the pop for board **size** only.
+Palette width was the same rule, unwritten.
+
+### The first model was wrong, and the controlled deal is what said so
+
+Grouping live floors by palette confounds the palette with the archetype that chose it. Read that
+way, a two-suit board's turns per pair looked **flat** as the board grew (0.318 / 0.328 / 0.334 over
+the 12-15, 16-19 and 20-24 pair buckets) while a four-suit board's climbed (0.424 / 0.488 / 0.533) —
+which reads as `PAR_RATE_RISE_PER_PAIR` starting later on a narrow palette, and that is what this
+generation first shipped into the file.
+
+The controlled measurement refuted it. One board per seed, built from a single archetype with no
+mutators, its suits **re-dealt** at two, three and four — twenty-four seeds, eight board sizes,
+nothing moving but the palette. Turns per pair as a fraction of the same board's four-suit cost:
+
+```
+pairs      12     13     14     16     17     19     22     24    mean
+two        0.736  0.766  0.711  0.820  0.728  0.688  0.733  0.727  0.739
+three      0.943  0.873  0.855  1.093  0.937  0.952  1.106  0.948  0.963
+```
+
+The discount is a **constant fraction of the rate at every board size**: a two-suit board's cost per
+pair rises with the board exactly as steeply as a four-suit board's (0.358 → 0.412 across 12 → 24
+pairs against 0.486 → 0.566). So it is a factor on the whole rate, not a later start to the rise. The
+"flat" reading was the archetype, not the palette.
+
+And **three suits and four are the same board** — 0.963, with three of eight sizes above one. Which
+is what `tile-suit-rules.ts` already said in words: a clumped floor gives each suit one region, so a
+third and a fourth suit cost the break almost nothing, and it is the step down to two, where one suit
+holds half the board, that changes the pop. So `PAR_NARROW_PALETTE_RATE_FACTOR = 0.74` applies at
+`SCATTERED_SUIT_CEILING` or below and nowhere else, and **every clumped floor's par is unchanged to
+the turn**.
+
+### Two things this shook out that were nobody's plan
+
+**Par could fall as the board grew.** `PAR_OPENING_ALLOWANCE` is a step *down* at the largest board
+the opening deals, sitting on top of a rate rather than inside it. At the full palette the rate's own
+growth across that step happens to cover it — which is why `floor-par.test.ts` asserts that step
+rather than assuming it. Scaled by 0.74 it no longer does: an eleven-pair two-suit board came out at
+six turns and a twelve-pair one at **five**, so a player crossing floor 6 to floor 7 on scattered
+floors would have been handed a smaller allowance for a bigger board. Par now takes the larger of its
+own reading and the reading at the last board the allowance covers. The new test found this, not a
+player.
+
+**`suitCountForPairs` is the wrong default.** It reads a six-pair board as two suits where the deal
+gives it three, so defaulting the new parameter to it cut floor 2's par from five turns to four in
+silence. The default is the full palette — the board every rate in the file was calibrated against —
+and a test now walks every pair count asserting the no-palette call is identical to the four-suit one.
+
+### After
+
+```
+suits  n     mean   median   p90    max   over-par share
+    2  640    0.630    0.571  0.923  1.667           0.055
+    3  240    0.658    0.600  1.000  1.571           0.037
+    4 1200    0.731    0.727  1.000  1.714           0.055
+```
+
+0.494 → **0.630** on the narrow floors, against 0.658 at three suits: the palette-attributable gap is
+closed, and what is left is board size (three-suit boards are small boards, where the flat allowances
+are a bigger share of par). Over-par share was 0.019 / 0.037 / 0.055 and is now 0.055 / 0.037 / 0.055
+— the same demand at every palette, which is the property, rather than a number that looked right.
+In the curve's printed table floor 7 goes 0.471 → 0.550, floor 9 0.586 → 0.683, floor 12 0.613 →
+0.817; the spread across all fifty-two floors narrows from 0.372-0.857 to 0.500-0.857.
+
+### The band, with its control run
+
+Every band in `CURVE_BANDS` reads the curve along the floor number. None read it across the palette,
+which is exactly where it was bent — so `maxPaletteParGap: 0.12`, the largest allowed gap between the
+mean of-par of the narrow floors and the wide ones. Measured after: 0.638 against 0.707, a gap of
+**0.069**. Negative control, run: `PAR_NARROW_PALETTE_RATE_FACTOR` back to 1 and `yarn sim:curve
+--check` fails with *"16 floors of 2 suits or fewer spend a mean 0.496 of their par against 36 wider
+floors' 0.707, a gap of 0.211 over 0.12"* — the pre-change numbers, to three places.
+
+The curve sim also stopped reading par off the floor number. It computes `parTurnsForBoard(run.board)`
+per seed and means it, because two seeds can deal the same floor different archetypes and a par read
+from `pairsForFloor` cannot see the palette it is judging.
+
+### What moved downstream, and what the repo's own records made me say
+
+Five call sites now read par off the board instead of off a pair count: the within-par objective and
+its projection, the floor-clear bonus, the cascade sim's sample, and the last-turn achievement (via
+`turnCeilingForRun`). The turn ceiling is three times par, so it follows the palette without being
+read separately.
+
+`system-refinement-ledger.test.ts` then went red: the ledger's note for `objective.featured_streak`
+quoted **0.829** of a run's floors clearing their featured objective and the census now reads
+**0.821**. That is the change working — the within-par objective is a target on scattered floors now
+— but the note said otherwise, and the test that compares a quoted figure to what the census would
+print today is the reason it could not be left saying it.
+
+## Gen 260 — the floor whose job is a rest was the tightest floor of the five roles
+
+Gen 259 left an archetype table on screen that I had not read across: eleven archetypes, and
+`pressureRoleForArchetype` sorts them into five pacing jobs — baseline, pressure, reward, recovery,
+mystery. `sim:curve` reads the curve along the floor number, `sim:cascade` reads it over all floors.
+Neither reads it by archetype, so nothing in this repository had ever checked whether those five roles
+describe anything a player experiences.
+
+### The first reading was wrong, and for the same reason as last time
+
+Grouping *live* floors by archetype said the breather was among the tightest floors in the game
+(0.742 of its par against `survey_hall`'s 0.674). That is a confound, not a finding: turns-against-par
+rises with board size and no two archetypes sit on the same floors, so an archetype that lands
+shallow looks generous and one that lands deep looks tight. Full runs with the magpie as the only
+thing moving said the opposite — breather 0.701, baseline 0.720 — and the schedule's own comment about
+the bird turned out approximately honest: it fires on 0.31 of the floors it rides and costs 0.016 of
+par. Two mutators I suspected of being inert are measured in other currencies entirely: `wide_recall`
+costs five score a match and `short_memorize` shortens the memorize window, neither of which is a turn.
+
+### The controlled reading
+
+One board per floor and seed, no mutators, the archetype id swapped and everything else held — floor,
+seed, pair count, objective. Thirty seeds, floors 18/22/30/42:
+
+```
+treasure_gallery 0.795   parasite_tithe 0.780   breather 0.778   shadow_read 0.775
+anchor_chain     0.769   script_room    0.767   survey_hall 0.758
+trap_hall        0.727   spotlight_hunt 0.716   rush_recall 0.711   speed_trial 0.697
+```
+
+Every clumped archetype between 0.758 and 0.795. Every narrow-palette one between 0.697 and 0.727.
+The split falls exactly on `SUIT_DEAL_PROFILE_BY_ARCHETYPE` and nowhere near the archetype id. **The
+archetype is a label; its suit-deal profile is the whole of its difficulty.** That is worth saying
+plainly rather than dressing up: eleven archetypes, five declared roles, one lever with two settings.
+
+Read by role, the cycle's pacing was upside down:
+
+```
+recovery 0.778    reward 0.795    mystery 0.767    baseline 0.758    pressure 0.739
+```
+
+The floor whose job is to let a run heal spent **more** of its allowance than the average floor whose
+job is to press — because the narrow palette, which Gen 259 established is the looser board against
+its own par, had been handed out to `pressure` archetypes only, and the recovery floor was left on the
+wide one.
+
+### The fix is the deal its own hint already asked for
+
+The breather's hint is *"A calmer floor to steady the board and rebuild the chain"* and its risk
+profile is *"Lower pressure"*. Two suits is what that describes: one suit over half the board means
+almost every match touches its own kind, the pop reaches far, and a broken chain is cheap to rebuild.
+Measured, the floor goes from 0.743 of its par to **0.682** and from 0.498 turns per pair to 0.348 —
+below the pressure mean of 0.729 and below the baseline's 0.798. Its copy said the opposite ("deals
+the full palette, which makes it the cheapest place to spend a peek or a flash") and now says what it
+does.
+
+`gate:archetype-pressure` is the instrument, in `gate:systems`. It bands the one claim the catalog
+makes out loud — the recovery floor may not cost more of its par than the average pressure floor — and
+deliberately does **not** band the archetypes against each other, because they are within noise of one
+another and a band there would be inventing a structure the game does not have. It reads its roles
+from `pressureRoleForArchetype` rather than keeping a copy, since a gate holding its own private role
+map could not check whether the schedule's roles mean anything. Negative control, run: breather back to
+`clumped` and it fails with *"the recovery floor is not a rest: breather spends 0.797 of its par
+against the 7 pressure archetypes' 0.729"*.
+
+### What four more narrow floors a cycle moved downstream
+
+Everything here is the same mechanism seen from a different counter, and every one of these was a red
+test rather than something I went looking for:
+
+- **The meter was understating Fever.** `CHAIN_RUNG_PAIRS` promised seven pairs; re-measured by
+  `sim:pop` a Fever break now takes 7.70, past `CHAIN_RUNG_PAIRS_TOLERANCE`. A narrow palette puts one
+  suit in bigger clumps, so a break that takes the clump takes more with it. The meter says eight now.
+- **Fever reaches fewer floors**, 0.246 → 0.217, because a two-suit floor ends sooner and a shorter
+  floor has less room to build a chain. Still far above the 10% bar Gen 152 set.
+- **The drop takes a severed suit on 0.854 of floors**, from 0.871: a narrow palette leaves fewer
+  suits to sever.
+- **Turn resolution 4.95 → 4.80 a floor.** Par follows it, so this is the shorter floor rather than a
+  looser one.
+- **Nine trait, power and hazard shares moved** by a few thousandths each, all in the ledger's prose,
+  all caught by the test that compares a quoted figure to what the census prints today.
+- **The magpie got rarer**, 0.013 → 0.008 of floors: the breather it rides ends in fewer turns, so the
+  bird's every-third-miss trigger lands on it less often. Both occupancy gates still pass and the run
+  census still bands it, but this is the one cost of the change rather than a benefit of it — a thief
+  is not relief, and the nest is now the wrong floor. Left as a task rather than folded in here.
+
+## Gen 261 — the record of "every system refined" was forty-eight verdicts about a game that had moved
+
+`system-refinement-ledger.ts` is this repository's own answer to "is the whole game refined?" — a
+verdict per system, gated so a new mechanic cannot ship without someone writing down what state it is
+in. It also carries the rule that condemns it when it goes stale, written at Gen 213:
+
+> *"An entry written before any of that is not evidence about this game; it is evidence about a game
+> that used to be here, indistinguishable from the real thing by reading."*
+
+By its own rule it was due. **Forty-six of the forty-eight entries still said Gen 213.** Since then par
+gave the opening a turn (220), stopped being one rate for every palette and started being read off the
+board rather than the floor number (259), the recovery floor's deal changed (260), and the in-run
+chrome was rebuilt three times (239, 240, 257, 258). The gate passed the whole time, because all it
+ever asked was whether the stamp was at or after the constant — and the constant had not moved. A bar
+nothing has ever failed is a bar nobody has checked, and this was the bar checking the claim that
+everything else had been checked.
+
+### What the walk re-ran rather than re-read
+
+The gate re-checks two kinds of evidence on every run — a census counter's live share, and `gone`/
+`present` tokens grepped against real source — so those forty-eight claims were already true. What is
+**not** re-checked is every other number in the prose, and that is where the staleness was. So:
+
+```
+softlock sweep        430/430 playable, 0 fairness issues, every seed
+endless health        430 sampled floors, 0 issue floors, 997 trait floors, 0 dead
+core replay           384 steps, replayDeterministic true, 0 invariant violations
+run census            peek 0.908, shuffle 0.196, wildMatch 0.042, flashPair 0.042,
+                      undo 0.483, gambit 0.563, pin 0.212, magpie 0.008
+sampled audio         11 manifest keys
+mutator ids           10
+singleton pair keys   1 (`__wild__`)
+```
+
+The first three had last been run against the boards of Gen 205 and the par of Gen 211. This is the
+first time any of them has been checked since par stopped being one rate for every palette.
+
+### What it found wrong
+
+**Three floor-identity surfaces named a palette the board does not deal.** The keystone floor told
+every player *"two suits, long chains"* — true of `trap_hall`, `rush_recall` and `spotlight_hunt`, and
+false of `treasure_gallery`, which the position-nine rotation also tags boss and which deals **four**.
+One boss floor in three, wrong in three sentences at once. The boss mechanics list asserted
+`'Scattered suit deal: short chains, many small pops.'` for every boss floor regardless of archetype.
+And both had the physics backwards: scattered means `SCATTERED_SUIT_CEILING`, which is two suits, and
+two suits is the **widest** reach a pop gets — 0.74 of a four-suit board's turns per pair (Gen 259).
+This file's own narrow-palette branch said so correctly, three lines away from the branch saying the
+opposite about the same board.
+
+**And one of them was mine, from last generation.** The new gate's first run failed on
+`survey_hall/breather`, because the `breather` *tag* is not the `breather` *archetype*: the cycle tags
+floors 3 and 10 breather and gives both `treasure_gallery`. Gen 260 rewrote that block for the
+archetype's new two-suit deal and so told two four-suit floors they dealt two — and left the clear
+line beside it still saying "Four suits", contradicting the two sentences above it. I changed two of
+three strings and did not read the third. Every palette sentence reads `floorPaletteRead` now, and
+`boss-encounters.test.ts` walks all eleven archetypes against the board each one actually deals, in
+both directions, with both branches asserted non-empty so neither goes untested.
+
+**Five numbers in the prose had drifted.** `power.undo_resolve` quoted a miss-rate ceiling of 0.483
+where the census reads 0.471 — so the margin it describes as comfortable is 0.004, not 0.016, and undo
+now sits within a rounding step of the rate that bounds it. `power.pin` called 0.158 "the reference
+miss rate"; the miss rate is 0.471. `feedback.gameplay_hud` stopped at Gen 212 and so said nothing
+about the most-changed surface in the game.
+
+### The stamp
+
+All forty-eight entries stamped Gen 261 and `SYSTEM_REFINEMENT_SWEEP_GENERATION` raised to match.
+Negative control, run: put `power.pin` back to 213 and the gate fails with *"entries predating Gen
+261: expected [ 'power.pin' ] to deeply equal []"*. The constant is what makes the claim cost
+something, and it should be raised again the next time par, the deal or the chrome moves — which, on
+this session's evidence, is roughly every twenty generations.
