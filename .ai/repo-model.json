@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2554,
     "codeFileCount": 901,
-    "exportedSymbolCount": 2719,
+    "exportedSymbolCount": 2721,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6892
+    "relationshipCount": 6899
   },
   "inventory": [
     {
@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 498178,
-      "sha256": "a63dd3b25a71631ae59b38912d2aed6b793fe7f35e499b51f89c84a683e50847"
+      "bytes": 502987,
+      "sha256": "d2d16286830172612339f3247fc90725f370032d08f2abc5c9f6363faf080ad9"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -777,8 +777,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 19222,
-      "sha256": "be472714bde67a006d4c45addb3b1e0d7b7e0e8e0692936bcd31d9cf232acbd5"
+      "bytes": 21621,
+      "sha256": "dd849e4ab8a788d46e72842c3ce295d68eb8d95390174746a966e78d72967620"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "eaf657399d6faa659b566b87bb3e2369c48c2483eb17ddbc8bbc8dad1ccf0fd1"
+      "sha256": "ebc00731ff3441e306341c1ac1866f71ec7e701342f85dc56866606086e73550"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -10983,8 +10983,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 19488,
-      "sha256": "095c93cbeef09b6ecae6b36e2b184edee626a2845860d5476924079056c3c41f"
+      "bytes": 21895,
+      "sha256": "68930a607d60bf78b9303609de7332131dfcfa2c3c81626b4a1f8a5f24f3276a"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -11217,14 +11217,14 @@
     {
       "path": "src/shared/boss-encounters.test.ts",
       "category": "test",
-      "bytes": 6838,
-      "sha256": "684ed1e4a29556d61277bff4b21e661b605d7941b0bb604511993d5975c1e856"
+      "bytes": 11036,
+      "sha256": "d75a87e1f38a27a791fd91a076e7ed6654cdeb5e7c1135e262f5fc7b8d5298d0"
     },
     {
       "path": "src/shared/boss-encounters.ts",
       "category": "source",
-      "bytes": 15716,
-      "sha256": "58dbd0b97789e92a16cd19e905515505a22605dfa0fd9acd19a1710dc753ab85"
+      "bytes": 19814,
+      "sha256": "7c0b1d48d772081cbce73ecdc05c47bd6c31029e1b5c418af571dcf648222909"
     },
     {
       "path": "src/shared/bridge-reachability.test.ts",
@@ -12867,8 +12867,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 31751,
-      "sha256": "e8f85c091db6960d320bf67e5a4287293e59ffaafd12b384f2442e1f5e4f2169"
+      "bytes": 35146,
+      "sha256": "88cd9526025a854feaed21434709c31125d1064eb6cdb69d73fe41cf0a5a59a4"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -25141,6 +25141,7 @@
       "testedBy": [
         "file:src/renderer/store/useAppStore.test.ts",
         "file:src/shared/bad-floor-is-quiet.test.ts",
+        "file:src/shared/boss-encounters.test.ts",
         "file:src/shared/exploit-surface.test.ts",
         "file:src/shared/floor-mutator-schedule.test.ts",
         "file:src/shared/game.test.ts",
@@ -25531,11 +25532,13 @@
       "path": "src/shared/boss-encounters.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 139,
+      "lineCount": 229,
       "imports": [
+        "file:src/shared/board-generation.ts",
         "file:src/shared/boss-encounters.ts",
         "file:src/shared/contracts.ts",
-        "file:src/shared/floor-mutator-schedule.ts"
+        "file:src/shared/floor-mutator-schedule.ts",
+        "file:src/shared/tile-suit-rules.ts"
       ],
       "exports": [],
       "testedBy": []
@@ -25545,11 +25548,12 @@
       "path": "src/shared/boss-encounters.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 309,
+      "lineCount": 370,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-mutator-schedule.ts",
-        "file:src/shared/mechanic-feedback.ts"
+        "file:src/shared/mechanic-feedback.ts",
+        "file:src/shared/tile-suit-rules.ts"
       ],
       "exports": [
         "symbol:src/shared/boss-encounters.ts#BOSS_ENCOUNTER_IDENTITY",
@@ -25559,10 +25563,12 @@
         "symbol:src/shared/boss-encounters.ts#EncounterIdentityRow",
         "symbol:src/shared/boss-encounters.ts#FloorIdentityContract",
         "symbol:src/shared/boss-encounters.ts#FloorIdentityWarningLevel",
+        "symbol:src/shared/boss-encounters.ts#floorPaletteRead",
         "symbol:src/shared/boss-encounters.ts#getBossEncounterIdentityForFloor",
         "symbol:src/shared/boss-encounters.ts#getBossFloorHudTitle",
         "symbol:src/shared/boss-encounters.ts#getEncounterIdentityForFloor",
-        "symbol:src/shared/boss-encounters.ts#getFloorIdentityContract"
+        "symbol:src/shared/boss-encounters.ts#getFloorIdentityContract",
+        "symbol:src/shared/boss-encounters.ts#paletteMechanicLine"
       ],
       "testedBy": [
         "file:src/shared/boss-encounters.test.ts"
@@ -31207,7 +31213,7 @@
       "path": "src/shared/system-refinement-ledger.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 480,
+      "lineCount": 493,
       "imports": [
         "file:src/shared/gameplay-interaction-graph.ts"
       ],
@@ -31496,6 +31502,7 @@
       "testedBy": [
         "file:src/renderer/components/RunShell.test.tsx",
         "file:src/shared/archetype-pressure-simulation.test.ts",
+        "file:src/shared/boss-encounters.test.ts",
         "file:src/shared/floor-par.test.ts",
         "file:src/shared/secondary-objective-rules.test.ts",
         "file:src/shared/tile-suit-rules.test.ts"
@@ -43238,88 +43245,104 @@
       "name": "BOSS_ENCOUNTER_IDENTITY",
       "kind": "value",
       "file": "src/shared/boss-encounters.ts",
-      "line": 70,
-      "endLine": 85
+      "line": 104,
+      "endLine": 119
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#BossEliteEncounterIdentity",
       "name": "BossEliteEncounterIdentity",
       "kind": "interface",
       "file": "src/shared/boss-encounters.ts",
-      "line": 18,
-      "endLine": 30
+      "line": 52,
+      "endLine": 64
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#BossEliteEncounterKind",
       "name": "BossEliteEncounterKind",
       "kind": "type",
       "file": "src/shared/boss-encounters.ts",
-      "line": 10,
-      "endLine": 10
+      "line": 44,
+      "endLine": 44
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#BossElitePresentationSlot",
       "name": "BossElitePresentationSlot",
       "kind": "interface",
       "file": "src/shared/boss-encounters.ts",
-      "line": 12,
-      "endLine": 16
+      "line": 46,
+      "endLine": 50
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#EncounterIdentityRow",
       "name": "EncounterIdentityRow",
       "kind": "interface",
       "file": "src/shared/boss-encounters.ts",
-      "line": 128,
-      "endLine": 135
+      "line": 166,
+      "endLine": 173
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#FloorIdentityContract",
       "name": "FloorIdentityContract",
       "kind": "interface",
       "file": "src/shared/boss-encounters.ts",
-      "line": 139,
-      "endLine": 149
+      "line": 177,
+      "endLine": 187
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#FloorIdentityWarningLevel",
       "name": "FloorIdentityWarningLevel",
       "kind": "type",
       "file": "src/shared/boss-encounters.ts",
-      "line": 137,
-      "endLine": 137
+      "line": 175,
+      "endLine": 175
+    },
+    {
+      "id": "symbol:src/shared/boss-encounters.ts#floorPaletteRead",
+      "name": "floorPaletteRead",
+      "kind": "value",
+      "file": "src/shared/boss-encounters.ts",
+      "line": 37,
+      "endLine": 42
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#getBossEncounterIdentityForFloor",
       "name": "getBossEncounterIdentityForFloor",
       "kind": "value",
       "file": "src/shared/boss-encounters.ts",
-      "line": 87,
-      "endLine": 117
+      "line": 121,
+      "endLine": 155
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#getBossFloorHudTitle",
       "name": "getBossFloorHudTitle",
       "kind": "value",
       "file": "src/shared/boss-encounters.ts",
-      "line": 119,
-      "endLine": 126
+      "line": 157,
+      "endLine": 164
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#getEncounterIdentityForFloor",
       "name": "getEncounterIdentityForFloor",
       "kind": "value",
       "file": "src/shared/boss-encounters.ts",
-      "line": 303,
-      "endLine": 308
+      "line": 364,
+      "endLine": 369
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#getFloorIdentityContract",
       "name": "getFloorIdentityContract",
       "kind": "value",
       "file": "src/shared/boss-encounters.ts",
-      "line": 169,
-      "endLine": 292
+      "line": 207,
+      "endLine": 353
+    },
+    {
+      "id": "symbol:src/shared/boss-encounters.ts#paletteMechanicLine",
+      "name": "paletteMechanicLine",
+      "kind": "value",
+      "file": "src/shared/boss-encounters.ts",
+      "line": 30,
+      "endLine": 35
     },
     {
       "id": "symbol:src/shared/cameraViewportMode.ts#deriveCameraViewportMode",
@@ -52398,48 +52421,48 @@
       "name": "staleLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 476,
-      "endLine": 479
+      "line": 489,
+      "endLine": 492
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#strandedLedgerIds",
       "name": "strandedLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 456,
-      "endLine": 461
+      "line": 469,
+      "endLine": 474
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_LEDGER",
       "name": "SYSTEM_REFINEMENT_LEDGER",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 79,
-      "endLine": 444
+      "line": 92,
+      "endLine": 457
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_SWEEP_GENERATION",
       "name": "SYSTEM_REFINEMENT_SWEEP_GENERATION",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 38,
-      "endLine": 38
+      "line": 51,
+      "endLine": 51
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementEntry",
       "name": "SystemRefinementEntry",
       "kind": "interface",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 40,
-      "endLine": 77
+      "line": 53,
+      "endLine": 90
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#systemRefinementLedgerById",
       "name": "systemRefinementLedgerById",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 446,
-      "endLine": 447
+      "line": 459,
+      "endLine": 460
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementVerdict",
@@ -52454,16 +52477,16 @@
       "name": "unevidencedLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 470,
-      "endLine": 473
+      "line": 483,
+      "endLine": 486
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#unexaminedSystemIds",
       "name": "unexaminedSystemIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 450,
-      "endLine": 453
+      "line": 463,
+      "endLine": 466
     },
     {
       "id": "symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
@@ -65786,6 +65809,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/boss-encounters.ts->symbol:src/shared/boss-encounters.ts#floorPaletteRead",
+      "source": "file:src/shared/boss-encounters.ts",
+      "target": "symbol:src/shared/boss-encounters.ts#floorPaletteRead",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/boss-encounters.ts->symbol:src/shared/boss-encounters.ts#getBossEncounterIdentityForFloor",
       "source": "file:src/shared/boss-encounters.ts",
       "target": "symbol:src/shared/boss-encounters.ts#getBossEncounterIdentityForFloor",
@@ -65807,6 +65836,12 @@
       "id": "exports:src/shared/boss-encounters.ts->symbol:src/shared/boss-encounters.ts#getFloorIdentityContract",
       "source": "file:src/shared/boss-encounters.ts",
       "target": "symbol:src/shared/boss-encounters.ts#getFloorIdentityContract",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/boss-encounters.ts->symbol:src/shared/boss-encounters.ts#paletteMechanicLine",
+      "source": "file:src/shared/boss-encounters.ts",
+      "target": "symbol:src/shared/boss-encounters.ts#paletteMechanicLine",
       "kind": "exports"
     },
     {
@@ -84322,6 +84357,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/boss-encounters.test.ts->src/shared/board-generation.ts",
+      "source": "file:src/shared/boss-encounters.test.ts",
+      "target": "file:src/shared/board-generation.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/boss-encounters.test.ts->src/shared/boss-encounters.ts",
       "source": "file:src/shared/boss-encounters.test.ts",
       "target": "file:src/shared/boss-encounters.ts",
@@ -84340,6 +84381,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/boss-encounters.test.ts->src/shared/tile-suit-rules.ts",
+      "source": "file:src/shared/boss-encounters.test.ts",
+      "target": "file:src/shared/tile-suit-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/boss-encounters.ts->src/shared/contracts.ts",
       "source": "file:src/shared/boss-encounters.ts",
       "target": "file:src/shared/contracts.ts",
@@ -84355,6 +84402,12 @@
       "id": "imports:src/shared/boss-encounters.ts->src/shared/mechanic-feedback.ts",
       "source": "file:src/shared/boss-encounters.ts",
       "target": "file:src/shared/mechanic-feedback.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/boss-encounters.ts->src/shared/tile-suit-rules.ts",
+      "source": "file:src/shared/boss-encounters.ts",
+      "target": "file:src/shared/tile-suit-rules.ts",
       "kind": "imports"
     },
     {
@@ -93741,6 +93794,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/board-generation.ts->file:src/shared/boss-encounters.test.ts",
+      "source": "file:src/shared/board-generation.ts",
+      "target": "file:src/shared/boss-encounters.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/board-generation.ts->file:src/shared/exploit-surface.test.ts",
       "source": "file:src/shared/board-generation.ts",
       "target": "file:src/shared/exploit-surface.test.ts",
@@ -97254,6 +97313,12 @@
       "id": "tested_by:src/shared/tile-suit-rules.ts->file:src/shared/archetype-pressure-simulation.test.ts",
       "source": "file:src/shared/tile-suit-rules.ts",
       "target": "file:src/shared/archetype-pressure-simulation.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/tile-suit-rules.ts->file:src/shared/boss-encounters.test.ts",
+      "source": "file:src/shared/tile-suit-rules.ts",
+      "target": "file:src/shared/boss-encounters.test.ts",
       "kind": "tested_by"
     },
     {

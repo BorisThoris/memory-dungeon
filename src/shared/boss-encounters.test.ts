@@ -2,10 +2,24 @@ import { describe, expect, it } from 'vitest';
 import {
     getBossEncounterIdentityForFloor,
     getEncounterIdentityForFloor,
-    getFloorIdentityContract
+    getFloorIdentityContract,
+    paletteMechanicLine
 } from './boss-encounters';
-import { FLOOR_ARCHETYPE_IDS, GAME_RULES_VERSION, type MutatorId } from './contracts';
+import { buildBoard } from './board-generation';
+import {
+    FLOOR_ARCHETYPE_IDS,
+    GAME_RULES_VERSION,
+    type FloorArchetypeId,
+    type FloorTag,
+    type MutatorId
+} from './contracts';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
+import {
+    SCATTERED_SUIT_CEILING,
+    boardPaletteWidth,
+    getSuitDealProfile,
+    suitCountForDeal
+} from './tile-suit-rules';
 
 describe('REG-076 boss and elite encounter identity', () => {
     it('derives boss identity from scheduled boss floor tags', () => {
@@ -29,7 +43,9 @@ describe('REG-076 boss and elite encounter identity', () => {
          * the scattered deal; that is what the list has to carry, and the anchor is what it must
          * not.
          */
-        expect(identity!.mechanics).toEqual(expect.arrayContaining([expect.stringContaining('Scattered suit deal')]));
+        // Gen 261: the line is derived from the archetype's deal rather than asserting "scattered",
+        // because the boss tag can carry a clumped archetype. It still has to name a suit deal.
+        expect(identity!.mechanics).toEqual(expect.arrayContaining([expect.stringMatching(/-suit deal:/)]));
         expect(identity!.mechanics.join(' ')).not.toContain('Keystone Pair');
         expect(identity!.placeholderNeeded).toBe(true);
         expect(identity!.placeholderSlots).toContain('boss intro stinger');
@@ -134,5 +150,79 @@ describe('REG-076 boss and elite encounter identity', () => {
             expect(row.activeReminder.length).toBeGreaterThan(10);
             expect(row.tokens.length).toBeGreaterThan(0);
         }
+    });
+});
+
+/**
+ * Gen 261, from the refinement-ledger walk. Three separate strings on a boss floor asserted a
+ * palette, and each was wrong for at least one archetype the boss tag can carry: the keystone floor
+ * told every player "two suits, long chains" while the position-nine rotation also tags
+ * `treasure_gallery` boss, which deals four. The clear line and the boss mechanics list were wrong a
+ * second way, calling a scattered deal "many small pops rather than one big one" when scattered means
+ * `SCATTERED_SUIT_CEILING` - two suits, the widest reach a pop gets.
+ */
+describe('what a floor tells the player about its palette', () => {
+    const paletteOnBoard = (floorArchetypeId: FloorArchetypeId, floorTag: FloorTag): number =>
+        boardPaletteWidth(
+            buildBoard(21, {
+                runSeed: 61_001,
+                runRulesVersion: GAME_RULES_VERSION,
+                gameMode: 'endless',
+                activeMutators: [],
+                floorTag,
+                floorArchetypeId,
+                featuredObjectiveId: null,
+                cycleFloor: 21
+            })
+        );
+
+    /** The suit count a sentence claims: "two suits" or "4 suits". */
+    const claimedSuits = (text: string): number | null => {
+        if (/\btwo[- ]suit/i.test(text)) return 2;
+        const digits = /\b(\d+)[- ]suits?\b/i.exec(text);
+        return digits ? Number(digits[1]) : null;
+    };
+
+    it('never names a palette the board does not deal, on any archetype or tag', () => {
+        for (const floorArchetypeId of FLOOR_ARCHETYPE_IDS) {
+            for (const floorTag of ['normal', 'breather', 'boss'] as FloorTag[]) {
+                const dealt = paletteOnBoard(floorArchetypeId, floorTag);
+                const contract = getFloorIdentityContract({ floorArchetypeId, floorTag, mutators: [] });
+                const sentences = [
+                    contract.teachingSentence,
+                    contract.counterplaySentence,
+                    contract.floorClearSentence,
+                    contract.activeReminder,
+                    paletteMechanicLine(floorArchetypeId)
+                ];
+                for (const sentence of sentences) {
+                    const claimed = claimedSuits(sentence);
+                    if (claimed === null) continue;
+                    expect(claimed, `${floorArchetypeId}/${floorTag} says "${sentence}" on a ${dealt}-suit board`).toBe(
+                        dealt
+                    );
+                }
+            }
+        }
+    });
+
+    it('says a narrow palette widens the pop, because that is the direction it goes', () => {
+        /*
+         * The physics half. Gen 259 measured a two-suit board at 0.74 of a four-suit board's turns
+         * per pair - one suit over half the board means almost every match touches its own kind - so
+         * "two suits" and "many small pops" cannot both describe the same floor.
+         */
+        for (const floorArchetypeId of FLOOR_ARCHETYPE_IDS) {
+            const narrow = suitCountForDeal(getSuitDealProfile(floorArchetypeId)) <= SCATTERED_SUIT_CEILING;
+            const line = paletteMechanicLine(floorArchetypeId);
+            expect(/widest|long chains/i.test(line), `${floorArchetypeId}: "${line}"`).toBe(narrow);
+            expect(/small(er)? pops|short(er)? chains/i.test(line), `${floorArchetypeId}: "${line}"`).toBe(!narrow);
+        }
+    });
+
+    it('reads at least one floor each way, so neither branch is untested', () => {
+        const widths = FLOOR_ARCHETYPE_IDS.map((id) => suitCountForDeal(getSuitDealProfile(id)));
+        expect(widths.some((width) => width <= SCATTERED_SUIT_CEILING)).toBe(true);
+        expect(widths.some((width) => width > SCATTERED_SUIT_CEILING)).toBe(true);
     });
 });

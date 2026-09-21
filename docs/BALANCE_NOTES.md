@@ -3227,3 +3227,75 @@ test rather than something I went looking for:
   bird's every-third-miss trigger lands on it less often. Both occupancy gates still pass and the run
   census still bands it, but this is the one cost of the change rather than a benefit of it — a thief
   is not relief, and the nest is now the wrong floor. Left as a task rather than folded in here.
+
+## Gen 261 — the record of "every system refined" was forty-eight verdicts about a game that had moved
+
+`system-refinement-ledger.ts` is this repository's own answer to "is the whole game refined?" — a
+verdict per system, gated so a new mechanic cannot ship without someone writing down what state it is
+in. It also carries the rule that condemns it when it goes stale, written at Gen 213:
+
+> *"An entry written before any of that is not evidence about this game; it is evidence about a game
+> that used to be here, indistinguishable from the real thing by reading."*
+
+By its own rule it was due. **Forty-six of the forty-eight entries still said Gen 213.** Since then par
+gave the opening a turn (220), stopped being one rate for every palette and started being read off the
+board rather than the floor number (259), the recovery floor's deal changed (260), and the in-run
+chrome was rebuilt three times (239, 240, 257, 258). The gate passed the whole time, because all it
+ever asked was whether the stamp was at or after the constant — and the constant had not moved. A bar
+nothing has ever failed is a bar nobody has checked, and this was the bar checking the claim that
+everything else had been checked.
+
+### What the walk re-ran rather than re-read
+
+The gate re-checks two kinds of evidence on every run — a census counter's live share, and `gone`/
+`present` tokens grepped against real source — so those forty-eight claims were already true. What is
+**not** re-checked is every other number in the prose, and that is where the staleness was. So:
+
+```
+softlock sweep        430/430 playable, 0 fairness issues, every seed
+endless health        430 sampled floors, 0 issue floors, 997 trait floors, 0 dead
+core replay           384 steps, replayDeterministic true, 0 invariant violations
+run census            peek 0.908, shuffle 0.196, wildMatch 0.042, flashPair 0.042,
+                      undo 0.483, gambit 0.563, pin 0.212, magpie 0.008
+sampled audio         11 manifest keys
+mutator ids           10
+singleton pair keys   1 (`__wild__`)
+```
+
+The first three had last been run against the boards of Gen 205 and the par of Gen 211. This is the
+first time any of them has been checked since par stopped being one rate for every palette.
+
+### What it found wrong
+
+**Three floor-identity surfaces named a palette the board does not deal.** The keystone floor told
+every player *"two suits, long chains"* — true of `trap_hall`, `rush_recall` and `spotlight_hunt`, and
+false of `treasure_gallery`, which the position-nine rotation also tags boss and which deals **four**.
+One boss floor in three, wrong in three sentences at once. The boss mechanics list asserted
+`'Scattered suit deal: short chains, many small pops.'` for every boss floor regardless of archetype.
+And both had the physics backwards: scattered means `SCATTERED_SUIT_CEILING`, which is two suits, and
+two suits is the **widest** reach a pop gets — 0.74 of a four-suit board's turns per pair (Gen 259).
+This file's own narrow-palette branch said so correctly, three lines away from the branch saying the
+opposite about the same board.
+
+**And one of them was mine, from last generation.** The new gate's first run failed on
+`survey_hall/breather`, because the `breather` *tag* is not the `breather` *archetype*: the cycle tags
+floors 3 and 10 breather and gives both `treasure_gallery`. Gen 260 rewrote that block for the
+archetype's new two-suit deal and so told two four-suit floors they dealt two — and left the clear
+line beside it still saying "Four suits", contradicting the two sentences above it. I changed two of
+three strings and did not read the third. Every palette sentence reads `floorPaletteRead` now, and
+`boss-encounters.test.ts` walks all eleven archetypes against the board each one actually deals, in
+both directions, with both branches asserted non-empty so neither goes untested.
+
+**Five numbers in the prose had drifted.** `power.undo_resolve` quoted a miss-rate ceiling of 0.483
+where the census reads 0.471 — so the margin it describes as comfortable is 0.004, not 0.016, and undo
+now sits within a rounding step of the rate that bounds it. `power.pin` called 0.158 "the reference
+miss rate"; the miss rate is 0.471. `feedback.gameplay_hud` stopped at Gen 212 and so said nothing
+about the most-changed surface in the game.
+
+### The stamp
+
+All forty-eight entries stamped Gen 261 and `SYSTEM_REFINEMENT_SWEEP_GENERATION` raised to match.
+Negative control, run: put `power.pin` back to 213 and the gate fails with *"entries predating Gen
+261: expected [ 'power.pin' ] to deeply equal []"*. The constant is what makes the claim cost
+something, and it should be raised again the next time par, the deal or the chrome moves — which, on
+this session's evidence, is roughly every twenty generations.

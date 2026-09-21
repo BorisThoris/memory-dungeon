@@ -6,6 +6,40 @@ import {
 } from './contracts';
 import type { FloorScheduleEntry } from './floor-mutator-schedule';
 import type { MechanicTokenId } from './mechanic-feedback';
+import { SCATTERED_SUIT_CEILING, getSuitDealProfile, suitCountForDeal } from './tile-suit-rules';
+
+/**
+ * How many suits this archetype's deal actually puts on a board, and what that does to a pop.
+ *
+ * Gen 261 added this because three separate strings on a boss floor asserted a palette and each was
+ * wrong for at least one of the archetypes that can carry the boss tag. The keystone floor told every
+ * player "two suits, long chains" - true of `trap_hall`, `rush_recall` and `spotlight_hunt`, and false
+ * of `treasure_gallery`, which the position-nine rotation also tags boss and which deals four. So one
+ * boss floor in three named the wrong palette, in three sentences at once.
+ *
+ * The second half was backwards as well. Both the clear line and the boss mechanics list said a
+ * scattered deal means "many small pops rather than one big one" - but scattered means
+ * `SCATTERED_SUIT_CEILING`, which is two suits, and two suits is the WIDEST reach a pop gets
+ * (measured, Gen 259: a two-suit board costs 0.74 of a four-suit board's turns per pair). This file's
+ * own narrow-palette branch had it right - "the pops here are the widest of the run" - while the boss
+ * branch beside it said the opposite about the same board.
+ *
+ * Read from `SUIT_DEAL_PROFILE_BY_ARCHETYPE` rather than restated, so a floor cannot describe a deal
+ * it is not given.
+ */
+export const paletteMechanicLine = (floorArchetypeId: FloorArchetypeId | null | undefined): string => {
+    const { suits, narrow } = floorPaletteRead(floorArchetypeId);
+    return narrow
+        ? `Two-suit deal: long chains, the widest pops of the run.`
+        : `${suits}-suit deal: shorter chains, many smaller pops.`;
+};
+
+export const floorPaletteRead = (
+    floorArchetypeId: FloorArchetypeId | null | undefined
+): { suits: number; narrow: boolean } => {
+    const suits = suitCountForDeal(getSuitDealProfile(floorArchetypeId));
+    return { suits, narrow: suits <= SCATTERED_SUIT_CEILING };
+};
 
 export type BossEliteEncounterKind = 'boss';
 
@@ -106,11 +140,15 @@ export const getBossEncounterIdentityForFloor = (
              * Gen 213: this line was 'Keystone Pair board anchor.' - the same phantom the comment
              * above BOSS_ENCOUNTER_IDENTITY says appears nowhere in the game. Gen 201 took it out
              * of the constant and left it in the builder that a real floor goes through, so the
-             * mechanics list every boss floor actually produced still named it. What a boss floor
-             * really does to the board is deal the suits scattered, which the constant already
-             * says and this now says too.
+             * mechanics list every boss floor actually produced still named it.
+             *
+             * Gen 261: what replaced it was wrong twice. It said every boss floor deals its suits
+             * scattered - false for the boss-tagged `treasure_gallery` the position-nine rotation
+             * deals, which is clumped - and it said a scattered deal means short chains and many
+             * small pops, which is backwards: scattered is two suits, and two suits is the widest
+             * reach a pop gets. Read off the archetype now (`floorPaletteRead`).
              */
-            'Scattered suit deal: short chains, many small pops.',
+            paletteMechanicLine(entry.floorArchetypeId),
             entry.riskProfile ? `Risk read: ${entry.riskProfile}` : 'Risk read: boss pressure.'
         ]
     };
@@ -178,16 +216,25 @@ export const getFloorIdentityContract = ({
     featuredObjectiveLabel?: string | null;
 }): FloorIdentityContract => {
     if (floorTag === 'boss' || floorArchetypeId === 'rush_recall') {
+        // Gen 261: read the palette rather than asserting it. A boss-tagged `treasure_gallery` deals
+        // four suits, and this branch told it it dealt two.
+        const keystone = floorPaletteRead(floorArchetypeId);
         return {
             id: 'boss_trophy_moment',
             label: 'Keystone chamber',
-            teachingSentence: `A keystone floor deals two suits, so more of what you match is touching its own kind than on an ordinary floor.${objectiveSuffix(featuredObjectiveLabel)}`,
+            teachingSentence: keystone.narrow
+                ? `A keystone floor deals two suits, so more of what you match is touching its own kind than on an ordinary floor.${objectiveSuffix(featuredObjectiveLabel)}`
+                : `This keystone deals the full ${keystone.suits} suits, so a pop reaches less of the board and the pressure is the board's size rather than the chain.${objectiveSuffix(featuredObjectiveLabel)}`,
             counterplaySentence: mutators.includes('short_memorize')
                 ? 'The study window is short here: learn the board in one look, then let the tools carry the floor rather than the memory.'
                 : 'Take the pairs whose suit still has neighbours first; the isolated ones pay the same whenever you take them.',
-            floorClearSentence: 'Keystone cleared. On a scattered deal the score comes from many small pops rather than one big one.',
+            floorClearSentence: keystone.narrow
+                ? 'Keystone cleared. On two suits the pops are the widest of the run; what you chose was the order.'
+                : `Keystone cleared. On ${keystone.suits} suits the score comes from many small pops rather than one big one.`,
             atmosphericFeedback: 'The Keystone chamber goes quiet, but the last matched pair still hangs in the air.',
-            activeReminder: 'Keystone: two suits, long chains.',
+            activeReminder: keystone.narrow
+                ? 'Keystone: two suits, long chains.'
+                : `Keystone: ${keystone.suits} suits, short chains.`,
             warningLevel: 'danger',
             tokens: ['objective', 'risk', 'reward', 'momentum']
         };
@@ -237,14 +284,28 @@ export const getFloorIdentityContract = ({
     }
 
     if (floorTag === 'breather' || floorArchetypeId === 'breather') {
+        /*
+         * Gen 261: read the palette here too. The `breather` TAG is not the `breather` ARCHETYPE -
+         * the cycle tags floors 3 and 10 breather and gives both of them `treasure_gallery`, which is
+         * clumped and deals four suits. Gen 260 rewrote this block for the archetype's new two-suit
+         * deal and so told those two floors they dealt two, and left the clear line below still
+         * saying four, contradicting the two sentences above it. All three read the board now.
+         */
+        const rest = floorPaletteRead(floorArchetypeId);
         return {
             id: 'recovery_study_room',
             label: 'Recovery study',
-            teachingSentence: `A breather asks for less and deals two suits, so the clumps are wide and a broken chain is cheap to rebuild.${objectiveSuffix(featuredObjectiveLabel)}`,
+            teachingSentence: rest.narrow
+                ? `A breather asks for less and deals two suits, so the clumps are wide and a broken chain is cheap to rebuild.${objectiveSuffix(featuredObjectiveLabel)}`
+                : `A breather asks for less, and this one deals the full ${rest.suits} suits, so the pops are narrower and the floor is a place to bank rather than to chain.${objectiveSuffix(featuredObjectiveLabel)}`,
             counterplaySentence: 'Charges do not carry a premium for being saved. Spend them on the floor that is easy to read and bank the score.',
-            floorClearSentence: 'Breather cleared. Four suits means the pops were narrow, but the floor never pushed back.',
+            floorClearSentence: rest.narrow
+                ? 'Breather cleared. Two suits means the pops were wide, and the floor never pushed back.'
+                : `Breather cleared. ${rest.suits} suits means the pops were narrow, but the floor never pushed back.`,
             atmosphericFeedback: 'The study lamps keep burning after you leave, holding the next route in soft focus.',
-            activeReminder: 'Breather: two wide suits, cheap floor to rebuild a chain on.',
+            activeReminder: rest.narrow
+                ? 'Breather: two wide suits, cheap floor to rebuild a chain on.'
+                : `Breather: ${rest.suits} suits, cheap floor to bank on.`,
             warningLevel: 'safe',
             tokens: ['safe', 'hidden_known', 'reward', 'momentum']
         };
