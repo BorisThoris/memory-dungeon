@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-21T15:21:52.955Z",
+  "generatedAt": "2026-09-21T15:27:37.140Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -287,7 +287,7 @@
         "bytes": 143993,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-21T15:21:22.845Z"
+        "capturedAt": "2026-09-21T15:27:16.834Z"
       },
       {
         "profile": "desktop",
@@ -296,7 +296,7 @@
         "bytes": 134991,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-21T15:21:27.845Z"
+        "capturedAt": "2026-09-21T15:27:21.491Z"
       },
       {
         "profile": "full",
@@ -305,7 +305,7 @@
         "bytes": 112331,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-21T15:21:48.239Z"
+        "capturedAt": "2026-09-21T15:27:32.416Z"
       },
       {
         "profile": "mobile",
@@ -314,7 +314,7 @@
         "bytes": 50945,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-21T15:21:35.907Z"
+        "capturedAt": "2026-09-21T15:27:25.950Z"
       },
       {
         "profile": "og",
@@ -323,7 +323,7 @@
         "bytes": 106849,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-21T15:21:52.781Z"
+        "capturedAt": "2026-09-21T15:27:36.990Z"
       }
     ]
   },
@@ -387,7 +387,7 @@
   "metrics": {
     "sourceFiles": 1101,
     "testFiles": 478,
-    "sourceLines": 169025,
+    "sourceLines": 169084,
     "largestDirectories": [
       {
         "directory": "src",
@@ -426,10 +426,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "16c04d12",
-    "lastCommitDate": "2026-09-21T15:16:25Z",
-    "lastCommitSubject": "Gen 246: classified the remaining 108, then caught the classification wrong",
-    "commitCount": 1534,
+    "head": "b800cd85",
+    "lastCommitDate": "2026-09-21T15:23:25Z",
+    "lastCommitSubject": "Merge remote-tracking branch 'origin/main' into claude/main-branch-code-review-5w7bph",
+    "commitCount": 1537,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
