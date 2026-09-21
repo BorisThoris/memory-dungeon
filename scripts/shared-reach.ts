@@ -51,6 +51,8 @@ export const SHARED_REACH_EXEMPTIONS: Record<string, string> = {
     'steam-rich-presence-tokens.ts': 'Token text the Steam Partner-site generator emits; the game sets presence through rich-presence.ts.',
 
     // Records and contract tables whose consumer is a test.
+    'controller-back-contract.ts':
+        'What the pad\u2019s B button does on every view, read by the release checklist\u2019s `controller-support` row and by `e2e/controller-navigation.spec.ts`. A record on purpose: the screens already know their own back target through the store, and making them look it up here would add indirection without adding truth. What it buys is that the claim and the behaviour are one list (Gen 256).',
     'color-vision.ts': 'Colour-distance maths the palette tests check the shipped palette against.',
     'difficulty-profile.ts': 'The shipped tuning profile written down so a change to the curve has to change this too.',
     'gameplay-interaction-graph.ts': 'Validates the interaction graph JSON against the feedback facts.',

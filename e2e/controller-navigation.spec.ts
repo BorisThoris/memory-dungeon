@@ -1,5 +1,6 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { VIEW_STATES, type ViewState } from '../src/shared/contracts';
+import { CONTROLLER_BACK_CONTRACT } from '../src/shared/controller-back-contract';
 import { openPlayablePathFixture } from './playablePathHelpers';
 import { readFrameHiddenTileCount } from './tileBoardGameFlow';
 import {
@@ -226,15 +227,13 @@ test.describe('controller navigation', () => {
         onScreen: (page) => page.locator(`[role="region"][aria-label="${label}"]`)
     });
 
-    const CONTENT_BY_VIEW: Record<ViewState, BackCase | { readonly exempt: string }> = {
-        boot: { exempt: 'A frame before hydration finishes, not a screen a player is ever standing on.' },
-        menu: { exempt: 'The root. Back from the root has nowhere to go; leaving the game is the window close.' },
-        playing: {
-            exempt:
-                'The board is where B is NOT a leave - a stray press must not cost a run. The way out is ' +
-                'Start, and the pause menu it opens answers B itself (an OverlayModal with onEscape=resume). ' +
-                'The board on a pad is covered above; the in-run overlays are covered below.'
-        },
+    /*
+     * Which views have a back path, and why the rest do not, is `CONTROLLER_BACK_CONTRACT` - the
+     * same table the release checklist proves its `controller-support` row against. This spec only
+     * says HOW to arrive at each one and what proves it is on screen. One list, read twice: the
+     * checklist asks whether it is complete and says something, this asks whether the app agrees.
+     */
+    const ARRIVALS: Partial<Record<ViewState, BackCase>> = {
         collection: metaScreen('Collection'),
         profile: metaScreen('Profile'),
         inventory: metaScreen('Inventory'),
@@ -261,22 +260,19 @@ test.describe('controller navigation', () => {
     };
 
     /**
-     * The census has to be complete, and `Record<ViewState, ...>` does not make it so HERE.
+     * Every view the contract says has a back path needs a way to get to it here.
      *
-     * Nothing typechecks `e2e/` - it is not in `tsconfig.json`, and Playwright transpiles each
-     * spec without checking types - so the Record annotation above is documentation, not a
-     * constraint. Deleting the `gameOver` row and running `tsc` was the negative control that
-     * proved it: clean. So the completeness claim is asserted at runtime, against the same
-     * `VIEW_STATES` the app itself is typed from.
+     * This is asserted at runtime rather than by the type, because `Partial<Record<...>>` cannot
+     * demand it and nothing typechecked `e2e/` before Gen 253 anyway - deleting a row and running
+     * `tsc` came back clean, which is how that was found. A view added to the contract with a real
+     * leave and no arrival would otherwise be silently unexercised.
      */
-    test('the census covers every view the app can show', () => {
-        expect([...Object.keys(CONTENT_BY_VIEW)].sort()).toEqual([...VIEW_STATES].sort());
+    test('every view the contract says answers back is exercised here', () => {
+        const owed = VIEW_STATES.filter((view) => CONTROLLER_BACK_CONTRACT[view].leavesTo !== null);
+        expect([...owed].sort()).toEqual([...(Object.keys(ARRIVALS) as ViewState[])].sort());
     });
 
-    for (const [view, entry] of Object.entries(CONTENT_BY_VIEW) as [ViewState, (typeof CONTENT_BY_VIEW)[ViewState]][]) {
-        if ('exempt' in entry) {
-            continue;
-        }
+    for (const [view, entry] of Object.entries(ARRIVALS) as [ViewState, BackCase][]) {
         test(`a pad reaches ${view} and B comes back out`, async ({ page }) => {
             test.setTimeout(180_000);
             await installFakePad(page);

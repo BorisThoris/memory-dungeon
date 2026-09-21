@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2556,
-    "codeFileCount": 896,
-    "exportedSymbolCount": 2706,
+    "trackedFileCount": 2549,
+    "codeFileCount": 897,
+    "exportedSymbolCount": 2710,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6850
+    "relationshipCount": 6859
   },
   "inventory": [
     {
@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 472135,
-      "sha256": "284f57a19a0e2ccca0c3391ed57377af399a1715edef054f469d1df351c34cd9"
+      "bytes": 476642,
+      "sha256": "667b46861d4affa70ac557038f581176f0c83c6af8ea9f1d55f6d9ff0adb6a72"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "042b1a6ec99835dbfdaacd6029c9d79f3300bb3be88a9412e0a5838332d3a602"
+      "sha256": "46ce18fde226d97ccfc6f4966f731619177e2d9871b9715e6c1074727ea8b150"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2259,8 +2259,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 8681,
-      "sha256": "76ff5241253d2c9c83ec6831d73fafda2d465afb7c685c966983ba266eaa8721"
+      "bytes": 8692,
+      "sha256": "00144693a3506ecd9401f95c5227b6d3f29341006d488421ffb1b1860e32e4c2"
     },
     {
       "path": "docs/REMOVED_DECOY.md",
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "4eab4476ad2fa1f3a5fe5e3083f31c704a0cc4d91de3e666dc53f736932decb4"
+      "sha256": "93756991a8ce061020c68008641813607db540240d00acbfc453e87651a219d3"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3777,8 +3777,8 @@
     {
       "path": "e2e/controller-navigation.spec.ts",
       "category": "test",
-      "bytes": 14478,
-      "sha256": "945e27789c4e7406af7131ce4b7c73537664fc6bffa446c428ebcc15395e032e"
+      "bytes": 14303,
+      "sha256": "96f12633ae879a17c7bd735269cd32c11dfea452f0874b1d127dd02f43b5aab3"
     },
     {
       "path": "e2e/cyp-review-capture.spec.ts",
@@ -4309,54 +4309,6 @@
       "sha256": "24b13d8ad32ef882a7e51484c80353a418c5a0ee8c20318a2df02a9917d01972"
     },
     {
-      "path": "project-media/capture.json",
-      "category": "configuration",
-      "bytes": 1305,
-      "sha256": "f8591fb2e1ee0e710e42fd313bfdbf167434ce5298647c31d564bea2633f720b"
-    },
-    {
-      "path": "project-media/card.jpg",
-      "category": "asset",
-      "bytes": 143993,
-      "sha256": "53d35838045218ac5dd39fd563048c6600b96fba3d57cd701a4147e34a717161"
-    },
-    {
-      "path": "project-media/desktop.jpg",
-      "category": "asset",
-      "bytes": 134991,
-      "sha256": "2c9f688d8194a3b31c08f0ed8d923fa71339e38563cdcf6338f912514274ff26"
-    },
-    {
-      "path": "project-media/full.jpg",
-      "category": "asset",
-      "bytes": 112331,
-      "sha256": "5edf12a3c997bf303bcd77487a977e1802d195c98fd3743733cf89a0340c4085"
-    },
-    {
-      "path": "project-media/icons.json",
-      "category": "configuration",
-      "bytes": 366,
-      "sha256": "e566063ac9f9c785deb4baed90aeb891c151150f558b762a0da53307f0cc6f55"
-    },
-    {
-      "path": "project-media/mobile.jpg",
-      "category": "asset",
-      "bytes": 50945,
-      "sha256": "3f40fa07871de1bb43834f7fe3e6090fed7a748535f53bbe17df2b79f37f85b3"
-    },
-    {
-      "path": "project-media/og.jpg",
-      "category": "asset",
-      "bytes": 106849,
-      "sha256": "999df7e3017afd590e8497c7a07f887962def879cf5cef32aa8b86d0ebc0eb92"
-    },
-    {
-      "path": "project.meta.json",
-      "category": "configuration",
-      "bytes": 11783,
-      "sha256": "6a857ec9caba9dcffb53445b27c668d030b15f284c58b42290c63080d801751d"
-    },
-    {
       "path": "public/apple-touch-icon.png",
       "category": "asset",
       "bytes": 1637,
@@ -4485,8 +4437,8 @@
     {
       "path": "scripts/ai-repo-model.mjs",
       "category": "script",
-      "bytes": 26617,
-      "sha256": "1425ab0d29d71b1a86f9017f6a4f9ec691324cf8c80a366d60a7a7836036f0f3"
+      "bytes": 27831,
+      "sha256": "0b8af3b6f54e875fc8e57acbb31bc3d0dc8f06c590ab290b5b7fcd2b2b9873c9"
     },
     {
       "path": "scripts/ast-allowlist.json",
@@ -4743,8 +4695,8 @@
     {
       "path": "scripts/audit-generation-claims.ts",
       "category": "script",
-      "bytes": 9612,
-      "sha256": "d531f353387c38dd668bc3df9417d1f273bbf562c7eac8618795ed4030d8b16c"
+      "bytes": 10636,
+      "sha256": "4520da8f80b95909459fd230ef4c5ba060202cafe3af43c47a6d173bc6ce4afa"
     },
     {
       "path": "scripts/audit-renderer-assets.mjs",
@@ -5367,8 +5319,8 @@
     {
       "path": "scripts/shared-reach.ts",
       "category": "script",
-      "bytes": 9488,
-      "sha256": "b24c3a8b4b5fc8392143616d0ce32c7f5dbdb205dff9d79775e85e87fb25518d"
+      "bytes": 9925,
+      "sha256": "3eeefc5cead359d59cf927a1f36ef05870c4472608f4d444633614ae420af4a9"
     },
     {
       "path": "scripts/sim-cascade.ts",
@@ -11425,6 +11377,12 @@
       "sha256": "8016478f1d490d74ceda0d86aaaef80a2f459f492e53ec4643f576ea16fe9883"
     },
     {
+      "path": "src/shared/controller-back-contract.ts",
+      "category": "source",
+      "bytes": 3064,
+      "sha256": "6b725a26bb6b7a4049ae967fbe5b74ed564e4dac772eb07088b820f1773427a8"
+    },
+    {
       "path": "src/shared/copy-locality.test.ts",
       "category": "test",
       "bytes": 3778,
@@ -12411,14 +12369,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 39178,
-      "sha256": "1c99c48b4612127b265ef7c1e139273270fc9817f821cbc41b6bcb2d7653bd4f"
+      "bytes": 40794,
+      "sha256": "47b13692b5d7b24a4482f867d02077dd8d24ffea07c2e93236241cabd81cd8cb"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 17119,
-      "sha256": "84a9d57ee80748c3fd504b1739d46421a567bcf403ec01f4a098680695e5d9a9"
+      "bytes": 17130,
+      "sha256": "9a1573dbfe37cb596dc87b5d7658e10121ba91da4e339f36e90a95b1bd4dfd63"
     },
     {
       "path": "src/shared/renderer-bundle-budget-script.test.ts",
@@ -26294,6 +26252,7 @@
         "file:src/shared/personal-best.test.ts",
         "file:src/shared/playthrough-solver.test.ts",
         "file:src/shared/recall-rules.test.ts",
+        "file:src/shared/release-checklist.test.ts",
         "file:src/shared/run-creation-rules.test.ts",
         "file:src/shared/run-history.test.ts",
         "file:src/shared/run-settings-rules.test.ts",
@@ -26332,6 +26291,25 @@
       "imports": [],
       "exports": [],
       "testedBy": []
+    },
+    {
+      "id": "file:src/shared/controller-back-contract.ts",
+      "path": "src/shared/controller-back-contract.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 65,
+      "imports": [
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_CONTRACT",
+        "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_VIEWS",
+        "symbol:src/shared/controller-back-contract.ts#ControllerBackRow",
+        "symbol:src/shared/controller-back-contract.ts#findUnexplainedControllerExemptions"
+      ],
+      "testedBy": [
+        "file:src/shared/release-checklist.test.ts"
+      ]
     },
     {
       "id": "file:src/shared/copy-locality.test.ts",
@@ -29556,7 +29534,7 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 678,
+      "lineCount": 711,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
@@ -29571,6 +29549,8 @@
         "file:src/shared/cascade-balance-simulation.ts",
         "file:src/shared/chunk-break-rules.ts",
         "file:src/shared/content-security-policy.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/controller-back-contract.ts",
         "file:src/shared/desktop-api-boundary.ts",
         "file:src/shared/game-core.ts",
         "file:src/shared/game.ts",
@@ -44966,6 +44946,38 @@
       "file": "src/shared/contracts.ts",
       "line": 162,
       "endLine": 162
+    },
+    {
+      "id": "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_CONTRACT",
+      "name": "CONTROLLER_BACK_CONTRACT",
+      "kind": "value",
+      "file": "src/shared/controller-back-contract.ts",
+      "line": 27,
+      "endLine": 52
+    },
+    {
+      "id": "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_VIEWS",
+      "name": "CONTROLLER_BACK_VIEWS",
+      "kind": "value",
+      "file": "src/shared/controller-back-contract.ts",
+      "line": 55,
+      "endLine": 57
+    },
+    {
+      "id": "symbol:src/shared/controller-back-contract.ts#ControllerBackRow",
+      "name": "ControllerBackRow",
+      "kind": "interface",
+      "file": "src/shared/controller-back-contract.ts",
+      "line": 19,
+      "endLine": 25
+    },
+    {
+      "id": "symbol:src/shared/controller-back-contract.ts#findUnexplainedControllerExemptions",
+      "name": "findUnexplainedControllerExemptions",
+      "kind": "value",
+      "file": "src/shared/controller-back-contract.ts",
+      "line": 60,
+      "endLine": 64
     },
     {
       "id": "symbol:src/shared/cosmetic-ids.ts#COSMETIC_IDS",
@@ -66918,6 +66930,30 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/controller-back-contract.ts->symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_CONTRACT",
+      "source": "file:src/shared/controller-back-contract.ts",
+      "target": "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_CONTRACT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/controller-back-contract.ts->symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_VIEWS",
+      "source": "file:src/shared/controller-back-contract.ts",
+      "target": "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_VIEWS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/controller-back-contract.ts->symbol:src/shared/controller-back-contract.ts#ControllerBackRow",
+      "source": "file:src/shared/controller-back-contract.ts",
+      "target": "symbol:src/shared/controller-back-contract.ts#ControllerBackRow",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/controller-back-contract.ts->symbol:src/shared/controller-back-contract.ts#findUnexplainedControllerExemptions",
+      "source": "file:src/shared/controller-back-contract.ts",
+      "target": "symbol:src/shared/controller-back-contract.ts#findUnexplainedControllerExemptions",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/cosmetic-ids.ts->symbol:src/shared/cosmetic-ids.ts#COSMETIC_IDS",
       "source": "file:src/shared/cosmetic-ids.ts",
       "target": "symbol:src/shared/cosmetic-ids.ts#COSMETIC_IDS",
@@ -84452,6 +84488,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/controller-back-contract.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/controller-back-contract.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/cosmetic-reachability.test.ts->src/shared/cosmetics.ts",
       "source": "file:src/shared/cosmetic-reachability.test.ts",
       "target": "file:src/shared/cosmetics.ts",
@@ -87233,6 +87275,18 @@
       "id": "imports:src/shared/release-checklist.test.ts->src/shared/content-security-policy.ts",
       "source": "file:src/shared/release-checklist.test.ts",
       "target": "file:src/shared/content-security-policy.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/release-checklist.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/release-checklist.test.ts->src/shared/controller-back-contract.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/shared/controller-back-contract.ts",
       "kind": "imports"
     },
     {
@@ -94381,6 +94435,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/run-creation-rules.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/run-creation-rules.test.ts",
@@ -94540,6 +94600,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/version-gate.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/version-gate.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/controller-back-contract.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/shared/controller-back-contract.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
       "kind": "tested_by"
     },
     {

@@ -19,7 +19,7 @@
  *      true when it was written and became a lie the moment Gen 184 shipped. The current generation
  *      is the highest one the repository mentions, so this needs no constant to keep up to date.
  */
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { extname, join, relative, sep } from 'node:path';
 
 const ROOT = join(import.meta.dirname, '..');
@@ -95,8 +95,29 @@ export const readRepositoryFiles = (): RepositoryFile[] =>
         text: readFileSync(file, 'utf8')
     }));
 
+/**
+ * Paths a claim may name that `collectFiles` deliberately does not walk.
+ *
+ * Skipping a directory is about not READING it - `.ai/repo-model.json` is several megabytes of
+ * generated JSON with no prose in it worth scanning. But the skip also removed those paths from
+ * the set a claim resolves against, so any sentence naming the model reported "no file named
+ * .ai/repo-model.json" about a file sitting right there and tracked in git. Found in Gen 256 by
+ * writing the first comment that ever said it out loud. Existence is checked on disk; nothing is
+ * assumed present because it is listed here.
+ */
+const UNSCANNED_CLAIMABLE_PATHS = ['.ai/repo-model.json', '.ai/README.md', '.ai/GAMEPLAY_MIGRATION.md'];
+
+const existingUnscannedPaths = (): string[] =>
+    UNSCANNED_CLAIMABLE_PATHS.filter((file) => existsSync(join(ROOT, file)));
+
 export const auditGenerationClaims = (files: readonly RepositoryFile[] = readRepositoryFiles()): GenerationClaimReport => {
-    const paths = new Set([...files.map((file) => file.path.slice(file.path.lastIndexOf('/') + 1)), ...files.map((file) => file.path)]);
+    const unscanned = existingUnscannedPaths();
+    const paths = new Set([
+        ...files.map((file) => file.path.slice(file.path.lastIndexOf('/') + 1)),
+        ...files.map((file) => file.path),
+        ...unscanned,
+        ...unscanned.map((file) => file.slice(file.lastIndexOf('/') + 1))
+    ]);
     const identifiers = new Set(
         files
             .filter((file) => SOURCE_EXTENSIONS.has(extname(file.path)))

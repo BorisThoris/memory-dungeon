@@ -2814,3 +2814,75 @@ there. Removed.
 One of the nine advisories was mine: `yarn upgrade brace-expansion` on a package this project does
 not depend on ADDED it to `dependencies`, and depcheck caught it on the next run. A tool that tells
 you what you just did wrong is worth more than the ten minutes it cost.
+
+## Gen 255 — the repo model treated two generated files as inputs
+
+`fullcheck` got past security and hygiene and stopped at `gate:systems`:
+
+```
+Error: .ai/repo-model.json is stale. Run yarn ai:model.
+```
+
+The whole drift was two sha256 entries: `project-media/capture.json` and `project.meta.json`. Both
+are **outputs** — `scripts/capture-project-shots.mjs` and `scripts/generate-project-meta.mjs` write
+them and `.github/workflows/project-meta-refresh.yml` commits the result back on a schedule. The
+last three `[meta-bot]` commits touched those two paths and nothing else, so **every scheduled bot
+run leaves `gate:systems` red on `main`** until a person happens to regenerate.
+
+`GENERATED_PATHS` in `ai-repo-model.mjs` already existed for exactly this, holding one entry: the
+model itself, excluded because the model cannot be part of what proves the model current. The same
+argument covers these two, one step removed. Checked before excluding — nothing under either path
+is imported, so no edge in the graph passes through them; an exclusion that hides a real dependency
+would be worse than the churn it removes.
+
+Both controls run. Positive: edit `project.meta.json` and `ai:model --check` stays green. Negative:
+append a line to `src/shared/contracts.ts` and it reports stale, which is the half that matters.
+
+## Gen 256 — the controller row was proved by something that could not prove it
+
+The release checklist carries *"Every screen is reachable on a controller, not just the board"*,
+owner `repo`, and repo rows are re-proved against live modules. This is what proved it:
+
+```ts
+expect(actions).toContain('confirm');
+expect(actions).toContain('up');
+expect(GAMEPAD_STICK_DEADZONE).toBeGreaterThan(0);
+```
+
+Three true facts about a pure function that never sees a screen. The row read `done` through the
+entire period when B opened nothing back up on seven views — because the mapping was never what
+was broken, and nothing here could have noticed.
+
+`src/shared/controller-back-contract.ts` now holds the claim as a row per `ViewState`: where B
+lands, or the reason it is deliberately not a leave. Two readers, which is the point. The checklist
+verifier asserts the table covers every view, that no row claims an exemption without saying why,
+that more than half the views actually leave (a table where nothing leaves would satisfy the first
+two and mean nothing), and that every leave names a view that exists — plus `b → back`, the first
+link, which the old verifier never checked either. `controller-navigation.spec.ts` reads the same
+table and drives a real pad at the real screens, and asserts every view the contract says answers
+back has an arrival here, so a row cannot be added and left unexercised.
+
+Negative controls, both run: make one view exempt without a reason and the checklist fails with
+`a view claims no back path and gives no reason: [ 'codex' ]`; point a leave at a view that does
+not exist and it fails with `profile leaves to a view that does not exist`.
+
+The row's evidence moved from `gamepad-input.ts` to the contract. `evidence` is only checked for
+non-emptiness, so it is a pointer for a reader rather than a constraint — worth knowing when
+reading any other row on that list.
+
+### Two things the new contract's own gates caught
+
+`audit:shared-reach` refused `controller-back-contract.ts` as a shared module no shipping entry
+point reaches — correctly, since only the checklist test and the e2e spec import it. It is exempt
+by name in the "records and contract tables whose consumer is a test" section, beside
+`release-checklist.ts` itself, with the reason spelled out: the screens already know their own back
+target through the store, and making them look it up would add indirection without adding truth.
+What the table buys is that the claim and the behaviour are one list.
+
+`audit:generation-claims` then reported `no file named .ai/repo-model.json` about a file sitting
+right there and tracked in git. `.ai` is in the auditor's `SKIPPED_DIRECTORIES` — not reading three
+megabytes of generated JSON is sensible, but the skip also removed those paths from the set a claim
+resolves against, so **no comment anywhere could name the repo model**. Found by writing the first
+one that ever did. The auditor now resolves against those paths while still not scanning them, with
+existence checked on disk rather than assumed. Negative control: point the same sentence at
+`.ai/no-such-model.json` and it reports `no file named .ai/no-such-model.json`.
