@@ -1,0 +1,21 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "allowImportingTsExtensions": true,
+        "paths": {
+            "@cross-repo-libs/notifications": ["./packages/notifications/src/index.ts"],
+            "/src/*": ["./src/*"]
+        }
+    },
+    "include": [
+        "src",
+        "vite.config.mts",
+        "tsup.config.ts",
+        "vitest.setup.ts",
+        "packages/notifications/src/**/*.ts",
+        "packages/notifications/src/**/*.tsx",
+        "scripts/run-mechanics-appendix.ts",
+        "e2e",
+        "playwright.config.ts"
+    ]
+}

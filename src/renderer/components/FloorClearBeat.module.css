@@ -10,7 +10,19 @@
 
 .beat {
     position: absolute;
-    inset: 0;
+    /*
+     * Inset by the chrome the shell publishes, not by the stage's raw edges. The beat is read over
+     * a live board with the HUD above it and the dock below, and `inset: 0` centred it in the whole
+     * stage as though neither were there - on a 390x844 phone that put the title straight through
+     * the HUD's floor row and the par line under the run bar. It went unseen because the watermark
+     * was accidentally in the flow (see `.colophon > :not(.watermark)` below) and its 406px were
+     * acting as a spacer that happened to push the title clear; fixing the watermark took the
+     * spacer away and the collision became visible, which is the only reason it is fixed here too.
+     * `--gameplay-hud-top-clearance` and `--gameplay-dock-bottom-clearance` are what
+     * `useGameplayChromeClearance` measures for exactly this, and four other rules already read
+     * them; this one had been guessing.
+     */
+    inset: var(--gameplay-hud-top-clearance, 0px) 0px var(--gameplay-dock-bottom-clearance, 0px);
     z-index: 6;
     display: grid;
     place-items: center;
@@ -52,7 +64,19 @@
     user-select: none;
 }
 
-.colophon > * {
+/*
+ * Everything EXCEPT the watermark, and the exception is the whole point.
+ *
+ * This rule exists to lift the real children above the watermark, and as `.colophon > *` it also
+ * matched the watermark itself - same specificity as `.watermark` (one class each) and later in
+ * the file, so it won, and `position: absolute` became `position: relative`. The floor's numeral
+ * stopped being a watermark behind the text and became a 406px block in the flow above it,
+ * pushing the card to 719px in a stage 691px tall: the beat then overhung the stage's clip and the
+ * "Downstairs:" note - the line that tells you who you are about to share a room with - was cut
+ * off the bottom on a 1440x900 desktop. One `:not()` is the difference between a watermark and a
+ * banner, and nothing said which one it was rendering.
+ */
+.colophon > :not(.watermark) {
     position: relative;
 }
 

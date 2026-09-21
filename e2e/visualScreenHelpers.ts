@@ -460,7 +460,9 @@ export async function writeHudLayoutDiagnostics(page: Page, outDir: string): Pro
                 clientHeight: el.clientHeight,
                 maxHeight: cs.maxHeight,
                 minHeight: cs.minHeight,
-                offsetHeight: el.offsetHeight,
+                // Playwright hands back `HTMLElement | SVGElement`, and an SVG has no
+                // `offsetHeight` - it would read `undefined` into the diagnostics rather than fail.
+                offsetHeight: el instanceof HTMLElement ? el.offsetHeight : el.getBoundingClientRect().height,
                 scrollHeight: el.scrollHeight,
                 tagName: el.tagName,
                 testId: el.getAttribute('data-testid') ?? ''

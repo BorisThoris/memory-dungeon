@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, type ReactNode } from 'react';
 import { acquireToolbarRovingPause } from '../a11y/toolbarRoving';
 import { acquireOverlayModalBodyState } from '../a11y/overlayModalBodyState';
 import { getOverlayDecisionPolicyRow } from '../../shared/overlay-decision-policy';
+import { targetAllowsEscapeToLeave } from '../hooks/useEscapeLeaves';
 import { useModalFocusTrap } from '../hooks/useModalFocusTrap';
 import { MetaFrame, OverlayActionDock, ScreenTitle } from '../ui';
 import type { OverlayActionPlacement } from '../ui';
@@ -44,11 +45,17 @@ interface OverlayModalProps {
     /** Optional keyboard back path for overlays with an existing safe cancel/resume action. */
     onEscape?: () => void;
     /**
-     * `margin`: the in-run surface of "The Margin" — ink, one hairline of gold, the title in
-     * display type and the actions as outlined words. Used by the pause dialog so it reads as
-     * part of the run shell rather than as a meta screen dropped over it.
+     * `margin` (the default): the surface of "The Margin" — ink, one hairline of gold, the title
+     * in display type and the actions as outlined words — so a dialog reads as a page of the
+     * same book as the shell it opens over. `default` is the older plated surface, kept for
+     * anything not yet redrawn.
      */
     surface?: 'default' | 'margin';
+    /**
+     * A wider page for dialogs that carry a table or a form (the run setup sheet, the shortcut
+     * list) rather than a sentence and a choice. Margin surface only.
+     */
+    wide?: boolean;
 }
 
 const modalKindFor = (actions: readonly ModalAction[], hasChildren: boolean): 'alert' | 'decision' | 'sheet' => {
@@ -120,23 +127,6 @@ const resolveActionPlacement = (
     return hasChildren ? 'dock' : 'rail';
 };
 
-const targetAllowsOverlayEscape = (target: EventTarget | null): boolean => {
-    if (!(target instanceof HTMLElement)) {
-        return true;
-    }
-
-    if (target.isContentEditable || target.closest('textarea, select')) {
-        return false;
-    }
-
-    const input = target.closest('input');
-    if (!input) {
-        return true;
-    }
-
-    return ['button', 'checkbox', 'radio', 'reset', 'submit'].includes(input.type);
-};
-
 const OverlayModal = ({
     title,
     subtitle,
@@ -148,7 +138,8 @@ const OverlayModal = ({
     headerPlateTone = 'neutral',
     actionPlacement = 'auto',
     onEscape,
-    surface = 'default'
+    surface = 'margin',
+    wide = false
 }: OverlayModalProps) => {
     const modalRef = useRef<HTMLElement | null>(null);
     const titleId = useId();
@@ -171,7 +162,7 @@ const OverlayModal = ({
                 !event.altKey &&
                 !event.ctrlKey &&
                 !event.metaKey &&
-                targetAllowsOverlayEscape(event.target)
+                targetAllowsEscapeToLeave(event.target)
             ) {
                 event.preventDefault();
                 onEscape();
@@ -201,8 +192,11 @@ const OverlayModal = ({
                 aria-modal="true"
                 className={`${styles.modal} ${overlayToneClass(headerPlateTone)} ${
                     actions.length === 0 ? styles.modalNoActions : ''
-                } ${surface === 'margin' ? styles.modalMargin : ''}`.trim()}
+                } ${surface === 'margin' ? styles.modalMargin : ''} ${
+                    surface === 'margin' && wide ? styles.modalMarginWide : ''
+                }`.trim()}
                 data-surface={surface}
+                data-tone={headerPlateTone}
                 data-action-placement={resolvedActionPlacement}
                 data-modal-kind={modalKind}
                 data-overlay-size={modalKind}
@@ -215,7 +209,19 @@ const OverlayModal = ({
                 tabIndex={-1}
             >
                 <div className={styles.mainColumn}>
-                    {ornamentalHeaderPlate && quietHeaderPlate ? (
+                    {/* The Margin has no plates: the title is display type over one hairline,
+                        whatever tone the caller asked for. The quiet-header hook stays so the
+                        floor-clear checks still find their heading. */}
+                    {surface === 'margin' ? (
+                        <div
+                            className={styles.marginHead}
+                            data-testid={ornamentalHeaderPlate && quietHeaderPlate ? 'overlay-modal-quiet-header' : undefined}
+                        >
+                            <ScreenTitle as="h3" className={styles.title} id={titleId} role="modal">
+                                {title}
+                            </ScreenTitle>
+                        </div>
+                    ) : ornamentalHeaderPlate && quietHeaderPlate ? (
                         <div
                             className={`${styles.headerQuietBand} ${quietHeaderToneClass(headerPlateTone)}`.trim()}
                             data-testid="overlay-modal-quiet-header"

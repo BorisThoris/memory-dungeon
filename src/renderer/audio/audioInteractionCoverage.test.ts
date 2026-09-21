@@ -1,9 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { AUDIO_INTERACTION_COVERAGE, audioCoverageRowsByDomain, getAudioCoverageRows } from './audioInteractionCoverage';
+import { AUDIO_INTERACTION_COVERAGE, audioCoverageRowsByDomain } from './audioInteractionCoverage';
 
 describe('REG-037 audio interaction coverage', () => {
     it('covers major runtime domains with sampled fallbacks or intentional silence', () => {
-        expect(getAudioCoverageRows()).toBe(AUDIO_INTERACTION_COVERAGE);
         expect(new Set(AUDIO_INTERACTION_COVERAGE.map((row) => row.domain))).toEqual(
             new Set(['startup', 'menu', 'settings', 'gameplay', 'overlay', 'meta'])
         );

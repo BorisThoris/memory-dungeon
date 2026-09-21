@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2551,
-    "codeFileCount": 893,
-    "exportedSymbolCount": 2704,
+    "trackedFileCount": 2552,
+    "codeFileCount": 900,
+    "exportedSymbolCount": 2713,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6837
+    "relationshipCount": 6871
   },
   "inventory": [
     {
@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 406105,
-      "sha256": "75e04607a4ddf37ab475b2d38fedabae0f0c9d2478f2a6b8fdda4b53c456bea8"
+      "bytes": 485364,
+      "sha256": "6fb94e99c8d8501a79065071cfaf6881822da866f5af8be1029d3a77c7d12d35"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -309,8 +309,8 @@
     {
       "path": "docs/design/game-view-redesign.md",
       "category": "documentation",
-      "bytes": 4455,
-      "sha256": "b43ea1d45bf4c8dadf2c3be700e4dc4ae9ed362e54bd8ebeb770d495843b4d5d"
+      "bytes": 7968,
+      "sha256": "8dfef98a46666945befe15eae3df417b59330d1d419fa8228be186fcf71b12e8"
     },
     {
       "path": "docs/DOC_CHECKBOX_INVENTORY.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "3a013ca7af954f7df7c54079e97a09f2684d6f52d49a35fe88b6ac77e22b71a0"
+      "sha256": "be89456ce75ed6264ae4da54b18010aab8478f780106a1bf3577d2f9489ee4e7"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2259,8 +2259,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 8681,
-      "sha256": "76ff5241253d2c9c83ec6831d73fafda2d465afb7c685c966983ba266eaa8721"
+      "bytes": 8692,
+      "sha256": "00144693a3506ecd9401f95c5227b6d3f29341006d488421ffb1b1860e32e4c2"
     },
     {
       "path": "docs/REMOVED_DECOY.md",
@@ -2362,13 +2362,13 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "9d4190a6ebc6d6e7b6c2d148fb25e62c983ec1c546be06e1be1858582cabcaec"
+      "sha256": "c8533f560b5606e931e8d48b30103e82c341ef205d9b5d463c28ad31bc980fc6"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
       "category": "documentation",
-      "bytes": 492277,
-      "sha256": "059877d4f87fbc936991b859fb418a663aba4ecd0c4c1e3b8225a7b73d59d8d8"
+      "bytes": 494025,
+      "sha256": "a590a366242d0a5c7e68726632d20e8d5a10ca6252e8acba0c6bcb7f9e993214"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3777,8 +3777,8 @@
     {
       "path": "e2e/controller-navigation.spec.ts",
       "category": "test",
-      "bytes": 6101,
-      "sha256": "445f73b5487c365372840f985f2780e636d54dc9f9d6e9389632b9916c728abb"
+      "bytes": 16852,
+      "sha256": "9548c823a02a008623afb4b80d453ea4b550859eb16971d3cf2f55345190a46e"
     },
     {
       "path": "e2e/cyp-review-capture.spec.ts",
@@ -3795,20 +3795,26 @@
     {
       "path": "e2e/demo-readiness.spec.ts",
       "category": "test",
-      "bytes": 6270,
-      "sha256": "05281bace5d819daf3a0b98c5562aab66bad13d7bc4c1c664fcb4b92ae07fdd1"
+      "bytes": 6788,
+      "sha256": "b71c10a99fe8eca4875104234f0d6cc2b9c1c35cbbea6cfad5cc1d4462faf320"
     },
     {
       "path": "e2e/fixtures/tile-card-face-illustration-contact-sheet.png",
       "category": "test",
-      "bytes": 339275,
-      "sha256": "64be743486767274086a33811a1ebb37a93478dc9adc7bf02dd89c2d1ff2ed01"
+      "bytes": 355500,
+      "sha256": "5453d27153c3112fff7086b433c0fc6a54f27a550b6ccd8fad6ab471f6b377c8"
     },
     {
       "path": "e2e/fixtures/tile-card-face-illustration-regression.json",
       "category": "test",
       "bytes": 6989,
-      "sha256": "c909914f3fad76248356595b51717d4c0889d1b85fe7e584ff91403b57ed0163"
+      "sha256": "a681d6a2bd72c0745007580ea0f4f4d019836229ed059e06fa6f3703e2d40af7"
+    },
+    {
+      "path": "e2e/gameplay-chrome-clearance.spec.ts",
+      "category": "test",
+      "bytes": 13562,
+      "sha256": "9fc9fd22890222f27c790837052e81e8b75e1153f4ac6b9d63636e6be5c50b79"
     },
     {
       "path": "e2e/gameplay-hud-layout.spec.ts",
@@ -3903,8 +3909,8 @@
     {
       "path": "e2e/playablePathHelpers.ts",
       "category": "test",
-      "bytes": 11767,
-      "sha256": "7a61b606dccc0e121e85c7ce3ab7695c9ff2f18fcd96a34c518ad8b663ed08d3"
+      "bytes": 12777,
+      "sha256": "97f047064b4a2927e3cdf413220e52136750efecef51926f312e8d78d1a83f0a"
     },
     {
       "path": "e2e/pngDiff.ts",
@@ -3981,14 +3987,14 @@
     {
       "path": "e2e/tile-card-face-illustration-benchmark.spec.ts",
       "category": "test",
-      "bytes": 3695,
-      "sha256": "c6d9d50269ce5de45b29851fd11c65abcc75ed7bf06fadb4f358022e318d384e"
+      "bytes": 3704,
+      "sha256": "36483de5eb8a5a396f77816b5d16d18954b74d001fae1bb54de91231e99d2571"
     },
     {
       "path": "e2e/tile-card-face-illustration-regression.spec.ts",
       "category": "test",
-      "bytes": 12536,
-      "sha256": "9a53bacf7cf919de8f072b2a01fdc8116f91a8d4f8bcaf7070b944bf7171243b"
+      "bytes": 12643,
+      "sha256": "eb52dd8ff19813a26240f3005a317921d86aaa6dd60029c5a55969f0a9df8414"
     },
     {
       "path": "e2e/tile-card-face-overlay-regression.spec.ts",
@@ -4017,8 +4023,8 @@
     {
       "path": "e2e/ui-fit-contract.spec.ts",
       "category": "test",
-      "bytes": 12377,
-      "sha256": "cd5e989555173a83e278e775d0dc188719089698d48047a29658b425f9cab121"
+      "bytes": 14081,
+      "sha256": "16c47e709b5ec29a69b44616ed197fb3d4500da1a232f38218b700ce73cb4035"
     },
     {
       "path": "e2e/ui-reachability-gate.spec.ts",
@@ -4035,8 +4041,8 @@
     {
       "path": "e2e/ui-scale-ceiling.spec.ts",
       "category": "test",
-      "bytes": 4733,
-      "sha256": "8b90307dcffdf6a04aa412c85b651b8de12cc7b812318be45e00e8dbe92ef4e0"
+      "bytes": 17934,
+      "sha256": "5d7d7929284bd0a01c15613e2eb8bd60a5cf6b514cde40b4c65bddef6bee7b5f"
     },
     {
       "path": "e2e/ui-screenshots.spec.ts",
@@ -4047,8 +4053,8 @@
     {
       "path": "e2e/uiFit.ts",
       "category": "test",
-      "bytes": 9581,
-      "sha256": "b1d33f16be7990955933276556e95485f7729b2f7ce5cb6b5bacfbe397e1a05b"
+      "bytes": 10902,
+      "sha256": "aa7553e293f5659a100daa438939cd13413f8c38da4c187b059440f4d11bf80c"
     },
     {
       "path": "e2e/uiReachability.ts",
@@ -4101,8 +4107,8 @@
     {
       "path": "e2e/visualScreenHelpers.ts",
       "category": "test",
-      "bytes": 36582,
-      "sha256": "eec85e7774787b457755257ddb6a4206b1519b07161bc587eb47909186481791"
+      "bytes": 36834,
+      "sha256": "4ea4a56e0ff0d698a1c7887a189f83ab2189d19be1883f8167035ac7d6024752"
     },
     {
       "path": "e2e/visualScreenScenarios.ts",
@@ -4191,8 +4197,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 31302,
-      "sha256": "bebfd126d418fa29000a6d6ca44ba4b4f23661a0b75b08dad7569bff1825cd3f"
+      "bytes": 31895,
+      "sha256": "db75a4d115936f550fb410c722b0a9666329026ed7e797f240bc2375e6c32e76"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4303,54 +4309,6 @@
       "sha256": "24b13d8ad32ef882a7e51484c80353a418c5a0ee8c20318a2df02a9917d01972"
     },
     {
-      "path": "project-media/capture.json",
-      "category": "configuration",
-      "bytes": 1305,
-      "sha256": "6826788f503a61e973329fe23a1d3279d62387b788b6d45bdb6b88933ff528ee"
-    },
-    {
-      "path": "project-media/card.jpg",
-      "category": "asset",
-      "bytes": 158548,
-      "sha256": "a1bb1854e8bdab4c89956c9d343461efba7c2055e5bbe66a9483cf7c16a914c5"
-    },
-    {
-      "path": "project-media/desktop.jpg",
-      "category": "asset",
-      "bytes": 148775,
-      "sha256": "6aaa5a0099a4091997c2311ea89633c8d204aa678e146fc1c86c6fcebafcddb5"
-    },
-    {
-      "path": "project-media/full.jpg",
-      "category": "asset",
-      "bytes": 122161,
-      "sha256": "6d41408043ca7d42d35cbe37e64b95ab0bf14bbc3035c2b4ff8d6c6e094472d5"
-    },
-    {
-      "path": "project-media/icons.json",
-      "category": "configuration",
-      "bytes": 366,
-      "sha256": "e566063ac9f9c785deb4baed90aeb891c151150f558b762a0da53307f0cc6f55"
-    },
-    {
-      "path": "project-media/mobile.jpg",
-      "category": "asset",
-      "bytes": 50952,
-      "sha256": "7632953bccec0df2d64fb9354248fb28cc78879a8efffeda61d8b6a590cbe9c4"
-    },
-    {
-      "path": "project-media/og.jpg",
-      "category": "asset",
-      "bytes": 112948,
-      "sha256": "1c17b9f83fcaf722c7efdb167793b6022b43ce49ebc7b76b17210ad83ea9aefd"
-    },
-    {
-      "path": "project.meta.json",
-      "category": "configuration",
-      "bytes": 11717,
-      "sha256": "e38fe2b1a1aeafe33b56671c4f2be661496770f5069f1f5e8a510ce827c2e805"
-    },
-    {
       "path": "public/apple-touch-icon.png",
       "category": "asset",
       "bytes": 1637,
@@ -4389,8 +4347,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 112948,
-      "sha256": "1c17b9f83fcaf722c7efdb167793b6022b43ce49ebc7b76b17210ad83ea9aefd"
+      "bytes": 106849,
+      "sha256": "999df7e3017afd590e8497c7a07f887962def879cf5cef32aa8b86d0ebc0eb92"
     },
     {
       "path": "public/site.webmanifest",
@@ -4473,14 +4431,14 @@
     {
       "path": "scripts/accessibility-targets.ts",
       "category": "script",
-      "bytes": 9429,
-      "sha256": "412e9c6f0eeae94e3704a30cafd89ee255ae871e8c9f45ab4d75943c24f55745"
+      "bytes": 9954,
+      "sha256": "39346aeb50be9e2f2ea5569363d01488293809a050256fc5b1c67c21f7ddb0c3"
     },
     {
       "path": "scripts/ai-repo-model.mjs",
       "category": "script",
-      "bytes": 26617,
-      "sha256": "1425ab0d29d71b1a86f9017f6a4f9ec691324cf8c80a366d60a7a7836036f0f3"
+      "bytes": 27831,
+      "sha256": "0b8af3b6f54e875fc8e57acbb31bc3d0dc8f06c590ab290b5b7fcd2b2b9873c9"
     },
     {
       "path": "scripts/ast-allowlist.json",
@@ -4737,8 +4695,8 @@
     {
       "path": "scripts/audit-generation-claims.ts",
       "category": "script",
-      "bytes": 9612,
-      "sha256": "d531f353387c38dd668bc3df9417d1f273bbf562c7eac8618795ed4030d8b16c"
+      "bytes": 10636,
+      "sha256": "4520da8f80b95909459fd230ef4c5ba060202cafe3af43c47a6d173bc6ce4afa"
     },
     {
       "path": "scripts/audit-renderer-assets.mjs",
@@ -4749,8 +4707,8 @@
     {
       "path": "scripts/audit-summary.mjs",
       "category": "script",
-      "bytes": 6489,
-      "sha256": "724c619b96ffd884ca604184b42482a716c8fff9b2a4604ef4e7f0b55ebe87fb"
+      "bytes": 7648,
+      "sha256": "7de39361b687ad7c2a8a5ab05205b37dd1f4725072bc152eb61ef87d4161fda9"
     },
     {
       "path": "scripts/bake-procedural-illustration-set-options.ts",
@@ -4953,8 +4911,8 @@
     {
       "path": "scripts/check-depcheck-clean.mjs",
       "category": "script",
-      "bytes": 1694,
-      "sha256": "2e9f164d7b9462a5035475ac5d0b6717615cc7f05da82b8ea21f3426185a4efd"
+      "bytes": 2552,
+      "sha256": "5214a4578df7b1ee4980eaab5128087cf843b7ace8948ebf8ec0091317711dff"
     },
     {
       "path": "scripts/check-module-graph-entry.ts",
@@ -5007,8 +4965,8 @@
     {
       "path": "scripts/e2e-surface-coverage.ts",
       "category": "script",
-      "bytes": 6524,
-      "sha256": "fb0f936d842fccf608a2a9489468604d1902cb2c25b348276e04c76a6641ed3f"
+      "bytes": 6316,
+      "sha256": "d6242bfcba8d0ad53904049c2385e3160e8a3299f3b9df3ebf6632942767e0d1"
     },
     {
       "path": "scripts/extract-endproduct-wip-assets.mjs",
@@ -5361,8 +5319,8 @@
     {
       "path": "scripts/shared-reach.ts",
       "category": "script",
-      "bytes": 9488,
-      "sha256": "b24c3a8b4b5fc8392143616d0ce32c7f5dbdb205dff9d79775e85e87fb25518d"
+      "bytes": 9925,
+      "sha256": "3eeefc5cead359d59cf927a1f36ef05870c4472608f4d444633614ae420af4a9"
     },
     {
       "path": "scripts/sim-cascade.ts",
@@ -5439,14 +5397,14 @@
     {
       "path": "scripts/test-only-exports-baseline.json",
       "category": "script",
-      "bytes": 9088,
-      "sha256": "e7a15b50b0d35199e04ec274fddbe53abdd1b75c47350a1a4f9048dc9858ec7d"
+      "bytes": 8579,
+      "sha256": "fde044887ddf4bbf9655ba2a98794be962cd8de1e8c8cc29d0a22b99fbf87a43"
     },
     {
       "path": "scripts/test-only-exports.ts",
       "category": "script",
-      "bytes": 15578,
-      "sha256": "05d367829856b928a473b8536ff7f9f29f6c9dea000deb50b6daa6115203fc54"
+      "bytes": 18601,
+      "sha256": "177869f6d7ab033ea54f276a38c6c8c0a695b71dc7a52c2d9a7400ad84f15150"
     },
     {
       "path": "scripts/test-only-modules.ts",
@@ -5703,14 +5661,14 @@
     {
       "path": "src/renderer/a11y/toolbarRoving.test.ts",
       "category": "test",
-      "bytes": 6512,
-      "sha256": "695a6501dc0f761e25281fc3ec90548316799c3eef7ca74d6fd3e74504bf1dc2"
+      "bytes": 6435,
+      "sha256": "e414bb5086255a5adca7d1ec243115b08ba2cf0ba7721087f4d996c17ab2791c"
     },
     {
       "path": "src/renderer/a11y/toolbarRoving.ts",
       "category": "source",
-      "bytes": 5290,
-      "sha256": "b6b2e99805c6159d8ecd075db1e422bf27e3532397a5af0305f2a169e406c6b5"
+      "bytes": 5356,
+      "sha256": "9859df759dc258394f656a1d6117ec08618412160d7b15e03dc0232526697344"
     },
     {
       "path": "src/renderer/App.test.tsx",
@@ -7875,14 +7833,14 @@
     {
       "path": "src/renderer/audio/audioInteractionCoverage.test.ts",
       "category": "test",
-      "bytes": 9922,
-      "sha256": "fc9c64db5272cd52c3afb7fd6ed0137065a37e80b108c5502b74d5e3d1a90ab3"
+      "bytes": 9827,
+      "sha256": "9fae40d66e7457f48dec002225dbeb1cccaf18e70dcb6e612b167be4ac02ae80"
     },
     {
       "path": "src/renderer/audio/audioInteractionCoverage.ts",
       "category": "source",
-      "bytes": 19076,
-      "sha256": "2cbf931fc88f6911427e95f408d7bb59a92b8b71c50de7164e7bc67dfd15ee99"
+      "bytes": 19422,
+      "sha256": "3cf83bd0406d7d1126a96d3fe12daaae1e11fcb15eeaf7b885e1a17376728a00"
     },
     {
       "path": "src/renderer/audio/audioManifestBoundary.test.ts",
@@ -8049,14 +8007,14 @@
     {
       "path": "src/renderer/breakpoints.test.ts",
       "category": "test",
-      "bytes": 7963,
-      "sha256": "a9ae29246221f2c7bc5bfe94f36807ac3fba452598062732df08c2981666b8dc"
+      "bytes": 7364,
+      "sha256": "58384da97d276206f017b22cc09fb6b4f7082f16971d46b3c5532d7efa21042f"
     },
     {
       "path": "src/renderer/breakpoints.ts",
       "category": "source",
-      "bytes": 1722,
-      "sha256": "87235629fa9eb76bcdce7d8a7fa99b68ad3751b859c2ccc25bfcf2642bfd4a2d"
+      "bytes": 1983,
+      "sha256": "788083666bba4d28988ab0ea9ac404f1634023f2ae08744b03a33eae3da103c8"
     },
     {
       "path": "src/renderer/cardFace/cardFaceOverlayPalette.test.ts",
@@ -8121,8 +8079,8 @@
     {
       "path": "src/renderer/cardFace/cardRasterDeck.ts",
       "category": "source",
-      "bytes": 5426,
-      "sha256": "4f9087e2f1ea5dbc142680a6b53cbc93eb1cddee2ca4b5757b1bb2b952a067bd"
+      "bytes": 4946,
+      "sha256": "842748f4fcf8e6bef1f341b7ee0d8001876bfa52e211a7db3c168280d518fd8f"
     },
     {
       "path": "src/renderer/cardFace/facePanelRasterUrls.ts",
@@ -8257,6 +8215,12 @@
       "sha256": "c30812a35cb8724281c246a9b831b63e4e0f212f9d93b53ea54244fe41ffab4d"
     },
     {
+      "path": "src/renderer/cardFace/staticCardTextureSize.ts",
+      "category": "source",
+      "bytes": 1718,
+      "sha256": "56d7ab09ea924f83bb299ce1df10e537ff9a9f3dcbd44563ed585794ced2f0bb"
+    },
+    {
       "path": "src/renderer/cardFace/svgMarkup.test.ts",
       "category": "test",
       "bytes": 512,
@@ -8367,8 +8331,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
       "category": "source",
-      "bytes": 17428,
-      "sha256": "523d05d684983380ce6bb35ded3d954d40f080e18adf9c861bf8433dbcd028e4"
+      "bytes": 20465,
+      "sha256": "75e7d31404b0d4eb7576366b2dfb8f3c8990c4be2593f065cd3d3af34417a20e"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
@@ -8379,8 +8343,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 28651,
-      "sha256": "2987fbd8236f0f0c87f9e97cfe053cc5c47ee565420e898bd0ce31fa692ab32d"
+      "bytes": 33878,
+      "sha256": "1e0d2e450ad5a76f198718709646c9d6d93296d6f3cdf5df12ee9d5849ffd3bd"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -8391,8 +8355,8 @@
     {
       "path": "src/renderer/components/CodexScreen.module.css",
       "category": "source",
-      "bytes": 3456,
-      "sha256": "b30a85ee1d95ddcbdb4118089faadc8446d23d6c092b1656f7fe37792a3695d0"
+      "bytes": 3655,
+      "sha256": "8ae083e911f5c4b0c1e9d0885d36c9c6a6b1056c2c3a1d571e218b5623881da8"
     },
     {
       "path": "src/renderer/components/CodexScreen.test.tsx",
@@ -8403,8 +8367,8 @@
     {
       "path": "src/renderer/components/CodexScreen.tsx",
       "category": "source",
-      "bytes": 11639,
-      "sha256": "22d13735ec057acefbdc83c803ac9bb09e3cc4883d661910be2f6f0547b94c16"
+      "bytes": 12893,
+      "sha256": "658f0fcef980d10bd9bc1c1aad61f49331392e3ded3c8194d060b1c28e3893eb"
     },
     {
       "path": "src/renderer/components/codexScreenModel.test.ts",
@@ -8421,8 +8385,8 @@
     {
       "path": "src/renderer/components/CollectionScreen.module.css",
       "category": "source",
-      "bytes": 1850,
-      "sha256": "a97bf610231bb3dc42e251e063e4e84c63aa6282bc8853afba7a6ed98e8f5f9e"
+      "bytes": 2030,
+      "sha256": "ec6a2341ea9d14dbc46d3521c8bdad5bfc293772c9bdc89423e6518d9563afbe"
     },
     {
       "path": "src/renderer/components/CollectionScreen.test.tsx",
@@ -8445,8 +8409,8 @@
     {
       "path": "src/renderer/components/FloorClearBeat.module.css",
       "category": "source",
-      "bytes": 4222,
-      "sha256": "42131b93ff82e56c5341ac1dbce585ae8d467848b699a4baf10e4f82b5f95d61"
+      "bytes": 6073,
+      "sha256": "69547c85fc5c66c79de99a823f4d061453c83d59ac523f1abdb638dd9aad13c9"
     },
     {
       "path": "src/renderer/components/FloorClearBeat.test.tsx",
@@ -8463,8 +8427,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.module.css",
       "category": "source",
-      "bytes": 16816,
-      "sha256": "405348490b79abd49cf74b7ab13142fad64f668260629bbec160b0f3a2918366"
+      "bytes": 20038,
+      "sha256": "ddcb219e426fbea505219a3c70342cb7c4ec1c814e0f66d9f4d1488f5fdd41ee"
     },
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
@@ -8475,8 +8439,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 23450,
-      "sha256": "1174a2b6e84fc0800bbfb3221e4f23dedc97c6ee2500ec17eda6d592cdc48a6c"
+      "bytes": 23837,
+      "sha256": "31c1b669c0e7bcee318e1d3d41f8189c3bcbae8486b92fd94db3b4d8835e58c2"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -8523,8 +8487,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 47820,
-      "sha256": "f86d361e7ffeba569bfa6e9748b0c04ea138b2e94a8ae3eb59b8c6adc20accc1"
+      "bytes": 48274,
+      "sha256": "7ae99b9cf4d6290d6c5b3dfb6f58185d7b58abd877496c3b2f8798388f04e55a"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -8535,8 +8499,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 84800,
-      "sha256": "29251108d72aefae8d9cc9b3d097df04102deda42e3545febaf874b0c33a5335"
+      "bytes": 86391,
+      "sha256": "b237c0dc38fd8abe716993e544ba0f8ec3b4b171080c0643cd391ba44e8e4822"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -8565,8 +8529,8 @@
     {
       "path": "src/renderer/components/InventoryScreen.module.css",
       "category": "source",
-      "bytes": 6051,
-      "sha256": "c0c98496bab9a10d073a0bb24903ae1175e9bcd08fe115d1934a0902be34b824"
+      "bytes": 6249,
+      "sha256": "d9e903e25c508642c034b4bb4253b1d481dda6853f5d7ab13482b7e3399b2f68"
     },
     {
       "path": "src/renderer/components/InventoryScreen.test.tsx",
@@ -8577,8 +8541,8 @@
     {
       "path": "src/renderer/components/InventoryScreen.tsx",
       "category": "source",
-      "bytes": 7656,
-      "sha256": "f2967ef6a304e8e262fd04eddedd204f470ccb8fd1a7d8f9ee0924a36043d132"
+      "bytes": 7750,
+      "sha256": "91ac181bc6ed2b2279cc8fb24c46c979f1f681f1f62a223e8cfc39ad2ce19a4f"
     },
     {
       "path": "src/renderer/components/inventoryScreenModel.test.ts",
@@ -8595,8 +8559,8 @@
     {
       "path": "src/renderer/components/MainMenu.module.css",
       "category": "source",
-      "bytes": 11591,
-      "sha256": "d70de837c416b0a8a587ffa5f988176ade3dd5f2a3de2fd66ae35308bcca9b05"
+      "bytes": 11547,
+      "sha256": "cb9500143677b63a3e8fd2593b0cf97e89e80cb25c45707a00e4f09e7ca1558a"
     },
     {
       "path": "src/renderer/components/MainMenu.test.tsx",
@@ -8607,8 +8571,8 @@
     {
       "path": "src/renderer/components/MainMenu.tsx",
       "category": "source",
-      "bytes": 13531,
-      "sha256": "768c34f88149130a73cd0e104a47ab61ae9a4ea1b21c4a80a98417ed04be3fc0"
+      "bytes": 14174,
+      "sha256": "2e158f75952762dadcb2b9595d3a0d300ac79daee488963992e567bd6df5f685"
     },
     {
       "path": "src/renderer/components/MainMenuBackground.module.css",
@@ -8679,8 +8643,8 @@
     {
       "path": "src/renderer/components/MetaScreen.module.css",
       "category": "source",
-      "bytes": 10702,
-      "sha256": "a426a4898a635f2b76b910fe19832f50a81be82a96dc568f4c1929defb1a8614"
+      "bytes": 7253,
+      "sha256": "b2d0de61d7ba0a41e2540af63a75143dad75ae8d90f7472db8d74d75a1c0b1c6"
     },
     {
       "path": "src/renderer/components/metaStackedShellLayout.test.ts",
@@ -8697,8 +8661,8 @@
     {
       "path": "src/renderer/components/OverlayModal.module.css",
       "category": "source",
-      "bytes": 19111,
-      "sha256": "fe2b1273451f21410979aadf1e529f53b44a5d276d6ad78d175809779b1657e3"
+      "bytes": 21749,
+      "sha256": "7ed253db02bef7ff9a45ffcabff16825068f7897899ef8dc0f1a35474e047f1a"
     },
     {
       "path": "src/renderer/components/OverlayModal.test.tsx",
@@ -8709,8 +8673,8 @@
     {
       "path": "src/renderer/components/OverlayModal.tsx",
       "category": "source",
-      "bytes": 9658,
-      "sha256": "2fd07f552eaffe9021d370292f73cef732cbbcb109c75c419f2308665f9c03d0"
+      "bytes": 10486,
+      "sha256": "719777c19c63f62f4c6066808cffa78d226992e1eea0836a8116045cfdd0ed03"
     },
     {
       "path": "src/renderer/components/PairProximityHintPlane.tsx",
@@ -8727,8 +8691,8 @@
     {
       "path": "src/renderer/components/ProfileScreen.module.css",
       "category": "source",
-      "bytes": 8912,
-      "sha256": "15df5399cc9af3df2c05028bfb2a88040ffb0d021d50c3bcd25e17710ec99910"
+      "bytes": 11862,
+      "sha256": "0b22eb3e1fdd3e5af095d142cbeecf89fd2c433a11d17ee9e89aab4bcdc89f75"
     },
     {
       "path": "src/renderer/components/ProfileScreen.test.tsx",
@@ -8745,8 +8709,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 28400,
-      "sha256": "bbe0014ae8e6bbfb5f3a3735ecf3bd4a7903a4e49c639926d4f8f531c9e9d35b"
+      "bytes": 34247,
+      "sha256": "866fbc47472af5db8d1151d7027f06cacedeb0e8d22bd617a1322b10b98a35f2"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
@@ -8757,8 +8721,8 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 23643,
-      "sha256": "2b38b151172a0b7b45e37a61502687f0bcd465f59ee42473ae3c0cca97da7632"
+      "bytes": 25846,
+      "sha256": "89e937bec79ce8e836df1c21501df3738762346ff63be1aeecc64cce257d4cc9"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -8793,8 +8757,8 @@
     {
       "path": "src/renderer/components/SettingsControls.tsx",
       "category": "source",
-      "bytes": 4795,
-      "sha256": "a9404c840be2ec30b498b9a2b47f3701e64b7b5246bce8f8cb5946e67d92a000"
+      "bytes": 5305,
+      "sha256": "688db9107d59889482acae856893919ad6a1de291e516964aab52893d9c1630c"
     },
     {
       "path": "src/renderer/components/settingsNavigationModel.ts",
@@ -8805,8 +8769,8 @@
     {
       "path": "src/renderer/components/SettingsScreen.module.css",
       "category": "source",
-      "bytes": 32543,
-      "sha256": "b9814ace7397885a0f81367a493464c862b519e1dfe1d967d7f60881e2af7210"
+      "bytes": 29979,
+      "sha256": "c64866bb632eb40fb9249254e7f9798a87348c2ad1134c484fb4b3bbef70ef68"
     },
     {
       "path": "src/renderer/components/SettingsScreen.test.tsx",
@@ -8817,8 +8781,8 @@
     {
       "path": "src/renderer/components/SettingsScreen.tsx",
       "category": "source",
-      "bytes": 46652,
-      "sha256": "5676f2b010278e9beb73bccac983628c99db2d465229b502dbbe9e64661593bc"
+      "bytes": 47625,
+      "sha256": "6f69692863b861dda17cbe31522a073a8fde70073a7ce3494e72573d322b7f9e"
     },
     {
       "path": "src/renderer/components/shuffleFlipAnimation.test.ts",
@@ -9663,14 +9627,14 @@
     {
       "path": "src/renderer/components/tileTextures.test.ts",
       "category": "test",
-      "bytes": 14295,
-      "sha256": "5556221daf81ed615eaf7460c60ee2ac3cc499adaca8912868fab36515a0d8b9"
+      "bytes": 14594,
+      "sha256": "b69fe1ee5b7a02ce80f41bb6a0976970aaeddb35291f5d6b96a1eb0941b60d42"
     },
     {
       "path": "src/renderer/components/tileTextures.ts",
       "category": "source",
-      "bytes": 61054,
-      "sha256": "880cce2f22cc85e9f8560bf939575d40900e611d3f9619697f3157203ded2027"
+      "bytes": 57493,
+      "sha256": "a1f4f03acf845e65ed852dbabbe8ff6bacada793dcdd0a69f238aee478c907b7"
     },
     {
       "path": "src/renderer/components/TutorialPairMarkerPlane.tsx",
@@ -10177,6 +10141,12 @@
       "sha256": "111cbe85970f7a99c5dca9314d0dac08a31386adc4051cc8a49ec77b8427b3d1"
     },
     {
+      "path": "src/renderer/hooks/useEscapeLeaves.ts",
+      "category": "source",
+      "bytes": 2462,
+      "sha256": "6f7714df95ed6aceaac71c7f98b2b525e6899b161e4336927adca6b9c4e873ed"
+    },
+    {
       "path": "src/renderer/hooks/useGamepadNavigation.test.tsx",
       "category": "test",
       "bytes": 5174,
@@ -10191,8 +10161,8 @@
     {
       "path": "src/renderer/hooks/useGameplayChromeClearance.ts",
       "category": "source",
-      "bytes": 4894,
-      "sha256": "3eb74c199f6750cd3676ffd4c4efaa09990277489d47e9d6a802bcefc222e42b"
+      "bytes": 5966,
+      "sha256": "8f4360574f30812b897da3c46ab469bbf8dd92bd122c74d6f800baff8c552ef6"
     },
     {
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
@@ -10539,14 +10509,14 @@
     {
       "path": "src/renderer/store/navigationModel.test.ts",
       "category": "test",
-      "bytes": 3983,
-      "sha256": "60e61226882d8340adfdfd901cc5ea37325d8f9b9868bca645175fe929ce1e71"
+      "bytes": 9677,
+      "sha256": "87f7a429304175f34e635a99d32b3380231ac3b85da6487fad7f9fbd795fa6ab"
     },
     {
       "path": "src/renderer/store/navigationModel.ts",
       "category": "source",
-      "bytes": 13733,
-      "sha256": "b24128de38cccffc780858dd182ffdb01c480d16f7e4d906b918ccd4d4f10ea4"
+      "bytes": 14259,
+      "sha256": "89326fb62fbc42d4df8389ed205ce1d7fc023b4ea18dd7e4981582a4010a3e3f"
     },
     {
       "path": "src/renderer/store/passAndPlayProjection.test.ts",
@@ -10767,8 +10737,8 @@
     {
       "path": "src/renderer/styles/global.css",
       "category": "source",
-      "bytes": 6830,
-      "sha256": "a61c3fef4c158261b0fb8578614feba1726c3d330067e59b4d99c62736266559"
+      "bytes": 7853,
+      "sha256": "1e38ef243fc2be6d9229f91cc1859633d2586c350a72c45138cb4ed87684b64e"
     },
     {
       "path": "src/renderer/styles/notificationsGame.css",
@@ -10803,8 +10773,8 @@
     {
       "path": "src/renderer/ui/AccentBanner.module.css",
       "category": "source",
-      "bytes": 711,
-      "sha256": "38e726da08df94d343f7a008ce53ca3a70be2a89afebcec16738e2b23ee67bf2"
+      "bytes": 418,
+      "sha256": "cb462189b508c83f86609fdcb7fd5328257864df554b5cd40d21a410fc09748f"
     },
     {
       "path": "src/renderer/ui/AccentBanner.tsx",
@@ -10813,10 +10783,22 @@
       "sha256": "ffb46b986c7ea439e7919c3cd18de78b7053eedb969871d18e412c1fbc63da28"
     },
     {
+      "path": "src/renderer/ui/cssZoom.test.ts",
+      "category": "test",
+      "bytes": 1387,
+      "sha256": "4aa3048145dd157fadff05718f0ecb5f1465fcc06d75606915b2eb11adc04ae9"
+    },
+    {
+      "path": "src/renderer/ui/cssZoom.ts",
+      "category": "source",
+      "bytes": 1437,
+      "sha256": "d18129c6abc7cfa33519ee0a7fed8e5a52564e86686fedddfec0239a45f92a58"
+    },
+    {
       "path": "src/renderer/ui/Eyebrow.module.css",
       "category": "source",
-      "bytes": 373,
-      "sha256": "17a651f0afb80d2fd2b1e6c1ed4d076429a7f3c6ab6e41943579dabfff09b9bb"
+      "bytes": 412,
+      "sha256": "1c6cf77787c4a4fc7d90d041a179e5e058604ad7411c15ee8003afee6dcac151"
     },
     {
       "path": "src/renderer/ui/Eyebrow.tsx",
@@ -10827,26 +10809,26 @@
     {
       "path": "src/renderer/ui/FittedGrid.module.css",
       "category": "source",
-      "bytes": 2073,
-      "sha256": "ee34836a7d117889b1340c86a1378151d60c4e88289b85fe114ba0d24a92f15e"
+      "bytes": 2363,
+      "sha256": "6c718599fc109f69348ebf261ca004ca1ab0594727f5932e495d39ddfd17bbd6"
     },
     {
       "path": "src/renderer/ui/FittedGrid.tsx",
       "category": "source",
-      "bytes": 5839,
-      "sha256": "7988ca9d52a06486a7c3c89f7fc06b897f4fcdec026ff212455a749d0c785b9f"
+      "bytes": 6756,
+      "sha256": "0276566171e8bec33e3a7efb121aead6a040e1ad1c6cdd8f78fea0f5e512bc7e"
     },
     {
       "path": "src/renderer/ui/fittedGridFit.test.ts",
       "category": "test",
-      "bytes": 2600,
-      "sha256": "dd5e8c0efecb0ad9bc9c931663e36bbbe064b7530322bea5b98a9842851eab3b"
+      "bytes": 4757,
+      "sha256": "513efbab055049b710d49f9e8fffaebf9431ebbe6d8c0d4340cb721e7f278592"
     },
     {
       "path": "src/renderer/ui/fittedGridFit.ts",
       "category": "source",
-      "bytes": 2952,
-      "sha256": "d35853e3bd40f898ae8c529dd73c20622c23f53f63085af6333ed9d5056d3290"
+      "bytes": 3978,
+      "sha256": "6134adbf041941f249b30222bbf3ae8efafdeba3f4d5e8244b8bffb18e156b4e"
     },
     {
       "path": "src/renderer/ui/gameplayIcons.tsx",
@@ -10863,8 +10845,8 @@
     {
       "path": "src/renderer/ui/MetaFrame.module.css",
       "category": "source",
-      "bytes": 1039,
-      "sha256": "2a5da9320d065ce3a29874a589e93f6e89588f303c4fab886ee3b527fb4cab26"
+      "bytes": 513,
+      "sha256": "04ac71000420c74138749eef9ba538b4fd868b1f19b3b3e9158ce6deb47c306e"
     },
     {
       "path": "src/renderer/ui/MetaFrame.tsx",
@@ -10875,26 +10857,26 @@
     {
       "path": "src/renderer/ui/metaInRunFramedPanel.module.css",
       "category": "source",
-      "bytes": 782,
-      "sha256": "2cd3775639670907c366b2a5a260e605ce0ddf13891735bd49e36d4e49e33ec9"
+      "bytes": 400,
+      "sha256": "8b684df78f3c70f31243a7425bec46a78d955bae84b8ab93785910b4396713f4"
     },
     {
       "path": "src/renderer/ui/MetaShell.module.css",
       "category": "source",
-      "bytes": 1647,
-      "sha256": "fe2f1c93cb0788666ea310fb6ae65cdcb9653dfc3efbc017284b2b4d8b3cd215"
+      "bytes": 4205,
+      "sha256": "0178174023ea2635d18e9fcd5c897554ca3fb9ba263ee5409740089c28d440e4"
     },
     {
       "path": "src/renderer/ui/MetaShell.tsx",
       "category": "source",
-      "bytes": 2367,
-      "sha256": "55cafde6dff6a41ecf595ec43ba5c17484469d48a3c85046b0731f30fac9810b"
+      "bytes": 2565,
+      "sha256": "456e03e03c0a1f9cfc990003529c018f087e46ed7bc3057aedae96931830e61b"
     },
     {
       "path": "src/renderer/ui/OverlayActionDock.module.css",
       "category": "source",
-      "bytes": 3694,
-      "sha256": "d545184f1a055102dcaf7db8b265b36aa4a3cb3c984c63128792ef541fc15be2"
+      "bytes": 2846,
+      "sha256": "a0cd97e069d2ac28a5d3de187e2ebf27cf3a083f5abe8517c552c8229bd95700"
     },
     {
       "path": "src/renderer/ui/OverlayActionDock.tsx",
@@ -10905,8 +10887,8 @@
     {
       "path": "src/renderer/ui/Panel.module.css",
       "category": "source",
-      "bytes": 2421,
-      "sha256": "1688bb9b1fa5587d7c2a0c96976439b7b35f9c8adf7f309ae20101d6e49f824a"
+      "bytes": 1643,
+      "sha256": "9ab910a7e046d21da7f90e5655263b84be281574a9689e7cbc89a0da059f0d14"
     },
     {
       "path": "src/renderer/ui/Panel.tsx",
@@ -10917,8 +10899,8 @@
     {
       "path": "src/renderer/ui/ScreenTitle.module.css",
       "category": "source",
-      "bytes": 1112,
-      "sha256": "bcc41f998801f240c776d6355bd481c829806074e9dd642896f789c5d271cb44"
+      "bytes": 1270,
+      "sha256": "7a11dd2d2ed34e855643e1bba248c90404723f7748efd5fa5e86827798bd3db4"
     },
     {
       "path": "src/renderer/ui/ScreenTitle.tsx",
@@ -10929,8 +10911,8 @@
     {
       "path": "src/renderer/ui/SectionRail.module.css",
       "category": "source",
-      "bytes": 2536,
-      "sha256": "2c8a4f3f53148dd38f26bc1d6ded24b28d7e46460debaf73468fa61d1d437c8e"
+      "bytes": 2934,
+      "sha256": "3fd84fd86b243dca1f3797c29bf1c30bbf891fd25f63f45d6926ee8780e67d62"
     },
     {
       "path": "src/renderer/ui/SectionRail.tsx",
@@ -10941,8 +10923,8 @@
     {
       "path": "src/renderer/ui/StatTile.module.css",
       "category": "source",
-      "bytes": 2149,
-      "sha256": "eef375366fabeef3a11eeb230bac94c811190047726e08ce6588c48e7b5813b0"
+      "bytes": 1609,
+      "sha256": "445a86b903b650f6341254ef0f8221bc83cb5465e3d3e92562471ff2f8ebd027"
     },
     {
       "path": "src/renderer/ui/StatTile.tsx",
@@ -10965,8 +10947,8 @@
     {
       "path": "src/renderer/ui/UiButton.module.css",
       "category": "source",
-      "bytes": 6168,
-      "sha256": "0c8a46009e3a5b9253e4b38374ed7772fe2e8be195c26e340a11138c2221d54b"
+      "bytes": 2569,
+      "sha256": "abf3c574bf4b7c7bd08791394f35386270b407ddb99adf54f7b67f299f1f5d4f"
     },
     {
       "path": "src/renderer/ui/UiButton.tsx",
@@ -10977,14 +10959,14 @@
     {
       "path": "src/renderer/uiScaleLimits.test.ts",
       "category": "test",
-      "bytes": 3348,
-      "sha256": "6ea6194b558ea273d5f3956495f1c68dbf9e57d587e2ccde18adb67b49173312"
+      "bytes": 4387,
+      "sha256": "0144a32c49b18a5a07bac5c9a3957168fdf6a6994db845c7e9c22e5a018c77b5"
     },
     {
       "path": "src/renderer/uiScaleLimits.ts",
       "category": "source",
-      "bytes": 3882,
-      "sha256": "5c70d44c7e207df16939fa533f6f3687eb0c2942986419643663bcc392038982"
+      "bytes": 6385,
+      "sha256": "fdb82504b7613fcadaadbf69d33913c9c1ec38fd64a8bc498a71bac512acbaa1"
     },
     {
       "path": "src/renderer/viewportMatrix.ts",
@@ -11403,14 +11385,20 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 32176,
-      "sha256": "8dc54238f486eeb429b9a79dff81e5d48a54a2510a6e77451432c5039d54b408"
+      "bytes": 32678,
+      "sha256": "9691658b642c940badc541c20b75824b239f3dc04fccc599f91be2e24ad02c02"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
       "category": "test",
       "bytes": 1925,
       "sha256": "8016478f1d490d74ceda0d86aaaef80a2f459f492e53ec4643f576ea16fe9883"
+    },
+    {
+      "path": "src/shared/controller-back-contract.ts",
+      "category": "source",
+      "bytes": 3064,
+      "sha256": "6b725a26bb6b7a4049ae967fbe5b74ed564e4dac772eb07088b820f1773427a8"
     },
     {
       "path": "src/shared/copy-locality.test.ts",
@@ -11745,8 +11733,8 @@
     {
       "path": "src/shared/gameplay-core.ts",
       "category": "source",
-      "bytes": 40999,
-      "sha256": "227581d1be58ab8ef8926ac4c68582762ba1fa3aab99c046c9b024bcbaf98aa1"
+      "bytes": 41352,
+      "sha256": "0ae79a5bb28023efd1040d33dac886e7c72c64e86ff6161cbee9ea80e117cb85"
     },
     {
       "path": "src/shared/gameplay-effect-transition.test.ts",
@@ -11891,6 +11879,18 @@
       "category": "test",
       "bytes": 4187,
       "sha256": "6898ac27ae075e010eda163a511020167abdeca36e5360b4de02e9f531598071"
+    },
+    {
+      "path": "src/shared/held-pair-rules.test.ts",
+      "category": "test",
+      "bytes": 4931,
+      "sha256": "ff25c49ed0567e7b13f55ec4a7cf708d8712c14880cad7bdd909fbe535cf9fc1"
+    },
+    {
+      "path": "src/shared/held-pair-rules.ts",
+      "category": "source",
+      "bytes": 5084,
+      "sha256": "c7b774a280d9833c479a8f90f854c856793bbe9cbdd074398f1510ce7b71a766"
     },
     {
       "path": "src/shared/honor-unlock-ids.ts",
@@ -12387,14 +12387,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 39178,
-      "sha256": "1c99c48b4612127b265ef7c1e139273270fc9817f821cbc41b6bcb2d7653bd4f"
+      "bytes": 40794,
+      "sha256": "47b13692b5d7b24a4482f867d02077dd8d24ffea07c2e93236241cabd81cd8cb"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 17119,
-      "sha256": "84a9d57ee80748c3fd504b1739d46421a567bcf403ec01f4a098680695e5d9a9"
+      "bytes": 17130,
+      "sha256": "9a1573dbfe37cb596dc87b5d7658e10121ba91da4e339f36e90a95b1bd4dfd63"
     },
     {
       "path": "src/shared/renderer-bundle-budget-script.test.ts",
@@ -15277,6 +15277,12 @@
       "sha256": "fcab4e9f3cb31d4fb84c9d4dc3500ad114c7f45ca3269bd71ea6fb0e0aaf1fc1"
     },
     {
+      "path": "tsconfig.e2e.json",
+      "category": "configuration",
+      "bytes": 568,
+      "sha256": "2960ad75d0a4e67398f26f37a7c8423a029b410208e413b3a9fc661cce584e82"
+    },
+    {
       "path": "tsconfig.json",
       "category": "configuration",
       "bytes": 965,
@@ -15315,8 +15321,8 @@
     {
       "path": "yarn.lock",
       "category": "other",
-      "bytes": 312557,
-      "sha256": "1519500e17c5695d96b36ddd3f87a4f07aed7ae4638f4655fe4fc041658d5f72"
+      "bytes": 316232,
+      "sha256": "1d0d7988868565886027e31cc079c32e6d0e5686cb411bd98864bd6bbf5529c6"
     }
   ],
   "files": [
@@ -15927,7 +15933,7 @@
       "path": "src/renderer/a11y/toolbarRoving.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 170,
+      "lineCount": 163,
       "imports": [
         "file:src/renderer/a11y/toolbarRoving.ts"
       ],
@@ -15939,15 +15945,13 @@
       "path": "src/renderer/a11y/toolbarRoving.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 154,
+      "lineCount": 150,
       "imports": [],
       "exports": [
         "symbol:src/renderer/a11y/toolbarRoving.ts#acquireToolbarRovingPause",
         "symbol:src/renderer/a11y/toolbarRoving.ts#getToolbarButtons",
         "symbol:src/renderer/a11y/toolbarRoving.ts#handleHorizontalToolbarKeyDown",
-        "symbol:src/renderer/a11y/toolbarRoving.ts#handleVerticalToolbarKeyDown",
-        "symbol:src/renderer/a11y/toolbarRoving.ts#syncToolbarTabIndices",
-        "symbol:src/renderer/a11y/toolbarRoving.ts#syncVerticalToolbarTabIndices"
+        "symbol:src/renderer/a11y/toolbarRoving.ts#syncToolbarTabIndices"
       ],
       "testedBy": [
         "file:src/renderer/a11y/toolbarRoving.test.ts",
@@ -16218,7 +16222,7 @@
       "path": "src/renderer/audio/audioInteractionCoverage.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 180,
+      "lineCount": 179,
       "imports": [
         "file:src/renderer/audio/audioInteractionCoverage.ts"
       ],
@@ -16230,7 +16234,7 @@
       "path": "src/renderer/audio/audioInteractionCoverage.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 391,
+      "lineCount": 396,
       "imports": [
         "file:src/renderer/audio/sampledSfx.ts",
         "file:src/renderer/audio/uiSfx.ts"
@@ -16240,8 +16244,7 @@
         "symbol:src/renderer/audio/audioInteractionCoverage.ts#audioCoverageCueIsGameplaySfx",
         "symbol:src/renderer/audio/audioInteractionCoverage.ts#audioCoverageCueIsKnown",
         "symbol:src/renderer/audio/audioInteractionCoverage.ts#audioCoverageRowsByDomain",
-        "symbol:src/renderer/audio/audioInteractionCoverage.ts#AudioSemanticMoment",
-        "symbol:src/renderer/audio/audioInteractionCoverage.ts#getAudioCoverageRows"
+        "symbol:src/renderer/audio/audioInteractionCoverage.ts#AudioSemanticMoment"
       ],
       "testedBy": [
         "file:src/renderer/audio/audioInteractionCoverage.test.ts",
@@ -16727,7 +16730,7 @@
       "path": "src/renderer/breakpoints.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 187,
+      "lineCount": 168,
       "imports": [
         "file:src/renderer/breakpoints.ts",
         "file:src/renderer/viewportMatrix.ts"
@@ -16740,13 +16743,11 @@
       "path": "src/renderer/breakpoints.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 42,
+      "lineCount": 38,
       "imports": [],
       "exports": [
         "symbol:src/renderer/breakpoints.ts#isNarrowShortLandscapeForMenuStack",
         "symbol:src/renderer/breakpoints.ts#isShortLandscapeViewport",
-        "symbol:src/renderer/breakpoints.ts#readWindowInnerSizeFallback",
-        "symbol:src/renderer/breakpoints.ts#safeSubscribeWindowResize",
         "symbol:src/renderer/breakpoints.ts#VIEWPORT_LANDSCAPE_STACK_MAX_WIDTH",
         "symbol:src/renderer/breakpoints.ts#VIEWPORT_MOBILE_MAX",
         "symbol:src/renderer/breakpoints.ts#VIEWPORT_SHORT_LANDSCAPE_MAX_HEIGHT",
@@ -16927,15 +16928,15 @@
       "path": "src/renderer/cardFace/cardRasterDeck.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 138,
+      "lineCount": 129,
       "imports": [
         "file:src/renderer/cardFace/cardFaceOverlayPalette.ts",
         "file:src/renderer/cardFace/cardIllustrationDraw.ts",
         "file:src/renderer/cardFace/cardIllustrationRect.ts",
         "file:src/renderer/cardFace/overlayDrawTier.ts",
         "file:src/renderer/cardFace/proceduralIllustration/illustrationSchemaVersion.ts",
+        "file:src/renderer/cardFace/staticCardTextureSize.ts",
         "file:src/renderer/components/gameplayVisualConfig.ts",
-        "file:src/renderer/components/tileShatter.ts",
         "file:src/shared/feature-flags.ts",
         "file:src/shared/hashPairKey.ts",
         "file:src/shared/run-number-guards.ts"
@@ -17323,6 +17324,24 @@
       ]
     },
     {
+      "id": "file:src/renderer/cardFace/staticCardTextureSize.ts",
+      "path": "src/renderer/cardFace/staticCardTextureSize.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 32,
+      "imports": [
+        "file:src/renderer/components/tileShatter.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/cardFace/staticCardTextureSize.ts#getStaticCardTexturePixelSize",
+        "symbol:src/renderer/cardFace/staticCardTextureSize.ts#STATIC_CARD_TEXTURE_HEIGHT",
+        "symbol:src/renderer/cardFace/staticCardTextureSize.ts#STATIC_CARD_TEXTURE_WIDTH"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/tileTextures.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/cardFace/svgMarkup.test.ts",
       "path": "src/renderer/cardFace/svgMarkup.test.ts",
       "layer": "renderer",
@@ -17629,7 +17648,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 601,
+      "lineCount": 664,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/modeArt.ts",
@@ -17637,8 +17656,8 @@
         "file:src/renderer/components/OverlayModal.tsx",
         "file:src/renderer/copy/passAndPlay.ts",
         "file:src/renderer/copy/screenCopy.ts",
+        "file:src/renderer/hooks/useEscapeLeaves.ts",
         "file:src/renderer/store/useAppStore.ts",
-        "file:src/renderer/ui/index.ts",
         "file:src/shared/challenge-progression.ts",
         "file:src/shared/classic-run-setup.ts",
         "file:src/shared/pass-and-play-rules.ts",
@@ -17687,7 +17706,7 @@
       "path": "src/renderer/components/CodexScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 260,
+      "lineCount": 280,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/codexScreenModel.ts",
@@ -17848,7 +17867,7 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 464,
+      "lineCount": 474,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -17857,6 +17876,7 @@
         "file:src/renderer/copy/passAndPlay.ts",
         "file:src/renderer/copy/screenCopy.ts",
         "file:src/renderer/hooks/useCopyToClipboard.ts",
+        "file:src/renderer/hooks/useEscapeLeaves.ts",
         "file:src/renderer/hooks/useViewportSize.ts",
         "file:src/renderer/platformTilt/usePlatformTiltField.ts",
         "file:src/renderer/steamStorePage.ts",
@@ -18013,7 +18033,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1810,
+      "lineCount": 1834,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -18070,6 +18090,7 @@
         "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/floor-par.ts",
         "file:src/shared/focusDimmedTileIds.ts",
+        "file:src/shared/held-pair-rules.ts",
         "file:src/shared/mechanics-encyclopedia.ts",
         "file:src/shared/pass-and-play-rules.ts",
         "file:src/shared/perfect-memory-status.ts",
@@ -18164,11 +18185,12 @@
       "path": "src/renderer/components/InventoryScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 161,
+      "lineCount": 164,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/inventoryScreenModel.ts",
         "file:src/renderer/components/metaStackedShellLayout.ts",
+        "file:src/renderer/hooks/useEscapeLeaves.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
         "file:src/shared/game-catalog.ts",
@@ -18231,7 +18253,7 @@
       "path": "src/renderer/components/MainMenu.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 282,
+      "lineCount": 290,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -18457,10 +18479,11 @@
       "path": "src/renderer/components/OverlayModal.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 269,
+      "lineCount": 275,
       "imports": [
         "file:src/renderer/a11y/overlayModalBodyState.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
+        "file:src/renderer/hooks/useEscapeLeaves.ts",
         "file:src/renderer/hooks/useModalFocusTrap.ts",
         "file:src/renderer/ui/index.ts",
         "file:src/shared/overlay-decision-policy.ts"
@@ -18565,8 +18588,9 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 450,
+      "lineCount": 491,
       "imports": [
+        "file:src/renderer/a11y/toolbarRoving.ts",
         "file:src/renderer/copy/chainBeat.ts",
         "file:src/renderer/copy/passAndPlay.ts",
         "file:src/renderer/copy/runDialogCopy.ts",
@@ -18675,10 +18699,8 @@
       "path": "src/renderer/components/SettingsControls.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 161,
-      "imports": [
-        "file:src/renderer/ui/index.ts"
-      ],
+      "lineCount": 170,
+      "imports": [],
       "exports": [
         "symbol:src/renderer/components/SettingsControls.tsx#PlaceholderControl",
         "symbol:src/renderer/components/SettingsControls.tsx#SegmentedControl",
@@ -18723,7 +18745,7 @@
       "path": "src/renderer/components/SettingsScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 741,
+      "lineCount": 755,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -18733,6 +18755,7 @@
         "file:src/renderer/components/settingsNavigationModel.ts",
         "file:src/renderer/copy/diagnosticsSettings.ts",
         "file:src/renderer/copy/settingsHints.ts",
+        "file:src/renderer/hooks/useEscapeLeaves.ts",
         "file:src/renderer/hooks/useModalFocusTrap.ts",
         "file:src/renderer/hooks/useViewportSize.ts",
         "file:src/renderer/store/backgroundPersistence.ts",
@@ -21257,8 +21280,9 @@
       "path": "src/renderer/components/tileTextures.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 364,
+      "lineCount": 365,
       "imports": [
+        "file:src/renderer/cardFace/staticCardTextureSize.ts",
         "file:src/renderer/components/tileShatter.ts",
         "file:src/renderer/components/tileTextures.ts",
         "file:src/shared/contracts.ts",
@@ -21272,7 +21296,7 @@
       "path": "src/renderer/components/tileTextures.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1738,
+      "lineCount": 1620,
       "imports": [
         "file:src/renderer/cardFace/cardFaceOverlayPalette.ts",
         "file:src/renderer/cardFace/cardIllustrationDraw.ts",
@@ -21285,8 +21309,8 @@
         "file:src/renderer/cardFace/proceduralIllustration/illustrationSchemaVersion.ts",
         "file:src/renderer/cardFace/programmaticCardFace.ts",
         "file:src/renderer/cardFace/resolveCardIllustrationUrl.ts",
+        "file:src/renderer/cardFace/staticCardTextureSize.ts",
         "file:src/renderer/components/gameplayVisualConfig.ts",
-        "file:src/renderer/components/tileShatter.ts",
         "file:src/renderer/styles/theme.ts",
         "file:src/shared/contracts.ts"
       ],
@@ -21307,7 +21331,6 @@
         "symbol:src/renderer/components/tileTextures.ts#getIllustrationPipelineDebugState",
         "symbol:src/renderer/components/tileTextures.ts#getOverlayPrewarmDebugState",
         "symbol:src/renderer/components/tileTextures.ts#getOverlayTextureCacheDebugState",
-        "symbol:src/renderer/components/tileTextures.ts#getStaticCardTexturePixelSize",
         "symbol:src/renderer/components/tileTextures.ts#getTileFaceOverlayRegressionStamp",
         "symbol:src/renderer/components/tileTextures.ts#getTileFaceOverlayTexture",
         "symbol:src/renderer/components/tileTextures.ts#getTileFaceOverlayTextureCacheKey",
@@ -21316,7 +21339,6 @@
         "symbol:src/renderer/components/tileTextures.ts#invalidateVersionedTileFaceTextureCaches",
         "symbol:src/renderer/components/tileTextures.ts#OverlayPrewarmDebugState",
         "symbol:src/renderer/components/tileTextures.ts#preloadTileTextureImages",
-        "symbol:src/renderer/components/tileTextures.ts#prewarmTileFaceOverlayTextures",
         "symbol:src/renderer/components/tileTextures.ts#resetDemandDrivenOverlayPrewarmForTest",
         "symbol:src/renderer/components/tileTextures.ts#runDemandDrivenTileFaceOverlayPrewarmSession",
         "symbol:src/renderer/components/tileTextures.ts#setTileTextureSamplingQuality",
@@ -22574,6 +22596,21 @@
       ]
     },
     {
+      "id": "file:src/renderer/hooks/useEscapeLeaves.ts",
+      "path": "src/renderer/hooks/useEscapeLeaves.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 68,
+      "imports": [
+        "file:src/renderer/hooks/useLatestRef.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/hooks/useEscapeLeaves.ts#targetAllowsEscapeToLeave",
+        "symbol:src/renderer/hooks/useEscapeLeaves.ts#useEscapeLeaves"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/hooks/useGamepadNavigation.test.tsx",
       "path": "src/renderer/hooks/useGamepadNavigation.test.tsx",
       "layer": "renderer",
@@ -22610,8 +22647,10 @@
       "path": "src/renderer/hooks/useGameplayChromeClearance.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 111,
-      "imports": [],
+      "lineCount": 124,
+      "imports": [
+        "file:src/renderer/ui/cssZoom.ts"
+      ],
       "exports": [
         "symbol:src/renderer/hooks/useGameplayChromeClearance.ts#useGameplayChromeClearance"
       ],
@@ -23586,7 +23625,7 @@
       "path": "src/renderer/store/navigationModel.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 105,
+      "lineCount": 202,
       "imports": [
         "file:src/renderer/store/navigationModel.ts"
       ],
@@ -23598,7 +23637,7 @@
       "path": "src/renderer/store/navigationModel.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 364,
+      "lineCount": 365,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-lifecycle-machine.ts"
@@ -23608,7 +23647,6 @@
         "symbol:src/renderer/store/navigationModel.ts#getNavigationShellChromeContract",
         "symbol:src/renderer/store/navigationModel.ts#getNavigationShellChromeRows",
         "symbol:src/renderer/store/navigationModel.ts#isInRunMetaView",
-        "symbol:src/renderer/store/navigationModel.ts#isInRunOverlayView",
         "symbol:src/renderer/store/navigationModel.ts#isMenuDestinationView",
         "symbol:src/renderer/store/navigationModel.ts#isRunStatusResumableAfterMetaOverlay",
         "symbol:src/renderer/store/navigationModel.ts#NAVIGATION_ROUTE_CONTRACTS",
@@ -24369,6 +24407,32 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/ui/cssZoom.test.ts",
+      "path": "src/renderer/ui/cssZoom.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 32,
+      "imports": [
+        "file:src/renderer/ui/cssZoom.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/ui/cssZoom.ts",
+      "path": "src/renderer/ui/cssZoom.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 26,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/ui/cssZoom.ts#readCssZoom"
+      ],
+      "testedBy": [
+        "file:src/renderer/ui/cssZoom.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/ui/Eyebrow.tsx",
       "path": "src/renderer/ui/Eyebrow.tsx",
       "layer": "renderer",
@@ -24385,7 +24449,7 @@
       "path": "src/renderer/ui/FittedGrid.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 150,
+      "lineCount": 161,
       "imports": [
         "file:src/renderer/ui/fittedGridFit.ts"
       ],
@@ -24400,7 +24464,7 @@
       "path": "src/renderer/ui/fittedGridFit.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 61,
+      "lineCount": 100,
       "imports": [
         "file:src/renderer/ui/fittedGridFit.ts"
       ],
@@ -24412,7 +24476,7 @@
       "path": "src/renderer/ui/fittedGridFit.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 69,
+      "lineCount": 86,
       "imports": [],
       "exports": [
         "symbol:src/renderer/ui/fittedGridFit.ts#computeGridFit",
@@ -24420,7 +24484,8 @@
         "symbol:src/renderer/ui/fittedGridFit.ts#GridFitInput",
         "symbol:src/renderer/ui/fittedGridFit.ts#growRowHeight",
         "symbol:src/renderer/ui/fittedGridFit.ts#MIN_CLICKABLE_ROW_HEIGHT",
-        "symbol:src/renderer/ui/fittedGridFit.ts#MIN_FITTED_ROW_HEIGHT"
+        "symbol:src/renderer/ui/fittedGridFit.ts#MIN_FITTED_ROW_HEIGHT",
+        "symbol:src/renderer/ui/fittedGridFit.ts#readFrameBox"
       ],
       "testedBy": [
         "file:src/renderer/ui/fittedGridFit.test.ts"
@@ -24528,8 +24593,9 @@
       "path": "src/renderer/ui/MetaShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 74,
+      "lineCount": 79,
       "imports": [
+        "file:src/renderer/hooks/useEscapeLeaves.ts",
         "file:src/renderer/ui/Eyebrow.tsx",
         "file:src/renderer/ui/ScreenTitle.tsx",
         "file:src/renderer/ui/UiButton.tsx"
@@ -24659,7 +24725,7 @@
       "path": "src/renderer/uiScaleLimits.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 59,
+      "lineCount": 72,
       "imports": [
         "file:src/renderer/breakpoints.ts",
         "file:src/renderer/uiScaleLimits.ts",
@@ -24673,7 +24739,7 @@
       "path": "src/renderer/uiScaleLimits.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 70,
+      "lineCount": 107,
       "imports": [
         "file:src/renderer/breakpoints.ts"
       ],
@@ -24681,6 +24747,7 @@
         "symbol:src/renderer/uiScaleLimits.ts#isCompactUiViewport",
         "symbol:src/renderer/uiScaleLimits.ts#isShortLandscapeDesktop",
         "symbol:src/renderer/uiScaleLimits.ts#safeUiScaleFor",
+        "symbol:src/renderer/uiScaleLimits.ts#SCREEN_SCALE_CEILINGS",
         "symbol:src/renderer/uiScaleLimits.ts#UI_SCALE_COMPACT",
         "symbol:src/renderer/uiScaleLimits.ts#UI_SCALE_MAX",
         "symbol:src/renderer/uiScaleLimits.ts#UiScaleViewport"
@@ -26045,7 +26112,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 742,
+      "lineCount": 753,
       "imports": [],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -26130,6 +26197,7 @@
         "symbol:src/shared/contracts.ts#TileState",
         "symbol:src/shared/contracts.ts#TileSuit",
         "symbol:src/shared/contracts.ts#TileTraitKind",
+        "symbol:src/shared/contracts.ts#VIEW_STATES",
         "symbol:src/shared/contracts.ts#ViewState",
         "symbol:src/shared/contracts.ts#WeakerShuffleMode"
       ],
@@ -26233,6 +26301,7 @@
         "file:src/shared/gameplay-interaction-graph.test.ts",
         "file:src/shared/gameplay-journal.test.ts",
         "file:src/shared/gameplay-property-invariants.test.ts",
+        "file:src/shared/held-pair-rules.test.ts",
         "file:src/shared/level-clear-rules.test.ts",
         "file:src/shared/long-run-depth.test.ts",
         "file:src/shared/magpie-rules.test.ts",
@@ -26249,6 +26318,7 @@
         "file:src/shared/personal-best.test.ts",
         "file:src/shared/playthrough-solver.test.ts",
         "file:src/shared/recall-rules.test.ts",
+        "file:src/shared/release-checklist.test.ts",
         "file:src/shared/run-creation-rules.test.ts",
         "file:src/shared/run-history.test.ts",
         "file:src/shared/run-settings-rules.test.ts",
@@ -26287,6 +26357,25 @@
       "imports": [],
       "exports": [],
       "testedBy": []
+    },
+    {
+      "id": "file:src/shared/controller-back-contract.ts",
+      "path": "src/shared/controller-back-contract.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 65,
+      "imports": [
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_CONTRACT",
+        "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_VIEWS",
+        "symbol:src/shared/controller-back-contract.ts#ControllerBackRow",
+        "symbol:src/shared/controller-back-contract.ts#findUnexplainedControllerExemptions"
+      ],
+      "testedBy": [
+        "file:src/shared/release-checklist.test.ts"
+      ]
     },
     {
       "id": "file:src/shared/copy-locality.test.ts",
@@ -27523,7 +27612,7 @@
       "path": "src/shared/gameplay-core.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1003,
+      "lineCount": 1009,
       "imports": [
         "file:src/shared/board-grid-dimensions.ts",
         "file:src/shared/board-inspection.ts",
@@ -27941,6 +28030,40 @@
       "imports": [],
       "exports": [],
       "testedBy": []
+    },
+    {
+      "id": "file:src/shared/held-pair-rules.test.ts",
+      "path": "src/shared/held-pair-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 83,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/held-pair-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/held-pair-rules.ts",
+      "path": "src/shared/held-pair-rules.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 94,
+      "imports": [
+        "file:src/shared/board-grid-dimensions.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/run-array-guards.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/held-pair-rules.ts#describeHeldPair",
+        "symbol:src/shared/held-pair-rules.ts#getHeldPairSpan",
+        "symbol:src/shared/held-pair-rules.ts#getHeldPairTileIds",
+        "symbol:src/shared/held-pair-rules.ts#HELD_PAIR_PIN_COUNT"
+      ],
+      "testedBy": [
+        "file:src/shared/held-pair-rules.test.ts"
+      ]
     },
     {
       "id": "file:src/shared/honor-unlock-ids.ts",
@@ -29477,7 +29600,7 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 678,
+      "lineCount": 711,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
@@ -29492,6 +29615,8 @@
         "file:src/shared/cascade-balance-simulation.ts",
         "file:src/shared/chunk-break-rules.ts",
         "file:src/shared/content-security-policy.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/controller-back-contract.ts",
         "file:src/shared/desktop-api-boundary.ts",
         "file:src/shared/game-core.ts",
         "file:src/shared/game.ts",
@@ -32533,8 +32658,8 @@
       "name": "acquireToolbarRovingPause",
       "kind": "value",
       "file": "src/renderer/a11y/toolbarRoving.ts",
-      "line": 65,
-      "endLine": 98
+      "line": 62,
+      "endLine": 95
     },
     {
       "id": "symbol:src/renderer/a11y/toolbarRoving.ts#getToolbarButtons",
@@ -32549,16 +32674,8 @@
       "name": "handleHorizontalToolbarKeyDown",
       "kind": "value",
       "file": "src/renderer/a11y/toolbarRoving.ts",
-      "line": 152,
-      "endLine": 153
-    },
-    {
-      "id": "symbol:src/renderer/a11y/toolbarRoving.ts#handleVerticalToolbarKeyDown",
-      "name": "handleVerticalToolbarKeyDown",
-      "kind": "value",
-      "file": "src/renderer/a11y/toolbarRoving.ts",
-      "line": 149,
-      "endLine": 150
+      "line": 148,
+      "endLine": 149
     },
     {
       "id": "symbol:src/renderer/a11y/toolbarRoving.ts#syncToolbarTabIndices",
@@ -32567,14 +32684,6 @@
       "file": "src/renderer/a11y/toolbarRoving.ts",
       "line": 35,
       "endLine": 55
-    },
-    {
-      "id": "symbol:src/renderer/a11y/toolbarRoving.ts#syncVerticalToolbarTabIndices",
-      "name": "syncVerticalToolbarTabIndices",
-      "kind": "value",
-      "file": "src/renderer/a11y/toolbarRoving.ts",
-      "line": 57,
-      "endLine": 59
     },
     {
       "id": "symbol:src/renderer/App.tsx#APP_MAIN_LANDMARK_ID",
@@ -32901,24 +33010,24 @@
       "name": "audioCoverageCueIsGameplaySfx",
       "kind": "value",
       "file": "src/renderer/audio/audioInteractionCoverage.ts",
-      "line": 387,
-      "endLine": 387
+      "line": 392,
+      "endLine": 392
     },
     {
       "id": "symbol:src/renderer/audio/audioInteractionCoverage.ts#audioCoverageCueIsKnown",
       "name": "audioCoverageCueIsKnown",
       "kind": "value",
       "file": "src/renderer/audio/audioInteractionCoverage.ts",
-      "line": 389,
-      "endLine": 390
+      "line": 394,
+      "endLine": 395
     },
     {
       "id": "symbol:src/renderer/audio/audioInteractionCoverage.ts#audioCoverageRowsByDomain",
       "name": "audioCoverageRowsByDomain",
       "kind": "value",
       "file": "src/renderer/audio/audioInteractionCoverage.ts",
-      "line": 384,
-      "endLine": 385
+      "line": 389,
+      "endLine": 390
     },
     {
       "id": "symbol:src/renderer/audio/audioInteractionCoverage.ts#AudioSemanticMoment",
@@ -32927,14 +33036,6 @@
       "file": "src/renderer/audio/audioInteractionCoverage.ts",
       "line": 6,
       "endLine": 19
-    },
-    {
-      "id": "symbol:src/renderer/audio/audioInteractionCoverage.ts#getAudioCoverageRows",
-      "name": "getAudioCoverageRows",
-      "kind": "value",
-      "file": "src/renderer/audio/audioInteractionCoverage.ts",
-      "line": 382,
-      "endLine": 382
     },
     {
       "id": "symbol:src/renderer/audio/audioManifestBoundary.ts#sfxManifestSchema",
@@ -33593,22 +33694,6 @@
       "endLine": 13
     },
     {
-      "id": "symbol:src/renderer/breakpoints.ts#readWindowInnerSizeFallback",
-      "name": "readWindowInnerSizeFallback",
-      "kind": "value",
-      "file": "src/renderer/breakpoints.ts",
-      "line": 36,
-      "endLine": 41
-    },
-    {
-      "id": "symbol:src/renderer/breakpoints.ts#safeSubscribeWindowResize",
-      "name": "safeSubscribeWindowResize",
-      "kind": "value",
-      "file": "src/renderer/breakpoints.ts",
-      "line": 25,
-      "endLine": 33
-    },
-    {
       "id": "symbol:src/renderer/breakpoints.ts#VIEWPORT_LANDSCAPE_STACK_MAX_WIDTH",
       "name": "VIEWPORT_LANDSCAPE_STACK_MAX_WIDTH",
       "kind": "value",
@@ -33861,48 +33946,48 @@
       "name": "CARD_RASTER_SLOT_COUNT",
       "kind": "value",
       "file": "src/renderer/cardFace/cardRasterDeck.ts",
-      "line": 28,
-      "endLine": 28
+      "line": 19,
+      "endLine": 19
     },
     {
       "id": "symbol:src/renderer/cardFace/cardRasterDeck.ts#clearRasterDeckPanelCache",
       "name": "clearRasterDeckPanelCache",
       "kind": "value",
       "file": "src/renderer/cardFace/cardRasterDeck.ts",
-      "line": 96,
-      "endLine": 98
+      "line": 87,
+      "endLine": 89
     },
     {
       "id": "symbol:src/renderer/cardFace/cardRasterDeck.ts#drawRasterDeckComposedOverlay",
       "name": "drawRasterDeckComposedOverlay",
       "kind": "value",
       "file": "src/renderer/cardFace/cardRasterDeck.ts",
-      "line": 104,
-      "endLine": 130
+      "line": 95,
+      "endLine": 121
     },
     {
       "id": "symbol:src/renderer/cardFace/cardRasterDeck.ts#getRasterDeckPanelPixelSize",
       "name": "getRasterDeckPanelPixelSize",
       "kind": "value",
       "file": "src/renderer/cardFace/cardRasterDeck.ts",
-      "line": 133,
-      "endLine": 137
+      "line": 124,
+      "endLine": 128
     },
     {
       "id": "symbol:src/renderer/cardFace/cardRasterDeck.ts#isCardRasterDeckEnabled",
       "name": "isCardRasterDeckEnabled",
       "kind": "value",
       "file": "src/renderer/cardFace/cardRasterDeck.ts",
-      "line": 81,
-      "endLine": 93
+      "line": 72,
+      "endLine": 84
     },
     {
       "id": "symbol:src/renderer/cardFace/cardRasterDeck.ts#rasterDeckPairKeyForSlot",
       "name": "rasterDeckPairKeyForSlot",
       "kind": "value",
       "file": "src/renderer/cardFace/cardRasterDeck.ts",
-      "line": 34,
-      "endLine": 37
+      "line": 25,
+      "endLine": 28
     },
     {
       "id": "symbol:src/renderer/cardFace/facePanelRasterUrls.ts#ALL_FACE_PANEL_URLS_ORDERED",
@@ -34337,6 +34422,30 @@
       "endLine": 48
     },
     {
+      "id": "symbol:src/renderer/cardFace/staticCardTextureSize.ts#getStaticCardTexturePixelSize",
+      "name": "getStaticCardTexturePixelSize",
+      "kind": "value",
+      "file": "src/renderer/cardFace/staticCardTextureSize.ts",
+      "line": 28,
+      "endLine": 31
+    },
+    {
+      "id": "symbol:src/renderer/cardFace/staticCardTextureSize.ts#STATIC_CARD_TEXTURE_HEIGHT",
+      "name": "STATIC_CARD_TEXTURE_HEIGHT",
+      "kind": "value",
+      "file": "src/renderer/cardFace/staticCardTextureSize.ts",
+      "line": 20,
+      "endLine": 20
+    },
+    {
+      "id": "symbol:src/renderer/cardFace/staticCardTextureSize.ts#STATIC_CARD_TEXTURE_WIDTH",
+      "name": "STATIC_CARD_TEXTURE_WIDTH",
+      "kind": "value",
+      "file": "src/renderer/cardFace/staticCardTextureSize.ts",
+      "line": 22,
+      "endLine": 25
+    },
+    {
       "id": "symbol:src/renderer/cardFace/svgMarkup.ts#svgLinearGradientDef",
       "name": "svgLinearGradientDef",
       "kind": "value",
@@ -34725,8 +34834,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ChooseYourPathScreen.tsx",
-      "line": 600,
-      "endLine": 600
+      "line": 663,
+      "endLine": 663
     },
     {
       "id": "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows",
@@ -34741,8 +34850,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/CodexScreen.tsx",
-      "line": 259,
-      "endLine": 259
+      "line": 279,
+      "endLine": 279
     },
     {
       "id": "symbol:src/renderer/components/codexScreenModel.ts#buildCodexModeRows",
@@ -34845,8 +34954,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 463,
-      "endLine": 463
+      "line": 473,
+      "endLine": 473
     },
     {
       "id": "symbol:src/renderer/components/gameplayRenderProfile.ts#GAMEPLAY_RENDER_PROFILE",
@@ -34941,40 +35050,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 1809,
-      "endLine": 1809
+      "line": 1833,
+      "endLine": 1833
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 195,
-      "endLine": 195
+      "line": 214,
+      "endLine": 214
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 193,
-      "endLine": 193
+      "line": 212,
+      "endLine": 212
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 197,
-      "endLine": 197
+      "line": 216,
+      "endLine": 216
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 187,
-      "endLine": 187
+      "line": 206,
+      "endLine": 206
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -35037,8 +35146,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/InventoryScreen.tsx",
-      "line": 160,
-      "endLine": 160
+      "line": 163,
+      "endLine": 163
     },
     {
       "id": "symbol:src/renderer/components/inventoryScreenModel.ts#createInventoryQuantityMap",
@@ -35061,8 +35170,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/MainMenu.tsx",
-      "line": 281,
-      "endLine": 281
+      "line": 289,
+      "endLine": 289
     },
     {
       "id": "symbol:src/renderer/components/MainMenuBackground.tsx#default",
@@ -35205,16 +35314,16 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/OverlayModal.tsx",
-      "line": 268,
-      "endLine": 268
+      "line": 274,
+      "endLine": 274
     },
     {
       "id": "symbol:src/renderer/components/OverlayModal.tsx#ModalAction",
       "name": "ModalAction",
       "kind": "interface",
       "file": "src/renderer/components/OverlayModal.tsx",
-      "line": 10,
-      "endLine": 15
+      "line": 11,
+      "endLine": 16
     },
     {
       "id": "symbol:src/renderer/components/PairProximityHintPlane.tsx#PairProximityHintPlane",
@@ -35237,24 +35346,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 449,
-      "endLine": 449
+      "line": 490,
+      "endLine": 490
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 41,
-      "endLine": 66
+      "line": 42,
+      "endLine": 67
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 28,
-      "endLine": 39
+      "line": 29,
+      "endLine": 40
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
@@ -35333,40 +35442,40 @@
       "name": "PlaceholderControl",
       "kind": "value",
       "file": "src/renderer/components/SettingsControls.tsx",
-      "line": 113,
-      "endLine": 146
+      "line": 124,
+      "endLine": 157
     },
     {
       "id": "symbol:src/renderer/components/SettingsControls.tsx#SegmentedControl",
       "name": "SegmentedControl",
       "kind": "value",
       "file": "src/renderer/components/SettingsControls.tsx",
-      "line": 78,
-      "endLine": 104
+      "line": 89,
+      "endLine": 115
     },
     {
       "id": "symbol:src/renderer/components/SettingsControls.tsx#SettingsSection",
       "name": "SettingsSection",
       "kind": "value",
       "file": "src/renderer/components/SettingsControls.tsx",
-      "line": 153,
-      "endLine": 160
+      "line": 164,
+      "endLine": 169
     },
     {
       "id": "symbol:src/renderer/components/SettingsControls.tsx#SliderRow",
       "name": "SliderRow",
       "kind": "value",
       "file": "src/renderer/components/SettingsControls.tsx",
-      "line": 43,
-      "endLine": 63
+      "line": 53,
+      "endLine": 74
     },
     {
       "id": "symbol:src/renderer/components/SettingsControls.tsx#ToggleRow",
       "name": "ToggleRow",
       "kind": "value",
       "file": "src/renderer/components/SettingsControls.tsx",
-      "line": 13,
-      "endLine": 30
+      "line": 20,
+      "endLine": 40
     },
     {
       "id": "symbol:src/renderer/components/settingsNavigationModel.ts#DEFAULT_SUBSECTION_BY_CATEGORY",
@@ -35413,8 +35522,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/SettingsScreen.tsx",
-      "line": 740,
-      "endLine": 740
+      "line": 754,
+      "endLine": 754
     },
     {
       "id": "symbol:src/renderer/components/shuffleFlipAnimation.ts#computeBoardEntranceMotionBudgetMs",
@@ -38317,272 +38426,256 @@
       "name": "applyAnisotropyToCachedTileTextures",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 588,
-      "endLine": 598
+      "line": 584,
+      "endLine": 594
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#clearTileTextureCachesForDebug",
       "name": "clearTileTextureCachesForDebug",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1713,
-      "endLine": 1721
+      "line": 1595,
+      "endLine": 1603
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#CubeFace",
       "name": "CubeFace",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 94,
-      "endLine": 94
+      "line": 97,
+      "endLine": 97
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#CubeLayer",
       "name": "CubeLayer",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 95,
-      "endLine": 95
+      "line": 98,
+      "endLine": 98
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#FaceVariant",
       "name": "FaceVariant",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 47,
-      "endLine": 47
+      "line": 50,
+      "endLine": 50
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#forceIllustrationOverlayCacheVersionForTest",
       "name": "forceIllustrationOverlayCacheVersionForTest",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1725,
-      "endLine": 1727
+      "line": 1607,
+      "endLine": 1609
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#formatTileFaceOverlayRegressionLogLine",
       "name": "formatTileFaceOverlayRegressionLogLine",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1288,
-      "endLine": 1292
+      "line": 1284,
+      "endLine": 1288
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCachedTileTextureKeysForDebug",
       "name": "getCachedTileTextureKeysForDebug",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1723,
-      "endLine": 1723
+      "line": 1605,
+      "endLine": 1605
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardBackRasterNormalMapTexture",
       "name": "getCardBackRasterNormalMapTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 625,
-      "endLine": 637
+      "line": 621,
+      "endLine": 633
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardFaceRasterNormalMapTexture",
       "name": "getCardFaceRasterNormalMapTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 610,
-      "endLine": 622
+      "line": 606,
+      "endLine": 618
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardFaceStaticTexture",
       "name": "getCardFaceStaticTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1666,
-      "endLine": 1683
+      "line": 1548,
+      "endLine": 1565
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardPanelDisplacementTexture",
       "name": "getCardPanelDisplacementTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 723,
-      "endLine": 740
+      "line": 719,
+      "endLine": 736
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardPanelNormalTexture",
       "name": "getCardPanelNormalTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 670,
-      "endLine": 687
+      "line": 666,
+      "endLine": 683
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getIllustrationPipelineDebugState",
       "name": "getIllustrationPipelineDebugState",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1729,
-      "endLine": 1737
+      "line": 1611,
+      "endLine": 1619
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getOverlayPrewarmDebugState",
       "name": "getOverlayPrewarmDebugState",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1708,
-      "endLine": 1711
+      "line": 1590,
+      "endLine": 1593
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getOverlayTextureCacheDebugState",
       "name": "getOverlayTextureCacheDebugState",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1693,
-      "endLine": 1706
-    },
-    {
-      "id": "symbol:src/renderer/components/tileTextures.ts#getStaticCardTexturePixelSize",
-      "name": "getStaticCardTexturePixelSize",
-      "kind": "value",
-      "file": "src/renderer/components/tileTextures.ts",
-      "line": 110,
-      "endLine": 113
+      "line": 1575,
+      "endLine": 1588
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getTileFaceOverlayRegressionStamp",
       "name": "getTileFaceOverlayRegressionStamp",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1270,
-      "endLine": 1286
+      "line": 1266,
+      "endLine": 1282
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getTileFaceOverlayTexture",
       "name": "getTileFaceOverlayTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1434,
-      "endLine": 1448
+      "line": 1430,
+      "endLine": 1444
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getTileFaceOverlayTextureCacheKey",
       "name": "getTileFaceOverlayTextureCacheKey",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1264,
-      "endLine": 1268
+      "line": 1260,
+      "endLine": 1264
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getTileFaceRoughnessTexture",
       "name": "getTileFaceRoughnessTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1422,
-      "endLine": 1432
+      "line": 1418,
+      "endLine": 1428
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getTileFaceTexture",
       "name": "getTileFaceTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1408,
-      "endLine": 1420
+      "line": 1404,
+      "endLine": 1416
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#invalidateVersionedTileFaceTextureCaches",
       "name": "invalidateVersionedTileFaceTextureCaches",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 260,
-      "endLine": 268
+      "line": 256,
+      "endLine": 264
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#OverlayPrewarmDebugState",
       "name": "OverlayPrewarmDebugState",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 80,
-      "endLine": 89
+      "line": 83,
+      "endLine": 92
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#preloadTileTextureImages",
       "name": "preloadTileTextureImages",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 400,
-      "endLine": 406
-    },
-    {
-      "id": "symbol:src/renderer/components/tileTextures.ts#prewarmTileFaceOverlayTextures",
-      "name": "prewarmTileFaceOverlayTextures",
-      "kind": "value",
-      "file": "src/renderer/components/tileTextures.ts",
-      "line": 1495,
-      "endLine": 1573
+      "line": 396,
+      "endLine": 402
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#resetDemandDrivenOverlayPrewarmForTest",
       "name": "resetDemandDrivenOverlayPrewarmForTest",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1660,
-      "endLine": 1664
+      "line": 1542,
+      "endLine": 1546
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#runDemandDrivenTileFaceOverlayPrewarmSession",
       "name": "runDemandDrivenTileFaceOverlayPrewarmSession",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1627,
-      "endLine": 1657
+      "line": 1509,
+      "endLine": 1539
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#setTileTextureSamplingQuality",
       "name": "setTileTextureSamplingQuality",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 128,
-      "endLine": 147
+      "line": 124,
+      "endLine": 143
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#subscribeTextureImageUpdates",
       "name": "subscribeTextureImageUpdates",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1685,
-      "endLine": 1691
+      "line": 1567,
+      "endLine": 1573
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#TILE_TEXTURE_IMAGE_IDS",
       "name": "TILE_TEXTURE_IMAGE_IDS",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 287,
-      "endLine": 295
+      "line": 283,
+      "endLine": 291
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#TileFace",
       "name": "TileFace",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 48,
-      "endLine": 48
+      "line": 51,
+      "endLine": 51
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#TileFaceOverlayRegressionStamp",
       "name": "TileFaceOverlayRegressionStamp",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 70,
-      "endLine": 78
+      "line": 73,
+      "endLine": 81
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#TileLayer",
       "name": "TileLayer",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 49,
-      "endLine": 49
+      "line": 52,
+      "endLine": 52
     },
     {
       "id": "symbol:src/renderer/components/TutorialPairMarkerPlane.tsx#TutorialPairMarkerPlane",
@@ -39849,6 +39942,22 @@
       "endLine": 89
     },
     {
+      "id": "symbol:src/renderer/hooks/useEscapeLeaves.ts#targetAllowsEscapeToLeave",
+      "name": "targetAllowsEscapeToLeave",
+      "kind": "value",
+      "file": "src/renderer/hooks/useEscapeLeaves.ts",
+      "line": 11,
+      "endLine": 26
+    },
+    {
+      "id": "symbol:src/renderer/hooks/useEscapeLeaves.ts#useEscapeLeaves",
+      "name": "useEscapeLeaves",
+      "kind": "value",
+      "file": "src/renderer/hooks/useEscapeLeaves.ts",
+      "line": 42,
+      "endLine": 67
+    },
+    {
       "id": "symbol:src/renderer/hooks/useGamepadNavigation.ts#useGamepadConnected",
       "name": "useGamepadConnected",
       "kind": "value",
@@ -39869,8 +39978,8 @@
       "name": "useGameplayChromeClearance",
       "kind": "value",
       "file": "src/renderer/hooks/useGameplayChromeClearance.ts",
-      "line": 27,
-      "endLine": 110
+      "line": 37,
+      "endLine": 123
     },
     {
       "id": "symbol:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts#formatHudActionFeedbackText",
@@ -40805,104 +40914,96 @@
       "name": "getNavigationRouteContract",
       "kind": "value",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 164,
-      "endLine": 169
+      "line": 167,
+      "endLine": 172
     },
     {
       "id": "symbol:src/renderer/store/navigationModel.ts#getNavigationShellChromeContract",
       "name": "getNavigationShellChromeContract",
       "kind": "value",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 239,
-      "endLine": 266
+      "line": 240,
+      "endLine": 267
     },
     {
       "id": "symbol:src/renderer/store/navigationModel.ts#getNavigationShellChromeRows",
       "name": "getNavigationShellChromeRows",
       "kind": "value",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 171,
-      "endLine": 204
+      "line": 174,
+      "endLine": 207
     },
     {
       "id": "symbol:src/renderer/store/navigationModel.ts#isInRunMetaView",
       "name": "isInRunMetaView",
       "kind": "value",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 235,
-      "endLine": 235
-    },
-    {
-      "id": "symbol:src/renderer/store/navigationModel.ts#isInRunOverlayView",
-      "name": "isInRunOverlayView",
-      "kind": "value",
-      "file": "src/renderer/store/navigationModel.ts",
-      "line": 237,
-      "endLine": 237
+      "line": 238,
+      "endLine": 238
     },
     {
       "id": "symbol:src/renderer/store/navigationModel.ts#isMenuDestinationView",
       "name": "isMenuDestinationView",
       "kind": "value",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 233,
-      "endLine": 233
+      "line": 236,
+      "endLine": 236
     },
     {
       "id": "symbol:src/renderer/store/navigationModel.ts#isRunStatusResumableAfterMetaOverlay",
       "name": "isRunStatusResumableAfterMetaOverlay",
       "kind": "value",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 206,
-      "endLine": 207
+      "line": 209,
+      "endLine": 210
     },
     {
       "id": "symbol:src/renderer/store/navigationModel.ts#NAVIGATION_ROUTE_CONTRACTS",
       "name": "NAVIGATION_ROUTE_CONTRACTS",
       "kind": "value",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 64,
-      "endLine": 162
+      "line": 67,
+      "endLine": 165
     },
     {
       "id": "symbol:src/renderer/store/navigationModel.ts#resolveNavigationTransition",
       "name": "resolveNavigationTransition",
       "kind": "value",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 297,
-      "endLine": 363
+      "line": 298,
+      "endLine": 364
     },
     {
       "id": "symbol:src/renderer/store/navigationModel.ts#resolveSettingsCloseTarget",
       "name": "resolveSettingsCloseTarget",
       "kind": "value",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 221,
-      "endLine": 231
+      "line": 224,
+      "endLine": 234
     },
     {
       "id": "symbol:src/renderer/store/navigationModel.ts#resolveSubscreenCloseTarget",
       "name": "resolveSubscreenCloseTarget",
       "kind": "value",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 209,
-      "endLine": 219
+      "line": 212,
+      "endLine": 222
     },
     {
       "id": "symbol:src/renderer/store/navigationModel.ts#StoreNavigationAction",
       "name": "StoreNavigationAction",
       "kind": "type",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 268,
-      "endLine": 278
+      "line": 269,
+      "endLine": 279
     },
     {
       "id": "symbol:src/renderer/store/navigationModel.ts#StoreNavigationTransition",
       "name": "StoreNavigationTransition",
       "kind": "type",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 280,
-      "endLine": 288
+      "line": 281,
+      "endLine": 289
     },
     {
       "id": "symbol:src/renderer/store/passAndPlayProjection.ts#projectPassAndPlayTurn",
@@ -41481,6 +41582,14 @@
       "endLine": 15
     },
     {
+      "id": "symbol:src/renderer/ui/cssZoom.ts#readCssZoom",
+      "name": "readCssZoom",
+      "kind": "value",
+      "file": "src/renderer/ui/cssZoom.ts",
+      "line": 17,
+      "endLine": 25
+    },
+    {
       "id": "symbol:src/renderer/ui/Eyebrow.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
@@ -41493,8 +41602,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/ui/FittedGrid.tsx",
-      "line": 149,
-      "endLine": 149
+      "line": 160,
+      "endLine": 160
     },
     {
       "id": "symbol:src/renderer/ui/FittedGrid.tsx#FittedGridProps",
@@ -41551,6 +41660,14 @@
       "file": "src/renderer/ui/fittedGridFit.ts",
       "line": 36,
       "endLine": 36
+    },
+    {
+      "id": "symbol:src/renderer/ui/fittedGridFit.ts#readFrameBox",
+      "name": "readFrameBox",
+      "kind": "value",
+      "file": "src/renderer/ui/fittedGridFit.ts",
+      "line": 82,
+      "endLine": 85
     },
     {
       "id": "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayExitIcon",
@@ -41965,16 +42082,16 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/ui/MetaShell.tsx",
-      "line": 73,
-      "endLine": 73
+      "line": 78,
+      "endLine": 78
     },
     {
       "id": "symbol:src/renderer/ui/MetaShell.tsx#MetaShellProps",
       "name": "MetaShellProps",
       "kind": "interface",
       "file": "src/renderer/ui/MetaShell.tsx",
-      "line": 13,
-      "endLine": 31
+      "line": 14,
+      "endLine": 32
     },
     {
       "id": "symbol:src/renderer/ui/OverlayActionDock.tsx#default",
@@ -42149,48 +42266,56 @@
       "name": "isCompactUiViewport",
       "kind": "value",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 58,
-      "endLine": 60
+      "line": 95,
+      "endLine": 97
     },
     {
       "id": "symbol:src/renderer/uiScaleLimits.ts#isShortLandscapeDesktop",
       "name": "isShortLandscapeDesktop",
       "kind": "value",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 55,
-      "endLine": 56
+      "line": 92,
+      "endLine": 93
     },
     {
       "id": "symbol:src/renderer/uiScaleLimits.ts#safeUiScaleFor",
       "name": "safeUiScaleFor",
       "kind": "value",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 63,
-      "endLine": 69
+      "line": 100,
+      "endLine": 106
+    },
+    {
+      "id": "symbol:src/renderer/uiScaleLimits.ts#SCREEN_SCALE_CEILINGS",
+      "name": "SCREEN_SCALE_CEILINGS",
+      "kind": "value",
+      "file": "src/renderer/uiScaleLimits.ts",
+      "line": 66,
+      "endLine": 73
     },
     {
       "id": "symbol:src/renderer/uiScaleLimits.ts#UI_SCALE_COMPACT",
       "name": "UI_SCALE_COMPACT",
       "kind": "value",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 47,
-      "endLine": 47
+      "line": 84,
+      "endLine": 84
     },
     {
       "id": "symbol:src/renderer/uiScaleLimits.ts#UI_SCALE_MAX",
       "name": "UI_SCALE_MAX",
       "kind": "value",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 39,
-      "endLine": 39
+      "line": 76,
+      "endLine": 76
     },
     {
       "id": "symbol:src/renderer/uiScaleLimits.ts#UiScaleViewport",
       "name": "UiScaleViewport",
       "kind": "interface",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 49,
-      "endLine": 52
+      "line": 86,
+      "endLine": 89
     },
     {
       "id": "symbol:src/renderer/viewportMatrix.ts#classifyResponsiveViewport",
@@ -44237,48 +44362,48 @@
       "name": "AchievementId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 162,
-      "endLine": 194
+      "line": 173,
+      "endLine": 205
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementState",
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 619,
-      "endLine": 619
+      "line": 630,
+      "endLine": 630
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 689,
-      "endLine": 691
+      "line": 700,
+      "endLine": 702
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
       "name": "BoardPresentationMode",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 203,
-      "endLine": 203
+      "line": 214,
+      "endLine": 214
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardScreenSpaceAA",
       "name": "BoardScreenSpaceAA",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 217,
-      "endLine": 217
+      "line": 228,
+      "endLine": 228
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardState",
       "name": "BoardState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 305,
-      "endLine": 333
+      "line": 316,
+      "endLine": 344
     },
     {
       "id": "symbol:src/shared/contracts.ts#BOSS_FLOOR_SCORE_MULTIPLIER",
@@ -44293,32 +44418,32 @@
       "name": "BuiltinPuzzleDefinition",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 104,
-      "endLine": 115
+      "line": 115,
+      "endLine": 126
     },
     {
       "id": "symbol:src/shared/contracts.ts#CameraViewportModePreference",
       "name": "CameraViewportModePreference",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 210,
-      "endLine": 210
+      "line": 221,
+      "endLine": 221
     },
     {
       "id": "symbol:src/shared/contracts.ts#ContractFlags",
       "name": "ContractFlags",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 153,
-      "endLine": 158
+      "line": 164,
+      "endLine": 169
     },
     {
       "id": "symbol:src/shared/contracts.ts#CrashReportSummary",
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 697,
-      "endLine": 702
+      "line": 708,
+      "endLine": 713
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -44341,16 +44466,16 @@
       "name": "DebugFlags",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 196,
-      "endLine": 200
+      "line": 207,
+      "endLine": 211
     },
     {
       "id": "symbol:src/shared/contracts.ts#DesktopApi",
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 715,
-      "endLine": 741
+      "line": 726,
+      "endLine": 752
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -44397,24 +44522,24 @@
       "name": "FINDABLE_KIND_SPAWN_WEIGHTS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 146,
-      "endLine": 148
+      "line": 157,
+      "endLine": 159
     },
     {
       "id": "symbol:src/shared/contracts.ts#FINDABLE_MATCH_SCORE",
       "name": "FINDABLE_MATCH_SCORE",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 142,
-      "endLine": 144
+      "line": 153,
+      "endLine": 155
     },
     {
       "id": "symbol:src/shared/contracts.ts#FindableKind",
       "name": "FindableKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 139,
-      "endLine": 139
+      "line": 150,
+      "endLine": 150
     },
     {
       "id": "symbol:src/shared/contracts.ts#FLIP_PAR_BONUS_SCORE",
@@ -44429,24 +44554,24 @@
       "name": "FLOOR_ARCHETYPE_IDS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 290,
-      "endLine": 302
+      "line": 301,
+      "endLine": 313
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorArchetypeId",
       "name": "FloorArchetypeId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 303,
-      "endLine": 303
+      "line": 314,
+      "endLine": 314
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorTag",
       "name": "FloorTag",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 281,
-      "endLine": 281
+      "line": 292,
+      "endLine": 292
     },
     {
       "id": "symbol:src/shared/contracts.ts#GAME_RULES_VERSION",
@@ -44461,32 +44586,32 @@
       "name": "GameMode",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 98,
-      "endLine": 98
+      "line": 109,
+      "endLine": 109
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameplayCommandJournalEntry",
       "name": "GameplayCommandJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 428,
-      "endLine": 432
+      "line": 439,
+      "endLine": 443
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameplayEventJournalEntry",
       "name": "GameplayEventJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 434,
-      "endLine": 444
+      "line": 445,
+      "endLine": 455
     },
     {
       "id": "symbol:src/shared/contracts.ts#GraphicsQualityPreset",
       "name": "GraphicsQualityPreset",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 220,
-      "endLine": 220
+      "line": 231,
+      "endLine": 231
     },
     {
       "id": "symbol:src/shared/contracts.ts#INITIAL_RECALL_FOCUS",
@@ -44517,8 +44642,8 @@
       "name": "LevelResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 353,
-      "endLine": 388
+      "line": 364,
+      "endLine": 399
     },
     {
       "id": "symbol:src/shared/contracts.ts#MATCH_DELAY_MS",
@@ -44605,64 +44730,64 @@
       "name": "MUTATOR_IDS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 117,
-      "endLine": 128
+      "line": 128,
+      "endLine": 139
     },
     {
       "id": "symbol:src/shared/contracts.ts#MutatorId",
       "name": "MutatorId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 129,
-      "endLine": 129
+      "line": 140,
+      "endLine": 140
     },
     {
       "id": "symbol:src/shared/contracts.ts#PassAndPlaySeat",
       "name": "PassAndPlaySeat",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 457,
-      "endLine": 469
+      "line": 468,
+      "endLine": 480
     },
     {
       "id": "symbol:src/shared/contracts.ts#PassAndPlayState",
       "name": "PassAndPlayState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 471,
-      "endLine": 484
+      "line": 482,
+      "endLine": 495
     },
     {
       "id": "symbol:src/shared/contracts.ts#PlayerStatsPersisted",
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 621,
-      "endLine": 634
+      "line": 632,
+      "endLine": 645
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
       "name": "PuzzleDifficulty",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 100,
-      "endLine": 100
+      "line": 111,
+      "endLine": 111
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleGoal",
       "name": "PuzzleGoal",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 101,
-      "endLine": 101
+      "line": 112,
+      "endLine": 112
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzlePackId",
       "name": "PuzzlePackId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 102,
-      "endLine": 102
+      "line": 113,
+      "endLine": 113
     },
     {
       "id": "symbol:src/shared/contracts.ts#Rating",
@@ -44701,16 +44826,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 705,
-      "endLine": 705
+      "line": 716,
+      "endLine": 716
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 708,
-      "endLine": 713
+      "line": 719,
+      "endLine": 724
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -44725,24 +44850,24 @@
       "name": "ResumableRunStatus",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 159,
-      "endLine": 159
+      "line": 170,
+      "endLine": 170
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceState",
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 682,
-      "endLine": 686
+      "line": 693,
+      "endLine": 697
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 680,
-      "endLine": 680
+      "line": 691,
+      "endLine": 691
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
@@ -44757,40 +44882,40 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 641,
-      "endLine": 653
+      "line": 652,
+      "endLine": 664
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
       "name": "RunState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 486,
-      "endLine": 617
+      "line": 497,
+      "endLine": 628
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
       "name": "RunStatus",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 160,
-      "endLine": 160
+      "line": 171,
+      "endLine": 171
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunSummary",
       "name": "RunSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 391,
-      "endLine": 426
+      "line": 402,
+      "endLine": 437
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunTimerState",
       "name": "RunTimerState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 446,
-      "endLine": 451
+      "line": 457,
+      "endLine": 462
     },
     {
       "id": "symbol:src/shared/contracts.ts#SAVE_SCHEMA_VERSION",
@@ -44805,8 +44930,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 655,
-      "endLine": 674
+      "line": 666,
+      "endLine": 685
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -44821,16 +44946,16 @@
       "name": "SessionStats",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 335,
-      "endLine": 351
+      "line": 346,
+      "endLine": 362
     },
     {
       "id": "symbol:src/shared/contracts.ts#Settings",
       "name": "Settings",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 222,
-      "endLine": 257
+      "line": 233,
+      "endLine": 268
     },
     {
       "id": "symbol:src/shared/contracts.ts#SHIFTING_BOUNTY_MATCH_BONUS",
@@ -44853,16 +44978,16 @@
       "name": "SubscreenReturnView",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 83,
-      "endLine": 83
+      "line": 94,
+      "endLine": 94
     },
     {
       "id": "symbol:src/shared/contracts.ts#Tile",
       "name": "Tile",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 259,
-      "endLine": 279
+      "line": 270,
+      "endLine": 290
     },
     {
       "id": "symbol:src/shared/contracts.ts#TileState",
@@ -44885,24 +45010,64 @@
       "name": "TileTraitKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 390,
-      "endLine": 390
+      "line": 401,
+      "endLine": 401
+    },
+    {
+      "id": "symbol:src/shared/contracts.ts#VIEW_STATES",
+      "name": "VIEW_STATES",
+      "kind": "value",
+      "file": "src/shared/contracts.ts",
+      "line": 78,
+      "endLine": 89
     },
     {
       "id": "symbol:src/shared/contracts.ts#ViewState",
       "name": "ViewState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 70,
-      "endLine": 80
+      "line": 91,
+      "endLine": 91
     },
     {
       "id": "symbol:src/shared/contracts.ts#WeakerShuffleMode",
       "name": "WeakerShuffleMode",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 151,
-      "endLine": 151
+      "line": 162,
+      "endLine": 162
+    },
+    {
+      "id": "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_CONTRACT",
+      "name": "CONTROLLER_BACK_CONTRACT",
+      "kind": "value",
+      "file": "src/shared/controller-back-contract.ts",
+      "line": 27,
+      "endLine": 52
+    },
+    {
+      "id": "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_VIEWS",
+      "name": "CONTROLLER_BACK_VIEWS",
+      "kind": "value",
+      "file": "src/shared/controller-back-contract.ts",
+      "line": 55,
+      "endLine": 57
+    },
+    {
+      "id": "symbol:src/shared/controller-back-contract.ts#ControllerBackRow",
+      "name": "ControllerBackRow",
+      "kind": "interface",
+      "file": "src/shared/controller-back-contract.ts",
+      "line": 19,
+      "endLine": 25
+    },
+    {
+      "id": "symbol:src/shared/controller-back-contract.ts#findUnexplainedControllerExemptions",
+      "name": "findUnexplainedControllerExemptions",
+      "kind": "value",
+      "file": "src/shared/controller-back-contract.ts",
+      "line": 60,
+      "endLine": 64
     },
     {
       "id": "symbol:src/shared/cosmetic-ids.ts#COSMETIC_IDS",
@@ -47309,16 +47474,16 @@
       "name": "reduceGameplayCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 914,
-      "endLine": 987
+      "line": 920,
+      "endLine": 993
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#replayGameplayCommands",
       "name": "replayGameplayCommands",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 989,
-      "endLine": 1002
+      "line": 995,
+      "endLine": 1008
     },
     {
       "id": "symbol:src/shared/gameplay-effect-transition.ts#applyGameplayDefinitionTransition",
@@ -47647,6 +47812,38 @@
       "file": "src/shared/hashPairKey.ts",
       "line": 2,
       "endLine": 8
+    },
+    {
+      "id": "symbol:src/shared/held-pair-rules.ts#describeHeldPair",
+      "name": "describeHeldPair",
+      "kind": "value",
+      "file": "src/shared/held-pair-rules.ts",
+      "line": 87,
+      "endLine": 93
+    },
+    {
+      "id": "symbol:src/shared/held-pair-rules.ts#getHeldPairSpan",
+      "name": "getHeldPairSpan",
+      "kind": "value",
+      "file": "src/shared/held-pair-rules.ts",
+      "line": 70,
+      "endLine": 84
+    },
+    {
+      "id": "symbol:src/shared/held-pair-rules.ts#getHeldPairTileIds",
+      "name": "getHeldPairTileIds",
+      "kind": "value",
+      "file": "src/shared/held-pair-rules.ts",
+      "line": 50,
+      "endLine": 63
+    },
+    {
+      "id": "symbol:src/shared/held-pair-rules.ts#HELD_PAIR_PIN_COUNT",
+      "name": "HELD_PAIR_PIN_COUNT",
+      "kind": "value",
+      "file": "src/shared/held-pair-rules.ts",
+      "line": 47,
+      "endLine": 47
     },
     {
       "id": "symbol:src/shared/honor-unlock-ids.ts#HONOR_UNLOCK_IDS",
@@ -53755,7 +53952,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 163
+          "line": 164
         }
       ],
       "tests": [
@@ -54064,7 +54261,7 @@
       "evidence": [
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 7
+          "line": 8
         },
         {
           "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -54715,7 +54912,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 9
+          "line": 10
         }
       ],
       "tests": [
@@ -55574,7 +55771,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 264
+          "line": 289
         }
       ],
       "tests": [
@@ -55613,7 +55810,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 264
+          "line": 289
         }
       ],
       "tests": [
@@ -55647,7 +55844,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 264
+          "line": 289
         }
       ],
       "tests": [
@@ -55681,7 +55878,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 264
+          "line": 289
         }
       ],
       "tests": [
@@ -57571,21 +57768,9 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/a11y/toolbarRoving.ts->symbol:src/renderer/a11y/toolbarRoving.ts#handleVerticalToolbarKeyDown",
-      "source": "file:src/renderer/a11y/toolbarRoving.ts",
-      "target": "symbol:src/renderer/a11y/toolbarRoving.ts#handleVerticalToolbarKeyDown",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/renderer/a11y/toolbarRoving.ts->symbol:src/renderer/a11y/toolbarRoving.ts#syncToolbarTabIndices",
       "source": "file:src/renderer/a11y/toolbarRoving.ts",
       "target": "symbol:src/renderer/a11y/toolbarRoving.ts#syncToolbarTabIndices",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/a11y/toolbarRoving.ts->symbol:src/renderer/a11y/toolbarRoving.ts#syncVerticalToolbarTabIndices",
-      "source": "file:src/renderer/a11y/toolbarRoving.ts",
-      "target": "symbol:src/renderer/a11y/toolbarRoving.ts#syncVerticalToolbarTabIndices",
       "kind": "exports"
     },
     {
@@ -57850,12 +58035,6 @@
       "id": "exports:src/renderer/audio/audioInteractionCoverage.ts->symbol:src/renderer/audio/audioInteractionCoverage.ts#AudioSemanticMoment",
       "source": "file:src/renderer/audio/audioInteractionCoverage.ts",
       "target": "symbol:src/renderer/audio/audioInteractionCoverage.ts#AudioSemanticMoment",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/audio/audioInteractionCoverage.ts->symbol:src/renderer/audio/audioInteractionCoverage.ts#getAudioCoverageRows",
-      "source": "file:src/renderer/audio/audioInteractionCoverage.ts",
-      "target": "symbol:src/renderer/audio/audioInteractionCoverage.ts#getAudioCoverageRows",
       "kind": "exports"
     },
     {
@@ -58348,18 +58527,6 @@
       "id": "exports:src/renderer/breakpoints.ts->symbol:src/renderer/breakpoints.ts#isShortLandscapeViewport",
       "source": "file:src/renderer/breakpoints.ts",
       "target": "symbol:src/renderer/breakpoints.ts#isShortLandscapeViewport",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/breakpoints.ts->symbol:src/renderer/breakpoints.ts#readWindowInnerSizeFallback",
-      "source": "file:src/renderer/breakpoints.ts",
-      "target": "symbol:src/renderer/breakpoints.ts#readWindowInnerSizeFallback",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/breakpoints.ts->symbol:src/renderer/breakpoints.ts#safeSubscribeWindowResize",
-      "source": "file:src/renderer/breakpoints.ts",
-      "target": "symbol:src/renderer/breakpoints.ts#safeSubscribeWindowResize",
       "kind": "exports"
     },
     {
@@ -58906,6 +59073,24 @@
       "id": "exports:src/renderer/cardFace/resolveCardIllustrationUrl.ts->symbol:src/renderer/cardFace/resolveCardIllustrationUrl.ts#resolveCardIllustrationUrl",
       "source": "file:src/renderer/cardFace/resolveCardIllustrationUrl.ts",
       "target": "symbol:src/renderer/cardFace/resolveCardIllustrationUrl.ts#resolveCardIllustrationUrl",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/cardFace/staticCardTextureSize.ts->symbol:src/renderer/cardFace/staticCardTextureSize.ts#getStaticCardTexturePixelSize",
+      "source": "file:src/renderer/cardFace/staticCardTextureSize.ts",
+      "target": "symbol:src/renderer/cardFace/staticCardTextureSize.ts#getStaticCardTexturePixelSize",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/cardFace/staticCardTextureSize.ts->symbol:src/renderer/cardFace/staticCardTextureSize.ts#STATIC_CARD_TEXTURE_HEIGHT",
+      "source": "file:src/renderer/cardFace/staticCardTextureSize.ts",
+      "target": "symbol:src/renderer/cardFace/staticCardTextureSize.ts#STATIC_CARD_TEXTURE_HEIGHT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/cardFace/staticCardTextureSize.ts->symbol:src/renderer/cardFace/staticCardTextureSize.ts#STATIC_CARD_TEXTURE_WIDTH",
+      "source": "file:src/renderer/cardFace/staticCardTextureSize.ts",
+      "target": "symbol:src/renderer/cardFace/staticCardTextureSize.ts#STATIC_CARD_TEXTURE_WIDTH",
       "kind": "exports"
     },
     {
@@ -61987,12 +62172,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/components/tileTextures.ts->symbol:src/renderer/components/tileTextures.ts#getStaticCardTexturePixelSize",
-      "source": "file:src/renderer/components/tileTextures.ts",
-      "target": "symbol:src/renderer/components/tileTextures.ts#getStaticCardTexturePixelSize",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/renderer/components/tileTextures.ts->symbol:src/renderer/components/tileTextures.ts#getTileFaceOverlayRegressionStamp",
       "source": "file:src/renderer/components/tileTextures.ts",
       "target": "symbol:src/renderer/components/tileTextures.ts#getTileFaceOverlayRegressionStamp",
@@ -62038,12 +62217,6 @@
       "id": "exports:src/renderer/components/tileTextures.ts->symbol:src/renderer/components/tileTextures.ts#preloadTileTextureImages",
       "source": "file:src/renderer/components/tileTextures.ts",
       "target": "symbol:src/renderer/components/tileTextures.ts#preloadTileTextureImages",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/tileTextures.ts->symbol:src/renderer/components/tileTextures.ts#prewarmTileFaceOverlayTextures",
-      "source": "file:src/renderer/components/tileTextures.ts",
-      "target": "symbol:src/renderer/components/tileTextures.ts#prewarmTileFaceOverlayTextures",
       "kind": "exports"
     },
     {
@@ -63043,6 +63216,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/hooks/useEscapeLeaves.ts->symbol:src/renderer/hooks/useEscapeLeaves.ts#targetAllowsEscapeToLeave",
+      "source": "file:src/renderer/hooks/useEscapeLeaves.ts",
+      "target": "symbol:src/renderer/hooks/useEscapeLeaves.ts#targetAllowsEscapeToLeave",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/hooks/useEscapeLeaves.ts->symbol:src/renderer/hooks/useEscapeLeaves.ts#useEscapeLeaves",
+      "source": "file:src/renderer/hooks/useEscapeLeaves.ts",
+      "target": "symbol:src/renderer/hooks/useEscapeLeaves.ts#useEscapeLeaves",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/hooks/useGamepadNavigation.ts->symbol:src/renderer/hooks/useGamepadNavigation.ts#useGamepadConnected",
       "source": "file:src/renderer/hooks/useGamepadNavigation.ts",
       "target": "symbol:src/renderer/hooks/useGamepadNavigation.ts#useGamepadConnected",
@@ -63781,12 +63966,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/store/navigationModel.ts->symbol:src/renderer/store/navigationModel.ts#isInRunOverlayView",
-      "source": "file:src/renderer/store/navigationModel.ts",
-      "target": "symbol:src/renderer/store/navigationModel.ts#isInRunOverlayView",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/renderer/store/navigationModel.ts->symbol:src/renderer/store/navigationModel.ts#isMenuDestinationView",
       "source": "file:src/renderer/store/navigationModel.ts",
       "target": "symbol:src/renderer/store/navigationModel.ts#isMenuDestinationView",
@@ -64267,6 +64446,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/ui/cssZoom.ts->symbol:src/renderer/ui/cssZoom.ts#readCssZoom",
+      "source": "file:src/renderer/ui/cssZoom.ts",
+      "target": "symbol:src/renderer/ui/cssZoom.ts#readCssZoom",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/ui/Eyebrow.tsx->symbol:src/renderer/ui/Eyebrow.tsx#default",
       "source": "file:src/renderer/ui/Eyebrow.tsx",
       "target": "symbol:src/renderer/ui/Eyebrow.tsx#default",
@@ -64318,6 +64503,12 @@
       "id": "exports:src/renderer/ui/fittedGridFit.ts->symbol:src/renderer/ui/fittedGridFit.ts#MIN_FITTED_ROW_HEIGHT",
       "source": "file:src/renderer/ui/fittedGridFit.ts",
       "target": "symbol:src/renderer/ui/fittedGridFit.ts#MIN_FITTED_ROW_HEIGHT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/ui/fittedGridFit.ts->symbol:src/renderer/ui/fittedGridFit.ts#readFrameBox",
+      "source": "file:src/renderer/ui/fittedGridFit.ts",
+      "target": "symbol:src/renderer/ui/fittedGridFit.ts#readFrameBox",
       "kind": "exports"
     },
     {
@@ -64780,6 +64971,12 @@
       "id": "exports:src/renderer/uiScaleLimits.ts->symbol:src/renderer/uiScaleLimits.ts#safeUiScaleFor",
       "source": "file:src/renderer/uiScaleLimits.ts",
       "target": "symbol:src/renderer/uiScaleLimits.ts#safeUiScaleFor",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/uiScaleLimits.ts->symbol:src/renderer/uiScaleLimits.ts#SCREEN_SCALE_CEILINGS",
+      "source": "file:src/renderer/uiScaleLimits.ts",
+      "target": "symbol:src/renderer/uiScaleLimits.ts#SCREEN_SCALE_CEILINGS",
       "kind": "exports"
     },
     {
@@ -66823,6 +67020,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/contracts.ts->symbol:src/shared/contracts.ts#VIEW_STATES",
+      "source": "file:src/shared/contracts.ts",
+      "target": "symbol:src/shared/contracts.ts#VIEW_STATES",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/contracts.ts->symbol:src/shared/contracts.ts#ViewState",
       "source": "file:src/shared/contracts.ts",
       "target": "symbol:src/shared/contracts.ts#ViewState",
@@ -66832,6 +67035,30 @@
       "id": "exports:src/shared/contracts.ts->symbol:src/shared/contracts.ts#WeakerShuffleMode",
       "source": "file:src/shared/contracts.ts",
       "target": "symbol:src/shared/contracts.ts#WeakerShuffleMode",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/controller-back-contract.ts->symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_CONTRACT",
+      "source": "file:src/shared/controller-back-contract.ts",
+      "target": "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_CONTRACT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/controller-back-contract.ts->symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_VIEWS",
+      "source": "file:src/shared/controller-back-contract.ts",
+      "target": "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_VIEWS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/controller-back-contract.ts->symbol:src/shared/controller-back-contract.ts#ControllerBackRow",
+      "source": "file:src/shared/controller-back-contract.ts",
+      "target": "symbol:src/shared/controller-back-contract.ts#ControllerBackRow",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/controller-back-contract.ts->symbol:src/shared/controller-back-contract.ts#findUnexplainedControllerExemptions",
+      "source": "file:src/shared/controller-back-contract.ts",
+      "target": "symbol:src/shared/controller-back-contract.ts#findUnexplainedControllerExemptions",
       "kind": "exports"
     },
     {
@@ -68890,6 +69117,30 @@
       "id": "exports:src/shared/hashPairKey.ts->symbol:src/shared/hashPairKey.ts#hashPairKey",
       "source": "file:src/shared/hashPairKey.ts",
       "target": "symbol:src/shared/hashPairKey.ts#hashPairKey",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/held-pair-rules.ts->symbol:src/shared/held-pair-rules.ts#describeHeldPair",
+      "source": "file:src/shared/held-pair-rules.ts",
+      "target": "symbol:src/shared/held-pair-rules.ts#describeHeldPair",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/held-pair-rules.ts->symbol:src/shared/held-pair-rules.ts#getHeldPairSpan",
+      "source": "file:src/shared/held-pair-rules.ts",
+      "target": "symbol:src/shared/held-pair-rules.ts#getHeldPairSpan",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/held-pair-rules.ts->symbol:src/shared/held-pair-rules.ts#getHeldPairTileIds",
+      "source": "file:src/shared/held-pair-rules.ts",
+      "target": "symbol:src/shared/held-pair-rules.ts#getHeldPairTileIds",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/held-pair-rules.ts->symbol:src/shared/held-pair-rules.ts#HELD_PAIR_PIN_COUNT",
+      "source": "file:src/shared/held-pair-rules.ts",
+      "target": "symbol:src/shared/held-pair-rules.ts#HELD_PAIR_PIN_COUNT",
       "kind": "exports"
     },
     {
@@ -75585,15 +75836,15 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/cardFace/cardRasterDeck.ts->src/renderer/components/gameplayVisualConfig.ts",
+      "id": "imports:src/renderer/cardFace/cardRasterDeck.ts->src/renderer/cardFace/staticCardTextureSize.ts",
       "source": "file:src/renderer/cardFace/cardRasterDeck.ts",
-      "target": "file:src/renderer/components/gameplayVisualConfig.ts",
+      "target": "file:src/renderer/cardFace/staticCardTextureSize.ts",
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/cardFace/cardRasterDeck.ts->src/renderer/components/tileShatter.ts",
+      "id": "imports:src/renderer/cardFace/cardRasterDeck.ts->src/renderer/components/gameplayVisualConfig.ts",
       "source": "file:src/renderer/cardFace/cardRasterDeck.ts",
-      "target": "file:src/renderer/components/tileShatter.ts",
+      "target": "file:src/renderer/components/gameplayVisualConfig.ts",
       "kind": "imports"
     },
     {
@@ -75867,6 +76118,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/cardFace/staticCardTextureSize.ts->src/renderer/components/tileShatter.ts",
+      "source": "file:src/renderer/cardFace/staticCardTextureSize.ts",
+      "target": "file:src/renderer/components/tileShatter.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/cardFace/svgMarkup.test.ts->src/renderer/cardFace/svgMarkup.ts",
       "source": "file:src/renderer/cardFace/svgMarkup.test.ts",
       "target": "file:src/renderer/cardFace/svgMarkup.ts",
@@ -76083,15 +76340,15 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/store/useAppStore.ts",
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/hooks/useEscapeLeaves.ts",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
-      "target": "file:src/renderer/store/useAppStore.ts",
+      "target": "file:src/renderer/hooks/useEscapeLeaves.ts",
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/ui/index.ts",
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/store/useAppStore.ts",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
-      "target": "file:src/renderer/ui/index.ts",
+      "target": "file:src/renderer/store/useAppStore.ts",
       "kind": "imports"
     },
     {
@@ -76410,6 +76667,12 @@
       "id": "imports:src/renderer/components/GameOverScreen.tsx->src/renderer/hooks/useCopyToClipboard.ts",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "file:src/renderer/hooks/useCopyToClipboard.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameOverScreen.tsx->src/renderer/hooks/useEscapeLeaves.ts",
+      "source": "file:src/renderer/components/GameOverScreen.tsx",
+      "target": "file:src/renderer/hooks/useEscapeLeaves.ts",
       "kind": "imports"
     },
     {
@@ -76953,6 +77216,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/held-pair-rules.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/shared/held-pair-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/mechanics-encyclopedia.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/shared/mechanics-encyclopedia.ts",
@@ -77046,6 +77315,12 @@
       "id": "imports:src/renderer/components/InventoryScreen.tsx->src/renderer/components/metaStackedShellLayout.ts",
       "source": "file:src/renderer/components/InventoryScreen.tsx",
       "target": "file:src/renderer/components/metaStackedShellLayout.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/InventoryScreen.tsx->src/renderer/hooks/useEscapeLeaves.ts",
+      "source": "file:src/renderer/components/InventoryScreen.tsx",
+      "target": "file:src/renderer/hooks/useEscapeLeaves.ts",
       "kind": "imports"
     },
     {
@@ -77343,6 +77618,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/OverlayModal.tsx->src/renderer/hooks/useEscapeLeaves.ts",
+      "source": "file:src/renderer/components/OverlayModal.tsx",
+      "target": "file:src/renderer/hooks/useEscapeLeaves.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/OverlayModal.tsx->src/renderer/hooks/useModalFocusTrap.ts",
       "source": "file:src/renderer/components/OverlayModal.tsx",
       "target": "file:src/renderer/hooks/useModalFocusTrap.ts",
@@ -77517,6 +77798,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/a11y/toolbarRoving.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/renderer/a11y/toolbarRoving.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/copy/chainBeat.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/renderer/copy/chainBeat.ts",
@@ -77643,12 +77930,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/SettingsControls.tsx->src/renderer/ui/index.ts",
-      "source": "file:src/renderer/components/SettingsControls.tsx",
-      "target": "file:src/renderer/ui/index.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/SettingsScreen.test.tsx->src/renderer/components/SettingsScreen.tsx",
       "source": "file:src/renderer/components/SettingsScreen.test.tsx",
       "target": "file:src/renderer/components/SettingsScreen.tsx",
@@ -77712,6 +77993,12 @@
       "id": "imports:src/renderer/components/SettingsScreen.tsx->src/renderer/copy/settingsHints.ts",
       "source": "file:src/renderer/components/SettingsScreen.tsx",
       "target": "file:src/renderer/copy/settingsHints.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SettingsScreen.tsx->src/renderer/hooks/useEscapeLeaves.ts",
+      "source": "file:src/renderer/components/SettingsScreen.tsx",
+      "target": "file:src/renderer/hooks/useEscapeLeaves.ts",
       "kind": "imports"
     },
     {
@@ -80325,6 +80612,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/tileTextures.test.ts->src/renderer/cardFace/staticCardTextureSize.ts",
+      "source": "file:src/renderer/components/tileTextures.test.ts",
+      "target": "file:src/renderer/cardFace/staticCardTextureSize.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/tileTextures.test.ts->src/renderer/components/tileShatter.ts",
       "source": "file:src/renderer/components/tileTextures.test.ts",
       "target": "file:src/renderer/components/tileShatter.ts",
@@ -80415,15 +80708,15 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/tileTextures.ts->src/renderer/components/gameplayVisualConfig.ts",
+      "id": "imports:src/renderer/components/tileTextures.ts->src/renderer/cardFace/staticCardTextureSize.ts",
       "source": "file:src/renderer/components/tileTextures.ts",
-      "target": "file:src/renderer/components/gameplayVisualConfig.ts",
+      "target": "file:src/renderer/cardFace/staticCardTextureSize.ts",
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/tileTextures.ts->src/renderer/components/tileShatter.ts",
+      "id": "imports:src/renderer/components/tileTextures.ts->src/renderer/components/gameplayVisualConfig.ts",
       "source": "file:src/renderer/components/tileTextures.ts",
-      "target": "file:src/renderer/components/tileShatter.ts",
+      "target": "file:src/renderer/components/gameplayVisualConfig.ts",
       "kind": "imports"
     },
     {
@@ -80973,6 +81266,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/hooks/useEscapeLeaves.ts->src/renderer/hooks/useLatestRef.ts",
+      "source": "file:src/renderer/hooks/useEscapeLeaves.ts",
+      "target": "file:src/renderer/hooks/useLatestRef.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/hooks/useGamepadNavigation.test.tsx->src/renderer/hooks/useGamepadNavigation.ts",
       "source": "file:src/renderer/hooks/useGamepadNavigation.test.tsx",
       "target": "file:src/renderer/hooks/useGamepadNavigation.ts",
@@ -81000,6 +81299,12 @@
       "id": "imports:src/renderer/hooks/useGamepadNavigation.ts->src/shared/gamepad-input.ts",
       "source": "file:src/renderer/hooks/useGamepadNavigation.ts",
       "target": "file:src/shared/gamepad-input.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/hooks/useGameplayChromeClearance.ts->src/renderer/ui/cssZoom.ts",
+      "source": "file:src/renderer/hooks/useGameplayChromeClearance.ts",
+      "target": "file:src/renderer/ui/cssZoom.ts",
       "kind": "imports"
     },
     {
@@ -82839,6 +83144,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/ui/cssZoom.test.ts->src/renderer/ui/cssZoom.ts",
+      "source": "file:src/renderer/ui/cssZoom.test.ts",
+      "target": "file:src/renderer/ui/cssZoom.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/ui/FittedGrid.tsx->src/renderer/ui/fittedGridFit.ts",
       "source": "file:src/renderer/ui/FittedGrid.tsx",
       "target": "file:src/renderer/ui/fittedGridFit.ts",
@@ -82920,6 +83231,12 @@
       "id": "imports:src/renderer/ui/index.ts->src/renderer/ui/UiButton.tsx",
       "source": "file:src/renderer/ui/index.ts",
       "target": "file:src/renderer/ui/UiButton.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/ui/MetaShell.tsx->src/renderer/hooks/useEscapeLeaves.ts",
+      "source": "file:src/renderer/ui/MetaShell.tsx",
+      "target": "file:src/renderer/hooks/useEscapeLeaves.ts",
       "kind": "imports"
     },
     {
@@ -84312,6 +84629,12 @@
       "id": "imports:src/shared/content-security-policy.test.ts->src/shared/content-security-policy.ts",
       "source": "file:src/shared/content-security-policy.test.ts",
       "target": "file:src/shared/content-security-policy.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/controller-back-contract.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/controller-back-contract.ts",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -85821,6 +86144,36 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/held-pair-rules.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/held-pair-rules.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/held-pair-rules.test.ts->src/shared/held-pair-rules.ts",
+      "source": "file:src/shared/held-pair-rules.test.ts",
+      "target": "file:src/shared/held-pair-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/held-pair-rules.ts->src/shared/board-grid-dimensions.ts",
+      "source": "file:src/shared/held-pair-rules.ts",
+      "target": "file:src/shared/board-grid-dimensions.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/held-pair-rules.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/held-pair-rules.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/held-pair-rules.ts->src/shared/run-array-guards.ts",
+      "source": "file:src/shared/held-pair-rules.ts",
+      "target": "file:src/shared/run-array-guards.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/honorUnlocks.test.ts->src/shared/honorUnlocks.ts",
       "source": "file:src/shared/honorUnlocks.test.ts",
       "target": "file:src/shared/honorUnlocks.ts",
@@ -87066,6 +87419,18 @@
       "id": "imports:src/shared/release-checklist.test.ts->src/shared/content-security-policy.ts",
       "source": "file:src/shared/release-checklist.test.ts",
       "target": "file:src/shared/content-security-policy.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/release-checklist.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/release-checklist.test.ts->src/shared/controller-back-contract.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/shared/controller-back-contract.ts",
       "kind": "imports"
     },
     {
@@ -91622,6 +91987,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/cardFace/staticCardTextureSize.ts->file:src/renderer/components/tileTextures.test.ts",
+      "source": "file:src/renderer/cardFace/staticCardTextureSize.ts",
+      "target": "file:src/renderer/components/tileTextures.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/cardFace/svgMarkup.ts->file:src/renderer/cardFace/svgMarkup.test.ts",
       "source": "file:src/renderer/cardFace/svgMarkup.ts",
       "target": "file:src/renderer/cardFace/svgMarkup.test.ts",
@@ -93062,6 +93433,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/ui/cssZoom.ts->file:src/renderer/ui/cssZoom.test.ts",
+      "source": "file:src/renderer/ui/cssZoom.ts",
+      "target": "file:src/renderer/ui/cssZoom.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/ui/fittedGridFit.ts->file:src/renderer/ui/fittedGridFit.test.ts",
       "source": "file:src/renderer/ui/fittedGridFit.ts",
       "target": "file:src/renderer/ui/fittedGridFit.test.ts",
@@ -94118,6 +94495,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/held-pair-rules.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/held-pair-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/level-clear-rules.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/level-clear-rules.test.ts",
@@ -94211,6 +94594,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/recall-rules.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/recall-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
       "kind": "tested_by"
     },
     {
@@ -94373,6 +94762,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/version-gate.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/version-gate.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/controller-back-contract.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/shared/controller-back-contract.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
       "kind": "tested_by"
     },
     {
@@ -95159,6 +95554,12 @@
       "id": "tested_by:src/shared/hashPairKey.ts->file:src/shared/hashPairKey.test.ts",
       "source": "file:src/shared/hashPairKey.ts",
       "target": "file:src/shared/hashPairKey.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/held-pair-rules.ts->file:src/shared/held-pair-rules.test.ts",
+      "source": "file:src/shared/held-pair-rules.ts",
+      "target": "file:src/shared/held-pair-rules.test.ts",
       "kind": "tested_by"
     },
     {

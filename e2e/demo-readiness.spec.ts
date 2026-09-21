@@ -54,7 +54,14 @@ async function installAudioHookAudit(page: Page) {
                 });
             };
             return el;
-        } as typeof Audio;
+            /*
+             * A constructor that returns an object yields that object from `new`, so this really
+             * does stand in for `Audio` at runtime - but a plain function type has no construct
+             * signature, so the direct assertion was one TypeScript rejects outright. It went
+             * unnoticed because nothing typechecked `e2e/` until Gen 253. Widening through
+             * `unknown` says what the conversion is instead of pretending the types overlap.
+             */
+        } as unknown as typeof Audio;
         window.Audio.prototype = NativeAudio.prototype;
     });
 }

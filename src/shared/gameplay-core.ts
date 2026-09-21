@@ -837,7 +837,13 @@ const applyPauseCommand = (
     writeEvent({
         type: 'feedback.requested',
         cue: 'run.paused',
-        message: 'Run paused. Timers are frozen until you resume.',
+        /*
+         * "Nothing moves" rather than "Timers are frozen": the run clock left at Gen 178, so the
+         * plural named one thing a player can actually meet (the memorize window) plus a dev-only
+         * reveal. This says what pausing does without naming an internal that has already changed
+         * once and can change again.
+         */
+        message: 'Run paused. Nothing moves until you resume.',
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };

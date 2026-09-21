@@ -51,7 +51,7 @@ test.describe('Illustration perf benchmark', () => {
                         id: `bench-${tier}-${pairKey}`,
                         label: pairKey.slice(0, 4).toUpperCase(),
                         pairKey,
-                        state: 'hidden',
+                        state: 'hidden' as const,
                         symbol: pairKey.slice(-1).toUpperCase()
                     };
 

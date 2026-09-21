@@ -98,8 +98,22 @@ export const partitionAdvisoriesByReach = (advisories, runtimeDependencyNames) =
  * Build-only advisories are tolerated up to a recorded number so the toolchain's own churn does not
  * block gameplay work — but the number is recorded, so it cannot quietly grow. Lower it whenever a
  * bump clears some; raising it is a decision someone has to write down here.
+ *
+ * Gen 254: 39 → 9. The gate went red at 39 against a baseline of 30, and every one of the nine new
+ * groups named a version this repo's own `resolutions` block was pinning — the pins had been
+ * correct when they were written and had since been overtaken. Bumping each pin to the version its
+ * advisory names as patched (tar, postcss, ip-address, joi, shell-quote, baseline-browser-mapping,
+ * the brace-expansion and js-yaml pins, plus vitest, svgo and electron-builder) cleared thirty.
+ *
+ * The nine that remain are all `brace-expansion`, on three incompatible major lines that different
+ * build tools require (`^1` under eslint's pinned minimatch 3.1.5, `^2` under depcheck and jake's
+ * filelist, `^5` under rimraf's glob and @electron/universal). A yarn resolution names a path, not
+ * a range, so a single `**\/brace-expansion` pin would force one major on all three; the
+ * path-specific pins that CAN be written are already here and took. Each is a
+ * denial-of-service on crafted input, in a tool that runs on a developer's machine and never in a
+ * shipped build. Bump minimatch at those three parents and the number should fall to zero.
  */
-export const BUILD_ONLY_ADVISORY_BASELINE = 30;
+export const BUILD_ONLY_ADVISORY_BASELINE = 9;
 
 export const evaluateAuditRisk = ({ advisories }, runtimeDependencyNames, baseline = BUILD_ONLY_ADVISORY_BASELINE) => {
   const { buildOnly, runtime } = partitionAdvisoriesByReach(advisories, runtimeDependencyNames);

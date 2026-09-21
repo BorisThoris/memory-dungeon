@@ -20,6 +20,7 @@ import {
     VIEWPORT_LANDSCAPE_STACK_MAX_WIDTH,
     VIEWPORT_MOBILE_MAX
 } from '../breakpoints';
+import { useEscapeLeaves } from '../hooks/useEscapeLeaves';
 import { useModalFocusTrap } from '../hooks/useModalFocusTrap';
 import { useViewportSize } from '../hooks/useViewportSize';
 import { runPersistenceInBackground } from '../store/backgroundPersistence';
@@ -32,7 +33,7 @@ import {
     uiSfxGainFromSettings
 } from '../audio/uiSfx';
 import { useAppStore } from '../store/useAppStore';
-import { Eyebrow, OverlayActionDock, Panel, ScreenTitle, UiButton } from '../ui';
+import { OverlayActionDock } from '../ui';
 import { pairProximityUiStrings } from '../ui/strings/pairProximityUi';
 import packageJson from '../../../package.json';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
@@ -53,6 +54,16 @@ interface SettingsScreenProps {
     presentation?: 'page' | 'modal';
 }
 
+const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'] as const;
+
+/**
+ * Settings as a page of "The Margin": the categories are a numbered contents ladder in the
+ * left margin, the chosen category is a chapter on the right — ruled sections, each control a
+ * line with its name, its note and its value — and the actions are outlined words on the foot
+ * rule. In a run it is the same page set over the board as a dialog. The shell's layout
+ * (desktop, wide-short, stacked, short-stacked) is decided from the viewport as before and
+ * reported on `data-settings-layout`; a stacked shell's category chooser is one <select>.
+ */
 const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
     const {
         clearPersistenceWriteNotice,
@@ -174,6 +185,8 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
         closeSettings();
     };
 
+    useEscapeLeaves(handleBack);
+
     const handleResetToDefaults = (): void => {
         playUiConfirm();
         const next: Settings = {
@@ -218,28 +231,27 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                         data-testid="settings-shell-fit-zoom"
                         style={{ zoom: 1 }}
                     >
-                        <Panel
+                        <div
                             className={`${styles.panel} ${isModal ? styles.panelModal : ''}`.trim()}
                             data-testid="settings-shell-panel"
-                            padding="none"
-                            variant="strong"
                         >
                             <div className={styles.frame}>
                                 <aside className={styles.sidebar}>
                                     <div className={styles.sidebarHeader}>
-                                        <Eyebrow>{eyebrow}</Eyebrow>
-                                        <ScreenTitle
-                                            as={isModal ? 'h2' : 'h1'}
-                                            className={styles.shellTitle}
-                                            id={titleId}
-                                            role="screenMd"
-                                        >
-                                            {title}
-                                        </ScreenTitle>
+                                        <p className={styles.eyebrow}>{eyebrow}</p>
+                                        {isModal ? (
+                                            <h2 className={styles.shellTitle} id={titleId}>
+                                                {title}
+                                            </h2>
+                                        ) : (
+                                            <h1 className={styles.shellTitle} id={titleId}>
+                                                {title}
+                                            </h1>
+                                        )}
                                     </div>
 
                                     <nav className={styles.categoryNav}>
-                                        {SETTINGS_CATEGORIES.map((category) => (
+                                        {SETTINGS_CATEGORIES.map((category, index) => (
                                             <button
                                                 aria-pressed={activeCategory === category.id}
                                                 className={`${styles.categoryButton} ${activeCategory === category.id ? styles.categoryButtonActive : ''}`.trim()}
@@ -251,7 +263,11 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                 type="button"
                                             >
                                                 {/* The rail picks; the header describes what was picked. */}
+                                                <span aria-hidden="true" className={styles.numeral}>
+                                                    {NUMERALS[index]}
+                                                </span>
                                                 <span className={styles.categoryLabel}>{category.label}</span>
+                                                <span aria-hidden="true" className={styles.leader} />
                                             </button>
                                         ))}
                                     </nav>
@@ -284,13 +300,11 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                       * rail entry that had just named it a third time.
                                       */}
                                     <header className={styles.contentHeader}>
-                                        <ScreenTitle
-                                            as={isModal ? 'h3' : 'h2'}
-                                            className={styles.contentTitle}
-                                            role="screen"
-                                        >
-                                            {activeCategoryMeta.label}
-                                        </ScreenTitle>
+                                        {isModal ? (
+                                            <h3 className={styles.contentTitle}>{activeCategoryMeta.label}</h3>
+                                        ) : (
+                                            <h2 className={styles.contentTitle}>{activeCategoryMeta.label}</h2>
+                                        )}
                                         <p className={styles.headerCopy}>{activeCategoryMeta.note}</p>
                                     </header>
 
@@ -620,16 +634,15 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                         </div>
                                                     ))}
                                                 </div>
-                                                <UiButton
+                                                <button
                                                     aria-label={SAVE_FILE_COPY.revealAriaLabel}
+                                                    className={styles.word}
                                                     data-testid="settings-reveal-save-file"
                                                     onClick={revealSaveFile}
-                                                    size="md"
                                                     type="button"
-                                                    variant="secondary"
                                                 >
                                                     {SAVE_FILE_COPY.reveal}
-                                                </UiButton>
+                                                </button>
                                                 <div className={styles.profileSummaryGrid} data-testid="settings-save-trust">
                                                     {saveTrustRows.map((row) => (
                                                         <div className={styles.profileSummaryRow} key={row.id}>
@@ -658,15 +671,16 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                     history, honors, and cosmetics are not deleted; full profile reset/export
                                                     is intentionally not enabled in this offline release shell.
                                                 </p>
-                                                <UiButton size={footerButtonSize} variant="secondary" onClick={handleResetToDefaults}>
+                                                <button className={styles.word} onClick={handleResetToDefaults} type="button">
                                                     Reset to defaults
-                                                </UiButton>
+                                                </button>
                                             </SettingsSection>
                                         ) : null}
                                     </div>
 
                                     <footer className={styles.footer} data-testid="settings-shell-footer">
                                         <OverlayActionDock
+                                            actionClassName={styles.footerWord}
                                             actions={[
                                                 {
                                                     label: 'Back',
@@ -688,7 +702,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                     </footer>
                                 </div>
                             </div>
-                        </Panel>
+                        </div>
                     </div>
                 </div>
             </div>

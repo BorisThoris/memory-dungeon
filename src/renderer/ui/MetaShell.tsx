@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { useEscapeLeaves } from '../hooks/useEscapeLeaves';
 import Eyebrow from './Eyebrow';
 import ScreenTitle from './ScreenTitle';
 import UiButton from './UiButton';
@@ -43,31 +44,35 @@ const MetaShell = ({
     testId,
     title,
     toolbar
-}: MetaShellProps) => (
-    <section
-        aria-label={label}
-        className={[styles.shell, className].filter(Boolean).join(' ')}
-        data-testid={testId}
-        role="region"
-        {...regionProps}
-    >
-        <header className={styles.header}>
-            <div className={styles.headerText}>
-                <Eyebrow tone="menu">{eyebrow}</Eyebrow>
-                <ScreenTitle as={stackedOnGameplay ? 'h2' : 'h1'} className={styles.title} role="display">
-                    {title}
-                </ScreenTitle>
-                {subtitle ? <p className={styles.subtitle}>{subtitle}</p> : null}
-            </div>
-            <UiButton onClick={onBack} size="md" type="button" variant="secondary">
-                {backLabel}
-            </UiButton>
-        </header>
+}: MetaShellProps) => {
+    useEscapeLeaves(onBack);
 
-        {toolbar ? <div className={styles.toolbar}>{toolbar}</div> : null}
+    return (
+        <section
+            aria-label={label}
+            className={[styles.shell, className].filter(Boolean).join(' ')}
+            data-testid={testId}
+            role="region"
+            {...regionProps}
+        >
+            <header className={styles.header}>
+                <div className={styles.headerText}>
+                    <Eyebrow tone="menu">{eyebrow}</Eyebrow>
+                    <ScreenTitle as={stackedOnGameplay ? 'h2' : 'h1'} className={styles.title} role="display">
+                        {title}
+                    </ScreenTitle>
+                    {subtitle ? <p className={styles.subtitle}>{subtitle}</p> : null}
+                </div>
+                <UiButton onClick={onBack} size="md" type="button" variant="secondary">
+                    {backLabel}
+                </UiButton>
+            </header>
 
-        <div className={styles.content}>{children}</div>
-    </section>
-);
+            {toolbar ? <div className={styles.toolbar}>{toolbar}</div> : null}
+
+            <div className={styles.content}>{children}</div>
+        </section>
+    );
+};
 
 export default MetaShell;

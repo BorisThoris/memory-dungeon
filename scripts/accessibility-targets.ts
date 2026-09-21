@@ -20,7 +20,7 @@ import { resolve } from 'node:path';
 
 import { SETTINGS_HINTS } from '../src/renderer/copy/settingsHints';
 import { SETTINGS_NUMERIC_RANGES } from '../src/shared/save-data';
-import { UI_SCALE_MAX } from '../src/renderer/uiScaleLimits';
+import { SCREEN_SCALE_CEILINGS, UI_SCALE_MAX } from '../src/renderer/uiScaleLimits';
 
 const read = (path: string): string => readFileSync(resolve(process.cwd(), path), 'utf8');
 
@@ -116,14 +116,20 @@ export const ACCESSIBILITY_TARGETS: readonly AccessibilityTarget[] = [
         asks: 'Text is at least 18px at 1080p on PC, and scalable to 200%.',
         status: 'open',
         answer:
-            'Neither half is met, and the second is further away than it looks. The declaration floor ' +
-            'is 12px (`MIN_TYPE_PX`), chosen for a fitted layout read at arm’s length on a Deck ' +
-            'rather than for a 1080p monitor; and the scale stops at ' +
-            `${UI_SCALE_MAX}×, not because 200% was judged unnecessary but because the main menu ` +
-            'loses a row of controls above it. That is a defect with a task, not a design position.',
-        blockedBy: 'task #245 - the main menu has no layout below ~700px of container height',
+            'Neither half is met, and the blocker named here until Gen 227 was the wrong screen. The ' +
+            'declaration floor is 12px (`MIN_TYPE_PX`), chosen for a fitted layout read at arm’s ' +
+            'length on a Deck rather than for a 1080p monitor; and the scale stops at ' +
+            `${UI_SCALE_MAX}× because that is the SMALLEST of the per-screen ceilings, which are ` +
+            'measured rather than asserted. Profile is the one that sets it: it clips its objective ' +
+            'cards at 1.4 while the main menu - the screen this target used to blame - holds to 1.6. ' +
+            'Each ceiling is checked from both sides, so a screen that is quietly better than its row ' +
+            'says fails the audit rather than costing players scale they could have had.',
+        blockedBy: 'task #246 - Profile is the UI-scale ceiling: it clips its objective cards at 1.4',
         evidence: () => [
             `uiScale ceiling: ${UI_SCALE_MAX} (src/renderer/uiScaleLimits.ts, measured by e2e/ui-scale-ceiling.spec.ts)`,
+            `per-screen ceilings: ${Object.entries(SCREEN_SCALE_CEILINGS)
+                .map(([screen, ceiling]) => `${screen} ${ceiling}`)
+                .join(', ')}`,
             `slider range: ${SETTINGS_NUMERIC_RANGES.uiScale.min} to ${SETTINGS_NUMERIC_RANGES.uiScale.max}`,
             `declaration floor: ${/export const MIN_TYPE_PX = 12/u.test(read('scripts/min-type-size.ts')) ? '12px' : 'moved'} (scripts/min-type-size.ts)`
         ]

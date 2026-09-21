@@ -1,23 +1,16 @@
+/* A note set off from the page: one gold rule at its left, the italic voice. */
 .root {
     margin: 0;
-    padding: var(--ui-space-lg) var(--ui-space-xl);
-    border-radius: var(--ui-radius-lg);
-    background: var(--theme-panel-surface-muted);
-    border: 1px solid var(--theme-border);
-    color: var(--theme-rune);
-    letter-spacing: 0.03em;
+    padding: 0.5rem 0 0.5rem 1rem;
+    border-left: 1px solid var(--margin-rule);
+    color: var(--margin-paper-soft);
+    font-family: var(--margin-heading-font);
+    font-style: italic;
+    font-size: 1.02rem;
     line-height: 1.45;
-    font-size: var(--ui-font-body-sm);
-    box-shadow:
-        inset 3px 0 0 color-mix(in srgb, var(--theme-border-strong) 88%, transparent),
-        inset 0 1px 0 color-mix(in srgb, var(--theme-hud-chrome-inset) 85%, transparent);
 }
 
 .compact {
-    padding: var(--ui-space-md) var(--ui-space-lg);
-    font-size: 0.78rem;
-}
-
-:global([data-reduce-motion='true']) .root {
-    background: var(--theme-panel-surface-muted);
+    padding: 0.35rem 0 0.35rem 0.8rem;
+    font-size: 0.95rem;
 }

@@ -4,6 +4,7 @@ import type { RunState } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { parTurnsForRun, turnCeilingForRun, turnsTakenThisFloor, turnsToCeiling } from '../../shared/floor-par';
 import { MUTATOR_CATALOG } from '../../shared/mechanics-encyclopedia';
+import { handleHorizontalToolbarKeyDown, syncToolbarTabIndices } from '../a11y/toolbarRoving';
 import { GameplayMenuIcon } from '../ui/gameplayIcons';
 import { useCountUp } from '../hooks/useCountUp';
 import styles from './RunShell.module.css';
@@ -184,6 +185,30 @@ const RunShell = ({
             : RUN_SHELL_LINE_COPY.chainKicker(chain, CHAIN_TIER_LABELS[tier]);
     const kickerTier = memorize || lineTone === 'error' || (!said && onboardingLine) ? 'none' : tier;
     const visibleTools = tools.filter((tool) => tool.charges === undefined || tool.charges > 0 || tool.armed);
+
+    /*
+     * One tab stop for the dock, re-synced on every render.
+     *
+     * Keying this on the visible tool ids was not enough, measured in a real run: the dock held
+     * FOUR tab stops on arrival and only fell to one after a modal had opened and closed. A tool
+     * stays mounted and goes `disabled` when its charges run out, so the id list never changed
+     * while the set of buttons roving applies to did - `getToolbarButtons` skips disabled ones, and
+     * the ones it skipped kept the `tabIndex 0` React gave them.
+     *
+     * Every render, then, and the current stop is passed back in so a player arrowing along the
+     * dock is not yanked to the first tool by the next score tick. When that stop is gone -
+     * spent, hidden - `syncToolbarTabIndices` falls back to the first button, which is where a
+     * fresh Tab into a toolbar belongs.
+     */
+    const dockRef = useRef<HTMLDivElement | null>(null);
+    useEffect(() => {
+        const root = dockRef.current;
+        if (!root) {
+            return;
+        }
+        const current = root.querySelector<HTMLElement>('button[tabindex="0"]:not([disabled])');
+        syncToolbarTabIndices(root, current);
+    });
 
     const ladderStyle = {
         '--chain-meter-clean': `${(meter.ticks.clean * 100).toFixed(1)}%`,
@@ -394,7 +419,23 @@ const RunShell = ({
                     </div>
                 ) : null}
                 <span aria-hidden="true" className={styles.footRule} />
-                <div className={styles.dock} role="toolbar" aria-label="Game controls">
+                {/*
+                  * The one `role="toolbar"` this game ships, and until Gen 258 it declared the role
+                  * and wired none of the pattern: measured in a real run, all nine dock buttons
+                  * carried `tabIndex 0` - nine tab stops where the role promises one - and
+                  * ArrowRight on the first tool left focus exactly where it was. Opening and
+                  * closing any modal then rearranged them, because `acquireToolbarRovingPause`
+                  * releases by INSTALLING the roving indices it was meant to be restoring.
+                  * `a11y/toolbarRoving.ts` had implemented all of this, with tests, reached by
+                  * nothing.
+                  */}
+                <div
+                    aria-label="Game controls"
+                    className={styles.dock}
+                    onKeyDown={handleHorizontalToolbarKeyDown}
+                    ref={dockRef}
+                    role="toolbar"
+                >
                     {visibleTools.map((tool) => (
                         <button
                             aria-label={tool.name ?? tool.title ?? tool.label}

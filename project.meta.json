@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-19T23:40:36.729Z",
+  "generatedAt": "2026-09-21T20:57:05.313Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -54,6 +54,7 @@
       "clean",
       "typecheck",
       "typecheck:shared",
+      "typecheck:e2e",
       "graph:project",
       "graph:systems",
       "ai:model",
@@ -121,6 +122,9 @@
       "audit:min-type-size",
       "gate:demo-readiness",
       "gate:ui-reachability",
+      "gate:ui-fit",
+      "gate:illustration-regression",
+      "gate:controller",
       "audit:save-field-policy",
       "audit:script-paths",
       "audit:generations",
@@ -282,46 +286,46 @@
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 158548,
+        "bytes": 143993,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-19T23:39:42.675Z"
+        "capturedAt": "2026-09-21T20:56:12.126Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 148775,
+        "bytes": 134991,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-19T23:39:57.694Z"
+        "capturedAt": "2026-09-21T20:56:26.723Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 122161,
+        "bytes": 112331,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-19T23:40:23.260Z"
+        "capturedAt": "2026-09-21T20:56:53.325Z"
       },
       {
         "profile": "mobile",
         "file": "mobile.jpg",
         "path": "project-media/mobile.jpg",
-        "bytes": 50952,
+        "bytes": 50945,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-19T23:40:07.900Z"
+        "capturedAt": "2026-09-21T20:56:34.221Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 112948,
+        "bytes": 106849,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-19T23:40:36.514Z"
+        "capturedAt": "2026-09-21T20:57:05.093Z"
       }
     ]
   },
@@ -380,16 +384,16 @@
       "@testing-library/react"
     ],
     "dependencyCount": 15,
-    "devDependencyCount": 49
+    "devDependencyCount": 47
   },
   "metrics": {
-    "sourceFiles": 1099,
-    "testFiles": 477,
-    "sourceLines": 168775,
+    "sourceFiles": 1103,
+    "testFiles": 478,
+    "sourceLines": 169824,
     "largestDirectories": [
       {
         "directory": "src",
-        "files": 926
+        "files": 929
       },
       {
         "directory": "scripts",
@@ -397,7 +401,7 @@
       },
       {
         "directory": "e2e",
-        "files": 63
+        "files": 64
       },
       {
         "directory": "packages",
@@ -424,10 +428,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "f0b5e348",
-    "lastCommitDate": "2026-09-20T02:36:14+03:00",
-    "lastCommitSubject": "Merge remote-tracking branch 'origin/main' into claude/game-view-redesign-6daf70",
-    "commitCount": 1477,
+    "head": "6d677bc8",
+    "lastCommitDate": "2026-09-21T20:52:33Z",
+    "lastCommitSubject": "Merge main into the review branch",
+    "commitCount": 1565,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {

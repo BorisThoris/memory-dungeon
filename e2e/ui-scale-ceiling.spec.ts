@@ -1,5 +1,9 @@
 import { expect, test, type Page } from '@playwright/test';
+import { SETTINGS_NUMERIC_RANGES } from '../src/shared/save-data';
+import { SCREEN_SCALE_CEILINGS, UI_SCALE_MAX } from '../src/renderer/uiScaleLimits';
 import { describeFit } from './uiFit';
+import { dismissStartupIntro } from './startupIntroHelpers';
+import { openPlayablePathFixture } from './playablePathHelpers';
 import {
     buildPopulatedProfileSaveJson,
     buildVisualSaveJson,
@@ -8,22 +12,33 @@ import {
 } from './visualScreenHelpers';
 
 /**
- * How far the UI scale actually goes.
+ * How far the UI scale actually goes, per screen, in both directions.
  *
  * Xbox's accessibility guidelines ask for text scalable to 200% (`docs/RESEARCH_NOTES.md` §3) and
- * this game's slider stopped at 1.4, which looked like a gap of 0.6 until the fit contract was read:
- * **every one of its checks runs at `uiScale: 1`.** So nothing in this repository had ever asked
- * what the top of the range does, and three separate things were wrong with it.
+ * this game's slider stopped at 1.4, which looked like a gap of 0.6 until the fit contract was
+ * read: **every one of its checks runs at `uiScale: 1`.** Gen 222 asked what the top of the range
+ * does and found three things wrong with it - a slider whose top fifth applied nothing, a Settings
+ * screen that lost its own Back and Save buttons above 1 (`100dvh` inside a `zoom`), and a main
+ * menu that lost its meta frame from 1.1. The first two were fixed; the third set the cap at 1.05
+ * and was blamed on a missing container-query rung in the menu.
  *
- * - **The slider's top fifth did nothing.** It ran to 1.4 while `App.tsx` capped what it applied at
- *   1.15, so dragging past that moved the handle and changed nothing on screen.
- * - **The Settings screen lost its own Back and Save buttons** at every scale above 1, on a Deck
- *   panel and a desktop identically. Its shell was `100dvh` tall inside a `zoom`, and a viewport
- *   unit does not zoom, so the shell ran past the bottom edge by exactly the scale. Fixed here
- *   (`--ui-zoomed-dvh`), and this spec is what proves it.
- * - **The main menu loses its meta frame from 1.1**, because its container-query ladder ends at
- *   `max-height: 760px` and there is no rung below it. That is a layout job with its own task; the
- *   cap is 1.05 until it lands, which is what `UI_SCALE_MAX` records.
+ * **Gen 227 re-measured and that blame was wrong.** Gen 223 had already refuted the rung story,
+ * and the menu has since been rebuilt as a fluid page with no ladder to miss a rung from. Measured
+ * with both caps lifted, the main menu holds to **1.6** - the most of the three - while **Profile
+ * fails at 1.4**, and Profile is what the cap has actually been standing on all along.
+ *
+ * So this spec records a ceiling per screen and checks it **from both sides**:
+ *
+ * - at its ceiling the screen fits, which is what lets `UI_SCALE_MAX` be the smallest of them;
+ * - at the next step above, the screen **must fail**. A ceiling nothing has been measured to break
+ *   through is a ceiling nobody has checked, and the likely error is that it is too low - a
+ *   screen quietly holding at 1.8 while its row says 1.4 costs players scaling they could have had.
+ *   This is the negative control, and it is the assertion that will fail first when a layout is
+ *   improved, which is the moment to raise that screen's row.
+ *
+ * Scales above the cap cannot be reached through the save (`SETTINGS_NUMERIC_RANGES` clamps it), so
+ * they are applied as `--ui-scale` directly. That is deliberate: the question here is what the
+ * layout does at that zoom, not what the app is willing to store.
  *
  * Same report as the fit contract, from the same function, so the two cannot drift. The board is
  * deliberately absent: it is a canvas that fits itself to its stage and has its own contract, and
@@ -32,14 +47,80 @@ import {
 
 const SCALE_VIEWPORTS = [
     { id: 'steamdeck', width: 1280, height: 800 },
-    { id: 'desktop', width: 1440, height: 900 },
-    { id: 'phone', width: 390, height: 844 }
+    { id: 'desktop', width: 1440, height: 900 }
 ] as const;
+
+/**
+ * The probe ladder the ceilings were measured on; "above" is the next rung past a ceiling.
+ *
+ * Deduplicated and sorted, because `UI_SCALE_MAX` is one of the rungs and is itself derived from
+ * the ceilings: when it lands on a rung already listed, an unsorted ladder measures that scale
+ * twice and steps out of order, and `stepAbove` stops meaning "the next one up".
+ *
+ * The close rungs are there because the failures are close together and not always monotonic: the
+ * run's chain HUD fits at 1.05 and overlaps at 1.1, and Codex used to clip at 1.2 and 1.25 and fit
+ * again from 1.3. A ladder that steps 1 -> 1.4 walks over both, and a control that looks for a
+ * break at the wrong rung finds none and reports the ceiling as understated - handing a screen
+ * scaling it cannot render, by the assertion written to prevent exactly that.
+ */
+const PROBE_LADDER: readonly number[] = [...new Set([1, UI_SCALE_MAX, 1.05, 1.1, 1.2, 1.4, 1.6, 1.8, 2])].sort(
+    (a, b) => a - b
+);
+
+const stepAbove = (ceiling: number): number => {
+    const above = PROBE_LADDER.find((step) => step > ceiling);
+    if (above === undefined) {
+        throw new Error(`no probe step above ${ceiling}: the ladder cannot check this ceiling`);
+    }
+    return above;
+};
+
+const SCREENS = [
+    { label: 'main menu', button: /^play$/i, ceiling: SCREEN_SCALE_CEILINGS['main menu'] },
+    { label: 'settings', button: /^settings$/i, ceiling: SCREEN_SCALE_CEILINGS.settings },
+    { label: 'profile', button: /^profile$/i, ceiling: SCREEN_SCALE_CEILINGS.profile },
+    { label: 'codex', button: /^codex$/i, ceiling: SCREEN_SCALE_CEILINGS.codex }
+] as const;
+
+/**
+ * The run itself, which every row above is only the way into.
+ *
+ * It was not on this list until Gen 238, and it is the lowest of them: at 1.1 - the cap this spec
+ * was signing off at the time - the chain goal line sits on the chain state on a Deck panel. Every
+ * ceiling recorded before that was a menu screen's, so the cap was being justified by screens a
+ * player passes through and never by the one they play on.
+ */
+const startRun = async (page: Page): Promise<void> => {
+    await page.goto('/');
+    await dismissStartupIntro(page);
+    await page.getByRole('button', { name: /^play$/i }).waitFor({ state: 'visible', timeout: 30_000 });
+    const dismiss = page.getByRole('button', { name: /^dismiss$/i });
+    if (await dismiss.isVisible().catch(() => false)) {
+        await dismiss.click();
+    }
+    await page.getByRole('button', { name: /^play$/i }).click();
+    await page.getByRole('region', { name: /choose your path/i }).waitFor({ state: 'visible', timeout: 30_000 });
+    await page.locator('button', { hasText: /start run/i }).first().click();
+    await page
+        .getByRole('heading', { name: /level 1/i })
+        .waitFor({ state: 'visible', timeout: 60_000 })
+        .catch(() => undefined);
+    await page.waitForTimeout(3000);
+};
 
 const atScale = (saveJson: string, uiScale: number): string => {
     const save = JSON.parse(saveJson) as { settings: Record<string, unknown> };
-    save.settings = { ...save.settings, uiScale };
+    save.settings = { ...save.settings, uiScale: Math.min(uiScale, UI_SCALE_MAX) };
     return JSON.stringify(save);
+};
+
+/**
+ * Force the zoom past what the app will store. A stylesheet rule rather than an inline style,
+ * because the app writes `--ui-scale` itself and a re-render would take an inline one back.
+ */
+const forceScale = async (page: Page, uiScale: number): Promise<void> => {
+    await page.addStyleTag({ content: `[class*="content"] { --ui-scale: ${uiScale} !important; }` });
+    await page.waitForTimeout(400);
 };
 
 const fitFailuresAtScale = async (
@@ -50,49 +131,202 @@ const fitFailuresAtScale = async (
 ): Promise<string[]> => {
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
     await open(page);
+    await forceScale(page, uiScale);
     await page.waitForTimeout(600);
     const report = await describeFit(page);
-    return Object.entries(report).flatMap(([kind, rows]) =>
-        (rows as string[]).map((row) => `${kind}: ${row}`)
-    );
+    return Object.entries(report).flatMap(([kind, rows]) => (rows as string[]).map((row) => `${kind}: ${row}`));
 };
 
 test.describe('the UI scale ceiling', () => {
     test.describe.configure({ retries: 0 });
 
-    const SCREENS = [
-        ['main menu', /^play$/i],
-        ['settings', /^settings$/i],
-        ['profile', /^profile$/i]
-    ] as const;
-
-    for (const [label, button] of SCREENS) {
-        test(`${label} holds its layout at the top of the scale range`, async ({ page }) => {
+    for (const { label, button, ceiling } of SCREENS) {
+        test(`${label} holds its layout up to ${ceiling} and not past it`, async ({ page }) => {
             test.setTimeout(300_000);
             const base = label === 'profile' ? buildPopulatedProfileSaveJson(true) : buildVisualSaveJson(true);
+            const open = async (target: Page, uiScale: number): Promise<void> => {
+                await gotoWithSave(target, atScale(base, uiScale));
+                await mainMenuPlayButton(target).waitFor({ state: 'visible', timeout: 30_000 });
+                if (label !== 'main menu') {
+                    await target.getByRole('button', { name: button }).click();
+                    await target.waitForTimeout(500);
+                }
+            };
+
+            const held = PROBE_LADDER.filter((step) => step <= ceiling);
             const failures: string[] = [];
-            // 0.8 and 1.05 are the slider's own ends; 1.4 and 2 are stored values the cap must hold down.
-            for (const uiScale of [0.8, 1, 1.05, 1.4, 2]) {
+            for (const uiScale of held) {
                 for (const viewport of SCALE_VIEWPORTS) {
-                    const rows = await fitFailuresAtScale(page, uiScale, viewport, async (target) => {
-                        await gotoWithSave(target, atScale(base, uiScale));
-                        await mainMenuPlayButton(target).waitFor({ state: 'visible', timeout: 30_000 });
-                        if (label !== 'main menu') {
-                            await target.getByRole('button', { name: button }).click();
-                            await target.waitForTimeout(500);
-                        }
-                    });
-                    const applied = await page.evaluate(() => {
-                        const el = document.querySelector('[class*="content"]');
-                        return el ? getComputedStyle(el).getPropertyValue('--ui-scale').trim() : 'none';
-                    });
+                    const rows = await fitFailuresAtScale(page, uiScale, viewport, (target) => open(target, uiScale));
                     console.log(
-                        `SCALE ${label} @ ${viewport.id} x${uiScale} (applied ${applied}): ${rows.length === 0 ? 'fits' : rows.join(' | ')}`
+                        `SCALE ${label} @ ${viewport.id} x${uiScale}: ${rows.length === 0 ? 'fits' : rows.join(' | ')}`
                     );
                     failures.push(...rows.map((row) => `${label} @ ${viewport.id} x${uiScale} ${row}`));
                 }
             }
-            expect(failures, `${label}: fit failures across the scale range`).toEqual([]);
+            expect(failures, `${label}: fit failures at or under its recorded ceiling ${ceiling}`).toEqual([]);
+
+            // The negative control: something must break above the ceiling, or the ceiling is too low.
+            const above = stepAbove(ceiling);
+            const breaks: string[] = [];
+            for (const viewport of SCALE_VIEWPORTS) {
+                const rows = await fitFailuresAtScale(page, above, viewport, (target) => open(target, above));
+                console.log(
+                    `SCALE ${label} @ ${viewport.id} x${above} (above the ceiling): ${rows.length === 0 ? 'fits' : rows.join(' | ')}`
+                );
+                breaks.push(...rows);
+            }
+            expect(
+                breaks.length,
+                `${label}: nothing breaks at ${above}, so the recorded ceiling of ${ceiling} is understated - raise it in SCREEN_SCALE_CEILINGS`
+            ).toBeGreaterThan(0);
         });
     }
+
+    test(`the run holds its layout up to ${SCREEN_SCALE_CEILINGS['in run']} and not past it`, async ({ page }) => {
+        test.setTimeout(300_000);
+        const ceiling = SCREEN_SCALE_CEILINGS['in run'];
+        await startRun(page);
+        const failures: string[] = [];
+        for (const uiScale of PROBE_LADDER.filter((step) => step <= ceiling)) {
+            for (const viewport of SCALE_VIEWPORTS) {
+                await page.setViewportSize({ width: viewport.width, height: viewport.height });
+                await forceScale(page, uiScale);
+                const report = await describeFit(page);
+                const rows = Object.entries(report).flatMap(([kind, list]) =>
+                    (list as string[]).map((row) => `in run @ ${viewport.id} x${uiScale} ${kind}: ${row}`)
+                );
+                console.log(`SCALE in run @ ${viewport.id} x${uiScale}: ${rows.length === 0 ? 'fits' : rows.join(' | ')}`);
+                failures.push(...rows);
+            }
+        }
+        expect(failures, `in run: fit failures at or under its recorded ceiling ${ceiling}`).toEqual([]);
+
+        const above = stepAbove(ceiling);
+        const breaks: string[] = [];
+        for (const viewport of SCALE_VIEWPORTS) {
+            await page.setViewportSize({ width: viewport.width, height: viewport.height });
+            await forceScale(page, above);
+            const report = await describeFit(page);
+            const rows = Object.values(report).flat() as string[];
+            console.log(`SCALE in run @ ${viewport.id} x${above} (above the ceiling): ${rows.length === 0 ? 'fits' : rows.join(' | ')}`);
+            breaks.push(...rows);
+        }
+        expect(
+            breaks.length,
+            `in run: nothing breaks at ${above}, so the recorded ceiling of ${ceiling} is understated - raise it in SCREEN_SCALE_CEILINGS`
+        ).toBeGreaterThan(0);
+    });
+
+    /**
+     * The floor-clear beat, which is a MOMENT rather than a screen: it clears itself and play
+     * resumes. An earlier probe opened it once and then changed the scale three times, and two
+     * runs of it disagreed about the same scale - it was reading three different instants of a
+     * surface that had moved on. Each scale re-arrives at the fixture for that reason.
+     */
+    test(`the floor clear beat holds its layout up to ${SCREEN_SCALE_CEILINGS['floor clear']} and not past it`, async ({
+        page
+    }) => {
+        test.setTimeout(720_000);
+        const ceiling = SCREEN_SCALE_CEILINGS['floor clear'];
+        const arrive = async (viewport: { width: number; height: number }, uiScale: number): Promise<string[]> => {
+            await page.setViewportSize({ width: viewport.width, height: viewport.height });
+            try {
+                await openPlayablePathFixture(page, 'floorClearWithRouteChoices');
+            } catch {
+                await page.waitForTimeout(1500);
+                await openPlayablePathFixture(page, 'floorClearWithRouteChoices');
+            }
+            await forceScale(page, uiScale);
+            const report = await describeFit(page);
+            return Object.values(report).flat() as string[];
+        };
+
+        const failures: string[] = [];
+        for (const uiScale of PROBE_LADDER.filter((step) => step <= ceiling)) {
+            for (const viewport of SCALE_VIEWPORTS) {
+                const rows = await arrive(viewport, uiScale);
+                console.log(`SCALE floor clear @ ${viewport.id} x${uiScale}: ${rows.length === 0 ? 'fits' : rows.join(' | ')}`);
+                failures.push(...rows.map((row) => `floor clear @ ${viewport.id} x${uiScale} ${row}`));
+            }
+        }
+        expect(failures, `floor clear: fit failures at or under its recorded ceiling ${ceiling}`).toEqual([]);
+
+        const above = stepAbove(ceiling);
+        const breaks: string[] = [];
+        for (const viewport of SCALE_VIEWPORTS) {
+            const rows = await arrive(viewport, above);
+            console.log(`SCALE floor clear @ ${viewport.id} x${above} (above the ceiling): ${rows.length === 0 ? 'fits' : rows.join(' | ')}`);
+            breaks.push(...rows);
+        }
+        expect(
+            breaks.length,
+            `floor clear: nothing breaks at ${above}, so the recorded ceiling of ${ceiling} is understated - raise it in SCREEN_SCALE_CEILINGS`
+        ).toBeGreaterThan(0);
+    });
+
+    /**
+     * Steam Deck Verified, the one criterion of the five that is a property of this build's type:
+     * *"the smallest on-screen font character should never fall below 9 pixels in height at
+     * 1280x800"* (`docs/RESEARCH_NOTES_2.md` §1, quoted from Valve's compatibility docs).
+     *
+     * The repo's own floor is 12 declared px, which sounds like a comfortable 3px of margin. It is
+     * not: the UI scale is a `zoom`, and the slider's BOTTOM is 0.8, so a 12px declaration reaches
+     * the eye at 9.6px. Measured on a 1280x800 panel at 0.8, the smallest painted text is 9.6px on
+     * the main menu and 9.98px in a run - it clears Valve's floor by six tenths of a pixel, and
+     * until Gen 249 nothing checked the painted size at all, because the rule that guards
+     * readability read the LAYOUT size and could not see the scale.
+     *
+     * So this pins the number that ships rather than the number that is declared. It fails if a
+     * smaller declaration lands, if the slider's floor drops, or if a screen puts fine print on a
+     * Deck panel.
+     */
+    test('the smallest type a Deck can paint clears the 9px floor at the bottom of the slider', async ({ page }) => {
+        test.setTimeout(180_000);
+        const VALVE_FLOOR_PX = 9;
+        const smallest = async (): Promise<{ paintedPx: number; text: string; zoom: number }> =>
+            page.evaluate(() => {
+                const shell = document.querySelector<HTMLElement>('[class*="content"]');
+                const zoom = shell && shell.clientWidth > 0 ? shell.getBoundingClientRect().width / shell.clientWidth : 1;
+                let worst = { paintedPx: 999, text: '', zoom };
+                for (const el of Array.from(document.querySelectorAll<HTMLElement>('*'))) {
+                    if (el.children.length > 0) continue;
+                    const text = (el.textContent ?? '').trim();
+                    if (!text) continue;
+                    const rect = el.getBoundingClientRect();
+                    const style = getComputedStyle(el);
+                    if (rect.width <= 0 || rect.height <= 0 || style.visibility === 'hidden' || style.opacity === '0') continue;
+                    const paintedPx = Number.parseFloat(style.fontSize) * zoom;
+                    if (paintedPx < worst.paintedPx) {
+                        worst = { paintedPx: Number(paintedPx.toFixed(2)), text: text.slice(0, 40), zoom };
+                    }
+                }
+                return worst;
+            });
+
+        await page.setViewportSize({ width: 1280, height: 800 });
+        await gotoWithSave(page, buildVisualSaveJson(true));
+        await mainMenuPlayButton(page).waitFor({ state: 'visible', timeout: 30_000 });
+        await forceScale(page, SETTINGS_NUMERIC_RANGES.uiScale.min);
+        const worst = await smallest();
+        console.log(`DECK TYPE menu @1280x800 x${worst.zoom.toFixed(2)}: ${worst.paintedPx}px on "${worst.text}"`);
+        expect(
+            worst.paintedPx,
+            `"${worst.text}" paints at ${worst.paintedPx}px on a Deck panel at the slider's floor; Valve's minimum is ${VALVE_FLOOR_PX}px`
+        ).toBeGreaterThanOrEqual(VALVE_FLOOR_PX);
+    });
+
+    test('a phone lays out at 1 whatever the stored scale says', async ({ page }) => {
+        test.setTimeout(120_000);
+        await page.setViewportSize({ width: 390, height: 844 });
+        await gotoWithSave(page, atScale(buildVisualSaveJson(true), UI_SCALE_MAX));
+        await mainMenuPlayButton(page).waitFor({ state: 'visible', timeout: 30_000 });
+        const applied = await page.evaluate(() => {
+            const el = document.querySelector('[class*="content"]');
+            return el ? getComputedStyle(el).getPropertyValue('--ui-scale').trim() : 'none';
+        });
+        expect(applied, 'a compact viewport lays out at 1, not at the stored scale').toBe('1');
+        const report = await describeFit(page);
+        expect(Object.values(report).flat(), 'phone at its own scale').toEqual([]);
+    });
 });

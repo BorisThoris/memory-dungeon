@@ -1,17 +1,8 @@
 import type { RunStatus, SubscreenReturnView, ViewState } from '../../shared/contracts';
 import { isResumableLifecycleState, lifecycleStateFromRunStatus } from '../../shared/run-lifecycle-machine';
 
-type NavigationSurface =
-    | 'boot'
-    | 'menu'
-    | 'modeSelect'
-    | 'collection'
-    | 'profile'
-    | 'inventory'
-    | 'codex'
-    | 'settings'
-    | 'playing'
-    | 'gameOver';
+/** The route table's surfaces are the app's views; a fourth copy of the list would only drift. */
+type NavigationSurface = ViewState;
 
 type NavigationAction =
     | 'back'
@@ -58,8 +49,20 @@ interface ResolveCloseInput {
 type RequestedSettingsReturnView = SubscreenReturnView | 'settings';
 
 const MENU_RETURN_VIEWS = new Set<ViewState>(['modeSelect', 'collection', 'profile', 'inventory', 'codex', 'settings']);
-const IN_RUN_META_VIEWS = new Set<ViewState>(['inventory', 'codex', 'settings']);
-const IN_RUN_OVERLAY_VIEWS = new Set<ViewState>(['inventory', 'codex', 'settings']);
+/*
+ * The meta screens that overlay a live run WITHOUT owning the shell the way run settings does.
+ *
+ * This said `['inventory', 'codex', 'settings']` and had a twin, `IN_RUN_OVERLAY_VIEWS`, with the
+ * identical three entries and a predicate of its own - two names for one set, so nothing could
+ * notice if they drifted apart. Worse, the code that decides this for real inlined
+ * `view === 'inventory' || view === 'codex'`, which EXCLUDES settings because run settings is
+ * answered by its own branch above it. So the record said one thing, the shipped behaviour did
+ * another, and no test could catch it because nothing connected them: the set had no runtime
+ * caller at all (Gen 245).
+ *
+ * It now says what the app does, and the app reads it. Changing this set changes the shell.
+ */
+const IN_RUN_META_VIEWS = new Set<ViewState>(['inventory', 'codex']);
 
 export const NAVIGATION_ROUTE_CONTRACTS: ReadonlyArray<NavigationRouteContract> = [
     { action: 'open', from: 'menu', to: 'modeSelect', presentation: 'page', preservesRun: false, timerPolicy: 'none' },
@@ -234,8 +237,6 @@ export const isMenuDestinationView = (view: ViewState): boolean => MENU_RETURN_V
 
 export const isInRunMetaView = (view: ViewState): boolean => IN_RUN_META_VIEWS.has(view);
 
-export const isInRunOverlayView = (view: ViewState): boolean => IN_RUN_OVERLAY_VIEWS.has(view);
-
 export const getNavigationShellChromeContract = ({
     runPresent,
     settingsReturnView,
@@ -259,7 +260,7 @@ export const getNavigationShellChromeContract = ({
     if (view === 'settings' && settingsReturnView === 'playing') {
         return { visualView: runPresent ? 'playing' : 'menu', shellChrome: runPresent ? 'gameplay_modal' : 'menu_hub', boardMounted: runPresent, fallbackView: 'menu', reason: 'Run settings overlays gameplay and freezes timers.' };
     }
-    if ((view === 'inventory' || view === 'codex') && subscreenReturnView === 'playing') {
+    if (isInRunMetaView(view) && subscreenReturnView === 'playing') {
         return { visualView: runPresent ? 'playing' : 'menu', shellChrome: runPresent ? 'gameplay_modal' : 'menu_hub', boardMounted: runPresent, fallbackView: 'menu', reason: 'In-run meta overlays keep gameplay mounted.' };
     }
     return { visualView: view, shellChrome: view === 'menu' ? 'menu_hub' : 'meta_page', boardMounted: false, fallbackView: 'menu', reason: 'Full-page menu/meta destination.' };

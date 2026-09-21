@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { ACHIEVEMENTS } from '../../shared/achievements';
 import { getActiveContentLock } from '../../shared/content-lock-state';
 import { MUTATOR_CATALOG } from '../../shared/game-catalog';
@@ -13,6 +13,7 @@ import { personalBestResult } from '../../shared/personal-best';
 import { buildRunShareText } from '../../shared/run-share-text';
 import { describeRunShareKey, encodeRunShareKey } from '../../shared/run-share-key';
 import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
+import { useEscapeLeaves } from '../hooks/useEscapeLeaves';
 import { useViewportSize } from '../hooks/useViewportSize';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
 import { Eyebrow, Panel, ScreenTitle, StatTile, UiButton } from '../ui';
@@ -90,6 +91,19 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
         [summary]
     );
     const uiGain = uiSfxGainFromSettings(settings.masterVolume, settings.sfxVolume);
+
+    /*
+     * B goes back to the menu, the route `NAVIGATION_ROUTE_CONTRACTS` already documents for
+     * gameOver. The run is already over, so there is nothing here to lose by leaving - and Play
+     * again stays a deliberate press rather than something back could trip.
+     */
+    const leaveToMenu = useCallback((): void => {
+        resumeUiSfxContext();
+        playUiBackSfx(uiGain);
+        goToMenu();
+    }, [goToMenu, uiGain]);
+    useEscapeLeaves(leaveToMenu);
+
     const { copy: copyToClipboard, state: copyState } = useCopyToClipboard();
     const runShare = buildRunShareText(run);
     const copyResultLabel =
@@ -192,11 +206,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                         aria-label={GAME_OVER_LABELS.returnToMenuMobile}
                         size="lg"
                         variant="secondary"
-                        onClick={() => {
-                            resumeUiSfxContext();
-                            playUiBackSfx(uiGain);
-                            goToMenu();
-                        }}
+                        onClick={leaveToMenu}
                     >
                         {gameOverScreenCopy.mainMenuLabel}
                     </UiButton>

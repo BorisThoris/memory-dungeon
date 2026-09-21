@@ -4,6 +4,52 @@ Post-relic / post-mutator tuning. Constants live in `src/shared/contracts.ts` un
 
 ## Recent intent
 
+- **Gen 249 the 9px Deck floor is met by six tenths of a pixel, and nothing was measuring it (`e2e/uiFit.ts`, `ui-scale-ceiling.spec.ts`):** #204's first criterion is Valve's, quoted: *"the smallest on-screen font character should never fall below 9 pixels in height at 1280x800"*. The repo answers it with a **12 declared px** floor, which reads like 3px of margin. **It is not.** The UI scale is a `zoom` and the slider's BOTTOM is 0.8, so a 12px declaration reaches the eye at **9.6px**. Measured on a 1280x800 panel at 0.8: **9.6px** on the main menu ("Seeker of Shards"), **9.98px** in a run ("Best"). It clears Valve's floor - by six tenths of a pixel. **And the rule that guards readability could not have seen a violation:** `undersized` in the fit report read `getComputedStyle().fontSize`, the LAYOUT size, which is 12 at every scale. **The same unit error as the chrome clearance (Gen 237) and the chain rail (Gen 239), this time in the check itself** - three instances now, in three subsystems, all invisible because scale 1 is where the two units agree. Fixed: `undersized` measures painted px, with a hundredth-of-a-pixel epsilon because at scale 1 the ratio is a division of two measured boxes and can land on 0.9999, which would report every screen as undersized. The change can only fire MORE at scales below 1 and LESS above, which is the correct direction in both. And the criterion now has a check that pins **the number that ships rather than the number that is declared**, with its negative control run: raising the floor to 10 fails with *"Seeker of Shards paints at 9.6px on a Deck panel at the slider's floor; Valve's minimum is 10px"*.
+
+- **Gen 248 the chrome rows answer for themselves too, and #253 is closed (`navigationModel.test.ts`):** The other half of the decorative layer. The four rows are mostly prose - `route` and `chrome` are sentences - but `preservesRun` is a claim the code can be asked about: **"the run survives this move" and `boardMounted` are the same statement in different words**, since a mounted board is what keeps gameplay alive under the overlay. Each row now names the case it describes (page back, in-run meta, null-run recovery, game-over return), and the test builds that case and asks `getNavigationShellChromeContract` - the if-chain App.tsx actually uses. **Negative control run:** flipping `in_run_meta` to `preservesRun: false` fails with *"row in_run_meta says preservesRun=false, but the shell keeps the board (gameplay_modal)"*. The row count is pinned too, so a new row cannot be added without naming its case. **Baseline 107 → 106, 4 exempt by name**, and every one of those four exemptions is a symbol whose test checks the game rather than the description. **#253 closed: both layers of `navigationModel` are now load-bearing.** The module that began this thread as "six exports nothing reaches" ends it with two sets and two tables the app cannot quietly contradict.
+
+- **Gen 247 the route table is checked against the app now, not against itself (`navigationModel.test.ts`):** #253 said the two layers speak different vocabularies - the table keyed `(from, to, action)` on a navigation surface, the resolver switching on a store action like `openInventoryFromPlaying` - and that reconciling them was the work. **They reconcile:** every store action IS a route triple. So rather than rewrite the resolver to read the table (the risky direction), the test now asserts the **behaviour against the record**: for each action the row must exist, `resolveNavigationTransition` must land on the view the row promises, and `timerPolicy: 'freeze-on-open'` must mean the transition actually freezes the run. **Negative control run, not described:** flipping the `playing -> inventory` row to `timerPolicy: 'none'` fails with *"openInventoryFromPlaying: the contract says timerPolicy none, the resolver freezes"* - the table and the app can no longer disagree in silence. That changes what `getNavigationRouteContract` IS: it was a getter whose test checked the description was self-consistent, and it is now the lookup a behaviour check reads, so it leaves the baseline as an **exemption with its reason written down** rather than as debt - **107, 3 exempt by name.** `getNavigationShellChromeRows` is still decorative and stays in the baseline; the chrome half of #253 is not done and the task says so.
+
+- **Gen 246 classified the remaining 108, then caught the classification being wrong (`test-only-exports-baseline.json`):** Five generations of one-cluster-at-a-time triage is slow, so I tried to split the rest by the distinction that mattered in Gen 245: is the module holding the export **live**, or is it a record whose test is meant to be its only consumer? The script said 63 live modules (99 entries) and **six modules with no runtime importer at all** (9 entries) - names that read exactly like record-by-design: `softlock-generator-contract`, `audioInteractionCoverage`, `content-security-policy`, `color-vision`, `power-verbs`, `long-run-depth`. **Spot-checked all six rather than believing it, and it was wrong on every one.** Four have runtime importers in `src/` (`gameplay-interaction-graph.ts`, `audioMixDuckingPolicy.ts`, `release-checklist.ts`, `tile-trait-rules.ts`) and two are consumed by `scripts/`. My grep under-counted importers. **The error is only in one direction, which is what saves the result:** a false negative moves a module INTO the live bucket, never out, so the corrected conclusion is the stronger one - **every module holding a baselined export is live, and none of the 108 is a record-by-design symbol.** Each is a decorative tail on working code and wants the Gen 245 treatment. Written into the baseline's own `why` field, where the next triage will read it, **including the warning that the heuristic under-counts and that nothing may be excused on its strength**. No code change: the deliverable is a map that is honest about its own error bars, which is worth more than five more generations of guessing where to start.
+
+- **Gen 245 a record that contradicted the code it described (`navigationModel.ts`):** Next cluster of the baseline triage - six navigation exports nothing but their own test reaches. **The module is live** (App.tsx, metaOverlayExecutor and metaOverlayState import it), so this is not a dead module; it is a live one carrying a **decorative tail**. `NAVIGATION_ROUTE_CONTRACTS` is read only by a getter that is itself test-only, and the live `resolveNavigationTransition` is a hand-written switch that never consults it; `getNavigationShellChromeRows` has no reader at all, and the live `getNavigationShellChromeContract` is an if-chain that ignores it. **And the two layers had already drifted, demonstrably:** `IN_RUN_META_VIEWS` said `['inventory', 'codex', 'settings']`, it had a TWIN (`IN_RUN_OVERLAY_VIEWS`) with the identical three entries and a predicate of its own, and the code that decides this for real inlined `view === 'inventory' || view === 'codex'` - **excluding settings**, which is answered by its own branch above. Record said one thing, shipped behaviour did another, nothing could catch it because nothing connected them. **Fixed by making the record load-bearing rather than by tidying it:** one set, spelling what the app does, and the app reads it - change the set now and the shell changes. The twin and its predicate are gone. **No behaviour change** (the set is exactly the condition it replaced; 38 tests across navigationModel, metaOverlayState and App pass), and **two entries leave the baseline by gaining a caller rather than by being excused: 110 → 108.** The route table and the chrome rows are still decorative and are #253, with the reconciliation named as the actual work: the two layers are keyed on different vocabularies, and **a description nothing enforces is worse than none, because a reader trusts it.**
+
+- **Gen 244 the exemption list, sized by a sweep rather than by convenience (`scripts/test-only-exports.ts`):** Gen 241 flagged two baselined exports as mislabelled - they have real consumers the audit cannot see, because Playwright specs and build scripts reach into the app through a DYNAMIC module URL (`import('/src/renderer/components/tileTextures.ts')`) and this audit reads static relative imports. **Rather than exempt the two I happened to notice, I swept all 112** for a mention anywhere in `e2e/` or `scripts/`: **exactly two hits, the same two.** `clearTileTextureCachesForDebug` (a bake script plus two illustration specs) and `getIllustrationPipelineDebugState` (two regression specs). The other 110 really are reached by nothing but their own test, which is worth knowing precisely: it means the baseline is debt rather than a measurement artefact. Both are now exemptions **named with their reason**, the module's "what this cannot see" paragraph names the blind spot alongside the `import * as` one it already admitted, and the sweep is recorded there too - **an exemption list is only honest if someone checked how long it should be.** Baseline **112 → 110, 2 exempt by name.**
+
+- **Gen 243 deleting dead code found a live starvation bug (`tileTextures.ts`):** #251 asked whether `prewarmTileFaceOverlayTextures` - a finished optimisation with no caller - should be wired or deleted, and said to measure first. **The cheapest question answered it without a stopwatch:** `runDemandDrivenTileFaceOverlayPrewarmSession` **is** wired (`useTileBoardSceneResources.ts`) and its doc says it enqueues *"only pairKeys the board currently cares about"* - the narrower, smarter version of the same job. The eager whole-board prewarm was **superseded**, not forgotten, so it goes. **Then the deletion earned its keep.** One of the two tests it owned covered the idle-scheduler FALLBACK, machinery the surviving session shares, so rather than lose that coverage I re-pointed both tests at the demand session - **and the fallback test went red.** Read: `pumpDemandOverlayPrewarm` breaks out when `deadline.timeRemaining() <= 2`, and the timer fallback in `schedulePrewarmStep` hands over a deadline whose `timeRemaining()` is **0**. So whenever `requestIdleCallback` is missing or throws - **the exact case the fallback exists for** - the demand prewarm bailed on the first key every time, left the queue untouched, rescheduled, and span an endless chain of zero-work timers **without warming a single bitmap**. The eager path made progress there, so deleting it blind would have taken the only code that worked under the fallback with it and left the starvation in place, unnoticed, behind a passing suite. **Fix:** draw at least one before yielding (`processed > 0 &&`). The red test is the negative control, demonstrated in both directions. **Baseline 113 → 112**, and the class of finding is worth more than the count: *dead code is worth deleting carefully, because what it covers may be the only thing covering something live.*
+
+- **Gen 242 the red spec was right, the bookkeeping was stale, and nothing was watching (`package.json`, `e2e/fixtures/tile-card-face-illustration-regression.json`):** Gen 241 found `tile-card-face-illustration-regression.spec.ts` failing at HEAD. **Read properly, the hashes passed and only the metadata failed:** `textureVersion` 49 expected against 51 received. Regenerated and diffed: **all 72 hashes identical, zero keys differing** - the only change in the fixture is that one number. **Why:** the two bumps came with `b1c4f7a1` ("Regenerate art and audio on upgraded local models") and `ac80c37e` ("Restore the SDXL card fronts"), which replace **authored PNG card fronts**, while this spec hashes **procedural** illustrations drawn from fixed seeds. Authored assets cannot move a procedural hash, so the hashes holding is the correct result and the fixture was simply behind. **The assertion is not the problem and was not weakened.** `writeUpdatedFixtures` refuses to regenerate when hashes change without a version bump, so the pinned version is half of a real contract - "bump a version before the art may change" - and pinning it also catches the inverse, a cache invalidated for every player with nothing to show for it. **What was missing was a gate.** `test:e2e:illustration-regression` existed as a standalone script that `fullcheck` never called, so two art drops landed, the spec went red, and nobody heard. Now `gate:illustration-regression`, in `fullcheck` beside `gate:ui-fit`, **16 seconds** against that gate's 19 minutes. **Third time this week the finding was that the instrument was not wired:** Gen 236 for the fit contract, Gen 241 for this spec's existence, this one for the gate.
+
+- **Gen 241 one of the 114 test-only exports was a second copy of a live constant (`cardFace/staticCardTextureSize.ts`, `tileTextures.ts`, `cardRasterDeck.ts`):** Left the layout work and took the broadest non-layout item in the queue - the 114 exports the audit says only their own test can reach - starting with the two biggest single-file clusters. **The first entry I checked was not debt at all.** `getStaticCardTexturePixelSize` reads as test-only because `cardRasterDeck.ts` does not import it: it **defines its own copy**, `getStaticCardTexturePixelSizeLocal`, over the same two constants, with the reason in a comment - *"no import - avoids cycles"*. **The reason is true** (`tileTextures.ts` line 38 imports `cardRasterDeck` for the composed overlay, so the other direction is a genuine cycle) **and the copies did agree** - but nothing checked that they would keep agreeing, and the failure mode is silent: raise the height in one and the raster deck keeps computing its illustration rect against the old number, which shows up as slightly wrong art rather than as a red test. Both now import one leaf module; `tileShatter` imports only three leaves of its own, so neither side imports the other and the cycle never forms. **Baseline 114 → 113, and the audit named the stale line itself** rather than needing to be told. **The rest of the cluster, triaged:** two entries (`clearTileTextureCachesForDebug`, `getIllustrationPipelineDebugState`) have real non-test consumers - a bake script and two e2e specs - reached through dynamic `import('/src/…')` URLs the audit cannot follow, so they are mislabelled rather than dead. One (`prewarmTileFaceOverlayTextures`) is a finished optimisation that **never had a caller at all**: `git log -S` over `TileBoard.tsx` and `GameScreen.tsx` returns nothing, so it did not lose one, it never got one - the `createInventoryScreenModel` shape again (#251, and it needs the timing measured before anyone wires it). **And verifying this change found something bigger than it:** `tile-card-face-illustration-regression.spec.ts` is **red at HEAD** - confirmed by stashing every file this generation touched, the untracked one included, and watching it fail anyway - and **no gate runs it**. `package.json` has it as a standalone script and `fullcheck` never calls it, which is Gen 236's finding again in a different corner: an instrument nothing invokes rots and reports nothing. Filed as #252 with the order of operations spelled out, because `regenerate:illustration-regression` makes the wrong fix one command away.
+
+- **Gen 240 measured #250 and refuted both of its candidate fixes, then stopped rather than guess (`RunShell.module.css`, diagnosis only):** The task said the chain rail is drawn over the floor-clear beat and offered two fixes - hide the rail during the beat, or inset the beat from the rail - with an instruction to measure before choosing. **Measured on a 1280x800 Deck panel, fresh arrival per scale, both are wrong about where the collision is.** The boxes, in layout px and constant across scales: `.chain` declares **64..272** (13rem) and `.ladder` fills it, **64..272**; the beat's panel is **282..1216**, already clear of the rail's declared box by 10px. What the beat actually meets is **`.chainRead` at 176..408** - `position: absolute; left: 7rem; white-space: nowrap` inside a 13rem container, **overflowing its own box by 136px**. The beat's title is 445..1053 at scale 1 (37px of clearance) and 387..995 at 1.1, which puts it 21px inside the read. So the rail's declared width has never contained its own content, and the two surfaces have been 37px apart at the only scale anything measured. **Neither candidate survives that.** Hiding the rail loses a live read - the chain that produced the floor's result is still the one on screen, and `chunkPairsThisChain` does not reset until the next floor. Insetting the beat past 408 moves its title from 445 to about 516 **at scale 1**, a 71px shift on a hand-designed screen that currently passes at every window. Moving the read left instead buries it under the ladder, which spans the rail's full width, and it would have to start at about 2rem to hold at 1.2. **No measured winner, so no change shipped:** the fix is a design decision about what the left column is, not a number to correct, and this session's own record says an unmeasured hypothesis is the expensive path (Gen 233's refuted `.chainGoalValue` change, Gen 234's self-inflicted laptop regression). #250 carries the geometry, the three refutations and the numbers behind them.
+
+- **Gen 239 the chain rail was frozen in the window while the game shrank around it (`RunShell.module.css`, `uiScaleLimits.ts`, `ui-scale-ceiling.spec.ts`):** Gen 238 found the run to be the lowest ceiling in the game - at **1.1, the cap the slider was shipping**, the rung goal sat under the caption on a Deck panel. **Measured, the cause was two CSS lengths:** `--ladder-h: clamp(15rem, 44vh, 25rem)` and `top: clamp(11rem, 27vh, 15.5rem)`. `vh` is a viewport unit and a viewport does not zoom, so inside the UI scale's `zoom` both resolve to a share of the WINDOW and are then used as layout lengths. The block sat at **216..672 layout px at 1, 1.05, 1.1 AND 1.2 - identical, frozen** - while the shell it lives in shrank **800 → 762 → 727 → 667**. Everything else in the run moves with the box, so the run line under the board rose into the rail's goal and covered it, and by 1.4 the whole block was past the bottom edge. **Fix:** a share of `--ui-zoomed-dvh` instead, the property `App.module.css` publishes for exactly this - at scale 1 it is the same number `vh` gave, so the block is byte-identical (216..672) at the size everything was drawn at, and tracks the box above it (196..621 at 1.1, 180..578 at 1.2). **The run went 1.05 → 1.2**, verified at 1 / 1.05 / 1.1 / 1.2 on both windows with 1.4 still failing as the control. **Then the floor-clear beat was measured, and it is the new lowest.** The same rail is drawn over it: at 1.1 on the Deck it lands on the beat's own title, par line and personal best, and a stash confirmed that predates this change. So **the cap stays 1.05** - the same number as an hour ago, for a different and now-named reason, which is the whole point of a row per screen. The beat has its own row and its own check now; fixing it (#250) takes the cap to 1.2, then 1.4 where Codex and Settings wait. **A measurement lesson worth more than the fix:** the beat is TRANSIENT, and the first probe opened it once and changed the scale three times - two runs of it disagreed about the same scale because they were reading three different instants of a surface that clears itself. The spec re-arrives per scale and says why.
+
+- **Gen 238 the cap was never Profile's, and it was never a menu screen's (`MetaShell.module.css`, `ProfileScreen.module.css`, `CodexScreen.tsx`, `uiScaleLimits.ts`, `save-data.ts`):** Task #246 said Profile pinned `UI_SCALE_MAX` at 1.1 by clipping at 1.4 on a Deck panel. **Measured, the cause was a unit error, not a layout one.** Profile owns a compact arrangement - hide the tier rail, six numbers in a fixed six-column row - written as `@media (max-height: 560px)`, and **a media query reads the WINDOW**. The UI scale is a `zoom`: it shrinks the box a screen lays out in and leaves the viewport alone. At 1.4 on a 1280x800 panel Profile lays out in **914x571** - laptop-sized - and every rung it owns still saw 800px, so the desktop arrangement was drawn into a box that could not hold it: the summary wrapped to two rows (66 -> 157 layout px), and the ledger, the only flexible region, took the whole cost and fell to a **44px** frame that clipped every card. The rung it needed was already written and worth the exact deficit ("its 75px is the difference between the ledger measuring a 25px frame and one that fits a row"). **Fix:** `MetaShell` is a **size container** and Profile's three rungs ask the box (`@container meta-shell`) instead of the window, thresholds re-derived from the box heights measured at every window and scale. Profile went from **1.1 to 1.6**. **Then the sweep that was supposed to justify raising the cap found two things instead.** Codex clipped an entry's summary from **1.1** - its card row was sized at 146px for a one-line title, and the columns narrow as the scale rises (249 -> 235px) until the longer titles take two lines and the 24px comes out of the summary below; sized for its own worst case (160px, measured) it holds to **1.4**. And then the run itself was probed **for the first time at any scale but 1**, and it is the lowest of everything: at **1.1, the cap the slider was already shipping**, the chain goal line sits on the chain state on a Deck panel. **Every ceiling this system had ever recorded was a menu screen - the screen a player spends the whole game on was not on the list.** So the cap comes **down, 1.1 -> 1.05**, in `SCREEN_SCALE_CEILINGS` and in the slider's own range, because a rung the game cannot render in play is worse than a shorter slider: the player who most needs large text is the one who reaches the top of it. `ui-scale-ceiling.spec.ts` now carries five rows including the run, each with its negative control breaking one rung above (6 passed, 9.0m), and its ladder is deduped, sorted and carries 1.05/1.1/1.2 because these failures are close together and Codex's was not even monotonic. Fixing the run's chain HUD (#249) takes the cap to 1.4, not 1.6. **`gate:ui-fit` after all of it: 20 passed, 18.5m** - the 18 fit-contract specs at 18 screens x 6 windows plus Gen 237's two clearance specs - so making `MetaShell` a size container, which every meta screen sits inside, regressed nothing at scale 1.
+
+- **Gen 237 the in-run chrome clearance was measured in painted px and written back as a CSS length (`useGameplayChromeClearance.ts`, `ui/cssZoom.ts`, `e2e/gameplay-chrome-clearance.spec.ts`):** A lead filed rather than acted on in Gen 228, with the instruction to **measure first**. Measured, on a 1280x800 Deck panel and a 1440x900 desktop, same run on screen at each scale: **the HUD occupies 118.4 layout px at every scale**, and the hook published **95px at 0.8, 118px at 1, 130px at 1.1** - the span times the zoom. The hook took both numbers off `getBoundingClientRect()`, which reports the PAINTED box, and wrote them out as CSS lengths, which the same zoomed subtree reads as LAYOUT px. **What that did to the game, which is the measurement that counts:** the board stage insets itself by exactly those properties, so at 0.8 it began **18.7px under the HUD** - the cards printing beneath the score, the precise fault the inset exists to prevent - and at 1.1 it stopped **12.8px short**, a dead strip. At scale 1 it was flush to within 0.4px, **and scale 1 is what every automated check in this repository pins**, which is why a system built to prevent this, running every frame, could be wrong for its whole life without a single red test. **Fix:** one divide, by a zoom read off the shell's own two boxes (`readCssZoom`, the same visual-vs-layout distinction Gen 228 named in `readFrameBox`). Re-measured: -0.31 / -0.39 / -0.42 across the three scales, flush everywhere. **The gate, with its negative control done rather than described:** `gameplay-chrome-clearance.spec.ts` checks the painted result - the stage's top against the HUD's bottom - at the bottom, middle and top of the slider's own travel read from `SETTINGS_NUMERIC_RANGES`, and asserts the measured zoom matches the scale it asked for, because a probe that silently applies nothing reports three identical passes (how the Gen 222 ceiling was measured wrong). Reverting the divide, the spec fails with four named rows; with it, 2 passed. Folded into `gate:ui-fit`, +54s on a 17-minute gate. **Swept for siblings:** three `setProperty` call sites in the renderer, and this was the only one writing a rect-derived length; the other two write unitless tilt and theme tokens. `FittedGrid` was the same class, fixed in Gen 228. **The class is now empty.**
+
+- **Gen 236 I had said it seven times and half of it was false (`package.json`):** Every write-up this week ended on the same line - *"neither `yarn build` nor the fit contract is in the routine verification path"* - offered as the reason all eleven fit defects shipped. Read properly, **`fullcheck` is `lint && gate:security && gate:package-hygiene && gate:desktop-build && gate:build-output && gate:systems && gate:ui-reachability && verify`, and `ci` is `yarn fullcheck`.** `gate:desktop-build` **is** `yarn build:electron`; `gate:build-output` runs a `vite build`. **The build was gated the whole time.** What misled me is that I ran `gate:systems` each generation and called that the routine path; it is one line of eight. **The other half was true and is now fixed:** `gate:ui-reachability` runs `ui-reachability-gate.spec.ts`, a different spec - the fit contract appeared in **no** gate, which is why eleven defects across nine screens reached `main` under a green `fullcheck`. `gate:ui-fit` runs it, in `fullcheck`, beside the reachability gate it is the twin of. **The cost, stated rather than discovered by whoever runs it next:** 17.3 minutes, the longest gate in the file by a wide margin. That is the price of the only instrument that can see this class at all, and this week it found eleven. **What this is an instance of:** a claim repeated until it sounded established, never re-derived - the exact defect this session has spent a dozen generations removing from the codebase (a ledger stamped before the game moved, an exemption naming a blocker gone for eight generations, a spec asking for a mode retired at the collapse). It is worth more as a correction than the gate is as a gate: **the seven repetitions were mine, in the same week I was fixing other people's.**
+
+- **Gen 235 the last two: a column of full-width buttons spends width to save no height, and the mode was named twice (`GameOverScreen.module.css`, task #248):** Game over was over the edge at the two smallest windows - **866px of page in an 844px phone** and **419px of rail in a 375px landscape** - dropping the next-run loop past the fold in both. **Landscape:** the rail's bulk is `.actionButtons`, 231px of buttons stacked one per row in a rail **350px wide**. Width was never the problem on this screen and height always was, so a single column was spending the one to save nothing of the other; two-up turns four rows into two and gives back about 110px, which is twice what the landscape needed. **The phone did not move, and the reason is worth keeping:** a rule at `max-width: 760px` had *already* made those buttons two-up, so the new rule only newly applied to the 812-960 band - which is exactly why landscape changed and the phone did not. Measuring rather than assuming the fix had landed everywhere is what caught that in one run instead of two. **The phone's own 29px came from a line that says what the line above it says:** `.modeIdentity` - *"Classic descent: chain..."* - under a heading reading *"Run complete · Classic"*. It is 40px on a phone, and the overflow was 29. That rule already existed for short landscape, with the argument already written into the file (*"the heading directly above it already names the mode, so it was spending a seventh of the window saying the same thing twice"*); this extends the same rule to the one other window with no room for it. It stays everywhere else, because it is the one place a run summary says what the mode's contract actually was. **The fit contract is green at all eighteen screens and all six windows.** Four defects were enumerated at Gen 231 by the harness that stopped hiding them; they are closed at Gen 232, 234 and 235. **Eleven fit defects found and fixed this week**, every one of them shipped, none of them visible to `yarn lint`, `tsc`, 2800 unit tests or `yarn gate:systems` - which remains the gap worth naming: **neither `yarn build` nor the fit contract is in the routine path.**
+
+- **Gen 234 two grid items were pinned to opposite edges of one cell, which is a row only while the cell is wider than both (`RunShell.module.css`, task #248):** The last defect on floor clear: at 812x375 the HUD printed *"Chain 2 - Sharp"* over *"3 momentum to Fever"*. **Measured:** the compact `.chain` is a named-area grid, `'mult read' / 'mult ladder'`, and BOTH labels are assigned **`grid-area: read`** - one `justify-self: start`, one `justify-self: end`. The cell is 222.6px, the labels are 122 and 118, so they collide by exactly the **17px** they are over. A layout that works above a width nothing checks. The cure is the row the code had already asked for: `.chainRead` dissolves at compact layouts (`display: contents`) so its three children can take named areas, and that **threw away its own `flex-direction: column` and 0.15rem gap** along with the box they applied to - the goal gets that row back. **The hypothesis that died first, recorded at Gen 233 so it would not be tried twice:** the goal's tail `×8 per pair` repeats what `.rungValue` already prints as a large numeral in the same row, so hiding it looked like a §105 duplication fix and a 60px saving at once. Applied and measured: the rule took effect (computed `display: none`, width 0) and **the goal box did not move** - still 674..792. Grid places these labels, not their text, so removing text cannot close the gap. Reverted rather than shipped with a comment claiming a fix it did not deliver. **And the first version of the real fix broke a window it was not aimed at, which is the part worth keeping.** Applied to all three compact layouts, the extra row grew the tablet HUD - and since Gen 230 the floor-clear beat is inset by the HUD's **published clearance**, so a taller HUD pushed the beat's notes past the board stage's clip on a **1024x768 laptop**, a window that had been passing. The new one-assertion-per-sweep harness from Gen 231 is what said so in the same run rather than two generations later. Scoped to `phone-landscape` on that measurement, not on taste: the collision is a short-landscape problem and the cure belongs where the problem is. **`floorClearWithRouteChoices` now passes at every window**; the board and the four-seat run bar still do. **Two left, both on game over:** a phone clips *"Next: Bronze Crest"* and drops the next-run loop, and short landscape clips *"No chain yet..."* with the same loop below the fold.
+
+- **Gen 232 the board's own keyboard entry point was off the bottom of a phone, because one of two paths to the same box was only ever checked where it worked (`GameScreen.tsx`, task #248):** The fit contract reported the board stage below the fold on a 390x844 phone during the floor-clear beat, and - worse - `[tile-board-application]` **unreachable**: the `role="application"` node that is the keyboard and controller entry point for the entire board, with its centre outside the window. **Measured: the frame laid out at 398..1242 in an 844px window**, nearly 400px past the bottom, because it computed `position: relative` and took `height: 100%` of a stage it had been pushed 398px down inside. **The attribution took four probes and two of my own hypotheses died on the way, which is worth recording because the wrong ones were the plausible ones.** It was not the cascade: a bare element carrying the same two classes computes `absolute`, so the rule is served and the class list is right. It was not an inline override on the phone: the phone element's `style` attribute holds nothing but two tilt variables. What the probes actually found is an **asymmetry between two code paths that are supposed to produce the same box** - `frameStyle={cameraViewportMode ? undefined : DESKTOP_FULL_BLEED...}`. Desktop gets the fill as an **inline style**, which cannot lose; the phone was left to `.frameMobileCamera`, which declares the identical four properties and, in the frame's real ancestor chain, **does not win**. One path guaranteed, one path hoped, and the hoped one was only ever looked at on the viewport where it happened to hold. **The fix is to stop having two paths:** the constant is `FULL_BLEED_TILE_BOARD_FRAME_STYLE` now and both modes get it. The phone board goes **398..1242 to 0..844**, its centre lands inside the window on the board's own canvas, and both the below-fold and the unreachable readings clear; desktop is unchanged at 118..809 and `the board fits every window` still passes. **What I did not settle, said plainly:** which rule in the ancestor chain beats `.frameMobileCamera`. The inline style makes the question moot for the box that matters, but the class is still there and still losing, and a later generation that leans on it will meet this again. **One left on this screen:** at 812x375 the HUD's "Chain 2 - Sharp" and "3 momentum to Fever" share pixels.
+
+- **Gen 231 the contract stopped at the first window that failed, so four generations each fixed the head of a queue (`e2e/ui-fit-contract.spec.ts`, `GameOverScreen.module.css`, task #248):** Game over put its next-run loop past the bottom edge on an **834x1112** tablet. Measured, the screen is **1133px tall in a 1112px window**: at that width `@media (max-width: 960px)` stacks the two columns, and stacked they sum instead of taking the taller. **The fix was already written down in the file, in words, keyed to the wrong thing.** Twelve rules further on, the short-landscape block says exactly the right principle - *"The width is there, so the result and the next move stay side by side rather than stacking into a page twice the window's height"* - but it is keyed `max-height: 560px`, so a **tall** tablet never reaches it. It is keyed on the width it talks about now, for 700-960px, and the page is **692px** rather than 1133. **The previous attempt is in the same file and was honest about stopping short:** a comment records that putting the two next-run cards side by side in the stacked rail saved 83px off a column that "already ran 44px past the bottom". Shaving 83 off 127 leaves 44, and 44 is what was still over the edge. Fixing the stacking removes the 127. **The larger finding is about the instrument, not the screen.** `atEverySize` asserted per viewport, so the sweep **stopped at the first window that failed** and the later ones were never measured at all. That is why the last four generations each read as "fixed it, and now a new failure appeared": the desktop clip on floor clear was hiding a phone defect, the tablet overflow on game over was hiding a phone one **and** a landscape one, and the mode sheet's stale locator was hiding a landscape clip. Every one of those was present the whole time; nothing had ever looked past the head of the queue. It collects every viewport and asserts once at the end now, and the very first run proved the point - **one run reported both remaining game-over windows** where the old shape would have taken two more fix-and-rerun cycles to discover the second. **What the new instrument says is left, in full, because enumerating it is now cheap:** game over clips *"Next: Bronze Crest"* and drops the next-run loop on a **phone**, and clips *"No chain yet..."* with the same loop below the fold in **landscape**; floor clear puts the **board stage** below the fold on a phone with the board's own application node unreachable, and overlaps *"Chain 2 - Sharp"* with *"3 momentum to Fever"* in landscape. Four defects across two screens, none of them new, all of them now visible in two runs instead of four generations.
+
+- **Gen 230 the floor's numeral was not a watermark, it was a 406px banner, and one `:not()` is the difference (`FloorClearBeat.module.css`, task #248):** The fit contract said floor clear clipped a route line on a **1440x900 desktop** - the most ordinary window there is - and the line it cut was *"Downstairs: ..."*, the one that tells you who you are about to share a room with. **The cause was two rules with the same specificity and the wrong one last.** `.watermark` sets `position: absolute` so the floor's numeral sits behind the text at 9% opacity; twelve lines later `.colophon > *` sets `position: relative` to lift the real children above it. One class each, so equal specificity, and the later one wins - **the watermark had been in the flow all along**, a 336px glyph occupying **406px** above the title. The card measured **719px in a stage 691px tall**, so it overhung the stage's clip and the last note went over the edge. It is `.colophon > :not(.watermark)` now and the card is **383px**. Nothing in the CSS said which of the two it was rendering, and nothing at any viewport had ever asked. **Fixing it exposed the defect it had been hiding, which is the second finding and the more interesting one.** With the accidental 406px spacer gone, the beat's title rose into the HUD on a phone: measured A/B at 390x844, **0 covered and 0 overlapping before, 1 and 8 after** - the bug had been holding the title clear of the run bar by accident. The real fault is older and was simply never reachable: `.beat` was `inset: 0`, centring itself in the whole stage **as though the HUD above and the dock below were not there**. The shell already publishes `--gameplay-hud-top-clearance` and `--gameplay-dock-bottom-clearance` for exactly this and **four other rules read them**; this one guessed. It reads them now, and the beat sits at 145 rather than 0 on a phone with both counts back to zero. **Why that A/B was run rather than reasoned:** the numbers going up after a fix is what a regression looks like, and the only way to tell a regression from an unmasking is to measure the same viewport both ways. **Two remain, both pre-existing and both recorded rather than forced into this generation:** floor clear on a phone still puts the **board stage** below the fold (present in both arms of the A/B, so nothing to do with the beat), and game over still puts its next-run loop past the bottom edge on a tablet. Neither had ever been reported before this week, because the contract stops at the first failing viewport and desktop was failing first.
+
+- **Gen 229 four of the six "broken specs" were the fit contract working, and one of them had been hiding a defect for generations (`RunShell.module.css`, `ChooseYourPathScreen.tsx`, task #248):** Gen 228 recorded that the fit contract reports 6 failed / 12 passed and called them all `toBeVisible()` locator failures - the specs "cannot open their screen at all". **That was wrong, and wrong in the way this repository keeps catching itself:** one error line from a summary was read as the shape of all six. Read individually, **five are real fit failures** at real viewports and only one is a stale locator. **Defect one, three specs, one line.** At 812x375 the run's feedback line had `white-space: nowrap` with `text-overflow: ellipsis`, and 267px in which to say 329px of sentence: the pause message reached the player as *"Run paused. Timers are frozen un..."*. It looked like three problems because in-run inventory, codex and settings all pause the run to open, so all three read the same truncated line. **Ellipsis is the wrong tool for this element**: it is the run's voice, and its content is not a label of known length but whichever message the turn produced, so any fixed line budget is a guess about the longest sentence the game will ever want to say. It wraps now; the caption sits in a footer anchored bottom with `align-items: flex-end`, so extra lines grow **upwards over the board** rather than pushing the dock off a 375px screen. **The copy was separately stale:** "Timers are frozen" is plural for a thing a player cannot meet - the run clock left at Gen 178, and what remains is the memorize window and a dev-only reveal. It says **"Run paused. Nothing moves until you resume."**, which is true whatever the timers turn out to be. **The stale spec was stale for much longer than Gen 228 said.** The mode detail spec asks for a mode called **'Puzzle'**; the catalog has held exactly two modes since it collapsed, so the spec had been dead for many generations. What the Margin pass changed was `hasLibrary` (`browseModes.length > 1`), which hides the filter when the library is one mode - so the failure changed its **error message** from "no tile named Puzzle" to "no filter at all", and that is what made an old corpse look like a fresh one. The spec now reads the mode off the catalog, because **a name in a test is a claim about the game** and this one had stopped being true with nothing saying so; the helper says which of the two things went wrong and names what IS on the page. **And repairing it immediately surfaced the defect it had been hiding**, which is the whole argument for fixing a dead test rather than deleting it: at 812x375 the sheet's body clips at y=307 while the gate line lays out at 310-330 and the action row is painted over it at 321-357 - **cut and covered at once**. The gate line read *"Gate: <condition> - 1/1 - Unlocked locally"* **on an unlocked mode**: a requirement stated to the one player who has already met it, beside a paragraph that had just said the same thing in words. It renders only while the mode is actually gated now, which removes the duplication and the overflow in the same edit. **The cost, said plainly:** a player who wanted reassurance that a mode is unlocked no longer reads it in those words - the mode simply opens. **Two remain**, both real and both recorded rather than half-fixed: floor clear clips a route line **on a 1440x900 desktop**, the most ordinary window there is, and game over puts its next-run loop below the fold on a tablet.
+
+- **Gen 228 the grid that never scrolls was measuring itself in a unit it does not lay out in (`src/renderer/ui/fittedGridFit.ts`, `FittedGrid.tsx`, task #246):** Gen 227 named Profile as the screen holding the UI-scale cap down, on the reading that it clips its objective cards at 1.4. Going to fix the card found the defect was not in the card, not in Profile, and **not confined to scales above the cap**. `FittedGrid` is the never-scrolling grid behind Profile's ledger, Collection, the Codex, the mode records and the run history: it measures the space it was given, works out how many cards fit, and pages the rest. It measured with **`getBoundingClientRect()`**, and the app applies the UI scale as **`zoom`** on the shell - so the rect is the **visual** box, with the zoom already multiplied in, while the CSS the same function goes on to emit (`minmax(220px, 1fr)`, `gridAutoRows`) is laid out in **unzoomed** px. **Measured in one unit, laid out in the other.** Exactly the shape of the `100dvh`-inside-a-`zoom` defect Gen 222 found in the Settings shell, in JavaScript this time, and the reason nothing caught it is the reason nothing caught that one: **every check the fit contract makes runs at `uiScale: 1`,** where the two boxes are the same number. **The mechanism, from the numbers rather than from how it reads:** on the Deck panel at 1.4 the frame is 823×132 in layout px and 1152×185 as a rect. Both boxes fit one row, so the overshoot is in the **columns** - five against three - and the page was filled with five cards while the grid had three cells in its one row. The extra two wrapped onto a second row inside a frame that **clips rather than scrolls**, which is a card with its bottom cut off and nothing to scroll it back. **It was wrong at scales a player can pick today, which is the part that matters.** Measured A/B on the Deck's 1280×800, through the app's own settings path, at the two ends of the shipped slider: at **1.05 - the cap itself** - one card spilled past the clip before the fix and none after; at **0.8** the cards came out **101px** tall where the space held **163**, so the smallest scale was throwing away 40% of the card and calling it a fit. A 1440×900 desktop is unaffected at those two scales by a coincidence of geometry, which is why this shipped. **The fix is one unit** - `clientWidth`/`clientHeight`, the layout box - lifted into a named `readFrameBox` rather than left as a property read, because choosing the wrong one of an element's two boxes is invisible until someone changes the scale, and a named function is something a comment can be attached to and a test can address. The test pins both boxes as the browser actually reported them and carries its own negative control: the two fits are required to **disagree**, so if a later change makes the distinction stop mattering the test says so instead of passing quietly. **What it did for Profile, and what it did not:** Profile now **fits at 1.4 on a desktop**, where before it clipped two progress lines and pushed the grid below the fold. On the Deck it still fails at 1.4, and the reason is no longer the grid: the ledger frame is handed **44 layout px** at that scale, so the cards are squeezed to 42 with 77 of content, and a section given 44px cannot be shown whatever the grid does. That is a budget question in the Profile layout above the grid, so `SCREEN_SCALE_CEILINGS.profile` stays at **1.1** and the cap stays 1.1 - raised only by measurement, never by a fix that looks like it should have worked. **One thing this generation did not cause and will not claim to have found clean:** the full fit contract reports **6 failed / 12 passed** on this tree, and the six were run again with this change stashed - **identical, with and without it**. They are `expect(locator).toBeVisible()` failures, which is a navigation failure rather than a fit failure: the spec cannot reach in-run inventory, codex or settings, the mode detail sheet, floor clear or game over at all, so it never gets as far as measuring them. They arrived with the Margin pass that landed on `main` from another session, and **nothing in the routine path could have said so** - `yarn lint`, `tsc`, 2797 unit tests and `yarn gate:systems` are all green on a tree whose e2e suite cannot open six screens, and `yarn build` is not in that path either. Recorded as its own task rather than folded into this one, because a fix for it is a different piece of work and hiding it inside a green-sounding generation is the failure this file exists to stop.
+
+- **Gen 227 the screen the UI-scale cap was blamed on had become the most scalable one in the game (`src/renderer/uiScaleLimits.ts`, `e2e/ui-scale-ceiling.spec.ts`, task #245):** Xbox's guidelines ask for text scalable to **200%** (`docs/RESEARCH_NOTES.md` §3) and this build capped at **1.05**, with a reason written down beside the constant: the main menu's container-query ladder ended at `max-height: 760px` with no rung below it. **Two things were wrong with that sentence.** Gen 223 had already **refuted** the ladder story - widening the rungs changed no output at any scale on either viewport, because `@container` adds no specificity and the rungs were never winning the cascade - and the menu has since been rebuilt as a fluid title page with no ladder to miss a rung from. The constant kept the dead reason anyway, which is the failure this repository keeps finding in a new place: **a claim nothing re-derives.** **The re-measurement was blind on its first run, which is worth saying rather than tidying away:** lifting `UI_SCALE_MAX` alone changed nothing, because the applied scale stayed at 1.05 at every stored value - the save normalizer clamps `uiScale` too, so the cap is enforced in two places and the probe was reading its own floor. With **both** lifted, at 1.1 / 1.4 / 1.6 / 1.8 / 2 on the two windows a launch checklist names: **main menu 1.6, settings 1.4, profile 1.1.** The main menu is now the **most** scalable of the three, and the screen the cap has actually been standing on is **Profile** - which nothing had ever named. It clips its objective cards' progress lines at 1.4 on both windows, and on the Deck panel the progress grid also runs below the fold and the pager overlaps the objective board. **The cap is 1.1 now, and it is derived rather than declared:** `SCREEN_SCALE_CEILINGS` records a ceiling per screen and `UI_SCALE_MAX` is the smallest of them, so a screen whose layout improves raises the cap by moving its own row and cannot leave the constant stale. **The gate checks each ceiling from both sides**, which is the part that matters: a screen must fit at its ceiling *and must fail at the next step above it*. A ceiling nothing has been measured to break through is a ceiling nobody has checked, and the likely error runs the expensive way - a screen quietly holding at 1.8 while its row says 1.4 costs players scale they could have had. That assertion is the one that fails first when a layout is fixed, which is exactly the moment to raise the row. Scales above the cap are applied as `--ui-scale` directly, because the question is what the layout does at that zoom rather than what the app is willing to store. The numbers are **probe steps, not bisections** - settings' true ceiling is somewhere in [1.4, 1.6) and Profile's in [1.1, 1.4) - and recording the step measured beats recording a figure nothing measured. The accessibility target `xag.text_scaling` stays **open** and now names the right blocker (task #246); 1.1 is not 2.0 and the audit says so.
+
+- **Gen 226 the held-pair marker had a control already, and it was the one nobody wanted to duplicate (`src/shared/held-pair-rules.ts`, task #230):** Thesis §30.3(c) asks for a marker that lets a player claim a pair they mean to save, so that holding a chain becomes a nameable strategy rather than a thing good players happen to do. Gen 188 found the collision and stopped there: the game already ships a memory marker - the **pin**, up to `MAX_PINNED_TILES` hidden tiles, toggled from the dock, changing no rules - and that is the job description almost word for word, except **a pin marks a tile and the hold decision's unit is a pair**. The thesis offers three ways out and recommends extending the pin into a pair link with one new verb. **This takes the recommendation and removes the verb: two pins ARE the claim.** A player who pins two tiles has already made the two-tile gesture the section says the claim has to be, so a "link these" press on top would be a second way to say the same thing - the duplication §105 exists to remove. Exactly two pins is a held pair, a third dissolves it back into three loose notes, and **nothing new appears on the dock**. Two consequences follow rather than being declared: the cap of one held pair falls out of the pin cap, and the choice between holding a pair and keeping three notes is the commitment (c) asks for instead of a notebook. **Both §30.3 constraints are structural here, not remembered.** *It never validates*: the module reads no tile identity at all, and the test gives the same two positions a matching and a mismatching identity and asserts every output is identical - plus a source scan for `pairKey`, `symbol`, `tilesArePairMatch` and `label`, because the assertion only holds while the file stays ignorant, and a later generation adding a "they match!" tint would be adding a free match test: no turn, no mismatch, strictly better than playing. *The span (T3.6) rides on the claim and only on it*: a span on an unmarked tile hands back part of the memory game (the finding at G.3), while on a claimed pair it restates the distance between two tiles the player picked - and if the claim is wrong it is the span of the pair they **think** they have, which is what they are deciding about. It is **Manhattan** rather than straight-line because the board is a grid and a break walks it in steps. **The cost, said rather than left to be discovered:** a player who pins two unrelated tiles as loose notes is told the span anyway - the price of not adding a control, and inert, since it is a distance between two positions they chose. **What this does not settle:** whether the marker becomes a crutch that does the remembering (thesis E.6). That needs players; a simulation cannot answer it, because the reference player has no memory to aid.
+
 - **Gen 225 the cascade climbed nine notes and hit none of them (`src/renderer/audio/musicalScale.ts`, task Gen 161):** Peggle 2's audio team (`docs/RESEARCH_NOTES.md` §2) say a cascade feels musical because each hit is the next step of an ascending scale that harmonises with the music. The break's phrase here was `720 + index * 46` Hz per pair, each note gliding 720 to 1080 while the next began. Pitch is logarithmic and that is a straight line: the steps run **107 cents, then 101, then 96, down to 75** by the ninth, and measured against the notes the run loop actually plays, **zero of the nine land on one** - a negative control the test states as `toEqual([])` rather than "mostly off". **The music was measured, not assumed.** `yarn audit:music-key` (new, in `gate:systems`) re-derives the chroma from `run-loop.wav` - 64 windows, a Goertzel filter per pitch class across five octaves, each window normalised by its own peak: `A 0.300, D 0.170, F 0.096, E 0.095, C# 0.074, C 0.074, F# 0.073, B 0.046, A# 0.041, G 0.019, G# 0.008, D# 0.006`. **What it will not settle:** the third is a tie - C and C# at 0.0737 each - and the Krumhansl-Schmuckler correlation flips between A major and A minor with the analysis window (A minor 0.792 / A major 0.775 under one implementation; A major 0.782 / A minor 0.716 under another). So the cascade uses the four pitch classes both candidate keys share and the measurement is confident in: **A, B, D, E**, clear of the contested third and of a seventh the loop barely plays (G 0.019, G# 0.008). Committing to a seven-note scale would have meant picking a side in a tie and calling it measurement. **The cost, where it is paid:** four notes to the octave means a nine-pair break climbs two, so the phrase opens at A4 440Hz rather than 720Hz and most breaks - two to four pairs - now sound LOWER than the ramp did. **The three chain milestones moved too:** 1360, 1680 and 1960Hz were near E6, G#6 and B6, and G# is the pitch class this loop has least of - the middle rung was the one note in the piece that is not in the piece. They are E6, A6 and B6 now, and the beats decide how far up the set the accent sweeps rather than how many Hz it is lifted by, so both ends of the sweep are notes. **The blocked half is sized, not hand-waved:** `docs/AUDIO_PHRASE_SIZING.md`. Re-keying per phrase needs the score re-authored as phrase chunks crossed with instrument stems and the `<audio>` element replaced with a Web Audio scheduler; the run music is one 24-second loop, so there are no phrases to key to. The task stays open on that, and the fixed set is written as a fixed set rather than as a `currentPhrase` parameter that would always answer the same.
 
 - **Gen 221 the only shake in the game fired on a miss, so the Fever break shook nothing (`src/renderer/components/boardTrauma.ts`, task Gen 159):** Eiserloh, GDC 2016, *"Juicing Your Cameras With Math"* (verified 3-0 in `docs/RESEARCH_NOTES.md` §2). What was here was `Math.sin(t * 36) * 0.022` on the two mismatched cards, switched on while `resolvingSelection === 'mismatch'` and off the frame it left - **written twice**, in `tileBoardLayoutMotionState.ts` and again in `tileFrameActivity.ts`, with two different time variables, so the frame that decides whether a card is idle was computing the shake separately from the frame that draws it. Three defects, two of them load-bearing for this game rather than matters of taste: **it could not stack** (two events in a turn shook the same as one, and a Fever break - the biggest thing that happens on this board, the thing Gen 139's hit-stop exists to let the player watch - shook nothing at all); **it could not decay** (a shake that ends on a state change ends mid-swing, which reads as a dropped frame); and **it was a tone, not noise**. **The model:** a `trauma` scalar in [0, 1], events add 0.2-0.5, linear decay, applied shake is **trauma cubed** - the cubic branch, because the talk's published mapping .30/.60/.90 -> 3%/22%/73% is 0.027/0.216/0.729 and the squared branch gives 9/36/81; `boardTrauma.test.ts` pins those three figures so a later swap to squared fails rather than passing. Offsets are sampled from **1-D Perlin gradient noise**, translational *and* rotational together (the source's 2D advice; its 3D advice inverts and does not apply to a board seen flat on). **Two subjects, two spaces:** the board shakes as a room - a pop 0.2, Clean 0.3, Sharp 0.4, Fever 0.5, a miss 0.2 - read off the board the way the match wave key is, so no event is threaded from the store; the two cards of a miss shake as themselves at 0.5 in their own maxima, sized so a miss peaks at 0.021 board units where the sine sat at 0.022. **What the cubic does, said rather than left to be read off the maxima:** a miss is now a whisper on the board (0.8% of maximum) where it used to be the loudest shake in the game, which is the intended correction - a miss already has the red tint, the danger rim and the miss floater - while a Fever break is 12.5% and stacked events reach a quarter of a card. **Why the model and not a nicer curve:** the shake is a pure function of the clock, so the Fever hit-stop slows and holds it with everything else (a per-frame random shake keeps jittering at full speed through exactly the moment being held), and it is resamplable, so a share code, a daily run and the endless simulation's replay verification all draw the same board twice. The determinism test carries its own negative control - the same assertion against `Math.random` fails. **The maxima are this game's**; the source publishes none and says so.
@@ -2542,3 +2588,442 @@ The ladder still sells reach, waves and bridges. It stopped selling what "touchi
   left for Fever to swallow whole, so its take is what its waves and bridges reach.
 - **Floors run longer and score the same**: 4.7 turns against 4.3, 10543 against 10062 at a clean
   clear. More of the floor is remembered rather than collected.
+
+## Gen 250 — B did nothing on any meta screen, and it was never a pad problem
+
+Deck Verified's controller criterion is *"The default controller configuration must provide users
+with the ability to access all content"* (`RESEARCH_NOTES_2.md` §1). The existing
+`controller-navigation.spec.ts` had three tests: the focus ring moves, the ring is visible, and the
+board answers a press. All three stop at the main menu and the board, so "all content" was never
+checked.
+
+Walking the five meta screens with a fake pad found B opening nothing back up. The first reading
+blamed the pad — but the probe's own regex was wrong (focus labels read `IIICollectionCards and
+relics`, not `Collection`), and once that was corrected the pad reached four of five and returned
+from none. Isolating it by **keyboard** settled it:
+
+```
+ESC Collection: opened=true escapeReturned=false
+ESC Profile:    opened=true escapeReturned=false
+ESC Inventory:  opened=true escapeReturned=false
+ESC Codex:      opened=true escapeReturned=false
+ESC Settings:   opened=true escapeReturned=false
+```
+
+`b` maps to `back` (`shared/gamepad-input.ts`), `back` dispatches Escape
+(`input/gamepadNavigation.ts`) — and not one of the five screens listened for Escape. The pad
+mapping was correct the whole way down; the screens had no handler at the end of it. A player who
+opened the Codex on a Deck had to hunt the on-screen Back button with the stick.
+
+### The fix
+
+`hooks/useEscapeLeaves.ts`, used by `MetaShell` (Collection, Profile, Codex) and by
+`InventoryScreen` and `SettingsScreen`, which are not `MetaShell` — the assumption that all five
+shared one frame was wrong, and wiring only `MetaShell` left Inventory and Settings still red.
+It listens on `window` in the bubble phase, so `OverlayModal` and `GameScreen`'s shortcut overlay —
+both `document` capture with `preventDefault` — still win, and `OverlayModal`'s own
+`targetAllowsOverlayEscape` moved into the hook rather than being copied.
+
+### What it is measured against
+
+Six new tests in `controller-navigation.spec.ts`: one per menu screen (d-pad walk, A opens, B
+returns to the menu), plus B from an in-run Codex landing back on the board rather than the main
+menu. Negative control: with the hook's `active` defaulted to `false`, all six fail; with it on,
+all six pass.
+
+Two facts worth keeping:
+
+- **The ring is spatial, not cyclic.** D-pad down stops at the bottom of the menu, so Collection
+  and Play are reached by going *up*. A down-only walk reports Collection unreachable, which is how
+  this test was nearly written as a bug report.
+- **Two tests in that spec were already red on `main`** before any of this — the menu walk and the
+  board walk — measured by stashing the change and re-running. No gate runs this spec, which is the
+  same shape as Gen 242's illustration regression. Left for its own generation.
+
+## Gen 251 — the controller spec was red on main, and it measured the machine it ran on
+
+Gen 250 left two tests failing in `controller-navigation.spec.ts` that were already failing before
+it, measured by stashing the change and re-running. Neither was a product defect. Both were the
+instrument.
+
+**The menu walk asserted a label that no longer exists.** It matched `/^play/i` against
+`document.activeElement.textContent`; the menu's roman-numeral eyebrow makes that string
+`IPlayBegin the descent`, so the walk never recognised Play, ran off the top of the menu, and
+failed on the skip link. Focus is now asked of the element — `mainMenuPlayButton(page)` against
+`document.activeElement` — because a label is copy and identity is the thing being asserted. The
+same shape sank a probe during Gen 250 (`IIICollectionCards and relics` vs `^collection`); it is
+worth stating once that in this menu no focus label is the word on the button.
+
+**The board walk timed its button hold in Playwright round trips.** `pressPad` set the fake pad's
+buttons in one `evaluate`, waited 120 ms, and cleared them in another. Under load the round trips
+dominate: a logged run showed one "tap" of right arriving as **four** ArrowRight events —
+`GAMEPAD_REPEAT_DELAY_MS` is 420 and the interval 130, so the pad was really held ~700 ms. The
+board consumed the first arrow, ran out of grid on a four-pair floor, and handed the repeat back,
+which walked the focus ring out of the board *exactly as designed*:
+
+```
+ArrowDown  target=tile-board-application prevented=true    <- consumed, cursor moved
+ArrowDown  target=tile-board-application prevented=false   <- edge: handed back, ring left
+```
+
+The hold now happens inside the page, in one round trip, so a tap is a tap regardless of how loaded
+the machine is. This is the same class as Gen 239's transient-surface artefact: a measurement whose
+answer depended on the harness rather than the app.
+
+### The gate
+
+`gate:controller` runs `controller-navigation.spec.ts` and `deck-controller-reach.spec.ts`, and is
+in `fullcheck` after `gate:illustration-regression`. Both specs existed and neither was in any
+gate — the third time this session an instrument was found unwired (Gen 236 the fit contract, Gen
+241/242 the illustration spec). Negative control: with one assertion in
+`deck-controller-reach.spec.ts` inverted, `yarn gate:controller` exits 1 with 1 failed / 9 passed.
+
+## Gen 252 — "all content" was a list I picked by hand, and it missed two screens
+
+Gen 250 proved B leaves five meta screens. Five is what I chose to look at. Taking `ViewState` as
+the question instead of my own list found two more views that swallow B:
+
+```
+VIEW modeSelect: still open=true  back at menu=false
+VIEW gameOver:   still open=true  back at menu=false
+```
+
+Choose Your Path and the run summary. Both now call `useEscapeLeaves`, against the routes
+`NAVIGATION_ROUTE_CONTRACTS` already documents — `modeSelect -> menu` and `gameOver -> menu`. On
+game over the run is already finished, so back costs nothing and Play again stays a deliberate
+press. Measured afterwards: both close to the menu, and a sheet open over Choose Your Path still
+takes Escape first (`OverlayModal` is `document` capture, the hook is `window` bubble), so B closes
+the sheet and leaves the screen behind it standing.
+
+### The census
+
+`controller-navigation.spec.ts` now keys its table by `ViewState`. Three views are exempt, each
+with the reason in the table: `boot` is a frame before hydration, `menu` is the root, and
+`playing` is the one place B is deliberately **not** a leave — a stray press must not cost a run,
+so the way out is Start, and the pause menu it opens answers B itself.
+
+Two things this cost, and both are worth keeping:
+
+- **`Record<ViewState, ...>` does not constrain an e2e spec.** `e2e/` is not in `tsconfig.json`
+  and Playwright transpiles without typechecking, so the annotation was documentation. The
+  negative control was deleting the `gameOver` row and running `tsc`: clean. Completeness is now
+  asserted at runtime against `VIEW_STATES`, and that check fails with `- "gameOver"` when a row
+  goes missing. **Nothing typechecks the e2e suite** — a separate config finds 11 errors there,
+  one of them a real latent bug (`offsetHeight` read off an `HTMLElement | SVGElement`). Its own
+  generation.
+- **The view list had four copies.** `contracts.ts` now exports `VIEW_STATES` and derives
+  `ViewState` from it; `navigationModel`'s `NavigationSurface`, `scripts/e2e-surface-coverage.ts`
+  and this spec all read that one list. A hand-copied list is a list that stops matching, and what
+  these copies exist for is proving nothing was forgotten.
+
+## Gen 253 — nothing typechecked the e2e suite, and the main menu's heading was one word
+
+Gen 252 found this by accident: `Record<ViewState, ...>` in a spec constrained nothing, because
+`e2e/` is not in `tsconfig.json` and Playwright transpiles each spec without checking types. Every
+annotation in the suite was documentation. `tsconfig.e2e.json` is `tsconfig.json` plus `e2e/`, and
+`typecheck:e2e` runs inside `gate:systems`.
+
+It found 11 errors. Eight were the `/src/...` dynamic-import idiom the browser-side specs use —
+those are Vite dev-server URLs, not paths, so a `paths` mapping and `allowImportingTsExtensions`
+resolve them to the real modules instead of suppressing them. Resolving them immediately produced
+four more: `state: 'hidden'` in a tile literal widens to `string` and is not a `TileState`. Two
+were independent:
+
+- `visualScreenHelpers.ts` read `offsetHeight` off an `HTMLElement | SVGElement`. On an SVG that is
+  `undefined`, which would have written a silent hole into the HUD diagnostics rather than failing.
+- `demo-readiness.spec.ts` asserted a plain function to `typeof Audio`. It works at runtime — a
+  constructor returning an object yields that object — but the assertion is one TypeScript rejects
+  outright. Widened through `unknown`, with the reason.
+
+Negative control: `const negativeControl: number = page;` in a helper, and `yarn typecheck:e2e`
+reports `TS2322: Type 'Page' is not assignable to type 'number'`.
+
+### The heading nobody could hear
+
+Running the two specs turned up `demo-readiness.spec.ts` red — and red on `main` before this
+change, measured by stashing. Its assertion was `/memory dungeon/i` against the `h1`. The `h1` is:
+
+```tsx
+<h1><span>Memory</span><span>Dungeon</span></h1>
+```
+
+Its text content is `MemoryDungeon`. `.title` is a column flex container, so the words stack and
+the missing space is invisible — but the accessible name is one word, and that is what a screen
+reader says. The fix is a real space between the spans, which a flex container does not render and
+the accessible name does carry. The test was right and had been right, unheard, for as long as it
+had been failing.
+
+`gate:demo-readiness` is now in `fullcheck` as well. Negative control: take the space back out and
+the gate exits 1 with 2 failed. That is the fifth instrument this session found unwired or red —
+the fit contract, the illustration spec, its gate, the controller spec, and now this.
+
+## Gen 254 — the security gate went red, and the pins had been overtaken
+
+A full `yarn fullcheck` stopped at its second step:
+
+```
+reaching a shipped build: 0; build-only: 39 (baseline 30)
+audit gate: build-only advisories grew from 30 to 39
+```
+
+Nothing reached shipped code. But every one of the nine new groups named a version this repo's own
+`resolutions` block was **pinning** — `tar 7.5.16`, `postcss 8.5.15`, `ip-address 10.1.1`,
+`joi 18.2.1`, `shell-quote 1.8.4`, `baseline-browser-mapping 2.10.23`, and the `brace-expansion`
+and `js-yaml` pins. Those pins were correct the day they were written. A pin is a snapshot of a
+judgement, and it keeps looking deliberate long after it has been overtaken.
+
+Bumping each to the version its own advisory names as patched, plus the three direct dev
+dependencies the advisories name (`vitest 4.1.2 → 4.1.11`, `svgo ^4.0.1 → ^4.1.0`,
+`electron-builder 26.8.1 → 26.15.0`), took **39 → 9**.
+
+The nine that remain are all `brace-expansion`, on three incompatible major lines that different
+build tools require: `^1` under eslint's pinned `minimatch 3.1.5`, `^2` under depcheck and jake's
+`filelist`, `^5` under rimraf's `glob` and `@electron/universal`. A yarn resolution names a path,
+not a range, so a single `**/brace-expansion` pin would force one major on all three. The
+path-specific pins that can be written are already there and took — the lock shows 1.1.18, 2.1.4
+and 5.0.9 resolved — and what is left is reached through stale transitive range entries under
+those three parents. Each is a denial-of-service on crafted input in a tool that runs on a
+developer's machine. Bumping `minimatch` at those three parents should take it to zero.
+
+**The baseline is ratcheted to 9**, per the rule written above it — lower it whenever a bump clears
+some. Negative control: set it to 8 and the gate reports `build-only advisories grew from 8 to 9`.
+
+That baseline had sat at 30 since Gen 8, when 64 advisories had accumulated behind a red light
+nobody looked at. The number has been a ceiling nobody pushed down since. It is 9 now.
+
+### And `gate:package-hygiene` was red too, behind a message that said otherwise
+
+With the advisories cleared the sweep moved on and stopped at the next gate:
+
+```
+depcheck failed to run or returned invalid JSON.
+```
+
+depcheck ran fine. It exits non-zero when it **finds** something, `execFileSync` raises that as an
+error, and `check-depcheck-clean.mjs` caught the throw, printed "failed to run", and dropped the
+report depcheck had already written to stdout. The wrapper now reads the JSON off the thrown error,
+so a finding is printed as a finding and only a genuinely unparsable run is called a failure.
+Negative control: add an unused devDependency and the gate prints `"devDependencies": ["left-pad"]`
+rather than a diagnostic about the tool.
+
+Behind it: `graphology` and `graphology-types`, declared and imported nowhere — the only two
+mentions in the repository are the package.json lines themselves. Measured at HEAD by stashing, so
+this predates today's work; `fullcheck`'s third step has been red for as long as they have been
+there. Removed.
+
+One of the nine advisories was mine: `yarn upgrade brace-expansion` on a package this project does
+not depend on ADDED it to `dependencies`, and depcheck caught it on the next run. A tool that tells
+you what you just did wrong is worth more than the ten minutes it cost.
+
+## Gen 255 — the repo model treated two generated files as inputs
+
+`fullcheck` got past security and hygiene and stopped at `gate:systems`:
+
+```
+Error: .ai/repo-model.json is stale. Run yarn ai:model.
+```
+
+The whole drift was two sha256 entries: `project-media/capture.json` and `project.meta.json`. Both
+are **outputs** — `scripts/capture-project-shots.mjs` and `scripts/generate-project-meta.mjs` write
+them and `.github/workflows/project-meta-refresh.yml` commits the result back on a schedule. The
+last three `[meta-bot]` commits touched those two paths and nothing else, so **every scheduled bot
+run leaves `gate:systems` red on `main`** until a person happens to regenerate.
+
+`GENERATED_PATHS` in `ai-repo-model.mjs` already existed for exactly this, holding one entry: the
+model itself, excluded because the model cannot be part of what proves the model current. The same
+argument covers these two, one step removed. Checked before excluding — nothing under either path
+is imported, so no edge in the graph passes through them; an exclusion that hides a real dependency
+would be worse than the churn it removes.
+
+Both controls run. Positive: edit `project.meta.json` and `ai:model --check` stays green. Negative:
+append a line to `src/shared/contracts.ts` and it reports stale, which is the half that matters.
+
+## Gen 256 — the controller row was proved by something that could not prove it
+
+The release checklist carries *"Every screen is reachable on a controller, not just the board"*,
+owner `repo`, and repo rows are re-proved against live modules. This is what proved it:
+
+```ts
+expect(actions).toContain('confirm');
+expect(actions).toContain('up');
+expect(GAMEPAD_STICK_DEADZONE).toBeGreaterThan(0);
+```
+
+Three true facts about a pure function that never sees a screen. The row read `done` through the
+entire period when B opened nothing back up on seven views — because the mapping was never what
+was broken, and nothing here could have noticed.
+
+`src/shared/controller-back-contract.ts` now holds the claim as a row per `ViewState`: where B
+lands, or the reason it is deliberately not a leave. Two readers, which is the point. The checklist
+verifier asserts the table covers every view, that no row claims an exemption without saying why,
+that more than half the views actually leave (a table where nothing leaves would satisfy the first
+two and mean nothing), and that every leave names a view that exists — plus `b → back`, the first
+link, which the old verifier never checked either. `controller-navigation.spec.ts` reads the same
+table and drives a real pad at the real screens, and asserts every view the contract says answers
+back has an arrival here, so a row cannot be added and left unexercised.
+
+Negative controls, both run: make one view exempt without a reason and the checklist fails with
+`a view claims no back path and gives no reason: [ 'codex' ]`; point a leave at a view that does
+not exist and it fails with `profile leaves to a view that does not exist`.
+
+The row's evidence moved from `gamepad-input.ts` to the contract. `evidence` is only checked for
+non-emptiness, so it is a pointer for a reader rather than a constraint — worth knowing when
+reading any other row on that list.
+
+### Two things the new contract's own gates caught
+
+`audit:shared-reach` refused `controller-back-contract.ts` as a shared module no shipping entry
+point reaches — correctly, since only the checklist test and the e2e spec import it. It is exempt
+by name in the "records and contract tables whose consumer is a test" section, beside
+`release-checklist.ts` itself, with the reason spelled out: the screens already know their own back
+target through the store, and making them look it up would add indirection without adding truth.
+What the table buys is that the claim and the behaviour are one list.
+
+`audit:generation-claims` then reported `no file named .ai/repo-model.json` about a file sitting
+right there and tracked in git. `.ai` is in the auditor's `SKIPPED_DIRECTORIES` — not reading three
+megabytes of generated JSON is sensible, but the skip also removed those paths from the set a claim
+resolves against, so **no comment anywhere could name the repo model**. Found by writing the first
+one that ever did. The auditor now resolves against those paths while still not scanning them, with
+existence checked on disk rather than assumed. Negative control: point the same sentence at
+`.ai/no-such-model.json` and it reports `no file named .ai/no-such-model.json`.
+
+## Gen 257 — #250 closed: the box never contained its own read
+
+The task said the chain rail is drawn over the floor-clear beat at 1.1. Gen 240 measured that and
+refuted both proposed fixes, then stopped rather than guess. What it could not know is that the
+scale it measured at stopped being reachable one generation earlier: **Gen 238 brought the cap down
+to 1.05.** Re-measured on a 1280x800 Deck panel, fresh arrival per scale:
+
+| scale | read ends | beat title starts | clearance |
+|---|---|---|---|
+| 1.0 | 408 | 445 | 37px |
+| 1.025 | 408 | 429 | 21px |
+| **1.05 (cap)** | **408** | **414** | **6px** |
+
+So the reported collision is unreachable — and six px is not clearance, it is a coincidence that
+survived a cap change.
+
+### The defect underneath, which is what the task was really about
+
+`.chain` declared `width: 13rem` (64..272) while `.chainRead` sits at `left: 7rem` with
+`white-space: nowrap` and runs 14.5rem wide, so the column painted to **408** and the declared box
+stopped at **272**. 136 layout px of content outside its own container. The comment above it said,
+in these words, *"it is as wide as its rung labels … and nothing spills past it"* — a record
+contradicting shipped behaviour, the fourth this session. Anything positioned against that box got
+a number wrong by 136px, which is exactly what made the beat's inset look safe: the beat clears
+272 and meets a read that ends at 408.
+
+The design decision Gen 240 asked for: **the left column is the ladder plus its read, 21.5rem.**
+The 13rem was only ever describing the ladder. So `.chain` is the column, `--ladder-w: 13rem` pins
+the ladder to its own width rather than inheriting the container's, and the comment now says what
+is true. Measured after: box 64..408, read 176..408, title unmoved at all three scales — **nothing
+a player sees moved.**
+
+Widening a box that had `pointer-events: auto` would have put 136px of invisible target over the
+board, so the box gives them up and `.chainRead` takes them; the only thing in the column a pointer
+wants is the depth line's `title`. The surface that eats clicks got *smaller*, and
+`demo-readiness`, `deck-controller-reach` and `board-3d-value` all still flip tiles.
+
+### The check, and two ways I got it wrong first
+
+`gameplay-chrome-clearance.spec.ts` (in `gate:ui-fit`) now holds the pair apart at every scale
+`SETTINGS_NUMERIC_RANGES` allows, and requires the box to contain its read. Its negative control is
+the scale this task started at — 1.1 is forced directly, past the cap, and must report the overlap:
+
+```
+BEAT x0.8:  title clears read by 196.54px, box spill -0.27px
+BEAT x1:    title clears read by  36.31px, box spill -0.48px
+BEAT x1.05: title clears read by   6.01px, box spill -0.33px
+BEAT control x1.1: title clears read by -21.75px
+```
+
+−21.75 against Gen 240's measured 21px. Two mistakes on the way there, both already recorded
+lessons of this session: the first version opened the fixture once and re-zoomed, and the beat is a
+**transient surface** — it reported `surfaces missing` at two of three scales (Gen 239's artefact,
+same screen). And the first version returned `Math.min` of the two margins, which passed while
+printing `-0.33px` at every scale because the containment term always won: the log said nothing
+about the 37 / 21 / 6 series the test is named for. A check that cannot be read is a check nobody
+will read.
+
+## Gen 258 — the dock declared a toolbar and wired none of it
+
+Three of the 106 test-only exports live in `a11y/toolbarRoving.ts`. Asking the Gen 245 question of
+them found the fourth kind of answer again: not debt, **live behaviour missing its wiring.**
+
+The game ships exactly one `role="toolbar"` — the in-run action dock — and the WAI-ARIA toolbar
+pattern is one tab stop for the toolbar with arrow keys between its controls. The module implements
+all of it, with tests. The dock wired none of it. The only live import was
+`acquireToolbarRovingPause`, which pauses roving that was never running.
+
+Measured in a real run, before:
+
+```
+DOCK fresh:  tabIndices [0,0,0,0,0,0,0,0,0]
+DOCK arrow:  "Shuffle hidden tiles" -> "Shuffle hidden tiles"
+DOCK after a modal opened and closed: [-1,0,-1,-1,-1,-1,0,0,-1]
+```
+
+Arrow keys did nothing, and the tab order *changed shape* after any modal — because
+`acquireToolbarRovingPause` releases by calling `applyToolbarTabIndices`, which **installs** the
+roving indices it is meant to be restoring. A screen reader announced "toolbar, Game controls" and
+then the thing behaved like a plain row of buttons.
+
+After wiring `handleHorizontalToolbarKeyDown` and the tab-index sync: one tab stop on arrival,
+arrows and Home/End move, zero tab stops behind a modal, one again after.
+
+### Two things I got wrong on the way, both caught by measuring
+
+**"Nine tab stops" was my own unsupported claim.** All nine buttons carried `tabIndex 0`, but a
+disabled button is not tabbable whatever its tabindex, and the dock disables a tool whose charges
+are spent. The probe was changed to count `!disabled && tabIndex >= 0` rather than read tabindex
+values, which is the difference between a number and the thing it stands for.
+
+**Keying the sync on the visible tool ids was not enough.** With that, the dock held **four** tab
+stops on arrival and fell to one only after a modal. A spent tool stays mounted and goes `disabled`,
+so the id list never changed while the set roving applies to did — `getToolbarButtons` skips
+disabled buttons, and the ones it skipped kept React's `tabIndex 0`. The sync runs every render now,
+passing the current stop back in so a player arrowing along the dock is not yanked to the first tool
+by the next score tick.
+
+### What resolved, and what went
+
+`handleHorizontalToolbarKeyDown` is now live. `handleVerticalToolbarKeyDown` and
+`syncVerticalToolbarTabIndices` are **deleted**: no vertical toolbar ships, and the second was a
+pass-through to `syncToolbarTabIndices` with no behaviour of its own. `handleToolbarKeyDown` takes
+its keys as an argument, so a vertical toolbar is three lines away on the day one exists.
+
+Baseline **106 → 103**. Gated in `controller-navigation.spec.ts` (`gate:controller`), in a browser
+rather than beside the module, because the module was always right — what was missing was that
+anything used it. Two negative controls, both run: drop the `onKeyDown` and it reports
+`ArrowRight left focus on "Shuffle hidden tiles"`; drop the sync and it reports `the toolbar is more
+than one tab stop`.
+
+### Gen 258, continued: the next five, and none were debt either
+
+**`breakpoints.ts` — superseded, and by something better.** `safeSubscribeWindowResize` and
+`readWindowInnerSizeFallback` read `window.innerWidth` and listened to `resize` alone.
+`hooks/useViewportSize.ts`, which the app actually uses, prefers `window.visualViewport`, coalesces
+through `requestAnimationFrame`, and listens for `orientationchange` and the visual viewport's own
+resize as well. On a Deck or a phone the visual viewport is the one that moves — the layout viewport
+does not shrink for an on-screen keyboard — so these two read the wrong number, which is the same
+mistake this session found three times in painted-versus-layout px. One of their comments said to
+*prefer* it over `window.innerWidth`: advice pointing at the weaker option. **Deleted**, with their
+tests. Their SSR default of 1280x800 did match `useViewportSize`; that part was true.
+
+**`getAudioCoverageRows` — a pass-through, again.** It returned the exported
+`AUDIO_INTERACTION_COVERAGE` unchanged, another suite already reads that constant directly, and the
+only thing ever asserted about the accessor was `expect(getAudioCoverageRows()).toBe(
+AUDIO_INTERACTION_COVERAGE)` — a test that the identity function is the identity. Second one of these
+in this generation, after `syncVerticalToolbarTabIndices`. **Deleted.**
+
+**Three are records whose consumer is a test because the test IS the check** — the
+`getNavigationRouteContract` category, exempt by name with the reason:
+`audioCoverageRowsByDomain` (REG-037 checks every gameplay row's mix role, cooldown policy,
+semantic moment and callsite one by one, and the domain filter is what that reads);
+`getModePosterArtRows` and `modePosterHasCustomArt` (REG-013 asserts every mode in
+`RUN_MODE_CATALOG` has custom poster art rather than the shared fallback, and that every row
+resolves to a non-empty asset URL — content completeness).
+
+**Baseline 106 → 97** across nine entries: three wired live, three deleted (two pass-throughs and a
+superseded pair), three named as records. Still **not one plain debt entry** in fourteen resolved
+across Gens 245 and 258. Whatever that baseline is, it is not a list of things nobody needs.

@@ -169,8 +169,16 @@ const MainMenu = ({
                     <header className={styles.titleBlock}>
                         <img alt="" className={styles.crest} src={UI_ART.brandCrest} />
                         <p className={styles.eyebrow}>Seeker of Shards</p>
+                        {/*
+                          * The space between the words is real text, not a gap the layout draws.
+                          * The two spans stack because `.title` is a column flex container, which
+                          * also means a whitespace-only node between them renders nothing - but it
+                          * is in the accessible name, and without it the `h1` read "MemoryDungeon"
+                          * to a screen reader. Found in Gen 253 by a demo-readiness assertion that
+                          * had been red on main long enough for nobody to notice.
+                          */}
                         <h1 className={styles.title}>
-                            <span>Memory</span>
+                            <span>Memory</span>{' '}
                             <span>Dungeon</span>
                         </h1>
                         <span aria-hidden="true" className={styles.rule} />

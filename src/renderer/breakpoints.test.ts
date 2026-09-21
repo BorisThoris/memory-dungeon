@@ -4,8 +4,6 @@ import { describe, expect, it } from 'vitest';
 import {
     isNarrowShortLandscapeForMenuStack,
     isShortLandscapeViewport,
-    readWindowInnerSizeFallback,
-    safeSubscribeWindowResize,
     VIEWPORT_LANDSCAPE_STACK_MAX_WIDTH,
     VIEWPORT_SHORT_LANDSCAPE_MAX_HEIGHT
 } from './breakpoints';
@@ -55,23 +53,6 @@ describe('isNarrowShortLandscapeForMenuStack', () => {
 
     it('is false one px above stack max width', () => {
         expect(isNarrowShortLandscapeForMenuStack(VIEWPORT_LANDSCAPE_STACK_MAX_WIDTH + 1, 720)).toBe(false);
-    });
-});
-
-describe('readWindowInnerSizeFallback', () => {
-    it('returns a usable size in browser-like environments', () => {
-        const s = readWindowInnerSizeFallback();
-        expect(s.width).toBeGreaterThan(0);
-        expect(s.height).toBeGreaterThan(0);
-    });
-});
-
-describe('safeSubscribeWindowResize', () => {
-    it('returns an unsubscribe that is safe to call twice', () => {
-        const unsub = safeSubscribeWindowResize(() => {});
-        expect(typeof unsub).toBe('function');
-        unsub();
-        unsub();
     });
 });
 

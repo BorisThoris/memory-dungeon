@@ -2617,6 +2617,29 @@ Three ways out, and the choice belongs to the product rather than to an interfac
    simulation, because a memory aid's effect on human memory is not a thing the reference player
    models.
 
+**Decided (Gen 226): option 1, with the verb removed.** The recommendation stands - no second
+control - but the link gesture is not needed either, because **two pins already are the claim**. A
+player who pins two tiles has made the two-tile gesture this section says the claim has to be;
+adding a "link these" press on top would be a second way to say the same thing, which is the
+duplication §105 exists to remove. So: exactly two pins is a held pair, a third pin dissolves it
+back into three loose notes, and the dock's pin tool says what it is holding and how far apart.
+
+The cap of one held pair falls out of `MAX_PINNED_TILES` rather than being declared, and the choice
+between holding a pair and keeping three notes is the commitment (c) asks for instead of a notebook.
+Both constraints above are structural rather than remembered: `held-pair-rules.ts` reads no tile
+identity at all - not `pairKey`, not `symbol` - and its test gives the same two positions a matching
+and a mismatching identity and asserts every output is identical, so the mark cannot become a free
+match test. T3.6's span is computed only for a claimed pair, in grid steps rather than straight-line
+distance, because the steps are what a break walks.
+
+**The cost, stated rather than discovered:** a player who pins two unrelated tiles as loose notes is
+told the span between them whether they meant a claim or not. That is the price of not adding a
+control, and the reading is inert - a distance between two tiles whose positions they already know.
+
+**Still unsettled, and not settleable here:** E.6, whether the marker does the remembering for the
+player. That needs players. The reference player has no memory to aid, so no simulation in this
+repository can answer it.
+
 ### 30.4 Why this is the highest-value unbuilt feature
 
 Per §17.2, our 10-second cell — "a chain built, held, and detonated" — is the strategic heart and

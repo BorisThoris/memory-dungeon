@@ -1,10 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import {
-    acquireToolbarRovingPause,
-    handleHorizontalToolbarKeyDown,
-    handleVerticalToolbarKeyDown,
-    syncVerticalToolbarTabIndices
-} from './toolbarRoving';
+import { acquireToolbarRovingPause, handleHorizontalToolbarKeyDown, syncToolbarTabIndices } from './toolbarRoving';
 
 const pauseReleases: Array<() => void> = [];
 
@@ -14,7 +9,7 @@ const pauseToolbarRoving = (): (() => void) => {
     return release;
 };
 
-type ToolbarKeyHandler = typeof handleVerticalToolbarKeyDown;
+type ToolbarKeyHandler = typeof handleHorizontalToolbarKeyDown;
 
 const pressToolbarKey = (handler: ToolbarKeyHandler, root: HTMLElement, key: string) => {
     const preventDefault = vi.fn();
@@ -28,13 +23,11 @@ afterEach(() => {
 });
 
 describe('toolbarRoving (REF-061)', () => {
+    /*
+     * Horizontal only. The vertical handler was here as a second row of this table and shipped to
+     * no toolbar: the game has one, and it is the in-run dock, which is a row (Gen 258).
+     */
     it.each([
-        {
-            backwardKey: 'ArrowUp',
-            forwardKey: 'ArrowDown',
-            handler: handleVerticalToolbarKeyDown,
-            orientation: 'vertical'
-        },
         {
             backwardKey: 'ArrowLeft',
             forwardKey: 'ArrowRight',
@@ -51,7 +44,7 @@ describe('toolbarRoving (REF-061)', () => {
         `;
         const toolbar = document.querySelector<HTMLElement>('[data-testid="tb"]')!;
         const buttons = Array.from(toolbar.querySelectorAll('button'));
-        syncVerticalToolbarTabIndices(toolbar);
+        syncToolbarTabIndices(toolbar);
         buttons[0]!.focus();
 
         expect(pressToolbarKey(handler, toolbar, forwardKey)).toHaveBeenCalledTimes(1);
@@ -91,7 +84,7 @@ describe('toolbarRoving (REF-061)', () => {
         `;
         const toolbar = document.querySelector<HTMLElement>('[data-testid="tb"]')!;
         const buttons = toolbar.querySelectorAll('button');
-        syncVerticalToolbarTabIndices(toolbar);
+        syncToolbarTabIndices(toolbar);
         expect(buttons[0]!.tabIndex).toBe(0);
         expect(buttons[1]!.tabIndex).toBe(-1);
 
@@ -113,10 +106,10 @@ describe('toolbarRoving (REF-061)', () => {
         `;
         const toolbar = document.querySelector<HTMLElement>('[data-testid="tb"]')!;
         const buttons = toolbar.querySelectorAll('button');
-        syncVerticalToolbarTabIndices(toolbar, buttons[1]);
+        syncToolbarTabIndices(toolbar, buttons[1]);
 
         const release = pauseToolbarRoving();
-        syncVerticalToolbarTabIndices(toolbar);
+        syncToolbarTabIndices(toolbar);
         release();
 
         expect(buttons[0]!.tabIndex).toBe(-1);
@@ -134,7 +127,7 @@ describe('toolbarRoving (REF-061)', () => {
         const toolbar = document.querySelector<HTMLElement>('[data-testid="tb"]')!;
         const buttons = toolbar.querySelectorAll('button');
 
-        syncVerticalToolbarTabIndices(toolbar, buttons[1]);
+        syncToolbarTabIndices(toolbar, buttons[1]);
 
         expect(buttons[0]!.tabIndex).toBe(-1);
         expect(buttons[1]!.tabIndex).toBe(-1);
@@ -153,7 +146,7 @@ describe('toolbarRoving (REF-061)', () => {
         `;
         const toolbar = document.querySelector<HTMLElement>('[data-testid="tb"]')!;
         const buttons = toolbar.querySelectorAll('button');
-        syncVerticalToolbarTabIndices(toolbar);
+        syncToolbarTabIndices(toolbar);
         const releaseOuter = pauseToolbarRoving();
         const releaseInner = pauseToolbarRoving();
 

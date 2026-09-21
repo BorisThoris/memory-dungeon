@@ -3,6 +3,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { MUTATOR_CATALOG } from '../../shared/game-catalog';
 import { getUiStateCopy } from '../../shared/ui-state-copy';
 import { playUiBackSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
+import { useEscapeLeaves } from '../hooks/useEscapeLeaves';
 import { Eyebrow, MetaFrame, Panel, ScreenTitle, UiButton } from '../ui';
 import { useAppStore } from '../store/useAppStore';
 import inRunFramedPanel from '../ui/metaInRunFramedPanel.module.css';
@@ -50,6 +51,8 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
         playUiBackSfx(uiGain);
         closeSubscreen();
     };
+
+    useEscapeLeaves(handleBack);
 
     if (!run) {
         const emptyState = getUiStateCopy('inventory_no_run');

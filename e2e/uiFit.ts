@@ -86,7 +86,29 @@ export const describeFit = async (page: Page): Promise<FitReport> =>
             })
             .map(name);
 
-        const undersized = leaves.filter((el) => Number.parseFloat(getComputedStyle(el).fontSize) < 12).map(name);
+        /*
+         * Measured as PAINTED px, not declared px. `getComputedStyle().fontSize` is the layout
+         * size, and the UI scale is a `zoom` on the shell: at 0.8 a 12px declaration reaches the
+         * player's eye at 9.6px while this rule still reads 12 and says nothing. Same unit error
+         * the chrome clearance and the chain rail carried (Gen 237, Gen 239), here in the rule
+         * that guards readability. At scale 1 the two are identical, so nothing moves for the
+         * checks that pin it.
+         */
+        const shellZoom = (() => {
+            const shell = document.querySelector('[class*="content"]');
+            if (!shell) return 1;
+            const layoutWidth = shell.clientWidth;
+            if (layoutWidth <= 0) return 1;
+            const ratio = shell.getBoundingClientRect().width / layoutWidth;
+            return Number.isFinite(ratio) && ratio > 0 ? ratio : 1;
+        })();
+        // The epsilon is not decoration: at scale 1 the ratio is a division of two measured boxes
+        // and can land on 0.9999, which would turn an exactly-12px declaration into 11.999 and
+        // report every screen as undersized. A hundredth of a pixel is below anything a player
+        // could see and well above the float noise.
+        const undersized = leaves
+            .filter((el) => Number.parseFloat(getComputedStyle(el).fontSize) * shellZoom < 12 - 0.01)
+            .map(name);
 
         // Text the layout is hiding: clamped to fewer lines than it has, cut horizontally, or cut
         // by a clipping ancestor - a card's third line under its cell's edge on a phone sideways.

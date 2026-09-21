@@ -1,4 +1,5 @@
 import type { Tile } from '../../shared/contracts';
+import { getStaticCardTexturePixelSize } from '../cardFace/staticCardTextureSize';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { installCanvas2dMock } from '../../test/installCanvas2dMock';
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
@@ -6,10 +7,8 @@ import {
     clearTileTextureCachesForDebug,
     forceIllustrationOverlayCacheVersionForTest,
     getIllustrationPipelineDebugState,
-    getStaticCardTexturePixelSize,
     getTileFaceOverlayTexture,
     preloadTileTextureImages,
-    prewarmTileFaceOverlayTextures,
     resetDemandDrivenOverlayPrewarmForTest,
     runDemandDrivenTileFaceOverlayPrewarmSession,
     subscribeTextureImageUpdates,
@@ -91,17 +90,17 @@ describe('tileTextures layout', () => {
         window.cancelIdleCallback = (() => undefined) as typeof window.cancelIdleCallback;
 
         try {
-            const stop = prewarmTileFaceOverlayTextures(
-                [baseTile('a1', 'pair-a'), baseTile('a2', 'pair-a'), baseTile('b1', 'pair-b')],
-                'medium',
-                'active'
-            );
+            const stop = runDemandDrivenTileFaceOverlayPrewarmSession(['pair-a', 'pair-b'], 'medium');
             await Promise.resolve();
             stop();
 
+            /*
+             * The eager whole-board prewarm this used to call was deleted in Gen 243: the
+             * demand-driven session supersedes it and is the one the board actually runs. What the
+             * assertion is for survives the swap - the warm-up draws the illustration bitmaps and
+             * creates no overlay TEXTURE, which is the split that makes it cheap.
+             */
             const state = getIllustrationPipelineDebugState();
-            expect(state.overlayPrewarm.targetKeys).toEqual(['pair-a|tier=standard', 'pair-b|tier=standard']);
-            expect(state.overlayPrewarm.completedCount).toBe(2);
             expect(state.illustrationBitmap.entryCount).toBe(2);
             expect(state.overlayTexture.overlayKeyCount).toBe(0);
         } finally {
@@ -182,12 +181,14 @@ describe('tileTextures layout', () => {
         window.cancelIdleCallback = (() => undefined) as typeof window.cancelIdleCallback;
 
         try {
-            const stop = prewarmTileFaceOverlayTextures([baseTile('idle-fallback', 'pair-idle-fallback')], 'medium', 'active');
+            const stop = runDemandDrivenTileFaceOverlayPrewarmSession(['pair-idle-fallback'], 'medium');
             await vi.advanceTimersByTimeAsync(0);
             stop();
 
+            // The fallback lives in schedulePrewarmStep, which the demand session shares, so this
+            // still covers what it covered: an idle scheduler that throws must not lose the work.
             const state = getIllustrationPipelineDebugState();
-            expect(state.overlayPrewarm.completedCount).toBe(1);
+            expect(state.illustrationBitmap.entryCount).toBe(1);
         } finally {
             window.requestIdleCallback = previousRequestIdleCallback;
             window.cancelIdleCallback = previousCancelIdleCallback;

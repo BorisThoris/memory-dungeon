@@ -38,7 +38,7 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Input and display'
     },
     {
-        evidence: 'src/shared/gamepad-input.ts',
+        evidence: 'src/shared/controller-back-contract.ts',
         id: 'controller-support',
         label: 'Every screen is reachable on a controller, not just the board',
         owner: 'repo',

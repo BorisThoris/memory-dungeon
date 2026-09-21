@@ -33,6 +33,12 @@ import { buildRichPresence, richPresencePairs } from './rich-presence';
 import { STEAM_CLOUD_RULES, SAVE_FILE_NAME } from './save-location';
 import { TILE_TRAIT_MARKS, describeTraitMark } from './tile-trait-marks';
 import { GAMEPAD_STICK_DEADZONE, readGamepadActions, STANDARD_GAMEPAD_BUTTONS } from './gamepad-input';
+import {
+    CONTROLLER_BACK_CONTRACT,
+    CONTROLLER_BACK_VIEWS,
+    findUnexplainedControllerExemptions
+} from './controller-back-contract';
+import { VIEW_STATES } from './contracts';
 import { MIN_WINDOW_HEIGHT, MIN_WINDOW_WIDTH, normalizeWindowState, resolveRestoredBounds } from '../main/window-bounds';
 import { CRASH_LOG_KEEP_COUNT, pruneCrashLogs, redactUserPaths } from '../main/crash-log';
 import { quarantineFileName, quarantineSaveFile } from '../main/save-recovery';
@@ -225,8 +231,19 @@ const VERIFIERS: Record<string, () => void> = {
             expect(covered.has(field), `${field} has no dock tool that spends it`).toBe(true);
         }
     },
+    /*
+     * The row says "every screen". Until Gen 256 this verifier said "A maps to confirm, the d-pad
+     * maps to up, the deadzone is positive" - three true facts about a pure function that never
+     * sees a screen, and the row read `done` through the whole period when B opened nothing back
+     * up on seven views. The mapping checks stay because they are the first link; what is new is
+     * the half that can fail when a screen forgets its way out.
+     */
     'controller-support': () => {
-        const pressed = new Set<number>([STANDARD_GAMEPAD_BUTTONS.a, STANDARD_GAMEPAD_BUTTONS.dpadUp]);
+        const pressed = new Set<number>([
+            STANDARD_GAMEPAD_BUTTONS.a,
+            STANDARD_GAMEPAD_BUTTONS.b,
+            STANDARD_GAMEPAD_BUTTONS.dpadUp
+        ]);
         const actions = readGamepadActions({
             axes: [0, 0, 0, 0],
             buttons: Array.from({ length: 17 }, (_unused, index) => ({ pressed: pressed.has(index) }))
@@ -234,9 +251,25 @@ const VERIFIERS: Record<string, () => void> = {
 
         expect(actions).toContain('confirm');
         expect(actions).toContain('up');
+        // B is the leave. Without this link the rest of the row is about a button nobody pressed.
+        expect(actions).toContain('back');
         expect(GAMEPAD_STICK_DEADZONE).toBeGreaterThan(0);
         // A stick resting inside the deadzone must not walk the focus on its own.
         expect(readGamepadActions({ axes: [0.2, 0.2, 0, 0], buttons: [] })).toEqual([]);
+
+        // Every screen the app can show has to answer for back, one way or the other.
+        expect([...Object.keys(CONTROLLER_BACK_CONTRACT)].sort()).toEqual([...VIEW_STATES].sort());
+        expect(
+            findUnexplainedControllerExemptions(),
+            'a view claims no back path and gives no reason'
+        ).toEqual([]);
+        // A table where nothing leaves would satisfy the two checks above and mean nothing.
+        expect(CONTROLLER_BACK_VIEWS.length).toBeGreaterThan(VIEW_STATES.length / 2);
+        for (const view of CONTROLLER_BACK_VIEWS) {
+            expect(VIEW_STATES, `${view} leaves to a view that does not exist`).toContain(
+                CONTROLLER_BACK_CONTRACT[view].leavesTo
+            );
+        }
     },
     'crash-reports': () => {
         expect(redactUserPaths('at C:\\Users\\ada\\game\\main.js', null)).not.toContain('ada');

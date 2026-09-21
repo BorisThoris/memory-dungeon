@@ -10,7 +10,6 @@ import {
 } from 'three';
 import type { GraphicsQualityPreset, Tile } from '../../shared/contracts';
 import { RENDERER_THEME } from '../styles/theme';
-import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
 import referenceBackTextureUrl from '../assets/textures/cards/authored-card-back.svg?url';
 import cardBackNormalTextureUrl from '../assets/textures/cards/back-normal.webp';
 import cardFaceTextureUrl from '../assets/textures/cards/front.svg?url';
@@ -36,6 +35,10 @@ import { CARD_ILLUSTRATION_REGISTRY } from '../cardFace/cardIllustrationRegistry
 import { getCardIllustrationImageByUrl } from '../cardFace/cardIllustrationImages';
 import { resolveCardIllustrationUrl } from '../cardFace/resolveCardIllustrationUrl';
 import { drawRasterDeckComposedOverlay, isCardRasterDeckEnabled } from '../cardFace/cardRasterDeck';
+import {
+    STATIC_CARD_TEXTURE_HEIGHT,
+    STATIC_CARD_TEXTURE_WIDTH
+} from '../cardFace/staticCardTextureSize';
 import { computeIllustrationPixelRect } from '../cardFace/cardIllustrationRect';
 import {
     getIllustrationVersionStamp,
@@ -100,17 +103,10 @@ export type CubeLayer = 'shell' | 'core';
  */
 const TEXTURE_SIZE = 512;
 /** Taller canvas for WebGL static card PNGs so 1403×2048 sources aren’t over-downscaled (was 512 — felt cropped/soft). */
-const STATIC_CARD_TEXTURE_HEIGHT = 1024;
-const STATIC_CARD_TEXTURE_WIDTH = Math.max(2, Math.round(STATIC_CARD_TEXTURE_HEIGHT * (CARD_PLANE_WIDTH / CARD_PLANE_HEIGHT)));
+
 
 let tileTextureSamplingQuality: GraphicsQualityPreset = 'medium';
 let lastOverlayTextureQuality: GraphicsQualityPreset | null = null;
-
-/** Regression anchor: static card bitmap dimensions must track `CARD_PLANE_*` in `tileShatter`. */
-export const getStaticCardTexturePixelSize = (): { width: number; height: number } => ({
-    width: STATIC_CARD_TEXTURE_WIDTH,
-    height: STATIC_CARD_TEXTURE_HEIGHT
-});
 
 const applyCanvasTileTextureSampling = (texture: CanvasTexture | Texture, quality: GraphicsQualityPreset): void => {
     if (quality === 'low') {
@@ -1447,130 +1443,6 @@ export const getTileFaceOverlayTexture = (
     );
 };
 
-type IllustrationPrewarmTarget = {
-    key: string;
-    pairKey: string;
-    palette: ReturnType<typeof getCardFaceOverlayColors>;
-    sourcePixelHeight: number;
-    sourcePixelWidth: number;
-    tier: OverlayDrawTier;
-};
-
-const buildIllustrationPrewarmTargetKey = (pairKey: string, tier: OverlayDrawTier): string => `${pairKey}|tier=${tier}`;
-
-const getIllustrationPrewarmTargets = (
-    tiles: readonly Tile[],
-    graphicsQuality: GraphicsQualityPreset,
-    variant: Exclude<FaceVariant, 'hidden'>
-): IllustrationPrewarmTarget[] => {
-    if (variant !== 'active') {
-        return [];
-    }
-
-    const tier = overlayDrawTierFromGraphicsQuality(graphicsQuality);
-    const palette = getCardFaceOverlayColors(variant);
-    const illustrationRect = computeIllustrationPixelRect(STATIC_CARD_TEXTURE_WIDTH, STATIC_CARD_TEXTURE_HEIGHT);
-    const targets: IllustrationPrewarmTarget[] = [];
-    const seen = new Set<string>();
-
-    for (const tile of tiles) {
-        const key = buildIllustrationPrewarmTargetKey(tile.pairKey, tier);
-        if (seen.has(key)) {
-            continue;
-        }
-        seen.add(key);
-        targets.push({
-            key,
-            pairKey: tile.pairKey,
-            palette,
-            sourcePixelHeight: illustrationRect.height,
-            sourcePixelWidth: illustrationRect.width,
-            tier
-        });
-    }
-
-    return targets;
-};
-
-export const prewarmTileFaceOverlayTextures = (
-    tiles: readonly Tile[],
-    graphicsQuality: GraphicsQualityPreset,
-    variant: Exclude<FaceVariant, 'hidden'> = 'active'
-): (() => void) => {
-    if (!canDraw() || tiles.length === 0) {
-        resetOverlayPrewarmDebugState();
-        return () => undefined;
-    }
-
-    syncIllustrationOverlayCacheVersion();
-    const targets = getIllustrationPrewarmTargets(tiles, graphicsQuality, variant);
-    if (targets.length === 0) {
-        resetOverlayPrewarmDebugState();
-        return () => undefined;
-    }
-
-    let cancelled = false;
-    let handle: PrewarmScheduleHandle | null = null;
-    let index = 0;
-    const boardKey = `${variant}|${overlayDrawTierFromGraphicsQuality(graphicsQuality)}|${targets.map((target) => target.key).join(',')}`;
-
-    overlayPrewarmDebugState = {
-        boardKey,
-        completedCount: 0,
-        pendingCount: targets.length,
-        scheduled: true,
-        targetCount: targets.length,
-        targetKeys: targets.map((target) => target.key),
-        tier: targets[0]?.tier ?? null,
-        variant
-    };
-
-    const pump = (deadline?: IdleDeadline): void => {
-        if (cancelled) {
-            return;
-        }
-
-        let processed = 0;
-        do {
-            const target = targets[index]!;
-            prewarmProceduralIllustrationBitmap(
-                target.pairKey,
-                target.tier,
-                target.palette,
-                target.sourcePixelWidth,
-                target.sourcePixelHeight
-            );
-            index += 1;
-            processed += 1;
-            overlayPrewarmDebugState.completedCount = index;
-            overlayPrewarmDebugState.pendingCount = targets.length - index;
-        } while (
-            index < targets.length &&
-            processed < OVERLAY_PREWARM_BATCH_SIZE &&
-            deadline != null &&
-            (deadline.didTimeout || deadline.timeRemaining() > 2)
-        );
-
-        overlayPrewarmDebugState.scheduled = false;
-        if (index < targets.length) {
-            overlayPrewarmDebugState.scheduled = true;
-            handle = schedulePrewarmStep(pump);
-        }
-    };
-
-    handle = schedulePrewarmStep(pump);
-    return () => {
-        cancelled = true;
-        cancelPrewarmStep(handle);
-        if (overlayPrewarmDebugState.boardKey === boardKey) {
-            overlayPrewarmDebugState = {
-                ...overlayPrewarmDebugState,
-                pendingCount: Math.max(0, targets.length - index),
-                scheduled: false
-            };
-        }
-    };
-};
 
 const demandOverlayPairKeyQueue = new Set<string>();
 let demandOverlayPrewarmHandle: PrewarmScheduleHandle | null = null;
@@ -1599,7 +1471,17 @@ const pumpDemandOverlayPrewarm = (deadline?: IdleDeadline): void => {
         if (processed >= OVERLAY_PREWARM_BATCH_SIZE) {
             break;
         }
-        if (deadline != null && !deadline.didTimeout && deadline.timeRemaining() <= 2) {
+        /*
+         * Always draw at least one before yielding. The timer fallback in `schedulePrewarmStep`
+         * hands over a deadline whose `timeRemaining()` is 0 - it exists for exactly the case
+         * where `requestIdleCallback` is missing or throws - so a bare budget check bailed on the
+         * first key every time, left the queue untouched, and rescheduled: an endless chain of
+         * zero-work timers that never warmed a single bitmap. Found in Gen 243 by re-pointing the
+         * idle-fallback test at this session after deleting the eager prewarm it used to cover;
+         * the eager path made progress here, so removing it would have taken the only code that
+         * worked under the fallback with it.
+         */
+        if (processed > 0 && deadline != null && !deadline.didTimeout && deadline.timeRemaining() <= 2) {
             break;
         }
         demandOverlayPairKeyQueue.delete(pairKey);

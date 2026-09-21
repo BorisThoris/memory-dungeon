@@ -21,7 +21,25 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const defaultRepoRoot = path.resolve(__dirname, '..');
 export const AI_REPO_MODEL_PATH = '.ai/repo-model.json';
 const MODEL_VERSION = 2;
-const GENERATED_PATHS = new Set([AI_REPO_MODEL_PATH]);
+/**
+ * Outputs, not inputs. Hashing a file this repository generates makes the model stale every time
+ * the generator runs, and a check that fails on its own machinery is a red light nobody reads.
+ *
+ * `.ai/repo-model.json` is here because the model cannot be part of what proves the model current.
+ * `project.meta.json` and `project-media/` are here for the same reason one step removed:
+ * `scripts/generate-project-meta.mjs` and `scripts/capture-project-shots.mjs` write them, and
+ * `.github/workflows/project-meta-refresh.yml` commits the result back on a schedule. Three
+ * consecutive `[meta-bot]` commits touched those paths and nothing else, and each one left
+ * `gate:systems` red on `main` until a person happened to regenerate (Gen 255).
+ *
+ * This is an exclusion from the INVENTORY's hashes only. Nothing under these paths is imported,
+ * so no edge in the graph passes through them - checked before excluding, because an exclusion
+ * that hides a real dependency is worse than the churn it removes.
+ */
+const GENERATED_PATHS = new Set([AI_REPO_MODEL_PATH, 'project.meta.json']);
+const GENERATED_PREFIXES = ['project-media/'];
+const isGeneratedPath = (file) =>
+    GENERATED_PATHS.has(file) || GENERATED_PREFIXES.some((prefix) => file.startsWith(prefix));
 const CONTENT_REGISTRIES = [
     { kind: 'findable', file: 'src/shared/findables.ts', variable: 'FINDABLE_REWARD_ROW_ORDER', mechanicPrefix: 'findable' },
     { kind: 'inventory_item', file: 'src/shared/run-inventory-contracts.ts', variable: 'RUN_INVENTORY_ITEM_IDS', mechanicPrefix: 'inventory' }
@@ -87,7 +105,7 @@ const listRepositoryFiles = (repoRoot) => {
             .split('\0')
             .filter(Boolean)
             .map((file) => file.replaceAll('\\', '/'))
-            .filter((file) => !GENERATED_PATHS.has(file))
+            .filter((file) => !isGeneratedPath(file))
     );
 };
 
