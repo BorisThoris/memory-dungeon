@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 446087,
-      "sha256": "84a9d4a0c44437305a01de9686dced0ff4710da51417a7d93e5aef6c3cc34fbb"
+      "bytes": 447798,
+      "sha256": "6747d50f0401391461502fdb37909cb22f4951d4e961eecfddbd502b511fadf1"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "b5ae5950680b56c84681f1ece810a5b3522666361d6ee9698976de1600ee511b"
+      "sha256": "2caa412444e182b9fabd63ad6056e80bd4fa8b3ea4cdcccd00969e3978cc93a1"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -3801,14 +3801,14 @@
     {
       "path": "e2e/fixtures/tile-card-face-illustration-contact-sheet.png",
       "category": "test",
-      "bytes": 339275,
-      "sha256": "64be743486767274086a33811a1ebb37a93478dc9adc7bf02dd89c2d1ff2ed01"
+      "bytes": 355500,
+      "sha256": "5453d27153c3112fff7086b433c0fc6a54f27a550b6ccd8fad6ab471f6b377c8"
     },
     {
       "path": "e2e/fixtures/tile-card-face-illustration-regression.json",
       "category": "test",
       "bytes": 6989,
-      "sha256": "c909914f3fad76248356595b51717d4c0889d1b85fe7e584ff91403b57ed0163"
+      "sha256": "a681d6a2bd72c0745007580ea0f4f4d019836229ed059e06fa6f3703e2d40af7"
     },
     {
       "path": "e2e/gameplay-chrome-clearance.spec.ts",
@@ -4197,8 +4197,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 31426,
-      "sha256": "d18131ed1866ae3ea44958a62138e3a66423d9b4199138cced0fcc71f74fc9d1"
+      "bytes": 31581,
+      "sha256": "4756a5437bc98881dfcfe4c8e07d423ce32bc75bc68fd3f1ef6f1af5cd8f98f8"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4312,7 +4312,7 @@
       "path": "project-media/capture.json",
       "category": "configuration",
       "bytes": 1305,
-      "sha256": "3d88976aea26de4fe514051f6c71ed7df62580dde581d04a780d092c19b3276f"
+      "sha256": "cc6bb2fefab89416d1d96d96dfbe84147f0f3f69c0acd77a77f7ef542fa1250a"
     },
     {
       "path": "project-media/card.jpg",
@@ -4354,7 +4354,7 @@
       "path": "project.meta.json",
       "category": "configuration",
       "bytes": 11738,
-      "sha256": "50f4ba612beb3f8a8c89648ea87ca8449780f6a1ed0cffd9a6260ab4106641cc"
+      "sha256": "2d75b62176261dbba8b659271abf7ee47d0c677470ee3fb2c74a1bb12be50e96"
     },
     {
       "path": "public/apple-touch-icon.png",
