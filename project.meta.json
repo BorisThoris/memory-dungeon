@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-21T22:49:56.027Z",
+  "generatedAt": "2026-09-21T23:49:10.689Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -291,7 +291,7 @@
         "bytes": 143993,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-21T22:49:13.661Z"
+        "capturedAt": "2026-09-21T23:48:03.554Z"
       },
       {
         "profile": "desktop",
@@ -300,7 +300,7 @@
         "bytes": 134991,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-21T22:49:32.906Z"
+        "capturedAt": "2026-09-21T23:48:21.981Z"
       },
       {
         "profile": "full",
@@ -309,7 +309,7 @@
         "bytes": 112331,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-21T22:49:51.290Z"
+        "capturedAt": "2026-09-21T23:48:51.359Z"
       },
       {
         "profile": "mobile",
@@ -318,7 +318,7 @@
         "bytes": 50945,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-21T22:49:39.308Z"
+        "capturedAt": "2026-09-21T23:48:32.213Z"
       },
       {
         "profile": "og",
@@ -327,7 +327,7 @@
         "bytes": 106849,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-21T22:49:55.874Z"
+        "capturedAt": "2026-09-21T23:49:10.501Z"
       }
     ]
   },
@@ -389,13 +389,13 @@
     "devDependencyCount": 47
   },
   "metrics": {
-    "sourceFiles": 1108,
-    "testFiles": 480,
-    "sourceLines": 171369,
+    "sourceFiles": 1111,
+    "testFiles": 481,
+    "sourceLines": 171607,
     "largestDirectories": [
       {
         "directory": "src",
-        "files": 933
+        "files": 936
       },
       {
         "directory": "scripts",
@@ -430,10 +430,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "7e7858ab",
-    "lastCommitDate": "2026-09-21T22:44:41Z",
-    "lastCommitSubject": "Merge main into the review branch",
-    "commitCount": 1577,
+    "head": "3094c679",
+    "lastCommitDate": "2026-09-21T23:39:29Z",
+    "lastCommitSubject": "Merge remote-tracking branch 'origin/main' into claude/game-view-redesign-6daf70-2xydcc",
+    "commitCount": 1580,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
