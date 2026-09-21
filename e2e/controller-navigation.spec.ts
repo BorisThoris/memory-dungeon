@@ -55,6 +55,7 @@ const DPAD_UP = 12;
 const DPAD_LEFT = 14;
 const DPAD_RIGHT = 15;
 const BUTTON_A = 0;
+const BUTTON_B = 1;
 
 const focusedLabel = (page: Page): Promise<string> =>
     page.evaluate(() => (document.activeElement?.textContent ?? '').trim().slice(0, 40));
@@ -147,5 +148,93 @@ test.describe('controller navigation', () => {
             }
         }
         await expect(board).not.toBeFocused();
+    });
+
+    /**
+     * Valve's controller criterion: the DEFAULT configuration must reach all content. Not "a
+     * remapping can" - the pad out of the box, on the screens a player actually opens.
+     *
+     * This walks the ring with the d-pad, opens with A and leaves with B, for every menu screen
+     * there is. It is worth its minutes because the first three tests above all stop at the main
+     * menu and the board: they proved the ring moves and that A starts a run, and said nothing
+     * about whether a player who opened the Codex could get out again. They could not - B maps to
+     * `back`, `back` dispatches Escape, and not one of the five screens listened for it, so the
+     * only way out was to find the on-screen Back button with the stick.
+     *
+     * Both directions are walked because the ring is spatial, not cyclic: d-pad down stops at the
+     * bottom of the menu, so anything above where focus lands is reached by going up. That is the
+     * default mapping doing its job, not a defect - but a down-only walk reports Collection
+     * unreachable, which is how this test was nearly written wrong.
+     */
+    const MENU_SCREENS = [
+        { name: 'Collection', region: 'Collection' },
+        { name: 'Profile', region: 'Profile' },
+        { name: 'Inventory', region: 'Inventory' },
+        { name: 'Codex', region: 'Codex' },
+        { name: 'Settings', region: null }
+    ] as const;
+
+    /** Settings is not a `MetaShell`, so it is found by its panel rather than a region label. */
+    const screenLocator = (page: Page, screen: (typeof MENU_SCREENS)[number]) =>
+        screen.region === null
+            ? page.getByTestId('settings-shell-panel')
+            : page.locator(`[role="region"][aria-label="${screen.region}"]`);
+
+    for (const screen of MENU_SCREENS) {
+        test(`a pad opens ${screen.name} and B comes back out`, async ({ page }) => {
+            test.setTimeout(180_000);
+            await installFakePad(page);
+            await gotoWithSave(page, buildVisualSaveJson(true));
+            await mainMenuPlayButton(page).waitFor({ state: 'visible', timeout: 30_000 });
+
+            const target = new RegExp(screen.name, 'i');
+            const walked: string[] = [];
+            let landed = false;
+            for (const direction of [DPAD_DOWN, DPAD_UP]) {
+                for (let step = 0; step < 12 && !landed; step += 1) {
+                    await pressPad(page, direction);
+                    const label = await focusedLabel(page);
+                    walked.push(label || '(nothing focused)');
+                    landed = target.test(label);
+                }
+                if (landed) {
+                    break;
+                }
+            }
+            expect(landed, `the d-pad never reached ${screen.name}; it walked: ${[...new Set(walked)].join(' > ')}`).toBe(
+                true
+            );
+
+            await pressPad(page, BUTTON_A);
+            await expect(screenLocator(page, screen)).toBeVisible({ timeout: 20_000 });
+
+            // B is the universal back on a Deck. Without it the screen is a room with no door.
+            await pressPad(page, BUTTON_B);
+            await expect(screenLocator(page, screen)).toBeHidden({ timeout: 20_000 });
+            await expect(mainMenuPlayButton(page)).toBeVisible({ timeout: 20_000 });
+        });
+    }
+
+    /**
+     * The same button, mid-run, has to land somewhere else: back on the board with the run intact,
+     * not out at the main menu. `resolveSubscreenCloseTarget` decides that, and this is the only
+     * thing that runs it with a real run underneath.
+     */
+    test('B leaves an in-run meta screen for the board, not the menu', async ({ page }) => {
+        test.setTimeout(300_000);
+        await installFakePad(page);
+        await openLevel1Play(page);
+        await waitLevel1PlayReady(page);
+
+        await page.keyboard.press('p');
+        await page.getByRole('button', { name: /^Codex$/i }).click();
+        const codex = page.locator('[role="region"][aria-label="Codex"]');
+        await expect(codex).toBeVisible({ timeout: 20_000 });
+
+        await pressPad(page, BUTTON_B);
+        await expect(codex).toBeHidden({ timeout: 20_000 });
+        await expect(page.getByTestId('tile-board-application')).toBeVisible({ timeout: 20_000 });
+        // Out at the main menu would mean the run was thrown away on a back press.
+        await expect(mainMenuPlayButton(page)).toBeHidden();
     });
 });

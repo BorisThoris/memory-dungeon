@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, type ReactNode } from 'react';
 import { acquireToolbarRovingPause } from '../a11y/toolbarRoving';
 import { acquireOverlayModalBodyState } from '../a11y/overlayModalBodyState';
 import { getOverlayDecisionPolicyRow } from '../../shared/overlay-decision-policy';
+import { targetAllowsEscapeToLeave } from '../hooks/useEscapeLeaves';
 import { useModalFocusTrap } from '../hooks/useModalFocusTrap';
 import { MetaFrame, OverlayActionDock, ScreenTitle } from '../ui';
 import type { OverlayActionPlacement } from '../ui';
@@ -126,23 +127,6 @@ const resolveActionPlacement = (
     return hasChildren ? 'dock' : 'rail';
 };
 
-const targetAllowsOverlayEscape = (target: EventTarget | null): boolean => {
-    if (!(target instanceof HTMLElement)) {
-        return true;
-    }
-
-    if (target.isContentEditable || target.closest('textarea, select')) {
-        return false;
-    }
-
-    const input = target.closest('input');
-    if (!input) {
-        return true;
-    }
-
-    return ['button', 'checkbox', 'radio', 'reset', 'submit'].includes(input.type);
-};
-
 const OverlayModal = ({
     title,
     subtitle,
@@ -178,7 +162,7 @@ const OverlayModal = ({
                 !event.altKey &&
                 !event.ctrlKey &&
                 !event.metaKey &&
-                targetAllowsOverlayEscape(event.target)
+                targetAllowsEscapeToLeave(event.target)
             ) {
                 event.preventDefault();
                 onEscape();

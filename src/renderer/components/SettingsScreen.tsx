@@ -20,6 +20,7 @@ import {
     VIEWPORT_LANDSCAPE_STACK_MAX_WIDTH,
     VIEWPORT_MOBILE_MAX
 } from '../breakpoints';
+import { useEscapeLeaves } from '../hooks/useEscapeLeaves';
 import { useModalFocusTrap } from '../hooks/useModalFocusTrap';
 import { useViewportSize } from '../hooks/useViewportSize';
 import { runPersistenceInBackground } from '../store/backgroundPersistence';
@@ -183,6 +184,8 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
         }
         closeSettings();
     };
+
+    useEscapeLeaves(handleBack);
 
     const handleResetToDefaults = (): void => {
         playUiConfirm();

@@ -2588,3 +2588,54 @@ The ladder still sells reach, waves and bridges. It stopped selling what "touchi
   left for Fever to swallow whole, so its take is what its waves and bridges reach.
 - **Floors run longer and score the same**: 4.7 turns against 4.3, 10543 against 10062 at a clean
   clear. More of the floor is remembered rather than collected.
+
+## Gen 250 — B did nothing on any meta screen, and it was never a pad problem
+
+Deck Verified's controller criterion is *"The default controller configuration must provide users
+with the ability to access all content"* (`RESEARCH_NOTES_2.md` §1). The existing
+`controller-navigation.spec.ts` had three tests: the focus ring moves, the ring is visible, and the
+board answers a press. All three stop at the main menu and the board, so "all content" was never
+checked.
+
+Walking the five meta screens with a fake pad found B opening nothing back up. The first reading
+blamed the pad — but the probe's own regex was wrong (focus labels read `IIICollectionCards and
+relics`, not `Collection`), and once that was corrected the pad reached four of five and returned
+from none. Isolating it by **keyboard** settled it:
+
+```
+ESC Collection: opened=true escapeReturned=false
+ESC Profile:    opened=true escapeReturned=false
+ESC Inventory:  opened=true escapeReturned=false
+ESC Codex:      opened=true escapeReturned=false
+ESC Settings:   opened=true escapeReturned=false
+```
+
+`b` maps to `back` (`shared/gamepad-input.ts`), `back` dispatches Escape
+(`input/gamepadNavigation.ts`) — and not one of the five screens listened for Escape. The pad
+mapping was correct the whole way down; the screens had no handler at the end of it. A player who
+opened the Codex on a Deck had to hunt the on-screen Back button with the stick.
+
+### The fix
+
+`hooks/useEscapeLeaves.ts`, used by `MetaShell` (Collection, Profile, Codex) and by
+`InventoryScreen` and `SettingsScreen`, which are not `MetaShell` — the assumption that all five
+shared one frame was wrong, and wiring only `MetaShell` left Inventory and Settings still red.
+It listens on `window` in the bubble phase, so `OverlayModal` and `GameScreen`'s shortcut overlay —
+both `document` capture with `preventDefault` — still win, and `OverlayModal`'s own
+`targetAllowsOverlayEscape` moved into the hook rather than being copied.
+
+### What it is measured against
+
+Six new tests in `controller-navigation.spec.ts`: one per menu screen (d-pad walk, A opens, B
+returns to the menu), plus B from an in-run Codex landing back on the board rather than the main
+menu. Negative control: with the hook's `active` defaulted to `false`, all six fail; with it on,
+all six pass.
+
+Two facts worth keeping:
+
+- **The ring is spatial, not cyclic.** D-pad down stops at the bottom of the menu, so Collection
+  and Play are reached by going *up*. A down-only walk reports Collection unreachable, which is how
+  this test was nearly written as a bug report.
+- **Two tests in that spec were already red on `main`** before any of this — the menu walk and the
+  board walk — measured by stashing the change and re-running. No gate runs this spec, which is the
+  same shape as Gen 242's illustration regression. Left for its own generation.

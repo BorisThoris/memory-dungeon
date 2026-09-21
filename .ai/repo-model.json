@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2554,
-    "codeFileCount": 895,
-    "exportedSymbolCount": 2703,
+    "trackedFileCount": 2555,
+    "codeFileCount": 896,
+    "exportedSymbolCount": 2705,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6840
+    "relationshipCount": 6847
   },
   "inventory": [
     {
@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 458727,
-      "sha256": "4acaa2c6ccfe6f74f77139f93ce7cc5d84c40d7c3d639666da9dab11093ae985"
+      "bytes": 461590,
+      "sha256": "0291c96c9ce276db96bca4994a471c87e3ae317df503dccdd73aaef4d9d86e6d"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "0afd144e951a681fe38ab064fafd02012b680569410fbcf01a00425ef8694476"
+      "sha256": "18e8fd3795db66972b7ff8b55d51386370357a395d6e41afcdfa953270445327"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "718f139e6cc16023cb7397f311ca2766cbce268b49140fa9815d5dc418328d59"
+      "sha256": "33380a7e1a33f5488dfd49ae3adefd069f77c5b4ba8879c1de230f84a4c17ce2"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3777,8 +3777,8 @@
     {
       "path": "e2e/controller-navigation.spec.ts",
       "category": "test",
-      "bytes": 6101,
-      "sha256": "445f73b5487c365372840f985f2780e636d54dc9f9d6e9389632b9916c728abb"
+      "bytes": 10572,
+      "sha256": "124c3aadbc7f70975f84129d56c4a93664a6952b876b652a9524b90626e65293"
     },
     {
       "path": "e2e/cyp-review-capture.spec.ts",
@@ -4312,7 +4312,7 @@
       "path": "project-media/capture.json",
       "category": "configuration",
       "bytes": 1305,
-      "sha256": "9115daf6b8736121831786d835d4eb94ae4df371ccf8686921da6ade8a12b0b0"
+      "sha256": "4b865eef2e2c0d3b343972954f1daaf6b14507084cc7da1c5399a7a94d5e0a33"
     },
     {
       "path": "project-media/card.jpg",
@@ -4354,7 +4354,7 @@
       "path": "project.meta.json",
       "category": "configuration",
       "bytes": 11776,
-      "sha256": "746dd312f47b52d8ced24ff36933004b4163e8227df06e5ded3a22e73d14147e"
+      "sha256": "197a8c97b9ae4930c399a6b98f69cf2298c80a0ac2c1edfa18c61efc7df59487"
     },
     {
       "path": "public/apple-touch-icon.png",
@@ -8571,8 +8571,8 @@
     {
       "path": "src/renderer/components/InventoryScreen.tsx",
       "category": "source",
-      "bytes": 7656,
-      "sha256": "f2967ef6a304e8e262fd04eddedd204f470ccb8fd1a7d8f9ee0924a36043d132"
+      "bytes": 7750,
+      "sha256": "91ac181bc6ed2b2279cc8fb24c46c979f1f681f1f62a223e8cfc39ad2ce19a4f"
     },
     {
       "path": "src/renderer/components/inventoryScreenModel.test.ts",
@@ -8703,8 +8703,8 @@
     {
       "path": "src/renderer/components/OverlayModal.tsx",
       "category": "source",
-      "bytes": 10845,
-      "sha256": "ecf2a045c09a04d26bea9061a00a471bc35f9c8cd6fdf781259c21ad12ce4cec"
+      "bytes": 10486,
+      "sha256": "719777c19c63f62f4c6066808cffa78d226992e1eea0836a8116045cfdd0ed03"
     },
     {
       "path": "src/renderer/components/PairProximityHintPlane.tsx",
@@ -8811,8 +8811,8 @@
     {
       "path": "src/renderer/components/SettingsScreen.tsx",
       "category": "source",
-      "bytes": 47531,
-      "sha256": "37e600c7b25e5c91939cdc50c2866b3d530134e2873951ecf17777d9223e43f8"
+      "bytes": 47625,
+      "sha256": "6f69692863b861dda17cbe31522a073a8fde70073a7ce3494e72573d322b7f9e"
     },
     {
       "path": "src/renderer/components/shuffleFlipAnimation.test.ts",
@@ -10171,6 +10171,12 @@
       "sha256": "111cbe85970f7a99c5dca9314d0dac08a31386adc4051cc8a49ec77b8427b3d1"
     },
     {
+      "path": "src/renderer/hooks/useEscapeLeaves.ts",
+      "category": "source",
+      "bytes": 2462,
+      "sha256": "6f7714df95ed6aceaac71c7f98b2b525e6899b161e4336927adca6b9c4e873ed"
+    },
+    {
       "path": "src/renderer/hooks/useGamepadNavigation.test.tsx",
       "category": "test",
       "bytes": 5174,
@@ -10893,8 +10899,8 @@
     {
       "path": "src/renderer/ui/MetaShell.tsx",
       "category": "source",
-      "bytes": 2367,
-      "sha256": "55cafde6dff6a41ecf595ec43ba5c17484469d48a3c85046b0731f30fac9810b"
+      "bytes": 2565,
+      "sha256": "456e03e03c0a1f9cfc990003529c018f087e46ed7bc3057aedae96931830e61b"
     },
     {
       "path": "src/renderer/ui/OverlayActionDock.module.css",
@@ -18150,11 +18156,12 @@
       "path": "src/renderer/components/InventoryScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 161,
+      "lineCount": 164,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/inventoryScreenModel.ts",
         "file:src/renderer/components/metaStackedShellLayout.ts",
+        "file:src/renderer/hooks/useEscapeLeaves.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
         "file:src/shared/game-catalog.ts",
@@ -18443,10 +18450,11 @@
       "path": "src/renderer/components/OverlayModal.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 291,
+      "lineCount": 275,
       "imports": [
         "file:src/renderer/a11y/overlayModalBodyState.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
+        "file:src/renderer/hooks/useEscapeLeaves.ts",
         "file:src/renderer/hooks/useModalFocusTrap.ts",
         "file:src/renderer/ui/index.ts",
         "file:src/shared/overlay-decision-policy.ts"
@@ -18707,7 +18715,7 @@
       "path": "src/renderer/components/SettingsScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 752,
+      "lineCount": 755,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -18717,6 +18725,7 @@
         "file:src/renderer/components/settingsNavigationModel.ts",
         "file:src/renderer/copy/diagnosticsSettings.ts",
         "file:src/renderer/copy/settingsHints.ts",
+        "file:src/renderer/hooks/useEscapeLeaves.ts",
         "file:src/renderer/hooks/useModalFocusTrap.ts",
         "file:src/renderer/hooks/useViewportSize.ts",
         "file:src/renderer/store/backgroundPersistence.ts",
@@ -22556,6 +22565,21 @@
       ]
     },
     {
+      "id": "file:src/renderer/hooks/useEscapeLeaves.ts",
+      "path": "src/renderer/hooks/useEscapeLeaves.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 68,
+      "imports": [
+        "file:src/renderer/hooks/useLatestRef.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/hooks/useEscapeLeaves.ts#targetAllowsEscapeToLeave",
+        "symbol:src/renderer/hooks/useEscapeLeaves.ts#useEscapeLeaves"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/hooks/useGamepadNavigation.test.tsx",
       "path": "src/renderer/hooks/useGamepadNavigation.test.tsx",
       "layer": "renderer",
@@ -24537,8 +24561,9 @@
       "path": "src/renderer/ui/MetaShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 74,
+      "lineCount": 79,
       "imports": [
+        "file:src/renderer/hooks/useEscapeLeaves.ts",
         "file:src/renderer/ui/Eyebrow.tsx",
         "file:src/renderer/ui/ScreenTitle.tsx",
         "file:src/renderer/ui/UiButton.tsx"
@@ -35042,8 +35067,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/InventoryScreen.tsx",
-      "line": 160,
-      "endLine": 160
+      "line": 163,
+      "endLine": 163
     },
     {
       "id": "symbol:src/renderer/components/inventoryScreenModel.ts#createInventoryQuantityMap",
@@ -35210,16 +35235,16 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/OverlayModal.tsx",
-      "line": 290,
-      "endLine": 290
+      "line": 274,
+      "endLine": 274
     },
     {
       "id": "symbol:src/renderer/components/OverlayModal.tsx#ModalAction",
       "name": "ModalAction",
       "kind": "interface",
       "file": "src/renderer/components/OverlayModal.tsx",
-      "line": 10,
-      "endLine": 15
+      "line": 11,
+      "endLine": 16
     },
     {
       "id": "symbol:src/renderer/components/PairProximityHintPlane.tsx#PairProximityHintPlane",
@@ -35418,8 +35443,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/SettingsScreen.tsx",
-      "line": 751,
-      "endLine": 751
+      "line": 754,
+      "endLine": 754
     },
     {
       "id": "symbol:src/renderer/components/shuffleFlipAnimation.ts#computeBoardEntranceMotionBudgetMs",
@@ -39838,6 +39863,22 @@
       "endLine": 89
     },
     {
+      "id": "symbol:src/renderer/hooks/useEscapeLeaves.ts#targetAllowsEscapeToLeave",
+      "name": "targetAllowsEscapeToLeave",
+      "kind": "value",
+      "file": "src/renderer/hooks/useEscapeLeaves.ts",
+      "line": 11,
+      "endLine": 26
+    },
+    {
+      "id": "symbol:src/renderer/hooks/useEscapeLeaves.ts#useEscapeLeaves",
+      "name": "useEscapeLeaves",
+      "kind": "value",
+      "file": "src/renderer/hooks/useEscapeLeaves.ts",
+      "line": 42,
+      "endLine": 67
+    },
+    {
       "id": "symbol:src/renderer/hooks/useGamepadNavigation.ts#useGamepadConnected",
       "name": "useGamepadConnected",
       "kind": "value",
@@ -41962,16 +42003,16 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/ui/MetaShell.tsx",
-      "line": 73,
-      "endLine": 73
+      "line": 78,
+      "endLine": 78
     },
     {
       "id": "symbol:src/renderer/ui/MetaShell.tsx#MetaShellProps",
       "name": "MetaShellProps",
       "kind": "interface",
       "file": "src/renderer/ui/MetaShell.tsx",
-      "line": 13,
-      "endLine": 31
+      "line": 14,
+      "endLine": 32
     },
     {
       "id": "symbol:src/renderer/ui/OverlayActionDock.tsx#default",
@@ -63038,6 +63079,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/hooks/useEscapeLeaves.ts->symbol:src/renderer/hooks/useEscapeLeaves.ts#targetAllowsEscapeToLeave",
+      "source": "file:src/renderer/hooks/useEscapeLeaves.ts",
+      "target": "symbol:src/renderer/hooks/useEscapeLeaves.ts#targetAllowsEscapeToLeave",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/hooks/useEscapeLeaves.ts->symbol:src/renderer/hooks/useEscapeLeaves.ts#useEscapeLeaves",
+      "source": "file:src/renderer/hooks/useEscapeLeaves.ts",
+      "target": "symbol:src/renderer/hooks/useEscapeLeaves.ts#useEscapeLeaves",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/hooks/useGamepadNavigation.ts->symbol:src/renderer/hooks/useGamepadNavigation.ts#useGamepadConnected",
       "source": "file:src/renderer/hooks/useGamepadNavigation.ts",
       "target": "symbol:src/renderer/hooks/useGamepadNavigation.ts#useGamepadConnected",
@@ -77068,6 +77121,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/InventoryScreen.tsx->src/renderer/hooks/useEscapeLeaves.ts",
+      "source": "file:src/renderer/components/InventoryScreen.tsx",
+      "target": "file:src/renderer/hooks/useEscapeLeaves.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/InventoryScreen.tsx->src/renderer/store/useAppStore.ts",
       "source": "file:src/renderer/components/InventoryScreen.tsx",
       "target": "file:src/renderer/store/useAppStore.ts",
@@ -77359,6 +77418,12 @@
       "id": "imports:src/renderer/components/OverlayModal.tsx->src/renderer/a11y/toolbarRoving.ts",
       "source": "file:src/renderer/components/OverlayModal.tsx",
       "target": "file:src/renderer/a11y/toolbarRoving.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/OverlayModal.tsx->src/renderer/hooks/useEscapeLeaves.ts",
+      "source": "file:src/renderer/components/OverlayModal.tsx",
+      "target": "file:src/renderer/hooks/useEscapeLeaves.ts",
       "kind": "imports"
     },
     {
@@ -77725,6 +77790,12 @@
       "id": "imports:src/renderer/components/SettingsScreen.tsx->src/renderer/copy/settingsHints.ts",
       "source": "file:src/renderer/components/SettingsScreen.tsx",
       "target": "file:src/renderer/copy/settingsHints.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SettingsScreen.tsx->src/renderer/hooks/useEscapeLeaves.ts",
+      "source": "file:src/renderer/components/SettingsScreen.tsx",
+      "target": "file:src/renderer/hooks/useEscapeLeaves.ts",
       "kind": "imports"
     },
     {
@@ -80986,6 +81057,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/hooks/useEscapeLeaves.ts->src/renderer/hooks/useLatestRef.ts",
+      "source": "file:src/renderer/hooks/useEscapeLeaves.ts",
+      "target": "file:src/renderer/hooks/useLatestRef.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/hooks/useGamepadNavigation.test.tsx->src/renderer/hooks/useGamepadNavigation.ts",
       "source": "file:src/renderer/hooks/useGamepadNavigation.test.tsx",
       "target": "file:src/renderer/hooks/useGamepadNavigation.ts",
@@ -82939,6 +83016,12 @@
       "id": "imports:src/renderer/ui/index.ts->src/renderer/ui/UiButton.tsx",
       "source": "file:src/renderer/ui/index.ts",
       "target": "file:src/renderer/ui/UiButton.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/ui/MetaShell.tsx->src/renderer/hooks/useEscapeLeaves.ts",
+      "source": "file:src/renderer/ui/MetaShell.tsx",
+      "target": "file:src/renderer/hooks/useEscapeLeaves.ts",
       "kind": "imports"
     },
     {
