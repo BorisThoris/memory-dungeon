@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { SETTINGS_NUMERIC_RANGES } from '../src/shared/save-data';
 import { SCREEN_SCALE_CEILINGS, UI_SCALE_MAX } from '../src/renderer/uiScaleLimits';
 import { describeFit } from './uiFit';
 import { dismissStartupIntro } from './startupIntroHelpers';
@@ -262,6 +263,57 @@ test.describe('the UI scale ceiling', () => {
             breaks.length,
             `floor clear: nothing breaks at ${above}, so the recorded ceiling of ${ceiling} is understated - raise it in SCREEN_SCALE_CEILINGS`
         ).toBeGreaterThan(0);
+    });
+
+    /**
+     * Steam Deck Verified, the one criterion of the five that is a property of this build's type:
+     * *"the smallest on-screen font character should never fall below 9 pixels in height at
+     * 1280x800"* (`docs/RESEARCH_NOTES_2.md` §1, quoted from Valve's compatibility docs).
+     *
+     * The repo's own floor is 12 declared px, which sounds like a comfortable 3px of margin. It is
+     * not: the UI scale is a `zoom`, and the slider's BOTTOM is 0.8, so a 12px declaration reaches
+     * the eye at 9.6px. Measured on a 1280x800 panel at 0.8, the smallest painted text is 9.6px on
+     * the main menu and 9.98px in a run - it clears Valve's floor by six tenths of a pixel, and
+     * until Gen 249 nothing checked the painted size at all, because the rule that guards
+     * readability read the LAYOUT size and could not see the scale.
+     *
+     * So this pins the number that ships rather than the number that is declared. It fails if a
+     * smaller declaration lands, if the slider's floor drops, or if a screen puts fine print on a
+     * Deck panel.
+     */
+    test('the smallest type a Deck can paint clears the 9px floor at the bottom of the slider', async ({ page }) => {
+        test.setTimeout(180_000);
+        const VALVE_FLOOR_PX = 9;
+        const smallest = async (): Promise<{ paintedPx: number; text: string; zoom: number }> =>
+            page.evaluate(() => {
+                const shell = document.querySelector<HTMLElement>('[class*="content"]');
+                const zoom = shell && shell.clientWidth > 0 ? shell.getBoundingClientRect().width / shell.clientWidth : 1;
+                let worst = { paintedPx: 999, text: '', zoom };
+                for (const el of Array.from(document.querySelectorAll<HTMLElement>('*'))) {
+                    if (el.children.length > 0) continue;
+                    const text = (el.textContent ?? '').trim();
+                    if (!text) continue;
+                    const rect = el.getBoundingClientRect();
+                    const style = getComputedStyle(el);
+                    if (rect.width <= 0 || rect.height <= 0 || style.visibility === 'hidden' || style.opacity === '0') continue;
+                    const paintedPx = Number.parseFloat(style.fontSize) * zoom;
+                    if (paintedPx < worst.paintedPx) {
+                        worst = { paintedPx: Number(paintedPx.toFixed(2)), text: text.slice(0, 40), zoom };
+                    }
+                }
+                return worst;
+            });
+
+        await page.setViewportSize({ width: 1280, height: 800 });
+        await gotoWithSave(page, buildVisualSaveJson(true));
+        await mainMenuPlayButton(page).waitFor({ state: 'visible', timeout: 30_000 });
+        await forceScale(page, SETTINGS_NUMERIC_RANGES.uiScale.min);
+        const worst = await smallest();
+        console.log(`DECK TYPE menu @1280x800 x${worst.zoom.toFixed(2)}: ${worst.paintedPx}px on "${worst.text}"`);
+        expect(
+            worst.paintedPx,
+            `"${worst.text}" paints at ${worst.paintedPx}px on a Deck panel at the slider's floor; Valve's minimum is ${VALVE_FLOOR_PX}px`
+        ).toBeGreaterThanOrEqual(VALVE_FLOOR_PX);
     });
 
     test('a phone lays out at 1 whatever the stored scale says', async ({ page }) => {

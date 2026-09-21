@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 457064,
-      "sha256": "8ca986d04c0e5083d38e6abd6744b1f5e491389b6ffc40b6b177e2e73bd36518"
+      "bytes": 458727,
+      "sha256": "4acaa2c6ccfe6f74f77139f93ce7cc5d84c40d7c3d639666da9dab11093ae985"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "d520c45acddd2f7b340e09b51644a65fe1172550ef02479258187146d18fbdce"
+      "sha256": "0afd144e951a681fe38ab064fafd02012b680569410fbcf01a00425ef8694476"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -4041,8 +4041,8 @@
     {
       "path": "e2e/ui-scale-ceiling.spec.ts",
       "category": "test",
-      "bytes": 14675,
-      "sha256": "5d33852ef13783585059bb86701be3f8199b520b178edf8a5620e3d1381a986f"
+      "bytes": 17934,
+      "sha256": "5d7d7929284bd0a01c15613e2eb8bd60a5cf6b514cde40b4c65bddef6bee7b5f"
     },
     {
       "path": "e2e/ui-screenshots.spec.ts",
@@ -4053,8 +4053,8 @@
     {
       "path": "e2e/uiFit.ts",
       "category": "test",
-      "bytes": 9581,
-      "sha256": "b1d33f16be7990955933276556e95485f7729b2f7ce5cb6b5bacfbe397e1a05b"
+      "bytes": 10902,
+      "sha256": "aa7553e293f5659a100daa438939cd13413f8c38da4c187b059440f4d11bf80c"
     },
     {
       "path": "e2e/uiReachability.ts",
@@ -4312,7 +4312,7 @@
       "path": "project-media/capture.json",
       "category": "configuration",
       "bytes": 1305,
-      "sha256": "25c8f2e0c0757986e53bd859ad221736079c70092b5aef542f1986d2f52b6ff2"
+      "sha256": "9115daf6b8736121831786d835d4eb94ae4df371ccf8686921da6ade8a12b0b0"
     },
     {
       "path": "project-media/card.jpg",
@@ -4353,8 +4353,8 @@
     {
       "path": "project.meta.json",
       "category": "configuration",
-      "bytes": 11766,
-      "sha256": "2959f0ce37e9f0041b394748747cb88c691d5c142f67d4204ad552af52a2f02a"
+      "bytes": 11776,
+      "sha256": "746dd312f47b52d8ced24ff36933004b4163e8227df06e5ded3a22e73d14147e"
     },
     {
       "path": "public/apple-touch-icon.png",
