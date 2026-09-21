@@ -3,15 +3,21 @@ import { describe, expect, it } from 'vitest';
 import { CURVE_FLOORS } from '../../scripts/sim-difficulty-curve';
 import {
     PAR_MISS_ALLOWANCE,
+    PAR_NARROW_PALETTE_RATE_FACTOR,
     PAR_OPENING_ALLOWANCE,
     PAR_OPENING_FLOORS,
     parOpeningAllowanceForPairs,
     parOpeningPairs,
+    parPaletteRateFactor,
+    parTurnsForBoard,
     parTurnsForFloor,
     TURN_CEILING_PAR_MULTIPLIER,
+    turnCeilingForBoard,
     turnCeilingForFloor
 } from './floor-par';
 import { PAIRS_MAX, PAIRS_MIN, pairsForFloor } from './pair-curve';
+import { SCATTERED_SUIT_CEILING, TILE_SUITS } from './tile-suit-rules';
+import type { BoardState, Tile, TileSuit } from './contracts';
 
 /**
  * Par had no test of its own until Gen 220, which is odd for the number every floor is measured
@@ -71,5 +77,99 @@ describe('the floor par', () => {
             const pairs = pairsForFloor(floor);
             expect(turnCeilingForFloor(pairs)).toBe(parTurnsForFloor(pairs) * TURN_CEILING_PAR_MULTIPLIER);
         }
+    });
+});
+
+/**
+ * Gen 259. A board dealt two suits costs a clean player 0.74 of what the same board dealt four costs
+ * per pair (measured, one board re-dealt over twenty-four seeds and eight sizes), and until this
+ * generation par did not know - so a third of the game's floors came in at half their allowance.
+ */
+const boardOf = (pairs: number, suits: number): BoardState => {
+    const palette = TILE_SUITS.slice(0, suits);
+    const tiles: Tile[] = [];
+    for (let pair = 0; pair < pairs; pair += 1) {
+        const suit = palette[pair % palette.length] as TileSuit;
+        for (const half of [0, 1]) {
+            tiles.push({
+                id: `t-${pair}-${half}`,
+                pairKey: `p-${pair}`,
+                symbol: `s-${pair}`,
+                state: 'hidden',
+                suit
+            } as Tile);
+        }
+    }
+    return { pairCount: pairs, tiles, columns: 4, level: 1 } as BoardState;
+};
+
+describe('par and the palette', () => {
+    it('charges a narrow palette less, and leaves three suits and four alone', () => {
+        // The measurement this rests on: 0.963 at three suits against four, three of eight sizes
+        // above one - no effect to separate from noise. Two suits is 0.739.
+        expect(parPaletteRateFactor(TILE_SUITS.length)).toBe(1);
+        expect(parPaletteRateFactor(3)).toBe(1);
+        expect(parPaletteRateFactor(SCATTERED_SUIT_CEILING)).toBe(PAR_NARROW_PALETTE_RATE_FACTOR);
+        expect(parPaletteRateFactor(1)).toBe(PAR_NARROW_PALETTE_RATE_FACTOR);
+        expect(PAR_NARROW_PALETTE_RATE_FACTOR).toBeLessThan(1);
+    });
+
+    it('leaves every caller that does not know the palette exactly where it was', () => {
+        /*
+         * The default is the full palette rather than `suitCountForPairs`, which reads a six-pair
+         * board as two suits where the deal gives it three - that default would have cut floor 2's
+         * par from five turns to four in silence. Nothing that passes no palette may move.
+         */
+        for (let pairs = PAIRS_MIN; pairs <= PAIRS_MAX; pairs += 1) {
+            expect(parTurnsForFloor(pairs), `default par at ${pairs} pairs`).toBe(
+                parTurnsForFloor(pairs, TILE_SUITS.length)
+            );
+        }
+    });
+
+    it('charges a two-suit board strictly less than the same board with four, on every board that can carry four', () => {
+        let cut = 0;
+        for (let pairs = PAIRS_MIN; pairs <= PAIRS_MAX; pairs += 1) {
+            const narrow = parTurnsForFloor(pairs, SCATTERED_SUIT_CEILING);
+            const wide = parTurnsForFloor(pairs, TILE_SUITS.length);
+            expect(narrow, `narrow par at ${pairs} pairs`).toBeLessThanOrEqual(wide);
+            if (narrow < wide) cut += 1;
+        }
+        // Not a rule that rounds away to nothing: it bites on most of the curve's board sizes.
+        expect(cut).toBeGreaterThan((PAIRS_MAX - PAIRS_MIN) / 2);
+    });
+
+    it('keeps par missable and monotone at a narrow palette too', () => {
+        for (let floor = 1; floor <= CURVE_FLOORS; floor += 1) {
+            const pairs = pairsForFloor(floor);
+            for (const suits of [1, SCATTERED_SUIT_CEILING, 3, TILE_SUITS.length]) {
+                expect(
+                    parTurnsForFloor(pairs, suits),
+                    `floor ${floor} par at ${suits} suits against ${pairs} pairs`
+                ).toBeLessThanOrEqual(pairs);
+                expect(parTurnsForFloor(pairs, suits)).toBeGreaterThanOrEqual(1);
+            }
+        }
+        for (const suits of [SCATTERED_SUIT_CEILING, TILE_SUITS.length]) {
+            for (let pairs = PAIRS_MIN + 1; pairs <= PAIRS_MAX; pairs += 1) {
+                expect(
+                    parTurnsForFloor(pairs, suits),
+                    `par at ${pairs} pairs, ${suits} suits`
+                ).toBeGreaterThanOrEqual(parTurnsForFloor(pairs - 1, suits));
+            }
+        }
+    });
+
+    it('reads the palette off the board, so a scattered floor gets its own par', () => {
+        const narrow = boardOf(20, SCATTERED_SUIT_CEILING);
+        const wide = boardOf(20, TILE_SUITS.length);
+        expect(parTurnsForBoard(narrow)).toBe(parTurnsForFloor(20, SCATTERED_SUIT_CEILING));
+        expect(parTurnsForBoard(wide)).toBe(parTurnsForFloor(20, TILE_SUITS.length));
+        expect(parTurnsForBoard(narrow)).toBeLessThan(parTurnsForBoard(wide));
+        // The ceiling is three times par, so it follows the palette rather than being read separately.
+        expect(turnCeilingForBoard(narrow)).toBe(parTurnsForBoard(narrow) * TURN_CEILING_PAR_MULTIPLIER);
+        expect(turnCeilingForBoard(wide)).toBeGreaterThan(turnCeilingForBoard(narrow));
+        // No board is the full palette's board, so nothing reads a missing one as a free floor.
+        expect(parTurnsForBoard(null)).toBe(parTurnsForFloor(0));
     });
 });

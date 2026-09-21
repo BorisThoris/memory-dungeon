@@ -2,10 +2,22 @@ import { act, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { createNewRun, finishMemorizePhase } from '../../shared/game-core';
-import type { RunState } from '../../shared/contracts';
+import type { BoardState, RunState } from '../../shared/contracts';
+import { TILE_SUITS } from '../../shared/tile-suit-rules';
 import RunShell, { type RunShellTool } from './RunShell';
 
 const playingRun = (): RunState => finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
+
+/**
+ * Floor 1's board carries two suits, and since Gen 259 par reads the palette off the board - so a
+ * fixture that overrides `pairCount` to stand in for a bigger board has to deal the palette that
+ * bigger board would carry, or it silently asks for the narrow palette's par.
+ */
+const overFullPalette = (board: BoardState, pairCount: number): BoardState => ({
+    ...board,
+    pairCount,
+    tiles: board.tiles.map((tile, index) => ({ ...tile, suit: TILE_SUITS[index % TILE_SUITS.length]! }))
+});
 
 const tool = (overrides: Partial<RunShellTool> & { id: string }): RunShellTool => ({
     label: overrides.id,
@@ -62,10 +74,11 @@ describe('RunShell', () => {
     });
 
     it('reads the ceiling on the par, and marks it once the floor is two turns from it', () => {
-        // Twelve pairs: par 6, ceiling 18 (Gen 204 moved par to 0.45 with the shuffled deal). The
-        // pressure of thesis §43 lives on the par stat.
+        // Twelve pairs over the full palette: par 7, ceiling 21 (Gen 204 moved par to 0.45 with the
+        // shuffled deal; Gen 220 gives a board this size a turn back). The pressure of thesis §43
+        // lives on the par stat.
         const base = playingRun();
-        const calm: RunState = { ...base, board: { ...base.board!, pairCount: 12 }, turnsThisFloor: 4 };
+        const calm: RunState = { ...base, board: overFullPalette(base.board!, 12), turnsThisFloor: 4 };
         const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={calm} tools={[]} />);
 
         const par = screen.getByTestId('hud-par');

@@ -298,7 +298,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         verdict: 'changed',
         generation: 216,
         gone: ['no shuffle, swap, or destroy'],
-        note: 'The scholar-style objective told the player "no shuffle, swap, or destroy" while its rule watched one field that covers swap too, so only the dead third was cut; Gen 213 found the same phrasing describing the Scholar preset and cut it there. Gen 216 finally counted the thing: 0.829 of a run’s floors clear their featured objective, and every floor carries one. Its census exemption had said it needed the run-level census, which shipped at Gen 207 - the line went on excusing the mechanic for eight generations after its own stated blocker was gone.'
+        note: 'The scholar-style objective told the player "no shuffle, swap, or destroy" while its rule watched one field that covers swap too, so only the dead third was cut; Gen 213 found the same phrasing describing the Scholar preset and cut it there. Gen 216 finally counted the thing: 0.821 of a run’s floors clear their featured objective, and every floor carries one. Gen 259 moved it from 0.829: the within-par objective now reads the palette its floor was dealt, so on the third of floors held to two suits it is a target rather than a formality. Its census exemption had said it needed the run-level census, which shipped at Gen 207 - the line went on excusing the mechanic for eight generations after its own stated blocker was gone.'
     },
     {
         id: 'economy.score_and_rewards',

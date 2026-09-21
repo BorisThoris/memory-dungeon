@@ -44,9 +44,10 @@ import { pickFloorScheduleEntry } from '../src/shared/floor-mutator-schedule';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from '../src/shared/game';
 import { advanceToNextLevel } from '../src/shared/next-floor-transition-rules';
 import { pairsForFloor } from '../src/shared/pair-curve';
-import { parTurnsForFloor } from '../src/shared/floor-par';
+import { parTurnsForBoard } from '../src/shared/floor-par';
 import { getUnresolvedPlayablePairGroups } from '../src/shared/playthrough-solver-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from '../src/shared/rng';
+import { SCATTERED_SUIT_CEILING, boardPaletteWidth } from '../src/shared/tile-suit-rules';
 import { isSingletonUtilityPairKey } from '../src/shared/tile-identity';
 
 export const CURVE_SEEDS = [11, 202, 3003, 40404, 555, 6006, 77, 8888, 91_919, 1_234] as const;
@@ -72,7 +73,7 @@ export const simulateDifficultyCurve = ({
     floors = CURVE_FLOORS,
     missRate = 0.15
 }: { seeds?: readonly number[]; floors?: number; missRate?: number } = {}): CurveFloorRow[] => {
-    const gathered = new Map<number, { turns: number[]; suits: number[]; popped: number[] }>();
+    const gathered = new Map<number, { turns: number[]; suits: number[]; popped: number[]; pars: number[] }>();
     for (const seed of seeds) {
         const entry = pickFloorScheduleEntry(seed, GAME_RULES_VERSION, 1, 'endless');
         const mutators = filterMutatorsByContentLock(entry.mutators);
@@ -95,7 +96,11 @@ export const simulateDifficultyCurve = ({
         };
         for (let floor = 1; floor <= floors; floor += 1) {
             const rng = createMulberry32(hashStringToSeed(`opening:${seed}:${floor}:${missRate}`));
-            const suits = new Set(run.board!.tiles.map((tile) => tile.suit)).size;
+            const suits = boardPaletteWidth(run.board);
+            // Par is read off the board rather than off the floor number, because the palette a
+            // floor deals is part of it (`floor-par.ts`) and two seeds can deal the same floor
+            // different archetypes.
+            const par = parTurnsForBoard(run.board);
             let turns = 0;
             while (run.status === 'playing' && turns < 80) {
                 const groups = getUnresolvedPlayablePairGroups(run.board!).filter((group) =>
@@ -120,9 +125,10 @@ export const simulateDifficultyCurve = ({
                 run = resolveBoardTurn(flipTile(flipTile(run, first.id), second.id));
                 turns += 1;
             }
-            const row = gathered.get(floor) ?? { turns: [], suits: [], popped: [] };
+            const row = gathered.get(floor) ?? { turns: [], suits: [], popped: [], pars: [] };
             row.turns.push(turns);
             row.suits.push(suits);
+            row.pars.push(par);
             row.popped.push(run.chunkPairsBrokenThisFloor ?? 0);
             gathered.set(floor, row);
             if (run.status !== 'playing') {
@@ -140,7 +146,7 @@ export const simulateDifficultyCurve = ({
             pairs: pairsForFloor(floor),
             suits: mean(row.suits),
             turns: mean(row.turns),
-            par: parTurnsForFloor(pairsForFloor(floor)),
+            par: mean(row.pars),
             poppedPairs: mean(row.popped)
         }));
 };
@@ -178,7 +184,23 @@ export const CURVE_BANDS = {
      * tilt: worst 0.771 on floor 6, mean 0.658. Before it, floors 2 and 6 sat at 0.900 - which is
      * what this band exists to catch, and what it does catch with the tilt taken out.
      */
-    maxOpeningParRatio: 0.8
+    maxOpeningParRatio: 0.8,
+    /**
+     * How much more of its allowance a wide-palette floor may cost than a narrow-palette one.
+     *
+     * Every band above reads the curve along the floor number. None of them read it across the
+     * palette, and that is where it was bent: `SCATTERED_SUIT_CEILING` holds a third of the game's
+     * floors to two suits whatever their size, a two-suit board's pop reaches a third further
+     * (measured, one board re-dealt: 0.74 of the four-suit cost per pair), and par did not know. So
+     * the sixteen narrow floors spent a mean 0.496 of their allowance against the wide floors' 0.707
+     * - the efficiency bonus and the within-par objective half a target or most of one depending on
+     * which archetype the schedule drew, which is relief landing where the seed puts it rather than
+     * where `breather` puts it.
+     *
+     * Measured after `PAR_NARROW_PALETTE_RATE_FACTOR`: 0.638 against 0.707, a gap of 0.069. The band
+     * sits at 0.12 - room for the deal to move, well under the 0.211 it was.
+     */
+    maxPaletteParGap: 0.12
 } as const;
 
 export const judgeDifficultyCurve = (rows: readonly CurveFloorRow[]): string[] => {
@@ -205,6 +227,21 @@ export const judgeDifficultyCurve = (rows: readonly CurveFloorRow[]): string[] =
             issues.push(
                 `floor ${row.floor} spends ${ratio.toFixed(3)} of its par, over the opening's ` +
                     `${CURVE_BANDS.maxOpeningParRatio}`
+            );
+        }
+    }
+    const narrow = rows.filter((row) => row.suits <= SCATTERED_SUIT_CEILING);
+    const wide = rows.filter((row) => row.suits > SCATTERED_SUIT_CEILING);
+    if (narrow.length > 0 && wide.length > 0) {
+        const meanRatio = (group: readonly CurveFloorRow[]): number =>
+            group.reduce((sum, row) => sum + curveParRatio(row), 0) / group.length;
+        const gap = meanRatio(wide) - meanRatio(narrow);
+        if (gap > CURVE_BANDS.maxPaletteParGap) {
+            issues.push(
+                `the narrow-palette floors are the loose end: ${narrow.length} floors of ` +
+                    `${SCATTERED_SUIT_CEILING} suits or fewer spend a mean ${meanRatio(narrow).toFixed(3)} of ` +
+                    `their par against ${wide.length} wider floors' ${meanRatio(wide).toFixed(3)}, a gap of ` +
+                    `${gap.toFixed(3)} over ${CURVE_BANDS.maxPaletteParGap}`
             );
         }
     }

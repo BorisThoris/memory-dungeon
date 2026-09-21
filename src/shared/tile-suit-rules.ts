@@ -559,6 +559,22 @@ export const dealBoardSuits = (
 };
 
 /**
+ * How many suits a board is actually carrying, counted off its tiles rather than inferred.
+ *
+ * `suitCountForDeal` says how many a floor of this shape *may* carry; this says how many it got.
+ * The two differ on every scattered and spotlight floor, and the difference is what par has to be
+ * read against (`floor-par.ts`) - a board dealt two suits is a board whose pop reaches half of it.
+ */
+export const boardPaletteWidth = (board: Pick<BoardState, 'tiles'> | null | undefined): number => {
+    if (!board) return TILE_SUITS.length;
+    const suits = new Set<TileSuit>();
+    for (const tile of board.tiles) {
+        if (tile.suit) suits.add(tile.suit);
+    }
+    return suits.size === 0 ? TILE_SUITS.length : suits.size;
+};
+
+/**
  * How clumped the board is: mean fraction of each tile's orthogonal neighbours that share its suit.
  * A uniform shuffle over four equal suits sits near 0.25; a fully clumped deal approaches 1.
  */

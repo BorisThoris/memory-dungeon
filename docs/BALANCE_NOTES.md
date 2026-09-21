@@ -3027,3 +3027,117 @@ resolves to a non-empty asset URL — content completeness).
 **Baseline 106 → 97** across nine entries: three wired live, three deleted (two pass-throughs and a
 superseded pair), three named as records. Still **not one plain debt entry** in fourteen resolved
 across Gens 245 and 258. Whatever that baseline is, it is not a list of things nobody needs.
+
+## Gen 259 — par knew how big a board was and not how wide its palette was
+
+`gate:difficulty-curve` prints a `suits` column beside every floor's turns and its par, and it had
+been printing a sawtooth for as long as the column existed. Floors 7, 9 and 12 drop to two suits
+between three- and four-suit neighbours, and those were the floors coming in furthest under par.
+Grouped by palette across all fifty-two floors:
+
+```
+suits  floors  mean of-par
+    2      16       0.496
+    3       6       0.682
+    4      30       0.712
+```
+
+A clean player spent **half** a two-suit floor's allowance and three quarters of a four-suit floor's.
+That is sixteen of fifty-two floors — the floor-end efficiency bonus and the within-par objective a
+formality on nearly a third of the game and a real target on the rest, decided by which archetype the
+schedule happened to draw. Relief landing where the seed puts it rather than where `breather` puts it.
+
+**The two suits are not the bug.** `SCATTERED_SUIT_CEILING` holds every scattered and spotlight floor
+to two however big its board, and that is measured: Gen 191 found a third suit halves a scattered
+floor's pop rate, 0.7 of matches to 0.36. What was wrong is that par did not know. `floor-par.ts`'s
+own doctrine, written at Gen 211, is *"par follows the pop, because the pop is what makes par
+achievable and its help is not flat"* — and Gen 211 made it follow the pop for board **size** only.
+Palette width was the same rule, unwritten.
+
+### The first model was wrong, and the controlled deal is what said so
+
+Grouping live floors by palette confounds the palette with the archetype that chose it. Read that
+way, a two-suit board's turns per pair looked **flat** as the board grew (0.318 / 0.328 / 0.334 over
+the 12-15, 16-19 and 20-24 pair buckets) while a four-suit board's climbed (0.424 / 0.488 / 0.533) —
+which reads as `PAR_RATE_RISE_PER_PAIR` starting later on a narrow palette, and that is what this
+generation first shipped into the file.
+
+The controlled measurement refuted it. One board per seed, built from a single archetype with no
+mutators, its suits **re-dealt** at two, three and four — twenty-four seeds, eight board sizes,
+nothing moving but the palette. Turns per pair as a fraction of the same board's four-suit cost:
+
+```
+pairs      12     13     14     16     17     19     22     24    mean
+two        0.736  0.766  0.711  0.820  0.728  0.688  0.733  0.727  0.739
+three      0.943  0.873  0.855  1.093  0.937  0.952  1.106  0.948  0.963
+```
+
+The discount is a **constant fraction of the rate at every board size**: a two-suit board's cost per
+pair rises with the board exactly as steeply as a four-suit board's (0.358 → 0.412 across 12 → 24
+pairs against 0.486 → 0.566). So it is a factor on the whole rate, not a later start to the rise. The
+"flat" reading was the archetype, not the palette.
+
+And **three suits and four are the same board** — 0.963, with three of eight sizes above one. Which
+is what `tile-suit-rules.ts` already said in words: a clumped floor gives each suit one region, so a
+third and a fourth suit cost the break almost nothing, and it is the step down to two, where one suit
+holds half the board, that changes the pop. So `PAR_NARROW_PALETTE_RATE_FACTOR = 0.74` applies at
+`SCATTERED_SUIT_CEILING` or below and nowhere else, and **every clumped floor's par is unchanged to
+the turn**.
+
+### Two things this shook out that were nobody's plan
+
+**Par could fall as the board grew.** `PAR_OPENING_ALLOWANCE` is a step *down* at the largest board
+the opening deals, sitting on top of a rate rather than inside it. At the full palette the rate's own
+growth across that step happens to cover it — which is why `floor-par.test.ts` asserts that step
+rather than assuming it. Scaled by 0.74 it no longer does: an eleven-pair two-suit board came out at
+six turns and a twelve-pair one at **five**, so a player crossing floor 6 to floor 7 on scattered
+floors would have been handed a smaller allowance for a bigger board. Par now takes the larger of its
+own reading and the reading at the last board the allowance covers. The new test found this, not a
+player.
+
+**`suitCountForPairs` is the wrong default.** It reads a six-pair board as two suits where the deal
+gives it three, so defaulting the new parameter to it cut floor 2's par from five turns to four in
+silence. The default is the full palette — the board every rate in the file was calibrated against —
+and a test now walks every pair count asserting the no-palette call is identical to the four-suit one.
+
+### After
+
+```
+suits  n     mean   median   p90    max   over-par share
+    2  640    0.630    0.571  0.923  1.667           0.055
+    3  240    0.658    0.600  1.000  1.571           0.037
+    4 1200    0.731    0.727  1.000  1.714           0.055
+```
+
+0.494 → **0.630** on the narrow floors, against 0.658 at three suits: the palette-attributable gap is
+closed, and what is left is board size (three-suit boards are small boards, where the flat allowances
+are a bigger share of par). Over-par share was 0.019 / 0.037 / 0.055 and is now 0.055 / 0.037 / 0.055
+— the same demand at every palette, which is the property, rather than a number that looked right.
+In the curve's printed table floor 7 goes 0.471 → 0.550, floor 9 0.586 → 0.683, floor 12 0.613 →
+0.817; the spread across all fifty-two floors narrows from 0.372-0.857 to 0.500-0.857.
+
+### The band, with its control run
+
+Every band in `CURVE_BANDS` reads the curve along the floor number. None read it across the palette,
+which is exactly where it was bent — so `maxPaletteParGap: 0.12`, the largest allowed gap between the
+mean of-par of the narrow floors and the wide ones. Measured after: 0.638 against 0.707, a gap of
+**0.069**. Negative control, run: `PAR_NARROW_PALETTE_RATE_FACTOR` back to 1 and `yarn sim:curve
+--check` fails with *"16 floors of 2 suits or fewer spend a mean 0.496 of their par against 36 wider
+floors' 0.707, a gap of 0.211 over 0.12"* — the pre-change numbers, to three places.
+
+The curve sim also stopped reading par off the floor number. It computes `parTurnsForBoard(run.board)`
+per seed and means it, because two seeds can deal the same floor different archetypes and a par read
+from `pairsForFloor` cannot see the palette it is judging.
+
+### What moved downstream, and what the repo's own records made me say
+
+Five call sites now read par off the board instead of off a pair count: the within-par objective and
+its projection, the floor-clear bonus, the cascade sim's sample, and the last-turn achievement (via
+`turnCeilingForRun`). The turn ceiling is three times par, so it follows the palette without being
+read separately.
+
+`system-refinement-ledger.test.ts` then went red: the ledger's note for `objective.featured_streak`
+quoted **0.829** of a run's floors clearing their featured objective and the census now reads
+**0.821**. That is the change working — the within-par objective is a target on scattered floors now
+— but the note said otherwise, and the test that compares a quoted figure to what the census would
+print today is the reason it could not be left saying it.

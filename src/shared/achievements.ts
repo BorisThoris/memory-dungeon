@@ -4,7 +4,7 @@ import { runRecord } from './run-record-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { ENDLESS_CYCLE_FLOOR_COUNT } from './floor-mutator-schedule';
 import { ACHIEVEMENT_IDS } from './save-data';
-import { turnCeilingForFloor } from './floor-par';
+import { turnCeilingForRun } from './floor-par';
 import { normalizeSessionStats, TILE_TRAIT_COUNT_KINDS } from './session-stats-rules';
 
 /** Run-score milestones, in points. Named for the Codex copy and the tests; the ids they unlock are older than the numbers. */
@@ -107,7 +107,7 @@ export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): A
      */
     if (
         run.lastLevelResult?.turnsTaken != null &&
-        run.lastLevelResult.turnsTaken === turnCeilingForFloor(run.board?.pairCount ?? 0) &&
+        run.lastLevelResult.turnsTaken === turnCeilingForRun(run) &&
         run.lastLevelResult.turnsTaken > 0 &&
         !saveData.achievements.ACH_LAST_LIFE
     ) {

@@ -3,7 +3,7 @@ import { getFeaturedObjectiveLabel } from './floor-mutator-schedule';
 import { runArrayCount } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { getFeaturedObjectiveRewardCopy } from './secondary-objective-rules';
-import { parTurnsForFloor, turnsTakenThisFloor } from './floor-par';
+import { parTurnsForBoard, turnsTakenThisFloor } from './floor-par';
 
 export type SecondaryObjectiveState = 'active' | 'completed' | 'failed';
 export type LevelResultTagId =
@@ -150,7 +150,7 @@ export const getSecondaryObjectiveProgress = (run: RunState): SecondaryObjective
             detail = state === 'failed' ? `Failed: ${failureReason}` : 'Clear the cursed pair last among real pairs.';
             break;
         case 'flip_par': {
-            const par = parTurnsForFloor(board.pairCount);
+            const par = parTurnsForBoard(board);
             const turns = turnsTakenThisFloor(run);
             state = turns > par ? 'failed' : 'active';
             condition = `Clear within par (${turns}/${par} turns).`;
