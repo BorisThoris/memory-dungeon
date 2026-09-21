@@ -19,6 +19,14 @@
  *
  * What this cannot see, by construction: a symbol reached through `import * as`, which consumes
  * every export at once. Those modules are listed in the summary rather than silently skipped.
+ *
+ * The other blind spot is a DYNAMIC module URL - `import('/src/renderer/components/tileTextures.ts')`
+ * - which Playwright specs and build scripts use to reach into the app from outside it. This audit
+ * reads static relative imports, so such a consumer is invisible and its target reads as test-only.
+ * Gen 244 swept every baselined symbol for a mention anywhere in `e2e/` or `scripts/` and found
+ * exactly TWO, both listed above by name and reason; the other 110 really are reached by nothing
+ * but their own test. The sweep is the point: an exemption list is only honest if someone checked
+ * how long it should be, and this one is not a place to put a symbol that is merely inconvenient.
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, resolve, sep } from 'node:path';
@@ -30,7 +38,16 @@ import { readRelativeImports, TEST_ONLY_EXEMPTIONS } from './test-only-modules';
  * about the game has to change when the game does. Named with the reason, because "why is this
  * unreachable" is the whole question - the same contract the module audit's exemptions keep.
  */
-export const TEST_ONLY_EXPORT_EXEMPTIONS: Record<string, string> = {};
+export const TEST_ONLY_EXPORT_EXEMPTIONS: Record<string, string> = {
+    clearTileTextureCachesForDebug:
+        'Reached by scripts/bake-procedural-illustration-set.ts and two illustration e2e specs ' +
+        "through `import('/src/renderer/components/tileTextures.ts')` - a dynamic module URL this " +
+        'audit cannot follow, so it reads as test-only while a build tool depends on it.',
+    getIllustrationPipelineDebugState:
+        'Same: the illustration-regression and overlay-regression specs read the pipeline debug ' +
+        'state through a dynamic module URL. It exists to be read from outside the app, which is ' +
+        'what makes it look unreachable from inside it.'
+};
 
 /**
  * A module the *module* audit already exempts exempts its exports too (Gen 215).

@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 449642,
-      "sha256": "7ad192a4fbe1eb8c3041265af40c0cc0f4566f03a6272ec7d46f2aa5219487f9"
+      "bytes": 450841,
+      "sha256": "8f2fd3722b992af8815048cc80783ab303a5a5953d54c51b6746c6c8725eb3bc"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "2d9bf9354d84469ebb1c725b7270aa09ecd64205dae1dd47b2917514becb6a7a"
+      "sha256": "2a8e44bf50a6ddc2ee9a6a102458911703d949f69c0b65b8d92e4a6ebdabd9e4"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -4312,7 +4312,7 @@
       "path": "project-media/capture.json",
       "category": "configuration",
       "bytes": 1305,
-      "sha256": "2749e041065adb25d411e1cf26ad33e7a87151d98a6992301712904b8eff6372"
+      "sha256": "5979e1ea82bf7c64576248063cdeb239105143a3dff845da925b426a4edda55e"
     },
     {
       "path": "project-media/card.jpg",
@@ -4353,8 +4353,8 @@
     {
       "path": "project.meta.json",
       "category": "configuration",
-      "bytes": 11738,
-      "sha256": "2d652ea2e41518eac5a8ac7c6494cdfcc3f3bd4d580b3ee81892d57ac2f6995c"
+      "bytes": 11776,
+      "sha256": "62d249cb0eb1bf41264ed3a28fae827502f2aba3204d68e95fc5c786aa10d582"
     },
     {
       "path": "public/apple-touch-icon.png",
@@ -5445,14 +5445,14 @@
     {
       "path": "scripts/test-only-exports-baseline.json",
       "category": "script",
-      "bytes": 8471,
-      "sha256": "4beba18733691d87ad7f26998c5a2286b2514ad6ae9d8656ea8ec2a9e32d10de"
+      "bytes": 8312,
+      "sha256": "f085b21daac8c59a4fd23fede4ced140288c97cdecc4e4dc938bf409dffb6a5b"
     },
     {
       "path": "scripts/test-only-exports.ts",
       "category": "script",
-      "bytes": 15578,
-      "sha256": "05d367829856b928a473b8536ff7f9f29f6c9dea000deb50b6daa6115203fc54"
+      "bytes": 16904,
+      "sha256": "55c1d4de7c49cc4a9684667b0eb219a2f48c6d37863da230f020673ec64287a7"
     },
     {
       "path": "scripts/test-only-modules.ts",
