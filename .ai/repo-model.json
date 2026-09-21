@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 468715,
-      "sha256": "dfaa5e90351ef4825293be168fd84eee7dd3ca0bd5640702d58e21d631259354"
+      "bytes": 472135,
+      "sha256": "284f57a19a0e2ccca0c3391ed57377af399a1715edef054f469d1df351c34cd9"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "502349acd0f1edc7f0554805542ff584954a57d790343132dcb26bd5e30702de"
+      "sha256": "042b1a6ec99835dbfdaacd6029c9d79f3300bb3be88a9412e0a5838332d3a602"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -4197,8 +4197,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 31835,
-      "sha256": "79db0c9028dc556d2ded4302681733c2ed55f60030ab89c23d42d3dd04e869d8"
+      "bytes": 31895,
+      "sha256": "db75a4d115936f550fb410c722b0a9666329026ed7e797f240bc2375e6c32e76"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4312,7 +4312,7 @@
       "path": "project-media/capture.json",
       "category": "configuration",
       "bytes": 1305,
-      "sha256": "4b865eef2e2c0d3b343972954f1daaf6b14507084cc7da1c5399a7a94d5e0a33"
+      "sha256": "8ff54b9bd0902acf0145f8f3c92b9723fd729e9edb8421c9b0c047e58c609aed"
     },
     {
       "path": "project-media/card.jpg",
@@ -4353,8 +4353,8 @@
     {
       "path": "project.meta.json",
       "category": "configuration",
-      "bytes": 11776,
-      "sha256": "197a8c97b9ae4930c399a6b98f69cf2298c80a0ac2c1edfa18c61efc7df59487"
+      "bytes": 11795,
+      "sha256": "ae9bf186140e231525222652bbb52bcfb9bf096c506c16529a7955d95c9c5193"
     },
     {
       "path": "public/apple-touch-icon.png",
@@ -4755,8 +4755,8 @@
     {
       "path": "scripts/audit-summary.mjs",
       "category": "script",
-      "bytes": 6489,
-      "sha256": "724c619b96ffd884ca604184b42482a716c8fff9b2a4604ef4e7f0b55ebe87fb"
+      "bytes": 7648,
+      "sha256": "7de39361b687ad7c2a8a5ab05205b37dd1f4725072bc152eb61ef87d4161fda9"
     },
     {
       "path": "scripts/bake-procedural-illustration-set-options.ts",
@@ -4959,8 +4959,8 @@
     {
       "path": "scripts/check-depcheck-clean.mjs",
       "category": "script",
-      "bytes": 1694,
-      "sha256": "2e9f164d7b9462a5035475ac5d0b6717615cc7f05da82b8ea21f3426185a4efd"
+      "bytes": 2552,
+      "sha256": "5214a4578df7b1ee4980eaab5128087cf843b7ace8948ebf8ec0091317711dff"
     },
     {
       "path": "scripts/check-module-graph-entry.ts",
@@ -15345,8 +15345,8 @@
     {
       "path": "yarn.lock",
       "category": "other",
-      "bytes": 312557,
-      "sha256": "1519500e17c5695d96b36ddd3f87a4f07aed7ae4638f4655fe4fc041658d5f72"
+      "bytes": 316232,
+      "sha256": "1d0d7988868565886027e31cc079c32e6d0e5686cb411bd98864bd6bbf5529c6"
     }
   ],
   "files": [

@@ -2756,3 +2756,61 @@ had been failing.
 `gate:demo-readiness` is now in `fullcheck` as well. Negative control: take the space back out and
 the gate exits 1 with 2 failed. That is the fifth instrument this session found unwired or red —
 the fit contract, the illustration spec, its gate, the controller spec, and now this.
+
+## Gen 254 — the security gate went red, and the pins had been overtaken
+
+A full `yarn fullcheck` stopped at its second step:
+
+```
+reaching a shipped build: 0; build-only: 39 (baseline 30)
+audit gate: build-only advisories grew from 30 to 39
+```
+
+Nothing reached shipped code. But every one of the nine new groups named a version this repo's own
+`resolutions` block was **pinning** — `tar 7.5.16`, `postcss 8.5.15`, `ip-address 10.1.1`,
+`joi 18.2.1`, `shell-quote 1.8.4`, `baseline-browser-mapping 2.10.23`, and the `brace-expansion`
+and `js-yaml` pins. Those pins were correct the day they were written. A pin is a snapshot of a
+judgement, and it keeps looking deliberate long after it has been overtaken.
+
+Bumping each to the version its own advisory names as patched, plus the three direct dev
+dependencies the advisories name (`vitest 4.1.2 → 4.1.11`, `svgo ^4.0.1 → ^4.1.0`,
+`electron-builder 26.8.1 → 26.15.0`), took **39 → 9**.
+
+The nine that remain are all `brace-expansion`, on three incompatible major lines that different
+build tools require: `^1` under eslint's pinned `minimatch 3.1.5`, `^2` under depcheck and jake's
+`filelist`, `^5` under rimraf's `glob` and `@electron/universal`. A yarn resolution names a path,
+not a range, so a single `**/brace-expansion` pin would force one major on all three. The
+path-specific pins that can be written are already there and took — the lock shows 1.1.18, 2.1.4
+and 5.0.9 resolved — and what is left is reached through stale transitive range entries under
+those three parents. Each is a denial-of-service on crafted input in a tool that runs on a
+developer's machine. Bumping `minimatch` at those three parents should take it to zero.
+
+**The baseline is ratcheted to 9**, per the rule written above it — lower it whenever a bump clears
+some. Negative control: set it to 8 and the gate reports `build-only advisories grew from 8 to 9`.
+
+That baseline had sat at 30 since Gen 8, when 64 advisories had accumulated behind a red light
+nobody looked at. The number has been a ceiling nobody pushed down since. It is 9 now.
+
+### And `gate:package-hygiene` was red too, behind a message that said otherwise
+
+With the advisories cleared the sweep moved on and stopped at the next gate:
+
+```
+depcheck failed to run or returned invalid JSON.
+```
+
+depcheck ran fine. It exits non-zero when it **finds** something, `execFileSync` raises that as an
+error, and `check-depcheck-clean.mjs` caught the throw, printed "failed to run", and dropped the
+report depcheck had already written to stdout. The wrapper now reads the JSON off the thrown error,
+so a finding is printed as a finding and only a genuinely unparsable run is called a failure.
+Negative control: add an unused devDependency and the gate prints `"devDependencies": ["left-pad"]`
+rather than a diagnostic about the tool.
+
+Behind it: `graphology` and `graphology-types`, declared and imported nowhere — the only two
+mentions in the repository are the package.json lines themselves. Measured at HEAD by stashing, so
+this predates today's work; `fullcheck`'s third step has been red for as long as they have been
+there. Removed.
+
+One of the nine advisories was mine: `yarn upgrade brace-expansion` on a package this project does
+not depend on ADDED it to `dependencies`, and depcheck caught it on the next run. A tool that tells
+you what you just did wrong is worth more than the ten minutes it cost.
