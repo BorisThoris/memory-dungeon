@@ -2639,3 +2639,41 @@ Two facts worth keeping:
 - **Two tests in that spec were already red on `main`** before any of this — the menu walk and the
   board walk — measured by stashing the change and re-running. No gate runs this spec, which is the
   same shape as Gen 242's illustration regression. Left for its own generation.
+
+## Gen 251 — the controller spec was red on main, and it measured the machine it ran on
+
+Gen 250 left two tests failing in `controller-navigation.spec.ts` that were already failing before
+it, measured by stashing the change and re-running. Neither was a product defect. Both were the
+instrument.
+
+**The menu walk asserted a label that no longer exists.** It matched `/^play/i` against
+`document.activeElement.textContent`; the menu's roman-numeral eyebrow makes that string
+`IPlayBegin the descent`, so the walk never recognised Play, ran off the top of the menu, and
+failed on the skip link. Focus is now asked of the element — `mainMenuPlayButton(page)` against
+`document.activeElement` — because a label is copy and identity is the thing being asserted. The
+same shape sank a probe during Gen 250 (`IIICollectionCards and relics` vs `^collection`); it is
+worth stating once that in this menu no focus label is the word on the button.
+
+**The board walk timed its button hold in Playwright round trips.** `pressPad` set the fake pad's
+buttons in one `evaluate`, waited 120 ms, and cleared them in another. Under load the round trips
+dominate: a logged run showed one "tap" of right arriving as **four** ArrowRight events —
+`GAMEPAD_REPEAT_DELAY_MS` is 420 and the interval 130, so the pad was really held ~700 ms. The
+board consumed the first arrow, ran out of grid on a four-pair floor, and handed the repeat back,
+which walked the focus ring out of the board *exactly as designed*:
+
+```
+ArrowDown  target=tile-board-application prevented=true    <- consumed, cursor moved
+ArrowDown  target=tile-board-application prevented=false   <- edge: handed back, ring left
+```
+
+The hold now happens inside the page, in one round trip, so a tap is a tap regardless of how loaded
+the machine is. This is the same class as Gen 239's transient-surface artefact: a measurement whose
+answer depended on the harness rather than the app.
+
+### The gate
+
+`gate:controller` runs `controller-navigation.spec.ts` and `deck-controller-reach.spec.ts`, and is
+in `fullcheck` after `gate:illustration-regression`. Both specs existed and neither was in any
+gate — the third time this session an instrument was found unwired (Gen 236 the fit contract, Gen
+241/242 the illustration spec). Negative control: with one assertion in
+`deck-controller-reach.spec.ts` inverted, `yarn gate:controller` exits 1 with 1 failed / 9 passed.

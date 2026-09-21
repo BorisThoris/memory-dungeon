@@ -42,11 +42,22 @@ const installFakePad = async (page: Page): Promise<void> => {
     });
 };
 
-/** Hold a button for a few frames, then let go — one deliberate press, as a hand would make it. */
+/**
+ * Hold a button for a few frames, then let go — one deliberate press, as a hand would make it.
+ *
+ * The hold is timed INSIDE the page, in one round trip. Held across two `evaluate` calls it was
+ * timed in Playwright round trips instead: under load a 120 ms "tap" became a ~700 ms hold, the
+ * pad's auto-repeat fired (`GAMEPAD_REPEAT_DELAY_MS` 420, then every 130), and a single press
+ * arrived as four. That is what made the board test fail here — the board consumed the first
+ * arrow, ran out of grid, and handed the repeat back, which walked the ring out of the board
+ * exactly as designed. A tap has to be a tap, or this suite measures the machine it runs on.
+ */
 const pressPad = async (page: Page, button: number): Promise<void> => {
-    await page.evaluate((code) => (window as PadWindow).__holdPad?.([code]), button);
-    await page.waitForTimeout(120);
-    await page.evaluate(() => (window as PadWindow).__holdPad?.([]));
+    await page.evaluate(async (code) => {
+        (window as PadWindow).__holdPad?.([code]);
+        await new Promise((resolve) => setTimeout(resolve, 120));
+        (window as PadWindow).__holdPad?.([]);
+    }, button);
     await page.waitForTimeout(120);
 };
 
@@ -82,15 +93,23 @@ test.describe('controller navigation', () => {
         }
         expect(seen.size).toBeGreaterThan(1);
 
-        // Walk back up to Play and press A: the pad has to be able to start a run.
-        for (let step = 0; step < 8; step += 1) {
-            const label = await focusedLabel(page);
-            if (/^play/i.test(label)) {
+        /*
+         * Walk back up to Play and press A: the pad has to be able to start a run.
+         *
+         * Which element has focus is asked of the element, not of its text. This used to match
+         * `/^play/i` against `document.activeElement.textContent`, and the menu's roman-numeral
+         * eyebrow made that string `IPlayBegin the descent` — so the walk never recognised Play,
+         * ran off the top of the menu, and failed on the skip link. A label is copy; identity is
+         * the thing being asserted.
+         */
+        const play = mainMenuPlayButton(page);
+        for (let step = 0; step < 10; step += 1) {
+            if (await play.evaluate((node) => node === document.activeElement)) {
                 break;
             }
             await pressPad(page, DPAD_UP);
         }
-        expect(await focusedLabel(page)).toMatch(/^play/i);
+        await expect(play).toBeFocused();
 
         await pressPad(page, BUTTON_A);
         await expect(mainMenuPlayButton(page)).toBeHidden({ timeout: 20_000 });

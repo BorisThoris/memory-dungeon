@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 461590,
-      "sha256": "0291c96c9ce276db96bca4994a471c87e3ae317df503dccdd73aaef4d9d86e6d"
+      "bytes": 464002,
+      "sha256": "133841f397577d669591b40089b579f4bbe9af19fc2021751cbdbcde19ff3d0c"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "18e8fd3795db66972b7ff8b55d51386370357a395d6e41afcdfa953270445327"
+      "sha256": "bead92081027f93eaa7bf700d8781b4cf7928ee0f256a6455b60bf399bda870f"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -3777,8 +3777,8 @@
     {
       "path": "e2e/controller-navigation.spec.ts",
       "category": "test",
-      "bytes": 10572,
-      "sha256": "124c3aadbc7f70975f84129d56c4a93664a6952b876b652a9524b90626e65293"
+      "bytes": 11664,
+      "sha256": "4195043206f01b954c9f4c1d9ec38de5d8958eb0699b6e91197238bd7ee627e9"
     },
     {
       "path": "e2e/cyp-review-capture.spec.ts",
@@ -4197,8 +4197,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 31581,
-      "sha256": "4756a5437bc98881dfcfe4c8e07d423ce32bc75bc68fd3f1ef6f1af5cd8f98f8"
+      "bytes": 31727,
+      "sha256": "d46903330f8de9ff7b3e3ac0ec4a82e4548dc7393b249e17f37d1ab5649180a2"
     },
     {
       "path": "packages/notifications/package.json",
