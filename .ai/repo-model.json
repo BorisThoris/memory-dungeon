@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2552,
-    "codeFileCount": 900,
-    "exportedSymbolCount": 2713,
+    "trackedFileCount": 2555,
+    "codeFileCount": 902,
+    "exportedSymbolCount": 2715,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6871
+    "relationshipCount": 6880
   },
   "inventory": [
     {
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "c8533f560b5606e931e8d48b30103e82c341ef205d9b5d463c28ad31bc980fc6"
+      "sha256": "775eeb3bac33ff9fdc2b9c89d0f1f1ef2a54a6c1b43e3eee554c5040e361858b"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -5679,8 +5679,8 @@
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 21336,
-      "sha256": "8a16394ea54d19abf0d9c36b5d36f6014c87884803f4e3546cee5433371e11f0"
+      "bytes": 21393,
+      "sha256": "8285009b34d5fbbd32ffe3ead7afe2d7e4b8e62590b91cd91a9646b2f7fddee4"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -8705,6 +8705,24 @@
       "category": "source",
       "bytes": 15137,
       "sha256": "dd68affefb8f36a318717926f4f0a02adf3d4086faf09a0d01103e020d0c51e3"
+    },
+    {
+      "path": "src/renderer/components/RunLoadingScreen.module.css",
+      "category": "source",
+      "bytes": 3535,
+      "sha256": "d95db4d3c0bbfb5810e26c6a0695ff0f0f9b9c240623b532e348719adf527b14"
+    },
+    {
+      "path": "src/renderer/components/runLoadingScreen.test.tsx",
+      "category": "test",
+      "bytes": 2582,
+      "sha256": "3e6ed1c2fb4051cd553d5374ada2c86388e0675e755ef246cb3df68824229cac"
+    },
+    {
+      "path": "src/renderer/components/RunLoadingScreen.tsx",
+      "category": "source",
+      "bytes": 2109,
+      "sha256": "3eee960e06c5c5f10d0d4c3a59b54ad1776356df8e94a85c78d16a92ee5671f9"
     },
     {
       "path": "src/renderer/components/RunShell.module.css",
@@ -15983,7 +16001,7 @@
       "path": "src/renderer/App.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 438,
+      "lineCount": 439,
       "imports": [
         "file:src/renderer/audio/feverDuck.ts",
         "file:src/renderer/audio/gameplayMusic.ts",
@@ -15997,6 +16015,7 @@
         "file:src/renderer/components/InventoryScreen.tsx",
         "file:src/renderer/components/MainMenu.tsx",
         "file:src/renderer/components/ProfileScreen.tsx",
+        "file:src/renderer/components/RunLoadingScreen.tsx",
         "file:src/renderer/components/SettingsScreen.tsx",
         "file:src/renderer/components/StartupIntro.tsx",
         "file:src/renderer/components/startupIntroConfig.ts",
@@ -18567,6 +18586,37 @@
       ],
       "testedBy": [
         "file:src/renderer/components/ProfileScreen.test.tsx"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/runLoadingScreen.test.tsx",
+      "path": "src/renderer/components/runLoadingScreen.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 54,
+      "imports": [
+        "file:src/renderer/components/RunLoadingScreen.tsx",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/RunLoadingScreen.tsx",
+      "path": "src/renderer/components/RunLoadingScreen.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 48,
+      "imports": [
+        "file:src/renderer/components/inventoryScreenModel.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/RunLoadingScreen.tsx#default",
+        "symbol:src/renderer/components/RunLoadingScreen.tsx#RunLoadingScreen"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/runLoadingScreen.test.tsx"
       ]
     },
     {
@@ -26220,6 +26270,7 @@
         "file:src/renderer/components/GameScreen.test.tsx",
         "file:src/renderer/components/MainMenuBackground.test.tsx",
         "file:src/renderer/components/ProfileScreen.test.tsx",
+        "file:src/renderer/components/runLoadingScreen.test.tsx",
         "file:src/renderer/components/RunShell.test.tsx",
         "file:src/renderer/components/TileBoard.test.tsx",
         "file:src/renderer/components/tileBoardBreakWave.test.ts",
@@ -32690,16 +32741,16 @@
       "name": "APP_MAIN_LANDMARK_ID",
       "kind": "value",
       "file": "src/renderer/App.tsx",
-      "line": 39,
-      "endLine": 39
+      "line": 40,
+      "endLine": 40
     },
     {
       "id": "symbol:src/renderer/App.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/App.tsx",
-      "line": 437,
-      "endLine": 437
+      "line": 438,
+      "endLine": 438
     },
     {
       "id": "symbol:src/renderer/assets/assetDropInReadiness.ts#ASSET_DROP_IN_CATEGORIES",
@@ -35340,6 +35391,22 @@
       "file": "src/renderer/components/ProfileScreen.tsx",
       "line": 279,
       "endLine": 279
+    },
+    {
+      "id": "symbol:src/renderer/components/RunLoadingScreen.tsx#default",
+      "name": "default",
+      "kind": "ExportAssignment",
+      "file": "src/renderer/components/RunLoadingScreen.tsx",
+      "line": 47,
+      "endLine": 47
+    },
+    {
+      "id": "symbol:src/renderer/components/RunLoadingScreen.tsx#RunLoadingScreen",
+      "name": "RunLoadingScreen",
+      "kind": "value",
+      "file": "src/renderer/components/RunLoadingScreen.tsx",
+      "line": 21,
+      "endLine": 45
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#default",
@@ -59766,6 +59833,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/RunLoadingScreen.tsx->symbol:src/renderer/components/RunLoadingScreen.tsx#default",
+      "source": "file:src/renderer/components/RunLoadingScreen.tsx",
+      "target": "symbol:src/renderer/components/RunLoadingScreen.tsx#default",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/RunLoadingScreen.tsx->symbol:src/renderer/components/RunLoadingScreen.tsx#RunLoadingScreen",
+      "source": "file:src/renderer/components/RunLoadingScreen.tsx",
+      "target": "symbol:src/renderer/components/RunLoadingScreen.tsx#RunLoadingScreen",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/RunShell.tsx->symbol:src/renderer/components/RunShell.tsx#default",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "symbol:src/renderer/components/RunShell.tsx#default",
@@ -75152,6 +75231,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/App.tsx->src/renderer/components/RunLoadingScreen.tsx",
+      "source": "file:src/renderer/App.tsx",
+      "target": "file:src/renderer/components/RunLoadingScreen.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/App.tsx->src/renderer/components/SettingsScreen.tsx",
       "source": "file:src/renderer/App.tsx",
       "target": "file:src/renderer/components/SettingsScreen.tsx",
@@ -77777,6 +77862,30 @@
       "id": "imports:src/renderer/components/ProfileScreen.tsx->src/shared/run-number-guards.ts",
       "source": "file:src/renderer/components/ProfileScreen.tsx",
       "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/runLoadingScreen.test.tsx->src/renderer/components/RunLoadingScreen.tsx",
+      "source": "file:src/renderer/components/runLoadingScreen.test.tsx",
+      "target": "file:src/renderer/components/RunLoadingScreen.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/runLoadingScreen.test.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/runLoadingScreen.test.tsx",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunLoadingScreen.tsx->src/renderer/components/inventoryScreenModel.ts",
+      "source": "file:src/renderer/components/RunLoadingScreen.tsx",
+      "target": "file:src/renderer/components/inventoryScreenModel.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunLoadingScreen.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/RunLoadingScreen.tsx",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -92263,6 +92372,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/RunLoadingScreen.tsx->file:src/renderer/components/runLoadingScreen.test.tsx",
+      "source": "file:src/renderer/components/RunLoadingScreen.tsx",
+      "target": "file:src/renderer/components/runLoadingScreen.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/RunShell.tsx->file:src/renderer/components/RunShell.test.tsx",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/renderer/components/RunShell.test.tsx",
@@ -94006,6 +94121,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/ProfileScreen.test.tsx",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/components/ProfileScreen.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/runLoadingScreen.test.tsx",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/renderer/components/runLoadingScreen.test.tsx",
       "kind": "tested_by"
     },
     {

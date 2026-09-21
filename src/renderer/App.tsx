@@ -8,6 +8,7 @@ import ProfileScreen from './components/ProfileScreen';
 import GameOverScreen from './components/GameOverScreen';
 import InventoryScreen from './components/InventoryScreen';
 import MainMenu from './components/MainMenu';
+import { RunLoadingScreen } from './components/RunLoadingScreen';
 import SettingsScreen from './components/SettingsScreen';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './components/gameplayVisualConfig';
 import metaScreenStyles from './components/MetaScreen.module.css';
@@ -385,7 +386,7 @@ const App = () => {
                         {hydrated &&
                             (view === 'playing' || shellChromeContract.boardMounted) &&
                             run && (
-                                <Suspense fallback={<div role="status">Loading run...</div>}>
+                                <Suspense fallback={<RunLoadingScreen run={run} />}>
                                     {/*
                                      * Inert while a shell is stacked over it. The board stays mounted so the run
                                      * survives, but it is covered: leaving it live left every tool button and the
