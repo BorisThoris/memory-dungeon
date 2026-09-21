@@ -52,6 +52,19 @@ export const TEST_ONLY_EXPORT_EXEMPTIONS: Record<string, string> = {
         'resolver that actually runs - every store action must land on the view its row promises, ' +
         'and a freeze-on-open row must mean the transition freezes the run. The test is the ' +
         'consumer because the test is the check.',
+    audioCoverageRowsByDomain:
+        'Record accessor by design (Gen 258): the REG-037 coverage table is prose about what every ' +
+        'runtime domain sounds like, and its gameplay rows are checked one by one - mix role, ' +
+        'cooldown policy, semantic moment, callsite. The domain filter is what that check reads. ' +
+        'The test is the consumer because the test is the check.',
+    getModePosterArtRows:
+        'Record by design (Gen 258): the rows carry each poster key\u2019s custom-or-fallback status, ' +
+        'and REG-013 checks them against MODE_POSTER_KEYS and asserts every row resolves to a ' +
+        'non-empty asset URL. Content completeness, not debt.',
+    modePosterHasCustomArt:
+        'The predicate that completeness check needs (Gen 258): every mode in RUN_MODE_CATALOG must ' +
+        'have custom poster art rather than the shared fallback, which is a claim about shipped ' +
+        'content and is asserted over the whole catalog.',
     getIllustrationPipelineDebugState:
         'Same: the illustration-regression and overlay-regression specs read the pipeline debug ' +
         'state through a dynamic module URL. It exists to be read from outside the app, which is ' +

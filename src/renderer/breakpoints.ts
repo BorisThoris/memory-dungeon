@@ -21,21 +21,17 @@ export const VIEWPORT_LANDSCAPE_STACK_MAX_WIDTH = 960;
 export const isNarrowShortLandscapeForMenuStack = (width: number, height: number): boolean =>
     isShortLandscapeViewport(width, height) && width <= VIEWPORT_LANDSCAPE_STACK_MAX_WIDTH;
 
-/** SSR / Vitest: no `window` access at call time beyond guards. */
-export const safeSubscribeWindowResize = (onResize: () => void): (() => void) => {
-    if (typeof window === 'undefined') {
-        return () => {};
-    }
-    window.addEventListener('resize', onResize);
-    return () => {
-        window.removeEventListener('resize', onResize);
-    };
-};
-
-/** Prefer over reading `window.innerWidth` during static import; defaults match `useViewportSize` SSR fallback. */
-export const readWindowInnerSizeFallback = (): { width: number; height: number } => {
-    if (typeof window === 'undefined') {
-        return { width: 1280, height: 800 };
-    }
-    return { width: window.innerWidth, height: window.innerHeight };
-};
+/*
+ * `safeSubscribeWindowResize` and `readWindowInnerSizeFallback` were here, reached by nothing but
+ * their own test, and they were strictly weaker than the path the app actually uses.
+ *
+ * `src/renderer/hooks/useViewportSize.ts` prefers `window.visualViewport` over `innerWidth`, coalesces updates
+ * through `requestAnimationFrame`, and listens for `orientationchange` and the visual viewport's own
+ * resize as well as the window's. The two helpers here read `innerWidth` and listened to `resize`
+ * alone. On a Deck or a phone the visual viewport is the one that moves - the layout viewport does
+ * not shrink for an on-screen keyboard - and reading the wrong one is the same mistake this session
+ * found three times in painted-versus-layout px. A helper whose comment says to prefer it over the
+ * thing it is worse than is worth deleting rather than keeping (Gen 258).
+ *
+ * Their SSR default, 1280x800, did match `useViewportSize`'s; that part of the comment was true.
+ */

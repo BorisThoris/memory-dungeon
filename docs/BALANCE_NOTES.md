@@ -2997,3 +2997,33 @@ rather than beside the module, because the module was always right — what was 
 anything used it. Two negative controls, both run: drop the `onKeyDown` and it reports
 `ArrowRight left focus on "Shuffle hidden tiles"`; drop the sync and it reports `the toolbar is more
 than one tab stop`.
+
+### Gen 258, continued: the next five, and none were debt either
+
+**`breakpoints.ts` — superseded, and by something better.** `safeSubscribeWindowResize` and
+`readWindowInnerSizeFallback` read `window.innerWidth` and listened to `resize` alone.
+`hooks/useViewportSize.ts`, which the app actually uses, prefers `window.visualViewport`, coalesces
+through `requestAnimationFrame`, and listens for `orientationchange` and the visual viewport's own
+resize as well. On a Deck or a phone the visual viewport is the one that moves — the layout viewport
+does not shrink for an on-screen keyboard — so these two read the wrong number, which is the same
+mistake this session found three times in painted-versus-layout px. One of their comments said to
+*prefer* it over `window.innerWidth`: advice pointing at the weaker option. **Deleted**, with their
+tests. Their SSR default of 1280x800 did match `useViewportSize`; that part was true.
+
+**`getAudioCoverageRows` — a pass-through, again.** It returned the exported
+`AUDIO_INTERACTION_COVERAGE` unchanged, another suite already reads that constant directly, and the
+only thing ever asserted about the accessor was `expect(getAudioCoverageRows()).toBe(
+AUDIO_INTERACTION_COVERAGE)` — a test that the identity function is the identity. Second one of these
+in this generation, after `syncVerticalToolbarTabIndices`. **Deleted.**
+
+**Three are records whose consumer is a test because the test IS the check** — the
+`getNavigationRouteContract` category, exempt by name with the reason:
+`audioCoverageRowsByDomain` (REG-037 checks every gameplay row's mix role, cooldown policy,
+semantic moment and callsite one by one, and the domain filter is what that reads);
+`getModePosterArtRows` and `modePosterHasCustomArt` (REG-013 asserts every mode in
+`RUN_MODE_CATALOG` has custom poster art rather than the shared fallback, and that every row
+resolves to a non-empty asset URL — content completeness).
+
+**Baseline 106 → 97** across nine entries: three wired live, three deleted (two pass-throughs and a
+superseded pair), three named as records. Still **not one plain debt entry** in fourteen resolved
+across Gens 245 and 258. Whatever that baseline is, it is not a list of things nobody needs.

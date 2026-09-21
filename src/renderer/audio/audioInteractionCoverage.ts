@@ -379,8 +379,13 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
     }
 ];
 
-export const getAudioCoverageRows = (): readonly AudioInteractionCoverageRow[] => AUDIO_INTERACTION_COVERAGE;
-
+/*
+ * `getAudioCoverageRows()` was here and returned `AUDIO_INTERACTION_COVERAGE` unchanged. The
+ * constant is exported, another suite already reads it directly, and the only thing ever asserted
+ * about the accessor was `expect(getAudioCoverageRows()).toBe(AUDIO_INTERACTION_COVERAGE)` - a test
+ * that the identity function is the identity. `audioCoverageRowsByDomain` below stays: it filters,
+ * and the check that reads it is a real one (Gen 258).
+ */
 export const audioCoverageRowsByDomain = (domain: AudioCoverageDomain): AudioInteractionCoverageRow[] =>
     AUDIO_INTERACTION_COVERAGE.filter((row) => row.domain === domain);
 

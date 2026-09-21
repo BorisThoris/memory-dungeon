@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2549,
     "codeFileCount": 897,
-    "exportedSymbolCount": 2708,
+    "exportedSymbolCount": 2705,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6858
+    "relationshipCount": 6855
   },
   "inventory": [
     {
@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 483124,
-      "sha256": "6c0c678906b957a2299967198412ff38ed6cedb7927d2856d744ffa0a69eaead"
+      "bytes": 485364,
+      "sha256": "6fb94e99c8d8501a79065071cfaf6881822da866f5af8be1029d3a77c7d12d35"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "2911d3f3ce3f5459621b9ebb2dcd98d3c573171f188752640e98e1d521d20841"
+      "sha256": "be89456ce75ed6264ae4da54b18010aab8478f780106a1bf3577d2f9489ee4e7"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -5397,14 +5397,14 @@
     {
       "path": "scripts/test-only-exports-baseline.json",
       "category": "script",
-      "bytes": 9008,
-      "sha256": "520d809421c72f3af4bf9ee560bce1a3e97ceb0724f6ff9b7a12033dbe6b43b6"
+      "bytes": 8579,
+      "sha256": "fde044887ddf4bbf9655ba2a98794be962cd8de1e8c8cc29d0a22b99fbf87a43"
     },
     {
       "path": "scripts/test-only-exports.ts",
       "category": "script",
-      "bytes": 17616,
-      "sha256": "223d299ac4be25d6a1f1da5d23ef9d538182359fef4099a7425b1abd801cf83b"
+      "bytes": 18601,
+      "sha256": "177869f6d7ab033ea54f276a38c6c8c0a695b71dc7a52c2d9a7400ad84f15150"
     },
     {
       "path": "scripts/test-only-modules.ts",
@@ -7833,14 +7833,14 @@
     {
       "path": "src/renderer/audio/audioInteractionCoverage.test.ts",
       "category": "test",
-      "bytes": 9922,
-      "sha256": "fc9c64db5272cd52c3afb7fd6ed0137065a37e80b108c5502b74d5e3d1a90ab3"
+      "bytes": 9827,
+      "sha256": "9fae40d66e7457f48dec002225dbeb1cccaf18e70dcb6e612b167be4ac02ae80"
     },
     {
       "path": "src/renderer/audio/audioInteractionCoverage.ts",
       "category": "source",
-      "bytes": 19076,
-      "sha256": "2cbf931fc88f6911427e95f408d7bb59a92b8b71c50de7164e7bc67dfd15ee99"
+      "bytes": 19422,
+      "sha256": "3cf83bd0406d7d1126a96d3fe12daaae1e11fcb15eeaf7b885e1a17376728a00"
     },
     {
       "path": "src/renderer/audio/audioManifestBoundary.test.ts",
@@ -7989,14 +7989,14 @@
     {
       "path": "src/renderer/breakpoints.test.ts",
       "category": "test",
-      "bytes": 7963,
-      "sha256": "a9ae29246221f2c7bc5bfe94f36807ac3fba452598062732df08c2981666b8dc"
+      "bytes": 7364,
+      "sha256": "58384da97d276206f017b22cc09fb6b4f7082f16971d46b3c5532d7efa21042f"
     },
     {
       "path": "src/renderer/breakpoints.ts",
       "category": "source",
-      "bytes": 1722,
-      "sha256": "87235629fa9eb76bcdce7d8a7fa99b68ad3751b859c2ccc25bfcf2642bfd4a2d"
+      "bytes": 1983,
+      "sha256": "788083666bba4d28988ab0ea9ac404f1634023f2ae08744b03a33eae3da103c8"
     },
     {
       "path": "src/renderer/cardFace/cardFaceOverlayPalette.test.ts",
@@ -16196,7 +16196,7 @@
       "path": "src/renderer/audio/audioInteractionCoverage.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 180,
+      "lineCount": 179,
       "imports": [
         "file:src/renderer/audio/audioInteractionCoverage.ts"
       ],
@@ -16208,7 +16208,7 @@
       "path": "src/renderer/audio/audioInteractionCoverage.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 391,
+      "lineCount": 396,
       "imports": [
         "file:src/renderer/audio/sampledSfx.ts",
         "file:src/renderer/audio/uiSfx.ts"
@@ -16218,8 +16218,7 @@
         "symbol:src/renderer/audio/audioInteractionCoverage.ts#audioCoverageCueIsGameplaySfx",
         "symbol:src/renderer/audio/audioInteractionCoverage.ts#audioCoverageCueIsKnown",
         "symbol:src/renderer/audio/audioInteractionCoverage.ts#audioCoverageRowsByDomain",
-        "symbol:src/renderer/audio/audioInteractionCoverage.ts#AudioSemanticMoment",
-        "symbol:src/renderer/audio/audioInteractionCoverage.ts#getAudioCoverageRows"
+        "symbol:src/renderer/audio/audioInteractionCoverage.ts#AudioSemanticMoment"
       ],
       "testedBy": [
         "file:src/renderer/audio/audioInteractionCoverage.test.ts",
@@ -16663,7 +16662,7 @@
       "path": "src/renderer/breakpoints.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 187,
+      "lineCount": 168,
       "imports": [
         "file:src/renderer/breakpoints.ts",
         "file:src/renderer/viewportMatrix.ts"
@@ -16676,13 +16675,11 @@
       "path": "src/renderer/breakpoints.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 42,
+      "lineCount": 38,
       "imports": [],
       "exports": [
         "symbol:src/renderer/breakpoints.ts#isNarrowShortLandscapeForMenuStack",
         "symbol:src/renderer/breakpoints.ts#isShortLandscapeViewport",
-        "symbol:src/renderer/breakpoints.ts#readWindowInnerSizeFallback",
-        "symbol:src/renderer/breakpoints.ts#safeSubscribeWindowResize",
         "symbol:src/renderer/breakpoints.ts#VIEWPORT_LANDSCAPE_STACK_MAX_WIDTH",
         "symbol:src/renderer/breakpoints.ts#VIEWPORT_MOBILE_MAX",
         "symbol:src/renderer/breakpoints.ts#VIEWPORT_SHORT_LANDSCAPE_MAX_HEIGHT",
@@ -32911,24 +32908,24 @@
       "name": "audioCoverageCueIsGameplaySfx",
       "kind": "value",
       "file": "src/renderer/audio/audioInteractionCoverage.ts",
-      "line": 387,
-      "endLine": 387
+      "line": 392,
+      "endLine": 392
     },
     {
       "id": "symbol:src/renderer/audio/audioInteractionCoverage.ts#audioCoverageCueIsKnown",
       "name": "audioCoverageCueIsKnown",
       "kind": "value",
       "file": "src/renderer/audio/audioInteractionCoverage.ts",
-      "line": 389,
-      "endLine": 390
+      "line": 394,
+      "endLine": 395
     },
     {
       "id": "symbol:src/renderer/audio/audioInteractionCoverage.ts#audioCoverageRowsByDomain",
       "name": "audioCoverageRowsByDomain",
       "kind": "value",
       "file": "src/renderer/audio/audioInteractionCoverage.ts",
-      "line": 384,
-      "endLine": 385
+      "line": 389,
+      "endLine": 390
     },
     {
       "id": "symbol:src/renderer/audio/audioInteractionCoverage.ts#AudioSemanticMoment",
@@ -32937,14 +32934,6 @@
       "file": "src/renderer/audio/audioInteractionCoverage.ts",
       "line": 6,
       "endLine": 19
-    },
-    {
-      "id": "symbol:src/renderer/audio/audioInteractionCoverage.ts#getAudioCoverageRows",
-      "name": "getAudioCoverageRows",
-      "kind": "value",
-      "file": "src/renderer/audio/audioInteractionCoverage.ts",
-      "line": 382,
-      "endLine": 382
     },
     {
       "id": "symbol:src/renderer/audio/audioManifestBoundary.ts#sfxManifestSchema",
@@ -33569,22 +33558,6 @@
       "file": "src/renderer/breakpoints.ts",
       "line": 12,
       "endLine": 13
-    },
-    {
-      "id": "symbol:src/renderer/breakpoints.ts#readWindowInnerSizeFallback",
-      "name": "readWindowInnerSizeFallback",
-      "kind": "value",
-      "file": "src/renderer/breakpoints.ts",
-      "line": 36,
-      "endLine": 41
-    },
-    {
-      "id": "symbol:src/renderer/breakpoints.ts#safeSubscribeWindowResize",
-      "name": "safeSubscribeWindowResize",
-      "kind": "value",
-      "file": "src/renderer/breakpoints.ts",
-      "line": 25,
-      "endLine": 33
     },
     {
       "id": "symbol:src/renderer/breakpoints.ts#VIEWPORT_LANDSCAPE_STACK_MAX_WIDTH",
@@ -57907,12 +57880,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/audio/audioInteractionCoverage.ts->symbol:src/renderer/audio/audioInteractionCoverage.ts#getAudioCoverageRows",
-      "source": "file:src/renderer/audio/audioInteractionCoverage.ts",
-      "target": "symbol:src/renderer/audio/audioInteractionCoverage.ts#getAudioCoverageRows",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/renderer/audio/audioManifestBoundary.ts->symbol:src/renderer/audio/audioManifestBoundary.ts#sfxManifestSchema",
       "source": "file:src/renderer/audio/audioManifestBoundary.ts",
       "target": "symbol:src/renderer/audio/audioManifestBoundary.ts#sfxManifestSchema",
@@ -58378,18 +58345,6 @@
       "id": "exports:src/renderer/breakpoints.ts->symbol:src/renderer/breakpoints.ts#isShortLandscapeViewport",
       "source": "file:src/renderer/breakpoints.ts",
       "target": "symbol:src/renderer/breakpoints.ts#isShortLandscapeViewport",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/breakpoints.ts->symbol:src/renderer/breakpoints.ts#readWindowInnerSizeFallback",
-      "source": "file:src/renderer/breakpoints.ts",
-      "target": "symbol:src/renderer/breakpoints.ts#readWindowInnerSizeFallback",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/breakpoints.ts->symbol:src/renderer/breakpoints.ts#safeSubscribeWindowResize",
-      "source": "file:src/renderer/breakpoints.ts",
-      "target": "symbol:src/renderer/breakpoints.ts#safeSubscribeWindowResize",
       "kind": "exports"
     },
     {
