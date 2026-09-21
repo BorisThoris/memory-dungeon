@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2554,
     "codeFileCount": 895,
-    "exportedSymbolCount": 2704,
+    "exportedSymbolCount": 2703,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6841
+    "relationshipCount": 6840
   },
   "inventory": [
     {
@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 450841,
-      "sha256": "8f2fd3722b992af8815048cc80783ab303a5a5953d54c51b6746c6c8725eb3bc"
+      "bytes": 452694,
+      "sha256": "26b93f6b0717f2e0c2104b95951c84f6dbc152240f6f3ef4ee22d5d21044af88"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "2a8e44bf50a6ddc2ee9a6a102458911703d949f69c0b65b8d92e4a6ebdabd9e4"
+      "sha256": "7cc5fb500d5179c26f1b5aaf8977438678ee9dbf2b15519ab9112005fe2c5784"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -4312,7 +4312,7 @@
       "path": "project-media/capture.json",
       "category": "configuration",
       "bytes": 1305,
-      "sha256": "5979e1ea82bf7c64576248063cdeb239105143a3dff845da925b426a4edda55e"
+      "sha256": "2a4db1e0326c31a2e9b78d36e309e6861e2edc7254d9a6d0e9306508b80bad25"
     },
     {
       "path": "project-media/card.jpg",
@@ -4354,7 +4354,7 @@
       "path": "project.meta.json",
       "category": "configuration",
       "bytes": 11776,
-      "sha256": "62d249cb0eb1bf41264ed3a28fae827502f2aba3204d68e95fc5c786aa10d582"
+      "sha256": "96497771e5a90841d1f06facf6ef712e8be76cd5a389372fa0a35dbf2eddc409"
     },
     {
       "path": "public/apple-touch-icon.png",
@@ -5445,8 +5445,8 @@
     {
       "path": "scripts/test-only-exports-baseline.json",
       "category": "script",
-      "bytes": 8312,
-      "sha256": "f085b21daac8c59a4fd23fede4ced140288c97cdecc4e4dc938bf409dffb6a5b"
+      "bytes": 8187,
+      "sha256": "4373eca8f289a03ccc7adb44c680bb460a302cc8b9d3c18b445fa985d2e04460"
     },
     {
       "path": "scripts/test-only-exports.ts",
@@ -10533,14 +10533,14 @@
     {
       "path": "src/renderer/store/navigationModel.test.ts",
       "category": "test",
-      "bytes": 3983,
-      "sha256": "60e61226882d8340adfdfd901cc5ea37325d8f9b9868bca645175fe929ce1e71"
+      "bytes": 4199,
+      "sha256": "eed2c4e01dd29c20243158fd6a5746000441728fc0861d7cc28eaf687f1668a7"
     },
     {
       "path": "src/renderer/store/navigationModel.ts",
       "category": "source",
-      "bytes": 13733,
-      "sha256": "b24128de38cccffc780858dd182ffdb01c480d16f7e4d906b918ccd4d4f10ea4"
+      "bytes": 14312,
+      "sha256": "cef85a7834255ad851709bb8598cb359a4c043729dae73148be9cc75d8a90076"
     },
     {
       "path": "src/renderer/store/passAndPlayProjection.test.ts",
@@ -23569,7 +23569,7 @@
       "path": "src/renderer/store/navigationModel.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 105,
+      "lineCount": 107,
       "imports": [
         "file:src/renderer/store/navigationModel.ts"
       ],
@@ -23581,7 +23581,7 @@
       "path": "src/renderer/store/navigationModel.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 364,
+      "lineCount": 374,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-lifecycle-machine.ts"
@@ -23591,7 +23591,6 @@
         "symbol:src/renderer/store/navigationModel.ts#getNavigationShellChromeContract",
         "symbol:src/renderer/store/navigationModel.ts#getNavigationShellChromeRows",
         "symbol:src/renderer/store/navigationModel.ts#isInRunMetaView",
-        "symbol:src/renderer/store/navigationModel.ts#isInRunOverlayView",
         "symbol:src/renderer/store/navigationModel.ts#isMenuDestinationView",
         "symbol:src/renderer/store/navigationModel.ts#isRunStatusResumableAfterMetaOverlay",
         "symbol:src/renderer/store/navigationModel.ts#NAVIGATION_ROUTE_CONTRACTS",
@@ -40795,104 +40794,96 @@
       "name": "getNavigationRouteContract",
       "kind": "value",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 164,
-      "endLine": 169
+      "line": 176,
+      "endLine": 181
     },
     {
       "id": "symbol:src/renderer/store/navigationModel.ts#getNavigationShellChromeContract",
       "name": "getNavigationShellChromeContract",
       "kind": "value",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 239,
-      "endLine": 266
+      "line": 249,
+      "endLine": 276
     },
     {
       "id": "symbol:src/renderer/store/navigationModel.ts#getNavigationShellChromeRows",
       "name": "getNavigationShellChromeRows",
       "kind": "value",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 171,
-      "endLine": 204
+      "line": 183,
+      "endLine": 216
     },
     {
       "id": "symbol:src/renderer/store/navigationModel.ts#isInRunMetaView",
       "name": "isInRunMetaView",
       "kind": "value",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 235,
-      "endLine": 235
-    },
-    {
-      "id": "symbol:src/renderer/store/navigationModel.ts#isInRunOverlayView",
-      "name": "isInRunOverlayView",
-      "kind": "value",
-      "file": "src/renderer/store/navigationModel.ts",
-      "line": 237,
-      "endLine": 237
+      "line": 247,
+      "endLine": 247
     },
     {
       "id": "symbol:src/renderer/store/navigationModel.ts#isMenuDestinationView",
       "name": "isMenuDestinationView",
       "kind": "value",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 233,
-      "endLine": 233
+      "line": 245,
+      "endLine": 245
     },
     {
       "id": "symbol:src/renderer/store/navigationModel.ts#isRunStatusResumableAfterMetaOverlay",
       "name": "isRunStatusResumableAfterMetaOverlay",
       "kind": "value",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 206,
-      "endLine": 207
+      "line": 218,
+      "endLine": 219
     },
     {
       "id": "symbol:src/renderer/store/navigationModel.ts#NAVIGATION_ROUTE_CONTRACTS",
       "name": "NAVIGATION_ROUTE_CONTRACTS",
       "kind": "value",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 64,
-      "endLine": 162
+      "line": 76,
+      "endLine": 174
     },
     {
       "id": "symbol:src/renderer/store/navigationModel.ts#resolveNavigationTransition",
       "name": "resolveNavigationTransition",
       "kind": "value",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 297,
-      "endLine": 363
+      "line": 307,
+      "endLine": 373
     },
     {
       "id": "symbol:src/renderer/store/navigationModel.ts#resolveSettingsCloseTarget",
       "name": "resolveSettingsCloseTarget",
       "kind": "value",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 221,
-      "endLine": 231
+      "line": 233,
+      "endLine": 243
     },
     {
       "id": "symbol:src/renderer/store/navigationModel.ts#resolveSubscreenCloseTarget",
       "name": "resolveSubscreenCloseTarget",
       "kind": "value",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 209,
-      "endLine": 219
+      "line": 221,
+      "endLine": 231
     },
     {
       "id": "symbol:src/renderer/store/navigationModel.ts#StoreNavigationAction",
       "name": "StoreNavigationAction",
       "kind": "type",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 268,
-      "endLine": 278
+      "line": 278,
+      "endLine": 288
     },
     {
       "id": "symbol:src/renderer/store/navigationModel.ts#StoreNavigationTransition",
       "name": "StoreNavigationTransition",
       "kind": "type",
       "file": "src/renderer/store/navigationModel.ts",
-      "line": 280,
-      "endLine": 288
+      "line": 290,
+      "endLine": 298
     },
     {
       "id": "symbol:src/renderer/store/passAndPlayProjection.ts#projectPassAndPlayTurn",
@@ -63782,12 +63773,6 @@
       "id": "exports:src/renderer/store/navigationModel.ts->symbol:src/renderer/store/navigationModel.ts#isInRunMetaView",
       "source": "file:src/renderer/store/navigationModel.ts",
       "target": "symbol:src/renderer/store/navigationModel.ts#isInRunMetaView",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/store/navigationModel.ts->symbol:src/renderer/store/navigationModel.ts#isInRunOverlayView",
-      "source": "file:src/renderer/store/navigationModel.ts",
-      "target": "symbol:src/renderer/store/navigationModel.ts#isInRunOverlayView",
       "kind": "exports"
     },
     {

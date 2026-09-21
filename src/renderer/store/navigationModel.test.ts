@@ -3,7 +3,6 @@ import {
     getNavigationRouteContract,
     getNavigationShellChromeRows,
     isInRunMetaView,
-    isInRunOverlayView,
     isMenuDestinationView,
     isRunStatusResumableAfterMetaOverlay,
     NAVIGATION_ROUTE_CONTRACTS,
@@ -97,7 +96,10 @@ describe('navigationModel', () => {
         expect(isMenuDestinationView('collection')).toBe(true);
         expect(isMenuDestinationView('playing')).toBe(false);
         expect(isInRunMetaView('codex')).toBe(true);
-        expect(isInRunOverlayView('gameOver')).toBe(false);
+        expect(isInRunMetaView('gameOver')).toBe(false);
+        // Settings is NOT one: run settings has its own shell branch above the in-run meta one,
+        // and this set is now what that branch reads, so the two cannot disagree again.
+        expect(isInRunMetaView('settings')).toBe(false);
         expect(isRunStatusResumableAfterMetaOverlay('memorize')).toBe(true);
         expect(isRunStatusResumableAfterMetaOverlay('levelComplete')).toBe(false);
     });
