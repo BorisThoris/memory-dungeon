@@ -67,17 +67,28 @@ export type Rating = 'S++' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
  */
 export type RunEndReason = 'turn_ceiling' | 'quit' | 'contract' | 'pass_and_play_final_floor';
 export type FeaturedObjectiveId = 'scholar_style' | 'cursed_last' | 'flip_par';
-export type ViewState =
-    | 'boot'
-    | 'menu'
-    | 'settings'
-    | 'playing'
-    | 'gameOver'
-    | 'modeSelect'
-    | 'collection'
-    | 'profile'
-    | 'inventory'
-    | 'codex';
+/**
+ * Every screen the app can be showing, as a value.
+ *
+ * It is a list rather than a bare union because three places wanted to walk it and each kept its
+ * own copy: `navigationModel`'s `NavigationSurface`, `scripts/e2e-surface-coverage.ts`, and the
+ * controller census in `e2e/controller-navigation.spec.ts`. A hand-copied list is a list that
+ * stops matching - and the thing those copies are for is proving nothing was forgotten.
+ */
+export const VIEW_STATES = [
+    'boot',
+    'menu',
+    'settings',
+    'playing',
+    'gameOver',
+    'modeSelect',
+    'collection',
+    'profile',
+    'inventory',
+    'codex'
+] as const;
+
+export type ViewState = (typeof VIEW_STATES)[number];
 
 /** Where sub-screens (mode select, collection, profile, inventory, codex) return on Back. */
 export type SubscreenReturnView = Exclude<ViewState, 'boot' | 'settings'>;

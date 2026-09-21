@@ -13,7 +13,7 @@
 import { globSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { PLAYABLE_PATH_FIXTURE_IDS, createPlayablePathFixture } from '../src/shared/playable-path-fixtures';
-import type { ViewState } from '../src/shared/contracts';
+import { VIEW_STATES, type ViewState } from '../src/shared/contracts';
 
 /** Fixtures no spec needs to name, by id with the reason. */
 export const UNVISITED_FIXTURE_EXEMPTIONS: Record<string, string> = {
@@ -47,19 +47,7 @@ export const findUnvisitedFixtures = (sources: string): string[] =>
 /** Views that no fixture puts the app into, so only navigation could reach them. */
 export const findViewsNoFixtureReaches = (): string[] => {
     const reached = new Set(PLAYABLE_PATH_FIXTURE_IDS.map((id) => createPlayablePathFixture(id).view));
-    const all: ViewState[] = [
-        'boot',
-        'menu',
-        'settings',
-        'playing',
-        'gameOver',
-        'modeSelect',
-        'collection',
-        'profile',
-        'inventory',
-        'codex'
-    ];
-    return all.filter((view) => !reached.has(view) && UNREACHED_VIEW_EXEMPTIONS[view] === undefined);
+    return VIEW_STATES.filter((view) => !reached.has(view) && UNREACHED_VIEW_EXEMPTIONS[view] === undefined);
 };
 
 /**

@@ -22,6 +22,7 @@ import {
     resumeUiSfxContext,
     uiSfxGainFromSettings
 } from '../audio/uiSfx';
+import { useEscapeLeaves } from '../hooks/useEscapeLeaves';
 import { useAppStore } from '../store/useAppStore';
 import OverlayModal from './OverlayModal';
 import styles from './ChooseYourPathScreen.module.css';
@@ -90,6 +91,17 @@ const ChooseYourPathScreen = (): ReactElement => {
         resumeUiSfxContext();
         playMenuOpenSfx(uiGain);
     }, [uiGain]);
+
+    /*
+     * B leaves Choose Your Path for the menu, the same thing the running head's Back word does.
+     * The detail sheet and the setup sheet are `OverlayModal`s that take Escape first, so an open
+     * sheet closes itself rather than dropping the player out of the screen behind it.
+     */
+    const leaveToMenu = useCallback((): void => {
+        playBack();
+        closeSubscreen();
+    }, [closeSubscreen, playBack]);
+    useEscapeLeaves(leaveToMenu);
 
     const [browseOpen, setBrowseOpen] = useState(true);
     const [query, setQuery] = useState('');
@@ -330,10 +342,7 @@ const ChooseYourPathScreen = (): ReactElement => {
                     <button
                         className={styles.headWord}
                         data-testid="choose-path-inline-back"
-                        onClick={() => {
-                            playBack();
-                            closeSubscreen();
-                        }}
+                        onClick={leaveToMenu}
                         type="button"
                     >
                         <BackChevron />

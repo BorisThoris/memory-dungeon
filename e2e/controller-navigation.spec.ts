@@ -1,4 +1,6 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Locator, type Page } from '@playwright/test';
+import { VIEW_STATES, type ViewState } from '../src/shared/contracts';
+import { openPlayablePathFixture } from './playablePathHelpers';
 import { readFrameHiddenTileCount } from './tileBoardGameFlow';
 import {
     buildVisualSaveJson,
@@ -171,42 +173,37 @@ test.describe('controller navigation', () => {
 
     /**
      * Valve's controller criterion: the DEFAULT configuration must reach all content. Not "a
-     * remapping can" - the pad out of the box, on the screens a player actually opens.
+     * remapping can" - the pad out of the box, on every screen a player can be standing on.
      *
-     * This walks the ring with the d-pad, opens with A and leaves with B, for every menu screen
-     * there is. It is worth its minutes because the first three tests above all stop at the main
-     * menu and the board: they proved the ring moves and that A starts a run, and said nothing
-     * about whether a player who opened the Codex could get out again. They could not - B maps to
-     * `back`, `back` dispatches Escape, and not one of the five screens listened for it, so the
-     * only way out was to find the on-screen Back button with the stick.
+     * "All content" is a census here, not a list. The table is keyed by `ViewState`, so the
+     * compiler fails this file when a view is added and nobody says what back does on it. That
+     * matters because the first version of this test WAS a list - five meta screens I picked by
+     * hand - and the two views it happened to leave out, Choose Your Path and the run summary,
+     * both turned out to swallow B as well (Gen 252). A hand-picked list finds what you already
+     * suspected.
      *
-     * Both directions are walked because the ring is spatial, not cyclic: d-pad down stops at the
-     * bottom of the menu, so anything above where focus lands is reached by going up. That is the
-     * default mapping doing its job, not a defect - but a down-only walk reports Collection
-     * unreachable, which is how this test was nearly written wrong.
+     * Each row either arrives at the view, proves it is open, presses B and proves it closed to
+     * the menu, or names itself exempt with the reason. Exempt is a claim about the design, so it
+     * has to survive being read out loud.
+     *
+     * The ring is walked in both directions because it is spatial, not cyclic: d-pad down stops at
+     * the bottom of the menu, so anything above where focus lands is reached by going up. That is
+     * the default mapping doing its job - but a down-only walk reports Collection unreachable,
+     * which is how this test was nearly written as a bug report.
      */
-    const MENU_SCREENS = [
-        { name: 'Collection', region: 'Collection' },
-        { name: 'Profile', region: 'Profile' },
-        { name: 'Inventory', region: 'Inventory' },
-        { name: 'Codex', region: 'Codex' },
-        { name: 'Settings', region: null }
-    ] as const;
+    interface BackCase {
+        /** How a player gets here from a cold boot. */
+        readonly arrive: (page: Page) => Promise<void>;
+        /** What proves this view is on screen. */
+        readonly onScreen: (page: Page) => Locator;
+    }
 
-    /** Settings is not a `MetaShell`, so it is found by its panel rather than a region label. */
-    const screenLocator = (page: Page, screen: (typeof MENU_SCREENS)[number]) =>
-        screen.region === null
-            ? page.getByTestId('settings-shell-panel')
-            : page.locator(`[role="region"][aria-label="${screen.region}"]`);
-
-    for (const screen of MENU_SCREENS) {
-        test(`a pad opens ${screen.name} and B comes back out`, async ({ page }) => {
-            test.setTimeout(180_000);
-            await installFakePad(page);
+    const walkToAndOpen =
+        (name: string) =>
+        async (page: Page): Promise<void> => {
             await gotoWithSave(page, buildVisualSaveJson(true));
             await mainMenuPlayButton(page).waitFor({ state: 'visible', timeout: 30_000 });
-
-            const target = new RegExp(screen.name, 'i');
+            const target = new RegExp(name, 'i');
             const walked: string[] = [];
             let landed = false;
             for (const direction of [DPAD_DOWN, DPAD_UP]) {
@@ -220,16 +217,75 @@ test.describe('controller navigation', () => {
                     break;
                 }
             }
-            expect(landed, `the d-pad never reached ${screen.name}; it walked: ${[...new Set(walked)].join(' > ')}`).toBe(
-                true
-            );
-
+            expect(landed, `the d-pad never reached ${name}; it walked: ${[...new Set(walked)].join(' > ')}`).toBe(true);
             await pressPad(page, BUTTON_A);
-            await expect(screenLocator(page, screen)).toBeVisible({ timeout: 20_000 });
+        };
+
+    const metaScreen = (label: string): BackCase => ({
+        arrive: walkToAndOpen(label),
+        onScreen: (page) => page.locator(`[role="region"][aria-label="${label}"]`)
+    });
+
+    const CONTENT_BY_VIEW: Record<ViewState, BackCase | { readonly exempt: string }> = {
+        boot: { exempt: 'A frame before hydration finishes, not a screen a player is ever standing on.' },
+        menu: { exempt: 'The root. Back from the root has nowhere to go; leaving the game is the window close.' },
+        playing: {
+            exempt:
+                'The board is where B is NOT a leave - a stray press must not cost a run. The way out is ' +
+                'Start, and the pause menu it opens answers B itself (an OverlayModal with onEscape=resume). ' +
+                'The board on a pad is covered above; the in-run overlays are covered below.'
+        },
+        collection: metaScreen('Collection'),
+        profile: metaScreen('Profile'),
+        inventory: metaScreen('Inventory'),
+        codex: metaScreen('Codex'),
+        settings: {
+            arrive: walkToAndOpen('Settings'),
+            // Settings is not a `MetaShell`, so it is found by its panel rather than a region label.
+            onScreen: (page) => page.getByTestId('settings-shell-panel')
+        },
+        modeSelect: {
+            arrive: async (page) => {
+                await gotoWithSave(page, buildVisualSaveJson(true));
+                await mainMenuPlayButton(page).waitFor({ state: 'visible', timeout: 30_000 });
+                await mainMenuPlayButton(page).click({ force: true });
+            },
+            onScreen: (page) => page.getByRole('region', { name: /choose your path/i })
+        },
+        gameOver: {
+            arrive: async (page) => {
+                await openPlayablePathFixture(page, 'gameOver');
+            },
+            onScreen: (page) => page.getByText(/Expedition Over/i).first()
+        }
+    };
+
+    /**
+     * The census has to be complete, and `Record<ViewState, ...>` does not make it so HERE.
+     *
+     * Nothing typechecks `e2e/` - it is not in `tsconfig.json`, and Playwright transpiles each
+     * spec without checking types - so the Record annotation above is documentation, not a
+     * constraint. Deleting the `gameOver` row and running `tsc` was the negative control that
+     * proved it: clean. So the completeness claim is asserted at runtime, against the same
+     * `VIEW_STATES` the app itself is typed from.
+     */
+    test('the census covers every view the app can show', () => {
+        expect([...Object.keys(CONTENT_BY_VIEW)].sort()).toEqual([...VIEW_STATES].sort());
+    });
+
+    for (const [view, entry] of Object.entries(CONTENT_BY_VIEW) as [ViewState, (typeof CONTENT_BY_VIEW)[ViewState]][]) {
+        if ('exempt' in entry) {
+            continue;
+        }
+        test(`a pad reaches ${view} and B comes back out`, async ({ page }) => {
+            test.setTimeout(180_000);
+            await installFakePad(page);
+            await entry.arrive(page);
+            await expect(entry.onScreen(page)).toBeVisible({ timeout: 20_000 });
 
             // B is the universal back on a Deck. Without it the screen is a room with no door.
             await pressPad(page, BUTTON_B);
-            await expect(screenLocator(page, screen)).toBeHidden({ timeout: 20_000 });
+            await expect(entry.onScreen(page)).toBeHidden({ timeout: 20_000 });
             await expect(mainMenuPlayButton(page)).toBeVisible({ timeout: 20_000 });
         });
     }

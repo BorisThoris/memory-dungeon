@@ -2677,3 +2677,41 @@ in `fullcheck` after `gate:illustration-regression`. Both specs existed and neit
 gate — the third time this session an instrument was found unwired (Gen 236 the fit contract, Gen
 241/242 the illustration spec). Negative control: with one assertion in
 `deck-controller-reach.spec.ts` inverted, `yarn gate:controller` exits 1 with 1 failed / 9 passed.
+
+## Gen 252 — "all content" was a list I picked by hand, and it missed two screens
+
+Gen 250 proved B leaves five meta screens. Five is what I chose to look at. Taking `ViewState` as
+the question instead of my own list found two more views that swallow B:
+
+```
+VIEW modeSelect: still open=true  back at menu=false
+VIEW gameOver:   still open=true  back at menu=false
+```
+
+Choose Your Path and the run summary. Both now call `useEscapeLeaves`, against the routes
+`NAVIGATION_ROUTE_CONTRACTS` already documents — `modeSelect -> menu` and `gameOver -> menu`. On
+game over the run is already finished, so back costs nothing and Play again stays a deliberate
+press. Measured afterwards: both close to the menu, and a sheet open over Choose Your Path still
+takes Escape first (`OverlayModal` is `document` capture, the hook is `window` bubble), so B closes
+the sheet and leaves the screen behind it standing.
+
+### The census
+
+`controller-navigation.spec.ts` now keys its table by `ViewState`. Three views are exempt, each
+with the reason in the table: `boot` is a frame before hydration, `menu` is the root, and
+`playing` is the one place B is deliberately **not** a leave — a stray press must not cost a run,
+so the way out is Start, and the pause menu it opens answers B itself.
+
+Two things this cost, and both are worth keeping:
+
+- **`Record<ViewState, ...>` does not constrain an e2e spec.** `e2e/` is not in `tsconfig.json`
+  and Playwright transpiles without typechecking, so the annotation was documentation. The
+  negative control was deleting the `gameOver` row and running `tsc`: clean. Completeness is now
+  asserted at runtime against `VIEW_STATES`, and that check fails with `- "gameOver"` when a row
+  goes missing. **Nothing typechecks the e2e suite** — a separate config finds 11 errors there,
+  one of them a real latent bug (`offsetHeight` read off an `HTMLElement | SVGElement`). Its own
+  generation.
+- **The view list had four copies.** `contracts.ts` now exports `VIEW_STATES` and derives
+  `ViewState` from it; `navigationModel`'s `NavigationSurface`, `scripts/e2e-surface-coverage.ts`
+  and this spec all read that one list. A hand-copied list is a list that stops matching, and what
+  these copies exist for is proving nothing was forgotten.

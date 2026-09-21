@@ -1,17 +1,8 @@
 import type { RunStatus, SubscreenReturnView, ViewState } from '../../shared/contracts';
 import { isResumableLifecycleState, lifecycleStateFromRunStatus } from '../../shared/run-lifecycle-machine';
 
-type NavigationSurface =
-    | 'boot'
-    | 'menu'
-    | 'modeSelect'
-    | 'collection'
-    | 'profile'
-    | 'inventory'
-    | 'codex'
-    | 'settings'
-    | 'playing'
-    | 'gameOver';
+/** The route table's surfaces are the app's views; a fourth copy of the list would only drift. */
+type NavigationSurface = ViewState;
 
 type NavigationAction =
     | 'back'
