@@ -41,11 +41,21 @@ export const CHAIN_RUNG_SCORE_MULTIPLIER: Readonly<Record<ChainTier, number>> = 
  * bridges reach rather than what the deal had already stacked. The rest of the ladder came back
  * intact once every tier counted corner contact.
  */
+/**
+ * Gen 260 moved Fever from seven pairs to eight, because the boards under it changed.
+ *
+ * Giving the recovery floor a two-suit deal (`SUIT_DEAL_PROFILE_BY_ARCHETYPE`) put four more floors
+ * per cycle on the narrow palette, and one suit over half a board is one suit in bigger clumps - so a
+ * break that reaches the whole clump takes more pairs with it. Measured fresh by `sim:pop`: 1.63 /
+ * 2.40 / 6.12 / 7.70 against the 2 / 2 / 6 / 7 stated here, which put Fever 0.70 out and past
+ * `CHAIN_RUNG_PAIRS_TOLERANCE`. The meter says "about eight pairs" now because that is what a Fever
+ * break takes; the test below is what made it say so rather than quietly understating the rung.
+ */
 export const CHAIN_RUNG_PAIRS: Readonly<Record<ChainTier, number>> = {
     none: 2,
     clean: 2,
     sharp: 6,
-    fever: 7
+    fever: 8
 };
 
 /**

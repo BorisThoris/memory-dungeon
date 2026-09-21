@@ -3141,3 +3141,89 @@ quoted **0.829** of a run's floors clearing their featured objective and the cen
 **0.821**. That is the change working — the within-par objective is a target on scattered floors now
 — but the note said otherwise, and the test that compares a quoted figure to what the census would
 print today is the reason it could not be left saying it.
+
+## Gen 260 — the floor whose job is a rest was the tightest floor of the five roles
+
+Gen 259 left an archetype table on screen that I had not read across: eleven archetypes, and
+`pressureRoleForArchetype` sorts them into five pacing jobs — baseline, pressure, reward, recovery,
+mystery. `sim:curve` reads the curve along the floor number, `sim:cascade` reads it over all floors.
+Neither reads it by archetype, so nothing in this repository had ever checked whether those five roles
+describe anything a player experiences.
+
+### The first reading was wrong, and for the same reason as last time
+
+Grouping *live* floors by archetype said the breather was among the tightest floors in the game
+(0.742 of its par against `survey_hall`'s 0.674). That is a confound, not a finding: turns-against-par
+rises with board size and no two archetypes sit on the same floors, so an archetype that lands
+shallow looks generous and one that lands deep looks tight. Full runs with the magpie as the only
+thing moving said the opposite — breather 0.701, baseline 0.720 — and the schedule's own comment about
+the bird turned out approximately honest: it fires on 0.31 of the floors it rides and costs 0.016 of
+par. Two mutators I suspected of being inert are measured in other currencies entirely: `wide_recall`
+costs five score a match and `short_memorize` shortens the memorize window, neither of which is a turn.
+
+### The controlled reading
+
+One board per floor and seed, no mutators, the archetype id swapped and everything else held — floor,
+seed, pair count, objective. Thirty seeds, floors 18/22/30/42:
+
+```
+treasure_gallery 0.795   parasite_tithe 0.780   breather 0.778   shadow_read 0.775
+anchor_chain     0.769   script_room    0.767   survey_hall 0.758
+trap_hall        0.727   spotlight_hunt 0.716   rush_recall 0.711   speed_trial 0.697
+```
+
+Every clumped archetype between 0.758 and 0.795. Every narrow-palette one between 0.697 and 0.727.
+The split falls exactly on `SUIT_DEAL_PROFILE_BY_ARCHETYPE` and nowhere near the archetype id. **The
+archetype is a label; its suit-deal profile is the whole of its difficulty.** That is worth saying
+plainly rather than dressing up: eleven archetypes, five declared roles, one lever with two settings.
+
+Read by role, the cycle's pacing was upside down:
+
+```
+recovery 0.778    reward 0.795    mystery 0.767    baseline 0.758    pressure 0.739
+```
+
+The floor whose job is to let a run heal spent **more** of its allowance than the average floor whose
+job is to press — because the narrow palette, which Gen 259 established is the looser board against
+its own par, had been handed out to `pressure` archetypes only, and the recovery floor was left on the
+wide one.
+
+### The fix is the deal its own hint already asked for
+
+The breather's hint is *"A calmer floor to steady the board and rebuild the chain"* and its risk
+profile is *"Lower pressure"*. Two suits is what that describes: one suit over half the board means
+almost every match touches its own kind, the pop reaches far, and a broken chain is cheap to rebuild.
+Measured, the floor goes from 0.743 of its par to **0.682** and from 0.498 turns per pair to 0.348 —
+below the pressure mean of 0.729 and below the baseline's 0.798. Its copy said the opposite ("deals
+the full palette, which makes it the cheapest place to spend a peek or a flash") and now says what it
+does.
+
+`gate:archetype-pressure` is the instrument, in `gate:systems`. It bands the one claim the catalog
+makes out loud — the recovery floor may not cost more of its par than the average pressure floor — and
+deliberately does **not** band the archetypes against each other, because they are within noise of one
+another and a band there would be inventing a structure the game does not have. It reads its roles
+from `pressureRoleForArchetype` rather than keeping a copy, since a gate holding its own private role
+map could not check whether the schedule's roles mean anything. Negative control, run: breather back to
+`clumped` and it fails with *"the recovery floor is not a rest: breather spends 0.797 of its par
+against the 7 pressure archetypes' 0.729"*.
+
+### What four more narrow floors a cycle moved downstream
+
+Everything here is the same mechanism seen from a different counter, and every one of these was a red
+test rather than something I went looking for:
+
+- **The meter was understating Fever.** `CHAIN_RUNG_PAIRS` promised seven pairs; re-measured by
+  `sim:pop` a Fever break now takes 7.70, past `CHAIN_RUNG_PAIRS_TOLERANCE`. A narrow palette puts one
+  suit in bigger clumps, so a break that takes the clump takes more with it. The meter says eight now.
+- **Fever reaches fewer floors**, 0.246 → 0.217, because a two-suit floor ends sooner and a shorter
+  floor has less room to build a chain. Still far above the 10% bar Gen 152 set.
+- **The drop takes a severed suit on 0.854 of floors**, from 0.871: a narrow palette leaves fewer
+  suits to sever.
+- **Turn resolution 4.95 → 4.80 a floor.** Par follows it, so this is the shorter floor rather than a
+  looser one.
+- **Nine trait, power and hazard shares moved** by a few thousandths each, all in the ledger's prose,
+  all caught by the test that compares a quoted figure to what the census prints today.
+- **The magpie got rarer**, 0.013 → 0.008 of floors: the breather it rides ends in fewer turns, so the
+  bird's every-third-miss trigger lands on it less often. Both occupancy gates still pass and the run
+  census still bands it, but this is the one cost of the change rather than a benefit of it — a thief
+  is not relief, and the nest is now the wrong floor. Left as a task rather than folded in here.

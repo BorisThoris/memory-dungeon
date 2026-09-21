@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2552,
-    "codeFileCount": 900,
-    "exportedSymbolCount": 2718,
+    "trackedFileCount": 2554,
+    "codeFileCount": 901,
+    "exportedSymbolCount": 2719,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6885
+    "relationshipCount": 6892
   },
   "inventory": [
     {
@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 492519,
-      "sha256": "2888941844438ef1ed47e9bb44be8eb02cf2104fd09e1a690a5a330f64dee699"
+      "bytes": 498178,
+      "sha256": "a63dd3b25a71631ae59b38912d2aed6b793fe7f35e499b51f89c84a683e50847"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -777,8 +777,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 18215,
-      "sha256": "aff19f4b686c16c1eeecc4d76acb2943a559250b80baa09bb48b408da4c79563"
+      "bytes": 19222,
+      "sha256": "be472714bde67a006d4c45addb3b1e0d7b7e0e8e0692936bcd31d9cf232acbd5"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "013f2bf56dbb53208887f5a96c9012b9a68cf20e7fecc12bdb30ab14652d48ba"
+      "sha256": "eaf657399d6faa659b566b87bb3e2369c48c2483eb17ddbc8bbc8dad1ccf0fd1"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4197,8 +4197,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 31895,
-      "sha256": "db75a4d115936f550fb410c722b0a9666329026ed7e797f240bc2375e6c32e76"
+      "bytes": 32078,
+      "sha256": "95fe8a3a0dcfe26c661f17891ab92b84a2ed45e884a510217b64dc33ff424596"
     },
     {
       "path": "packages/notifications/package.json",
@@ -5321,6 +5321,12 @@
       "category": "script",
       "bytes": 9925,
       "sha256": "3eeefc5cead359d59cf927a1f36ef05870c4472608f4d444633614ae420af4a9"
+    },
+    {
+      "path": "scripts/sim-archetype-pressure.ts",
+      "category": "script",
+      "bytes": 11627,
+      "sha256": "15b7b1596ed580c9fa9270d5e74b79eb22113ee0d136bcd836a6b92f394e9628"
     },
     {
       "path": "scripts/sim-cascade.ts",
@@ -10977,8 +10983,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 18479,
-      "sha256": "2e738d24c4d5431caaedb94725dd78c3c72aa6b32ff9a8192d214bd256686b39"
+      "bytes": 19488,
+      "sha256": "095c93cbeef09b6ecae6b36e2b184edee626a2845860d5476924079056c3c41f"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -11009,6 +11015,12 @@
       "category": "test",
       "bytes": 4526,
       "sha256": "6d9a3aae20ffbdf5e402e923feaf464a7b1dcd24e465ff2ca9584ce1ecd04376"
+    },
+    {
+      "path": "src/shared/archetype-pressure-simulation.test.ts",
+      "category": "test",
+      "bytes": 6339,
+      "sha256": "0b46e92da9bc24e24976282ca4e966a5870a2f16fef8f81452c6fcd594cb252c"
     },
     {
       "path": "src/shared/audit-summary-script.test.ts",
@@ -11211,8 +11223,8 @@
     {
       "path": "src/shared/boss-encounters.ts",
       "category": "source",
-      "bytes": 15710,
-      "sha256": "6c546282780309d58f0845a73bcb46543261ce1018e763d0c1f5299914e40dbf"
+      "bytes": 15716,
+      "sha256": "58dbd0b97789e92a16cd19e905515505a22605dfa0fd9acd19a1710dc753ab85"
     },
     {
       "path": "src/shared/bridge-reachability.test.ts",
@@ -11259,8 +11271,8 @@
     {
       "path": "src/shared/chain-rung-value-rules.ts",
       "category": "source",
-      "bytes": 3534,
-      "sha256": "a3ae1cfa52d377bbec60c607138d9d7d2f345ef7ba7f2d910e0cb39630c7c964"
+      "bytes": 4229,
+      "sha256": "e1d4ea3ce4c7e173c220e59ae77e3853c86410df478a3c2a1330e2454e1e1670"
     },
     {
       "path": "src/shared/chain-targets.test.ts",
@@ -11589,8 +11601,8 @@
     {
       "path": "src/shared/floor-mutator-schedule.ts",
       "category": "source",
-      "bytes": 24110,
-      "sha256": "6c51415ce26bb34883e2ccf15b81fecdc7ee097de86a6d9445069af72d5303ff"
+      "bytes": 24835,
+      "sha256": "4cb152dbf4a57c8c326f4bc3e7e4f77702e24a446fa32e8950c220c3a37da8f8"
     },
     {
       "path": "src/shared/floor-par.test.ts",
@@ -12855,8 +12867,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 30744,
-      "sha256": "191f90a838743a90cda950ff1aab12e6dedbcf28b8e7e83524a8e92db94db980"
+      "bytes": 31751,
+      "sha256": "e8f85c091db6960d320bf67e5a4287293e59ffaafd12b384f2442e1f5e4f2169"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -12927,14 +12939,14 @@
     {
       "path": "src/shared/tile-suit-rules.test.ts",
       "category": "test",
-      "bytes": 19561,
-      "sha256": "111705899c3c0a62d4a2b0c2a83007fa74265ba29651a29147be8dc9ca977f0d"
+      "bytes": 20989,
+      "sha256": "24933de2c3001a2b7d16e16dc52c45aaf87b5f695011be4f7f38afcad031d566"
     },
     {
       "path": "src/shared/tile-suit-rules.ts",
       "category": "source",
-      "bytes": 30335,
-      "sha256": "31842f2a0dc0ad5db9d97220dc5482315f76dc1110b864140afb965e66f6966e"
+      "bytes": 31783,
+      "sha256": "97338d3bf83c4bb3e2a9d0eb9265a22cc606dacfff04e81c7c2ba24b21dc297f"
     },
     {
       "path": "src/shared/tile-symbol-catalog.test.ts",
@@ -24875,6 +24887,20 @@
       "testedBy": []
     },
     {
+      "id": "file:src/shared/archetype-pressure-simulation.test.ts",
+      "path": "src/shared/archetype-pressure-simulation.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 124,
+      "imports": [
+        "file:src/shared/floor-mutator-schedule.ts",
+        "file:src/shared/floor-par.ts",
+        "file:src/shared/tile-suit-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/shared/audit-summary-script.test.ts",
       "path": "src/shared/audit-summary-script.test.ts",
       "layer": "shared",
@@ -25668,7 +25694,7 @@
       "path": "src/shared/chain-rung-value-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 63,
+      "lineCount": 73,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/chunk-break-rules.ts"
@@ -26903,7 +26929,7 @@
       "path": "src/shared/floor-mutator-schedule.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 623,
+      "lineCount": 634,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/rng.ts",
@@ -26935,11 +26961,13 @@
         "symbol:src/shared/floor-mutator-schedule.ts#getFloorArchetypeProgressionRows",
         "symbol:src/shared/floor-mutator-schedule.ts#getFloorChapterIdentity",
         "symbol:src/shared/floor-mutator-schedule.ts#pickFloorScheduleEntry",
+        "symbol:src/shared/floor-mutator-schedule.ts#pressureRoleForArchetype",
         "symbol:src/shared/floor-mutator-schedule.ts#usesEndlessFloorSchedule"
       ],
       "testedBy": [
         "file:src/renderer/hooks/useDistractionChannelTick.integration.test.tsx",
         "file:src/shared/achievement-reachability.test.ts",
+        "file:src/shared/archetype-pressure-simulation.test.ts",
         "file:src/shared/authored-floors.test.ts",
         "file:src/shared/bad-floor-is-quiet.test.ts",
         "file:src/shared/boss-encounters.test.ts",
@@ -27002,6 +27030,7 @@
       ],
       "testedBy": [
         "file:src/shared/achievements.test.ts",
+        "file:src/shared/archetype-pressure-simulation.test.ts",
         "file:src/shared/bad-floor-is-quiet.test.ts",
         "file:src/shared/difficulty-curve-simulation.test.ts",
         "file:src/shared/floor-par.test.ts",
@@ -31413,7 +31442,7 @@
       "path": "src/shared/tile-suit-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 371,
+      "lineCount": 390,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/contracts.ts",
@@ -31432,7 +31461,7 @@
       "path": "src/shared/tile-suit-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 628,
+      "lineCount": 650,
       "imports": [
         "file:src/shared/board-grid-dimensions.ts",
         "file:src/shared/contracts.ts",
@@ -31466,6 +31495,7 @@
       ],
       "testedBy": [
         "file:src/renderer/components/RunShell.test.tsx",
+        "file:src/shared/archetype-pressure-simulation.test.ts",
         "file:src/shared/floor-par.test.ts",
         "file:src/shared/secondary-objective-rules.test.ts",
         "file:src/shared/tile-suit-rules.test.ts"
@@ -43416,16 +43446,16 @@
       "name": "CHAIN_RUNG_PAIRS",
       "kind": "value",
       "file": "src/shared/chain-rung-value-rules.ts",
-      "line": 44,
-      "endLine": 49
+      "line": 54,
+      "endLine": 59
     },
     {
       "id": "symbol:src/shared/chain-rung-value-rules.ts#CHAIN_RUNG_PAIRS_TOLERANCE",
       "name": "CHAIN_RUNG_PAIRS_TOLERANCE",
       "kind": "value",
       "file": "src/shared/chain-rung-value-rules.ts",
-      "line": 56,
-      "endLine": 56
+      "line": 66,
+      "endLine": 66
     },
     {
       "id": "symbol:src/shared/chain-rung-value-rules.ts#CHAIN_RUNG_SCORE_MULTIPLIER",
@@ -43440,16 +43470,16 @@
       "name": "chainRungPairs",
       "kind": "value",
       "file": "src/shared/chain-rung-value-rules.ts",
-      "line": 62,
-      "endLine": 62
+      "line": 72,
+      "endLine": 72
     },
     {
       "id": "symbol:src/shared/chain-rung-value-rules.ts#chainRungScoreMultiplier",
       "name": "chainRungScoreMultiplier",
       "kind": "value",
       "file": "src/shared/chain-rung-value-rules.ts",
-      "line": 59,
-      "endLine": 59
+      "line": 69,
+      "endLine": 69
     },
     {
       "id": "symbol:src/shared/chain-targets.ts#ChainTargetBand",
@@ -45872,56 +45902,64 @@
       "name": "getFeaturedObjectiveLabel",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 551,
-      "endLine": 552
+      "line": 562,
+      "endLine": 563
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFloorArchetypeDefinition",
       "name": "getFloorArchetypeDefinition",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 547,
-      "endLine": 549
+      "line": 558,
+      "endLine": 560
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFloorArchetypeProgressionReport",
       "name": "getFloorArchetypeProgressionReport",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 503,
-      "endLine": 545
+      "line": 514,
+      "endLine": 556
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFloorArchetypeProgressionRows",
       "name": "getFloorArchetypeProgressionRows",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 498,
-      "endLine": 501
+      "line": 509,
+      "endLine": 512
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFloorChapterIdentity",
       "name": "getFloorChapterIdentity",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 554,
-      "endLine": 587
+      "line": 565,
+      "endLine": 598
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#pickFloorScheduleEntry",
       "name": "pickFloorScheduleEntry",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 593,
-      "endLine": 619
+      "line": 604,
+      "endLine": 630
+    },
+    {
+      "id": "symbol:src/shared/floor-mutator-schedule.ts#pressureRoleForArchetype",
+      "name": "pressureRoleForArchetype",
+      "kind": "value",
+      "file": "src/shared/floor-mutator-schedule.ts",
+      "line": 437,
+      "endLine": 455
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#usesEndlessFloorSchedule",
       "name": "usesEndlessFloorSchedule",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 621,
-      "endLine": 622
+      "line": 632,
+      "endLine": 633
     },
     {
       "id": "symbol:src/shared/floor-par.ts#floorHitTurnCeiling",
@@ -52656,16 +52694,16 @@
       "name": "boardPaletteWidth",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 568,
-      "endLine": 575
+      "line": 590,
+      "endLine": 597
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#dealBoardSuits",
       "name": "dealBoardSuits",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 527,
-      "endLine": 559
+      "line": 549,
+      "endLine": 581
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#dealTilesInClumps",
@@ -52680,8 +52718,8 @@
       "name": "getSuitDealProfile",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 440,
-      "endLine": 441
+      "line": 462,
+      "endLine": 463
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#getTileSuit",
@@ -52704,16 +52742,16 @@
       "name": "largestHiddenSuitClump",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 601,
-      "endLine": 627
+      "line": 623,
+      "endLine": 649
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#MIN_PAIRS_FOR_TWO_SUITS",
       "name": "MIN_PAIRS_FOR_TWO_SUITS",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 498,
-      "endLine": 498
+      "line": 520,
+      "endLine": 520
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#MIX_MAX_RUN",
@@ -52752,48 +52790,48 @@
       "name": "sameSuitNeighbourRate",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 581,
-      "endLine": 595
+      "line": 603,
+      "endLine": 617
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#SCATTERED_SUIT_CEILING",
       "name": "SCATTERED_SUIT_CEILING",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 519,
-      "endLine": 519
+      "line": 541,
+      "endLine": 541
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#SUIT_DEAL_PROFILE_BY_ARCHETYPE",
       "name": "SUIT_DEAL_PROFILE_BY_ARCHETYPE",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 426,
-      "endLine": 438
+      "line": 448,
+      "endLine": 460
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#SUIT_TARGET_PAIRS",
       "name": "SUIT_TARGET_PAIRS",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 497,
-      "endLine": 497
+      "line": 519,
+      "endLine": 519
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#suitCountForDeal",
       "name": "suitCountForDeal",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 521,
-      "endLine": 525
+      "line": 543,
+      "endLine": 547
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#suitCountForPairs",
       "name": "suitCountForPairs",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 500,
-      "endLine": 504
+      "line": 522,
+      "endLine": 526
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#SuitDealProfile",
@@ -54020,7 +54058,7 @@
         },
         {
           "path": "src/shared/tile-suit-rules.test.ts",
-          "line": 307
+          "line": 308
         },
         {
           "path": "src/shared/cascade-balance-simulation.test.ts",
@@ -67737,6 +67775,12 @@
       "id": "exports:src/shared/floor-mutator-schedule.ts->symbol:src/shared/floor-mutator-schedule.ts#pickFloorScheduleEntry",
       "source": "file:src/shared/floor-mutator-schedule.ts",
       "target": "symbol:src/shared/floor-mutator-schedule.ts#pickFloorScheduleEntry",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/floor-mutator-schedule.ts->symbol:src/shared/floor-mutator-schedule.ts#pressureRoleForArchetype",
+      "source": "file:src/shared/floor-mutator-schedule.ts",
+      "target": "symbol:src/shared/floor-mutator-schedule.ts#pressureRoleForArchetype",
       "kind": "exports"
     },
     {
@@ -83516,6 +83560,24 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/archetype-pressure-simulation.test.ts->src/shared/floor-mutator-schedule.ts",
+      "source": "file:src/shared/archetype-pressure-simulation.test.ts",
+      "target": "file:src/shared/floor-mutator-schedule.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/archetype-pressure-simulation.test.ts->src/shared/floor-par.ts",
+      "source": "file:src/shared/archetype-pressure-simulation.test.ts",
+      "target": "file:src/shared/floor-par.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/archetype-pressure-simulation.test.ts->src/shared/tile-suit-rules.ts",
+      "source": "file:src/shared/archetype-pressure-simulation.test.ts",
+      "target": "file:src/shared/tile-suit-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/authored-floors.test.ts->src/shared/authored-floors.ts",
       "source": "file:src/shared/authored-floors.test.ts",
       "target": "file:src/shared/authored-floors.ts",
@@ -95023,6 +95085,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/floor-mutator-schedule.ts->file:src/shared/archetype-pressure-simulation.test.ts",
+      "source": "file:src/shared/floor-mutator-schedule.ts",
+      "target": "file:src/shared/archetype-pressure-simulation.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/floor-mutator-schedule.ts->file:src/shared/authored-floors.test.ts",
       "source": "file:src/shared/floor-mutator-schedule.ts",
       "target": "file:src/shared/authored-floors.test.ts",
@@ -95074,6 +95142,12 @@
       "id": "tested_by:src/shared/floor-par.ts->file:src/shared/achievements.test.ts",
       "source": "file:src/shared/floor-par.ts",
       "target": "file:src/shared/achievements.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/floor-par.ts->file:src/shared/archetype-pressure-simulation.test.ts",
+      "source": "file:src/shared/floor-par.ts",
+      "target": "file:src/shared/archetype-pressure-simulation.test.ts",
       "kind": "tested_by"
     },
     {
@@ -97174,6 +97248,12 @@
       "id": "tested_by:src/shared/tile-suit-rules.ts->file:src/renderer/components/RunShell.test.tsx",
       "source": "file:src/shared/tile-suit-rules.ts",
       "target": "file:src/renderer/components/RunShell.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/tile-suit-rules.ts->file:src/shared/archetype-pressure-simulation.test.ts",
+      "source": "file:src/shared/tile-suit-rules.ts",
+      "target": "file:src/shared/archetype-pressure-simulation.test.ts",
       "kind": "tested_by"
     },
     {

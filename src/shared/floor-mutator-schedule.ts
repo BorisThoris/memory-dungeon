@@ -427,24 +427,35 @@ const emptyFloorTagCounts = (): Record<FloorTag, number> => ({
     boss: 0
 });
 
-const roleForArchetype = (entry: FloorScheduleEntry): FloorArchetypePressureRole => {
-    if (entry.floorTag === 'boss') {
-        return 'boss';
-    }
-    if (entry.floorArchetypeId === 'treasure_gallery') {
+/**
+ * The pacing job a floor's archetype is doing, ignoring its position in the cycle.
+ *
+ * Exported since Gen 260 so that `sim:archetype-pressure` reads the schedule's own assignment rather
+ * than keeping a second copy of it: the whole point of that gate is to check whether these roles
+ * describe how the floors actually play, and a gate holding its own private role map could not.
+ */
+export const pressureRoleForArchetype = (
+    floorArchetypeId: FloorArchetypeId | null | undefined
+): Exclude<FloorArchetypePressureRole, 'boss'> => {
+    if (floorArchetypeId === 'treasure_gallery') {
         return 'reward';
     }
-    if (entry.floorArchetypeId === 'breather') {
+    if (floorArchetypeId === 'breather') {
         return 'recovery';
     }
-    if (entry.floorArchetypeId === 'script_room') {
+    if (floorArchetypeId === 'script_room') {
         return 'mystery';
     }
-    if (entry.floorArchetypeId === 'survey_hall') {
+    if (floorArchetypeId === 'survey_hall') {
         return 'baseline';
     }
+    // An entry with no archetype at all reads as pressure, which is what this returned before it
+    // was extracted - a floor nobody has characterised is not one to call a rest.
     return 'pressure';
 };
+
+const roleForArchetype = (entry: FloorScheduleEntry): FloorArchetypePressureRole =>
+    entry.floorTag === 'boss' ? 'boss' : pressureRoleForArchetype(entry.floorArchetypeId);
 
 const budgetExpectationForRole = (role: FloorArchetypePressureRole): string => {
     switch (role) {

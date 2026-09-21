@@ -15,6 +15,7 @@ import {
     largestHiddenSuitClump,
     PAIR_HALF_SEPARATION,
     sameSuitNeighbourRate,
+    SCATTERED_SUIT_CEILING,
     suitCountForPairs,
     SUIT_DEAL_PROFILE_BY_ARCHETYPE,
     TILE_SUIT_CATALOG,
@@ -351,19 +352,37 @@ describe('the deal profile', () => {
         expect(largest).toBeLessThanOrEqual(mixMaxRunForSuits(2));
     });
 
-    it('reads the profile off the built floor: a rush floor carries fewer suits than a breather', () => {
-        // Gen 204: the same turn as above, on real built floors rather than bare tiles.
+    it('reads the profile off the built floor: a rush floor carries fewer suits than a survey hall', () => {
+        // Gen 204: the same turn as above, on real built floors rather than bare tiles. The wide side
+        // of the comparison was the breather until Gen 260 moved it to the narrow palette, so it is
+        // the baseline archetype now - the floor that actually deals four.
         for (const runSeed of [21, 22, 23, 24]) {
             // Floor 14: deep enough that both archetypes carry more than one suit.
-            const breather = buildBoard(14, { runSeed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', floorArchetypeId: 'breather' });
+            const wide = buildBoard(14, { runSeed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', floorArchetypeId: 'survey_hall' });
             const rush = buildBoard(14, { runSeed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', floorArchetypeId: 'rush_recall' });
             const suits = (board: { tiles: Tile[] }): number => new Set(board.tiles.map((tile) => tile.suit)).size;
-            expect(suits(rush), `seed ${runSeed}`).toBeLessThan(suits(breather));
+            expect(suits(rush), `seed ${runSeed}`).toBeLessThan(suits(wide));
             // Neither is clumped: both sit within a shuffle's reach of their own chance baseline.
-            for (const [name, board] of [['breather', breather], ['rush', rush]] as const) {
+            for (const [name, board] of [['survey_hall', wide], ['rush', rush]] as const) {
                 const overChance = sameSuitNeighbourRate(board) - 1 / suits(board);
                 expect(overChance, `${name} seed ${runSeed}`).toBeLessThan(0.15);
             }
+        }
+    });
+
+    it('deals the recovery floor a narrow palette, because that is the only relief an archetype has', () => {
+        /*
+         * Gen 260. Measured with the archetype as the only thing moving, every clumped archetype cost
+         * a clean player 0.758-0.795 of its par and every narrow one 0.697-0.727 - the split falls on
+         * this table, not on the archetype id. So a breather on four suits was not a rest, and the
+         * role it is given (`pressureRoleForArchetype` -> recovery) said it was.
+         */
+        for (const runSeed of [31, 32, 33, 34]) {
+            const breather = buildBoard(18, { runSeed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', floorArchetypeId: 'breather' });
+            const baseline = buildBoard(18, { runSeed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', floorArchetypeId: 'survey_hall' });
+            const suits = (board: { tiles: Tile[] }): number => new Set(board.tiles.map((tile) => tile.suit)).size;
+            expect(suits(breather), `breather seed ${runSeed}`).toBe(SCATTERED_SUIT_CEILING);
+            expect(suits(breather), `breather against the baseline, seed ${runSeed}`).toBeLessThan(suits(baseline));
         }
     });
 });

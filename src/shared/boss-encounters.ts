@@ -240,11 +240,11 @@ export const getFloorIdentityContract = ({
         return {
             id: 'recovery_study_room',
             label: 'Recovery study',
-            teachingSentence: `A breather asks for less and deals the full palette, which makes it the cheapest place to spend a peek or a flash.${objectiveSuffix(featuredObjectiveLabel)}`,
+            teachingSentence: `A breather asks for less and deals two suits, so the clumps are wide and a broken chain is cheap to rebuild.${objectiveSuffix(featuredObjectiveLabel)}`,
             counterplaySentence: 'Charges do not carry a premium for being saved. Spend them on the floor that is easy to read and bank the score.',
             floorClearSentence: 'Breather cleared. Four suits means the pops were narrow, but the floor never pushed back.',
             atmosphericFeedback: 'The study lamps keep burning after you leave, holding the next route in soft focus.',
-            activeReminder: 'Breather: full palette, cheap floor to spend on.',
+            activeReminder: 'Breather: two wide suits, cheap floor to rebuild a chain on.',
             warningLevel: 'safe',
             tokens: ['safe', 'hidden_known', 'reward', 'momentum']
         };
