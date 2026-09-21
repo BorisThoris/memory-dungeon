@@ -3,6 +3,7 @@ import '@cross-repo-libs/notifications/styles.css';
 import { StrictMode } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import App from './App';
+import { BootSplashTeardown } from './BootSplashTeardown';
 import { AppErrorBoundary } from './components/AppErrorBoundary';
 import { desktopClient } from './desktop-client';
 import { registerRendererErrorHooks } from './diagnostics/rendererErrorHooks';
@@ -21,6 +22,7 @@ const mountRendererApp = (rootElement: HTMLElement): Root => {
     const root = createRoot(rootElement);
     root.render(
         <StrictMode>
+            <BootSplashTeardown />
             {/*
              * Outside everything, including the tilt provider and the notification host: a throw in
              * any of them used to unmount the whole tree and leave an empty window behind.

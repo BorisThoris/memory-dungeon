@@ -49,6 +49,8 @@ describe('startup intro contract', () => {
         ).toEqual({
             assetState: 'loading',
             loadingLabel: 'Preparing intro assets…',
+            progress: 0,
+            progressPercent: 0,
             skipState: 'idle'
         });
 
@@ -61,6 +63,8 @@ describe('startup intro contract', () => {
         ).toEqual({
             assetState: 'loading',
             loadingLabel: 'Skip requested — preparing a safe intro fallback…',
+            progress: 0,
+            progressPercent: 0,
             skipState: 'requested'
         });
 
@@ -73,8 +77,66 @@ describe('startup intro contract', () => {
         ).toEqual({
             assetState: 'fallback',
             loadingLabel: null,
+            progress: 1,
+            progressPercent: 100,
             skipState: 'requested'
         });
+    });
+
+    it('reports step progress and prefers the current step label while loading', () => {
+        expect(
+            resolveStartupIntroOverlayContract({
+                assetsReady: false,
+                loadedSteps: 1,
+                renderMode: 'three',
+                skipPending: false,
+                stepLabel: 'Cutting the tiles…',
+                totalSteps: 3
+            })
+        ).toMatchObject({
+            loadingLabel: 'Cutting the tiles…',
+            progressPercent: 33
+        });
+    });
+
+    it('lets skip copy outrank step copy so the player sees their input was taken', () => {
+        expect(
+            resolveStartupIntroOverlayContract({
+                assetsReady: false,
+                loadedSteps: 2,
+                renderMode: 'three',
+                skipPending: true,
+                stepLabel: 'Waking the relic…',
+                totalSteps: 3
+            })
+        ).toMatchObject({
+            loadingLabel: 'Skip requested — preparing a safe intro fallback…',
+            progressPercent: 67
+        });
+    });
+
+    it('reads a ready overlay as complete even when no step progress was reported', () => {
+        expect(
+            resolveStartupIntroOverlayContract({
+                assetsReady: true,
+                loadedSteps: 0,
+                renderMode: 'three',
+                skipPending: false,
+                totalSteps: 3
+            })
+        ).toMatchObject({ progress: 1, progressPercent: 100 });
+    });
+
+    it('clamps a step count that overshoots its total', () => {
+        expect(
+            resolveStartupIntroOverlayContract({
+                assetsReady: false,
+                loadedSteps: 5,
+                renderMode: 'three',
+                skipPending: false,
+                totalSteps: 3
+            })
+        ).toMatchObject({ progress: 1, progressPercent: 100 });
     });
 
     it('keeps slow asset failsafe bounded for a first-impression boot path', () => {

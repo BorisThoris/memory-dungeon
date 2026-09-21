@@ -506,7 +506,10 @@ export async function gotoWithSaveExpectStartupIntroVisible(page: Page, saveJson
         [STORAGE_KEY, saveJson]
     );
     const intro = page.getByRole('dialog', { name: /startup relic intro/i });
-    await page.goto('/', { waitUntil: 'load', timeout: 90_000 });
+    // `load` waits on every subresource, which against a cold dev server can resolve seconds after
+    // React mounted — long enough for the intro to auto-complete and leave callers asserting on a
+    // dialog that is already gone. `domcontentloaded` starts the watch while the intro is still up.
+    await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 90_000 });
     await intro.waitFor({ state: 'visible', timeout: 90_000 });
 }
 

@@ -21,7 +21,11 @@ import {
 } from 'three';
 import relicSvgUrl from '../../../docs/wip-assets/card-sources/VECFINAL.svg?url';
 import type { GraphicsQualityPreset } from '../../shared/contracts';
-import { preloadStartupCriticalAssets } from '../assets/preloadStartupAssets';
+import {
+    preloadStartupCriticalAssets,
+    STARTUP_PRELOAD_INITIAL_LABEL,
+    STARTUP_PRELOAD_STEP_TOTAL
+} from '../assets/preloadStartupAssets';
 import { preloadCardRankOpentypeFont } from '../cardFace/opentypeCardRankFont';
 import { getMotionPermissionButtonLabels, shouldOfferDeviceMotionPermission } from '../platformTilt/platformTiltPermissionUi';
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
@@ -554,6 +558,10 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
     const [renderMode, setRenderMode] = useState<IntroRenderMode>(() => (hasWebGLSupport() ? 'three' : 'fallback'));
     const [textureSet, setTextureSet] = useState<RelicTextureSet | null>(null);
     const [assetsReady, setAssetsReady] = useState(false);
+    const [preloadProgress, setPreloadProgress] = useState<{ label: string | null; loadedSteps: number }>({
+        label: null,
+        loadedSteps: 0
+    });
     const [skipPending, setSkipPending] = useState(false);
     const [phase, setPhase] = useState<IntroPhase>('enter');
     const [variant] = useState(() => resolveIntroVariant({ reduceMotion }));
@@ -797,7 +805,19 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
             finishWith(null);
         }, STARTUP_INTRO_ASSET_FAILSAFE_MS);
 
-        void preloadStartupCriticalAssets({ relicSvgUrl, webgl })
+        void preloadStartupCriticalAssets({
+            onProgress: ({ completed, label }) => {
+                if (cancelled || settled) {
+                    return;
+                }
+                // Steps settle in whatever order they finish, so never let the rail walk backwards.
+                setPreloadProgress((current) =>
+                    completed > current.loadedSteps ? { label, loadedSteps: completed } : current
+                );
+            },
+            relicSvgUrl,
+            webgl
+        })
             .then(({ relicTextureSet }) => {
                 if (settled) {
                     relicTextureSet?.dispose();
@@ -845,8 +865,11 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
     const introMotionLabels = getMotionPermissionButtonLabels(permission, 'intro');
     const overlayContract = resolveStartupIntroOverlayContract({
         assetsReady,
+        loadedSteps: preloadProgress.loadedSteps,
         renderMode,
-        skipPending
+        skipPending,
+        stepLabel: preloadProgress.label ?? (preloadProgress.loadedSteps === 0 ? STARTUP_PRELOAD_INITIAL_LABEL : null),
+        totalSteps: STARTUP_PRELOAD_STEP_TOTAL
     });
 
     return (
@@ -867,11 +890,6 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
             style={timingStyle}
             tabIndex={-1}
         >
-            {overlayContract.loadingLabel ? (
-                <div aria-live="polite" className={styles.loadingHint} data-testid="startup-intro-loading-state">
-                    {overlayContract.loadingLabel}
-                </div>
-            ) : null}
             <div aria-hidden="true" className={styles.chromaticVeil} />
             <div aria-hidden="true" className={styles.edgeNoise} />
 
@@ -896,15 +914,42 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
                     )}
                 </div>
             </div>
-            <button
-                className={styles.continueButton}
-                disabled={skipPending}
-                onClick={requestSkip}
-                onPointerDown={(event) => event.stopPropagation()}
-                type="button"
-            >
-                {skipPending ? 'Opening game…' : 'Continue to game'}
-            </button>
+            {/*
+             * One console instead of a floating pill and a detached button: while assets load the
+             * rail is the subject, and it becomes the skip affordance once they are ready. Reserving
+             * the rail's row in both states keeps the button from jumping when loading ends.
+             */}
+            <div className={styles.bootConsole} data-state={overlayContract.assetState}>
+                <div className={styles.bootRailRow} data-visible={overlayContract.loadingLabel ? 'true' : 'false'}>
+                    <div
+                        aria-hidden={overlayContract.loadingLabel ? undefined : 'true'}
+                        aria-valuemax={100}
+                        aria-valuemin={0}
+                        aria-valuenow={overlayContract.progressPercent}
+                        aria-valuetext={`${overlayContract.progressPercent}% loaded`}
+                        className={styles.bootRail}
+                        data-testid="startup-intro-progress"
+                        role="progressbar"
+                        style={{ '--boot-progress': `${overlayContract.progressPercent}%` } as CSSProperties}
+                    >
+                        <span className={styles.bootRailFill} />
+                    </div>
+                    {overlayContract.loadingLabel ? (
+                        <p aria-live="polite" className={styles.loadingHint} data-testid="startup-intro-loading-state">
+                            {overlayContract.loadingLabel}
+                        </p>
+                    ) : null}
+                </div>
+                <button
+                    className={styles.continueButton}
+                    disabled={skipPending}
+                    onClick={requestSkip}
+                    onPointerDown={(event) => event.stopPropagation()}
+                    type="button"
+                >
+                    {skipPending ? 'Opening game…' : 'Continue to game'}
+                </button>
+            </div>
             {showIntroMotionCta ? (
                 <button
                     aria-label={introMotionLabels.ariaLabel}

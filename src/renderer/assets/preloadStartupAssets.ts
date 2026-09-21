@@ -141,7 +141,35 @@ export const resetStartupAssetPreloadStateForTests = (): void => {
     modePosterPreloadStarted = false;
 };
 
+/** One per tracked boot step, in the order the loading rail reports them. */
+export type StartupPreloadStepId = 'tiles' | 'interface' | 'relic';
+
+export interface StartupPreloadProgress {
+    /** Steps finished so far, out of `total`. */
+    completed: number;
+    /** Player-facing copy for the step that just landed. */
+    label: string;
+    step: StartupPreloadStepId;
+    total: number;
+}
+
+const STARTUP_PRELOAD_STEP_LABELS: Record<StartupPreloadStepId, string> = {
+    interface: 'Unrolling the interface…',
+    relic: 'Waking the relic…',
+    tiles: 'Cutting the tiles…'
+};
+
+/**
+ * Copy for the rail before any step has landed. Exported so the overlay and its tests share one
+ * source of truth for the "nothing has finished yet" state.
+ */
+export const STARTUP_PRELOAD_INITIAL_LABEL = 'Descending…';
+
+export const STARTUP_PRELOAD_STEP_TOTAL = 3;
+
 interface PreloadStartupCriticalAssetsOptions {
+    /** Called as each tracked step settles; never called after the returned promise resolves. */
+    onProgress?: (progress: StartupPreloadProgress) => void;
     relicSvgUrl: string;
     webgl: boolean;
 }
@@ -153,18 +181,38 @@ interface PreloadStartupCriticalAssetsResult {
 /**
  * Tiles, card illustrations, UI backgrounds, and (when WebGL) relic SVG→texture for the startup intro.
  * Raster failures resolve so boot cannot deadlock; relic parse failure yields null (caller shows fallback).
+ *
+ * Steps report as they settle rather than in a fixed order, so the rail reflects real work landing.
+ * A failed step still counts as completed — the rail tracks "no longer waiting on this", not success,
+ * or a broken asset would strand the bar short of full while the intro plays on regardless.
  */
 export const preloadStartupCriticalAssets = async (
     options: PreloadStartupCriticalAssetsOptions
 ): Promise<PreloadStartupCriticalAssetsResult> => {
+    let completed = 0;
+    const reportStep = (step: StartupPreloadStepId): void => {
+        completed += 1;
+        options.onProgress?.({
+            completed,
+            label: STARTUP_PRELOAD_STEP_LABELS[step],
+            step,
+            total: STARTUP_PRELOAD_STEP_TOTAL
+        });
+    };
+    const track = async <T,>(step: StartupPreloadStepId, operation: Promise<T>): Promise<T> => {
+        const result = await operation;
+        reportStep(step);
+        return result;
+    };
+
     const relicPromise: Promise<RelicTextureSet | null> = options.webgl
         ? loadRelicTextures(options.relicSvgUrl).catch(() => null)
         : Promise.resolve(null);
 
     const [, , relicTextureSet] = await Promise.all([
-        settleRasterPreload(preloadTileTextureImages),
-        settleRasterPreload(preloadUiRasterImages),
-        relicPromise
+        track('tiles', settleRasterPreload(preloadTileTextureImages)),
+        track('interface', settleRasterPreload(preloadUiRasterImages)),
+        track('relic', relicPromise)
     ]);
 
     warmCardIllustrationsInBackground();

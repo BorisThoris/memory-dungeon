@@ -1,6 +1,8 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import type { ReactElement } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type * as PreloadStartupAssetsModule from '../assets/preloadStartupAssets';
+import { STARTUP_PRELOAD_INITIAL_LABEL } from '../assets/preloadStartupAssets';
 import { PlatformTiltProvider } from '../platformTilt/PlatformTiltProvider';
 import StartupIntro from './StartupIntro';
 import { getIntroExitDurationMs } from './startupIntroConfig';
@@ -14,13 +16,26 @@ const uiSfxMocks = vi.hoisted(() => ({
 
 const mockHasWebGLSupport = vi.fn();
 
+interface MockPreloadOptions {
+    onProgress?: (progress: { completed: number; label: string; total: number }) => void;
+}
+
 const mockPreloadStartupCriticalAssets = vi.hoisted(() =>
-    vi.fn(() => Promise.resolve({ relicTextureSet: null }))
+    // Typed with the options bag so tests can capture `onProgress` and drive the loading rail.
+    vi.fn((_options: MockPreloadOptions): Promise<{ relicTextureSet: null }> =>
+        Promise.resolve({ relicTextureSet: null })
+    )
 );
 
-vi.mock('../assets/preloadStartupAssets', () => ({
-    preloadStartupCriticalAssets: mockPreloadStartupCriticalAssets
-}));
+vi.mock('../assets/preloadStartupAssets', async (importOriginal) => {
+    // Keep the real loading-copy constants: the overlay renders them, so stubbing them would let
+    // the rail's labels drift from what ships without a test noticing.
+    const actual = await importOriginal<typeof PreloadStartupAssetsModule>();
+    return {
+        ...actual,
+        preloadStartupCriticalAssets: mockPreloadStartupCriticalAssets
+    };
+});
 
 vi.mock('./startupIntroTextures', () => ({
     hasWebGLSupport: () => mockHasWebGLSupport()
@@ -298,7 +313,9 @@ describe('StartupIntro', () => {
 
         renderIntro(<StartupIntro onComplete={onComplete} reduceMotion={true} />);
 
-        expect(screen.getByTestId('startup-intro-loading-state')).toHaveTextContent(/preparing intro assets/i);
+        expect(screen.getByTestId('startup-intro-loading-state')).toHaveTextContent(STARTUP_PRELOAD_INITIAL_LABEL);
+        // Nothing has settled yet, so the rail must read empty rather than guess at progress.
+        expect(screen.getByTestId('startup-intro-progress')).toHaveAttribute('aria-valuenow', '0');
 
         fireEvent.keyDown(window, { key: 'Enter' });
 
@@ -329,6 +346,59 @@ describe('StartupIntro', () => {
 
         expect(mockPreloadStartupCriticalAssets).toHaveBeenCalledTimes(1);
         expect(screen.getByRole('img', { name: /obsidian relic sigil/i })).toBeInTheDocument();
+    });
+
+    it('advances the loading rail as preload steps report in', async () => {
+        const onComplete = vi.fn();
+        mockHasWebGLSupport.mockReturnValue(false);
+        let reportProgress: MockPreloadOptions['onProgress'] | null = null;
+        mockPreloadStartupCriticalAssets.mockImplementationOnce(
+            ({ onProgress }: MockPreloadOptions) => {
+                reportProgress = onProgress ?? null;
+                return new Promise<{ relicTextureSet: null }>(() => {});
+            }
+        );
+
+        renderIntro(<StartupIntro onComplete={onComplete} reduceMotion={true} />);
+
+        const rail = screen.getByTestId('startup-intro-progress');
+        expect(rail).toHaveAttribute('aria-valuenow', '0');
+
+        act(() => {
+            reportProgress?.({ completed: 1, label: 'Cutting the tiles…', total: 3 });
+        });
+
+        expect(rail).toHaveAttribute('aria-valuenow', '33');
+        expect(screen.getByTestId('startup-intro-loading-state')).toHaveTextContent('Cutting the tiles…');
+
+        act(() => {
+            reportProgress?.({ completed: 2, label: 'Unrolling the interface…', total: 3 });
+        });
+
+        expect(rail).toHaveAttribute('aria-valuenow', '67');
+    });
+
+    it('never walks the rail backwards when a later step settles first', async () => {
+        const onComplete = vi.fn();
+        mockHasWebGLSupport.mockReturnValue(false);
+        let reportProgress: MockPreloadOptions['onProgress'] | null = null;
+        mockPreloadStartupCriticalAssets.mockImplementationOnce(
+            ({ onProgress }: MockPreloadOptions) => {
+                reportProgress = onProgress ?? null;
+                return new Promise<{ relicTextureSet: null }>(() => {});
+            }
+        );
+
+        renderIntro(<StartupIntro onComplete={onComplete} reduceMotion={true} />);
+
+        act(() => {
+            reportProgress?.({ completed: 2, label: 'Unrolling the interface…', total: 3 });
+            reportProgress?.({ completed: 1, label: 'Cutting the tiles…', total: 3 });
+        });
+
+        const rail = screen.getByTestId('startup-intro-progress');
+        expect(rail).toHaveAttribute('aria-valuenow', '67');
+        expect(screen.getByTestId('startup-intro-loading-state')).toHaveTextContent('Unrolling the interface…');
     });
 });
 
