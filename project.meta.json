@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-21T17:31:22.537Z",
+  "generatedAt": "2026-09-21T17:40:54.004Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -54,6 +54,7 @@
       "clean",
       "typecheck",
       "typecheck:shared",
+      "typecheck:e2e",
       "graph:project",
       "graph:systems",
       "ai:model",
@@ -288,7 +289,7 @@
         "bytes": 143993,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-21T17:30:20.943Z"
+        "capturedAt": "2026-09-21T17:40:26.720Z"
       },
       {
         "profile": "desktop",
@@ -297,7 +298,7 @@
         "bytes": 134991,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-21T17:30:40.170Z"
+        "capturedAt": "2026-09-21T17:40:35.867Z"
       },
       {
         "profile": "full",
@@ -306,7 +307,7 @@
         "bytes": 112331,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-21T17:31:09.436Z"
+        "capturedAt": "2026-09-21T17:40:45.484Z"
       },
       {
         "profile": "mobile",
@@ -315,7 +316,7 @@
         "bytes": 50945,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-21T17:30:48.269Z"
+        "capturedAt": "2026-09-21T17:40:40.684Z"
       },
       {
         "profile": "og",
@@ -324,7 +325,7 @@
         "bytes": 106849,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-21T17:31:22.326Z"
+        "capturedAt": "2026-09-21T17:40:53.857Z"
       }
     ]
   },
@@ -388,7 +389,7 @@
   "metrics": {
     "sourceFiles": 1102,
     "testFiles": 478,
-    "sourceLines": 169439,
+    "sourceLines": 169456,
     "largestDirectories": [
       {
         "directory": "src",
@@ -427,10 +428,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "731195ae",
-    "lastCommitDate": "2026-09-21T17:18:34Z",
-    "lastCommitSubject": "Gen 252: \"all content\" was a list I picked by hand, and it missed two screens",
-    "commitCount": 1546,
+    "head": "07222623",
+    "lastCommitDate": "2026-09-21T17:36:01Z",
+    "lastCommitSubject": "Merge main (dca93ef6) into the review branch",
+    "commitCount": 1549,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
