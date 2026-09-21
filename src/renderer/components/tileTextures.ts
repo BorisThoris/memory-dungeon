@@ -1443,130 +1443,6 @@ export const getTileFaceOverlayTexture = (
     );
 };
 
-type IllustrationPrewarmTarget = {
-    key: string;
-    pairKey: string;
-    palette: ReturnType<typeof getCardFaceOverlayColors>;
-    sourcePixelHeight: number;
-    sourcePixelWidth: number;
-    tier: OverlayDrawTier;
-};
-
-const buildIllustrationPrewarmTargetKey = (pairKey: string, tier: OverlayDrawTier): string => `${pairKey}|tier=${tier}`;
-
-const getIllustrationPrewarmTargets = (
-    tiles: readonly Tile[],
-    graphicsQuality: GraphicsQualityPreset,
-    variant: Exclude<FaceVariant, 'hidden'>
-): IllustrationPrewarmTarget[] => {
-    if (variant !== 'active') {
-        return [];
-    }
-
-    const tier = overlayDrawTierFromGraphicsQuality(graphicsQuality);
-    const palette = getCardFaceOverlayColors(variant);
-    const illustrationRect = computeIllustrationPixelRect(STATIC_CARD_TEXTURE_WIDTH, STATIC_CARD_TEXTURE_HEIGHT);
-    const targets: IllustrationPrewarmTarget[] = [];
-    const seen = new Set<string>();
-
-    for (const tile of tiles) {
-        const key = buildIllustrationPrewarmTargetKey(tile.pairKey, tier);
-        if (seen.has(key)) {
-            continue;
-        }
-        seen.add(key);
-        targets.push({
-            key,
-            pairKey: tile.pairKey,
-            palette,
-            sourcePixelHeight: illustrationRect.height,
-            sourcePixelWidth: illustrationRect.width,
-            tier
-        });
-    }
-
-    return targets;
-};
-
-export const prewarmTileFaceOverlayTextures = (
-    tiles: readonly Tile[],
-    graphicsQuality: GraphicsQualityPreset,
-    variant: Exclude<FaceVariant, 'hidden'> = 'active'
-): (() => void) => {
-    if (!canDraw() || tiles.length === 0) {
-        resetOverlayPrewarmDebugState();
-        return () => undefined;
-    }
-
-    syncIllustrationOverlayCacheVersion();
-    const targets = getIllustrationPrewarmTargets(tiles, graphicsQuality, variant);
-    if (targets.length === 0) {
-        resetOverlayPrewarmDebugState();
-        return () => undefined;
-    }
-
-    let cancelled = false;
-    let handle: PrewarmScheduleHandle | null = null;
-    let index = 0;
-    const boardKey = `${variant}|${overlayDrawTierFromGraphicsQuality(graphicsQuality)}|${targets.map((target) => target.key).join(',')}`;
-
-    overlayPrewarmDebugState = {
-        boardKey,
-        completedCount: 0,
-        pendingCount: targets.length,
-        scheduled: true,
-        targetCount: targets.length,
-        targetKeys: targets.map((target) => target.key),
-        tier: targets[0]?.tier ?? null,
-        variant
-    };
-
-    const pump = (deadline?: IdleDeadline): void => {
-        if (cancelled) {
-            return;
-        }
-
-        let processed = 0;
-        do {
-            const target = targets[index]!;
-            prewarmProceduralIllustrationBitmap(
-                target.pairKey,
-                target.tier,
-                target.palette,
-                target.sourcePixelWidth,
-                target.sourcePixelHeight
-            );
-            index += 1;
-            processed += 1;
-            overlayPrewarmDebugState.completedCount = index;
-            overlayPrewarmDebugState.pendingCount = targets.length - index;
-        } while (
-            index < targets.length &&
-            processed < OVERLAY_PREWARM_BATCH_SIZE &&
-            deadline != null &&
-            (deadline.didTimeout || deadline.timeRemaining() > 2)
-        );
-
-        overlayPrewarmDebugState.scheduled = false;
-        if (index < targets.length) {
-            overlayPrewarmDebugState.scheduled = true;
-            handle = schedulePrewarmStep(pump);
-        }
-    };
-
-    handle = schedulePrewarmStep(pump);
-    return () => {
-        cancelled = true;
-        cancelPrewarmStep(handle);
-        if (overlayPrewarmDebugState.boardKey === boardKey) {
-            overlayPrewarmDebugState = {
-                ...overlayPrewarmDebugState,
-                pendingCount: Math.max(0, targets.length - index),
-                scheduled: false
-            };
-        }
-    };
-};
 
 const demandOverlayPairKeyQueue = new Set<string>();
 let demandOverlayPrewarmHandle: PrewarmScheduleHandle | null = null;
@@ -1595,7 +1471,17 @@ const pumpDemandOverlayPrewarm = (deadline?: IdleDeadline): void => {
         if (processed >= OVERLAY_PREWARM_BATCH_SIZE) {
             break;
         }
-        if (deadline != null && !deadline.didTimeout && deadline.timeRemaining() <= 2) {
+        /*
+         * Always draw at least one before yielding. The timer fallback in `schedulePrewarmStep`
+         * hands over a deadline whose `timeRemaining()` is 0 - it exists for exactly the case
+         * where `requestIdleCallback` is missing or throws - so a bare budget check bailed on the
+         * first key every time, left the queue untouched, and rescheduled: an endless chain of
+         * zero-work timers that never warmed a single bitmap. Found in Gen 243 by re-pointing the
+         * idle-fallback test at this session after deleting the eager prewarm it used to cover;
+         * the eager path made progress here, so removing it would have taken the only code that
+         * worked under the fallback with it.
+         */
+        if (processed > 0 && deadline != null && !deadline.didTimeout && deadline.timeRemaining() <= 2) {
             break;
         }
         demandOverlayPairKeyQueue.delete(pairKey);

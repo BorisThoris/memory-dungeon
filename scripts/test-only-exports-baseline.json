@@ -35,7 +35,6 @@
     "src/renderer/components/tileTextures.ts clearTileTextureCachesForDebug",
     "src/renderer/components/tileTextures.ts forceIllustrationOverlayCacheVersionForTest",
     "src/renderer/components/tileTextures.ts getIllustrationPipelineDebugState",
-    "src/renderer/components/tileTextures.ts prewarmTileFaceOverlayTextures",
     "src/renderer/components/tileTextures.ts resetDemandDrivenOverlayPrewarmForTest",
     "src/renderer/copy/chainMomentum.ts getChainMomentumLabel",
     "src/renderer/copy/chainMomentum.ts getChainMomentumSubline",
