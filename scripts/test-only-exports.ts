@@ -43,6 +43,10 @@ export const TEST_ONLY_EXPORT_EXEMPTIONS: Record<string, string> = {
         'Reached by scripts/bake-procedural-illustration-set.ts and two illustration e2e specs ' +
         "through `import('/src/renderer/components/tileTextures.ts')` - a dynamic module URL this " +
         'audit cannot follow, so it reads as test-only while a build tool depends on it.',
+    getNavigationShellChromeRows:
+        'Record by design as of Gen 248: each row names the case it describes and is checked ' +
+        'against getNavigationShellChromeContract - a row claiming preservesRun must describe a ' +
+        'shell that keeps the board mounted. The test is the consumer because the test is the check.',
     getNavigationRouteContract:
         'Record by design as of Gen 247: the route table it reads is now checked AGAINST the ' +
         'resolver that actually runs - every store action must land on the view its row promises, ' +

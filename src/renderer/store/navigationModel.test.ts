@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
     getNavigationRouteContract,
+    getNavigationShellChromeContract,
     getNavigationShellChromeRows,
     isInRunMetaView,
     isMenuDestinationView,
@@ -143,6 +144,46 @@ describe('navigationModel', () => {
                     transition.freezeRun === true ? 'freezes' : 'does not freeze'
                 }`
             ).toBe(contract?.timerPolicy === 'freeze-on-open');
+        }
+    });
+
+    /**
+     * The shell-chrome rows against the contract that actually decides the shell.
+     *
+     * The rows are mostly prose - `route` and `chrome` are sentences - but `preservesRun` is a
+     * claim the code can be asked about: "the run survives this move" is the same statement as
+     * `boardMounted`, which is what keeps gameplay alive under the overlay. Until Gen 248 the rows
+     * had no reader at all, so those claims sat beside an if-chain that could contradict them
+     * without anything noticing - which is exactly what a set in this module had already done
+     * (Gen 245).
+     *
+     * Each row now names the case it describes and is checked against
+     * `getNavigationShellChromeContract`. A row whose `preservesRun` stops matching the shell it
+     * describes fails here.
+     */
+    it('keeps every shell-chrome row true of the contract that decides the shell', () => {
+        const caseForRow: Record<string, Parameters<typeof getNavigationShellChromeContract>[0]> = {
+            page_back: { runPresent: false, settingsReturnView: 'menu', subscreenReturnView: 'menu', view: 'collection' },
+            in_run_meta: { runPresent: true, settingsReturnView: 'menu', subscreenReturnView: 'playing', view: 'inventory' },
+            null_run_recovery: { runPresent: false, settingsReturnView: 'menu', subscreenReturnView: 'playing', view: 'inventory' },
+            game_over_return: { runPresent: false, settingsReturnView: 'menu', subscreenReturnView: 'menu', view: 'gameOver' }
+        };
+
+        const rows = getNavigationShellChromeRows();
+        expect(rows.length, 'every row must name the case it describes').toBe(Object.keys(caseForRow).length);
+
+        for (const row of rows) {
+            const shellCase = caseForRow[row.id];
+            expect(shellCase, `row ${row.id} describes no case this test knows how to build`).toBeDefined();
+            const contract = getNavigationShellChromeContract(shellCase!);
+            expect(
+                contract.boardMounted,
+                `row ${row.id} says preservesRun=${row.preservesRun}, but the shell ${
+                    contract.boardMounted ? 'keeps' : 'drops'
+                } the board (${contract.shellChrome})`
+            ).toBe(row.preservesRun);
+            // The app ships no router: a row claiming otherwise would be describing a different app.
+            expect(row.localOnly, `row ${row.id} claims a non-local route`).toBe(true);
         }
     });
 

@@ -1,6 +1,6 @@
 # Gameplay mechanics — machine snapshot
 
-**Generated:** 2026-09-21T15:19:46.100Z
+**Generated:** 2026-09-21T15:26:19.647Z
 
 > Regenerate with `yarn docs:mechanics-appendix`. Do not edit by hand.
 

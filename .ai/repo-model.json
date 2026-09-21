@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 455785,
-      "sha256": "b73f40d55e7e06e6c9d12a2a534019563d0fbd4e39e09c36ffd67715ffbd0055"
+      "bytes": 457064,
+      "sha256": "8ca986d04c0e5083d38e6abd6744b1f5e491389b6ffc40b6b177e2e73bd36518"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "1fbd1d6742b378b088b315c449449a1cd46d36b99518dcc2120e3d9c5f6fd211"
+      "sha256": "d520c45acddd2f7b340e09b51644a65fe1172550ef02479258187146d18fbdce"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -4312,7 +4312,7 @@
       "path": "project-media/capture.json",
       "category": "configuration",
       "bytes": 1305,
-      "sha256": "f9c09eb8eee99689fb38e5dd41d5122af628e8b5425f33c64d86e6147780f22d"
+      "sha256": "25c8f2e0c0757986e53bd859ad221736079c70092b5aef542f1986d2f52b6ff2"
     },
     {
       "path": "project-media/card.jpg",
@@ -4353,8 +4353,8 @@
     {
       "path": "project.meta.json",
       "category": "configuration",
-      "bytes": 11776,
-      "sha256": "33479ad4ca96b779cedec5f8ad2c8937aae1a0b74eaf0bb4cb1a342bda68d29b"
+      "bytes": 11766,
+      "sha256": "2959f0ce37e9f0041b394748747cb88c691d5c142f67d4204ad552af52a2f02a"
     },
     {
       "path": "public/apple-touch-icon.png",
@@ -5445,14 +5445,14 @@
     {
       "path": "scripts/test-only-exports-baseline.json",
       "category": "script",
-      "bytes": 8880,
-      "sha256": "94e212b153408637b7fbd01d57eea1520ea6384cb1f1869243c7ef16cbda8e40"
+      "bytes": 8806,
+      "sha256": "20897fa8515c200e7e4b92c2df778c51e1a49f1201ac1d91a6d541556d0b45b4"
     },
     {
       "path": "scripts/test-only-exports.ts",
       "category": "script",
-      "bytes": 17282,
-      "sha256": "8ebd0dbc32ed329034277e068df8c2df936641a1a8d38a2b220c15abdfb6d2ac"
+      "bytes": 17616,
+      "sha256": "223d299ac4be25d6a1f1da5d23ef9d538182359fef4099a7425b1abd801cf83b"
     },
     {
       "path": "scripts/test-only-modules.ts",
@@ -10533,8 +10533,8 @@
     {
       "path": "src/renderer/store/navigationModel.test.ts",
       "category": "test",
-      "bytes": 7172,
-      "sha256": "04b6e4b035d97e704dc16f96110122a82beeb0b01ee65e6998f2f88414deb898"
+      "bytes": 9677,
+      "sha256": "87f7a429304175f34e635a99d32b3380231ac3b85da6487fad7f9fbd795fa6ab"
     },
     {
       "path": "src/renderer/store/navigationModel.ts",
@@ -23569,7 +23569,7 @@
       "path": "src/renderer/store/navigationModel.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 161,
+      "lineCount": 202,
       "imports": [
         "file:src/renderer/store/navigationModel.ts"
       ],
