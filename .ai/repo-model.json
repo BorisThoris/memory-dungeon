@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 452694,
-      "sha256": "26b93f6b0717f2e0c2104b95951c84f6dbc152240f6f3ef4ee22d5d21044af88"
+      "bytes": 454358,
+      "sha256": "2e2ddba065a739b0448ada4d8a93dc0bed6c8b155877a9391f16ee3cae1f1660"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "7cc5fb500d5179c26f1b5aaf8977438678ee9dbf2b15519ab9112005fe2c5784"
+      "sha256": "6da5535d9942f3946441b6e5e15b42e27a69c4038d7e9b6d64aa003ae3936c03"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -4312,7 +4312,7 @@
       "path": "project-media/capture.json",
       "category": "configuration",
       "bytes": 1305,
-      "sha256": "2a4db1e0326c31a2e9b78d36e309e6861e2edc7254d9a6d0e9306508b80bad25"
+      "sha256": "f9c09eb8eee99689fb38e5dd41d5122af628e8b5425f33c64d86e6147780f22d"
     },
     {
       "path": "project-media/card.jpg",
@@ -4354,7 +4354,7 @@
       "path": "project.meta.json",
       "category": "configuration",
       "bytes": 11776,
-      "sha256": "96497771e5a90841d1f06facf6ef712e8be76cd5a389372fa0a35dbf2eddc409"
+      "sha256": "33479ad4ca96b779cedec5f8ad2c8937aae1a0b74eaf0bb4cb1a342bda68d29b"
     },
     {
       "path": "public/apple-touch-icon.png",
@@ -5445,8 +5445,8 @@
     {
       "path": "scripts/test-only-exports-baseline.json",
       "category": "script",
-      "bytes": 8187,
-      "sha256": "4373eca8f289a03ccc7adb44c680bb460a302cc8b9d3c18b445fa985d2e04460"
+      "bytes": 8952,
+      "sha256": "21f32b41a14528334523b01e45729ceeeb8c69d9f943b77b65be7357baca179e"
     },
     {
       "path": "scripts/test-only-exports.ts",
