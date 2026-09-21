@@ -4312,7 +4312,7 @@
       "path": "project-media/capture.json",
       "category": "configuration",
       "bytes": 1305,
-      "sha256": "8ff54b9bd0902acf0145f8f3c92b9723fd729e9edb8421c9b0c047e58c609aed"
+      "sha256": "f8591fb2e1ee0e710e42fd313bfdbf167434ce5298647c31d564bea2633f720b"
     },
     {
       "path": "project-media/card.jpg",
@@ -4353,8 +4353,8 @@
     {
       "path": "project.meta.json",
       "category": "configuration",
-      "bytes": 11795,
-      "sha256": "ae9bf186140e231525222652bbb52bcfb9bf096c506c16529a7955d95c9c5193"
+      "bytes": 11783,
+      "sha256": "6a857ec9caba9dcffb53445b27c668d030b15f284c58b42290c63080d801751d"
     },
     {
       "path": "public/apple-touch-icon.png",
