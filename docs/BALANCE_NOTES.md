@@ -2886,3 +2886,61 @@ resolves against, so **no comment anywhere could name the repo model**. Found by
 one that ever did. The auditor now resolves against those paths while still not scanning them, with
 existence checked on disk rather than assumed. Negative control: point the same sentence at
 `.ai/no-such-model.json` and it reports `no file named .ai/no-such-model.json`.
+
+## Gen 257 — #250 closed: the box never contained its own read
+
+The task said the chain rail is drawn over the floor-clear beat at 1.1. Gen 240 measured that and
+refuted both proposed fixes, then stopped rather than guess. What it could not know is that the
+scale it measured at stopped being reachable one generation earlier: **Gen 238 brought the cap down
+to 1.05.** Re-measured on a 1280x800 Deck panel, fresh arrival per scale:
+
+| scale | read ends | beat title starts | clearance |
+|---|---|---|---|
+| 1.0 | 408 | 445 | 37px |
+| 1.025 | 408 | 429 | 21px |
+| **1.05 (cap)** | **408** | **414** | **6px** |
+
+So the reported collision is unreachable — and six px is not clearance, it is a coincidence that
+survived a cap change.
+
+### The defect underneath, which is what the task was really about
+
+`.chain` declared `width: 13rem` (64..272) while `.chainRead` sits at `left: 7rem` with
+`white-space: nowrap` and runs 14.5rem wide, so the column painted to **408** and the declared box
+stopped at **272**. 136 layout px of content outside its own container. The comment above it said,
+in these words, *"it is as wide as its rung labels … and nothing spills past it"* — a record
+contradicting shipped behaviour, the fourth this session. Anything positioned against that box got
+a number wrong by 136px, which is exactly what made the beat's inset look safe: the beat clears
+272 and meets a read that ends at 408.
+
+The design decision Gen 240 asked for: **the left column is the ladder plus its read, 21.5rem.**
+The 13rem was only ever describing the ladder. So `.chain` is the column, `--ladder-w: 13rem` pins
+the ladder to its own width rather than inheriting the container's, and the comment now says what
+is true. Measured after: box 64..408, read 176..408, title unmoved at all three scales — **nothing
+a player sees moved.**
+
+Widening a box that had `pointer-events: auto` would have put 136px of invisible target over the
+board, so the box gives them up and `.chainRead` takes them; the only thing in the column a pointer
+wants is the depth line's `title`. The surface that eats clicks got *smaller*, and
+`demo-readiness`, `deck-controller-reach` and `board-3d-value` all still flip tiles.
+
+### The check, and two ways I got it wrong first
+
+`gameplay-chrome-clearance.spec.ts` (in `gate:ui-fit`) now holds the pair apart at every scale
+`SETTINGS_NUMERIC_RANGES` allows, and requires the box to contain its read. Its negative control is
+the scale this task started at — 1.1 is forced directly, past the cap, and must report the overlap:
+
+```
+BEAT x0.8:  title clears read by 196.54px, box spill -0.27px
+BEAT x1:    title clears read by  36.31px, box spill -0.48px
+BEAT x1.05: title clears read by   6.01px, box spill -0.33px
+BEAT control x1.1: title clears read by -21.75px
+```
+
+−21.75 against Gen 240's measured 21px. Two mistakes on the way there, both already recorded
+lessons of this session: the first version opened the fixture once and re-zoomed, and the beat is a
+**transient surface** — it reported `surfaces missing` at two of three scales (Gen 239's artefact,
+same screen). And the first version returned `Math.min` of the two margins, which passed while
+printing `-0.33px` at every scale because the containment term always won: the log said nothing
+about the 37 / 21 / 6 series the test is named for. A check that cannot be read is a check nobody
+will read.

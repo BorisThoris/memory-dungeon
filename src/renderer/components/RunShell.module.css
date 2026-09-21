@@ -240,10 +240,24 @@
  * run-stats group; the head's own box stays the running head, which is what the board is inset
  * against.
  */
-/* The ladder in the left margin. `.chain` is a real box, not the 1px rail: it is as wide as its
-   rung labels and as tall as the rail plus the read that hangs beside the marker, so every cell
-   the head draws keeps a readable box and nothing spills past it (the long-run HUD gate measures
-   exactly that). The rail is drawn at the box's left edge. */
+/* The ladder in the left margin. `.chain` is a real box, not the 1px rail: it is as wide as the
+   whole column - the rail, the rung labels AND the read that hangs beside the marker - and as tall
+   as the rail plus that read, so nothing spills past it. The rail is drawn at the box's left edge.
+
+   It said that before and was not: the box declared 13rem while `.chainRead` sits at `left: 7rem`
+   with `white-space: nowrap` and ran 14.5rem wide, so the column painted to 21.5rem and the
+   declared box stopped at 13rem - 136 layout px of content outside its own container, on a
+   1280x800 Deck panel. Anything positioned against this box got a number that was wrong by that
+   much, which is what #250 was really reporting: the floor-clear beat insets past 272 and still
+   meets a read that ends at 408. Measured at the three scales the slider reaches, the beat's title
+   cleared the read by 37px at 1.0, 21px at 1.025 and 6px at 1.05 - never an overlap since the cap
+   came down in Gen 238, but 6px is a margin nobody chose. `gameplay-chrome-clearance.spec.ts` now
+   holds the pair apart at every reachable scale (Gen 257).
+
+   Widening the box would have put 136px of invisible pointer target over the board, so the box
+   gives up `pointer-events` and the read takes them: the only thing in here a pointer wants is the
+   depth line's `title`. The painted result is identical - the ladder is pinned to its own 13rem
+   rather than inheriting the container's width - and the surface that eats clicks got smaller. */
 /*
  * The meter rail, placed against the BOX it lives in rather than the window.
  *
@@ -263,13 +277,16 @@
  */
 .chain {
     --ladder-h: clamp(15rem, calc(var(--ui-zoomed-dvh, 100dvh) * 0.44), 25rem);
+    /* The rail and its rung labels. The read hangs to the right of this, inside the column. */
+    --ladder-w: 13rem;
 
     position: absolute;
     left: var(--margin-x);
     top: clamp(11rem, calc(var(--ui-zoomed-dvh, 100dvh) * 0.27), 15.5rem);
-    width: 13rem;
+    /* The whole column: the ladder, plus the read that starts at 7rem and runs 14.5rem. */
+    width: 21.5rem;
     height: calc(var(--ladder-h) + 6.5rem);
-    pointer-events: auto;
+    pointer-events: none;
 }
 
 .ladder {
@@ -277,7 +294,8 @@
     top: 0;
     left: 0;
     display: block;
-    width: 100%;
+    /* Its own width, not the container's: the column is wider than the ladder by the read. */
+    width: var(--ladder-w);
     height: var(--ladder-h);
 }
 
@@ -386,6 +404,8 @@
 .chainRead {
     position: absolute;
     left: 7rem;
+    /* The one thing in the column a pointer wants: the depth line carries a `title`. */
+    pointer-events: auto;
     top: clamp(0px, calc(var(--ladder-h) * (1 - var(--chain-meter-fill-n, 0)) - 1.9rem), calc(var(--ladder-h) + 0.4rem));
     display: flex;
     flex-direction: column;

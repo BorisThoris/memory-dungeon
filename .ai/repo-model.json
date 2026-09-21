@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 476642,
-      "sha256": "667b46861d4affa70ac557038f581176f0c83c6af8ea9f1d55f6d9ff0adb6a72"
+      "bytes": 480035,
+      "sha256": "fdea0bb0262855f0951907a6a231f95c0f6f0eafe529f507a50b4f85f1bb3cef"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "46ce18fde226d97ccfc6f4966f731619177e2d9871b9715e6c1074727ea8b150"
+      "sha256": "a2552eb3233b5b73768dcdbd85192b71564b1c357a6e48f5baef8f0fb5a63223"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -3813,8 +3813,8 @@
     {
       "path": "e2e/gameplay-chrome-clearance.spec.ts",
       "category": "test",
-      "bytes": 7575,
-      "sha256": "3c4c7d4a7a219ef6fea6664c08dbb457595ccbb2beb8c3f406edc6dd531acb50"
+      "bytes": 13562,
+      "sha256": "9fc9fd22890222f27c790837052e81e8b75e1153f4ac6b9d63636e6be5c50b79"
     },
     {
       "path": "e2e/gameplay-hud-layout.spec.ts",
@@ -8691,8 +8691,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 32641,
-      "sha256": "951e9807b53ed1a8fe0636042d2e6001aa5e5e7d8a0fb37a932a196e43c7449e"
+      "bytes": 34247,
+      "sha256": "866fbc47472af5db8d1151d7027f06cacedeb0e8d22bd617a1322b10b98a35f2"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",

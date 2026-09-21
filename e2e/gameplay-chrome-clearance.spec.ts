@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { SETTINGS_NUMERIC_RANGES } from '../src/shared/save-data';
 import { dismissStartupIntro } from './startupIntroHelpers';
+import { openPlayablePathFixture } from './playablePathHelpers';
 
 /**
  * The board stage starts where the HUD ends, at every scale the slider offers.
@@ -56,6 +57,13 @@ const FLUSH_TOLERANCE_PX = 2;
 
 /** The forced zoom has to land within this of what was asked, or the measurement means nothing. */
 const ZOOM_TOLERANCE = 0.01;
+
+/**
+ * Dividing a painted rect by the measured zoom lands a fraction of a px out, so a box that exactly
+ * contains its content reads as -0.27 at 0.8x. Half a px absorbs that; the defect this guards is
+ * 136px of spill and 21px of overlap, which is nowhere near it.
+ */
+const SPILL_TOLERANCE_PX = 0.5;
 
 interface ChromePlacement {
     readonly effectiveZoom: number;
@@ -151,4 +159,102 @@ test.describe('the in-run chrome clearance', () => {
             expect(failures, `${viewport.id}: the stage and the chrome do not meet`).toEqual([]);
         });
     }
+
+    /**
+     * The floor-clear beat and the chain read are two live surfaces in the same strip.
+     *
+     * #250 reported the rail drawn over the beat at 1.1, and it was: Gen 240 measured the beat's
+     * title starting 21px inside a read that ends at 408. What made that unreachable was the cap
+     * coming down to 1.05 in Gen 238 - not anything about this pair. Re-measured at the scales the
+     * slider actually offers, on a 1280x800 Deck panel, the title cleared the read by 37px at 1.0,
+     * 21px at 1.025 and **6px at 1.05**. Six px is not clearance, it is a coincidence that survived
+     * a cap change.
+     *
+     * So the pair is held apart here, at every scale `SETTINGS_NUMERIC_RANGES` allows, and the
+     * chain box is required to contain its own read - the thing that was actually wrong, and what
+     * made the beat's inset a lie: the box declared 13rem while its content painted to 21.5rem, so
+     * anything positioned against it was off by 136px (Gen 257).
+     *
+     * The negative control is the scale this started at. 1.1 is past the cap, so it is forced
+     * directly rather than stored, and the same assertion has to report the overlap Gen 240 found -
+     * a bar that only ever sees passing geometry is a bar nobody has checked.
+     */
+    test('the floor-clear beat and the chain read never meet', async ({ page }) => {
+        test.setTimeout(300_000);
+        await page.setViewportSize({ width: 1280, height: 800 });
+
+        const failures: string[] = [];
+        /*
+         * Arrive again for every scale. The beat is a transient surface: it plays and goes, so a
+         * loop that opens the fixture once and re-zooms measures it at the first scale and finds
+         * nothing at the rest - which is what this test did on its first run, reporting `surfaces
+         * missing` at 1.0 and 1.05. Gen 239 recorded the same artefact on the same screen.
+         */
+        const overlapAtScale = async (uiScale: number): Promise<{ titleGap: number; boxSpill: number } | null> => {
+            await openPlayablePathFixture(page, 'floorClearWithRouteChoices');
+            await forceScale(page, uiScale);
+            await page.waitForTimeout(400);
+            return page.evaluate(() => {
+                const shell = document.querySelector('[data-testid="run-shell"]');
+                const zoom = shell ? shell.getBoundingClientRect().width / Math.max(1, shell.clientWidth) : 1;
+                const chain = document.querySelector('[data-testid="hud-chain"]');
+                const read = document.querySelector('[data-testid="hud-chain-rung-value"]')?.parentElement ?? null;
+                const title = document.querySelector('[data-testid="floor-clear-title"]');
+                if (!chain || !read || !title) {
+                    return null;
+                }
+                const layout = (el: Element) => {
+                    const r = el.getBoundingClientRect();
+                    return { left: r.left / zoom, right: r.right / zoom };
+                };
+                const readBox = layout(read);
+                const chainBox = layout(chain);
+                const titleBox = layout(title);
+                /*
+                 * Two numbers, not their minimum. Collapsing them with `Math.min` passed and read
+                 * `-0.33px` at every scale, because the box exactly contains its read and that term
+                 * always won - so the log said nothing about the margin the test is named for,
+                 * which is the 37 / 21 / 6px series. A check that cannot be read is a check nobody
+                 * will read.
+                 */
+                return { titleGap: titleBox.left - readBox.right, boxSpill: chainBox.right - readBox.right };
+            });
+        };
+
+        for (const uiScale of PROBE_SCALES) {
+            const measured = await overlapAtScale(uiScale);
+            console.log(
+                `BEAT x${uiScale}: ${
+                    measured === null
+                        ? 'surfaces missing'
+                        : `title clears read by ${measured.titleGap.toFixed(2)}px, box spill ${measured.boxSpill.toFixed(2)}px`
+                }`
+            );
+            if (measured === null) {
+                failures.push(`x${uiScale}: the beat, the chain or its read was not on screen, so nothing was measured`);
+                continue;
+            }
+            if (measured.titleGap < -SPILL_TOLERANCE_PX) {
+                failures.push(
+                    `x${uiScale}: the floor-clear title starts ${Math.abs(measured.titleGap).toFixed(2)}px inside the chain read`
+                );
+            }
+            if (measured.boxSpill < -SPILL_TOLERANCE_PX) {
+                failures.push(
+                    `x${uiScale}: the chain read spills ${Math.abs(measured.boxSpill).toFixed(2)}px past the box that declares it`
+                );
+            }
+        }
+        expect(failures, 'the floor-clear beat and the chain read share the strip').toEqual([]);
+
+        // The control: past the cap this pair is known to collide, so the check has to say so.
+        const pastCap = await overlapAtScale(1.1);
+        expect(pastCap, 'the probe measured nothing at the control scale').not.toBeNull();
+        console.log(`BEAT control x1.1: title clears read by ${(pastCap?.titleGap ?? 0).toFixed(2)}px`);
+        expect(
+            pastCap?.titleGap ?? 0,
+            'at 1.1 - past the shipped cap - Gen 240 measured the beat 21px inside the read; a check that ' +
+                'cannot see that is not measuring this pair'
+        ).toBeLessThan(-SPILL_TOLERANCE_PX);
+    });
 });
