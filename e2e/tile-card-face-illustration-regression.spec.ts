@@ -125,7 +125,7 @@ test.describe('Procedural illustration regression', () => {
                                 id: `regression-${pairKey}-${tier}`,
                                 label: pairKey,
                                 pairKey,
-                                state: 'hidden',
+                                state: 'hidden' as const,
                                 symbol: pairKey.slice(0, 1).toUpperCase()
                             },
                             'active',
@@ -141,7 +141,7 @@ test.describe('Procedural illustration regression', () => {
                 id: 'regression-A',
                 label: 'A',
                 pairKey: 'alpha',
-                state: 'hidden',
+                state: 'hidden' as const,
                 symbol: 'A'
             };
             texturesMod.clearTileTextureCachesForDebug();

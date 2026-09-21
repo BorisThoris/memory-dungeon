@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2555,
+    "trackedFileCount": 2556,
     "codeFileCount": 896,
     "exportedSymbolCount": 2706,
     "contentItemCount": 10,
@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 466270,
-      "sha256": "06fb92e12c4ac5d4510b4b8281d089df1e55c11250b444d6f9ee63bb269ae397"
+      "bytes": 468715,
+      "sha256": "dfaa5e90351ef4825293be168fd84eee7dd3ca0bd5640702d58e21d631259354"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "60e219f41ec0cf73b89302d6f5272af0798e43d53a1cb3847980610a1b7d1342"
+      "sha256": "502349acd0f1edc7f0554805542ff584954a57d790343132dcb26bd5e30702de"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -3795,8 +3795,8 @@
     {
       "path": "e2e/demo-readiness.spec.ts",
       "category": "test",
-      "bytes": 6270,
-      "sha256": "05281bace5d819daf3a0b98c5562aab66bad13d7bc4c1c664fcb4b92ae07fdd1"
+      "bytes": 6788,
+      "sha256": "b71c10a99fe8eca4875104234f0d6cc2b9c1c35cbbea6cfad5cc1d4462faf320"
     },
     {
       "path": "e2e/fixtures/tile-card-face-illustration-contact-sheet.png",
@@ -3987,14 +3987,14 @@
     {
       "path": "e2e/tile-card-face-illustration-benchmark.spec.ts",
       "category": "test",
-      "bytes": 3695,
-      "sha256": "c6d9d50269ce5de45b29851fd11c65abcc75ed7bf06fadb4f358022e318d384e"
+      "bytes": 3704,
+      "sha256": "36483de5eb8a5a396f77816b5d16d18954b74d001fae1bb54de91231e99d2571"
     },
     {
       "path": "e2e/tile-card-face-illustration-regression.spec.ts",
       "category": "test",
-      "bytes": 12625,
-      "sha256": "9a6b2127dc01d78dde5460d7f88f6e4f8c41f0fa5ec30949963a35fadbf9a75b"
+      "bytes": 12643,
+      "sha256": "eb52dd8ff19813a26240f3005a317921d86aaa6dd60029c5a55969f0a9df8414"
     },
     {
       "path": "e2e/tile-card-face-overlay-regression.spec.ts",
@@ -4107,8 +4107,8 @@
     {
       "path": "e2e/visualScreenHelpers.ts",
       "category": "test",
-      "bytes": 36268,
-      "sha256": "a0736d4851d027efc52e2b1cf180e3273d934077e9758b58fb51c311c569fe5d"
+      "bytes": 36520,
+      "sha256": "520c37275ccd23798e9f39d3f5879d73ad089821475621cdec0af75a1dc3c73b"
     },
     {
       "path": "e2e/visualScreenScenarios.ts",
@@ -4197,8 +4197,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 31727,
-      "sha256": "d46903330f8de9ff7b3e3ac0ec4a82e4548dc7393b249e17f37d1ab5649180a2"
+      "bytes": 31835,
+      "sha256": "79db0c9028dc556d2ded4302681733c2ed55f60030ab89c23d42d3dd04e869d8"
     },
     {
       "path": "packages/notifications/package.json",
@@ -8601,8 +8601,8 @@
     {
       "path": "src/renderer/components/MainMenu.tsx",
       "category": "source",
-      "bytes": 13531,
-      "sha256": "768c34f88149130a73cd0e104a47ab61ae9a4ea1b21c4a80a98417ed04be3fc0"
+      "bytes": 14174,
+      "sha256": "2e158f75952762dadcb2b9595d3a0d300ac79daee488963992e567bd6df5f685"
     },
     {
       "path": "src/renderer/components/MainMenuBackground.module.css",
@@ -15301,6 +15301,12 @@
       "sha256": "fcab4e9f3cb31d4fb84c9d4dc3500ad114c7f45ca3269bd71ea6fb0e0aaf1fc1"
     },
     {
+      "path": "tsconfig.e2e.json",
+      "category": "configuration",
+      "bytes": 568,
+      "sha256": "2960ad75d0a4e67398f26f37a7c8423a029b410208e413b3a9fc661cce584e82"
+    },
+    {
       "path": "tsconfig.json",
       "category": "configuration",
       "bytes": 965,
@@ -18226,7 +18232,7 @@
       "path": "src/renderer/components/MainMenu.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 282,
+      "lineCount": 290,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -35094,8 +35100,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/MainMenu.tsx",
-      "line": 281,
-      "endLine": 281
+      "line": 289,
+      "endLine": 289
     },
     {
       "id": "symbol:src/renderer/components/MainMenuBackground.tsx#default",

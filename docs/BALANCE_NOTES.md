@@ -2715,3 +2715,44 @@ Two things this cost, and both are worth keeping:
   `ViewState` from it; `navigationModel`'s `NavigationSurface`, `scripts/e2e-surface-coverage.ts`
   and this spec all read that one list. A hand-copied list is a list that stops matching, and what
   these copies exist for is proving nothing was forgotten.
+
+## Gen 253 — nothing typechecked the e2e suite, and the main menu's heading was one word
+
+Gen 252 found this by accident: `Record<ViewState, ...>` in a spec constrained nothing, because
+`e2e/` is not in `tsconfig.json` and Playwright transpiles each spec without checking types. Every
+annotation in the suite was documentation. `tsconfig.e2e.json` is `tsconfig.json` plus `e2e/`, and
+`typecheck:e2e` runs inside `gate:systems`.
+
+It found 11 errors. Eight were the `/src/...` dynamic-import idiom the browser-side specs use —
+those are Vite dev-server URLs, not paths, so a `paths` mapping and `allowImportingTsExtensions`
+resolve them to the real modules instead of suppressing them. Resolving them immediately produced
+four more: `state: 'hidden'` in a tile literal widens to `string` and is not a `TileState`. Two
+were independent:
+
+- `visualScreenHelpers.ts` read `offsetHeight` off an `HTMLElement | SVGElement`. On an SVG that is
+  `undefined`, which would have written a silent hole into the HUD diagnostics rather than failing.
+- `demo-readiness.spec.ts` asserted a plain function to `typeof Audio`. It works at runtime — a
+  constructor returning an object yields that object — but the assertion is one TypeScript rejects
+  outright. Widened through `unknown`, with the reason.
+
+Negative control: `const negativeControl: number = page;` in a helper, and `yarn typecheck:e2e`
+reports `TS2322: Type 'Page' is not assignable to type 'number'`.
+
+### The heading nobody could hear
+
+Running the two specs turned up `demo-readiness.spec.ts` red — and red on `main` before this
+change, measured by stashing. Its assertion was `/memory dungeon/i` against the `h1`. The `h1` is:
+
+```tsx
+<h1><span>Memory</span><span>Dungeon</span></h1>
+```
+
+Its text content is `MemoryDungeon`. `.title` is a column flex container, so the words stack and
+the missing space is invisible — but the accessible name is one word, and that is what a screen
+reader says. The fix is a real space between the spans, which a flex container does not render and
+the accessible name does carry. The test was right and had been right, unheard, for as long as it
+had been failing.
+
+`gate:demo-readiness` is now in `fullcheck` as well. Negative control: take the space back out and
+the gate exits 1 with 2 failed. That is the fifth instrument this session found unwired or red —
+the fit contract, the illustration spec, its gate, the controller spec, and now this.
