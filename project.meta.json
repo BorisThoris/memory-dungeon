@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-21T19:48:44.323Z",
+  "generatedAt": "2026-09-21T20:45:44.863Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -289,7 +289,7 @@
         "bytes": 143993,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-21T19:48:14.339Z"
+        "capturedAt": "2026-09-21T20:44:53.321Z"
       },
       {
         "profile": "desktop",
@@ -298,7 +298,7 @@
         "bytes": 134991,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-21T19:48:25.069Z"
+        "capturedAt": "2026-09-21T20:44:58.816Z"
       },
       {
         "profile": "full",
@@ -307,7 +307,7 @@
         "bytes": 112331,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-21T19:48:36.135Z"
+        "capturedAt": "2026-09-21T20:45:29.898Z"
       },
       {
         "profile": "mobile",
@@ -316,7 +316,7 @@
         "bytes": 50945,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-21T19:48:31.472Z"
+        "capturedAt": "2026-09-21T20:45:10.730Z"
       },
       {
         "profile": "og",
@@ -325,7 +325,7 @@
         "bytes": 106849,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-21T19:48:44.162Z"
+        "capturedAt": "2026-09-21T20:45:44.638Z"
       }
     ]
   },
@@ -389,7 +389,7 @@
   "metrics": {
     "sourceFiles": 1103,
     "testFiles": 478,
-    "sourceLines": 169752,
+    "sourceLines": 169830,
     "largestDirectories": [
       {
         "directory": "src",
@@ -428,10 +428,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "5339f5ce",
-    "lastCommitDate": "2026-09-21T19:44:00Z",
+    "head": "d34cbeb7",
+    "lastCommitDate": "2026-09-21T20:41:18Z",
     "lastCommitSubject": "Merge main into the review branch",
-    "commitCount": 1559,
+    "commitCount": 1562,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
