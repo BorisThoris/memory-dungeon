@@ -1,9 +1,52 @@
-.continueButton {
+/* Loading rail, status line and skip action as one anchored block at the foot of the overlay. */
+.bootConsole {
     position: absolute;
     z-index: 2;
     bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
     left: 50%;
     transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.85rem;
+    width: min(340px, calc(100vw - 2.5rem));
+}
+
+/* Holds its row whether or not the label is up, so the button never shifts on load completion. */
+.bootRailRow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    opacity: 1;
+    transition: opacity 320ms ease;
+}
+
+.bootRailRow[data-visible='false'] {
+    opacity: 0;
+}
+
+.bootRail {
+    position: relative;
+    width: 100%;
+    height: 2px;
+    overflow: hidden;
+    border-radius: var(--ui-radius-pill);
+    background: color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+}
+
+.bootRailFill {
+    display: block;
+    width: var(--boot-progress, 0%);
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--theme-gold), var(--theme-gold-bright));
+    box-shadow: 0 0 12px color-mix(in srgb, var(--theme-gold-bright) 45%, transparent);
+    transition: width 420ms cubic-bezier(0.2, 0.86, 0.22, 1);
+}
+
+.continueButton {
     min-height: 44px;
     padding: 0.65rem 1.4rem;
     border: 1px solid var(--theme-gold-bright);
@@ -17,7 +60,6 @@
 
 .continueButton:focus-visible { outline: 2px solid var(--theme-cyan-bright); outline-offset: 4px; }
 .continueButton:disabled { cursor: wait; }
-.overlay .loadingHint { bottom: 5rem; }
 
 .overlay {
     /* Portal to `document.body` in App (see App.tsx): `.content` uses `zoom`, which breaks
@@ -86,21 +128,16 @@
     transform: translate3d(calc(var(--tilt-x, 0) * -8px), calc(var(--tilt-y, 0) * -7px), 0);
 }
 
+/* In-flow inside .bootRailRow — the rail above it now carries the framing the pill used to. */
 .loadingHint {
-    position: absolute;
-    bottom: clamp(1rem, 3vw, 2rem);
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 9;
     margin: 0;
-    padding: 0.35rem 0.75rem;
-    border-radius: var(--ui-radius-pill);
-    border: 1px solid color-mix(in srgb, var(--theme-border-strong) 70%, transparent);
-    background: color-mix(in srgb, var(--theme-panel-solid) 88%, transparent);
     color: var(--theme-text-muted);
     font-size: var(--ui-font-caption);
     font-weight: 600;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-align: center;
+    text-wrap: balance;
     pointer-events: none;
 }
 
@@ -152,6 +189,12 @@
 :global([data-reduce-motion='true']) .chromaticVeil,
 :global([data-reduce-motion='true']) .edgeNoise {
     transform: none;
+}
+
+/* The rail still fills — it is information — but it snaps instead of easing. */
+:global([data-reduce-motion='true']) .bootRailFill,
+:global([data-reduce-motion='true']) .bootRailRow {
+    transition: none;
 }
 
 .stage {

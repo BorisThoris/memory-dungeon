@@ -33,8 +33,202 @@
         <meta name="twitter:image" content="https://memory-dungeon-git.pages.dev/og-image.jpg" />
         <meta name="twitter:image:alt" content="Memory Dungeon - A memory roguelite: read the board, match the pairs and protect the streak while relics bend the rules and every run deals deeper, harder boards. Run modes, a collection to unlock, local saves and an Electron build aimed at Steam." />
         <!-- project-meta:social:end -->
+        <!--
+            First-paint boot splash. Everything the renderer styles itself with (global.css, the
+            theme CSS variables) arrives with the bundle, so without this the first frame is a white
+            page that snaps to the dark intro once React commits. These rules are inline so they cost
+            no request, and the markup below is plain CSS — `script-src 'self'` forbids an inline
+            script, and the splash must never depend on the bundle it is covering for.
+            Torn down by dismissBootSplash() (src/renderer/bootSplash.ts) once React has mounted.
+        -->
+        <style>
+            html,
+            body {
+                margin: 0;
+                min-height: 100%;
+                background-color: #05050a;
+            }
+
+            #boot-splash {
+                position: fixed;
+                inset: 0;
+                z-index: 10000;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: clamp(1.5rem, 4vh, 2.75rem);
+                padding: clamp(1rem, 4vw, 2.5rem);
+                box-sizing: border-box;
+                background:
+                    radial-gradient(circle at 18% 15%, rgba(242, 211, 157, 0.12), transparent 24%),
+                    radial-gradient(circle at 78% 12%, rgba(140, 98, 223, 0.13), transparent 24%),
+                    radial-gradient(circle at 52% 84%, rgba(223, 132, 71, 0.12), transparent 22%),
+                    linear-gradient(160deg, #05050a 0%, #090914 54%, #0d1018 100%);
+                color: #f4ecdc;
+                font-family: 'Source Sans 3', 'Trebuchet MS', 'Segoe UI', sans-serif;
+                text-align: center;
+                opacity: 1;
+                transition: opacity 420ms cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            /* Set by dismissBootSplash once React owns the screen; removal follows the fade. */
+            #boot-splash[data-boot-splash='dismissed'] {
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            #boot-splash-sigil {
+                position: relative;
+                width: clamp(76px, 15vh, 116px);
+                height: clamp(76px, 15vh, 116px);
+                flex: none;
+            }
+
+            #boot-splash-sigil span {
+                position: absolute;
+                inset: 0;
+                border-radius: 50%;
+                border: 1px solid rgba(242, 211, 157, 0.22);
+            }
+
+            /* Gold arc over a faint full ring: the gap is what reads as motion while it spins. */
+            #boot-splash-sigil span:nth-child(1) {
+                border-top-color: #f2d39d;
+                border-right-color: rgba(242, 211, 157, 0.5);
+                animation: boot-splash-spin 2.6s linear infinite;
+            }
+
+            #boot-splash-sigil span:nth-child(2) {
+                inset: 18%;
+                border-color: rgba(184, 217, 228, 0.16);
+                border-bottom-color: rgba(184, 217, 228, 0.62);
+                animation: boot-splash-spin 3.8s linear infinite reverse;
+            }
+
+            #boot-splash-sigil span:nth-child(3) {
+                inset: 38%;
+                border-radius: 2px;
+                border-color: rgba(242, 211, 157, 0.7);
+                background: rgba(242, 211, 157, 0.08);
+                animation: boot-splash-pulse 2.6s ease-in-out infinite;
+            }
+
+            #boot-splash-wordmark {
+                margin: 0;
+                font-family: 'Cinzel', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+                font-size: clamp(1.5rem, 5.5vw, 2.6rem);
+                font-weight: 700;
+                letter-spacing: 0.18em;
+                text-transform: uppercase;
+                color: #f2d39d;
+                text-shadow: 0 0 26px rgba(242, 211, 157, 0.28);
+            }
+
+            #boot-splash-rail {
+                position: relative;
+                width: min(260px, 62vw);
+                height: 2px;
+                overflow: hidden;
+                border-radius: 999px;
+                background: rgba(242, 211, 157, 0.14);
+            }
+
+            /* Indeterminate by design: nothing has loaded yet that could report real progress. */
+            #boot-splash-rail::after {
+                content: '';
+                position: absolute;
+                inset: 0 auto 0 0;
+                width: 38%;
+                border-radius: inherit;
+                background: linear-gradient(90deg, transparent, #f2d39d, transparent);
+                animation: boot-splash-sweep 1.5s ease-in-out infinite;
+            }
+
+            #boot-splash-status {
+                margin: 0;
+                font-size: 0.78rem;
+                font-weight: 600;
+                letter-spacing: 0.22em;
+                text-transform: uppercase;
+                color: rgba(231, 221, 202, 0.76);
+            }
+
+            /*
+                A slow or failed bundle would otherwise leave the splash saying "loading" forever,
+                and `script-src 'self'` rules out a timer. A delayed animation is the only tool
+                available: the splash is torn down the moment React commits, so this line can only
+                ever surface on a boot that really has taken this long.
+            */
+            #boot-splash-stalled {
+                max-width: 32ch;
+                margin: 0;
+                font-size: 0.74rem;
+                line-height: 1.5;
+                color: rgba(231, 221, 202, 0.55);
+                opacity: 0;
+                animation: boot-splash-stall 600ms ease-out 12s both;
+            }
+
+            @keyframes boot-splash-stall {
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @keyframes boot-splash-spin {
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+
+            @keyframes boot-splash-pulse {
+                0%,
+                100% {
+                    opacity: 0.55;
+                    transform: rotate(45deg) scale(0.88);
+                }
+                50% {
+                    opacity: 1;
+                    transform: rotate(45deg) scale(1.08);
+                }
+            }
+
+            @keyframes boot-splash-sweep {
+                0% {
+                    transform: translateX(-100%);
+                }
+                100% {
+                    transform: translateX(363%);
+                }
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                #boot-splash-sigil span,
+                #boot-splash-rail::after {
+                    animation: none;
+                }
+
+                #boot-splash-sigil span:nth-child(3) {
+                    transform: rotate(45deg);
+                }
+
+                /* No sweep to read progress from, so the rail becomes a plain lit bar. */
+                #boot-splash-rail::after {
+                    width: 100%;
+                    background: rgba(242, 211, 157, 0.55);
+                }
+            }
+        </style>
         </head>
     <body>
+        <div id="boot-splash" role="status" aria-label="Loading Memory Dungeon">
+            <div id="boot-splash-sigil" aria-hidden="true"><span></span><span></span><span></span></div>
+            <p id="boot-splash-wordmark">Memory Dungeon</p>
+            <div id="boot-splash-rail" aria-hidden="true"></div>
+            <p id="boot-splash-status">Lighting the torches…</p>
+            <p id="boot-splash-stalled">Still loading. If this screen stays, reload the page.</p>
+        </div>
         <div id="root"></div>
         <script type="module" src="/src/renderer/main.tsx"></script>
     </body>

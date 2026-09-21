@@ -123,7 +123,7 @@
 .eyebrow {
     margin: 0 0 clamp(0.2rem, 1vh, 0.6rem);
     font-family: var(--margin-body-font);
-    font-size: clamp(0.62rem, 1.5vh, 0.8rem);
+    font-size: clamp(0.75rem, 1.5vh, 0.8rem);
     font-weight: 500;
     letter-spacing: 0.34em;
     text-transform: uppercase;
@@ -174,7 +174,7 @@
     margin: 0 0 clamp(0.3rem, 1vh, 0.6rem);
     padding-bottom: 0.35rem;
     border-bottom: 1px solid var(--margin-hairline);
-    font-size: clamp(0.6rem, 1.4vh, 0.72rem);
+    font-size: clamp(0.75rem, 1.4vh, 0.8rem);
     font-weight: 500;
     letter-spacing: 0.3em;
     text-transform: uppercase;
@@ -262,7 +262,7 @@
 }
 
 .entryNote {
-    font-size: clamp(0.72rem, 1.6vh, 0.86rem);
+    font-size: clamp(0.75rem, 1.6vh, 0.86rem);
     font-style: italic;
     color: var(--margin-paper-dim);
     white-space: nowrap;
@@ -327,7 +327,7 @@
 }
 
 .helpKicker {
-    font-size: 0.66rem;
+    font-size: 0.75rem;
     letter-spacing: 0.28em;
     text-transform: uppercase;
     color: var(--margin-gold);
@@ -384,7 +384,7 @@
     background: transparent;
     color: var(--margin-gold);
     font-family: var(--margin-body-font);
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     letter-spacing: 0.22em;
     text-transform: uppercase;
     cursor: pointer;
@@ -433,7 +433,7 @@
     justify-content: center;
     gap: 0.35rem 0.6rem;
     margin-top: clamp(0.75rem, 2.5vh, 1.75rem);
-    font-size: clamp(0.62rem, 1.4vh, 0.74rem);
+    font-size: clamp(0.75rem, 1.4vh, 0.8rem);
     letter-spacing: 0.24em;
     text-transform: uppercase;
     color: var(--margin-paper-dim);

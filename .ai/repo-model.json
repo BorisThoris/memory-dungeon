@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2548,
-    "codeFileCount": 890,
-    "exportedSymbolCount": 2696,
+    "trackedFileCount": 2551,
+    "codeFileCount": 893,
+    "exportedSymbolCount": 2704,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6821
+    "relationshipCount": 6837
   },
   "inventory": [
     {
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "aca4675510a04f4d0e43795b875c82e88fc28f98c5effdf7eba2c16943eac398"
+      "sha256": "9d4190a6ebc6d6e7b6c2d148fb25e62c983ec1c546be06e1be1858582cabcaec"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4101,8 +4101,8 @@
     {
       "path": "e2e/visualScreenHelpers.ts",
       "category": "test",
-      "bytes": 36268,
-      "sha256": "a0736d4851d027efc52e2b1cf180e3273d934077e9758b58fb51c311c569fe5d"
+      "bytes": 36582,
+      "sha256": "eec85e7774787b457755257ddb6a4206b1519b07161bc587eb47909186481791"
     },
     {
       "path": "e2e/visualScreenScenarios.ts",
@@ -4125,8 +4125,8 @@
     {
       "path": "index.html",
       "category": "other",
-      "bytes": 3582,
-      "sha256": "94ba49e5240ed347fb9f0c1126ee9e5739ec6cdd23a9f005f21cd55955a15617"
+      "bytes": 11182,
+      "sha256": "154ae9831bf385d51333ff1548ca5a150bf72ae29da2c1a20018e5f0188e95c5"
     },
     {
       "path": "knip.json",
@@ -5715,8 +5715,8 @@
     {
       "path": "src/renderer/App.test.tsx",
       "category": "test",
-      "bytes": 27764,
-      "sha256": "65f8b7cde1a252e46a11f447d697988f04af575c390f038274595bc47f594858"
+      "bytes": 28061,
+      "sha256": "e77d182347501808a1bbab56fe8bc326adcb703e951fbee204efff35d13c0c15"
     },
     {
       "path": "src/renderer/App.tsx",
@@ -7305,14 +7305,14 @@
     {
       "path": "src/renderer/assets/preloadStartupAssets.test.ts",
       "category": "test",
-      "bytes": 10616,
-      "sha256": "20a46d17bcba4bb3f62aa8de76fb4a89c0f3d3d472449c33af92d08b55eaa167"
+      "bytes": 12549,
+      "sha256": "c3593e4e55e1108fb6295a57cc65f32f830b1f8b8565e8b8bdc9dd52b1debda7"
     },
     {
       "path": "src/renderer/assets/preloadStartupAssets.ts",
       "category": "source",
-      "bytes": 5937,
-      "sha256": "ce783058d43853ffd53a8e78ae63c03eeaf1e2a91655f0813ff465555d18e82d"
+      "bytes": 7809,
+      "sha256": "93a3b2fadc7e2492add370def85b65ab0d32ffa8591f45e959c52db5084c6c43"
     },
     {
       "path": "src/renderer/assets/README.md",
@@ -8029,6 +8029,24 @@
       "sha256": "17c505209d95903b1915982e6856fc649f0006a00094a7f00d1be22e02729700"
     },
     {
+      "path": "src/renderer/bootSplash.test.ts",
+      "category": "test",
+      "bytes": 2025,
+      "sha256": "d2e76e53f707a731662f5b299c12776c09e46e46b7b394d70ff44c8fce7df97b"
+    },
+    {
+      "path": "src/renderer/bootSplash.ts",
+      "category": "source",
+      "bytes": 1821,
+      "sha256": "6ff0124f5920ee4633ac56fe3ef6849c79a804262a02320bf42b141fcb282cd8"
+    },
+    {
+      "path": "src/renderer/BootSplashTeardown.tsx",
+      "category": "source",
+      "bytes": 724,
+      "sha256": "286b8a87278ca0ebe80affbbe3a44fb12c5c4815368b2b66073c4b4371352a50"
+    },
+    {
       "path": "src/renderer/breakpoints.test.ts",
       "category": "test",
       "bytes": 7963,
@@ -8578,7 +8596,7 @@
       "path": "src/renderer/components/MainMenu.module.css",
       "category": "source",
       "bytes": 11591,
-      "sha256": "2b6853cd7ae5800150443df7b4ff12ce45c203445bd26c764334991578c175cc"
+      "sha256": "d70de837c416b0a8a587ffa5f988176ade3dd5f2a3de2fd66ae35308bcca9b05"
     },
     {
       "path": "src/renderer/components/MainMenu.test.tsx",
@@ -8817,8 +8835,8 @@
     {
       "path": "src/renderer/components/StartupIntro.module.css",
       "category": "source",
-      "bytes": 10821,
-      "sha256": "951bfabd3b45823c59582689eaf9f8ced4365d5afed083fd82084ab3af8d4d3f"
+      "bytes": 11965,
+      "sha256": "94dd9f1ac8dc8e480288ba4ed2131031312db954108fcc0b01c5387eef5f75ed"
     },
     {
       "path": "src/renderer/components/startupIntro.test.ts",
@@ -8829,14 +8847,14 @@
     {
       "path": "src/renderer/components/StartupIntro.tsx",
       "category": "source",
-      "bytes": 35467,
-      "sha256": "a874a9081de8a852f219d9a6f8ff66f90a9ebb984ab1ec9263e59460dadf32c7"
+      "bytes": 37755,
+      "sha256": "a2aa440008a69eea93ed1f2011afe0e704f108348164d22d4a382d3d5b4dc159"
     },
     {
       "path": "src/renderer/components/startupIntroComponent.test.tsx",
       "category": "test",
-      "bytes": 16921,
-      "sha256": "0e6b04f920b45d3acd41bb3a17dc5b64d4a7becd83b2212663488ec4c92973c4"
+      "bytes": 20179,
+      "sha256": "c1a085a11592b41e4303e001caf698708d45e135d3a88b477477c034cd49d383"
     },
     {
       "path": "src/renderer/components/startupIntroConfig.ts",
@@ -8847,14 +8865,14 @@
     {
       "path": "src/renderer/components/startupIntroContract.test.ts",
       "category": "test",
-      "bytes": 2617,
-      "sha256": "01e787eff3e47ed7d115fafeb0c5c3fdfaf2401a26bb93f2dc95f5e0460e8322"
+      "bytes": 4667,
+      "sha256": "ed5b0953702f2cf214d3a0b92c9988146ca18d689b3bce4c7d06f5a90f710ebe"
     },
     {
       "path": "src/renderer/components/startupIntroContract.ts",
       "category": "source",
-      "bytes": 2745,
-      "sha256": "91c361d567e0d6ccdeafda2da85de8757e539b7834c73bcd5114e0dc079b892a"
+      "bytes": 3676,
+      "sha256": "f46b9504cadcd3a962260ba0a101d19f2a8976f61d381cfbaf77b1a04af4c42e"
     },
     {
       "path": "src/renderer/components/startupIntroTextures.ts",
@@ -10239,8 +10257,8 @@
     {
       "path": "src/renderer/initRendererShell.tsx",
       "category": "source",
-      "bytes": 2843,
-      "sha256": "b50d86d9f38d39ddd5c820111ae0208858372bf29ccd1e6f67a03a555543ece1"
+      "bytes": 2937,
+      "sha256": "931b767858eaca5d9562fa202c1d04bdd9a4a30f35626af9c6b9f5b20140b03c"
     },
     {
       "path": "src/renderer/input/gamepadNavigation.test.ts",
@@ -15941,9 +15959,10 @@
       "path": "src/renderer/App.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 646,
+      "lineCount": 652,
       "imports": [
         "file:src/renderer/App.tsx",
+        "file:src/renderer/assets/preloadStartupAssets.ts",
         "file:src/renderer/desktop-client.ts",
         "file:src/renderer/platformTilt/PlatformTiltProvider.tsx",
         "file:src/renderer/store/useAppStore.ts",
@@ -16061,7 +16080,7 @@
       "path": "src/renderer/assets/preloadStartupAssets.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 267,
+      "lineCount": 307,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -16071,7 +16090,7 @@
       "path": "src/renderer/assets/preloadStartupAssets.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 175,
+      "lineCount": 223,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
@@ -16084,10 +16103,17 @@
         "symbol:src/renderer/assets/preloadStartupAssets.ts#preloadStartupCriticalAssets",
         "symbol:src/renderer/assets/preloadStartupAssets.ts#preloadUiRasterImages",
         "symbol:src/renderer/assets/preloadStartupAssets.ts#resetStartupAssetPreloadStateForTests",
+        "symbol:src/renderer/assets/preloadStartupAssets.ts#STARTUP_PRELOAD_INITIAL_LABEL",
+        "symbol:src/renderer/assets/preloadStartupAssets.ts#STARTUP_PRELOAD_STEP_TOTAL",
+        "symbol:src/renderer/assets/preloadStartupAssets.ts#StartupPreloadProgress",
+        "symbol:src/renderer/assets/preloadStartupAssets.ts#StartupPreloadStepId",
         "symbol:src/renderer/assets/preloadStartupAssets.ts#warmCardIllustrationsInBackground",
         "symbol:src/renderer/assets/preloadStartupAssets.ts#warmModePosterRasterImagesInBackground"
       ],
-      "testedBy": []
+      "testedBy": [
+        "file:src/renderer/App.test.tsx",
+        "file:src/renderer/components/startupIntroComponent.test.tsx"
+      ]
     },
     {
       "id": "file:src/renderer/assets/ui/index.ts",
@@ -16653,6 +16679,48 @@
       "testedBy": [
         "file:src/renderer/audio/webAudioContext.test.ts"
       ]
+    },
+    {
+      "id": "file:src/renderer/bootSplash.test.ts",
+      "path": "src/renderer/bootSplash.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 61,
+      "imports": [
+        "file:src/renderer/bootSplash.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/bootSplash.ts",
+      "path": "src/renderer/bootSplash.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 50,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/bootSplash.ts#BOOT_SPLASH_ELEMENT_ID",
+        "symbol:src/renderer/bootSplash.ts#BOOT_SPLASH_FADE_MS",
+        "symbol:src/renderer/bootSplash.ts#dismissBootSplash"
+      ],
+      "testedBy": [
+        "file:src/renderer/bootSplash.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/BootSplashTeardown.tsx",
+      "path": "src/renderer/BootSplashTeardown.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 20,
+      "imports": [
+        "file:src/renderer/bootSplash.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/BootSplashTeardown.tsx#BootSplashTeardown"
+      ],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/breakpoints.test.ts",
@@ -18737,7 +18805,7 @@
       "path": "src/renderer/components/StartupIntro.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 930,
+      "lineCount": 975,
       "imports": [
         "file:src/renderer/a11y/focusables.ts",
         "file:src/renderer/assets/preloadStartupAssets.ts",
@@ -18767,8 +18835,9 @@
       "path": "src/renderer/components/startupIntroComponent.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 472,
+      "lineCount": 542,
       "imports": [
+        "file:src/renderer/assets/preloadStartupAssets.ts",
         "file:src/renderer/components/StartupIntro.tsx",
         "file:src/renderer/components/startupIntroConfig.ts",
         "file:src/renderer/components/startupIntroContract.ts",
@@ -18804,7 +18873,7 @@
       "path": "src/renderer/components/startupIntroContract.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 84,
+      "lineCount": 146,
       "imports": [
         "file:src/renderer/components/startupIntroContract.ts"
       ],
@@ -18816,7 +18885,7 @@
       "path": "src/renderer/components/startupIntroContract.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 84,
+      "lineCount": 103,
       "imports": [
         "file:src/renderer/components/startupIntroConfig.ts"
       ],
@@ -22705,9 +22774,10 @@
       "path": "src/renderer/initRendererShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 73,
+      "lineCount": 75,
       "imports": [
         "file:src/renderer/App.tsx",
+        "file:src/renderer/BootSplashTeardown.tsx",
         "file:src/renderer/components/AppErrorBoundary.tsx",
         "file:src/renderer/desktop-client.ts",
         "file:src/renderer/diagnostics/rendererErrorHooks.ts",
@@ -32583,8 +32653,8 @@
       "name": "preloadStartupCriticalAssets",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 157,
-      "endLine": 174
+      "line": 189,
+      "endLine": 222
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#preloadUiRasterImages",
@@ -32601,6 +32671,38 @@
       "file": "src/renderer/assets/preloadStartupAssets.ts",
       "line": 135,
       "endLine": 142
+    },
+    {
+      "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#STARTUP_PRELOAD_INITIAL_LABEL",
+      "name": "STARTUP_PRELOAD_INITIAL_LABEL",
+      "kind": "value",
+      "file": "src/renderer/assets/preloadStartupAssets.ts",
+      "line": 166,
+      "endLine": 166
+    },
+    {
+      "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#STARTUP_PRELOAD_STEP_TOTAL",
+      "name": "STARTUP_PRELOAD_STEP_TOTAL",
+      "kind": "value",
+      "file": "src/renderer/assets/preloadStartupAssets.ts",
+      "line": 168,
+      "endLine": 168
+    },
+    {
+      "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#StartupPreloadProgress",
+      "name": "StartupPreloadProgress",
+      "kind": "interface",
+      "file": "src/renderer/assets/preloadStartupAssets.ts",
+      "line": 147,
+      "endLine": 154
+    },
+    {
+      "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#StartupPreloadStepId",
+      "name": "StartupPreloadStepId",
+      "kind": "type",
+      "file": "src/renderer/assets/preloadStartupAssets.ts",
+      "line": 145,
+      "endLine": 145
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#warmCardIllustrationsInBackground",
@@ -33441,6 +33543,38 @@
       "file": "src/renderer/audio/webAudioContext.ts",
       "line": 30,
       "endLine": 39
+    },
+    {
+      "id": "symbol:src/renderer/bootSplash.ts#BOOT_SPLASH_ELEMENT_ID",
+      "name": "BOOT_SPLASH_ELEMENT_ID",
+      "kind": "value",
+      "file": "src/renderer/bootSplash.ts",
+      "line": 10,
+      "endLine": 10
+    },
+    {
+      "id": "symbol:src/renderer/bootSplash.ts#BOOT_SPLASH_FADE_MS",
+      "name": "BOOT_SPLASH_FADE_MS",
+      "kind": "value",
+      "file": "src/renderer/bootSplash.ts",
+      "line": 13,
+      "endLine": 13
+    },
+    {
+      "id": "symbol:src/renderer/bootSplash.ts#dismissBootSplash",
+      "name": "dismissBootSplash",
+      "kind": "value",
+      "file": "src/renderer/bootSplash.ts",
+      "line": 33,
+      "endLine": 49
+    },
+    {
+      "id": "symbol:src/renderer/BootSplashTeardown.tsx#BootSplashTeardown",
+      "name": "BootSplashTeardown",
+      "kind": "value",
+      "file": "src/renderer/BootSplashTeardown.tsx",
+      "line": 13,
+      "endLine": 19
     },
     {
       "id": "symbol:src/renderer/breakpoints.ts#isNarrowShortLandscapeForMenuStack",
@@ -35351,8 +35485,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/StartupIntro.tsx",
-      "line": 929,
-      "endLine": 929
+      "line": 974,
+      "endLine": 974
     },
     {
       "id": "symbol:src/renderer/components/startupIntroConfig.ts#createIntroSeed",
@@ -35423,24 +35557,24 @@
       "name": "resolveStartupIntroAppContract",
       "kind": "value",
       "file": "src/renderer/components/startupIntroContract.ts",
-      "line": 39,
-      "endLine": 61
+      "line": 48,
+      "endLine": 70
     },
     {
       "id": "symbol:src/renderer/components/startupIntroContract.ts#resolveStartupIntroOverlayContract",
       "name": "resolveStartupIntroOverlayContract",
       "kind": "value",
       "file": "src/renderer/components/startupIntroContract.ts",
-      "line": 63,
-      "endLine": 81
+      "line": 74,
+      "endLine": 100
     },
     {
       "id": "symbol:src/renderer/components/startupIntroContract.ts#STARTUP_INTRO_ASSET_FAILSAFE_MS",
       "name": "STARTUP_INTRO_ASSET_FAILSAFE_MS",
       "kind": "value",
       "file": "src/renderer/components/startupIntroContract.ts",
-      "line": 83,
-      "endLine": 83
+      "line": 102,
+      "endLine": 102
     },
     {
       "id": "symbol:src/renderer/components/startupIntroTextures.ts#hasWebGLSupport",
@@ -39799,16 +39933,16 @@
       "name": "bootstrapWebRenderer",
       "kind": "value",
       "file": "src/renderer/initRendererShell.tsx",
-      "line": 61,
-      "endLine": 72
+      "line": 63,
+      "endLine": 74
     },
     {
       "id": "symbol:src/renderer/initRendererShell.tsx#getRendererRootElement",
       "name": "getRendererRootElement",
       "kind": "value",
       "file": "src/renderer/initRendererShell.tsx",
-      "line": 52,
-      "endLine": 58
+      "line": 54,
+      "endLine": 60
     },
     {
       "id": "symbol:src/renderer/input/gamepadNavigation.ts#applyGamepadAction",
@@ -57527,6 +57661,30 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/assets/preloadStartupAssets.ts->symbol:src/renderer/assets/preloadStartupAssets.ts#STARTUP_PRELOAD_INITIAL_LABEL",
+      "source": "file:src/renderer/assets/preloadStartupAssets.ts",
+      "target": "symbol:src/renderer/assets/preloadStartupAssets.ts#STARTUP_PRELOAD_INITIAL_LABEL",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/assets/preloadStartupAssets.ts->symbol:src/renderer/assets/preloadStartupAssets.ts#STARTUP_PRELOAD_STEP_TOTAL",
+      "source": "file:src/renderer/assets/preloadStartupAssets.ts",
+      "target": "symbol:src/renderer/assets/preloadStartupAssets.ts#STARTUP_PRELOAD_STEP_TOTAL",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/assets/preloadStartupAssets.ts->symbol:src/renderer/assets/preloadStartupAssets.ts#StartupPreloadProgress",
+      "source": "file:src/renderer/assets/preloadStartupAssets.ts",
+      "target": "symbol:src/renderer/assets/preloadStartupAssets.ts#StartupPreloadProgress",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/assets/preloadStartupAssets.ts->symbol:src/renderer/assets/preloadStartupAssets.ts#StartupPreloadStepId",
+      "source": "file:src/renderer/assets/preloadStartupAssets.ts",
+      "target": "symbol:src/renderer/assets/preloadStartupAssets.ts#StartupPreloadStepId",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/assets/preloadStartupAssets.ts->symbol:src/renderer/assets/preloadStartupAssets.ts#warmCardIllustrationsInBackground",
       "source": "file:src/renderer/assets/preloadStartupAssets.ts",
       "target": "symbol:src/renderer/assets/preloadStartupAssets.ts#warmCardIllustrationsInBackground",
@@ -58154,6 +58312,30 @@
       "id": "exports:src/renderer/audio/webAudioContext.ts->symbol:src/renderer/audio/webAudioContext.ts#resumeSharedAudioContext",
       "source": "file:src/renderer/audio/webAudioContext.ts",
       "target": "symbol:src/renderer/audio/webAudioContext.ts#resumeSharedAudioContext",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/bootSplash.ts->symbol:src/renderer/bootSplash.ts#BOOT_SPLASH_ELEMENT_ID",
+      "source": "file:src/renderer/bootSplash.ts",
+      "target": "symbol:src/renderer/bootSplash.ts#BOOT_SPLASH_ELEMENT_ID",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/bootSplash.ts->symbol:src/renderer/bootSplash.ts#BOOT_SPLASH_FADE_MS",
+      "source": "file:src/renderer/bootSplash.ts",
+      "target": "symbol:src/renderer/bootSplash.ts#BOOT_SPLASH_FADE_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/bootSplash.ts->symbol:src/renderer/bootSplash.ts#dismissBootSplash",
+      "source": "file:src/renderer/bootSplash.ts",
+      "target": "symbol:src/renderer/bootSplash.ts#dismissBootSplash",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/BootSplashTeardown.tsx->symbol:src/renderer/BootSplashTeardown.tsx#BootSplashTeardown",
+      "source": "file:src/renderer/BootSplashTeardown.tsx",
+      "target": "symbol:src/renderer/BootSplashTeardown.tsx#BootSplashTeardown",
       "kind": "exports"
     },
     {
@@ -74599,6 +74781,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/App.test.tsx->src/renderer/assets/preloadStartupAssets.ts",
+      "source": "file:src/renderer/App.test.tsx",
+      "target": "file:src/renderer/assets/preloadStartupAssets.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/App.test.tsx->src/renderer/desktop-client.ts",
       "source": "file:src/renderer/App.test.tsx",
       "target": "file:src/renderer/desktop-client.ts",
@@ -75232,6 +75420,18 @@
       "id": "imports:src/renderer/audio/webAudioContext.test.ts->src/renderer/audio/webAudioContext.ts",
       "source": "file:src/renderer/audio/webAudioContext.test.ts",
       "target": "file:src/renderer/audio/webAudioContext.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/bootSplash.test.ts->src/renderer/bootSplash.ts",
+      "source": "file:src/renderer/bootSplash.test.ts",
+      "target": "file:src/renderer/bootSplash.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/BootSplashTeardown.tsx->src/renderer/bootSplash.ts",
+      "source": "file:src/renderer/BootSplashTeardown.tsx",
+      "target": "file:src/renderer/bootSplash.ts",
       "kind": "imports"
     },
     {
@@ -77692,6 +77892,12 @@
       "id": "imports:src/renderer/components/StartupIntro.tsx->src/shared/contracts.ts",
       "source": "file:src/renderer/components/StartupIntro.tsx",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/startupIntroComponent.test.tsx->src/renderer/assets/preloadStartupAssets.ts",
+      "source": "file:src/renderer/components/startupIntroComponent.test.tsx",
+      "target": "file:src/renderer/assets/preloadStartupAssets.ts",
       "kind": "imports"
     },
     {
@@ -80944,6 +81150,12 @@
       "id": "imports:src/renderer/initRendererShell.tsx->src/renderer/App.tsx",
       "source": "file:src/renderer/initRendererShell.tsx",
       "target": "file:src/renderer/App.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/initRendererShell.tsx->src/renderer/BootSplashTeardown.tsx",
+      "source": "file:src/renderer/initRendererShell.tsx",
+      "target": "file:src/renderer/BootSplashTeardown.tsx",
       "kind": "imports"
     },
     {
@@ -91158,6 +91370,18 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/assets/preloadStartupAssets.ts->file:src/renderer/App.test.tsx",
+      "source": "file:src/renderer/assets/preloadStartupAssets.ts",
+      "target": "file:src/renderer/App.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/assets/preloadStartupAssets.ts->file:src/renderer/components/startupIntroComponent.test.tsx",
+      "source": "file:src/renderer/assets/preloadStartupAssets.ts",
+      "target": "file:src/renderer/components/startupIntroComponent.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/assets/ui/modeArt.ts->file:src/renderer/assets/ui/modeArt.test.ts",
       "source": "file:src/renderer/assets/ui/modeArt.ts",
       "target": "file:src/renderer/assets/ui/modeArt.test.ts",
@@ -91281,6 +91505,12 @@
       "id": "tested_by:src/renderer/audio/webAudioContext.ts->file:src/renderer/audio/webAudioContext.test.ts",
       "source": "file:src/renderer/audio/webAudioContext.ts",
       "target": "file:src/renderer/audio/webAudioContext.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/bootSplash.ts->file:src/renderer/bootSplash.test.ts",
+      "source": "file:src/renderer/bootSplash.ts",
+      "target": "file:src/renderer/bootSplash.test.ts",
       "kind": "tested_by"
     },
     {

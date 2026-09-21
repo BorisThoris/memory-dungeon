@@ -2,13 +2,19 @@ import { NotificationHost } from '@cross-repo-libs/notifications';
 import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type * as PreloadStartupAssetsModule from './assets/preloadStartupAssets';
 vi.mock('./components/MainMenuBackground', () => ({
     default: () => <div aria-hidden="true" data-testid="menu-background" />
 }));
 
-vi.mock('./assets/preloadStartupAssets', () => ({
-    preloadStartupCriticalAssets: vi.fn(() => Promise.resolve({ relicTextureSet: null }))
-}));
+vi.mock('./assets/preloadStartupAssets', async (importOriginal) => {
+    // Partial: the intro renders the module's real loading-copy constants.
+    const actual = await importOriginal<typeof PreloadStartupAssetsModule>();
+    return {
+        ...actual,
+        preloadStartupCriticalAssets: vi.fn(() => Promise.resolve({ relicTextureSet: null }))
+    };
+});
 
 import App, { APP_MAIN_LANDMARK_ID } from './App';
 import type { RunState } from '../shared/contracts';

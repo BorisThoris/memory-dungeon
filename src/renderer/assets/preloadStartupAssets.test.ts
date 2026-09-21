@@ -243,6 +243,46 @@ describe('preloadStartupCriticalAssets', () => {
         expect(preloadCardIllustrationImages).not.toHaveBeenCalled();
     });
 
+    it('reports every tracked step once, ending at the full total', async () => {
+        const { preloadStartupCriticalAssets, STARTUP_PRELOAD_STEP_TOTAL } = await import('./preloadStartupAssets');
+        const progress: Array<{ completed: number; step: string }> = [];
+
+        await preloadStartupCriticalAssets({
+            onProgress: ({ completed, step }) => progress.push({ completed, step }),
+            relicSvgUrl: 'relic.svg',
+            webgl: true
+        });
+
+        expect(progress).toHaveLength(STARTUP_PRELOAD_STEP_TOTAL);
+        expect(progress.at(-1)?.completed).toBe(STARTUP_PRELOAD_STEP_TOTAL);
+        expect(new Set(progress.map((entry) => entry.step))).toEqual(new Set(['tiles', 'interface', 'relic']));
+    });
+
+    it('still reaches the full total when a tracked step fails', async () => {
+        loadRelicTextures.mockImplementationOnce(() => Promise.reject(new Error('relic parse failed')));
+        const { preloadStartupCriticalAssets, STARTUP_PRELOAD_STEP_TOTAL } = await import('./preloadStartupAssets');
+        const completions: number[] = [];
+
+        // A broken asset must not strand the rail short of full: the intro plays on regardless, so
+        // the bar tracks "no longer waiting on this step", not "this step succeeded".
+        const { relicTextureSet } = await preloadStartupCriticalAssets({
+            onProgress: ({ completed }) => completions.push(completed),
+            relicSvgUrl: 'relic.svg',
+            webgl: true
+        });
+
+        expect(relicTextureSet).toBeNull();
+        expect(completions.at(-1)).toBe(STARTUP_PRELOAD_STEP_TOTAL);
+    });
+
+    it('loads without a progress listener', async () => {
+        const { preloadStartupCriticalAssets } = await import('./preloadStartupAssets');
+
+        await expect(preloadStartupCriticalAssets({ relicSvgUrl: 'relic.svg', webgl: false })).resolves.toEqual({
+            relicTextureSet: null
+        });
+    });
+
     it('falls back to timer warmups when requestIdleCallback throws', async () => {
         Object.defineProperty(window, 'requestIdleCallback', {
             configurable: true,
