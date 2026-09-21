@@ -2944,3 +2944,56 @@ same screen). And the first version returned `Math.min` of the two margins, whic
 printing `-0.33px` at every scale because the containment term always won: the log said nothing
 about the 37 / 21 / 6 series the test is named for. A check that cannot be read is a check nobody
 will read.
+
+## Gen 258 — the dock declared a toolbar and wired none of it
+
+Three of the 106 test-only exports live in `a11y/toolbarRoving.ts`. Asking the Gen 245 question of
+them found the fourth kind of answer again: not debt, **live behaviour missing its wiring.**
+
+The game ships exactly one `role="toolbar"` — the in-run action dock — and the WAI-ARIA toolbar
+pattern is one tab stop for the toolbar with arrow keys between its controls. The module implements
+all of it, with tests. The dock wired none of it. The only live import was
+`acquireToolbarRovingPause`, which pauses roving that was never running.
+
+Measured in a real run, before:
+
+```
+DOCK fresh:  tabIndices [0,0,0,0,0,0,0,0,0]
+DOCK arrow:  "Shuffle hidden tiles" -> "Shuffle hidden tiles"
+DOCK after a modal opened and closed: [-1,0,-1,-1,-1,-1,0,0,-1]
+```
+
+Arrow keys did nothing, and the tab order *changed shape* after any modal — because
+`acquireToolbarRovingPause` releases by calling `applyToolbarTabIndices`, which **installs** the
+roving indices it is meant to be restoring. A screen reader announced "toolbar, Game controls" and
+then the thing behaved like a plain row of buttons.
+
+After wiring `handleHorizontalToolbarKeyDown` and the tab-index sync: one tab stop on arrival,
+arrows and Home/End move, zero tab stops behind a modal, one again after.
+
+### Two things I got wrong on the way, both caught by measuring
+
+**"Nine tab stops" was my own unsupported claim.** All nine buttons carried `tabIndex 0`, but a
+disabled button is not tabbable whatever its tabindex, and the dock disables a tool whose charges
+are spent. The probe was changed to count `!disabled && tabIndex >= 0` rather than read tabindex
+values, which is the difference between a number and the thing it stands for.
+
+**Keying the sync on the visible tool ids was not enough.** With that, the dock held **four** tab
+stops on arrival and fell to one only after a modal. A spent tool stays mounted and goes `disabled`,
+so the id list never changed while the set roving applies to did — `getToolbarButtons` skips
+disabled buttons, and the ones it skipped kept React's `tabIndex 0`. The sync runs every render now,
+passing the current stop back in so a player arrowing along the dock is not yanked to the first tool
+by the next score tick.
+
+### What resolved, and what went
+
+`handleHorizontalToolbarKeyDown` is now live. `handleVerticalToolbarKeyDown` and
+`syncVerticalToolbarTabIndices` are **deleted**: no vertical toolbar ships, and the second was a
+pass-through to `syncToolbarTabIndices` with no behaviour of its own. `handleToolbarKeyDown` takes
+its keys as an argument, so a vertical toolbar is three lines away on the day one exists.
+
+Baseline **106 → 103**. Gated in `controller-navigation.spec.ts` (`gate:controller`), in a browser
+rather than beside the module, because the module was always right — what was missing was that
+anything used it. Two negative controls, both run: drop the `onKeyDown` and it reports
+`ArrowRight left focus on "Shuffle hidden tiles"`; drop the sync and it reports `the toolbar is more
+than one tab stop`.

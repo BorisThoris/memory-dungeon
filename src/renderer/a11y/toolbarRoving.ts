@@ -54,9 +54,6 @@ export const syncToolbarTabIndices = (root: HTMLElement | null, active?: HTMLEle
     applyToolbarTabIndices(buttons, active);
 };
 
-export const syncVerticalToolbarTabIndices = (root: HTMLElement | null, active?: HTMLElement | null): void => {
-    syncToolbarTabIndices(root, active);
-};
 
 /**
  * Pause WAI-ARIA toolbar roving for every `[role="toolbar"]` in the document so Tab does not reach
@@ -102,11 +99,6 @@ interface ToolbarNavigationKeys {
     previous: 'ArrowLeft' | 'ArrowUp';
 }
 
-const VERTICAL_NAVIGATION_KEYS: ToolbarNavigationKeys = {
-    next: 'ArrowDown',
-    previous: 'ArrowUp'
-};
-
 const HORIZONTAL_NAVIGATION_KEYS: ToolbarNavigationKeys = {
     next: 'ArrowRight',
     previous: 'ArrowLeft'
@@ -146,8 +138,12 @@ const handleToolbarKeyDown = (
     syncToolbarTabIndices(root, target);
 };
 
-export const handleVerticalToolbarKeyDown = (event: ReactKeyboardEvent<HTMLElement>): void =>
-    handleToolbarKeyDown(event, VERTICAL_NAVIGATION_KEYS);
-
+/*
+ * Horizontal only, because the game ships one toolbar and it is a row: the in-run dock. The
+ * vertical pair was here too - `handleVerticalToolbarKeyDown`, and a `syncVerticalToolbarTabIndices`
+ * that was a pass-through to `syncToolbarTabIndices` with no behaviour of its own - and nothing
+ * outside this module's own test ever called either. `handleToolbarKeyDown` takes its keys as an
+ * argument, so a vertical toolbar is three lines away on the day one exists (Gen 258).
+ */
 export const handleHorizontalToolbarKeyDown = (event: ReactKeyboardEvent<HTMLElement>): void =>
     handleToolbarKeyDown(event, HORIZONTAL_NAVIGATION_KEYS);

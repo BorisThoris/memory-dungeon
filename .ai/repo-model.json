@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2549,
     "codeFileCount": 897,
-    "exportedSymbolCount": 2710,
+    "exportedSymbolCount": 2708,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6859
+    "relationshipCount": 6858
   },
   "inventory": [
     {
@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 480035,
-      "sha256": "fdea0bb0262855f0951907a6a231f95c0f6f0eafe529f507a50b4f85f1bb3cef"
+      "bytes": 483124,
+      "sha256": "6c0c678906b957a2299967198412ff38ed6cedb7927d2856d744ffa0a69eaead"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "a2552eb3233b5b73768dcdbd85192b71564b1c357a6e48f5baef8f0fb5a63223"
+      "sha256": "2911d3f3ce3f5459621b9ebb2dcd98d3c573171f188752640e98e1d521d20841"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "93756991a8ce061020c68008641813607db540240d00acbfc453e87651a219d3"
+      "sha256": "1968028e7e1856814be427e43990869e2d1a5cf411630fcdcf180ec95b77b56f"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3777,8 +3777,8 @@
     {
       "path": "e2e/controller-navigation.spec.ts",
       "category": "test",
-      "bytes": 14303,
-      "sha256": "96f12633ae879a17c7bd735269cd32c11dfea452f0874b1d127dd02f43b5aab3"
+      "bytes": 16852,
+      "sha256": "9548c823a02a008623afb4b80d453ea4b550859eb16971d3cf2f55345190a46e"
     },
     {
       "path": "e2e/cyp-review-capture.spec.ts",
@@ -5397,8 +5397,8 @@
     {
       "path": "scripts/test-only-exports-baseline.json",
       "category": "script",
-      "bytes": 8806,
-      "sha256": "20897fa8515c200e7e4b92c2df778c51e1a49f1201ac1d91a6d541556d0b45b4"
+      "bytes": 9008,
+      "sha256": "520d809421c72f3af4bf9ee560bce1a3e97ceb0724f6ff9b7a12033dbe6b43b6"
     },
     {
       "path": "scripts/test-only-exports.ts",
@@ -5661,14 +5661,14 @@
     {
       "path": "src/renderer/a11y/toolbarRoving.test.ts",
       "category": "test",
-      "bytes": 6512,
-      "sha256": "695a6501dc0f761e25281fc3ec90548316799c3eef7ca74d6fd3e74504bf1dc2"
+      "bytes": 6435,
+      "sha256": "e414bb5086255a5adca7d1ec243115b08ba2cf0ba7721087f4d996c17ab2791c"
     },
     {
       "path": "src/renderer/a11y/toolbarRoving.ts",
       "category": "source",
-      "bytes": 5290,
-      "sha256": "b6b2e99805c6159d8ecd075db1e422bf27e3532397a5af0305f2a169e406c6b5"
+      "bytes": 5356,
+      "sha256": "9859df759dc258394f656a1d6117ec08618412160d7b15e03dc0232526697344"
     },
     {
       "path": "src/renderer/App.test.tsx",
@@ -8703,8 +8703,8 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 23643,
-      "sha256": "2b38b151172a0b7b45e37a61502687f0bcd465f59ee42473ae3c0cca97da7632"
+      "bytes": 25846,
+      "sha256": "89e937bec79ce8e836df1c21501df3738762346ff63be1aeecc64cce257d4cc9"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -15915,7 +15915,7 @@
       "path": "src/renderer/a11y/toolbarRoving.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 170,
+      "lineCount": 163,
       "imports": [
         "file:src/renderer/a11y/toolbarRoving.ts"
       ],
@@ -15927,15 +15927,13 @@
       "path": "src/renderer/a11y/toolbarRoving.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 154,
+      "lineCount": 150,
       "imports": [],
       "exports": [
         "symbol:src/renderer/a11y/toolbarRoving.ts#acquireToolbarRovingPause",
         "symbol:src/renderer/a11y/toolbarRoving.ts#getToolbarButtons",
         "symbol:src/renderer/a11y/toolbarRoving.ts#handleHorizontalToolbarKeyDown",
-        "symbol:src/renderer/a11y/toolbarRoving.ts#handleVerticalToolbarKeyDown",
-        "symbol:src/renderer/a11y/toolbarRoving.ts#syncToolbarTabIndices",
-        "symbol:src/renderer/a11y/toolbarRoving.ts#syncVerticalToolbarTabIndices"
+        "symbol:src/renderer/a11y/toolbarRoving.ts#syncToolbarTabIndices"
       ],
       "testedBy": [
         "file:src/renderer/a11y/toolbarRoving.test.ts",
@@ -18525,8 +18523,9 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 450,
+      "lineCount": 491,
       "imports": [
+        "file:src/renderer/a11y/toolbarRoving.ts",
         "file:src/renderer/copy/chainBeat.ts",
         "file:src/renderer/copy/passAndPlay.ts",
         "file:src/renderer/copy/runDialogCopy.ts",
@@ -32592,8 +32591,8 @@
       "name": "acquireToolbarRovingPause",
       "kind": "value",
       "file": "src/renderer/a11y/toolbarRoving.ts",
-      "line": 65,
-      "endLine": 98
+      "line": 62,
+      "endLine": 95
     },
     {
       "id": "symbol:src/renderer/a11y/toolbarRoving.ts#getToolbarButtons",
@@ -32608,16 +32607,8 @@
       "name": "handleHorizontalToolbarKeyDown",
       "kind": "value",
       "file": "src/renderer/a11y/toolbarRoving.ts",
-      "line": 152,
-      "endLine": 153
-    },
-    {
-      "id": "symbol:src/renderer/a11y/toolbarRoving.ts#handleVerticalToolbarKeyDown",
-      "name": "handleVerticalToolbarKeyDown",
-      "kind": "value",
-      "file": "src/renderer/a11y/toolbarRoving.ts",
-      "line": 149,
-      "endLine": 150
+      "line": 148,
+      "endLine": 149
     },
     {
       "id": "symbol:src/renderer/a11y/toolbarRoving.ts#syncToolbarTabIndices",
@@ -32626,14 +32617,6 @@
       "file": "src/renderer/a11y/toolbarRoving.ts",
       "line": 35,
       "endLine": 55
-    },
-    {
-      "id": "symbol:src/renderer/a11y/toolbarRoving.ts#syncVerticalToolbarTabIndices",
-      "name": "syncVerticalToolbarTabIndices",
-      "kind": "value",
-      "file": "src/renderer/a11y/toolbarRoving.ts",
-      "line": 57,
-      "endLine": 59
     },
     {
       "id": "symbol:src/renderer/App.tsx#APP_MAIN_LANDMARK_ID",
@@ -35256,24 +35239,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 449,
-      "endLine": 449
+      "line": 490,
+      "endLine": 490
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 41,
-      "endLine": 66
+      "line": 42,
+      "endLine": 67
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 28,
-      "endLine": 39
+      "line": 29,
+      "endLine": 40
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
@@ -53862,7 +53845,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 163
+          "line": 164
         }
       ],
       "tests": [
@@ -54171,7 +54154,7 @@
       "evidence": [
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 7
+          "line": 8
         },
         {
           "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -55681,7 +55664,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 264
+          "line": 289
         }
       ],
       "tests": [
@@ -55720,7 +55703,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 264
+          "line": 289
         }
       ],
       "tests": [
@@ -55754,7 +55737,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 264
+          "line": 289
         }
       ],
       "tests": [
@@ -55788,7 +55771,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 264
+          "line": 289
         }
       ],
       "tests": [
@@ -57678,21 +57661,9 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/a11y/toolbarRoving.ts->symbol:src/renderer/a11y/toolbarRoving.ts#handleVerticalToolbarKeyDown",
-      "source": "file:src/renderer/a11y/toolbarRoving.ts",
-      "target": "symbol:src/renderer/a11y/toolbarRoving.ts#handleVerticalToolbarKeyDown",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/renderer/a11y/toolbarRoving.ts->symbol:src/renderer/a11y/toolbarRoving.ts#syncToolbarTabIndices",
       "source": "file:src/renderer/a11y/toolbarRoving.ts",
       "target": "symbol:src/renderer/a11y/toolbarRoving.ts#syncToolbarTabIndices",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/a11y/toolbarRoving.ts->symbol:src/renderer/a11y/toolbarRoving.ts#syncVerticalToolbarTabIndices",
-      "source": "file:src/renderer/a11y/toolbarRoving.ts",
-      "target": "symbol:src/renderer/a11y/toolbarRoving.ts#syncVerticalToolbarTabIndices",
       "kind": "exports"
     },
     {
@@ -77669,6 +77640,12 @@
       "id": "imports:src/renderer/components/RunShell.test.tsx->src/shared/game-core.ts",
       "source": "file:src/renderer/components/RunShell.test.tsx",
       "target": "file:src/shared/game-core.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/a11y/toolbarRoving.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/renderer/a11y/toolbarRoving.ts",
       "kind": "imports"
     },
     {

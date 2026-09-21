@@ -287,6 +287,54 @@ test.describe('controller navigation', () => {
     }
 
     /**
+     * The in-run dock declares `role="toolbar"`, which is a promise about the keyboard.
+     *
+     * WAI-ARIA's toolbar pattern is one tab stop for the whole toolbar, arrow keys between its
+     * controls. `a11y/toolbarRoving.ts` implements all of it, with tests. Until Gen 258 the dock
+     * wired none of it: measured in a real run, ArrowRight on the first tool left focus exactly
+     * where it was, and the dock held four tab stops on arrival - then a different number after any
+     * modal had opened and closed, because the only live caller of that module released its pause
+     * by INSTALLING the roving indices it was meant to be restoring.
+     *
+     * That is the whole reason this is checked in a browser rather than in the unit test beside the
+     * module. The module was always right. What was missing was that anything used it.
+     */
+    test('the in-run dock keeps the toolbar promise its role makes', async ({ page }) => {
+        test.setTimeout(300_000);
+        await openLevel1Play(page);
+        await waitLevel1PlayReady(page);
+
+        const dock = page.getByRole('toolbar', { name: /game controls/i });
+        await expect(dock).toBeVisible({ timeout: 20_000 });
+
+        const tabStops = () =>
+            dock.evaluate(
+                (root) => [...root.querySelectorAll('button')].filter((b) => !b.disabled && b.tabIndex >= 0).length
+            );
+
+        // One tab stop, not one per tool: that is what the role promises a keyboard.
+        expect(await tabStops(), 'the toolbar is more than one tab stop').toBe(1);
+
+        // And the arrow keys move along it.
+        const labelOf = () => page.evaluate(() => document.activeElement?.getAttribute('aria-label') ?? 'none');
+        await dock.evaluate((root) => root.querySelector<HTMLElement>('button:not([disabled])')?.focus());
+        const first = await labelOf();
+        await page.keyboard.press('ArrowRight');
+        await page.waitForTimeout(200);
+        const second = await labelOf();
+        expect(second, `ArrowRight left focus on "${first}"`).not.toBe(first);
+
+        // Home and End are the rest of the pattern, and cost nothing to ask for.
+        await page.keyboard.press('End');
+        await page.waitForTimeout(200);
+        const last = await labelOf();
+        expect(last, 'End did not reach a different control').not.toBe(second);
+        await page.keyboard.press('Home');
+        await page.waitForTimeout(200);
+        expect(await labelOf(), 'Home did not come back to the first control').toBe(first);
+    });
+
+    /**
      * The same button, mid-run, has to land somewhere else: back on the board with the run intact,
      * not out at the main menu. `resolveSubscreenCloseTarget` decides that, and this is the only
      * thing that runs it with a real run underneath.
