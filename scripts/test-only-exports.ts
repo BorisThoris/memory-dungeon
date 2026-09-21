@@ -43,6 +43,11 @@ export const TEST_ONLY_EXPORT_EXEMPTIONS: Record<string, string> = {
         'Reached by scripts/bake-procedural-illustration-set.ts and two illustration e2e specs ' +
         "through `import('/src/renderer/components/tileTextures.ts')` - a dynamic module URL this " +
         'audit cannot follow, so it reads as test-only while a build tool depends on it.',
+    getNavigationRouteContract:
+        'Record by design as of Gen 247: the route table it reads is now checked AGAINST the ' +
+        'resolver that actually runs - every store action must land on the view its row promises, ' +
+        'and a freeze-on-open row must mean the transition freezes the run. The test is the ' +
+        'consumer because the test is the check.',
     getIllustrationPipelineDebugState:
         'Same: the illustration-regression and overlay-regression specs read the pipeline debug ' +
         'state through a dynamic module URL. It exists to be read from outside the app, which is ' +

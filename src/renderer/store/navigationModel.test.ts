@@ -92,6 +92,60 @@ describe('navigationModel', () => {
         expect(rows.find((row) => row.id === 'in_run_meta')?.chrome).toMatch(/Gameplay remains mounted/i);
     });
 
+    /**
+     * The route table against the resolver that actually runs.
+     *
+     * These are two layers of the same module written in different vocabularies - the table is
+     * keyed (from, to, action) on a navigation surface, the resolver switches on a store action
+     * like `openInventoryFromPlaying` - and until Gen 247 nothing connected them. The table was a
+     * description, this test asserted the description was self-consistent, and the app was free to
+     * disagree with it. Gen 245 proved that is not hypothetical: a set in this same module already
+     * contradicted the branch that decides the same thing.
+     *
+     * So the table is now checked against behaviour rather than against itself. Every store action
+     * names its route; the row must exist, the resolver must land on the view the row promises,
+     * and `timerPolicy: 'freeze-on-open'` must mean the transition actually freezes the run. A row
+     * with no action, or an action whose resolver disagrees, fails here.
+     */
+    it('resolves every store action onto the route its contract promises', () => {
+        const runningState = {
+            run: {},
+            settingsReturnView: 'menu' as const,
+            subscreenReturnView: 'menu' as const,
+            view: 'playing' as const
+        };
+        const menuState = {
+            run: null,
+            settingsReturnView: 'menu' as const,
+            subscreenReturnView: 'menu' as const,
+            view: 'menu' as const
+        };
+
+        const routes = [
+            { action: 'openModeSelect', from: 'menu', to: 'modeSelect', state: menuState },
+            { action: 'openCollection', from: 'menu', to: 'collection', state: menuState },
+            { action: 'openProfile', from: 'menu', to: 'profile', state: menuState },
+            { action: 'openInventoryFromMenu', from: 'menu', to: 'inventory', state: menuState },
+            { action: 'openCodexFromMenu', from: 'menu', to: 'codex', state: menuState },
+            { action: 'openInventoryFromPlaying', from: 'playing', to: 'inventory', state: runningState },
+            { action: 'openCodexFromPlaying', from: 'playing', to: 'codex', state: runningState }
+        ] as const;
+
+        for (const route of routes) {
+            const contract = getNavigationRouteContract(route.from, route.to, 'open');
+            expect(contract, `${route.from} -> ${route.to} has no route contract`).not.toBeNull();
+
+            const transition = resolveNavigationTransition(route.state, route.action);
+            expect(transition.view, `${route.action} does not land on ${route.to}`).toBe(route.to);
+            expect(
+                transition.freezeRun === true,
+                `${route.action}: the contract says timerPolicy ${contract?.timerPolicy}, the resolver ${
+                    transition.freezeRun === true ? 'freezes' : 'does not freeze'
+                }`
+            ).toBe(contract?.timerPolicy === 'freeze-on-open');
+        }
+    });
+
     it('classifies menu and in-run destinations for shell chrome decisions', () => {
         expect(isMenuDestinationView('collection')).toBe(true);
         expect(isMenuDestinationView('playing')).toBe(false);

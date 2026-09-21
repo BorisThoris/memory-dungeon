@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 454358,
-      "sha256": "2e2ddba065a739b0448ada4d8a93dc0bed6c8b155877a9391f16ee3cae1f1660"
+      "bytes": 455785,
+      "sha256": "b73f40d55e7e06e6c9d12a2a534019563d0fbd4e39e09c36ffd67715ffbd0055"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 18034,
-      "sha256": "6da5535d9942f3946441b6e5e15b42e27a69c4038d7e9b6d64aa003ae3936c03"
+      "sha256": "1fbd1d6742b378b088b315c449449a1cd46d36b99518dcc2120e3d9c5f6fd211"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -5445,14 +5445,14 @@
     {
       "path": "scripts/test-only-exports-baseline.json",
       "category": "script",
-      "bytes": 8952,
-      "sha256": "21f32b41a14528334523b01e45729ceeeb8c69d9f943b77b65be7357baca179e"
+      "bytes": 8880,
+      "sha256": "94e212b153408637b7fbd01d57eea1520ea6384cb1f1869243c7ef16cbda8e40"
     },
     {
       "path": "scripts/test-only-exports.ts",
       "category": "script",
-      "bytes": 16904,
-      "sha256": "55c1d4de7c49cc4a9684667b0eb219a2f48c6d37863da230f020673ec64287a7"
+      "bytes": 17282,
+      "sha256": "8ebd0dbc32ed329034277e068df8c2df936641a1a8d38a2b220c15abdfb6d2ac"
     },
     {
       "path": "scripts/test-only-modules.ts",
@@ -10533,8 +10533,8 @@
     {
       "path": "src/renderer/store/navigationModel.test.ts",
       "category": "test",
-      "bytes": 4199,
-      "sha256": "eed2c4e01dd29c20243158fd6a5746000441728fc0861d7cc28eaf687f1668a7"
+      "bytes": 7172,
+      "sha256": "04b6e4b035d97e704dc16f96110122a82beeb0b01ee65e6998f2f88414deb898"
     },
     {
       "path": "src/renderer/store/navigationModel.ts",
@@ -23569,7 +23569,7 @@
       "path": "src/renderer/store/navigationModel.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 107,
+      "lineCount": 161,
       "imports": [
         "file:src/renderer/store/navigationModel.ts"
       ],

@@ -50,7 +50,6 @@
     "src/renderer/platformTilt/platformTiltPermissionUi.ts motionHapticsCarryEssentialFeedback",
     "src/renderer/store/gameplayFeedbackAdapter.ts getLatestGameplayFeedback",
     "src/renderer/store/gameplayFeedbackAdapter.ts getNewGameplayFeedback",
-    "src/renderer/store/navigationModel.ts getNavigationRouteContract",
     "src/renderer/store/navigationModel.ts getNavigationShellChromeRows",
     "src/renderer/store/navigationModel.ts isMenuDestinationView",
     "src/renderer/store/navigationModel.ts isRunStatusResumableAfterMetaOverlay",
