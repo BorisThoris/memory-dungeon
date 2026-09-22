@@ -7,6 +7,8 @@ import { resolveUiBackgroundUrl } from './modeArt';
 
 export const UI_ART = {
     brandCrest: brandCrestUrl,
+    /** Choose Your Path — a painted haze of mist and candlelight, drifting over the stage. */
+    choosePathAmbient: resolveUiBackgroundUrl('bg-choose-path-stage-ambient-v2.webp', ''),
     /** Choose Your Path — soft-light texture layer over gameplay base (`sceneLayer` in `ChooseYourPathScreen`). */
     choosePathScene: resolveUiBackgroundUrl('bg-choose-path-stage-v1.webp'),
     dividerOrnament: dividerOrnamentUrl,
@@ -40,6 +42,7 @@ export type UiArtKey = keyof typeof UI_ART;
 
 export const UI_ART_KEYS = [
     'brandCrest',
+    'choosePathAmbient',
     'choosePathScene',
     'dividerOrnament',
     'gameplayScene',

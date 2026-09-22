@@ -36,6 +36,43 @@
     mask-image: radial-gradient(ellipse 100% 90% at 50% 45%, black 25%, rgba(0, 0, 0, 0.7) 60%, transparent 100%);
 }
 
+/* The air of the place, over whatever poster is behind it. Soft-light keeps it as atmosphere
+   rather than a wash: it lifts the mist and the candles without flattening the art underneath. */
+.ambient {
+    position: absolute;
+    inset: -6% -8%;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.42;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    mix-blend-mode: soft-light;
+    mask-image: radial-gradient(ellipse 100% 100% at 50% 45%, black 35%, transparent 100%);
+    animation: choosePathAmbientDrift 64s ease-in-out infinite alternate;
+    will-change: transform, opacity;
+}
+
+.ambient[data-still='true'] {
+    animation: none;
+}
+
+@keyframes choosePathAmbientDrift {
+    0% {
+        transform: translate3d(-1.6%, 0.6%, 0) scale(1.02);
+        opacity: 0.34;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: translate3d(1.6%, -0.6%, 0) scale(1.05);
+        opacity: 0.4;
+    }
+}
+
 /* The living portal: the ground sinks to 30 % like a still poster would, the runes, moon, stars
    and vortex stay brighter, and the plate is held at the same 45 % the still is. */
 .scene[data-scene='portal'] {

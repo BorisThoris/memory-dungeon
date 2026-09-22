@@ -342,6 +342,19 @@ const ChooseYourPathScreen = (): ReactElement => {
                     style={{ backgroundImage: `url(${launchMode ? resolveModePosterUrl(launchMode.posterKey) : UI_ART.choosePathScene})` }}
                 />
             )}
+            {/*
+              * The air of the place: a painted haze of mist and candlelight that drifts across the
+              * stage whichever poster is behind it, so a mode without a living scene is still in a
+              * room rather than on a picture. It is already blurred in the art, so it moves with a
+              * transform and an opacity and never a filter.
+              */}
+            <div
+                aria-hidden="true"
+                className={styles.ambient}
+                data-still={settings.reduceMotion ? 'true' : 'false'}
+                data-testid="choose-path-ambient"
+                style={{ backgroundImage: `url(${UI_ART.choosePathAmbient})` }}
+            />
             <div aria-hidden="true" className={styles.scrim} />
 
             <div className={styles.page}>

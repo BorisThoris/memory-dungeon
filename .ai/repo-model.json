@@ -7953,8 +7953,8 @@
     {
       "path": "src/renderer/assets/ui/index.ts",
       "category": "source",
-      "bytes": 3864,
-      "sha256": "9a6ddf60651536ac81a2003f58ddb3db81907466fb1038c42e81c70bae0810c5"
+      "bytes": 4080,
+      "sha256": "b9075475825a73174c767a2288216097a552021bffcfdfcd0bc8dfdc7551f6ea"
     },
     {
       "path": "src/renderer/assets/ui/menu-emblem.svg",
@@ -8985,8 +8985,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
       "category": "source",
-      "bytes": 21673,
-      "sha256": "b6e0d5cf5434fde9adb706bee2d1553f1406874a422a943ed41d6b8ebe321f76"
+      "bytes": 22682,
+      "sha256": "a0e85633a6a03eaafbba78f9c7fb9f52b3d753cff3fdd5c907b2887b8a89a2ba"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
@@ -8997,8 +8997,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 35059,
-      "sha256": "87189a44302d4121872bc0def812e617314b56b4a2c2b7442880cf2d08fe1fe6"
+      "bytes": 35777,
+      "sha256": "3bed3468dc297eec0682ee404cc1e0a1a89f89439a109061a40d624a57927f79"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -16858,7 +16858,7 @@
       "path": "src/renderer/assets/ui/index.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 80,
+      "lineCount": 83,
       "imports": [
         "file:src/renderer/assets/ui/modeArt.ts"
       ],
@@ -18487,7 +18487,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 672,
+      "lineCount": 685,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/modeArt.ts",
@@ -33854,32 +33854,32 @@
       "name": "getUiArtRows",
       "kind": "value",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 73,
-      "endLine": 77
+      "line": 76,
+      "endLine": 80
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#MODE_CARD_ART",
       "name": "MODE_CARD_ART",
       "kind": "ExportSpecifier",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 79,
-      "endLine": 79
+      "line": 82,
+      "endLine": 82
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#MODE_POSTER_KEYS",
       "name": "MODE_POSTER_KEYS",
       "kind": "ExportSpecifier",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 79,
-      "endLine": 79
+      "line": 82,
+      "endLine": 82
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#resolveModePosterUrl",
       "name": "resolveModePosterUrl",
       "kind": "ExportSpecifier",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 79,
-      "endLine": 79
+      "line": 82,
+      "endLine": 82
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UI_ART",
@@ -33887,31 +33887,31 @@
       "kind": "value",
       "file": "src/renderer/assets/ui/index.ts",
       "line": 8,
-      "endLine": 37
+      "endLine": 39
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UI_ART_KEYS",
       "name": "UI_ART_KEYS",
       "kind": "value",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 41,
-      "endLine": 66
+      "line": 43,
+      "endLine": 69
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UiArtKey",
       "name": "UiArtKey",
       "kind": "type",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 39,
-      "endLine": 39
+      "line": 41,
+      "endLine": 41
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UiArtRow",
       "name": "UiArtRow",
       "kind": "interface",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 68,
-      "endLine": 71
+      "line": 71,
+      "endLine": 74
     },
     {
       "id": "symbol:src/renderer/assets/ui/modeArt.ts#getModePosterArtRows",
@@ -35934,8 +35934,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ChooseYourPathScreen.tsx",
-      "line": 671,
-      "endLine": 671
+      "line": 684,
+      "endLine": 684
     },
     {
       "id": "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows",
