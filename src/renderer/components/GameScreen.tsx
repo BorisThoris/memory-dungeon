@@ -1519,6 +1519,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 debugPeekActive={run.debugPeekActive}
                                 dimmedTileIds={focusDimmedTileIds}
                                 guidedTargetTileIds={onboardingBoardTargetIds}
+                                cardHeat={runChainMeter(run).fill}
                                 chainContext={{
                                     currentStreak: run.stats.currentStreak,
                                     floorCurioId: run.floorCurioId ?? null,

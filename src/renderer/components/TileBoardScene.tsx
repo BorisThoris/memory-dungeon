@@ -84,6 +84,8 @@ const EMPTY_TILE_IDS: ReadonlySet<string> = new Set();
 /** `wide_recall` - cooler, slightly desaturated face during play. */
 interface TileBoardSceneProps {
     board: BoardState;
+    /** Chain meter fill, 0..1: how hard the card backs burn. */
+    cardHeat?: number;
     boardViewport: TileBoardViewportState;
     compact: boolean;
     debugPeekActive: boolean;
@@ -154,6 +156,7 @@ const CARD_WIDTH = CARD_PLANE_WIDTH;
 const CARD_HEIGHT = CARD_PLANE_HEIGHT;
 const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     board,
+    cardHeat = 0,
     boardViewport,
     compact,
     debugPeekActive,
@@ -443,6 +446,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
                 onTileHover={onTileHover}
                 reduceMotion={reduceMotion}
                 resolvingMatchWaveKey={resolvingMatchWaveKey}
+                cardHeat={cardHeat}
                 sharedCardBackLayers={sharedCardBackLayers}
                 sharedCardFrontLayers={sharedCardFrontLayers}
                 shuffleMotionBudgetMs={shuffleMotionBudgetMs}

@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2678,
-    "codeFileCount": 922,
-    "exportedSymbolCount": 2773,
+    "trackedFileCount": 2684,
+    "codeFileCount": 925,
+    "exportedSymbolCount": 2779,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 7024
+    "relationshipCount": 7035
   },
   "inventory": [
     {
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "980974e275b5c44b093152bbfe97dbf73018a80f4efc7064eb1efb7dbfb2f1a6"
+      "sha256": "b9aa6940c5977d6e1536f6fe2ac82061d63e61541902b66f2df66822ca1a2a22"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4787,6 +4787,12 @@
       "category": "script",
       "bytes": 1141,
       "sha256": "86caf404685e259e88d6eed785bc0923b35e62171641e270cba17f3d2b50e02d"
+    },
+    {
+      "path": "scripts/card-pipeline/cut_card_back_glow.py",
+      "category": "script",
+      "bytes": 4897,
+      "sha256": "58f8257b14b0816e234ece4ff19f2b5ee31f28f44e6fe7c98233f1cc8cd6736d"
     },
     {
       "path": "scripts/card-pipeline/export-card-normal-webp.mjs",
@@ -7369,10 +7375,22 @@
       "sha256": "633f0f5041665c69491549f21a4b18f69b6e3e95c31a9ab11dfc3e6076c3ebd3"
     },
     {
+      "path": "src/renderer/assets/textures/cards/card-back-glow-runes.webp",
+      "category": "source",
+      "bytes": 155404,
+      "sha256": "6fa634b8b3326f84a095149e7390f54a46f4981103e49110f0082e47cbe9cf3a"
+    },
+    {
       "path": "src/renderer/assets/textures/cards/card-back-painted.webp",
       "category": "source",
       "bytes": 430608,
       "sha256": "61bab2c30328265e08807066e31ec02619e89060cc978161dfce12efa718da6c"
+    },
+    {
+      "path": "src/renderer/assets/textures/cards/card-back-spin.webp",
+      "category": "source",
+      "bytes": 271694,
+      "sha256": "acb5d6d1d98350795fe2bc8b9d9b221522ac816a76d2f79f0b32e62739604ae0"
     },
     {
       "path": "src/renderer/assets/textures/cards/edge-roughness.png",
@@ -8857,6 +8875,12 @@
       "sha256": "76964122aa07b7ad2e905976b2a9dff40a0daa10ec21b5b53982f3021b1ca454"
     },
     {
+      "path": "src/renderer/components/AnimatedCardBackGlow.tsx",
+      "category": "source",
+      "bytes": 5258,
+      "sha256": "eb4a07ff9c069c6c6a377e8719308a3c6ae7c1f18e03e65413e6f7184f5efb1c"
+    },
+    {
       "path": "src/renderer/components/AnimatedCardBackSvgLayers.tsx",
       "category": "source",
       "bytes": 4581,
@@ -9141,8 +9165,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 88286,
-      "sha256": "54535844c53e8230821cc26ac20385ba5745a4f847b22e5e0a71b827376756cf"
+      "bytes": 88354,
+      "sha256": "354783eb6c98b164a911fca4297cfd5799bfc8477f0a80f46f5360ec32742bbf"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9573,8 +9597,8 @@
     {
       "path": "src/renderer/components/TileBezel.tsx",
       "category": "source",
-      "bytes": 33777,
-      "sha256": "3a924edb8759ff9c6bc7611d205cf9a42641706c8f31010c92f24c12aececa10"
+      "bytes": 35202,
+      "sha256": "3aaa48b597c1928bfb2af24f3fcd0ae86b927487dd59d2e516a635a9171621d1"
     },
     {
       "path": "src/renderer/components/TileBoard.module.css",
@@ -9591,8 +9615,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 148669,
-      "sha256": "0a12a20ba4319a9162f63ac8a7098b58b143fb0b18cb876703b693bb55c6ef46"
+      "bytes": 152401,
+      "sha256": "7879f4f748d82d61fa70809d0e412c89605abcf3129f853c6508e0f9e74f677a"
     },
     {
       "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -9655,10 +9679,22 @@
       "sha256": "de749c0cc6c161671df318c97fb1c5892921c91f9176298b4d218355c68e567d"
     },
     {
+      "path": "src/renderer/components/tileBoardCardHeat.test.ts",
+      "category": "test",
+      "bytes": 2397,
+      "sha256": "89ccda5e9fa041f3abb82e18cac8673d80e89f9f0a1513141ae8b6d80c98a0cc"
+    },
+    {
+      "path": "src/renderer/components/tileBoardCardHeat.ts",
+      "category": "source",
+      "bytes": 2767,
+      "sha256": "e978c0f16e9168fcadf0abcad0f3a3b7d3bf2cab9749a9f4d31a5f37d00cb214"
+    },
+    {
       "path": "src/renderer/components/TileBoardCardSurface.tsx",
       "category": "source",
-      "bytes": 9365,
-      "sha256": "d4d40c488ddabc31d8d8d4e7eefbe8fad9d5acd23f35d8165991f5db7e9319c1"
+      "bytes": 10597,
+      "sha256": "0346cc1cc4662bc887cc8e49387f798936009194cbb98c607f29b7f9997b8d9f"
     },
     {
       "path": "src/renderer/components/tileBoardCardTint.test.ts",
@@ -10083,14 +10119,14 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 19358,
-      "sha256": "b1e1cae8a240af870e2800c69db90872555e94705c5b43db0fd6868f9136fccd"
+      "bytes": 19504,
+      "sha256": "a20f7f9db778640df9969a548135fbfdba9d888c2f0a71e34c9fe7a9c2c4b05c"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "category": "source",
-      "bytes": 7729,
-      "sha256": "12580b3491718aab8751a481a4351c26e547c3b158ccbbe885273bdab720ae0e"
+      "bytes": 7874,
+      "sha256": "8f4831478faeb2c88427576beba7c1e3a635c6e3938f014e2edf15e791cc6ff8"
     },
     {
       "path": "src/renderer/components/tileBoardSceneFrame.test.ts",
@@ -10359,14 +10395,14 @@
     {
       "path": "src/renderer/components/tileTextures.test.ts",
       "category": "test",
-      "bytes": 14594,
-      "sha256": "b69fe1ee5b7a02ce80f41bb6a0976970aaeddb35291f5d6b96a1eb0941b60d42"
+      "bytes": 15016,
+      "sha256": "9711ea5548ec23988123558c1e88e1b6244a5dc5a3300d5a461d4f90ee890f9e"
     },
     {
       "path": "src/renderer/components/tileTextures.ts",
       "category": "source",
-      "bytes": 60451,
-      "sha256": "2a94b0e403c89f443e7237d693b9c8da4773d82c2c61d7f343f0202500b811e6"
+      "bytes": 62195,
+      "sha256": "66c1ded2a9a3b73d236fc7732e98420a23e27cd250c41959d96ed0f9f82c60a4"
     },
     {
       "path": "src/renderer/components/TutorialPairMarkerPlane.tsx",
@@ -18211,6 +18247,21 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/AnimatedCardBackGlow.tsx",
+      "path": "src/renderer/components/AnimatedCardBackGlow.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 129,
+      "imports": [
+        "file:src/renderer/components/tileBoardCardHeat.ts",
+        "file:src/renderer/components/tileBoardPick.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/AnimatedCardBackGlow.tsx#AnimatedCardBackGlow"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/AnimatedCardBackSvgLayers.tsx",
       "path": "src/renderer/components/AnimatedCardBackSvgLayers.tsx",
       "layer": "renderer",
@@ -18933,7 +18984,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1835,
+      "lineCount": 1836,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -20001,7 +20052,7 @@
       "path": "src/renderer/components/TileBezel.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 853,
+      "lineCount": 885,
       "imports": [
         "file:src/renderer/components/cardArcaneGlowMaterial.ts",
         "file:src/renderer/components/cardSvgPlaneGeometry.ts",
@@ -20060,7 +20111,7 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3436,
+      "lineCount": 3443,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -20304,12 +20355,41 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/tileBoardCardHeat.test.ts",
+      "path": "src/renderer/components/tileBoardCardHeat.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 54,
+      "imports": [
+        "file:src/renderer/components/tileBoardCardHeat.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/tileBoardCardHeat.ts",
+      "path": "src/renderer/components/tileBoardCardHeat.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 62,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/components/tileBoardCardHeat.ts#cardHeatLevels",
+        "symbol:src/renderer/components/tileBoardCardHeat.ts#CardHeatLevels",
+        "symbol:src/renderer/components/tileBoardCardHeat.ts#cardMatchFlare"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/tileBoardCardHeat.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/TileBoardCardSurface.tsx",
       "path": "src/renderer/components/TileBoardCardSurface.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 213,
+      "lineCount": 240,
       "imports": [
+        "file:src/renderer/components/AnimatedCardBackGlow.tsx",
         "file:src/renderer/components/AnimatedCardBackSvgLayers.tsx",
         "file:src/renderer/components/AnimatedCardFrontSvgLayers.tsx",
         "file:src/renderer/components/cardSvgPlaneGeometry.ts",
@@ -21561,7 +21641,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 464,
+      "lineCount": 468,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
@@ -21605,7 +21685,7 @@
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 180,
+      "lineCount": 184,
       "imports": [
         "file:src/renderer/components/cardSvgPlaneGeometry.ts",
         "file:src/renderer/components/TileBezel.tsx",
@@ -22363,7 +22443,7 @@
       "path": "src/renderer/components/tileTextures.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 365,
+      "lineCount": 367,
       "imports": [
         "file:src/renderer/cardFace/staticCardTextureSize.ts",
         "file:src/renderer/components/tileShatter.ts",
@@ -22379,7 +22459,7 @@
       "path": "src/renderer/components/tileTextures.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1649,
+      "lineCount": 1687,
       "imports": [
         "file:src/renderer/cardFace/cardFaceOverlayPalette.ts",
         "file:src/renderer/cardFace/cardIllustrationDraw.ts",
@@ -22406,7 +22486,9 @@
         "symbol:src/renderer/components/tileTextures.ts#forceIllustrationOverlayCacheVersionForTest",
         "symbol:src/renderer/components/tileTextures.ts#formatTileFaceOverlayRegressionLogLine",
         "symbol:src/renderer/components/tileTextures.ts#getCachedTileTextureKeysForDebug",
+        "symbol:src/renderer/components/tileTextures.ts#getCardBackGlowTexture",
         "symbol:src/renderer/components/tileTextures.ts#getCardBackRasterNormalMapTexture",
+        "symbol:src/renderer/components/tileTextures.ts#getCardBackSpinTexture",
         "symbol:src/renderer/components/tileTextures.ts#getCardFaceRasterNormalMapTexture",
         "symbol:src/renderer/components/tileTextures.ts#getCardFaceStaticTexture",
         "symbol:src/renderer/components/tileTextures.ts#getCardPanelDisplacementTexture",
@@ -35710,6 +35792,14 @@
       "endLine": 7
     },
     {
+      "id": "symbol:src/renderer/components/AnimatedCardBackGlow.tsx#AnimatedCardBackGlow",
+      "name": "AnimatedCardBackGlow",
+      "kind": "value",
+      "file": "src/renderer/components/AnimatedCardBackGlow.tsx",
+      "line": 35,
+      "endLine": 127
+    },
+    {
       "id": "symbol:src/renderer/components/AnimatedCardBackSvgLayers.tsx#AnimatedCardBackSvgLayers",
       "name": "AnimatedCardBackSvgLayers",
       "kind": "value",
@@ -36362,8 +36452,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 1834,
-      "endLine": 1834
+      "line": 1835,
+      "endLine": 1835
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -37202,24 +37292,24 @@
       "name": "TileBezel",
       "kind": "value",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 852,
-      "endLine": 852
+      "line": 884,
+      "endLine": 884
     },
     {
       "id": "symbol:src/renderer/components/TileBezel.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "interface",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 151,
-      "endLine": 155
+      "line": 155,
+      "endLine": 159
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 3435,
-      "endLine": 3435
+      "line": 3442,
+      "endLine": 3442
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
@@ -37694,12 +37784,36 @@
       "endLine": 106
     },
     {
+      "id": "symbol:src/renderer/components/tileBoardCardHeat.ts#cardHeatLevels",
+      "name": "cardHeatLevels",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardCardHeat.ts",
+      "line": 30,
+      "endLine": 43
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardCardHeat.ts#CardHeatLevels",
+      "name": "CardHeatLevels",
+      "kind": "interface",
+      "file": "src/renderer/components/tileBoardCardHeat.ts",
+      "line": 15,
+      "endLine": 24
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardCardHeat.ts#cardMatchFlare",
+      "name": "cardMatchFlare",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardCardHeat.ts",
+      "line": 49,
+      "endLine": 61
+    },
+    {
       "id": "symbol:src/renderer/components/TileBoardCardSurface.tsx#TileBoardCardSurface",
       "name": "TileBoardCardSurface",
       "kind": "value",
       "file": "src/renderer/components/TileBoardCardSurface.tsx",
-      "line": 47,
-      "endLine": 211
+      "line": 55,
+      "endLine": 238
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardTint.ts#applyTileBoardCardTint",
@@ -39074,16 +39188,16 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 463,
-      "endLine": 463
+      "line": 467,
+      "endLine": 467
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
       "name": "TileBoardSceneHandle",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 151,
-      "endLine": 151
+      "line": 153,
+      "endLine": 153
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileHoverTiltState",
@@ -39098,8 +39212,8 @@
       "name": "TileBoardSceneBoardGroup",
       "kind": "value",
       "file": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
-      "line": 45,
-      "endLine": 179
+      "line": 47,
+      "endLine": 183
     },
     {
       "id": "symbol:src/renderer/components/tileBoardSceneFrame.ts#runTileBoardSceneFrame",
@@ -39970,256 +40084,272 @@
       "name": "applyAnisotropyToCachedTileTextures",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 609,
-      "endLine": 619
+      "line": 617,
+      "endLine": 627
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#clearTileTextureCachesForDebug",
       "name": "clearTileTextureCachesForDebug",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1624,
-      "endLine": 1632
+      "line": 1662,
+      "endLine": 1670
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#CubeFace",
       "name": "CubeFace",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 97,
-      "endLine": 97
+      "line": 99,
+      "endLine": 99
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#CubeLayer",
       "name": "CubeLayer",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 98,
-      "endLine": 98
+      "line": 100,
+      "endLine": 100
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#FaceVariant",
       "name": "FaceVariant",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 50,
-      "endLine": 50
+      "line": 52,
+      "endLine": 52
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#forceIllustrationOverlayCacheVersionForTest",
       "name": "forceIllustrationOverlayCacheVersionForTest",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1636,
-      "endLine": 1638
+      "line": 1674,
+      "endLine": 1676
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#formatTileFaceOverlayRegressionLogLine",
       "name": "formatTileFaceOverlayRegressionLogLine",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1309,
-      "endLine": 1313
+      "line": 1347,
+      "endLine": 1351
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCachedTileTextureKeysForDebug",
       "name": "getCachedTileTextureKeysForDebug",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1634,
-      "endLine": 1634
+      "line": 1672,
+      "endLine": 1672
+    },
+    {
+      "id": "symbol:src/renderer/components/tileTextures.ts#getCardBackGlowTexture",
+      "name": "getCardBackGlowTexture",
+      "kind": "value",
+      "file": "src/renderer/components/tileTextures.ts",
+      "line": 693,
+      "endLine": 693
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardBackRasterNormalMapTexture",
       "name": "getCardBackRasterNormalMapTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 646,
-      "endLine": 658
+      "line": 654,
+      "endLine": 666
+    },
+    {
+      "id": "symbol:src/renderer/components/tileTextures.ts#getCardBackSpinTexture",
+      "name": "getCardBackSpinTexture",
+      "kind": "value",
+      "file": "src/renderer/components/tileTextures.ts",
+      "line": 696,
+      "endLine": 696
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardFaceRasterNormalMapTexture",
       "name": "getCardFaceRasterNormalMapTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 631,
-      "endLine": 643
+      "line": 639,
+      "endLine": 651
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardFaceStaticTexture",
       "name": "getCardFaceStaticTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1573,
-      "endLine": 1590
+      "line": 1611,
+      "endLine": 1628
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardPanelDisplacementTexture",
       "name": "getCardPanelDisplacementTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 744,
-      "endLine": 761
+      "line": 782,
+      "endLine": 799
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardPanelNormalTexture",
       "name": "getCardPanelNormalTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 691,
-      "endLine": 708
+      "line": 729,
+      "endLine": 746
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getIllustrationPipelineDebugState",
       "name": "getIllustrationPipelineDebugState",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1640,
-      "endLine": 1648
+      "line": 1678,
+      "endLine": 1686
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getOverlayPrewarmDebugState",
       "name": "getOverlayPrewarmDebugState",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1619,
-      "endLine": 1622
+      "line": 1657,
+      "endLine": 1660
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getOverlayTextureCacheDebugState",
       "name": "getOverlayTextureCacheDebugState",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1604,
-      "endLine": 1617
+      "line": 1642,
+      "endLine": 1655
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getTileFaceOverlayRegressionStamp",
       "name": "getTileFaceOverlayRegressionStamp",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1291,
-      "endLine": 1307
+      "line": 1329,
+      "endLine": 1345
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getTileFaceOverlayTexture",
       "name": "getTileFaceOverlayTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1455,
-      "endLine": 1469
+      "line": 1493,
+      "endLine": 1507
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getTileFaceOverlayTextureCacheKey",
       "name": "getTileFaceOverlayTextureCacheKey",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1285,
-      "endLine": 1289
+      "line": 1323,
+      "endLine": 1327
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getTileFaceRoughnessTexture",
       "name": "getTileFaceRoughnessTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1443,
-      "endLine": 1453
+      "line": 1481,
+      "endLine": 1491
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getTileFaceTexture",
       "name": "getTileFaceTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1429,
-      "endLine": 1441
+      "line": 1467,
+      "endLine": 1479
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#invalidateVersionedTileFaceTextureCaches",
       "name": "invalidateVersionedTileFaceTextureCaches",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 275,
-      "endLine": 283
+      "line": 277,
+      "endLine": 285
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#OverlayPrewarmDebugState",
       "name": "OverlayPrewarmDebugState",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 83,
-      "endLine": 92
+      "line": 85,
+      "endLine": 94
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#preloadTileTextureImages",
       "name": "preloadTileTextureImages",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 421,
-      "endLine": 427
+      "line": 429,
+      "endLine": 435
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#resetDemandDrivenOverlayPrewarmForTest",
       "name": "resetDemandDrivenOverlayPrewarmForTest",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1567,
-      "endLine": 1571
+      "line": 1605,
+      "endLine": 1609
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#runDemandDrivenTileFaceOverlayPrewarmSession",
       "name": "runDemandDrivenTileFaceOverlayPrewarmSession",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1534,
-      "endLine": 1564
+      "line": 1572,
+      "endLine": 1602
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#setTileTextureSamplingQuality",
       "name": "setTileTextureSamplingQuality",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 124,
-      "endLine": 143
+      "line": 126,
+      "endLine": 145
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#subscribeTextureImageUpdates",
       "name": "subscribeTextureImageUpdates",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1596,
-      "endLine": 1602
+      "line": 1634,
+      "endLine": 1640
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#TILE_TEXTURE_IMAGE_IDS",
       "name": "TILE_TEXTURE_IMAGE_IDS",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 308,
-      "endLine": 316
+      "line": 314,
+      "endLine": 324
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#TileFace",
       "name": "TileFace",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 51,
-      "endLine": 51
+      "line": 53,
+      "endLine": 53
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#TileFaceOverlayRegressionStamp",
       "name": "TileFaceOverlayRegressionStamp",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 73,
-      "endLine": 81
+      "line": 75,
+      "endLine": 83
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#TileLayer",
       "name": "TileLayer",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 52,
-      "endLine": 52
+      "line": 54,
+      "endLine": 54
     },
     {
       "id": "symbol:src/renderer/components/TutorialPairMarkerPlane.tsx#TutorialPairMarkerPlane",
@@ -60814,6 +60944,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/AnimatedCardBackGlow.tsx->symbol:src/renderer/components/AnimatedCardBackGlow.tsx#AnimatedCardBackGlow",
+      "source": "file:src/renderer/components/AnimatedCardBackGlow.tsx",
+      "target": "symbol:src/renderer/components/AnimatedCardBackGlow.tsx#AnimatedCardBackGlow",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/AnimatedCardBackSvgLayers.tsx->symbol:src/renderer/components/AnimatedCardBackSvgLayers.tsx#AnimatedCardBackSvgLayers",
       "source": "file:src/renderer/components/AnimatedCardBackSvgLayers.tsx",
       "target": "symbol:src/renderer/components/AnimatedCardBackSvgLayers.tsx#AnimatedCardBackSvgLayers",
@@ -62299,6 +62435,24 @@
       "id": "exports:src/renderer/components/tileBoardCardFrontLayerVisualState.ts->symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#computeCardFrontLayerVisualState",
       "source": "file:src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
       "target": "symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#computeCardFrontLayerVisualState",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileBoardCardHeat.ts->symbol:src/renderer/components/tileBoardCardHeat.ts#cardHeatLevels",
+      "source": "file:src/renderer/components/tileBoardCardHeat.ts",
+      "target": "symbol:src/renderer/components/tileBoardCardHeat.ts#cardHeatLevels",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileBoardCardHeat.ts->symbol:src/renderer/components/tileBoardCardHeat.ts#CardHeatLevels",
+      "source": "file:src/renderer/components/tileBoardCardHeat.ts",
+      "target": "symbol:src/renderer/components/tileBoardCardHeat.ts#CardHeatLevels",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileBoardCardHeat.ts->symbol:src/renderer/components/tileBoardCardHeat.ts#cardMatchFlare",
+      "source": "file:src/renderer/components/tileBoardCardHeat.ts",
+      "target": "symbol:src/renderer/components/tileBoardCardHeat.ts#cardMatchFlare",
       "kind": "exports"
     },
     {
@@ -64054,9 +64208,21 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/tileTextures.ts->symbol:src/renderer/components/tileTextures.ts#getCardBackGlowTexture",
+      "source": "file:src/renderer/components/tileTextures.ts",
+      "target": "symbol:src/renderer/components/tileTextures.ts#getCardBackGlowTexture",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/tileTextures.ts->symbol:src/renderer/components/tileTextures.ts#getCardBackRasterNormalMapTexture",
       "source": "file:src/renderer/components/tileTextures.ts",
       "target": "symbol:src/renderer/components/tileTextures.ts#getCardBackRasterNormalMapTexture",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileTextures.ts->symbol:src/renderer/components/tileTextures.ts#getCardBackSpinTexture",
+      "source": "file:src/renderer/components/tileTextures.ts",
+      "target": "symbol:src/renderer/components/tileTextures.ts#getCardBackSpinTexture",
       "kind": "exports"
     },
     {
@@ -78180,6 +78346,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/AnimatedCardBackGlow.tsx->src/renderer/components/tileBoardCardHeat.ts",
+      "source": "file:src/renderer/components/AnimatedCardBackGlow.tsx",
+      "target": "file:src/renderer/components/tileBoardCardHeat.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/AnimatedCardBackGlow.tsx->src/renderer/components/tileBoardPick.ts",
+      "source": "file:src/renderer/components/AnimatedCardBackGlow.tsx",
+      "target": "file:src/renderer/components/tileBoardPick.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/AnimatedCardBackSvgLayers.tsx->src/renderer/components/cardSvgPlaneGeometry.ts",
       "source": "file:src/renderer/components/AnimatedCardBackSvgLayers.tsx",
       "target": "file:src/renderer/components/cardSvgPlaneGeometry.ts",
@@ -81063,6 +81241,18 @@
       "id": "imports:src/renderer/components/tileBoardCardFrontLayerVisualState.ts->src/renderer/components/cardSvgPlaneGeometry.ts",
       "source": "file:src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
       "target": "file:src/renderer/components/cardSvgPlaneGeometry.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileBoardCardHeat.test.ts->src/renderer/components/tileBoardCardHeat.ts",
+      "source": "file:src/renderer/components/tileBoardCardHeat.test.ts",
+      "target": "file:src/renderer/components/tileBoardCardHeat.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardCardSurface.tsx->src/renderer/components/AnimatedCardBackGlow.tsx",
+      "source": "file:src/renderer/components/TileBoardCardSurface.tsx",
+      "target": "file:src/renderer/components/AnimatedCardBackGlow.tsx",
       "kind": "imports"
     },
     {
@@ -94856,6 +95046,12 @@
       "id": "tested_by:src/renderer/components/tileBoardCardFrontLayerVisualState.ts->file:src/renderer/components/tileBoardCardFrontLayerVisualState.test.ts",
       "source": "file:src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
       "target": "file:src/renderer/components/tileBoardCardFrontLayerVisualState.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/tileBoardCardHeat.ts->file:src/renderer/components/tileBoardCardHeat.test.ts",
+      "source": "file:src/renderer/components/tileBoardCardHeat.ts",
+      "target": "file:src/renderer/components/tileBoardCardHeat.test.ts",
       "kind": "tested_by"
     },
     {

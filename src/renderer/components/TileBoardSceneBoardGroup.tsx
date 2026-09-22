@@ -10,6 +10,8 @@ import type { TileBoardRuneFieldMetrics } from './tileBoardRuneField';
 
 interface TileBoardSceneBoardGroupProps {
     board: BoardState;
+    /** Chain meter fill, 0..1: how hard the card backs burn. */
+    cardHeat: number;
     boardColumns: number;
     boardEntranceMotionBudgetMs: number;
     boardEntranceMotionDeadlineMs: number;
@@ -44,6 +46,7 @@ interface TileBoardSceneBoardGroupProps {
 
 export const TileBoardSceneBoardGroup = ({
     board,
+    cardHeat,
     boardColumns,
     boardEntranceMotionBudgetMs,
     boardEntranceMotionDeadlineMs,
@@ -166,6 +169,7 @@ export const TileBoardSceneBoardGroup = ({
                     boardRows={boardRows}
                     boardColumns={boardColumns}
                     board={board}
+                    cardHeat={cardHeat}
                     sharedCardBackLayers={sharedCardBackLayers}
                     sharedCardFrontLayers={sharedCardFrontLayers}
                     textureRevision={textureRevision}

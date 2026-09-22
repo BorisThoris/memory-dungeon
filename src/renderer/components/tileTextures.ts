@@ -11,6 +11,8 @@ import {
 import type { GraphicsQualityPreset, Tile } from '../../shared/contracts';
 import { RENDERER_THEME } from '../styles/theme';
 import referenceBackTextureUrl from '../assets/textures/cards/card-back-painted.webp';
+import cardBackGlowTextureUrl from '../assets/textures/cards/card-back-glow-runes.webp';
+import cardBackSpinTextureUrl from '../assets/textures/cards/card-back-spin.webp';
 import cardBackNormalTextureUrl from '../assets/textures/cards/back-normal.webp';
 import cardFaceTextureUrl from '../assets/textures/cards/front-face.webp';
 import cardFaceNormalTextureUrl from '../assets/textures/cards/front-normal.webp';
@@ -292,6 +294,10 @@ export const invalidateVersionedTileFaceTextureCaches = (): void => {
 const textureImageUrls = {
     /** Hidden-side card raster (WebGL back plane, DOM .cardFaceBack): the gold labyrinth. */
     cardReference: referenceBackTextureUrl,
+    /** The back's own light, keyed out of the plate: rises with the chain (`AnimatedCardBackGlow`). */
+    cardBackGlow: cardBackGlowTextureUrl,
+    /** The labyrinth medallion's light alone, turned over the still plate as the chain climbs. */
+    cardBackSpin: cardBackSpinTextureUrl,
     /** Face-up panel raster (WebGL front plane, DOM .cardFaceFront): the gold frame round the illustration. */
     cardFace: cardFaceTextureUrl,
     /** Tangent-space normal for WebGL face-up raster plane (`front-normal.webp`). */
@@ -307,6 +313,8 @@ type TextureImageId = keyof typeof textureImageUrls;
 
 export const TILE_TEXTURE_IMAGE_IDS = [
     'cardReference',
+    'cardBackGlow',
+    'cardBackSpin',
     'cardFace',
     'cardFaceNormal',
     'cardBackNormal',
@@ -656,6 +664,36 @@ export const getCardBackRasterNormalMapTexture = (): Texture | null => {
     cachedRasterBackNormalSource = image;
     return cachedRasterBackNormalTexture;
 };
+
+const rasterTextureCache = new Map<TextureImageId, Texture>();
+
+/**
+ * A plain sRGB texture straight from one of the loaded card rasters, cached per image so every card
+ * on the board shares one upload. Null until the image decodes, which the board redraws through
+ * `subscribeTextureImageUpdates` like any other raster.
+ */
+const getRasterTexture = (imageId: TextureImageId): Texture | null => {
+    const image = getTextureImage(imageId);
+    if (!image?.naturalWidth) {
+        return null;
+    }
+    const cached = rasterTextureCache.get(imageId);
+    if (cached && cached.image === image) {
+        return cached;
+    }
+    cached?.dispose();
+    const texture = new CanvasTexture(image as unknown as HTMLCanvasElement);
+    texture.colorSpace = SRGBColorSpace;
+    texture.needsUpdate = true;
+    rasterTextureCache.set(imageId, texture);
+    return texture;
+};
+
+/** The card back's rune light, additive over the painted plate. */
+export const getCardBackGlowTexture = (): Texture | null => getRasterTexture('cardBackGlow');
+
+/** The card back's labyrinth medallion, additive and turned by the chain. */
+export const getCardBackSpinTexture = (): Texture | null => getRasterTexture('cardBackSpin');
 
 /**
  * Procedural tangent-space normal map (paper-like micro grain + very soft undulation).

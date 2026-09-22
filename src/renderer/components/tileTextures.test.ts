@@ -52,6 +52,8 @@ describe('tileTextures layout', () => {
     it('keeps tile texture image preload ids in card-surface order', () => {
         expect(TILE_TEXTURE_IMAGE_IDS).toEqual([
             'cardReference',
+            'cardBackGlow',
+            'cardBackSpin',
             'cardFace',
             'cardFaceNormal',
             'cardBackNormal',

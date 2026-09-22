@@ -366,6 +366,11 @@ interface TileBoardProps {
     traitRouteTargetTileIds?: readonly string[];
     /** Exact setup action for the currently highlighted trait route, if one exists. */
     traitRouteHintText?: string | null;
+    /**
+     * The chain meter's fill, 0 at rest to 1 at Fever. The card backs burn with it
+     * (`tileBoardCardHeat`), so a streak is felt on the thing the player is looking at.
+     */
+    cardHeat?: number;
     /** Current run chain state, used to preview the payoff of a highlighted chain move. */
     chainContext?: {
         currentStreak: number;
@@ -656,6 +661,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         guidedTargetTileIds = [],
     traitRouteTargetTileIds = [],
     traitRouteHintText = null,
+    cardHeat = 0,
     chainContext,
     recoveryContext = null,
     peekRevealedTileIds = [],
@@ -3294,6 +3300,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     <TileBoardScene
                                         allowGambitThirdFlip={allowGambitThirdFlip}
                                         board={board}
+                                        cardHeat={cardHeat}
                                         boardViewport={renderedViewportState}
                                         compact={compact}
                                         cursedPairKey={cursedPairKey}

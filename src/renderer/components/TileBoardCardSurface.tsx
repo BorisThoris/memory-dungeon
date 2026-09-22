@@ -8,6 +8,7 @@ import {
     type Texture
 } from 'three';
 
+import { AnimatedCardBackGlow } from './AnimatedCardBackGlow';
 import { AnimatedCardBackSvgLayers } from './AnimatedCardBackSvgLayers';
 import { AnimatedCardFrontSvgLayers } from './AnimatedCardFrontSvgLayers';
 import type { CardBackSvgLayerGeometry, CardFrontSvgLayerGeometry } from './cardSvgPlaneGeometry';
@@ -22,6 +23,13 @@ interface TileBoardCardSurfaceProps {
     backNormalMap: Texture | null;
     backRoughnessMap: CanvasTexture | null;
     cardBackArtTexture: CanvasTexture | null;
+    /** The back's rune light and its turning medallion, and how hard the chain drives them. */
+    cardBackGlowTexture: Texture | null;
+    cardBackSpinGeometry: PlaneGeometry;
+    cardBackSpinTexture: Texture | null;
+    cardHeat: number;
+    /** True once this card's pair has landed: the back throws a flare. */
+    cardMatched: boolean;
     cardFrontArtTexture: CanvasTexture | null;
     cardPanelDisplacementMap: CanvasTexture | null;
     cardTint: string;
@@ -51,6 +59,11 @@ export const TileBoardCardSurface = memo(
         backNormalMap,
         backRoughnessMap,
         cardBackArtTexture,
+        cardBackGlowTexture,
+        cardBackSpinGeometry,
+        cardBackSpinTexture,
+        cardHeat,
+        cardMatched,
         cardFrontArtTexture,
         cardPanelDisplacementMap,
         cardTint,
@@ -182,6 +195,20 @@ export const TileBoardCardSurface = memo(
                     />
                 </mesh>
             )}
+            {/* The back answers the run: its own light rises with the chain and the labyrinth turns. */}
+            <group position={[0, 0, -faceZ]} rotation={[0, Math.PI, 0]}>
+                <AnimatedCardBackGlow
+                    geometry={backGeometry}
+                    glowTexture={cardBackGlowTexture}
+                    heat={cardHeat}
+                    matched={cardMatched}
+                    reduceMotion={reduceMotion}
+                    seed={seed}
+                    spinGeometry={cardBackSpinGeometry}
+                    spinTexture={cardBackSpinTexture}
+                    z={-CARD_WEAR_Z_SLIVER * 0.5}
+                />
+            </group>
             {wearAssets ? (
                 <mesh
                     geometry={backGeometry}

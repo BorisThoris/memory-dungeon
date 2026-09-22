@@ -76,7 +76,9 @@ import { frontRoughnessVariantForSurface, overlayVariantForSurface } from './til
 import { initialTileBoardCardTint } from './tileBoardInitialCardTint';
 import type { TileTransform } from './tileBoardTransform';
 import {
+    getCardBackGlowTexture,
     getCardBackRasterNormalMapTexture,
+    getCardBackSpinTexture,
     getCardFaceRasterNormalMapTexture,
     getCardFaceStaticTexture,
     getCardPanelDisplacementTexture,
@@ -116,6 +118,8 @@ interface TileBezelProps {
     boardRows: number;
     boardColumns: number;
     board: BoardState;
+    /** Chain meter fill, 0..1: how hard this card's back burns. */
+    cardHeat: number;
     textureRevision: number;
     tile: Tile;
     transform: TileTransform;
@@ -157,6 +161,9 @@ export interface TileHoverTiltState {
 const CARD_WIDTH = CARD_PLANE_WIDTH;
 const CARD_HEIGHT = CARD_PLANE_HEIGHT;
 const CARD_FACE_INSET = 0.016;
+/** The medallion's disc is 0.63 of the painted plate's height; the plane matches so it lands on it. */
+const CARD_BACK_SPIN_SIZE = CARD_HEIGHT * 0.63;
+
 const CARD_FACE_WIDTH = CARD_WIDTH - CARD_FACE_INSET * 2;
 const CARD_FACE_HEIGHT = CARD_HEIGHT - CARD_FACE_INSET * 2;
 type BendSourceEvent = ThreeEvent<PointerEvent | MouseEvent>;
@@ -200,6 +207,7 @@ const TileBezelInner = ({
     boardRows,
     boardColumns,
     board,
+    cardHeat,
     textureRevision,
     tile,
     transform,
@@ -321,6 +329,25 @@ const TileBezelInner = ({
     useLayoutEffect(() => {
         propsRef.current = propsSnapshot;
     });
+
+    /*
+     * The back's own light and its turning medallion, shared by every card on the board (one upload
+     * each). The medallion's plane is square and centred on the card, sized so the disc lands on
+     * the painted labyrinth; it is rotated about its own centre, which is the medallion's.
+     */
+    const cardBackGlowTexture = useMemo(() => {
+        void textureRevision;
+        return getCardBackGlowTexture();
+    }, [textureRevision]);
+    const cardBackSpinTexture = useMemo(() => {
+        void textureRevision;
+        return getCardBackSpinTexture();
+    }, [textureRevision]);
+    const cardBackSpinGeometry = useMemo(
+        () => new PlaneGeometry(CARD_BACK_SPIN_SIZE, CARD_BACK_SPIN_SIZE, 1, 1),
+        []
+    );
+    const isMatched = tile.state === 'matched';
 
     const cardPanelNormalMap = useMemo(() => getCardPanelNormalTexture(), []);
     const cardPanelDisplacementMap = useMemo(() => getCardPanelDisplacementTexture(), []);
@@ -745,6 +772,11 @@ const TileBezelInner = ({
                     <TileBoardCardSurface
                         backCardMatRef={backCardMatRef}
                         backGeometry={backGeometry}
+                        cardBackGlowTexture={cardBackGlowTexture}
+                        cardBackSpinGeometry={cardBackSpinGeometry}
+                        cardBackSpinTexture={cardBackSpinTexture}
+                        cardHeat={cardHeat}
+                        cardMatched={isMatched}
                         backNormalMap={backNormalMapEffective}
                         backRoughnessMap={backRoughnessMap}
                         cardBackArtTexture={cardBackArtTexture}
