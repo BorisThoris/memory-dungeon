@@ -19,6 +19,7 @@ describe('REG-037 audio interaction coverage', () => {
         expect(gameplay.map((row) => row.id)).toEqual([
             'tile_flip',
             'resolve_match',
+            'combo_voicing_ladder',
             'trait_route_cashout',
             'chain_milestone_hit',
             'resolved_cascade_accent',
@@ -39,6 +40,15 @@ describe('REG-037 audio interaction coverage', () => {
             'board_power'
         ]);
         expect(gameplay.find((row) => row.id === 'resolve_match')?.mixRole).toMatch(/reward/i);
+        expect(gameplay.find((row) => row.id === 'combo_voicing_ladder')).toMatchObject({
+            decision: 'procedural_only',
+            semanticMoment: 'reward'
+        });
+        // The point of the row: the meter is what varies the cue, and it adds no cue of its own.
+        expect(gameplay.find((row) => row.id === 'combo_voicing_ladder')?.mixRole).toMatch(/combo voicing/i);
+        expect(gameplay.find((row) => row.id === 'combo_voicing_ladder')?.cooldownPolicy).toMatch(
+            /adds no one-shot of its own/i
+        );
         expect(gameplay.find((row) => row.id === 'trait_route_cashout')).toMatchObject({
             decision: 'procedural_only',
             semanticMoment: 'reward'

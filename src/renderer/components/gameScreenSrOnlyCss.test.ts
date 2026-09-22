@@ -7,13 +7,19 @@ const css = readFileSync(
     'utf8'
 );
 
+/*
+ * The selector is matched on its tokens, not its line breaks: it is long enough that the
+ * formatter wraps it, and a guard that a reformat can break is a guard that gets deleted.
+ */
 const STAGE_CHILD_LAYER_SELECTOR =
-    '.boardStage > :global(*):not(.srOnly):not(.matchScoreFloater):not(.mismatchScoreFloater):not(.distractionHud)';
+    '.boardStage > :global(*):not(.srOnly):not(.matchScoreFloater):not(.mismatchScoreFloater):not(.distractionHud):not(.memorizeSkipLayer)';
+
+const collapsed = css.replace(/\s+/gu, ' ');
 
 const ruleBody = (selector: string): string => {
-    const start = css.indexOf(`${selector} {`);
+    const start = collapsed.indexOf(`${selector} {`);
     expect(start, `rule "${selector}" is present`).toBeGreaterThan(-1);
-    return css.slice(start, css.indexOf('}', start));
+    return collapsed.slice(start, collapsed.indexOf('}', start));
 };
 
 /**
@@ -31,8 +37,8 @@ describe('GameScreen board stage children', () => {
     });
 
     it('excludes screen-reader-only text from the stage child layer rule', () => {
-        expect(css).not.toMatch(/\.boardStage\s*>\s*:global\(\*\)\s*\{/u);
-        expect(css).not.toMatch(/\.boardStage\s*>\s*:global\(\*\):not\(\.srOnly\)\s*\{/u);
+        expect(collapsed).not.toMatch(/\.boardStage\s*>\s*:global\(\*\)\s*\{/u);
+        expect(collapsed).not.toMatch(/\.boardStage\s*>\s*:global\(\*\):not\(\.srOnly\)\s*\{/u);
         const children = ruleBody(STAGE_CHILD_LAYER_SELECTOR);
         expect(children).toMatch(/position:\s*relative/u);
     });
@@ -48,5 +54,37 @@ describe('GameScreen board stage children', () => {
             expect(STAGE_CHILD_LAYER_SELECTOR).toContain(`:not(${overlay})`);
             expect(ruleBody(overlay)).toMatch(/position:\s*absolute/u);
         }
+    });
+});
+
+/*
+ * The same rule killed the double tap that ends the study period, and killed it silently.
+ *
+ * The skip layer is an empty button whose entire hit area comes from `position: absolute; inset:
+ * 0`. Flattened to `position: relative` it kept its class, its accessible name and its place in
+ * the DOM - and, having no content, collapsed to nothing. Every test that asked whether it was
+ * rendered still passed. There was no visual symptom and no failing check, only a gesture that
+ * had stopped working.
+ *
+ * jsdom lays out neither CSS modules nor zero-height boxes, so no rendering test can catch this.
+ * The stylesheet can.
+ */
+describe('the study-skip layer', () => {
+    it('keeps the hit area that its absolute inset gives it', () => {
+        const layer = ruleBody('.memorizeSkipLayer');
+        expect(layer).toMatch(/position:\s*absolute/u);
+        expect(layer).toMatch(/inset:\s*0/u);
+    });
+
+    it('is excluded from the stage child layer rule that would flatten it', () => {
+        expect(STAGE_CHILD_LAYER_SELECTOR).toContain(':not(.memorizeSkipLayer)');
+        expect(ruleBody(STAGE_CHILD_LAYER_SELECTOR)).toMatch(/position:\s*relative/u);
+    });
+
+    /* Above the tiles the stage-child rule puts on layer 1, so the tap reaches the layer. */
+    it('paints above the board tiles it covers', () => {
+        const zIndex = /z-index:\s*(\d+)/u.exec(ruleBody('.memorizeSkipLayer'));
+        expect(zIndex, 'the skip layer declares a z-index').not.toBeNull();
+        expect(Number(zIndex?.[1])).toBeGreaterThan(1);
     });
 });

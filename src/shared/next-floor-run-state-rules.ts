@@ -57,6 +57,7 @@ export const createNextFloorRunState = (
         chunkPairsBrokenThisFloor: 0,
         chunkScoreThisFloor: 0,
         chunkPairsThisChain: 0,
+        skipMomentumThisChain: 0,
         feverBreaksThisFloor: 0,
         // The carried chain is a chain this floor really holds, so it is this floor's record until
         // a longer one lands. It is under the Clean rung by construction, so it can never credit

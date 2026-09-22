@@ -36,6 +36,26 @@ export const ROUTE_CHOICE_COPY = {
     stair: 'This stair leaves the current floor.'
 } as const;
 
+/**
+ * The par stat in the head, and the turns the run has left beside it.
+ *
+ * Gen 183 took the lives away and put the pressure on the turn ceiling (`docs/REMOVED_LIVES.md`),
+ * but only a screen reader was ever told where that ceiling was: the head read `4 of 7 turns` and
+ * nothing on it said the run ends at 21. What a row of hearts did well was show how much was
+ * left, not how much had been spent, so the budget is back on the rule as a count that falls -
+ * type on the same line as the par, not a boxed meter, and red on the same two-turn edge the par
+ * already marks.
+ */
+export const RUN_SHELL_PAR_COPY = {
+    /** `4 of 7 turns, 17 of 21 left before the run ends`. */
+    aria: (turnsTaken: number, parTurns: number, left: number, ceiling: number): string =>
+        `${turnsTaken} of ${parTurns} turns, ${left} of ${ceiling} left before the run ends`,
+    /** The word after the count. Short, because it sits in a head that a phone also has to hold. */
+    leftWord: 'left',
+    /** On hover, where there is room to say which rule the count belongs to. */
+    title: (ceiling: number): string => `The run ends if this floor is still open after ${ceiling} turns.`
+} as const;
+
 /** Spoken by screen readers over the run shell's pause control. */
 export const RUN_SHELL_LABELS = {
     pause: 'Pause and open the run menu',
@@ -92,10 +112,14 @@ export const RUN_SHELL_LINE_COPY = {
 /**
  * The study period ends itself on a clock. This is the line that tells the player they can end
  * it themselves, and the label the same control carries for a screen reader.
+ *
+ * Both name the payout, because the gesture reads as pure subtraction without it: a player told
+ * only that they can give up clock has been offered less of something, and will not press it
+ * twice. What they are actually offered is a trade, so the line says so.
  */
 export const MEMORIZE_SKIP_COPY = {
-    hint: 'Double-tap the board to start early',
-    label: 'Start the floor early'
+    hint: 'Double-tap the board to start early and bank momentum',
+    label: 'Start the floor early and bank chain momentum'
 } as const;
 
 /**

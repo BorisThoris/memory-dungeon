@@ -37,9 +37,18 @@ competence and not a difficulty gate.
   'pass_and_play_final_floor'`; `RunState.runEndReason` is `null` while the run is alive and
   `RunSummary.runEndReason` persists it (a save-field-policy row: absent reads as unknown, no
   migration). A contract's `maxMismatches` still ends the run, as `'contract'`.
-- **The par stat carries the ceiling.** The HUD par (`hud-par`) reads `4 of 5 turns, ceiling 15` and
-  sets `data-ceiling-near="true"` once two turns or fewer remain; the pause overlay's "Lives" row is a
-  "Turns" row. The game-over screen says how the run ended in one line under the score.
+- **The par stat carries the ceiling.** The HUD par (`hud-par`) reads `4 of 7 turns · 17 left` -
+  turns spent against par, then what the run has before the ceiling (`hud-turns-left`,
+  `turnsToCeiling`) - and sets `data-ceiling-near="true"` once two turns or fewer remain, which
+  turns the whole stat the miss colour. The pause overlay's "Lives" row is a "Turns" row, with a
+  "Turns left" row (`pause-turns-left`) beside it. The game-over screen says how the run ended in
+  one line under the score.
+
+  The count that falls was missing until Gen 262: from Gen 183 the ceiling was in the par's
+  `aria-label` and in `data-ceiling-near` and nowhere a sighted player could read it, so the head
+  showed a number climbing toward a limit it never named. That is not the life economy coming
+  back - nothing is spent, nothing is bought, a miss still costs only the chain - it is the one
+  thing the hearts did that the ceiling has to keep doing: saying how much run is left.
 - **A miss costs the chain and nothing else.** It still counts a try (rating) and a turn (par). The
   trace-4 test, `src/shared/bad-floor-is-quiet.test.ts`, pins it: a fourteen-pair floor with seven
   misses ends `levelComplete`, the score went up, and the mismatch copy for that floor contains none

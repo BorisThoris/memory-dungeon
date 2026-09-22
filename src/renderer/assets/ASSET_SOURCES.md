@@ -17,15 +17,15 @@ Per [docs/new_design/ASSET_AND_ART_PIPELINE.md](../../docs/new_design/ASSET_AND_
 | `ui/backgrounds/bg-gameplay-arcane-workshop-v1.webp` (`.png` master) | Gameplay stage under board | Procedural local raster (Pillow), after OpenAI image API billing limit blocked live generation; then WebP export | Arcane workshop backdrop; dark center reserved for board readability. A painted Z-Image-Turbo alternative exists in `ui-backgrounds.zimage.manifest.json` (entry `bg-gameplay-arcane-workshop-v1`, alpha profile in `scripts/card-pipeline/masks/`) but is not shipped by choice. |
 | `ui/backgrounds/bg-board-arcane-table-v1.webp` (`.png` master) | Gameplay board-stage workbench texture | Procedural local raster (Pillow), after OpenAI image API billing limit blocked live generation; then WebP export | Etched table / rune projection layer behind the tile board. A Z-Image-Turbo slate alternative exists in the same manifest (entry `bg-board-arcane-table-v1`) but is not shipped by choice. |
 | `ui/backgrounds/bg-mode-classic-v1.webp` (`.png` master) | Mode card poster | AI-generated, then WebP export | Classic / blue-silver gate |
-| `ui/backgrounds/bg-mode-daily-v1.webp` (`.png` master) | Mode card poster | AI-generated, then WebP export | Daily / purple crystal featured |
+| `ui/backgrounds/bg-mode-daily-v1.webp` (`.png` master) | Mode card poster | AI-generated, then WebP export | Daily / purple crystal featured. **Mode removed (the mode collapse):** `run-mode-catalog.ts` ships only `classic` and `pass_and_play` and references no poster here, so nothing loads this. Dead art, not a wiring gap — do not restore it. |
 | `ui/backgrounds/bg-mode-endless-v1.webp` (`.png` master) | Mode card poster (locked) | AI-generated, then WebP export | Endless / ember gate, darker |
-| `ui/backgrounds/bg-mode-puzzle-v1.webp` (`.png` master) | Mode card poster | Local **Z-Image-Turbo** batch (`yarn ui-art:local`, take in `ui-backgrounds.zimage.picks.json`), then `yarn assets:ui-backgrounds:export-runtime-webp` | Ordered rune-tile grid on a crypt altar |
-| `ui/backgrounds/bg-mode-mirror-puzzle-v1.webp` (`.png` master) | Mode card poster | Local **Z-Image-Turbo** batch (`yarn ui-art:local`, take in `ui-backgrounds.zimage.picks.json`), then `yarn assets:ui-backgrounds:export-runtime-webp` | Mirrored hall with rune windows over a reflecting pool |
+| `ui/backgrounds/bg-mode-puzzle-v1.webp` (`.png` master) | Mode card poster | Local **Z-Image-Turbo** batch (`yarn ui-art:local`, take in `ui-backgrounds.zimage.picks.json`), then `yarn assets:ui-backgrounds:export-runtime-webp` | Ordered rune-tile grid on a crypt altar. **Mode removed (the mode collapse):** `run-mode-catalog.ts` ships only `classic` and `pass_and_play` and references no poster here, so nothing loads this. Dead art, not a wiring gap — do not restore it. |
+| `ui/backgrounds/bg-mode-mirror-puzzle-v1.webp` (`.png` master) | Mode card poster | Local **Z-Image-Turbo** batch (`yarn ui-art:local`, take in `ui-backgrounds.zimage.picks.json`), then `yarn assets:ui-backgrounds:export-runtime-webp` | Mirrored hall with rune windows over a reflecting pool. **Mode removed (the mode collapse):** `run-mode-catalog.ts` ships only `classic` and `pass_and_play` and references no poster here, so nothing loads this. Dead art, not a wiring gap — do not restore it. |
 | `ui/backgrounds/bg-mode-wild-v1.webp` (`.png` master) | Mode card poster | Local **Z-Image-Turbo** batch (`yarn ui-art:local`, take in `ui-backgrounds.zimage.picks.json`), then `yarn assets:ui-backgrounds:export-runtime-webp` | Volatile violet crystal scattering cards |
 | `ui/backgrounds/bg-mode-practice-v1.webp` (`.png` master) | Mode card poster | Local **Z-Image-Turbo** batch (`yarn ui-art:local`, take in `ui-backgrounds.zimage.picks.json`), then `yarn assets:ui-backgrounds:export-runtime-webp` | Calm study alcove, lantern and a row of cards |
 | `ui/backgrounds/bg-mode-scholar-v1.webp` (`.png` master) | Mode card poster | Local **Z-Image-Turbo** batch (`yarn ui-art:local`, take in `ui-backgrounds.zimage.picks.json`), then `yarn assets:ui-backgrounds:export-runtime-webp` | Vaulted library, glowing grimoire on a lectern |
 | `ui/backgrounds/bg-mode-pin-vow-v1.webp` (`.png` master) | Mode card poster | Local **Z-Image-Turbo** batch (`yarn ui-art:local`, take in `ui-backgrounds.zimage.picks.json`), then `yarn assets:ui-backgrounds:export-runtime-webp` | War-room map pinned with gold pins and cyan threads |
-| `ui/backgrounds/bg-mode-meditation-v1.webp` (`.png` master) | Mode card poster | Local **Z-Image-Turbo** batch (`yarn ui-art:local`, take in `ui-backgrounds.zimage.picks.json`), then `yarn assets:ui-backgrounds:export-runtime-webp` | Floating card above a still cavern pool |
+| `ui/backgrounds/bg-mode-meditation-v1.webp` (`.png` master) | Mode card poster | Local **Z-Image-Turbo** batch (`yarn ui-art:local`, take in `ui-backgrounds.zimage.picks.json`), then `yarn assets:ui-backgrounds:export-runtime-webp` | Floating card above a still cavern pool. **Mode removed (the mode collapse):** `run-mode-catalog.ts` ships only `classic` and `pass_and_play` and references no poster here, so nothing loads this. Dead art, not a wiring gap — do not restore it. |
 | `ui/backgrounds/bg-mode-pass-and-play-v1.webp` (`.png` master) | Mode card poster | Local **Z-Image-Turbo** batch (`yarn ui-art:local`, take in `ui-backgrounds.zimage.picks.json`), then `yarn assets:ui-backgrounds:export-runtime-webp` | Round table, four chairs, fanned gold-backed cards; previously a WebP-only procedural placeholder. |
 | `ui/backgrounds/mode-dungeon-showcase.webp` (`.png` master) | Mode card poster (`dungeon_showcase`) | Local **Z-Image-Turbo** batch (`yarn ui-art:local`, take in `ui-backgrounds.zimage.picks.json`), then `yarn assets:ui-backgrounds:export-runtime-webp` | Horned shadow in a cyan archway behind a ring of cards. |
 | `../../../build/icon.png` | Electron / Steam app icon (1024²) | Local **Z-Image-Turbo** batch (`yarn ui-art:local`, take in `ui-backgrounds.zimage.picks.json`), then `yarn assets:ui-backgrounds:export-runtime-webp` (`app-icon-memory-dungeon` entry) | Gold-framed card back with a cyan crystal; replaces the lettered placeholder tile. |
@@ -35,7 +35,21 @@ Per [docs/new_design/ASSET_AND_ART_PIPELINE.md](../../docs/new_design/ASSET_AND_
 | `ui/brand-crest.svg` | Menu crest | Authored SVG | Crystal sigil in gold frame; reused on **GameOver** hero lockup (**META-002**). |
 | `ui/menu-emblem.svg` | Secondary emblem | Authored SVG | Ring + tome motif |
 | `ui/divider-ornament.svg` | Hero divider | Authored SVG | Gold gradient + center gem + side flourishes |
-| `ui/icons/icon-inventory-bag-v1.svg` | Gameplay left rail / flyout inventory glyph | Authored SVG | `currentColor` strokes; barrel in `ui/icons/index.ts` |
+
+### Superseded: the authored icon SVGs (shelf stock — do not wire back in)
+
+Every `ui/icons/*.svg` below is **loaded by nothing**. The run's dock and rails draw inline React
+components from [`ui/gameplayIcons.tsx`](../ui/gameplayIcons.tsx) instead, and the barrel this table
+used to point at (`ui/icons/index.ts`) does not exist. `yarn audit:renderer-assets` lists the whole
+block under "art that is only talked about", and this is what it means.
+
+They are kept as source for the authored motifs. If a glyph needs changing, change the component;
+adding an `?url` import to re-animate one of these files would put a second, divergent icon set in
+the build. The rows keep their original intent so the motif is still findable.
+
+| Path | Role (as designed) | Source / tool | Notes |
+|------|------|---------------|-------|
+| `ui/icons/icon-inventory-bag-v1.svg` | Gameplay left rail / flyout inventory glyph | Authored SVG | `currentColor` strokes; superseded by `gameplayIcons.tsx` |
 | `ui/icons/icon-codex-book-v1.svg` | Gameplay left rail / flyout codex glyph | Authored SVG | Same |
 | `ui/icons/icon-main-menu-v1.svg` | Gameplay left rail main menu (abandon) glyph | Authored SVG | Same |
 | `ui/icons/icon-menu-hamburger-v1.svg` | Utility flyout toggle | Authored SVG | Same |
@@ -48,8 +62,8 @@ Per [docs/new_design/ASSET_AND_ART_PIPELINE.md](../../docs/new_design/ASSET_AND_
 | `ui/icons/icon-peek-v1.svg` | Board power: peek | Authored SVG | Same |
 | `ui/icons/icon-stray-v1.svg` | Board power: stray remove | Authored SVG | Same |
 | `ui/icons/icon-undo-v1.svg` | Resolving-phase undo | Authored SVG | Same |
-| `ui/icons/icon-score-parasite-crystal.svg` | HUD score parasite mutator crystal glyph | Authored SVG | **HUD-007:** arcane-violet / gold-rim crystal aligned to `VISUAL_SYSTEM_SPEC` + `theme.ts` `--theme-hud-parasite-*`; used in `GameplayHudBar.tsx` (`?url` import). |
-| `ui/frames/hud-segment-ornament.svg` | HUD score segment flourish | Authored SVG | Hex motif; used in `GameScreen.module.css` |
+| `ui/icons/icon-score-parasite-crystal.svg` | HUD score parasite mutator crystal glyph | Authored SVG | **HUD-007:** arcane-violet / gold-rim crystal aligned to `VISUAL_SYSTEM_SPEC` + `theme.ts` `--theme-hud-parasite-*`. Was imported by `GameplayHudBar.tsx`, which **no longer exists** — the run HUD is now "The Margin" (`RunShell.tsx`), which draws no mutator crystal. Nothing loads this. |
+| `ui/frames/hud-segment-ornament.svg` | HUD score segment flourish | Authored SVG | Hex motif. This table claimed it was "used in `GameScreen.module.css`"; that stylesheet does not mention it and nothing in `src/` references `ui/frames/` at all. The flourish went with the same HUD rewrite. Nothing loads this. |
 | `textures/cards/authored-card-back.svg` | Tile **hidden** side (default runtime) | Shared authored SVG card back; wired from `tileTextures.ts` and `TileBoardScene.tsx`. WebGL merged mesh when under byte/vertex caps ([`cardSvgPlaneGeometry.ts`](../components/cardSvgPlaneGeometry.ts)). | Primary card back source; every hidden card uses this same asset. |
 | `textures/cards/back.svg` | Legacy hidden-side trace | SVG Storm-style trace | Shelf stock only; not the default runtime card back. |
 | `textures/cards/front.svg` | Face-up panel (default runtime) | Traced front; pairs with the shared hidden-side SVG at runtime | Same atomic SVG pipeline. |

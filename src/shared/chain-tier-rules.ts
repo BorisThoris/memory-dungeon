@@ -92,9 +92,22 @@ export const chainTierRungs = (pairsOnFloor: number | null | undefined): { clean
 export const chainMomentum = (chain: number, cascadedPairs: number): number =>
     runNonNegativeInteger(chain) + runNonNegativeInteger(cascadedPairs);
 
+/**
+ * Everything feeding the ladder beside the streak itself.
+ *
+ * There are two sources now - the pairs a break took, and the momentum a skipped study period
+ * paid (`memorize-skip-reward-rules.ts`) - and a surface that read only the first would draw a
+ * meter the run does not have. Every run-level caller sums through here so a third source is one
+ * edit, not a hunt.
+ */
+export type ChainMomentumRun = Pick<RunState, 'chunkPairsThisChain' | 'skipMomentumThisChain'>;
+
+export const runChainMomentumPairs = (run: ChainMomentumRun): number =>
+    runNonNegativeInteger(run.chunkPairsThisChain) + runNonNegativeInteger(run.skipMomentumThisChain);
+
 /** The run's live tier: its momentum against its floor. The one call every surface should make. */
-export const runChainTier = (run: Pick<RunState, 'stats' | 'chunkPairsThisChain' | 'board'>): ChainTier =>
-    getChainTier(chainMomentum(run.stats.currentStreak, run.chunkPairsThisChain), run.board?.pairCount ?? null);
+export const runChainTier = (run: Pick<RunState, 'stats' | 'board'> & ChainMomentumRun): ChainTier =>
+    getChainTier(chainMomentum(run.stats.currentStreak, runChainMomentumPairs(run)), run.board?.pairCount ?? null);
 
 /** The tier a chain has reached on a floor of `pairsOnFloor` pairs; omit the floor for the fixed rungs. */
 export const getChainTier = (chain: number, pairsOnFloor?: number | null): ChainTier => {
@@ -144,8 +157,8 @@ export const chainMeter = (momentum: number, pairsOnFloor?: number | null): Chai
 };
 
 /** The run's own meter: its momentum against its floor. */
-export const runChainMeter = (run: Pick<RunState, 'stats' | 'chunkPairsThisChain' | 'board'>): ChainMeter =>
-    chainMeter(chainMomentum(run.stats.currentStreak, run.chunkPairsThisChain), run.board?.pairCount ?? null);
+export const runChainMeter = (run: Pick<RunState, 'stats' | 'board'> & ChainMomentumRun): ChainMeter =>
+    chainMeter(chainMomentum(run.stats.currentStreak, runChainMomentumPairs(run)), run.board?.pairCount ?? null);
 
 /**
  * The rung the chain is climbing toward, and how close it is.

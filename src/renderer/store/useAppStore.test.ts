@@ -8,6 +8,8 @@ import { createDefaultSaveData } from '../../shared/save-data';
 import { calculateTileTraitMismatchPenalty } from '../../shared/tile-trait-rules';
 import { BOARD_FLOATER_POP_CLEAR } from './matchScorePop';
 import { useAppStore } from './useAppStore';
+import { MEMORIZE_SKIP_MOMENTUM_MAX } from '../../shared/memorize-skip-reward-rules';
+import { runChainMomentumPairs, runChainTier } from '../../shared/chain-tier-rules';
 
 const gameSfxMocks = vi.hoisted(() => ({
     playFlipSfx: vi.fn(),
@@ -193,6 +195,39 @@ describe('useAppStore timers', () => {
         await vi.advanceTimersByTimeAsync(memorizeDuration + 1);
         expect(useAppStore.getState().run?.status).toBe('playing');
         expect(useAppStore.getState().run?.flipHistory).toEqual(flipHistoryAfterSkip);
+    });
+
+    /*
+     * The gesture used to be pure subtraction - give up clock, get back the clock you gave up.
+     * It banks chain momentum now, so that reading the board fast is worth something on the
+     * board. Capped below the first rung, so it is a head start and never a free tier.
+     */
+    it('banks chain momentum for the study time the player hands back', () => {
+        useAppStore.getState().startRun();
+        notifyCurrentBoardReady();
+        expect(useAppStore.getState().run?.status).toBe('memorize');
+        expect(useAppStore.getState().run?.skipMomentumThisChain ?? 0).toBe(0);
+
+        useAppStore.getState().skipMemorizePhase();
+
+        const run = useAppStore.getState().run;
+        // Skipped with the whole window still in front of them: the full payout.
+        expect(run?.skipMomentumThisChain).toBe(MEMORIZE_SKIP_MOMENTUM_MAX);
+        expect(runChainMomentumPairs(run!)).toBe(MEMORIZE_SKIP_MOMENTUM_MAX);
+        // A head start, not a rung: the streak is still zero and the ladder still reads none.
+        expect(run?.stats.currentStreak).toBe(0);
+        expect(runChainTier(run!)).toBe('none');
+    });
+
+    it('pays nothing when the clock runs the study period out by itself', async () => {
+        useAppStore.getState().startRun();
+        notifyCurrentBoardReady();
+
+        const memorizeDuration = useAppStore.getState().run?.timerState.memorizeRemainingMs ?? 0;
+        await vi.advanceTimersByTimeAsync(memorizeDuration + 1);
+
+        expect(useAppStore.getState().run?.status).toBe('playing');
+        expect(useAppStore.getState().run?.skipMomentumThisChain ?? 0).toBe(0);
     });
 
     it('ignores a skip when there is no study period to end', () => {

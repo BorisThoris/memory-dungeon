@@ -239,6 +239,44 @@ describe('gate:changed selector', () => {
         expect(runGateChanged('docs/README.md').gates.map(({ id }) => id)).not.toContain('typecheck');
     });
 
+    /**
+     * A wider hole than the typecheck one: `yarn lint` is not part of `yarn verify`, so no path
+     * through this selector reached it at all. It lived only in `fullcheck`, the whole manual
+     * gauntlet — meaning the tool that answers "what should I run for these changes" never once
+     * answered "lint", while `--max-warnings 0` says the repo does care.
+     */
+    it('lints changed code, whatever else the file was routed to', () => {
+        for (const file of [
+            'src/renderer/components/SceneSprites.tsx',
+            'src/shared/gameplay-rules-edit-map.test.ts',
+            // Not `src/`-only: `eslint .` covers the scripts and configs, including this selector.
+            'scripts/gate-changed.mjs'
+        ]) {
+            const payload = runGateChanged(file);
+            expect(payload.gates.map(({ id }) => id)).toContain('lint');
+            expect(payload.gates.find(({ id }) => id === 'lint')?.command).toBe('yarn lint');
+        }
+    });
+
+    it('lints even a file already bound for verify, which does not lint', () => {
+        // `yarn verify` is `typecheck && test`. It is easy to read it as the thorough gate and
+        // assume lint is inside; it is not, and that assumption is what left the hole.
+        const ids = runGateChanged('src/renderer/input/touchHaptics.ts').gates.map(({ id }) => id);
+        expect(ids).toContain('verify');
+        expect(ids).toContain('lint');
+    });
+
+    it('asks for eslint once, and not for a change with no code in it', () => {
+        const many = runGateChanged(
+            'src/renderer/components/SceneSprites.tsx',
+            'scripts/gate-changed.mjs',
+            'src/renderer/audio/gameSfx.ts'
+        );
+        expect(many.gates.filter(({ id }) => id === 'lint')).toHaveLength(1);
+        expect(many.reasons.filter(({ gateId }) => gateId === 'lint')).toHaveLength(1);
+        expect(runGateChanged('docs/README.md').gates.map(({ id }) => id)).not.toContain('lint');
+    });
+
     it('discovers Git paths without scheduling deleted tests', async () => {
         const { changedPathsFromGit } = await loadGateChanged();
         const repository = mkdtempSync(path.join(tmpdir(), 'memory-dungeon-gate-changed-'));
@@ -551,7 +589,8 @@ describe('gate:changed selector', () => {
                 id: 'changedTests',
                 command: 'yarn vitest run "src/shared/gameplay-rules-edit-map.test.ts" --maxWorkers=2'
             },
-            { id: 'typecheck', command: 'yarn typecheck' }
+            { id: 'typecheck', command: 'yarn typecheck' },
+            { id: 'lint', command: 'yarn lint' }
         ]);
     });
 

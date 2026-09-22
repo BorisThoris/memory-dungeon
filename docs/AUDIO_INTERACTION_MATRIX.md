@@ -17,6 +17,7 @@ Machine-readable mirror: `src/renderer/audio/audioInteractionCoverage.ts`.
 - Major startup/menu/settings/gameplay/overlay/meta interactions are represented by semantic rows with call sites.
 - Repeated one-shots are capped by category in `gameSfx.ts`, `sampledSfx.ts`, and `uiSfx.ts` (`flip` 5, `match` 4, `mismatch` 4, `power` 5, `pressure` 1, `shuffle` 4, `menu` 3, `ui` 5).
 - Every audible row uses sampled WAV/OGG with procedural fallback; passive scroll/in-page anchors remain explicitly silent.
+- Gameplay one-shots are *performed*, not merely played: `comboVoicing.ts` transposes the sample and gates extra layers on the chain meter (`chain-tier-rules.ts`), so the same three match recordings cover a whole run without repeating themselves. The rotation is fixed rather than random so every cue stays assertable.
 - Reduced-motion visual mode never disables essential audio feedback; rows document `reducedMotionSafe`.
 
 ## Matrix
@@ -39,7 +40,8 @@ Machine-readable mirror: `src/renderer/audio/audioInteractionCoverage.ts`.
 | Game toolbar | Fit board / helper toggles | `GameLeftToolbar` | `reuse` | `ui-click` | utility click | 0.04s | sampled + procedural fallback | existing |
 | Game toolbar | Open settings/codex/inventory/abandon confirm | `GameLeftToolbar` / `GameScreen` | `reuse` | `menu-open` | panel reveal | 0.16s | sampled + procedural fallback | `Menu_load.wav` |
 | Gameplay | Tile flip / gambit third flip | `useAppStore.pressTile` | `reuse` | `flip` / `gambit-commit` | tactile wood tick / commit chirp | 0.05s / 0.068s | sampled + procedural fallback | existing |
-| Gameplay | Match tiers / mismatch | `playResolveSfx` | `reuse` | `match-tier-low|mid|high` / `mismatch` | reward bloom / soft fail | 0.12s–0.18s | sampled + procedural fallback | existing |
+| Gameplay | Match tiers / mismatch | `playResolveSfx` | `reuse` | `match-tier-low|mid|high` / `mismatch` | reward bloom / soft fail, both voiced by the chain meter | 0.12s–0.18s | sampled + procedural fallback | existing |
+| Gameplay | Dynamic combo voicing | `audio/comboVoicing` via `playMatchSfx` / `playMismatchSfx` / `playFlipSfx` | `none` | transposition + meter-gated layers | each consecutive match steps up the in-key set and the meter stacks Clean shimmer, Sharp body, Fever ring; misses transpose down by what they broke; a fixed round robin keeps repeated cues from being repeated files | rides the cue it voices | sampled transposition + procedural layers | existing |
 | Gameplay | Stacked reward burst / super stack | `playResolveSfx` | `reuse` | procedural layers | two-lane payoff pop, reward-perk lane joins, multi-lane cashout sparkle, and four-plus-lane top-tier flourish | 0.09s–0.18s | procedural fallback | existing |
 | Gameplay | Payoff intensity states | `GameScreenActionFeedbackRail` / `TileBoard` mirrored by `playResolveSfx` and `playMatchPayoffSfx` | `reuse` | procedural layers | prime anticipation, cashout hit, stack/super stack capstone, trait surge, and risk/lost-payoff pressure stay aligned across visual and audio feedback | 0.08s–0.22s | procedural fallback | existing |
 | Gameplay | Aggregate payoff floaters | `GameScreen` jackpot / reward burst / payoff summary / payoff chip / payoff lane / payoff ladder / stage payoff stack strips | `none` | semantic cue roles | cashout, stack, super reward strips, payoff chips, payoff lanes, and payoff ladders expose audio roles, beat counts, and screen cues for the biggest board payoff moments | existing layer trims | procedural fallback | existing |

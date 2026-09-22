@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { RunState } from '../../shared/contracts';
+import { chainMeter } from '../../shared/chain-tier-rules';
 import sfxManifest from '../assets/audio/sfx/manifest.json';
 import {
     AUDIO_INTERACTION_COVERAGE,
@@ -211,7 +212,7 @@ describe('gameSfx', () => {
         }
     });
 
-    it('adds a sparkle layer for surge-depth match chains only', () => {
+    it('stacks match layers as the chain meter climbs, and none of them cold', () => {
         const createOscillator = vi.fn(() => {
             const o = {
                 type: 'sine' as OscillatorType,
@@ -241,10 +242,110 @@ describe('gameSfx', () => {
         );
 
         const g = sfxGainFromSettings(1, 1);
+        // Below the Clean rung the match is the match and nothing else.
         playMatchSfx(g, 2);
         expect(createOscillator).toHaveBeenCalledTimes(1);
-        playMatchSfx(g, 6);
+        // Clean adds the shimmer: two voices for this call, three in total.
+        playMatchSfx(g, 3);
         expect(createOscillator).toHaveBeenCalledTimes(3);
+        // Sharp adds body under it: three voices for this call, six in total.
+        playMatchSfx(g, 6);
+        expect(createOscillator).toHaveBeenCalledTimes(6);
+        // Fever adds the ring that holds: four voices for this call, ten in total.
+        playMatchSfx(g, 10);
+        expect(createOscillator).toHaveBeenCalledTimes(10);
+    });
+
+    it('voices the match layers off the meter rather than off the streak number', () => {
+        const createOscillator = vi.fn(() => {
+            const o = {
+                type: 'sine' as OscillatorType,
+                frequency: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
+                connect: vi.fn(),
+                start: vi.fn(),
+                stop: vi.fn(),
+                addEventListener: vi.fn()
+            };
+            oscillators.push(o);
+            return o;
+        });
+        const createGain = vi.fn(() => ({
+            gain: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
+            connect: vi.fn()
+        }));
+
+        vi.stubGlobal(
+            'AudioContext',
+            class {
+                currentTime = 0;
+                destination = {};
+                createOscillator = createOscillator;
+                createGain = createGain;
+                close = (): Promise<void> => Promise.resolve();
+            }
+        );
+
+        const g = sfxGainFromSettings(1, 1);
+        /*
+         * A streak of two on a small floor whose chunks have taken nine pairs is at Fever, and a
+         * streak of two is what the old cue read. The meter is the thing the HUD bar, the board
+         * and the music move to, so it is the thing the mix has to move to as well.
+         */
+        playMatchSfx(g, 2, chainMeter(11, 12));
+        expect(createOscillator).toHaveBeenCalledTimes(4);
+        // Same streak, cold meter: one voice. The number did not change; the room did.
+        playMatchSfx(g, 2, chainMeter(0, 12));
+        expect(createOscillator).toHaveBeenCalledTimes(5);
+    });
+
+    it('does not play two identical matches in a row', () => {
+        const createOscillator = vi.fn(() => {
+            const o = {
+                type: 'sine' as OscillatorType,
+                frequency: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
+                connect: vi.fn(),
+                start: vi.fn(),
+                stop: vi.fn(),
+                addEventListener: vi.fn()
+            };
+            oscillators.push(o);
+            return o;
+        });
+        const createGain = vi.fn(() => ({
+            gain: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
+            connect: vi.fn()
+        }));
+
+        vi.stubGlobal(
+            'AudioContext',
+            class {
+                currentTime = 0;
+                destination = {};
+                createOscillator = createOscillator;
+                createGain = createGain;
+                close = (): Promise<void> => Promise.resolve();
+            }
+        );
+
+        const g = sfxGainFromSettings(1, 1);
+        /*
+         * The complaint this whole thing answers: a chain break puts the player back at depth 1
+         * over and over, and depth 1 used to be one file at one pitch. It is the round robin, not
+         * the ladder, that has to carry this case - the depth is identical every time.
+         */
+        const startFrequencies = [0, 1, 2].map((): number => {
+            playMatchSfx(g, 1);
+            const call = createOscillator.mock.results.at(-1)?.value as {
+                frequency: { setValueAtTime: { mock: { calls: [number, number][] } } };
+            };
+            return call.frequency.setValueAtTime.mock.calls[0]?.[0] ?? 0;
+        });
+        expect(new Set(startFrequencies).size).toBe(3);
+        // Texture, not transposition: the whole rotation stays inside a fifth of a semitone.
+        for (const frequency of startFrequencies) {
+            expect(frequency).toBeGreaterThan(607);
+            expect(frequency).toBeLessThan(617);
+        }
     });
 
     it('plays distinct procedural chain opportunity beat cues by board beat tier', () => {
@@ -618,8 +719,11 @@ describe('gameSfx', () => {
         } as unknown as RunState;
 
         playResolveSfx(beforeMilestone, afterMilestone, gain);
-        expect(createOscillator).toHaveBeenCalledTimes(3);
-        expect(oscillators[1]?.type).toBe('sine');
+        // Match, its Clean-rung shimmer, the milestone ping, the cascade accent. The shimmer is
+        // new at Gen 262 and sits with the match it belongs to, which is why the accents moved
+        // down an index rather than the accents changing.
+        expect(createOscillator).toHaveBeenCalledTimes(4);
+        expect(oscillators[2]?.type).toBe('sine');
         /*
          * D7, where the milestone accent used to ramp to 2048 - a note, where that was a number.
          * Since Gen 225 the accent starts on a note the run loop plays and sweeps to another one,
@@ -627,12 +731,12 @@ describe('gameSfx', () => {
          * (`musicalScale.ts`). `musicalScale.test.ts` holds the set; this holds that the call site
          * uses it. The oscillator below is the chain-drop sting, which is not on the set.
          */
-        expect(createOscillator.mock.results[1]?.value.frequency.exponentialRampToValueAtTime).toHaveBeenCalledWith(
+        expect(createOscillator.mock.results[2]?.value.frequency.exponentialRampToValueAtTime).toHaveBeenCalledWith(
             expect.closeTo(2349.3, 1),
             expect.any(Number)
         );
-        expect(oscillators[2]?.type).toBe('sine');
-        expect(createOscillator.mock.results[2]?.value.frequency.exponentialRampToValueAtTime).toHaveBeenCalledWith(
+        expect(oscillators[3]?.type).toBe('sine');
+        expect(createOscillator.mock.results[3]?.value.frequency.exponentialRampToValueAtTime).toHaveBeenCalledWith(
             2900,
             expect.any(Number)
         );
@@ -645,7 +749,8 @@ describe('gameSfx', () => {
         } as unknown as RunState;
 
         playResolveSfx(beforeRepeat, afterRepeat, gain);
-        expect(createOscillator).toHaveBeenCalledTimes(5);
+        // No milestone this time: match, shimmer and cascade accent only.
+        expect(createOscillator).toHaveBeenCalledTimes(7);
     });
 
     it('layers a resource reward chime when a resolved match grants a flash-pair charge', () => {

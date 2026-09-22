@@ -97,8 +97,8 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
         callsite: 'useAppStore.pressTile -> playFlipSfx',
         semanticMoment: 'commit',
         decision: 'sampled_with_fallback',
-        cooldownPolicy: 'flip category polyphony cap',
-        mixRole: 'tactile card tick',
+        cooldownPolicy: 'flip category polyphony cap; combo-voiced, so the tick lifts a semitone per chain rung and rotates takes',
+        mixRole: 'tactile card tick that tightens with the chain meter',
         reducedMotionSafe: true
     },
     {
@@ -109,8 +109,20 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
         callsite: 'applyResolveBoardTurn -> playResolveSfx',
         semanticMoment: 'reward',
         decision: 'sampled_with_fallback',
-        cooldownPolicy: 'match category polyphony cap; tiered by streak depth; pickup/resource reward layers share cap; three-channel rewards add capstone burst',
-        mixRole: 'reward bloom with pickup/resource chimes and stacked-payoff burst',
+        cooldownPolicy: 'match category polyphony cap; tiered by streak depth and transposed up the in-key ladder per consecutive match; pickup/resource reward layers share cap; three-channel rewards add capstone burst',
+        mixRole: 'reward bloom voiced by the chain meter, with pickup/resource chimes and stacked-payoff burst',
+        reducedMotionSafe: true
+    },
+    {
+        id: 'combo_voicing_ladder',
+        domain: 'gameplay',
+        interaction: 'Match, miss, and flip cues are transposed and layered by where the run sits on the chain meter',
+        cue: 'none',
+        callsite: 'audio/comboVoicing -> playMatchSfx / playMismatchSfx / playFlipSfx sample transposition and meter-gated layers',
+        semanticMoment: 'reward',
+        decision: 'procedural_only',
+        cooldownPolicy: 'rides the cue it voices and adds no one-shot of its own; layers share the match and mismatch category caps; a fixed round robin, never random, so cues stay assertable',
+        mixRole: 'dynamic combo voicing: in-key transposition per consecutive match, Clean shimmer / Sharp body / Fever ring, and per-take detune so a repeated cue is never a repeated file',
         reducedMotionSafe: true
     },
     {
@@ -277,8 +289,8 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
         callsite: 'applyResolveBoardTurn -> playResolveSfx',
         semanticMoment: 'fail',
         decision: 'sampled_with_fallback',
-        cooldownPolicy: 'mismatch category polyphony cap',
-        mixRole: 'soft fail',
+        cooldownPolicy: 'mismatch category polyphony cap; combo-voiced by the meter as it stood before the miss, so a Fever break is not a cold miss',
+        mixRole: 'soft fail that drops lower and longer the more chain it broke',
         reducedMotionSafe: true
     },
     {

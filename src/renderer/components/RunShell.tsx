@@ -8,11 +8,16 @@ import { handleHorizontalToolbarKeyDown, syncToolbarTabIndices } from '../a11y/t
 import { GameplayMenuIcon } from '../ui/gameplayIcons';
 import { useCountUp } from '../hooks/useCountUp';
 import styles from './RunShell.module.css';
-import { MEMORIZE_SKIP_COPY, RUN_SHELL_LABELS, RUN_SHELL_LINE_COPY } from '../copy/runDialogCopy';
+import { MEMORIZE_SKIP_COPY, RUN_SHELL_LABELS, RUN_SHELL_LINE_COPY, RUN_SHELL_PAR_COPY } from '../copy/runDialogCopy';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { CHAIN_BEAT_COPY, CHAIN_TIER_LABELS } from '../copy/chainBeat';
 import { chainRungScoreMultiplier } from '../../shared/chain-rung-value-rules';
-import { chainRungApproach, chainTierRungs, runChainMeter, runChainTier } from '../../shared/chain-tier-rules';
+import {
+    chainRungApproach,
+    chainTierRungs,
+    runChainMeter,
+    runChainTier
+} from '../../shared/chain-tier-rules';
 import { playStudyClosingTickSfx } from '../audio/gameSfx';
 import { tapStudyClosing } from '../input/touchHaptics';
 import { memorizeUrgency } from './memorizeUrgency';
@@ -247,6 +252,10 @@ const RunShell = ({
     useStudyClosingBeats(memorize?.seconds ?? null, urgency.closing, sfxGain, reduceMotion);
     const turnsTaken = turnsTakenThisFloor(run);
     const parTurns = parTurnsForRun(run);
+    // The run's remaining life, in the only currency that can end it while the player keeps
+    // playing: turns before this floor's ceiling closes the run (§42.2).
+    const turnCeiling = turnCeilingForRun(run);
+    const turnsLeft = turnsToCeiling(run);
     const pairCount = run.board?.pairCount ?? 0;
 
     // The caption under the board: a kicker naming the moment, then the one sentence about it. The
@@ -354,20 +363,33 @@ const RunShell = ({
                             the turns a competent player needs; beating it pays the floor-end
                             efficiency bonus, missing it costs nothing else. The ceiling, three times
                             the par, is where the run ends if the floor is still open (§42.2), and the
-                            pressure of thesis §43 reads here once it is two turns away. */}
+                            pressure of thesis §43 reads here once it is two turns away.
+
+                            The count beside it is what the run has left before that ceiling, and it
+                            is the only thing in the head that says the run can end at all. Lives
+                            went in Gen 183 and the ceiling that replaced them was spoken to a
+                            screen reader and drawn to nobody; a player watching a number climb
+                            toward a limit they were never shown is not being given the pressure,
+                            only the surprise. It falls rather than climbs, because that is the half
+                            of a life counter worth keeping. */}
                         <span
                             className={styles.par}
-                            data-ceiling-near={turnsToCeiling(run) <= 2 ? 'true' : undefined}
+                            data-ceiling-near={turnsLeft <= 2 ? 'true' : undefined}
                             data-testid="hud-par"
                         >
                             <span
-                                aria-label={`${turnsTaken} of ${parTurns} turns, ceiling ${turnCeilingForRun(run)}`}
+                                aria-label={RUN_SHELL_PAR_COPY.aria(turnsTaken, parTurns, turnsLeft, turnCeiling)}
                                 role="img"
+                                title={RUN_SHELL_PAR_COPY.title(turnCeiling)}
                             >
                                 <span className={styles.parNumbers}>
                                     {turnsTaken} of {parTurns}
                                 </span>
                                 <span className={styles.parWord}> turns</span>
+                                <span className={styles.parLeft} data-testid="hud-turns-left">
+                                    <span className={styles.parLeftNumber}>{turnsLeft}</span>{' '}
+                                    {RUN_SHELL_PAR_COPY.leftWord}
+                                </span>
                             </span>
                         </span>
                         {mutatorTitles.length > 0 && shellLayout !== 'phone-portrait' ? (
@@ -475,7 +497,12 @@ const RunShell = ({
                             <span
                                 className={styles.chainDepth}
                                 data-chain-tier={tier}
-                                title={`${CHAIN_BEAT_COPY.momentumHint(chain, runNonNegativeInteger(run.chunkPairsThisChain), rungs)} ${CHAIN_BEAT_COPY.rungLadder()}`}
+                                title={`${CHAIN_BEAT_COPY.momentumHint(
+                                    chain,
+                                    runNonNegativeInteger(run.chunkPairsThisChain),
+                                    runNonNegativeInteger(run.skipMomentumThisChain),
+                                    rungs
+                                )} ${CHAIN_BEAT_COPY.rungLadder()}`}
                             >
                                 {CHAIN_TIER_LABELS[tier] ? `Chain ${chain} · ${CHAIN_TIER_LABELS[tier]}` : `Chain ${chain}`}
                             </span>

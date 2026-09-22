@@ -3,15 +3,24 @@ import { runArray } from '../../shared/run-array-guards';
 import { runFiniteNumber, runNonNegativeInteger } from '../../shared/run-number-guards';
 import { TILE_TRAIT_COUNT_KINDS } from '../../shared/session-stats-rules';
 import { getChainMilestoneFeedback, type ChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
-import { runChainTier, type ChainTier } from '../../shared/chain-tier-rules';
+import { runChainMeter, runChainTier, type ChainMeter, type ChainTier } from '../../shared/chain-tier-rules';
 import { CHAIN_MILESTONE_SEMITONES, cascadeNoteHz, chunkBreakNoteHz } from './musicalScale';
+import {
+    comboFlipVoicing,
+    comboMatchVoicing,
+    comboMismatchVoicing,
+    __resetComboVoicingForTests,
+    type ComboVoicing
+} from './comboVoicing';
 import { audioNeverThrows, audioNeverThrowsBoolean } from './audioSafety';
 import {
+    matchTierRootDepth,
     maybePreloadSampledSfx,
     resolveMatchTierSampleKey,
     resetSampledSfxForTests,
     silenceAllSampleVoices,
-    tryPlaySampled as tryPlaySampledUnguarded
+    tryPlaySampled as tryPlaySampledUnguarded,
+    type SampledVoicing
 } from './sampledSfx';
 import {
     getSharedAudioContext,
@@ -33,6 +42,7 @@ export const __resetGameSfxEngineForTests = (): void => {
     silenceAllSampleVoices();
     resetSampledSfxForTests();
     resetSharedAudioContextForTests();
+    __resetComboVoicingForTests();
 };
 
 const getAudioContext = getSharedAudioContext;
@@ -45,8 +55,11 @@ export const resumeAudioContext = (): void => {
 };
 
 /** Every cue in this module goes through these two, so no cue can throw into a click handler. */
-const tryPlaySampled = (key: Parameters<typeof tryPlaySampledUnguarded>[0], gain: number): boolean =>
-    audioNeverThrowsBoolean(() => tryPlaySampledUnguarded(key, gain));
+const tryPlaySampled = (
+    key: Parameters<typeof tryPlaySampledUnguarded>[0],
+    gain: number,
+    voicing?: SampledVoicing
+): boolean => audioNeverThrowsBoolean(() => tryPlaySampledUnguarded(key, gain, voicing));
 
 const clamp01 = (v: number): number => Math.max(0, Math.min(1, v));
 
@@ -197,11 +210,25 @@ const playToneUnguarded = (options: ToneOptions): void => {
     osc.stop(ctx.currentTime + options.durationSec + 0.02);
 };
 
-export const playFlipSfx = (gain: number): void => {
-    if (tryPlaySampled('flip', gain)) {
+/**
+ * A tile turning over, at the pitch the meter is currently holding.
+ *
+ * `meter` is optional and the cue is identical without it. That is on purpose: this fires from
+ * the tile press path, the gambit third pick, tests and the hostile-context sweep, and the flip
+ * has to make a sound in every one of them whether or not a run state was to hand.
+ */
+export const playFlipSfx = (gain: number, meter?: ChainMeter | null): void => {
+    const voicing = comboFlipVoicing(meter);
+    if (tryPlaySampled('flip', gain * voicing.gainScale, voicing)) {
         return;
     }
-    playTone({ frequency: 520, durationSec: 0.05, gain, type: 'sine', category: 'flip' });
+    playTone({
+        frequency: 520 * voicing.pitchRatio,
+        durationSec: 0.05,
+        gain: gain * voicing.gainScale,
+        type: 'sine',
+        category: 'flip'
+    });
 };
 
 /**
@@ -250,49 +277,114 @@ export const playGambitCommitSfx = (gain: number): void => {
     });
 };
 
-/** `chainDepth` is consecutive-match count after this match (caps so very long chains stay pleasant). */
-export const playMatchSfx = (gain: number, chainDepth = 1): void => {
-    if (gain <= 0.001) {
-        return;
-    }
-    const tierKey = resolveMatchTierSampleKey(Math.max(1, chainDepth));
-    const tier = Math.max(1, Math.min(chainDepth, 14));
-    const lift = tier - 1;
-    const sampled = tryPlaySampled(tierKey, gain);
-    if (!sampled) {
+/**
+ * The voices the meter stacks on top of the match itself.
+ *
+ * Each one is tied to a rung of the chain ladder rather than to a raw streak number, so the cue
+ * thickens in step with the bar the player is watching: a shimmer once the chain is Clean, body
+ * under it at Sharp, a ring that holds at Fever. All three ride the same `pitchRatio` as the hit,
+ * which is what keeps four voices sounding like one instrument getting bigger rather than like
+ * four cues arriving at once.
+ *
+ * The tail is immediate, not scheduled. A ring that starts 70ms after its own hit is a second
+ * event; started together with a long decay it is the hit having somewhere to go.
+ */
+const playComboMatchLayers = (gain: number, voicing: ComboVoicing): void => {
+    if (voicing.layers.shimmer) {
         playTone({
-            frequency: 612 + lift * 34,
-            frequencyEnd: 820 + lift * 42,
-            durationSec: 0.12 + Math.min(lift, 9) * 0.007,
-            gain,
+            frequency: 1240 * voicing.pitchRatio,
+            frequencyEnd: 1780 * voicing.pitchRatio,
+            durationSec: 0.07,
+            gain: gain * (voicing.layers.body ? 0.28 : 0.2),
+            type: 'sine',
+            category: 'match'
+        });
+    }
+    if (voicing.layers.body) {
+        playTone({
+            frequency: 214 * voicing.pitchRatio,
+            frequencyEnd: 160 * voicing.pitchRatio,
+            durationSec: 0.11,
+            gain: gain * 0.26,
             type: 'triangle',
             category: 'match'
         });
     }
-    if (tier >= 6) {
+    if (voicing.layers.tail) {
+        // Up the same in-key set the break phrase uses, from the surge note, so the ring lands
+        // on a pitch the rest of the mix already plays.
+        const note = cascadeNoteHz(CHAIN_MILESTONE_SEMITONES.surge, voicing.step);
         playTone({
-            frequency: 1240 + Math.min(lift, 8) * 55,
-            frequencyEnd: 1780 + Math.min(lift, 8) * 72,
-            durationSec: 0.07,
-            gain: gain * (tier >= 10 ? 0.34 : 0.24),
+            frequency: note,
+            frequencyEnd: note,
+            durationSec: 0.34,
+            gain: gain * 0.15,
             type: 'sine',
             category: 'match'
         });
     }
 };
 
-const playMismatchSfx = (gain: number): void => {
-    if (tryPlaySampled('mismatch', gain)) {
+/**
+ * A matched pair.
+ *
+ * `chainDepth` is the consecutive-match count including this match; it picks the tier recording
+ * and the rung of the in-key ladder the recording is transposed to. `meter` is the live chain
+ * meter and it decides the layers — pass it wherever a run state exists, because the streak alone
+ * does not know what the bar in the HUD is doing. Without one the fixed rungs stand in.
+ *
+ * See `comboVoicing.ts` for why any of this moves at all.
+ */
+export const playMatchSfx = (gain: number, chainDepth = 1, meter?: ChainMeter | null): void => {
+    if (gain <= 0.001) {
         return;
     }
-    playTone({
-        frequency: 180,
-        frequencyEnd: 120,
-        durationSec: 0.18,
-        gain,
-        type: 'sawtooth',
-        category: 'mismatch'
-    });
+    const depth = Math.max(1, chainDepth);
+    const tierKey = resolveMatchTierSampleKey(depth);
+    const voicing = comboMatchVoicing({ chainDepth: depth, meter, tierRootDepth: matchTierRootDepth(tierKey) });
+    const sampled = tryPlaySampled(tierKey, gain * voicing.gainScale, voicing);
+    if (!sampled) {
+        playTone({
+            frequency: 612 * voicing.pitchRatio,
+            frequencyEnd: 820 * voicing.pitchRatio,
+            durationSec: 0.12 + voicing.step * 0.008,
+            gain: gain * voicing.gainScale,
+            type: 'triangle',
+            category: 'match'
+        });
+    }
+    playComboMatchLayers(gain, voicing);
+};
+
+/**
+ * A missed pair, weighted by the chain it broke.
+ *
+ * `meter` is the meter as it stood *before* the miss, because a miss is worth what it cost. The
+ * one sample transposes down a rung at a time, and Sharp and Fever add a low drop under it so a
+ * chain ending is audibly a chain ending and not a cold first flip.
+ */
+const playMismatchSfx = (gain: number, meter?: ChainMeter | null): void => {
+    const voicing = comboMismatchVoicing({ meter });
+    if (!tryPlaySampled('mismatch', gain * voicing.gainScale, voicing)) {
+        playTone({
+            frequency: 180 * voicing.pitchRatio,
+            frequencyEnd: 120 * voicing.pitchRatio,
+            durationSec: 0.18 / voicing.pitchRatio,
+            gain: gain * voicing.gainScale,
+            type: 'sawtooth',
+            category: 'mismatch'
+        });
+    }
+    if (voicing.layers.body) {
+        playTone({
+            frequency: 148 * voicing.pitchRatio,
+            frequencyEnd: 62,
+            durationSec: voicing.layers.tail ? 0.36 : 0.24,
+            gain: gain * (voicing.layers.tail ? 0.3 : 0.2),
+            type: 'triangle',
+            category: 'mismatch'
+        });
+    }
 };
 
 const hasResolvedResourceReward = (before: RunState, after: RunState): boolean =>
@@ -622,7 +714,9 @@ export const playResolveSfx = (before: RunState, after: RunState, gain: number):
         return;
     }
     if (after.stats.matchesFound > before.stats.matchesFound) {
-        playMatchSfx(gain, Math.max(1, after.stats.currentStreak));
+        // The meter after the turn for a match, before it for a miss: one says what was reached,
+        // the other says what was lost, and those are the two things a cue here has to carry.
+        playMatchSfx(gain, Math.max(1, after.stats.currentStreak), runChainMeter(after));
         const chainMilestone = getChainMilestoneFeedback(before.stats.currentStreak, after.stats.currentStreak);
         if (chainMilestone) {
             playChainMilestoneAccentSfx(gain, chainMilestone);
@@ -664,7 +758,7 @@ export const playResolveSfx = (before: RunState, after: RunState, gain: number):
             playStackedRewardBurstSfx(gain, rewardChannelCount);
         }
     } else if (after.stats.tries > before.stats.tries) {
-        playMismatchSfx(gain);
+        playMismatchSfx(gain, runChainMeter(before));
         const traitMismatchCount = resolvedTraitMismatchCount(before, after);
         if (traitMismatchCount >= 2) {
             playTraitMismatchSurgeSfx(gain, traitMismatchCount);
