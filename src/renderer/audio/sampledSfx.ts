@@ -91,8 +91,55 @@ const stealOldestSampleInCategory = (category: SfxCategory): void => {
     }
 };
 
+/**
+ * Transposes the take, and returns the playback rate the caller needs to rescale the envelope by.
+ *
+ * Every branch here is a real one. `playbackRate` and `detune` are non-optional in lib.dom, but the
+ * Vitest doubles and the hostile-context sweep build buffer sources out of bare object literals, and
+ * a cue that throws on a missing param is a cue that takes the tile press with it (`audioSafety.ts`).
+ */
+function applySampleVoicing(src: AudioBufferSourceNode, voicing: SampledVoicing | undefined): number {
+    const semitones = Number.isFinite(voicing?.semitones) ? (voicing?.semitones ?? 0) : 0;
+    const cents = Number.isFinite(voicing?.detuneCents) ? (voicing?.detuneCents ?? 0) : 0;
+    if (semitones === 0 && cents === 0) {
+        return 1;
+    }
+    const detuneParam = src.detune as AudioParam | undefined;
+    const centsOnTheNode = detuneParam != null && typeof detuneParam.value === 'number';
+    if (centsOnTheNode && detuneParam != null) {
+        detuneParam.value = cents;
+    }
+    const rateParam = src.playbackRate as AudioParam | undefined;
+    if (rateParam == null || typeof rateParam.value !== 'number') {
+        // Nothing to transpose with: the take plays as recorded, so do not rescale its envelope.
+        return 1;
+    }
+    const rate = 2 ** ((semitones * 100 + (centsOnTheNode ? 0 : cents)) / 1200);
+    rateParam.value = rate;
+    // `detune` multiplies the rate rather than replacing it, so the audible rate is both together.
+    return rate * 2 ** ((centsOnTheNode ? cents : 0) / 1200);
+}
+
 function urlForFilename(filename: string): string | undefined {
     return urlsByFilename.get(filename);
+}
+
+/**
+ * How a combo-voiced cue asks for a transposed take of a sample.
+ *
+ * `detuneCents` rides on top of `semitones` through the source node’s own `detune` param when
+ * the implementation has one, and is folded into the playback rate when it does not — older Web
+ * Audio builds and every test double in this repo are in the second group.
+ */
+export interface SampledVoicing {
+    semitones?: number;
+    detuneCents?: number;
+}
+
+/** Lowest chain depth this tier sample covers: where the combo ladder restarts (see comboVoicing). */
+export function matchTierRootDepth(key: SfxSampleKey): number {
+    const ranges = manifest.matchTierDepthRanges as Record<string, readonly [number, number] | undefined>;
+    return ranges[key]?.[0] ?? 1;
 }
 
 /** Map consecutive-match streak depth to one of three tier samples (see manifest matchTierDepthRanges). */
@@ -108,7 +155,7 @@ export function resolveMatchTierSampleKey(chainDepth: number): SfxSampleKey {
     return 'match-tier-low';
 }
 
-export function tryPlaySampled(key: SfxSampleKey, gain: number): boolean {
+export function tryPlaySampled(key: SfxSampleKey, gain: number, voicing?: SampledVoicing): boolean {
     if (import.meta.env.MODE === 'test') {
         return false;
     }
@@ -135,7 +182,11 @@ export function tryPlaySampled(key: SfxSampleKey, gain: number): boolean {
     const src = ctx.createBufferSource();
     src.buffer = buf;
     const g = ctx.createGain();
-    const dur = buf.duration;
+    const rate = applySampleVoicing(src, voicing);
+    // Transposing a sample moves its length with its pitch: an octave up is half as long. The
+    // envelope and the stop time follow, or a lifted cue gets its tail cut and a dropped one is
+    // silenced before it finishes.
+    const dur = buf.duration / rate;
     const t0 = ctx.currentTime;
 
     g.gain.setValueAtTime(0.0001, t0);

@@ -68,6 +68,21 @@ export const RUN_MUSIC_KEY = {
 export const semitoneHz = (semitonesFromA4: number): number => A4_HZ * 2 ** (semitonesFromA4 / 12);
 
 /**
+ * How far above the root the `step`-th note of the confident set sits, in semitones: 0, 2, 5, 7,
+ * then 12, 14, 17, 19 as the steps wrap into the next octave.
+ *
+ * `cascadeNoteHz` answers the same question in Hz, which is what an oscillator wants. A *sample*
+ * wants the interval instead - transposing a recorded one-shot means multiplying its playback rate
+ * by `2 ** (semitones / 12)`, and there is no root frequency to divide by because the root is
+ * whatever pitch the recording was made at. Same ladder, two callers climbing it.
+ */
+export const cascadeStepSemitones = (step: number): number => {
+    const set = CASCADE_PITCH_CLASSES;
+    const index = Math.max(0, Math.floor(step));
+    return Math.floor(index / set.length) * 12 + (set[index % set.length] ?? 0);
+};
+
+/**
  * The `step`-th note up the confident set from `startSemitonesFromA4`, which must itself be one of
  * them. Steps past the set wrap into the next octave, so a nine-note phrase keeps climbing rather
  * than running out at the fourth note.

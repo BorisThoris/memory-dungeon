@@ -65,6 +65,7 @@ import {
     executeContinueToNextLevel
 } from './levelCompleteContinuationExecutor';
 import { createMenuSurfacePatch } from './menuSurfaceState';
+import { runChainMeter, type ChainMeter } from '../../shared/chain-tier-rules';
 import { projectGameplayFeedback } from './gameplayFeedbackAdapter';
 import {
     playFlipSfx,
@@ -92,6 +93,18 @@ const RUN_SURFACE_RESET = createRunSurfaceReset();
 const sfxGainFromStore = (): number => {
     const { settings } = useAppStore.getState();
     return sfxGainFromSettings(settings.masterVolume, settings.sfxVolume);
+};
+
+/**
+ * The chain meter the gameplay cues are voiced against (`audio/comboVoicing.ts`).
+ *
+ * Read off the store at cue time rather than threaded through the press result: the press
+ * result describes what the press did, and how loud or how high the room is at that moment is
+ * not part of that. Null outside a run, which the cues treat as a cold meter.
+ */
+const comboMeterFromStore = (): ChainMeter | null => {
+    const { run } = useAppStore.getState();
+    return run ? runChainMeter(run) : null;
 };
 
 const playRunStartUiSfxFromStore = (): void => {
@@ -422,7 +435,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             if (result.playFlipSfx) {
                 void resumeAudioContext();
                 const g = sfxGainFromStore();
-                playFlipSfx(g);
+                playFlipSfx(g, comboMeterFromStore());
                 if (projectGameplayFeedback(result.events).some((feedback) => feedback.audioCategory === 'gambit-commit')) {
                     playGambitCommitSfx(g);
                 }
@@ -459,10 +472,11 @@ export const useAppStore = create<AppState>((set, get) => ({
                 freezeRunSnapshotForPlayingMetaOverlay,
                 playTilePressAudioCues: (audio) => {
                     playTilePressAudioCues(audio, {
+                        getComboMeter: comboMeterFromStore,
                         getSfxGain: sfxGainFromStore,
-                                            playFlipSfx,
+                        playFlipSfx,
                         playPeekPowerSfx,
-                                            resumeAudioContext
+                        resumeAudioContext
                     });
                 },
                 scheduleResolveTimer,
