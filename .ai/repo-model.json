@@ -9501,8 +9501,8 @@
     {
       "path": "src/renderer/components/SceneSprites.test.tsx",
       "category": "test",
-      "bytes": 6776,
-      "sha256": "1db16ddc93af62ee08e0e0bbf3241a8d31329f6b866fbd449b57c8df6804de9c"
+      "bytes": 8066,
+      "sha256": "2c88ef4c79bf52bacb83eaab7aaca2c91d342f77a08e56c9e2a84a7a3905ded3"
     },
     {
       "path": "src/renderer/components/SceneSprites.tsx",
@@ -13887,8 +13887,8 @@
     {
       "path": "src/shared/turn-mismatch-rules.ts",
       "category": "source",
-      "bytes": 5147,
-      "sha256": "839ead067904acfb3e5f00d1d4996150fb2867a0bafa6dbed39f16b578e30c86"
+      "bytes": 5689,
+      "sha256": "aec802c0da91b4d287a5ee73e17c0dbe6a019a96e2d84520c3bec0e55305082a"
     },
     {
       "path": "src/shared/turn-resolution.ts",
@@ -19797,7 +19797,7 @@
       "path": "src/renderer/components/SceneSprites.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 130,
+      "lineCount": 151,
       "imports": [
         "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/components/gameplaySceneLevels.ts",
@@ -33244,7 +33244,7 @@
       "path": "src/shared/turn-mismatch-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 116,
+      "lineCount": 123,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/magpie-rules.ts",
@@ -55536,7 +55536,7 @@
       "kind": "value",
       "file": "src/shared/turn-mismatch-rules.ts",
       "line": 56,
-      "endLine": 115
+      "endLine": 122
     },
     {
       "id": "symbol:src/shared/turn-resolution.ts#calculateMatchScore",

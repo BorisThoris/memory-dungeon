@@ -116,6 +116,27 @@ describe('SceneSprites', () => {
         expect(screen.getByTestId('scene-sprites')).toHaveAttribute('data-flame-drawing', 'true');
     });
 
+    it('drops the fire on a miss without putting it out', () => {
+        // A miss halves the streak and zeroes the cascade (`turn-mismatch-rules`), so the room
+        // reads momentum that is still most of a chain. The comment there once said "the fire goes
+        // out" — written before there was a fire. It is not out, and a test is the only thing that
+        // keeps that claim honest as the curve moves.
+        const FEVER_RUNG = 7;
+        const fillFor = (momentum: number) => Math.min(1, momentum / FEVER_RUNG);
+        // A seat at Fever: streak 6 with 2 cascade pairs, then a miss leaves streak 3, cascade 0.
+        const hot = sceneFlameLevels(fillFor(6 + 2));
+        const afterMiss = sceneFlameLevels(fillFor(Math.floor(6 / 2)));
+        const cold = sceneFlameLevels(0);
+
+        expect(afterMiss.rate).toBeLessThan(hot.rate);
+        expect(afterMiss.embers).toBeLessThan(hot.embers);
+        // The drop has to be visible, or the loss reads as nothing happening.
+        expect(hot.rate - afterMiss.rate).toBeGreaterThan(0.1);
+        // And it has to stay a fire: still clearly above a room with no chain behind it at all.
+        expect(afterMiss.rate).toBeGreaterThan(cold.rate + 0.2);
+        expect(afterMiss.embers).toBeGreaterThan(cold.embers);
+    });
+
     it('holds a frozen scene frozen however hot the run is', () => {
         render(<SceneSprites embers heat={1} set={flames} still />);
         const sprites = screen.getByTestId('scene-sprites');

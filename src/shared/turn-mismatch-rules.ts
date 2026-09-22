@@ -97,8 +97,15 @@ export const resolveMismatchTurnTransition = ({
         // A miss is a turn against the par as much as a match is; the gambit's three flips are one.
         turnsThisFloor: runNonNegativeInteger(run.turnsThisFloor) + 1,
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, tileIds),
-        // A miss keeps half the streak (the score multiplier forgives) but the cascade's momentum
-        // is gone: the fire goes out, and the ladder is climbed again from what was remembered.
+        // A miss keeps half the streak (the score multiplier forgives) but every other source of
+        // momentum is gone, so the ladder is climbed again from what was remembered.
+        //
+        // This used to say "the fire goes out", which was a figure of speech until there was a
+        // fire: the room's torches now burn off this same momentum (`sceneFlameLevels`). They do
+        // not go out. A seat at Fever on a four-pair floor drops from rate 1.54 to 1.34 — visibly
+        // less, still well clear of the 0.92 a cold room burns at, because half a remembered
+        // streak is still a streak. Anything wanting the fire to actually gutter has to say so
+        // itself; this line only takes the cascade away.
         chunkPairsThisChain: 0,
         skipMomentumThisChain: 0,
         stats: {
