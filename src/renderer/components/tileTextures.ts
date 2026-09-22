@@ -32,7 +32,7 @@ import {
     prewarmProceduralIllustrationBitmap
 } from '../cardFace/cardIllustrationDraw';
 import { CARD_ILLUSTRATION_REGISTRY } from '../cardFace/cardIllustrationRegistry';
-import { getCardIllustrationImageByUrl } from '../cardFace/cardIllustrationImages';
+import { getCardIllustrationImageByUrl, subscribeCardIllustrationImageReady } from '../cardFace/cardIllustrationImages';
 import { resolveCardIllustrationUrl } from '../cardFace/resolveCardIllustrationUrl';
 import { drawRasterDeckComposedOverlay, isCardRasterDeckEnabled } from '../cardFace/cardRasterDeck';
 import {
@@ -235,6 +235,25 @@ const purgeOverlayTextureCache = (reason: string, nextVersionToken: string = ove
             disposeCachedTexture(key);
         }
     }
+};
+
+/**
+ * Faces drawn before their painted panel had decoded hold the procedural fallback, and a cached
+ * face is never redrawn on its own. Each panel that lands drops those faces so the next frame
+ * composes them with the art; the purge is coalesced to a frame because eighty panels arrive in a
+ * burst and each one would otherwise throw away the work of the last.
+ */
+let illustrationRedrawHandle: number | null = null;
+
+const scheduleOverlayRedrawForNewIllustration = (): void => {
+    if (illustrationRedrawHandle != null || typeof globalThis.requestAnimationFrame !== 'function') {
+        return;
+    }
+    illustrationRedrawHandle = globalThis.requestAnimationFrame(() => {
+        illustrationRedrawHandle = null;
+        purgeOverlayTextureCache('illustration-decoded');
+        emitTextureImageUpdate();
+    });
 };
 
 const syncIllustrationOverlayCacheVersion = (versionToken: string = OVERLAY_TEXTURE_CACHE_VERSION): void => {
@@ -1563,6 +1582,10 @@ export const getCardFaceStaticTexture = (): CanvasTexture | null =>
         STATIC_CARD_TEXTURE_WIDTH,
         STATIC_CARD_TEXTURE_HEIGHT
     );
+
+subscribeCardIllustrationImageReady(() => {
+    scheduleOverlayRedrawForNewIllustration();
+});
 
 export const subscribeTextureImageUpdates = (listener: () => void): (() => void) => {
     textureImageUpdateListeners.add(listener);

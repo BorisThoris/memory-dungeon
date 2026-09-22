@@ -7,6 +7,33 @@ import { runNonNegativeIntegerWithFallback } from '../../shared/run-number-guard
 
 const imagesByUrl = new Map<string, HTMLImageElement>();
 const pendingImagesByUrl = new Map<string, Promise<void>>();
+const imageReadyListeners = new Set<() => void>();
+
+/**
+ * Fires when a panel finishes decoding and enters the cache.
+ *
+ * A card face is drawn once into a cached canvas texture and never redrawn, so any face composed
+ * before its panel arrives keeps the procedural fallback for the rest of the session. On a cold
+ * load the eighty panels take seconds while the board draws its faces immediately — which is how
+ * every painted panel in the build shipped downloaded and unseen. The texture cache listens here
+ * and drops the faces it drew blind.
+ */
+export const subscribeCardIllustrationImageReady = (listener: () => void): (() => void) => {
+    imageReadyListeners.add(listener);
+    return () => {
+        imageReadyListeners.delete(listener);
+    };
+};
+
+const emitCardIllustrationImageReady = (): void => {
+    for (const listener of imageReadyListeners) {
+        try {
+            listener();
+        } catch {
+            // A cache observer must not break the load of the next panel.
+        }
+    }
+};
 
 export interface PreloadCardIllustrationImagesOptions {
     concurrency?: number;
@@ -74,6 +101,9 @@ function loadCardIllustrationImage(url: string): Promise<void> {
             }
             imagesByUrl.set(url, img);
             resolveOnce();
+            if (img.naturalWidth > 0) {
+                emitCardIllustrationImageReady();
+            }
         };
 
         img.onload = (): void => {

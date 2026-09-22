@@ -62,6 +62,8 @@ import type { TileBezelFrameBag } from './tileBoardFrameBag';
 import { advanceTileBezelFrame } from './tileBoardFrameAdvance';
 import { useSceneEffectTier } from '../hooks/useSceneEffectTier';
 import { useTileBoardSharedCardSvgAssets } from './useTileBoardSharedCardSvgAssets';
+import { getAllCardIllustrationUrls } from '../cardFace/cardIllustrationRegistry';
+import { preloadCardIllustrationImages } from '../cardFace/cardIllustrationImages';
 import { useTileBoardTextureRevision } from './useTileBoardTextureRevision';
 import { runTileBoardSceneFrame } from './tileBoardSceneFrame';
 import { TileBoardSceneBoardGroup } from './TileBoardSceneBoardGroup';
@@ -224,6 +226,17 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     const totalColumns = board.columns;
     const totalRows = board.rows;
     const textureRevision = useTileBoardTextureRevision();
+    /*
+     * The painted face panels are what the card faces are made of, and the board is the only screen
+     * that needs them. The startup preload warms them at the end of a chain of three loads behind
+     * the intro, latched by a flag that stays set even if that scheduled warm is cancelled — so a
+     * skipped or interrupted intro left the art undownloaded and every face fell back to the
+     * procedural shell for the session. The board asks directly instead; the loader dedupes per URL,
+     * so arriving second costs nothing.
+     */
+    useEffect(() => {
+        void preloadCardIllustrationImages(getAllCardIllustrationUrls()).catch(() => undefined);
+    }, []);
     // The living card frames cost fourteen meshes a card; only a machine on the full scene tier
     // takes them (`getSceneEffectTier`), which is the same call the backdrops make.
     const cardSvgMeshesAffordable = useSceneEffectTier(graphicsQuality, reduceMotion) === 'full';
