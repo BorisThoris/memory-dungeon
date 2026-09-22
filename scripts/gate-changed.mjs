@@ -7,6 +7,7 @@ export const GATES = {
     navigation: 'yarn gate:navigation',
     systems: 'yarn gate:systems',
     verify: 'yarn verify',
+    typecheck: 'yarn typecheck',
     gameplay: 'yarn gate:gameplay',
     longRun: 'yarn gate:long-run',
     readabilityLongRun: 'yarn gate:readability-long-run',
@@ -337,6 +338,27 @@ export const selectGatesForChangedPaths = (paths) => {
     for (const file of normalized) {
         if (file.startsWith('src/') && !coveredFiles.has(file)) {
             add('verify', file, 'source file without a narrower mapping requires full typecheck and unit coverage');
+        }
+    }
+
+    /*
+     * Types, for anything the narrower gates picked up.
+     *
+     * `yarn verify` is the only gate that runs `tsc`, and reaching it means falling through every
+     * mapping above — so a file *with* a mapping was never typechecked. That covered most of
+     * `src/renderer/components`: an edit to a scene, a card rule or an sfx module ran its own
+     * Vitest files and a `vite build`, and Vitest transpiles without checking types while esbuild
+     * strips them. A type error in any well-gated file passed green, and a test file was the worst
+     * case of all, since `changedTests` marks it covered and nothing else claims it.
+     *
+     * `tsc --noEmit` reads the whole program, so one run covers every changed file at once; this
+     * is a single extra gate, not one per file. Files already bound for `verify` get it there.
+     */
+    const typecheckedByVerify = gateIds.has('verify');
+    if (!typecheckedByVerify) {
+        const firstTyped = normalized.find((file) => file.startsWith('src/') && /\.(ts|tsx|mts|cts)$/u.test(file));
+        if (firstTyped) {
+            add('typecheck', firstTyped, 'changed TypeScript needs tsc: Vitest and vite build both skip type errors');
         }
     }
 

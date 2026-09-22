@@ -4989,8 +4989,8 @@
     {
       "path": "scripts/gate-changed.mjs",
       "category": "script",
-      "bytes": 19909,
-      "sha256": "d843dcac2b85623daa48505dc61d67bb68276940b174f839cff76a8b0c900c4b"
+      "bytes": 21184,
+      "sha256": "02e0b96ea89856e521c74076c47e86fbebf14f1e6c3cc778cc952adf6d63da3f"
     },
     {
       "path": "scripts/gate-long-run.ts",
@@ -12597,8 +12597,8 @@
     {
       "path": "src/shared/gate-changed.test.ts",
       "category": "test",
-      "bytes": 30872,
-      "sha256": "9bc2e9a027465fc9b0e793d18a4d579420fda3c8adabf6dc1fa42cb0576bed37"
+      "bytes": 33812,
+      "sha256": "dfd9d8f843e98081ac0470658e735a2666bdf0a208b39a5f9e684d1819a4d289"
     },
     {
       "path": "src/shared/gate-long-run-script.test.ts",
@@ -29067,7 +29067,7 @@
       "path": "src/shared/gate-changed.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 691,
+      "lineCount": 743,
       "imports": [],
       "exports": [],
       "testedBy": []

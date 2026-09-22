@@ -191,6 +191,54 @@ describe('gate:changed selector', () => {
         ]);
     });
 
+    /**
+     * `yarn verify` is the only gate that runs `tsc`, and a file reaches it only by falling through
+     * every narrower mapping. So a *well-gated* file — a scene, a card rule, an sfx module — was
+     * the one kind that never got typechecked: Vitest transpiles without checking types and
+     * `vite build` strips them, so a type error in it passed green.
+     */
+    it('typechecks changed TypeScript that a narrower gate already claimed', () => {
+        for (const file of [
+            'src/renderer/components/SceneSprites.tsx',
+            'src/renderer/audio/gameSfx.ts',
+            'src/renderer/components/GameplayScene.tsx'
+        ]) {
+            const payload = runGateChanged(file);
+            const ids = payload.gates.map(({ id }) => id);
+            // The narrow gate still runs; this is in addition to it, not instead of it.
+            expect(ids.length).toBeGreaterThan(1);
+            expect(ids).toContain('typecheck');
+            expect(payload.gates.find(({ id }) => id === 'typecheck')?.command).toBe('yarn typecheck');
+        }
+    });
+
+    it('typechecks a test-only change, which nothing else did', () => {
+        // The worst case of all: `changedTests` marks the file covered, so the `verify` fallback
+        // never claims it, and running a test file does not typecheck it.
+        const ids = runGateChanged('src/renderer/components/RunShell.test.tsx').gates.map(({ id }) => id);
+        expect(ids).toContain('changedTests');
+        expect(ids).toContain('typecheck');
+    });
+
+    it('does not ask for tsc twice, or at all without TypeScript', () => {
+        // `verify` is `typecheck && test`, so a file bound for it needs nothing added.
+        const verified = runGateChanged('src/renderer/input/touchHaptics.ts').gates.map(({ id }) => id);
+        expect(verified).toContain('verify');
+        expect(verified).not.toContain('typecheck');
+
+        // One run of `tsc` reads the whole program, so many changed files are still one gate.
+        const many = runGateChanged(
+            'src/renderer/components/SceneSprites.tsx',
+            'src/renderer/audio/gameSfx.ts',
+            'src/renderer/components/GameplayScene.tsx'
+        );
+        expect(many.gates.filter(({ id }) => id === 'typecheck')).toHaveLength(1);
+        expect(many.reasons.filter(({ gateId }) => gateId === 'typecheck')).toHaveLength(1);
+
+        // A docs-only change has no types to check.
+        expect(runGateChanged('docs/README.md').gates.map(({ id }) => id)).not.toContain('typecheck');
+    });
+
     it('discovers Git paths without scheduling deleted tests', async () => {
         const { changedPathsFromGit } = await loadGateChanged();
         const repository = mkdtempSync(path.join(tmpdir(), 'memory-dungeon-gate-changed-'));
@@ -495,11 +543,15 @@ describe('gate:changed selector', () => {
         const supportPayload = runGateChanged('src/shared/gameplay-rules-edit-map.test.ts');
         expect(supportPayload.gates.map((gate) => gate.id)).not.toContain('actionLoop');
         expect(supportPayload.gates.map((gate) => gate.id)).not.toContain('simSoftlockSeeds');
+        // The point of this case is that a support test file stays off the expensive gameplay
+        // gates. It runs itself and it typechecks — `changedTests` marks the file covered, so the
+        // `verify` fallback never claims it and `tsc` would otherwise never see it.
         expect(supportPayload.gates).toEqual([
             {
                 id: 'changedTests',
                 command: 'yarn vitest run "src/shared/gameplay-rules-edit-map.test.ts" --maxWorkers=2'
-            }
+            },
+            { id: 'typecheck', command: 'yarn typecheck' }
         ]);
     });
 
