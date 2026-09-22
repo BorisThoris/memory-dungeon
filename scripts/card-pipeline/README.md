@@ -60,6 +60,21 @@ because the light *level* is what carries it.
 The per-frame drive is gated on `getSceneEffectTier` — a lean device keeps the light and loses the
 motion — and a card whose side is facing away does no per-frame work at all.
 
+### The budget this was built to
+
+Measured on a Playwright `devices['Pixel 5']` with CDP `Emulation.setCPUThrottlingRate: 4`, which
+is the cheapest honest stand-in for a mid-range phone:
+
+| | fps |
+| --- | --- |
+| Main menu, settled | 125–129 |
+| Gameplay board, everything on, `lean` tier | 46–54 |
+
+For context on why the gate exists: an earlier cut meshed both card faces as SVG layers on every
+device and took that same board to **25 fps**. Re-measure with the same method before and after any
+change that adds a mesh or a frame callback per card, and ignore the first sample after boot — the
+startup preload can land a multi-second frame in it that has nothing to do with the board.
+
 ## Generating new art
 
 `batch_local_zimage.py` and the manifests here drive Z-Image-Turbo on the local GPU; see
