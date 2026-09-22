@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-22T20:36:53.077Z",
+  "generatedAt": "2026-09-22T20:43:00.494Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -281,35 +281,35 @@
   },
   "media": {
     "source": "repo-local",
-    "directory": "C:/Users/Gaming PC/Desktop/Repos/memory-dungeon/.claude/worktrees/local-llm-assets-220202/project-media",
+    "directory": "/home/runner/work/memory-dungeon/memory-dungeon/project-media",
     "primary": "project-media/card.jpg",
     "images": [
       {
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 164169,
+        "bytes": 168072,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-22T20:36:43.150Z"
+        "capturedAt": "2026-09-22T20:42:23.384Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 156708,
+        "bytes": 154165,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-22T20:36:43.153Z"
+        "capturedAt": "2026-09-22T20:42:31.538Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 131002,
+        "bytes": 130996,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-22T20:36:43.154Z"
+        "capturedAt": "2026-09-22T20:42:55.443Z"
       },
       {
         "profile": "mobile",
@@ -318,16 +318,16 @@
         "bytes": 51915,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-22T11:02:45.127Z"
+        "capturedAt": "2026-09-22T20:42:36.173Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 123147,
+        "bytes": 122847,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-22T20:36:43.156Z"
+        "capturedAt": "2026-09-22T20:43:00.270Z"
       }
     ]
   },
@@ -389,9 +389,9 @@
     "devDependencyCount": 47
   },
   "metrics": {
-    "sourceFiles": 1136,
+    "sourceFiles": 1127,
     "testFiles": 485,
-    "sourceLines": 181830,
+    "sourceLines": 173869,
     "largestDirectories": [
       {
         "directory": "src",
@@ -410,8 +410,8 @@
         "files": 14
       },
       {
-        "directory": "dist-build",
-        "files": 9
+        "directory": ".",
+        "files": 5
       }
     ],
     "hasReadme": true,
@@ -429,12 +429,12 @@
   },
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
-    "branch": "claude/sprite-animation-backgrounds-ceda9f",
-    "head": "2d287c16",
-    "lastCommitDate": "2026-09-22T23:36:41+03:00",
-    "lastCommitSubject": "Let the nave remember the run that ended in it",
-    "commitCount": 1680,
-    "remote": "https://github.com/BorisThoris/memory-dungeon.git"
+    "branch": "main",
+    "head": "b16856d3",
+    "lastCommitDate": "2026-09-22T23:38:27+03:00",
+    "lastCommitSubject": "Refresh the repo model after merging main",
+    "commitCount": 1683,
+    "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
     "file": "README.md",
