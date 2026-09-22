@@ -3,7 +3,8 @@ import { memo, useRef } from 'react';
 import { AdditiveBlending, DoubleSide, type Mesh, type MeshBasicMaterial, type PlaneGeometry, type Texture } from 'three';
 
 import { noopMeshRaycast } from './tileBoardPick';
-import { CARD_BREAK_DROP, cardBreakSnuff, cardHeatLevels, cardMatchFlare } from './tileBoardCardHeat';
+import { advanceCardGlowFrame, initialCardGlowMemory, type CardGlowFrameMemory } from './cardGlowFrame';
+import { cardHeatLevels } from './tileBoardCardHeat';
 
 /**
  * A card side, answering the run.
@@ -44,8 +45,6 @@ interface AnimatedCardGlowProps {
     z: number;
 }
 
-const fract = (value: number): number => value - Math.floor(value);
-
 export const AnimatedCardGlow = memo(
     ({
         geometry,
@@ -64,20 +63,11 @@ export const AnimatedCardGlow = memo(
         const spinMatRef = useRef<MeshBasicMaterial | null>(null);
         const spinMeshRef = useRef<Mesh | null>(null);
         /*
-         * When the pair landed, on the render clock. Stamped inside the frame loop because that is
-         * the only clock the flare is measured against, and cleared when the card leaves the matched
-         * state so a re-deal cannot inherit an old flare.
+         * What this card carries between frames: the heat it last saw (a large fall is the break),
+         * when its pair landed, and when it last guttered. Kept in a ref rather than state because
+         * it changes every frame and nothing outside the frame loop reads it.
          */
-        const matchedAtRef = useRef<number | null>(null);
-        /*
-         * The last heat this card saw, and when it last fell. A break is read from the input rather
-         * than plumbed as another event: the chain meter empties on a mismatch and nothing else
-         * moves it down, so a large drop between frames is the break, and the card can gutter
-         * without the board having to tell it anything.
-         */
-        const lastHeatRef = useRef(heat);
-        const snuffedAtRef = useRef<number | null>(null);
-        const phase = fract(seed * 0.618034) * Math.PI * 2;
+        const memoryRef = useRef<CardGlowFrameMemory>(initialCardGlowMemory(heat));
 
         // The still level for a card whose device (or player) has turned the motion off, and the
         // starting level for one that has not: a board is never drawn with the light at zero.
@@ -87,41 +77,25 @@ export const AnimatedCardGlow = memo(
             if (!visible || !animated) {
                 return;
             }
-            const t = state.clock.elapsedTime;
-            if (matched && matchedAtRef.current == null) {
-                matchedAtRef.current = t;
-            } else if (!matched && matchedAtRef.current != null) {
-                matchedAtRef.current = null;
-            }
-            if (heat < lastHeatRef.current - CARD_BREAK_DROP) {
-                snuffedAtRef.current = t;
-            }
-            lastHeatRef.current = heat;
-            const snuffedAt = snuffedAtRef.current;
-            const snuff = snuffedAt == null ? 1 : cardBreakSnuff(t - snuffedAt);
-            if (snuff >= 1) {
-                snuffedAtRef.current = null;
-            }
-            const levels = cardHeatLevels(heat);
-            // A slow breath per card so a still board is never dead, and never a single pulse.
-            const breath = reduceMotion ? 1 : 1 + 0.12 * Math.sin(t * 0.9 + phase);
-            const matchedAt = matchedAtRef.current;
-            const flare = matchedAt == null ? 0 : cardMatchFlare(t - matchedAt, heat);
+            const { frame, memory } = advanceCardGlowFrame(
+                { heat, matched, reduceMotion, seed, time: state.clock.elapsedTime },
+                memoryRef.current
+            );
+            memoryRef.current = memory;
 
             const glowMat = glowMatRef.current;
             if (glowMat) {
-                glowMat.opacity = Math.min(1.6, levels.runeGlow * breath * snuff + flare);
+                glowMat.opacity = frame.glowOpacity;
             }
 
             const spinMat = spinMatRef.current;
             if (spinMat) {
-                spinMat.opacity = Math.min(1.4, levels.spin * breath * snuff + flare * 0.6);
+                spinMat.opacity = frame.spinOpacity;
             }
 
             const spinMesh = spinMeshRef.current;
-            if (spinMesh && !reduceMotion) {
-                // Turns per second, one way: a mechanism winding, not an ornament wobbling.
-                spinMesh.rotation.z = -t * levels.spinRate * Math.PI * 2 + phase * 0.2;
+            if (spinMesh) {
+                spinMesh.rotation.z = frame.spinRotation;
             }
         });
 

@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2673,
-    "codeFileCount": 913,
-    "exportedSymbolCount": 2753,
+    "trackedFileCount": 2675,
+    "codeFileCount": 915,
+    "exportedSymbolCount": 2759,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6975
+    "relationshipCount": 6985
   },
   "inventory": [
     {
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "33f16856cb523b3c36f156ffa7bb03eb92c7a6c42078ec042db0c33207e04263"
+      "sha256": "55619f28c4bc8be3070bf3f9210d36c991604d5506543656aead2118bad905a7"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -8883,8 +8883,8 @@
     {
       "path": "src/renderer/components/AnimatedCardGlow.tsx",
       "category": "source",
-      "bytes": 7498,
-      "sha256": "7531666037d8774393348ab021590e499273064897e0a1fa71c4cdc8b0e5744e"
+      "bytes": 5963,
+      "sha256": "85440a9863ed444fa1effd497fc9318f664bb6370184e55535d2dbb799755107"
     },
     {
       "path": "src/renderer/components/AppErrorBoundary.module.css",
@@ -8957,6 +8957,18 @@
       "category": "source",
       "bytes": 3578,
       "sha256": "2d755b8735d699300706eca768e5b61b2fc56e29f5d6f1e8b9f4cbc272b99ee8"
+    },
+    {
+      "path": "src/renderer/components/cardGlowFrame.test.ts",
+      "category": "test",
+      "bytes": 6565,
+      "sha256": "f14c71a74a0ffb32b2e4cfefcd30c62130ccbeb826bb532ef7e42770dfd21466"
+    },
+    {
+      "path": "src/renderer/components/cardGlowFrame.ts",
+      "category": "source",
+      "bytes": 3448,
+      "sha256": "1932a306088d5e0fadc8f0844bb422d0eeaa1e1bb37255f550db542b6a399005"
     },
     {
       "path": "src/renderer/components/CathedralScene.module.css",
@@ -18185,8 +18197,9 @@
       "path": "src/renderer/components/AnimatedCardGlow.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 169,
+      "lineCount": 143,
       "imports": [
+        "file:src/renderer/components/cardGlowFrame.ts",
         "file:src/renderer/components/tileBoardCardHeat.ts",
         "file:src/renderer/components/tileBoardPick.ts"
       ],
@@ -18387,6 +18400,39 @@
         "symbol:src/renderer/components/cardArcaneGlowShaderGlsl.ts#CARD_ARCANE_GLOW_FRAGMENT_SHADER"
       ],
       "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/cardGlowFrame.test.ts",
+      "path": "src/renderer/components/cardGlowFrame.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 138,
+      "imports": [
+        "file:src/renderer/components/cardGlowFrame.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/cardGlowFrame.ts",
+      "path": "src/renderer/components/cardGlowFrame.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 78,
+      "imports": [
+        "file:src/renderer/components/tileBoardCardHeat.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/cardGlowFrame.ts#advanceCardGlowFrame",
+        "symbol:src/renderer/components/cardGlowFrame.ts#CardGlowFrame",
+        "symbol:src/renderer/components/cardGlowFrame.ts#CardGlowFrameInput",
+        "symbol:src/renderer/components/cardGlowFrame.ts#CardGlowFrameMemory",
+        "symbol:src/renderer/components/cardGlowFrame.ts#cardGlowPhase",
+        "symbol:src/renderer/components/cardGlowFrame.ts#initialCardGlowMemory"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/cardGlowFrame.test.ts"
+      ]
     },
     {
       "id": "file:src/renderer/components/CathedralScene.test.tsx",
@@ -35526,8 +35572,8 @@
       "name": "AnimatedCardGlow",
       "kind": "value",
       "file": "src/renderer/components/AnimatedCardGlow.tsx",
-      "line": 49,
-      "endLine": 167
+      "line": 48,
+      "endLine": 141
     },
     {
       "id": "symbol:src/renderer/components/AppErrorBoundary.tsx#AppErrorBoundary",
@@ -35824,6 +35870,54 @@
       "file": "src/renderer/components/cardArcaneGlowShaderGlsl.ts",
       "line": 6,
       "endLine": 106
+    },
+    {
+      "id": "symbol:src/renderer/components/cardGlowFrame.ts#advanceCardGlowFrame",
+      "name": "advanceCardGlowFrame",
+      "kind": "value",
+      "file": "src/renderer/components/cardGlowFrame.ts",
+      "line": 51,
+      "endLine": 77
+    },
+    {
+      "id": "symbol:src/renderer/components/cardGlowFrame.ts#CardGlowFrame",
+      "name": "CardGlowFrame",
+      "kind": "interface",
+      "file": "src/renderer/components/cardGlowFrame.ts",
+      "line": 34,
+      "endLine": 39
+    },
+    {
+      "id": "symbol:src/renderer/components/cardGlowFrame.ts#CardGlowFrameInput",
+      "name": "CardGlowFrameInput",
+      "kind": "interface",
+      "file": "src/renderer/components/cardGlowFrame.ts",
+      "line": 16,
+      "endLine": 25
+    },
+    {
+      "id": "symbol:src/renderer/components/cardGlowFrame.ts#CardGlowFrameMemory",
+      "name": "CardGlowFrameMemory",
+      "kind": "interface",
+      "file": "src/renderer/components/cardGlowFrame.ts",
+      "line": 28,
+      "endLine": 32
+    },
+    {
+      "id": "symbol:src/renderer/components/cardGlowFrame.ts#cardGlowPhase",
+      "name": "cardGlowPhase",
+      "kind": "value",
+      "file": "src/renderer/components/cardGlowFrame.ts",
+      "line": 49,
+      "endLine": 49
+    },
+    {
+      "id": "symbol:src/renderer/components/cardGlowFrame.ts#initialCardGlowMemory",
+      "name": "initialCardGlowMemory",
+      "kind": "value",
+      "file": "src/renderer/components/cardGlowFrame.ts",
+      "line": 41,
+      "endLine": 45
     },
     {
       "id": "symbol:src/renderer/components/CathedralScene.tsx#CathedralScene",
@@ -60694,6 +60788,42 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/cardGlowFrame.ts->symbol:src/renderer/components/cardGlowFrame.ts#advanceCardGlowFrame",
+      "source": "file:src/renderer/components/cardGlowFrame.ts",
+      "target": "symbol:src/renderer/components/cardGlowFrame.ts#advanceCardGlowFrame",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardGlowFrame.ts->symbol:src/renderer/components/cardGlowFrame.ts#CardGlowFrame",
+      "source": "file:src/renderer/components/cardGlowFrame.ts",
+      "target": "symbol:src/renderer/components/cardGlowFrame.ts#CardGlowFrame",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardGlowFrame.ts->symbol:src/renderer/components/cardGlowFrame.ts#CardGlowFrameInput",
+      "source": "file:src/renderer/components/cardGlowFrame.ts",
+      "target": "symbol:src/renderer/components/cardGlowFrame.ts#CardGlowFrameInput",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardGlowFrame.ts->symbol:src/renderer/components/cardGlowFrame.ts#CardGlowFrameMemory",
+      "source": "file:src/renderer/components/cardGlowFrame.ts",
+      "target": "symbol:src/renderer/components/cardGlowFrame.ts#CardGlowFrameMemory",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardGlowFrame.ts->symbol:src/renderer/components/cardGlowFrame.ts#cardGlowPhase",
+      "source": "file:src/renderer/components/cardGlowFrame.ts",
+      "target": "symbol:src/renderer/components/cardGlowFrame.ts#cardGlowPhase",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardGlowFrame.ts->symbol:src/renderer/components/cardGlowFrame.ts#initialCardGlowMemory",
+      "source": "file:src/renderer/components/cardGlowFrame.ts",
+      "target": "symbol:src/renderer/components/cardGlowFrame.ts#initialCardGlowMemory",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/CathedralScene.tsx->symbol:src/renderer/components/CathedralScene.tsx#CathedralScene",
       "source": "file:src/renderer/components/CathedralScene.tsx",
       "target": "symbol:src/renderer/components/CathedralScene.tsx#CathedralScene",
@@ -77712,6 +77842,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/AnimatedCardGlow.tsx->src/renderer/components/cardGlowFrame.ts",
+      "source": "file:src/renderer/components/AnimatedCardGlow.tsx",
+      "target": "file:src/renderer/components/cardGlowFrame.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/AnimatedCardGlow.tsx->src/renderer/components/tileBoardCardHeat.ts",
       "source": "file:src/renderer/components/AnimatedCardGlow.tsx",
       "target": "file:src/renderer/components/tileBoardCardHeat.ts",
@@ -77823,6 +77959,18 @@
       "id": "imports:src/renderer/components/cardArcaneGlowMaterial.ts->src/renderer/styles/theme.ts",
       "source": "file:src/renderer/components/cardArcaneGlowMaterial.ts",
       "target": "file:src/renderer/styles/theme.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardGlowFrame.test.ts->src/renderer/components/cardGlowFrame.ts",
+      "source": "file:src/renderer/components/cardGlowFrame.test.ts",
+      "target": "file:src/renderer/components/cardGlowFrame.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardGlowFrame.ts->src/renderer/components/tileBoardCardHeat.ts",
+      "source": "file:src/renderer/components/cardGlowFrame.ts",
+      "target": "file:src/renderer/components/tileBoardCardHeat.ts",
       "kind": "imports"
     },
     {
@@ -93896,6 +94044,12 @@
       "id": "tested_by:src/renderer/components/cardArcaneGlowMaterial.ts->file:src/renderer/components/tileBoardGlowVisualState.test.ts",
       "source": "file:src/renderer/components/cardArcaneGlowMaterial.ts",
       "target": "file:src/renderer/components/tileBoardGlowVisualState.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/cardGlowFrame.ts->file:src/renderer/components/cardGlowFrame.test.ts",
+      "source": "file:src/renderer/components/cardGlowFrame.ts",
+      "target": "file:src/renderer/components/cardGlowFrame.test.ts",
       "kind": "tested_by"
     },
     {
