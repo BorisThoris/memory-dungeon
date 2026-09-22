@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2674,
     "codeFileCount": 915,
-    "exportedSymbolCount": 2759,
+    "exportedSymbolCount": 2761,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6985
+    "relationshipCount": 6987
   },
   "inventory": [
     {
@@ -8955,14 +8955,14 @@
     {
       "path": "src/renderer/components/cardGlowFrame.test.ts",
       "category": "test",
-      "bytes": 6565,
-      "sha256": "f14c71a74a0ffb32b2e4cfefcd30c62130ccbeb826bb532ef7e42770dfd21466"
+      "bytes": 9376,
+      "sha256": "627a8ba971a4369bb265e46dd2b0bd22dcda52670ae528786eaa47e6d4d4e40b"
     },
     {
       "path": "src/renderer/components/cardGlowFrame.ts",
       "category": "source",
-      "bytes": 3448,
-      "sha256": "1932a306088d5e0fadc8f0844bb422d0eeaa1e1bb37255f550db542b6a399005"
+      "bytes": 4798,
+      "sha256": "badf066173306121f1f41f1a9d6cdfb4686cdffe5c9f2d2786c3ae58e175689a"
     },
     {
       "path": "src/renderer/components/CathedralScene.module.css",
@@ -9651,8 +9651,8 @@
     {
       "path": "src/renderer/components/tileBoardCardHeat.ts",
       "category": "source",
-      "bytes": 3778,
-      "sha256": "838be9318fcc444a7efae3bc3e62bb23ac2806a03900eb0598b76b5ef6e5f64c"
+      "bytes": 4963,
+      "sha256": "09c64f0905eaf308d381d8b46e7bedaa7df93b742e9012020f5eaa6c67567e39"
     },
     {
       "path": "src/renderer/components/TileBoardCardSurface.tsx",
@@ -18400,7 +18400,7 @@
       "path": "src/renderer/components/cardGlowFrame.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 138,
+      "lineCount": 191,
       "imports": [
         "file:src/renderer/components/cardGlowFrame.ts"
       ],
@@ -18412,7 +18412,7 @@
       "path": "src/renderer/components/cardGlowFrame.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 78,
+      "lineCount": 102,
       "imports": [
         "file:src/renderer/components/tileBoardCardHeat.ts"
       ],
@@ -20205,11 +20205,13 @@
       "path": "src/renderer/components/tileBoardCardHeat.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 88,
+      "lineCount": 117,
       "imports": [],
       "exports": [
         "symbol:src/renderer/components/tileBoardCardHeat.ts#CARD_BREAK_DROP",
+        "symbol:src/renderer/components/tileBoardCardHeat.ts#CARD_FEVER_FILL",
         "symbol:src/renderer/components/tileBoardCardHeat.ts#cardBreakSnuff",
+        "symbol:src/renderer/components/tileBoardCardHeat.ts#cardFeverArrival",
         "symbol:src/renderer/components/tileBoardCardHeat.ts#cardHeatLevels",
         "symbol:src/renderer/components/tileBoardCardHeat.ts#CardHeatLevels",
         "symbol:src/renderer/components/tileBoardCardHeat.ts#cardMatchFlare"
@@ -35870,48 +35872,48 @@
       "name": "advanceCardGlowFrame",
       "kind": "value",
       "file": "src/renderer/components/cardGlowFrame.ts",
-      "line": 51,
-      "endLine": 77
+      "line": 67,
+      "endLine": 101
     },
     {
       "id": "symbol:src/renderer/components/cardGlowFrame.ts#CardGlowFrame",
       "name": "CardGlowFrame",
       "kind": "interface",
       "file": "src/renderer/components/cardGlowFrame.ts",
-      "line": 34,
-      "endLine": 39
+      "line": 49,
+      "endLine": 54
     },
     {
       "id": "symbol:src/renderer/components/cardGlowFrame.ts#CardGlowFrameInput",
       "name": "CardGlowFrameInput",
       "kind": "interface",
       "file": "src/renderer/components/cardGlowFrame.ts",
-      "line": 16,
-      "endLine": 25
+      "line": 29,
+      "endLine": 38
     },
     {
       "id": "symbol:src/renderer/components/cardGlowFrame.ts#CardGlowFrameMemory",
       "name": "CardGlowFrameMemory",
       "kind": "interface",
       "file": "src/renderer/components/cardGlowFrame.ts",
-      "line": 28,
-      "endLine": 32
+      "line": 41,
+      "endLine": 47
     },
     {
       "id": "symbol:src/renderer/components/cardGlowFrame.ts#cardGlowPhase",
       "name": "cardGlowPhase",
       "kind": "value",
       "file": "src/renderer/components/cardGlowFrame.ts",
-      "line": 49,
-      "endLine": 49
+      "line": 65,
+      "endLine": 65
     },
     {
       "id": "symbol:src/renderer/components/cardGlowFrame.ts#initialCardGlowMemory",
       "name": "initialCardGlowMemory",
       "kind": "value",
       "file": "src/renderer/components/cardGlowFrame.ts",
-      "line": 41,
-      "endLine": 45
+      "line": 56,
+      "endLine": 61
     },
     {
       "id": "symbol:src/renderer/components/CathedralScene.tsx#CathedralScene",
@@ -37422,16 +37424,32 @@
       "name": "CARD_BREAK_DROP",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardHeat.ts",
-      "line": 69,
-      "endLine": 69
+      "line": 98,
+      "endLine": 98
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardCardHeat.ts#CARD_FEVER_FILL",
+      "name": "CARD_FEVER_FILL",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardCardHeat.ts",
+      "line": 46,
+      "endLine": 46
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardHeat.ts#cardBreakSnuff",
       "name": "cardBreakSnuff",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardHeat.ts",
-      "line": 52,
-      "endLine": 63
+      "line": 81,
+      "endLine": 92
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardCardHeat.ts#cardFeverArrival",
+      "name": "cardFeverArrival",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardCardHeat.ts",
+      "line": 58,
+      "endLine": 69
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardHeat.ts#cardHeatLevels",
@@ -37454,8 +37472,8 @@
       "name": "cardMatchFlare",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardHeat.ts",
-      "line": 75,
-      "endLine": 87
+      "line": 104,
+      "endLine": 116
     },
     {
       "id": "symbol:src/renderer/components/TileBoardCardSurface.tsx#TileBoardCardSurface",
@@ -61952,9 +61970,21 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/tileBoardCardHeat.ts->symbol:src/renderer/components/tileBoardCardHeat.ts#CARD_FEVER_FILL",
+      "source": "file:src/renderer/components/tileBoardCardHeat.ts",
+      "target": "symbol:src/renderer/components/tileBoardCardHeat.ts#CARD_FEVER_FILL",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/tileBoardCardHeat.ts->symbol:src/renderer/components/tileBoardCardHeat.ts#cardBreakSnuff",
       "source": "file:src/renderer/components/tileBoardCardHeat.ts",
       "target": "symbol:src/renderer/components/tileBoardCardHeat.ts#cardBreakSnuff",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileBoardCardHeat.ts->symbol:src/renderer/components/tileBoardCardHeat.ts#cardFeverArrival",
+      "source": "file:src/renderer/components/tileBoardCardHeat.ts",
+      "target": "symbol:src/renderer/components/tileBoardCardHeat.ts#cardFeverArrival",
       "kind": "exports"
     },
     {

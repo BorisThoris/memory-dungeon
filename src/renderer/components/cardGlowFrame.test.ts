@@ -117,6 +117,22 @@ describe('advanceCardGlowFrame', () => {
         expect(new Set(still.map((f) => f.glowOpacity)).size).toBe(1);
     });
 
+    it('spares a reduce-motion player every sudden change in brightness', () => {
+        // Landing a pair, losing the chain and reaching Fever are all flashes; under the setting the
+        // light is the chain and nothing else, which still says everything the player needs.
+        const transients = play([
+            { seconds: 0.3, input: { ...rest, heat: 1, reduceMotion: true } },
+            { seconds: 0.3, input: { ...rest, heat: 1, matched: true, reduceMotion: true } },
+            { seconds: 0.5, input: { ...rest, heat: 0, reduceMotion: true } }
+        ]).frames;
+        const hot = transients.slice(0, 36).map((f) => f.glowOpacity);
+        const afterBreak = transients.slice(-20).map((f) => f.glowOpacity);
+        expect(new Set(hot).size).toBe(1);
+        expect(new Set(afterBreak).size).toBe(1);
+        // The level still moved with the chain: that is the feedback that remains.
+        expect(hot[0]).toBeGreaterThan(afterBreak[0]!);
+    });
+
     it('gives two cards different breaths from their seeds, and repeats for one', () => {
         const a = play([{ seconds: 0.5, input: { ...rest, heat: 0.5, seed: 3 } }]).frames;
         const b = play([{ seconds: 0.5, input: { ...rest, heat: 0.5, seed: 44 } }]).frames;
@@ -125,6 +141,43 @@ describe('advanceCardGlowFrame', () => {
 
         const again = play([{ seconds: 0.5, input: { ...rest, heat: 0.5, seed: 3 } }]).frames;
         expect(a.map((f) => f.glowOpacity)).toEqual(again.map((f) => f.glowOpacity));
+    });
+
+    it('throws a flourish the moment the meter fills, once, and not again while it stays full', () => {
+        // Climbing to Fever was a ramp with no arrival; this is the beat at the top of it.
+        const climb = play([
+            { seconds: 0.6, input: { ...rest, heat: 0.95 } },
+            { seconds: 2.5, input: { ...rest, heat: 1 } }
+        ]);
+        const held = play([{ seconds: 3.1, input: { ...rest, heat: 1 } }]);
+
+        const beforeTop = climb.frames.slice(0, 36);
+        const atTop = climb.frames.slice(36, 60);
+        const settled = climb.frames.slice(-30);
+
+        expect(Math.max(...atTop.map((f) => f.glowOpacity))).toBeGreaterThan(
+            Math.max(...beforeTop.map((f) => f.glowOpacity))
+        );
+        // It is spent within a second or so, leaving the card at the Fever it earned.
+        expect(Math.max(...settled.map((f) => f.glowOpacity))).toBeLessThan(
+            Math.max(...atTop.map((f) => f.glowOpacity))
+        );
+        // A board that was already at Fever never arrives: no flourish on every frame it stays there.
+        expect(Math.max(...held.frames.slice(36, 60).map((f) => f.glowOpacity))).toBeLessThan(
+            Math.max(...atTop.map((f) => f.glowOpacity))
+        );
+        expect(climb.memory.feverAt).toBeNull();
+    });
+
+    it('arrives again after a break took the chain away', () => {
+        const { frames } = play([
+            { seconds: 0.4, input: { ...rest, heat: 1 } },
+            { seconds: 2, input: rest },
+            { seconds: 0.5, input: { ...rest, heat: 1 } }
+        ]);
+        const second = frames.slice(144, 168);
+        // Losing Fever and winning it back is worth the same beat as the first time.
+        expect(Math.max(...second.map((f) => f.glowOpacity))).toBeGreaterThan(1);
     });
 
     it('forgets a flare when the card leaves the matched state', () => {

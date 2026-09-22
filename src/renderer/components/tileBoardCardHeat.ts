@@ -40,6 +40,35 @@ export const cardHeatLevels = (fill: number): CardHeatLevels => {
 };
 
 /**
+ * Fever is the top of the meter: `chainMeter.fill` reaches exactly 1 there and stays until the
+ * chain drops, so crossing it is a rising edge a card can watch for.
+ */
+export const CARD_FEVER_FILL = 1;
+
+/**
+ * The flourish the whole board throws in the moment a run reaches Fever, as an addition on top of
+ * everything else. `age` is seconds since the meter filled.
+ *
+ * Climbing to Fever was a ramp with no arrival. Every step of the chain already brightened the
+ * cards and wound the medallion faster, so the top of the meter — the thing the run is *for* —
+ * passed without a beat of its own. This is that beat: longer and larger than the flare a single
+ * pair throws, and it lands on every card at once, because the board arrives at Fever as one thing
+ * rather than card by card.
+ */
+export const cardFeverArrival = (age: number): number => {
+    if (!Number.isFinite(age) || age < 0) {
+        return 0;
+    }
+    const attack = 0.12;
+    const decay = 1.1;
+    if (age < attack) {
+        return round(0.95 * (age / attack));
+    }
+    const fade = 1 - (age - attack) / decay;
+    return fade <= 0 ? 0 : round(0.95 * fade * fade);
+};
+
+/**
  * How far a card's light is pulled down in the moment a streak is lost, as a multiplier on
  * everything else. `age` is seconds since the chain fell.
  *
