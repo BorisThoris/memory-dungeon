@@ -139,6 +139,27 @@
     animation-delay: -1.7s;
 }
 
+/* Reaching Fever: one flash of the whole ring, longer and larger than a break's, thrown once on
+   arrival. It is a sudden change in brightness, so reduce motion never mounts it at all. */
+.feverArrival {
+    opacity: 0;
+    animation: sceneFeverArrival 1400ms cubic-bezier(0.15, 0.85, 0.25, 1) forwards;
+}
+
+@keyframes sceneFeverArrival {
+    0% {
+        opacity: 0;
+    }
+
+    9% {
+        opacity: 1.35;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
 /* ------------------------------------------------------------------ the ring's motes */
 /* Points of the ring's own light lifting off the floor (`SceneMotes`); the whole drift fades in
    with the chain (`--scene-motes-opacity`, set with the ring levels) and takes the ring's hue, so

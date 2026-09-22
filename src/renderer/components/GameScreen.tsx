@@ -953,6 +953,17 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 ? 'pop'
                 : pulseTier
             : 'none';
+    /*
+     * The turn that carried the run into Fever, if the latest one did. The scene flashes on it, so
+     * the top of the meter is an arrival rather than the end of a ramp; it clears as soon as a
+     * later turn lands, which is what keeps a run sitting at Fever from strobing.
+     */
+    const feverArrivalKey =
+        latestTurnForPulse &&
+        latestTurnForPulse.announcement.chainTierAfter === 'fever' &&
+        latestTurnForPulse.announcement.chainTierBefore !== 'fever'
+            ? `fever:${latestTurnForPulse.eventId}`
+            : null;
     useEffect(() => {
         if (pulseEventId === null || pulsePairs <= 0) {
             return undefined;
@@ -1411,6 +1422,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             <div aria-hidden="true" className={styles.stageBackdrop}>
                 <GameplayScene
                     cleared={run.status === 'levelComplete'}
+                    feverKey={feverArrivalKey}
                     fill={runChainMeter(run).fill}
                     memorize={run.status === 'memorize'}
                     pulse={breakPulseTier}

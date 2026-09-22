@@ -30,6 +30,9 @@ import styles from './GameplayScene.module.css';
  *     flare with it, the pop barely stirring them and Fever throwing them up the wall;
  *   - a cleared floor is the room exhaling: the ring swells bright and settles over a long
  *     breath while the torches gutter and recover;
+ *   - reaching Fever is the room arriving with the cards: one flash of the whole ring the moment
+ *     the meter fills, thrown on the rising edge so a run that sits at Fever is not strobed, and
+ *     never thrown at all under reduce motion;
  *   - the torches always burn: their flames are cut out of the painting and play as flipbook
  *     sprites (`SceneSprites`), each on its own clock, with sparks rising off them, while the
  *     painted torchlight on the stone flickers under them; they do not care how the run is going;
@@ -51,6 +54,12 @@ export interface GameplaySceneProps {
     pulse: ChainTier | 'pop' | 'none';
     /** Identity of the event behind `pulse`, so a second break of the same tier restarts the flash. */
     pulseKey: string | null;
+    /**
+     * Identity of the turn that carried the run into Fever, or null when the last turn did not.
+     * The flash is keyed on it, so it is thrown once on arrival rather than held while the meter
+     * stays full, and a run that loses Fever and takes it again gets another.
+     */
+    feverKey?: string | null;
     /** The floor has just been cleared: the room exhales. */
     cleared?: boolean;
     quality: GraphicsQualityPreset;
@@ -60,7 +69,17 @@ export interface GameplaySceneProps {
 
 const bg = (url: string) => ({ backgroundImage: `url(${url})` });
 
-export function GameplayScene({ cleared = false, fill, memorize, pulse, pulseKey, quality, reduceMotion, tier }: GameplaySceneProps) {
+export function GameplayScene({
+    cleared = false,
+    feverKey = null,
+    fill,
+    memorize,
+    pulse,
+    pulseKey,
+    quality,
+    reduceMotion,
+    tier
+}: GameplaySceneProps) {
     const sceneRef = useRef<HTMLDivElement>(null);
     const ring = sceneRingLevels(fill);
     const effectTier = useSceneEffectTier(quality, reduceMotion);
@@ -124,6 +143,14 @@ export function GameplayScene({ cleared = false, fill, memorize, pulse, pulseKey
                 ) : null}
                 <div className={`${plate.layer} ${styles.layer} ${styles.runeGlow}`} style={bg(UI_ART.gameplaySceneGlowRunes)} />
                 <div className={`${plate.layer} ${styles.layer} ${styles.ringGlow}`} style={bg(UI_ART.gameplaySceneGlowRing)} />
+                {feverKey && !still ? (
+                    <div
+                        className={`${plate.layer} ${styles.layer} ${styles.feverArrival}`}
+                        data-testid="gameplay-scene-fever"
+                        key={feverKey}
+                        style={bg(UI_ART.gameplaySceneGlowRing)}
+                    />
+                ) : null}
                 {alive ? (
                     <div className={styles.mist} data-testid="gameplay-scene-mist">
                         <div className={`${styles.mistBank} ${styles.mistNear}`} />

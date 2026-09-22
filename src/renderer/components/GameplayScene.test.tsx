@@ -120,6 +120,26 @@ describe('GameplayScene', () => {
         expect(screen.queryByTestId('gameplay-scene-pulse')).toBeNull();
     });
 
+    it('flashes the room once when the run reaches Fever, and never while it stays there', () => {
+        const { rerender } = render(<GameplayScene {...base} tier="sharp" />);
+        expect(screen.queryByTestId('gameplay-scene-fever')).toBeNull();
+
+        // The key is the turn that crossed into Fever, so arriving mounts the flash...
+        rerender(<GameplayScene {...base} fill={1} tier="fever" feverKey="fever:turn-9" />);
+        const first = screen.getByTestId('gameplay-scene-fever');
+        // ...staying there does not throw another, because later turns carry no arrival key.
+        rerender(<GameplayScene {...base} fill={1} tier="fever" feverKey={null} />);
+        expect(screen.queryByTestId('gameplay-scene-fever')).toBeNull();
+        // ...and taking Fever again after losing it is worth a fresh one.
+        rerender(<GameplayScene {...base} fill={1} tier="fever" feverKey="fever:turn-21" />);
+        expect(screen.getByTestId('gameplay-scene-fever')).not.toBe(first);
+    });
+
+    it('never flashes Fever under reduce motion: it is a sudden change in brightness', () => {
+        render(<GameplayScene {...base} fill={1} tier="fever" feverKey="fever:turn-9" reduceMotion />);
+        expect(screen.queryByTestId('gameplay-scene-fever')).toBeNull();
+    });
+
     it('holds still under reduce motion: no drift, no mist, no embers, every flame on its first frame', () => {
         render(<GameplayScene {...base} reduceMotion />);
         const scene = screen.getByTestId('gameplay-scene');
