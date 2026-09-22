@@ -691,7 +691,12 @@ const TileBezelInner = ({
     }, [textureRevision, tile]);
         const cardTint = initialTileBoardCardTint({ faceUp, isPinned, resolvingSelection, tile });
     const cardBackArtTexture = useSvgMeshBack ? null : getTileFaceTexture(tile, 'back', 'hidden', 'panel');
-    const cardFrontArtTexture = useSvgMeshFront ? null : getCardFaceStaticTexture();
+    /*
+     * The face art is needed either way. With the SVG frame layers on, the panel and the frame are
+     * meshes but the art between them is still this raster: nulling it there left the face as bare
+     * stone, which is what shipped when the layers first landed.
+     */
+    const cardFrontArtTexture = getCardFaceStaticTexture();
     const overlayVariant = overlayVariantForSurface(surfaceVariant);
     const overlayTexture =
         overlayVariant === null ? null : getTileFaceOverlayTexture(tile, overlayVariant, graphicsQuality);

@@ -9561,8 +9561,8 @@
     {
       "path": "src/renderer/components/TileBezel.tsx",
       "category": "source",
-      "bytes": 33516,
-      "sha256": "02971797860ce9a66484ef4efb61a8b180821e68804c59b8712dba531b091c72"
+      "bytes": 33777,
+      "sha256": "3a924edb8759ff9c6bc7611d205cf9a42641706c8f31010c92f24c12aececa10"
     },
     {
       "path": "src/renderer/components/TileBoard.module.css",
@@ -19989,7 +19989,7 @@
       "path": "src/renderer/components/TileBezel.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 848,
+      "lineCount": 853,
       "imports": [
         "file:src/renderer/components/cardArcaneGlowMaterial.ts",
         "file:src/renderer/components/cardSvgPlaneGeometry.ts",
@@ -37190,8 +37190,8 @@
       "name": "TileBezel",
       "kind": "value",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 847,
-      "endLine": 847
+      "line": 852,
+      "endLine": 852
     },
     {
       "id": "symbol:src/renderer/components/TileBezel.tsx#TileHoverTiltState",
