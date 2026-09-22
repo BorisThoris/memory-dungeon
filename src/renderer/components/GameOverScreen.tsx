@@ -18,6 +18,7 @@ import { useViewportSize } from '../hooks/useViewportSize';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
 import { Eyebrow, Panel, ScreenTitle, StatTile, UiButton } from '../ui';
 import { useAppStore } from '../store/useAppStore';
+import { CathedralScene } from './CathedralScene';
 import MainMenuBackground from './MainMenuBackground';
 import styles from './GameOverScreen.module.css';
 import { GAME_OVER_LABELS } from '../copy/screenCopy';
@@ -166,11 +167,9 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                 reduceMotion={settings.reduceMotion}
                 width={width}
             />
-            <div
-                aria-hidden="true"
-                className={styles.sceneLayer}
-                style={{ backgroundImage: `url(${UI_ART.menuScene})` }}
-            />
+            <div aria-hidden="true" className={styles.sceneLayer}>
+                <CathedralScene quality={settings.graphicsQuality} reduceMotion={settings.reduceMotion} />
+            </div>
             <div className={styles.scrim} />
 
             <div className={styles.foreground}>

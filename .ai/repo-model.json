@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2557,
-    "codeFileCount": 903,
-    "exportedSymbolCount": 2723,
+    "trackedFileCount": 2650,
+    "codeFileCount": 911,
+    "exportedSymbolCount": 2738,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6908
+    "relationshipCount": 6945
   },
   "inventory": [
     {
@@ -63,8 +63,8 @@
     {
       "path": ".gitignore",
       "category": "other",
-      "bytes": 734,
-      "sha256": "f2a5c8011ae8d6da3882d20b38e930f85ce53ccf8e560f24e3c7fa9094a90ccf"
+      "bytes": 770,
+      "sha256": "ed337601fd16e3211010ec5e50c051e8d57aa4376efe354f75e1ef58f3435d58"
     },
     {
       "path": ".idea/.gitignore",
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "17c6f9378fa744b897c36f60df1ab6adb75c2419f4e39d272df3fc7d5bff6142"
+      "sha256": "a6b18caa05e72c9e8c73c5880eacc031867076e155b3df26d4160e83868c0f9d"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3921,8 +3921,8 @@
     {
       "path": "e2e/portfolio-visual-smoke.spec.ts",
       "category": "test",
-      "bytes": 7772,
-      "sha256": "0fa0b19dd613b2838daa7b15d55ab10f89684aeb49e54c49591437e98eb77390"
+      "bytes": 7988,
+      "sha256": "9ea6c3aab640dfde525a0dc5db4b6f452d0c32980e1990383ebff80e8db36f2e"
     },
     {
       "path": "e2e/README.md",
@@ -4701,8 +4701,8 @@
     {
       "path": "scripts/audit-renderer-assets.mjs",
       "category": "script",
-      "bytes": 9394,
-      "sha256": "bdec3be5ec6ba129e2ce6fec61aa437080797731b4b15d6e25d8c66fe70e5e8c"
+      "bytes": 9529,
+      "sha256": "e3950fa755fe5b151fbe98ed5acb7a3567422cd5123226f4fbb47d7b867f6333"
     },
     {
       "path": "scripts/audit-summary.mjs",
@@ -5287,22 +5287,58 @@
       "sha256": "4d738a8efe8c5586a773a4e6636b561cd9661cf6f1c4df9422556195df4b28c4"
     },
     {
+      "path": "scripts/scene-pipeline/cathedral.sh",
+      "category": "script",
+      "bytes": 2267,
+      "sha256": "2efc4715ca0e289a1637a9aadc1ea9eeb8bcea1b5e46116bc72b467014363d56"
+    },
+    {
+      "path": "scripts/scene-pipeline/cut_sprites.py",
+      "category": "script",
+      "bytes": 14541,
+      "sha256": "8597c01302b53e4eb47894f0fea7beb73198d4a106ecb2e5fd1e530ef6417994"
+    },
+    {
+      "path": "scripts/scene-pipeline/find_candles.py",
+      "category": "script",
+      "bytes": 3235,
+      "sha256": "501fe06c4cbd6026f2c33e483e9b363a2efb96f8c3b67e52ec85b3ade5aa7f57"
+    },
+    {
       "path": "scripts/scene-pipeline/README.md",
       "category": "script",
-      "bytes": 3015,
-      "sha256": "aefb655a7ef0cc4951c3e3919f7c2f21d71e293e61a72eb063f6a46a14ab405e"
+      "bytes": 5816,
+      "sha256": "48d9a8c37d5461268238c9e65fc4a9936f4b3ee9ef231db67f0b668991ff870b"
     },
     {
       "path": "scripts/scene-pipeline/scene.sh",
       "category": "script",
-      "bytes": 2265,
-      "sha256": "b846a7d3c74668d3d66ab858116722bc01c42dfbfe8bf8a3c80d04c50cec9e03"
+      "bytes": 3132,
+      "sha256": "5a052a985b2b4649f45d93e4deae0a93e0af7c7be7b3b433329f5e4f159d9be8"
+    },
+    {
+      "path": "scripts/scene-pipeline/segment_cathedral.py",
+      "category": "script",
+      "bytes": 3447,
+      "sha256": "de2b74a5a2705f28b5bb879d8bca517f1c3ecdd681e739b292dd270bc775f19e"
     },
     {
       "path": "scripts/scene-pipeline/segment_scene.py",
       "category": "script",
       "bytes": 7152,
       "sha256": "056652ae002961d7ba61ea0de1259adbba2b5c34bea2eceeac7b03735246abd4"
+    },
+    {
+      "path": "scripts/scene-pipeline/sprites/bg-gameplay-dungeon-ring.json",
+      "category": "script",
+      "bytes": 245,
+      "sha256": "50c18ba4051a52191755877e3ccfd46431fd5ecd40a6fbb567a85cb7cf29ff92"
+    },
+    {
+      "path": "scripts/scene-pipeline/sprites/bg-main-menu-cathedral.json",
+      "category": "script",
+      "bytes": 1908,
+      "sha256": "027af28a8235ddb1ee8bcacb7aabe2010800dee95122e36f0b85ee85c5e2dbb5"
     },
     {
       "path": "scripts/script-paths.ts",
@@ -7269,14 +7305,14 @@
     {
       "path": "src/renderer/assets/preloadStartupAssets.test.ts",
       "category": "test",
-      "bytes": 12549,
-      "sha256": "c3593e4e55e1108fb6295a57cc65f32f830b1f8b8565e8b8bdc9dd52b1debda7"
+      "bytes": 13308,
+      "sha256": "8ebad83a497dd45d8bb2ccef826987cfed45edce228e470cc50aee68aedf3d6a"
     },
     {
       "path": "src/renderer/assets/preloadStartupAssets.ts",
       "category": "source",
-      "bytes": 7809,
-      "sha256": "93a3b2fadc7e2492add370def85b65ab0d32ffa8591f45e959c52db5084c6c43"
+      "bytes": 8194,
+      "sha256": "f788d767e7d127c90e82df30784ca7b22d5c082db26cd343f013e6438863f5e2"
     },
     {
       "path": "src/renderer/assets/README.md",
@@ -7425,20 +7461,20 @@
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-base.png",
       "category": "source",
-      "bytes": 1810309,
-      "sha256": "39ca2539b196993a8f5fc5df2e011f087f3bc0ef1b80ef1f407cbeb9f5291648"
+      "bytes": 1809735,
+      "sha256": "02434a73486dbfae4eb00dadb947e85354d1ebc9c42dfffff7aaf227a4b313b2"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-base.webp",
       "category": "source",
-      "bytes": 172470,
-      "sha256": "a5b166c016cf335161debb43ce53f21f3d5f3f6f8c78feb636a4f11bba4574d8"
+      "bytes": 172116,
+      "sha256": "a1503d011cbd8f322829e563afd5a84726f38f57678d1e0265ae3f8b75ac3c64"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-glow-ring.png",
       "category": "source",
-      "bytes": 2189812,
-      "sha256": "49dd9e5ee32283ecacb3d4a4b3f43c0806fd4e9a3236f7bafccfaa83453df2a2"
+      "bytes": 2189223,
+      "sha256": "fe2e3fbbc649ae2b437a2f30800b71661246cc3a153cc6750b02116c6c49d888"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-glow-ring.webp",
@@ -7449,8 +7485,8 @@
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-glow-runes.png",
       "category": "source",
-      "bytes": 2229546,
-      "sha256": "24920bbbc44cc7b582c9323d01d7aa3117732f9c7a2348d715ba766cd282f117"
+      "bytes": 2230023,
+      "sha256": "27bc220ae7fa4bf76e37a0c5e2d3923d83c691e949e0523b495a8f9975a9ed88"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-glow-runes.webp",
@@ -7461,50 +7497,50 @@
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-glow-torches.png",
       "category": "source",
-      "bytes": 2197324,
-      "sha256": "11fecca36c1416f77e09969e4c999230558fc35e43fad1f5f50fec4f4d94bd94"
+      "bytes": 2196438,
+      "sha256": "11c4a806cdd54399e287c37dbcf6335858d56861d5a7aab9e4f7cc81a82430e5"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-glow-torches.webp",
       "category": "source",
-      "bytes": 108312,
-      "sha256": "51cd042d1cb24723ea325796974d9898642766ff5970590b98183d3c686645f8"
+      "bytes": 107764,
+      "sha256": "e55668673cf5fcd919de28052841b956320cea8433c37290ab09469a957f5cbb"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-light-ring.png",
       "category": "source",
-      "bytes": 1289682,
-      "sha256": "29869a8c7f9e24acb594670db50c6bbfd8406a0b829d0ac6b0af91036e92be39"
+      "bytes": 1288267,
+      "sha256": "dfce54c12edac2724140652c5bd0a1f3e77ab62bb0ea4985342b17ab5f366221"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-light-ring.webp",
       "category": "source",
-      "bytes": 41694,
-      "sha256": "11ddb2c07b966b7f1b252f1465a6d2cf76ea2d6fc25407d7c9c01bd31ee08d30"
+      "bytes": 41006,
+      "sha256": "c39742f26defcb92f92b20dedcb6d6a82a63cadcf3c69b73b3b7f6ed5e585bee"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-light-torches-l.png",
       "category": "source",
-      "bytes": 1461772,
-      "sha256": "7995690081614aa5384feea6ccca7095ec5e33ba0ff004909988ef66464fe476"
+      "bytes": 1460893,
+      "sha256": "47c054af321907251597dc1b2bf3779bacd000e25cb37608b886d0309987c499"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-light-torches-l.webp",
       "category": "source",
-      "bytes": 82412,
-      "sha256": "fd09b9a0bea74893de81407cc2de3475fcf423733905d2399a16fb7b698f4ccd"
+      "bytes": 82252,
+      "sha256": "c8eada044a9d1075d63ebae7799e6ccc892ed47585ac361c2a8c35f113069b99"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-light-torches-r.png",
       "category": "source",
-      "bytes": 1525121,
-      "sha256": "2f61b46e318d2cca4c210a84b2cb41d4dd4623331dcc080659a9dc3d75e929ea"
+      "bytes": 1524802,
+      "sha256": "17ef5f3a1fe5ef4879fc5270b3e7eaeb0d26eabe5500eb6d51ce53363186fa81"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v2-light-torches-r.webp",
       "category": "source",
-      "bytes": 99602,
-      "sha256": "18d877fea4d6f5381586a8eefdab41066bdc865b0e293b808b97140d65b9a6cc"
+      "bytes": 99376,
+      "sha256": "3fe7b080d00f7aa01305da1504b586619f90702d627344734fa83c2f2c663898"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-main-menu-cathedral-v1.png",
@@ -7517,6 +7553,42 @@
       "category": "source",
       "bytes": 106482,
       "sha256": "5aacb39ed1783bb84aa1a74946835bce6cd692f9e3d39758353ee991e25e3c99"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-main-menu-cathedral-v2-base.png",
+      "category": "source",
+      "bytes": 1567215,
+      "sha256": "a2c6e3fb1a38b3164f722ac0d7d7161d77e43334216cd49044914bce070ae10d"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-main-menu-cathedral-v2-base.webp",
+      "category": "source",
+      "bytes": 92344,
+      "sha256": "ea6ff2c024ba4c4567b9f2c73341fc53afa418dc8d580776743166682937a755"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-main-menu-cathedral-v2-glow-candles.png",
+      "category": "source",
+      "bytes": 2002507,
+      "sha256": "c62c814b24b69f08c5a7577c92f7f7b4a4c462c3dcce8a0c3f7c7fd489e10857"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-main-menu-cathedral-v2-glow-candles.webp",
+      "category": "source",
+      "bytes": 99952,
+      "sha256": "7f3f99095649651ac48b8df67eaf294b351d0437499a73ee020c3e4dffcea630"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-main-menu-cathedral-v2-glow-wisps.png",
+      "category": "source",
+      "bytes": 2102491,
+      "sha256": "dc93946be4c53de4e8b33c73a11d7e38433caa4935398aa2dda2c37515b35c4f"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-main-menu-cathedral-v2-glow-wisps.webp",
+      "category": "source",
+      "bytes": 78994,
+      "sha256": "83a51eeb93b153f755c71fa9bcc4b350964eb15495e7a4cfdb80a7b0656c7a06"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-mode-classic-v1.png",
@@ -7785,8 +7857,8 @@
     {
       "path": "src/renderer/assets/ui/index.ts",
       "category": "source",
-      "bytes": 2689,
-      "sha256": "e1f97dcdf9c5f7a50572ed286cd2a3caa4211cae531e44baefaccc9f1becaced"
+      "bytes": 3258,
+      "sha256": "a2ebd5e304f70d1bf46fd8cef7df8c4f94d4109b6685d10a380450549d7b699a"
     },
     {
       "path": "src/renderer/assets/ui/menu-emblem.svg",
@@ -7811,6 +7883,444 @@
       "category": "source",
       "bytes": 3604,
       "sha256": "3ce9bdb7891147baedfe0ade8423f059e8f63d4f19f20a3362bb24f011aad0e7"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprite-flame-00.png",
+      "category": "source",
+      "bytes": 85438,
+      "sha256": "3d911d79ee7d5f0ffe0ea6960b6cb18c4933a33ea376e55811e290566f36a481"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprite-flame-00.webp",
+      "category": "source",
+      "bytes": 24876,
+      "sha256": "0050ca054c56e0f8d0060a33da6ab5f306f527ddfdcac2ef8e4180b6e0463eac"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprite-flame-01.png",
+      "category": "source",
+      "bytes": 43177,
+      "sha256": "5406fbd492e86034c8e5b759e97a0945c059ef25bd726fc7d95c6b7a94ca0c13"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprite-flame-01.webp",
+      "category": "source",
+      "bytes": 15738,
+      "sha256": "8557a4e46b4234b88b11c8b775493bf70e9844938858f4c42d98ebb15b713485"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprite-flame-02.png",
+      "category": "source",
+      "bytes": 18354,
+      "sha256": "c2bc003d90001a2e702dd7bf7a359f9cfe0c11b96f6f21e4a94aaf0c6edbc0a0"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprite-flame-02.webp",
+      "category": "source",
+      "bytes": 8398,
+      "sha256": "7137abe2a9e568bb470286fd0a23bc7166d39d25f19baaa0d51e68016df3a48f"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprite-flame-03.png",
+      "category": "source",
+      "bytes": 34096,
+      "sha256": "c2dad345ced65bdfe36ca5bccf4c2f5b0270848cafbd80f9044b8e4a8d9c6dcd"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprite-flame-03.webp",
+      "category": "source",
+      "bytes": 13636,
+      "sha256": "bfa02d0ed4e8b22a9315284c3b58c34ffb2fef4ffe36ed81762e889e16e12b76"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprite-flame-04.png",
+      "category": "source",
+      "bytes": 47621,
+      "sha256": "002201fd7e7962a60c13208a69e9e9c18ef827d2cc1994937252c2a17503ff5d"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprite-flame-04.webp",
+      "category": "source",
+      "bytes": 18814,
+      "sha256": "12696dd2f33d4d7caeddc82dabe12cfb5f1fa04f23bfeffcd799d3607b7bbc58"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprite-flame-05.png",
+      "category": "source",
+      "bytes": 96587,
+      "sha256": "5760545e622b0314b7dc0f8614340ae146e8d5b0dddbeb5e6df73ee9f03852e1"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprite-flame-05.webp",
+      "category": "source",
+      "bytes": 32066,
+      "sha256": "84008271487abc712a5f559940effe6c3ea69ad86d67c15e3212658ce1399d2d"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprites.json",
+      "category": "source",
+      "bytes": 1463,
+      "sha256": "7f8b81c687179e01a67b5a277e76cf0dbcb1a6fb47e91bf33b0185da567021d3"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-00.png",
+      "category": "source",
+      "bytes": 8652,
+      "sha256": "e55a2ccabf39a4f2971ce70bb6cecd002caf61c0ccf40427b01650a16b9fdb75"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-00.webp",
+      "category": "source",
+      "bytes": 4278,
+      "sha256": "dbe169928486650ecd9ecc23c3617324b6aafb7f8a8b944daa0590956c696f90"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-01.png",
+      "category": "source",
+      "bytes": 3993,
+      "sha256": "297aa5928ef2b0f3b65247bf77e897a69a856c77e0861fe8e485f6c6abd416de"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-01.webp",
+      "category": "source",
+      "bytes": 2816,
+      "sha256": "bf425e8b94b58a5d81bea558f0209f0c76ee6454dc63f94edd593dfd7858f797"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-02.png",
+      "category": "source",
+      "bytes": 6861,
+      "sha256": "41b9da5317ef3959d2ebfbb643b2bcfad0edeef889bc9822fe8fa52f82095f53"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-02.webp",
+      "category": "source",
+      "bytes": 3988,
+      "sha256": "da1f764be4e0c579338da499b0ab9f0159a924c63d64263985beb74fda1534cd"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-03.png",
+      "category": "source",
+      "bytes": 8389,
+      "sha256": "821c2c7e2f5ac4f7d5cff1dc94780523a1bef51c819d6371fac879f8ca07c8d9"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-03.webp",
+      "category": "source",
+      "bytes": 4688,
+      "sha256": "86be4766d3d8a4c7778e9d1e2cf7caada474cd89083214f8f17de2a176036a16"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-04.png",
+      "category": "source",
+      "bytes": 5830,
+      "sha256": "18b3fc1cf0d48a946540c4fc2c2dc965eb98bc55b5c1f83d8916fbe957bd4e38"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-04.webp",
+      "category": "source",
+      "bytes": 3602,
+      "sha256": "4679bed6623c83af7a59f7e98c1a68ee7472d3811eebdfd220858b0e656aff03"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-05.png",
+      "category": "source",
+      "bytes": 4819,
+      "sha256": "f21a02170e0059517b7fafb4f35d3d5e2cd82abce51b89a7517056542ef32ae5"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-05.webp",
+      "category": "source",
+      "bytes": 3124,
+      "sha256": "027472792903b7ea55504e283741a52a9e70d41a05acaef222ffabd437ee98bc"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-06.png",
+      "category": "source",
+      "bytes": 5662,
+      "sha256": "f3ac6784472e77124caa760e88fb20f3fb977e3a82411fbb55a241a6dd00fbfa"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-06.webp",
+      "category": "source",
+      "bytes": 3290,
+      "sha256": "671382a9138fed51085c55db0ec3abba578fafc24eee405ff400b926cdb669d6"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-07.png",
+      "category": "source",
+      "bytes": 4634,
+      "sha256": "26c097e43bacc15e287ab846de3f9b4dfb12b1ba33b3cd1060a550ffeac53a85"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-07.webp",
+      "category": "source",
+      "bytes": 2542,
+      "sha256": "8db5b5363ac812ee1359b67c5afe7aef32d851fbd77339b7b1f1ee2c716fe12d"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-08.png",
+      "category": "source",
+      "bytes": 6425,
+      "sha256": "a24f45ce6d4cbcdfa434a66c70b9f00f9f7a5c002dde91ea02cb61a8e48b9814"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-08.webp",
+      "category": "source",
+      "bytes": 3584,
+      "sha256": "c8d96cfe6bd15d93e74fb991b4fe78a509b3338ea5747e91e93f78f32a41209f"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-09.png",
+      "category": "source",
+      "bytes": 4464,
+      "sha256": "a61f5d41e25b8e0aee33248f50fea18e6512d9d1aae6c58252abe463f5de44c9"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-09.webp",
+      "category": "source",
+      "bytes": 2526,
+      "sha256": "c81e482da8de37df1f155c60f6e0a9fbf7bba0851f7003643cdb6215ce7f56df"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-10.png",
+      "category": "source",
+      "bytes": 4888,
+      "sha256": "d4273befd8173674bf6c7ab0949bde56dbd80bfb1135c740f8728002d967f531"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-10.webp",
+      "category": "source",
+      "bytes": 2770,
+      "sha256": "ee5e7a3548e41700ea00502869b6ea1a90bc5d62a61b72fff310008f8a516c79"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-11.png",
+      "category": "source",
+      "bytes": 5117,
+      "sha256": "9ef412e6c2f7232e109fa6c8a6f5775de1d78ba16e32fa04a4cc325fed3d99b2"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-11.webp",
+      "category": "source",
+      "bytes": 3306,
+      "sha256": "a66e3d1263fcd660dde556c5f38c2062ffff163e378dbb48bedc1d6e74609d2c"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-12.png",
+      "category": "source",
+      "bytes": 4604,
+      "sha256": "1b363ea09eda9b94b9bd0ffc8d5fb04dac10c2799c154474b4f926ac9576f652"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-12.webp",
+      "category": "source",
+      "bytes": 2564,
+      "sha256": "311441ac5fd301f7e93624cbbea21812145e405655b9a596f92b42cef2c0217d"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-13.png",
+      "category": "source",
+      "bytes": 3740,
+      "sha256": "db2ed1270d8ca624c1705914250ed60c1070aad8545ad081b1c71a090a95e18e"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-13.webp",
+      "category": "source",
+      "bytes": 2778,
+      "sha256": "1b18b594a974aed2377be793b9282afa92aaa97003a95c3eac623497b8023dd2"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-14.png",
+      "category": "source",
+      "bytes": 105,
+      "sha256": "23a174695573285175413e0649a681be589b8effe097ef171f099eba770b996a"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-14.webp",
+      "category": "source",
+      "bytes": 102,
+      "sha256": "ea4f909c33a985f7df7bdbf9627c88a4eb10dd8aa40811319339ccd643c1850b"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-15.png",
+      "category": "source",
+      "bytes": 6079,
+      "sha256": "105521bb13fc79a4c3c0528d30f1fee3d110bc2a46f80bfe4567800205c7a373"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-15.webp",
+      "category": "source",
+      "bytes": 2958,
+      "sha256": "3eb350d2b49295299533ad92ce5b78d25e7507d3c7806425e794650f0a3d424c"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-16.png",
+      "category": "source",
+      "bytes": 5801,
+      "sha256": "dc658bac08019b425503192c52a3993c89e555eda8804a3cc776a78ac90cf86e"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-16.webp",
+      "category": "source",
+      "bytes": 3156,
+      "sha256": "ceb3783fb0f9a589871ebae899c2fe15c01be89aa2b2863f6bc2ca9ea1606437"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-17.png",
+      "category": "source",
+      "bytes": 5353,
+      "sha256": "5d03c7ae7769f3ea39b31d5044946b7353c7334f970f889dc7f3fa9889bc396d"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-17.webp",
+      "category": "source",
+      "bytes": 3266,
+      "sha256": "808af6c2c6a5e2d5c697ebff19486379a3ee1cb8dd9628950990bfd22bea742c"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-18.png",
+      "category": "source",
+      "bytes": 4741,
+      "sha256": "222cb7df042f5619fd789c346ad29047b852696e1a0930a3614017a0eb5879b5"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-18.webp",
+      "category": "source",
+      "bytes": 2688,
+      "sha256": "33f7d24121166095d91cbf38d7653629ff94f65aa2216f6da5528c3b2711a1c5"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-19.png",
+      "category": "source",
+      "bytes": 4194,
+      "sha256": "10fe05c6ffec83e582644ccf38c58782aed90210d006df4864e80019809b2856"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-19.webp",
+      "category": "source",
+      "bytes": 2828,
+      "sha256": "f4f2dd03ea61423a6dcb3c345064d0868a20fd4a717ad652def586f6a29d5988"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-20.png",
+      "category": "source",
+      "bytes": 4740,
+      "sha256": "b80d35bd978879f49b937e220d67ec66531d9f2c59edef6e491c1499fc7276f6"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-20.webp",
+      "category": "source",
+      "bytes": 3244,
+      "sha256": "df93fe5716aaea55aec3b0528877807c4776288c9b128f52a122b97fde31d6b9"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-21.png",
+      "category": "source",
+      "bytes": 4809,
+      "sha256": "eecc1cbe3a691493ff63f424cd0a501566f31e491cd038ad0a2d29861eeccf62"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-21.webp",
+      "category": "source",
+      "bytes": 3012,
+      "sha256": "cf6663e0eb784ef4a762874ab072d867d7871c5648d4aa821fdb0d507da130d0"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-22.png",
+      "category": "source",
+      "bytes": 4954,
+      "sha256": "08fcf325e7278bdfff15a1d08ec6118ef8286bcbe8b4e00540e3a624d7a5364c"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-22.webp",
+      "category": "source",
+      "bytes": 3198,
+      "sha256": "1b82a5f0c0112fb97909782697abb62937b8e1bc19d81700dcff3ddc4c455552"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-23.png",
+      "category": "source",
+      "bytes": 3295,
+      "sha256": "2e103c4b7e7d8546c6674223fa9cebe82a5e99f67b2c05456d1f5ea9aff781d5"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-23.webp",
+      "category": "source",
+      "bytes": 2456,
+      "sha256": "de7a220a1fcb874774e8ca9600937f78722263582ecd9eca65272352085539e3"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-24.png",
+      "category": "source",
+      "bytes": 7130,
+      "sha256": "ef24ac2c6018b103ead87b12fbf1a9eb39716c991f3978d1bc502755b9bcd142"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-24.webp",
+      "category": "source",
+      "bytes": 3830,
+      "sha256": "3b8480382e14da24fa1c6c5eed17382d68c6d505502b093302c641afaed5f187"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-25.png",
+      "category": "source",
+      "bytes": 7121,
+      "sha256": "0f30e890379ac535459449090ec412be25ffd2444e135bbb11f8b4ca3fc1668d"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-25.webp",
+      "category": "source",
+      "bytes": 3770,
+      "sha256": "ac84e25aa36479f7054f3de3269f92b4629d78ae69e231172c6f9eda00f38cde"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-26.png",
+      "category": "source",
+      "bytes": 8671,
+      "sha256": "ff07ed01fe66d4efaca720c61dd4c42fa8dbe1bfba6a1cd4176d9d1510868661"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-26.webp",
+      "category": "source",
+      "bytes": 4856,
+      "sha256": "d631833b42576535e3d2795ec6a5ca66bb65648766a38b3d798af9adc0a1608d"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-27.png",
+      "category": "source",
+      "bytes": 6932,
+      "sha256": "b3c9542b1d6813fa6574fa3bf94fb1de76cccf67086c5dbead3d83a458743c05"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-27.webp",
+      "category": "source",
+      "bytes": 4102,
+      "sha256": "d93dfade7d4991d439bd6165695cf4cc15cc505068be4e01cb16b7d820550bb3"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-28.png",
+      "category": "source",
+      "bytes": 5188,
+      "sha256": "abf2af0fa6b1f473cbfa25ba44ebcd9bd75a7abf04e1a787733a5af30b896cdb"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-28.webp",
+      "category": "source",
+      "bytes": 3452,
+      "sha256": "a36300aba7917005b8720bba321883583e480b36914f2481d343884421bb05e0"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprites.json",
+      "category": "source",
+      "bytes": 6745,
+      "sha256": "9ec3f6cd77a5da897dc5e4f36155ab827e0bb8eb9f1da5656f6395adbe72f7aa"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/index.ts",
+      "category": "source",
+      "bytes": 2282,
+      "sha256": "8e7caa28ba6aadc59f6b3139d268928379021415e17cd5e3cadfbda18a19e2cb"
     },
     {
       "path": "src/renderer/assets/ui/stage-ring.svg",
@@ -8335,6 +8845,24 @@
       "sha256": "fb7b46bcee3222f6e6275347eccbf769e18ab894e6f3255de2845801c4427f5f"
     },
     {
+      "path": "src/renderer/components/CathedralScene.module.css",
+      "category": "source",
+      "bytes": 2377,
+      "sha256": "2eaf543a7a6a9421fef2dd858343609db64c87efa38bd1623aa6e1d903c4c266"
+    },
+    {
+      "path": "src/renderer/components/CathedralScene.test.tsx",
+      "category": "test",
+      "bytes": 3895,
+      "sha256": "be718257ba906f6edcce8fcf9ac8255aed2331d5a8ef80a4af398613887b063c"
+    },
+    {
+      "path": "src/renderer/components/CathedralScene.tsx",
+      "category": "source",
+      "bytes": 3040,
+      "sha256": "2aff4dc2785cf995b6faf0e50be00a11012007735af75c91ab0c00d995b50bad"
+    },
+    {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
       "category": "source",
       "bytes": 20465,
@@ -8433,8 +8961,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.module.css",
       "category": "source",
-      "bytes": 20038,
-      "sha256": "ddcb219e426fbea505219a3c70342cb7c4ec1c814e0f66d9f4d1488f5fdd41ee"
+      "bytes": 20840,
+      "sha256": "4fcb8b2139cf5c06e59fae1a0e7aa9e2d62b5f001ac031715be85fbc55447919"
     },
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
@@ -8445,8 +8973,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 23837,
-      "sha256": "31c1b669c0e7bcee318e1d3d41f8189c3bcbae8486b92fd94db3b4d8835e58c2"
+      "bytes": 23896,
+      "sha256": "f664388900d320d204fdd49a5c0a4566a5e7e000dbadd9274d60eb808d7d9eb4"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -8457,20 +8985,20 @@
     {
       "path": "src/renderer/components/GameplayScene.module.css",
       "category": "source",
-      "bytes": 3728,
-      "sha256": "b1a12a0c397d433b87606ba472d2732f876651a888495004685980fa32f4e216"
+      "bytes": 4919,
+      "sha256": "7df3df98655039f69a10e8e853de0af6c5f390523f35ba3a24bbc9052c4fa055"
     },
     {
       "path": "src/renderer/components/GameplayScene.test.tsx",
       "category": "test",
-      "bytes": 4499,
-      "sha256": "36c7b7509b6bdf3011ae31c6f8733d89d2e0fdd78966d8cb1cc5668ddb4c68fa"
+      "bytes": 7045,
+      "sha256": "7be9a20c0b211c4fa918f3043161669f7944d6b535b3c4812b96b898632be036"
     },
     {
       "path": "src/renderer/components/GameplayScene.tsx",
       "category": "source",
-      "bytes": 4317,
-      "sha256": "0077383d64f06b5c37b22067f0f3973ceb99975420f65b44cedbcc55cc08a39c"
+      "bytes": 6443,
+      "sha256": "f2e1ae650743d5f5bedcb1b2948620f4698a66169ea2a348b580497decc267e0"
     },
     {
       "path": "src/renderer/components/gameplaySceneLevels.ts",
@@ -8565,8 +9093,8 @@
     {
       "path": "src/renderer/components/MainMenu.module.css",
       "category": "source",
-      "bytes": 11547,
-      "sha256": "cb9500143677b63a3e8fd2593b0cf97e89e80cb25c45707a00e4f09e7ca1558a"
+      "bytes": 12067,
+      "sha256": "947fe7ec3253d510bed466d42d7222d6921b2a2794845aa27fa37ece39a3dbeb"
     },
     {
       "path": "src/renderer/components/MainMenu.test.tsx",
@@ -8577,8 +9105,8 @@
     {
       "path": "src/renderer/components/MainMenu.tsx",
       "category": "source",
-      "bytes": 14174,
-      "sha256": "2e158f75952762dadcb2b9595d3a0d300ac79daee488963992e567bd6df5f685"
+      "bytes": 14293,
+      "sha256": "9ec855edf35145c942ac4fc2d5d503fa7b11f8b69d3ac7f1c9a8512cf664a73c"
     },
     {
       "path": "src/renderer/components/MainMenuBackground.module.css",
@@ -8765,6 +9293,30 @@
       "category": "source",
       "bytes": 3230,
       "sha256": "b9124d84d7ca595dfd822c78f0c0ee1a9e4a0ae4ad5ba072c3bdb9aac7e099c0"
+    },
+    {
+      "path": "src/renderer/components/scenePlate.module.css",
+      "category": "source",
+      "bytes": 3024,
+      "sha256": "d515bbec45e6b1c37bb395756aad26d74bdba64b40ab890106edfd9b6cce0488"
+    },
+    {
+      "path": "src/renderer/components/sceneSpriteClocks.ts",
+      "category": "source",
+      "bytes": 1975,
+      "sha256": "d3e7e0aebf6610a7d8d20ea5a612db41c0defd77056daa893bc105b8f4845c87"
+    },
+    {
+      "path": "src/renderer/components/SceneSprites.module.css",
+      "category": "source",
+      "bytes": 2398,
+      "sha256": "927dc70ac07383ac9ced118c8aa22cf416ccf06274c151d2d117dd2ff14bd761"
+    },
+    {
+      "path": "src/renderer/components/SceneSprites.tsx",
+      "category": "source",
+      "bytes": 4080,
+      "sha256": "c99fb9c4aa22f79fb9b67106757f37fb11db60866f1245f39a2234e4d13fc606"
     },
     {
       "path": "src/renderer/components/ScoreTermsLine.test.tsx",
@@ -10229,6 +10781,12 @@
       "category": "source",
       "bytes": 1553,
       "sha256": "e8bbbc15d74400e86b92a22a10ed518af4d8917630b66e19c1aa965413159a40"
+    },
+    {
+      "path": "src/renderer/hooks/useSceneLook.ts",
+      "category": "source",
+      "bytes": 2926,
+      "sha256": "23040adb277bedc2209fbcc66bd86d4479cd558015330b10bafd4554bc145cda"
     },
     {
       "path": "src/renderer/hooks/useViewportSize.test.tsx",
@@ -16115,7 +16673,7 @@
       "path": "src/renderer/assets/preloadStartupAssets.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 307,
+      "lineCount": 312,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -16125,9 +16683,10 @@
       "path": "src/renderer/assets/preloadStartupAssets.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 223,
+      "lineCount": 224,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
+        "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
         "file:src/renderer/components/startupIntroTextures.ts",
@@ -16155,7 +16714,7 @@
       "path": "src/renderer/assets/ui/index.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 64,
+      "lineCount": 71,
       "imports": [
         "file:src/renderer/assets/ui/modeArt.ts"
       ],
@@ -16206,6 +16765,48 @@
       ],
       "testedBy": [
         "file:src/renderer/assets/ui/modeArt.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprites.json",
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprites.json",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 69,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprites.json",
+      "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprites.json",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 299,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/assets/ui/sprites/index.ts",
+      "path": "src/renderer/assets/ui/sprites/index.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 63,
+      "imports": [
+        "file:src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprites.json",
+        "file:src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprites.json"
+      ],
+      "exports": [
+        "symbol:src/renderer/assets/ui/sprites/index.ts#getSceneSpriteSheetUrls",
+        "symbol:src/renderer/assets/ui/sprites/index.ts#resolveSceneSpriteSet",
+        "symbol:src/renderer/assets/ui/sprites/index.ts#SCENE_SPRITES",
+        "symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteDef",
+        "symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteSet",
+        "symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteSetKey"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/CathedralScene.test.tsx"
       ]
     },
     {
@@ -17659,6 +18260,41 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/CathedralScene.test.tsx",
+      "path": "src/renderer/components/CathedralScene.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 70,
+      "imports": [
+        "file:src/renderer/assets/ui/sprites/index.ts",
+        "file:src/renderer/components/CathedralScene.tsx",
+        "file:src/renderer/components/sceneSpriteClocks.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/CathedralScene.tsx",
+      "path": "src/renderer/components/CathedralScene.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 60,
+      "imports": [
+        "file:src/renderer/assets/ui/index.ts",
+        "file:src/renderer/assets/ui/sprites/index.ts",
+        "file:src/renderer/components/SceneSprites.tsx",
+        "file:src/renderer/hooks/useSceneLook.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/CathedralScene.tsx#CathedralScene",
+        "symbol:src/renderer/components/CathedralScene.tsx#CathedralSceneProps"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/CathedralScene.test.tsx"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "layer": "renderer",
@@ -17898,10 +18534,11 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 474,
+      "lineCount": 473,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
+        "file:src/renderer/components/CathedralScene.tsx",
         "file:src/renderer/components/MainMenuBackground.tsx",
         "file:src/renderer/copy/gameOverScreen.ts",
         "file:src/renderer/copy/passAndPlay.ts",
@@ -17955,7 +18592,7 @@
       "path": "src/renderer/components/GameplayScene.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 91,
+      "lineCount": 130,
       "imports": [
         "file:src/renderer/components/GameplayScene.tsx",
         "file:src/renderer/components/gameplaySceneLevels.ts"
@@ -17968,10 +18605,13 @@
       "path": "src/renderer/components/GameplayScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 88,
+      "lineCount": 118,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
+        "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/components/gameplaySceneLevels.ts",
+        "file:src/renderer/components/SceneSprites.tsx",
+        "file:src/renderer/hooks/useSceneLook.ts",
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts"
       ],
@@ -18284,10 +18924,11 @@
       "path": "src/renderer/components/MainMenu.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 290,
+      "lineCount": 293,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
+        "file:src/renderer/components/CathedralScene.tsx",
         "file:src/renderer/components/MainMenuBackground.tsx",
         "file:src/renderer/copy/saveRecoveryNotice.ts",
         "file:src/renderer/desktop-client.ts",
@@ -18725,6 +19366,41 @@
         "file:src/renderer/components/runShellToolCatalog.test.ts",
         "file:src/shared/release-checklist.test.ts"
       ]
+    },
+    {
+      "id": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "path": "src/renderer/components/sceneSpriteClocks.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 49,
+      "imports": [
+        "file:src/renderer/assets/ui/sprites/index.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/sceneSpriteClocks.ts#SceneEmber",
+        "symbol:src/renderer/components/sceneSpriteClocks.ts#SceneSpriteClock",
+        "symbol:src/renderer/components/sceneSpriteClocks.ts#sceneSpriteClocks",
+        "symbol:src/renderer/components/sceneSpriteClocks.ts#sceneSpriteEmbers"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/CathedralScene.test.tsx"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/SceneSprites.tsx",
+      "path": "src/renderer/components/SceneSprites.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 90,
+      "imports": [
+        "file:src/renderer/assets/ui/sprites/index.ts",
+        "file:src/renderer/components/sceneSpriteClocks.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/SceneSprites.tsx#SceneSprites",
+        "symbol:src/renderer/components/SceneSprites.tsx#SceneSpritesProps"
+      ],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/components/ScoreTermsLine.test.tsx",
@@ -22832,6 +23508,18 @@
       "testedBy": [
         "file:src/renderer/hooks/useRichPresence.test.ts"
       ]
+    },
+    {
+      "id": "file:src/renderer/hooks/useSceneLook.ts",
+      "path": "src/renderer/hooks/useSceneLook.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 71,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/hooks/useSceneLook.ts#useSceneLook"
+      ],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/hooks/useViewportSize.test.tsx",
@@ -32856,112 +33544,112 @@
       "name": "preloadModePosterRasterImages",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 101,
-      "endLine": 104
+      "line": 102,
+      "endLine": 105
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#preloadStartupCriticalAssets",
       "name": "preloadStartupCriticalAssets",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 189,
-      "endLine": 222
+      "line": 190,
+      "endLine": 223
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#preloadUiRasterImages",
       "name": "preloadUiRasterImages",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 96,
-      "endLine": 99
+      "line": 97,
+      "endLine": 100
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#resetStartupAssetPreloadStateForTests",
       "name": "resetStartupAssetPreloadStateForTests",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 135,
-      "endLine": 142
+      "line": 136,
+      "endLine": 143
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#STARTUP_PRELOAD_INITIAL_LABEL",
       "name": "STARTUP_PRELOAD_INITIAL_LABEL",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 166,
-      "endLine": 166
+      "line": 167,
+      "endLine": 167
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#STARTUP_PRELOAD_STEP_TOTAL",
       "name": "STARTUP_PRELOAD_STEP_TOTAL",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 168,
-      "endLine": 168
+      "line": 169,
+      "endLine": 169
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#StartupPreloadProgress",
       "name": "StartupPreloadProgress",
       "kind": "interface",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 147,
-      "endLine": 154
+      "line": 148,
+      "endLine": 155
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#StartupPreloadStepId",
       "name": "StartupPreloadStepId",
       "kind": "type",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 145,
-      "endLine": 145
+      "line": 146,
+      "endLine": 146
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#warmCardIllustrationsInBackground",
       "name": "warmCardIllustrationsInBackground",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 120,
-      "endLine": 133
+      "line": 121,
+      "endLine": 134
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#warmModePosterRasterImagesInBackground",
       "name": "warmModePosterRasterImagesInBackground",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 106,
-      "endLine": 118
+      "line": 107,
+      "endLine": 119
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#getUiArtRows",
       "name": "getUiArtRows",
       "kind": "value",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 57,
-      "endLine": 61
+      "line": 64,
+      "endLine": 68
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#MODE_CARD_ART",
       "name": "MODE_CARD_ART",
       "kind": "ExportSpecifier",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 63,
-      "endLine": 63
+      "line": 70,
+      "endLine": 70
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#MODE_POSTER_KEYS",
       "name": "MODE_POSTER_KEYS",
       "kind": "ExportSpecifier",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 63,
-      "endLine": 63
+      "line": 70,
+      "endLine": 70
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#resolveModePosterUrl",
       "name": "resolveModePosterUrl",
       "kind": "ExportSpecifier",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 63,
-      "endLine": 63
+      "line": 70,
+      "endLine": 70
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UI_ART",
@@ -32969,31 +33657,31 @@
       "kind": "value",
       "file": "src/renderer/assets/ui/index.ts",
       "line": 8,
-      "endLine": 28
+      "endLine": 32
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UI_ART_KEYS",
       "name": "UI_ART_KEYS",
       "kind": "value",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 32,
-      "endLine": 50
+      "line": 36,
+      "endLine": 57
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UiArtKey",
       "name": "UiArtKey",
       "kind": "type",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 30,
-      "endLine": 30
+      "line": 34,
+      "endLine": 34
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UiArtRow",
       "name": "UiArtRow",
       "kind": "interface",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 52,
-      "endLine": 55
+      "line": 59,
+      "endLine": 62
     },
     {
       "id": "symbol:src/renderer/assets/ui/modeArt.ts#getModePosterArtRows",
@@ -33082,6 +33770,54 @@
       "file": "src/renderer/assets/ui/modeArt.ts",
       "line": 10,
       "endLine": 11
+    },
+    {
+      "id": "symbol:src/renderer/assets/ui/sprites/index.ts#getSceneSpriteSheetUrls",
+      "name": "getSceneSpriteSheetUrls",
+      "kind": "value",
+      "file": "src/renderer/assets/ui/sprites/index.ts",
+      "line": 61,
+      "endLine": 62
+    },
+    {
+      "id": "symbol:src/renderer/assets/ui/sprites/index.ts#resolveSceneSpriteSet",
+      "name": "resolveSceneSpriteSet",
+      "kind": "value",
+      "file": "src/renderer/assets/ui/sprites/index.ts",
+      "line": 43,
+      "endLine": 50
+    },
+    {
+      "id": "symbol:src/renderer/assets/ui/sprites/index.ts#SCENE_SPRITES",
+      "name": "SCENE_SPRITES",
+      "kind": "value",
+      "file": "src/renderer/assets/ui/sprites/index.ts",
+      "line": 52,
+      "endLine": 57
+    },
+    {
+      "id": "symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteDef",
+      "name": "SceneSpriteDef",
+      "kind": "interface",
+      "file": "src/renderer/assets/ui/sprites/index.ts",
+      "line": 10,
+      "endLine": 21
+    },
+    {
+      "id": "symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteSet",
+      "name": "SceneSpriteSet",
+      "kind": "interface",
+      "file": "src/renderer/assets/ui/sprites/index.ts",
+      "line": 23,
+      "endLine": 28
+    },
+    {
+      "id": "symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteSetKey",
+      "name": "SceneSpriteSetKey",
+      "kind": "type",
+      "file": "src/renderer/assets/ui/sprites/index.ts",
+      "line": 59,
+      "endLine": 59
     },
     {
       "id": "symbol:src/renderer/audio/audioGlobUrlMap.ts#buildAudioUrlMapByFilename",
@@ -34932,6 +35668,22 @@
       "endLine": 449
     },
     {
+      "id": "symbol:src/renderer/components/CathedralScene.tsx#CathedralScene",
+      "name": "CathedralScene",
+      "kind": "function",
+      "file": "src/renderer/components/CathedralScene.tsx",
+      "line": 32,
+      "endLine": 59
+    },
+    {
+      "id": "symbol:src/renderer/components/CathedralScene.tsx#CathedralSceneProps",
+      "name": "CathedralSceneProps",
+      "kind": "interface",
+      "file": "src/renderer/components/CathedralScene.tsx",
+      "line": 25,
+      "endLine": 28
+    },
+    {
       "id": "symbol:src/renderer/components/ChooseYourPathScreen.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
@@ -35056,8 +35808,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 473,
-      "endLine": 473
+      "line": 472,
+      "endLine": 472
     },
     {
       "id": "symbol:src/renderer/components/gameplayRenderProfile.ts#GAMEPLAY_RENDER_PROFILE",
@@ -35088,16 +35840,16 @@
       "name": "GameplayScene",
       "kind": "function",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 42,
-      "endLine": 87
+      "line": 54,
+      "endLine": 117
     },
     {
       "id": "symbol:src/renderer/components/GameplayScene.tsx#GameplaySceneProps",
       "name": "GameplaySceneProps",
       "kind": "interface",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 27,
-      "endLine": 38
+      "line": 39,
+      "endLine": 50
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#sceneRingLevels",
@@ -35272,8 +36024,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/MainMenu.tsx",
-      "line": 289,
-      "endLine": 289
+      "line": 292,
+      "endLine": 292
     },
     {
       "id": "symbol:src/renderer/components/MainMenuBackground.tsx#default",
@@ -35538,6 +36290,54 @@
       "file": "src/renderer/components/runShellToolCatalog.ts",
       "line": 35,
       "endLine": 42
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#SceneEmber",
+      "name": "SceneEmber",
+      "kind": "interface",
+      "file": "src/renderer/components/sceneSpriteClocks.ts",
+      "line": 22,
+      "endLine": 31
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#SceneSpriteClock",
+      "name": "SceneSpriteClock",
+      "kind": "interface",
+      "file": "src/renderer/components/sceneSpriteClocks.ts",
+      "line": 8,
+      "endLine": 11
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#sceneSpriteClocks",
+      "name": "sceneSpriteClocks",
+      "kind": "value",
+      "file": "src/renderer/components/sceneSpriteClocks.ts",
+      "line": 15,
+      "endLine": 20
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#sceneSpriteEmbers",
+      "name": "sceneSpriteEmbers",
+      "kind": "value",
+      "file": "src/renderer/components/sceneSpriteClocks.ts",
+      "line": 34,
+      "endLine": 48
+    },
+    {
+      "id": "symbol:src/renderer/components/SceneSprites.tsx#SceneSprites",
+      "name": "SceneSprites",
+      "kind": "function",
+      "file": "src/renderer/components/SceneSprites.tsx",
+      "line": 24,
+      "endLine": 89
+    },
+    {
+      "id": "symbol:src/renderer/components/SceneSprites.tsx#SceneSpritesProps",
+      "name": "SceneSpritesProps",
+      "kind": "interface",
+      "file": "src/renderer/components/SceneSprites.tsx",
+      "line": 15,
+      "endLine": 20
     },
     {
       "id": "symbol:src/renderer/components/ScoreTermsLine.tsx#default",
@@ -40146,6 +40946,14 @@
       "file": "src/renderer/hooks/useRichPresence.ts",
       "line": 14,
       "endLine": 37
+    },
+    {
+      "id": "symbol:src/renderer/hooks/useSceneLook.ts#useSceneLook",
+      "name": "useSceneLook",
+      "kind": "value",
+      "file": "src/renderer/hooks/useSceneLook.ts",
+      "line": 13,
+      "endLine": 70
     },
     {
       "id": "symbol:src/renderer/hooks/useViewportSize.ts#useViewportSize",
@@ -58178,6 +58986,42 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/assets/ui/sprites/index.ts->symbol:src/renderer/assets/ui/sprites/index.ts#getSceneSpriteSheetUrls",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "symbol:src/renderer/assets/ui/sprites/index.ts#getSceneSpriteSheetUrls",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/assets/ui/sprites/index.ts->symbol:src/renderer/assets/ui/sprites/index.ts#resolveSceneSpriteSet",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "symbol:src/renderer/assets/ui/sprites/index.ts#resolveSceneSpriteSet",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/assets/ui/sprites/index.ts->symbol:src/renderer/assets/ui/sprites/index.ts#SCENE_SPRITES",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "symbol:src/renderer/assets/ui/sprites/index.ts#SCENE_SPRITES",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/assets/ui/sprites/index.ts->symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteDef",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteDef",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/assets/ui/sprites/index.ts->symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteSet",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteSet",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/assets/ui/sprites/index.ts->symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteSetKey",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteSetKey",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/audio/audioGlobUrlMap.ts->symbol:src/renderer/audio/audioGlobUrlMap.ts#buildAudioUrlMapByFilename",
       "source": "file:src/renderer/audio/audioGlobUrlMap.ts",
       "target": "symbol:src/renderer/audio/audioGlobUrlMap.ts#buildAudioUrlMapByFilename",
@@ -59564,6 +60408,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/CathedralScene.tsx->symbol:src/renderer/components/CathedralScene.tsx#CathedralScene",
+      "source": "file:src/renderer/components/CathedralScene.tsx",
+      "target": "symbol:src/renderer/components/CathedralScene.tsx#CathedralScene",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/CathedralScene.tsx->symbol:src/renderer/components/CathedralScene.tsx#CathedralSceneProps",
+      "source": "file:src/renderer/components/CathedralScene.tsx",
+      "target": "symbol:src/renderer/components/CathedralScene.tsx#CathedralSceneProps",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/ChooseYourPathScreen.tsx->symbol:src/renderer/components/ChooseYourPathScreen.tsx#default",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
       "target": "symbol:src/renderer/components/ChooseYourPathScreen.tsx#default",
@@ -60017,6 +60873,42 @@
       "id": "exports:src/renderer/components/runShellToolCatalog.ts->symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolSpec",
       "source": "file:src/renderer/components/runShellToolCatalog.ts",
       "target": "symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolSpec",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneSpriteClocks.ts->symbol:src/renderer/components/sceneSpriteClocks.ts#SceneEmber",
+      "source": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "target": "symbol:src/renderer/components/sceneSpriteClocks.ts#SceneEmber",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneSpriteClocks.ts->symbol:src/renderer/components/sceneSpriteClocks.ts#SceneSpriteClock",
+      "source": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "target": "symbol:src/renderer/components/sceneSpriteClocks.ts#SceneSpriteClock",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneSpriteClocks.ts->symbol:src/renderer/components/sceneSpriteClocks.ts#sceneSpriteClocks",
+      "source": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "target": "symbol:src/renderer/components/sceneSpriteClocks.ts#sceneSpriteClocks",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneSpriteClocks.ts->symbol:src/renderer/components/sceneSpriteClocks.ts#sceneSpriteEmbers",
+      "source": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "target": "symbol:src/renderer/components/sceneSpriteClocks.ts#sceneSpriteEmbers",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/SceneSprites.tsx->symbol:src/renderer/components/SceneSprites.tsx#SceneSprites",
+      "source": "file:src/renderer/components/SceneSprites.tsx",
+      "target": "symbol:src/renderer/components/SceneSprites.tsx#SceneSprites",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/SceneSprites.tsx->symbol:src/renderer/components/SceneSprites.tsx#SceneSpritesProps",
+      "source": "file:src/renderer/components/SceneSprites.tsx",
+      "target": "symbol:src/renderer/components/SceneSprites.tsx#SceneSpritesProps",
       "kind": "exports"
     },
     {
@@ -63473,6 +64365,12 @@
       "id": "exports:src/renderer/hooks/useRichPresence.ts->symbol:src/renderer/hooks/useRichPresence.ts#useRichPresence",
       "source": "file:src/renderer/hooks/useRichPresence.ts",
       "target": "symbol:src/renderer/hooks/useRichPresence.ts#useRichPresence",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/hooks/useSceneLook.ts->symbol:src/renderer/hooks/useSceneLook.ts#useSceneLook",
+      "source": "file:src/renderer/hooks/useSceneLook.ts",
+      "target": "symbol:src/renderer/hooks/useSceneLook.ts#useSceneLook",
       "kind": "exports"
     },
     {
@@ -75508,6 +76406,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/assets/preloadStartupAssets.ts->src/renderer/assets/ui/sprites/index.ts",
+      "source": "file:src/renderer/assets/preloadStartupAssets.ts",
+      "target": "file:src/renderer/assets/ui/sprites/index.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/assets/preloadStartupAssets.ts->src/renderer/cardFace/cardIllustrationImages.ts",
       "source": "file:src/renderer/assets/preloadStartupAssets.ts",
       "target": "file:src/renderer/cardFace/cardIllustrationImages.ts",
@@ -75547,6 +76451,18 @@
       "id": "imports:src/renderer/assets/ui/modeArt.test.ts->src/shared/run-mode-catalog.ts",
       "source": "file:src/renderer/assets/ui/modeArt.test.ts",
       "target": "file:src/shared/run-mode-catalog.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/assets/ui/sprites/index.ts->src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprites.json",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "file:src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprites.json",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/assets/ui/sprites/index.ts->src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprites.json",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "file:src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprites.json",
       "kind": "imports"
     },
     {
@@ -76522,6 +77438,54 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/CathedralScene.test.tsx->src/renderer/assets/ui/sprites/index.ts",
+      "source": "file:src/renderer/components/CathedralScene.test.tsx",
+      "target": "file:src/renderer/assets/ui/sprites/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/CathedralScene.test.tsx->src/renderer/components/CathedralScene.tsx",
+      "source": "file:src/renderer/components/CathedralScene.test.tsx",
+      "target": "file:src/renderer/components/CathedralScene.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/CathedralScene.test.tsx->src/renderer/components/sceneSpriteClocks.ts",
+      "source": "file:src/renderer/components/CathedralScene.test.tsx",
+      "target": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/CathedralScene.tsx->src/renderer/assets/ui/index.ts",
+      "source": "file:src/renderer/components/CathedralScene.tsx",
+      "target": "file:src/renderer/assets/ui/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/CathedralScene.tsx->src/renderer/assets/ui/sprites/index.ts",
+      "source": "file:src/renderer/components/CathedralScene.tsx",
+      "target": "file:src/renderer/assets/ui/sprites/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/CathedralScene.tsx->src/renderer/components/SceneSprites.tsx",
+      "source": "file:src/renderer/components/CathedralScene.tsx",
+      "target": "file:src/renderer/components/SceneSprites.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/CathedralScene.tsx->src/renderer/hooks/useSceneLook.ts",
+      "source": "file:src/renderer/components/CathedralScene.tsx",
+      "target": "file:src/renderer/hooks/useSceneLook.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/CathedralScene.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/CathedralScene.tsx",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/ChooseYourPathScreen.test.tsx->src/renderer/components/ChooseYourPathScreen.tsx",
       "source": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
       "target": "file:src/renderer/components/ChooseYourPathScreen.tsx",
@@ -76888,6 +77852,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameOverScreen.tsx->src/renderer/components/CathedralScene.tsx",
+      "source": "file:src/renderer/components/GameOverScreen.tsx",
+      "target": "file:src/renderer/components/CathedralScene.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameOverScreen.tsx->src/renderer/components/MainMenuBackground.tsx",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "file:src/renderer/components/MainMenuBackground.tsx",
@@ -77032,9 +78002,27 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/assets/ui/sprites/index.ts",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "file:src/renderer/assets/ui/sprites/index.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/gameplaySceneLevels.ts",
       "source": "file:src/renderer/components/GameplayScene.tsx",
       "target": "file:src/renderer/components/gameplaySceneLevels.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/SceneSprites.tsx",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "file:src/renderer/components/SceneSprites.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/hooks/useSceneLook.ts",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "file:src/renderer/hooks/useSceneLook.ts",
       "kind": "imports"
     },
     {
@@ -77650,6 +78638,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/MainMenu.tsx->src/renderer/components/CathedralScene.tsx",
+      "source": "file:src/renderer/components/MainMenu.tsx",
+      "target": "file:src/renderer/components/CathedralScene.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/MainMenu.tsx->src/renderer/components/MainMenuBackground.tsx",
       "source": "file:src/renderer/components/MainMenu.tsx",
       "target": "file:src/renderer/components/MainMenuBackground.tsx",
@@ -78181,6 +79175,24 @@
       "id": "imports:src/renderer/components/runShellToolCatalog.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/components/runShellToolCatalog.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneSpriteClocks.ts->src/renderer/assets/ui/sprites/index.ts",
+      "source": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "target": "file:src/renderer/assets/ui/sprites/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SceneSprites.tsx->src/renderer/assets/ui/sprites/index.ts",
+      "source": "file:src/renderer/components/SceneSprites.tsx",
+      "target": "file:src/renderer/assets/ui/sprites/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SceneSprites.tsx->src/renderer/components/sceneSpriteClocks.ts",
+      "source": "file:src/renderer/components/SceneSprites.tsx",
+      "target": "file:src/renderer/components/sceneSpriteClocks.ts",
       "kind": "imports"
     },
     {
@@ -92091,6 +93103,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/assets/ui/sprites/index.ts->file:src/renderer/components/CathedralScene.test.tsx",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "file:src/renderer/components/CathedralScene.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/audio/audioGlobUrlMap.ts->file:src/renderer/audio/audioGlobUrlMap.test.ts",
       "source": "file:src/renderer/audio/audioGlobUrlMap.ts",
       "target": "file:src/renderer/audio/audioGlobUrlMap.test.ts",
@@ -92397,6 +93415,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/CathedralScene.tsx->file:src/renderer/components/CathedralScene.test.tsx",
+      "source": "file:src/renderer/components/CathedralScene.tsx",
+      "target": "file:src/renderer/components/CathedralScene.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/ChooseYourPathScreen.tsx->file:src/renderer/components/ChooseYourPathScreen.test.tsx",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
       "target": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
@@ -92622,6 +93646,12 @@
       "id": "tested_by:src/renderer/components/runShellToolCatalog.ts->file:src/shared/release-checklist.test.ts",
       "source": "file:src/renderer/components/runShellToolCatalog.ts",
       "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/sceneSpriteClocks.ts->file:src/renderer/components/CathedralScene.test.tsx",
+      "source": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "target": "file:src/renderer/components/CathedralScene.test.tsx",
       "kind": "tested_by"
     },
     {

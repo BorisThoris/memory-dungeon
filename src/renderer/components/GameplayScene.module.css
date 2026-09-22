@@ -1,40 +1,68 @@
 /*
- * The relightable room. `isolation: isolate` keeps the additive layers blending with the base
- * only, never with the page behind the scene; the parent (`.stageBackdrop` in GameScreen) still
- * owns the mask, the ink gradient and the overall opacity.
+ * The relightable room: what is particular to the dungeon. The plate, its drift and the pointer
+ * parallax, the base and layer boxes and the things container come from `scenePlate.module.css`,
+ * shared with the cathedral. The parent (`.stageBackdrop` in GameScreen) still owns the mask, the
+ * ink gradient and the overall opacity.
  */
-.scene {
+/* ------------------------------------------------------------------ the mist in the corridor */
+.mist {
     position: absolute;
     inset: 0;
-    isolation: isolate;
     overflow: hidden;
-    pointer-events: none;
+    mask-image: radial-gradient(ellipse 34% 30% at 50% 52%, black 30%, transparent 100%);
 }
 
-.base,
-.layer {
+.mistBank {
     position: absolute;
-    inset: 0;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-/* The stone is sunk into the page; the light is not. */
-.base {
-    opacity: var(--scene-base-opacity, 1);
-}
-
-.layer {
+    inset: -20% -30%;
     mix-blend-mode: plus-lighter;
-    will-change: opacity;
+    background:
+        radial-gradient(ellipse 22% 14% at 38% 55%, rgba(120, 140, 170, 0.32), transparent 70%),
+        radial-gradient(ellipse 26% 12% at 62% 50%, rgba(110, 130, 165, 0.26), transparent 70%),
+        radial-gradient(ellipse 18% 10% at 50% 62%, rgba(130, 150, 180, 0.22), transparent 70%);
+    filter: blur(10px);
+    will-change: transform, opacity;
 }
 
-@supports not (mix-blend-mode: plus-lighter) {
-    .layer {
-        mix-blend-mode: screen;
+.mistNear {
+    opacity: 0.55;
+    animation: sceneMistA 34s ease-in-out infinite alternate;
+}
+
+.mistFar {
+    opacity: 0.4;
+    animation: sceneMistB 51s ease-in-out infinite alternate;
+    animation-delay: -17s;
+}
+
+@keyframes sceneMistA {
+    0% {
+        transform: translate3d(-3%, 1%, 0);
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 0.62;
+    }
+
+    100% {
+        transform: translate3d(3%, -1%, 0);
+        opacity: 0.45;
     }
 }
+
+@keyframes sceneMistB {
+    0% {
+        transform: translate3d(2.5%, -0.5%, 0) scale(1.05);
+        opacity: 0.3;
+    }
+
+    100% {
+        transform: translate3d(-2.5%, 0.8%, 0) scale(1);
+        opacity: 0.5;
+    }
+}
+
 
 /* ------------------------------------------------------------------ the ring */
 .ringLight {
@@ -90,7 +118,8 @@
 
 /* ------------------------------------------------------------------ still */
 .scene[data-still='true'] .layer,
-.scene[data-still='true'] .ringPulse {
+.scene[data-still='true'] .ringPulse,
+.scene[data-still='true'] .mistBank {
     animation: none;
     transition: none;
 }

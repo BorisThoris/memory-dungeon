@@ -1,0 +1,97 @@
+/*
+ * Cut-out sprites over a painted plate. Each `.sprite` clips one frame of its strip; the strip is
+ * `frames` boxes wide and steps left by one box per frame. A flame is opaque paint, so the sprite
+ * is drawn over the plate (source-over), not added to it: adding yellow to the yellow-white wall
+ * the painting already lit clips to a pale ghost. Only the sparks add.
+ */
+.sprites {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.sprite {
+    position: absolute;
+    overflow: hidden;
+    contain: strict;
+}
+
+.strip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: calc(var(--sprite-frames, 1) * 100%);
+    height: 100%;
+    max-width: none;
+    user-select: none;
+    animation: spriteFlip var(--sprite-duration, 1100ms) steps(var(--sprite-frames, 1), end) infinite;
+    animation-delay: var(--sprite-delay, 0ms);
+    will-change: transform;
+}
+
+.sprite[data-still='true'] .strip {
+    animation: none;
+}
+
+@keyframes spriteFlip {
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+/* ------------------------------------------------------------------ embers */
+.embers {
+    position: absolute;
+    pointer-events: none;
+    mix-blend-mode: plus-lighter;
+}
+
+.ember {
+    /* A column the height of the ember box carrying one spark at its foot: translating the column
+       by its own height lifts the spark the full rise, whatever the box measures on screen. */
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: var(--ember-size, 2px);
+    opacity: 0;
+    animation: emberRise var(--ember-duration, 2600ms) linear infinite;
+    animation-delay: var(--ember-delay, 0ms);
+    will-change: transform, opacity;
+}
+
+.ember::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: var(--ember-size, 2px);
+    height: var(--ember-size, 2px);
+    border-radius: 50%;
+    background: #ffd27a;
+    box-shadow: 0 0 4px 1px rgba(255, 150, 40, 0.75);
+}
+
+.sprites[data-still='true'] .ember {
+    animation: none;
+}
+
+@keyframes emberRise {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0;
+    }
+
+    12% {
+        opacity: 0.9;
+    }
+
+    55% {
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: translate(var(--ember-drift, 0px), -100%) scale(0.4);
+        opacity: 0;
+    }
+}

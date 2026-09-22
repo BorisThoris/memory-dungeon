@@ -14,6 +14,7 @@ import {
     resumeUiSfxContext,
     uiSfxGainFromSettings
 } from '../audio/uiSfx';
+import { CathedralScene } from './CathedralScene';
 import MainMenuBackground from './MainMenuBackground';
 import { SAVE_RECOVERY_COPY } from '../copy/saveRecoveryNotice';
 import { runPersistenceInBackground } from '../store/backgroundPersistence';
@@ -122,7 +123,9 @@ const MainMenu = ({
                 suppressLoadingFallback={suppressMenuBackgroundFallback}
                 width={width}
             />
-            <div aria-hidden="true" className={styles.sceneLayer} style={{ backgroundImage: `url(${UI_ART.menuScene})` }} />
+            <div aria-hidden="true" className={styles.sceneLayer}>
+                <CathedralScene quality={saveData.settings.graphicsQuality} reduceMotion={reduceMotion} />
+            </div>
             <div aria-hidden="true" className={styles.scrim} />
 
             <div className={styles.page} data-testid="main-menu-page">

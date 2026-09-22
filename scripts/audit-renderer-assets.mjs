@@ -34,6 +34,7 @@ const SHELF_STOCK_DIRS = new Set([
 ]);
 const isRuntimeSourceMasterAsset = (rel) =>
     (rel.startsWith('src/renderer/assets/ui/backgrounds/') && rel.toLowerCase().endsWith('.png')) ||
+    (rel.startsWith('src/renderer/assets/ui/sprites/') && rel.toLowerCase().endsWith('.png')) ||
     rel === 'src/renderer/assets/textures/cards/back-normal.png' ||
     rel === 'src/renderer/assets/textures/cards/front-normal.png';
 const TEXT_EXTS = new Set([
@@ -235,7 +236,7 @@ for (const assetAbs of allAssetPaths) {
 console.log(`Audited ${allAssetPaths.length} asset files under src/renderer/assets/`);
 console.log(`Search roots: ${SEARCH_DIRS.join(', ')} (basename substring)\n`);
 console.log(
-    `Fallback expectations: optional generated art may be absent if UI code supplies visible inline fallbacks; renderer audio manifest entries must point to existing OGG files even though runtime playback has procedural fallbacks. Intentional pipeline reference packs and runtime source masters are skipped: ${[...SHELF_STOCK_DIRS].join(', ')}, src/renderer/assets/ui/backgrounds/*.png, card normal-map PNG masters.\n`
+    `Fallback expectations: optional generated art may be absent if UI code supplies visible inline fallbacks; renderer audio manifest entries must point to existing OGG files even though runtime playback has procedural fallbacks. Intentional pipeline reference packs and runtime source masters are skipped: ${[...SHELF_STOCK_DIRS].join(', ')}, src/renderer/assets/ui/backgrounds/*.png, src/renderer/assets/ui/sprites/*.png, card normal-map PNG masters.\n`
 );
 
 if (fatalAssetErrors.length > 0) {

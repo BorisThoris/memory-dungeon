@@ -181,12 +181,17 @@ describe('preloadStartupCriticalAssets', () => {
             warmModePosterRasterImagesInBackground
         } = await import('./preloadStartupAssets');
         const { getUiArtRows, MODE_CARD_ART, MODE_POSTER_KEYS, UI_ART, UI_ART_KEYS } = await import('./ui');
+        const { getSceneSpriteSheetUrls, SCENE_SPRITES } = await import('./ui/sprites');
         resetStartupAssetPreloadStateForTests();
 
         await preloadUiRasterImages();
         expect(Object.keys(UI_ART)).toEqual([...UI_ART_KEYS]);
         expect(getUiArtRows().map((row) => row.key)).toEqual([...UI_ART_KEYS]);
-        expect(requestedRasterUrls).toEqual([...new Set(getUiArtRows().map((row) => row.assetUrl))]);
+        // The backdrops, their light layers and every sprite strip that plays over them (the menu's
+        // candles are on the first screen), deduped.
+        const sheetUrls = getSceneSpriteSheetUrls();
+        expect(sheetUrls.length).toBe(SCENE_SPRITES.cathedralCandles.sprites.length + SCENE_SPRITES.gameplayFlames.sprites.length);
+        expect(requestedRasterUrls).toEqual([...new Set([...getUiArtRows().map((row) => row.assetUrl), ...sheetUrls])]);
 
         requestedRasterUrls = [];
         await preloadModePosterRasterImages();

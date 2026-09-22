@@ -23,6 +23,10 @@ export const UI_ART = {
     gameplayWorkshopTable: resolveUiBackgroundUrl('bg-board-arcane-table-v1.webp'),
     menuEmblem: menuEmblemUrl,
     menuScene: resolveUiBackgroundUrl('bg-main-menu-cathedral-v1.webp'),
+    /** The cathedral as a relightable nave (`CathedralScene`): base plus additive light layers, from `scripts/scene-pipeline/cathedral.sh`. */
+    menuSceneBase: resolveUiBackgroundUrl('bg-main-menu-cathedral-v2-base.webp'),
+    menuSceneGlowCandles: resolveUiBackgroundUrl('bg-main-menu-cathedral-v2-glow-candles.webp', ''),
+    menuSceneGlowWisps: resolveUiBackgroundUrl('bg-main-menu-cathedral-v2-glow-wisps.webp', ''),
     menuSeal: menuSealUrl,
     stageRing: stageRingUrl
 } as const;
@@ -45,6 +49,9 @@ export const UI_ART_KEYS = [
     'gameplayWorkshopTable',
     'menuEmblem',
     'menuScene',
+    'menuSceneBase',
+    'menuSceneGlowCandles',
+    'menuSceneGlowWisps',
     'menuSeal',
     'stageRing'
 ] as const satisfies readonly UiArtKey[];

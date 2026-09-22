@@ -29,15 +29,15 @@
 }
 
 /* ------------------------------------------------------------------ the scene, sunk into ink */
+/* The nave (`CathedralScene`) sinks to 34 %; its candles and wisps stay brighter, at 60 %. */
 .sceneLayer {
     position: absolute;
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    opacity: 0.34;
-    background-position: center 40%;
-    background-repeat: no-repeat;
-    background-size: cover;
+    --scene-base-opacity: 0.34;
+    --scene-light-opacity: 0.6;
+    --scene-plate-anchor-y: 40%;
     filter: saturate(0.85) contrast(1.05);
     mask-image: radial-gradient(ellipse 100% 90% at 50% 45%, black 25%, rgba(0, 0, 0, 0.7) 60%, transparent 100%);
 }

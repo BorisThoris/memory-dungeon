@@ -1,0 +1,107 @@
+/*
+ * The nave's lights. The plate, drift, parallax and layer boxes come from `scenePlate.module.css`.
+ * The lights and the candle sprites read `--scene-light-opacity` so the parent can sink the stone
+ * (`--scene-base-opacity`) further than the flames.
+ */
+.scene {
+    --scene-light-opacity: 1;
+}
+
+.layer {
+    opacity: var(--scene-light-opacity, 1);
+}
+
+.things {
+    opacity: var(--scene-light-opacity, 1);
+}
+
+/* Candlelight on the stone: a slow, stepped flicker, the sum of many small flames. */
+.candleGlow {
+    animation: cathedralCandlelight 4.1s steps(1, end) infinite;
+}
+
+/* The wisps breathe; a second, fainter copy drifts upward a little out of phase, so the light
+   seems to move along the arch rather than pulse in place. */
+.wisps {
+    animation: cathedralWispsBreathe 7.5s ease-in-out infinite;
+}
+
+.wispsEcho {
+    opacity: calc(var(--scene-light-opacity, 1) * 0.35);
+    filter: blur(2px);
+    animation: cathedralWispsDrift 11s ease-in-out infinite;
+    animation-delay: -4s;
+}
+
+.scene[data-alive='false'] .wispsEcho {
+    display: none;
+}
+
+.scene[data-still='true'] .layer {
+    animation: none;
+}
+
+@keyframes cathedralCandlelight {
+    0% {
+        opacity: var(--scene-light-opacity, 1);
+    }
+
+    11% {
+        opacity: calc(var(--scene-light-opacity, 1) * 0.92);
+    }
+
+    23% {
+        opacity: calc(var(--scene-light-opacity, 1) * 1.04);
+    }
+
+    38% {
+        opacity: calc(var(--scene-light-opacity, 1) * 0.96);
+    }
+
+    52% {
+        opacity: calc(var(--scene-light-opacity, 1) * 1.02);
+    }
+
+    64% {
+        opacity: calc(var(--scene-light-opacity, 1) * 0.9);
+    }
+
+    77% {
+        opacity: calc(var(--scene-light-opacity, 1) * 1.0);
+    }
+
+    89% {
+        opacity: calc(var(--scene-light-opacity, 1) * 0.95);
+    }
+
+    100% {
+        opacity: var(--scene-light-opacity, 1);
+    }
+}
+
+@keyframes cathedralWispsBreathe {
+    0%,
+    100% {
+        opacity: calc(var(--scene-light-opacity, 1) * 0.8);
+    }
+
+    50% {
+        opacity: var(--scene-light-opacity, 1);
+    }
+}
+
+@keyframes cathedralWispsDrift {
+    0% {
+        transform: translate3d(0, 0.8%, 0);
+        opacity: calc(var(--scene-light-opacity, 1) * 0.15);
+    }
+
+    50% {
+        opacity: calc(var(--scene-light-opacity, 1) * 0.4);
+    }
+
+    100% {
+        transform: translate3d(0.3%, -1.2%, 0);
+        opacity: calc(var(--scene-light-opacity, 1) * 0.1);
+    }
+}

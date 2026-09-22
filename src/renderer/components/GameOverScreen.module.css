@@ -24,10 +24,9 @@
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    opacity: 0.3;
-    background-position: center bottom;
-    background-repeat: no-repeat;
-    background-size: cover;
+    --scene-base-opacity: 0.3;
+    --scene-light-opacity: 0.55;
+    --scene-plate-anchor-y: 100%;
     filter: saturate(0.85) contrast(1.05);
     mask-image: radial-gradient(ellipse 100% 90% at 50% 45%, black 25%, rgba(0, 0, 0, 0.7) 60%, transparent 100%);
 }

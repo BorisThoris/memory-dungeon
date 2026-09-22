@@ -1,0 +1,69 @@
+{
+  "plate": [
+    1376,
+    768
+  ],
+  "kind": "flame",
+  "sprites": [
+    {
+      "id": "flame-00",
+      "x": 0.08866,
+      "y": 0.11849,
+      "w": 0.06468,
+      "h": 0.16406,
+      "frames": 16,
+      "fps": 14,
+      "sheet": "bg-gameplay-dungeon-ring-v2-sprite-flame-00.webp"
+    },
+    {
+      "id": "flame-01",
+      "x": 0.30669,
+      "y": 0.27474,
+      "w": 0.04288,
+      "h": 0.10286,
+      "frames": 16,
+      "fps": 14,
+      "sheet": "bg-gameplay-dungeon-ring-v2-sprite-flame-01.webp"
+    },
+    {
+      "id": "flame-02",
+      "x": 0.50218,
+      "y": 0.35156,
+      "w": 0.02398,
+      "h": 0.07292,
+      "frames": 16,
+      "fps": 14,
+      "sheet": "bg-gameplay-dungeon-ring-v2-sprite-flame-02.webp"
+    },
+    {
+      "id": "flame-03",
+      "x": 0.64172,
+      "y": 0.33073,
+      "w": 0.03416,
+      "h": 0.09896,
+      "frames": 16,
+      "fps": 14,
+      "sheet": "bg-gameplay-dungeon-ring-v2-sprite-flame-03.webp"
+    },
+    {
+      "id": "flame-04",
+      "x": 0.73328,
+      "y": 0.26562,
+      "w": 0.03997,
+      "h": 0.1263,
+      "frames": 16,
+      "fps": 14,
+      "sheet": "bg-gameplay-dungeon-ring-v2-sprite-flame-04.webp"
+    },
+    {
+      "id": "flame-05",
+      "x": 0.87282,
+      "y": 0.14323,
+      "w": 0.06759,
+      "h": 0.15885,
+      "frames": 16,
+      "fps": 14,
+      "sheet": "bg-gameplay-dungeon-ring-v2-sprite-flame-05.webp"
+    }
+  ]
+}

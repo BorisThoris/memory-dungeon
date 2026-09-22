@@ -13,7 +13,9 @@ const base: GameplaySceneProps = {
     tier: 'none'
 };
 
-const layerCount = () => screen.getByTestId('gameplay-scene').children.length;
+const plateLayers = () =>
+    [...screen.getByTestId('gameplay-scene-plate').children].filter((el) => /base|layer/i.test(el.className));
+const layerCount = () => plateLayers().length;
 
 describe('GameplayScene', () => {
     it('is decoration: hidden from assistive tech, the room as data attributes', () => {
@@ -52,8 +54,9 @@ describe('GameplayScene', () => {
     it('keeps the torches burning whatever the chain does', () => {
         const torchesAt = (fill: number) => {
             const { unmount } = render(<GameplayScene {...base} fill={fill} />);
-            const scene = screen.getByTestId('gameplay-scene');
-            const torches = [...scene.children].filter((el) => /torch/i.test(el.className)).map((el) => el.getAttribute('style'));
+            const torches = plateLayers()
+                .filter((el) => /torch/i.test(el.className))
+                .map((el) => el.getAttribute('style'));
             unmount();
             return torches;
         };
@@ -83,8 +86,44 @@ describe('GameplayScene', () => {
         expect(screen.queryByTestId('gameplay-scene-pulse')).toBeNull();
     });
 
-    it('holds still under reduce motion', () => {
+    it('holds still under reduce motion: no drift, no mist, no embers, every flame on its first frame', () => {
         render(<GameplayScene {...base} reduceMotion />);
-        expect(screen.getByTestId('gameplay-scene')).toHaveAttribute('data-still', 'true');
+        const scene = screen.getByTestId('gameplay-scene');
+        expect(scene).toHaveAttribute('data-still', 'true');
+        expect(scene).toHaveAttribute('data-alive', 'false');
+        expect(screen.queryByTestId('gameplay-scene-mist')).toBeNull();
+        expect(screen.queryAllByTestId('scene-embers')).toHaveLength(0);
+        expect(screen.getByTestId('scene-sprites')).toHaveAttribute('data-still', 'true');
+    });
+
+    it('cuts the six torch flames out as sprites that play on their own clocks, with sparks', () => {
+        render(<GameplayScene {...base} />);
+        const scene = screen.getByTestId('gameplay-scene');
+        expect(scene).toHaveAttribute('data-alive', 'true');
+        const sprites = screen.getByTestId('scene-sprites');
+        expect(sprites).toHaveAttribute('data-sprite-kind', 'flame');
+        const flames = [...sprites.querySelectorAll('[data-sprite-id]')];
+        expect(flames).toHaveLength(6);
+        const durations = new Set(flames.map((el) => (el as HTMLElement).style.getPropertyValue('--sprite-duration')));
+        expect(durations.size).toBe(6);
+        for (const flame of flames) {
+            const style = (flame as HTMLElement).style;
+            expect(style.getPropertyValue('--sprite-frames')).toBe('16');
+            expect(flame.querySelector('img')).toHaveAttribute('src', expect.stringContaining('sprite-flame'));
+            // Every flame is somewhere on the walls: above the horizon, inside the plate.
+            expect(parseFloat(style.top)).toBeLessThan(40);
+            expect(parseFloat(style.left) + parseFloat(style.width)).toBeLessThanOrEqual(100);
+        }
+        expect(screen.getAllByTestId('scene-embers')).toHaveLength(6);
+        expect(screen.getByTestId('gameplay-scene-mist')).toBeInTheDocument();
+    });
+
+    it('keeps the flames and drops the sparks, mist and drift on low quality', () => {
+        render(<GameplayScene {...base} quality="low" />);
+        expect(screen.getByTestId('gameplay-scene')).toHaveAttribute('data-alive', 'false');
+        expect(screen.getByTestId('scene-sprites').querySelectorAll('[data-sprite-id]')).toHaveLength(6);
+        expect(screen.getByTestId('scene-sprites')).toHaveAttribute('data-still', 'false');
+        expect(screen.queryAllByTestId('scene-embers')).toHaveLength(0);
+        expect(screen.queryByTestId('gameplay-scene-mist')).toBeNull();
     });
 });

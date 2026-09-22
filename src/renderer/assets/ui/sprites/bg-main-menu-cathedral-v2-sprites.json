@@ -1,0 +1,299 @@
+{
+  "plate": [
+    1376,
+    768
+  ],
+  "kind": "candle",
+  "sprites": [
+    {
+      "id": "candle-00",
+      "x": 0.06177,
+      "y": 0.57422,
+      "w": 0.02253,
+      "h": 0.05339,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-00.webp"
+    },
+    {
+      "id": "candle-01",
+      "x": 0.07994,
+      "y": 0.58073,
+      "w": 0.01962,
+      "h": 0.04427,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-01.webp"
+    },
+    {
+      "id": "candle-02",
+      "x": 0.0952,
+      "y": 0.53125,
+      "w": 0.02035,
+      "h": 0.04948,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-02.webp"
+    },
+    {
+      "id": "candle-03",
+      "x": 0.10901,
+      "y": 0.57422,
+      "w": 0.02035,
+      "h": 0.04688,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-03.webp"
+    },
+    {
+      "id": "candle-04",
+      "x": 0.12209,
+      "y": 0.58073,
+      "w": 0.01962,
+      "h": 0.04427,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-04.webp"
+    },
+    {
+      "id": "candle-05",
+      "x": 0.25,
+      "y": 0.67708,
+      "w": 0.01599,
+      "h": 0.03776,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-05.webp"
+    },
+    {
+      "id": "candle-06",
+      "x": 0.25799,
+      "y": 0.67318,
+      "w": 0.01744,
+      "h": 0.03906,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-06.webp"
+    },
+    {
+      "id": "candle-07",
+      "x": 0.26672,
+      "y": 0.65234,
+      "w": 0.01744,
+      "h": 0.03516,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-07.webp"
+    },
+    {
+      "id": "candle-08",
+      "x": 0.27471,
+      "y": 0.67578,
+      "w": 0.01744,
+      "h": 0.03906,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-08.webp"
+    },
+    {
+      "id": "candle-09",
+      "x": 0.2827,
+      "y": 0.68229,
+      "w": 0.01744,
+      "h": 0.03776,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-09.webp"
+    },
+    {
+      "id": "candle-10",
+      "x": 0.32922,
+      "y": 0.72266,
+      "w": 0.01453,
+      "h": 0.03776,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-10.webp"
+    },
+    {
+      "id": "candle-11",
+      "x": 0.33794,
+      "y": 0.71875,
+      "w": 0.01453,
+      "h": 0.03906,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-11.webp"
+    },
+    {
+      "id": "candle-12",
+      "x": 0.34448,
+      "y": 0.70052,
+      "w": 0.01453,
+      "h": 0.03906,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-12.webp"
+    },
+    {
+      "id": "candle-13",
+      "x": 0.34956,
+      "y": 0.71615,
+      "w": 0.01962,
+      "h": 0.04427,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-13.webp"
+    },
+    {
+      "id": "candle-14",
+      "x": 0.35683,
+      "y": 0.72266,
+      "w": 0.01453,
+      "h": 0.03776,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-14.webp"
+    },
+    {
+      "id": "candle-15",
+      "x": 0.6984,
+      "y": 0.70703,
+      "w": 0.01599,
+      "h": 0.04688,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-15.webp"
+    },
+    {
+      "id": "candle-16",
+      "x": 0.70712,
+      "y": 0.70703,
+      "w": 0.01453,
+      "h": 0.04688,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-16.webp"
+    },
+    {
+      "id": "candle-17",
+      "x": 0.7173,
+      "y": 0.70703,
+      "w": 0.01453,
+      "h": 0.04688,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-17.webp"
+    },
+    {
+      "id": "candle-18",
+      "x": 0.72456,
+      "y": 0.70703,
+      "w": 0.01453,
+      "h": 0.04688,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-18.webp"
+    },
+    {
+      "id": "candle-19",
+      "x": 0.74128,
+      "y": 0.6888,
+      "w": 0.01235,
+      "h": 0.03776,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-19.webp"
+    },
+    {
+      "id": "candle-20",
+      "x": 0.74709,
+      "y": 0.68359,
+      "w": 0.01453,
+      "h": 0.03776,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-20.webp"
+    },
+    {
+      "id": "candle-21",
+      "x": 0.75509,
+      "y": 0.66536,
+      "w": 0.01453,
+      "h": 0.03906,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-21.webp"
+    },
+    {
+      "id": "candle-22",
+      "x": 0.76453,
+      "y": 0.68359,
+      "w": 0.01453,
+      "h": 0.03776,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-22.webp"
+    },
+    {
+      "id": "candle-23",
+      "x": 0.77471,
+      "y": 0.6888,
+      "w": 0.01235,
+      "h": 0.03776,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-23.webp"
+    },
+    {
+      "id": "candle-24",
+      "x": 0.90843,
+      "y": 0.51953,
+      "w": 0.01744,
+      "h": 0.04948,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-24.webp"
+    },
+    {
+      "id": "candle-25",
+      "x": 0.92297,
+      "y": 0.51953,
+      "w": 0.01744,
+      "h": 0.04948,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-25.webp"
+    },
+    {
+      "id": "candle-26",
+      "x": 0.93968,
+      "y": 0.47266,
+      "w": 0.02035,
+      "h": 0.0599,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-26.webp"
+    },
+    {
+      "id": "candle-27",
+      "x": 0.96366,
+      "y": 0.52995,
+      "w": 0.02035,
+      "h": 0.05078,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-27.webp"
+    },
+    {
+      "id": "candle-28",
+      "x": 0.98038,
+      "y": 0.52995,
+      "w": 0.01962,
+      "h": 0.05078,
+      "frames": 12,
+      "fps": 10,
+      "sheet": "bg-main-menu-cathedral-v2-sprite-candle-28.webp"
+    }
+  ]
+}
