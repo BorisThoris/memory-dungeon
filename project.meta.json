@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-21T23:49:10.689Z",
+  "generatedAt": "2026-09-22T10:17:45.200Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -288,46 +288,46 @@
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 143993,
+        "bytes": 166618,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-21T23:48:03.554Z"
+        "capturedAt": "2026-09-22T10:16:50.687Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 134991,
+        "bytes": 156582,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-21T23:48:21.981Z"
+        "capturedAt": "2026-09-22T10:17:10.068Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 112331,
+        "bytes": 130874,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-21T23:48:51.359Z"
+        "capturedAt": "2026-09-22T10:17:36.365Z"
       },
       {
         "profile": "mobile",
         "file": "mobile.jpg",
         "path": "project-media/mobile.jpg",
-        "bytes": 50945,
+        "bytes": 51942,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-21T23:48:32.213Z"
+        "capturedAt": "2026-09-22T10:17:17.056Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 106849,
+        "bytes": 120183,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-21T23:49:10.501Z"
+        "capturedAt": "2026-09-22T10:17:44.947Z"
       }
     ]
   },
@@ -389,13 +389,13 @@
     "devDependencyCount": 47
   },
   "metrics": {
-    "sourceFiles": 1111,
-    "testFiles": 481,
-    "sourceLines": 171607,
+    "sourceFiles": 1120,
+    "testFiles": 482,
+    "sourceLines": 172430,
     "largestDirectories": [
       {
         "directory": "src",
-        "files": 936
+        "files": 945
       },
       {
         "directory": "scripts",
@@ -430,10 +430,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "3094c679",
-    "lastCommitDate": "2026-09-21T23:39:29Z",
-    "lastCommitSubject": "Merge remote-tracking branch 'origin/main' into claude/game-view-redesign-6daf70-2xydcc",
-    "commitCount": 1580,
+    "head": "ec2f6353",
+    "lastCommitDate": "2026-09-22T04:42:56+03:00",
+    "lastCommitSubject": "Cut the flames out of the backdrops as sprites that burn",
+    "commitCount": 1582,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
