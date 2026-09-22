@@ -4347,8 +4347,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 123163,
-      "sha256": "7bcf2c0c1ae47961df325f63f8e297f02c825c0ae7d2d14c637fb96e0a012fb6"
+      "bytes": 120628,
+      "sha256": "59673679851df85bd5e6f9e1ef2a93c13d6723b8416a3c2e6846421fd3b718cd"
     },
     {
       "path": "public/site.webmanifest",
@@ -4989,8 +4989,8 @@
     {
       "path": "scripts/gate-changed.mjs",
       "category": "script",
-      "bytes": 20781,
-      "sha256": "3e4e28243b5c2222ef4d52ca72c9983312805924565500be136c98137c7bfe68"
+      "bytes": 21699,
+      "sha256": "fac254ff10ae88c1a0f48c3a3d7d6eac6b13526f576399289ba2ba5396738876"
     },
     {
       "path": "scripts/gate-long-run.ts",
@@ -12609,8 +12609,8 @@
     {
       "path": "src/shared/gate-changed.test.ts",
       "category": "test",
-      "bytes": 33070,
-      "sha256": "5bd3180499921ffadb6c6a5f676c85c1ad47482b3f9ed929ddfc834ebca919f5"
+      "bytes": 35103,
+      "sha256": "cb2a4156dcccbbe5361247787c4af3f1b2a525c832f8dcef275cfd6a198dad85"
     },
     {
       "path": "src/shared/gate-long-run-script.test.ts",
@@ -29133,7 +29133,7 @@
       "path": "src/shared/gate-changed.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 743,
+      "lineCount": 782,
       "imports": [],
       "exports": [],
       "testedBy": []

@@ -8,6 +8,7 @@ export const GATES = {
     systems: 'yarn gate:systems',
     verify: 'yarn verify',
     typecheck: 'yarn typecheck',
+    lint: 'yarn lint',
     gameplay: 'yarn gate:gameplay',
     longRun: 'yarn gate:long-run',
     readabilityLongRun: 'yarn gate:readability-long-run',
@@ -360,6 +361,22 @@ export const selectGatesForChangedPaths = (paths) => {
         if (firstTyped) {
             add('typecheck', firstTyped, 'changed TypeScript needs tsc: Vitest and vite build both skip type errors');
         }
+    }
+
+    /*
+     * Lint, for anything with code in it.
+     *
+     * The same hole as the typecheck one above and a wider one: `yarn lint` is not part of `yarn
+     * verify`, so no path through this selector reached it at all. It lives only in `fullcheck`,
+     * the whole manual gauntlet, which means the tool that answers "what should I run for these
+     * changes" never once answered "lint" — and `--max-warnings 0` says this repo does care.
+     *
+     * Not restricted to `src/`: `eslint .` covers the scripts and configs too, and this file is
+     * one of them. One run lints the repo, so this is a single gate however many files changed.
+     */
+    const firstLintable = normalized.find((file) => /\.(ts|tsx|mts|cts|js|mjs|cjs|jsx)$/u.test(file));
+    if (firstLintable) {
+        add('lint', firstLintable, 'changed code needs eslint: no other gate in this selector runs it');
     }
 
     if (gateIds.size === 0 && normalized.length > 0) {
