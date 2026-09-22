@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import cardBackSvgUrl from '../assets/textures/cards/authored-card-back.svg?url';
 import cardFrontSvgUrl from '../assets/textures/cards/authored-card-front.svg?url';
 import {
-    loadSharedCardBackSvgLayerGeometries,
     loadSharedCardFrontSvgLayerGeometries,
     type CardBackSvgLayerGeometry,
     type CardFrontSvgLayerGeometry
@@ -38,7 +36,12 @@ export const useTileBoardSharedCardSvgAssets = (enabled: boolean): TileBoardShar
     const sharedCardFrontLayers = enabled ? loaded.front : null;
     const sharedCardBackLayers = enabled ? loaded.back : null;
 
-    /** Chain front -> back so two SVGLoader.parse passes never run in parallel (main-thread + memory). */
+    /*
+     * Only the face is meshed. The back's authored SVG is a placeholder — a leather rectangle with
+     * a diamond — while the shipped back is a painted plate of gold filigree and blue runes, so
+     * meshing it would replace the art with something plainer. The face's layers are a frame that
+     * composites *over* its raster, which is why that one is worth the meshes.
+     */
     useEffect(() => {
         if (!enabled) {
             return undefined;
@@ -46,9 +49,9 @@ export const useTileBoardSharedCardSvgAssets = (enabled: boolean): TileBoardShar
         let cancelled = false;
         void (async () => {
             const assets = await loadTileBoardSharedCardSvgAssets({
-                backUrl: cardBackSvgUrl,
+                backUrl: null,
                 frontUrl: cardFrontSvgUrl,
-                loadBackLayers: loadSharedCardBackSvgLayerGeometries,
+                loadBackLayers: null,
                 loadFrontLayers: loadSharedCardFrontSvgLayerGeometries
             });
             if (assets == null) {

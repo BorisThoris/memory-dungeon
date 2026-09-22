@@ -10,9 +10,9 @@ import {
 } from 'three';
 import type { GraphicsQualityPreset, Tile } from '../../shared/contracts';
 import { RENDERER_THEME } from '../styles/theme';
-import referenceBackTextureUrl from '../assets/textures/cards/authored-card-back.svg?url';
+import referenceBackTextureUrl from '../assets/textures/cards/card-back-painted.webp';
 import cardBackNormalTextureUrl from '../assets/textures/cards/back-normal.webp';
-import cardFaceTextureUrl from '../assets/textures/cards/front.svg?url';
+import cardFaceTextureUrl from '../assets/textures/cards/front-face.webp';
 import cardFaceNormalTextureUrl from '../assets/textures/cards/front-normal.webp';
 import edgeTextureUrl from '../assets/textures/cards/edge.png';
 import panelRoughnessTextureUrl from '../assets/textures/cards/panel-roughness.png';
@@ -282,11 +282,17 @@ export const invalidateVersionedTileFaceTextureCaches = (): void => {
     }
 };
 
-/** One URL per card side — keep atomic with `cardSvgPlaneGeometry` (merged mesh), not per-motif splits. */
+/*
+ * One URL per card side. Both sides are the painted plates (`front-face`, `reference-back`, encoded
+ * to WebP at 1536 tall — `STATIC_CARD_TEXTURE_HEIGHT` is sized for their 1403x2048 source). They
+ * shipped in the repo unused while these two keys pointed at `authored-card-*.svg`, which are
+ * flat placeholder vectors: a brown slab with a diamond on it. That is what every card in the game
+ * was, front and back.
+ */
 const textureImageUrls = {
-    /** Hidden-side card raster (WebGL back plane, DOM .cardFaceBack). */
+    /** Hidden-side card raster (WebGL back plane, DOM .cardFaceBack): the gold labyrinth. */
     cardReference: referenceBackTextureUrl,
-    /** Face-up panel raster (WebGL front plane, DOM .cardFaceFront); calmer center vs back. */
+    /** Face-up panel raster (WebGL front plane, DOM .cardFaceFront): the gold frame round the illustration. */
     cardFace: cardFaceTextureUrl,
     /** Tangent-space normal for WebGL face-up raster plane (`front-normal.webp`). */
     cardFaceNormal: cardFaceNormalTextureUrl,

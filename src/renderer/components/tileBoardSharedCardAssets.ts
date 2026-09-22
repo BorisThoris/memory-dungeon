@@ -14,10 +14,11 @@ export interface TileBoardSharedCardSvgAssets {
 }
 
 interface LoadTileBoardSharedCardSvgAssetsInput {
-    backUrl: string;
-    frontUrl: string;
-    loadBackLayers: (url: string) => Promise<CardBackSvgLayerGeometry[] | null>;
-    loadFrontLayers: (url: string) => Promise<CardFrontSvgLayerGeometry[] | null>;
+    /** Null when that side keeps its painted raster instead of being meshed. */
+    backUrl: string | null;
+    frontUrl: string | null;
+    loadBackLayers: ((url: string) => Promise<CardBackSvgLayerGeometry[] | null>) | null;
+    loadFrontLayers: ((url: string) => Promise<CardFrontSvgLayerGeometry[] | null>) | null;
 }
 
 export const disposeTileBoardSharedCardLayers = (
@@ -55,8 +56,8 @@ export const loadTileBoardSharedCardSvgAssets = async ({
     loadBackLayers,
     loadFrontLayers
 }: LoadTileBoardSharedCardSvgAssetsInput): Promise<TileBoardSharedCardSvgAssets | null> => {
-    const frontLayers = await loadOrNull(() => loadFrontLayers(frontUrl));
-    const backLayers = await loadOrNull(() => loadBackLayers(backUrl));
+    const frontLayers = frontUrl && loadFrontLayers ? await loadOrNull(() => loadFrontLayers(frontUrl)) : null;
+    const backLayers = backUrl && loadBackLayers ? await loadOrNull(() => loadBackLayers(backUrl)) : null;
 
     if (frontLayers == null && backLayers == null) {
         return null;
