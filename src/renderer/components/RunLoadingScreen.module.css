@@ -14,7 +14,39 @@
         linear-gradient(160deg, var(--theme-void) 0%, var(--theme-void-soft) 54%, var(--theme-smoke-deep) 100%);
 }
 
+/* The room, further under the ink than the board sinks it: it is a place being arrived at, not the
+   stage yet, and the board's own scene should read as a step *up* in light when it arrives. The
+   whole group is dimmed (the light layers too, unlike the board, where they punch through), and
+   the panel's type has to stay legible over it. */
+.scene {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.62;
+    --scene-base-opacity: 0.24;
+    filter: saturate(0.8) contrast(1.04);
+    mask-image: radial-gradient(ellipse 110% 100% at 50% 50%, black 15%, rgba(0, 0, 0, 0.7) 55%, transparent 100%);
+}
+
+/* The panel is set on ink so Cinzel at 0.78rem never sits on a lit wall. */
+.screen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(
+        ellipse 30% 26% at 50% 46%,
+        color-mix(in srgb, var(--theme-void) 82%, transparent) 0%,
+        color-mix(in srgb, var(--theme-void) 40%, transparent) 55%,
+        transparent 100%
+    );
+}
+
 .panel {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: center;

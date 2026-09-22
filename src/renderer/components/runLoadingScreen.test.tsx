@@ -51,3 +51,20 @@ describe('RunLoadingScreen', () => {
         expect(screen.getByTestId('run-loading-screen')).toHaveTextContent('not-a-mode');
     });
 });
+
+describe('RunLoadingScreen scene', () => {
+    it('shows the room the run is dropping into, sunk under the ink and at rest', () => {
+        render(<RunLoadingScreen quality="high" reduceMotion={false} />);
+        const scene = screen.getByTestId('gameplay-scene');
+        expect(scene).toHaveAttribute('data-scene-fill', '0.00');
+        expect(scene).toHaveAttribute('data-scene-pulse', 'none');
+        expect(scene).toHaveAttribute('data-memorize', 'false');
+        // The torches are already burning when the board arrives over them.
+        expect(screen.getByTestId('scene-sprites').querySelectorAll('[data-sprite-id]')).toHaveLength(6);
+    });
+
+    it('passes reduce motion through to the room', () => {
+        render(<RunLoadingScreen reduceMotion />);
+        expect(screen.getByTestId('gameplay-scene')).toHaveAttribute('data-still', 'true');
+    });
+});

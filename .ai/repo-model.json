@@ -9,7 +9,7 @@
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6989
+    "relationshipCount": 6990
   },
   "inventory": [
     {
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "fcdd07ed0364329fb22c63fd1617a9c0faf11270552a7e2772112a1986196641"
+      "sha256": "f2691078483d94150b819a08e2b6b934737cb3551adb44e72e19e1590f5a4ba8"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -5739,8 +5739,8 @@
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 21393,
-      "sha256": "8285009b34d5fbbd32ffe3ead7afe2d7e4b8e62590b91cd91a9646b2f7fddee4"
+      "bytes": 22221,
+      "sha256": "62f1ee57c0177943ba3cbfe34a3f7514159071fba647e9e2c56802b2af4ac3e0"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -9351,20 +9351,20 @@
     {
       "path": "src/renderer/components/RunLoadingScreen.module.css",
       "category": "source",
-      "bytes": 3535,
-      "sha256": "d95db4d3c0bbfb5810e26c6a0695ff0f0f9b9c240623b532e348719adf527b14"
+      "bytes": 4818,
+      "sha256": "2306ba532e5834120e71a3b0587294923b5469d0dd29615390e53e49fdce9f16"
     },
     {
       "path": "src/renderer/components/runLoadingScreen.test.tsx",
       "category": "test",
-      "bytes": 2582,
-      "sha256": "3e6ed1c2fb4051cd553d5374ada2c86388e0675e755ef246cb3df68824229cac"
+      "bytes": 3524,
+      "sha256": "00fbf5e902cdd05234c6d1f206db2c53ee1cd5ec9b85ed8cb34715053c95fb09"
     },
     {
       "path": "src/renderer/components/RunLoadingScreen.tsx",
       "category": "source",
-      "bytes": 2109,
-      "sha256": "3eee960e06c5c5f10d0d4c3a59b54ad1776356df8e94a85c78d16a92ee5671f9"
+      "bytes": 3010,
+      "sha256": "d4a7d67fcfb122b2c3aeafd5c42df3298f767ea3f4660545c3562e2aae85e050"
     },
     {
       "path": "src/renderer/components/RunShell.module.css",
@@ -16697,7 +16697,7 @@
       "path": "src/renderer/App.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 439,
+      "lineCount": 447,
       "imports": [
         "file:src/renderer/audio/feverDuck.ts",
         "file:src/renderer/audio/gameplayMusic.ts",
@@ -19447,7 +19447,7 @@
       "path": "src/renderer/components/runLoadingScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 54,
+      "lineCount": 71,
       "imports": [
         "file:src/renderer/components/RunLoadingScreen.tsx",
         "file:src/shared/contracts.ts"
@@ -19460,8 +19460,9 @@
       "path": "src/renderer/components/RunLoadingScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 48,
+      "lineCount": 66,
       "imports": [
+        "file:src/renderer/components/GameplayScene.tsx",
         "file:src/renderer/components/inventoryScreenModel.ts",
         "file:src/shared/contracts.ts"
       ],
@@ -33729,8 +33730,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/App.tsx",
-      "line": 438,
-      "endLine": 438
+      "line": 446,
+      "endLine": 446
     },
     {
       "id": "symbol:src/renderer/assets/assetDropInReadiness.ts#ASSET_DROP_IN_CATEGORIES",
@@ -36489,16 +36490,16 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunLoadingScreen.tsx",
-      "line": 47,
-      "endLine": 47
+      "line": 65,
+      "endLine": 65
     },
     {
       "id": "symbol:src/renderer/components/RunLoadingScreen.tsx#RunLoadingScreen",
       "name": "RunLoadingScreen",
       "kind": "value",
       "file": "src/renderer/components/RunLoadingScreen.tsx",
-      "line": 21,
-      "endLine": 45
+      "line": 28,
+      "endLine": 63
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#default",
@@ -79638,6 +79639,12 @@
       "id": "imports:src/renderer/components/runLoadingScreen.test.tsx->src/shared/contracts.ts",
       "source": "file:src/renderer/components/runLoadingScreen.test.tsx",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunLoadingScreen.tsx->src/renderer/components/GameplayScene.tsx",
+      "source": "file:src/renderer/components/RunLoadingScreen.tsx",
+      "target": "file:src/renderer/components/GameplayScene.tsx",
       "kind": "imports"
     },
     {

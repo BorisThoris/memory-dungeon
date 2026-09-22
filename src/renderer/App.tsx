@@ -386,7 +386,15 @@ const App = () => {
                         {hydrated &&
                             (view === 'playing' || shellChromeContract.boardMounted) &&
                             run && (
-                                <Suspense fallback={<RunLoadingScreen run={run} />}>
+                                <Suspense
+                                    fallback={
+                                        <RunLoadingScreen
+                                            quality={settings.graphicsQuality}
+                                            reduceMotion={reduceMotion}
+                                            run={run}
+                                        />
+                                    }
+                                >
                                     {/*
                                      * Inert while a shell is stacked over it. The board stays mounted so the run
                                      * survives, but it is covered: leaving it live left every tool button and the
