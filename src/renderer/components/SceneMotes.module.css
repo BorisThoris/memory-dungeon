@@ -1,0 +1,51 @@
+/* Points of light drifting up through a scene; the scene fades the drift with `--scene-motes-opacity`. */
+.motes {
+    position: absolute;
+    inset: 0;
+    opacity: var(--scene-motes-opacity, 1);
+    transition: opacity 900ms ease;
+    pointer-events: none;
+}
+
+.mote {
+    position: absolute;
+    width: var(--mote-size, 2px);
+    height: var(--mote-size, 2px);
+    border-radius: 50%;
+    background: var(--mote-color, #fff);
+    box-shadow: 0 0 8px 2px var(--mote-glow, rgba(255, 255, 255, 0.7));
+    mix-blend-mode: plus-lighter;
+    opacity: 0;
+    animation: sceneMote var(--mote-duration, 9000ms) ease-in-out infinite;
+    animation-delay: var(--mote-delay, 0ms);
+    will-change: transform, opacity;
+}
+
+.motes[data-still='true'] .mote {
+    animation: none;
+}
+
+@keyframes sceneMote {
+    0% {
+        transform: translate(0, 0);
+        opacity: 0;
+    }
+
+    16% {
+        opacity: 0.85;
+    }
+
+    52% {
+        transform: translate(var(--mote-drift, 0px), calc(var(--mote-rise, 60px) * -0.52));
+        opacity: 0.5;
+    }
+
+    84% {
+        opacity: 0.65;
+    }
+
+    100% {
+        transform: translate(calc(var(--mote-drift, 0px) * 0.35), calc(var(--mote-rise, 60px) * -1));
+        opacity: 0;
+    }
+}

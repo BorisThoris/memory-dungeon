@@ -112,3 +112,38 @@ export const resolveAdaptiveBoardRenderQuality = (input: {
 
     return { dprCap, resolvedAa };
 };
+
+/**
+ * How much of a painted scene's life a device gets (`GameplayScene`, `CathedralScene`,
+ * `PortalScene`).
+ *
+ *   - `full`: light passes, flame sprites, mist, sparks, motes, the plate's drift and its turn
+ *     toward the pointer.
+ *   - `lean`: the glow layers and the flame sprites only. Everything else in `full` is either a
+ *     blended composited layer per particle, a blurred full-plate layer, or a per-frame transform
+ *     of the whole plate, and on a phone those cost the frame rate the board needs; the flames are
+ *     a handful of small stepped strips and are what the scene is for.
+ *   - `still`: nothing moves (reduce motion).
+ *
+ * A phone is any coarse-pointer device or a viewport narrower than `SCENE_LEAN_MAX_WIDTH`, whatever
+ * the quality preset says: the preset is the player's choice of fidelity, the device's budget is
+ * not theirs to raise.
+ */
+export type SceneEffectTier = 'full' | 'lean' | 'still';
+
+export const SCENE_LEAN_MAX_WIDTH = 900;
+
+export const getSceneEffectTier = (input: {
+    quality: GraphicsQualityPreset;
+    reduceMotion: boolean;
+    coarsePointer: boolean;
+    viewportWidth: number;
+}): SceneEffectTier => {
+    if (input.reduceMotion) {
+        return 'still';
+    }
+    if (input.quality === 'low' || input.coarsePointer || input.viewportWidth < SCENE_LEAN_MAX_WIDTH) {
+        return 'lean';
+    }
+    return 'full';
+};

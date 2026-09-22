@@ -37,6 +37,13 @@
     display: none;
 }
 
+/* A phone gets the candles; the candlelight's flicker and the wisps' breathing on the full-plate
+   layers are what it cannot afford. */
+.scene[data-alive='false'] .candleGlow,
+.scene[data-alive='false'] .wisps {
+    animation: none;
+}
+
 .scene[data-still='true'] .layer {
     animation: none;
 }

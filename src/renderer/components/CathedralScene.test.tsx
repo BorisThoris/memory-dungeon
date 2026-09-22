@@ -24,8 +24,14 @@ describe('CathedralScene', () => {
             expect(parseFloat(style.top) + parseFloat(style.height)).toBeLessThanOrEqual(100);
             expect(parseFloat(style.left) + parseFloat(style.width)).toBeLessThanOrEqual(100);
         }
-        // Candles do not throw sparks.
+        // Candles do not throw sparks; the spirit-light climbs the arch as motes.
         expect(screen.queryAllByTestId('scene-embers')).toHaveLength(0);
+        const motes = [...screen.getByTestId('cathedral-scene-motes').children] as HTMLElement[];
+        expect(motes).toHaveLength(10);
+        for (const mote of motes) {
+            const x = parseFloat(mote.style.left);
+            expect(x > 30 && x < 44 ? true : x > 62 && x < 76).toBe(true);
+        }
     });
 
     it('holds still under reduce motion and drops the drift on low quality', () => {
@@ -35,6 +41,8 @@ describe('CathedralScene', () => {
         unmount();
         render(<CathedralScene quality="low" reduceMotion={false} />);
         expect(screen.getByTestId('cathedral-scene')).toHaveAttribute('data-alive', 'false');
+        expect(screen.getByTestId('cathedral-scene')).toHaveAttribute('data-scene-effect-tier', 'lean');
+        expect(screen.queryByTestId('cathedral-scene-motes')).toBeNull();
         expect(screen.getByTestId('scene-sprites')).toHaveAttribute('data-still', 'false');
     });
 });

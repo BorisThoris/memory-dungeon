@@ -76,11 +76,12 @@
     position: absolute;
     inset: -20% -30%;
     mix-blend-mode: plus-lighter;
+    /* Soft stops do the blurring: a `filter: blur()` on a moving layer this size is re-filtered
+       every frame. */
     background:
-        radial-gradient(ellipse 30% 12% at 22% 78%, rgba(150, 165, 190, 0.3), transparent 70%),
-        radial-gradient(ellipse 34% 10% at 74% 82%, rgba(140, 160, 190, 0.26), transparent 70%),
-        radial-gradient(ellipse 26% 9% at 48% 90%, rgba(160, 175, 200, 0.22), transparent 70%);
-    filter: blur(12px);
+        radial-gradient(ellipse 34% 15% at 22% 78%, rgba(150, 165, 190, 0.28) 0%, rgba(150, 165, 190, 0.11) 45%, transparent 75%),
+        radial-gradient(ellipse 38% 13% at 74% 82%, rgba(140, 160, 190, 0.24) 0%, rgba(140, 160, 190, 0.1) 45%, transparent 75%),
+        radial-gradient(ellipse 30% 12% at 48% 90%, rgba(160, 175, 200, 0.2) 0%, rgba(160, 175, 200, 0.08) 45%, transparent 75%);
     will-change: transform, opacity;
 }
 
@@ -95,26 +96,20 @@
     animation-delay: -21s;
 }
 
-/* ------------------------------------------------------------------ the motes */
-.mote {
-    position: absolute;
-    width: var(--mote-size, 2px);
-    height: var(--mote-size, 2px);
-    border-radius: 50%;
-    background: #bfe9ff;
-    box-shadow: 0 0 5px 1px rgba(120, 220, 255, 0.7);
-    mix-blend-mode: plus-lighter;
-    opacity: 0;
-    animation: portalMote var(--mote-duration, 12000ms) ease-in-out infinite;
-    animation-delay: var(--mote-delay, 0ms);
-    will-change: transform, opacity;
+/* ------------------------------------------------------------------ lean */
+/* A phone gets the vortex; the breathing runes, the pulsing moon and the twinkling stars on the
+   full-plate layers are what it cannot afford. */
+.scene[data-alive='false'] .runes,
+.scene[data-alive='false'] .moon,
+.scene[data-alive='false'] .starsA,
+.scene[data-alive='false'] .starsB {
+    animation: none;
 }
 
 /* ------------------------------------------------------------------ still */
 .scene[data-still='true'] .layer,
 .scene[data-still='true'] .disc,
-.scene[data-still='true'] .mistBank,
-.scene[data-still='true'] .mote {
+.scene[data-still='true'] .mistBank {
     animation: none;
 }
 
@@ -237,30 +232,5 @@
     100% {
         transform: translate3d(-2.5%, 0.6%, 0) scale(1);
         opacity: 0.46;
-    }
-}
-
-@keyframes portalMote {
-    0% {
-        transform: translate(0, 0);
-        opacity: 0;
-    }
-
-    15% {
-        opacity: 0.85;
-    }
-
-    50% {
-        transform: translate(var(--mote-drift, 0px), calc(var(--mote-rise, 60px) * -0.5));
-        opacity: 0.5;
-    }
-
-    85% {
-        opacity: 0.7;
-    }
-
-    100% {
-        transform: translate(calc(var(--mote-drift, 0px) * 0.3), calc(var(--mote-rise, 60px) * -1));
-        opacity: 0;
     }
 }

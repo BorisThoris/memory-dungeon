@@ -7,7 +7,9 @@ import {
     getGraphicsQualityTierSnapshot,
     getMenuAtmosphereParticleCount,
     getMenuPixiResolutionCap,
-    resolveAdaptiveBoardRenderQuality
+    getSceneEffectTier,
+    resolveAdaptiveBoardRenderQuality,
+    SCENE_LEAN_MAX_WIDTH
 } from './graphicsQuality';
 
 describe('graphicsQuality caps', () => {
@@ -90,5 +92,26 @@ describe('graphicsQuality caps', () => {
         });
         expect(r.dprCap).toBe(getBoardDprCap('low', true));
         expect(r.resolvedAa).toBe('smaa');
+    });
+});
+
+describe('getSceneEffectTier', () => {
+    const desktop = { quality: 'high' as const, reduceMotion: false, coarsePointer: false, viewportWidth: 1440 };
+
+    it('gives a desktop on medium or high the full scene', () => {
+        expect(getSceneEffectTier(desktop)).toBe('full');
+        expect(getSceneEffectTier({ ...desktop, quality: 'medium' })).toBe('full');
+    });
+
+    it('keeps a phone lean whatever the preset says: a coarse pointer or a narrow viewport', () => {
+        expect(getSceneEffectTier({ ...desktop, coarsePointer: true })).toBe('lean');
+        expect(getSceneEffectTier({ ...desktop, viewportWidth: SCENE_LEAN_MAX_WIDTH - 1 })).toBe('lean');
+        expect(getSceneEffectTier({ ...desktop, viewportWidth: SCENE_LEAN_MAX_WIDTH })).toBe('full');
+        expect(getSceneEffectTier({ ...desktop, quality: 'low' })).toBe('lean');
+    });
+
+    it('holds still under reduce motion before anything else', () => {
+        expect(getSceneEffectTier({ ...desktop, reduceMotion: true })).toBe('still');
+        expect(getSceneEffectTier({ ...desktop, reduceMotion: true, coarsePointer: true, quality: 'low' })).toBe('still');
     });
 });

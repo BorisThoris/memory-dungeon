@@ -3,8 +3,10 @@ import type { GraphicsQualityPreset } from '../../shared/contracts';
 import type { ChainTier } from '../../shared/chain-tier-rules';
 import { UI_ART } from '../assets/ui';
 import { SCENE_SPRITES } from '../assets/ui/sprites';
+import { useSceneEffectTier } from '../hooks/useSceneEffectTier';
 import { useSceneLook } from '../hooks/useSceneLook';
 import { sceneRingLevels } from './gameplaySceneLevels';
+import { SceneMotes } from './SceneMotes';
 import { SceneSprites } from './SceneSprites';
 import { ringMotes } from './sceneSpriteClocks';
 import plate from './scenePlate.module.css';
@@ -33,10 +35,10 @@ import styles from './GameplayScene.module.css';
  *     reads as a place.
  *
  * Everything sits in a *plate*: a box with the painting's aspect ratio, cover-fitted to the scene,
- * so the sprites' plate fractions land on their torches whatever the viewport. Reduce motion
- * freezes every animation and drops the parallax; `low` quality drops the three rendered light
- * passes, the mist, the embers and the drift, and keeps the glows and the flames, which read on
- * their own.
+ * so the sprites' plate fractions land on their torches whatever the viewport. What the device
+ * gets is `getSceneEffectTier`'s call: `full` on a desktop at medium or high; `lean` on a phone or
+ * at `low`, which drops the three rendered light passes, the mist, the embers, the motes and the
+ * drift and keeps the glows and the flames, which read on their own; `still` under reduce motion.
  */
 export interface GameplaySceneProps {
     /** The chain meter's fill, 0..1 of the way to Fever. */
@@ -56,9 +58,10 @@ const bg = (url: string) => ({ backgroundImage: `url(${url})` });
 export function GameplayScene({ fill, memorize, pulse, pulseKey, quality, reduceMotion, tier }: GameplaySceneProps) {
     const sceneRef = useRef<HTMLDivElement>(null);
     const ring = sceneRingLevels(fill);
-    const still = reduceMotion;
-    const lightPasses = quality !== 'low';
-    const alive = quality !== 'low' && !still;
+    const effectTier = useSceneEffectTier(quality, reduceMotion);
+    const still = effectTier === 'still';
+    const alive = effectTier === 'full';
+    const lightPasses = alive;
     const flames = SCENE_SPRITES.gameplayFlames;
     useSceneLook(sceneRef, alive);
     return (
@@ -66,6 +69,7 @@ export function GameplayScene({ fill, memorize, pulse, pulseKey, quality, reduce
             aria-hidden="true"
             className={`${plate.scene} ${styles.scene}`}
             data-alive={alive ? 'true' : 'false'}
+            data-scene-effect-tier={effectTier}
             data-memorize={memorize ? 'true' : 'false'}
             data-scene-pulse={pulse}
             data-scene-fill={fill.toFixed(2)}
@@ -80,7 +84,7 @@ export function GameplayScene({ fill, memorize, pulse, pulseKey, quality, reduce
                     '--scene-ring-hue': `${ring.hueDeg}deg`,
                     '--scene-ring-saturate': ring.saturate,
                     '--scene-pulse-peak': ring.pulsePeak,
-                    '--scene-ring-motes': ring.motes,
+                    '--scene-motes-opacity': ring.motes,
                     '--scene-plate-aspect': `${flames.plate[0]} / ${flames.plate[1]}`
                 } as CSSProperties
             }
@@ -114,24 +118,14 @@ export function GameplayScene({ fill, memorize, pulse, pulseKey, quality, reduce
                 <div className={plate.things}>
                     <SceneSprites embers={alive} set={flames} still={still} />
                     {alive ? (
-                        <div className={styles.ringMotes} data-testid="gameplay-scene-ring-motes">
-                            {ringMotes().map((mote) => (
-                                <i
-                                    className={styles.ringMote}
-                                    key={mote.id}
-                                    style={
-                                        {
-                                            left: `${mote.x}%`,
-                                            top: `${mote.y}%`,
-                                            '--mote-duration': `${mote.durationMs}ms`,
-                                            '--mote-delay': `${mote.delayMs}ms`,
-                                            '--mote-drift': `${mote.driftPx}px`,
-                                            '--mote-rise': `${mote.risePx}px`,
-                                            '--mote-size': `${mote.size}px`
-                                        } as CSSProperties
-                                    }
-                                />
-                            ))}
+                        <div className={styles.ringMotes}>
+                            <SceneMotes
+                                color="#d9c6ff"
+                                glow="rgba(170, 130, 255, 0.8)"
+                                motes={ringMotes()}
+                                still={false}
+                                testId="gameplay-scene-ring-motes"
+                            />
                         </div>
                     ) : null}
                 </div>

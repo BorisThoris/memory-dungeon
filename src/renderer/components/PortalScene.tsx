@@ -2,8 +2,10 @@ import { useRef, type CSSProperties } from 'react';
 import type { GraphicsQualityPreset } from '../../shared/contracts';
 import { UI_ART } from '../assets/ui';
 import { SCENE_SPRITES } from '../assets/ui/sprites';
+import { useSceneEffectTier } from '../hooks/useSceneEffectTier';
 import { useSceneLook } from '../hooks/useSceneLook';
 import { portalMotes } from './portalSceneMotes';
+import { SceneMotes } from './SceneMotes';
 import plate from './scenePlate.module.css';
 import styles from './PortalScene.module.css';
 
@@ -20,9 +22,9 @@ import styles from './PortalScene.module.css';
  * rise through the trees. The plate drifts slowly and turns with the pointer (`useSceneLook`).
  *
  * The parent owns the mask, the filter and how far the scene sinks into the page; the base reads
- * `--scene-base-opacity` and the lights `--scene-light-opacity`. Reduce motion freezes
- * everything; `low` quality keeps the layers and the vortex and drops the echo, the mist, the
- * motes and the drift.
+ * `--scene-base-opacity` and the lights `--scene-light-opacity`. `getSceneEffectTier` decides the
+ * rest: `full` on a desktop, `lean` on a phone or at `low` (the layers and the vortex, no echo, no
+ * mist, no motes, no drift), `still` under reduce motion.
  */
 export interface PortalSceneProps {
     quality: GraphicsQualityPreset;
@@ -34,8 +36,9 @@ const pct = (value: number): string => `${(value * 100).toFixed(3)}%`;
 
 export function PortalScene({ quality, reduceMotion }: PortalSceneProps) {
     const sceneRef = useRef<HTMLDivElement>(null);
-    const still = reduceMotion;
-    const alive = quality !== 'low' && !still;
+    const tier = useSceneEffectTier(quality, reduceMotion);
+    const still = tier === 'still';
+    const alive = tier === 'full';
     const set = SCENE_SPRITES.portalVortex;
     const vortex = set.sprites[0] ?? null;
     useSceneLook(sceneRef, alive);
@@ -44,6 +47,7 @@ export function PortalScene({ quality, reduceMotion }: PortalSceneProps) {
             aria-hidden="true"
             className={`${plate.scene} ${styles.scene}`}
             data-alive={alive ? 'true' : 'false'}
+            data-scene-effect-tier={tier}
             data-still={still ? 'true' : 'false'}
             data-testid="portal-scene"
             ref={sceneRef}
@@ -71,24 +75,14 @@ export function PortalScene({ quality, reduceMotion }: PortalSceneProps) {
                             <div className={`${styles.mistBank} ${styles.mistNear}`} />
                             <div className={`${styles.mistBank} ${styles.mistFar}`} />
                         </div>
-                        <div className={`${plate.things} ${styles.things}`} data-testid="portal-scene-motes">
-                            {portalMotes().map((mote) => (
-                                <i
-                                    className={styles.mote}
-                                    key={mote.id}
-                                    style={
-                                        {
-                                            left: `${mote.x}%`,
-                                            top: `${mote.y}%`,
-                                            '--mote-duration': `${mote.durationMs}ms`,
-                                            '--mote-delay': `${mote.delayMs}ms`,
-                                            '--mote-drift': `${mote.driftPx}px`,
-                                            '--mote-rise': `${mote.risePx}px`,
-                                            '--mote-size': `${mote.size}px`
-                                        } as CSSProperties
-                                    }
-                                />
-                            ))}
+                        <div className={`${plate.things} ${styles.things}`}>
+                            <SceneMotes
+                                color="#bfe9ff"
+                                glow="rgba(120, 220, 255, 0.7)"
+                                motes={portalMotes()}
+                                still={false}
+                                testId="portal-scene-motes"
+                            />
                         </div>
                     </>
                 ) : null}

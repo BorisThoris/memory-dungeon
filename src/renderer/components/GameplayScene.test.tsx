@@ -50,7 +50,7 @@ describe('GameplayScene', () => {
         expect(style).toContain(`--scene-ring-light: ${sceneRingLevels(0.5).light}`);
         expect(style).toContain(`--scene-ring-hue: ${sceneRingLevels(0.5).hueDeg}deg`);
         expect(style).toContain(`--scene-pulse-peak: ${sceneRingLevels(0.5).pulsePeak}`);
-        expect(style).toContain(`--scene-ring-motes: ${sceneRingLevels(0.5).motes}`);
+        expect(style).toContain(`--scene-motes-opacity: ${sceneRingLevels(0.5).motes}`);
         // The ring's motes are on the floor round the ring, never on the walls.
         const motes = [...screen.getByTestId('gameplay-scene-ring-motes').children] as HTMLElement[];
         expect(motes).toHaveLength(10);
@@ -100,6 +100,7 @@ describe('GameplayScene', () => {
         render(<GameplayScene {...base} reduceMotion />);
         const scene = screen.getByTestId('gameplay-scene');
         expect(scene).toHaveAttribute('data-still', 'true');
+        expect(scene).toHaveAttribute('data-scene-effect-tier', 'still');
         expect(scene).toHaveAttribute('data-alive', 'false');
         expect(screen.queryByTestId('gameplay-scene-mist')).toBeNull();
         expect(screen.queryAllByTestId('scene-embers')).toHaveLength(0);
@@ -129,9 +130,29 @@ describe('GameplayScene', () => {
         expect(screen.getByTestId('gameplay-scene-mist')).toBeInTheDocument();
     });
 
+    it('goes lean on a phone whatever the preset: flames and glows, no light passes, mist, sparks or drift', () => {
+        const width = window.innerWidth;
+        Object.defineProperty(window, 'innerWidth', { configurable: true, value: 390 });
+        try {
+            render(<GameplayScene {...base} quality="high" />);
+            const scene = screen.getByTestId('gameplay-scene');
+            expect(scene).toHaveAttribute('data-scene-effect-tier', 'lean');
+            expect(scene).toHaveAttribute('data-alive', 'false');
+            expect(layerCount()).toBe(4);
+            expect(screen.getByTestId('scene-sprites').querySelectorAll('[data-sprite-id]')).toHaveLength(6);
+            expect(screen.getByTestId('scene-sprites')).toHaveAttribute('data-still', 'false');
+            expect(screen.queryAllByTestId('scene-embers')).toHaveLength(0);
+            expect(screen.queryByTestId('gameplay-scene-mist')).toBeNull();
+            expect(screen.queryByTestId('gameplay-scene-ring-motes')).toBeNull();
+        } finally {
+            Object.defineProperty(window, 'innerWidth', { configurable: true, value: width });
+        }
+    });
+
     it('keeps the flames and drops the sparks, mist and drift on low quality', () => {
         render(<GameplayScene {...base} quality="low" />);
         expect(screen.getByTestId('gameplay-scene')).toHaveAttribute('data-alive', 'false');
+        expect(screen.getByTestId('gameplay-scene')).toHaveAttribute('data-scene-effect-tier', 'lean');
         expect(screen.getByTestId('scene-sprites').querySelectorAll('[data-sprite-id]')).toHaveLength(6);
         expect(screen.getByTestId('scene-sprites')).toHaveAttribute('data-still', 'false');
         expect(screen.queryAllByTestId('scene-embers')).toHaveLength(0);

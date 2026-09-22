@@ -71,8 +71,17 @@ flames; its parent sinks the base further than the lights (`--scene-base-opacity
 is the Classic clearing) breathes the runes, pulses the moon, twinkles the stars on two stepped
 clocks, spins the vortex disc in the arch (its feathered rim dissolving into the painted outer
 arms, a fainter copy turning the other way), drifts mist over the ground and floats motes through
-the trees. Reduce motion freezes everything and drops the parallax; `low` quality drops the light
-passes, the mist, the sparks, the motes and the drift, and keeps the glows and the flames.
+the trees.
+
+What a device gets is `getSceneEffectTier` (`src/shared/graphicsQuality.ts`), fed the pointer
+kind and the viewport by `useSceneEffectTier`: **full** on a desktop at medium or high; **lean**
+on any coarse-pointer device, any viewport under 900 px, or at `low`: the glow layers held still
+and unpromoted (so they rasterize with the page and blend once, instead of one full-screen GPU
+composite per layer per frame), the flame sprites and the vortex playing, no light passes, mist,
+sparks, motes, echo, drift or parallax; **still** under reduce motion. On a throttled Pixel 5
+emulation the full menu scene halved the frame rate (134 → 65 fps); lean costs nothing
+measurable (143 → 139). Mist uses soft gradient stops, never `filter: blur()`, which re-filters
+a moving layer every frame.
 
 ## Extending
 

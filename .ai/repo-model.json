@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2668,
-    "codeFileCount": 915,
-    "exportedSymbolCount": 2746,
+    "trackedFileCount": 2671,
+    "codeFileCount": 917,
+    "exportedSymbolCount": 2755,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6965
+    "relationshipCount": 6987
   },
   "inventory": [
     {
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "94a41b3f370351e05da60f2db88638b98c89a3ef817a4d6bb1c5b4148bac9a67"
+      "sha256": "dc5ca9406a950196b014e720f644ed346f476fa79af2c4e255720b72922990a8"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -5319,8 +5319,8 @@
     {
       "path": "scripts/scene-pipeline/README.md",
       "category": "script",
-      "bytes": 6626,
-      "sha256": "d47d9a54b2160562c95aeef991fff953c422cbfe5e7808363d623052b2509765"
+      "bytes": 7247,
+      "sha256": "de1e737c99e4ca849e67fba024fb69d5baa549dacdfc91c6df574bd9369846ea"
     },
     {
       "path": "scripts/scene-pipeline/scene.sh",
@@ -8931,20 +8931,20 @@
     {
       "path": "src/renderer/components/CathedralScene.module.css",
       "category": "source",
-      "bytes": 2377,
-      "sha256": "2eaf543a7a6a9421fef2dd858343609db64c87efa38bd1623aa6e1d903c4c266"
+      "bytes": 2729,
+      "sha256": "e0918f6298f572b0c4b3a129cba77efafd0389d3ca04fe5a685e278f7a4cbde7"
     },
     {
       "path": "src/renderer/components/CathedralScene.test.tsx",
       "category": "test",
-      "bytes": 3895,
-      "sha256": "be718257ba906f6edcce8fcf9ac8255aed2331d5a8ef80a4af398613887b063c"
+      "bytes": 4504,
+      "sha256": "045686054a30f8be9b20e65ee88da10bb2d8acd017706585c010c1e6ef058c83"
     },
     {
       "path": "src/renderer/components/CathedralScene.tsx",
       "category": "source",
-      "bytes": 3040,
-      "sha256": "2aff4dc2785cf995b6faf0e50be00a11012007735af75c91ab0c00d995b50bad"
+      "bytes": 3877,
+      "sha256": "90e7b4a63068b055fdb012eb6849364865d92636f2d5b1ae13c0be1685f10635"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
@@ -9069,20 +9069,20 @@
     {
       "path": "src/renderer/components/GameplayScene.module.css",
       "category": "source",
-      "bytes": 5998,
-      "sha256": "16fc09761ff519aa7466bd92a09d6e4838f1d373aee7be85a84a7966e69578cf"
+      "bytes": 6057,
+      "sha256": "9d114a2494bc632951cb310619767dc66387189cca350018edec90693a7cfc06"
     },
     {
       "path": "src/renderer/components/GameplayScene.test.tsx",
       "category": "test",
-      "bytes": 7790,
-      "sha256": "74e88b0e71163eb8caa80be844d8ca846677a746f37b59d2e230ac5adda19502"
+      "bytes": 9141,
+      "sha256": "77f50f3ca5ca85d75fed0017477fa166b6b6c2a060b17f9c238fec31a3f27566"
     },
     {
       "path": "src/renderer/components/GameplayScene.tsx",
       "category": "source",
-      "bytes": 7844,
-      "sha256": "3d54df4b42f9cc8a1d24fba742cf2a4df7c7abede1f5a8d5419a2a7d9e5832da"
+      "bytes": 7469,
+      "sha256": "6643185229aa2f858a1a75e662efa32850c09e476bda8302b352d2c05d0f184e"
     },
     {
       "path": "src/renderer/components/gameplaySceneLevels.ts",
@@ -9309,8 +9309,8 @@
     {
       "path": "src/renderer/components/PortalScene.module.css",
       "category": "source",
-      "bytes": 6191,
-      "sha256": "41b01bee890d245d3c00082b06f55a657335fe9a7710c2dcdafe421c565c3064"
+      "bytes": 5772,
+      "sha256": "840d779dfe38a2b39d0d9834a151b94dc44bee99cbecb9749b8950552a56de45"
     },
     {
       "path": "src/renderer/components/PortalScene.test.tsx",
@@ -9321,14 +9321,14 @@
     {
       "path": "src/renderer/components/PortalScene.tsx",
       "category": "source",
-      "bytes": 5409,
-      "sha256": "931ba38908109f597501922df5edced9c6eda58c989fbb1e98d1235c95305644"
+      "bytes": 5080,
+      "sha256": "20f73db088e0031a3c9906c325e6d5ef98b7c1951ed604c8187d58d92cb76147"
     },
     {
       "path": "src/renderer/components/portalSceneMotes.ts",
       "category": "source",
-      "bytes": 1436,
-      "sha256": "3f46066b931ac18705ce627a25dab7292f58fdc80fe16c30931aefe7f9c37a65"
+      "bytes": 1257,
+      "sha256": "4d2ed85c09de9f239ee9599c0f24e2d16868a1a280363d87a40208365e548035"
     },
     {
       "path": "src/renderer/components/ProfileScreen.module.css",
@@ -9403,16 +9403,28 @@
       "sha256": "b9124d84d7ca595dfd822c78f0c0ee1a9e4a0ae4ad5ba072c3bdb9aac7e099c0"
     },
     {
+      "path": "src/renderer/components/SceneMotes.module.css",
+      "category": "source",
+      "bytes": 1217,
+      "sha256": "5dc4ea72e9c78c03a164e03586c11119d2e76e0b82339c7f563162518faf7094"
+    },
+    {
+      "path": "src/renderer/components/SceneMotes.tsx",
+      "category": "source",
+      "bytes": 2105,
+      "sha256": "baaa7e15fb9e47b7dfbc15312e1ebcbf59d85c707943abdee040128a7bf63387"
+    },
+    {
       "path": "src/renderer/components/scenePlate.module.css",
       "category": "source",
-      "bytes": 3024,
-      "sha256": "d515bbec45e6b1c37bb395756aad26d74bdba64b40ab890106edfd9b6cce0488"
+      "bytes": 3636,
+      "sha256": "af4aeb4dc34c99fe32136c8136b1777416d14edd3a512cd1da961391b421cae2"
     },
     {
       "path": "src/renderer/components/sceneSpriteClocks.ts",
       "category": "source",
-      "bytes": 3376,
-      "sha256": "4efe8e461d47413ea939a40e766564fa63243c9b5995342d52928ee7b2ac43ec"
+      "bytes": 4331,
+      "sha256": "a9ff57fa1f3012a7612209b1d378ec7feb73e2a8391cfba1e06478035af59c7a"
     },
     {
       "path": "src/renderer/components/SceneSprites.module.css",
@@ -10889,6 +10901,12 @@
       "category": "source",
       "bytes": 1553,
       "sha256": "e8bbbc15d74400e86b92a22a10ed518af4d8917630b66e19c1aa965413159a40"
+    },
+    {
+      "path": "src/renderer/hooks/useSceneEffectTier.ts",
+      "category": "source",
+      "bytes": 665,
+      "sha256": "c6f1a73292517a7fcb0ce67936714307124a7d5dbfbed19e4243038dd6b6bec0"
     },
     {
       "path": "src/renderer/hooks/useSceneLook.ts",
@@ -12549,14 +12567,14 @@
     {
       "path": "src/shared/graphicsQuality.test.ts",
       "category": "test",
-      "bytes": 4035,
-      "sha256": "bb620d29446e812b96a2ce620fa5c90405d9c511c172842950ceaa9643e76937"
+      "bytes": 5352,
+      "sha256": "f8412b375965c815276a331aa457960cb2634f979cc1c0ee1a8490d54662b000"
     },
     {
       "path": "src/shared/graphicsQuality.ts",
       "category": "source",
-      "bytes": 4426,
-      "sha256": "ca4951cc74ddf4afefafdd3b4cd2cfbe55595a9ad87c82488c772008580b943e"
+      "bytes": 5811,
+      "sha256": "c89d57eab6291fd978326c2e531c1028bf31f22b1ff0dccbf946daabf24b7d3a"
     },
     {
       "path": "src/shared/hashPairKey.test.ts",
@@ -18383,7 +18401,7 @@
       "path": "src/renderer/components/CathedralScene.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 70,
+      "lineCount": 78,
       "imports": [
         "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/components/CathedralScene.tsx",
@@ -18397,11 +18415,14 @@
       "path": "src/renderer/components/CathedralScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 60,
+      "lineCount": 76,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
+        "file:src/renderer/components/SceneMotes.tsx",
+        "file:src/renderer/components/sceneSpriteClocks.ts",
         "file:src/renderer/components/SceneSprites.tsx",
+        "file:src/renderer/hooks/useSceneEffectTier.ts",
         "file:src/renderer/hooks/useSceneLook.ts",
         "file:src/shared/contracts.ts"
       ],
@@ -18712,7 +18733,7 @@
       "path": "src/renderer/components/GameplayScene.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 141,
+      "lineCount": 162,
       "imports": [
         "file:src/renderer/components/GameplayScene.tsx",
         "file:src/renderer/components/gameplaySceneLevels.ts"
@@ -18725,13 +18746,15 @@
       "path": "src/renderer/components/GameplayScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 142,
+      "lineCount": 136,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/components/gameplaySceneLevels.ts",
+        "file:src/renderer/components/SceneMotes.tsx",
         "file:src/renderer/components/sceneSpriteClocks.ts",
         "file:src/renderer/components/SceneSprites.tsx",
+        "file:src/renderer/hooks/useSceneEffectTier.ts",
         "file:src/renderer/hooks/useSceneLook.ts",
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts"
@@ -19336,11 +19359,13 @@
       "path": "src/renderer/components/PortalScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 99,
+      "lineCount": 93,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/components/portalSceneMotes.ts",
+        "file:src/renderer/components/SceneMotes.tsx",
+        "file:src/renderer/hooks/useSceneEffectTier.ts",
         "file:src/renderer/hooks/useSceneLook.ts",
         "file:src/shared/contracts.ts"
       ],
@@ -19357,8 +19382,10 @@
       "path": "src/renderer/components/portalSceneMotes.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 38,
-      "imports": [],
+      "lineCount": 29,
+      "imports": [
+        "file:src/renderer/components/SceneMotes.tsx"
+      ],
       "exports": [
         "symbol:src/renderer/components/portalSceneMotes.ts#PORTAL_MOTE_COUNT",
         "symbol:src/renderer/components/portalSceneMotes.ts#PortalMote",
@@ -19539,15 +19566,32 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/SceneMotes.tsx",
+      "path": "src/renderer/components/SceneMotes.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 62,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/components/SceneMotes.tsx#SceneMote",
+        "symbol:src/renderer/components/SceneMotes.tsx#SceneMotes",
+        "symbol:src/renderer/components/SceneMotes.tsx#SceneMotesProps"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/sceneSpriteClocks.ts",
       "path": "src/renderer/components/sceneSpriteClocks.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 86,
+      "lineCount": 100,
       "imports": [
-        "file:src/renderer/assets/ui/sprites/index.ts"
+        "file:src/renderer/assets/ui/sprites/index.ts",
+        "file:src/renderer/components/SceneMotes.tsx"
       ],
       "exports": [
+        "symbol:src/renderer/components/sceneSpriteClocks.ts#CATHEDRAL_MOTE_COUNT",
+        "symbol:src/renderer/components/sceneSpriteClocks.ts#cathedralMotes",
         "symbol:src/renderer/components/sceneSpriteClocks.ts#RING_MOTE_COUNT",
         "symbol:src/renderer/components/sceneSpriteClocks.ts#RingMote",
         "symbol:src/renderer/components/sceneSpriteClocks.ts#ringMotes",
@@ -23682,6 +23726,23 @@
       "testedBy": [
         "file:src/renderer/hooks/useRichPresence.test.ts"
       ]
+    },
+    {
+      "id": "file:src/renderer/hooks/useSceneEffectTier.ts",
+      "path": "src/renderer/hooks/useSceneEffectTier.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 12,
+      "imports": [
+        "file:src/renderer/hooks/useCoarsePointer.ts",
+        "file:src/renderer/hooks/useViewportSize.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/graphicsQuality.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/hooks/useSceneEffectTier.ts#useSceneEffectTier"
+      ],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/hooks/useSceneLook.ts",
@@ -28920,7 +28981,7 @@
       "path": "src/shared/graphicsQuality.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 95,
+      "lineCount": 118,
       "imports": [
         "file:src/renderer/components/gameplayVisualConfig.ts",
         "file:src/shared/graphicsQuality.ts"
@@ -28933,7 +28994,7 @@
       "path": "src/shared/graphicsQuality.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 115,
+      "lineCount": 150,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -28944,8 +29005,11 @@
         "symbol:src/shared/graphicsQuality.ts#getGraphicsQualityTierSnapshot",
         "symbol:src/shared/graphicsQuality.ts#getMenuAtmosphereParticleCount",
         "symbol:src/shared/graphicsQuality.ts#getMenuPixiResolutionCap",
+        "symbol:src/shared/graphicsQuality.ts#getSceneEffectTier",
         "symbol:src/shared/graphicsQuality.ts#GraphicsQualityTierSnapshot",
-        "symbol:src/shared/graphicsQuality.ts#resolveAdaptiveBoardRenderQuality"
+        "symbol:src/shared/graphicsQuality.ts#resolveAdaptiveBoardRenderQuality",
+        "symbol:src/shared/graphicsQuality.ts#SCENE_LEAN_MAX_WIDTH",
+        "symbol:src/shared/graphicsQuality.ts#SceneEffectTier"
       ],
       "testedBy": [
         "file:src/shared/graphicsQuality.test.ts"
@@ -35846,16 +35910,16 @@
       "name": "CathedralScene",
       "kind": "function",
       "file": "src/renderer/components/CathedralScene.tsx",
-      "line": 32,
-      "endLine": 59
+      "line": 37,
+      "endLine": 75
     },
     {
       "id": "symbol:src/renderer/components/CathedralScene.tsx#CathedralSceneProps",
       "name": "CathedralSceneProps",
       "kind": "interface",
       "file": "src/renderer/components/CathedralScene.tsx",
-      "line": 25,
-      "endLine": 28
+      "line": 30,
+      "endLine": 33
     },
     {
       "id": "symbol:src/renderer/components/ChooseYourPathScreen.tsx#default",
@@ -36014,16 +36078,16 @@
       "name": "GameplayScene",
       "kind": "function",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 56,
-      "endLine": 141
+      "line": 58,
+      "endLine": 135
     },
     {
       "id": "symbol:src/renderer/components/GameplayScene.tsx#GameplaySceneProps",
       "name": "GameplaySceneProps",
       "kind": "interface",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 41,
-      "endLine": 52
+      "line": 43,
+      "endLine": 54
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#sceneRingLevels",
@@ -36366,40 +36430,40 @@
       "name": "PortalScene",
       "kind": "function",
       "file": "src/renderer/components/PortalScene.tsx",
-      "line": 35,
-      "endLine": 98
+      "line": 37,
+      "endLine": 92
     },
     {
       "id": "symbol:src/renderer/components/PortalScene.tsx#PortalSceneProps",
       "name": "PortalSceneProps",
       "kind": "interface",
       "file": "src/renderer/components/PortalScene.tsx",
-      "line": 27,
-      "endLine": 30
+      "line": 29,
+      "endLine": 32
     },
     {
       "id": "symbol:src/renderer/components/portalSceneMotes.ts#PORTAL_MOTE_COUNT",
       "name": "PORTAL_MOTE_COUNT",
       "kind": "value",
       "file": "src/renderer/components/portalSceneMotes.ts",
-      "line": 21,
-      "endLine": 21
+      "line": 12,
+      "endLine": 12
     },
     {
       "id": "symbol:src/renderer/components/portalSceneMotes.ts#PortalMote",
       "name": "PortalMote",
-      "kind": "interface",
+      "kind": "type",
       "file": "src/renderer/components/portalSceneMotes.ts",
-      "line": 6,
-      "endLine": 17
+      "line": 8,
+      "endLine": 8
     },
     {
       "id": "symbol:src/renderer/components/portalSceneMotes.ts#portalMotes",
       "name": "portalMotes",
       "kind": "value",
       "file": "src/renderer/components/portalSceneMotes.ts",
-      "line": 23,
-      "endLine": 37
+      "line": 14,
+      "endLine": 28
     },
     {
       "id": "symbol:src/renderer/components/ProfileScreen.tsx#default",
@@ -36506,60 +36570,100 @@
       "endLine": 42
     },
     {
+      "id": "symbol:src/renderer/components/SceneMotes.tsx#SceneMote",
+      "name": "SceneMote",
+      "kind": "interface",
+      "file": "src/renderer/components/SceneMotes.tsx",
+      "line": 12,
+      "endLine": 23
+    },
+    {
+      "id": "symbol:src/renderer/components/SceneMotes.tsx#SceneMotes",
+      "name": "SceneMotes",
+      "kind": "function",
+      "file": "src/renderer/components/SceneMotes.tsx",
+      "line": 34,
+      "endLine": 61
+    },
+    {
+      "id": "symbol:src/renderer/components/SceneMotes.tsx#SceneMotesProps",
+      "name": "SceneMotesProps",
+      "kind": "interface",
+      "file": "src/renderer/components/SceneMotes.tsx",
+      "line": 25,
+      "endLine": 32
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#CATHEDRAL_MOTE_COUNT",
+      "name": "CATHEDRAL_MOTE_COUNT",
+      "kind": "value",
+      "file": "src/renderer/components/sceneSpriteClocks.ts",
+      "line": 78,
+      "endLine": 78
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#cathedralMotes",
+      "name": "cathedralMotes",
+      "kind": "value",
+      "file": "src/renderer/components/sceneSpriteClocks.ts",
+      "line": 85,
+      "endLine": 99
+    },
+    {
       "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#RING_MOTE_COUNT",
       "name": "RING_MOTE_COUNT",
       "kind": "value",
       "file": "src/renderer/components/sceneSpriteClocks.ts",
-      "line": 62,
-      "endLine": 62
+      "line": 53,
+      "endLine": 53
     },
     {
       "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#RingMote",
       "name": "RingMote",
-      "kind": "interface",
+      "kind": "type",
       "file": "src/renderer/components/sceneSpriteClocks.ts",
-      "line": 50,
-      "endLine": 60
+      "line": 51,
+      "endLine": 51
     },
     {
       "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#ringMotes",
       "name": "ringMotes",
       "kind": "value",
       "file": "src/renderer/components/sceneSpriteClocks.ts",
-      "line": 70,
-      "endLine": 85
+      "line": 61,
+      "endLine": 76
     },
     {
       "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#SceneEmber",
       "name": "SceneEmber",
       "kind": "interface",
       "file": "src/renderer/components/sceneSpriteClocks.ts",
-      "line": 22,
-      "endLine": 31
+      "line": 23,
+      "endLine": 32
     },
     {
       "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#SceneSpriteClock",
       "name": "SceneSpriteClock",
       "kind": "interface",
       "file": "src/renderer/components/sceneSpriteClocks.ts",
-      "line": 8,
-      "endLine": 11
+      "line": 9,
+      "endLine": 12
     },
     {
       "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#sceneSpriteClocks",
       "name": "sceneSpriteClocks",
       "kind": "value",
       "file": "src/renderer/components/sceneSpriteClocks.ts",
-      "line": 15,
-      "endLine": 20
+      "line": 16,
+      "endLine": 21
     },
     {
       "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#sceneSpriteEmbers",
       "name": "sceneSpriteEmbers",
       "kind": "value",
       "file": "src/renderer/components/sceneSpriteClocks.ts",
-      "line": 34,
-      "endLine": 48
+      "line": 35,
+      "endLine": 49
     },
     {
       "id": "symbol:src/renderer/components/SceneSprites.tsx#SceneSprites",
@@ -41184,6 +41288,14 @@
       "file": "src/renderer/hooks/useRichPresence.ts",
       "line": 14,
       "endLine": 37
+    },
+    {
+      "id": "symbol:src/renderer/hooks/useSceneEffectTier.ts#useSceneEffectTier",
+      "name": "useSceneEffectTier",
+      "kind": "value",
+      "file": "src/renderer/hooks/useSceneEffectTier.ts",
+      "line": 7,
+      "endLine": 11
     },
     {
       "id": "symbol:src/renderer/hooks/useSceneLook.ts#useSceneLook",
@@ -49010,6 +49122,14 @@
       "endLine": 31
     },
     {
+      "id": "symbol:src/shared/graphicsQuality.ts#getSceneEffectTier",
+      "name": "getSceneEffectTier",
+      "kind": "value",
+      "file": "src/shared/graphicsQuality.ts",
+      "line": 136,
+      "endLine": 149
+    },
+    {
       "id": "symbol:src/shared/graphicsQuality.ts#GraphicsQualityTierSnapshot",
       "name": "GraphicsQualityTierSnapshot",
       "kind": "type",
@@ -49024,6 +49144,22 @@
       "file": "src/shared/graphicsQuality.ts",
       "line": 79,
       "endLine": 114
+    },
+    {
+      "id": "symbol:src/shared/graphicsQuality.ts#SCENE_LEAN_MAX_WIDTH",
+      "name": "SCENE_LEAN_MAX_WIDTH",
+      "kind": "value",
+      "file": "src/shared/graphicsQuality.ts",
+      "line": 134,
+      "endLine": 134
+    },
+    {
+      "id": "symbol:src/shared/graphicsQuality.ts#SceneEffectTier",
+      "name": "SceneEffectTier",
+      "kind": "type",
+      "file": "src/shared/graphicsQuality.ts",
+      "line": 132,
+      "endLine": 132
     },
     {
       "id": "symbol:src/shared/hashPairKey.ts#hashPairKey",
@@ -61144,6 +61280,36 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/SceneMotes.tsx->symbol:src/renderer/components/SceneMotes.tsx#SceneMote",
+      "source": "file:src/renderer/components/SceneMotes.tsx",
+      "target": "symbol:src/renderer/components/SceneMotes.tsx#SceneMote",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/SceneMotes.tsx->symbol:src/renderer/components/SceneMotes.tsx#SceneMotes",
+      "source": "file:src/renderer/components/SceneMotes.tsx",
+      "target": "symbol:src/renderer/components/SceneMotes.tsx#SceneMotes",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/SceneMotes.tsx->symbol:src/renderer/components/SceneMotes.tsx#SceneMotesProps",
+      "source": "file:src/renderer/components/SceneMotes.tsx",
+      "target": "symbol:src/renderer/components/SceneMotes.tsx#SceneMotesProps",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneSpriteClocks.ts->symbol:src/renderer/components/sceneSpriteClocks.ts#CATHEDRAL_MOTE_COUNT",
+      "source": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "target": "symbol:src/renderer/components/sceneSpriteClocks.ts#CATHEDRAL_MOTE_COUNT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneSpriteClocks.ts->symbol:src/renderer/components/sceneSpriteClocks.ts#cathedralMotes",
+      "source": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "target": "symbol:src/renderer/components/sceneSpriteClocks.ts#cathedralMotes",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/sceneSpriteClocks.ts->symbol:src/renderer/components/sceneSpriteClocks.ts#RING_MOTE_COUNT",
       "source": "file:src/renderer/components/sceneSpriteClocks.ts",
       "target": "symbol:src/renderer/components/sceneSpriteClocks.ts#RING_MOTE_COUNT",
@@ -64651,6 +64817,12 @@
       "id": "exports:src/renderer/hooks/useRichPresence.ts->symbol:src/renderer/hooks/useRichPresence.ts#useRichPresence",
       "source": "file:src/renderer/hooks/useRichPresence.ts",
       "target": "symbol:src/renderer/hooks/useRichPresence.ts#useRichPresence",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/hooks/useSceneEffectTier.ts->symbol:src/renderer/hooks/useSceneEffectTier.ts#useSceneEffectTier",
+      "source": "file:src/renderer/hooks/useSceneEffectTier.ts",
+      "target": "symbol:src/renderer/hooks/useSceneEffectTier.ts#useSceneEffectTier",
       "kind": "exports"
     },
     {
@@ -70522,6 +70694,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/graphicsQuality.ts->symbol:src/shared/graphicsQuality.ts#getSceneEffectTier",
+      "source": "file:src/shared/graphicsQuality.ts",
+      "target": "symbol:src/shared/graphicsQuality.ts#getSceneEffectTier",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/graphicsQuality.ts->symbol:src/shared/graphicsQuality.ts#GraphicsQualityTierSnapshot",
       "source": "file:src/shared/graphicsQuality.ts",
       "target": "symbol:src/shared/graphicsQuality.ts#GraphicsQualityTierSnapshot",
@@ -70531,6 +70709,18 @@
       "id": "exports:src/shared/graphicsQuality.ts->symbol:src/shared/graphicsQuality.ts#resolveAdaptiveBoardRenderQuality",
       "source": "file:src/shared/graphicsQuality.ts",
       "target": "symbol:src/shared/graphicsQuality.ts#resolveAdaptiveBoardRenderQuality",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/graphicsQuality.ts->symbol:src/shared/graphicsQuality.ts#SCENE_LEAN_MAX_WIDTH",
+      "source": "file:src/shared/graphicsQuality.ts",
+      "target": "symbol:src/shared/graphicsQuality.ts#SCENE_LEAN_MAX_WIDTH",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/graphicsQuality.ts->symbol:src/shared/graphicsQuality.ts#SceneEffectTier",
+      "source": "file:src/shared/graphicsQuality.ts",
+      "target": "symbol:src/shared/graphicsQuality.ts#SceneEffectTier",
       "kind": "exports"
     },
     {
@@ -77760,9 +77950,27 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/CathedralScene.tsx->src/renderer/components/SceneMotes.tsx",
+      "source": "file:src/renderer/components/CathedralScene.tsx",
+      "target": "file:src/renderer/components/SceneMotes.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/CathedralScene.tsx->src/renderer/components/sceneSpriteClocks.ts",
+      "source": "file:src/renderer/components/CathedralScene.tsx",
+      "target": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/CathedralScene.tsx->src/renderer/components/SceneSprites.tsx",
       "source": "file:src/renderer/components/CathedralScene.tsx",
       "target": "file:src/renderer/components/SceneSprites.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/CathedralScene.tsx->src/renderer/hooks/useSceneEffectTier.ts",
+      "source": "file:src/renderer/components/CathedralScene.tsx",
+      "target": "file:src/renderer/hooks/useSceneEffectTier.ts",
       "kind": "imports"
     },
     {
@@ -78312,6 +78520,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/SceneMotes.tsx",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "file:src/renderer/components/SceneMotes.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/sceneSpriteClocks.ts",
       "source": "file:src/renderer/components/GameplayScene.tsx",
       "target": "file:src/renderer/components/sceneSpriteClocks.ts",
@@ -78321,6 +78535,12 @@
       "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/SceneSprites.tsx",
       "source": "file:src/renderer/components/GameplayScene.tsx",
       "target": "file:src/renderer/components/SceneSprites.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/hooks/useSceneEffectTier.ts",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "file:src/renderer/hooks/useSceneEffectTier.ts",
       "kind": "imports"
     },
     {
@@ -79248,6 +79468,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/PortalScene.tsx->src/renderer/components/SceneMotes.tsx",
+      "source": "file:src/renderer/components/PortalScene.tsx",
+      "target": "file:src/renderer/components/SceneMotes.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/PortalScene.tsx->src/renderer/hooks/useSceneEffectTier.ts",
+      "source": "file:src/renderer/components/PortalScene.tsx",
+      "target": "file:src/renderer/hooks/useSceneEffectTier.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/PortalScene.tsx->src/renderer/hooks/useSceneLook.ts",
       "source": "file:src/renderer/components/PortalScene.tsx",
       "target": "file:src/renderer/hooks/useSceneLook.ts",
@@ -79257,6 +79489,12 @@
       "id": "imports:src/renderer/components/PortalScene.tsx->src/shared/contracts.ts",
       "source": "file:src/renderer/components/PortalScene.tsx",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/portalSceneMotes.ts->src/renderer/components/SceneMotes.tsx",
+      "source": "file:src/renderer/components/portalSceneMotes.ts",
+      "target": "file:src/renderer/components/SceneMotes.tsx",
       "kind": "imports"
     },
     {
@@ -79527,6 +79765,12 @@
       "id": "imports:src/renderer/components/sceneSpriteClocks.ts->src/renderer/assets/ui/sprites/index.ts",
       "source": "file:src/renderer/components/sceneSpriteClocks.ts",
       "target": "file:src/renderer/assets/ui/sprites/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneSpriteClocks.ts->src/renderer/components/SceneMotes.tsx",
+      "source": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "target": "file:src/renderer/components/SceneMotes.tsx",
       "kind": "imports"
     },
     {
@@ -83073,6 +83317,30 @@
       "id": "imports:src/renderer/hooks/useRichPresence.ts->src/shared/rich-presence.ts",
       "source": "file:src/renderer/hooks/useRichPresence.ts",
       "target": "file:src/shared/rich-presence.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/hooks/useSceneEffectTier.ts->src/renderer/hooks/useCoarsePointer.ts",
+      "source": "file:src/renderer/hooks/useSceneEffectTier.ts",
+      "target": "file:src/renderer/hooks/useCoarsePointer.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/hooks/useSceneEffectTier.ts->src/renderer/hooks/useViewportSize.ts",
+      "source": "file:src/renderer/hooks/useSceneEffectTier.ts",
+      "target": "file:src/renderer/hooks/useViewportSize.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/hooks/useSceneEffectTier.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/hooks/useSceneEffectTier.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/hooks/useSceneEffectTier.ts->src/shared/graphicsQuality.ts",
+      "source": "file:src/renderer/hooks/useSceneEffectTier.ts",
+      "target": "file:src/shared/graphicsQuality.ts",
       "kind": "imports"
     },
     {

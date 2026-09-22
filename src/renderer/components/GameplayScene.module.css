@@ -16,11 +16,12 @@
     position: absolute;
     inset: -20% -30%;
     mix-blend-mode: plus-lighter;
+    /* Soft stops do the blurring: a `filter: blur()` on a layer this size is re-filtered every
+       frame it moves, which is what the mist does. */
     background:
-        radial-gradient(ellipse 22% 14% at 38% 55%, rgba(120, 140, 170, 0.32), transparent 70%),
-        radial-gradient(ellipse 26% 12% at 62% 50%, rgba(110, 130, 165, 0.26), transparent 70%),
-        radial-gradient(ellipse 18% 10% at 50% 62%, rgba(130, 150, 180, 0.22), transparent 70%);
-    filter: blur(10px);
+        radial-gradient(ellipse 26% 17% at 38% 55%, rgba(120, 140, 170, 0.3) 0%, rgba(120, 140, 170, 0.12) 45%, transparent 75%),
+        radial-gradient(ellipse 30% 15% at 62% 50%, rgba(110, 130, 165, 0.24) 0%, rgba(110, 130, 165, 0.1) 45%, transparent 75%),
+        radial-gradient(ellipse 22% 13% at 50% 62%, rgba(130, 150, 180, 0.2) 0%, rgba(130, 150, 180, 0.08) 45%, transparent 75%);
     will-change: transform, opacity;
 }
 
@@ -117,50 +118,24 @@
 }
 
 /* ------------------------------------------------------------------ the ring's motes */
-/* Points of the ring's own light lifting off the floor; the whole drift fades in with the chain
-   (`--scene-ring-motes`) and takes the ring's hue, so at Fever they rise rose. */
+/* Points of the ring's own light lifting off the floor (`SceneMotes`); the whole drift fades in
+   with the chain (`--scene-motes-opacity`, set with the ring levels) and takes the ring's hue, so
+   at Fever they rise rose. */
 .ringMotes {
     position: absolute;
     inset: 0;
-    opacity: var(--scene-ring-motes, 0);
     filter: hue-rotate(var(--scene-ring-hue, 0deg));
-    transition: opacity 900ms ease;
     pointer-events: none;
 }
 
-.ringMote {
-    position: absolute;
-    width: var(--mote-size, 2px);
-    height: var(--mote-size, 2px);
-    border-radius: 50%;
-    background: #d9c6ff;
-    box-shadow: 0 0 8px 2px rgba(170, 130, 255, 0.8);
-    mix-blend-mode: plus-lighter;
-    opacity: 0;
-    animation: sceneRingMote var(--mote-duration, 7000ms) ease-in-out infinite;
-    animation-delay: var(--mote-delay, 0ms);
-    will-change: transform, opacity;
-}
-
-@keyframes sceneRingMote {
-    0% {
-        transform: translate(0, 0);
-        opacity: 0;
-    }
-
-    18% {
-        opacity: 0.9;
-    }
-
-    55% {
-        transform: translate(var(--mote-drift, 0px), calc(var(--mote-rise, 80px) * -0.55));
-        opacity: 0.55;
-    }
-
-    100% {
-        transform: translate(calc(var(--mote-drift, 0px) * 0.4), calc(var(--mote-rise, 80px) * -1));
-        opacity: 0;
-    }
+/* ------------------------------------------------------------------ lean */
+/* A phone gets the flames, the ring's answer to the chain and the break flash; the ambient
+   flicker and breathing of the full-plate light layers are what it cannot afford. */
+.scene[data-alive='false'] .torchLightL,
+.scene[data-alive='false'] .torchLightR,
+.scene[data-alive='false'] .torchGlow,
+.scene[data-alive='false'] .runeGlow {
+    animation: none;
 }
 
 /* ------------------------------------------------------------------ still */
