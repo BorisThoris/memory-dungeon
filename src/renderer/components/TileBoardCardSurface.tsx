@@ -28,8 +28,12 @@ interface TileBoardCardSurfaceProps {
     cardBackSpinGeometry: PlaneGeometry;
     cardBackSpinTexture: Texture | null;
     cardHeat: number;
+    /** False on a device that cannot afford the back's moving light. */
+    cardGlowAnimated: boolean;
     /** True once this card's pair has landed: the back throws a flare. */
     cardMatched: boolean;
+    /** False while the card is face up, when its back cannot be seen. */
+    cardBackVisible: boolean;
     cardFrontArtTexture: CanvasTexture | null;
     cardPanelDisplacementMap: CanvasTexture | null;
     cardTint: string;
@@ -62,6 +66,8 @@ export const TileBoardCardSurface = memo(
         cardBackGlowTexture,
         cardBackSpinGeometry,
         cardBackSpinTexture,
+        cardBackVisible,
+        cardGlowAnimated,
         cardHeat,
         cardMatched,
         cardFrontArtTexture,
@@ -198,10 +204,12 @@ export const TileBoardCardSurface = memo(
             {/* The back answers the run: its own light rises with the chain and the labyrinth turns. */}
             <group position={[0, 0, -faceZ]} rotation={[0, Math.PI, 0]}>
                 <AnimatedCardBackGlow
+                    animated={cardGlowAnimated}
                     geometry={backGeometry}
                     glowTexture={cardBackGlowTexture}
                     heat={cardHeat}
                     matched={cardMatched}
+                    visible={cardBackVisible}
                     reduceMotion={reduceMotion}
                     seed={seed}
                     spinGeometry={cardBackSpinGeometry}

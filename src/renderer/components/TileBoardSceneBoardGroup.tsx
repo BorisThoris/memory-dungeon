@@ -12,6 +12,7 @@ interface TileBoardSceneBoardGroupProps {
     board: BoardState;
     /** Chain meter fill, 0..1: how hard the card backs burn. */
     cardHeat: number;
+    cardGlowAnimated: boolean;
     boardColumns: number;
     boardEntranceMotionBudgetMs: number;
     boardEntranceMotionDeadlineMs: number;
@@ -46,6 +47,7 @@ interface TileBoardSceneBoardGroupProps {
 
 export const TileBoardSceneBoardGroup = ({
     board,
+    cardGlowAnimated,
     cardHeat,
     boardColumns,
     boardEntranceMotionBudgetMs,
@@ -169,6 +171,7 @@ export const TileBoardSceneBoardGroup = ({
                     boardRows={boardRows}
                     boardColumns={boardColumns}
                     board={board}
+                    cardGlowAnimated={cardGlowAnimated}
                     cardHeat={cardHeat}
                     sharedCardBackLayers={sharedCardBackLayers}
                     sharedCardFrontLayers={sharedCardFrontLayers}

@@ -120,6 +120,8 @@ interface TileBezelProps {
     board: BoardState;
     /** Chain meter fill, 0..1: how hard this card's back burns. */
     cardHeat: number;
+    /** False on a device that cannot afford the card backs' moving light (`getSceneEffectTier`). */
+    cardGlowAnimated: boolean;
     textureRevision: number;
     tile: Tile;
     transform: TileTransform;
@@ -161,8 +163,16 @@ export interface TileHoverTiltState {
 const CARD_WIDTH = CARD_PLANE_WIDTH;
 const CARD_HEIGHT = CARD_PLANE_HEIGHT;
 const CARD_FACE_INSET = 0.016;
-/** The medallion's disc is 0.63 of the painted plate's height; the plane matches so it lands on it. */
-const CARD_BACK_SPIN_SIZE = CARD_HEIGHT * 0.63;
+/**
+ * The medallion's plane, sized from the same number the cutter used.
+ *
+ * `scripts/card-pipeline/cut_card_back_glow.py --disc 0.5 0.487 0.315` crops the disc at a radius
+ * of 0.315 of the plate's shorter side, so the texture is exactly that diameter across. Drift
+ * between the two and the turning light slides off the painted labyrinth underneath it, which is
+ * the kind of thing that looks like a rendering bug and is really a number typed twice.
+ */
+const CARD_BACK_SPIN_DISC_RADIUS_FRACTION = 0.315;
+const CARD_BACK_SPIN_SIZE = CARD_HEIGHT * CARD_BACK_SPIN_DISC_RADIUS_FRACTION * 2;
 
 const CARD_FACE_WIDTH = CARD_WIDTH - CARD_FACE_INSET * 2;
 const CARD_FACE_HEIGHT = CARD_HEIGHT - CARD_FACE_INSET * 2;
@@ -207,6 +217,7 @@ const TileBezelInner = ({
     boardRows,
     boardColumns,
     board,
+    cardGlowAnimated,
     cardHeat,
     textureRevision,
     tile,
@@ -775,6 +786,8 @@ const TileBezelInner = ({
                         cardBackGlowTexture={cardBackGlowTexture}
                         cardBackSpinGeometry={cardBackSpinGeometry}
                         cardBackSpinTexture={cardBackSpinTexture}
+                        cardBackVisible={!faceUp}
+                        cardGlowAnimated={cardGlowAnimated}
                         cardHeat={cardHeat}
                         cardMatched={isMatched}
                         backNormalMap={backNormalMapEffective}

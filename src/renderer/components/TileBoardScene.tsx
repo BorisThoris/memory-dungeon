@@ -446,6 +446,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
                 onTileHover={onTileHover}
                 reduceMotion={reduceMotion}
                 resolvingMatchWaveKey={resolvingMatchWaveKey}
+                cardGlowAnimated={cardSvgMeshesAffordable}
                 cardHeat={cardHeat}
                 sharedCardBackLayers={sharedCardBackLayers}
                 sharedCardFrontLayers={sharedCardFrontLayers}

@@ -19,8 +19,6 @@ export interface CardHeatLevels {
     spin: number;
     /** Turns per second of the medallion. */
     spinRate: number;
-    /** Degrees of hue rotation on the card's light: cyan at rest, toward gold at Fever. */
-    hueDeg: number;
 }
 
 const clamp01 = (value: number): number => (Number.isFinite(value) ? Math.min(1, Math.max(0, value)) : 0);
@@ -37,8 +35,7 @@ export const cardHeatLevels = (fill: number): CardHeatLevels => {
     return {
         runeGlow: round(0.22 + 0.78 * eased),
         spin: round(0.9 * turning * turning * (3 - 2 * turning)),
-        spinRate: round(0.02 + 0.14 * turning),
-        hueDeg: Math.round(26 * eased) + 0
+        spinRate: round(0.02 + 0.14 * turning)
     };
 };
 

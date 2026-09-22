@@ -25,6 +25,10 @@ describe('cardHeatLevels', () => {
         expect(cardHeatLevels(0.3).spin).toBeLessThan(cardHeatLevels(0.7).spin);
     });
 
+    it('reports only what the board draws: no field is computed and left unread', () => {
+        expect(Object.keys(cardHeatLevels(0.5)).sort()).toEqual(['runeGlow', 'spin', 'spinRate']);
+    });
+
     it('keeps a resting board lit rather than dead, and clamps bad input', () => {
         // A chain of nothing still shows the painting's own light, or the backs read as cardboard.
         expect(cardHeatLevels(0).runeGlow).toBeGreaterThan(0.15);

@@ -8877,8 +8877,8 @@
     {
       "path": "src/renderer/components/AnimatedCardBackGlow.tsx",
       "category": "source",
-      "bytes": 5258,
-      "sha256": "eb4a07ff9c069c6c6a377e8719308a3c6ae7c1f18e03e65413e6f7184f5efb1c"
+      "bytes": 6401,
+      "sha256": "0acf9379ba0bcd84fe632aa7d4584afa4df4ce250799159d41ae92dfdb779a2b"
     },
     {
       "path": "src/renderer/components/AnimatedCardBackSvgLayers.tsx",
@@ -9597,8 +9597,8 @@
     {
       "path": "src/renderer/components/TileBezel.tsx",
       "category": "source",
-      "bytes": 35202,
-      "sha256": "3aaa48b597c1928bfb2af24f3fcd0ae86b927487dd59d2e516a635a9171621d1"
+      "bytes": 35923,
+      "sha256": "d0df8788773985cfba6aecb22559e4084afaa22683d762b1b0fe3726751d5a6b"
     },
     {
       "path": "src/renderer/components/TileBoard.module.css",
@@ -9681,20 +9681,20 @@
     {
       "path": "src/renderer/components/tileBoardCardHeat.test.ts",
       "category": "test",
-      "bytes": 2397,
-      "sha256": "89ccda5e9fa041f3abb82e18cac8673d80e89f9f0a1513141ae8b6d80c98a0cc"
+      "bytes": 2652,
+      "sha256": "625ab9f26c56a7e217189463e064ec44d0cc413e89154920faad109d4f22ec5c"
     },
     {
       "path": "src/renderer/components/tileBoardCardHeat.ts",
       "category": "source",
-      "bytes": 2767,
-      "sha256": "e978c0f16e9168fcadf0abcad0f3a3b7d3bf2cab9749a9f4d31a5f37d00cb214"
+      "bytes": 2608,
+      "sha256": "ba26ed6ac5c2c5925e11f9bc686ebd4d05f65420bd67a8c90c7bb4e10086c313"
     },
     {
       "path": "src/renderer/components/TileBoardCardSurface.tsx",
       "category": "source",
-      "bytes": 10597,
-      "sha256": "0346cc1cc4662bc887cc8e49387f798936009194cbb98c607f29b7f9997b8d9f"
+      "bytes": 10958,
+      "sha256": "0c387de0db1b0edc0b261b6490495d80b306b4473b1dc7b27b376c32967f51ae"
     },
     {
       "path": "src/renderer/components/tileBoardCardTint.test.ts",
@@ -10119,14 +10119,14 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 19504,
-      "sha256": "a20f7f9db778640df9969a548135fbfdba9d888c2f0a71e34c9fe7a9c2c4b05c"
+      "bytes": 19564,
+      "sha256": "b02ca618385ab060474425591942c447c79ef5c252c40c28a19ac9523ebeb96b"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "category": "source",
-      "bytes": 7874,
-      "sha256": "8f4831478faeb2c88427576beba7c1e3a635c6e3938f014e2edf15e791cc6ff8"
+      "bytes": 7986,
+      "sha256": "4ea2d6d8894260e81168a6eb9dab2fc197e65afed3f9c0136505416972c66a91"
     },
     {
       "path": "src/renderer/components/tileBoardSceneFrame.test.ts",
@@ -18251,7 +18251,7 @@
       "path": "src/renderer/components/AnimatedCardBackGlow.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 129,
+      "lineCount": 150,
       "imports": [
         "file:src/renderer/components/tileBoardCardHeat.ts",
         "file:src/renderer/components/tileBoardPick.ts"
@@ -20052,7 +20052,7 @@
       "path": "src/renderer/components/TileBezel.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 885,
+      "lineCount": 898,
       "imports": [
         "file:src/renderer/components/cardArcaneGlowMaterial.ts",
         "file:src/renderer/components/cardSvgPlaneGeometry.ts",
@@ -20359,7 +20359,7 @@
       "path": "src/renderer/components/tileBoardCardHeat.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 54,
+      "lineCount": 58,
       "imports": [
         "file:src/renderer/components/tileBoardCardHeat.ts"
       ],
@@ -20371,7 +20371,7 @@
       "path": "src/renderer/components/tileBoardCardHeat.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 62,
+      "lineCount": 59,
       "imports": [],
       "exports": [
         "symbol:src/renderer/components/tileBoardCardHeat.ts#cardHeatLevels",
@@ -20387,7 +20387,7 @@
       "path": "src/renderer/components/TileBoardCardSurface.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 240,
+      "lineCount": 248,
       "imports": [
         "file:src/renderer/components/AnimatedCardBackGlow.tsx",
         "file:src/renderer/components/AnimatedCardBackSvgLayers.tsx",
@@ -21641,7 +21641,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 468,
+      "lineCount": 469,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
@@ -21685,7 +21685,7 @@
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 184,
+      "lineCount": 187,
       "imports": [
         "file:src/renderer/components/cardSvgPlaneGeometry.ts",
         "file:src/renderer/components/TileBezel.tsx",
@@ -35796,8 +35796,8 @@
       "name": "AnimatedCardBackGlow",
       "kind": "value",
       "file": "src/renderer/components/AnimatedCardBackGlow.tsx",
-      "line": 35,
-      "endLine": 127
+      "line": 47,
+      "endLine": 148
     },
     {
       "id": "symbol:src/renderer/components/AnimatedCardBackSvgLayers.tsx#AnimatedCardBackSvgLayers",
@@ -37292,16 +37292,16 @@
       "name": "TileBezel",
       "kind": "value",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 884,
-      "endLine": 884
+      "line": 897,
+      "endLine": 897
     },
     {
       "id": "symbol:src/renderer/components/TileBezel.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "interface",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 155,
-      "endLine": 159
+      "line": 157,
+      "endLine": 161
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#default",
@@ -37788,8 +37788,8 @@
       "name": "cardHeatLevels",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardHeat.ts",
-      "line": 30,
-      "endLine": 43
+      "line": 28,
+      "endLine": 40
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardHeat.ts#CardHeatLevels",
@@ -37797,23 +37797,23 @@
       "kind": "interface",
       "file": "src/renderer/components/tileBoardCardHeat.ts",
       "line": 15,
-      "endLine": 24
+      "endLine": 22
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardHeat.ts#cardMatchFlare",
       "name": "cardMatchFlare",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardHeat.ts",
-      "line": 49,
-      "endLine": 61
+      "line": 46,
+      "endLine": 58
     },
     {
       "id": "symbol:src/renderer/components/TileBoardCardSurface.tsx#TileBoardCardSurface",
       "name": "TileBoardCardSurface",
       "kind": "value",
       "file": "src/renderer/components/TileBoardCardSurface.tsx",
-      "line": 55,
-      "endLine": 238
+      "line": 59,
+      "endLine": 246
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardTint.ts#applyTileBoardCardTint",
@@ -39188,8 +39188,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 467,
-      "endLine": 467
+      "line": 468,
+      "endLine": 468
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
@@ -39212,8 +39212,8 @@
       "name": "TileBoardSceneBoardGroup",
       "kind": "value",
       "file": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
-      "line": 47,
-      "endLine": 183
+      "line": 48,
+      "endLine": 186
     },
     {
       "id": "symbol:src/renderer/components/tileBoardSceneFrame.ts#runTileBoardSceneFrame",

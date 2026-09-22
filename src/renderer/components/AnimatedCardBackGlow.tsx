@@ -15,10 +15,22 @@ import { cardHeatLevels, cardMatchFlare } from './tileBoardCardHeat';
  *
  * Every card gets its own phase from its seed, so a board of backs shimmers rather than pulsing as
  * one slab, and the medallions are never in step.
+ *
+ * A card whose back is hidden, or a device that cannot afford the motion, does no per-frame work at
+ * all: the frame callback returns immediately and the medallion is not mounted. The rune light is
+ * still there at its resting level, because a streak has to be legible on every device.
  */
 interface AnimatedCardBackGlowProps {
     /** Chain meter fill, 0 at rest to 1 at Fever. */
     heat: number;
+    /** False while the card is face up: its back is behind the art and nothing here can be seen. */
+    visible: boolean;
+    /**
+     * False on a device that cannot afford the medallion's mesh and its frame loop. The rune light
+     * still rises with the chain — it is the streak's feedback and the reason the feature exists —
+     * but it is set when the heat changes rather than driven every frame.
+     */
+    animated: boolean;
     /** True once this card's pair has landed; the flare is timed from the transition. */
     matched: boolean;
     geometry: PlaneGeometry;
@@ -36,9 +48,11 @@ export const AnimatedCardBackGlow = memo(
     ({
         geometry,
         glowTexture,
+        animated,
         heat,
         matched,
         reduceMotion,
+        visible,
         seed,
         spinGeometry,
         spinTexture,
@@ -55,7 +69,14 @@ export const AnimatedCardBackGlow = memo(
         const matchedAtRef = useRef<number | null>(null);
         const phase = fract(seed * 0.618034) * Math.PI * 2;
 
+        // The still level for a card whose device (or player) has turned the motion off, and the
+        // starting level for one that has not: a board is never drawn with the light at zero.
+        const restingGlow = cardHeatLevels(heat).runeGlow;
+
         useFrame((state) => {
+            if (!visible || !animated) {
+                return;
+            }
             const t = state.clock.elapsedTime;
             if (matched && matchedAtRef.current == null) {
                 matchedAtRef.current = t;
@@ -94,14 +115,14 @@ export const AnimatedCardBackGlow = memo(
                             blending={AdditiveBlending}
                             depthWrite={false}
                             map={glowTexture}
-                            opacity={0}
+                            opacity={restingGlow}
                             side={DoubleSide}
                             toneMapped={false}
                             transparent
                         />
                     </mesh>
                 ) : null}
-                {spinTexture ? (
+                {spinTexture && animated ? (
                     <mesh
                         geometry={spinGeometry}
                         position={[0, 0, z + 0.00008]}
