@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2673,
     "codeFileCount": 913,
-    "exportedSymbolCount": 2751,
+    "exportedSymbolCount": 2753,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6973
+    "relationshipCount": 6975
   },
   "inventory": [
     {
@@ -8883,8 +8883,8 @@
     {
       "path": "src/renderer/components/AnimatedCardGlow.tsx",
       "category": "source",
-      "bytes": 6577,
-      "sha256": "039dfad2ff516ba4330e1b1cdb4ea95dbd62b79de6b0aaca758e46ade2ecb3b7"
+      "bytes": 7498,
+      "sha256": "7531666037d8774393348ab021590e499273064897e0a1fa71c4cdc8b0e5744e"
     },
     {
       "path": "src/renderer/components/AppErrorBoundary.module.css",
@@ -9639,14 +9639,14 @@
     {
       "path": "src/renderer/components/tileBoardCardHeat.test.ts",
       "category": "test",
-      "bytes": 2652,
-      "sha256": "625ab9f26c56a7e217189463e064ec44d0cc413e89154920faad109d4f22ec5c"
+      "bytes": 3953,
+      "sha256": "fdfadd922238baee3673033897dfcfcdc33be65fe2f9673f1124da1137f4b1d3"
     },
     {
       "path": "src/renderer/components/tileBoardCardHeat.ts",
       "category": "source",
-      "bytes": 2608,
-      "sha256": "ba26ed6ac5c2c5925e11f9bc686ebd4d05f65420bd67a8c90c7bb4e10086c313"
+      "bytes": 3778,
+      "sha256": "838be9318fcc444a7efae3bc3e62bb23ac2806a03900eb0598b76b5ef6e5f64c"
     },
     {
       "path": "src/renderer/components/TileBoardCardSurface.tsx",
@@ -18185,7 +18185,7 @@
       "path": "src/renderer/components/AnimatedCardGlow.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 152,
+      "lineCount": 169,
       "imports": [
         "file:src/renderer/components/tileBoardCardHeat.ts",
         "file:src/renderer/components/tileBoardPick.ts"
@@ -20153,7 +20153,7 @@
       "path": "src/renderer/components/tileBoardCardHeat.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 58,
+      "lineCount": 89,
       "imports": [
         "file:src/renderer/components/tileBoardCardHeat.ts"
       ],
@@ -20165,9 +20165,11 @@
       "path": "src/renderer/components/tileBoardCardHeat.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 59,
+      "lineCount": 88,
       "imports": [],
       "exports": [
+        "symbol:src/renderer/components/tileBoardCardHeat.ts#CARD_BREAK_DROP",
+        "symbol:src/renderer/components/tileBoardCardHeat.ts#cardBreakSnuff",
         "symbol:src/renderer/components/tileBoardCardHeat.ts#cardHeatLevels",
         "symbol:src/renderer/components/tileBoardCardHeat.ts#CardHeatLevels",
         "symbol:src/renderer/components/tileBoardCardHeat.ts#cardMatchFlare"
@@ -35525,7 +35527,7 @@
       "kind": "value",
       "file": "src/renderer/components/AnimatedCardGlow.tsx",
       "line": 49,
-      "endLine": 150
+      "endLine": 167
     },
     {
       "id": "symbol:src/renderer/components/AppErrorBoundary.tsx#AppErrorBoundary",
@@ -37328,6 +37330,22 @@
       "endLine": 20
     },
     {
+      "id": "symbol:src/renderer/components/tileBoardCardHeat.ts#CARD_BREAK_DROP",
+      "name": "CARD_BREAK_DROP",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardCardHeat.ts",
+      "line": 69,
+      "endLine": 69
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardCardHeat.ts#cardBreakSnuff",
+      "name": "cardBreakSnuff",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardCardHeat.ts",
+      "line": 52,
+      "endLine": 63
+    },
+    {
       "id": "symbol:src/renderer/components/tileBoardCardHeat.ts#cardHeatLevels",
       "name": "cardHeatLevels",
       "kind": "value",
@@ -37348,8 +37366,8 @@
       "name": "cardMatchFlare",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardHeat.ts",
-      "line": 46,
-      "endLine": 58
+      "line": 75,
+      "endLine": 87
     },
     {
       "id": "symbol:src/renderer/components/TileBoardCardSurface.tsx#TileBoardCardSurface",
@@ -61801,6 +61819,18 @@
       "id": "exports:src/renderer/components/tileBoardCardBend.ts->symbol:src/renderer/components/tileBoardCardBend.ts#WEAR_TEX_SIZE",
       "source": "file:src/renderer/components/tileBoardCardBend.ts",
       "target": "symbol:src/renderer/components/tileBoardCardBend.ts#WEAR_TEX_SIZE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileBoardCardHeat.ts->symbol:src/renderer/components/tileBoardCardHeat.ts#CARD_BREAK_DROP",
+      "source": "file:src/renderer/components/tileBoardCardHeat.ts",
+      "target": "symbol:src/renderer/components/tileBoardCardHeat.ts#CARD_BREAK_DROP",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileBoardCardHeat.ts->symbol:src/renderer/components/tileBoardCardHeat.ts#cardBreakSnuff",
+      "source": "file:src/renderer/components/tileBoardCardHeat.ts",
+      "target": "symbol:src/renderer/components/tileBoardCardHeat.ts#cardBreakSnuff",
       "kind": "exports"
     },
     {

@@ -40,6 +40,35 @@ export const cardHeatLevels = (fill: number): CardHeatLevels => {
 };
 
 /**
+ * How far a card's light is pulled down in the moment a streak is lost, as a multiplier on
+ * everything else. `age` is seconds since the chain fell.
+ *
+ * Winning is already felt — the board brightens and the medallion winds up. Losing was not: the
+ * heat simply went to zero and the light faded on its own ramp, which reads as the board settling
+ * rather than as something being taken away. The cards now gutter: the light is snuffed below its
+ * resting level for a moment and then comes back, so a break is a thing that *happens* rather than
+ * a thing that stops happening.
+ */
+export const cardBreakSnuff = (age: number): number => {
+    if (!Number.isFinite(age) || age < 0) {
+        return 1;
+    }
+    const hold = 0.09;
+    const recover = 0.55;
+    if (age < hold) {
+        return 0.22;
+    }
+    const t = (age - hold) / recover;
+    return t >= 1 ? 1 : round(0.22 + 0.78 * t * t);
+};
+
+/**
+ * How far the chain has to fall in one frame to count as a break rather than the meter easing.
+ * A mismatch empties the meter, so the drop is large; nothing else moves it down at all.
+ */
+export const CARD_BREAK_DROP = 0.12;
+
+/**
  * The flare a card throws when its pair lands: a short, hard spike on top of whatever the streak
  * already had, bigger the further the chain has come. `age` is seconds since the match.
  */

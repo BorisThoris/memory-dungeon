@@ -3,7 +3,7 @@ import { memo, useRef } from 'react';
 import { AdditiveBlending, DoubleSide, type Mesh, type MeshBasicMaterial, type PlaneGeometry, type Texture } from 'three';
 
 import { noopMeshRaycast } from './tileBoardPick';
-import { cardHeatLevels, cardMatchFlare } from './tileBoardCardHeat';
+import { CARD_BREAK_DROP, cardBreakSnuff, cardHeatLevels, cardMatchFlare } from './tileBoardCardHeat';
 
 /**
  * A card side, answering the run.
@@ -69,6 +69,14 @@ export const AnimatedCardGlow = memo(
          * state so a re-deal cannot inherit an old flare.
          */
         const matchedAtRef = useRef<number | null>(null);
+        /*
+         * The last heat this card saw, and when it last fell. A break is read from the input rather
+         * than plumbed as another event: the chain meter empties on a mismatch and nothing else
+         * moves it down, so a large drop between frames is the break, and the card can gutter
+         * without the board having to tell it anything.
+         */
+        const lastHeatRef = useRef(heat);
+        const snuffedAtRef = useRef<number | null>(null);
         const phase = fract(seed * 0.618034) * Math.PI * 2;
 
         // The still level for a card whose device (or player) has turned the motion off, and the
@@ -85,6 +93,15 @@ export const AnimatedCardGlow = memo(
             } else if (!matched && matchedAtRef.current != null) {
                 matchedAtRef.current = null;
             }
+            if (heat < lastHeatRef.current - CARD_BREAK_DROP) {
+                snuffedAtRef.current = t;
+            }
+            lastHeatRef.current = heat;
+            const snuffedAt = snuffedAtRef.current;
+            const snuff = snuffedAt == null ? 1 : cardBreakSnuff(t - snuffedAt);
+            if (snuff >= 1) {
+                snuffedAtRef.current = null;
+            }
             const levels = cardHeatLevels(heat);
             // A slow breath per card so a still board is never dead, and never a single pulse.
             const breath = reduceMotion ? 1 : 1 + 0.12 * Math.sin(t * 0.9 + phase);
@@ -93,12 +110,12 @@ export const AnimatedCardGlow = memo(
 
             const glowMat = glowMatRef.current;
             if (glowMat) {
-                glowMat.opacity = Math.min(1.6, levels.runeGlow * breath + flare);
+                glowMat.opacity = Math.min(1.6, levels.runeGlow * breath * snuff + flare);
             }
 
             const spinMat = spinMatRef.current;
             if (spinMat) {
-                spinMat.opacity = Math.min(1.4, levels.spin * breath + flare * 0.6);
+                spinMat.opacity = Math.min(1.4, levels.spin * breath * snuff + flare * 0.6);
             }
 
             const spinMesh = spinMeshRef.current;

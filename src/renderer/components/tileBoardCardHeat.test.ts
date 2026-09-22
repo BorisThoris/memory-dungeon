@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { cardHeatLevels, cardMatchFlare } from './tileBoardCardHeat';
+import { CARD_BREAK_DROP, cardBreakSnuff, cardHeatLevels, cardMatchFlare } from './tileBoardCardHeat';
 
 describe('cardHeatLevels', () => {
     it('winds the board up with the chain, and every step of fill is felt', () => {
@@ -53,5 +53,36 @@ describe('cardMatchFlare', () => {
     it('never answers a nonsense age', () => {
         expect(cardMatchFlare(-1, 1)).toBe(0);
         expect(cardMatchFlare(Number.NaN, 1)).toBe(0);
+    });
+});
+
+describe('cardBreakSnuff', () => {
+    it('pulls the light under its resting level, then brings it back', () => {
+        // The moment of the break is the darkest the card ever is.
+        expect(cardBreakSnuff(0)).toBeLessThan(0.3);
+        expect(cardBreakSnuff(0.05)).toBe(cardBreakSnuff(0));
+        // It recovers, and only upward.
+        let last = cardBreakSnuff(0.1);
+        for (let step = 1; step <= 12; step += 1) {
+            const next = cardBreakSnuff(0.1 + step * 0.05);
+            expect(next).toBeGreaterThanOrEqual(last);
+            last = next;
+        }
+        expect(cardBreakSnuff(1)).toBe(1);
+        expect(cardBreakSnuff(9)).toBe(1);
+    });
+
+    it('never dims a card that has not broken', () => {
+        expect(cardBreakSnuff(-1)).toBe(1);
+        expect(cardBreakSnuff(Number.NaN)).toBe(1);
+    });
+
+    it('triggers on a lost chain and not on the meter easing', () => {
+        // A mismatch empties the meter, so the fall is far larger than the threshold; nothing else
+        // moves it down at all.
+        const fever = cardHeatLevels(1);
+        expect(fever.runeGlow).toBe(1);
+        expect(CARD_BREAK_DROP).toBeGreaterThan(0);
+        expect(CARD_BREAK_DROP).toBeLessThan(0.5);
     });
 });
