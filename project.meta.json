@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-22T21:51:48.231Z",
+  "generatedAt": "2026-09-22T22:07:10.693Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -288,28 +288,28 @@
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 165781,
+        "bytes": 167736,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-22T21:51:08.998Z"
+        "capturedAt": "2026-09-22T22:06:33.266Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 156708,
+        "bytes": 156720,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-22T21:51:28.428Z"
+        "capturedAt": "2026-09-22T22:06:52.894Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 129248,
+        "bytes": 128517,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-22T21:51:39.959Z"
+        "capturedAt": "2026-09-22T22:07:05.437Z"
       },
       {
         "profile": "mobile",
@@ -318,16 +318,16 @@
         "bytes": 51915,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-22T21:51:32.967Z"
+        "capturedAt": "2026-09-22T22:06:57.646Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 120705,
+        "bytes": 123163,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-22T21:51:48.025Z"
+        "capturedAt": "2026-09-22T22:07:10.444Z"
       }
     ]
   },
@@ -391,7 +391,7 @@
   "metrics": {
     "sourceFiles": 1131,
     "testFiles": 487,
-    "sourceLines": 174691,
+    "sourceLines": 174748,
     "largestDirectories": [
       {
         "directory": "src",
@@ -430,10 +430,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "3e3ba939",
-    "lastCommitDate": "2026-09-23T00:47:31+03:00",
+    "head": "32f63961",
+    "lastCommitDate": "2026-09-23T01:03:13+03:00",
     "lastCommitSubject": "Refresh the repo model after merging main",
-    "commitCount": 1703,
+    "commitCount": 1707,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
