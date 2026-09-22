@@ -61,17 +61,47 @@ describe('GameplayScene', () => {
         }
     });
 
-    it('keeps the torches burning whatever the chain does', () => {
-        const torchesAt = (fill: number) => {
+    it('holds the painted torchlight still while the chain moves the flames themselves', () => {
+        // Light thrown across a wall by a flame the painter painted cannot honestly grow with a
+        // chain, and holding it still is what lets the flames read as the thing that changed.
+        const roomAt = (fill: number) => {
             const { unmount } = render(<GameplayScene {...base} fill={fill} />);
             const torches = plateLayers()
                 .filter((el) => /torch/i.test(el.className))
                 .map((el) => el.getAttribute('style'));
+            const fire = screen.getByTestId('scene-sprites').style.getPropertyValue('--flame-rate');
             unmount();
-            return torches;
+            return { torches, fire };
         };
-        expect(torchesAt(0)).toHaveLength(3);
-        expect(torchesAt(0)).toEqual(torchesAt(1));
+        const cold = roomAt(0);
+        const hot = roomAt(1);
+        expect(cold.torches).toHaveLength(3);
+        expect(cold.torches).toEqual(hot.torches);
+        expect(Number(hot.fire)).toBeGreaterThan(Number(cold.fire));
+    });
+
+    it('burns the fire harder the better the run is going, and only ever on the sprites', () => {
+        const fireAt = (fill: number) => {
+            const { unmount } = render(<GameplayScene {...base} fill={fill} />);
+            const style = screen.getByTestId('scene-sprites').style;
+            const levels = (['--flame-rate', '--flame-lift', '--flame-embers', '--flame-ember-rate'] as const).map(
+                (name) => Number(style.getPropertyValue(name))
+            );
+            unmount();
+            return levels;
+        };
+        const steps = [0, 0.25, 0.5, 0.75, 1].map(fireAt);
+        for (let i = 1; i < steps.length; i += 1) {
+            for (let k = 0; k < steps[i]!.length; k += 1) {
+                expect(steps[i]![k]!).toBeGreaterThan(steps[i - 1]![k]!);
+            }
+        }
+        // No new layer paid for any of it: the plate has the same children hot as cold.
+        const cold = render(<GameplayScene {...base} fill={0} />);
+        const coldLayers = layerCount();
+        cold.unmount();
+        render(<GameplayScene {...base} fill={1} />);
+        expect(layerCount()).toBe(coldLayers);
     });
 
     it('flashes the floor on a break and restarts for a second break of the same tier', () => {

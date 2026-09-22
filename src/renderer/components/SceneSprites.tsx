@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import type { SceneSpriteSet } from '../assets/ui/sprites';
+import { sceneFlameLevels } from './gameplaySceneLevels';
 import { sceneSpriteClocks, sceneSpriteEmbers } from './sceneSpriteClocks';
 import styles from './SceneSprites.module.css';
 
@@ -11,23 +12,47 @@ import styles from './SceneSprites.module.css';
  *
  * Must sit inside a plate-sized box (`GameplayScene`'s `.plate`): positions are fractions of it.
  * `still` freezes every strip on its first frame, which is the painting's own flame.
+ *
+ * A scene with a run behind it can pass `heat`, and the fire answers it (`sceneFlameLevels`):
+ * faster, taller and throwing more sparks as the chain climbs. It is four custom properties on this
+ * one element, inherited by all six flames — the rate of an animation that was already running and
+ * a scale on a box that was already composited, so a hot room costs a phone nothing a cold one did
+ * not. A scene with no run — the menu's candles, the portal — passes nothing and gets the flame the
+ * painter painted.
  */
 export interface SceneSpritesProps {
     set: SceneSpriteSet;
     still: boolean;
     /** Sparks rising from each flame; off on low quality. */
     embers?: boolean;
+    /** The chain meter's fill, 0..1, or null in a scene where no run is going on. */
+    heat?: number | null;
 }
 
 const pct = (value: number): string => `${(value * 100).toFixed(3)}%`;
 
-export function SceneSprites({ set, still, embers = false }: SceneSpritesProps) {
+/** Nothing at all when no run is behind the scene, so the CSS falls back to the painted flame. */
+const flameVars = (heat: number | null): CSSProperties => {
+    if (heat === null) {
+        return {};
+    }
+    const levels = sceneFlameLevels(heat);
+    return {
+        '--flame-rate': levels.rate,
+        '--flame-lift': levels.lift,
+        '--flame-embers': levels.embers,
+        '--flame-ember-rate': levels.emberRate
+    } as CSSProperties;
+};
+
+export function SceneSprites({ set, still, embers = false, heat = null }: SceneSpritesProps) {
     return (
         <div
             className={styles.sprites}
             data-sprite-kind={set.kind}
             data-still={still ? 'true' : 'false'}
             data-testid="scene-sprites"
+            style={flameVars(heat)}
         >
             {set.sprites.map((sprite, index) => {
                 const clock = sceneSpriteClocks(sprite, index);

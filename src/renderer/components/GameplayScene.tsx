@@ -33,9 +33,13 @@ import styles from './GameplayScene.module.css';
  *   - reaching Fever is the room arriving with the cards: one flash of the whole ring the moment
  *     the meter fills, thrown on the rising edge so a run that sits at Fever is not strobed, and
  *     never thrown at all under reduce motion;
- *   - the torches always burn: their flames are cut out of the painting and play as flipbook
- *     sprites (`SceneSprites`), each on its own clock, with sparks rising off them, while the
- *     painted torchlight on the stone flickers under them; they do not care how the run is going;
+ *   - the torches always burn, and burn harder the better the run is going: their flames are cut
+ *     out of the painting and play as flipbook sprites (`SceneSprites`), each on its own clock,
+ *     and the chain drives the rate of those flipbooks, how far each flame climbs its own torch and
+ *     how thickly the sparks come off it (`sceneFlameLevels`) — on a curve that is steep off zero,
+ *     so the first pair of a chain already shows in the fire. The painted torchlight on the stone
+ *     under them does not move with the chain: light thrown across a wall by a flame the painter
+ *     painted cannot honestly grow, and holding it still is what lets the flames themselves read;
  *   - mist drifts in the corridor beyond the ring, and the whole plate drifts slowly and turns a
  *     little with the pointer (`useSceneLook`), the sprites more than the walls, so the painting
  *     reads as a place.
@@ -158,7 +162,7 @@ export function GameplayScene({
                     </div>
                 ) : null}
                 <div className={plate.things}>
-                    <SceneSprites embers={alive} set={flames} still={still} />
+                    <SceneSprites embers={alive} heat={fill} set={flames} still={still} />
                     {alive ? (
                         <div className={styles.ringMotes}>
                             <SceneMotes

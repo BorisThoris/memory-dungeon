@@ -64,7 +64,12 @@ chain meter's *fill* continuously (`gameplaySceneLevels.ts`: light, glow, hue to
 saturation and the break-flash peak all ease up from chain 0 to Fever), breathes during memorize,
 and its floor light flashes on a break (remounted per event so two breaks in a row both flash);
 the torches always burn, their flames as sprites and their painted light flickering on two stepped
-clocks, whatever the run is doing, but they flare with a break (the pop barely, Fever up the
+clocks, and burn harder the better the run is going — the chain drives each flipbook's rate, how
+far each flame climbs its own torch and how thickly its sparks come off (`sceneFlameLevels`), on a
+curve steep off zero so the first pair of a chain already shows in the fire, against the ring's
+ease-in; the painted torchlight on the stone does *not* move with the chain, because light a
+painter threw across a wall cannot honestly grow and holding it still is what lets the flames
+read. They flare with a break as well (the pop barely, Fever up the
 wall: `sceneTorchFlarePeak`); a cleared floor is the room exhaling (the ring swells and settles,
 the torches gutter and recover); the ring throws up motes as the chain climbs; mist drifts in the
 corridor. `CathedralScene.tsx` (main menu,
@@ -82,7 +87,12 @@ kind and the viewport by `useSceneEffectTier`: **full** on a desktop at medium o
 on any coarse-pointer device, any viewport under 900 px, or at `low`: the glow layers held still
 and unpromoted (so they rasterize with the page and blend once, instead of one full-screen GPU
 composite per layer per frame), the flame sprites and the vortex playing, no light passes, mist,
-sparks, motes, echo, drift or parallax; **still** under reduce motion. On a throttled Pixel 5
+sparks, motes, echo, drift or parallax; **still** under reduce motion. The chain still reaches the
+fire on lean: `sceneFlameLevels` is four custom properties on the one sprite root, inherited by
+every flame, spent on the rate of an animation that was already running and a scale the compositor
+was already paying for — a phone gets the same climb a desktop does, which is the only reason the
+fire was allowed to answer the run at all. A scene with no run behind it (the menu's candles, the
+portal) sets none of them and burns as the painter painted it. On a throttled Pixel 5
 emulation the full menu scene halved the frame rate (134 → 65 fps); lean costs nothing
 measurable (143 → 139). Mist uses soft gradient stops, never `filter: blur()`, which re-filters
 a moving layer every frame.
@@ -93,7 +103,12 @@ a moving layer every frame.
   `SCENE_SPRITES` pick it up, nothing in the components changes.
 - Another element that should react (a window): add its hue key or a hand window in the
   segmenter, a light in `blender_scene_lights.py` with its own light group, a layer and a CSS
-  variable in the scene component.
+  variable in the scene component. Before reaching for a new layer, check whether the thing can be
+  said with a property on a box that already exists, the way the fire's answer to the chain is —
+  a layer is a full-screen composite per frame and is what the lean tier drops first.
+- Another scene that should feel the run: pass `heat` to its `SceneSprites` and its fire answers
+  the chain. Leave it off and the scene keeps the flame it was painted with; there is no "resting"
+  value to set, because every `--flame-*` property falls back in CSS to the painting itself.
 - Another backdrop (the arcane workshop): measure its flames, run `scene.sh <plate> <prefix>
   <boxes.json>` (or `cathedral.sh` when no light pass is wanted); the positions in `SCENE` are per
   plate and need re-measuring.

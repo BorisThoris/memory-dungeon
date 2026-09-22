@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2676,
-    "codeFileCount": 916,
-    "exportedSymbolCount": 2763,
+    "trackedFileCount": 2677,
+    "codeFileCount": 917,
+    "exportedSymbolCount": 2765,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6991
+    "relationshipCount": 7000
   },
   "inventory": [
     {
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "75e2245d80cf660103b264d35773afb337e93ff229579daf253932efa75ab74d"
+      "sha256": "dc5ca9406a950196b014e720f644ed346f476fa79af2c4e255720b72922990a8"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4197,8 +4197,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 32778,
-      "sha256": "2eba389aef8d597bf53abc4f3d2bb6b7cd04195dffd2953de5e689860a3e4a2e"
+      "bytes": 32824,
+      "sha256": "11eba7f1f760b8106196f0c80228d3286ce399c0fcf49c2d9fc80ce757385687"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4989,8 +4989,8 @@
     {
       "path": "scripts/gate-changed.mjs",
       "category": "script",
-      "bytes": 19849,
-      "sha256": "f88799699d4f3c765442a76a10a5a3e5443e01c8dd80af6c27ec5a172c5f6055"
+      "bytes": 19909,
+      "sha256": "d843dcac2b85623daa48505dc61d67bb68276940b174f839cff76a8b0c900c4b"
     },
     {
       "path": "scripts/gate-long-run.ts",
@@ -5331,8 +5331,8 @@
     {
       "path": "scripts/scene-pipeline/README.md",
       "category": "script",
-      "bytes": 7605,
-      "sha256": "2730ab2cff2f19390404073e0058370f0444a9c61558f850a7b8e11544e88a6e"
+      "bytes": 9098,
+      "sha256": "422d6c53496b42c3dd3178bcf83e2ee4f96f8d59f182b2638cef4aa580d9d7ed"
     },
     {
       "path": "scripts/scene-pipeline/scene.sh",
@@ -9117,20 +9117,20 @@
     {
       "path": "src/renderer/components/GameplayScene.test.tsx",
       "category": "test",
-      "bytes": 12078,
-      "sha256": "3fc482c673860af1f0b62a923954ceec2004a8d9e2d8ddf9634b2fc37b870424"
+      "bytes": 13714,
+      "sha256": "3a8bef2125b122dca9990e5e91fc6a6aea681e4662dd4e3de15234306ec619f3"
     },
     {
       "path": "src/renderer/components/GameplayScene.tsx",
       "category": "source",
-      "bytes": 9379,
-      "sha256": "83e3a04210cf77d69bf1cdf74153326859a3deef3f4fc7fcd8c8bf0466b9bb77"
+      "bytes": 9801,
+      "sha256": "ba5ab6cda083919dbeb646a536296b4418b0440215e6d795e8a93bc57a0c3602"
     },
     {
       "path": "src/renderer/components/gameplaySceneLevels.ts",
       "category": "source",
-      "bytes": 2263,
-      "sha256": "ee6b7ed8ad0bc2910e22dc8610a279fdf51423364f6366446daa75bc442e2848"
+      "bytes": 4248,
+      "sha256": "d116aa06ea6f0a5707f652f55071914314f948a7cd8ee50136da036e1d95e662"
     },
     {
       "path": "src/renderer/components/gameplayVisualConfig.test.ts",
@@ -9471,14 +9471,20 @@
     {
       "path": "src/renderer/components/SceneSprites.module.css",
       "category": "source",
-      "bytes": 2398,
-      "sha256": "927dc70ac07383ac9ced118c8aa22cf416ccf06274c151d2d117dd2ff14bd761"
+      "bytes": 3339,
+      "sha256": "7a80128d3d6156a6d79bc1459ccb23635e306355a0a490e8e113db209ff63a24"
+    },
+    {
+      "path": "src/renderer/components/SceneSprites.test.tsx",
+      "category": "test",
+      "bytes": 4691,
+      "sha256": "0378a84745615027188dd68bf50d54f537aba1c3cfad124834a99fa838413d00"
     },
     {
       "path": "src/renderer/components/SceneSprites.tsx",
       "category": "source",
-      "bytes": 4080,
-      "sha256": "c99fb9c4aa22f79fb9b67106757f37fb11db60866f1245f39a2234e4d13fc606"
+      "bytes": 5305,
+      "sha256": "84b92cec34b1f0c2f6194c88ecbcd868d659f6141e788c1761ce83abceaf4923"
     },
     {
       "path": "src/renderer/components/ScoreTermsLine.test.tsx",
@@ -16973,7 +16979,8 @@
         "symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteSetKey"
       ],
       "testedBy": [
-        "file:src/renderer/components/CathedralScene.test.tsx"
+        "file:src/renderer/components/CathedralScene.test.tsx",
+        "file:src/renderer/components/SceneSprites.test.tsx"
       ]
     },
     {
@@ -18777,7 +18784,7 @@
       "path": "src/renderer/components/GameplayScene.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 206,
+      "lineCount": 236,
       "imports": [
         "file:src/renderer/components/GameplayScene.tsx",
         "file:src/renderer/components/gameplaySceneLevels.ts"
@@ -18790,7 +18797,7 @@
       "path": "src/renderer/components/GameplayScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 178,
+      "lineCount": 182,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
@@ -18816,17 +18823,20 @@
       "path": "src/renderer/components/gameplaySceneLevels.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 60,
+      "lineCount": 100,
       "imports": [
         "file:src/shared/chain-tier-rules.ts"
       ],
       "exports": [
+        "symbol:src/renderer/components/gameplaySceneLevels.ts#sceneFlameLevels",
+        "symbol:src/renderer/components/gameplaySceneLevels.ts#SceneFlameLevels",
         "symbol:src/renderer/components/gameplaySceneLevels.ts#sceneRingLevels",
         "symbol:src/renderer/components/gameplaySceneLevels.ts#SceneRingLevels",
         "symbol:src/renderer/components/gameplaySceneLevels.ts#sceneTorchFlarePeak"
       ],
       "testedBy": [
-        "file:src/renderer/components/GameplayScene.test.tsx"
+        "file:src/renderer/components/GameplayScene.test.tsx",
+        "file:src/renderer/components/SceneSprites.test.tsx"
       ]
     },
     {
@@ -19653,20 +19663,37 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/SceneSprites.test.tsx",
+      "path": "src/renderer/components/SceneSprites.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 96,
+      "imports": [
+        "file:src/renderer/assets/ui/sprites/index.ts",
+        "file:src/renderer/components/gameplaySceneLevels.ts",
+        "file:src/renderer/components/SceneSprites.tsx"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/SceneSprites.tsx",
       "path": "src/renderer/components/SceneSprites.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 90,
+      "lineCount": 115,
       "imports": [
         "file:src/renderer/assets/ui/sprites/index.ts",
+        "file:src/renderer/components/gameplaySceneLevels.ts",
         "file:src/renderer/components/sceneSpriteClocks.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/SceneSprites.tsx#SceneSprites",
         "symbol:src/renderer/components/SceneSprites.tsx#SceneSpritesProps"
       ],
-      "testedBy": []
+      "testedBy": [
+        "file:src/renderer/components/SceneSprites.test.tsx"
+      ]
     },
     {
       "id": "file:src/renderer/components/ScoreTermsLine.test.tsx",
@@ -36116,40 +36143,56 @@
       "name": "GameplayScene",
       "kind": "function",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 72,
-      "endLine": 177
+      "line": 76,
+      "endLine": 181
     },
     {
       "id": "symbol:src/renderer/components/GameplayScene.tsx#GameplaySceneProps",
       "name": "GameplaySceneProps",
       "kind": "interface",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 49,
-      "endLine": 68
+      "line": 53,
+      "endLine": 72
+    },
+    {
+      "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#sceneFlameLevels",
+      "name": "sceneFlameLevels",
+      "kind": "value",
+      "file": "src/renderer/components/gameplaySceneLevels.ts",
+      "line": 69,
+      "endLine": 80
+    },
+    {
+      "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#SceneFlameLevels",
+      "name": "SceneFlameLevels",
+      "kind": "interface",
+      "file": "src/renderer/components/gameplaySceneLevels.ts",
+      "line": 47,
+      "endLine": 56
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#sceneRingLevels",
       "name": "sceneRingLevels",
       "kind": "value",
       "file": "src/renderer/components/gameplaySceneLevels.ts",
-      "line": 26,
-      "endLine": 38
+      "line": 31,
+      "endLine": 43
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#SceneRingLevels",
       "name": "SceneRingLevels",
       "kind": "interface",
       "file": "src/renderer/components/gameplaySceneLevels.ts",
-      "line": 9,
-      "endLine": 22
+      "line": 14,
+      "endLine": 27
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#sceneTorchFlarePeak",
       "name": "sceneTorchFlarePeak",
       "kind": "value",
       "file": "src/renderer/components/gameplaySceneLevels.ts",
-      "line": 46,
-      "endLine": 59
+      "line": 86,
+      "endLine": 99
     },
     {
       "id": "symbol:src/renderer/components/gameplayVisualConfig.ts#CARD_INTERACTION_FEEDBACK",
@@ -36716,16 +36759,16 @@
       "name": "SceneSprites",
       "kind": "function",
       "file": "src/renderer/components/SceneSprites.tsx",
-      "line": 24,
-      "endLine": 89
+      "line": 48,
+      "endLine": 114
     },
     {
       "id": "symbol:src/renderer/components/SceneSprites.tsx#SceneSpritesProps",
       "name": "SceneSpritesProps",
       "kind": "interface",
       "file": "src/renderer/components/SceneSprites.tsx",
-      "line": 15,
-      "endLine": 20
+      "line": 23,
+      "endLine": 30
     },
     {
       "id": "symbol:src/renderer/components/ScoreTermsLine.tsx#default",
@@ -61018,6 +61061,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/gameplaySceneLevels.ts->symbol:src/renderer/components/gameplaySceneLevels.ts#sceneFlameLevels",
+      "source": "file:src/renderer/components/gameplaySceneLevels.ts",
+      "target": "symbol:src/renderer/components/gameplaySceneLevels.ts#sceneFlameLevels",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/gameplaySceneLevels.ts->symbol:src/renderer/components/gameplaySceneLevels.ts#SceneFlameLevels",
+      "source": "file:src/renderer/components/gameplaySceneLevels.ts",
+      "target": "symbol:src/renderer/components/gameplaySceneLevels.ts#SceneFlameLevels",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/gameplaySceneLevels.ts->symbol:src/renderer/components/gameplaySceneLevels.ts#sceneRingLevels",
       "source": "file:src/renderer/components/gameplaySceneLevels.ts",
       "target": "symbol:src/renderer/components/gameplaySceneLevels.ts#sceneRingLevels",
@@ -79920,9 +79975,33 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/SceneSprites.test.tsx->src/renderer/assets/ui/sprites/index.ts",
+      "source": "file:src/renderer/components/SceneSprites.test.tsx",
+      "target": "file:src/renderer/assets/ui/sprites/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SceneSprites.test.tsx->src/renderer/components/gameplaySceneLevels.ts",
+      "source": "file:src/renderer/components/SceneSprites.test.tsx",
+      "target": "file:src/renderer/components/gameplaySceneLevels.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SceneSprites.test.tsx->src/renderer/components/SceneSprites.tsx",
+      "source": "file:src/renderer/components/SceneSprites.test.tsx",
+      "target": "file:src/renderer/components/SceneSprites.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/SceneSprites.tsx->src/renderer/assets/ui/sprites/index.ts",
       "source": "file:src/renderer/components/SceneSprites.tsx",
       "target": "file:src/renderer/assets/ui/sprites/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SceneSprites.tsx->src/renderer/components/gameplaySceneLevels.ts",
+      "source": "file:src/renderer/components/SceneSprites.tsx",
+      "target": "file:src/renderer/components/gameplaySceneLevels.ts",
       "kind": "imports"
     },
     {
@@ -93833,6 +93912,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/assets/ui/sprites/index.ts->file:src/renderer/components/SceneSprites.test.tsx",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "file:src/renderer/components/SceneSprites.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/audio/audioGlobUrlMap.ts->file:src/renderer/audio/audioGlobUrlMap.test.ts",
       "source": "file:src/renderer/audio/audioGlobUrlMap.ts",
       "target": "file:src/renderer/audio/audioGlobUrlMap.test.ts",
@@ -94223,6 +94308,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/gameplaySceneLevels.ts->file:src/renderer/components/SceneSprites.test.tsx",
+      "source": "file:src/renderer/components/gameplaySceneLevels.ts",
+      "target": "file:src/renderer/components/SceneSprites.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/gameplayVisualConfig.ts->file:src/renderer/components/gameplayVisualConfig.test.ts",
       "source": "file:src/renderer/components/gameplayVisualConfig.ts",
       "target": "file:src/renderer/components/gameplayVisualConfig.test.ts",
@@ -94388,6 +94479,12 @@
       "id": "tested_by:src/renderer/components/sceneSpriteClocks.ts->file:src/renderer/components/CathedralScene.test.tsx",
       "source": "file:src/renderer/components/sceneSpriteClocks.ts",
       "target": "file:src/renderer/components/CathedralScene.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/SceneSprites.tsx->file:src/renderer/components/SceneSprites.test.tsx",
+      "source": "file:src/renderer/components/SceneSprites.tsx",
+      "target": "file:src/renderer/components/SceneSprites.test.tsx",
       "kind": "tested_by"
     },
     {

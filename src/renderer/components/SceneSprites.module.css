@@ -3,6 +3,10 @@
  * `frames` boxes wide and steps left by one box per frame. A flame is opaque paint, so the sprite
  * is drawn over the plate (source-over), not added to it: adding yellow to the yellow-white wall
  * the painting already lit clips to a pale ghost. Only the sparks add.
+ *
+ * The four `--flame-*` properties are how a run reaches the fire (`sceneFlameLevels`). Each has a
+ * fallback that is exactly the painted flame, so a scene with no run behind it — the menu's
+ * candles, the portal — sets none of them and burns as it always did.
  */
 .sprites {
     position: absolute;
@@ -14,6 +18,11 @@
     position: absolute;
     overflow: hidden;
     contain: strict;
+    /* About the flame's foot, so a hotter fire climbs the wall instead of swelling off its torch.
+       A transform on a box that is already its own layer: the compositor does this, not the CPU. */
+    transform: scaleY(var(--flame-lift, 1));
+    transform-origin: 50% 100%;
+    transition: transform 420ms ease-out;
 }
 
 .strip {
@@ -25,13 +34,20 @@
     height: 100%;
     max-width: none;
     user-select: none;
-    animation: spriteFlip var(--sprite-duration, 1100ms) steps(var(--sprite-frames, 1), end) infinite;
+    animation: spriteFlip calc(var(--sprite-duration, 1100ms) / var(--flame-rate, 1))
+        steps(var(--sprite-frames, 1), end) infinite;
     animation-delay: var(--sprite-delay, 0ms);
     will-change: transform;
 }
 
 .sprite[data-still='true'] .strip {
     animation: none;
+}
+
+/* A frozen scene stays frozen, and a run cannot make it move: no lift, and nothing to ease into. */
+.sprites[data-still='true'] .sprite {
+    transform: none;
+    transition: none;
 }
 
 @keyframes spriteFlip {
@@ -45,6 +61,8 @@
     position: absolute;
     pointer-events: none;
     mix-blend-mode: plus-lighter;
+    opacity: var(--flame-embers, 1);
+    transition: opacity 420ms ease-out;
 }
 
 .ember {
@@ -55,7 +73,7 @@
     bottom: 0;
     width: var(--ember-size, 2px);
     opacity: 0;
-    animation: emberRise var(--ember-duration, 2600ms) linear infinite;
+    animation: emberRise calc(var(--ember-duration, 2600ms) / var(--flame-ember-rate, 1)) linear infinite;
     animation-delay: var(--ember-delay, 0ms);
     will-change: transform, opacity;
 }

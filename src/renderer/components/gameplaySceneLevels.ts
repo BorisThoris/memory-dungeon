@@ -1,8 +1,13 @@
 /**
  * How the room answers the run, as continuous functions of the chain meter's fill (0..1 of the way
  * to Fever) rather than four steps: the ring warms as the chain grows, not when a rung is crossed,
- * and the motes it throws up rise from nothing at rest to a full drift at Fever. The torches are
- * not here on purpose — they always burn.
+ * and the motes it throws up rise from nothing at rest to a full drift at Fever.
+ *
+ * The ring and the fire answer on different curves on purpose. The ring *is* the meter made
+ * architecture, so it eases in the way the meter does: the last pairs before Fever move it most.
+ * The fire is the room noticing, so it answers early and steeply, the way the cards' rune glow
+ * does — the first pair of a chain should already have the torches up, or nothing in the room tells
+ * a player a chain has started until it is nearly over.
  */
 import type { ChainTier } from '../../shared/chain-tier-rules';
 
@@ -38,6 +43,41 @@ export const sceneRingLevels = (fill: number): SceneRingLevels => {
 };
 
 const round = (value: number): number => Math.round(value * 1000) / 1000;
+
+export interface SceneFlameLevels {
+    /** Multiplier on every flame flipbook's rate: a hot room burns faster. */
+    rate: number;
+    /** Vertical scale of each flame about its own foot, so it grows up the wall rather than outward. */
+    lift: number;
+    /** Opacity of the sparks coming off the flames. */
+    embers: number;
+    /** Multiplier on how fast those sparks rise. */
+    emberRate: number;
+}
+
+/**
+ * How hard the room's fire burns for a given chain.
+ *
+ * All four of these are things CSS can already do to a box that exists: a rate on a running
+ * animation, a scale about the flame's foot, an opacity. No new layer, no new element, and nothing
+ * per frame. That is the reason the fire can answer the run at all — six flames and their sparks
+ * are in the scene on every device that gets it, including the phones held to the `lean` tier,
+ * which is exactly where a fifth painted light pass would not have been affordable.
+ *
+ * At rest the fire sits a shade under its painted self, which is what leaves it somewhere to climb.
+ */
+export const sceneFlameLevels = (fill: number): SceneFlameLevels => {
+    const f = clamp01(fill);
+    // Steep off zero: one pair is visible in the fire, and Fever is the top of a climb the player
+    // has been watching rather than the only moment anything happened.
+    const early = 1 - (1 - f) * (1 - f);
+    return {
+        rate: round(0.92 + 0.62 * early),
+        lift: round(1 + 0.16 * early),
+        embers: round(0.5 + 0.5 * early),
+        emberRate: round(0.85 + 0.5 * early)
+    };
+};
 
 /**
  * How hard the torches flare on a break: the pop (a match with no chain behind it) barely stirs
