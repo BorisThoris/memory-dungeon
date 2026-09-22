@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2671,
-    "codeFileCount": 917,
-    "exportedSymbolCount": 2756,
+    "trackedFileCount": 2675,
+    "codeFileCount": 921,
+    "exportedSymbolCount": 2772,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6990
+    "relationshipCount": 7019
   },
   "inventory": [
     {
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "f2691078483d94150b819a08e2b6b934737cb3551adb44e72e19e1590f5a4ba8"
+      "sha256": "d440c6ddc0b1e3720f5a322b2044f7cb4090c35a6527f85bb4138a4ae641a95d"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -7347,8 +7347,8 @@
     {
       "path": "src/renderer/assets/textures/cards/authored-card-front.svg",
       "category": "source",
-      "bytes": 1425,
-      "sha256": "fab05e9bac1d4d49fbd02761a08ce87a35cc5a5d5a915be686b59ca28efe2e47"
+      "bytes": 4107,
+      "sha256": "23d66a40b7b955c5b3b8121161abb7198d77a4ae81ad14860474f43ea1e1a308"
     },
     {
       "path": "src/renderer/assets/textures/cards/back-normal.png",
@@ -8845,6 +8845,12 @@
       "sha256": "54a4caffb22bb7b04769c67b31a6f2a4b38299cea8f23d332cb86a3c1ac9efed"
     },
     {
+      "path": "src/renderer/components/AnimatedCardFrontSvgLayers.tsx",
+      "category": "source",
+      "bytes": 5824,
+      "sha256": "57ba4ab5d5d41e9028b62f0fd0bd95e2cf9fd8fb5ddcf92429f2103e849b1111"
+    },
+    {
       "path": "src/renderer/components/AppErrorBoundary.module.css",
       "category": "source",
       "bytes": 1076,
@@ -8925,8 +8931,8 @@
     {
       "path": "src/renderer/components/cardSvgPlaneGeometry.ts",
       "category": "source",
-      "bytes": 17372,
-      "sha256": "fb7b46bcee3222f6e6275347eccbf769e18ab894e6f3255de2845801c4427f5f"
+      "bytes": 21549,
+      "sha256": "1068498c95d76c36244e0dd91abf53e85472fcb79c596aabe9012d20f8ef2d59"
     },
     {
       "path": "src/renderer/components/CathedralScene.module.css",
@@ -9549,8 +9555,8 @@
     {
       "path": "src/renderer/components/TileBezel.tsx",
       "category": "source",
-      "bytes": 32655,
-      "sha256": "5c9f4aa58e15fea30efe295a0fc89e69fc8e9b53aca070c2fc2fd8e3151e03b6"
+      "bytes": 33516,
+      "sha256": "02971797860ce9a66484ef4efb61a8b180821e68804c59b8712dba531b091c72"
     },
     {
       "path": "src/renderer/components/TileBoard.module.css",
@@ -9619,10 +9625,22 @@
       "sha256": "5827f229fff61b205afa6292c7853e61886b49eba046d80c4baa428f66b0f6dc"
     },
     {
+      "path": "src/renderer/components/tileBoardCardFrontLayerVisualState.test.ts",
+      "category": "test",
+      "bytes": 3633,
+      "sha256": "ecbfc3813ce1dbe44fed340243597bd5da2bd26d838425f51296509b5a1d65c4"
+    },
+    {
+      "path": "src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
+      "category": "source",
+      "bytes": 4044,
+      "sha256": "de749c0cc6c161671df318c97fb1c5892921c91f9176298b4d218355c68e567d"
+    },
+    {
       "path": "src/renderer/components/TileBoardCardSurface.tsx",
       "category": "source",
-      "bytes": 8136,
-      "sha256": "7e321a0d8b6c9c268eb019d1db0d4b02a13a67f18466c7629c4c3384a65f3e61"
+      "bytes": 9365,
+      "sha256": "d4d40c488ddabc31d8d8d4e7eefbe8fad9d5acd23f35d8165991f5db7e9319c1"
     },
     {
       "path": "src/renderer/components/tileBoardCardTint.test.ts",
@@ -10047,14 +10065,14 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 17681,
-      "sha256": "7ef129a6cd428ab0bde6f190cd410be977c7c60e835b2446f659f005b16eac42"
+      "bytes": 18494,
+      "sha256": "118f62b2b9267c33995ac8cb61aebe93a94f6c021cb8664a94267bb7b0185f6f"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "category": "source",
-      "bytes": 7525,
-      "sha256": "e8f8bb5723b671f1c8a7a8da98bc6d410f66962f10aa3f780e53e6e01adbc8bf"
+      "bytes": 7729,
+      "sha256": "12580b3491718aab8751a481a4351c26e547c3b158ccbbe885273bdab720ae0e"
     },
     {
       "path": "src/renderer/components/tileBoardSceneFrame.test.ts",
@@ -10119,14 +10137,14 @@
     {
       "path": "src/renderer/components/tileBoardSharedCardAssets.test.ts",
       "category": "test",
-      "bytes": 4457,
-      "sha256": "72943f2e026637b20e387efd64ebd82c3c542a7b2e5c8987ff12575318ad6e02"
+      "bytes": 4524,
+      "sha256": "fec02efde5b1dae8f9990649d907572420d9575a482702eda28de1f9ce866e8e"
     },
     {
       "path": "src/renderer/components/tileBoardSharedCardAssets.ts",
       "category": "source",
-      "bytes": 1742,
-      "sha256": "eacc3dd3580c6439005919cb6ccfb5ee6f6cacabdc45362085b94872f08fb6cf"
+      "bytes": 2377,
+      "sha256": "e66d9e462aa2e5f21f79d177101d1b576a5676630186c3fad1fa0c72ea12c6ec"
     },
     {
       "path": "src/renderer/components/tileBoardSpotlightState.test.ts",
@@ -10357,10 +10375,16 @@
       "sha256": "a36ddd42daa9dc886a0670061f0d0be65ebe7bcbded54819bca4275c0c302ecd"
     },
     {
+      "path": "src/renderer/components/useTileBoardSharedCardSvgAssets.test.tsx",
+      "category": "test",
+      "bytes": 2334,
+      "sha256": "1687ed1e2250ea5c2a7d952270a0bc60012b313556f034b20608351a9faed950"
+    },
+    {
       "path": "src/renderer/components/useTileBoardSharedCardSvgAssets.ts",
       "category": "source",
-      "bytes": 2345,
-      "sha256": "9a4c4d5bfe13fcef265cdeb31718494ce06a8d0507a5ded7fa5b42e0ce90994a"
+      "bytes": 3272,
+      "sha256": "3a593266e0a1f17a0fa71714739910f528fbf0b542550c226785e48e6e721609"
     },
     {
       "path": "src/renderer/components/useTileBoardTextureRevision.ts",
@@ -18171,6 +18195,23 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/AnimatedCardFrontSvgLayers.tsx",
+      "path": "src/renderer/components/AnimatedCardFrontSvgLayers.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 131,
+      "imports": [
+        "file:src/renderer/components/cardSvgPlaneGeometry.ts",
+        "file:src/renderer/components/gameplayRenderProfile.ts",
+        "file:src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
+        "file:src/renderer/components/tileBoardPick.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/AnimatedCardFrontSvgLayers.tsx#AnimatedCardFrontSvgLayers"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/AppErrorBoundary.test.tsx",
       "path": "src/renderer/components/AppErrorBoundary.test.tsx",
       "layer": "renderer",
@@ -18380,19 +18421,27 @@
       "path": "src/renderer/components/cardSvgPlaneGeometry.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 517,
+      "lineCount": 601,
       "imports": [
         "file:src/renderer/components/tileShatter.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CARD_BACK_SVG_LAYER_NAMES",
+        "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CARD_FRONT_SVG_LAYER_NAMES",
         "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CardBackSvgLayerGeometry",
         "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CardBackSvgLayerName",
+        "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CardFrontSvgLayerGeometry",
+        "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CardFrontSvgLayerName",
+        "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CardSvgLayerGeometry",
+        "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CardSvgLayerName",
         "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#loadSharedCardBackSvgLayerGeometries",
+        "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#loadSharedCardFrontSvgLayerGeometries",
+        "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#loadSharedCardSvgLayerGeometries",
         "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#loadSharedCardSvgPlaneGeometry"
       ],
       "testedBy": [
         "file:src/renderer/components/cardSvgPlaneGeometry.test.ts",
+        "file:src/renderer/components/tileBoardCardFrontLayerVisualState.test.ts",
         "file:src/renderer/components/tileBoardSharedCardAssets.test.ts"
       ]
     },
@@ -19919,7 +19968,7 @@
       "path": "src/renderer/components/TileBezel.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 849,
+      "lineCount": 848,
       "imports": [
         "file:src/renderer/components/cardArcaneGlowMaterial.ts",
         "file:src/renderer/components/cardSvgPlaneGeometry.ts",
@@ -20188,13 +20237,48 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/tileBoardCardFrontLayerVisualState.test.ts",
+      "path": "src/renderer/components/tileBoardCardFrontLayerVisualState.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 79,
+      "imports": [
+        "file:src/renderer/components/cardSvgPlaneGeometry.ts",
+        "file:src/renderer/components/tileBoardCardFrontLayerVisualState.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
+      "path": "src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 107,
+      "imports": [
+        "file:src/renderer/components/cardSvgPlaneGeometry.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#CARD_FRONT_LAYER_BASE_OPACITY",
+        "symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#CARD_FRONT_UNDER_ART_LAYERS",
+        "symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#CardFrontLayerVisualState",
+        "symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#CardFrontLayerVisualStateInput",
+        "symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#computeCardFrontLayerPhase",
+        "symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#computeCardFrontLayerVisualState"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/tileBoardCardFrontLayerVisualState.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/TileBoardCardSurface.tsx",
       "path": "src/renderer/components/TileBoardCardSurface.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 196,
+      "lineCount": 213,
       "imports": [
         "file:src/renderer/components/AnimatedCardBackSvgLayers.tsx",
+        "file:src/renderer/components/AnimatedCardFrontSvgLayers.tsx",
         "file:src/renderer/components/cardSvgPlaneGeometry.ts",
         "file:src/renderer/components/gameplayRenderProfile.ts",
         "file:src/renderer/components/tileBoardCardBend.ts",
@@ -21444,7 +21528,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 447,
+      "lineCount": 451,
       "imports": [
         "file:src/renderer/components/boardTrauma.ts",
         "file:src/renderer/components/gameplayRenderProfile.ts",
@@ -21469,6 +21553,7 @@
         "file:src/renderer/components/useTileBoardTextureRevision.ts",
         "file:src/renderer/dev/boardWebglPerfSample.ts",
         "file:src/renderer/dev/legacy/tileStepLegacy.ts",
+        "file:src/renderer/hooks/useSceneEffectTier.ts",
         "file:src/renderer/platformTilt/platformTiltTypes.ts",
         "file:src/renderer/styles/theme.ts",
         "file:src/shared/contracts.ts"
@@ -21667,7 +21752,7 @@
       "path": "src/renderer/components/tileBoardSharedCardAssets.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 122,
+      "lineCount": 116,
       "imports": [
         "file:src/renderer/components/cardSvgPlaneGeometry.ts",
         "file:src/renderer/components/tileBoardSharedCardAssets.ts"
@@ -21686,8 +21771,10 @@
       ],
       "exports": [
         "symbol:src/renderer/components/tileBoardSharedCardAssets.ts#disposeTileBoardSharedCardBackLayers",
+        "symbol:src/renderer/components/tileBoardSharedCardAssets.ts#disposeTileBoardSharedCardLayers",
         "symbol:src/renderer/components/tileBoardSharedCardAssets.ts#disposeTileBoardSharedCardSvgAssets",
-        "symbol:src/renderer/components/tileBoardSharedCardAssets.ts#loadTileBoardSharedCardSvgAssets"
+        "symbol:src/renderer/components/tileBoardSharedCardAssets.ts#loadTileBoardSharedCardSvgAssets",
+        "symbol:src/renderer/components/tileBoardSharedCardAssets.ts#TileBoardSharedCardSvgAssets"
       ],
       "testedBy": [
         "file:src/renderer/components/tileBoardSharedCardAssets.test.ts"
@@ -22380,11 +22467,23 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/useTileBoardSharedCardSvgAssets.test.tsx",
+      "path": "src/renderer/components/useTileBoardSharedCardSvgAssets.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 54,
+      "imports": [
+        "file:src/renderer/components/useTileBoardSharedCardSvgAssets.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/useTileBoardSharedCardSvgAssets.ts",
       "path": "src/renderer/components/useTileBoardSharedCardSvgAssets.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 65,
+      "lineCount": 77,
       "imports": [
         "file:src/renderer/components/cardSvgPlaneGeometry.ts",
         "file:src/renderer/components/tileBoardSharedCardAssets.ts"
@@ -22392,7 +22491,9 @@
       "exports": [
         "symbol:src/renderer/components/useTileBoardSharedCardSvgAssets.ts#useTileBoardSharedCardSvgAssets"
       ],
-      "testedBy": []
+      "testedBy": [
+        "file:src/renderer/components/useTileBoardSharedCardSvgAssets.test.tsx"
+      ]
     },
     {
       "id": "file:src/renderer/components/useTileBoardTextureRevision.ts",
@@ -35574,6 +35675,14 @@
       "endLine": 116
     },
     {
+      "id": "symbol:src/renderer/components/AnimatedCardFrontSvgLayers.tsx#AnimatedCardFrontSvgLayers",
+      "name": "AnimatedCardFrontSvgLayers",
+      "kind": "value",
+      "file": "src/renderer/components/AnimatedCardFrontSvgLayers.tsx",
+      "line": 41,
+      "endLine": 129
+    },
+    {
       "id": "symbol:src/renderer/components/AppErrorBoundary.tsx#AppErrorBoundary",
       "name": "AppErrorBoundary",
       "kind": "class",
@@ -35878,12 +35987,20 @@
       "endLine": 35
     },
     {
+      "id": "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CARD_FRONT_SVG_LAYER_NAMES",
+      "name": "CARD_FRONT_SVG_LAYER_NAMES",
+      "kind": "value",
+      "file": "src/renderer/components/cardSvgPlaneGeometry.ts",
+      "line": 43,
+      "endLine": 50
+    },
+    {
       "id": "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CardBackSvgLayerGeometry",
       "name": "CardBackSvgLayerGeometry",
-      "kind": "interface",
+      "kind": "type",
       "file": "src/renderer/components/cardSvgPlaneGeometry.ts",
-      "line": 37,
-      "endLine": 40
+      "line": 59,
+      "endLine": 59
     },
     {
       "id": "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CardBackSvgLayerName",
@@ -35894,20 +36011,68 @@
       "endLine": 36
     },
     {
+      "id": "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CardFrontSvgLayerGeometry",
+      "name": "CardFrontSvgLayerGeometry",
+      "kind": "type",
+      "file": "src/renderer/components/cardSvgPlaneGeometry.ts",
+      "line": 60,
+      "endLine": 60
+    },
+    {
+      "id": "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CardFrontSvgLayerName",
+      "name": "CardFrontSvgLayerName",
+      "kind": "type",
+      "file": "src/renderer/components/cardSvgPlaneGeometry.ts",
+      "line": 51,
+      "endLine": 51
+    },
+    {
+      "id": "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CardSvgLayerGeometry",
+      "name": "CardSvgLayerGeometry",
+      "kind": "interface",
+      "file": "src/renderer/components/cardSvgPlaneGeometry.ts",
+      "line": 55,
+      "endLine": 58
+    },
+    {
+      "id": "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CardSvgLayerName",
+      "name": "CardSvgLayerName",
+      "kind": "type",
+      "file": "src/renderer/components/cardSvgPlaneGeometry.ts",
+      "line": 53,
+      "endLine": 53
+    },
+    {
       "id": "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#loadSharedCardBackSvgLayerGeometries",
       "name": "loadSharedCardBackSvgLayerGeometries",
+      "kind": "value",
+      "file": "src/renderer/components/cardSvgPlaneGeometry.ts",
+      "line": 596,
+      "endLine": 597
+    },
+    {
+      "id": "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#loadSharedCardFrontSvgLayerGeometries",
+      "name": "loadSharedCardFrontSvgLayerGeometries",
+      "kind": "value",
+      "file": "src/renderer/components/cardSvgPlaneGeometry.ts",
+      "line": 599,
+      "endLine": 600
+    },
+    {
+      "id": "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#loadSharedCardSvgLayerGeometries",
+      "name": "loadSharedCardSvgLayerGeometries",
       "kind": "function",
       "file": "src/renderer/components/cardSvgPlaneGeometry.ts",
-      "line": 451,
-      "endLine": 516
+      "line": 525,
+      "endLine": 594
     },
     {
       "id": "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#loadSharedCardSvgPlaneGeometry",
       "name": "loadSharedCardSvgPlaneGeometry",
       "kind": "function",
       "file": "src/renderer/components/cardSvgPlaneGeometry.ts",
-      "line": 387,
-      "endLine": 449
+      "line": 456,
+      "endLine": 518
     },
     {
       "id": "symbol:src/renderer/components/CathedralScene.tsx#CathedralScene",
@@ -36994,16 +37159,16 @@
       "name": "TileBezel",
       "kind": "value",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 848,
-      "endLine": 848
+      "line": 847,
+      "endLine": 847
     },
     {
       "id": "symbol:src/renderer/components/TileBezel.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "interface",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 152,
-      "endLine": 156
+      "line": 151,
+      "endLine": 155
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#default",
@@ -37438,12 +37603,60 @@
       "endLine": 20
     },
     {
+      "id": "symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#CARD_FRONT_LAYER_BASE_OPACITY",
+      "name": "CARD_FRONT_LAYER_BASE_OPACITY",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
+      "line": 35,
+      "endLine": 42
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#CARD_FRONT_UNDER_ART_LAYERS",
+      "name": "CARD_FRONT_UNDER_ART_LAYERS",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
+      "line": 45,
+      "endLine": 48
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#CardFrontLayerVisualState",
+      "name": "CardFrontLayerVisualState",
+      "kind": "interface",
+      "file": "src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
+      "line": 17,
+      "endLine": 25
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#CardFrontLayerVisualStateInput",
+      "name": "CardFrontLayerVisualStateInput",
+      "kind": "interface",
+      "file": "src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
+      "line": 27,
+      "endLine": 33
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#computeCardFrontLayerPhase",
+      "name": "computeCardFrontLayerPhase",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
+      "line": 50,
+      "endLine": 50
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#computeCardFrontLayerVisualState",
+      "name": "computeCardFrontLayerVisualState",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
+      "line": 54,
+      "endLine": 106
+    },
+    {
       "id": "symbol:src/renderer/components/TileBoardCardSurface.tsx#TileBoardCardSurface",
       "name": "TileBoardCardSurface",
       "kind": "value",
       "file": "src/renderer/components/TileBoardCardSurface.tsx",
-      "line": 44,
-      "endLine": 194
+      "line": 47,
+      "endLine": 211
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardTint.ts#applyTileBoardCardTint",
@@ -38818,24 +39031,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 446,
-      "endLine": 446
+      "line": 450,
+      "endLine": 450
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
       "name": "TileBoardSceneHandle",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 148,
-      "endLine": 148
+      "line": 149,
+      "endLine": 149
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 73,
-      "endLine": 73
+      "line": 74,
+      "endLine": 74
     },
     {
       "id": "symbol:src/renderer/components/TileBoardSceneBoardGroup.tsx#TileBoardSceneBoardGroup",
@@ -38938,24 +39151,40 @@
       "name": "disposeTileBoardSharedCardBackLayers",
       "kind": "value",
       "file": "src/renderer/components/tileBoardSharedCardAssets.ts",
-      "line": 16,
-      "endLine": 22
+      "line": 32,
+      "endLine": 32
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardSharedCardAssets.ts#disposeTileBoardSharedCardLayers",
+      "name": "disposeTileBoardSharedCardLayers",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardSharedCardAssets.ts",
+      "line": 23,
+      "endLine": 29
     },
     {
       "id": "symbol:src/renderer/components/tileBoardSharedCardAssets.ts#disposeTileBoardSharedCardSvgAssets",
       "name": "disposeTileBoardSharedCardSvgAssets",
       "kind": "value",
       "file": "src/renderer/components/tileBoardSharedCardAssets.ts",
-      "line": 24,
-      "endLine": 33
+      "line": 34,
+      "endLine": 42
     },
     {
       "id": "symbol:src/renderer/components/tileBoardSharedCardAssets.ts#loadTileBoardSharedCardSvgAssets",
       "name": "loadTileBoardSharedCardSvgAssets",
       "kind": "value",
       "file": "src/renderer/components/tileBoardSharedCardAssets.ts",
-      "line": 35,
+      "line": 52,
       "endLine": 66
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardSharedCardAssets.ts#TileBoardSharedCardSvgAssets",
+      "name": "TileBoardSharedCardSvgAssets",
+      "kind": "interface",
+      "file": "src/renderer/components/tileBoardSharedCardAssets.ts",
+      "line": 11,
+      "endLine": 14
     },
     {
       "id": "symbol:src/renderer/components/tileBoardSpotlightState.ts#getTileBoardSpotlightState",
@@ -39994,8 +40223,8 @@
       "name": "useTileBoardSharedCardSvgAssets",
       "kind": "value",
       "file": "src/renderer/components/useTileBoardSharedCardSvgAssets.ts",
-      "line": 22,
-      "endLine": 64
+      "line": 31,
+      "endLine": 76
     },
     {
       "id": "symbol:src/renderer/components/useTileBoardTextureRevision.ts#useTileBoardTextureRevision",
@@ -60542,6 +60771,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/AnimatedCardFrontSvgLayers.tsx->symbol:src/renderer/components/AnimatedCardFrontSvgLayers.tsx#AnimatedCardFrontSvgLayers",
+      "source": "file:src/renderer/components/AnimatedCardFrontSvgLayers.tsx",
+      "target": "symbol:src/renderer/components/AnimatedCardFrontSvgLayers.tsx#AnimatedCardFrontSvgLayers",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/AppErrorBoundary.tsx->symbol:src/renderer/components/AppErrorBoundary.tsx#AppErrorBoundary",
       "source": "file:src/renderer/components/AppErrorBoundary.tsx",
       "target": "symbol:src/renderer/components/AppErrorBoundary.tsx#AppErrorBoundary",
@@ -60770,6 +61005,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/cardSvgPlaneGeometry.ts->symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CARD_FRONT_SVG_LAYER_NAMES",
+      "source": "file:src/renderer/components/cardSvgPlaneGeometry.ts",
+      "target": "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CARD_FRONT_SVG_LAYER_NAMES",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/cardSvgPlaneGeometry.ts->symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CardBackSvgLayerGeometry",
       "source": "file:src/renderer/components/cardSvgPlaneGeometry.ts",
       "target": "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CardBackSvgLayerGeometry",
@@ -60782,9 +61023,45 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/cardSvgPlaneGeometry.ts->symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CardFrontSvgLayerGeometry",
+      "source": "file:src/renderer/components/cardSvgPlaneGeometry.ts",
+      "target": "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CardFrontSvgLayerGeometry",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardSvgPlaneGeometry.ts->symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CardFrontSvgLayerName",
+      "source": "file:src/renderer/components/cardSvgPlaneGeometry.ts",
+      "target": "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CardFrontSvgLayerName",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardSvgPlaneGeometry.ts->symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CardSvgLayerGeometry",
+      "source": "file:src/renderer/components/cardSvgPlaneGeometry.ts",
+      "target": "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CardSvgLayerGeometry",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardSvgPlaneGeometry.ts->symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CardSvgLayerName",
+      "source": "file:src/renderer/components/cardSvgPlaneGeometry.ts",
+      "target": "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#CardSvgLayerName",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/cardSvgPlaneGeometry.ts->symbol:src/renderer/components/cardSvgPlaneGeometry.ts#loadSharedCardBackSvgLayerGeometries",
       "source": "file:src/renderer/components/cardSvgPlaneGeometry.ts",
       "target": "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#loadSharedCardBackSvgLayerGeometries",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardSvgPlaneGeometry.ts->symbol:src/renderer/components/cardSvgPlaneGeometry.ts#loadSharedCardFrontSvgLayerGeometries",
+      "source": "file:src/renderer/components/cardSvgPlaneGeometry.ts",
+      "target": "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#loadSharedCardFrontSvgLayerGeometries",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardSvgPlaneGeometry.ts->symbol:src/renderer/components/cardSvgPlaneGeometry.ts#loadSharedCardSvgLayerGeometries",
+      "source": "file:src/renderer/components/cardSvgPlaneGeometry.ts",
+      "target": "symbol:src/renderer/components/cardSvgPlaneGeometry.ts#loadSharedCardSvgLayerGeometries",
       "kind": "exports"
     },
     {
@@ -61940,6 +62217,42 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/tileBoardCardFrontLayerVisualState.ts->symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#CARD_FRONT_LAYER_BASE_OPACITY",
+      "source": "file:src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
+      "target": "symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#CARD_FRONT_LAYER_BASE_OPACITY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileBoardCardFrontLayerVisualState.ts->symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#CARD_FRONT_UNDER_ART_LAYERS",
+      "source": "file:src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
+      "target": "symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#CARD_FRONT_UNDER_ART_LAYERS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileBoardCardFrontLayerVisualState.ts->symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#CardFrontLayerVisualState",
+      "source": "file:src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
+      "target": "symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#CardFrontLayerVisualState",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileBoardCardFrontLayerVisualState.ts->symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#CardFrontLayerVisualStateInput",
+      "source": "file:src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
+      "target": "symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#CardFrontLayerVisualStateInput",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileBoardCardFrontLayerVisualState.ts->symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#computeCardFrontLayerPhase",
+      "source": "file:src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
+      "target": "symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#computeCardFrontLayerPhase",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileBoardCardFrontLayerVisualState.ts->symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#computeCardFrontLayerVisualState",
+      "source": "file:src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
+      "target": "symbol:src/renderer/components/tileBoardCardFrontLayerVisualState.ts#computeCardFrontLayerVisualState",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/TileBoardCardSurface.tsx->symbol:src/renderer/components/TileBoardCardSurface.tsx#TileBoardCardSurface",
       "source": "file:src/renderer/components/TileBoardCardSurface.tsx",
       "target": "symbol:src/renderer/components/TileBoardCardSurface.tsx#TileBoardCardSurface",
@@ -63068,6 +63381,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/tileBoardSharedCardAssets.ts->symbol:src/renderer/components/tileBoardSharedCardAssets.ts#disposeTileBoardSharedCardLayers",
+      "source": "file:src/renderer/components/tileBoardSharedCardAssets.ts",
+      "target": "symbol:src/renderer/components/tileBoardSharedCardAssets.ts#disposeTileBoardSharedCardLayers",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/tileBoardSharedCardAssets.ts->symbol:src/renderer/components/tileBoardSharedCardAssets.ts#disposeTileBoardSharedCardSvgAssets",
       "source": "file:src/renderer/components/tileBoardSharedCardAssets.ts",
       "target": "symbol:src/renderer/components/tileBoardSharedCardAssets.ts#disposeTileBoardSharedCardSvgAssets",
@@ -63077,6 +63396,12 @@
       "id": "exports:src/renderer/components/tileBoardSharedCardAssets.ts->symbol:src/renderer/components/tileBoardSharedCardAssets.ts#loadTileBoardSharedCardSvgAssets",
       "source": "file:src/renderer/components/tileBoardSharedCardAssets.ts",
       "target": "symbol:src/renderer/components/tileBoardSharedCardAssets.ts#loadTileBoardSharedCardSvgAssets",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileBoardSharedCardAssets.ts->symbol:src/renderer/components/tileBoardSharedCardAssets.ts#TileBoardSharedCardSvgAssets",
+      "source": "file:src/renderer/components/tileBoardSharedCardAssets.ts",
+      "target": "symbol:src/renderer/components/tileBoardSharedCardAssets.ts#TileBoardSharedCardSvgAssets",
       "kind": "exports"
     },
     {
@@ -77824,6 +78149,30 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/AnimatedCardFrontSvgLayers.tsx->src/renderer/components/cardSvgPlaneGeometry.ts",
+      "source": "file:src/renderer/components/AnimatedCardFrontSvgLayers.tsx",
+      "target": "file:src/renderer/components/cardSvgPlaneGeometry.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/AnimatedCardFrontSvgLayers.tsx->src/renderer/components/gameplayRenderProfile.ts",
+      "source": "file:src/renderer/components/AnimatedCardFrontSvgLayers.tsx",
+      "target": "file:src/renderer/components/gameplayRenderProfile.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/AnimatedCardFrontSvgLayers.tsx->src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
+      "source": "file:src/renderer/components/AnimatedCardFrontSvgLayers.tsx",
+      "target": "file:src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/AnimatedCardFrontSvgLayers.tsx->src/renderer/components/tileBoardPick.ts",
+      "source": "file:src/renderer/components/AnimatedCardFrontSvgLayers.tsx",
+      "target": "file:src/renderer/components/tileBoardPick.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/AppErrorBoundary.test.tsx->src/renderer/components/AppErrorBoundary.tsx",
       "source": "file:src/renderer/components/AppErrorBoundary.test.tsx",
       "target": "file:src/renderer/components/AppErrorBoundary.tsx",
@@ -80644,9 +80993,33 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/tileBoardCardFrontLayerVisualState.test.ts->src/renderer/components/cardSvgPlaneGeometry.ts",
+      "source": "file:src/renderer/components/tileBoardCardFrontLayerVisualState.test.ts",
+      "target": "file:src/renderer/components/cardSvgPlaneGeometry.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileBoardCardFrontLayerVisualState.test.ts->src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
+      "source": "file:src/renderer/components/tileBoardCardFrontLayerVisualState.test.ts",
+      "target": "file:src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileBoardCardFrontLayerVisualState.ts->src/renderer/components/cardSvgPlaneGeometry.ts",
+      "source": "file:src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
+      "target": "file:src/renderer/components/cardSvgPlaneGeometry.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/TileBoardCardSurface.tsx->src/renderer/components/AnimatedCardBackSvgLayers.tsx",
       "source": "file:src/renderer/components/TileBoardCardSurface.tsx",
       "target": "file:src/renderer/components/AnimatedCardBackSvgLayers.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardCardSurface.tsx->src/renderer/components/AnimatedCardFrontSvgLayers.tsx",
+      "source": "file:src/renderer/components/TileBoardCardSurface.tsx",
+      "target": "file:src/renderer/components/AnimatedCardFrontSvgLayers.tsx",
       "kind": "imports"
     },
     {
@@ -81982,6 +82355,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/hooks/useSceneEffectTier.ts",
+      "source": "file:src/renderer/components/TileBoardScene.tsx",
+      "target": "file:src/renderer/hooks/useSceneEffectTier.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/platformTilt/platformTiltTypes.ts",
       "source": "file:src/renderer/components/TileBoardScene.tsx",
       "target": "file:src/renderer/platformTilt/platformTiltTypes.ts",
@@ -82717,6 +83096,12 @@
       "id": "imports:src/renderer/components/useTileBoardSceneResources.ts->src/shared/graphicsQuality.ts",
       "source": "file:src/renderer/components/useTileBoardSceneResources.ts",
       "target": "file:src/shared/graphicsQuality.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/useTileBoardSharedCardSvgAssets.test.tsx->src/renderer/components/useTileBoardSharedCardSvgAssets.ts",
+      "source": "file:src/renderer/components/useTileBoardSharedCardSvgAssets.test.tsx",
+      "target": "file:src/renderer/components/useTileBoardSharedCardSvgAssets.ts",
       "kind": "imports"
     },
     {
@@ -94053,6 +94438,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/cardSvgPlaneGeometry.ts->file:src/renderer/components/tileBoardCardFrontLayerVisualState.test.ts",
+      "source": "file:src/renderer/components/cardSvgPlaneGeometry.ts",
+      "target": "file:src/renderer/components/tileBoardCardFrontLayerVisualState.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/cardSvgPlaneGeometry.ts->file:src/renderer/components/tileBoardSharedCardAssets.test.ts",
       "source": "file:src/renderer/components/cardSvgPlaneGeometry.ts",
       "target": "file:src/renderer/components/tileBoardSharedCardAssets.test.ts",
@@ -94386,6 +94777,12 @@
       "id": "tested_by:src/renderer/components/tileBoardCardBend.ts->file:src/renderer/components/tileBoardCardBend.test.ts",
       "source": "file:src/renderer/components/tileBoardCardBend.ts",
       "target": "file:src/renderer/components/tileBoardCardBend.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/tileBoardCardFrontLayerVisualState.ts->file:src/renderer/components/tileBoardCardFrontLayerVisualState.test.ts",
+      "source": "file:src/renderer/components/tileBoardCardFrontLayerVisualState.ts",
+      "target": "file:src/renderer/components/tileBoardCardFrontLayerVisualState.test.ts",
       "kind": "tested_by"
     },
     {
@@ -94746,6 +95143,12 @@
       "id": "tested_by:src/renderer/components/tileTextures.ts->file:src/renderer/components/tileTextures.test.ts",
       "source": "file:src/renderer/components/tileTextures.ts",
       "target": "file:src/renderer/components/tileTextures.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/useTileBoardSharedCardSvgAssets.ts->file:src/renderer/components/useTileBoardSharedCardSvgAssets.test.tsx",
+      "source": "file:src/renderer/components/useTileBoardSharedCardSvgAssets.ts",
+      "target": "file:src/renderer/components/useTileBoardSharedCardSvgAssets.test.tsx",
       "kind": "tested_by"
     },
     {

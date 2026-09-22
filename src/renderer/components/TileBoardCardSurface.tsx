@@ -2,7 +2,6 @@ import { memo, type MutableRefObject } from 'react';
 import {
     DoubleSide,
     MultiplyBlending,
-    type BufferGeometry,
     type CanvasTexture,
     type MeshStandardMaterial,
     type PlaneGeometry,
@@ -10,7 +9,8 @@ import {
 } from 'three';
 
 import { AnimatedCardBackSvgLayers } from './AnimatedCardBackSvgLayers';
-import type { CardBackSvgLayerGeometry } from './cardSvgPlaneGeometry';
+import { AnimatedCardFrontSvgLayers } from './AnimatedCardFrontSvgLayers';
+import type { CardBackSvgLayerGeometry, CardFrontSvgLayerGeometry } from './cardSvgPlaneGeometry';
 import type { GameplayRenderQualityProfile } from './gameplayRenderProfile';
 import { noopMeshRaycast } from './tileBoardPick';
 import { CARD_WEAR_Z_SLIVER, type CardWearAssetSet } from './tileBoardCardBend';
@@ -34,12 +34,15 @@ interface TileBoardCardSurfaceProps {
     renderQuality: GameplayRenderQualityProfile;
     seed: number;
     sharedCardBackLayers: readonly CardBackSvgLayerGeometry[] | null;
-    sharedCardFrontGeometry: BufferGeometry | null;
+    sharedCardFrontLayers: readonly CardFrontSvgLayerGeometry[] | null;
     tutorialPairOrdinal: number | null;
     useSvgMeshBack: boolean;
     useSvgMeshFront: boolean;
     wearAssets: CardWearAssetSet | null;
 }
+
+/** How far the frame's layers stand off the art plane, so they never z-fight with it. */
+const CARD_FRONT_ART_Z_SLIVER = 0.00022;
 
 export const TileBoardCardSurface = memo(
     ({
@@ -60,34 +63,48 @@ export const TileBoardCardSurface = memo(
         renderQuality,
         seed,
         sharedCardBackLayers,
-        sharedCardFrontGeometry,
+        sharedCardFrontLayers,
         tutorialPairOrdinal,
         useSvgMeshBack,
         useSvgMeshFront,
         wearAssets
     }: TileBoardCardSurfaceProps) => (
         <>
-            {useSvgMeshFront && sharedCardFrontGeometry ? (
-                <mesh geometry={sharedCardFrontGeometry} position={[0, 0, faceZ]} raycast={noopMeshRaycast}>
-                    <meshStandardMaterial
-                        ref={frontCardMatRef}
-                        alphaTest={0.06}
-                        color={cardTint}
-                        depthWrite
-                        displacementBias={-renderQuality.cardDisplacementScale * 0.5}
-                        displacementMap={cardPanelDisplacementMap ?? undefined}
-                        displacementScale={renderQuality.cardDisplacementScale}
-                        metalness={renderQuality.cardMetalness}
-                        normalMap={frontNormalMap ?? undefined}
-                        normalScale={renderQuality.cardNormalScale}
-                        roughness={renderQuality.cardRoughness}
-                        roughnessMap={frontRoughnessMap ?? undefined}
-                        side={DoubleSide}
-                        toneMapped={false}
-                        transparent
-                        vertexColors
+            {useSvgMeshFront && sharedCardFrontLayers ? (
+                <>
+                    <AnimatedCardFrontSvgLayers
+                        artZ={CARD_FRONT_ART_Z_SLIVER}
+                        cardPanelDisplacementMap={cardPanelDisplacementMap}
+                        cardTint={cardTint}
+                        faceZ={faceZ}
+                        frontCardMatRef={frontCardMatRef}
+                        layers={sharedCardFrontLayers}
+                        normalMap={frontNormalMap}
+                        reduceMotion={reduceMotion}
+                        renderQuality={renderQuality}
+                        roughnessMap={frontRoughnessMap}
+                        seed={seed}
                     />
-                </mesh>
+                    {/* The illustration stays a raster between the panel and the frame: painted art
+                        is not worth tens of thousands of triangles a card. Lit exactly as it is
+                        without the frame, so turning the frame on does not change the art. */}
+                    <mesh geometry={frontGeometry} position={[0, 0, faceZ]} raycast={noopMeshRaycast} renderOrder={5}>
+                        <meshStandardMaterial
+                            alphaTest={0.06}
+                            color={cardTint}
+                            depthWrite={false}
+                            map={cardFrontArtTexture ?? undefined}
+                            metalness={renderQuality.cardMetalness}
+                            normalMap={frontNormalMap ?? undefined}
+                            normalScale={renderQuality.cardNormalScale}
+                            roughness={renderQuality.cardRoughness}
+                            roughnessMap={frontRoughnessMap ?? undefined}
+                            side={DoubleSide}
+                            toneMapped={false}
+                            transparent
+                        />
+                    </mesh>
+                </>
             ) : (
                 <mesh geometry={frontGeometry} position={[0, 0, faceZ]} raycast={noopMeshRaycast}>
                     <meshStandardMaterial

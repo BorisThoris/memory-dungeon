@@ -1,25 +1,35 @@
-import type { BufferGeometry } from 'three';
-import type { CardBackSvgLayerGeometry } from './cardSvgPlaneGeometry';
+import type { CardBackSvgLayerGeometry, CardFrontSvgLayerGeometry } from './cardSvgPlaneGeometry';
 
-interface TileBoardSharedCardSvgAssets {
-    backLayers: CardBackSvgLayerGeometry[];
-    frontGeometry: BufferGeometry;
+/**
+ * Both card faces as layered meshes, traced from the authored SVGs.
+ *
+ * The two loads are chained rather than raced: `SVGLoader.parse` is main-thread work, and two of
+ * them at once on a phone is a visible hitch at board entry. Either face may come back null (the
+ * art is missing, too big to mesh, or over the vertex cap) and the other still renders — a card
+ * with a live frame and a raster back is a fair result; failing both because one failed is not.
+ */
+export interface TileBoardSharedCardSvgAssets {
+    backLayers: CardBackSvgLayerGeometry[] | null;
+    frontLayers: CardFrontSvgLayerGeometry[] | null;
 }
 
 interface LoadTileBoardSharedCardSvgAssetsInput {
     backUrl: string;
     frontUrl: string;
     loadBackLayers: (url: string) => Promise<CardBackSvgLayerGeometry[] | null>;
-    loadFrontGeometry: (url: string) => Promise<BufferGeometry | null>;
+    loadFrontLayers: (url: string) => Promise<CardFrontSvgLayerGeometry[] | null>;
 }
 
-export const disposeTileBoardSharedCardBackLayers = (
-    layers: readonly CardBackSvgLayerGeometry[] | null | undefined
+export const disposeTileBoardSharedCardLayers = (
+    layers: readonly { geometry: { dispose: () => void } }[] | null | undefined
 ): void => {
     for (const layer of layers ?? []) {
         layer.geometry.dispose();
     }
 };
+
+/** Kept for the back alone, where callers hold just that list. */
+export const disposeTileBoardSharedCardBackLayers = disposeTileBoardSharedCardLayers;
 
 export const disposeTileBoardSharedCardSvgAssets = (
     assets: TileBoardSharedCardSvgAssets | null | undefined
@@ -27,40 +37,30 @@ export const disposeTileBoardSharedCardSvgAssets = (
     if (!assets) {
         return;
     }
+    disposeTileBoardSharedCardLayers(assets.frontLayers);
+    disposeTileBoardSharedCardLayers(assets.backLayers);
+};
 
-    assets.frontGeometry.dispose();
-    disposeTileBoardSharedCardBackLayers(assets.backLayers);
+const loadOrNull = async <T>(load: () => Promise<T | null>): Promise<T | null> => {
+    try {
+        return await load();
+    } catch {
+        return null;
+    }
 };
 
 export const loadTileBoardSharedCardSvgAssets = async ({
     backUrl,
     frontUrl,
     loadBackLayers,
-    loadFrontGeometry
+    loadFrontLayers
 }: LoadTileBoardSharedCardSvgAssetsInput): Promise<TileBoardSharedCardSvgAssets | null> => {
-    let frontGeometry: BufferGeometry | null;
-    try {
-        frontGeometry = await loadFrontGeometry(frontUrl);
-    } catch {
+    const frontLayers = await loadOrNull(() => loadFrontLayers(frontUrl));
+    const backLayers = await loadOrNull(() => loadBackLayers(backUrl));
+
+    if (frontLayers == null && backLayers == null) {
         return null;
     }
 
-    if (frontGeometry == null) {
-        return null;
-    }
-
-    let backLayers: CardBackSvgLayerGeometry[] | null;
-    try {
-        backLayers = await loadBackLayers(backUrl);
-    } catch {
-        frontGeometry.dispose();
-        return null;
-    }
-
-    if (backLayers == null) {
-        frontGeometry.dispose();
-        return null;
-    }
-
-    return { backLayers, frontGeometry };
+    return { backLayers, frontLayers };
 };

@@ -34,15 +34,34 @@ export const CARD_BACK_SVG_LAYER_NAMES = [
     'back-vignette'
 ] as const;
 export type CardBackSvgLayerName = (typeof CARD_BACK_SVG_LAYER_NAMES)[number];
-export interface CardBackSvgLayerGeometry {
-    geometry: BufferGeometry;
-    name: CardBackSvgLayerName;
-}
 
-const backLayerOrder = new Map<CardBackSvgLayerName, number>(CARD_BACK_SVG_LAYER_NAMES.map((name, index) => [name, index]));
-const resolvedBackLayersByUrl = new Map<string, CardBackSvgLayerGeometry[] | null>();
-const inflightBackLayersByUrl = new Map<string, Promise<CardBackSvgLayerGeometry[] | null>>();
-const failedBackLayerAttemptsByUrl = new Map<string, number>();
+/**
+ * The face's layers, over the illustration raster rather than instead of it: the panel and the
+ * well sit behind nothing (the art covers them), the frame, its fine inner rule, the rune ring
+ * round the art and the four corner ticks are what the player sees move.
+ */
+export const CARD_FRONT_SVG_LAYER_NAMES = [
+    'front-panel',
+    'front-well',
+    'front-frame',
+    'front-fine',
+    'front-rune-ring',
+    'front-corners'
+] as const;
+export type CardFrontSvgLayerName = (typeof CARD_FRONT_SVG_LAYER_NAMES)[number];
+
+export type CardSvgLayerName = CardBackSvgLayerName | CardFrontSvgLayerName;
+
+export interface CardSvgLayerGeometry<TName extends CardSvgLayerName = CardSvgLayerName> {
+    geometry: BufferGeometry;
+    name: TName;
+}
+export type CardBackSvgLayerGeometry = CardSvgLayerGeometry<CardBackSvgLayerName>;
+export type CardFrontSvgLayerGeometry = CardSvgLayerGeometry<CardFrontSvgLayerName>;
+
+const resolvedLayersByUrl = new Map<string, CardSvgLayerGeometry[] | null>();
+const inflightLayersByUrl = new Map<string, Promise<CardSvgLayerGeometry[] | null>>();
+const failedLayerAttemptsByUrl = new Map<string, number>();
 
 const recordTransientSvgLoadFailure = <T>(
     assetUrl: string,
@@ -56,7 +75,13 @@ const recordTransientSvgLoadFailure = <T>(
     }
 };
 
-const CARD_BACK_LAYER_FALLBACK_COLORS: Record<CardBackSvgLayerName, { fill: string; stroke: string }> = {
+const CARD_LAYER_FALLBACK_COLORS: Record<CardSvgLayerName, { fill: string; stroke: string }> = {
+    'front-panel': { fill: '#0c1018', stroke: '#0c1018' },
+    'front-well': { fill: '#0a1624', stroke: '#0a1624' },
+    'front-frame': { fill: '#a67832', stroke: '#c3954f' },
+    'front-fine': { fill: '#c3954f', stroke: '#c3954f' },
+    'front-rune-ring': { fill: '#c3954f', stroke: '#c3954f' },
+    'front-corners': { fill: '#d7b56a', stroke: '#d7b56a' },
     'back-base': { fill: '#2d1d13', stroke: '#2d1d13' },
     'back-rims': { fill: '#c3954f', stroke: '#d7b56a' },
     'back-corners': { fill: '#c3954f', stroke: '#d7b56a' },
@@ -75,11 +100,39 @@ interface SvgViewBox {
 }
 
 /**
+ * The build inlines small assets as `data:` URLs, and a page whose CSP names its `connect-src`
+ * refuses to *fetch* one — which is how the authored card art (a few KB each) silently never
+ * meshed. Decode it here instead: it is already in memory, there is nothing to fetch.
+ */
+const decodeDataUrlSvg = (assetUrl: string): string | null => {
+    if (!assetUrl.startsWith('data:')) {
+        return null;
+    }
+    const comma = assetUrl.indexOf(',');
+    if (comma < 0) {
+        return null;
+    }
+    const meta = assetUrl.slice(5, comma);
+    const payload = assetUrl.slice(comma + 1);
+    if (/;base64/i.test(meta)) {
+        const binary = atob(payload);
+        const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+        return new TextDecoder().decode(bytes);
+    }
+    return decodeURIComponent(payload);
+};
+
+/**
  * Loads SVG source only when under {@link MAX_SVG_SOURCE_BYTES_FOR_MESH}.
  * Uses `Content-Length` to bail out **without** buffering huge bodies; streams unknown lengths with a hard cap
  * so multi‑MB assets never allocate a full string just to skip mesh build.
  */
 async function fetchSvgTextUnderMeshByteCap(assetUrl: string): Promise<string | null> {
+    const inline = decodeDataUrlSvg(assetUrl);
+    if (inline !== null) {
+        return svgTextByteLength(inline) > MAX_SVG_SOURCE_BYTES_FOR_MESH ? null : inline;
+    }
+
     const response = await fetch(assetUrl);
 
     if (!response.ok) {
@@ -225,14 +278,14 @@ function styleOpacity(style: Record<string, unknown> | undefined, property: 'fil
     return Number.isFinite(opacity) ? MathUtils.clamp(opacity, 0, 1) : 1;
 }
 
-function layerNameForPath(path: { userData?: unknown }): CardBackSvgLayerName | null {
+function layerNameForPath(path: { userData?: unknown }, known: ReadonlySet<string>): CardSvgLayerName | null {
     const userData = path.userData as { node?: { getAttribute?: (name: string) => string | null; parentNode?: unknown } } | undefined;
     let node = userData?.node;
 
     while (node) {
         const id = node.getAttribute?.('id');
-        if (id && backLayerOrder.has(id as CardBackSvgLayerName)) {
-            return id as CardBackSvgLayerName;
+        if (id && known.has(id)) {
+            return id as CardSvgLayerName;
         }
         node = node.parentNode as typeof node;
     }
@@ -243,10 +296,10 @@ function layerNameForPath(path: { userData?: unknown }): CardBackSvgLayerName | 
 function addFillAndStrokeGeometries(
     parts: BufferGeometry[],
     path: ReturnType<SVGLoader['parse']>['paths'][number],
-    layerName: CardBackSvgLayerName
+    layerName: CardSvgLayerName
 ): void {
     const style = path.userData?.style as Record<string, unknown> | undefined;
-    const fallback = CARD_BACK_LAYER_FALLBACK_COLORS[layerName];
+    const fallback = CARD_LAYER_FALLBACK_COLORS[layerName];
     const fillColor = colorFromStyle(style?.fill, fallback.fill);
     if (fillColor) {
         const shapes = SVGLoader.createShapes(path);
@@ -282,10 +335,7 @@ function finalizeCardSvgGeometry(parts: BufferGeometry[], assetUrl: string): Buf
         return null;
     }
 
-    const merged = mergeGeometries(parts, false);
-    for (const p of parts) {
-        p.dispose();
-    }
+    const merged = mergeCardSvgParts(parts);
 
     if (!merged || merged.attributes.position.count > MAX_VERTEX_COUNT) {
         console.warn(
@@ -346,15 +396,34 @@ function parseSvgViewBox(text: string): SvgViewBox {
     return { minX, minY, width, height };
 }
 
+/**
+ * `mergeGeometries` refuses a mix of indexed and non-indexed inputs, and one layer routinely is
+ * both: a filled shape comes back from `ShapeGeometry` indexed, a stroked one from
+ * `SVGLoader.pointsToStroke` does not. Flattening the indexed ones costs a few vertices and is the
+ * difference between a layer that meshes and a layer that silently falls back to the raster.
+ */
+const mergeCardSvgParts = (parts: BufferGeometry[]): BufferGeometry | null => {
+    const flattened = parts.map((part) => {
+        if (!part.index) {
+            return part;
+        }
+        const nonIndexed = part.toNonIndexed();
+        part.dispose();
+        return nonIndexed;
+    });
+    const merged = mergeGeometries(flattened, false);
+    for (const part of flattened) {
+        part.dispose();
+    }
+    return merged;
+};
+
 function finalizeCardSvgLayerGeometry(parts: BufferGeometry[], assetUrl: string, viewBox: SvgViewBox): BufferGeometry | null {
     if (parts.length === 0) {
         return null;
     }
 
-    const merged = mergeGeometries(parts, false);
-    for (const p of parts) {
-        p.dispose();
-    }
+    const merged = mergeCardSvgParts(parts);
 
     if (!merged || merged.attributes.position.count > MAX_VERTEX_COUNT) {
         console.warn(
@@ -448,33 +517,42 @@ export function loadSharedCardSvgPlaneGeometry(assetUrl: string): Promise<Buffer
     return inflight;
 }
 
-export function loadSharedCardBackSvgLayerGeometries(assetUrl: string): Promise<CardBackSvgLayerGeometry[] | null> {
-    const hit = resolvedBackLayersByUrl.get(assetUrl);
+/**
+ * Traces one SVG into a mesh per named `<g id="...">`, in the order the names are given, and caches
+ * the result per URL. Layers whose group is absent or empty are left out rather than faked, so a
+ * caller can tell "this art has no rune ring" from "this art failed to load" (which is `null`).
+ */
+export function loadSharedCardSvgLayerGeometries<TName extends CardSvgLayerName>(
+    assetUrl: string,
+    names: readonly TName[]
+): Promise<CardSvgLayerGeometry<TName>[] | null> {
+    const hit = resolvedLayersByUrl.get(assetUrl);
     if (hit !== undefined) {
-        return Promise.resolve(hit);
+        return Promise.resolve(hit as CardSvgLayerGeometry<TName>[] | null);
     }
 
-    let inflight = inflightBackLayersByUrl.get(assetUrl);
-    if (inflight) {
-        return inflight;
+    const inflightHit = inflightLayersByUrl.get(assetUrl);
+    if (inflightHit) {
+        return inflightHit as Promise<CardSvgLayerGeometry<TName>[] | null>;
     }
 
-    inflight = (async (): Promise<CardBackSvgLayerGeometry[] | null> => {
+    const known = new Set<string>(names);
+    const inflight = (async (): Promise<CardSvgLayerGeometry[] | null> => {
         try {
             const text = await fetchSvgTextUnderMeshByteCap(assetUrl);
 
             if (text === null) {
-                failedBackLayerAttemptsByUrl.delete(assetUrl);
-                resolvedBackLayersByUrl.set(assetUrl, null);
+                failedLayerAttemptsByUrl.delete(assetUrl);
+                resolvedLayersByUrl.set(assetUrl, null);
                 return null;
             }
 
             const data = new SVGLoader().parse(text);
             const viewBox = parseSvgViewBox(text);
-            const partsByLayer = new Map<CardBackSvgLayerName, BufferGeometry[]>();
+            const partsByLayer = new Map<CardSvgLayerName, BufferGeometry[]>();
 
             for (const path of data.paths) {
-                const layerName = layerNameForPath(path);
+                const layerName = layerNameForPath(path, known);
                 if (!layerName) {
                     continue;
                 }
@@ -483,8 +561,8 @@ export function loadSharedCardBackSvgLayerGeometries(assetUrl: string): Promise<
                 partsByLayer.set(layerName, parts);
             }
 
-            const layers: CardBackSvgLayerGeometry[] = [];
-            for (const name of CARD_BACK_SVG_LAYER_NAMES) {
+            const layers: CardSvgLayerGeometry[] = [];
+            for (const name of names) {
                 const parts = partsByLayer.get(name) ?? [];
                 const geometry = finalizeCardSvgLayerGeometry(parts, assetUrl, viewBox);
                 if (geometry) {
@@ -493,24 +571,30 @@ export function loadSharedCardBackSvgLayerGeometries(assetUrl: string): Promise<
             }
 
             if (layers.length === 0) {
-                console.warn('cardSvgPlaneGeometry: no animated back layers in', assetUrl.slice(-40));
-                failedBackLayerAttemptsByUrl.delete(assetUrl);
-                resolvedBackLayersByUrl.set(assetUrl, null);
+                console.warn('cardSvgPlaneGeometry: no animated layers in', assetUrl.slice(-40));
+                failedLayerAttemptsByUrl.delete(assetUrl);
+                resolvedLayersByUrl.set(assetUrl, null);
                 return null;
             }
 
-            failedBackLayerAttemptsByUrl.delete(assetUrl);
-            resolvedBackLayersByUrl.set(assetUrl, layers);
+            failedLayerAttemptsByUrl.delete(assetUrl);
+            resolvedLayersByUrl.set(assetUrl, layers);
             return layers;
         } catch (e) {
-            console.warn('cardSvgPlaneGeometry: failed to build layered back mesh', e);
-            recordTransientSvgLoadFailure(assetUrl, failedBackLayerAttemptsByUrl, resolvedBackLayersByUrl);
+            console.warn('cardSvgPlaneGeometry: failed to build layered mesh', e);
+            recordTransientSvgLoadFailure(assetUrl, failedLayerAttemptsByUrl, resolvedLayersByUrl);
             return null;
         } finally {
-            inflightBackLayersByUrl.delete(assetUrl);
+            inflightLayersByUrl.delete(assetUrl);
         }
     })();
 
-    inflightBackLayersByUrl.set(assetUrl, inflight);
-    return inflight;
+    inflightLayersByUrl.set(assetUrl, inflight);
+    return inflight as Promise<CardSvgLayerGeometry<TName>[] | null>;
 }
+
+export const loadSharedCardBackSvgLayerGeometries = (assetUrl: string): Promise<CardBackSvgLayerGeometry[] | null> =>
+    loadSharedCardSvgLayerGeometries(assetUrl, CARD_BACK_SVG_LAYER_NAMES);
+
+export const loadSharedCardFrontSvgLayerGeometries = (assetUrl: string): Promise<CardFrontSvgLayerGeometry[] | null> =>
+    loadSharedCardSvgLayerGeometries(assetUrl, CARD_FRONT_SVG_LAYER_NAMES);

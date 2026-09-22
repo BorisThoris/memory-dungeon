@@ -60,6 +60,7 @@ import {
 } from './tileBoardRegistry';
 import type { TileBezelFrameBag } from './tileBoardFrameBag';
 import { advanceTileBezelFrame } from './tileBoardFrameAdvance';
+import { useSceneEffectTier } from '../hooks/useSceneEffectTier';
 import { useTileBoardSharedCardSvgAssets } from './useTileBoardSharedCardSvgAssets';
 import { useTileBoardTextureRevision } from './useTileBoardTextureRevision';
 import { runTileBoardSceneFrame } from './tileBoardSceneFrame';
@@ -223,7 +224,10 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     const totalColumns = board.columns;
     const totalRows = board.rows;
     const textureRevision = useTileBoardTextureRevision();
-    const { sharedCardBackLayers, sharedCardFrontGeometry } = useTileBoardSharedCardSvgAssets();
+    // The living card frames cost fourteen meshes a card; only a machine on the full scene tier
+    // takes them (`getSceneEffectTier`), which is the same call the backdrops make.
+    const cardSvgMeshesAffordable = useSceneEffectTier(graphicsQuality, reduceMotion) === 'full';
+    const { sharedCardBackLayers, sharedCardFrontLayers } = useTileBoardSharedCardSvgAssets(cardSvgMeshesAffordable);
 
     const tileStepLegacy = useMemo(() => readTileStepLegacy(), []);
     const hostConsolidatesTileFrames = !tileStepLegacy;
@@ -427,7 +431,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
                 reduceMotion={reduceMotion}
                 resolvingMatchWaveKey={resolvingMatchWaveKey}
                 sharedCardBackLayers={sharedCardBackLayers}
-                sharedCardFrontGeometry={sharedCardFrontGeometry}
+                sharedCardFrontLayers={sharedCardFrontLayers}
                 shuffleMotionBudgetMs={shuffleMotionBudgetMs}
                 shuffleMotionDeadlineMs={shuffleMotionDeadlineMs}
                 shuffleStaggerTileCount={shuffleStaggerTileCount}

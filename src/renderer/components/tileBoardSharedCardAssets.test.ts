@@ -1,8 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { BufferGeometry } from 'three';
-import type { CardBackSvgLayerGeometry } from './cardSvgPlaneGeometry';
+import type { CardBackSvgLayerGeometry, CardFrontSvgLayerGeometry } from './cardSvgPlaneGeometry';
 import {
     disposeTileBoardSharedCardBackLayers,
+    disposeTileBoardSharedCardLayers,
     disposeTileBoardSharedCardSvgAssets,
     loadTileBoardSharedCardSvgAssets
 } from './tileBoardSharedCardAssets';
@@ -16,9 +17,14 @@ const fakeBackLayer = (name: CardBackSvgLayerGeometry['name']): CardBackSvgLayer
     name
 });
 
+const fakeFrontLayer = (name: CardFrontSvgLayerGeometry['name']): CardFrontSvgLayerGeometry => ({
+    geometry: fakeGeometry(),
+    name
+});
+
 describe('tileBoardSharedCardAssets', () => {
-    it('loads front geometry before back layers and returns both asset sets', async () => {
-        const frontGeometry = fakeGeometry();
+    it('loads the front layers before the back ones and returns both sets', async () => {
+        const frontLayers = [fakeFrontLayer('front-panel'), fakeFrontLayer('front-frame')];
         const backLayers = [fakeBackLayer('back-base'), fakeBackLayer('back-gem')];
         const calls: string[] = [];
 
@@ -29,93 +35,81 @@ describe('tileBoardSharedCardAssets', () => {
                 calls.push(`back:${url}`);
                 return backLayers;
             },
-            loadFrontGeometry: async (url) => {
+            loadFrontLayers: async (url) => {
                 calls.push(`front:${url}`);
-                return frontGeometry;
+                return frontLayers;
             }
         });
 
+        // Chained, never raced: two SVGLoader.parse passes at once is a visible hitch at board entry.
         expect(calls).toEqual(['front:front.svg', 'back:back.svg']);
-        expect(result).toEqual({ backLayers, frontGeometry });
+        expect(result).toEqual({ backLayers, frontLayers });
     });
 
-    it('returns null without loading back layers when front geometry fails', async () => {
-        const loadBackLayers = vi.fn(async () => [fakeBackLayer('back-base')]);
+    it('keeps the face a raster and still animates the back when the front art cannot mesh', async () => {
+        const backLayers = [fakeBackLayer('back-base')];
 
         await expect(
             loadTileBoardSharedCardSvgAssets({
                 backUrl: 'back.svg',
                 frontUrl: 'front.svg',
-                loadBackLayers,
-                loadFrontGeometry: async () => null
+                loadBackLayers: async () => backLayers,
+                loadFrontLayers: async () => null
             })
-        ).resolves.toBeNull();
-        expect(loadBackLayers).not.toHaveBeenCalled();
+        ).resolves.toEqual({ backLayers, frontLayers: null });
     });
 
-    it('normalizes a rejected front geometry load without starting the back load', async () => {
-        const loadBackLayers = vi.fn(async () => [fakeBackLayer('back-base')]);
-
-        await expect(
-            loadTileBoardSharedCardSvgAssets({
-                backUrl: 'back.svg',
-                frontUrl: 'front.svg',
-                loadBackLayers,
-                loadFrontGeometry: async () => {
-                    throw new Error('front parse failed');
-                }
-            })
-        ).resolves.toBeNull();
-        expect(loadBackLayers).not.toHaveBeenCalled();
-    });
-
-    it('disposes front geometry when back layer loading fails', async () => {
-        const frontGeometry = fakeGeometry();
+    it('keeps the back a raster and still animates the face when the back art cannot mesh', async () => {
+        const frontLayers = [fakeFrontLayer('front-panel')];
 
         await expect(
             loadTileBoardSharedCardSvgAssets({
                 backUrl: 'back.svg',
                 frontUrl: 'front.svg',
                 loadBackLayers: async () => null,
-                loadFrontGeometry: async () => frontGeometry
+                loadFrontLayers: async () => frontLayers
             })
-        ).resolves.toBeNull();
-        expect(frontGeometry.dispose).toHaveBeenCalledTimes(1);
+        ).resolves.toEqual({ backLayers: null, frontLayers });
     });
 
-    it('disposes front geometry and normalizes a rejected back layer load', async () => {
-        const frontGeometry = fakeGeometry();
+    it('normalizes a rejected load to a missing face rather than a thrown board', async () => {
+        const backLayers = [fakeBackLayer('back-base')];
 
         await expect(
             loadTileBoardSharedCardSvgAssets({
                 backUrl: 'back.svg',
                 frontUrl: 'front.svg',
-                loadBackLayers: async () => {
-                    throw new Error('back parse failed');
-                },
-                loadFrontGeometry: async () => frontGeometry
+                loadBackLayers: async () => backLayers,
+                loadFrontLayers: async () => {
+                    throw new Error('parse');
+                }
+            })
+        ).resolves.toEqual({ backLayers, frontLayers: null });
+    });
+
+    it('returns null only when neither face meshed', async () => {
+        await expect(
+            loadTileBoardSharedCardSvgAssets({
+                backUrl: 'back.svg',
+                frontUrl: 'front.svg',
+                loadBackLayers: async () => null,
+                loadFrontLayers: async () => null
             })
         ).resolves.toBeNull();
-        expect(frontGeometry.dispose).toHaveBeenCalledTimes(1);
     });
 
-    it('disposes loaded shared SVG assets', () => {
-        const frontGeometry = fakeGeometry();
+    it('disposes every geometry it hands out, and tolerates a missing set', () => {
+        const frontLayers = [fakeFrontLayer('front-panel')];
         const backLayers = [fakeBackLayer('back-base'), fakeBackLayer('back-gem')];
 
-        disposeTileBoardSharedCardSvgAssets({ backLayers, frontGeometry });
+        disposeTileBoardSharedCardSvgAssets({ backLayers, frontLayers });
+        for (const layer of [...frontLayers, ...backLayers]) {
+            expect(layer.geometry.dispose).toHaveBeenCalledTimes(1);
+        }
 
-        expect(frontGeometry.dispose).toHaveBeenCalledTimes(1);
-        expect(backLayers[0]!.geometry.dispose).toHaveBeenCalledTimes(1);
-        expect(backLayers[1]!.geometry.dispose).toHaveBeenCalledTimes(1);
-    });
-
-    it('disposes back layers on their own', () => {
-        const backLayers = [fakeBackLayer('back-base'), fakeBackLayer('back-gem')];
-
-        disposeTileBoardSharedCardBackLayers(backLayers);
-
-        expect(backLayers[0]!.geometry.dispose).toHaveBeenCalledTimes(1);
-        expect(backLayers[1]!.geometry.dispose).toHaveBeenCalledTimes(1);
+        expect(() => disposeTileBoardSharedCardSvgAssets(null)).not.toThrow();
+        expect(() => disposeTileBoardSharedCardSvgAssets({ backLayers: null, frontLayers: null })).not.toThrow();
+        expect(() => disposeTileBoardSharedCardLayers(null)).not.toThrow();
+        expect(() => disposeTileBoardSharedCardBackLayers(undefined)).not.toThrow();
     });
 });

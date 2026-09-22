@@ -13,7 +13,6 @@ import {
 import {
     PlaneGeometry,
     Vector3,
-    type BufferGeometry,
     type Group,
     type Mesh,
     type MeshBasicMaterial,
@@ -24,7 +23,7 @@ import type { BoardState, GraphicsQualityPreset, Tile } from '../../shared/contr
 import type { TraitInteractionLaneId } from '../copy/traitInteractionLaneMap';
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
 import type { TileTraitRouteReadabilityIntensity } from './tileBoardReadability';
-import type { CardBackSvgLayerGeometry } from './cardSvgPlaneGeometry';
+import type { CardBackSvgLayerGeometry, CardFrontSvgLayerGeometry } from './cardSvgPlaneGeometry';
 import { createCardArcaneGlowMaterial } from './cardArcaneGlowMaterial';
 import { createMatchedCardRimFireMaterial } from './matchedCardRimFireMaterial';
 import { gameplayRenderQualityProfile } from './gameplayRenderProfile';
@@ -121,7 +120,7 @@ interface TileBezelProps {
     tile: Tile;
     transform: TileTransform;
     graphicsQuality: GraphicsQualityPreset;
-    sharedCardFrontGeometry: BufferGeometry | null;
+    sharedCardFrontLayers: readonly CardFrontSvgLayerGeometry[] | null;
     sharedCardBackLayers: readonly CardBackSvgLayerGeometry[] | null;
     memorizeCurseHighlight?: boolean;
     spotlightWardHighlight?: boolean;
@@ -204,7 +203,7 @@ const TileBezelInner = ({
     textureRevision,
     tile,
     transform,
-    sharedCardFrontGeometry,
+    sharedCardFrontLayers,
     sharedCardBackLayers,
     memorizeCurseHighlight = false,
     spotlightWardHighlight = false,
@@ -276,7 +275,7 @@ const TileBezelInner = ({
                 : getFocusRoundedRectRingGeometry(),
         [graphicsQuality]
     );
-    const useSvgMeshFront = sharedCardFrontGeometry != null;
+    const useSvgMeshFront = sharedCardFrontLayers != null;
     const useSvgMeshBack = sharedCardBackLayers != null;
 
     // Where this tile sits in the chunk-break wave, from the board alone: no event plumbing.
@@ -756,7 +755,7 @@ const TileBezelInner = ({
                         renderQuality={renderQuality}
                         seed={transform.seed}
                         sharedCardBackLayers={sharedCardBackLayers}
-                        sharedCardFrontGeometry={sharedCardFrontGeometry}
+                        sharedCardFrontLayers={sharedCardFrontLayers}
                         tutorialPairOrdinal={tutorialPairOrdinal}
                         useSvgMeshBack={useSvgMeshBack}
                         useSvgMeshFront={useSvgMeshFront}
