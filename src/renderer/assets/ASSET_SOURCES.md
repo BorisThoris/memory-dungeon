@@ -35,7 +35,21 @@ Per [docs/new_design/ASSET_AND_ART_PIPELINE.md](../../docs/new_design/ASSET_AND_
 | `ui/brand-crest.svg` | Menu crest | Authored SVG | Crystal sigil in gold frame; reused on **GameOver** hero lockup (**META-002**). |
 | `ui/menu-emblem.svg` | Secondary emblem | Authored SVG | Ring + tome motif |
 | `ui/divider-ornament.svg` | Hero divider | Authored SVG | Gold gradient + center gem + side flourishes |
-| `ui/icons/icon-inventory-bag-v1.svg` | Gameplay left rail / flyout inventory glyph | Authored SVG | `currentColor` strokes; barrel in `ui/icons/index.ts` |
+
+### Superseded: the authored icon SVGs (shelf stock — do not wire back in)
+
+Every `ui/icons/*.svg` below is **loaded by nothing**. The run's dock and rails draw inline React
+components from [`ui/gameplayIcons.tsx`](../ui/gameplayIcons.tsx) instead, and the barrel this table
+used to point at (`ui/icons/index.ts`) does not exist. `yarn audit:renderer-assets` lists the whole
+block under "art that is only talked about", and this is what it means.
+
+They are kept as source for the authored motifs. If a glyph needs changing, change the component;
+adding an `?url` import to re-animate one of these files would put a second, divergent icon set in
+the build. The rows keep their original intent so the motif is still findable.
+
+| Path | Role (as designed) | Source / tool | Notes |
+|------|------|---------------|-------|
+| `ui/icons/icon-inventory-bag-v1.svg` | Gameplay left rail / flyout inventory glyph | Authored SVG | `currentColor` strokes; superseded by `gameplayIcons.tsx` |
 | `ui/icons/icon-codex-book-v1.svg` | Gameplay left rail / flyout codex glyph | Authored SVG | Same |
 | `ui/icons/icon-main-menu-v1.svg` | Gameplay left rail main menu (abandon) glyph | Authored SVG | Same |
 | `ui/icons/icon-menu-hamburger-v1.svg` | Utility flyout toggle | Authored SVG | Same |
@@ -48,8 +62,8 @@ Per [docs/new_design/ASSET_AND_ART_PIPELINE.md](../../docs/new_design/ASSET_AND_
 | `ui/icons/icon-peek-v1.svg` | Board power: peek | Authored SVG | Same |
 | `ui/icons/icon-stray-v1.svg` | Board power: stray remove | Authored SVG | Same |
 | `ui/icons/icon-undo-v1.svg` | Resolving-phase undo | Authored SVG | Same |
-| `ui/icons/icon-score-parasite-crystal.svg` | HUD score parasite mutator crystal glyph | Authored SVG | **HUD-007:** arcane-violet / gold-rim crystal aligned to `VISUAL_SYSTEM_SPEC` + `theme.ts` `--theme-hud-parasite-*`; used in `GameplayHudBar.tsx` (`?url` import). |
-| `ui/frames/hud-segment-ornament.svg` | HUD score segment flourish | Authored SVG | Hex motif; used in `GameScreen.module.css` |
+| `ui/icons/icon-score-parasite-crystal.svg` | HUD score parasite mutator crystal glyph | Authored SVG | **HUD-007:** arcane-violet / gold-rim crystal aligned to `VISUAL_SYSTEM_SPEC` + `theme.ts` `--theme-hud-parasite-*`. Was imported by `GameplayHudBar.tsx`, which **no longer exists** — the run HUD is now "The Margin" (`RunShell.tsx`), which draws no mutator crystal. Nothing loads this. |
+| `ui/frames/hud-segment-ornament.svg` | HUD score segment flourish | Authored SVG | Hex motif. This table claimed it was "used in `GameScreen.module.css`"; that stylesheet does not mention it and nothing in `src/` references `ui/frames/` at all. The flourish went with the same HUD rewrite. Nothing loads this. |
 | `textures/cards/authored-card-back.svg` | Tile **hidden** side (default runtime) | Shared authored SVG card back; wired from `tileTextures.ts` and `TileBoardScene.tsx`. WebGL merged mesh when under byte/vertex caps ([`cardSvgPlaneGeometry.ts`](../components/cardSvgPlaneGeometry.ts)). | Primary card back source; every hidden card uses this same asset. |
 | `textures/cards/back.svg` | Legacy hidden-side trace | SVG Storm-style trace | Shelf stock only; not the default runtime card back. |
 | `textures/cards/front.svg` | Face-up panel (default runtime) | Traced front; pairs with the shared hidden-side SVG at runtime | Same atomic SVG pipeline. |
