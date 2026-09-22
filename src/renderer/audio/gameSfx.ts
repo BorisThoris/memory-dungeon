@@ -204,6 +204,34 @@ export const playFlipSfx = (gain: number): void => {
     playTone({ frequency: 520, durationSec: 0.05, gain, type: 'sine', category: 'flip' });
 };
 
+/**
+ * The last seconds of the study window, as a tick.
+ *
+ * The HUD says this too — the bar reddens and thickens as the window shuts — but the HUD is the
+ * one place a player who is doing this *right* is not looking. Memorizing means watching the
+ * board; a warning that requires glancing away is a warning that reaches the distracted player and
+ * misses the concentrating one. Sound does not ask for the eye at all, which is the same reason
+ * the stage was left alone: the board has to stay visible.
+ *
+ * Bounded hard, for the reason the visual rise starts late. This is pressure applied to the one
+ * activity it exists to time, so it gets the last few seconds and no more, it is quiet, and it
+ * climbs in pitch rather than in volume — a clock speeding up, not a klaxon.
+ */
+export const playStudyClosingTickSfx = (gain: number, secondsLeft: number): void => {
+    if (gain <= 0.001) {
+        return;
+    }
+    // 3, 2, 1 → rising. A tick that does not move says "time passes"; one that rises says "now".
+    const step = Math.max(0, 3 - Math.max(0, Math.min(3, Math.round(secondsLeft))));
+    playTone({
+        frequency: 660 + step * 120,
+        durationSec: 0.045,
+        gain: gain * (0.14 + step * 0.03),
+        type: 'triangle',
+        category: 'flip'
+    });
+};
+
 /** Layered on the third flip of a Gambit (after `playFlipSfx`). */
 export const playGambitCommitSfx = (gain: number): void => {
     if (gain <= 0.001) {

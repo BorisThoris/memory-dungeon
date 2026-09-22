@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2679,
     "codeFileCount": 919,
-    "exportedSymbolCount": 2771,
+    "exportedSymbolCount": 2772,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 7010
+    "relationshipCount": 7012
   },
   "inventory": [
     {
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "c5a80ac313a47800fceb7ecba74ac76c652c6152802b1b4f142ad0edc5890d9e"
+      "sha256": "8dad3d3caeee31073d971958cbf4fe29ed636e3cc3b63c5cd77d873b3d5e2f38"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -8541,14 +8541,14 @@
     {
       "path": "src/renderer/audio/gameSfx.test.ts",
       "category": "test",
-      "bytes": 37712,
-      "sha256": "8134bf7bdb60550f84c58b954a90d390d65cd660f985691ac724fdee1a8e8cd9"
+      "bytes": 40169,
+      "sha256": "0083b4ff403a434461858b114184f595c55a7a02a2ff0f2ce8f0dbe6e195da59"
     },
     {
       "path": "src/renderer/audio/gameSfx.ts",
       "category": "source",
-      "bytes": 27831,
-      "sha256": "9f878687dd86d40f519f2fbc3328656165b51a9f096f6010c21061bbb0792d57"
+      "bytes": 29154,
+      "sha256": "4138f78c57475f86ff176bb358c514f6d13e00869832884d0cee0d6d0a503b34"
     },
     {
       "path": "src/renderer/audio/gameSfxCancellation.test.ts",
@@ -9159,8 +9159,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 89604,
-      "sha256": "b563987267ed6ebc9c7e62cba14ccff511f5483cb56eab0ff2b3cddd77259fe1"
+      "bytes": 89658,
+      "sha256": "62e7c4a10f732ca5de611d120b121575efa8cb8829e5ed41f755aed88469f6c4"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9429,14 +9429,14 @@
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 20627,
-      "sha256": "c2ac3b752854116e1b1538bd4fddf785bcc6b3029d8e33dafac1f6a8fd35464b"
+      "bytes": 23582,
+      "sha256": "621d4d69cb96c57b8ab18c5117945a610ad8f5a51b1215bf502910e52184d806"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 29348,
-      "sha256": "0b95a66514a48c5504a76e792ffbbf3df3d4c1d76892d32538f502f73c31adf6"
+      "bytes": 30558,
+      "sha256": "41c081f2631b24e0848f9b54b448e2646faa9512e20d305174ddd9e118c92303"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -17230,7 +17230,7 @@
       "path": "src/renderer/audio/gameSfx.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 983,
+      "lineCount": 1042,
       "imports": [
         "file:src/renderer/assets/audio/sfx/manifest.json",
         "file:src/renderer/audio/audioInteractionCoverage.ts",
@@ -17246,7 +17246,7 @@
       "path": "src/renderer/audio/gameSfx.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 753,
+      "lineCount": 781,
       "imports": [
         "file:src/renderer/audio/audioSafety.ts",
         "file:src/renderer/audio/musicalScale.ts",
@@ -17273,6 +17273,7 @@
         "symbol:src/renderer/audio/gameSfx.ts#playPowerArmSfx",
         "symbol:src/renderer/audio/gameSfx.ts#playResolveSfx",
         "symbol:src/renderer/audio/gameSfx.ts#playShuffleSfx",
+        "symbol:src/renderer/audio/gameSfx.ts#playStudyClosingTickSfx",
         "symbol:src/renderer/audio/gameSfx.ts#resumeAudioContext",
         "symbol:src/renderer/audio/gameSfx.ts#sfxGainFromSettings"
       ],
@@ -18918,7 +18919,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1863,
+      "lineCount": 1864,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -19575,7 +19576,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 393,
+      "lineCount": 454,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/shared/contracts.ts",
@@ -19590,9 +19591,10 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 549,
+      "lineCount": 579,
       "imports": [
         "file:src/renderer/a11y/toolbarRoving.ts",
+        "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/components/memorizeUrgency.ts",
         "file:src/renderer/copy/chainBeat.ts",
         "file:src/renderer/copy/passAndPlay.ts",
@@ -34348,16 +34350,16 @@
       "name": "CHUNK_BREAK_MAX_NOTES",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 329,
-      "endLine": 329
+      "line": 357,
+      "endLine": 357
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playChainOpportunityBeatSfx",
       "name": "playChainOpportunityBeatSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 436,
-      "endLine": 461
+      "line": 464,
+      "endLine": 489
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playFlipSfx",
@@ -34372,72 +34374,80 @@
       "name": "playFloorClearSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 735,
-      "endLine": 752
+      "line": 763,
+      "endLine": 780
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playGambitCommitSfx",
       "name": "playGambitCommitSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 208,
-      "endLine": 223
+      "line": 236,
+      "endLine": 251
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playMatchPayoffSfx",
       "name": "playMatchPayoffSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 554,
-      "endLine": 584
+      "line": 582,
+      "endLine": 612
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playMatchSfx",
       "name": "playMatchSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 226,
-      "endLine": 254
+      "line": 254,
+      "endLine": 282
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playMismatchRecoveryCrescendoSfx",
       "name": "playMismatchRecoveryCrescendoSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 463,
-      "endLine": 487
+      "line": 491,
+      "endLine": 515
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playPeekPowerSfx",
       "name": "playPeekPowerSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 674,
-      "endLine": 686
+      "line": 702,
+      "endLine": 714
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playPowerArmSfx",
       "name": "playPowerArmSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 659,
-      "endLine": 671
+      "line": 687,
+      "endLine": 699
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playResolveSfx",
       "name": "playResolveSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 590,
-      "endLine": 656
+      "line": 618,
+      "endLine": 684
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playShuffleSfx",
       "name": "playShuffleSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 692,
-      "endLine": 730
+      "line": 720,
+      "endLine": 758
+    },
+    {
+      "id": "symbol:src/renderer/audio/gameSfx.ts#playStudyClosingTickSfx",
+      "name": "playStudyClosingTickSfx",
+      "kind": "value",
+      "file": "src/renderer/audio/gameSfx.ts",
+      "line": 220,
+      "endLine": 233
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#resumeAudioContext",
@@ -36276,8 +36286,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 1862,
-      "endLine": 1862
+      "line": 1863,
+      "endLine": 1863
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -36660,24 +36670,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 548,
-      "endLine": 548
+      "line": 578,
+      "endLine": 578
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 43,
-      "endLine": 68
+      "line": 44,
+      "endLine": 74
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 30,
-      "endLine": 41
+      "line": 31,
+      "endLine": 42
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
@@ -55538,7 +55548,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 73
+          "line": 79
         }
       ],
       "tests": [
@@ -55564,7 +55574,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 62
+          "line": 65
         },
         {
           "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -55865,7 +55875,7 @@
       "tests": [
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 9
+          "line": 12
         },
         {
           "path": "src/renderer/components/GameScreen.test.tsx",
@@ -57357,7 +57367,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 331
+          "line": 361
         }
       ],
       "tests": [
@@ -57396,7 +57406,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 331
+          "line": 361
         }
       ],
       "tests": [
@@ -57430,7 +57440,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 331
+          "line": 361
         }
       ],
       "tests": [
@@ -57464,7 +57474,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 331
+          "line": 361
         }
       ],
       "tests": [
@@ -59831,6 +59841,12 @@
       "id": "exports:src/renderer/audio/gameSfx.ts->symbol:src/renderer/audio/gameSfx.ts#playShuffleSfx",
       "source": "file:src/renderer/audio/gameSfx.ts",
       "target": "symbol:src/renderer/audio/gameSfx.ts#playShuffleSfx",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/gameSfx.ts->symbol:src/renderer/audio/gameSfx.ts#playStudyClosingTickSfx",
+      "source": "file:src/renderer/audio/gameSfx.ts",
+      "target": "symbol:src/renderer/audio/gameSfx.ts#playStudyClosingTickSfx",
       "kind": "exports"
     },
     {
@@ -79999,6 +80015,12 @@
       "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/a11y/toolbarRoving.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/renderer/a11y/toolbarRoving.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/audio/gameSfx.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/renderer/audio/gameSfx.ts",
       "kind": "imports"
     },
     {

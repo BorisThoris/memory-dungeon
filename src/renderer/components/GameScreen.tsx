@@ -1483,6 +1483,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             politeAnnouncement={politeHudAnnouncement}
                             reduceMotion={reduceMotion}
                             run={run}
+                            sfxGain={shuffleSfxGain}
                             shellLayout={shellProfile.layout}
                             tools={runShellTools}
                         />

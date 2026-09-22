@@ -13,6 +13,7 @@ import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { CHAIN_BEAT_COPY, CHAIN_TIER_LABELS } from '../copy/chainBeat';
 import { chainRungScoreMultiplier } from '../../shared/chain-rung-value-rules';
 import { chainRungApproach, chainTierRungs, runChainMeter, runChainTier } from '../../shared/chain-tier-rules';
+import { playStudyClosingTickSfx } from '../audio/gameSfx';
 import { memorizeUrgency } from './memorizeUrgency';
 import { isPassAndPlayRun, PASS_AND_PLAY_FLOORS } from '../../shared/pass-and-play-rules';
 
@@ -57,6 +58,11 @@ export interface RunShellProps {
     politeAnnouncement?: string;
     /** Reduced motion: the score total changes on the frame rather than counting up. */
     reduceMotion?: boolean;
+    /**
+     * Sfx gain for the study clock's last ticks. 0 or omitted is silence, which is what a screen
+     * with no run behind it and a player with the volume down both get.
+     */
+    sfxGain?: number;
     /**
      * The shell's layout, so the head can leave out what a layout has no room for instead of
      * hiding it: a phone upright has one row for the head and the mutator's name is the lane that
@@ -129,6 +135,28 @@ const useChainMeterFeverArrival = (full: boolean): boolean => {
     return arriving;
 };
 
+/**
+ * The tick under the closing study window.
+ *
+ * Fires once per whole second, only while the window is genuinely closing, and never twice for the
+ * same second — the countdown re-reads four times a second, so keying this on the seconds value
+ * rather than on the tick is what keeps it a clock instead of a buzz.
+ */
+const useStudyClosingTicks = (seconds: number | null, closing: boolean, gain: number): void => {
+    const lastTickedRef = useRef<number | null>(null);
+    useEffect(() => {
+        if (!closing || seconds === null || seconds <= 0) {
+            lastTickedRef.current = null;
+            return;
+        }
+        if (lastTickedRef.current === seconds) {
+            return;
+        }
+        lastTickedRef.current = seconds;
+        playStudyClosingTickSfx(gain, seconds);
+    }, [closing, seconds, gain]);
+};
+
 interface MemorizeCountdown {
     /** Whole seconds left, rounded up so the head never reads 0 while the board is still shown. */
     seconds: number;
@@ -182,6 +210,7 @@ const RunShell = ({
     tools,
     onPause,
     reduceMotion = false,
+    sfxGain = 0,
     shellLayout = 'desktop'
 }: RunShellProps): ReactElement => {
     const mutatorTitles = run.activeMutators.map((id) => MUTATOR_CATALOG[id]?.title ?? id);
@@ -203,6 +232,7 @@ const RunShell = ({
     // The window closing is the one thing the study period never said. Only the HUD answers it:
     // the player's task right now is looking at the board, so the stage must not be touched.
     const urgency = memorizeUrgency(memorize?.progress ?? 0);
+    useStudyClosingTicks(memorize?.seconds ?? null, urgency.closing, sfxGain);
     const turnsTaken = turnsTakenThisFloor(run);
     const parTurns = parTurnsForRun(run);
     const pairCount = run.board?.pairCount ?? 0;

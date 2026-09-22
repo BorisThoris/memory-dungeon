@@ -6,6 +6,9 @@ import type { BoardState, RunState } from '../../shared/contracts';
 import { TILE_SUITS } from '../../shared/tile-suit-rules';
 import RunShell, { type RunShellTool } from './RunShell';
 
+const sfxMocks = vi.hoisted(() => ({ playStudyClosingTickSfx: vi.fn() }));
+vi.mock('../audio/gameSfx', () => sfxMocks);
+
 const playingRun = (): RunState => finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
 
 /**
@@ -305,6 +308,64 @@ describe('RunShell — The Margin', () => {
             expect(urgency()).toBeGreaterThan(late);
             expect(closing()).toBe('true');
             expect(screen.getByTestId('hud-memorize')).toHaveAttribute('data-closing', 'true');
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+
+    it('ticks the closing study window once a second, not once a frame', () => {
+        // The countdown re-reads four times a second. Keying the cue on the seconds value rather
+        // than on the tick is the whole difference between a clock and a buzz.
+        vi.useFakeTimers();
+        sfxMocks.playStudyClosingTickSfx.mockClear();
+        try {
+            const base = createNewRun(0, { echoFeedbackEnabled: false });
+            const run: RunState = { ...base, timerState: { ...base.timerState, memorizeRemainingMs: 10_000 } };
+            render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={run} sfxGain={0.5} tools={[]} />);
+
+            act(() => {
+                vi.advanceTimersByTime(8_000);
+            });
+            // The early window is for looking: nothing has sounded yet.
+            expect(sfxMocks.playStudyClosingTickSfx).not.toHaveBeenCalled();
+
+            // Stepped at the countdown's own cadence rather than jumped in one go. Advancing two
+            // seconds at once coalesces every interval into a single render, so the effect would
+            // only ever see the last state — which is the same reason a tab that stalls through
+            // the end of the window simply misses its ticks instead of firing them all at once.
+            for (let i = 0; i < 8; i += 1) {
+                act(() => {
+                    vi.advanceTimersByTime(250);
+                });
+            }
+            const calls = sfxMocks.playStudyClosingTickSfx.mock.calls;
+            expect(calls.length).toBeGreaterThan(0);
+            // One per whole second, never twice for the same one.
+            const seconds = calls.map((call) => call[1]);
+            expect(new Set(seconds).size).toBe(seconds.length);
+            expect(seconds.length).toBeLessThanOrEqual(3);
+            for (const call of calls) {
+                expect(call[0]).toBe(0.5);
+            }
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+
+    it('stays silent through the study window when the player has the volume down', () => {
+        vi.useFakeTimers();
+        sfxMocks.playStudyClosingTickSfx.mockClear();
+        try {
+            const base = createNewRun(0, { echoFeedbackEnabled: false });
+            const run: RunState = { ...base, timerState: { ...base.timerState, memorizeRemainingMs: 4_000 } };
+            // No `sfxGain` at all: a shell rendered without one must not invent a sound.
+            render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={run} tools={[]} />);
+            act(() => {
+                vi.advanceTimersByTime(4_000);
+            });
+            for (const call of sfxMocks.playStudyClosingTickSfx.mock.calls) {
+                expect(call[0]).toBe(0);
+            }
         } finally {
             vi.useRealTimers();
         }

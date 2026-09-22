@@ -21,6 +21,7 @@ import {
     CHUNK_BREAK_MAX_NOTES,
     resumeAudioContext,
     playShuffleSfx,
+    playStudyClosingTickSfx,
     sfxGainFromSettings
 } from './gameSfx';
 import { MATCH_TIER_SAMPLE_KEYS, preloadSampledSfx, resolveMatchTierSampleKey, SFX_SAMPLE_KEYS } from './sampledSfx';
@@ -977,6 +978,65 @@ describe('gameSfx', () => {
         expect(resolveMatchTierSampleKey(10)).toBe('match-tier-mid');
         expect(resolveMatchTierSampleKey(11)).toBe('match-tier-high');
         expect(resolveMatchTierSampleKey(99)).toBe('match-tier-high');
+    });
+
+    it('ticks the closing study window upward, quietly, and not at all while muted', () => {
+        // The HUD reddens too, but the HUD is the one place a player doing this right is not
+        // looking: memorizing means watching the board. Sound is the only channel that reaches the
+        // concentrating player without asking them to glance away.
+        const createOscillator = vi.fn(() => {
+            const o = {
+                type: 'sine' as OscillatorType,
+                frequency: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
+                connect: vi.fn(),
+                start: vi.fn(),
+                stop: vi.fn(),
+                addEventListener: vi.fn()
+            };
+            oscillators.push(o);
+            return o;
+        });
+        const gains: { gain: { setValueAtTime: ReturnType<typeof vi.fn> } }[] = [];
+        const createGain = vi.fn(() => {
+            const g = {
+                gain: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
+                connect: vi.fn()
+            };
+            gains.push(g);
+            return g;
+        });
+
+        vi.stubGlobal(
+            'AudioContext',
+            class {
+                currentTime = 0;
+                destination = {};
+                createOscillator = createOscillator;
+                createGain = createGain;
+                close = (): Promise<void> => Promise.resolve();
+            }
+        );
+
+        const gain = sfxGainFromSettings(1, 1);
+        playStudyClosingTickSfx(gain, 3);
+        playStudyClosingTickSfx(gain, 2);
+        playStudyClosingTickSfx(gain, 1);
+        expect(createOscillator).toHaveBeenCalledTimes(3);
+
+        const pitch = (i: number) =>
+            createOscillator.mock.results[i]?.value.frequency.setValueAtTime.mock.calls[0]?.[0] as number;
+        // A tick that does not move says "time passes"; one that rises says "now".
+        expect(pitch(1)).toBeGreaterThan(pitch(0));
+        expect(pitch(2)).toBeGreaterThan(pitch(1));
+
+        const level = (i: number) => gains[i]?.gain.setValueAtTime.mock.calls[0]?.[0] as number;
+        // It climbs in pitch, not into a klaxon: every tick stays well under a match cue.
+        for (let i = 0; i < 3; i += 1) {
+            expect(level(i)).toBeLessThan(gain * 0.3);
+        }
+
+        playStudyClosingTickSfx(0, 1);
+        expect(createOscillator).toHaveBeenCalledTimes(3);
     });
 
 });
