@@ -46,3 +46,40 @@ export const sceneSpriteEmbers = (sprite: Pick<SceneSpriteDef, 'h'>, index: numb
         };
     });
 };
+
+export interface RingMote {
+    id: string;
+    /** Start point, percent of the plate: somewhere on the ring's ellipse. */
+    x: number;
+    y: number;
+    durationMs: number;
+    delayMs: number;
+    driftPx: number;
+    risePx: number;
+    size: number;
+}
+
+export const RING_MOTE_COUNT = 10;
+
+/**
+ * The motes the rune ring throws up as the chain climbs: spread round the ring's ellipse on the
+ * floor (`scene.json`: centre 50 %, 72.9 %; radii 21.8 %, 10.4 % of the plate), each on its own
+ * slow loop, deterministic so a render is the same every time. How strongly they show is the
+ * scene's `--scene-ring-motes`, not theirs.
+ */
+export const ringMotes = (): RingMote[] =>
+    Array.from({ length: RING_MOTE_COUNT }, (_, i) => {
+        const angle = 2 * Math.PI * fract(i * 0.618034 + 0.05);
+        const radial = 0.55 + 0.45 * fract(i * 0.381966 + 0.3);
+        const durationMs = Math.round(5200 + 3600 * fract(i * 0.754878));
+        return {
+            id: `ring-${i}`,
+            x: Math.round((0.5 + 0.218 * radial * Math.cos(angle)) * 1000) / 10,
+            y: Math.round((0.729 + 0.104 * radial * Math.sin(angle)) * 1000) / 10,
+            durationMs,
+            delayMs: -Math.round(durationMs * fract(i * 0.56984 + 0.2)),
+            driftPx: Math.round(-10 + 20 * fract(i * 0.271828 + 0.4)),
+            risePx: Math.round(70 + 60 * fract(i * 0.141421 + 0.6)),
+            size: 3 + (i % 4 === 0 ? 1 : 0)
+        };
+    });

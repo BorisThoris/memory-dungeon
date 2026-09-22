@@ -1,7 +1,8 @@
 /**
  * How the room answers the run, as continuous functions of the chain meter's fill (0..1 of the way
- * to Fever) rather than four steps: the ring warms as the chain grows, not when a rung is crossed.
- * The torches are not here on purpose — they always burn.
+ * to Fever) rather than four steps: the ring warms as the chain grows, not when a rung is crossed,
+ * and the motes it throws up rise from nothing at rest to a full drift at Fever. The torches are
+ * not here on purpose — they always burn.
  */
 export interface SceneRingLevels {
     /** Opacity of the ring's floor light pass. */
@@ -14,6 +15,8 @@ export interface SceneRingLevels {
     saturate: number;
     /** Peak opacity of the floor flash on a break. */
     pulsePeak: number;
+    /** Strength of the motes the ring throws up, 0 at rest to 1 at Fever. */
+    motes: number;
 }
 
 const clamp01 = (value: number): number => (Number.isFinite(value) ? Math.min(1, Math.max(0, value)) : 0);
@@ -27,7 +30,8 @@ export const sceneRingLevels = (fill: number): SceneRingLevels => {
         glow: round(0.68 + 0.72 * eased),
         hueDeg: Math.round(-40 * eased) + 0, // + 0 folds -0 into 0 so the CSS variable never reads "-0deg"
         saturate: round(1 + 0.4 * eased),
-        pulsePeak: round(0.35 + 0.9 * eased)
+        pulsePeak: round(0.35 + 0.9 * eased),
+        motes: round(eased)
     };
 };
 

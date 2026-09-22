@@ -29,16 +29,17 @@ describe('GameplayScene', () => {
 
     it('warms the ring with the chain, continuously: every step of fill lifts light, glow, hue and flash', () => {
         let last = sceneRingLevels(0);
-        expect(last).toEqual({ light: 0.5, glow: 0.68, hueDeg: 0, saturate: 1, pulsePeak: 0.35 });
+        expect(last).toEqual({ light: 0.5, glow: 0.68, hueDeg: 0, saturate: 1, pulsePeak: 0.35, motes: 0 });
         for (let step = 1; step <= 20; step += 1) {
             const next = sceneRingLevels(step / 20);
             expect(next.light).toBeGreaterThan(last.light);
             expect(next.glow).toBeGreaterThan(last.glow);
             expect(next.hueDeg).toBeLessThanOrEqual(last.hueDeg);
             expect(next.pulsePeak).toBeGreaterThan(last.pulsePeak);
+            expect(next.motes).toBeGreaterThan(last.motes);
             last = next;
         }
-        expect(last).toEqual({ light: 1.3, glow: 1.4, hueDeg: -40, saturate: 1.4, pulsePeak: 1.25 });
+        expect(last).toEqual({ light: 1.3, glow: 1.4, hueDeg: -40, saturate: 1.4, pulsePeak: 1.25, motes: 1 });
         // Out-of-range input is clamped, never NaN in a CSS variable.
         expect(sceneRingLevels(Number.NaN)).toEqual(sceneRingLevels(0));
         expect(sceneRingLevels(4)).toEqual(sceneRingLevels(1));
@@ -49,6 +50,15 @@ describe('GameplayScene', () => {
         expect(style).toContain(`--scene-ring-light: ${sceneRingLevels(0.5).light}`);
         expect(style).toContain(`--scene-ring-hue: ${sceneRingLevels(0.5).hueDeg}deg`);
         expect(style).toContain(`--scene-pulse-peak: ${sceneRingLevels(0.5).pulsePeak}`);
+        expect(style).toContain(`--scene-ring-motes: ${sceneRingLevels(0.5).motes}`);
+        // The ring's motes are on the floor round the ring, never on the walls.
+        const motes = [...screen.getByTestId('gameplay-scene-ring-motes').children] as HTMLElement[];
+        expect(motes).toHaveLength(10);
+        for (const mote of motes) {
+            expect(parseFloat(mote.style.top)).toBeGreaterThan(60);
+            expect(parseFloat(mote.style.top)).toBeLessThan(85);
+            expect(Math.abs(parseFloat(mote.style.left) - 50)).toBeLessThanOrEqual(22);
+        }
     });
 
     it('keeps the torches burning whatever the chain does', () => {
@@ -93,6 +103,7 @@ describe('GameplayScene', () => {
         expect(scene).toHaveAttribute('data-alive', 'false');
         expect(screen.queryByTestId('gameplay-scene-mist')).toBeNull();
         expect(screen.queryAllByTestId('scene-embers')).toHaveLength(0);
+        expect(screen.queryByTestId('gameplay-scene-ring-motes')).toBeNull();
         expect(screen.getByTestId('scene-sprites')).toHaveAttribute('data-still', 'true');
     });
 

@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2668,
     "codeFileCount": 915,
-    "exportedSymbolCount": 2743,
+    "exportedSymbolCount": 2746,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6961
+    "relationshipCount": 6965
   },
   "inventory": [
     {
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "b8b9962267f0e5085c1fb00a4d4c345f61bc91075f9769b7e0269bc8359a61a4"
+      "sha256": "94a41b3f370351e05da60f2db88638b98c89a3ef817a4d6bb1c5b4148bac9a67"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -9069,26 +9069,26 @@
     {
       "path": "src/renderer/components/GameplayScene.module.css",
       "category": "source",
-      "bytes": 4919,
-      "sha256": "7df3df98655039f69a10e8e853de0af6c5f390523f35ba3a24bbc9052c4fa055"
+      "bytes": 5998,
+      "sha256": "16fc09761ff519aa7466bd92a09d6e4838f1d373aee7be85a84a7966e69578cf"
     },
     {
       "path": "src/renderer/components/GameplayScene.test.tsx",
       "category": "test",
-      "bytes": 7045,
-      "sha256": "7be9a20c0b211c4fa918f3043161669f7944d6b535b3c4812b96b898632be036"
+      "bytes": 7790,
+      "sha256": "74e88b0e71163eb8caa80be844d8ca846677a746f37b59d2e230ac5adda19502"
     },
     {
       "path": "src/renderer/components/GameplayScene.tsx",
       "category": "source",
-      "bytes": 6443,
-      "sha256": "f2e1ae650743d5f5bedcb1b2948620f4698a66169ea2a348b580497decc267e0"
+      "bytes": 7844,
+      "sha256": "3d54df4b42f9cc8a1d24fba742cf2a4df7c7abede1f5a8d5419a2a7d9e5832da"
     },
     {
       "path": "src/renderer/components/gameplaySceneLevels.ts",
       "category": "source",
-      "bytes": 1398,
-      "sha256": "ae001334c03ba84a19dd0330584e14e4b4f1f617d2811bc91ff85f41b43bf4e5"
+      "bytes": 1644,
+      "sha256": "5d4eb7d3d08f53ad3dc2cfb8efed129568daf0b5d0500cd10dd05caefdc8c08c"
     },
     {
       "path": "src/renderer/components/gameplayVisualConfig.test.ts",
@@ -9411,8 +9411,8 @@
     {
       "path": "src/renderer/components/sceneSpriteClocks.ts",
       "category": "source",
-      "bytes": 1975,
-      "sha256": "d3e7e0aebf6610a7d8d20ea5a612db41c0defd77056daa893bc105b8f4845c87"
+      "bytes": 3376,
+      "sha256": "4efe8e461d47413ea939a40e766564fa63243c9b5995342d52928ee7b2ac43ec"
     },
     {
       "path": "src/renderer/components/SceneSprites.module.css",
@@ -18712,7 +18712,7 @@
       "path": "src/renderer/components/GameplayScene.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 130,
+      "lineCount": 141,
       "imports": [
         "file:src/renderer/components/GameplayScene.tsx",
         "file:src/renderer/components/gameplaySceneLevels.ts"
@@ -18725,11 +18725,12 @@
       "path": "src/renderer/components/GameplayScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 118,
+      "lineCount": 142,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/components/gameplaySceneLevels.ts",
+        "file:src/renderer/components/sceneSpriteClocks.ts",
         "file:src/renderer/components/SceneSprites.tsx",
         "file:src/renderer/hooks/useSceneLook.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -18748,7 +18749,7 @@
       "path": "src/renderer/components/gameplaySceneLevels.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 35,
+      "lineCount": 39,
       "imports": [],
       "exports": [
         "symbol:src/renderer/components/gameplaySceneLevels.ts#sceneRingLevels",
@@ -19542,11 +19543,14 @@
       "path": "src/renderer/components/sceneSpriteClocks.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 49,
+      "lineCount": 86,
       "imports": [
         "file:src/renderer/assets/ui/sprites/index.ts"
       ],
       "exports": [
+        "symbol:src/renderer/components/sceneSpriteClocks.ts#RING_MOTE_COUNT",
+        "symbol:src/renderer/components/sceneSpriteClocks.ts#RingMote",
+        "symbol:src/renderer/components/sceneSpriteClocks.ts#ringMotes",
         "symbol:src/renderer/components/sceneSpriteClocks.ts#SceneEmber",
         "symbol:src/renderer/components/sceneSpriteClocks.ts#SceneSpriteClock",
         "symbol:src/renderer/components/sceneSpriteClocks.ts#sceneSpriteClocks",
@@ -36010,32 +36014,32 @@
       "name": "GameplayScene",
       "kind": "function",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 54,
-      "endLine": 117
+      "line": 56,
+      "endLine": 141
     },
     {
       "id": "symbol:src/renderer/components/GameplayScene.tsx#GameplaySceneProps",
       "name": "GameplaySceneProps",
       "kind": "interface",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 39,
-      "endLine": 50
+      "line": 41,
+      "endLine": 52
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#sceneRingLevels",
       "name": "sceneRingLevels",
       "kind": "value",
       "file": "src/renderer/components/gameplaySceneLevels.ts",
-      "line": 21,
-      "endLine": 32
+      "line": 24,
+      "endLine": 36
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#SceneRingLevels",
       "name": "SceneRingLevels",
       "kind": "interface",
       "file": "src/renderer/components/gameplaySceneLevels.ts",
-      "line": 6,
-      "endLine": 17
+      "line": 7,
+      "endLine": 20
     },
     {
       "id": "symbol:src/renderer/components/gameplayVisualConfig.ts#CARD_INTERACTION_FEEDBACK",
@@ -36500,6 +36504,30 @@
       "file": "src/renderer/components/runShellToolCatalog.ts",
       "line": 35,
       "endLine": 42
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#RING_MOTE_COUNT",
+      "name": "RING_MOTE_COUNT",
+      "kind": "value",
+      "file": "src/renderer/components/sceneSpriteClocks.ts",
+      "line": 62,
+      "endLine": 62
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#RingMote",
+      "name": "RingMote",
+      "kind": "interface",
+      "file": "src/renderer/components/sceneSpriteClocks.ts",
+      "line": 50,
+      "endLine": 60
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#ringMotes",
+      "name": "ringMotes",
+      "kind": "value",
+      "file": "src/renderer/components/sceneSpriteClocks.ts",
+      "line": 70,
+      "endLine": 85
     },
     {
       "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#SceneEmber",
@@ -61116,6 +61144,24 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/sceneSpriteClocks.ts->symbol:src/renderer/components/sceneSpriteClocks.ts#RING_MOTE_COUNT",
+      "source": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "target": "symbol:src/renderer/components/sceneSpriteClocks.ts#RING_MOTE_COUNT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneSpriteClocks.ts->symbol:src/renderer/components/sceneSpriteClocks.ts#RingMote",
+      "source": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "target": "symbol:src/renderer/components/sceneSpriteClocks.ts#RingMote",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneSpriteClocks.ts->symbol:src/renderer/components/sceneSpriteClocks.ts#ringMotes",
+      "source": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "target": "symbol:src/renderer/components/sceneSpriteClocks.ts#ringMotes",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/sceneSpriteClocks.ts->symbol:src/renderer/components/sceneSpriteClocks.ts#SceneEmber",
       "source": "file:src/renderer/components/sceneSpriteClocks.ts",
       "target": "symbol:src/renderer/components/sceneSpriteClocks.ts#SceneEmber",
@@ -78263,6 +78309,12 @@
       "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/gameplaySceneLevels.ts",
       "source": "file:src/renderer/components/GameplayScene.tsx",
       "target": "file:src/renderer/components/gameplaySceneLevels.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/sceneSpriteClocks.ts",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "file:src/renderer/components/sceneSpriteClocks.ts",
       "kind": "imports"
     },
     {

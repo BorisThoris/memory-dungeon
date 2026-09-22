@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, type CSSProperties } from 'react';
 import type { GraphicsQualityPreset } from '../../shared/contracts';
 import type { ChainTier } from '../../shared/chain-tier-rules';
 import { UI_ART } from '../assets/ui';
@@ -6,6 +6,7 @@ import { SCENE_SPRITES } from '../assets/ui/sprites';
 import { useSceneLook } from '../hooks/useSceneLook';
 import { sceneRingLevels } from './gameplaySceneLevels';
 import { SceneSprites } from './SceneSprites';
+import { ringMotes } from './sceneSpriteClocks';
 import plate from './scenePlate.module.css';
 import styles from './GameplayScene.module.css';
 
@@ -19,8 +20,9 @@ import styles from './GameplayScene.module.css';
  * adds, so every layer composites with `plus-lighter` at an intensity the run sets:
  *
  *   - the ring follows the chain meter's fill, continuously: a bare stone circle with the chain at
- *     zero, warming and turning toward rose as the run approaches Fever, and breathing while the
- *     board is memorised;
+ *     zero, warming and turning toward rose as the run approaches Fever, throwing up motes that
+ *     rise from nothing at rest to a full drift at Fever, and breathing while the board is
+ *     memorised;
  *   - a break flashes the ring's floor light, harder the further the chain has come (the pulse
  *     remounts on every event, so two breaks in a row each get their flash);
  *   - the torches always burn: their flames are cut out of the painting and play as flipbook
@@ -78,8 +80,9 @@ export function GameplayScene({ fill, memorize, pulse, pulseKey, quality, reduce
                     '--scene-ring-hue': `${ring.hueDeg}deg`,
                     '--scene-ring-saturate': ring.saturate,
                     '--scene-pulse-peak': ring.pulsePeak,
+                    '--scene-ring-motes': ring.motes,
                     '--scene-plate-aspect': `${flames.plate[0]} / ${flames.plate[1]}`
-                } as React.CSSProperties
+                } as CSSProperties
             }
         >
             <div className={plate.plate} data-testid="gameplay-scene-plate">
@@ -110,6 +113,27 @@ export function GameplayScene({ fill, memorize, pulse, pulseKey, quality, reduce
                 ) : null}
                 <div className={plate.things}>
                     <SceneSprites embers={alive} set={flames} still={still} />
+                    {alive ? (
+                        <div className={styles.ringMotes} data-testid="gameplay-scene-ring-motes">
+                            {ringMotes().map((mote) => (
+                                <i
+                                    className={styles.ringMote}
+                                    key={mote.id}
+                                    style={
+                                        {
+                                            left: `${mote.x}%`,
+                                            top: `${mote.y}%`,
+                                            '--mote-duration': `${mote.durationMs}ms`,
+                                            '--mote-delay': `${mote.delayMs}ms`,
+                                            '--mote-drift': `${mote.driftPx}px`,
+                                            '--mote-rise': `${mote.risePx}px`,
+                                            '--mote-size': `${mote.size}px`
+                                        } as CSSProperties
+                                    }
+                                />
+                            ))}
+                        </div>
+                    ) : null}
                 </div>
             </div>
         </div>

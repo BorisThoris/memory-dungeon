@@ -116,6 +116,53 @@
     animation-delay: -1.7s;
 }
 
+/* ------------------------------------------------------------------ the ring's motes */
+/* Points of the ring's own light lifting off the floor; the whole drift fades in with the chain
+   (`--scene-ring-motes`) and takes the ring's hue, so at Fever they rise rose. */
+.ringMotes {
+    position: absolute;
+    inset: 0;
+    opacity: var(--scene-ring-motes, 0);
+    filter: hue-rotate(var(--scene-ring-hue, 0deg));
+    transition: opacity 900ms ease;
+    pointer-events: none;
+}
+
+.ringMote {
+    position: absolute;
+    width: var(--mote-size, 2px);
+    height: var(--mote-size, 2px);
+    border-radius: 50%;
+    background: #d9c6ff;
+    box-shadow: 0 0 8px 2px rgba(170, 130, 255, 0.8);
+    mix-blend-mode: plus-lighter;
+    opacity: 0;
+    animation: sceneRingMote var(--mote-duration, 7000ms) ease-in-out infinite;
+    animation-delay: var(--mote-delay, 0ms);
+    will-change: transform, opacity;
+}
+
+@keyframes sceneRingMote {
+    0% {
+        transform: translate(0, 0);
+        opacity: 0;
+    }
+
+    18% {
+        opacity: 0.9;
+    }
+
+    55% {
+        transform: translate(var(--mote-drift, 0px), calc(var(--mote-rise, 80px) * -0.55));
+        opacity: 0.55;
+    }
+
+    100% {
+        transform: translate(calc(var(--mote-drift, 0px) * 0.4), calc(var(--mote-rise, 80px) * -1));
+        opacity: 0;
+    }
+}
+
 /* ------------------------------------------------------------------ still */
 .scene[data-still='true'] .layer,
 .scene[data-still='true'] .ringPulse,
