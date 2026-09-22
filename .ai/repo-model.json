@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2677,
-    "codeFileCount": 917,
-    "exportedSymbolCount": 2767,
+    "trackedFileCount": 2679,
+    "codeFileCount": 919,
+    "exportedSymbolCount": 2771,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 7003
+    "relationshipCount": 7010
   },
   "inventory": [
     {
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "fcdd07ed0364329fb22c63fd1617a9c0faf11270552a7e2772112a1986196641"
+      "sha256": "c5a80ac313a47800fceb7ecba74ac76c652c6152802b1b4f142ad0edc5890d9e"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -9301,6 +9301,18 @@
       "sha256": "57d4d8528181874dd3fb3ac479d7d36bec4a19bab24798ccb2811a53231cdcd2"
     },
     {
+      "path": "src/renderer/components/memorizeUrgency.test.ts",
+      "category": "test",
+      "bytes": 2435,
+      "sha256": "a20c04883e6d3c5265664bad4be286a50cb47bcc62c33099ea5b76583b4f26e2"
+    },
+    {
+      "path": "src/renderer/components/memorizeUrgency.ts",
+      "category": "source",
+      "bytes": 2263,
+      "sha256": "e058d968dc9081820ee5b651cc1cf790e81bdbe4907d31f0a673a9e6fbddec4e"
+    },
+    {
       "path": "src/renderer/components/MetaScreen.module.css",
       "category": "source",
       "bytes": 7253,
@@ -9411,20 +9423,20 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 38689,
-      "sha256": "3ae1de7bed553665a1ed380d14cd617ac1a6a7359346a5b5c2aa934116ae295d"
+      "bytes": 40104,
+      "sha256": "803b1f3d5670a500afafa180695aa7a9090d9d9f5d9546ffa34987d8397427d4"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 18950,
-      "sha256": "2410a111bf610f24e529eb853bcad8960a5b9045bfef30aab75122573b3238ed"
+      "bytes": 20627,
+      "sha256": "c2ac3b752854116e1b1538bd4fddf785bcc6b3029d8e33dafac1f6a8fd35464b"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 28310,
-      "sha256": "eacdf115663f6444fdc17957a384f6368c9a88f14c03ed097b2b6f117a343de4"
+      "bytes": 29348,
+      "sha256": "0b95a66514a48c5504a76e792ffbbf3df3d4c1d76892d32538f502f73c31adf6"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -19309,6 +19321,35 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/memorizeUrgency.test.ts",
+      "path": "src/renderer/components/memorizeUrgency.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 48,
+      "imports": [
+        "file:src/renderer/components/memorizeUrgency.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/memorizeUrgency.ts",
+      "path": "src/renderer/components/memorizeUrgency.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 45,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/components/memorizeUrgency.ts#MEMORIZE_CLOSING_FROM",
+        "symbol:src/renderer/components/memorizeUrgency.ts#MEMORIZE_URGENT_FROM",
+        "symbol:src/renderer/components/memorizeUrgency.ts#memorizeUrgency",
+        "symbol:src/renderer/components/memorizeUrgency.ts#MemorizeUrgency"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/memorizeUrgency.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/metaStackedShellLayout.test.ts",
       "path": "src/renderer/components/metaStackedShellLayout.test.ts",
       "layer": "renderer",
@@ -19534,7 +19575,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 355,
+      "lineCount": 393,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/shared/contracts.ts",
@@ -19549,9 +19590,10 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 530,
+      "lineCount": 549,
       "imports": [
         "file:src/renderer/a11y/toolbarRoving.ts",
+        "file:src/renderer/components/memorizeUrgency.ts",
         "file:src/renderer/copy/chainBeat.ts",
         "file:src/renderer/copy/passAndPlay.ts",
         "file:src/renderer/copy/runDialogCopy.ts",
@@ -36486,6 +36528,38 @@
       "endLine": 53
     },
     {
+      "id": "symbol:src/renderer/components/memorizeUrgency.ts#MEMORIZE_CLOSING_FROM",
+      "name": "MEMORIZE_CLOSING_FROM",
+      "kind": "value",
+      "file": "src/renderer/components/memorizeUrgency.ts",
+      "line": 32,
+      "endLine": 32
+    },
+    {
+      "id": "symbol:src/renderer/components/memorizeUrgency.ts#MEMORIZE_URGENT_FROM",
+      "name": "MEMORIZE_URGENT_FROM",
+      "kind": "value",
+      "file": "src/renderer/components/memorizeUrgency.ts",
+      "line": 29,
+      "endLine": 29
+    },
+    {
+      "id": "symbol:src/renderer/components/memorizeUrgency.ts#memorizeUrgency",
+      "name": "memorizeUrgency",
+      "kind": "value",
+      "file": "src/renderer/components/memorizeUrgency.ts",
+      "line": 34,
+      "endLine": 44
+    },
+    {
+      "id": "symbol:src/renderer/components/memorizeUrgency.ts#MemorizeUrgency",
+      "name": "MemorizeUrgency",
+      "kind": "interface",
+      "file": "src/renderer/components/memorizeUrgency.ts",
+      "line": 15,
+      "endLine": 20
+    },
+    {
       "id": "symbol:src/renderer/components/metaStackedShellLayout.ts#getMetaSubscreenLayout",
       "name": "getMetaSubscreenLayout",
       "kind": "function",
@@ -36586,24 +36660,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 529,
-      "endLine": 529
+      "line": 548,
+      "endLine": 548
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 42,
-      "endLine": 67
+      "line": 43,
+      "endLine": 68
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 29,
-      "endLine": 40
+      "line": 30,
+      "endLine": 41
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
@@ -55464,7 +55538,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 72
+          "line": 73
         }
       ],
       "tests": [
@@ -57283,7 +57357,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 327
+          "line": 331
         }
       ],
       "tests": [
@@ -57322,7 +57396,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 327
+          "line": 331
         }
       ],
       "tests": [
@@ -57356,7 +57430,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 327
+          "line": 331
         }
       ],
       "tests": [
@@ -57390,7 +57464,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 327
+          "line": 331
         }
       ],
       "tests": [
@@ -61323,6 +61397,30 @@
       "id": "exports:src/renderer/components/MemorizeSkipLayer.tsx->symbol:src/renderer/components/MemorizeSkipLayer.tsx#MemorizeSkipLayer",
       "source": "file:src/renderer/components/MemorizeSkipLayer.tsx",
       "target": "symbol:src/renderer/components/MemorizeSkipLayer.tsx#MemorizeSkipLayer",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/memorizeUrgency.ts->symbol:src/renderer/components/memorizeUrgency.ts#MEMORIZE_CLOSING_FROM",
+      "source": "file:src/renderer/components/memorizeUrgency.ts",
+      "target": "symbol:src/renderer/components/memorizeUrgency.ts#MEMORIZE_CLOSING_FROM",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/memorizeUrgency.ts->symbol:src/renderer/components/memorizeUrgency.ts#MEMORIZE_URGENT_FROM",
+      "source": "file:src/renderer/components/memorizeUrgency.ts",
+      "target": "symbol:src/renderer/components/memorizeUrgency.ts#MEMORIZE_URGENT_FROM",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/memorizeUrgency.ts->symbol:src/renderer/components/memorizeUrgency.ts#memorizeUrgency",
+      "source": "file:src/renderer/components/memorizeUrgency.ts",
+      "target": "symbol:src/renderer/components/memorizeUrgency.ts#memorizeUrgency",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/memorizeUrgency.ts->symbol:src/renderer/components/memorizeUrgency.ts#MemorizeUrgency",
+      "source": "file:src/renderer/components/memorizeUrgency.ts",
+      "target": "symbol:src/renderer/components/memorizeUrgency.ts#MemorizeUrgency",
       "kind": "exports"
     },
     {
@@ -79580,6 +79678,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/memorizeUrgency.test.ts->src/renderer/components/memorizeUrgency.ts",
+      "source": "file:src/renderer/components/memorizeUrgency.test.ts",
+      "target": "file:src/renderer/components/memorizeUrgency.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/metaStackedShellLayout.test.ts->src/renderer/components/metaStackedShellLayout.ts",
       "source": "file:src/renderer/components/metaStackedShellLayout.test.ts",
       "target": "file:src/renderer/components/metaStackedShellLayout.ts",
@@ -79895,6 +79999,12 @@
       "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/a11y/toolbarRoving.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/renderer/a11y/toolbarRoving.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/components/memorizeUrgency.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/renderer/components/memorizeUrgency.ts",
       "kind": "imports"
     },
     {
@@ -94456,6 +94566,12 @@
       "id": "tested_by:src/renderer/components/memorizeSkipGesture.ts->file:src/renderer/components/memorizeSkipGesture.test.ts",
       "source": "file:src/renderer/components/memorizeSkipGesture.ts",
       "target": "file:src/renderer/components/memorizeSkipGesture.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/memorizeUrgency.ts->file:src/renderer/components/memorizeUrgency.test.ts",
+      "source": "file:src/renderer/components/memorizeUrgency.ts",
+      "target": "file:src/renderer/components/memorizeUrgency.test.ts",
       "kind": "tested_by"
     },
     {

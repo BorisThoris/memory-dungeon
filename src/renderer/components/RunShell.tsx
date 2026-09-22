@@ -13,6 +13,7 @@ import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { CHAIN_BEAT_COPY, CHAIN_TIER_LABELS } from '../copy/chainBeat';
 import { chainRungScoreMultiplier } from '../../shared/chain-rung-value-rules';
 import { chainRungApproach, chainTierRungs, runChainMeter, runChainTier } from '../../shared/chain-tier-rules';
+import { memorizeUrgency } from './memorizeUrgency';
 import { isPassAndPlayRun, PASS_AND_PLAY_FLOORS } from '../../shared/pass-and-play-rules';
 
 /**
@@ -199,6 +200,9 @@ const RunShell = ({
     const chainMeterDropping = useChainMeterDrop(meter.momentum, rungs.clean);
     const chainMeterArriving = useChainMeterFeverArrival(meter.full);
     const memorize = useMemorizeCountdown(run);
+    // The window closing is the one thing the study period never said. Only the HUD answers it:
+    // the player's task right now is looking at the board, so the stage must not be touched.
+    const urgency = memorizeUrgency(memorize?.progress ?? 0);
     const turnsTaken = turnsTakenThisFloor(run);
     const parTurns = parTurnsForRun(run);
     const pairCount = run.board?.pairCount ?? 0;
@@ -364,7 +368,17 @@ const RunShell = ({
                         a bar, and the count sits on it where the eye lands first. */}
                     <span aria-hidden="true" className={styles.headRule}>
                         {memorize ? (
-                            <span className={styles.memorizeBar} style={{ width: `${(memorize.progress * 100).toFixed(1)}%` }} />
+                            <span
+                                className={styles.memorizeBar}
+                                data-closing={urgency.closing ? 'true' : undefined}
+                                data-testid="hud-memorize-bar"
+                                style={
+                                    {
+                                        width: `${(memorize.progress * 100).toFixed(1)}%`,
+                                        '--memorize-urgency': urgency.level
+                                    } as CSSProperties
+                                }
+                            />
                         ) : null}
                     </span>
 
@@ -432,7 +446,12 @@ const RunShell = ({
                 </div>
 
                 {memorize ? (
-                    <div className={styles.memorizeHead} data-testid="hud-memorize">
+                    <div
+                        className={styles.memorizeHead}
+                        data-closing={urgency.closing ? 'true' : undefined}
+                        data-testid="hud-memorize"
+                        style={{ '--memorize-urgency': urgency.level } as CSSProperties}
+                    >
                         <span className={styles.memorizeTitle}>
                             Memorize <span className={styles.memorizeCount}>· {memorize.seconds}</span>
                         </span>

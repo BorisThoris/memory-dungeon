@@ -272,6 +272,44 @@ describe('RunShell — The Margin', () => {
         }
     });
 
+    it('lets the study clock run out louder than it started', () => {
+        // The bar always carried the fact that the window was nearly gone. A fact in an unchanged
+        // colour is one the player stopped rereading nine seconds ago, so the last seconds now read
+        // differently from the first.
+        vi.useFakeTimers();
+        try {
+            const base = createNewRun(0, { echoFeedbackEnabled: false });
+            const run: RunState = { ...base, timerState: { ...base.timerState, memorizeRemainingMs: 10_000 } };
+            render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={run} tools={[]} />);
+
+            const urgency = () => Number(screen.getByTestId('hud-memorize-bar').style.getPropertyValue('--memorize-urgency'));
+            const closing = () => screen.getByTestId('hud-memorize-bar').getAttribute('data-closing');
+
+            act(() => {
+                vi.advanceTimersByTime(250);
+            });
+            // Early on the head says nothing new: this stretch is for looking.
+            expect(urgency()).toBe(0);
+            expect(closing()).toBeNull();
+
+            act(() => {
+                vi.advanceTimersByTime(7_500);
+            });
+            const late = urgency();
+            expect(late).toBeGreaterThan(0);
+            expect(closing()).toBeNull();
+
+            act(() => {
+                vi.advanceTimersByTime(2_000);
+            });
+            expect(urgency()).toBeGreaterThan(late);
+            expect(closing()).toBe('true');
+            expect(screen.getByTestId('hud-memorize')).toHaveAttribute('data-closing', 'true');
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+
     it('leaves the study count behind once the floor is in play, and names the chain over the line', () => {
         const run = playingRun();
         render(

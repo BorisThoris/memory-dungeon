@@ -164,14 +164,48 @@
 }
 
 /* The study period's clock, drawn along the rule. */
+/*
+ * The study clock. `--memorize-urgency` (0 for most of the window, rising as it shuts) turns the
+ * bar from gold toward the colour this shell uses for loss, and thickens it, so the last seconds
+ * of looking read differently from the first — the bar always carried the fact, but a fact in an
+ * unchanged colour is one the player stopped rereading nine seconds ago.
+ *
+ * Only the HUD does this. Closing the room in as the window shuts is the obvious move and the
+ * wrong one: the player's whole job right now is seeing the board.
+ */
 .memorizeBar {
     position: absolute;
     left: 0;
     top: -1px;
-    height: 3px;
-    background: var(--gold);
-    box-shadow: 0 0 12px color-mix(in srgb, var(--gold) 50%, transparent);
-    transition: width 240ms linear;
+    height: calc(3px + 1px * var(--memorize-urgency, 0));
+    background: color-mix(in srgb, var(--miss) calc(var(--memorize-urgency, 0) * 100%), var(--gold));
+    box-shadow: 0 0 calc(12px + 8px * var(--memorize-urgency, 0))
+        color-mix(
+            in srgb,
+            color-mix(in srgb, var(--miss) calc(var(--memorize-urgency, 0) * 100%), var(--gold)) 50%,
+            transparent
+        );
+    transition: width 240ms linear, background 240ms linear, height 240ms linear;
+}
+
+.memorizeBar[data-closing='true'] {
+    animation: memorizeClosing 0.7s ease-in-out infinite;
+}
+
+/* The count is where the eye already is, so it is the cheapest place to say "now". */
+.memorizeHead[data-closing='true'] .memorizeCount {
+    color: var(--miss);
+}
+
+@keyframes memorizeClosing {
+    0%,
+    100% {
+        opacity: 0.78;
+    }
+
+    50% {
+        opacity: 1;
+    }
 }
 
 .score {
@@ -813,9 +847,11 @@
     .chain[data-meter-arrive='true'] .ladderMarker,
     .chain[data-meter-full='true'] .ladderFill,
     .chain[data-meter-full='true'] .ladderMarker,
-    /* Only the pulse. The imminent rung stays lit: which rung the next pair buys is information,
-       and a player getting none of the transients needs it more than anyone, not less. */
-    .rung[data-rung-imminent='true'] .rungLabel {
+    /* Only the pulses. The imminent rung stays lit and the closing bar stays red: which rung the
+       next pair buys, and how little of the study window is left, are information — and a player
+       getting none of the transients needs them more than anyone, not less. */
+    .rung[data-rung-imminent='true'] .rungLabel,
+    .memorizeBar[data-closing='true'] {
         animation: none;
     }
 
