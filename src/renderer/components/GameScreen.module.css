@@ -505,8 +505,16 @@
    absolutely against the stage, and this rule outranked their own `position` and `z-index`. On a
    desktop the board frame is itself absolute, so the floater's flow position happened to be the
    stage's corner and the offsets still landed; in the phone camera shell the frame is in flow, and
-   the score pop was placed a full board height below it - off the screen, every match. */
-.boardStage > :global(*):not(.srOnly):not(.matchScoreFloater):not(.mismatchScoreFloater):not(.distractionHud) {
+   the score pop was placed a full board height below it - off the screen, every match.
+
+   The study-skip layer is the third casualty and the worst, because it had no symptom to see. It
+   is an empty button stretched over the board by `position: absolute; inset: 0`, so when this rule
+   flattened it to `position: relative` it kept its class, its label and its place in the tree and
+   simply stopped having any area - a control the tests still found and no finger could ever hit.
+   The double tap that ends the study period died that way. `gameScreenSrOnlyCss.test.ts` guards
+   all four exclusions now. */
+.boardStage
+    > :global(*):not(.srOnly):not(.matchScoreFloater):not(.mismatchScoreFloater):not(.distractionHud):not(.memorizeSkipLayer) {
     position: relative;
     z-index: 1;
 }

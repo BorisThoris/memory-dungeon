@@ -21,6 +21,7 @@ import {
 } from './gameplay-core-contracts';
 import { getBoardTurnAnnouncementFacts } from './board-turn-event-facts';
 import { finishMemorizePhase } from './memorize-phase-rules';
+import { MEMORIZE_SKIP_FEEDBACK_COPY } from './memorize-skip-reward-rules';
 import { disableDebugPeek, enableDebugPeek, pauseRun, resumeRun } from './run-timer-rules';
 import {
     getRunInventoryItemQuantity,
@@ -795,17 +796,34 @@ const applyMemorizeCompleteCommand = (
     if (run.status !== 'memorize') {
         return rejectedResult(run, command.commandId, 'Run is not in the memorize phase.', command);
     }
-    const nextRun = finishMemorizePhase(run);
-    if (nextRun === run) {
+    const finished = finishMemorizePhase(run);
+    if (finished === run) {
         return rejectedResult(run, command.commandId, 'Memorize phase could not be completed.', command);
     }
+    /*
+     * The study period paid for itself. A player who ended it early handed back clock they had
+     * already read, and the momentum that buys is banked here rather than by the caller, so that
+     * replaying the journal rebuilds the same run - by then the timer that measured it is gone.
+     */
+    const skipMomentum = runNonNegativeInteger(command.skipMomentum);
+    const nextRun: RunState =
+        skipMomentum > 0
+            ? {
+                  ...finished,
+                  skipMomentumThisChain:
+                      runNonNegativeInteger(finished.skipMomentumThisChain) + skipMomentum
+              }
+            : finished;
     const events: GameplayEvent[] = [];
     const writeMemorizeEvent = makeEventWriter(command.commandId, MEMORIZE_SOURCE, events);
     writeMemorizeEvent({ type: 'phase.memorize_completed', statusAfter: nextRun.status });
     writeMemorizeEvent({
         type: 'feedback.requested',
         cue: 'phase.memorize.completed',
-        message: 'Memorize phase over. Find the pairs.',
+        message:
+            skipMomentum > 0
+                ? `${MEMORIZE_SKIP_FEEDBACK_COPY.started} ${MEMORIZE_SKIP_FEEDBACK_COPY.banked(skipMomentum)}`
+                : MEMORIZE_SKIP_FEEDBACK_COPY.elapsed,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };

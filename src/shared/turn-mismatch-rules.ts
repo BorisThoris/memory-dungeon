@@ -100,6 +100,7 @@ export const resolveMismatchTurnTransition = ({
         // A miss keeps half the streak (the score multiplier forgives) but the cascade's momentum
         // is gone: the fire goes out, and the ladder is climbed again from what was remembered.
         chunkPairsThisChain: 0,
+        skipMomentumThisChain: 0,
         stats: {
             ...stats,
             tries: penalty.tries,

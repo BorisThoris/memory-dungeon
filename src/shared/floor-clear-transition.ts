@@ -12,7 +12,7 @@ import { getFloorClearObjectiveResult } from './secondary-objective-rules';
 import { clearResolveState } from './run-timer-rules';
 import { normalizeSessionStats } from './session-stats-rules';
 import { runNonNegativeInteger } from './run-number-guards';
-import { getChainTier } from './chain-tier-rules';
+import { getChainTier, runChainMomentumPairs } from './chain-tier-rules';
 
 export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState => {
     const board: BoardState = { ...clearedBoard, flippedTileIds: [] };
@@ -33,7 +33,7 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
     // floor, never from the score.
     const momentumBonus = getFloorClearMomentumBonus({
         chain: stats.currentStreak,
-        cascadedPairs: run.chunkPairsThisChain,
+        cascadedPairs: runChainMomentumPairs(run),
         pairsOnFloor: board.pairCount
     });
     const parTurns = parTurnsForBoard(board);

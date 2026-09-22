@@ -6,6 +6,8 @@ import {
     resumeRunThroughGameplayCore
 } from '../../shared/gameplay-core-adapters';
 import type { GameplayPauseTimerSnapshot } from '../../shared/gameplay-core-contracts';
+import { memorizeSkipReward } from '../../shared/memorize-skip-reward-rules';
+import { getMemorizeDurationForRun } from '../../shared/scoring-rules';
 import {
     clearActiveTimer,
     createActiveTimer,
@@ -53,10 +55,11 @@ export const createRunTimerController = ({
     let debugRevealTimer: ActiveTimer | null = null;
     let pendingMemorizeBoardKey: string | null = null;
 
-    const completeMemorizePhase = (run: RunState): RunState =>
+    const completeMemorizePhase = (run: RunState, skipMomentum = 0): RunState =>
         completeMemorizePhaseThroughGameplayCore(
             run,
-            `memorize-complete:${run.runSeed}:${run.board?.level ?? 0}`
+            `memorize-complete:${run.runSeed}:${run.board?.level ?? 0}`,
+            skipMomentum
         ).run;
 
     const commandJournalLength = (run: RunState): number =>
@@ -259,13 +262,22 @@ export const createRunTimerController = ({
      * should not have to sit and watch the rest of the clock, so a deliberate double tap ends it
      * here — the same completion the timer would have run, with the timer cancelled so it cannot
      * fire a second time into a phase that is already over.
+     *
+     * And the time handed back is paid for, in chain momentum (`memorize-skip-reward-rules.ts`).
+     * The clock is measured here because this is the only place that holds it: the live timer
+     * knows what is left, and the floor's configured window is the denominator, not whatever a
+     * resumed timer happened to be scheduled with - otherwise a pause would buy momentum for free.
      */
     const skipMemorizePhase = (): boolean => {
         const { run, view } = getState();
         if (!run || view !== 'playing' || run.status !== 'memorize') {
             return false;
         }
-        const skipped = completeMemorizePhase(run);
+        const reward = memorizeSkipReward(
+            getActiveTimerRemainingMs(memorizeTimer, timerRemainingMs(run.timerState.memorizeRemainingMs)),
+            getMemorizeDurationForRun(run, run.board?.level ?? 1)
+        );
+        const skipped = completeMemorizePhase(run, reward.momentum);
         if (skipped === run) {
             return false;
         }

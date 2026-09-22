@@ -12,7 +12,12 @@ import { MEMORIZE_SKIP_COPY, RUN_SHELL_LABELS, RUN_SHELL_LINE_COPY } from '../co
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { CHAIN_BEAT_COPY, CHAIN_TIER_LABELS } from '../copy/chainBeat';
 import { chainRungScoreMultiplier } from '../../shared/chain-rung-value-rules';
-import { chainRungApproach, chainTierRungs, runChainMeter, runChainTier } from '../../shared/chain-tier-rules';
+import {
+    chainRungApproach,
+    chainTierRungs,
+    runChainMeter,
+    runChainTier
+} from '../../shared/chain-tier-rules';
 import { playStudyClosingTickSfx } from '../audio/gameSfx';
 import { tapStudyClosing } from '../input/touchHaptics';
 import { memorizeUrgency } from './memorizeUrgency';
@@ -475,7 +480,12 @@ const RunShell = ({
                             <span
                                 className={styles.chainDepth}
                                 data-chain-tier={tier}
-                                title={`${CHAIN_BEAT_COPY.momentumHint(chain, runNonNegativeInteger(run.chunkPairsThisChain), rungs)} ${CHAIN_BEAT_COPY.rungLadder()}`}
+                                title={`${CHAIN_BEAT_COPY.momentumHint(
+                                    chain,
+                                    runNonNegativeInteger(run.chunkPairsThisChain),
+                                    runNonNegativeInteger(run.skipMomentumThisChain),
+                                    rungs
+                                )} ${CHAIN_BEAT_COPY.rungLadder()}`}
                             >
                                 {CHAIN_TIER_LABELS[tier] ? `Chain ${chain} · ${CHAIN_TIER_LABELS[tier]}` : `Chain ${chain}`}
                             </span>

@@ -64,6 +64,7 @@ import {
     chainMomentum,
     chainRungApproach,
     runChainMeter,
+    runChainMomentumPairs,
     runChainTier,
     type ChainTier
 } from '../../shared/chain-tier-rules';
@@ -1551,7 +1552,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 chainContext={{
                                     currentStreak: run.stats.currentStreak,
                                     floorCurioId: run.floorCurioId ?? null,
-                                    momentum: chainMomentum(run.stats.currentStreak, run.chunkPairsThisChain)
+                                    momentum: chainMomentum(run.stats.currentStreak, runChainMomentumPairs(run))
                                 }}
                                 recoveryContext={boardRecoveryContext}
                                 interactive={run.status === 'playing' || gambitThirdPickActive}

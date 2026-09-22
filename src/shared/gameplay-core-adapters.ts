@@ -168,11 +168,16 @@ export const applyTileFlipThroughGameplayCore = (
 ): GameplayRunTransitionAdapterResult =>
     reduceThroughGameplayCore(run, createGameplayTileFlipCommand(commandId, tileId));
 
+/**
+ * `skipMomentum` is what the player bought by ending the study period early
+ * (`memorize-skip-reward-rules.ts`); the timer's own completion passes nothing and pays nothing.
+ */
 export const completeMemorizePhaseThroughGameplayCore = (
     run: RunState,
-    commandId: string
+    commandId: string,
+    skipMomentum = 0
 ): GameplayRunTransitionAdapterResult =>
-    reduceThroughGameplayCore(run, createGameplayMemorizeCompleteCommand(commandId));
+    reduceThroughGameplayCore(run, createGameplayMemorizeCompleteCommand(commandId, skipMomentum));
 
 export const pauseRunThroughGameplayCore = (
     run: RunState,
