@@ -114,7 +114,10 @@ describe('RunShell', () => {
         const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={calm} tools={[]} />);
 
         const par = screen.getByTestId('hud-par');
-        expect(within(par).getByRole('img')).toHaveAttribute('aria-label', '4 of 7 turns, ceiling 21');
+        expect(within(par).getByRole('img')).toHaveAttribute(
+            'aria-label',
+            '4 of 7 turns, 17 of 21 left before the run ends'
+        );
         expect(par).toHaveTextContent('4 of 7 turns');
         expect(par).not.toHaveAttribute('data-ceiling-near');
 
@@ -122,8 +125,29 @@ describe('RunShell', () => {
         expect(screen.getByTestId('hud-par')).toHaveAttribute('data-ceiling-near', 'true');
         expect(within(screen.getByTestId('hud-par')).getByRole('img')).toHaveAttribute(
             'aria-label',
-            '19 of 7 turns, ceiling 21'
+            '19 of 7 turns, 2 of 21 left before the run ends'
         );
+    });
+
+    it('draws what the run has left before the ceiling, not only the turns it has spent', () => {
+        // The head used to say `4 of 7 turns` and speak the ceiling to a screen reader alone, so a
+        // sighted player had no reading at all of how close the run was to ending - the thing the
+        // old row of hearts did well (Gen 183 took the lives; docs/REMOVED_LIVES.md). It counts
+        // down, and it reaches zero on the turn the ceiling ends the run.
+        const base = playingRun();
+        const board = overFullPalette(base.board!, 12);
+        const early: RunState = { ...base, board, turnsThisFloor: 4 };
+        const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={early} tools={[]} />);
+
+        const left = (): HTMLElement => screen.getByTestId('hud-turns-left');
+        expect(left()).toHaveTextContent('17 left');
+
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, turnsThisFloor: 20 }} tools={[]} />);
+        expect(left()).toHaveTextContent('1 left');
+
+        // Never below zero, so a floor resolved on its ceiling turn does not read as a negative.
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, turnsThisFloor: 24 }} tools={[]} />);
+        expect(left()).toHaveTextContent('0 left');
     });
 
     it('explains the chain tier from momentum, so a Sharp read on a x3 chain is not a mystery', () => {

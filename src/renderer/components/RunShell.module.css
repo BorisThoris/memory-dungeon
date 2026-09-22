@@ -144,6 +144,36 @@
     color: var(--miss);
 }
 
+/*
+ * What the run has left before the ceiling ends it. Set off from the par by a middot rather than
+ * a rule or a box, because it is the same sentence: how this floor is going, then how much of it
+ * there is. The old hearts were a row that emptied; this is a number that falls, which says the
+ * same thing in the type the rest of the head is set in.
+ */
+.parLeft {
+    margin-left: 0.55rem;
+}
+
+.parLeft::before {
+    content: '·';
+    margin-right: 0.55rem;
+    color: var(--rule);
+}
+
+/*
+ * The count carries the head's full paper, a step up from the par it sits beside: of the two
+ * numbers on this stat it is the one that ends the run. Inside the ceiling-near state it takes
+ * the miss colour with everything else in the stat.
+ */
+.parLeftNumber {
+    color: inherit;
+    font-weight: 500;
+}
+
+.par:not([data-ceiling-near='true']) .parLeftNumber {
+    color: var(--paper);
+}
+
 .mutator {
     padding-left: 1.1rem;
     border-left: 1px solid color-mix(in srgb, var(--paper) 24%, transparent);
@@ -920,6 +950,20 @@
 :global([data-shell-layout='phone-portrait']) .mutator,
 :global([data-shell-layout='phone-landscape']) .mutator {
     padding-left: 0.65rem;
+}
+
+/*
+ * "4 / 9 · 17 left" on a phone. The word stays where the par's did not: a bare number here reads
+ * as part of the par, and the one thing this count must never be is mistaken for the target.
+ */
+:global([data-shell-layout='phone-portrait']) .parLeft,
+:global([data-shell-layout='phone-landscape']) .parLeft {
+    margin-left: 0.35rem;
+}
+
+:global([data-shell-layout='phone-portrait']) .parLeft::before,
+:global([data-shell-layout='phone-landscape']) .parLeft::before {
+    margin-right: 0.35rem;
 }
 
 /* The ladder on its side: one row under the head. */

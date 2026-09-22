@@ -23,7 +23,7 @@ import type { CSSProperties } from 'react';
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { ABANDON_DIALOG_COPY, PAUSE_DIALOG_COPY, PERFECT_MEMORY_COPY, RUN_TOOL_REASONS, SHORTCUTS_COPY } from '../copy/runDialogCopy';
-import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
+import { parTurnsForRun, turnsTakenThisFloor, turnsToCeiling } from '../../shared/floor-par';
 import {
     BOARD_SHUFFLE_COPY,
     FLASH_PAIR_COPY,
@@ -1781,6 +1781,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 <dd data-testid="pause-turns">
                                     {turnsTakenThisFloor(run)} / {parTurnsForRun(run)}
                                 </dd>
+                            </div>
+                            {/* The row that used to read "Lives" (Gen 183, docs/REMOVED_LIVES.md).
+                                The head carries this count as well, but the pause dialog is where a
+                                player comes to ask how the run is doing, and how much longer it can
+                                go wrong is half of that question. */}
+                            <div>
+                                <dt>Turns left</dt>
+                                <dd data-testid="pause-turns-left">{turnsToCeiling(run)}</dd>
                             </div>
                         </dl>
                     </OverlayModal>

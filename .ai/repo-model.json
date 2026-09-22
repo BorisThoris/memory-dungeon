@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2685,
     "codeFileCount": 925,
-    "exportedSymbolCount": 2800,
+    "exportedSymbolCount": 2801,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 7073
+    "relationshipCount": 7074
   },
   "inventory": [
     {
@@ -2277,8 +2277,8 @@
     {
       "path": "docs/REMOVED_LIVES.md",
       "category": "documentation",
-      "bytes": 17727,
-      "sha256": "04f49a8d601fe3efff0b313342b98b05088afcbcdac86c1533217c23223e321b"
+      "bytes": 18408,
+      "sha256": "f4f98f7d678037341d5a508d67d0716903272b3105f4eff2813c085982da948a"
     },
     {
       "path": "docs/REMOVED_MODES.md",
@@ -9171,8 +9171,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 87825,
-      "sha256": "b867982453970a61931f4f3e4b1641571949cec2f6f5c94c7a79b8a4b732b0ed"
+      "bytes": 88429,
+      "sha256": "773eb89245f6a8abfe7bd8a7bbfdfb85c983047fcb0c21bb3c8596fb950e41ac"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9435,20 +9435,20 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 40104,
-      "sha256": "803b1f3d5670a500afafa180695aa7a9090d9d9f5d9546ffa34987d8397427d4"
+      "bytes": 40178,
+      "sha256": "1cd34ae9d246b303577407f52eada256d14875bd4716325263eb7a8a567d3109"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 26173,
-      "sha256": "fe908a9be1b06e810fee37a61150864e125939db2bbe8b02688d91ffe736b85b"
+      "bytes": 27598,
+      "sha256": "0b2b3ff1af7c04a1009ff501ba16bb4636af450f2c3f6443d44417df48956cbd"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 30804,
-      "sha256": "3fcd3370c353b8949a4a523aea70a29145754113bca5606674b16ac36a77347d"
+      "bytes": 32100,
+      "sha256": "3c052dbac173ad63f7311b5e7a338215dd64d1b79c572ced02ec866826f2ae0e"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -10629,8 +10629,8 @@
     {
       "path": "src/renderer/copy/runDialogCopy.ts",
       "category": "source",
-      "bytes": 5108,
-      "sha256": "2edb664fbb51d56f49a9739bed15feb669a397f25ae514b10c1732ab4d17f5ec"
+      "bytes": 6301,
+      "sha256": "2f61f29c01d139f77251a64d96022aea2e2877908b6720f785e8a968df9b334c"
     },
     {
       "path": "src/renderer/copy/runHistory.ts",
@@ -19003,7 +19003,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1865,
+      "lineCount": 1873,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -19660,7 +19660,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 508,
+      "lineCount": 532,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/shared/contracts.ts",
@@ -19675,7 +19675,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 601,
+      "lineCount": 618,
       "imports": [
         "file:src/renderer/a11y/toolbarRoving.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -23107,7 +23107,7 @@
       "path": "src/renderer/copy/runDialogCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 114,
+      "lineCount": 134,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/runDialogCopy.ts#ABANDON_DIALOG_COPY",
@@ -23118,6 +23118,7 @@
         "symbol:src/renderer/copy/runDialogCopy.ts#ROUTE_CHOICE_COPY",
         "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LABELS",
         "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LINE_COPY",
+        "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_PAR_COPY",
         "symbol:src/renderer/copy/runDialogCopy.ts#RUN_TOOL_REASONS",
         "symbol:src/renderer/copy/runDialogCopy.ts#SHORTCUTS_COPY"
       ],
@@ -36566,8 +36567,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 1864,
-      "endLine": 1864
+      "line": 1872,
+      "endLine": 1872
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -36950,8 +36951,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 600,
-      "endLine": 600
+      "line": 617,
+      "endLine": 617
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
@@ -41030,8 +41031,8 @@
       "name": "MEMORIZE_SKIP_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 100,
-      "endLine": 103
+      "line": 120,
+      "endLine": 123
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#PAUSE_DIALOG_COPY",
@@ -41046,8 +41047,8 @@
       "name": "PERFECT_MEMORY_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 109,
-      "endLine": 113
+      "line": 129,
+      "endLine": 133
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#ROUTE_CHOICE_COPY",
@@ -41062,24 +41063,32 @@
       "name": "RUN_SHELL_LABELS",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 40,
-      "endLine": 45
+      "line": 60,
+      "endLine": 65
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LINE_COPY",
       "name": "RUN_SHELL_LINE_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 79,
-      "endLine": 90
+      "line": 99,
+      "endLine": 110
+    },
+    {
+      "id": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_PAR_COPY",
+      "name": "RUN_SHELL_PAR_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/runDialogCopy.ts",
+      "line": 49,
+      "endLine": 57
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_TOOL_REASONS",
       "name": "RUN_TOOL_REASONS",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 54,
-      "endLine": 72
+      "line": 74,
+      "endLine": 92
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#SHORTCUTS_COPY",
@@ -57759,7 +57768,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 378
+          "line": 395
         }
       ],
       "tests": [
@@ -57798,7 +57807,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 378
+          "line": 395
         }
       ],
       "tests": [
@@ -57832,7 +57841,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 378
+          "line": 395
         }
       ],
       "tests": [
@@ -57866,7 +57875,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 378
+          "line": 395
         }
       ],
       "tests": [
@@ -65081,6 +65090,12 @@
       "id": "exports:src/renderer/copy/runDialogCopy.ts->symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LINE_COPY",
       "source": "file:src/renderer/copy/runDialogCopy.ts",
       "target": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LINE_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/runDialogCopy.ts->symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_PAR_COPY",
+      "source": "file:src/renderer/copy/runDialogCopy.ts",
+      "target": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_PAR_COPY",
       "kind": "exports"
     },
     {
