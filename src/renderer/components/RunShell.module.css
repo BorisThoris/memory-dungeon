@@ -368,6 +368,58 @@
     color: var(--paper-3);
 }
 
+/*
+ * The rung the chain is climbing to, and the pair before it.
+ *
+ * Every other thing the ladder does is a reaction — a rung passed, a chain lost, the meter filling.
+ * This is the only part that looks forward, and it is why a player takes one more turn: the rung
+ * ahead is lit before it is earned, and at one away it is lit enough to be a reason.
+ *
+ * Deliberately split into a *state* and a *beat*. Being next is information — which rung your next
+ * pair buys — so it is a colour and a weight, and it stays under reduce motion, where the player
+ * needs it most because they are getting none of the transients. Only the pulse at one away is
+ * motion, and only the pulse is taken away.
+ */
+.rung[data-rung-next='true'] .rungTick {
+    background: var(--paper-2);
+}
+
+.rung[data-rung-next='true'] .rungLabel {
+    color: var(--paper-2);
+}
+
+.rung[data-rung-imminent='true'] .rungTick {
+    left: -5px;
+    width: 11px;
+    background: var(--paper);
+}
+
+.rung[data-rung-imminent='true'] .rungLabel {
+    color: var(--paper);
+    /* The one place the ladder leans: a rung a single pair away is worth a player's eye. */
+    animation: rungImminent 1.6s ease-in-out infinite;
+}
+
+/* One pair from Fever is the biggest promise the ladder makes, so it makes it in Fever's colour. */
+.rung[data-rung='fever'][data-rung-imminent='true'] .rungTick {
+    background: var(--fever);
+}
+
+.rung[data-rung='fever'][data-rung-imminent='true'] .rungLabel {
+    color: var(--fever);
+}
+
+@keyframes rungImminent {
+    0%,
+    100% {
+        opacity: 0.72;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
 .rungMultiplier {
     margin-left: 0.4rem;
     opacity: 0.8;
@@ -760,7 +812,10 @@
     .chain[data-meter-arrive='true'] .ladderFill,
     .chain[data-meter-arrive='true'] .ladderMarker,
     .chain[data-meter-full='true'] .ladderFill,
-    .chain[data-meter-full='true'] .ladderMarker {
+    .chain[data-meter-full='true'] .ladderMarker,
+    /* Only the pulse. The imminent rung stays lit: which rung the next pair buys is information,
+       and a player getting none of the transients needs it more than anyone, not less. */
+    .rung[data-rung-imminent='true'] .rungLabel {
         animation: none;
     }
 

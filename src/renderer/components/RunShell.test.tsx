@@ -303,4 +303,52 @@ describe('RunShell — The Margin', () => {
         expect(ladder.querySelector('[data-rung="sharp"]')).toHaveAttribute('data-rung-reached', 'false');
         expect(screen.getByTestId('hud-chain')).toHaveTextContent('Chain 3 · Clean');
     });
+
+    /**
+     * The one part of the ladder that looks forward. Everything else it does reports something that
+     * has already happened; this says what the next pair buys, which is the reason a player takes
+     * one more turn.
+     */
+    const ladderAtStreak = (currentStreak: number) => {
+        const base = playingRun();
+        const run: RunState = {
+            ...base,
+            board: { ...base.board!, pairCount: 12 },
+            stats: { ...base.stats, currentStreak }
+        };
+        const { unmount } = render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={run} tools={[]} />);
+        const ladder = screen.getByTestId('hud-chain-meter');
+        const state = (tier: string) => ({
+            next: ladder.querySelector(`[data-rung="${tier}"]`)?.getAttribute('data-rung-next'),
+            imminent: ladder.querySelector(`[data-rung="${tier}"]`)?.getAttribute('data-rung-imminent')
+        });
+        const read = { clean: state('clean'), sharp: state('sharp'), fever: state('fever') };
+        unmount();
+        return read;
+    };
+
+    it('marks the rung the next pair buys, and only that one', () => {
+        // Twelve pairs: Clean 3, Sharp 6, Fever 8.
+        const climbing = ladderAtStreak(4);
+        expect(climbing.sharp.next).toBe('true');
+        expect(climbing.clean.next).toBeNull();
+        expect(climbing.fever.next).toBeNull();
+    });
+
+    it('leans on a rung only at the pair that lands it', () => {
+        expect(ladderAtStreak(4).sharp.imminent).toBeNull();
+        expect(ladderAtStreak(5).sharp.imminent).toBe('true');
+        // Landed: the lean is gone, and the rung above is the one being climbed to now.
+        const landed = ladderAtStreak(6);
+        expect(landed.sharp.imminent).toBeNull();
+        expect(landed.sharp.next).toBeNull();
+        expect(landed.fever.next).toBe('true');
+    });
+
+    it('stops leaning at the top: Fever has nothing above it to promise', () => {
+        const atFever = ladderAtStreak(9);
+        expect(atFever.fever.next).toBeNull();
+        expect(atFever.fever.imminent).toBeNull();
+        expect(atFever.sharp.next).toBeNull();
+    });
 });

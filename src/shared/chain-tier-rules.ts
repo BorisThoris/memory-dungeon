@@ -147,6 +147,35 @@ export const chainMeter = (momentum: number, pairsOnFloor?: number | null): Chai
 export const runChainMeter = (run: Pick<RunState, 'stats' | 'chunkPairsThisChain' | 'board'>): ChainMeter =>
     chainMeter(chainMomentum(run.stats.currentStreak, run.chunkPairsThisChain), run.board?.pairCount ?? null);
 
+/**
+ * The rung the chain is climbing toward, and how close it is.
+ *
+ * Everything the run says about a chain is a *reaction*: a pair landed, a chain broke, the meter
+ * filled. None of it is anticipation, and the pair before a reward is the one worth playing for —
+ * the HUD already prints "1 momentum to Sharp", which is the fact, in the same grey as the fact
+ * before it. This is the fact made a state the interface can lean on.
+ *
+ * `away` counts in momentum, not pairs, because that is what the rungs are measured in; the two
+ * differ once a cascade is running. `imminent` is deliberately exactly one: a rung two away is not
+ * a moment, and a threshold that lights early is a threshold nobody believes.
+ */
+export interface ChainRungApproach {
+    /** The rung being climbed to, or null once the chain is at Fever and there is nothing above. */
+    next: Exclude<ChainTier, 'none'> | null;
+    /** Momentum still needed to reach it; 0 at Fever. */
+    away: number;
+    /** One away. */
+    imminent: boolean;
+}
+
+export const chainRungApproach = (momentum: number, pairsOnFloor?: number | null): ChainRungApproach => {
+    const depth = runNonNegativeInteger(momentum);
+    const rungs = chainTierRungs(pairsOnFloor);
+    const next = depth < rungs.clean ? 'clean' : depth < rungs.sharp ? 'sharp' : depth < rungs.fever ? 'fever' : null;
+    const away = next === null ? 0 : Math.max(0, rungs[next] - depth);
+    return { next, away, imminent: away === 1 };
+};
+
 /** The next rung, for "one more and the region goes" copy; null at the top. */
 export const nextChainTierAt = (chain: number, pairsOnFloor?: number | null): number | null => {
     const tier = getChainTier(chain, pairsOnFloor);

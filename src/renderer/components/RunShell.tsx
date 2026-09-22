@@ -12,7 +12,7 @@ import { MEMORIZE_SKIP_COPY, RUN_SHELL_LABELS, RUN_SHELL_LINE_COPY } from '../co
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { CHAIN_BEAT_COPY, CHAIN_TIER_LABELS } from '../copy/chainBeat';
 import { chainRungScoreMultiplier } from '../../shared/chain-rung-value-rules';
-import { chainTierRungs, runChainMeter, runChainTier } from '../../shared/chain-tier-rules';
+import { chainRungApproach, chainTierRungs, runChainMeter, runChainTier } from '../../shared/chain-tier-rules';
 import { isPassAndPlayRun, PASS_AND_PLAY_FLOORS } from '../../shared/pass-and-play-rules';
 
 /**
@@ -191,10 +191,11 @@ const RunShell = ({
     const tier = runChainTier(run);
     const chain = runNonNegativeInteger(run.stats.currentStreak);
     const rungs = chainTierRungs(run.board?.pairCount ?? null);
-    const nextTier = meter.momentum < rungs.clean ? 'clean'
-        : meter.momentum < rungs.sharp ? 'sharp'
-        : meter.momentum < rungs.fever ? 'fever' : null;
-    const nextTierLabel = CHAIN_BEAT_COPY.goalLabel(nextTier ? rungs[nextTier] - meter.momentum : 0, nextTier);
+    // One rule for what the chain is climbing toward, so the ladder, the goal copy and the lean-in
+    // below can never disagree about which rung is next or how far off it is.
+    const approach = chainRungApproach(meter.momentum, run.board?.pairCount ?? null);
+    const nextTier = approach.next;
+    const nextTierLabel = CHAIN_BEAT_COPY.goalLabel(approach.away, nextTier);
     const chainMeterDropping = useChainMeterDrop(meter.momentum, rungs.clean);
     const chainMeterArriving = useChainMeterFeverArrival(meter.full);
     const memorize = useMemorizeCountdown(run);
@@ -260,6 +261,10 @@ const RunShell = ({
             className={styles.rung}
             data-rung={tierName}
             data-rung-reached={tierName === 'none' || meter.momentum >= rungs[tierName] ? 'true' : 'false'}
+            /* The rung being climbed to, and whether it is one pair off. A rung the chain is merely
+               heading for is marked all the way up; only the last step is a moment. */
+            data-rung-next={tierName === nextTier ? 'true' : undefined}
+            data-rung-imminent={tierName === nextTier && approach.imminent ? 'true' : undefined}
             style={{ '--rung-at': position } as CSSProperties}
         >
             <span className={styles.rungTick} />

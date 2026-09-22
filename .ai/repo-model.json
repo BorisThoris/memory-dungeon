@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2677,
     "codeFileCount": 917,
-    "exportedSymbolCount": 2765,
+    "exportedSymbolCount": 2767,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 7001
+    "relationshipCount": 7003
   },
   "inventory": [
     {
@@ -9411,20 +9411,20 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 36805,
-      "sha256": "8e1708c26662f9b78c7e1136114ba69f3c4f868adbf2497457c785289bd65930"
+      "bytes": 38689,
+      "sha256": "3ae1de7bed553665a1ed380d14cd617ac1a6a7359346a5b5c2aa934116ae295d"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 16802,
-      "sha256": "d25c4de40a4f9d39bcf8001e14727409835bd22cf7c1b445aa8bea24731d9642"
+      "bytes": 18950,
+      "sha256": "2410a111bf610f24e529eb853bcad8960a5b9045bfef30aab75122573b3238ed"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 27827,
-      "sha256": "aecfb065dc73552188fb9534dbbcf635b96bb9afd8ea7ca1a623527b14863802"
+      "bytes": 28310,
+      "sha256": "eacdf115663f6444fdc17957a384f6368c9a88f14c03ed097b2b6f117a343de4"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -12027,14 +12027,14 @@
     {
       "path": "src/shared/chain-tier-rules.test.ts",
       "category": "test",
-      "bytes": 2379,
-      "sha256": "247327956251fdd3a0ab23a3938c0e706941f30b187be4a762203059e3fbff87"
+      "bytes": 4890,
+      "sha256": "f219643f390c2bce2eb1d0042d844694dd5a57ded93a6138439d4c4c177574ee"
     },
     {
       "path": "src/shared/chain-tier-rules.ts",
       "category": "source",
-      "bytes": 8873,
-      "sha256": "c3117db84155eeb543aa80ea5797dda1c66abedc60c8e44b0092e8e2eae3963f"
+      "bytes": 10347,
+      "sha256": "7d7efd3d19a5984977b025c511eec14ec133b3af9b00075982af9932a70f4a1c"
     },
     {
       "path": "src/shared/challenge-progression.test.ts",
@@ -19534,7 +19534,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 307,
+      "lineCount": 355,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/shared/contracts.ts",
@@ -19549,7 +19549,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 525,
+      "lineCount": 530,
       "imports": [
         "file:src/renderer/a11y/toolbarRoving.ts",
         "file:src/renderer/copy/chainBeat.ts",
@@ -26778,7 +26778,7 @@
       "path": "src/shared/chain-tier-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 54,
+      "lineCount": 101,
       "imports": [
         "file:src/shared/chain-tier-rules.ts"
       ],
@@ -26790,7 +26790,7 @@
       "path": "src/shared/chain-tier-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 159,
+      "lineCount": 188,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-number-guards.ts"
@@ -26807,6 +26807,8 @@
         "symbol:src/shared/chain-tier-rules.ts#chainMeter",
         "symbol:src/shared/chain-tier-rules.ts#ChainMeter",
         "symbol:src/shared/chain-tier-rules.ts#chainMomentum",
+        "symbol:src/shared/chain-tier-rules.ts#chainRungApproach",
+        "symbol:src/shared/chain-tier-rules.ts#ChainRungApproach",
         "symbol:src/shared/chain-tier-rules.ts#ChainTier",
         "symbol:src/shared/chain-tier-rules.ts#chainTierRungs",
         "symbol:src/shared/chain-tier-rules.ts#getChainTier",
@@ -36584,8 +36586,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 524,
-      "endLine": 524
+      "line": 529,
+      "endLine": 529
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
@@ -44972,6 +44974,22 @@
       "endLine": 93
     },
     {
+      "id": "symbol:src/shared/chain-tier-rules.ts#chainRungApproach",
+      "name": "chainRungApproach",
+      "kind": "value",
+      "file": "src/shared/chain-tier-rules.ts",
+      "line": 171,
+      "endLine": 177
+    },
+    {
+      "id": "symbol:src/shared/chain-tier-rules.ts#ChainRungApproach",
+      "name": "ChainRungApproach",
+      "kind": "interface",
+      "file": "src/shared/chain-tier-rules.ts",
+      "line": 162,
+      "endLine": 169
+    },
+    {
       "id": "symbol:src/shared/chain-tier-rules.ts#ChainTier",
       "name": "ChainTier",
       "kind": "type",
@@ -45000,8 +45018,8 @@
       "name": "nextChainTierAt",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 151,
-      "endLine": 158
+      "line": 180,
+      "endLine": 187
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#runChainMeter",
@@ -57265,7 +57283,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 322
+          "line": 327
         }
       ],
       "tests": [
@@ -57304,7 +57322,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 322
+          "line": 327
         }
       ],
       "tests": [
@@ -57338,7 +57356,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 322
+          "line": 327
         }
       ],
       "tests": [
@@ -57372,7 +57390,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 322
+          "line": 327
         }
       ],
       "tests": [
@@ -67671,6 +67689,18 @@
       "id": "exports:src/shared/chain-tier-rules.ts->symbol:src/shared/chain-tier-rules.ts#chainMomentum",
       "source": "file:src/shared/chain-tier-rules.ts",
       "target": "symbol:src/shared/chain-tier-rules.ts#chainMomentum",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/chain-tier-rules.ts->symbol:src/shared/chain-tier-rules.ts#chainRungApproach",
+      "source": "file:src/shared/chain-tier-rules.ts",
+      "target": "symbol:src/shared/chain-tier-rules.ts#chainRungApproach",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/chain-tier-rules.ts->symbol:src/shared/chain-tier-rules.ts#ChainRungApproach",
+      "source": "file:src/shared/chain-tier-rules.ts",
+      "target": "symbol:src/shared/chain-tier-rules.ts#ChainRungApproach",
       "kind": "exports"
     },
     {
