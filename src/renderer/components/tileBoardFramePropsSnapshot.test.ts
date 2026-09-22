@@ -66,8 +66,6 @@ describe('tileBoardFramePropsSnapshot', () => {
             tile,
             tileFieldParallaxEnabled: true,
             transform,
-            useSvgMeshBack: true,
-            useSvgMeshFront: false
         };
 
         const snapshot = createTileBezelFramePropsSnapshot(input);

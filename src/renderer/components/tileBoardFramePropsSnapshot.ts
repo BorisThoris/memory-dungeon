@@ -34,8 +34,6 @@ export interface TileBezelFramePropsSnapshot {
     textureRevision: number;
     tile: Tile;
     transform: TileTransform;
-    useSvgMeshBack: boolean;
-    useSvgMeshFront: boolean;
     graphicsQuality: GraphicsQualityPreset;
     tileFieldParallaxEnabled: boolean;
     fieldTiltRef: MutableRefObject<TiltVector>;

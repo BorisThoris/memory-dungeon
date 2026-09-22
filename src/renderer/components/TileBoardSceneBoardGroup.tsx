@@ -2,7 +2,6 @@ import type { MutableRefObject, RefObject } from 'react';
 import type { Group, PlaneGeometry, ShaderMaterial } from 'three';
 import type { BoardState, GraphicsQualityPreset } from '../../shared/contracts';
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
-import type { CardBackSvgLayerGeometry, CardFrontSvgLayerGeometry } from './cardSvgPlaneGeometry';
 import { TileBezel, type TileHoverTiltState } from './TileBezel';
 import { noopMeshRaycast } from './tileBoardPick';
 import type { TileBoardRow } from './tileBoardRows';
@@ -35,8 +34,6 @@ interface TileBoardSceneBoardGroupProps {
     onTileHover?: (tileId: string | null) => void;
     reduceMotion: boolean;
     resolvingMatchWaveKey: string | null;
-    sharedCardBackLayers: readonly CardBackSvgLayerGeometry[] | null;
-    sharedCardFrontLayers: readonly CardFrontSvgLayerGeometry[] | null;
     shuffleMotionBudgetMs: number;
     shuffleMotionDeadlineMs: number;
     shuffleStaggerTileCount: number;
@@ -71,8 +68,6 @@ export const TileBoardSceneBoardGroup = ({
     onTileHover,
     reduceMotion,
     resolvingMatchWaveKey,
-    sharedCardBackLayers,
-    sharedCardFrontLayers,
     shuffleMotionBudgetMs,
     shuffleMotionDeadlineMs,
     shuffleStaggerTileCount,
@@ -173,8 +168,6 @@ export const TileBoardSceneBoardGroup = ({
                     board={board}
                     cardGlowAnimated={cardGlowAnimated}
                     cardHeat={cardHeat}
-                    sharedCardBackLayers={sharedCardBackLayers}
-                    sharedCardFrontLayers={sharedCardFrontLayers}
                     textureRevision={textureRevision}
                     tile={tile}
                     transform={transform}

@@ -61,7 +61,6 @@ import {
 import type { TileBezelFrameBag } from './tileBoardFrameBag';
 import { advanceTileBezelFrame } from './tileBoardFrameAdvance';
 import { useSceneEffectTier } from '../hooks/useSceneEffectTier';
-import { useTileBoardSharedCardSvgAssets } from './useTileBoardSharedCardSvgAssets';
 import { getAllCardIllustrationUrls } from '../cardFace/cardIllustrationRegistry';
 import { preloadCardIllustrationImages } from '../cardFace/cardIllustrationImages';
 import { useTileBoardTextureRevision } from './useTileBoardTextureRevision';
@@ -240,10 +239,9 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     useEffect(() => {
         void preloadCardIllustrationImages(getAllCardIllustrationUrls()).catch(() => undefined);
     }, []);
-    // The living card frames cost fourteen meshes a card; only a machine on the full scene tier
-    // takes them (`getSceneEffectTier`), which is the same call the backdrops make.
-    const cardSvgMeshesAffordable = useSceneEffectTier(graphicsQuality, reduceMotion) === 'full';
-    const { sharedCardBackLayers, sharedCardFrontLayers } = useTileBoardSharedCardSvgAssets(cardSvgMeshesAffordable);
+    // The card backs' moving light is the streak's feedback; only a machine on the full scene tier
+    // drives it per frame (`getSceneEffectTier`), which is the same call the backdrops make.
+    const cardGlowAnimated = useSceneEffectTier(graphicsQuality, reduceMotion) === 'full';
 
     const tileStepLegacy = useMemo(() => readTileStepLegacy(), []);
     const hostConsolidatesTileFrames = !tileStepLegacy;
@@ -446,10 +444,8 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
                 onTileHover={onTileHover}
                 reduceMotion={reduceMotion}
                 resolvingMatchWaveKey={resolvingMatchWaveKey}
-                cardGlowAnimated={cardSvgMeshesAffordable}
+                cardGlowAnimated={cardGlowAnimated}
                 cardHeat={cardHeat}
-                sharedCardBackLayers={sharedCardBackLayers}
-                sharedCardFrontLayers={sharedCardFrontLayers}
                 shuffleMotionBudgetMs={shuffleMotionBudgetMs}
                 shuffleMotionDeadlineMs={shuffleMotionDeadlineMs}
                 shuffleStaggerTileCount={shuffleStaggerTileCount}

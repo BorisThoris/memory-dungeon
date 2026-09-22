@@ -9,9 +9,6 @@ import {
 } from 'three';
 
 import { AnimatedCardBackGlow } from './AnimatedCardBackGlow';
-import { AnimatedCardBackSvgLayers } from './AnimatedCardBackSvgLayers';
-import { AnimatedCardFrontSvgLayers } from './AnimatedCardFrontSvgLayers';
-import type { CardBackSvgLayerGeometry, CardFrontSvgLayerGeometry } from './cardSvgPlaneGeometry';
 import type { GameplayRenderQualityProfile } from './gameplayRenderProfile';
 import { noopMeshRaycast } from './tileBoardPick';
 import { CARD_WEAR_Z_SLIVER, type CardWearAssetSet } from './tileBoardCardBend';
@@ -45,16 +42,9 @@ interface TileBoardCardSurfaceProps {
     reduceMotion: boolean;
     renderQuality: GameplayRenderQualityProfile;
     seed: number;
-    sharedCardBackLayers: readonly CardBackSvgLayerGeometry[] | null;
-    sharedCardFrontLayers: readonly CardFrontSvgLayerGeometry[] | null;
     tutorialPairOrdinal: number | null;
-    useSvgMeshBack: boolean;
-    useSvgMeshFront: boolean;
     wearAssets: CardWearAssetSet | null;
 }
-
-/** How far the frame's layers stand off the art plane, so they never z-fight with it. */
-const CARD_FRONT_ART_Z_SLIVER = 0.00022;
 
 export const TileBoardCardSurface = memo(
     ({
@@ -81,71 +71,35 @@ export const TileBoardCardSurface = memo(
         reduceMotion,
         renderQuality,
         seed,
-        sharedCardBackLayers,
-        sharedCardFrontLayers,
         tutorialPairOrdinal,
-        useSvgMeshBack,
-        useSvgMeshFront,
         wearAssets
     }: TileBoardCardSurfaceProps) => (
         <>
-            {useSvgMeshFront && sharedCardFrontLayers ? (
-                <>
-                    <AnimatedCardFrontSvgLayers
-                        artZ={CARD_FRONT_ART_Z_SLIVER}
-                        cardPanelDisplacementMap={cardPanelDisplacementMap}
-                        cardTint={cardTint}
-                        faceZ={faceZ}
-                        frontCardMatRef={frontCardMatRef}
-                        layers={sharedCardFrontLayers}
-                        normalMap={frontNormalMap}
-                        reduceMotion={reduceMotion}
-                        renderQuality={renderQuality}
-                        roughnessMap={frontRoughnessMap}
-                        seed={seed}
-                    />
-                    {/* The illustration stays a raster between the panel and the frame: painted art
-                        is not worth tens of thousands of triangles a card. Lit exactly as it is
-                        without the frame, so turning the frame on does not change the art. */}
-                    <mesh geometry={frontGeometry} position={[0, 0, faceZ]} raycast={noopMeshRaycast} renderOrder={5}>
-                        <meshStandardMaterial
-                            alphaTest={0.06}
-                            color={cardTint}
-                            depthWrite={false}
-                            map={cardFrontArtTexture ?? undefined}
-                            metalness={renderQuality.cardMetalness}
-                            normalMap={frontNormalMap ?? undefined}
-                            normalScale={renderQuality.cardNormalScale}
-                            roughness={renderQuality.cardRoughness}
-                            roughnessMap={frontRoughnessMap ?? undefined}
-                            side={DoubleSide}
-                            toneMapped={false}
-                            transparent
-                        />
-                    </mesh>
-                </>
-            ) : (
-                <mesh geometry={frontGeometry} position={[0, 0, faceZ]} raycast={noopMeshRaycast}>
-                    <meshStandardMaterial
-                        ref={frontCardMatRef}
-                        alphaTest={0.06}
-                        color={cardTint}
-                        depthWrite
-                        displacementBias={-renderQuality.cardDisplacementScale * 0.5}
-                        displacementMap={cardPanelDisplacementMap ?? undefined}
-                        displacementScale={renderQuality.cardDisplacementScale}
-                        map={cardFrontArtTexture ?? undefined}
-                        metalness={renderQuality.cardMetalness}
-                        normalMap={frontNormalMap ?? undefined}
-                        normalScale={renderQuality.cardNormalScale}
-                        roughness={renderQuality.cardRoughness}
-                        roughnessMap={frontRoughnessMap ?? undefined}
-                        side={DoubleSide}
-                        toneMapped={false}
-                        transparent
-                    />
-                </mesh>
-            )}
+            {/*
+             * The face is the painted plate with the per-tile illustration drawn over it
+             * (`getTileFaceOverlayTexture`). It used to be this plus six SVG frame meshes, which
+             * put a third frame on a card that already had two painted ones.
+             */}
+            <mesh geometry={frontGeometry} position={[0, 0, faceZ]} raycast={noopMeshRaycast}>
+                <meshStandardMaterial
+                    ref={frontCardMatRef}
+                    alphaTest={0.06}
+                    color={cardTint}
+                    depthWrite
+                    displacementBias={-renderQuality.cardDisplacementScale * 0.5}
+                    displacementMap={cardPanelDisplacementMap ?? undefined}
+                    displacementScale={renderQuality.cardDisplacementScale}
+                    map={cardFrontArtTexture ?? undefined}
+                    metalness={renderQuality.cardMetalness}
+                    normalMap={frontNormalMap ?? undefined}
+                    normalScale={renderQuality.cardNormalScale}
+                    roughness={renderQuality.cardRoughness}
+                    roughnessMap={frontRoughnessMap ?? undefined}
+                    side={DoubleSide}
+                    toneMapped={false}
+                    transparent
+                />
+            </mesh>
             {wearAssets ? (
                 <mesh
                     geometry={frontGeometry}
@@ -166,41 +120,26 @@ export const TileBoardCardSurface = memo(
                     />
                 </mesh>
             ) : null}
-            {useSvgMeshBack && sharedCardBackLayers ? (
-                <AnimatedCardBackSvgLayers
-                    backCardMatRef={backCardMatRef}
-                    cardPanelDisplacementMap={cardPanelDisplacementMap}
-                    cardTint={cardTint}
-                    faceZ={faceZ}
-                    layers={sharedCardBackLayers}
-                    normalMap={backNormalMap}
-                    reduceMotion={reduceMotion}
-                    renderQuality={renderQuality}
-                    roughnessMap={backRoughnessMap}
-                    seed={seed}
+            <mesh geometry={backGeometry} position={[0, 0, -faceZ]} rotation={[0, Math.PI, 0]} raycast={noopMeshRaycast}>
+                <meshStandardMaterial
+                    ref={backCardMatRef}
+                    alphaTest={0.06}
+                    color={cardTint}
+                    depthWrite
+                    displacementBias={-renderQuality.cardDisplacementScale * 0.5}
+                    displacementMap={cardPanelDisplacementMap ?? undefined}
+                    displacementScale={renderQuality.cardDisplacementScale}
+                    map={cardBackArtTexture ?? undefined}
+                    metalness={renderQuality.cardMetalness}
+                    normalMap={backNormalMap ?? undefined}
+                    normalScale={renderQuality.cardNormalScale}
+                    roughness={renderQuality.cardRoughness}
+                    roughnessMap={backRoughnessMap ?? undefined}
+                    side={DoubleSide}
+                    toneMapped={false}
+                    transparent
                 />
-            ) : (
-                <mesh geometry={backGeometry} position={[0, 0, -faceZ]} rotation={[0, Math.PI, 0]} raycast={noopMeshRaycast}>
-                    <meshStandardMaterial
-                        ref={backCardMatRef}
-                        alphaTest={0.06}
-                        color={cardTint}
-                        depthWrite
-                        displacementBias={-renderQuality.cardDisplacementScale * 0.5}
-                        displacementMap={cardPanelDisplacementMap ?? undefined}
-                        displacementScale={renderQuality.cardDisplacementScale}
-                        map={cardBackArtTexture ?? undefined}
-                        metalness={renderQuality.cardMetalness}
-                        normalMap={backNormalMap ?? undefined}
-                        normalScale={renderQuality.cardNormalScale}
-                        roughness={renderQuality.cardRoughness}
-                        roughnessMap={backRoughnessMap ?? undefined}
-                        side={DoubleSide}
-                        toneMapped={false}
-                        transparent
-                    />
-                </mesh>
-            )}
+            </mesh>
             {/* The back answers the run: its own light rises with the chain and the labyrinth turns. */}
             <group position={[0, 0, -faceZ]} rotation={[0, Math.PI, 0]}>
                 <AnimatedCardBackGlow

@@ -119,8 +119,6 @@ export const advanceTileBezelFrame = (bag: TileBezelFrameBag, state: RootState, 
                 persistent: bag.overlayPersistentRef.current,
                 positions: bag.planeGeometries.overlay.attributes.position as BufferAttribute
             },
-            useSvgMeshBack: p.useSvgMeshBack,
-            useSvgMeshFront: p.useSvgMeshFront
         });
     }
 

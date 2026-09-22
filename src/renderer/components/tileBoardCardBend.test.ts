@@ -747,8 +747,6 @@ describe('tileBoardCardBend', () => {
                 persistent: new Float32Array(overlayBase.length / 3),
                 positions: overlay.attributes.position as BufferAttribute
             },
-            useSvgMeshBack: false,
-            useSvgMeshFront: false
         });
 
         const frontZ = Array.from({ length: frontBase.length / 3 }, (_, index) => {
@@ -773,7 +771,7 @@ describe('tileBoardCardBend', () => {
         overlay.dispose();
     });
 
-    it('skips SVG-backed front and back meshes while still composing overlay bend', () => {
+    it('bends every plane of the card together: front, back and overlay', () => {
         const front = new PlaneGeometry(2, 2, 2, 2);
         const back = new PlaneGeometry(2, 2, 2, 2);
         const overlay = new PlaneGeometry(2, 2, 2, 2);
@@ -803,16 +801,15 @@ describe('tileBoardCardBend', () => {
                 persistent: new Float32Array(overlayBase.length / 3),
                 positions: overlay.attributes.position as BufferAttribute
             },
-            useSvgMeshBack: true,
-            useSvgMeshFront: true
         });
 
         const frontArray = front.attributes.position.array as Float32Array;
         const backArray = back.attributes.position.array as Float32Array;
         const overlayArray = overlay.attributes.position.array as Float32Array;
 
-        expect(Math.max(...Array.from(frontArray).filter((_, index) => index % 3 === 2))).toBe(0);
-        expect(Math.max(...Array.from(backArray).filter((_, index) => index % 3 === 2))).toBe(0);
+        // Both faces are raster planes now, so both take the bend; the card is one object.
+        expect(Math.max(...Array.from(frontArray).filter((_, index) => index % 3 === 2))).toBeGreaterThan(0);
+        expect(Math.max(...Array.from(backArray).filter((_, index) => index % 3 === 2))).toBeGreaterThan(0);
         expect(Math.max(...Array.from(overlayArray).filter((_, index) => index % 3 === 2))).toBeGreaterThan(0);
 
         front.dispose();
@@ -837,8 +834,6 @@ describe('tileBoardCardBend', () => {
             depthScale: 1,
             front: { base, persistent: frontPersistent },
             overlay: { base, persistent: overlayPersistent },
-            useSvgMeshBack: false,
-            useSvgMeshFront: false,
             wear: null
         });
 
@@ -849,7 +844,7 @@ describe('tileBoardCardBend', () => {
         geometry.dispose();
     });
 
-    it('skips persistent front/back stamps for SVG meshes and respects overlay gating', () => {
+    it('stamps the faces persistently and leaves the overlay to its own gate', () => {
         const geometry = new PlaneGeometry(2, 2, 2, 2);
         const base = cloneBasePositions(geometry);
         const frontPersistent = new Float32Array(base.length / 3);
@@ -866,19 +861,18 @@ describe('tileBoardCardBend', () => {
             depthScale: 1,
             front: { base, persistent: frontPersistent },
             overlay: { base, persistent: overlayPersistent },
-            useSvgMeshBack: true,
-            useSvgMeshFront: true,
             wear: null
         });
 
-        expect(Math.max(...frontPersistent)).toBe(0);
-        expect(Math.max(...backPersistent)).toBe(0);
+        expect(Math.max(...frontPersistent)).toBeCloseTo(CARD_BEND_MAX_DEPTH);
+        expect(Math.max(...backPersistent)).toBeCloseTo(CARD_BEND_MAX_DEPTH);
+        // `bendOverlay` is false here: the overlay is the one plane that can opt out.
         expect(Math.max(...overlayPersistent)).toBe(0);
 
         geometry.dispose();
     });
 
-    it('stamps wear textures only for raster-backed faces', () => {
+    it('stamps wear on both faces', () => {
         const geometry = new PlaneGeometry(2, 2, 2, 2);
         const base = cloneBasePositions(geometry);
         const frontPersistent = new Float32Array(base.length / 3);
@@ -924,14 +918,13 @@ describe('tileBoardCardBend', () => {
             depthScale: 1,
             front: { base, persistent: frontPersistent },
             overlay: { base, persistent: overlayPersistent },
-            useSvgMeshBack: false,
-            useSvgMeshFront: true,
             wear
         });
 
-        expect(wear.front.texture.needsUpdate).toBe(false);
+        // Both faces are raster planes, so a bend wears both of them.
+        expect(wear.front.texture.needsUpdate).toBe(true);
         expect(wear.back.texture.needsUpdate).toBe(true);
-        expect(calls.filter((call) => call === 'fillRect')).toHaveLength(1);
+        expect(calls.filter((call) => call === 'fillRect')).toHaveLength(2);
 
         geometry.dispose();
     });

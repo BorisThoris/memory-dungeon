@@ -23,7 +23,6 @@ import type { BoardState, GraphicsQualityPreset, Tile } from '../../shared/contr
 import type { TraitInteractionLaneId } from '../copy/traitInteractionLaneMap';
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
 import type { TileTraitRouteReadabilityIntensity } from './tileBoardReadability';
-import type { CardBackSvgLayerGeometry, CardFrontSvgLayerGeometry } from './cardSvgPlaneGeometry';
 import { createCardArcaneGlowMaterial } from './cardArcaneGlowMaterial';
 import { createMatchedCardRimFireMaterial } from './matchedCardRimFireMaterial';
 import { gameplayRenderQualityProfile } from './gameplayRenderProfile';
@@ -126,8 +125,6 @@ interface TileBezelProps {
     tile: Tile;
     transform: TileTransform;
     graphicsQuality: GraphicsQualityPreset;
-    sharedCardFrontLayers: readonly CardFrontSvgLayerGeometry[] | null;
-    sharedCardBackLayers: readonly CardBackSvgLayerGeometry[] | null;
     memorizeCurseHighlight?: boolean;
     spotlightWardHighlight?: boolean;
     spotlightBountyHighlight?: boolean;
@@ -222,8 +219,6 @@ const TileBezelInner = ({
     textureRevision,
     tile,
     transform,
-    sharedCardFrontLayers,
-    sharedCardBackLayers,
     memorizeCurseHighlight = false,
     spotlightWardHighlight = false,
     spotlightBountyHighlight = false,
@@ -294,8 +289,6 @@ const TileBezelInner = ({
                 : getFocusRoundedRectRingGeometry(),
         [graphicsQuality]
     );
-    const useSvgMeshFront = sharedCardFrontLayers != null;
-    const useSvgMeshBack = sharedCardBackLayers != null;
 
     // Where this tile sits in the chunk-break wave, from the board alone: no event plumbing.
     const breakWaveDelaySec = useMemo(() => getBreakWaveDelaySec(board, tile), [board, tile]);
@@ -334,8 +327,6 @@ const TileBezelInner = ({
         tile,
         tileFieldParallaxEnabled,
         transform,
-        useSvgMeshBack,
-        useSvgMeshFront
     };
     useLayoutEffect(() => {
         propsRef.current = propsSnapshot;
@@ -364,16 +355,12 @@ const TileBezelInner = ({
     const cardPanelDisplacementMap = useMemo(() => getCardPanelDisplacementTexture(), []);
     const frontNormalMapEffective = useMemo(() => {
         void textureRevision;
-        if (useSvgMeshFront) {
-            return cardPanelNormalMap;
-        }
         return getCardFaceRasterNormalMapTexture() ?? cardPanelNormalMap;
-    }, [useSvgMeshFront, cardPanelNormalMap, textureRevision]);
+    }, [cardPanelNormalMap, textureRevision]);
     const backNormalMapEffective = useMemo(() => {
         void textureRevision;
-        void useSvgMeshBack;
         return getCardBackRasterNormalMapTexture() ?? cardPanelNormalMap;
-    }, [useSvgMeshBack, cardPanelNormalMap, textureRevision]);
+    }, [cardPanelNormalMap, textureRevision]);
 
     const frontBaseRef = useRef<Float32Array | null>(null);
     const backBaseRef = useRef<Float32Array | null>(null);
@@ -589,8 +576,6 @@ const TileBezelInner = ({
                 base: overlayBase,
                 persistent: overlayPersistentRef.current
             },
-            useSvgMeshBack,
-            useSvgMeshFront,
             wear: wearAssets
         });
     };
@@ -728,7 +713,7 @@ const TileBezelInner = ({
         return getTileFaceRoughnessTexture(tile, 'back', 'hidden', 'panel');
     }, [textureRevision, tile]);
         const cardTint = initialTileBoardCardTint({ faceUp, isPinned, resolvingSelection, tile });
-    const cardBackArtTexture = useSvgMeshBack ? null : getTileFaceTexture(tile, 'back', 'hidden', 'panel');
+    const cardBackArtTexture = getTileFaceTexture(tile, 'back', 'hidden', 'panel');
     /*
      * The face art is needed either way. With the SVG frame layers on, the panel and the frame are
      * meshes but the art between them is still this raster: nulling it there left the face as bare
@@ -804,11 +789,7 @@ const TileBezelInner = ({
                         reduceMotion={reduceMotion}
                         renderQuality={renderQuality}
                         seed={transform.seed}
-                        sharedCardBackLayers={sharedCardBackLayers}
-                        sharedCardFrontLayers={sharedCardFrontLayers}
                         tutorialPairOrdinal={tutorialPairOrdinal}
-                        useSvgMeshBack={useSvgMeshBack}
-                        useSvgMeshFront={useSvgMeshFront}
                         wearAssets={wearAssets}
                     />
                     {tile.suit ? <SuitMarkerPlane faceZ={faceZ} suit={tile.suit} /> : null}

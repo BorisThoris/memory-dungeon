@@ -160,8 +160,6 @@ interface ApplyLiveCardBendInput {
     liveDepthScale: number;
     liveOverlayDepthScale: number;
     overlay: CardBendPlaneTarget | null;
-    useSvgMeshBack: boolean;
-    useSvgMeshFront: boolean;
 }
 
 interface LiveCardBendStateInput {
@@ -204,8 +202,6 @@ interface CommitPersistentCardBendInput {
     depthScale: number;
     front: CardBendPersistentTarget | null;
     overlay: CardBendPersistentTarget | null;
-    useSvgMeshBack: boolean;
-    useSvgMeshFront: boolean;
     wear: CardWearStampTargets | null;
 }
 
@@ -567,11 +563,9 @@ export const applyLiveCardBend = ({
     front,
     liveDepthScale,
     liveOverlayDepthScale,
-    overlay,
-    useSvgMeshBack,
-    useSvgMeshFront
+    overlay
 }: ApplyLiveCardBendInput): void => {
-    if (front && !useSvgMeshFront) {
+    if (front) {
         composeCardPositions(
             front.positions,
             front.base,
@@ -584,7 +578,7 @@ export const applyLiveCardBend = ({
         );
     }
 
-    if (back && !useSvgMeshBack) {
+    if (back) {
         composeCardPositions(
             back.positions,
             back.base,
@@ -728,15 +722,13 @@ export const commitPersistentCardBend = ({
     depthScale,
     front,
     overlay,
-    useSvgMeshBack,
-    useSvgMeshFront,
     wear
 }: CommitPersistentCardBendInput): void => {
-    if (front && !useSvgMeshFront) {
+    if (front) {
         addPersistentBendStamp(front.persistent, front.base, bendU, bendV, cardWidth, cardHeight, depthScale);
     }
 
-    if (back && !useSvgMeshBack) {
+    if (back) {
         addPersistentBendStamp(back.persistent, back.base, bendU, bendV, cardWidth, cardHeight, depthScale);
     }
 
@@ -748,13 +740,8 @@ export const commitPersistentCardBend = ({
         return;
     }
 
-    if (!useSvgMeshFront) {
-        drawWearStamp(wear.front.context, bendU, bendV, depthScale);
-        wear.front.texture.needsUpdate = true;
-    }
-
-    if (!useSvgMeshBack) {
-        drawWearStamp(wear.back.context, bendU, bendV, depthScale);
-        wear.back.texture.needsUpdate = true;
-    }
+    drawWearStamp(wear.front.context, bendU, bendV, depthScale);
+    wear.front.texture.needsUpdate = true;
+    drawWearStamp(wear.back.context, bendU, bendV, depthScale);
+    wear.back.texture.needsUpdate = true;
 };
