@@ -8469,14 +8469,14 @@
     {
       "path": "src/renderer/audio/audioInteractionCoverage.test.ts",
       "category": "test",
-      "bytes": 9827,
-      "sha256": "9fae40d66e7457f48dec002225dbeb1cccaf18e70dcb6e612b167be4ac02ae80"
+      "bytes": 10041,
+      "sha256": "dc04e848a28e6b729b01c5a63e80f104367725099ae9b527dfb720a0b5121571"
     },
     {
       "path": "src/renderer/audio/audioInteractionCoverage.ts",
       "category": "source",
-      "bytes": 19422,
-      "sha256": "3cf83bd0406d7d1126a96d3fe12daaae1e11fcb15eeaf7b885e1a17376728a00"
+      "bytes": 20405,
+      "sha256": "2bdc0baf671cd706a5cc8a26adbed0241bf806bc39c06d9d6e62875331f25aac"
     },
     {
       "path": "src/renderer/audio/audioManifestBoundary.test.ts",
@@ -8541,14 +8541,14 @@
     {
       "path": "src/renderer/audio/gameSfx.test.ts",
       "category": "test",
-      "bytes": 35739,
-      "sha256": "ed271dfc319da7c88cc4c2bd94d1bf3fba073a22c429af4ab01c0f467a00d19b"
+      "bytes": 37712,
+      "sha256": "8134bf7bdb60550f84c58b954a90d390d65cd660f985691ac724fdee1a8e8cd9"
     },
     {
       "path": "src/renderer/audio/gameSfx.ts",
       "category": "source",
-      "bytes": 25816,
-      "sha256": "34a2ad330298deec09058a60ddf502e12e8b619aae61e45368a3fb96c7d1e2aa"
+      "bytes": 27831,
+      "sha256": "9f878687dd86d40f519f2fbc3328656165b51a9f096f6010c21061bbb0792d57"
     },
     {
       "path": "src/renderer/audio/gameSfxCancellation.test.ts",
@@ -17021,7 +17021,7 @@
       "path": "src/renderer/audio/audioInteractionCoverage.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 179,
+      "lineCount": 180,
       "imports": [
         "file:src/renderer/audio/audioInteractionCoverage.ts"
       ],
@@ -17033,7 +17033,7 @@
       "path": "src/renderer/audio/audioInteractionCoverage.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 396,
+      "lineCount": 408,
       "imports": [
         "file:src/renderer/audio/sampledSfx.ts",
         "file:src/renderer/audio/uiSfx.ts"
@@ -17211,7 +17211,7 @@
       "path": "src/renderer/audio/gameSfx.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 966,
+      "lineCount": 983,
       "imports": [
         "file:src/renderer/assets/audio/sfx/manifest.json",
         "file:src/renderer/audio/audioInteractionCoverage.ts",
@@ -17227,7 +17227,7 @@
       "path": "src/renderer/audio/gameSfx.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 717,
+      "lineCount": 753,
       "imports": [
         "file:src/renderer/audio/audioSafety.ts",
         "file:src/renderer/audio/musicalScale.ts",
@@ -34099,31 +34099,31 @@
       "kind": "value",
       "file": "src/renderer/audio/audioInteractionCoverage.ts",
       "line": 55,
-      "endLine": 380
+      "endLine": 392
     },
     {
       "id": "symbol:src/renderer/audio/audioInteractionCoverage.ts#audioCoverageCueIsGameplaySfx",
       "name": "audioCoverageCueIsGameplaySfx",
       "kind": "value",
       "file": "src/renderer/audio/audioInteractionCoverage.ts",
-      "line": 392,
-      "endLine": 392
+      "line": 404,
+      "endLine": 404
     },
     {
       "id": "symbol:src/renderer/audio/audioInteractionCoverage.ts#audioCoverageCueIsKnown",
       "name": "audioCoverageCueIsKnown",
       "kind": "value",
       "file": "src/renderer/audio/audioInteractionCoverage.ts",
-      "line": 394,
-      "endLine": 395
+      "line": 406,
+      "endLine": 407
     },
     {
       "id": "symbol:src/renderer/audio/audioInteractionCoverage.ts#audioCoverageRowsByDomain",
       "name": "audioCoverageRowsByDomain",
       "kind": "value",
       "file": "src/renderer/audio/audioInteractionCoverage.ts",
-      "line": 389,
-      "endLine": 390
+      "line": 401,
+      "endLine": 402
     },
     {
       "id": "symbol:src/renderer/audio/audioInteractionCoverage.ts#AudioSemanticMoment",
@@ -34282,8 +34282,8 @@
       "name": "playChainOpportunityBeatSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 404,
-      "endLine": 429
+      "line": 436,
+      "endLine": 461
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playFlipSfx",
@@ -34298,8 +34298,8 @@
       "name": "playFloorClearSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 699,
-      "endLine": 716
+      "line": 735,
+      "endLine": 752
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playGambitCommitSfx",
@@ -34314,8 +34314,8 @@
       "name": "playMatchPayoffSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 522,
-      "endLine": 552
+      "line": 554,
+      "endLine": 584
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playMatchSfx",
@@ -34330,40 +34330,40 @@
       "name": "playMismatchRecoveryCrescendoSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 431,
-      "endLine": 455
+      "line": 463,
+      "endLine": 487
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playPeekPowerSfx",
       "name": "playPeekPowerSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 638,
-      "endLine": 650
+      "line": 674,
+      "endLine": 686
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playPowerArmSfx",
       "name": "playPowerArmSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 623,
-      "endLine": 635
+      "line": 659,
+      "endLine": 671
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playResolveSfx",
       "name": "playResolveSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 558,
-      "endLine": 620
+      "line": 590,
+      "endLine": 656
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playShuffleSfx",
       "name": "playShuffleSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 656,
-      "endLine": 694
+      "line": 692,
+      "endLine": 730
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#resumeAudioContext",

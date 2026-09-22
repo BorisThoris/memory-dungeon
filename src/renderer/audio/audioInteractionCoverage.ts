@@ -150,6 +150,18 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
         reducedMotionSafe: true
     },
     {
+        id: 'chain_fever_arrival',
+        domain: 'gameplay',
+        interaction: 'The turn that carries a run to Fever: the meter fills',
+        cue: 'none',
+        callsite: 'applyResolveBoardTurn -> playResolveSfx chain-fever arrival layer',
+        semanticMoment: 'reward',
+        decision: 'procedural_only',
+        cooldownPolicy: 'rising edge only — a run already at Fever never fires it again; match category polyphony cap',
+        mixRole: 'the phrase resolving: a rise under the Fever sting, once per arrival',
+        reducedMotionSafe: true
+    },
+    {
         id: 'chunk_break_ladder',
         domain: 'gameplay',
         interaction: 'A chain breaks a chunk: one rising note per pair, a Fever sting on top, a thud when a warden fell',

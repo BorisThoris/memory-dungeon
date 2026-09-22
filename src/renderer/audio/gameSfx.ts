@@ -368,6 +368,38 @@ const playChunkBreakSfx = (gain: number, pairs: number, tier: ChainTier): void =
     }
 };
 
+/**
+ * Reaching Fever, as opposed to breaking at it.
+ *
+ * The chunk phrase already puts a sting on a Fever break, so once a run was at the top every break
+ * sounded the same and the moment of arriving sounded like none of them in particular. The board,
+ * the room and the ladder all light once when the meter fills; this is that beat in the mix — a
+ * fifth under the sting's own octave, so it reads as the phrase resolving rather than as a
+ * different instrument arriving.
+ */
+const playChainFeverArrivalSfx = (gain: number): void => {
+    scheduleCue(() => {
+        playTone({
+            frequency: 440,
+            frequencyEnd: 880,
+            durationSec: 0.58,
+            gain: gain * 0.4,
+            type: 'sine',
+            category: 'match'
+        });
+    }, 30);
+    scheduleCue(() => {
+        playTone({
+            frequency: 1320,
+            frequencyEnd: 1980,
+            durationSec: 0.3,
+            gain: gain * 0.22,
+            type: 'triangle',
+            category: 'match'
+        });
+    }, 150);
+};
+
 const playTraitMismatchSurgeSfx = (gain: number, traitMismatchCount: number): void => {
     playTone({
         frequency: 640 + Math.min(traitMismatchCount, 4) * 70,
@@ -570,6 +602,10 @@ export const playResolveSfx = (before: RunState, after: RunState, gain: number):
         const chunkPairs = (after.chunkPairsBrokenThisFloor ?? 0) - (before.chunkPairsBrokenThisFloor ?? 0);
         if (chunkPairs > 0) {
             playChunkBreakSfx(gain, chunkPairs, runChainTier(after));
+        }
+        // The turn that carried the run to the top of the meter, and only that turn.
+        if (runChainTier(after) === 'fever' && runChainTier(before) !== 'fever') {
+            playChainFeverArrivalSfx(gain);
         }
         if ((after.findablesClaimedThisFloor ?? 0) > (before.findablesClaimedThisFloor ?? 0)) {
             playTone({

@@ -140,7 +140,7 @@ describe('gameSfx', () => {
         expect(stops.length).toBeGreaterThanOrEqual(1);
     });
 
-    it('plays the shatter phrase capped at nine notes and a sting at Fever', () => {
+    it('plays the shatter phrase capped at nine notes, a sting at Fever, and the arrival once', () => {
         vi.useFakeTimers();
         try {
             const createOscillator = vi.fn(() => {
@@ -183,11 +183,28 @@ describe('gameSfx', () => {
                 chunkPairsThisChain: 12,
                 board
             } as unknown as RunState;
+            // Twelve pairs put Fever at momentum 8, so this turn crosses into it: 7 -> 20.
             playResolveSfx(before, after, gain);
             const beforePhrase = createOscillator.mock.calls.length;
             vi.advanceTimersByTime(2_000);
-            // Nine notes for twelve pairs and one Fever sting, on top of the match itself.
-            expect(createOscillator.mock.calls.length - beforePhrase).toBe(CHUNK_BREAK_MAX_NOTES + 1);
+            // Nine notes for twelve pairs, one Fever sting, and the two-tone arrival, on top of the
+            // match itself.
+            expect(createOscillator.mock.calls.length - beforePhrase).toBe(CHUNK_BREAK_MAX_NOTES + 3);
+
+            // A second break with the run already at Fever is a sting without an arrival: the
+            // moment of reaching the top is not every moment spent there.
+            const deeper = {
+                stats: { matchesFound: 3, tries: 3, currentStreak: 9 },
+                chunkPairsBrokenThisFloor: 24,
+                chunkPairsThisChain: 24,
+                board
+            } as unknown as RunState;
+            playResolveSfx(after, deeper, gain);
+            // Snapshot after the call, as above: the match's own tones fire immediately and it is
+            // the scheduled phrase that is being counted.
+            const beforeSecond = createOscillator.mock.calls.length;
+            vi.advanceTimersByTime(2_000);
+            expect(createOscillator.mock.calls.length - beforeSecond).toBe(CHUNK_BREAK_MAX_NOTES + 1);
         } finally {
             vi.useRealTimers();
         }

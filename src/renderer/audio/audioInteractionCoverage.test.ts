@@ -22,6 +22,7 @@ describe('REG-037 audio interaction coverage', () => {
             'trait_route_cashout',
             'chain_milestone_hit',
             'resolved_cascade_accent',
+            'chain_fever_arrival',
             'chunk_break_ladder',
             'stacked_reward_setup',
             'stacked_reward_burst',
