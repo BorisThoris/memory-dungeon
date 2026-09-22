@@ -168,7 +168,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                 width={width}
             />
             <div aria-hidden="true" className={styles.sceneLayer}>
-                <CathedralScene quality={settings.graphicsQuality} reduceMotion={settings.reduceMotion} />
+                <CathedralScene mood="ended" quality={settings.graphicsQuality} reduceMotion={settings.reduceMotion} />
             </div>
             <div className={styles.scrim} />
 

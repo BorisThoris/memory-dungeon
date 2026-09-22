@@ -34,6 +34,16 @@ describe('CathedralScene', () => {
         }
     });
 
+    it('mourns at the run end: the mood is on the scene for the stylesheet to sink the candlelight', () => {
+        const { unmount } = render(<CathedralScene quality="high" reduceMotion={false} />);
+        expect(screen.getByTestId('cathedral-scene')).toHaveAttribute('data-mood', 'menu');
+        unmount();
+        render(<CathedralScene mood="ended" quality="high" reduceMotion={false} />);
+        expect(screen.getByTestId('cathedral-scene')).toHaveAttribute('data-mood', 'ended');
+        // The candles still burn: the end of a run is quiet, not dark.
+        expect(screen.getByTestId('scene-sprites').querySelectorAll('[data-sprite-id]').length).toBeGreaterThan(20);
+    });
+
     it('holds still under reduce motion and drops the drift on low quality', () => {
         const { unmount } = render(<CathedralScene quality="high" reduceMotion />);
         expect(screen.getByTestId('cathedral-scene')).toHaveAttribute('data-still', 'true');

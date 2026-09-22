@@ -23,18 +23,24 @@ import styles from './CathedralScene.module.css';
  *
  * The parent owns the mask, the filter and how far the whole scene sinks into the page; the base
  * alone reads `--scene-base-opacity` and the lights `--scene-light-opacity`, so the candles can
- * burn brighter than the nave they light. `getSceneEffectTier` decides the rest: `full` on a
+ * burn brighter than the nave they light. At the run's end (`mood="ended"`) the candlelight
+ * sinks and the spirit-light takes the nave. `getSceneEffectTier` decides the rest: `full` on a
  * desktop, `lean` on a phone or at `low` (the flames and the lights only, no drift, no echo, no
  * motes), `still` under reduce motion.
  */
 export interface CathedralSceneProps {
     quality: GraphicsQualityPreset;
     reduceMotion: boolean;
+    /**
+     * `ended` is the run's end: the candlelight sinks and the spirit-light takes the nave, the
+     * candles burning low over their stands. Default `menu`.
+     */
+    mood?: 'menu' | 'ended';
 }
 
 const bg = (url: string) => ({ backgroundImage: `url(${url})` });
 
-export function CathedralScene({ quality, reduceMotion }: CathedralSceneProps) {
+export function CathedralScene({ mood = 'menu', quality, reduceMotion }: CathedralSceneProps) {
     const sceneRef = useRef<HTMLDivElement>(null);
     const tier = useSceneEffectTier(quality, reduceMotion);
     const still = tier === 'still';
@@ -46,6 +52,7 @@ export function CathedralScene({ quality, reduceMotion }: CathedralSceneProps) {
             aria-hidden="true"
             className={`${plate.scene} ${styles.scene}`}
             data-alive={alive ? 'true' : 'false'}
+            data-mood={mood}
             data-scene-effect-tier={tier}
             data-still={still ? 'true' : 'false'}
             data-testid="cathedral-scene"

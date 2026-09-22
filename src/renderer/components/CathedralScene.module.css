@@ -15,6 +15,24 @@
     opacity: var(--scene-light-opacity, 1);
 }
 
+/* The run's end: the candlelight sinks to half and the wisps rise past full, the whole nave
+   easing there over a few seconds as the screen settles. */
+.scene[data-mood='ended'] .candleGlow {
+    opacity: calc(var(--scene-light-opacity, 1) * 0.5);
+    animation: none;
+    transition: opacity 3s ease;
+}
+
+.scene[data-mood='ended'] .wisps {
+    opacity: calc(var(--scene-light-opacity, 1) * 1.25);
+    animation: none;
+    transition: opacity 3s ease;
+}
+
+.scene[data-mood='ended'] .things {
+    opacity: calc(var(--scene-light-opacity, 1) * 0.7);
+}
+
 /* Candlelight on the stone: a slow, stepped flicker, the sum of many small flames. */
 .candleGlow {
     animation: cathedralCandlelight 4.1s steps(1, end) infinite;

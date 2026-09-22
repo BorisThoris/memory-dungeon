@@ -4,6 +4,8 @@
  * and the motes it throws up rise from nothing at rest to a full drift at Fever. The torches are
  * not here on purpose — they always burn.
  */
+import type { ChainTier } from '../../shared/chain-tier-rules';
+
 export interface SceneRingLevels {
     /** Opacity of the ring's floor light pass. */
     light: number;
@@ -36,3 +38,22 @@ export const sceneRingLevels = (fill: number): SceneRingLevels => {
 };
 
 const round = (value: number): number => Math.round(value * 1000) / 1000;
+
+/**
+ * How hard the torches flare on a break: the pop (a match with no chain behind it) barely stirs
+ * them, Fever throws them up the wall. Peak opacity of the transient torch-glow layer.
+ */
+export const sceneTorchFlarePeak = (pulse: ChainTier | 'pop' | 'none'): number => {
+    switch (pulse) {
+        case 'pop':
+            return 0.22;
+        case 'clean':
+            return 0.38;
+        case 'sharp':
+            return 0.55;
+        case 'fever':
+            return 0.85;
+        default:
+            return 0;
+    }
+};

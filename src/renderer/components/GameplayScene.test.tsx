@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { GameplayScene, type GameplaySceneProps } from './GameplayScene';
-import { sceneRingLevels } from './gameplaySceneLevels';
+import { sceneRingLevels, sceneTorchFlarePeak } from './gameplaySceneLevels';
 
 const base: GameplaySceneProps = {
     fill: 0,
@@ -77,12 +77,36 @@ describe('GameplayScene', () => {
     it('flashes the floor on a break and restarts for a second break of the same tier', () => {
         const { rerender } = render(<GameplayScene {...base} pulse="none" />);
         expect(screen.queryByTestId('gameplay-scene-pulse')).toBeNull();
+        expect(screen.queryByTestId('gameplay-scene-flare')).toBeNull();
         rerender(<GameplayScene {...base} pulse="clean" pulseKey="turn-1" />);
         const first = screen.getByTestId('gameplay-scene-pulse');
+        const firstFlare = screen.getByTestId('gameplay-scene-flare');
         rerender(<GameplayScene {...base} pulse="clean" pulseKey="turn-2" />);
         const second = screen.getByTestId('gameplay-scene-pulse');
         expect(second).not.toBe(first);
+        expect(screen.getByTestId('gameplay-scene-flare')).not.toBe(firstFlare);
         expect(screen.getByTestId('gameplay-scene')).toHaveAttribute('data-scene-pulse', 'clean');
+    });
+
+    it('flares the torches on a break, harder up the tiers, and never under reduce motion', () => {
+        expect(sceneTorchFlarePeak('none')).toBe(0);
+        expect(sceneTorchFlarePeak('pop')).toBeLessThan(sceneTorchFlarePeak('clean'));
+        expect(sceneTorchFlarePeak('clean')).toBeLessThan(sceneTorchFlarePeak('sharp'));
+        expect(sceneTorchFlarePeak('sharp')).toBeLessThan(sceneTorchFlarePeak('fever'));
+        const { unmount } = render(<GameplayScene {...base} pulse="fever" pulseKey="t" tier="fever" />);
+        const style = screen.getByTestId('gameplay-scene').getAttribute('style') ?? '';
+        expect(style).toContain(`--scene-flare-peak: ${sceneTorchFlarePeak('fever')}`);
+        expect(screen.getByTestId('gameplay-scene-flare')).toBeInTheDocument();
+        unmount();
+        render(<GameplayScene {...base} pulse="fever" pulseKey="t" tier="fever" reduceMotion />);
+        expect(screen.queryByTestId('gameplay-scene-flare')).toBeNull();
+    });
+
+    it('exhales when the floor is cleared', () => {
+        const { rerender } = render(<GameplayScene {...base} />);
+        expect(screen.getByTestId('gameplay-scene')).toHaveAttribute('data-cleared', 'false');
+        rerender(<GameplayScene {...base} cleared />);
+        expect(screen.getByTestId('gameplay-scene')).toHaveAttribute('data-cleared', 'true');
     });
 
     it('drops the rendered light passes on low quality and keeps the glows', () => {
@@ -90,9 +114,9 @@ describe('GameplayScene', () => {
         const full = layerCount();
         unmount();
         render(<GameplayScene {...base} quality="low" pulse="pop" pulseKey="t" />);
-        // base + three glows; the three light passes and the pulse are gone.
-        expect(layerCount()).toBe(4);
-        expect(full).toBe(8);
+        // base + three glows + the flare; the three light passes and the pulse are gone.
+        expect(layerCount()).toBe(5);
+        expect(full).toBe(9);
         expect(screen.queryByTestId('gameplay-scene-pulse')).toBeNull();
     });
 

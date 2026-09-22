@@ -64,9 +64,13 @@ chain meter's *fill* continuously (`gameplaySceneLevels.ts`: light, glow, hue to
 saturation and the break-flash peak all ease up from chain 0 to Fever), breathes during memorize,
 and its floor light flashes on a break (remounted per event so two breaks in a row both flash);
 the torches always burn, their flames as sprites and their painted light flickering on two stepped
-clocks, whatever the run is doing; mist drifts in the corridor. `CathedralScene.tsx` (main menu,
-game over) flickers the candlelight, breathes and drifts the wisps, and plays the 29 candle
-flames; its parent sinks the base further than the lights (`--scene-base-opacity`,
+clocks, whatever the run is doing, but they flare with a break (the pop barely, Fever up the
+wall: `sceneTorchFlarePeak`); a cleared floor is the room exhaling (the ring swells and settles,
+the torches gutter and recover); the ring throws up motes as the chain climbs; mist drifts in the
+corridor. `CathedralScene.tsx` (main menu,
+game over) flickers the candlelight, breathes and drifts the wisps, climbs the arch with motes
+and plays the 29 candle flames; at the run's end (`mood="ended"`) the candlelight sinks and the
+spirit-light takes the nave; its parent sinks the base further than the lights (`--scene-base-opacity`,
 `--scene-light-opacity`). `PortalScene.tsx` (Choose Your Path, when the recommended run's poster
 is the Classic clearing) breathes the runes, pulses the moon, twinkles the stars on two stepped
 clocks, spins the vortex disc in the arch (its feathered rim dissolving into the painted outer

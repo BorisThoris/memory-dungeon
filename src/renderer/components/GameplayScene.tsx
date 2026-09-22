@@ -5,7 +5,7 @@ import { UI_ART } from '../assets/ui';
 import { SCENE_SPRITES } from '../assets/ui/sprites';
 import { useSceneEffectTier } from '../hooks/useSceneEffectTier';
 import { useSceneLook } from '../hooks/useSceneLook';
-import { sceneRingLevels } from './gameplaySceneLevels';
+import { sceneRingLevels, sceneTorchFlarePeak } from './gameplaySceneLevels';
 import { SceneMotes } from './SceneMotes';
 import { SceneSprites } from './SceneSprites';
 import { ringMotes } from './sceneSpriteClocks';
@@ -26,7 +26,10 @@ import styles from './GameplayScene.module.css';
  *     rise from nothing at rest to a full drift at Fever, and breathing while the board is
  *     memorised;
  *   - a break flashes the ring's floor light, harder the further the chain has come (the pulse
- *     remounts on every event, so two breaks in a row each get their flash);
+ *     remounts on every event, so two breaks in a row each get their flash), and the torches
+ *     flare with it, the pop barely stirring them and Fever throwing them up the wall;
+ *   - a cleared floor is the room exhaling: the ring swells bright and settles over a long
+ *     breath while the torches gutter and recover;
  *   - the torches always burn: their flames are cut out of the painting and play as flipbook
  *     sprites (`SceneSprites`), each on its own clock, with sparks rising off them, while the
  *     painted torchlight on the stone flickers under them; they do not care how the run is going;
@@ -48,6 +51,8 @@ export interface GameplaySceneProps {
     pulse: ChainTier | 'pop' | 'none';
     /** Identity of the event behind `pulse`, so a second break of the same tier restarts the flash. */
     pulseKey: string | null;
+    /** The floor has just been cleared: the room exhales. */
+    cleared?: boolean;
     quality: GraphicsQualityPreset;
     reduceMotion: boolean;
     tier: ChainTier;
@@ -55,7 +60,7 @@ export interface GameplaySceneProps {
 
 const bg = (url: string) => ({ backgroundImage: `url(${url})` });
 
-export function GameplayScene({ fill, memorize, pulse, pulseKey, quality, reduceMotion, tier }: GameplaySceneProps) {
+export function GameplayScene({ cleared = false, fill, memorize, pulse, pulseKey, quality, reduceMotion, tier }: GameplaySceneProps) {
     const sceneRef = useRef<HTMLDivElement>(null);
     const ring = sceneRingLevels(fill);
     const effectTier = useSceneEffectTier(quality, reduceMotion);
@@ -69,6 +74,7 @@ export function GameplayScene({ fill, memorize, pulse, pulseKey, quality, reduce
             aria-hidden="true"
             className={`${plate.scene} ${styles.scene}`}
             data-alive={alive ? 'true' : 'false'}
+            data-cleared={cleared ? 'true' : 'false'}
             data-scene-effect-tier={effectTier}
             data-memorize={memorize ? 'true' : 'false'}
             data-scene-pulse={pulse}
@@ -84,6 +90,7 @@ export function GameplayScene({ fill, memorize, pulse, pulseKey, quality, reduce
                     '--scene-ring-hue': `${ring.hueDeg}deg`,
                     '--scene-ring-saturate': ring.saturate,
                     '--scene-pulse-peak': ring.pulsePeak,
+                    '--scene-flare-peak': sceneTorchFlarePeak(pulse),
                     '--scene-motes-opacity': ring.motes,
                     '--scene-plate-aspect': `${flames.plate[0]} / ${flames.plate[1]}`
                 } as CSSProperties
@@ -107,6 +114,14 @@ export function GameplayScene({ fill, memorize, pulse, pulseKey, quality, reduce
                     </>
                 ) : null}
                 <div className={`${plate.layer} ${styles.layer} ${styles.torchGlow}`} style={bg(UI_ART.gameplaySceneGlowTorches)} />
+                {pulse !== 'none' && !still ? (
+                    <div
+                        className={`${plate.layer} ${styles.layer} ${styles.torchFlare}`}
+                        data-testid="gameplay-scene-flare"
+                        key={pulseKey ?? pulse}
+                        style={bg(UI_ART.gameplaySceneGlowTorches)}
+                    />
+                ) : null}
                 <div className={`${plate.layer} ${styles.layer} ${styles.runeGlow}`} style={bg(UI_ART.gameplaySceneGlowRunes)} />
                 <div className={`${plate.layer} ${styles.layer} ${styles.ringGlow}`} style={bg(UI_ART.gameplaySceneGlowRing)} />
                 {alive ? (

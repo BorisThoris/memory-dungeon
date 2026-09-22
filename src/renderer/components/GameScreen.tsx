@@ -1410,6 +1410,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             />
             <div aria-hidden="true" className={styles.stageBackdrop}>
                 <GameplayScene
+                    cleared={run.status === 'levelComplete'}
                     fill={runChainMeter(run).fill}
                     memorize={run.status === 'memorize'}
                     pulse={breakPulseTier}
