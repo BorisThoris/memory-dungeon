@@ -13,7 +13,11 @@
  * - renderer-only builds must use the local browser fallback client when Electron,
  *   Steam, and desktop save APIs are absent.
  *
- * Exit 1 for broken renderer audio manifests; orphaned assets are informational
+ * Reports two kinds of stranded art: files no search hit at all, and files every hit of which is a
+ * comment or a doc — the second kind is how finished art ships unseen, because a substring search
+ * counts the comment that describes a plate as a reference to it.
+ *
+ * Exit 1 for broken renderer audio manifests; stranded art is informational
  * (manual triage before delete).
  */
 import fs from 'node:fs';
@@ -36,7 +40,10 @@ const isRuntimeSourceMasterAsset = (rel) =>
     (rel.startsWith('src/renderer/assets/ui/backgrounds/') && rel.toLowerCase().endsWith('.png')) ||
     (rel.startsWith('src/renderer/assets/ui/sprites/') && rel.toLowerCase().endsWith('.png')) ||
     rel === 'src/renderer/assets/textures/cards/back-normal.png' ||
-    rel === 'src/renderer/assets/textures/cards/front-normal.png';
+    rel === 'src/renderer/assets/textures/cards/front-normal.png' ||
+    // The painted card plates: the WebP beside each one is what the game loads.
+    rel === 'src/renderer/assets/textures/cards/front-face.png' ||
+    rel === 'src/renderer/assets/textures/cards/reference-back.png';
 const TEXT_EXTS = new Set([
     '.ts',
     '.tsx',
@@ -216,6 +223,46 @@ auditRendererAudioManifestFiles({
 });
 
 const orphans = [];
+const talkedAboutOnly = [];
+
+/**
+ * Whether a file reaches this asset at runtime, rather than only mentioning it.
+ *
+ * A basename in a comment, a doc or a pipeline script is a *mention*: it explains the art, it does
+ * not load it. Three pieces of finished art shipped in this repo unseen behind exactly that —
+ * eighty painted card panels and both painted card plates were named in comments while the code
+ * loaded placeholders — and a substring search called every one of them referenced.
+ *
+ * A reference is an import, a URL string or a manifest entry: the basename inside quotes, or on an
+ * import line. Anything else is a mention, and a file that is only ever mentioned is art nobody
+ * can see.
+ */
+const referencesAsset = (text, basename) => {
+    const escaped = basename.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
+    const quoted = new RegExp(`['\`"][^'\`"\n]*${escaped}`, 'u');
+    for (const rawLine of text.split('\n')) {
+        if (!rawLine.includes(basename)) {
+            continue;
+        }
+        const line = rawLine.trim();
+        // A line that is only a comment can never load anything.
+        if (line.startsWith('*') || line.startsWith('//') || line.startsWith('<!--')) {
+            continue;
+        }
+        if (quoted.test(rawLine) || /^\s*import\s/u.test(rawLine)) {
+            return true;
+        }
+    }
+    return false;
+};
+
+const readSearchFile = (rel) => {
+    try {
+        return fs.readFileSync(path.join(root, rel), 'utf8');
+    } catch {
+        return '';
+    }
+};
 
 for (const assetAbs of allAssetPaths) {
     const basename = path.basename(assetAbs);
@@ -230,6 +277,15 @@ for (const assetAbs of allAssetPaths) {
 
     if (externalHits.length === 0) {
         orphans.push({ path: selfRel, basename });
+        continue;
+    }
+
+    // Markdown is documentation by definition; a `.md` hit is always a mention.
+    const loaders = externalHits.filter(
+        (hit) => !hit.toLowerCase().endsWith('.md') && referencesAsset(readSearchFile(hit), basename)
+    );
+    if (loaders.length === 0) {
+        talkedAboutOnly.push({ path: selfRel, mentionedBy: externalHits.slice(0, 3) });
     }
 }
 
@@ -252,6 +308,16 @@ if (duplicateGroups.length > 0) {
     for (const group of duplicateGroups) {
         console.log(`  ${group.join('\n  ')}\n`);
     }
+}
+
+if (talkedAboutOnly.length > 0) {
+    console.log(
+        `Art that is only talked about (${talkedAboutOnly.length}) — every hit is a comment or a doc, so nothing loads it:\n`
+    );
+    for (const { path: p, mentionedBy } of talkedAboutOnly.sort((a, b) => a.path.localeCompare(b.path))) {
+        console.log(`  ${p}\n      mentioned by: ${mentionedBy.join(', ')}`);
+    }
+    console.log('');
 }
 
 if (orphans.length === 0) {
