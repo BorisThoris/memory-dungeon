@@ -28,6 +28,11 @@ export const UI_ART = {
     menuSceneGlowCandles: resolveUiBackgroundUrl('bg-main-menu-cathedral-v2-glow-candles.webp', ''),
     menuSceneGlowWisps: resolveUiBackgroundUrl('bg-main-menu-cathedral-v2-glow-wisps.webp', ''),
     menuSeal: menuSealUrl,
+    /** The portal clearing (the Classic poster) as a living scene (`PortalScene`, behind Choose Your Path), from `scripts/scene-pipeline/portal.sh`. */
+    portalSceneBase: resolveUiBackgroundUrl('bg-mode-classic-v2-base.webp'),
+    portalSceneGlowMoon: resolveUiBackgroundUrl('bg-mode-classic-v2-glow-moon.webp', ''),
+    portalSceneGlowRunes: resolveUiBackgroundUrl('bg-mode-classic-v2-glow-runes.webp', ''),
+    portalSceneStars: resolveUiBackgroundUrl('bg-mode-classic-v2-stars.webp', ''),
     stageRing: stageRingUrl
 } as const;
 
@@ -53,6 +58,10 @@ export const UI_ART_KEYS = [
     'menuSceneGlowCandles',
     'menuSceneGlowWisps',
     'menuSeal',
+    'portalSceneBase',
+    'portalSceneGlowMoon',
+    'portalSceneGlowRunes',
+    'portalSceneStars',
     'stageRing'
 ] as const satisfies readonly UiArtKey[];
 

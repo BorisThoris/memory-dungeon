@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2650,
-    "codeFileCount": 911,
-    "exportedSymbolCount": 2738,
+    "trackedFileCount": 2668,
+    "codeFileCount": 915,
+    "exportedSymbolCount": 2743,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6945
+    "relationshipCount": 6961
   },
   "inventory": [
     {
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "a6b18caa05e72c9e8c73c5880eacc031867076e155b3df26d4160e83868c0f9d"
+      "sha256": "b8b9962267f0e5085c1fb00a4d4c345f61bc91075f9769b7e0269bc8359a61a4"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4101,8 +4101,8 @@
     {
       "path": "e2e/visualScenarioSteps.ts",
       "category": "test",
-      "bytes": 11120,
-      "sha256": "e13dc89de0e17a86637889a0af02445d27fa243977e2061657c28fa94d4a7742"
+      "bytes": 11638,
+      "sha256": "30497750d2b532155b52fc5f48ae6c6f7f657285eac1ae6f3ad71d5883f1ee8c"
     },
     {
       "path": "e2e/visualScreenHelpers.ts",
@@ -5293,6 +5293,12 @@
       "sha256": "2efc4715ca0e289a1637a9aadc1ea9eeb8bcea1b5e46116bc72b467014363d56"
     },
     {
+      "path": "scripts/scene-pipeline/cut_disc.py",
+      "category": "script",
+      "bytes": 2879,
+      "sha256": "28795154d1fe3b4fcff74fb2fbe063729423fc4264ee05a70226aba43e8f6a9e"
+    },
+    {
       "path": "scripts/scene-pipeline/cut_sprites.py",
       "category": "script",
       "bytes": 14541,
@@ -5305,10 +5311,16 @@
       "sha256": "501fe06c4cbd6026f2c33e483e9b363a2efb96f8c3b67e52ec85b3ade5aa7f57"
     },
     {
+      "path": "scripts/scene-pipeline/portal.sh",
+      "category": "script",
+      "bytes": 1941,
+      "sha256": "bbf075bc715b8eab4d5de4cea465725c8298f3af3ababe8d9beb9f8582b5b3d3"
+    },
+    {
       "path": "scripts/scene-pipeline/README.md",
       "category": "script",
-      "bytes": 5816,
-      "sha256": "48d9a8c37d5461268238c9e65fc4a9936f4b3ee9ef231db67f0b668991ff870b"
+      "bytes": 6626,
+      "sha256": "d47d9a54b2160562c95aeef991fff953c422cbfe5e7808363d623052b2509765"
     },
     {
       "path": "scripts/scene-pipeline/scene.sh",
@@ -5321,6 +5333,12 @@
       "category": "script",
       "bytes": 3447,
       "sha256": "de2b74a5a2705f28b5bb879d8bca517f1c3ecdd681e739b292dd270bc775f19e"
+    },
+    {
+      "path": "scripts/scene-pipeline/segment_portal.py",
+      "category": "script",
+      "bytes": 4264,
+      "sha256": "7458c21f9d9e5efcbdd0e2955858b2828b08d48081a76cbe189eda1434aa2d23"
     },
     {
       "path": "scripts/scene-pipeline/segment_scene.py",
@@ -7305,8 +7323,8 @@
     {
       "path": "src/renderer/assets/preloadStartupAssets.test.ts",
       "category": "test",
-      "bytes": 13308,
-      "sha256": "8ebad83a497dd45d8bb2ccef826987cfed45edce228e470cc50aee68aedf3d6a"
+      "bytes": 13295,
+      "sha256": "6ad93ead7bdc3f28eef7ca9c8e16861bcb2fea4c403d351ef1de515d24ad7457"
     },
     {
       "path": "src/renderer/assets/preloadStartupAssets.ts",
@@ -7603,6 +7621,54 @@
       "sha256": "122afba5357bf0248800642c672ab5003bf3d9c359fd39a82ecca79fab0692e4"
     },
     {
+      "path": "src/renderer/assets/ui/backgrounds/bg-mode-classic-v2-base.png",
+      "category": "source",
+      "bytes": 1957509,
+      "sha256": "be8b0b61450a5e14095b70d6754fd217e0a5c4d7cd46bc11f967ec285fcce647"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-mode-classic-v2-base.webp",
+      "category": "source",
+      "bytes": 207694,
+      "sha256": "d9b94acde5b34ea276fa8bc864cb232bd19fd31ce8ccbcd5297b06c6c00d85cc"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-mode-classic-v2-glow-moon.png",
+      "category": "source",
+      "bytes": 2266883,
+      "sha256": "9f772f7f43a755cafc04d9ccf74848f16148407ac9412d47262663d7e1dd96df"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-mode-classic-v2-glow-moon.webp",
+      "category": "source",
+      "bytes": 30244,
+      "sha256": "dad012e0b0ed71ffa4d19eb2de3b738415b385964689983e913f86da430b3671"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-mode-classic-v2-glow-runes.png",
+      "category": "source",
+      "bytes": 2473317,
+      "sha256": "4e52b9c73016284ebd27e2f6f89a6e54415993bf413138b2d636a639533e8a65"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-mode-classic-v2-glow-runes.webp",
+      "category": "source",
+      "bytes": 233432,
+      "sha256": "c43ecb098e08d3ec4a9136ad6c3b7b6319adf112e0a25efce55a1e8df5d4cc8d"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-mode-classic-v2-stars.png",
+      "category": "source",
+      "bytes": 2373287,
+      "sha256": "e4ec9c497f6a2689c3dc7d082548735ff30fb06489d356e802369b8c771790e3"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-mode-classic-v2-stars.webp",
+      "category": "source",
+      "bytes": 53104,
+      "sha256": "9dbcf6198b008f9b8a2fa90068e20943094da127a1800bb1327e743aa4448f99"
+    },
+    {
       "path": "src/renderer/assets/ui/backgrounds/bg-mode-daily-v1.png",
       "category": "source",
       "bytes": 2065921,
@@ -7857,8 +7923,8 @@
     {
       "path": "src/renderer/assets/ui/index.ts",
       "category": "source",
-      "bytes": 3258,
-      "sha256": "a2ebd5e304f70d1bf46fd8cef7df8c4f94d4109b6685d10a380450549d7b699a"
+      "bytes": 3864,
+      "sha256": "9a6ddf60651536ac81a2003f58ddb3db81907466fb1038c42e81c70bae0810c5"
     },
     {
       "path": "src/renderer/assets/ui/menu-emblem.svg",
@@ -8317,10 +8383,28 @@
       "sha256": "9ec3f6cd77a5da897dc5e4f36155ab827e0bb8eb9f1da5656f6395adbe72f7aa"
     },
     {
+      "path": "src/renderer/assets/ui/sprites/bg-mode-classic-v2-sprite-vortex.png",
+      "category": "source",
+      "bytes": 91868,
+      "sha256": "9cddf3c9a361cede393451c84e302e81f5f11b80194a1b70b7c006a2cb30bfc3"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-mode-classic-v2-sprite-vortex.webp",
+      "category": "source",
+      "bytes": 11990,
+      "sha256": "79c79eb50063e29dba08365a9aea770d9585a102e526000beb547a97070deda5"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-mode-classic-v2-sprites.json",
+      "category": "source",
+      "bytes": 296,
+      "sha256": "f8eb43217d0ff6d3fb7dbb9006766c2fe1a838ac5caadf1eb64e804817386c08"
+    },
+    {
       "path": "src/renderer/assets/ui/sprites/index.ts",
       "category": "source",
-      "bytes": 2282,
-      "sha256": "8e7caa28ba6aadc59f6b3139d268928379021415e17cd5e3cadfbda18a19e2cb"
+      "bytes": 2514,
+      "sha256": "670ae757d379d5d63eb7074ea9cc9d16b6bd39fde9bea29c4f70a8b06b4c2bd3"
     },
     {
       "path": "src/renderer/assets/ui/stage-ring.svg",
@@ -8865,8 +8949,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
       "category": "source",
-      "bytes": 20465,
-      "sha256": "75e7d31404b0d4eb7576366b2dfb8f3c8990c4be2593f065cd3d3af34417a20e"
+      "bytes": 21673,
+      "sha256": "b6e0d5cf5434fde9adb706bee2d1553f1406874a422a943ed41d6b8ebe321f76"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
@@ -8877,8 +8961,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 33878,
-      "sha256": "1e0d2e450ad5a76f198718709646c9d6d93296d6f3cdf5df12ee9d5849ffd3bd"
+      "bytes": 35059,
+      "sha256": "87189a44302d4121872bc0def812e617314b56b4a2c2b7442880cf2d08fe1fe6"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -9221,6 +9305,30 @@
       "category": "test",
       "bytes": 1237,
       "sha256": "5521241c3b0dfaede191c5be54242f8f1fe41bec1eda7bd99ffce8586b5be6af"
+    },
+    {
+      "path": "src/renderer/components/PortalScene.module.css",
+      "category": "source",
+      "bytes": 6191,
+      "sha256": "41b01bee890d245d3c00082b06f55a657335fe9a7710c2dcdafe421c565c3064"
+    },
+    {
+      "path": "src/renderer/components/PortalScene.test.tsx",
+      "category": "test",
+      "bytes": 2676,
+      "sha256": "25d07b18aeeb8ece7193e187a9f55bfb2b605c8395706f91dcc9b4ef494f08f9"
+    },
+    {
+      "path": "src/renderer/components/PortalScene.tsx",
+      "category": "source",
+      "bytes": 5409,
+      "sha256": "931ba38908109f597501922df5edced9c6eda58c989fbb1e98d1235c95305644"
+    },
+    {
+      "path": "src/renderer/components/portalSceneMotes.ts",
+      "category": "source",
+      "bytes": 1436,
+      "sha256": "3f46066b931ac18705ce627a25dab7292f58fdc80fe16c30931aefe7f9c37a65"
     },
     {
       "path": "src/renderer/components/ProfileScreen.module.css",
@@ -16714,7 +16822,7 @@
       "path": "src/renderer/assets/ui/index.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 71,
+      "lineCount": 80,
       "imports": [
         "file:src/renderer/assets/ui/modeArt.ts"
       ],
@@ -16788,14 +16896,25 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/assets/ui/sprites/bg-mode-classic-v2-sprites.json",
+      "path": "src/renderer/assets/ui/sprites/bg-mode-classic-v2-sprites.json",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 19,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/assets/ui/sprites/index.ts",
       "path": "src/renderer/assets/ui/sprites/index.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 63,
+      "lineCount": 66,
       "imports": [
         "file:src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprites.json",
-        "file:src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprites.json"
+        "file:src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprites.json",
+        "file:src/renderer/assets/ui/sprites/bg-mode-classic-v2-sprites.json"
       ],
       "exports": [
         "symbol:src/renderer/assets/ui/sprites/index.ts#getSceneSpriteSheetUrls",
@@ -18315,12 +18434,13 @@
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 664,
+      "lineCount": 672,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/modeArt.ts",
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/OverlayModal.tsx",
+        "file:src/renderer/components/PortalScene.tsx",
         "file:src/renderer/copy/passAndPlay.ts",
         "file:src/renderer/copy/screenCopy.ts",
         "file:src/renderer/hooks/useEscapeLeaves.ts",
@@ -19196,6 +19316,56 @@
       ],
       "exports": [],
       "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/PortalScene.test.tsx",
+      "path": "src/renderer/components/PortalScene.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 48,
+      "imports": [
+        "file:src/renderer/components/PortalScene.tsx",
+        "file:src/renderer/components/portalSceneMotes.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/PortalScene.tsx",
+      "path": "src/renderer/components/PortalScene.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 99,
+      "imports": [
+        "file:src/renderer/assets/ui/index.ts",
+        "file:src/renderer/assets/ui/sprites/index.ts",
+        "file:src/renderer/components/portalSceneMotes.ts",
+        "file:src/renderer/hooks/useSceneLook.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/PortalScene.tsx#PortalScene",
+        "symbol:src/renderer/components/PortalScene.tsx#PortalSceneProps"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/PortalScene.test.tsx"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/portalSceneMotes.ts",
+      "path": "src/renderer/components/portalSceneMotes.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 38,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/components/portalSceneMotes.ts#PORTAL_MOTE_COUNT",
+        "symbol:src/renderer/components/portalSceneMotes.ts#PortalMote",
+        "symbol:src/renderer/components/portalSceneMotes.ts#portalMotes"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/PortalScene.test.tsx"
+      ]
     },
     {
       "id": "file:src/renderer/components/ProfileScreen.test.tsx",
@@ -33624,32 +33794,32 @@
       "name": "getUiArtRows",
       "kind": "value",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 64,
-      "endLine": 68
+      "line": 73,
+      "endLine": 77
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#MODE_CARD_ART",
       "name": "MODE_CARD_ART",
       "kind": "ExportSpecifier",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 70,
-      "endLine": 70
+      "line": 79,
+      "endLine": 79
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#MODE_POSTER_KEYS",
       "name": "MODE_POSTER_KEYS",
       "kind": "ExportSpecifier",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 70,
-      "endLine": 70
+      "line": 79,
+      "endLine": 79
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#resolveModePosterUrl",
       "name": "resolveModePosterUrl",
       "kind": "ExportSpecifier",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 70,
-      "endLine": 70
+      "line": 79,
+      "endLine": 79
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UI_ART",
@@ -33657,31 +33827,31 @@
       "kind": "value",
       "file": "src/renderer/assets/ui/index.ts",
       "line": 8,
-      "endLine": 32
+      "endLine": 37
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UI_ART_KEYS",
       "name": "UI_ART_KEYS",
       "kind": "value",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 36,
-      "endLine": 57
+      "line": 41,
+      "endLine": 66
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UiArtKey",
       "name": "UiArtKey",
       "kind": "type",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 34,
-      "endLine": 34
+      "line": 39,
+      "endLine": 39
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UiArtRow",
       "name": "UiArtRow",
       "kind": "interface",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 59,
-      "endLine": 62
+      "line": 68,
+      "endLine": 71
     },
     {
       "id": "symbol:src/renderer/assets/ui/modeArt.ts#getModePosterArtRows",
@@ -33776,48 +33946,48 @@
       "name": "getSceneSpriteSheetUrls",
       "kind": "value",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 61,
-      "endLine": 62
+      "line": 64,
+      "endLine": 65
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#resolveSceneSpriteSet",
       "name": "resolveSceneSpriteSet",
       "kind": "value",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 43,
-      "endLine": 50
+      "line": 44,
+      "endLine": 51
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#SCENE_SPRITES",
       "name": "SCENE_SPRITES",
       "kind": "value",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 52,
-      "endLine": 57
+      "line": 53,
+      "endLine": 60
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteDef",
       "name": "SceneSpriteDef",
       "kind": "interface",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 10,
-      "endLine": 21
+      "line": 11,
+      "endLine": 22
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteSet",
       "name": "SceneSpriteSet",
       "kind": "interface",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 23,
-      "endLine": 28
+      "line": 24,
+      "endLine": 29
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteSetKey",
       "name": "SceneSpriteSetKey",
       "kind": "type",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 59,
-      "endLine": 59
+      "line": 62,
+      "endLine": 62
     },
     {
       "id": "symbol:src/renderer/audio/audioGlobUrlMap.ts#buildAudioUrlMapByFilename",
@@ -35688,8 +35858,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ChooseYourPathScreen.tsx",
-      "line": 663,
-      "endLine": 663
+      "line": 671,
+      "endLine": 671
     },
     {
       "id": "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows",
@@ -36186,6 +36356,46 @@
       "file": "src/renderer/components/PairProximityHintPlane.tsx",
       "line": 34,
       "endLine": 79
+    },
+    {
+      "id": "symbol:src/renderer/components/PortalScene.tsx#PortalScene",
+      "name": "PortalScene",
+      "kind": "function",
+      "file": "src/renderer/components/PortalScene.tsx",
+      "line": 35,
+      "endLine": 98
+    },
+    {
+      "id": "symbol:src/renderer/components/PortalScene.tsx#PortalSceneProps",
+      "name": "PortalSceneProps",
+      "kind": "interface",
+      "file": "src/renderer/components/PortalScene.tsx",
+      "line": 27,
+      "endLine": 30
+    },
+    {
+      "id": "symbol:src/renderer/components/portalSceneMotes.ts#PORTAL_MOTE_COUNT",
+      "name": "PORTAL_MOTE_COUNT",
+      "kind": "value",
+      "file": "src/renderer/components/portalSceneMotes.ts",
+      "line": 21,
+      "endLine": 21
+    },
+    {
+      "id": "symbol:src/renderer/components/portalSceneMotes.ts#PortalMote",
+      "name": "PortalMote",
+      "kind": "interface",
+      "file": "src/renderer/components/portalSceneMotes.ts",
+      "line": 6,
+      "endLine": 17
+    },
+    {
+      "id": "symbol:src/renderer/components/portalSceneMotes.ts#portalMotes",
+      "name": "portalMotes",
+      "kind": "value",
+      "file": "src/renderer/components/portalSceneMotes.ts",
+      "line": 23,
+      "endLine": 37
     },
     {
       "id": "symbol:src/renderer/components/ProfileScreen.tsx#default",
@@ -60798,6 +61008,36 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/PortalScene.tsx->symbol:src/renderer/components/PortalScene.tsx#PortalScene",
+      "source": "file:src/renderer/components/PortalScene.tsx",
+      "target": "symbol:src/renderer/components/PortalScene.tsx#PortalScene",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/PortalScene.tsx->symbol:src/renderer/components/PortalScene.tsx#PortalSceneProps",
+      "source": "file:src/renderer/components/PortalScene.tsx",
+      "target": "symbol:src/renderer/components/PortalScene.tsx#PortalSceneProps",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/portalSceneMotes.ts->symbol:src/renderer/components/portalSceneMotes.ts#PORTAL_MOTE_COUNT",
+      "source": "file:src/renderer/components/portalSceneMotes.ts",
+      "target": "symbol:src/renderer/components/portalSceneMotes.ts#PORTAL_MOTE_COUNT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/portalSceneMotes.ts->symbol:src/renderer/components/portalSceneMotes.ts#PortalMote",
+      "source": "file:src/renderer/components/portalSceneMotes.ts",
+      "target": "symbol:src/renderer/components/portalSceneMotes.ts#PortalMote",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/portalSceneMotes.ts->symbol:src/renderer/components/portalSceneMotes.ts#portalMotes",
+      "source": "file:src/renderer/components/portalSceneMotes.ts",
+      "target": "symbol:src/renderer/components/portalSceneMotes.ts#portalMotes",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/ProfileScreen.tsx->symbol:src/renderer/components/ProfileScreen.tsx#default",
       "source": "file:src/renderer/components/ProfileScreen.tsx",
       "target": "symbol:src/renderer/components/ProfileScreen.tsx#default",
@@ -76466,6 +76706,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/assets/ui/sprites/index.ts->src/renderer/assets/ui/sprites/bg-mode-classic-v2-sprites.json",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "file:src/renderer/assets/ui/sprites/bg-mode-classic-v2-sprites.json",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/audio/audioCueSafety.test.ts->src/renderer/audio/gameSfx.ts",
       "source": "file:src/renderer/audio/audioCueSafety.test.ts",
       "target": "file:src/renderer/audio/gameSfx.ts",
@@ -77537,6 +77783,12 @@
       "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/components/OverlayModal.tsx",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
       "target": "file:src/renderer/components/OverlayModal.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/components/PortalScene.tsx",
+      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
+      "target": "file:src/renderer/components/PortalScene.tsx",
       "kind": "imports"
     },
     {
@@ -78911,6 +79163,48 @@
       "id": "imports:src/renderer/components/PlayableOnboardingHarness.test.tsx->src/shared/save-data.ts",
       "source": "file:src/renderer/components/PlayableOnboardingHarness.test.tsx",
       "target": "file:src/shared/save-data.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/PortalScene.test.tsx->src/renderer/components/PortalScene.tsx",
+      "source": "file:src/renderer/components/PortalScene.test.tsx",
+      "target": "file:src/renderer/components/PortalScene.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/PortalScene.test.tsx->src/renderer/components/portalSceneMotes.ts",
+      "source": "file:src/renderer/components/PortalScene.test.tsx",
+      "target": "file:src/renderer/components/portalSceneMotes.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/PortalScene.tsx->src/renderer/assets/ui/index.ts",
+      "source": "file:src/renderer/components/PortalScene.tsx",
+      "target": "file:src/renderer/assets/ui/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/PortalScene.tsx->src/renderer/assets/ui/sprites/index.ts",
+      "source": "file:src/renderer/components/PortalScene.tsx",
+      "target": "file:src/renderer/assets/ui/sprites/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/PortalScene.tsx->src/renderer/components/portalSceneMotes.ts",
+      "source": "file:src/renderer/components/PortalScene.tsx",
+      "target": "file:src/renderer/components/portalSceneMotes.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/PortalScene.tsx->src/renderer/hooks/useSceneLook.ts",
+      "source": "file:src/renderer/components/PortalScene.tsx",
+      "target": "file:src/renderer/hooks/useSceneLook.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/PortalScene.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/PortalScene.tsx",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -93616,6 +93910,18 @@
       "id": "tested_by:src/renderer/components/OverlayModal.tsx->file:src/renderer/components/OverlayModal.test.tsx",
       "source": "file:src/renderer/components/OverlayModal.tsx",
       "target": "file:src/renderer/components/OverlayModal.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/PortalScene.tsx->file:src/renderer/components/PortalScene.test.tsx",
+      "source": "file:src/renderer/components/PortalScene.tsx",
+      "target": "file:src/renderer/components/PortalScene.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/portalSceneMotes.ts->file:src/renderer/components/PortalScene.test.tsx",
+      "source": "file:src/renderer/components/portalSceneMotes.ts",
+      "target": "file:src/renderer/components/PortalScene.test.tsx",
       "kind": "tested_by"
     },
     {

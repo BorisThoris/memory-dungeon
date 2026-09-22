@@ -190,7 +190,7 @@ describe('preloadStartupCriticalAssets', () => {
         // The backdrops, their light layers and every sprite strip that plays over them (the menu's
         // candles are on the first screen), deduped.
         const sheetUrls = getSceneSpriteSheetUrls();
-        expect(sheetUrls.length).toBe(SCENE_SPRITES.cathedralCandles.sprites.length + SCENE_SPRITES.gameplayFlames.sprites.length);
+        expect(sheetUrls.length).toBe(Object.values(SCENE_SPRITES).reduce((sum, set) => sum + set.sprites.length, 0));
         expect(requestedRasterUrls).toEqual([...new Set([...getUiArtRows().map((row) => row.assetUrl), ...sheetUrls])]);
 
         requestedRasterUrls = [];

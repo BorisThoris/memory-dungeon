@@ -1,0 +1,19 @@
+{
+  "plate": [
+    1376,
+    768
+  ],
+  "kind": "disc",
+  "sprites": [
+    {
+      "id": "vortex",
+      "x": 0.43387,
+      "y": 0.3776,
+      "w": 0.13808,
+      "h": 0.2474,
+      "frames": 1,
+      "fps": 0,
+      "sheet": "bg-mode-classic-v2-sprite-vortex.webp"
+    }
+  ]
+}

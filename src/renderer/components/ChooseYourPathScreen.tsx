@@ -25,6 +25,7 @@ import {
 import { useEscapeLeaves } from '../hooks/useEscapeLeaves';
 import { useAppStore } from '../store/useAppStore';
 import OverlayModal from './OverlayModal';
+import { PortalScene } from './PortalScene';
 import styles from './ChooseYourPathScreen.module.css';
 import { CHOOSE_YOUR_PATH_COPY, CLASSIC_SETUP_COPY } from '../copy/screenCopy';
 import { DEFAULT_CLASSIC_RUN_SETUP, type ClassicRunSetup } from '../../shared/classic-run-setup';
@@ -327,13 +328,20 @@ const ChooseYourPathScreen = (): ReactElement => {
     return (
         <section aria-label="Choose your path" className={styles.screen} role="region">
             {/* The recommended run's poster is the scene behind the page, sunk into the ink as the
-                cathedral is behind the title page; the stage art stands in when there is none. */}
-            <div
-                aria-hidden="true"
-                className={styles.scene}
-                data-testid="choose-path-scene-layer"
-                style={{ backgroundImage: `url(${launchMode ? resolveModePosterUrl(launchMode.posterKey) : UI_ART.choosePathScene})` }}
-            />
+                cathedral is behind the title page; the stage art stands in when there is none. The
+                Classic poster is a living scene (`PortalScene`); the other posters are stills. */}
+            {launchMode?.posterKey === 'classic' ? (
+                <div aria-hidden="true" className={styles.scene} data-testid="choose-path-scene-layer" data-scene="portal">
+                    <PortalScene quality={settings.graphicsQuality} reduceMotion={settings.reduceMotion} />
+                </div>
+            ) : (
+                <div
+                    aria-hidden="true"
+                    className={styles.scene}
+                    data-testid="choose-path-scene-layer"
+                    style={{ backgroundImage: `url(${launchMode ? resolveModePosterUrl(launchMode.posterKey) : UI_ART.choosePathScene})` }}
+                />
+            )}
             <div aria-hidden="true" className={styles.scrim} />
 
             <div className={styles.page}>

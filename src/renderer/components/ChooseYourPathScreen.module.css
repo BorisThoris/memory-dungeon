@@ -36,6 +36,15 @@
     mask-image: radial-gradient(ellipse 100% 90% at 50% 45%, black 25%, rgba(0, 0, 0, 0.7) 60%, transparent 100%);
 }
 
+/* The living portal: the ground sinks to 30 % like a still poster would, the runes, moon, stars
+   and vortex stay brighter, and the plate is held at the same 45 % the still is. */
+.scene[data-scene='portal'] {
+    opacity: 1;
+    --scene-base-opacity: 0.3;
+    --scene-light-opacity: 0.55;
+    --scene-plate-anchor-y: 45%;
+}
+
 .scrim {
     position: absolute;
     inset: 0;

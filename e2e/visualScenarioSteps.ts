@@ -76,7 +76,11 @@ export const VISUAL_SCREEN_SCENARIOS: ReadonlyArray<VisualScreenScenario> = [
             await expectAppScrollportHasNoVerticalOverflow(page);
             const sceneLayer = page.getByTestId('choose-path-scene-layer');
             await expect(sceneLayer).toBeVisible();
-            const sceneBackground = await sceneLayer.evaluate((element) => getComputedStyle(element).backgroundImage);
+            // A still poster paints the layer itself; the living portal paints its plate's base inside it.
+            const sceneBackground = await sceneLayer.evaluate((element) => {
+                const painted = element.querySelector('[data-testid="portal-scene-plate"] > *') ?? element;
+                return getComputedStyle(painted).backgroundImage;
+            });
             expect(sceneBackground).toContain('url(');
             const inlineBack = page.getByTestId('choose-path-inline-back');
             await expect(inlineBack).toBeVisible();

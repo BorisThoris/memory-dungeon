@@ -1,0 +1,266 @@
+/*
+ * The portal clearing's lights and its vortex. The plate, drift, parallax and layer boxes come
+ * from `scenePlate.module.css`. The lights, the vortex and the motes read `--scene-light-opacity`
+ * so the parent can sink the ground (`--scene-base-opacity`) further than what glows on it.
+ */
+.scene {
+    --scene-light-opacity: 1;
+}
+
+.layer {
+    opacity: var(--scene-light-opacity, 1);
+}
+
+.things {
+    opacity: var(--scene-light-opacity, 1);
+}
+
+/* ------------------------------------------------------------------ the lights */
+.runes {
+    animation: portalRunesBreathe 6.5s ease-in-out infinite;
+}
+
+.moon {
+    animation: portalMoonPulse 11s ease-in-out infinite;
+    animation-delay: -3s;
+}
+
+/* Two copies of the stars on stepped clocks that never agree: each star is at one of four levels. */
+.starsA {
+    opacity: calc(var(--scene-light-opacity, 1) * 0.6);
+    animation: portalTwinkleA 3.7s steps(1, end) infinite;
+}
+
+.starsB {
+    opacity: calc(var(--scene-light-opacity, 1) * 0.5);
+    animation: portalTwinkleB 5.3s steps(1, end) infinite;
+    animation-delay: -1.9s;
+}
+
+/* ------------------------------------------------------------------ the vortex */
+.vortex {
+    position: absolute;
+    pointer-events: none;
+}
+
+.disc {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    user-select: none;
+    will-change: transform;
+}
+
+.discCore {
+    animation: portalSpin 64s linear infinite;
+}
+
+/* A fainter copy turning the other way, a little larger: two currents in the one whirlpool. */
+.discEcho {
+    opacity: 0.22;
+    mix-blend-mode: plus-lighter;
+    animation: portalSpinBack 97s linear infinite;
+}
+
+/* ------------------------------------------------------------------ the mist over the ground */
+.mist {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    mask-image: linear-gradient(180deg, transparent 52%, black 70%, black 92%, transparent 100%);
+}
+
+.mistBank {
+    position: absolute;
+    inset: -20% -30%;
+    mix-blend-mode: plus-lighter;
+    background:
+        radial-gradient(ellipse 30% 12% at 22% 78%, rgba(150, 165, 190, 0.3), transparent 70%),
+        radial-gradient(ellipse 34% 10% at 74% 82%, rgba(140, 160, 190, 0.26), transparent 70%),
+        radial-gradient(ellipse 26% 9% at 48% 90%, rgba(160, 175, 200, 0.22), transparent 70%);
+    filter: blur(12px);
+    will-change: transform, opacity;
+}
+
+.mistNear {
+    opacity: 0.5;
+    animation: portalMistA 38s ease-in-out infinite alternate;
+}
+
+.mistFar {
+    opacity: 0.38;
+    animation: portalMistB 57s ease-in-out infinite alternate;
+    animation-delay: -21s;
+}
+
+/* ------------------------------------------------------------------ the motes */
+.mote {
+    position: absolute;
+    width: var(--mote-size, 2px);
+    height: var(--mote-size, 2px);
+    border-radius: 50%;
+    background: #bfe9ff;
+    box-shadow: 0 0 5px 1px rgba(120, 220, 255, 0.7);
+    mix-blend-mode: plus-lighter;
+    opacity: 0;
+    animation: portalMote var(--mote-duration, 12000ms) ease-in-out infinite;
+    animation-delay: var(--mote-delay, 0ms);
+    will-change: transform, opacity;
+}
+
+/* ------------------------------------------------------------------ still */
+.scene[data-still='true'] .layer,
+.scene[data-still='true'] .disc,
+.scene[data-still='true'] .mistBank,
+.scene[data-still='true'] .mote {
+    animation: none;
+}
+
+@keyframes portalRunesBreathe {
+    0%,
+    100% {
+        opacity: calc(var(--scene-light-opacity, 1) * 0.78);
+    }
+
+    50% {
+        opacity: var(--scene-light-opacity, 1);
+    }
+}
+
+@keyframes portalMoonPulse {
+    0%,
+    100% {
+        opacity: calc(var(--scene-light-opacity, 1) * 0.86);
+    }
+
+    50% {
+        opacity: var(--scene-light-opacity, 1);
+    }
+}
+
+@keyframes portalTwinkleA {
+    0% {
+        opacity: calc(var(--scene-light-opacity, 1) * 0.6);
+    }
+
+    17% {
+        opacity: calc(var(--scene-light-opacity, 1) * 0.3);
+    }
+
+    31% {
+        opacity: calc(var(--scene-light-opacity, 1) * 0.75);
+    }
+
+    52% {
+        opacity: calc(var(--scene-light-opacity, 1) * 0.4);
+    }
+
+    68% {
+        opacity: calc(var(--scene-light-opacity, 1) * 0.7);
+    }
+
+    84% {
+        opacity: calc(var(--scene-light-opacity, 1) * 0.35);
+    }
+
+    100% {
+        opacity: calc(var(--scene-light-opacity, 1) * 0.6);
+    }
+}
+
+@keyframes portalTwinkleB {
+    0% {
+        opacity: calc(var(--scene-light-opacity, 1) * 0.5);
+    }
+
+    23% {
+        opacity: calc(var(--scene-light-opacity, 1) * 0.2);
+    }
+
+    41% {
+        opacity: calc(var(--scene-light-opacity, 1) * 0.65);
+    }
+
+    59% {
+        opacity: calc(var(--scene-light-opacity, 1) * 0.3);
+    }
+
+    77% {
+        opacity: calc(var(--scene-light-opacity, 1) * 0.6);
+    }
+
+    100% {
+        opacity: calc(var(--scene-light-opacity, 1) * 0.5);
+    }
+}
+
+@keyframes portalSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes portalSpinBack {
+    from {
+        transform: rotate(0deg) scale(1.08);
+    }
+
+    to {
+        transform: rotate(-360deg) scale(1.08);
+    }
+}
+
+@keyframes portalMistA {
+    0% {
+        transform: translate3d(-3%, 0.5%, 0);
+        opacity: 0.38;
+    }
+
+    50% {
+        opacity: 0.56;
+    }
+
+    100% {
+        transform: translate3d(3%, -0.5%, 0);
+        opacity: 0.42;
+    }
+}
+
+@keyframes portalMistB {
+    0% {
+        transform: translate3d(2.5%, 0, 0) scale(1.04);
+        opacity: 0.28;
+    }
+
+    100% {
+        transform: translate3d(-2.5%, 0.6%, 0) scale(1);
+        opacity: 0.46;
+    }
+}
+
+@keyframes portalMote {
+    0% {
+        transform: translate(0, 0);
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 0.85;
+    }
+
+    50% {
+        transform: translate(var(--mote-drift, 0px), calc(var(--mote-rise, 60px) * -0.5));
+        opacity: 0.5;
+    }
+
+    85% {
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: translate(calc(var(--mote-drift, 0px) * 0.3), calc(var(--mote-rise, 60px) * -1));
+        opacity: 0;
+    }
+}

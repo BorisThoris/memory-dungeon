@@ -10,6 +10,7 @@ lights, the torches and the candles move and react.
 ```bash
 bash scripts/scene-pipeline/scene.sh        # dungeon: cut sprites → segment → Blender passes → assets
 bash scripts/scene-pipeline/cathedral.sh    # cathedral: cut sprites → segment → assets
+bash scripts/scene-pipeline/portal.sh       # portal clearing (Classic poster): cut the vortex disc → segment → assets
 ```
 
 ## Stages
@@ -23,14 +24,16 @@ bash scripts/scene-pipeline/cathedral.sh    # cathedral: cut sprites → segment
    the segmenter takes), one RGBA strip per flame and `<prefix>-sprites.json` with each box as
    fractions of the plate. `sprites-sheet.png` and `still-vs-rebuilt.png` are for a look before
    installing. `find_candles.py` drafts the boxes for candles (small flames on a dark room);
-   torches are measured by eye on a gridded crop.
+   torches are measured by eye on a gridded crop. **`cut_disc.py`** cuts a feathered disc
+   (the portal's vortex) the scene spins in place, in the same manifest shape.
 1. **`segment_scene.py`** — keys the emissive families out of the painting by hue (violet ring on
    the floor, orange flames and the painted torchlight near them, blue wall glyphs) into RGBA
    layers, and leaves a base with that light removed: bare stone under the ring, torch-lit walls
    dimmed by what the torch layer puts back. Writes `scene.json` with the ring ellipse, torch and
    rune positions (fractions of the plate). `check-sheet.png`: base | base + all layers at 1 (≈ the
    painting) | layers alone. **`segment_cathedral.py`** does the same for the nave with two
-   families: the candlelight on the stone and the teal wisps.
+   families: the candlelight on the stone and the teal wisps; **`segment_portal.py`** for the
+   clearing with three: the runes and glowing plants, the moon, the stars.
 2. **`blender_scene_lights.py`** (Blender 4.3, Cycles, GPU) — a plain room whose proportions are
    solved from the painting (level camera, 75° FOV; the ring's ellipse fixes the depth scale, the
    wall bases the width; corners chamfered so the shading has no hard seams), with the *base*
@@ -40,7 +43,8 @@ bash scripts/scene-pipeline/cathedral.sh    # cathedral: cut sprites → segment
    torches raking the walls. Standard view transform, so the additive maths holds.
 3. **Export** — PNG masters + WebP (quality 84, alpha kept) into `src/renderer/assets/ui/backgrounds/`
    as `bg-gameplay-dungeon-ring-v2-{base,glow-ring,glow-torches,glow-runes,light-ring,light-torches-l,light-torches-r}`
-   (the cathedral: `bg-main-menu-cathedral-v2-{base,glow-candles,glow-wisps}`), and the sprite
+   (the cathedral: `bg-main-menu-cathedral-v2-{base,glow-candles,glow-wisps}`; the portal:
+   `bg-mode-classic-v2-{base,glow-runes,glow-moon,stars}`), and the sprite
    strips + manifest into `src/renderer/assets/ui/sprites/` (`assets/ui/sprites/index.ts` resolves
    them; `SCENE_SPRITES`).
 
@@ -63,8 +67,12 @@ the torches always burn, their flames as sprites and their painted light flicker
 clocks, whatever the run is doing; mist drifts in the corridor. `CathedralScene.tsx` (main menu,
 game over) flickers the candlelight, breathes and drifts the wisps, and plays the 29 candle
 flames; its parent sinks the base further than the lights (`--scene-base-opacity`,
-`--scene-light-opacity`). Reduce motion freezes everything and drops the parallax; `low` quality
-drops the light passes, the mist, the sparks and the drift, and keeps the glows and the flames.
+`--scene-light-opacity`). `PortalScene.tsx` (Choose Your Path, when the recommended run's poster
+is the Classic clearing) breathes the runes, pulses the moon, twinkles the stars on two stepped
+clocks, spins the vortex disc in the arch (its feathered rim dissolving into the painted outer
+arms, a fainter copy turning the other way), drifts mist over the ground and floats motes through
+the trees. Reduce motion freezes everything and drops the parallax; `low` quality drops the light
+passes, the mist, the sparks, the motes and the drift, and keeps the glows and the flames.
 
 ## Extending
 
