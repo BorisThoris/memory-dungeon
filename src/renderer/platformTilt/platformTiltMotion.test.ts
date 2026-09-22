@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
+    HAPTIC_CUES,
     HAPTICS_POLICY,
     MAX_TILT_DEG,
+    allHapticFeedbackIsNonEssential,
     TILT_DEADZONE,
     applyDeadzoneNormalized,
     applyDeadzoneTilt,
@@ -105,15 +107,37 @@ describe('applyDeadzoneTilt', () => {
 });
 
 describe('REG-067 haptic policy', () => {
-    it('keeps haptics optional and non-essential', () => {
+    it('keeps haptics optional and silent where they cannot fire', () => {
         expect(HAPTICS_POLICY).toMatchObject({
             essentialFeedback: false,
             persistenceRequired: false,
             runtime: 'optional_navigator_vibrate',
             unsupportedBehavior: 'silent_noop'
         });
-        expect(hapticFeedbackIsNonEssential({ hapticsAvailable: true, reduceMotion: false })).toBe(true);
-        expect(hapticFeedbackIsNonEssential({ hapticsAvailable: false, reduceMotion: false })).toBe(true);
-        expect(hapticFeedbackIsNonEssential({ hapticsAvailable: true, reduceMotion: true })).toBe(true);
+    });
+
+    it('leaves nothing that only the hands are told', () => {
+        // A player misses the haptic whenever the hardware is absent, the browser declines, or
+        // reduce motion is on. Every cue must therefore reach them some other way.
+        expect(allHapticFeedbackIsNonEssential()).toBe(true);
+        for (const [cue, channels] of Object.entries(HAPTIC_CUES)) {
+            expect(hapticFeedbackIsNonEssential(cue as keyof typeof HAPTIC_CUES)).toBe(true);
+            expect(channels.length).toBeGreaterThan(0);
+        }
+    });
+
+    it('can actually fail, which the version before it could not', () => {
+        // The old check ended `(!reduceMotion || hapticsAvailable || !hapticsAvailable)` — a
+        // tautology — so it returned true for every input and this suite would have passed against
+        // `() => true`. A compliance test that cannot fail is not a compliance test.
+        const essential = { ...HAPTIC_CUES, handsOnly: [] as readonly string[] };
+        const check = (cue: keyof typeof essential): boolean => essential[cue].length > 0;
+        expect(check('studyClosing')).toBe(true);
+        expect(check('handsOnly')).toBe(false);
+    });
+
+    it('registers every cue that actually fires a haptic', () => {
+        // The list is the policy. A haptic added without an entry here is a cue nobody checked.
+        expect(Object.keys(HAPTIC_CUES).sort()).toEqual(['chainBreak', 'feverArrival', 'studyClosing']);
     });
 });

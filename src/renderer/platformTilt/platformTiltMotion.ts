@@ -9,13 +9,42 @@ export const HAPTICS_POLICY = {
     unsupportedBehavior: 'silent_noop'
 } as const;
 
-export const hapticFeedbackIsNonEssential = ({
-    hapticsAvailable,
-    reduceMotion
-}: {
-    hapticsAvailable: boolean;
-    reduceMotion: boolean;
-}): boolean => HAPTICS_POLICY.essentialFeedback === false && (!reduceMotion || hapticsAvailable || !hapticsAvailable);
+/**
+ * Every cue this game can deliver by touch or rumble, and what a player who receives neither gets
+ * instead. Registered here, beside the policy, because REG-067's promise — haptics stay
+ * non-essential polish — is a claim about this list and nothing else.
+ *
+ * A player misses the haptic whenever the hardware is absent, the browser declines, or reduce
+ * motion is on. So every entry needs at least one other channel, or that player is simply not told.
+ * Adding a haptic cue means adding it here; a cue with an empty list fails the policy test, which
+ * is the point of the list existing.
+ */
+export const HAPTIC_CUES = {
+    /** `rumbleForBreak` — the chain breaking. */
+    chainBreak: ['ring floor flash', 'card glow gutter', 'ladder drain', 'break sfx'],
+    /** `rumbleForFeverArrival` — the run reaching the top. */
+    feverArrival: ['card flourish', 'room ring flash', 'ladder arrival', 'arrival sfx'],
+    /** `tapStudyClosing` — the study window about to shut. */
+    studyClosing: ['memorize bar reddens', 'closing tick sfx']
+} as const satisfies Record<string, readonly string[]>;
+
+export type HapticCueId = keyof typeof HAPTIC_CUES;
+
+/**
+ * Whether a haptic cue is polish rather than the only way a player is told something.
+ *
+ * This used to take `hapticsAvailable` and `reduceMotion` and ignore both: its condition ended
+ * `(!reduceMotion || hapticsAvailable || !hapticsAvailable)`, whose last two terms are a
+ * tautology, so it returned true for every input and the REG-067 test would have passed against
+ * `() => true`. The runtime flags were never the question. Whether a cue is essential is a fact
+ * about the cue — does anything else carry it — and no device state changes the answer.
+ */
+export const hapticFeedbackIsNonEssential = (cue: HapticCueId): boolean =>
+    HAPTICS_POLICY.essentialFeedback === false && HAPTIC_CUES[cue].length > 0;
+
+/** Every registered cue is polish. The whole of REG-067, as one statement. */
+export const allHapticFeedbackIsNonEssential = (): boolean =>
+    (Object.keys(HAPTIC_CUES) as HapticCueId[]).every(hapticFeedbackIsNonEssential);
 
 export const zeroTilt = (): TiltVector => ({ x: 0, y: 0 });
 

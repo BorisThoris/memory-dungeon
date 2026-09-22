@@ -9,7 +9,11 @@ import RunShell, { type RunShellTool } from './RunShell';
 const sfxMocks = vi.hoisted(() => ({ playStudyClosingTickSfx: vi.fn() }));
 vi.mock('../audio/gameSfx', () => sfxMocks);
 
-const hapticMocks = vi.hoisted(() => ({ tapStudyClosing: vi.fn(() => true) }));
+const hapticMocks = vi.hoisted(() => ({
+    // Typed with the real signature so the assertions on `call[0]` (the reduce-motion flag the
+    // shell hands down) are checked rather than indexing an empty tuple.
+    tapStudyClosing: vi.fn((_reduceMotion: boolean) => true)
+}));
 vi.mock('../input/touchHaptics', () => hapticMocks);
 
 const playingRun = (): RunState => finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));

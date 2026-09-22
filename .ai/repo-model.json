@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2681,
     "codeFileCount": 921,
-    "exportedSymbolCount": 2775,
+    "exportedSymbolCount": 2778,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 7018
+    "relationshipCount": 7021
   },
   "inventory": [
     {
@@ -9429,8 +9429,8 @@
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 25977,
-      "sha256": "f1f265a51856a086d654496d6eb46a068c6ac9b1a911ca24774c2ca28ebad6d6"
+      "bytes": 26173,
+      "sha256": "fe908a9be1b06e810fee37a61150864e125939db2bbe8b02688d91ffe736b85b"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
@@ -11055,14 +11055,14 @@
     {
       "path": "src/renderer/platformTilt/platformTiltMotion.test.ts",
       "category": "test",
-      "bytes": 3761,
-      "sha256": "56e22eba7512f25118b3c8fe13a7437d75557a7e534157c31c978e9a7480ae4e"
+      "bytes": 4972,
+      "sha256": "01c33205f938443915925a6d167d0c5268dd56063ed7558528a9f339248e9ba9"
     },
     {
       "path": "src/renderer/platformTilt/platformTiltMotion.ts",
       "category": "source",
-      "bytes": 3379,
-      "sha256": "a1f8ef23b690ebfd55b52b69ba3e0de94d62f7e76fe13eb370bfde7c7d72daac"
+      "bytes": 5230,
+      "sha256": "cb233a98c2fff7c447bd4309c5a32c645697774981bb442238b707d7863e3ef5"
     },
     {
       "path": "src/renderer/platformTilt/platformTiltPermissionUi.test.ts",
@@ -19588,7 +19588,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 504,
+      "lineCount": 508,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/shared/contracts.ts",
@@ -24094,7 +24094,7 @@
       "path": "src/renderer/platformTilt/platformTiltMotion.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 120,
+      "lineCount": 144,
       "imports": [
         "file:src/renderer/platformTilt/platformTiltMotion.ts"
       ],
@@ -24106,17 +24106,20 @@
       "path": "src/renderer/platformTilt/platformTiltMotion.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 107,
+      "lineCount": 136,
       "imports": [
         "file:src/renderer/platformTilt/platformTiltTypes.ts"
       ],
       "exports": [
+        "symbol:src/renderer/platformTilt/platformTiltMotion.ts#allHapticFeedbackIsNonEssential",
         "symbol:src/renderer/platformTilt/platformTiltMotion.ts#applyDeadzoneNormalized",
         "symbol:src/renderer/platformTilt/platformTiltMotion.ts#applyDeadzoneTilt",
         "symbol:src/renderer/platformTilt/platformTiltMotion.ts#dampTilt",
         "symbol:src/renderer/platformTilt/platformTiltMotion.ts#degreesToNormalizedTilt",
         "symbol:src/renderer/platformTilt/platformTiltMotion.ts#degreeTiltToProcessed",
         "symbol:src/renderer/platformTilt/platformTiltMotion.ts#deviceOrientationToDegreeTilt",
+        "symbol:src/renderer/platformTilt/platformTiltMotion.ts#HAPTIC_CUES",
+        "symbol:src/renderer/platformTilt/platformTiltMotion.ts#HapticCueId",
         "symbol:src/renderer/platformTilt/platformTiltMotion.ts#hapticFeedbackIsNonEssential",
         "symbol:src/renderer/platformTilt/platformTiltMotion.ts#HAPTICS_POLICY",
         "symbol:src/renderer/platformTilt/platformTiltMotion.ts#MAX_TILT_DEG",
@@ -41747,60 +41750,84 @@
       "endLine": 20
     },
     {
+      "id": "symbol:src/renderer/platformTilt/platformTiltMotion.ts#allHapticFeedbackIsNonEssential",
+      "name": "allHapticFeedbackIsNonEssential",
+      "kind": "value",
+      "file": "src/renderer/platformTilt/platformTiltMotion.ts",
+      "line": 46,
+      "endLine": 47
+    },
+    {
       "id": "symbol:src/renderer/platformTilt/platformTiltMotion.ts#applyDeadzoneNormalized",
       "name": "applyDeadzoneNormalized",
       "kind": "function",
       "file": "src/renderer/platformTilt/platformTiltMotion.ts",
-      "line": 36,
-      "endLine": 44
+      "line": 65,
+      "endLine": 73
     },
     {
       "id": "symbol:src/renderer/platformTilt/platformTiltMotion.ts#applyDeadzoneTilt",
       "name": "applyDeadzoneTilt",
       "kind": "function",
       "file": "src/renderer/platformTilt/platformTiltMotion.ts",
-      "line": 46,
-      "endLine": 51
+      "line": 75,
+      "endLine": 80
     },
     {
       "id": "symbol:src/renderer/platformTilt/platformTiltMotion.ts#dampTilt",
       "name": "dampTilt",
       "kind": "function",
       "file": "src/renderer/platformTilt/platformTiltMotion.ts",
-      "line": 99,
-      "endLine": 106
+      "line": 128,
+      "endLine": 135
     },
     {
       "id": "symbol:src/renderer/platformTilt/platformTiltMotion.ts#degreesToNormalizedTilt",
       "name": "degreesToNormalizedTilt",
       "kind": "function",
       "file": "src/renderer/platformTilt/platformTiltMotion.ts",
-      "line": 23,
-      "endLine": 30
+      "line": 52,
+      "endLine": 59
     },
     {
       "id": "symbol:src/renderer/platformTilt/platformTiltMotion.ts#degreeTiltToProcessed",
       "name": "degreeTiltToProcessed",
       "kind": "function",
       "file": "src/renderer/platformTilt/platformTiltMotion.ts",
-      "line": 92,
-      "endLine": 97
+      "line": 121,
+      "endLine": 126
     },
     {
       "id": "symbol:src/renderer/platformTilt/platformTiltMotion.ts#deviceOrientationToDegreeTilt",
       "name": "deviceOrientationToDegreeTilt",
       "kind": "function",
       "file": "src/renderer/platformTilt/platformTiltMotion.ts",
-      "line": 70,
-      "endLine": 82
+      "line": 99,
+      "endLine": 111
+    },
+    {
+      "id": "symbol:src/renderer/platformTilt/platformTiltMotion.ts#HAPTIC_CUES",
+      "name": "HAPTIC_CUES",
+      "kind": "value",
+      "file": "src/renderer/platformTilt/platformTiltMotion.ts",
+      "line": 22,
+      "endLine": 29
+    },
+    {
+      "id": "symbol:src/renderer/platformTilt/platformTiltMotion.ts#HapticCueId",
+      "name": "HapticCueId",
+      "kind": "type",
+      "file": "src/renderer/platformTilt/platformTiltMotion.ts",
+      "line": 31,
+      "endLine": 31
     },
     {
       "id": "symbol:src/renderer/platformTilt/platformTiltMotion.ts#hapticFeedbackIsNonEssential",
       "name": "hapticFeedbackIsNonEssential",
       "kind": "value",
       "file": "src/renderer/platformTilt/platformTiltMotion.ts",
-      "line": 12,
-      "endLine": 18
+      "line": 42,
+      "endLine": 43
     },
     {
       "id": "symbol:src/renderer/platformTilt/platformTiltMotion.ts#HAPTICS_POLICY",
@@ -41823,16 +41850,16 @@
       "name": "remapTiltForScreenAngle",
       "kind": "function",
       "file": "src/renderer/platformTilt/platformTiltMotion.ts",
-      "line": 54,
-      "endLine": 64
+      "line": 83,
+      "endLine": 93
     },
     {
       "id": "symbol:src/renderer/platformTilt/platformTiltMotion.ts#subtractBaselineDegrees",
       "name": "subtractBaselineDegrees",
       "kind": "function",
       "file": "src/renderer/platformTilt/platformTiltMotion.ts",
-      "line": 84,
-      "endLine": 89
+      "line": 113,
+      "endLine": 118
     },
     {
       "id": "symbol:src/renderer/platformTilt/platformTiltMotion.ts#TILT_DEADZONE",
@@ -41847,8 +41874,8 @@
       "name": "zeroTilt",
       "kind": "value",
       "file": "src/renderer/platformTilt/platformTiltMotion.ts",
-      "line": 20,
-      "endLine": 20
+      "line": 49,
+      "endLine": 49
     },
     {
       "id": "symbol:src/renderer/platformTilt/platformTiltPermissionUi.ts#getMotionPermissionButtonLabels",
@@ -55639,7 +55666,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 68
+          "line": 72
         },
         {
           "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -55940,7 +55967,7 @@
       "tests": [
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 15
+          "line": 19
         },
         {
           "path": "src/renderer/components/GameScreen.test.tsx",
@@ -65357,6 +65384,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/platformTilt/platformTiltMotion.ts->symbol:src/renderer/platformTilt/platformTiltMotion.ts#allHapticFeedbackIsNonEssential",
+      "source": "file:src/renderer/platformTilt/platformTiltMotion.ts",
+      "target": "symbol:src/renderer/platformTilt/platformTiltMotion.ts#allHapticFeedbackIsNonEssential",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/platformTilt/platformTiltMotion.ts->symbol:src/renderer/platformTilt/platformTiltMotion.ts#applyDeadzoneNormalized",
       "source": "file:src/renderer/platformTilt/platformTiltMotion.ts",
       "target": "symbol:src/renderer/platformTilt/platformTiltMotion.ts#applyDeadzoneNormalized",
@@ -65390,6 +65423,18 @@
       "id": "exports:src/renderer/platformTilt/platformTiltMotion.ts->symbol:src/renderer/platformTilt/platformTiltMotion.ts#deviceOrientationToDegreeTilt",
       "source": "file:src/renderer/platformTilt/platformTiltMotion.ts",
       "target": "symbol:src/renderer/platformTilt/platformTiltMotion.ts#deviceOrientationToDegreeTilt",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/platformTilt/platformTiltMotion.ts->symbol:src/renderer/platformTilt/platformTiltMotion.ts#HAPTIC_CUES",
+      "source": "file:src/renderer/platformTilt/platformTiltMotion.ts",
+      "target": "symbol:src/renderer/platformTilt/platformTiltMotion.ts#HAPTIC_CUES",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/platformTilt/platformTiltMotion.ts->symbol:src/renderer/platformTilt/platformTiltMotion.ts#HapticCueId",
+      "source": "file:src/renderer/platformTilt/platformTiltMotion.ts",
+      "target": "symbol:src/renderer/platformTilt/platformTiltMotion.ts#HapticCueId",
       "kind": "exports"
     },
     {
