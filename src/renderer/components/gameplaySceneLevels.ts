@@ -65,16 +65,27 @@ export interface SceneFlameLevels {
  * which is exactly where a fifth painted light pass would not have been affordable.
  *
  * At rest the fire sits a shade under its painted self, which is what leaves it somewhere to climb.
+ *
+ * `imminent` is the pair that would land the next rung (`chainRungApproach`), and the fire draws
+ * breath for it: pulled in, burning tighter and faster, holding fewer sparks. Fire does this before
+ * a gust, which is the only reason it is legible without a caption — and it is the inverse of every
+ * other state here, so the rung landing *releases* it rather than merely adding to it. The ladder
+ * lights the rung ahead; this is the room leaning toward the same moment, which is what stops that
+ * lean being one lit label in a corner.
+ *
+ * It is small on purpose. A room that lurched every fourth pair would be exhausting, and the draw
+ * has to still read as the same fire.
  */
-export const sceneFlameLevels = (fill: number): SceneFlameLevels => {
+export const sceneFlameLevels = (fill: number, imminent = false): SceneFlameLevels => {
     const f = clamp01(fill);
     // Steep off zero: one pair is visible in the fire, and Fever is the top of a climb the player
     // has been watching rather than the only moment anything happened.
     const early = 1 - (1 - f) * (1 - f);
+    const drawn = imminent ? 1 : 0;
     return {
-        rate: round(0.92 + 0.62 * early),
-        lift: round(1 + 0.16 * early),
-        embers: round(0.5 + 0.5 * early),
+        rate: round((0.92 + 0.62 * early) * (1 + 0.18 * drawn)),
+        lift: round((1 + 0.16 * early) * (1 - 0.07 * drawn)),
+        embers: round((0.5 + 0.5 * early) * (1 - 0.25 * drawn)),
         emberRate: round(0.85 + 0.5 * early)
     };
 };

@@ -60,7 +60,13 @@ import { describePassAndPlayChainLost } from '../../shared/pass-and-play-rules';
 import { floorClearResidentLine } from '../copy/floorCurioBeat';
 import { pickFloorCurio } from '../../shared/floor-curio-rules';
 import { canGreetFloorCurio } from '../../shared/floor-curio-greeting-rules';
-import { chainMomentum, runChainMeter, runChainTier, type ChainTier } from '../../shared/chain-tier-rules';
+import {
+    chainMomentum,
+    chainRungApproach,
+    runChainMeter,
+    runChainTier,
+    type ChainTier
+} from '../../shared/chain-tier-rules';
 import { GAMEPAD_SHORTCUT_ROWS, GAMEPLAY_SHORTCUT_ROWS } from '../keyboard/gameplayShortcuts';
 import { useGamepadConnected } from '../hooks/useGamepadNavigation';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
@@ -1432,6 +1438,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     cleared={run.status === 'levelComplete'}
                     feverKey={feverArrivalKey}
                     fill={runChainMeter(run).fill}
+                    imminent={chainRungApproach(runChainMeter(run).momentum, run.board?.pairCount ?? null).imminent}
                     memorize={run.status === 'memorize'}
                     pulse={breakPulseTier}
                     pulseKey={pulseEventId}

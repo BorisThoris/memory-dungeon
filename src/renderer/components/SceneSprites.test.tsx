@@ -82,6 +82,40 @@ describe('SceneSprites', () => {
         }
     });
 
+    it('draws breath for the pair that would land a rung, and lets it out again', () => {
+        // Fire pulls in before a gust. That is the only reason this reads without a caption, and it
+        // is why the draw has to be the *inverse* of the climb: the rung landing releases it.
+        const steady = sceneFlameLevels(0.6);
+        const drawing = sceneFlameLevels(0.6, true);
+        expect(drawing.rate).toBeGreaterThan(steady.rate);
+        expect(drawing.lift).toBeLessThan(steady.lift);
+        expect(drawing.embers).toBeLessThan(steady.embers);
+        // Small enough to still be the same fire: a room that lurched every fourth pair would be
+        // exhausting, and a flame that shrank by half would read as going out, not as gathering.
+        expect(drawing.lift).toBeGreaterThan(steady.lift * 0.9);
+        expect(sceneFlameLevels(0.6, false)).toEqual(steady);
+    });
+
+    it('never lets the draw undo the climb: a drawn hot fire still beats a steady cold one', () => {
+        // Both states ride the same four properties, so they could in principle cancel. A player
+        // one pair from Fever must not see a fire smaller than one who has just started.
+        const coldSteady = sceneFlameLevels(0);
+        const hotDrawing = sceneFlameLevels(1, true);
+        expect(hotDrawing.rate).toBeGreaterThan(coldSteady.rate);
+        expect(hotDrawing.lift).toBeGreaterThan(coldSteady.lift);
+        expect(hotDrawing.embers).toBeGreaterThan(coldSteady.embers);
+    });
+
+    it('says nothing about drawing breath in a scene with no run', () => {
+        const { unmount } = render(<SceneSprites embers heat={null} imminent set={flames} still={false} />);
+        const root = screen.getByTestId('scene-sprites');
+        expect(root).not.toHaveAttribute('data-flame-drawing');
+        expect(root.style.getPropertyValue('--flame-rate')).toBe('');
+        unmount();
+        render(<SceneSprites embers heat={0.5} imminent set={flames} still={false} />);
+        expect(screen.getByTestId('scene-sprites')).toHaveAttribute('data-flame-drawing', 'true');
+    });
+
     it('holds a frozen scene frozen however hot the run is', () => {
         render(<SceneSprites embers heat={1} set={flames} still />);
         const sprites = screen.getByTestId('scene-sprites');

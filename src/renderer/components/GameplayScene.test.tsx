@@ -104,6 +104,28 @@ describe('GameplayScene', () => {
         expect(layerCount()).toBe(coldLayers);
     });
 
+    it('leans the room toward the pair that would land a rung, and only that pair', () => {
+        // The ladder lights the rung ahead; this is the room leaning at the same moment, so the
+        // anticipation is not one lit label in a corner of the HUD.
+        const fireAt = (imminent: boolean) => {
+            const { unmount } = render(<GameplayScene {...base} fill={0.6} imminent={imminent} />);
+            const style = screen.getByTestId('scene-sprites').style;
+            const read = {
+                drawing: screen.getByTestId('gameplay-scene').getAttribute('data-scene-drawing'),
+                lift: Number(style.getPropertyValue('--flame-lift')),
+                rate: Number(style.getPropertyValue('--flame-rate'))
+            };
+            unmount();
+            return read;
+        };
+        const steady = fireAt(false);
+        const drawing = fireAt(true);
+        expect(steady.drawing).toBe('false');
+        expect(drawing.drawing).toBe('true');
+        expect(drawing.lift).toBeLessThan(steady.lift);
+        expect(drawing.rate).toBeGreaterThan(steady.rate);
+    });
+
     it('flashes the floor on a break and restarts for a second break of the same tier', () => {
         const { rerender } = render(<GameplayScene {...base} pulse="none" />);
         expect(screen.queryByTestId('gameplay-scene-pulse')).toBeNull();

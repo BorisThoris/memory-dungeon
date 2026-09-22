@@ -69,7 +69,11 @@ far each flame climbs its own torch and how thickly its sparks come off (`sceneF
 curve steep off zero so the first pair of a chain already shows in the fire, against the ring's
 ease-in; the painted torchlight on the stone does *not* move with the chain, because light a
 painter threw across a wall cannot honestly grow and holding it still is what lets the flames
-read. They flare with a break as well (the pop barely, Fever up the
+read. When the next pair would land a rung (`chainRungApproach(...).imminent`) the fire **draws
+breath** — pulled in, tighter, fewer sparks, the inverse of the climb so the rung landing releases
+it rather than adding to it. That is the only thing in the room that looks forward instead of
+reporting, and it leans at the same moment the HUD ladder lights the rung ahead, so the
+anticipation is not one lit label in a corner. They flare with a break as well (the pop barely, Fever up the
 wall: `sceneTorchFlarePeak`); a cleared floor is the room exhaling (the ring swells and settles,
 the torches gutter and recover); the ring throws up motes as the chain climbs; mist drifts in the
 corridor. `CathedralScene.tsx` (main menu,

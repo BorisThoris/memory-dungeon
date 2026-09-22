@@ -40,6 +40,10 @@ import styles from './GameplayScene.module.css';
  *     so the first pair of a chain already shows in the fire. The painted torchlight on the stone
  *     under them does not move with the chain: light thrown across a wall by a flame the painter
  *     painted cannot honestly grow, and holding it still is what lets the flames themselves read;
+ *   - and when the next pair would land a rung (`imminent`), the fire *draws breath* for it —
+ *     pulled in, tighter, fewer sparks. It is the one thing in the room that looks forward rather
+ *     than reporting, it is the inverse of every other state here so the rung landing releases it,
+ *     and it is the room leaning toward the same moment the ladder is lighting;
  *   - mist drifts in the corridor beyond the ring, and the whole plate drifts slowly and turns a
  *     little with the pointer (`useSceneLook`), the sprites more than the walls, so the painting
  *     reads as a place.
@@ -66,6 +70,11 @@ export interface GameplaySceneProps {
     feverKey?: string | null;
     /** The floor has just been cleared: the room exhales. */
     cleared?: boolean;
+    /**
+     * The next pair would land a rung (`chainRungApproach`). The fire draws breath for it, the way
+     * the ladder lights the rung ahead — the room leaning toward the same moment the HUD is.
+     */
+    imminent?: boolean;
     quality: GraphicsQualityPreset;
     reduceMotion: boolean;
     tier: ChainTier;
@@ -75,6 +84,7 @@ const bg = (url: string) => ({ backgroundImage: `url(${url})` });
 
 export function GameplayScene({
     cleared = false,
+    imminent = false,
     feverKey = null,
     fill,
     memorize,
@@ -101,6 +111,7 @@ export function GameplayScene({
             data-scene-effect-tier={effectTier}
             data-memorize={memorize ? 'true' : 'false'}
             data-scene-pulse={pulse}
+            data-scene-drawing={imminent ? 'true' : 'false'}
             data-scene-fill={fill.toFixed(2)}
             data-scene-tier={tier}
             data-still={still ? 'true' : 'false'}
@@ -162,7 +173,7 @@ export function GameplayScene({
                     </div>
                 ) : null}
                 <div className={plate.things}>
-                    <SceneSprites embers={alive} heat={fill} set={flames} still={still} />
+                    <SceneSprites embers={alive} heat={fill} imminent={imminent} set={flames} still={still} />
                     {alive ? (
                         <div className={styles.ringMotes}>
                             <SceneMotes
