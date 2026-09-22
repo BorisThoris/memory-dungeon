@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-22T20:24:13.038Z",
+  "generatedAt": "2026-09-22T20:36:53.077Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -288,28 +288,28 @@
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 167448,
+        "bytes": 164169,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-22T20:23:57.648Z"
+        "capturedAt": "2026-09-22T20:36:43.150Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 157706,
+        "bytes": 156708,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-22T20:23:57.650Z"
+        "capturedAt": "2026-09-22T20:36:43.153Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 130110,
+        "bytes": 131002,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-22T20:23:57.652Z"
+        "capturedAt": "2026-09-22T20:36:43.154Z"
       },
       {
         "profile": "mobile",
@@ -324,10 +324,10 @@
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 123166,
+        "bytes": 123147,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-22T20:23:57.654Z"
+        "capturedAt": "2026-09-22T20:36:43.156Z"
       }
     ]
   },
@@ -391,7 +391,7 @@
   "metrics": {
     "sourceFiles": 1136,
     "testFiles": 485,
-    "sourceLines": 181754,
+    "sourceLines": 181830,
     "largestDirectories": [
       {
         "directory": "src",
@@ -430,10 +430,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "claude/sprite-animation-backgrounds-ceda9f",
-    "head": "b30e9061",
-    "lastCommitDate": "2026-09-22T23:23:57+03:00",
-    "lastCommitSubject": "Merge remote-tracking branch 'origin/main' into claude/sprite-animation-backgrounds-ceda9f",
-    "commitCount": 1678,
+    "head": "2d287c16",
+    "lastCommitDate": "2026-09-22T23:36:41+03:00",
+    "lastCommitSubject": "Let the nave remember the run that ended in it",
+    "commitCount": 1680,
     "remote": "https://github.com/BorisThoris/memory-dungeon.git"
   },
   "readme": {
