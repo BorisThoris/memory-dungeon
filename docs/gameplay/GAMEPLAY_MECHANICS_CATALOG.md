@@ -89,6 +89,7 @@
 | Floor-end bonus: 100 × floor × tier at clear (`FLOOR_TIER_MULT`) + 50 × floor per turn under par; boss multiplier | `calculateFloorClearBonus` (`level-clear-rules.ts`), `finalizeLevel` | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | Featured objective bonus and objective streak kicker | `getFloorClearObjectiveResult`, `getFeaturedObjectiveClearResult`, `FEATURED_OBJECTIVE_BONUS_SCORES` (`secondary-objective-rules.ts`) | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | Chain-standing floor-end payout (Extreme Fever) | `finalizeLevel` reads `runChainTier` | [epic-scoring-objectives](./epic-scoring-objectives.md) |
+| The clear is the first link of the next floor's chain: one link carries, no tier does; the cascade momentum does not carry at all | `carriedChainForNextFloor`, `CHAIN_CARRYOVER_CAP` (`chain-carryover-rules.ts`), read by `createNextFloorRunState` (`next-floor-run-state-rules.ts`) | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | Rating letter | `calculateRating` | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | Shuffle score tax | `shuffleScoreTaxActive`, multiplier decay | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 
@@ -303,7 +304,7 @@ Source: [`RunState`](../../src/shared/contracts.ts) interface.
 | `chunkScoreThisFloor` | Score the chunks paid this floor, findables and spilled treasure included | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | `chunkPairsThisChain` | Pairs chunks broke since the chain last dropped: momentum the tier ladder counts | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | `feverBreaksThisFloor` | Breaks that landed at the Fever rung this floor | [epic-scoring-objectives](./epic-scoring-objectives.md) |
-| `bestChainThisFloor` | Longest chain the floor saw | [epic-scoring-objectives](./epic-scoring-objectives.md) |
+| `bestChainThisFloor` | Longest chain the floor saw; starts at the chain carried in, not at zero | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | `feverBreaksThisRun` | Run-wide Fever breaks; records and achievements read it | [epic-meta-progression](./epic-meta-progression.md) |
 | `biggestChunkPairs` | Biggest single chunk in pairs this run | [epic-meta-progression](./epic-meta-progression.md) |
 | `bestChainThisRun` | Longest chain this run | [epic-meta-progression](./epic-meta-progression.md) |

@@ -2320,7 +2320,8 @@ own: the **drop**.
 At **Fever**, the top of the ladder, the blast also takes its **halo** — every tile bordering it,
 whatever its suit — and the screen stops to show you.
 
-Clear the board. The next floor is bigger. Your chain resets. Go again.
+Clear the board. The next floor is bigger. The clear is itself the first link of your next
+chain, so you start it one match from Clean. Go again.
 
 That is the entire rule set. Seven sentences.
 
@@ -3996,8 +3997,18 @@ This is measurable once §61's session instrumentation exists, and it is a band 
 
 Per §24.2, we should *give* the player a good place to stop rather than fight their leaving.
 
-The floor clear is that place: it has a small ceremony, it resolves the score, and it is the moment
-the chain resets anyway. A player who stops after a floor clear has a clean ending.
+The floor clear is that place: it has a small ceremony and it resolves the score. A player who
+stops after a floor clear has a clean ending.
+
+**Gen 262 weakened half of this argument on purpose.** The original version of this section leaned
+on a second reason — the chain reset at the stairs, so there was nothing left on the table to come
+back for. That reset turned out to be the run's one moment of punishing success, and
+`chain-carryover-rules.ts` now carries the chain across the boundary. The clean ending survives
+because what carries is one link and no tier: a player who stops after a clear is never walking
+away from a multiplier they earned and did not spend, only from a single match's head start. That
+is the line this section is really about — stopping should be good, not hard — and one link is on
+the good side of it. §124 below records the same boundary refusing to carry the Recall charge, and
+why a number and a power are different questions.
 
 **Therefore the design should make floor clear the easiest place to stop and mid-floor the hardest
 — not by trapping the player mid-floor, but by making the floor-clear beat satisfying enough that
@@ -6255,7 +6266,7 @@ findings worth having.
 | Charged by | A break of ≥ 6 pairs | Score, turns, floors | It must be earned by the thing the game is about (§4.3e) |
 | Threshold | 6 pairs | 4, 8 | 6 is roughly a good Sharp break; it should feel like a reward for a real achievement, not for a routine one |
 | Charges held | 1 | 2–3 | More than one turns it into a resource to manage, which is an economy |
-| Carried between floors | **No** | Yes | The chain resets per floor and so should this; a carried charge would make floor N's opening depend on floor N−1 |
+| Carried between floors | **No** | Yes | A carried charge would make floor N's opening depend on floor N−1. (Gen 262 let the *chain* carry one link, below any tier; the charge still does not. One link is a head start that decays on the first miss; a held charge is a whole power, and carrying that changes what the opening *is* rather than how warm it starts.) |
 | Reveals | One suit | The whole board, one region, N tiles | One suit is a *choice* and it is legible; the whole board is the game turned off |
 | Which suit | Player picks | Random, largest | The choice is where the strategy is |
 | Duration | 1.2s | 0.6s, 3s | Long enough to encode two or three positions, short enough that it is a glance rather than a study |

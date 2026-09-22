@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { type RunState } from './contracts';
 import { createNewRun } from './game';
 import { createNextFloorRunState } from './next-floor-run-state-rules';
+import { CHAIN_CARRYOVER_CAP, carriedChainForNextFloor } from './chain-carryover-rules';
+import { getChainTier } from './chain-tier-rules';
 import { pickFloorCurio } from './floor-curio-rules';
 
 describe('createNextFloorRunState', () => {
@@ -57,11 +59,51 @@ describe('createNextFloorRunState', () => {
         expect(next.lastLevelResult).toBeNull();
         expect(next.stats.tries).toBe(0);
         expect(next.stats.currentLevelScore).toBe(0);
-        expect(next.stats.currentStreak).toBe(0);
         expect(next.stats.highestLevel).toBe(4);
     });
 
+    it('carries the chain onto the next floor instead of wiping it at the stairs', () => {
+        const baseRun = createNewRun(0, { runSeed: 12 });
+        const nextBoard = { ...baseRun.board!, level: 4 };
+        const run = {
+            ...baseRun,
+            status: 'levelComplete' as const,
+            chunkPairsThisChain: 5,
+            stats: { ...baseRun.stats, currentStreak: 1 }
+        };
 
+        const next = createNextFloorRunState(run, {
+            activeMutators: run.activeMutators,
+            board: nextBoard,
+            memorizeRemainingMs: 2500
+        });
+
+        expect(next.stats.currentStreak).toBe(carriedChainForNextFloor(1));
+        expect(next.stats.currentStreak).toBe(1);
+        // The floor holds the chain it was handed, so its own record starts there.
+        expect(next.bestChainThisFloor).toBe(1);
+        // The cascade momentum was measured against a board that is gone.
+        expect(next.chunkPairsThisChain).toBe(0);
+    });
+
+    it('caps the carried chain short of Clean, so the floor opens holding no tier', () => {
+        const baseRun = createNewRun(0, { runSeed: 12 });
+        const nextBoard = { ...baseRun.board!, level: 4 };
+        const run = {
+            ...baseRun,
+            status: 'levelComplete' as const,
+            stats: { ...baseRun.stats, currentStreak: 40 }
+        };
+
+        const next = createNextFloorRunState(run, {
+            activeMutators: run.activeMutators,
+            board: nextBoard,
+            memorizeRemainingMs: 2500
+        });
+
+        expect(next.stats.currentStreak).toBe(CHAIN_CARRYOVER_CAP);
+        expect(getChainTier(next.stats.currentStreak, nextBoard.pairCount)).toBe('none');
+    });
 
     it('normalizes malformed stat records before resetting next-floor stats', () => {
         const run = {

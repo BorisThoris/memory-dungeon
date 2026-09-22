@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2681,
-    "codeFileCount": 921,
-    "exportedSymbolCount": 2778,
+    "trackedFileCount": 2683,
+    "codeFileCount": 923,
+    "exportedSymbolCount": 2780,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 7021
+    "relationshipCount": 7036
   },
   "inventory": [
     {
@@ -63,8 +63,8 @@
     {
       "path": ".gitignore",
       "category": "other",
-      "bytes": 770,
-      "sha256": "ed337601fd16e3211010ec5e50c051e8d57aa4376efe354f75e1ef58f3435d58"
+      "bytes": 734,
+      "sha256": "f2a5c8011ae8d6da3882d20b38e930f85ce53ccf8e560f24e3c7fa9094a90ccf"
     },
     {
       "path": ".idea/.gitignore",
@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 502987,
-      "sha256": "d2d16286830172612339f3247fc90725f370032d08f2abc5c9f6363faf080ad9"
+      "bytes": 506257,
+      "sha256": "1b0bd70b08c8e4a940ba34ee02453f7849b4780db6a344bc4db8181c81aff19f"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -447,8 +447,8 @@
     {
       "path": "docs/GAME_FORGIVENESS_CODE_AUDIT.md",
       "category": "documentation",
-      "bytes": 11367,
-      "sha256": "df17f6ecc64a1782f9197cde8ae0118e39bf470fa637bcd6e92da962240b9fd4"
+      "bytes": 11486,
+      "sha256": "a8295a88ca4429a317c54c0bf3aaf9568a30fb1f9ab14b7111977322fd851dd1"
     },
     {
       "path": "docs/GAME_FORGIVENESS_DEEP_DIVE.md",
@@ -777,14 +777,14 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 21621,
-      "sha256": "dd849e4ab8a788d46e72842c3ce295d68eb8d95390174746a966e78d72967620"
+      "bytes": 23017,
+      "sha256": "5109c0d27835b9cbe633c3c2f15e8423f58f4ffa0ad91bbaef52a410c339c40a"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
       "category": "documentation",
-      "bytes": 39437,
-      "sha256": "b49f66a391b6268b89d6b0f5bb45d54cd986866d78a3126f115850525253eab2"
+      "bytes": 39824,
+      "sha256": "dbf001da4ac40f834c0df944b33c5a7b0dacbb574bee540d2098ff4658451c7e"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_POLISH_AND_GAPS.md",
@@ -2362,13 +2362,13 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "648a1d6d6daf657230fd153957bbd83eb1cb92c0193b94fd93c8dd0fe9b71665"
+      "sha256": "3d383cc2ddce8dda75f8fa8b21bf28b60b5a811db5d5a21c470c44295359c43e"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
       "category": "documentation",
-      "bytes": 494025,
-      "sha256": "a590a366242d0a5c7e68726632d20e8d5a10ca6252e8acba0c6bcb7f9e993214"
+      "bytes": 495091,
+      "sha256": "e5ba2bf4e7224a482df87f45504432e6938e97a3dce5f37c3e61e7711a62fb65"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3921,8 +3921,8 @@
     {
       "path": "e2e/portfolio-visual-smoke.spec.ts",
       "category": "test",
-      "bytes": 7988,
-      "sha256": "9ea6c3aab640dfde525a0dc5db4b6f452d0c32980e1990383ebff80e8db36f2e"
+      "bytes": 7772,
+      "sha256": "0fa0b19dd613b2838daa7b15d55ab10f89684aeb49e54c49591437e98eb77390"
     },
     {
       "path": "e2e/README.md",
@@ -4101,8 +4101,8 @@
     {
       "path": "e2e/visualScenarioSteps.ts",
       "category": "test",
-      "bytes": 11638,
-      "sha256": "30497750d2b532155b52fc5f48ae6c6f7f657285eac1ae6f3ad71d5883f1ee8c"
+      "bytes": 11376,
+      "sha256": "7c01ed7fe77e56569c31c9190e14af3524702e002299e08e60029912f08b31d6"
     },
     {
       "path": "e2e/visualScreenHelpers.ts",
@@ -4197,8 +4197,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 32824,
-      "sha256": "11eba7f1f760b8106196f0c80228d3286ce399c0fcf49c2d9fc80ce757385687"
+      "bytes": 32401,
+      "sha256": "2ad2c5e103270a3ba6c6fd7419556230b664bfff2d74ae1e368d976c3ae9a6e5"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4701,8 +4701,8 @@
     {
       "path": "scripts/audit-renderer-assets.mjs",
       "category": "script",
-      "bytes": 12647,
-      "sha256": "73f153d198e71820a30ce52ac66dc9221e0286794782a6b315eec219253aaeb5"
+      "bytes": 12312,
+      "sha256": "23476e5c72c5429c88cec310ae594011af8e62c75357059ef4f0b2ea4f9008e9"
     },
     {
       "path": "scripts/audit-summary.mjs",
@@ -4791,8 +4791,8 @@
     {
       "path": "scripts/card-pipeline/cut_card_back_glow.py",
       "category": "script",
-      "bytes": 4897,
-      "sha256": "58f8257b14b0816e234ece4ff19f2b5ee31f28f44e6fe7c98233f1cc8cd6736d"
+      "bytes": 4803,
+      "sha256": "7f19ffefa0009ab99c1145bff865b0614d0a8e42c75a9995b194f9714810eef6"
     },
     {
       "path": "scripts/card-pipeline/export-card-normal-webp.mjs",
@@ -4887,8 +4887,8 @@
     {
       "path": "scripts/card-pipeline/README.md",
       "category": "script",
-      "bytes": 4701,
-      "sha256": "c459c9af13736e89183f15707bed8fd1a787792fb52032938716db3d75336a49"
+      "bytes": 4618,
+      "sha256": "8dce73ef0e981ba73e689a6584611423aca07662086cea135083cc17f042e6f1"
     },
     {
       "path": "scripts/card-pipeline/requirements-local-card-backs.txt",
@@ -4989,8 +4989,8 @@
     {
       "path": "scripts/gate-changed.mjs",
       "category": "script",
-      "bytes": 21184,
-      "sha256": "02e0b96ea89856e521c74076c47e86fbebf14f1e6c3cc778cc952adf6d63da3f"
+      "bytes": 20781,
+      "sha256": "3e4e28243b5c2222ef4d52ca72c9983312805924565500be136c98137c7bfe68"
     },
     {
       "path": "scripts/gate-long-run.ts",
@@ -5313,8 +5313,8 @@
     {
       "path": "scripts/scene-pipeline/cut_sprites.py",
       "category": "script",
-      "bytes": 14541,
-      "sha256": "8597c01302b53e4eb47894f0fea7beb73198d4a106ecb2e5fd1e530ef6417994"
+      "bytes": 14279,
+      "sha256": "dc44768db363f8660fddcb8dbb4a78c9005d5b9e06c59e4c432b64673665910c"
     },
     {
       "path": "scripts/scene-pipeline/find_candles.py",
@@ -5331,8 +5331,8 @@
     {
       "path": "scripts/scene-pipeline/README.md",
       "category": "script",
-      "bytes": 9954,
-      "sha256": "64506e674e5830dd36129f8fee2afdc233326d07786b75e1c282d76eda069534"
+      "bytes": 9832,
+      "sha256": "fe9ce189a26b67e95b34c16abd16a2026438add78ee8f8d3f6c763ac91428471"
     },
     {
       "path": "scripts/scene-pipeline/scene.sh",
@@ -5367,8 +5367,8 @@
     {
       "path": "scripts/scene-pipeline/sprites/bg-main-menu-cathedral.json",
       "category": "script",
-      "bytes": 1908,
-      "sha256": "027af28a8235ddb1ee8bcacb7aabe2010800dee95122e36f0b85ee85c5e2dbb5"
+      "bytes": 1729,
+      "sha256": "62dd8c7a22c4d58617c57e39ebd4f36aab22b97bb601a04d8fbf222b6f7983cf"
     },
     {
       "path": "scripts/script-paths.ts",
@@ -5751,8 +5751,8 @@
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 22221,
-      "sha256": "62f1ee57c0177943ba3cbfe34a3f7514159071fba647e9e2c56802b2af4ac3e0"
+      "bytes": 21775,
+      "sha256": "449dd402c573155c574d53ee7b1d8ac1c2dcc5819bd91391217dc1c39f1d4411"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -7335,14 +7335,14 @@
     {
       "path": "src/renderer/assets/preloadStartupAssets.test.ts",
       "category": "test",
-      "bytes": 13295,
-      "sha256": "6ad93ead7bdc3f28eef7ca9c8e16861bcb2fea4c403d351ef1de515d24ad7457"
+      "bytes": 12984,
+      "sha256": "f167533aee46f4cffb89368fa2bcf5f1983cc0e23c394ea73c0f737e7a765ffd"
     },
     {
       "path": "src/renderer/assets/preloadStartupAssets.ts",
       "category": "source",
-      "bytes": 8194,
-      "sha256": "f788d767e7d127c90e82df30784ca7b22d5c082db26cd343f013e6438863f5e2"
+      "bytes": 7971,
+      "sha256": "1383a3ac8db91529ae0196e000552ea0b674abf839c467cb9edea5cebe9e5c82"
     },
     {
       "path": "src/renderer/assets/README.md",
@@ -7959,8 +7959,8 @@
     {
       "path": "src/renderer/assets/ui/index.ts",
       "category": "source",
-      "bytes": 4080,
-      "sha256": "b9075475825a73174c767a2288216097a552021bffcfdfcd0bc8dfdc7551f6ea"
+      "bytes": 3998,
+      "sha256": "687554d8f85da5f4312b1b1d9df35e933a95cadfe0e913ed9b3edf7652c90393"
     },
     {
       "path": "src/renderer/assets/ui/menu-emblem.svg",
@@ -8061,8 +8061,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprites.json",
       "category": "source",
-      "bytes": 1463,
-      "sha256": "7f8b81c687179e01a67b5a277e76cf0dbcb1a6fb47e91bf33b0185da567021d3"
+      "bytes": 1395,
+      "sha256": "95f507b4b5f772495854ccf724350a07811e9f91abc0141012a17c4d4584373b"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-00.png",
@@ -8415,8 +8415,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprites.json",
       "category": "source",
-      "bytes": 6745,
-      "sha256": "9ec3f6cd77a5da897dc5e4f36155ab827e0bb8eb9f1da5656f6395adbe72f7aa"
+      "bytes": 6447,
+      "sha256": "e67b084e8e3ace964e1ed162d06e716762a35d15d52487131bcf08a09a1256dd"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-mode-classic-v2-sprite-vortex.png",
@@ -8433,14 +8433,14 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-mode-classic-v2-sprites.json",
       "category": "source",
-      "bytes": 296,
-      "sha256": "f8eb43217d0ff6d3fb7dbb9006766c2fe1a838ac5caadf1eb64e804817386c08"
+      "bytes": 278,
+      "sha256": "d1d387e49a4420db944548c986f39efeb304621df3261a0b7ce559136e347bcd"
     },
     {
       "path": "src/renderer/assets/ui/sprites/index.ts",
       "category": "source",
-      "bytes": 2514,
-      "sha256": "670ae757d379d5d63eb7074ea9cc9d16b6bd39fde9bea29c4f70a8b06b4c2bd3"
+      "bytes": 2449,
+      "sha256": "34c667132b5be88f935bc6f2d3fc286a2654a4bceb5c73c4fe44a33beb853a67"
     },
     {
       "path": "src/renderer/assets/ui/stage-ring.svg",
@@ -8469,14 +8469,14 @@
     {
       "path": "src/renderer/audio/audioInteractionCoverage.test.ts",
       "category": "test",
-      "bytes": 10041,
-      "sha256": "dc04e848a28e6b729b01c5a63e80f104367725099ae9b527dfb720a0b5121571"
+      "bytes": 9862,
+      "sha256": "61e3ea0e9378f9926554ea29bb04229c9e1384ad19da1ddb7c80de7bf686b5a8"
     },
     {
       "path": "src/renderer/audio/audioInteractionCoverage.ts",
       "category": "source",
-      "bytes": 20405,
-      "sha256": "2bdc0baf671cd706a5cc8a26adbed0241bf806bc39c06d9d6e62875331f25aac"
+      "bytes": 19998,
+      "sha256": "f162e5089e915bd585f03eef0efa11240c93fc668787a8aed252f3c203a40da8"
     },
     {
       "path": "src/renderer/audio/audioManifestBoundary.test.ts",
@@ -8541,14 +8541,14 @@
     {
       "path": "src/renderer/audio/gameSfx.test.ts",
       "category": "test",
-      "bytes": 40169,
-      "sha256": "0083b4ff403a434461858b114184f595c55a7a02a2ff0f2ce8f0dbe6e195da59"
+      "bytes": 39188,
+      "sha256": "5bd21459e0d181862e1cb11ec1111b39ff06e51bc50a732cc16fcea5ade1483a"
     },
     {
       "path": "src/renderer/audio/gameSfx.ts",
       "category": "source",
-      "bytes": 29154,
-      "sha256": "4138f78c57475f86ff176bb358c514f6d13e00869832884d0cee0d6d0a503b34"
+      "bytes": 28374,
+      "sha256": "dba60a9989c3e1ded9eda509c48c6159f5d5fff3db2a5cc63a057009c5783022"
     },
     {
       "path": "src/renderer/audio/gameSfxCancellation.test.ts",
@@ -8691,8 +8691,8 @@
     {
       "path": "src/renderer/cardFace/cardIllustrationImages.ts",
       "category": "source",
-      "bytes": 4317,
-      "sha256": "86ccf19276f33c416eba6802ea6de747bdde8f93e67389b00a424fb55ab19dec"
+      "bytes": 4188,
+      "sha256": "c1983cc8d20fc857ea0bb8a7644841aa009a7813bd49bc973611e67272c46499"
     },
     {
       "path": "src/renderer/cardFace/cardIllustrationRect.ts",
@@ -8883,8 +8883,8 @@
     {
       "path": "src/renderer/components/AnimatedCardGlow.tsx",
       "category": "source",
-      "bytes": 5963,
-      "sha256": "85440a9863ed444fa1effd497fc9318f664bb6370184e55535d2dbb799755107"
+      "bytes": 5821,
+      "sha256": "d171a74aaf3d0a5b761aa5f6e736e9ff542b684d01e025eb36f4384743adb9a5"
     },
     {
       "path": "src/renderer/components/AppErrorBoundary.module.css",
@@ -8961,20 +8961,20 @@
     {
       "path": "src/renderer/components/cardGlowFrame.test.ts",
       "category": "test",
-      "bytes": 9376,
-      "sha256": "627a8ba971a4369bb265e46dd2b0bd22dcda52670ae528786eaa47e6d4d4e40b"
+      "bytes": 9186,
+      "sha256": "2bde62c516f697602a73c31abdc7146a9bbd6e9b478b6f8573e1496311b34a4a"
     },
     {
       "path": "src/renderer/components/cardGlowFrame.ts",
       "category": "source",
-      "bytes": 4798,
-      "sha256": "badf066173306121f1f41f1a9d6cdfb4686cdffe5c9f2d2786c3ae58e175689a"
+      "bytes": 4697,
+      "sha256": "620ad80dcb74bd1ff501a2b55e2f3edb8ea355944e99afbb6e2c3a08d9423b67"
     },
     {
       "path": "src/renderer/components/CathedralScene.module.css",
       "category": "source",
-      "bytes": 3298,
-      "sha256": "b2997590c2cd719f22277969615c9a63a5f5431df7a6cb1a81a00bfe60f93e54"
+      "bytes": 3166,
+      "sha256": "1813e32fe7001504f375521b70b8e0af01ff60263286e5d291d83b8e17c73dd8"
     },
     {
       "path": "src/renderer/components/CathedralScene.test.tsx",
@@ -8985,14 +8985,14 @@
     {
       "path": "src/renderer/components/CathedralScene.tsx",
       "category": "source",
-      "bytes": 5104,
-      "sha256": "bca96276b2e74e41bddd440da8921dbb77a60716f22400a6fdb96903a48fd23f"
+      "bytes": 5009,
+      "sha256": "64fb731370c66771032cc47e9114639c6f1c841039d796e82d0ef54412e33eb2"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
       "category": "source",
-      "bytes": 22682,
-      "sha256": "a0e85633a6a03eaafbba78f9c7fb9f52b3d753cff3fdd5c907b2887b8a89a2ba"
+      "bytes": 21765,
+      "sha256": "efc4a47bf8d8645d6ee6928f959f6890ef1bd3d440e4f73bea0ed2cb0b5b1156"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
@@ -9003,8 +9003,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 35777,
-      "sha256": "3bed3468dc297eec0682ee404cc1e0a1a89f89439a109061a40d624a57927f79"
+      "bytes": 35093,
+      "sha256": "3d1d4d3f1728c5ac9b584b1c464e06109b8691206831f0154cb914ab38c6b2b3"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -9087,8 +9087,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.module.css",
       "category": "source",
-      "bytes": 20840,
-      "sha256": "4fcb8b2139cf5c06e59fae1a0e7aa9e2d62b5f001ac031715be85fbc55447919"
+      "bytes": 20016,
+      "sha256": "1986ab2a0271909cc6250245c318615f097adbe897c0b591832341846df5ad67"
     },
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
@@ -9099,8 +9099,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 24918,
-      "sha256": "a67cbbcbe9a94eb6de32a17593b2a89412ec047fcffa8e8cfba2b425b8388448"
+      "bytes": 24436,
+      "sha256": "a63dd1301ec67de9ef9a8c9d92fb99a40baddc9e7a468be7aa80a1b1c34f940c"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -9111,26 +9111,26 @@
     {
       "path": "src/renderer/components/GameplayScene.module.css",
       "category": "source",
-      "bytes": 8039,
-      "sha256": "4d2e87e376c7b39ab9fa3a1d2501de59cd295d5c9659c898c3ad75d65ba8f8ad"
+      "bytes": 7692,
+      "sha256": "2d09d8056b3553deae755bca3654e09619a842d46be16800c744a3ba88c00a21"
     },
     {
       "path": "src/renderer/components/GameplayScene.test.tsx",
       "category": "test",
-      "bytes": 14841,
-      "sha256": "7371728dd92bd1f5a61f1a5d6c969be1aa7cd463a67727fa87f9d6376549cb26"
+      "bytes": 14584,
+      "sha256": "89918e2b2e61b724b7cfba3ff7e40ceef5a2fdea57ac6143087ca32d8b326f5b"
     },
     {
       "path": "src/renderer/components/GameplayScene.tsx",
       "category": "source",
-      "bytes": 10528,
-      "sha256": "3cf3b9d2cc834622c3a3c7be9e4f8b8b950bf528bf57858ba4f8aebcd9c87e36"
+      "bytes": 10336,
+      "sha256": "66d43131af15bad6b044d257f016d4d0bba853a0807c0a4026701201554b6385"
     },
     {
       "path": "src/renderer/components/gameplaySceneLevels.ts",
       "category": "source",
-      "bytes": 5068,
-      "sha256": "6b9eadfd1c60b5484813448320aa727dcde7de1c4fb6da4e90ec8bdd7f33456c"
+      "bytes": 4958,
+      "sha256": "cc8212cb38a016ffee38d53fe3f938336f3058bac006116a3780bd16e490e038"
     },
     {
       "path": "src/renderer/components/gameplayVisualConfig.test.ts",
@@ -9159,8 +9159,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 89658,
-      "sha256": "62e7c4a10f732ca5de611d120b121575efa8cb8829e5ed41f755aed88469f6c4"
+      "bytes": 87795,
+      "sha256": "7d8e4e4a85a7df8153c267eb9eccfe6374974aaca0774c92a3a9fca697a5183e"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9219,8 +9219,8 @@
     {
       "path": "src/renderer/components/MainMenu.module.css",
       "category": "source",
-      "bytes": 12067,
-      "sha256": "947fe7ec3253d510bed466d42d7222d6921b2a2794845aa27fa37ece39a3dbeb"
+      "bytes": 11621,
+      "sha256": "c90ec6644aba0447fba425d481e7a9c6871112a3f0c3286f88e0cd45375aef3e"
     },
     {
       "path": "src/renderer/components/MainMenu.test.tsx",
@@ -9363,8 +9363,8 @@
     {
       "path": "src/renderer/components/PortalScene.module.css",
       "category": "source",
-      "bytes": 5772,
-      "sha256": "840d779dfe38a2b39d0d9834a151b94dc44bee99cbecb9749b8950552a56de45"
+      "bytes": 5536,
+      "sha256": "96c83a057f3b61ce9143a96559b1bab743662d442753d4bef488a017d70241e1"
     },
     {
       "path": "src/renderer/components/PortalScene.test.tsx",
@@ -9375,14 +9375,14 @@
     {
       "path": "src/renderer/components/PortalScene.tsx",
       "category": "source",
-      "bytes": 5080,
-      "sha256": "20f73db088e0031a3c9906c325e6d5ef98b7c1951ed604c8187d58d92cb76147"
+      "bytes": 4988,
+      "sha256": "b6cba5075854ed452645663fcb5e593e54010fa560295506f7a43dbcccb477fc"
     },
     {
       "path": "src/renderer/components/portalSceneMotes.ts",
       "category": "source",
-      "bytes": 1257,
-      "sha256": "4d2ed85c09de9f239ee9599c0f24e2d16868a1a280363d87a40208365e548035"
+      "bytes": 1229,
+      "sha256": "722cb2531b6b06415e7384e96210ba248aa4c69de66c5c893c95c1279bf628e2"
     },
     {
       "path": "src/renderer/components/ProfileScreen.module.css",
@@ -9405,26 +9405,26 @@
     {
       "path": "src/renderer/components/RunLoadingScreen.module.css",
       "category": "source",
-      "bytes": 4818,
-      "sha256": "2306ba532e5834120e71a3b0587294923b5469d0dd29615390e53e49fdce9f16"
+      "bytes": 4652,
+      "sha256": "62a215e2b0c7a48b517ce70289916008f70c7b0c93cdd7a23533e5e4ec696048"
     },
     {
       "path": "src/renderer/components/runLoadingScreen.test.tsx",
       "category": "test",
-      "bytes": 3524,
-      "sha256": "00fbf5e902cdd05234c6d1f206db2c53ee1cd5ec9b85ed8cb34715053c95fb09"
+      "bytes": 3454,
+      "sha256": "0363b0e5446671158f947a075b396d280b5ce62d317add282e93f20b3381c413"
     },
     {
       "path": "src/renderer/components/RunLoadingScreen.tsx",
       "category": "source",
-      "bytes": 3010,
-      "sha256": "d4a7d67fcfb122b2c3aeafd5c42df3298f767ea3f4660545c3562e2aae85e050"
+      "bytes": 2945,
+      "sha256": "d88c99c3e559388016d9b0245aa787e11f7ddefb97989b1e826fdc726dcfa708"
     },
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 40104,
-      "sha256": "803b1f3d5670a500afafa180695aa7a9090d9d9f5d9546ffa34987d8397427d4"
+      "bytes": 38791,
+      "sha256": "d6acaa0bc100a8abcec283dcf42033b50e983a16dab6990e9ed682710126bc3c"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
@@ -9435,8 +9435,8 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 31150,
-      "sha256": "f652e15f84f5fe2c05213d0fd6cd7c334aee672abea16de2c4453db17ad32548"
+      "bytes": 30560,
+      "sha256": "bb0808f143f1d90b472ad47b9ead740933582dbfc1f352d3430f53900a329086"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -9471,20 +9471,20 @@
     {
       "path": "src/renderer/components/scenePlate.module.css",
       "category": "source",
-      "bytes": 3636,
-      "sha256": "af4aeb4dc34c99fe32136c8136b1777416d14edd3a512cd1da961391b421cae2"
+      "bytes": 3522,
+      "sha256": "09444f5c876751369a24e5535763f2a6a759403d77c767a187155fcdc9d25006"
     },
     {
       "path": "src/renderer/components/sceneSpriteClocks.ts",
       "category": "source",
-      "bytes": 4331,
-      "sha256": "a9ff57fa1f3012a7612209b1d378ec7feb73e2a8391cfba1e06478035af59c7a"
+      "bytes": 4232,
+      "sha256": "a1db85df487e75fb32756e1b253968c4025b9fbb5660dc13bf01a28cb48b180a"
     },
     {
       "path": "src/renderer/components/SceneSprites.module.css",
       "category": "source",
-      "bytes": 3339,
-      "sha256": "7a80128d3d6156a6d79bc1459ccb23635e306355a0a490e8e113db209ff63a24"
+      "bytes": 3224,
+      "sha256": "8a88598f0d1c9bb5d22504f51e8de5687884aeddcbdb1ffc1830b1e163758e70"
     },
     {
       "path": "src/renderer/components/SceneSprites.test.tsx",
@@ -9495,8 +9495,8 @@
     {
       "path": "src/renderer/components/SceneSprites.tsx",
       "category": "source",
-      "bytes": 5788,
-      "sha256": "33d5b49d3e5c346c53a62499a235ddf750b318331a5bef1dc81305a09f72b05d"
+      "bytes": 5667,
+      "sha256": "5aed823e71c574bbb3a55dc115d9dcab0ec692b5a2dfb397226fea3d980e2fe0"
     },
     {
       "path": "src/renderer/components/ScoreTermsLine.test.tsx",
@@ -9609,8 +9609,8 @@
     {
       "path": "src/renderer/components/TileBezel.tsx",
       "category": "source",
-      "bytes": 35217,
-      "sha256": "3bd07df854e8f3ed837ea3332628e2b7c0cd5dca26340f87bba4d12eb76ef7dc"
+      "bytes": 34333,
+      "sha256": "043bba490daac3c081f6b238a609fb5cd2d2960b7aa50194382ef5f4d0717732"
     },
     {
       "path": "src/renderer/components/TileBoard.module.css",
@@ -9627,8 +9627,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 152401,
-      "sha256": "7879f4f748d82d61fa70809d0e412c89605abcf3129f853c6508e0f9e74f677a"
+      "bytes": 148959,
+      "sha256": "6052b555c1c24ec11ab30baeb1a63ca02142092058ef35ce9a8fcb59662ae149"
     },
     {
       "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -9657,32 +9657,32 @@
     {
       "path": "src/renderer/components/tileBoardCardBend.test.ts",
       "category": "test",
-      "bytes": 34885,
-      "sha256": "0308e28481b44c0c87ba46f4fe58ddca99e3ffd39173aa6563b6788856f45e12"
+      "bytes": 33932,
+      "sha256": "a80465ef82d48f4412d0adbffefa03170bbfc8014f0615bd30648cb4586e162d"
     },
     {
       "path": "src/renderer/components/tileBoardCardBend.ts",
       "category": "source",
-      "bytes": 19752,
-      "sha256": "286fdb60a97fbb98e14147e280abada62188c77b68960bdca88e5901f89058ad"
+      "bytes": 19005,
+      "sha256": "0fabea3cb09b683792d0833f372509992d27664de7ec480e3bd9c0c0c6838d1d"
     },
     {
       "path": "src/renderer/components/tileBoardCardHeat.test.ts",
       "category": "test",
-      "bytes": 3953,
-      "sha256": "fdfadd922238baee3673033897dfcfcdc33be65fe2f9673f1124da1137f4b1d3"
+      "bytes": 3865,
+      "sha256": "e843d126c83bcc9fc58ff0217d86819cc2f4c647180dba85d487a7812bb0f0dd"
     },
     {
       "path": "src/renderer/components/tileBoardCardHeat.ts",
       "category": "source",
-      "bytes": 4963,
-      "sha256": "09c64f0905eaf308d381d8b46e7bedaa7df93b742e9012020f5eaa6c67567e39"
+      "bytes": 4847,
+      "sha256": "244d8a364f154633fffac64532b5e0b4e879aaf7adbee2bd23150bcb7b183a7f"
     },
     {
       "path": "src/renderer/components/TileBoardCardSurface.tsx",
       "category": "source",
-      "bytes": 8513,
-      "sha256": "28d02ebea4bd652852eccd0322dcba13797705cacb71fbb473022aa4e28663f1"
+      "bytes": 8310,
+      "sha256": "c2954b08fb5f6defa9f318652a5e887f05735bca05e0d83fb733f41d1009dd5c"
     },
     {
       "path": "src/renderer/components/tileBoardCardTint.test.ts",
@@ -9777,8 +9777,8 @@
     {
       "path": "src/renderer/components/tileBoardFrameAdvance.ts",
       "category": "source",
-      "bytes": 12190,
-      "sha256": "3c2ec239026ce42dc1d0264e6effe549066a9aaee86fb80f1f8a29b82c4c5c61"
+      "bytes": 11885,
+      "sha256": "cd213e3d6eaf0658367e31ca38e02ae356595058ee1f3a37aae6df738379a293"
     },
     {
       "path": "src/renderer/components/tileBoardFrameBag.test.ts",
@@ -9813,14 +9813,14 @@
     {
       "path": "src/renderer/components/tileBoardFramePropsSnapshot.test.ts",
       "category": "test",
-      "bytes": 2592,
-      "sha256": "e310282fd31f49d1c782fa379d9aa86014acdadf8713519df3c361a6b5a66956"
+      "bytes": 2512,
+      "sha256": "5bf261ce7aceb69a3d4f023039198a78910b2704e3ed123965e2d77af7ab27d7"
     },
     {
       "path": "src/renderer/components/tileBoardFramePropsSnapshot.ts",
       "category": "source",
-      "bytes": 2165,
-      "sha256": "39e06d674adbee5500f1ea87a2bfd7f3359245ffb13d2dc7e57a9e33b2caf738"
+      "bytes": 2108,
+      "sha256": "694f77b1546b136b326fb67f81868cc86248cfdf42a47e73910100888ffad9a8"
     },
     {
       "path": "src/renderer/components/tileBoardFramePulseState.test.ts",
@@ -10107,14 +10107,14 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 19233,
-      "sha256": "820883545e07509617d0beac3ec6cf78c0827234ed3bf53231b3309e7eee3903"
+      "bytes": 18769,
+      "sha256": "50732063a7b9553facd74c64372c34aeae31503af0562fb129865ad028f46cf3"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "category": "source",
-      "bytes": 7555,
-      "sha256": "f4590f351406480f8c0b356e8f3cd9e74c1f1981f592c4fa7545c9dd2f4b57b0"
+      "bytes": 7376,
+      "sha256": "20268b38727737a5e9597950694703933b2f28a3d28939c094921b00bfb717a6"
     },
     {
       "path": "src/renderer/components/tileBoardSceneFrame.test.ts",
@@ -10371,14 +10371,14 @@
     {
       "path": "src/renderer/components/tileTextures.test.ts",
       "category": "test",
-      "bytes": 15045,
-      "sha256": "2c044710bb0f1ee81332562182480056ff1e9eebc922800fe610f451d91fb403"
+      "bytes": 14678,
+      "sha256": "a2c20ea940be7ddaad01d9fb5a6af40aa9a11beabfb2e82f5220100b42ba313f"
     },
     {
       "path": "src/renderer/components/tileTextures.ts",
       "category": "source",
-      "bytes": 62603,
-      "sha256": "a8f53a6b22aa39e7c64c7f22d0e6d4c3436db53a760832c6f2b242d97c4cee1f"
+      "bytes": 60910,
+      "sha256": "f65cd2770818a8b8db49edac95cb8d1e594758ea8e06a2983e4b85c6820c3cd4"
     },
     {
       "path": "src/renderer/components/TutorialPairMarkerPlane.tsx",
@@ -11007,8 +11007,8 @@
     {
       "path": "src/renderer/input/gamepadRumble.ts",
       "category": "source",
-      "bytes": 3689,
-      "sha256": "0107fab9a14dff8d21eca9efb199c05ae33cbd5a8203624e6367fd26cb784d65"
+      "bytes": 3595,
+      "sha256": "23628e69464e12973a13540a6911a548c8c484a7e534b1a69559eca5a9f1e488"
     },
     {
       "path": "src/renderer/input/spatialFocus.test.ts",
@@ -11487,8 +11487,8 @@
     {
       "path": "src/renderer/store/useAppStore.test.ts",
       "category": "test",
-      "bytes": 33857,
-      "sha256": "48cd422f9adf5dba5bf142c028e753c2191ff2ccd7c6366048a9658b65de78a8"
+      "bytes": 34359,
+      "sha256": "61b3a4891958228a2cf43f8ca8d23c237ff8821f9632812f1675092a175b6825"
     },
     {
       "path": "src/renderer/store/useAppStore.ts",
@@ -11745,8 +11745,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 21895,
-      "sha256": "68930a607d60bf78b9303609de7332131dfcfa2c3c81626b4a1f8a5f24f3276a"
+      "bytes": 23295,
+      "sha256": "5a7b6335cbfd9955ad6de778f18354d2605934c8909784929fc02f9e8fb1f353"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -12025,6 +12025,18 @@
       "sha256": "8f82d28d972346bb2e3e315a13b38aa71552e42633f76c5d3f10c715ed368acd"
     },
     {
+      "path": "src/shared/chain-carryover-rules.test.ts",
+      "category": "test",
+      "bytes": 2216,
+      "sha256": "90767e20952d3059b8eeeedbf2f7576d862f465a39471ecf7aadd36acb46d68d"
+    },
+    {
+      "path": "src/shared/chain-carryover-rules.ts",
+      "category": "source",
+      "bytes": 3664,
+      "sha256": "58296d8b5dea3c4b2c034bd2901ff0138da6619b03c26f67b9a0676a49cf047d"
+    },
+    {
       "path": "src/shared/chain-rung-value-rules.test.ts",
       "category": "test",
       "bytes": 3656,
@@ -12051,8 +12063,8 @@
     {
       "path": "src/shared/chain-tier-rules.test.ts",
       "category": "test",
-      "bytes": 4890,
-      "sha256": "f219643f390c2bce2eb1d0042d844694dd5a57ded93a6138439d4c4c177574ee"
+      "bytes": 4889,
+      "sha256": "b843eb9a640b2a74086df99a6d77959e1ff3dca41714b673ed8e2943c5c99173"
     },
     {
       "path": "src/shared/chain-tier-rules.ts",
@@ -12441,8 +12453,8 @@
     {
       "path": "src/shared/game.test.ts",
       "category": "test",
-      "bytes": 67513,
-      "sha256": "5b4af02eeea22104ad8ab6543e72ef35a811e09c3f02d87bd37ec97c86c3bc80"
+      "bytes": 67786,
+      "sha256": "9c3f309abd3a2ec92ac0254492e104f13da470c9e04fb0bd546709c042727d22"
     },
     {
       "path": "src/shared/game.ts",
@@ -12597,8 +12609,8 @@
     {
       "path": "src/shared/gate-changed.test.ts",
       "category": "test",
-      "bytes": 33812,
-      "sha256": "dfd9d8f843e98081ac0470658e735a2666bdf0a208b39a5f9e684d1819a4d289"
+      "bytes": 33070,
+      "sha256": "5bd3180499921ffadb6c6a5f676c85c1ad47482b3f9ed929ddfc834ebca919f5"
     },
     {
       "path": "src/shared/gate-long-run-script.test.ts",
@@ -12627,8 +12639,8 @@
     {
       "path": "src/shared/graphicsQuality.test.ts",
       "category": "test",
-      "bytes": 5352,
-      "sha256": "f8412b375965c815276a331aa457960cb2634f979cc1c0ee1a8490d54662b000"
+      "bytes": 5235,
+      "sha256": "005ca4f9c5f06890ecec3f1cd1e793b2838dc4d8fa70703838bae0a436d6caf0"
     },
     {
       "path": "src/shared/graphicsQuality.ts",
@@ -12813,8 +12825,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 32722,
-      "sha256": "147791fb68259fb135bc5c24a58bbd64947e05c8a43c70746b185582688a8c06"
+      "bytes": 33061,
+      "sha256": "43fa06e4370f9c1440024ff7b60dcb0ffcd992197433ef98812c0e84d520d444"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -12891,14 +12903,14 @@
     {
       "path": "src/shared/next-floor-run-state-rules.test.ts",
       "category": "test",
-      "bytes": 3399,
-      "sha256": "fb93e46d6c690c5f8757cbbe96ff392e9b2482bd9676836ae2f39d2741e444ba"
+      "bytes": 5187,
+      "sha256": "d175d7c762cde7ca58c73ac80ad18e872dda8c1ab3f21b0f2e88c68428b701df"
     },
     {
       "path": "src/shared/next-floor-run-state-rules.ts",
       "category": "source",
-      "bytes": 2863,
-      "sha256": "39de125d05fa0461755ac71966f1b37a6ecf48c0924ed8fd92e27eacfc5fecdc"
+      "bytes": 3567,
+      "sha256": "9ef40f82cfde1c4aa504d6ca3633ee7d08f9f7a526b104c091eee823116803d9"
     },
     {
       "path": "src/shared/next-floor-transition-rules.ts",
@@ -13341,8 +13353,8 @@
     {
       "path": "src/shared/run-occupancy-simulation.test.ts",
       "category": "test",
-      "bytes": 6165,
-      "sha256": "3436b510de7655ad50b7a00c46398fa802da2255a5b70c4c35ea9d1fd3be6566"
+      "bytes": 7224,
+      "sha256": "55561663c5a70a64ef8d41fff44f5031389190e9e2d325d5b768b748ec960047"
     },
     {
       "path": "src/shared/run-record-guards.test.ts",
@@ -13617,8 +13629,8 @@
     {
       "path": "src/shared/system-occupancy-simulation.ts",
       "category": "source",
-      "bytes": 56000,
-      "sha256": "b8884934f50cca5e081dce6462c146dd09ddefa01d78805d50128fa994e35dcc"
+      "bytes": 56731,
+      "sha256": "2cfa5f9e60daa618e7d8b6cd3e39a71691d4e537f571ab6c0c67a954c71cfaee"
     },
     {
       "path": "src/shared/system-refinement-ledger.test.ts",
@@ -13629,8 +13641,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 35146,
-      "sha256": "88cd9526025a854feaed21434709c31125d1064eb6cdb69d73fe41cf0a5a59a4"
+      "bytes": 36542,
+      "sha256": "7bfc1f9a7d290c9a3e3b949b4a01ed82088e6fb1dab356df8ce689786344008f"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -25392,7 +25404,7 @@
       "path": "src/renderer/store/useAppStore.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 863,
+      "lineCount": 868,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/useAppStore.ts",
@@ -26794,6 +26806,39 @@
       "testedBy": []
     },
     {
+      "id": "file:src/shared/chain-carryover-rules.test.ts",
+      "path": "src/shared/chain-carryover-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 43,
+      "imports": [
+        "file:src/shared/chain-carryover-rules.ts",
+        "file:src/shared/chain-tier-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/chain-carryover-rules.ts",
+      "path": "src/shared/chain-carryover-rules.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 62,
+      "imports": [
+        "file:src/shared/chain-tier-rules.ts",
+        "file:src/shared/run-number-guards.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/chain-carryover-rules.ts#carriedChainForNextFloor",
+        "symbol:src/shared/chain-carryover-rules.ts#CHAIN_CARRYOVER_CAP"
+      ],
+      "testedBy": [
+        "file:src/shared/chain-carryover-rules.test.ts",
+        "file:src/shared/game.test.ts",
+        "file:src/shared/next-floor-run-state-rules.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/chain-rung-value-rules.test.ts",
       "path": "src/shared/chain-rung-value-rules.test.ts",
       "layer": "shared",
@@ -26907,8 +26952,10 @@
       "testedBy": [
         "file:src/shared/authored-floors.test.ts",
         "file:src/shared/cascade-clump-fixture.test.ts",
+        "file:src/shared/chain-carryover-rules.test.ts",
         "file:src/shared/chain-tier-rules.test.ts",
-        "file:src/shared/clump-read-rules.test.ts"
+        "file:src/shared/clump-read-rules.test.ts",
+        "file:src/shared/next-floor-run-state-rules.test.ts"
       ]
     },
     {
@@ -28397,10 +28444,11 @@
       "path": "src/shared/game.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1702,
+      "lineCount": 1705,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-powers.ts",
+        "file:src/shared/chain-carryover-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-curio-rules.ts",
         "file:src/shared/floor-par.ts",
@@ -29663,7 +29711,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 627,
+      "lineCount": 628,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -29920,8 +29968,10 @@
       "path": "src/shared/next-floor-run-state-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 86,
+      "lineCount": 128,
       "imports": [
+        "file:src/shared/chain-carryover-rules.ts",
+        "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-curio-rules.ts",
         "file:src/shared/game.ts",
@@ -29935,9 +29985,10 @@
       "path": "src/shared/next-floor-run-state-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 84,
+      "lineCount": 94,
       "imports": [
         "file:src/shared/board-tile-generation-rules.ts",
+        "file:src/shared/chain-carryover-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-curio-rules.ts",
         "file:src/shared/run-timer-rules.ts",
@@ -31367,7 +31418,7 @@
       "path": "src/shared/run-occupancy-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 115,
+      "lineCount": 131,
       "imports": [
         "file:src/shared/system-occupancy-simulation.ts"
       ],
@@ -32264,7 +32315,7 @@
       "path": "src/shared/system-occupancy-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1072,
+      "lineCount": 1081,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-power-actions.ts",
@@ -44998,6 +45049,22 @@
       "endLine": 525
     },
     {
+      "id": "symbol:src/shared/chain-carryover-rules.ts#carriedChainForNextFloor",
+      "name": "carriedChainForNextFloor",
+      "kind": "value",
+      "file": "src/shared/chain-carryover-rules.ts",
+      "line": 60,
+      "endLine": 61
+    },
+    {
+      "id": "symbol:src/shared/chain-carryover-rules.ts#CHAIN_CARRYOVER_CAP",
+      "name": "CHAIN_CARRYOVER_CAP",
+      "kind": "value",
+      "file": "src/shared/chain-carryover-rules.ts",
+      "line": 52,
+      "endLine": 52
+    },
+    {
       "id": "symbol:src/shared/chain-rung-value-rules.ts#CHAIN_RUNG_PAIRS",
       "name": "CHAIN_RUNG_PAIRS",
       "kind": "value",
@@ -50162,16 +50229,16 @@
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 594,
-      "endLine": 612
+      "line": 595,
+      "endLine": 613
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 615,
-      "endLine": 626
+      "line": 616,
+      "endLine": 627
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
@@ -50179,7 +50246,7 @@
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
       "line": 534,
-      "endLine": 591
+      "endLine": 592
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
@@ -50666,16 +50733,16 @@
       "name": "createNextFloorRunState",
       "kind": "value",
       "file": "src/shared/next-floor-run-state-rules.ts",
-      "line": 19,
-      "endLine": 83
+      "line": 20,
+      "endLine": 93
     },
     {
       "id": "symbol:src/shared/next-floor-run-state-rules.ts#CreateNextFloorRunStateOptions",
       "name": "CreateNextFloorRunStateOptions",
       "kind": "interface",
       "file": "src/shared/next-floor-run-state-rules.ts",
-      "line": 13,
-      "endLine": 17
+      "line": 14,
+      "endLine": 18
     },
     {
       "id": "symbol:src/shared/next-floor-transition-rules.ts#advanceToNextLevel",
@@ -53850,40 +53917,40 @@
       "name": "dominantSystemKeys",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1050,
-      "endLine": 1053
+      "line": 1059,
+      "endLine": 1062
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#floorBandedRows",
       "name": "floorBandedRows",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 967,
-      "endLine": 972
+      "line": 976,
+      "endLine": 981
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeRunOccupancy",
       "name": "judgeRunOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1008,
-      "endLine": 1048
+      "line": 1017,
+      "endLine": 1057
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
       "name": "judgeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 974,
-      "endLine": 996
+      "line": 983,
+      "endLine": 1005
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancyAgainstBaseline",
       "name": "judgeSystemOccupancyAgainstBaseline",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 934,
-      "endLine": 957
+      "line": 943,
+      "endLine": 966
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OCCUPANCY_SEEDS",
@@ -53938,8 +54005,8 @@
       "name": "summarizeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1055,
-      "endLine": 1071
+      "line": 1064,
+      "endLine": 1080
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BANDS",
@@ -53947,23 +54014,23 @@
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
       "line": 827,
-      "endLine": 838
+      "endLine": 847
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE",
       "name": "SYSTEM_OCCUPANCY_BASELINE",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 888,
-      "endLine": 908
+      "line": 897,
+      "endLine": 917
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "name": "SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 925,
-      "endLine": 925
+      "line": 934,
+      "endLine": 934
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_COUNTERS",
@@ -56063,7 +56130,7 @@
         },
         {
           "path": "src/shared/run-occupancy-simulation.test.ts",
-          "line": 83
+          "line": 70
         }
       ],
       "enables": [],
@@ -56187,7 +56254,7 @@
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
-          "line": 35
+          "line": 42
         },
         {
           "path": "src/shared/flip-tile-transition.ts",
@@ -56201,7 +56268,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 130
+          "line": 131
         },
         {
           "path": "src/shared/next-floor-run-state-rules.test.ts",
@@ -56422,7 +56489,7 @@
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
-          "line": 34
+          "line": 41
         }
       ],
       "tests": [
@@ -67817,6 +67884,18 @@
       "id": "exports:src/shared/cascade-balance-simulation.ts->symbol:src/shared/cascade-balance-simulation.ts#summarizeCascadeBalance",
       "source": "file:src/shared/cascade-balance-simulation.ts",
       "target": "symbol:src/shared/cascade-balance-simulation.ts#summarizeCascadeBalance",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/chain-carryover-rules.ts->symbol:src/shared/chain-carryover-rules.ts#carriedChainForNextFloor",
+      "source": "file:src/shared/chain-carryover-rules.ts",
+      "target": "symbol:src/shared/chain-carryover-rules.ts#carriedChainForNextFloor",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/chain-carryover-rules.ts->symbol:src/shared/chain-carryover-rules.ts#CHAIN_CARRYOVER_CAP",
+      "source": "file:src/shared/chain-carryover-rules.ts",
+      "target": "symbol:src/shared/chain-carryover-rules.ts#CHAIN_CARRYOVER_CAP",
       "kind": "exports"
     },
     {
@@ -86764,6 +86843,30 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/chain-carryover-rules.test.ts->src/shared/chain-carryover-rules.ts",
+      "source": "file:src/shared/chain-carryover-rules.test.ts",
+      "target": "file:src/shared/chain-carryover-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/chain-carryover-rules.test.ts->src/shared/chain-tier-rules.ts",
+      "source": "file:src/shared/chain-carryover-rules.test.ts",
+      "target": "file:src/shared/chain-tier-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/chain-carryover-rules.ts->src/shared/chain-tier-rules.ts",
+      "source": "file:src/shared/chain-carryover-rules.ts",
+      "target": "file:src/shared/chain-tier-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/chain-carryover-rules.ts->src/shared/run-number-guards.ts",
+      "source": "file:src/shared/chain-carryover-rules.ts",
+      "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/chain-rung-value-rules.test.ts->src/shared/chain-rung-value-rules.ts",
       "source": "file:src/shared/chain-rung-value-rules.test.ts",
       "target": "file:src/shared/chain-rung-value-rules.ts",
@@ -87715,6 +87818,12 @@
       "id": "imports:src/shared/game.test.ts->src/shared/board-powers.ts",
       "source": "file:src/shared/game.test.ts",
       "target": "file:src/shared/board-powers.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/game.test.ts->src/shared/chain-carryover-rules.ts",
+      "source": "file:src/shared/game.test.ts",
+      "target": "file:src/shared/chain-carryover-rules.ts",
       "kind": "imports"
     },
     {
@@ -89140,6 +89249,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/next-floor-run-state-rules.test.ts->src/shared/chain-carryover-rules.ts",
+      "source": "file:src/shared/next-floor-run-state-rules.test.ts",
+      "target": "file:src/shared/chain-carryover-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/next-floor-run-state-rules.test.ts->src/shared/chain-tier-rules.ts",
+      "source": "file:src/shared/next-floor-run-state-rules.test.ts",
+      "target": "file:src/shared/chain-tier-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/next-floor-run-state-rules.test.ts->src/shared/contracts.ts",
       "source": "file:src/shared/next-floor-run-state-rules.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -89167,6 +89288,12 @@
       "id": "imports:src/shared/next-floor-run-state-rules.ts->src/shared/board-tile-generation-rules.ts",
       "source": "file:src/shared/next-floor-run-state-rules.ts",
       "target": "file:src/shared/board-tile-generation-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/next-floor-run-state-rules.ts->src/shared/chain-carryover-rules.ts",
+      "source": "file:src/shared/next-floor-run-state-rules.ts",
+      "target": "file:src/shared/chain-carryover-rules.ts",
       "kind": "imports"
     },
     {
@@ -96279,6 +96406,24 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/chain-carryover-rules.ts->file:src/shared/chain-carryover-rules.test.ts",
+      "source": "file:src/shared/chain-carryover-rules.ts",
+      "target": "file:src/shared/chain-carryover-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/chain-carryover-rules.ts->file:src/shared/game.test.ts",
+      "source": "file:src/shared/chain-carryover-rules.ts",
+      "target": "file:src/shared/game.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/chain-carryover-rules.ts->file:src/shared/next-floor-run-state-rules.test.ts",
+      "source": "file:src/shared/chain-carryover-rules.ts",
+      "target": "file:src/shared/next-floor-run-state-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/chain-rung-value-rules.ts->file:src/shared/chain-rung-value-rules.test.ts",
       "source": "file:src/shared/chain-rung-value-rules.ts",
       "target": "file:src/shared/chain-rung-value-rules.test.ts",
@@ -96309,6 +96454,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/chain-tier-rules.ts->file:src/shared/chain-carryover-rules.test.ts",
+      "source": "file:src/shared/chain-tier-rules.ts",
+      "target": "file:src/shared/chain-carryover-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/chain-tier-rules.ts->file:src/shared/chain-tier-rules.test.ts",
       "source": "file:src/shared/chain-tier-rules.ts",
       "target": "file:src/shared/chain-tier-rules.test.ts",
@@ -96318,6 +96469,12 @@
       "id": "tested_by:src/shared/chain-tier-rules.ts->file:src/shared/clump-read-rules.test.ts",
       "source": "file:src/shared/chain-tier-rules.ts",
       "target": "file:src/shared/clump-read-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/chain-tier-rules.ts->file:src/shared/next-floor-run-state-rules.test.ts",
+      "source": "file:src/shared/chain-tier-rules.ts",
+      "target": "file:src/shared/next-floor-run-state-rules.test.ts",
       "kind": "tested_by"
     },
     {

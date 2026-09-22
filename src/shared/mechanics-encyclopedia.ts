@@ -11,7 +11,7 @@
 import type { AchievementId, GameMode, MutatorId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 41 as const;
+export const ENCYCLOPEDIA_VERSION = 42 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -545,7 +545,8 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
             'clear the floor faster, and a longer ripple pays more. A miss halves the chain and puts the fire out. ' +
             'A suit that can no longer pop - no two of its pairs within reach of each other - loses its last pairs on its own: that is the drop, and it happens at any chain, so breaking the two pairs that hold a third up is a thing you can aim. ' +
             'A break with a shape gets a name on the run line: a ripple that ran on, a drop, a long clump, a bridge into the suit next door, a treasure spill, a clean sweep of a suit. ' +
-            'Clear the floor with momentum still standing and the floor-end bonus multiplies with the tier: 1.5x at Clean, 2.5x at Sharp, 5x at Fever - Extreme Fever. Never the rating.'
+            'Clear the floor with momentum still standing and the floor-end bonus multiplies with the tier: 1.5x at Clean, 2.5x at Sharp, 5x at Fever - Extreme Fever. Never the rating. ' +
+            'Clearing a floor is itself the first link of the next floor\'s chain: you arrive one match from Clean instead of three, so the chain is never wiped for finishing. Only that one link carries - every tier is earned on the board that shows it - and the momentum the chunks added stays behind with the board it was broken on.'
     },
     {
         id: 'tile_suits',

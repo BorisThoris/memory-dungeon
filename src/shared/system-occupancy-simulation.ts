@@ -828,13 +828,22 @@ export const SYSTEM_OCCUPANCY_BANDS = {
     core: { min: 0.9, max: 1 },
     common: { min: 0.1, max: 0.9 },
     /*
-     * 0.005 is one floor in two hundred, which is below what this census can resolve rather than a
-     * cadence anyone would design for: a system that fires once because a seed allowed it clears
+     * The bar is one floor of the census, which is below what this census can resolve rather than
+     * a cadence anyone would design for: a system that fires once because a seed allowed it clears
      * the bar. Raising it to 0.02 was tried and reverted - at 120 floors it called three hazard
      * caches thin that sit at 4-7% over 160, so the bar was measuring the sample, not the game.
      * A real bar needs more floors under it first.
+     *
+     * **Gen 262 corrected the number to match that sentence.** It read 0.005 - one floor in two
+     * hundred - and the run census plays 240 floors (`OCCUPANCY_SEEDS` x
+     * `SYSTEM_OCCUPANCY_BASELINE_FLOORS`), where one floor is 0.0042. A system firing exactly once
+     * therefore did *not* clear the bar, against the stated intent, and nothing noticed until the
+     * chain carry-over shortened floors enough to move the magpie from two of those floors to one.
+     * Written as a literal rather than derived from the two constants because they are declared
+     * below this object; the case `the census resolves one floor` in
+     * `run-occupancy-simulation.test.ts` holds the number and this sentence in step.
      */
-    rare: { min: 0.005, max: 0.25 }
+    rare: { min: 0.004, max: 0.25 }
 } as const;
 
 /**

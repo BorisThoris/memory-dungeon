@@ -5,6 +5,7 @@ import {
     type RunState
 } from './contracts';
 import { applyFloorCurio, pickFloorCurio } from './floor-curio-rules';
+import { carriedChainForNextFloor } from './chain-carryover-rules';
 import { countFindablePairs } from './board-tile-generation-rules';
 import { createTimerState } from './run-timer-rules';
 import { calculateRating } from './scoring-rules';
@@ -22,6 +23,12 @@ export const createNextFloorRunState = (
 ): RunState => {
     const nextBoard = options.board;
     const stats = normalizeSessionStats(run.stats);
+    /*
+     * The chain crosses the boundary, capped short of the Clean rung (`chain-carryover-rules.ts`):
+     * the momentum is the player's, every tier is earned on the board that shows it. The cascade
+     * momentum does not cross at all.
+     */
+    const carriedChain = carriedChainForNextFloor(stats.currentStreak);
 
     const nextRun: RunState = {
         ...run,
@@ -51,7 +58,10 @@ export const createNextFloorRunState = (
         chunkScoreThisFloor: 0,
         chunkPairsThisChain: 0,
         feverBreaksThisFloor: 0,
-        bestChainThisFloor: 0,
+        // The carried chain is a chain this floor really holds, so it is this floor's record until
+        // a longer one lands. It is under the Clean rung by construction, so it can never credit
+        // `sharpFloorsThisRun` or `feverFloorsThisRun` for a rung the floor did not climb.
+        bestChainThisFloor: carriedChain,
         chunkPairsDroppedThisFloor: 0,
         bestRippleThisFloor: 0,
         turnsThisFloor: 0,
@@ -68,7 +78,7 @@ export const createNextFloorRunState = (
             currentLevelScore: 0,
             rating: calculateRating(0),
             highestLevel: Math.max(stats.highestLevel, nextBoard.level),
-            currentStreak: 0
+            currentStreak: carriedChain
         }
     };
     /*

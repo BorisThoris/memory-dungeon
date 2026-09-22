@@ -95,8 +95,8 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         id: 'board.chain_chunk_fever',
         counter: 'feverBreaks',
         verdict: 'confirmed',
-        generation: 261,
-        note: 'Ladder re-measured at none 1.63 / clean 2.40 / sharp 6.12 / fever 7.70 pairs per match, and the multiplier climbs strictly at every rung. Fever itself lands on 0.217 of floors, which is the top of the ladder being reachable rather than decorative. sim:cascade and sim:pop both hold their bands. Gen 260 moved both numbers: giving the recovery floor a two-suit deal put four more floors a cycle on the narrow palette, where one suit sits in bigger clumps - so a break takes more pairs and a floor ends sooner, which is fewer floors reaching the top rung and a larger break when one does. The meter follows it; CHAIN_RUNG_PAIRS says eight pairs at Fever now.'
+        generation: 262,
+        note: 'Gen 262 stopped the stairs wiping the chain: a clear is now the first link of the next floor’s chain (`chain-carryover-rules.ts`). One link and no tier, because that is what the floors could afford - capping the carry one under Sharp ended five of the curve’s floors in under two turns, and one under Clean still left the narrow-palette gap at 0.166 over a band of 0.12. Ladder re-measured at none 1.63 / clean 2.40 / sharp 6.12 / fever 7.70 pairs per match, and the multiplier climbs strictly at every rung. Fever itself lands on 0.217 of floors, which is the top of the ladder being reachable rather than decorative. sim:cascade and sim:pop both hold their bands. Gen 260 moved both numbers: giving the recovery floor a two-suit deal put four more floors a cycle on the narrow palette, where one suit sits in bigger clumps - so a break takes more pairs and a floor ends sooner, which is fewer floors reaching the top rung and a larger break when one does. The meter follows it; CHAIN_RUNG_PAIRS says eight pairs at Fever now.'
     },
     {
         id: 'board.cleanup',
@@ -157,8 +157,8 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         id: 'power.peek',
         counter: 'peek',
         verdict: 'confirmed',
-        generation: 261,
-        note: 'Occupancy 0.908 across whole runs, banded core, and it is the one run-scoped charge that clears that bar honestly: a run starts with a single peek and three of the floor curios grant another, so the charge keeps coming back. Read a floor at a time it was 1.000, which was true of 240 first floors rather than of a run (Gen 207).'
+        generation: 262,
+        note: 'Occupancy 0.900 across whole runs, banded core, and it is the one run-scoped charge that clears that bar honestly: a run starts with a single peek and three of the floor curios grant another, so the charge keeps coming back. Read a floor at a time it was 1.000, which was true of 240 first floors rather than of a run (Gen 207). Gen 262 moved it from 0.908 to exactly the core bar: the chain now carries a link across the stairs, floors end a little sooner, and a charge that is read at the end of a floor gets marginally fewer floors to be seen on. It is the tightest thing the carry-over touched, and it is the reason the carry is one link rather than more - at a larger carry this read 0.892 and 0.850.'
     },
     {
         id: 'power.pin',
@@ -288,8 +288,8 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         id: 'hazard.magpie_thief',
         counter: 'magpieThefts',
         verdict: 'changed',
-        generation: 261,
-        note: 'Occupancy 0.008 across whole runs, banded rare, and until Gen 208 it had no counter at all and was not in the interaction graph - so the ledger claim to cover every system had never covered the one mechanic that takes finished work back off the player. The floor census reads it SILENT, true of 240 first floors and false of the game: the bird arrives on every third mismatch OF THE RUN, so a census that restarts every floor almost never reaches it. It is announced when it steals (Gen 113) and the graph now records that reader. Gen 260 took it from 0.013 to 0.008: the breather it rides deals two suits now, so the floor ends in fewer turns and the bird’s every-third-miss trigger lands on it less often. Still reachable and still banded by the run census, but the nest is the wrong floor for it now - a thief is not relief, and a pressure floor would give it more to take.'
+        generation: 262,
+        note: 'Occupancy 0.004 across whole runs, banded rare, and until Gen 208 it had no counter at all and was not in the interaction graph - so the ledger claim to cover every system had never covered the one mechanic that takes finished work back off the player. The floor census reads it SILENT, true of 240 first floors and false of the game: the bird arrives on every third mismatch OF THE RUN, so a census that restarts every floor almost never reaches it. It is announced when it steals (Gen 113) and the graph now records that reader. Gen 260 took it from 0.013 to 0.008: the breather it rides deals two suits now, so the floor ends in fewer turns and the bird’s every-third-miss trigger lands on it less often. Gen 262 took it from 0.008 to 0.004 for the same reason again - the chain carries a link across the stairs, floors end sooner, the every-third-miss trigger lands less often - and that halving is one floor of the census, which is how the `rare` bar was found to be 0.005 while one floor of 240 is 0.0042. The bar was corrected, not the bird. Still reachable and still banded by the run census, but it is now the thinnest system here on a bar it clears by a single floor, and the nest is the wrong floor for it - a thief is not relief, and a pressure floor would give it more to take.'
     },
     {
         id: 'safety.softlock_fairness',
@@ -309,9 +309,9 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         id: 'objective.featured_streak',
         counter: 'featuredStreak',
         verdict: 'changed',
-        generation: 261,
+        generation: 262,
         gone: ['no shuffle, swap, or destroy'],
-        note: 'The scholar-style objective told the player "no shuffle, swap, or destroy" while its rule watched one field that covers swap too, so only the dead third was cut; Gen 213 found the same phrasing describing the Scholar preset and cut it there. Gen 216 finally counted the thing: 0.821 of a run’s floors clear their featured objective, and every floor carries one. Gen 259 moved it from 0.829: the within-par objective now reads the palette its floor was dealt, so on the third of floors held to two suits it is a target rather than a formality. Its census exemption had said it needed the run-level census, which shipped at Gen 207 - the line went on excusing the mechanic for eight generations after its own stated blocker was gone.'
+        note: 'The scholar-style objective told the player "no shuffle, swap, or destroy" while its rule watched one field that covers swap too, so only the dead third was cut; Gen 213 found the same phrasing describing the Scholar preset and cut it there. Gen 216 finally counted the thing: 0.821 of a run’s floors clear their featured objective, and every floor carries one. Gen 259 moved it from 0.829: the within-par objective now reads the palette its floor was dealt, so on the third of floors held to two suits it is a target rather than a formality. Gen 262 took it to 0.838, and it is the one counter the chain carry-over moved upward: the within-par objective is the most common of the set, and a floor that opens one link from Clean comes in under its par slightly more often. Its census exemption had said it needed the run-level census, which shipped at Gen 207 - the line went on excusing the mechanic for eight generations after its own stated blocker was gone.'
     },
     {
         id: 'economy.score_and_rewards',
