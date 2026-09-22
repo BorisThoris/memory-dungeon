@@ -6,12 +6,13 @@ import { noopMeshRaycast } from './tileBoardPick';
 import { cardHeatLevels, cardMatchFlare } from './tileBoardCardHeat';
 
 /**
- * The card back, answering the run.
+ * A card side, answering the run.
  *
- * Two additive layers over the painted plate, keyed out of that same painting so nothing has to be
- * erased from it: the cyan rune light across the whole back, and the labyrinth medallion, which
- * turns. Both ride `heat` — the chain meter's fill — so a streak visibly winds the board up and a
- * break drops it still (`tileBoardCardHeat`). A landed pair throws a flare on top.
+ * Additive light over the painted plate, keyed out of that same painting so nothing has to be
+ * erased from it (`scripts/card-pipeline/cut_card_back_glow.py`). The back gets its cyan runes and
+ * the labyrinth medallion, which turns; the face gets the gems set around its frame. Both sides
+ * ride the same `heat` — the chain meter's fill — so a streak winds the whole board up and a break
+ * drops it still (`tileBoardCardHeat`). A landed pair throws a flare on top.
  *
  * Every card gets its own phase from its seed, so a board of backs shimmers rather than pulsing as
  * one slab, and the medallions are never in step.
@@ -20,7 +21,7 @@ import { cardHeatLevels, cardMatchFlare } from './tileBoardCardHeat';
  * all: the frame callback returns immediately and the medallion is not mounted. The rune light is
  * still there at its resting level, because a streak has to be legible on every device.
  */
-interface AnimatedCardBackGlowProps {
+interface AnimatedCardGlowProps {
     /** Chain meter fill, 0 at rest to 1 at Fever. */
     heat: number;
     /** False while the card is face up: its back is behind the art and nothing here can be seen. */
@@ -37,14 +38,15 @@ interface AnimatedCardBackGlowProps {
     glowTexture: Texture | null;
     reduceMotion: boolean;
     seed: number;
-    spinGeometry: PlaneGeometry;
-    spinTexture: Texture | null;
+    /** The turning medallion, on the side that has one; omitted on the face. */
+    spinGeometry?: PlaneGeometry;
+    spinTexture?: Texture | null;
     z: number;
 }
 
 const fract = (value: number): number => value - Math.floor(value);
 
-export const AnimatedCardBackGlow = memo(
+export const AnimatedCardGlow = memo(
     ({
         geometry,
         glowTexture,
@@ -55,9 +57,9 @@ export const AnimatedCardBackGlow = memo(
         visible,
         seed,
         spinGeometry,
-        spinTexture,
+        spinTexture = null,
         z
-    }: AnimatedCardBackGlowProps) => {
+    }: AnimatedCardGlowProps) => {
         const glowMatRef = useRef<MeshBasicMaterial | null>(null);
         const spinMatRef = useRef<MeshBasicMaterial | null>(null);
         const spinMeshRef = useRef<Mesh | null>(null);
@@ -122,7 +124,7 @@ export const AnimatedCardBackGlow = memo(
                         />
                     </mesh>
                 ) : null}
-                {spinTexture && animated ? (
+                {spinTexture && spinGeometry && animated ? (
                     <mesh
                         geometry={spinGeometry}
                         position={[0, 0, z + 0.00008]}
@@ -146,4 +148,4 @@ export const AnimatedCardBackGlow = memo(
         );
     }
 );
-AnimatedCardBackGlow.displayName = 'AnimatedCardBackGlow';
+AnimatedCardGlow.displayName = 'AnimatedCardGlow';

@@ -8,7 +8,7 @@ import {
     type Texture
 } from 'three';
 
-import { AnimatedCardBackGlow } from './AnimatedCardBackGlow';
+import { AnimatedCardGlow } from './AnimatedCardGlow';
 import type { GameplayRenderQualityProfile } from './gameplayRenderProfile';
 import { noopMeshRaycast } from './tileBoardPick';
 import { CARD_WEAR_Z_SLIVER, type CardWearAssetSet } from './tileBoardCardBend';
@@ -25,8 +25,10 @@ interface TileBoardCardSurfaceProps {
     cardBackSpinGeometry: PlaneGeometry;
     cardBackSpinTexture: Texture | null;
     cardHeat: number;
-    /** False on a device that cannot afford the back's moving light. */
+    /** False on a device that cannot afford the cards' moving light. */
     cardGlowAnimated: boolean;
+    /** The gems around the face's frame, lit by the same chain as the back. */
+    cardFaceGlowTexture: Texture | null;
     /** True once this card's pair has landed: the back throws a flare. */
     cardMatched: boolean;
     /** False while the card is face up, when its back cannot be seen. */
@@ -57,6 +59,7 @@ export const TileBoardCardSurface = memo(
         cardBackSpinGeometry,
         cardBackSpinTexture,
         cardBackVisible,
+        cardFaceGlowTexture,
         cardGlowAnimated,
         cardHeat,
         cardMatched,
@@ -100,6 +103,20 @@ export const TileBoardCardSurface = memo(
                     transparent
                 />
             </mesh>
+            {/* The face answers the run too: the gems around its frame take the same chain. */}
+            <group position={[0, 0, faceZ]}>
+                <AnimatedCardGlow
+                    animated={cardGlowAnimated}
+                    geometry={frontGeometry}
+                    glowTexture={cardFaceGlowTexture}
+                    heat={cardHeat}
+                    matched={cardMatched}
+                    reduceMotion={reduceMotion}
+                    seed={seed}
+                    visible={!cardBackVisible}
+                    z={CARD_WEAR_Z_SLIVER * 0.5}
+                />
+            </group>
             {wearAssets ? (
                 <mesh
                     geometry={frontGeometry}
@@ -142,7 +159,7 @@ export const TileBoardCardSurface = memo(
             </mesh>
             {/* The back answers the run: its own light rises with the chain and the labyrinth turns. */}
             <group position={[0, 0, -faceZ]} rotation={[0, Math.PI, 0]}>
-                <AnimatedCardBackGlow
+                <AnimatedCardGlow
                     animated={cardGlowAnimated}
                     geometry={backGeometry}
                     glowTexture={cardBackGlowTexture}

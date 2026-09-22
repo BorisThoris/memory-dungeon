@@ -13,6 +13,7 @@ import { RENDERER_THEME } from '../styles/theme';
 import referenceBackTextureUrl from '../assets/textures/cards/card-back-painted.webp';
 import cardBackGlowTextureUrl from '../assets/textures/cards/card-back-glow-runes.webp';
 import cardBackSpinTextureUrl from '../assets/textures/cards/card-back-spin.webp';
+import cardFaceGlowTextureUrl from '../assets/textures/cards/card-face-glow.webp';
 import cardBackNormalTextureUrl from '../assets/textures/cards/back-normal.webp';
 import cardFaceTextureUrl from '../assets/textures/cards/front-face.webp';
 import cardFaceNormalTextureUrl from '../assets/textures/cards/front-normal.webp';
@@ -298,6 +299,8 @@ const textureImageUrls = {
     cardBackGlow: cardBackGlowTextureUrl,
     /** The labyrinth medallion's light alone, turned over the still plate as the chain climbs. */
     cardBackSpin: cardBackSpinTextureUrl,
+    /** The gems set around the face's frame: the same light on the side the player is reading. */
+    cardFaceGlow: cardFaceGlowTextureUrl,
     /** Face-up panel raster (WebGL front plane, DOM .cardFaceFront): the gold frame round the illustration. */
     cardFace: cardFaceTextureUrl,
     /** Tangent-space normal for WebGL face-up raster plane (`front-normal.webp`). */
@@ -315,6 +318,7 @@ export const TILE_TEXTURE_IMAGE_IDS = [
     'cardReference',
     'cardBackGlow',
     'cardBackSpin',
+    'cardFaceGlow',
     'cardFace',
     'cardFaceNormal',
     'cardBackNormal',
@@ -694,6 +698,9 @@ export const getCardBackGlowTexture = (): Texture | null => getRasterTexture('ca
 
 /** The card back's labyrinth medallion, additive and turned by the chain. */
 export const getCardBackSpinTexture = (): Texture | null => getRasterTexture('cardBackSpin');
+
+/** The card face's gems, additive over the painted frame. */
+export const getCardFaceGlowTexture = (): Texture | null => getRasterTexture('cardFaceGlow');
 
 /**
  * Procedural tangent-space normal map (paper-like micro grain + very soft undulation).

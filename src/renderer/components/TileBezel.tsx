@@ -78,6 +78,7 @@ import {
     getCardBackGlowTexture,
     getCardBackRasterNormalMapTexture,
     getCardBackSpinTexture,
+    getCardFaceGlowTexture,
     getCardFaceRasterNormalMapTexture,
     getCardFaceStaticTexture,
     getCardPanelDisplacementTexture,
@@ -340,6 +341,10 @@ const TileBezelInner = ({
     const cardBackGlowTexture = useMemo(() => {
         void textureRevision;
         return getCardBackGlowTexture();
+    }, [textureRevision]);
+    const cardFaceGlowTexture = useMemo(() => {
+        void textureRevision;
+        return getCardFaceGlowTexture();
     }, [textureRevision]);
     const cardBackSpinTexture = useMemo(() => {
         void textureRevision;
@@ -772,6 +777,7 @@ const TileBezelInner = ({
                         cardBackSpinGeometry={cardBackSpinGeometry}
                         cardBackSpinTexture={cardBackSpinTexture}
                         cardBackVisible={!faceUp}
+                        cardFaceGlowTexture={cardFaceGlowTexture}
                         cardGlowAnimated={cardGlowAnimated}
                         cardHeat={cardHeat}
                         cardMatched={isMatched}

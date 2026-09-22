@@ -54,6 +54,7 @@ describe('tileTextures layout', () => {
             'cardReference',
             'cardBackGlow',
             'cardBackSpin',
+            'cardFaceGlow',
             'cardFace',
             'cardFaceNormal',
             'cardBackNormal',
