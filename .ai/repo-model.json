@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2675,
-    "codeFileCount": 915,
+    "trackedFileCount": 2676,
+    "codeFileCount": 916,
     "exportedSymbolCount": 2761,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6987
+    "relationshipCount": 6989
   },
   "inventory": [
     {
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "55619f28c4bc8be3070bf3f9210d36c991604d5506543656aead2118bad905a7"
+      "sha256": "75e2245d80cf660103b264d35773afb337e93ff229579daf253932efa75ab74d"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4197,8 +4197,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 32737,
-      "sha256": "82bb5c22d9b1f1e4f9f388dae913fd9badcf0229d0b466ed9beeabc6279f3c42"
+      "bytes": 32778,
+      "sha256": "2eba389aef8d597bf53abc4f3d2bb6b7cd04195dffd2953de5e689860a3e4a2e"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4989,8 +4989,8 @@
     {
       "path": "scripts/gate-changed.mjs",
       "category": "script",
-      "bytes": 19735,
-      "sha256": "b5937b503ec46b48966119eedf7ce5f7700b47a75627badcc90370d4a07125da"
+      "bytes": 19849,
+      "sha256": "f88799699d4f3c765442a76a10a5a3e5443e01c8dd80af6c27ec5a172c5f6055"
     },
     {
       "path": "scripts/gate-long-run.ts",
@@ -10931,6 +10931,12 @@
       "category": "source",
       "bytes": 665,
       "sha256": "c6f1a73292517a7fcb0ce67936714307124a7d5dbfbed19e4243038dd6b6bec0"
+    },
+    {
+      "path": "src/renderer/hooks/useSceneLook.test.tsx",
+      "category": "test",
+      "bytes": 4497,
+      "sha256": "7fd943b7a8902e966c938c041cbc7467b3d50bce9ba88c860e45d6b6780435d2"
     },
     {
       "path": "src/renderer/hooks/useSceneLook.ts",
@@ -23745,6 +23751,18 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/hooks/useSceneLook.test.tsx",
+      "path": "src/renderer/hooks/useSceneLook.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 113,
+      "imports": [
+        "file:src/renderer/hooks/useSceneLook.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/hooks/useSceneLook.ts",
       "path": "src/renderer/hooks/useSceneLook.ts",
       "layer": "renderer",
@@ -23754,7 +23772,9 @@
       "exports": [
         "symbol:src/renderer/hooks/useSceneLook.ts#useSceneLook"
       ],
-      "testedBy": []
+      "testedBy": [
+        "file:src/renderer/hooks/useSceneLook.test.tsx"
+      ]
     },
     {
       "id": "file:src/renderer/hooks/useViewportSize.test.tsx",
@@ -83398,6 +83418,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/hooks/useSceneLook.test.tsx->src/renderer/hooks/useSceneLook.ts",
+      "source": "file:src/renderer/hooks/useSceneLook.test.tsx",
+      "target": "file:src/renderer/hooks/useSceneLook.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/hooks/useViewportSize.test.tsx->src/renderer/hooks/useViewportSize.ts",
       "source": "file:src/renderer/hooks/useViewportSize.test.tsx",
       "target": "file:src/renderer/hooks/useViewportSize.ts",
@@ -95058,6 +95084,12 @@
       "id": "tested_by:src/renderer/hooks/useRichPresence.ts->file:src/renderer/hooks/useRichPresence.test.ts",
       "source": "file:src/renderer/hooks/useRichPresence.ts",
       "target": "file:src/renderer/hooks/useRichPresence.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/hooks/useSceneLook.ts->file:src/renderer/hooks/useSceneLook.test.tsx",
+      "source": "file:src/renderer/hooks/useSceneLook.ts",
+      "target": "file:src/renderer/hooks/useSceneLook.test.tsx",
       "kind": "tested_by"
     },
     {
