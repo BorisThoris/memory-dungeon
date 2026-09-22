@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2679,
-    "codeFileCount": 919,
-    "exportedSymbolCount": 2772,
+    "trackedFileCount": 2681,
+    "codeFileCount": 921,
+    "exportedSymbolCount": 2775,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 7012
+    "relationshipCount": 7018
   },
   "inventory": [
     {
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "8dad3d3caeee31073d971958cbf4fe29ed636e3cc3b63c5cd77d873b3d5e2f38"
+      "sha256": "648a1d6d6daf657230fd153957bbd83eb1cb92c0193b94fd93c8dd0fe9b71665"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -9429,14 +9429,14 @@
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 23582,
-      "sha256": "621d4d69cb96c57b8ab18c5117945a610ad8f5a51b1215bf502910e52184d806"
+      "bytes": 25977,
+      "sha256": "f1f265a51856a086d654496d6eb46a068c6ac9b1a911ca24774c2ca28ebad6d6"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 30558,
-      "sha256": "41c081f2631b24e0848f9b54b448e2646faa9512e20d305174ddd9e118c92303"
+      "bytes": 31150,
+      "sha256": "f652e15f84f5fe2c05213d0fd6cd7c334aee672abea16de2c4453db17ad32548"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -11021,6 +11021,18 @@
       "category": "source",
       "bytes": 3415,
       "sha256": "896c2746b9c6bffd8f45f6bbf06c2c0af822d6ec3adda7711576c06e893ff112"
+    },
+    {
+      "path": "src/renderer/input/touchHaptics.test.ts",
+      "category": "test",
+      "bytes": 2687,
+      "sha256": "b56948c793d8bb690ae04fd58f2c5dff91d33be689b0e1527f424de2cbf5c275"
+    },
+    {
+      "path": "src/renderer/input/touchHaptics.ts",
+      "category": "source",
+      "bytes": 2604,
+      "sha256": "f699f19ea6648ae337b64b61fe7776922046ed022b0ad3bd468fe55bfbc358ce"
     },
     {
       "path": "src/renderer/keyboard/gameplayShortcuts.ts",
@@ -19576,7 +19588,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 454,
+      "lineCount": 504,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/shared/contracts.ts",
@@ -19591,7 +19603,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 579,
+      "lineCount": 591,
       "imports": [
         "file:src/renderer/a11y/toolbarRoving.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -19601,6 +19613,7 @@
         "file:src/renderer/copy/runDialogCopy.ts",
         "file:src/renderer/gameShellLayout.ts",
         "file:src/renderer/hooks/useCountUp.ts",
+        "file:src/renderer/input/touchHaptics.ts",
         "file:src/renderer/ui/gameplayIcons.tsx",
         "file:src/shared/chain-rung-value-rules.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -24001,6 +24014,34 @@
       ],
       "testedBy": [
         "file:src/renderer/input/spatialFocus.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/input/touchHaptics.test.ts",
+      "path": "src/renderer/input/touchHaptics.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 56,
+      "imports": [
+        "file:src/renderer/input/touchHaptics.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/input/touchHaptics.ts",
+      "path": "src/renderer/input/touchHaptics.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 63,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/input/touchHaptics.ts#STUDY_CLOSING_TAP_MS",
+        "symbol:src/renderer/input/touchHaptics.ts#tapStudyClosing",
+        "symbol:src/renderer/input/touchHaptics.ts#VibrateFn"
+      ],
+      "testedBy": [
+        "file:src/renderer/input/touchHaptics.test.ts"
       ]
     },
     {
@@ -36670,24 +36711,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 578,
-      "endLine": 578
+      "line": 590,
+      "endLine": 590
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 44,
-      "endLine": 74
+      "line": 45,
+      "endLine": 75
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 31,
-      "endLine": 42
+      "line": 32,
+      "endLine": 43
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
@@ -41640,6 +41681,30 @@
       "file": "src/renderer/input/spatialFocus.ts",
       "line": 20,
       "endLine": 23
+    },
+    {
+      "id": "symbol:src/renderer/input/touchHaptics.ts#STUDY_CLOSING_TAP_MS",
+      "name": "STUDY_CLOSING_TAP_MS",
+      "kind": "value",
+      "file": "src/renderer/input/touchHaptics.ts",
+      "line": 37,
+      "endLine": 37
+    },
+    {
+      "id": "symbol:src/renderer/input/touchHaptics.ts#tapStudyClosing",
+      "name": "tapStudyClosing",
+      "kind": "value",
+      "file": "src/renderer/input/touchHaptics.ts",
+      "line": 45,
+      "endLine": 62
+    },
+    {
+      "id": "symbol:src/renderer/input/touchHaptics.ts#VibrateFn",
+      "name": "VibrateFn",
+      "kind": "type",
+      "file": "src/renderer/input/touchHaptics.ts",
+      "line": 20,
+      "endLine": 20
     },
     {
       "id": "symbol:src/renderer/keyboard/gameplayShortcuts.ts#GAMEPAD_SHORTCUT_ROWS",
@@ -55548,7 +55613,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 79
+          "line": 80
         }
       ],
       "tests": [
@@ -55574,7 +55639,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 65
+          "line": 68
         },
         {
           "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -55875,7 +55940,7 @@
       "tests": [
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 12
+          "line": 15
         },
         {
           "path": "src/renderer/components/GameScreen.test.tsx",
@@ -57367,7 +57432,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 361
+          "line": 373
         }
       ],
       "tests": [
@@ -57406,7 +57471,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 361
+          "line": 373
         }
       ],
       "tests": [
@@ -57440,7 +57505,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 361
+          "line": 373
         }
       ],
       "tests": [
@@ -57474,7 +57539,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 361
+          "line": 373
         }
       ],
       "tests": [
@@ -65241,6 +65306,24 @@
       "id": "exports:src/renderer/input/spatialFocus.ts->symbol:src/renderer/input/spatialFocus.ts#SpatialCandidate",
       "source": "file:src/renderer/input/spatialFocus.ts",
       "target": "symbol:src/renderer/input/spatialFocus.ts#SpatialCandidate",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/input/touchHaptics.ts->symbol:src/renderer/input/touchHaptics.ts#STUDY_CLOSING_TAP_MS",
+      "source": "file:src/renderer/input/touchHaptics.ts",
+      "target": "symbol:src/renderer/input/touchHaptics.ts#STUDY_CLOSING_TAP_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/input/touchHaptics.ts->symbol:src/renderer/input/touchHaptics.ts#tapStudyClosing",
+      "source": "file:src/renderer/input/touchHaptics.ts",
+      "target": "symbol:src/renderer/input/touchHaptics.ts#tapStudyClosing",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/input/touchHaptics.ts->symbol:src/renderer/input/touchHaptics.ts#VibrateFn",
+      "source": "file:src/renderer/input/touchHaptics.ts",
+      "target": "symbol:src/renderer/input/touchHaptics.ts#VibrateFn",
       "kind": "exports"
     },
     {
@@ -80060,6 +80143,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/input/touchHaptics.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/renderer/input/touchHaptics.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/ui/gameplayIcons.tsx",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/renderer/ui/gameplayIcons.tsx",
@@ -83795,6 +83884,12 @@
       "id": "imports:src/renderer/input/spatialFocus.test.ts->src/renderer/input/spatialFocus.ts",
       "source": "file:src/renderer/input/spatialFocus.test.ts",
       "target": "file:src/renderer/input/spatialFocus.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/input/touchHaptics.test.ts->src/renderer/input/touchHaptics.ts",
+      "source": "file:src/renderer/input/touchHaptics.test.ts",
+      "target": "file:src/renderer/input/touchHaptics.ts",
       "kind": "imports"
     },
     {
@@ -95422,6 +95517,12 @@
       "id": "tested_by:src/renderer/input/spatialFocus.ts->file:src/renderer/input/spatialFocus.test.ts",
       "source": "file:src/renderer/input/spatialFocus.ts",
       "target": "file:src/renderer/input/spatialFocus.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/input/touchHaptics.ts->file:src/renderer/input/touchHaptics.test.ts",
+      "source": "file:src/renderer/input/touchHaptics.ts",
+      "target": "file:src/renderer/input/touchHaptics.test.ts",
       "kind": "tested_by"
     },
     {

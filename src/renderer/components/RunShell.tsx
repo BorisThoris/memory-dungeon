@@ -14,6 +14,7 @@ import { CHAIN_BEAT_COPY, CHAIN_TIER_LABELS } from '../copy/chainBeat';
 import { chainRungScoreMultiplier } from '../../shared/chain-rung-value-rules';
 import { chainRungApproach, chainTierRungs, runChainMeter, runChainTier } from '../../shared/chain-tier-rules';
 import { playStudyClosingTickSfx } from '../audio/gameSfx';
+import { tapStudyClosing } from '../input/touchHaptics';
 import { memorizeUrgency } from './memorizeUrgency';
 import { isPassAndPlayRun, PASS_AND_PLAY_FLOORS } from '../../shared/pass-and-play-rules';
 
@@ -136,13 +137,23 @@ const useChainMeterFeverArrival = (full: boolean): boolean => {
 };
 
 /**
- * The tick under the closing study window.
+ * The beat under the closing study window: a tick, and a tap on a device that can.
  *
  * Fires once per whole second, only while the window is genuinely closing, and never twice for the
  * same second — the countdown re-reads four times a second, so keying this on the seconds value
  * rather than on the tick is what keeps it a clock instead of a buzz.
+ *
+ * Both channels fire together on purpose, because they miss different people. The sound misses a
+ * muted phone; the HUD bar beside them misses anyone actually watching the board, which is what
+ * memorizing *is*. A player gets whichever of the three reaches them, and a desktop with the sound
+ * on and no vibration hardware simply hears the tick.
  */
-const useStudyClosingTicks = (seconds: number | null, closing: boolean, gain: number): void => {
+const useStudyClosingBeats = (
+    seconds: number | null,
+    closing: boolean,
+    gain: number,
+    reduceMotion: boolean
+): void => {
     const lastTickedRef = useRef<number | null>(null);
     useEffect(() => {
         if (!closing || seconds === null || seconds <= 0) {
@@ -154,7 +165,8 @@ const useStudyClosingTicks = (seconds: number | null, closing: boolean, gain: nu
         }
         lastTickedRef.current = seconds;
         playStudyClosingTickSfx(gain, seconds);
-    }, [closing, seconds, gain]);
+        tapStudyClosing(reduceMotion);
+    }, [closing, seconds, gain, reduceMotion]);
 };
 
 interface MemorizeCountdown {
@@ -232,7 +244,7 @@ const RunShell = ({
     // The window closing is the one thing the study period never said. Only the HUD answers it:
     // the player's task right now is looking at the board, so the stage must not be touched.
     const urgency = memorizeUrgency(memorize?.progress ?? 0);
-    useStudyClosingTicks(memorize?.seconds ?? null, urgency.closing, sfxGain);
+    useStudyClosingBeats(memorize?.seconds ?? null, urgency.closing, sfxGain, reduceMotion);
     const turnsTaken = turnsTakenThisFloor(run);
     const parTurns = parTurnsForRun(run);
     const pairCount = run.board?.pairCount ?? 0;

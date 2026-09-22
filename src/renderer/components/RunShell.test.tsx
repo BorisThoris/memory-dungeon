@@ -9,6 +9,9 @@ import RunShell, { type RunShellTool } from './RunShell';
 const sfxMocks = vi.hoisted(() => ({ playStudyClosingTickSfx: vi.fn() }));
 vi.mock('../audio/gameSfx', () => sfxMocks);
 
+const hapticMocks = vi.hoisted(() => ({ tapStudyClosing: vi.fn(() => true) }));
+vi.mock('../input/touchHaptics', () => hapticMocks);
+
 const playingRun = (): RunState => finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
 
 /**
@@ -346,6 +349,53 @@ describe('RunShell — The Margin', () => {
             expect(seconds.length).toBeLessThanOrEqual(3);
             for (const call of calls) {
                 expect(call[0]).toBe(0.5);
+            }
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+
+    it('taps the device on the same beat it ticks, so a muted phone is not left with nothing', () => {
+        // The bar misses the player watching the board, which is what memorizing is; the tick
+        // misses a muted phone. The two channels fire together because they miss different people.
+        vi.useFakeTimers();
+        sfxMocks.playStudyClosingTickSfx.mockClear();
+        hapticMocks.tapStudyClosing.mockClear();
+        try {
+            const base = createNewRun(0, { echoFeedbackEnabled: false });
+            const run: RunState = { ...base, timerState: { ...base.timerState, memorizeRemainingMs: 10_000 } };
+            const { rerender } = render(
+                <RunShell onPause={vi.fn()} personalBestDepth={false} run={run} sfxGain={0.5} tools={[]} />
+            );
+            for (let i = 0; i < 40; i += 1) {
+                act(() => {
+                    vi.advanceTimersByTime(250);
+                });
+            }
+            expect(hapticMocks.tapStudyClosing.mock.calls.length).toBe(
+                sfxMocks.playStudyClosingTickSfx.mock.calls.length
+            );
+            expect(hapticMocks.tapStudyClosing.mock.calls.length).toBeGreaterThan(0);
+            // The shell hands its own reduce-motion setting down rather than deciding for it.
+            for (const call of hapticMocks.tapStudyClosing.mock.calls) {
+                expect(call[0]).toBe(false);
+            }
+
+            hapticMocks.tapStudyClosing.mockClear();
+            rerender(
+                <RunShell onPause={vi.fn()} personalBestDepth={false} reduceMotion run={run} sfxGain={0.5} tools={[]} />
+            );
+            const quiet: RunState = { ...base, timerState: { ...base.timerState, memorizeRemainingMs: 9_000 } };
+            rerender(
+                <RunShell onPause={vi.fn()} personalBestDepth={false} reduceMotion run={quiet} sfxGain={0.5} tools={[]} />
+            );
+            for (let i = 0; i < 40; i += 1) {
+                act(() => {
+                    vi.advanceTimersByTime(250);
+                });
+            }
+            for (const call of hapticMocks.tapStudyClosing.mock.calls) {
+                expect(call[0]).toBe(true);
             }
         } finally {
             vi.useRealTimers();
