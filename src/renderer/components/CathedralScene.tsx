@@ -24,7 +24,8 @@ import styles from './CathedralScene.module.css';
  * The parent owns the mask, the filter and how far the whole scene sinks into the page; the base
  * alone reads `--scene-base-opacity` and the lights `--scene-light-opacity`, so the candles can
  * burn brighter than the nave they light. At the run's end (`mood="ended"`) the candlelight
- * sinks and the spirit-light takes the nave. `getSceneEffectTier` decides the rest: `full` on a
+ * sinks and the spirit-light takes the nave, and `heat` lets the candles go on burning at the rate
+ * the run earned while it does. `getSceneEffectTier` decides the rest: `full` on a
  * desktop, `lean` on a phone or at `low` (the flames and the lights only, no drift, no echo, no
  * motes), `still` under reduce motion.
  */
@@ -36,11 +37,22 @@ export interface CathedralSceneProps {
      * candles burning low over their stands. Default `menu`.
      */
     mood?: 'menu' | 'ended';
+    /**
+     * How hot the run behind this screen got, 0..1 on the chain meter's own scale, or null when
+     * there is no run behind it — the main menu, or a first launch.
+     *
+     * The gameplay room reads this live; here it is a run already over, so what it lights is the
+     * best chain the player actually reached. It is not a contradiction with `ended`: the nave
+     * sinks either way, and the candles going on burning at the rate the run earned, against a
+     * room going dark, is the room remembering how the run went. A player who never chained ends
+     * on guttering candles; one who hit Fever ends on a nave still alight.
+     */
+    heat?: number | null;
 }
 
 const bg = (url: string) => ({ backgroundImage: `url(${url})` });
 
-export function CathedralScene({ mood = 'menu', quality, reduceMotion }: CathedralSceneProps) {
+export function CathedralScene({ heat = null, mood = 'menu', quality, reduceMotion }: CathedralSceneProps) {
     const sceneRef = useRef<HTMLDivElement>(null);
     const tier = useSceneEffectTier(quality, reduceMotion);
     const still = tier === 'still';
@@ -53,6 +65,7 @@ export function CathedralScene({ mood = 'menu', quality, reduceMotion }: Cathedr
             className={`${plate.scene} ${styles.scene}`}
             data-alive={alive ? 'true' : 'false'}
             data-mood={mood}
+            data-scene-heat={heat === null ? 'none' : heat.toFixed(2)}
             data-scene-effect-tier={tier}
             data-still={still ? 'true' : 'false'}
             data-testid="cathedral-scene"
@@ -65,7 +78,7 @@ export function CathedralScene({ mood = 'menu', quality, reduceMotion }: Cathedr
                 <div className={`${plate.layer} ${styles.layer} ${styles.wisps}`} style={bg(UI_ART.menuSceneGlowWisps)} />
                 <div className={`${plate.layer} ${styles.layer} ${styles.wispsEcho}`} style={bg(UI_ART.menuSceneGlowWisps)} />
                 <div className={`${plate.things} ${styles.things}`}>
-                    <SceneSprites set={candles} still={still} />
+                    <SceneSprites heat={heat} set={candles} still={still} />
                     {alive ? (
                         <SceneMotes
                             color="#bff5ea"

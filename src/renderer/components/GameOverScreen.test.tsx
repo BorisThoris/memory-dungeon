@@ -137,6 +137,32 @@ describe('the table at game over', () => {
     });
 });
 
+describe('the nave a run ends in', () => {
+    const naveHeatFor = (bestStreak: number) => {
+        let run = finishMemorizePhase(createNewRun(100, { runSeed: 0xabc }));
+        run = { ...run, runEndReason: 'turn_ceiling', stats: { ...run.stats, bestStreak }, status: 'gameOver' };
+        const { unmount } = render(<GameOverScreen run={createRunSummary(run, [])} />);
+        const heat = screen.getByTestId('cathedral-scene').getAttribute('data-scene-heat');
+        unmount();
+        return Number(heat);
+    };
+
+    it('burns by the best chain the run actually reached, on the meter\'s own scale', () => {
+        // The screen already tells the player their best streak as a number. The room saying the
+        // same thing in light is what makes a bad run feel like one before the number is read.
+        expect(naveHeatFor(0)).toBe(0);
+        expect(naveHeatFor(5)).toBeGreaterThan(naveHeatFor(0));
+        expect(naveHeatFor(10)).toBeGreaterThan(naveHeatFor(5));
+    });
+
+    it('does not burn brighter than Fever for a streak that ran past it', () => {
+        // The board is gone, so the streak goes against the standard Fever rung rather than the
+        // floor's. A monster run tops the scale out; it cannot push the nave past alight.
+        expect(naveHeatFor(10)).toBe(1);
+        expect(naveHeatFor(40)).toBe(1);
+    });
+});
+
 describe('GameOverScreen (REF-031)', () => {
     beforeEach(() => {
         gameOverStoreMocks.bestScoreAtRunStart = null;

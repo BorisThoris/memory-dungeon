@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { ACHIEVEMENTS } from '../../shared/achievements';
+import { chainMeter } from '../../shared/chain-tier-rules';
 import { getActiveContentLock } from '../../shared/content-lock-state';
 import { MUTATOR_CATALOG } from '../../shared/game-catalog';
 import { getSteamStorePageUrl } from '../steamStorePage';
@@ -157,6 +158,10 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
     });
     const mutatorChips = summary.activeMutators?.map((id) => mutatorLabel(id)) ?? [];
     const endReasonLine = runEndReasonLine(summary);
+    // The nave the run ends in burns at the best chain the run actually reached, measured on the
+    // meter's own scale rather than a second one invented here: the board is gone, so the streak
+    // goes against the standard Fever rung. A run that never chained ends on guttering candles.
+    const endingHeat = chainMeter(summary.bestStreak).fill;
 
     return (
         <section className={styles.shell} ref={shellRef}>
@@ -168,7 +173,12 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                 width={width}
             />
             <div aria-hidden="true" className={styles.sceneLayer}>
-                <CathedralScene mood="ended" quality={settings.graphicsQuality} reduceMotion={settings.reduceMotion} />
+                <CathedralScene
+                    heat={endingHeat}
+                    mood="ended"
+                    quality={settings.graphicsQuality}
+                    reduceMotion={settings.reduceMotion}
+                />
             </div>
             <div className={styles.scrim} />
 

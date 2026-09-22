@@ -44,6 +44,33 @@ describe('CathedralScene', () => {
         expect(screen.getByTestId('scene-sprites').querySelectorAll('[data-sprite-id]').length).toBeGreaterThan(20);
     });
 
+    it('lights the nave a run ends in by how hot that run got', () => {
+        const navesAt = (heat: number | null) => {
+            const { unmount } = render(
+                <CathedralScene heat={heat} mood="ended" quality="high" reduceMotion={false} />
+            );
+            const scene = screen.getByTestId('cathedral-scene');
+            const rate = Number(screen.getByTestId('scene-sprites').style.getPropertyValue('--flame-rate'));
+            const marker = scene.getAttribute('data-scene-heat');
+            unmount();
+            return { rate, marker };
+        };
+        const cold = navesAt(0);
+        const hot = navesAt(1);
+        // A run that never chained ends on guttering candles; one that hit Fever ends alight.
+        expect(hot.rate).toBeGreaterThan(cold.rate);
+        expect(cold.marker).toBe('0.00');
+        expect(hot.marker).toBe('1.00');
+    });
+
+    it('leaves the menu nave alone: no run behind it, so the candles are the ones painted', () => {
+        render(<CathedralScene quality="high" reduceMotion={false} />);
+        // Not "cold" — absent. A menu that declared a resting heat would quietly dim itself, and a
+        // player who has never pressed Play has no run for the room to be reporting on.
+        expect(screen.getByTestId('cathedral-scene')).toHaveAttribute('data-scene-heat', 'none');
+        expect(screen.getByTestId('scene-sprites').style.getPropertyValue('--flame-rate')).toBe('');
+    });
+
     it('holds still under reduce motion and drops the drift on low quality', () => {
         const { unmount } = render(<CathedralScene quality="high" reduceMotion />);
         expect(screen.getByTestId('cathedral-scene')).toHaveAttribute('data-still', 'true');

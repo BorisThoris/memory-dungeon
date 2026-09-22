@@ -9,7 +9,7 @@
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 7000
+    "relationshipCount": 7001
   },
   "inventory": [
     {
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "dc5ca9406a950196b014e720f644ed346f476fa79af2c4e255720b72922990a8"
+      "sha256": "fcdd07ed0364329fb22c63fd1617a9c0faf11270552a7e2772112a1986196641"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4347,8 +4347,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 123196,
-      "sha256": "b4833d055d49c952fafd821f73bdd26be346046c01ebb0672ebac9236f844913"
+      "bytes": 123166,
+      "sha256": "e05314bd39fe506d041792639fde544add61bd603f6f8d245234b62aa9b43f74"
     },
     {
       "path": "public/site.webmanifest",
@@ -5331,8 +5331,8 @@
     {
       "path": "scripts/scene-pipeline/README.md",
       "category": "script",
-      "bytes": 9098,
-      "sha256": "422d6c53496b42c3dd3178bcf83e2ee4f96f8d59f182b2638cef4aa580d9d7ed"
+      "bytes": 9530,
+      "sha256": "76bb71b5c6f245e8fa11ed6ff5c6210c6ead3bb39c575d77089a95f01b1aea9b"
     },
     {
       "path": "scripts/scene-pipeline/scene.sh",
@@ -8979,14 +8979,14 @@
     {
       "path": "src/renderer/components/CathedralScene.test.tsx",
       "category": "test",
-      "bytes": 5115,
-      "sha256": "5622413e93683044a0fc03d18755f58e46d119c77128acc7969674bf5c7e0d64"
+      "bytes": 6576,
+      "sha256": "8c26cb3dfa36ee5109d9da8c943c01ff995e79fb4acb5f91308835af844ec7d6"
     },
     {
       "path": "src/renderer/components/CathedralScene.tsx",
       "category": "source",
-      "bytes": 4227,
-      "sha256": "71e3d8dd3971097c963237ec3f1d3e86605d7803f4a761348889df1d36b93405"
+      "bytes": 5104,
+      "sha256": "bca96276b2e74e41bddd440da8921dbb77a60716f22400a6fdb96903a48fd23f"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
@@ -9093,14 +9093,14 @@
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "category": "test",
-      "bytes": 13030,
-      "sha256": "ae8645c8fdffdb3d8b9493f00741f29c0fdee04412b001d1eded570388c44747"
+      "bytes": 14381,
+      "sha256": "59aefa6256fc42885356960e76e9f23d741e9c40ff16ba4a50a17b3c7f03635a"
     },
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 24381,
-      "sha256": "6e52b4159467cb76d08b7f3e2aa22189477e2904db8aefd7c1f31e26469dd101"
+      "bytes": 24918,
+      "sha256": "a67cbbcbe9a94eb6de32a17593b2a89412ec047fcffa8e8cfba2b425b8388448"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -18452,7 +18452,7 @@
       "path": "src/renderer/components/CathedralScene.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 88,
+      "lineCount": 115,
       "imports": [
         "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/components/CathedralScene.tsx",
@@ -18466,7 +18466,7 @@
       "path": "src/renderer/components/CathedralScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 83,
+      "lineCount": 96,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
@@ -18710,7 +18710,7 @@
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 280,
+      "lineCount": 306,
       "imports": [
         "file:src/renderer/components/GameOverScreen.tsx",
         "file:src/shared/contracts.ts",
@@ -18726,7 +18726,7 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 473,
+      "lineCount": 483,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -18743,6 +18743,7 @@
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
         "file:src/shared/achievements.ts",
+        "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/content-lock-state.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/game-catalog.ts",
@@ -35975,16 +35976,16 @@
       "name": "CathedralScene",
       "kind": "function",
       "file": "src/renderer/components/CathedralScene.tsx",
-      "line": 43,
-      "endLine": 82
+      "line": 55,
+      "endLine": 95
     },
     {
       "id": "symbol:src/renderer/components/CathedralScene.tsx#CathedralSceneProps",
       "name": "CathedralSceneProps",
       "kind": "interface",
       "file": "src/renderer/components/CathedralScene.tsx",
-      "line": 31,
-      "endLine": 39
+      "line": 32,
+      "endLine": 51
     },
     {
       "id": "symbol:src/renderer/components/ChooseYourPathScreen.tsx#default",
@@ -36111,8 +36112,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 472,
-      "endLine": 472
+      "line": 482,
+      "endLine": 482
     },
     {
       "id": "symbol:src/renderer/components/gameplayRenderProfile.ts#GAMEPLAY_RENDER_PROFILE",
@@ -78622,6 +78623,12 @@
       "id": "imports:src/renderer/components/GameOverScreen.tsx->src/shared/achievements.ts",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "file:src/shared/achievements.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameOverScreen.tsx->src/shared/chain-tier-rules.ts",
+      "source": "file:src/renderer/components/GameOverScreen.tsx",
+      "target": "file:src/shared/chain-tier-rules.ts",
       "kind": "imports"
     },
     {

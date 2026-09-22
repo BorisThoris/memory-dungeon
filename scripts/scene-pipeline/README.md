@@ -76,7 +76,11 @@ corridor. `CathedralScene.tsx` (main menu,
 game over) flickers the candlelight, breathes and drifts the wisps, climbs the arch with motes
 and plays the 29 candle flames; at the run's end (`mood="ended"`) the candlelight sinks and the
 spirit-light takes the nave; its parent sinks the base further than the lights (`--scene-base-opacity`,
-`--scene-light-opacity`). `PortalScene.tsx` (Choose Your Path, when the recommended run's poster
+`--scene-light-opacity`). The game-over nave also takes `heat` — the best chain the finished run
+actually reached, put through `chainMeter` so it lands on the same scale the board used during
+play — so the candles go on burning at the rate the run earned while the room goes dark around
+them. A run that never chained ends on guttering candles. The menu passes nothing, because a
+player who has not pressed Play has no run for the room to report on. `PortalScene.tsx` (Choose Your Path, when the recommended run's poster
 is the Classic clearing) breathes the runes, pulses the moon, twinkles the stars on two stepped
 clocks, spins the vortex disc in the arch (its feathered rim dissolving into the painted outer
 arms, a fainter copy turning the other way), drifts mist over the ground and floats motes through
