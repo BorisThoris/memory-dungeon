@@ -1,5 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
-import { RUMBLE_BY_TIER, rumbleForBreak, rumbleGamepads } from './gamepadRumble';
+import {
+    RUMBLE_BY_TIER,
+    RUMBLE_FEVER_ARRIVAL,
+    rumbleForBreak,
+    rumbleForFeverArrival,
+    rumbleGamepads
+} from './gamepadRumble';
 
 describe('controller rumble on a break', () => {
     it('scales with the tier and is nothing below Clean', () => {
@@ -42,3 +48,29 @@ describe('controller rumble on a break', () => {
         expect(playEffect).not.toHaveBeenCalled();
     });
 });
+
+describe('rumbleForFeverArrival', () => {
+    it('holds longer and softer than the break it lands on', () => {
+        // The break at Fever is the hit; the arrival is the pad holding on to it, so it must not
+        // simply be a bigger version of the same jolt.
+        expect(RUMBLE_FEVER_ARRIVAL.durationMs).toBeGreaterThan(RUMBLE_BY_TIER.fever!.durationMs);
+        expect(RUMBLE_FEVER_ARRIVAL.strongMagnitude).toBeLessThan(RUMBLE_BY_TIER.fever!.strongMagnitude);
+        expect(RUMBLE_FEVER_ARRIVAL.weakMagnitude).toBeLessThan(RUMBLE_BY_TIER.fever!.weakMagnitude);
+    });
+
+    it('shakes a pad that can, and never one that asked not to be shaken', () => {
+        const playEffect = vi.fn(() => Promise.resolve());
+        const gamepads = () => [{ vibrationActuator: { playEffect } }];
+
+        expect(rumbleGamepads(RUMBLE_FEVER_ARRIVAL, { reduceMotion: false, gamepads })).toBe(1);
+        expect(playEffect).toHaveBeenCalledTimes(1);
+
+        expect(rumbleGamepads(RUMBLE_FEVER_ARRIVAL, { reduceMotion: true, gamepads })).toBe(0);
+        expect(playEffect).toHaveBeenCalledTimes(1);
+    });
+
+    it('is a silent no-op with no pad at all', () => {
+        expect(rumbleForFeverArrival(false)).toBe(0);
+    });
+});
+

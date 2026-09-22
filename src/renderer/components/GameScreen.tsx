@@ -88,7 +88,7 @@ import {
     resumeAudioContext,
     sfxGainFromSettings
 } from '../audio/gameSfx';
-import { rumbleForBreak } from '../input/gamepadRumble';
+import { rumbleForBreak, rumbleForFeverArrival } from '../input/gamepadRumble';
 import {
     playMenuOpenSfx,
     playUiBackSfx,
@@ -968,14 +968,22 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         if (pulseEventId === null || pulsePairs <= 0) {
             return undefined;
         }
-        // The pad shakes with the stage: same event, same tier, once. Reduce motion turns it off.
+        /*
+         * The pad shakes with the stage: same event, same tier, once. Reduce motion turns it off.
+         * A turn that also carried the run into Fever adds the arrival on top — longer and softer
+         * than the break under it, because the break is the hit and the arrival is the pad holding
+         * on to it. Both are keyed to the same event, so neither can fire twice for one turn.
+         */
         rumbleForBreak(pulseTier, reduceMotion);
+        if (feverArrivalKey !== null) {
+            rumbleForFeverArrival(reduceMotion);
+        }
         const clear = window.setTimeout(
             () => setExpiredPulseEventId(pulseEventId),
             pulseTier === 'fever' ? FEVER_BREAK_PULSE_MS : BREAK_PULSE_MS
         );
         return () => window.clearTimeout(clear);
-    }, [pulseEventId, pulsePairs, pulseTier, reduceMotion]);
+    }, [feverArrivalKey, pulseEventId, pulsePairs, pulseTier, reduceMotion]);
 
     /*
      * The last pair is its own moment. The board holds for a breath after it resolves, so the

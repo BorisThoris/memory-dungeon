@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2676,
     "codeFileCount": 916,
-    "exportedSymbolCount": 2761,
+    "exportedSymbolCount": 2763,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 6989
+    "relationshipCount": 6991
   },
   "inventory": [
     {
@@ -9159,8 +9159,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 88975,
-      "sha256": "b347bf12bd6839b540b623c5e433df4aa9a405560eebaede39da07afdcc552ce"
+      "bytes": 89441,
+      "sha256": "864a8dc3aa5cad0d759bb6f3a2939682952fd243105d43c9193899443788cfae"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -10983,14 +10983,14 @@
     {
       "path": "src/renderer/input/gamepadRumble.test.ts",
       "category": "test",
-      "bytes": 2189,
-      "sha256": "4db0d40610ad945445f03861b1c35c259252ed929e7be8f6a9e22ccae13d60e5"
+      "bytes": 3482,
+      "sha256": "efded5b3ce566b0b23daa3dfc33f647d8068c6b16d96589963dd0ec1b9fc7dfc"
     },
     {
       "path": "src/renderer/input/gamepadRumble.ts",
       "category": "source",
-      "bytes": 2860,
-      "sha256": "5874746331fe5fcbe685bf0cd7ca4ef0afb0a48866926ab2e8c15188c2fc3700"
+      "bytes": 3689,
+      "sha256": "0107fab9a14dff8d21eca9efb199c05ae33cbd5a8203624e6367fd26cb784d65"
     },
     {
       "path": "src/renderer/input/spatialFocus.test.ts",
@@ -18895,7 +18895,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1848,
+      "lineCount": 1856,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -23874,7 +23874,7 @@
       "path": "src/renderer/input/gamepadRumble.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 45,
+      "lineCount": 77,
       "imports": [
         "file:src/renderer/input/gamepadRumble.ts"
       ],
@@ -23886,13 +23886,15 @@
       "path": "src/renderer/input/gamepadRumble.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 77,
+      "lineCount": 95,
       "imports": [
         "file:src/shared/chain-tier-rules.ts"
       ],
       "exports": [
         "symbol:src/renderer/input/gamepadRumble.ts#RUMBLE_BY_TIER",
+        "symbol:src/renderer/input/gamepadRumble.ts#RUMBLE_FEVER_ARRIVAL",
         "symbol:src/renderer/input/gamepadRumble.ts#rumbleForBreak",
+        "symbol:src/renderer/input/gamepadRumble.ts#rumbleForFeverArrival",
         "symbol:src/renderer/input/gamepadRumble.ts#rumbleGamepads",
         "symbol:src/renderer/input/gamepadRumble.ts#RumblePattern"
       ],
@@ -36186,8 +36188,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 1847,
-      "endLine": 1847
+      "line": 1855,
+      "endLine": 1855
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -41434,24 +41436,40 @@
       "name": "RUMBLE_BY_TIER",
       "kind": "value",
       "file": "src/renderer/input/gamepadRumble.ts",
-      "line": 18,
-      "endLine": 23
+      "line": 32,
+      "endLine": 37
+    },
+    {
+      "id": "symbol:src/renderer/input/gamepadRumble.ts#RUMBLE_FEVER_ARRIVAL",
+      "name": "RUMBLE_FEVER_ARRIVAL",
+      "kind": "value",
+      "file": "src/renderer/input/gamepadRumble.ts",
+      "line": 26,
+      "endLine": 30
     },
     {
       "id": "symbol:src/renderer/input/gamepadRumble.ts#rumbleForBreak",
       "name": "rumbleForBreak",
       "kind": "value",
       "file": "src/renderer/input/gamepadRumble.ts",
-      "line": 75,
-      "endLine": 76
+      "line": 89,
+      "endLine": 90
+    },
+    {
+      "id": "symbol:src/renderer/input/gamepadRumble.ts#rumbleForFeverArrival",
+      "name": "rumbleForFeverArrival",
+      "kind": "value",
+      "file": "src/renderer/input/gamepadRumble.ts",
+      "line": 93,
+      "endLine": 94
     },
     {
       "id": "symbol:src/renderer/input/gamepadRumble.ts#rumbleGamepads",
       "name": "rumbleGamepads",
       "kind": "value",
       "file": "src/renderer/input/gamepadRumble.ts",
-      "line": 46,
-      "endLine": 73
+      "line": 60,
+      "endLine": 87
     },
     {
       "id": "symbol:src/renderer/input/gamepadRumble.ts#RumblePattern",
@@ -64984,9 +65002,21 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/input/gamepadRumble.ts->symbol:src/renderer/input/gamepadRumble.ts#RUMBLE_FEVER_ARRIVAL",
+      "source": "file:src/renderer/input/gamepadRumble.ts",
+      "target": "symbol:src/renderer/input/gamepadRumble.ts#RUMBLE_FEVER_ARRIVAL",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/input/gamepadRumble.ts->symbol:src/renderer/input/gamepadRumble.ts#rumbleForBreak",
       "source": "file:src/renderer/input/gamepadRumble.ts",
       "target": "symbol:src/renderer/input/gamepadRumble.ts#rumbleForBreak",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/input/gamepadRumble.ts->symbol:src/renderer/input/gamepadRumble.ts#rumbleForFeverArrival",
+      "source": "file:src/renderer/input/gamepadRumble.ts",
+      "target": "symbol:src/renderer/input/gamepadRumble.ts#rumbleForFeverArrival",
       "kind": "exports"
     },
     {

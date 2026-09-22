@@ -15,6 +15,20 @@ export interface RumblePattern {
     weakMagnitude: number;
 }
 
+/**
+ * Reaching Fever, as opposed to breaking at it.
+ *
+ * A break at Fever already rumbles hardest, so once a run was at the top every break felt alike
+ * and arriving felt like none of them in particular — the same gap the board, the room, the ladder
+ * and the mix each had. This is longer and softer than the Fever break itself: the break is a hit,
+ * and the arrival is the pad holding on to it.
+ */
+export const RUMBLE_FEVER_ARRIVAL: RumblePattern = {
+    durationMs: 520,
+    strongMagnitude: 0.7,
+    weakMagnitude: 0.55
+};
+
 export const RUMBLE_BY_TIER: Readonly<Record<ChainTier, RumblePattern | null>> = {
     none: null,
     clean: { durationMs: 90, strongMagnitude: 0.25, weakMagnitude: 0.45 },
@@ -74,3 +88,7 @@ export const rumbleGamepads = (
 
 export const rumbleForBreak = (tier: ChainTier, reduceMotion: boolean): number =>
     rumbleGamepads(RUMBLE_BY_TIER[tier], { reduceMotion });
+
+/** The turn that carried the run to Fever, and only that turn. */
+export const rumbleForFeverArrival = (reduceMotion: boolean): number =>
+    rumbleGamepads(RUMBLE_FEVER_ARRIVAL, { reduceMotion });
