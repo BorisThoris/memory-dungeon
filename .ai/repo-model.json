@@ -5757,8 +5757,8 @@
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
       "category": "source",
-      "bytes": 16166,
-      "sha256": "f4cdff6fc0e39cfea9da4b38c97379923a3bd5420b0f25ac52921069bf0ef835"
+      "bytes": 16990,
+      "sha256": "0ab309a2793b808c1524b6e7f66a8dbcad781346d80e7cc3f3d73b5400e42779"
     },
     {
       "path": "src/renderer/assets/assetDropInReadiness.test.ts",
