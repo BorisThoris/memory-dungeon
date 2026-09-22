@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2674,
+    "trackedFileCount": 2675,
     "codeFileCount": 915,
     "exportedSymbolCount": 2761,
     "contentItemCount": 10,
@@ -4883,6 +4883,12 @@
       "category": "script",
       "bytes": 1404,
       "sha256": "7e06ac2da4814d113d2571f1b8e5e7c7ce6435adb486f0ceda02774cc50b1a15"
+    },
+    {
+      "path": "scripts/card-pipeline/README.md",
+      "category": "script",
+      "bytes": 3923,
+      "sha256": "6218c6a6dd86a7a4db0eb8f72b97e7b14022d1f934a340077b55355ddeea86d7"
     },
     {
       "path": "scripts/card-pipeline/requirements-local-card-backs.txt",
