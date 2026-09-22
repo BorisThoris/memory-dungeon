@@ -750,7 +750,15 @@
 /* ---- motion ------------------------------------------------------------------------ */
 
 @media (prefers-reduced-motion: reduce) {
+    /*
+     * The arrival is named here rather than left to the `data-meter-full` rule below it. Both are
+     * true at the same moment today, so the fill's rule already silenced the flash — by coincidence,
+     * not by intent, and an arrival that ever fired without the meter reading full would have
+     * flashed at the one player who asked not to be flashed at.
+     */
     .caption,
+    .chain[data-meter-arrive='true'] .ladderFill,
+    .chain[data-meter-arrive='true'] .ladderMarker,
     .chain[data-meter-full='true'] .ladderFill,
     .chain[data-meter-full='true'] .ladderMarker {
         animation: none;

@@ -9411,8 +9411,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 36317,
-      "sha256": "7f746f8c842b9c206f3395bc7aa018906a2a267a342c431b6a5686a68e619a8b"
+      "bytes": 36805,
+      "sha256": "8e1708c26662f9b78c7e1136114ba69f3c4f868adbf2497457c785289bd65930"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
