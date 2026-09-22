@@ -513,6 +513,9 @@ describe('gate:changed selector', () => {
             'scripts/audio-pipeline/export-runtime-ogg.mjs',
             'scripts/audio-pipeline/generate-portfolio-feedback-pack.mjs',
             'src/renderer/cardFace/cardIllustrationDraw.ts',
+            'src/renderer/components/cardGlowFrame.ts',
+            'src/renderer/components/GameplayScene.tsx',
+            'scripts/card-pipeline/cut_card_back_glow.py',
             'scripts/card-pipeline/export-face-panel-webp.mjs',
             'scripts/card-pipeline/export-ui-background-webp.mjs',
             'scripts/card-pipeline/export-card-normal-webp.mjs',
@@ -548,6 +551,17 @@ describe('gate:changed selector', () => {
                     reason.file === 'scripts/audit-renderer-assets.mjs'
             )
         ).toBe(true);
+        // The cards' light and the rooms they sit in are rendering too: changing either has to run
+        // the gate that covers rendering, or their tests only run when someone runs everything.
+        for (const file of [
+            'src/renderer/components/cardGlowFrame.ts',
+            'src/renderer/components/GameplayScene.tsx',
+            'scripts/card-pipeline/cut_card_back_glow.py'
+        ]) {
+            expect(
+                payload.reasons.some((reason) => reason.gateId === 'assetRendering' && reason.file === file)
+            ).toBe(true);
+        }
         expect(
             payload.reasons.some(
                 (reason) =>
