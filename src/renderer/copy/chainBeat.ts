@@ -31,6 +31,23 @@ const rungValueLine = (tier: ChainTier): string => {
     return `${at} takes about ${pairs} ${pairs === 1 ? 'pair' : 'pairs'} and pays ×${chainRungScoreMultiplier(tier)} for each.`;
 };
 
+/**
+ * What the momentum number is made of, named source by source.
+ * 
+ * Momentum stopped being one thing when the study skip started paying it: a player reading
+ * "momentum 5" with a streak of 3 deserves to know whether the other two came off the board or
+ * out of the clock they handed back. The sources are listed only when they are non-zero, so an
+ * ordinary chain still reads as the single number it is.
+ */
+const momentumSourceLine = (chain: number, cascaded: number, banked: number): string => {
+    const extra: string[] = [];
+    if (cascaded > 0) extra.push(`${cascaded} cascaded`);
+    if (banked > 0) extra.push(`${banked} banked from an early start`);
+    return extra.length === 0
+        ? `Chain ${chain}`
+        : `Chain ${chain} plus ${extra.join(' and ')}, momentum ${chain + cascaded + banked}`;
+};
+
 export const CHAIN_BEAT_COPY = {
     /**
      * The HUD's standing goal under the stat row: how far the next rung is and what standing on
@@ -101,8 +118,13 @@ export const CHAIN_BEAT_COPY = {
         return tags.length === 0 ? null : `${tags.join(', ')}.`;
     },
     /** Hover on the chain stat: what the tier is made of and where the next rungs sit on this floor. */
-    momentumHint: (chain: number, cascaded: number, rungs: { sharp: number; fever: number }): string =>
-        `${cascaded > 0 ? `Chain ${chain} plus ${cascaded} cascaded, momentum ${chain + cascaded}` : `Chain ${chain}`}. ` +
+    momentumHint: (
+        chain: number,
+        cascaded: number,
+        banked: number,
+        rungs: { sharp: number; fever: number }
+    ): string =>
+        `${momentumSourceLine(chain, cascaded, banked)}. ` +
         `Every match pops the clump it touches. Clean from 3 reaches twice as far into it, Sharp from ${rungs.sharp} runs the reaction into the clump next door, Fever from ${rungs.fever} into three of them on this floor. A miss halves the chain and puts the fire out.`,
     /**
      * What the rung the player is standing on is worth, for the pip cluster beside the tier. The

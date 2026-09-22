@@ -601,6 +601,14 @@ export interface RunState {
     chunkScoreThisFloor: number;
     /** Pairs chunks broke since the chain last dropped: momentum the tier ladder counts, the score streak does not. */
     chunkPairsThisChain: number;
+    /**
+     * Momentum the study clock handed back, since the chain last dropped: what ending the
+     * memorize phase early paid (`memorize-skip-reward-rules.ts`). Kept apart from
+     * `chunkPairsThisChain` because that field is counted in pairs and read as pairs; this one
+     * is momentum with no pairs behind it. Absent on runs saved before the skip paid anything,
+     * and read as zero.
+     */
+    skipMomentumThisChain?: number;
     /** Breaks that landed at the Fever rung this floor, and the longest chain the floor saw. */
     feverBreaksThisFloor: number;
     bestChainThisFloor: number;

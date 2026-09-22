@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import type { FindableKind, RunStatus, TileTraitKind } from './contracts';
 import { RUN_INVENTORY_ITEM_IDS } from './run-inventory-contracts';
+import { MEMORIZE_SKIP_MOMENTUM_MAX } from './memorize-skip-reward-rules';
 
 export const GAMEPLAY_CORE_SCHEMA_VERSION = 1 as const;
 
@@ -377,7 +378,17 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...commandBase,
-            type: z.literal('phase.memorize_complete')
+            type: z.literal('phase.memorize_complete'),
+            /*
+             * Momentum the player bought by ending the study period early
+             * (`memorize-skip-reward-rules.ts`). It rides on the command rather than being applied
+             * outside the reducer so that replaying a journal reproduces the same run: the clock
+             * that measured it is gone by then.
+             *
+             * Defaulted, so journals written before the skip paid anything still parse, and so the
+             * timer's own completion can keep calling this with one argument.
+             */
+            skipMomentum: z.number().int().min(0).max(MEMORIZE_SKIP_MOMENTUM_MAX).default(0)
         })
         .strict(),
     z
@@ -813,11 +824,15 @@ export const createGameplayTileFlipCommand = (commandId: string, targetTileId: s
         targetTileId
     });
 
-export const createGameplayMemorizeCompleteCommand = (commandId: string): GameplayCommand =>
+export const createGameplayMemorizeCompleteCommand = (
+    commandId: string,
+    skipMomentum = 0
+): GameplayCommand =>
     gameplayCommandSchema.parse({
         schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
         commandId,
-        type: 'phase.memorize_complete'
+        type: 'phase.memorize_complete',
+        skipMomentum
     });
 
 export const createGameplayPauseCommand = (

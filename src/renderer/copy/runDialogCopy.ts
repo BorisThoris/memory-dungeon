@@ -92,10 +92,14 @@ export const RUN_SHELL_LINE_COPY = {
 /**
  * The study period ends itself on a clock. This is the line that tells the player they can end
  * it themselves, and the label the same control carries for a screen reader.
+ *
+ * Both name the payout, because the gesture reads as pure subtraction without it: a player told
+ * only that they can give up clock has been offered less of something, and will not press it
+ * twice. What they are actually offered is a trade, so the line says so.
  */
 export const MEMORIZE_SKIP_COPY = {
-    hint: 'Double-tap the board to start early',
-    label: 'Start the floor early'
+    hint: 'Double-tap the board to start early and bank momentum',
+    label: 'Start the floor early and bank chain momentum'
 } as const;
 
 /**
