@@ -69,6 +69,9 @@ export interface RunShellProps {
 /** How long the ladder reads as draining after a chain drops. */
 const CHAIN_METER_DROP_MS = 700;
 
+/** How long the ladder holds its arrival at Fever; longer than the drop, because it is earned. */
+const CHAIN_METER_FEVER_MS = 1100;
+
 /** How often the memorize count in the head is refreshed. Four ticks a second reads as a clock. */
 const MEMORIZE_TICK_MS = 250;
 
@@ -94,6 +97,35 @@ const useChainMeterDrop = (momentum: number, cleanRung: number): boolean => {
         };
     }, [momentum, cleanRung]);
     return dropping;
+};
+
+/**
+ * The arrival at Fever on the ladder.
+ *
+ * Losing a chain had a beat here and reaching the top did not, so the ladder said more about
+ * failing than about the thing a run is played for — while the board and the room both flash on
+ * arrival. This is the ladder's half of that moment: the rail lights once as the meter fills.
+ *
+ * It fires on the rising edge only, so a run that sits at Fever is not strobed, and again if the
+ * chain is lost and taken back. Timer-set like the drop, so the render never sets state.
+ */
+const useChainMeterFeverArrival = (full: boolean): boolean => {
+    const [arriving, setArriving] = useState(false);
+    const previousRef = useRef(full);
+    useEffect(() => {
+        const previous = previousRef.current;
+        previousRef.current = full;
+        if (!full || previous) {
+            return undefined;
+        }
+        const start = window.setTimeout(() => setArriving(true), 0);
+        const end = window.setTimeout(() => setArriving(false), CHAIN_METER_FEVER_MS);
+        return () => {
+            window.clearTimeout(start);
+            window.clearTimeout(end);
+        };
+    }, [full]);
+    return arriving;
 };
 
 interface MemorizeCountdown {
@@ -164,6 +196,7 @@ const RunShell = ({
         : meter.momentum < rungs.fever ? 'fever' : null;
     const nextTierLabel = CHAIN_BEAT_COPY.goalLabel(nextTier ? rungs[nextTier] - meter.momentum : 0, nextTier);
     const chainMeterDropping = useChainMeterDrop(meter.momentum, rungs.clean);
+    const chainMeterArriving = useChainMeterFeverArrival(meter.full);
     const memorize = useMemorizeCountdown(run);
     const turnsTaken = turnsTakenThisFloor(run);
     const parTurns = parTurnsForRun(run);
@@ -343,6 +376,7 @@ const RunShell = ({
                     <div
                         className={styles.chain}
                         data-chain-tier={tier}
+                        data-meter-arrive={chainMeterArriving ? 'true' : 'false'}
                         data-meter-drop={chainMeterDropping ? 'true' : 'false'}
                         data-meter-full={meter.full ? 'true' : 'false'}
                         data-testid="hud-chain"

@@ -1,4 +1,4 @@
-import { act, render, screen, within } from '@testing-library/react';
+import { act, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { createNewRun, finishMemorizePhase } from '../../shared/game-core';
@@ -71,6 +71,28 @@ describe('RunShell', () => {
             'aria-label',
             expect.stringContaining('A Fever break takes about')
         );
+    });
+
+    it('lights the ladder once when the meter fills, and not while it stays full', async () => {
+        // Losing a chain already had a beat here and topping it did not, so the ladder said more
+        // about failing than about the thing a run is played for.
+        const base = playingRun();
+        const cold: RunState = { ...base, board: { ...base.board!, pairCount: 12 } };
+        const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={cold} tools={[]} />);
+        const ladder = (): HTMLElement => screen.getByTestId('hud-chain');
+        expect(ladder()).toHaveAttribute('data-meter-arrive', 'false');
+
+        // Twelve pairs puts Fever at 7: nine fills the meter.
+        const fever: RunState = { ...cold, stats: { ...cold.stats, currentStreak: 9 } };
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={fever} tools={[]} />);
+        await waitFor(() => expect(ladder()).toHaveAttribute('data-meter-arrive', 'true'));
+
+        // Climbing further inside Fever is not a second arrival.
+        const deeper: RunState = { ...cold, stats: { ...cold.stats, currentStreak: 11 } };
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={deeper} tools={[]} />);
+        await waitFor(() => expect(ladder()).toHaveAttribute('data-meter-arrive', 'false'), { timeout: 3000 });
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={deeper} tools={[]} />);
+        expect(ladder()).toHaveAttribute('data-meter-arrive', 'false');
     });
 
     it('reads the ceiling on the par, and marks it once the floor is two turns from it', () => {
