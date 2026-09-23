@@ -35,7 +35,7 @@
         "src/renderer/gameplay/regPhase4PlayContract.ts REG106_HUD_IA",
         "src/renderer/gameplay/regPhase4PlayContract.ts REG108_CARD_MATERIAL_LANES",
         "src/renderer/gameplay/regPhase4PlayContract.ts reg104ShellAttributes",
-        "src/renderer/platformTilt/platformTiltMotion.ts hapticFeedbackIsNonEssential",
+        "src/renderer/platformTilt/platformTiltMotion.ts allHapticFeedbackIsNonEssential",
         "src/renderer/platformTilt/platformTiltPermissionUi.ts getPlatformMotionCapabilityRows",
         "src/renderer/platformTilt/platformTiltPermissionUi.ts getPlatformPolishPolicy",
         "src/renderer/platformTilt/platformTiltPermissionUi.ts motionHapticsCarryEssentialFeedback",
