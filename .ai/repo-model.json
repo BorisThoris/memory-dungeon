@@ -9009,14 +9009,14 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "category": "test",
-      "bytes": 8495,
-      "sha256": "7a2e6b772b4d5d2b490d0c0b9f97157ac320b76ffc9d96d719024227af268d7e"
+      "bytes": 8635,
+      "sha256": "5c9617b99f02db8fd68b8b879e410097c782ff9b6d90105c7c51b1e08921384d"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 35093,
-      "sha256": "3d1d4d3f1728c5ac9b584b1c464e06109b8691206831f0154cb914ab38c6b2b3"
+      "bytes": 35458,
+      "sha256": "d442da3314ff12942344697245bc2118cd5500eb85e0531d1e42a7e11db79e5e"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -13581,14 +13581,14 @@
     {
       "path": "src/shared/social-play-scope.test.ts",
       "category": "test",
-      "bytes": 1887,
-      "sha256": "a1a5aae700d5c5cf33114f03a303150d6d4a06cd66c03e86ce11fefa0b3fd348"
+      "bytes": 2364,
+      "sha256": "40ddc4477d20a25bae904079f7efa251b66c66d8f1047d38f604a0e257f0bc0d"
     },
     {
       "path": "src/shared/social-play-scope.ts",
       "category": "source",
-      "bytes": 4921,
-      "sha256": "0ead5f635158ccffc496a10826c511c6f73f196e41d43af32cf0bc9465ac54a3"
+      "bytes": 5124,
+      "sha256": "0ffa9d0c432bd2628a8cd544499412e7ecae4de5d20a5c855ca35d82e68d490f"
     },
     {
       "path": "src/shared/softlock-fairness.test.ts",
@@ -18587,7 +18587,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 183,
+      "lineCount": 185,
       "imports": [
         "file:src/renderer/components/ChooseYourPathScreen.tsx",
         "file:src/renderer/components/chooseYourPathScreenModel.ts",
@@ -18603,7 +18603,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 685,
+      "lineCount": 692,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/modeArt.ts",
@@ -32203,7 +32203,7 @@
       "path": "src/shared/social-play-scope.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 37,
+      "lineCount": 46,
       "imports": [
         "file:src/shared/social-play-scope.ts"
       ],
@@ -32215,7 +32215,7 @@
       "path": "src/shared/social-play-scope.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 114,
+      "lineCount": 118,
       "imports": [
         "file:src/shared/run-number-guards.ts"
       ],
@@ -36327,8 +36327,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ChooseYourPathScreen.tsx",
-      "line": 684,
-      "endLine": 684
+      "line": 691,
+      "endLine": 691
     },
     {
       "id": "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows",
@@ -53935,16 +53935,16 @@
       "name": "buildSocialScopeNote",
       "kind": "value",
       "file": "src/shared/social-play-scope.ts",
-      "line": 86,
-      "endLine": 97
+      "line": 89,
+      "endLine": 101
     },
     {
       "id": "symbol:src/shared/social-play-scope.ts#buildSocialShareCopy",
       "name": "buildSocialShareCopy",
       "kind": "value",
       "file": "src/shared/social-play-scope.ts",
-      "line": 99,
-      "endLine": 113
+      "line": 103,
+      "endLine": 117
     },
     {
       "id": "symbol:src/shared/social-play-scope.ts#getShippedSocialPlayDecision",

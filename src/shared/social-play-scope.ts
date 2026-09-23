@@ -68,11 +68,14 @@ export const SOCIAL_PLAY_SCOPE_DECISION = {
 export const getShippedSocialPlayDecision = (): SocialPlayDecisionRow =>
     SOCIAL_PLAY_DECISIONS.find((row) => row.status === 'shipped') ?? SHIPPED_SOCIAL_PLAY_DECISION;
 
-/** Short labels for the scope note, so it never has to be restated in a component. */
+/**
+ * Short labels for the scope note, in the words the rest of the screen uses: the row above the
+ * note says "Paste a run key", so the note does not call the same thing a "share string".
+ */
 const SOCIAL_SCOPE_NOTE_LABEL: Record<SocialPlayDecisionId, string> = {
-    online_challenges: 'Online challenges',
+    online_challenges: 'online challenges',
     pass_and_play: 'same-device play',
-    share_strings: 'share strings'
+    share_strings: 'run keys'
 };
 
 /**
@@ -92,8 +95,9 @@ export const buildSocialScopeNote = (): string => {
     );
     const list = (parts: readonly string[]): string =>
         parts.length <= 1 ? (parts[0] ?? '') : `${parts.slice(0, -1).join(', ')} and ${parts[parts.length - 1]}`;
-    const head = `Offline-first: local runs, ${list(shipped)}.`;
-    return deferred.length === 0 ? head : `${head} ${list(deferred)} stay deferred.`;
+    // Said to a player, not a planning meeting: "stay deferred" was the decision table's word.
+    const head = `Everything here plays offline: solo runs, ${list(shipped)}.`;
+    return deferred.length === 0 ? head : `${head} No ${list(deferred)}.`;
 };
 
 export const buildSocialShareCopy = ({

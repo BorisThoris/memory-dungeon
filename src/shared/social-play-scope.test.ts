@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+    buildSocialScopeNote,
     buildSocialShareCopy,
     getShippedSocialPlayDecision,
     getSocialPlayScopeRows,
@@ -23,6 +24,14 @@ describe('REG-051 social play scope decision', () => {
             id: 'share_strings',
             persistence: 'derived_share_string'
         });
+    });
+
+    it('tells a player what plays offline in the words the screen uses', () => {
+        // Built from the rows, so it still cannot promise less or more than ships; but it is a
+        // sentence on Choose Your Path under a field labelled "Paste a run key", not a scope memo.
+        expect(buildSocialScopeNote()).toBe(
+            'Everything here plays offline: solo runs, run keys and same-device play. No online challenges.'
+        );
     });
 
     it('normalizes malformed score and seed values before building share copy', () => {
