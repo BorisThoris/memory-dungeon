@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-23T12:25:15.814Z",
+  "generatedAt": "2026-09-23T19:24:39.911Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -288,28 +288,28 @@
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 167980,
+        "bytes": 168100,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-23T12:24:41.071Z"
+        "capturedAt": "2026-09-23T19:23:59.373Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 157221,
+        "bytes": 155220,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-23T12:25:00.511Z"
+        "capturedAt": "2026-09-23T19:24:07.980Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 131399,
+        "bytes": 130939,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-23T12:25:10.582Z"
+        "capturedAt": "2026-09-23T19:24:32.348Z"
       },
       {
         "profile": "mobile",
@@ -318,16 +318,16 @@
         "bytes": 51915,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-23T12:25:05.224Z"
+        "capturedAt": "2026-09-23T19:24:12.866Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 123089,
+        "bytes": 120659,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-23T12:25:15.601Z"
+        "capturedAt": "2026-09-23T19:24:39.674Z"
       }
     ]
   },
@@ -391,7 +391,7 @@
   "metrics": {
     "sourceFiles": 1136,
     "testFiles": 490,
-    "sourceLines": 176477,
+    "sourceLines": 176621,
     "largestDirectories": [
       {
         "directory": "src",
@@ -430,10 +430,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "9da3e082",
-    "lastCommitDate": "2026-09-23T15:15:49+03:00",
-    "lastCommitSubject": "Merge remote-tracking branch 'origin/main' into claude/lives-between-floors-balance-1e5583",
-    "commitCount": 1738,
+    "head": "f6e9a349",
+    "lastCommitDate": "2026-09-23T22:19:27+03:00",
+    "lastCommitSubject": "Rework the hook: a match matches, and the chain earns a capped pop",
+    "commitCount": 1740,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
