@@ -301,6 +301,9 @@ describe('RunShell — The Margin', () => {
                 vi.advanceTimersByTime(1100);
             });
             expect(screen.getByTestId('hud-memorize')).toHaveTextContent('Memorize · 3');
+            // The head counts; the sentence states the window. A live region that re-words itself
+            // every second is re-read every second.
+            expect(screen.getByTestId('run-shell-line')).toHaveTextContent(/Every face shows for 4 seconds/);
         } finally {
             vi.useRealTimers();
         }

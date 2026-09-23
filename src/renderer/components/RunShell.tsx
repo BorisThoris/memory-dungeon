@@ -179,6 +179,13 @@ interface MemorizeCountdown {
     seconds: number;
     /** 0..1 of the study period spent; the bar drawn along the head's rule. */
     progress: number;
+    /**
+     * How long this stretch of study is, in whole seconds, fixed from the moment it began. The
+     * sentence under the board says how long the faces show; handed `seconds` instead, it counted
+     * down beside the head's own count, ended on "shows for 0 seconds", and - being the dock's
+     * `role="status"` line - was read out again by a screen reader every second of the study.
+     */
+    windowSeconds: number;
 }
 
 /**
@@ -203,7 +210,8 @@ const useMemorizeCountdown = (run: RunState): MemorizeCountdown | null => {
             const remaining = Math.max(0, totalMs - elapsed);
             return {
                 seconds: Math.ceil(remaining / 1000),
-                progress: totalMs > 0 ? Math.min(1, elapsed / totalMs) : 1
+                progress: totalMs > 0 ? Math.min(1, elapsed / totalMs) : 1,
+                windowSeconds: Math.ceil(totalMs / 1000)
             };
         };
         // Timer-set so the render never sets state; the first read lands on the next tick.
@@ -214,7 +222,11 @@ const useMemorizeCountdown = (run: RunState): MemorizeCountdown | null => {
             window.clearInterval(tick);
         };
     }, [memorizing, snapshotMs]);
-    return memorizing ? countdown ?? { seconds: Math.ceil(Math.max(0, snapshotMs ?? 0) / 1000), progress: 0 } : null;
+    if (!memorizing) {
+        return null;
+    }
+    const snapshotSeconds = Math.ceil(Math.max(0, snapshotMs ?? 0) / 1000);
+    return countdown ?? { seconds: snapshotSeconds, progress: 0, windowSeconds: snapshotSeconds };
 };
 
 const RunShell = ({
@@ -262,7 +274,7 @@ const RunShell = ({
     // announcer clears its line to an empty string between beats, which is no line at all.
     const said = feedback || null;
     const line = memorize
-        ? said ?? RUN_SHELL_LINE_COPY.study(pairCount, memorize.seconds)
+        ? said ?? RUN_SHELL_LINE_COPY.study(pairCount, memorize.windowSeconds)
         : said ?? onboardingLine ?? null;
     const lineTone = said ? feedbackPriority : 'info';
     const kicker = memorize
