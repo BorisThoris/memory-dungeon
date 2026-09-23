@@ -52,6 +52,27 @@ describe('Extreme Fever at the floor clear', () => {
         expect(cleared.lastLevelResult?.bestChain).toBe(5);
     });
 
+    it('records the floor at the rung it paid, not at what the streak alone reached', () => {
+        // Streak 5 on twelve pairs is short of Sharp (6); with three cascaded pairs the ladder
+        // stood at Fever and the clear paid Fever. The record used to read the streak and log a
+        // Fever-paid floor as not even Sharp - no Sharp floor for the run, the profile or its honor.
+        const { run, board } = clearedRun(5, 3);
+        const cleared = finalizeLevel(run, board);
+        expect(cleared.lastLevelResult?.chainTier).toBe('fever');
+        expect(cleared.sharpFloorsThisRun).toBe(1);
+        expect(cleared.feverFloorsThisRun).toBe(1);
+        expect(cleared.peakChainTierThisRun).toBe('fever');
+    });
+
+    it('keeps a rung the floor reached even when the chain dropped before the last pair', () => {
+        const { run, board } = clearedRun(1, 0);
+        const cleared = finalizeLevel({ ...run, peakChainTierThisFloor: 'sharp' }, board);
+        expect(cleared.lastLevelResult?.momentumBonusTier).toBeUndefined();
+        expect(cleared.lastLevelResult?.chainTier).toBe('sharp');
+        expect(cleared.sharpFloorsThisRun).toBe(1);
+        expect(cleared.feverFloorsThisRun).toBe(0);
+    });
+
     it('pays nothing when the chain dropped before the last pair; a Fever finish multiplies the floor bonus and never the rating', () => {
         const { run, board } = clearedRun(1, 0);
         const cleared = finalizeLevel(run, board);

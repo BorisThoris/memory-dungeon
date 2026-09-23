@@ -292,6 +292,13 @@ export const normalizeRunSummary = (input: unknown): RunSummary | null => {
     const bestRipple = chainRecord(source.bestRipple);
     const sharpFloors = chainRecord(source.sharpFloors);
     const feverFloors = chainRecord(source.feverFloors);
+    const peakChainTier =
+        source.peakChainTier === 'none' ||
+        source.peakChainTier === 'clean' ||
+        source.peakChainTier === 'sharp' ||
+        source.peakChainTier === 'fever'
+            ? source.peakChainTier
+            : undefined;
 
     return {
         totalScore,
@@ -309,6 +316,7 @@ export const normalizeRunSummary = (input: unknown): RunSummary | null => {
         ...(Number.isFinite(bestRipple) ? { bestRipple } : {}),
         ...(Number.isFinite(sharpFloors) ? { sharpFloors } : {}),
         ...(Number.isFinite(feverFloors) ? { feverFloors } : {}),
+        ...(peakChainTier ? { peakChainTier } : {}),
         ...(Number.isFinite(runSeed) ? { runSeed } : {}),
         ...(Number.isFinite(runRulesVersion) ? { runRulesVersion } : {}),
         ...(gameMode ? { gameMode } : {}),

@@ -31,7 +31,7 @@ const runItBackDetail = (summary: RunSummary | null, run: RunState): string => {
 };
 
 const getChainTargetRow = (summary: RunSummary | null): GameOverNextRunRow => {
-    const target = getChainTargetFeedback(summary?.bestStreak);
+    const target = getChainTargetFeedback(summary?.bestStreak, summary?.peakChainTier);
     return {
         id: 'chain_target',
         title: 'Chain target',

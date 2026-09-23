@@ -66,4 +66,22 @@ describe('the cascade clump fixture', () => {
         expect(fever?.status).toBe('levelComplete');
         expect(rows.filter((row) => row.status === 'playing').every((row) => row.tier !== 'fever')).toBe(true);
     });
+
+    it('records the floor at the rung the ladder showed, which the streak alone never reaches', () => {
+        // Three matches, streak 3: on twelve pairs that is Clean. The HUD said Fever, and the clear
+        // paid Fever; the floor's record, the run's Fever-floor count and the profile's all say so.
+        let run = createPlayablePathFixture('cascadeClump').run as RunState;
+        const peaks: string[] = [];
+        while (run.status === 'playing') {
+            const hidden = run.board!.tiles.filter((tile) => tile.state === 'hidden');
+            const first = hidden[0]!;
+            const partner = hidden.find((tile) => tile.pairKey === first.pairKey && tile.id !== first.id)!;
+            run = resolveBoardTurn(flipTile(flipTile(run, first.id), partner.id));
+            peaks.push(run.peakChainTierThisFloor ?? 'missing');
+        }
+        expect(peaks).toEqual(['clean', 'sharp', 'fever']);
+        expect(run.stats.currentStreak).toBe(3);
+        expect(run.lastLevelResult?.chainTier).toBe('fever');
+        expect(run.feverFloorsThisRun).toBe(1);
+    });
 });

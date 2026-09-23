@@ -109,6 +109,12 @@ export const runChainMomentumPairs = (run: ChainMomentumRun): number =>
 export const runChainTier = (run: Pick<RunState, 'stats' | 'board'> & ChainMomentumRun): ChainTier =>
     getChainTier(chainMomentum(run.stats.currentStreak, runChainMomentumPairs(run)), run.board?.pairCount ?? null);
 
+const CHAIN_TIER_ORDER: readonly ChainTier[] = ['none', 'clean', 'sharp', 'fever'];
+
+/** The higher of two rungs; anything unrecognised (a run saved before a field existed) reads as none. */
+export const higherChainTier = (a: ChainTier | null | undefined, b: ChainTier | null | undefined): ChainTier =>
+    CHAIN_TIER_ORDER[Math.max(0, CHAIN_TIER_ORDER.indexOf(a ?? 'none'), CHAIN_TIER_ORDER.indexOf(b ?? 'none'))] ?? 'none';
+
 /** The tier a chain has reached on a floor of `pairsOnFloor` pairs; omit the floor for the fixed rungs. */
 export const getChainTier = (chain: number, pairsOnFloor?: number | null): ChainTier => {
     const depth = Number.isFinite(chain) ? Math.max(0, Math.floor(chain)) : 0;

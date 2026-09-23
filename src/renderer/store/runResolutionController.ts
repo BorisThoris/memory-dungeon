@@ -139,7 +139,9 @@ export const createRunResolutionController = ({
         if (nextRun.status === 'levelComplete' && prevStatus !== 'levelComplete' && !sharedTable) {
             nextSave = mergeChainFloorStats(
                 nextSave,
-                getChainTier(runNonNegativeInteger(nextRun.lastLevelResult?.bestChain), nextRun.board?.pairCount ?? null)
+                // The rung the floor clear recorded, the same one the run's Sharp-floor count took.
+                nextRun.lastLevelResult?.chainTier ??
+                    getChainTier(runNonNegativeInteger(nextRun.lastLevelResult?.bestChain), nextRun.board?.pairCount ?? null)
             );
         }
 

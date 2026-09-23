@@ -383,6 +383,8 @@ export interface LevelResult {
     chunkPairsBroken?: number;
     feverBreaks?: number;
     bestChain?: number;
+    /** The highest rung the floor's chain reached; what its Sharp and Fever floor records count. */
+    chainTier?: 'none' | 'clean' | 'sharp' | 'fever';
     /** Extreme Fever: the momentum still standing when the last pair went, and what it paid. */
     chainMomentumAtClear?: number;
     momentumBonusTier?: 'none' | 'clean' | 'sharp' | 'fever';
@@ -416,6 +418,8 @@ export interface RunSummary {
     bestRipple?: number;
     sharpFloors?: number;
     feverFloors?: number;
+    /** The highest rung the run's chain reached on any floor, cleared or not. */
+    peakChainTier?: 'none' | 'clean' | 'sharp' | 'fever';
     /** Present for seeded modes (daily, shared challenge). */
     runSeed?: number;
     runRulesVersion?: number;
@@ -619,6 +623,15 @@ export interface RunState {
     bestChainThisRun: number;
     sharpFloorsThisRun: number;
     feverFloorsThisRun: number;
+    /**
+     * The highest rung the ladder showed, this floor and this run: momentum against the floor's
+     * rungs, read after each match exactly as the HUD reads it (`runChainTier`). `bestChain*` is
+     * the streak, the number the HUD prints, and the ladder does not climb on the streak alone -
+     * so a floor the HUD called Sharp, and whose clear paid the Sharp bonus, was recorded from the
+     * streak as never having reached it. Absent on runs saved before it existed; read as none.
+     */
+    peakChainTierThisFloor?: 'none' | 'clean' | 'sharp' | 'fever';
+    peakChainTierThisRun?: 'none' | 'clean' | 'sharp' | 'fever';
     /** The drop: pairs that fell because a break left their suit with too few to hold, this floor and this run's count of drops. */
     chunkPairsDroppedThisFloor: number;
     chunkDropsThisRun: number;
