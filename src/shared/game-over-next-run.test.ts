@@ -142,4 +142,19 @@ describe('REG-096 game over next-run loop', () => {
         expect(row?.detail).toContain('Adept tier at profile level 3 (3 honor marks).');
         expect(row?.detail).not.toContain('Next: Next:');
     });
+
+    it('says the next milestone once when a level-up has already said it', () => {
+        const withSharpFloors = (sharpFloors: number) => {
+            const save = createDefaultSaveData();
+            save.playerStats = { ...save.playerStats!, sharpFloors };
+            return save;
+        };
+        const run = createRunSummary({ ...finishMemorizePhase(createNewRun(0)), status: 'gameOver', runEndReason: 'quit' }, []);
+
+        const row = getGameOverNextRunRows(run, withSharpFloors(5), withSharpFloors(4)).find((entry) => entry.id === 'next_goal');
+
+        expect(row?.value).toBe('Profile level up');
+        expect(row?.detail.match(/Adept tier at profile level 3/g)).toHaveLength(1);
+        expect(row?.detail).toContain('Next: ');
+    });
 });

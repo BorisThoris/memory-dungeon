@@ -9105,14 +9105,14 @@
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "category": "test",
-      "bytes": 14381,
-      "sha256": "59aefa6256fc42885356960e76e9f23d741e9c40ff16ba4a50a17b3c7f03635a"
+      "bytes": 14631,
+      "sha256": "08692024f78fd7e701c07f0f438a9c1a609ac2cb316629a12b30b3ff95e2ffbe"
     },
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 24436,
-      "sha256": "a63dd1301ec67de9ef9a8c9d92fb99a40baddc9e7a468be7aa80a1b1c34f940c"
+      "bytes": 24905,
+      "sha256": "fd9b4847cf9cd344b897e2337141dc062e13985d48e240f6676e14782255b3db"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -12441,14 +12441,14 @@
     {
       "path": "src/shared/game-over-next-run.test.ts",
       "category": "test",
-      "bytes": 6494,
-      "sha256": "c4df0385d78b032808893f172d18be7c791e8a9b7ef421a39ffac37d1f14593b"
+      "bytes": 7250,
+      "sha256": "346942bb26128c077990f240cf9f074d0f25e5ce6c8e8e713172ddb4294e4789"
     },
     {
       "path": "src/shared/game-over-next-run.ts",
       "category": "source",
-      "bytes": 5787,
-      "sha256": "e3d62b10af3b7f4253ebcc8f9f243864116b325fc25897bf20702323c19aa806"
+      "bytes": 6270,
+      "sha256": "f3f7150cb9b758164e3e9be0614f73efa2af6f0482e92d719971d1a08d1c9816"
     },
     {
       "path": "src/shared/game.test.ts",
@@ -18807,7 +18807,7 @@
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 306,
+      "lineCount": 309,
       "imports": [
         "file:src/renderer/components/GameOverScreen.tsx",
         "file:src/shared/contracts.ts",
@@ -18823,7 +18823,7 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 483,
+      "lineCount": 489,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -28447,7 +28447,7 @@
       "path": "src/shared/game-over-next-run.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 146,
+      "lineCount": 161,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/game-core.ts",
@@ -28462,7 +28462,7 @@
       "path": "src/shared/game-over-next-run.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 138,
+      "lineCount": 147,
       "imports": [
         "file:src/shared/chain-targets.ts",
         "file:src/shared/contracts.ts",
@@ -36450,8 +36450,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 482,
-      "endLine": 482
+      "line": 488,
+      "endLine": 488
     },
     {
       "id": "symbol:src/renderer/components/gameplayRenderProfile.ts#GAMEPLAY_RENDER_PROFILE",
@@ -48266,8 +48266,8 @@
       "name": "getGameOverNextRunRows",
       "kind": "value",
       "file": "src/shared/game-over-next-run.ts",
-      "line": 100,
-      "endLine": 137
+      "line": 109,
+      "endLine": 146
     },
     {
       "id": "symbol:src/shared/game.ts#advanceToNextLevel",
