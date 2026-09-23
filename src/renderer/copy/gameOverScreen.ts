@@ -92,7 +92,7 @@ export const gameOverScreenCopy = {
      * player - the ceiling line names the rule, not a failure.
      */
     endReason: {
-        turn_ceiling: (floor: number) => `The turn ceiling ran out on floor ${floor}.`,
+        turn_ceiling: (floor: number) => `Your turns ran out on floor ${floor}.`,
         quit: (floor: number) => `You stopped on floor ${floor}.`,
         contract: (floor: number) => `The contract's mismatch limit ended the run on floor ${floor}.`,
         pass_and_play_final_floor: (floor: number) => `The table played its last floor, floor ${floor}.`

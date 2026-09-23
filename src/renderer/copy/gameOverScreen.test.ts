@@ -4,7 +4,7 @@ import { achievementsNote, gameOverScreenCopy, runEndReasonLine } from './gameOv
 describe('the end-reason line', () => {
     it('names the rule that ended the run, never the player', () => {
         expect(runEndReasonLine({ highestLevel: 7, runEndReason: 'turn_ceiling' })).toBe(
-            'The turn ceiling ran out on floor 7.'
+            'Your turns ran out on floor 7.'
         );
         expect(runEndReasonLine({ highestLevel: 7, runEndReason: 'quit' })).toBe('You stopped on floor 7.');
         expect(runEndReasonLine({ highestLevel: 3, runEndReason: 'contract' })).toBe(

@@ -106,26 +106,26 @@ describe('RunShell', () => {
     });
 
     it('reads the ceiling on the par, and marks it once the floor is two turns from it', () => {
-        // Twelve pairs over the full palette: par 7, ceiling 21 (Gen 204 moved par to 0.45 with the
-        // shuffled deal; Gen 220 gives a board this size a turn back). The pressure of thesis §43
-        // lives on the par stat.
+        // Twelve pairs over the full palette: par 7 (Gen 204 moved par to 0.45 with the shuffled
+        // deal; Gen 220 gives a board this size a turn back). Arriving on a full turn bank, the
+        // ceiling is its cap of twice par, 14. The pressure of thesis §43 lives on the par stat.
         const base = playingRun();
-        const calm: RunState = { ...base, board: overFullPalette(base.board!, 12), turnsThisFloor: 4 };
+        const calm: RunState = { ...base, board: overFullPalette(base.board!, 12), turnsThisFloor: 4, turnBankCarry: 14 };
         const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={calm} tools={[]} />);
 
         const par = screen.getByTestId('hud-par');
         expect(within(par).getByRole('img')).toHaveAttribute(
             'aria-label',
-            '4 of 7 turns, 17 of 21 left before the run ends'
+            '4 of 7 turns, 10 of 14 left before the run ends'
         );
         expect(par).toHaveTextContent('4 of 7 turns');
         expect(par).not.toHaveAttribute('data-ceiling-near');
 
-        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...calm, turnsThisFloor: 19 }} tools={[]} />);
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...calm, turnsThisFloor: 12 }} tools={[]} />);
         expect(screen.getByTestId('hud-par')).toHaveAttribute('data-ceiling-near', 'true');
         expect(within(screen.getByTestId('hud-par')).getByRole('img')).toHaveAttribute(
             'aria-label',
-            '19 of 7 turns, 2 of 21 left before the run ends'
+            '12 of 7 turns, 2 of 14 left before the run ends'
         );
     });
 
@@ -136,17 +136,17 @@ describe('RunShell', () => {
         // down, and it reaches zero on the turn the ceiling ends the run.
         const base = playingRun();
         const board = overFullPalette(base.board!, 12);
-        const early: RunState = { ...base, board, turnsThisFloor: 4 };
+        const early: RunState = { ...base, board, turnsThisFloor: 4, turnBankCarry: 14 };
         const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={early} tools={[]} />);
 
         const left = (): HTMLElement => screen.getByTestId('hud-turns-left');
-        expect(left()).toHaveTextContent('17 left');
+        expect(left()).toHaveTextContent('10 left');
 
-        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, turnsThisFloor: 20 }} tools={[]} />);
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, turnsThisFloor: 13 }} tools={[]} />);
         expect(left()).toHaveTextContent('1 left');
 
         // Never below zero, so a floor resolved on its ceiling turn does not read as a negative.
-        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, turnsThisFloor: 24 }} tools={[]} />);
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, turnsThisFloor: 16 }} tools={[]} />);
         expect(left()).toHaveTextContent('0 left');
     });
 

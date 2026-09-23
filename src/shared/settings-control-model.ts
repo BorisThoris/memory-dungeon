@@ -37,7 +37,7 @@ export const SETTINGS_REFERENCE_CONTROL_ROWS: readonly SettingsReferenceControlR
         persistedField: null,
         visibleInSettings: true,
         copy: 'Reference-only. Shipped balance uses the Standard fair curve; enabling variants requires rules identity and achievement/daily copy.',
-        hint: 'Reference only: shipped balance is the Standard profile (one par curve, a turn ceiling at three times par, softened memorize curve).',
+        hint: 'Reference only: shipped balance is the Standard profile (one par curve, a run-wide turn bank topped up each floor, softened memorize curve).',
         options: ['Easy', 'Normal', 'Hard', 'Nightmare'],
         persistedSettingKey: null,
         ruleImpact: 'Would require GAME_RULES_VERSION because scoring, the turn ceiling, and fairness identity change.',

@@ -27,8 +27,8 @@ describe('the run census', () => {
         expect(report.runs).toBeGreaterThan(0);
         expect(report.floors).toBe(report.runs * SYSTEM_OCCUPANCY_BASELINE_FLOORS);
         expect(report.deepestFloor).toBe(SYSTEM_OCCUPANCY_BASELINE_FLOORS);
-        // At the reference miss rate a run does not end on its own: the turn ceiling is a gradient
-        // for a player who is missing, and a clean run ends when the player stops (thesis §42.2).
+        // The census holds the turn bank open, so no run ends on its own here: it reads what a run
+        // meets floor by floor. How long a run survives is the bank's question, not this one's.
         expect(report.endReasons['reached the cap']).toBe(report.runs);
     });
 

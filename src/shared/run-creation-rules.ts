@@ -12,6 +12,7 @@ import { filterMutatorsByContentLock } from './content-lock-state';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import { pickFloorCurio, seatFloorCurio } from './floor-curio-rules';
 import { countFindablePairs } from './board-tile-generation-rules';
+import { openingTurnBankCarry } from './floor-par';
 import { getMemorizeDurationForRun } from './scoring-rules';
 import { createSessionStats } from './session-stats-rules';
 import { createTimerState } from './run-timer-rules';
@@ -163,6 +164,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         chunkDropsThisRun: 0,
         bestRippleThisFloor: 0,
         turnsThisFloor: 0,
+        turnBankCarry: openingTurnBankCarry(board),
         largestChunkScoreThisFloor: 0,
         bestRippleThisRun: 0,
         magpieTheftsThisFloor: 0,

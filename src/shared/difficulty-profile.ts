@@ -37,7 +37,7 @@ export const SHIPPED_FAIR_DIFFICULTY_PROFILE: DifficultyProfileRuleSummary = {
         decayEveryNLevels: MEMORIZE_DECAY_EVERY_N_LEVELS
     },
     playerCopy:
-        'Default: every floor states a par and a ceiling of three times par; a run ends when you stop or when a floor is not cleared within its ceiling, and a miss costs nothing beyond the chain. No selectable difficulty profile changes rules yet.'
+        'Default: every floor states a par, and turns come from one bank the whole run draws on - each floor deposits three quarters of its par and unspent turns carry over; a run ends when you stop or when the bank runs dry before a floor is cleared. No selectable difficulty profile changes rules yet.'
 } as const;
 
 export const listDifficultyProfiles = (): DifficultyProfileRuleSummary[] => [
@@ -71,7 +71,7 @@ export const getCurrentDifficultyProfile = (): DifficultyProfileRow => ({
     status: 'shipped',
     dailyComparable: true,
     constants: currentConstants,
-    rules: 'one curve for everyone: a par per floor, a ceiling at three times par, and a miss that resets the chain and nothing else'
+    rules: 'one curve for everyone: a par per floor, and a run-wide turn bank that each floor tops up by three quarters of its par'
 });
 
 export const getDifficultyProfileRows = (): DifficultyProfileRow[] => [

@@ -627,6 +627,12 @@ export interface RunState {
     bestRippleThisRun: number;
     /** Turns resolved on this floor, match or miss, against the floor's par (`floor-par.ts`). */
     turnsThisFloor: number;
+    /**
+     * The turn bank (`floor-par.ts`): turns the run carried onto this floor unspent. The floor's
+     * ceiling is this plus the floor's deposit, under its cap. Absent on a run built without one,
+     * which reads the per-board ceiling.
+     */
+    turnBankCarry?: number;
     /** The biggest single break's score this floor: what band N5 reads the largest break's share from. */
     largestChunkScoreThisFloor: number;
     /** Pairs the magpie has taken back on this floor. */

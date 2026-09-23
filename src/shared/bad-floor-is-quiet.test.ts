@@ -4,7 +4,7 @@ import { GAME_RULES_VERSION } from './contracts';
 import { buildBoard } from './board-generation';
 import { countFindablePairs } from './board-tile-generation-rules';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
-import { parTurnsForFloor, turnCeilingForFloor } from './floor-par';
+import { parTurnsForFloor, turnBankCapForBoard, turnCeilingForRun } from './floor-par';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { getUnresolvedPlayablePairGroups } from './playthrough-solver-rules';
 import { isSingletonUtilityPairKey } from './tile-identity';
@@ -53,7 +53,14 @@ const startFloorEleven = (): RunState => {
         activeMutators: []
     });
     const base = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: SEED }));
-    return { ...base, board, status: 'playing', findablesTotalThisFloor: countFindablePairs(board.tiles) };
+    // The tired player arrives on a full bank: the trace is about one bad floor, not a bad run.
+    return {
+        ...base,
+        board,
+        status: 'playing',
+        findablesTotalThisFloor: countFindablePairs(board.tiles),
+        turnBankCarry: turnBankCapForBoard(board)
+    };
 };
 
 const PUNISHING = /\b(life|lives|lost|penalty|punish\w*)\b/iu;
@@ -63,7 +70,7 @@ describe('a bad floor is quiet, not punishing (thesis §67, trace 4)', () => {
         let run = startFloorEleven();
         const scoreBefore = run.stats.totalScore;
         const par = parTurnsForFloor(run.board!.pairCount);
-        const ceiling = turnCeilingForFloor(run.board!.pairCount);
+        const ceiling = turnCeilingForRun(run);
         // Four misses, then matches; three more misses once something has been matched. Every match
         // pops, so the floor can end inside the script - what matters is that it ends cleared,
         // never over.
@@ -108,10 +115,11 @@ describe('a bad floor is quiet, not punishing (thesis §67, trace 4)', () => {
         expect(Object.keys(run)).not.toContain('lives');
     });
 
-    it('ends the run only when a floor is never cleared within three times its par, and never for a miss', () => {
+    it('ends the run only when the bank runs dry before the floor is cleared, and never for one miss', () => {
         let run = startFloorEleven();
-        const ceiling = turnCeilingForFloor(run.board!.pairCount);
-        expect(ceiling).toBe(parTurnsForFloor(run.board!.pairCount) * 3);
+        const ceiling = turnCeilingForRun(run);
+        // Arriving on a full bank, the floor's ceiling is its cap: twice par.
+        expect(ceiling).toBe(turnBankCapForBoard(run.board));
         for (let turn = 1; turn < ceiling; turn += 1) {
             run = playMiss(run);
             expect(run.status, `turn ${turn}`).toBe('playing');

@@ -96,7 +96,7 @@ describe('how the run ended', () => {
     it('says the ceiling ran out, without a word about failing', () => {
         render(<GameOverScreen run={withReason('turn_ceiling')} />);
         const line = screen.getByTestId('game-over-end-reason');
-        expect(line).toHaveTextContent('The turn ceiling ran out on floor 7.');
+        expect(line).toHaveTextContent('Your turns ran out on floor 7.');
         expect(line).not.toHaveTextContent(/life|lives|lost|fail|died|death/i);
     });
 

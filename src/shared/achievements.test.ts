@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parTurnsForFloor, turnCeilingForFloor } from './floor-par';
+import { parTurnsForFloor, turnCeilingForRun } from './floor-par';
 import type { AchievementId, RunState } from './contracts';
 import {
     ACHIEVEMENT_BY_ID,
@@ -67,7 +67,7 @@ describe('achievement rules', () => {
                 mistakes: 0,
                 // Gen 183: Last Turn Standing - the floor cleared on the ceiling's final turn.
                 parTurns: parTurnsForFloor(createNewRun(0).board!.pairCount),
-                turnsTaken: turnCeilingForFloor(createNewRun(0).board!.pairCount)
+                turnsTaken: turnCeilingForRun(createNewRun(0))
             }
         };
         const unlocked = evaluateAchievementUnlocks(run, createDefaultSaveData());

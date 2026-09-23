@@ -1,7 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
 import { type BoardState, type RunState, type Tile } from './contracts';
-import { parTurnsForFloor, turnCeilingForFloor, TURN_CEILING_PAR_MULTIPLIER } from './floor-par';
+import {
+    parTurnsForFloor,
+    TURN_BANK_CAP_PAR_MULTIPLIER,
+    turnCeilingForFloor,
+    turnCeilingForRun,
+    TURN_CEILING_PAR_MULTIPLIER
+} from './floor-par';
 import { flipTile, resolveBoardTurn } from './game';
 import { createNewRun } from './run-creation-rules';
 import { makeRun, makeTile } from './test/game-fixtures';
@@ -256,19 +262,20 @@ describe('the turn ceiling', () => {
         ]);
     const play = (run: RunState, first: string, second: string) => resolveBoardTurn(flipTile(flipTile(run, first), second));
     const miss = (run: RunState) => play(run, 'a-1', 'b-1');
-    const ceiling = turnCeilingForFloor(2);
+    const ceiling = turnCeilingForRun(twoPairRun());
 
-    it('is three times par', () => {
-        expect(TURN_CEILING_PAR_MULTIPLIER).toBe(3);
-        // Gen 210 gave every floor a miss allowance and Gen 220 gave the opening's board sizes a
-        // second turn, so a two-pair fixture's par is 3 rather than the bare 1 and its ceiling 9.
-        // The rule itself is unchanged through both: three times whatever par is.
+    it('opens a run on a full bank: twice par', () => {
+        // A new run carries a full bank onto its first floor, so that floor's ceiling is the cap.
+        // A two-pair fixture's par is 3 (Gen 210's miss allowance, Gen 220's opening turn), so 6.
+        expect(TURN_BANK_CAP_PAR_MULTIPLIER).toBe(2);
         expect(parTurnsForFloor(2)).toBe(3);
-        expect(ceiling).toBe(9);
+        expect(ceiling).toBe(6);
+        // A run built without a bank still reads the old per-board ceiling of three times par.
+        expect(TURN_CEILING_PAR_MULTIPLIER).toBe(3);
         expect(turnCeilingForFloor(14)).toBe(parTurnsForFloor(14) * 3);
     });
 
-    it('ends a floor never cleared exactly on turn three times par, with nothing left face up', () => {
+    it('ends a floor never cleared exactly on its ceiling turn, with nothing left face up', () => {
         let run = twoPairRun();
         for (let turn = 1; turn < ceiling; turn += 1) {
             run = miss(run);

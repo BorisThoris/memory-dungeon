@@ -341,7 +341,7 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
         id: 'turn_ceiling',
         title: 'The turn ceiling',
         description:
-            'Every floor has a **ceiling** of **three times its par** in turns; a floor not cleared within it ends the run, and that is the only way a run ends on its own - otherwise it ends when you stop. A bad floor costs nothing beyond that: a miss resets the chain and a slow clear pays a smaller floor-end bonus, and the next floor begins like any other. The run bar shows turns against par and marks the last two turns before the ceiling.'
+            'Your turns are a **bank** the whole run draws on. The run opens with **twice the first floor\'s par**; each new floor deposits **three quarters of its own par**, on top of whatever you left unspent, and the bank never holds more than **twice the new floor\'s par**. Clear a floor under par and the bank grows; run over and the shortfall follows you down the stairs. A floor not cleared before the bank runs dry ends the run, and that is the only way a run ends on its own - otherwise it ends when you stop. The run bar shows turns against par and how many turns the bank has left.'
     },
     {
         id: 'scoring',

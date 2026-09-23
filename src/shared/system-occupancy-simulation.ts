@@ -681,6 +681,13 @@ export const simulateRunOccupancy = ({
             );
             run = {
                 ...run,
+                /*
+                 * The census holds the turn bank open: it measures what a run meets floor by floor,
+                 * not how long one survives, and at the census's miss rate the bank (`floor-par.ts`)
+                 * would end most runs inside the first dozen floors and leave the deep floors unread.
+                 * Without a carry every floor reads its own per-board ceiling, which it never reaches.
+                 */
+                turnBankCarry: undefined,
                 // Floor 1 needs its mutators put on by hand for the same reason (Gen 208); every
                 // floor after it gets them from `advanceToNextLevel`, which is the game's own path.
                 activeMutators: filterMutatorsByContentLock(
@@ -731,7 +738,7 @@ export const simulateRunOccupancy = ({
                     ended = 'the floor did not advance';
                     break;
                 }
-                run = finishMemorizePhase(next);
+                run = { ...finishMemorizePhase(next), turnBankCarry: undefined };
                 floor += 1;
             }
             if (pass === 'reference') endReasons[ended] = (endReasons[ended] ?? 0) + 1;

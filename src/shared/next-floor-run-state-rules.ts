@@ -6,6 +6,7 @@ import {
 } from './contracts';
 import { applyFloorCurio, pickFloorCurio } from './floor-curio-rules';
 import { countFindablePairs } from './board-tile-generation-rules';
+import { turnsToCeiling } from './floor-par';
 import { createTimerState } from './run-timer-rules';
 import { calculateRating } from './scoring-rules';
 import { normalizeSessionStats } from './session-stats-rules';
@@ -56,6 +57,7 @@ export const createNextFloorRunState = (
         chunkPairsDroppedThisFloor: 0,
         bestRippleThisFloor: 0,
         turnsThisFloor: 0,
+        turnBankCarry: turnsToCeiling(run),
         largestChunkScoreThisFloor: 0,
         magpieTheftsThisFloor: 0,
         shiftingSpotlightNonce: 0,

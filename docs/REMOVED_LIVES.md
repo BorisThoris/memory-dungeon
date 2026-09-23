@@ -25,6 +25,27 @@ where it says *how well*, not *how much longer*.
 board at all - three times par means missing two-thirds of your flips, which is a floor under
 competence and not a difficulty gate.
 
+## Update: the ceiling became a run-wide bank
+
+The per-floor ceiling below refilled to three times par on every floor, and that made it a life
+handed back on every stair. Measured over twenty seeds, a player missing 45% of their pairs still
+reached floor 120 on every one, so a run never ended just because it was going badly. The player
+asked for a run that punishes that, so the ceiling is now a **turn bank** (`floor-par.ts`,
+`RunState.turnBankCarry`):
+
+- a run opens on a full bank, `TURN_BANK_CAP_PAR_MULTIPLIER = 2` times the first floor's par;
+- each new floor deposits `TURN_BANK_FLOOR_GRANT_PAR_MULTIPLIER = 0.75` of its par, rounded up,
+  on top of whatever the last floor left unspent;
+- the bank never holds more than twice the new floor's par.
+
+A floor played at par drains the bank, a floor under par refills it, and the overspend follows the
+run down. Measured over twenty seeds at a random miss rate, median floors reached: 0% misses 120+,
+15% 120+ (4 of 20 runs die early), 25% 18, 35% 10, 45% 5. One bad floor on a full bank is still
+survivable (`bad-floor-is-quiet.test.ts`). A bad run is not. The run census holds the bank open,
+because it measures what a run meets floor by floor and not how long a run lasts.
+
+A run built without a carry (older fixtures) still reads the per-board ceiling described below.
+
 ## What replaced it
 
 - **The turn ceiling.** `TURN_CEILING_PAR_MULTIPLIER = 3` and `turnCeilingForFloor(pairs) =

@@ -113,7 +113,7 @@ describe('mechanics-encyclopedia', () => {
         // clearing a floor on the ceiling's final turn.
         const ceiling = CODEX_CORE_TOPICS.find((topic) => topic.id === 'turn_ceiling');
         expect(ceiling?.title).toBe('The turn ceiling');
-        expect(ceiling?.description).toContain('three times its par');
+        expect(ceiling?.description).toContain('**bank**');
         expect(ceiling?.description).toContain('ends the run');
         expect(ceiling?.description).toContain('when you stop');
         expect(ACHIEVEMENT_CATALOG.ACH_LAST_LIFE.title).toBe('Last Turn Standing');
