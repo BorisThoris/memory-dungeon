@@ -267,9 +267,11 @@ export const useHudPoliteLiveAnnouncement = ({
     // findable was claimed, and the event id makes the dedupe key unique per turn, so a
     // re-render cannot re-announce and two identical pickups on different turns both are.
     useEffect(() => {
-        if (!boardTurnEvent || unannouncedGameplayFeedback().some((item) => item.source.kind === 'findable')) {
+        if (!boardTurnEvent) {
             return;
         }
+        // A pickup with its own gameplay event is said by that event; the turn still says the rest.
+        const pickupSaidElsewhere = unannouncedGameplayFeedback().some((item) => item.source.kind === 'findable');
         // The floor's last match resolves and the next floor opens in the same update, so this
         // effect first sees that turn standing on a board it did not happen on. Saying "Match
         // resolved. 6/6 pairs cleared." over the new floor's memorize phase described a board
@@ -277,7 +279,10 @@ export const useHudPoliteLiveAnnouncement = ({
         if (boardLevel !== null && boardTurnEvent.announcement.level !== boardLevel) {
             return;
         }
-        const announcement = buildBoardTurnAnnouncement(boardTurnEvent, { reduceMotion });
+        const announcement = buildBoardTurnAnnouncement(boardTurnEvent, {
+            reduceMotion,
+            includePickup: !pickupSaidElsewhere
+        });
         if (!announcement) {
             return;
         }
