@@ -1,5 +1,5 @@
 import { chainRungScoreMultiplier } from './chain-rung-value-rules';
-import { CHAIN_TIER_CLEAN_FROM, CHAIN_TIER_FEVER_FROM, CHAIN_TIER_SHARP_FROM } from './chain-tier-rules';
+import { CHAIN_TIER_CLEAN_FROM, getChainTier, higherChainTier, type ChainTier } from './chain-tier-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 
 export type ChainTargetBand = 'seed' | 'reward' | 'combo' | 'mastery';
@@ -23,11 +23,20 @@ export interface ChainTargetFeedback {
  * while the HUD spoke of Clean, Sharp and Fever. The bands are the ladder's default rungs
  * (`chainTierRungs` with no floor), and the pay each rung names is the multiplier the HUD shows.
  */
-export const getChainTargetFeedback = (bestStreakInput: number | null | undefined): ChainTargetFeedback => {
+/*
+ * `reached` is the rung the run's ladder actually showed. Without it the band is read off the
+ * streak against the fixed rungs, and the ladder does not climb on the streak alone: a run whose
+ * HUD had said Sharp, and whose floor clears had paid Sharp, was told at the end to "Reach Clean".
+ */
+export const getChainTargetFeedback = (
+    bestStreakInput: number | null | undefined,
+    reached?: ChainTier | null
+): ChainTargetFeedback => {
     const bestStreak = runNonNegativeInteger(bestStreakInput);
     const sharpPays = chainRungScoreMultiplier('sharp');
     const feverPays = chainRungScoreMultiplier('fever');
-    if (bestStreak >= CHAIN_TIER_FEVER_FROM) {
+    const tier = higherChainTier(reached, getChainTier(bestStreak));
+    if (tier === 'fever') {
         return {
             band: 'mastery',
             bestStreak,
@@ -38,7 +47,7 @@ export const getChainTargetFeedback = (bestStreakInput: number | null | undefine
             payoffValue: 'hold Fever'
         };
     }
-    if (bestStreak >= CHAIN_TIER_SHARP_FROM) {
+    if (tier === 'sharp') {
         return {
             band: 'combo',
             bestStreak,
@@ -49,7 +58,7 @@ export const getChainTargetFeedback = (bestStreakInput: number | null | undefine
             payoffValue: 'Fever next'
         };
     }
-    if (bestStreak >= CHAIN_TIER_CLEAN_FROM) {
+    if (tier === 'clean') {
         return {
             band: 'reward',
             bestStreak,

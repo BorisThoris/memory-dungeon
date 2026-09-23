@@ -119,9 +119,15 @@ export const chunkAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): strin
     return [CHAIN_BEAT_COPY.chunkAnnouncement(pairs, chainTierAfter, chainAfter), ...(style ? [style] : [])];
 };
 
+/**
+ * `includePickup: false` is for a turn whose pickup already has its own gameplay event to say it.
+ * The announcer used to skip the whole turn in that case, which kept the pickup from being said
+ * twice and also kept the rest from being said at all: a three-pair Fever break that happened to
+ * uncover a glint was announced as the glint and nothing else.
+ */
 export const buildBoardTurnAnnouncement = (
     turnEvent: BoardTurnResolvedEvent,
-    _options: { reduceMotion: boolean }
+    { includePickup = true }: { reduceMotion: boolean; includePickup?: boolean }
 ): BoardTurnAnnouncementResult | null => {
     const lines = [
         chainMilestoneAnnouncement(turnEvent),
@@ -132,7 +138,7 @@ export const buildBoardTurnAnnouncement = (
          */
         ...chunkAnnouncementLines(turnEvent),
         ...magpieAnnouncementLines(turnEvent),
-        getBoardTurnPickupAnnouncement(turnEvent)?.text ?? null
+        includePickup ? getBoardTurnPickupAnnouncement(turnEvent)?.text ?? null : null
     ].filter((line): line is string => line != null && line.length > 0);
 
     if (lines.length === 0) {

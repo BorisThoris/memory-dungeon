@@ -54,6 +54,7 @@ export const createNextFloorRunState = (
         skipMomentumThisChain: 0,
         feverBreaksThisFloor: 0,
         bestChainThisFloor: 0,
+        peakChainTierThisFloor: 'none',
         chunkPairsDroppedThisFloor: 0,
         bestRippleThisFloor: 0,
         turnsThisFloor: 0,

@@ -11,14 +11,39 @@ export const getFindableToastText = (kind: FindableKind): string =>
 
 const isNonEmptyHudSentence = (value: string): boolean => value.length > 0;
 
+/* A sentence ends at a stop followed by a space, so `Ripple ×1.75` stays one sentence. */
 const splitHudAnnouncementSentences = (text: string): string[] =>
     text
         .replace(/\s+/g, ' ')
         .trim()
-        .match(/[^.?!]+[.?!]?/g)
-        ?.map((part) => part.trim())
-        .filter(isNonEmptyHudSentence) ?? [];
+        .split(/(?<=[.?!])\s+/)
+        .map((part) => part.trim())
+        .filter(isNonEmptyHudSentence);
 
+/**
+ * The counters every match repeats. The line under the board has room for two sentences, and
+ * these always come first, because the queue files the per-match counters ahead of the turn's
+ * news: the floor's last match read "Match resolved. 6/6 pairs cleared. +6 more updates." while
+ * "Clean reached: x3" and "Chain 3, Sharp break" were the six. They yield their places to news.
+ */
+const ROUTINE_HUD_SENTENCE = /^(?:Match resolved\.|\d+\/\d+ pairs cleared\.|Recall focus \d+\/\d+)/;
+
+/** Two glints on one turn were two identical sentences side by side; say it once, counted. */
+const collapseRepeatedSentences = (sentences: readonly string[]): string[] => {
+    const counts = new Map<string, number>();
+    for (const sentence of sentences) {
+        counts.set(sentence, (counts.get(sentence) ?? 0) + 1);
+    }
+    return [...counts].map(([sentence, count]) =>
+        count > 1 ? `${sentence.replace(/[.?!]$/, '')} (×${count}).` : sentence
+    );
+};
+
+/**
+ * The visual line only; the live region always gets the whole announcement. A shortened line
+ * keeps the turn's news over its routine counters and says nothing about what it left out - a
+ * "+N more updates" tail pointed at a log the player has no way to open.
+ */
 export const formatHudActionFeedbackText = (
     text: string,
     { maxChars = 132, maxSentences = 2 }: { maxChars?: number; maxSentences?: number } = {}
@@ -28,22 +53,30 @@ export const formatHudActionFeedbackText = (
         return normalized;
     }
 
-    const sentences = splitHudAnnouncementSentences(normalized);
+    const sentences = collapseRepeatedSentences(splitHudAnnouncementSentences(normalized));
     if (sentences.length > 1) {
-        const selected: string[] = [];
-        for (const sentence of sentences) {
-            if (selected.length >= maxSentences) {
+        const byWeight = [
+            ...sentences.filter((sentence) => !ROUTINE_HUD_SENTENCE.test(sentence)),
+            ...sentences.filter((sentence) => ROUTINE_HUD_SENTENCE.test(sentence))
+        ];
+        const selected = new Set<string>();
+        let length = 0;
+        for (const sentence of byWeight) {
+            if (selected.size >= maxSentences) {
                 break;
             }
-            const next = [...selected, sentence].join(' ');
-            if (next.length > maxChars && selected.length > 0) {
-                break;
+            const nextLength = length + (selected.size > 0 ? 1 : 0) + sentence.length;
+            if (nextLength > maxChars && selected.size > 0) {
+                continue;
             }
-            selected.push(sentence);
+            selected.add(sentence);
+            length = nextLength;
         }
-        const remaining = Math.max(0, sentences.length - selected.length);
-        const summary = selected.join(' ');
-        return remaining > 0 ? `${summary} +${remaining} more updates.` : summary;
+        const kept = sentences.filter((sentence) => selected.has(sentence)).join(' ');
+        if (kept.length <= maxChars) {
+            return kept;
+        }
+        return formatHudActionFeedbackText(kept, { maxChars, maxSentences: 1 });
     }
 
     const clipped = normalized.slice(0, maxChars - 3).replace(/\s+\S*$/, '').trim();

@@ -12,7 +12,7 @@ import { getFloorClearObjectiveResult } from './secondary-objective-rules';
 import { clearResolveState } from './run-timer-rules';
 import { normalizeSessionStats } from './session-stats-rules';
 import { runNonNegativeInteger } from './run-number-guards';
-import { getChainTier, runChainMomentumPairs } from './chain-tier-rules';
+import { getChainTier, higherChainTier, runChainMomentumPairs } from './chain-tier-rules';
 
 export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState => {
     const board: BoardState = { ...clearedBoard, flippedTileIds: [] };
@@ -63,9 +63,14 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
     if (momentumBonus.tier === 'fever') {
         bonusTags.push(EXTREME_FEVER_BONUS_TAG);
     }
-    // The floor's chain record: the deepest rung its longest chain reached, against this
-    // floor's ladder. The run counts floors, not breaks, so a quest can ask for three floors.
-    const floorChainTier = getChainTier(runNonNegativeInteger(run.bestChainThisFloor), board.pairCount);
+    // The floor's chain record: the deepest rung the ladder showed on it, against this floor's
+    // rungs. The run counts floors, not breaks, so a quest can ask for three floors. Read from the
+    // momentum peak the HUD drew; the streak reading stays as the floor for runs saved before the
+    // peak was kept, and the clear's own momentum tier because it has just paid that rung's bonus.
+    const floorChainTier = higherChainTier(
+        higherChainTier(run.peakChainTierThisFloor, momentumBonus.tier),
+        getChainTier(runNonNegativeInteger(run.bestChainThisFloor), board.pairCount)
+    );
     const lastLevelResult = createFloorClearLevelResult({
         bonusTags,
         featuredObjectiveCompleted,
@@ -111,7 +116,8 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
                 ? runNonNegativeInteger(stats.perfectClears) + 1
                 : runNonNegativeInteger(stats.perfectClears)
         },
+        peakChainTierThisRun: higherChainTier(run.peakChainTierThisRun, floorChainTier),
         timerState: clearResolveState(run),
-        lastLevelResult
+        lastLevelResult: floorChainTier === 'none' ? lastLevelResult : { ...lastLevelResult, chainTier: floorChainTier }
     };
 };

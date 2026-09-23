@@ -4,6 +4,7 @@ import {
     type RunEndReason,
     type RunState
 } from './contracts';
+import { higherChainTier } from './chain-tier-rules';
 import { runArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
@@ -31,6 +32,7 @@ export const createRunSummary = (run: RunState, unlockedAchievements: Achievemen
             bestRipple: Math.max(runNonNegativeInteger(run.bestRippleThisRun), runNonNegativeInteger(run.bestRippleThisFloor)),
             sharpFloors: runNonNegativeInteger(run.sharpFloorsThisRun),
             feverFloors: runNonNegativeInteger(run.feverFloorsThisRun),
+            peakChainTier: higherChainTier(run.peakChainTierThisRun, run.peakChainTierThisFloor),
             runSeed: runNonNegativeInteger(run.runSeed),
             runRulesVersion: runNonNegativeInteger(run.runRulesVersion),
             gameMode: run.gameMode,

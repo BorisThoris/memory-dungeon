@@ -103,6 +103,8 @@ describe('how the run ended', () => {
     it('says the player stopped, the contract ended it, or the table finished', () => {
         const { rerender } = render(<GameOverScreen run={withReason('quit')} />);
         expect(screen.getByTestId('game-over-end-reason')).toHaveTextContent('You stopped on floor 7.');
+        // The reason names the floor; the caption does not say it again.
+        expect(screen.queryByText(/before the archive sealed/)).toBeNull();
         rerender(<GameOverScreen run={withReason('contract')} />);
         expect(screen.getByTestId('game-over-end-reason')).toHaveTextContent(/contract.*floor 7\./);
         rerender(<GameOverScreen run={withReason('pass_and_play_final_floor')} />);
@@ -112,6 +114,7 @@ describe('how the run ended', () => {
     it('says nothing about it for a summary from before the reason was recorded', () => {
         render(<GameOverScreen run={withReason(undefined)} />);
         expect(screen.queryByTestId('game-over-end-reason')).toBeNull();
+        expect(screen.getByText('Floor 7 reached before the archive sealed.')).toBeInTheDocument();
     });
 });
 

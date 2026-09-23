@@ -98,7 +98,24 @@ describe('useHudPoliteLiveAnnouncement', () => {
             formatHudActionFeedbackText(
                 'Shuffle Snare fired. Hidden safe tiles reordered. Cascade Cache fired. One safe hidden pair cleared. Ripple carried a second wave. The chain held at Sharp.'
             )
-        ).toBe('Shuffle Snare fired. Hidden safe tiles reordered. +4 more updates.');
+        ).toBe('Shuffle Snare fired. Hidden safe tiles reordered.');
+    });
+
+    it("gives a shortened line's places to the turn's news, not the counters every match repeats", () => {
+        // The floor's last match, as a real run announced it.
+        expect(
+            formatHudActionFeedbackText(
+                'Match resolved. 6/6 pairs cleared. Recall focus 3/3; +24 memory score. Clean reached: x3. Breaks reach deeper into the clump. Chain 3, Sharp break. 1 more pair of the same suit broke away with that match and left the board. Clean sweep.'
+            )
+        ).toBe('Clean reached: x3. Breaks reach deeper into the clump.');
+    });
+
+    it('says a repeated sentence once, counted, and does not split a decimal', () => {
+        expect(
+            formatHudActionFeedbackText(
+                'Score Glint claimed: +25 score. Score Glint claimed: +25 score. Match resolved. 7/7 pairs cleared. Recall focus 3/3; +16 memory score. Break paid Ripple ×1.75 on three pairs.'
+            )
+        ).toBe('Score Glint claimed: +25 score (×2). Break paid Ripple ×1.75 on three pairs.');
     });
 
     it('clips single long visual action feedback without changing live-region copy', () => {
@@ -462,6 +479,49 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
         expect(result.current.message).toBe('Score Glint claimed: +25 score.');
         expect(result.current.message).not.toContain('available');
+    });
+
+    it('still says what the turn did when the same turn claimed a pickup', async () => {
+        // A real run's floor 3: a three-pair Fever break that uncovered two glints was announced
+        // as the glints and nothing else, because a pending pickup event skipped the whole turn.
+        const feedback: GameplayFeedbackPresentation = {
+            audioCategory: 'match-resolution',
+            commandId: 'glint-and-milestone',
+            cue: 'findable.score_glint.matched',
+            eventId: 'glint-and-milestone:2',
+            message: 'Score Glint claimed: +25 score.',
+            priority: 'info',
+            source: { kind: 'findable', id: 'score_glint' },
+            tone: 'reward'
+        };
+        const turnEvent = createBoardTurnResolvedEventFixture({
+            commandId: 'glint-and-milestone',
+            matchedFindableKind: 'score_glint',
+            announcement: {
+                currentStreakBefore: 2,
+                currentStreakAfter: 3,
+                findablesClaimedBefore: 0,
+                findablesClaimedAfter: 1
+            }
+        }) as BoardTurnResolvedEvent;
+        const { result, rerender } = renderHook(
+            (p: { on: boolean }) =>
+                useHudPoliteLiveAnnouncement({
+                    ...base,
+                    boardTurnEvent: p.on ? turnEvent : null,
+                    gameplayFeedback: p.on ? [feedback] : []
+                }),
+            { initialProps: { on: false } }
+        );
+
+        await act(async () => {
+            rerender({ on: true });
+        });
+        await flushRaf();
+
+        expect(result.current.message).toContain('Clean reached: x3.');
+        // Said once, by the pickup's own event.
+        expect(result.current.message.match(/Score Glint claimed/g)).toHaveLength(1);
     });
 
     it('announces matched tile trait effects with the resolved match', async () => {

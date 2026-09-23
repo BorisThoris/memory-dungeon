@@ -32,4 +32,13 @@ describe('chain target feedback', () => {
         expect(getChainTargetFeedback(5).detail).toContain(`pays ×${chainRungScoreMultiplier('sharp')} a pair`);
         expect(getChainTargetFeedback(8).detail).toContain(`pays ×${chainRungScoreMultiplier('fever')} a pair`);
     });
+
+    it('reads the rung the run reached, not the streak alone', () => {
+        // Two matches whose breaks took two more pairs: the HUD said Sharp, the clear paid Sharp.
+        expect(getChainTargetFeedback(2, 'sharp')).toMatchObject({ band: 'combo', value: 'Reach Fever' });
+        expect(getChainTargetFeedback(3, 'fever')).toMatchObject({ band: 'mastery', value: 'Hold Fever' });
+        // A reached rung never lowers what the streak alone already shows.
+        expect(getChainTargetFeedback(12, 'clean')).toMatchObject({ band: 'mastery' });
+        expect(getChainTargetFeedback(2, null)).toMatchObject({ band: 'seed' });
+    });
 });

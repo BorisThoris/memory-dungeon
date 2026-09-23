@@ -82,7 +82,7 @@ describe('board-turn feedback ownership boundary', () => {
         expect(turnAnnouncement).toMatch(/buildBoardTurnAnnouncement = \(\s*turnEvent: BoardTurnResolvedEvent/u);
         expect(turnAnnouncement).not.toContain('RunState');
         expect(announcementHook).toContain('buildBoardTurnAnnouncement(');
-        expect(announcementHook).toContain('{ reduceMotion }');
+        expect(announcementHook).toMatch(/buildBoardTurnAnnouncement\(boardTurnEvent, \{\s*reduceMotion,/u);
         expect(turnAnnouncement).toContain('CHAIN_MILESTONE_THRESHOLDS');
         for (const forbiddenInference of [
             'matchedPairs - snap.matchedPairs',

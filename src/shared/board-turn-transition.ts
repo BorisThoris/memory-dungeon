@@ -5,6 +5,7 @@ import {
     type Tile
 } from './contracts';
 import { chunkBreakMomentumPairs } from './chunk-break-rules';
+import { higherChainTier, runChainTier } from './chain-tier-rules';
 import { isBoardComplete } from './board-inspection';
 import { WILD_PAIR_KEY } from './tile-identity';
 import { tilesArePairMatch } from './scoring-rules';
@@ -257,7 +258,13 @@ export const createResolveBoardTurnTransition = ({
             timerState: clearResolveState(run)
         };
 
-        const cleanedNextRun = releaseStrandedStasisBlock(nextRun);
+        // The rung the HUD now shows, read the way it reads it, kept as the floor's and the run's peak.
+        const shownTier = runChainTier(nextRun);
+        const cleanedNextRun = releaseStrandedStasisBlock({
+            ...nextRun,
+            peakChainTierThisFloor: higherChainTier(run.peakChainTierThisFloor, shownTier),
+            peakChainTierThisRun: higherChainTier(run.peakChainTierThisRun, shownTier)
+        });
         const completionBoard = cleanedNextRun.board ?? spun.board;
         return isBoardComplete(completionBoard) ? finalizeLevel(cleanedNextRun, completionBoard, execution) : cleanedNextRun;
     };

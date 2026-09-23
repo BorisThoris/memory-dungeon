@@ -58,6 +58,13 @@ const launchSummary = (def: RunModeDefinition, freshClassic: boolean): string =>
 
 const socialScopeNote = buildSocialScopeNote();
 
+/*
+ * The short note beside a mode's title. It printed the group, and since the mode collapse there is
+ * one group, so every row said "Core modes" - a label that told a player nothing about the row it
+ * sat on. A mode's own identity tag says what sets it apart; the group is the fallback.
+ */
+const modeNote = (def: RunModeDefinition): string => def.identityTag ?? RUN_MODE_GROUP_LABEL[def.group];
+
 const ChooseYourPathScreen = (): ReactElement => {
     const {
         closeSubscreen,
@@ -316,7 +323,7 @@ const ChooseYourPathScreen = (): ReactElement => {
                 <span className={styles.numeral}>{numeral(index)}</span>
                 <span className={styles.entryTitle}>{def.title}</span>
                 <span aria-hidden="true" className={styles.leader} />
-                <span className={styles.entryNote}>{locked ? 'In the full game' : RUN_MODE_GROUP_LABEL[def.group]}</span>
+                <span className={styles.entryNote}>{locked ? 'In the full game' : modeNote(def)}</span>
                 <span className={styles.entryDescription}>{def.shortDescription}</span>
             </button>
         );
@@ -538,7 +545,7 @@ const ChooseYourPathScreen = (): ReactElement => {
                 <OverlayModal
                     actions={detailActions(detailMode)}
                     onEscape={closeDetail}
-                    subtitle={RUN_MODE_GROUP_LABEL[detailMode.group]}
+                    subtitle={modeNote(detailMode)}
                     testId="library-mode-detail-modal"
                     title={detailMode.title}
                 >

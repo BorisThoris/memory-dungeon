@@ -113,7 +113,9 @@ describe('ChooseYourPathScreen', () => {
 
         const browse = screen.getByRole('region', { name: /browse modes/i });
         const table = within(browse).getByRole('button', { name: /^Pass and Play\. Open details\.$/i });
-        expect(table).toHaveTextContent(/core modes/i);
+        // Its own tag, not the one group every mode is in since the collapse.
+        expect(table).toHaveTextContent(/same device/i);
+        expect(table).not.toHaveTextContent(/core modes/i);
         // The taxonomy strips are gone: a card carries no "lanes" or "launch loop" copy.
         expect(browse).not.toHaveTextContent(/launch loop|chain leads|read pressure|chase reward/i);
     });

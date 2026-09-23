@@ -288,7 +288,13 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             </p>
                         ) : null}
                         <img alt="" className={styles.divider} src={UI_ART.dividerOrnament} />
-                        <p className={styles.copy}>{gameOverScreenCopy.floorCaption(summary.highestLevel)}</p>
+                        {/* The end reason already names the floor, and so does the Highest Floor tile
+                            below; the caption is for a summary too old to carry a reason. Beside
+                            "You stopped on floor 3." it said the floor a second time, and that the
+                            archive had sealed on a player who had chosen to stop. */}
+                        {endReasonLine ? null : (
+                            <p className={styles.copy}>{gameOverScreenCopy.floorCaption(summary.highestLevel)}</p>
+                        )}
                         {/* The rules this run ran under: a fact the score means nothing without. */}
                         <p className={`${styles.copy} ${styles.modeIdentity}`} data-testid="game-over-mode-identity">
                             {runModeIdentityLine(summary)}

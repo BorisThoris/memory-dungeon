@@ -31,7 +31,7 @@ const runItBackDetail = (summary: RunSummary | null, run: RunState): string => {
 };
 
 const getChainTargetRow = (summary: RunSummary | null): GameOverNextRunRow => {
-    const target = getChainTargetFeedback(summary?.bestStreak);
+    const target = getChainTargetFeedback(summary?.bestStreak, summary?.peakChainTier);
     return {
         id: 'chain_target',
         title: 'Chain target',
@@ -81,10 +81,19 @@ const getMetaNextGoalRow = (save: SaveData, previousSave?: SaveData): GameOverNe
     }
     if (delta?.changed === true) {
         value = delta.headline;
+        // What changed, then what is next - less anything the change already said. A level-up's
+        // own line ends on the next milestone, and the goal line appended it again: "Adept tier at
+        // profile level 3 (4 honor marks)" twice in one paragraph.
+        const next = [progression.motivationCopy, progression.nextMilestoneCopy]
+            .filter((part) => !delta.summaryCopy.includes(part))
+            .join(' ');
         // The goal copy already says "Next:" when the reward is still locked; do not say it twice.
-        detail = delta.nextGoalCopy.startsWith('Next: ')
-            ? `${delta.summaryCopy} ${delta.nextGoalCopy}`
-            : `${delta.summaryCopy} Next: ${delta.nextGoalCopy}`;
+        detail =
+            next === ''
+                ? delta.summaryCopy
+                : next.startsWith('Next: ')
+                  ? `${delta.summaryCopy} ${next}`
+                  : `${delta.summaryCopy} Next: ${next}`;
     }
 
     return {

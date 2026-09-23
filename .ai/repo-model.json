@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2686,
     "codeFileCount": 926,
-    "exportedSymbolCount": 2806,
+    "exportedSymbolCount": 2807,
     "contentItemCount": 10,
     "mechanicCount": 42,
     "stateFieldCount": 80,
-    "relationshipCount": 7087
+    "relationshipCount": 7090
   },
   "inventory": [
     {
@@ -297,8 +297,8 @@
     {
       "path": "docs/CHAIN_CHUNK_FEVER_DESIGN.md",
       "category": "documentation",
-      "bytes": 72871,
-      "sha256": "9601482efbbbbab5576d86d4e8900a6a15a90666b733bc30a592908268933659"
+      "bytes": 73372,
+      "sha256": "32e5630c8437c3f925dc62f60189658e1d31037890f96c23a3b1292efcd23ee5"
     },
     {
       "path": "docs/COLLECTIBLE_SYSTEM.md",
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "6d73a2af4aca01ee200843a395febf32549edcd8490bff1077eb6cc9f1d8d723"
+      "sha256": "b3b26768ee801903d3a40c1defb822e9b99d278b70a5381172e00f992112354d"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4347,8 +4347,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 120585,
-      "sha256": "fc7f48932b35a47979ffe4458c8ca267479e890887320e975a560ece4bd1370d"
+      "bytes": 121011,
+      "sha256": "86f6f42988e0ec0aa3909d41516026fe59aa3c5670d1788e5dbd6433e1f73a55"
     },
     {
       "path": "public/site.webmanifest",
@@ -5469,8 +5469,8 @@
     {
       "path": "scripts/test-only-exports-baseline.json",
       "category": "script",
-      "bytes": 8579,
-      "sha256": "fde044887ddf4bbf9655ba2a98794be962cd8de1e8c8cc29d0a22b99fbf87a43"
+      "bytes": 8582,
+      "sha256": "20d366b9f8b35f451b3db6f5b4a6594a0c657d6f5cb8d23082052eef287c74f8"
     },
     {
       "path": "scripts/test-only-exports.ts",
@@ -9009,14 +9009,14 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "category": "test",
-      "bytes": 8495,
-      "sha256": "7a2e6b772b4d5d2b490d0c0b9f97157ac320b76ffc9d96d719024227af268d7e"
+      "bytes": 8635,
+      "sha256": "5c9617b99f02db8fd68b8b879e410097c782ff9b6d90105c7c51b1e08921384d"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 35093,
-      "sha256": "3d1d4d3f1728c5ac9b584b1c464e06109b8691206831f0154cb914ab38c6b2b3"
+      "bytes": 35458,
+      "sha256": "d442da3314ff12942344697245bc2118cd5500eb85e0531d1e42a7e11db79e5e"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -9105,14 +9105,14 @@
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "category": "test",
-      "bytes": 14375,
-      "sha256": "057104cec83f6e2da28e06aa5e54ef1285a7b0d0008fb182b4b92c0e1aff8211"
+      "bytes": 14625,
+      "sha256": "926d8d945c2b1c7ed8626494d6e751eb01d23a54252c47dea456ce3b8ba6bd23"
     },
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 24436,
-      "sha256": "a63dd1301ec67de9ef9a8c9d92fb99a40baddc9e7a468be7aa80a1b1c34f940c"
+      "bytes": 24905,
+      "sha256": "fd9b4847cf9cd344b897e2337141dc062e13985d48e240f6676e14782255b3db"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -9441,14 +9441,14 @@
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 27695,
-      "sha256": "3284d13a9731f4f041be60ee75c6530cc89d53a0b8aa23c1f24196e419e23cd1"
+      "bytes": 27957,
+      "sha256": "2f7318387d47788a33246e9b7c4c36baa71d04aae6e1db18f776cc31e4e57b60"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 32100,
-      "sha256": "3c052dbac173ad63f7311b5e7a338215dd64d1b79c572ced02ec866826f2ae0e"
+      "bytes": 32700,
+      "sha256": "ac00619a4c0dc9ac823dcb28f69239ef6d83181c1b34666b2e13e00481b961ff"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -10455,8 +10455,8 @@
     {
       "path": "src/renderer/copy/boardTurnAnnouncement.ts",
       "category": "source",
-      "bytes": 6201,
-      "sha256": "1f67c6af1c2eb46cae13e5a56d2aaba6e2d75935f49cc58d0e8fedd0bc8a9232"
+      "bytes": 6631,
+      "sha256": "fc52e23bbc51c6f3076177d004fc01d0c9ef720d0a6e11fc18749a05ad86e4b8"
     },
     {
       "path": "src/renderer/copy/chainBeat.test.ts",
@@ -10575,8 +10575,8 @@
     {
       "path": "src/renderer/copy/hudActionFeedback.ts",
       "category": "source",
-      "bytes": 4550,
-      "sha256": "fe1d9756e31a396c7f9aedad33982c195ad9ce12d6195763327a64fbec33d87c"
+      "bytes": 6228,
+      "sha256": "7f98a1c2f27aceb38ed304e179f261e2d80cfef0f08f2ef6f2fb50d8e23ac926"
     },
     {
       "path": "src/renderer/copy/magpieBeat.test.ts",
@@ -10917,14 +10917,14 @@
     {
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "category": "test",
-      "bytes": 40926,
-      "sha256": "f6a4419a0a47961a60749d9b2508c8d4040012650332ecc96ad4d5dcb8acc49e"
+      "bytes": 43745,
+      "sha256": "fe26dcc7c1c10e3b5e8a6cb90b27357841081200617d985fb69f426e5d7dad01"
     },
     {
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "category": "source",
-      "bytes": 20886,
-      "sha256": "4894c5353290c627e9079bcb36383fd8b4baa2f997bc0740bad941ba414897c0"
+      "bytes": 21090,
+      "sha256": "51240ed2f4b3ed8bf2256489993bbf7298c32d5e1789c9bc8892766a0c642bd6"
     },
     {
       "path": "src/renderer/hooks/useLatestRef.ts",
@@ -11373,8 +11373,8 @@
     {
       "path": "src/renderer/store/runResolutionController.ts",
       "category": "source",
-      "bytes": 11443,
-      "sha256": "810a175d50b3ac109b59dee75da0e0fff1e557c6f800445a3575b2e2c026422a"
+      "bytes": 11602,
+      "sha256": "e59c61beb57de000e923f7076588b91b76f156c06320bc3c006fcbb12fb70384"
     },
     {
       "path": "src/renderer/store/runStartExecutor.test.ts",
@@ -11979,14 +11979,14 @@
     {
       "path": "src/shared/board-turn-feedback-boundary.test.ts",
       "category": "test",
-      "bytes": 7088,
-      "sha256": "e8dc8afded93c8efb7f90da2f2ebbc93b8aa12130c1d4e305cb99d9789388901"
+      "bytes": 7133,
+      "sha256": "1e40da4acfb06364c010f56ceb70d1398af29f8e14aa1fbfe1914107f4f5d3c0"
     },
     {
       "path": "src/shared/board-turn-transition.ts",
       "category": "source",
-      "bytes": 15997,
-      "sha256": "c599150084c06f0633a14316d27ac62edf86c60b392f96cfd488abe69e89d7c6"
+      "bytes": 16426,
+      "sha256": "ae0c36f360ff0993ba40bfe5669afdc40bc58b30d7f2a2b8686b6957c2525445"
     },
     {
       "path": "src/shared/boss-encounters.test.ts",
@@ -12033,8 +12033,8 @@
     {
       "path": "src/shared/cascade-clump-fixture.test.ts",
       "category": "test",
-      "bytes": 3625,
-      "sha256": "8f82d28d972346bb2e3e315a13b38aa71552e42633f76c5d3f10c715ed368acd"
+      "bytes": 4706,
+      "sha256": "c8742c68793093e7964dc7d22258ad8c5ed59569280f5cfb72007394c486c354"
     },
     {
       "path": "src/shared/chain-rung-value-rules.test.ts",
@@ -12051,14 +12051,14 @@
     {
       "path": "src/shared/chain-targets.test.ts",
       "category": "test",
-      "bytes": 1457,
-      "sha256": "9049cd62c7adc769458828b702fc95d47f314e011dca00de56e5787cb6a3b9e3"
+      "bytes": 2096,
+      "sha256": "58ae2db2da7d3a8e704f08bc6d9bc0c1ef87132ff334c4271896733ab46ad514"
     },
     {
       "path": "src/shared/chain-targets.ts",
       "category": "source",
-      "bytes": 3290,
-      "sha256": "fc11ee89d7a6750214beb8435851a70d852b28486ea50032bf39e052c7c99c4f"
+      "bytes": 3641,
+      "sha256": "7d2f2bf372b3d852f4ffbf5738415d61fd018a2bf325d2741dd40cb1dafabfa5"
     },
     {
       "path": "src/shared/chain-tier-rules.test.ts",
@@ -12069,8 +12069,8 @@
     {
       "path": "src/shared/chain-tier-rules.ts",
       "category": "source",
-      "bytes": 10996,
-      "sha256": "1d36bad79fbc8f64de4d96eb3877685b48f80d3b5e74c4defb233833da5ba188"
+      "bytes": 11423,
+      "sha256": "e5a6fdc4ef5ed29794f3a7eae46252557f808ccd06a9d5b708c72aa97e0648cf"
     },
     {
       "path": "src/shared/challenge-progression.test.ts",
@@ -12171,8 +12171,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 33405,
-      "sha256": "94a3b90016e002840194041ef479eb080a632c00918f18237c62c6acb61ee30a"
+      "bytes": 34337,
+      "sha256": "396d75d800a24c2e3f47593efa1f803aee2538344d3a82e66a64fe755f7620ac"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -12327,8 +12327,8 @@
     {
       "path": "src/shared/floor-clear-momentum-bonus-rules.test.ts",
       "category": "test",
-      "bytes": 4319,
-      "sha256": "56d4c732c02f2fae4d70d73540c9147ffefe7129a166ce9a64976bddceb54df4"
+      "bytes": 5540,
+      "sha256": "71c2c6c79448e73f434bd009375c4ea69e0d3d6c7732027665eb2cffc6a1252c"
     },
     {
       "path": "src/shared/floor-clear-momentum-bonus-rules.ts",
@@ -12339,8 +12339,8 @@
     {
       "path": "src/shared/floor-clear-transition.ts",
       "category": "source",
-      "bytes": 5298,
-      "sha256": "74db6f5adb730ee1114ed1c6b7ac28b71d8c4e7191eacd72e13be7caf9f8dd26"
+      "bytes": 5815,
+      "sha256": "b802cfba8dcd9e457e3289b38570aba6b5c41b6038d6ad70066272074c62073e"
     },
     {
       "path": "src/shared/floor-curio-greeting-rules.test.ts",
@@ -12441,14 +12441,14 @@
     {
       "path": "src/shared/game-over-next-run.test.ts",
       "category": "test",
-      "bytes": 6494,
-      "sha256": "c4df0385d78b032808893f172d18be7c791e8a9b7ef421a39ffac37d1f14593b"
+      "bytes": 7250,
+      "sha256": "346942bb26128c077990f240cf9f074d0f25e5ce6c8e8e713172ddb4294e4789"
     },
     {
       "path": "src/shared/game-over-next-run.ts",
       "category": "source",
-      "bytes": 5763,
-      "sha256": "7ff91a39125b9dc353e684e7fef3c575a2e436974d0214568a3bdbda8123a43c"
+      "bytes": 6270,
+      "sha256": "f3f7150cb9b758164e3e9be0614f73efa2af6f0482e92d719971d1a08d1c9816"
     },
     {
       "path": "src/shared/game.test.ts",
@@ -12921,8 +12921,8 @@
     {
       "path": "src/shared/next-floor-run-state-rules.ts",
       "category": "source",
-      "bytes": 2987,
-      "sha256": "6868a6e4f10d680662d4f4cbc1a28b7927c75b6b1bcd555b81ef11f55f542d74"
+      "bytes": 3027,
+      "sha256": "4025cfd2a49d31e66cb34d21b2d89327d123b6000b437a0f97bdb70bc846b07c"
     },
     {
       "path": "src/shared/next-floor-transition-rules.ts",
@@ -13251,8 +13251,8 @@
     {
       "path": "src/shared/run-creation-rules.ts",
       "category": "source",
-      "bytes": 8194,
-      "sha256": "99a2a681c00525eb3cf45f97902af115bc2d446722d4c1b675cd797cd4bbad04"
+      "bytes": 8272,
+      "sha256": "fe23849f7915d072d745a628f2d6681d5e914c87df70f0d2f04e6ec858a7db27"
     },
     {
       "path": "src/shared/run-from-share-key.test.ts",
@@ -13425,8 +13425,8 @@
     {
       "path": "src/shared/run-summary-rules.ts",
       "category": "source",
-      "bytes": 3575,
-      "sha256": "b23312629cc985d2c5e137757dd106da9f09403eec76ca9aa00c5bedf213436e"
+      "bytes": 3727,
+      "sha256": "637791ddd28275567b6fe2bfc7a08e45692cb2d5f2eda971dd09140d76fac63b"
     },
     {
       "path": "src/shared/run-timer-rules.test.ts",
@@ -13449,8 +13449,8 @@
     {
       "path": "src/shared/save-data.ts",
       "category": "source",
-      "bytes": 26925,
-      "sha256": "26f2ac6f6385ba8e75f3a1e60af2731e4814bba9b99eac03d8e7c6da06adf1af"
+      "bytes": 27236,
+      "sha256": "4a024d38f9cae4e0dce712b907152c33bd0c30ce3dbc5a96632a353fdfe86904"
     },
     {
       "path": "src/shared/save-field-policy.test.ts",
@@ -13581,14 +13581,14 @@
     {
       "path": "src/shared/social-play-scope.test.ts",
       "category": "test",
-      "bytes": 1887,
-      "sha256": "a1a5aae700d5c5cf33114f03a303150d6d4a06cd66c03e86ce11fefa0b3fd348"
+      "bytes": 2364,
+      "sha256": "40ddc4477d20a25bae904079f7efa251b66c66d8f1047d38f604a0e257f0bc0d"
     },
     {
       "path": "src/shared/social-play-scope.ts",
       "category": "source",
-      "bytes": 4921,
-      "sha256": "0ead5f635158ccffc496a10826c511c6f73f196e41d43af32cf0bc9465ac54a3"
+      "bytes": 5124,
+      "sha256": "0ffa9d0c432bd2628a8cd544499412e7ecae4de5d20a5c855ca35d82e68d490f"
     },
     {
       "path": "src/shared/softlock-fairness.test.ts",
@@ -18593,7 +18593,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 183,
+      "lineCount": 185,
       "imports": [
         "file:src/renderer/components/ChooseYourPathScreen.tsx",
         "file:src/renderer/components/chooseYourPathScreenModel.ts",
@@ -18609,7 +18609,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 685,
+      "lineCount": 692,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/modeArt.ts",
@@ -18813,7 +18813,7 @@
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 306,
+      "lineCount": 309,
       "imports": [
         "file:src/renderer/components/GameOverScreen.tsx",
         "file:src/shared/contracts.ts",
@@ -18829,7 +18829,7 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 483,
+      "lineCount": 489,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -19666,7 +19666,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 532,
+      "lineCount": 535,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/shared/contracts.ts",
@@ -19681,7 +19681,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 618,
+      "lineCount": 630,
       "imports": [
         "file:src/renderer/a11y/toolbarRoving.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -22650,7 +22650,7 @@
       "path": "src/renderer/copy/boardTurnAnnouncement.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 143,
+      "lineCount": 149,
       "imports": [
         "file:src/renderer/copy/chainBeat.ts",
         "file:src/renderer/copy/chainMilestoneFeedback.ts",
@@ -22963,7 +22963,7 @@
       "path": "src/renderer/copy/hudActionFeedback.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 114,
+      "lineCount": 147,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/findables.ts",
@@ -23788,7 +23788,7 @@
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1042,
+      "lineCount": 1102,
       "imports": [
         "file:src/renderer/copy/gameplayHints.ts",
         "file:src/renderer/copy/hudActionFeedback.ts",
@@ -23806,7 +23806,7 @@
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 472,
+      "lineCount": 477,
       "imports": [
         "file:src/renderer/copy/boardTurnAnnouncement.ts",
         "file:src/renderer/copy/gameplayEventAnnouncement.ts",
@@ -25073,7 +25073,7 @@
       "path": "src/renderer/store/runResolutionController.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 270,
+      "lineCount": 272,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/store/achievementPersistence.ts",
@@ -26689,9 +26689,10 @@
       "path": "src/shared/board-turn-transition.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 387,
+      "lineCount": 394,
       "imports": [
         "file:src/shared/board-inspection.ts",
+        "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/chunk-break-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-par.ts",
@@ -26869,7 +26870,7 @@
       "path": "src/shared/cascade-clump-fixture.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 70,
+      "lineCount": 88,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
@@ -26919,7 +26920,7 @@
       "path": "src/shared/chain-targets.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 36,
+      "lineCount": 45,
       "imports": [
         "file:src/shared/chain-rung-value-rules.ts",
         "file:src/shared/chain-targets.ts"
@@ -26932,7 +26933,7 @@
       "path": "src/shared/chain-targets.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 76,
+      "lineCount": 85,
       "imports": [
         "file:src/shared/chain-rung-value-rules.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -26964,7 +26965,7 @@
       "path": "src/shared/chain-tier-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 201,
+      "lineCount": 207,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-number-guards.ts"
@@ -26987,6 +26988,7 @@
         "symbol:src/shared/chain-tier-rules.ts#ChainTier",
         "symbol:src/shared/chain-tier-rules.ts#chainTierRungs",
         "symbol:src/shared/chain-tier-rules.ts#getChainTier",
+        "symbol:src/shared/chain-tier-rules.ts#higherChainTier",
         "symbol:src/shared/chain-tier-rules.ts#nextChainTierAt",
         "symbol:src/shared/chain-tier-rules.ts#runChainMeter",
         "symbol:src/shared/chain-tier-rules.ts#runChainMomentumPairs",
@@ -27351,7 +27353,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 767,
+      "lineCount": 780,
       "imports": [],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -27986,7 +27988,7 @@
       "path": "src/shared/floor-clear-momentum-bonus-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 71,
+      "lineCount": 92,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-clear-momentum-bonus-rules.ts",
@@ -28019,7 +28021,7 @@
       "path": "src/shared/floor-clear-transition.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 118,
+      "lineCount": 124,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
@@ -28457,7 +28459,7 @@
       "path": "src/shared/game-over-next-run.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 146,
+      "lineCount": 161,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/game-core.ts",
@@ -28472,7 +28474,7 @@
       "path": "src/shared/game-over-next-run.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 138,
+      "lineCount": 147,
       "imports": [
         "file:src/shared/chain-targets.ts",
         "file:src/shared/contracts.ts",
@@ -30073,7 +30075,7 @@
       "path": "src/shared/next-floor-run-state-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 87,
+      "lineCount": 88,
       "imports": [
         "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/contracts.ts",
@@ -31102,7 +31104,7 @@
       "path": "src/shared/run-creation-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 196,
+      "lineCount": 198,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/board-tile-generation-rules.ts",
@@ -31666,8 +31668,9 @@
       "path": "src/shared/run-summary-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 78,
+      "lineCount": 80,
       "imports": [
+        "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-journal.ts",
         "file:src/shared/run-array-guards.ts",
@@ -31743,7 +31746,7 @@
       "path": "src/shared/save-data.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 640,
+      "lineCount": 648,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
@@ -32219,7 +32222,7 @@
       "path": "src/shared/social-play-scope.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 37,
+      "lineCount": 46,
       "imports": [
         "file:src/shared/social-play-scope.ts"
       ],
@@ -32231,7 +32234,7 @@
       "path": "src/shared/social-play-scope.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 114,
+      "lineCount": 118,
       "imports": [
         "file:src/shared/run-number-guards.ts"
       ],
@@ -36357,8 +36360,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ChooseYourPathScreen.tsx",
-      "line": 684,
-      "endLine": 684
+      "line": 691,
+      "endLine": 691
     },
     {
       "id": "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows",
@@ -36477,8 +36480,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 482,
-      "endLine": 482
+      "line": 488,
+      "endLine": 488
     },
     {
       "id": "symbol:src/renderer/components/gameplayRenderProfile.ts#GAMEPLAY_RENDER_PROFILE",
@@ -36981,8 +36984,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 617,
-      "endLine": 617
+      "line": 629,
+      "endLine": 629
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
@@ -40581,8 +40584,8 @@
       "name": "buildBoardTurnAnnouncement",
       "kind": "value",
       "file": "src/renderer/copy/boardTurnAnnouncement.ts",
-      "line": 122,
-      "endLine": 142
+      "line": 128,
+      "endLine": 148
     },
     {
       "id": "symbol:src/renderer/copy/boardTurnAnnouncement.ts#CHAIN_MILESTONE_THRESHOLDS",
@@ -40877,16 +40880,16 @@
       "name": "countTileTraitTotal",
       "kind": "value",
       "file": "src/renderer/copy/hudActionFeedback.ts",
-      "line": 98,
-      "endLine": 99
+      "line": 131,
+      "endLine": 132
     },
     {
       "id": "symbol:src/renderer/copy/hudActionFeedback.ts#formatHudActionFeedbackText",
       "name": "formatHudActionFeedbackText",
       "kind": "value",
       "file": "src/renderer/copy/hudActionFeedback.ts",
-      "line": 22,
-      "endLine": 51
+      "line": 47,
+      "endLine": 84
     },
     {
       "id": "symbol:src/renderer/copy/hudActionFeedback.ts#getFindableAnnouncementText",
@@ -40909,32 +40912,32 @@
       "name": "getHudActionFeedbackProfile",
       "kind": "value",
       "file": "src/renderer/copy/hudActionFeedback.ts",
-      "line": 60,
-      "endLine": 96
+      "line": 93,
+      "endLine": 129
     },
     {
       "id": "symbol:src/renderer/copy/hudActionFeedback.ts#joinReadableList",
       "name": "joinReadableList",
       "kind": "value",
       "file": "src/renderer/copy/hudActionFeedback.ts",
-      "line": 108,
-      "endLine": 109
+      "line": 141,
+      "endLine": 142
     },
     {
       "id": "symbol:src/renderer/copy/hudActionFeedback.ts#pluralize",
       "name": "pluralize",
       "kind": "value",
       "file": "src/renderer/copy/hudActionFeedback.ts",
-      "line": 111,
-      "endLine": 112
+      "line": 144,
+      "endLine": 145
     },
     {
       "id": "symbol:src/renderer/copy/hudActionFeedback.ts#tileTraitKindLabels",
       "name": "tileTraitKindLabels",
       "kind": "value",
       "file": "src/renderer/copy/hudActionFeedback.ts",
-      "line": 105,
-      "endLine": 106
+      "line": 138,
+      "endLine": 139
     },
     {
       "id": "symbol:src/renderer/copy/magpieBeat.ts#MAGPIE_BEAT_COPY",
@@ -41782,7 +41785,7 @@
       "kind": "value",
       "file": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "line": 76,
-      "endLine": 471
+      "endLine": 476
     },
     {
       "id": "symbol:src/renderer/hooks/useLatestRef.ts#useLatestRef",
@@ -42990,7 +42993,7 @@
       "kind": "value",
       "file": "src/renderer/store/runResolutionController.ts",
       "line": 82,
-      "endLine": 269
+      "endLine": 271
     },
     {
       "id": "symbol:src/renderer/store/runStartExecutor.ts#executeRunStartRequest",
@@ -45005,48 +45008,48 @@
       "name": "applyTurnCeiling",
       "kind": "value",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 98,
-      "endLine": 107
+      "line": 99,
+      "endLine": 108
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnExecutionContext",
       "name": "BoardTurnExecutionContext",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 66,
-      "endLine": 76
+      "line": 67,
+      "endLine": 77
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnFindableRewardResult",
       "name": "BoardTurnFindableRewardResult",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 32,
-      "endLine": 37
+      "line": 33,
+      "endLine": 38
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnTransitionDependencies",
       "name": "BoardTurnTransitionDependencies",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 45,
-      "endLine": 64
+      "line": 46,
+      "endLine": 65
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnWildMatchResult",
       "name": "BoardTurnWildMatchResult",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 39,
-      "endLine": 43
+      "line": 40,
+      "endLine": 44
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#createResolveBoardTurnTransition",
       "name": "createResolveBoardTurnTransition",
       "kind": "value",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 109,
-      "endLine": 386
+      "line": 110,
+      "endLine": 393
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#BOSS_ENCOUNTER_IDENTITY",
@@ -45333,8 +45336,8 @@
       "name": "getChainTargetFeedback",
       "kind": "value",
       "file": "src/shared/chain-targets.ts",
-      "line": 26,
-      "endLine": 75
+      "line": 31,
+      "endLine": 84
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#CHAIN_TIER_CLEAN_FROM",
@@ -45397,24 +45400,24 @@
       "name": "chainCanBreakChunk",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 123,
-      "endLine": 124
+      "line": 129,
+      "endLine": 130
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#chainMeter",
       "name": "chainMeter",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 145,
-      "endLine": 157
+      "line": 151,
+      "endLine": 163
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#ChainMeter",
       "name": "ChainMeter",
       "kind": "interface",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 133,
-      "endLine": 143
+      "line": 139,
+      "endLine": 149
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#chainMomentum",
@@ -45437,16 +45440,16 @@
       "name": "chainRungApproach",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 184,
-      "endLine": 190
+      "line": 190,
+      "endLine": 196
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#ChainRungApproach",
       "name": "ChainRungApproach",
       "kind": "interface",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 175,
-      "endLine": 182
+      "line": 181,
+      "endLine": 188
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#ChainTier",
@@ -45469,24 +45472,32 @@
       "name": "getChainTier",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 113,
-      "endLine": 120
+      "line": 119,
+      "endLine": 126
+    },
+    {
+      "id": "symbol:src/shared/chain-tier-rules.ts#higherChainTier",
+      "name": "higherChainTier",
+      "kind": "value",
+      "file": "src/shared/chain-tier-rules.ts",
+      "line": 115,
+      "endLine": 116
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#nextChainTierAt",
       "name": "nextChainTierAt",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 193,
-      "endLine": 200
+      "line": 199,
+      "endLine": 206
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#runChainMeter",
       "name": "runChainMeter",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 160,
-      "endLine": 161
+      "line": 166,
+      "endLine": 167
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#runChainMomentumPairs",
@@ -46277,16 +46288,16 @@
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 644,
-      "endLine": 644
+      "line": 657,
+      "endLine": 657
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 714,
-      "endLine": 716
+      "line": 727,
+      "endLine": 729
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
@@ -46349,8 +46360,8 @@
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 722,
-      "endLine": 727
+      "line": 735,
+      "endLine": 740
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -46381,8 +46392,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 740,
-      "endLine": 766
+      "line": 753,
+      "endLine": 779
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -46501,16 +46512,16 @@
       "name": "GameplayCommandJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 439,
-      "endLine": 443
+      "line": 443,
+      "endLine": 447
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameplayEventJournalEntry",
       "name": "GameplayEventJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 445,
-      "endLine": 455
+      "line": 449,
+      "endLine": 459
     },
     {
       "id": "symbol:src/shared/contracts.ts#GraphicsQualityPreset",
@@ -46550,7 +46561,7 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 364,
-      "endLine": 399
+      "endLine": 401
     },
     {
       "id": "symbol:src/shared/contracts.ts#MATCH_DELAY_MS",
@@ -46653,24 +46664,24 @@
       "name": "PassAndPlaySeat",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 468,
-      "endLine": 480
+      "line": 472,
+      "endLine": 484
     },
     {
       "id": "symbol:src/shared/contracts.ts#PassAndPlayState",
       "name": "PassAndPlayState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 482,
-      "endLine": 495
+      "line": 486,
+      "endLine": 499
     },
     {
       "id": "symbol:src/shared/contracts.ts#PlayerStatsPersisted",
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 646,
-      "endLine": 659
+      "line": 659,
+      "endLine": 672
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
@@ -46733,16 +46744,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 730,
-      "endLine": 730
+      "line": 743,
+      "endLine": 743
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 733,
-      "endLine": 738
+      "line": 746,
+      "endLine": 751
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -46765,16 +46776,16 @@
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 707,
-      "endLine": 711
+      "line": 720,
+      "endLine": 724
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 705,
-      "endLine": 705
+      "line": 718,
+      "endLine": 718
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
@@ -46789,16 +46800,16 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 666,
-      "endLine": 678
+      "line": 679,
+      "endLine": 691
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
       "name": "RunState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 497,
-      "endLine": 642
+      "line": 501,
+      "endLine": 655
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
@@ -46813,16 +46824,16 @@
       "name": "RunSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 402,
-      "endLine": 437
+      "line": 404,
+      "endLine": 441
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunTimerState",
       "name": "RunTimerState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 457,
-      "endLine": 462
+      "line": 461,
+      "endLine": 466
     },
     {
       "id": "symbol:src/shared/contracts.ts#SAVE_SCHEMA_VERSION",
@@ -46837,8 +46848,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 680,
-      "endLine": 699
+      "line": 693,
+      "endLine": 712
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -46917,8 +46928,8 @@
       "name": "TileTraitKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 401,
-      "endLine": 401
+      "line": 403,
+      "endLine": 403
     },
     {
       "id": "symbol:src/shared/contracts.ts#VIEW_STATES",
@@ -47470,7 +47481,7 @@
       "kind": "value",
       "file": "src/shared/floor-clear-transition.ts",
       "line": 17,
-      "endLine": 117
+      "endLine": 123
     },
     {
       "id": "symbol:src/shared/floor-curio-greeting-rules.ts#canGreetFloorCurio",
@@ -48325,8 +48336,8 @@
       "name": "getGameOverNextRunRows",
       "kind": "value",
       "file": "src/shared/game-over-next-run.ts",
-      "line": 100,
-      "endLine": 137
+      "line": 109,
+      "endLine": 146
     },
     {
       "id": "symbol:src/shared/game.ts#advanceToNextLevel",
@@ -51046,7 +51057,7 @@
       "kind": "value",
       "file": "src/shared/next-floor-run-state-rules.ts",
       "line": 20,
-      "endLine": 86
+      "endLine": 87
     },
     {
       "id": "symbol:src/shared/next-floor-run-state-rules.ts#CreateNextFloorRunStateOptions",
@@ -52422,7 +52433,7 @@
       "kind": "value",
       "file": "src/shared/run-creation-rules.ts",
       "line": 50,
-      "endLine": 187
+      "endLine": 189
     },
     {
       "id": "symbol:src/shared/run-creation-rules.ts#CreateRunOptions",
@@ -52437,8 +52448,8 @@
       "name": "createWildRun",
       "kind": "value",
       "file": "src/shared/run-creation-rules.ts",
-      "line": 189,
-      "endLine": 195
+      "line": 191,
+      "endLine": 197
     },
     {
       "id": "symbol:src/shared/run-from-share-key.ts#createRunFromShareKey",
@@ -53197,24 +53208,24 @@
       "name": "createGameOverRunSummary",
       "kind": "value",
       "file": "src/shared/run-summary-rules.ts",
-      "line": 55,
-      "endLine": 60
+      "line": 57,
+      "endLine": 62
     },
     {
       "id": "symbol:src/shared/run-summary-rules.ts#createRunSummary",
       "name": "createRunSummary",
       "kind": "value",
       "file": "src/shared/run-summary-rules.ts",
-      "line": 13,
-      "endLine": 48
+      "line": 14,
+      "endLine": 50
     },
     {
       "id": "symbol:src/shared/run-summary-rules.ts#createValidatedGameOverRunSummary",
       "name": "createValidatedGameOverRunSummary",
       "kind": "value",
       "file": "src/shared/run-summary-rules.ts",
-      "line": 68,
-      "endLine": 77
+      "line": 70,
+      "endLine": 79
     },
     {
       "id": "symbol:src/shared/run-timer-rules.ts#clearResolveState",
@@ -53293,8 +53304,8 @@
       "name": "createDefaultSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 335,
-      "endLine": 347
+      "line": 343,
+      "endLine": 355
     },
     {
       "id": "symbol:src/shared/save-data.ts#DEFAULT_SETTINGS",
@@ -53309,32 +53320,32 @@
       "name": "mergeBestFloorNoPowers",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 619,
-      "endLine": 630
+      "line": 627,
+      "endLine": 638
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeChainFloorStats",
       "name": "mergeChainFloorStats",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 592,
-      "endLine": 605
+      "line": 600,
+      "endLine": 613
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeEncoreFromRun",
       "name": "mergeEncoreFromRun",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 632,
-      "endLine": 639
+      "line": 640,
+      "endLine": 647
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeRunsFinished",
       "name": "mergeRunsFinished",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 611,
-      "endLine": 617
+      "line": 619,
+      "endLine": 625
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeRunSummary",
@@ -53342,47 +53353,47 @@
       "kind": "value",
       "file": "src/shared/save-data.ts",
       "line": 246,
-      "endLine": 333
+      "endLine": 341
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeSaveData",
       "name": "normalizeSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 534,
-      "endLine": 585
+      "line": 542,
+      "endLine": 593
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSaveData",
       "name": "normalizeUnknownSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 502,
-      "endLine": 505
+      "line": 510,
+      "endLine": 513
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSaveDataOrThrow",
       "name": "normalizeUnknownSaveDataOrThrow",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 507,
-      "endLine": 519
+      "line": 515,
+      "endLine": 527
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSettings",
       "name": "normalizeUnknownSettings",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 521,
-      "endLine": 524
+      "line": 529,
+      "endLine": 532
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSettingsOrThrow",
       "name": "normalizeUnknownSettingsOrThrow",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 526,
-      "endLine": 532
+      "line": 534,
+      "endLine": 540
     },
     {
       "id": "symbol:src/shared/save-data.ts#RUN_HISTORY_SEED_CAP",
@@ -53397,8 +53408,8 @@
       "name": "saveDataBoundarySchema",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 379,
-      "endLine": 394
+      "line": 387,
+      "endLine": 402
     },
     {
       "id": "symbol:src/shared/save-data.ts#SETTINGS_NUMERIC_RANGES",
@@ -53413,8 +53424,8 @@
       "name": "settingsBoundarySchema",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 355,
-      "endLine": 375
+      "line": 363,
+      "endLine": 383
     },
     {
       "id": "symbol:src/shared/save-field-policy.ts#getSaveFieldPolicies",
@@ -54005,16 +54016,16 @@
       "name": "buildSocialScopeNote",
       "kind": "value",
       "file": "src/shared/social-play-scope.ts",
-      "line": 86,
-      "endLine": 97
+      "line": 89,
+      "endLine": 101
     },
     {
       "id": "symbol:src/shared/social-play-scope.ts#buildSocialShareCopy",
       "name": "buildSocialShareCopy",
       "kind": "value",
       "file": "src/shared/social-play-scope.ts",
-      "line": 99,
-      "endLine": 113
+      "line": 103,
+      "endLine": 117
     },
     {
       "id": "symbol:src/shared/social-play-scope.ts#getShippedSocialPlayDecision",
@@ -57019,7 +57030,7 @@
         },
         {
           "path": "src/shared/run-summary-rules.ts",
-          "line": 10
+          "line": 11
         },
         {
           "path": "src/shared/save-data.ts",
@@ -57838,7 +57849,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 395
+          "line": 407
         }
       ],
       "tests": [
@@ -57877,7 +57888,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 395
+          "line": 407
         }
       ],
       "tests": [
@@ -57911,7 +57922,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 395
+          "line": 407
         }
       ],
       "tests": [
@@ -57945,7 +57956,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 395
+          "line": 407
         }
       ],
       "tests": [
@@ -68436,6 +68447,12 @@
       "id": "exports:src/shared/chain-tier-rules.ts->symbol:src/shared/chain-tier-rules.ts#getChainTier",
       "source": "file:src/shared/chain-tier-rules.ts",
       "target": "symbol:src/shared/chain-tier-rules.ts#getChainTier",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/chain-tier-rules.ts->symbol:src/shared/chain-tier-rules.ts#higherChainTier",
+      "source": "file:src/shared/chain-tier-rules.ts",
+      "target": "symbol:src/shared/chain-tier-rules.ts#higherChainTier",
       "kind": "exports"
     },
     {
@@ -87101,6 +87118,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/board-turn-transition.ts->src/shared/chain-tier-rules.ts",
+      "source": "file:src/shared/board-turn-transition.ts",
+      "target": "file:src/shared/chain-tier-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/board-turn-transition.ts->src/shared/chunk-break-rules.ts",
       "source": "file:src/shared/board-turn-transition.ts",
       "target": "file:src/shared/chunk-break-rules.ts",
@@ -91190,6 +91213,12 @@
       "id": "imports:src/shared/run-summary-rules.test.ts->src/shared/save-data.ts",
       "source": "file:src/shared/run-summary-rules.test.ts",
       "target": "file:src/shared/save-data.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-summary-rules.ts->src/shared/chain-tier-rules.ts",
+      "source": "file:src/shared/run-summary-rules.ts",
+      "target": "file:src/shared/chain-tier-rules.ts",
       "kind": "imports"
     },
     {
