@@ -27,12 +27,6 @@ describe('board tile generation rules', () => {
         );
     });
 
-    it('uses letter symbols when category_letters mutator is active', () => {
-        const tiles = createTiles(1, 2, 1, 20, ['category_letters']);
-
-        expect(new Set(tiles.map((tile) => tile.symbol))).toEqual(new Set(['A', 'B']));
-    });
-
     it('assigns findables to whole eligible real pairs only', () => {
         const tiles = [
             tile('a1', 'a'),

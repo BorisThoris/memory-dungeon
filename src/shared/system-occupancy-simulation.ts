@@ -142,6 +142,8 @@ export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
      * a system called `core` on a fresh-run-per-floor reading; this is the same error inverted.
      */
     { id: 'magpieThefts', key: 'magpieTheftsThisFloor', label: 'The magpie took a matched pair back', family: 'memory', cadence: 'rare', kind: 'tally', player: 'reference', scope: 'run' },
+    /* The restless floor (Gen 262): the one mutator that moves the board mid-floor. Floor-scoped, since its clock is the floor's own turn count. */
+    { id: 'restlessDrifts', key: 'restlessDriftsThisFloor', label: 'The restless floor shifted hidden cards', family: 'memory', cadence: 'rare', kind: 'tally', player: 'reference' },
     /*
      * The featured objective, uncounted since the census existed (Gen 216).
      *

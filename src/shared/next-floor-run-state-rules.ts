@@ -61,6 +61,7 @@ export const createNextFloorRunState = (
         missBankCarry: carryMissBank(run),
         largestChunkScoreThisFloor: 0,
         magpieTheftsThisFloor: 0,
+        restlessDriftsThisFloor: 0,
         shiftingSpotlightNonce: 0,
         flashPairRevealedTileIds: [],
         regionShuffleCharges: INITIAL_REGION_SHUFFLE_CHARGES,

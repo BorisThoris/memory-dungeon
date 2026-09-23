@@ -24,6 +24,8 @@ const DEFAULT_ANNOUNCEMENT: BoardTurnAnnouncementFacts = {
     chunkRippleWaves: 0,
     magpieTheftsBefore: 0,
     magpieTheftsAfter: 0,
+    restlessDriftsBefore: 0,
+    restlessDriftsAfter: 0,
     matchedTraitKinds: [],
     shuffleChargesBefore: 0,
     shuffleChargesAfter: 0,

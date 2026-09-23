@@ -42,7 +42,7 @@ Design context: [GAME_MECHANICS_IDEAS.md](./GAME_MECHANICS_IDEAS.md), [GAME_MECH
 - [x] `[P0]` **D2** — Mutator engine: `activeMutators` on run; hooks in `game.ts` (timing, score, power gates); v1 = one active mutator.
 - [x] `[P1]` **D3** — Ship 3 mutators: glass floor, sticky fingers, score parasite (or equivalents from ideas doc).
 - [x] `[P1]` **D4** — Wire daily (A2): roll one mutator with daily seed.
-- [x] `[P2]` **D5** — Category mutator: letters-only / numbers-only via `pairKey` / sets.
+- [x] `[P2]` **D5** — Category mutator: letters-only / numbers-only via `pairKey` / sets. *(Removed in Gen 262 - invisible once faces became art; floor 8 carries `restless_floor` instead.)*
 
 ---
 

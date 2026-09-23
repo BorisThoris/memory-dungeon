@@ -1,5 +1,6 @@
 import { type BoardState, type RunState, type RunStatus, type Tile } from './contracts';
 import { applyMagpieTheft, resolveMagpieVisit } from './magpie-rules';
+import { applyRestlessDrift, resolveRestlessDrift } from './restless-floor-rules';
 import { hasMutator } from './mutators';
 import { decreaseRecallFocus, rememberForgottenTiles } from './recall-rules';
 import { clearResolveState } from './run-timer-rules';
@@ -82,15 +83,30 @@ export const resolveMismatchTurnTransition = ({
         : null;
     const boardAfterMagpie =
         magpie?.theft != null ? applyMagpieTheft(spunMiss.board, magpie.theft) : spunMiss.board;
+    // A miss is a turn on the restless floor's clock as much as a match is; it drifts after the bird.
+    const turnsAfterMiss = runNonNegativeInteger(run.turnsThisFloor) + 1;
+    const drift = hasMutator(run, 'restless_floor')
+        ? resolveRestlessDrift({
+              board: boardAfterMagpie,
+              turnsThisFloor: turnsAfterMiss,
+              driftsBefore: runNonNegativeInteger(run.restlessDriftsThisFloor),
+              pinnedTileIds: Array.isArray(run.pinnedTileIds) ? run.pinnedTileIds : [],
+              runSeed: run.runSeed,
+              rulesVersion: run.runRulesVersion
+          })
+        : null;
+    const boardAfterDrift = drift?.kind === 'drift' ? applyRestlessDrift(boardAfterMagpie, drift.swaps) : boardAfterMagpie;
 
     return {
         ...run,
         status: penalty.status,
         runEndReason: penalty.contractFail ? 'contract' : run.runEndReason ?? null,
-        board: boardAfterMagpie,
+        board: boardAfterDrift,
         shiftingSpotlightNonce: spunMiss.shiftingSpotlightNonce,
         magpieTheftsThisFloor:
             runNonNegativeInteger(run.magpieTheftsThisFloor) + (magpie?.kind === 'theft' ? 1 : 0),
+        restlessDriftsThisFloor:
+            runNonNegativeInteger(run.restlessDriftsThisFloor) + (drift?.kind === 'drift' ? 1 : 0),
         stickyBlockIndex: null,
         recallFocus: decreaseRecallFocus(run),
         recallMistakesThisFloor: runNonNegativeInteger(run.recallMistakesThisFloor) + 1,

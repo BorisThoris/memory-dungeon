@@ -11,7 +11,7 @@
 import type { AchievementId, GameMode, MutatorId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 44 as const;
+export const ENCYCLOPEDIA_VERSION = 45 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -261,10 +261,11 @@ export const MUTATOR_CATALOG: Record<MutatorId, MutatorDefinition> = {
         description:
             'After a match, **one board slot** is reserved so your **next opening flip** must start elsewhere—flip-order pressure only (often highlighted in the HUD).'
     },
-    category_letters: {
-        id: 'category_letters',
-        title: 'Letters only',
-        description: 'Tile faces draw from the letter/number hybrid set instead of rotating symbol bands.'
+    restless_floor: {
+        id: 'restless_floor',
+        title: 'Restless floor',
+        description:
+            'The floor keeps changing while you play it. Every **third turn**, match or miss, hidden cards trade places — one pair the first time, two the second, three from then on. Matched, flipped and pinned cards stay put. Clear what you know before the floor takes it back.'
     },
     short_memorize: {
         id: 'short_memorize',

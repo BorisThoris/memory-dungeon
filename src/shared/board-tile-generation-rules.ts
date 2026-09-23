@@ -8,7 +8,6 @@ import {
     shuffleWithRng
 } from './rng';
 import {
-    LETTER_SYMBOLS,
     getSymbolSetForLevel as getSymbolSetForLevelFromCatalog
 } from './tile-symbol-catalog';
 import {
@@ -59,7 +58,7 @@ export const createTiles = (
     includeWildTile?: boolean
 ): Tile[] => {
     const rng = createMulberry32(deriveLevelTileRngSeed(runSeed, level, rulesVersion));
-    const symbolSource = mutators.includes('category_letters') ? LETTER_SYMBOLS : getSymbolSetForLevel(level);
+    const symbolSource = getSymbolSetForLevel(level);
     const symbols = symbolSource.slice(0, pairCount);
     const pairs: Tile[] = symbols.flatMap((entry, index) => {
         const pairKey = `${level}-${index}`;

@@ -1,4 +1,6 @@
 import { MAGPIE_BEAT_COPY } from './magpieBeat';
+import { restlessDriftAnnouncement } from './restlessFloorBeat';
+import { restlessSwapCountForDrift } from '../../shared/restless-floor-rules';
 import { CHAIN_BEAT_COPY, CHAIN_TIER_LABELS } from './chainBeat';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 import { getChainMilestoneFeedback } from './chainMilestoneFeedback';
@@ -106,6 +108,17 @@ export const magpieAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): stri
 };
 
 /**
+ * The restless floor's line for a turn it shifted on. How many pairs moved is the rule's own
+ * escalation read off the drift count before the turn, so the copy never has to diff boards.
+ */
+export const restlessAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): string[] => {
+    const { restlessDriftsBefore, restlessDriftsAfter } = turnEvent.announcement;
+    return restlessDriftsAfter > restlessDriftsBefore
+        ? [restlessDriftAnnouncement(restlessSwapCountForDrift(restlessDriftsBefore))]
+        : [];
+};
+
+/**
  * The chunk's line for a turn where a chain broke one. Read off the event's counters, so the
  * renderer never has to diff boards to know pairs left.
  */
@@ -138,6 +151,7 @@ export const buildBoardTurnAnnouncement = (
          */
         ...chunkAnnouncementLines(turnEvent),
         ...magpieAnnouncementLines(turnEvent),
+        ...restlessAnnouncementLines(turnEvent),
         includePickup ? getBoardTurnPickupAnnouncement(turnEvent)?.text ?? null : null
     ].filter((line): line is string => line != null && line.length > 0);
 

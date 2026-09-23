@@ -131,7 +131,7 @@ export interface BuiltinPuzzleDefinition {
 
 export const MUTATOR_IDS = [
     'sticky_fingers',
-    'category_letters',
+    'restless_floor',
     'short_memorize',
     'wide_recall',
     'silhouette_twist',
@@ -309,7 +309,7 @@ export const FLOOR_ARCHETYPE_IDS = [
     'shadow_read',
     'anchor_chain',
     'trap_hall',
-    'script_room',
+    'restless_hall',
     'rush_recall',
     'parasite_tithe',
     'spotlight_hunt',
@@ -663,6 +663,8 @@ export interface RunState {
     largestChunkScoreThisFloor: number;
     /** Pairs the magpie has taken back on this floor. */
     magpieTheftsThisFloor: number;
+    /** `restless_floor`: drifts the floor has made this floor; the next one moves one more pair of cards, to a cap. */
+    restlessDriftsThisFloor: number;
     /** `shifting_spotlight`: increments each time ward/bounty rotates this floor (seed step for next pick). */
     shiftingSpotlightNonce: number;
 }

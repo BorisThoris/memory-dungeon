@@ -9,7 +9,7 @@ What appears **on** cards (symbols, labels) and how bands advance by level; dist
 | Area | Status | Notes |
 |------|--------|--------|
 | Symbol catalog | **Shippable** | `tile-symbol-catalog.ts` — letter band, numeric bands, level thresholds (`SYMBOL_BAND_*`). |
-| `category_letters` mutator | **Shippable** | Forces `LETTER_SYMBOLS` at generation (`game.ts` / `createTiles`). |
+| Symbol bands during play | **Removed** | The `category_letters` mutator went in Gen 262: faces are illustrations, so a symbol-band swap changed nothing a player could see. `restless_floor` took its floor. |
 | Atomic variants | **Functional** | `atomicVariant` on tiles for styling; used in puzzles and pair visual variety. |
 | `getSymbolSetForLevel` | **Shippable** | Stages difficulty of symbol pool by floor. |
 | Labels vs symbols | **Functional** | Tiles carry both; `wide_recall` was intended to shift emphasis — **penalty only** until presentation catches up (see board epic). |

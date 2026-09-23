@@ -32,7 +32,7 @@ Check off as you ship or reject. **Roadmap-scale work** (dailies, relics, mutato
 
 - [x] `[P2]` **Spaced encore** — `encorePairKeysLastRun` in save + bonus in `resolveBoardTurn`; privacy: pairKey hashes only.
 - [x] `[Research]` **Distraction channel mutator** — `distraction_channel` + settings toggle; **off by default**; respects reduce motion.
-- [x] `[P1]` **Category floors** — letters-only / numbers-only mutator or player filter — HOOK **D5**.
+- [x] `[P1]` **Category floors** — letters-only / numbers-only mutator or player filter — HOOK **D5**. *(Removed in Gen 262; see `restless_floor`.)*
 - [x] `[P2]` **Atomic pairs** — `Tile.atomicVariant` + fallback inset colors; themes can key off variant.
 - [x] `[P2]` **Meditation mode** — `gameMode: 'meditation'`; menu entry; nerfed streak rewards in `game.ts`.
 

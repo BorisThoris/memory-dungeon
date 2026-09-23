@@ -90,7 +90,7 @@ Wired through **`useAppStore`** and **`GameScreen`** / toolbar:
 |------------|-----------------------------|-------------------------|-------------------------------|
 | `short_memorize` | Daily table | Yes (duration / synergies) | HUD labels |
 | `glass_floor` | Cycle | Yes (decoy tile) | Board shows decoy behavior via state |
-| `category_letters` | Cycle | Yes (symbol set) | Faces show letters |
+| `restless_floor` | Cycle | Yes (hidden cards trade places every third turn, escalating) | Suits on the backs move; HUD announcement |
 | `sticky_fingers` | Cycle | Yes (first-flip block) | UX feedback |
 | `findables_floor` | Catalog / modes | Yes (placement, scoring) | Faces / labels |
 | `shifting_spotlight` | Catalog / modes | Yes (ward/bounty rotation) | Tests + logic |

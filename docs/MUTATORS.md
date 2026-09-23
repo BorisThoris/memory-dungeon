@@ -6,10 +6,10 @@ Hooks in `src/shared/game.ts` consult `activeMutators` via `hasMutator` / `src/s
 
 | Phase | Mutators may affect |
 |--------|---------------------|
-| **Memorize** | `short_memorize`, `category_letters` (symbol set), `findables_floor` (spawn 0–2 bonus pair markers on generation), `shifting_spotlight` (ward/bounty pair keys on `BoardState`) |
-| **Playing / flip** | `sticky_fingers` (block index after match) |
+| **Memorize** | `short_memorize`, `findables_floor` (spawn 0–2 bonus pair markers on generation), `shifting_spotlight` (ward/bounty pair keys on `BoardState`) |
+| **Playing / flip** | `sticky_fingers` (block index after match), `restless_floor` (every third resolved turn - match or miss - hidden cards trade places; escalates 1 → 2 → 3 pairs per drift; pinned cards exempt) |
 | **Powers** | Contracts (`activeContract`) gate shuffle — combine with mutators in tests (`game.test.ts` also has an `it.each` matrix over `noShuffle` vs `canShuffleBoard`, plus wild-run contract rows). Destroy and Stray were removed in Gen 200; see [REMOVED_POWERS.md](./REMOVED_POWERS.md) |
-| **Scoring / floor advance** | `category_letters`, `n_back_anchor` (anchor cadence), `findables_floor` (flat score on match claim), `shifting_spotlight` (bounty/ward match score delta; rotates after each flip resolution), `wide_recall` / `silhouette_twist` / `distraction_channel` (flat per-match penalty stacked with presentation—see `getPresentationMutatorMatchPenalty` in `game.ts`) |
+| **Scoring / floor advance** | `n_back_anchor` (anchor cadence), `findables_floor` (flat score on match claim), `shifting_spotlight` (bounty/ward match score delta; rotates after each flip resolution), `wide_recall` / `silhouette_twist` / `distraction_channel` (flat per-match penalty stacked with presentation—see `getPresentationMutatorMatchPenalty` in `game.ts`) |
 | **Presentation** | `wide_recall` (label-first play on flipped tiles), `silhouette_twist` (silhouette styling), `distraction_channel` (optional **numeric** HUD overlay in `GameScreen`—cyclically changing digit for visual noise; local React tick, **not** `RunState`; **off** in settings by default; disabled when reduced motion), `shifting_spotlight` (ward/bounty tile highlights when face-up / memorize) |
 
 ## Shipped IDs (`MutatorId`)
@@ -18,7 +18,7 @@ Ten, and this list is the ten in `MUTATOR_IDS`. `score_parasite` was here until 
 with the lives it drained; the row went with it rather than being left to describe nothing.
 
 - `sticky_fingers` — `stickyBlockIndex` on match path.
-- `category_letters` — forces the letter symbol band for generation (overrides floor-based `getSymbolSetForLevel` rotation).
+- `restless_floor` — the one mutator that changes the board *while* it is played (`restless-floor-rules.ts`, hooked after the spotlight and the magpie in both turn seams). Every `RESTLESS_TURN_INTERVAL` resolved turns, `restlessSwapCountForDrift(driftsBefore)` pairs of hidden, unpinned cards trade cells; `restlessDriftsThisFloor` on `RunState` counts drifts and drives both the escalation and the announcement (`restlessFloorBeat.ts`). It replaced `category_letters` in Gen 262: faces are illustrations, so a symbol-band swap changed nothing a player could see.
 - `short_memorize` — reduced memorize window (`getMemorizeDurationForRun`).
 - `wide_recall` — play phase shows **labels** primarily (symbols de-emphasized in renderer); **rules:** flat match-score penalty per match.
 - `silhouette_twist` — silhouette / reduced-face styling during play (CSS / materials); **rules:** flat match-score penalty per match.

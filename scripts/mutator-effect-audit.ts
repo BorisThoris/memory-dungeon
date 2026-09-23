@@ -36,7 +36,7 @@ import { isSingletonUtilityPairKey } from '../src/shared/tile-identity';
 export interface MutatorFloorReading {
     score: number;
     memorizeMs: number;
-    letters: boolean;
+    drifts: number;
     findables: number;
     spotlight: boolean;
     sticky: boolean;
@@ -87,7 +87,7 @@ export const playMutatorFloor = (seed: number, floor: number, mutators: MutatorI
     const reading: MutatorFloorReading = {
         score: 0,
         memorizeMs: getMemorizeDurationForRun(run, floor),
-        letters: board.tiles.some((tile) => /^[A-Z]$/.test(tile.symbol)),
+        drifts: 0,
         findables: countFindablePairs(board.tiles),
         spotlight: board.wardPairKey != null || board.bountyPairKey != null,
         sticky: false,
@@ -121,6 +121,7 @@ export const playMutatorFloor = (seed: number, floor: number, mutators: MutatorI
         if (run.nBackAnchorPairKey != null) reading.nBack = true;
         if (run.board?.wardPairKey != null || run.board?.bountyPairKey != null) reading.spotlight = true;
         reading.thefts = Math.max(reading.thefts, run.magpieTheftsThisFloor ?? 0);
+        reading.drifts = Math.max(reading.drifts, run.restlessDriftsThisFloor ?? 0);
     }
     reading.score = run.stats?.currentLevelScore ?? 0;
     return reading;
@@ -147,7 +148,7 @@ export interface MutatorEffectFinding {
 const CHANNELS: Array<{ name: string; differs: (a: MutatorFloorReading, b: MutatorFloorReading) => boolean }> = [
     { name: 'score', differs: (a, b) => a.score !== b.score },
     { name: 'the memorize window', differs: (a, b) => a.memorizeMs !== b.memorizeMs },
-    { name: 'the symbols', differs: (a, b) => a.letters !== b.letters },
+    { name: 'the floor drifting', differs: (a, b) => a.drifts !== b.drifts },
     { name: 'the findables', differs: (a, b) => a.findables !== b.findables },
     { name: 'the spotlight', differs: (a, b) => a.spotlight !== b.spotlight },
     { name: 'the sticky block', differs: (a, b) => a.sticky !== b.sticky },

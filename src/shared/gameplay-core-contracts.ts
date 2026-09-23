@@ -255,6 +255,8 @@ export const boardTurnAnnouncementFactsSchema = z
         chunkRippleWaves: z.number().int().nonnegative().default(0),
         magpieTheftsBefore: z.number().int().nonnegative().default(0),
         magpieTheftsAfter: z.number().int().nonnegative().default(0),
+        restlessDriftsBefore: z.number().int().nonnegative().default(0),
+        restlessDriftsAfter: z.number().int().nonnegative().default(0),
         findablesTotalBefore: z.number().int().nonnegative(),
         findablesTotalAfter: z.number().int().nonnegative(),
         matchedTraitKinds: z.array(z.string().min(1).max(40)).default([]),

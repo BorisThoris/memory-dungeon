@@ -172,6 +172,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         largestChunkScoreThisFloor: 0,
         bestRippleThisRun: 0,
         magpieTheftsThisFloor: 0,
+        restlessDriftsThisFloor: 0,
         shiftingSpotlightNonce: 0
     };
 

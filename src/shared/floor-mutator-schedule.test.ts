@@ -292,7 +292,7 @@ describe('floor archetype progression contract', () => {
             floorTag: 'boss',
             featuredObjectiveId: 'scholar_style'
         });
-        expect(byArchetype.get('script_room:8')).toMatchObject({
+        expect(byArchetype.get('restless_hall:8')).toMatchObject({
             role: 'mystery',
             featuredObjectiveId: 'flip_par'
         });

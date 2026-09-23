@@ -69,11 +69,11 @@ export const FLOOR_ARCHETYPE_CATALOG: Record<FloorArchetypeId, FloorArchetypeDef
         riskProfile: 'Sticky pressure on a boss budget; a mismatch costs a tile you already knew.',
         encounterRole: 'boss'
     },
-    script_room: {
-        title: 'Script Room',
-        hint: 'Letters replace the usual read. Finish within par.',
-        theme: 'Script',
-        riskProfile: 'Letter-symbol read; lean on shape/category memory.'
+    restless_hall: {
+        title: 'Restless Hall',
+        hint: 'Every third turn the floor shifts under you, and it shifts more the longer you stay. Finish within par.',
+        theme: 'Restless',
+        riskProfile: 'Hidden cards trade places on a clock you are winding; clear what you know before the floor takes it back.'
     },
     rush_recall: {
         title: 'Rush Recall',
@@ -372,7 +372,7 @@ const ENDLESS_FLOOR_CYCLE: FloorScheduleEntry[] = [
      * used to guard: get through the floor without a mismatch taking a tile you already learned.
      */
     makeEntry(7, 'trap_hall', 'scholar_style', ['sticky_fingers'], 'boss'),
-    makeEntry(8, 'script_room', 'flip_par', ['category_letters'], 'normal'),
+    makeEntry(8, 'restless_hall', 'flip_par', ['restless_floor'], 'normal'),
     makeEntry(9, 'rush_recall', 'flip_par', ['short_memorize', 'wide_recall'], 'boss'),
     /*
      * Floor 10 is the back half's pickup breather. The shrine mutator that once told it apart from
@@ -443,7 +443,7 @@ export const pressureRoleForArchetype = (
     if (floorArchetypeId === 'breather') {
         return 'recovery';
     }
-    if (floorArchetypeId === 'script_room') {
+    if (floorArchetypeId === 'restless_hall') {
         return 'mystery';
     }
     if (floorArchetypeId === 'survey_hall') {

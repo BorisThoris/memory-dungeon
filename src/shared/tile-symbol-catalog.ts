@@ -154,7 +154,7 @@ export const SYMBOL_BAND_READABILITY_PROFILES: readonly SymbolBandReadabilityPro
         difficulty: 'mid_discrimination',
         purpose: 'Step-up band that mixes letters and a few digits before callsign labels arrive.',
         mobileReadability: 'Single glyph label keeps tile faces large; confusable glyphs are known pressure, not color-only.',
-        distractorPolicy: 'Contains intentional letter/digit distractors; `category_letters` forces this band as a readable mutator identity.',
+        distractorPolicy: 'Contains intentional letter/digit distractors by design; this band is what floors 9-16 deal.',
         maxRecommendedLabelLength: 1
     },
     {

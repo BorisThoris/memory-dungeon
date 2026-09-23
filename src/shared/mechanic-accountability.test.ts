@@ -74,8 +74,8 @@ describe('every mechanic answers for itself', () => {
         // run-level census - which shipped at Gen 207, eight generations before anyone re-read the
         // line.
         const censused = Object.keys(MECHANIC_CENSUS_COUNTERS).length;
-        expect(censused).toBe(32);
-        expect(gameplayInteractionGraph.mechanics.length).toBe(42);
+        expect(censused).toBe(33);
+        expect(gameplayInteractionGraph.mechanics.length).toBe(43);
         /*
          * Nothing is blind by family any more: every remaining mechanic carries its own argued
          * exemption. Ten of them.

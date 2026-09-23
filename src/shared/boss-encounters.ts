@@ -327,10 +327,24 @@ export const getFloorIdentityContract = ({
         };
     }
 
-    if (floorArchetypeId === 'shadow_read' || floorArchetypeId === 'script_room') {
+    if (floorArchetypeId === 'restless_hall') {
+        return {
+            id: 'restless_floor',
+            label: 'Restless hall',
+            teachingSentence: `Every third turn the floor shifts: hidden cards trade places, one pair at first and up to three once you linger.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: 'Clear the pairs you know before the clock ticks, and pin the card you cannot afford to lose - a pinned card never moves.',
+            floorClearSentence: 'Restless hall cleared. The floor moved and you moved faster.',
+            atmosphericFeedback: 'The flagstones settle. Whatever was still shifting under the cards has gone quiet.',
+            activeReminder: 'Restless hall: the board drifts every third turn. Pin what matters.',
+            warningLevel: 'warning',
+            tokens: ['hidden_known', 'risk', 'objective']
+        };
+    }
+
+    if (floorArchetypeId === 'shadow_read') {
         return {
             id: 'scout_read_floor',
-            label: floorArchetypeId === 'script_room' ? 'Script read' : 'Shadow read',
+            label: 'Shadow read',
             teachingSentence: `The cards are harder to read here, but the suit on every back still tells you what a match would take.${objectiveSuffix(featuredObjectiveLabel)}`,
             counterplaySentence: 'Read the suit on the back rather than trying to hold the face. Contact is what the pop cares about, not identity.',
             floorClearSentence: 'Read floor cleared. Suit on the back was enough; the faces were never the whole puzzle.',

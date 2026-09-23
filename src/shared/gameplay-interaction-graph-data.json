@@ -292,6 +292,7 @@
                 "src/renderer/components/RunShell.tsx",
                 "src/renderer/components/gameScreenFeedback.ts",
                 "src/renderer/copy/magpieBeat.ts",
+                "src/renderer/copy/restlessFloorBeat.ts",
                 "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts"
             ],
             "reads": [
@@ -305,7 +306,8 @@
                 "sessionStats",
                 "achievementProgress",
                 "nextFloor",
-                "magpieTheftsThisFloor"
+                "magpieTheftsThisFloor",
+                "restlessDriftsThisFloor"
             ],
             "writes": [
                 "feedbackLines"
@@ -1569,6 +1571,43 @@
                 "src/shared/magpie-rules.test.ts",
                 "src/shared/run-occupancy-simulation.test.ts"
             ]
+        },
+        {
+            "id": "hazard.restless_floor",
+            "label": "The restless floor",
+            "kind": "hazard",
+            "role": "trades_hidden_cards_every_third_resolved_turn_escalating_while_the_floor_stays_open",
+            "evidence": [
+                "src/shared/restless-floor-rules.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/shared/turn-mismatch-rules.ts",
+                "src/shared/floor-mutator-schedule.ts",
+                "src/shared/board-turn-event-facts.ts"
+            ],
+            "reads": [
+                "activeMutators",
+                "turnsThisFloor",
+                "restlessDriftsThisFloor",
+                "tileStates",
+                "pairKeys",
+                "pinnedTileIds",
+                "runSeed"
+            ],
+            "writes": [
+                "tileStates",
+                "restlessDriftsThisFloor"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "moves-only-hidden-unpinned-cards",
+                "trades-cells-without-changing-any-state",
+                "holds-still-with-fewer-than-two-loose-cards"
+            ],
+            "tests": [
+                "src/shared/restless-floor-rules.test.ts",
+                "src/renderer/copy/restlessFloorBeat.test.ts"
+            ]
         }
     ],
     "edges": [
@@ -2261,6 +2300,24 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "the turn announcement says the bird took a pair back"
+        },
+        {
+            "source": "hazard.restless_floor",
+            "target": "core.board_turn_resolution",
+            "kind": "consequence",
+            "label": "every third resolved turn trades hidden cards' cells, one more pair each drift up to three"
+        },
+        {
+            "source": "inventory.mutator_loadout",
+            "target": "hazard.restless_floor",
+            "kind": "gates",
+            "label": "only a floor carrying restless_floor drifts"
+        },
+        {
+            "source": "hazard.restless_floor",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the turn announcement says the floor shifted and how many pairs moved"
         }
     ],
     "coverage": {

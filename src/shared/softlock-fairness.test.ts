@@ -123,7 +123,7 @@ describe('REG-087 board fairness inspection', () => {
 
     it('accepts important mutator combinations without orphaning real pairs', () => {
         const rows: MutatorId[][] = [
-            ['category_letters', 'findables_floor'],
+            ['restless_floor', 'findables_floor'],
             ['wide_recall', 'silhouette_twist'],
             ['sticky_fingers', 'distraction_channel'],
             ['shifting_spotlight'],

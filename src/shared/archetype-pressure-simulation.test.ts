@@ -36,7 +36,7 @@ describe('the archetype pressure bands', () => {
             row({ archetypeId: 'speed_trial', role: 'pressure', ofPar: 0.751 }),
             row({ archetypeId: 'survey_hall', role: 'baseline', ofPar: 0.758 }),
             row({ archetypeId: 'treasure_gallery', role: 'reward', ofPar: 0.795 }),
-            row({ archetypeId: 'script_room', role: 'mystery', ofPar: 0.767 })
+            row({ archetypeId: 'restless_hall', role: 'mystery', ofPar: 0.767 })
         ]);
         // The numbers Gen 260 measured before the fix, so this asserts the band on its own history.
         expect(issues).toHaveLength(1);
@@ -52,7 +52,7 @@ describe('the archetype pressure bands', () => {
                 row({ archetypeId: 'speed_trial', role: 'pressure', ofPar: 0.751 }),
                 row({ archetypeId: 'survey_hall', role: 'baseline', ofPar: 0.758 }),
                 row({ archetypeId: 'treasure_gallery', role: 'reward', ofPar: 0.795 }),
-                row({ archetypeId: 'script_room', role: 'mystery', ofPar: 0.767 })
+                row({ archetypeId: 'restless_hall', role: 'mystery', ofPar: 0.767 })
             ])
         ).toEqual([]);
     });

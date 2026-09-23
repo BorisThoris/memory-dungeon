@@ -11,7 +11,7 @@ Run modifiers that change generation, scoring, timers, or objectives. Sources: e
 | `glass_floor` | Decoy tile; glass witness bonus | HUD chip; tile is normal mesh with decoy key | **Shippable** |
 | `sticky_fingers` | Blocks prior match index on next “opening” flip | HUD chip; no on-grid blocked-slot art | **Functional** |
 | `score_parasite` | Life pressure every N floors unless ward | HUD + polite announcements | **Shippable** |
-| `category_letters` | Symbol set swap at generation | Passive (data on tiles) | **Shippable** |
+| `restless_floor` | Every third resolved turn, hidden cards trade places; 1, then 2, then 3 pairs per drift (`restless-floor-rules.ts`) | Backs move on the board; run announcement line | **Shippable** |
 | `short_memorize` | Shorter memorize window | Timer-driven UI | **Shippable** |
 | `wide_recall` | Flat match penalty | WebGL **cooler face tint** on flipped tiles in play (`presentationWideRecall`) | **Functional** |
 | `silhouette_twist` | Flat match penalty | WebGL **darker silhouette** read (`presentationSilhouette`) | **Functional** |

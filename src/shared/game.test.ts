@@ -752,7 +752,7 @@ describe('game rules', () => {
         expect(getMemorizeDuration(29)).toBe(4180);
     });
 
-    it('uses staged symbol bands by level when category_letters is off', () => {
+    it('uses staged symbol bands by level', () => {
         const numericBand = buildBoard(4, { runSeed: 11_022, runRulesVersion: GAME_RULES_VERSION });
         expect(numericBand.tiles.some((t) => /^\d{2}$/.test(t.symbol))).toBe(true);
         const letterBand = buildBoard(10, { runSeed: 11_022, runRulesVersion: GAME_RULES_VERSION });

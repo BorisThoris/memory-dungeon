@@ -11,6 +11,8 @@ import { WILD_PAIR_KEY } from './tile-identity';
 import { tilesArePairMatch } from './scoring-rules';
 import { clearResolveState } from './run-timer-rules';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
+import { applyRestlessDrift, resolveRestlessDrift } from './restless-floor-rules';
+import { hasMutator } from './mutators';
 import { deriveMatchClaimContext } from './match-claim-rules';
 import { selectGambitMatchedPair } from './gambit-match-rules';
 import { resolveMismatchTurnTransition } from './turn-mismatch-rules';
@@ -201,6 +203,21 @@ export const createResolveBoardTurnTransition = ({
             chunkMomentumPairs: chunkBreakMomentumPairs(chunkBreak),
             chunkRippleWaves: chunkBreak.waves
         });
+        /*
+         * The restless floor moves last, on the board the turn actually produced, once the turn
+         * count it keys on has ticked. It never touches a pinned card.
+         */
+        const drift = hasMutator(run, 'restless_floor')
+            ? resolveRestlessDrift({
+                  board: spun.board,
+                  turnsThisFloor: progress.turnsThisFloor,
+                  driftsBefore: runNonNegativeInteger(run.restlessDriftsThisFloor),
+                  pinnedTileIds: boardCleanup.pinnedTileIds,
+                  runSeed: run.runSeed,
+                  rulesVersion: run.runRulesVersion
+              })
+            : null;
+        const boardAfterDrift = drift?.kind === 'drift' ? applyRestlessDrift(spun.board, drift.swaps) : spun.board;
         const stats = normalizeSessionStats(run.stats);
 
         const journaledRun = execution
@@ -213,8 +230,10 @@ export const createResolveBoardTurnTransition = ({
         const nextRun: RunState = {
             ...journaledRun,
             status: 'playing',
-            board: spun.board,
+            board: boardAfterDrift,
             shiftingSpotlightNonce: spun.shiftingSpotlightNonce,
+            restlessDriftsThisFloor:
+                runNonNegativeInteger(run.restlessDriftsThisFloor) + (drift?.kind === 'drift' ? 1 : 0),
             powersUsedThisRun: usedWild ? true : run.powersUsedThisRun,
             wildMatchesRemaining: runNonNegativeInteger(journaledRun.wildMatchesRemaining),
             peekCharges: runNonNegativeInteger(run.peekCharges) + runNonNegativeInteger(traitReward.peekChargeGain),

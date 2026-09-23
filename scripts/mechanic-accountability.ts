@@ -59,6 +59,7 @@ export const MECHANIC_CENSUS_COUNTERS: Record<string, readonly string[]> = {
     // Gen 216: countable since the run census shipped at Gen 207; see the exemption note below.
     'objective.featured_streak': ['featuredStreak'],
     'hazard.magpie_thief': ['magpieThefts'],
+    'hazard.restless_floor': ['restlessDrifts'],
     'power.peek': ['peek'],
     'power.shuffle': ['shuffle'],
     'power.region_shuffle': ['regionShuffle'],
