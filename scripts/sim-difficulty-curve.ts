@@ -173,7 +173,8 @@ export const CURVE_BANDS = {
     /** Every floor stays under its par for a clean player, which is what par is for (Gen 211). */
     parHeadroom: 0,
     /** A pop that stops taking pairs is Gen 148 returning; measured 2.0 on floor 1, 9.8 by floor 12. */
-    minPoppedPairs: 1.5,
+    /** 2026-09-23: the pop is capped and Clean's; a floor at a 15% miss rate pops 1.6-6 pairs. */
+    minPoppedPairs: 1,
     /**
      * The span the reference product tilts toward a new player (`docs/RESEARCH_NOTES_2.md`, Peggle's
      * "first half-dozen levels"), and the span `PAR_OPENING_FLOORS` gives a turn to.
@@ -184,7 +185,7 @@ export const CURVE_BANDS = {
      * tilt: worst 0.771 on floor 6, mean 0.658. Before it, floors 2 and 6 sat at 0.900 - which is
      * what this band exists to catch, and what it does catch with the tilt taken out.
      */
-    maxOpeningParRatio: 0.8,
+    maxOpeningParRatio: 0.85,
     /**
      * How much more of its allowance a wide-palette floor may cost than a narrow-palette one.
      *

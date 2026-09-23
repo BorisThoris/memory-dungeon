@@ -45,31 +45,32 @@ describe('the cascade clump fixture', () => {
         return rows;
     };
 
-    it('climbs none to Fever in three matches, on the rungs its twelve pairs set', () => {
-        expect(chainTierRungs(12)).toEqual({ clean: 3, fever: 8, sharp: 6 });
+    it('climbs none to Fever in five matches, on the rungs its twelve pairs set', () => {
+        // 2026-09-23: a lone match pops nothing, so the first two matches are plain; the third is
+        // Clean and pops one pair, the fourth is Sharp and takes two, the fifth is Fever.
+        expect(chainTierRungs(12)).toEqual({ clean: 3, fever: 9, sharp: 7 });
         const rows = playThrough();
-        expect(rows.map((row) => row.tier)).toEqual(['clean', 'sharp', 'fever']);
-        expect(rows.map((row) => row.momentum)).toEqual([3, 6, 9]);
+        expect(rows.map((row) => row.tier)).toEqual(['none', 'none', 'clean', 'sharp', 'fever', 'fever']);
+        expect(rows.map((row) => row.momentum)).toEqual([1, 2, 4, 7, 9, 11]);
     });
 
-    it('reaches Fever on the turn that clears the floor, which is why the e2e cannot poll for it', () => {
+    it('reaches Fever with a pair still to play, and clears the floor on the turn after', () => {
         /*
-         * Not a defect in the board: twelve pairs in three suit columns means every match pops two
-         * more pairs, so momentum and the pairs left run out together and the top rung lands on the
-         * last match by construction. It is a fact about this fixture, and the spec that plays it
-         * has to read the floor-clear beat's own tier rather than try to catch the stage before it
-         * unmounts.
+         * Until 2026-09-23 the top rung landed on the same turn the floor cleared, because every
+         * match popped two more pairs and momentum and the pairs left ran out together - which is
+         * why the e2e could not poll for it. With the pop capped, Fever arrives on the fifth match
+         * with the board still standing, and the floor clears on the sixth.
          */
         const rows = playThrough();
         const fever = rows.find((row) => row.tier === 'fever');
-        expect(fever?.turn).toBe(3);
-        expect(fever?.status).toBe('levelComplete');
-        expect(rows.filter((row) => row.status === 'playing').every((row) => row.tier !== 'fever')).toBe(true);
+        expect(fever?.turn).toBe(5);
+        expect(fever?.status).toBe('playing');
+        expect(rows.at(-1)).toMatchObject({ turn: 6, status: 'levelComplete', tier: 'fever' });
     });
 
     it('records the floor at the rung the ladder showed, which the streak alone never reaches', () => {
-        // Three matches, streak 3: on twelve pairs that is Clean. The HUD said Fever, and the clear
-        // paid Fever; the floor's record, the run's Fever-floor count and the profile's all say so.
+        // Six matches, streak 6: on twelve pairs that is short of Sharp. The HUD said Fever, and the
+        // clear paid Fever; the floor's record, the run's Fever-floor count and the profile's all say so.
         let run = createPlayablePathFixture('cascadeClump').run as RunState;
         const peaks: string[] = [];
         while (run.status === 'playing') {
@@ -79,8 +80,8 @@ describe('the cascade clump fixture', () => {
             run = resolveBoardTurn(flipTile(flipTile(run, first.id), partner.id));
             peaks.push(run.peakChainTierThisFloor ?? 'missing');
         }
-        expect(peaks).toEqual(['clean', 'sharp', 'fever']);
-        expect(run.stats.currentStreak).toBe(3);
+        expect(peaks).toEqual(['none', 'none', 'clean', 'sharp', 'fever', 'fever']);
+        expect(run.stats.currentStreak).toBe(6);
         expect(run.lastLevelResult?.chainTier).toBe('fever');
         expect(run.feverFloorsThisRun).toBe(1);
     });

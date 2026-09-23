@@ -82,18 +82,19 @@ describe('achievement thresholds against real content', () => {
 });
 
 describe('the chain loop achievements against real boards', () => {
-    it('Sixfold asks for no more pairs than one Fever break on a clumped board takes', () => {
+    it('Fourfold asks for no more pairs than one Fever break on a clumped board takes', () => {
         // The clumped fixture is the board the e2e plays to Fever; a Fever break on its first pair
-        // takes the ember clump and its halo. If that is not six pairs, six is not earnable.
+        // takes the ember pop and bridges into tide, to the cap. If that is not four pairs, four is
+        // not earnable - and the cap (`BREAK_PAIR_CAP`) is four, so this bar is the ceiling itself.
         const run = createPlayablePathFixture('cascadeClump').run!;
-        const broken = resolveChunkBreak({ board: run.board!, run, matchedTileIds: ['em1-A', 'em1-B'], chain: 8 });
+        const broken = resolveChunkBreak({ board: run.board!, run, matchedTileIds: ['em1-A', 'em1-B'], chain: 9 });
         expect(broken.tier).toBe('fever');
-        expect(broken.brokenPairKeys.length).toBeGreaterThanOrEqual(CHUNK_SIX_PAIRS);
+        expect(broken.wavePairKeys.flat().length).toBeGreaterThanOrEqual(CHUNK_SIX_PAIRS);
     });
 
     it('Nothing held it is earnable: a break on a cut-off suit drops its last pair', () => {
-        // A, B, C ember; D, E, F tide. C touches no ember tile, so a break on A takes B through
-        // the clump and C drops. One drop is the whole bar, and the drop fires at any tier.
+        // A, B, C ember; D, E, F tide. C touches no ember tile, so a Clean break on A takes B and
+        // C drops. One drop is the whole bar, and the drop fires at any tier once a suit is alone.
         const suit = (id: string) => (['A', 'B', 'C'].includes(id[0]!) ? 'ember' : 'tide');
         const tile = (id: string) => makeTile(id, id[0]!, id[0]!, { suit: suit(id) });
         const board = makeBoard(
@@ -101,22 +102,22 @@ describe('the chain loop achievements against real boards', () => {
             { columns: 4, rows: 3, level: 3 }
         );
         const run = createNewRun(0);
-        const broken = resolveChunkBreak({ board, run, matchedTileIds: ['A1', 'A2'], chain: 1 });
+        const broken = resolveChunkBreak({ board, run, matchedTileIds: ['A1', 'A2'], chain: 3 });
         expect(broken.droppedPairKeys).toEqual(['C']);
         expect(evaluateAchievementUnlocks({ ...run, chunkDropsThisRun: 1 }, createDefaultSaveData())).toContain('ACH_NOTHING_HELD_IT');
     });
 
-    it('Chain reaction is earnable: a Sharp break walks a long clump in three waves', () => {
-        // One row of six whole ember pairs. Sharp walks four steps a wave, so the reaction has to
-        // run three times to reach the far end - which is what the achievement is asking for.
+    it('Chain reaction is earnable: a Fever break walks a long clump in three waves', () => {
+        // One row of six whole ember pairs. A wave walks two steps and takes the next pair, and
+        // Fever runs three waves - which is what the achievement is asking for.
         const rowTile = (id: string) => makeTile(id, id[0]!, id[0]!, { suit: 'ember' });
         const board = makeBoard(
             ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'D1', 'D2', 'E1', 'E2', 'F1', 'F2'].map(rowTile),
             { columns: 12, rows: 1, level: 3 }
         );
         const run = createNewRun(0);
-        const broken = resolveChunkBreak({ board, run, matchedTileIds: ['A1', 'A2'], chain: 4 });
-        expect(broken.tier).toBe('sharp');
+        const broken = resolveChunkBreak({ board, run, matchedTileIds: ['A1', 'A2'], chain: 7 });
+        expect(broken.tier).toBe('fever');
         expect(broken.waves).toBeGreaterThanOrEqual(CHAIN_REACTION_WAVES);
         expect(evaluateAchievementUnlocks({ ...run, bestRippleThisRun: broken.waves }, createDefaultSaveData())).toContain(
             'ACH_CHAIN_REACTION'

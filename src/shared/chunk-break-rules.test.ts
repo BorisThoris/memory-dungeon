@@ -9,6 +9,7 @@ import {
     chunkBreakScore,
     findSuitRegion,
     RIPPLE_MAX_WAVES,
+    SHARP_WAVES,
     resolveChunkBreak,
     suitCanStillPop,
     waveMult,
@@ -72,47 +73,59 @@ describe('the region', () => {
 });
 
 describe('what breaks', () => {
-    it('pops the whole clump touching a lone match, partners with it: a match is never just a match', () => {
+    /*
+     * 2026-09-23: the pop is Clean's, capped by rung, and a lone match takes nothing. Six pairs on
+     * this board: Clean from 3, Sharp from 4, Fever from 7 (floor-relative rungs).
+     */
+    it('a lone match is a match: nothing pops, and nothing drops while two ember pairs still stand', () => {
         const result = resolveChunkBreak({ board: board(), run: endless, matchedTileIds: ['A1', 'A2'], chain: 1 });
         expect(result.tier).toBe('none');
-        expect(result.brokenPairKeys.sort()).toEqual(['B', 'C']);
+        expect(result.brokenPairKeys).toEqual([]);
+        expect(result.waves).toBe(0);
+        expect(result.board.tiles.every((t) => t.state === 'hidden')).toBe(true);
+    });
+
+    it('Clean pops the one ember pair the match is touching, and the pair that left alone drops', () => {
+        const result = resolveChunkBreak({ board: board(), run: endless, matchedTileIds: ['A1', 'A2'], chain: 3 });
+        expect(result.tier).toBe('clean');
+        expect(result.wavePairKeys).toEqual([['B']]);
+        // C touches no ember card once B is gone: the suit can no longer pop, so its last pair falls.
+        expect(result.droppedPairKeys).toEqual(['C']);
         expect(result.brokenTileIds.sort()).toEqual(['B1', 'B2', 'C1', 'C2']);
-        expect(result.board.tiles.filter((t) => t.state === 'removed').map((t) => t.id).sort()).toEqual(['B1', 'B2', 'C1', 'C2']);
         expect(result.board.matchedPairs).toBe(2);
-        expect(result.waves).toBe(1);
         expect(result.board.tiles.find((t) => t.id === 'D1')?.state).toBe('hidden');
     });
 
     it('never takes the matched pair itself, whatever a later wave walks past', () => {
-        const result = resolveChunkBreak({ board: board(), run: endless, matchedTileIds: ['A1', 'A2'], chain: 4 });
+        const result = resolveChunkBreak({ board: board(), run: endless, matchedTileIds: ['A1', 'A2'], chain: 7 });
         expect(result.brokenPairKeys).not.toContain('A');
         expect(result.brokenTileIds).not.toContain('A1');
     });
 
-    it('Sharp bridges once: its own clump, then the one that clump was leaning on', () => {
-        // Six pairs on this board: Sharp from x4, Fever from x7 (floor-relative rungs).
+    it('Sharp takes two pairs in the pop and does not bridge', () => {
         const result = resolveChunkBreak({ board: board(), run: endless, matchedTileIds: ['A1', 'A2'], chain: 4 });
         expect(result.tier).toBe('sharp');
-        expect(result.wavePairKeys[0]!.sort()).toEqual(['B', 'C']);
-        // One clump caught, and this board has only one other suit, so Sharp and Fever agree here.
-        expect(result.wavePairKeys[1]!.sort()).toEqual(['D', 'E', 'F']);
+        expect(result.wavePairKeys).toEqual([['B', 'C']]);
+        expect(result.droppedPairKeys).toEqual([]);
+        // The tide clump next door stands: the bridge is Fever's.
+        expect(result.board.tiles.filter((t) => t.suit === 'tide').every((t) => t.state === 'hidden')).toBe(true);
     });
 
-    it('Fever bridges: the second wave is the clump the first one was touching', () => {
+    it('Fever bridges once: the ember pop, then the tide clump it was touching, to the cap of four', () => {
         const result = resolveChunkBreak({ board: board(), run: endless, matchedTileIds: ['A1', 'A2'], chain: 7 });
         expect(result.tier).toBe('fever');
-        // Wave one is the ember clump, B and C. The cards it took were touching tide - D1 beside
-        // C1, E1 and E2 beside B2 and C2 - so the bridge hands tide to wave two, and the tide
-        // clump goes whole. Every card that left was in contact with a card that broke.
         expect(result.wavePairKeys[0]!.sort()).toEqual(['B', 'C']);
-        expect(result.wavePairKeys[1]!.sort()).toEqual(['D', 'E', 'F']);
-        expect(result.droppedPairKeys).toEqual([]);
+        // The cards wave one took were touching tide, so the bridge hands tide to wave two - and the
+        // cap of four stops it at two of the three tide pairs. Every card that left was in contact
+        // with a card that broke; the third tide pair, left alone, drops.
+        expect(result.wavePairKeys[1]!.sort()).toEqual(['D', 'E']);
+        expect(result.droppedPairKeys).toEqual(['F']);
         expect(result.waves).toBe(2);
     });
 
     it('leaves a pair alone when its partner has a job of its own', () => {
         const tiles = layout().map((t) => (t.id === 'C2' ? { ...t, findableKind: 'score_glint' as const } : t));
-        const result = resolveChunkBreak({ board: board(tiles), run: endless, matchedTileIds: ['A1', 'A2'], chain: 1 });
+        const result = resolveChunkBreak({ board: board(tiles), run: endless, matchedTileIds: ['A1', 'A2'], chain: 3 });
         expect(result.brokenPairKeys).toEqual(['B']);
         expect(tileCanBreakInChunk(tiles.find((t) => t.id === 'C2')!)).toBe(false);
     });
@@ -124,7 +137,7 @@ describe('what breaks', () => {
             board: board(tiles, { cursedPairKey: 'B' }),
             run: endless,
             matchedTileIds: ['A1', 'A2'],
-            chain: 1
+            chain: 3
         });
         expect(result.brokenPairKeys).toEqual(['C']);
         expect(result.board.tiles.find((t) => t.pairKey === WILD_PAIR_KEY)?.state).toBe('hidden');
@@ -132,15 +145,12 @@ describe('what breaks', () => {
 });
 
 describe('the ripple', () => {
-    it('a lone match walks two steps: B is touching, C is one card too far', () => {
+    it('a lone match takes nothing from the row', () => {
         const result = resolveChunkBreak({ board: row(), run: endless, matchedTileIds: ['A1', 'A2'], chain: 1 });
         expect(result.tier).toBe('none');
-        expect(result.wavePairKeys).toEqual([['B']]);
-        expect(result.waves).toBe(1);
-        expect(waveOf(result, 'B2')).toBe(0);
-        // C and D stay standing: two whole ember pairs still touching, so the suit can still pop.
+        expect(result.wavePairKeys).toEqual([]);
+        expect(result.waves).toBe(0);
         expect(result.droppedPairKeys).toEqual([]);
-        expect(result.board.tiles.find((t) => t.id === 'C1')?.state).toBe('hidden');
     });
 
     it('a pair whose far half is not in the wave stays whole, at every tier', () => {
@@ -149,31 +159,41 @@ describe('the ripple', () => {
         const result = resolveChunkBreak({ board: row(tiles), run: endless, matchedTileIds: ['A1', 'A2'], chain: 3 });
         expect(result.tier).toBe('clean');
         // B goes; C does not, though half of it was in the wave. Nothing reaches across the board.
+        expect(result.wavePairKeys).toEqual([['B']]);
         expect(result.wavePairKeys.flat()).not.toContain('C');
-        // C leaves all the same, but as the severance drop - the beat that says a suit is stranded,
-        // not the pop. The pop itself never reached it.
-        expect(result.droppedPairKeys).toContain('C');
     });
 
-    it('Clean walks four steps: the same wave, twice as far', () => {
+    it('Clean walks two steps and takes one pair: B is touching, C is capped out', () => {
         const result = resolveChunkBreak({ board: row(), run: endless, matchedTileIds: ['A1', 'A2'], chain: 3 });
         expect(result.tier).toBe('clean');
-        expect(result.wavePairKeys).toEqual([['B', 'C']]);
+        expect(result.wavePairKeys).toEqual([['B']]);
         expect(result.waves).toBe(1);
-        expect(waveOf(result, 'C2')).toBe(0);
-        // D is beyond four steps and Clean's wave does not run again, so the pop leaves it.
-        expect(result.wavePairKeys.flat()).not.toContain('D');
+        expect(waveOf(result, 'B2')).toBe(0);
+        // C and D stay standing: two whole ember pairs still touching, so the suit can still pop.
+        expect(result.droppedPairKeys).toEqual([]);
+        expect(result.board.tiles.find((t) => t.id === 'C1')?.state).toBe('hidden');
     });
 
-    it('Sharp: the reaction runs on from where the wave stopped', () => {
+    it('Sharp: the reaction runs one wave on from where the pop stopped', () => {
         const result = resolveChunkBreak({ board: row(), run: endless, matchedTileIds: ['A1', 'A2'], chain: 4 });
         expect(result.tier).toBe('sharp');
-        expect(result.wavePairKeys).toEqual([['B', 'C'], ['D']]);
+        expect(result.wavePairKeys).toEqual([['B'], ['C']]);
         expect(result.waves).toBe(2);
-        expect(waveOf(result, 'D2')).toBe(1);
-        expect(rippleWaves('sharp')).toBe(RIPPLE_MAX_WAVES);
+        expect(waveOf(result, 'C2')).toBe(1);
+        // D is the ember suit's last pair and touches nothing ember now: it drops.
+        expect(result.droppedPairKeys).toEqual(['D']);
+        expect(rippleWaves('sharp')).toBe(SHARP_WAVES);
+        expect(rippleWaves('fever')).toBe(RIPPLE_MAX_WAVES);
         expect(rippleWaves('none')).toBe(1);
         expect(rippleWaves('clean')).toBe(1);
+    });
+
+    it('Fever runs the reaction three waves along the row', () => {
+        const result = resolveChunkBreak({ board: row(), run: endless, matchedTileIds: ['A1', 'A2'], chain: 7 });
+        expect(result.tier).toBe('fever');
+        expect(result.wavePairKeys).toEqual([['B'], ['C'], ['D']]);
+        expect(result.waves).toBe(3);
+        expect(waveOf(result, 'D2')).toBe(2);
     });
 
     it('a longer reaction pays more for the same pairs, up to the cap', () => {
@@ -219,8 +239,9 @@ describe('through a real turn', () => {
         };
     };
 
-    it('takes the clump touching a chain-one match off the board, live, and says so on the journal', () => {
-        const run = runWithChain(1);
+    it('takes the pair touching a Clean match off the board, live, and says so on the journal', () => {
+        // Chain three: the pop is Clean's since 2026-09-23. B pops and C, left alone, drops.
+        const run = runWithChain(3);
         const after = resolveBoardTurn(flipTile(flipTile(run, 'A1'), 'A2'));
 
         for (const id of ['B1', 'B2', 'C1', 'C2']) {
@@ -233,11 +254,11 @@ describe('through a real turn', () => {
         const turn = (after.gameplayEventJournal as { type: string; announcement?: Record<string, number> }[])
             .filter((event) => event.type === 'board.turn_resolved')
             .at(-1)!;
-        expect(turn.announcement).toMatchObject({ chunkPairsBrokenBefore: 0, chunkPairsBrokenAfter: 2, chainAfter: 1 });
+        expect(turn.announcement).toMatchObject({ chunkPairsBrokenBefore: 0, chunkPairsBrokenAfter: 2, chainAfter: 3 });
     });
 
     it('pays the pop on top of the match, without touching the chain or the recall', () => {
-        const alone = runWithChain(1);
+        const alone = runWithChain(3);
         // The same board with nothing ember beside A: the match alone.
         const lonely = {
             ...alone,
@@ -305,15 +326,16 @@ describe('the drop', () => {
         tile('D2'), tile('F1'), tile('E2'), tile('F2')
     ];
 
-    it('takes the pairs of a suit that can no longer pop, at any tier', () => {
-        // Chain one and Clean only: from Sharp the bridge catches the tide clump and the ember
-        // remnant goes with the wave rather than the drop, which the Sharp case below pins.
-        for (const chain of [1, 3]) {
-            const result = resolveChunkBreak({ board: board(cutOff()), run: endless, matchedTileIds: ['A1', 'A2'], chain });
-            expect(result.droppedPairKeys, `chain ${chain}`).toEqual(['C']);
-            expect(result.brokenPairKeys, `chain ${chain}`).toEqual(['B', 'C']);
-            expect(result.board.tiles.filter((t) => t.pairKey === 'C').every((t) => t.state === 'removed')).toBe(true);
-        }
+    it('takes the last pair of a suit that can no longer pop, once a break has left it alone', () => {
+        // With no chain nothing pops, B still stands beside A's empty cells, and C is held up by it.
+        const lone = resolveChunkBreak({ board: board(cutOff()), run: endless, matchedTileIds: ['A1', 'A2'], chain: 1 });
+        expect(lone.droppedPairKeys).toEqual([]);
+        expect(lone.brokenPairKeys).toEqual([]);
+        // At Clean the pop takes B, C is the suit's last plain pair with nothing of its kind touching it, and it drops.
+        const clean = resolveChunkBreak({ board: board(cutOff()), run: endless, matchedTileIds: ['A1', 'A2'], chain: 3 });
+        expect(clean.droppedPairKeys).toEqual(['C']);
+        expect(clean.brokenPairKeys).toEqual(['B', 'C']);
+        expect(clean.board.tiles.filter((t) => t.pairKey === 'C').every((t) => t.state === 'removed')).toBe(true);
     });
 
     it('fires on a match that pops nothing, when the match itself severs the suit', () => {

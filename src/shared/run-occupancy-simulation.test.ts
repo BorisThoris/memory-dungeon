@@ -102,7 +102,9 @@ describe('the run census', () => {
         const onFloors = simulateSystemOccupancy({ floors: SYSTEM_OCCUPANCY_BASELINE_FLOORS }).rows.find(
             (row) => row.key === 'magpieThefts'
         )!;
-        expect(onFloors.floorShare).toBe(0);
+        // A floor takes twice the turns it did before the pop was capped (2026-09-23), so the
+        // floor census now reaches a third miss now and then; the run census still sees far more.
+        expect(onFloors.floorShare).toBeLessThan(magpie.runFloorShare);
     });
 
     it('says where each system was last seen, which is the number a floor census cannot have', () => {

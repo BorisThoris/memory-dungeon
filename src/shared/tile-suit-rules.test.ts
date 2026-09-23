@@ -336,10 +336,12 @@ describe('the deal profile', () => {
         }
     });
 
-    it('deals a spotlight floor in two suits only, and mixes them like every other floor', () => {
+    it('deals a spotlight floor in three suits, and mixes them like every other floor', () => {
+        // Three since 2026-09-23: with the break capped, one suit over half a board bought the pop
+        // nothing and the palette became a map rather than a lever (`SCATTERED_SUIT_CEILING`).
         const tiles = pairs(12);
         const two = dealBoardSuits(tiles, 6, 5, 12, GAME_RULES_VERSION, 'two_suit');
-        expect(new Set(two.map((t) => t.suit)).size).toBe(2);
+        expect(new Set(two.map((t) => t.suit)).size).toBe(3);
         /*
          * Gen 204: this used to require a run of eight or more - a spotlight floor was the most
          * clumped board in the game, measured at 0.733 same-suit neighbours with one suit covering

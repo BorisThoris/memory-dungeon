@@ -57,11 +57,11 @@ export const CHAIN_BEAT_COPY = {
         nextTier ? `${momentumLeft} momentum to ${CHAIN_TIER_LABELS[nextTier]}` : 'Fever active',
     goalBenefit: (nextTier: Exclude<ChainTier, 'none'> | null): string =>
         nextTier === 'clean'
-            ? 'Reach deeper into the clump'
+            ? 'Matches start to pop the pair beside them'
             : nextTier === 'sharp'
-              ? 'Chain into the next clump'
+              ? 'A break takes two pairs and runs on'
               : nextTier === 'fever'
-                ? 'Chain into three clumps'
+                ? 'A break takes four and bridges suits'
                 : 'Keep matching to hold the fire',
     /**
      * The break's line: the one the feedback rail shows and a screen reader speaks, so it has to
@@ -125,7 +125,7 @@ export const CHAIN_BEAT_COPY = {
         rungs: { sharp: number; fever: number }
     ): string =>
         `${momentumSourceLine(chain, cascaded, banked)}. ` +
-        `Every match pops the clump it touches. Clean from 3 reaches twice as far into it, Sharp from ${rungs.sharp} runs the reaction into the clump next door, Fever from ${rungs.fever} into three of them on this floor. A miss halves the chain and puts the fire out.`,
+        `A match on its own just matches. Clean from 3 pops the pair it touches, Sharp from ${rungs.sharp} takes two and runs on, Fever from ${rungs.fever} takes four and bridges into the suit next door on this floor. A miss halves the chain and puts the fire out.`,
     /**
      * What the rung the player is standing on is worth, for the pip cluster beside the tier. The
      * meter said where they were and never what being there bought (thesis §30.3a); a cluster that

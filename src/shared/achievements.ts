@@ -13,8 +13,8 @@ export const SCORE_MILESTONE_SECOND = 100_000;
 
 export type AchievementDefinition = AchievementCodexEntry;
 
-/** Pairs one break has to take for Sixfold: a Fever halo on a clumped board does it (see the reachability test). */
-export const CHUNK_SIX_PAIRS = 6;
+/** Pairs one break has to take: four, the Fever cap (`BREAK_PAIR_CAP`) since the pop was capped on 2026-09-23. */
+export const CHUNK_SIX_PAIRS = 4;
 
 /** A ripple worth an achievement: the pop, a partner's clump, and that partner's clump. */
 export const CHAIN_REACTION_WAVES = 3;

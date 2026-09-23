@@ -51,11 +51,17 @@ export const CHAIN_RUNG_SCORE_MULTIPLIER: Readonly<Record<ChainTier, number>> = 
  * `CHAIN_RUNG_PAIRS_TOLERANCE`. The meter says "about eight pairs" now because that is what a Fever
  * break takes; the test below is what made it say so rather than quietly understating the rung.
  */
+/**
+ * 2026-09-23: the pop was reworked. A lone match takes nothing but the drop, and a break is capped
+ * by rung (`BREAK_PAIR_CAP`: 1 / 2 / 4). Measured fresh by `sim:pop` at each rung on the
+ * scheduled floors: none 0.00, clean 0.66, sharp 0.95, fever 2.34 - so the sentence says 0 / 1 /
+ * 1 / 2, and the score ladder it explains reads x16 / x3.2 / x7.0 rung over rung.
+ */
 export const CHAIN_RUNG_PAIRS: Readonly<Record<ChainTier, number>> = {
-    none: 2,
-    clean: 2,
-    sharp: 6,
-    fever: 8
+    none: 0,
+    clean: 1,
+    sharp: 1,
+    fever: 2
 };
 
 /**

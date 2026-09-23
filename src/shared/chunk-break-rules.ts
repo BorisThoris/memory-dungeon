@@ -75,7 +75,7 @@ export const CLEAN_WAVES = 1;
  * to 1.00 of matches where they used to pop on 0.94 to 1.00. A match with no chain behind it was
  * taking most of what a Fever break takes, which is what left the ladder nothing to sell.
  */
-export const BOUNDED_BREAK_REACH = 2;
+export const BOUNDED_BREAK_REACH = 1;
 
 /**
  * What Clean buys, since Gen 197 took away the partner reach: the wave walks twice as far along
@@ -104,6 +104,41 @@ export const BREAK_CLUMP_REACH: Readonly<Record<ChainTier, number>> = {
     sharp: CLEAN_BREAK_REACH,
     fever: CLEAN_BREAK_REACH
 };
+
+/**
+ * The most pairs one break may take, by rung - the pop's own size, before the drop.
+ *
+ * 2026-09-23: the pop was taking the board. Measured on the scheduled floors with a player who
+ * never misses (`tmp/sim-popshare`, eight seeds, floors 1-24): the player matched 35% of a floor's
+ * pairs and the pops took 65%, the biggest break on a floor averaged two thirds of the board, and
+ * on 172 floors of 192 a single break removed at least half of what was still standing. Every
+ * lever added since Gen 197 - reach, corners at every tier, the bridge, the twelve-wave reaction -
+ * had made the pop bigger to keep the ladder legible, and together they made the memory game the
+ * smaller half of its own floors. A player who has just found a pair and watched eight more leave
+ * did not play a memory game; they watched one.
+ *
+ * So a break is capped, and the cap is what the chain buys: one pair beside a lone match, two at
+ * Clean, three at Sharp, five at Fever. The wave still walks by contact and still takes the nearest
+ * pairs first, so the cap cuts the far end of a break, never the card the player was looking at.
+ */
+export const BREAK_PAIR_CAP: Readonly<Record<ChainTier, number>> = {
+    none: 0,
+    clean: 1,
+    sharp: 2,
+    fever: 4
+};
+
+/**
+ * The breather's relief. Its rest used to be a two-suit deal - one suit over half the board, so
+ * every match touched its own kind and the pop reached far. With the break capped the palette no
+ * longer buys anything (measured, a two-suit board is no faster), so the floor whose hint promises
+ * "a calmer floor to steady the board and rebuild the chain" gets its calm from the cap instead:
+ * one more pair at every rung, so the fire catches sooner and spreads further on that floor only.
+ */
+export const BREATHER_BREAK_PAIR_BONUS = 1;
+
+export const breakPairCap = (tier: ChainTier, floorArchetypeId: BoardState['floorArchetypeId'] | undefined = null): number =>
+    BREAK_PAIR_CAP[tier] + (floorArchetypeId === 'breather' ? BREATHER_BREAK_PAIR_BONUS : 0);
 
 export const breakClumpReach = (tier: ChainTier): number => BREAK_CLUMP_REACH[tier];
 
@@ -161,8 +196,8 @@ export const breakWalksDiagonals = (tier: ChainTier): boolean => BREAK_DIAGONAL_
 export const BREAK_BRIDGE_CLUMPS: Readonly<Record<ChainTier, number>> = {
     none: 0,
     clean: 0,
-    sharp: 1,
-    fever: 3
+    sharp: 0,
+    fever: 1
 };
 
 export const breakBridgeClumps = (tier: ChainTier): number => BREAK_BRIDGE_CLUMPS[tier];
@@ -177,7 +212,9 @@ export const WAVE_MULT_CAP = 6;
 /** What the tier a break lands at multiplies it by: the ladder's rungs, in score. */
 export const CHAIN_MULT: Record<ChainTier, number> = { none: 1, clean: 2, sharp: 4, fever: 8 };
 /** A chain reaction cannot outrun the board, but a bound keeps the rule honest on an authored one. */
-export const RIPPLE_MAX_WAVES = 12;
+export const RIPPLE_MAX_WAVES = 3;
+/** Sharp's reaction: the pop and one wave on from it. Fever runs the bounded reaction out. */
+export const SHARP_WAVES = 2;
 /**
  * The drop. Puzzle Bobble's second ingredient: a cluster falls once nothing holds it. Here what
  * holds a suit up is the pop itself - **a pair drops when its suit can no longer pop** (thesis
@@ -202,11 +239,12 @@ export const SEVERANCE_DROP_REACH = 2;
  * other. Two is the remnant the last-pair problem (§41.2) is about: the pairs a player would
  * otherwise grind out by hand once nothing on the floor can reach them.
  */
-export const SEVERANCE_DROP_MAX_PAIRS = 2;
+export const SEVERANCE_DROP_MAX_PAIRS = 1;
 
 /** How many waves the ripple may run at this tier: the pop alone, the pop and its partners' clumps, or the whole reaction. */
 export const rippleWaves = (tier: ChainTier): number => {
-    if (tier === 'sharp' || tier === 'fever') return RIPPLE_MAX_WAVES;
+    if (tier === 'fever') return RIPPLE_MAX_WAVES;
+    if (tier === 'sharp') return SHARP_WAVES;
     return tier === 'clean' ? CLEAN_WAVES : POP_WAVES;
 };
 
@@ -436,6 +474,7 @@ export const resolveChunkBreak = ({
     // and the reaction runs on until a wave takes nothing.
     let seeds: string[] = [...matchedTileIds];
     const reach = breakClumpReach(tier);
+    const pairCap = breakPairCap(tier, board.floorArchetypeId);
     const bridgeClumps = breakBridgeClumps(tier);
     let bridgesLeft = bridgeClumps > 0 ? 1 : 0;
     const columns = getSafeBoardColumns(board);
@@ -461,6 +500,8 @@ export const resolveChunkBreak = ({
         for (const index of region) {
             const tile = board.tiles[index]!;
             regionTileIds.add(tile.id);
+            // The cap: the wave walks on so the region is still known, but takes nothing past it.
+            if (brokenPairKeys.length + taken.length >= pairCap) continue;
             if (brokenPairKeys.includes(tile.pairKey) || taken.includes(tile.pairKey)) continue;
             if (board.cursedPairKey && tile.pairKey === board.cursedPairKey) continue;
             const pair = byPairKey.get(tile.pairKey) ?? [];

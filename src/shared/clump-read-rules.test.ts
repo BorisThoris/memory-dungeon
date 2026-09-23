@@ -38,34 +38,34 @@ describe('the aim guide reads the tier it is actually on', () => {
         expect(read?.suit).toBe('ember');
         // The connected ember region the tile stands in, itself included: the whole top row.
         expect(read?.size).toBe(8);
-        // A pop walks two steps: B is inside them, C is one card further on.
-        expect(read?.now).toMatchObject({ tier: 'none', pairs: 1 });
-        expect(sorted(read?.now.tileIds)).toEqual(['B1', 'B2']);
+        // A lone match pops nothing (2026-09-23): the guide says so rather than promising Clean's pair.
+        expect(read?.now).toMatchObject({ tier: 'none', pairs: 0 });
+        expect(sorted(read?.now.tileIds)).toEqual([]);
     });
 
     it('ghosts what the next rung would add, which is the hold decision on the board', () => {
-        // Clean buys depth: the same wave, walked twice as far along the same row.
+        // Clean buys the pop itself: the one pair the match is touching.
         const pop = getClumpRead(board(), 'A1', at(1));
-        expect(pop?.next).toMatchObject({ tier: 'clean', pairs: 3, addedPairs: 2 });
-        expect(sorted(pop?.next?.addedTileIds)).toEqual(['C1', 'C2', 'D1', 'D2']);
+        expect(pop?.next).toMatchObject({ tier: 'clean', pairs: 1, addedPairs: 1 });
+        expect(sorted(pop?.next?.addedTileIds)).toEqual(['B1', 'B2']);
 
-        // Sharp buys the bridge: the wave crosses into the one clump it was touching.
+        // Sharp buys two pairs and the reaction: the wave after the pop reaches C, then D.
         const clean = getClumpRead(board(), 'A1', at(RUNGS.clean));
-        expect(clean?.now).toMatchObject({ tier: 'clean', pairs: 3 });
-        expect(clean?.next).toMatchObject({ tier: 'sharp', pairs: 5, addedPairs: 2 });
-        expect(sorted(clean?.next?.addedTileIds)).toEqual(['F1', 'F2', 'H1', 'H2']);
+        expect(clean?.now).toMatchObject({ tier: 'clean', pairs: 1 });
+        expect(clean?.next).toMatchObject({ tier: 'sharp', pairs: 3, addedPairs: 2 });
+        expect(sorted(clean?.next?.addedTileIds)).toEqual(['C1', 'C2', 'D1', 'D2']);
 
-        // Fever catches three clumps rather than one, so the other suit below goes too.
+        // Fever buys the bridge: the wave crosses into the one clump it was touching, to a cap of four.
         const sharp = getClumpRead(board(), 'A1', at(RUNGS.sharp));
-        expect(sharp?.now).toMatchObject({ tier: 'sharp', pairs: 5 });
-        expect(sharp?.next).toMatchObject({ tier: 'fever', pairs: 7, addedPairs: 2 });
-        expect(sorted(sharp?.next?.addedTileIds)).toEqual(['E1', 'E2', 'G1', 'G2']);
+        expect(sharp?.now).toMatchObject({ tier: 'sharp', pairs: 3 });
+        expect(sharp?.next).toMatchObject({ tier: 'fever', pairs: 5, addedPairs: 2 });
+        expect(sorted(sharp?.next?.addedTileIds)).toEqual(['F1', 'F2', 'H1', 'H2']);
     });
 
     it('has no rung left to ghost at Fever', () => {
         const fever = getClumpRead(board(), 'A1', at(RUNGS.fever));
 
-        expect(fever?.now).toMatchObject({ tier: 'fever', pairs: 7 });
+        expect(fever?.now).toMatchObject({ tier: 'fever', pairs: 5 });
         expect(fever?.next).toBeNull();
     });
 

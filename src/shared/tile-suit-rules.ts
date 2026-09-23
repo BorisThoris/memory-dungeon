@@ -516,7 +516,7 @@ const breakablePairCount = (tiles: readonly Tile[]): number => {
  * the Sharp rung against leaving the palette to the ratio alone, and that is the trade this file
  * makes on purpose: a readable board first.
  */
-export const SUIT_TARGET_PAIRS = 4;
+export const SUIT_TARGET_PAIRS = 3;
 export const MIN_PAIRS_FOR_TWO_SUITS = 6;
 
 export const suitCountForPairs = (pairs: number): number => {
@@ -538,7 +538,7 @@ export const suitCountForPairs = (pairs: number): number => {
  * So a scattered floor keeps two suits however big it is, and a spotlight floor keeps its two by
  * definition. Everything else grows with the board.
  */
-export const SCATTERED_SUIT_CEILING = 2;
+export const SCATTERED_SUIT_CEILING = 3;
 
 export const suitCountForDeal = (profile: SuitDealProfile, pairs = Number.POSITIVE_INFINITY): number => {
     const ceiling =

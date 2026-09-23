@@ -363,9 +363,16 @@ export const CASCADE_BALANCE_BANDS: CascadeBalanceBands = {
      * to take moves with the intent: measured 0.70-0.71 across two rules versions and 48 or 96
      * seeds. What keeps the small breaks from being decoration is the band below, not this one.
      */
-    cleanChunkShareOfScore: { min: 0.5, max: 0.85 },
+    /*
+     * 2026-09-23: 0.25-0.6. The pop was taking 65% of a floor's pairs and most of its score, and
+     * the memory game had become the smaller half of its own floors. With the break capped by rung
+     * (`BREAK_PAIR_CAP`) and a lone match popping nothing, measured 0.42 at zero misses: the break
+     * is still where the big numbers come from, and the match is where most of the score does.
+     */
+    cleanChunkShareOfScore: { min: 0.25, max: 0.6 },
     /** Band N5 (thesis §40.3): below 0.25 the curve is too flat, above 0.7 the small breaks are decoration. Measured 0.49-0.50. */
-    cleanLargestBreakShareOfScore: { min: 0.25, max: 0.7 },
+    /** Band N5, re-drawn 2026-09-23 around a capped break: measured 0.20; below 0.1 the break is decoration. */
+    cleanLargestBreakShareOfScore: { min: 0.1, max: 0.5 },
     /**
      * The par (thesis §41.3): a player who never misses is under it on nearly every floor, and
      * the gap to the reference player is what makes it a goal rather than a formality. Measured
@@ -378,8 +385,14 @@ export const CASCADE_BALANCE_BANDS: CascadeBalanceBands = {
      * Gen 183 over 48 seeds and 24 floors: a player missing a quarter of their flips never met it
      * (0.000), one missing half met it on 0.029 of floors, one missing seventy percent on 0.236.
      * The ceiling sits at zero for the reference player with a margin for the deal.
+     *
+     * The ceiling is the turn bank now (`floor-par.ts`), a full one on every floor this sim builds,
+     * and on 2026-09-23 the pop stopped clearing half a floor per match, so a floor takes twice the
+     * turns it did. Measured after: the reference player meets a full bank on 0.024 of floors. The
+     * band is 0.03 - a run that is losable is the point of the bank, and a quarter of flips missed
+     * on a floor with no pop to lean on is a floor that can run out.
      */
-    referenceCeilingShare: { max: 0.02 },
+    referenceCeilingShare: { max: 0.03 },
     /** Turns to clear at zero misses over turns at the reference miss rate: faster, and by enough to feel. */
     cleanTurnsOverReferenceTurns: { max: 0.9 },
     /**

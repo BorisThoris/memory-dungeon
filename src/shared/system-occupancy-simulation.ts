@@ -121,7 +121,7 @@ export interface SystemOccupancyCounter {
 
 export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
     { id: 'chunkBreaks', key: 'chunkBreaksThisFloor', label: 'A match popped the clump it touched', family: 'cascade', cadence: 'core', kind: 'tally', player: 'reference' },
-    { id: 'chunkPairsDropped', key: 'chunkPairsDroppedThisFloor', label: 'The drop took a severed suit’s last pairs', family: 'cascade', cadence: 'common', kind: 'tally', player: 'reference' },
+    { id: 'chunkPairsDropped', key: 'chunkPairsDroppedThisFloor', label: 'The drop took a severed suit’s last pairs', family: 'cascade', cadence: 'core', kind: 'tally', player: 'reference' },
     { id: 'feverBreaks', key: 'feverBreaksThisFloor', label: 'A break landed at Fever', family: 'cascade', cadence: 'common', kind: 'tally', player: 'reference' },
     { id: 'recallMatches', key: 'recallMatchesThisFloor', label: 'A pair was matched from memory', family: 'memory', cadence: 'core', kind: 'tally', player: 'reference' },
     { id: 'recallMistakes', key: 'recallMistakesThisFloor', label: 'A mismatch was made', family: 'memory', cadence: 'common', kind: 'tally', player: 'reference' },

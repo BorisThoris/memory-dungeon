@@ -55,23 +55,30 @@ describe('secondary objective rules', () => {
          * it off the board since Gen 259 - a four-pair two-suit board standing in for a twelve-pair
          * one silently asked for the narrow palette's par.
          */
+        // Eleven since 2026-09-23: 0.72 a pair plus the miss allowance is ten, and floor 6's
+        // eleven-pair reading is kept because a bigger board is never cheaper (`floor-par.ts`).
         const board = { ...run.board!, pairCount: 12, tiles: tilesOf(12, TILE_SUITS.length) };
-        expect(isWithinFloorPar({ ...run, turnsThisFloor: 7 }, board)).toBe(true);
-        expect(isWithinFloorPar({ ...run, turnsThisFloor: 8 }, board)).toBe(false);
+        expect(isWithinFloorPar({ ...run, turnsThisFloor: 11 }, board)).toBe(true);
+        expect(isWithinFloorPar({ ...run, turnsThisFloor: 12 }, board)).toBe(false);
         expect(isWithinFloorPar(run, { ...board, pairCount: 1 })).toBe(false);
     });
 
-    it('holds the same board to a tighter par when it was dealt a narrow palette', () => {
+    it('holds the same board to the same par whatever palette it was dealt', () => {
         /*
-         * Gen 259. The same twelve pairs over two suits pop a third faster, so seven turns is no
-         * longer within par on it - the objective was free on every scattered and spotlight floor.
+         * Gen 259 charged a narrow palette less because it popped a third faster. Since the break was
+         * capped (2026-09-23) the palette no longer changes what a match takes - measured, two suits
+         * and four are within 0.02 turns a pair - so the objective reads one par for both.
          */
         const run = createNewRun(0);
         const wide = { ...run.board!, pairCount: 12, tiles: tilesOf(12, TILE_SUITS.length) };
         const narrow = { ...wide, tiles: tilesOf(12, SCATTERED_SUIT_CEILING) };
-        expect(isWithinFloorPar({ ...run, turnsThisFloor: 7 }, narrow)).toBe(false);
-        expect(isWithinFloorPar({ ...run, turnsThisFloor: 6 }, narrow)).toBe(true);
-        expect(isWithinFloorPar({ ...run, turnsThisFloor: 7 }, wide)).toBe(true);
+        for (const turns of [10, 11, 12]) {
+            expect(isWithinFloorPar({ ...run, turnsThisFloor: turns }, narrow)).toBe(
+                isWithinFloorPar({ ...run, turnsThisFloor: turns }, wide)
+            );
+        }
+        expect(isWithinFloorPar({ ...run, turnsThisFloor: 11 }, wide)).toBe(true);
+        expect(isWithinFloorPar({ ...run, turnsThisFloor: 12 }, wide)).toBe(false);
     });
 
     it('uses the score table in reward copy', () => {

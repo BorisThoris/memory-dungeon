@@ -858,16 +858,13 @@ describe('game rules', () => {
         expect(resolved.status).toBe('levelComplete');
         expect(resolved.runEndReason).toBeNull();
         /*
-         * 30 for the match and 200 for the floor - 100 for the clear plus 100 of under-par
-         * efficiency, which pays 50 per turn under - plus 50 in floor objectives. The efficiency half
-         * is new since Gen 210: par on a one-pair floor was one turn and clearing it takes one, so
-         * this fixture was level with par rather than under it. Gen 220 gave the opening a second
-         * turn and so a second efficiency step, which is the tilt reaching the score as well as the
-         * target: an opening floor cleared the same way pays 50 x level more than it did.
+         * 30 for the match and 100 for the clear, plus 50 in floor objectives. Par is clamped at
+         * the board's pair count (2026-09-23), so a one-pair floor's par is one turn and clearing it
+         * in one is level with par: no under-par efficiency step, which pays only for turns under.
          */
-        expect(resolved.stats.totalScore).toBe(280);
-        expect(resolved.stats.currentLevelScore).toBe(280);
-        expect(resolved.lastLevelResult).toMatchObject({ turnsTaken: 1, playScore: 30, floorBonus: 200, floorBonusTierMult: 1 });
+        expect(resolved.stats.totalScore).toBe(180);
+        expect(resolved.stats.currentLevelScore).toBe(180);
+        expect(resolved.lastLevelResult).toMatchObject({ turnsTaken: 1, playScore: 30, floorBonus: 100, floorBonusTierMult: 1 });
         expect(resolved.lastLevelResult?.parTurns).toBe(parTurnsForFloor(resolved.board?.pairCount ?? 0));
         expect(resolved.stats.bestStreak).toBe(1);
         expect(resolved.stats.perfectClears).toBe(1);
@@ -908,9 +905,9 @@ describe('game rules', () => {
         // 230 rather than 180 since Gen 210: a one-pair floor's par is two turns, so a clear in one
         // is under par and earns the efficiency bonus it always should have. 280 since Gen 220, which
         // gave the opening a third turn of par and so a second 50-point step of that same bonus.
-        expect(resolved.stats.totalScore).toBe(280);
-        expect(resolved.stats.currentLevelScore).toBe(280);
-        expect(resolved.stats.bestScore).toBe(280);
+        expect(resolved.stats.totalScore).toBe(180);
+        expect(resolved.stats.currentLevelScore).toBe(180);
+        expect(resolved.stats.bestScore).toBe(180);
         expect(resolved.stats.levelsCleared).toBe(1);
         expect(resolved.stats.highestLevel).toBe(1);
         expect(resolved.stats.perfectClears).toBe(1);
@@ -931,18 +928,12 @@ describe('game rules', () => {
         expect(firstMatch.stats.totalScore).toBe(30);
         expect(firstMatch.stats.currentStreak).toBe(1);
         expect(secondMatch.status).toBe('levelComplete');
-        // Two turns on a two-pair floor whose par is three since Gen 220: the clear comes in a turn
-        // UNDER par, so it takes both the 50-point efficiency step and the within-par objective.
-        expect(secondMatch.stats.totalScore).toBe(70 + RECALL_FOCUS_MATCH_SCORE + 100 + 50 + 45 + 50);
-        expect(secondMatch.lastLevelResult).toMatchObject({ parTurns: 3, turnsTaken: 2 });
-        /*
-         * Two turns on a two-pair floor is under par since Gen 220 and was level with it since
-         * Gen 210, so the within-par objective pays its 45 either way and the total above carries
-         * it. The assertion here used to read `floorEfficiencyBonus: undefined` - a field this
-         * result never carries, so a condition nothing could fail either way.
-         */
-        expect(secondMatch.lastLevelResult?.floorBonus).toBe(150);
-        expect(secondMatch.stats.totalScore - (70 + RECALL_FOCUS_MATCH_SCORE + 150 + 50)).toBe(45);
+        // Two turns on a two-pair floor whose par is its pair count (clamped, 2026-09-23): level
+        // with par, so the within-par objective pays its 45 and the efficiency step pays nothing.
+        expect(secondMatch.stats.totalScore).toBe(70 + RECALL_FOCUS_MATCH_SCORE + 100 + 45 + 50);
+        expect(secondMatch.lastLevelResult).toMatchObject({ parTurns: 2, turnsTaken: 2 });
+        expect(secondMatch.lastLevelResult?.floorBonus).toBe(100);
+        expect(secondMatch.stats.totalScore - (70 + RECALL_FOCUS_MATCH_SCORE + 100 + 50)).toBe(45);
         expect(secondMatch.stats.bestStreak).toBe(2);
     });
 
@@ -960,12 +951,11 @@ describe('game rules', () => {
         expect(resolved.status).toBe('levelComplete');
         expect(resolved.runEndReason).toBeNull();
         /*
-         * A miss is a turn too: three turns, and the floor still pays its clear and its objectives.
-         * Since Gen 220 a two-pair floor's par is three, so this clear is level with par rather than
-         * over it - the within-par objective pays its 45 and the efficiency term pays nothing, which
-         * is what a floor that used every turn it was given should look like.
+         * A miss is a turn too: three turns on a two-pair floor whose par is two, so this clear is
+         * over par - the within-par objective is missed, the efficiency term pays nothing, and the
+         * floor still pays its clear and its other objective.
          */
-        expect(resolved.stats.totalScore).toBe(70 + RECALL_FOCUS_MATCH_SCORE + 100 + 50 + 45);
+        expect(resolved.stats.totalScore).toBe(70 + RECALL_FOCUS_MATCH_SCORE + 100 + 50);
         expect(resolved.lastLevelResult?.turnsTaken).toBe(3);
         expect(resolved.lastLevelResult?.perfect).toBe(false);
         expect(resolved.lastLevelResult?.mistakes).toBe(1);

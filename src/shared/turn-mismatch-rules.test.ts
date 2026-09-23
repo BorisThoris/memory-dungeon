@@ -266,10 +266,10 @@ describe('the turn ceiling', () => {
 
     it('opens a run on a full bank: twice par', () => {
         // A new run carries a full bank onto its first floor, so that floor's ceiling is the cap.
-        // A two-pair fixture's par is 3 (Gen 210's miss allowance, Gen 220's opening turn), so 6.
+        // A two-pair fixture's par is its pair count (par is clamped there since 2026-09-23), so 4.
         expect(TURN_BANK_CAP_PAR_MULTIPLIER).toBe(2);
-        expect(parTurnsForFloor(2)).toBe(3);
-        expect(ceiling).toBe(6);
+        expect(parTurnsForFloor(2)).toBe(2);
+        expect(ceiling).toBe(4);
         // A run built without a bank still reads the old per-board ceiling of three times par.
         expect(TURN_CEILING_PAR_MULTIPLIER).toBe(3);
         expect(turnCeilingForFloor(14)).toBe(parTurnsForFloor(14) * 3);

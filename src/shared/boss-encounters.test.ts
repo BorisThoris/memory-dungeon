@@ -103,7 +103,7 @@ describe('REG-076 boss and elite encounter identity', () => {
         ]);
         expect(rows[1]).toMatchObject({
             label: 'Keystone chamber',
-            activeReminder: 'Keystone: two suits, long chains.'
+            activeReminder: 'Keystone: three suits, a chain that is easy to keep.'
         });
         /*
          * Gen 201: these sentences are read in a run, so they have to describe the run. The whole
@@ -206,17 +206,20 @@ describe('what a floor tells the player about its palette', () => {
         }
     });
 
-    it('says a narrow palette widens the pop, because that is the direction it goes', () => {
+    it('says a narrow palette is a chain that is easier to keep, and never that it widens the pop', () => {
         /*
-         * The physics half. Gen 259 measured a two-suit board at 0.74 of a four-suit board's turns
-         * per pair - one suit over half the board means almost every match touches its own kind - so
-         * "two suits" and "many small pops" cannot both describe the same floor.
+         * The physics half, as it stands since 2026-09-23. Gen 259 measured a two-suit board at 0.74
+         * of a four-suit board's turns per pair, because every match touched its own kind and the
+         * pop reached far. The break is capped by rung now, so the palette no longer changes what a
+         * pop takes (re-measured: two suits and four within 0.02 turns a pair); what three suits
+         * still buys is a card of your kind close by, which is a chain that is easier to keep.
          */
         for (const floorArchetypeId of FLOOR_ARCHETYPE_IDS) {
             const narrow = suitCountForDeal(getSuitDealProfile(floorArchetypeId)) <= SCATTERED_SUIT_CEILING;
             const line = paletteMechanicLine(floorArchetypeId);
-            expect(/widest|long chains/i.test(line), `${floorArchetypeId}: "${line}"`).toBe(narrow);
-            expect(/small(er)? pops|short(er)? chains/i.test(line), `${floorArchetypeId}: "${line}"`).toBe(!narrow);
+            expect(/easier to keep|never far/i.test(line), `${floorArchetypeId}: "${line}"`).toBe(narrow);
+            expect(/more map|whatever the palette/i.test(line), `${floorArchetypeId}: "${line}"`).toBe(!narrow);
+            expect(/widest|wide pops|two suits/i.test(line), `${floorArchetypeId}: "${line}"`).toBe(false);
         }
     });
 

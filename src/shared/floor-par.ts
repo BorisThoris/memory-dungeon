@@ -1,7 +1,7 @@
 import type { BoardState, RunState } from './contracts';
 import { pairsForFloor } from './pair-curve';
 import { runNonNegativeInteger } from './run-number-guards';
-import { SCATTERED_SUIT_CEILING, TILE_SUITS, boardPaletteWidth } from './tile-suit-rules';
+import { TILE_SUITS, boardPaletteWidth } from './tile-suit-rules';
 
 /**
  * The par. Every floor states the number of turns a competent player should need, and the run
@@ -24,7 +24,7 @@ import { SCATTERED_SUIT_CEILING, TILE_SUITS, boardPaletteWidth } from './tile-su
  * player came in under par on 0.862 of floors against the 0.9 this target means to hold - so par
  * follows the board rather than the board being clumped back to fit par.
  */
-export const PAR_TURNS_PER_PAIR = 0.45;
+export const PAR_TURNS_PER_PAIR = 0.72;
 
 /**
  * Gen 211: par follows the pop, because the pop is what makes par achievable and its help is not
@@ -103,15 +103,27 @@ export const PAR_MISS_ALLOWANCE = 1;
  * board a player meets), and `boardPaletteWidth` reads an empty board as the full palette, so one
  * suit takes the narrow factor rather than an invented number of its own.
  */
-export const PAR_NARROW_PALETTE_RATE_FACTOR = 0.74;
+/*
+ * One since 2026-09-23. The discount was the pop's: a two-suit board popped further. With the break
+ * capped by rung the palette no longer changes what a match takes, and re-measured the controlled
+ * way - one board per seed, twenty-four seeds, re-dealt at two, three and four suits, played clean
+ * and at a 15% miss rate - two suits and four are within 0.02 turns a pair of each other at every
+ * size (0.610-0.757 against 0.607-0.765), and three suits sit 0.03-0.05 above four. No factor
+ * separates from noise, so par takes none. The function stays so a caller that knows its palette
+ * keeps its shape, and `floor-par.test.ts` holds it at one.
+ */
+export const PAR_NARROW_PALETTE_RATE_FACTOR = 1;
 
 /**
  * What a board's palette does to its par rate: one at three suits and four, the narrow factor at or
  * below `SCATTERED_SUIT_CEILING`.
  */
+/** The widest palette that takes the narrow factor: two suits. Three and four are the same board. */
+export const PAR_NARROW_PALETTE_SUITS = 2;
+
 export const parPaletteRateFactor = (suits: number): number => {
     const palette = Math.max(1, Math.min(TILE_SUITS.length, Math.floor(runNonNegativeInteger(suits)) || 1));
-    return palette <= SCATTERED_SUIT_CEILING ? PAR_NARROW_PALETTE_RATE_FACTOR : 1;
+    return palette <= PAR_NARROW_PALETTE_SUITS ? PAR_NARROW_PALETTE_RATE_FACTOR : 1;
 };
 
 /**
@@ -161,7 +173,13 @@ export const parRateForPairs = (pairs: number, suits: number = TILE_SUITS.length
  * `floor-par.test.ts` holds it there.
  */
 export const PAR_OPENING_FLOORS = 6;
-export const PAR_OPENING_ALLOWANCE = 1;
+/*
+ * Two since 2026-09-23. The pop is Clean's now, so the opening - where a chain has not been built
+ * yet - is the part of the game with the least help on the board, and the reference player's
+ * worst opening floor (the sixth, a scattered archetype) spent 0.88 of a one-turn par. Par is
+ * clamped at the pair count, so the first floors read exactly their pairs.
+ */
+export const PAR_OPENING_ALLOWANCE = 2;
 
 /** The largest board the opening deals. Read from the curve so the two cannot drift apart. */
 export const parOpeningPairs = (): number => pairsForFloor(PAR_OPENING_FLOORS);
@@ -169,10 +187,18 @@ export const parOpeningPairs = (): number => pairsForFloor(PAR_OPENING_FLOORS);
 export const parOpeningAllowanceForPairs = (pairs: number): number =>
     runNonNegativeInteger(pairs) <= parOpeningPairs() ? PAR_OPENING_ALLOWANCE : 0;
 
+/*
+ * Never above the board's own pair count: a par a perfect memory cannot miss without a single pop
+ * measures nothing. Floor 1 is the board this binds on - four pairs at the reference rate plus its
+ * two allowances would read five - and it is the line `floor-par.test.ts` holds.
+ */
 const parTurnsFromRate = (count: number, palette: number): number =>
-    Math.max(
-        1,
-        Math.ceil(count * parRateForPairs(count, palette)) + PAR_MISS_ALLOWANCE + parOpeningAllowanceForPairs(count)
+    Math.min(
+        count,
+        Math.max(
+            1,
+            Math.ceil(count * parRateForPairs(count, palette)) + PAR_MISS_ALLOWANCE + parOpeningAllowanceForPairs(count)
+        )
     );
 
 /**

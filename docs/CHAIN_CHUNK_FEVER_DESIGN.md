@@ -433,6 +433,56 @@ every seed, because the locks that build exists to buy a master key for are ones
 keyless on purpose. A keyless lock is content, not a softlock - a master key opens any of them,
 the exit included, and the shop sells one.
 
+## 13. The pop was taking the board (2026-09-23)
+
+The player's verdict, verbatim: *"the pop system isn't as good as I thought, cards aren't randomised
+properly in positioning, so you just end up popping half the board most of the time."* The positions
+had been a shuffle since Gen 204; the feeling was right and the cause was the pop. Measured on the
+scheduled floors with a player who never misses (eight seeds, floors 1-24): the player **matched 35%**
+of a floor's pairs and the pops took **65%**; the biggest break on a floor averaged **two thirds of
+the board**; on **172 floors of 192** a single break removed at least half of what was still standing.
+Every lever since Gen 197 - reach, corners at every tier, the bridge, the twelve-wave reaction, the
+two-suit recovery floor - had made the pop bigger to keep the ladder legible, and together they had
+made the memory game the smaller half of its own floors.
+
+### 13.1 The rule now
+
+- **A lone match just matches.** The pop is Clean's: from a chain of three, a match pops the same-suit
+  pair it is touching. Contact is unchanged - both halves in the wave, never across a gap.
+- **A break is capped by rung** (`BREAK_PAIR_CAP`): one pair at Clean, two at Sharp, four at Fever,
+  nearest first. The cap cuts the far end of a break, never the card the player was looking at.
+- **The reach is one step** (`BOUNDED_BREAK_REACH`), two from Clean. **Sharp runs two waves, Fever
+  three** (`SHARP_WAVES`, `RIPPLE_MAX_WAVES`); the bridge is Fever's alone, one clump.
+- **The drop takes one pair** (`SEVERANCE_DROP_MAX_PAIRS`): the last plain pair of a suit that can no
+  longer pop. It fires on nearly every floor and is banded `core` - it is the last-pair mercy of §41.2,
+  not a break.
+- **No floor past the first deals two suits**: one suit for every three pairs (`SUIT_TARGET_PAIRS`),
+  scattered and spotlight floors at three (`SCATTERED_SUIT_CEILING`). Measured the controlled way,
+  two suits and four are the same board now (§13.3), so the palette is a map, not a lever.
+- **The breather's rest** is one extra pair on every rung's cap (`BREATHER_BREAK_PAIR_BONUS`), because
+  its two-suit deal no longer bought it anything.
+
+### 13.2 What it did to a floor
+
+Same instrument, after: the player matches **61%** of a floor's pairs, the pops take 40% (a third of
+that the drop); the biggest break on a floor is **13-20%** of it; breaks are 0-3 pairs, a Fever break
+four. Half-board breaks fall from 172 of 192 floors to the late-floor artefact of taking two of the
+three pairs left. `sim:pop` reads the ladder at 0.00 / 0.66 / 0.95 / 2.34 pairs a match and the score
+ladder at x16 / x3.2 / x7.0 rung over rung; `CHAIN_RUNG_PAIRS` says 0 / 1 / 1 / 2.
+
+### 13.3 What it did to par, the ladder and the bands
+
+A floor takes twice the turns it did - a clean player 8.4 against 4.6 - so par was re-derived rather
+than patched: `PAR_TURNS_PER_PAIR` 0.45 -> 0.72 (the reference player's rate on a wide palette,
+measured 0.68-0.77), clamped at the board's pair count, the opening allowance two turns. The palette
+factor went to one: one board per seed, twenty-four seeds, re-dealt at two, three and four suits, two
+and four are within 0.02 turns a pair at every size and three sits 0.03-0.05 above four. Momentum
+comes almost wholly from matches now and there are twice as many, so the top rungs moved up:
+`CHAIN_TIER_SHARP_SHARE` 0.45 -> 0.55, `CHAIN_TIER_FEVER_SHARE` 0.62 -> 0.75; a clean player still
+reaches Fever on 0.83 of floors, the reference player on 0.17. The cascade bands were re-drawn around
+the smaller pop (chunk share of score 0.42, largest break 0.20), and every gate is green: pop reach,
+cascade, difficulty curve, archetype pressure, both censuses, depth, health, the softlock seeds.
+
 ## 12. Next batch
 
 | Gen | Task | Why |

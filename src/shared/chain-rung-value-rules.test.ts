@@ -59,7 +59,8 @@ describe('what the meter promises a rung is worth', () => {
         // the multiplier precisely because pairs alone can read flat while the payoff doubles - so
         // the strict climb is asserted on the multiplier, and on the pairs across the whole ladder.
         expect(chainRungPairs('none')).toBeLessThanOrEqual(chainRungPairs('clean'));
-        expect(chainRungPairs('clean')).toBeLessThan(chainRungPairs('sharp'));
+        // Clean and Sharp both round to a pair since the cap (2026-09-23); the multiplier tells them apart.
+        expect(chainRungPairs('clean')).toBeLessThanOrEqual(chainRungPairs('sharp'));
         expect(chainRungPairs('sharp')).toBeLessThan(chainRungPairs('fever'));
         expect(chainRungScoreMultiplier('none')).toBeLessThan(chainRungScoreMultiplier('clean'));
         expect(chainRungScoreMultiplier('clean')).toBeLessThan(chainRungScoreMultiplier('sharp'));

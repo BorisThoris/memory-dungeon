@@ -31,8 +31,11 @@ describe('the floor par', () => {
          * half-dozen levels, while the player is learning. Measured against par this game did the
          * opposite - floors 1-6 spent a mean 0.797 of their allowance against 0.640 deeper in.
          */
+        // 2026-09-23: par at 0.72 a pair plus two opening turns, clamped at the pair count, reads
+        // the pair count on every opening floor; floor 7 keeps floor 6's reading because a bigger
+        // board is never cheaper.
         expect([1, 2, 3, 4, 5, 6, 7].map((floor) => parTurnsForFloor(pairsForFloor(floor)))).toEqual([
-            4, 5, 6, 7, 7, 7, 7
+            4, 6, 7, 9, 10, 11, 11
         ]);
         expect(parOpeningAllowanceForPairs(pairsForFloor(PAR_OPENING_FLOORS))).toBe(PAR_OPENING_ALLOWANCE);
         expect(parOpeningAllowanceForPairs(pairsForFloor(PAR_OPENING_FLOORS + 1))).toBe(0);
@@ -104,14 +107,14 @@ const boardOf = (pairs: number, suits: number): BoardState => {
 };
 
 describe('par and the palette', () => {
-    it('charges a narrow palette less, and leaves three suits and four alone', () => {
-        // The measurement this rests on: 0.963 at three suits against four, three of eight sizes
-        // above one - no effect to separate from noise. Two suits is 0.739.
+    it('charges every palette the same, since the capped pop stopped the palette changing the board', () => {
+        // Re-measured the controlled way on 2026-09-23 (`PAR_NARROW_PALETTE_RATE_FACTOR`): two suits
+        // and four within 0.02 turns a pair of each other at every board size.
         expect(parPaletteRateFactor(TILE_SUITS.length)).toBe(1);
         expect(parPaletteRateFactor(3)).toBe(1);
         expect(parPaletteRateFactor(SCATTERED_SUIT_CEILING)).toBe(PAR_NARROW_PALETTE_RATE_FACTOR);
         expect(parPaletteRateFactor(1)).toBe(PAR_NARROW_PALETTE_RATE_FACTOR);
-        expect(PAR_NARROW_PALETTE_RATE_FACTOR).toBeLessThan(1);
+        expect(PAR_NARROW_PALETTE_RATE_FACTOR).toBe(1);
     });
 
     it('leaves every caller that does not know the palette exactly where it was', () => {
@@ -127,16 +130,12 @@ describe('par and the palette', () => {
         }
     });
 
-    it('charges a two-suit board strictly less than the same board with four, on every board that can carry four', () => {
-        let cut = 0;
+    it('charges a narrow board exactly what it charges a wide one', () => {
         for (let pairs = PAIRS_MIN; pairs <= PAIRS_MAX; pairs += 1) {
-            const narrow = parTurnsForFloor(pairs, SCATTERED_SUIT_CEILING);
-            const wide = parTurnsForFloor(pairs, TILE_SUITS.length);
-            expect(narrow, `narrow par at ${pairs} pairs`).toBeLessThanOrEqual(wide);
-            if (narrow < wide) cut += 1;
+            expect(parTurnsForFloor(pairs, SCATTERED_SUIT_CEILING), `par at ${pairs} pairs`).toBe(
+                parTurnsForFloor(pairs, TILE_SUITS.length)
+            );
         }
-        // Not a rule that rounds away to nothing: it bites on most of the curve's board sizes.
-        expect(cut).toBeGreaterThan((PAIRS_MAX - PAIRS_MIN) / 2);
     });
 
     it('keeps par missable and monotone at a narrow palette too', () => {
@@ -165,10 +164,10 @@ describe('par and the palette', () => {
         const wide = boardOf(20, TILE_SUITS.length);
         expect(parTurnsForBoard(narrow)).toBe(parTurnsForFloor(20, SCATTERED_SUIT_CEILING));
         expect(parTurnsForBoard(wide)).toBe(parTurnsForFloor(20, TILE_SUITS.length));
-        expect(parTurnsForBoard(narrow)).toBeLessThan(parTurnsForBoard(wide));
+        expect(parTurnsForBoard(narrow)).toBe(parTurnsForBoard(wide));
         // The ceiling is three times par, so it follows the palette rather than being read separately.
         expect(turnCeilingForBoard(narrow)).toBe(parTurnsForBoard(narrow) * TURN_CEILING_PAR_MULTIPLIER);
-        expect(turnCeilingForBoard(wide)).toBeGreaterThan(turnCeilingForBoard(narrow));
+        expect(turnCeilingForBoard(wide)).toBe(turnCeilingForBoard(narrow));
         // No board is the full palette's board, so nothing reads a missing one as a free floor.
         expect(parTurnsForBoard(null)).toBe(parTurnsForFloor(0));
     });

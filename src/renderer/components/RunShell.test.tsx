@@ -106,26 +106,27 @@ describe('RunShell', () => {
     });
 
     it('reads the ceiling on the par, and marks it once the floor is two turns from it', () => {
-        // Twelve pairs over the full palette: par 7 (Gen 204 moved par to 0.45 with the shuffled
-        // deal; Gen 220 gives a board this size a turn back). Arriving on a full turn bank, the
-        // ceiling is its cap of twice par, 14. The pressure of thesis §43 lives on the par stat.
+        // Twelve pairs over the full palette: par 11 (0.72 a pair since the pop was capped on
+        // 2026-09-23, the miss allowance, and floor 6's reading kept because a bigger board is never
+        // cheaper). Arriving on a full turn bank, the ceiling is its cap of twice par, 22. The
+        // pressure of thesis §43 lives on the par stat.
         const base = playingRun();
-        const calm: RunState = { ...base, board: overFullPalette(base.board!, 12), turnsThisFloor: 4, turnBankCarry: 14 };
+        const calm: RunState = { ...base, board: overFullPalette(base.board!, 12), turnsThisFloor: 4, turnBankCarry: 22 };
         const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={calm} tools={[]} />);
 
         const par = screen.getByTestId('hud-par');
         expect(within(par).getByRole('img')).toHaveAttribute(
             'aria-label',
-            '4 of 7 turns, 10 of 14 left before the run ends'
+            '4 of 11 turns, 18 of 22 left before the run ends'
         );
-        expect(par).toHaveTextContent('4 of 7 turns');
+        expect(par).toHaveTextContent('4 of 11 turns');
         expect(par).not.toHaveAttribute('data-ceiling-near');
 
-        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...calm, turnsThisFloor: 12 }} tools={[]} />);
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...calm, turnsThisFloor: 20 }} tools={[]} />);
         expect(screen.getByTestId('hud-par')).toHaveAttribute('data-ceiling-near', 'true');
         expect(within(screen.getByTestId('hud-par')).getByRole('img')).toHaveAttribute(
             'aria-label',
-            '12 of 7 turns, 2 of 14 left before the run ends'
+            '20 of 11 turns, 2 of 22 left before the run ends'
         );
     });
 
@@ -136,17 +137,17 @@ describe('RunShell', () => {
         // down, and it reaches zero on the turn the ceiling ends the run.
         const base = playingRun();
         const board = overFullPalette(base.board!, 12);
-        const early: RunState = { ...base, board, turnsThisFloor: 4, turnBankCarry: 14 };
+        const early: RunState = { ...base, board, turnsThisFloor: 4, turnBankCarry: 22 };
         const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={early} tools={[]} />);
 
         const left = (): HTMLElement => screen.getByTestId('hud-turns-left');
-        expect(left()).toHaveTextContent('10 left');
+        expect(left()).toHaveTextContent('18 left');
 
-        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, turnsThisFloor: 13 }} tools={[]} />);
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, turnsThisFloor: 21 }} tools={[]} />);
         expect(left()).toHaveTextContent('1 left');
 
         // Never below zero, so a floor resolved on its ceiling turn does not read as a negative.
-        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, turnsThisFloor: 16 }} tools={[]} />);
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, turnsThisFloor: 24 }} tools={[]} />);
         expect(left()).toHaveTextContent('0 left');
     });
 
@@ -155,23 +156,23 @@ describe('RunShell', () => {
         const run: RunState = {
             ...base,
             board: { ...base.board!, pairCount: 12 },
-            chunkPairsThisChain: 3,
+            chunkPairsThisChain: 4,
             stats: { ...base.stats, currentStreak: 3 }
         };
         render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={run} tools={[]} />);
 
         const chain = within(screen.getByTestId('hud-chain')).getByText(/Chain 3/);
-        // Twelve pairs: Sharp from 6, Fever from 8. A chain of 3 plus 3 cascaded pairs is Sharp.
+        // Twelve pairs: Sharp from 7, Fever from 9. A chain of 3 plus 4 cascaded pairs is Sharp.
         expect(chain).toHaveAttribute('data-chain-tier', 'sharp');
         expect(chain).toHaveTextContent(/Sharp/);
-        expect(chain).toHaveAttribute('title', expect.stringMatching(/momentum 6/));
-        expect(chain).toHaveAttribute('title', expect.stringMatching(/Sharp from 6 runs the reaction into the clump next door, Fever from 8/));
-        // The meter reads the same ladder: momentum 6 of 8, Sharp, not yet full.
+        expect(chain).toHaveAttribute('title', expect.stringMatching(/momentum 7/));
+        expect(chain).toHaveAttribute('title', expect.stringMatching(/Sharp from 7 .* Fever from 9/));
+        // The meter reads the same ladder: momentum 7 of 9, Sharp, not yet full.
         const meter = screen.getByTestId('hud-chain-meter');
         expect(meter).toHaveAttribute('data-chain-tier', 'sharp');
-        expect(meter).toHaveAttribute('data-meter-fill', '0.750');
+        expect(meter).toHaveAttribute('data-meter-fill', '0.778');
         expect(meter).toHaveAttribute('data-meter-full', 'false');
-        expect(meter).toHaveAttribute('aria-label', expect.stringContaining('Fever meter: momentum 6 of 8.'));
+        expect(meter).toHaveAttribute('aria-label', expect.stringContaining('Fever meter: momentum 7 of 9.'));
         const goal = screen.getByTestId('hud-chain-goal');
         expect(goal).toHaveTextContent('2 momentum to Fever');
         expect(goal).toHaveTextContent('×8 per pair');
@@ -508,7 +509,7 @@ describe('RunShell — The Margin', () => {
     };
 
     it('marks the rung the next pair buys, and only that one', () => {
-        // Twelve pairs: Clean 3, Sharp 6, Fever 8.
+        // Twelve pairs: Clean 3, Sharp 7, Fever 9.
         const climbing = ladderAtStreak(4);
         expect(climbing.sharp.next).toBe('true');
         expect(climbing.clean.next).toBeNull();
@@ -516,10 +517,10 @@ describe('RunShell — The Margin', () => {
     });
 
     it('leans on a rung only at the pair that lands it', () => {
-        expect(ladderAtStreak(4).sharp.imminent).toBeNull();
-        expect(ladderAtStreak(5).sharp.imminent).toBe('true');
+        expect(ladderAtStreak(5).sharp.imminent).toBeNull();
+        expect(ladderAtStreak(6).sharp.imminent).toBe('true');
         // Landed: the lean is gone, and the rung above is the one being climbed to now.
-        const landed = ladderAtStreak(6);
+        const landed = ladderAtStreak(7);
         expect(landed.sharp.imminent).toBeNull();
         expect(landed.sharp.next).toBeNull();
         expect(landed.fever.next).toBe('true');

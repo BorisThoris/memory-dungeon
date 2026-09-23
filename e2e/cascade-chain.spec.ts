@@ -46,23 +46,30 @@ test.describe('chain, chunk and Fever in the app', () => {
             return removed;
         });
 
-    test('the first match pops the clump it touches, with no chain behind it', async ({ page }) => {
+    test('a lone match just matches; the third match reaches Clean and pops the pair it touches', async ({ page }) => {
+        // 2026-09-23: the pop is Clean's (`BREAK_PAIR_CAP`). Two matches take their own pairs and
+        // nothing else; the third lights the chain and the pop takes the one pair it is touching.
         await openPlayablePathFixture(page, 'cascadeClump');
         await waitForBoardPlayPhase(page);
 
-        // Turn one, chain zero: the ladder has bought nothing yet.
         await expect(page.getByTestId('board-stage')).toHaveAttribute('data-chain-tier', 'none');
         expect(await readRemovedCount(page), 'nothing has left the board yet').toBe(0);
 
-        expect(await matchNextPair(page), 'the fixture offered a pair to match').toBe(true);
+        for (let match = 1; match <= 2; match += 1) {
+            expect(await matchNextPair(page), `the fixture offered pair ${match}`).toBe(true);
+            await page.waitForTimeout(700);
+            expect(await readRemovedCount(page), `match ${match} popped nothing with no chain behind it`).toBe(0);
+        }
+        await expect(page.getByTestId('board-stage')).toHaveAttribute('data-chain-tier', 'none');
+
+        expect(await matchNextPair(page), 'the fixture offered a third pair').toBe(true);
         await page.waitForTimeout(700);
 
         // The pair the player matched turns `matched`; every tile a pop took is `removed`. On this
-        // fixture the matched pair stands inside a column of its own suit, so the pop takes it.
+        // fixture the matched pair stands inside a column of its own suit, so Clean's pop takes one.
         const removed = await readRemovedCount(page);
-        expect(removed, 'the pop took the touching clump on the first match').toBeGreaterThan(0);
-        const chain = await page.getByTestId('hud-chain').textContent();
-        expect(chain ?? '', 'the pop happened at chain one, not at a tier').toMatch(/1/);
+        expect(removed, 'the pop took a pair on the third match').toBeGreaterThan(0);
+        await expect(page.getByTestId('board-stage')).toHaveAttribute('data-chain-tier', 'clean');
     });
 
     test('matching row by row breaks the clump, climbs the ladder, and clears the floor', async ({ page }) => {
@@ -139,7 +146,10 @@ test.describe('chain, chunk and Fever in the app', () => {
          *
          * On this board the top rung arrives on the same match that clears the floor - proven from
          * the rules in `src/shared/cascade-clump-fixture.test.ts`, third match, momentum 9 against a
-         * rung of 8 - because twelve pairs in three suit columns means every match pops two more
+         * rung (now 9; since the pop was capped on 2026-09-23 Fever arrives on the fifth match with a
+         * pair still standing, and the floor clears on the sixth - `cascade-clump-fixture.test.ts`)
+         * - the note below is the history of why this spec reads the beat rather than the stage:
+         * it used to be because twelve pairs in three suit columns meant every match popped two more
          * and momentum runs out exactly when the board does. The stage unmounts at that moment and
          * the floor-clear beat that states the tier is up for about a beat, so every way of reading
          * Fever from this page is a race: polling `data-chain-tier` lost it (this spec was red for

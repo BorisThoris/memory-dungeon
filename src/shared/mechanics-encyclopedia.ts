@@ -11,7 +11,7 @@
 import type { AchievementId, GameMode, MutatorId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 41 as const;
+export const ENCYCLOPEDIA_VERSION = 42 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -197,8 +197,8 @@ export const ACHIEVEMENT_CATALOG: Record<AchievementId, AchievementCodexEntry> =
     },
     ACH_CHUNK_SIX: {
         id: 'ACH_CHUNK_SIX',
-        title: 'Sixfold',
-        description: 'Take six pairs or more with a single chunk break.'
+        title: 'Fourfold',
+        description: 'Take four pairs or more with a single chunk break - a Fever break at its cap.'
     },
     ACH_EXTREME_FEVER: {
         id: 'ACH_EXTREME_FEVER',
@@ -536,14 +536,13 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         id: 'chain_chunk_fever',
         title: 'Chain, chunk and Fever',
         description:
-            'Every match pops: the same-suit cards the two tiles you matched are touching break away with them. ' +
-            'A pop only ever takes what it is touching - a pair goes when the wave holds **both** halves, and nothing is ever taken across a gap. ' +
-            'What the chain buys is how far the wave walks: two steps with no chain, four from chain 3 (Clean). ' +
-            'Sharp, about two-fifths of the floor\'s pairs of momentum and four at least, runs the reaction on from where the wave stopped and lets it **bridge** - crossing into the one clump its cards were touching, whatever that suit is. ' +
-            'Fever, about two-thirds and seven at least, bridges into three clumps. Every pair a break takes adds to the chain\'s momentum. ' +
+            'A match on its own just matches. Build a chain of three (Clean) and matches start to **pop**: a same-suit pair the two tiles you matched are touching breaks away with them. ' +
+            'A pop only ever takes what it is touching - a pair goes when the wave holds **both** halves, and nothing is ever taken across a gap - and it is capped by the rung: one pair at Clean, two at Sharp, four at Fever, nearest first. ' +
+            'Sharp, a little over half the floor\'s pairs of momentum and four at least, runs the reaction one wave on from where the pop stopped. ' +
+            'Fever, three quarters and seven at least, runs it three waves and lets it **bridge** into the one clump its cards were touching, whatever that suit is. Every pair a break takes adds to the chain\'s momentum. ' +
             'Treasure inside a break spills and pays as if you had matched it. A break pays a pair\'s worth times the pairs, times the tier it landed at (Clean ×2, Sharp ×4, Fever ×8), times the ripple (×1.75 for a second wave, up to ×6): a huge Fever reaction is worth hundreds of pops. Broken pairs give no recall credit - memory still pays best - but they ' +
             'clear the floor faster, and a longer ripple pays more. A miss halves the chain and puts the fire out. ' +
-            'A suit that can no longer pop - no two of its pairs within reach of each other - loses its last pairs on its own: that is the drop, and it happens at any chain, so breaking the two pairs that hold a third up is a thing you can aim. ' +
+            'A suit that can no longer pop - no two of its pairs within reach of each other - loses its last pair on its own: that is the drop, and it happens at any chain, so the last pair of a suit is never a pair you have to grind out. ' +
             'A break with a shape gets a name on the run line: a ripple that ran on, a drop, a long clump, a bridge into the suit next door, a treasure spill, a clean sweep of a suit. ' +
             'Clear the floor with momentum still standing and the floor-end bonus multiplies with the tier: 1.5x at Clean, 2.5x at Sharp, 5x at Fever - Extreme Fever. Never the rating.'
     },
@@ -553,8 +552,8 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         description:
             'Every tile wears one of four suits on its back — Ember, Tide, Moss or Bone — and both halves of a pair share it. ' +
             'Suits are shuffled across the board, so nothing is laid out for you and no two floors look alike. ' +
-            'A floor carries about one suit for every four pairs it deals, rounded up: the very first board shows two, the second shows three, and all four are out by around the tenth floor. '
-            + 'What the floor decides is the palette, not the layout: a breather or a treasure hall deals four suits, a rush, speed or trap floor deals two, and a spotlight floor deals two by design. Two suits is a board where almost everything can chain; four is a board where the route has to be found. ' +
+            'A floor carries about one suit for every three pairs it deals, rounded up: the very first board shows two, and all four are out by around the fifth floor. '
+            + 'What the floor decides is the palette, not the layout: a breather, a rush, a speed or a trap floor and a spotlight floor deal three suits, everything else four. No floor past the first deals two: one suit over half a board was a board where every match popped, and the pop is capped now, so the palette is a map to read rather than a lever. ' +
             'Focus or select a hidden tile and the board outlines the cards it is touching that share its suit, and says how many pairs a Sharp break there would take. ' +
             'The symbol on the front is still the thing to remember; the suit is the thing you can see.'
     },

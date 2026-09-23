@@ -96,21 +96,21 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         counter: 'feverBreaks',
         verdict: 'confirmed',
         generation: 261,
-        note: 'Ladder re-measured at none 1.63 / clean 2.40 / sharp 6.12 / fever 7.70 pairs per match, and the multiplier climbs strictly at every rung. Fever itself lands on 0.217 of floors, which is the top of the ladder being reachable rather than decorative. sim:cascade and sim:pop both hold their bands. Gen 260 moved both numbers: giving the recovery floor a two-suit deal put four more floors a cycle on the narrow palette, where one suit sits in bigger clumps - so a break takes more pairs and a floor ends sooner, which is fewer floors reaching the top rung and a larger break when one does. The meter follows it; CHAIN_RUNG_PAIRS says eight pairs at Fever now.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.388 x 0.47, Fever lands on more floors because momentum is matches now and a floor has twice as many. Before: Ladder re-measured at none 1.63 / clean 2.40 / sharp 6.12 / fever 7.70 pairs per match, and the multiplier climbs strictly at every rung. Fever itself lands on 0.217 of floors, which is the top of the ladder being reachable rather than decorative. sim:cascade and sim:pop both hold their bands. Gen 260 moved both numbers: giving the recovery floor a two-suit deal put four more floors a cycle on the narrow palette, where one suit sits in bigger clumps - so a break takes more pairs and a floor ends sooner, which is fewer floors reaching the top rung and a larger break when one does. The meter follows it; CHAIN_RUNG_PAIRS says eight pairs at Fever now.'
     },
     {
         id: 'board.cleanup',
         counter: 'chunkPairsDropped',
         verdict: 'confirmed',
         generation: 261,
-        note: 'The pop takes only cards in contact (Gen 197), and the drop fires on 0.397 of chain-one matches at 1.38 pairs a drop in sim:pop. The census reads the same mechanism from the other side: the drop takes a severed suit on 0.854 of floors. Gen 260 moved it from 0.871 with the recovery floor’s two-suit deal - a narrow palette leaves fewer suits to sever, and a floor that ends sooner gives the drop fewer chances. Both are measurements rather than the rule being read back.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.988 x 2.82, the drop is the last-pair mercy and fires on nearly every floor, banded core. Before: The pop takes only cards in contact (Gen 197), and the drop fires on 0.397 of chain-one matches at 1.38 pairs a drop in sim:pop. The census reads the same mechanism from the other side: the drop takes a severed suit on 0.854 of floors. Gen 260 moved it from 0.871 with the recovery floor’s two-suit deal - a narrow palette leaves fewer suits to sever, and a floor that ends sooner gives the drop fewer chances. Both are measurements rather than the rule being read back.'
     },
     {
         id: 'core.board_turn_resolution',
         counter: 'matchResolutions',
         verdict: 'confirmed',
         generation: 261,
-        note: 'The census reads 1.000 x 4.80 on the reference pass: every floor resolves turns, which is the one row that would be alarming at any other value. Re-measured at Gen 213 against par as Gen 211 left it; Gen 260 took it from 4.95 to 4.80 a floor, because a narrow palette on the recovery floor clears in fewer turns. Par follows it - `parTurnsForBoard` reads the palette since Gen 259 - so this is the shorter floor rather than a looser one.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung: 1.000 x 8.42, because a floor is matched by hand now and takes twice the turns it did. Before: The census reads 1.000 x 4.80 on the reference pass: every floor resolves turns, which is the one row that would be alarming at any other value. Re-measured at Gen 213 against par as Gen 211 left it; Gen 260 took it from 4.95 to 4.80 a floor, because a narrow palette on the recovery floor clears in fewer turns. Par follows it - `parTurnsForBoard` reads the palette since Gen 259 - so this is the shorter floor rather than a looser one.'
     },
     {
         id: 'objective.floor_clear',
@@ -126,7 +126,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         counter: 'trait.echo',
         verdict: 'changed',
         generation: 261,
-        note: 'Occupancy 0.388 x 0.42, banded common. Pays in peek charges, a currency the run still spends. Gen 205: it was the rarest of the four at 0.342, because two of the three interaction couples spend Conduit and Stasis and the fill meant to even the floor out drew uniformly instead. Re-measured at Gen 213 and the fill is still holding it level with Heavy.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.617 x 0.80, a floor takes twice the turns, so a trait pair is matched by hand more often. Before: Occupancy 0.388 x 0.42, banded common. Pays in peek charges, a currency the run still spends. Gen 205: it was the rarest of the four at 0.342, because two of the three interaction couples spend Conduit and Stasis and the fill meant to even the floor out drew uniformly instead. Re-measured at Gen 213 and the fill is still holding it level with Heavy.'
     },
     {
         id: 'trait.heavy',
@@ -134,7 +134,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         verdict: 'changed',
         generation: 261,
         gone: ['never drains peek charges'],
-        note: 'Its mismatch line promised "costs +1 extra try but never drains peek charges". Nothing in the game drains a peek charge on a mismatch, so the clause promised the absence of an impossible penalty. Cut; the true half stayed. Occupancy 0.412 x 0.44, which is the trait appearing about as often as Echo and rather less than the two lock traits.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.588 x 0.76, a floor takes twice the turns, so a trait pair is matched by hand more often. Before: Its mismatch line promised "costs +1 extra try but never drains peek charges". Nothing in the game drains a peek charge on a mismatch, so the clause promised the absence of an impossible penalty. Cut; the true half stayed. Occupancy 0.412 x 0.44, which is the trait appearing about as often as Echo and rather less than the two lock traits.'
     },
     {
         id: 'trait.conduit',
@@ -142,14 +142,14 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         verdict: 'changed',
         generation: 261,
         gone: ['combo shard'],
-        note: 'Its Echo payoff line, "Conduit + Echo: peek spark", was sorted into a lane called Shard and drawn on the card back as a combo shard - a currency removed in Gen 184. It reads Tool now, which is what a returned peek charge is. Occupancy 0.487 x 0.61, and no live source names the shard.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.729 x 1.17, a floor takes twice the turns, so a trait pair is matched by hand more often. Before: Its Echo payoff line, "Conduit + Echo: peek spark", was sorted into a lane called Shard and drawn on the card back as a combo shard - a currency removed in Gen 184. It reads Tool now, which is what a returned peek charge is. Occupancy 0.487 x 0.61, and no live source names the shard.'
     },
     {
         id: 'trait.stasis',
         counter: 'trait.stasis',
         verdict: 'confirmed',
         generation: 261,
-        note: 'Occupancy 0.508 x 0.66, banded common and the most common of the four. Both its interaction lines land in the block lane, which is what a lock does, and the lane survived the Gen 202 cull on evidence rather than by being overlooked.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.750 x 1.23, a floor takes twice the turns, so a trait pair is matched by hand more often. Before: Occupancy 0.508 x 0.66, banded common and the most common of the four. Both its interaction lines land in the block lane, which is what a lock does, and the lane survived the Gen 202 cull on evidence rather than by being overlooked.'
     },
 
     // ---- The powers a player can press. --------------------------------------------------------
@@ -158,14 +158,14 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         counter: 'peek',
         verdict: 'confirmed',
         generation: 261,
-        note: 'Occupancy 0.908 across whole runs, banded core, and it is the one run-scoped charge that clears that bar honestly: a run starts with a single peek and three of the floor curios grant another, so the charge keeps coming back. Read a floor at a time it was 1.000, which was true of 240 first floors rather than of a run (Gen 207).'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.933 x 0.93, runs reach the census cap again with the bank held open. Before: Occupancy 0.908 across whole runs, banded core, and it is the one run-scoped charge that clears that bar honestly: a run starts with a single peek and three of the floor curios grant another, so the charge keeps coming back. Read a floor at a time it was 1.000, which was true of 240 first floors rather than of a run (Gen 207).'
     },
     {
         id: 'power.pin',
         counter: 'pin',
         verdict: 'changed',
         generation: 261,
-        note: 'Re-banded core to common. It read 1.000 while the census pressed it at floor open regardless of the board; pressed after a miss, where a pin has a reason, it reads 0.158 of floors at 0.23 pins a floor. Gen 261 cut the clause calling 0.158 “the reference miss rate”: the miss rate is 0.471, and 0.158 is the share of floors on which the census finds a moment worth pinning at all.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.433 x 0.75, more turns a floor is more moments worth pinning after a miss. Before: Re-banded core to common. It read 1.000 while the census pressed it at floor open regardless of the board; pressed after a miss, where a pin has a reason, it reads 0.158 of floors at 0.23 pins a floor. Gen 261 cut the clause calling 0.158 “the reference miss rate”: the miss rate is 0.471, and 0.158 is the share of floors on which the census finds a moment worth pinning at all.'
     },
     {
         id: 'power.flash_pair',
@@ -200,14 +200,14 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         counter: 'undo',
         verdict: 'confirmed',
         generation: 261,
-        note: 'Occupancy 0.467 x 0.47, banded common, and correctly bounded: undo only exists while a pair is resolving, so it cannot exceed the miss rate by much. The reference miss rate is 0.471 of floors, which is the ceiling it sits just under. Gen 261 re-measured it: the note had said 0.483, so the margin it describes was reported as 0.016 when it is 0.004 - undo is now within a rounding step of the rate that bounds it, which is worth knowing before anything else moves the miss rate.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.667 x 0.67, more turns a floor is more resolving pairs to undo. Before: Occupancy 0.467 x 0.47, banded common, and correctly bounded: undo only exists while a pair is resolving, so it cannot exceed the miss rate by much. The reference miss rate is 0.471 of floors, which is the ceiling it sits just under. Gen 261 re-measured it: the note had said 0.483, so the margin it describes was reported as 0.016 when it is 0.004 - undo is now within a rounding step of the rate that bounds it, which is worth knowing before anything else moves the miss rate.'
     },
     {
         id: 'power.gambit',
         counter: 'gambit',
         verdict: 'confirmed',
         generation: 261,
-        note: 'Occupancy 0.458 x 0.46, banded common. One third flip per floor, spent on the first miss, which is the only moment it can be spent - so its share tracks the chance a floor has a miss at all.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.671 x 0.67, more turns a floor is more first misses to spend the third flip on. Before: Occupancy 0.458 x 0.46, banded common. One third flip per floor, spent on the first miss, which is the only moment it can be spent - so its share tracks the chance a floor has a miss at all.'
     },
     {
         id: 'power.wild_match',
@@ -289,7 +289,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         counter: 'magpieThefts',
         verdict: 'changed',
         generation: 261,
-        note: 'Occupancy 0.008 across whole runs, banded rare, and until Gen 208 it had no counter at all and was not in the interaction graph - so the ledger claim to cover every system had never covered the one mechanic that takes finished work back off the player. The floor census reads it SILENT, true of 240 first floors and false of the game: the bird arrives on every third mismatch OF THE RUN, so a census that restarts every floor almost never reaches it. It is announced when it steals (Gen 113) and the graph now records that reader. Gen 260 took it from 0.013 to 0.008: the breather it rides deals two suits now, so the floor ends in fewer turns and the bird’s every-third-miss trigger lands on it less often. Still reachable and still banded by the run census, but the nest is the wrong floor for it now - a thief is not relief, and a pressure floor would give it more to take.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.029 x 0.03, a floor takes twice the turns, so the third miss of the run arrives while the bird\'s floor is still open. Before:Occupancy 0.008 across whole runs, banded rare, and until Gen 208 it had no counter at all and was not in the interaction graph - so the ledger claim to cover every system had never covered the one mechanic that takes finished work back off the player. The floor census reads it SILENT, true of 240 first floors and false of the game: the bird arrives on every third mismatch OF THE RUN, so a census that restarts every floor almost never reaches it. It is announced when it steals (Gen 113) and the graph now records that reader. Gen 260 took it from 0.013 to 0.008: the breather it rides deals two suits now, so the floor ends in fewer turns and the bird’s every-third-miss trigger lands on it less often. Still reachable and still banded by the run census, but the nest is the wrong floor for it now - a thief is not relief, and a pressure floor would give it more to take.'
     },
     {
         id: 'safety.softlock_fairness',
@@ -311,7 +311,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         verdict: 'changed',
         generation: 261,
         gone: ['no shuffle, swap, or destroy'],
-        note: 'The scholar-style objective told the player "no shuffle, swap, or destroy" while its rule watched one field that covers swap too, so only the dead third was cut; Gen 213 found the same phrasing describing the Scholar preset and cut it there. Gen 216 finally counted the thing: 0.821 of a run’s floors clear their featured objective, and every floor carries one. Gen 259 moved it from 0.829: the within-par objective now reads the palette its floor was dealt, so on the third of floors held to two suits it is a target rather than a formality. Its census exemption had said it needed the run-level census, which shipped at Gen 207 - the line went on excusing the mechanic for eight generations after its own stated blocker was gone.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.800 x 0.80, within-par reads the re-derived par. Before: The scholar-style objective told the player "no shuffle, swap, or destroy" while its rule watched one field that covers swap too, so only the dead third was cut; Gen 213 found the same phrasing describing the Scholar preset and cut it there. Gen 216 finally counted the thing: 0.821 of a run’s floors clear their featured objective, and every floor carries one. Gen 259 moved it from 0.829: the within-par objective now reads the palette its floor was dealt, so on the third of floors held to two suits it is a target rather than a formality. Its census exemption had said it needed the run-level census, which shipped at Gen 207 - the line went on excusing the mechanic for eight generations after its own stated blocker was gone.'
     },
     {
         id: 'economy.score_and_rewards',

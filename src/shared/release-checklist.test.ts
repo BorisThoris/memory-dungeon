@@ -115,7 +115,7 @@ const VERIFIERS: Record<string, () => void> = {
         }
         // The clumped board: a Fever chain on the first pair breaks its clump and the halo.
         const fixture = createPlayablePathFixture('cascadeClump').run!;
-        const broken = resolveChunkBreak({ board: fixture.board!, run: fixture, matchedTileIds: ['em1-A', 'em1-B'], chain: 8 });
+        const broken = resolveChunkBreak({ board: fixture.board!, run: fixture, matchedTileIds: ['em1-A', 'em1-B'], chain: 9 });
         expect(broken.tier).toBe('fever');
         expect(broken.brokenPairKeys.length).toBeGreaterThan(0);
     },
@@ -141,8 +141,8 @@ const VERIFIERS: Record<string, () => void> = {
         const row = makeBoard(rowTiles, { columns: 12, rows: 1, level: 3 });
         const run = createNewRun(0, { gameMode: 'endless', runSeed: 7 });
         const lone = resolveChunkBreak({ board: row, run, matchedTileIds: ['A1', 'A2'], chain: 1 });
-        expect(lone.wavePairKeys, 'a lone match walks two steps and takes what is touching').toEqual([['B']]);
-        expect(lone.waves).toBe(1);
+        expect(lone.wavePairKeys, 'a lone match is a match: the pop is Clean\'s (2026-09-23)').toEqual([]);
+        expect(lone.waves).toBe(0);
         const split = makeBoard(
             rowTiles.map((t) => (t.id === 'B2' ? rowTile('T1') : t.id === 'T1' ? rowTile('B2') : t)),
             { columns: 12, rows: 1, level: 3 }
@@ -150,10 +150,12 @@ const VERIFIERS: Record<string, () => void> = {
         const halfOut = resolveChunkBreak({ board: split, run, matchedTileIds: ['A1', 'A2'], chain: 3 });
         expect(halfOut.wavePairKeys.flat(), 'a pair with a half outside the wave is never reached').not.toContain('B');
         const clean = resolveChunkBreak({ board: row, run, matchedTileIds: ['A1', 'A2'], chain: 3 });
-        expect(clean.wavePairKeys, 'Clean walks four steps: the same wave, twice as far').toEqual([['B', 'C']]);
+        expect(clean.wavePairKeys, 'Clean pops the one pair it is touching').toEqual([['B']]);
         const sharp = resolveChunkBreak({ board: row, run, matchedTileIds: ['A1', 'A2'], chain: 4 });
-        expect(sharp.wavePairKeys, 'Sharp runs the reaction on from where the wave stopped').toEqual([['B', 'C'], ['D']]);
-        expect(sharp.board.tiles.find((t) => t.id === 'D2')?.brokenAtWave).toBe(1);
+        expect(sharp.wavePairKeys, 'Sharp runs the reaction one wave on from where the pop stopped').toEqual([['B'], ['C']]);
+        expect(sharp.board.tiles.find((t) => t.id === 'C2')?.brokenAtWave).toBe(1);
+        const fever = resolveChunkBreak({ board: row, run, matchedTileIds: ['A1', 'A2'], chain: 7 });
+        expect(fever.wavePairKeys, 'Fever runs it three waves').toEqual([['B'], ['C'], ['D']]);
     },
     'the-drop': () => {
         const suit = (id: string) => (['A', 'B', 'C'].includes(id[0]!) ? 'ember' : 'tide');
@@ -164,7 +166,7 @@ const VERIFIERS: Record<string, () => void> = {
         const clean = resolveChunkBreak({ board, run, matchedTileIds: ['A1', 'A2'], chain: 3 });
         expect(clean.droppedPairKeys, 'the cut-off pair drops at Clean').toEqual(['C']);
         const lone = resolveChunkBreak({ board, run, matchedTileIds: ['A1', 'A2'], chain: 1 });
-        expect(lone.droppedPairKeys, 'and with no chain behind the match at all').toEqual(['C']);
+        expect(lone.droppedPairKeys, 'and not before: with no pop B still holds C up').toEqual([]);
     },
     'ripple-records': () => {
         const run = createNewRun(0, { gameMode: 'endless', runSeed: 7 });

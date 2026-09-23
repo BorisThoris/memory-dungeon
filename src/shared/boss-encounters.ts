@@ -29,9 +29,11 @@ import { SCATTERED_SUIT_CEILING, getSuitDealProfile, suitCountForDeal } from './
  */
 export const paletteMechanicLine = (floorArchetypeId: FloorArchetypeId | null | undefined): string => {
     const { suits, narrow } = floorPaletteRead(floorArchetypeId);
+    // 2026-09-23: the break is capped by rung, so the palette no longer changes what a pop takes.
+    // A narrow palette is three suits and a chain that is easier to keep; a wide one is more map.
     return narrow
-        ? `Two-suit deal: long chains, the widest pops of the run.`
-        : `${suits}-suit deal: shorter chains, many smaller pops.`;
+        ? `Three-suit deal: a card of your kind is never far, so a chain is easier to keep.`
+        : `${suits}-suit deal: more map to read; a pop takes what it touches, whatever the palette.`;
 };
 
 export const floorPaletteRead = (
@@ -223,18 +225,18 @@ export const getFloorIdentityContract = ({
             id: 'boss_trophy_moment',
             label: 'Keystone chamber',
             teachingSentence: keystone.narrow
-                ? `A keystone floor deals two suits, so more of what you match is touching its own kind than on an ordinary floor.${objectiveSuffix(featuredObjectiveLabel)}`
-                : `This keystone deals the full ${keystone.suits} suits, so a pop reaches less of the board and the pressure is the board's size rather than the chain.${objectiveSuffix(featuredObjectiveLabel)}`,
+                ? `A keystone floor deals three suits, so the card you need is never far to look for and the chain is easier to keep.${objectiveSuffix(featuredObjectiveLabel)}`
+                : `This keystone deals the full ${keystone.suits} suits: more map to read, and the pressure is the board's size rather than the chain.${objectiveSuffix(featuredObjectiveLabel)}`,
             counterplaySentence: mutators.includes('short_memorize')
                 ? 'The study window is short here: learn the board in one look, then let the tools carry the floor rather than the memory.'
                 : 'Take the pairs whose suit still has neighbours first; the isolated ones pay the same whenever you take them.',
             floorClearSentence: keystone.narrow
-                ? 'Keystone cleared. On two suits the pops are the widest of the run; what you chose was the order.'
-                : `Keystone cleared. On ${keystone.suits} suits the score comes from many small pops rather than one big one.`,
+                ? 'Keystone cleared. On three suits the chain was easy to keep; what you chose was the order.'
+                : `Keystone cleared. On ${keystone.suits} suits the score came from the chain you kept rather than from any one pop.`,
             atmosphericFeedback: 'The Keystone chamber goes quiet, but the last matched pair still hangs in the air.',
             activeReminder: keystone.narrow
-                ? 'Keystone: two suits, long chains.'
-                : `Keystone: ${keystone.suits} suits, short chains.`,
+                ? 'Keystone: three suits, a chain that is easy to keep.'
+                : `Keystone: ${keystone.suits} suits, read the map.`,
             warningLevel: 'danger',
             tokens: ['objective', 'risk', 'reward', 'momentum']
         };
@@ -244,11 +246,11 @@ export const getFloorIdentityContract = ({
         return {
             id: 'narrow_palette_hall',
             label: floorArchetypeId === 'speed_trial' ? 'Speed trial' : 'Narrow hall',
-            teachingSentence: `Two suits on this floor, so almost every card has its own kind somewhere against it.${objectiveSuffix(featuredObjectiveLabel)}`,
-            counterplaySentence: 'A narrow palette is a chaining floor. Hold a known pair until a match has popped beside it and the tier will carry.',
-            floorClearSentence: 'Cleared. On a two-suit floor the pops are wide; what you choose is the order.',
+            teachingSentence: `Three suits on this floor, so a card of your own kind is never far to look for.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: 'A narrow palette is a chaining floor. Hold a known pair until the chain is at Clean and the pop will take what it touches.',
+            floorClearSentence: 'Cleared. On a three-suit floor the chain is easy to keep; what you choose is the order.',
             atmosphericFeedback: 'The chalk rings fade one at a time, in the order you found them.',
-            activeReminder: 'Two suits: the pops here are the widest of the run.',
+            activeReminder: 'Three suits: the chain is easy to keep here.',
             warningLevel: 'warning',
             tokens: ['risk', 'reward', 'resolved', 'momentum']
         };
@@ -258,11 +260,11 @@ export const getFloorIdentityContract = ({
         return {
             id: 'two_suit_hunt',
             label: 'Spotlight hunt',
-            teachingSentence: `Two suits only, whatever the board's size - the narrowest palette the deal ever gives you.${objectiveSuffix(featuredObjectiveLabel)}`,
-            counterplaySentence: 'This is the floor to chain on. Hold a known pair back until a match has already popped beside it and the tier will carry.',
-            floorClearSentence: 'Spotlight cleared. Two suits is the widest reach a pop ever gets.',
+            teachingSentence: `Three suits, whatever the board's size - the narrowest palette the deal gives you past the first floor.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: 'This is the floor to chain on. Hold a known pair back until the chain is at Clean and the pop will take what it touches.',
+            floorClearSentence: 'Spotlight cleared. Three suits is the narrowest palette a floor gets, and the easiest chain to keep.',
             atmosphericFeedback: 'The spotlight swings off the last pair and the hall goes even.',
-            activeReminder: 'Two suits: the deepest chains of the run live here.',
+            activeReminder: 'Three suits: the easiest chains of the run live here.',
             warningLevel: 'reward',
             tokens: ['reward', 'momentum', 'objective']
         };
@@ -296,15 +298,15 @@ export const getFloorIdentityContract = ({
             id: 'recovery_study_room',
             label: 'Recovery study',
             teachingSentence: rest.narrow
-                ? `A breather asks for less and deals two suits, so the clumps are wide and a broken chain is cheap to rebuild.${objectiveSuffix(featuredObjectiveLabel)}`
-                : `A breather asks for less, and this one deals the full ${rest.suits} suits, so the pops are narrower and the floor is a place to bank rather than to chain.${objectiveSuffix(featuredObjectiveLabel)}`,
+                ? `A breather asks for less and deals three suits, and every break here takes a pair more than it would elsewhere, so a broken chain is cheap to rebuild.${objectiveSuffix(featuredObjectiveLabel)}`
+                : `A breather asks for less, and this one deals the full ${rest.suits} suits, so the floor is a place to bank rather than to chain.${objectiveSuffix(featuredObjectiveLabel)}`,
             counterplaySentence: 'Charges do not carry a premium for being saved. Spend them on the floor that is easy to read and bank the score.',
             floorClearSentence: rest.narrow
-                ? 'Breather cleared. Two suits means the pops were wide, and the floor never pushed back.'
-                : `Breather cleared. ${rest.suits} suits means the pops were narrow, but the floor never pushed back.`,
+                ? 'Breather cleared. The breaks ran a pair deeper here, and the floor never pushed back.'
+                : `Breather cleared. ${rest.suits} suits, and the floor never pushed back.`,
             atmosphericFeedback: 'The study lamps keep burning after you leave, holding the next route in soft focus.',
             activeReminder: rest.narrow
-                ? 'Breather: two wide suits, cheap floor to rebuild a chain on.'
+                ? 'Breather: three suits, breaks a pair deeper, cheap floor to rebuild a chain on.'
                 : `Breather: ${rest.suits} suits, cheap floor to bank on.`,
             warningLevel: 'safe',
             tokens: ['safe', 'hidden_known', 'reward', 'momentum']

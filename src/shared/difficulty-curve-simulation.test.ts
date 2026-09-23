@@ -40,18 +40,19 @@ describe('the difficulty curve', () => {
     });
 
     it('gives every floor a miss allowance and the big ones a rising rate', () => {
-        // Four and five since Gen 220, which gave the first six floors a turn; see `floor-par.test.ts`.
+        // The pair count on the opening floors since 2026-09-23 (par is clamped there); see `floor-par.test.ts`.
         expect(parTurnsForFloor(pairsForFloor(1))).toBe(4);
-        expect(parTurnsForFloor(pairsForFloor(2))).toBe(5);
+        expect(parTurnsForFloor(pairsForFloor(2))).toBe(6);
         /*
          * The rate is flat to thirteen pairs and rises after it, because that is where the pop's
          * share of the board stops keeping up (Gen 211). Par on the biggest board the game deals is
          * 19 rather than the 11 a flat rate gave, against a clean player's measured 14.6 to 15.8.
          */
         expect(PAR_FLAT_RATE_PAIRS).toBe(13);
-        expect(parTurnsForFloor(13)).toBe(7);
-        expect(parTurnsForFloor(14)).toBe(8);
-        expect(parTurnsForFloor(24)).toBe(19);
+        expect(parTurnsForFloor(13)).toBe(11);
+        expect(parTurnsForFloor(14)).toBe(12);
+        // The biggest board reads its own pair count: the rate reaches one there and par is clamped.
+        expect(parTurnsForFloor(24)).toBe(24);
         // Monotone: a bigger board never asks for fewer turns than a smaller one.
         for (let pairs = 2; pairs <= 24; pairs += 1) {
             expect(parTurnsForFloor(pairs), `par at ${pairs} pairs`).toBeGreaterThanOrEqual(parTurnsForFloor(pairs - 1));
@@ -69,7 +70,7 @@ describe('the difficulty curve', () => {
         expect(judgeDifficultyCurve([{ floor: 1, pairs: 4, suits: 2, turns: 22, par: 3, poppedPairs: 2 }])).toEqual([
             'floor 1 takes 22.0 turns, over 20',
             'floor 1 takes 22.0 turns against a par of 3',
-            "floor 1 spends 7.333 of its par, over the opening's 0.8"
+            "floor 1 spends 7.333 of its par, over the opening's 0.85"
         ]);
         expect(judgeDifficultyCurve([{ floor: 1, pairs: 4, suits: 2, turns: 1, par: 3, poppedPairs: 2 }])).toEqual([
             'floor 1 is over in 1.0 turns, under 2'
@@ -102,7 +103,7 @@ describe('the difficulty curve', () => {
                 { floor: 10, pairs: 13, suits: 4, turns: 6, par: 7, poppedPairs: 8 }
             ])
         ).toEqual([
-            "floor 2 spends 0.900 of its par, over the opening's 0.8",
+            "floor 2 spends 0.900 of its par, over the opening's 0.85",
             'the opening is the tight end: floor 2 spends 0.900 of its par against floor 10\'s 0.857 deeper in'
         ]);
     });

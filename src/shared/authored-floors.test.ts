@@ -10,7 +10,8 @@ import {
 } from './authored-floors';
 import { buildBoard } from './board-build-rules';
 import { chainTierRungs } from './chain-tier-rules';
-import { BOUNDED_BREAK_REACH, resolveChunkBreak } from './chunk-break-rules';
+import { CLEAN_BREAK_REACH, resolveChunkBreak } from './chunk-break-rules';
+import { CHAIN_TIER_CLEAN_FROM } from './chain-tier-rules';
 import { pairsForFloor } from './pair-curve';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
 import { isSingletonUtilityPairKey, WILD_PAIR_KEY } from './tile-identity';
@@ -197,11 +198,13 @@ describe('the authored floors', () => {
 });
 
 describe('N6: the first pop', () => {
+    // 2026-09-23: a lone match pops nothing; the first pop is the Clean chain's, so the opening's
+    // guarantee is read at that rung - a player three matches in on floor 1 sees the board answer.
     it('floor 1: whatever the player matches first, at least one other pair pops with it', () => {
         for (const [where, board] of boardsUnderTest(1)) {
             for (const [key, halves] of realPairs(board)) {
-                const result = resolveChunkBreak({ board, run, matchedTileIds: halves.map((t) => t.id), chain: 0 });
-                expect(result.tier, `${where} match ${key}`).toBe('none');
+                const result = resolveChunkBreak({ board, run, matchedTileIds: halves.map((t) => t.id), chain: CHAIN_TIER_CLEAN_FROM });
+                expect(result.tier, `${where} match ${key}`).toBe('clean');
                 expect(result.brokenPairKeys.length, `${where} match ${key}`).toBeGreaterThanOrEqual(1);
                 expect(result.brokenPairKeys, `${where} match ${key}`).not.toContain(key);
             }
@@ -224,7 +227,7 @@ describe('N6: the first pop', () => {
             expect(new Set(board.tiles.map((tile) => tile.suit)).size, where).toBe(2);
             for (const [key, halves] of realPairs(board)) {
                 const suit = halves[0]!.suit;
-                const result = resolveChunkBreak({ board, run, matchedTileIds: halves.map((t) => t.id), chain: 0 });
+                const result = resolveChunkBreak({ board, run, matchedTileIds: halves.map((t) => t.id), chain: CHAIN_TIER_CLEAN_FROM });
                 expect(result.brokenPairKeys.length, `${where} match ${key} pops`).toBeGreaterThanOrEqual(1);
                 const taken = board.tiles.filter((tile) => result.brokenTileIds.includes(tile.id));
                 expect(taken.map((tile) => tile.suit), `${where} match ${key} stays in suit`).toEqual(taken.map(() => suit));
@@ -254,7 +257,7 @@ describe('N6: the first pop', () => {
                     expect(taken.map((tile) => tile.suit), `${where} match ${key} chain ${chain}`).toEqual(taken.map(() => suit));
                 }
                 // The clumps are small enough that a lone match pops here too.
-                const lone = resolveChunkBreak({ board, run, matchedTileIds: halves.map((t) => t.id), chain: 0 });
+                const lone = resolveChunkBreak({ board, run, matchedTileIds: halves.map((t) => t.id), chain: CHAIN_TIER_CLEAN_FROM });
                 expect(lone.brokenPairKeys.length, `${where} match ${key}`).toBeGreaterThanOrEqual(1);
             }
         }
@@ -325,7 +328,7 @@ describe('N6: the first pop', () => {
                 expect(cells.length, `floor ${level} ${suit} is two pairs`).toBe(4);
                 for (const matched of pairings(cells)) {
                     const rest = cells.filter((cell) => !matched.includes(cell));
-                    const region = boundedWave(layout, matched, BOUNDED_BREAK_REACH);
+                    const region = boundedWave(layout, matched, CLEAN_BREAK_REACH);
                     expect(rest.every((cell) => region.has(cell)), `floor ${level} ${suit} match ${matched}`).toBe(true);
                 }
             }
@@ -366,8 +369,8 @@ describe('N7: the split pair on floor 3', () => {
             const { key, near } = splitOf(board);
             for (const [matched, halves] of realPairs(board)) {
                 if (matched === key || halves[0]!.suit !== board.tiles[near]!.suit) continue;
-                const result = resolveChunkBreak({ board, run, matchedTileIds: halves.map((t) => t.id), chain: 0 });
-                expect(result.tier).toBe('none');
+                const result = resolveChunkBreak({ board, run, matchedTileIds: halves.map((t) => t.id), chain: CHAIN_TIER_CLEAN_FROM });
+                expect(result.tier).toBe('clean');
                 expect(result.wavePairKeys.flat(), `${where} match ${matched}`).not.toContain(key);
                 if (result.brokenPairKeys.includes(key)) {
                     expect(result.droppedPairKeys, `${where} match ${matched}`).toContain(key);
@@ -413,7 +416,7 @@ describe('N7: the split pair on floor 3', () => {
         const clump = layout.cells.flatMap((suit, cell) => (suit === 'ember' && cell !== near && cell !== layout.splitCells![1] ? [cell] : []));
         expect(clump.length, 'the clump is two pairs').toBe(4);
         for (const matched of pairings(clump)) {
-            const region = boundedWave(layout, matched, BOUNDED_BREAK_REACH);
+            const region = boundedWave(layout, matched, CLEAN_BREAK_REACH);
             expect(region.has(near), `pair at ${matched}`).toBe(true);
             // And the clump's other pair goes, which is what the player sees the wave do.
             const rest = clump.filter((cell) => !matched.includes(cell));

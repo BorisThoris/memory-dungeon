@@ -53,7 +53,7 @@ export const CHAIN_TIER_FEVER_FROM = 10;
  * reference player at 0.17 with a clean player at 0.44 - a separation of 2.6 against a band of
  * 1.5. `docs/BALANCE_NOTES.md`, Gen 191 and Gen 192.
  */
-export const CHAIN_TIER_SHARP_SHARE = 0.45;
+export const CHAIN_TIER_SHARP_SHARE = 0.55;
 /*
  * Half the floor, not two thirds.
  *
@@ -74,7 +74,7 @@ export const CHAIN_TIER_SHARP_SHARE = 0.45;
  * Gen 192 nudged it to 0.62, because taking the settle out made floors longer again and left the
  * reference player sitting exactly on the 0.22 ceiling with no margin for the next change.
  */
-export const CHAIN_TIER_FEVER_SHARE = 0.62;
+export const CHAIN_TIER_FEVER_SHARE = 0.75;
 export const CHAIN_TIER_SHARP_MIN = 4;
 export const CHAIN_TIER_FEVER_MIN = 7;
 

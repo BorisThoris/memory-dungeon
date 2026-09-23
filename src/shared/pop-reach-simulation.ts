@@ -76,9 +76,9 @@ export interface PopReachLevelReport {
     meanWholePairs: number;
     /** Pairs a break could actually take: what the suit palette is sized against. */
     meanSuits: number;
-    /** Share of matches on this floor that pop at least one other pair, at chain one. */
+    /** Share of matches on this floor that pop at least one other pair, at the Clean rung. */
     popRate: number;
-    /** Mean pairs a match takes with it, at chain one. */
+    /** Mean pairs a match takes with it, at the Clean rung. */
     pairsPerMatch: number;
 }
 
@@ -87,7 +87,7 @@ export interface PopReachLevelReport {
  * fat tail - a drop handing over a clump that was not nearly gone - is a number and not a fear.
  */
 export interface PopReachDropReport {
-    /** Share of chain-one matches whose severance dropped at least one pair. */
+    /** Share of matches at the Clean rung whose severance dropped at least one pair. */
     dropRate: number;
     /** Pairs per drop event, by count: index 1 is one pair, index 2 two pairs, and so on. */
     pairsPerDrop: number[];
@@ -141,7 +141,10 @@ export const simulatePopReach = (levels = 12, seeds: readonly number[] = POP_REA
                 if (halves.some((half) => half.state !== 'hidden')) continue;
                 matches += 1;
                 const matchedTileIds = halves.map((half) => half.id);
-                const broke = resolveChunkBreak({ board, run, matchedTileIds, chain: 1 });
+                // The pop is Clean's since 2026-09-23 - a lone match takes nothing but the drop - so
+                // the loop's reach is read at the rung where it starts, which is what "is the loop
+                // reachable on this floor" means now. The ladder below still reads every rung.
+                const broke = resolveChunkBreak({ board, run, matchedTileIds, chain: chainForTier.clean });
                 if (broke.droppedPairKeys.length > 0) {
                     dropEvents += 1;
                     dropCounts[broke.droppedPairKeys.length] = (dropCounts[broke.droppedPairKeys.length] ?? 0) + 1;
@@ -154,7 +157,7 @@ export const simulatePopReach = (levels = 12, seeds: readonly number[] = POP_REA
                 poppedPairs += wavePairs(broke);
                 for (const tier of POP_REACH_TIERS) {
                     const atTier =
-                        tier === 'none'
+                        tier === 'clean'
                             ? broke
                             : resolveChunkBreak({ board, run, matchedTileIds, chain: chainForTier[tier] });
                     tierPairs[tier] += wavePairs(atTier);
@@ -208,7 +211,8 @@ export const simulatePopReach = (levels = 12, seeds: readonly number[] = POP_REA
     const scoreStep = {} as Record<ChainTier, number>;
     POP_REACH_TIERS.forEach((tier, index) => {
         const below = index === 0 ? 0 : scorePerMatch[POP_REACH_TIERS[index - 1]!];
-        scoreStep[tier] = below === 0 ? 0 : scorePerMatch[tier] / below;
+        // A rung over nothing - Clean over a lone match that takes no pairs - is every multiple at once.
+        scoreStep[tier] = below === 0 ? (scorePerMatch[tier] > 0 ? Number.POSITIVE_INFINITY : 0) : scorePerMatch[tier] / below;
     });
     const pairsPerDrop = Array.from({ length: dropCounts.length }, (_, index) => dropCounts[index] ?? 0);
     const droppedPairs = pairsPerDrop.reduce((sum, count, pairs) => sum + count * pairs, 0);
@@ -255,7 +259,12 @@ export const POP_REACH_BANDS = {
      */
     ladderMinStep: { min: 0.25 },
     /** Fever over a lone match. Was 1.66 before the reach ladder and the bigger suits. */
-    ladderSpread: { min: 2.2 },
+    /**
+     * 2026-09-23: 1.5. The pop is capped by rung now (`BREAK_PAIR_CAP`) and a lone match takes
+     * nothing, so the spread is Fever's own take: measured 2.34 with a cap of four, on boards
+     * where the top rung arrives with few pairs left to take.
+     */
+    ladderSpread: { min: 1.5 },
     /**
      * The band that matters, added at Gen 189: every rung must at least come close to doubling what
      * the rung below it pays. `ladderMinStep` above measures pairs, which is an input - a rung can
@@ -288,6 +297,8 @@ export const judgePopReach = (report: PopReachReport): { ok: boolean; issues: st
         }
     }
     for (const tier of POP_REACH_TIERS) {
+        // A lone match has no rung below it, and since 2026-09-23 takes no pairs of its own.
+        if (tier === 'none') continue;
         const step = report.ladder.step[tier];
         if (step < POP_REACH_BANDS.ladderMinStep.min) {
             issues.push(

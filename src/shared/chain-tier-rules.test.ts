@@ -35,15 +35,15 @@ describe('the chain ladder', () => {
     });
 
     it('reads the ladder as one bar with the rungs as ticks, full at Fever', () => {
-        // Twelve pairs: Clean 3, Sharp 6, Fever 8 - both shares clear their fixed minimums on a
-        // floor this size, so the rungs are where the floor puts them rather than where the
-        // minimum does.
-        expect(chainMeter(0, 12)).toMatchObject({ tier: 'none', fill: 0, full: false, feverAt: 8 });
-        expect(chainMeter(6, 12)).toMatchObject({ tier: 'sharp', full: false });
-        expect(chainMeter(6, 12).fill).toBeCloseTo(6 / 8);
-        expect(chainMeter(6, 12).ticks.clean).toBeCloseTo(3 / 8);
-        expect(chainMeter(6, 12).ticks.sharp).toBeCloseTo(6 / 8);
-        expect(chainMeter(8, 12)).toMatchObject({ tier: 'fever', fill: 1, full: true });
+        // Twelve pairs: Clean 3, Sharp 7, Fever 9 (shares 0.55 and 0.75 since 2026-09-23) - both
+        // shares clear their fixed minimums on a floor this size, so the rungs are where the floor
+        // puts them rather than where the minimum does.
+        expect(chainMeter(0, 12)).toMatchObject({ tier: 'none', fill: 0, full: false, feverAt: 9 });
+        expect(chainMeter(7, 12)).toMatchObject({ tier: 'sharp', full: false });
+        expect(chainMeter(7, 12).fill).toBeCloseTo(7 / 9);
+        expect(chainMeter(7, 12).ticks.clean).toBeCloseTo(3 / 9);
+        expect(chainMeter(7, 12).ticks.sharp).toBeCloseTo(7 / 9);
+        expect(chainMeter(9, 12)).toMatchObject({ tier: 'fever', fill: 1, full: true });
         expect(chainMeter(11, 12)).toMatchObject({ fill: 1, full: true, momentum: 11 });
         expect(chainMeter(Number.NaN, 12).fill).toBe(0);
     });
