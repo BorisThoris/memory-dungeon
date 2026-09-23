@@ -1,6 +1,6 @@
 import type { ChainTier } from './chain-tier-rules';
 import type { RunState } from './contracts';
-import { MISS_BANK_CAP, missesLeft } from './miss-bank';
+import { grantMisses, MISS_BANK_CAP, missesLeft } from './miss-bank';
 import { runNonNegativeInteger } from './run-number-guards';
 
 /**
@@ -45,7 +45,7 @@ export const STORE_ITEMS: readonly StoreItemDefinition[] = [
     {
         id: 'miss',
         title: 'Another miss',
-        body: 'One more miss before the run ends. Never more than four in hand.',
+        body: 'One more miss before the run ends, good for three floors past this one. Never more than four in hand.',
         basePrice: 4,
         priceStep: 2
     },
@@ -65,7 +65,7 @@ export const STORE_ITEMS: readonly StoreItemDefinition[] = [
     }
 ];
 
-export type StoreRun = Pick<RunState, 'gold' | 'storePurchases' | 'missBankCarry' | 'peekCharges' | 'shuffleCharges'>;
+export type StoreRun = Pick<RunState, 'gold' | 'storePurchases' | 'missBank' | 'board' | 'peekCharges' | 'shuffleCharges'>;
 
 export const runGold = (run: Pick<RunState, 'gold'>): number => runNonNegativeInteger(run.gold ?? 0);
 
@@ -113,7 +113,8 @@ export const buyStoreItem = <R extends StoreRun>(run: R, id: StoreItemId): R | n
     };
     switch (id) {
         case 'miss':
-            return { ...paid, missBankCarry: Math.min(MISS_BANK_CAP, (missesLeft(run) ?? 0) + 1) };
+            // Bought on this floor, so it lasts as long as a miss earned here would.
+            return { ...paid, missBank: grantMisses(run.missBank ?? [], run.board?.level ?? 1, 1) };
         case 'peek':
             return { ...paid, peekCharges: runNonNegativeInteger(run.peekCharges) + 1 };
         case 'shuffle':

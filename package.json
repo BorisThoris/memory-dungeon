@@ -106,6 +106,7 @@
     "audit:mutator-effects": "tsx scripts/mutator-effect-audit.ts",
     "sim:run": "tsx scripts/sim-run-occupancy.ts",
     "sim:curve": "tsx scripts/sim-difficulty-curve.ts",
+    "sim:survival": "tsx scripts/sim-survival.ts",
     "sim:archetype-pressure": "tsx scripts/sim-archetype-pressure.ts",
     "audit:shared-reach": "tsx scripts/shared-reach.ts",
     "audit:test-only-modules": "tsx scripts/test-only-modules.ts",

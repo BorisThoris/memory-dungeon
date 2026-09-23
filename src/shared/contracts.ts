@@ -7,6 +7,12 @@
  * with TypeScript `exactOptionalPropertyTypes` when feasible.
  */
 export const SAVE_SCHEMA_VERSION = 8;
+
+/** One deposit in the miss bank (`miss-bank.ts`): how many misses, and the floor they were earned on. */
+export interface MissBankGrant {
+    floor: number;
+    misses: number;
+}
 /** Bump when generation rules change (tile order, mutators, pair layout). */
 export const GAME_RULES_VERSION = 49;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
@@ -647,11 +653,13 @@ export interface RunState {
     /** Turns resolved on this floor, match or miss, against the floor's par (`floor-par.ts`). */
     turnsThisFloor: number;
     /**
-     * The miss bank (`miss-bank.ts`): misses the run may still make before one ends it. Opens at
-     * two, each floor grants one, never above three. Absent on a run built without one (a fixture,
-     * a census holding it open), which has no budget and never ends this way.
+     * The miss bank (`miss-bank.ts`): the misses the run may still make before one ends it, as a
+     * ledger of grants stamped with the floor each was earned on - three to open, one per floor
+     * cleared, one per chain rung, each good for three floors past the one that earned it, never
+     * more than four in hand. Absent on a run built without one (a fixture, a census holding it
+     * open), which has no budget and never ends this way.
      */
-    missBankCarry?: number;
+    missBank?: MissBankGrant[];
     /**
      * The purse (`run-store-rules.ts`): gold earned at floor clears and spent on the pause menu's
      * store. Absent on a run built before it, read as nought. `storePurchases` counts what this

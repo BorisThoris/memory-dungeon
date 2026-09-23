@@ -166,7 +166,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         chunkDropsThisRun: 0,
         bestRippleThisFloor: 0,
         turnsThisFloor: 0,
-        missBankCarry: openingMissBank(),
+        missBank: openingMissBank(),
         gold: 0,
         storePurchases: {},
         largestChunkScoreThisFloor: 0,

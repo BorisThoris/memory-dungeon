@@ -25,7 +25,24 @@ where it says *how well*, not *how much longer*.
 board at all - three times par means missing two-thirds of your flips, which is a floor under
 competence and not a difficulty gate.
 
-## Update 2026-09-23 (later the same day): the bank is counted in misses
+## Update 2026-09-24: misses are earned, and they expire
+
+The flat two-a-floor deposit made the bank a subscription: a run that banked four by floor 3 kept
+them to floor 30 without once being asked to earn its life. The player asked for lives won per
+floor or per combo, carried "to the next level plus three levels from that round", with a formula
+that is punishing but winnable. So `RunState.missBank` is a ledger of grants, each stamped with the
+floor it was earned on (`src/shared/miss-bank.ts`): a run opens with `MISS_BANK_OPENING = 3` on
+floor 1; clearing a floor earns `MISS_BANK_FLOOR_GRANT = 1`; every `MISS_BANK_COMBO_RUNG = 5`
+matches in a row earns one more, spendable at once; a grant earned on floor N is good through
+floor N + `MISS_BANK_LIFETIME_FLOORS = 3` and gone after; never more than `MISS_BANK_CAP = 4` in
+hand, and at the cap a new grant pushes the oldest out rather than being lost. A miss spends the
+grant that would go first. The head's count and the pause row are unchanged; the pause row adds
+which misses go first and the last floor they last through. Measured with `yarn sim:survival`
+(perfect-memory player, twenty seeds, median floor): 10% misses 45, 15% 17, 20% 6, 25% 6, 35% 4,
+against 37/21/11/9/5 under the flat deposit - deeper for the player whose chains feed the bank,
+shorter for everyone else, because floor 2's misses stop being paid for on floor 6.
+
+## Update 2026-09-23 (later the same day): the bank is counted in misses (superseded above)
 
 Played, the turn bank read "17 left" on floor 4 - the turns a nine-pair floor needs to be matched
 at all, folded into the turns a player could waste, and read as seventeen lives. The player's

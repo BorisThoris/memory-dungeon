@@ -597,7 +597,7 @@ const playFloor = (
         {
             ...base,
             // The bank is held open, as the run census holds it: a floor census measures the floor.
-            missBankCarry: undefined,
+            missBank: undefined,
             activeMutators,
             board,
             status: 'playing',
@@ -689,7 +689,7 @@ export const simulateRunOccupancy = ({
                  * would end most runs inside the first few floors and leave the deep floors unread.
                  * Without a carry a run has no budget and never ends this way.
                  */
-                missBankCarry: undefined,
+                missBank: undefined,
                 // Floor 1 needs its mutators put on by hand for the same reason (Gen 208); every
                 // floor after it gets them from `advanceToNextLevel`, which is the game's own path.
                 activeMutators: filterMutatorsByContentLock(
@@ -740,7 +740,7 @@ export const simulateRunOccupancy = ({
                     ended = 'the floor did not advance';
                     break;
                 }
-                run = { ...finishMemorizePhase(next), missBankCarry: undefined };
+                run = { ...finishMemorizePhase(next), missBank: undefined };
                 floor += 1;
             }
             if (pass === 'reference') endReasons[ended] = (endReasons[ended] ?? 0) + 1;
