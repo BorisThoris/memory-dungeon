@@ -80,11 +80,11 @@ describe('achievement rules', () => {
             'ACH_PERFECT_CLEAR'
         ]);
         const lastMiss = evaluateAchievementUnlocks(
-            { ...run, missBankCarry: 0, lastLevelResult: { ...run.lastLevelResult!, perfect: false, mistakes: 1 } },
+            { ...run, missBank: [], lastLevelResult: { ...run.lastLevelResult!, perfect: false, mistakes: 1 } },
             createDefaultSaveData()
         );
         expect(lastMiss).toContain('ACH_LAST_LIFE');
-        expect(evaluateAchievementUnlocks({ ...run, missBankCarry: 1 }, createDefaultSaveData())).not.toContain('ACH_LAST_LIFE');
+        expect(evaluateAchievementUnlocks({ ...run, missBank: [{ floor: 1, misses: 1 }] }, createDefaultSaveData())).not.toContain('ACH_LAST_LIFE');
     });
 
     it('does not unlock perfect clear when board powers were used this run', () => {

@@ -55,7 +55,12 @@ export const RUN_SHELL_PAR_COPY = {
     /** The word after the count. Short, because it sits in a head that a phone also has to hold. */
     leftWord: (missesLeft: number): string => (missesLeft === 1 ? 'miss left' : 'misses left'),
     /** On hover, where there is room to say which rule the count belongs to. */
-    title: 'Misses you can still make. A miss with none left ends the run; each new floor gives one back, up to three.'
+    title: 'Misses you can still make. A miss with none left ends the run. Clearing a floor earns one, every five matches in a row earns one, each lasts three floors, and you hold four at most.',
+    /** The pause sheet's note under the count: the misses that go first, and the last floor they last through. */
+    soonestToGo: (misses: number, lastFloor: number): string =>
+        `${misses} ${misses === 1 ? 'lasts' : 'last'} through floor ${lastFloor}`,
+    /** The head's beat when a chain pays into the bank. */
+    earned: (misses: number): string => `+${misses} ${misses === 1 ? 'miss' : 'misses'} earned`
 } as const;
 
 /** Spoken by screen readers over the run shell's pause control. */

@@ -5,7 +5,8 @@ import { buildBoard } from './board-generation';
 import { countFindablePairs } from './board-tile-generation-rules';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
 import { parTurnsForFloor } from './floor-par';
-import { MISS_BANK_OPENING, missesLeft } from './miss-bank';
+import { MISS_BANK_COMBO_RUNG, MISS_BANK_OPENING, missesLeft } from './miss-bank';
+import { runNonNegativeInteger } from './run-number-guards';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { getUnresolvedPlayablePairGroups } from './playthrough-solver-rules';
 import { isSingletonUtilityPairKey } from './tile-identity';
@@ -60,7 +61,7 @@ const startFloorEleven = (): RunState => {
         board,
         status: 'playing',
         findablesTotalThisFloor: countFindablePairs(board.tiles),
-        missBankCarry: MISS_BANK_OPENING
+        missBank: [{ floor: board.level, misses: MISS_BANK_OPENING }]
     };
 };
 
@@ -92,7 +93,11 @@ describe('a bad floor is quiet, not punishing (thesis §67, trace 4)', () => {
         expect(run.status).toBe('levelComplete');
         expect(run.runEndReason).toBeNull();
         expect(run.stats.mismatches).toBeGreaterThanOrEqual(2);
-        expect(missesLeft(run)).toBe(MISS_BANK_OPENING - run.stats.mismatches);
+        // The three misses came out of the bank; the clean finish that followed put back whatever
+        // its chain earned (one per five in a row, 2026-09-24), which is the recovery and not a
+        // softening: the count never reads higher than the chain honestly paid for.
+        const earnedByChain = Math.floor(runNonNegativeInteger(run.bestChainThisFloor) / MISS_BANK_COMBO_RUNG);
+        expect(missesLeft(run)).toBe(MISS_BANK_OPENING - run.stats.mismatches + earnedByChain);
 
         // What the floor said at the end: around par rather than under it by much, and score up.
         // Three misses is the whole budget, and par carries a turn of miss allowance, so the worst

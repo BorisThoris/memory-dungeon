@@ -22,9 +22,16 @@ import { useNotificationStore } from '@cross-repo-libs/notifications';
 import type { CSSProperties } from 'react';
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { ABANDON_DIALOG_COPY, PAUSE_DIALOG_COPY, PERFECT_MEMORY_COPY, RUN_TOOL_REASONS, SHORTCUTS_COPY } from '../copy/runDialogCopy';
+import {
+    ABANDON_DIALOG_COPY,
+    PAUSE_DIALOG_COPY,
+    PERFECT_MEMORY_COPY,
+    RUN_SHELL_PAR_COPY,
+    RUN_TOOL_REASONS,
+    SHORTCUTS_COPY
+} from '../copy/runDialogCopy';
 import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
-import { missesLeft } from '../../shared/miss-bank';
+import { missBankSoonestToGo, missesLeft } from '../../shared/miss-bank';
 import { runGold, storeOffer } from '../../shared/run-store-rules';
 import { STORE_SHEET_COPY } from '../copy/storeSheet';
 import {
@@ -1804,7 +1811,20 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 go wrong is half of that question. */}
                             <div>
                                 <dt>Misses left</dt>
-                                <dd data-testid="pause-misses-left">{missesLeft(run) ?? '—'}</dd>
+                                <dd data-testid="pause-misses-left">
+                                    {missesLeft(run) ?? '—'}
+                                    {(() => {
+                                        // Each miss was earned on a floor and lasts three more, so
+                                        // the sheet says which go first and when.
+                                        const soonest = missBankSoonestToGo(run);
+                                        return soonest && missesLeft(run) ? (
+                                            <small data-testid="pause-misses-shelf">
+                                                {' '}
+                                                · {RUN_SHELL_PAR_COPY.soonestToGo(soonest.misses, soonest.lastFloor)}
+                                            </small>
+                                        ) : null;
+                                    })()}
+                                </dd>
                             </div>
                             <div>
                                 <dt>Gold</dt>

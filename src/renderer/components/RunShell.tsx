@@ -124,6 +124,36 @@ const useChainMeterDrop = (momentum: number, cleanRung: number): boolean => {
  * It fires on the rising edge only, so a run that sits at Fever is not strobed, and again if the
  * chain is lost and taken back. Timer-set like the drop, so the render never sets state.
  */
+/**
+ * A miss earned mid-floor: the count beside the par goes up, once, when a chain crosses a rung
+ * (`miss-bank.ts`). The bank is the one number that ends the run, and the only way it climbs
+ * while a floor is being played is the chain, so the head says so on the count itself rather
+ * than on the ladder. Rising edge only, timer-set like the beats above it.
+ */
+const MISS_EARNED_MS = 1400;
+const useMissEarned = (missesRemaining: number | null): number => {
+    const [earned, setEarned] = useState(0);
+    const previousRef = useRef(missesRemaining);
+    useEffect(() => {
+        const previous = previousRef.current;
+        previousRef.current = missesRemaining;
+        if (missesRemaining == null || previous == null || missesRemaining <= previous) {
+            // A spend, or no bank: whatever beat was showing is over, so the miss's own beat is
+            // not read against a count still saying "earned".
+            const clear = window.setTimeout(() => setEarned(0), 0);
+            return () => window.clearTimeout(clear);
+        }
+        const gained = missesRemaining - previous;
+        const start = window.setTimeout(() => setEarned(gained), 0);
+        const end = window.setTimeout(() => setEarned(0), MISS_EARNED_MS);
+        return () => {
+            window.clearTimeout(start);
+            window.clearTimeout(end);
+        };
+    }, [missesRemaining]);
+    return earned;
+};
+
 const useChainMeterFeverArrival = (full: boolean): boolean => {
     const [arriving, setArriving] = useState(false);
     const previousRef = useRef(full);
@@ -269,6 +299,7 @@ const RunShell = ({
     // The run's remaining life, in the only currency that can end it while the player keeps
     // playing: misses before one ends the run (`miss-bank.ts`). A run with no bank shows none.
     const missesRemaining = missesLeft(run);
+    const missesEarned = useMissEarned(missesRemaining);
     const pairCount = run.board?.pairCount ?? 0;
 
     // The caption under the board: a kicker naming the moment, then the one sentence about it. The
@@ -400,9 +431,19 @@ const RunShell = ({
                                 </span>
                                 <span className={styles.parWord}> turns</span>
                                 {missesRemaining != null ? (
-                                    <span className={styles.parLeft} data-testid="hud-misses-left">
+                                    <span
+                                        className={styles.parLeft}
+                                        data-miss-earned={missesEarned > 0 ? 'true' : undefined}
+                                        data-testid="hud-misses-left"
+                                    >
                                         <span className={styles.parLeftNumber}>{missesRemaining}</span>{' '}
                                         {RUN_SHELL_PAR_COPY.leftWord(missesRemaining)}
+                                        {missesEarned > 0 ? (
+                                            <span className={styles.parEarned} data-testid="hud-miss-earned">
+                                                {' '}
+                                                {RUN_SHELL_PAR_COPY.earned(missesEarned)}
+                                            </span>
+                                        ) : null}
                                     </span>
                                 ) : null}
                             </span>

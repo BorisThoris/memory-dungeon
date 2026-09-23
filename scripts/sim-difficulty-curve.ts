@@ -90,7 +90,7 @@ export const simulateDifficultyCurve = ({
         let run: RunState = {
             ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed })),
             // The bank is held open, as in every census: this measures the curve, not survival.
-            missBankCarry: undefined,
+            missBank: undefined,
             activeMutators: mutators,
             board,
             status: 'playing',

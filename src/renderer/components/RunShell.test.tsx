@@ -111,7 +111,7 @@ describe('RunShell', () => {
         // cheaper). The run's life is its miss bank (`miss-bank.ts`), and the count beside the par
         // is what it has left. The pressure of thesis §43 lives on the par stat.
         const base = playingRun();
-        const calm: RunState = { ...base, board: overFullPalette(base.board!, 12), turnsThisFloor: 4, missBankCarry: 3 };
+        const calm: RunState = { ...base, board: overFullPalette(base.board!, 12), turnsThisFloor: 4, missBank: [{ floor: 1, misses: 3 }] };
         const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={calm} tools={[]} />);
 
         const par = screen.getByTestId('hud-par');
@@ -119,7 +119,7 @@ describe('RunShell', () => {
         expect(par).toHaveTextContent('4 of 11 turns');
         expect(par).not.toHaveAttribute('data-ceiling-near');
 
-        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...calm, turnsThisFloor: 8, missBankCarry: 1 }} tools={[]} />);
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...calm, turnsThisFloor: 8, missBank: [{ floor: 1, misses: 1 }] }} tools={[]} />);
         expect(screen.getByTestId('hud-par')).toHaveAttribute('data-ceiling-near', 'true');
         expect(within(screen.getByTestId('hud-par')).getByRole('img')).toHaveAttribute('aria-label', '8 of 11 turns, 1 miss left');
     });
@@ -132,22 +132,40 @@ describe('RunShell', () => {
         // seventeen lives on floor 4. It counts misses now, the only thing that can end the run.
         const base = playingRun();
         const board = overFullPalette(base.board!, 12);
-        const early: RunState = { ...base, board, turnsThisFloor: 4, missBankCarry: 3 };
+        const early: RunState = { ...base, board, turnsThisFloor: 4, missBank: [{ floor: 1, misses: 3 }] };
         const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={early} tools={[]} />);
 
         const left = (): HTMLElement => screen.getByTestId('hud-misses-left');
         expect(left()).toHaveTextContent('3 misses left');
 
-        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, missBankCarry: 1 }} tools={[]} />);
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, missBank: [{ floor: 1, misses: 1 }] }} tools={[]} />);
         expect(left()).toHaveTextContent('1 miss left');
 
-        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, missBankCarry: 0 }} tools={[]} />);
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, missBank: [] }} tools={[]} />);
         expect(left()).toHaveTextContent('0 misses left');
         expect(within(screen.getByTestId('hud-par')).getByRole('img')).toHaveAttribute('aria-label', '4 of 11 turns, no misses left');
 
         // A run built without a bank shows no count at all rather than a number it does not have.
-        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, missBankCarry: undefined }} tools={[]} />);
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, missBank: undefined }} tools={[]} />);
         expect(screen.queryByTestId('hud-misses-left')).toBeNull();
+    });
+
+    it('says so on the count when a chain earns a miss, and only then', async () => {
+        // Since 2026-09-24 the bank is earned: every five in a row pays a miss in (`miss-bank.ts`),
+        // and it is the one way the run's life goes up mid-floor, so the count itself says it.
+        const base = playingRun();
+        const board = overFullPalette(base.board!, 12);
+        const one: RunState = { ...base, board, turnsThisFloor: 4, missBank: [{ floor: 1, misses: 1 }] };
+        const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={one} tools={[]} />);
+        expect(screen.queryByTestId('hud-miss-earned')).toBeNull();
+
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...one, missBank: [{ floor: 1, misses: 2 }] }} tools={[]} />);
+        await waitFor(() => expect(screen.getByTestId('hud-miss-earned')).toHaveTextContent('+1 miss earned'));
+        expect(screen.getByTestId('hud-misses-left')).toHaveAttribute('data-miss-earned', 'true');
+
+        // Spending one is the miss's beat, not this one.
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...one, missBank: [{ floor: 1, misses: 1 }] }} tools={[]} />);
+        await waitFor(() => expect(screen.queryByTestId('hud-miss-earned')).toBeNull());
     });
 
     it('explains the chain tier from momentum, so a Sharp read on a x3 chain is not a mystery', () => {

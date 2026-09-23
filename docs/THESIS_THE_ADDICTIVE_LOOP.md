@@ -8820,7 +8820,7 @@ who has seen enough. (The skip already exists; it should stay.)
 | Score range within a floor | 27× | 768× |
 | Ladder spread (pairs per match, none → fever) | 2.53 | to be re-measured, expected wider |
 | Lives | yes | no |
-| Fail state | out of lives | a miss bank: 3 to start, +2 a floor, 4 at most (turn ceiling 3× par until 2026-09-23) |
+| Fail state | out of lives | a miss bank: 3 to start, +1 a floor cleared, +1 per five in a row, each good for three floors, 4 at most (3/+2 flat until 2026-09-24; turn ceiling 3× par until 2026-09-23) |
 | Between-session mechanics | records | records |
 | Dark patterns | none | none |
 

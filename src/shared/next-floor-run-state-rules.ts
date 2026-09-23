@@ -58,7 +58,7 @@ export const createNextFloorRunState = (
         chunkPairsDroppedThisFloor: 0,
         bestRippleThisFloor: 0,
         turnsThisFloor: 0,
-        missBankCarry: carryMissBank(run),
+        missBank: carryMissBank(run, nextBoard.level),
         largestChunkScoreThisFloor: 0,
         magpieTheftsThisFloor: 0,
         restlessDriftsThisFloor: 0,

@@ -164,7 +164,7 @@ export const playCascadeBalanceFloor = ({
     // would otherwise read as fallen and the bands would measure the budget rather than the pop.
     let run: RunState = {
         ...base,
-        missBankCarry: undefined,
+        missBank: undefined,
         board,
         status: 'playing',
         findablesTotalThisFloor: countFindablePairs(board.tiles)

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { createNewRun, finalizeLevel, finishMemorizePhase } from './game';
-import { MISS_BANK_CAP } from './miss-bank';
+import { MISS_BANK_CAP, missesLeft } from './miss-bank';
 import {
     buyStoreItem,
     floorClearGold,
@@ -40,7 +40,7 @@ describe('the store', () => {
     const run = (overrides: Partial<RunState> = {}): RunState => ({
         ...createNewRun(0, { runSeed: 7, gameMode: 'endless' }),
         gold: 10,
-        missBankCarry: 2,
+        missBank: [{ floor: 1, misses: 2 }],
         ...overrides
     });
 
@@ -55,13 +55,13 @@ describe('the store', () => {
 
     it('sells a miss into the bank and stops at the cap', () => {
         const bought = buyStoreItem(run(), 'miss')!;
-        expect(bought.missBankCarry).toBe(3);
+        expect(missesLeft(bought)).toBe(3);
         expect(runGold(bought)).toBe(10 - storePrice(run(), 'miss'));
-        const full = run({ missBankCarry: MISS_BANK_CAP });
+        const full = run({ missBank: [{ floor: 1, misses: MISS_BANK_CAP }] });
         expect(storeOffer(full).find((row) => row.id === 'miss')?.blocked).toBe('full');
         expect(buyStoreItem(full, 'miss')).toBeNull();
         // A run with no bank has nothing to put a miss into.
-        expect(storeOffer(run({ missBankCarry: undefined })).find((row) => row.id === 'miss')?.blocked).toBe('no_bank');
+        expect(storeOffer(run({ missBank: undefined })).find((row) => row.id === 'miss')?.blocked).toBe('no_bank');
     });
 
     it('sells charges the dock already spends', () => {
