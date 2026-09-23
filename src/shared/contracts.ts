@@ -65,7 +65,11 @@ export type Rating = 'S++' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
  * floor is not cleared within its turn ceiling, when a contract's mismatch limit is passed, or
  * when a shared game's last floor is done. Null while the run is alive.
  */
-export type RunEndReason = 'turn_ceiling' | 'quit' | 'contract' | 'pass_and_play_final_floor';
+/*
+ * `turn_ceiling` is kept for summaries written while the ceiling existed (Gen 183 to 2026-09-23);
+ * a run ends that way no more. `miss_budget` is the miss bank (`miss-bank.ts`) running dry.
+ */
+export type RunEndReason = 'turn_ceiling' | 'miss_budget' | 'quit' | 'contract' | 'pass_and_play_final_floor';
 export type FeaturedObjectiveId = 'scholar_style' | 'cursed_last' | 'flip_par';
 /**
  * Every screen the app can be showing, as a value.
@@ -641,11 +645,11 @@ export interface RunState {
     /** Turns resolved on this floor, match or miss, against the floor's par (`floor-par.ts`). */
     turnsThisFloor: number;
     /**
-     * The turn bank (`floor-par.ts`): turns the run carried onto this floor unspent. The floor's
-     * ceiling is this plus the floor's deposit, under its cap. Absent on a run built without one,
-     * which reads the per-board ceiling.
+     * The miss bank (`miss-bank.ts`): misses the run may still make before one ends it. Opens at
+     * two, each floor grants one, never above three. Absent on a run built without one (a fixture,
+     * a census holding it open), which has no budget and never ends this way.
      */
-    turnBankCarry?: number;
+    missBankCarry?: number;
     /** The biggest single break's score this floor: what band N5 reads the largest break's share from. */
     largestChunkScoreThisFloor: number;
     /** Pairs the magpie has taken back on this floor. */

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parTurnsForFloor, turnCeilingForRun } from './floor-par';
+import { parTurnsForFloor } from './floor-par';
 import type { AchievementId, RunState } from './contracts';
 import {
     ACHIEVEMENT_BY_ID,
@@ -65,20 +65,26 @@ describe('achievement rules', () => {
                 rating: 'S++' as const,
                 perfect: true,
                 mistakes: 0,
-                // Gen 183: Last Turn Standing - the floor cleared on the ceiling's final turn.
                 parTurns: parTurnsForFloor(createNewRun(0).board!.pairCount),
-                turnsTaken: turnCeilingForRun(createNewRun(0))
+                turnsTaken: 3
             }
         };
+        // Last Turn Standing (2026-09-23): a floor cleared with the miss bank already empty. This
+        // fixture is a perfect floor, so it is not earned here; see the case below.
         const unlocked = evaluateAchievementUnlocks(run, createDefaultSaveData());
 
         expect(unlocked).toEqual([
             'ACH_FIRST_CLEAR',
             'ACH_LEVEL_FIVE',
             'ACH_SCORE_THOUSAND',
-            'ACH_PERFECT_CLEAR',
-            'ACH_LAST_LIFE'
+            'ACH_PERFECT_CLEAR'
         ]);
+        const lastMiss = evaluateAchievementUnlocks(
+            { ...run, missBankCarry: 0, lastLevelResult: { ...run.lastLevelResult!, perfect: false, mistakes: 1 } },
+            createDefaultSaveData()
+        );
+        expect(lastMiss).toContain('ACH_LAST_LIFE');
+        expect(evaluateAchievementUnlocks({ ...run, missBankCarry: 1 }, createDefaultSaveData())).not.toContain('ACH_LAST_LIFE');
     });
 
     it('does not unlock perfect clear when board powers were used this run', () => {

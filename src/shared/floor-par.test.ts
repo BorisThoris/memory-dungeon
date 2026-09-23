@@ -10,10 +10,7 @@ import {
     parOpeningPairs,
     parPaletteRateFactor,
     parTurnsForBoard,
-    parTurnsForFloor,
-    TURN_CEILING_PAR_MULTIPLIER,
-    turnCeilingForBoard,
-    turnCeilingForFloor
+    parTurnsForFloor
 } from './floor-par';
 import { PAIRS_MAX, PAIRS_MIN, pairsForFloor } from './pair-curve';
 import { SCATTERED_SUIT_CEILING, TILE_SUITS } from './tile-suit-rules';
@@ -74,12 +71,8 @@ describe('the floor par', () => {
         expect(parTurnsForFloor(parOpeningPairs() + 1)).toBeGreaterThanOrEqual(parTurnsForFloor(parOpeningPairs()));
     });
 
-    it('carries the allowance into the turn ceiling, because the ceiling is par', () => {
+    it('keeps one turn of miss allowance in par', () => {
         expect(PAR_MISS_ALLOWANCE).toBe(1);
-        for (const floor of [1, 6, 7, 52]) {
-            const pairs = pairsForFloor(floor);
-            expect(turnCeilingForFloor(pairs)).toBe(parTurnsForFloor(pairs) * TURN_CEILING_PAR_MULTIPLIER);
-        }
     });
 });
 
@@ -165,9 +158,6 @@ describe('par and the palette', () => {
         expect(parTurnsForBoard(narrow)).toBe(parTurnsForFloor(20, SCATTERED_SUIT_CEILING));
         expect(parTurnsForBoard(wide)).toBe(parTurnsForFloor(20, TILE_SUITS.length));
         expect(parTurnsForBoard(narrow)).toBe(parTurnsForBoard(wide));
-        // The ceiling is three times par, so it follows the palette rather than being read separately.
-        expect(turnCeilingForBoard(narrow)).toBe(parTurnsForBoard(narrow) * TURN_CEILING_PAR_MULTIPLIER);
-        expect(turnCeilingForBoard(wide)).toBe(turnCeilingForBoard(narrow));
         // No board is the full palette's board, so nothing reads a missing one as a free floor.
         expect(parTurnsForBoard(null)).toBe(parTurnsForFloor(0));
     });

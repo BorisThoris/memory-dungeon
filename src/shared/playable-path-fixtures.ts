@@ -222,7 +222,7 @@ const floorClearWithRouteChoices = (): RunState => playPerfectFloors(baseEndless
 
 const gameOverRun = (): RunState => {
     const run = finishMemorizePhase(baseEndlessRun());
-    return createRunSummary({ ...run, status: 'gameOver', runEndReason: 'turn_ceiling' }, []);
+    return createRunSummary({ ...run, status: 'gameOver', runEndReason: 'miss_budget' }, []);
 };
 
 const assertNever = (value: never): never => {

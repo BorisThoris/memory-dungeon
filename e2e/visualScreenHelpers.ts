@@ -861,7 +861,7 @@ async function discoverMismatchPair(
 }
 
 /**
- * Miss until the turn ceiling ends the run (level 1: three times the par). Flake patterns:
+ * Miss until the miss bank ends the run (three misses on floor 1, then one more). Flake patterns:
  * - Same as `discoverMismatchPair` for the discovery phase; burn loop waits for board reset or overlay via polling
  *   (slow machines can exceed a fixed `MATCH_SETTLE_MS`).
  * - If CI keeps failing here, increase the visual scenario timeout before weakening the live game-over path.

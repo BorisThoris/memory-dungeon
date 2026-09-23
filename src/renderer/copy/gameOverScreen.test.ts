@@ -6,6 +6,7 @@ describe('the end-reason line', () => {
         expect(runEndReasonLine({ highestLevel: 7, runEndReason: 'turn_ceiling' })).toBe(
             'Your turns ran out on floor 7.'
         );
+        expect(runEndReasonLine({ highestLevel: 7, runEndReason: 'miss_budget' })).toBe('Your last miss came on floor 7.');
         expect(runEndReasonLine({ highestLevel: 7, runEndReason: 'quit' })).toBe('You stopped on floor 7.');
         expect(runEndReasonLine({ highestLevel: 3, runEndReason: 'contract' })).toBe(
             "The contract's mismatch limit ended the run on floor 3."

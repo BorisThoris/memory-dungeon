@@ -111,14 +111,14 @@ describe('mechanics-encyclopedia', () => {
         // Thesis §42.2: a run ends when the player stops or a floor is not cleared within three
         // times its par. The Steam API name ACH_LAST_LIFE stays; the achievement it names is now
         // clearing a floor on the ceiling's final turn.
-        const ceiling = CODEX_CORE_TOPICS.find((topic) => topic.id === 'turn_ceiling');
-        expect(ceiling?.title).toBe('The turn ceiling');
-        expect(ceiling?.description).toContain('**bank**');
+        const ceiling = CODEX_CORE_TOPICS.find((topic) => topic.id === 'miss_budget');
+        expect(ceiling?.title).toBe('Misses');
+        expect(ceiling?.description).toContain('**misses**');
         expect(ceiling?.description).toContain('ends the run');
         expect(ceiling?.description).toContain('when you stop');
         expect(ACHIEVEMENT_CATALOG.ACH_LAST_LIFE.title).toBe('Last Turn Standing');
         expect(ACHIEVEMENT_CATALOG.ACH_LAST_LIFE.description).toBe(
-            'Clear a floor on the final turn before its ceiling.'
+            'Clear a floor with your last miss already spent.'
         );
         expect(MUTATOR_CATALOG.magpie_thief.description).not.toMatch(/scare/i);
     });

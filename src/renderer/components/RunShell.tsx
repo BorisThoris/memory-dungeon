@@ -2,7 +2,8 @@ import { memo, useEffect, useRef, useState, type CSSProperties, type ReactElemen
 import type { GameShellLayout } from '../gameShellLayout';
 import type { RunState } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
-import { parTurnsForRun, turnCeilingForRun, turnsTakenThisFloor, turnsToCeiling } from '../../shared/floor-par';
+import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
+import { missesLeft } from '../../shared/miss-bank';
 import { MUTATOR_CATALOG } from '../../shared/mechanics-encyclopedia';
 import { handleHorizontalToolbarKeyDown, syncToolbarTabIndices } from '../a11y/toolbarRoving';
 import { GameplayMenuIcon } from '../ui/gameplayIcons';
@@ -265,9 +266,8 @@ const RunShell = ({
     const turnsTaken = turnsTakenThisFloor(run);
     const parTurns = parTurnsForRun(run);
     // The run's remaining life, in the only currency that can end it while the player keeps
-    // playing: turns before this floor's ceiling closes the run (§42.2).
-    const turnCeiling = turnCeilingForRun(run);
-    const turnsLeft = turnsToCeiling(run);
+    // playing: misses before one ends the run (`miss-bank.ts`). A run with no bank shows none.
+    const missesRemaining = missesLeft(run);
     const pairCount = run.board?.pairCount ?? 0;
 
     // The caption under the board: a kicker naming the moment, then the one sentence about it. The
@@ -386,22 +386,24 @@ const RunShell = ({
                             of a life counter worth keeping. */}
                         <span
                             className={styles.par}
-                            data-ceiling-near={turnsLeft <= 2 ? 'true' : undefined}
+                            data-ceiling-near={missesRemaining != null && missesRemaining <= 1 ? 'true' : undefined}
                             data-testid="hud-par"
                         >
                             <span
-                                aria-label={RUN_SHELL_PAR_COPY.aria(turnsTaken, parTurns, turnsLeft, turnCeiling)}
+                                aria-label={RUN_SHELL_PAR_COPY.aria(turnsTaken, parTurns, missesRemaining)}
                                 role="img"
-                                title={RUN_SHELL_PAR_COPY.title(turnCeiling)}
+                                title={RUN_SHELL_PAR_COPY.title}
                             >
                                 <span className={styles.parNumbers}>
                                     {turnsTaken} of {parTurns}
                                 </span>
                                 <span className={styles.parWord}> turns</span>
-                                <span className={styles.parLeft} data-testid="hud-turns-left">
-                                    <span className={styles.parLeftNumber}>{turnsLeft}</span>{' '}
-                                    {RUN_SHELL_PAR_COPY.leftWord}
-                                </span>
+                                {missesRemaining != null ? (
+                                    <span className={styles.parLeft} data-testid="hud-misses-left">
+                                        <span className={styles.parLeftNumber}>{missesRemaining}</span>{' '}
+                                        {RUN_SHELL_PAR_COPY.leftWord(missesRemaining)}
+                                    </span>
+                                ) : null}
                             </span>
                         </span>
                         {mutatorTitles.length > 0 && shellLayout !== 'phone-portrait' ? (

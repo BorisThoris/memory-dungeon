@@ -105,50 +105,49 @@ describe('RunShell', () => {
         expect(ladder()).toHaveAttribute('data-meter-arrive', 'false');
     });
 
-    it('reads the ceiling on the par, and marks it once the floor is two turns from it', () => {
+    it('reads the misses left on the par, and marks the last one', () => {
         // Twelve pairs over the full palette: par 11 (0.72 a pair since the pop was capped on
         // 2026-09-23, the miss allowance, and floor 6's reading kept because a bigger board is never
-        // cheaper). Arriving on a full turn bank, the ceiling is its cap of twice par, 22. The
-        // pressure of thesis §43 lives on the par stat.
+        // cheaper). The run's life is its miss bank (`miss-bank.ts`), and the count beside the par
+        // is what it has left. The pressure of thesis §43 lives on the par stat.
         const base = playingRun();
-        const calm: RunState = { ...base, board: overFullPalette(base.board!, 12), turnsThisFloor: 4, turnBankCarry: 22 };
+        const calm: RunState = { ...base, board: overFullPalette(base.board!, 12), turnsThisFloor: 4, missBankCarry: 3 };
         const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={calm} tools={[]} />);
 
         const par = screen.getByTestId('hud-par');
-        expect(within(par).getByRole('img')).toHaveAttribute(
-            'aria-label',
-            '4 of 11 turns, 18 of 22 left before the run ends'
-        );
+        expect(within(par).getByRole('img')).toHaveAttribute('aria-label', '4 of 11 turns, 3 misses left');
         expect(par).toHaveTextContent('4 of 11 turns');
         expect(par).not.toHaveAttribute('data-ceiling-near');
 
-        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...calm, turnsThisFloor: 20 }} tools={[]} />);
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...calm, turnsThisFloor: 8, missBankCarry: 1 }} tools={[]} />);
         expect(screen.getByTestId('hud-par')).toHaveAttribute('data-ceiling-near', 'true');
-        expect(within(screen.getByTestId('hud-par')).getByRole('img')).toHaveAttribute(
-            'aria-label',
-            '20 of 11 turns, 2 of 22 left before the run ends'
-        );
+        expect(within(screen.getByTestId('hud-par')).getByRole('img')).toHaveAttribute('aria-label', '8 of 11 turns, 1 miss left');
     });
 
-    it('draws what the run has left before the ceiling, not only the turns it has spent', () => {
-        // The head used to say `4 of 7 turns` and speak the ceiling to a screen reader alone, so a
-        // sighted player had no reading at all of how close the run was to ending - the thing the
-        // old row of hearts did well (Gen 183 took the lives; docs/REMOVED_LIVES.md). It counts
-        // down, and it reaches zero on the turn the ceiling ends the run.
+    it('draws the misses the run has left, and says so when there are none', () => {
+        // The head used to say `4 of 7 turns` and speak the run's end to a screen reader alone, so
+        // a sighted player had no reading at all of how close the run was to ending - the thing
+        // the old row of hearts did well (Gen 183 took the lives; docs/REMOVED_LIVES.md). The turn
+        // bank that followed counted the turns a floor needs to be matched at all, and read as
+        // seventeen lives on floor 4. It counts misses now, the only thing that can end the run.
         const base = playingRun();
         const board = overFullPalette(base.board!, 12);
-        const early: RunState = { ...base, board, turnsThisFloor: 4, turnBankCarry: 22 };
+        const early: RunState = { ...base, board, turnsThisFloor: 4, missBankCarry: 3 };
         const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={early} tools={[]} />);
 
-        const left = (): HTMLElement => screen.getByTestId('hud-turns-left');
-        expect(left()).toHaveTextContent('18 left');
+        const left = (): HTMLElement => screen.getByTestId('hud-misses-left');
+        expect(left()).toHaveTextContent('3 misses left');
 
-        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, turnsThisFloor: 21 }} tools={[]} />);
-        expect(left()).toHaveTextContent('1 left');
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, missBankCarry: 1 }} tools={[]} />);
+        expect(left()).toHaveTextContent('1 miss left');
 
-        // Never below zero, so a floor resolved on its ceiling turn does not read as a negative.
-        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, turnsThisFloor: 24 }} tools={[]} />);
-        expect(left()).toHaveTextContent('0 left');
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, missBankCarry: 0 }} tools={[]} />);
+        expect(left()).toHaveTextContent('0 misses left');
+        expect(within(screen.getByTestId('hud-par')).getByRole('img')).toHaveAttribute('aria-label', '4 of 11 turns, no misses left');
+
+        // A run built without a bank shows no count at all rather than a number it does not have.
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, missBankCarry: undefined }} tools={[]} />);
+        expect(screen.queryByTestId('hud-misses-left')).toBeNull();
     });
 
     it('explains the chain tier from momentum, so a Sharp read on a x3 chain is not a mystery', () => {

@@ -67,10 +67,10 @@ describe('the difficulty curve', () => {
     });
 
     it('would catch a floor that ran long or ended instantly', () => {
-        expect(judgeDifficultyCurve([{ floor: 1, pairs: 4, suits: 2, turns: 22, par: 3, poppedPairs: 2 }])).toEqual([
-            'floor 1 takes 22.0 turns, over 20',
-            'floor 1 takes 22.0 turns against a par of 3',
-            "floor 1 spends 7.333 of its par, over the opening's 0.85"
+        expect(judgeDifficultyCurve([{ floor: 1, pairs: 4, suits: 2, turns: 26, par: 3, poppedPairs: 2 }])).toEqual([
+            'floor 1 takes 26.0 turns, over 24',
+            'floor 1 takes 26.0 turns against a par of 3',
+            "floor 1 spends 8.667 of its par, over the opening's 0.85"
         ]);
         expect(judgeDifficultyCurve([{ floor: 1, pairs: 4, suits: 2, turns: 1, par: 3, poppedPairs: 2 }])).toEqual([
             'floor 1 is over in 1.0 turns, under 2'

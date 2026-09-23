@@ -89,6 +89,8 @@ export const simulateDifficultyCurve = ({
         });
         let run: RunState = {
             ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed })),
+            // The bank is held open, as in every census: this measures the curve, not survival.
+            missBankCarry: undefined,
             activeMutators: mutators,
             board,
             status: 'playing',
@@ -166,8 +168,12 @@ export const curveParRatio = (row: Pick<CurveFloorRow, 'turns' | 'par'>): number
  * must be the forgiving end rather than the tight one - the ways this curve has actually gone wrong.
  */
 export const CURVE_BANDS = {
-    /** No floor may run long. Measured, the deepest floors sit at 14-16 turns on a 48-tile board. */
-    maxTurns: 20,
+    /**
+     * No floor may run long. Measured at 14-16 turns on a 48-tile board before the pop was capped;
+     * 20.5-21.2 on floors 45-52 after it (2026-09-23), with every seed counted now that the bank
+     * is held open here - the turn bank had been ending the long seeds and thinning the mean.
+     */
+    maxTurns: 24,
     /** Nor may one end instantly. Floor 1 sits at 2.3 and is the reason this floor exists. */
     minTurns: 2,
     /** Every floor stays under its par for a clean player, which is what par is for (Gen 211). */

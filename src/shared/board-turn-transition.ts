@@ -14,7 +14,7 @@ import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
 import { deriveMatchClaimContext } from './match-claim-rules';
 import { selectGambitMatchedPair } from './gambit-match-rules';
 import { resolveMismatchTurnTransition } from './turn-mismatch-rules';
-import { floorHitTurnCeiling } from './floor-par';
+import { applyMissBudget } from './miss-bank';
 import { resolveTurnMatchFollowup } from './turn-match-followup-rules';
 import { resolveTurnMatchBoardCleanup } from './turn-match-board-cleanup-rules';
 import { resolveTurnMatchProgress } from './turn-match-progress-rules';
@@ -91,21 +91,10 @@ interface ResolvedMatchInput {
     execution?: BoardTurnExecutionContext;
 }
 
-/**
- * The turn ceiling (thesis §42.2), applied after a match and a miss alike: a floor still open on
- * its ceiling turn ends the run. A floor that cleared on that turn has already left `playing`
- * and is a clear. Nothing else ends a run mid-floor.
+/*
+ * The miss budget (`miss-bank.ts`) is applied after every resolved turn: a miss spends one, and a
+ * miss with none left ends the run. Nothing else ends a run mid-floor.
  */
-export const applyTurnCeiling = (run: RunState): RunState =>
-    floorHitTurnCeiling(run)
-        ? {
-              ...run,
-              status: 'gameOver',
-              runEndReason: 'turn_ceiling',
-              board: run.board ? { ...run.board, flippedTileIds: [] } : run.board,
-              timerState: clearResolveState(run)
-          }
-        : run;
 
 export const createResolveBoardTurnTransition = ({
     finalizeLevel,
@@ -382,12 +371,12 @@ export const createResolveBoardTurnTransition = ({
             return run;
         }
         if (flippedTileIds.length === 3) {
-            return applyTurnCeiling(resolveGambitThree(run, encorePairKeys, execution));
+            return applyMissBudget(run, resolveGambitThree(run, encorePairKeys, execution));
         }
         if (flippedTileIds.length !== 2) {
             return run;
         }
-        return applyTurnCeiling(resolveTwoFlippedTiles(run, encorePairKeys, execution));
+        return applyMissBudget(run, resolveTwoFlippedTiles(run, encorePairKeys, execution));
     };
     return resolveBoardTurn;
 };

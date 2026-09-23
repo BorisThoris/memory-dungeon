@@ -93,6 +93,7 @@ export const gameOverScreenCopy = {
      */
     endReason: {
         turn_ceiling: (floor: number) => `Your turns ran out on floor ${floor}.`,
+        miss_budget: (floor: number) => `Your last miss came on floor ${floor}.`,
         quit: (floor: number) => `You stopped on floor ${floor}.`,
         contract: (floor: number) => `The contract's mismatch limit ended the run on floor ${floor}.`,
         pass_and_play_final_floor: (floor: number) => `The table played its last floor, floor ${floor}.`

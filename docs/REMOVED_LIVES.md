@@ -25,7 +25,24 @@ where it says *how well*, not *how much longer*.
 board at all - three times par means missing two-thirds of your flips, which is a floor under
 competence and not a difficulty gate.
 
-## Update: the ceiling became a run-wide bank
+## Update 2026-09-23 (later the same day): the bank is counted in misses
+
+Played, the turn bank read "17 left" on floor 4 - the turns a nine-pair floor needs to be matched
+at all, folded into the turns a player could waste, and read as seventeen lives. The player's
+verdict: undeserved, too safe, one or two a floor at most. So the budget is denominated in the
+thing it is for (`src/shared/miss-bank.ts`, `RunState.missBankCarry`): a run opens with
+`MISS_BANK_OPENING = 3` misses, each new floor grants `MISS_BANK_FLOOR_GRANT = 2` on top of what was
+left unspent, never above `MISS_BANK_CAP = 4`; a miss spends one, still costs the chain and counts a
+try and a turn, and a miss with none left ends the run (`runEndReason: 'miss_budget'`). The turn
+ceiling and turn bank are gone from `floor-par.ts`: with misses bounded and matches bounded by the
+board, a floor cannot run forever. The head reads `4 of 9 turns · 3 misses left` (`hud-misses-left`)
+and turns the miss colour on the last one; the pause dialog's row is "Misses left". Measured with a
+perfect-memory player over twenty seeds, median floor reached: 10% misses 37, 15% 21, 20% 11, 25%
+9, 35% 5 (the table of the tunings tried is at the constants). This is the life economy's one good
+idea back on its own - a count of how much run is left that means exactly what it says - and none
+of the six systems that softened it.
+
+## Update: the ceiling became a run-wide bank (superseded above)
 
 The per-floor ceiling below refilled to three times par on every floor, and that made it a life
 handed back on every stair. Measured over twenty seeds, a player missing 45% of their pairs still

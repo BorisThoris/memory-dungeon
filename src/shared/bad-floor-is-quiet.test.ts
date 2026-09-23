@@ -4,7 +4,8 @@ import { GAME_RULES_VERSION } from './contracts';
 import { buildBoard } from './board-generation';
 import { countFindablePairs } from './board-tile-generation-rules';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
-import { parTurnsForFloor, turnBankCapForBoard, turnCeilingForRun } from './floor-par';
+import { parTurnsForFloor } from './floor-par';
+import { MISS_BANK_OPENING, missesLeft } from './miss-bank';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { getUnresolvedPlayablePairGroups } from './playthrough-solver-rules';
 import { isSingletonUtilityPairKey } from './tile-identity';
@@ -12,9 +13,9 @@ import { isSingletonUtilityPairKey } from './tile-identity';
 /**
  * Thesis §67, trace 4: a bad floor is quiet, not punishing (task T2.10).
  *
- * Floor eleven, a tired player: four misses, then matches, then three more misses, and a miss
- * between matches for the rest of the floor - a bad floor all the way down rather than a bad
- * opening a player recovers from. What must be true at the end - the floor cleared, the run went
+ * Floor eleven, a tired player: the whole miss budget spent on one floor - two misses, a match, a
+ * third miss - and then the floor finished from memory; a bad floor rather than a bad opening a
+ * player recovers from. What must be true at the end - the floor cleared, the run went
  * on, the score went up, the bonus was small, and nothing said "you did badly" - is checked here
  * against the real turn path on a real generated floor, not a fixture.
  */
@@ -59,50 +60,47 @@ const startFloorEleven = (): RunState => {
         board,
         status: 'playing',
         findablesTotalThisFloor: countFindablePairs(board.tiles),
-        turnBankCarry: turnBankCapForBoard(board)
+        missBankCarry: MISS_BANK_OPENING
     };
 };
 
 const PUNISHING = /\b(life|lives|lost|penalty|punish\w*)\b/iu;
 
 describe('a bad floor is quiet, not punishing (thesis §67, trace 4)', () => {
-    it('clears with seven misses, pays less, loses nothing, and says nothing punishing', () => {
+    it('clears with three misses, pays less, loses nothing, and says nothing punishing', () => {
         let run = startFloorEleven();
         const scoreBefore = run.stats.totalScore;
         const par = parTurnsForFloor(run.board!.pairCount);
-        const ceiling = turnCeilingForRun(run);
-        // Four misses, then matches; three more misses once something has been matched. Every match
-        // pops, so the floor can end inside the script - what matters is that it ends cleared,
-        // never over.
-        const script: Array<'miss' | 'match'> = ['miss', 'miss', 'miss', 'miss', 'match', 'miss', 'match', 'miss', 'match', 'miss'];
+        // Two misses, then a match, a third miss, then matches: the whole of the opening bank spent
+        // on one floor (2026-09-23, `miss-bank.ts`), and the floor still cleared. The trace used to
+        // be seven misses; the budget is three now, and this is the bad floor it allows.
+        const script: Array<'miss' | 'match'> = ['miss', 'miss', 'match', 'miss', 'match'];
         for (const step of script) {
             if (run.status !== 'playing') break;
             run = step === 'miss' ? playMiss(run) : playMatch(run);
             expect(run.status, `after a ${step}`).not.toBe('gameOver');
         }
-        // And a miss between matches for the rest of it. A player having a bad floor is having it
-        // when the floor ends too; a clean finish would earn a tier honestly, and this trace is
-        // about the floor that never gets one.
+        // Then matches to the end - the budget is spent, so the finish has to be clean, and a clean
+        // finish earns whatever rung it honestly climbs to. The trace is about the misses, not the
+        // rung: nothing about the three of them is said back as a punishment.
         while (run.status === 'playing') {
             run = playMatch(run);
-            if (run.status === 'playing') {
-                run = playMiss(run);
-            }
         }
 
-        // The floor cleared and the run went on: no life to lose, and the ceiling was never near.
+        // The floor cleared and the run went on: the misses were inside the budget, and nothing on
+        // the floor said so as a punishment.
         expect(run.status).toBe('levelComplete');
         expect(run.runEndReason).toBeNull();
-        expect(run.stats.mismatches).toBeGreaterThanOrEqual(4);
-        expect(run.turnsThisFloor).toBeLessThan(ceiling);
+        expect(run.stats.mismatches).toBeGreaterThanOrEqual(2);
+        expect(missesLeft(run)).toBe(MISS_BANK_OPENING - run.stats.mismatches);
 
-        // What the floor said at the end: over par, no efficiency, a tier at most Clean's, score up.
+        // What the floor said at the end: around par rather than under it by much, and score up.
+        // Three misses is the whole budget, and par carries a turn of miss allowance, so the worst
+        // floor the budget allows lands within a turn of par.
         const result = run.lastLevelResult!;
         expect(result.parTurns).toBe(par);
         expect(result.turnsTaken).toBe(run.turnsThisFloor);
-        expect(result.turnsTaken).toBeGreaterThan(par);
-        expect(result.floorEfficiencyBonus).toBeUndefined();
-        expect(result.floorBonusTierMult ?? 1).toBeLessThanOrEqual(1.5);
+        expect(result.turnsTaken).toBeGreaterThanOrEqual(par - 1);
         expect(run.stats.totalScore).toBeGreaterThan(scoreBefore);
 
         // Nothing the floor said was a punishment. The chain resetting is the whole cost.
@@ -115,20 +113,17 @@ describe('a bad floor is quiet, not punishing (thesis §67, trace 4)', () => {
         expect(Object.keys(run)).not.toContain('lives');
     });
 
-    it('ends the run only when the bank runs dry before the floor is cleared, and never for one miss', () => {
+    it('ends the run only when the miss bank is spent, and never for a miss inside it', () => {
         let run = startFloorEleven();
-        const ceiling = turnCeilingForRun(run);
-        // Arriving on a full bank, the floor's ceiling is its cap: twice par.
-        expect(ceiling).toBe(turnBankCapForBoard(run.board));
-        for (let turn = 1; turn < ceiling; turn += 1) {
+        for (let spent = 1; spent <= MISS_BANK_OPENING; spent += 1) {
             run = playMiss(run);
-            expect(run.status, `turn ${turn}`).toBe('playing');
+            expect(run.status, `miss ${spent}`).toBe('playing');
             expect(run.runEndReason).toBeNull();
+            expect(missesLeft(run)).toBe(MISS_BANK_OPENING - spent);
         }
         run = playMiss(run);
         expect(run.status).toBe('gameOver');
-        expect(run.runEndReason).toBe('turn_ceiling');
-        expect(run.turnsThisFloor).toBe(ceiling);
+        expect(run.runEndReason).toBe('miss_budget');
         expect(run.board?.flippedTileIds).toEqual([]);
     });
 });

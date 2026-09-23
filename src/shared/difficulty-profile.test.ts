@@ -16,7 +16,7 @@ describe('REG-046 difficulty profile contract', () => {
             memorizeStepMs: MEMORIZE_STEP_MS,
             memorizeMinMs: MEMORIZE_MIN_MS
         });
-        expect(current.rules).toContain('a run-wide turn bank');
+        expect(current.rules).toContain('a run-wide miss bank');
 
         const rows = getDifficultyProfileRows();
         expect(rows.map((row) => row.id)).toEqual(['classic_fair', 'practice_soft', 'purist_hard']);
@@ -27,7 +27,7 @@ describe('REG-046 difficulty profile contract', () => {
     it('describes the shipped profile by the par and the ceiling, not by a life economy (Gen 183)', () => {
         // Lives, the first-mismatch grace, guard tokens and the shard-to-life conversion went in
         // Gen 183 (docs/REMOVED_LIVES.md); the one profile has no forgiveness block to summarize.
-        expect(SHIPPED_FAIR_DIFFICULTY_PROFILE.playerCopy).toContain('one bank the whole run draws on');
+        expect(SHIPPED_FAIR_DIFFICULTY_PROFILE.playerCopy).toContain('one small bank the whole run draws on');
         expect(SHIPPED_FAIR_DIFFICULTY_PROFILE).not.toHaveProperty('lives');
         expect(SHIPPED_FAIR_DIFFICULTY_PROFILE).not.toHaveProperty('forgiveness');
         const removed = /\blives\b|\blife\b|guard|grace|shard/i;

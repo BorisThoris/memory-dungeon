@@ -1,16 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { type BoardState, type RunState, type Tile } from './contracts';
-import {
-    parTurnsForFloor,
-    TURN_BANK_CAP_PAR_MULTIPLIER,
-    turnCeilingForFloor,
-    turnCeilingForRun,
-    TURN_CEILING_PAR_MULTIPLIER
-} from './floor-par';
-import { flipTile, resolveBoardTurn } from './game';
 import { createNewRun } from './run-creation-rules';
-import { makeRun, makeTile } from './test/game-fixtures';
 import { calculateMismatchPenalty, createHiddenMismatchBoard, resolveMismatchTurnTransition } from './turn-mismatch-rules';
 
 const tile = (id: string, state: Tile['state'] = 'flipped', overrides: Partial<Tile> = {}): Tile => ({
@@ -249,85 +240,6 @@ describe('the magpie on a real miss', () => {
 });
 
 /*
- * The turn ceiling (thesis §42.2): the one way a floor ends a run. Two pairs par at one turn, so
- * the ceiling is three; every turn below is played through the real flip/resolve path.
+ * The turn ceiling that used to end a run from here (Gen 183 to 2026-09-23) is gone; the run ends
+ * on its misses now, and `miss-bank.test.ts` walks that through this same turn path.
  */
-describe('the turn ceiling', () => {
-    const twoPairRun = () =>
-        makeRun([
-            makeTile('a-1', 'a', 'A'),
-            makeTile('a-2', 'a', 'A'),
-            makeTile('b-1', 'b', 'B'),
-            makeTile('b-2', 'b', 'B')
-        ]);
-    const play = (run: RunState, first: string, second: string) => resolveBoardTurn(flipTile(flipTile(run, first), second));
-    const miss = (run: RunState) => play(run, 'a-1', 'b-1');
-    const ceiling = turnCeilingForRun(twoPairRun());
-
-    it('opens a run on a full bank: twice par', () => {
-        // A new run carries a full bank onto its first floor, so that floor's ceiling is the cap.
-        // A two-pair fixture's par is its pair count (par is clamped there since 2026-09-23), so 4.
-        expect(TURN_BANK_CAP_PAR_MULTIPLIER).toBe(2);
-        expect(parTurnsForFloor(2)).toBe(2);
-        expect(ceiling).toBe(4);
-        // A run built without a bank still reads the old per-board ceiling of three times par.
-        expect(TURN_CEILING_PAR_MULTIPLIER).toBe(3);
-        expect(turnCeilingForFloor(14)).toBe(parTurnsForFloor(14) * 3);
-    });
-
-    it('ends a floor never cleared exactly on its ceiling turn, with nothing left face up', () => {
-        let run = twoPairRun();
-        for (let turn = 1; turn < ceiling; turn += 1) {
-            run = miss(run);
-            expect(run.status).toBe('playing');
-            expect(run.runEndReason).toBeNull();
-            expect(run.turnsThisFloor).toBe(turn);
-        }
-
-        const ended = miss(run);
-
-        expect(ended.turnsThisFloor).toBe(ceiling);
-        expect(ended.status).toBe('gameOver');
-        expect(ended.runEndReason).toBe('turn_ceiling');
-        expect(ended.board?.flippedTileIds).toEqual([]);
-        expect(ended.board?.tiles.every((t) => t.state === 'hidden')).toBe(true);
-    });
-
-    /*
-     * Missed up to the turn before the ceiling. Written as a loop rather than as a fixed number of
-     * misses because Gen 210 moved par on small floors and these two tests are about the ceiling
-     * TURN, not about the number three.
-     */
-    const missedToTheCeilingTurn = (turnsToLeave = 1): RunState => {
-        let run = twoPairRun();
-        for (let turn = 0; turn < ceiling - turnsToLeave; turn += 1) run = miss(run);
-        return run;
-    };
-
-    it('ends the run on a match that leaves the floor open on the ceiling turn', () => {
-        const ended = play(missedToTheCeilingTurn(), 'a-1', 'a-2');
-
-        expect(ended.turnsThisFloor).toBe(ceiling);
-        expect(ended.board?.matchedPairs).toBe(1);
-        expect(ended.status).toBe('gameOver');
-        expect(ended.runEndReason).toBe('turn_ceiling');
-        expect(ended.board?.flippedTileIds).toEqual([]);
-    });
-
-    it('is a clear, not an end, when the floor clears on that same turn', () => {
-        const cleared = play(play(missedToTheCeilingTurn(2), 'a-1', 'a-2'), 'b-1', 'b-2');
-
-        expect(cleared.turnsThisFloor).toBe(ceiling);
-        expect(cleared.status).toBe('levelComplete');
-        expect(cleared.runEndReason).toBeNull();
-        expect(cleared.lastLevelResult?.turnsTaken).toBe(ceiling);
-    });
-
-    it('leaves the run playing after a match on a turn before the ceiling', () => {
-        const matched = play(miss(twoPairRun()), 'a-1', 'a-2');
-
-        expect(matched.turnsThisFloor).toBe(2);
-        expect(matched.status).toBe('playing');
-        expect(matched.runEndReason).toBeNull();
-    });
-});

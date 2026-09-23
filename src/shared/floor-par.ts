@@ -238,75 +238,8 @@ export const turnsTakenThisFloor = (run: Pick<RunState, 'turnsThisFloor'>): numb
 
 export const parTurnsForRun = (run: Pick<RunState, 'board'>): number => parTurnsForBoard(run.board);
 
-/**
- * The turn ceiling (thesis §42.2). There are no lives; a run ends when a floor is not cleared
- * within three times its par. Three times par is a player missing two thirds of their flips: not
- * a difficulty gate but a floor under competence, there so that a run *can* end and be a story.
- * The run never ends because you forgot - it ends because you could not finish a board at all.
+/*
+ * The turn ceiling and the turn bank that replaced it (Gen 183 to 2026-09-23) lived here. A run
+ * ends on its misses now (`miss-bank.ts`): with misses bounded and matches bounded by the board, a
+ * floor cannot run forever, and the count a player watches is the one thing that can end the run.
  */
-export const TURN_CEILING_PAR_MULTIPLIER = 3;
-
-export const turnCeilingForFloor = (pairs: number, suits?: number): number =>
-    parTurnsForFloor(pairs, suits) * TURN_CEILING_PAR_MULTIPLIER;
-
-/** The ceiling for a board, read off the board the same way its par is. */
-export const turnCeilingForBoard = (board: Pick<BoardState, 'pairCount' | 'tiles'> | null | undefined): number =>
-    parTurnsForBoard(board) * TURN_CEILING_PAR_MULTIPLIER;
-
-/**
- * The turn bank: the ceiling is carried from floor to floor instead of handed out fresh.
- *
- * Until now every floor opened on three times its own par, whatever the floor before it cost. That
- * made the ceiling a per-floor hurdle with a full refill behind it, and measured it was no hurdle at
- * all: over twenty seeds, a player missing 45% of their pairs still reached floor 120 on every one.
- * A run could only end on a floor that went catastrophically wrong on its own, never because the
- * floors before it had gone badly. The head read `17 left` and the next floor put it back - a life
- * handed back on every stair.
- *
- * So the turns left are a bank the whole run draws on:
- *
- * - **The run opens on a full bank**: the first floor's cap.
- * - **Each new floor deposits** its own par times `TURN_BANK_FLOOR_GRANT_PAR_MULTIPLIER`, rounded
- *   up, on top of whatever the last floor left unspent.
- * - **The bank never holds more than** `TURN_BANK_CAP_PAR_MULTIPLIER` times the new floor's par, so
- *   a run of good floors cannot stockpile a cushion that carries it through the deep game.
- *
- * Unspent turns carry, overspent ones are gone, and the drain follows you down the stairs. A run now
- * ends because it has been going badly, not only because one floor went catastrophically.
- */
-export const TURN_BANK_FLOOR_GRANT_PAR_MULTIPLIER = 0.75;
-export const TURN_BANK_CAP_PAR_MULTIPLIER = 2;
-
-/** The most a floor's bank may hold. */
-export const turnBankCapForBoard = (board: Pick<BoardState, 'pairCount' | 'tiles'> | null | undefined): number =>
-    parTurnsForBoard(board) * TURN_BANK_CAP_PAR_MULTIPLIER;
-
-/** What a floor deposits into the bank on arrival. */
-export const turnBankDepositForBoard = (board: Pick<BoardState, 'pairCount' | 'tiles'> | null | undefined): number =>
-    Math.ceil(parTurnsForBoard(board) * TURN_BANK_FLOOR_GRANT_PAR_MULTIPLIER);
-
-/**
- * The ceiling this floor is held to: what the run carried in plus the floor's deposit, under the
- * floor's cap. It is read off the board in play rather than stored, so it cannot go stale if the
- * board is swapped. A run built without a carry (an old fixture, a hand-made test run) reads the
- * per-board ceiling instead.
- */
-export const turnCeilingForRun = (run: Pick<RunState, 'board' | 'turnBankCarry'>): number =>
-    run.turnBankCarry != null
-        ? Math.min(runNonNegativeInteger(run.turnBankCarry) + turnBankDepositForBoard(run.board), turnBankCapForBoard(run.board))
-        : turnCeilingForBoard(run.board);
-
-/**
- * What a run carries onto its first floor: a full bank, so the first floor's ceiling is its cap.
- */
-export const openingTurnBankCarry = turnBankCapForBoard;
-
-/** Turns left before the ceiling ends the run, never below zero. This is what the next floor carries. */
-export const turnsToCeiling = (run: Pick<RunState, 'board' | 'turnsThisFloor' | 'turnBankCarry'>): number =>
-    Math.max(0, turnCeilingForRun(run) - turnsTakenThisFloor(run));
-
-/** A floor still open on its ceiling turn ends the run. A floor that cleared on that turn is a clear. */
-export const floorHitTurnCeiling = (
-    run: Pick<RunState, 'board' | 'turnsThisFloor' | 'turnBankCarry' | 'status'>
-): boolean =>
-    run.status === 'playing' && run.board != null && turnsTakenThisFloor(run) >= turnCeilingForRun(run);

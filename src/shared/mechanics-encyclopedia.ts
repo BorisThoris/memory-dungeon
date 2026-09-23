@@ -11,7 +11,7 @@
 import type { AchievementId, GameMode, MutatorId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 42 as const;
+export const ENCYCLOPEDIA_VERSION = 43 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -153,7 +153,7 @@ export const ACHIEVEMENT_CATALOG: Record<AchievementId, AchievementCodexEntry> =
         // lives went and the turn ceiling came in (docs/REMOVED_LIVES.md).
         id: 'ACH_LAST_LIFE',
         title: 'Last Turn Standing',
-        description: 'Clear a floor on the final turn before its ceiling.'
+        description: 'Clear a floor with your last miss already spent.'
     },
     ACH_ENDLESS_TEN: {
         id: 'ACH_ENDLESS_TEN',
@@ -338,10 +338,10 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
             'Each floor begins with tiles face-up briefly, then play continues hidden. Mutators such as Short memorize can shorten this window, and some floor residents lend or take a little of it.'
     },
     {
-        id: 'turn_ceiling',
-        title: 'The turn ceiling',
+        id: 'miss_budget',
+        title: 'Misses',
         description:
-            'Your turns are a **bank** the whole run draws on. The run opens with **twice the first floor\'s par**; each new floor deposits **three quarters of its own par**, on top of whatever you left unspent, and the bank never holds more than **twice the new floor\'s par**. Clear a floor under par and the bank grows; run over and the shortfall follows you down the stairs. A floor not cleared before the bank runs dry ends the run, and that is the only way a run ends on its own - otherwise it ends when you stop. The run bar shows turns against par and how many turns the bank has left.'
+            'A run has a small budget of **misses**. It opens with **two**; every new floor gives **one** back, on top of whatever you did not spend, and the budget never holds more than **three**. A miss spends one - it still resets the chain, counts a try and a turn, and nothing else - and a miss with none left ends the run. That is the only way a run ends on its own; otherwise it ends when you stop. The run bar shows turns against par and how many misses you have left, and turns red on the last one.'
     },
     {
         id: 'scoring',

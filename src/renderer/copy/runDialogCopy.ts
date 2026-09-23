@@ -47,13 +47,15 @@ export const ROUTE_CHOICE_COPY = {
  * already marks.
  */
 export const RUN_SHELL_PAR_COPY = {
-    /** `4 of 7 turns, 17 of 21 left before the run ends`. */
-    aria: (turnsTaken: number, parTurns: number, left: number, ceiling: number): string =>
-        `${turnsTaken} of ${parTurns} turns, ${left} of ${ceiling} left before the run ends`,
+    /** `4 of 9 turns, 2 misses left` - or, with the bank empty, `4 of 9 turns, no misses left`. */
+    aria: (turnsTaken: number, parTurns: number, missesLeft: number | null): string =>
+        missesLeft == null
+            ? `${turnsTaken} of ${parTurns} turns`
+            : `${turnsTaken} of ${parTurns} turns, ${missesLeft === 0 ? 'no' : missesLeft} ${missesLeft === 1 ? 'miss' : 'misses'} left`,
     /** The word after the count. Short, because it sits in a head that a phone also has to hold. */
-    leftWord: 'left',
+    leftWord: (missesLeft: number): string => (missesLeft === 1 ? 'miss left' : 'misses left'),
     /** On hover, where there is room to say which rule the count belongs to. */
-    title: (ceiling: number): string => `The run ends if this floor is still open after ${ceiling} turns.`
+    title: 'Misses you can still make. A miss with none left ends the run; each new floor gives one back, up to three.'
 } as const;
 
 /** Spoken by screen readers over the run shell's pause control. */

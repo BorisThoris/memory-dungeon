@@ -4,7 +4,7 @@ import { runRecord } from './run-record-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { ENDLESS_CYCLE_FLOOR_COUNT } from './floor-mutator-schedule';
 import { ACHIEVEMENT_IDS } from './save-data';
-import { turnCeilingForRun } from './floor-par';
+import { missesLeft } from './miss-bank';
 import { normalizeSessionStats, TILE_TRAIT_COUNT_KINDS } from './session-stats-rules';
 
 /** Run-score milestones, in points. Named for the Codex copy and the tests; the ids they unlock are older than the numbers. */
@@ -102,13 +102,14 @@ export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): A
     }
 
     /*
-     * Gen 183: the id is a Steam API name and stays; the achievement is "Last Turn Standing" -
-     * the floor cleared on the final turn before its ceiling would have ended the run.
+     * Gen 183: the id is a Steam API name and stays. Since 2026-09-23 the achievement is "Last
+     * Miss Standing" - the floor cleared with the miss bank already empty, so one more miss on it
+     * would have ended the run.
      */
     if (
-        run.lastLevelResult?.turnsTaken != null &&
-        run.lastLevelResult.turnsTaken === turnCeilingForRun(run) &&
-        run.lastLevelResult.turnsTaken > 0 &&
+        run.lastLevelResult != null &&
+        runNonNegativeInteger(run.lastLevelResult.mistakes) > 0 &&
+        missesLeft(run) === 0 &&
         !saveData.achievements.ACH_LAST_LIFE
     ) {
         unlocked.push('ACH_LAST_LIFE');
