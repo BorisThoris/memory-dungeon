@@ -39,6 +39,11 @@ export const FLOOR_CLEAR_COPY = {
         if (efficiency > 0) {
             terms.push(`${under} under par +${efficiency.toLocaleString()}`);
         }
+        // The purse (run-store-rules.ts): what this clear paid toward the store.
+        const gold = runNonNegativeInteger(result.goldEarned);
+        if (gold > 0) {
+            terms.push(`+${gold} gold`);
+        }
         return `${terms.join(' · ')}.`;
     }
 } as const;

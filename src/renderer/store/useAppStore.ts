@@ -1,3 +1,4 @@
+import { buyStoreItem } from '../../shared/run-store-rules';
 import { create } from 'zustand/react';
 import { acknowledgePassAndPlayHandoff, PASS_AND_PLAY_MIN_SEATS } from '../../shared/pass-and-play-rules';
 import type {
@@ -557,6 +558,17 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     skipMemorizePhase: () => {
         runTimerController.skipMemorizePhase();
+    },
+
+    buyStoreItem: (id) => {
+        const { run } = get();
+        if (!run || run.status !== 'paused') {
+            return;
+        }
+        const bought = buyStoreItem(run, id);
+        if (bought) {
+            set({ run: bought });
+        }
     },
 
     applyFlashPairPower: () => {

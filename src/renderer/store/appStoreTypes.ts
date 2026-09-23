@@ -1,3 +1,4 @@
+import type { StoreItemId } from '../../shared/run-store-rules';
 import type { ClassicRunSetup } from '../../shared/classic-run-setup';
 import type {
     AchievementId,
@@ -73,6 +74,8 @@ export interface AppState {
     openInventoryFromMenu: () => void;
     openCodexFromMenu: () => void;
     openInventoryFromPlaying: () => void;
+    /** The pause menu's store: buys one item into the live run, or does nothing the sheet would refuse. */
+    buyStoreItem: (id: StoreItemId) => void;
     openCodexFromPlaying: () => void;
     closeSubscreen: () => void;
     openSettings: (returnView?: SubscreenReturnView) => void;

@@ -61,6 +61,9 @@ export const RUN_SHELL_PAR_COPY = {
 /** Spoken by screen readers over the run shell's pause control. */
 export const RUN_SHELL_LABELS = {
     pause: 'Pause and open the run menu',
+    /** The purse on the head, and what it is for on hover. */
+    gold: 'gold',
+    goldTitle: 'Gold: earned when a floor clears, spent in the store on the pause menu.',
     /** The tag on the Floor stat once this run is the deepest the profile has seen. */
     personalBest: 'Best',
     personalBestAria: 'Deepest floor yet'

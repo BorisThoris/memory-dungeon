@@ -79,6 +79,10 @@ and each section names the module a definition lived in, so `git log --all -- sr
 its whole history. The intent is not that none of this returns — it is that it returns **deliberately, one
 mechanic at a time, measured against the loop** rather than layered on top of it.
 
+> **2026-09-23:** the first thing back, on these terms, is the store - as a sheet on the pause menu with
+> gold earned at floor clears, never a door between floors (`src/shared/run-store-rules.ts`,
+> `docs/BALANCE_NOTES.md`). The rest of this file stands as the record of what it was.
+
 ## What removing it actually did
 
 Two numbers, both from the repository's own simulations, run immediately before and after the Gen 172 cut:

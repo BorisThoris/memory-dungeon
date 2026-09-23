@@ -4,6 +4,7 @@ import type { RunState } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
 import { missesLeft } from '../../shared/miss-bank';
+import { runGold } from '../../shared/run-store-rules';
 import { MUTATOR_CATALOG } from '../../shared/mechanics-encyclopedia';
 import { handleHorizontalToolbarKeyDown, syncToolbarTabIndices } from '../a11y/toolbarRoving';
 import { GameplayMenuIcon } from '../ui/gameplayIcons';
@@ -463,6 +464,11 @@ const RunShell = ({
                     <span className={styles.score} data-testid="hud-score">
                         <span className={styles.scoreLabel}>Score</span>
                         <span className={styles.scoreValue}>{shownScore.toLocaleString()}</span>
+                        {/* The purse (run-store-rules.ts), beside the score it is earned with. */}
+                        <span className={styles.gold} data-testid="hud-gold" title={RUN_SHELL_LABELS.goldTitle}>
+                            <span className={styles.goldValue}>{runGold(run)}</span>{' '}
+                            <span className={styles.goldLabel}>{RUN_SHELL_LABELS.gold}</span>
+                        </span>
                     </span>
 
                     {/* The ladder you are climbing. Peggle's multiplier reads at a glance because it

@@ -13,6 +13,7 @@ import { clearResolveState } from './run-timer-rules';
 import { normalizeSessionStats } from './session-stats-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 import { getChainTier, higherChainTier, runChainMomentumPairs } from './chain-tier-rules';
+import { floorClearGold, runGold } from './run-store-rules';
 
 export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState => {
     const board: BoardState = { ...clearedBoard, flippedTileIds: [] };
@@ -71,6 +72,8 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
         higherChainTier(run.peakChainTierThisFloor, momentumBonus.tier),
         getChainTier(runNonNegativeInteger(run.bestChainThisFloor), board.pairCount)
     );
+    // What the clear pays into the purse: the rung it cleared at and the turns it came in under.
+    const goldEarned = floorClearGold({ tier: momentumBonus.tier, turnsUnderPar: floorBonus.turnsUnderPar });
     const lastLevelResult = createFloorClearLevelResult({
         bonusTags,
         featuredObjectiveCompleted,
@@ -117,7 +120,8 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
                 : runNonNegativeInteger(stats.perfectClears)
         },
         peakChainTierThisRun: higherChainTier(run.peakChainTierThisRun, floorChainTier),
+        gold: runGold(run) + goldEarned,
         timerState: clearResolveState(run),
-        lastLevelResult: floorChainTier === 'none' ? lastLevelResult : { ...lastLevelResult, chainTier: floorChainTier }
+        lastLevelResult: { ...lastLevelResult, goldEarned, ...(floorChainTier === 'none' ? {} : { chainTier: floorChainTier }) }
     };
 };

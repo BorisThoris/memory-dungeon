@@ -25,6 +25,8 @@ import { useShallow } from 'zustand/react/shallow';
 import { ABANDON_DIALOG_COPY, PAUSE_DIALOG_COPY, PERFECT_MEMORY_COPY, RUN_TOOL_REASONS, SHORTCUTS_COPY } from '../copy/runDialogCopy';
 import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
 import { missesLeft } from '../../shared/miss-bank';
+import { runGold, storeOffer } from '../../shared/run-store-rules';
+import { STORE_SHEET_COPY } from '../copy/storeSheet';
 import {
     BOARD_SHUFFLE_COPY,
     FLASH_PAIR_COPY,
@@ -323,6 +325,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const [boardViewportAtRest, setBoardViewportAtRest] = useState(true);
     const [abandonRunConfirmOpen, setAbandonRunConfirmOpen] = useState(false);
     const [shortcutsHelpOpen, setShortcutsHelpOpen] = useState(false);
+    const [storeOpen, setStoreOpen] = useState(false);
     const gamepadConnected = useGamepadConnected();
     useEffect(() => {
         if (!compactTouchChrome) {
@@ -341,6 +344,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             dismissPowersFtue: state.dismissPowersFtue,
             goToMenu: state.goToMenu,
             openCodexFromPlaying: state.openCodexFromPlaying,
+            buyStoreItem: state.buyStoreItem,
             openInventoryFromPlaying: state.openInventoryFromPlaying,
             openSettings: state.openSettings,
             notifyMemorizeBoardReady: state.notifyMemorizeBoardReady,
@@ -644,6 +648,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         continueToNextLevel,
         dismissPowersFtue,
         goToMenu,
+        buyStoreItem,
         openCodexFromPlaying,
         openInventoryFromPlaying,
         openSettings,
@@ -1685,10 +1690,20 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 </div>
 
                 {/* One modal at a time: Controls opens over pause, and closing it comes back here. */}
-                {!suppressStatusOverlays && !abandonRunConfirmOpen && !shortcutsHelpOpen && run.status === 'paused' && (
+                {!suppressStatusOverlays && !abandonRunConfirmOpen && !shortcutsHelpOpen && !storeOpen && run.status === 'paused' && (
                     <OverlayModal
                         actions={[
                             { label: 'Resume', onClick: resume, variant: 'primary' },
+                            /* The store (2026-09-23, run-store-rules.ts): a sheet here rather than a
+                               door between floors, so the game never waits for the player to shop. */
+                            {
+                                label: STORE_SHEET_COPY.pauseAction(runGold(run)),
+                                onClick: () => {
+                                    playMenuOpen();
+                                    setStoreOpen(true);
+                                },
+                                variant: 'secondary'
+                            },
                             /* Fit board left this menu for the dock, where the camera is: a pinch
                                is undone next to where it happened, without pausing. */
                             { label: 'Inventory', onClick: openInventoryFromPlaying, variant: 'secondary' },
@@ -1791,6 +1806,40 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 <dt>Misses left</dt>
                                 <dd data-testid="pause-misses-left">{missesLeft(run) ?? '—'}</dd>
                             </div>
+                            <div>
+                                <dt>Gold</dt>
+                                <dd data-testid="pause-gold">{runGold(run)}</dd>
+                            </div>
+                        </dl>
+                    </OverlayModal>
+                )}
+                {!suppressStatusOverlays && storeOpen && run.status === 'paused' && (
+                    <OverlayModal
+                        actions={[
+                            ...storeOffer(run).map((row) => ({
+                                label: STORE_SHEET_COPY.buyAction(row),
+                                onClick: () => {
+                                    playMenuOpen();
+                                    buyStoreItem(row.id);
+                                },
+                                variant: 'secondary' as const,
+                                disabled: row.blocked !== null
+                            })),
+                            { label: STORE_SHEET_COPY.back, onClick: () => setStoreOpen(false), variant: 'primary' }
+                        ]}
+                        headerPlateTone="pause"
+                        onEscape={() => setStoreOpen(false)}
+                        subtitle={STORE_SHEET_COPY.subtitle(runGold(run))}
+                        testId="store-sheet"
+                        title={STORE_SHEET_COPY.title}
+                    >
+                        <dl className={styles.pauseStats} data-testid="store-rows">
+                            {storeOffer(run).map((row) => (
+                                <div key={row.id}>
+                                    <dt>{row.title}</dt>
+                                    <dd data-testid={'store-row-' + row.id}>{STORE_SHEET_COPY.rowBody(row)}</dd>
+                                </div>
+                            ))}
                         </dl>
                     </OverlayModal>
                 )}

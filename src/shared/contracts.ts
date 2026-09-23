@@ -389,6 +389,8 @@ export interface LevelResult {
     bestChain?: number;
     /** The highest rung the floor's chain reached; what its Sharp and Fever floor records count. */
     chainTier?: 'none' | 'clean' | 'sharp' | 'fever';
+    /** Gold the clear paid into the purse (`run-store-rules.ts`). */
+    goldEarned?: number;
     /** Extreme Fever: the momentum still standing when the last pair went, and what it paid. */
     chainMomentumAtClear?: number;
     momentumBonusTier?: 'none' | 'clean' | 'sharp' | 'fever';
@@ -650,6 +652,13 @@ export interface RunState {
      * a census holding it open), which has no budget and never ends this way.
      */
     missBankCarry?: number;
+    /**
+     * The purse (`run-store-rules.ts`): gold earned at floor clears and spent on the pause menu's
+     * store. Absent on a run built before it, read as nought. `storePurchases` counts what this
+     * run has bought, which is what the prices climb on.
+     */
+    gold?: number;
+    storePurchases?: Partial<Record<'miss' | 'peek' | 'shuffle', number>>;
     /** The biggest single break's score this floor: what band N5 reads the largest break's share from. */
     largestChunkScoreThisFloor: number;
     /** Pairs the magpie has taken back on this floor. */
