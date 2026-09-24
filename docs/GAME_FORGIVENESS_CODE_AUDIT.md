@@ -88,7 +88,7 @@ That is also outdated. The active game already has a streak-to-survival mechanic
 The document is directionally right that players still feel punished, but it misses an important runtime nuance:
 - the first guard only arrives at streak 4,
 - the first heal only arrives at streak 8,
-- and streak resets on every floor.
+- and streak reset on every floor (fixed at Gen 262: `chain-carryover-rules.ts` carries one link across the stairs, so a clear no longer wipes the chain).
 
 That means early and mid-game players often die before the reward system becomes relevant.
 

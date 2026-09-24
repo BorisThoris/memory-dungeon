@@ -96,7 +96,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         counter: 'feverBreaks',
         verdict: 'confirmed',
         generation: 261,
-        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.392 x 0.47, Fever lands on more floors because momentum is matches now and a floor has twice as many. Before: Ladder re-measured at none 1.63 / clean 2.40 / sharp 6.12 / fever 7.70 pairs per match, and the multiplier climbs strictly at every rung. Fever itself lands on 0.217 of floors, which is the top of the ladder being reachable rather than decorative. sim:cascade and sim:pop both hold their bands. Gen 260 moved both numbers: giving the recovery floor a two-suit deal put four more floors a cycle on the narrow palette, where one suit sits in bigger clumps - so a break takes more pairs and a floor ends sooner, which is fewer floors reaching the top rung and a larger break when one does. The meter follows it; CHAIN_RUNG_PAIRS says eight pairs at Fever now.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.392 x 0.47, Fever lands on more floors because momentum is matches now and a floor has twice as many. Before: Ladder re-measured at none 1.63 / clean 2.40 / sharp 6.12 / fever 7.70 pairs per match, and the multiplier climbs strictly at every rung. Fever itself lands on 0.217 of floors, which is the top of the ladder being reachable rather than decorative. sim:cascade and sim:pop both hold their bands. Gen 260 moved both numbers: giving the recovery floor a two-suit deal put four more floors a cycle on the narrow palette, where one suit sits in bigger clumps - so a break takes more pairs and a floor ends sooner, which is fewer floors reaching the top rung and a larger break when one does. The meter follows it; CHAIN_RUNG_PAIRS says eight pairs at Fever now. Gen 262 also stopped the stairs wiping the chain: a floor clear is the first link of the next floor’s chain (`chain-carryover-rules.ts`), one link and no tier, because capping the carry one under Sharp ended five of the curve’s floors in under two turns.'
     },
     {
         id: 'board.cleanup',
@@ -158,7 +158,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         counter: 'peek',
         verdict: 'confirmed',
         generation: 261,
-        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.938 x 0.94, runs reach the census cap again with the bank held open. Before: Occupancy 0.908 across whole runs, banded core, and it is the one run-scoped charge that clears that bar honestly: a run starts with a single peek and three of the floor curios grant another, so the charge keeps coming back. Read a floor at a time it was 1.000, which was true of 240 first floors rather than of a run (Gen 207).'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.929 x 0.93, runs reach the census cap again with the bank held open. Before: Occupancy 0.908 across whole runs, banded core, and it is the one run-scoped charge that clears that bar honestly: a run starts with a single peek and three of the floor curios grant another, so the charge keeps coming back. Read a floor at a time it was 1.000, which was true of 240 first floors rather than of a run (Gen 207). Gen 262 re-measured it from 0.938 x 0.94 once the chain began carrying one link across the stairs: floors open one match nearer Clean and end a little sooner.'
     },
     {
         id: 'power.pin',
@@ -318,9 +318,9 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         id: 'objective.featured_streak',
         counter: 'featuredStreak',
         verdict: 'changed',
-        generation: 261,
+        generation: 262,
         gone: ['no shuffle, swap, or destroy'],
-        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.808 x 0.81, within-par reads the re-derived par. Before: The scholar-style objective told the player "no shuffle, swap, or destroy" while its rule watched one field that covers swap too, so only the dead third was cut; Gen 213 found the same phrasing describing the Scholar preset and cut it there. Gen 216 finally counted the thing: 0.821 of a run’s floors clear their featured objective, and every floor carries one. Gen 259 moved it from 0.829: the within-par objective now reads the palette its floor was dealt, so on the third of floors held to two suits it is a target rather than a formality. Its census exemption had said it needed the run-level census, which shipped at Gen 207 - the line went on excusing the mechanic for eight generations after its own stated blocker was gone.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.813 x 0.81, within-par reads the re-derived par. Before: The scholar-style objective told the player "no shuffle, swap, or destroy" while its rule watched one field that covers swap too, so only the dead third was cut; Gen 213 found the same phrasing describing the Scholar preset and cut it there. Gen 216 finally counted the thing: 0.821 of a run’s floors clear their featured objective, and every floor carries one. Gen 259 moved it from 0.829: the within-par objective now reads the palette its floor was dealt, so on the third of floors held to two suits it is a target rather than a formality. Its census exemption had said it needed the run-level census, which shipped at Gen 207 - the line went on excusing the mechanic for eight generations after its own stated blocker was gone. Gen 262 re-measured it from 0.808 x 0.81 once the chain began carrying one link across the stairs: floors open one match nearer Clean and end a little sooner.'
     },
     {
         id: 'economy.score_and_rewards',

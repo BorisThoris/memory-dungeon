@@ -818,7 +818,12 @@ describe('useAppStore timers', () => {
         expect(state.run?.status).toBe('levelComplete');
         expect(state.saveData.bestScore).toBeGreaterThan(0);
         expect(state.saveData.achievements.ACH_FIRST_CLEAR).toBe(true);
-        expect(state.newlyUnlockedAchievements).toEqual([]);
+        // Both floors are cleared flawlessly here, and since Gen 262 the clear of floor one is
+        // itself the first link of floor two's chain (`chain-carryover-rules.ts`). That one link
+        // is what takes a perfect floor two over the Fever rung as its last pair goes, which is
+        // exactly what Extreme Fever is for. This case is about clear/continue/end and what gets
+        // persisted, so it asserts the unlock rather than pretending the chain still resets.
+        expect(state.newlyUnlockedAchievements).toEqual(['ACH_EXTREME_FEVER']);
         expect(state.run?.stats.highestLevel).toBe(2);
         expect(state.run?.stats.levelsCleared).toBe(2);
         expect(state.run?.achievementsEnabled).toBe(true);

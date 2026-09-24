@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
     judgeRunOccupancy,
     judgeSystemOccupancy,
+    OCCUPANCY_SEEDS,
     simulateRunOccupancy,
     simulateSystemOccupancy,
     summarizeRunOccupancy,
@@ -59,6 +60,21 @@ describe('the run census', () => {
         expect(verdict.onceOnly.join(' ')).toContain('wildMatch');
         const wild = report.rows.find((row) => row.key === 'wildMatch')!;
         expect(wild.lastFloorSeen).toBe(1);
+    });
+
+    it('the census resolves one floor: a system that fires once clears the rare bar', () => {
+        /*
+         * The `rare` bar says in prose that firing once because a seed allowed it is enough, and
+         * for twenty generations the number said otherwise - it was one floor in two hundred while
+         * the census played two hundred and forty. Nothing caught it until Gen 262's chain
+         * carry-over moved the magpie from two of those floors to one. This is the number and the
+         * sentence held in step, so the next change to either census dimension fails here rather
+         * than quietly re-banding a system that is doing exactly what it was written to do.
+         */
+        const oneFloor = 1 / (OCCUPANCY_SEEDS.length * SYSTEM_OCCUPANCY_BASELINE_FLOORS);
+        expect(report.floors).toBe(OCCUPANCY_SEEDS.length * SYSTEM_OCCUPANCY_BASELINE_FLOORS);
+        expect(SYSTEM_OCCUPANCY_BANDS.rare.min).toBeLessThanOrEqual(oneFloor);
+        expect(SYSTEM_OCCUPANCY_BANDS.rare.min).toBeGreaterThan(0);
     });
 
     it('holds every run-scoped charge inside the band a run actually gives it', () => {

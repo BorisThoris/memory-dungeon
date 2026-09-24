@@ -3303,3 +3303,56 @@ Negative control, run: put `power.pin` back to 213 and the gate fails with *"ent
 261: expected [ 'power.pin' ] to deeply equal []"*. The constant is what makes the claim cost
 something, and it should be raised again the next time par, the deal or the chrome moves — which, on
 this session's evidence, is roughly every twenty generations.
+
+---
+
+## Gen 262 — the stairs took the chain, and the only carry the floors could afford was one link
+
+A floor clear zeroed `currentStreak`. A *miss* halves it. So the run's one moment of unambiguous
+success was the harshest thing that could happen to a chain, and it happened on every floor.
+`chain-carryover-rules.ts` carries the chain across the boundary instead.
+
+The interesting part is not that it carries. It is **how little it can carry**, and that the number
+came from the sims rather than from taste.
+
+### Three caps, measured
+
+Clean is the rung where a break starts to ripple, so every link handed to a floor for free is a
+break that reaches further and earlier on a board the player has not begun to read. Three caps were
+run through `difficulty-curve-simulation.ts` and the run census:
+
+```
+cap                      curve                                              census
+one under Sharp          floors 7, 9, 18, 19, 30 end in <2 turns            peek 0.850 (core bar 0.9)
+(the first cut)          narrow-palette gap 0.229 over a band of 0.12       magpie 0.000
+one under Clean          narrow-palette gap 0.166 over a band of 0.12       peek 0.892 (core bar 0.9)
+one link                 every band holds                                   peek 0.908, magpie 0.004
+```
+
+The narrow-palette floors go first every time - 20 floors of two suits or fewer against 32 wider
+ones - because on a two-suit board almost everything can chain, and that is the floor set this
+repository already has open as a loose end. A floor that is over in 1.9 turns is not a floor.
+
+So the cap is **one link**, `CHAIN_CARRYOVER_CAP`, and the honest reading of it is not "some of
+your chain survives" but *the clear is itself the first link of the next floor's chain*: a player
+arrives one match from Clean instead of three, feels it on the first pair they turn over, and no
+tier is ever handed to a board that did not earn it. `chunkPairsThisChain` does not carry at all -
+it counts pairs broken on a board that no longer exists, and carrying it would route momentum
+around the cap.
+
+A bigger carry is available to anyone who wants it. It is not a tuning knob: it costs floor length,
+and the curve and the census would have to be re-banded with it, deliberately, as their own change.
+
+### The bar that had been wrong for twenty generations
+
+The run census called the magpie thin at 0.004 against a `rare` minimum of 0.005. Chasing it found
+the bar, not the bird. `SYSTEM_OCCUPANCY_BANDS.rare` is documented as meaning *"a system that fires
+once because a seed allowed it clears the bar"* - but 0.005 is one floor in two hundred, and the run
+census plays 240 (`OCCUPANCY_SEEDS` x `SYSTEM_OCCUPANCY_BASELINE_FLOORS`), where one floor is
+0.0042. A system firing exactly once therefore failed a bar written to pass it. Nothing had noticed,
+because nothing had sat on exactly one floor before: the magpie ran at two of 240 (0.008, the figure
+in Gen 261's census above) and the carry-over moved it to one.
+
+The bar is now 0.004 and `the census resolves one floor` in `run-occupancy-simulation.test.ts`
+holds the number and the sentence in step, so the next change to either census dimension fails
+there rather than quietly re-banding a system doing exactly what it was written to do.

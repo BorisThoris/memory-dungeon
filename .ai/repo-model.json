@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2710,
-    "codeFileCount": 944,
-    "exportedSymbolCount": 2886,
+    "trackedFileCount": 2712,
+    "codeFileCount": 946,
+    "exportedSymbolCount": 2888,
     "contentItemCount": 10,
     "mechanicCount": 48,
     "stateFieldCount": 87,
-    "relationshipCount": 7375
+    "relationshipCount": 7390
   },
   "inventory": [
     {
@@ -285,8 +285,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 506759,
-      "sha256": "8a2f13d5b293b955f7ffd40bfbe12cc69fe9ed72abb259e3c4fc8e9fbba9f99d"
+      "bytes": 510029,
+      "sha256": "f931460b127296bcf4b515a6f38af9f50ec06f623cb577a53b351cc3b777fc5c"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -453,8 +453,8 @@
     {
       "path": "docs/GAME_FORGIVENESS_CODE_AUDIT.md",
       "category": "documentation",
-      "bytes": 11367,
-      "sha256": "df17f6ecc64a1782f9197cde8ae0118e39bf470fa637bcd6e92da962240b9fd4"
+      "bytes": 11486,
+      "sha256": "a8295a88ca4429a317c54c0bf3aaf9568a30fb1f9ab14b7111977322fd851dd1"
     },
     {
       "path": "docs/GAME_FORGIVENESS_DEEP_DIVE.md",
@@ -783,14 +783,14 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 26960,
-      "sha256": "19489af84f3124263650b2c46de793be1b42d5ee7efe88c9302ec2447f612ba7"
+      "bytes": 27537,
+      "sha256": "011ba9206e13081e13e4d99a46992c9f5bce7cfdf1713aede7b2ae14919c4e0c"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
       "category": "documentation",
-      "bytes": 39437,
-      "sha256": "b49f66a391b6268b89d6b0f5bb45d54cd986866d78a3126f115850525253eab2"
+      "bytes": 39824,
+      "sha256": "dbf001da4ac40f834c0df944b33c5a7b0dacbb574bee540d2098ff4658451c7e"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_POLISH_AND_GAPS.md",
@@ -2368,13 +2368,13 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33561,
-      "sha256": "33d82e75ba669d42be2632900e13f22af9883234eadeaf31ac9266e1b1ddbc69"
+      "sha256": "ffb8f479a6dfac0239e2790912a326937641bbf8eb5ba33b0a1ba92dd59e1f6d"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
       "category": "documentation",
-      "bytes": 494174,
-      "sha256": "2ab62fdb7fb78bd5d961712a66d348080192f9c4c8eb07b185ca4daadcdc98b1"
+      "bytes": 495240,
+      "sha256": "b98e7e321c4fd8096a8152ecbb3e65b3b0a75bc89746dbf5666d9a832c2f8fc1"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -11571,8 +11571,8 @@
     {
       "path": "src/renderer/store/useAppStore.test.ts",
       "category": "test",
-      "bytes": 35657,
-      "sha256": "f9dad88a2530d3d52bd6b4c3d2823167b5c15b25b786738c05d3f9ade96dfc0c"
+      "bytes": 36159,
+      "sha256": "24de9d0eb946bee8e96f8cd0ac607e610ec38f92846dd6e4f1c1765d4ff90c8d"
     },
     {
       "path": "src/renderer/store/useAppStore.ts",
@@ -11829,8 +11829,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 27248,
-      "sha256": "d8e229421653891927ad254e5ce0589475540a4f9cd3d9c628834d778db6114a"
+      "bytes": 27827,
+      "sha256": "c24b597762458d9e43f196a00c7ac943ea51e27a9edfacd53a7391df069bd8d8"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -12113,6 +12113,18 @@
       "category": "test",
       "bytes": 4884,
       "sha256": "83c10da47da51ff659110d730f4c3b9f5fd93f664abb2b12b719cecb69d88acf"
+    },
+    {
+      "path": "src/shared/chain-carryover-rules.test.ts",
+      "category": "test",
+      "bytes": 2216,
+      "sha256": "90767e20952d3059b8eeeedbf2f7576d862f465a39471ecf7aadd36acb46d68d"
+    },
+    {
+      "path": "src/shared/chain-carryover-rules.ts",
+      "category": "source",
+      "bytes": 3664,
+      "sha256": "58296d8b5dea3c4b2c034bd2901ff0138da6619b03c26f67b9a0676a49cf047d"
     },
     {
       "path": "src/shared/chain-rung-value-rules.test.ts",
@@ -12531,8 +12543,8 @@
     {
       "path": "src/shared/game.test.ts",
       "category": "test",
-      "bytes": 66672,
-      "sha256": "a1f5cf3e63c39655e5ff576ee5d901f5073daa5598a9dc7360a11d7391cdb4ea"
+      "bytes": 66945,
+      "sha256": "fdf61f5c8bcae889346ebc1203f803ec297a8ad8ee6c9b3b23ed822e5ea7e13e"
     },
     {
       "path": "src/shared/game.ts",
@@ -12903,8 +12915,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 34097,
-      "sha256": "5146b8db4c7a022fefc8eb8690d75124c66055cca31f166269bd5f20ee03b695"
+      "bytes": 34436,
+      "sha256": "831ee908fc36c2bb9415b6293bdfaa09be17e207f76a9be463f8ce6bc48e68c9"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -13005,14 +13017,14 @@
     {
       "path": "src/shared/next-floor-run-state-rules.test.ts",
       "category": "test",
-      "bytes": 3399,
-      "sha256": "fb93e46d6c690c5f8757cbbe96ff392e9b2482bd9676836ae2f39d2741e444ba"
+      "bytes": 5187,
+      "sha256": "d175d7c762cde7ca58c73ac80ad18e872dda8c1ab3f21b0f2e88c68428b701df"
     },
     {
       "path": "src/shared/next-floor-run-state-rules.ts",
       "category": "source",
-      "bytes": 3073,
-      "sha256": "7591df1fe7cc35fbb138ab4ea0c50a5e4b1136056320ef06af4876317cf21888"
+      "bytes": 3777,
+      "sha256": "73b0750e03abeab7ca5ccad301ed20c17acb9d7ec08c400206e7da43467111b7"
     },
     {
       "path": "src/shared/next-floor-transition-rules.ts",
@@ -13467,8 +13479,8 @@
     {
       "path": "src/shared/run-occupancy-simulation.test.ts",
       "category": "test",
-      "bytes": 6383,
-      "sha256": "4d379e367d0d83571656cbb5597f7741526124295f8f25849c8423aed4dbd221"
+      "bytes": 7442,
+      "sha256": "75ba2a3aa4d3573be060ee05a9f610dcfaa42a4b1088760119ec1116634e6973"
     },
     {
       "path": "src/shared/run-record-guards.test.ts",
@@ -13779,8 +13791,8 @@
     {
       "path": "src/shared/system-occupancy-simulation.ts",
       "category": "source",
-      "bytes": 56952,
-      "sha256": "d386002f63bb2ebffa15a30aa09f2528655e701462222c2cf93e21348f0fcc4d"
+      "bytes": 57683,
+      "sha256": "53a267759f7bcfe86c861b9d7703e710008ba1f9c115ec85f86138de22a6cb7b"
     },
     {
       "path": "src/shared/system-refinement-ledger.test.ts",
@@ -13791,8 +13803,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 41410,
-      "sha256": "dfcf1632ef3f35c88686fc155bf6bf0c1d4b72d6e5cfabdfe4f0f6618ec93fd9"
+      "bytes": 41987,
+      "sha256": "03a921e1bf811511199d4eb4426beb502f2b386b3afa1eb6425c4dac91cddba3"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -25721,7 +25733,7 @@
       "path": "src/renderer/store/useAppStore.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 898,
+      "lineCount": 903,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/useAppStore.ts",
@@ -27156,6 +27168,39 @@
       "testedBy": []
     },
     {
+      "id": "file:src/shared/chain-carryover-rules.test.ts",
+      "path": "src/shared/chain-carryover-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 43,
+      "imports": [
+        "file:src/shared/chain-carryover-rules.ts",
+        "file:src/shared/chain-tier-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/chain-carryover-rules.ts",
+      "path": "src/shared/chain-carryover-rules.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 62,
+      "imports": [
+        "file:src/shared/chain-tier-rules.ts",
+        "file:src/shared/run-number-guards.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/chain-carryover-rules.ts#carriedChainForNextFloor",
+        "symbol:src/shared/chain-carryover-rules.ts#CHAIN_CARRYOVER_CAP"
+      ],
+      "testedBy": [
+        "file:src/shared/chain-carryover-rules.test.ts",
+        "file:src/shared/game.test.ts",
+        "file:src/shared/next-floor-run-state-rules.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/chain-rung-value-rules.test.ts",
       "path": "src/shared/chain-rung-value-rules.test.ts",
       "layer": "shared",
@@ -27276,9 +27321,11 @@
         "file:src/renderer/store/useAppStore.test.ts",
         "file:src/shared/authored-floors.test.ts",
         "file:src/shared/cascade-clump-fixture.test.ts",
+        "file:src/shared/chain-carryover-rules.test.ts",
         "file:src/shared/chain-tier-rules.test.ts",
         "file:src/shared/clump-read-rules.test.ts",
-        "file:src/shared/memorize-skip-reward-rules.test.ts"
+        "file:src/shared/memorize-skip-reward-rules.test.ts",
+        "file:src/shared/next-floor-run-state-rules.test.ts"
       ]
     },
     {
@@ -28773,10 +28820,11 @@
       "path": "src/shared/game.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1692,
+      "lineCount": 1695,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-powers.ts",
+        "file:src/shared/chain-carryover-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-curio-rules.ts",
         "file:src/shared/floor-par.ts",
@@ -30051,7 +30099,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 637,
+      "lineCount": 638,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -30400,8 +30448,10 @@
       "path": "src/shared/next-floor-run-state-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 86,
+      "lineCount": 128,
       "imports": [
+        "file:src/shared/chain-carryover-rules.ts",
+        "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-curio-rules.ts",
         "file:src/shared/game.ts",
@@ -30415,9 +30465,10 @@
       "path": "src/shared/next-floor-run-state-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 89,
+      "lineCount": 99,
       "imports": [
         "file:src/shared/board-tile-generation-rules.ts",
+        "file:src/shared/chain-carryover-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-curio-rules.ts",
         "file:src/shared/miss-bank.ts",
@@ -31889,7 +31940,7 @@
       "path": "src/shared/run-occupancy-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 117,
+      "lineCount": 133,
       "imports": [
         "file:src/shared/system-occupancy-simulation.ts"
       ],
@@ -32925,7 +32976,7 @@
       "path": "src/shared/system-occupancy-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1083,
+      "lineCount": 1092,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-power-actions.ts",
@@ -45920,6 +45971,22 @@
       "endLine": 542
     },
     {
+      "id": "symbol:src/shared/chain-carryover-rules.ts#carriedChainForNextFloor",
+      "name": "carriedChainForNextFloor",
+      "kind": "value",
+      "file": "src/shared/chain-carryover-rules.ts",
+      "line": 60,
+      "endLine": 61
+    },
+    {
+      "id": "symbol:src/shared/chain-carryover-rules.ts#CHAIN_CARRYOVER_CAP",
+      "name": "CHAIN_CARRYOVER_CAP",
+      "kind": "value",
+      "file": "src/shared/chain-carryover-rules.ts",
+      "line": 52,
+      "endLine": 52
+    },
+    {
       "id": "symbol:src/shared/chain-rung-value-rules.ts#CHAIN_RUNG_PAIRS",
       "name": "CHAIN_RUNG_PAIRS",
       "kind": "value",
@@ -51132,16 +51199,16 @@
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 604,
-      "endLine": 622
+      "line": 605,
+      "endLine": 623
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 625,
-      "endLine": 636
+      "line": 626,
+      "endLine": 637
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
@@ -51149,7 +51216,7 @@
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
       "line": 545,
-      "endLine": 601
+      "endLine": 602
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
@@ -51836,16 +51903,16 @@
       "name": "createNextFloorRunState",
       "kind": "value",
       "file": "src/shared/next-floor-run-state-rules.ts",
-      "line": 20,
-      "endLine": 88
+      "line": 21,
+      "endLine": 98
     },
     {
       "id": "symbol:src/shared/next-floor-run-state-rules.ts#CreateNextFloorRunStateOptions",
       "name": "CreateNextFloorRunStateOptions",
       "kind": "interface",
       "file": "src/shared/next-floor-run-state-rules.ts",
-      "line": 14,
-      "endLine": 18
+      "line": 15,
+      "endLine": 19
     },
     {
       "id": "symbol:src/shared/next-floor-transition-rules.ts#advanceToNextLevel",
@@ -55348,40 +55415,40 @@
       "name": "dominantSystemKeys",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1061,
-      "endLine": 1064
+      "line": 1070,
+      "endLine": 1073
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#floorBandedRows",
       "name": "floorBandedRows",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 978,
-      "endLine": 983
+      "line": 987,
+      "endLine": 992
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeRunOccupancy",
       "name": "judgeRunOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1019,
-      "endLine": 1059
+      "line": 1028,
+      "endLine": 1068
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
       "name": "judgeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 985,
-      "endLine": 1007
+      "line": 994,
+      "endLine": 1016
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancyAgainstBaseline",
       "name": "judgeSystemOccupancyAgainstBaseline",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 945,
-      "endLine": 968
+      "line": 954,
+      "endLine": 977
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OCCUPANCY_SEEDS",
@@ -55436,8 +55503,8 @@
       "name": "summarizeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1066,
-      "endLine": 1082
+      "line": 1075,
+      "endLine": 1091
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BANDS",
@@ -55445,23 +55512,23 @@
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
       "line": 838,
-      "endLine": 849
+      "endLine": 858
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE",
       "name": "SYSTEM_OCCUPANCY_BASELINE",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 899,
-      "endLine": 919
+      "line": 908,
+      "endLine": 928
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "name": "SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 936,
-      "endLine": 936
+      "line": 945,
+      "endLine": 945
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_COUNTERS",
@@ -57521,7 +57588,7 @@
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
-          "line": 9
+          "line": 10
         },
         {
           "path": "src/shared/run-soak.ts",
@@ -57707,7 +57774,7 @@
         },
         {
           "path": "src/shared/run-occupancy-simulation.test.ts",
-          "line": 83
+          "line": 70
         }
       ],
       "enables": [],
@@ -57877,7 +57944,7 @@
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
-          "line": 36
+          "line": 43
         },
         {
           "path": "src/shared/flip-tile-transition.ts",
@@ -57891,7 +57958,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 130
+          "line": 131
         },
         {
           "path": "src/shared/next-floor-run-state-rules.test.ts",
@@ -58138,7 +58205,7 @@
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
-          "line": 35
+          "line": 42
         }
       ],
       "tests": [
@@ -69930,6 +69997,18 @@
       "id": "exports:src/shared/cascade-balance-simulation.ts->symbol:src/shared/cascade-balance-simulation.ts#summarizeCascadeBalance",
       "source": "file:src/shared/cascade-balance-simulation.ts",
       "target": "symbol:src/shared/cascade-balance-simulation.ts#summarizeCascadeBalance",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/chain-carryover-rules.ts->symbol:src/shared/chain-carryover-rules.ts#carriedChainForNextFloor",
+      "source": "file:src/shared/chain-carryover-rules.ts",
+      "target": "symbol:src/shared/chain-carryover-rules.ts#carriedChainForNextFloor",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/chain-carryover-rules.ts->symbol:src/shared/chain-carryover-rules.ts#CHAIN_CARRYOVER_CAP",
+      "source": "file:src/shared/chain-carryover-rules.ts",
+      "target": "symbol:src/shared/chain-carryover-rules.ts#CHAIN_CARRYOVER_CAP",
       "kind": "exports"
     },
     {
@@ -89826,6 +89905,30 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/chain-carryover-rules.test.ts->src/shared/chain-carryover-rules.ts",
+      "source": "file:src/shared/chain-carryover-rules.test.ts",
+      "target": "file:src/shared/chain-carryover-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/chain-carryover-rules.test.ts->src/shared/chain-tier-rules.ts",
+      "source": "file:src/shared/chain-carryover-rules.test.ts",
+      "target": "file:src/shared/chain-tier-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/chain-carryover-rules.ts->src/shared/chain-tier-rules.ts",
+      "source": "file:src/shared/chain-carryover-rules.ts",
+      "target": "file:src/shared/chain-tier-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/chain-carryover-rules.ts->src/shared/run-number-guards.ts",
+      "source": "file:src/shared/chain-carryover-rules.ts",
+      "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/chain-rung-value-rules.test.ts->src/shared/chain-rung-value-rules.ts",
       "source": "file:src/shared/chain-rung-value-rules.test.ts",
       "target": "file:src/shared/chain-rung-value-rules.ts",
@@ -90783,6 +90886,12 @@
       "id": "imports:src/shared/game.test.ts->src/shared/board-powers.ts",
       "source": "file:src/shared/game.test.ts",
       "target": "file:src/shared/board-powers.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/game.test.ts->src/shared/chain-carryover-rules.ts",
+      "source": "file:src/shared/game.test.ts",
+      "target": "file:src/shared/chain-carryover-rules.ts",
       "kind": "imports"
     },
     {
@@ -92298,6 +92407,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/next-floor-run-state-rules.test.ts->src/shared/chain-carryover-rules.ts",
+      "source": "file:src/shared/next-floor-run-state-rules.test.ts",
+      "target": "file:src/shared/chain-carryover-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/next-floor-run-state-rules.test.ts->src/shared/chain-tier-rules.ts",
+      "source": "file:src/shared/next-floor-run-state-rules.test.ts",
+      "target": "file:src/shared/chain-tier-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/next-floor-run-state-rules.test.ts->src/shared/contracts.ts",
       "source": "file:src/shared/next-floor-run-state-rules.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -92325,6 +92446,12 @@
       "id": "imports:src/shared/next-floor-run-state-rules.ts->src/shared/board-tile-generation-rules.ts",
       "source": "file:src/shared/next-floor-run-state-rules.ts",
       "target": "file:src/shared/board-tile-generation-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/next-floor-run-state-rules.ts->src/shared/chain-carryover-rules.ts",
+      "source": "file:src/shared/next-floor-run-state-rules.ts",
+      "target": "file:src/shared/chain-carryover-rules.ts",
       "kind": "imports"
     },
     {
@@ -99999,6 +100126,24 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/chain-carryover-rules.ts->file:src/shared/chain-carryover-rules.test.ts",
+      "source": "file:src/shared/chain-carryover-rules.ts",
+      "target": "file:src/shared/chain-carryover-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/chain-carryover-rules.ts->file:src/shared/game.test.ts",
+      "source": "file:src/shared/chain-carryover-rules.ts",
+      "target": "file:src/shared/game.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/chain-carryover-rules.ts->file:src/shared/next-floor-run-state-rules.test.ts",
+      "source": "file:src/shared/chain-carryover-rules.ts",
+      "target": "file:src/shared/next-floor-run-state-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/chain-rung-value-rules.ts->file:src/shared/chain-rung-value-rules.test.ts",
       "source": "file:src/shared/chain-rung-value-rules.ts",
       "target": "file:src/shared/chain-rung-value-rules.test.ts",
@@ -100053,6 +100198,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/chain-tier-rules.ts->file:src/shared/chain-carryover-rules.test.ts",
+      "source": "file:src/shared/chain-tier-rules.ts",
+      "target": "file:src/shared/chain-carryover-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/chain-tier-rules.ts->file:src/shared/chain-tier-rules.test.ts",
       "source": "file:src/shared/chain-tier-rules.ts",
       "target": "file:src/shared/chain-tier-rules.test.ts",
@@ -100068,6 +100219,12 @@
       "id": "tested_by:src/shared/chain-tier-rules.ts->file:src/shared/memorize-skip-reward-rules.test.ts",
       "source": "file:src/shared/chain-tier-rules.ts",
       "target": "file:src/shared/memorize-skip-reward-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/chain-tier-rules.ts->file:src/shared/next-floor-run-state-rules.test.ts",
+      "source": "file:src/shared/chain-tier-rules.ts",
+      "target": "file:src/shared/next-floor-run-state-rules.test.ts",
       "kind": "tested_by"
     },
     {
