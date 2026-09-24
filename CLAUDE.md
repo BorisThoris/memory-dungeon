@@ -79,7 +79,12 @@ Rules here are the owner's decisions and the lessons that cost real time. They o
 - **Bombs** are aimed at the one face-up card, take its pair with no turn, miss or score, and never
   take the floor's last pair.
 - **Mutators iterate during play** on a clock the player winds (turns, misses, matches) and show on
-  the board; static generation swaps were rejected.
+  the board; static generation swaps were rejected. The live ones: restless floor (floor 8, every
+  third turn), skittish cards (floor 11, on a miss the two cards seen flinch one step), lantern
+  light (floor 10, a match lights up to three neighbours until the next flip), plus the magpie,
+  sticky fingers, spotlight and n-back. Build a new one the way these were: a rules module, a seam
+  hook, a run counter, words for what the board cannot show, the full graph/census/ledger
+  checklist, a hall room, and a look at it in the browser.
 - Before tuning the pop, measure the matched vs popped share of a floor, not pairs per match.
 - Only `classic` and `pass_and_play` ship; do not restore removed modes or their art.
 
