@@ -4359,8 +4359,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 121656,
-      "sha256": "970cccc83a66d5c852c9eb1f6865f30ca281b6803b3bcbb88cc87e4de13fba83"
+      "bytes": 123146,
+      "sha256": "3ac1d9e599b2f47e9d21f553d6731f2127c7172434cf5235b03f92a98ae2177c"
     },
     {
       "path": "public/site.webmanifest",
@@ -4755,8 +4755,8 @@
     {
       "path": "scripts/build-project-trailers.mjs",
       "category": "script",
-      "bytes": 17131,
-      "sha256": "0e56c3fe91663f07514f78cb0c44330c354dc440db2e88e94a1513914b68e4b3"
+      "bytes": 18416,
+      "sha256": "ddf5b7a30de600ec167a773ece39eda7fdc68b9fab850c42f852aab8b87747ea"
     },
     {
       "path": "scripts/capture-project-shots.mjs",
