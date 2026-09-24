@@ -4749,8 +4749,8 @@
     {
       "path": "scripts/build-project-trailers.mjs",
       "category": "script",
-      "bytes": 16266,
-      "sha256": "ec05f592f330c770378f19497e44733905e8c2df3ecf6b94bcc604a31006eaaa"
+      "bytes": 17131,
+      "sha256": "0e56c3fe91663f07514f78cb0c44330c354dc440db2e88e94a1513914b68e4b3"
     },
     {
       "path": "scripts/capture-project-shots.mjs",
@@ -5277,8 +5277,8 @@
     {
       "path": "scripts/refresh-project-meta.mjs",
       "category": "script",
-      "bytes": 7802,
-      "sha256": "0051b69fb840494f917d911580a94b73927e847fb558d61dd649a77aa010ac9d"
+      "bytes": 8328,
+      "sha256": "c0043dee72b82928e012d0a9a6473908c0a2227e9dba9a91b0589f25bc20ac43"
     },
     {
       "path": "scripts/release-checklist.ts",
