@@ -29,6 +29,7 @@ import { resolutionGapDuckMultiplier } from './audio/resolutionGapDuck';
 import { setTelemetrySink } from '../shared/telemetry';
 import { createGameOverRunSummary } from '../shared/run-summary-rules';
 import type { MutatorId } from '../shared/contracts';
+import type { TestHallRoomId } from '../shared/test-hall-rooms';
 import {
     createPlayablePathFixture,
     type PlayablePathFixtureId
@@ -41,6 +42,8 @@ export const APP_MAIN_LANDMARK_ID = 'app-main';
 
 const GameScreen = lazy(() => import('./components/GameScreen'));
 const DevBlueprintExplorer = import.meta.env.DEV ? lazy(() => import('./dev/BlueprintExplorer')) : null;
+const DevTestHall = import.meta.env.DEV ? lazy(() => import('./dev/TestHall')) : null;
+const DevTestHallBadge = import.meta.env.DEV ? lazy(() => import('./dev/TestHallBadge')) : null;
 
 const focusAppMainLandmark = (): void => {
     document.getElementById(APP_MAIN_LANDMARK_ID)?.focus({ preventScroll: true });
@@ -119,6 +122,8 @@ const App = () => {
     const visualView = shellChromeContract.visualView;
     const suppressGameplayStatusOverlays = shellChromeContract.shellChrome === 'gameplay_modal';
     const showDevBlueprintExplorer = import.meta.env.DEV && window.location.pathname === '/__blueprint';
+    // The test hall (`dev/TestHall.tsx`): every authored room, loadable into play.
+    const showDevTestHall = import.meta.env.DEV && window.location.pathname === '/__hall';
 
     /*
      * What the friends list sees. A run in progress names its mode and floor; anything else is
@@ -168,6 +173,21 @@ const App = () => {
         void hydrate();
     }, [hydrate]);
 
+    /** Dev-only: `/?hallRoom=<id>` boots straight into that test hall room once the save is loaded. */
+    const [hallRoomId, setHallRoomId] = useState<TestHallRoomId | null>(null);
+    useEffect(() => {
+        if (!import.meta.env.DEV || !hydrated) {
+            return;
+        }
+        void import('./dev/testHallLoader').then(({ startTestHallRoom, testHallRoomFromUrl }) => {
+            const id = testHallRoomFromUrl();
+            if (id !== null) {
+                startTestHallRoom(id);
+                setHallRoomId(id);
+            }
+        });
+    }, [hydrated]);
+
     /** Dev-only: log telemetry to console so `trackEvent` calls are visible without a host sink. */
     useEffect(() => {
         if (!import.meta.env.DEV) {
@@ -191,6 +211,7 @@ const App = () => {
                 forceGameOver: () => void;
                 startClassicGameOver: () => void;
                 startFixture: (id: PlayablePathFixtureId) => Promise<void>;
+                startTestHallRoom: (id: string) => Promise<boolean>;
                 setRunProgress: (progress: {
                     totalScore?: number;
                     level?: number;
@@ -255,6 +276,16 @@ const App = () => {
             startClassicGameOver: () => {
                 useAppStore.getState().startRun();
                 forceCurrentRunGameOver();
+            },
+            /* Loads a test hall room (`test-hall-rooms.ts`) the way startFixture loads a fixture.
+               Resolves false for an id the hall does not have, so a sweep cannot pass on a typo. */
+            startTestHallRoom: async (id: string) => {
+                const { isTestHallRoomId, startTestHallRoom } = await import('./dev/testHallLoader');
+                if (!isTestHallRoomId(id)) {
+                    return false;
+                }
+                startTestHallRoom(id);
+                return true;
             },
             startFixture: async (id: PlayablePathFixtureId) => {
                 const fixture = createPlayablePathFixture(id, {
@@ -330,6 +361,10 @@ const App = () => {
                 {showDevBlueprintExplorer && DevBlueprintExplorer ? (
                     <Suspense fallback={<div role="status">Loading blueprint explorer...</div>}>
                         <DevBlueprintExplorer />
+                    </Suspense>
+                ) : showDevTestHall && DevTestHall ? (
+                    <Suspense fallback={<div role="status">Loading the test hall...</div>}>
+                        <DevTestHall />
                     </Suspense>
                 ) : (
                     <>
@@ -436,6 +471,12 @@ const App = () => {
                         ) : null}
 
                         {hydrated && view === 'gameOver' && run?.lastRunSummary && <GameOverScreen run={run} />}
+
+                        {hallRoomId !== null && DevTestHallBadge && view === 'playing' ? (
+                            <Suspense fallback={null}>
+                                <DevTestHallBadge roomId={hallRoomId} />
+                            </Suspense>
+                        ) : null}
                     </>
                 )}
             </main>

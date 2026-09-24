@@ -2,7 +2,7 @@ import { applyBomb, applyPeek, applyShuffle, bombTargetTileId } from './board-po
 import type { BoardState, RunState, Tile } from './contracts';
 import { advanceToNextLevel, createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { missBankCap, missBankGrantLastFloor, missesLeft } from './miss-bank';
-import { createMulberry32, hashStringToSeed } from './rng';
+import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { buyStoreItem, isStoreStopFloor, runGold, storeOffer, type StoreItemId } from './run-store-rules';
 import { isSingletonUtilityPairKey } from './tile-identity';
 
@@ -180,7 +180,7 @@ export const soakRun = ({
     maxActions?: number;
 }): SoakRunReport => {
     const rng = createMulberry32(hashStringToSeed(`soak:${seed}:${playerName}`));
-    const pick = <T>(items: readonly T[]): T => items[Math.floor(rng() * items.length)]!;
+    const pick = <T>(items: readonly T[]): T => items[pickRngIndex(rng, items.length)]!;
     const violations: SoakViolation[] = [];
     let run: RunState = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed });
     let step = 0;

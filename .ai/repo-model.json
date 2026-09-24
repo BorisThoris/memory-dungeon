@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2701,
-    "codeFileCount": 939,
-    "exportedSymbolCount": 2870,
+    "trackedFileCount": 2708,
+    "codeFileCount": 944,
+    "exportedSymbolCount": 2885,
     "contentItemCount": 10,
     "mechanicCount": 43,
     "stateFieldCount": 82,
-    "relationshipCount": 7264
+    "relationshipCount": 7297
   },
   "inventory": [
     {
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "38f10ccfc9905d736d20917b6d03064ab62d6020d0bb4ed26ca4519f9d627698"
+      "sha256": "fb40d47bbf857cb63eee7bb31219d2ccfb9dd3e27c4b7a468f26d3816a8fc627"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3973,6 +3973,12 @@
       "sha256": "c6cb193909b55d9bd80009da1ff65b624791a58f338c8545644e7ecdf856401c"
     },
     {
+      "path": "e2e/test-hall.spec.ts",
+      "category": "test",
+      "bytes": 3745,
+      "sha256": "4873e231d9bb7863040ce8ececf95e634c80e4793e3806636ba0a15e97f122b9"
+    },
+    {
       "path": "e2e/tile-board-raycast.spec.ts",
       "category": "test",
       "bytes": 8412,
@@ -4197,8 +4203,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 32492,
-      "sha256": "acfd1eeda3ed45c008ae449cfb9927376d66b2d7b9744c1481679d7cb1c17600"
+      "bytes": 32566,
+      "sha256": "d2203ede8af7c1b3aa24c498792462efec396aa284a80cd0c79d2315fe553b27"
     },
     {
       "path": "packages/notifications/package.json",
@@ -5763,8 +5769,8 @@
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 21775,
-      "sha256": "449dd402c573155c574d53ee7b1d8ac1c2dcc5819bd91391217dc1c39f1d4411"
+      "bytes": 23899,
+      "sha256": "c716a27c028d778cd34a05dfe2c89a72ce170f160e284a7941c0325f2f58ee74"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -10795,6 +10801,30 @@
       "sha256": "2e0838539c950dd7e50004556cf5c5220022386b8efb0222e579fde479f7d2ee"
     },
     {
+      "path": "src/renderer/dev/TestHall.module.css",
+      "category": "source",
+      "bytes": 2284,
+      "sha256": "764d6f9a999b9283008f28a8773c3a669dfe529a11f1bb8db26007075a4fc556"
+    },
+    {
+      "path": "src/renderer/dev/TestHall.tsx",
+      "category": "source",
+      "bytes": 5553,
+      "sha256": "f6b53d01e8ff0b97bfb2a86cb229e06b0f69366a402b5c7193da98d3b68975a0"
+    },
+    {
+      "path": "src/renderer/dev/TestHallBadge.tsx",
+      "category": "source",
+      "bytes": 641,
+      "sha256": "6f72bdd5b1a5a21d477168603c96045f5d2258b07c728690787712877e6008a9"
+    },
+    {
+      "path": "src/renderer/dev/testHallLoader.ts",
+      "category": "source",
+      "bytes": 1542,
+      "sha256": "309140b64ba12795ec57b86d14ba00c5189f1f185a2751db63ff9877f240abec"
+    },
+    {
       "path": "src/renderer/diagnostics/rendererErrorHooks.test.ts",
       "category": "test",
       "bytes": 4410,
@@ -13497,8 +13527,8 @@
     {
       "path": "src/shared/run-soak.ts",
       "category": "source",
-      "bytes": 12995,
-      "sha256": "d213ff20df9d68893c01905db2a920444a2597deb7f6f03aaf190aa787b0b2b6"
+      "bytes": 13008,
+      "sha256": "147301b600b6a7800039d9443aab94fe23839346393d8ce41a5af09c487ec904"
     },
     {
       "path": "src/shared/run-store-rules.test.ts",
@@ -13763,6 +13793,18 @@
       "category": "source",
       "bytes": 4203,
       "sha256": "76ac16244aed945c869ea02172f7818b06c2b00370ecabc3503eb99a92a7d13a"
+    },
+    {
+      "path": "src/shared/test-hall-rooms.test.ts",
+      "category": "test",
+      "bytes": 1426,
+      "sha256": "f68307640c7fb6509e7e53b80b2502e0df7b94ea8cb0ef0f37c74efd3bf23ec3"
+    },
+    {
+      "path": "src/shared/test-hall-rooms.ts",
+      "category": "source",
+      "bytes": 22175,
+      "sha256": "bec750bcfada8f4ffaf5e50bb2f8eac2c4cc8743e75849535d93346e34f010fb"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -16877,7 +16919,7 @@
       "path": "src/renderer/App.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 447,
+      "lineCount": 488,
       "imports": [
         "file:src/renderer/audio/feverDuck.ts",
         "file:src/renderer/audio/gameplayMusic.ts",
@@ -16907,7 +16949,8 @@
         "file:src/shared/contracts.ts",
         "file:src/shared/playable-path-fixtures.ts",
         "file:src/shared/run-summary-rules.ts",
-        "file:src/shared/telemetry.ts"
+        "file:src/shared/telemetry.ts",
+        "file:src/shared/test-hall-rooms.ts"
       ],
       "exports": [
         "symbol:src/renderer/App.tsx#APP_MAIN_LANDMARK_ID",
@@ -23556,6 +23599,55 @@
       ]
     },
     {
+      "id": "file:src/renderer/dev/TestHall.tsx",
+      "path": "src/renderer/dev/TestHall.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 102,
+      "imports": [
+        "file:src/renderer/dev/testHallLoader.ts",
+        "file:src/shared/gameplay-interaction-graph.ts",
+        "file:src/shared/test-hall-rooms.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/dev/TestHall.tsx#default"
+      ],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/dev/TestHallBadge.tsx",
+      "path": "src/renderer/dev/TestHallBadge.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 16,
+      "imports": [
+        "file:src/shared/test-hall-rooms.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/dev/TestHallBadge.tsx#default"
+      ],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/dev/testHallLoader.ts",
+      "path": "src/renderer/dev/testHallLoader.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 37,
+      "imports": [
+        "file:src/renderer/store/useAppStore.ts",
+        "file:src/shared/save-data.ts",
+        "file:src/shared/test-hall-rooms.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/dev/testHallLoader.ts#isTestHallRoomId",
+        "symbol:src/renderer/dev/testHallLoader.ts#startTestHallRoom",
+        "symbol:src/renderer/dev/testHallLoader.ts#TEST_HALL_ROOM_PARAM",
+        "symbol:src/renderer/dev/testHallLoader.ts#testHallRoomFromUrl"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/diagnostics/rendererErrorHooks.test.ts",
       "path": "src/renderer/diagnostics/rendererErrorHooks.test.ts",
       "layer": "renderer",
@@ -29241,7 +29333,8 @@
       "testedBy": [
         "file:src/shared/gameplay-interaction-graph.test.ts",
         "file:src/shared/mechanic-accountability.test.ts",
-        "file:src/shared/system-refinement-ledger.test.ts"
+        "file:src/shared/system-refinement-ledger.test.ts",
+        "file:src/shared/test-hall-rooms.test.ts"
       ]
     },
     {
@@ -32939,6 +33032,48 @@
       ]
     },
     {
+      "id": "file:src/shared/test-hall-rooms.test.ts",
+      "path": "src/shared/test-hall-rooms.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 35,
+      "imports": [
+        "file:src/shared/gameplay-interaction-graph.ts",
+        "file:src/shared/test-hall-rooms.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/test-hall-rooms.ts",
+      "path": "src/shared/test-hall-rooms.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 444,
+      "imports": [
+        "file:src/shared/board-power-actions.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/game.ts",
+        "file:src/shared/miss-bank.ts",
+        "file:src/shared/run-store-rules.ts",
+        "file:src/shared/scoring-rules.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/test-hall-rooms.ts#playTestHallStep",
+        "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
+        "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
+        "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
+        "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
+        "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
+        "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
+        "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
+        "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom"
+      ],
+      "testedBy": [
+        "file:src/shared/test-hall-rooms.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/test-only-export-audit.test.ts",
       "path": "src/shared/test-only-export-audit.test.ts",
       "layer": "shared",
@@ -34413,16 +34548,16 @@
       "name": "APP_MAIN_LANDMARK_ID",
       "kind": "value",
       "file": "src/renderer/App.tsx",
-      "line": 40,
-      "endLine": 40
+      "line": 41,
+      "endLine": 41
     },
     {
       "id": "symbol:src/renderer/App.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/App.tsx",
-      "line": 446,
-      "endLine": 446
+      "line": 487,
+      "endLine": 487
     },
     {
       "id": "symbol:src/renderer/assets/assetDropInReadiness.ts#ASSET_DROP_IN_CATEGORIES",
@@ -41855,6 +41990,54 @@
       "file": "src/renderer/dev/legacy/tileStepLegacy.ts",
       "line": 5,
       "endLine": 14
+    },
+    {
+      "id": "symbol:src/renderer/dev/TestHall.tsx#default",
+      "name": "default",
+      "kind": "ExportAssignment",
+      "file": "src/renderer/dev/TestHall.tsx",
+      "line": 101,
+      "endLine": 101
+    },
+    {
+      "id": "symbol:src/renderer/dev/TestHallBadge.tsx#default",
+      "name": "default",
+      "kind": "ExportAssignment",
+      "file": "src/renderer/dev/TestHallBadge.tsx",
+      "line": 15,
+      "endLine": 15
+    },
+    {
+      "id": "symbol:src/renderer/dev/testHallLoader.ts#isTestHallRoomId",
+      "name": "isTestHallRoomId",
+      "kind": "value",
+      "file": "src/renderer/dev/testHallLoader.ts",
+      "line": 14,
+      "endLine": 15
+    },
+    {
+      "id": "symbol:src/renderer/dev/testHallLoader.ts#startTestHallRoom",
+      "name": "startTestHallRoom",
+      "kind": "value",
+      "file": "src/renderer/dev/testHallLoader.ts",
+      "line": 17,
+      "endLine": 30
+    },
+    {
+      "id": "symbol:src/renderer/dev/testHallLoader.ts#TEST_HALL_ROOM_PARAM",
+      "name": "TEST_HALL_ROOM_PARAM",
+      "kind": "value",
+      "file": "src/renderer/dev/testHallLoader.ts",
+      "line": 12,
+      "endLine": 12
+    },
+    {
+      "id": "symbol:src/renderer/dev/testHallLoader.ts#testHallRoomFromUrl",
+      "name": "testHallRoomFromUrl",
+      "kind": "value",
+      "file": "src/renderer/dev/testHallLoader.ts",
+      "line": 33,
+      "endLine": 36
     },
     {
       "id": "symbol:src/renderer/diagnostics/rendererErrorHooks.ts#describeThrownValue",
@@ -55433,6 +55616,78 @@
       "endLine": 132
     },
     {
+      "id": "symbol:src/shared/test-hall-rooms.ts#playTestHallStep",
+      "name": "playTestHallStep",
+      "kind": "value",
+      "file": "src/shared/test-hall-rooms.ts",
+      "line": 388,
+      "endLine": 419
+    },
+    {
+      "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
+      "name": "TEST_HALL_ROOMS",
+      "kind": "value",
+      "file": "src/shared/test-hall-rooms.ts",
+      "line": 166,
+      "endLine": 375
+    },
+    {
+      "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
+      "name": "testHallRoom",
+      "kind": "value",
+      "file": "src/shared/test-hall-rooms.ts",
+      "line": 443,
+      "endLine": 443
+    },
+    {
+      "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
+      "name": "TestHallRoom",
+      "kind": "interface",
+      "file": "src/shared/test-hall-rooms.ts",
+      "line": 59,
+      "endLine": 70
+    },
+    {
+      "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
+      "name": "TestHallRoomId",
+      "kind": "type",
+      "file": "src/shared/test-hall-rooms.ts",
+      "line": 26,
+      "endLine": 40
+    },
+    {
+      "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
+      "name": "TestHallRoomReport",
+      "kind": "interface",
+      "file": "src/shared/test-hall-rooms.ts",
+      "line": 421,
+      "endLine": 424
+    },
+    {
+      "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
+      "name": "TestHallScriptLine",
+      "kind": "interface",
+      "file": "src/shared/test-hall-rooms.ts",
+      "line": 52,
+      "endLine": 57
+    },
+    {
+      "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
+      "name": "TestHallStep",
+      "kind": "type",
+      "file": "src/shared/test-hall-rooms.ts",
+      "line": 42,
+      "endLine": 50
+    },
+    {
+      "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
+      "name": "walkTestHallRoom",
+      "kind": "value",
+      "file": "src/shared/test-hall-rooms.ts",
+      "line": 426,
+      "endLine": 441
+    },
+    {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
       "name": "makeBoard",
       "kind": "value",
@@ -66428,6 +66683,42 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/dev/TestHall.tsx->symbol:src/renderer/dev/TestHall.tsx#default",
+      "source": "file:src/renderer/dev/TestHall.tsx",
+      "target": "symbol:src/renderer/dev/TestHall.tsx#default",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/dev/TestHallBadge.tsx->symbol:src/renderer/dev/TestHallBadge.tsx#default",
+      "source": "file:src/renderer/dev/TestHallBadge.tsx",
+      "target": "symbol:src/renderer/dev/TestHallBadge.tsx#default",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/dev/testHallLoader.ts->symbol:src/renderer/dev/testHallLoader.ts#isTestHallRoomId",
+      "source": "file:src/renderer/dev/testHallLoader.ts",
+      "target": "symbol:src/renderer/dev/testHallLoader.ts#isTestHallRoomId",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/dev/testHallLoader.ts->symbol:src/renderer/dev/testHallLoader.ts#startTestHallRoom",
+      "source": "file:src/renderer/dev/testHallLoader.ts",
+      "target": "symbol:src/renderer/dev/testHallLoader.ts#startTestHallRoom",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/dev/testHallLoader.ts->symbol:src/renderer/dev/testHallLoader.ts#TEST_HALL_ROOM_PARAM",
+      "source": "file:src/renderer/dev/testHallLoader.ts",
+      "target": "symbol:src/renderer/dev/testHallLoader.ts#TEST_HALL_ROOM_PARAM",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/dev/testHallLoader.ts->symbol:src/renderer/dev/testHallLoader.ts#testHallRoomFromUrl",
+      "source": "file:src/renderer/dev/testHallLoader.ts",
+      "target": "symbol:src/renderer/dev/testHallLoader.ts#testHallRoomFromUrl",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/diagnostics/rendererErrorHooks.ts->symbol:src/renderer/diagnostics/rendererErrorHooks.ts#describeThrownValue",
       "source": "file:src/renderer/diagnostics/rendererErrorHooks.ts",
       "target": "symbol:src/renderer/diagnostics/rendererErrorHooks.ts#describeThrownValue",
@@ -76610,6 +76901,60 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/test-hall-rooms.ts->symbol:src/shared/test-hall-rooms.ts#playTestHallStep",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "symbol:src/shared/test-hall-rooms.ts#playTestHallStep",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/test-hall-rooms.ts->symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/test-hall-rooms.ts->symbol:src/shared/test-hall-rooms.ts#testHallRoom",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/test-hall-rooms.ts->symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/test-hall-rooms.ts->symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/test-hall-rooms.ts->symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/test-hall-rooms.ts->symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/test-hall-rooms.ts->symbol:src/shared/test-hall-rooms.ts#TestHallStep",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/test-hall-rooms.ts->symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/test/game-fixtures.ts->symbol:src/shared/test/game-fixtures.ts#makeBoard",
       "source": "file:src/shared/test/game-fixtures.ts",
       "target": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -79304,6 +79649,12 @@
       "id": "imports:src/renderer/App.tsx->src/shared/telemetry.ts",
       "source": "file:src/renderer/App.tsx",
       "target": "file:src/shared/telemetry.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/App.tsx->src/shared/test-hall-rooms.ts",
+      "source": "file:src/renderer/App.tsx",
+      "target": "file:src/shared/test-hall-rooms.ts",
       "kind": "imports"
     },
     {
@@ -85634,6 +85985,48 @@
       "id": "imports:src/renderer/dev/legacy/tileStepLegacy.test.ts->src/renderer/dev/legacy/tileStepLegacy.ts",
       "source": "file:src/renderer/dev/legacy/tileStepLegacy.test.ts",
       "target": "file:src/renderer/dev/legacy/tileStepLegacy.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/dev/TestHall.tsx->src/renderer/dev/testHallLoader.ts",
+      "source": "file:src/renderer/dev/TestHall.tsx",
+      "target": "file:src/renderer/dev/testHallLoader.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/dev/TestHall.tsx->src/shared/gameplay-interaction-graph.ts",
+      "source": "file:src/renderer/dev/TestHall.tsx",
+      "target": "file:src/shared/gameplay-interaction-graph.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/dev/TestHall.tsx->src/shared/test-hall-rooms.ts",
+      "source": "file:src/renderer/dev/TestHall.tsx",
+      "target": "file:src/shared/test-hall-rooms.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/dev/TestHallBadge.tsx->src/shared/test-hall-rooms.ts",
+      "source": "file:src/renderer/dev/TestHallBadge.tsx",
+      "target": "file:src/shared/test-hall-rooms.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/dev/testHallLoader.ts->src/renderer/store/useAppStore.ts",
+      "source": "file:src/renderer/dev/testHallLoader.ts",
+      "target": "file:src/renderer/store/useAppStore.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/dev/testHallLoader.ts->src/shared/save-data.ts",
+      "source": "file:src/renderer/dev/testHallLoader.ts",
+      "target": "file:src/shared/save-data.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/dev/testHallLoader.ts->src/shared/test-hall-rooms.ts",
+      "source": "file:src/renderer/dev/testHallLoader.ts",
+      "target": "file:src/shared/test-hall-rooms.ts",
       "kind": "imports"
     },
     {
@@ -93833,6 +94226,54 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/test-hall-rooms.test.ts->src/shared/gameplay-interaction-graph.ts",
+      "source": "file:src/shared/test-hall-rooms.test.ts",
+      "target": "file:src/shared/gameplay-interaction-graph.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/test-hall-rooms.test.ts->src/shared/test-hall-rooms.ts",
+      "source": "file:src/shared/test-hall-rooms.test.ts",
+      "target": "file:src/shared/test-hall-rooms.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/test-hall-rooms.ts->src/shared/board-power-actions.ts",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "file:src/shared/board-power-actions.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/test-hall-rooms.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/test-hall-rooms.ts->src/shared/game.ts",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/test-hall-rooms.ts->src/shared/miss-bank.ts",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "file:src/shared/miss-bank.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/test-hall-rooms.ts->src/shared/run-store-rules.ts",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "file:src/shared/run-store-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/test-hall-rooms.ts->src/shared/scoring-rules.ts",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "file:src/shared/scoring-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/test/game-fixtures.ts->src/shared/board-generation.ts",
       "source": "file:src/shared/test/game-fixtures.ts",
       "target": "file:src/shared/board-generation.ts",
@@ -100780,6 +101221,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/gameplay-interaction-graph.ts->file:src/shared/test-hall-rooms.test.ts",
+      "source": "file:src/shared/gameplay-interaction-graph.ts",
+      "target": "file:src/shared/test-hall-rooms.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/gameplay-journal.ts->file:src/shared/gameplay-journal-cost.test.ts",
       "source": "file:src/shared/gameplay-journal.ts",
       "target": "file:src/shared/gameplay-journal-cost.test.ts",
@@ -102187,6 +102634,12 @@
       "id": "tested_by:src/shared/telemetry.ts->file:src/shared/telemetry.test.ts",
       "source": "file:src/shared/telemetry.ts",
       "target": "file:src/shared/telemetry.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/test-hall-rooms.ts->file:src/shared/test-hall-rooms.test.ts",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "file:src/shared/test-hall-rooms.test.ts",
       "kind": "tested_by"
     },
     {
