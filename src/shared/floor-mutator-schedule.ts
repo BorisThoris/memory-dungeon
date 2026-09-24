@@ -82,11 +82,11 @@ export const FLOOR_ARCHETYPE_CATALOG: Record<FloorArchetypeId, FloorArchetypeDef
         riskProfile: 'Boss pressure with short study and wider recall.',
         encounterRole: 'boss'
     },
-    parasite_tithe: {
-        title: 'Static Hall',
-        hint: 'The channel hisses over the study window. Read past the noise and keep the chain up.',
-        theme: 'Static',
-        riskProfile: 'Distraction on the memorize window; a clean floor matters.'
+    skittish_hall: {
+        title: 'Skittish Hall',
+        hint: 'Miss here and the two cards you saw flinch into a neighbouring cell. Work out which way.',
+        theme: 'Skittish',
+        riskProfile: 'Every miss moves the two faces it showed one step; a clean floor never flinches.'
     },
     spotlight_hunt: {
         title: 'Spotlight Hunt',
@@ -380,7 +380,7 @@ const ENDLESS_FLOOR_CYCLE: FloorScheduleEntry[] = [
      * without moving the board, floor 10 asks for one under par.
      */
     makeEntry(10, 'treasure_gallery', 'flip_par', ['findables_floor'], 'breather'),
-    makeEntry(11, 'parasite_tithe', 'scholar_style', ['distraction_channel'], 'normal'),
+    makeEntry(11, 'skittish_hall', 'scholar_style', ['skittish_cards'], 'normal'),
     makeEntry(12, 'spotlight_hunt', 'cursed_last', ['shifting_spotlight'], 'normal')
 ];
 

@@ -36,6 +36,7 @@ import { isStoreStopFloor, runGold, storeOffer } from '../../shared/run-store-ru
 import { bombTargetTileId } from '../../shared/board-power-actions';
 import { isPassAndPlayRun } from '../../shared/pass-and-play-rules';
 import { relicDefinition } from '../../shared/run-relic-rules';
+import { SKITTISH_FLOATER_REASON } from '../copy/skittishCardsBeat';
 import { BOMB_TOOL_COPY, STORE_SHEET_COPY } from '../copy/storeSheet';
 import {
     BOARD_SHUFFLE_COPY,
@@ -488,7 +489,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const boardFloaterReason =
         boardFloaterPayload?.kind === 'match'
             ? boardFloaterDetailLines[0] ?? boardFloaterChainCue
-            : boardFloaterMismatchRecovery ?? boardFloaterDetailLines[0] ?? '';
+            : boardFloaterPayload?.kind === 'miss' && boardFloaterPayload.flinched
+              ? SKITTISH_FLOATER_REASON
+              : boardFloaterMismatchRecovery ?? boardFloaterDetailLines[0] ?? '';
     const boardFloaterIntensity =
         boardFloaterPayload?.kind === 'match'
             ? boardFloaterPayload.feedbackIntensity

@@ -60,7 +60,7 @@ describe('REG-076 boss and elite encounter identity', () => {
         expect(getEncounterIdentityForFloor(entry)).toBeNull();
     });
 
-    it('provides floor identity contracts for baseline, trap, recovery, treasure, parasite, and boss floors', () => {
+    it('provides floor identity contracts for baseline, trap, recovery, treasure, skittish, and boss floors', () => {
         const rows = [
             getFloorIdentityContract({
                 floorTag: 'normal',
@@ -88,8 +88,8 @@ describe('REG-076 boss and elite encounter identity', () => {
             }),
             getFloorIdentityContract({
                 floorTag: 'normal',
-                floorArchetypeId: 'parasite_tithe',
-                mutators: ['distraction_channel'],
+                floorArchetypeId: 'skittish_hall',
+                mutators: ['skittish_cards'],
                 featuredObjectiveLabel: 'Scholar style'
             })
         ];
@@ -99,7 +99,8 @@ describe('REG-076 boss and elite encounter identity', () => {
             'boss_trophy_moment',
             'recovery_study_room',
             'pickup_gallery_dense',
-            'anchor_floor'
+            // Gen 263: floor 11 used to borrow the anchor floor's copy; it has its own now.
+            'skittish_cards'
         ]);
         expect(rows[1]).toMatchObject({
             label: 'Keystone chamber',

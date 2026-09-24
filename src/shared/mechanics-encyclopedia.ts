@@ -11,7 +11,7 @@
 import type { AchievementId, GameMode, MutatorId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 48 as const;
+export const ENCYCLOPEDIA_VERSION = 49 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -312,6 +312,12 @@ export const MUTATOR_CATALOG: Record<MutatorId, MutatorDefinition> = {
         title: 'The magpie',
         description:
             'Something bright-eyed is nesting on this floor. Every **third miss** it drops in, takes a **pair you already cleared**, and hides it again somewhere you have never looked. Your **score keeps the points** — what it takes is the knowing.'
+    },
+    skittish_cards: {
+        id: 'skittish_cards',
+        title: 'Skittish cards',
+        description:
+            'The cards on this floor do not like being looked at. When you **miss**, each of the two cards you just saw **flinches one step** — up, down, left or right — into a face-down neighbour’s cell. A card you missed is still **next to where you saw it**: check beside it first. A clean floor never flinches, and a **pinned** card never moves.'
     }
 };
 

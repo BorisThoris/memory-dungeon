@@ -45,6 +45,9 @@ export interface BoardTurnAnnouncementFacts {
     /** Drifts the restless floor has made this floor, before and after this turn. */
     restlessDriftsBefore: number;
     restlessDriftsAfter: number;
+    /** Misses on which skittish cards flinched this floor, before and after this turn. */
+    skittishFlinchesBefore: number;
+    skittishFlinchesAfter: number;
     /**
      * Which tiles the floater anchors to. Not simply the flipped ids: a gambit resolves
      * three tiles but the floater belongs on the matched pair, and only the rules layer
@@ -195,6 +198,8 @@ export const getBoardTurnAnnouncementFacts = (
         magpieTheftsAfter: runNonNegativeInteger(after.magpieTheftsThisFloor),
         restlessDriftsBefore: runNonNegativeInteger(before.restlessDriftsThisFloor),
         restlessDriftsAfter: runNonNegativeInteger(after.restlessDriftsThisFloor),
+        skittishFlinchesBefore: runNonNegativeInteger(before.skittishFlinchesThisFloor),
+        skittishFlinchesAfter: runNonNegativeInteger(after.skittishFlinchesThisFloor),
         matchedTraitKinds: TILE_TRAIT_COUNT_KINDS.filter((kind) =>
             flippedTileIds.some(
                 (tileId) => before.board?.tiles.find((tile) => tile.id === tileId)?.tileTraitKind === kind

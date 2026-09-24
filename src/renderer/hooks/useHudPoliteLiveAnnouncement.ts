@@ -1,3 +1,4 @@
+import { SKITTISH_FLOATER_REASON } from '../copy/skittishCardsBeat';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { runNonNegativeInteger, runNonNegativeIntegerWithFallback } from '../../shared/run-number-guards';
 import { buildBoardTurnAnnouncement } from '../copy/boardTurnAnnouncement';
@@ -354,7 +355,10 @@ export const useHudPoliteLiveAnnouncement = ({
 
         // A miss is quiet (thesis §67): the cards reset, the chain does, and that is all it says.
         if (mismatchDelta > 0) {
-            lines.push('No match. Recover with a safe match. Chain reset.');
+            // Skittish cards: the two cards just seen moved as they turned back, and the caption is
+            // what a sighted player reads - so it says where to look instead of the generic advice.
+            const flinched = turnFacts != null && turnFacts.skittishFlinchesAfter > turnFacts.skittishFlinchesBefore;
+            lines.push(flinched ? `No match. ${SKITTISH_FLOATER_REASON} Chain reset.` : 'No match. Recover with a safe match. Chain reset.');
         }
 
         if (recallMistakeDelta > 0) {

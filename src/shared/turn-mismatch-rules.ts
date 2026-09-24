@@ -1,6 +1,7 @@
 import { type BoardState, type RunState, type RunStatus, type Tile } from './contracts';
 import { applyMagpieTheft, resolveMagpieVisit } from './magpie-rules';
 import { applyRestlessDrift, resolveRestlessDrift } from './restless-floor-rules';
+import { applySkittishFlinch, resolveSkittishFlinch } from './skittish-cards-rules';
 import { hasMutator } from './mutators';
 import { decreaseRecallFocus, rememberForgottenTiles } from './recall-rules';
 import { clearResolveState } from './run-timer-rules';
@@ -65,7 +66,22 @@ export const resolveMismatchTurnTransition = ({
     const normalizedRun = { ...run, stats };
     const traitPenalty = calculateTileTraitMismatchPenalty(normalizedRun, sourceTiles, board);
     const penalty = calculateMismatchPenalty(normalizedRun, triesDelta + traitPenalty.triesDelta);
-    const hiddenBoard = createHiddenMismatchBoard(board, tileIds);
+    const turnedBack = createHiddenMismatchBoard(board, tileIds);
+    /*
+     * Skittish cards flinch first: the two faces the miss showed step into a neighbouring cell as
+     * soon as they are face down, before anything else on the turn reads the board.
+     */
+    const flinch = hasMutator(run, 'skittish_cards')
+        ? resolveSkittishFlinch({
+              board: turnedBack,
+              missedTileIds: tileIds,
+              pinnedTileIds: Array.isArray(run.pinnedTileIds) ? run.pinnedTileIds : [],
+              turnsThisFloor: runNonNegativeInteger(run.turnsThisFloor) + 1,
+              runSeed: run.runSeed,
+              rulesVersion: run.runRulesVersion
+          })
+        : null;
+    const hiddenBoard = flinch?.kind === 'flinch' ? applySkittishFlinch(turnedBack, flinch.swaps) : turnedBack;
     const spunMiss = rotateRunShiftingSpotlight(run, hiddenBoard);
 
     /*
@@ -107,6 +123,8 @@ export const resolveMismatchTurnTransition = ({
             runNonNegativeInteger(run.magpieTheftsThisFloor) + (magpie?.kind === 'theft' ? 1 : 0),
         restlessDriftsThisFloor:
             runNonNegativeInteger(run.restlessDriftsThisFloor) + (drift?.kind === 'drift' ? 1 : 0),
+        skittishFlinchesThisFloor:
+            runNonNegativeInteger(run.skittishFlinchesThisFloor) + (flinch?.kind === 'flinch' ? 1 : 0),
         stickyBlockIndex: null,
         recallFocus: decreaseRecallFocus(run),
         recallMistakesThisFloor: runNonNegativeInteger(run.recallMistakesThisFloor) + 1,

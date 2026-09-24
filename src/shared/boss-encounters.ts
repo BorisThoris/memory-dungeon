@@ -313,10 +313,24 @@ export const getFloorIdentityContract = ({
         };
     }
 
-    if (floorArchetypeId === 'parasite_tithe' || floorArchetypeId === 'anchor_chain') {
+    if (floorArchetypeId === 'skittish_hall') {
+        return {
+            id: 'skittish_cards',
+            label: 'Skittish hall',
+            teachingSentence: `Miss, and the two cards you just saw each flinch one step - up, down, left or right.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: 'A card you missed is next to where it was: check its neighbours before the rest of the board, and pin what you cannot afford to lose - a pinned card never moves.',
+            floorClearSentence: 'Skittish hall cleared. You kept track of cards that would not keep still.',
+            atmosphericFeedback: 'The cards settle into their cells and stop twitching.',
+            activeReminder: 'Skittish hall: a missed card moves one step. Look beside it.',
+            warningLevel: 'warning',
+            tokens: ['hidden_known', 'risk', 'objective']
+        };
+    }
+
+    if (floorArchetypeId === 'anchor_chain') {
         return {
             id: 'anchor_floor',
-            label: floorArchetypeId === 'anchor_chain' ? 'Anchor chain' : 'Tithe hall',
+            label: 'Anchor chain',
             teachingSentence: `A floor that keeps asking you to remember one particular pair, on a board that hides it as well as any other.${objectiveSuffix(featuredObjectiveLabel)}`,
             counterplaySentence: 'Pin the anchor rather than trusting it to memory; the pin costs nothing and survives a shuffle it would not otherwise.',
             floorClearSentence: 'Anchor floor cleared. The pairs the floor kept pointing at were the ones worth holding.',

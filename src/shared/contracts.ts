@@ -147,7 +147,8 @@ export const MUTATOR_IDS = [
     'distraction_channel',
     'findables_floor',
     'shifting_spotlight',
-    'magpie_thief'
+    'magpie_thief',
+    'skittish_cards'
 ] as const;
 export type MutatorId = (typeof MUTATOR_IDS)[number];
 
@@ -319,7 +320,7 @@ export const FLOOR_ARCHETYPE_IDS = [
     'trap_hall',
     'restless_hall',
     'rush_recall',
-    'parasite_tithe',
+    'skittish_hall',
     'spotlight_hunt',
     'breather'
 ] as const;
@@ -682,6 +683,8 @@ export interface RunState {
     magpieTheftsThisFloor: number;
     /** `restless_floor`: drifts the floor has made this floor; the next one moves one more pair of cards, to a cap. */
     restlessDriftsThisFloor: number;
+    /** `skittish_cards`: misses this floor on which the missed cards flinched into a neighbouring cell. */
+    skittishFlinchesThisFloor: number;
     /** `shifting_spotlight`: increments each time ward/bounty rotates this floor (seed step for next pick). */
     shiftingSpotlightNonce: number;
 }

@@ -307,7 +307,8 @@
                 "achievementProgress",
                 "nextFloor",
                 "magpieTheftsThisFloor",
-                "restlessDriftsThisFloor"
+                "restlessDriftsThisFloor",
+                "skittishFlinchesThisFloor"
             ],
             "writes": [
                 "feedbackLines"
@@ -1756,6 +1757,39 @@
                 "src/shared/run-relic-rules.test.ts",
                 "src/shared/test-hall-rooms.test.ts"
             ]
+        },
+        {
+            "id": "hazard.skittish_cards",
+            "label": "Skittish Cards",
+            "kind": "hazard",
+            "role": "moves_the_two_missed_cards_one_step_into_a_hidden_neighbour_on_every_miss",
+            "evidence": [
+                "src/shared/skittish-cards-rules.ts",
+                "src/shared/turn-mismatch-rules.ts",
+                "src/renderer/copy/skittishCardsBeat.ts"
+            ],
+            "reads": [
+                "tileStates",
+                "flippedTileIds",
+                "pinnedTileIds",
+                "activeMutators",
+                "runSeed"
+            ],
+            "writes": [
+                "tileStates",
+                "skittishFlinchesThisFloor"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "hidden-cards-only",
+                "pinned-cards-never-move",
+                "never-with-own-partner"
+            ],
+            "tests": [
+                "src/shared/skittish-cards-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts"
+            ]
         }
     ],
     "edges": [
@@ -2568,6 +2602,24 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "bomb tool and charges in the dock"
+        },
+        {
+            "source": "core.board_turn_resolution",
+            "target": "hazard.skittish_cards",
+            "kind": "triggers",
+            "label": "a miss makes the missed cards flinch"
+        },
+        {
+            "source": "power.pin",
+            "target": "hazard.skittish_cards",
+            "kind": "counterplay",
+            "label": "a pinned card never flinches"
+        },
+        {
+            "source": "hazard.skittish_cards",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "every flinch is announced"
         }
     ],
     "coverage": {

@@ -1,5 +1,6 @@
 import { MAGPIE_BEAT_COPY } from './magpieBeat';
 import { restlessDriftAnnouncement } from './restlessFloorBeat';
+import { SKITTISH_FLINCH_ANNOUNCEMENT } from './skittishCardsBeat';
 import { restlessSwapCountForDrift } from '../../shared/restless-floor-rules';
 import { CHAIN_BEAT_COPY, CHAIN_TIER_LABELS } from './chainBeat';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
@@ -111,6 +112,10 @@ export const magpieAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): stri
  * The restless floor's line for a turn it shifted on. How many pairs moved is the rule's own
  * escalation read off the drift count before the turn, so the copy never has to diff boards.
  */
+/** Skittish cards' line for a miss the missed cards flinched on. */
+export const skittishAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): string[] =>
+    turnEvent.announcement.skittishFlinchesAfter > turnEvent.announcement.skittishFlinchesBefore ? [SKITTISH_FLINCH_ANNOUNCEMENT] : [];
+
 export const restlessAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): string[] => {
     const { restlessDriftsBefore, restlessDriftsAfter } = turnEvent.announcement;
     return restlessDriftsAfter > restlessDriftsBefore
@@ -151,6 +156,7 @@ export const buildBoardTurnAnnouncement = (
          */
         ...chunkAnnouncementLines(turnEvent),
         ...magpieAnnouncementLines(turnEvent),
+        ...skittishAnnouncementLines(turnEvent),
         ...restlessAnnouncementLines(turnEvent),
         includePickup ? getBoardTurnPickupAnnouncement(turnEvent)?.text ?? null : null
     ].filter((line): line is string => line != null && line.length > 0);

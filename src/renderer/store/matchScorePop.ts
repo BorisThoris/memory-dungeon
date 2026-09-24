@@ -118,6 +118,8 @@ export type MismatchScorePop = {
     tileIdC?: string;
     brokenChainDepth?: number;
     traitInteractionTexts?: string[];
+    /** Skittish cards: the two missed cards flinched one step as they turned back. */
+    flinched?: boolean;
     key: string;
 };
 
@@ -801,6 +803,9 @@ export function buildMismatchScorePopPayload(
     }
     if (traitInteractionTexts.length > 0) {
         payload.traitInteractionTexts = traitInteractionTexts;
+    }
+    if (facts.skittishFlinchesAfter > facts.skittishFlinchesBefore) {
+        payload.flinched = true;
     }
     return payload;
 }

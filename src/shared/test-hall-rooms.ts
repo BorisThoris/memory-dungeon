@@ -14,6 +14,7 @@ import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from '.
 import { missBankCap, missesLeft } from './miss-bank';
 import { buyStoreItem, isStoreStopFloor, runGold, type StoreItemId } from './run-store-rules';
 import { getMemorizeDurationForRun } from './scoring-rules';
+import { orthogonalNeighbourIndices } from './skittish-cards-rules';
 import { WILD_PAIR_KEY } from './tile-identity';
 
 /**
@@ -61,7 +62,8 @@ export type TestHallRoomId =
     | 'pin'
     | 'wild'
     | 'conduit'
-    | 'stasis';
+    | 'stasis'
+    | 'skittish';
 
 export type TestHallStep =
     | { readonly do: 'match'; readonly pairKey: string }
@@ -620,6 +622,35 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
             { step: { do: 'match', pairKey: 's' }, says: 'the Stasis match locks h-1', expect: (r) => (r.stickyBlockIndex === positionOf(r, 'h-1') ? null : `lock at ${r.stickyBlockIndex}`) },
             { step: { do: 'flip', tileId: 'a-1' }, says: 'a first card elsewhere is fine', expect: statusIs('playing') },
             { step: { do: 'flip', tileId: 'h-1' }, says: 'the locked card opens as the second card', expect: (r) => (r.board?.flippedTileIds.includes('h-1') ? null : 'the locked card would not open second') }
+        ]
+    },
+    {
+        id: 'skittish',
+        title: 'Skittish cards',
+        mechanic: 'Miss, and each of the two cards you saw flinches one step into a face-down neighbour. Pinned cards stay.',
+        graphMechanicIds: ['hazard.skittish_cards', 'power.pin'],
+        tryThis: 'Pin c-1, then miss a against b: both flinch one step, and never into the pinned card. Then find them.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t g:m h:b', 'a:e b:t c:m d:b', 'e:e f:t g:m h:b'], { mutators: ['skittish_cards'] }),
+        script: [
+            { step: { do: 'pin', tileId: 'c-1' }, says: 'c-1 is pinned', expect: (r) => (r.pinnedTileIds.includes('c-1') ? null : 'c-1 is not pinned') },
+            {
+                step: { do: 'miss', a: 'a-1', b: 'b-1' },
+                says: 'a-1 and b-1 each step into a neighbouring cell, the pinned card stays',
+                expect: (r, b) => {
+                    const columns = b.board?.columns ?? 4;
+                    const count = b.board?.tiles.length ?? 0;
+                    for (const id of ['a-1', 'b-1']) {
+                        const from = positionOf(b, id);
+                        const to = positionOf(r, id);
+                        if (to === from) continue; // a card whose neighbours were all taken may stay
+                        if (!orthogonalNeighbourIndices(from, columns, count).includes(to)) return `${id} jumped from ${from} to ${to}`;
+                    }
+                    if (positionOf(r, 'a-1') === positionOf(b, 'a-1') && positionOf(r, 'b-1') === positionOf(b, 'b-1')) return 'neither missed card moved';
+                    if (positionOf(r, 'c-1') !== positionOf(b, 'c-1')) return 'the pinned card moved';
+                    return r.skittishFlinchesThisFloor === 1 ? null : `flinches ${r.skittishFlinchesThisFloor}`;
+                }
+            },
+            { step: { do: 'match', pairKey: 'h' }, says: 'a match never flinches', expect: expectAll(isGone('h'), (r) => (r.skittishFlinchesThisFloor === 1 ? null : `flinches ${r.skittishFlinchesThisFloor}`)) }
         ]
     }
 ];

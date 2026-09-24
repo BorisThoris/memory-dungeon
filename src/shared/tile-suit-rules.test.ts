@@ -286,7 +286,7 @@ describe('the deal profile', () => {
     it('is named for every archetype, so a new floor kind cannot fall through to a shape nobody chose', () => {
         const ids: FloorArchetypeId[] = [
             'survey_hall', 'speed_trial', 'treasure_gallery', 'shadow_read', 'anchor_chain', 'trap_hall',
-            'restless_hall', 'rush_recall', 'parasite_tithe', 'spotlight_hunt', 'breather'
+            'restless_hall', 'rush_recall', 'skittish_hall', 'spotlight_hunt', 'breather'
         ];
         for (const id of ids) {
             expect(['clumped', 'scattered', 'two_suit']).toContain(SUIT_DEAL_PROFILE_BY_ARCHETYPE[id]);
