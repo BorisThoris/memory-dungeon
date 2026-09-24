@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2708,
+    "trackedFileCount": 2709,
     "codeFileCount": 944,
     "exportedSymbolCount": 2885,
     "contentItemCount": 10,
@@ -51,8 +51,8 @@
     {
       "path": ".github/workflows/project-meta-refresh.yml",
       "category": "configuration",
-      "bytes": 4200,
-      "sha256": "70d01e365f37b09c1394e6556136f2d8c14711fb00d9da404c7eb450a9d8cafd"
+      "bytes": 4383,
+      "sha256": "305e891b56b11dab9f5e4524828039d87c8aaa046e028928d1d75a8b8a4476b2"
     },
     {
       "path": ".github/workflows/project-meta.yml",
@@ -4203,8 +4203,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 32566,
-      "sha256": "d2203ede8af7c1b3aa24c498792462efec396aa284a80cd0c79d2315fe553b27"
+      "bytes": 32698,
+      "sha256": "dd3cd7a7eec43b00e882f6eef396123114da71e4927e8fa19ca7e6e55d00d41e"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4353,8 +4353,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 120628,
-      "sha256": "7e95d1f5549625e29bfc92708fdacdc2bd109d5d1adde94c673307707b571a59"
+      "bytes": 120605,
+      "sha256": "1312aa5f17f6cf9e15b0fc000fab95b7f5a7749481109a68469999144f7e54b3"
     },
     {
       "path": "public/site.webmanifest",
@@ -4747,10 +4747,16 @@
       "sha256": "cc03f1ab51f8709cd0c5e809e8464790826487d390fcdbf665eea47a06c1c4a1"
     },
     {
+      "path": "scripts/build-project-trailers.mjs",
+      "category": "script",
+      "bytes": 16266,
+      "sha256": "ec05f592f330c770378f19497e44733905e8c2df3ecf6b94bcc604a31006eaaa"
+    },
+    {
       "path": "scripts/capture-project-shots.mjs",
       "category": "script",
-      "bytes": 10370,
-      "sha256": "54439dfd883c663e124fa9543c55ef5d90587f351a79260c1570c70d6e07bb13"
+      "bytes": 10726,
+      "sha256": "4cd4e151b65b7fef21db7ef83ea383f3c3d02fadd829b1c92e769e8ce0c1de7e"
     },
     {
       "path": "scripts/card-pipeline/batch_local_card_backs.py",
@@ -5025,8 +5031,8 @@
     {
       "path": "scripts/generate-app-icons.mjs",
       "category": "script",
-      "bytes": 17978,
-      "sha256": "255b9f476dac97df0e09dcd5aa768db1695d536a113110d353fde07efbd7ea17"
+      "bytes": 18204,
+      "sha256": "434f63f752cad510105637a287464f3ee384dbad6862b403d4ad81853a5bf149"
     },
     {
       "path": "scripts/generate-card-plates.ts",
@@ -5055,14 +5061,14 @@
     {
       "path": "scripts/generate-project-meta.mjs",
       "category": "script",
-      "bytes": 20199,
-      "sha256": "5077d7f057083a78237fd198fd491c70b461acf846e302b43968cd3c1d3c644e"
+      "bytes": 22306,
+      "sha256": "700f3a318ae8be2d389b15d8feb9a5c03d82aaf640d9199ac78a0082504c9183"
     },
     {
       "path": "scripts/generate-social-preview.mjs",
       "category": "script",
-      "bytes": 9516,
-      "sha256": "17c5546bea55db53076b464a084e5c12fb2dedd4f9ea7a8e6e514935ebc5cdbe"
+      "bytes": 9596,
+      "sha256": "b7c7bb84056a6b601ef153c0ef64250d4cad40aaf0e963a434d408b001d6ab04"
     },
     {
       "path": "scripts/generate-visual-inventory-md.mjs",
@@ -5127,8 +5133,8 @@
     {
       "path": "scripts/project.meta.schema.json",
       "category": "script",
-      "bytes": 6610,
-      "sha256": "60108aff591eb3a3bce785759705c462995a0e026ddcfafbd25d0aa531e33cf9"
+      "bytes": 7848,
+      "sha256": "74e2a05665fbd8fd92864ab3d2e96ffcfdf189b696096f30c6b4d23d865a12c1"
     },
     {
       "path": "scripts/README-card-motifs.md",
@@ -5271,8 +5277,8 @@
     {
       "path": "scripts/refresh-project-meta.mjs",
       "category": "script",
-      "bytes": 2821,
-      "sha256": "07676222dedbdcc64a464779f1cd4ac7243031cae6e9bdf9e9f6895a16f4214e"
+      "bytes": 7802,
+      "sha256": "0051b69fb840494f917d911580a94b73927e847fb558d61dd649a77aa010ac9d"
     },
     {
       "path": "scripts/release-checklist.ts",
