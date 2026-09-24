@@ -10,7 +10,7 @@ describe('chain target feedback', () => {
             payoffValue: 'Clean next'
         });
         expect(getChainTargetFeedback(0).detail).toMatch(/^No chain yet\./u);
-        expect(getChainTargetFeedback(2).detail).toMatch(/^Best chain ×2\./u);
+        expect(getChainTargetFeedback(2).detail).toMatch(/^Best chain: 2 matches in a row\./u);
         expect(getChainTargetFeedback(5)).toMatchObject({
             band: 'reward',
             value: 'Reach Sharp',

@@ -139,3 +139,15 @@ describe('createRunSummary', () => {
         });
     });
 });
+
+describe('the reason a run ended', () => {
+    it('survives the save round-trip the real game-over path takes', () => {
+        // Gen 263: normalization never carried it, so every results screen fell back to a line that
+        // did not say why the run was over.
+        for (const reason of ['miss_budget', 'turn_ceiling', 'quit', 'contract', 'pass_and_play_final_floor'] as const) {
+            const run: RunState = { ...createNewRun(0, { runSeed: 3 }), status: 'gameOver', runEndReason: reason };
+            expect(createValidatedGameOverRunSummary(run, []).lastRunSummary?.runEndReason).toBe(reason);
+        }
+        expect(normalizeSaveData({ lastRunSummary: { runEndReason: 'dragons' } as never }).lastRunSummary?.runEndReason).toBeUndefined();
+    });
+});

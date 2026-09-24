@@ -10,6 +10,9 @@ import {
     type MetaProgressionStatus
 } from './meta-progression';
 
+/** Reward names are written for lists ("crest"); a sentence that opens with one needs its capital. */
+const sentenceStart = (text: string): string => (text.length > 0 ? text[0]!.toUpperCase() + text.slice(1) : text);
+
 export type MetaProgressionDeltaKind = 'profile_level' | 'difficulty_tier' | 'honor_source' | 'reward_status' | 'milestone';
 
 export interface MetaProgressionDeltaRow {
@@ -132,8 +135,8 @@ export const buildMetaProgressionRunDelta = (before: SaveData, after: SaveData):
             after: statusCopy(afterRow.status),
             body:
                 afterRow.status === 'owned'
-                    ? `${afterRow.reward} is now active where its mode rule allows it.`
-                    : `${afterRow.reward} can be unlocked from Profile.`,
+                    ? `${sentenceStart(afterRow.reward)} is now active where its mode rule allows it.`
+                    : `${sentenceStart(afterRow.reward)} can be unlocked from Profile.`,
             priority: afterRow.status === 'owned' ? 85 : 80,
             progress: afterRow.progress
         });

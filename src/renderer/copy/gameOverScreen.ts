@@ -76,7 +76,7 @@ export const gameOverScreenCopy = {
         practice: 'Practice descent: training rules were explicit, with progression expectations reduced.',
         /* Every run summary opens with this line; the old "Long-run core: chains and featured
            objectives" was the design's name for the mode, not something said to a player. */
-        classic: 'Classic descent: chain matches and clear each floor within its turns, as deep as you can.'
+        classic: 'Classic descent: chain matches, keep a miss in the bank, and go as deep as you can.'
     },
     flipHistoryCopy: (flipCount: number) =>
         flipCount > 0
@@ -93,7 +93,7 @@ export const gameOverScreenCopy = {
      */
     endReason: {
         turn_ceiling: (floor: number) => `Your turns ran out on floor ${floor}.`,
-        miss_budget: (floor: number) => `Your last miss came on floor ${floor}.`,
+        miss_budget: (floor: number) => `You ran out of misses on floor ${floor}.`,
         quit: (floor: number) => `You stopped on floor ${floor}.`,
         contract: (floor: number) => `The contract's mismatch limit ended the run on floor ${floor}.`,
         pass_and_play_final_floor: (floor: number) => `The table played its last floor, floor ${floor}.`

@@ -8,6 +8,7 @@ import {
     type GameMode,
     type MutatorId,
     type PlayerStatsPersisted,
+    type RunEndReason,
     type RunSummary,
     type SaveData,
     type Settings
@@ -48,6 +49,10 @@ export const DEFAULT_SETTINGS: Settings = {
     shuffleScoreTaxEnabled: false,
     pairProximityHintsEnabled: true
 };
+
+/** Every way a run can end (`RunEndReason`); anything else in a save reads as unknown. */
+const RUN_END_REASONS: readonly RunEndReason[] = ['turn_ceiling', 'miss_budget', 'quit', 'contract', 'pass_and_play_final_floor'];
+const isRunEndReason = (value: unknown): value is RunEndReason => RUN_END_REASONS.includes(value as RunEndReason);
 
 const DISPLAY_MODE_VALUES = ['windowed', 'fullscreen'] as const satisfies readonly Settings['displayMode'][];
 const GRAPHICS_QUALITY_VALUES = ['low', 'medium', 'high'] as const satisfies readonly Settings['graphicsQuality'][];
@@ -326,6 +331,12 @@ export const normalizeRunSummary = (input: unknown): RunSummary | null => {
         ...(Number.isFinite(payoffPressureExtra) ? { payoffPressureExtra } : {}),
         ...(typeof source.practiceMode === 'boolean' ? { practiceMode: source.practiceMode } : {}),
         ...(typeof source.wildMenuRun === 'boolean' ? { wildMenuRun: source.wildMenuRun } : {}),
+        /*
+         * How the run ended. It was never carried through here, so the real game-over path - which
+         * round-trips the summary through this function - lost it every time, and the results screen
+         * fell back to a line that never said why the run ended (Gen 263).
+         */
+        ...(isRunEndReason(source.runEndReason) ? { runEndReason: source.runEndReason } : {}),
         ...(source.activeContract === null
             ? { activeContract: null }
             : activeContract

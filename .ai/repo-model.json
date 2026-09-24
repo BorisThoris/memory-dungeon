@@ -9135,8 +9135,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "category": "test",
-      "bytes": 14624,
-      "sha256": "1f3e700131a32b8f0e383dae1e0ebb3abe2961775d3c56c8594949cc4d8a30a5"
+      "bytes": 14626,
+      "sha256": "7984f206bc06e07e2b641b55e6321bc00bf9285f0a86619a20842893368ed171"
     },
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
@@ -10575,14 +10575,14 @@
     {
       "path": "src/renderer/copy/gameOverScreen.test.ts",
       "category": "test",
-      "bytes": 2727,
-      "sha256": "32c6c74672ec0b4eede3e2435d0721c205856326724d3244de329abff190f00e"
+      "bytes": 2729,
+      "sha256": "151369b2dbda0f7fd5f8fa3f96e5f4c1c42a0694da8bde4df5e2aaa156b89d32"
     },
     {
       "path": "src/renderer/copy/gameOverScreen.ts",
       "category": "source",
-      "bytes": 6761,
-      "sha256": "3a77b39ab06e7c108762d11134eca8dfeb8fc72605ca2eefdea1821a023a55e9"
+      "bytes": 6757,
+      "sha256": "89a727bee0071bbf157da40ccc81bd43441b153dcd8123a0f5a0297ab8a26fe9"
     },
     {
       "path": "src/renderer/copy/gameplayEventAnnouncement.test.ts",
@@ -12165,14 +12165,14 @@
     {
       "path": "src/shared/chain-targets.test.ts",
       "category": "test",
-      "bytes": 2096,
-      "sha256": "58ae2db2da7d3a8e704f08bc6d9bc0c1ef87132ff334c4271896733ab46ad514"
+      "bytes": 2112,
+      "sha256": "b1e2ec2e4c04a6c7c2c611bfb3f8d9fb1724ba33d73fb27fc90acdabc7ef9420"
     },
     {
       "path": "src/shared/chain-targets.ts",
       "category": "source",
-      "bytes": 3641,
-      "sha256": "7d2f2bf372b3d852f4ffbf5738415d61fd018a2bf325d2741dd40cb1dafabfa5"
+      "bytes": 4009,
+      "sha256": "ec160d1205ab3350fe35678707d722ff526d0bde7bb738bcaf6ebe6e18a1aca8"
     },
     {
       "path": "src/shared/chain-tier-rules.test.ts",
@@ -12555,8 +12555,8 @@
     {
       "path": "src/shared/game-over-next-run.test.ts",
       "category": "test",
-      "bytes": 7250,
-      "sha256": "346942bb26128c077990f240cf9f074d0f25e5ce6c8e8e713172ddb4294e4789"
+      "bytes": 7282,
+      "sha256": "c861b159866fd64193ad1a425660a4253430c29599a09854d81e83f9b5158cc4"
     },
     {
       "path": "src/shared/game-over-next-run.ts",
@@ -12987,8 +12987,8 @@
     {
       "path": "src/shared/meta-progression-delta.ts",
       "category": "source",
-      "bytes": 6461,
-      "sha256": "9463589cfc34ae0848906753a9153af4a98fb999ff7bdff7213f71cdd7b4619d"
+      "bytes": 6710,
+      "sha256": "25f8a84ccf46cc4fd458d3f482e82e20876e783f6ef40d357d8ac439e17f751b"
     },
     {
       "path": "src/shared/meta-progression.test.ts",
@@ -13605,8 +13605,8 @@
     {
       "path": "src/shared/run-summary-rules.test.ts",
       "category": "test",
-      "bytes": 5263,
-      "sha256": "4210e3d6b50ba586b67bd76e331c46d089b5d919a940dcaaac9ef2fd5080f74e"
+      "bytes": 6034,
+      "sha256": "6c25c37e21aad2e1a48ee00e429567c1ba202a294cd9d556f796ff4fba6e1629"
     },
     {
       "path": "src/shared/run-summary-rules.ts",
@@ -13635,8 +13635,8 @@
     {
       "path": "src/shared/save-data.ts",
       "category": "source",
-      "bytes": 27236,
-      "sha256": "4a024d38f9cae4e0dce712b907152c33bd0c30ce3dbc5a96632a353fdfe86904"
+      "bytes": 27993,
+      "sha256": "23cabe78567aa910154a4d2372c2aa0767a7dafa4678c1fde0709fa25d5e477e"
     },
     {
       "path": "src/shared/save-field-policy.test.ts",
@@ -27369,7 +27369,7 @@
       "path": "src/shared/chain-targets.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 85,
+      "lineCount": 92,
       "imports": [
         "file:src/shared/chain-rung-value-rules.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -30368,7 +30368,7 @@
       "path": "src/shared/meta-progression-delta.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 175,
+      "lineCount": 178,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/meta-progression.ts"
@@ -32367,7 +32367,7 @@
       "path": "src/shared/run-summary-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 142,
+      "lineCount": 154,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/game-core.ts",
@@ -32463,7 +32463,7 @@
       "path": "src/shared/save-data.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 648,
+      "lineCount": 659,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
@@ -46277,8 +46277,8 @@
       "name": "getChainTargetFeedback",
       "kind": "value",
       "file": "src/shared/chain-targets.ts",
-      "line": 31,
-      "endLine": 84
+      "line": 38,
+      "endLine": 91
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#CHAIN_TIER_CLEAN_FROM",
@@ -51629,32 +51629,32 @@
       "name": "buildMetaProgressionRunDelta",
       "kind": "value",
       "file": "src/shared/meta-progression-delta.ts",
-      "line": 70,
-      "endLine": 174
+      "line": 73,
+      "endLine": 177
     },
     {
       "id": "symbol:src/shared/meta-progression-delta.ts#MetaProgressionDeltaKind",
       "name": "MetaProgressionDeltaKind",
       "kind": "type",
       "file": "src/shared/meta-progression-delta.ts",
-      "line": 13,
-      "endLine": 13
+      "line": 16,
+      "endLine": 16
     },
     {
       "id": "symbol:src/shared/meta-progression-delta.ts#MetaProgressionDeltaRow",
       "name": "MetaProgressionDeltaRow",
       "kind": "interface",
       "file": "src/shared/meta-progression-delta.ts",
-      "line": 15,
-      "endLine": 24
+      "line": 18,
+      "endLine": 27
     },
     {
       "id": "symbol:src/shared/meta-progression-delta.ts#MetaProgressionRunDelta",
       "name": "MetaProgressionRunDelta",
       "kind": "interface",
       "file": "src/shared/meta-progression-delta.ts",
-      "line": 26,
-      "endLine": 32
+      "line": 29,
+      "endLine": 35
     },
     {
       "id": "symbol:src/shared/meta-progression.ts#applyMetaProgressionUnlock",
@@ -54709,144 +54709,144 @@
       "name": "ACHIEVEMENT_IDS",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 85,
-      "endLine": 108
+      "line": 90,
+      "endLine": 113
     },
     {
       "id": "symbol:src/shared/save-data.ts#createAchievementState",
       "name": "createAchievementState",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 110,
-      "endLine": 117
+      "line": 115,
+      "endLine": 122
     },
     {
       "id": "symbol:src/shared/save-data.ts#createDefaultSaveData",
       "name": "createDefaultSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 343,
-      "endLine": 355
+      "line": 354,
+      "endLine": 366
     },
     {
       "id": "symbol:src/shared/save-data.ts#DEFAULT_SETTINGS",
       "name": "DEFAULT_SETTINGS",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 26,
-      "endLine": 50
+      "line": 27,
+      "endLine": 51
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeBestFloorNoPowers",
       "name": "mergeBestFloorNoPowers",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 627,
-      "endLine": 638
+      "line": 638,
+      "endLine": 649
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeChainFloorStats",
       "name": "mergeChainFloorStats",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 600,
-      "endLine": 613
+      "line": 611,
+      "endLine": 624
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeEncoreFromRun",
       "name": "mergeEncoreFromRun",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 640,
-      "endLine": 647
+      "line": 651,
+      "endLine": 658
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeRunsFinished",
       "name": "mergeRunsFinished",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 619,
-      "endLine": 625
+      "line": 630,
+      "endLine": 636
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeRunSummary",
       "name": "normalizeRunSummary",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 246,
-      "endLine": 341
+      "line": 251,
+      "endLine": 352
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeSaveData",
       "name": "normalizeSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 542,
-      "endLine": 593
+      "line": 553,
+      "endLine": 604
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSaveData",
       "name": "normalizeUnknownSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 510,
-      "endLine": 513
+      "line": 521,
+      "endLine": 524
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSaveDataOrThrow",
       "name": "normalizeUnknownSaveDataOrThrow",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 515,
-      "endLine": 527
+      "line": 526,
+      "endLine": 538
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSettings",
       "name": "normalizeUnknownSettings",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 529,
-      "endLine": 532
+      "line": 540,
+      "endLine": 543
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSettingsOrThrow",
       "name": "normalizeUnknownSettingsOrThrow",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 534,
-      "endLine": 540
+      "line": 545,
+      "endLine": 551
     },
     {
       "id": "symbol:src/shared/save-data.ts#RUN_HISTORY_SEED_CAP",
       "name": "RUN_HISTORY_SEED_CAP",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 133,
-      "endLine": 133
+      "line": 138,
+      "endLine": 138
     },
     {
       "id": "symbol:src/shared/save-data.ts#saveDataBoundarySchema",
       "name": "saveDataBoundarySchema",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 387,
-      "endLine": 402
+      "line": 398,
+      "endLine": 413
     },
     {
       "id": "symbol:src/shared/save-data.ts#SETTINGS_NUMERIC_RANGES",
       "name": "SETTINGS_NUMERIC_RANGES",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 77,
-      "endLine": 83
+      "line": 82,
+      "endLine": 88
     },
     {
       "id": "symbol:src/shared/save-data.ts#settingsBoundarySchema",
       "name": "settingsBoundarySchema",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 363,
-      "endLine": 383
+      "line": 374,
+      "endLine": 394
     },
     {
       "id": "symbol:src/shared/save-field-policy.ts#getSaveFieldPolicies",
@@ -58782,7 +58782,7 @@
         },
         {
           "path": "src/shared/save-data.ts",
-          "line": 24
+          "line": 25
         },
         {
           "path": "src/main/persistence.ts",

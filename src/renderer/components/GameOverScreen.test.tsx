@@ -96,7 +96,7 @@ describe('how the run ended', () => {
     it('says the last miss came, without a word about failing', () => {
         render(<GameOverScreen run={withReason('miss_budget')} />);
         const line = screen.getByTestId('game-over-end-reason');
-        expect(line).toHaveTextContent('Your last miss came on floor 7.');
+        expect(line).toHaveTextContent('You ran out of misses on floor 7.');
         expect(line).not.toHaveTextContent(/life|lives|lost|fail|died|death/i);
     });
 

@@ -26,7 +26,7 @@ describe('REG-096 game over next-run loop', () => {
         expect(rows.find((row) => row.id === 'chain_target')).toMatchObject({
             title: 'Chain target',
             value: 'Reach Sharp',
-            detail: 'Best chain ×5. Sharp chains into the next clump and pays ×4 a pair.',
+            detail: 'Best chain: 5 matches in a row. Sharp chains into the next clump and pays ×4 a pair.',
             actionHint: 'Open with pairs you are sure of, then carry the chain into the next clump.'
         });
         expect(rows.find((row) => row.id === 'local_share')?.detail).toMatch(/online rank/i);
@@ -48,7 +48,7 @@ describe('REG-096 game over next-run loop', () => {
 
         expect(row).toMatchObject({
             value: 'Reach Fever',
-            detail: 'Best chain ×8. Fever chains into three clumps and pays ×8 a pair.'
+            detail: 'Best chain: 8 matches in a row. Fever chains into three clumps and pays ×8 a pair.'
         });
     });
 
