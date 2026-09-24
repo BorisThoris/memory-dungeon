@@ -132,3 +132,13 @@ export function GameplayExitIcon({ className, ...rest }: GameplayIconProps) {
         </svg>
     );
 }
+
+export function GameplayBombIcon({ className, ...rest }: GameplayIconProps) {
+    return (
+        <svg {...base} className={className} {...rest}>
+            <circle cx="11" cy="14" r="6.5" />
+            <path d="M15.5 9.5 18 7" />
+            <path d="M18.5 4.5v1.5M21 7h-1.5M20.3 5.2l-1 1" />
+        </svg>
+    );
+}

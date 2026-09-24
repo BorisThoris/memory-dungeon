@@ -11,13 +11,25 @@ import { runNonNegativeInteger } from './run-number-guards';
  * it stood behind were stops in a loop of momentum (`docs/REMOVED_DUNGEON_LAYER.md`). What made
  * it worth bringing back on 2026-09-23 is the miss bank: for the first time a run has one thing
  * worth buying - another miss before the run ends - and a floor cleared well has something to
- * earn toward it. So gold is back as a run currency, earned only at a floor clear, and the store
- * is a sheet on the pause menu rather than a door between floors: there is never a moment the
- * game waits for the player to shop.
+ * earn toward it. So gold is back as a run currency, earned only at a floor clear.
  *
  * Prices climb with each purchase of the same thing in a run, so gold is a decision and not a
  * subscription: the first extra miss is cheap, the fourth is not.
+ *
+ * Where it opens changed on 2026-09-24. It began as a sheet on the pause menu, so that the game
+ * never waited for the player to shop - and nobody found it there. The player asked for shopping
+ * to be "a gameplay thing, not hidden away, every so levels", so it is a **store stop**: after every
+ * third floor's clear the store opens by itself, with a Descend button. That is the stop Gen 174
+ * removed, back on the player's word and once every three floors rather than after every one. A
+ * shared game at one screen never stops for it: the table is not one player's run.
  */
+export const STORE_STOP_EVERY_FLOORS = 3;
+
+export const isStoreStopFloor = (clearedLevel: number | null | undefined): boolean => {
+    const level = runNonNegativeInteger(clearedLevel ?? 0);
+    return level > 0 && level % STORE_STOP_EVERY_FLOORS === 0;
+};
+
 export const GOLD_FLOOR_CLEAR_BASE = 2;
 /** Gold a clear pays per turn under par, and the most it pays that way. */
 export const GOLD_PER_TURN_UNDER_PAR = 1;
@@ -31,7 +43,7 @@ export const floorClearGold = ({ tier, turnsUnderPar }: { tier: ChainTier; turns
     GOLD_BY_CLEAR_TIER[tier] +
     Math.min(GOLD_UNDER_PAR_CAP, runNonNegativeInteger(turnsUnderPar)) * GOLD_PER_TURN_UNDER_PAR;
 
-export type StoreItemId = 'miss' | 'peek' | 'shuffle' | RelicId;
+export type StoreItemId = 'miss' | 'peek' | 'shuffle' | 'bomb' | RelicId;
 
 export interface StoreItemDefinition {
     id: StoreItemId;
@@ -69,6 +81,14 @@ export const STORE_ITEMS: readonly StoreItemDefinition[] = [
         priceStep: 1,
         kind: 'consumable'
     },
+    {
+        id: 'bomb',
+        title: 'A bomb',
+        body: 'Flip a card, then bomb it: its pair leaves the board. No miss, no turn, the chain stands.',
+        basePrice: 4,
+        priceStep: 2,
+        kind: 'consumable'
+    },
     // Relics (2026-09-24, `run-relic-rules.ts`): bought once, kept to the end of the run.
     ...RELICS.map(
         (relic): StoreItemDefinition => ({
@@ -84,7 +104,7 @@ export const STORE_ITEMS: readonly StoreItemDefinition[] = [
 
 export type StoreRun = Pick<
     RunState,
-    'gold' | 'storePurchases' | 'missBank' | 'board' | 'peekCharges' | 'shuffleCharges' | 'relics'
+    'gold' | 'storePurchases' | 'missBank' | 'board' | 'peekCharges' | 'shuffleCharges' | 'bombCharges' | 'relics'
 >;
 
 export const runGold = (run: Pick<RunState, 'gold'>): number => runNonNegativeInteger(run.gold ?? 0);
@@ -141,6 +161,8 @@ export const buyStoreItem = <R extends StoreRun>(run: R, id: StoreItemId): R | n
             return { ...paid, peekCharges: runNonNegativeInteger(run.peekCharges) + 1 };
         case 'shuffle':
             return { ...paid, shuffleCharges: runNonNegativeInteger(run.shuffleCharges) + 1 };
+        case 'bomb':
+            return { ...paid, bombCharges: runNonNegativeInteger(run.bombCharges) + 1 };
         default:
             return { ...paid, relics: [...(run.relics ?? []), id] };
     }

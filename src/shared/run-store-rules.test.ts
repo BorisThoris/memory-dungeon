@@ -9,6 +9,8 @@ import {
     runGold,
     STORE_ITEMS,
     storeOffer,
+    isStoreStopFloor,
+    STORE_STOP_EVERY_FLOORS,
     storePrice
 } from './run-store-rules';
 import type { BoardState, RunState } from './contracts';
@@ -76,5 +78,23 @@ describe('the store', () => {
         expect(storeOffer(poor).every((row) => row.blocked === 'gold')).toBe(true);
         expect(buyStoreItem(poor, 'peek')).toBeNull();
         expect(runGold(poor)).toBe(2);
+    });
+});
+
+describe('the store stop', () => {
+    it('comes every third floor, and never before the first clear', () => {
+        expect([0, 1, 2, 3, 4, 5, 6, 9, 10].filter((level) => isStoreStopFloor(level))).toEqual([3, 6, 9]);
+        expect(isStoreStopFloor(null)).toBe(false);
+        expect(STORE_STOP_EVERY_FLOORS).toBe(3);
+    });
+
+    it('sells bombs, dearer each time', () => {
+        const run: RunState = { ...createNewRun(0, { runSeed: 7, gameMode: 'endless' }), gold: 20 };
+        const first = buyStoreItem(run, 'bomb')!;
+        expect(first.bombCharges).toBe(1);
+        const second = buyStoreItem(first, 'bomb')!;
+        expect(second.bombCharges).toBe(2);
+        expect(runGold(second)).toBe(20 - storePrice(run, 'bomb') - storePrice(first, 'bomb'));
+        expect(storePrice(first, 'bomb')).toBeGreaterThan(storePrice(run, 'bomb'));
     });
 });

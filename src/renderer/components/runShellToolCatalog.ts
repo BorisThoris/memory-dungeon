@@ -18,6 +18,7 @@ export type RunShellToolId =
     | 'row'
     | 'pin'
     | 'peek'
+    | 'bomb'
     | 'flash'
     | 'undo'
     | 'greet'
@@ -29,6 +30,7 @@ export type RunPowerChargeField = Extract<
     | 'shuffleCharges'
     | 'regionShuffleCharges'
     | 'peekCharges'
+    | 'bombCharges'
     | 'flashPairCharges'
 >;
 
@@ -48,6 +50,8 @@ export const RUN_SHELL_TOOL_CATALOG: readonly RunShellToolSpec[] = [
     { conditional: false, id: 'row', label: 'Row', spends: 'regionShuffleCharges' },
     { conditional: false, id: 'pin', label: 'Pin', spends: null },
     { conditional: false, id: 'peek', label: 'Peek', spends: 'peekCharges' },
+    // Bought at the store stop (2026-09-24). Hidden like every tool with no charges left.
+    { conditional: false, id: 'bomb', label: 'Bomb', spends: 'bombCharges' },
     // Only Practice and Wild runs carry flash charges, so the dock hides it elsewhere.
     { conditional: true, id: 'flash', label: 'Flash', spends: 'flashPairCharges' },
     { conditional: false, id: 'undo', label: 'Undo', spends: null },

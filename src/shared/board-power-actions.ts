@@ -272,6 +272,61 @@ export const applyPeek = (run: RunState, tileId: string): RunState => {
     };
 };
 
+/**
+ * The bomb: the pair of the one card face up leaves the board.
+ *
+ * Destroy (removed Gen 200, `docs/REMOVED_POWERS.md`) was this power with nothing that granted a
+ * charge. The store stop grants them now (`run-store-rules.ts`), and the bomb aims at the card the
+ * player has just turned over rather than an armed target: flip a card, realise you do not know
+ * where its twin is, and spend a bomb instead of a guess. No score, no miss, no turn, and the chain
+ * stands. It may not take the floor's last pair - that pair is the clear, and the clear is a match.
+ */
+export const bombTargetTileId = (run: RunState): string | null => {
+    if (run.status !== 'playing' || !run.board || runNonNegativeInteger(run.bombCharges) < 1) {
+        return null;
+    }
+    const flipped = runFilteredStringArray(run.board.flippedTileIds);
+    if (flipped.length !== 1) {
+        return null;
+    }
+    const tile = run.board.tiles.find((candidate) => candidate.id === flipped[0]);
+    if (!tile || tile.state !== 'flipped') {
+        return null;
+    }
+    const partner = run.board.tiles.find((candidate) => candidate.pairKey === tile.pairKey && candidate.id !== tile.id);
+    if (!partner || partner.state !== 'hidden') {
+        return null;
+    }
+    const pairsLeft = new Set(
+        run.board.tiles.filter((candidate) => candidate.state === 'hidden' || candidate.state === 'flipped').map((candidate) => candidate.pairKey)
+    ).size;
+    return pairsLeft > 1 ? tile.id : null;
+};
+
+export const applyBomb = (run: RunState, tileId: string): RunState => {
+    if (bombTargetTileId(run) !== tileId || !run.board) {
+        return run;
+    }
+    const tile = run.board.tiles.find((candidate) => candidate.id === tileId)!;
+    const pairTileIds = run.board.tiles.filter((candidate) => candidate.pairKey === tile.pairKey).map((candidate) => candidate.id);
+    return {
+        ...run,
+        bombCharges: decrementRunCounter(run.bombCharges),
+        powersUsedThisRun: true,
+        pinnedTileIds: runFilteredStringArray(run.pinnedTileIds).filter((id) => !pairTileIds.includes(id)),
+        board: {
+            ...run.board,
+            flippedTileIds: [],
+            matchedPairs: runNonNegativeInteger(run.board.matchedPairs) + 1,
+            tiles: run.board.tiles.map((candidate) =>
+                pairTileIds.includes(candidate.id)
+                    ? { ...candidate, state: 'removed' as const, findableKind: undefined }
+                    : candidate
+            )
+        }
+    };
+};
+
 export const cancelResolvingWithUndo = (run: RunState): RunState => {
     const undoUsesThisFloor = runNonNegativeInteger(run.undoUsesThisFloor);
     if (run.status !== 'resolving' || !run.board || undoUsesThisFloor < 1) {

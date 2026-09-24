@@ -561,6 +561,11 @@ export interface RunState {
     flipHistory: string[];
     /** H1 Peek: charges and ephemeral reveals (do not count as committed flips). */
     peekCharges: number;
+    /**
+     * Bombs (`board-power-actions.ts` `applyBomb`), bought at the store stop: each takes the pair
+     * of the card the player has just flipped off the board - no score, no miss, no turn.
+     */
+    bombCharges: number;
     peekRevealedTileIds: string[];
     /** H2 Undo: remaining undos this floor (cancel resolving before timer). */
     undoUsesThisFloor: number;
@@ -668,7 +673,7 @@ export interface RunState {
      * run has bought, which is what the prices climb on.
      */
     gold?: number;
-    storePurchases?: Partial<Record<'miss' | 'peek' | 'shuffle' | RelicId, number>>;
+    storePurchases?: Partial<Record<'miss' | 'peek' | 'shuffle' | 'bomb' | RelicId, number>>;
     /** Relics bought in the store this run (`run-relic-rules.ts`), kept to the end of it. */
     relics?: RelicId[];
     /** The biggest single break's score this floor: what band N5 reads the largest break's share from. */

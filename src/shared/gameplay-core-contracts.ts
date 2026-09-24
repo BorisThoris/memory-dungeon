@@ -306,6 +306,13 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...commandBase,
+            type: z.literal('board.bomb'),
+            targetTileId: z.string().min(1).max(160)
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
             type: z.literal('board.gambit_commit'),
             targetTileId: z.string().min(1).max(160)
         })
@@ -605,6 +612,16 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
+            type: z.literal('board.bombed'),
+            targetTileId: z.string().min(1).max(160),
+            pairKey: z.string().min(1).max(160),
+            bombChargesBefore: z.number().int().nonnegative(),
+            bombChargesAfter: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
             type: z.literal('board.peeked'),
             targetTileId: z.string().min(1).max(160),
             peekChargesBefore: z.number().int().nonnegative(),
@@ -719,6 +736,14 @@ export const createGameplayPeekCommand = (commandId: string, targetTileId: strin
         schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
         commandId,
         type: 'board.peek',
+        targetTileId
+    });
+
+export const createGameplayBombCommand = (commandId: string, targetTileId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'board.bomb',
         targetTileId
     });
 

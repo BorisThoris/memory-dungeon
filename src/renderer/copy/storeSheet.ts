@@ -1,11 +1,10 @@
 import type { StoreOfferRow } from '../../shared/run-store-rules';
 
-/** The store sheet on the pause menu (`run-store-rules.ts`). */
+/** The store stop, after every third floor (`run-store-rules.ts`). */
 export const STORE_SHEET_COPY = {
     title: 'Store',
-    subtitle: (gold: number): string => `You have ${gold} gold. Prices climb with each thing you buy this run.`,
-    /** The pause menu's entry, carrying the purse so the player knows whether it is worth opening. */
-    pauseAction: (gold: number): string => `Store · ${gold} gold`,
+    subtitle: (floor: number, gold: number): string =>
+        `Floor ${floor} cleared. You have ${gold} gold to spend before you descend; prices climb with each thing you buy.`,
     buyAction: (row: StoreOfferRow): string =>
         row.blocked === 'owned' ? `${row.title} · owned` : `${row.title} · ${row.price} gold`,
     rowBody: (row: StoreOfferRow): string =>
@@ -18,5 +17,11 @@ export const STORE_SHEET_COPY = {
               : row.blocked === 'gold'
                 ? `${row.body} ${row.price} gold; you are short.`
                 : row.body,
-    back: 'Back'
+    descend: 'Descend'
+} as const;
+
+/** The dock's bomb (`applyBomb`): it aims at the one card face up, so it says so until there is one. */
+export const BOMB_TOOL_COPY = {
+    waiting: 'Flip a card first: a bomb takes the pair of the one card face up',
+    ready: 'Bomb this card: its pair leaves the board, no miss'
 } as const;

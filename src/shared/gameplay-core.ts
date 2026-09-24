@@ -1,5 +1,6 @@
 import {
     applyFlashPair,
+    applyBomb,
     applyPeek,
     applyRegionShuffle,
     applyShuffle,
@@ -73,6 +74,7 @@ export interface GameplayReplayResult {
 
 const SYSTEM_SOURCE: GameplaySource = { kind: 'system', id: 'gameplay-core' };
 const PEEK_SOURCE: GameplaySource = { kind: 'power', id: 'peek' };
+const BOMB_SOURCE: GameplaySource = { kind: 'power', id: 'bomb' };
 const PIN_SOURCE: GameplaySource = { kind: 'power', id: 'pin' };
 const GAMBIT_SOURCE: GameplaySource = { kind: 'power', id: 'gambit' };
 const SHUFFLE_SOURCE: GameplaySource = { kind: 'power', id: 'shuffle' };
@@ -204,6 +206,35 @@ const applyPeekCommand = (
         type: 'feedback.requested',
         cue: 'power.peek.used',
         message: `Peek revealed ${tileName(run, command.targetTileId)} at ${tilePlace(run, command.targetTileId)}; ${chargesLeft(after, 'charge')}.`,
+        tone: 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
+const applyBombCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'board.bomb' }>
+): GameplayCommandResult => {
+    const nextRun = applyBomb(run, command.targetTileId);
+    if (nextRun === run) {
+        return rejectedResult(run, command.commandId, 'A bomb needs one card face up whose pair is not the last on the floor.', command);
+    }
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, BOMB_SOURCE, events);
+    const before = runNonNegativeInteger(run.bombCharges);
+    const after = runNonNegativeInteger(nextRun.bombCharges);
+    const pairKey = run.board?.tiles.find((tile) => tile.id === command.targetTileId)?.pairKey ?? 'unknown';
+    writeEvent({
+        type: 'board.bombed',
+        targetTileId: command.targetTileId,
+        pairKey,
+        bombChargesBefore: before,
+        bombChargesAfter: after
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'power.bomb.used',
+        message: `Bomb took that card and its twin off the board; ${chargesLeft(after, 'bomb')}.`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -943,6 +974,9 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     const command = parsed.data;
     if (command.type === 'board.peek') {
         return applyPeekCommand(run, command);
+    }
+    if (command.type === 'board.bomb') {
+        return applyBombCommand(run, command);
     }
     if (command.type === 'board.pin_toggle') {
         return applyPinToggleCommand(run, command);

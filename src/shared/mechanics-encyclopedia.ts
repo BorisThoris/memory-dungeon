@@ -11,7 +11,7 @@
 import type { AchievementId, GameMode, MutatorId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 46 as const;
+export const ENCYCLOPEDIA_VERSION = 47 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -343,7 +343,7 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
         title: 'Gold and the store',
         description:
             'A floor clear pays **gold**: two, plus one for each rung of the chain it cleared at (Clean, Sharp, Fever), plus one for every turn under par, three at most. ' +
-            'The **store** is on the pause menu, so the game never waits for you to shop. It sells another **miss** (into the bank, never past four), a **peek** charge and a **shuffle** charge; ' +
+            'The **store** opens by itself after every third floor, with a **Descend** button when you are done. It sells another **miss** (into the bank, up to what it holds), a **peek** charge, a **shuffle** charge and a **bomb** - flip a card, then bomb it, and its pair leaves the board with no miss and no turn spent, though never the floor\'s last pair; ' +
             'each thing you buy costs more the next time this run. ' +
             'It also sells three **relics**, once each, kept to the end of the run: **Deep Pockets** (the miss bank holds five), **Gilded Chain** (every fifth match in a row also pays two gold) and **Long Look** (a second more to study every floor). ' +
             'Gold is the run\'s, not the profile\'s: it ends with the run.'

@@ -74,8 +74,10 @@ export interface AppState {
     openInventoryFromMenu: () => void;
     openCodexFromMenu: () => void;
     openInventoryFromPlaying: () => void;
-    /** The pause menu's store: buys one item into the live run, or does nothing the sheet would refuse. */
+    /** The store stop's purchase: buys one item into the live run, or does nothing the sheet would refuse. */
     buyStoreItem: (id: StoreItemId) => void;
+    /** Spends a bomb on the one card face up (`applyBomb`), or does nothing when it cannot. */
+    useBomb: () => void;
     openCodexFromPlaying: () => void;
     closeSubscreen: () => void;
     openSettings: (returnView?: SubscreenReturnView) => void;

@@ -1,4 +1,8 @@
-import { buyStoreItem } from '../../shared/run-store-rules';
+import { buyStoreItem, isStoreStopFloor } from '../../shared/run-store-rules';
+import { bombTargetTileId } from '../../shared/board-power-actions';
+import { createGameplayBombCommand } from '../../shared/gameplay-core-contracts';
+import { reduceGameplayCommand } from '../../shared/gameplay-core';
+import { appendGameplayJournal } from '../../shared/gameplay-journal';
 import { create } from 'zustand/react';
 import { acknowledgePassAndPlayHandoff, PASS_AND_PLAY_MIN_SEATS } from '../../shared/pass-and-play-rules';
 import type {
@@ -562,13 +566,36 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     buyStoreItem: (id) => {
         const { run } = get();
-        if (!run || run.status !== 'paused') {
+        // The store stop opens at a cleared floor (`isStoreStopFloor`), before the next one builds.
+        if (!run || run.status !== 'levelComplete' || !isStoreStopFloor(run.lastLevelResult?.level)) {
             return;
         }
         const bought = buyStoreItem(run, id);
         if (bought) {
             set({ run: bought });
         }
+    },
+
+    useBomb: () => {
+        const { run, view } = get();
+        if (!run || view !== 'playing') {
+            return;
+        }
+        const target = bombTargetTileId(run);
+        if (!target) {
+            return;
+        }
+        const command = createGameplayBombCommand(
+            `bomb:${run.runSeed}:${run.board?.level ?? 0}:${run.bombCharges}:${target}`,
+            target
+        );
+        const result = reduceGameplayCommand(run, command);
+        if (!result.accepted) {
+            return;
+        }
+        void resumeAudioContext();
+        playPowerArmSfx(sfxGainFromStore());
+        set({ run: appendGameplayJournal(result.run, [command], result.events) });
     },
 
     applyFlashPairPower: () => {

@@ -119,6 +119,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         stickyBlockIndex: null,
         flipHistory: [],
         peekCharges,
+        bombCharges: 0,
         peekRevealedTileIds: [],
         undoUsesThisFloor: 1,
         gambitAvailableThisFloor: true,

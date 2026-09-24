@@ -32,9 +32,11 @@ import {
 } from '../copy/runDialogCopy';
 import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
 import { missBankSoonestToGo, missesLeft } from '../../shared/miss-bank';
-import { runGold, storeOffer } from '../../shared/run-store-rules';
+import { isStoreStopFloor, runGold, storeOffer } from '../../shared/run-store-rules';
+import { bombTargetTileId } from '../../shared/board-power-actions';
+import { isPassAndPlayRun } from '../../shared/pass-and-play-rules';
 import { relicDefinition } from '../../shared/run-relic-rules';
-import { STORE_SHEET_COPY } from '../copy/storeSheet';
+import { BOMB_TOOL_COPY, STORE_SHEET_COPY } from '../copy/storeSheet';
 import {
     BOARD_SHUFFLE_COPY,
     FLASH_PAIR_COPY,
@@ -333,7 +335,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const [boardViewportAtRest, setBoardViewportAtRest] = useState(true);
     const [abandonRunConfirmOpen, setAbandonRunConfirmOpen] = useState(false);
     const [shortcutsHelpOpen, setShortcutsHelpOpen] = useState(false);
-    const [storeOpen, setStoreOpen] = useState(false);
+    /*
+     * The store stop (`isStoreStopFloor`): after every third floor's clear the beat hands over to
+     * the store sheet instead of building the next floor, and Descend continues. Keyed on the floor
+     * that cleared, so it opens once per stop.
+     */
+    const [storeStopKey, setStoreStopKey] = useState<string | null>(null);
     const gamepadConnected = useGamepadConnected();
     useEffect(() => {
         if (!compactTouchChrome) {
@@ -353,6 +360,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             goToMenu: state.goToMenu,
             openCodexFromPlaying: state.openCodexFromPlaying,
             buyStoreItem: state.buyStoreItem,
+            useBomb: state.useBomb,
             openInventoryFromPlaying: state.openInventoryFromPlaying,
             openSettings: state.openSettings,
             notifyMemorizeBoardReady: state.notifyMemorizeBoardReady,
@@ -657,6 +665,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         dismissPowersFtue,
         goToMenu,
         buyStoreItem,
+        useBomb,
         openCodexFromPlaying,
         openInventoryFromPlaying,
         openSettings,
@@ -1014,6 +1023,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      * now; reduced motion skips the hold, since a delay with nothing moving is just latency.
      */
     const floorClearKey = `${run.runSeed}:${run.lastLevelResult?.level ?? 'none'}`;
+    const storeStopDue = isStoreStopFloor(run.lastLevelResult?.level) && !isPassAndPlayRun(run.passAndPlay);
     const [floorClearShownAtMount] = useState(() => (run.status === 'levelComplete' ? floorClearKey : null));
     const [floorClearReleasedKey, setFloorClearReleasedKey] = useState<string | null>(null);
     const floorClearBeatShown =
@@ -1035,7 +1045,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      * was cut short by anything else is harmless.
      */
     useEffect(() => {
-        if (!floorClearBeatShown || abandonRunConfirmOpen) {
+        if (!floorClearBeatShown || abandonRunConfirmOpen || storeStopKey === floorClearKey) {
             return undefined;
         }
         // The beat is given its time in *rendered* frames, not on the wall clock. A phone building
@@ -1046,13 +1056,21 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         let elapsed = 0;
         let last: number | null = null;
         let frame = 0;
+        // A store floor hands the beat to the store sheet; every other floor builds the next board.
+        const afterBeat = (): void => {
+            if (storeStopDue) {
+                setStoreStopKey(floorClearKey);
+                return;
+            }
+            continueToNextLevel();
+        };
         const tick = (now: number) => {
             if (last !== null) {
                 elapsed += Math.min(now - last, FLOOR_CLEAR_BEAT_FRAME_CAP_MS);
             }
             last = now;
             if (elapsed >= FLOOR_CLEAR_BEAT_MS) {
-                continueToNextLevel();
+                afterBeat();
                 return;
             }
             frame = window.requestAnimationFrame(tick);
@@ -1060,13 +1078,13 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         frame = window.requestAnimationFrame(tick);
         const safety = window.setTimeout(() => {
             window.cancelAnimationFrame(frame);
-            continueToNextLevel();
+            afterBeat();
         }, FLOOR_CLEAR_BEAT_STALL_CAP_MS);
         return () => {
             window.cancelAnimationFrame(frame);
             window.clearTimeout(safety);
         };
-    }, [floorClearBeatShown, floorClearKey, abandonRunConfirmOpen, continueToNextLevel]);
+    }, [floorClearBeatShown, floorClearKey, abandonRunConfirmOpen, continueToNextLevel, storeStopDue, storeStopKey]);
 
     const nextFloorResidentLine = run.lastLevelResult
         ? floorClearResidentLine(
@@ -1368,6 +1386,16 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 armed: peekModeArmed,
                 title: 'Peek at a hidden tile',
                 onClick: togglePeekMode
+            },
+            {
+                /* The bomb aims at the card just flipped (`applyBomb`), so it needs no armed mode:
+                   it lights while exactly one card is face up and its pair is not the floor's last. */
+                ...toolSpec('bomb'),
+                glyph: RUN_SHELL_GLYPHS.bomb,
+                charges: run.bombCharges,
+                disabled: bombTargetTileId(run) === null,
+                title: bombTargetTileId(run) === null ? BOMB_TOOL_COPY.waiting : BOMB_TOOL_COPY.ready,
+                onClick: useBomb
             },
             ...(showFlashPairPower
                 ? [
@@ -1698,20 +1726,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 </div>
 
                 {/* One modal at a time: Controls opens over pause, and closing it comes back here. */}
-                {!suppressStatusOverlays && !abandonRunConfirmOpen && !shortcutsHelpOpen && !storeOpen && run.status === 'paused' && (
+                {!suppressStatusOverlays && !abandonRunConfirmOpen && !shortcutsHelpOpen && run.status === 'paused' && (
                     <OverlayModal
                         actions={[
                             { label: 'Resume', onClick: resume, variant: 'primary' },
-                            /* The store (2026-09-23, run-store-rules.ts): a sheet here rather than a
-                               door between floors, so the game never waits for the player to shop. */
-                            {
-                                label: STORE_SHEET_COPY.pauseAction(runGold(run)),
-                                onClick: () => {
-                                    playMenuOpen();
-                                    setStoreOpen(true);
-                                },
-                                variant: 'secondary'
-                            },
                             /* Fit board left this menu for the dock, where the camera is: a pinch
                                is undone next to where it happened, without pausing. */
                             { label: 'Inventory', onClick: openInventoryFromPlaying, variant: 'secondary' },
@@ -1842,7 +1860,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         </dl>
                     </OverlayModal>
                 )}
-                {!suppressStatusOverlays && storeOpen && run.status === 'paused' && (
+                {!suppressStatusOverlays && run.status === 'levelComplete' && storeStopKey === floorClearKey && (
                     <OverlayModal
                         actions={[
                             ...storeOffer(run).map((row) => ({
@@ -1854,11 +1872,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 variant: 'secondary' as const,
                                 disabled: row.blocked !== null
                             })),
-                            { label: STORE_SHEET_COPY.back, onClick: () => setStoreOpen(false), variant: 'primary' }
+                            { label: STORE_SHEET_COPY.descend, onClick: continueToNextLevel, variant: 'primary' }
                         ]}
                         headerPlateTone="pause"
-                        onEscape={() => setStoreOpen(false)}
-                        subtitle={STORE_SHEET_COPY.subtitle(runGold(run))}
+                        onEscape={continueToNextLevel}
+                        subtitle={STORE_SHEET_COPY.subtitle(run.lastLevelResult?.level ?? 0, runGold(run))}
                         testId="store-sheet"
                         title={STORE_SHEET_COPY.title}
                     >
