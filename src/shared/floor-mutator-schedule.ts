@@ -82,6 +82,12 @@ export const FLOOR_ARCHETYPE_CATALOG: Record<FloorArchetypeId, FloorArchetypeDef
         riskProfile: 'Boss pressure with short study and wider recall.',
         encounterRole: 'boss'
     },
+    lantern_hall: {
+        title: 'Lantern Hall',
+        hint: 'Every match lights the cards beside it until you turn the next one. Match where the dark is.',
+        theme: 'Lantern',
+        riskProfile: 'A reward floor that pays in knowledge: where you match decides how much you get to see.'
+    },
     skittish_hall: {
         title: 'Skittish Hall',
         hint: 'Miss here and the two cards you saw flinch into a neighbouring cell. Work out which way.',
@@ -379,7 +385,7 @@ const ENDLESS_FLOOR_CYCLE: FloorScheduleEntry[] = [
      * floor 3 went with the relic draft, so the objective does instead: floor 3 asks for a floor
      * without moving the board, floor 10 asks for one under par.
      */
-    makeEntry(10, 'treasure_gallery', 'flip_par', ['findables_floor'], 'breather'),
+    makeEntry(10, 'lantern_hall', 'flip_par', ['lantern_light'], 'breather'),
     makeEntry(11, 'skittish_hall', 'scholar_style', ['skittish_cards'], 'normal'),
     makeEntry(12, 'spotlight_hunt', 'cursed_last', ['shifting_spotlight'], 'normal')
 ];
@@ -437,7 +443,7 @@ const emptyFloorTagCounts = (): Record<FloorTag, number> => ({
 export const pressureRoleForArchetype = (
     floorArchetypeId: FloorArchetypeId | null | undefined
 ): Exclude<FloorArchetypePressureRole, 'boss'> => {
-    if (floorArchetypeId === 'treasure_gallery') {
+    if (floorArchetypeId === 'treasure_gallery' || floorArchetypeId === 'lantern_hall') {
         return 'reward';
     }
     if (floorArchetypeId === 'breather') {

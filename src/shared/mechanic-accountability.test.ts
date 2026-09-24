@@ -75,10 +75,10 @@ describe('every mechanic answers for itself', () => {
         // line.
         const censused = Object.keys(MECHANIC_CENSUS_COUNTERS).length;
         // 34 in Gen 263: skittish cards joined with their own census row.
-        expect(censused).toBe(34);
+        expect(censused).toBe(35);
         // 43 to 48 in Gen 262: the miss bank, gold, the store stop, bombs and relics joined the graph,
         // each exempt with the soak as its proof rather than counted, because no census player shops.
-        expect(gameplayInteractionGraph.mechanics.length).toBe(49);
+        expect(gameplayInteractionGraph.mechanics.length).toBe(50);
         /*
          * Nothing is blind by family any more: every remaining mechanic carries its own argued
          * exemption. Ten of them.

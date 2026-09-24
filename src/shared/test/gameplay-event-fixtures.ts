@@ -28,6 +28,7 @@ const DEFAULT_ANNOUNCEMENT: BoardTurnAnnouncementFacts = {
     restlessDriftsAfter: 0,
     skittishFlinchesBefore: 0,
     skittishFlinchesAfter: 0,
+    lanternLitCount: 0,
     matchedTraitKinds: [],
     shuffleChargesBefore: 0,
     shuffleChargesAfter: 0,

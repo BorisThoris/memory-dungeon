@@ -176,6 +176,8 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         magpieTheftsThisFloor: 0,
         restlessDriftsThisFloor: 0,
         skittishFlinchesThisFloor: 0,
+        lanternLitTileIds: [],
+        lanternLightsThisFloor: 0,
         shiftingSpotlightNonce: 0
     };
 

@@ -928,9 +928,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         });
     }, [run.activeMutators, run.board, run.status, run.stickyBlockIndex]);
     const mergedPeekTileIds = useMemo(() => {
-        const merged = new Set<string>([...run.peekRevealedTileIds, ...run.flashPairRevealedTileIds]);
+        const merged = new Set<string>([
+            ...run.peekRevealedTileIds,
+            ...run.flashPairRevealedTileIds,
+            // Lantern light shows faces the same way; it lives in its own field so it never counts as a peek.
+            ...(run.lanternLitTileIds ?? [])
+        ]);
         return [...merged];
-    }, [run.peekRevealedTileIds, run.flashPairRevealedTileIds]);
+    }, [run.peekRevealedTileIds, run.flashPairRevealedTileIds, run.lanternLitTileIds]);
     const allowGambitThirdFlip = run.gambitAvailableThisFloor && !run.gambitThirdFlipUsed;
     const activeSeatLabel = run.passAndPlay
         ? (run.passAndPlay.seats[run.passAndPlay.activeSeatIndex]?.label ?? null)

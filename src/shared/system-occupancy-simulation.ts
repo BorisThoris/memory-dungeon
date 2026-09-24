@@ -145,6 +145,8 @@ export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
     /* The restless floor (Gen 262): the one mutator that moves the board mid-floor. Floor-scoped, since its clock is the floor's own turn count. */
     { id: 'restlessDrifts', key: 'restlessDriftsThisFloor', label: 'The restless floor shifted hidden cards', family: 'memory', cadence: 'rare', kind: 'tally', player: 'reference' },
     /* Skittish cards (Gen 263): the missed cards flinch a step. Floor-scoped; its clock is the reference player's misses on floor 11. */
+    /* Lantern light (Gen 263): a match lit face-down cards beside it. Floor-scoped; floor 10 of the cycle. */
+    { id: 'lanternLights', key: 'lanternLightsThisFloor', label: 'A match lit the cards beside it', family: 'memory', cadence: 'rare', kind: 'tally', player: 'reference' },
     { id: 'skittishFlinches', key: 'skittishFlinchesThisFloor', label: 'Skittish cards flinched after a miss', family: 'memory', cadence: 'rare', kind: 'tally', player: 'reference' },
     /*
      * The featured objective, uncounted since the census existed (Gen 216).

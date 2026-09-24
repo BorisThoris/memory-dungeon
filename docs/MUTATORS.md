@@ -14,12 +14,13 @@ Hooks in `src/shared/game.ts` consult `activeMutators` via `hasMutator` / `src/s
 
 ## Shipped IDs (`MutatorId`)
 
-Eleven, and this list is the eleven in `MUTATOR_IDS`. `score_parasite` was here until Gen 183 took it out
+Twelve, and this list is the twelve in `MUTATOR_IDS`. `score_parasite` was here until Gen 183 took it out
 with the lives it drained; the row went with it rather than being left to describe nothing.
 
 - `sticky_fingers` — `stickyBlockIndex` on match path.
 - `restless_floor` — the one mutator that changes the board *while* it is played (`restless-floor-rules.ts`, hooked after the spotlight and the magpie in both turn seams). Every `RESTLESS_TURN_INTERVAL` resolved turns, `restlessSwapCountForDrift(driftsBefore)` pairs of hidden, unpinned cards trade cells; `restlessDriftsThisFloor` on `RunState` counts drifts and drives both the escalation and the announcement (`restlessFloorBeat.ts`). It replaced `category_letters` in Gen 262: faces are illustrations, so a symbol-band swap changed nothing a player could see.
 - `skittish_cards` — floor 11 (Skittish Hall) since Gen 263 (`skittish-cards-rules.ts`, hooked in the mismatch seam as soon as the missed cards turn back, before the spotlight, the magpie and the restless drift). Each of the two cards a miss showed trades places with one seeded face-down orthogonal neighbour: never a pinned card, never its own partner, each card at most once. The clock is the player's misses; a clean floor never flinches. Counted on `RunState.skittishFlinchesThisFloor`, announced every time (`skittishCardsBeat.ts`). It replaced `distraction_channel` on floor 11, whose only effect with its HUD off (the default) was a flat four points off each match; `distraction_channel` survives as the seeded boss-floor seasoning.
+- `lantern_light` — floor 10 (Lantern Hall) since Gen 263 (`lantern-light-rules.ts`, hooked last in the match seam, after the pop and any drift). Every match lights up to `LANTERN_MAX_LIT` (3) seeded face-down cards orthogonally touching the matched pair; they show their faces until the next flip (`RunState.lanternLitTileIds`, cleared in `flip-tile-transition.ts` beside the flashed pair, merged into the board's reveal set in `GameScreen`). Not a peek: its own field, so no objective or achievement that forbids peeking is tripped. The reward-shaped dynamic: where you match decides how much you see. It replaced the cycle's second `treasure_gallery`; counted on `lanternLightsThisFloor`.
 - `short_memorize` — reduced memorize window (`getMemorizeDurationForRun`).
 - `wide_recall` — play phase shows **labels** primarily (symbols de-emphasized in renderer); **rules:** flat match-score penalty per match.
 - `silhouette_twist` — silhouette / reduced-face styling during play (CSS / materials); **rules:** flat match-score penalty per match.

@@ -73,6 +73,8 @@ export const createNextFloorRunState = (
         magpieTheftsThisFloor: 0,
         restlessDriftsThisFloor: 0,
         skittishFlinchesThisFloor: 0,
+        lanternLitTileIds: [],
+        lanternLightsThisFloor: 0,
         shiftingSpotlightNonce: 0,
         flashPairRevealedTileIds: [],
         regionShuffleCharges: INITIAL_REGION_SHUFFLE_CHARGES,

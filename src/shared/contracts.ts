@@ -148,7 +148,8 @@ export const MUTATOR_IDS = [
     'findables_floor',
     'shifting_spotlight',
     'magpie_thief',
-    'skittish_cards'
+    'skittish_cards',
+    'lantern_light'
 ] as const;
 export type MutatorId = (typeof MUTATOR_IDS)[number];
 
@@ -321,6 +322,7 @@ export const FLOOR_ARCHETYPE_IDS = [
     'restless_hall',
     'rush_recall',
     'skittish_hall',
+    'lantern_hall',
     'spotlight_hunt',
     'breather'
 ] as const;
@@ -685,6 +687,10 @@ export interface RunState {
     restlessDriftsThisFloor: number;
     /** `skittish_cards`: misses this floor on which the missed cards flinched into a neighbouring cell. */
     skittishFlinchesThisFloor: number;
+    /** `lantern_light`: the face-down cards the last match lit; they show their faces until the next flip. */
+    lanternLitTileIds: string[];
+    /** `lantern_light`: matches this floor that lit at least one card. */
+    lanternLightsThisFloor: number;
     /** `shifting_spotlight`: increments each time ward/bounty rotates this floor (seed step for next pick). */
     shiftingSpotlightNonce: number;
 }

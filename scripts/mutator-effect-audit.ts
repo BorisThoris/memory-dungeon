@@ -43,6 +43,7 @@ export interface MutatorFloorReading {
     nBack: boolean;
     thefts: number;
     flinches: number;
+    lit: number;
 }
 
 export const MUTATOR_AUDIT_SEEDS = [11, 202, 3003, 40404, 555, 6006, 77, 8888] as const;
@@ -101,7 +102,8 @@ export const playMutatorFloor = (seed: number, floor: number, mutators: MutatorI
         sticky: false,
         nBack: false,
         thefts: 0,
-        flinches: 0
+        flinches: 0,
+        lit: 0
     };
     // The same player on both runs of the floor, so a difference is the mutator and not the policy.
     const rng = createMulberry32(hashStringToSeed(`mutator-audit:${seed}:${floor}`));
@@ -132,6 +134,7 @@ export const playMutatorFloor = (seed: number, floor: number, mutators: MutatorI
         reading.thefts = Math.max(reading.thefts, run.magpieTheftsThisFloor ?? 0);
         reading.drifts = Math.max(reading.drifts, run.restlessDriftsThisFloor ?? 0);
         reading.flinches = Math.max(reading.flinches, run.skittishFlinchesThisFloor ?? 0);
+        reading.lit = Math.max(reading.lit, run.lanternLightsThisFloor ?? 0);
     }
     reading.score = run.stats?.currentLevelScore ?? 0;
     return reading;
@@ -160,6 +163,7 @@ const CHANNELS: Array<{ name: string; differs: (a: MutatorFloorReading, b: Mutat
     { name: 'the memorize window', differs: (a, b) => a.memorizeMs !== b.memorizeMs },
     { name: 'the floor drifting', differs: (a, b) => a.drifts !== b.drifts },
     { name: 'missed cards flinching', differs: (a, b) => a.flinches !== b.flinches },
+    { name: 'matches lighting their neighbours', differs: (a, b) => a.lit !== b.lit },
     { name: 'the findables', differs: (a, b) => a.findables !== b.findables },
     { name: 'the spotlight', differs: (a, b) => a.spotlight !== b.spotlight },
     { name: 'the sticky block', differs: (a, b) => a.sticky !== b.sticky },

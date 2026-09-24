@@ -63,7 +63,8 @@ export type TestHallRoomId =
     | 'wild'
     | 'conduit'
     | 'stasis'
-    | 'skittish';
+    | 'skittish'
+    | 'lantern';
 
 export type TestHallStep =
     | { readonly do: 'match'; readonly pairKey: string }
@@ -651,6 +652,25 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                 }
             },
             { step: { do: 'match', pairKey: 'h' }, says: 'a match never flinches', expect: expectAll(isGone('h'), (r) => (r.skittishFlinchesThisFloor === 1 ? null : `flinches ${r.skittishFlinchesThisFloor}`)) }
+        ]
+    },
+    {
+        id: 'lantern',
+        title: 'Lantern light',
+        mechanic: 'A match lights up to three face-down cards touching it, until the next card is turned. It is not a peek.',
+        graphMechanicIds: ['board.lantern_light'],
+        tryThis: 'Match x in the middle and read the faces that light up around it, then turn a card: they go dark.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e x:t x:t f:b', 'a:e b:t c:m d:b', 'e:e f:b g:m g:m'], { mutators: ['lantern_light'] }),
+        script: [
+            {
+                step: { do: 'match', pairKey: 'x' },
+                says: 'three cards beside x light up, and no peek is spent or recorded',
+                expect: (r) =>
+                    r.lanternLitTileIds.length === 3 && r.peekRevealedTileIds.length === 0 && r.lanternLightsThisFloor === 1
+                        ? null
+                        : `lit ${r.lanternLitTileIds.join(',')}, peeks ${r.peekRevealedTileIds.length}`
+            },
+            { step: { do: 'flip', tileId: 'g-1' }, says: 'the next flip puts the light out', expect: (r) => (r.lanternLitTileIds.length === 0 ? null : `still lit ${r.lanternLitTileIds.join(',')}`) }
         ]
     }
 ];

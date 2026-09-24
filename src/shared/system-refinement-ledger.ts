@@ -96,7 +96,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         counter: 'feverBreaks',
         verdict: 'confirmed',
         generation: 261,
-        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.388 x 0.47, Fever lands on more floors because momentum is matches now and a floor has twice as many. Before: Ladder re-measured at none 1.63 / clean 2.40 / sharp 6.12 / fever 7.70 pairs per match, and the multiplier climbs strictly at every rung. Fever itself lands on 0.217 of floors, which is the top of the ladder being reachable rather than decorative. sim:cascade and sim:pop both hold their bands. Gen 260 moved both numbers: giving the recovery floor a two-suit deal put four more floors a cycle on the narrow palette, where one suit sits in bigger clumps - so a break takes more pairs and a floor ends sooner, which is fewer floors reaching the top rung and a larger break when one does. The meter follows it; CHAIN_RUNG_PAIRS says eight pairs at Fever now. Gen 262 also stopped the stairs wiping the chain: a floor clear is the first link of the next floor’s chain (`chain-carryover-rules.ts`), one link and no tier, because capping the carry one under Sharp ended five of the curve’s floors in under two turns. Gen 263 re-measured it from 0.392 x 0.47 when floor 11 traded a flat score tax for skittish cards.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.383 x 0.47, Fever lands on more floors because momentum is matches now and a floor has twice as many. Before: Ladder re-measured at none 1.63 / clean 2.40 / sharp 6.12 / fever 7.70 pairs per match, and the multiplier climbs strictly at every rung. Fever itself lands on 0.217 of floors, which is the top of the ladder being reachable rather than decorative. sim:cascade and sim:pop both hold their bands. Gen 260 moved both numbers: giving the recovery floor a two-suit deal put four more floors a cycle on the narrow palette, where one suit sits in bigger clumps - so a break takes more pairs and a floor ends sooner, which is fewer floors reaching the top rung and a larger break when one does. The meter follows it; CHAIN_RUNG_PAIRS says eight pairs at Fever now. Gen 262 also stopped the stairs wiping the chain: a floor clear is the first link of the next floor’s chain (`chain-carryover-rules.ts`), one link and no tier, because capping the carry one under Sharp ended five of the curve’s floors in under two turns. Gen 263 re-measured it from 0.392 x 0.47 when floor 11 traded a flat score tax for skittish cards. Gen 263 re-measured it from 0.388 x 0.47 when floor 10 became the lantern hall.'
     },
     {
         id: 'board.cleanup',
@@ -110,7 +110,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         counter: 'matchResolutions',
         verdict: 'confirmed',
         generation: 261,
-        note: 'Re-measured 2026-09-23 after the pop was capped by rung: 1.000 x 8.41, because a floor is matched by hand now and takes twice the turns it did. Before: The census reads 1.000 x 4.80 on the reference pass: every floor resolves turns, which is the one row that would be alarming at any other value. Re-measured at Gen 213 against par as Gen 211 left it; Gen 260 took it from 4.95 to 4.80 a floor, because a narrow palette on the recovery floor clears in fewer turns. Par follows it - `parTurnsForBoard` reads the palette since Gen 259 - so this is the shorter floor rather than a looser one. Gen 263: 8.40 to 8.41 turns a floor once floor 11 began moving the cards a miss showed.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung: 1.000 x 8.43, because a floor is matched by hand now and takes twice the turns it did. Before: The census reads 1.000 x 4.80 on the reference pass: every floor resolves turns, which is the one row that would be alarming at any other value. Re-measured at Gen 213 against par as Gen 211 left it; Gen 260 took it from 4.95 to 4.80 a floor, because a narrow palette on the recovery floor clears in fewer turns. Par follows it - `parTurnsForBoard` reads the palette since Gen 259 - so this is the shorter floor rather than a looser one. Gen 263: 8.40 to 8.41 turns a floor once floor 11 began moving the cards a miss showed. The lantern hall took it to 8.43.'
     },
     {
         id: 'objective.floor_clear',
@@ -126,7 +126,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         counter: 'trait.echo',
         verdict: 'changed',
         generation: 261,
-        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.642 x 0.82, a floor takes twice the turns, so a trait pair is matched by hand more often. Before: Occupancy 0.388 x 0.42, banded common. Pays in peek charges, a currency the run still spends. Gen 205: it was the rarest of the four at 0.342, because two of the three interaction couples spend Conduit and Stasis and the fill meant to even the floor out drew uniformly instead. Re-measured at Gen 213 and the fill is still holding it level with Heavy. Gen 262 re-measured it from 0.625 x 0.80 after a miss on a Heavy card began costing two from the bank: floors that meet Heavy end sooner. Gen 263 re-measured it from 0.629 x 0.80 when floor 11 traded a flat score tax for skittish cards.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.642 x 0.81, a floor takes twice the turns, so a trait pair is matched by hand more often. Before: Occupancy 0.388 x 0.42, banded common. Pays in peek charges, a currency the run still spends. Gen 205: it was the rarest of the four at 0.342, because two of the three interaction couples spend Conduit and Stasis and the fill meant to even the floor out drew uniformly instead. Re-measured at Gen 213 and the fill is still holding it level with Heavy. Gen 262 re-measured it from 0.625 x 0.80 after a miss on a Heavy card began costing two from the bank: floors that meet Heavy end sooner. Gen 263 re-measured it from 0.629 x 0.80 when floor 11 traded a flat score tax for skittish cards. Gen 263: 0.82 to 0.81 with the lantern hall on floor 10.'
     },
     {
         id: 'trait.heavy',
@@ -142,14 +142,14 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         verdict: 'changed',
         generation: 261,
         gone: ['combo shard'],
-        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.733 x 1.18, a floor takes twice the turns, so a trait pair is matched by hand more often. Before: Its Echo payoff line, "Conduit + Echo: peek spark", was sorted into a lane called Shard and drawn on the card back as a combo shard - a currency removed in Gen 184. It reads Tool now, which is what a returned peek charge is. Occupancy 0.487 x 0.61, and no live source names the shard. Gen 263 re-measured it from 0.729 x 1.18 when floor 11 traded a flat score tax for skittish cards.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.725 x 1.17, a floor takes twice the turns, so a trait pair is matched by hand more often. Before: Its Echo payoff line, "Conduit + Echo: peek spark", was sorted into a lane called Shard and drawn on the card back as a combo shard - a currency removed in Gen 184. It reads Tool now, which is what a returned peek charge is. Occupancy 0.487 x 0.61, and no live source names the shard. Gen 263 re-measured it from 0.729 x 1.18 when floor 11 traded a flat score tax for skittish cards. Gen 263 re-measured it from 0.733 x 1.18 when floor 10 became the lantern hall.'
     },
     {
         id: 'trait.stasis',
         counter: 'trait.stasis',
         verdict: 'confirmed',
         generation: 261,
-        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.746 x 1.22, a floor takes twice the turns, so a trait pair is matched by hand more often. Before: Occupancy 0.508 x 0.66, banded common and the most common of the four. Both its interaction lines land in the block lane, which is what a lock does, and the lane survived the Gen 202 cull on evidence rather than by being overlooked. Gen 262 re-measured it from 0.750 x 1.22 after a miss on a Heavy card began costing two from the bank: floors that meet Heavy end sooner. Gen 263: 1.23 to 1.22 a floor once floor 11 moved to skittish cards.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.750 x 1.24, a floor takes twice the turns, so a trait pair is matched by hand more often. Before: Occupancy 0.508 x 0.66, banded common and the most common of the four. Both its interaction lines land in the block lane, which is what a lock does, and the lane survived the Gen 202 cull on evidence rather than by being overlooked. Gen 262 re-measured it from 0.750 x 1.22 after a miss on a Heavy card began costing two from the bank: floors that meet Heavy end sooner. Gen 263: 1.23 to 1.22 a floor once floor 11 moved to skittish cards. Gen 263: back to 0.750 x 1.24 with the lantern hall on floor 10.'
     },
 
     // ---- The powers a player can press. --------------------------------------------------------
@@ -165,7 +165,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         counter: 'pin',
         verdict: 'changed',
         generation: 261,
-        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.375 x 0.66, more turns a floor is more moments worth pinning after a miss. Before: Re-banded core to common. It read 1.000 while the census pressed it at floor open regardless of the board; pressed after a miss, where a pin has a reason, it reads 0.158 of floors at 0.23 pins a floor. Gen 261 cut the clause calling 0.158 “the reference miss rate”: the miss rate is 0.471, and 0.158 is the share of floors on which the census finds a moment worth pinning at all. Gen 262 re-measured it from 0.438 x 0.75 after a miss on a Heavy card began costing two from the bank: floors that meet Heavy end sooner.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.367 x 0.65, more turns a floor is more moments worth pinning after a miss. Before: Re-banded core to common. It read 1.000 while the census pressed it at floor open regardless of the board; pressed after a miss, where a pin has a reason, it reads 0.158 of floors at 0.23 pins a floor. Gen 261 cut the clause calling 0.158 “the reference miss rate”: the miss rate is 0.471, and 0.158 is the share of floors on which the census finds a moment worth pinning at all. Gen 262 re-measured it from 0.438 x 0.75 after a miss on a Heavy card began costing two from the bank: floors that meet Heavy end sooner. Gen 263 re-measured it from 0.375 x 0.66 when floor 10 became the lantern hall.'
     },
     {
         id: 'power.flash_pair',
@@ -290,6 +290,14 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         verdict: 'changed',
         generation: 261,
         note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.029 x 0.03, a floor takes twice the turns, so the third miss of the run arrives while the bird\'s floor is still open. Before:Occupancy 0.008 across whole runs, banded rare, and until Gen 208 it had no counter at all and was not in the interaction graph - so the ledger claim to cover every system had never covered the one mechanic that takes finished work back off the player. The floor census reads it SILENT, true of 240 first floors and false of the game: the bird arrives on every third mismatch OF THE RUN, so a census that restarts every floor almost never reaches it. It is announced when it steals (Gen 113) and the graph now records that reader. Gen 260 took it from 0.013 to 0.008: the breather it rides deals two suits now, so the floor ends in fewer turns and the bird’s every-third-miss trigger lands on it less often. Still reachable and still banded by the run census, but the nest is the wrong floor for it now - a thief is not relief, and a pressure floor would give it more to take.'
+    },
+    {
+        id: 'board.lantern_light',
+        counter: 'lanternLights',
+        verdict: 'changed',
+        generation: 261,
+        present: ['resolveLanternLight', 'lantern_hall', 'LANTERN_MAX_LIT'],
+        note: 'Gen 263. Floor 10 was the second treasure gallery of the cycle, the same room as floor 3 with a different objective. It is the Lantern Hall now: every match lights up to three face-down cards touching the matched pair until the next flip. The reward-shaped dynamic beside the skittish hall and the restless floor: its clock is the player’s matches, and it makes where to match a choice, since a pair at the edge lights little and one in the unread middle the most. It is not a peek - its own field, so no objective or achievement that forbids peeking is tripped. Census 0.083 x 0.70 of floors: every floor 10 of the cycle, about eight lights a visit.'
     },
     {
         id: 'hazard.skittish_cards',

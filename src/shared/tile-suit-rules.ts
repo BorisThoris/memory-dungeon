@@ -455,6 +455,7 @@ export const SUIT_DEAL_PROFILE_BY_ARCHETYPE: Readonly<Record<FloorArchetypeId, S
     restless_hall: 'clumped',
     rush_recall: 'scattered',
     skittish_hall: 'clumped',
+    lantern_hall: 'clumped',
     spotlight_hunt: 'two_suit',
     breather: 'two_suit'
 };

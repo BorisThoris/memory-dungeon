@@ -259,6 +259,7 @@ export const boardTurnAnnouncementFactsSchema = z
         restlessDriftsAfter: z.number().int().nonnegative().default(0),
         skittishFlinchesBefore: z.number().int().nonnegative().default(0),
         skittishFlinchesAfter: z.number().int().nonnegative().default(0),
+        lanternLitCount: z.number().int().nonnegative().default(0),
         findablesTotalBefore: z.number().int().nonnegative(),
         findablesTotalAfter: z.number().int().nonnegative(),
         matchedTraitKinds: z.array(z.string().min(1).max(40)).default([]),

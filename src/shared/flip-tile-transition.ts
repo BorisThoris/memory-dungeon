@@ -29,10 +29,15 @@ export const createFlipTileTransition = (_deps: FlipTileTransitionDeps) =>
             return run;
         }
 
-        const runAfterFlashClear =
+        const flashCleared =
             (runFilteredStringArrayOrNull(run.flashPairRevealedTileIds)?.length ?? 0) > 0
                 ? { ...run, flashPairRevealedTileIds: [] }
                 : run;
+        // What the lantern lit goes dark the moment the next card is turned, the same way a flash does.
+        const runAfterFlashClear =
+            (runFilteredStringArrayOrNull(flashCleared.lanternLitTileIds)?.length ?? 0) > 0
+                ? { ...flashCleared, lanternLitTileIds: [] }
+                : flashCleared;
         const board = runAfterFlashClear.board;
         if (!board) {
             return runAfterFlashClear;

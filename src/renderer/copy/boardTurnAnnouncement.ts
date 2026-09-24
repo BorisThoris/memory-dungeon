@@ -1,5 +1,6 @@
 import { MAGPIE_BEAT_COPY } from './magpieBeat';
 import { restlessDriftAnnouncement } from './restlessFloorBeat';
+import { lanternLitAnnouncement } from './lanternLightBeat';
 import { SKITTISH_FLINCH_ANNOUNCEMENT } from './skittishCardsBeat';
 import { restlessSwapCountForDrift } from '../../shared/restless-floor-rules';
 import { CHAIN_BEAT_COPY, CHAIN_TIER_LABELS } from './chainBeat';
@@ -116,6 +117,10 @@ export const magpieAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): stri
 export const skittishAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): string[] =>
     turnEvent.announcement.skittishFlinchesAfter > turnEvent.announcement.skittishFlinchesBefore ? [SKITTISH_FLINCH_ANNOUNCEMENT] : [];
 
+/** The lantern's line for a match that lit cards beside it. */
+export const lanternAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): string[] =>
+    turnEvent.announcement.lanternLitCount > 0 ? [lanternLitAnnouncement(turnEvent.announcement.lanternLitCount)] : [];
+
 export const restlessAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): string[] => {
     const { restlessDriftsBefore, restlessDriftsAfter } = turnEvent.announcement;
     return restlessDriftsAfter > restlessDriftsBefore
@@ -157,6 +162,7 @@ export const buildBoardTurnAnnouncement = (
         ...chunkAnnouncementLines(turnEvent),
         ...magpieAnnouncementLines(turnEvent),
         ...skittishAnnouncementLines(turnEvent),
+        ...lanternAnnouncementLines(turnEvent),
         ...restlessAnnouncementLines(turnEvent),
         includePickup ? getBoardTurnPickupAnnouncement(turnEvent)?.text ?? null : null
     ].filter((line): line is string => line != null && line.length > 0);

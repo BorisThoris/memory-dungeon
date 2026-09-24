@@ -11,6 +11,7 @@ import { WILD_PAIR_KEY } from './tile-identity';
 import { tilesArePairMatch } from './scoring-rules';
 import { clearResolveState } from './run-timer-rules';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
+import { resolveLanternLight } from './lantern-light-rules';
 import { applyRestlessDrift, resolveRestlessDrift } from './restless-floor-rules';
 import { hasMutator } from './mutators';
 import { deriveMatchClaimContext } from './match-claim-rules';
@@ -218,6 +219,19 @@ export const createResolveBoardTurnTransition = ({
               })
             : null;
         const boardAfterDrift = drift?.kind === 'drift' ? applyRestlessDrift(spun.board, drift.swaps) : spun.board;
+        /*
+         * The lantern lights last, on the board the player will look at: after the pop has taken
+         * what it takes and any drift has moved what it moves, so a lit face is where it will be.
+         */
+        const lanternLit = hasMutator(run, 'lantern_light')
+            ? resolveLanternLight({
+                  board: boardAfterDrift,
+                  matchedTileIds: [firstTile.id, secondTile.id],
+                  turnsThisFloor: progress.turnsThisFloor,
+                  runSeed: run.runSeed,
+                  rulesVersion: run.runRulesVersion
+              })
+            : [];
         const stats = normalizeSessionStats(run.stats);
 
         const journaledRun = execution
@@ -234,6 +248,8 @@ export const createResolveBoardTurnTransition = ({
             shiftingSpotlightNonce: spun.shiftingSpotlightNonce,
             restlessDriftsThisFloor:
                 runNonNegativeInteger(run.restlessDriftsThisFloor) + (drift?.kind === 'drift' ? 1 : 0),
+            lanternLitTileIds: lanternLit,
+            lanternLightsThisFloor: runNonNegativeInteger(run.lanternLightsThisFloor) + (lanternLit.length > 0 ? 1 : 0),
             powersUsedThisRun: usedWild ? true : run.powersUsedThisRun,
             wildMatchesRemaining: runNonNegativeInteger(journaledRun.wildMatchesRemaining),
             peekCharges: runNonNegativeInteger(run.peekCharges) + runNonNegativeInteger(traitReward.peekChargeGain),

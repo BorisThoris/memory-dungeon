@@ -335,7 +335,9 @@ describe('floor archetype progression contract', () => {
             expect(count).toBeGreaterThanOrEqual(band.minPerCycle);
             expect(count).toBeLessThanOrEqual(band.maxPerCycle);
         }
-        expect(report.archetypeCounts.treasure_gallery).toBe(2);
+        // Gen 263: floor 10 is the lantern hall; the cycle keeps two reward floors, one gallery.
+        expect(report.archetypeCounts.treasure_gallery).toBe(1);
+        expect(report.archetypeCounts.lantern_hall).toBe(1);
         expect(report.archetypeCounts.trap_hall).toBe(1);
         expect(report.archetypeCounts.rush_recall).toBe(1);
     });

@@ -308,7 +308,9 @@
                 "nextFloor",
                 "magpieTheftsThisFloor",
                 "restlessDriftsThisFloor",
-                "skittishFlinchesThisFloor"
+                "skittishFlinchesThisFloor",
+                "lanternLitTileIds",
+                "lanternLightsThisFloor"
             ],
             "writes": [
                 "feedbackLines"
@@ -1790,6 +1792,39 @@
                 "src/shared/skittish-cards-rules.test.ts",
                 "src/shared/test-hall-rooms.test.ts"
             ]
+        },
+        {
+            "id": "board.lantern_light",
+            "label": "Lantern Light",
+            "kind": "board",
+            "role": "every_match_shows_up_to_three_face_down_neighbours_until_the_next_flip",
+            "evidence": [
+                "src/shared/lantern-light-rules.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/renderer/copy/lanternLightBeat.ts"
+            ],
+            "reads": [
+                "tileStates",
+                "matchedPairs",
+                "activeMutators",
+                "runSeed"
+            ],
+            "writes": [
+                "lanternLitTileIds",
+                "lanternLightsThisFloor"
+            ],
+            "enables": [
+                "objective.floor_clear"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "hidden-cards-only",
+                "cleared-on-next-flip"
+            ],
+            "tests": [
+                "src/shared/lantern-light-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts"
+            ]
         }
     ],
     "edges": [
@@ -2620,6 +2655,24 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "every flinch is announced"
+        },
+        {
+            "source": "core.board_turn_resolution",
+            "target": "board.lantern_light",
+            "kind": "triggers",
+            "label": "a match lights the cards beside it"
+        },
+        {
+            "source": "board.chain_chunk_fever",
+            "target": "board.lantern_light",
+            "kind": "modifies",
+            "label": "a pop clears cards the lantern would have lit"
+        },
+        {
+            "source": "board.lantern_light",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "lit faces show on the board"
         }
     ],
     "coverage": {

@@ -48,6 +48,8 @@ export interface BoardTurnAnnouncementFacts {
     /** Misses on which skittish cards flinched this floor, before and after this turn. */
     skittishFlinchesBefore: number;
     skittishFlinchesAfter: number;
+    /** Cards the lantern lit on this turn (none unless it was a match on a lantern floor). */
+    lanternLitCount: number;
     /**
      * Which tiles the floater anchors to. Not simply the flipped ids: a gambit resolves
      * three tiles but the floater belongs on the matched pair, and only the rules layer
@@ -200,6 +202,10 @@ export const getBoardTurnAnnouncementFacts = (
         restlessDriftsAfter: runNonNegativeInteger(after.restlessDriftsThisFloor),
         skittishFlinchesBefore: runNonNegativeInteger(before.skittishFlinchesThisFloor),
         skittishFlinchesAfter: runNonNegativeInteger(after.skittishFlinchesThisFloor),
+        lanternLitCount:
+            runNonNegativeInteger(after.lanternLightsThisFloor) > runNonNegativeInteger(before.lanternLightsThisFloor)
+                ? (Array.isArray(after.lanternLitTileIds) ? after.lanternLitTileIds.length : 0)
+                : 0,
         matchedTraitKinds: TILE_TRAIT_COUNT_KINDS.filter((kind) =>
             flippedTileIds.some(
                 (tileId) => before.board?.tiles.find((tile) => tile.id === tileId)?.tileTraitKind === kind

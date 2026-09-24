@@ -11,7 +11,7 @@
 import type { AchievementId, GameMode, MutatorId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 49 as const;
+export const ENCYCLOPEDIA_VERSION = 50 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -312,6 +312,12 @@ export const MUTATOR_CATALOG: Record<MutatorId, MutatorDefinition> = {
         title: 'The magpie',
         description:
             'Something bright-eyed is nesting on this floor. Every **third miss** it drops in, takes a **pair you already cleared**, and hides it again somewhere you have never looked. Your **score keeps the points** — what it takes is the knowing.'
+    },
+    lantern_light: {
+        id: 'lantern_light',
+        title: 'Lantern light',
+        description:
+            'Every **match** lights the cards beside it: up to **three** of the face-down cards touching the matched pair show their faces until you **turn the next card**. Nothing is spent. A pair matched at the edge lights little; one matched where you have not looked lights the most - so choose where to match.'
     },
     skittish_cards: {
         id: 'skittish_cards',

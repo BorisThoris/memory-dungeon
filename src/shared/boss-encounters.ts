@@ -313,6 +313,20 @@ export const getFloorIdentityContract = ({
         };
     }
 
+    if (floorArchetypeId === 'lantern_hall') {
+        return {
+            id: 'lantern_light',
+            label: 'Lantern hall',
+            teachingSentence: `Every match lights up to three of the face-down cards touching it, until you turn the next card.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: 'Match in the middle of what you have not read: a pair at the edge lights little, one in the dark lights the most.',
+            floorClearSentence: 'Lantern hall cleared. You went where the light would help.',
+            atmosphericFeedback: 'The lanterns gutter out one by one behind you.',
+            activeReminder: 'Lantern hall: a match lights its neighbours. Read them before the next flip.',
+            warningLevel: 'reward',
+            tokens: ['reward', 'hidden_known', 'momentum']
+        };
+    }
+
     if (floorArchetypeId === 'skittish_hall') {
         return {
             id: 'skittish_cards',
