@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-23T22:45:08.151Z",
+  "generatedAt": "2026-09-24T11:39:34.633Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -289,28 +289,28 @@
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 167830,
+        "bytes": 166008,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-23T22:44:48.840Z"
+        "capturedAt": "2026-09-24T11:38:43.663Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 157873,
+        "bytes": 156669,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-23T22:44:53.884Z"
+        "capturedAt": "2026-09-24T11:39:03.124Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 131515,
+        "bytes": 130996,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-23T22:45:03.290Z"
+        "capturedAt": "2026-09-24T11:39:27.307Z"
       },
       {
         "profile": "mobile",
@@ -319,16 +319,16 @@
         "bytes": 51915,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-23T22:44:58.537Z"
+        "capturedAt": "2026-09-24T11:39:07.891Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 122667,
+        "bytes": 120628,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-23T22:45:07.980Z"
+        "capturedAt": "2026-09-24T11:39:34.393Z"
       }
     ]
   },
@@ -390,13 +390,13 @@
     "devDependencyCount": 47
   },
   "metrics": {
-    "sourceFiles": 1145,
-    "testFiles": 493,
-    "sourceLines": 177802,
+    "sourceFiles": 1147,
+    "testFiles": 494,
+    "sourceLines": 178008,
     "largestDirectories": [
       {
         "directory": "src",
-        "files": 969
+        "files": 971
       },
       {
         "directory": "scripts",
@@ -431,10 +431,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "e239966c",
-    "lastCommitDate": "2026-09-24T01:28:35+03:00",
-    "lastCommitSubject": "Merge remote-tracking branch 'origin/main' into claude/level-logic-letters-only-be2e84",
-    "commitCount": 1753,
+    "head": "0d32b1ac",
+    "lastCommitDate": "2026-09-24T14:35:16+03:00",
+    "lastCommitSubject": "Sell relics in the store: Deep Pockets, Gilded Chain, Long Look",
+    "commitCount": 1755,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
