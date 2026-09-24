@@ -42,7 +42,9 @@ export const STANDALONE_GATES: Record<string, string> = {
     'icons:check': 'Run by the pre-push hook on every push; checks the generated icon set against the config.',
     'social:check': 'Run by the pre-push hook on every push; checks the link-preview card against the config.',
     'meta:check':
-        'Run by the project-meta workflow on CI, and warns in the pre-push hook; project.meta.json moves with every commit, so it is refreshed on release rather than gated locally.'
+        'Run by the project-meta workflow on CI, and warns in the pre-push hook; project.meta.json moves with every commit, so it is refreshed on release rather than gated locally.',
+    'trailers:check':
+        'Checks the published trailer videos against their sources; it needs the rendered reels and a network publish target, so it is run by hand when a trailer is cut rather than on a plain checkout.'
 };
 
 /**

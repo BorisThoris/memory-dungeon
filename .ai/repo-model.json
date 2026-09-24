@@ -5013,8 +5013,8 @@
     {
       "path": "scripts/gate-reachability.ts",
       "category": "script",
-      "bytes": 6708,
-      "sha256": "601c980c185d3559a8868c0789ea48ef498c1afb44212e0bad89ab0d82de1d94"
+      "bytes": 6934,
+      "sha256": "b1aa43613ab3dc916193dbd2175504132625181a3c7e28014829edc4fd4dfee1"
     },
     {
       "path": "scripts/gate-softlock-seeds.ts",
