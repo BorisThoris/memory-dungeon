@@ -211,6 +211,7 @@ export const buildTileBoardRows = ({
             tile
         });
         const { nonPickableBack, powerBackAccent } = getTileBoardHiddenBackAccents({
+            openingLocked: stickyFingerSlotMark,
             clumpReadNextTileIds,
             clumpReadTileIds,
             faceUp,

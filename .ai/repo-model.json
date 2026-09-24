@@ -9,7 +9,7 @@
     "contentItemCount": 10,
     "mechanicCount": 50,
     "stateFieldCount": 90,
-    "relationshipCount": 7470
+    "relationshipCount": 7469
   },
   "inventory": [
     {
@@ -2368,7 +2368,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33561,
-      "sha256": "ea8821469e5a133ad704d17eafce45328334bb5e152bed8d8789eca0f70ee51a"
+      "sha256": "f9ef845a5eabc4e4219a67e925e3ac717227685eb73dde8b5118726c10f611cb"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3921,8 +3921,8 @@
     {
       "path": "e2e/playtest.spec.ts",
       "category": "test",
-      "bytes": 5630,
-      "sha256": "db81d7946a050db66eefef28f4cfa4f084ae1fdd968295bd0ec6ae8307d51560"
+      "bytes": 6960,
+      "sha256": "02a84e12217a62f8170c898f2a483f575ce4888315b0f3ac03bad85d9abf7b3f"
     },
     {
       "path": "e2e/pngDiff.ts",
@@ -9207,8 +9207,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 94956,
-      "sha256": "ba0fe1e630d6d8e61f6a0799a6180209f28a5eb3116360368e39357eec8cf170"
+      "bytes": 94888,
+      "sha256": "867cd4e33adc7f14486804fddbb79064ec1ca275836fc3c7f3a08af37a067016"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9927,8 +9927,8 @@
     {
       "path": "src/renderer/components/tileBoardHiddenBackAccents.ts",
       "category": "source",
-      "bytes": 2711,
-      "sha256": "eab39cfe39c856ac891c66a421f8fbdac1a02fffb77b697ffd27dea197c66a5b"
+      "bytes": 3069,
+      "sha256": "c759e0a3c750aaaf11c4e46d85f959754f9ff681096323ca02fc1028cc6b0720"
     },
     {
       "path": "src/renderer/components/TileBoardHoverChrome.tsx",
@@ -10065,14 +10065,14 @@
     {
       "path": "src/renderer/components/tileBoardReadability.test.ts",
       "category": "test",
-      "bytes": 14610,
-      "sha256": "38450074ed1ab058478ee91be9f64b057d70ef16ff2697f548bb24c025a2d0c5"
+      "bytes": 15011,
+      "sha256": "e25ffa467936a0991f19610179845cb7498d4281da8648ba3a5a541aee9b83d6"
     },
     {
       "path": "src/renderer/components/tileBoardReadability.ts",
       "category": "source",
-      "bytes": 12891,
-      "sha256": "43dabf36ccc0312814b35e189c76cc4a563779c84ac9f509ccb82038679cab95"
+      "bytes": 13149,
+      "sha256": "dcd3f54078d59f177d82cd848b7535bbeaa3d92982696022858c76ef53ee4e68"
     },
     {
       "path": "src/renderer/components/TileBoardReadabilityMarkers.tsx",
@@ -10137,8 +10137,8 @@
     {
       "path": "src/renderer/components/tileBoardRows.ts",
       "category": "source",
-      "bytes": 11936,
-      "sha256": "ee463cfdcb55ddb3fca7a7b5694990fa0429b120177bf197259a22801c83218d"
+      "bytes": 11985,
+      "sha256": "542de088ae4a3c4ae5df3f3e07ed5d01ebb53ab56e5b147b6cf385a796752621"
     },
     {
       "path": "src/renderer/components/tileBoardRuneField.test.ts",
@@ -10893,14 +10893,14 @@
     {
       "path": "src/renderer/gameplay/stickyFingersBlockedTileId.test.ts",
       "category": "test",
-      "bytes": 1774,
-      "sha256": "b122684846ca59d60a082be5f738c2351543234613d8b5a009b918c72c9ddb32"
+      "bytes": 1573,
+      "sha256": "cd4adef6f0645b0a8345e6b78a346c7a5e10e02d888dae852ccc2cfd14a6939c"
     },
     {
       "path": "src/renderer/gameplay/stickyFingersBlockedTileId.ts",
       "category": "source",
-      "bytes": 689,
-      "sha256": "c4ce68e2946d810a766c2c15b73a5dcaf1a3939d03dc9c150784e9f4d5c83289"
+      "bytes": 978,
+      "sha256": "ab022ff905a4fb916737941ff820cf9aa4d6716d56731d74dd466999e2fd5154"
     },
     {
       "path": "src/renderer/gameShellLayout.test.ts",
@@ -19220,7 +19220,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1990,
+      "lineCount": 1989,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -21200,7 +21200,7 @@
       "path": "src/renderer/components/tileBoardHiddenBackAccents.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 80,
+      "lineCount": 87,
       "imports": [
         "file:src/renderer/components/tileBoardPick.ts",
         "file:src/shared/contracts.ts"
@@ -21568,7 +21568,7 @@
       "path": "src/renderer/components/tileBoardReadability.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 287,
+      "lineCount": 293,
       "imports": [
         "file:src/renderer/components/tileBoardReadability.ts",
         "file:src/shared/color-vision.ts",
@@ -21583,7 +21583,7 @@
       "path": "src/renderer/components/tileBoardReadability.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 413,
+      "lineCount": 417,
       "imports": [
         "file:src/renderer/components/tileBoardRows.ts",
         "file:src/renderer/copy/traitInteractionLaneMap.ts",
@@ -21798,7 +21798,7 @@
       "path": "src/renderer/components/tileBoardRows.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 315,
+      "lineCount": 316,
       "imports": [
         "file:src/renderer/components/tileBoardFaceUp.ts",
         "file:src/renderer/components/tileBoardFlipLock.ts",
@@ -23867,7 +23867,7 @@
       "path": "src/renderer/gameplay/stickyFingersBlockedTileId.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 62,
+      "lineCount": 57,
       "imports": [
         "file:src/renderer/gameplay/stickyFingersBlockedTileId.ts"
       ],
@@ -23879,10 +23879,8 @@
       "path": "src/renderer/gameplay/stickyFingersBlockedTileId.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 22,
-      "imports": [
-        "file:src/shared/contracts.ts"
-      ],
+      "lineCount": 24,
+      "imports": [],
       "exports": [
         "symbol:src/renderer/gameplay/stickyFingersBlockedTileId.ts#getStickyBlockedTileId"
       ],
@@ -37395,8 +37393,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 1989,
-      "endLine": 1989
+      "line": 1988,
+      "endLine": 1988
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -39371,8 +39369,8 @@
       "name": "getTileBoardHiddenBackAccents",
       "kind": "value",
       "file": "src/renderer/components/tileBoardHiddenBackAccents.ts",
-      "line": 35,
-      "endLine": 79
+      "line": 41,
+      "endLine": 86
     },
     {
       "id": "symbol:src/renderer/components/tileBoardHiddenBackAccents.ts#TileBoardHiddenBackAccentsInput",
@@ -39380,7 +39378,7 @@
       "kind": "interface",
       "file": "src/renderer/components/tileBoardHiddenBackAccents.ts",
       "line": 18,
-      "endLine": 33
+      "endLine": 39
     },
     {
       "id": "symbol:src/renderer/components/tileBoardHiddenBackAccents.ts#TileBoardPowerBackAccent",
@@ -39668,7 +39666,7 @@
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
       "line": 302,
-      "endLine": 412
+      "endLine": 416
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitLaneReadabilityColor",
@@ -40036,7 +40034,7 @@
       "kind": "value",
       "file": "src/renderer/components/tileBoardRows.ts",
       "line": 119,
-      "endLine": 285
+      "endLine": 286
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRows.ts#BuildTileBoardRowsInput",
@@ -40051,8 +40049,8 @@
       "name": "getTileBoardOverlayPrewarmDemandPairKeys",
       "kind": "value",
       "file": "src/renderer/components/tileBoardRows.ts",
-      "line": 287,
-      "endLine": 314
+      "line": 288,
+      "endLine": 315
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRows.ts#getTutorialPairOrdinalByKey",
@@ -42491,8 +42489,8 @@
       "name": "getStickyBlockedTileId",
       "kind": "value",
       "file": "src/renderer/gameplay/stickyFingersBlockedTileId.ts",
-      "line": 4,
-      "endLine": 21
+      "line": 10,
+      "endLine": 23
     },
     {
       "id": "symbol:src/renderer/gameShellLayout.ts#GameShellInputMode",
@@ -87144,12 +87142,6 @@
       "id": "imports:src/renderer/gameplay/stickyFingersBlockedTileId.test.ts->src/renderer/gameplay/stickyFingersBlockedTileId.ts",
       "source": "file:src/renderer/gameplay/stickyFingersBlockedTileId.test.ts",
       "target": "file:src/renderer/gameplay/stickyFingersBlockedTileId.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/gameplay/stickyFingersBlockedTileId.ts->src/shared/contracts.ts",
-      "source": "file:src/renderer/gameplay/stickyFingersBlockedTileId.ts",
-      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {

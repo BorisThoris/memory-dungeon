@@ -50,6 +50,12 @@ describe('tileBoardReadability', () => {
         expect(state({ faceUp: true, powerBackAccent: 'peek' }).showHiddenReadabilityMarkers).toBe(false);
     });
 
+    it('puts a lock above every read, so a Stasis lock on a trait card is not just another trait ring', () => {
+        const locked = state({ stickyFingerSlotMark: true, traitComboBack: true, traitLaneBack: 'tool', tile: tile({ tileTraitKind: 'heavy' }) });
+        expect(locked.hiddenReadabilityAccentColor).toBe('#c65a28');
+        expect(locked.showHiddenReadabilityMarkers).toBe(true);
+    });
+
     it('prioritizes hidden accent colors by trait lane, trait route, trait kind, and powers', () => {
         expect(state({ traitRewardHotBack: true }).hiddenReadabilityAccentColor).toBe('#ffe48a');
         expect(state({ traitComboSurgeBack: true }).hiddenReadabilityAccentColor).toBe('#ffd166');

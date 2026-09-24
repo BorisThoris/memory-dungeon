@@ -921,12 +921,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             return null;
         }
         return getStickyBlockedTileId({
-            activeMutators: run.activeMutators,
             flippedTileIds: board.flippedTileIds,
             stickyBlockIndex: run.stickyBlockIndex,
             tiles: board.tiles
         });
-    }, [run.activeMutators, run.board, run.status, run.stickyBlockIndex]);
+    }, [run.board, run.status, run.stickyBlockIndex]);
     const mergedPeekTileIds = useMemo(() => {
         const merged = new Set<string>([
             ...run.peekRevealedTileIds,

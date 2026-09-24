@@ -30,6 +30,12 @@ export interface TileBoardHiddenBackAccentsInput {
     tileSwapFirstTileId: string | null;
     tileSwapPowerVisualActive: boolean;
     tile: Tile;
+    /**
+     * The tile cannot open this turn (a sticky-fingers or Stasis lock). It is greyed like any card that
+     * cannot be picked right now: on a trait card the lock's own accent was the same one every trait
+     * card wears, so a Stasis lock showed nothing (Gen 263).
+     */
+    openingLocked?: boolean;
 }
 
 export const getTileBoardHiddenBackAccents = ({
@@ -44,7 +50,8 @@ export const getTileBoardHiddenBackAccents = ({
     tileSwapEligibleTileIds,
     tileSwapFirstTileId,
     tileSwapPowerVisualActive,
-    tile
+    tile,
+    openingLocked = false
 }: TileBoardHiddenBackAccentsInput): TileBoardHiddenBackAccents => {
     if (tile.state !== 'hidden' || faceUp) {
         return {
@@ -72,7 +79,7 @@ export const getTileBoardHiddenBackAccents = ({
     }
 
     return {
-        nonPickableBack: !isTilePickable(tile, interactive, flipLocked),
+        nonPickableBack: openingLocked || !isTilePickable(tile, interactive, flipLocked),
         powerBackAccent,
         traitBackAccent: tile.tileTraitKind ?? null
     };

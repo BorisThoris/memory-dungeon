@@ -21,8 +21,10 @@ interface Snapshot {
     view: string;
     status: string | null;
     level: number;
-    flipped: number;
+    flipped: { id: string; k: string }[];
     hidden: { id: string; k: string }[];
+    /** The one tile a Stasis lock says cannot open a turn, if any. */
+    blocked: string | null;
 }
 
 const snapshot = (page: Page): Promise<Snapshot> =>
@@ -33,7 +35,10 @@ const snapshot = (page: Page): Promise<Snapshot> =>
             view,
             status: run?.status ?? null,
             level: run?.board?.level ?? 0,
-            flipped: run?.board?.flippedTileIds.length ?? 0,
+            flipped: (run?.board?.tiles ?? [])
+                .filter((tile) => run?.board?.flippedTileIds.includes(tile.id))
+                .map((tile) => ({ id: tile.id, k: tile.pairKey })),
+            blocked: run?.stickyBlockIndex != null ? run.board?.tiles[run.stickyBlockIndex]?.id ?? null : null,
             hidden: (run?.board?.tiles ?? [])
                 .filter((tile) => tile.state === 'hidden' && !tile.pairKey.startsWith('__'))
                 .map((tile) => ({ id: tile.id, k: tile.pairKey }))
@@ -81,11 +86,35 @@ const playRun = async (page: Page, { missRate, maxFloor, label }: { missRate: nu
             await page.waitForTimeout(600);
             continue;
         }
-        if (s.status !== 'playing' || s.flipped > 0) {
+        if (s.status !== 'playing') {
             await page.waitForTimeout(300);
             continue;
         }
-        const first = s.hidden[Math.floor(rand() * s.hidden.length)];
+        const press = (ids: string[]) =>
+            page.evaluate(async (tileIds) => {
+                const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+                for (const id of tileIds) useAppStore.getState().pressTile(id);
+            }, ids);
+        /*
+         * A turn left with one card up - a press refused by a Stasis lock leaves the next press as the
+         * opener - is finished the way a player finishes it: turn a second card.
+         */
+        const open = s.flipped[0];
+        if (open && s.flipped.length === 1) {
+            const match = s.hidden.find((tile) => tile.k === open.k);
+            const any = s.hidden[Math.floor(rand() * s.hidden.length)];
+            const second = rand() < missRate ? any : match ?? any;
+            if (second) await press([second.id]);
+            await page.waitForTimeout(600);
+            continue;
+        }
+        if (s.flipped.length > 0) {
+            await page.waitForTimeout(300);
+            continue;
+        }
+        // A Stasis lock keeps one tile from opening a turn; a player opens elsewhere.
+        const openers = s.hidden.filter((tile) => tile.id !== s.blocked);
+        const first = openers[Math.floor(rand() * openers.length)];
         if (!first) {
             await page.waitForTimeout(300);
             continue;
@@ -94,10 +123,7 @@ const playRun = async (page: Page, { missRate, maxFloor, label }: { missRate: nu
         const others = s.hidden.filter((tile) => tile.k !== first.k);
         const second = rand() < missRate && others.length > 0 ? others[Math.floor(rand() * others.length)] : partner;
         if (!second) continue;
-        await page.evaluate(async (ids) => {
-            const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
-            for (const id of ids) useAppStore.getState().pressTile(id);
-        }, [first.id, second.id]);
+        await press([first.id, second.id]);
         await page.waitForTimeout(600);
     }
     throw new Error(`${label}: the run neither ended nor reached floor ${maxFloor + 1} in 600 steps`);
