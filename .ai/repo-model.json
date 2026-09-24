@@ -3976,7 +3976,7 @@
       "path": "e2e/test-hall.spec.ts",
       "category": "test",
       "bytes": 3745,
-      "sha256": "4873e231d9bb7863040ce8ececf95e634c80e4793e3806636ba0a15e97f122b9"
+      "sha256": "a4b8af3dd010ada3f9fb9aeff2f4579ddd762dcd24f2ddd75aee426d811ba1cf"
     },
     {
       "path": "e2e/tile-board-raycast.spec.ts",
@@ -10665,8 +10665,8 @@
     {
       "path": "src/renderer/copy/runDialogCopy.ts",
       "category": "source",
-      "bytes": 7209,
-      "sha256": "0296dd8028a74c74992774fd4719b11cabc267a5bd5f68232bdcf7a25e96cf77"
+      "bytes": 7220,
+      "sha256": "223b33da9c925ad7c1f94b717c1dfc5ac1fcc1569748a98fbf08be0c8fc18b5a"
     },
     {
       "path": "src/renderer/copy/runHistory.ts",
@@ -12243,8 +12243,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 36059,
-      "sha256": "b4ac8da3308632bfdd12d22be7de095929980a71e0a7b6ee7bd779534d197bf5"
+      "bytes": 36069,
+      "sha256": "45283cc968f8e0fa4f0d4540b762c41fcd0caf4648f3222f33714579105b622a"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",

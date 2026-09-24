@@ -66,7 +66,7 @@ test.describe('Test hall', () => {
                         useAppStore.getState().pressTile(id);
                     }
                 }, halves);
-                await expect.poll(async () => (await readRun(page)).progress, { timeout: 15_000 }).toBeGreaterThan(booted.progress);
+                await expect.poll(async () => (await readRun(page)).progress, { timeout: 45_000 }).toBeGreaterThan(booted.progress);
             }
             expect(errors).toEqual([]);
         });

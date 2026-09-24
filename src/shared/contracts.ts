@@ -668,8 +668,8 @@ export interface RunState {
      */
     missBank?: MissBankGrant[];
     /**
-     * The purse (`run-store-rules.ts`): gold earned at floor clears and spent on the pause menu's
-     * store. Absent on a run built before it, read as nought. `storePurchases` counts what this
+     * The purse (`run-store-rules.ts`): gold earned at floor clears and spent at the store stop
+     * every third floor. Absent on a run built before it, read as nought. `storePurchases` counts what this
      * run has bought, which is what the prices climb on.
      */
     gold?: number;
