@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2709,
+    "trackedFileCount": 2710,
     "codeFileCount": 944,
-    "exportedSymbolCount": 2885,
+    "exportedSymbolCount": 2886,
     "contentItemCount": 10,
     "mechanicCount": 48,
     "stateFieldCount": 87,
-    "relationshipCount": 7371
+    "relationshipCount": 7375
   },
   "inventory": [
     {
@@ -197,6 +197,12 @@
       "category": "asset",
       "bytes": 894132,
       "sha256": "9c6f9415e97af000fca3c586f6b93aef18a2dc0f8213e96a88cf8012cf3936cf"
+    },
+    {
+      "path": "CLAUDE.md",
+      "category": "other",
+      "bytes": 6990,
+      "sha256": "5a5f4dfc7710f15ffdaa356450aa1c66619ce62b5a7d8e6cae17fe1abc451c10"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -777,8 +783,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 26270,
-      "sha256": "7bbff93a4800bfb6e5a8c05041f984a0e749c0d222012d3b9c7bde91563a858c"
+      "bytes": 26960,
+      "sha256": "19489af84f3124263650b2c46de793be1b42d5ee7efe88c9302ec2447f612ba7"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2362,7 +2368,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33561,
-      "sha256": "2f006b99cb1bf353cc4a80d3225e29a69821079fe084ba94bfaed3810b7d3969"
+      "sha256": "33d82e75ba669d42be2632900e13f22af9883234eadeaf31ac9266e1b1ddbc69"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -5457,8 +5463,8 @@
     {
       "path": "scripts/soak-runs.ts",
       "category": "script",
-      "bytes": 2393,
-      "sha256": "eca9ab592a58696e81b397dab4da2c4ae5dc393b64cb786ab4ef85fd4224fe08"
+      "bytes": 2432,
+      "sha256": "96f87ecfdcc697fb35a7255e9a41fa1edcd2f9e68c53cabcf83b9fdca0e808e3"
     },
     {
       "path": "scripts/steam-cloud-config.ts",
@@ -11823,8 +11829,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 26558,
-      "sha256": "e6b1bd8fd6431300ea212be83daf1125d658f03e289672dc5ca0a86518c8d210"
+      "bytes": 27248,
+      "sha256": "d8e229421653891927ad254e5ce0589475540a4f9cd3d9c628834d778db6114a"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -12855,8 +12861,8 @@
     {
       "path": "src/shared/match-claim-rules.ts",
       "category": "source",
-      "bytes": 1965,
-      "sha256": "e168176a297246a26c63635c133f9bab5c9b20fd55d2ec82d163fb80283331ac"
+      "bytes": 3251,
+      "sha256": "22564fb643163f977bb8c5cca8094bc637e498571d0fcf79a26e428e1938c8d1"
     },
     {
       "path": "src/shared/mechanic-accountability.test.ts",
@@ -13527,14 +13533,14 @@
     {
       "path": "src/shared/run-soak.test.ts",
       "category": "test",
-      "bytes": 2975,
-      "sha256": "444c75e836f73f844f96c5f3aeb50df0b90d4cee7cf1a530e37a7728d71124b4"
+      "bytes": 3453,
+      "sha256": "576c398be9e947a19ee0daae87554abea8a5016264f52abc1522d67c0ad4b65b"
     },
     {
       "path": "src/shared/run-soak.ts",
       "category": "source",
-      "bytes": 14264,
-      "sha256": "8aca705636d96d9cd4608c4ab474edd5b2d5c6ad22d813a25ff0a1d235432be5"
+      "bytes": 16146,
+      "sha256": "797577ed643da2be07e643efd887ebc28b4352e82571cdb73c0d09db37c1efb6"
     },
     {
       "path": "src/shared/run-store-rules.test.ts",
@@ -13785,8 +13791,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 40720,
-      "sha256": "437ef4c2b84cdbfaac7ed340a299aab7acfc4fac87fb6a6fa49605cf4049f5be"
+      "bytes": 41410,
+      "sha256": "dfcf1632ef3f35c88686fc155bf6bf0c1d4b72d6e5cfabdfe4f0f6618ec93fd9"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -13809,8 +13815,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 31136,
-      "sha256": "ba98d0a7296850b14b680c5ce8cb66c720e28a76700f6538cd583246a214e48c"
+      "bytes": 37038,
+      "sha256": "4b33b6236276c5c54616d7e267011171f0fecb449542dedecfbcc09c71b49ea9"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -29924,7 +29930,7 @@
       "path": "src/shared/match-claim-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 61,
+      "lineCount": 83,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-number-guards.ts",
@@ -29934,7 +29940,8 @@
       "exports": [
         "symbol:src/shared/match-claim-rules.ts#createMatchedPairClaimBoard",
         "symbol:src/shared/match-claim-rules.ts#deriveMatchClaimContext",
-        "symbol:src/shared/match-claim-rules.ts#MatchClaimContext"
+        "symbol:src/shared/match-claim-rules.ts#MatchClaimContext",
+        "symbol:src/shared/match-claim-rules.ts#wildStandInPartnerId"
       ],
       "testedBy": [
         "file:src/shared/match-claim-rules.test.ts"
@@ -32065,7 +32072,7 @@
       "path": "src/shared/run-soak.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 50,
+      "lineCount": 56,
       "imports": [
         "file:src/shared/game.ts",
         "file:src/shared/run-soak.ts"
@@ -32078,8 +32085,9 @@
       "path": "src/shared/run-soak.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 287,
+      "lineCount": 318,
       "imports": [
+        "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/game.ts",
@@ -33055,14 +33063,16 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 612,
+      "lineCount": 710,
       "imports": [
         "file:src/shared/board-power-actions.ts",
+        "file:src/shared/board-power-state.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/game.ts",
         "file:src/shared/miss-bank.ts",
         "file:src/shared/run-store-rules.ts",
-        "file:src/shared/scoring-rules.ts"
+        "file:src/shared/scoring-rules.ts",
+        "file:src/shared/tile-identity.ts"
       ],
       "exports": [
         "symbol:src/shared/test-hall-rooms.ts#playTestHallStep",
@@ -50946,8 +50956,8 @@
       "name": "createMatchedPairClaimBoard",
       "kind": "value",
       "file": "src/shared/match-claim-rules.ts",
-      "line": 33,
-      "endLine": 60
+      "line": 52,
+      "endLine": 82
     },
     {
       "id": "symbol:src/shared/match-claim-rules.ts#deriveMatchClaimContext",
@@ -50964,6 +50974,14 @@
       "file": "src/shared/match-claim-rules.ts",
       "line": 11,
       "endLine": 17
+    },
+    {
+      "id": "symbol:src/shared/match-claim-rules.ts#wildStandInPartnerId",
+      "name": "wildStandInPartnerId",
+      "kind": "value",
+      "file": "src/shared/match-claim-rules.ts",
+      "line": 41,
+      "endLine": 50
     },
     {
       "id": "symbol:src/shared/mechanic-feedback.ts#assertTokenCoverage",
@@ -54114,48 +54132,48 @@
       "name": "SOAK_INVARIANTS",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 80,
-      "endLine": 171
+      "line": 86,
+      "endLine": 188
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SOAK_PLAYERS",
       "name": "SOAK_PLAYERS",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 34,
-      "endLine": 38
+      "line": 37,
+      "endLine": 42
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakPlayer",
       "name": "SoakPlayer",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 23,
-      "endLine": 32
+      "line": 24,
+      "endLine": 35
     },
     {
       "id": "symbol:src/shared/run-soak.ts#soakRun",
       "name": "soakRun",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 182,
-      "endLine": 286
+      "line": 199,
+      "endLine": 317
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakRunReport",
       "name": "SoakRunReport",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 49,
-      "endLine": 63
+      "line": 53,
+      "endLine": 69
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakViolation",
       "name": "SoakViolation",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 40,
-      "endLine": 47
+      "line": 44,
+      "endLine": 51
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#buyStoreItem",
@@ -55626,72 +55644,72 @@
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 548,
-      "endLine": 587
+      "line": 638,
+      "endLine": 685
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "name": "TEST_HALL_ROOMS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 194,
-      "endLine": 535
+      "line": 204,
+      "endLine": 625
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 611,
-      "endLine": 611
+      "line": 709,
+      "endLine": 709
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
       "name": "TestHallRoom",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 80,
-      "endLine": 91
+      "line": 90,
+      "endLine": 101
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
       "name": "TestHallRoomId",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 35,
-      "endLine": 57
+      "line": 37,
+      "endLine": 64
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 589,
-      "endLine": 592
+      "line": 687,
+      "endLine": 690
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
       "name": "TestHallScriptLine",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 73,
-      "endLine": 78
+      "line": 83,
+      "endLine": 88
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
       "name": "TestHallStep",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 59,
-      "endLine": 71
+      "line": 66,
+      "endLine": 81
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 594,
-      "endLine": 609
+      "line": 692,
+      "endLine": 707
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -57507,7 +57525,7 @@
         },
         {
           "path": "src/shared/run-soak.ts",
-          "line": 4
+          "line": 5
         }
       ],
       "tests": [
@@ -73704,6 +73722,12 @@
       "id": "exports:src/shared/match-claim-rules.ts->symbol:src/shared/match-claim-rules.ts#MatchClaimContext",
       "source": "file:src/shared/match-claim-rules.ts",
       "target": "symbol:src/shared/match-claim-rules.ts#MatchClaimContext",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/match-claim-rules.ts->symbol:src/shared/match-claim-rules.ts#wildStandInPartnerId",
+      "source": "file:src/shared/match-claim-rules.ts",
+      "target": "symbol:src/shared/match-claim-rules.ts#wildStandInPartnerId",
       "kind": "exports"
     },
     {
@@ -93702,6 +93726,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/run-soak.ts->src/shared/board-inspection.ts",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "file:src/shared/board-inspection.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/run-soak.ts->src/shared/board-power-actions.ts",
       "source": "file:src/shared/run-soak.ts",
       "target": "file:src/shared/board-power-actions.ts",
@@ -94650,6 +94680,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/test-hall-rooms.ts->src/shared/board-power-state.ts",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "file:src/shared/board-power-state.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/test-hall-rooms.ts->src/shared/contracts.ts",
       "source": "file:src/shared/test-hall-rooms.ts",
       "target": "file:src/shared/contracts.ts",
@@ -94677,6 +94713,12 @@
       "id": "imports:src/shared/test-hall-rooms.ts->src/shared/scoring-rules.ts",
       "source": "file:src/shared/test-hall-rooms.ts",
       "target": "file:src/shared/scoring-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/test-hall-rooms.ts->src/shared/tile-identity.ts",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "file:src/shared/tile-identity.ts",
       "kind": "imports"
     },
     {

@@ -126,7 +126,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         counter: 'trait.echo',
         verdict: 'changed',
         generation: 261,
-        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.625 x 0.80, a floor takes twice the turns, so a trait pair is matched by hand more often. Before: Occupancy 0.388 x 0.42, banded common. Pays in peek charges, a currency the run still spends. Gen 205: it was the rarest of the four at 0.342, because two of the three interaction couples spend Conduit and Stasis and the fill meant to even the floor out drew uniformly instead. Re-measured at Gen 213 and the fill is still holding it level with Heavy.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.629 x 0.80, a floor takes twice the turns, so a trait pair is matched by hand more often. Before: Occupancy 0.388 x 0.42, banded common. Pays in peek charges, a currency the run still spends. Gen 205: it was the rarest of the four at 0.342, because two of the three interaction couples spend Conduit and Stasis and the fill meant to even the floor out drew uniformly instead. Re-measured at Gen 213 and the fill is still holding it level with Heavy. Gen 262 re-measured it from 0.625 x 0.80 after a miss on a Heavy card began costing two from the bank: floors that meet Heavy end sooner.'
     },
     {
         id: 'trait.heavy',
@@ -134,7 +134,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         verdict: 'changed',
         generation: 261,
         gone: ['never drains peek charges'],
-        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.596 x 0.76, a floor takes twice the turns, so a trait pair is matched by hand more often. Before: Its mismatch line promised "costs +1 extra try but never drains peek charges". Nothing in the game drains a peek charge on a mismatch, so the clause promised the absence of an impossible penalty. Cut; the true half stayed. Occupancy 0.412 x 0.44, which is the trait appearing about as often as Echo and rather less than the two lock traits.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.600 x 0.75, a floor takes twice the turns, so a trait pair is matched by hand more often. Before: Its mismatch line promised "costs +1 extra try but never drains peek charges". Nothing in the game drains a peek charge on a mismatch, so the clause promised the absence of an impossible penalty. Cut; the true half stayed. Occupancy 0.412 x 0.44, which is the trait appearing about as often as Echo and rather less than the two lock traits. Gen 262 re-measured it from 0.596 x 0.76 after a miss on a Heavy card began costing two from the bank: floors that meet Heavy end sooner.'
     },
     {
         id: 'trait.conduit',
@@ -149,7 +149,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         counter: 'trait.stasis',
         verdict: 'confirmed',
         generation: 261,
-        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.750 x 1.22, a floor takes twice the turns, so a trait pair is matched by hand more often. Before: Occupancy 0.508 x 0.66, banded common and the most common of the four. Both its interaction lines land in the block lane, which is what a lock does, and the lane survived the Gen 202 cull on evidence rather than by being overlooked.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.746 x 1.23, a floor takes twice the turns, so a trait pair is matched by hand more often. Before: Occupancy 0.508 x 0.66, banded common and the most common of the four. Both its interaction lines land in the block lane, which is what a lock does, and the lane survived the Gen 202 cull on evidence rather than by being overlooked. Gen 262 re-measured it from 0.750 x 1.22 after a miss on a Heavy card began costing two from the bank: floors that meet Heavy end sooner.'
     },
 
     // ---- The powers a player can press. --------------------------------------------------------
@@ -165,7 +165,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         counter: 'pin',
         verdict: 'changed',
         generation: 261,
-        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.438 x 0.75, more turns a floor is more moments worth pinning after a miss. Before: Re-banded core to common. It read 1.000 while the census pressed it at floor open regardless of the board; pressed after a miss, where a pin has a reason, it reads 0.158 of floors at 0.23 pins a floor. Gen 261 cut the clause calling 0.158 “the reference miss rate”: the miss rate is 0.471, and 0.158 is the share of floors on which the census finds a moment worth pinning at all.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.375 x 0.66, more turns a floor is more moments worth pinning after a miss. Before: Re-banded core to common. It read 1.000 while the census pressed it at floor open regardless of the board; pressed after a miss, where a pin has a reason, it reads 0.158 of floors at 0.23 pins a floor. Gen 261 cut the clause calling 0.158 “the reference miss rate”: the miss rate is 0.471, and 0.158 is the share of floors on which the census finds a moment worth pinning at all. Gen 262 re-measured it from 0.438 x 0.75 after a miss on a Heavy card began costing two from the bank: floors that meet Heavy end sooner.'
     },
     {
         id: 'power.flash_pair',
@@ -207,7 +207,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         counter: 'gambit',
         verdict: 'confirmed',
         generation: 261,
-        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.671 x 0.67, more turns a floor is more first misses to spend the third flip on. Before: Occupancy 0.458 x 0.46, banded common. One third flip per floor, spent on the first miss, which is the only moment it can be spent - so its share tracks the chance a floor has a miss at all.'
+        note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.654 x 0.65, more turns a floor is more first misses to spend the third flip on. Before: Occupancy 0.458 x 0.46, banded common. One third flip per floor, spent on the first miss, which is the only moment it can be spent - so its share tracks the chance a floor has a miss at all. Gen 262 re-measured it from 0.671 x 0.67 after a miss on a Heavy card began costing two from the bank: floors that meet Heavy end sooner.'
     },
     {
         id: 'power.wild_match',

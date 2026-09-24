@@ -9,10 +9,12 @@ import {
     cancelResolvingWithUndo
 } from './board-power-actions';
 import type { BoardState, MutatorId, RunState, Tile, TileSuit, TileTraitKind } from './contracts';
+import { togglePinnedTile } from './board-power-state';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { missBankCap, missesLeft } from './miss-bank';
 import { buyStoreItem, isStoreStopFloor, runGold, type StoreItemId } from './run-store-rules';
 import { getMemorizeDurationForRun } from './scoring-rules';
+import { WILD_PAIR_KEY } from './tile-identity';
 
 /**
  * The test hall: one small authored room per mechanic, the game-dev "flat" where every system can
@@ -54,7 +56,12 @@ export type TestHallRoomId =
     | 'undo'
     | 'flash-pair'
     | 'echo'
-    | 'heavy';
+    | 'heavy'
+    | 'gambit'
+    | 'pin'
+    | 'wild'
+    | 'conduit'
+    | 'stasis';
 
 export type TestHallStep =
     | { readonly do: 'match'; readonly pairKey: string }
@@ -67,6 +74,9 @@ export type TestHallStep =
     | { readonly do: 'rowShuffle'; readonly row: number }
     | { readonly do: 'undo' }
     | { readonly do: 'flash' }
+    | { readonly do: 'pin'; readonly tileId: string }
+    | { readonly do: 'gambit'; readonly a: string; readonly b: string; readonly third: string }
+    | { readonly do: 'wild'; readonly tileId: string }
     | { readonly do: 'buy'; readonly item: StoreItemId }
     | { readonly do: 'clear' };
 
@@ -531,6 +541,86 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
             { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'a plain miss costs one', expect: missesAre(0) },
             { step: { do: 'match', pairKey: 'a' }, says: 'the Heavy match still pays its 35 on top', expect: (r, b) => (r.stats.totalScore - b.stats.totalScore >= 35 ? null : `paid ${r.stats.totalScore - b.stats.totalScore}`) }
         ]
+    },
+    {
+        id: 'gambit',
+        title: 'The Gambit',
+        mechanic: 'Once a floor, a third card after two that miss: if it completes a pair, the turn is a match.',
+        graphMechanicIds: ['power.gambit', 'inventory.gambit_token'],
+        tryThis: 'Flip a and b, then before they turn back flip the other a: the gambit makes it a match.',
+        build: () => room(['a:e b:t c:m', 'd:b a:e b:t', 'c:m d:b e:e', 'e:e f:t f:t'], { run: { gambitAvailableThisFloor: true, gambitThirdFlipUsed: false } }),
+        script: [
+            {
+                step: { do: 'gambit', a: 'a-1', b: 'b-1', third: 'a-2' },
+                says: 'the third card completes a: a match, no miss, the gambit is spent',
+                expect: expectAll(isGone('a'), isStanding('b'), missesAre(3), (r) => (r.gambitThirdFlipUsed && !r.gambitAvailableThisFloor ? null : 'the gambit was not spent'))
+            }
+        ]
+    },
+    {
+        id: 'pin',
+        title: 'Pins',
+        mechanic: 'A pin marks a hidden card to remember; a shuffle moves the cards, so it clears the pins.',
+        graphMechanicIds: ['power.pin', 'power.shuffle'],
+        tryThis: 'Pin a card, then shuffle: the pin goes, because the card it marked has moved.',
+        build: () => room(['a:e b:t c:m', 'd:b a:e b:t', 'c:m d:b e:e', 'e:e f:t f:t'], { run: { shuffleCharges: 1 } }),
+        script: [
+            { step: { do: 'pin', tileId: 'a-1' }, says: 'a-1 carries a pin', expect: expectAll(costsNothing, (r) => (r.pinnedTileIds.includes('a-1') ? null : 'a-1 is not pinned')) },
+            { step: { do: 'shuffle' }, says: 'the shuffle clears the pin it would have made a lie of', expect: (r) => (r.pinnedTileIds.length === 0 ? null : `pins ${r.pinnedTileIds.join(',')}`) }
+        ]
+    },
+    {
+        id: 'wild',
+        title: 'The wild joker',
+        mechanic: 'The joker matches any card, and its pair goes with it: the joker stands in for the partner.',
+        graphMechanicIds: ['board.wild_joker_tile', 'power.wild_match', 'inventory.wild_match_token'],
+        tryThis: 'Flip the joker, then any card: that whole pair is gone. Clear the rest and the floor ends.',
+        /*
+         * Gen 262: the joker used to claim only the card it was flipped with, leaving the partner face
+         * down with nothing to pair - every Wild run softlocked on its first joker. The clear at the
+         * end is the half of this room that matters.
+         */
+        build: () =>
+            room(['a:e b:t c:m', 'd:b a:e b:t', 'c:m d:b w:e'], {
+                run: { wildMenuRun: true, wildMatchesRemaining: 1 },
+                tiles: (tiles) => tiles.map((t) => (t.pairKey === 'w' ? { ...t, id: 'joker', pairKey: WILD_PAIR_KEY } : t))
+            }),
+        script: [
+            { step: { do: 'wild', tileId: 'a-1' }, says: 'the joker takes the whole of pair a', expect: expectAll(isGone('a'), missesAre(3), (r) => (r.wildMatchesRemaining === 0 ? null : `jokers ${r.wildMatchesRemaining}`)) },
+            { step: { do: 'clear' }, says: 'the rest clears and so does the floor', expect: statusIs('levelComplete') }
+        ]
+    },
+    {
+        id: 'conduit',
+        title: 'Conduit',
+        mechanic: 'A clean Conduit match turns neighbouring traits into score; an Echo next to it adds a peek.',
+        graphMechanicIds: ['trait.conduit', 'trait.echo'],
+        tryThis: 'Both Conduit cards (a) sit next to an Echo card (c). Match a and count the peeks.',
+        build: () =>
+            room(['a:e c:t b:m d:b', 'e:e c:t a:e f:m', 'b:m d:b e:e f:m'], {
+                run: { peekCharges: 0 },
+                tiles: (tiles) => withTrait('c', 'echo')(withTrait('a', 'conduit')(tiles))
+            }),
+        script: [
+            {
+                step: { do: 'match', pairKey: 'a' },
+                says: 'the Conduit sparks the Echo beside it: a peek, and more score than a plain match',
+                expect: (r) => (r.peekCharges === 1 ? null : `peeks ${r.peekCharges}`)
+            }
+        ]
+    },
+    {
+        id: 'stasis',
+        title: 'Stasis',
+        mechanic: 'A clean Stasis match locks a neighbouring trait card: it cannot be the first card of the next turn.',
+        graphMechanicIds: ['trait.stasis', 'trait.heavy'],
+        tryThis: 'Match the Stasis pair (s). The Heavy card beside it will not open first - but it will open second.',
+        build: () => room(['s:e h:t a:m b:b', 'c:b d:m h:t s:e', 'a:m b:b c:b d:m'], { tiles: (tiles) => withTrait('h', 'heavy')(withTrait('s', 'stasis')(tiles)) }),
+        script: [
+            { step: { do: 'match', pairKey: 's' }, says: 'the Stasis match locks h-1', expect: (r) => (r.stickyBlockIndex === positionOf(r, 'h-1') ? null : `lock at ${r.stickyBlockIndex}`) },
+            { step: { do: 'flip', tileId: 'a-1' }, says: 'a first card elsewhere is fine', expect: statusIs('playing') },
+            { step: { do: 'flip', tileId: 'h-1' }, says: 'the locked card opens as the second card', expect: (r) => (r.board?.flippedTileIds.includes('h-1') ? null : 'the locked card would not open second') }
+        ]
     }
 ];
 
@@ -572,6 +662,14 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
             return cancelResolvingWithUndo(run);
         case 'flash':
             return applyFlashPair(run);
+        case 'pin':
+            return togglePinnedTile(run, step.tileId);
+        case 'gambit':
+            return resolveBoardTurn(flipTile(flipTile(flipTile(run, step.a), step.b), step.third));
+        case 'wild': {
+            const joker = (run.board?.tiles ?? []).find((t) => t.pairKey === WILD_PAIR_KEY && t.state === 'hidden');
+            return joker ? resolveBoardTurn(flipTile(flipTile(run, joker.id), step.tileId)) : null;
+        }
         case 'buy':
             return buyStoreItem(run, step.item);
         case 'clear': {

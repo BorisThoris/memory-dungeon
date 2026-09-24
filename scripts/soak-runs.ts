@@ -31,7 +31,7 @@ for (const [name, player] of Object.entries(SOAK_PLAYERS)) {
         reports.reduce((sum, report) => sum + read(report), 0);
     process.stdout.write(
         `${name}: ${seeds} runs, ${total((r) => r.floorsCleared)} floors, ${total((r) => r.turns)} turns, ` +
-            `${total((r) => r.purchases)} purchases, ${total((r) => r.bombsUsed)} bombs, ${total((r) => r.goldEarned)} gold earned, ${total((r) => r.missesGranted)} misses granted, ${total((r) => r.relicsBought)} relics, ended ${JSON.stringify(ended)}, ` +
+            `${total((r) => r.purchases)} purchases, ${total((r) => r.bombsUsed)} bombs, ${total((r) => r.goldEarned)} gold earned, ${total((r) => r.missesGranted)} misses granted, ${total((r) => r.relicsBought)} relics, ${total((r) => r.wildMatches)} jokers, ended ${JSON.stringify(ended)}, ` +
             `${found.length} violations\n`
     );
     for (const violation of found.slice(0, 10)) {

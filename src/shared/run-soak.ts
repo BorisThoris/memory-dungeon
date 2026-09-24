@@ -1,10 +1,11 @@
 import { applyBomb, applyPeek, applyShuffle, bombTargetTileId } from './board-power-actions';
 import type { BoardState, RunState, Tile } from './contracts';
-import { advanceToNextLevel, createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
+import { inspectBoardFairness } from './board-inspection';
+import { advanceToNextLevel, createNewRun, createWildRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { missBankCap, missBankGrantLastFloor, missesLeft } from './miss-bank';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { buyStoreItem, isStoreStopFloor, runGold, storeOffer, type StoreItemId } from './run-store-rules';
-import { isSingletonUtilityPairKey } from './tile-identity';
+import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 
 /**
  * The run soak: whole runs, played by seeded random players, with the run's invariants checked after
@@ -21,6 +22,8 @@ import { isSingletonUtilityPairKey } from './tile-identity';
  * A failure names the seed, the floor, the action and the invariant, so it replays exactly.
  */
 export interface SoakPlayer {
+    /** Start from the Wild setup (a joker on the board) instead of a classic run. */
+    readonly wild?: boolean;
     /** Share of turns the player flips two cards that do not match. */
     missRate: number;
     /** Share of turns, with a bomb in hand, the player bombs instead of turning the second card. */
@@ -31,10 +34,11 @@ export interface SoakPlayer {
     shuffleRate: number;
 }
 
-export const SOAK_PLAYERS: Readonly<Record<'careful' | 'average' | 'sloppy', SoakPlayer>> = {
+export const SOAK_PLAYERS: Readonly<Record<'careful' | 'average' | 'sloppy' | 'wild', SoakPlayer>> = {
     careful: { missRate: 0.05, bombRate: 0.5, peekRate: 0.1, shuffleRate: 0.02 },
     average: { missRate: 0.18, bombRate: 0.35, peekRate: 0.15, shuffleRate: 0.05 },
-    sloppy: { missRate: 0.4, bombRate: 0.25, peekRate: 0.2, shuffleRate: 0.08 }
+    sloppy: { missRate: 0.4, bombRate: 0.25, peekRate: 0.2, shuffleRate: 0.08 },
+    wild: { wild: true, missRate: 0.18, bombRate: 0.35, peekRate: 0.15, shuffleRate: 0.05 }
 };
 
 export interface SoakViolation {
@@ -59,6 +63,8 @@ export interface SoakRunReport {
     /** Every rise in misses left, summed: floor grants, chain grants and bought misses. */
     missesGranted: number;
     relicsBought: number;
+    /** Jokers spent: every fall in wildMatchesRemaining. */
+    wildMatches: number;
     violations: SoakViolation[];
 }
 
@@ -155,6 +161,17 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         const paid = had - (missesLeft(run) ?? 0);
         return paid === owed ? null : `paid ${paid} of ${owed} (tries ${before.stats.tries} -> ${run.stats.tries})`;
     },
+    /*
+     * The board inspector's structural checks - pairs whole, counters honest, a way left to finish.
+     * It existed and nothing ran it over live play: the wild joker claimed a card and left its
+     * partner face down with nothing to pair, and the floor could never clear. Only between turns,
+     * since a card mid-flip is legitimately half of an unresolved pair.
+     */
+    'the board always has a way to finish': (_b, run) => {
+        if (!run.board || run.status === 'resolving' || run.board.flippedTileIds.length > 0) return null;
+        const issues = inspectBoardFairness(run.board).issues;
+        return issues.length === 0 ? null : issues.map((issue) => issue.code).join(', ');
+    },
     'a purchase costs exactly its price': (before, run, action) => {
         if (!before || !action.startsWith('buy:')) return null;
         const id = action.slice(4) as StoreItemId;
@@ -195,7 +212,9 @@ export const soakRun = ({
     const rng = createMulberry32(hashStringToSeed(`soak:${seed}:${playerName}`));
     const pick = <T>(items: readonly T[]): T => items[pickRngIndex(rng, items.length)]!;
     const violations: SoakViolation[] = [];
-    let run: RunState = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed });
+    let run: RunState = player.wild
+        ? createWildRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed })
+        : createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed });
     let step = 0;
     let turns = 0;
     let purchases = 0;
@@ -203,6 +222,7 @@ export const soakRun = ({
     let goldEarned = 0;
     let missesGranted = 0;
     let relicsBought = 0;
+    let wildMatches = 0;
     let floorsCleared = 0;
 
     const act = (action: string, next: RunState): void => {
@@ -213,6 +233,7 @@ export const soakRun = ({
         goldEarned += Math.max(0, runGold(next) - runGold(run));
         missesGranted += Math.max(0, (missesLeft(next) ?? 0) - (missesLeft(run) ?? 0));
         relicsBought += Math.max(0, (next.relics ?? []).length - (run.relics ?? []).length);
+        wildMatches += Math.max(0, (run.wildMatchesRemaining ?? 0) - (next.wildMatchesRemaining ?? 0));
         run = next;
     };
 
@@ -253,6 +274,15 @@ export const soakRun = ({
             const next = applyShuffle(run);
             if (next !== run) act('shuffle', next);
         }
+        // The joker, played the way a player with a wild in hand plays it: early, on any card.
+        const joker = (run.board?.tiles ?? []).find((tile) => tile.state === 'hidden' && isWildPairKey(tile.pairKey));
+        if (joker && (run.wildMatchesRemaining ?? 0) > 0 && rng() < 0.5) {
+            act('flip', flipTile(run, joker.id));
+            act('flip', flipTile(run, pick(hiddenReal(run)).id));
+            turns += 1;
+            act('resolve', resolveBoardTurn(run));
+            continue;
+        }
         const pool = hiddenReal(run);
         const first = pick(pool);
         act('flip', flipTile(run, first.id));
@@ -281,6 +311,7 @@ export const soakRun = ({
         goldEarned,
         missesGranted,
         relicsBought,
+        wildMatches,
         violations
     };
 };
