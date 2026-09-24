@@ -1,5 +1,14 @@
-import { applyBomb, applyPeek, applyShuffle, bombTargetTileId } from './board-power-actions';
-import type { BoardState, MutatorId, RunState, Tile, TileSuit } from './contracts';
+import {
+    applyBomb,
+    applyFlashPair,
+    applyPeek,
+    applyRegionShuffle,
+    applyShuffle,
+    applyTileSwap,
+    bombTargetTileId,
+    cancelResolvingWithUndo
+} from './board-power-actions';
+import type { BoardState, MutatorId, RunState, Tile, TileSuit, TileTraitKind } from './contracts';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { missBankCap, missesLeft } from './miss-bank';
 import { buyStoreItem, isStoreStopFloor, runGold, type StoreItemId } from './run-store-rules';
@@ -37,7 +46,15 @@ export type TestHallRoomId =
     | 'long-look'
     | 'restless-floor'
     | 'magpie'
-    | 'score-glint';
+    | 'score-glint'
+    | 'peek'
+    | 'shuffle'
+    | 'tile-swap'
+    | 'row-shuffle'
+    | 'undo'
+    | 'flash-pair'
+    | 'echo'
+    | 'heavy';
 
 export type TestHallStep =
     | { readonly do: 'match'; readonly pairKey: string }
@@ -46,6 +63,10 @@ export type TestHallStep =
     | { readonly do: 'bomb' }
     | { readonly do: 'peek'; readonly tileId: string }
     | { readonly do: 'shuffle' }
+    | { readonly do: 'swap'; readonly a: string; readonly b: string }
+    | { readonly do: 'rowShuffle'; readonly row: number }
+    | { readonly do: 'undo' }
+    | { readonly do: 'flash' }
     | { readonly do: 'buy'; readonly item: StoreItemId }
     | { readonly do: 'clear' };
 
@@ -159,6 +180,13 @@ const isGone = (pairKey: string) => (run: RunState) => (gone(run, pairKey) ? nul
 const isStanding = (pairKey: string) => (run: RunState) => (standing(run, pairKey) ? null : `pair ${pairKey} left the board`);
 const missesAre = (n: number) => (run: RunState) => (missesLeft(run) === n ? null : `misses left ${missesLeft(run)}, expected ${n}`);
 const statusIs = (status: RunState['status']) => (run: RunState) => (run.status === status ? null : `status ${run.status}, expected ${status}`);
+const order = (run: RunState): string => (run.board?.tiles ?? []).map((t) => t.id).join(',');
+const positionOf = (run: RunState, tileId: string): number => (run.board?.tiles ?? []).findIndex((t) => t.id === tileId);
+/** A power that is not a turn: no turn counted, no miss spent. */
+const costsNothing = (run: RunState, before: RunState): string | null =>
+    run.turnsThisFloor !== before.turnsThisFloor ? 'it counted a turn' : missesLeft(run) !== missesLeft(before) ? 'it cost a miss' : null;
+const withTrait = (pairKey: string, kind: TileTraitKind) => (tiles: Tile[]) =>
+    tiles.map((t) => (t.pairKey === pairKey ? { ...t, tileTraitKind: kind } : t));
 const turnsAre = (n: number) => (run: RunState) => (run.turnsThisFloor === n ? null : `turns ${run.turnsThisFloor}, expected ${n}`);
 
 // ---- The rooms --------------------------------------------------------------------------------
@@ -371,6 +399,138 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                 expect: (r, before) => (r.stats.totalScore - before.stats.totalScore >= 25 && r.findablesClaimedThisFloor === 1 ? null : `paid ${r.stats.totalScore - before.stats.totalScore}, claimed ${r.findablesClaimedThisFloor}`)
             }
         ]
+    },
+    {
+        id: 'peek',
+        title: 'Peek',
+        mechanic: 'A peek shows one hidden card for a moment: no turn, no miss, one charge.',
+        graphMechanicIds: ['power.peek', 'inventory.peek_charge'],
+        tryThis: 'Press Peek and pick a card. It shows its face, then goes back down.',
+        build: () => room(['a:e b:t c:m', 'd:b a:e b:t', 'c:m d:b e:e', 'e:e f:t f:t'], { run: { peekCharges: 1 } }),
+        script: [
+            {
+                step: { do: 'peek', tileId: 'a-1' },
+                says: 'a-1 is shown, the charge is spent, nothing else moved',
+                expect: expectAll(costsNothing, (r) => (r.peekCharges === 0 && r.peekRevealedTileIds.includes('a-1') ? null : `peeks ${r.peekCharges}, shown ${r.peekRevealedTileIds.join(',')}`))
+            }
+        ]
+    },
+    {
+        id: 'shuffle',
+        title: 'Shuffle',
+        mechanic: 'A shuffle deals the hidden cards again: no turn, no miss, one charge.',
+        graphMechanicIds: ['power.shuffle', 'inventory.shuffle_charge'],
+        tryThis: 'Press Shuffle and watch the face-down cards move.',
+        build: () => room(['a:e b:t c:m', 'd:b a:e b:t', 'c:m d:b e:e', 'e:e f:t f:t'], { run: { shuffleCharges: 1 } }),
+        script: [
+            {
+                step: { do: 'shuffle' },
+                says: 'the hidden cards move and the charge is spent',
+                expect: expectAll(costsNothing, (r, b) => (r.shuffleCharges === 0 && order(r) !== order(b) ? null : `shuffles ${r.shuffleCharges}, moved ${order(r) !== order(b)}`))
+            }
+        ]
+    },
+    {
+        id: 'tile-swap',
+        title: 'Swap two cards',
+        mechanic: 'A swap trades two hidden cards you choose, from the row/swap charge.',
+        graphMechanicIds: ['power.tile_swap', 'inventory.region_shuffle_charge'],
+        tryThis: 'Press Swap, then pick the top-left card and the bottom-right one.',
+        build: () => room(['a:e b:t c:m', 'd:b a:e b:t', 'c:m d:b e:e', 'e:e f:t f:t'], { run: { regionShuffleCharges: 1 } }),
+        script: [
+            {
+                step: { do: 'swap', a: 'a-1', b: 'f-2' },
+                says: 'a-1 and f-2 trade places',
+                expect: expectAll(costsNothing, (r, b) =>
+                    positionOf(r, 'a-1') === positionOf(b, 'f-2') && positionOf(r, 'f-2') === positionOf(b, 'a-1') && r.regionShuffleCharges === 0
+                        ? null
+                        : `a-1 at ${positionOf(r, 'a-1')}, charges ${r.regionShuffleCharges}`
+                )
+            }
+        ]
+    },
+    {
+        id: 'row-shuffle',
+        title: 'Shuffle a row',
+        mechanic: 'A row shuffle deals one row again and leaves every other row where it was.',
+        graphMechanicIds: ['power.region_shuffle', 'inventory.region_shuffle_charge'],
+        tryThis: 'Press the row shuffle and pick the top row.',
+        build: () => room(['a:e b:t c:m', 'd:b a:e b:t', 'c:m d:b e:e', 'e:e f:t f:t'], { run: { regionShuffleCharges: 1 } }),
+        script: [
+            {
+                step: { do: 'rowShuffle', row: 0 },
+                says: 'the top row moves, the rest stay',
+                expect: expectAll(costsNothing, (r, b) => {
+                    const top = (run: RunState) => order(run).split(',').slice(0, 3).join(',');
+                    const rest = (run: RunState) => order(run).split(',').slice(3).join(',');
+                    return top(r) !== top(b) && rest(r) === rest(b) && r.regionShuffleCharges === 0 ? null : 'the wrong cards moved';
+                })
+            }
+        ]
+    },
+    {
+        id: 'undo',
+        title: 'Undo',
+        mechanic: 'Undo takes back a second flip before the turn resolves: no miss, one use a floor.',
+        graphMechanicIds: ['power.undo_resolve', 'inventory.undo_charge'],
+        tryThis: 'Flip two cards that do not match, and press Undo before they turn back.',
+        build: () => room(['a:e b:t c:m', 'd:b a:e b:t', 'c:m d:b e:e', 'e:e f:t f:t'], { run: { undoUsesThisFloor: 1 } }),
+        script: [
+            { step: { do: 'flip', tileId: 'a-1' }, says: 'one card up', expect: statusIs('playing') },
+            { step: { do: 'flip', tileId: 'b-1' }, says: 'two cards up, the turn is resolving', expect: statusIs('resolving') },
+            {
+                step: { do: 'undo' },
+                says: 'both go back down and nothing was charged',
+                expect: expectAll(statusIs('playing'), costsNothing, isStanding('a'), isStanding('b'), (r) => (r.undoUsesThisFloor === 0 ? null : `undo ${r.undoUsesThisFloor}`))
+            }
+        ]
+    },
+    {
+        id: 'flash-pair',
+        title: 'Flash pair',
+        mechanic: 'In practice and wild runs, a flash shows both halves of one hidden pair.',
+        graphMechanicIds: ['power.flash_pair', 'inventory.flash_pair_charge'],
+        tryThis: 'Press Flash: two matching cards show their faces for a moment.',
+        build: () => room(['a:e b:t c:m', 'd:b a:e b:t', 'c:m d:b e:e', 'e:e f:t f:t'], { run: { flashPairCharges: 1, practiceMode: true } }),
+        script: [
+            {
+                step: { do: 'flash' },
+                says: 'both halves of one pair are shown and the charge is spent',
+                expect: expectAll(costsNothing, (r) => {
+                    const shown = r.flashPairRevealedTileIds.map((id) => r.board?.tiles.find((t) => t.id === id)?.pairKey);
+                    return r.flashPairCharges === 0 && shown.length === 2 && shown[0] === shown[1] ? null : `charges ${r.flashPairCharges}, shown ${shown.join(',')}`;
+                })
+            }
+        ]
+    },
+    {
+        id: 'echo',
+        title: 'Echo',
+        mechanic: 'Matching an Echo pair cleanly grants a peek charge.',
+        graphMechanicIds: ['trait.echo', 'inventory.peek_charge'],
+        tryThis: 'Match the Echo pair a and watch the Peek count go up.',
+        build: () => room(['a:e b:t c:m', 'd:b a:e b:t', 'c:m d:b e:e', 'e:e f:t f:t'], { run: { peekCharges: 0 }, tiles: withTrait('a', 'echo') }),
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'the clean Echo match grants a peek', expect: (r) => (r.peekCharges === 1 ? null : `peeks ${r.peekCharges}`) }
+        ]
+    },
+    {
+        id: 'heavy',
+        title: 'Heavy',
+        mechanic: 'A Heavy pair pays 35 more on a clean match, and a miss on it costs two from the bank.',
+        graphMechanicIds: ['trait.heavy', 'economy.miss_bank'],
+        tryThis: 'Miss with the Heavy card: two misses go. Then match it for the bonus.',
+        /*
+         * Until Gen 262 the bank charged one miss for every mismatch whatever the turn charged in
+         * tries, so the extra miss printed on this card had cost nothing since the bank replaced
+         * the try counter. This room is where that is walked.
+         */
+        build: () => room(['a:e b:t c:m', 'd:b a:e b:t', 'c:m d:b e:e', 'e:e f:t f:t'], { tiles: withTrait('a', 'heavy') }),
+        script: [
+            { step: { do: 'miss', a: 'a-1', b: 'b-1' }, says: 'a miss on Heavy costs two', expect: missesAre(1) },
+            { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'a plain miss costs one', expect: missesAre(0) },
+            { step: { do: 'match', pairKey: 'a' }, says: 'the Heavy match still pays its 35 on top', expect: (r, b) => (r.stats.totalScore - b.stats.totalScore >= 35 ? null : `paid ${r.stats.totalScore - b.stats.totalScore}`) }
+        ]
     }
 ];
 
@@ -404,6 +564,14 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
             return applyPeek(run, step.tileId);
         case 'shuffle':
             return applyShuffle(run);
+        case 'swap':
+            return applyTileSwap(run, step.a, step.b);
+        case 'rowShuffle':
+            return applyRegionShuffle(run, step.row);
+        case 'undo':
+            return cancelResolvingWithUndo(run);
+        case 'flash':
+            return applyFlashPair(run);
         case 'buy':
             return buyStoreItem(run, step.item);
         case 'clear': {

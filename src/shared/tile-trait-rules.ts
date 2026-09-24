@@ -41,7 +41,7 @@ export const TILE_TRAIT_COPY: Record<TileTraitKind, { label: string; match: stri
     heavy: {
         label: 'Heavy',
         match: 'Clean match grants +35 score.',
-        mismatch: 'Mismatch costs +1 extra try.'
+        mismatch: 'A miss costs one more from the bank.'
     },
     conduit: {
         label: 'Conduit',

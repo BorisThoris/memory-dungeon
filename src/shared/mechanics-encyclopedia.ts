@@ -416,7 +416,7 @@ export const ENCYCLOPEDIA_POWER_TOPICS: readonly EncyclopediaTopic[] = [
         id: 'power_gambit',
         title: 'Gambit (third flip)',
         description:
-            'Once per floor, after two flips, you may try a third card to complete a pair; wrong gambit still counts against tries. Counts as a power for perfect clear when used. Resolve **feel** can differ from a normal two-flip miss when **Echo** is on—see **Resolve timing & echo**.'
+            'Once per floor, after two flips, you may try a third card to complete a pair; a wrong gambit still costs a miss. Counts as a power for perfect clear when used. Resolve **feel** can differ from a normal two-flip miss when **Echo** is on—see **Resolve timing & echo**.'
     },
     {
         id: 'power_wild',
@@ -590,7 +590,7 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         id: 'board_tile_traits',
         title: 'Tile traits',
         description:
-            '**Tile traits** are pair-level rules layered onto ordinary match pairs from floor 4 onward; the first three floors carry none. **Echo** grants a peek charge on clean match. **Heavy** grants +35 score on clean match and a miss costs an extra try. **Conduit** converts nearby traits into score. **Stasis** locks a nearby trait tile from being opened first next turn. Traits standing next to each other add to these effects — Conduit beside Echo also grants a peek charge, Conduit beside Stasis adds score and pulses the same lock.'
+            '**Tile traits** are pair-level rules layered onto ordinary match pairs from floor 4 onward; the first three floors carry none. **Echo** grants a peek charge on clean match. **Heavy** grants +35 score on clean match and a miss on it costs one more from the bank. **Conduit** converts nearby traits into score. **Stasis** locks a nearby trait tile from being opened first next turn. Traits standing next to each other add to these effects — Conduit beside Echo also grants a peek charge, Conduit beside Stasis adds score and pulses the same lock.'
     },
     {
         id: 'board_shifting_spotlight',

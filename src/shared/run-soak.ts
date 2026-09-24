@@ -147,6 +147,14 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         if (run.bombCharges !== before.bombCharges - 1) return `bombs ${before.bombCharges} -> ${run.bombCharges}`;
         return null;
     },
+    'a miss costs the tries it charged, as far as the bank covers them': (before, run, action) => {
+        if (!before || action !== 'resolve' || run.stats.mismatches <= before.stats.mismatches) return null;
+        const had = missesLeft(before) ?? 0;
+        if (had === 0) return run.status === 'gameOver' ? null : 'a miss on an empty bank did not end the run';
+        const owed = Math.min(had, Math.max(1, run.stats.tries - before.stats.tries));
+        const paid = had - (missesLeft(run) ?? 0);
+        return paid === owed ? null : `paid ${paid} of ${owed} (tries ${before.stats.tries} -> ${run.stats.tries})`;
+    },
     'a purchase costs exactly its price': (before, run, action) => {
         if (!before || !action.startsWith('buy:')) return null;
         const id = action.slice(4) as StoreItemId;

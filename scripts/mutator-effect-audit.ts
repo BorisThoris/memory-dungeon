@@ -77,7 +77,14 @@ export const playMutatorFloor = (seed: number, floor: number, mutators: MutatorI
         activeMutators: mutators,
         board,
         status: 'playing',
-        findablesTotalThisFloor: countFindablePairs(board.tiles)
+        findablesTotalThisFloor: countFindablePairs(board.tiles),
+        /*
+         * A bank that cannot run dry. This measures what a mutator changes, not whether the player
+         * survives: on the opening three misses a quarter miss rate ends the floor early, more so
+         * since a Heavy card's miss costs two, and a floor that ends before a mutator acts reads as
+         * a mutator that does nothing.
+         */
+        missBank: [{ floor, misses: 60 }]
     };
     // Primed for every mutator under test, so the two runs of the floor differ by the mutator only.
     for (const id of MUTATOR_IDS) {

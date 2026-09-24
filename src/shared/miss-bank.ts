@@ -175,9 +175,19 @@ export const applyMissBudget = (before: RunState, after: RunState): RunState => 
     if (!missed) {
         return after;
     }
+    /*
+     * A miss costs what the turn charged in tries: one, or two on a Heavy card or a failed Gambit.
+     * Until this read the tries the turn added, every miss cost exactly one, and both of those
+     * penalties - printed on the card and in the Gambit's own line - had cost nothing since the
+     * bank replaced the try counter. An extra the bank cannot cover is waived: only a miss made
+     * with the bank already empty ends the run.
+     */
     const left = missesLeft(after) ?? 0;
     if (left > 0) {
-        return { ...after, missBank: spendMiss(after.missBank) };
+        const cost = Math.max(1, runNonNegativeInteger(after.stats.tries) - runNonNegativeInteger(before.stats.tries));
+        let missBank = after.missBank;
+        for (let spent = 0; spent < Math.min(cost, left); spent += 1) missBank = spendMiss(missBank);
+        return { ...after, missBank };
     }
     if (after.status !== 'playing') {
         return after;
