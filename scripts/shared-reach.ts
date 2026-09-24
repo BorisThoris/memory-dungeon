@@ -40,6 +40,8 @@ export const SHARED_REACH_EXEMPTIONS: Record<string, string> = {
     'system-occupancy-simulation.ts':
         'The occupancy census, run by `yarn sim:occupancy` and `gate:occupancy`; it counts how many floors each system actually fires on, which is the measurement reachability alone cannot make.',
     'softlock-generator-contract.ts': 'Softlock seed contract the softlock gate enforces.',
+    'run-soak.ts':
+        'The whole-run invariant soak, run by `yarn soak` and its unit test; it plays runs through the game\'s own functions and checks every action, so no run ever imports it.',
 
     // Build and script inputs.
     'blueprintAstPoc.ts': 'The dev-only AST round-trip target named in scripts/ast-allowlist.json and read by the Vite dev endpoint; referenced from JSON, so no import edge reaches it.',

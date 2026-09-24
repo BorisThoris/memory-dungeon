@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2698,
-    "codeFileCount": 937,
-    "exportedSymbolCount": 2864,
+    "trackedFileCount": 2701,
+    "codeFileCount": 939,
+    "exportedSymbolCount": 2870,
     "contentItemCount": 10,
     "mechanicCount": 43,
     "stateFieldCount": 82,
-    "relationshipCount": 7247
+    "relationshipCount": 7264
   },
   "inventory": [
     {
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "c38ce368a5c9f29088cc02927a1ab475ce5ccdeb4c35be2189b6dec906d28bce"
+      "sha256": "38f10ccfc9905d736d20917b6d03064ab62d6020d0bb4ed26ca4519f9d627698"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4197,8 +4197,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 32452,
-      "sha256": "b05311c20d8f5ca041b9d2acdf324bce38a2d69fff24809de2826199f07317c1"
+      "bytes": 32492,
+      "sha256": "acfd1eeda3ed45c008ae449cfb9927376d66b2d7b9744c1481679d7cb1c17600"
     },
     {
       "path": "packages/notifications/package.json",
@@ -5385,8 +5385,8 @@
     {
       "path": "scripts/shared-reach.ts",
       "category": "script",
-      "bytes": 9925,
-      "sha256": "3eeefc5cead359d59cf927a1f36ef05870c4472608f4d444633614ae420af4a9"
+      "bytes": 10123,
+      "sha256": "d10b2822d59c5c42479daf64c1d289db2549cb0d0ce1a4916aee6553e0c6279b"
     },
     {
       "path": "scripts/sim-archetype-pressure.ts",
@@ -5441,6 +5441,12 @@
       "category": "script",
       "bytes": 7600,
       "sha256": "1bc9294c5cf7e2f13c5e09a546855645ad7b950b0cc353223087d35a79421ba6"
+    },
+    {
+      "path": "scripts/soak-runs.ts",
+      "category": "script",
+      "bytes": 2261,
+      "sha256": "6083b98d0673254da38b3d4a56387b4729a334b7f0b7a5bcd7c2812a5c74bda7"
     },
     {
       "path": "scripts/steam-cloud-config.ts",
@@ -13481,6 +13487,18 @@
       "category": "source",
       "bytes": 2767,
       "sha256": "8e8970e66dddf36225f9321a35b1f6bcaa8ecf887b6b371d879d7755e337e7d2"
+    },
+    {
+      "path": "src/shared/run-soak.test.ts",
+      "category": "test",
+      "bytes": 2443,
+      "sha256": "e5a0dbcef7d8ad7ff6d8d3c2bbb5cf78719dea88606fe624d1cbb4ca2245dfbb"
+    },
+    {
+      "path": "src/shared/run-soak.ts",
+      "category": "source",
+      "bytes": 12995,
+      "sha256": "d213ff20df9d68893c01905db2a920444a2597deb7f6f03aaf190aa787b0b2b6"
     },
     {
       "path": "src/shared/run-store-rules.test.ts",
@@ -28777,6 +28795,7 @@
         "file:src/shared/release-checklist.test.ts",
         "file:src/shared/restless-floor-rules.test.ts",
         "file:src/shared/run-relic-rules.test.ts",
+        "file:src/shared/run-soak.test.ts",
         "file:src/shared/run-store-rules.test.ts",
         "file:src/shared/tile-floater-anchor-rules.test.ts"
       ]
@@ -31940,6 +31959,46 @@
       "testedBy": [
         "file:src/shared/release-checklist.test.ts",
         "file:src/shared/run-share-text.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/shared/run-soak.test.ts",
+      "path": "src/shared/run-soak.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 45,
+      "imports": [
+        "file:src/shared/game.ts",
+        "file:src/shared/run-soak.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/run-soak.ts",
+      "path": "src/shared/run-soak.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 265,
+      "imports": [
+        "file:src/shared/board-power-actions.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/game.ts",
+        "file:src/shared/miss-bank.ts",
+        "file:src/shared/rng.ts",
+        "file:src/shared/run-store-rules.ts",
+        "file:src/shared/tile-identity.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/run-soak.ts#SOAK_INVARIANTS",
+        "symbol:src/shared/run-soak.ts#SOAK_PLAYERS",
+        "symbol:src/shared/run-soak.ts#SoakPlayer",
+        "symbol:src/shared/run-soak.ts#soakRun",
+        "symbol:src/shared/run-soak.ts#SoakRunReport",
+        "symbol:src/shared/run-soak.ts#SoakViolation"
+      ],
+      "testedBy": [
+        "file:src/shared/run-soak.test.ts"
       ]
     },
     {
@@ -53862,6 +53921,54 @@
       "endLine": 23
     },
     {
+      "id": "symbol:src/shared/run-soak.ts#SOAK_INVARIANTS",
+      "name": "SOAK_INVARIANTS",
+      "kind": "value",
+      "file": "src/shared/run-soak.ts",
+      "line": 75,
+      "endLine": 158
+    },
+    {
+      "id": "symbol:src/shared/run-soak.ts#SOAK_PLAYERS",
+      "name": "SOAK_PLAYERS",
+      "kind": "value",
+      "file": "src/shared/run-soak.ts",
+      "line": 34,
+      "endLine": 38
+    },
+    {
+      "id": "symbol:src/shared/run-soak.ts#SoakPlayer",
+      "name": "SoakPlayer",
+      "kind": "interface",
+      "file": "src/shared/run-soak.ts",
+      "line": 23,
+      "endLine": 32
+    },
+    {
+      "id": "symbol:src/shared/run-soak.ts#soakRun",
+      "name": "soakRun",
+      "kind": "value",
+      "file": "src/shared/run-soak.ts",
+      "line": 169,
+      "endLine": 264
+    },
+    {
+      "id": "symbol:src/shared/run-soak.ts#SoakRunReport",
+      "name": "SoakRunReport",
+      "kind": "interface",
+      "file": "src/shared/run-soak.ts",
+      "line": 49,
+      "endLine": 58
+    },
+    {
+      "id": "symbol:src/shared/run-soak.ts#SoakViolation",
+      "name": "SoakViolation",
+      "kind": "interface",
+      "file": "src/shared/run-soak.ts",
+      "line": 40,
+      "endLine": 47
+    },
+    {
       "id": "symbol:src/shared/run-store-rules.ts#buyStoreItem",
       "name": "buyStoreItem",
       "kind": "value",
@@ -75369,6 +75476,42 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/run-soak.ts->symbol:src/shared/run-soak.ts#SOAK_INVARIANTS",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "symbol:src/shared/run-soak.ts#SOAK_INVARIANTS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-soak.ts->symbol:src/shared/run-soak.ts#SOAK_PLAYERS",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "symbol:src/shared/run-soak.ts#SOAK_PLAYERS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-soak.ts->symbol:src/shared/run-soak.ts#SoakPlayer",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "symbol:src/shared/run-soak.ts#SoakPlayer",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-soak.ts->symbol:src/shared/run-soak.ts#soakRun",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "symbol:src/shared/run-soak.ts#soakRun",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-soak.ts->symbol:src/shared/run-soak.ts#SoakRunReport",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "symbol:src/shared/run-soak.ts#SoakRunReport",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-soak.ts->symbol:src/shared/run-soak.ts#SoakViolation",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "symbol:src/shared/run-soak.ts#SoakViolation",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/run-store-rules.ts->symbol:src/shared/run-store-rules.ts#buyStoreItem",
       "source": "file:src/shared/run-store-rules.ts",
       "target": "symbol:src/shared/run-store-rules.ts#buyStoreItem",
@@ -92748,6 +92891,60 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/run-soak.test.ts->src/shared/game.ts",
+      "source": "file:src/shared/run-soak.test.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-soak.test.ts->src/shared/run-soak.ts",
+      "source": "file:src/shared/run-soak.test.ts",
+      "target": "file:src/shared/run-soak.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-soak.ts->src/shared/board-power-actions.ts",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "file:src/shared/board-power-actions.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-soak.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-soak.ts->src/shared/game.ts",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-soak.ts->src/shared/miss-bank.ts",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "file:src/shared/miss-bank.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-soak.ts->src/shared/rng.ts",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-soak.ts->src/shared/run-store-rules.ts",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "file:src/shared/run-store-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-soak.ts->src/shared/tile-identity.ts",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "file:src/shared/tile-identity.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/run-store-rules.test.ts->src/shared/contracts.ts",
       "source": "file:src/shared/run-store-rules.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -100397,6 +100594,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/game.ts->file:src/shared/run-soak.test.ts",
+      "source": "file:src/shared/game.ts",
+      "target": "file:src/shared/run-soak.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/game.ts->file:src/shared/run-store-rules.test.ts",
       "source": "file:src/shared/game.ts",
       "target": "file:src/shared/run-store-rules.test.ts",
@@ -101444,6 +101647,12 @@
       "id": "tested_by:src/shared/run-share-text.ts->file:src/shared/run-share-text.test.ts",
       "source": "file:src/shared/run-share-text.ts",
       "target": "file:src/shared/run-share-text.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/run-soak.ts->file:src/shared/run-soak.test.ts",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "file:src/shared/run-soak.test.ts",
       "kind": "tested_by"
     },
     {

@@ -105,6 +105,7 @@
     "audit:generations": "tsx scripts/audit-generation-claims.ts",
     "audit:mutator-effects": "tsx scripts/mutator-effect-audit.ts",
     "sim:run": "tsx scripts/sim-run-occupancy.ts",
+    "soak": "tsx scripts/soak-runs.ts",
     "sim:curve": "tsx scripts/sim-difficulty-curve.ts",
     "sim:survival": "tsx scripts/sim-survival.ts",
     "sim:archetype-pressure": "tsx scripts/sim-archetype-pressure.ts",
