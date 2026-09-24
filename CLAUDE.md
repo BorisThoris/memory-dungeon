@@ -23,7 +23,7 @@ Rules here are the owner's decisions and the lessons that cost real time. They o
    `yarn vitest run src/shared/mechanics-catalog-appendix-builder.test.ts -u`.
 3. `yarn gate:systems` must exit 0. It does not run the whole unit suite, so also run
    `yarn vitest run` (or `yarn verify`). `ai-repo-model.test.ts`, `release-checklist.test.ts` and
-   `gate-changed.test.ts` time out when the machine is loaded: re-run them alone before believing it.
+   `gate-changed.test.ts` time out, and `gameplay-journal-cost.test.ts` misjudges its timing, when the machine is loaded: re-run them alone before believing it.
 4. Player-facing Codex text changed: bump `ENCYCLOPEDIA_VERSION` in `mechanics-encyclopedia.ts`.
    A new `docs/**/*.md` file needs a row in `docs/internal-wiki/DOCS_CATALOG.md`.
 5. Do not bump `GAME_RULES_VERSION` for a schedule-only change: it reseeds every baseline.
@@ -42,6 +42,11 @@ Rules here are the owner's decisions and the lessons that cost real time. They o
   against named invariants, including the board inspector's "a way left to finish" (it caught the
   wild softlock). A new rule about run state gets an invariant there, and a new economy item or
   power gets counted in the report and required by `run-soak.test.ts`.
+- **Playtest** (`yarn test:e2e:playtest`, `e2e/playtest.spec.ts`): whole runs from the main menu,
+  a careful player through the store stop and a sloppy one to the results screen, no console
+  errors allowed, screenshots of every transition in `test-results/playtest/`. Run it and **look at
+  the screenshots** after any change a player sees; its first run found three results-screen bugs
+  and the store sheet clipping its own descriptions.
 - **Every mechanic in the graph** must also have: a `system-refinement-ledger.ts` entry with
   `present` tokens that exist in source; a census counter or an argued exemption (over 40
   characters, ending with a full stop) in `scripts/mechanic-accountability.ts`; the mechanic count

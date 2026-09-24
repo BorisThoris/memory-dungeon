@@ -27,6 +27,8 @@ interface OverlayModalProps {
     actions: ModalAction[];
     /** Optional stable hook for e2e (applied to the dialog surface). */
     testId?: string;
+    /** The body has its own controls (a store's buy buttons), but the dialog should still open on its primary action. */
+    focusPrimaryActionFirst?: boolean;
     /**
      * OVR-002: forged-gold header band using {@link MetaFrame} (META-003). Static only — pairs with global
      * `data-reduce-motion` (drops cornice glow, no motion hooks here). OVR-003: dialog surface enter animation is
@@ -139,7 +141,8 @@ const OverlayModal = ({
     actionPlacement = 'auto',
     onEscape,
     surface = 'margin',
-    wide = false
+    wide = false,
+    focusPrimaryActionFirst = false
 }: OverlayModalProps) => {
     const modalRef = useRef<HTMLElement | null>(null);
     const titleId = useId();
@@ -263,6 +266,7 @@ const OverlayModal = ({
                         actions={actions}
                         className={styles.actions}
                         placement={resolvedActionPlacement}
+                        focusPrimaryFirst={focusPrimaryActionFirst}
                         testId="overlay-modal-actions"
                     />
                 ) : null}

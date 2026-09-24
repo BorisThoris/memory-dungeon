@@ -21,6 +21,8 @@ interface OverlayActionDockProps {
     actionClassName?: string;
     testId?: string;
     leading?: ReactNode;
+    /** Open the dialog on the first primary action even when the body has controls before it. */
+    focusPrimaryFirst?: boolean;
 }
 
 const isPrimaryAction = (action: OverlayAction): boolean => (action.variant ?? 'primary') === 'primary';
@@ -32,7 +34,8 @@ const OverlayActionDock = ({
     className = '',
     actionClassName = '',
     testId = 'overlay-action-dock',
-    leading
+    leading,
+    focusPrimaryFirst = false
 }: OverlayActionDockProps) => {
     const secondaryActions = actions.filter((action) => !isPrimaryAction(action));
     const primaryActions = actions.filter(isPrimaryAction);
@@ -41,6 +44,7 @@ const OverlayActionDock = ({
         <UiButton
             aria-label={action.ariaLabel}
             className={`${styles.actionButton} ${actionClassName}`.trim()}
+            data-modal-initial-focus={focusPrimaryFirst && isPrimaryAction(action) && index === 0 ? '' : undefined}
             data-variant={action.variant ?? 'primary'}
             disabled={action.disabled}
             key={`${action.label}:${index}`}

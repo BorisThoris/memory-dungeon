@@ -1439,3 +1439,62 @@ where that rule
         transparent var(--margin-stage-inline-start)
     );
 }
+
+/* The store stop: title, what it does, and its own price, one row per thing on sale. */
+.storeRows {
+    display: grid;
+    margin: 0.3rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-family: var(--margin-body-font);
+}
+
+.storeRow {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr) auto;
+    column-gap: 0.9rem;
+    align-items: center;
+    padding: 0.4rem 0;
+    border-top: 1px solid var(--margin-hairline);
+}
+
+.storeRow:last-child {
+    border-bottom: 1px solid var(--margin-hairline);
+}
+
+.storeRowTitle {
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--margin-paper-2);
+}
+
+.storeRowBody {
+    font-size: 0.8125rem;
+    line-height: 1.35;
+    color: var(--margin-paper);
+}
+
+.storeBuy {
+    min-width: 5.5rem;
+    min-height: 2.25rem;
+    padding: 0.3rem 0.7rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 55%, transparent);
+    border-radius: 3px;
+    background: transparent;
+    color: var(--theme-gold-bright);
+    font: inherit;
+    font-size: 0.8125rem;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+}
+
+.storeBuy:hover:not(:disabled),
+.storeBuy:focus-visible {
+    background: color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+}
+
+.storeBuy:disabled {
+    cursor: default;
+    opacity: 0.45;
+}

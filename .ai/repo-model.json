@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2720,
+    "trackedFileCount": 2721,
     "codeFileCount": 954,
     "exportedSymbolCount": 2899,
     "contentItemCount": 10,
@@ -201,8 +201,8 @@
     {
       "path": "CLAUDE.md",
       "category": "other",
-      "bytes": 7476,
-      "sha256": "56bc886e30cacf2813bd80872c64257fe8e9fec5aff56fc76b9d5061c3e1ff0f"
+      "bytes": 7977,
+      "sha256": "17f0c3dd3173ae0a41618168469560144af33d11f651ec2cbb8f72818c0ea729"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -3919,6 +3919,12 @@
       "sha256": "97f047064b4a2927e3cdf413220e52136750efecef51926f312e8d78d1a83f0a"
     },
     {
+      "path": "e2e/playtest.spec.ts",
+      "category": "test",
+      "bytes": 5630,
+      "sha256": "db81d7946a050db66eefef28f4cfa4f084ae1fdd968295bd0ec6ae8307d51560"
+    },
+    {
       "path": "e2e/pngDiff.ts",
       "category": "test",
       "bytes": 707,
@@ -3981,8 +3987,8 @@
     {
       "path": "e2e/test-hall.spec.ts",
       "category": "test",
-      "bytes": 3745,
-      "sha256": "a4b8af3dd010ada3f9fb9aeff2f4579ddd762dcd24f2ddd75aee426d811ba1cf"
+      "bytes": 5551,
+      "sha256": "e1f7465a6e71d91c2fcb0d412e26823492d82d8256f3220dd50689dc23153057"
     },
     {
       "path": "e2e/tile-board-raycast.spec.ts",
@@ -4209,8 +4215,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 32698,
-      "sha256": "dd3cd7a7eec43b00e882f6eef396123114da71e4927e8fa19ca7e6e55d00d41e"
+      "bytes": 32775,
+      "sha256": "2515c6e33bdbd21ed62180e8031859b16954287fdbf40d15a35a3b44a429cc58"
     },
     {
       "path": "packages/notifications/package.json",
@@ -5739,8 +5745,8 @@
     {
       "path": "src/renderer/a11y/focusables.ts",
       "category": "source",
-      "bytes": 4998,
-      "sha256": "ed74cac2a02123305e5f625186c9ccfafb101c9672b3f09d70ea40316fc1b1fd"
+      "bytes": 5183,
+      "sha256": "9c0dcf8b746437b8105c186d90d83cdd61f90304e2cb1ce14901ec09411071c0"
     },
     {
       "path": "src/renderer/a11y/modalFocusReturnStack.test.ts",
@@ -9189,8 +9195,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 48823,
-      "sha256": "e908366544a83ab48ba559ee217fa3fff421e3ed072914b7895034ceb559429c"
+      "bytes": 50154,
+      "sha256": "6e0e5ee8011b323780ce797d9781dbb56dc61db208ef7875d8f72399adc5bf7d"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -9201,8 +9207,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 93949,
-      "sha256": "224be9306bb6970497877828decc5dabbebab94a5132c69c83c6714ae3578463"
+      "bytes": 94956,
+      "sha256": "ba0fe1e630d6d8e61f6a0799a6180209f28a5eb3116360368e39357eec8cf170"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9387,8 +9393,8 @@
     {
       "path": "src/renderer/components/OverlayModal.tsx",
       "category": "source",
-      "bytes": 10486,
-      "sha256": "719777c19c63f62f4c6066808cffa78d226992e1eea0836a8116045cfdd0ed03"
+      "bytes": 10752,
+      "sha256": "ab5c8b2f0c6449df76b34a86efd2781bafa644f3faf1f95ae152b2d2c62e75ca"
     },
     {
       "path": "src/renderer/components/PairProximityHintPlane.tsx",
@@ -10725,8 +10731,8 @@
     {
       "path": "src/renderer/copy/storeSheet.ts",
       "category": "source",
-      "bytes": 1310,
-      "sha256": "faab28408dad594001c9025979536cb034a61be7fac103f9c4ab5c9d43f8994f"
+      "bytes": 1620,
+      "sha256": "2872b6eb37658f8b5c6e8303f340b311ba5d0f092d9a4e50519b932c9ee4dc91"
     },
     {
       "path": "src/renderer/copy/traitInteractionLaneMap.test.ts",
@@ -11757,8 +11763,8 @@
     {
       "path": "src/renderer/ui/OverlayActionDock.tsx",
       "category": "source",
-      "bytes": 3171,
-      "sha256": "889db780d492ad61b444ef7458bb88dfb1e06fb2757154ab765167f558ea3cd5"
+      "bytes": 3449,
+      "sha256": "c548d2fa6e0632108215b31df4fc26c2ba31bde349706ebaa1e809a69c97eb9a"
     },
     {
       "path": "src/renderer/ui/Panel.module.css",
@@ -16881,7 +16887,7 @@
       "path": "src/renderer/a11y/focusables.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 141,
+      "lineCount": 142,
       "imports": [],
       "exports": [
         "symbol:src/renderer/a11y/focusables.ts#FOCUSABLE_SELECTOR",
@@ -19214,7 +19220,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1978,
+      "lineCount": 1990,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -19696,7 +19702,7 @@
       "path": "src/renderer/components/OverlayModal.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 275,
+      "lineCount": 279,
       "imports": [
         "file:src/renderer/a11y/overlayModalBodyState.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -23505,7 +23511,7 @@
       "path": "src/renderer/copy/storeSheet.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 28,
+      "lineCount": 31,
       "imports": [
         "file:src/shared/run-store-rules.ts"
       ],
@@ -26200,7 +26206,7 @@
       "path": "src/renderer/ui/OverlayActionDock.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 92,
+      "lineCount": 96,
       "imports": [
         "file:src/renderer/ui/UiButton.tsx"
       ],
@@ -34710,7 +34716,7 @@
       "kind": "value",
       "file": "src/renderer/a11y/focusables.ts",
       "line": 83,
-      "endLine": 90
+      "endLine": 91
     },
     {
       "id": "symbol:src/renderer/a11y/focusables.ts#getFocusableElements",
@@ -34725,8 +34731,8 @@
       "name": "handleTabFocusTrapEvent",
       "kind": "value",
       "file": "src/renderer/a11y/focusables.ts",
-      "line": 96,
-      "endLine": 140
+      "line": 97,
+      "endLine": 141
     },
     {
       "id": "symbol:src/renderer/a11y/focusables.ts#MODAL_PROGRAMMATIC_FOCUS_OPTIONS",
@@ -37389,8 +37395,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 1977,
-      "endLine": 1977
+      "line": 1989,
+      "endLine": 1989
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -37685,8 +37691,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/OverlayModal.tsx",
-      "line": 274,
-      "endLine": 274
+      "line": 278,
+      "endLine": 278
     },
     {
       "id": "symbol:src/renderer/components/OverlayModal.tsx#ModalAction",
@@ -42085,8 +42091,8 @@
       "name": "BOMB_TOOL_COPY",
       "kind": "value",
       "file": "src/renderer/copy/storeSheet.ts",
-      "line": 24,
-      "endLine": 27
+      "line": 27,
+      "endLine": 30
     },
     {
       "id": "symbol:src/renderer/copy/storeSheet.ts#STORE_SHEET_COPY",
@@ -42094,7 +42100,7 @@
       "kind": "value",
       "file": "src/renderer/copy/storeSheet.ts",
       "line": 4,
-      "endLine": 21
+      "endLine": 24
     },
     {
       "id": "symbol:src/renderer/copy/traitInteractionLaneMap.ts#buildTraitInteractionLaneMap",
@@ -44877,8 +44883,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/ui/OverlayActionDock.tsx",
-      "line": 91,
-      "endLine": 91
+      "line": 95,
+      "endLine": 95
     },
     {
       "id": "symbol:src/renderer/ui/OverlayActionDock.tsx#OverlayAction",

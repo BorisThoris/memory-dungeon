@@ -85,7 +85,8 @@ export const focusFirstTabbableOrContainer = (
     focusOptions: FocusOptions = MODAL_PROGRAMMATIC_FOCUS_OPTIONS
 ): void => {
     const list = getFocusableElements(container);
-    const target = list[0] ?? container;
+    // A dialog whose body carries its own controls can name the one it should open on; otherwise the first.
+    const target = list.find((element) => element.hasAttribute('data-modal-initial-focus')) ?? list[0] ?? container;
     target?.focus(focusOptions);
 };
 

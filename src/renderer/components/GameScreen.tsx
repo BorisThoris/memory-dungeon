@@ -1870,32 +1870,44 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 )}
                 {!suppressStatusOverlays && run.status === 'levelComplete' && storeStopKey === floorClearKey && (
                     <OverlayModal
-                        actions={[
-                            ...storeOffer(run).map((row) => ({
-                                label: STORE_SHEET_COPY.buyAction(row),
-                                onClick: () => {
-                                    playMenuOpen();
-                                    buyStoreItem(row.id);
-                                },
-                                variant: 'secondary' as const,
-                                disabled: row.blocked !== null
-                            })),
-                            { label: STORE_SHEET_COPY.descend, onClick: continueToNextLevel, variant: 'primary' }
-                        ]}
+                        actions={[{ label: STORE_SHEET_COPY.descend, onClick: continueToNextLevel, variant: 'primary' }]}
+                        focusPrimaryActionFirst
                         headerPlateTone="pause"
                         onEscape={continueToNextLevel}
                         subtitle={STORE_SHEET_COPY.subtitle(run.lastLevelResult?.level ?? 0, runGold(run))}
                         testId="store-sheet"
                         title={STORE_SHEET_COPY.title}
                     >
-                        <dl className={styles.pauseStats} data-testid="store-rows">
+                        {/*
+                         * Each thing on sale says what it is and carries its own price. The sheet used
+                         * to describe the items in one list and sell them from a second, and the two
+                         * together outgrew the dialog: at 720px the last three descriptions were cut
+                         * off while their buttons stayed, so two relics were sold without saying what
+                         * they did (Gen 263, found by the playtest).
+                         */}
+                        <ul className={styles.storeRows} data-testid="store-rows">
                             {storeOffer(run).map((row) => (
-                                <div key={row.id}>
-                                    <dt>{row.title}</dt>
-                                    <dd data-testid={'store-row-' + row.id}>{STORE_SHEET_COPY.rowBody(row)}</dd>
-                                </div>
+                                <li className={styles.storeRow} key={row.id}>
+                                    <span className={styles.storeRowTitle}>{row.title}</span>
+                                    <span className={styles.storeRowBody} data-testid={'store-row-' + row.id}>
+                                        {STORE_SHEET_COPY.rowBody(row)}
+                                    </span>
+                                    <button
+                                        aria-label={STORE_SHEET_COPY.buyAriaLabel(row)}
+                                        className={styles.storeBuy}
+                                        data-testid={'store-buy-' + row.id}
+                                        disabled={row.blocked !== null}
+                                        onClick={() => {
+                                            playMenuOpen();
+                                            buyStoreItem(row.id);
+                                        }}
+                                        type="button"
+                                    >
+                                        {STORE_SHEET_COPY.priceLabel(row)}
+                                    </button>
+                                </li>
                             ))}
-                        </dl>
+                        </ul>
                     </OverlayModal>
                 )}
 

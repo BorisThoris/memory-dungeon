@@ -72,3 +72,33 @@ test.describe('Test hall', () => {
         });
     }
 });
+
+test.describe('The store stop, in the store-stop room', () => {
+    test('describes everything it sells, inside the dialog, and opens on Descend', async ({ page }) => {
+        test.setTimeout(240_000);
+        await gotoWithSaveAndQuery(page, buildVisualSaveJson(true), 'hallRoom=store-stop');
+        await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 150_000 });
+        for (const pair of ['a', 'b']) {
+            await page.evaluate(async (key) => {
+                const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+                const store = useAppStore.getState();
+                store.pressTile(`${key}-1`);
+                store.pressTile(`${key}-2`);
+            }, pair);
+            await page.waitForTimeout(1200);
+        }
+        await expect(page.getByTestId('store-sheet')).toBeVisible({ timeout: 30_000 });
+        // The modal body clips (it never scrolls), so a row has to sit inside the body, not merely the dialog.
+        const box = await page.getByTestId('store-rows').locator('..').boundingBox();
+        const ids = ['miss', 'peek', 'shuffle', 'bomb', 'deep_pockets', 'gilded_chain', 'long_look'];
+        for (const id of ids) {
+            // Gen 263: the last three descriptions were clipped while their buy buttons stayed.
+            const row = page.getByTestId(`store-row-${id}`);
+            await expect(row).toBeVisible();
+            const rowBox = await row.boundingBox();
+            expect(rowBox && box && rowBox.y + rowBox.height <= box.y + box.height, `${id} row inside the dialog body`).toBe(true);
+            await expect(page.getByTestId(`store-buy-${id}`)).toBeVisible();
+        }
+        await expect.poll(() => page.evaluate(() => document.activeElement?.textContent?.trim())).toBe('Descend');
+    });
+});

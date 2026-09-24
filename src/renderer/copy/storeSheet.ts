@@ -5,8 +5,11 @@ export const STORE_SHEET_COPY = {
     title: 'Store',
     subtitle: (floor: number, gold: number): string =>
         `Floor ${floor} cleared. You have ${gold} gold to spend before you descend; prices climb with each thing you buy.`,
-    buyAction: (row: StoreOfferRow): string =>
-        row.blocked === 'owned' ? `${row.title} · owned` : `${row.title} · ${row.price} gold`,
+    /** The price on a row's own button; the row beside it already says what it is. */
+    priceLabel: (row: StoreOfferRow): string => (row.blocked === 'owned' ? 'Owned' : `${row.price} gold`),
+    /** What a screen reader hears for that button, which cannot lean on the row it sits in. */
+    buyAriaLabel: (row: StoreOfferRow): string =>
+        row.blocked === 'owned' ? `${row.title}: owned` : `Buy ${row.title.toLowerCase()} for ${row.price} gold`,
     rowBody: (row: StoreOfferRow): string =>
         row.blocked === 'owned'
             ? `${row.body} Yours for the rest of the run.`
