@@ -4359,8 +4359,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 123087,
-      "sha256": "65f14a04fd5ab25095727cfd587f83d400d1bebe5f97c6dbe7b5dc95b0b30117"
+      "bytes": 122673,
+      "sha256": "fce9113de5037d46ba5ff104447f90f25af0ea7a06d919887a29b576c44d0df5"
     },
     {
       "path": "public/site.webmanifest",
