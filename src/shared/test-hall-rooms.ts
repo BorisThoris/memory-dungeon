@@ -181,7 +181,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         id: 'miss-bank-edge',
         title: 'The last miss',
         mechanic: 'A miss with misses left spends one; a miss with none ends the run.',
-        graphMechanicIds: ['core.board_turn_resolution'],
+        graphMechanicIds: ['core.board_turn_resolution', 'economy.miss_bank'],
         tryThis: 'Miss twice. The first is your last; the second ends the run.',
         build: () => room(['a:e b:t', 'c:m a:e', 'b:t c:m'], { misses: 1 }),
         script: [
@@ -193,7 +193,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         id: 'chain-earns-miss',
         title: 'Five in a row',
         mechanic: 'Every fifth match in a row earns a miss.',
-        graphMechanicIds: ['core.board_turn_resolution', 'feedback.gameplay_hud'],
+        graphMechanicIds: ['economy.miss_bank', 'board.chain_chunk_fever', 'feedback.gameplay_hud'],
         tryThis: 'Your chain stands at four. Match any pair: the fifth in a row earns a miss.',
         /*
          * The chain starts at four rather than being played up from nothing. Played up on a small
@@ -253,7 +253,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         id: 'bomb',
         title: 'The bomb',
         mechanic: 'Flip a card, bomb it: its pair leaves the board with no miss, no turn, no score.',
-        graphMechanicIds: [],
+        graphMechanicIds: ['power.bomb'],
         tryThis: 'Flip any card, then press Bomb on the dock.',
         build: () => room(['a:e b:t', 'c:m a:e', 'b:t c:m'], { run: { bombCharges: 1 } }),
         script: [
@@ -265,7 +265,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         id: 'bomb-last-pair',
         title: 'The bomb and the last pair',
         mechanic: 'A bomb never takes the floor\'s last pair: that pair is the clear.',
-        graphMechanicIds: ['objective.floor_clear'],
+        graphMechanicIds: ['power.bomb', 'objective.floor_clear'],
         tryThis: 'One pair left. Flip a card: the Bomb stays dark. Match it instead.',
         build: () =>
             room(['a:e b:t', 'a:e b:t'], {
@@ -280,7 +280,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         id: 'store-stop',
         title: 'The store stop',
         mechanic: 'Every third floor, the store opens before the next floor; purchases cost their price.',
-        graphMechanicIds: [],
+        graphMechanicIds: ['progression.store_stop', 'economy.gold'],
         tryThis: 'Clear the floor: the store opens because this is floor 3. Buy a bomb and Descend.',
         build: () => room(['a:e b:t', 'b:t a:e'], { level: 3, run: { gold: 12 } }),
         script: [
@@ -292,7 +292,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         id: 'deep-pockets',
         title: 'Deep Pockets',
         mechanic: 'The relic lifts the miss bank to five.',
-        graphMechanicIds: [],
+        graphMechanicIds: ['inventory.relics', 'economy.miss_bank'],
         tryThis: 'You hold Deep Pockets and four misses. Clear the floor, then buy another miss at the stop.',
         build: () => room(['a:e b:t', 'b:t a:e'], { level: 3, misses: 4, run: { gold: 20, relics: ['deep_pockets'] } }),
         script: [
@@ -304,7 +304,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         id: 'long-look',
         title: 'Long Look',
         mechanic: 'The relic adds a second to every study window.',
-        graphMechanicIds: ['phase.memorize'],
+        graphMechanicIds: ['inventory.relics', 'phase.memorize'],
         tryThis: 'Compare the study window with and without Long Look.',
         build: () => room(['a:e b:t', 'b:t a:e'], { run: { relics: ['long_look'] } }),
         script: [

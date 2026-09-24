@@ -66,7 +66,7 @@ const TestHall = (): ReactElement => {
                                 ))}
                             </ol>
                             <p className={styles.graph}>
-                                Graph: {hallRoom.graphMechanicIds.length > 0 ? hallRoom.graphMechanicIds.join(', ') : 'not in the interaction graph'}
+                                Graph: {hallRoom.graphMechanicIds.join(', ')}
                             </p>
                             {report && report.failures.length > 0 ? (
                                 <ul className={styles.failures}>

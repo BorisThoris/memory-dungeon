@@ -1,6 +1,6 @@
 # Gameplay mechanics — machine snapshot
 
-**Generated:** 2026-09-24T11:47:51.878Z
+**Generated:** 2026-09-24T13:50:07.282Z
 
 > Regenerate with `yarn docs:mechanics-appendix`. Do not edit by hand.
 
@@ -14,7 +14,7 @@
 
 ## System refinement ledger
 
-Every system in the game, with the last generation that passed over it. 26 changed, 22 confirmed already in their refined state, 1 removed outright.
+Every system in the game, with the last generation that passed over it. 31 changed, 22 confirmed already in their refined state, 1 removed outright.
 
 | System | Verdict | Gen | What was found |
 | --- | --- | --- | --- |
@@ -64,6 +64,11 @@ Every system in the game, with the last generation that passed over it. 26 chang
 | `surface.floor_identity_coaching` | changed | 261 | The four sentences a player reads on the floor they are standing on taught traps, disarms, keys, locks, guard, the parasite clock and finding the exit. Rewritten around what an archetype now decides: whether the suits are clumped, scattered or two-suit. The contract that supplies them is still the one the game screen reads. Gen 261 found the tag and the archetype confused in it: the cycle tags floors 3 and 10 `breather` while giving both `treasure_gallery`, so Gen 260’s rewrite for the breather archetype’s new two-suit deal told those two four-suit floors they dealt two - and left the clear line beside it still saying four, contradicting the two sentences above. Read off the deal now, and gated. |
 | `surface.boss_identity` | changed | 261 | It promised +2 Favor, a currency removed in Gen 175, and a Keystone Pair board anchor that exists nowhere in the game - in a string shown in the HUD title. Gen 201 fixed the constant and Gen 213 found the phantom anchor still being injected by the builder a real boss floor goes through, thirty lines below the comment saying it appears nowhere. Gen 261 found what replaced it wrong twice over. It said every boss floor deals its suits scattered - but the position-nine rotation also tags `treasure_gallery` boss, which is clumped and deals four, so one boss floor in three named the wrong palette in three sentences at once (“two suits, long chains” on a four-suit board). And it had the physics backwards: scattered means SCATTERED_SUIT_CEILING, which is two suits, and two suits is the WIDEST reach a pop gets (0.74 of a four-suit board’s turns per pair, Gen 259) - while the line said a scattered deal gives many small pops rather than one big one. Every palette sentence reads `floorPaletteRead` now, and boss-encounters.test.ts walks all eleven archetypes against the board each one actually deals. |
 | `surface.trait_interaction_lanes` | changed | 261 | Seven lanes for four interactions. The shard, guard and risk lanes went with their colours and their beat tiers - except on the board, which Gen 213 found still publishing all seven in its lane contract, cast to the lane id type to make it compile, and defaulting the audio cue to the shard the game lost in Gen 184. The score lane was being announced under a dead currency name. The contract is now the lane order itself and every lane names its own cue. |
+| `economy.miss_bank` | changed | 261 | The miss budget became an earned, expiring bank: three to start, one per floor clear and one per fifth link, each grant kept for three floors, capped at four (five with Deep Pockets). Not in the graph until the test hall asked for it. `yarn soak` checks the cap and the shelf on every action of every run; the run-soak test requires grants to happen. |
+| `economy.gold` | changed | 261 | Gold came back with the store: paid at each floor clear by chain tier and turns under par, never negative, spent only at the stop. The soak holds every purchase to its exact price and requires a run to earn some. |
+| `progression.store_stop` | changed | 261 | The store is a stop every third floor, opened on the floor-clear beat before Descend rather than hidden in the pause menu. The test hall walks floor 3 into the stop and buys a bomb; the soak shops at every stop it reaches. |
+| `power.bomb` | changed | 261 | Destroying a pair came back as a bought bomb: aim it with one face-up card, and its pair goes with no turn, miss or score, never the floor’s last pair. Two test hall rooms walk it; the soak holds every bomb to costing nothing but exactly one charge. |
+| `inventory.relics` | changed | 261 | Relics are run-long passives bought at the stop: Deep Pockets lifts the bank cap, Gilded Chain pays for a Fever clear, Long Look lengthens the study window. Rooms walk Deep Pockets and Long Look; the soak requires a run to buy one. |
 | `surface.codex` | changed | 261 | Eleven entries still taught Destroy and Stray the day after both were removed: findables, powers, dense pickups, shifting spotlight, charges, perfect memory, recall focus, the scholar objective and the scholar contract. Gen 213 re-read the glossary against the powers that exist and found nothing left teaching either. |
 | `surface.audio` | changed | 261 | Two sampled effects and their manifest rows went with the powers that played them, along with the OGG and WAV files. The audio coverage gate confirms every remaining cue has a manifest entry and a file, and Gen 213 re-read the manifest: eleven entries, none of them named for a power that no longer exists. |
 | `surface.removed_powers` | removed | 261 | Destroy could never be pressed - no code path grants a charge - and Stray had only one legal target left, the wild joker, so pressing it deleted the player’s own wild match. Recorded in docs/REMOVED_POWERS.md, and Gen 213 re-greps both charge fields to prove the removal has not quietly come back. |

@@ -23,9 +23,12 @@ describe('the test hall', () => {
         }
     });
 
-    it('names only mechanics the interaction graph has', () => {
+    it('names only mechanics the interaction graph has, and at least one each', () => {
+        /* Bombs, the store stop and relics shipped with no graph node, and their rooms said so with
+           an empty list. A room with nothing to name is a mechanic the graph cannot see. */
         const known = new Set(gameplayInteractionGraph.mechanics.map((mechanic) => mechanic.id));
         for (const hallRoom of TEST_HALL_ROOMS) {
+            expect(hallRoom.graphMechanicIds.length, hallRoom.id).toBeGreaterThan(0);
             for (const id of hallRoom.graphMechanicIds) {
                 expect(known.has(id), `${hallRoom.id} names ${id}`).toBe(true);
             }

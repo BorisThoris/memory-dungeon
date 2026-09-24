@@ -54,6 +54,11 @@ export interface SoakRunReport {
     ended: string;
     purchases: number;
     bombsUsed: number;
+    /** Every rise in the purse, summed: gold paid at floor clears. */
+    goldEarned: number;
+    /** Every rise in misses left, summed: floor grants, chain grants and bought misses. */
+    missesGranted: number;
+    relicsBought: number;
     violations: SoakViolation[];
 }
 
@@ -187,6 +192,9 @@ export const soakRun = ({
     let turns = 0;
     let purchases = 0;
     let bombsUsed = 0;
+    let goldEarned = 0;
+    let missesGranted = 0;
+    let relicsBought = 0;
     let floorsCleared = 0;
 
     const act = (action: string, next: RunState): void => {
@@ -194,6 +202,9 @@ export const soakRun = ({
         for (const invariant of checkAll(run, next, action)) {
             violations.push({ seed, player: playerName, floor: run.board?.level ?? 0, step, action, invariant });
         }
+        goldEarned += Math.max(0, runGold(next) - runGold(run));
+        missesGranted += Math.max(0, (missesLeft(next) ?? 0) - (missesLeft(run) ?? 0));
+        relicsBought += Math.max(0, (next.relics ?? []).length - (run.relics ?? []).length);
         run = next;
     };
 
@@ -259,6 +270,9 @@ export const soakRun = ({
         ended: run.status === 'gameOver' ? String(run.runEndReason) : run.status,
         purchases,
         bombsUsed,
+        goldEarned,
+        missesGranted,
+        relicsBought,
         violations
     };
 };

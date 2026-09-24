@@ -118,7 +118,8 @@ describe('gameplay interaction graph', () => {
             'comboShards',
             'lives',
             'guardTokens',
-            'gold',
+            // `gold` left this list when the store came back as a stop every third floor: it is
+            // earned at floor clears and spent there (`economy.gold`, `progression.store_stop`).
             'relicIds'
         ];
         const declared = new Set(

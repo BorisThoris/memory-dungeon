@@ -441,6 +441,41 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         note: 'Seven lanes for four interactions. The shard, guard and risk lanes went with their colours and their beat tiers - except on the board, which Gen 213 found still publishing all seven in its lane contract, cast to the lane id type to make it compile, and defaulting the audio cue to the shard the game lost in Gen 184. The score lane was being announced under a dead currency name. The contract is now the lane order itself and every lane names its own cue.'
     },
     {
+        id: 'economy.miss_bank',
+        verdict: 'changed',
+        generation: 261,
+        present: ['grantMisses', 'missBankCap', 'missBankGrantLastFloor'],
+        note: 'The miss budget became an earned, expiring bank: three to start, one per floor clear and one per fifth link, each grant kept for three floors, capped at four (five with Deep Pockets). Not in the graph until the test hall asked for it. `yarn soak` checks the cap and the shelf on every action of every run; the run-soak test requires grants to happen.'
+    },
+    {
+        id: 'economy.gold',
+        verdict: 'changed',
+        generation: 261,
+        present: ['floorClearGold', 'GOLD_BY_CLEAR_TIER', 'runGold'],
+        note: 'Gold came back with the store: paid at each floor clear by chain tier and turns under par, never negative, spent only at the stop. The soak holds every purchase to its exact price and requires a run to earn some.'
+    },
+    {
+        id: 'progression.store_stop',
+        verdict: 'changed',
+        generation: 261,
+        present: ['STORE_STOP_EVERY_FLOORS', 'isStoreStopFloor', 'buyStoreItem'],
+        note: 'The store is a stop every third floor, opened on the floor-clear beat before Descend rather than hidden in the pause menu. The test hall walks floor 3 into the stop and buys a bomb; the soak shops at every stop it reaches.'
+    },
+    {
+        id: 'power.bomb',
+        verdict: 'changed',
+        generation: 261,
+        present: ['bombTargetTileId', 'applyBomb', 'bombCharges'],
+        note: 'Destroying a pair came back as a bought bomb: aim it with one face-up card, and its pair goes with no turn, miss or score, never the floor’s last pair. Two test hall rooms walk it; the soak holds every bomb to costing nothing but exactly one charge.'
+    },
+    {
+        id: 'inventory.relics',
+        verdict: 'changed',
+        generation: 261,
+        present: ['RELICS', 'hasRelic', 'DEEP_POCKETS_CAP', 'LONG_LOOK_MS'],
+        note: 'Relics are run-long passives bought at the stop: Deep Pockets lifts the bank cap, Gilded Chain pays for a Fever clear, Long Look lengthens the study window. Rooms walk Deep Pockets and Long Look; the soak requires a run to buy one.'
+    },
+    {
         id: 'surface.codex',
         verdict: 'changed',
         generation: 261,

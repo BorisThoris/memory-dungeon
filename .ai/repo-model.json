@@ -7,9 +7,9 @@
     "codeFileCount": 944,
     "exportedSymbolCount": 2885,
     "contentItemCount": 10,
-    "mechanicCount": 43,
-    "stateFieldCount": 82,
-    "relationshipCount": 7297
+    "mechanicCount": 48,
+    "stateFieldCount": 87,
+    "relationshipCount": 7371
   },
   "inventory": [
     {
@@ -777,8 +777,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 24797,
-      "sha256": "3acc20c88bb5cde82cac50a4f4b877365ad65cea19293d4b066c2741af2fddf7"
+      "bytes": 26270,
+      "sha256": "c6c577e0396f8b260723c01f79a32c30d770873e1db66b3eaf04d9b455acb8fb"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2361,8 +2361,8 @@
     {
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
-      "bytes": 33560,
-      "sha256": "fb40d47bbf857cb63eee7bb31219d2ccfb9dd3e27c4b7a468f26d3816a8fc627"
+      "bytes": 33561,
+      "sha256": "2f006b99cb1bf353cc4a80d3225e29a69821079fe084ba94bfaed3810b7d3969"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -5091,8 +5091,8 @@
     {
       "path": "scripts/mechanic-accountability.ts",
       "category": "script",
-      "bytes": 15451,
-      "sha256": "3676d266b95491be6597dc2a865190b5887ca75c1f7620b39e9ed035ac1f274f"
+      "bytes": 16786,
+      "sha256": "4c1fa4d30e85263e99efc1d463a19145006553cc77224d00fcb33ed02848a055"
     },
     {
       "path": "scripts/min-type-size.ts",
@@ -5457,8 +5457,8 @@
     {
       "path": "scripts/soak-runs.ts",
       "category": "script",
-      "bytes": 2261,
-      "sha256": "6083b98d0673254da38b3d4a56387b4729a334b7f0b7a5bcd7c2812a5c74bda7"
+      "bytes": 2393,
+      "sha256": "eca9ab592a58696e81b397dab4da2c4ae5dc393b64cb786ab4ef85fd4224fe08"
     },
     {
       "path": "scripts/steam-cloud-config.ts",
@@ -10815,8 +10815,8 @@
     {
       "path": "src/renderer/dev/TestHall.tsx",
       "category": "source",
-      "bytes": 5553,
-      "sha256": "f6b53d01e8ff0b97bfb2a86cb229e06b0f69366a402b5c7193da98d3b68975a0"
+      "bytes": 5481,
+      "sha256": "61703b185001e438501a4c5f358fce0d5ca24502098abb034115faf8d7d0c2ea"
     },
     {
       "path": "src/renderer/dev/TestHallBadge.tsx",
@@ -11823,8 +11823,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 25073,
-      "sha256": "f5da41e355ecb74e53f10a0d88aa6be1d7ced90960a21def495091ab22407a20"
+      "bytes": 26558,
+      "sha256": "e6b1bd8fd6431300ea212be83daf1125d658f03e289672dc5ca0a86518c8d210"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -12627,14 +12627,14 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 78797,
-      "sha256": "a3c7e2c8360adadfd652b555f277ebc0436e81d8821087347a293ad459028b07"
+      "bytes": 86517,
+      "sha256": "e49ae293dcdca136fefe4d153238335d23e0a839215aba3ade2d07218641bd3e"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "category": "test",
-      "bytes": 26056,
-      "sha256": "c2080a7d2dc74ee4b5d896dffb29a806333ce204304920382797569ad8e16512"
+      "bytes": 26231,
+      "sha256": "c9b509252f44753832e435ff5e21a4f5d3f8d39f353609a52a50c07de06875e3"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.ts",
@@ -12861,8 +12861,8 @@
     {
       "path": "src/shared/mechanic-accountability.test.ts",
       "category": "test",
-      "bytes": 5338,
-      "sha256": "357d01e1cddbdbaca6e5fe6b166d899b6db4888aab4739c4655106bdf30244a2"
+      "bytes": 5545,
+      "sha256": "0356fad0ebb5f8f901221fa0d032242badb6051682e8070bbb393ba4dbaa1792"
     },
     {
       "path": "src/shared/mechanic-feedback.test.ts",
@@ -13527,14 +13527,14 @@
     {
       "path": "src/shared/run-soak.test.ts",
       "category": "test",
-      "bytes": 2443,
-      "sha256": "e5a0dbcef7d8ad7ff6d8d3c2bbb5cf78719dea88606fe624d1cbb4ca2245dfbb"
+      "bytes": 2975,
+      "sha256": "444c75e836f73f844f96c5f3aeb50df0b90d4cee7cf1a530e37a7728d71124b4"
     },
     {
       "path": "src/shared/run-soak.ts",
       "category": "source",
-      "bytes": 13008,
-      "sha256": "147301b600b6a7800039d9443aab94fe23839346393d8ce41a5af09c487ec904"
+      "bytes": 13636,
+      "sha256": "cbdc39266ae70e7d5665ad8bd69a68e42c2f5fe618c9da133909775d64c7c3ff"
     },
     {
       "path": "src/shared/run-store-rules.test.ts",
@@ -13785,8 +13785,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 38511,
-      "sha256": "971e86274281d237a67db3365432330d330083dbea7ac50af34a5c860c7dd83d"
+      "bytes": 40720,
+      "sha256": "437ef4c2b84cdbfaac7ed340a299aab7acfc4fac87fb6a6fa49605cf4049f5be"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -13803,14 +13803,14 @@
     {
       "path": "src/shared/test-hall-rooms.test.ts",
       "category": "test",
-      "bytes": 1426,
-      "sha256": "f68307640c7fb6509e7e53b80b2502e0df7b94ea8cb0ef0f37c74efd3bf23ec3"
+      "bytes": 1729,
+      "sha256": "e05bb3aa7e54bf7bd585bc874b770116b21609db2978bde67eb536a41c58cdf5"
     },
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 22175,
-      "sha256": "bec750bcfada8f4ffaf5e50bb2f8eac2c4cc8743e75849535d93346e34f010fb"
+      "bytes": 22339,
+      "sha256": "343e028e599b52e93399546bd6cbb91ce3f88db301c60ed9d188963e8e0d8b67"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -29291,7 +29291,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2344,
+      "lineCount": 2594,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -29301,7 +29301,7 @@
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 473,
+      "lineCount": 474,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/findables.ts",
@@ -29945,7 +29945,7 @@
       "path": "src/shared/mechanic-accountability.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 96,
+      "lineCount": 98,
       "imports": [
         "file:src/shared/gameplay-interaction-graph.ts",
         "file:src/shared/system-occupancy-simulation.ts"
@@ -32065,7 +32065,7 @@
       "path": "src/shared/run-soak.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 45,
+      "lineCount": 50,
       "imports": [
         "file:src/shared/game.ts",
         "file:src/shared/run-soak.ts"
@@ -32078,7 +32078,7 @@
       "path": "src/shared/run-soak.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 265,
+      "lineCount": 279,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/contracts.ts",
@@ -32983,7 +32983,7 @@
       "path": "src/shared/system-refinement-ledger.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 502,
+      "lineCount": 537,
       "imports": [
         "file:src/shared/gameplay-interaction-graph.ts"
       ],
@@ -33042,7 +33042,7 @@
       "path": "src/shared/test-hall-rooms.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 35,
+      "lineCount": 38,
       "imports": [
         "file:src/shared/gameplay-interaction-graph.ts",
         "file:src/shared/test-hall-rooms.ts"
@@ -54114,8 +54114,8 @@
       "name": "SOAK_INVARIANTS",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 75,
-      "endLine": 158
+      "line": 80,
+      "endLine": 163
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SOAK_PLAYERS",
@@ -54138,8 +54138,8 @@
       "name": "soakRun",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 169,
-      "endLine": 264
+      "line": 174,
+      "endLine": 278
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakRunReport",
@@ -54147,7 +54147,7 @@
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
       "line": 49,
-      "endLine": 58
+      "endLine": 63
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakViolation",
@@ -55474,16 +55474,16 @@
       "name": "staleLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 498,
-      "endLine": 501
+      "line": 533,
+      "endLine": 536
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#strandedLedgerIds",
       "name": "strandedLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 478,
-      "endLine": 483
+      "line": 513,
+      "endLine": 518
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_LEDGER",
@@ -55491,7 +55491,7 @@
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
       "line": 92,
-      "endLine": 466
+      "endLine": 501
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_SWEEP_GENERATION",
@@ -55514,8 +55514,8 @@
       "name": "systemRefinementLedgerById",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 468,
-      "endLine": 469
+      "line": 503,
+      "endLine": 504
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementVerdict",
@@ -55530,16 +55530,16 @@
       "name": "unevidencedLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 492,
-      "endLine": 495
+      "line": 527,
+      "endLine": 530
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#unexaminedSystemIds",
       "name": "unexaminedSystemIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 472,
-      "endLine": 475
+      "line": 507,
+      "endLine": 510
     },
     {
       "id": "symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
@@ -57459,6 +57459,76 @@
       ]
     },
     {
+      "id": "mechanic:economy.gold",
+      "mechanicId": "economy.gold",
+      "label": "Gold",
+      "kind": "economy",
+      "role": "floor_clear_purse",
+      "evidence": [
+        {
+          "path": "src/shared/run-store-rules.ts",
+          "line": 10
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 35
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/run-store-rules.test.ts",
+          "line": 7
+        },
+        {
+          "path": "src/shared/run-soak.test.ts",
+          "line": 33
+        }
+      ],
+      "enables": [
+        "progression.store_stop"
+      ],
+      "blocks": [],
+      "softlockGuards": []
+    },
+    {
+      "id": "mechanic:economy.miss_bank",
+      "mechanicId": "economy.miss_bank",
+      "label": "Miss Bank",
+      "kind": "economy",
+      "role": "earned_expiring_miss_ledger",
+      "evidence": [
+        {
+          "path": "src/shared/miss-bank.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/next-floor-run-state-rules.ts",
+          "line": 9
+        },
+        {
+          "path": "src/shared/run-soak.ts",
+          "line": 4
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/miss-bank.test.ts",
+          "line": 6
+        },
+        {
+          "path": "src/shared/run-soak.test.ts",
+          "line": 34
+        },
+        {
+          "path": "src/shared/test-hall-rooms.test.ts",
+          "line": 1
+        }
+      ],
+      "enables": [],
+      "blocks": [],
+      "softlockGuards": []
+    },
+    {
       "id": "mechanic:economy.score_and_rewards",
       "mechanicId": "economy.score_and_rewards",
       "label": "Score And Reward Economy",
@@ -57964,6 +58034,32 @@
       ]
     },
     {
+      "id": "mechanic:inventory.relics",
+      "mechanicId": "inventory.relics",
+      "label": "Relics",
+      "kind": "inventory",
+      "role": "bought_run_long_passive",
+      "evidence": [
+        {
+          "path": "src/shared/run-relic-rules.ts",
+          "line": 4
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/run-relic-rules.test.ts",
+          "line": 6
+        },
+        {
+          "path": "src/shared/test-hall-rooms.test.ts",
+          "line": 27
+        }
+      ],
+      "enables": [],
+      "blocks": [],
+      "softlockGuards": []
+    },
+    {
       "id": "mechanic:inventory.shuffle_charge",
       "mechanicId": "inventory.shuffle_charge",
       "label": "Shuffle Charge Inventory",
@@ -58320,6 +58416,46 @@
         "timer-lifecycle",
         "meditation-mode-override"
       ]
+    },
+    {
+      "id": "mechanic:power.bomb",
+      "mechanicId": "power.bomb",
+      "label": "Bomb",
+      "kind": "power",
+      "role": "bought_pair_destroy_resource",
+      "evidence": [
+        {
+          "path": "src/shared/board-power-actions.ts",
+          "line": 276
+        },
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 3
+        },
+        {
+          "path": "src/renderer/components/runShellToolCatalog.ts",
+          "line": 21
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/board-power-actions.test.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/test-hall-rooms.test.ts",
+          "line": 27
+        },
+        {
+          "path": "src/shared/run-soak.test.ts",
+          "line": 20
+        }
+      ],
+      "enables": [
+        "objective.floor_clear"
+      ],
+      "blocks": [],
+      "softlockGuards": []
     },
     {
       "id": "mechanic:power.flash_pair",
@@ -58888,6 +59024,39 @@
       ]
     },
     {
+      "id": "mechanic:progression.store_stop",
+      "mechanicId": "progression.store_stop",
+      "label": "Store Stop",
+      "kind": "progression",
+      "role": "every_third_floor_spend_stop",
+      "evidence": [
+        {
+          "path": "src/shared/run-store-rules.ts",
+          "line": 8
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 21
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/run-store-rules.test.ts",
+          "line": 6
+        },
+        {
+          "path": "src/shared/test-hall-rooms.test.ts",
+          "line": 27
+        }
+      ],
+      "enables": [
+        "power.bomb",
+        "inventory.relics"
+      ],
+      "blocks": [],
+      "softlockGuards": []
+    },
+    {
       "id": "mechanic:safety.softlock_fairness",
       "mechanicId": "safety.softlock_fairness",
       "label": "Softlock Fairness",
@@ -59274,6 +59443,17 @@
       "writtenBy": []
     },
     {
+      "id": "state:bombCharges",
+      "name": "bombCharges",
+      "readBy": [
+        "mechanic:power.bomb"
+      ],
+      "writtenBy": [
+        "mechanic:power.bomb",
+        "mechanic:progression.store_stop"
+      ]
+    },
+    {
       "id": "state:chunkDropsThisRun",
       "name": "chunkDropsThisRun",
       "readBy": [
@@ -59318,7 +59498,9 @@
       "id": "state:currentStreak",
       "name": "currentStreak",
       "readBy": [
-        "mechanic:board.chain_chunk_fever"
+        "mechanic:board.chain_chunk_fever",
+        "mechanic:economy.gold",
+        "mechanic:economy.miss_bank"
       ],
       "writtenBy": []
     },
@@ -59518,6 +59700,7 @@
       "writtenBy": [
         "mechanic:core.board_turn_resolution",
         "mechanic:inventory.wild_match_token",
+        "mechanic:power.bomb",
         "mechanic:power.flash_pair",
         "mechanic:power.undo_resolve",
         "mechanic:power.wild_match"
@@ -59546,9 +59729,22 @@
         "mechanic:core.board_turn_resolution",
         "mechanic:core.gameplay_commands",
         "mechanic:inventory.wild_match_token",
+        "mechanic:power.bomb",
         "mechanic:power.flash_pair",
         "mechanic:power.undo_resolve",
         "mechanic:power.wild_match"
+      ]
+    },
+    {
+      "id": "state:gold",
+      "name": "gold",
+      "readBy": [
+        "mechanic:economy.gold",
+        "mechanic:progression.store_stop"
+      ],
+      "writtenBy": [
+        "mechanic:economy.gold",
+        "mechanic:progression.store_stop"
       ]
     },
     {
@@ -59568,6 +59764,7 @@
       "id": "state:lastLevelResult",
       "name": "lastLevelResult",
       "readBy": [
+        "mechanic:economy.gold",
         "mechanic:feedback.gameplay_hud",
         "mechanic:progression.run_flow"
       ],
@@ -59579,7 +59776,10 @@
       "id": "state:levelComplete",
       "name": "levelComplete",
       "readBy": [
-        "mechanic:progression.run_flow"
+        "mechanic:economy.gold",
+        "mechanic:economy.miss_bank",
+        "mechanic:progression.run_flow",
+        "mechanic:progression.store_stop"
       ],
       "writtenBy": [
         "mechanic:objective.floor_clear"
@@ -59612,7 +59812,8 @@
       ],
       "writtenBy": [
         "mechanic:board.chain_chunk_fever",
-        "mechanic:core.board_turn_resolution"
+        "mechanic:core.board_turn_resolution",
+        "mechanic:power.bomb"
       ]
     },
     {
@@ -59648,6 +59849,17 @@
       "writtenBy": []
     },
     {
+      "id": "state:missBank",
+      "name": "missBank",
+      "readBy": [
+        "mechanic:economy.miss_bank"
+      ],
+      "writtenBy": [
+        "mechanic:economy.miss_bank",
+        "mechanic:progression.store_stop"
+      ]
+    },
+    {
       "id": "state:nearbyTraits",
       "name": "nearbyTraits",
       "readBy": [
@@ -59661,7 +59873,8 @@
       "readBy": [
         "mechanic:feedback.gameplay_hud",
         "mechanic:inventory.mutator_loadout",
-        "mechanic:progression.run_flow"
+        "mechanic:progression.run_flow",
+        "mechanic:progression.store_stop"
       ],
       "writtenBy": [
         "mechanic:progression.run_flow"
@@ -59706,6 +59919,7 @@
         "mechanic:core.board_turn_resolution",
         "mechanic:hazard.magpie_thief",
         "mechanic:hazard.restless_floor",
+        "mechanic:power.bomb",
         "mechanic:power.wild_match"
       ],
       "writtenBy": []
@@ -59723,6 +59937,7 @@
         "mechanic:core.gameplay_commands",
         "mechanic:inventory.peek_charge",
         "mechanic:power.peek",
+        "mechanic:progression.store_stop",
         "mechanic:trait.conduit",
         "mechanic:trait.echo"
       ]
@@ -59818,6 +60033,18 @@
       ]
     },
     {
+      "id": "state:relics",
+      "name": "relics",
+      "readBy": [
+        "mechanic:economy.gold",
+        "mechanic:economy.miss_bank",
+        "mechanic:inventory.relics"
+      ],
+      "writtenBy": [
+        "mechanic:progression.store_stop"
+      ]
+    },
+    {
       "id": "state:removedTiles",
       "name": "removedTiles",
       "readBy": [
@@ -59868,6 +60095,7 @@
       "name": "runStatus",
       "readBy": [
         "mechanic:core.board_turn_resolution",
+        "mechanic:power.bomb",
         "mechanic:power.undo_resolve"
       ],
       "writtenBy": [
@@ -59931,7 +60159,8 @@
       "writtenBy": [
         "mechanic:core.gameplay_commands",
         "mechanic:inventory.shuffle_charge",
-        "mechanic:power.shuffle"
+        "mechanic:power.shuffle",
+        "mechanic:progression.store_stop"
       ]
     },
     {
@@ -59964,6 +60193,16 @@
       ]
     },
     {
+      "id": "state:storePurchases",
+      "name": "storePurchases",
+      "readBy": [
+        "mechanic:progression.store_stop"
+      ],
+      "writtenBy": [
+        "mechanic:progression.store_stop"
+      ]
+    },
+    {
       "id": "state:tilePositions",
       "name": "tilePositions",
       "readBy": [
@@ -59986,6 +60225,7 @@
         "mechanic:hazard.restless_floor",
         "mechanic:inventory.wild_match_token",
         "mechanic:objective.floor_clear",
+        "mechanic:power.bomb",
         "mechanic:power.flash_pair",
         "mechanic:power.gambit",
         "mechanic:power.peek",
@@ -60003,6 +60243,7 @@
         "mechanic:core.board_turn_resolution",
         "mechanic:hazard.magpie_thief",
         "mechanic:hazard.restless_floor",
+        "mechanic:power.bomb",
         "mechanic:power.region_shuffle",
         "mechanic:power.shuffle",
         "mechanic:power.tile_swap",
@@ -60053,10 +60294,12 @@
       "id": "state:tries",
       "name": "tries",
       "readBy": [
+        "mechanic:economy.miss_bank",
         "mechanic:objective.floor_clear"
       ],
       "writtenBy": [
         "mechanic:core.board_turn_resolution",
+        "mechanic:economy.miss_bank",
         "mechanic:power.gambit"
       ]
     },
@@ -60157,6 +60400,20 @@
       "target": "mechanic:core.board_turn_resolution",
       "kind": "consequence",
       "label": "every third resolved turn trades hidden cards' cells, one more pair each drift up to three"
+    },
+    {
+      "id": "consumes:mechanic:core.board_turn_resolution->mechanic:economy.miss_bank:a miss spends the oldest grant",
+      "source": "mechanic:core.board_turn_resolution",
+      "target": "mechanic:economy.miss_bank",
+      "kind": "consumes",
+      "label": "a miss spends the oldest grant"
+    },
+    {
+      "id": "consumes:mechanic:economy.gold->mechanic:progression.store_stop:spent at the stop every third floor",
+      "source": "mechanic:economy.gold",
+      "target": "mechanic:progression.store_stop",
+      "kind": "consumes",
+      "label": "spent at the stop every third floor"
     },
     {
       "id": "consumes:mechanic:power.flash_pair->mechanic:inventory.flash_pair_charge:spends one Flash charge",
@@ -60352,6 +60609,20 @@
       "label": "emits typed feedback"
     },
     {
+      "id": "displays:mechanic:economy.gold->mechanic:feedback.gameplay_hud:purse",
+      "source": "mechanic:economy.gold",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "purse"
+    },
+    {
+      "id": "displays:mechanic:economy.miss_bank->mechanic:feedback.gameplay_hud:misses left",
+      "source": "mechanic:economy.miss_bank",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "misses left"
+    },
+    {
       "id": "displays:mechanic:feedback.gameplay_hud->file:src/renderer/components/gameScreenFeedback.ts",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "file:src/renderer/components/gameScreenFeedback.ts",
@@ -60442,6 +60713,13 @@
       "label": "shows retained streak"
     },
     {
+      "id": "displays:mechanic:power.bomb->mechanic:feedback.gameplay_hud:bomb tool and charges in the dock",
+      "source": "mechanic:power.bomb",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "bomb tool and charges in the dock"
+    },
+    {
       "id": "displays:mechanic:power.flash_pair->mechanic:feedback.gameplay_hud:shows revealed pair and remaining charges",
       "source": "mechanic:power.flash_pair",
       "target": "mechanic:feedback.gameplay_hud",
@@ -60516,6 +60794,13 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "displays",
       "label": "projects typed floor readiness parasite and banish outcomes"
+    },
+    {
+      "id": "displays:mechanic:progression.store_stop->mechanic:feedback.gameplay_hud:store sheet on the floor-clear beat",
+      "source": "mechanic:progression.store_stop",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "store sheet on the floor-clear beat"
     },
     {
       "id": "enables:mechanic:board.wild_joker_tile->mechanic:power.wild_match:pairs with one flipped non-wild tile",
@@ -60635,6 +60920,13 @@
       "target": "mechanic:objective.floor_clear",
       "kind": "enables",
       "label": "starts informed tile play"
+    },
+    {
+      "id": "enables:mechanic:power.bomb->mechanic:objective.floor_clear:destroys a pair, including the last one",
+      "source": "mechanic:power.bomb",
+      "target": "mechanic:objective.floor_clear",
+      "kind": "enables",
+      "label": "destroys a pair, including the last one"
     },
     {
       "id": "enables:mechanic:progression.run_flow->mechanic:feedback.gameplay_hud:route feedback",
@@ -78024,11 +78316,32 @@
       "label": "resolves streak bonus at floor clear"
     },
     {
+      "id": "grants:mechanic:board.chain_chunk_fever->mechanic:economy.miss_bank:every fifth link earns a miss",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "mechanic:economy.miss_bank",
+      "kind": "grants",
+      "label": "every fifth link earns a miss"
+    },
+    {
       "id": "grants:mechanic:mode.wild_run->mechanic:inventory.wild_match_token:starts the run with one wildcard spend",
       "source": "mechanic:mode.wild_run",
       "target": "mechanic:inventory.wild_match_token",
       "kind": "grants",
       "label": "starts the run with one wildcard spend"
+    },
+    {
+      "id": "grants:mechanic:progression.run_flow->mechanic:economy.gold:floor clear pays by chain tier and turns under par",
+      "source": "mechanic:progression.run_flow",
+      "target": "mechanic:economy.gold",
+      "kind": "grants",
+      "label": "floor clear pays by chain tier and turns under par"
+    },
+    {
+      "id": "grants:mechanic:progression.run_flow->mechanic:economy.miss_bank:a floor clear grants a miss on a three-floor shelf",
+      "source": "mechanic:progression.run_flow",
+      "target": "mechanic:economy.miss_bank",
+      "kind": "grants",
+      "label": "a floor clear grants a miss on a three-floor shelf"
     },
     {
       "id": "grants:mechanic:progression.run_flow->mechanic:inventory.gambit_token:rearms one Gambit token at run and floor start",
@@ -78057,6 +78370,27 @@
       "target": "mechanic:inventory.mutator_loadout",
       "kind": "grants",
       "label": "selects mode daily or scheduled opening pressure"
+    },
+    {
+      "id": "grants:mechanic:progression.store_stop->mechanic:economy.miss_bank:a bought miss joins the bank",
+      "source": "mechanic:progression.store_stop",
+      "target": "mechanic:economy.miss_bank",
+      "kind": "grants",
+      "label": "a bought miss joins the bank"
+    },
+    {
+      "id": "grants:mechanic:progression.store_stop->mechanic:inventory.relics:relics are bought",
+      "source": "mechanic:progression.store_stop",
+      "target": "mechanic:inventory.relics",
+      "kind": "grants",
+      "label": "relics are bought"
+    },
+    {
+      "id": "grants:mechanic:progression.store_stop->mechanic:power.bomb:bombs are bought",
+      "source": "mechanic:progression.store_stop",
+      "target": "mechanic:power.bomb",
+      "kind": "grants",
+      "label": "bombs are bought"
     },
     {
       "id": "guarded_by:mechanic:board.cleanup->mechanic:safety.softlock_fairness:sanitizes state",
@@ -78239,6 +78573,36 @@
       "id": "implemented_by:mechanic:core.gameplay_commands->file:src/shared/gameplay-journal.ts",
       "source": "mechanic:core.gameplay_commands",
       "target": "file:src/shared/gameplay-journal.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:economy.gold->file:src/renderer/components/GameScreen.tsx",
+      "source": "mechanic:economy.gold",
+      "target": "file:src/renderer/components/GameScreen.tsx",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:economy.gold->file:src/shared/run-store-rules.ts",
+      "source": "mechanic:economy.gold",
+      "target": "file:src/shared/run-store-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:economy.miss_bank->file:src/shared/miss-bank.ts",
+      "source": "mechanic:economy.miss_bank",
+      "target": "file:src/shared/miss-bank.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:economy.miss_bank->file:src/shared/next-floor-run-state-rules.ts",
+      "source": "mechanic:economy.miss_bank",
+      "target": "file:src/shared/next-floor-run-state-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:economy.miss_bank->file:src/shared/run-soak.ts",
+      "source": "mechanic:economy.miss_bank",
+      "target": "file:src/shared/run-soak.ts",
       "kind": "implemented_by"
     },
     {
@@ -78494,6 +78858,12 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:inventory.relics->file:src/shared/run-relic-rules.ts",
+      "source": "mechanic:inventory.relics",
+      "target": "file:src/shared/run-relic-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:inventory.shuffle_charge->file:src/shared/board-power-actions.ts",
       "source": "mechanic:inventory.shuffle_charge",
       "target": "file:src/shared/board-power-actions.ts",
@@ -78647,6 +79017,24 @@
       "id": "implemented_by:mechanic:phase.memorize->file:src/shared/scoring-rules.ts",
       "source": "mechanic:phase.memorize",
       "target": "file:src/shared/scoring-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:power.bomb->file:src/renderer/components/runShellToolCatalog.ts",
+      "source": "mechanic:power.bomb",
+      "target": "file:src/renderer/components/runShellToolCatalog.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:power.bomb->file:src/shared/board-power-actions.ts",
+      "source": "mechanic:power.bomb",
+      "target": "file:src/shared/board-power-actions.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:power.bomb->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:power.bomb",
+      "target": "file:src/shared/gameplay-core.ts",
       "kind": "implemented_by"
     },
     {
@@ -78899,6 +79287,18 @@
       "id": "implemented_by:mechanic:progression.run_setup->file:src/shared/run-creation-rules.ts",
       "source": "mechanic:progression.run_setup",
       "target": "file:src/shared/run-creation-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:progression.store_stop->file:src/renderer/components/GameScreen.tsx",
+      "source": "mechanic:progression.store_stop",
+      "target": "file:src/renderer/components/GameScreen.tsx",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:progression.store_stop->file:src/shared/run-store-rules.ts",
+      "source": "mechanic:progression.store_stop",
+      "target": "file:src/shared/run-store-rules.ts",
       "kind": "implemented_by"
     },
     {
@@ -95128,6 +95528,34 @@
       "label": "projects timing mutators into the study window"
     },
     {
+      "id": "modifies:mechanic:inventory.relics->mechanic:economy.gold:Gilded Chain pays for a Fever clear",
+      "source": "mechanic:inventory.relics",
+      "target": "mechanic:economy.gold",
+      "kind": "modifies",
+      "label": "Gilded Chain pays for a Fever clear"
+    },
+    {
+      "id": "modifies:mechanic:inventory.relics->mechanic:economy.miss_bank:Deep Pockets raises the bank cap",
+      "source": "mechanic:inventory.relics",
+      "target": "mechanic:economy.miss_bank",
+      "kind": "modifies",
+      "label": "Deep Pockets raises the bank cap"
+    },
+    {
+      "id": "modifies:mechanic:inventory.relics->mechanic:phase.memorize:Long Look lengthens the memorize window",
+      "source": "mechanic:inventory.relics",
+      "target": "mechanic:phase.memorize",
+      "kind": "modifies",
+      "label": "Long Look lengthens the memorize window"
+    },
+    {
+      "id": "modifies:mechanic:power.bomb->mechanic:board.chain_chunk_fever:a bomb is not a match: no chain, no pop",
+      "source": "mechanic:power.bomb",
+      "target": "mechanic:board.chain_chunk_fever",
+      "kind": "modifies",
+      "label": "a bomb is not a match: no chain, no pop"
+    },
+    {
       "id": "modifies:mechanic:progression.run_flow->mechanic:inventory.mutator_loadout:replaces pressure only at the deterministic floor boundary",
       "source": "mechanic:progression.run_flow",
       "target": "mechanic:inventory.mutator_loadout",
@@ -95375,6 +95803,66 @@
       "id": "reads:mechanic:core.gameplay_commands->state:tileTraitKind",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:tileTraitKind",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:economy.gold->state:currentStreak",
+      "source": "mechanic:economy.gold",
+      "target": "state:currentStreak",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:economy.gold->state:gold",
+      "source": "mechanic:economy.gold",
+      "target": "state:gold",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:economy.gold->state:lastLevelResult",
+      "source": "mechanic:economy.gold",
+      "target": "state:lastLevelResult",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:economy.gold->state:levelComplete",
+      "source": "mechanic:economy.gold",
+      "target": "state:levelComplete",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:economy.gold->state:relics",
+      "source": "mechanic:economy.gold",
+      "target": "state:relics",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:economy.miss_bank->state:currentStreak",
+      "source": "mechanic:economy.miss_bank",
+      "target": "state:currentStreak",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:economy.miss_bank->state:levelComplete",
+      "source": "mechanic:economy.miss_bank",
+      "target": "state:levelComplete",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:economy.miss_bank->state:missBank",
+      "source": "mechanic:economy.miss_bank",
+      "target": "state:missBank",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:economy.miss_bank->state:relics",
+      "source": "mechanic:economy.miss_bank",
+      "target": "state:relics",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:economy.miss_bank->state:tries",
+      "source": "mechanic:economy.miss_bank",
+      "target": "state:tries",
       "kind": "reads"
     },
     {
@@ -95648,6 +96136,12 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:inventory.relics->state:relics",
+      "source": "mechanic:inventory.relics",
+      "target": "state:relics",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:inventory.shuffle_charge->state:noShuffle",
       "source": "mechanic:inventory.shuffle_charge",
       "target": "state:noShuffle",
@@ -95771,6 +96265,30 @@
       "id": "reads:mechanic:phase.memorize->state:memorizeMs",
       "source": "mechanic:phase.memorize",
       "target": "state:memorizeMs",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:power.bomb->state:bombCharges",
+      "source": "mechanic:power.bomb",
+      "target": "state:bombCharges",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:power.bomb->state:pairKeys",
+      "source": "mechanic:power.bomb",
+      "target": "state:pairKeys",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:power.bomb->state:runStatus",
+      "source": "mechanic:power.bomb",
+      "target": "state:runStatus",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:power.bomb->state:tileStates",
+      "source": "mechanic:power.bomb",
+      "target": "state:tileStates",
       "kind": "reads"
     },
     {
@@ -96053,6 +96571,30 @@
       "id": "reads:mechanic:progression.run_flow->state:powersUsedThisRun",
       "source": "mechanic:progression.run_flow",
       "target": "state:powersUsedThisRun",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:progression.store_stop->state:gold",
+      "source": "mechanic:progression.store_stop",
+      "target": "state:gold",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:progression.store_stop->state:levelComplete",
+      "source": "mechanic:progression.store_stop",
+      "target": "state:levelComplete",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:progression.store_stop->state:nextFloor",
+      "source": "mechanic:progression.store_stop",
+      "target": "state:nextFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:progression.store_stop->state:storePurchases",
+      "source": "mechanic:progression.store_stop",
+      "target": "state:storePurchases",
       "kind": "reads"
     },
     {
@@ -96364,6 +96906,36 @@
       "label": "deterministic replay"
     },
     {
+      "id": "tested_by:mechanic:economy.gold->file:src/shared/run-soak.test.ts",
+      "source": "mechanic:economy.gold",
+      "target": "file:src/shared/run-soak.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:economy.gold->file:src/shared/run-store-rules.test.ts",
+      "source": "mechanic:economy.gold",
+      "target": "file:src/shared/run-store-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:economy.miss_bank->file:src/shared/miss-bank.test.ts",
+      "source": "mechanic:economy.miss_bank",
+      "target": "file:src/shared/miss-bank.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:economy.miss_bank->file:src/shared/run-soak.test.ts",
+      "source": "mechanic:economy.miss_bank",
+      "target": "file:src/shared/run-soak.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:economy.miss_bank->file:src/shared/test-hall-rooms.test.ts",
+      "source": "mechanic:economy.miss_bank",
+      "target": "file:src/shared/test-hall-rooms.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:economy.score_and_rewards->file:src/shared/level-clear-rules.test.ts",
       "source": "mechanic:economy.score_and_rewards",
       "target": "file:src/shared/level-clear-rules.test.ts",
@@ -96544,6 +97116,18 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:inventory.relics->file:src/shared/run-relic-rules.test.ts",
+      "source": "mechanic:inventory.relics",
+      "target": "file:src/shared/run-relic-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.relics->file:src/shared/test-hall-rooms.test.ts",
+      "source": "mechanic:inventory.relics",
+      "target": "file:src/shared/test-hall-rooms.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:inventory.shuffle_charge->file:src/shared/board-power-actions.test.ts",
       "source": "mechanic:inventory.shuffle_charge",
       "target": "file:src/shared/board-power-actions.test.ts",
@@ -96679,6 +97263,24 @@
       "id": "tested_by:mechanic:phase.memorize->file:src/shared/scoring-rules.test.ts",
       "source": "mechanic:phase.memorize",
       "target": "file:src/shared/scoring-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:power.bomb->file:src/shared/board-power-actions.test.ts",
+      "source": "mechanic:power.bomb",
+      "target": "file:src/shared/board-power-actions.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:power.bomb->file:src/shared/run-soak.test.ts",
+      "source": "mechanic:power.bomb",
+      "target": "file:src/shared/run-soak.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:power.bomb->file:src/shared/test-hall-rooms.test.ts",
+      "source": "mechanic:power.bomb",
+      "target": "file:src/shared/test-hall-rooms.test.ts",
       "kind": "tested_by"
     },
     {
@@ -96926,6 +97528,18 @@
       "id": "tested_by:mechanic:progression.run_setup->file:src/shared/run-creation-rules.test.ts",
       "source": "mechanic:progression.run_setup",
       "target": "file:src/shared/run-creation-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:progression.store_stop->file:src/shared/run-store-rules.test.ts",
+      "source": "mechanic:progression.store_stop",
+      "target": "file:src/shared/run-store-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:progression.store_stop->file:src/shared/test-hall-rooms.test.ts",
+      "source": "mechanic:progression.store_stop",
+      "target": "file:src/shared/test-hall-rooms.test.ts",
       "kind": "tested_by"
     },
     {
@@ -103378,6 +103992,24 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:economy.gold->state:gold",
+      "source": "mechanic:economy.gold",
+      "target": "state:gold",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:economy.miss_bank->state:missBank",
+      "source": "mechanic:economy.miss_bank",
+      "target": "state:missBank",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:economy.miss_bank->state:tries",
+      "source": "mechanic:economy.miss_bank",
+      "target": "state:tries",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:economy.score_and_rewards->state:currentLevelScore",
       "source": "mechanic:economy.score_and_rewards",
       "target": "state:currentLevelScore",
@@ -103555,6 +104187,36 @@
       "id": "writes:mechanic:phase.memorize->state:timerState",
       "source": "mechanic:phase.memorize",
       "target": "state:timerState",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.bomb->state:bombCharges",
+      "source": "mechanic:power.bomb",
+      "target": "state:bombCharges",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.bomb->state:gameplayCommands",
+      "source": "mechanic:power.bomb",
+      "target": "state:gameplayCommands",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.bomb->state:gameplayEvents",
+      "source": "mechanic:power.bomb",
+      "target": "state:gameplayEvents",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.bomb->state:matchedPairs",
+      "source": "mechanic:power.bomb",
+      "target": "state:matchedPairs",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.bomb->state:tileStates",
+      "source": "mechanic:power.bomb",
+      "target": "state:tileStates",
       "kind": "writes"
     },
     {
@@ -103933,6 +104595,48 @@
       "id": "writes:mechanic:progression.run_setup->state:activeMutators",
       "source": "mechanic:progression.run_setup",
       "target": "state:activeMutators",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:progression.store_stop->state:bombCharges",
+      "source": "mechanic:progression.store_stop",
+      "target": "state:bombCharges",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:progression.store_stop->state:gold",
+      "source": "mechanic:progression.store_stop",
+      "target": "state:gold",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:progression.store_stop->state:missBank",
+      "source": "mechanic:progression.store_stop",
+      "target": "state:missBank",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:progression.store_stop->state:peekCharges",
+      "source": "mechanic:progression.store_stop",
+      "target": "state:peekCharges",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:progression.store_stop->state:relics",
+      "source": "mechanic:progression.store_stop",
+      "target": "state:relics",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:progression.store_stop->state:shuffleCharges",
+      "source": "mechanic:progression.store_stop",
+      "target": "state:shuffleCharges",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:progression.store_stop->state:storePurchases",
+      "source": "mechanic:progression.store_stop",
+      "target": "state:storePurchases",
       "kind": "writes"
     },
     {

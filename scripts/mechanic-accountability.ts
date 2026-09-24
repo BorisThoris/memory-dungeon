@@ -181,6 +181,26 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
         generation: 217,
         reason: 'Chosen at run creation and unchanged by any floor, and no census pass takes a contract - so the census could only ever report it absent. What it gates is censused: the shuffle charges it forbids each carry a row.'
     },
+    'economy.miss_bank': {
+        generation: 262,
+        reason: 'Every run has it and the census never ends one: its reference runs reach the floor cap. What proves grants happen and hold their rules is the whole-run soak, which checks the cap and the three-floor shelf on every action and requires grants to occur.'
+    },
+    'economy.gold': {
+        generation: 262,
+        reason: 'Paid at every floor clear, so a floor counter would read the clear rate back. The whole-run soak requires gold to be earned and holds every purchase to its exact price.'
+    },
+    'progression.store_stop': {
+        generation: 262,
+        reason: 'The census players never shop, so a row would read zero on a working store. The whole-run soak shops at every stop it reaches and the store-stop test hall room walks one.'
+    },
+    'power.bomb': {
+        generation: 262,
+        reason: 'Bombs are only bought at the store and the census players never shop. The whole-run soak throws them and requires one to land; two test hall rooms walk the aim and the last-pair guard.'
+    },
+    'inventory.relics': {
+        generation: 262,
+        reason: 'Relics are only bought at the store and the census players never shop. The whole-run soak requires a relic to be bought, and the Deep Pockets and Long Look rooms walk their effects.'
+    },
     'inventory.mutator_loadout': {
         generation: 217,
         reason: 'Not a run setup - the schedule hands a different mutator to every floor - but a per-floor selection rather than an event, and the census counts what accumulates within a floor. Its accountability is the mutator-effect audit, which presses all ten and requires each to move a channel a player could notice.'

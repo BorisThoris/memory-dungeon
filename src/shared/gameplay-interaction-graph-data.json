@@ -1608,6 +1608,154 @@
                 "src/shared/restless-floor-rules.test.ts",
                 "src/renderer/copy/restlessFloorBeat.test.ts"
             ]
+        },
+        {
+            "id": "economy.miss_bank",
+            "label": "Miss Bank",
+            "kind": "economy",
+            "role": "earned_expiring_miss_ledger",
+            "evidence": [
+                "src/shared/miss-bank.ts",
+                "src/shared/next-floor-run-state-rules.ts",
+                "src/shared/run-soak.ts"
+            ],
+            "reads": [
+                "missBank",
+                "tries",
+                "currentStreak",
+                "levelComplete",
+                "relics"
+            ],
+            "writes": [
+                "missBank",
+                "tries"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [],
+            "tests": [
+                "src/shared/miss-bank.test.ts",
+                "src/shared/run-soak.test.ts",
+                "src/shared/test-hall-rooms.test.ts"
+            ]
+        },
+        {
+            "id": "economy.gold",
+            "label": "Gold",
+            "kind": "economy",
+            "role": "floor_clear_purse",
+            "evidence": [
+                "src/shared/run-store-rules.ts",
+                "src/renderer/components/GameScreen.tsx"
+            ],
+            "reads": [
+                "levelComplete",
+                "lastLevelResult",
+                "currentStreak",
+                "gold",
+                "relics"
+            ],
+            "writes": [
+                "gold"
+            ],
+            "enables": [
+                "progression.store_stop"
+            ],
+            "blocks": [],
+            "softlockGuards": [],
+            "tests": [
+                "src/shared/run-store-rules.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
+            "id": "progression.store_stop",
+            "label": "Store Stop",
+            "kind": "progression",
+            "role": "every_third_floor_spend_stop",
+            "evidence": [
+                "src/shared/run-store-rules.ts",
+                "src/renderer/components/GameScreen.tsx"
+            ],
+            "reads": [
+                "gold",
+                "storePurchases",
+                "levelComplete",
+                "nextFloor"
+            ],
+            "writes": [
+                "gold",
+                "storePurchases",
+                "bombCharges",
+                "relics",
+                "peekCharges",
+                "shuffleCharges",
+                "missBank"
+            ],
+            "enables": [
+                "power.bomb",
+                "inventory.relics"
+            ],
+            "blocks": [],
+            "softlockGuards": [],
+            "tests": [
+                "src/shared/run-store-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts"
+            ]
+        },
+        {
+            "id": "power.bomb",
+            "label": "Bomb",
+            "kind": "power",
+            "role": "bought_pair_destroy_resource",
+            "evidence": [
+                "src/shared/board-power-actions.ts",
+                "src/shared/gameplay-core.ts",
+                "src/renderer/components/runShellToolCatalog.ts"
+            ],
+            "reads": [
+                "bombCharges",
+                "tileStates",
+                "pairKeys",
+                "runStatus"
+            ],
+            "writes": [
+                "bombCharges",
+                "tileStates",
+                "matchedPairs",
+                "gameplayCommands",
+                "gameplayEvents"
+            ],
+            "enables": [
+                "objective.floor_clear"
+            ],
+            "blocks": [],
+            "softlockGuards": [],
+            "tests": [
+                "src/shared/board-power-actions.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
+            "id": "inventory.relics",
+            "label": "Relics",
+            "kind": "inventory",
+            "role": "bought_run_long_passive",
+            "evidence": [
+                "src/shared/run-relic-rules.ts"
+            ],
+            "reads": [
+                "relics"
+            ],
+            "writes": [],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [],
+            "tests": [
+                "src/shared/run-relic-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts"
+            ]
         }
     ],
     "edges": [
@@ -2318,6 +2466,108 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "the turn announcement says the floor shifted and how many pairs moved"
+        },
+        {
+            "source": "core.board_turn_resolution",
+            "target": "economy.miss_bank",
+            "kind": "consumes",
+            "label": "a miss spends the oldest grant"
+        },
+        {
+            "source": "board.chain_chunk_fever",
+            "target": "economy.miss_bank",
+            "kind": "grants",
+            "label": "every fifth link earns a miss"
+        },
+        {
+            "source": "progression.run_flow",
+            "target": "economy.miss_bank",
+            "kind": "grants",
+            "label": "a floor clear grants a miss on a three-floor shelf"
+        },
+        {
+            "source": "economy.miss_bank",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "misses left"
+        },
+        {
+            "source": "progression.run_flow",
+            "target": "economy.gold",
+            "kind": "grants",
+            "label": "floor clear pays by chain tier and turns under par"
+        },
+        {
+            "source": "economy.gold",
+            "target": "progression.store_stop",
+            "kind": "consumes",
+            "label": "spent at the stop every third floor"
+        },
+        {
+            "source": "economy.gold",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "purse"
+        },
+        {
+            "source": "progression.store_stop",
+            "target": "power.bomb",
+            "kind": "grants",
+            "label": "bombs are bought"
+        },
+        {
+            "source": "progression.store_stop",
+            "target": "inventory.relics",
+            "kind": "grants",
+            "label": "relics are bought"
+        },
+        {
+            "source": "progression.store_stop",
+            "target": "economy.miss_bank",
+            "kind": "grants",
+            "label": "a bought miss joins the bank"
+        },
+        {
+            "source": "power.bomb",
+            "target": "objective.floor_clear",
+            "kind": "enables",
+            "label": "destroys a pair, including the last one"
+        },
+        {
+            "source": "power.bomb",
+            "target": "board.chain_chunk_fever",
+            "kind": "modifies",
+            "label": "a bomb is not a match: no chain, no pop"
+        },
+        {
+            "source": "inventory.relics",
+            "target": "economy.miss_bank",
+            "kind": "modifies",
+            "label": "Deep Pockets raises the bank cap"
+        },
+        {
+            "source": "inventory.relics",
+            "target": "economy.gold",
+            "kind": "modifies",
+            "label": "Gilded Chain pays for a Fever clear"
+        },
+        {
+            "source": "inventory.relics",
+            "target": "phase.memorize",
+            "kind": "modifies",
+            "label": "Long Look lengthens the memorize window"
+        },
+        {
+            "source": "progression.store_stop",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "store sheet on the floor-clear beat"
+        },
+        {
+            "source": "power.bomb",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "bomb tool and charges in the dock"
         }
     ],
     "coverage": {

@@ -128,7 +128,7 @@ flowchart LR
 
 ## Gameplay Interaction Graph
 
-Executable registry covers 43 mechanics, 118 edges, 4 tile traits, and 2 blockers.
+Executable registry covers 48 mechanics, 135 edges, 4 tile traits, and 2 blockers.
 
 ```mermaid
 flowchart LR
@@ -152,7 +152,7 @@ flowchart LR
 ### Evidence Nodes
 
 - **Trait Layer** (domain/shared): 4 trait mechanics with synergy, risk, and counterplay edges. Evidence: `src/shared/tile-trait-rules.ts`, `src/shared/trait-opportunities.ts`
-- **Board Powers** (domain/shared): 9 routing/removal tools connect player agency to trait layouts. Evidence: `src/shared/board-power-actions.ts`, `src/shared/board-power-availability.ts`
+- **Board Powers** (domain/shared): 10 routing/removal tools connect player agency to trait layouts. Evidence: `src/shared/board-power-actions.ts`, `src/shared/board-power-availability.ts`
 - **Objectives** (domain/shared): Objectives must connect to the floor clear. Evidence: `src/shared/secondary-objective-rules.ts`, `src/shared/level-clear-rules.ts`
 - **Interaction Graph Gate** (safety/shared): Typed graph validation fails disconnected mechanics, unguarded blockers, and unwired outputs. Evidence: `src/shared/gameplay-interaction-graph-data.json`, `src/shared/gameplay-interaction-graph.ts`, `src/shared/gameplay-interaction-graph.test.ts`, `src/shared/softlock-fairness.test.ts`, `src/shared/tile-trait-rules.ts`
 
