@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-24T11:39:34.633Z",
+  "generatedAt": "2026-09-24T12:49:47.410Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -259,7 +259,9 @@
       "social:check",
       "icons",
       "icons:check",
-      "meta:refresh"
+      "meta:refresh",
+      "trailers",
+      "trailers:check"
     ]
   },
   "capture": {
@@ -289,10 +291,10 @@
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 166008,
+        "bytes": 164190,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-24T11:38:43.663Z"
+        "capturedAt": "2026-09-24T12:49:06.745Z"
       },
       {
         "profile": "desktop",
@@ -301,16 +303,16 @@
         "bytes": 156669,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-24T11:39:03.124Z"
+        "capturedAt": "2026-09-24T12:49:26.127Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 130996,
+        "bytes": 129575,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-24T11:39:27.307Z"
+        "capturedAt": "2026-09-24T12:49:38.152Z"
       },
       {
         "profile": "mobile",
@@ -319,16 +321,16 @@
         "bytes": 51915,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-24T11:39:07.891Z"
+        "capturedAt": "2026-09-24T12:49:30.800Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 120628,
+        "bytes": 120605,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-24T11:39:34.393Z"
+        "capturedAt": "2026-09-24T12:49:47.165Z"
       }
     ]
   },
@@ -390,17 +392,17 @@
     "devDependencyCount": 47
   },
   "metrics": {
-    "sourceFiles": 1147,
-    "testFiles": 494,
-    "sourceLines": 178008,
+    "sourceFiles": 1149,
+    "testFiles": 495,
+    "sourceLines": 178862,
     "largestDirectories": [
       {
         "directory": "src",
-        "files": 971
+        "files": 972
       },
       {
         "directory": "scripts",
-        "files": 92
+        "files": 93
       },
       {
         "directory": "e2e",
@@ -431,10 +433,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "0d32b1ac",
-    "lastCommitDate": "2026-09-24T14:35:16+03:00",
-    "lastCommitSubject": "Sell relics in the store: Deep Pockets, Gilded Chain, Long Look",
-    "commitCount": 1755,
+    "head": "22a620a1",
+    "lastCommitDate": "2026-09-24T15:41:11+03:00",
+    "lastCommitSubject": "Update the metadata toolkit scripts: trailers step, refresh --commit, capture.skip",
+    "commitCount": 1761,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
