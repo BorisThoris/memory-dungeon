@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-24T12:13:20.297Z",
+  "generatedAt": "2026-09-24T12:49:47.410Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -259,7 +259,9 @@
       "social:check",
       "icons",
       "icons:check",
-      "meta:refresh"
+      "meta:refresh",
+      "trailers",
+      "trailers:check"
     ]
   },
   "capture": {
@@ -289,28 +291,28 @@
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 167375,
+        "bytes": 164190,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-24T12:12:26.684Z"
+        "capturedAt": "2026-09-24T12:49:06.745Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 156580,
+        "bytes": 156669,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-24T12:12:46.070Z"
+        "capturedAt": "2026-09-24T12:49:26.127Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 130989,
+        "bytes": 129575,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-24T12:13:13.156Z"
+        "capturedAt": "2026-09-24T12:49:38.152Z"
       },
       {
         "profile": "mobile",
@@ -319,16 +321,16 @@
         "bytes": 51915,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-24T12:12:53.842Z"
+        "capturedAt": "2026-09-24T12:49:30.800Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 120726,
+        "bytes": 120605,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-24T12:13:20.057Z"
+        "capturedAt": "2026-09-24T12:49:47.165Z"
       }
     ]
   },
@@ -390,9 +392,9 @@
     "devDependencyCount": 47
   },
   "metrics": {
-    "sourceFiles": 1148,
+    "sourceFiles": 1149,
     "testFiles": 495,
-    "sourceLines": 178307,
+    "sourceLines": 178862,
     "largestDirectories": [
       {
         "directory": "src",
@@ -400,7 +402,7 @@
       },
       {
         "directory": "scripts",
-        "files": 92
+        "files": 93
       },
       {
         "directory": "e2e",
@@ -431,10 +433,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "e30d1aa5",
-    "lastCommitDate": "2026-09-24T15:08:53+03:00",
-    "lastCommitSubject": "Refresh the repo model after merging main",
-    "commitCount": 1759,
+    "head": "22a620a1",
+    "lastCommitDate": "2026-09-24T15:41:11+03:00",
+    "lastCommitSubject": "Update the metadata toolkit scripts: trailers step, refresh --commit, capture.skip",
+    "commitCount": 1761,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
