@@ -1,6 +1,7 @@
 import type { MissBankGrant, RunState } from './contracts';
 import { clearResolveState } from './run-timer-rules';
 import { runNonNegativeInteger } from './run-number-guards';
+import { DEEP_POCKETS_CAP, GILDED_CHAIN_GOLD, hasRelic } from './run-relic-rules';
 
 /**
  * The miss bank: the run's budget for being wrong, counted in misses - and, since 2026-09-24,
@@ -55,6 +56,10 @@ export const MISS_BANK_COMBO_RUNG = 5;
 export const MISS_BANK_LIFETIME_FLOORS = 3;
 export const MISS_BANK_CAP = 4;
 
+/** The cap this run is held to: four, or five with Deep Pockets (`run-relic-rules.ts`). */
+export const missBankCap = (run: Pick<RunState, 'relics'>): number =>
+    hasRelic(run, 'deep_pockets') ? DEEP_POCKETS_CAP : MISS_BANK_CAP;
+
 export type { MissBankGrant };
 
 export type MissBankRun = Pick<RunState, 'missBank' | 'board'>;
@@ -99,9 +104,14 @@ export const openingMissBank = (): MissBankGrant[] => [{ floor: 1, misses: MISS_
  * A deposit, under the cap. Over it, the grants that would expire first make room: a chain held
  * on a full bank is not wasted, it pushes the shelf forward.
  */
-export const grantMisses = (grants: readonly MissBankGrant[], floor: number, misses: number): MissBankGrant[] => {
+export const grantMisses = (
+    grants: readonly MissBankGrant[],
+    floor: number,
+    misses: number,
+    cap: number = MISS_BANK_CAP
+): MissBankGrant[] => {
     const next = normalizeMissBank([...grants, { floor, misses }]);
-    let over = sumMisses(next) - MISS_BANK_CAP;
+    let over = sumMisses(next) - cap;
     for (const grant of next) {
         if (over <= 0) break;
         const taken = Math.min(over, grant.misses);
@@ -126,11 +136,11 @@ export const missBankOnFloor = (grants: readonly MissBankGrant[], level: number)
  * What the next floor opens with: what the cleared floor left unspent and not yet expired, plus
  * the clear's own grant, stamped with the floor that earned it.
  */
-export const carryMissBank = (run: MissBankRun, nextLevel: number): MissBankGrant[] | undefined => {
+export const carryMissBank = (run: MissBankRun & Pick<RunState, 'relics'>, nextLevel: number): MissBankGrant[] | undefined => {
     if (run.missBank == null) return undefined;
     const clearedFloor = Math.max(1, runNonNegativeInteger(run.board?.level ?? nextLevel - 1));
     const kept = missBankOnFloor(run.missBank, nextLevel);
-    return grantMisses(kept, clearedFloor, MISS_BANK_FLOOR_GRANT);
+    return grantMisses(kept, clearedFloor, MISS_BANK_FLOOR_GRANT, missBankCap(run));
 };
 
 /** Misses a chain that climbed from `before` to `after` earns: one per rung crossed. */
@@ -153,7 +163,13 @@ export const applyMissBudget = (before: RunState, after: RunState): RunState => 
     const level = Math.max(1, runNonNegativeInteger(after.board?.level ?? before.board?.level ?? 1));
     const earned = comboMissesEarned(before.stats.currentStreak, after.stats.currentStreak);
     if (earned > 0) {
-        return { ...after, missBank: grantMisses(after.missBank, level, earned) };
+        // Gilded Chain (`run-relic-rules.ts`) pays gold on the same rung that earns the miss.
+        const gilded = hasRelic(after, 'gilded_chain') ? GILDED_CHAIN_GOLD * earned : 0;
+        return {
+            ...after,
+            missBank: grantMisses(after.missBank, level, earned, missBankCap(after)),
+            ...(gilded > 0 ? { gold: runNonNegativeInteger(after.gold ?? 0) + gilded } : {})
+        };
     }
     const missed = runNonNegativeInteger(after.stats.mismatches) > runNonNegativeInteger(before.stats.mismatches);
     if (!missed) {

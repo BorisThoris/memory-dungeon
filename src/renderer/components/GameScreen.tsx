@@ -33,6 +33,7 @@ import {
 import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
 import { missBankSoonestToGo, missesLeft } from '../../shared/miss-bank';
 import { runGold, storeOffer } from '../../shared/run-store-rules';
+import { relicDefinition } from '../../shared/run-relic-rules';
 import { STORE_SHEET_COPY } from '../copy/storeSheet';
 import {
     BOARD_SHUFFLE_COPY,
@@ -1830,6 +1831,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 <dt>Gold</dt>
                                 <dd data-testid="pause-gold">{runGold(run)}</dd>
                             </div>
+                            {(run.relics ?? []).length > 0 ? (
+                                <div>
+                                    <dt>Relics</dt>
+                                    <dd data-testid="pause-relics">
+                                        {(run.relics ?? []).map((id) => relicDefinition(id).title).join(' · ')}
+                                    </dd>
+                                </div>
+                            ) : null}
                         </dl>
                     </OverlayModal>
                 )}

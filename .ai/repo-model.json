@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2695,
-    "codeFileCount": 934,
-    "exportedSymbolCount": 2845,
+    "trackedFileCount": 2697,
+    "codeFileCount": 936,
+    "exportedSymbolCount": 2857,
     "contentItemCount": 10,
     "mechanicCount": 43,
     "stateFieldCount": 82,
-    "relationshipCount": 7192
+    "relationshipCount": 7223
   },
   "inventory": [
     {
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 24797,
-      "sha256": "6865581ca2126f7c4469a0ba55aff6733f81f7a5a414b756dc46d6de59f7e33c"
+      "sha256": "1753531dfc1bd21f3f5294b94c8208912ef9d2da485e326dc69185c21fb64f26"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2362,7 +2362,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33560,
-      "sha256": "96a02e87c4c685de6b7be8025dbfb179a9b036bc73bcb6d1fc54a1a177fb23c6"
+      "sha256": "7a392e6588f812900a5380019a8eaa3569e03246e2ebe7e71c62697055a577b2"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4347,8 +4347,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 123122,
-      "sha256": "c0b7869449e39ee148e5b0f12b72ae43a526753701bf7ff16cedf05a5f0e2675"
+      "bytes": 122667,
+      "sha256": "62b99aef70e74fd5d6849d03b869d32d5f22fa4c14726704d7b3aaa0e0fe41fc"
     },
     {
       "path": "public/site.webmanifest",
@@ -9177,8 +9177,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 92064,
-      "sha256": "dfaf84db4273c3701ad3d40d1bfce497d22ffeeb3481fc2043c2a588fa900da1"
+      "bytes": 92581,
+      "sha256": "b7b2b6ffa6b61df838fbff58a613f17b7d1181c94e55acd1d3424643424ac1a0"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -10677,8 +10677,8 @@
     {
       "path": "src/renderer/copy/storeSheet.ts",
       "category": "source",
-      "bytes": 951,
-      "sha256": "5eaa216be405e3dc82d579d875d98f0764816b4089f6d37d6b434edec80a0902"
+      "bytes": 1108,
+      "sha256": "168015ae19905b885f6b29f7027579799a8a1675c4e2feb90c4dedcdbe613b2b"
     },
     {
       "path": "src/renderer/copy/traitInteractionLaneMap.test.ts",
@@ -11782,7 +11782,7 @@
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
       "bytes": 25073,
-      "sha256": "3f24bbab9276aacdad081cb5b59fb306a5115d60219347ebfd91a678f8fc600d"
+      "sha256": "3fb2459050bacf437b2312952dade20ce2635cfe10a9fe1563e05178c3732749"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -12195,8 +12195,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 35563,
-      "sha256": "52ee1c7c2f6cf2dfba3c7e75cb91d621504cb5d96309ae2aa41f33d6945a0806"
+      "bytes": 35819,
+      "sha256": "8b79f15fe2c1bc1dbe18d9baf567688c58e9f80145322ca0ecf550f566896edf"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -12843,14 +12843,14 @@
     {
       "path": "src/shared/mechanics-encyclopedia.test.ts",
       "category": "test",
-      "bytes": 10004,
-      "sha256": "dd11a8e7f1c4af486e266803f716ef2b3795481b4d2964bf108100a6a11498f7"
+      "bytes": 10232,
+      "sha256": "98bcdba9ca841db7500b5534bebd3336064d2e0a5e38b426db420b368007c519"
     },
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 33650,
-      "sha256": "90aa689b18c896195eb6cf0c2798214209062969bf9d2d8499340c178e6a4ebc"
+      "bytes": 33921,
+      "sha256": "b85ed69fa52d833a428449900c5d6032b0f43bd38f2e8d43ec5f52a7b8db272a"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -12915,8 +12915,8 @@
     {
       "path": "src/shared/miss-bank.ts",
       "category": "source",
-      "bytes": 8831,
-      "sha256": "647c4cde99100a0c38eaedc7190fc7c6b6886fa27af19dedd0452aa037f157d1"
+      "bytes": 9559,
+      "sha256": "e7bfbb5878f0fb9861547f6c54396f9cdc8b31f53cfba4bf7ffb4b8da4b79f27"
     },
     {
       "path": "src/shared/mode-records.test.ts",
@@ -13299,8 +13299,8 @@
     {
       "path": "src/shared/run-creation-rules.ts",
       "category": "source",
-      "bytes": 8333,
-      "sha256": "b84a9446147f9d1cf216112a1ef9f695080ed4b76f94f57089b86caac3ce0544"
+      "bytes": 8353,
+      "sha256": "50d692280f0a5abe134d2275c1cbf559a7fa4bb7739d8ab6a2ebcfab06ebcb12"
     },
     {
       "path": "src/shared/run-from-share-key.test.ts",
@@ -13429,6 +13429,18 @@
       "sha256": "365c409750a1a237e9830409dab9c9dc4c5b1d8519cebb37561b851a966a35b1"
     },
     {
+      "path": "src/shared/run-relic-rules.test.ts",
+      "category": "test",
+      "bytes": 3824,
+      "sha256": "5b30a06557b7777d31c011d8094caf87c36b7f4c6dd5a0d9149c0461a30ea393"
+    },
+    {
+      "path": "src/shared/run-relic-rules.ts",
+      "category": "source",
+      "bytes": 2183,
+      "sha256": "e1746028b7d92ec0523044de5dde051b9e0295b9b752526a5bd1d468f471cd8e"
+    },
+    {
       "path": "src/shared/run-settings-rules.test.ts",
       "category": "test",
       "bytes": 1022,
@@ -13473,8 +13485,8 @@
     {
       "path": "src/shared/run-store-rules.ts",
       "category": "source",
-      "bytes": 5173,
-      "sha256": "d5fafd5f849c7702cb9a7ff0a50814ae780142c2d9308b49dd11da6ce7a4613f"
+      "bytes": 6085,
+      "sha256": "d758c0efdd440db46a41536ecc17a8e9e9100cc819ea89d3e180e53f545deffa"
     },
     {
       "path": "src/shared/run-summary-rules.test.ts",
@@ -13557,8 +13569,8 @@
     {
       "path": "src/shared/scoring-rules.ts",
       "category": "source",
-      "bytes": 5544,
-      "sha256": "0941dad26d8e6b9573b442d182fea2f529dd9f6b59e5e3496105504a068e1e52"
+      "bytes": 5768,
+      "sha256": "96dd9d0d090caffc097129a783d107359ee35f050331a57524e7560071b947e4"
     },
     {
       "path": "src/shared/script-paths.test.ts",
@@ -19063,7 +19075,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1943,
+      "lineCount": 1952,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -19131,6 +19143,7 @@
         "file:src/shared/run-array-guards.ts",
         "file:src/shared/run-mode-identity.ts",
         "file:src/shared/run-number-guards.ts",
+        "file:src/shared/run-relic-rules.ts",
         "file:src/shared/run-store-rules.ts",
         "file:src/shared/secondary-objectives.ts"
       ],
@@ -23287,7 +23300,7 @@
       "path": "src/renderer/copy/storeSheet.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 20,
+      "lineCount": 23,
       "imports": [
         "file:src/shared/run-store-rules.ts"
       ],
@@ -27464,7 +27477,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 803,
+      "lineCount": 807,
       "imports": [],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -27526,6 +27539,7 @@
         "symbol:src/shared/contracts.ts#RECALL_CLUE_MATCH_SCORE",
         "symbol:src/shared/contracts.ts#RECALL_FOCUS_MATCH_SCORE",
         "symbol:src/shared/contracts.ts#RECALL_FOCUS_MAX",
+        "symbol:src/shared/contracts.ts#RelicId",
         "symbol:src/shared/contracts.ts#RendererErrorKind",
         "symbol:src/shared/contracts.ts#RendererErrorReport",
         "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -27678,6 +27692,7 @@
         "file:src/shared/restless-floor-rules.test.ts",
         "file:src/shared/run-creation-rules.test.ts",
         "file:src/shared/run-history.test.ts",
+        "file:src/shared/run-relic-rules.test.ts",
         "file:src/shared/run-settings-rules.test.ts",
         "file:src/shared/run-store-rules.test.ts",
         "file:src/shared/run-summary-rules.test.ts",
@@ -28726,6 +28741,7 @@
         "file:src/shared/p2-contracts.test.ts",
         "file:src/shared/release-checklist.test.ts",
         "file:src/shared/restless-floor-rules.test.ts",
+        "file:src/shared/run-relic-rules.test.ts",
         "file:src/shared/run-store-rules.test.ts",
         "file:src/shared/tile-floater-anchor-rules.test.ts"
       ]
@@ -29859,7 +29875,7 @@
       "path": "src/shared/mechanics-encyclopedia.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 208,
+      "lineCount": 210,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/mechanics-encyclopedia.ts"
@@ -29872,7 +29888,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 635,
+      "lineCount": 637,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -30105,10 +30121,11 @@
       "path": "src/shared/miss-bank.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 177,
+      "lineCount": 193,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-number-guards.ts",
+        "file:src/shared/run-relic-rules.ts",
         "file:src/shared/run-timer-rules.ts"
       ],
       "exports": [
@@ -30121,6 +30138,7 @@
         "symbol:src/shared/miss-bank.ts#MISS_BANK_FLOOR_GRANT",
         "symbol:src/shared/miss-bank.ts#MISS_BANK_LIFETIME_FLOORS",
         "symbol:src/shared/miss-bank.ts#MISS_BANK_OPENING",
+        "symbol:src/shared/miss-bank.ts#missBankCap",
         "symbol:src/shared/miss-bank.ts#MissBankGrant",
         "symbol:src/shared/miss-bank.ts#missBankGrantLastFloor",
         "symbol:src/shared/miss-bank.ts#missBankOnFloor",
@@ -30134,6 +30152,7 @@
       "testedBy": [
         "file:src/shared/bad-floor-is-quiet.test.ts",
         "file:src/shared/miss-bank.test.ts",
+        "file:src/shared/run-relic-rules.test.ts",
         "file:src/shared/run-store-rules.test.ts"
       ]
     },
@@ -31300,7 +31319,7 @@
       "path": "src/shared/run-creation-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 201,
+      "lineCount": 202,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/board-tile-generation-rules.ts",
@@ -31742,6 +31761,49 @@
       ]
     },
     {
+      "id": "file:src/shared/run-relic-rules.test.ts",
+      "path": "src/shared/run-relic-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 80,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/game.ts",
+        "file:src/shared/miss-bank.ts",
+        "file:src/shared/run-relic-rules.ts",
+        "file:src/shared/run-store-rules.ts",
+        "file:src/shared/scoring-rules.ts",
+        "file:src/shared/test/game-fixtures.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/run-relic-rules.ts",
+      "path": "src/shared/run-relic-rules.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 60,
+      "imports": [
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/run-relic-rules.ts#DEEP_POCKETS_CAP",
+        "symbol:src/shared/run-relic-rules.ts#GILDED_CHAIN_GOLD",
+        "symbol:src/shared/run-relic-rules.ts#hasRelic",
+        "symbol:src/shared/run-relic-rules.ts#isRelicId",
+        "symbol:src/shared/run-relic-rules.ts#LONG_LOOK_MS",
+        "symbol:src/shared/run-relic-rules.ts#RELIC_IDS",
+        "symbol:src/shared/run-relic-rules.ts#relicDefinition",
+        "symbol:src/shared/run-relic-rules.ts#RelicDefinition",
+        "symbol:src/shared/run-relic-rules.ts#RelicId",
+        "symbol:src/shared/run-relic-rules.ts#RELICS"
+      ],
+      "testedBy": [
+        "file:src/shared/run-relic-rules.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/run-settings-rules.test.ts",
       "path": "src/shared/run-settings-rules.test.ts",
       "layer": "shared",
@@ -31862,12 +31924,13 @@
       "path": "src/shared/run-store-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 124,
+      "lineCount": 148,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/miss-bank.ts",
-        "file:src/shared/run-number-guards.ts"
+        "file:src/shared/run-number-guards.ts",
+        "file:src/shared/run-relic-rules.ts"
       ],
       "exports": [
         "symbol:src/shared/run-store-rules.ts#buyStoreItem",
@@ -31887,6 +31950,7 @@
         "symbol:src/shared/run-store-rules.ts#StoreRun"
       ],
       "testedBy": [
+        "file:src/shared/run-relic-rules.test.ts",
         "file:src/shared/run-store-rules.test.ts"
       ]
     },
@@ -32199,12 +32263,13 @@
       "path": "src/shared/scoring-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 146,
+      "lineCount": 151,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/mutators.ts",
         "file:src/shared/pair-curve.ts",
         "file:src/shared/run-number-guards.ts",
+        "file:src/shared/run-relic-rules.ts",
         "file:src/shared/tile-identity.ts"
       ],
       "exports": [
@@ -32221,6 +32286,7 @@
         "symbol:src/shared/scoring-rules.ts#tilesArePairMatch"
       ],
       "testedBy": [
+        "file:src/shared/run-relic-rules.test.ts",
         "file:src/shared/scoring-rules.test.ts",
         "file:src/shared/turn-match-score-rules.test.ts",
         "file:src/shared/turn-match-scoring-summary-rules.test.ts"
@@ -32811,6 +32877,7 @@
         "file:src/shared/game.test.ts",
         "file:src/shared/miss-bank.test.ts",
         "file:src/shared/release-checklist.test.ts",
+        "file:src/shared/run-relic-rules.test.ts",
         "file:src/shared/session-stats-rules.test.ts",
         "file:src/shared/tile-suit-rules.test.ts",
         "file:src/shared/tile-trait-rules.test.ts"
@@ -36830,40 +36897,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 1942,
-      "endLine": 1942
+      "line": 1951,
+      "endLine": 1951
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 231,
-      "endLine": 231
+      "line": 232,
+      "endLine": 232
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 229,
-      "endLine": 229
+      "line": 230,
+      "endLine": 230
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 233,
-      "endLine": 233
+      "line": 234,
+      "endLine": 234
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 223,
-      "endLine": 223
+      "line": 224,
+      "endLine": 224
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -41487,7 +41554,7 @@
       "kind": "value",
       "file": "src/renderer/copy/storeSheet.ts",
       "line": 4,
-      "endLine": 19
+      "endLine": 22
     },
     {
       "id": "symbol:src/renderer/copy/traitInteractionLaneMap.ts#buildTraitInteractionLaneMap",
@@ -46558,48 +46625,48 @@
       "name": "AchievementId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 183,
-      "endLine": 215
+      "line": 185,
+      "endLine": 217
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementState",
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 680,
-      "endLine": 680
+      "line": 684,
+      "endLine": 684
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 750,
-      "endLine": 752
+      "line": 754,
+      "endLine": 756
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
       "name": "BoardPresentationMode",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 224,
-      "endLine": 224
+      "line": 226,
+      "endLine": 226
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardScreenSpaceAA",
       "name": "BoardScreenSpaceAA",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 238,
-      "endLine": 238
+      "line": 240,
+      "endLine": 240
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardState",
       "name": "BoardState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 326,
-      "endLine": 354
+      "line": 328,
+      "endLine": 356
     },
     {
       "id": "symbol:src/shared/contracts.ts#BOSS_FLOOR_SCORE_MULTIPLIER",
@@ -46614,32 +46681,32 @@
       "name": "BuiltinPuzzleDefinition",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 125,
-      "endLine": 136
+      "line": 127,
+      "endLine": 138
     },
     {
       "id": "symbol:src/shared/contracts.ts#CameraViewportModePreference",
       "name": "CameraViewportModePreference",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 231,
-      "endLine": 231
+      "line": 233,
+      "endLine": 233
     },
     {
       "id": "symbol:src/shared/contracts.ts#ContractFlags",
       "name": "ContractFlags",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 174,
-      "endLine": 179
+      "line": 176,
+      "endLine": 181
     },
     {
       "id": "symbol:src/shared/contracts.ts#CrashReportSummary",
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 758,
-      "endLine": 763
+      "line": 762,
+      "endLine": 767
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -46662,16 +46729,16 @@
       "name": "DebugFlags",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 217,
-      "endLine": 221
+      "line": 219,
+      "endLine": 223
     },
     {
       "id": "symbol:src/shared/contracts.ts#DesktopApi",
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 776,
-      "endLine": 802
+      "line": 780,
+      "endLine": 806
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -46710,32 +46777,32 @@
       "name": "FeaturedObjectiveId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 79,
-      "endLine": 79
+      "line": 81,
+      "endLine": 81
     },
     {
       "id": "symbol:src/shared/contracts.ts#FINDABLE_KIND_SPAWN_WEIGHTS",
       "name": "FINDABLE_KIND_SPAWN_WEIGHTS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 167,
-      "endLine": 169
+      "line": 169,
+      "endLine": 171
     },
     {
       "id": "symbol:src/shared/contracts.ts#FINDABLE_MATCH_SCORE",
       "name": "FINDABLE_MATCH_SCORE",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 163,
-      "endLine": 165
+      "line": 165,
+      "endLine": 167
     },
     {
       "id": "symbol:src/shared/contracts.ts#FindableKind",
       "name": "FindableKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 160,
-      "endLine": 160
+      "line": 162,
+      "endLine": 162
     },
     {
       "id": "symbol:src/shared/contracts.ts#FLIP_PAR_BONUS_SCORE",
@@ -46750,24 +46817,24 @@
       "name": "FLOOR_ARCHETYPE_IDS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 311,
-      "endLine": 323
+      "line": 313,
+      "endLine": 325
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorArchetypeId",
       "name": "FloorArchetypeId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 324,
-      "endLine": 324
+      "line": 326,
+      "endLine": 326
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorTag",
       "name": "FloorTag",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 302,
-      "endLine": 302
+      "line": 304,
+      "endLine": 304
     },
     {
       "id": "symbol:src/shared/contracts.ts#GAME_RULES_VERSION",
@@ -46782,32 +46849,32 @@
       "name": "GameMode",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 119,
-      "endLine": 119
+      "line": 121,
+      "endLine": 121
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameplayCommandJournalEntry",
       "name": "GameplayCommandJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 455,
-      "endLine": 459
+      "line": 457,
+      "endLine": 461
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameplayEventJournalEntry",
       "name": "GameplayEventJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 461,
-      "endLine": 471
+      "line": 463,
+      "endLine": 473
     },
     {
       "id": "symbol:src/shared/contracts.ts#GraphicsQualityPreset",
       "name": "GraphicsQualityPreset",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 241,
-      "endLine": 241
+      "line": 243,
+      "endLine": 243
     },
     {
       "id": "symbol:src/shared/contracts.ts#INITIAL_RECALL_FOCUS",
@@ -46838,8 +46905,8 @@
       "name": "LevelResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 374,
-      "endLine": 413
+      "line": 376,
+      "endLine": 415
     },
     {
       "id": "symbol:src/shared/contracts.ts#MATCH_DELAY_MS",
@@ -46934,64 +47001,64 @@
       "name": "MUTATOR_IDS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 138,
-      "endLine": 149
+      "line": 140,
+      "endLine": 151
     },
     {
       "id": "symbol:src/shared/contracts.ts#MutatorId",
       "name": "MutatorId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 150,
-      "endLine": 150
+      "line": 152,
+      "endLine": 152
     },
     {
       "id": "symbol:src/shared/contracts.ts#PassAndPlaySeat",
       "name": "PassAndPlaySeat",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 484,
-      "endLine": 496
+      "line": 486,
+      "endLine": 498
     },
     {
       "id": "symbol:src/shared/contracts.ts#PassAndPlayState",
       "name": "PassAndPlayState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 498,
-      "endLine": 511
+      "line": 500,
+      "endLine": 513
     },
     {
       "id": "symbol:src/shared/contracts.ts#PlayerStatsPersisted",
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 682,
-      "endLine": 695
+      "line": 686,
+      "endLine": 699
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
       "name": "PuzzleDifficulty",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 121,
-      "endLine": 121
+      "line": 123,
+      "endLine": 123
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleGoal",
       "name": "PuzzleGoal",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 122,
-      "endLine": 122
+      "line": 124,
+      "endLine": 124
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzlePackId",
       "name": "PuzzlePackId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 123,
-      "endLine": 123
+      "line": 125,
+      "endLine": 125
     },
     {
       "id": "symbol:src/shared/contracts.ts#Rating",
@@ -47026,20 +47093,28 @@
       "endLine": 43
     },
     {
+      "id": "symbol:src/shared/contracts.ts#RelicId",
+      "name": "RelicId",
+      "kind": "type",
+      "file": "src/shared/contracts.ts",
+      "line": 80,
+      "endLine": 80
+    },
+    {
       "id": "symbol:src/shared/contracts.ts#RendererErrorKind",
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 766,
-      "endLine": 766
+      "line": 770,
+      "endLine": 770
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 769,
-      "endLine": 774
+      "line": 773,
+      "endLine": 778
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -47054,24 +47129,24 @@
       "name": "ResumableRunStatus",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 180,
-      "endLine": 180
+      "line": 182,
+      "endLine": 182
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceState",
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 743,
-      "endLine": 747
+      "line": 747,
+      "endLine": 751
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 741,
-      "endLine": 741
+      "line": 745,
+      "endLine": 745
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
@@ -47086,40 +47161,40 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 702,
-      "endLine": 714
+      "line": 706,
+      "endLine": 718
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
       "name": "RunState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 513,
-      "endLine": 678
+      "line": 515,
+      "endLine": 682
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
       "name": "RunStatus",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 181,
-      "endLine": 181
+      "line": 183,
+      "endLine": 183
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunSummary",
       "name": "RunSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 416,
-      "endLine": 453
+      "line": 418,
+      "endLine": 455
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunTimerState",
       "name": "RunTimerState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 473,
-      "endLine": 478
+      "line": 475,
+      "endLine": 480
     },
     {
       "id": "symbol:src/shared/contracts.ts#SAVE_SCHEMA_VERSION",
@@ -47134,8 +47209,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 716,
-      "endLine": 735
+      "line": 720,
+      "endLine": 739
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -47150,16 +47225,16 @@
       "name": "SessionStats",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 356,
-      "endLine": 372
+      "line": 358,
+      "endLine": 374
     },
     {
       "id": "symbol:src/shared/contracts.ts#Settings",
       "name": "Settings",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 243,
-      "endLine": 278
+      "line": 245,
+      "endLine": 280
     },
     {
       "id": "symbol:src/shared/contracts.ts#SHIFTING_BOUNTY_MATCH_BONUS",
@@ -47182,16 +47257,16 @@
       "name": "SubscreenReturnView",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 104,
-      "endLine": 104
+      "line": 106,
+      "endLine": 106
     },
     {
       "id": "symbol:src/shared/contracts.ts#Tile",
       "name": "Tile",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 280,
-      "endLine": 300
+      "line": 282,
+      "endLine": 302
     },
     {
       "id": "symbol:src/shared/contracts.ts#TileState",
@@ -47214,32 +47289,32 @@
       "name": "TileTraitKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 415,
-      "endLine": 415
+      "line": 417,
+      "endLine": 417
     },
     {
       "id": "symbol:src/shared/contracts.ts#VIEW_STATES",
       "name": "VIEW_STATES",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 88,
-      "endLine": 99
+      "line": 90,
+      "endLine": 101
     },
     {
       "id": "symbol:src/shared/contracts.ts#ViewState",
       "name": "ViewState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 101,
-      "endLine": 101
+      "line": 103,
+      "endLine": 103
     },
     {
       "id": "symbol:src/shared/contracts.ts#WeakerShuffleMode",
       "name": "WeakerShuffleMode",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 172,
-      "endLine": 172
+      "line": 174,
+      "endLine": 174
     },
     {
       "id": "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_CONTRACT",
@@ -50695,7 +50770,7 @@
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
       "line": 328,
-      "endLine": 373
+      "endLine": 375
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#CodexCoreTopic",
@@ -50710,48 +50785,48 @@
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 602,
-      "endLine": 620
+      "line": 604,
+      "endLine": 622
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 623,
-      "endLine": 634
+      "line": 625,
+      "endLine": 636
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "name": "ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 543,
-      "endLine": 599
+      "line": 545,
+      "endLine": 601
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
       "name": "ENCYCLOPEDIA_POWER_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 376,
-      "endLine": 425
+      "line": 378,
+      "endLine": 427
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS",
       "name": "ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 430,
-      "endLine": 491
+      "line": 432,
+      "endLine": 493
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "name": "ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 496,
-      "endLine": 540
+      "line": 498,
+      "endLine": 542
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_VERSION",
@@ -51222,144 +51297,152 @@
       "name": "applyMissBudget",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 149,
-      "endLine": 176
+      "line": 159,
+      "endLine": 192
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#carryMissBank",
       "name": "carryMissBank",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 129,
-      "endLine": 134
+      "line": 139,
+      "endLine": 144
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#comboMissesEarned",
       "name": "comboMissesEarned",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 137,
-      "endLine": 141
+      "line": 147,
+      "endLine": 151
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#grantMisses",
       "name": "grantMisses",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 102,
-      "endLine": 112
+      "line": 107,
+      "endLine": 122
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#MISS_BANK_CAP",
       "name": "MISS_BANK_CAP",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 56,
-      "endLine": 56
+      "line": 57,
+      "endLine": 57
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#MISS_BANK_COMBO_RUNG",
       "name": "MISS_BANK_COMBO_RUNG",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 54,
-      "endLine": 54
+      "line": 55,
+      "endLine": 55
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#MISS_BANK_FLOOR_GRANT",
       "name": "MISS_BANK_FLOOR_GRANT",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 53,
-      "endLine": 53
+      "line": 54,
+      "endLine": 54
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#MISS_BANK_LIFETIME_FLOORS",
       "name": "MISS_BANK_LIFETIME_FLOORS",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 55,
-      "endLine": 55
+      "line": 56,
+      "endLine": 56
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#MISS_BANK_OPENING",
       "name": "MISS_BANK_OPENING",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 52,
-      "endLine": 52
+      "line": 53,
+      "endLine": 53
+    },
+    {
+      "id": "symbol:src/shared/miss-bank.ts#missBankCap",
+      "name": "missBankCap",
+      "kind": "value",
+      "file": "src/shared/miss-bank.ts",
+      "line": 60,
+      "endLine": 61
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#MissBankGrant",
       "name": "MissBankGrant",
       "kind": "ExportSpecifier",
       "file": "src/shared/miss-bank.ts",
-      "line": 58,
-      "endLine": 58
+      "line": 63,
+      "endLine": 63
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#missBankGrantLastFloor",
       "name": "missBankGrantLastFloor",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 65,
-      "endLine": 66
+      "line": 70,
+      "endLine": 71
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#missBankOnFloor",
       "name": "missBankOnFloor",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 122,
-      "endLine": 123
+      "line": 132,
+      "endLine": 133
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#MissBankRun",
       "name": "MissBankRun",
       "kind": "type",
       "file": "src/shared/miss-bank.ts",
-      "line": 60,
-      "endLine": 60
+      "line": 65,
+      "endLine": 65
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#missBankSoonestToGo",
       "name": "missBankSoonestToGo",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 88,
-      "endLine": 93
+      "line": 93,
+      "endLine": 98
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#missesLeft",
       "name": "missesLeft",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 84,
-      "endLine": 85
+      "line": 89,
+      "endLine": 90
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#normalizeMissBank",
       "name": "normalizeMissBank",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 69,
-      "endLine": 78
+      "line": 74,
+      "endLine": 83
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#openingMissBank",
       "name": "openingMissBank",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 96,
-      "endLine": 96
+      "line": 101,
+      "endLine": 101
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#spendMiss",
       "name": "spendMiss",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 115,
-      "endLine": 119
+      "line": 125,
+      "endLine": 129
     },
     {
       "id": "symbol:src/shared/mode-records.ts#getModeRecords",
@@ -52847,7 +52930,7 @@
       "kind": "value",
       "file": "src/shared/run-creation-rules.ts",
       "line": 50,
-      "endLine": 192
+      "endLine": 193
     },
     {
       "id": "symbol:src/shared/run-creation-rules.ts#CreateRunOptions",
@@ -52862,8 +52945,8 @@
       "name": "createWildRun",
       "kind": "value",
       "file": "src/shared/run-creation-rules.ts",
-      "line": 194,
-      "endLine": 200
+      "line": 195,
+      "endLine": 201
     },
     {
       "id": "symbol:src/shared/run-from-share-key.ts#createRunFromShareKey",
@@ -53538,6 +53621,86 @@
       "endLine": 4
     },
     {
+      "id": "symbol:src/shared/run-relic-rules.ts#DEEP_POCKETS_CAP",
+      "name": "DEEP_POCKETS_CAP",
+      "kind": "value",
+      "file": "src/shared/run-relic-rules.ts",
+      "line": 26,
+      "endLine": 26
+    },
+    {
+      "id": "symbol:src/shared/run-relic-rules.ts#GILDED_CHAIN_GOLD",
+      "name": "GILDED_CHAIN_GOLD",
+      "kind": "value",
+      "file": "src/shared/run-relic-rules.ts",
+      "line": 28,
+      "endLine": 28
+    },
+    {
+      "id": "symbol:src/shared/run-relic-rules.ts#hasRelic",
+      "name": "hasRelic",
+      "kind": "value",
+      "file": "src/shared/run-relic-rules.ts",
+      "line": 57,
+      "endLine": 57
+    },
+    {
+      "id": "symbol:src/shared/run-relic-rules.ts#isRelicId",
+      "name": "isRelicId",
+      "kind": "value",
+      "file": "src/shared/run-relic-rules.ts",
+      "line": 55,
+      "endLine": 55
+    },
+    {
+      "id": "symbol:src/shared/run-relic-rules.ts#LONG_LOOK_MS",
+      "name": "LONG_LOOK_MS",
+      "kind": "value",
+      "file": "src/shared/run-relic-rules.ts",
+      "line": 30,
+      "endLine": 30
+    },
+    {
+      "id": "symbol:src/shared/run-relic-rules.ts#RELIC_IDS",
+      "name": "RELIC_IDS",
+      "kind": "value",
+      "file": "src/shared/run-relic-rules.ts",
+      "line": 53,
+      "endLine": 53
+    },
+    {
+      "id": "symbol:src/shared/run-relic-rules.ts#relicDefinition",
+      "name": "relicDefinition",
+      "kind": "value",
+      "file": "src/shared/run-relic-rules.ts",
+      "line": 59,
+      "endLine": 59
+    },
+    {
+      "id": "symbol:src/shared/run-relic-rules.ts#RelicDefinition",
+      "name": "RelicDefinition",
+      "kind": "interface",
+      "file": "src/shared/run-relic-rules.ts",
+      "line": 18,
+      "endLine": 23
+    },
+    {
+      "id": "symbol:src/shared/run-relic-rules.ts#RelicId",
+      "name": "RelicId",
+      "kind": "ExportSpecifier",
+      "file": "src/shared/run-relic-rules.ts",
+      "line": 16,
+      "endLine": 16
+    },
+    {
+      "id": "symbol:src/shared/run-relic-rules.ts#RELICS",
+      "name": "RELICS",
+      "kind": "value",
+      "file": "src/shared/run-relic-rules.ts",
+      "line": 32,
+      "endLine": 51
+    },
+    {
       "id": "symbol:src/shared/run-settings-rules.ts#applyRunSettings",
       "name": "applyRunSettings",
       "kind": "value",
@@ -53622,120 +53785,120 @@
       "name": "buyStoreItem",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 104,
-      "endLine": 123
+      "line": 126,
+      "endLine": 147
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#floorClearGold",
       "name": "floorClearGold",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 28,
-      "endLine": 31
+      "line": 29,
+      "endLine": 32
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#GOLD_BY_CLEAR_TIER",
       "name": "GOLD_BY_CLEAR_TIER",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 25,
-      "endLine": 25
+      "line": 26,
+      "endLine": 26
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#GOLD_FLOOR_CLEAR_BASE",
       "name": "GOLD_FLOOR_CLEAR_BASE",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 20,
-      "endLine": 20
+      "line": 21,
+      "endLine": 21
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#GOLD_PER_TURN_UNDER_PAR",
       "name": "GOLD_PER_TURN_UNDER_PAR",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 22,
-      "endLine": 22
+      "line": 23,
+      "endLine": 23
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#GOLD_UNDER_PAR_CAP",
       "name": "GOLD_UNDER_PAR_CAP",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 23,
-      "endLine": 23
+      "line": 24,
+      "endLine": 24
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#runGold",
       "name": "runGold",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 70,
-      "endLine": 70
+      "line": 90,
+      "endLine": 90
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#STORE_ITEMS",
       "name": "STORE_ITEMS",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 44,
-      "endLine": 66
+      "line": 47,
+      "endLine": 83
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#StoreItemDefinition",
       "name": "StoreItemDefinition",
       "kind": "interface",
       "file": "src/shared/run-store-rules.ts",
-      "line": 35,
-      "endLine": 42
+      "line": 36,
+      "endLine": 45
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#StoreItemId",
       "name": "StoreItemId",
       "kind": "type",
       "file": "src/shared/run-store-rules.ts",
-      "line": 33,
-      "endLine": 33
+      "line": 34,
+      "endLine": 34
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#storeOffer",
       "name": "storeOffer",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 90,
-      "endLine": 101
+      "line": 111,
+      "endLine": 123
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#StoreOfferRow",
       "name": "StoreOfferRow",
       "kind": "interface",
       "file": "src/shared/run-store-rules.ts",
-      "line": 80,
-      "endLine": 87
+      "line": 100,
+      "endLine": 108
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#storePrice",
       "name": "storePrice",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 75,
-      "endLine": 78
+      "line": 95,
+      "endLine": 98
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#storePurchaseCount",
       "name": "storePurchaseCount",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 72,
-      "endLine": 73
+      "line": 92,
+      "endLine": 93
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#StoreRun",
       "name": "StoreRun",
       "kind": "type",
       "file": "src/shared/run-store-rules.ts",
-      "line": 68,
-      "endLine": 68
+      "line": 85,
+      "endLine": 88
     },
     {
       "id": "symbol:src/shared/run-summary-rules.ts#createGameOverRunSummary",
@@ -54102,88 +54265,88 @@
       "name": "calculateMatchScore",
       "kind": "value",
       "file": "src/shared/scoring-rules.ts",
-      "line": 97,
-      "endLine": 106
+      "line": 102,
+      "endLine": 111
     },
     {
       "id": "symbol:src/shared/scoring-rules.ts#calculateRating",
       "name": "calculateRating",
       "kind": "value",
       "file": "src/shared/scoring-rules.ts",
-      "line": 87,
-      "endLine": 95
+      "line": 92,
+      "endLine": 100
     },
     {
       "id": "symbol:src/shared/scoring-rules.ts#computeFlipResolveDelayMs",
       "name": "computeFlipResolveDelayMs",
       "kind": "value",
       "file": "src/shared/scoring-rules.ts",
-      "line": 123,
-      "endLine": 145
+      "line": 128,
+      "endLine": 150
     },
     {
       "id": "symbol:src/shared/scoring-rules.ts#getDefaultTileCount",
       "name": "getDefaultTileCount",
       "kind": "value",
       "file": "src/shared/scoring-rules.ts",
-      "line": 60,
-      "endLine": 60
+      "line": 61,
+      "endLine": 61
     },
     {
       "id": "symbol:src/shared/scoring-rules.ts#getLegacyMemorizeDuration",
       "name": "getLegacyMemorizeDuration",
       "kind": "value",
       "file": "src/shared/scoring-rules.ts",
-      "line": 47,
-      "endLine": 51
+      "line": 48,
+      "endLine": 52
     },
     {
       "id": "symbol:src/shared/scoring-rules.ts#getMemorizeDuration",
       "name": "getMemorizeDuration",
       "kind": "value",
       "file": "src/shared/scoring-rules.ts",
-      "line": 66,
-      "endLine": 70
+      "line": 67,
+      "endLine": 71
     },
     {
       "id": "symbol:src/shared/scoring-rules.ts#getMemorizeDurationForRun",
       "name": "getMemorizeDurationForRun",
       "kind": "value",
       "file": "src/shared/scoring-rules.ts",
-      "line": 72,
-      "endLine": 85
+      "line": 73,
+      "endLine": 90
     },
     {
       "id": "symbol:src/shared/scoring-rules.ts#getMemorizePerTileBudget",
       "name": "getMemorizePerTileBudget",
       "kind": "value",
       "file": "src/shared/scoring-rules.ts",
-      "line": 54,
-      "endLine": 57
+      "line": 55,
+      "endLine": 58
     },
     {
       "id": "symbol:src/shared/scoring-rules.ts#getPresentationMutatorMatchPenalty",
       "name": "getPresentationMutatorMatchPenalty",
       "kind": "value",
       "file": "src/shared/scoring-rules.ts",
-      "line": 29,
-      "endLine": 41
+      "line": 30,
+      "endLine": 42
     },
     {
       "id": "symbol:src/shared/scoring-rules.ts#PRESENTATION_MUTATOR_MATCH_PENALTIES",
       "name": "PRESENTATION_MUTATOR_MATCH_PENALTIES",
       "kind": "value",
       "file": "src/shared/scoring-rules.ts",
-      "line": 23,
-      "endLine": 27
+      "line": 24,
+      "endLine": 28
     },
     {
       "id": "symbol:src/shared/scoring-rules.ts#tilesArePairMatch",
       "name": "tilesArePairMatch",
       "kind": "value",
       "file": "src/shared/scoring-rules.ts",
-      "line": 109,
-      "endLine": 120
+      "line": 114,
+      "endLine": 125
     },
     {
       "id": "symbol:src/shared/secondary-objective-rules.ts#DefaultClearObjectiveBonusResult",
@@ -70063,6 +70226,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/contracts.ts->symbol:src/shared/contracts.ts#RelicId",
+      "source": "file:src/shared/contracts.ts",
+      "target": "symbol:src/shared/contracts.ts#RelicId",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/contracts.ts->symbol:src/shared/contracts.ts#RendererErrorKind",
       "source": "file:src/shared/contracts.ts",
       "target": "symbol:src/shared/contracts.ts#RendererErrorKind",
@@ -73261,6 +73430,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/miss-bank.ts->symbol:src/shared/miss-bank.ts#missBankCap",
+      "source": "file:src/shared/miss-bank.ts",
+      "target": "symbol:src/shared/miss-bank.ts#missBankCap",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/miss-bank.ts->symbol:src/shared/miss-bank.ts#MissBankGrant",
       "source": "file:src/shared/miss-bank.ts",
       "target": "symbol:src/shared/miss-bank.ts#MissBankGrant",
@@ -74944,6 +75119,66 @@
       "id": "exports:src/shared/run-record-guards.ts->symbol:src/shared/run-record-guards.ts#runRecord",
       "source": "file:src/shared/run-record-guards.ts",
       "target": "symbol:src/shared/run-record-guards.ts#runRecord",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-relic-rules.ts->symbol:src/shared/run-relic-rules.ts#DEEP_POCKETS_CAP",
+      "source": "file:src/shared/run-relic-rules.ts",
+      "target": "symbol:src/shared/run-relic-rules.ts#DEEP_POCKETS_CAP",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-relic-rules.ts->symbol:src/shared/run-relic-rules.ts#GILDED_CHAIN_GOLD",
+      "source": "file:src/shared/run-relic-rules.ts",
+      "target": "symbol:src/shared/run-relic-rules.ts#GILDED_CHAIN_GOLD",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-relic-rules.ts->symbol:src/shared/run-relic-rules.ts#hasRelic",
+      "source": "file:src/shared/run-relic-rules.ts",
+      "target": "symbol:src/shared/run-relic-rules.ts#hasRelic",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-relic-rules.ts->symbol:src/shared/run-relic-rules.ts#isRelicId",
+      "source": "file:src/shared/run-relic-rules.ts",
+      "target": "symbol:src/shared/run-relic-rules.ts#isRelicId",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-relic-rules.ts->symbol:src/shared/run-relic-rules.ts#LONG_LOOK_MS",
+      "source": "file:src/shared/run-relic-rules.ts",
+      "target": "symbol:src/shared/run-relic-rules.ts#LONG_LOOK_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-relic-rules.ts->symbol:src/shared/run-relic-rules.ts#RELIC_IDS",
+      "source": "file:src/shared/run-relic-rules.ts",
+      "target": "symbol:src/shared/run-relic-rules.ts#RELIC_IDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-relic-rules.ts->symbol:src/shared/run-relic-rules.ts#relicDefinition",
+      "source": "file:src/shared/run-relic-rules.ts",
+      "target": "symbol:src/shared/run-relic-rules.ts#relicDefinition",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-relic-rules.ts->symbol:src/shared/run-relic-rules.ts#RelicDefinition",
+      "source": "file:src/shared/run-relic-rules.ts",
+      "target": "symbol:src/shared/run-relic-rules.ts#RelicDefinition",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-relic-rules.ts->symbol:src/shared/run-relic-rules.ts#RelicId",
+      "source": "file:src/shared/run-relic-rules.ts",
+      "target": "symbol:src/shared/run-relic-rules.ts#RelicId",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-relic-rules.ts->symbol:src/shared/run-relic-rules.ts#RELICS",
+      "source": "file:src/shared/run-relic-rules.ts",
+      "target": "symbol:src/shared/run-relic-rules.ts#RELICS",
       "kind": "exports"
     },
     {
@@ -81019,6 +81254,12 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/run-number-guards.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/run-relic-rules.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/shared/run-relic-rules.ts",
       "kind": "imports"
     },
     {
@@ -90820,6 +91061,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/miss-bank.ts->src/shared/run-relic-rules.ts",
+      "source": "file:src/shared/miss-bank.ts",
+      "target": "file:src/shared/run-relic-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/miss-bank.ts->src/shared/run-timer-rules.ts",
       "source": "file:src/shared/miss-bank.ts",
       "target": "file:src/shared/run-timer-rules.ts",
@@ -92164,6 +92411,54 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/run-relic-rules.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/run-relic-rules.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-relic-rules.test.ts->src/shared/game.ts",
+      "source": "file:src/shared/run-relic-rules.test.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-relic-rules.test.ts->src/shared/miss-bank.ts",
+      "source": "file:src/shared/run-relic-rules.test.ts",
+      "target": "file:src/shared/miss-bank.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-relic-rules.test.ts->src/shared/run-relic-rules.ts",
+      "source": "file:src/shared/run-relic-rules.test.ts",
+      "target": "file:src/shared/run-relic-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-relic-rules.test.ts->src/shared/run-store-rules.ts",
+      "source": "file:src/shared/run-relic-rules.test.ts",
+      "target": "file:src/shared/run-store-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-relic-rules.test.ts->src/shared/scoring-rules.ts",
+      "source": "file:src/shared/run-relic-rules.test.ts",
+      "target": "file:src/shared/scoring-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-relic-rules.test.ts->src/shared/test/game-fixtures.ts",
+      "source": "file:src/shared/run-relic-rules.test.ts",
+      "target": "file:src/shared/test/game-fixtures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-relic-rules.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/run-relic-rules.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/run-settings-rules.test.ts->src/shared/contracts.ts",
       "source": "file:src/shared/run-settings-rules.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -92293,6 +92588,12 @@
       "id": "imports:src/shared/run-store-rules.ts->src/shared/run-number-guards.ts",
       "source": "file:src/shared/run-store-rules.ts",
       "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-store-rules.ts->src/shared/run-relic-rules.ts",
+      "source": "file:src/shared/run-store-rules.ts",
+      "target": "file:src/shared/run-relic-rules.ts",
       "kind": "imports"
     },
     {
@@ -92581,6 +92882,12 @@
       "id": "imports:src/shared/scoring-rules.ts->src/shared/run-number-guards.ts",
       "source": "file:src/shared/scoring-rules.ts",
       "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/scoring-rules.ts->src/shared/run-relic-rules.ts",
+      "source": "file:src/shared/scoring-rules.ts",
+      "target": "file:src/shared/run-relic-rules.ts",
       "kind": "imports"
     },
     {
@@ -99105,6 +99412,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/run-relic-rules.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/run-relic-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/run-settings-rules.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/run-settings-rules.test.ts",
@@ -99855,6 +100168,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/game.ts->file:src/shared/run-relic-rules.test.ts",
+      "source": "file:src/shared/game.ts",
+      "target": "file:src/shared/run-relic-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/game.ts->file:src/shared/run-store-rules.test.ts",
       "source": "file:src/shared/game.ts",
       "target": "file:src/shared/run-store-rules.test.ts",
@@ -100224,6 +100543,12 @@
       "id": "tested_by:src/shared/miss-bank.ts->file:src/shared/miss-bank.test.ts",
       "source": "file:src/shared/miss-bank.ts",
       "target": "file:src/shared/miss-bank.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/miss-bank.ts->file:src/shared/run-relic-rules.test.ts",
+      "source": "file:src/shared/miss-bank.ts",
+      "target": "file:src/shared/run-relic-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -100851,6 +101176,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/run-relic-rules.ts->file:src/shared/run-relic-rules.test.ts",
+      "source": "file:src/shared/run-relic-rules.ts",
+      "target": "file:src/shared/run-relic-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/run-settings-rules.ts->file:src/shared/run-settings-rules.test.ts",
       "source": "file:src/shared/run-settings-rules.ts",
       "target": "file:src/shared/run-settings-rules.test.ts",
@@ -100878,6 +101209,12 @@
       "id": "tested_by:src/shared/run-share-text.ts->file:src/shared/run-share-text.test.ts",
       "source": "file:src/shared/run-share-text.ts",
       "target": "file:src/shared/run-share-text.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/run-store-rules.ts->file:src/shared/run-relic-rules.test.ts",
+      "source": "file:src/shared/run-store-rules.ts",
+      "target": "file:src/shared/run-relic-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -101265,6 +101602,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/scoring-rules.ts->file:src/shared/run-relic-rules.test.ts",
+      "source": "file:src/shared/scoring-rules.ts",
+      "target": "file:src/shared/run-relic-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/scoring-rules.ts->file:src/shared/scoring-rules.test.ts",
       "source": "file:src/shared/scoring-rules.ts",
       "target": "file:src/shared/scoring-rules.test.ts",
@@ -101436,6 +101779,12 @@
       "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/shared/release-checklist.test.ts",
       "source": "file:src/shared/test/game-fixtures.ts",
       "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/shared/run-relic-rules.test.ts",
+      "source": "file:src/shared/test/game-fixtures.ts",
+      "target": "file:src/shared/run-relic-rules.test.ts",
       "kind": "tested_by"
     },
     {

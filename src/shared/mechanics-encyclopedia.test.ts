@@ -47,9 +47,11 @@ describe('mechanics-encyclopedia', () => {
     });
 
     it('names no system the dungeon layer took with it', () => {
-        // Relics, shop gold, routes, side rooms, wagers, wardens, keys and exits are gone from the
-        // rules, so no reference copy may still describe them as if a player could meet them.
-        const removed = /relic|shop gold|route card|side room|wager|warden|dungeon key|locked exit/i;
+        // The relic draft, shop gold, routes, side rooms, wagers, wardens, keys and exits are gone
+        // from the rules, so no reference copy may still describe them as if a player could meet
+        // them. Relics themselves came back on 2026-09-24, bought in the store rather than drafted
+        // (`run-relic-rules.ts`), so the guard names the draft and not the word.
+        const removed = /relic draft|relic offer|relic pick|draft a relic|shop gold|route card|side room|wager|warden|dungeon key|locked exit/i;
         for (const term of MECHANICS_GLOSSARY) {
             expect(term.shortDefinition, term.id).not.toMatch(removed);
             expect(term.preferredLabel, term.id).not.toMatch(removed);

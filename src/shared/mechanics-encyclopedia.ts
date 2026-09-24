@@ -11,7 +11,7 @@
 import type { AchievementId, GameMode, MutatorId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 45 as const;
+export const ENCYCLOPEDIA_VERSION = 46 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -344,7 +344,9 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
         description:
             'A floor clear pays **gold**: two, plus one for each rung of the chain it cleared at (Clean, Sharp, Fever), plus one for every turn under par, three at most. ' +
             'The **store** is on the pause menu, so the game never waits for you to shop. It sells another **miss** (into the bank, never past four), a **peek** charge and a **shuffle** charge; ' +
-            'each thing you buy costs more the next time this run. Gold is the run\'s, not the profile\'s: it ends with the run.'
+            'each thing you buy costs more the next time this run. ' +
+            'It also sells three **relics**, once each, kept to the end of the run: **Deep Pockets** (the miss bank holds five), **Gilded Chain** (every fifth match in a row also pays two gold) and **Long Look** (a second more to study every floor). ' +
+            'Gold is the run\'s, not the profile\'s: it ends with the run.'
     },
     {
         id: 'miss_budget',

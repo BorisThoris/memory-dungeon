@@ -76,6 +76,8 @@ export type Rating = 'S++' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
  * a run ends that way no more. `miss_budget` is the miss bank (`miss-bank.ts`) running dry.
  */
 export type RunEndReason = 'turn_ceiling' | 'miss_budget' | 'quit' | 'contract' | 'pass_and_play_final_floor';
+/** A relic bought in the store (`run-relic-rules.ts`). */
+export type RelicId = 'deep_pockets' | 'gilded_chain' | 'long_look';
 export type FeaturedObjectiveId = 'scholar_style' | 'cursed_last' | 'flip_par';
 /**
  * Every screen the app can be showing, as a value.
@@ -666,7 +668,9 @@ export interface RunState {
      * run has bought, which is what the prices climb on.
      */
     gold?: number;
-    storePurchases?: Partial<Record<'miss' | 'peek' | 'shuffle', number>>;
+    storePurchases?: Partial<Record<'miss' | 'peek' | 'shuffle' | RelicId, number>>;
+    /** Relics bought in the store this run (`run-relic-rules.ts`), kept to the end of it. */
+    relics?: RelicId[];
     /** The biggest single break's score this floor: what band N5 reads the largest break's share from. */
     largestChunkScoreThisFloor: number;
     /** Pairs the magpie has taken back on this floor. */

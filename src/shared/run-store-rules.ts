@@ -1,6 +1,7 @@
 import type { ChainTier } from './chain-tier-rules';
 import type { RunState } from './contracts';
-import { grantMisses, MISS_BANK_CAP, missesLeft } from './miss-bank';
+import { grantMisses, missBankCap, missesLeft } from './miss-bank';
+import { hasRelic, isRelicId, RELICS, type RelicId } from './run-relic-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 
 /**
@@ -30,7 +31,7 @@ export const floorClearGold = ({ tier, turnsUnderPar }: { tier: ChainTier; turns
     GOLD_BY_CLEAR_TIER[tier] +
     Math.min(GOLD_UNDER_PAR_CAP, runNonNegativeInteger(turnsUnderPar)) * GOLD_PER_TURN_UNDER_PAR;
 
-export type StoreItemId = 'miss' | 'peek' | 'shuffle';
+export type StoreItemId = 'miss' | 'peek' | 'shuffle' | RelicId;
 
 export interface StoreItemDefinition {
     id: StoreItemId;
@@ -39,33 +40,52 @@ export interface StoreItemDefinition {
     basePrice: number;
     /** Added to the price for every earlier purchase of this item in the run. */
     priceStep: number;
+    /** A consumable can be bought again; a relic once, and kept to the end of the run. */
+    kind: 'consumable' | 'relic';
 }
 
 export const STORE_ITEMS: readonly StoreItemDefinition[] = [
     {
         id: 'miss',
         title: 'Another miss',
-        body: 'One more miss before the run ends, good for three floors past this one. Never more than four in hand.',
+        body: 'One more miss before the run ends, good for three floors past this one, up to what your bank holds.',
         basePrice: 4,
-        priceStep: 2
+        priceStep: 2,
+        kind: 'consumable'
     },
     {
         id: 'peek',
         title: 'A peek',
         body: 'One peek charge: turn a hidden card over and put it back.',
         basePrice: 3,
-        priceStep: 1
+        priceStep: 1,
+        kind: 'consumable'
     },
     {
         id: 'shuffle',
         title: 'A shuffle',
         body: 'One full-board shuffle charge.',
         basePrice: 3,
-        priceStep: 1
-    }
+        priceStep: 1,
+        kind: 'consumable'
+    },
+    // Relics (2026-09-24, `run-relic-rules.ts`): bought once, kept to the end of the run.
+    ...RELICS.map(
+        (relic): StoreItemDefinition => ({
+            id: relic.id,
+            title: relic.title,
+            body: relic.body,
+            basePrice: relic.price,
+            priceStep: 0,
+            kind: 'relic'
+        })
+    )
 ];
 
-export type StoreRun = Pick<RunState, 'gold' | 'storePurchases' | 'missBank' | 'board' | 'peekCharges' | 'shuffleCharges'>;
+export type StoreRun = Pick<
+    RunState,
+    'gold' | 'storePurchases' | 'missBank' | 'board' | 'peekCharges' | 'shuffleCharges' | 'relics'
+>;
 
 export const runGold = (run: Pick<RunState, 'gold'>): number => runNonNegativeInteger(run.gold ?? 0);
 
@@ -83,7 +103,8 @@ export interface StoreOfferRow {
     body: string;
     price: number;
     /** Why it cannot be bought right now, or `null` when it can. */
-    blocked: 'gold' | 'full' | 'no_bank' | null;
+    blocked: 'gold' | 'full' | 'no_bank' | 'owned' | null;
+    kind: StoreItemDefinition['kind'];
 }
 
 /** The sheet's rows, priced for this run and marked with why each cannot be bought, if it cannot. */
@@ -94,10 +115,11 @@ export const storeOffer = (run: StoreRun): StoreOfferRow[] =>
         if (item.id === 'miss') {
             const left = missesLeft(run);
             if (left == null) blocked = 'no_bank';
-            else if (left >= MISS_BANK_CAP) blocked = 'full';
+            else if (left >= missBankCap(run)) blocked = 'full';
         }
+        if (isRelicId(item.id) && hasRelic(run, item.id)) blocked = 'owned';
         if (blocked === null && runGold(run) < price) blocked = 'gold';
-        return { id: item.id, title: item.title, body: item.body, price, blocked };
+        return { id: item.id, title: item.title, body: item.body, price, blocked, kind: item.kind };
     });
 
 /** The purchase, or `null` when the sheet would have said no. */
@@ -114,10 +136,12 @@ export const buyStoreItem = <R extends StoreRun>(run: R, id: StoreItemId): R | n
     switch (id) {
         case 'miss':
             // Bought on this floor, so it lasts as long as a miss earned here would.
-            return { ...paid, missBank: grantMisses(run.missBank ?? [], run.board?.level ?? 1, 1) };
+            return { ...paid, missBank: grantMisses(run.missBank ?? [], run.board?.level ?? 1, 1, missBankCap(run)) };
         case 'peek':
             return { ...paid, peekCharges: runNonNegativeInteger(run.peekCharges) + 1 };
         case 'shuffle':
             return { ...paid, shuffleCharges: runNonNegativeInteger(run.shuffleCharges) + 1 };
+        default:
+            return { ...paid, relics: [...(run.relics ?? []), id] };
     }
 };

@@ -13,6 +13,7 @@ import {
     type Tile
 } from './contracts';
 import { hasMutator } from './mutators';
+import { hasRelic, LONG_LOOK_MS } from './run-relic-rules';
 import { runFiniteNumber, runFiniteNumberOrFallback, runNonNegativeInteger } from './run-number-guards';
 import { pairsForFloor } from './pair-curve';
 import { isWildPairKey } from './tile-identity';
@@ -80,6 +81,10 @@ export const getMemorizeDurationForRun = (run: RunState, level: number): number 
      */
     if (Number.isFinite(run.resolveDelayMultiplier) && run.resolveDelayMultiplier > 1) {
         ms = Math.floor(ms * 1.55);
+    }
+    // Long Look (`run-relic-rules.ts`), bought in the store: a second more on every floor.
+    if (hasRelic(run, 'long_look')) {
+        ms += LONG_LOOK_MS;
     }
     return ms;
 };

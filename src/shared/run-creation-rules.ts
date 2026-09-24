@@ -169,6 +169,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         missBank: openingMissBank(),
         gold: 0,
         storePurchases: {},
+        relics: [],
         largestChunkScoreThisFloor: 0,
         bestRippleThisRun: 0,
         magpieTheftsThisFloor: 0,
