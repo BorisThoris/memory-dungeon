@@ -8,10 +8,20 @@
  * **Version** bumps when entries are added, removed, or meaningfully rewritten (helps audits and saves).
  * Gameplay rules remain in `game.ts`; this file is **labels + reference only**.
  */
-import type { AchievementId, GameMode, MutatorId } from './contracts';
+import {
+    CURSED_LAST_BONUS_SCORE,
+    FEATURED_OBJECTIVE_STREAK_BONUS_MAX,
+    FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP,
+    FEATURED_OBJECTIVE_STREAK_MISS_DECAY,
+    FLIP_PAR_BONUS_SCORE,
+    SCHOLAR_STYLE_FLOOR_BONUS_SCORE,
+    type AchievementId,
+    type GameMode,
+    type MutatorId
+} from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 50 as const;
+export const ENCYCLOPEDIA_VERSION = 51 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -259,7 +269,7 @@ export const MUTATOR_CATALOG: Record<MutatorId, MutatorDefinition> = {
         id: 'sticky_fingers',
         title: 'Sticky fingers',
         description:
-            'After a match, **one board slot** is reserved so your **next opening flip** must start elsewhere—flip-order pressure only (often highlighted in the HUD).'
+            'After a match, a **face-down card touching** the first card of the pair **sticks**: your **next turn cannot open on it**, though it can still be the second card. The stuck card is marked on the board. Nothing sticks when the match has no face-down neighbour, or when one pair is left.'
     },
     restless_floor: {
         id: 'restless_floor',
@@ -370,7 +380,7 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
         id: 'scoring',
         title: 'Score, the par, and the floor-end bonus',
         description:
-            'Every floor states a **par**: the turns a competent player needs, `ceil(pairs × 0.85)`, shown as **turns / par** on the run bar. A turn is a pair of flips resolved, match or miss. Clearing a floor pays **100 × floor**, multiplied by the chain tier still standing when the last pair went (**Clean ×1.5, Sharp ×2.5, Fever ×5**), plus **50 × floor** for every turn under par. Missing par costs nothing else. Match score, streaks and the break\'s own scoring are under **Scoring & survival**. **Perfect Memory** (achievement) requires a flawless **floor** (zero tries) **and** no disallowed powers this **run**.'
+            'Every floor states a **par**: the turns a competent player needs, about **0.72 turns a pair** (a little more past thirteen pairs), rounded up, plus **one** turn to spare (**three** on the first six floors), and never more turns than the floor has pairs, shown as **turns / par** on the run bar. A turn is a pair of flips resolved, match or miss. Clearing a floor pays **100 × floor**, multiplied by the chain tier still standing when the last pair went (**Clean ×1.5, Sharp ×2.5, Fever ×5**), plus **50 × floor** for every turn under par. Missing par costs nothing else. Match score, streaks and the break\'s own scoring are under **Scoring & survival**. **Perfect Memory** (achievement) requires a flawless **floor** (zero tries) **and** no disallowed powers this **run**.'
     },
     {
         id: 'powers',
@@ -446,7 +456,7 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         id: 'sys_floor_schedule_and_featured_objective',
         title: 'Floor schedule, featured objectives, and the objective streak',
         description:
-            '**Classic Run** uses a repeating chapter schedule: each floor has a **name**, a short **hint**, and **one featured objective** — **Scholar style**, **Glass witness**, **Flip par**, or **Cursed last** — that pays a floor bonus when you clear with it intact. Consecutive featured-objective clears build an **objective streak**: the first clear starts it, and each clear after that adds a **+10** score kicker per streak step, capped at **+50**. Missing the featured objective on a clear decays the streak by **2**; a floor without a featured objective leaves it untouched.'
+            `**Classic Run** uses a repeating chapter schedule: each floor has a **name**, a short **hint**, and **one featured objective** — **Scholar style**, **Flip par**, or **Cursed last** — that pays a floor bonus when you clear with it intact. Consecutive featured-objective clears build an **objective streak**: the first clear starts it, and each clear after that adds a **+${FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP}** score kicker per streak step, capped at **+${FEATURED_OBJECTIVE_STREAK_BONUS_MAX}**. Missing the featured objective on a clear decays the streak by **${FEATURED_OBJECTIVE_STREAK_MISS_DECAY}**; a floor without a featured objective leaves it untouched.`
     },
     {
         id: 'sys_perfect_floor_vs_achievement',
@@ -464,19 +474,19 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         id: 'sys_scholar_style_floor',
         title: 'Scholar-style floor bonus (not only the contract)',
         description:
-            'The **scholar-style** objective is worth **+40**. Outside scheduled endless chapters, it still behaves like a normal stackable floor objective: clear the floor **without moving the board on that floor** — no full-board shuffle, row shuffle or tile swap — and you get the bonus. In modern endless chapters, you earn it only on floors where **Scholar style** is the **featured objective**.'
+            `The **scholar-style** objective is worth **+${SCHOLAR_STYLE_FLOOR_BONUS_SCORE}**. Outside scheduled endless chapters, it still behaves like a normal stackable floor objective: clear the floor **without moving the board on that floor** — no full-board shuffle, row shuffle or tile swap — and you get the bonus. In modern endless chapters, you earn it only on floors where **Scholar style** is the **featured objective**.`
     },
     {
         id: 'sys_flip_par_floor',
         title: 'Flip par (within the floor par)',
         description:
-            'The **flip par** objective is worth **+30**. Clear the floor within its stated **par** of turns (`ceil(pairs × 0.85)`, the same par the run bar shows) and you get the bonus. A turn is a pair of flips resolved, match or miss; the gambit\'s three flips are one turn. Outside scheduled endless chapters this can stack with other floor objectives; in modern endless chapters it pays out only when **Flip par** is the **featured objective** for that floor.'
+            `The **flip par** objective is worth **+${FLIP_PAR_BONUS_SCORE}**. Clear the floor within its stated **par** of turns (the same par the run bar shows) and you get the bonus. A turn is a pair of flips resolved, match or miss; the gambit's three flips are one turn. Outside scheduled endless chapters this can stack with other floor objectives; in modern endless chapters it pays out only when **Flip par** is the **featured objective** for that floor.`
     },
     {
         id: 'sys_cursed_last',
         title: 'Cursed last objective',
         description:
-            '**Cursed last** is worth **+50**: one pair is marked cursed, and you must match it **last** among real pairs. Outside scheduled endless chapters it behaves like a normal floor objective. In modern endless chapters it only appears when it is the floor\'s **featured objective**, and endless floors generate the cursed pair only on **Cursed last** chapters.'
+            `**Cursed last** is worth **+${CURSED_LAST_BONUS_SCORE}**: one pair is marked cursed, and you must match it **last** among real pairs. Outside scheduled endless chapters it behaves like a normal floor objective. In modern endless chapters it only appears when it is the floor's **featured objective**, and endless floors generate the cursed pair only on **Cursed last** chapters.`
     },
     {
         id: 'sys_boss_floor_multiplier',

@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2721,
     "codeFileCount": 954,
-    "exportedSymbolCount": 2899,
+    "exportedSymbolCount": 2900,
     "contentItemCount": 10,
     "mechanicCount": 50,
     "stateFieldCount": 90,
-    "relationshipCount": 7469
+    "relationshipCount": 7481
   },
   "inventory": [
     {
@@ -735,8 +735,8 @@
     {
       "path": "docs/gameplay/epic-mutators.md",
       "category": "documentation",
-      "bytes": 4008,
-      "sha256": "29de1080a315f2ca41741b9071b89a6a67df41d361ce5781bfc34d023723c187"
+      "bytes": 4095,
+      "sha256": "fccb903bfc54c1a196e098a901f8ed94e67772529ee7461ef9aaf8bf64b00c55"
     },
     {
       "path": "docs/gameplay/epic-onboarding-codex-copy.md",
@@ -783,8 +783,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 29853,
-      "sha256": "f9e966cb910a4dc8fee84e0fc178ffec76f244dd2279eb474e046d30f15f5759"
+      "bytes": 30793,
+      "sha256": "2b0379f6a13a57f1b17db88ca115a7929bd631159aa23e0919d72c2089a8580c"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2368,7 +2368,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33561,
-      "sha256": "f9ef845a5eabc4e4219a67e925e3ac717227685eb73dde8b5118726c10f611cb"
+      "sha256": "341fc17632fa489be11223142bd9ba1d2a54d92183fd9a9104c0804ed169dbb8"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4365,8 +4365,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 123177,
-      "sha256": "28c7fc17d258cc5efa62b4d93f5824af5460fdb99b41e2de5cb6ea325e33c7a2"
+      "bytes": 121134,
+      "sha256": "04ff30d01b06213d53cdfbf16831df9dda97c5fad26f3827111257d9fabb4970"
     },
     {
       "path": "public/site.webmanifest",
@@ -5427,8 +5427,8 @@
     {
       "path": "scripts/sim-difficulty-curve.ts",
       "category": "script",
-      "bytes": 15998,
-      "sha256": "787936eddf26dcc9419ea3ac3cc8a50b42b54e5b19b54ccad623370496ed4427"
+      "bytes": 16491,
+      "sha256": "4c0639440efced248959de8fdb84fc673efadbacfe0c991e9f7d69a9e9911951"
     },
     {
       "path": "scripts/sim-endless.ts",
@@ -10071,8 +10071,8 @@
     {
       "path": "src/renderer/components/tileBoardReadability.ts",
       "category": "source",
-      "bytes": 13149,
-      "sha256": "dcd3f54078d59f177d82cd848b7535bbeaa3d92982696022858c76ef53ee4e68"
+      "bytes": 13242,
+      "sha256": "8931199dc5bdb90d8e354c8b2f243405eae09f745f1f5e89b58af328915cbc68"
     },
     {
       "path": "src/renderer/components/TileBoardReadabilityMarkers.tsx",
@@ -11859,8 +11859,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 30147,
-      "sha256": "d7ca73e733c11c31d5671591792b204a9867115dcdadc002581336f88e941d48"
+      "bytes": 31087,
+      "sha256": "b2b343c1aa96a1a5d2235424736c54ebebeee19faa3df644d41ba1df3fec3588"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -12087,8 +12087,8 @@
     {
       "path": "src/shared/board-turn-transition.ts",
       "category": "source",
-      "bytes": 17866,
-      "sha256": "a3c8753b28e9d0c756faefd4a34482732e37b1e0edbed4d055e9388c37d9d2f1"
+      "bytes": 17855,
+      "sha256": "531e76d47fb2a9bc3d9ba5ea5059d91fa5058e86cf013b0f5772a916d9ef1028"
     },
     {
       "path": "src/shared/bomb-power.test.ts",
@@ -12496,7 +12496,7 @@
       "path": "src/shared/floor-mutator-schedule.ts",
       "category": "source",
       "bytes": 25312,
-      "sha256": "00ec6f5999dfa2d3fff31ea8dee5c4df2b8d04ba046a2e17bf515ef032a2d151"
+      "sha256": "06324d39efd9455579c2f5305759f9828261caa54034936715328299c99d7a78"
     },
     {
       "path": "src/shared/floor-par.test.ts",
@@ -12951,14 +12951,14 @@
     {
       "path": "src/shared/mechanics-encyclopedia.test.ts",
       "category": "test",
-      "bytes": 10232,
-      "sha256": "98bcdba9ca841db7500b5534bebd3336064d2e0a5e38b426db420b368007c519"
+      "bytes": 12429,
+      "sha256": "a3af5f0d790be931bbe63bf42ad1d1a9028e99d3392f9fa2eef2f3a25e362020"
     },
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 35332,
-      "sha256": "f3a425e0f0bcaaca4c6e83bf1bfecc7c58c3364a8729ea3463cb49da79fc635a"
+      "bytes": 36017,
+      "sha256": "2b0e7c45cacfb43e5eee26b68cea41b2f17787e3457f8469b3a23aff04e71c8f"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -13845,8 +13845,8 @@
     {
       "path": "src/shared/system-occupancy-simulation.ts",
       "category": "source",
-      "bytes": 58289,
-      "sha256": "e710ff3f746dabac894f444b80892f8981848991b6163d50e78d213c118b6e9d"
+      "bytes": 58628,
+      "sha256": "c3c7b745e0e24d61e9d8ce9200dac3f0c9a04f5ed37cb9beb4e1119954eaf906"
     },
     {
       "path": "src/shared/system-refinement-ledger.test.ts",
@@ -13857,8 +13857,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 44692,
-      "sha256": "86f4d51111c1bf305dcb148eec164c6cc72c5ba9a64c02437ca7bd3b583d7a41"
+      "bytes": 45632,
+      "sha256": "377f91fcc64f96b7e3b8e43b7df22659530caa686e9ce02339d92a9f3c02a9c5"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -13881,8 +13881,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 40401,
-      "sha256": "7574c692eadfe7a303f194383bc310d4d781334f9bd31365f58dd2a90ac0454b"
+      "bytes": 63049,
+      "sha256": "d02a28a8538795adfb5eb0b5240cfa2f926f1832763c6467c1de8e7656a1c106"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -14025,14 +14025,14 @@
     {
       "path": "src/shared/turn-match-board-cleanup-rules.test.ts",
       "category": "test",
-      "bytes": 2463,
-      "sha256": "43f0a2c39dec3d66d843a12f17a75481958599f8c059a12536c752b092a76ffa"
+      "bytes": 3436,
+      "sha256": "93c1df9049718f20644aba0c5322adc8f11a1c91e16f9273598d88e9cf7be872"
     },
     {
       "path": "src/shared/turn-match-board-cleanup-rules.ts",
       "category": "source",
-      "bytes": 1537,
-      "sha256": "166d4fecb8c51102a727743ba071979a37d373e5ddb1a15eb68810eff59b35f5"
+      "bytes": 2844,
+      "sha256": "b2ef7acc8d7f48f8283b2a90ed4bb2b57155b8463eb6e38c97af5342904b216e"
     },
     {
       "path": "src/shared/turn-match-board-resolution-rules.test.ts",
@@ -21583,7 +21583,7 @@
       "path": "src/renderer/components/tileBoardReadability.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 417,
+      "lineCount": 418,
       "imports": [
         "file:src/renderer/components/tileBoardRows.ts",
         "file:src/renderer/copy/traitInteractionLaneMap.ts",
@@ -27077,7 +27077,7 @@
       "path": "src/shared/board-turn-transition.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 418,
+      "lineCount": 416,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -28645,6 +28645,7 @@
         "file:src/shared/content-lock.test.ts",
         "file:src/shared/floor-mutator-schedule.test.ts",
         "file:src/shared/floor-schedule-reachability.test.ts",
+        "file:src/shared/mechanics-encyclopedia.test.ts",
         "file:src/shared/softlock-fairness.test.ts",
         "file:src/shared/version-gate.test.ts"
       ]
@@ -28700,7 +28701,8 @@
         "file:src/shared/bad-floor-is-quiet.test.ts",
         "file:src/shared/difficulty-curve-simulation.test.ts",
         "file:src/shared/floor-par.test.ts",
-        "file:src/shared/game.test.ts"
+        "file:src/shared/game.test.ts",
+        "file:src/shared/mechanics-encyclopedia.test.ts"
       ]
     },
     {
@@ -30241,10 +30243,13 @@
       "path": "src/shared/mechanics-encyclopedia.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 210,
+      "lineCount": 261,
       "imports": [
         "file:src/shared/contracts.ts",
-        "file:src/shared/mechanics-encyclopedia.ts"
+        "file:src/shared/floor-mutator-schedule.ts",
+        "file:src/shared/floor-par.ts",
+        "file:src/shared/mechanics-encyclopedia.ts",
+        "file:src/shared/secondary-objective-rules.ts"
       ],
       "exports": [],
       "testedBy": []
@@ -30254,7 +30259,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 650,
+      "lineCount": 660,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -32756,6 +32761,7 @@
         "symbol:src/shared/secondary-objective-rules.ts#isWithinFloorPar"
       ],
       "testedBy": [
+        "file:src/shared/mechanics-encyclopedia.test.ts",
         "file:src/shared/secondary-objective-rules.test.ts"
       ]
     },
@@ -33166,7 +33172,7 @@
       "path": "src/shared/system-occupancy-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1096,
+      "lineCount": 1101,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-power-actions.ts",
@@ -33304,11 +33310,14 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 761,
+      "lineCount": 1103,
       "imports": [
+        "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/board-power-state.ts",
+        "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/game.ts",
         "file:src/shared/miss-bank.ts",
         "file:src/shared/run-store-rules.ts",
@@ -33848,7 +33857,7 @@
       "path": "src/shared/turn-match-board-cleanup-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 70,
+      "lineCount": 86,
       "imports": [
         "file:src/shared/run-creation-rules.ts",
         "file:src/shared/turn-match-board-cleanup-rules.ts"
@@ -33861,15 +33870,18 @@
       "path": "src/shared/turn-match-board-cleanup-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 43,
+      "lineCount": 67,
       "imports": [
+        "file:src/shared/board-inspection.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/mutators.ts",
         "file:src/shared/recall-rules.ts",
-        "file:src/shared/run-number-guards.ts"
+        "file:src/shared/run-number-guards.ts",
+        "file:src/shared/skittish-cards-rules.ts"
       ],
       "exports": [
         "symbol:src/shared/turn-match-board-cleanup-rules.ts#resolveTurnMatchBoardCleanup",
+        "symbol:src/shared/turn-match-board-cleanup-rules.ts#selectStickyFingersBlockIndex",
         "symbol:src/shared/turn-match-board-cleanup-rules.ts#TurnMatchBoardCleanupInput",
         "symbol:src/shared/turn-match-board-cleanup-rules.ts#TurnMatchBoardCleanupResult"
       ],
@@ -39666,7 +39678,7 @@
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
       "line": 302,
-      "endLine": 416
+      "endLine": 417
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitLaneReadabilityColor",
@@ -45978,7 +45990,7 @@
       "kind": "value",
       "file": "src/shared/board-turn-transition.ts",
       "line": 102,
-      "endLine": 417
+      "endLine": 415
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#BOSS_ENCOUNTER_IDENTITY",
@@ -51417,160 +51429,160 @@
       "name": "ACHIEVEMENT_CATALOG",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 127,
-      "endLine": 252
+      "line": 137,
+      "endLine": 262
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#AchievementCodexEntry",
       "name": "AchievementCodexEntry",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 23,
-      "endLine": 27
+      "line": 33,
+      "endLine": 37
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#CODEX_CORE_TOPICS",
       "name": "CODEX_CORE_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 340,
-      "endLine": 387
+      "line": 350,
+      "endLine": 397
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#CodexCoreTopic",
       "name": "CodexCoreTopic",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 35,
-      "endLine": 39
+      "line": 45,
+      "endLine": 49
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_CONTRACT_TOPICS",
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 617,
-      "endLine": 635
+      "line": 627,
+      "endLine": 645
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 638,
-      "endLine": 649
+      "line": 648,
+      "endLine": 659
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "name": "ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 557,
-      "endLine": 614
+      "line": 567,
+      "endLine": 624
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
       "name": "ENCYCLOPEDIA_POWER_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 390,
-      "endLine": 439
+      "line": 400,
+      "endLine": 449
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS",
       "name": "ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 444,
-      "endLine": 505
+      "line": 454,
+      "endLine": 515
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "name": "ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 510,
-      "endLine": 554
+      "line": 520,
+      "endLine": 564
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_VERSION",
       "name": "ENCYCLOPEDIA_VERSION",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 14,
-      "endLine": 14
+      "line": 24,
+      "endLine": 24
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#EncyclopediaTopic",
       "name": "EncyclopediaTopic",
       "kind": "type",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 42,
-      "endLine": 42
+      "line": 52,
+      "endLine": 52
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#GAME_MODE_CODEX",
       "name": "GAME_MODE_CODEX",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 330,
-      "endLine": 337
+      "line": 340,
+      "endLine": 347
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#GameModeCodexEntry",
       "name": "GameModeCodexEntry",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 29,
-      "endLine": 33
+      "line": 39,
+      "endLine": 43
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#glossaryTermById",
       "name": "glossaryTermById",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 119,
-      "endLine": 120
+      "line": 129,
+      "endLine": 130
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MECHANICS_GLOSSARY",
       "name": "MECHANICS_GLOSSARY",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 122,
-      "endLine": 122
+      "line": 132,
+      "endLine": 132
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MECHANICS_GLOSSARY_TERMS",
       "name": "MECHANICS_GLOSSARY_TERMS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 59,
-      "endLine": 109
+      "line": 69,
+      "endLine": 119
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MechanicsGlossaryTerm",
       "name": "MechanicsGlossaryTerm",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 44,
-      "endLine": 57
+      "line": 54,
+      "endLine": 67
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MUTATOR_CATALOG",
       "name": "MUTATOR_CATALOG",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 257,
-      "endLine": 328
+      "line": 267,
+      "endLine": 338
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MutatorDefinition",
       "name": "MutatorDefinition",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 16,
-      "endLine": 20
+      "line": 26,
+      "endLine": 30
     },
     {
       "id": "symbol:src/shared/memorize-phase-rules.ts#finishMemorizePhase",
@@ -55697,48 +55709,48 @@
       "name": "dominantSystemKeys",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1074,
-      "endLine": 1077
+      "line": 1079,
+      "endLine": 1082
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#floorBandedRows",
       "name": "floorBandedRows",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 991,
-      "endLine": 996
+      "line": 996,
+      "endLine": 1001
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeRunOccupancy",
       "name": "judgeRunOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1032,
-      "endLine": 1072
+      "line": 1037,
+      "endLine": 1077
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
       "name": "judgeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 998,
-      "endLine": 1020
+      "line": 1003,
+      "endLine": 1025
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancyAgainstBaseline",
       "name": "judgeSystemOccupancyAgainstBaseline",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 958,
-      "endLine": 981
+      "line": 963,
+      "endLine": 986
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OCCUPANCY_SEEDS",
       "name": "OCCUPANCY_SEEDS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 788,
-      "endLine": 788
+      "line": 793,
+      "endLine": 793
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OccupancyFloorResult",
@@ -55753,64 +55765,64 @@
       "name": "RunOccupancyReport",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 642,
-      "endLine": 660
+      "line": 647,
+      "endLine": 665
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#simulateRunOccupancy",
       "name": "simulateRunOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 662,
-      "endLine": 776
+      "line": 667,
+      "endLine": 781
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#simulateSystemOccupancy",
       "name": "simulateSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 790,
-      "endLine": 835
+      "line": 795,
+      "endLine": 840
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#summarizeRunOccupancy",
       "name": "summarizeRunOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 778,
-      "endLine": 786
+      "line": 783,
+      "endLine": 791
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#summarizeSystemOccupancy",
       "name": "summarizeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1079,
-      "endLine": 1095
+      "line": 1084,
+      "endLine": 1100
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BANDS",
       "name": "SYSTEM_OCCUPANCY_BANDS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 842,
-      "endLine": 862
+      "line": 847,
+      "endLine": 867
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE",
       "name": "SYSTEM_OCCUPANCY_BASELINE",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 912,
-      "endLine": 932
+      "line": 917,
+      "endLine": 937
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "name": "SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 949,
-      "endLine": 949
+      "line": 954,
+      "endLine": 954
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_COUNTERS",
@@ -55993,72 +56005,72 @@
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 689,
-      "endLine": 736
+      "line": 1026,
+      "endLine": 1078
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "name": "TEST_HALL_ROOMS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 207,
-      "endLine": 676
+      "line": 260,
+      "endLine": 1013
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 760,
-      "endLine": 760
+      "line": 1102,
+      "endLine": 1102
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
       "name": "TestHallRoom",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 93,
-      "endLine": 104
+      "line": 115,
+      "endLine": 126
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
       "name": "TestHallRoomId",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 38,
-      "endLine": 67
+      "line": 41,
+      "endLine": 85
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 738,
-      "endLine": 741
+      "line": 1080,
+      "endLine": 1083
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
       "name": "TestHallScriptLine",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 86,
-      "endLine": 91
+      "line": 108,
+      "endLine": 113
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
       "name": "TestHallStep",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 69,
-      "endLine": 84
+      "line": 87,
+      "endLine": 106
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 743,
-      "endLine": 758
+      "line": 1085,
+      "endLine": 1100
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -56969,24 +56981,32 @@
       "name": "resolveTurnMatchBoardCleanup",
       "kind": "value",
       "file": "src/shared/turn-match-board-cleanup-rules.ts",
-      "line": 23,
-      "endLine": 42
+      "line": 22,
+      "endLine": 36
+    },
+    {
+      "id": "symbol:src/shared/turn-match-board-cleanup-rules.ts#selectStickyFingersBlockIndex",
+      "name": "selectStickyFingersBlockIndex",
+      "kind": "value",
+      "file": "src/shared/turn-match-board-cleanup-rules.ts",
+      "line": 50,
+      "endLine": 66
     },
     {
       "id": "symbol:src/shared/turn-match-board-cleanup-rules.ts#TurnMatchBoardCleanupInput",
       "name": "TurnMatchBoardCleanupInput",
       "kind": "interface",
       "file": "src/shared/turn-match-board-cleanup-rules.ts",
-      "line": 15,
-      "endLine": 21
+      "line": 16,
+      "endLine": 20
     },
     {
       "id": "symbol:src/shared/turn-match-board-cleanup-rules.ts#TurnMatchBoardCleanupResult",
       "name": "TurnMatchBoardCleanupResult",
       "kind": "interface",
       "file": "src/shared/turn-match-board-cleanup-rules.ts",
-      "line": 6,
-      "endLine": 13
+      "line": 8,
+      "endLine": 14
     },
     {
       "id": "symbol:src/shared/turn-match-board-resolution-rules.ts#resolveTurnMatchBoardResolution",
@@ -78526,6 +78546,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/turn-match-board-cleanup-rules.ts->symbol:src/shared/turn-match-board-cleanup-rules.ts#selectStickyFingersBlockIndex",
+      "source": "file:src/shared/turn-match-board-cleanup-rules.ts",
+      "target": "symbol:src/shared/turn-match-board-cleanup-rules.ts#selectStickyFingersBlockIndex",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/turn-match-board-cleanup-rules.ts->symbol:src/shared/turn-match-board-cleanup-rules.ts#TurnMatchBoardCleanupInput",
       "source": "file:src/shared/turn-match-board-cleanup-rules.ts",
       "target": "symbol:src/shared/turn-match-board-cleanup-rules.ts#TurnMatchBoardCleanupInput",
@@ -92785,9 +92811,27 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/mechanics-encyclopedia.test.ts->src/shared/floor-mutator-schedule.ts",
+      "source": "file:src/shared/mechanics-encyclopedia.test.ts",
+      "target": "file:src/shared/floor-mutator-schedule.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/mechanics-encyclopedia.test.ts->src/shared/floor-par.ts",
+      "source": "file:src/shared/mechanics-encyclopedia.test.ts",
+      "target": "file:src/shared/floor-par.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/mechanics-encyclopedia.test.ts->src/shared/mechanics-encyclopedia.ts",
       "source": "file:src/shared/mechanics-encyclopedia.test.ts",
       "target": "file:src/shared/mechanics-encyclopedia.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/mechanics-encyclopedia.test.ts->src/shared/secondary-objective-rules.ts",
+      "source": "file:src/shared/mechanics-encyclopedia.test.ts",
+      "target": "file:src/shared/secondary-objective-rules.ts",
       "kind": "imports"
     },
     {
@@ -95455,6 +95499,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/test-hall-rooms.ts->src/shared/board-inspection.ts",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "file:src/shared/board-inspection.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/test-hall-rooms.ts->src/shared/board-power-actions.ts",
       "source": "file:src/shared/test-hall-rooms.ts",
       "target": "file:src/shared/board-power-actions.ts",
@@ -95467,9 +95517,21 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/test-hall-rooms.ts->src/shared/board-tile-generation-rules.ts",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "file:src/shared/board-tile-generation-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/test-hall-rooms.ts->src/shared/contracts.ts",
       "source": "file:src/shared/test-hall-rooms.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/test-hall-rooms.ts->src/shared/floor-mutator-schedule.ts",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "file:src/shared/floor-mutator-schedule.ts",
       "kind": "imports"
     },
     {
@@ -95905,6 +95967,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/turn-match-board-cleanup-rules.ts->src/shared/board-inspection.ts",
+      "source": "file:src/shared/turn-match-board-cleanup-rules.ts",
+      "target": "file:src/shared/board-inspection.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/turn-match-board-cleanup-rules.ts->src/shared/contracts.ts",
       "source": "file:src/shared/turn-match-board-cleanup-rules.ts",
       "target": "file:src/shared/contracts.ts",
@@ -95926,6 +95994,12 @@
       "id": "imports:src/shared/turn-match-board-cleanup-rules.ts->src/shared/run-number-guards.ts",
       "source": "file:src/shared/turn-match-board-cleanup-rules.ts",
       "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/turn-match-board-cleanup-rules.ts->src/shared/skittish-cards-rules.ts",
+      "source": "file:src/shared/turn-match-board-cleanup-rules.ts",
+      "target": "file:src/shared/skittish-cards-rules.ts",
       "kind": "imports"
     },
     {
@@ -102239,6 +102313,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/floor-mutator-schedule.ts->file:src/shared/mechanics-encyclopedia.test.ts",
+      "source": "file:src/shared/floor-mutator-schedule.ts",
+      "target": "file:src/shared/mechanics-encyclopedia.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/floor-mutator-schedule.ts->file:src/shared/softlock-fairness.test.ts",
       "source": "file:src/shared/floor-mutator-schedule.ts",
       "target": "file:src/shared/softlock-fairness.test.ts",
@@ -102284,6 +102364,12 @@
       "id": "tested_by:src/shared/floor-par.ts->file:src/shared/game.test.ts",
       "source": "file:src/shared/floor-par.ts",
       "target": "file:src/shared/game.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/floor-par.ts->file:src/shared/mechanics-encyclopedia.test.ts",
+      "source": "file:src/shared/floor-par.ts",
+      "target": "file:src/shared/mechanics-encyclopedia.test.ts",
       "kind": "tested_by"
     },
     {
@@ -104150,6 +104236,12 @@
       "id": "tested_by:src/shared/scoring-rules.ts->file:src/shared/turn-match-scoring-summary-rules.test.ts",
       "source": "file:src/shared/scoring-rules.ts",
       "target": "file:src/shared/turn-match-scoring-summary-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/secondary-objective-rules.ts->file:src/shared/mechanics-encyclopedia.test.ts",
+      "source": "file:src/shared/secondary-objective-rules.ts",
+      "target": "file:src/shared/mechanics-encyclopedia.test.ts",
       "kind": "tested_by"
     },
     {

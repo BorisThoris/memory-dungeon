@@ -499,6 +499,11 @@ const playFloorFrom = (
             first = group[0]!;
             second = group[1]!;
         }
+        // A stuck card (sticky fingers, a Stasis lock) cannot open a turn but can close one, so
+        // the player opens on the other card, as `sim-difficulty-curve.ts` does.
+        if (run.stickyBlockIndex != null && run.board!.tiles[run.stickyBlockIndex]?.id === first.id) {
+            [first, second] = [second, first];
+        }
         /*
          * The wild joker is a singleton, so it is never in a playable pair group and the ordinary
          * loop never reaches for it - which is exactly why `wildMatch` read zero on all 240 floors
