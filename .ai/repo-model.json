@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2721,
-    "codeFileCount": 954,
-    "exportedSymbolCount": 2899,
+    "trackedFileCount": 2725,
+    "codeFileCount": 958,
+    "exportedSymbolCount": 2903,
     "contentItemCount": 10,
     "mechanicCount": 50,
     "stateFieldCount": 90,
-    "relationshipCount": 7469
+    "relationshipCount": 7492
   },
   "inventory": [
     {
@@ -2368,7 +2368,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33561,
-      "sha256": "f9ef845a5eabc4e4219a67e925e3ac717227685eb73dde8b5118726c10f611cb"
+      "sha256": "b6d17f621a9bb0527d883b0be45015e8880301a455cdedd4d62d1673ce1a1ec7"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3735,8 +3735,8 @@
     {
       "path": "e2e/a11y-scoped-routes.spec.ts",
       "category": "test",
-      "bytes": 2039,
-      "sha256": "e1ed7b1d42b2a6934ab4c262b85fcaaecabdeec169ab600f71cc5804ef5eaa87"
+      "bytes": 5396,
+      "sha256": "c54aa17d0ba9626949a5a172e9af8fa5dc3b5aafca1f9581d2cd09e2c7cd3bfb"
     },
     {
       "path": "e2e/ambiguousControls.ts",
@@ -3783,8 +3783,8 @@
     {
       "path": "e2e/controller-navigation.spec.ts",
       "category": "test",
-      "bytes": 16852,
-      "sha256": "9548c823a02a008623afb4b80d453ea4b550859eb16971d3cf2f55345190a46e"
+      "bytes": 20841,
+      "sha256": "ea59bff5dab3383debba11b87c9b9620ee06dad7944caa0c8771f9c433b9d502"
     },
     {
       "path": "e2e/cyp-review-capture.spec.ts",
@@ -4365,8 +4365,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 123177,
-      "sha256": "28c7fc17d258cc5efa62b4d93f5824af5460fdb99b41e2de5cb6ea325e33c7a2"
+      "bytes": 121134,
+      "sha256": "04ff30d01b06213d53cdfbf16831df9dda97c5fad26f3827111257d9fabb4970"
     },
     {
       "path": "public/site.webmanifest",
@@ -5747,6 +5747,18 @@
       "category": "source",
       "bytes": 5183,
       "sha256": "9c0dcf8b746437b8105c186d90d83cdd61f90304e2cb1ce14901ec09411071c0"
+    },
+    {
+      "path": "src/renderer/a11y/focusLossRecovery.test.tsx",
+      "category": "test",
+      "bytes": 3380,
+      "sha256": "f15be3795dfdc3e900857294557d0bc28564752d470f224efb240e2101ebd282"
+    },
+    {
+      "path": "src/renderer/a11y/focusLossRecovery.ts",
+      "category": "source",
+      "bytes": 4086,
+      "sha256": "64536a3be2b63947c7403fe53ad3af6563917c668211e72e7d017b1b58405d0e"
     },
     {
       "path": "src/renderer/a11y/modalFocusReturnStack.test.ts",
@@ -9141,14 +9153,14 @@
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "category": "test",
-      "bytes": 14626,
-      "sha256": "7984f206bc06e07e2b641b55e6321bc00bf9285f0a86619a20842893368ed171"
+      "bytes": 15679,
+      "sha256": "56e2a6ea22b512d7295ad477ff0b3db5b7ca71c526d2d11e2190dfee2f991db2"
     },
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 24905,
-      "sha256": "fd9b4847cf9cd344b897e2337141dc062e13985d48e240f6676e14782255b3db"
+      "bytes": 25481,
+      "sha256": "1e1037c1a45f7705c84094ea4161fa8f7b6fadab69ef7442b6787f58db161f3c"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -9207,8 +9219,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 94888,
-      "sha256": "867cd4e33adc7f14486804fddbb79064ec1ca275836fc3c7f3a08af37a067016"
+      "bytes": 94195,
+      "sha256": "0ef8a9d326b67d4ea8a440e90e3deb8ef2c379d4c43fcc2b28c6c7f38b701dff"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9477,14 +9489,14 @@
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 29729,
-      "sha256": "2b13ee2c994b9f5f0356352103416332debccd31d29b9b074e7ae7cefcbdb1ce"
+      "bytes": 31827,
+      "sha256": "9556b140c25d1c0b573795f4a8e5ae782ad4a7cc8690e27d0e240686bc72c95a"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 35435,
-      "sha256": "c8e90e7a88f2afec3c6595d77176f3fc788e22dbcc22af3e2cd077c2b5452e34"
+      "bytes": 36430,
+      "sha256": "8d548e314a9a656e7c3c7fab3cb91c1da06d440f0e5ef75426cc35af267d8d69"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -9647,6 +9659,18 @@
       "category": "source",
       "bytes": 12267,
       "sha256": "fbceb58fdbd4ffd0875f4b38bb1a17e3f60702bcc2b8c62a5e08f942dfefd2e0"
+    },
+    {
+      "path": "src/renderer/components/StoreSheetRows.test.tsx",
+      "category": "test",
+      "bytes": 3264,
+      "sha256": "2ade0a33e05f652507d6ac9ca428c7d384acf7ef2cb073b99d575006d26eda06"
+    },
+    {
+      "path": "src/renderer/components/StoreSheetRows.tsx",
+      "category": "source",
+      "bytes": 3460,
+      "sha256": "7f22181b83de69a1bde0330f76e8dc2640e9608eaaa4a8e3d5932c36b5bc146c"
     },
     {
       "path": "src/renderer/components/SuitMarkerPlane.tsx",
@@ -10491,8 +10515,8 @@
     {
       "path": "src/renderer/copy/boardTurnAnnouncement.ts",
       "category": "source",
-      "bytes": 8149,
-      "sha256": "df5049e52d19f3cebbfa81315ae987c9e769ce40c976b91dac37a0bfc0a5aa4b"
+      "bytes": 8529,
+      "sha256": "19c4be7a637ecf6f47df1c8ff25bed707be5239a40d2f454c81f90f852733563"
     },
     {
       "path": "src/renderer/copy/chainBeat.test.ts",
@@ -10587,8 +10611,8 @@
     {
       "path": "src/renderer/copy/gameOverScreen.ts",
       "category": "source",
-      "bytes": 6757,
-      "sha256": "89a727bee0071bbf157da40ccc81bd43441b153dcd8123a0f5a0297ab8a26fe9"
+      "bytes": 7188,
+      "sha256": "95a0704e8027bb4597dd345e762fb78ff250be2e25d4bc46e80d865e06e1a063"
     },
     {
       "path": "src/renderer/copy/gameplayEventAnnouncement.test.ts",
@@ -10731,8 +10755,8 @@
     {
       "path": "src/renderer/copy/storeSheet.ts",
       "category": "source",
-      "bytes": 1620,
-      "sha256": "2872b6eb37658f8b5c6e8303f340b311ba5d0f092d9a4e50519b932c9ee4dc91"
+      "bytes": 2082,
+      "sha256": "2ccf997ca17ba9a9298c5b50bd755d65969b4914f396ad15bbccb76b68daa85e"
     },
     {
       "path": "src/renderer/copy/traitInteractionLaneMap.test.ts",
@@ -11019,14 +11043,14 @@
     {
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "category": "test",
-      "bytes": 43745,
-      "sha256": "fe26dcc7c1c10e3b5e8a6cb90b27357841081200617d985fb69f426e5d7dad01"
+      "bytes": 45662,
+      "sha256": "37cb1ec9e80fa32ffc63dd76d5d6b5cd458ef1bca3801c01227dee25f0b321c5"
     },
     {
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "category": "source",
-      "bytes": 21544,
-      "sha256": "96a3e732d725d0ce7233ccedce607a2b70069ba5e1721ed18d502d1259b64b57"
+      "bytes": 21772,
+      "sha256": "6c336d363e89cb3c4fa10e300cd7f6f86e164d33ba54192a951a34aa836fe7f5"
     },
     {
       "path": "src/renderer/hooks/useLatestRef.ts",
@@ -11103,14 +11127,14 @@
     {
       "path": "src/renderer/input/gamepadNavigation.test.ts",
       "category": "test",
-      "bytes": 4995,
-      "sha256": "8ac8ccd1ee3eb6c34dd772d55338c0b639bffe73b267ee8199a051367b116a70"
+      "bytes": 6350,
+      "sha256": "7e515af27e9e707c7c361be4c3766285cbeced3589e9f2b5d1a19b367fcec657"
     },
     {
       "path": "src/renderer/input/gamepadNavigation.ts",
       "category": "source",
-      "bytes": 6026,
-      "sha256": "232cc4dc5c6f392c38f5ffb8caf8714511b3fefee2ea6bb4850ecdc4f60c5a47"
+      "bytes": 6801,
+      "sha256": "1151e415baf9798eebe4671ed345f86f29a75e27a10de3b626a81ce30d8bf02e"
     },
     {
       "path": "src/renderer/input/gamepadRumble.test.ts",
@@ -12303,8 +12327,8 @@
     {
       "path": "src/shared/controller-back-contract.ts",
       "category": "source",
-      "bytes": 3064,
-      "sha256": "6b725a26bb6b7a4049ae967fbe5b74ed564e4dac772eb07088b820f1773427a8"
+      "bytes": 3248,
+      "sha256": "85815dba76ce9854000d3ac76c349e52b2e035ca15b23a989911fa1dc11bcc57"
     },
     {
       "path": "src/shared/copy-locality.test.ts",
@@ -16902,6 +16926,36 @@
       ]
     },
     {
+      "id": "file:src/renderer/a11y/focusLossRecovery.test.tsx",
+      "path": "src/renderer/a11y/focusLossRecovery.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 92,
+      "imports": [
+        "file:src/renderer/a11y/focusLossRecovery.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/a11y/focusLossRecovery.ts",
+      "path": "src/renderer/a11y/focusLossRecovery.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 93,
+      "imports": [
+        "file:src/renderer/hooks/useLatestRef.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/a11y/focusLossRecovery.ts#focusWasLostWith",
+        "symbol:src/renderer/a11y/focusLossRecovery.ts#pickFocusSuccessor",
+        "symbol:src/renderer/a11y/focusLossRecovery.ts#useFocusLossRecovery"
+      ],
+      "testedBy": [
+        "file:src/renderer/a11y/focusLossRecovery.test.tsx"
+      ]
+    },
+    {
       "id": "file:src/renderer/a11y/modalFocusReturnStack.test.ts",
       "path": "src/renderer/a11y/modalFocusReturnStack.test.ts",
       "layer": "renderer",
@@ -19024,7 +19078,7 @@
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 309,
+      "lineCount": 326,
       "imports": [
         "file:src/renderer/components/GameOverScreen.tsx",
         "file:src/shared/contracts.ts",
@@ -19040,7 +19094,7 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 489,
+      "lineCount": 499,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -19220,7 +19274,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1989,
+      "lineCount": 1977,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -19239,6 +19293,7 @@
         "file:src/renderer/components/runShellGlyphs.tsx",
         "file:src/renderer/components/runShellToolCatalog.ts",
         "file:src/renderer/components/ScoreTermsLine.tsx",
+        "file:src/renderer/components/StoreSheetRows.tsx",
         "file:src/renderer/components/TileBoard.tsx",
         "file:src/renderer/components/useGameScreenPowerTileHints.ts",
         "file:src/renderer/copy/boardPowerCopy.ts",
@@ -19883,7 +19938,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 553,
+      "lineCount": 591,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/shared/contracts.ts",
@@ -19898,8 +19953,9 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 679,
+      "lineCount": 694,
       "imports": [
+        "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/components/memorizeUrgency.ts",
@@ -20322,6 +20378,40 @@
         "symbol:src/renderer/components/startupIntroTextures.ts#RelicTextureSet"
       ],
       "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/StoreSheetRows.test.tsx",
+      "path": "src/renderer/components/StoreSheetRows.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 73,
+      "imports": [
+        "file:src/renderer/components/StoreSheetRows.tsx",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/game-core.ts",
+        "file:src/shared/run-store-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/StoreSheetRows.tsx",
+      "path": "src/renderer/components/StoreSheetRows.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 73,
+      "imports": [
+        "file:src/renderer/a11y/focusLossRecovery.ts",
+        "file:src/renderer/copy/storeSheet.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/run-store-rules.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/StoreSheetRows.tsx#default"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/StoreSheetRows.test.tsx"
+      ]
     },
     {
       "id": "file:src/renderer/components/SuitMarkerPlane.tsx",
@@ -22869,7 +22959,7 @@
       "path": "src/renderer/copy/boardTurnAnnouncement.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 175,
+      "lineCount": 183,
       "imports": [
         "file:src/renderer/copy/chainBeat.ts",
         "file:src/renderer/copy/chainMilestoneFeedback.ts",
@@ -23129,7 +23219,7 @@
       "path": "src/renderer/copy/gameOverScreen.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 135,
+      "lineCount": 142,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -23503,7 +23593,8 @@
         "symbol:src/renderer/copy/skittishCardsBeat.ts#SKITTISH_FLOATER_REASON"
       ],
       "testedBy": [
-        "file:src/renderer/copy/skittishCardsBeat.test.ts"
+        "file:src/renderer/copy/skittishCardsBeat.test.ts",
+        "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts"
       ]
     },
     {
@@ -23511,7 +23602,7 @@
       "path": "src/renderer/copy/storeSheet.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 31,
+      "lineCount": 39,
       "imports": [
         "file:src/shared/run-store-rules.ts"
       ],
@@ -24162,10 +24253,11 @@
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1102,
+      "lineCount": 1138,
       "imports": [
         "file:src/renderer/copy/gameplayHints.ts",
         "file:src/renderer/copy/hudActionFeedback.ts",
+        "file:src/renderer/copy/skittishCardsBeat.ts",
         "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/shared/board-turn-event-facts.ts",
@@ -24180,7 +24272,7 @@
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 481,
+      "lineCount": 484,
       "imports": [
         "file:src/renderer/copy/boardTurnAnnouncement.ts",
         "file:src/renderer/copy/gameplayEventAnnouncement.ts",
@@ -24379,7 +24471,7 @@
       "path": "src/renderer/input/gamepadNavigation.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 138,
+      "lineCount": 166,
       "imports": [
         "file:src/renderer/input/gamepadNavigation.ts"
       ],
@@ -24391,7 +24483,7 @@
       "path": "src/renderer/input/gamepadNavigation.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 148,
+      "lineCount": 159,
       "imports": [
         "file:src/renderer/a11y/focusables.ts",
         "file:src/renderer/input/spatialFocus.ts",
@@ -27911,6 +28003,7 @@
         "file:src/renderer/components/ProfileScreen.test.tsx",
         "file:src/renderer/components/runLoadingScreen.test.tsx",
         "file:src/renderer/components/RunShell.test.tsx",
+        "file:src/renderer/components/StoreSheetRows.test.tsx",
         "file:src/renderer/components/TileBoard.test.tsx",
         "file:src/renderer/components/tileBoardBreakWave.test.ts",
         "file:src/renderer/components/tileBoardCardTint.test.ts",
@@ -28061,7 +28154,7 @@
       "path": "src/shared/controller-back-contract.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 65,
+      "lineCount": 67,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -28865,6 +28958,7 @@
         "file:src/renderer/components/inventoryScreenModel.test.ts",
         "file:src/renderer/components/PlayableOnboardingHarness.test.tsx",
         "file:src/renderer/components/RunShell.test.tsx",
+        "file:src/renderer/components/StoreSheetRows.test.tsx",
         "file:src/renderer/store/runLifecycleController.test.ts",
         "file:src/renderer/store/runResolutionController.test.ts",
         "file:src/renderer/store/runStartState.test.ts",
@@ -32362,6 +32456,7 @@
         "symbol:src/shared/run-store-rules.ts#StoreRun"
       ],
       "testedBy": [
+        "file:src/renderer/components/StoreSheetRows.test.tsx",
         "file:src/shared/run-relic-rules.test.ts",
         "file:src/shared/run-store-rules.test.ts"
       ]
@@ -34747,6 +34842,30 @@
       "file": "src/renderer/a11y/focusables.ts",
       "line": 11,
       "endLine": 11
+    },
+    {
+      "id": "symbol:src/renderer/a11y/focusLossRecovery.ts#focusWasLostWith",
+      "name": "focusWasLostWith",
+      "kind": "value",
+      "file": "src/renderer/a11y/focusLossRecovery.ts",
+      "line": 20,
+      "endLine": 27
+    },
+    {
+      "id": "symbol:src/renderer/a11y/focusLossRecovery.ts#pickFocusSuccessor",
+      "name": "pickFocusSuccessor",
+      "kind": "value",
+      "file": "src/renderer/a11y/focusLossRecovery.ts",
+      "line": 34,
+      "endLine": 38
+    },
+    {
+      "id": "symbol:src/renderer/a11y/focusLossRecovery.ts#useFocusLossRecovery",
+      "name": "useFocusLossRecovery",
+      "kind": "value",
+      "file": "src/renderer/a11y/focusLossRecovery.ts",
+      "line": 54,
+      "endLine": 92
     },
     {
       "id": "symbol:src/renderer/a11y/modalFocusReturnStack.ts#acquireModalFocusSnapshot",
@@ -37273,8 +37392,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 488,
-      "endLine": 488
+      "line": 498,
+      "endLine": 498
     },
     {
       "id": "symbol:src/renderer/components/gameplayRenderProfile.ts#GAMEPLAY_RENDER_PROFILE",
@@ -37393,40 +37512,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 1988,
-      "endLine": 1988
+      "line": 1976,
+      "endLine": 1976
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 235,
-      "endLine": 235
+      "line": 236,
+      "endLine": 236
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 233,
-      "endLine": 233
+      "line": 234,
+      "endLine": 234
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 237,
-      "endLine": 237
+      "line": 238,
+      "endLine": 238
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 227,
-      "endLine": 227
+      "line": 228,
+      "endLine": 228
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -37777,24 +37896,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 678,
-      "endLine": 678
+      "line": 693,
+      "endLine": 693
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 52,
-      "endLine": 82
+      "line": 53,
+      "endLine": 83
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 39,
-      "endLine": 50
+      "line": 40,
+      "endLine": 51
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
@@ -38251,6 +38370,14 @@
       "file": "src/renderer/components/startupIntroTextures.ts",
       "line": 9,
       "endLine": 17
+    },
+    {
+      "id": "symbol:src/renderer/components/StoreSheetRows.tsx#default",
+      "name": "default",
+      "kind": "ExportAssignment",
+      "file": "src/renderer/components/StoreSheetRows.tsx",
+      "line": 72,
+      "endLine": 72
     },
     {
       "id": "symbol:src/renderer/components/SuitMarkerPlane.tsx#SuitMarkerPlane",
@@ -41377,8 +41504,8 @@
       "name": "buildBoardTurnAnnouncement",
       "kind": "value",
       "file": "src/renderer/copy/boardTurnAnnouncement.ts",
-      "line": 151,
-      "endLine": 174
+      "line": 156,
+      "endLine": 182
     },
     {
       "id": "symbol:src/renderer/copy/boardTurnAnnouncement.ts#CHAIN_MILESTONE_THRESHOLDS",
@@ -41625,8 +41752,8 @@
       "name": "achievementsNote",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 115,
-      "endLine": 134
+      "line": 122,
+      "endLine": 141
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy",
@@ -41634,15 +41761,15 @@
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
       "line": 6,
-      "endLine": 101
+      "endLine": 108
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#runEndReasonLine",
       "name": "runEndReasonLine",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 107,
-      "endLine": 108
+      "line": 114,
+      "endLine": 115
     },
     {
       "id": "symbol:src/renderer/copy/gameplayEventAnnouncement.ts#buildGameplayEventAnnouncement",
@@ -42089,8 +42216,8 @@
       "name": "BOMB_TOOL_COPY",
       "kind": "value",
       "file": "src/renderer/copy/storeSheet.ts",
-      "line": 27,
-      "endLine": 30
+      "line": 35,
+      "endLine": 38
     },
     {
       "id": "symbol:src/renderer/copy/storeSheet.ts#STORE_SHEET_COPY",
@@ -42098,7 +42225,7 @@
       "kind": "value",
       "file": "src/renderer/copy/storeSheet.ts",
       "line": 4,
-      "endLine": 24
+      "endLine": 32
     },
     {
       "id": "symbol:src/renderer/copy/traitInteractionLaneMap.ts#buildTraitInteractionLaneMap",
@@ -42698,7 +42825,7 @@
       "kind": "value",
       "file": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "line": 77,
-      "endLine": 480
+      "endLine": 483
     },
     {
       "id": "symbol:src/renderer/hooks/useLatestRef.ts#useLatestRef",
@@ -42769,8 +42896,8 @@
       "name": "applyGamepadAction",
       "kind": "value",
       "file": "src/renderer/input/gamepadNavigation.ts",
-      "line": 109,
-      "endLine": 147
+      "line": 113,
+      "endLine": 158
     },
     {
       "id": "symbol:src/renderer/input/gamepadNavigation.ts#GAMEPAD_ACTIVE_ATTRIBUTE",
@@ -47954,15 +48081,15 @@
       "kind": "value",
       "file": "src/shared/controller-back-contract.ts",
       "line": 27,
-      "endLine": 52
+      "endLine": 54
     },
     {
       "id": "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_VIEWS",
       "name": "CONTROLLER_BACK_VIEWS",
       "kind": "value",
       "file": "src/shared/controller-back-contract.ts",
-      "line": 55,
-      "endLine": 57
+      "line": 57,
+      "endLine": 59
     },
     {
       "id": "symbol:src/shared/controller-back-contract.ts#ControllerBackRow",
@@ -47977,8 +48104,8 @@
       "name": "findUnexplainedControllerExemptions",
       "kind": "value",
       "file": "src/shared/controller-back-contract.ts",
-      "line": 60,
-      "endLine": 64
+      "line": 62,
+      "endLine": 66
     },
     {
       "id": "symbol:src/shared/cosmetic-ids.ts#COSMETIC_IDS",
@@ -57559,7 +57686,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 87
+          "line": 88
         }
       ],
       "tests": [
@@ -57977,7 +58104,7 @@
       "evidence": [
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 10
+          "line": 11
         },
         {
           "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -59674,7 +59801,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 451
+          "line": 458
         }
       ],
       "tests": [
@@ -59713,7 +59840,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 451
+          "line": 458
         }
       ],
       "tests": [
@@ -59747,7 +59874,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 451
+          "line": 458
         }
       ],
       "tests": [
@@ -59781,7 +59908,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 451
+          "line": 458
         }
       ],
       "tests": [
@@ -61855,6 +61982,24 @@
       "id": "exports:src/renderer/a11y/focusables.ts->symbol:src/renderer/a11y/focusables.ts#TabTrapKeyboardEvent",
       "source": "file:src/renderer/a11y/focusables.ts",
       "target": "symbol:src/renderer/a11y/focusables.ts#TabTrapKeyboardEvent",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/a11y/focusLossRecovery.ts->symbol:src/renderer/a11y/focusLossRecovery.ts#focusWasLostWith",
+      "source": "file:src/renderer/a11y/focusLossRecovery.ts",
+      "target": "symbol:src/renderer/a11y/focusLossRecovery.ts#focusWasLostWith",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/a11y/focusLossRecovery.ts->symbol:src/renderer/a11y/focusLossRecovery.ts#pickFocusSuccessor",
+      "source": "file:src/renderer/a11y/focusLossRecovery.ts",
+      "target": "symbol:src/renderer/a11y/focusLossRecovery.ts#pickFocusSuccessor",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/a11y/focusLossRecovery.ts->symbol:src/renderer/a11y/focusLossRecovery.ts#useFocusLossRecovery",
+      "source": "file:src/renderer/a11y/focusLossRecovery.ts",
+      "target": "symbol:src/renderer/a11y/focusLossRecovery.ts#useFocusLossRecovery",
       "kind": "exports"
     },
     {
@@ -64483,6 +64628,12 @@
       "id": "exports:src/renderer/components/startupIntroTextures.ts->symbol:src/renderer/components/startupIntroTextures.ts#RelicTextureSet",
       "source": "file:src/renderer/components/startupIntroTextures.ts",
       "target": "symbol:src/renderer/components/startupIntroTextures.ts#RelicTextureSet",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/StoreSheetRows.tsx->symbol:src/renderer/components/StoreSheetRows.tsx#default",
+      "source": "file:src/renderer/components/StoreSheetRows.tsx",
+      "target": "symbol:src/renderer/components/StoreSheetRows.tsx#default",
       "kind": "exports"
     },
     {
@@ -80437,6 +80588,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/a11y/focusLossRecovery.test.tsx->src/renderer/a11y/focusLossRecovery.ts",
+      "source": "file:src/renderer/a11y/focusLossRecovery.test.tsx",
+      "target": "file:src/renderer/a11y/focusLossRecovery.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/a11y/focusLossRecovery.ts->src/renderer/hooks/useLatestRef.ts",
+      "source": "file:src/renderer/a11y/focusLossRecovery.ts",
+      "target": "file:src/renderer/hooks/useLatestRef.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/a11y/modalFocusReturnStack.test.ts->src/renderer/a11y/modalFocusReturnStack.ts",
       "source": "file:src/renderer/a11y/modalFocusReturnStack.test.ts",
       "target": "file:src/renderer/a11y/modalFocusReturnStack.ts",
@@ -82627,6 +82790,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/StoreSheetRows.tsx",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/components/StoreSheetRows.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/TileBoard.tsx",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/TileBoard.tsx",
@@ -83581,6 +83750,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/a11y/focusLossRecovery.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/renderer/a11y/focusLossRecovery.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/a11y/toolbarRoving.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/renderer/a11y/toolbarRoving.ts",
@@ -84082,6 +84257,54 @@
       "id": "imports:src/renderer/components/startupIntroContract.ts->src/renderer/components/startupIntroConfig.ts",
       "source": "file:src/renderer/components/startupIntroContract.ts",
       "target": "file:src/renderer/components/startupIntroConfig.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/StoreSheetRows.test.tsx->src/renderer/components/StoreSheetRows.tsx",
+      "source": "file:src/renderer/components/StoreSheetRows.test.tsx",
+      "target": "file:src/renderer/components/StoreSheetRows.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/StoreSheetRows.test.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/StoreSheetRows.test.tsx",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/StoreSheetRows.test.tsx->src/shared/game-core.ts",
+      "source": "file:src/renderer/components/StoreSheetRows.test.tsx",
+      "target": "file:src/shared/game-core.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/StoreSheetRows.test.tsx->src/shared/run-store-rules.ts",
+      "source": "file:src/renderer/components/StoreSheetRows.test.tsx",
+      "target": "file:src/shared/run-store-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/StoreSheetRows.tsx->src/renderer/a11y/focusLossRecovery.ts",
+      "source": "file:src/renderer/components/StoreSheetRows.tsx",
+      "target": "file:src/renderer/a11y/focusLossRecovery.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/StoreSheetRows.tsx->src/renderer/copy/storeSheet.ts",
+      "source": "file:src/renderer/components/StoreSheetRows.tsx",
+      "target": "file:src/renderer/copy/storeSheet.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/StoreSheetRows.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/StoreSheetRows.tsx",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/StoreSheetRows.tsx->src/shared/run-store-rules.ts",
+      "source": "file:src/renderer/components/StoreSheetRows.tsx",
+      "target": "file:src/shared/run-store-rules.ts",
       "kind": "imports"
     },
     {
@@ -87256,6 +87479,12 @@
       "id": "imports:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts->src/renderer/copy/hudActionFeedback.ts",
       "source": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "target": "file:src/renderer/copy/hudActionFeedback.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts->src/renderer/copy/skittishCardsBeat.ts",
+      "source": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
+      "target": "file:src/renderer/copy/skittishCardsBeat.ts",
       "kind": "imports"
     },
     {
@@ -98735,6 +98964,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/a11y/focusLossRecovery.ts->file:src/renderer/a11y/focusLossRecovery.test.tsx",
+      "source": "file:src/renderer/a11y/focusLossRecovery.ts",
+      "target": "file:src/renderer/a11y/focusLossRecovery.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/a11y/modalFocusReturnStack.ts->file:src/renderer/a11y/modalFocusReturnStack.test.ts",
       "source": "file:src/renderer/a11y/modalFocusReturnStack.ts",
       "target": "file:src/renderer/a11y/modalFocusReturnStack.test.ts",
@@ -99455,6 +99690,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/StoreSheetRows.tsx->file:src/renderer/components/StoreSheetRows.test.tsx",
+      "source": "file:src/renderer/components/StoreSheetRows.tsx",
+      "target": "file:src/renderer/components/StoreSheetRows.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/TileBoard.tsx->file:src/renderer/components/TileBoard.test.tsx",
       "source": "file:src/renderer/components/TileBoard.tsx",
       "target": "file:src/renderer/components/TileBoard.test.tsx",
@@ -100004,6 +100245,12 @@
       "id": "tested_by:src/renderer/copy/skittishCardsBeat.ts->file:src/renderer/copy/skittishCardsBeat.test.ts",
       "source": "file:src/renderer/copy/skittishCardsBeat.ts",
       "target": "file:src/renderer/copy/skittishCardsBeat.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/copy/skittishCardsBeat.ts->file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
+      "source": "file:src/renderer/copy/skittishCardsBeat.ts",
+      "target": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "kind": "tested_by"
     },
     {
@@ -101261,6 +101508,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/StoreSheetRows.test.tsx",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/renderer/components/StoreSheetRows.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/TileBoard.test.tsx",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/components/TileBoard.test.tsx",
@@ -102362,6 +102615,12 @@
       "id": "tested_by:src/shared/game-core.ts->file:src/renderer/components/RunShell.test.tsx",
       "source": "file:src/shared/game-core.ts",
       "target": "file:src/renderer/components/RunShell.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/game-core.ts->file:src/renderer/components/StoreSheetRows.test.tsx",
+      "source": "file:src/shared/game-core.ts",
+      "target": "file:src/renderer/components/StoreSheetRows.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -103736,6 +103995,12 @@
       "id": "tested_by:src/shared/run-soak.ts->file:src/shared/run-soak.test.ts",
       "source": "file:src/shared/run-soak.ts",
       "target": "file:src/shared/run-soak.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/run-store-rules.ts->file:src/renderer/components/StoreSheetRows.test.tsx",
+      "source": "file:src/shared/run-store-rules.ts",
+      "target": "file:src/renderer/components/StoreSheetRows.test.tsx",
       "kind": "tested_by"
     },
     {

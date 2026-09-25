@@ -40,7 +40,9 @@ export const CONTROLLER_BACK_CONTRACT: Record<ViewState, ControllerBackRow> = {
         leavesTo: null,
         reason:
             'The one place B is deliberately not a leave: a stray press must not cost a run. The way out ' +
-            'is Start, and the pause menu it opens answers B itself (an OverlayModal with onEscape=resume).'
+            'is Start, and the pause menu it opens answers B itself (an OverlayModal with onEscape=resume). ' +
+            'The store stop, a dialog inside this view, answers B with Descend (its onEscape), driven by ' +
+            'e2e/controller-navigation.spec.ts in the store-stop room.'
     },
     modeSelect: { view: 'modeSelect', leavesTo: 'menu' },
     collection: { view: 'collection', leavesTo: 'menu' },

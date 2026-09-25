@@ -7,6 +7,7 @@ import { missesLeft } from '../../shared/miss-bank';
 import { runGold } from '../../shared/run-store-rules';
 import { MUTATOR_CATALOG } from '../../shared/mechanics-encyclopedia';
 import { handleHorizontalToolbarKeyDown, syncToolbarTabIndices } from '../a11y/toolbarRoving';
+import { useFocusLossRecovery } from '../a11y/focusLossRecovery';
 import { GameplayMenuIcon } from '../ui/gameplayIcons';
 import { useCountUp } from '../hooks/useCountUp';
 import styles from './RunShell.module.css';
@@ -342,6 +343,12 @@ const RunShell = ({
         const current = root.querySelector<HTMLElement>('button[tabindex="0"]:not([disabled])');
         syncToolbarTabIndices(root, current);
     });
+    // Spending the last bomb takes Bomb out of the dock while it holds focus; focus stays in the
+    // dock, on the tool that took its place, rather than falling to the top of the page.
+    useFocusLossRecovery(dockRef, {
+        selector: 'button',
+        onRecovered: (next) => syncToolbarTabIndices(dockRef.current, next)
+    });
 
     const ladderStyle = {
         '--chain-meter-clean': `${(meter.ticks.clean * 100).toFixed(1)}%`,
@@ -596,7 +603,15 @@ const RunShell = ({
                         <span className={styles.kicker} data-chain-tier={kickerTier}>
                             {kicker}
                         </span>
+                        {/*
+                          * A status line for what only it says - the study window, the first
+                          * floor's prompt - and silent while it echoes the announcer. `feedback`
+                          * is the text the HUD's own polite region (below) and the board's score
+                          * pop already speak, so a live caption made a screen reader say every
+                          * bomb, flinch and lantern twice, measured in a real run.
+                          */}
                         <p
+                            aria-live={said ? 'off' : undefined}
                             className={`${styles.line} ${lineTone === 'error' ? styles.lineError : ''}`.trim()}
                             data-run-shell-line-tone={lineTone}
                             data-testid="run-shell-line"

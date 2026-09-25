@@ -216,7 +216,7 @@ describe('GameOverScreen (REF-031)', () => {
         );
     });
 
-    it('exposes a single page title and polite run summary for assistive tech', () => {
+    it('exposes a single page title and polite run summary for assistive tech', async () => {
         render(<GameOverScreen run={gameOverRunFixture()} />);
 
         expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
@@ -224,11 +224,28 @@ describe('GameOverScreen (REF-031)', () => {
 
         const polite = screen.getByLabelText('Run summary announcement');
         expect(polite).toHaveAttribute('aria-live', 'polite');
-        expect(polite).toHaveTextContent(/Expedition complete/);
+        // Mounted empty, then filled: text a live region arrives with is not announced.
+        expect(polite.textContent).toBe('');
+        await waitFor(() => expect(polite).toHaveTextContent(/^Run ended\./));
+        // And it says how the run ended, which the old "Expedition complete" never did.
+        expect(polite).toHaveTextContent('Your turns ran out on floor');
 
         expect(screen.getAllByRole('button', { name: 'Play Again - start a new run after this expedition' })[0]).toBeInTheDocument();
         expect(screen.getAllByRole('button', { name: 'Mobile Play Again - start a new run after this expedition' })[0]).toBeInTheDocument();
         expect(screen.getAllByRole('button', { name: 'Return to the main menu' })[0]).toBeInTheDocument();
+    });
+
+    it('speaks a run lost to the miss bank as that, and an old summary without a reason by its floor', async () => {
+        const { unmount } = render(<GameOverScreen run={gameOverRunFixture(40, 'miss_budget')} />);
+        const polite = screen.getByLabelText('Run summary announcement');
+        await waitFor(() => expect(polite).toHaveTextContent(/You ran out of misses on floor \d+\. Final score 40\./));
+        expect(polite).not.toHaveTextContent(/complete/i);
+        unmount();
+
+        render(<GameOverScreen run={gameOverRunFixture(40, null)} />);
+        await waitFor(() =>
+            expect(screen.getByLabelText('Run summary announcement')).toHaveTextContent(/Final score 40\. Highest floor \d+\./)
+        );
     });
 
     it('uses a second-level heading for unlocked achievements', () => {

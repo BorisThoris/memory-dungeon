@@ -2,6 +2,7 @@ import { act, renderHook } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { Tile } from '../../shared/contracts';
 import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
+import { SKITTISH_FLINCH_ANNOUNCEMENT } from '../copy/skittishCardsBeat';
 import { getHudActionFeedbackProfile } from '../copy/hudActionFeedback';
 import type { BoardTurnAnnouncementFacts } from '../../shared/board-turn-event-facts';
 import type { BoardTurnResolvedEvent, GameplayFeedbackPresentation } from '../store/gameplayFeedbackAdapter';
@@ -602,6 +603,41 @@ describe('useHudPoliteLiveAnnouncement', () => {
         expect(result.current.message).toBe(
             'No match. Recover with a safe match. Chain reset. Heavy trait penalty applied.'
         );
+    });
+
+    it('says a flinch, a lantern and a shift each exactly once', async () => {
+        /*
+         * The skittish room, measured: the miss line said "They flinched one step" and the turn
+         * line after it said "The cards you missed flinched" - one flinch, two sentences, in the
+         * same breath. The miss line keeps it (it is also the caption); the turn line does not.
+         */
+        const { result, rerender } = renderHook(
+            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
+                useHudPoliteLiveAnnouncement({ ...base, boardLevel: 1, boardTurnEvent: p.turnEvent }),
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
+        );
+        const count = (text: string, needle: RegExp): number => (text.match(needle) ?? []).length;
+
+        await act(async () => {
+            rerender({ turnEvent: mismatchTurn('flinch', { skittishFlinchesBefore: 0, skittishFlinchesAfter: 1 }) });
+        });
+        await flushRaf();
+        expect(result.current.message).toBe(`No match. ${SKITTISH_FLINCH_ANNOUNCEMENT} Chain reset.`);
+        expect(count(result.current.message, /flinch/gi)).toBe(1);
+
+        await act(async () => {
+            await new Promise<void>((r) => setTimeout(r, 420));
+            rerender({ turnEvent: mismatchTurn('shift', { mismatchesBefore: 1, mismatchesAfter: 2, restlessDriftsBefore: 0, restlessDriftsAfter: 1 }) });
+        });
+        await flushRaf();
+        expect(count(result.current.message, /The floor shifted/g)).toBe(1);
+
+        await act(async () => {
+            await new Promise<void>((r) => setTimeout(r, 420));
+            rerender({ turnEvent: matchTurn('lantern', { lanternLitCount: 3 }) });
+        });
+        await flushRaf();
+        expect(count(result.current.message, /The lantern lit three cards/g)).toBe(1);
     });
 
     it('announces multi-trait mismatch penalties as a trait surge', async () => {

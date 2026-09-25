@@ -9,8 +9,15 @@ export const gameOverScreenCopy = {
     scoreLabel: 'Score',
     floorCaption: (highestLevel: number) =>
         `Floor ${highestLevel} reached before the archive sealed.`,
-    politeRunSummary: (totalScore: number, highestLevel: number) =>
-        `Expedition complete. Final score ${totalScore.toLocaleString()}. Highest floor ${highestLevel}.`,
+    /**
+     * What a screen reader hears on arrival. It says how the run ended when the summary knows, the
+     * one fact the screen leads with: "Expedition complete" over a run that ran out of misses was
+     * the only thing a listener was told, and it was the opposite of what happened.
+     */
+    politeRunSummary: (totalScore: number, highestLevel: number, endReason: string | null = null) =>
+        endReason
+            ? `Run ended. ${endReason} Final score ${totalScore.toLocaleString()}.`
+            : `Run ended. Final score ${totalScore.toLocaleString()}. Highest floor ${highestLevel}.`,
     achievementsNoteOn: 'Achievements counted for this run.',
     /**
      * Why achievements did not count, in the run's own terms.

@@ -282,6 +282,44 @@ describe('RunShell', () => {
         expect(screen.queryByTestId('run-shell-line')).not.toBeInTheDocument();
     });
 
+    it('speaks the caption only when it says something the announcer does not', () => {
+        /*
+         * `feedback` is the announcer's own text, which the HUD's polite region below already
+         * speaks. As a live caption it made every bomb, flinch and lantern line be heard twice.
+         */
+        const run = playingRun();
+        const { rerender } = render(
+            <RunShell feedback="Bomb took that card and its twin off the board." onPause={vi.fn()} personalBestDepth={false} politeAnnouncement="Bomb took that card and its twin off the board." run={run} tools={[]} />
+        );
+        expect(screen.getByTestId('run-shell-line')).toHaveAttribute('aria-live', 'off');
+        expect(screen.getByTestId('hud-polite-live-region')).toHaveAttribute('aria-live', 'polite');
+
+        // The first floor's prompt is said nowhere else, so the caption stays a status line for it.
+        rerender(<RunShell onboardingLine="Flip a marked tile" onPause={vi.fn()} personalBestDepth={false} run={run} tools={[]} />);
+        const line = screen.getByTestId('run-shell-line');
+        expect(line).toHaveAttribute('role', 'status');
+        expect(line).not.toHaveAttribute('aria-live');
+    });
+
+    it('keeps focus in the dock when the focused tool spends its last charge and leaves', () => {
+        const run = playingRun();
+        const dock = (bombs: number) => (
+            <RunShell
+                onPause={vi.fn()}
+                personalBestDepth={false}
+                run={run}
+                tools={[tool({ id: 'peek', charges: 1 }), tool({ id: 'bomb', charges: bombs }), tool({ id: 'greet' })]}
+            />
+        );
+        const { rerender } = render(dock(1));
+        screen.getByTestId('tool-bomb').focus();
+        rerender(dock(0));
+        expect(screen.queryByTestId('tool-bomb')).not.toBeInTheDocument();
+        // Bomb's place is taken by the tool after it, and it is the dock's one tab stop now.
+        expect(document.activeElement).toBe(screen.getByTestId('tool-greet'));
+        expect(screen.getByTestId('tool-greet').tabIndex).toBe(0);
+    });
+
     it('docks only the tools that have charges or are armed, plus the menu', async () => {
         const user = userEvent.setup();
         const onPause = vi.fn();

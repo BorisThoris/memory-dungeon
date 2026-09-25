@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ACHIEVEMENTS } from '../../shared/achievements';
 import { chainMeter } from '../../shared/chain-tier-rules';
 import { getActiveContentLock } from '../../shared/content-lock-state';
@@ -88,10 +88,20 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
     const politeRunSummaryText = useMemo(
         () =>
             summary
-                ? gameOverScreenCopy.politeRunSummary(summary.totalScore, summary.highestLevel)
+                ? gameOverScreenCopy.politeRunSummary(summary.totalScore, summary.highestLevel, runEndReasonLine(summary))
                 : '',
         [summary]
     );
+    /*
+     * The status region mounts empty and is filled a tick later. A live region that arrives in the
+     * DOM already holding its text is not a change, and screen readers are entitled to say nothing
+     * about it - which is how this screen could open in silence.
+     */
+    const [spokenRunSummary, setSpokenRunSummary] = useState('');
+    useEffect(() => {
+        const timer = window.setTimeout(() => setSpokenRunSummary(politeRunSummaryText), 0);
+        return () => window.clearTimeout(timer);
+    }, [politeRunSummaryText]);
     const uiGain = uiSfxGainFromSettings(settings.masterVolume, settings.sfxVolume);
 
     /*
@@ -190,7 +200,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                     className={styles.visuallyHidden}
                     role="status"
                 >
-                    {politeRunSummaryText}
+                    {spokenRunSummary}
                 </p>
                 <section
                     aria-label={GAME_OVER_LABELS.region}

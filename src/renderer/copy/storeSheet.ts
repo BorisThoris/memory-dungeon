@@ -20,6 +20,14 @@ export const STORE_SHEET_COPY = {
               : row.blocked === 'gold'
                 ? `${row.body} ${row.price} gold; you are short.`
                 : row.body,
+    /**
+     * Said once a purchase goes through. Nothing else on the sheet speaks when it does: the gold
+     * lives in the subtitle and the new price on a button, and neither is a live region.
+     */
+    receipt: (row: StoreOfferRow, goldLeft: number): string =>
+        row.kind === 'relic'
+            ? `Bought ${row.title}, yours for the rest of the run. ${goldLeft} gold left.`
+            : `Bought ${row.title.toLowerCase()}. ${goldLeft} gold left.`,
     descend: 'Descend'
 } as const;
 
