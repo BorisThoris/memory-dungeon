@@ -23,7 +23,8 @@
 //       id: 'showcase-bg',           // file name of the web copy: <dir>/<id>.mp4 + <id>.jpg
 //       title: 'Showcase trailer',
 //       kind: 'trailer',             // 'trailer': a video to publish; 'stills': a build that writes
-//                                    //   its own images (a poster set into project-media/)
+//                                    //   its own images (a poster set into project-media/);
+//                                    //   'artwork': one still to publish (a wallpaper, poster, key art)
 //       inputs: ['marketing/instagram-trailer', 'app/src'],   // git pathspecs; a change here rebuilds
 //       prepare: { command: 'node marketing/instagram-trailer/regenerate.mjs --only screens',
 //                  inputs: ['app/src', 'src'] },   // optional generator step with its own inputs
@@ -33,6 +34,20 @@
 //       posterAt: 0.4                // where in the video the poster frame is taken (fraction)
 //     }]
 //   }
+//
+// An artwork item publishes one image the way a trailer publishes a video:
+//
+//     artworkDir: 'public/artwork',   // where the web copies go (default: <social.staticDir>/artwork)
+//     artworkUrlPathPrefix: '/artwork',
+//     items: [{
+//       id: 'cover-remember-this',
+//       title: 'Remember this',
+//       kind: 'artwork',
+//       role: 'wallpaper',           // wallpaper | poster | key-art | capsule | social
+//       source: 'project-media/reel-cover-remember-this.jpg',   // the master, committed in project-media/
+//       inputs: [...]                // defaults to [source]; a rendered master adds `build` + `output` instead
+//       maxWidth: 2560               // the web copy is a JPEG no wider/taller than this (default 2560)
+//     }]
 //
 // An input change is detected through git (the index plus the working tree),
 // so a rebuild happens exactly when something the render depends on changed.
@@ -75,6 +90,9 @@ const publishDirRelative = toPosix(trailers.dir ?? path.posix.join(config.social
 const publishDir = path.join(repoRoot, publishDirRelative);
 const urlPathPrefix = normalizePrefix(trailers.urlPathPrefix ?? '/trailers');
 const maxBytes = trailers.maxBytes ?? 20 * 1024 * 1024;
+const artworkDirRelative = toPosix(trailers.artworkDir ?? path.posix.join(config.social?.staticDir ?? 'public', 'artwork'));
+const artworkDir = path.join(repoRoot, artworkDirRelative);
+const artworkUrlPathPrefix = normalizePrefix(trailers.artworkUrlPathPrefix ?? '/artwork');
 
 const stale = [];
 const missingTools = [];
@@ -125,7 +143,7 @@ for (const item of items) {
   }
 
   // The build hash is taken after prepare so regenerated inputs are part of it.
-  const inputsHash = hashPathspecs(item.inputs ?? []);
+  const inputsHash = hashPathspecs(itemInputs(item));
   const needsBuild = force || !previous || previous.inputsHash !== inputsHash || state.unpublished;
   if (!needsBuild) {
     // prepare ran but produced identical inputs: the render is still valid.
@@ -135,8 +153,8 @@ for (const item of items) {
     continue;
   }
 
-  if (noBuild) {
-    console.log('\n[trailers] ' + item.id + ': --no-build, publishing what ' + (item.output ?? 'the build') + ' holds.');
+  if (noBuild || !item.build) {
+    console.log('\n[trailers] ' + item.id + ': ' + (item.build ? '--no-build, ' : '') + 'publishing ' + (item.output ?? item.source ?? 'the build') + '.');
   } else {
     if (trailers.freeGpu) freeGpu();
     console.log('\n[trailers] ' + item.id + ': build - ' + item.build);
@@ -151,6 +169,7 @@ for (const item of items) {
   const entry = { id: item.id, title: item.title ?? item.id, kind: item.kind ?? 'trailer', inputsHash, builtAt: new Date().toISOString() };
   if (item.prepare) entry.prepareHash = prepareHash ?? hashPathspecs(item.prepare.inputs ?? []);
   if ((item.kind ?? 'trailer') === 'trailer') Object.assign(entry, publishTrailer(item));
+  else if (item.kind === 'artwork') Object.assign(entry, publishArtwork(item));
   else if (item.outputs) entry.outputs = item.outputs.map((relative) => describeFile(relative));
   recorded.set(item.id, entry);
   recordChanged = true;
@@ -181,10 +200,11 @@ console.log('\n[trailers] ' + slug + ': ' + built + ' built' + (missingTools.len
 
 function describeState(item, previous) {
   const kind = item.kind ?? 'trailer';
-  if (!previous) return { stale: true, reason: 'never built', prepareStale: true, unpublished: kind === 'trailer', summary: 'never built' };
+  const publishes = kind === 'trailer' || kind === 'artwork';
+  if (!previous) return { stale: true, reason: 'never built', prepareStale: true, unpublished: publishes, summary: 'never built' };
   const prepareStale = Boolean(item.prepare) && previous.prepareHash !== hashPathspecs(item.prepare.inputs ?? []);
-  const inputsStale = previous.inputsHash !== hashPathspecs(item.inputs ?? []);
-  const unpublished = kind === 'trailer' && !(previous.file && fs.existsSync(path.join(repoRoot, previous.file)));
+  const inputsStale = previous.inputsHash !== hashPathspecs(itemInputs(item));
+  const unpublished = publishes && !(previous.file && fs.existsSync(path.join(repoRoot, previous.file)));
   const reasons = [];
   if (prepareStale) reasons.push('generator inputs changed');
   if (inputsStale) reasons.push('inputs changed');
@@ -197,6 +217,13 @@ function describeState(item, previous) {
     reason: reasons.join(', '),
     summary: stale ? 'STALE: ' + reasons.join(', ') : 'current (built ' + previous.builtAt + (previous.file ? ', ' + previous.file : '') + ')'
   };
+}
+
+// An artwork item with no inputs of its own is rendered from its source file.
+function itemInputs(item) {
+  if (Array.isArray(item.inputs)) return item.inputs;
+  if (item.kind === 'artwork' && item.source) return [item.source];
+  return [];
 }
 
 // The hash covers every tracked file under the pathspecs (its blob id from the
@@ -334,6 +361,44 @@ function publishTrailer(item) {
     duration: Number(published.duration.toFixed(2)),
     fps: published.fps,
     orientation: item.orientation ?? (published.height > published.width ? 'portrait' : published.height === published.width ? 'square' : 'landscape')
+  };
+}
+
+// A still is published as a JPEG the site can serve at any size: the master
+// (a PNG, a large JPEG) stays in project-media/, the web copy lands in
+// artworkDir under the item's id, capped at maxWidth on its long side.
+function publishArtwork(item) {
+  const relative = item.output ?? item.source;
+  if (!relative) {
+    console.error('[trailers] ' + item.id + ': an artwork item needs a `source` (or a `build` with an `output`)');
+    process.exit(1);
+  }
+  const source = path.join(repoRoot, relative);
+  if (!fs.existsSync(source)) {
+    console.error('[trailers] ' + item.id + ': ' + relative + ' does not exist');
+    process.exit(1);
+  }
+  fs.mkdirSync(artworkDir, { recursive: true });
+  const target = path.join(artworkDir, item.id + '.jpg');
+  const cap = item.maxWidth ?? 2560;
+  ffmpeg([
+    '-y', '-loglevel', 'error', '-i', source,
+    '-vf', "scale='min(iw," + cap + ")':'min(ih," + cap + ")':force_original_aspect_ratio=decrease",
+    '-q:v', String(item.quality ?? 3), '-frames:v', '1', target
+  ]);
+  const published = probe(target);
+  const bytes = fs.statSync(target).size;
+  console.log('[trailers] ' + item.id + ': published ' + toPosix(path.relative(repoRoot, target)) + ' (' + formatBytes(bytes) + ', ' +
+    published.width + 'x' + published.height + ')');
+  return {
+    role: item.role ?? 'artwork',
+    source: toPosix(relative),
+    file: toPosix(path.relative(repoRoot, target)),
+    urlPath: artworkUrlPathPrefix + item.id + '.jpg',
+    bytes,
+    width: published.width,
+    height: published.height,
+    orientation: published.height > published.width ? 'portrait' : published.height === published.width ? 'square' : 'landscape'
   };
 }
 
