@@ -47,9 +47,18 @@ export const APP_MAIN_LANDMARK_ID = 'app-main';
  * all in memory (`preloadRunAssets`, bounded per step). Normally the boot preload has finished long
  * before Play is pressed and this resolves as soon as the chunk does.
  */
-const GameScreen = lazy(() =>
-    Promise.all([import('./components/GameScreen'), preloadRunAssets()]).then(([module]) => module)
-);
+const GameScreen = lazy(async () => {
+    const [module] = await Promise.all([import('./components/GameScreen'), preloadRunAssets()]);
+    // The first floor's card textures, drawn while the loading screen still covers the board (the
+    // GPU half runs in `TileBoardScene` before its first frame). Imported here, not at the top, so
+    // three.js stays in the gameplay chunk.
+    const { board } = useAppStore.getState().run ?? {};
+    if (board) {
+        const { drawBoardTileTextures } = await import('./components/tileTextureWarmup');
+        await drawBoardTileTextures(board, useAppStore.getState().settings.graphicsQuality).catch(() => undefined);
+    }
+    return module;
+});
 const DevBlueprintExplorer = import.meta.env.DEV ? lazy(() => import('./dev/BlueprintExplorer')) : null;
 const DevTestHall = import.meta.env.DEV ? lazy(() => import('./dev/TestHall')) : null;
 const DevTestHallBadge = import.meta.env.DEV ? lazy(() => import('./dev/TestHallBadge')) : null;

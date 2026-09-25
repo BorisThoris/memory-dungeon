@@ -1,4 +1,6 @@
 import { useFrame, useThree } from '@react-three/fiber';
+import { uploadBoardTileTextures } from './tileTextureWarmup';
+import { prewarmPairProximityBadges } from './pairProximityBadges';
 import {
     forwardRef,
     useEffect,
@@ -205,7 +207,26 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     traitRouteTargetTileIds = [],
     stickyBlockedTileId = null
 }: TileBoardSceneProps, ref) => {
-    const { camera, gl, viewport } = useThree();
+    const { camera, gl, scene, viewport } = useThree();
+    /*
+     * Before a floor's first frame: every texture its tiles will use - backs, and faces in all three
+     * face-up states - is on the GPU, and the scene's shaders are compiled. The first floor's
+     * textures were drawn behind the loading screen; a later floor's are drawn here, in the floor
+     * transition, rather than on its first reveal, first match and first miss (`tileTextureWarmup`).
+     */
+    const warmedFloorRef = useRef<string | null>(null);
+    useLayoutEffect(() => {
+        const key = `${board.level}:${board.tiles.length}:${graphicsQuality}`;
+        if (warmedFloorRef.current === key) return;
+        warmedFloorRef.current = key;
+        uploadBoardTileTextures(board, graphicsQuality, (texture) => gl.initTexture(texture));
+        prewarmPairProximityBadges(board.columns + board.rows);
+        try {
+            gl.compile(scene, camera);
+        } catch {
+            // Shaders still compile on first use.
+        }
+    }, [board, camera, gl, graphicsQuality, scene]);
     const { colors } = RENDERER_THEME;
     const sceneRenderQuality = gameplayRenderQualityProfile(graphicsQuality);
     const tileFieldParallaxEnabled = useMemo(

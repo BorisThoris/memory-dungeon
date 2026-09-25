@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2734,
-    "codeFileCount": 959,
-    "exportedSymbolCount": 2915,
+    "trackedFileCount": 2736,
+    "codeFileCount": 961,
+    "exportedSymbolCount": 2919,
     "contentItemCount": 10,
     "mechanicCount": 50,
     "stateFieldCount": 90,
-    "relationshipCount": 7538
+    "relationshipCount": 7547
   },
   "inventory": [
     {
@@ -2374,7 +2374,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33561,
-      "sha256": "2dd9ec800197e54d527f5be5d7a8a36d2055674706a9360f8e0624bf4c3b3135"
+      "sha256": "6982dfa2e0ecf2173dfb0fe132fe25f5366ce5eb802f715c79708178e73d21b3"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3753,8 +3753,8 @@
     {
       "path": "e2e/asset-streaming.spec.ts",
       "category": "test",
-      "bytes": 2450,
-      "sha256": "23a783b2d9b5a5d096768449f11fe69cdbd61e4bc6d57535e6714884bf65c949"
+      "bytes": 3661,
+      "sha256": "1da71549f131ca86cf57de83cc373d8886e18fc9c65b27060184042fa62c7e0f"
     },
     {
       "path": "e2e/blueprint-explorer.spec.ts",
@@ -5847,8 +5847,8 @@
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 24977,
-      "sha256": "606418f3378c72d604affc167ffaf2482acba854f2b4c3f6975555e9fc226019"
+      "bytes": 25531,
+      "sha256": "df49787b49d355b8eea078e46b91cd86c0db4a5a09ba05e520f6c3973671f47b"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -9463,10 +9463,16 @@
       "sha256": "ab5c8b2f0c6449df76b34a86efd2781bafa644f3faf1f95ae152b2d2c62e75ca"
     },
     {
+      "path": "src/renderer/components/pairProximityBadges.ts",
+      "category": "source",
+      "bytes": 2170,
+      "sha256": "0676541fba4ce369ce8644bec2ff08c026be0ca55f7e8d11e8e2838d03cd9d76"
+    },
+    {
       "path": "src/renderer/components/PairProximityHintPlane.tsx",
       "category": "source",
-      "bytes": 2758,
-      "sha256": "4d5b28a6dc59bca273c222913d1243ddab2b006b474043c79f00bade04758ef5"
+      "bytes": 1087,
+      "sha256": "94371cd12e07bb8043914b78c9f85a2e55357ae4541d8b4729a8850b9c2cb722"
     },
     {
       "path": "src/renderer/components/PlayableOnboardingHarness.test.tsx",
@@ -10233,8 +10239,8 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 18769,
-      "sha256": "50732063a7b9553facd74c64372c34aeae31503af0562fb129865ad028f46cf3"
+      "bytes": 19917,
+      "sha256": "5127044c65edaf9fb941b8dc8c62608105ee9cd3849badeb25a279018c8f05da"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
@@ -10505,6 +10511,12 @@
       "category": "source",
       "bytes": 60910,
       "sha256": "f65cd2770818a8b8db49edac95cb8d1e594758ea8e06a2983e4b85c6820c3cd4"
+    },
+    {
+      "path": "src/renderer/components/tileTextureWarmup.ts",
+      "category": "source",
+      "bytes": 3783,
+      "sha256": "68dbe8d913d15d40c9521d4993762b09008ce6ab66e4943830710ef76d587d96"
     },
     {
       "path": "src/renderer/components/TutorialPairMarkerPlane.tsx",
@@ -17105,7 +17117,7 @@
       "path": "src/renderer/App.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 510,
+      "lineCount": 519,
       "imports": [
         "file:src/renderer/assets/preloadRunAssets.ts",
         "file:src/renderer/audio/feverDuck.ts",
@@ -19861,12 +19873,26 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/pairProximityBadges.ts",
+      "path": "src/renderer/components/pairProximityBadges.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 57,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/components/pairProximityBadges.ts#badgeTexture",
+        "symbol:src/renderer/components/pairProximityBadges.ts#prewarmPairProximityBadges"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/PairProximityHintPlane.tsx",
       "path": "src/renderer/components/PairProximityHintPlane.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 80,
+      "lineCount": 31,
       "imports": [
+        "file:src/renderer/components/pairProximityBadges.ts",
         "file:src/renderer/components/tileBoardPick.ts",
         "file:src/renderer/components/tileShatter.ts"
       ],
@@ -22047,12 +22073,13 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 465,
+      "lineCount": 486,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
         "file:src/renderer/components/boardTrauma.ts",
         "file:src/renderer/components/gameplayRenderProfile.ts",
+        "file:src/renderer/components/pairProximityBadges.ts",
         "file:src/renderer/components/TileBezel.tsx",
         "file:src/renderer/components/tileBoardFrameAdvance.ts",
         "file:src/renderer/components/tileBoardFrameBag.ts",
@@ -22068,6 +22095,7 @@
         "file:src/renderer/components/tileFieldTilt.ts",
         "file:src/renderer/components/tileResolvingSelection.ts",
         "file:src/renderer/components/tileShatter.ts",
+        "file:src/renderer/components/tileTextureWarmup.ts",
         "file:src/renderer/components/useTileBoardSceneImperativeHandle.ts",
         "file:src/renderer/components/useTileBoardSceneResources.ts",
         "file:src/renderer/components/useTileBoardTextureRevision.ts",
@@ -22888,6 +22916,22 @@
       "testedBy": [
         "file:src/renderer/components/tileTextures.test.ts"
       ]
+    },
+    {
+      "id": "file:src/renderer/components/tileTextureWarmup.ts",
+      "path": "src/renderer/components/tileTextureWarmup.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 88,
+      "imports": [
+        "file:src/renderer/components/tileTextures.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/tileTextureWarmup.ts#drawBoardTileTextures",
+        "symbol:src/renderer/components/tileTextureWarmup.ts#uploadBoardTileTextures"
+      ],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/components/TutorialPairMarkerPlane.tsx",
@@ -35048,8 +35092,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/App.tsx",
-      "line": 509,
-      "endLine": 509
+      "line": 518,
+      "endLine": 518
     },
     {
       "id": "symbol:src/renderer/assets/assetDropInReadiness.ts#ASSET_DROP_IN_CATEGORIES",
@@ -38012,12 +38056,28 @@
       "endLine": 16
     },
     {
+      "id": "symbol:src/renderer/components/pairProximityBadges.ts#badgeTexture",
+      "name": "badgeTexture",
+      "kind": "value",
+      "file": "src/renderer/components/pairProximityBadges.ts",
+      "line": 38,
+      "endLine": 51
+    },
+    {
+      "id": "symbol:src/renderer/components/pairProximityBadges.ts#prewarmPairProximityBadges",
+      "name": "prewarmPairProximityBadges",
+      "kind": "value",
+      "file": "src/renderer/components/pairProximityBadges.ts",
+      "line": 54,
+      "endLine": 56
+    },
+    {
       "id": "symbol:src/renderer/components/PairProximityHintPlane.tsx#PairProximityHintPlane",
       "name": "PairProximityHintPlane",
       "kind": "value",
       "file": "src/renderer/components/PairProximityHintPlane.tsx",
-      "line": 34,
-      "endLine": 79
+      "line": 7,
+      "endLine": 30
     },
     {
       "id": "symbol:src/renderer/components/PortalScene.tsx#PortalScene",
@@ -40440,24 +40500,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 464,
-      "endLine": 464
+      "line": 485,
+      "endLine": 485
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
       "name": "TileBoardSceneHandle",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 152,
-      "endLine": 152
+      "line": 154,
+      "endLine": 154
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 75,
-      "endLine": 75
+      "line": 77,
+      "endLine": 77
     },
     {
       "id": "symbol:src/renderer/components/TileBoardSceneBoardGroup.tsx#TileBoardSceneBoardGroup",
@@ -41570,6 +41630,22 @@
       "file": "src/renderer/components/tileTextures.ts",
       "line": 55,
       "endLine": 55
+    },
+    {
+      "id": "symbol:src/renderer/components/tileTextureWarmup.ts#drawBoardTileTextures",
+      "name": "drawBoardTileTextures",
+      "kind": "value",
+      "file": "src/renderer/components/tileTextureWarmup.ts",
+      "line": 51,
+      "endLine": 67
+    },
+    {
+      "id": "symbol:src/renderer/components/tileTextureWarmup.ts#uploadBoardTileTextures",
+      "name": "uploadBoardTileTextures",
+      "kind": "value",
+      "file": "src/renderer/components/tileTextureWarmup.ts",
+      "line": 70,
+      "endLine": 87
     },
     {
       "id": "symbol:src/renderer/components/TutorialPairMarkerPlane.tsx#TutorialPairMarkerPlane",
@@ -64485,6 +64561,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/pairProximityBadges.ts->symbol:src/renderer/components/pairProximityBadges.ts#badgeTexture",
+      "source": "file:src/renderer/components/pairProximityBadges.ts",
+      "target": "symbol:src/renderer/components/pairProximityBadges.ts#badgeTexture",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/pairProximityBadges.ts->symbol:src/renderer/components/pairProximityBadges.ts#prewarmPairProximityBadges",
+      "source": "file:src/renderer/components/pairProximityBadges.ts",
+      "target": "symbol:src/renderer/components/pairProximityBadges.ts#prewarmPairProximityBadges",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/PairProximityHintPlane.tsx->symbol:src/renderer/components/PairProximityHintPlane.tsx#PairProximityHintPlane",
       "source": "file:src/renderer/components/PairProximityHintPlane.tsx",
       "target": "symbol:src/renderer/components/PairProximityHintPlane.tsx#PairProximityHintPlane",
@@ -67152,6 +67240,18 @@
       "id": "exports:src/renderer/components/tileTextures.ts->symbol:src/renderer/components/tileTextures.ts#TileLayer",
       "source": "file:src/renderer/components/tileTextures.ts",
       "target": "symbol:src/renderer/components/tileTextures.ts#TileLayer",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileTextureWarmup.ts->symbol:src/renderer/components/tileTextureWarmup.ts#drawBoardTileTextures",
+      "source": "file:src/renderer/components/tileTextureWarmup.ts",
+      "target": "symbol:src/renderer/components/tileTextureWarmup.ts#drawBoardTileTextures",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileTextureWarmup.ts->symbol:src/renderer/components/tileTextureWarmup.ts#uploadBoardTileTextures",
+      "source": "file:src/renderer/components/tileTextureWarmup.ts",
+      "target": "symbol:src/renderer/components/tileTextureWarmup.ts#uploadBoardTileTextures",
       "kind": "exports"
     },
     {
@@ -83838,6 +83938,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/PairProximityHintPlane.tsx->src/renderer/components/pairProximityBadges.ts",
+      "source": "file:src/renderer/components/PairProximityHintPlane.tsx",
+      "target": "file:src/renderer/components/pairProximityBadges.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/PairProximityHintPlane.tsx->src/renderer/components/tileBoardPick.ts",
       "source": "file:src/renderer/components/PairProximityHintPlane.tsx",
       "target": "file:src/renderer/components/tileBoardPick.ts",
@@ -86370,6 +86476,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/pairProximityBadges.ts",
+      "source": "file:src/renderer/components/TileBoardScene.tsx",
+      "target": "file:src/renderer/components/pairProximityBadges.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/TileBezel.tsx",
       "source": "file:src/renderer/components/TileBoardScene.tsx",
       "target": "file:src/renderer/components/TileBezel.tsx",
@@ -86457,6 +86569,12 @@
       "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/tileShatter.ts",
       "source": "file:src/renderer/components/TileBoardScene.tsx",
       "target": "file:src/renderer/components/tileShatter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/tileTextureWarmup.ts",
+      "source": "file:src/renderer/components/TileBoardScene.tsx",
+      "target": "file:src/renderer/components/tileTextureWarmup.ts",
       "kind": "imports"
     },
     {
@@ -87128,6 +87246,18 @@
     {
       "id": "imports:src/renderer/components/tileTextures.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/components/tileTextures.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileTextureWarmup.ts->src/renderer/components/tileTextures.ts",
+      "source": "file:src/renderer/components/tileTextureWarmup.ts",
+      "target": "file:src/renderer/components/tileTextures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileTextureWarmup.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/tileTextureWarmup.ts",
       "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
