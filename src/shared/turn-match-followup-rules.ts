@@ -17,8 +17,10 @@ export const resolveTurnMatchFollowup = ({
     encoreKey
 }: TurnMatchFollowupInput): TurnMatchFollowupResult => {
     const nBackMatchCounter = runNonNegativeInteger(run.nBackMatchCounter) + 1;
-    const nBackAnchorPairKey =
-        hasMutator(run, 'n_back_anchor') && nBackMatchCounter % 2 === 0 ? encoreKey : run.nBackAnchorPairKey;
+    // The anchor itself is chosen on the post-turn board in `n-back-anchor-rules.ts`; this only keeps
+    // the key it had, for callers that read the follow-up alone.
+    void encoreKey;
+    const nBackAnchorPairKey = hasMutator(run, 'n_back_anchor') ? run.nBackAnchorPairKey : null;
 
     return {
         nBackMatchCounter,

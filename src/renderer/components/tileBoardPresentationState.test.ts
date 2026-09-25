@@ -15,7 +15,7 @@ const presentationState = (
 ) =>
     getTileBoardPresentationState({
         faceUp: true,
-        nBackAnchorPairKey: null,
+        nBackAnchorMarkedTileId: null,
         nBackMutatorActive: false,
         runStatus: 'playing' as RunStatus,
         silhouetteDuringPlay: false,
@@ -29,12 +29,13 @@ describe('tileBoardPresentationState', () => {
         expect(
             presentationState({
                 faceUp: false,
-                nBackAnchorPairKey: 'pair-a',
+                nBackAnchorMarkedTileId: 'tile-a',
                 nBackMutatorActive: true,
                 silhouetteDuringPlay: true,
                 wideRecallInPlay: true
             })
         ).toEqual({
+            // A flipped card drawn face down (mid-turn): no face-up reads, and not a hidden marked card either.
             presentationNBackAnchor: false,
             presentationSilhouette: false,
             presentationWideRecall: false
@@ -64,34 +65,13 @@ describe('tileBoardPresentationState', () => {
         });
     });
 
-    it('marks the n-back anchor only for the active matching in-play flip', () => {
-        expect(
-            presentationState({
-                nBackAnchorPairKey: 'pair-a',
-                nBackMutatorActive: true
-            }).presentationNBackAnchor
-        ).toBe(true);
-
-        expect(
-            presentationState({
-                nBackAnchorPairKey: 'pair-b',
-                nBackMutatorActive: true
-            }).presentationNBackAnchor
-        ).toBe(false);
-
-        expect(
-            presentationState({
-                nBackAnchorPairKey: 'pair-a',
-                nBackMutatorActive: false
-            }).presentationNBackAnchor
-        ).toBe(false);
-
-        expect(
-            presentationState({
-                nBackAnchorPairKey: 'pair-a',
-                nBackMutatorActive: true,
-                tile: tile('matched')
-            }).presentationNBackAnchor
-        ).toBe(false);
+    it('marks the anchor on its one face-down marked card, and nowhere else', () => {
+        const hidden = tile('hidden');
+        const marked = { faceUp: false, tile: hidden, nBackAnchorMarkedTileId: 'tile-a', nBackMutatorActive: true };
+        expect(presentationState(marked).presentationNBackAnchor).toBe(true);
+        expect(presentationState({ ...marked, nBackAnchorMarkedTileId: 'tile-b' }).presentationNBackAnchor).toBe(false);
+        expect(presentationState({ ...marked, nBackMutatorActive: false }).presentationNBackAnchor).toBe(false);
+        expect(presentationState({ ...marked, faceUp: true, tile: tile('flipped') }).presentationNBackAnchor).toBe(false);
+        expect(presentationState({ ...marked, runStatus: 'memorize' as RunStatus }).presentationNBackAnchor).toBe(false);
     });
 });

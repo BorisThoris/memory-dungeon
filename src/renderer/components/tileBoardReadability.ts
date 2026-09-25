@@ -48,6 +48,8 @@ interface TileBoardReadabilityInput {
     spotlightBountyOnBack: boolean;
     spotlightWardOnBack: boolean;
     stickyFingerSlotMark: boolean;
+    /** The anchor's marked card (Anchor Chain): find its partner for an extra chain link. */
+    anchorMarkBack?: boolean;
     traitComboBack: boolean;
     traitComboSurgeBack: boolean;
     traitLaneBack?: TraitInteractionLaneId | null;
@@ -299,6 +301,9 @@ export const getTraitRouteCadenceAction = (
     return 'None';
 };
 
+/** The anchor's mark: a cold teal, clear of every trait colour and of the lock's burnt orange. */
+export const ANCHOR_MARK_COLOR = '#5fe0cf';
+
 export const getTileBoardReadabilityState = ({
     faceUp,
     nonPickableBack,
@@ -307,6 +312,7 @@ export const getTileBoardReadabilityState = ({
     spotlightBountyOnBack,
     spotlightWardOnBack,
     stickyFingerSlotMark,
+    anchorMarkBack = false,
     traitComboBack,
     traitComboSurgeBack,
     traitLaneBack = null,
@@ -348,7 +354,9 @@ export const getTileBoardReadabilityState = ({
     // face down since the test hall found the block sitting on an already-matched slot).
     const hiddenReadabilityAccentColor = stickyFingerSlotMark
         ? '#c65a28'
-        : traitLaneReadabilityColor
+        : anchorMarkBack && !faceUp && tile.state === 'hidden'
+          ? ANCHOR_MARK_COLOR
+          : traitLaneReadabilityColor
         ? traitLaneReadabilityColor
         : isSelectedTraitFollowupBack
           ? '#fff7c4'
@@ -386,7 +394,8 @@ export const getTileBoardReadabilityState = ({
             isTraitComboBack ||
             isTraitRouteTargetBack ||
             traitLaneReadabilityColor != null ||
-            stickyFingerSlotMark);
+            stickyFingerSlotMark ||
+            anchorMarkBack);
     const showFaceReadabilityMarker =
         faceUp &&
         tile.state !== 'matched' &&

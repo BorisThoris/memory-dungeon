@@ -17,6 +17,7 @@ import { advanceToNextLevel, createNewRun, finishMemorizePhase, flipTile, resolv
 import { missBankCap, missesLeft } from './miss-bank';
 import { buyStoreItem, isStoreStopFloor, runGold, type StoreItemId } from './run-store-rules';
 import { getMemorizeDurationForRun } from './scoring-rules';
+import { anchorMarkedTileId } from './n-back-anchor-rules';
 import { orthogonalNeighbourIndices } from './skittish-cards-rules';
 import { WILD_PAIR_KEY } from './tile-identity';
 
@@ -95,6 +96,8 @@ export type TestHallStep =
     | { readonly do: 'rowShuffle'; readonly row: number }
     | { readonly do: 'undo' }
     | { readonly do: 'flash' }
+    | { readonly do: 'matchAnchor' }
+    | { readonly do: 'matchOther' }
     | { readonly do: 'pin'; readonly tileId: string }
     | { readonly do: 'gambit'; readonly a: string; readonly b: string; readonly third: string }
     | { readonly do: 'wild'; readonly tileId: string }
@@ -750,20 +753,30 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     },
     {
         id: 'n-back',
-        title: 'The n-back anchor',
-        mechanic: 'Every second match makes that pair the anchor.',
-        graphMechanicIds: ['core.board_turn_resolution'],
-        tryThis: 'Match three pairs: the second becomes the anchor and the third leaves it there.',
-        /*
-         * What this room cannot show: the anchor is always a pair just matched, and the board tints
-         * the anchor only on a face-up card in play, so the tint has nothing to land on. The rule
-         * below is what the game does; what the anchor is for is an open question for the owner.
-         */
-        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { mutators: ['n_back_anchor'] }),
+        title: 'The anchor',
+        mechanic: 'After a match the floor marks one card of a face-down pair; match that pair for an extra chain link. Two matches without it and it moves on.',
+        graphMechanicIds: ['board.n_back_anchor', 'board.chain_chunk_fever'],
+        tryThis: 'Match any pair: one face-down card is marked. Find its partner and match them for two links instead of one.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t', 'g:m h:b g:m h:b'], { mutators: ['n_back_anchor'] }),
         script: [
-            { step: { do: 'match', pairKey: 'a' }, says: 'the first match sets no anchor', expect: (r) => (r.nBackAnchorPairKey === null ? null : `anchor ${r.nBackAnchorPairKey}`) },
-            { step: { do: 'match', pairKey: 'b' }, says: 'the second match anchors b', expect: (r) => (r.nBackAnchorPairKey === 'b' ? null : `anchor ${r.nBackAnchorPairKey}`) },
-            { step: { do: 'match', pairKey: 'c' }, says: 'the third leaves the anchor on b', expect: (r) => (r.nBackAnchorPairKey === 'b' ? null : `anchor ${r.nBackAnchorPairKey}`) }
+            {
+                step: { do: 'matchOther' },
+                says: 'a first match names an anchor and marks one of its face-down cards',
+                expect: (r) => {
+                    const marked = anchorMarkedTileId(r.board, r.nBackAnchorPairKey);
+                    return r.nBackAnchorPairKey && marked && standing(r, r.nBackAnchorPairKey) ? null : `anchor ${r.nBackAnchorPairKey}, marked ${marked}`;
+                }
+            },
+            {
+                step: { do: 'matchAnchor' },
+                says: 'matching the anchor pays two links, and a new anchor is named',
+                expect: (r, b) =>
+                    r.stats.currentStreak === b.stats.currentStreak + 2 && r.anchorClaimsThisFloor === 1 && r.nBackAnchorPairKey !== b.nBackAnchorPairKey
+                        ? null
+                        : `streak ${b.stats.currentStreak} -> ${r.stats.currentStreak}, claims ${r.anchorClaimsThisFloor}, anchor ${r.nBackAnchorPairKey}`
+            },
+            { step: { do: 'matchOther' }, says: 'one match past it, the anchor stays', expect: (r, b) => (r.nBackAnchorPairKey === b.nBackAnchorPairKey ? null : 'the anchor moved after one match') },
+            { step: { do: 'matchOther' }, says: 'two matches past it, the anchor moves on', expect: (r, b) => (r.nBackAnchorPairKey !== b.nBackAnchorPairKey ? null : 'the anchor stayed after two matches') }
         ]
     },
     {
@@ -1054,6 +1067,14 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
             return cancelResolvingWithUndo(run);
         case 'flash':
             return applyFlashPair(run);
+        case 'matchAnchor':
+            return run.nBackAnchorPairKey ? playTestHallStep(run, { do: 'match', pairKey: run.nBackAnchorPairKey }) : null;
+        case 'matchOther': {
+            const other = (run.board?.tiles ?? []).find(
+                (t) => t.state === 'hidden' && t.pairKey !== run.nBackAnchorPairKey && halvesOf(run, t.pairKey).length === 2
+            );
+            return other ? playTestHallStep(run, { do: 'match', pairKey: other.pairKey }) : null;
+        }
         case 'pin':
             return togglePinnedTile(run, step.tileId);
         case 'gambit':

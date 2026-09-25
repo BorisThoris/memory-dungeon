@@ -1,5 +1,6 @@
 import { MAGPIE_BEAT_COPY } from './magpieBeat';
 import { restlessDriftAnnouncement } from './restlessFloorBeat';
+import { ANCHOR_CLAIMED_ANNOUNCEMENT, ANCHOR_MARKED_ANNOUNCEMENT } from './anchorBeat';
 import { lanternLitAnnouncement } from './lanternLightBeat';
 import { SKITTISH_FLINCH_ANNOUNCEMENT } from './skittishCardsBeat';
 import { restlessSwapCountForDrift } from '../../shared/restless-floor-rules';
@@ -116,6 +117,15 @@ export const magpieAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): stri
 export const skittishAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): string[] =>
     turnEvent.announcement.skittishFlinchesAfter > turnEvent.announcement.skittishFlinchesBefore ? [SKITTISH_FLINCH_ANNOUNCEMENT] : [];
 
+/** The anchor's lines: a claim first, then the new mark it leaves. */
+export const anchorAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): string[] => {
+    const { anchorClaimsBefore, anchorClaimsAfter, anchorMoved } = turnEvent.announcement;
+    return [
+        ...(anchorClaimsAfter > anchorClaimsBefore ? [ANCHOR_CLAIMED_ANNOUNCEMENT] : []),
+        ...(anchorMoved ? [ANCHOR_MARKED_ANNOUNCEMENT] : [])
+    ];
+};
+
 /** The lantern's line for a match that lit cards beside it. */
 export const lanternAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): string[] =>
     turnEvent.announcement.lanternLitCount > 0 ? [lanternLitAnnouncement(turnEvent.announcement.lanternLitCount)] : [];
@@ -170,6 +180,7 @@ export const buildBoardTurnAnnouncement = (
         ...magpieAnnouncementLines(turnEvent),
         ...(includeSkittish ? skittishAnnouncementLines(turnEvent) : []),
         ...lanternAnnouncementLines(turnEvent),
+        ...anchorAnnouncementLines(turnEvent),
         ...restlessAnnouncementLines(turnEvent),
         includePickup ? getBoardTurnPickupAnnouncement(turnEvent)?.text ?? null : null
     ].filter((line): line is string => line != null && line.length > 0);

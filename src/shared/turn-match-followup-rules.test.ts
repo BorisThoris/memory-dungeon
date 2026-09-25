@@ -3,7 +3,7 @@ import { createNewRun } from './run-creation-rules';
 import { resolveTurnMatchFollowup } from './turn-match-followup-rules';
 
 describe('resolveTurnMatchFollowup', () => {
-    it('increments n-back counter without changing the anchor when the mutator is inactive', () => {
+    it('counts the match and carries no anchor when the mutator is off', () => {
         const run = { ...createNewRun(0), nBackMatchCounter: 1, nBackAnchorPairKey: 'previous' };
 
         const result = resolveTurnMatchFollowup({
@@ -12,14 +12,14 @@ describe('resolveTurnMatchFollowup', () => {
         });
 
         expect(result.nBackMatchCounter).toBe(2);
-        expect(result.nBackAnchorPairKey).toBe('previous');
+        expect(result.nBackAnchorPairKey).toBeNull();
     });
 
-    it('anchors every second match when n-back anchor is active', () => {
+    it('keeps the current anchor on the anchor floor; the next one is chosen on the post-turn board (n-back-anchor-rules)', () => {
         const run = {
             ...createNewRun(0, { activeMutators: ['n_back_anchor'] }),
             nBackMatchCounter: 1,
-            nBackAnchorPairKey: null
+            nBackAnchorPairKey: 'sun'
         };
 
         const result = resolveTurnMatchFollowup({
@@ -28,7 +28,8 @@ describe('resolveTurnMatchFollowup', () => {
         });
 
         expect(result.nBackMatchCounter).toBe(2);
-        expect(result.nBackAnchorPairKey).toBe('moon:encore');
+        // Gen 263: the anchor is no longer the pair just matched (a pair already off the board).
+        expect(result.nBackAnchorPairKey).toBe('sun');
     });
 
     it('normalizes malformed n-back counters before advancing follow-up state', () => {

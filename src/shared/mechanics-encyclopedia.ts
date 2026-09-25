@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 53 as const;
+export const ENCYCLOPEDIA_VERSION = 54 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -295,9 +295,9 @@ export const MUTATOR_CATALOG: Record<MutatorId, MutatorDefinition> = {
     },
     n_back_anchor: {
         id: 'n_back_anchor',
-        title: 'N-back anchor',
+        title: 'The anchor',
         description:
-            'Every second match updates an **anchor** pair key; later openings can reference that anchor for spaced-recall pressure.'
+            'After your first match, the floor picks a pair still face down as the **anchor** and **marks one of its cards**. You know where half of it is: find the other half and match them for an **extra chain link**. Leave it for two matches and the anchor moves to another pair.'
     },
     distraction_channel: {
         id: 'distraction_channel',

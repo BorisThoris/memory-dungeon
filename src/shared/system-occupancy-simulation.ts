@@ -147,6 +147,8 @@ export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
     { id: 'restlessDrifts', key: 'restlessDriftsThisFloor', label: 'The restless floor shifted hidden cards', family: 'memory', cadence: 'rare', kind: 'tally', player: 'reference' },
     /* Skittish cards (Gen 263): the missed cards flinch a step. Floor-scoped; its clock is the reference player's misses on floor 11. */
     /* Lantern light (Gen 263): a match lit face-down cards beside it. Floor-scoped; floor 10 of the cycle. */
+    /* The anchor (Gen 263): matches that claimed the marked pair. Floor-scoped; floor 5 of the cycle. */
+    { id: 'anchorClaims', key: 'anchorClaimsThisFloor', label: 'The anchor pair was matched for an extra link', family: 'memory', cadence: 'rare', kind: 'tally', player: 'reference' },
     { id: 'lanternLights', key: 'lanternLightsThisFloor', label: 'A match lit the cards beside it', family: 'memory', cadence: 'rare', kind: 'tally', player: 'reference' },
     { id: 'skittishFlinches', key: 'skittishFlinchesThisFloor', label: 'Skittish cards flinched after a miss', family: 'memory', cadence: 'rare', kind: 'tally', player: 'reference' },
     /*

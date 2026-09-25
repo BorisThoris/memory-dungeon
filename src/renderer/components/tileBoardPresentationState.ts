@@ -8,7 +8,7 @@ interface TileBoardPresentationState {
 
 export const getTileBoardPresentationState = ({
     faceUp,
-    nBackAnchorPairKey,
+    nBackAnchorMarkedTileId,
     nBackMutatorActive,
     runStatus,
     silhouetteDuringPlay,
@@ -16,7 +16,8 @@ export const getTileBoardPresentationState = ({
     wideRecallInPlay
 }: {
     faceUp: boolean;
-    nBackAnchorPairKey: string | null;
+    /** The one card the anchor marks (`anchorMarkedTileId`); its partner is the player's to find. */
+    nBackAnchorMarkedTileId: string | null;
     nBackMutatorActive: boolean;
     runStatus: RunStatus;
     silhouetteDuringPlay: boolean;
@@ -28,9 +29,11 @@ export const getTileBoardPresentationState = ({
     return {
         presentationNBackAnchor: Boolean(
             nBackMutatorActive &&
-                nBackAnchorPairKey != null &&
-                tile.pairKey === nBackAnchorPairKey &&
-                inPlayFlip
+                runStatus === 'playing' &&
+                nBackAnchorMarkedTileId != null &&
+                tile.id === nBackAnchorMarkedTileId &&
+                tile.state === 'hidden' &&
+                !faceUp
         ),
         presentationSilhouette: Boolean(silhouetteDuringPlay && inPlayFlip),
         presentationWideRecall: Boolean(wideRecallInPlay && inPlayFlip)

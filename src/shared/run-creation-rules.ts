@@ -128,6 +128,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         matchScoreMultiplier: 1,
         nBackMatchCounter: 0,
         nBackAnchorPairKey: null,
+        anchorClaimsThisFloor: 0,
         matchedPairKeysThisRun: [],
         weakerShuffleMode,
         shuffleScoreTaxActive,

@@ -146,7 +146,7 @@ describe('tileBoardRows', () => {
         const result = rows({
             board: b,
             bountyPairKey: 'd',
-            nBackAnchorPairKey: 'b',
+            nBackAnchorPairKey: 'c',
             nBackMutatorActive: true,
             shiftingSpotlightActive: true,
             silhouetteDuringPlay: true,
@@ -158,7 +158,9 @@ describe('tileBoardRows', () => {
         expect(result[0]!.stickyFingerSlotMark).toBe(true);
         expect(result[1]!.presentationWideRecall).toBe(true);
         expect(result[1]!.presentationSilhouette).toBe(true);
-        expect(result[1]!.presentationNBackAnchor).toBe(true);
+        // The anchor marks the face-down card of its pair (c1), not a card in play.
+        expect(result[1]!.presentationNBackAnchor).toBe(false);
+        expect(result[2]!.presentationNBackAnchor).toBe(true);
         expect(result[2]!.spotlightWardOnBack).toBe(true);
         expect(result[3]!.spotlightBountyOnBack).toBe(true);
     });

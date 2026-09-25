@@ -292,6 +292,14 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         note: 'Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.029 x 0.03, a floor takes twice the turns, so the third miss of the run arrives while the bird\'s floor is still open. Before:Occupancy 0.008 across whole runs, banded rare, and until Gen 208 it had no counter at all and was not in the interaction graph - so the ledger claim to cover every system had never covered the one mechanic that takes finished work back off the player. The floor census reads it SILENT, true of 240 first floors and false of the game: the bird arrives on every third mismatch OF THE RUN, so a census that restarts every floor almost never reaches it. It is announced when it steals (Gen 113) and the graph now records that reader. Gen 260 took it from 0.013 to 0.008: the breather it rides deals two suits now, so the floor ends in fewer turns and the bird’s every-third-miss trigger lands on it less often. Still reachable and still banded by the run census, but the nest is the wrong floor for it now - a thief is not relief, and a pressure floor would give it more to take.'
     },
     {
+        id: 'board.n_back_anchor',
+        counter: 'anchorClaims',
+        verdict: 'changed',
+        generation: 261,
+        present: ['resolveAnchorAfterMatch', 'anchorMarkedTileId', 'ANCHOR_BONUS_LINKS'],
+        note: 'Gen 263. The n-back anchor named the pair just matched every second match - a pair already off the board - and the board tinted it only while face up in play, which a matched pair never is again: floor 5 carried a mutator nobody could see or use (the test hall found it). Now, after a match, the floor picks a fully face-down pair and marks one of its cards; matching that pair pays an extra chain link, and two other matches move the anchor on. Census 0.071 x 0.13 of floors: floor 5 of 12, on the floors where the reference player takes the marked pair before it moves.'
+    },
+    {
         id: 'board.lantern_light',
         counter: 'lanternLights',
         verdict: 'changed',

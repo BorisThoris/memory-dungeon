@@ -581,6 +581,8 @@ export interface RunState {
     /** N-back mutator: matches since last anchor highlight. */
     nBackMatchCounter: number;
     nBackAnchorPairKey: string | null;
+    /** `n_back_anchor`: anchors matched this floor, each paying an extra chain link. */
+    anchorClaimsThisFloor: number;
     /** Pair keys matched this run (spaced encore bookkeeping). */
     matchedPairKeysThisRun: string[];
     weakerShuffleMode: WeakerShuffleMode;

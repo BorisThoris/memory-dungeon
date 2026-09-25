@@ -310,7 +310,8 @@
                 "restlessDriftsThisFloor",
                 "skittishFlinchesThisFloor",
                 "lanternLitTileIds",
-                "lanternLightsThisFloor"
+                "lanternLightsThisFloor",
+                "anchorClaimsThisFloor"
             ],
             "writes": [
                 "feedbackLines"
@@ -1825,6 +1826,39 @@
                 "src/shared/lantern-light-rules.test.ts",
                 "src/shared/test-hall-rooms.test.ts"
             ]
+        },
+        {
+            "id": "board.n_back_anchor",
+            "label": "The Anchor",
+            "kind": "board",
+            "role": "marks_one_card_of_a_face_down_pair_and_pays_an_extra_chain_link_for_matching_it",
+            "evidence": [
+                "src/shared/n-back-anchor-rules.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/renderer/components/tileBoardPresentationState.ts"
+            ],
+            "reads": [
+                "tileStates",
+                "pairKeys",
+                "activeMutators",
+                "runSeed",
+                "nBackAnchorPairKey"
+            ],
+            "writes": [
+                "nBackAnchorPairKey",
+                "anchorClaimsThisFloor",
+                "currentStreak"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "fully-hidden-pairs-only",
+                "reset-each-floor"
+            ],
+            "tests": [
+                "src/shared/n-back-anchor-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts"
+            ]
         }
     ],
     "edges": [
@@ -2673,6 +2707,24 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "lit faces show on the board"
+        },
+        {
+            "source": "core.board_turn_resolution",
+            "target": "board.n_back_anchor",
+            "kind": "triggers",
+            "label": "a match names or moves the anchor"
+        },
+        {
+            "source": "board.n_back_anchor",
+            "target": "board.chain_chunk_fever",
+            "kind": "modifies",
+            "label": "a matched anchor adds a chain link"
+        },
+        {
+            "source": "board.n_back_anchor",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the marked card carries a teal ring"
         }
     ],
     "coverage": {

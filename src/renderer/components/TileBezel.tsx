@@ -822,6 +822,7 @@ const TileBezelInner = ({
                         spotlightBountyOnBack={spotlightBountyOnBack}
                         spotlightWardOnBack={spotlightWardOnBack}
                         stickyFingerSlotMark={stickyFingerSlotMark}
+                        anchorMarkBack={presentationNBackAnchor}
                         board={board}
                         tile={tile}
                         traitComboBack={traitComboBack}

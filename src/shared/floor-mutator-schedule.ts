@@ -58,9 +58,9 @@ export const FLOOR_ARCHETYPE_CATALOG: Record<FloorArchetypeId, FloorArchetypeDef
     },
     anchor_chain: {
         title: 'Anchor Chain',
-        hint: 'Track the anchor cadence and preserve the cursed-last line.',
+        hint: 'One card is marked: find its partner and match them for an extra chain link before the anchor moves on.',
         theme: 'Anchor',
-        riskProfile: 'N-back anchor cadence; use pins/peek only when needed.'
+        riskProfile: 'A standing offer of chain: the marked card tells you half of a pair, your memory has to supply the rest.'
     },
     trap_hall: {
         title: 'Trap Hall',

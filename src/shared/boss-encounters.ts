@@ -345,12 +345,12 @@ export const getFloorIdentityContract = ({
         return {
             id: 'anchor_floor',
             label: 'Anchor chain',
-            teachingSentence: `A floor that keeps asking you to remember one particular pair, on a board that hides it as well as any other.${objectiveSuffix(featuredObjectiveLabel)}`,
-            counterplaySentence: 'Pin the anchor rather than trusting it to memory; the pin costs nothing and survives a shuffle it would not otherwise.',
-            floorClearSentence: 'Anchor floor cleared. The pairs the floor kept pointing at were the ones worth holding.',
+            teachingSentence: `After a match the floor marks one face-down card: match it with its partner for an extra chain link.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: 'The marked card is half the answer. Remember where its partner was, and take the anchor before two other matches move it on.',
+            floorClearSentence: 'Anchor floor cleared. The pairs the floor pointed at were the ones worth taking.',
             atmosphericFeedback: 'The mortar settles, and the pair the room kept asking for goes quiet with it.',
             warningLevel: 'warning',
-            activeReminder: 'Anchor floor: pin what the floor keeps asking for.',
+            activeReminder: 'Anchor floor: find the marked card’s partner for an extra link.',
             tokens: ['objective', 'cost', 'safe']
         };
     }

@@ -1,20 +1,20 @@
 # Gameplay mechanics — machine snapshot
 
-**Generated:** 2026-09-25T11:17:10.719Z
+**Generated:** 2026-09-25T15:48:20.667Z
 
 > Regenerate with `yarn docs:mechanics-appendix`. Do not edit by hand.
 
 | Constant / count | Value |
 | --- | --- |
 | `GAME_RULES_VERSION` | 49 |
-| `ENCYCLOPEDIA_VERSION` | 53 |
+| `ENCYCLOPEDIA_VERSION` | 54 |
 | Mutator entries (`MUTATOR_CATALOG`) | 12 |
 | Achievement entries (`ACHIEVEMENT_CATALOG`) | 22 |
 | `GameMode` codex ids | endless |
 
 ## System refinement ledger
 
-Every system in the game, with the last generation that passed over it. 33 changed, 22 confirmed already in their refined state, 1 removed outright.
+Every system in the game, with the last generation that passed over it. 34 changed, 22 confirmed already in their refined state, 1 removed outright.
 
 | System | Verdict | Gen | What was found |
 | --- | --- | --- | --- |
@@ -45,6 +45,7 @@ Every system in the game, with the last generation that passed over it. 33 chang
 | `board.wild_joker_tile` | confirmed | 261 | The last singleton in the game. Gen 196 removed the decoy, the exit, the lever and the shop door; the singleton key list is now exactly one key, pinned by a test, and Gen 213 re-read it to confirm the joker is still the only card in the game without a partner. |
 | `phase.memorize` | confirmed | 261 | Exempt from the census by argument rather than omission: every floor opens with it, so a counter would read 1.00 on every row and prove nothing. What can be checked is that the window is still a run-creation value a mutator can move, which is what the mutator-effect audit presses it through. |
 | `hazard.magpie_thief` | changed | 261 | Re-measured 2026-09-23 after the pop was capped by rung (docs/CHAIN_CHUNK_FEVER_DESIGN.md §13): 0.029 x 0.03, a floor takes twice the turns, so the third miss of the run arrives while the bird's floor is still open. Before:Occupancy 0.008 across whole runs, banded rare, and until Gen 208 it had no counter at all and was not in the interaction graph - so the ledger claim to cover every system had never covered the one mechanic that takes finished work back off the player. The floor census reads it SILENT, true of 240 first floors and false of the game: the bird arrives on every third mismatch OF THE RUN, so a census that restarts every floor almost never reaches it. It is announced when it steals (Gen 113) and the graph now records that reader. Gen 260 took it from 0.013 to 0.008: the breather it rides deals two suits now, so the floor ends in fewer turns and the bird’s every-third-miss trigger lands on it less often. Still reachable and still banded by the run census, but the nest is the wrong floor for it now - a thief is not relief, and a pressure floor would give it more to take. |
+| `board.n_back_anchor` | changed | 261 | Gen 263. The n-back anchor named the pair just matched every second match - a pair already off the board - and the board tinted it only while face up in play, which a matched pair never is again: floor 5 carried a mutator nobody could see or use (the test hall found it). Now, after a match, the floor picks a fully face-down pair and marks one of its cards; matching that pair pays an extra chain link, and two other matches move the anchor on. Census 0.071 x 0.13 of floors: floor 5 of 12, on the floors where the reference player takes the marked pair before it moves. |
 | `board.lantern_light` | changed | 261 | Gen 263. Floor 10 was the second treasure gallery of the cycle, the same room as floor 3 with a different objective. It is the Lantern Hall now: every match lights up to three face-down cards touching the matched pair until the next flip. The reward-shaped dynamic beside the skittish hall and the restless floor: its clock is the player’s matches, and it makes where to match a choice, since a pair at the edge lights little and one in the unread middle the most. It is not a peek - its own field, so no objective or achievement that forbids peeking is tripped. Census 0.083 x 0.70 of floors: every floor 10 of the cycle, about eight lights a visit. |
 | `hazard.skittish_cards` | changed | 261 | Gen 263. Floor 11 carried distraction_channel, whose only effect with its HUD off (the default) was a flat four points off every match, under a hint about a channel hissing over the study window that nobody saw; and its encounter copy was the anchor floor’s, about a pair it never asked for. Skittish cards took the slot: on every miss, each of the two cards the miss showed trades places with one face-down neighbour. The clock is the player’s own misses, it moves exactly the facts the miss revealed, and only one step, so the damage is to where a card is rather than whether it is known. Pinned cards never move. Census 0.063 x 0.14 of floors: floor 11 of 12, on the floors where the reference player misses at all. |
 | `hazard.restless_floor` | changed | 261 | Gen 262. Floor 8 carried category_letters, a symbol-band swap at generation; faces have been illustrations since the raster deck, so the band never reached a face and the mutator did nothing a player could see - the effect audit passed it only because it read the symbol string. It is gone. The restless floor took the slot: the one mutator that iterates while the floor is played, trading hidden cards' cells every third resolved turn and moving one more pair per drift up to three. Census 0.083 x 0.23 of floors (floor 8 of 12, and only when the reference player takes three turns on it), so it is reachable and banded rare; the announcement names how many pairs moved and never where. |

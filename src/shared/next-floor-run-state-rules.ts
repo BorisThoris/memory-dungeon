@@ -75,6 +75,10 @@ export const createNextFloorRunState = (
         skittishFlinchesThisFloor: 0,
         lanternLitTileIds: [],
         lanternLightsThisFloor: 0,
+        // Pair keys repeat from floor to floor, so a carried anchor would mark a card on the wrong board.
+        nBackAnchorPairKey: null,
+        nBackMatchCounter: 0,
+        anchorClaimsThisFloor: 0,
         shiftingSpotlightNonce: 0,
         flashPairRevealedTileIds: [],
         regionShuffleCharges: INITIAL_REGION_SHUFFLE_CHARGES,

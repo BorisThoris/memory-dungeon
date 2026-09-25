@@ -12,6 +12,7 @@ import { tilesArePairMatch } from './scoring-rules';
 import { clearResolveState } from './run-timer-rules';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
 import { resolveLanternLight } from './lantern-light-rules';
+import { ANCHOR_BONUS_LINKS, resolveAnchorAfterMatch } from './n-back-anchor-rules';
 import { applyRestlessDrift, resolveRestlessDrift } from './restless-floor-rules';
 import { hasMutator } from './mutators';
 import { deriveMatchClaimContext } from './match-claim-rules';
@@ -231,6 +232,22 @@ export const createResolveBoardTurnTransition = ({
               })
             : [];
         const stats = normalizeSessionStats(run.stats);
+        /*
+         * The anchor (Anchor Chain): read on the board the player will look at next. A matched anchor
+         * pays an extra chain link, which the rungs and the miss bank read like any other.
+         */
+        const anchor = hasMutator(run, 'n_back_anchor')
+            ? resolveAnchorAfterMatch({
+                  board: boardAfterDrift,
+                  anchorPairKeyBefore: run.nBackAnchorPairKey,
+                  matchesSinceAnchorBefore: runNonNegativeInteger(run.nBackMatchCounter),
+                  matchedPairKey: firstTile.pairKey,
+                  runSeed: run.runSeed,
+                  rulesVersion: run.runRulesVersion,
+                  matchResolutions: runNonNegativeInteger(run.matchResolutionsThisFloor)
+              })
+            : null;
+        const streakAfter = runNonNegativeInteger(scoring.currentStreak) + (anchor?.anchorMatched ? ANCHOR_BONUS_LINKS : 0);
 
         const journaledRun = execution
             ? wildMatch.run
@@ -256,8 +273,9 @@ export const createResolveBoardTurnTransition = ({
             shuffleCharges: runNonNegativeInteger(run.shuffleCharges),
             regionShuffleCharges: runNonNegativeInteger(run.regionShuffleCharges),
             flashPairCharges: runNonNegativeInteger(run.flashPairCharges),
-            nBackMatchCounter: followup.nBackMatchCounter,
-            nBackAnchorPairKey: followup.nBackAnchorPairKey,
+            nBackMatchCounter: anchor ? anchor.matchesSinceAnchor : followup.nBackMatchCounter,
+            nBackAnchorPairKey: anchor ? anchor.anchorPairKey : null,
+            anchorClaimsThisFloor: runNonNegativeInteger(run.anchorClaimsThisFloor) + (anchor?.anchorMatched ? 1 : 0),
             matchedPairKeysThisRun: [...runStringArray(run.matchedPairKeysThisRun), scoring.encoreKey],
             pinnedTileIds: boardCleanup.pinnedTileIds,
             recallFocus: boardCleanup.recallFocus,
@@ -272,8 +290,8 @@ export const createResolveBoardTurnTransition = ({
                 currentLevelScore: runNonNegativeInteger(scoring.currentLevelScore),
                 bestScore: Math.max(runNonNegativeInteger(scoring.bestScore), runNonNegativeInteger(scoring.totalScore)),
                 matchesFound: runNonNegativeInteger(stats.matchesFound) + 1,
-                currentStreak: runNonNegativeInteger(scoring.currentStreak),
-                bestStreak: Math.max(runNonNegativeInteger(stats.bestStreak), runNonNegativeInteger(scoring.currentStreak)),
+                currentStreak: streakAfter,
+                bestStreak: Math.max(runNonNegativeInteger(stats.bestStreak), streakAfter),
                 highestLevel: Math.max(runNonNegativeInteger(stats.highestLevel), runNonNegativeInteger(board.level)),
                 tileTraitMatches: addTileTraitCountStats(stats.tileTraitMatches, [firstTile, secondTile])
             },

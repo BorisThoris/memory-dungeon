@@ -1,4 +1,5 @@
 import type { BoardState, RunStatus, Tile } from '../../shared/contracts';
+import { anchorMarkedTileId } from '../../shared/n-back-anchor-rules';
 import {
     getSelectedTraitFollowupTileIds,
     getTraitComboSurgeTileIds,
@@ -162,6 +163,7 @@ export const buildTileBoardRows = ({
     const traitComboSurgeTileIds = getTraitComboSurgeTileIds(board);
     const selectedTraitFollowupTileIdSet = selectedTraitFollowupTileIds ?? getSelectedTraitFollowupTileIds(board);
 
+    const nBackAnchorMarkedTileId = anchorMarkedTileId(board, nBackAnchorPairKey);
     return board.tiles.map((tile, index) => {
         const traitOpportunity = traitOpportunityByTileId.get(tile.id) ?? null;
         const faceUp = isTileBoardFaceUp({ debugPeekActive, peekRevealedTileIds, previewActive, tile });
@@ -191,7 +193,7 @@ export const buildTileBoardRows = ({
         const { presentationNBackAnchor, presentationSilhouette, presentationWideRecall } =
             getTileBoardPresentationState({
                 faceUp,
-                nBackAnchorPairKey,
+                nBackAnchorMarkedTileId,
                 nBackMutatorActive,
                 runStatus,
                 silhouetteDuringPlay,

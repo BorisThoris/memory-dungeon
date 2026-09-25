@@ -4,6 +4,7 @@ import { noopMeshRaycast } from './tileBoardPick';
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
 import { DUNGEON_BOARD_STAGE_LAYER_POLICY } from './tileBoardStageLayers';
 import {
+    ANCHOR_MARK_COLOR,
     getTileBoardReadabilityState,
     getTraitPreviewReadabilityBeatCount,
     getTraitPreviewReadabilityTone,
@@ -52,6 +53,7 @@ interface TileBoardReadabilityMarkersProps {
     spotlightBountyOnBack: boolean;
     spotlightWardOnBack: boolean;
     stickyFingerSlotMark: boolean;
+    anchorMarkBack?: boolean;
     tile: Tile;
     board?: BoardState;
     traitComboBack: boolean;
@@ -183,6 +185,7 @@ export const TileBoardReadabilityMarkers = ({
     spotlightBountyOnBack,
     spotlightWardOnBack,
     stickyFingerSlotMark,
+    anchorMarkBack = false,
     board,
     tile,
     traitComboBack,
@@ -218,6 +221,7 @@ export const TileBoardReadabilityMarkers = ({
         spotlightBountyOnBack,
         spotlightWardOnBack,
         stickyFingerSlotMark,
+        anchorMarkBack,
         traitComboBack,
         traitComboSurgeBack,
         traitLaneBack,
@@ -1268,6 +1272,24 @@ export const TileBoardReadabilityMarkers = ({
                                 />
                             </mesh>
                         </group>
+                    ) : null}
+                    {anchorMarkBack && tile.state === 'hidden' ? (
+                        <mesh
+                            geometry={findableCornerRingGeometry}
+                            position={[-CARD_WIDTH * 0.34, CARD_HEIGHT * 0.39, 0.00056]}
+                            raycast={noopMeshRaycast}
+                            renderOrder={10}
+                        >
+                            <meshBasicMaterial
+                                color={ANCHOR_MARK_COLOR}
+                                depthTest
+                                depthWrite={false}
+                                opacity={0.9}
+                                side={DoubleSide}
+                                toneMapped={false}
+                                transparent
+                            />
+                        </mesh>
                     ) : null}
                     {stickyFingerSlotMark && tile.state === 'hidden' ? (
                         <mesh
