@@ -1,4 +1,4 @@
-import { SKITTISH_FLOATER_REASON } from '../copy/skittishCardsBeat';
+import { SKITTISH_FLINCH_ANNOUNCEMENT } from '../copy/skittishCardsBeat';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { runNonNegativeInteger, runNonNegativeIntegerWithFallback } from '../../shared/run-number-guards';
 import { buildBoardTurnAnnouncement } from '../copy/boardTurnAnnouncement';
@@ -282,7 +282,9 @@ export const useHudPoliteLiveAnnouncement = ({
         }
         const announcement = buildBoardTurnAnnouncement(boardTurnEvent, {
             reduceMotion,
-            includePickup: !pickupSaidElsewhere
+            includePickup: !pickupSaidElsewhere,
+            // The miss line below says the flinch; this turn line saying it too made it twice.
+            includeSkittish: false
         });
         if (!announcement) {
             return;
@@ -357,8 +359,9 @@ export const useHudPoliteLiveAnnouncement = ({
         if (mismatchDelta > 0) {
             // Skittish cards: the two cards just seen moved as they turned back, and the caption is
             // what a sighted player reads - so it says where to look instead of the generic advice.
+            // This is the one place the flinch is said: the turn line leaves it out.
             const flinched = turnFacts != null && turnFacts.skittishFlinchesAfter > turnFacts.skittishFlinchesBefore;
-            lines.push(flinched ? `No match. ${SKITTISH_FLOATER_REASON} Chain reset.` : 'No match. Recover with a safe match. Chain reset.');
+            lines.push(flinched ? `No match. ${SKITTISH_FLINCH_ANNOUNCEMENT} Chain reset.` : 'No match. Recover with a safe match. Chain reset.');
         }
 
         if (recallMistakeDelta > 0) {

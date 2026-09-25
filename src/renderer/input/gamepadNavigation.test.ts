@@ -39,6 +39,34 @@ describe('listNavigableElements', () => {
 });
 
 describe('applyGamepadAction', () => {
+    it('walks a roving toolbar with its own arrow keys, whose other tools are tabIndex -1', () => {
+        // The in-run dock: one tab stop, the rest reachable only by the toolbar's arrows.
+        const toolbar = document.createElement('div');
+        toolbar.setAttribute('role', 'toolbar');
+        document.body.append(toolbar);
+        const tools = ['pin', 'bomb', 'pause'].map((label, index) => {
+            const tool = button(label, index * 120, 600);
+            tool.tabIndex = index === 0 ? 0 : -1;
+            toolbar.append(tool);
+            return tool;
+        });
+        toolbar.addEventListener('keydown', (event) => {
+            const at = tools.indexOf(document.activeElement as HTMLButtonElement);
+            const next = event.key === 'ArrowRight' ? at + 1 : event.key === 'ArrowLeft' ? at - 1 : -1;
+            if (next >= 0 && next < tools.length && next !== at) {
+                event.preventDefault();
+                tools[next]?.focus();
+            }
+        });
+        tools[0]?.focus();
+        expect(applyGamepadAction('right')).toBe(true);
+        expect(document.activeElement).toBe(tools[1]);
+        // At the end the toolbar does not consume it, and the spatial walk has its turn.
+        tools[2]?.focus();
+        applyGamepadAction('right');
+        expect(document.activeElement).toBe(tools[2]);
+    });
+
     it('moves the focus ring in the pushed direction', () => {
         const left = button('left', 0, 0);
         const right = button('right', 200, 0);

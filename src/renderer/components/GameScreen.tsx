@@ -32,12 +32,13 @@ import {
 } from '../copy/runDialogCopy';
 import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
 import { missBankSoonestToGo, missesLeft } from '../../shared/miss-bank';
-import { isStoreStopFloor, runGold, storeOffer } from '../../shared/run-store-rules';
+import { isStoreStopFloor, runGold } from '../../shared/run-store-rules';
 import { bombTargetTileId } from '../../shared/board-power-actions';
 import { isPassAndPlayRun } from '../../shared/pass-and-play-rules';
 import { relicDefinition } from '../../shared/run-relic-rules';
 import { SKITTISH_FLOATER_REASON } from '../copy/skittishCardsBeat';
 import { BOMB_TOOL_COPY, STORE_SHEET_COPY } from '../copy/storeSheet';
+import StoreSheetRows from './StoreSheetRows';
 import {
     BOARD_SHUFFLE_COPY,
     FLASH_PAIR_COPY,
@@ -1461,7 +1462,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      * - Do not wrap modal markup in this subtree: nesting focused dialogs inside `aria-hidden` breaks SR semantics.
      * - `inert` alone should block pointer events on descendants; keep modal siblings outside this wrapper.
      */
-    const gameplayShellInert = !suppressStatusOverlays && (abandonRunConfirmOpen || run.status === 'paused');
+    // The store stop is a dialog over the cleared board like pause is, so the board goes inert under
+    // it too: it was the one modal a screen reader could still browse out of into the dock and HUD.
+    const storeSheetOpen = run.status === 'levelComplete' && storeStopKey === floorClearKey;
+    const gameplayShellInert =
+        !suppressStatusOverlays && (abandonRunConfirmOpen || run.status === 'paused' || storeSheetOpen);
     const reg104GameplayShellVariant =
         run.status === 'paused' ? 'paused' : run.status === 'levelComplete' ? 'floor_clear' : 'playing';
     return (
@@ -1538,12 +1543,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             tools={runShellTools}
                         />
 
+                        {/* Shown, not spoken: the HUD announcer queues this same line (keyed per
+                            pair), and as its own status region it was the third voice saying it. */}
                         {gambitThirdPickActive ? (
                             <div
-                                aria-live="polite"
                                 className={styles.gambitOpportunityHint}
                                 data-testid="gambit-opportunity-hint"
-                                role="status"
                             >
                                 {GAMBIT_OPPORTUNITY_HINT_LINE}
                             </div>
@@ -1638,7 +1643,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             {run.status === 'memorize' && !suppressStatusOverlays ? (
                                 <MemorizeSkipLayer onSkip={skipMemorizePhase} />
                             ) : null}
-                            {boardFloaterPayload ? (
+                            {/* The match's score is said here and nowhere else. A miss is not: the
+                                HUD's polite region says the whole miss (and a flinch, and a shift),
+                                and a second region saying "Miss. No match." first made a screen
+                                reader hear every miss twice. */}
+                            {boardFloaterPayload?.kind === 'match' ? (
                                 <span
                                     key={`live-${boardFloaterPayload.key}`}
                                     aria-atomic="true"
@@ -1877,36 +1886,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         testId="store-sheet"
                         title={STORE_SHEET_COPY.title}
                     >
-                        {/*
-                         * Each thing on sale says what it is and carries its own price. The sheet used
-                         * to describe the items in one list and sell them from a second, and the two
-                         * together outgrew the dialog: at 720px the last three descriptions were cut
-                         * off while their buttons stayed, so two relics were sold without saying what
-                         * they did (Gen 263, found by the playtest).
-                         */}
-                        <ul className={styles.storeRows} data-testid="store-rows">
-                            {storeOffer(run).map((row) => (
-                                <li className={styles.storeRow} key={row.id}>
-                                    <span className={styles.storeRowTitle}>{row.title}</span>
-                                    <span className={styles.storeRowBody} data-testid={'store-row-' + row.id}>
-                                        {STORE_SHEET_COPY.rowBody(row)}
-                                    </span>
-                                    <button
-                                        aria-label={STORE_SHEET_COPY.buyAriaLabel(row)}
-                                        className={styles.storeBuy}
-                                        data-testid={'store-buy-' + row.id}
-                                        disabled={row.blocked !== null}
-                                        onClick={() => {
-                                            playMenuOpen();
-                                            buyStoreItem(row.id);
-                                        }}
-                                        type="button"
-                                    >
-                                        {STORE_SHEET_COPY.priceLabel(row)}
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
+                        <StoreSheetRows
+                            onBuy={(id) => {
+                                const before = useAppStore.getState().run;
+                                playMenuOpen();
+                                buyStoreItem(id);
+                                return useAppStore.getState().run !== before;
+                            }}
+                            run={run}
+                        />
                     </OverlayModal>
                 )}
 

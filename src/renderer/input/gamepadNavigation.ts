@@ -69,7 +69,11 @@ const dispatchKey = (target: EventTarget, key: string, code: string): boolean =>
 const applicationRegion = (element: Element | null): HTMLElement | null =>
     element instanceof HTMLElement ? element.closest<HTMLElement>('[role="application"]') : null;
 
-const moveFocusSpatially = (direction: FocusDirection, root: Document): boolean => {
+/** A `role="toolbar"` runs WAI-ARIA roving focus: its arrow keys move along it. */
+const toolbarRegion = (element: Element | null): HTMLElement | null =>
+    element instanceof HTMLElement ? element.closest<HTMLElement>('[role="toolbar"]') : null;
+
+const moveFocusSpatially =(direction: FocusDirection, root: Document): boolean => {
     const active = root.activeElement instanceof HTMLElement ? root.activeElement : null;
     const elements = listNavigableElements(root);
     if (elements.length === 0) {
@@ -116,6 +120,13 @@ export const applyGamepadAction = (action: GamepadActionId, root: Document = doc
         // cells are still pickable. It consumes the key only when it actually moved, so the edge
         // of the board hands the stick back and the next push walks out to the surrounding HUD.
         if (region && dispatchKey(region, ARROW_KEYS[direction], ARROW_KEYS[direction])) {
+            return true;
+        }
+        // A roving toolbar (the in-run dock) keeps one tab stop and gives every other tool
+        // `tabIndex -1`, so the spatial walk below cannot see them: measured on a pad, d-pad right
+        // from the dock's first tool never reached Bomb. The toolbar's own arrow keys get first
+        // refusal, the same as the board's, and hand the stick back at either end.
+        if (toolbarRegion(root.activeElement) && dispatchKey(active, ARROW_KEYS[direction], ARROW_KEYS[direction])) {
             return true;
         }
         return moveFocusSpatially(direction, root);

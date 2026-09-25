@@ -148,9 +148,17 @@ export const chunkAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): strin
  * twice and also kept the rest from being said at all: a three-pair Fever break that happened to
  * uncover a glint was announced as the glint and nothing else.
  */
+/*
+ * `includeSkittish: false` is the same idea for the flinch: the HUD's miss line says it, because
+ * that line is also the caption a sighted player reads, and said here as well a screen reader heard
+ * one flinch as two sentences in one breath (measured in the skittish room).
+ */
 export const buildBoardTurnAnnouncement = (
     turnEvent: BoardTurnResolvedEvent,
-    { includePickup = true }: { reduceMotion: boolean; includePickup?: boolean }
+    {
+        includePickup = true,
+        includeSkittish = true
+    }: { reduceMotion: boolean; includePickup?: boolean; includeSkittish?: boolean }
 ): BoardTurnAnnouncementResult | null => {
     const lines = [
         chainMilestoneAnnouncement(turnEvent),
@@ -161,7 +169,7 @@ export const buildBoardTurnAnnouncement = (
          */
         ...chunkAnnouncementLines(turnEvent),
         ...magpieAnnouncementLines(turnEvent),
-        ...skittishAnnouncementLines(turnEvent),
+        ...(includeSkittish ? skittishAnnouncementLines(turnEvent) : []),
         ...lanternAnnouncementLines(turnEvent),
         ...restlessAnnouncementLines(turnEvent),
         includePickup ? getBoardTurnPickupAnnouncement(turnEvent)?.text ?? null : null

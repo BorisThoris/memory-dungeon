@@ -6,6 +6,7 @@ import { readFrameHiddenTileCount } from './tileBoardGameFlow';
 import {
     buildVisualSaveJson,
     gotoWithSave,
+    gotoWithSaveAndQuery,
     mainMenuPlayButton,
     openLevel1Play,
     waitLevel1PlayReady
@@ -332,6 +333,81 @@ test.describe('controller navigation', () => {
         await page.keyboard.press('Home');
         await page.waitForTimeout(200);
         expect(await labelOf(), 'Home did not come back to the first control').toBe(first);
+    });
+
+    /**
+     * The in-run surfaces added after this suite was written: the store stop (a dialog inside the
+     * `playing` view, so the per-view back table cannot see it) and the dock's Bomb. Each is reached
+     * and operated on the pad alone, in the test hall room that sets it up.
+     */
+    const bootHallRoom = async (page: Page, roomId: string): Promise<void> => {
+        await gotoWithSaveAndQuery(page, buildVisualSaveJson(true), `hallRoom=${roomId}`);
+        await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 150_000 });
+        await page.waitForFunction(
+            async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run?.status === 'playing',
+            null,
+            { timeout: 60_000, polling: 500 }
+        );
+    };
+    const pressTiles = (page: Page, ids: string[]): Promise<void> =>
+        page.evaluate(async (list) => {
+            const store = (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState();
+            for (const id of list) store.pressTile(id);
+        }, ids);
+    const focusedTestId = (page: Page): Promise<string> =>
+        page.evaluate(() => document.activeElement?.getAttribute('data-testid') ?? '');
+
+    test('a pad buys at the store stop, and B descends', async ({ page }) => {
+        test.setTimeout(300_000);
+        await installFakePad(page);
+        await bootHallRoom(page, 'store-stop');
+        await pressTiles(page, ['a-1', 'a-2']);
+        await page.waitForTimeout(1200);
+        await pressTiles(page, ['b-1', 'b-2']);
+        const sheet = page.getByTestId('store-sheet');
+        await expect(sheet).toBeVisible({ timeout: 30_000 });
+        await expect.poll(() => page.evaluate(() => document.activeElement?.textContent?.trim())).toBe('Descend');
+
+        // The sheet opens on Descend; the rows are above it, so the d-pad walks up into them.
+        let onBuy = false;
+        for (let step = 0; step < 10 && !onBuy; step += 1) {
+            await pressPad(page, DPAD_UP);
+            onBuy = (await focusedTestId(page)).startsWith('store-buy-');
+        }
+        expect(onBuy, 'the d-pad never reached a buy button').toBe(true);
+        const bought = await focusedTestId(page);
+        await pressPad(page, BUTTON_A);
+        await expect(page.getByTestId('store-receipt')).toHaveText(/^Bought /);
+        expect(bought).toMatch(/^store-buy-/);
+
+        await pressPad(page, BUTTON_B);
+        await expect(sheet).toBeHidden({ timeout: 20_000 });
+        await expect
+            .poll(() => page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run?.board?.level))
+            .toBe(4);
+    });
+
+    test('a pad walks the dock to Bomb and fires it, and focus stays in the dock', async ({ page }) => {
+        test.setTimeout(300_000);
+        await installFakePad(page);
+        await bootHallRoom(page, 'bomb');
+        await pressTiles(page, ['b-1']);
+        await expect(page.getByTestId('tool-bomb')).toBeEnabled({ timeout: 20_000 });
+
+        const dock = page.getByRole('toolbar', { name: /game controls/i });
+        await dock.evaluate((root) => root.querySelector<HTMLElement>('button:not([disabled])')?.focus());
+        for (let step = 0; step < 12 && (await focusedTestId(page)) !== 'tool-bomb'; step += 1) {
+            await pressPad(page, DPAD_RIGHT);
+        }
+        expect(await focusedTestId(page)).toBe('tool-bomb');
+        await pressPad(page, BUTTON_A);
+
+        await expect
+            .poll(() => page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run?.bombCharges))
+            .toBe(0);
+        // The spent Bomb leaves the dock; focus goes to the tool that took its place, not the page.
+        await expect(page.getByTestId('tool-bomb')).toHaveCount(0);
+        expect(await page.evaluate(() => document.activeElement?.closest('[role="toolbar"]') !== null)).toBe(true);
     });
 
     /**
