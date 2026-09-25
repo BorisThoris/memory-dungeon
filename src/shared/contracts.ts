@@ -77,7 +77,7 @@ export type Rating = 'S++' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
  */
 export type RunEndReason = 'turn_ceiling' | 'miss_budget' | 'quit' | 'contract' | 'pass_and_play_final_floor';
 /** A relic bought in the store (`run-relic-rules.ts`). */
-export type RelicId = 'deep_pockets' | 'gilded_chain' | 'long_look';
+export type RelicId = 'deep_pockets' | 'gilded_chain' | 'long_look' | 'tallow_candle';
 export type FeaturedObjectiveId = 'scholar_style' | 'cursed_last' | 'flip_par';
 /**
  * Every screen the app can be showing, as a value.

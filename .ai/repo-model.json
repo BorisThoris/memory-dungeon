@@ -9,7 +9,7 @@
     "contentItemCount": 10,
     "mechanicCount": 51,
     "stateFieldCount": 92,
-    "relationshipCount": 7590
+    "relationshipCount": 7592
   },
   "inventory": [
     {
@@ -201,8 +201,8 @@
     {
       "path": "CLAUDE.md",
       "category": "other",
-      "bytes": 8332,
-      "sha256": "277490539db174d6f3f2d949c85732bcbded69542cdf64b4cf52cf6ba5b18e87"
+      "bytes": 8346,
+      "sha256": "883bbb554d65e3c763b4fe1c934e716ef240b46f9b59e213b34a6bd9cd5cabc3"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -789,8 +789,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 31409,
-      "sha256": "3c06b0d593608b3ebe28e0a82646b2bde892d76c1943a4f23fc845c93ae3d5dc"
+      "bytes": 31576,
+      "sha256": "adefb83e75027cadbf99b4142395e4151ee0e24f6b19c604ac568fcda643c0fd"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2374,7 +2374,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33561,
-      "sha256": "0611cd4adb96fc1590619d2303e5e8c3a2b57429fb7879e8d924de6462ef78af"
+      "sha256": "ecd991848433824fb9ec03e21262555d260510c9fd9ca62162030cb1f07a5fa7"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3999,8 +3999,8 @@
     {
       "path": "e2e/test-hall.spec.ts",
       "category": "test",
-      "bytes": 7618,
-      "sha256": "35b13b57c127f379e1eea49c4b9601e6f8026db00b7220dd7fb7ba8c9edca181"
+      "bytes": 9875,
+      "sha256": "de97b6fd2150a3f45ee6445455f30196cd4466227fd39d714829d3c02cd9e721"
     },
     {
       "path": "e2e/tile-board-raycast.spec.ts",
@@ -9261,8 +9261,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 50154,
-      "sha256": "6e0e5ee8011b323780ce797d9781dbb56dc61db208ef7875d8f72399adc5bf7d"
+      "bytes": 50839,
+      "sha256": "4f16486a00a57ff658d1e5391f14f0a6b5836acff17c25ad19c0633ba00ff2fe"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -11961,8 +11961,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 31705,
-      "sha256": "d3e21136b4c63fd6d4ebb41938d05304e3e10d2b5ecb6905725c394dacc45afc"
+      "bytes": 31872,
+      "sha256": "83629855df5cf672e3bdaf9d67d342d9e72787a6cb852c4feff206efc5700ad9"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -12189,8 +12189,8 @@
     {
       "path": "src/shared/board-turn-transition.ts",
       "category": "source",
-      "bytes": 18945,
-      "sha256": "2678506a00e7692b340436b2d485ddbc644c053caa8917b57497926949bb1564"
+      "bytes": 19219,
+      "sha256": "da0609f426e33dfb8eae379b3ce0e6fb256e75b2ce71b954dd0243ab17c25107"
     },
     {
       "path": "src/shared/bomb-power.test.ts",
@@ -12393,8 +12393,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 36657,
-      "sha256": "47d3e5b09a5e2d6caa2986d2c3071d568a6e8dd7fd804f527b0ace10cbb83e58"
+      "bytes": 36675,
+      "sha256": "18c9c11cf0e8d43d458167a03e0c7bae5019b8930928118e083e25eff09b2c96"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -12777,8 +12777,8 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 91831,
-      "sha256": "f62de069ca138bc1e801ffe18e503c3cba055c545dad687b16b502d3ed670bbc"
+      "bytes": 92046,
+      "sha256": "92e58bf65e9c5a5cd2c679c2d651a983a27f2d069fafd799135a9106996be721"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
@@ -13059,8 +13059,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 36320,
-      "sha256": "6eaeac99c9b3008c95cb3bbd170d705928e00d4404463b476bdcc78f87b2f684"
+      "bytes": 36430,
+      "sha256": "0ef176ef42c8f0397f4e045c04de39d4500072c9b48c644ea890acd601b56ffa"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -13659,8 +13659,8 @@
     {
       "path": "src/shared/run-relic-rules.ts",
       "category": "source",
-      "bytes": 2183,
-      "sha256": "e1746028b7d92ec0523044de5dde051b9e0295b9b752526a5bd1d468f471cd8e"
+      "bytes": 2678,
+      "sha256": "148cfcd534c6d64a1c5b655c5d194bd15eb6ae14eef1f7219a3b87597cd051d1"
     },
     {
       "path": "src/shared/run-settings-rules.test.ts",
@@ -13971,8 +13971,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 46444,
-      "sha256": "6f7b358b2e4fca1f9837911ac15e735ee19848b8b71ee11f0f339c10f383013b"
+      "bytes": 46628,
+      "sha256": "a68126ef076cc775be67d118455c34c0cc1c8d87ed975f7ce1bf4cdec36dfeda"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -13995,8 +13995,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 64223,
-      "sha256": "e174e2885834eab8b4228dfe4cf416e78ec41bfae57ed9d3a49635292efbfe20"
+      "bytes": 65285,
+      "sha256": "39eeb84146a4446ab656c8c81114bca115d3bffa08c00c3f6916843813776297"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -27361,7 +27361,7 @@
       "path": "src/shared/board-turn-transition.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 434,
+      "lineCount": 437,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -27378,6 +27378,7 @@
         "file:src/shared/restless-floor-rules.ts",
         "file:src/shared/run-array-guards.ts",
         "file:src/shared/run-number-guards.ts",
+        "file:src/shared/run-relic-rules.ts",
         "file:src/shared/run-timer-rules.ts",
         "file:src/shared/scoring-rules.ts",
         "file:src/shared/session-stats-rules.ts",
@@ -29760,7 +29761,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2751,
+      "lineCount": 2757,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -32487,7 +32488,7 @@
       "path": "src/shared/run-relic-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 60,
+      "lineCount": 71,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -33643,7 +33644,7 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1128,
+      "lineCount": 1141,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -46469,40 +46470,40 @@
       "name": "BoardTurnExecutionContext",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 71,
-      "endLine": 81
+      "line": 72,
+      "endLine": 82
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnFindableRewardResult",
       "name": "BoardTurnFindableRewardResult",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 37,
-      "endLine": 42
+      "line": 38,
+      "endLine": 43
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnTransitionDependencies",
       "name": "BoardTurnTransitionDependencies",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 50,
-      "endLine": 69
+      "line": 51,
+      "endLine": 70
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnWildMatchResult",
       "name": "BoardTurnWildMatchResult",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 44,
-      "endLine": 48
+      "line": 45,
+      "endLine": 49
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#createResolveBoardTurnTransition",
       "name": "createResolveBoardTurnTransition",
       "kind": "value",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 103,
-      "endLine": 433
+      "line": 104,
+      "endLine": 436
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#BOSS_ENCOUNTER_IDENTITY",
@@ -54869,16 +54870,16 @@
       "name": "hasRelic",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 57,
-      "endLine": 57
+      "line": 68,
+      "endLine": 68
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#isRelicId",
       "name": "isRelicId",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 55,
-      "endLine": 55
+      "line": 66,
+      "endLine": 66
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#LONG_LOOK_MS",
@@ -54893,16 +54894,16 @@
       "name": "RELIC_IDS",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 53,
-      "endLine": 53
+      "line": 64,
+      "endLine": 64
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#relicDefinition",
       "name": "relicDefinition",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 59,
-      "endLine": 59
+      "line": 70,
+      "endLine": 70
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#RelicDefinition",
@@ -54926,7 +54927,7 @@
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
       "line": 32,
-      "endLine": 51
+      "endLine": 62
     },
     {
       "id": "symbol:src/shared/run-settings-rules.ts#applyRunSettings",
@@ -56557,32 +56558,32 @@
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1043,
-      "endLine": 1103
+      "line": 1056,
+      "endLine": 1116
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "name": "TEST_HALL_ROOMS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 263,
-      "endLine": 1030
+      "line": 264,
+      "endLine": 1043
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1127,
-      "endLine": 1127
+      "line": 1140,
+      "endLine": 1140
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
       "name": "TestHallRoom",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 118,
-      "endLine": 129
+      "line": 119,
+      "endLine": 130
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
@@ -56590,39 +56591,39 @@
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
       "line": 42,
-      "endLine": 86
+      "endLine": 87
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1105,
-      "endLine": 1108
+      "line": 1118,
+      "endLine": 1121
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
       "name": "TestHallScriptLine",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 111,
-      "endLine": 116
+      "line": 112,
+      "endLine": 117
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
       "name": "TestHallStep",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 88,
-      "endLine": 109
+      "line": 89,
+      "endLine": 110
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1110,
-      "endLine": 1125
+      "line": 1123,
+      "endLine": 1138
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -58277,7 +58278,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 15
+          "line": 16
         },
         {
           "path": "src/renderer/components/tileBoardPresentationState.ts",
@@ -58736,7 +58737,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 16
+          "line": 17
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
@@ -91281,6 +91282,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/board-turn-transition.ts->src/shared/run-relic-rules.ts",
+      "source": "file:src/shared/board-turn-transition.ts",
+      "target": "file:src/shared/run-relic-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/board-turn-transition.ts->src/shared/run-timer-rules.ts",
       "source": "file:src/shared/board-turn-transition.ts",
       "target": "file:src/shared/run-timer-rules.ts",
@@ -97559,6 +97566,13 @@
       "target": "mechanic:phase.memorize",
       "kind": "modifies",
       "label": "projects timing mutators into the study window"
+    },
+    {
+      "id": "modifies:mechanic:inventory.relics->mechanic:board.lantern_light:Tallow Candle lights the first match of every floor",
+      "source": "mechanic:inventory.relics",
+      "target": "mechanic:board.lantern_light",
+      "kind": "modifies",
+      "label": "Tallow Candle lights the first match of every floor"
     },
     {
       "id": "modifies:mechanic:inventory.relics->mechanic:economy.gold:Gilded Chain pays for a Fever clear",

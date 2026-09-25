@@ -1447,6 +1447,14 @@ where that rule
     padding: 0;
     list-style: none;
     font-family: var(--margin-body-font);
+    /*
+     * The dialog body clips rather than scrolls, and on a phone eight rows do not fit: the last three
+     * were cut off, unseen and unbuyable (Gen 263). The list scrolls inside its own cap instead; on a
+     * desktop the cap sits above the list's height and nothing scrolls.
+     */
+    max-height: min(62dvh, 30rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
 }
 
 .storeRow {
@@ -1497,4 +1505,17 @@ where that rule
 .storeBuy:disabled {
     cursor: default;
     opacity: 0.45;
+}
+
+/* Narrow screens: the title and its price on one line, what it does full width beneath. */
+@media (max-width: 560px) {
+    .storeRow {
+        grid-template-columns: minmax(0, 1fr) auto;
+        row-gap: 0.25rem;
+    }
+
+    .storeRowBody {
+        grid-column: 1 / -1;
+        grid-row: 2;
+    }
 }

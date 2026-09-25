@@ -47,6 +47,17 @@ export const RELICS: readonly RelicDefinition[] = [
         title: 'Long Look',
         body: `Every floor's study window lasts a second longer.`,
         price: 10
+    },
+    {
+        /*
+         * The lantern hall's light, once a floor, on every floor (`lantern-light-rules.ts`): the
+         * first match lights the face-down cards beside it until the next flip. It rewards choosing
+         * where to open a floor - in the unread middle, not at the edge.
+         */
+        id: 'tallow_candle',
+        title: 'Tallow Candle',
+        body: 'Your first match on every floor lights the face-down cards beside it until your next flip.',
+        price: 8
     }
 ];
 

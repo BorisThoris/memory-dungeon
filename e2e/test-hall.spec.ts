@@ -125,7 +125,7 @@ test.describe('The store stop, in the store-stop room', () => {
         await expect(page.getByTestId('store-sheet')).toBeVisible({ timeout: 30_000 });
         // The modal body clips (it never scrolls), so a row has to sit inside the body, not merely the dialog.
         const box = await page.getByTestId('store-rows').locator('..').boundingBox();
-        const ids = ['miss', 'peek', 'shuffle', 'bomb', 'deep_pockets', 'gilded_chain', 'long_look'];
+        const ids = ['miss', 'peek', 'shuffle', 'bomb', 'deep_pockets', 'gilded_chain', 'long_look', 'tallow_candle'];
         for (const id of ids) {
             // Gen 263: the last three descriptions were clipped while their buy buttons stayed.
             const row = page.getByTestId(`store-row-${id}`);
@@ -135,5 +135,42 @@ test.describe('The store stop, in the store-stop room', () => {
             await expect(page.getByTestId(`store-buy-${id}`)).toBeVisible();
         }
         await expect.poll(() => page.evaluate(() => document.activeElement?.textContent?.trim())).toBe('Descend');
+    });
+});
+
+test.describe('The store stop on a phone', () => {
+    test.use({ viewport: { width: 390, height: 844 } });
+
+    test('every item can be scrolled to and bought, none cut off by the dialog', async ({ page }) => {
+        test.setTimeout(240_000);
+        await gotoWithSaveAndQuery(page, buildVisualSaveJson(true), 'hallRoom=store-stop');
+        await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 150_000 });
+        for (const pair of ['a', 'b']) {
+            await page.evaluate(async (key) => {
+                const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+                const store = useAppStore.getState();
+                store.pressTile(`${key}-1`);
+                store.pressTile(`${key}-2`);
+            }, pair);
+            await page.waitForTimeout(1200);
+        }
+        await expect(page.getByTestId('store-sheet')).toBeVisible({ timeout: 30_000 });
+        // Gen 263: on a phone the last three rows sat below a dialog body that clips, unseen and unbuyable.
+        // The body must hold its content (it clips, never scrolls), and the list must be the part that scrolls;
+        // a script can scroll a clipping box, so reaching the buttons alone would not prove a player can.
+        const layout = await page.getByTestId('store-rows').evaluate((list) => {
+            const body = list.parentElement!;
+            return { bodyClips: body.scrollHeight > body.clientHeight + 1, listScrolls: getComputedStyle(list).overflowY };
+        });
+        expect(layout.bodyClips).toBe(false);
+        expect(['auto', 'scroll']).toContain(layout.listScrolls);
+        for (const id of ['miss', 'peek', 'shuffle', 'bomb', 'deep_pockets', 'gilded_chain', 'long_look', 'tallow_candle']) {
+            const buy = page.getByTestId(`store-buy-${id}`);
+            await buy.scrollIntoViewIfNeeded();
+            const list = await page.getByTestId('store-rows').boundingBox();
+            const button = await buy.boundingBox();
+            expect(list && button && button.y >= list.y - 1 && button.y + button.height <= list.y + list.height + 1, `${id} reachable`).toBe(true);
+        }
+        await expect(page.getByRole('button', { name: 'Descend' })).toBeInViewport();
     });
 });

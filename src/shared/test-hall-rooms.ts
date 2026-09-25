@@ -51,6 +51,7 @@ export type TestHallRoomId =
     | 'store-stop'
     | 'deep-pockets'
     | 'long-look'
+    | 'tallow-candle'
     | 'restless-floor'
     | 'magpie'
     | 'score-glint'
@@ -414,6 +415,18 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                     return withRelic - without === 1000 ? null : `difference ${withRelic - without}ms`;
                 }
             }
+        ]
+    },
+    {
+        id: 'tallow-candle',
+        title: 'Tallow Candle',
+        mechanic: 'The relic lights the face-down cards beside a floor\'s first match until the next flip; later matches light nothing.',
+        graphMechanicIds: ['inventory.relics', 'board.lantern_light'],
+        tryThis: 'You hold the Tallow Candle. Open the floor in the middle: the cards beside that first match light up. The second match lights nothing.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e x:t x:t f:b', 'a:e b:t c:m d:b', 'e:e f:b g:m g:m'], { run: { relics: ['tallow_candle'] } }),
+        script: [
+            { step: { do: 'match', pairKey: 'x' }, says: 'the first match lights the cards beside it', expect: (r) => (r.lanternLitTileIds.length > 0 && r.peekRevealedTileIds.length === 0 ? null : `lit ${r.lanternLitTileIds.length}`) },
+            { step: { do: 'match', pairKey: 'g' }, says: 'the second match lights nothing', expect: (r) => (r.lanternLitTileIds.length === 0 ? null : `lit ${r.lanternLitTileIds.join(',')}`) }
         ]
     },
     {

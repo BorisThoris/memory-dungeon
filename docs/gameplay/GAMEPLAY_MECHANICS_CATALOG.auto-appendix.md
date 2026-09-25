@@ -1,13 +1,13 @@
 # Gameplay mechanics — machine snapshot
 
-**Generated:** 2026-09-25T15:48:20.667Z
+**Generated:** 2026-09-25T16:21:48.885Z
 
 > Regenerate with `yarn docs:mechanics-appendix`. Do not edit by hand.
 
 | Constant / count | Value |
 | --- | --- |
 | `GAME_RULES_VERSION` | 49 |
-| `ENCYCLOPEDIA_VERSION` | 54 |
+| `ENCYCLOPEDIA_VERSION` | 55 |
 | Mutator entries (`MUTATOR_CATALOG`) | 12 |
 | Achievement entries (`ACHIEVEMENT_CATALOG`) | 22 |
 | `GameMode` codex ids | endless |
@@ -71,7 +71,7 @@ Every system in the game, with the last generation that passed over it. 34 chang
 | `economy.gold` | changed | 261 | Gold came back with the store: paid at each floor clear by chain tier and turns under par, never negative, spent only at the stop. The soak holds every purchase to its exact price and requires a run to earn some. |
 | `progression.store_stop` | changed | 261 | The store is a stop every third floor, opened on the floor-clear beat before Descend rather than hidden in the pause menu. The test hall walks floor 3 into the stop and buys a bomb; the soak shops at every stop it reaches. |
 | `power.bomb` | changed | 261 | Destroying a pair came back as a bought bomb: aim it with one face-up card, and its pair goes with no turn, miss or score, never the floor’s last pair. Two test hall rooms walk it; the soak holds every bomb to costing nothing but exactly one charge. |
-| `inventory.relics` | changed | 261 | Relics are run-long passives bought at the stop: Deep Pockets lifts the bank cap, Gilded Chain pays for a Fever clear, Long Look lengthens the study window. Rooms walk Deep Pockets and Long Look; the soak requires a run to buy one. |
+| `inventory.relics` | changed | 261 | Relics are run-long passives bought at the stop: Deep Pockets lifts the bank cap, Gilded Chain pays for a Fever clear, Long Look lengthens the study window. Rooms walk Deep Pockets and Long Look; the soak requires a run to buy one. Gen 263 added Tallow Candle: a floor’s first match lights the face-down cards beside it until the next flip, the lantern hall’s light once a floor on every floor. |
 | `surface.codex` | changed | 261 | Eleven entries still taught Destroy and Stray the day after both were removed: findables, powers, dense pickups, shifting spotlight, charges, perfect memory, recall focus, the scholar objective and the scholar contract. Gen 213 re-read the glossary against the powers that exist and found nothing left teaching either. |
 | `surface.audio` | changed | 261 | Two sampled effects and their manifest rows went with the powers that played them, along with the OGG and WAV files. The audio coverage gate confirms every remaining cue has a manifest entry and a file, and Gen 213 re-read the manifest: eleven entries, none of them named for a power that no longer exists. |
 | `surface.removed_powers` | removed | 261 | Destroy could never be pressed - no code path grants a charge - and Stray had only one legal target left, the wild joker, so pressing it deleted the player’s own wild match. Recorded in docs/REMOVED_POWERS.md, and Gen 213 re-greps both charge fields to prove the removal has not quietly come back. |

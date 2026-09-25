@@ -12,6 +12,7 @@ import { tilesArePairMatch } from './scoring-rules';
 import { clearResolveState } from './run-timer-rules';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
 import { resolveLanternLight } from './lantern-light-rules';
+import { hasRelic } from './run-relic-rules';
 import { ANCHOR_BONUS_LINKS, resolveAnchorAfterMatch } from './n-back-anchor-rules';
 import { applyRestlessDrift, resolveRestlessDrift } from './restless-floor-rules';
 import { hasMutator } from './mutators';
@@ -222,7 +223,9 @@ export const createResolveBoardTurnTransition = ({
          * The lantern lights last, on the board the player will look at: after the pop has taken
          * what it takes and any drift has moved what it moves, so a lit face is where it will be.
          */
-        const lanternLit = hasMutator(run, 'lantern_light')
+        // The lantern hall lights every match; the Tallow Candle relic lights a floor's first one.
+        const candleLit = hasRelic(run, 'tallow_candle') && runNonNegativeInteger(sourceBoard.matchedPairs) === 0;
+        const lanternLit = hasMutator(run, 'lantern_light') || candleLit
             ? resolveLanternLight({
                   board: boardAfterDrift,
                   matchedTileIds: [firstTile.id, secondTile.id],

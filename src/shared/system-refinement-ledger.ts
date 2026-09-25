@@ -497,8 +497,8 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         id: 'inventory.relics',
         verdict: 'changed',
         generation: 261,
-        present: ['RELICS', 'hasRelic', 'DEEP_POCKETS_CAP', 'LONG_LOOK_MS'],
-        note: 'Relics are run-long passives bought at the stop: Deep Pockets lifts the bank cap, Gilded Chain pays for a Fever clear, Long Look lengthens the study window. Rooms walk Deep Pockets and Long Look; the soak requires a run to buy one.'
+        present: ['RELICS', 'hasRelic', 'DEEP_POCKETS_CAP', 'LONG_LOOK_MS', 'tallow_candle'],
+        note: 'Relics are run-long passives bought at the stop: Deep Pockets lifts the bank cap, Gilded Chain pays for a Fever clear, Long Look lengthens the study window. Rooms walk Deep Pockets and Long Look; the soak requires a run to buy one. Gen 263 added Tallow Candle: a floor’s first match lights the face-down cards beside it until the next flip, the lantern hall’s light once a floor on every floor.'
     },
     {
         id: 'surface.codex',

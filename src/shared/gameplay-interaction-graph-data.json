@@ -2725,6 +2725,12 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "the marked card carries a teal ring"
+        },
+        {
+            "source": "inventory.relics",
+            "target": "board.lantern_light",
+            "kind": "modifies",
+            "label": "Tallow Candle lights the first match of every floor"
         }
     ],
     "coverage": {

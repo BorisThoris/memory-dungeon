@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 54 as const;
+export const ENCYCLOPEDIA_VERSION = 55 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -367,7 +367,7 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
             'A floor clear pays **gold**: two, plus one for each rung of the chain it cleared at (Clean, Sharp, Fever), plus one for every turn under par, three at most. ' +
             'The **store** opens by itself after every third floor, with a **Descend** button when you are done. It sells another **miss** (into the bank, up to what it holds), a **peek** charge, a **shuffle** charge and a **bomb** - flip a card, then bomb it, and its pair leaves the board with no miss and no turn spent, though never the floor\'s last pair; ' +
             'each thing you buy costs more the next time this run. ' +
-            'It also sells three **relics**, once each, kept to the end of the run: **Deep Pockets** (the miss bank holds five), **Gilded Chain** (every fifth match in a row also pays two gold) and **Long Look** (a second more to study every floor). ' +
+            'It also sells four **relics**, once each, kept to the end of the run: **Deep Pockets** (the miss bank holds five), **Gilded Chain** (every fifth match in a row also pays two gold), **Long Look** (a second more to study every floor) and **Tallow Candle** (your first match on every floor lights the face-down cards beside it until your next flip). ' +
             'Gold is the run\'s, not the profile\'s: it ends with the run.'
     },
     {

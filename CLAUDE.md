@@ -84,7 +84,7 @@ Rules here are the owner's decisions and the lessons that cost real time. They o
   not soften survival by appeal to an older "a bad floor is never punishing" thesis.
 - **The store is a stop**, opened on the floor-clear beat every third floor
   (`STORE_STOP_EVERY_FLOORS`), continued with Descend. It sells misses, peeks, shuffles, bombs and
-  three relics (Deep Pockets, Gilded Chain, Long Look). Not a pause-menu screen, not a door.
+  four relics (Deep Pockets, Gilded Chain, Long Look, Tallow Candle). Not a pause-menu screen, not a door.
 - **Bombs** are aimed at the one face-up card, take its pair with no turn, miss or score, and never
   take the floor's last pair.
 - **Mutators iterate during play** on a clock the player winds (turns, misses, matches) and show on
