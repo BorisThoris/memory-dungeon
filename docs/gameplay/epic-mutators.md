@@ -9,7 +9,7 @@ Run modifiers that change generation, scoring, timers, or objectives. Sources: e
 | ID | Rules / generation | Renderer / UX | Completeness |
 |----|---------------------|---------------|--------------|
 | `glass_floor` | Decoy tile; glass witness bonus | HUD chip; tile is normal mesh with decoy key | **Shippable** |
-| `sticky_fingers` | Blocks prior match index on next “opening” flip | HUD chip; no on-grid blocked-slot art | **Functional** |
+| `sticky_fingers` | Blocks a face-down neighbour of the match on the next “opening” flip (it used to block the matched slot itself, which blocked nothing) | HUD chip; no on-grid blocked-slot art | **Functional** |
 | `score_parasite` | Life pressure every N floors unless ward | HUD + polite announcements | **Shippable** |
 | `restless_floor` | Every third resolved turn, hidden cards trade places; 1, then 2, then 3 pairs per drift (`restless-floor-rules.ts`) | Backs move on the board; run announcement line | **Shippable** |
 | `short_memorize` | Shorter memorize window | Timer-driven UI | **Shippable** |

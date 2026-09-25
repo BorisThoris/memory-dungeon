@@ -344,7 +344,8 @@ export const getTileBoardReadabilityState = ({
           ? tileTraitColor(tile.tileTraitKind)
           : '#f2d39d';
     // A lock outranks every read: it is the one thing on a back that changes what may be tapped this turn.
-    // The burnt orange is the lock ring sticky fingers already draws on a matched slot (Gen 263).
+    // The burnt orange is the lock ring sticky fingers draws on the stuck card (Gen 263; the card is
+    // face down since the test hall found the block sitting on an already-matched slot).
     const hiddenReadabilityAccentColor = stickyFingerSlotMark
         ? '#c65a28'
         : traitLaneReadabilityColor

@@ -1,5 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { MUTATOR_IDS, type AchievementId, type GameMode, type MutatorId } from './contracts';
+import {
+    FEATURED_OBJECTIVE_STREAK_BONUS_MAX,
+    FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP,
+    MUTATOR_IDS,
+    type AchievementId,
+    type GameMode,
+    type MutatorId
+} from './contracts';
+import { FEATURED_OBJECTIVE_LABELS } from './floor-mutator-schedule';
+import { PAR_TURNS_PER_PAIR } from './floor-par';
+import { getFeaturedObjectiveBonusScore } from './secondary-objective-rules';
 import {
     ACHIEVEMENT_CATALOG,
     CODEX_CORE_TOPICS,
@@ -205,5 +215,46 @@ describe('mechanics-encyclopedia', () => {
         expect(MUTATOR_CATALOG.distraction_channel.description).toContain('scores slightly less');
         expect(ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS.find((topic) => topic.id === 'sys_recall_focus')?.description)
             .toContain('forgotten markers are removed');
+    });
+});
+
+describe('featured objectives and par, as the rules pay them', () => {
+    /*
+     * Found by the test hall's featured-streak room: the objective topics quoted +40 / +30 / +50
+     * against the 50 / 45 / 65 a clear pays, named a fourth objective (Glass witness) that went in
+     * Gen 196, and gave par as `ceil(pairs × 0.85)`, a rate floor-par.ts retired in Gen 181.
+     */
+    const topic = (id: string): string =>
+        [...CODEX_CORE_TOPICS, ...ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS].find((entry) => entry.id === id)?.description ?? '';
+
+    it('quotes the bonus each objective pays', () => {
+        for (const [id, objective] of [
+            ['sys_scholar_style_floor', 'scholar_style'],
+            ['sys_flip_par_floor', 'flip_par'],
+            ['sys_cursed_last', 'cursed_last']
+        ] as const) {
+            expect(topic(id), id).toContain(`+${getFeaturedObjectiveBonusScore(objective)}**`);
+        }
+    });
+
+    it('names exactly the featured objectives the schedule deals', () => {
+        const text = topic('sys_floor_schedule_and_featured_objective');
+        for (const label of Object.values(FEATURED_OBJECTIVE_LABELS)) {
+            expect(text).toContain(`**${label}**`);
+        }
+        expect(text).not.toContain('Glass witness');
+        expect(text).toContain(`+${FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP}**`);
+        expect(text).toContain(`+${FEATURED_OBJECTIVE_STREAK_BONUS_MAX}**`);
+    });
+
+    it('never quotes the retired par rate', () => {
+        for (const id of ['scoring', 'sys_flip_par_floor']) {
+            expect(topic(id), id).not.toContain('0.85');
+        }
+        expect(topic('scoring')).toContain(`${PAR_TURNS_PER_PAIR} turns a pair`);
+    });
+
+    it('describes sticky fingers as a face-down card that sticks', () => {
+        expect(MUTATOR_CATALOG.sticky_fingers.description).toContain('face-down card touching');
     });
 });

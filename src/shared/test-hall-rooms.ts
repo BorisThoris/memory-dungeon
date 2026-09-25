@@ -8,9 +8,12 @@ import {
     bombTargetTileId,
     cancelResolvingWithUndo
 } from './board-power-actions';
+import { inspectRunFairness } from './board-inspection';
 import type { BoardState, MutatorId, RunState, Tile, TileSuit, TileTraitKind } from './contracts';
 import { togglePinnedTile } from './board-power-state';
-import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
+import { countFindablePairs } from './board-tile-generation-rules';
+import { pickFloorScheduleEntry } from './floor-mutator-schedule';
+import { advanceToNextLevel, createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { missBankCap, missesLeft } from './miss-bank';
 import { buyStoreItem, isStoreStopFloor, runGold, type StoreItemId } from './run-store-rules';
 import { getMemorizeDurationForRun } from './scoring-rules';
@@ -64,7 +67,22 @@ export type TestHallRoomId =
     | 'conduit'
     | 'stasis'
     | 'skittish'
-    | 'lantern';
+    | 'lantern'
+    | 'sticky-fingers'
+    | 'n-back'
+    | 'spotlight'
+    | 'wide-recall'
+    | 'silhouette'
+    | 'floor-pay'
+    | 'featured-streak'
+    | 'featured-streak-miss'
+    | 'next-floor'
+    | 'short-memorize'
+    | 'dense-pickups'
+    | 'wild-run'
+    | 'no-shuffle'
+    | 'session-stats'
+    | 'journal';
 
 export type TestHallStep =
     | { readonly do: 'match'; readonly pairKey: string }
@@ -81,7 +99,11 @@ export type TestHallStep =
     | { readonly do: 'gambit'; readonly a: string; readonly b: string; readonly third: string }
     | { readonly do: 'wild'; readonly tileId: string }
     | { readonly do: 'buy'; readonly item: StoreItemId }
-    | { readonly do: 'clear' };
+    | { readonly do: 'clear' }
+    /** Descend from a cleared floor to the next one, which opens on its study window. */
+    | { readonly do: 'advance' }
+    /** End the study window and start play. */
+    | { readonly do: 'study' };
 
 export interface TestHallScriptLine {
     readonly step: TestHallStep;
@@ -139,6 +161,7 @@ const room = (
         streak = 0,
         mutators = [] as MutatorId[],
         run: extra = {} as Partial<RunState>,
+        board: boardExtra = {} as Partial<BoardState>,
         tiles: editTiles = (tiles: Tile[]) => tiles
     } = {}
 ): RunState => {
@@ -150,13 +173,17 @@ const room = (
         level,
         columns,
         rows: rows.length,
-        pairCount: new Set(laid.map((t) => t.pairKey)).size,
+        // The joker is a single card, not a pair: counting it made every Wild room's board fail the
+        // fairness inspector's tile count.
+        pairCount: new Set(laid.filter((t) => t.pairKey !== WILD_PAIR_KEY).map((t) => t.pairKey)).size,
         matchedPairs: 0,
         flippedTileIds: [],
         cursedPairKey: null,
         wardPairKey: null,
         bountyPairKey: null,
-        tiles: laid
+        featuredObjectiveId: null,
+        tiles: laid,
+        ...boardExtra
     };
     return {
         ...base,
@@ -201,6 +228,32 @@ const costsNothing = (run: RunState, before: RunState): string | null =>
 const withTrait = (pairKey: string, kind: TileTraitKind) => (tiles: Tile[]) =>
     tiles.map((t) => (t.pairKey === pairKey ? { ...t, tileTraitKind: kind } : t));
 const turnsAre = (n: number) => (run: RunState) => (run.turnsThisFloor === n ? null : `turns ${run.turnsThisFloor}, expected ${n}`);
+const paid = (run: RunState, before: RunState): number => run.stats.totalScore - before.stats.totalScore;
+/**
+ * The match pays `delta` against the same match played on `plain(before)` - the room with the
+ * thing under test taken away - so a room states a difference instead of a total it would have to
+ * keep in step with every other scoring rule.
+ */
+const matchPaysBeside =
+    (pairKey: string, delta: number, plain: (before: RunState) => RunState) =>
+    (run: RunState, before: RunState): string | null => {
+        const without = plain(before);
+        const plainRun = playTestHallStep(without, { do: 'match', pairKey });
+        if (!plainRun) return `the plain match of ${pairKey} could not be played`;
+        const difference = paid(run, before) - paid(plainRun, without);
+        return difference === delta ? null : `paid ${paid(run, before)} against ${paid(plainRun, without)} plain (${difference}), expected ${delta}`;
+    };
+const withoutMutators = (run: RunState): RunState => ({ ...run, activeMutators: [] });
+/** The board inspector's "a way left to finish": no issue, and a route to the clear. */
+const finishable = (run: RunState): string | null => {
+    const report = inspectRunFairness(run);
+    return report.issues.length === 0 && report.hasCompletionRoute ? null : `fairness: ${report.issues.map((i) => i.code).join(',') || 'no completion route'}`;
+};
+const journaledOneTurn = (run: RunState, before: RunState): string | null => {
+    const added = (run.gameplayCommandJournal ?? []).slice((before.gameplayCommandJournal ?? []).length);
+    return added.length === 1 && added[0]?.type === 'board.turn_resolve' ? null : `journaled ${added.map((c) => c.type).join(',') || 'nothing'}`;
+};
+const scheduled = (run: RunState) => pickFloorScheduleEntry(run.runSeed, run.runRulesVersion, run.board?.level ?? 0, run.gameMode);
 
 // ---- The rooms --------------------------------------------------------------------------------
 
@@ -672,6 +725,290 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
             },
             { step: { do: 'flip', tileId: 'g-1' }, says: 'the next flip puts the light out', expect: (r) => (r.lanternLitTileIds.length === 0 ? null : `still lit ${r.lanternLitTileIds.join(',')}`) }
         ]
+    },
+    {
+        id: 'sticky-fingers',
+        title: 'Sticky fingers',
+        mechanic: 'After a match, a face-down card touching the first card of the pair sticks: the next turn cannot open on it.',
+        graphMechanicIds: ['core.board_turn_resolution'],
+        tryThis: 'Match a in the corner. b-1 beside it sticks: it will not open first, but it opens second.',
+        /*
+         * The room that found it: sticky fingers used to block the slot of the first matched card -
+         * a matched card, which cannot be opened anyway - so the block refused nothing at all.
+         */
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { mutators: ['sticky_fingers'] }),
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'the match sticks b-1, the face-down card beside a-1', expect: (r) => (r.stickyBlockIndex === positionOf(r, 'b-1') ? null : `stuck at ${r.stickyBlockIndex}`) },
+            { step: { do: 'flip', tileId: 'b-1' }, says: 'the stuck card will not open first', expect: (r) => (r.board?.flippedTileIds.length === 0 ? null : 'the stuck card opened as the first card') },
+            { step: { do: 'flip', tileId: 'c-1' }, says: 'a first card elsewhere is fine', expect: (r) => (r.board?.flippedTileIds.includes('c-1') ? null : 'c-1 did not open') },
+            { step: { do: 'flip', tileId: 'b-1' }, says: 'the stuck card opens as the second card', expect: (r) => (r.board?.flippedTileIds.includes('b-1') ? null : 'the stuck card would not open second') }
+        ]
+    },
+    {
+        id: 'n-back',
+        title: 'The n-back anchor',
+        mechanic: 'Every second match makes that pair the anchor.',
+        graphMechanicIds: ['core.board_turn_resolution'],
+        tryThis: 'Match three pairs: the second becomes the anchor and the third leaves it there.',
+        /*
+         * What this room cannot show: the anchor is always a pair just matched, and the board tints
+         * the anchor only on a face-up card in play, so the tint has nothing to land on. The rule
+         * below is what the game does; what the anchor is for is an open question for the owner.
+         */
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { mutators: ['n_back_anchor'] }),
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'the first match sets no anchor', expect: (r) => (r.nBackAnchorPairKey === null ? null : `anchor ${r.nBackAnchorPairKey}`) },
+            { step: { do: 'match', pairKey: 'b' }, says: 'the second match anchors b', expect: (r) => (r.nBackAnchorPairKey === 'b' ? null : `anchor ${r.nBackAnchorPairKey}`) },
+            { step: { do: 'match', pairKey: 'c' }, says: 'the third leaves the anchor on b', expect: (r) => (r.nBackAnchorPairKey === 'b' ? null : `anchor ${r.nBackAnchorPairKey}`) }
+        ]
+    },
+    {
+        id: 'spotlight',
+        title: 'The shifting spotlight',
+        mechanic: 'The Bounty pair pays 30 more and the Ward pair 22 less; every turn moves both.',
+        graphMechanicIds: ['economy.score_and_rewards'],
+        tryThis: 'Match the Bounty (b), then the new Ward, then miss: the two marks move every turn.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { mutators: ['shifting_spotlight'], board: { wardPairKey: 'a', bountyPairKey: 'b' } }),
+        script: [
+            {
+                step: { do: 'match', pairKey: 'b' },
+                says: 'the Bounty pays 30 over a plain match, and the marks move to pairs still standing',
+                expect: expectAll(matchPaysBeside('b', 30, (b) => ({ ...withoutMutators(b), board: { ...b.board!, wardPairKey: null, bountyPairKey: null } })), (r) => {
+                    const { wardPairKey: ward, bountyPairKey: bounty } = r.board ?? {};
+                    return ward && bounty && standing(r, ward) && standing(r, bounty) ? null : `ward ${ward}, bounty ${bounty}`;
+                })
+            },
+            {
+                step: { do: 'match', pairKey: 'd' },
+                says: 'd is the Ward now: it pays 22 under a plain match',
+                expect: (r, b) =>
+                    b.board?.wardPairKey !== 'd'
+                        ? `the Ward moved to ${b.board?.wardPairKey}, not d`
+                        : matchPaysBeside('d', -22, (before) => ({ ...withoutMutators(before), board: { ...before.board!, wardPairKey: null, bountyPairKey: null } }))(r, b)
+            },
+            { step: { do: 'miss', a: 'a-1', b: 'c-1' }, says: 'a miss moves the marks too', expect: (r, b) => ((r.shiftingSpotlightNonce ?? 0) === (b.shiftingSpotlightNonce ?? 0) + 1 ? null : `spotlight moved ${r.shiftingSpotlightNonce} times`) }
+        ]
+    },
+    {
+        id: 'wide-recall',
+        title: 'Wide recall',
+        mechanic: 'Faces read wide in play, and every match pays 5 less.',
+        graphMechanicIds: ['economy.score_and_rewards'],
+        tryThis: 'Match a and compare what it paid with the same match on a plain floor.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { mutators: ['wide_recall'] }),
+        script: [{ step: { do: 'match', pairKey: 'a' }, says: 'the match pays 5 under a plain one', expect: matchPaysBeside('a', -5, withoutMutators) }]
+    },
+    {
+        id: 'silhouette',
+        title: 'Silhouette twist',
+        mechanic: 'Faces show as silhouettes in play, and every match pays 5 less.',
+        graphMechanicIds: ['economy.score_and_rewards'],
+        tryThis: 'Match a and compare what it paid with the same match on a plain floor.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { mutators: ['silhouette_twist'] }),
+        script: [{ step: { do: 'match', pairKey: 'a' }, says: 'the match pays 5 under a plain one', expect: matchPaysBeside('a', -5, withoutMutators) }]
+    },
+    {
+        id: 'floor-pay',
+        title: "The floor's pay",
+        mechanic: 'A clear pays 100 x floor times the chain tier standing, plus 50 x floor for every turn under par.',
+        graphMechanicIds: ['economy.score_and_rewards', 'objective.floor_clear'],
+        tryThis: 'Clear floor 4 under its par and read the floor-end bonus.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t']),
+        script: [
+            {
+                step: { do: 'clear' },
+                says: 'the bonus is the tiered clear plus the turns saved, and the floor pays play + bonus + objectives',
+                expect: (r) => {
+                    const result = r.lastLevelResult;
+                    if (r.status !== 'levelComplete' || !result) return `status ${r.status}`;
+                    const { parTurns = 0, turnsTaken = 0, floorEfficiencyBonus = 0, floorBonus = 0, floorBonusTierMult = 1, playScore = 0 } = result;
+                    if (turnsTaken >= parTurns) return `took ${turnsTaken} turns against a par of ${parTurns}`;
+                    if (floorEfficiencyBonus !== 50 * 4 * (parTurns - turnsTaken)) return `efficiency ${floorEfficiencyBonus} for ${parTurns - turnsTaken} turns saved`;
+                    if (floorBonus !== Math.round(100 * 4 * floorBonusTierMult) + floorEfficiencyBonus) return `floor bonus ${floorBonus} at x${floorBonusTierMult}`;
+                    const sum = playScore + floorBonus + (result.objectiveBonusScore ?? 0) + (result.featuredObjectiveStreakBonus ?? 0);
+                    return result.scoreGained === sum ? null : `the floor paid ${result.scoreGained}, its parts add to ${sum}`;
+                }
+            }
+        ]
+    },
+    {
+        id: 'featured-streak',
+        title: 'The objective streak',
+        mechanic: 'Each featured objective cleared in a row adds 10 on top of the objective, up to 50.',
+        graphMechanicIds: ['objective.featured_streak', 'economy.score_and_rewards'],
+        tryThis: 'Your streak is one and this floor features Flip par. Clear it under par: the streak goes to two and pays its 10.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { run: { featuredObjectiveStreak: 1 }, board: { featuredObjectiveId: 'flip_par' } }),
+        script: [
+            {
+                step: { do: 'clear' },
+                says: 'Flip par pays 45, the streak goes to two and adds its 10',
+                expect: (r) => {
+                    const result = r.lastLevelResult;
+                    return r.featuredObjectiveStreak === 2 && result?.featuredObjectiveCompleted && result.objectiveBonusScore === 45 && result.featuredObjectiveStreakBonus === 10
+                        ? null
+                        : `streak ${r.featuredObjectiveStreak}, objective ${result?.objectiveBonusScore}, kicker ${result?.featuredObjectiveStreakBonus}`;
+                }
+            }
+        ]
+    },
+    {
+        id: 'featured-streak-miss',
+        title: 'The objective streak, missed',
+        mechanic: 'Clearing a floor without its featured objective takes two off the objective streak.',
+        graphMechanicIds: ['objective.featured_streak'],
+        tryThis: 'Your streak is three and the floor features Flip par. Miss three times, then clear: over par, the streak drops to one.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { run: { featuredObjectiveStreak: 3 }, board: { featuredObjectiveId: 'flip_par' } }),
+        script: [
+            { step: { do: 'miss', a: 'a-1', b: 'b-1' }, says: 'a miss', expect: missesAre(2) },
+            { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'a miss', expect: missesAre(1) },
+            { step: { do: 'miss', a: 'e-1', b: 'f-1' }, says: 'a miss', expect: missesAre(0) },
+            {
+                step: { do: 'clear' },
+                says: 'over par: no objective, no kicker, the streak falls by two',
+                expect: (r) => {
+                    const result = r.lastLevelResult;
+                    if (r.status !== 'levelComplete' || !result) return `status ${r.status}`;
+                    if ((result.turnsTaken ?? 0) <= (result.parTurns ?? 0)) return `took ${result.turnsTaken}, inside a par of ${result.parTurns}`;
+                    return r.featuredObjectiveStreak === 1 && !result.featuredObjectiveCompleted && !result.objectiveBonusScore && !result.featuredObjectiveStreakBonus
+                        ? null
+                        : `streak ${r.featuredObjectiveStreak}, objective ${result.objectiveBonusScore}, kicker ${result.featuredObjectiveStreakBonus}`;
+                }
+            }
+        ]
+    },
+    {
+        id: 'next-floor',
+        title: 'The next floor',
+        mechanic: 'A cleared floor descends to the next: a new board, face down, on its study window, with its own mutators and a miss earned.',
+        graphMechanicIds: ['progression.run_flow', 'inventory.mutator_loadout', 'economy.miss_bank'],
+        tryThis: 'Clear floor 4 with two misses left, then descend: floor 5 opens with three and its own mutators.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { misses: 2 }),
+        script: [
+            { step: { do: 'clear' }, says: 'the floor clears', expect: statusIs('levelComplete') },
+            {
+                step: { do: 'advance' },
+                says: 'floor 5 opens face down on its study window, a miss richer, carrying the mutators its schedule names',
+                expect: expectAll(statusIs('memorize'), turnsAre(0), missesAre(3), (r) => {
+                    const board = r.board;
+                    if (board?.level !== 5) return `level ${board?.level}`;
+                    if (!board.tiles.every((t) => t.state === 'hidden')) return 'a card on the new floor is not face down';
+                    const entry = scheduled(r);
+                    return r.activeMutators.join(',') === entry.mutators.join(',') && board.featuredObjectiveId === entry.featuredObjectiveId
+                        ? null
+                        : `mutators ${r.activeMutators.join(',')} / ${entry.mutators.join(',')}, objective ${board.featuredObjectiveId} / ${entry.featuredObjectiveId}`;
+                })
+            },
+            { step: { do: 'study' }, says: 'the study window ends and play starts, with a way to finish', expect: expectAll(statusIs('playing'), finishable) }
+        ]
+    },
+    {
+        id: 'short-memorize',
+        title: 'Short memorize',
+        mechanic: 'Short memorize takes 350 ms off the study window.',
+        graphMechanicIds: ['phase.memorize', 'inventory.mutator_loadout'],
+        tryThis: 'Clear floor 1 and descend: floor 2 is a speed trial, and its study window is shorter.',
+        build: () => room(['a:e b:t', 'b:t a:e'], { level: 1 }),
+        script: [
+            { step: { do: 'clear' }, says: 'floor 1 clears', expect: statusIs('levelComplete') },
+            {
+                step: { do: 'advance' },
+                says: 'floor 2 carries Short memorize, and its window is 350 ms under the same floor without it',
+                expect: (r) => {
+                    if (!r.activeMutators.includes('short_memorize')) return `floor 2 carries ${r.activeMutators.join(',') || 'nothing'}`;
+                    const without = getMemorizeDurationForRun(withoutMutators(r), 2);
+                    return without - (r.timerState.memorizeRemainingMs ?? without) === 350 ? null : `window ${r.timerState.memorizeRemainingMs} against ${without}`;
+                }
+            }
+        ]
+    },
+    {
+        id: 'dense-pickups',
+        title: 'Dense pickups',
+        mechanic: 'The Dense pickups mutator deals two glint pairs on its floor.',
+        graphMechanicIds: ['findable.score_glint', 'inventory.mutator_loadout'],
+        tryThis: 'Clear floor 2 and descend: floor 3 is a treasure gallery with two glint pairs to find.',
+        build: () => room(['a:e b:t', 'b:t a:e'], { level: 2 }),
+        script: [
+            { step: { do: 'clear' }, says: 'floor 2 clears', expect: statusIs('levelComplete') },
+            {
+                step: { do: 'advance' },
+                says: 'floor 3 deals two glint pairs, and the run counts two to find',
+                expect: (r) => {
+                    if (!r.activeMutators.includes('findables_floor')) return `floor 3 carries ${r.activeMutators.join(',') || 'nothing'}`;
+                    const pairs = countFindablePairs(r.board?.tiles ?? []);
+                    return pairs === 2 && r.findablesTotalThisFloor === 2 ? null : `glint pairs ${pairs}, counted ${r.findablesTotalThisFloor}`;
+                }
+            }
+        ]
+    },
+    {
+        id: 'wild-run',
+        title: 'The Wild run',
+        mechanic: 'An unspent joker is carried to the next floor, which deals it again.',
+        graphMechanicIds: ['mode.wild_run', 'safety.softlock_fairness'],
+        tryThis: 'Clear the real pairs and leave the joker: the floor still clears, and the joker comes down with you.',
+        build: () =>
+            room(['a:e b:t c:m', 'd:b a:e b:t', 'c:m d:b w:e'], {
+                run: { wildMenuRun: true, wildMatchesRemaining: 1 },
+                tiles: (tiles) => tiles.map((t) => (t.pairKey === 'w' ? { ...t, id: 'joker', pairKey: WILD_PAIR_KEY } : t))
+            }),
+        script: [
+            { step: { do: 'clear' }, says: 'the real pairs clear the floor with the joker standing', expect: expectAll(statusIs('levelComplete'), (r) => (r.wildMatchesRemaining === 1 ? null : `jokers ${r.wildMatchesRemaining}`)) },
+            {
+                step: { do: 'advance' },
+                says: 'the next floor deals one joker and the token comes too, with no floor mutators',
+                expect: (r) => {
+                    const jokers = (r.board?.tiles ?? []).filter((t) => t.pairKey === WILD_PAIR_KEY).length;
+                    return jokers === 1 && r.wildMatchesRemaining === 1 && r.activeMutators.length === 0 ? null : `jokers dealt ${jokers}, tokens ${r.wildMatchesRemaining}, mutators ${r.activeMutators.join(',')}`;
+                }
+            },
+            { step: { do: 'study' }, says: 'play starts with a way to finish', expect: expectAll(statusIs('playing'), finishable) }
+        ]
+    },
+    {
+        id: 'no-shuffle',
+        title: 'The no-shuffle contract',
+        mechanic: 'A run under the no-shuffle contract cannot shuffle, whatever charges it holds.',
+        graphMechanicIds: ['inventory.contract_loadout', 'power.shuffle'],
+        tryThis: 'You hold a shuffle charge under a no-shuffle contract. Press Shuffle: nothing moves and the charge stays.',
+        build: () => room(['a:e b:t c:m', 'd:b a:e b:t', 'c:m d:b e:e', 'e:e f:t f:t'], { run: { shuffleCharges: 1, activeContract: { noShuffle: true, maxMismatches: null } } }),
+        script: [
+            {
+                step: { do: 'shuffle' },
+                says: 'the shuffle is refused: nothing moved, the charge is kept',
+                expect: expectAll(costsNothing, (r, b) => (order(r) === order(b) && r.shuffleCharges === 1 ? null : `moved ${order(r) !== order(b)}, charges ${r.shuffleCharges}`))
+            }
+        ]
+    },
+    {
+        id: 'session-stats',
+        title: 'Session stats',
+        mechanic: 'The run counts matches, misses, tries, the best chain, trait cards and floors cleared.',
+        graphMechanicIds: ['stats.session_tracking'],
+        tryThis: 'Miss with the Echo card, match it and one more, then clear: watch each count move once.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { tiles: withTrait('a', 'echo') }),
+        script: [
+            {
+                step: { do: 'miss', a: 'a-1', b: 'b-1' },
+                says: 'one mismatch, one try, one Echo card missed',
+                expect: (r) => (r.stats.mismatches === 1 && r.stats.tries === 1 && r.stats.tileTraitMismatches.echo === 1 ? null : `mismatches ${r.stats.mismatches}, tries ${r.stats.tries}, echo missed ${r.stats.tileTraitMismatches.echo}`)
+            },
+            { step: { do: 'match', pairKey: 'a' }, says: 'one match, one Echo pair matched', expect: (r) => (r.stats.matchesFound === 1 && r.stats.tileTraitMatches.echo === 1 ? null : `matches ${r.stats.matchesFound}, echo matched ${r.stats.tileTraitMatches.echo}`) },
+            { step: { do: 'match', pairKey: 'c' }, says: 'two in a row is the best chain', expect: (r) => (r.stats.matchesFound === 2 && r.stats.bestStreak === 2 ? null : `matches ${r.stats.matchesFound}, best chain ${r.stats.bestStreak}`) },
+            { step: { do: 'clear' }, says: 'one floor cleared, and the miss still counted', expect: (r, b) => (r.stats.levelsCleared === b.stats.levelsCleared + 1 && r.stats.mismatches === 1 ? null : `cleared ${r.stats.levelsCleared}, mismatches ${r.stats.mismatches}`) }
+        ]
+    },
+    {
+        id: 'journal',
+        title: 'The command journal',
+        mechanic: 'Every turn is journaled as one command, match or miss, so a run can be replayed.',
+        graphMechanicIds: ['core.gameplay_commands'],
+        tryThis: 'Match a pair, then miss: each turn adds one line to the journal.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t']),
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'the match is one journaled turn', expect: (r, b) => journaledOneTurn(r, b) },
+            { step: { do: 'miss', a: 'b-1', b: 'c-1' }, says: 'the miss is one more', expect: (r, b) => journaledOneTurn(r, b) }
+        ]
     }
 ];
 
@@ -724,14 +1061,19 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
         case 'buy':
             return buyStoreItem(run, step.item);
         case 'clear': {
+            // Real pairs only: a joker left standing is the Wild run's to carry, not a pair to clear.
             let next = run;
             for (let guard = 0; guard < 64 && next.status === 'playing'; guard += 1) {
-                const pairKey = (next.board?.tiles ?? []).find((t) => t.state === 'hidden')?.pairKey;
+                const pairKey = (next.board?.tiles ?? []).find((t) => t.state === 'hidden' && t.pairKey !== WILD_PAIR_KEY)?.pairKey;
                 if (!pairKey) break;
                 next = playTestHallStep(next, { do: 'match', pairKey }) ?? next;
             }
             return next;
         }
+        case 'advance':
+            return run.status === 'levelComplete' ? advanceToNextLevel(run) : null;
+        case 'study':
+            return run.status === 'memorize' ? finishMemorizePhase(run) : null;
     }
 };
 

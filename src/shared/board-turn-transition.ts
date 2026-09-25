@@ -19,7 +19,7 @@ import { selectGambitMatchedPair } from './gambit-match-rules';
 import { resolveMismatchTurnTransition } from './turn-mismatch-rules';
 import { applyMissBudget } from './miss-bank';
 import { resolveTurnMatchFollowup } from './turn-match-followup-rules';
-import { resolveTurnMatchBoardCleanup } from './turn-match-board-cleanup-rules';
+import { resolveTurnMatchBoardCleanup, selectStickyFingersBlockIndex } from './turn-match-board-cleanup-rules';
 import { resolveTurnMatchProgress } from './turn-match-progress-rules';
 import { resolveTurnMatchBoardResolution } from './turn-match-board-resolution-rules';
 import { resolveTurnMatchScoringSummary } from './turn-match-scoring-summary-rules';
@@ -187,9 +187,7 @@ export const createResolveBoardTurnTransition = ({
         });
         const boardCleanup = resolveTurnMatchBoardCleanup({
             run,
-            board: sourceBoard,
             matchedTileIds: [firstTile.id, secondTile.id],
-            firstMatchedTileId: firstTile.id,
             recallBonus: scoring.recallBonus
         });
         const progress = resolveTurnMatchProgress({
@@ -266,7 +264,7 @@ export const createResolveBoardTurnTransition = ({
             recallMatchesThisFloor: boardCleanup.recallMatchesThisFloor,
             recallBonusScoreThisFloor: boardCleanup.recallBonusScoreThisFloor,
             forgottenTileIdsThisFloor: boardCleanup.forgottenTileIdsThisFloor,
-            stickyBlockIndex: traitReward.stickyBlockIndex ?? boardCleanup.stickyBlockIndex,
+            stickyBlockIndex: traitReward.stickyBlockIndex ?? selectStickyFingersBlockIndex(run, boardAfterDrift, firstTile.id),
             ...progress,
             stats: {
                 ...stats,

@@ -124,6 +124,13 @@ export const simulateDifficultyCurve = ({
                     const group = groups[pickRngIndex(rng, groups.length)]!;
                     [first, second] = [group[0]!, group[1]!];
                 }
+                // A stuck card (sticky fingers, a Stasis lock) cannot open a turn but can close
+                // one, so the player opens on the other card. Until sticky fingers blocked a card
+                // that could still be played, nothing here ever met a lock that mattered.
+                const stuck = run.stickyBlockIndex;
+                if (stuck != null && run.board!.tiles[stuck]?.id === first.id) {
+                    [first, second] = [second, first];
+                }
                 run = resolveBoardTurn(flipTile(flipTile(run, first.id), second.id));
                 turns += 1;
             }
