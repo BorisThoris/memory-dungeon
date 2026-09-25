@@ -47,6 +47,10 @@ Rules here are the owner's decisions and the lessons that cost real time. They o
   errors allowed, screenshots of every transition in `test-results/playtest/`. Run it and **look at
   the screenshots** after any change a player sees; its first run found three results-screen bugs
   and the store sheet clipping its own descriptions.
+- **Nothing streams in play** (`src/renderer/assets/preloadRunAssets.ts`, `e2e/asset-streaming.spec.ts`):
+  card art, tiles, scene art, every sound, the music and every font face load at boot and the run's
+  loading screen waits on them. A new asset a run uses must join that preload, or the e2e test that
+  holds post-board asset requests to zero fails.
 - **Every mechanic in the graph** must also have: a `system-refinement-ledger.ts` entry with
   `present` tokens that exist in source; a census counter or an argued exemption (over 40
   characters, ending with a full stop) in `scripts/mechanic-accountability.ts`; the mechanic count

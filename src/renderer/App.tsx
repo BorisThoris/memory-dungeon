@@ -35,12 +35,21 @@ import {
     type PlayablePathFixtureId
 } from '../shared/playable-path-fixtures';
 import { useAppStore } from './store/useAppStore';
+import { preloadRunAssets } from './assets/preloadRunAssets';
 import { getNavigationShellChromeContract } from './store/navigationModel';
 
 /** Landmark id for A11Y-002 skip link (`href` / programmatic focus). */
 export const APP_MAIN_LANDMARK_ID = 'app-main';
 
-const GameScreen = lazy(() => import('./components/GameScreen'));
+/*
+ * The board waits for its assets as well as its code: the run's loading screen is this lazy
+ * boundary's fallback, so it stays up until the card art, tiles, scene, sounds, music and type are
+ * all in memory (`preloadRunAssets`, bounded per step). Normally the boot preload has finished long
+ * before Play is pressed and this resolves as soon as the chunk does.
+ */
+const GameScreen = lazy(() =>
+    Promise.all([import('./components/GameScreen'), preloadRunAssets()]).then(([module]) => module)
+);
 const DevBlueprintExplorer = import.meta.env.DEV ? lazy(() => import('./dev/BlueprintExplorer')) : null;
 const DevTestHall = import.meta.env.DEV ? lazy(() => import('./dev/TestHall')) : null;
 const DevTestHallBadge = import.meta.env.DEV ? lazy(() => import('./dev/TestHallBadge')) : null;
@@ -172,6 +181,19 @@ const App = () => {
     useEffect(() => {
         void hydrate();
     }, [hydrate]);
+
+    /*
+     * Start loading everything a run needs as soon as the save (and so the graphics setting) is
+     * known - behind the intro and the menu - so by the time Play is pressed there is nothing left to
+     * stream. The run's loading screen waits on the same promise.
+     */
+    useEffect(() => {
+        if (hydrated) {
+            void preloadRunAssets({ graphicsQuality: settings.graphicsQuality });
+        }
+        // Once: a later quality change does not need a second preload.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [hydrated]);
 
     /** Dev-only: `/?hallRoom=<id>` boots straight into that test hall room once the save is loaded. */
     const [hallRoomId, setHallRoomId] = useState<TestHallRoomId | null>(null);

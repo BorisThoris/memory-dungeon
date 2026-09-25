@@ -26,6 +26,37 @@ const resolveTrackUrl = (track: 'menu' | 'run'): string | undefined => {
     return resolveMusicUrl('menu-loop.ogg');
 };
 
+/**
+ * The music, held in memory once loaded (`preloadGameplayMusic`), so starting a track never streams
+ * it from disk or network mid-play. Until it lands, the file URL is used as before.
+ */
+const preloadedTrackUrls = new Map<'menu' | 'run', string>();
+let musicPreload: Promise<void> | null = null;
+
+const playableTrackUrl = (track: 'menu' | 'run'): string | undefined =>
+    preloadedTrackUrls.get(track) ?? resolveTrackUrl(track);
+
+export const preloadGameplayMusic = (): Promise<void> => {
+    if (musicPreload) return musicPreload;
+    if (typeof fetch === 'undefined' || typeof URL === 'undefined' || typeof URL.createObjectURL !== 'function') {
+        return Promise.resolve();
+    }
+    musicPreload = Promise.all(
+        (['menu', 'run'] as const).map(async (track) => {
+            const src = resolveTrackUrl(track);
+            if (!src || preloadedTrackUrls.has(track)) return;
+            try {
+                const response = await fetch(src);
+                if (!response.ok) return;
+                preloadedTrackUrls.set(track, URL.createObjectURL(await response.blob()));
+            } catch {
+                // The file URL still plays; it just streams.
+            }
+        })
+    ).then(() => undefined);
+    return musicPreload;
+};
+
 const clamp01 = (v: number): number => Math.max(0, Math.min(1, v));
 
 const subscribeToPageVisibility = (onStoreChange: () => void): (() => void) => {
@@ -158,7 +189,7 @@ export function useGameplayMusic({ active, track, masterVolume, musicVolume, sup
 
     useEffect(() => {
         if (typeof Audio === 'undefined') return undefined;
-        const src = resolveTrackUrl(track);
+        const src = playableTrackUrl(track);
         audioUnavailableRef.current = false;
         if (!src) {
             audioRef.current = null;

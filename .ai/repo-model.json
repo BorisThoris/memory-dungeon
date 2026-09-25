@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2732,
-    "codeFileCount": 958,
-    "exportedSymbolCount": 2905,
+    "trackedFileCount": 2734,
+    "codeFileCount": 959,
+    "exportedSymbolCount": 2915,
     "contentItemCount": 10,
     "mechanicCount": 50,
     "stateFieldCount": 90,
-    "relationshipCount": 7517
+    "relationshipCount": 7538
   },
   "inventory": [
     {
@@ -201,8 +201,8 @@
     {
       "path": "CLAUDE.md",
       "category": "other",
-      "bytes": 7977,
-      "sha256": "17f0c3dd3173ae0a41618168469560144af33d11f651ec2cbb8f72818c0ea729"
+      "bytes": 8332,
+      "sha256": "277490539db174d6f3f2d949c85732bcbded69542cdf64b4cf52cf6ba5b18e87"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -2374,7 +2374,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33561,
-      "sha256": "485b2a33203946d594f1542c9a75c248fb82dee265bed3e59b9b91b26cdc0b1f"
+      "sha256": "2dd9ec800197e54d527f5be5d7a8a36d2055674706a9360f8e0624bf4c3b3135"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3749,6 +3749,12 @@
       "category": "test",
       "bytes": 4022,
       "sha256": "dd9fe93ff027838d85413735049258122ecb91bc0034f5f07582594f752b0d66"
+    },
+    {
+      "path": "e2e/asset-streaming.spec.ts",
+      "category": "test",
+      "bytes": 2450,
+      "sha256": "23a783b2d9b5a5d096768449f11fe69cdbd61e4bc6d57535e6714884bf65c949"
     },
     {
       "path": "e2e/blueprint-explorer.spec.ts",
@@ -5841,8 +5847,8 @@
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 23899,
-      "sha256": "c716a27c028d778cd34a05dfe2c89a72ce170f160e284a7941c0325f2f58ee74"
+      "bytes": 24977,
+      "sha256": "606418f3378c72d604affc167ffaf2482acba854f2b4c3f6975555e9fc226019"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -7423,6 +7429,12 @@
       "sha256": "244e78ffa9065cc7c9b012f7fbbda8009f3195c1e6bbb537557fea5c54f20e41"
     },
     {
+      "path": "src/renderer/assets/preloadRunAssets.ts",
+      "category": "source",
+      "bytes": 7010,
+      "sha256": "9b2917e6f2e742d6f789f1e586fc46a39bf3fb4b3d2c4dff936a097716dce486"
+    },
+    {
       "path": "src/renderer/assets/preloadStartupAssets.test.ts",
       "category": "test",
       "bytes": 12984,
@@ -7431,8 +7443,8 @@
     {
       "path": "src/renderer/assets/preloadStartupAssets.ts",
       "category": "source",
-      "bytes": 7971,
-      "sha256": "1383a3ac8db91529ae0196e000552ea0b674abf839c467cb9edea5cebe9e5c82"
+      "bytes": 9667,
+      "sha256": "e7bcb2bc339129e9c21b5f5d1480595469990b062edca4429d63e2118417abee"
     },
     {
       "path": "src/renderer/assets/README.md",
@@ -8637,8 +8649,8 @@
     {
       "path": "src/renderer/audio/gameplayMusic.ts",
       "category": "source",
-      "bytes": 9844,
-      "sha256": "243f2153e8a5e015626ebfc27b0d63ee3e9bd694fd75d829995688dd6f536aef"
+      "bytes": 11110,
+      "sha256": "cf3996a7b7e50e6d89b8c05dd202e846ee6e4380ba1edc7a6e3a2e27bce8f26f"
     },
     {
       "path": "src/renderer/audio/gameSfx.test.ts",
@@ -8697,8 +8709,8 @@
     {
       "path": "src/renderer/audio/sampledSfx.ts",
       "category": "source",
-      "bytes": 8533,
-      "sha256": "d7275591cedc79c702f46f60e2b41fefd6d7c28c0b5144513d49408026c506a5"
+      "bytes": 9068,
+      "sha256": "68fd1325bdfd23c6bb4314ce20ebb49601a29030356fd064c8ada165cc0527cf"
     },
     {
       "path": "src/renderer/audio/uiSfx.test.ts",
@@ -8709,8 +8721,8 @@
     {
       "path": "src/renderer/audio/uiSfx.ts",
       "category": "source",
-      "bytes": 10709,
-      "sha256": "e4efe234f7365545caab898540120b7acb418228a101d0793596464a848451a4"
+      "bytes": 11086,
+      "sha256": "caf9ec6972dad3bb96913b8e3ad4997573b4cfa4e56cb35bc968a32a15943ff1"
     },
     {
       "path": "src/renderer/audio/webAudioContext.test.ts",
@@ -9507,8 +9519,8 @@
     {
       "path": "src/renderer/components/RunLoadingScreen.module.css",
       "category": "source",
-      "bytes": 4652,
-      "sha256": "62a215e2b0c7a48b517ce70289916008f70c7b0c93cdd7a23533e5e4ec696048"
+      "bytes": 5034,
+      "sha256": "8158d8652396f70e7a30a63890b4ce6197689d1f50762bfc681859ccc5bdd4fe"
     },
     {
       "path": "src/renderer/components/runLoadingScreen.test.tsx",
@@ -9519,8 +9531,8 @@
     {
       "path": "src/renderer/components/RunLoadingScreen.tsx",
       "category": "source",
-      "bytes": 2945,
-      "sha256": "d88c99c3e559388016d9b0245aa787e11f7ddefb97989b1e826fdc726dcfa708"
+      "bytes": 3763,
+      "sha256": "3d35c8239697e49bdfaddf92c8b893588390633d0b6ddc76644ee83a9f90ff72"
     },
     {
       "path": "src/renderer/components/RunShell.module.css",
@@ -17093,8 +17105,9 @@
       "path": "src/renderer/App.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 488,
+      "lineCount": 510,
       "imports": [
+        "file:src/renderer/assets/preloadRunAssets.ts",
         "file:src/renderer/audio/feverDuck.ts",
         "file:src/renderer/audio/gameplayMusic.ts",
         "file:src/renderer/audio/resolutionGapDuck.ts",
@@ -17192,6 +17205,35 @@
       ]
     },
     {
+      "id": "file:src/renderer/assets/preloadRunAssets.ts",
+      "path": "src/renderer/assets/preloadRunAssets.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 163,
+      "imports": [
+        "file:src/renderer/assets/preloadStartupAssets.ts",
+        "file:src/renderer/audio/gameplayMusic.ts",
+        "file:src/renderer/audio/sampledSfx.ts",
+        "file:src/renderer/audio/uiSfx.ts",
+        "file:src/renderer/cardFace/cardIllustrationImages.ts",
+        "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
+        "file:src/renderer/cardFace/opentypeCardRankFont.ts",
+        "file:src/renderer/components/tileTextures.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/assets/preloadRunAssets.ts#preloadRunAssets",
+        "symbol:src/renderer/assets/preloadRunAssets.ts#resetRunAssetPreloadForTests",
+        "symbol:src/renderer/assets/preloadRunAssets.ts#RUN_ASSET_STEP_CAP_MS",
+        "symbol:src/renderer/assets/preloadRunAssets.ts#RUN_ASSET_STEP_TOTAL",
+        "symbol:src/renderer/assets/preloadRunAssets.ts#RunAssetProgress",
+        "symbol:src/renderer/assets/preloadRunAssets.ts#runAssetsReady",
+        "symbol:src/renderer/assets/preloadRunAssets.ts#RunAssetStepId",
+        "symbol:src/renderer/assets/preloadRunAssets.ts#subscribeRunAssetProgress"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/assets/preloadStartupAssets.test.ts",
       "path": "src/renderer/assets/preloadStartupAssets.test.ts",
       "layer": "renderer",
@@ -17206,7 +17248,7 @@
       "path": "src/renderer/assets/preloadStartupAssets.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 224,
+      "lineCount": 264,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
@@ -17219,6 +17261,7 @@
         "symbol:src/renderer/assets/preloadStartupAssets.ts#preloadModePosterRasterImages",
         "symbol:src/renderer/assets/preloadStartupAssets.ts#preloadStartupCriticalAssets",
         "symbol:src/renderer/assets/preloadStartupAssets.ts#preloadUiRasterImages",
+        "symbol:src/renderer/assets/preloadStartupAssets.ts#preloadUiRasterImagesFully",
         "symbol:src/renderer/assets/preloadStartupAssets.ts#resetStartupAssetPreloadStateForTests",
         "symbol:src/renderer/assets/preloadStartupAssets.ts#STARTUP_PRELOAD_INITIAL_LABEL",
         "symbol:src/renderer/assets/preloadStartupAssets.ts#STARTUP_PRELOAD_STEP_TOTAL",
@@ -17601,7 +17644,7 @@
       "path": "src/renderer/audio/gameplayMusic.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 276,
+      "lineCount": 307,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-lifecycle-machine.ts"
@@ -17609,6 +17652,7 @@
       "exports": [
         "symbol:src/renderer/audio/gameplayMusic.ts#getAdaptiveMusicState",
         "symbol:src/renderer/audio/gameplayMusic.ts#musicGainFromSettings",
+        "symbol:src/renderer/audio/gameplayMusic.ts#preloadGameplayMusic",
         "symbol:src/renderer/audio/gameplayMusic.ts#resolveAdaptiveMusicState",
         "symbol:src/renderer/audio/gameplayMusic.ts#useGameplayMusic"
       ],
@@ -17791,7 +17835,7 @@
       "path": "src/renderer/audio/sampledSfx.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 284,
+      "lineCount": 301,
       "imports": [
         "file:src/renderer/assets/audio/sfx/manifest.json",
         "file:src/renderer/audio/audioGlobUrlMap.ts",
@@ -17834,7 +17878,7 @@
       "path": "src/renderer/audio/uiSfx.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 395,
+      "lineCount": 408,
       "imports": [
         "file:src/renderer/assets/audio/ui/manifest.json",
         "file:src/renderer/audio/audioGlobUrlMap.ts",
@@ -19961,8 +20005,9 @@
       "path": "src/renderer/components/RunLoadingScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 66,
+      "lineCount": 78,
       "imports": [
+        "file:src/renderer/assets/preloadRunAssets.ts",
         "file:src/renderer/components/GameplayScene.tsx",
         "file:src/renderer/components/inventoryScreenModel.ts",
         "file:src/shared/contracts.ts"
@@ -34995,16 +35040,16 @@
       "name": "APP_MAIN_LANDMARK_ID",
       "kind": "value",
       "file": "src/renderer/App.tsx",
-      "line": 41,
-      "endLine": 41
+      "line": 42,
+      "endLine": 42
     },
     {
       "id": "symbol:src/renderer/App.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/App.tsx",
-      "line": 487,
-      "endLine": 487
+      "line": 509,
+      "endLine": 509
     },
     {
       "id": "symbol:src/renderer/assets/assetDropInReadiness.ts#ASSET_DROP_IN_CATEGORIES",
@@ -35055,20 +35100,84 @@
       "endLine": 95
     },
     {
+      "id": "symbol:src/renderer/assets/preloadRunAssets.ts#preloadRunAssets",
+      "name": "preloadRunAssets",
+      "kind": "value",
+      "file": "src/renderer/assets/preloadRunAssets.ts",
+      "line": 126,
+      "endLine": 155
+    },
+    {
+      "id": "symbol:src/renderer/assets/preloadRunAssets.ts#resetRunAssetPreloadForTests",
+      "name": "resetRunAssetPreloadForTests",
+      "kind": "value",
+      "file": "src/renderer/assets/preloadRunAssets.ts",
+      "line": 157,
+      "endLine": 162
+    },
+    {
+      "id": "symbol:src/renderer/assets/preloadRunAssets.ts#RUN_ASSET_STEP_CAP_MS",
+      "name": "RUN_ASSET_STEP_CAP_MS",
+      "kind": "value",
+      "file": "src/renderer/assets/preloadRunAssets.ts",
+      "line": 53,
+      "endLine": 53
+    },
+    {
+      "id": "symbol:src/renderer/assets/preloadRunAssets.ts#RUN_ASSET_STEP_TOTAL",
+      "name": "RUN_ASSET_STEP_TOTAL",
+      "kind": "value",
+      "file": "src/renderer/assets/preloadRunAssets.ts",
+      "line": 50,
+      "endLine": 50
+    },
+    {
+      "id": "symbol:src/renderer/assets/preloadRunAssets.ts#RunAssetProgress",
+      "name": "RunAssetProgress",
+      "kind": "interface",
+      "file": "src/renderer/assets/preloadRunAssets.ts",
+      "line": 34,
+      "endLine": 39
+    },
+    {
+      "id": "symbol:src/renderer/assets/preloadRunAssets.ts#runAssetsReady",
+      "name": "runAssetsReady",
+      "kind": "value",
+      "file": "src/renderer/assets/preloadRunAssets.ts",
+      "line": 120,
+      "endLine": 120
+    },
+    {
+      "id": "symbol:src/renderer/assets/preloadRunAssets.ts#RunAssetStepId",
+      "name": "RunAssetStepId",
+      "kind": "type",
+      "file": "src/renderer/assets/preloadRunAssets.ts",
+      "line": 32,
+      "endLine": 32
+    },
+    {
+      "id": "symbol:src/renderer/assets/preloadRunAssets.ts#subscribeRunAssetProgress",
+      "name": "subscribeRunAssetProgress",
+      "kind": "value",
+      "file": "src/renderer/assets/preloadRunAssets.ts",
+      "line": 112,
+      "endLine": 118
+    },
+    {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#preloadModePosterRasterImages",
       "name": "preloadModePosterRasterImages",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 102,
-      "endLine": 105
+      "line": 142,
+      "endLine": 145
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#preloadStartupCriticalAssets",
       "name": "preloadStartupCriticalAssets",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 190,
-      "endLine": 223
+      "line": 230,
+      "endLine": 263
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#preloadUiRasterImages",
@@ -35079,60 +35188,68 @@
       "endLine": 100
     },
     {
+      "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#preloadUiRasterImagesFully",
+      "name": "preloadUiRasterImagesFully",
+      "kind": "value",
+      "file": "src/renderer/assets/preloadStartupAssets.ts",
+      "line": 129,
+      "endLine": 140
+    },
+    {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#resetStartupAssetPreloadStateForTests",
       "name": "resetStartupAssetPreloadStateForTests",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 136,
-      "endLine": 143
+      "line": 176,
+      "endLine": 183
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#STARTUP_PRELOAD_INITIAL_LABEL",
       "name": "STARTUP_PRELOAD_INITIAL_LABEL",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 167,
-      "endLine": 167
+      "line": 207,
+      "endLine": 207
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#STARTUP_PRELOAD_STEP_TOTAL",
       "name": "STARTUP_PRELOAD_STEP_TOTAL",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 169,
-      "endLine": 169
+      "line": 209,
+      "endLine": 209
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#StartupPreloadProgress",
       "name": "StartupPreloadProgress",
       "kind": "interface",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 148,
-      "endLine": 155
+      "line": 188,
+      "endLine": 195
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#StartupPreloadStepId",
       "name": "StartupPreloadStepId",
       "kind": "type",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 146,
-      "endLine": 146
+      "line": 186,
+      "endLine": 186
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#warmCardIllustrationsInBackground",
       "name": "warmCardIllustrationsInBackground",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 121,
-      "endLine": 134
+      "line": 161,
+      "endLine": 174
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#warmModePosterRasterImagesInBackground",
       "name": "warmModePosterRasterImagesInBackground",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 107,
-      "endLine": 119
+      "line": 147,
+      "endLine": 159
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#getUiArtRows",
@@ -35579,32 +35696,40 @@
       "name": "getAdaptiveMusicState",
       "kind": "value",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 122,
-      "endLine": 141
+      "line": 153,
+      "endLine": 172
     },
     {
       "id": "symbol:src/renderer/audio/gameplayMusic.ts#musicGainFromSettings",
       "name": "musicGainFromSettings",
       "kind": "value",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 43,
-      "endLine": 44
+      "line": 74,
+      "endLine": 75
+    },
+    {
+      "id": "symbol:src/renderer/audio/gameplayMusic.ts#preloadGameplayMusic",
+      "name": "preloadGameplayMusic",
+      "kind": "value",
+      "file": "src/renderer/audio/gameplayMusic.ts",
+      "line": 39,
+      "endLine": 58
     },
     {
       "id": "symbol:src/renderer/audio/gameplayMusic.ts#resolveAdaptiveMusicState",
       "name": "resolveAdaptiveMusicState",
       "kind": "value",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 77,
-      "endLine": 120
+      "line": 108,
+      "endLine": 151
     },
     {
       "id": "symbol:src/renderer/audio/gameplayMusic.ts#useGameplayMusic",
       "name": "useGameplayMusic",
       "kind": "function",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 147,
-      "endLine": 275
+      "line": 178,
+      "endLine": 306
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#__resetGameSfxEngineForTests",
@@ -35859,24 +35984,24 @@
       "name": "maybePreloadSampledSfx",
       "kind": "function",
       "file": "src/renderer/audio/sampledSfx.ts",
-      "line": 259,
-      "endLine": 268
+      "line": 276,
+      "endLine": 284
     },
     {
       "id": "symbol:src/renderer/audio/sampledSfx.ts#preloadSampledSfx",
       "name": "preloadSampledSfx",
       "kind": "function",
       "file": "src/renderer/audio/sampledSfx.ts",
-      "line": 233,
-      "endLine": 256
+      "line": 240,
+      "endLine": 251
     },
     {
       "id": "symbol:src/renderer/audio/sampledSfx.ts#resetSampledSfxForTests",
       "name": "resetSampledSfxForTests",
       "kind": "function",
       "file": "src/renderer/audio/sampledSfx.ts",
-      "line": 279,
-      "endLine": 283
+      "line": 295,
+      "endLine": 300
     },
     {
       "id": "symbol:src/renderer/audio/sampledSfx.ts#resolveMatchTierSampleKey",
@@ -35915,8 +36040,8 @@
       "name": "silenceAllSampleVoices",
       "kind": "function",
       "file": "src/renderer/audio/sampledSfx.ts",
-      "line": 270,
-      "endLine": 277
+      "line": 286,
+      "endLine": 293
     },
     {
       "id": "symbol:src/renderer/audio/sampledSfx.ts#tryPlaySampled",
@@ -35932,135 +36057,135 @@
       "kind": "value",
       "file": "src/renderer/audio/uiSfx.ts",
       "line": 77,
-      "endLine": 82
+      "endLine": 83
     },
     {
       "id": "symbol:src/renderer/audio/uiSfx.ts#maybePreloadUiSfx",
       "name": "maybePreloadUiSfx",
       "kind": "function",
       "file": "src/renderer/audio/uiSfx.ts",
-      "line": 234,
-      "endLine": 243
+      "line": 248,
+      "endLine": 256
     },
     {
       "id": "symbol:src/renderer/audio/uiSfx.ts#playGameOverOpenSfx",
       "name": "playGameOverOpenSfx",
       "kind": "value",
       "file": "src/renderer/audio/uiSfx.ts",
-      "line": 380,
-      "endLine": 386
+      "line": 393,
+      "endLine": 399
     },
     {
       "id": "symbol:src/renderer/audio/uiSfx.ts#playIntroStingSfx",
       "name": "playIntroStingSfx",
       "kind": "value",
       "file": "src/renderer/audio/uiSfx.ts",
-      "line": 356,
-      "endLine": 362
+      "line": 369,
+      "endLine": 375
     },
     {
       "id": "symbol:src/renderer/audio/uiSfx.ts#playMenuOpenSfx",
       "name": "playMenuOpenSfx",
       "kind": "value",
       "file": "src/renderer/audio/uiSfx.ts",
-      "line": 340,
-      "endLine": 346
+      "line": 353,
+      "endLine": 359
     },
     {
       "id": "symbol:src/renderer/audio/uiSfx.ts#playPauseOpenSfx",
       "name": "playPauseOpenSfx",
       "kind": "value",
       "file": "src/renderer/audio/uiSfx.ts",
-      "line": 364,
-      "endLine": 370
+      "line": 377,
+      "endLine": 383
     },
     {
       "id": "symbol:src/renderer/audio/uiSfx.ts#playPauseResumeSfx",
       "name": "playPauseResumeSfx",
       "kind": "value",
       "file": "src/renderer/audio/uiSfx.ts",
-      "line": 372,
-      "endLine": 378
+      "line": 385,
+      "endLine": 391
     },
     {
       "id": "symbol:src/renderer/audio/uiSfx.ts#playRunStartSfx",
       "name": "playRunStartSfx",
       "kind": "value",
       "file": "src/renderer/audio/uiSfx.ts",
-      "line": 348,
-      "endLine": 354
+      "line": 361,
+      "endLine": 367
     },
     {
       "id": "symbol:src/renderer/audio/uiSfx.ts#playUiBackSfx",
       "name": "playUiBackSfx",
       "kind": "value",
       "file": "src/renderer/audio/uiSfx.ts",
-      "line": 329,
-      "endLine": 335
+      "line": 342,
+      "endLine": 348
     },
     {
       "id": "symbol:src/renderer/audio/uiSfx.ts#playUiClickSfx",
       "name": "playUiClickSfx",
       "kind": "value",
       "file": "src/renderer/audio/uiSfx.ts",
-      "line": 318,
-      "endLine": 319
+      "line": 331,
+      "endLine": 332
     },
     {
       "id": "symbol:src/renderer/audio/uiSfx.ts#playUiConfirmSfx",
       "name": "playUiConfirmSfx",
       "kind": "value",
       "file": "src/renderer/audio/uiSfx.ts",
-      "line": 321,
-      "endLine": 327
+      "line": 334,
+      "endLine": 340
     },
     {
       "id": "symbol:src/renderer/audio/uiSfx.ts#playUiCopySfx",
       "name": "playUiCopySfx",
       "kind": "value",
       "file": "src/renderer/audio/uiSfx.ts",
-      "line": 388,
-      "endLine": 394
+      "line": 401,
+      "endLine": 407
     },
     {
       "id": "symbol:src/renderer/audio/uiSfx.ts#playUiCounterSfx",
       "name": "playUiCounterSfx",
       "kind": "value",
       "file": "src/renderer/audio/uiSfx.ts",
-      "line": 337,
-      "endLine": 338
+      "line": 350,
+      "endLine": 351
     },
     {
       "id": "symbol:src/renderer/audio/uiSfx.ts#playUiCue",
       "name": "playUiCue",
       "kind": "value",
       "file": "src/renderer/audio/uiSfx.ts",
-      "line": 312,
-      "endLine": 316
+      "line": 325,
+      "endLine": 329
     },
     {
       "id": "symbol:src/renderer/audio/uiSfx.ts#preloadUiSfx",
       "name": "preloadUiSfx",
       "kind": "function",
       "file": "src/renderer/audio/uiSfx.ts",
-      "line": 214,
-      "endLine": 232
+      "line": 218,
+      "endLine": 229
     },
     {
       "id": "symbol:src/renderer/audio/uiSfx.ts#resumeUiSfxContext",
       "name": "resumeUiSfxContext",
       "kind": "value",
       "file": "src/renderer/audio/uiSfx.ts",
-      "line": 111,
-      "endLine": 116
+      "line": 112,
+      "endLine": 117
     },
     {
       "id": "symbol:src/renderer/audio/uiSfx.ts#silenceAllUiSampleVoices",
       "name": "silenceAllUiSampleVoices",
       "kind": "function",
       "file": "src/renderer/audio/uiSfx.ts",
-      "line": 245,
-      "endLine": 252
+      "line": 258,
+      "endLine": 265
     },
     {
       "id": "symbol:src/renderer/audio/uiSfx.ts#UI_SFX_SAMPLE_KEYS",
@@ -36091,8 +36216,8 @@
       "name": "uiSfxSampleKeyForCue",
       "kind": "value",
       "file": "src/renderer/audio/uiSfx.ts",
-      "line": 84,
-      "endLine": 109
+      "line": 85,
+      "endLine": 110
     },
     {
       "id": "symbol:src/renderer/audio/webAudioContext.ts#getSharedAudioContext",
@@ -37947,16 +38072,16 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunLoadingScreen.tsx",
-      "line": 65,
-      "endLine": 65
+      "line": 77,
+      "endLine": 77
     },
     {
       "id": "symbol:src/renderer/components/RunLoadingScreen.tsx#RunLoadingScreen",
       "name": "RunLoadingScreen",
       "kind": "value",
       "file": "src/renderer/components/RunLoadingScreen.tsx",
-      "line": 28,
-      "endLine": 63
+      "line": 29,
+      "endLine": 75
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#default",
@@ -62176,6 +62301,54 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/assets/preloadRunAssets.ts->symbol:src/renderer/assets/preloadRunAssets.ts#preloadRunAssets",
+      "source": "file:src/renderer/assets/preloadRunAssets.ts",
+      "target": "symbol:src/renderer/assets/preloadRunAssets.ts#preloadRunAssets",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/assets/preloadRunAssets.ts->symbol:src/renderer/assets/preloadRunAssets.ts#resetRunAssetPreloadForTests",
+      "source": "file:src/renderer/assets/preloadRunAssets.ts",
+      "target": "symbol:src/renderer/assets/preloadRunAssets.ts#resetRunAssetPreloadForTests",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/assets/preloadRunAssets.ts->symbol:src/renderer/assets/preloadRunAssets.ts#RUN_ASSET_STEP_CAP_MS",
+      "source": "file:src/renderer/assets/preloadRunAssets.ts",
+      "target": "symbol:src/renderer/assets/preloadRunAssets.ts#RUN_ASSET_STEP_CAP_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/assets/preloadRunAssets.ts->symbol:src/renderer/assets/preloadRunAssets.ts#RUN_ASSET_STEP_TOTAL",
+      "source": "file:src/renderer/assets/preloadRunAssets.ts",
+      "target": "symbol:src/renderer/assets/preloadRunAssets.ts#RUN_ASSET_STEP_TOTAL",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/assets/preloadRunAssets.ts->symbol:src/renderer/assets/preloadRunAssets.ts#RunAssetProgress",
+      "source": "file:src/renderer/assets/preloadRunAssets.ts",
+      "target": "symbol:src/renderer/assets/preloadRunAssets.ts#RunAssetProgress",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/assets/preloadRunAssets.ts->symbol:src/renderer/assets/preloadRunAssets.ts#runAssetsReady",
+      "source": "file:src/renderer/assets/preloadRunAssets.ts",
+      "target": "symbol:src/renderer/assets/preloadRunAssets.ts#runAssetsReady",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/assets/preloadRunAssets.ts->symbol:src/renderer/assets/preloadRunAssets.ts#RunAssetStepId",
+      "source": "file:src/renderer/assets/preloadRunAssets.ts",
+      "target": "symbol:src/renderer/assets/preloadRunAssets.ts#RunAssetStepId",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/assets/preloadRunAssets.ts->symbol:src/renderer/assets/preloadRunAssets.ts#subscribeRunAssetProgress",
+      "source": "file:src/renderer/assets/preloadRunAssets.ts",
+      "target": "symbol:src/renderer/assets/preloadRunAssets.ts#subscribeRunAssetProgress",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/assets/preloadStartupAssets.ts->symbol:src/renderer/assets/preloadStartupAssets.ts#preloadModePosterRasterImages",
       "source": "file:src/renderer/assets/preloadStartupAssets.ts",
       "target": "symbol:src/renderer/assets/preloadStartupAssets.ts#preloadModePosterRasterImages",
@@ -62191,6 +62364,12 @@
       "id": "exports:src/renderer/assets/preloadStartupAssets.ts->symbol:src/renderer/assets/preloadStartupAssets.ts#preloadUiRasterImages",
       "source": "file:src/renderer/assets/preloadStartupAssets.ts",
       "target": "symbol:src/renderer/assets/preloadStartupAssets.ts#preloadUiRasterImages",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/assets/preloadStartupAssets.ts->symbol:src/renderer/assets/preloadStartupAssets.ts#preloadUiRasterImagesFully",
+      "source": "file:src/renderer/assets/preloadStartupAssets.ts",
+      "target": "symbol:src/renderer/assets/preloadStartupAssets.ts#preloadUiRasterImagesFully",
       "kind": "exports"
     },
     {
@@ -62575,6 +62754,12 @@
       "id": "exports:src/renderer/audio/gameplayMusic.ts->symbol:src/renderer/audio/gameplayMusic.ts#musicGainFromSettings",
       "source": "file:src/renderer/audio/gameplayMusic.ts",
       "target": "symbol:src/renderer/audio/gameplayMusic.ts#musicGainFromSettings",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/gameplayMusic.ts->symbol:src/renderer/audio/gameplayMusic.ts#preloadGameplayMusic",
+      "source": "file:src/renderer/audio/gameplayMusic.ts",
+      "target": "symbol:src/renderer/audio/gameplayMusic.ts#preloadGameplayMusic",
       "kind": "exports"
     },
     {
@@ -80767,6 +80952,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/App.tsx->src/renderer/assets/preloadRunAssets.ts",
+      "source": "file:src/renderer/App.tsx",
+      "target": "file:src/renderer/assets/preloadRunAssets.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/App.tsx->src/renderer/audio/feverDuck.ts",
       "source": "file:src/renderer/App.tsx",
       "target": "file:src/renderer/audio/feverDuck.ts",
@@ -80950,6 +81141,60 @@
       "id": "imports:src/renderer/assets/assetDropInReadiness.test.ts->src/renderer/assets/assetDropInReadiness.ts",
       "source": "file:src/renderer/assets/assetDropInReadiness.test.ts",
       "target": "file:src/renderer/assets/assetDropInReadiness.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/assets/preloadRunAssets.ts->src/renderer/assets/preloadStartupAssets.ts",
+      "source": "file:src/renderer/assets/preloadRunAssets.ts",
+      "target": "file:src/renderer/assets/preloadStartupAssets.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/assets/preloadRunAssets.ts->src/renderer/audio/gameplayMusic.ts",
+      "source": "file:src/renderer/assets/preloadRunAssets.ts",
+      "target": "file:src/renderer/audio/gameplayMusic.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/assets/preloadRunAssets.ts->src/renderer/audio/sampledSfx.ts",
+      "source": "file:src/renderer/assets/preloadRunAssets.ts",
+      "target": "file:src/renderer/audio/sampledSfx.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/assets/preloadRunAssets.ts->src/renderer/audio/uiSfx.ts",
+      "source": "file:src/renderer/assets/preloadRunAssets.ts",
+      "target": "file:src/renderer/audio/uiSfx.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/assets/preloadRunAssets.ts->src/renderer/cardFace/cardIllustrationImages.ts",
+      "source": "file:src/renderer/assets/preloadRunAssets.ts",
+      "target": "file:src/renderer/cardFace/cardIllustrationImages.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/assets/preloadRunAssets.ts->src/renderer/cardFace/cardIllustrationRegistry.ts",
+      "source": "file:src/renderer/assets/preloadRunAssets.ts",
+      "target": "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/assets/preloadRunAssets.ts->src/renderer/cardFace/opentypeCardRankFont.ts",
+      "source": "file:src/renderer/assets/preloadRunAssets.ts",
+      "target": "file:src/renderer/cardFace/opentypeCardRankFont.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/assets/preloadRunAssets.ts->src/renderer/components/tileTextures.ts",
+      "source": "file:src/renderer/assets/preloadRunAssets.ts",
+      "target": "file:src/renderer/components/tileTextures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/assets/preloadRunAssets.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/assets/preloadRunAssets.ts",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -83800,6 +84045,12 @@
       "id": "imports:src/renderer/components/runLoadingScreen.test.tsx->src/shared/contracts.ts",
       "source": "file:src/renderer/components/runLoadingScreen.test.tsx",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunLoadingScreen.tsx->src/renderer/assets/preloadRunAssets.ts",
+      "source": "file:src/renderer/components/RunLoadingScreen.tsx",
+      "target": "file:src/renderer/assets/preloadRunAssets.ts",
       "kind": "imports"
     },
     {

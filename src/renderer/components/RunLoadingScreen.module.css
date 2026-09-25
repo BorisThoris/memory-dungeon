@@ -124,6 +124,17 @@
     background: color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
 }
 
+/* Determinate: the run's assets report steps as they land (`preloadRunAssets`); the sweep rides over it. */
+.rail::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: calc(var(--load-fill, 0) * 100%);
+    border-radius: inherit;
+    background: color-mix(in srgb, var(--theme-gold-bright) 70%, transparent);
+    transition: width 240ms ease-out;
+}
+
 /* Indeterminate: a lazy chunk reports no byte count worth showing the player. */
 .rail::after {
     content: '';

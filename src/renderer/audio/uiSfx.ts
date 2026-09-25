@@ -78,6 +78,7 @@ export const __resetUiSfxEngineForTests = (): void => {
     silenceAllUiSampleVoices();
     buffers.clear();
     preloadStarted = false;
+    preloadPromise = null;
     resetSharedAudioContextForTests();
 };
 
@@ -211,10 +212,23 @@ function tryPlayUiSampled(key: UiSfxSampleKey, gain: number): boolean {
     return true;
 }
 
-export async function preloadUiSfx(): Promise<void> {
+let preloadPromise: Promise<void> | null = null;
+
+/** Loads and decodes every interface sound once; shared by the run preloader and the first click. */
+export function preloadUiSfx(): Promise<void> {
     if (import.meta.env.MODE === 'test') {
-        return;
+        return Promise.resolve();
     }
+    if (!preloadPromise) {
+        preloadStarted = true;
+        preloadPromise = loadUiSfx().catch(() => {
+            preloadPromise = null;
+        });
+    }
+    return preloadPromise;
+}
+
+async function loadUiSfx(): Promise<void> {
     const ctx = getSharedAudioContext();
     if (!ctx) {
         return;
@@ -238,8 +252,7 @@ export function maybePreloadUiSfx(): void {
     if (preloadStarted) {
         return;
     }
-    preloadStarted = true;
-    void preloadUiSfx().catch(() => undefined);
+    void preloadUiSfx();
 }
 
 export function silenceAllUiSampleVoices(): void {

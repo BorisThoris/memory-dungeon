@@ -230,10 +230,27 @@ export function tryPlaySampled(key: SfxSampleKey, gain: number, voicing?: Sample
     return true;
 }
 
-export async function preloadSampledSfx(): Promise<void> {
+let preloadPromise: Promise<void> | null = null;
+
+/**
+ * Loads and decodes every game sound once. The run's loading screen waits on this
+ * (`preloadRunAssets`), and the first sound played still calls it: both get the same promise, so
+ * nothing is fetched twice and nothing is fetched mid-play.
+ */
+export function preloadSampledSfx(): Promise<void> {
     if (import.meta.env.MODE === 'test') {
-        return;
+        return Promise.resolve();
     }
+    if (!preloadPromise) {
+        preloadStarted = true;
+        preloadPromise = loadSampledSfx().catch(() => {
+            preloadPromise = null;
+        });
+    }
+    return preloadPromise;
+}
+
+async function loadSampledSfx(): Promise<void> {
 
     const ctx = getSharedAudioContext();
     if (!ctx) {
@@ -263,8 +280,7 @@ export function maybePreloadSampledSfx(): void {
     if (preloadStarted) {
         return;
     }
-    preloadStarted = true;
-    void preloadSampledSfx().catch(() => undefined);
+    void preloadSampledSfx();
 }
 
 export function silenceAllSampleVoices(): void {
@@ -280,4 +296,5 @@ export function resetSampledSfxForTests(): void {
     silenceAllSampleVoices();
     buffers.clear();
     preloadStarted = false;
+    preloadPromise = null;
 }

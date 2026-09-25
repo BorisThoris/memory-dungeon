@@ -99,6 +99,46 @@ export const preloadUiRasterImages = (): Promise<void> => {
     return preloadRasterUrls(urls, 4);
 };
 
+/**
+ * Decoded images kept alive for the whole session. A browser may drop a decoded image from memory once
+ * nothing refers to it, and then decode it again - or fetch it again - on first paint. The run
+ * preloader (`preloadRunAssets`) holds on to what it loaded so the board and the scene never do.
+ */
+const retainedImages = new Map<string, HTMLImageElement>();
+
+const loadAndDecodeRaster = (url: string, timeoutMs: number): Promise<void> => {
+    if (retainedImages.has(url)) return Promise.resolve();
+    return new Promise((resolve) => {
+        const image = new Image();
+        image.decoding = 'async';
+        const timer = window.setTimeout(resolve, timeoutMs);
+        const done = (): void => {
+            window.clearTimeout(timer);
+            resolve();
+        };
+        image.onload = () => {
+            retainedImages.set(url, image);
+            void (image.decode?.() ?? Promise.resolve()).catch(() => undefined).then(done);
+        };
+        image.onerror = done;
+        image.src = url;
+    });
+};
+
+/** The gameplay scene's backdrops, light layers and sprite strips, loaded, decoded and held (not the boot's 250ms glance). */
+export const preloadUiRasterImagesFully = async (timeoutMs = 6000): Promise<void> => {
+    const urls = [...new Set([...getUiArtRows().map((row) => row.assetUrl), ...getSceneSpriteSheetUrls()])];
+    let cursor = 0;
+    const worker = async (): Promise<void> => {
+        while (cursor < urls.length) {
+            const url = urls[cursor];
+            cursor += 1;
+            if (url) await loadAndDecodeRaster(url, timeoutMs);
+        }
+    };
+    await Promise.all(Array.from({ length: Math.min(4, urls.length) }, () => worker()));
+};
+
 export const preloadModePosterRasterImages = (): Promise<void> => {
     const urls = [...MODE_POSTER_KEYS.map((key) => MODE_CARD_ART[key]), MODE_CARD_ART.fallback];
     return preloadRasterUrls(urls, 3);

@@ -1,4 +1,5 @@
-import type { CSSProperties } from 'react';
+import { useEffect, useState, type CSSProperties } from 'react';
+import { subscribeRunAssetProgress, type RunAssetProgress } from '../assets/preloadRunAssets';
 import type { GraphicsQualityPreset, RunState } from '../../shared/contracts';
 import { GameplayScene } from './GameplayScene';
 import { modeTitle } from './inventoryScreenModel';
@@ -30,6 +31,10 @@ export const RunLoadingScreen = ({ quality = 'medium', reduceMotion = false, run
     // No run, or a run without a mode, both mean there is no name to show — say what is happening
     // instead. Defaulting to a mode id would print that id when the catalog has no title for it.
     const label = run?.gameMode ? modeTitle(run.gameMode) : 'Descending';
+    // What is still being loaded, if anything: the rail fills with it and the status says which step landed last.
+    const [progress, setProgress] = useState<RunAssetProgress | null>(null);
+    useEffect(() => subscribeRunAssetProgress(setProgress), []);
+    const railFill = progress ? progress.completed / progress.total : 0;
 
     return (
         <div aria-live="polite" className={styles.screen} data-testid="run-loading-screen" role="status">
@@ -54,9 +59,16 @@ export const RunLoadingScreen = ({ quality = 'medium', reduceMotion = false, run
                     ))}
                 </div>
 
-                <div aria-hidden="true" className={styles.rail} />
+                <div
+                    aria-hidden="true"
+                    className={styles.rail}
+                    data-progress={progress ? `${progress.completed}/${progress.total}` : undefined}
+                    style={{ '--load-fill': railFill } as CSSProperties}
+                />
                 {/* The only part a screen reader needs; everything above is the same fact, drawn. */}
-                <p className={styles.status}>Dealing the board…</p>
+                <p className={styles.status} data-testid="run-loading-status">
+                    {progress && progress.completed < progress.total ? progress.label : 'Dealing the board…'}
+                </p>
             </div>
         </div>
     );
