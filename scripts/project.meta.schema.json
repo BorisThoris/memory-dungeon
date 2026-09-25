@@ -29,7 +29,7 @@
           "enum": ["web-app", "web-library", "web-site", "duplicate", "archived", "template", "tooling", "hosted-only"]
         },
         "showcaseTier": { "type": "string", "enum": ["showcase", "more", "excluded"] },
-        "showcaseOrder": { "type": "integer", "minimum": 1 },
+        "showcaseOrder": { "type": "integer", "minimum": 0 },
         "duplicateOf": { "type": "string" },
         "excludedReason": { "type": "string" }
       }
