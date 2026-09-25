@@ -191,6 +191,14 @@
 
 ---
 
+## `docs/balance/`
+
+| File | Summary |
+|------|---------|
+| [2026-09-25-balance-report.md](../balance/2026-09-25-balance-report.md) | Measured balance after Heavy x2, lantern/skittish floors, store stops: deaths per floor, Heavy share, store, gold, relics; options, not applied |
+
+---
+
 ## `docs/UI_TASKS/`
 
 | File | Summary |

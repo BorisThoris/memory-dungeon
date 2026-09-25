@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2721,
+    "trackedFileCount": 2722,
     "codeFileCount": 954,
     "exportedSymbolCount": 2899,
     "contentItemCount": 10,
@@ -287,6 +287,12 @@
       "category": "documentation",
       "bytes": 510029,
       "sha256": "f931460b127296bcf4b515a6f38af9f50ec06f623cb577a53b351cc3b777fc5c"
+    },
+    {
+      "path": "docs/balance/2026-09-25-balance-report.md",
+      "category": "documentation",
+      "bytes": 13539,
+      "sha256": "152738665680afe0710f182abcc32aaefa2fbd6c853b0f2e4717567b076f48b2"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -855,8 +861,8 @@
     {
       "path": "docs/internal-wiki/DOCS_CATALOG.md",
       "category": "documentation",
-      "bytes": 18702,
-      "sha256": "c66d626001c4d7899c80b4f5bade0036e9fed70399ec66b82b28f793406e20ee"
+      "bytes": 18988,
+      "sha256": "22462c3d130360e6ef15131a5381a5f891d86a33584ac3d64f4989634e5e650a"
     },
     {
       "path": "docs/internal-wiki/E2E_AND_QA.md",
@@ -4365,8 +4371,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 123177,
-      "sha256": "28c7fc17d258cc5efa62b4d93f5824af5460fdb99b41e2de5cb6ea325e33c7a2"
+      "bytes": 121134,
+      "sha256": "04ff30d01b06213d53cdfbf16831df9dda97c5fad26f3827111257d9fabb4970"
     },
     {
       "path": "public/site.webmanifest",
