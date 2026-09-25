@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "items": [
+    {
+      "id": "reel",
+      "title": "Remember this. Find its pair. Break the chain.",
+      "kind": "trailer",
+      "inputsHash": "dd77469aac842a17ec64bb2e5c0b5bfd3d66abed64dfc15465f3cff62baeb75b",
+      "builtAt": "2026-09-25T11:03:00.214Z",
+      "source": "output/reel/out/memory-dungeon-reel-10s.mp4",
+      "file": "public/trailers/reel.mp4",
+      "poster": "public/trailers/reel.jpg",
+      "urlPath": "/trailers/reel.mp4",
+      "posterUrlPath": "/trailers/reel.jpg",
+      "bytes": 6540821,
+      "width": 1080,
+      "height": 1920,
+      "duration": 10.01,
+      "fps": 60,
+      "orientation": "portrait"
+    },
+    {
+      "id": "cover-remember-this",
+      "title": "Remember this",
+      "kind": "artwork",
+      "inputsHash": "aceb1ffc0338322930a2e99dfc57fdb0556784a56abc3df9cf0478e1faee19be",
+      "builtAt": "2026-09-25T11:02:19.285Z",
+      "role": "poster",
+      "source": "project-media/reel-cover-remember-this.jpg",
+      "file": "public/artwork/cover-remember-this.jpg",
+      "urlPath": "/artwork/cover-remember-this.jpg",
+      "bytes": 265869,
+      "width": 1080,
+      "height": 1920,
+      "orientation": "portrait"
+    },
+    {
+      "id": "cover-break-the-chain",
+      "title": "Break the chain",
+      "kind": "artwork",
+      "inputsHash": "005cd4275fb74bfdbcbeb2176a26c60363076cfccfd9583315063753d1ab7140",
+      "builtAt": "2026-09-25T11:02:20.495Z",
+      "role": "poster",
+      "source": "project-media/reel-cover-break-the-chain.jpg",
+      "file": "public/artwork/cover-break-the-chain.jpg",
+      "urlPath": "/artwork/cover-break-the-chain.jpg",
+      "bytes": 115513,
+      "width": 1080,
+      "height": 1920,
+      "orientation": "portrait"
+    },
+    {
+      "id": "cover-gameplay",
+      "title": "The board",
+      "kind": "artwork",
+      "inputsHash": "f5ffa41c4c14927fb2dda674d04db3888ba8086022f70b4abe0f4cc9b810baff",
+      "builtAt": "2026-09-25T11:02:21.071Z",
+      "role": "wallpaper",
+      "source": "project-media/reel-cover-gameplay.jpg",
+      "file": "public/artwork/cover-gameplay.jpg",
+      "urlPath": "/artwork/cover-gameplay.jpg",
+      "bytes": 117971,
+      "width": 1080,
+      "height": 1920,
+      "orientation": "portrait"
+    },
+    {
+      "id": "end-card",
+      "title": "The dungeon waits",
+      "kind": "artwork",
+      "inputsHash": "637f1562762ab59f021580054ee041a5a5c72020a41b457b03a6812af5568797",
+      "builtAt": "2026-09-25T11:02:21.528Z",
+      "role": "key-art",
+      "source": "project-media/reel-end-card.png",
+      "file": "public/artwork/end-card.jpg",
+      "urlPath": "/artwork/end-card.jpg",
+      "bytes": 161582,
+      "width": 1080,
+      "height": 1920,
+      "orientation": "portrait"
+    }
+  ]
+}

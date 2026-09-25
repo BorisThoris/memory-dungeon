@@ -83,6 +83,39 @@ export default {
     "shortName": "Memory Dungeon"
   },
 
+  // Rendered media. The reel is the 10 s Instagram commercial built by
+  // scripts/reel-pipeline/reel.sh (Blender, a seeded gameplay take, ACE-Step
+  // score; see its README); its build directory is set to output/reel so the
+  // master lands in the repo (ignored) where this script publishes it from.
+  // The covers are the reel's poster frames, kept as masters in project-media/.
+  trailers: {
+    dir: "public/trailers",
+    urlPathPrefix: "/trailers",
+    artworkDir: "public/artwork",
+    artworkUrlPathPrefix: "/artwork",
+    freeGpu: true,
+    items: [
+      {
+        id: "reel",
+        title: "Remember this. Find its pair. Break the chain.",
+        kind: "trailer",
+        inputs: ["scripts/reel-pipeline", "docs/wip-assets/reel"],
+        build: 'bash -c "REEL_BUILD=output/reel bash scripts/reel-pipeline/reel.sh"',
+        output: "output/reel/out/memory-dungeon-reel-10s.mp4",
+        requires: [
+          "ffmpeg",
+          "py",
+          { name: "blender", env: "BLENDER", candidates: ["E:/Program Files/Blender Foundation/Blender 4.3/blender.exe"] }
+        ],
+        posterAt: 0.55
+      },
+      { id: "cover-remember-this", title: "Remember this", kind: "artwork", role: "poster", source: "project-media/reel-cover-remember-this.jpg" },
+      { id: "cover-break-the-chain", title: "Break the chain", kind: "artwork", role: "poster", source: "project-media/reel-cover-break-the-chain.jpg" },
+      { id: "cover-gameplay", title: "The board", kind: "artwork", role: "wallpaper", source: "project-media/reel-cover-gameplay.jpg" },
+      { id: "end-card", title: "The dungeon waits", kind: "artwork", role: "key-art", source: "project-media/reel-end-card.png" }
+    ]
+  },
+
   media: {
     sourceDir: path.join(portfolioRoot, "public", "project-shots", "memory-dungeon", "latest"),
     publicPathPrefix: "/project-shots/memory-dungeon/latest",

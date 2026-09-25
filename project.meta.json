@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-25T11:19:41.546Z",
+  "generatedAt": "2026-09-25T11:04:03.207Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -287,7 +287,7 @@
   },
   "media": {
     "source": "repo-local",
-    "directory": "/home/runner/work/memory-dungeon/memory-dungeon/project-media",
+    "directory": "C:/Users/Gaming PC/Desktop/Repos/memory-dungeon/project-media",
     "primary": "project-media/card.jpg",
     "images": [
       {
@@ -297,7 +297,7 @@
         "bytes": 165814,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-25T11:18:48.917Z"
+        "capturedAt": "2026-09-23T21:42:24.284Z"
       },
       {
         "profile": "desktop",
@@ -306,7 +306,7 @@
         "bytes": 156603,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-25T11:19:08.413Z"
+        "capturedAt": "2026-09-23T21:42:24.287Z"
       },
       {
         "profile": "full",
@@ -315,7 +315,7 @@
         "bytes": 130939,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-25T11:19:34.644Z"
+        "capturedAt": "2026-09-23T21:42:24.291Z"
       },
       {
         "profile": "mobile",
@@ -324,7 +324,7 @@
         "bytes": 51915,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-25T11:19:15.190Z"
+        "capturedAt": "2026-09-22T22:18:34.151Z"
       },
       {
         "profile": "og",
@@ -333,7 +333,108 @@
         "bytes": 120810,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-25T11:19:41.322Z"
+        "capturedAt": "2026-09-23T21:42:24.298Z"
+      },
+      {
+        "profile": "reel-cover-break-the-chain",
+        "file": "reel-cover-break-the-chain.jpg",
+        "path": "project-media/reel-cover-break-the-chain.jpg",
+        "bytes": 139355,
+        "width": 1080,
+        "height": 1920,
+        "capturedAt": "2026-09-25T11:00:34.681Z"
+      },
+      {
+        "profile": "reel-cover-gameplay",
+        "file": "reel-cover-gameplay.jpg",
+        "path": "project-media/reel-cover-gameplay.jpg",
+        "bytes": 149787,
+        "width": 1080,
+        "height": 1920,
+        "capturedAt": "2026-09-25T11:00:34.841Z"
+      },
+      {
+        "profile": "reel-cover-remember-this",
+        "file": "reel-cover-remember-this.jpg",
+        "path": "project-media/reel-cover-remember-this.jpg",
+        "bytes": 322090,
+        "width": 1080,
+        "height": 1920,
+        "capturedAt": "2026-09-25T11:00:34.451Z"
+      },
+      {
+        "profile": "reel-end-card",
+        "file": "reel-end-card.png",
+        "path": "project-media/reel-end-card.png",
+        "bytes": 1192916,
+        "width": 1080,
+        "height": 1920,
+        "capturedAt": "2026-09-25T11:00:35.001Z"
+      }
+    ],
+    "trailers": [
+      {
+        "id": "reel",
+        "title": "Remember this. Find its pair. Break the chain.",
+        "url": "https://memory-dungeon-git.pages.dev/trailers/reel.mp4",
+        "poster": "https://memory-dungeon-git.pages.dev/trailers/reel.jpg",
+        "file": "public/trailers/reel.mp4",
+        "bytes": 6540821,
+        "width": 1080,
+        "height": 1920,
+        "duration": 10.01,
+        "orientation": "portrait",
+        "builtAt": "2026-09-25T11:03:00.214Z"
+      }
+    ],
+    "artwork": [
+      {
+        "id": "cover-remember-this",
+        "title": "Remember this",
+        "role": "poster",
+        "url": "https://memory-dungeon-git.pages.dev/artwork/cover-remember-this.jpg",
+        "file": "public/artwork/cover-remember-this.jpg",
+        "bytes": 265869,
+        "width": 1080,
+        "height": 1920,
+        "orientation": "portrait",
+        "builtAt": "2026-09-25T11:02:19.285Z"
+      },
+      {
+        "id": "cover-break-the-chain",
+        "title": "Break the chain",
+        "role": "poster",
+        "url": "https://memory-dungeon-git.pages.dev/artwork/cover-break-the-chain.jpg",
+        "file": "public/artwork/cover-break-the-chain.jpg",
+        "bytes": 115513,
+        "width": 1080,
+        "height": 1920,
+        "orientation": "portrait",
+        "builtAt": "2026-09-25T11:02:20.495Z"
+      },
+      {
+        "id": "cover-gameplay",
+        "title": "The board",
+        "role": "wallpaper",
+        "url": "https://memory-dungeon-git.pages.dev/artwork/cover-gameplay.jpg",
+        "file": "public/artwork/cover-gameplay.jpg",
+        "bytes": 117971,
+        "width": 1080,
+        "height": 1920,
+        "orientation": "portrait",
+        "builtAt": "2026-09-25T11:02:21.071Z"
+      },
+      {
+        "id": "end-card",
+        "title": "The dungeon waits",
+        "role": "key-art",
+        "url": "https://memory-dungeon-git.pages.dev/artwork/end-card.jpg",
+        "file": "public/artwork/end-card.jpg",
+        "bytes": 161582,
+        "width": 1080,
+        "height": 1920,
+        "orientation": "portrait",
+        "builtAt": "2026-09-25T11:02:21.528Z"
       }
     ]
   },
@@ -395,9 +496,9 @@
     "devDependencyCount": 47
   },
   "metrics": {
-    "sourceFiles": 1174,
-    "testFiles": 507,
-    "sourceLines": 182805,
+    "sourceFiles": 1153,
+    "testFiles": 491,
+    "sourceLines": 186170,
     "largestDirectories": [
       {
         "directory": "src",
@@ -405,7 +506,7 @@
       },
       {
         "directory": "scripts",
-        "files": 94
+        "files": 92
       },
       {
         "directory": "e2e",
@@ -416,8 +517,8 @@
         "files": 14
       },
       {
-        "directory": ".",
-        "files": 5
+        "directory": "dist-build",
+        "files": 9
       }
     ],
     "hasReadme": true,
@@ -436,11 +537,11 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "5943a59c",
-    "lastCommitDate": "2026-09-25T14:15:12+03:00",
-    "lastCommitSubject": "Refresh the repo model after merging main",
-    "commitCount": 1820,
-    "remote": "https://github.com/BorisThoris/memory-dungeon"
+    "head": "d7d297f9",
+    "lastCommitDate": "2026-09-23T20:25:43+00:00",
+    "lastCommitSubject": "Refresh screenshots, card, icons and metadata [meta-bot]",
+    "commitCount": 1749,
+    "remote": "https://github.com/BorisThoris/memory-dungeon.git"
   },
   "readme": {
     "file": "README.md",

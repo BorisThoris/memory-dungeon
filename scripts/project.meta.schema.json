@@ -117,6 +117,26 @@
             }
           }
         },
+        "artwork": {
+          "description": "Wallpapers, posters and key art published by scripts/build-project-trailers.mjs (kind: artwork), addressed by their URL on the deployment.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "url"],
+            "properties": {
+              "id": { "type": "string" },
+              "title": { "type": "string" },
+              "role": { "type": "string", "enum": ["wallpaper", "poster", "key-art", "capsule", "social", "artwork"] },
+              "url": { "type": "string" },
+              "file": { "type": "string" },
+              "bytes": { "type": "integer" },
+              "width": { "type": "integer" },
+              "height": { "type": "integer" },
+              "orientation": { "type": "string", "enum": ["landscape", "portrait", "square"] },
+              "builtAt": { "type": "string", "format": "date-time" }
+            }
+          }
+        },
         "videos": {
           "type": "array",
           "items": {
