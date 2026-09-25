@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-25T11:23:16.632Z",
+  "generatedAt": "2026-09-25T11:24:21.478Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -398,7 +398,7 @@
         "width": 1080,
         "height": 1920,
         "orientation": "portrait",
-        "builtAt": "2026-09-25T11:02:19.285Z"
+        "builtAt": "2026-09-25T11:24:18.911Z"
       },
       {
         "id": "cover-break-the-chain",
@@ -410,7 +410,7 @@
         "width": 1080,
         "height": 1920,
         "orientation": "portrait",
-        "builtAt": "2026-09-25T11:02:20.495Z"
+        "builtAt": "2026-09-25T11:24:19.187Z"
       },
       {
         "id": "cover-gameplay",
@@ -422,7 +422,7 @@
         "width": 1080,
         "height": 1920,
         "orientation": "portrait",
-        "builtAt": "2026-09-25T11:02:21.071Z"
+        "builtAt": "2026-09-25T11:24:20.180Z"
       },
       {
         "id": "end-card",
@@ -434,7 +434,7 @@
         "width": 1080,
         "height": 1920,
         "orientation": "portrait",
-        "builtAt": "2026-09-25T11:02:21.528Z"
+        "builtAt": "2026-09-25T11:24:20.491Z"
       }
     ]
   },
@@ -537,10 +537,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "acf2250f",
-    "lastCommitDate": "2026-09-25T14:22:45+03:00",
-    "lastCommitSubject": "Toolkit: a showcase order may be 0",
-    "commitCount": 1823,
+    "head": "ce87c294",
+    "lastCommitDate": "2026-09-25T14:23:18+03:00",
+    "lastCommitSubject": "Regenerate the metadata after the rebase",
+    "commitCount": 1824,
     "remote": "https://github.com/BorisThoris/memory-dungeon.git"
   },
   "readme": {
