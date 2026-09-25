@@ -11,6 +11,13 @@ import { isSingletonUtilityPairKey } from './tile-identity';
 import { getSuitDealProfile, type SuitDealProfile } from './tile-suit-rules';
 import { calculateRating } from './scoring-rules';
 import { parTurnsForBoard } from './floor-par';
+import { orderAroundLock } from './turn-match-board-cleanup-rules';
+
+/** Both cards of the turn, the locked one second (`orderAroundLock`). */
+const flipLockedLast = (run: RunState, first: { id: string }, second: { id: string }): RunState => {
+    const [a, b] = orderAroundLock(run, first, second);
+    return flipTile(flipTile(run, a.id), b.id);
+};
 
 /**
  * The cascade, measured rather than felt.
@@ -202,7 +209,7 @@ export const playCascadeBalanceFloor = ({
             first = group[0]!;
             second = group[1]!;
         }
-        run = resolveBoardTurn(flipTile(flipTile(run, first.id), second.id));
+        run = resolveBoardTurn(flipLockedLast(run, first, second));
         turns += 1;
         bestChain = Math.max(bestChain, runNonNegativeInteger(run.stats.currentStreak));
     }

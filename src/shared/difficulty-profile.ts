@@ -37,7 +37,7 @@ export const SHIPPED_FAIR_DIFFICULTY_PROFILE: DifficultyProfileRuleSummary = {
         decayEveryNLevels: MEMORIZE_DECAY_EVERY_N_LEVELS
     },
     playerCopy:
-        'Default: every floor states a par, and misses come from one small bank the whole run draws on - it opens with two, each floor gives one back and it never holds more than three; a run ends when you stop or when the bank runs dry before a floor is cleared. No selectable difficulty profile changes rules yet.'
+        'Default: every floor states a par, and misses come from one small bank the whole run draws on - it opens with three, a floor clear or five matches in a row earns one, each lasts three floors and it never holds more than four; a run ends when you stop or when the bank runs dry before a floor is cleared. No selectable difficulty profile changes rules yet.'
 } as const;
 
 export const listDifficultyProfiles = (): DifficultyProfileRuleSummary[] => [

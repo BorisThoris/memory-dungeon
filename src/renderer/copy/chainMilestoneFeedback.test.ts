@@ -1,43 +1,41 @@
 import { describe, expect, it } from 'vitest';
+import { chainRungScoreMultiplier } from '../../shared/chain-rung-value-rules';
 import { getChainMilestoneFeedback } from './chainMilestoneFeedback';
 
 describe('getChainMilestoneFeedback', () => {
-    it('returns actionized feedback when crossing milestone tiers', () => {
-        expect(getChainMilestoneFeedback(2, 3)).toEqual({
+    it('calls out the rung the rail climbed to, with the rail\'s own multiplier', () => {
+        expect(getChainMilestoneFeedback('none', 'clean')).toEqual({
             action: 'Hold the chain',
             audioCue: 'chain-start-ping',
             beatCount: 3,
             label: 'Clean reached',
             screenCue: 'reward-loop',
-            target: 'x3',
+            target: `×${chainRungScoreMultiplier('clean')}`,
             tone: 'chain',
-            value: 'Breaks reach deeper into the clump'
+            value: `Every pair a break takes pays ×${chainRungScoreMultiplier('clean')}`
         });
-        expect(getChainMilestoneFeedback(5, 6)).toEqual({
-            action: 'Carry it into the next clump',
-            audioCue: 'surge-hit-ping',
-            beatCount: 4,
-            label: 'Sharp reached',
-            screenCue: 'surge-live',
-            target: 'x6',
-            tone: 'surge',
-            value: 'Breaks chain into the next clump'
-        });
-        expect(getChainMilestoneFeedback(9, 10)).toEqual({
-            action: 'Keep the fire',
-            audioCue: 'combo-hit-ping',
-            beatCount: 5,
-            label: 'Fever reached',
-            screenCue: 'combo-live',
-            target: 'x10',
-            tone: 'combo',
-            value: 'Breaks chain into three clumps'
-        });
+        expect(getChainMilestoneFeedback('clean', 'sharp')?.label).toBe('Sharp reached');
+        expect(getChainMilestoneFeedback('clean', 'sharp')?.target).toBe(`×${chainRungScoreMultiplier('sharp')}`);
+        expect(getChainMilestoneFeedback('sharp', 'fever')?.label).toBe('Fever reached');
     });
 
-    it('does not repeat milestone feedback after a tier is already active', () => {
-        expect(getChainMilestoneFeedback(3, 4)).toBeUndefined();
-        expect(getChainMilestoneFeedback(6, 7)).toBeUndefined();
-        expect(getChainMilestoneFeedback(10, 11)).toBeUndefined();
+    it('names the highest rung when one turn climbs two', () => {
+        // A pop can carry a chain from Clean straight past Sharp; the caption said "Sharp" by the
+        // streak while the rail already read Fever.
+        expect(getChainMilestoneFeedback('clean', 'fever')?.label).toBe('Fever reached');
+    });
+
+    it('never quotes the streak mark as a multiplier', () => {
+        // Deep playtest, floor 10: "Clean reached: x3" under a rail reading "Clean ×2".
+        for (const tier of ['clean', 'sharp', 'fever'] as const) {
+            expect(getChainMilestoneFeedback('none', tier)?.target).toBe(`×${chainRungScoreMultiplier(tier)}`);
+        }
+    });
+
+    it('does not repeat milestone feedback after a tier is already active, or on the way down', () => {
+        expect(getChainMilestoneFeedback('clean', 'clean')).toBeUndefined();
+        expect(getChainMilestoneFeedback('fever', 'fever')).toBeUndefined();
+        expect(getChainMilestoneFeedback('fever', 'none')).toBeUndefined();
+        expect(getChainMilestoneFeedback(null, 'none')).toBeUndefined();
     });
 });

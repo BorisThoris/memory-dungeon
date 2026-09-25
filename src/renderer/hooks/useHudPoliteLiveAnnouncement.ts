@@ -397,7 +397,18 @@ export const useHudPoliteLiveAnnouncement = ({
                 lines.push(`${pluralize(shuffleChargeDelta, 'full shuffle charge')} gained.`);
             }
             if (stasisLocked) {
-                lines.push('Stasis blocked a nearby trait tile from opening first next turn.');
+                /*
+                 * Two rules set the lock: a Stasis trait match, and sticky fingers after any match
+                 * (Trap Hall). Credit the one that could have done it - a lock after a match with
+                 * no Stasis or Conduit card in it is the mutator's, and saying "Stasis" there sent
+                 * the player looking for a trait the floor never dealt.
+                 */
+                const byTrait = (turnFacts?.matchedTraitKinds ?? []).some((kind) => kind === 'stasis' || kind === 'conduit');
+                lines.push(
+                    byTrait
+                        ? 'Stasis blocked a nearby trait tile from opening first next turn.'
+                        : 'Sticky fingers: the marked card beside that match cannot open your next turn.'
+                );
             }
             if (recallMatchDelta > 0) {
                 lines.push(

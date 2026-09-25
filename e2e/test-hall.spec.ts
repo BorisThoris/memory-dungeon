@@ -73,6 +73,41 @@ test.describe('Test hall', () => {
     }
 });
 
+test.describe('Sticky fingers, in its room', () => {
+    test('a match locks a face-down card beside it, the lock refuses an opening press, and the line says why', async ({ page }) => {
+        /*
+         * The Trap Hall's lock used to sit on the matched card itself, so the floor-7 boss mutator did
+         * nothing a player could meet; and a lock after a trait-free match was captioned "Stasis".
+         */
+        test.setTimeout(240_000);
+        await gotoWithSaveAndQuery(page, buildVisualSaveJson(true), 'hallRoom=sticky-fingers');
+        await expect(page.getByTestId('test-hall-badge')).toContainText('Sticky fingers', { timeout: 150_000 });
+        await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 30_000 });
+        const press = (ids: string[]) =>
+            page.evaluate(async (tileIds) => {
+                const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+                for (const id of tileIds) useAppStore.getState().pressTile(id);
+            }, ids);
+        const lock = () =>
+            page.evaluate(async () => {
+                const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+                const { run } = useAppStore.getState();
+                const tile = run?.stickyBlockIndex != null ? run.board?.tiles[run.stickyBlockIndex] : null;
+                return { id: tile?.id ?? null, state: tile?.state ?? null, flipped: run?.board?.flippedTileIds ?? [] };
+            });
+
+        await press(['a-1', 'a-2']);
+        await expect.poll(async () => (await lock()).id, { timeout: 45_000 }).toBe('b-1');
+        expect((await lock()).state).toBe('hidden');
+        await expect(page.getByTestId('run-shell-line')).toContainText('Sticky fingers', { timeout: 15_000 });
+        await expect(page.getByTestId('run-shell-line')).not.toContainText('Stasis');
+
+        // Pressed as an opener, the locked card stays down (the room's unit script covers it opening second).
+        await press(['b-1']);
+        expect((await lock()).flipped).toEqual([]);
+    });
+});
+
 test.describe('The store stop, in the store-stop room', () => {
     test('describes everything it sells, inside the dialog, and opens on Descend', async ({ page }) => {
         test.setTimeout(240_000);

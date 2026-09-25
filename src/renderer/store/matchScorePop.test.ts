@@ -382,37 +382,37 @@ describe('buildMatchScorePopPayload', () => {
     });
 
     it('emits arcade milestone badges only when chain tiers are crossed', () => {
-        expect(getMatchScorePopChainMilestone(2, 3)).toEqual({
+        expect(getMatchScorePopChainMilestone('none', 'clean')).toEqual({
             action: 'Hold the chain',
             audioCue: 'chain-start-ping',
             beatCount: 3,
             label: 'Clean reached',
             screenCue: 'reward-loop',
-            target: 'x3',
+            target: '×2',
             tone: 'chain',
-            value: 'Breaks reach deeper into the clump'
+            value: 'Every pair a break takes pays ×2'
         });
-        expect(getMatchScorePopChainMilestone(5, 6)).toEqual({
+        expect(getMatchScorePopChainMilestone('clean', 'sharp')).toEqual({
             action: 'Carry it into the next clump',
             audioCue: 'surge-hit-ping',
             beatCount: 4,
             label: 'Sharp reached',
             screenCue: 'surge-live',
-            target: 'x6',
+            target: '×4',
             tone: 'surge',
-            value: 'Breaks chain into the next clump'
+            value: 'Every pair a break takes pays ×4'
         });
-        expect(getMatchScorePopChainMilestone(9, 10)).toEqual({
+        expect(getMatchScorePopChainMilestone('sharp', 'fever')).toEqual({
             action: 'Keep the fire',
             audioCue: 'combo-hit-ping',
             beatCount: 5,
             label: 'Fever reached',
             screenCue: 'combo-live',
-            target: 'x10',
+            target: '×8',
             tone: 'combo',
-            value: 'Breaks chain into three clumps'
+            value: 'Every pair a break takes pays ×8'
         });
-        expect(getMatchScorePopChainMilestone(6, 7)).toBeUndefined();
+        expect(getMatchScorePopChainMilestone('sharp', 'sharp')).toBeUndefined();
     });
 
     it('adds the crossed chain milestone to the match floater payload', () => {
@@ -437,9 +437,9 @@ describe('buildMatchScorePopPayload', () => {
             beatCount: 4,
             label: 'Sharp reached',
             screenCue: 'surge-live',
-            target: 'x6',
+            target: '×4',
             tone: 'surge',
-            value: 'Breaks chain into the next clump'
+            value: 'Every pair a break takes pays ×4'
         });
     });
 

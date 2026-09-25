@@ -66,9 +66,9 @@ export type TestHallRoomId =
     | 'wild'
     | 'conduit'
     | 'stasis'
+    | 'sticky-fingers'
     | 'skittish'
     | 'lantern'
-    | 'sticky-fingers'
     | 'n-back'
     | 'spotlight'
     | 'wide-recall'
@@ -679,6 +679,28 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         ]
     },
     {
+        id: 'sticky-fingers',
+        title: 'Sticky fingers',
+        mechanic: 'After a match, the first face-down card touching it cannot be the first card of the next turn (the Trap Hall).',
+        graphMechanicIds: ['board.cleanup'],
+        tryThis: 'Match a in the corner. b-1 beside it is marked: it will not open first, but it opens second.',
+        build: () => room(['a:e b:t c:m d:b', 'e:m f:b g:e h:t', 'a:e b:t c:m d:b', 'e:m f:b g:e h:t'], { mutators: ['sticky_fingers'] }),
+        script: [
+            {
+                step: { do: 'match', pairKey: 'a' },
+                says: 'the match locks b-1, the face-down card beside a-1 - not the matched card',
+                expect: (r) => (r.stickyBlockIndex === positionOf(r, 'b-1') ? null : `lock at ${r.stickyBlockIndex}`)
+            },
+            {
+                step: { do: 'flip', tileId: 'b-1' },
+                says: 'b-1 will not open the turn',
+                expect: (r) => ((r.board?.flippedTileIds.length ?? 0) === 0 ? null : 'the locked card opened a turn')
+            },
+            { step: { do: 'flip', tileId: 'c-1' }, says: 'a first card elsewhere is fine', expect: statusIs('playing') },
+            { step: { do: 'flip', tileId: 'b-1' }, says: 'the locked card opens as the second card', expect: (r) => (r.board?.flippedTileIds.includes('b-1') ? null : 'the locked card would not open second') }
+        ]
+    },
+    {
         id: 'skittish',
         title: 'Skittish cards',
         mechanic: 'Miss, and each of the two cards you saw flinches one step into a face-down neighbour. Pinned cards stay.',
@@ -724,24 +746,6 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                         : `lit ${r.lanternLitTileIds.join(',')}, peeks ${r.peekRevealedTileIds.length}`
             },
             { step: { do: 'flip', tileId: 'g-1' }, says: 'the next flip puts the light out', expect: (r) => (r.lanternLitTileIds.length === 0 ? null : `still lit ${r.lanternLitTileIds.join(',')}`) }
-        ]
-    },
-    {
-        id: 'sticky-fingers',
-        title: 'Sticky fingers',
-        mechanic: 'After a match, a face-down card touching the first card of the pair sticks: the next turn cannot open on it.',
-        graphMechanicIds: ['core.board_turn_resolution'],
-        tryThis: 'Match a in the corner. b-1 beside it sticks: it will not open first, but it opens second.',
-        /*
-         * The room that found it: sticky fingers used to block the slot of the first matched card -
-         * a matched card, which cannot be opened anyway - so the block refused nothing at all.
-         */
-        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { mutators: ['sticky_fingers'] }),
-        script: [
-            { step: { do: 'match', pairKey: 'a' }, says: 'the match sticks b-1, the face-down card beside a-1', expect: (r) => (r.stickyBlockIndex === positionOf(r, 'b-1') ? null : `stuck at ${r.stickyBlockIndex}`) },
-            { step: { do: 'flip', tileId: 'b-1' }, says: 'the stuck card will not open first', expect: (r) => (r.board?.flippedTileIds.length === 0 ? null : 'the stuck card opened as the first card') },
-            { step: { do: 'flip', tileId: 'c-1' }, says: 'a first card elsewhere is fine', expect: (r) => (r.board?.flippedTileIds.includes('c-1') ? null : 'c-1 did not open') },
-            { step: { do: 'flip', tileId: 'b-1' }, says: 'the stuck card opens as the second card', expect: (r) => (r.board?.flippedTileIds.includes('b-1') ? null : 'the stuck card would not open second') }
         ]
     },
     {

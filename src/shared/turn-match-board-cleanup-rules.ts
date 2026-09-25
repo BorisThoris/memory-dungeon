@@ -64,3 +64,16 @@ export const selectStickyFingersBlockIndex = (
         .sort((a, b) => a - b);
     return neighbours[0] ?? null;
 };
+
+/**
+ * A simulated player who sees a lock turns the locked card second, as a person would: the pair is
+ * ordered so the locked tile never opens the turn. Used by the census, the curve and the audits.
+ */
+export const orderAroundLock = <T extends { id: string }>(
+    run: Pick<RunState, 'board' | 'stickyBlockIndex'>,
+    first: T,
+    second: T
+): [T, T] => {
+    const locked = run.stickyBlockIndex != null ? run.board?.tiles[run.stickyBlockIndex]?.id : undefined;
+    return locked != null && locked === first.id ? [second, first] : [first, second];
+};

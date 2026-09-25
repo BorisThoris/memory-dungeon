@@ -106,9 +106,9 @@ describe('useHudPoliteLiveAnnouncement', () => {
         // The floor's last match, as a real run announced it.
         expect(
             formatHudActionFeedbackText(
-                'Match resolved. 6/6 pairs cleared. Recall focus 3/3; +24 memory score. Clean reached: x3. Breaks reach deeper into the clump. Chain 3, Sharp break. 1 more pair of the same suit broke away with that match and left the board. Clean sweep.'
+                'Match resolved. 6/6 pairs cleared. Recall focus 3/3; +24 memory score. Clean reached: ×2 per pair. Hold the chain. Chain 3, Sharp break. 1 more pair of the same suit broke away with that match and left the board. Clean sweep.'
             )
-        ).toBe('Clean reached: x3. Breaks reach deeper into the clump.');
+        ).toBe('Clean reached: ×2 per pair. Hold the chain.');
     });
 
     it('says a repeated sentence once, counted, and does not split a decimal', () => {
@@ -193,7 +193,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
         // previous render, so one resolved turn announces the milestone exactly once.
         const milestoneEvent = createBoardTurnResolvedEventFixture({
             commandId: 'chain-milestone',
-            announcement: { level: 3, currentStreakBefore: 2, currentStreakAfter: 3 }
+            announcement: { level: 3, currentStreakBefore: 2, currentStreakAfter: 3, chainTierBefore: 'none', chainTierAfter: 'clean' }
         });
 
         const { result, rerender } = renderHook(
@@ -211,7 +211,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
         });
         await flushRaf();
 
-        expect(result.current.message).toBe('Clean reached: x3. Breaks reach deeper into the clump.');
+        expect(result.current.message).toBe('Clean reached: ×2 per pair. Hold the chain.');
     });
 
     it('announces surge chain milestones', async () => {
@@ -220,7 +220,9 @@ describe('useHudPoliteLiveAnnouncement', () => {
             announcement: {
                 level: 3,
                 currentStreakBefore: 5,
-                currentStreakAfter: 6
+                currentStreakAfter: 6,
+                chainTierBefore: 'clean',
+                chainTierAfter: 'sharp'
             }
         });
 
@@ -241,7 +243,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
         });
         await flushRaf();
 
-        expect(result.current.message).toBe('Sharp reached: x6. Breaks chain into the next clump.');
+        expect(result.current.message).toBe('Sharp reached: ×4 per pair. Carry it into the next clump.');
     });
 
     it('announces when a meaningful match chain breaks', async () => {
@@ -501,6 +503,8 @@ describe('useHudPoliteLiveAnnouncement', () => {
             announcement: {
                 currentStreakBefore: 2,
                 currentStreakAfter: 3,
+                chainTierBefore: 'none',
+                chainTierAfter: 'clean',
                 findablesClaimedBefore: 0,
                 findablesClaimedAfter: 1
             }
@@ -520,7 +524,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
         });
         await flushRaf();
 
-        expect(result.current.message).toContain('Clean reached: x3.');
+        expect(result.current.message).toContain('Clean reached: ×2 per pair.');
         // Said once, by the pickup's own event.
         expect(result.current.message.match(/Score Glint claimed/g)).toHaveLength(1);
     });
@@ -542,6 +546,29 @@ describe('useHudPoliteLiveAnnouncement', () => {
         await flushRaf();
 
         expect(result.current.message).toBe('Match resolved. 1/4 pairs cleared. Echo trait resolved.');
+    });
+
+    it('credits a lock after a trait-free match to sticky fingers, not to Stasis', async () => {
+        // The Trap Hall deals no Stasis card; its caption used to name one anyway.
+        const { result, rerender } = renderHook(
+            (p: { turnEvent: BoardTurnResolvedEvent | null; sticky: number | null }) =>
+                useHudPoliteLiveAnnouncement({
+                    ...base,
+                    boardLevel: 1,
+                    boardTurnEvent: p.turnEvent,
+                    stickyBlockIndex: p.sticky
+                }),
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null, sticky: null as number | null } }
+        );
+
+        await act(async () => {
+            rerender({ turnEvent: matchTurn('sticky-turn', { matchedTraitKinds: [] }), sticky: 2 });
+        });
+        await flushRaf();
+
+        expect(result.current.message).toBe(
+            'Match resolved. 1/4 pairs cleared. Sticky fingers: the marked card beside that match cannot open your next turn.'
+        );
     });
 
     it('announces trait combo surges, charge gains, and stasis locks with the resolved match', async () => {

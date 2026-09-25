@@ -23,6 +23,7 @@ import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
+import { orderAroundLock } from './turn-match-board-cleanup-rules';
 
 /**
  * Does this system ever happen to a player?
@@ -499,11 +500,6 @@ const playFloorFrom = (
             first = group[0]!;
             second = group[1]!;
         }
-        // A stuck card (sticky fingers, a Stasis lock) cannot open a turn but can close one, so
-        // the player opens on the other card, as `sim-difficulty-curve.ts` does.
-        if (run.stickyBlockIndex != null && run.board!.tiles[run.stickyBlockIndex]?.id === first.id) {
-            [first, second] = [second, first];
-        }
         /*
          * The wild joker is a singleton, so it is never in a playable pair group and the ordinary
          * loop never reaches for it - which is exactly why `wildMatch` read zero on all 240 floors
@@ -519,6 +515,8 @@ const playFloorFrom = (
                 continue;
             }
         }
+        // The locked card second, as a player who sees the lock turns it (`orderAroundLock`).
+        [first, second] = orderAroundLock(run, first, second);
         const flipped = flipTile(flipTile(run, first.id), second.id);
         /*
          * The undo is the one tool that has to be spent mid-turn: it takes back a pair the player

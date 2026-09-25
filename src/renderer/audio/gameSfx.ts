@@ -717,7 +717,7 @@ export const playResolveSfx = (before: RunState, after: RunState, gain: number):
         // The meter after the turn for a match, before it for a miss: one says what was reached,
         // the other says what was lost, and those are the two things a cue here has to carry.
         playMatchSfx(gain, Math.max(1, after.stats.currentStreak), runChainMeter(after));
-        const chainMilestone = getChainMilestoneFeedback(before.stats.currentStreak, after.stats.currentStreak);
+        const chainMilestone = getChainMilestoneFeedback(runChainTier(before), runChainTier(after));
         if (chainMilestone) {
             playChainMilestoneAccentSfx(gain, chainMilestone);
         }

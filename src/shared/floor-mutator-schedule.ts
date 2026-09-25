@@ -64,9 +64,9 @@ export const FLOOR_ARCHETYPE_CATALOG: Record<FloorArchetypeId, FloorArchetypeDef
     },
     trap_hall: {
         title: 'Trap Hall',
-        hint: 'Sticky fingers punish every miss. Learn a tile before you spend it.',
+        hint: 'Sticky fingers: every match marks a card beside it that cannot open your next turn. Open elsewhere.',
         theme: 'Trap',
-        riskProfile: 'Sticky pressure on a boss budget; a mismatch costs a tile you already knew.',
+        riskProfile: 'Flip-order pressure on a boss budget; the card you remember best is often the one you may not open with.',
         encounterRole: 'boss'
     },
     restless_hall: {

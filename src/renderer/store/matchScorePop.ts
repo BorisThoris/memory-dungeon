@@ -1,6 +1,7 @@
 import { formatTileTraitInteractionTags } from '../../shared/tile-trait-rules';
 import { getFindableKindLabel, getFindableRewardCopy } from '../../shared/findables';
 import type { BoardTurnAnnouncementFacts } from '../../shared/board-turn-event-facts';
+import type { ChainTier } from '../../shared/chain-tier-rules';
 import type { BoardTurnResolvedEvent } from './gameplayFeedbackAdapter';
 import { runArray } from '../../shared/run-array-guards';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
@@ -137,9 +138,9 @@ const isRewardPerkOnlyTraitBurst = (traitInteractionTexts: readonly string[]): b
     traitInteractionTexts.length > 0 && traitInteractionTexts.every(isRewardPerkInteractionText);
 
 export const getMatchScorePopChainMilestone = (
-    previousStreak: number,
-    nextStreak: number
-): MatchScorePopChainMilestone | undefined => getChainMilestoneFeedback(previousStreak, nextStreak);
+    tierBefore: ChainTier | null | undefined,
+    tierAfter: ChainTier | null | undefined
+): MatchScorePopChainMilestone | undefined => getChainMilestoneFeedback(tierBefore, tierAfter);
 
 export const getMatchScorePopFeedbackProfile = (
     chainDepth: number,
@@ -667,7 +668,7 @@ export function buildMatchScorePopPayload(
         : undefined;
     const traitInteractionTexts = formatTileTraitInteractionTags(turnEvent.traitInteractionTags);
     const chainDepth = matchScoreChainDepth(facts.currentStreakAfter);
-    const chainMilestone = getMatchScorePopChainMilestone(facts.currentStreakBefore, chainDepth);
+    const chainMilestone = getMatchScorePopChainMilestone(facts.chainTierBefore, facts.chainTierAfter);
     // The break's own score, term by term. Read from the facts the rules stamped, and rebuilt with
     // the same functions the rule multiplied, so the line cannot promise a product the run did not
     // award.

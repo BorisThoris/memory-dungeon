@@ -7,8 +7,17 @@ import {
     type GameMode,
     type MutatorId
 } from './contracts';
+import { getDefaultDifficultyProfile } from './difficulty-profile';
 import { FEATURED_OBJECTIVE_LABELS } from './floor-mutator-schedule';
 import { PAR_TURNS_PER_PAIR } from './floor-par';
+import {
+    MISS_BANK_CAP,
+    MISS_BANK_COMBO_RUNG,
+    MISS_BANK_FLOOR_GRANT,
+    MISS_BANK_LIFETIME_FLOORS,
+    MISS_BANK_OPENING
+} from './miss-bank';
+import { DEEP_POCKETS_CAP } from './run-relic-rules';
 import { getFeaturedObjectiveBonusScore } from './secondary-objective-rules';
 import {
     ACHIEVEMENT_CATALOG,
@@ -133,6 +142,25 @@ describe('mechanics-encyclopedia', () => {
             'Clear a floor with your last miss already spent.'
         );
         expect(MUTATOR_CATALOG.magpie_thief.description).not.toMatch(/scare/i);
+    });
+
+    it('states the miss bank the rules actually run, not the one it replaced', () => {
+        /*
+         * The Codex said "opens with two, one back every floor, never more than three" for days
+         * after the bank became earned grants with a shelf life (3 to open, +1 a floor clear, +1 a
+         * fifth chain link, three floors each, cap 4). Found reading the Codex after a deep playtest.
+         */
+        const words = ['zero', 'one', 'two', 'three', 'four', 'five', 'six'];
+        const bank = CODEX_CORE_TOPICS.find((topic) => topic.id === 'miss_budget')!.description;
+        expect(bank).toContain(`opens with **${words[MISS_BANK_OPENING]}**`);
+        expect(bank).toContain(`clearing a floor earns **${words[MISS_BANK_FLOOR_GRANT]}**`);
+        expect(bank).toContain(`every **fifth match in a row**`);
+        expect(MISS_BANK_COMBO_RUNG).toBe(5);
+        expect(bank).toContain(`lasts **${words[MISS_BANK_LIFETIME_FLOORS]} floors**`);
+        expect(bank).toContain(`holds **${words[MISS_BANK_CAP]}** at most (**${words[DEEP_POCKETS_CAP]}** with Deep Pockets)`);
+        const profile = getDefaultDifficultyProfile().playerCopy;
+        expect(profile).toContain(`opens with ${words[MISS_BANK_OPENING]}`);
+        expect(profile).toContain(`never holds more than ${words[MISS_BANK_CAP]}`);
     });
 
     it('ACHIEVEMENT_CATALOG has an entry per AchievementId with id/title/description aligned to keys', () => {

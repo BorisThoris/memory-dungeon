@@ -22,6 +22,13 @@ import { advanceToNextLevel } from '../src/shared/next-floor-transition-rules';
 import { getUnresolvedPlayablePairGroups } from '../src/shared/playthrough-solver-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from '../src/shared/rng';
 import { isSingletonUtilityPairKey } from '../src/shared/tile-identity';
+import { orderAroundLock } from '../src/shared/turn-match-board-cleanup-rules';
+
+/** Both cards of the turn, the locked one second (`orderAroundLock`). */
+const flipLockedLast = (run: RunState, first: { id: string }, second: { id: string }): RunState => {
+    const [a, b] = orderAroundLock(run, first, second);
+    return flipTile(flipTile(run, a.id), b.id);
+};
 
 export const SURVIVAL_SEEDS = [11, 202, 3003, 40404, 555, 6006, 77, 8888, 91_919, 1_234, 13, 27, 314, 2718, 42, 99, 1001, 4096, 65_537, 7] as const;
 export const SURVIVAL_FLOOR_CAP = 60;
@@ -78,7 +85,7 @@ export const simulateSurvivalRun = (seed: number, missRate: number, floorCap = S
                 [first, second] = [group[0]!, group[1]!];
             }
             const before = run;
-            run = resolveBoardTurn(flipTile(flipTile(run, first.id), second.id));
+            run = resolveBoardTurn(flipLockedLast(run, first, second));
             tally.comboEarned += comboMissesEarned(before.stats.currentStreak, run.stats.currentStreak);
             turns += 1;
         }

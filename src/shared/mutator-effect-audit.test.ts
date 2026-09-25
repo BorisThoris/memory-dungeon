@@ -37,6 +37,14 @@ describe('every mutator changes the game', () => {
         );
     });
 
+    it('has sticky fingers lock cards a player could otherwise open', () => {
+        // The Trap Hall's lock used to sit on the matched card itself: set every turn, felt never.
+        const floor = findMutatorFloor('sticky_fingers')!;
+        const on = playMutatorFloor(floor.seed, floor.floor, ['sticky_fingers']);
+        const off = playMutatorFloor(floor.seed, floor.floor, []);
+        expect(on.sticky).toBeGreaterThan(off.sticky);
+    });
+
     it('would catch a mutator that did nothing, which is the only reason to keep it', () => {
         /*
          * The bar has to fail on something. A floor played with no mutator against itself moves no
