@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2726,
+    "trackedFileCount": 2732,
     "codeFileCount": 958,
     "exportedSymbolCount": 2905,
     "contentItemCount": 10,
@@ -4339,6 +4339,30 @@
       "sha256": "0145206fb2d1e66fc1066faac868571d055581fdd1788ed52f5fd76e4354ee2e"
     },
     {
+      "path": "public/artwork/cover-break-the-chain.jpg",
+      "category": "asset",
+      "bytes": 115513,
+      "sha256": "8a6f575f240a286c07e889a7c6b25ae98f2cf3d9b60a4dd78f6f786c83649f33"
+    },
+    {
+      "path": "public/artwork/cover-gameplay.jpg",
+      "category": "asset",
+      "bytes": 117971,
+      "sha256": "0bb10b0e5a7fef19eae05dcbe85c14bc503d7a5388401cb295f01c38611e9173"
+    },
+    {
+      "path": "public/artwork/cover-remember-this.jpg",
+      "category": "asset",
+      "bytes": 265869,
+      "sha256": "8948396d02474c9a9b44820181e9e4098237daf76c0f2e37a16ea5d19150be92"
+    },
+    {
+      "path": "public/artwork/end-card.jpg",
+      "category": "asset",
+      "bytes": 161582,
+      "sha256": "50e831c3ae64b3f10c001b5a89635fa559a908d165a158b4073dc03a60178b2f"
+    },
+    {
       "path": "public/favicon.ico",
       "category": "asset",
       "bytes": 1489,
@@ -4371,14 +4395,26 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 121298,
-      "sha256": "d108e62c04f66bea6b135eea42c31be96d17a5f54c6114df56a77fd873790008"
+      "bytes": 120810,
+      "sha256": "d7639b7a2482782afa139b7ecd5324a8b30bc40237dc84aa9ead5e2a210a3398"
     },
     {
       "path": "public/site.webmanifest",
       "category": "other",
       "bytes": 780,
       "sha256": "0d93130799f66c03da908caf6d3ad2f00b1e0b416fe78d87e68933d04d6fc8be"
+    },
+    {
+      "path": "public/trailers/reel.jpg",
+      "category": "asset",
+      "bytes": 84214,
+      "sha256": "45c179b38f0e54c4d8d5ff5573e20180c71718dff31f33fa322a9edf3e07cfa4"
+    },
+    {
+      "path": "public/trailers/reel.mp4",
+      "category": "other",
+      "bytes": 6540821,
+      "sha256": "ff8a70bdb39c4d9e31088f3ab9f4ea6b7b46089fbfe681d0be927aa7098823ef"
     },
     {
       "path": "public/wip-assets/svg/board-a-card-states.svg",
@@ -4767,8 +4803,8 @@
     {
       "path": "scripts/build-project-trailers.mjs",
       "category": "script",
-      "bytes": 18416,
-      "sha256": "ddf5b7a30de600ec167a773ece39eda7fdc68b9fab850c42f852aab8b87747ea"
+      "bytes": 21650,
+      "sha256": "563ad8a08974f9f5672e3b059e821d1903812e2d9377b5dcb179c1f8611c17b5"
     },
     {
       "path": "scripts/capture-project-shots.mjs",
@@ -5079,8 +5115,8 @@
     {
       "path": "scripts/generate-project-meta.mjs",
       "category": "script",
-      "bytes": 22306,
-      "sha256": "700f3a318ae8be2d389b15d8feb9a5c03d82aaf640d9199ac78a0082504c9183"
+      "bytes": 23045,
+      "sha256": "d18bebc8f8db94733bad2abfd037662f4bb2d36998b16fd76476a7f3000eea56"
     },
     {
       "path": "scripts/generate-social-preview.mjs",
@@ -5145,14 +5181,14 @@
     {
       "path": "scripts/project-meta.config.mjs",
       "category": "script",
-      "bytes": 3111,
-      "sha256": "35538993a9dcf8f9235861cf5a4d43067eb5b065a28446889c69b4ffc5748238"
+      "bytes": 4812,
+      "sha256": "a0f2d55e6cd142d4ef000a3f8f5ac10ce2866922b0695a0c0522607768d6864b"
     },
     {
       "path": "scripts/project.meta.schema.json",
       "category": "script",
-      "bytes": 7848,
-      "sha256": "74e2a05665fbd8fd92864ab3d2e96ffcfdf189b696096f30c6b4d23d865a12c1"
+      "bytes": 8816,
+      "sha256": "6454e75af3a32f8054123b65d5d4bf9ff330309d79daeb1fbfee3138c745decd"
     },
     {
       "path": "scripts/README-card-motifs.md",
