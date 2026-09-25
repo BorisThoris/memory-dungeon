@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2740,
+    "trackedFileCount": 2741,
     "codeFileCount": 965,
-    "exportedSymbolCount": 2928,
+    "exportedSymbolCount": 2929,
     "contentItemCount": 10,
     "mechanicCount": 51,
     "stateFieldCount": 92,
-    "relationshipCount": 7592
+    "relationshipCount": 7595
   },
   "inventory": [
     {
@@ -201,8 +201,8 @@
     {
       "path": "CLAUDE.md",
       "category": "other",
-      "bytes": 8346,
-      "sha256": "883bbb554d65e3c763b4fe1c934e716ef240b46f9b59e213b34a6bd9cd5cabc3"
+      "bytes": 8802,
+      "sha256": "4cf73976403ae37a0b6577974265f42a0e23500ad2930bd317bd19eaebde4051"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -2374,7 +2374,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33561,
-      "sha256": "ecd991848433824fb9ec03e21262555d260510c9fd9ca62162030cb1f07a5fa7"
+      "sha256": "3b971bdab076a455b329727f7067f57664fdc46387d123c5b0b73ff5c7f3f271"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3999,8 +3999,8 @@
     {
       "path": "e2e/test-hall.spec.ts",
       "category": "test",
-      "bytes": 9875,
-      "sha256": "de97b6fd2150a3f45ee6445455f30196cd4466227fd39d714829d3c02cd9e721"
+      "bytes": 11691,
+      "sha256": "f555728e55c279c833a37977be6642065c6027c335a96893115c632ad63d298c"
     },
     {
       "path": "e2e/tile-board-raycast.spec.ts",
@@ -4043,6 +4043,12 @@
       "category": "test",
       "bytes": 15286,
       "sha256": "f9046d914fb011d59a58fa2e71519f4b09a074635eab245f77a645032ec3332a"
+    },
+    {
+      "path": "e2e/tools-usable.spec.ts",
+      "category": "test",
+      "bytes": 7255,
+      "sha256": "7b13fb6b2a4f916c45c40aa922fbfa648f43276bf8061a4f8311668d3a87b2a7"
     },
     {
       "path": "e2e/ui-design-reference.spec.ts",
@@ -9267,8 +9273,8 @@
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
       "category": "test",
-      "bytes": 63861,
-      "sha256": "bc4b0b5ba35675cc26b4d5b19ead9fb11d01b4f66a92b11cac4a3dc2422ca859"
+      "bytes": 63941,
+      "sha256": "ebcacc86702d5a722e4bde2345b7d0d67685640b21031d85e286de8d1bc8f0ef"
     },
     {
       "path": "src/renderer/components/GameScreen.tsx",
@@ -9747,8 +9753,8 @@
     {
       "path": "src/renderer/components/TileBoard.module.css",
       "category": "source",
-      "bytes": 30675,
-      "sha256": "25b951a862fdf6dda2fceac467a4411b996a0af899e83b5c8f942c99f779491d"
+      "bytes": 31432,
+      "sha256": "ac1dde650f553bb82b36f57a38bc03ebf3016bc2a4d81975a1aafb7620832061"
     },
     {
       "path": "src/renderer/components/TileBoard.test.tsx",
@@ -9759,8 +9765,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 148959,
-      "sha256": "6052b555c1c24ec11ab30baeb1a63ca02142092058ef35ce9a8fcb59662ae149"
+      "bytes": 149329,
+      "sha256": "301a62fc6b1c13726fc1742205794fdc8730a1021d1508e00edf22c2d0a591fc"
     },
     {
       "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -10707,8 +10713,8 @@
     {
       "path": "src/renderer/copy/gameplayHints.ts",
       "category": "source",
-      "bytes": 485,
-      "sha256": "e3ba1851f2a6840634c416e63faa94b486721bb4345d0ed638fdc9b96ca9332b"
+      "bytes": 504,
+      "sha256": "ab7036e8cf90c2b3b4c53e0910a06f5ec6c897ccf55f64b21fbd1dd2cba76fda"
     },
     {
       "path": "src/renderer/copy/hudActionFeedback.ts",
@@ -11703,14 +11709,14 @@
     {
       "path": "src/renderer/store/useAppStore.test.ts",
       "category": "test",
-      "bytes": 36159,
-      "sha256": "24de9d0eb946bee8e96f8cd0ac607e610ec38f92846dd6e4f1c1765d4ff90c8d"
+      "bytes": 38028,
+      "sha256": "226cbc3abe9e4ddb64dd5268ba2acbdba58c31c5097914c0f97bd71bf0be44e5"
     },
     {
       "path": "src/renderer/store/useAppStore.ts",
       "category": "source",
-      "bytes": 23281,
-      "sha256": "46f40cb665c131447dabb18899021f1f5cbf2065a444f729c40ffac6407bcee5"
+      "bytes": 23732,
+      "sha256": "8f201bf3f89372ea1c8c63d9a8980eb7ac0fd3be579a860fa4e483cd6f25308b"
     },
     {
       "path": "src/renderer/styles/App.module.css",
@@ -12675,8 +12681,8 @@
     {
       "path": "src/shared/game.test.ts",
       "category": "test",
-      "bytes": 66945,
-      "sha256": "fdf61f5c8bcae889346ebc1203f803ec297a8ad8ee6c9b3b23ed822e5ea7e13e"
+      "bytes": 67112,
+      "sha256": "b2a4e865fa97928966c901ab7103b1c05bb36bf414f56d1573aec41f171de148"
     },
     {
       "path": "src/shared/game.ts",
@@ -13797,14 +13803,14 @@
     {
       "path": "src/shared/scoring-rules.test.ts",
       "category": "test",
-      "bytes": 4279,
-      "sha256": "39c2a836a68576af20ff915edd667297c5455ee3aa5afff1659d729ca8e22da4"
+      "bytes": 5006,
+      "sha256": "5fac048f1663ff09c8cbfab1beb39c22c90a04d0109b8b7c2602b3c5f535ba27"
     },
     {
       "path": "src/shared/scoring-rules.ts",
       "category": "source",
-      "bytes": 5768,
-      "sha256": "96dd9d0d090caffc097129a783d107359ee35f050331a57524e7560071b947e4"
+      "bytes": 6693,
+      "sha256": "1d840fd1aac5eb604cec223a1240b1e3570a107fa04796b7b11644da8da270e1"
     },
     {
       "path": "src/shared/script-paths.test.ts",
@@ -19375,7 +19381,7 @@
       "path": "src/renderer/components/GameScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1537,
+      "lineCount": 1538,
       "imports": [
         "file:src/renderer/components/GameScreen.tsx",
         "file:src/renderer/components/gameScreenFeedback.ts",
@@ -20630,7 +20636,7 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3443,
+      "lineCount": 3450,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -26136,7 +26142,7 @@
       "path": "src/renderer/store/useAppStore.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 903,
+      "lineCount": 939,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/useAppStore.ts",
@@ -26148,6 +26154,7 @@
         "file:src/shared/memorize-skip-reward-rules.ts",
         "file:src/shared/playable-path-fixtures.ts",
         "file:src/shared/save-data.ts",
+        "file:src/shared/scoring-rules.ts",
         "file:src/shared/tile-trait-rules.ts"
       ],
       "exports": [],
@@ -26158,7 +26165,7 @@
       "path": "src/renderer/store/useAppStore.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 698,
+      "lineCount": 708,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -29236,7 +29243,7 @@
       "path": "src/shared/game.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1695,
+      "lineCount": 1696,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-powers.ts",
@@ -32998,7 +33005,7 @@
       "path": "src/shared/scoring-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 102,
+      "lineCount": 115,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/game-core.ts",
@@ -33013,7 +33020,7 @@
       "path": "src/shared/scoring-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 151,
+      "lineCount": 168,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/mutators.ts",
@@ -33032,10 +33039,12 @@
         "symbol:src/shared/scoring-rules.ts#getMemorizeDurationForRun",
         "symbol:src/shared/scoring-rules.ts#getMemorizePerTileBudget",
         "symbol:src/shared/scoring-rules.ts#getPresentationMutatorMatchPenalty",
+        "symbol:src/shared/scoring-rules.ts#MISS_DECISION_HOLD_MS",
         "symbol:src/shared/scoring-rules.ts#PRESENTATION_MUTATOR_MATCH_PENALTIES",
         "symbol:src/shared/scoring-rules.ts#tilesArePairMatch"
       ],
       "testedBy": [
+        "file:src/renderer/store/useAppStore.test.ts",
         "file:src/shared/run-relic-rules.test.ts",
         "file:src/shared/scoring-rules.test.ts",
         "file:src/shared/turn-match-score-rules.test.ts",
@@ -38758,8 +38767,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 3442,
-      "endLine": 3442
+      "line": 3449,
+      "endLine": 3449
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
@@ -44831,7 +44840,7 @@
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
       "line": 231,
-      "endLine": 691
+      "endLine": 701
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
@@ -55574,8 +55583,8 @@
       "name": "computeFlipResolveDelayMs",
       "kind": "value",
       "file": "src/shared/scoring-rules.ts",
-      "line": 128,
-      "endLine": 150
+      "line": 142,
+      "endLine": 167
     },
     {
       "id": "symbol:src/shared/scoring-rules.ts#getDefaultTileCount",
@@ -55624,6 +55633,14 @@
       "file": "src/shared/scoring-rules.ts",
       "line": 30,
       "endLine": 42
+    },
+    {
+      "id": "symbol:src/shared/scoring-rules.ts#MISS_DECISION_HOLD_MS",
+      "name": "MISS_DECISION_HOLD_MS",
+      "kind": "value",
+      "file": "src/shared/scoring-rules.ts",
+      "line": 137,
+      "endLine": 137
     },
     {
       "id": "symbol:src/shared/scoring-rules.ts#PRESENTATION_MUTATOR_MATCH_PENALTIES",
@@ -59611,7 +59628,7 @@
         },
         {
           "path": "src/renderer/store/useAppStore.test.ts",
-          "line": 15
+          "line": 16
         }
       ],
       "enables": [
@@ -77905,6 +77922,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/scoring-rules.ts->symbol:src/shared/scoring-rules.ts#MISS_DECISION_HOLD_MS",
+      "source": "file:src/shared/scoring-rules.ts",
+      "target": "symbol:src/shared/scoring-rules.ts#MISS_DECISION_HOLD_MS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/scoring-rules.ts->symbol:src/shared/scoring-rules.ts#PRESENTATION_MUTATOR_MATCH_PENALTIES",
       "source": "file:src/shared/scoring-rules.ts",
       "target": "symbol:src/shared/scoring-rules.ts#PRESENTATION_MUTATOR_MATCH_PENALTIES",
@@ -90019,6 +90042,12 @@
       "id": "imports:src/renderer/store/useAppStore.test.ts->src/shared/save-data.ts",
       "source": "file:src/renderer/store/useAppStore.test.ts",
       "target": "file:src/shared/save-data.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/useAppStore.test.ts->src/shared/scoring-rules.ts",
+      "source": "file:src/renderer/store/useAppStore.test.ts",
+      "target": "file:src/shared/scoring-rules.ts",
       "kind": "imports"
     },
     {
@@ -105475,6 +105504,12 @@
       "id": "tested_by:src/shared/score-terms-rules.ts->file:src/shared/score-terms-rules.test.ts",
       "source": "file:src/shared/score-terms-rules.ts",
       "target": "file:src/shared/score-terms-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/scoring-rules.ts->file:src/renderer/store/useAppStore.test.ts",
+      "source": "file:src/shared/scoring-rules.ts",
+      "target": "file:src/renderer/store/useAppStore.test.ts",
       "kind": "tested_by"
     },
     {

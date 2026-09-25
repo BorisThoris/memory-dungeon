@@ -425,6 +425,16 @@ export const useAppStore = create<AppState>((set, get) => ({
                 ? { ...pressedRun, passAndPlay: acknowledgePassAndPlayHandoff(pressedRun.passAndPlay) }
                 : pressedRun;
 
+        /*
+         * Tapping one of the two missed cards goes on at once. A miss can hold for a while when the
+         * Gambit or Undo is in hand (`MISS_DECISION_HOLD_MS`); this is how a player who does not want
+         * either says so.
+         */
+        if (run.status === 'resolving' && run.board?.flippedTileIds.length === 2 && run.board.flippedTileIds.includes(tileId)) {
+            scheduleResolveTimer(0);
+            return;
+        }
+
         const gambitThirdPick =
             run.status === 'resolving' &&
             run.board &&

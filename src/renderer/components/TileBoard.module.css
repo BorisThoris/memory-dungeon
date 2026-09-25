@@ -840,3 +840,22 @@ block board gestures so pan/zoom does not fight the deal. */
 [data-mobile-camera-mode='false'] .traitPreviewChip {
     bottom: var(--ui-space-xs);
 }
+
+/*
+ * Narrow screens: the chip sat above the tool dock, which on a phone is on top of the bottom row of
+ * cards and the caption. It moves to just under the HUD - above the cards, where a portrait layout
+ * leaves room - and drops its summary row to stay one or two lines.
+ */
+@media (max-width: 720px) {
+    .traitPreviewChip,
+    [data-mobile-camera-mode='false'] .traitPreviewChip,
+    [data-mobile-camera-mode='true'] .traitPreviewChip {
+        /* Just under the HUD, which measures itself (`useGameplayChromeClearance`); the fallback is its usual height. */
+        top: calc(var(--gameplay-hud-top-clearance, clamp(3.1rem, 9vmin, 4.6rem)) + var(--ui-space-xs));
+        bottom: auto;
+    }
+
+    .traitPreviewSummary {
+        display: none;
+    }
+}

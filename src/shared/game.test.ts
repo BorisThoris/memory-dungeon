@@ -838,7 +838,8 @@ describe('game rules', () => {
             createTile('b1', 'B', 'B'),
             createTile('b2', 'B', 'B')
         ];
-        const started = createRun(tiles);
+        // No Gambit or Undo in hand: the plain resolve (with one, the miss holds - scoring-rules.test).
+        const started = { ...createRun(tiles), gambitAvailableThisFloor: false, undoUsesThisFloor: 0 };
 
         const mismatchPending = flipTile(flipTile(started, 'a1'), 'b1');
         expect(mismatchPending.status).toBe('resolving');

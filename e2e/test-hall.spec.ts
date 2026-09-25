@@ -174,3 +174,34 @@ test.describe('The store stop on a phone', () => {
         await expect(page.getByRole('button', { name: 'Descend' })).toBeInViewport();
     });
 });
+
+test.describe('The preview chip on a phone', () => {
+    test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+
+    test('sits above the cards, not over them or the caption', async ({ page }) => {
+        test.setTimeout(240_000);
+        await gotoWithSaveAndQuery(page, buildVisualSaveJson(true), 'hallRoom=clean-pop');
+        await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 150_000 });
+        await page.waitForTimeout(1500);
+        type Rect = { left: number; top: number; width: number; height: number };
+        const first = await page.evaluate(
+            () => (window as unknown as { __e2eGetTileClientRectAtGrid1: (r: number, c: number) => Rect }).__e2eGetTileClientRectAtGrid1(1, 1)
+        );
+        await page.touchscreen.tap(first.left + first.width / 2, first.top + first.height / 2);
+        await expect(page.getByTestId('trait-preview-chip')).toBeVisible({ timeout: 10_000 });
+        // Reported on a phone: the chip sat over the bottom row of cards and the caption, and stayed after every tap.
+        const overlaps = await page.evaluate(() => {
+            const chip = document.querySelector('[data-testid="trait-preview-chip"]')!.getBoundingClientRect();
+            const w = window as unknown as { __e2eGetTileClientRectAtGrid1: (r: number, c: number) => Rect | null };
+            let count = 0;
+            for (let r = 1; r <= 8; r += 1) {
+                for (let c = 1; c <= 12; c += 1) {
+                    const t = w.__e2eGetTileClientRectAtGrid1(r, c);
+                    if (t && !(t.top + t.height <= chip.top || t.top >= chip.bottom || t.left + t.width <= chip.left || t.left >= chip.right)) count += 1;
+                }
+            }
+            return count;
+        });
+        expect(overlaps).toBe(0);
+    });
+});

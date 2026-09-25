@@ -47,6 +47,11 @@ Rules here are the owner's decisions and the lessons that cost real time. They o
   errors allowed, screenshots of every transition in `test-results/playtest/`. Run it and **look at
   the screenshots** after any change a player sees; its first run found three results-screen bugs
   and the store sheet clipping its own descriptions.
+- **Every tool is usable** (`e2e/tools-usable.spec.ts`): each dock tool pressed and its target picked
+  through the board's own pick handler. A tool that acts on a miss (Gambit, Undo) needs the miss to
+  wait: `MISS_DECISION_HOLD_MS` holds it while one is in hand, and tapping a missed card goes on.
+  Headless WebGL runs at a few frames a second, so time-bound e2e steps stretch the run's
+  `resolveDelayMultiplier` rather than trusting wall-clock waits.
 - **Nothing streams in play** (`src/renderer/assets/preloadRunAssets.ts`, `e2e/asset-streaming.spec.ts`):
   card art, tiles, scene art, every sound, the music and every font face load at boot and the run's
   loading screen waits on them. A new asset a run uses must join that preload, or the e2e test that

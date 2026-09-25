@@ -1503,7 +1503,8 @@ describe('GameScreen (OVR-014)', () => {
 
         // The hint already says it: one line, no restatement in three pip blocks beside it.
         const hint = screen.getByTestId('gambit-opportunity-hint');
-        expect(hint).toHaveTextContent('one more flip is available');
+        expect(hint).toHaveTextContent('turn a third card to complete a pair');
+        expect(hint).toHaveTextContent('tap a missed card to go on');
         expect(hint).toHaveTextContent('locks Perfect Memory');
         expect(screen.queryByTestId('gambit-opportunity-signals')).toBeNull();
         expect(hint.querySelectorAll('*')).toHaveLength(0);

@@ -125,6 +125,20 @@ export const tilesArePairMatch = (a: Tile, b: Tile): boolean => {
 };
 
 /** Effective delay after two tiles are flipped (0 if immediate match). */
+/**
+ * How long a miss waits when the player holds a tool that works on it.
+ *
+ * The Gambit (a third card) and Undo can only be used while a missed pair is still face up, and
+ * that was the plain 850ms resolve: long enough to see the miss, not to notice it, decide, and reach
+ * a third card or the Undo button - so neither tool was usable in practice, least of all on a phone.
+ * When one of them is actually available the miss holds this long instead, and tapping either missed
+ * card goes on at once (`pressTile`), so a player who does not want the tool is not held up.
+ */
+export const MISS_DECISION_HOLD_MS = 2400;
+
+const missDecisionToolAvailable = (run: RunState): boolean =>
+    (Boolean(run.gambitAvailableThisFloor) && !run.gambitThirdFlipUsed) || Number(run.undoUsesThisFloor) > 0;
+
 export const computeFlipResolveDelayMs = (
     run: RunState,
     flippedTileIds: string[],
@@ -145,6 +159,9 @@ export const computeFlipResolveDelayMs = (
     let ms = MATCH_DELAY_MS * opts.resolveDelayMultiplier;
     if (opts.echoFeedbackEnabled) {
         ms += ECHO_EXTRA_RESOLVE_MS;
+    }
+    if (missDecisionToolAvailable(run)) {
+        ms = Math.max(ms, MISS_DECISION_HOLD_MS * opts.resolveDelayMultiplier);
     }
     return ms;
 };

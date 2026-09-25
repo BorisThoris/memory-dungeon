@@ -10,6 +10,7 @@ import {
     getMemorizeDurationForRun,
     getMemorizePerTileBudget,
     getPresentationMutatorMatchPenalty,
+    MISS_DECISION_HOLD_MS,
     tilesArePairMatch
 } from './scoring-rules';
 
@@ -61,6 +62,9 @@ describe('scoring-rules', () => {
         const [first, second] = run.board!.tiles.filter((tile) => tile.pairKey !== run.board!.tiles[0]!.pairKey);
         const mismatched = {
             ...run,
+            // No tool that acts on a miss, so the plain resolve applies (the hold is tested below).
+            gambitAvailableThisFloor: false,
+            undoUsesThisFloor: 0,
             board: run.board && {
                 ...run.board,
                 tiles: run.board.tiles.map((tile, index) =>
@@ -81,6 +85,15 @@ describe('scoring-rules', () => {
                 echoFeedbackEnabled: true
             })
         ).toBe(MATCH_DELAY_MS * 2 + 380);
+        // With the Gambit or Undo in hand the miss holds long enough to use them, at the same speed scale.
+        for (const withTool of [{ gambitAvailableThisFloor: true, gambitThirdFlipUsed: false }, { undoUsesThisFloor: 1 }]) {
+            expect(
+                computeFlipResolveDelayMs({ ...mismatched, ...withTool }, ['first', 'second'], {
+                    resolveDelayMultiplier: 2,
+                    echoFeedbackEnabled: false
+                })
+            ).toBe(MISS_DECISION_HOLD_MS * 2);
+        }
     });
 
     it('returns no resolve delay for malformed flipped tile ids', () => {

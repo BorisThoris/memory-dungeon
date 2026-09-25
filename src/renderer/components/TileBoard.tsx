@@ -1261,7 +1261,14 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         const tile = board.tiles.find((candidate) => candidate.id === tileId);
         return tile && tile.state === 'flipped' ? tile.id : null;
     }, [board.flippedTileIds, board.tiles, boardApplicationFocused]);
-    const previewChipTileId = boardApplicationFocused ? focusedTileId : (selectedPreviewTileId ?? hoveredTileId);
+    /*
+     * Hover is a mouse's idea. On a touch screen every tap leaves a "hover" behind, so the chip used to
+     * appear after any tap and stay over the bottom of the board and the caption until the next one -
+     * reported as blocking play on a phone. Touch reads the card actually turned (or focused), not hover.
+     */
+    const previewChipTileId = boardApplicationFocused
+        ? focusedTileId
+        : (selectedPreviewTileId ?? (touchPrimary ? null : hoveredTileId));
     /*
      * The clump the considered tile stands in: outlined on the board and named in the chip. Read
      * from the live board through the same region rule the break uses, so what is promised is

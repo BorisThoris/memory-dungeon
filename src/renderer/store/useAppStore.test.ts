@@ -1,4 +1,5 @@
 import { DEFAULT_CLASSIC_RUN_SETUP } from '../../shared/classic-run-setup';
+import { MISS_DECISION_HOLD_MS } from '../../shared/scoring-rules';
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import type { BoardState, RunState, Tile } from '../../shared/contracts';
 import { buildBoard, countFindablePairs } from '../../shared/board-generation';
@@ -332,13 +333,46 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().view).toBe('playing');
         expect(useAppStore.getState().run?.status).toBe('resolving');
 
-        await vi.advanceTimersByTimeAsync(1400);
+        // A new run holds the Gambit, so a miss waits out the decision hold (`MISS_DECISION_HOLD_MS`).
+        await vi.advanceTimersByTimeAsync(MISS_DECISION_HOLD_MS + 200);
 
         expect(useAppStore.getState().run?.status).toBe('playing');
         expect(useAppStore.getState().run?.stats.tries).toBe(expectedTriesAfterResolve);
     });
 
 
+    it('goes on at once when a missed card is tapped during the decision hold', async () => {
+        useAppStore.getState().startRun();
+        notifyCurrentBoardReady();
+
+        const memorizeDuration = useAppStore.getState().run?.timerState.memorizeRemainingMs ?? 0;
+        await vi.advanceTimersByTimeAsync(memorizeDuration + 1);
+
+        const board = useAppStore.getState().run?.board;
+        expect(board).not.toBeNull();
+
+        const pairGroups = normalPairGroups(board!);
+        const firstTile = pairGroups[0]?.[0];
+        const mismatchTile = pairGroups[1]?.[0];
+
+        expect(firstTile).toBeDefined();
+        expect(mismatchTile).toBeDefined();
+
+        useAppStore.getState().pressTile(firstTile!.id);
+        useAppStore.getState().pressTile(mismatchTile!.id);
+
+        expect(useAppStore.getState().run?.status).toBe('resolving');
+
+        useAppStore.getState().pressTile(firstTile!.id);
+        await vi.advanceTimersByTimeAsync(50);
+
+        expect(useAppStore.getState().run?.status).toBe('playing');
+        expect(useAppStore.getState().run?.stats.mismatches).toBe(1);
+        expect(useAppStore.getState().matchScorePop).toBeNull();
+        expect(useAppStore.getState().mismatchScorePop).not.toBeNull();
+        expect(useAppStore.getState().mismatchScorePop?.tileIdA).toBe(firstTile!.id);
+        expect(useAppStore.getState().mismatchScorePop?.tileIdB).toBe(mismatchTile!.id);
+    });
     it('does not set matchScorePop on mismatch resolve; mismatches increment and mismatchScorePop payload is stored', async () => {
         useAppStore.getState().startRun();
         notifyCurrentBoardReady();
@@ -361,7 +395,8 @@ describe('useAppStore timers', () => {
 
         expect(useAppStore.getState().run?.status).toBe('resolving');
 
-        await vi.advanceTimersByTimeAsync(1400);
+        // A new run holds the Gambit, so a miss waits out the decision hold (`MISS_DECISION_HOLD_MS`).
+        await vi.advanceTimersByTimeAsync(MISS_DECISION_HOLD_MS + 200);
 
         expect(useAppStore.getState().run?.status).toBe('playing');
         expect(useAppStore.getState().run?.stats.mismatches).toBe(1);
@@ -796,7 +831,8 @@ describe('useAppStore timers', () => {
             for (const ids of [...pairGroups.values()].filter((group) => group.length === 2)) {
                 useAppStore.getState().pressTile(ids[0]!);
                 useAppStore.getState().pressTile(ids[1]!);
-                await vi.advanceTimersByTimeAsync(1400);
+                // A new run holds the Gambit, so a miss waits out the decision hold (`MISS_DECISION_HOLD_MS`).
+        await vi.advanceTimersByTimeAsync(MISS_DECISION_HOLD_MS + 200);
             }
 
             run = useAppStore.getState().run;
