@@ -31,6 +31,13 @@ import { getUnresolvedPlayablePairGroups } from '../src/shared/playthrough-solve
 import { createMulberry32, hashStringToSeed, pickRngIndex } from '../src/shared/rng';
 import { getMemorizeDurationForRun } from '../src/shared/scoring-rules';
 import { isSingletonUtilityPairKey } from '../src/shared/tile-identity';
+import { orderAroundLock } from '../src/shared/turn-match-board-cleanup-rules';
+
+/** Both cards of the turn, the locked one second (`orderAroundLock`). */
+const flipLockedLast = (run: RunState, first: { id: string }, second: { id: string }): RunState => {
+    const [a, b] = orderAroundLock(run, first, second);
+    return flipTile(flipTile(run, a.id), b.id);
+};
 
 /** Everything about a played floor a player could notice. */
 export interface MutatorFloorReading {
@@ -39,7 +46,8 @@ export interface MutatorFloorReading {
     drifts: number;
     findables: number;
     spotlight: boolean;
-    sticky: boolean;
+    /** Turns that ended with a lock on a card that could have been opened - not merely a lock set. */
+    sticky: number;
     nBack: boolean;
     thefts: number;
     flinches: number;
@@ -99,7 +107,7 @@ export const playMutatorFloor = (seed: number, floor: number, mutators: MutatorI
         drifts: 0,
         findables: countFindablePairs(board.tiles),
         spotlight: board.wardPairKey != null || board.bountyPairKey != null,
-        sticky: false,
+        sticky: 0,
         nBack: false,
         thefts: 0,
         flinches: 0,
@@ -127,8 +135,13 @@ export const playMutatorFloor = (seed: number, floor: number, mutators: MutatorI
             const group = groups[pickRngIndex(rng, groups.length)]!;
             [first, second] = [group[0]!, group[1]!];
         }
-        run = resolveBoardTurn(flipTile(flipTile(run, first.id), second.id));
-        if (run.stickyBlockIndex != null) reading.sticky = true;
+        run = resolveBoardTurn(flipLockedLast(run, first, second));
+        /*
+         * A lock counts only where it lands on a face-down card. Sticky fingers used to lock the
+         * matched card itself, which no one can open, and this channel - reading "an index is set"
+         * - called that an effect for as long as the Trap Hall shipped doing nothing.
+         */
+        if (run.stickyBlockIndex != null && run.board?.tiles[run.stickyBlockIndex]?.state === 'hidden') reading.sticky += 1;
         if (run.nBackAnchorPairKey != null) reading.nBack = true;
         if (run.board?.wardPairKey != null || run.board?.bountyPairKey != null) reading.spotlight = true;
         reading.thefts = Math.max(reading.thefts, run.magpieTheftsThisFloor ?? 0);

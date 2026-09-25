@@ -23,6 +23,7 @@ import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
+import { orderAroundLock } from './turn-match-board-cleanup-rules';
 
 /**
  * Does this system ever happen to a player?
@@ -514,6 +515,8 @@ const playFloorFrom = (
                 continue;
             }
         }
+        // The locked card second, as a player who sees the lock turns it (`orderAroundLock`).
+        [first, second] = orderAroundLock(run, first, second);
         const flipped = flipTile(flipTile(run, first.id), second.id);
         /*
          * The undo is the one tool that has to be spent mid-turn: it takes back a pair the player

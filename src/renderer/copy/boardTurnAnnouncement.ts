@@ -16,20 +16,19 @@ export const CHAIN_MILESTONE_THRESHOLDS = [3, 6, 10] as const;
  * streak the core reported rather than from a remembered previous streak.
  */
 export const chainMilestoneAnnouncement = (turnEvent: BoardTurnResolvedEvent): string | null => {
-    const { currentStreakBefore, currentStreakAfter } = turnEvent.announcement;
+    const { currentStreakBefore, currentStreakAfter, chainTierBefore, chainTierAfter } = turnEvent.announcement;
     if (currentStreakAfter <= currentStreakBefore) {
         return null;
+    }
+    // The rung the rail shows, not a fixed streak mark: see `getChainMilestoneFeedback`.
+    const milestone = getChainMilestoneFeedback(chainTierBefore, chainTierAfter);
+    if (milestone) {
+        return `${milestone.label}: ${milestone.target} per pair. ${milestone.action}.`;
     }
     const crossed = CHAIN_MILESTONE_THRESHOLDS.find(
         (threshold) => currentStreakBefore < threshold && currentStreakAfter >= threshold
     );
-    if (crossed === undefined) {
-        return null;
-    }
-    const milestone = getChainMilestoneFeedback(currentStreakBefore, currentStreakAfter);
-    return milestone
-        ? `${milestone.label}: ${milestone.target}. ${milestone.value}.`
-        : `Chain times ${crossed} - keep the chain for bigger match payouts.`;
+    return crossed === undefined ? null : `Chain times ${crossed} - keep the chain for bigger match payouts.`;
 };
 
 /**

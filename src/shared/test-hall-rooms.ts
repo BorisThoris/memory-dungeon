@@ -63,6 +63,7 @@ export type TestHallRoomId =
     | 'wild'
     | 'conduit'
     | 'stasis'
+    | 'sticky-fingers'
     | 'skittish'
     | 'lantern';
 
@@ -623,6 +624,28 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
             { step: { do: 'match', pairKey: 's' }, says: 'the Stasis match locks h-1', expect: (r) => (r.stickyBlockIndex === positionOf(r, 'h-1') ? null : `lock at ${r.stickyBlockIndex}`) },
             { step: { do: 'flip', tileId: 'a-1' }, says: 'a first card elsewhere is fine', expect: statusIs('playing') },
             { step: { do: 'flip', tileId: 'h-1' }, says: 'the locked card opens as the second card', expect: (r) => (r.board?.flippedTileIds.includes('h-1') ? null : 'the locked card would not open second') }
+        ]
+    },
+    {
+        id: 'sticky-fingers',
+        title: 'Sticky fingers',
+        mechanic: 'After a match, the first face-down card touching it cannot be the first card of the next turn (the Trap Hall).',
+        graphMechanicIds: ['board.cleanup'],
+        tryThis: 'Match a in the corner. b-1 beside it is marked: it will not open first, but it opens second.',
+        build: () => room(['a:e b:t c:m d:b', 'e:m f:b g:e h:t', 'a:e b:t c:m d:b', 'e:m f:b g:e h:t'], { mutators: ['sticky_fingers'] }),
+        script: [
+            {
+                step: { do: 'match', pairKey: 'a' },
+                says: 'the match locks b-1, the face-down card beside a-1 - not the matched card',
+                expect: (r) => (r.stickyBlockIndex === positionOf(r, 'b-1') ? null : `lock at ${r.stickyBlockIndex}`)
+            },
+            {
+                step: { do: 'flip', tileId: 'b-1' },
+                says: 'b-1 will not open the turn',
+                expect: (r) => ((r.board?.flippedTileIds.length ?? 0) === 0 ? null : 'the locked card opened a turn')
+            },
+            { step: { do: 'flip', tileId: 'c-1' }, says: 'a first card elsewhere is fine', expect: statusIs('playing') },
+            { step: { do: 'flip', tileId: 'b-1' }, says: 'the locked card opens as the second card', expect: (r) => (r.board?.flippedTileIds.includes('b-1') ? null : 'the locked card would not open second') }
         ]
     },
     {

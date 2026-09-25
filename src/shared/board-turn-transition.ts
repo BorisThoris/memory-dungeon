@@ -19,7 +19,7 @@ import { selectGambitMatchedPair } from './gambit-match-rules';
 import { resolveMismatchTurnTransition } from './turn-mismatch-rules';
 import { applyMissBudget } from './miss-bank';
 import { resolveTurnMatchFollowup } from './turn-match-followup-rules';
-import { resolveTurnMatchBoardCleanup } from './turn-match-board-cleanup-rules';
+import { resolveTurnMatchBoardCleanup, selectStickyFingersLockIndex } from './turn-match-board-cleanup-rules';
 import { resolveTurnMatchProgress } from './turn-match-progress-rules';
 import { resolveTurnMatchBoardResolution } from './turn-match-board-resolution-rules';
 import { resolveTurnMatchScoringSummary } from './turn-match-scoring-summary-rules';
@@ -189,7 +189,6 @@ export const createResolveBoardTurnTransition = ({
             run,
             board: sourceBoard,
             matchedTileIds: [firstTile.id, secondTile.id],
-            firstMatchedTileId: firstTile.id,
             recallBonus: scoring.recallBonus
         });
         const progress = resolveTurnMatchProgress({
@@ -232,6 +231,10 @@ export const createResolveBoardTurnTransition = ({
                   rulesVersion: run.runRulesVersion
               })
             : [];
+        // Sticky fingers locks a card beside the match, on the board the player will look at.
+        const stickyFingersLock = hasMutator(run, 'sticky_fingers')
+            ? selectStickyFingersLockIndex(boardAfterDrift, [firstTile.id, secondTile.id])
+            : null;
         const stats = normalizeSessionStats(run.stats);
 
         const journaledRun = execution
@@ -266,7 +269,7 @@ export const createResolveBoardTurnTransition = ({
             recallMatchesThisFloor: boardCleanup.recallMatchesThisFloor,
             recallBonusScoreThisFloor: boardCleanup.recallBonusScoreThisFloor,
             forgottenTileIdsThisFloor: boardCleanup.forgottenTileIdsThisFloor,
-            stickyBlockIndex: traitReward.stickyBlockIndex ?? boardCleanup.stickyBlockIndex,
+            stickyBlockIndex: traitReward.stickyBlockIndex ?? stickyFingersLock,
             ...progress,
             stats: {
                 ...stats,

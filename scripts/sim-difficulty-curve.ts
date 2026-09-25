@@ -49,6 +49,13 @@ import { getUnresolvedPlayablePairGroups } from '../src/shared/playthrough-solve
 import { createMulberry32, hashStringToSeed, pickRngIndex } from '../src/shared/rng';
 import { SCATTERED_SUIT_CEILING, boardPaletteWidth } from '../src/shared/tile-suit-rules';
 import { isSingletonUtilityPairKey } from '../src/shared/tile-identity';
+import { orderAroundLock } from '../src/shared/turn-match-board-cleanup-rules';
+
+/** Both cards of the turn, the locked one second (`orderAroundLock`). */
+const flipLockedLast = (run: RunState, first: { id: string }, second: { id: string }): RunState => {
+    const [a, b] = orderAroundLock(run, first, second);
+    return flipTile(flipTile(run, a.id), b.id);
+};
 
 export const CURVE_SEEDS = [11, 202, 3003, 40404, 555, 6006, 77, 8888, 91_919, 1_234] as const;
 export const CURVE_FLOORS = 52;
@@ -124,7 +131,7 @@ export const simulateDifficultyCurve = ({
                     const group = groups[pickRngIndex(rng, groups.length)]!;
                     [first, second] = [group[0]!, group[1]!];
                 }
-                run = resolveBoardTurn(flipTile(flipTile(run, first.id), second.id));
+                run = resolveBoardTurn(flipLockedLast(run, first, second));
                 turns += 1;
             }
             const row = gathered.get(floor) ?? { turns: [], suits: [], popped: [], pars: [] };

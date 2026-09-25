@@ -113,7 +113,7 @@ const getChainMultiplierLabel = (normalizedAnnouncement: string): string | null 
         return `x${numericMatch[1]}`;
     }
 
-    const milestoneMatch = normalizedAnnouncement.match(/\b(?:clean|sharp|fever) reached:\s*x(\d+)\b/i);
+    const milestoneMatch = normalizedAnnouncement.match(/\b(?:clean|sharp|fever) reached:\s*[x×](\d+)/i);
     if (milestoneMatch?.[1]) {
         return `x${milestoneMatch[1]}`;
     }

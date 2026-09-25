@@ -11,7 +11,7 @@
 import type { AchievementId, GameMode, MutatorId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 50 as const;
+export const ENCYCLOPEDIA_VERSION = 52 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -259,7 +259,7 @@ export const MUTATOR_CATALOG: Record<MutatorId, MutatorDefinition> = {
         id: 'sticky_fingers',
         title: 'Sticky fingers',
         description:
-            'After a match, **one board slot** is reserved so your **next opening flip** must start elsewhere—flip-order pressure only (often highlighted in the HUD).'
+            'After a match, **one face-down card touching it** is marked and cannot be the **first card** of your next turn - open elsewhere, and turn it second if you know its partner. Nothing is locked when only one pair is left.'
     },
     restless_floor: {
         id: 'restless_floor',
@@ -364,7 +364,7 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
         id: 'miss_budget',
         title: 'Misses',
         description:
-            'A run has a small budget of **misses**. It opens with **two**; every new floor gives **one** back, on top of whatever you did not spend, and the budget never holds more than **three**. A miss spends one - it still resets the chain, counts a try and a turn, and nothing else - and a miss with none left ends the run. That is the only way a run ends on its own; otherwise it ends when you stop. The run bar shows turns against par and how many misses you have left, and turns red on the last one.'
+            'A run has a small bank of **misses**, and it is earned. It opens with **three**; clearing a floor earns **one**, and so does every **fifth match in a row**. Each miss you earn lasts **three floors** past the one you earned it on - the oldest go first - and the bank holds **four** at most (**five** with Deep Pockets). A miss spends one (two on a Heavy card) - it still resets the chain, counts a try and a turn, and nothing else - and a miss with none left ends the run. That is the only way a run ends on its own; otherwise it ends when you stop. The run bar shows turns against par and how many misses you have left, and turns red on the last one.'
     },
     {
         id: 'scoring',

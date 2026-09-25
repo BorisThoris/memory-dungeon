@@ -51,6 +51,13 @@ import { getUnresolvedPlayablePairGroups } from '../src/shared/playthrough-solve
 import { createMulberry32, hashStringToSeed, pickRngIndex } from '../src/shared/rng';
 import { SUIT_DEAL_PROFILE_BY_ARCHETYPE, boardPaletteWidth } from '../src/shared/tile-suit-rules';
 import { isSingletonUtilityPairKey } from '../src/shared/tile-identity';
+import { orderAroundLock } from '../src/shared/turn-match-board-cleanup-rules';
+
+/** Both cards of the turn, the locked one second (`orderAroundLock`). */
+const flipLockedLast = (run: RunState, first: { id: string }, second: { id: string }): RunState => {
+    const [a, b] = orderAroundLock(run, first, second);
+    return flipTile(flipTile(run, a.id), b.id);
+};
 
 export const ARCHETYPE_PRESSURE_SEEDS: readonly number[] = Array.from({ length: 30 }, (_, index) => 5001 + index * 211);
 
@@ -103,7 +110,7 @@ const playFloor = (board: BoardState, seed: number, tag: string): number => {
             const group = groups[pickRngIndex(rng, groups.length)]!;
             [first, second] = [group[0]!, group[1]!];
         }
-        run = resolveBoardTurn(flipTile(flipTile(run, first.id), second.id));
+        run = resolveBoardTurn(flipLockedLast(run, first, second));
         turns += 1;
     }
     return turns;
