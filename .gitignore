@@ -34,3 +34,5 @@ steam_appid.txt.bak
 # Python (e.g. scripts/audio-pipeline)
 **/__pycache__/
 *.pyc
+# recorded trailer masters (scripts/build-project-trailers.mjs)
+project-media/.captures/

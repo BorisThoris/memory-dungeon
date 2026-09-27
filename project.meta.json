@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-25T17:37:33.609Z",
+  "generatedAt": "2026-09-27T13:21:37.231Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -264,7 +264,9 @@
       "icons:check",
       "meta:refresh",
       "trailers",
-      "trailers:check"
+      "trailers:check",
+      "test:media",
+      "test:media:e2e"
     ]
   },
   "capture": {
@@ -287,53 +289,53 @@
   },
   "media": {
     "source": "repo-local",
-    "directory": "/home/runner/work/memory-dungeon/memory-dungeon/project-media",
+    "directory": "C:/Users/GAMING~1/AppData/Local/Temp/media-rollout-BXkgXs/project-media",
     "primary": "project-media/card.jpg",
     "images": [
       {
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 167261,
+        "bytes": 165233,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-25T17:37:12.124Z"
+        "capturedAt": "2026-09-27T13:18:22.532Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 157389,
+        "bytes": 155174,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-25T17:37:17.659Z"
+        "capturedAt": "2026-09-27T13:18:31.370Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 131438,
+        "bytes": 129200,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-25T17:37:28.171Z"
+        "capturedAt": "2026-09-27T13:18:52.465Z"
       },
       {
         "profile": "mobile",
         "file": "mobile.jpg",
         "path": "project-media/mobile.jpg",
-        "bytes": 51915,
+        "bytes": 52129,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-25T17:37:22.581Z"
+        "capturedAt": "2026-09-27T13:18:43.523Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 122399,
+        "bytes": 122127,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-25T17:37:33.357Z"
+        "capturedAt": "2026-09-27T13:19:00.601Z"
       },
       {
         "profile": "reel-cover-break-the-chain",
@@ -342,7 +344,7 @@
         "bytes": 139355,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-09-25T17:27:02.502Z"
+        "capturedAt": "2026-09-27T13:17:00.725Z"
       },
       {
         "profile": "reel-cover-gameplay",
@@ -351,7 +353,7 @@
         "bytes": 149787,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-09-25T17:27:02.502Z"
+        "capturedAt": "2026-09-27T13:17:00.727Z"
       },
       {
         "profile": "reel-cover-remember-this",
@@ -360,7 +362,7 @@
         "bytes": 322090,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-09-25T17:27:02.503Z"
+        "capturedAt": "2026-09-27T13:17:00.740Z"
       },
       {
         "profile": "reel-end-card",
@@ -369,7 +371,7 @@
         "bytes": 1192916,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-09-25T17:27:02.504Z"
+        "capturedAt": "2026-09-27T13:17:00.880Z"
       }
     ],
     "trailers": [
@@ -496,9 +498,9 @@
     "devDependencyCount": 47
   },
   "metrics": {
-    "sourceFiles": 1183,
-    "testFiles": 511,
-    "sourceLines": 184238,
+    "sourceFiles": 1186,
+    "testFiles": 513,
+    "sourceLines": 184902,
     "largestDirectories": [
       {
         "directory": "src",
@@ -506,7 +508,7 @@
       },
       {
         "directory": "scripts",
-        "files": 94
+        "files": 97
       },
       {
         "directory": "e2e",
@@ -536,12 +538,12 @@
   },
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
-    "branch": "main",
-    "head": "5519871d",
-    "lastCommitDate": "2026-09-25T20:26:31+03:00",
-    "lastCommitSubject": "Refresh the repo model after merging main",
-    "commitCount": 1846,
-    "remote": "https://github.com/BorisThoris/memory-dungeon"
+    "branch": "HEAD",
+    "head": "73e85ea3",
+    "lastCommitDate": "2026-09-25T17:37:35+00:00",
+    "lastCommitSubject": "Refresh screenshots, card, icons and metadata [meta-bot]",
+    "commitCount": 1847,
+    "remote": "https://github.com/BorisThoris/memory-dungeon.git"
   },
   "readme": {
     "file": "README.md",

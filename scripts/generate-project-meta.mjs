@@ -472,7 +472,7 @@ function collectTrailers() {
   if (!record || !Array.isArray(record.items)) return [];
   const origin = deploymentOrigin();
   return record.items
-    .filter((item) => (item.kind ?? 'trailer') === 'trailer' && item.urlPath)
+    .filter((item) => ['trailer', 'capture'].includes(item.kind ?? 'trailer') && item.urlPath)
     .map((item) => pruneEmpty({
       id: item.id,
       title: item.title,

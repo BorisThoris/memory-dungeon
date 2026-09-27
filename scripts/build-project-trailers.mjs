@@ -7,6 +7,7 @@
 // Usage:
 //   npm run trailers                  # rebuild whatever is stale, publish, record
 //   npm run trailers -- --check       # non-zero exit if anything is stale or unpublished
+//   npm run trailers -- --check --buildable-only   # ...ignoring items this machine cannot render
 //   npm run trailers -- --force       # rebuild everything
 //   npm run trailers -- --only=<id>   # one item
 //   npm run trailers -- --list        # what is configured and its state
@@ -49,6 +50,24 @@
 //       maxWidth: 2560               // the web copy is a JPEG no wider/taller than this (default 2560)
 //     }]
 //
+// A captured trailer is recorded from the running app through Playwright (no
+// Blender, no scene of its own): the recipe drives the app the way a player
+// or a visitor would, a music bed is mixed under it, and it re-records when
+// the app's source (`inputs`) or the recipe changes:
+//
+//     items: [{
+//       id: 'tour', title: 'Two minutes in the editor', kind: 'capture',
+//       inputs: ['src', 'index.html'],       // the app; the recipe itself is always part of the hash
+//       source: 'deployment',                 // or 'local' (start runCommand) - what to record
+//       music: 'project-media/music/tour.m4a',   // optional bed, looped and faded under the picture
+//       recipe: {
+//         route: '/', viewport: { width: 1280, height: 720 }, durationMs: 20000,
+//         setup: { readySelector, actions: [...] },     // strict: must be reached (same shape as capture)
+//         timeline: [ { type: 'key', key: 'KeyW', holdMs: 1500 }, ... ],   // what happens on camera
+//         quality: { minStd: 10 }                        // the frame mid-way must pass this
+//       }
+//     }]
+//
 // An input change is detected through git (the index plus the working tree),
 // so a rebuild happens exactly when something the render depends on changed.
 // A machine without the toolchain (`requires`) reports the item stale and
@@ -63,6 +82,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 import config from './project-meta.config.mjs';
+import { assessFrame, loadChromium, recordRecipe, resolveBaseUrl } from './project-media-lib.mjs';
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(scriptDir, '..');
@@ -71,6 +91,9 @@ const checkOnly = args.includes('--check');
 const force = args.includes('--force');
 const listOnly = args.includes('--list');
 const noBuild = args.includes('--no-build');
+// --check --buildable-only: a stale item whose toolchain (Blender, NVENC) is
+// not on this machine is a warning, not a failure - it is rebuilt where it is.
+const buildableOnly = args.includes('--buildable-only');
 const onlyArg = args.find((argument) => argument.startsWith('--only='));
 const only = onlyArg ? new Set(onlyArg.slice('--only='.length).split(',').map((value) => value.trim())) : null;
 
@@ -110,7 +133,9 @@ for (const item of items) {
   }
 
   if (checkOnly) {
-    if (state.stale) stale.push(item.id + ' (' + state.reason + ')');
+    if (state.stale && buildableOnly && checkRequirements(item.requires ?? []).missing.length > 0) {
+      console.warn('[trailers] ' + item.id + ': stale (' + state.reason + ') but needs ' + checkRequirements(item.requires ?? []).missing.join(', ') + ' - rebuilt where the toolchain is.');
+    } else if (state.stale) stale.push(item.id + ' (' + state.reason + ')');
     else console.log('[trailers] ' + item.id + ': current' + (previous?.builtAt ? ' (built ' + previous.builtAt + ')' : ''));
     continue;
   }
@@ -143,7 +168,7 @@ for (const item of items) {
   }
 
   // The build hash is taken after prepare so regenerated inputs are part of it.
-  const inputsHash = hashPathspecs(itemInputs(item));
+  const inputsHash = hashPathspecs(itemInputs(item), itemExtraInput(item));
   const needsBuild = force || !previous || previous.inputsHash !== inputsHash || state.unpublished;
   if (!needsBuild) {
     // prepare ran but produced identical inputs: the render is still valid.
@@ -153,7 +178,9 @@ for (const item of items) {
     continue;
   }
 
-  if (noBuild || !item.build) {
+  if (item.kind === 'capture') {
+    // recorded and published in one go below
+  } else if (noBuild || !item.build) {
     console.log('\n[trailers] ' + item.id + ': ' + (item.build ? '--no-build, ' : '') + 'publishing ' + (item.output ?? item.source ?? 'the build') + '.');
   } else {
     if (trailers.freeGpu) freeGpu();
@@ -169,6 +196,7 @@ for (const item of items) {
   const entry = { id: item.id, title: item.title ?? item.id, kind: item.kind ?? 'trailer', inputsHash, builtAt: new Date().toISOString() };
   if (item.prepare) entry.prepareHash = prepareHash ?? hashPathspecs(item.prepare.inputs ?? []);
   if ((item.kind ?? 'trailer') === 'trailer') Object.assign(entry, publishTrailer(item));
+  else if (item.kind === 'capture') Object.assign(entry, await publishCapture(item));
   else if (item.kind === 'artwork') Object.assign(entry, publishArtwork(item));
   else if (item.outputs) entry.outputs = item.outputs.map((relative) => describeFile(relative));
   recorded.set(item.id, entry);
@@ -200,10 +228,10 @@ console.log('\n[trailers] ' + slug + ': ' + built + ' built' + (missingTools.len
 
 function describeState(item, previous) {
   const kind = item.kind ?? 'trailer';
-  const publishes = kind === 'trailer' || kind === 'artwork';
+  const publishes = kind === 'trailer' || kind === 'artwork' || kind === 'capture';
   if (!previous) return { stale: true, reason: 'never built', prepareStale: true, unpublished: publishes, summary: 'never built' };
   const prepareStale = Boolean(item.prepare) && previous.prepareHash !== hashPathspecs(item.prepare.inputs ?? []);
-  const inputsStale = previous.inputsHash !== hashPathspecs(itemInputs(item));
+  const inputsStale = previous.inputsHash !== hashPathspecs(itemInputs(item), itemExtraInput(item));
   const unpublished = publishes && !(previous.file && fs.existsSync(path.join(repoRoot, previous.file)));
   const reasons = [];
   if (prepareStale) reasons.push('generator inputs changed');
@@ -220,18 +248,39 @@ function describeState(item, previous) {
 }
 
 // An artwork item with no inputs of its own is rendered from its source file.
+// Whatever this toolkit publishes into the static directory (trailers,
+// artwork, the card image, the icon set) is never an input, or a build would
+// invalidate itself.
 function itemInputs(item) {
-  if (Array.isArray(item.inputs)) return item.inputs;
-  if (item.kind === 'artwork' && item.source) return [item.source];
-  return [];
+  let inputs = [];
+  if (Array.isArray(item.inputs)) inputs = item.inputs;
+  else if (item.kind === 'artwork' && item.source) inputs = [item.source];
+  if (inputs.length === 0) return inputs;
+  const staticDir = toPosix(config.social?.staticDir ?? 'public');
+  const iconDir = toPosix(config.icons?.outputDir ?? staticDir);
+  const generated = [
+    publishDirRelative, artworkDirRelative,
+    path.posix.join(staticDir, config.social?.imageName ?? 'og-image.jpg'),
+    ...['favicon.ico', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png', 'icon-maskable-512.png', config.icons?.manifestName ?? 'site.webmanifest']
+      .map((name) => path.posix.join(iconDir, name))
+  ];
+  return [...inputs, ...generated.map((relative) => ':(exclude)' + relative)];
+}
+
+// A captured trailer is also a function of its recipe and its music bed.
+function itemExtraInput(item) {
+  if (item.kind !== 'capture') return '';
+  return JSON.stringify({ recipe: item.recipe ?? null, music: item.music ?? null, source: item.source ?? 'deployment' });
 }
 
 // The hash covers every tracked file under the pathspecs (its blob id from the
 // index) plus the content of anything modified or untracked in the working
 // tree, so an unstaged edit counts as a change too. Ignored files do not.
-function hashPathspecs(pathspecs) {
-  if (pathspecs.length === 0) return 'none';
+function hashPathspecs(pathspecs, extra = '') {
+  if (pathspecs.length === 0 && !extra) return 'none';
   const hash = crypto.createHash('sha256');
+  hash.update(extra);
+  if (pathspecs.length === 0) return hash.digest('hex');
   const listed = git(['ls-files', '-s', '-z', '--', ...pathspecs]);
   hash.update(listed);
   const status = git(['status', '--porcelain', '-z', '--untracked-files=all', '--', ...pathspecs]);
@@ -362,6 +411,98 @@ function publishTrailer(item) {
     fps: published.fps,
     orientation: item.orientation ?? (published.height > published.width ? 'portrait' : published.height === published.width ? 'square' : 'landscape')
   };
+}
+
+// Records the recipe from the running app (Playwright's webm), keeps that
+// master under project-media/.captures/ (ignored), then publishes it like any
+// trailer: H.264 + AAC with the music bed looped and faded underneath, capped
+// in size, with a poster frame. --no-build re-encodes the last recording.
+async function publishCapture(item) {
+  const recipe = item.recipe ?? {};
+  const capturesDir = path.join(repoRoot, 'project-media', '.captures');
+  const master = path.join(capturesDir, item.id + '.webm');
+  fs.mkdirSync(capturesDir, { recursive: true });
+  let stats = null;
+
+  if (noBuild && fs.existsSync(master)) {
+    console.log('\n[trailers] ' + item.id + ': --no-build, re-publishing the last recording.');
+  } else {
+    const chromium = await loadChromium(repoRoot, config);
+    const base = await resolveBaseUrl(config, repoRoot, { source: item.source ?? 'deployment', url: item.url, log: (line) => console.log(line.replace('[media]', '[trailers]')) });
+    try {
+      console.log('\n[trailers] ' + item.id + ': recording ' + (recipe.durationMs ?? 20000) / 1000 + ' s of ' + base.url + ' (' + base.source + ')');
+      const recording = await recordRecipe(chromium, { url: base.url, recipe, outDir: capturesDir, log: (line) => console.log(line.replace('[media]', '[trailers]')) });
+      stats = recording.stats;
+      const problems = assessFrame(stats, recipe.quality);
+      if (problems.length > 0) {
+        fs.rmSync(recording.videoPath, { force: true });
+        console.error('[trailers] ' + item.id + ': the recording does not show the app - ' + problems.join('; '));
+        process.exit(1);
+      }
+      fs.renameSync(recording.videoPath, master);
+      if (recording.skipped.length > 0) console.log('[trailers] ' + item.id + ': skipped ' + recording.skipped.length + ' optional step(s)');
+    } finally {
+      await base.stop();
+    }
+  }
+
+  fs.mkdirSync(publishDir, { recursive: true });
+  const target = path.join(publishDir, item.id + '.mp4');
+  const poster = path.join(publishDir, item.id + '.jpg');
+  const music = item.music ? path.join(repoRoot, item.music) : null;
+  if (music && !fs.existsSync(music)) {
+    console.error('[trailers] ' + item.id + ': music bed ' + item.music + ' does not exist');
+    process.exit(1);
+  }
+  const duration = Math.max(1, (recipe.durationMs ?? 20000) / 1000);
+  encodeCapture(master, target, { music, duration, crf: item.crf ?? 23, maxHeight: item.maxHeight ?? 1080 });
+  let bytes = fs.statSync(target).size;
+  if (bytes > maxBytes) {
+    const kbps = Math.max(600, Math.floor(((maxBytes * 8 * 0.94) / duration - 128000) / 1000));
+    console.log('[trailers] ' + item.id + ': ' + formatBytes(bytes) + ' exceeds the cap, re-encoding at ' + kbps + ' kbps');
+    encodeCapture(master, target, { music, duration, kbps, maxHeight: item.maxHeight ?? 1080 });
+    bytes = fs.statSync(target).size;
+  }
+  const published = probe(target);
+  const at = Math.max(0, Math.min(published.duration - 0.1, (item.posterAt ?? 0.5) * published.duration));
+  ffmpeg(['-y', '-loglevel', 'error', '-ss', at.toFixed(3), '-i', target, '-frames:v', '1', '-q:v', '3', poster]);
+  console.log('[trailers] ' + item.id + ': published ' + toPosix(path.relative(repoRoot, target)) + ' (' + formatBytes(bytes) + ', ' +
+    published.width + 'x' + published.height + ', ' + published.duration.toFixed(1) + ' s) + poster');
+
+  return {
+    source: toPosix(path.relative(repoRoot, master)),
+    file: toPosix(path.relative(repoRoot, target)),
+    poster: toPosix(path.relative(repoRoot, poster)),
+    urlPath: urlPathPrefix + item.id + '.mp4',
+    posterUrlPath: urlPathPrefix + item.id + '.jpg',
+    bytes,
+    width: published.width,
+    height: published.height,
+    duration: Number(published.duration.toFixed(2)),
+    fps: published.fps,
+    orientation: published.height > published.width ? 'portrait' : published.height === published.width ? 'square' : 'landscape',
+    music: item.music,
+    stats
+  };
+}
+
+function encodeCapture(source, target, options) {
+  const rate = options.kbps
+    ? ['-b:v', options.kbps + 'k', '-maxrate', options.kbps + 'k', '-bufsize', options.kbps * 2 + 'k']
+    : ['-crf', String(options.crf)];
+  const scale = "scale='min(iw,1920)':'min(ih," + options.maxHeight + ")':force_original_aspect_ratio=decrease:force_divisible_by=2";
+  const fadeOut = Math.max(0, options.duration - 2).toFixed(2);
+  const audio = options.music
+    ? ['-stream_loop', '-1', '-i', options.music,
+      '-filter_complex', '[0:v]' + scale + ',fps=30[v];[1:a]afade=t=in:d=1,afade=t=out:st=' + fadeOut + ':d=2,volume=0.9[a]',
+      '-map', '[v]', '-map', '[a]', '-c:a', 'aac', '-b:a', '128k', '-ac', '2']
+    : ['-vf', scale + ',fps=30', '-an'];
+  ffmpeg([
+    '-y', '-loglevel', 'error', '-i', source, ...audio,
+    '-t', options.duration.toFixed(2),
+    '-c:v', 'libx264', '-preset', 'slow', '-profile:v', 'high', '-pix_fmt', 'yuv420p', ...rate,
+    '-movflags', '+faststart', target
+  ]);
 }
 
 // A still is published as a JPEG the site can serve at any size: the master
