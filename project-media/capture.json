@@ -1,6 +1,6 @@
 {
   "slug": "memory-dungeon",
-  "capturedAt": "2026-09-27T13:19:02.968Z",
+  "capturedAt": "2026-09-27T13:29:44.331Z",
   "source": "deployment",
   "url": "https://memory-dungeon-git.pages.dev/",
   "recipe": {
@@ -27,12 +27,12 @@
       "file": "card.jpg",
       "width": 1600,
       "height": 900,
-      "bytes": 165233,
+      "bytes": 166104,
       "status": "captured",
       "stats": {
         "mean": 25,
         "std": 18,
-        "dark": 0.198,
+        "dark": 0.197,
         "light": 0,
         "colours": 29
       }
@@ -42,14 +42,14 @@
       "file": "desktop.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 155174,
+      "bytes": 157702,
       "status": "captured",
       "stats": {
         "mean": 26,
         "std": 19,
-        "dark": 0.161,
+        "dark": 0.165,
         "light": 0,
-        "colours": 28
+        "colours": 29
       }
     },
     {
@@ -57,14 +57,14 @@
       "file": "mobile.jpg",
       "width": 430,
       "height": 932,
-      "bytes": 52129,
+      "bytes": 51915,
       "status": "captured",
       "stats": {
-        "mean": 24,
-        "std": 21,
-        "dark": 0.125,
+        "mean": 23,
+        "std": 18,
+        "dark": 0.104,
         "light": 0,
-        "colours": 39
+        "colours": 31
       }
     },
     {
@@ -72,14 +72,14 @@
       "file": "full.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 129200,
+      "bytes": 129482,
       "status": "captured",
       "stats": {
-        "mean": 26,
-        "std": 19,
-        "dark": 0.162,
+        "mean": 25,
+        "std": 17,
+        "dark": 0.159,
         "light": 0,
-        "colours": 29
+        "colours": 25
       }
     },
     {
@@ -87,14 +87,14 @@
       "file": "og.jpg",
       "width": 1200,
       "height": 630,
-      "bytes": 122127,
+      "bytes": 123016,
       "status": "captured",
       "stats": {
         "mean": 26,
         "std": 18,
-        "dark": 0.184,
+        "dark": 0.185,
         "light": 0,
-        "colours": 23
+        "colours": 24
       }
     }
   ]
