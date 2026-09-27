@@ -5,6 +5,7 @@ import {
     BOARD_LAYOUT_ROW_STAGGER_X,
     BOARD_LAYOUT_YAW_MAX,
     CORE_SCALE,
+    getTileColumnSpacing,
     SHELL_SCALE,
     TILE_SPACING
 } from './tileShatter';
@@ -53,7 +54,7 @@ export const getTileTransform = (
     const column = index % totalColumns;
     const row = Math.floor(index / totalColumns);
     const compactMul = compact ? 0.85 : 1;
-    let baseX = (column - (totalColumns - 1) / 2) * TILE_SPACING;
+    let baseX = (column - (totalColumns - 1) / 2) * getTileColumnSpacing(compact);
     if (!reduceMotion && row % 2 === 1) {
         baseX += BOARD_LAYOUT_ROW_STAGGER_X * compactMul;
     }

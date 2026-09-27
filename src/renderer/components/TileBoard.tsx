@@ -14,6 +14,7 @@ import {
 import { flushSync } from 'react-dom';
 import type { BoardScreenSpaceAA, BoardState, GraphicsQualityPreset, RunStatus } from '../../shared/contracts';
 import { getChainTargetFeedback } from '../../shared/chain-targets';
+import { getChainTier } from '../../shared/chain-tier-rules';
 import { getClumpRead } from '../../shared/clump-read-rules';
 import { CHAIN_BEAT_COPY } from '../copy/chainBeat';
 import { getTileSuit } from '../../shared/tile-suit-rules';
@@ -81,7 +82,7 @@ import {
     twoFingerContactIsACameraGesture,
     type TileBoardGesturePointPair
 } from './tileBoardGestureCommit';
-import { BOARD_LAYOUT_VIEWPORT_PADDING, TILE_SPACING } from './tileShatter';
+import { BOARD_LAYOUT_VIEWPORT_PADDING, getTileColumnSpacing, TILE_SPACING } from './tileShatter';
 import { computeBoardEntranceMotionBudgetMs, computeShuffleMotionBudgetMs } from './shuffleFlipAnimation';
 import { boardWebglPerfSampleRecordReactCommit, boardWebglPerfSampleVerboseEnabled } from '../dev/boardWebglPerfSample';
 import { preloadTileTextureImages } from './tileTextures';
@@ -1595,10 +1596,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 : nextActionId === 'idle'
                   ? 'idle' as const
                   : 'ready' as const;
-        const momentumLabel = chainContext && chainContext.currentStreak > 0 ? `x${chainContext.currentStreak} streak` : null;
+        const momentumLabel = chainContext && chainContext.currentStreak > 0 ? `${chainContext.currentStreak} in a row` : null;
         const targetPlanLabel =
             activeRouteReady && chainContext
-                ? getChainTargetFeedback(chainContext.currentStreak + 1).value
+                ? getChainTargetFeedback(chainContext.currentStreak, getChainTier(chainContext.momentum, board.pairCount)).value
                 : null;
         const arcadeCallout = comboSurgeLabel
             ? {
@@ -2217,10 +2218,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const canvasContext = getTileBoardCanvasContextConfig(resolvedBoardAa, webglCanvasRemountKey);
     /** Avoid forcing discrete/high-power GPU contexts unless the player explicitly chose high quality. */
     const glPowerPreference: WebGLPowerPreference = graphicsQuality === 'high' ? 'high-performance' : 'default';
-    const boardWorldWidth = useMemo(
-        () => (board.columns - 1) * TILE_SPACING + 1 + 2 * BOARD_LAYOUT_VIEWPORT_PADDING,
-        [board.columns]
-    );
+    const boardWorldWidth = (board.columns - 1) * getTileColumnSpacing(compact) + 1 + 2 * BOARD_LAYOUT_VIEWPORT_PADDING;
     const boardWorldHeight = useMemo(
         () => (board.rows - 1) * TILE_SPACING + 1 + 2 * BOARD_LAYOUT_VIEWPORT_PADDING,
         [board.rows]

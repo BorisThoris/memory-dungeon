@@ -41,6 +41,11 @@ describe('mismatchFloaterRecoveryHint', () => {
 });
 
 describe('mismatchFloaterNextAction', () => {
+    it('rebuilds from the tier left after a miss, not the old streak against fixed thresholds', () => {
+        expect(mismatchFloaterNextAction([], { brokenChainDepth: 8, currentTier: 'clean' }).value).toBe('Reach Sharp');
+        expect(mismatchFloaterNextAction([], { brokenChainDepth: 3, currentTier: 'none' }).value).toBe('Reach Clean');
+    });
+
     it('points at the lost reward first, then the broken chain, then the route', () => {
         expect(mismatchFloaterNextAction([], { brokenChainDepth: 3 })).toMatchObject({ tone: 'risk' });
         expect(mismatchFloaterNextAction(['Heavy: extra try'])).toMatchObject({

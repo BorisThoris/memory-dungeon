@@ -3,10 +3,12 @@
  * region alike. Centralized for a11y review and future i18n.
  */
 import { getChainTargetFeedback } from '../../shared/chain-targets';
+import type { ChainTier } from '../../shared/chain-tier-rules';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 
 type MismatchFloaterContext = {
     brokenChainDepth?: number;
+    currentTier?: ChainTier;
 };
 
 const normalizeBrokenChainDepth = (context: MismatchFloaterContext = {}): number =>
@@ -67,7 +69,7 @@ export function mismatchFloaterNextAction(
         return {
             arcadeCue: 'Rebuild chase',
             label: 'Rebuild chain',
-            value: getChainTargetFeedback(brokenChainDepth).value,
+            value: getChainTargetFeedback(brokenChainDepth, context.currentTier).value,
             tone: 'risk'
         };
     }

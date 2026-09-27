@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 55 as const;
+export const ENCYCLOPEDIA_VERSION = 56 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -342,7 +342,7 @@ export const GAME_MODE_CODEX: GameModeCodexEntry[] = [
         id: 'endless',
         title: 'Classic Run',
         description:
-            'The one mode. Procedural floors whose suits are shuffled, so no board is arranged for you. Every match pops the cards of its own suit that it is touching, and the chain that builds from pop to pop climbs toward Fever. Each floor is named, carries a hint, and features one objective that pays a floor bonus. Everything the retired mode cards used to switch on — a clock, calm pacing, vows, chaos, an unrecorded run — is a choice on the setup sheet in front of the run. (Internal mode id: endless.)'
+            'Remember pairs and build momentum through procedural floors. At Clean, matches can pop nearby pairs of the same suit; climb to Sharp and Fever for larger reactions. Each floor has its own layout, hint and bonus objective. Choose your run settings before you descend.'
     },
 ];
 
@@ -570,15 +570,15 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         title: 'Chain, chunk and Fever',
         description:
             'A match on its own just matches. Build a chain of three (Clean) and matches start to **pop**: a same-suit pair the two tiles you matched are touching breaks away with them. ' +
-            'A pop only ever takes what it is touching - a pair goes when the wave holds **both** halves, and nothing is ever taken across a gap - and it is capped by the rung: one pair at Clean, two at Sharp, four at Fever, nearest first. ' +
+            'A pop only ever takes what it is touching - a pair goes when the wave holds **both** halves, and nothing is ever taken across a gap - and it is capped by the rung: up to one extra pair at Clean, two at Sharp, four at Fever, nearest first. These are extra pairs beyond the pair you matched, and the layout decides how many are in reach. A **breather** allows one extra pair at every rung, including before Clean. ' +
             'Sharp, a little over half the floor\'s pairs of momentum and four at least, runs the reaction one wave on from where the pop stopped. ' +
             'Fever, three quarters and seven at least, runs it three waves and lets it **bridge** into the one clump its cards were touching, whatever that suit is. Every pair a break takes adds to the chain\'s momentum. ' +
-            'Treasure inside a break spills and pays as if you had matched it. A break pays a pair\'s worth times the pairs, times the tier it landed at (Clean ×2, Sharp ×4, Fever ×8), times the ripple (×1.75 for a second wave, up to ×6): a huge Fever reaction is worth hundreds of pops. Broken pairs give no recall credit - memory still pays best - but they ' +
+            'Treasure inside a break spills and pays as if you had matched it. Each popped pair starts at **60% of a base match\'s score**, then the break multiplies by its tier (Clean ×2, Sharp ×4, Fever ×8) and ripple (×1.75 for a second wave, up to ×6). Those multipliers apply to popped pairs, not the pair you remembered. Broken pairs give no recall credit - memory still pays best - but they ' +
             'clear the floor faster, and a longer ripple pays more. A miss halves the chain and puts the fire out. ' +
             'A suit that can no longer pop - no two of its pairs within reach of each other - loses its last pair on its own: that is the drop, and it happens at any chain, so the last pair of a suit is never a pair you have to grind out. ' +
             'A break with a shape gets a name on the run line: a ripple that ran on, a drop, a long clump, a bridge into the suit next door, a treasure spill, a clean sweep of a suit. ' +
             'Clear the floor with momentum still standing and the floor-end bonus multiplies with the tier: 1.5x at Clean, 2.5x at Sharp, 5x at Fever - Extreme Fever. Never the rating. ' +
-            'Clearing a floor is itself the first link of the next floor\'s chain: you arrive one match from Clean instead of three, so the chain is never wiped for finishing. Only that one link carries - every tier is earned on the board that shows it - and the momentum the chunks added stays behind with the board it was broken on.'
+            'Up to **one chain link** carries into the next floor: with that link, two more matches reach Clean instead of three. Every tier is earned on the board that shows it. Cascade and early-start momentum stay behind with the floor where you earned them.'
     },
     {
         id: 'tile_suits',

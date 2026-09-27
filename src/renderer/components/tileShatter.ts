@@ -8,6 +8,8 @@ import { RENDERER_THEME } from '../styles/theme';
  * Dev frame budgeting uses `boardWebglPerfSample` in `TileBoardScene`, not per-shard counters here.
  */
 export const TILE_SPACING = 1.18;
+/** Narrow stages spend less width between cards so the fitted suits and tap targets stay legible. */
+export const getTileColumnSpacing = (compact: boolean): number => compact ? 1 : TILE_SPACING;
 /** Organic layout: max XY offset from nominal grid (world units); deterministic per tile id. */
 export const BOARD_LAYOUT_JITTER_XY = 0.092;
 /** Organic layout: max idle Y rotation (rad) for a scattered-table read. */

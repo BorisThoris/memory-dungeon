@@ -470,7 +470,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const boardFloaterMismatchNextAction =
         boardFloaterPayload?.kind === 'miss'
             ? mismatchFloaterNextAction(boardFloaterDetailLines, {
-                  brokenChainDepth: boardFloaterPayload.brokenChainDepth
+                  brokenChainDepth: boardFloaterPayload.brokenChainDepth,
+                  currentTier: run ? runChainTier(run) : undefined
               })
             : null;
     /**

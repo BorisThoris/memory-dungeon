@@ -12,6 +12,7 @@ describe('REG-096 game over next-run loop', () => {
             findablesClaimedThisFloor: 1,
             findablesTotalThisFloor: 2,
             stats: { ...source.stats, bestStreak: 5 },
+            peakChainTierThisRun: 'clean',
             status: 'gameOver',
             runEndReason: 'turn_ceiling'
         }, []);
@@ -21,23 +22,24 @@ describe('REG-096 game over next-run loop', () => {
         expect(rows.every((row) => row.localOnly)).toBe(true);
         expect(rows.find((row) => row.id === 'run_it_back')?.actionHint).toMatch(/again/i);
         expect(rows.find((row) => row.id === 'run_it_back')?.detail).toMatch(/score \/ floor \d+ \/ \d+ clear/);
-        expect(rows.find((row) => row.id === 'run_it_back')?.detail).toContain('best chain x5');
+        expect(rows.find((row) => row.id === 'run_it_back')?.detail).toContain('best chain 5 matches');
         expect(rows.find((row) => row.id === 'run_it_back')?.detail).toContain('pickups 1/2');
         expect(rows.find((row) => row.id === 'chain_target')).toMatchObject({
             title: 'Chain target',
             value: 'Reach Sharp',
-            detail: 'Best chain: 5 matches in a row. Sharp chains into the next clump and pays ×4 a pair.',
-            actionHint: 'Open with pairs you are sure of, then carry the chain into the next clump.'
+            detail: 'Best chain: 5 matches in a row. Sharp can pop up to 2 extra pairs and ripple through the same suit. Popped pairs score ×4 before ripple bonuses.',
+            actionHint: 'Build momentum with pairs you remember, then match beside a same-suit clump.'
         });
         expect(rows.find((row) => row.id === 'local_share')?.detail).toMatch(/online rank/i);
     });
 
-    it('turns high streaks into a concrete combo-tier next-run target', () => {
+    it('uses the recorded run tier when choosing the next-run target', () => {
         const source = finishMemorizePhase(createNewRun(0));
         const run = createRunSummary(
             {
                 ...source,
                 stats: { ...source.stats, bestStreak: 8 },
+                peakChainTierThisRun: 'sharp',
                 status: 'gameOver',
                 runEndReason: 'turn_ceiling'
             },
@@ -48,8 +50,21 @@ describe('REG-096 game over next-run loop', () => {
 
         expect(row).toMatchObject({
             value: 'Reach Fever',
-            detail: 'Best chain: 8 matches in a row. Fever chains into three clumps and pays ×8 a pair.'
+            detail: 'Best chain: 8 matches in a row. Fever can pop up to 4 extra pairs and bridge into a neighbouring suit. Popped pairs score ×8 before ripple bonuses.'
         });
+
+        // The same streak on a larger board may only have reached Clean. The summary keeps it.
+        run.lastRunSummary = { ...run.lastRunSummary!, peakChainTier: 'clean' };
+        expect(getGameOverNextRunRows(run).find((entry) => entry.id === 'chain_target')?.value).toBe('Reach Sharp');
+    });
+
+    it('offers the replay actions the results screen actually ships', () => {
+        const source = finishMemorizePhase(createNewRun(0));
+        const run = createRunSummary({ ...source, status: 'gameOver', runEndReason: 'quit' }, []);
+        const next = getGameOverNextRunRows(run).find((row) => row.id === 'next_goal');
+        expect(next?.actionHint).toContain('Play Again');
+        expect(next?.actionHint).toContain('Rematch');
+        expect(next?.actionHint).not.toMatch(/Daily|UTC/);
     });
 
 

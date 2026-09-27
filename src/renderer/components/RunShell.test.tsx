@@ -65,9 +65,7 @@ describe('RunShell', () => {
         expect(rungAt()).toHaveAttribute('data-chain-tier', 'none');
         expect(rungAt()).toHaveAttribute('data-rung-multiplier', '1');
         expect(rungAt()).toHaveTextContent('×1');
-        expect(rungAt().getAttribute('aria-label')).toMatch(
-            /^A match with no chain takes about \d+ pairs? and pays ×1 for each\.$/
-        );
+        expect(rungAt()).toHaveAccessibleName('Your match clears its pair. Reach Clean to start popping nearby pairs.');
 
         // Twelve pairs: Sharp from 5, Fever from 7. A Fever break is scored at eight times a pop.
         const hot: RunState = { ...cold, stats: { ...cold.stats, currentStreak: 9 } };
@@ -79,7 +77,7 @@ describe('RunShell', () => {
         // The meter's own label carries it too, so a screen reader is told the same thing.
         expect(within(screen.getByTestId('hud-chain')).getByTestId('hud-chain-meter')).toHaveAttribute(
             'aria-label',
-            expect.stringContaining('A Fever break takes about')
+            expect.stringContaining('Fever can pop up to 4 extra pairs by contact.')
         );
     });
 
@@ -192,7 +190,7 @@ describe('RunShell', () => {
         expect(meter).toHaveAttribute('aria-label', expect.stringContaining('Fever meter: momentum 7 of 9.'));
         const goal = screen.getByTestId('hud-chain-goal');
         expect(goal).toHaveTextContent('2 momentum to Fever');
-        expect(goal).toHaveTextContent('×8 per pair');
+        expect(goal).toHaveTextContent('Pops ×8');
     });
 
     it('drains the meter for a beat when a chain of Clean or better drops to nothing', () => {

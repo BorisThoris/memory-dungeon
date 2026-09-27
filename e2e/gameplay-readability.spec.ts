@@ -8,7 +8,7 @@ import {
     expectGameplayReady,
     openPlayablePathFixture
 } from './playablePathHelpers';
-import { waitForBoardPlayPhase } from './tileBoardGameFlow';
+import { readTileClientRectAtGrid, waitForBoardPlayPhase } from './tileBoardGameFlow';
 
 const READABILITY_VIEWPORTS = [
     { name: 'phone narrow', width: 360, height: 740 },
@@ -36,6 +36,48 @@ test.describe('Gameplay readability hardening', () => {
             await expectLocatorFullyInWindowViewport(page, page.getByTestId('tile-board-frame'), 8);
             await expectLocatorFullyInWindowViewport(page, page.getByTestId('game-action-dock'), 8);
             await expectBoardKeepsPriority(page);
+            const labels = await page.getByTestId('hud-chain-meter').locator('[data-rung] > span:last-child').evaluateAll((nodes) =>
+                nodes.map((node) => {
+                    const box = node.getBoundingClientRect();
+                    return { text: node.textContent, left: box.left, right: box.right, top: box.top, bottom: box.bottom, width: box.width };
+                }).filter((box) => box.width > 0)
+            );
+            expect(labels.length, 'the chain ladder has visible tier names').toBeGreaterThanOrEqual(3);
+            for (let i = 0; i < labels.length; i += 1) {
+                for (let j = i + 1; j < labels.length; j += 1) {
+                    const a = labels[i]!;
+                    const b = labels[j]!;
+                    const width = Math.min(a.right, b.right) - Math.max(a.left, b.left);
+                    const height = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+                    expect(width > 0.5 && height > 0.5, `${a.text} overlaps ${b.text}`).toBe(false);
+                }
+            }
+
+            if (viewport.width <= 430) {
+                const frame = page.getByTestId('tile-board-frame');
+                await expect(frame).toHaveAttribute('data-shuffle-animating', 'false');
+                const columns = Number(await frame.getAttribute('data-board-columns'));
+                const rows = Number(await frame.getAttribute('data-board-rows'));
+                const cards = await Promise.all(Array.from({ length: columns * rows }, (_, index) =>
+                    readTileClientRectAtGrid(page, Math.floor(index / columns) + 1, index % columns + 1)
+                ));
+                // Six columns used to leave only 36px cards on a 390px phone. Keep the gain in
+                // actual WebGL pick bounds, rather than just checking the full-screen canvas.
+                for (const card of cards) {
+                    expect(card.width).toBeGreaterThanOrEqual(viewport.width / 10);
+                    expect(card.left).toBeGreaterThanOrEqual(0);
+                    expect(card.right).toBeLessThanOrEqual(viewport.width);
+                }
+                for (let i = 0; i < cards.length; i += 1) {
+                    for (let j = i + 1; j < cards.length; j += 1) {
+                        const a = cards[i]!;
+                        const b = cards[j]!;
+                        const width = Math.min(a.right, b.right) - Math.max(a.left, b.left);
+                        const height = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+                        expect(width > 0.5 && height > 0.5, `cards ${i + 1} and ${j + 1} overlap`).toBe(false);
+                    }
+                }
+            }
         });
     }
 
@@ -150,4 +192,3 @@ function parseCountAttr(raw: string): Map<string, number> {
     }
     return states;
 }
-

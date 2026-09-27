@@ -1125,33 +1125,43 @@
 :global([data-shell-layout='tablet']) .rung,
 :global([data-shell-layout='phone-portrait']) .rung,
 :global([data-shell-layout='phone-landscape']) .rung {
-    left: var(--rung-at);
+    left: 0;
     bottom: auto;
     top: 0;
-    width: 0;
+    width: 100%;
     height: 1px;
 }
 
 :global([data-shell-layout='tablet']) .rungTick,
 :global([data-shell-layout='phone-portrait']) .rungTick,
 :global([data-shell-layout='phone-landscape']) .rungTick {
-    left: 0;
+    left: var(--rung-at);
     top: -3px;
     width: 1px;
     height: 7px;
 }
 
+:global([data-shell-layout='tablet']) .rung[data-rung-imminent='true'] .rungTick,
+:global([data-shell-layout='phone-portrait']) .rung[data-rung-imminent='true'] .rungTick,
+:global([data-shell-layout='phone-landscape']) .rung[data-rung-imminent='true'] .rungTick {
+    left: var(--rung-at);
+    top: -5px;
+    width: 1px;
+    height: 11px;
+}
+
 :global([data-shell-layout='tablet']) .rungLabel,
 :global([data-shell-layout='phone-portrait']) .rungLabel,
 :global([data-shell-layout='phone-landscape']) .rungLabel {
-    left: 0;
+    left: var(--rung-at);
     top: 0.45rem;
     transform: translateX(-50%);
     letter-spacing: 0.12em;
 }
 
-/* Clean ends at its tick and Sharp starts at its own, so the two names cannot collide on a small
-   floor where the rungs sit close (six pairs: Clean at 43%, Sharp at 57%). Fever ends at the rail. */
+/* Clean ends before its tick. Sharp is centred at its tick, with room reserved for Fever at the
+   rail's end: on a twelve-pair floor Sharp sits at 78%, where a right-aligned start overlapped
+   Fever by 31px on a 390px phone. The ticks keep their exact momentum positions. */
 :global([data-shell-layout='tablet']) .rung[data-rung='clean'] .rungLabel,
 :global([data-shell-layout='phone-portrait']) .rung[data-rung='clean'] .rungLabel,
 :global([data-shell-layout='phone-landscape']) .rung[data-rung='clean'] .rungLabel {
@@ -1161,7 +1171,8 @@
 :global([data-shell-layout='tablet']) .rung[data-rung='sharp'] .rungLabel,
 :global([data-shell-layout='phone-portrait']) .rung[data-rung='sharp'] .rungLabel,
 :global([data-shell-layout='phone-landscape']) .rung[data-rung='sharp'] .rungLabel {
-    transform: translateX(0.35rem);
+    left: min(var(--rung-at), calc(100% - 5rem));
+    transform: translateX(-50%);
 }
 
 :global([data-shell-layout='tablet']) .rung[data-rung='fever'] .rungLabel,

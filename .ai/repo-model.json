@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2741,
+    "trackedFileCount": 2744,
     "codeFileCount": 965,
-    "exportedSymbolCount": 2929,
+    "exportedSymbolCount": 2930,
     "contentItemCount": 10,
     "mechanicCount": 51,
     "stateFieldCount": 92,
-    "relationshipCount": 7595
+    "relationshipCount": 7603
   },
   "inventory": [
     {
@@ -51,20 +51,20 @@
     {
       "path": ".github/workflows/project-meta-refresh.yml",
       "category": "configuration",
-      "bytes": 4383,
-      "sha256": "305e891b56b11dab9f5e4524828039d87c8aaa046e028928d1d75a8b8a4476b2"
+      "bytes": 5087,
+      "sha256": "b48bba66d7725b9fed13ee06f5ffbd149cc7f6e32ae2ad461ce5aa70a5fb6ae7"
     },
     {
       "path": ".github/workflows/project-meta.yml",
       "category": "configuration",
-      "bytes": 652,
-      "sha256": "aae4d8f2ddaab19ca7f006c84d3f67641fde273830415f17551de7af1a63f99f"
+      "bytes": 844,
+      "sha256": "ddaf06308e4c9a330480fe610ea6034db87bc898a0754168f30d831c8c79d742"
     },
     {
       "path": ".gitignore",
       "category": "other",
-      "bytes": 734,
-      "sha256": "f2a5c8011ae8d6da3882d20b38e930f85ce53ccf8e560f24e3c7fa9094a90ccf"
+      "bytes": 823,
+      "sha256": "3c08cde0b345f62f37d32ec85899e83d83d85f376a0e9ff0475504ad254a7ff2"
     },
     {
       "path": ".idea/.gitignore",
@@ -790,7 +790,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 31576,
-      "sha256": "adefb83e75027cadbf99b4142395e4151ee0e24f6b19c604ac568fcda643c0fd"
+      "sha256": "ab0670c5a4dc8e1abb6db153044051ed7ef2f04660702983676786d58757066d"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2374,7 +2374,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33561,
-      "sha256": "3b971bdab076a455b329727f7067f57664fdc46387d123c5b0b73ff5c7f3f271"
+      "sha256": "ae79d26572bd03ee032dd11ab62a56e41614521b8875480abdf43214ca3db1d7"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3843,8 +3843,8 @@
     {
       "path": "e2e/gameplay-readability.spec.ts",
       "category": "test",
-      "bytes": 7111,
-      "sha256": "dc66c9085e782af25ac7c98856b6f8ddef46af4d8126f8d7b924a284b6e57dfd"
+      "bytes": 9840,
+      "sha256": "c69ec6149c84bc2b55172f97000f49c94aa8cb611a04ea3c46a0ffc33875b682"
     },
     {
       "path": "e2e/gameplay-visual-audit.spec.ts",
@@ -4233,8 +4233,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 32775,
-      "sha256": "2515c6e33bdbd21ed62180e8031859b16954287fdbf40d15a35a3b44a429cc58"
+      "bytes": 32899,
+      "sha256": "d714f864086551480a1ae28fa055897a5b958ff02050b61847781da3f60c8a0f"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4407,8 +4407,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 121989,
-      "sha256": "c614292bf4566124299d96b8367737b1a9c574b99df9be627850587ce1c9e27f"
+      "bytes": 123016,
+      "sha256": "af1ab152499443418c830f3e61e410e7b1ba5b085be858cda346806aba0f9adb"
     },
     {
       "path": "public/site.webmanifest",
@@ -4815,14 +4815,14 @@
     {
       "path": "scripts/build-project-trailers.mjs",
       "category": "script",
-      "bytes": 21650,
-      "sha256": "563ad8a08974f9f5672e3b059e821d1903812e2d9377b5dcb179c1f8611c17b5"
+      "bytes": 29826,
+      "sha256": "d0bef353ef71783f6d887f6dd113b7e315200990810a195541a17196f046b00c"
     },
     {
       "path": "scripts/capture-project-shots.mjs",
       "category": "script",
-      "bytes": 10726,
-      "sha256": "4cd4e151b65b7fef21db7ef83ea383f3c3d02fadd829b1c92e769e8ce0c1de7e"
+      "bytes": 6163,
+      "sha256": "050ec3266db8a375eb1db81af8bc8e2a31db2b1aac04b023f62d48c2912ac718"
     },
     {
       "path": "scripts/card-pipeline/batch_local_card_backs.py",
@@ -5127,8 +5127,8 @@
     {
       "path": "scripts/generate-project-meta.mjs",
       "category": "script",
-      "bytes": 23045,
-      "sha256": "d18bebc8f8db94733bad2abfd037662f4bb2d36998b16fd76476a7f3000eea56"
+      "bytes": 23062,
+      "sha256": "812cb7c3bbd694c305e610d81e0c3ad2884f5300722be002ac86037c5c205f0e"
     },
     {
       "path": "scripts/generate-social-preview.mjs",
@@ -5189,6 +5189,24 @@
       "category": "script",
       "bytes": 898,
       "sha256": "497a651005180ed6e7461e509f46c647ae37fcb9beb9934ee5d319c6518b6289"
+    },
+    {
+      "path": "scripts/project-media-lib.mjs",
+      "category": "script",
+      "bytes": 15997,
+      "sha256": "6ee23bc45b32421a6f0d0cf4f874f11b87c9fdc429d9cb61d58f9035ae590cdd"
+    },
+    {
+      "path": "scripts/project-media.e2e.mjs",
+      "category": "script",
+      "bytes": 4926,
+      "sha256": "c6e89aa215f6498b56950ffd319959f39c19808d356c58d157813cca399fbf56"
+    },
+    {
+      "path": "scripts/project-media.test.mjs",
+      "category": "test",
+      "bytes": 9656,
+      "sha256": "8e8bb8e8c9b293fd14ee5f809ba391253cfb0da3fddd21d77ea0618e0d4a0dc0"
     },
     {
       "path": "scripts/project-meta.config.mjs",
@@ -9279,8 +9297,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 94195,
-      "sha256": "0ef8a9d326b67d4ea8a440e90e3deb8ef2c379d4c43fcc2b28c6c7f38b701dff"
+      "bytes": 94263,
+      "sha256": "4f2c98ebf9026079f6b572ca322d0b504158b3d3109c3ef4af7ea88af7d28d00"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9549,20 +9567,20 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 41020,
-      "sha256": "12c52b2edbd6c910034a18240f9de1984d2585d7105c980fbccf1e70d93c4840"
+      "bytes": 41502,
+      "sha256": "c113ec8e8492a7607bfdea2e4d27baab82b1501b40f2d87bb1fa98068a12f171"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 31827,
-      "sha256": "9556b140c25d1c0b573795f4a8e5ae782ad4a7cc8690e27d0e240686bc72c95a"
+      "bytes": 31807,
+      "sha256": "a9759db1994e1ee3eb5222037cdb72de1872413fe7edbb2575236543ec1a112c"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 36430,
-      "sha256": "8d548e314a9a656e7c3c7fab3cb91c1da06d440f0e5ef75426cc35af267d8d69"
+      "bytes": 36549,
+      "sha256": "ba1fb8bb6d943ea911e87232be4284026fb2f17e311647f12b6bbb6dc328531b"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -9765,8 +9783,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 149329,
-      "sha256": "301a62fc6b1c13726fc1742205794fdc8730a1021d1508e00edf22c2d0a591fc"
+      "bytes": 149427,
+      "sha256": "aad41f74466aeec6d538688d382be3318135ed4a090e0748181a4bacac6349f9"
     },
     {
       "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -10389,8 +10407,8 @@
     {
       "path": "src/renderer/components/tileBoardTransform.ts",
       "category": "source",
-      "bytes": 2989,
-      "sha256": "02fc9c6d9af4309465368bc11530f56ca0878bf7571b65b782c261249e2279d7"
+      "bytes": 3032,
+      "sha256": "88bb1bb90e3c841242a65675b6cf5a96051962e093e1505ac5cabcaf33211900"
     },
     {
       "path": "src/renderer/components/tileBoardTutorialMarkers.test.ts",
@@ -10503,8 +10521,8 @@
     {
       "path": "src/renderer/components/tileShatter.ts",
       "category": "source",
-      "bytes": 11270,
-      "sha256": "4935f558f54c4fca71a00e7e014c3bf4b1480b42611ea7dae79146ea9b09c3f7"
+      "bytes": 11466,
+      "sha256": "3fc816172b5c271d457e3082ca3b19e94e9bc9d35535e6c2637adf5d7844cc27"
     },
     {
       "path": "src/renderer/components/tileTextures.test.ts",
@@ -10605,14 +10623,14 @@
     {
       "path": "src/renderer/copy/chainBeat.test.ts",
       "category": "test",
-      "bytes": 3181,
-      "sha256": "148d74504ad20dcdee08865f19f0ae0948e1ba8fbf2de3192d80649c60fca3b5"
+      "bytes": 4820,
+      "sha256": "55bf5599c2b617ade9e532fba12c2b5a6977b222e39a32e3ea8c2ee388a663f3"
     },
     {
       "path": "src/renderer/copy/chainBeat.ts",
       "category": "source",
-      "bytes": 8959,
-      "sha256": "892704ee4218ebf3de6ce3098c88b23fba2d79751388b52ead132dc003febee3"
+      "bytes": 7987,
+      "sha256": "cf552b6e5fc9bb3f61d3d16e0343a3893a99e3d3ced1b37e76bbd2ba50dd3832"
     },
     {
       "path": "src/renderer/copy/chainMilestoneFeedback.test.ts",
@@ -10761,14 +10779,14 @@
     {
       "path": "src/renderer/copy/mismatchFloater.test.ts",
       "category": "test",
-      "bytes": 2523,
-      "sha256": "e8587b3075e3bc887654a2c49c73e1727704c5dcc8c7a96f81c0ba403754444d"
+      "bytes": 2875,
+      "sha256": "2dad25fada00408000a9015d251ae720c48be96b0496bb4856ba38990ad5a468"
     },
     {
       "path": "src/renderer/copy/mismatchFloater.ts",
       "category": "source",
-      "bytes": 3170,
-      "sha256": "791d4601dde2a0c937a4a1732afff3763578300da831489d104df0a6d4fc0c1d"
+      "bytes": 3284,
+      "sha256": "e913e36833e38b762dffeef54b89b7e238dd6e77517e6c7984bfeec41ba719f5"
     },
     {
       "path": "src/renderer/copy/passAndPlay.ts",
@@ -11968,7 +11986,7 @@
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
       "bytes": 31872,
-      "sha256": "83629855df5cf672e3bdaf9d67d342d9e72787a6cb852c4feff206efc5700ad9"
+      "sha256": "f8ead8a0837718c7ba2ea636d0bdd7dcfbcacf87262daf809869d8be0ad22997"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -12279,14 +12297,14 @@
     {
       "path": "src/shared/chain-targets.test.ts",
       "category": "test",
-      "bytes": 2112,
-      "sha256": "b1e2ec2e4c04a6c7c2c611bfb3f8d9fb1724ba33d73fb27fc90acdabc7ef9420"
+      "bytes": 3221,
+      "sha256": "274670870c855ca95c20495ecaf2368ec4570d8dc4f5d3829f6c81f120da9cfd"
     },
     {
       "path": "src/shared/chain-targets.ts",
       "category": "source",
-      "bytes": 4009,
-      "sha256": "ec160d1205ab3350fe35678707d722ff526d0bde7bb738bcaf6ebe6e18a1aca8"
+      "bytes": 4180,
+      "sha256": "4a28460760c3ceb24211cee443b3633d7478298c8ba4c5cf11c8811a18ec19b7"
     },
     {
       "path": "src/shared/chain-tier-rules.test.ts",
@@ -12669,14 +12687,14 @@
     {
       "path": "src/shared/game-over-next-run.test.ts",
       "category": "test",
-      "bytes": 7282,
-      "sha256": "c861b159866fd64193ad1a425660a4253430c29599a09854d81e83f9b5158cc4"
+      "bytes": 8307,
+      "sha256": "4f72d6fc21bc6949cb9df667375aba63ac48174b1ec756516c1576de2b0972fd"
     },
     {
       "path": "src/shared/game-over-next-run.ts",
       "category": "source",
-      "bytes": 6270,
-      "sha256": "f3f7150cb9b758164e3e9be0614f73efa2af6f0482e92d719971d1a08d1c9816"
+      "bytes": 6328,
+      "sha256": "28117953f1773144741f512c383466268a17253d7633afa528e9c8eda3810df7"
     },
     {
       "path": "src/shared/game.test.ts",
@@ -13065,8 +13083,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 36430,
-      "sha256": "0ef176ef42c8f0397f4e045c04de39d4500072c9b48c644ea890acd601b56ffa"
+      "bytes": 36347,
+      "sha256": "940150b16b992fd7873e22435a69cfec89687caa99b9762e637a4957402cac3e"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -19402,7 +19420,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1977,
+      "lineCount": 1978,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -20081,7 +20099,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 591,
+      "lineCount": 589,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/shared/contracts.ts",
@@ -20096,7 +20114,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 694,
+      "lineCount": 695,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -20636,7 +20654,7 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3450,
+      "lineCount": 3448,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -20669,6 +20687,7 @@
         "file:src/renderer/hooks/useViewportSize.ts",
         "file:src/renderer/platformTilt/usePlatformTiltField.ts",
         "file:src/shared/chain-targets.ts",
+        "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/clump-read-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/findables.ts",
@@ -22507,7 +22526,7 @@
       "path": "src/renderer/components/tileBoardTransform.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 96,
+      "lineCount": 97,
       "imports": [
         "file:src/renderer/components/tileShatter.ts",
         "file:src/shared/contracts.ts"
@@ -22836,7 +22855,7 @@
       "path": "src/renderer/components/tileShatter.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 305,
+      "lineCount": 307,
       "imports": [
         "file:src/renderer/styles/theme.ts",
         "file:src/shared/contracts.ts"
@@ -22852,6 +22871,7 @@
         "symbol:src/renderer/components/tileShatter.ts#CORE_SCALE",
         "symbol:src/renderer/components/tileShatter.ts#createTileShatterEffect",
         "symbol:src/renderer/components/tileShatter.ts#getNewlyMatchedTiles",
+        "symbol:src/renderer/components/tileShatter.ts#getTileColumnSpacing",
         "symbol:src/renderer/components/tileShatter.ts#getTileShatterFrameState",
         "symbol:src/renderer/components/tileShatter.ts#SHELL_SCALE",
         "symbol:src/renderer/components/tileShatter.ts#TILE_DEPTH",
@@ -23193,7 +23213,7 @@
       "path": "src/renderer/copy/chainBeat.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 65,
+      "lineCount": 90,
       "imports": [
         "file:src/renderer/copy/boardTurnAnnouncement.ts",
         "file:src/renderer/copy/chainBeat.ts",
@@ -23207,10 +23227,12 @@
       "path": "src/renderer/copy/chainBeat.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 153,
+      "lineCount": 145,
       "imports": [
         "file:src/shared/chain-rung-value-rules.ts",
-        "file:src/shared/chain-tier-rules.ts"
+        "file:src/shared/chain-tier-rules.ts",
+        "file:src/shared/chunk-break-rules.ts",
+        "file:src/shared/contracts.ts"
       ],
       "exports": [
         "symbol:src/renderer/copy/chainBeat.ts#CHAIN_BEAT_COPY",
@@ -23595,7 +23617,7 @@
       "path": "src/renderer/copy/mismatchFloater.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 53,
+      "lineCount": 58,
       "imports": [
         "file:src/renderer/copy/mismatchFloater.ts"
       ],
@@ -23607,9 +23629,10 @@
       "path": "src/renderer/copy/mismatchFloater.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 91,
+      "lineCount": 93,
       "imports": [
         "file:src/shared/chain-targets.ts",
+        "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/run-number-guards.ts"
       ],
       "exports": [
@@ -27655,10 +27678,11 @@
       "path": "src/shared/chain-targets.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 45,
+      "lineCount": 62,
       "imports": [
         "file:src/shared/chain-rung-value-rules.ts",
-        "file:src/shared/chain-targets.ts"
+        "file:src/shared/chain-targets.ts",
+        "file:src/shared/chain-tier-rules.ts"
       ],
       "exports": [],
       "testedBy": []
@@ -27668,10 +27692,11 @@
       "path": "src/shared/chain-targets.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 92,
+      "lineCount": 93,
       "imports": [
         "file:src/shared/chain-rung-value-rules.ts",
         "file:src/shared/chain-tier-rules.ts",
+        "file:src/shared/chunk-break-rules.ts",
         "file:src/shared/run-number-guards.ts"
       ],
       "exports": [
@@ -27737,6 +27762,7 @@
         "file:src/shared/authored-floors.test.ts",
         "file:src/shared/cascade-clump-fixture.test.ts",
         "file:src/shared/chain-carryover-rules.test.ts",
+        "file:src/shared/chain-targets.test.ts",
         "file:src/shared/chain-tier-rules.test.ts",
         "file:src/shared/clump-read-rules.test.ts",
         "file:src/shared/memorize-skip-reward-rules.test.ts",
@@ -29204,7 +29230,7 @@
       "path": "src/shared/game-over-next-run.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 161,
+      "lineCount": 176,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/game-core.ts",
@@ -37855,8 +37881,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 1976,
-      "endLine": 1976
+      "line": 1977,
+      "endLine": 1977
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -38255,8 +38281,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 693,
-      "endLine": 693
+      "line": 694,
+      "endLine": 694
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
@@ -38767,24 +38793,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 3449,
-      "endLine": 3449
+      "line": 3447,
+      "endLine": 3447
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
       "name": "TileBoardClientRect",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 327,
-      "endLine": 334
+      "line": 328,
+      "endLine": 335
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardHandle",
       "name": "TileBoardHandle",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 336,
-      "endLine": 340
+      "line": 337,
+      "endLine": 341
     },
     {
       "id": "symbol:src/renderer/components/tileBoardBreakWave.ts#BREAK_WAVE_MAX_DELAY_SECONDS",
@@ -40815,32 +40841,32 @@
       "name": "getTileTransform",
       "kind": "value",
       "file": "src/renderer/components/tileBoardTransform.ts",
-      "line": 43,
-      "endLine": 95
+      "line": 44,
+      "endLine": 96
     },
     {
       "id": "symbol:src/renderer/components/tileBoardTransform.ts#hashTileLayoutSeed",
       "name": "hashTileLayoutSeed",
       "kind": "value",
       "file": "src/renderer/components/tileBoardTransform.ts",
-      "line": 30,
-      "endLine": 38
+      "line": 31,
+      "endLine": 39
     },
     {
       "id": "symbol:src/renderer/components/tileBoardTransform.ts#layoutNormFromSeed",
       "name": "layoutNormFromSeed",
       "kind": "value",
       "file": "src/renderer/components/tileBoardTransform.ts",
-      "line": 40,
-      "endLine": 41
+      "line": 41,
+      "endLine": 42
     },
     {
       "id": "symbol:src/renderer/components/tileBoardTransform.ts#TileTransform",
       "name": "TileTransform",
       "kind": "interface",
       "file": "src/renderer/components/tileBoardTransform.ts",
-      "line": 12,
-      "endLine": 28
+      "line": 13,
+      "endLine": 29
     },
     {
       "id": "symbol:src/renderer/components/tileBoardTutorialMarkers.ts#getTileBoardTutorialPairOrdinal",
@@ -41311,104 +41337,112 @@
       "name": "BOARD_LAYOUT_JITTER_XY",
       "kind": "value",
       "file": "src/renderer/components/tileShatter.ts",
-      "line": 12,
-      "endLine": 12
+      "line": 14,
+      "endLine": 14
     },
     {
       "id": "symbol:src/renderer/components/tileShatter.ts#BOARD_LAYOUT_JITTER_Z",
       "name": "BOARD_LAYOUT_JITTER_Z",
       "kind": "value",
       "file": "src/renderer/components/tileShatter.ts",
-      "line": 16,
-      "endLine": 16
+      "line": 18,
+      "endLine": 18
     },
     {
       "id": "symbol:src/renderer/components/tileShatter.ts#BOARD_LAYOUT_ROW_STAGGER_X",
       "name": "BOARD_LAYOUT_ROW_STAGGER_X",
       "kind": "value",
       "file": "src/renderer/components/tileShatter.ts",
-      "line": 18,
-      "endLine": 18
+      "line": 20,
+      "endLine": 20
     },
     {
       "id": "symbol:src/renderer/components/tileShatter.ts#BOARD_LAYOUT_VIEWPORT_PADDING",
       "name": "BOARD_LAYOUT_VIEWPORT_PADDING",
       "kind": "value",
       "file": "src/renderer/components/tileShatter.ts",
-      "line": 20,
-      "endLine": 20
+      "line": 22,
+      "endLine": 22
     },
     {
       "id": "symbol:src/renderer/components/tileShatter.ts#BOARD_LAYOUT_YAW_MAX",
       "name": "BOARD_LAYOUT_YAW_MAX",
       "kind": "value",
       "file": "src/renderer/components/tileShatter.ts",
-      "line": 14,
-      "endLine": 14
+      "line": 16,
+      "endLine": 16
     },
     {
       "id": "symbol:src/renderer/components/tileShatter.ts#CARD_PLANE_HEIGHT",
       "name": "CARD_PLANE_HEIGHT",
       "kind": "value",
       "file": "src/renderer/components/tileShatter.ts",
-      "line": 26,
-      "endLine": 26
+      "line": 28,
+      "endLine": 28
     },
     {
       "id": "symbol:src/renderer/components/tileShatter.ts#CARD_PLANE_WIDTH",
       "name": "CARD_PLANE_WIDTH",
       "kind": "value",
       "file": "src/renderer/components/tileShatter.ts",
-      "line": 25,
-      "endLine": 25
+      "line": 27,
+      "endLine": 27
     },
     {
       "id": "symbol:src/renderer/components/tileShatter.ts#CORE_SCALE",
       "name": "CORE_SCALE",
       "kind": "value",
       "file": "src/renderer/components/tileShatter.ts",
-      "line": 29,
-      "endLine": 29
+      "line": 31,
+      "endLine": 31
     },
     {
       "id": "symbol:src/renderer/components/tileShatter.ts#createTileShatterEffect",
       "name": "createTileShatterEffect",
       "kind": "value",
       "file": "src/renderer/components/tileShatter.ts",
-      "line": 254,
-      "endLine": 304
+      "line": 256,
+      "endLine": 306
     },
     {
       "id": "symbol:src/renderer/components/tileShatter.ts#getNewlyMatchedTiles",
       "name": "getNewlyMatchedTiles",
       "kind": "value",
       "file": "src/renderer/components/tileShatter.ts",
-      "line": 231,
-      "endLine": 252
+      "line": 233,
+      "endLine": 254
+    },
+    {
+      "id": "symbol:src/renderer/components/tileShatter.ts#getTileColumnSpacing",
+      "name": "getTileColumnSpacing",
+      "kind": "value",
+      "file": "src/renderer/components/tileShatter.ts",
+      "line": 12,
+      "endLine": 12
     },
     {
       "id": "symbol:src/renderer/components/tileShatter.ts#getTileShatterFrameState",
       "name": "getTileShatterFrameState",
       "kind": "value",
       "file": "src/renderer/components/tileShatter.ts",
-      "line": 182,
-      "endLine": 229
+      "line": 184,
+      "endLine": 231
     },
     {
       "id": "symbol:src/renderer/components/tileShatter.ts#SHELL_SCALE",
       "name": "SHELL_SCALE",
       "kind": "value",
       "file": "src/renderer/components/tileShatter.ts",
-      "line": 28,
-      "endLine": 28
+      "line": 30,
+      "endLine": 30
     },
     {
       "id": "symbol:src/renderer/components/tileShatter.ts#TILE_DEPTH",
       "name": "TILE_DEPTH",
       "kind": "value",
       "file": "src/renderer/components/tileShatter.ts",
-      "line": 27,
-      "endLine": 27
+      "line": 29,
+      "endLine": 29
     },
     {
       "id": "symbol:src/renderer/components/tileShatter.ts#TILE_SPACING",
@@ -41423,48 +41457,48 @@
       "name": "TileDischargePulseSpec",
       "kind": "interface",
       "file": "src/renderer/components/tileShatter.ts",
-      "line": 50,
-      "endLine": 58
+      "line": 52,
+      "endLine": 60
     },
     {
       "id": "symbol:src/renderer/components/tileShatter.ts#TileShatterEffectData",
       "name": "TileShatterEffectData",
       "kind": "interface",
       "file": "src/renderer/components/tileShatter.ts",
-      "line": 60,
-      "endLine": 77
+      "line": 62,
+      "endLine": 79
     },
     {
       "id": "symbol:src/renderer/components/tileShatter.ts#TileShatterImpactAnchor",
       "name": "TileShatterImpactAnchor",
       "kind": "interface",
       "file": "src/renderer/components/tileShatter.ts",
-      "line": 37,
-      "endLine": 40
+      "line": 39,
+      "endLine": 42
     },
     {
       "id": "symbol:src/renderer/components/tileShatter.ts#TileShatterMode",
       "name": "TileShatterMode",
       "kind": "type",
       "file": "src/renderer/components/tileShatter.ts",
-      "line": 33,
-      "endLine": 33
+      "line": 35,
+      "endLine": 35
     },
     {
       "id": "symbol:src/renderer/components/tileShatter.ts#TileShatterTransform",
       "name": "TileShatterTransform",
       "kind": "interface",
       "file": "src/renderer/components/tileShatter.ts",
-      "line": 42,
-      "endLine": 48
+      "line": 44,
+      "endLine": 50
     },
     {
       "id": "symbol:src/renderer/components/tileShatter.ts#TileShatterVec3",
       "name": "TileShatterVec3",
       "kind": "type",
       "file": "src/renderer/components/tileShatter.ts",
-      "line": 35,
-      "endLine": 35
+      "line": 37,
+      "endLine": 37
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#applyAnisotropyToCachedTileTextures",
@@ -41991,24 +42025,24 @@
       "name": "CHAIN_BEAT_COPY",
       "kind": "value",
       "file": "src/renderer/copy/chainBeat.ts",
-      "line": 51,
-      "endLine": 152
+      "line": 54,
+      "endLine": 144
     },
     {
       "id": "symbol:src/renderer/copy/chainBeat.ts#CHAIN_STYLE_LONG_SPAN",
       "name": "CHAIN_STYLE_LONG_SPAN",
       "kind": "value",
       "file": "src/renderer/copy/chainBeat.ts",
-      "line": 19,
-      "endLine": 19
+      "line": 21,
+      "endLine": 21
     },
     {
       "id": "symbol:src/renderer/copy/chainBeat.ts#CHAIN_TIER_LABELS",
       "name": "CHAIN_TIER_LABELS",
       "kind": "value",
       "file": "src/renderer/copy/chainBeat.ts",
-      "line": 11,
-      "endLine": 16
+      "line": 13,
+      "endLine": 18
     },
     {
       "id": "symbol:src/renderer/copy/chainMilestoneFeedback.ts#ChainMilestoneFeedback",
@@ -42343,32 +42377,32 @@
       "name": "mismatchFloaterLiveRegionText",
       "kind": "function",
       "file": "src/renderer/copy/mismatchFloater.ts",
-      "line": 16,
-      "endLine": 20
+      "line": 18,
+      "endLine": 22
     },
     {
       "id": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterNextAction",
       "name": "mismatchFloaterNextAction",
       "kind": "function",
       "file": "src/renderer/copy/mismatchFloater.ts",
-      "line": 61,
-      "endLine": 90
+      "line": 63,
+      "endLine": 92
     },
     {
       "id": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryHint",
       "name": "mismatchFloaterRecoveryHint",
       "kind": "function",
       "file": "src/renderer/copy/mismatchFloater.ts",
-      "line": 23,
-      "endLine": 35
+      "line": 25,
+      "endLine": 37
     },
     {
       "id": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterSignal",
       "name": "mismatchFloaterSignal",
       "kind": "function",
       "file": "src/renderer/copy/mismatchFloater.ts",
-      "line": 43,
-      "endLine": 51
+      "line": 45,
+      "endLine": 53
     },
     {
       "id": "symbol:src/renderer/copy/passAndPlay.ts#PASS_AND_PLAY_COPY",
@@ -46799,24 +46833,24 @@
       "name": "ChainTargetBand",
       "kind": "type",
       "file": "src/shared/chain-targets.ts",
-      "line": 5,
-      "endLine": 5
+      "line": 6,
+      "endLine": 6
     },
     {
       "id": "symbol:src/shared/chain-targets.ts#ChainTargetFeedback",
       "name": "ChainTargetFeedback",
       "kind": "interface",
       "file": "src/shared/chain-targets.ts",
-      "line": 7,
-      "endLine": 15
+      "line": 8,
+      "endLine": 16
     },
     {
       "id": "symbol:src/shared/chain-targets.ts#getChainTargetFeedback",
       "name": "getChainTargetFeedback",
       "kind": "value",
       "file": "src/shared/chain-targets.ts",
-      "line": 38,
-      "endLine": 91
+      "line": 39,
+      "endLine": 92
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#CHAIN_TIER_CLEAN_FROM",
@@ -58149,7 +58183,7 @@
         },
         {
           "path": "src/renderer/copy/chainBeat.ts",
-          "line": 5
+          "line": 3
         },
         {
           "path": "src/renderer/components/tileBoardBreakWave.ts",
@@ -58183,7 +58217,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 72
+          "line": 70
         },
         {
           "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -67233,6 +67267,12 @@
       "id": "exports:src/renderer/components/tileShatter.ts->symbol:src/renderer/components/tileShatter.ts#getNewlyMatchedTiles",
       "source": "file:src/renderer/components/tileShatter.ts",
       "target": "symbol:src/renderer/components/tileShatter.ts#getNewlyMatchedTiles",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileShatter.ts->symbol:src/renderer/components/tileShatter.ts#getTileColumnSpacing",
+      "source": "file:src/renderer/components/tileShatter.ts",
+      "target": "symbol:src/renderer/components/tileShatter.ts#getTileColumnSpacing",
       "kind": "exports"
     },
     {
@@ -85503,6 +85543,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/TileBoard.tsx->src/shared/chain-tier-rules.ts",
+      "source": "file:src/renderer/components/TileBoard.tsx",
+      "target": "file:src/shared/chain-tier-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/TileBoard.tsx->src/shared/clump-read-rules.ts",
       "source": "file:src/renderer/components/TileBoard.tsx",
       "target": "file:src/shared/clump-read-rules.ts",
@@ -87819,6 +87865,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/copy/chainBeat.ts->src/shared/chunk-break-rules.ts",
+      "source": "file:src/renderer/copy/chainBeat.ts",
+      "target": "file:src/shared/chunk-break-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/copy/chainBeat.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/copy/chainBeat.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/copy/chainMilestoneFeedback.test.ts->src/renderer/copy/chainMilestoneFeedback.ts",
       "source": "file:src/renderer/copy/chainMilestoneFeedback.test.ts",
       "target": "file:src/renderer/copy/chainMilestoneFeedback.ts",
@@ -88020,6 +88078,12 @@
       "id": "imports:src/renderer/copy/mismatchFloater.ts->src/shared/chain-targets.ts",
       "source": "file:src/renderer/copy/mismatchFloater.ts",
       "target": "file:src/shared/chain-targets.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/copy/mismatchFloater.ts->src/shared/chain-tier-rules.ts",
+      "source": "file:src/renderer/copy/mismatchFloater.ts",
+      "target": "file:src/shared/chain-tier-rules.ts",
       "kind": "imports"
     },
     {
@@ -91665,6 +91729,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/chain-targets.test.ts->src/shared/chain-tier-rules.ts",
+      "source": "file:src/shared/chain-targets.test.ts",
+      "target": "file:src/shared/chain-tier-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/chain-targets.ts->src/shared/chain-rung-value-rules.ts",
       "source": "file:src/shared/chain-targets.ts",
       "target": "file:src/shared/chain-rung-value-rules.ts",
@@ -91674,6 +91744,12 @@
       "id": "imports:src/shared/chain-targets.ts->src/shared/chain-tier-rules.ts",
       "source": "file:src/shared/chain-targets.ts",
       "target": "file:src/shared/chain-tier-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/chain-targets.ts->src/shared/chunk-break-rules.ts",
+      "source": "file:src/shared/chain-targets.ts",
+      "target": "file:src/shared/chunk-break-rules.ts",
       "kind": "imports"
     },
     {
@@ -102318,6 +102394,12 @@
       "id": "tested_by:src/shared/chain-tier-rules.ts->file:src/shared/chain-carryover-rules.test.ts",
       "source": "file:src/shared/chain-tier-rules.ts",
       "target": "file:src/shared/chain-carryover-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/chain-tier-rules.ts->file:src/shared/chain-targets.test.ts",
+      "source": "file:src/shared/chain-tier-rules.ts",
+      "target": "file:src/shared/chain-targets.test.ts",
       "kind": "tested_by"
     },
     {

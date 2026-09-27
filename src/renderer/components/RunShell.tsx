@@ -534,7 +534,7 @@ const RunShell = ({
                         style={ladderStyle}
                     >
                         <span
-                            aria-label={CHAIN_BEAT_COPY.meterLabel(meter.momentum, meter.feverAt, meter.full, meter.tier)}
+                            aria-label={CHAIN_BEAT_COPY.meterLabel(meter.momentum, meter.feverAt, meter.full, meter.tier, run.board?.floorArchetypeId)}
                             className={styles.ladder}
                             data-chain-tier={meter.tier}
                             data-meter-drop={chainMeterDropping ? 'true' : 'false'}
@@ -553,7 +553,7 @@ const RunShell = ({
                         </span>
                         <div className={styles.chainRead}>
                             <span
-                                aria-label={CHAIN_BEAT_COPY.rungValue(tier)}
+                                aria-label={CHAIN_BEAT_COPY.rungValue(tier, run.board?.floorArchetypeId)}
                                 className={styles.rungValue}
                                 data-chain-tier={tier}
                                 data-rung-multiplier={chainRungScoreMultiplier(tier)}
@@ -569,14 +569,15 @@ const RunShell = ({
                                     chain,
                                     runNonNegativeInteger(run.chunkPairsThisChain),
                                     runNonNegativeInteger(run.skipMomentumThisChain),
-                                    rungs
+                                    rungs,
+                                    run.board?.floorArchetypeId
                                 )} ${CHAIN_BEAT_COPY.rungLadder()}`}
                             >
                                 {CHAIN_TIER_LABELS[tier] ? `Chain ${chain} · ${CHAIN_TIER_LABELS[tier]}` : `Chain ${chain}`}
                             </span>
                             <span className={styles.chainGoal} data-chain-tier={nextTier ?? 'fever'} data-testid="hud-chain-goal">
                                 <em>{nextTierLabel}</em>
-                                <span className={styles.chainGoalValue}>×{chainRungScoreMultiplier(nextTier ?? 'fever')} per pair</span>
+                                <span className={styles.chainGoalValue}>Pops ×{chainRungScoreMultiplier(nextTier ?? 'fever')}</span>
                             </span>
                         </div>
                     </div>

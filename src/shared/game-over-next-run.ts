@@ -26,7 +26,7 @@ const runItBackDetail = (summary: RunSummary | null, run: RunState): string => {
     const levelsCleared = runNonNegativeInteger(summary.levelsCleared);
     const bestStreak = runNonNegativeInteger(summary.bestStreak);
     const pickupCopy = pickupTotal > 0 ? ` / pickups ${pickupClaimed}/${pickupTotal}` : '';
-    const chainCopy = bestStreak > 0 ? ` / best chain x${bestStreak}` : ' / chain not started';
+    const chainCopy = bestStreak > 0 ? ` / best chain ${bestStreak} ${bestStreak === 1 ? 'match' : 'matches'}` : ' / chain not started';
     return `${totalScore.toLocaleString()} score / floor ${highestLevel} / ${levelsCleared} clear(s)${chainCopy}${pickupCopy}`;
 };
 
@@ -65,7 +65,7 @@ const getFallbackNextGoalRow = (summary: RunSummary | null): GameOverNextRunRow 
     detail: runNonNegativeInteger(summary?.perfectClears) > 0
         ? `${runNonNegativeInteger(summary?.perfectClears)} perfect floor(s) logged.`
         : 'Perfect floors and no-assist runs unlock mastery.',
-    actionHint: 'Choose Classic for long-run progression or Daily for UTC archive progress.',
+    actionHint: 'Play Again starts a fresh run. Rematch repeats this layout so you can use what you learned.',
     localOnly: true
 });
 

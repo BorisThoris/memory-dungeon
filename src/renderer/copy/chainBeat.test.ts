@@ -12,6 +12,31 @@ const turnEvent = (announcement: Partial<BoardTurnEvent['announcement']>): Board
 };
 
 describe('the chunk says something', () => {
+    it('separates the remembered pair from the chain reward on the first floor', () => {
+        expect(CHAIN_BEAT_COPY.rungValue('none')).toBe('Your match clears its pair. Reach Clean to start popping nearby pairs.');
+        expect(CHAIN_BEAT_COPY.rungValue('clean')).toContain('up to 1 extra pair');
+        expect(CHAIN_BEAT_COPY.rungValue('sharp')).toContain('up to 2 extra pairs');
+        expect(CHAIN_BEAT_COPY.rungValue('fever')).toContain('up to 4 extra pairs');
+        expect(CHAIN_BEAT_COPY.rungValue('fever')).toContain('Popped pairs score ×8 before ripple bonuses.');
+    });
+
+    it('teaches the breather bonus where the player reads the live meter', () => {
+        expect(CHAIN_BEAT_COPY.meterLabel(0, 9, false, 'none', 'breather')).toContain('On this breather, a match can pop up to 1 extra pair');
+        expect(CHAIN_BEAT_COPY.rungValue('clean', 'breather')).toContain('up to 2 extra pairs');
+        expect(CHAIN_BEAT_COPY.rungValue('fever', 'breather')).toContain('up to 5 extra pairs');
+        expect(CHAIN_BEAT_COPY.momentumHint(1, 0, 0, { sharp: 7, fever: 9 }, 'breather')).toContain('Clean from 3 can pop up to 2 extra pairs');
+    });
+
+    it('does not describe a cross-suit Fever bridge as clearing only one suit', () => {
+        const lines = chunkAnnouncementLines(turnEvent({
+            chunkPairsBrokenBefore: 0, chunkPairsBrokenAfter: 4, chainAfter: 9,
+            chainTierAfter: 'fever', chunkBridgedPairs: 1
+        }));
+        expect(lines[0]).toContain('4 more pairs broke away');
+        expect(lines.join(' ')).not.toContain('same suit');
+        expect(lines).toContain('Bridge.');
+    });
+
     it('says nothing on a turn without a break', () => {
         expect(chunkAnnouncementLines(turnEvent({}))).toEqual([]);
     });

@@ -1,5 +1,7 @@
 import type { ChainTier } from '../../shared/chain-tier-rules';
-import { CHAIN_RUNG_PAIRS, chainRungScoreMultiplier } from '../../shared/chain-rung-value-rules';
+import { chainRungScoreMultiplier } from '../../shared/chain-rung-value-rules';
+import { breakPairCap } from '../../shared/chunk-break-rules';
+import type { BoardState } from '../../shared/contracts';
 
 /**
  * What the chain and the chunk say.
@@ -18,17 +20,18 @@ export const CHAIN_TIER_LABELS: Readonly<Record<ChainTier, string>> = {
 /** Grid steps between a broken pair's halves that earn "Long clump": a wave that ran a long way. */
 export const CHAIN_STYLE_LONG_SPAN = 4;
 
+const extraPairs = (count: number): string => `${count} extra ${count === 1 ? 'pair' : 'pairs'}`;
+
 /**
- * One rung's worth, as a sentence: what it finds and what it pays for finding it.
- *
- * Both halves, because either alone misleads. Sharp finds a third of a pair more than Clean and
- * pays twice as much for every pair it finds, so the pairs read as a dead rung and the multiplier
- * reads as the truth (Gen 189).
+ * Explain the live limit, not the simulation's average number of extra pairs. An average of zero
+ * at Lone used to say the player's match took zero pairs; Clean and Sharp both rounded to one.
+ * The matched pair is separate, and a breather raises the limit even before Clean.
  */
-const rungValueLine = (tier: ChainTier): string => {
-    const pairs = CHAIN_RUNG_PAIRS[tier];
-    const at = tier === 'none' ? 'A match with no chain' : `A ${CHAIN_TIER_LABELS[tier]} break`;
-    return `${at} takes about ${pairs} ${pairs === 1 ? 'pair' : 'pairs'} and pays ×${chainRungScoreMultiplier(tier)} for each.`;
+const rungValueLine = (tier: ChainTier, archetype?: BoardState['floorArchetypeId']): string => {
+    const pairs = breakPairCap(tier, archetype);
+    if (pairs === 0) return 'Your match clears its pair. Reach Clean to start popping nearby pairs.';
+    const at = tier === 'none' ? 'On this breather, a match' : `${CHAIN_TIER_LABELS[tier]}`;
+    return `${at} can pop up to ${extraPairs(pairs)} by contact. Popped pairs score ×${chainRungScoreMultiplier(tier)} before ripple bonuses.`;
 };
 
 /**
@@ -57,11 +60,11 @@ export const CHAIN_BEAT_COPY = {
         nextTier ? `${momentumLeft} momentum to ${CHAIN_TIER_LABELS[nextTier]}` : 'Fever active',
     goalBenefit: (nextTier: Exclude<ChainTier, 'none'> | null): string =>
         nextTier === 'clean'
-            ? 'Matches start to pop the pair beside them'
+            ? 'Matches can pop a nearby pair'
             : nextTier === 'sharp'
-              ? 'A break takes two pairs and runs on'
+              ? 'A break can pop two extra pairs and run on'
               : nextTier === 'fever'
-                ? 'A break takes four and bridges suits'
+                ? 'A break can pop four extra pairs and bridge suits'
                 : 'Keep matching to hold the fire',
     /**
      * The break's line: the one the feedback rail shows and a screen reader speaks, so it has to
@@ -69,10 +72,10 @@ export const CHAIN_BEAT_COPY = {
      */
     chunkAnnouncement: (pairs: number, tier: ChainTier, chain: number): string =>
         tier === 'none'
-            ? `Pop. ${pairs} ${pairs === 1 ? 'pair' : 'pairs'} of the same suit touching that match broke away and left the board.`
+            ? `Pop. ${extraPairs(pairs)} broke away with that match and left the board.`
             : `Chain ${chain}, ${CHAIN_TIER_LABELS[tier]} break. ${pairs} more ${
                   pairs === 1 ? 'pair' : 'pairs'
-              } of the same suit broke away with that match and left the board.`,
+              } broke away with that match and left the board.`,
     /**
      * The clump read on a considered tile: what it stands in, what a match there pops **now**, and
      * what the next rung would add. The second half is the hold decision (thesis §30.3b) said on
@@ -122,31 +125,20 @@ export const CHAIN_BEAT_COPY = {
         chain: number,
         cascaded: number,
         banked: number,
-        rungs: { sharp: number; fever: number }
+        rungs: { sharp: number; fever: number },
+        archetype?: BoardState['floorArchetypeId']
     ): string =>
         `${momentumSourceLine(chain, cascaded, banked)}. ` +
-        `A match on its own just matches. Clean from 3 pops the pair it touches, Sharp from ${rungs.sharp} takes two and runs on, Fever from ${rungs.fever} takes four and bridges into the suit next door on this floor. A miss halves the chain and puts the fire out.`,
-    /**
-     * What the rung the player is standing on is worth, for the pip cluster beside the tier. The
-     * meter said where they were and never what being there bought (thesis §30.3a); a cluster that
-     * grows as they climb is how "Sharp takes about this many" is learned by seeing it.
-     */
+        (archetype === 'breather' ? 'This breather lets every rung pop one more pair. ' : 'A match on its own clears its pair. ') +
+        `Clean from 3 can pop up to ${extraPairs(breakPairCap('clean', archetype))} by contact, Sharp from ${rungs.sharp} up to ${breakPairCap('sharp', archetype)} and can ripple, Fever from ${rungs.fever} up to ${breakPairCap('fever', archetype)} and can bridge into a neighbouring suit. A miss halves the chain and clears cascade and early-start momentum.`,
+    /** What this floor's rung can add to a remembered pair, and how those extra pairs score. */
     rungValue: rungValueLine,
     /** The whole ladder in one line, for the hover hint: what each rung up pays. */
     rungLadder: (): string =>
-        `A lone match pays ×${chainRungScoreMultiplier('none')} a pair, Clean ×${chainRungScoreMultiplier('clean')}, ` +
+        `Popped-pair score: Lone ×${chainRungScoreMultiplier('none')}, Clean ×${chainRungScoreMultiplier('clean')}, ` +
         `Sharp ×${chainRungScoreMultiplier('sharp')}, Fever ×${chainRungScoreMultiplier('fever')}.`,
     /** The meter, for a screen reader: where the momentum stands on the ladder, and what it is worth. */
-    meterLabel: (momentum: number, feverAt: number, full: boolean, tier: ChainTier): string =>
+    meterLabel: (momentum: number, feverAt: number, full: boolean, tier: ChainTier, archetype?: BoardState['floorArchetypeId']): string =>
         `${full ? `Fever meter full: momentum ${momentum}.` : `Fever meter: momentum ${momentum} of ${feverAt}.`}` +
-        ` ${rungValueLine(tier)}`,
-    codexChainTitle: 'Chain, chunk and Fever',
-    codexChainDescription:
-        'Every match pops: the whole same-suit clump touching the two tiles you matched breaks away with them, and the partners of those pairs go too, wherever they sit. ' +
-        'The chain decides how far the pops ripple. With no chain the partners leave and stop. From chain 3 (Clean) each partner that left takes its own clump - a second wave. ' +
-        'Sharp - about two-fifths of the floor\'s pairs of momentum, four at least - runs the reaction until a wave takes nothing. Fever - about two-thirds, seven at least - adds the halo: everything touching the first clump, whatever its suit. ' +
-        'Every pair a break takes adds to the chain\'s momentum. Treasure inside a break spills and pays as if you had matched it. Broken pairs score less than matched ones and give no recall credit - memory still pays best - but they ' +
-        'clear the floor faster, and a longer ripple pays more. A miss halves the chain and puts the fire out. ' +
-        'A break with a shape gets a name on the run line: a ripple that ran on, a drop, a partner taken from across the board, a halo, a treasure spill, a clean sweep of a suit. ' +
-        'Clear the floor with momentum still standing and the floor-end bonus multiplies with it: 1.5x at Clean, 2.5x at Sharp, 5x at Fever - Extreme Fever.'
+        ` ${rungValueLine(tier, archetype)}`
 } as const;
