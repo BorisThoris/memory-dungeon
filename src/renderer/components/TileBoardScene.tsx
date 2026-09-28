@@ -364,6 +364,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     });
     const boardGroupRef = useRef<Group | null>(null);
     const tileFrameBagsRef = useRef(new Map<string, TileBezelFrameBag>());
+    const visualTime = useRef(0);
     const tileFrameIdleStreakRef = useRef(new Map<string, number>());
     const tilePickMeshesRef = useRef(new Map<string, Mesh>());
     const tileFrameRegistry = useTileBoardItemRegistry(tileFrameBagsRef, {
@@ -406,7 +407,13 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         );
     }, []); // eslint-disable-line react-hooks/exhaustive-deps -- mount-only; useFrame updates boardGroup each frame
 
-    useFrame((state, delta) => {
+    useFrame((_, delta) => {
+        if (runStatus !== 'paused') visualTime.current += Math.max(0, Math.min(delta, 0.1));
+    }, -2);
+
+    useFrame((state, rawDelta) => {
+        if (runStatus === 'paused') return;
+        const delta = Math.max(0, Math.min(rawDelta, 0.1));
         const perfOn = boardWebglPerfSampleEnabled() || boardWebglPerfSampleVerboseEnabled();
         const advancedTrauma = advanceBoardTrauma({
             delta,
@@ -419,12 +426,12 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         boardTraumaRef.current = advancedTrauma.trauma;
         runTileBoardSceneFrame({
             accumulatePerfPhases: boardWebglPerfSampleAccumulatePhases,
-            advanceTileFrame: (bag) => advanceTileBezelFrame(bag, state, delta),
+            advanceTileFrame: (bag) => advanceTileBezelFrame(bag, state, delta, tileStepLegacy ? state.clock.elapsedTime : visualTime.current),
             bags: tileFrameBagsRef.current,
             boardGroup: boardGroupRef.current,
             boardRuneFieldMetrics,
             boardViewport,
-            clockElapsedTime: state.clock.elapsedTime,
+            clockElapsedTime: tileStepLegacy ? state.clock.elapsedTime : visualTime.current,
             delta,
             idleStreaks: tileFrameIdleStreakRef.current,
             interactionSuppressed,
@@ -450,6 +457,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
                 compact={compact}
                 runStatus={runStatus}
                 particleFrames={tileFrameBagsRef}
+                visualTime={visualTime}
                 boardColumns={totalColumns}
                 boardEntranceMotionBudgetMs={boardEntranceMotionBudgetMs}
                 boardEntranceMotionDeadlineMs={boardEntranceMotionDeadlineMs}

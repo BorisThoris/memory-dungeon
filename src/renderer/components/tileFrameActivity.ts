@@ -12,6 +12,7 @@ import type { ResolvingSelectionState } from './tileResolvingSelection';
  */
 export type TileBezelActivityBag = {
     propsRef: MutableRefObject<{
+        traitRouteReadabilityIntensity?: string;
         reduceMotion: boolean;
         faceUp: boolean;
         pickable: boolean;
@@ -56,6 +57,7 @@ export type TileBezelActivityBag = {
     pressingOnCardRef: MutableRefObject<boolean>;
     focusDimBlendRef: MutableRefObject<number>;
     lastActivityVisualGateRef: MutableRefObject<{
+        traitRouteReadabilityIntensity?: string;
         textureRevision: number;
         keyboardFocused: boolean;
         focusDimmed: boolean;
@@ -144,7 +146,8 @@ export function shouldAdvanceTileBezelThisFrame(
         gate.textureRevision !== p.textureRevision ||
         gate.keyboardFocused !== p.keyboardFocused ||
         gate.focusDimmed !== p.focusDimmed ||
-        gate.graphicsQuality !== p.graphicsQuality
+        gate.graphicsQuality !== p.graphicsQuality ||
+        gate.traitRouteReadabilityIntensity !== p.traitRouteReadabilityIntensity
     ) {
         return true;
     }
@@ -269,6 +272,8 @@ export function shouldAdvanceTileBezelThisFrame(
     if (p.graphicsQuality !== 'low' && p.keyboardFocused && p.pickable && p.tile.state !== 'matched') {
         return true;
     }
+    if (p.graphicsQuality !== 'low' && !p.faceUp && p.tile.state === 'hidden' &&
+        p.traitRouteReadabilityIntensity && p.traitRouteReadabilityIntensity !== 'none') return true;
 
     if (bag.matchPulseRef.current > 0.002) {
         return true;

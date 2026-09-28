@@ -854,7 +854,6 @@ const TileBezelInner = ({
                         focusRimMatRef={focusRimMatRef}
                         focusRingGeometry={focusRingGeometry}
                         graphicsQuality={graphicsQuality}
-                        matchedEdgeGeometry={matchedEdgeGeometry}
                         matchedRimFireMaterial={matchedRimFireMaterial}
                         matchedVictoryFlameMatRef={matchedVictoryFlameMatRef}
                         matchedVictoryFlameMeshRef={matchedVictoryFlameMeshRef}

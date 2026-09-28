@@ -120,17 +120,25 @@ for (const reduced of [false, true]) {
                 const capture = new MutationObserver(() => {
                     if (Number(node.dataset.particleMatchBursts) === 0) return;
                     capture.disconnect();
-                    requestAnimationFrame(() => requestAnimationFrame(() => {
-                        (window as unknown as { __rimMatchFrame: string }).__rimMatchFrame = node.toDataURL();
-                    }));
+                    const frames: string[] = [];
+                    (window as unknown as { __rimMatchFrames: string[] }).__rimMatchFrames = frames;
+                    let frame = 0;
+                    const sample = () => {
+                        frame += 1;
+                        if ([2, 4, 7].includes(frame)) frames.push(node.toDataURL());
+                        if (frame < 7) requestAnimationFrame(sample);
+                    };
+                    requestAnimationFrame(sample);
                 });
                 capture.observe(node, { attributes: true, attributeFilter: ['data-particle-match-bursts'] });
             });
             await pick(page, 'a-2');
             await expect.poll(() => count(page, 'match-bursts')).toBe(2);
-            await expect.poll(() => page.evaluate(() => Boolean((window as unknown as { __rimMatchFrame?: string }).__rimMatchFrame))).toBe(true);
-            const matchFrame = await page.evaluate(() => (window as unknown as { __rimMatchFrame: string }).__rimMatchFrame);
-            writeFileSync(`output/playwright/particles-rim-match-${reduced ? 'reduced' : '4k'}.png`, Buffer.from(matchFrame.split(',')[1]!, 'base64'));
+            await expect.poll(() => count(page, 'ripple-bursts')).toBe(reduced ? 0 : 2);
+            await expect.poll(() => page.evaluate(() => (window as unknown as { __rimMatchFrames?: string[] }).__rimMatchFrames?.length)).toBe(3);
+            const matchFrames = await page.evaluate(() => (window as unknown as { __rimMatchFrames: string[] }).__rimMatchFrames);
+            matchFrames.forEach((frame, index) => writeFileSync(
+                `output/playwright/particles-contact-${reduced ? 'reduced' : '4k'}-${index}.png`, Buffer.from(frame.split(',')[1]!, 'base64')));
             await page.screenshot({ path: `output/playwright/particles-match-${reduced ? 'reduced' : '4k'}.png` });
             await expect.poll(() => count(page, 'active')).toBe(0);
             expect(await canvas(page).getAttribute('data-particle-allocation-errors')).toBe('[]');

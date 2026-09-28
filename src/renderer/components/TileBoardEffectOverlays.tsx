@@ -1,4 +1,5 @@
 import type { RefObject } from 'react';
+import { getCardAuraGeometry } from './tileBoardRimGeometry';
 import {
     DoubleSide,
     type BufferGeometry,
@@ -29,7 +30,6 @@ interface TileBoardEffectOverlaysProps {
     focusRimMatRef: RefObject<MeshBasicMaterial | null>;
     focusRingGeometry: BufferGeometry;
     graphicsQuality: GraphicsQualityPreset;
-    matchedEdgeGeometry: BufferGeometry;
     matchedRimFireMaterial: ShaderMaterial;
     matchedVictoryFlameMatRef: RefObject<ShaderMaterial | null>;
     matchedVictoryFlameMeshRef: RefObject<Mesh | null>;
@@ -61,7 +61,6 @@ export const TileBoardEffectOverlays = ({
     focusRimMatRef,
     focusRingGeometry,
     graphicsQuality,
-    matchedEdgeGeometry,
     matchedRimFireMaterial,
     matchedVictoryFlameMatRef,
     matchedVictoryFlameMeshRef,
@@ -174,7 +173,7 @@ export const TileBoardEffectOverlays = ({
         ) : null}
         <mesh
             ref={matchedVictoryFlameMeshRef}
-            geometry={matchedEdgeGeometry}
+            geometry={getCardAuraGeometry()}
             position={[0, 0, faceZ + 0.024]}
             raycast={noopMeshRaycast}
             renderOrder={18}

@@ -125,14 +125,29 @@ export const computeTileBoardFrameVisualState = ({
     const flameState = computeMatchedVictoryFlameVisualState({
         graphicsQuality,
         matchedVictoryBurst,
-        matchedVictoryPersistent: resolvingRimState.matchedVictoryPersistent,
+        matchedVictoryPersistent: resolvingRimState.matchedVictoryPersistent ||
+            (tileState !== 'removed' && resolvingSelection !== 'mismatch' &&
+                (focusActive || hoverDomParity || hoverFaceUpPickable || (faceUp && resolvingSelection === 'match'))),
         reduceMotion
     });
+    // Persistent focus has a quieter flame; the strongest envelope belongs to a real match.
+    if (!resolvingRimState.matchedVictoryPersistent && resolvingSelection !== 'match') {
+        flameState.intensity *= routeReadabilityIntensity === 'none' ? 0.72 : 0.9;
+    }
+    flameState.auraMood = resolvingSelection === 'match' || resolvingRimState.matchedVictoryPersistent
+        ? 'match' : routeReadabilityIntensity === 'none' ? 'focus' : 'charge';
+    if (flameState.visible && !reduceMotion) {
+        cardGlowStates.hoverBack.intensity *= 0.12;
+        cardGlowStates.hoverFront.intensity *= 0.12;
+        cardGlowStates.focus.intensity *= 0.12;
+        if (resolvingSelection === 'match') cardGlowStates.resolving.intensity *= 0.12;
+        hoverGoldState.hoverEmissiveIntensity *= 0.35;
+    }
 
     return {
         cardGlowStates,
         flameState,
-        focusRimOpacity: computeFocusRimOpacity({
+        focusRimOpacity: (flameState.visible && !reduceMotion ? 0.2 : 1) * computeFocusRimOpacity({
             keyboardFocused: keyboardFocused || (routeReadabilityIntensity !== 'none' && tileState !== 'matched' && !faceUp),
             pickable,
             reduceMotion,

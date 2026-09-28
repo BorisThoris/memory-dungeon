@@ -22,6 +22,7 @@ import {
 } from './tileBoardFrameVisualState';
 import { applyTileBoardFrameMaterialState } from './tileBoardFrameMaterialState';
 import type { TileBezelFrameBag } from './tileBoardFrameBag';
+import { sampleMatchImpact } from './boardMatchImpact';
 
 const CARD_WIDTH = CARD_PLANE_WIDTH;
 const CARD_HEIGHT = CARD_PLANE_HEIGHT;
@@ -29,7 +30,7 @@ const CARD_HEIGHT = CARD_PLANE_HEIGHT;
 const scratchCardTint = new Color();
 const scratchGlowColor = new Color();
 
-export const advanceTileBezelFrame = (bag: TileBezelFrameBag, state: RootState, delta: number): void => {
+export const advanceTileBezelFrame = (bag: TileBezelFrameBag, state: RootState, delta: number, visualTime = state.clock.elapsedTime): void => {
     if (typeof document !== 'undefined' && document.hidden) {
         return;
     }
@@ -41,7 +42,7 @@ export const advanceTileBezelFrame = (bag: TileBezelFrameBag, state: RootState, 
         return;
     }
 
-    const clock = state.clock;
+    const clock = { elapsedTime: visualTime };
     const pulseTransition = computeTileBoardFramePulseTransitionState({
         current: {
             faceUpStructBlend: bag.faceUpStructBlendRef.current,
@@ -123,7 +124,7 @@ export const advanceTileBezelFrame = (bag: TileBezelFrameBag, state: RootState, 
     }
 
     const isMatched = p.tile.state === 'matched';
-    const time = state.clock.elapsedTime;
+    const time = visualTime;
     const interactionMotion = computeTileBoardInteractionMotionState({
         faceUp: p.faceUp,
         fieldAmp: p.fieldAmp,
@@ -215,6 +216,12 @@ export const advanceTileBezelFrame = (bag: TileBezelFrameBag, state: RootState, 
         cardGroupMotionState,
         delta
     );
+    if (isMatched && pulseRefs.matchedVictoryBurstStartedAt != null) {
+        const impact = sampleMatchImpact(time - pulseRefs.matchedVictoryBurstStartedAt, p.reduceMotion);
+        group.position.z += impact.z;
+        group.scale.x *= impact.scaleX;
+        group.scale.y *= impact.scaleY;
+    }
 
     const frameVisualState = computeTileBoardFrameVisualState({
         faceUp: p.faceUp,
@@ -297,6 +304,7 @@ export const advanceTileBezelFrame = (bag: TileBezelFrameBag, state: RootState, 
     bag.focusDimBlendRef.current = materialResult.focusDimBlend;
 
     bag.lastActivityVisualGateRef.current = {
+        traitRouteReadabilityIntensity: p.traitRouteReadabilityIntensity,
         textureRevision: p.textureRevision,
         keyboardFocused: p.keyboardFocused,
         focusDimmed: p.focusDimmed,

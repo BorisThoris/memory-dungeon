@@ -7,8 +7,9 @@ import { collectBoardParticleCues, particleBoardChanged } from './boardParticleC
 import { getTileTransform } from './tileBoardTransform';
 import type { TileBezelFrameBag } from './tileBoardFrameBag';
 import { getRimParticleMood } from './boardParticleRim';
+import { beginMatchImpact, MATCH_CONTACT_SECONDS } from './boardMatchImpact';
 
-export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMotion, runStatus, frames, cardHeat }: {
+export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMotion, runStatus, frames, cardHeat, time, sharedFrameClock }: {
     board: BoardState;
     compact: boolean;
     graphicsQuality: GraphicsQualityPreset;
@@ -16,15 +17,16 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
     runStatus: RunStatus;
     frames: RefObject<Map<string, TileBezelFrameBag>>;
     cardHeat: number;
+    time: RefObject<number>;
+    sharedFrameClock: boolean;
 }) => {
     const { gl } = useThree();
     const system = useMemo(() => createBoardParticleSystem(), []);
     const previous = useRef<BoardState | null>(null);
-    const time = useRef(0);
     const motion = useRef(reduceMotion);
     const activeCount = useRef(-1);
     const peakCount = useRef(0);
-    const totals = useRef({ bomb: 0, match: 0, flip: 0, chain: 0, rim: 0 });
+    const totals = useRef({ bomb: 0, match: 0, flip: 0, chain: 0, rim: 0, ripple: 0 });
     const nextRimTick = useRef(0);
     const rimTick = useRef(0);
     const pausedFrame = useRef<boolean | null>(null);
@@ -37,10 +39,13 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
             const index = board.tiles.findIndex((tile) => tile.id === cue.tileId);
             const tile = board.tiles[index]!;
             const transform = getTileTransform(tile, index, board.columns, board.rows, compact, true, reduceMotion);
-            const group = frames.current?.get(tile.id)?.groupRef.current;
+            const frame = frames.current?.get(tile.id);
+            if (cue.kind === 'match' && sharedFrameClock && frame) beginMatchImpact(frame, time.current);
+            const group = frame?.groupRef.current;
             group?.updateMatrix();
             const anchor = group?.position;
             const emitted = system.emit({ ...cue,
+                delay: cue.delay + (cue.kind === 'match' && !reduceMotion ? MATCH_CONTACT_SECONDS : 0),
                 x: anchor?.x ?? transform.baseX + transform.layoutJitterX,
                 y: anchor?.y ?? transform.baseY + transform.layoutJitterY,
                 z: anchor?.z ?? 0.04,
@@ -48,16 +53,19 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
                 cardMatrix: group?.matrix, energy: cardHeat
             });
             if (emitted > 0) totals.current[cue.kind] += 1;
+            if (cue.kind === 'match' && system.emit({ kind: 'ripple',
+                x: anchor?.x ?? transform.baseX, y: anchor?.y ?? transform.baseY, z: 0,
+                time: time.current, delay: MATCH_CONTACT_SECONDS, seed: transform.seed,
+                reduceMotion, quality: graphicsQuality, energy: cardHeat }) > 0) totals.current.ripple += 1;
         }
         previous.current = board;
         const canvas = gl.domElement;
         canvas.setAttribute('data-particle-budget', String(boardParticleBudget(graphicsQuality)));
-        for (const kind of ['bomb', 'match', 'flip', 'chain', 'rim'] as const) {
+        for (const kind of ['bomb', 'match', 'flip', 'chain', 'rim', 'ripple'] as const) {
             canvas.setAttribute(`data-particle-${kind}-bursts`, String(totals.current[kind]));
         }
-    }, [board, cardHeat, compact, frames, gl, graphicsQuality, reduceMotion, system]);
-    useFrame((_, delta) => {
-        if (runStatus !== 'paused') time.current += Math.max(0, Math.min(delta, 0.1));
+    }, [board, cardHeat, compact, frames, gl, graphicsQuality, reduceMotion, sharedFrameClock, system, time]);
+    useFrame(() => {
         if (!reduceMotion && (runStatus === 'playing' || runStatus === 'resolving') && time.current >= nextRimTick.current) {
             nextRimTick.current = time.current + (graphicsQuality === 'low' ? 0.24 : graphicsQuality === 'medium' ? 0.16 : 0.1);
             const candidates = [];
@@ -95,5 +103,5 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
             pausedFrame.current = paused;
         }
     });
-    return <primitive object={system.mesh} dispose={null} />;
+    return <><primitive object={system.rippleMesh} dispose={null} /><primitive object={system.mesh} dispose={null} /></>;
 };

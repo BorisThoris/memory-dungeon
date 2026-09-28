@@ -129,6 +129,7 @@ const createRoundedRectBezelRingGeometry = (
 let resolvingRoundedSingleton: ShapeGeometry | null = null;
 let focusRoundedSingleton: ShapeGeometry | null = null;
 let matchedRoundedSingleton: ShapeGeometry | null = null;
+let auraRoundedSingleton: ShapeGeometry | null = null;
 let arcaneGlowRoundedSingleton: ShapeGeometry | null = null;
 
 export const getResolvingRoundedRectRingGeometry = (): ShapeGeometry => {
@@ -156,6 +157,13 @@ export const getMatchedRoundedRectRingGeometry = (): ShapeGeometry => {
         );
     }
     return matchedRoundedSingleton;
+};
+
+/** Flame envelope is wider than the separate, semantic trait-marker borders. */
+export const getCardAuraGeometry = (): ShapeGeometry => {
+    auraRoundedSingleton ??= createRoundedRectBezelRingGeometry(
+        GAMEPLAY_BOARD_VISUALS.matchedEdgeEffect.auraOuterPad, 0.01, 0.24, 0.084);
+    return auraRoundedSingleton;
 };
 
 export const getArcaneGlowRoundedRectRingGeometry = (): ShapeGeometry => {

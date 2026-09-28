@@ -22,6 +22,18 @@ const visualState = (overrides: Partial<Parameters<typeof computeTileBoardFrameV
     });
 
 describe('tileBoardFrameVisualState', () => {
+    it('uses a warm focus aura, a charged aura, and a stronger match aura with a quiet idle state', () => {
+        const focus = visualState({ keyboardFocused: true });
+        const charge = visualState({ routeReadabilityIntensity: 'surge' });
+        const match = visualState({ faceUp: true, resolvingSelection: 'match', tileState: 'flipped' });
+        expect(visualState().flameState.visible).toBe(false);
+        expect(focus.flameState.visible).toBe(true);
+        expect(focus.flameState.auraMood).toBe('focus');
+        expect(charge.flameState.auraMood).toBe('charge');
+        expect(match.flameState.auraMood).toBe('match');
+        expect(match.flameState.intensity).toBeGreaterThan(focus.flameState.intensity);
+        expect(visualState({ keyboardFocused: true, reduceMotion: true }).flameState.motion).toBe(0);
+    });
     it('composes hidden-card hover gold into back glow state', () => {
         const state = visualState({ hoverDomParity: true });
 

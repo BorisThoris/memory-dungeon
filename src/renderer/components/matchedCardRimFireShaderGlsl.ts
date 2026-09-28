@@ -1,13 +1,6 @@
-/**
- * Purpose-built matched-card ember rim shader.
- *
- * The effect is driven from rounded-rect edge distance, not a sampled fire volume,
- * so the read stays attached to the card silhouette and corners.
- */
-
+/** Continuous fire envelope with flowing tongues; its hollow center preserves the card art. */
 export const MATCHED_RIM_FIRE_FRAGMENT_SHADER = /* glsl */ `
 precision highp float;
-
 uniform float uTime;
 uniform float uSeed;
 uniform float uIntensity;
@@ -24,101 +17,40 @@ uniform float uInnerCorner;
 uniform vec3 uCoreColor;
 uniform vec3 uGlowColor;
 uniform vec3 uEmberColor;
-
 varying vec2 vLocal;
-
-float sdRoundedRect(vec2 p, vec2 halfSize, float radius) {
-  vec2 q = abs(p) - halfSize + vec2(radius);
-  return length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - radius;
+float sdRoundedRect(vec2 p, vec2 h, float r) {
+    vec2 q = abs(p) - h + r;
+    return length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - r;
 }
-
-float hash21(vec2 p) {
-  p = fract(p * vec2(123.34, 456.21));
-  p += dot(p, p + 45.32);
-  return fract(p.x * p.y);
-}
-
+float hash21(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 float noise(vec2 p) {
-  vec2 i = floor(p);
-  vec2 f = fract(p);
-  float a = hash21(i);
-  float b = hash21(i + vec2(1.0, 0.0));
-  float c = hash21(i + vec2(0.0, 1.0));
-  float d = hash21(i + vec2(1.0, 1.0));
-  vec2 u = f * f * (3.0 - 2.0 * f);
-  return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
+    vec2 i = floor(p), f = fract(p);
+    f = f * f * (3.0 - 2.0 * f);
+    return mix(mix(hash21(i), hash21(i + vec2(1, 0)), f.x),
+        mix(hash21(i + vec2(0, 1)), hash21(i + vec2(1, 1)), f.x), f.y);
 }
-
-float fbm(vec2 p) {
-  float value = 0.0;
-  float amplitude = 0.5;
-  for (int i = 0; i < 4; i++) {
-    value += noise(p) * amplitude;
-    p = p * 2.03 + vec2(17.0, 11.0);
-    amplitude *= 0.5;
-  }
-  return value;
-}
-
 void main() {
-  float intensity = clamp(uIntensity, 0.0, 4.0);
-  float burst = clamp(uBurst, 0.0, 2.0);
-  float motion = clamp(uMotion, 0.0, 2.0);
-  float emberStrength = clamp(uEmberStrength, 0.0, 2.0);
-
-  float outerSdf = sdRoundedRect(vLocal, uOuterHalfSize, uOuterCorner);
-  float innerSdf = sdRoundedRect(vLocal, uInnerHalfSize, uInnerCorner);
-
-  float softness = max(0.0015, uSoftness);
-  float outerMask = 1.0 - smoothstep(-softness, softness, outerSdf);
-  float innerMask = smoothstep(-softness, softness, innerSdf);
-  float ringMask = outerMask * innerMask;
-  if (ringMask < 0.002) {
-    discard;
-  }
-
-  float innerGap = max(innerSdf, 0.0);
-  float outerGap = max(-outerSdf, 0.0);
-  float bandT = clamp(innerGap / max(innerGap + outerGap, 0.0001), 0.0, 1.0);
-  float centerBand = 1.0 - abs(bandT * 2.0 - 1.0);
-
-  vec2 outerNorm = vLocal / max(uOuterHalfSize, vec2(0.0001));
-  float cornerness = smoothstep(0.42, 0.92, min(abs(outerNorm.x), abs(outerNorm.y)));
-  float phase = atan(outerNorm.y, outerNorm.x);
-
-  float motionTime = uTime * mix(0.12, 1.0, motion);
-  vec2 emberUv = vec2(phase * 2.6 + uSeed * 17.0, bandT * 5.2 - motionTime * 2.25);
-  float emberNoise = fbm(emberUv + vec2(0.0, fbm(vec2(phase * 1.4 - motionTime * 0.6, bandT * 2.6 + uSeed * 13.0)) * 0.65));
-  float emberTravel = 0.5 + 0.5 * sin(phase * 8.0 - motionTime * (2.3 + motion * 2.0) + uSeed * 31.0);
-  float fastTravel = 0.5 + 0.5 * sin(phase * 16.0 + motionTime * (4.4 + motion * 3.2) + uSeed * 53.0);
-  float cornerSpark = cornerness * pow(clamp(noise(vec2(phase * 5.2 + uSeed * 47.0 - motionTime * 3.0, bandT * 9.0)), 0.0, 1.0), 3.4);
-  float innerSpark = pow(clamp(noise(vec2(phase * 7.0 + uSeed * 23.0, motionTime * 1.1 + bandT * 6.0)), 0.0, 1.0), 4.5);
-  float outerAura = smoothstep(0.34, 1.0, bandT) *
-    (0.36 + 0.34 * fbm(vec2(phase * 3.8 + uSeed * 12.0, motionTime * 0.9))) *
-    (0.82 + burst * 0.6);
-  float cornerFlare = cornerness *
-    pow(clamp(emberNoise * 0.52 + fastTravel * 0.48, 0.0, 1.0), 2.0) *
-    (0.36 + burst * 0.84);
-
-  float coreWidth = max(0.04, uInnerWidth + burst * 0.075);
-  float outerStart = clamp(1.0 - (uOuterWidth + burst * 0.12), 0.18, 0.9);
-
-  float core = (1.0 - smoothstep(0.02, coreWidth, bandT)) * (0.9 + 0.1 * (1.0 - bandT));
-  float glow = smoothstep(0.0, 0.34 + burst * 0.12, centerBand) * (0.55 + 0.24 * cornerness) + outerAura * 0.32;
-  float ember = smoothstep(outerStart, 1.0, bandT) *
-    pow(clamp(emberNoise * 0.82 + emberTravel * 0.34 + cornerSpark * 0.72 + fastTravel * 0.18, 0.0, 1.0), mix(2.25, 1.25, burst)) *
-    (0.3 + 0.44 * emberStrength) *
-    (0.88 + 0.44 * cornerness);
-  float innerAccent = smoothstep(0.0, coreWidth * 0.9, bandT) * innerSpark * 0.24;
-
-  vec3 color = uCoreColor * (core + innerAccent + cornerFlare * 0.38) + uGlowColor * glow + uEmberColor * (ember + cornerFlare);
-  float alpha = ringMask * intensity * (core * 1.02 + glow * 0.42 + ember + cornerFlare * 0.62);
-  alpha *= 0.94 + burst * 0.42;
-  alpha = clamp(alpha, 0.0, 1.0);
-  if (alpha < 0.01) {
-    discard;
-  }
-
-  gl_FragColor = vec4(color, alpha);
+    float intensity = clamp(uIntensity, 0.0, 4.0);
+    float burst = clamp(uBurst, 0.0, 2.0);
+    float motion = clamp(uMotion, 0.0, 2.0);
+    float edge = sdRoundedRect(vLocal, uInnerHalfSize, uInnerCorner);
+    float outer = sdRoundedRect(vLocal, uOuterHalfSize, uOuterCorner);
+    float softness = max(uSoftness, 0.003);
+    float mask = smoothstep(-softness, softness, edge) * (1.0 - smoothstep(-0.035, 0.0, outer));
+    if (mask < 0.002) discard;
+    float t = uTime * motion;
+    vec2 flow = vLocal * vec2(15.0, 9.0) + vec2(uSeed * 37.0, -t * 2.8);
+    float broad = noise(flow + noise(flow * 0.48 + t * 0.3) * 1.8);
+    float fine = noise(flow * 2.1 - vec2(t * 0.6, t * 1.3));
+    float tongue = pow(clamp(broad * 0.85 + fine * 0.15, 0.0, 1.0), 1.25);
+    float reach = (0.025 + tongue * (0.18 + uOuterWidth * 0.06)) * (1.0 + burst * 0.25);
+    float flame = 1.0 - smoothstep(reach * 0.3, reach, edge);
+    float core = exp(-max(edge, 0.0) * (85.0 - uInnerWidth * 30.0));
+    float halo = exp(-max(edge, 0.0) * 20.0) * 0.16;
+    float filaments = flame * (0.42 + fine * 0.58) * clamp(uEmberStrength, 0.0, 2.0);
+    vec3 color = mix(uEmberColor, uGlowColor, clamp(core * 0.3 + fine * 0.22, 0.0, 1.0));
+    color = mix(color, uCoreColor, core * 0.75);
+    float alpha = mask * intensity * (core * 0.62 + filaments * 0.72 + halo);
+    gl_FragColor = vec4(color, clamp(alpha, 0.0, 0.88));
 }
 `;

@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2752,
-    "codeFileCount": 972,
-    "exportedSymbolCount": 2948,
+    "trackedFileCount": 2754,
+    "codeFileCount": 974,
+    "exportedSymbolCount": 2952,
     "contentItemCount": 10,
     "mechanicCount": 51,
     "stateFieldCount": 92,
-    "relationshipCount": 7666
+    "relationshipCount": 7675
   },
   "inventory": [
     {
@@ -693,8 +693,8 @@
     {
       "path": "docs/gameplay/epic-board-rendering-assists.md",
       "category": "documentation",
-      "bytes": 6102,
-      "sha256": "f074fa1dd4c40897f045fe659c12fcfb64e665548e6764c4e02b5ab55265a5d7"
+      "bytes": 7576,
+      "sha256": "be47ba1e8e562d0d652e08894facd035fad03f72ed1a94ef77c3096b676438d7"
     },
     {
       "path": "docs/gameplay/epic-choose-your-path.md",
@@ -2374,7 +2374,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33561,
-      "sha256": "8af0825b6175f6440fbd250ec222913c122705dae32dfdc9feaebe0c2d58f584"
+      "sha256": "0c1f500446d16275d68e35baca7facb8bfd4c7563f8809308d9f295631d6236f"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3771,8 +3771,8 @@
     {
       "path": "e2e/board-particles.spec.ts",
       "category": "test",
-      "bytes": 9870,
-      "sha256": "f324863186db88ea3fac23883194ba300836737d8fcb4d0014b3943a6ff5e17d"
+      "bytes": 10302,
+      "sha256": "1457f8f8e4aef0470dbf947ecf6a105065993ae5e63fb14468c016b6fa1e96b5"
     },
     {
       "path": "e2e/boardOverlayClearance.ts",
@@ -4413,8 +4413,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 121873,
-      "sha256": "0f3a6c5864cdac63b3acafee25eaa5e9ddc62212f351390a23b1d2a6d3fcad4e"
+      "bytes": 120210,
+      "sha256": "d7fc05c601a7ecbc1c94940f14c0d1a5df9d215aa357658132a3ca49fb04c220"
     },
     {
       "path": "public/site.webmanifest",
@@ -9061,6 +9061,18 @@
       "sha256": "5470dd100d54a16abe91f18d63dc3a12b53a933c3ddad5cbc5a05870002ba412"
     },
     {
+      "path": "src/renderer/components/boardMatchImpact.test.ts",
+      "category": "test",
+      "bytes": 1663,
+      "sha256": "649669dbba8b2d5c3f263086d3691896986816f562fd2f63f2e5f0caae63b10b"
+    },
+    {
+      "path": "src/renderer/components/boardMatchImpact.ts",
+      "category": "source",
+      "bytes": 1322,
+      "sha256": "6995c527da5a82803c649a5ccc8f2e556da9606a5e3a41e0650df4f632978350"
+    },
+    {
       "path": "src/renderer/components/boardParticleCues.test.ts",
       "category": "test",
       "bytes": 2292,
@@ -9087,14 +9099,14 @@
     {
       "path": "src/renderer/components/boardParticleSystem.test.ts",
       "category": "test",
-      "bytes": 4991,
-      "sha256": "44425984eb4ddd724856fc1b74a0d58f2e979ef2328ee9001405d2c2b48ccacd"
+      "bytes": 6300,
+      "sha256": "db0109392bac7d4c27b102e70135b3625bb3eb2bd081aaeb684318fed5496e8d"
     },
     {
       "path": "src/renderer/components/boardParticleSystem.ts",
       "category": "source",
-      "bytes": 10949,
-      "sha256": "d17cbf868e3a5fd1424a5239ac050acb2370a85af2bc8fab53418ed279cb0387"
+      "bytes": 12643,
+      "sha256": "c3dbafb6aee803c11637ef5fd3704185c376db8f3eb7120a72867bd485df024b"
     },
     {
       "path": "src/renderer/components/boardRuneFieldMaterial.ts",
@@ -9321,8 +9333,8 @@
     {
       "path": "src/renderer/components/gameplayVisualConfig.ts",
       "category": "source",
-      "bytes": 13254,
-      "sha256": "051ae9e4138e38e8c848f6f3932f044afe85a1f18944a0236743a732308fdfde"
+      "bytes": 13282,
+      "sha256": "e7cce087d3ac23f265e4cdca7f5760ab2f39cf5c0a4a1ff195329a99ad968d28"
     },
     {
       "path": "src/renderer/components/GameScreen.module.css",
@@ -9441,14 +9453,14 @@
     {
       "path": "src/renderer/components/matchedCardRimFireMaterial.ts",
       "category": "source",
-      "bytes": 4392,
-      "sha256": "cec3695bce55c1768385985334baa434267313745804be4fb402c85026691b67"
+      "bytes": 4443,
+      "sha256": "edbf9fe8cb125562aafd2b415ca63941efe52e789b6a701f5e0fc37ef026d5b8"
     },
     {
       "path": "src/renderer/components/matchedCardRimFireShaderGlsl.ts",
       "category": "source",
-      "bytes": 4611,
-      "sha256": "d72c52b583ce61c770b40ad8cac4cdb6131fe56574f2f33819171a41692edbad"
+      "bytes": 2475,
+      "sha256": "8d8eafe34a0a0d7913af851fd8203272607b8c85ea8afea75225e411ce621a8b"
     },
     {
       "path": "src/renderer/components/matchScoreFloaterTiming.test.ts",
@@ -9807,8 +9819,8 @@
     {
       "path": "src/renderer/components/TileBezel.tsx",
       "category": "source",
-      "bytes": 34398,
-      "sha256": "05c7819d324b179df4830b172bc13f658a20cfb71eddd5e1e73199b075a8d84a"
+      "bytes": 34332,
+      "sha256": "9ab346b638763ec8c7daaf6fd0515bb38481859ec5ada42bc73edd0f9ac16802"
     },
     {
       "path": "src/renderer/components/TileBoard.module.css",
@@ -9945,8 +9957,8 @@
     {
       "path": "src/renderer/components/TileBoardEffectOverlays.tsx",
       "category": "source",
-      "bytes": 8384,
-      "sha256": "ffb32cdbefdbae5fde914952cd886d6d3843de2c5df4c1a3a56bc99a4e27eee3"
+      "bytes": 8382,
+      "sha256": "bbadd3d21a789a01863ba9b906e93bbf346e856f40e3f3e541ee4127a33a9f3d"
     },
     {
       "path": "src/renderer/components/tileBoardFaceUp.test.ts",
@@ -9975,8 +9987,8 @@
     {
       "path": "src/renderer/components/tileBoardFrameAdvance.ts",
       "category": "source",
-      "bytes": 11885,
-      "sha256": "cd213e3d6eaf0658367e31ca38e02ae356595058ee1f3a37aae6df738379a293"
+      "bytes": 12356,
+      "sha256": "8cf90c5c696ec92f360498a04a1f24bfabe162140f22b7b223820788ba27809b"
     },
     {
       "path": "src/renderer/components/tileBoardFrameBag.test.ts",
@@ -9987,8 +9999,8 @@
     {
       "path": "src/renderer/components/tileBoardFrameBag.ts",
       "category": "source",
-      "bytes": 4176,
-      "sha256": "32341aeebcb0380df0aa3076819802aa51ff5a6a9b09a995ee766e27f630bdef"
+      "bytes": 4225,
+      "sha256": "40b88d9a2532a3eb2f0cfedcb2669c92aae4bafb1da291260cf390b1c3290006"
     },
     {
       "path": "src/renderer/components/tileBoardFrameDeparture.test.ts",
@@ -10035,14 +10047,14 @@
     {
       "path": "src/renderer/components/tileBoardFrameVisualState.test.ts",
       "category": "test",
-      "bytes": 4519,
-      "sha256": "eece6a461c6c915f075c73ed3171755781998f255948b1152a5dafab407cf95c"
+      "bytes": 5355,
+      "sha256": "263c1044b2cf35d363dcf70ec0f89797c8364e2c1209769cdc5be668e551a485"
     },
     {
       "path": "src/renderer/components/tileBoardFrameVisualState.ts",
       "category": "source",
-      "bytes": 7073,
-      "sha256": "62147ee6a8468d93d14044e657070b0d42e8b98eb19ba961e1408bf1bde50794"
+      "bytes": 8123,
+      "sha256": "3cdeac781d62a04a98588b863b8836b9221f67c75ccde7c6eac207ba7b1e5f27"
     },
     {
       "path": "src/renderer/components/tileBoardGestureCommit.test.ts",
@@ -10173,8 +10185,8 @@
     {
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "category": "source",
-      "bytes": 5590,
-      "sha256": "d359bf8449d024a92026eef498e427f2b2a2c5fa6fb2130d22cf181bd3319b30"
+      "bytes": 6332,
+      "sha256": "bdcccd345615c2361546154fe33313b6ba1d46577871739b9b9824521e43bbbf"
     },
     {
       "path": "src/renderer/components/tileBoardPick.test.ts",
@@ -10257,8 +10269,8 @@
     {
       "path": "src/renderer/components/tileBoardRimGeometry.ts",
       "category": "source",
-      "bytes": 7096,
-      "sha256": "5f5bc9c561874b2852dca1d086deb6a66d0bd9b402873e67630a09c9f61a25ee"
+      "bytes": 7475,
+      "sha256": "2638f166baae7cf313936496d973c10dbe595b74534df7440484491e7462bb9f"
     },
     {
       "path": "src/renderer/components/tileBoardRimVisualState.test.ts",
@@ -10269,8 +10281,8 @@
     {
       "path": "src/renderer/components/tileBoardRimVisualState.ts",
       "category": "source",
-      "bytes": 7675,
-      "sha256": "0bbc6e19cb63236cb679a54008850c04b650c181dcb01f56e8b48c659019cfa3"
+      "bytes": 8104,
+      "sha256": "d8cd26c74ac57e129e63fb77654c8207085f32aa57c88607c6a52f635160b426"
     },
     {
       "path": "src/renderer/components/tileBoardRowMarkers.test.ts",
@@ -10311,14 +10323,14 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 20187,
-      "sha256": "683bb19579577b0098d8b36c3688d5f5e0a80aaa833d3eca9bce471ee8802704"
+      "bytes": 20604,
+      "sha256": "d701ee865ea860c8bc6fa0fc549ceebd1cca89131370bf653534f73ea3b6d09a"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "category": "source",
-      "bytes": 7870,
-      "sha256": "9d8ede3cd0762b588722d9bfc1f92db285e5e7f76b4c179955b8d1fca0748db1"
+      "bytes": 8004,
+      "sha256": "664f7e648728d27500635f1d3d3851718aac56ff14c4d0e9052355c7e6e1340d"
     },
     {
       "path": "src/renderer/components/tileBoardSceneFrame.test.ts",
@@ -10539,14 +10551,14 @@
     {
       "path": "src/renderer/components/tileFrameActivity.test.ts",
       "category": "test",
-      "bytes": 15711,
-      "sha256": "f3d2c102c669a2bf6e8d5bfb01385ac6f8550dca87e112fa192deb572ccfd905"
+      "bytes": 16112,
+      "sha256": "fa9f4c0ef3c11bd513cca9c5065a38f47594abb670a726c5d32fb62d4ee713ee"
     },
     {
       "path": "src/renderer/components/tileFrameActivity.ts",
       "category": "source",
-      "bytes": 13380,
-      "sha256": "8f6b530afe0baba2f36afcc507426198604188dbdf6572f30740c4a3bf89c63c"
+      "bytes": 13745,
+      "sha256": "8c2e6f70e33b2596747ad9b2bf80b4ad7e9d3c7c0180fe8a9ace53dbc56e0297"
     },
     {
       "path": "src/renderer/components/tileResolvingSelection.test.ts",
@@ -18845,6 +18857,34 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/boardMatchImpact.test.ts",
+      "path": "src/renderer/components/boardMatchImpact.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 32,
+      "imports": [
+        "file:src/renderer/components/boardMatchImpact.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/boardMatchImpact.ts",
+      "path": "src/renderer/components/boardMatchImpact.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 27,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/components/boardMatchImpact.ts#beginMatchImpact",
+        "symbol:src/renderer/components/boardMatchImpact.ts#MATCH_CONTACT_SECONDS",
+        "symbol:src/renderer/components/boardMatchImpact.ts#sampleMatchImpact"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/boardMatchImpact.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/boardParticleCues.test.ts",
       "path": "src/renderer/components/boardParticleCues.test.ts",
       "layer": "renderer",
@@ -18917,7 +18957,7 @@
       "path": "src/renderer/components/boardParticleSystem.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 98,
+      "lineCount": 120,
       "imports": [
         "file:src/renderer/components/boardParticleSystem.ts"
       ],
@@ -18929,7 +18969,7 @@
       "path": "src/renderer/components/boardParticleSystem.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 225,
+      "lineCount": 254,
       "imports": [
         "file:src/renderer/components/boardParticleRim.ts",
         "file:src/renderer/components/tileBoardPick.ts",
@@ -19523,7 +19563,7 @@
       "path": "src/renderer/components/gameplayVisualConfig.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 280,
+      "lineCount": 281,
       "imports": [
         "file:src/renderer/components/gameplayRenderProfile.ts",
         "file:src/shared/contracts.ts"
@@ -19896,7 +19936,7 @@
       "path": "src/renderer/components/matchedCardRimFireShaderGlsl.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 125,
+      "lineCount": 57,
       "imports": [],
       "exports": [
         "symbol:src/renderer/components/matchedCardRimFireShaderGlsl.ts#MATCHED_RIM_FIRE_FRAGMENT_SHADER"
@@ -20749,7 +20789,7 @@
       "path": "src/renderer/components/TileBezel.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 886,
+      "lineCount": 885,
       "imports": [
         "file:src/renderer/components/cardArcaneGlowMaterial.ts",
         "file:src/renderer/components/gameplayRenderProfile.ts",
@@ -21238,10 +21278,11 @@
       "path": "src/renderer/components/TileBoardEffectOverlays.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 242,
+      "lineCount": 241,
       "imports": [
         "file:src/renderer/components/PairProximityHintPlane.tsx",
         "file:src/renderer/components/tileBoardPick.ts",
+        "file:src/renderer/components/tileBoardRimGeometry.ts",
         "file:src/renderer/components/tileShatter.ts",
         "file:src/renderer/styles/theme.ts",
         "file:src/shared/contracts.ts"
@@ -21311,8 +21352,9 @@
       "path": "src/renderer/components/tileBoardFrameAdvance.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 306,
+      "lineCount": 314,
       "imports": [
+        "file:src/renderer/components/boardMatchImpact.ts",
         "file:src/renderer/components/tileBoardCardBend.ts",
         "file:src/renderer/components/tileBoardFrameBag.ts",
         "file:src/renderer/components/tileBoardFrameMaterialState.ts",
@@ -21345,7 +21387,7 @@
       "path": "src/renderer/components/tileBoardFrameBag.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 94,
+      "lineCount": 95,
       "imports": [
         "file:src/renderer/components/tileBoardFramePropsSnapshot.ts",
         "file:src/renderer/components/tileResolvingSelection.ts",
@@ -21488,7 +21530,7 @@
       "path": "src/renderer/components/tileBoardFrameVisualState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 120,
+      "lineCount": 132,
       "imports": [
         "file:src/renderer/components/tileBoardFrameVisualState.ts"
       ],
@@ -21500,7 +21542,7 @@
       "path": "src/renderer/components/tileBoardFrameVisualState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 213,
+      "lineCount": 228,
       "imports": [
         "file:src/renderer/components/gameplayRenderProfile.ts",
         "file:src/renderer/components/tileBoardGlowVisualState.ts",
@@ -21869,8 +21911,9 @@
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 100,
+      "lineCount": 108,
       "imports": [
+        "file:src/renderer/components/boardMatchImpact.ts",
         "file:src/renderer/components/boardParticleCues.ts",
         "file:src/renderer/components/boardParticleRim.ts",
         "file:src/renderer/components/boardParticleSystem.ts",
@@ -22106,7 +22149,7 @@
       "path": "src/renderer/components/tileBoardRimGeometry.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 189,
+      "lineCount": 197,
       "imports": [
         "file:src/renderer/components/gameplayVisualConfig.ts",
         "file:src/renderer/components/tileShatter.ts",
@@ -22114,6 +22157,7 @@
       ],
       "exports": [
         "symbol:src/renderer/components/tileBoardRimGeometry.ts#getArcaneGlowRoundedRectRingGeometry",
+        "symbol:src/renderer/components/tileBoardRimGeometry.ts#getCardAuraGeometry",
         "symbol:src/renderer/components/tileBoardRimGeometry.ts#getFocusRoundedRectRingGeometry",
         "symbol:src/renderer/components/tileBoardRimGeometry.ts#getMatchedRoundedRectRingGeometry",
         "symbol:src/renderer/components/tileBoardRimGeometry.ts#getResolvingRoundedRectRingGeometry",
@@ -22149,7 +22193,7 @@
       "path": "src/renderer/components/tileBoardRimVisualState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 259,
+      "lineCount": 269,
       "imports": [
         "file:src/renderer/components/gameplayVisualConfig.ts",
         "file:src/renderer/components/matchedCardRimFireMaterial.ts",
@@ -22297,7 +22341,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 493,
+      "lineCount": 501,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
@@ -22342,7 +22386,7 @@
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 190,
+      "lineCount": 193,
       "imports": [
         "file:src/renderer/components/TileBezel.tsx",
         "file:src/renderer/components/tileBoardFrameBag.ts",
@@ -22948,7 +22992,7 @@
       "path": "src/renderer/components/tileFrameActivity.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 448,
+      "lineCount": 454,
       "imports": [
         "file:src/renderer/components/tileFrameActivity.ts",
         "file:src/shared/contracts.ts"
@@ -22961,7 +23005,7 @@
       "path": "src/renderer/components/tileFrameActivity.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 374,
+      "lineCount": 379,
       "imports": [
         "file:src/renderer/components/boardTrauma.ts",
         "file:src/renderer/components/gameplayVisualConfig.ts",
@@ -37520,6 +37564,30 @@
       "endLine": 28
     },
     {
+      "id": "symbol:src/renderer/components/boardMatchImpact.ts#beginMatchImpact",
+      "name": "beginMatchImpact",
+      "kind": "value",
+      "file": "src/renderer/components/boardMatchImpact.ts",
+      "line": 5,
+      "endLine": 12
+    },
+    {
+      "id": "symbol:src/renderer/components/boardMatchImpact.ts#MATCH_CONTACT_SECONDS",
+      "name": "MATCH_CONTACT_SECONDS",
+      "kind": "value",
+      "file": "src/renderer/components/boardMatchImpact.ts",
+      "line": 2,
+      "endLine": 2
+    },
+    {
+      "id": "symbol:src/renderer/components/boardMatchImpact.ts#sampleMatchImpact",
+      "name": "sampleMatchImpact",
+      "kind": "value",
+      "file": "src/renderer/components/boardMatchImpact.ts",
+      "line": 14,
+      "endLine": 26
+    },
+    {
       "id": "symbol:src/renderer/components/boardParticleCues.ts#BoardParticleCue",
       "name": "BoardParticleCue",
       "kind": "interface",
@@ -37612,8 +37680,8 @@
       "name": "createBoardParticleSystem",
       "kind": "value",
       "file": "src/renderer/components/boardParticleSystem.ts",
-      "line": 97,
-      "endLine": 224
+      "line": 106,
+      "endLine": 253
     },
     {
       "id": "symbol:src/renderer/components/boardRuneFieldMaterial.ts#clampBoardRuneFieldDriverUniforms",
@@ -38140,8 +38208,8 @@
       "name": "CARD_INTERACTION_FEEDBACK",
       "kind": "value",
       "file": "src/renderer/components/gameplayVisualConfig.ts",
-      "line": 208,
-      "endLine": 265
+      "line": 209,
+      "endLine": 266
     },
     {
       "id": "symbol:src/renderer/components/gameplayVisualConfig.ts#GAMEPLAY_BOARD_VISUALS",
@@ -38149,15 +38217,15 @@
       "kind": "value",
       "file": "src/renderer/components/gameplayVisualConfig.ts",
       "line": 74,
-      "endLine": 186
+      "endLine": 187
     },
     {
       "id": "symbol:src/renderer/components/gameplayVisualConfig.ts#GAMEPLAY_CARD_VISUALS",
       "name": "GAMEPLAY_CARD_VISUALS",
       "kind": "value",
       "file": "src/renderer/components/gameplayVisualConfig.ts",
-      "line": 188,
-      "endLine": 206
+      "line": 189,
+      "endLine": 207
     },
     {
       "id": "symbol:src/renderer/components/gameplayVisualConfig.ts#GAMEPLAY_VISUAL_CSS_VARS",
@@ -38332,8 +38400,8 @@
       "name": "MATCHED_RIM_FIRE_FRAGMENT_SHADER",
       "kind": "value",
       "file": "src/renderer/components/matchedCardRimFireShaderGlsl.ts",
-      "line": 8,
-      "endLine": 124
+      "line": 2,
+      "endLine": 56
     },
     {
       "id": "symbol:src/renderer/components/matchScoreFloaterTiming.ts#MATCH_SCORE_FLOAT_FALLBACK_MARGIN_MS",
@@ -39068,8 +39136,8 @@
       "name": "TileBezel",
       "kind": "value",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 885,
-      "endLine": 885
+      "line": 884,
+      "endLine": 884
     },
     {
       "id": "symbol:src/renderer/components/TileBezel.tsx#TileHoverTiltState",
@@ -39877,7 +39945,7 @@
       "kind": "value",
       "file": "src/renderer/components/TileBoardEffectOverlays.tsx",
       "line": 53,
-      "endLine": 241
+      "endLine": 240
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFaceUp.ts#isTileBoardFaceUp",
@@ -39900,24 +39968,24 @@
       "name": "advanceTileBezelFrame",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFrameAdvance.ts",
-      "line": 32,
-      "endLine": 305
+      "line": 33,
+      "endLine": 313
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFrameBag.ts#createOrUpdateTileBezelFrameBag",
       "name": "createOrUpdateTileBezelFrameBag",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFrameBag.ts",
-      "line": 83,
-      "endLine": 93
+      "line": 84,
+      "endLine": 94
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFrameBag.ts#CreateTileBezelFrameBagInput",
       "name": "CreateTileBezelFrameBagInput",
       "kind": "type",
       "file": "src/renderer/components/tileBoardFrameBag.ts",
-      "line": 79,
-      "endLine": 81
+      "line": 80,
+      "endLine": 82
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFrameBag.ts#TileBezelFrameBag",
@@ -39925,7 +39993,7 @@
       "kind": "interface",
       "file": "src/renderer/components/tileBoardFrameBag.ts",
       "line": 20,
-      "endLine": 77
+      "endLine": 78
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFrameBag.ts#TileBezelPlaneGeometries",
@@ -40068,8 +40136,8 @@
       "name": "applyTileBoardFrameVisualState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFrameVisualState.ts",
-      "line": 148,
-      "endLine": 212
+      "line": 163,
+      "endLine": 227
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFrameVisualState.ts#computeTileBoardFrameVisualState",
@@ -40077,7 +40145,7 @@
       "kind": "value",
       "file": "src/renderer/components/tileBoardFrameVisualState.ts",
       "line": 77,
-      "endLine": 146
+      "endLine": 161
     },
     {
       "id": "symbol:src/renderer/components/tileBoardGestureCommit.ts#MOUSE_TAP_MAX_DURATION_MS",
@@ -40372,8 +40440,8 @@
       "name": "TileBoardParticles",
       "kind": "value",
       "file": "src/renderer/components/TileBoardParticles.tsx",
-      "line": 11,
-      "endLine": 99
+      "line": 12,
+      "endLine": 107
     },
     {
       "id": "symbol:src/renderer/components/tileBoardPick.ts#isTilePickable",
@@ -40660,32 +40728,40 @@
       "name": "getArcaneGlowRoundedRectRingGeometry",
       "kind": "value",
       "file": "src/renderer/components/tileBoardRimGeometry.ts",
-      "line": 161,
-      "endLine": 166
+      "line": 169,
+      "endLine": 174
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardRimGeometry.ts#getCardAuraGeometry",
+      "name": "getCardAuraGeometry",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardRimGeometry.ts",
+      "line": 163,
+      "endLine": 167
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRimGeometry.ts#getFocusRoundedRectRingGeometry",
       "name": "getFocusRoundedRectRingGeometry",
       "kind": "value",
       "file": "src/renderer/components/tileBoardRimGeometry.ts",
-      "line": 141,
-      "endLine": 146
+      "line": 142,
+      "endLine": 147
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRimGeometry.ts#getMatchedRoundedRectRingGeometry",
       "name": "getMatchedRoundedRectRingGeometry",
       "kind": "value",
       "file": "src/renderer/components/tileBoardRimGeometry.ts",
-      "line": 148,
-      "endLine": 159
+      "line": 149,
+      "endLine": 160
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRimGeometry.ts#getResolvingRoundedRectRingGeometry",
       "name": "getResolvingRoundedRectRingGeometry",
       "kind": "value",
       "file": "src/renderer/components/tileBoardRimGeometry.ts",
-      "line": 134,
-      "endLine": 139
+      "line": 135,
+      "endLine": 140
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRimGeometry.ts#getSharedCurseRingGeometry",
@@ -40732,72 +40808,72 @@
       "name": "getSharedFocusRingGeometry",
       "kind": "value",
       "file": "src/renderer/components/tileBoardRimGeometry.ts",
-      "line": 181,
-      "endLine": 188
+      "line": 189,
+      "endLine": 196
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRimGeometry.ts#getSharedResolvingCrispRingGeometry",
       "name": "getSharedResolvingCrispRingGeometry",
       "kind": "value",
       "file": "src/renderer/components/tileBoardRimGeometry.ts",
-      "line": 172,
-      "endLine": 179
+      "line": 180,
+      "endLine": 187
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRimVisualState.ts#applyFocusRimOpacity",
       "name": "applyFocusRimOpacity",
       "kind": "value",
       "file": "src/renderer/components/tileBoardRimVisualState.ts",
-      "line": 190,
-      "endLine": 194
+      "line": 191,
+      "endLine": 195
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRimVisualState.ts#applyMatchedVictoryFlameVisualState",
       "name": "applyMatchedVictoryFlameVisualState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardRimVisualState.ts",
-      "line": 231,
-      "endLine": 258
+      "line": 232,
+      "endLine": 268
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRimVisualState.ts#applyResolvingRimVisualState",
       "name": "applyResolvingRimVisualState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardRimVisualState.ts",
-      "line": 175,
-      "endLine": 188
+      "line": 176,
+      "endLine": 189
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRimVisualState.ts#computeFocusRimOpacity",
       "name": "computeFocusRimOpacity",
       "kind": "value",
       "file": "src/renderer/components/tileBoardRimVisualState.ts",
-      "line": 157,
-      "endLine": 173
+      "line": 158,
+      "endLine": 174
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRimVisualState.ts#computeMatchedVictoryFlameVisualState",
       "name": "computeMatchedVictoryFlameVisualState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardRimVisualState.ts",
-      "line": 196,
-      "endLine": 229
+      "line": 197,
+      "endLine": 230
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRimVisualState.ts#computeResolvingRimVisualState",
       "name": "computeResolvingRimVisualState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardRimVisualState.ts",
-      "line": 90,
-      "endLine": 155
+      "line": 91,
+      "endLine": 156
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRimVisualState.ts#getResolvingRimColorRole",
       "name": "getResolvingRimColorRole",
       "kind": "value",
       "file": "src/renderer/components/tileBoardRimVisualState.ts",
-      "line": 87,
-      "endLine": 88
+      "line": 88,
+      "endLine": 89
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRimVisualState.ts#MatchedVictoryFlameVisualState",
@@ -40805,7 +40881,7 @@
       "kind": "interface",
       "file": "src/renderer/components/tileBoardRimVisualState.ts",
       "line": 56,
-      "endLine": 64
+      "endLine": 65
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRimVisualState.ts#ResolvingRimColorRole",
@@ -40940,8 +41016,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 492,
-      "endLine": 492
+      "line": 500,
+      "endLine": 500
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
@@ -40964,8 +41040,8 @@
       "name": "TileBoardSceneBoardGroup",
       "kind": "value",
       "file": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
-      "line": 50,
-      "endLine": 189
+      "line": 51,
+      "endLine": 192
     },
     {
       "id": "symbol:src/renderer/components/tileBoardSceneFrame.ts#runTileBoardSceneFrame",
@@ -41564,32 +41640,32 @@
       "name": "advanceScheduledTileBezelFrames",
       "kind": "value",
       "file": "src/renderer/components/tileFrameActivity.ts",
-      "line": 100,
-      "endLine": 126
+      "line": 102,
+      "endLine": 128
     },
     {
       "id": "symbol:src/renderer/components/tileFrameActivity.ts#AdvanceScheduledTileBezelFramesResult",
       "name": "AdvanceScheduledTileBezelFramesResult",
       "kind": "interface",
       "file": "src/renderer/components/tileFrameActivity.ts",
-      "line": 83,
-      "endLine": 86
+      "line": 85,
+      "endLine": 88
     },
     {
       "id": "symbol:src/renderer/components/tileFrameActivity.ts#scheduleTileBezelFrameActivity",
       "name": "scheduleTileBezelFrameActivity",
       "kind": "value",
       "file": "src/renderer/components/tileFrameActivity.ts",
-      "line": 88,
-      "endLine": 98
+      "line": 90,
+      "endLine": 100
     },
     {
       "id": "symbol:src/renderer/components/tileFrameActivity.ts#shouldAdvanceTileBezelThisFrame",
       "name": "shouldAdvanceTileBezelThisFrame",
       "kind": "function",
       "file": "src/renderer/components/tileFrameActivity.ts",
-      "line": 128,
-      "endLine": 373
+      "line": 130,
+      "endLine": 378
     },
     {
       "id": "symbol:src/renderer/components/tileFrameActivity.ts#TileBezelActivityBag",
@@ -41597,7 +41673,7 @@
       "kind": "type",
       "file": "src/renderer/components/tileFrameActivity.ts",
       "line": 13,
-      "endLine": 64
+      "endLine": 66
     },
     {
       "id": "symbol:src/renderer/components/tileResolvingSelection.ts#getMatchResolvingPairTileIds",
@@ -64543,6 +64619,24 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/boardMatchImpact.ts->symbol:src/renderer/components/boardMatchImpact.ts#beginMatchImpact",
+      "source": "file:src/renderer/components/boardMatchImpact.ts",
+      "target": "symbol:src/renderer/components/boardMatchImpact.ts#beginMatchImpact",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardMatchImpact.ts->symbol:src/renderer/components/boardMatchImpact.ts#MATCH_CONTACT_SECONDS",
+      "source": "file:src/renderer/components/boardMatchImpact.ts",
+      "target": "symbol:src/renderer/components/boardMatchImpact.ts#MATCH_CONTACT_SECONDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardMatchImpact.ts->symbol:src/renderer/components/boardMatchImpact.ts#sampleMatchImpact",
+      "source": "file:src/renderer/components/boardMatchImpact.ts",
+      "target": "symbol:src/renderer/components/boardMatchImpact.ts#sampleMatchImpact",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/boardParticleCues.ts->symbol:src/renderer/components/boardParticleCues.ts#BoardParticleCue",
       "source": "file:src/renderer/components/boardParticleCues.ts",
       "target": "symbol:src/renderer/components/boardParticleCues.ts#BoardParticleCue",
@@ -66898,6 +66992,12 @@
       "id": "exports:src/renderer/components/tileBoardRimGeometry.ts->symbol:src/renderer/components/tileBoardRimGeometry.ts#getArcaneGlowRoundedRectRingGeometry",
       "source": "file:src/renderer/components/tileBoardRimGeometry.ts",
       "target": "symbol:src/renderer/components/tileBoardRimGeometry.ts#getArcaneGlowRoundedRectRingGeometry",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileBoardRimGeometry.ts->symbol:src/renderer/components/tileBoardRimGeometry.ts#getCardAuraGeometry",
+      "source": "file:src/renderer/components/tileBoardRimGeometry.ts",
+      "target": "symbol:src/renderer/components/tileBoardRimGeometry.ts#getCardAuraGeometry",
       "kind": "exports"
     },
     {
@@ -83128,6 +83228,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/boardMatchImpact.test.ts->src/renderer/components/boardMatchImpact.ts",
+      "source": "file:src/renderer/components/boardMatchImpact.test.ts",
+      "target": "file:src/renderer/components/boardMatchImpact.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/boardParticleCues.test.ts->src/renderer/components/boardParticleCues.ts",
       "source": "file:src/renderer/components/boardParticleCues.test.ts",
       "target": "file:src/renderer/components/boardParticleCues.ts",
@@ -86428,6 +86534,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/TileBoardEffectOverlays.tsx->src/renderer/components/tileBoardRimGeometry.ts",
+      "source": "file:src/renderer/components/TileBoardEffectOverlays.tsx",
+      "target": "file:src/renderer/components/tileBoardRimGeometry.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/TileBoardEffectOverlays.tsx->src/renderer/components/tileShatter.ts",
       "source": "file:src/renderer/components/TileBoardEffectOverlays.tsx",
       "target": "file:src/renderer/components/tileShatter.ts",
@@ -86467,6 +86579,12 @@
       "id": "imports:src/renderer/components/tileBoardFlipLock.test.ts->src/renderer/components/tileBoardFlipLock.ts",
       "source": "file:src/renderer/components/tileBoardFlipLock.test.ts",
       "target": "file:src/renderer/components/tileBoardFlipLock.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileBoardFrameAdvance.ts->src/renderer/components/boardMatchImpact.ts",
+      "source": "file:src/renderer/components/tileBoardFrameAdvance.ts",
+      "target": "file:src/renderer/components/boardMatchImpact.ts",
       "kind": "imports"
     },
     {
@@ -86995,6 +87113,12 @@
       "id": "imports:src/renderer/components/tileBoardPairProximityState.ts->src/shared/pairProximityHint.ts",
       "source": "file:src/renderer/components/tileBoardPairProximityState.ts",
       "target": "file:src/shared/pairProximityHint.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/boardMatchImpact.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/renderer/components/boardMatchImpact.ts",
       "kind": "imports"
     },
     {
@@ -101107,6 +101231,12 @@
       "id": "tested_by:src/renderer/components/boardFloaterPlacement.ts->file:src/renderer/components/boardFloaterPlacement.test.ts",
       "source": "file:src/renderer/components/boardFloaterPlacement.ts",
       "target": "file:src/renderer/components/boardFloaterPlacement.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/boardMatchImpact.ts->file:src/renderer/components/boardMatchImpact.test.ts",
+      "source": "file:src/renderer/components/boardMatchImpact.ts",
+      "target": "file:src/renderer/components/boardMatchImpact.test.ts",
       "kind": "tested_by"
     },
     {

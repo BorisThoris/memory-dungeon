@@ -127,6 +127,7 @@ export const GAMEPLAY_BOARD_VISUALS = {
         }
     },
     matchedEdgeEffect: {
+        auraOuterPad: 0.22,
         band: {
             innerWidth: 0.18,
             outerWidth: 0.46,

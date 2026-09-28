@@ -23,8 +23,8 @@ const matchedEdgeGeometry = GAMEPLAY_BOARD_VISUALS.matchedEdgeEffect.geometry;
 const matchedEdgeBand = GAMEPLAY_BOARD_VISUALS.matchedEdgeEffect.band;
 
 const outerHalfSize = new Vector2(
-    CARD_PLANE_WIDTH * 0.5 + matchedEdgeGeometry.outerPad,
-    CARD_PLANE_HEIGHT * 0.5 + matchedEdgeGeometry.outerPad
+    CARD_PLANE_WIDTH * 0.5 + GAMEPLAY_BOARD_VISUALS.matchedEdgeEffect.auraOuterPad,
+    CARD_PLANE_HEIGHT * 0.5 + GAMEPLAY_BOARD_VISUALS.matchedEdgeEffect.auraOuterPad
 );
 const innerHalfSize = new Vector2(
     CARD_PLANE_WIDTH * 0.5 - matchedEdgeGeometry.innerPad,
@@ -106,7 +106,7 @@ export const createMatchedCardRimFireMaterial = (seed: number): ShaderMaterial =
         fragmentShader: MATCHED_RIM_FIRE_FRAGMENT_SHADER,
         transparent: true,
         depthWrite: false,
-        depthTest: true,
+        depthTest: false,
         blending: AdditiveBlending,
         side: DoubleSide,
         toneMapped: false,

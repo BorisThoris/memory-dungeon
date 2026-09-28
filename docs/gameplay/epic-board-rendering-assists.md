@@ -22,7 +22,7 @@ How the board is shown (WebGL), optional player assists, and mutator-adjacent **
 
 ## Extending card particles
 
-`boardParticleSystem.ts` owns one instanced quad mesh and fixed typed buffers. Use its
+`boardParticleSystem.ts` owns fixed typed buffers shared by two instanced quad layers. Use its
 `emit({ kind, x, y, z, seed, time, delay, reduceMotion, quality })` API to add bursts;
 add a preset to `BoardParticleKind` and the emitter for a new visual style. Keep gameplay
 randomness separate: the emitter uses a local cosmetic seed. `boardParticleCues.ts`
@@ -42,6 +42,25 @@ keep emission aligned with tilt, flip and departure scale. Ambient trails consum
 free slots and stop while paused, suppressed or under reduced motion. Their emission is
 limited to 2 / 4 / 6 cards per tick across quality levels, with round-robin coverage.
 Reduced-motion rim bands use a frozen shader clock rather than a slowly moving flame.
+
+The aura uses a separate wide, hollow rounded-card envelope, leaving trait-marker geometry
+and card art readable. Flowing amber tongues signal focus, deeper orange signals charged
+routes, and mint-white fire signals a successful pair. A match lifts for 65 ms, accelerates
+into contact at 140 ms, briefly compresses, and recovers as it leaves. Three staggered
+elliptical rings spread across the board at contact (two on low quality). Rings reuse the
+particle buffers and a second rendering layer behind card chrome. The board and particles
+share a bounded visual clock, frozen on pause. Reduced motion omits the slam and expanding
+rings, retaining the stationary confirmation fade.
+
+The styling principles are anticipation → contact → dissipation, a clear focal point,
+coherent fire/ember shapes and colors, and intensity proportional to the earned outcome.
+These follow [Riot's VFX guidance](https://www.riotgames.com/en/artedu/visual-effects) on
+balancing satisfaction with gameplay clarity, and the layered feedback approach in
+[Juice It or Lose It](https://gdcvault.com/play/1016487/Juice-It-or-Lose).
+The quieter setting follows the control offered by
+[Candy Crush's effects settings](https://candycrush.zendesk.com/hc/en-us/articles/27184207521565-Discover-the-Settings-Menu).
+`boardMatchImpact.test.ts` covers the contact trajectory and reduced-motion suppression;
+the particle and browser tests cover staggered rings, shared buffers, budgets and expiry.
 
 `boardParticleSystem.test.ts` checks bounds, reuse, lifetime, reduced motion and cleanup;
 `boardParticleCues.test.ts` checks transition selection. `e2e/board-particles.spec.ts`

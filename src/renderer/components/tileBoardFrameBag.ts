@@ -69,6 +69,7 @@ export interface TileBezelFrameBag {
     matchedVictoryBurstT0Ref: MutableRefObject<number | null>;
     prevTileMatchedRef: MutableRefObject<boolean>;
     lastActivityVisualGateRef: MutableRefObject<{
+        traitRouteReadabilityIntensity?: string;
         textureRevision: number;
         keyboardFocused: boolean;
         focusDimmed: boolean;

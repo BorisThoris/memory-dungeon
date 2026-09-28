@@ -6,6 +6,28 @@ const burst: BoardParticleBurst = { kind: 'bomb', x: 1, y: 2, z: 0.1, seed: 41, 
     reduceMotion: false, quality: 'high' };
 
 describe('the shared board particle pool', () => {
+    it('places staggered contact ripples on the board using the same bounded buffers', () => {
+        const pool = createBoardParticleSystem();
+        expect(pool.emit({ ...burst, kind: 'ripple', delay: 0.14 })).toBe(3);
+        expect(pool.rippleMesh.geometry).toBe(pool.mesh.geometry);
+        expect(pool.rippleMesh.renderOrder).toBeLessThan(pool.mesh.renderOrder);
+        const origin = pool.mesh.geometry.getAttribute('origin');
+        const lifetime = pool.mesh.geometry.getAttribute('lifetime');
+        for (let index = 0; index < 3; index += 1) {
+            expect(origin.getX(index)).toBe(1);
+            expect(origin.getY(index)).toBe(2);
+            expect(origin.getZ(index)).toBeCloseTo(-0.025);
+            expect(lifetime.getX(index)).toBeCloseTo(1.14 + index * 0.085);
+            expect(lifetime.getW(index)).toBe(6);
+        }
+        expect(pool.emit({ ...burst, kind: 'ripple', reduceMotion: true })).toBe(0);
+        for (let index = 0; index < 20; index += 1) pool.emit(burst);
+        // A busy cascade must leave the contact rings readable until their own fade finishes.
+        expect([0, 1, 2].map(index => lifetime.getW(index))).toEqual([6, 6, 6]);
+        expect(pool.advance(3)).toBe(0);
+        expect(pool.rippleMesh.visible).toBe(false);
+        pool.dispose();
+    });
     it('reuses its buffers and stays bounded during a large cascade', () => {
         const pool = createBoardParticleSystem();
         const geometry = pool.mesh.geometry;

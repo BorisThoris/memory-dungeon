@@ -253,6 +253,12 @@ describe('shouldAdvanceTileBezelThisFrame', () => {
         });
 
         expect(shouldAdvanceTileBezelThisFrame(bag, 50, nowMs)).toBe(false);
+        p.traitRouteReadabilityIntensity = 'surge';
+        expect(shouldAdvanceTileBezelThisFrame(bag, 50, nowMs)).toBe(true);
+        bag.lastActivityVisualGateRef.current!.traitRouteReadabilityIntensity = 'surge';
+        expect(shouldAdvanceTileBezelThisFrame(bag, 51, nowMs)).toBe(true);
+        p.reduceMotion = true;
+        expect(shouldAdvanceTileBezelThisFrame(bag, 51, nowMs)).toBe(false);
     });
 
     it('reduceMotion: returns false for settled hidden tile (no rim fire)', () => {

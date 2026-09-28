@@ -14,6 +14,7 @@ interface TileBoardSceneBoardGroupProps {
     compact: boolean;
     runStatus: RunStatus;
     particleFrames: RefObject<Map<string, TileBezelFrameBag>>;
+    visualTime: MutableRefObject<number>;
     /** Chain meter fill, 0..1: how hard the card backs burn. */
     cardHeat: number;
     cardGlowAnimated: boolean;
@@ -52,6 +53,7 @@ export const TileBoardSceneBoardGroup = ({
     compact,
     runStatus,
     particleFrames,
+    visualTime,
     cardGlowAnimated,
     cardHeat,
     boardColumns,
@@ -85,7 +87,8 @@ export const TileBoardSceneBoardGroup = ({
 }: TileBoardSceneBoardGroupProps) => (
     <group ref={boardGroupRef} rotation={[0, 0, 0]}>
         <TileBoardParticles board={board} compact={compact} graphicsQuality={graphicsQuality}
-            reduceMotion={reduceMotion} runStatus={runStatus} frames={particleFrames} cardHeat={cardHeat} />
+            reduceMotion={reduceMotion} runStatus={runStatus} frames={particleFrames} cardHeat={cardHeat} time={visualTime}
+            sharedFrameClock={hostConsolidatesTileFrames} />
         {graphicsQuality !== 'low' ? (
             <mesh
                 geometry={boardRuneFieldGeometry}

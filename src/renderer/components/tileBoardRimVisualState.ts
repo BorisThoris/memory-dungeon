@@ -54,6 +54,7 @@ interface MatchedVictoryFlameVisualInput {
 }
 
 export interface MatchedVictoryFlameVisualState {
+    auraMood?: 'focus' | 'charge' | 'match';
     emberStrength: number;
     innerWidth: number;
     intensity: number;
@@ -254,5 +255,14 @@ export const applyMatchedVictoryFlameVisualState = ({
     u.uOuterWidth.value = state.outerWidth;
     u.uEmberStrength.value = state.emberStrength;
     u.uIntensity.value = state.intensity;
+    if (state.auraMood === 'match') {
+        u.uCoreColor.value.set(1, 0.98, 0.78);
+        u.uGlowColor.value.set(0.55, 1, 0.8);
+        u.uEmberColor.value.set(0.12, 0.65, 0.48);
+    } else {
+        u.uCoreColor.value.set(1, 0.94, 0.68);
+        u.uGlowColor.value.set(1, 0.56, 0.16);
+        u.uEmberColor.value.set(0.95, state.auraMood === 'charge' ? 0.19 : 0.32, 0.035);
+    }
     clampMatchedCardRimFireDriverUniforms({ uIntensity: u.uIntensity, uBurst: u.uBurst });
 };
