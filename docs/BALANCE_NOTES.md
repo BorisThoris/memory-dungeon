@@ -4,6 +4,8 @@ Post-relic / post-mutator tuning. Constants live in `src/shared/contracts.ts` un
 
 ## Recent intent
 
+- **2026-09-28 starting bomb (rules 51):** normal runs now carry one bomb before the first store. Flip one card, then press Bomb; it removes that pair without spending a turn or miss and still protects the last pair. Historical rules keep their original zero-bomb inventory. Onboarding moves its guide away from bombed cards. Store bombs continue to replenish the inventory at the existing prices.
+
 - **2026-09-28 Peek arming:** the dock and keyboard shortcut could arm Peek with one card already face up, but the rules then interpreted the next target as an ordinary second flip. Shared `canPeekAtBoard` eligibility now gates both the effect and arming, and the dock explains that the current flip must finish. The browser test exercises this blocked state before resolving the pair and using Peek normally.
 
 - **2026-09-28 usable powers:** bombs now count only real pairs when protecting the last pair. A leftover wild joker previously let the bomb remove the last real pair without triggering a floor clear, leaving no playable finish. The bomb test hall now includes this case, and the regression test confirms the ordinary final match still clears with the bomb unspent. Rules 50 shuffles guarantee a changed pair-face arrangement instead of occasionally charging for an identical result (including swaps between indistinguishable twins). Row shuffles refuse rows containing only one pair identity; row-only board shuffles refuse a board with no useful row. Historical shuffle streams before rules 50 are preserved.

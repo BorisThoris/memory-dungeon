@@ -1,5 +1,6 @@
 import { expect as baseExpect, test, type Page } from '@playwright/test';
-import { buildVisualSaveJson, gotoWithSaveAndQuery } from './visualScreenHelpers';
+import { buildVisualSaveJson, gotoWithSaveAndQuery, mainMenuPlayButton, startClassicRunFromModeSelect } from './visualScreenHelpers';
+import { dismissStartupIntro } from './startupIntroHelpers';
 
 // A software-rendered WebGL frame can delay even a successful state read past five seconds.
 // Keep the actual inventory/board assertions, with the same deadline as room readiness.
@@ -77,6 +78,78 @@ const openRoom = async (page: Page, room: string): Promise<void> => {
     await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 150_000 });
     await expect.poll(async () => (await read(page)).status, { timeout: 30_000 }).toBe('playing');
 };
+
+for (const display of [
+    { name: 'desktop', width: 1280, height: 720, scale: 1 },
+    { name: '4K', width: 3840, height: 2160, scale: 1 },
+    { name: 'scaled 4K', width: 1920, height: 1080, scale: 2 }
+]) {
+    test.describe(`Normal run on ${display.name}`, () => {
+        test.use({ viewport: { width: display.width, height: display.height }, deviceScaleFactor: display.scale });
+        test('starts with a usable bomb and keeps rendering stable through a shuffle', async ({ page }) => {
+            test.setTimeout(240_000);
+            const errors: string[] = [];
+            page.on('pageerror', (error) => errors.push(error.message));
+            // Exercise the fresh tutorial at desktop and existing profiles at 4K, with motion on.
+            await gotoWithSaveAndQuery(page, buildVisualSaveJson(display.name !== 'desktop', false), '');
+            await dismissStartupIntro(page);
+            await mainMenuPlayButton(page).click();
+            await startClassicRunFromModeSelect(page);
+            await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 150_000 });
+            await expect.poll(async () => (await read(page)).status).toBe('playing');
+            const bomb = page.getByTestId('tool-bomb');
+            await expect(bomb).toBeVisible();
+            await expect(bomb).toBeDisabled();
+            expect((await read(page)).bombs).toBe(1);
+            if (display.name !== 'desktop') {
+                await expect(page.getByTestId('gameplay-scene')).toHaveAttribute('data-scene-effect-tier', 'lean');
+            }
+            const target = await page.evaluate(() => {
+                const w = window as unknown as {
+                    __e2eGetTileClientRectAtGrid1: (r: number, c: number) => { left: number; top: number; width: number; height: number } | null;
+                    __e2eGetTileIdAtGrid1: (r: number, c: number) => string | null;
+                };
+                const rect = w.__e2eGetTileClientRectAtGrid1(1, 1);
+                if (!rect) throw new Error('The first card was not rendered');
+                return { ...rect, id: w.__e2eGetTileIdAtGrid1(1, 1)! };
+            });
+            // A real mouse click exercises the canvas raycast, not an injected power inventory.
+            await page.mouse.click(target.left + target.width / 2, target.top + target.height / 2);
+            await expect(bomb).toBeEnabled();
+            await bomb.click();
+            await expect.poll(async () => (await read(page)).states[target.id]).toBe('removed');
+            expect((await read(page)).bombs).toBe(0);
+            expect(Object.values((await read(page)).states).filter((state) => state === 'removed')).toHaveLength(2);
+
+            const canvas = page.getByTestId('tile-board-stage').locator('canvas');
+            await canvas.evaluate((node: HTMLCanvasElement) => {
+                node.dataset.resizeCount = '0';
+                node.dataset.contextLosses = '0';
+                node.dataset.resizeEvents = '[]';
+                new MutationObserver((records) => {
+                    node.dataset.resizeCount = String(Number(node.dataset.resizeCount) + records.length);
+                    const events = JSON.parse(node.dataset.resizeEvents!);
+                    events.push(...records.map((record) => ({ attribute: record.attributeName, old: record.oldValue,
+                        width: node.width, height: node.height, cssWidth: node.clientWidth, cssHeight: node.clientHeight })));
+                    node.dataset.resizeEvents = JSON.stringify(events);
+                }).observe(node, { attributes: true, attributeFilter: ['width', 'height'], attributeOldValue: true });
+                node.addEventListener('webglcontextlost', () => { node.dataset.contextLosses = '1'; });
+            });
+            await page.getByTestId('tool-shuffle').click();
+            await expect.poll(async () => (await read(page)).shuffles).toBe(0);
+            await page.waitForTimeout(4000);
+            const allocation = await canvas.evaluate((node: HTMLCanvasElement) => ({
+                pixels: node.width * node.height, resizes: node.dataset.resizeCount, losses: node.dataset.contextLosses,
+                events: JSON.parse(node.dataset.resizeEvents!)
+            }));
+            expect(allocation.pixels).toBeLessThanOrEqual(3840 * 2160);
+            expect(allocation.events).toEqual([]);
+            expect(allocation.losses).toBe('0');
+            expect(errors).toEqual([]);
+            await page.screenshot({ path: `test-results/normal-run-${display.name.replaceAll(' ', '-')}.png` });
+        });
+    });
+}
 
 test.describe('Every tool can be used from the dock', () => {
     test.setTimeout(240_000);

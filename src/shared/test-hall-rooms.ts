@@ -354,7 +354,8 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         mechanic: 'Flip a card, bomb it: its pair leaves the board with no miss, no turn, no score.',
         graphMechanicIds: ['power.bomb'],
         tryThis: 'Flip any card, then press Bomb on the dock.',
-        build: () => room(['a:e b:t', 'c:m a:e', 'b:t c:m'], { run: { bombCharges: 1 } }),
+        // Uses the normal starting inventory, so this room catches an unreachable starter bomb.
+        build: () => room(['a:e b:t', 'c:m a:e', 'b:t c:m']),
         script: [
             { step: { do: 'flip', tileId: 'b-1' }, says: 'one card face up lights the bomb', expect: (r) => (bombTargetTileId(r) === 'b-1' ? null : 'the bomb is not aimed at the flipped card') },
             { step: { do: 'bomb' }, says: 'pair b is gone, nothing else moved', expect: expectAll(isGone('b'), missesAre(3), turnsAre(0), (r) => (r.bombCharges === 0 ? null : `bombs ${r.bombCharges}`)) }
@@ -388,7 +389,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         build: () => room(['a:e b:t', 'b:t a:e'], { level: 3, run: { gold: 12 } }),
         script: [
             { step: { do: 'clear' }, says: 'floor 3 clears and is a store stop', expect: (r) => (r.status === 'levelComplete' && isStoreStopFloor(r.lastLevelResult?.level) ? null : `status ${r.status}`) },
-            { step: { do: 'buy', item: 'bomb' }, says: 'a bomb costs 4 gold', expect: (r, b) => (r.bombCharges === 1 && runGold(b) - runGold(r) === 4 ? null : `bombs ${r.bombCharges}, gold ${runGold(b)} -> ${runGold(r)}`) }
+            { step: { do: 'buy', item: 'bomb' }, says: 'a bomb costs 4 gold', expect: (r, b) => (r.bombCharges === b.bombCharges + 1 && runGold(b) - runGold(r) === 4 ? null : `bombs ${r.bombCharges}, gold ${runGold(b)} -> ${runGold(r)}`) }
         ]
     },
     {
@@ -775,7 +776,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         mechanic: 'After a match the floor marks one card of a face-down pair; match that pair for an extra chain link. Two matches without it and it moves on.',
         graphMechanicIds: ['board.n_back_anchor', 'board.chain_chunk_fever'],
         tryThis: 'Match any pair: one face-down card is marked. Find its partner and match them for two links instead of one.',
-        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t', 'g:m h:b g:m h:b'], { mutators: ['n_back_anchor'] }),
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t', 'g:m h:b g:m h:b'], { mutators: ['n_back_anchor'], run: { runSeed: 90_211 } }),
         script: [
             {
                 step: { do: 'matchOther' },
@@ -803,7 +804,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         mechanic: 'The Bounty pair pays 30 more and the Ward pair 22 less; every turn moves both.',
         graphMechanicIds: ['economy.score_and_rewards'],
         tryThis: 'Match the Bounty (b), then the new Ward, then miss: the two marks move every turn.',
-        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { mutators: ['shifting_spotlight'], board: { wardPairKey: 'a', bountyPairKey: 'b' } }),
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { mutators: ['shifting_spotlight'], run: { runSeed: 90_211 }, board: { wardPairKey: 'a', bountyPairKey: 'b' } }),
         script: [
             {
                 step: { do: 'match', pairKey: 'b' },

@@ -1420,7 +1420,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 glyph: RUN_SHELL_GLYPHS.bomb,
                 charges: run.bombCharges,
                 disabled: bombTargetTileId(run) === null,
-                title: bombTargetTileId(run) === null ? BOMB_TOOL_COPY.waiting : BOMB_TOOL_COPY.ready,
+                title: bombTargetTileId(run) !== null ? BOMB_TOOL_COPY.ready
+                    : run.status === 'resolving' ? BOMB_TOOL_COPY.resolving
+                    : run.status !== 'playing' ? BOMB_TOOL_COPY.unavailable
+                    : run.board.pairCount - run.board.matchedPairs <= 1 ? BOMB_TOOL_COPY.lastPair
+                    : run.board.flippedTileIds.length === 0 ? BOMB_TOOL_COPY.waiting
+                    : BOMB_TOOL_COPY.noPartner,
                 onClick: useBomb
             },
             ...(showFlashPairPower

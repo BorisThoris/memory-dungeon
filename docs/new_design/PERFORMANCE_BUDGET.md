@@ -12,6 +12,13 @@ Targets are **guidelines** for mid-range laptops and phones; actual headroom dep
 
 ## Board GPU knobs (`Settings`)
 
+Drawing buffers also obey a physical pixel budget: the board gets at most 1920×1080 pixels on Low,
+2560×1440 on Medium, and 3840×2160 on High; ambient Pixi gets 1920×1080. Neither dimension exceeds
+4096 pixels. Large floors keep the same resolution through entrance, shuffle and card removal instead
+of resizing the buffer at animation boundaries. Native and scaled 4K displays use the lean painted
+scene, retaining flame sprites while dropping full-plate drift, mist and extra light passes. Gameplay
+torchlight stays steady; the flames provide its movement without stepped full-room brightness.
+
 | Setting | Effect |
 |---------|--------|
 | **Graphics quality** | Caps **tile board DPR** (`getBoardDprCap`) and **menu Pixi renderer resolution** (`getMenuPixiResolutionCap`). |

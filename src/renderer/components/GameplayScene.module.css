@@ -119,18 +119,10 @@
 
 /* ------------------------------------------------------------------ the torches: always lit */
 .torchLightL,
+.torchLightR,
 .torchGlow {
+    /* Flames move in SceneSprites; full-room stepped brightness read as screen flashing. */
     opacity: 0.82;
-    animation: sceneFlickerA 2.7s steps(1, end) infinite;
-}
-
-.torchLightR {
-    opacity: 0.82;
-    animation: sceneFlickerB 3.3s steps(1, end) infinite;
-}
-
-.torchGlow {
-    animation-duration: 2.1s;
 }
 
 .runeGlow {
@@ -262,86 +254,5 @@
 
     100% {
         opacity: 0;
-    }
-}
-
-/* Torch flicker: stepped so it reads as a flame, not a fade. Two clocks, never in phase. */
-@keyframes sceneFlickerA {
-    0% {
-        opacity: 0.82;
-    }
-
-    9% {
-        opacity: 0.9;
-    }
-
-    17% {
-        opacity: 0.76;
-    }
-
-    31% {
-        opacity: 0.86;
-    }
-
-    44% {
-        opacity: 0.72;
-    }
-
-    52% {
-        opacity: 0.88;
-    }
-
-    68% {
-        opacity: 0.8;
-    }
-
-    79% {
-        opacity: 0.93;
-    }
-
-    90% {
-        opacity: 0.77;
-    }
-
-    100% {
-        opacity: 0.82;
-    }
-}
-
-@keyframes sceneFlickerB {
-    0% {
-        opacity: 0.8;
-    }
-
-    13% {
-        opacity: 0.7;
-    }
-
-    22% {
-        opacity: 0.9;
-    }
-
-    37% {
-        opacity: 0.78;
-    }
-
-    49% {
-        opacity: 0.92;
-    }
-
-    61% {
-        opacity: 0.74;
-    }
-
-    74% {
-        opacity: 0.86;
-    }
-
-    88% {
-        opacity: 0.79;
-    }
-
-    100% {
-        opacity: 0.8;
     }
 }

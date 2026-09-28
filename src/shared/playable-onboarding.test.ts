@@ -3,8 +3,21 @@ import { buildBoard } from './board-generation';
 import { createNewRun, finishMemorizePhase } from './game-core';
 import { flipTile } from './turn-resolution';
 import { getPlayableOnboardingScenario, getPlayableOnboardingStep } from './playable-onboarding';
+import { applyBomb } from './board-power-actions';
 
 describe('REG-026 playable onboarding', () => {
+    it('guides a remaining pair after the starter bomb removes the highlighted pair', () => {
+        const run = finishMemorizePhase(createNewRun(0, { onboardingSafeFirstFloor: true }));
+        const save = { onboardingDismissed: false, powersFtueSeen: false };
+        const first = getPlayableOnboardingStep(run, save)!;
+        const after = applyBomb(flipTile(run, first.targetTileIds[0]!), first.targetTileIds[0]!);
+        const next = getPlayableOnboardingStep(after, save)!;
+        expect(next.title).toBe('One pair cleared');
+        expect(next.targetTileIds).toHaveLength(2);
+        expect(next.targetTileIds.some((id) => first.targetTileIds.includes(id))).toBe(false);
+        expect(next.targetTileIds.every((id) => after.board!.tiles.find((tile) => tile.id === id)?.state === 'hidden')).toBe(true);
+    });
+
     it('guides a fresh first floor by actual board state and target tiles', () => {
         const run = finishMemorizePhase(createNewRun(0, { onboardingSafeFirstFloor: true }));
         const first = getPlayableOnboardingStep(run, { onboardingDismissed: false, powersFtueSeen: false });

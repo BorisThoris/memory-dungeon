@@ -43,6 +43,7 @@ const config: PlaywrightTestConfig = {
     retries: process.env.CI ? 2 : 0,
     reporter: 'list',
     use: {
+        headless: true,
         baseURL: 'http://127.0.0.1:5173',
         /** Point at a system Chromium when the pinned browser build is not installed (remote runners). */
         ...(systemChromiumPath ? { launchOptions: { executablePath: systemChromiumPath } } : {}),

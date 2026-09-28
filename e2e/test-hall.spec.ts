@@ -192,7 +192,7 @@ test.describe('The store stop on a phone', () => {
                 shuffles: run.shuffleCharges, relics: run.relics, gold: run.gold };
         });
         const bought = await inventory();
-        expect(bought.bombs).toBe(1);
+        expect(bought.bombs).toBe(2);
         expect(bought.peeks).toBeGreaterThan(0);
         expect(bought.shuffles).toBeGreaterThan(0);
         expect(bought.relics).toEqual(['deep_pockets', 'gilded_chain', 'long_look', 'tallow_candle']);

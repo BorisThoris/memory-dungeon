@@ -103,6 +103,7 @@ export default defineConfig(({ mode }) => ({
         }
     },
     test: {
+        maxWorkers: 2,
         environment: 'happy-dom',
         setupFiles: './vitest.setup.ts',
         /* 30s, not 10s: the full parallel run on the Windows build machine timed out a different

@@ -21,6 +21,8 @@ import {
 } from 'three';
 import relicSvgUrl from '../../../docs/wip-assets/card-sources/VECFINAL.svg?url';
 import type { GraphicsQualityPreset } from '../../shared/contracts';
+import { getRenderPixelRatio } from '../../shared/graphicsQuality';
+import { useViewportSize } from '../hooks/useViewportSize';
 import {
     preloadStartupCriticalAssets,
     STARTUP_PRELOAD_INITIAL_LABEL,
@@ -520,7 +522,9 @@ const RelicIntroScene = ({
     targetFootprint: ElementFootprint | null;
 }) => {
     const palette = getPresetPalette(preset);
-    const dpr = Math.min(typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1, 1.75);
+    const { width, height } = useViewportSize();
+    const dpr = getRenderPixelRatio(width, height,
+        typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1, 1.75, 2560 * 1440);
 
     return (
         <Canvas

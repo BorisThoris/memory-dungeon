@@ -119,7 +119,9 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         stickyBlockIndex: null,
         flipHistory: [],
         peekCharges,
-        bombCharges: 0,
+        // A normal run must let players try the bomb before reaching the first store.
+        // Shared runs from older rules retain their original starting inventory.
+        bombCharges: rulesVersion >= 51 ? 1 : 0,
         peekRevealedTileIds: [],
         undoUsesThisFloor: 1,
         gambitAvailableThisFloor: true,

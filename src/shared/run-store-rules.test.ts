@@ -91,9 +91,9 @@ describe('the store stop', () => {
     it('sells bombs, dearer each time', () => {
         const run: RunState = { ...createNewRun(0, { runSeed: 7, gameMode: 'endless' }), gold: 20 };
         const first = buyStoreItem(run, 'bomb')!;
-        expect(first.bombCharges).toBe(1);
+        expect(first.bombCharges).toBe(run.bombCharges + 1);
         const second = buyStoreItem(first, 'bomb')!;
-        expect(second.bombCharges).toBe(2);
+        expect(second.bombCharges).toBe(run.bombCharges + 2);
         expect(runGold(second)).toBe(20 - storePrice(run, 'bomb') - storePrice(first, 'bomb'));
         expect(storePrice(first, 'bomb')).toBeGreaterThan(storePrice(run, 'bomb'));
     });

@@ -728,6 +728,12 @@
     color: color-mix(in srgb, var(--miss) 70%, var(--paper));
 }
 
+/* Reserve the ordinary two-line feedback footprint so a tool's receipt does not resize and
+   clear the board's drawing buffer underneath it. Longer accessible messages may still grow. */
+:global([data-shell-layout='desktop']) .line {
+    min-height: 2lh;
+}
+
 @keyframes captionIn {
     from {
         opacity: 0;

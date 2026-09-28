@@ -34,5 +34,9 @@ export const STORE_SHEET_COPY = {
 /** The dock's bomb (`applyBomb`): it aims at the one card face up, so it says so until there is one. */
 export const BOMB_TOOL_COPY = {
     waiting: 'Flip a card first: a bomb takes the pair of the one card face up',
+    unavailable: 'Bomb: wait for the floor to begin',
+    resolving: 'Bomb: finish the current pair first',
+    lastPair: 'Bomb: the last pair must be matched',
+    noPartner: 'Bomb: choose a card with a hidden matching partner',
     ready: 'Bomb this card: its pair leaves the board, no miss'
 } as const;

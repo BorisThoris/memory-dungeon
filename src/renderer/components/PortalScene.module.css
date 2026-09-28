@@ -28,12 +28,12 @@
 /* Two copies of the stars on stepped clocks that never agree: each star is at one of four levels. */
 .starsA {
     opacity: calc(var(--scene-light-opacity, 1) * 0.6);
-    animation: portalTwinkleA 3.7s steps(1, end) infinite;
+    animation: portalTwinkleA 7.4s ease-in-out infinite;
 }
 
 .starsB {
     opacity: calc(var(--scene-light-opacity, 1) * 0.5);
-    animation: portalTwinkleB 5.3s steps(1, end) infinite;
+    animation: portalTwinkleB 10.6s ease-in-out infinite;
     animation-delay: -1.9s;
 }
 

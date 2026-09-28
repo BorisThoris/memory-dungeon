@@ -1,6 +1,6 @@
 import type { BoardScreenSpaceAA, GraphicsQualityPreset } from './contracts';
 
-/** Tile count at/above which internal adaptive quality may cap DPR and AA during heavy board motion. */
+/** Original floor tile count at/above which quality uses a stable lower render budget. */
 export const ADAPTIVE_BOARD_QUALITY_LARGE_TILE_THRESHOLD = 40;
 
 /**
@@ -29,6 +29,20 @@ export const getBoardDprCap = (quality: GraphicsQualityPreset, compact: boolean)
 /** Main menu Pixi atmosphere: cap internal renderer resolution vs OS DPR (PERF-006). */
 export const getMenuPixiResolutionCap = (quality: GraphicsQualityPreset): number =>
     quality === 'low' ? 1.25 : quality === 'medium' ? 2 : 2.5;
+
+/** Bound allocations by physical pixels as well as DPR, including 4K and scaled monitors. */
+export const getRenderPixelRatio = (
+    width: number,
+    height: number,
+    devicePixelRatio: number,
+    dprCap: number,
+    pixelBudget: number
+): number => Math.min(
+    Math.max(0.1, devicePixelRatio || 1),
+    dprCap,
+    Math.sqrt(pixelBudget / (Math.max(1, width) * Math.max(1, height))),
+    4096 / Math.max(1, width, height)
+);
 
 /** Main menu Pixi atmosphere: animated particle budget by viewport and quality preset. */
 export const getMenuAtmosphereParticleCount = (
@@ -73,13 +87,12 @@ export const getGraphicsQualityTierSnapshot = (quality: GraphicsQualityPreset): 
 });
 
 /**
- * Internal-only: during shuffle, entrance, or prestage loading on large boards, cap DPR and avoid SMAA
- * to keep frame time predictable. Restores saved-tier behavior when motion clears.
+ * Keep one allocation for the whole floor. Changing DPR at each shuffle/entrance resizes and
+ * clears the drawing buffer, causing flashes precisely when the board is busiest.
  */
 export const resolveAdaptiveBoardRenderQuality = (input: {
     savedGraphicsQuality: GraphicsQualityPreset;
-    /** Shuffle or entrance animation, or prestaging GPU warm-up (`TileBoard` `boardPreStage === 'loading'`). */
-    boardHeavyMotion: boolean;
+    /** The floor's original tile count, including removed cards, so quality stays stable. */
     activeTileCount: number;
     compact: boolean;
     boardScreenSpaceAA: BoardScreenSpaceAA;
@@ -87,7 +100,7 @@ export const resolveAdaptiveBoardRenderQuality = (input: {
 }): { dprCap: number; resolvedAa: 'smaa' | 'msaa' | 'off' } => {
     const baseDpr = getBoardDprCap(input.savedGraphicsQuality, input.compact);
     const largeBoard = input.activeTileCount >= ADAPTIVE_BOARD_QUALITY_LARGE_TILE_THRESHOLD;
-    const adapt = input.boardHeavyMotion && largeBoard && input.savedGraphicsQuality !== 'low';
+    const adapt = largeBoard && input.savedGraphicsQuality !== 'low';
 
     let dprCap = baseDpr;
 
@@ -138,11 +151,15 @@ export const getSceneEffectTier = (input: {
     reduceMotion: boolean;
     coarsePointer: boolean;
     viewportWidth: number;
+    viewportHeight?: number;
+    devicePixelRatio?: number;
 }): SceneEffectTier => {
     if (input.reduceMotion) {
         return 'still';
     }
-    if (input.quality === 'low' || input.coarsePointer || input.viewportWidth < SCENE_LEAN_MAX_WIDTH) {
+    const physicalPixels = input.viewportWidth * (input.viewportHeight ?? 0) * (input.devicePixelRatio ?? 1) ** 2;
+    if (input.quality === 'low' || input.coarsePointer || input.viewportWidth < SCENE_LEAN_MAX_WIDTH
+        || physicalPixels >= 3840 * 2160) {
         return 'lean';
     }
     return 'full';

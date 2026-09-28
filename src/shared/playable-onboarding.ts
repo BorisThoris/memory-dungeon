@@ -33,7 +33,7 @@ export interface PlayableOnboardingPrompt {
 
 const isSafeOnboardingTile = (board: BoardState, pairKey: string, tileId: string): boolean => {
     const tile = board.tiles.find((candidate) => candidate.id === tileId);
-    if (!tile || tile.state === 'matched' || isSingletonUtilityPairKey(tile.pairKey)) {
+    if (!tile || tile.state === 'matched' || tile.state === 'removed' || isSingletonUtilityPairKey(tile.pairKey)) {
         return false;
     }
     if (board.cursedPairKey === pairKey || board.wardPairKey === pairKey || board.bountyPairKey === pairKey) {
@@ -65,6 +65,13 @@ const getStepCopy = (
 ): Pick<PlayableOnboardingPrompt, 'title' | 'prompt' | 'detail'> => {
     const stats = normalizeSessionStats(run.stats);
     if (step.id === 'recovery') {
+        if (run.turnsThisFloor === 0 && run.board?.tiles.some((tile) => tile.state === 'removed')) {
+            return {
+                title: 'One pair cleared',
+                prompt: 'Match the next marked pair',
+                detail: 'The bomb cleared a pair without spending a turn. Match the marked cards to earn score and build your chain.'
+            };
+        }
         if (stats.mismatches > 0) {
             return {
                 title: 'Recover and continue',

@@ -33,9 +33,9 @@
     opacity: calc(var(--scene-light-opacity, 1) * 0.7);
 }
 
-/* Candlelight on the stone: a slow, stepped flicker, the sum of many small flames. */
+/* Candlelight on the stone changes smoothly; stepped whole-room light looked like flashing. */
 .candleGlow {
-    animation: cathedralCandlelight 4.1s steps(1, end) infinite;
+    animation: cathedralCandlelight 8.2s ease-in-out infinite;
 }
 
 /* The wisps breathe; a second, fainter copy drifts upward a little out of phase, so the light

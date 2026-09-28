@@ -8,6 +8,7 @@ import {
     getMenuAtmosphereParticleCount,
     getMenuPixiResolutionCap,
     getSceneEffectTier,
+    getRenderPixelRatio,
     resolveAdaptiveBoardRenderQuality,
     SCENE_LEAN_MAX_WIDTH
 } from './graphicsQuality';
@@ -57,34 +58,22 @@ describe('graphicsQuality caps', () => {
         expect(Object.keys(GAMEPLAY_BOARD_VISUALS.faceUpHoverRimOpacityMul).sort()).toEqual(['high', 'low', 'medium']);
     });
 
-    it('resolveAdaptiveBoardRenderQuality caps DPR and avoids SMAA during heavy motion on large boards', () => {
+    it('keeps the large-floor render budget stable instead of changing it during animations', () => {
         const idle = resolveAdaptiveBoardRenderQuality({
             activeTileCount: ADAPTIVE_BOARD_QUALITY_LARGE_TILE_THRESHOLD,
-            boardHeavyMotion: false,
             boardScreenSpaceAA: 'auto',
             compact: false,
             reduceMotion: false,
             savedGraphicsQuality: 'high'
         });
-        expect(idle.dprCap).toBe(getBoardDprCap('high', false));
-        expect(idle.resolvedAa).toBe('smaa');
+        expect(idle.dprCap).toBeLessThan(getBoardDprCap('high', false));
+        expect(idle.resolvedAa).toBe('msaa');
 
-        const heavy = resolveAdaptiveBoardRenderQuality({
-            activeTileCount: ADAPTIVE_BOARD_QUALITY_LARGE_TILE_THRESHOLD,
-            boardHeavyMotion: true,
-            boardScreenSpaceAA: 'auto',
-            compact: false,
-            reduceMotion: false,
-            savedGraphicsQuality: 'high'
-        });
-        expect(heavy.dprCap).toBeLessThan(idle.dprCap);
-        expect(heavy.resolvedAa).toBe('msaa');
     });
 
-    it('resolveAdaptiveBoardRenderQuality leaves low tier unchanged during motion', () => {
+    it('resolveAdaptiveBoardRenderQuality leaves low tier unchanged on large floors', () => {
         const r = resolveAdaptiveBoardRenderQuality({
             activeTileCount: 99,
-            boardHeavyMotion: true,
             boardScreenSpaceAA: 'smaa',
             compact: true,
             reduceMotion: false,
@@ -92,6 +81,21 @@ describe('graphicsQuality caps', () => {
         });
         expect(r.dprCap).toBe(getBoardDprCap('low', true));
         expect(r.resolvedAa).toBe('smaa');
+    });
+});
+
+describe('render allocation budget', () => {
+    it.each([[3840, 2160, 1], [3840, 2160, 2], [1920, 1080, 2], [7680, 2160, 2]])(
+        'bounds %sx%s at DPR %s without allocating an oversized target', (width, height, deviceDpr) => {
+            const budget = 2560 * 1440;
+            const dpr = getRenderPixelRatio(width, height, deviceDpr, 2.1, budget);
+            expect(width * height * dpr * dpr).toBeLessThanOrEqual(budget + 1);
+            expect(Math.max(width, height) * dpr).toBeLessThanOrEqual(4096);
+            expect(dpr).toBeGreaterThan(0);
+        }
+    );
+    it('retains native sharpness when the display fits the budget', () => {
+        expect(getRenderPixelRatio(1920, 1080, 1, 1.7, 2560 * 1440)).toBe(1);
     });
 });
 
@@ -113,5 +117,11 @@ describe('getSceneEffectTier', () => {
     it('holds still under reduce motion before anything else', () => {
         expect(getSceneEffectTier({ ...desktop, reduceMotion: true })).toBe('still');
         expect(getSceneEffectTier({ ...desktop, reduceMotion: true, coarsePointer: true, quality: 'low' })).toBe('still');
+    });
+
+    it('keeps 4K and scaled 4K backgrounds lean while preserving flame sprites', () => {
+        expect(getSceneEffectTier({ ...desktop, viewportWidth: 3840, viewportHeight: 2160 })).toBe('lean');
+        expect(getSceneEffectTier({ ...desktop, viewportWidth: 1920, viewportHeight: 1080, devicePixelRatio: 2 })).toBe('lean');
+        expect(getSceneEffectTier({ ...desktop, viewportWidth: 1920, viewportHeight: 1080, devicePixelRatio: 1 })).toBe('full');
     });
 });

@@ -22,7 +22,7 @@ import { getTileSuit } from '../../shared/tile-suit-rules';
 /** The pointer has to rest on a tile this long before the clump read follows it. */
 const HOVER_CLUMP_READ_DELAY_MS = 160;
 const EMPTY_CLUMP_READ: ReadonlySet<string> = new Set();
-import { resolveAdaptiveBoardRenderQuality } from '../../shared/graphicsQuality';
+import { getRenderPixelRatio, resolveAdaptiveBoardRenderQuality } from '../../shared/graphicsQuality';
 import { getFindableRewardText } from '../../shared/findables';
 import { getTileSwapTraitPreviewLines, getTileTraitInteractionPreviewLines } from '../../shared/tile-trait-rules';
 import { BOARD_ROUTE_COACHING } from '../copy/boardRouteCoaching';
@@ -2201,20 +2201,16 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         []
     );
     const deviceDpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
-    const activeTileCount = useMemo(
-        () => board.tiles.filter((t) => t.state !== 'removed').length,
-        [board.tiles]
-    );
     const adaptive = resolveAdaptiveBoardRenderQuality({
-        activeTileCount,
-        boardHeavyMotion: boardMotionAnimating,
+        activeTileCount: board.tiles.length,
         boardScreenSpaceAA: boardScreenSpaceAA ?? 'auto',
         compact,
         reduceMotion,
         savedGraphicsQuality: graphicsQuality ?? 'medium'
     });
     /** Cap DPR for GPU cost (PERF-001 + internal adaptive motion tier). */
-    const dpr = Math.min(deviceDpr, adaptive.dprCap);
+    const dpr = getRenderPixelRatio(width, height, deviceDpr, adaptive.dprCap,
+        graphicsQuality === 'high' ? 3840 * 2160 : graphicsQuality === 'low' ? 1920 * 1080 : 2560 * 1440);
     const resolvedBoardAa = adaptive.resolvedAa;
     const canvasContext = getTileBoardCanvasContextConfig(resolvedBoardAa, webglCanvasRemountKey);
     /** Avoid forcing discrete/high-power GPU contexts unless the player explicitly chose high quality. */

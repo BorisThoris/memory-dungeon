@@ -201,7 +201,7 @@ describe('MainMenuBackground', () => {
         );
 
         await waitFor(() => {
-            expect(applicationInstances[0]?.renderer.resolution).toBe(2.5);
+            expect(applicationInstances[0]?.renderer.resolution).toBeCloseTo(Math.sqrt(1920 * 1080 / (1280 * 800)));
         });
     });
 
@@ -261,7 +261,7 @@ describe('MainMenuBackground', () => {
         });
 
         await waitFor(() => {
-            expect(applicationInstances[0]?.renderer.resolution).toBe(2.5);
+            expect(applicationInstances[0]?.renderer.resolution).toBeCloseTo(Math.sqrt(1920 * 1080 / (900 * 600)));
         });
         expect(tickerAddSpy).not.toHaveBeenCalled();
         expect(startSpy).not.toHaveBeenCalled();

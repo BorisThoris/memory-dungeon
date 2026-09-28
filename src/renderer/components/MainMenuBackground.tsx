@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 import type { Application, Container, Sprite, Texture } from 'pixi.js';
 import type { GraphicsQualityPreset } from '../../shared/contracts';
-import { getMenuAtmosphereParticleCount, getMenuPixiResolutionCap } from '../../shared/graphicsQuality';
+import { getMenuAtmosphereParticleCount, getMenuPixiResolutionCap, getRenderPixelRatio } from '../../shared/graphicsQuality';
 import { useLatestRef } from '../hooks/useLatestRef';
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
 import type * as PixiNamespace from 'pixi.js';
@@ -331,7 +331,8 @@ const createSceneController = (
     const applyRendererResolution = (): void => {
         const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
         const cap = getMenuPixiResolutionCap(graphicsQuality);
-        app.renderer.resolution = Math.min(dpr, cap);
+        const resolution = getRenderPixelRatio(surfaceWidth, surfaceHeight, dpr, cap, 1920 * 1080);
+        if (app.renderer.resolution !== resolution) app.renderer.resolution = resolution;
     };
 
     const rebuildScene = (): void => {
@@ -613,6 +614,8 @@ const MainMenuBackground = ({
                     antialias: initialGraphicsQuality !== 'low',
                     autoDensity: true,
                     autoStart: false,
+                    resolution: getRenderPixelRatio(latestPropsRef.current.width, latestPropsRef.current.height,
+                        window.devicePixelRatio || 1, getMenuPixiResolutionCap(initialGraphicsQuality), 1920 * 1080),
                     backgroundAlpha: 0,
                     powerPreference: 'high-performance',
                     preference: 'webgl',
