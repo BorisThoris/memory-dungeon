@@ -239,6 +239,11 @@ describe('run surface state helpers', () => {
 
 
     it('ignores peek toggles outside its active surface conditions', () => {
+        const openRun = playingRun();
+        openRun.board = { ...openRun.board!, flippedTileIds: [openRun.board!.tiles[0]!.id] };
+        expect(createPeekModeToggleResult({
+            boardPinMode: false, peekModeArmed: false, run: openRun, view: 'playing'
+        })).toEqual({ kind: 'ignored' });
         expect(
             createPeekModeToggleResult({
                 boardPinMode: false,

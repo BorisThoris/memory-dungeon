@@ -15,7 +15,8 @@ import {
 } from './recall-rules';
 import {
     hasClearFlipState,
-    canRegionShuffle,
+    canPeekAtBoard,
+    canRegionShuffleRow,
     canSwapHiddenTiles,
     canShuffleBoard
 } from './board-power-availability';
@@ -24,12 +25,27 @@ import { normalizeSessionStats } from './session-stats-rules';
 import { hideTileAfterTurn } from './tile-state-rules';
 import { runFilteredStringArray } from './run-array-guards';
 import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
+import { isSingletonUtilityPairKey } from './tile-identity';
 
 const SHUFFLE_SCORE_TAX_FACTOR = 0.94;
 
 type TileEntry = {
     index: number;
     tile: BoardState['tiles'][number];
+};
+
+/** A paid shuffle must move card faces, not merely exchange the indistinguishable halves of a pair. */
+const shufflePowerTiles = (tiles: BoardState['tiles'], rng: () => number, rulesVersion: number): BoardState['tiles'] => {
+    const shuffled = shuffleWithRng(rng, tiles);
+    if (rulesVersion >= 50 && shuffled.every((tile, index) => tile.pairKey === tiles[index]!.pairKey)) {
+        const first = pickRngIndex(rng, shuffled.length);
+        const different = shuffled.flatMap((tile, index) => tile.pairKey !== shuffled[first]!.pairKey ? [index] : []);
+        if (different.length > 0) {
+            const second = different[pickRngIndex(rng, different.length)]!;
+            [shuffled[first], shuffled[second]] = [shuffled[second]!, shuffled[first]!];
+        }
+    }
+    return shuffled;
 };
 
 export const applyShuffle = (run: RunState): RunState => {
@@ -62,14 +78,14 @@ export const applyShuffle = (run: RunState): RunState => {
         }
         for (const entries of rowToEntries.values()) {
             const chunk = entries.map((entry) => entry.tile);
-            const shuffledChunk = shuffleWithRng(() => shuffleRng(), chunk);
+            const shuffledChunk = shufflePowerTiles(chunk, shuffleRng, run.runRulesVersion);
             entries.forEach((entry, slot) => {
                 nextTiles[entry.index] = shuffledChunk[slot] ?? entry.tile;
             });
         }
     } else {
         const hiddenTiles = hiddenEntries.map((entry) => entry.tile);
-        const shuffled = shuffleWithRng(() => shuffleRng(), hiddenTiles);
+        const shuffled = shufflePowerTiles(hiddenTiles, shuffleRng, run.runRulesVersion);
         hiddenEntries.forEach((entry, slot) => {
             nextTiles[entry.index] = shuffled[slot] ?? entry.tile;
         });
@@ -107,7 +123,7 @@ export const applyShuffle = (run: RunState): RunState => {
 
 export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState => {
     const board = run.board;
-    if (!canRegionShuffle(run) || !board) {
+    if (!canRegionShuffleRow(run, rowIndex) || !board) {
         return run;
     }
     const cols = board.columns;
@@ -132,7 +148,7 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
     );
     const nextTiles = [...board.tiles];
     const chunk = hiddenInRow.map((entry) => entry.tile);
-    const shuffledChunk = shuffleWithRng(() => shuffleRng(), chunk);
+    const shuffledChunk = shufflePowerTiles(chunk, shuffleRng, run.runRulesVersion);
     hiddenInRow.forEach((entry, slot) => {
         nextTiles[entry.index] = shuffledChunk[slot] ?? entry.tile;
     });
@@ -247,11 +263,7 @@ export const applyFlashPair = (run: RunState): RunState => {
 };
 
 export const applyPeek = (run: RunState, tileId: string): RunState => {
-    const peekCharges = runNonNegativeInteger(run.peekCharges);
-    if (run.status !== 'playing' || !run.board || peekCharges < 1) {
-        return run;
-    }
-    if (!hasClearFlipState(run)) {
+    if (!canPeekAtBoard(run) || !run.board) {
         return run;
     }
     const tile = run.board.tiles.find((t) => t.id === tileId);
@@ -264,7 +276,7 @@ export const applyPeek = (run: RunState, tileId: string): RunState => {
     }
     return {
         ...run,
-        peekCharges: decrementRunCounter(peekCharges),
+        peekCharges: decrementRunCounter(run.peekCharges),
         powersUsedThisRun: true,
         recallFocus: decreaseRecallFocus(run),
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, [tileId]),
@@ -298,7 +310,9 @@ export const bombTargetTileId = (run: RunState): string | null => {
         return null;
     }
     const pairsLeft = new Set(
-        run.board.tiles.filter((candidate) => candidate.state === 'hidden' || candidate.state === 'flipped').map((candidate) => candidate.pairKey)
+        run.board.tiles.filter((candidate) =>
+            !isSingletonUtilityPairKey(candidate.pairKey) && (candidate.state === 'hidden' || candidate.state === 'flipped')
+        ).map((candidate) => candidate.pairKey)
     ).size;
     return pairsLeft > 1 ? tile.id : null;
 };

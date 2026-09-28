@@ -105,6 +105,7 @@ export interface BuildTileBoardRowsInput {
     runStatus: RunStatus;
     shiftingSpotlightActive: boolean;
     showTutorialPairMarkers: boolean;
+    onboardingTargetTileIds?: readonly string[];
     silhouetteDuringPlay: boolean;
     stickyBlockedTileId: string | null;
     tileSwapEligibleTileIds: ReadonlySet<string>;
@@ -141,6 +142,7 @@ export const buildTileBoardRows = ({
     runStatus,
     shiftingSpotlightActive,
     showTutorialPairMarkers,
+    onboardingTargetTileIds,
     silhouetteDuringPlay,
     stickyBlockedTileId,
     tileSwapEligibleTileIds,
@@ -156,7 +158,7 @@ export const buildTileBoardRows = ({
     const totalRows = board.rows;
     const flippedN = board.flippedTileIds.length;
     const flipLocked = isTileBoardFlipLocked({ allowGambitThirdFlip, flippedTileCount: flippedN });
-    const tutorialPairOrdinalByKey = getTutorialPairOrdinalByKey(board, showTutorialPairMarkers);
+    const tutorialPairOrdinalByKey = getTutorialPairOrdinalByKey(board, showTutorialPairMarkers, onboardingTargetTileIds);
     const traitOpportunityByTileId = new Map(
         getTraitOpportunitySummary(board).tiles.map((opportunity) => [opportunity.tileId, opportunity])
     );

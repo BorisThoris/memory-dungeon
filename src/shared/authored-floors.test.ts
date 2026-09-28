@@ -8,6 +8,7 @@ import {
     isAuthoredFloor,
     layAuthoredFloorTiles
 } from './authored-floors';
+import type { AuthoredFloorLayout } from './authored-floors';
 import { buildBoard } from './board-build-rules';
 import { chainTierRungs } from './chain-tier-rules';
 import { CLEAN_BREAK_REACH, resolveChunkBreak } from './chunk-break-rules';
@@ -18,11 +19,16 @@ import { isSingletonUtilityPairKey, WILD_PAIR_KEY } from './tile-identity';
 
 const SEEDS = [1, 7, 19_101, 42_001, 172_707, 867_5309, 1_234_567, 99] as const;
 const run = { gameMode: 'endless' as const, floorCurioId: null };
+const layouts = new WeakMap<BoardState, AuthoredFloorLayout>();
+const rememberLayout = (board: BoardState, seed: number): BoardState => {
+    layouts.set(board, authoredFloorLayout(board.level, seed, GAME_RULES_VERSION)!);
+    return board;
+};
 
 /** The floor as a run builds it: the schedule's archetype, objective and mutators for that floor. */
 const scheduledBoard = (level: number, runSeed: number): BoardState => {
     const entry = pickFloorScheduleEntry(runSeed, GAME_RULES_VERSION, level, 'endless');
-    return buildBoard(level, {
+    return rememberLayout(buildBoard(level, {
         runSeed,
         runRulesVersion: GAME_RULES_VERSION,
         gameMode: 'endless',
@@ -31,12 +37,12 @@ const scheduledBoard = (level: number, runSeed: number): BoardState => {
         floorArchetypeId: entry.floorArchetypeId,
         featuredObjectiveId: entry.featuredObjectiveId,
         cycleFloor: entry.cycleFloor
-    });
+    }), runSeed);
 };
 
 /** The floor with nothing scheduled, which is the harder case: a cursed pair a break never takes. */
 const bareBoard = (level: number, runSeed: number, activeMutators: MutatorId[] = []): BoardState =>
-    buildBoard(level, { runSeed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', activeMutators });
+    rememberLayout(buildBoard(level, { runSeed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', activeMutators }), runSeed);
 
 const realPairs = (board: BoardState): Map<string, Tile[]> => {
     const byKey = new Map<string, Tile[]>();
@@ -117,6 +123,48 @@ const boardsUnderTest = (level: number): Array<[string, BoardState]> =>
     ]);
 
 describe('the authored floors', () => {
+    it.each([1, 2, 3])('floor %i varies its layout without adjacent twins or broken teaching waves', (level) => {
+        const shapes = new Map<string, number>();
+        for (let seed = 1; seed <= 300; seed += 1) {
+            const board = bareBoard(level, seed);
+            const layout = layouts.get(board)!;
+            const shape = layout.cells.join(',');
+            shapes.set(shape, (shapes.get(shape) ?? 0) + 1);
+            expect(board.tiles.map((tile) => tile.suit)).toEqual(layout.cells);
+            const splitKey = authoredSplitPairKey(board.tiles, layout);
+            for (const [key, halves] of realPairs(board)) {
+                const [a, b] = halves.map((tile) => board.tiles.indexOf(tile)) as [number, number];
+                const dx = Math.abs(a % board.columns - b % board.columns);
+                const dy = Math.abs(Math.floor(a / board.columns) - Math.floor(b / board.columns));
+                expect(Math.max(dx, dy), `floor ${level}, seed ${seed}, pair ${key}`).toBeGreaterThan(1);
+                if (key === splitKey) continue;
+                const result = resolveChunkBreak({ board, run, matchedTileIds: halves.map((tile) => tile.id), chain: CHAIN_TIER_CLEAN_FROM });
+                expect(result.brokenPairKeys.length, `floor ${level}, seed ${seed}, pop from ${key}`).toBeGreaterThan(0);
+                expect(result.wavePairKeys.flat()).not.toContain(splitKey);
+            }
+            if (layout.splitCells) {
+                const [near, far] = layout.splitCells;
+                expect(board.tiles[near]!.pairKey).toBe(board.tiles[far]!.pairKey);
+                expect(board.tiles[near]!.findableKind).toBeUndefined();
+                const region = boundedWave(layout, [near], board.tiles.length);
+                expect(region.has(far), `seed ${seed}: the far half stays isolated`).toBe(false);
+            }
+        }
+        expect(shapes.size).toBeGreaterThanOrEqual(level === 1 ? 8 : 80);
+        expect(Math.max(...shapes.values())).toBeLessThan(45);
+    });
+
+    it('retains historical opening geometry and tile order for rules 49', () => {
+        for (const level of [1, 2, 3]) {
+            const first = buildBoard(level, { runSeed: 42_001, runRulesVersion: 49 });
+            const layout = authoredFloorLayout(level)!;
+            expect(authoredFloorLayout(level, 42_001, 49)).toBe(layout);
+            expect(first.tiles.map((tile) => tile.suit)).toEqual(layout.cells);
+            expect(first).toEqual(buildBoard(level, { runSeed: 42_001, runRulesVersion: 49 }));
+            expect(first.tiles.map((tile) => tile.id)).not.toEqual(bareBoard(level, 42_001).tiles.map((tile) => tile.id));
+        }
+    });
+
     it('are the first three, and every one of them carries a layout', () => {
         expect(AUTHORED_FLOOR_LAST_LEVEL).toBe(3);
         for (const level of [1, 2, 3]) {
@@ -136,7 +184,7 @@ describe('the authored floors', () => {
     it('N1/N2: every tile has its partner and the board is exactly two tiles per pair, on every seed', () => {
         for (const level of [1, 2, 3]) {
             for (const [where, board] of boardsUnderTest(level)) {
-                const layout = authoredFloorLayout(level);
+                const layout = layouts.get(board);
                 const pairs = realPairs(board);
                 expect(board.pairCount, `${level} ${where}`).toBe(pairsForFloor(level));
                 expect(board.tiles.length, `${level} ${where}`).toBe(2 * board.pairCount);
@@ -148,16 +196,16 @@ describe('the authored floors', () => {
                 if (!layout) continue;
                 expect(board.columns).toBe(layout.columns);
                 expect(board.rows).toBe(layout.rows);
-                // The shape is the authored one, whatever the seed did to the symbols.
+                // The board uses the seeded lesson geometry, including its split cells.
                 expect(board.tiles.map((tile) => tile.suit), `${level} ${where}`).toEqual([...layout.cells]);
             }
         }
     });
 
-    it('take their symbols and their placement from the seed, and their shape from the author', () => {
+    it('takes symbols, placement and lesson geometry from the seed', () => {
         const a = bareBoard(2, 11);
         const b = bareBoard(2, 12);
-        expect(a.tiles.map((tile) => tile.suit)).toEqual(b.tiles.map((tile) => tile.suit));
+        expect(a.tiles.map((tile) => tile.suit)).not.toEqual(b.tiles.map((tile) => tile.suit));
         expect(a.tiles.map((tile) => tile.pairKey)).not.toEqual(b.tiles.map((tile) => tile.pairKey));
         expect(bareBoard(3, 11)).toEqual(bareBoard(3, 11));
     });
@@ -181,7 +229,7 @@ describe('the authored floors', () => {
 
     it('puts a singleton after the authored cells rather than inside the shape', () => {
         const board = buildBoard(2, { runSeed: 5, runRulesVersion: GAME_RULES_VERSION, includeWildTile: true });
-        const layout = authoredFloorLayout(2)!;
+        const layout = authoredFloorLayout(2, 5, GAME_RULES_VERSION)!;
         expect(board.tiles.length).toBe(layout.cells.length + 1);
         expect(board.tiles.at(-1)?.pairKey).toBe(WILD_PAIR_KEY);
         expect(board.tiles.slice(0, layout.cells.length).map((tile) => tile.suit)).toEqual([...layout.cells]);
@@ -338,7 +386,7 @@ describe('N6: the first pop', () => {
 
 describe('N7: the split pair on floor 3', () => {
     const splitOf = (board: BoardState) => {
-        const layout = authoredFloorLayout(3)!;
+        const layout = layouts.get(board)!;
         const key = authoredSplitPairKey(board.tiles, layout)!;
         const [near, far] = layout.splitCells!;
         return { key, near, far, layout };

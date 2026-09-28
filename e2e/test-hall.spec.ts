@@ -164,14 +164,46 @@ test.describe('The store stop on a phone', () => {
         });
         expect(layout.bodyClips).toBe(false);
         expect(['auto', 'scroll']).toContain(layout.listScrolls);
-        for (const id of ['miss', 'peek', 'shuffle', 'bomb', 'deep_pockets', 'gilded_chain', 'long_look', 'tallow_candle']) {
+        // Exercise purchases as well as scrolling: the previous test's title promised buying,
+        // but it never pressed a buy button. Give this fixture enough gold and room in the bank.
+        await page.evaluate(async () => {
+            const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+            const run = useAppStore.getState().run!;
+            useAppStore.setState({ run: { ...run, gold: 100, missBank: [{ floor: 3, misses: 1 }] } });
+        });
+        for (const id of ['miss', 'peek', 'shuffle', 'bomb', 'deep_pockets', 'gilded_chain', 'long_look', 'tallow_candle'] as const) {
             const buy = page.getByTestId(`store-buy-${id}`);
             await buy.scrollIntoViewIfNeeded();
             const list = await page.getByTestId('store-rows').boundingBox();
             const button = await buy.boundingBox();
             expect(list && button && button.y >= list.y - 1 && button.y + button.height <= list.y + list.height + 1, `${id} reachable`).toBe(true);
+            await expect(buy).toBeEnabled();
+            await buy.click();
+            await expect.poll(() => page.evaluate(async (item) => {
+                const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+                return useAppStore.getState().run?.storePurchases?.[item];
+            }, id), { timeout: 30_000 }).toBe(1);
         }
         await expect(page.getByRole('button', { name: 'Descend' })).toBeInViewport();
+        const inventory = () => page.evaluate(async () => {
+            const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+            const run = useAppStore.getState().run!;
+            return { level: run.board!.level, bombs: run.bombCharges, peeks: run.peekCharges,
+                shuffles: run.shuffleCharges, relics: run.relics, gold: run.gold };
+        });
+        const bought = await inventory();
+        expect(bought.bombs).toBe(1);
+        expect(bought.peeks).toBeGreaterThan(0);
+        expect(bought.shuffles).toBeGreaterThan(0);
+        expect(bought.relics).toEqual(['deep_pockets', 'gilded_chain', 'long_look', 'tallow_candle']);
+        expect(bought.gold).toBeLessThan(100);
+        await page.getByRole('button', { name: 'Descend' }).click();
+        await expect.poll(async () => (await inventory()).level, { timeout: 30_000 }).toBe(4);
+        const carried = await inventory();
+        expect(carried.bombs).toBe(bought.bombs);
+        expect(carried.peeks).toBeGreaterThanOrEqual(bought.peeks);
+        expect(carried.shuffles).toBeGreaterThanOrEqual(bought.shuffles);
+        expect(carried.relics).toEqual(bought.relics);
     });
 });
 

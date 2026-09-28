@@ -41,6 +41,13 @@ describe('tileBoardTutorialMarkers', () => {
         expect(getTutorialPairOrdinalByKey(board([tile('a', 'alpha')]), false)).toBeNull();
     });
 
+    it('reveals only the prompted pair, never the rest of a guided board', () => {
+        const tiles = board([tile('a1', 'alpha'), tile('b1', 'beta'), tile('a2', 'alpha'), tile('b2', 'beta')]);
+        expect([...getTutorialPairOrdinalByKey(tiles, true, ['a1', 'a2'])!.keys()]).toEqual(['alpha']);
+        expect(getTutorialPairOrdinalByKey(tiles, true, [])!.size).toBe(0);
+        expect(getTutorialPairOrdinalByKey(tiles, false, ['a1', 'a2'])).toBeNull();
+    });
+
     it('returns the ordinal only for hidden face-down tutorial tiles', () => {
         const ordinalByKey = new Map([['alpha', 1]]);
 

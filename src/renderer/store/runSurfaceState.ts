@@ -14,6 +14,7 @@ import { canGreetFloorCurio } from '../../shared/floor-curio-greeting-rules';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
 import {
+    canPeekAtBoard,
     canRegionShuffle,
 } from '../../shared/board-powers';
 import { flipTile } from '../../shared/turn-resolution';
@@ -152,7 +153,7 @@ export const createPeekModeToggleResult = ({
         !run ||
         view !== 'playing' ||
         run.status !== 'playing' ||
-        run.peekCharges < 1 ||
+        (!peekModeArmed && !canPeekAtBoard(run)) ||
         boardPinMode ||
         tileSwapArmed
     ) {

@@ -13,6 +13,7 @@ import type { BoardState, MutatorId, RunState, Tile, TileSuit, TileTraitKind } f
 import { togglePinnedTile } from './board-power-state';
 import { countFindablePairs } from './board-tile-generation-rules';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
+import { FLOOR_CURIOS, MIN_CURIO_MEMORIZE_MS } from './floor-curio-rules';
 import { advanceToNextLevel, createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { missBankCap, missesLeft } from './miss-bank';
 import { buyStoreItem, isStoreStopFloor, runGold, type StoreItemId } from './run-store-rules';
@@ -364,11 +365,15 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         title: 'The bomb and the last pair',
         mechanic: 'A bomb never takes the floor\'s last pair: that pair is the clear.',
         graphMechanicIds: ['power.bomb', 'objective.floor_clear'],
-        tryThis: 'One pair left. Flip a card: the Bomb stays dark. Match it instead.',
+        tryThis: 'One real pair and a joker left. Flip a card: the Bomb stays dark. Match the pair instead.',
         build: () =>
             room(['a:e b:t', 'a:e b:t'], {
                 run: { bombCharges: 1 },
-                tiles: (tiles) => tiles.map((t) => (t.pairKey === 'a' ? { ...t, state: 'matched' as const } : t))
+                board: { matchedPairs: 1, rows: 3 },
+                tiles: (tiles) => [
+                    ...tiles.map((t) => (t.pairKey === 'a' ? { ...t, state: 'matched' as const } : t)),
+                    tile('joker', WILD_PAIR_KEY, 'bone')
+                ]
             }),
         script: [
             { step: { do: 'flip', tileId: 'b-1' }, says: 'the bomb has no target on the last pair', expect: (r) => (bombTargetTileId(r) === null ? null : 'the bomb would take the last pair') }
@@ -945,8 +950,15 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                 says: 'floor 2 carries Short memorize, and its window is 350 ms under the same floor without it',
                 expect: (r) => {
                     if (!r.activeMutators.includes('short_memorize')) return `floor 2 carries ${r.activeMutators.join(',') || 'nothing'}`;
-                    const without = getMemorizeDurationForRun(withoutMutators(r), 2);
-                    return without - (r.timerState.memorizeRemainingMs ?? without) === 350 ? null : `window ${r.timerState.memorizeRemainingMs} against ${without}`;
+                    const without = getMemorizeDurationForRun({
+                        ...r,
+                        activeMutators: r.activeMutators.filter((mutator) => mutator !== 'short_memorize')
+                    }, 2);
+                    const withShort = getMemorizeDurationForRun(r, 2);
+                    const welcomeBonus = FLOOR_CURIOS.find((curio) => curio.id === r.floorCurioId)?.effect.memorizeBonusMs ?? 0;
+                    const expectedWindow = Math.max(MIN_CURIO_MEMORIZE_MS, withShort + welcomeBonus);
+                    return without - withShort === 350 && r.timerState.memorizeRemainingMs === expectedWindow
+                        ? null : `window ${r.timerState.memorizeRemainingMs} against ${expectedWindow} after the resident's welcome`;
                 }
             }
         ]

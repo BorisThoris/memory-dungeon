@@ -1,5 +1,6 @@
 import type { Tile, TileSuit } from './contracts';
 import { isSingletonUtilityPairKey } from './tile-identity';
+import { createMulberry32, hashStringToSeed, pickRngIndex, shuffleWithRng } from './rng';
 
 /**
  * The authored floors.
@@ -8,9 +9,9 @@ import { isSingletonUtilityPairKey } from './tile-identity';
  * does to the board around it (`chunk-break-rules.ts`). That loop has three rules a new player has
  * to meet - a match pops what it is touching, a pop stops at a colour boundary, and a pair pulled
  * apart is yours to remember - and a procedural deal makes each of them *likely* on the first
- * floors, not certain. So the grid and the suit of every cell are written here once and are the
- * same for everyone; what the symbols are and which pair lands where still come from the run seed.
- * Thesis §51.
+ * floors, not certain. Rules 50 keeps those lessons as constraints on a seeded layout, with
+ * separated pair halves. The constants below are the historical rules-49 shapes and fallbacks;
+ * current runs no longer repeat one colour map on each opening floor. Thesis §51.
  *
  * **Gen 205 redrew all three, because they were the most arranged boards in the game.**
  *
@@ -131,10 +132,96 @@ const FLOOR_THREE: AuthoredFloorLayout = {
 
 const LAYOUTS: readonly AuthoredFloorLayout[] = [FLOOR_ONE, FLOOR_TWO, FLOOR_THREE];
 
-export const authoredFloorLayout = (level: number): AuthoredFloorLayout | null =>
-    LAYOUTS.find((layout) => layout.level === level) ?? null;
+const distance = (a: number, b: number, columns: number): number =>
+    Math.abs(a % columns - b % columns) + Math.abs(Math.floor(a / columns) - Math.floor(b / columns));
+
+const touches = (a: number, b: number, columns: number): boolean =>
+    a !== b && Math.abs(a % columns - b % columns) <= 1 &&
+    Math.abs(Math.floor(a / columns) - Math.floor(b / columns)) <= 1;
+
+/** From any matched pair, the Clean wave can reach every other cell in two steps. */
+const withinOpeningReach = (cells: number[], columns: number): boolean =>
+    cells.every((a, index) => cells.slice(index + 1).every((b) => cells.every((target) =>
+        [a, b].some((source) => source === target || touches(source, target, columns) ||
+            cells.some((via) => touches(source, via, columns) && touches(via, target, columns))))));
+
+/** Keep the opening lessons, but draw their geometry anew for each run. Historical deals stay fixed. */
+export const authoredFloorLayout = (
+    level: number,
+    runSeed?: number,
+    rulesVersion = 50
+): AuthoredFloorLayout | null => {
+    const base = LAYOUTS.find((layout) => layout.level === level) ?? null;
+    if (!base || runSeed === undefined || rulesVersion < 50) return base;
+    const rng = createMulberry32(hashStringToSeed(`opening-layout:${rulesVersion}:${runSeed}:${level}`));
+    // Floor three's isolated half makes valid maps rarer. Bound the work and keep a known-valid
+    // separated fallback, so even an unlucky seed receives the lesson without adjacent twins.
+    const attempts = level === 3 ? 8192 : level === 2 ? 1024 : 256;
+    for (let attempt = 0; attempt < attempts; attempt += 1) {
+        const cells = shuffleWithRng(rng, [...base.cells]);
+        let splitCells: [number, number] | null = null;
+        let valid = true;
+        for (const suit of new Set(cells)) {
+            let own = cells.flatMap((s, index) => s === suit ? [index] : []);
+            if (base.splitCells && suit === E) {
+                const isolated = own.filter((a) => !own.some((b) => touches(a, b, base.columns)));
+                if (isolated.length !== 1) { valid = false; break; }
+                own = own.filter((cell) => cell !== isolated[0]);
+                const near = own.filter((cell) => distance(cell, isolated[0]!, base.columns) >= 3 &&
+                    separatedCellPairs(own.filter((other) => other !== cell), base.columns, rng)
+                        .every(([a, b]) => !touches(a!, b!, base.columns)));
+                if (near.length === 0) { valid = false; break; }
+                splitCells = [near[pickRngIndex(rng, near.length)]!, isolated[0]!];
+            }
+            if (!withinOpeningReach(own, base.columns)) { valid = false; break; }
+            const nearCell = splitCells?.[0];
+            const free = nearCell !== undefined && suit === E ? own.filter((cell) => cell !== nearCell) : own;
+            if (separatedCellPairs(free, base.columns, rng).some(([a, b]) => touches(a!, b!, base.columns))) {
+                valid = false; break;
+            }
+        }
+        if (!valid) continue;
+        // Reject walls and checkerboards, without prescribing a particular colour pattern.
+        let edges = 0;
+        let same = 0;
+        cells.forEach((suit, a) => {
+            for (const b of [a % base.columns < base.columns - 1 ? a + 1 : -1, a + base.columns]) {
+                if (b < 0 || b >= cells.length) continue;
+                edges += 1;
+                if (cells[b] === suit) same += 1;
+            }
+        });
+        if (same / edges < 0.15 || same / edges > 0.55) continue;
+        return { ...base, cells, splitCells };
+    }
+    return level === 3 ? {
+        ...base,
+        cells: [T, M, E, E, E, M, T, M, T, E, E, M, T, E],
+        splitCells: [4, 10]
+    } : base;
+};
+
+/** Exhaustive matching is tiny here (at most six free cells per suit). Choose randomly among
+ * equally good deals, minimizing close pairs across the whole suit instead of trapping the last pair. */
+const separatedCellPairs = (cells: readonly number[], columns: number, rng: () => number): number[][] => {
+    const arrangements = (free: readonly number[]): number[][][] => {
+        if (free.length === 0) return [[]];
+        const first = free[0]!;
+        return free.slice(1).flatMap((second) => arrangements(free.filter((cell) => cell !== first && cell !== second))
+            .map((rest) => [[first, second], ...rest]));
+    };
+    const candidates = arrangements(cells);
+    const cost = (pairs: number[][]): number => pairs.reduce((sum, [a, b]) =>
+        sum + (touches(a!, b!, columns) ? 10 : 0) + Math.max(0, 3 - distance(a!, b!, columns)), 0);
+    const bestCost = Math.min(...candidates.map(cost));
+    const best = candidates.filter((pairs) => cost(pairs) === bestCost);
+    return shuffleWithRng(rng, best[pickRngIndex(rng, best.length)]!)
+        .map((pair) => shuffleWithRng(rng, pair));
+};
 
 export interface LayAuthoredFloorOptions {
+    runSeed?: number;
+    rulesVersion?: number;
     /**
      * Pairs that must not be the split pair: the cursed pair, which a break never takes, and a
      * findable pair, which a break claims at most one of. Either in the split slot would make the
@@ -147,9 +234,9 @@ export interface LayAuthoredFloorOptions {
  * Lays the tiles of a generated floor into an authored layout.
  *
  * Every real pair takes the suit of the cells it is laid into, so both halves share it. Pairs are
- * assigned to suits in the order the seed shuffled them, and tiles fill their suit's cells in
- * that same shuffled order, so the seed decides which pair sits where and no new randomness is
- * introduced. Singletons the floor carries (a wild) are not part of the shape: they go
+ * assigned to suits in the order the seed shuffled them. Rules 50 then chooses separated cell
+ * pairings with a dedicated seeded stream; older versions retain their shuffled fill order.
+ * Singletons the floor carries (a wild) are not part of the shape: they go
  * after the authored cells, in a trailing row.
  *
  * Returns null when the tiles do not fit the layout - a different pair count, or a pair with
@@ -185,6 +272,7 @@ export const layAuthoredFloorTiles = (
         if (splitCells.includes(cell)) return;
         freeCellsBySuit.set(suit, [...(freeCellsBySuit.get(suit) ?? []), cell]);
     });
+    if ([...freeCellsBySuit.values()].some((cells) => cells.length % 2 !== 0)) return null;
 
     const suitByPairKey = new Map<string, TileSuit>();
     const cellsByPairKey = new Map<string, number[]>();
@@ -205,6 +293,16 @@ export const layAuthoredFloorTiles = (
     }
     if (remaining.length > 0) {
         return null;
+    }
+
+    if ((options.rulesVersion ?? 49) >= 50) {
+        const rng = createMulberry32(hashStringToSeed(`opening-pairs:${options.rulesVersion}:${options.runSeed ?? 0}:${layout.level}`));
+        for (const [suit, cells] of freeCellsBySuit) {
+            const pairs = separatedCellPairs(cells, layout.columns, rng);
+            const keys = shuffleWithRng(rng, [...suitByPairKey.keys()].filter((key) =>
+                suitByPairKey.get(key) === suit && !cellsByPairKey.has(key)));
+            keys.forEach((key, index) => cellsByPairKey.set(key, pairs[index]!));
+        }
     }
 
     const placed = new Array<Tile | null>(layout.cells.length).fill(null);

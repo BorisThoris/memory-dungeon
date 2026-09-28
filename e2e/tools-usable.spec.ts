@@ -1,5 +1,9 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect as baseExpect, test, type Page } from '@playwright/test';
 import { buildVisualSaveJson, gotoWithSaveAndQuery } from './visualScreenHelpers';
+
+// A software-rendered WebGL frame can delay even a successful state read past five seconds.
+// Keep the actual inventory/board assertions, with the same deadline as room readiness.
+const expect = baseExpect.configure({ timeout: 30_000 });
 
 /**
  * Every tool, used the way a player uses it: its dock button pressed, its target picked on the board
@@ -89,9 +93,14 @@ test.describe('Every tool can be used from the dock', () => {
 
     test('peek: press Peek, pick a card, it shows', async ({ page }) => {
         await openRoom(page, 'peek');
-        await tool(page, /peek/i).click();
         await pick(page, 'a-1');
-        await expect.poll(async () => (await read(page)).peeked).toContain('a-1');
+        await expect(page.getByTestId('tool-peek')).toBeDisabled();
+        await expect(page.getByTestId('tool-peek')).toHaveAccessibleName('Finish the current flip first');
+        await pick(page, 'a-2');
+        await expect.poll(async () => (await read(page)).status, { timeout: 30_000 }).toBe('playing');
+        await tool(page, /peek/i).click();
+        await pick(page, 'b-1');
+        await expect.poll(async () => (await read(page)).peeked, { timeout: 30_000 }).toContain('b-1');
         expect((await read(page)).peeks).toBe(0);
     });
 

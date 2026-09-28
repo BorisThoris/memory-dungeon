@@ -2,10 +2,11 @@ import { describe, expect, it } from 'vitest';
 
 import { applyBomb, bombTargetTileId } from './board-power-actions';
 import type { RunState } from './contracts';
-import { flipTile } from './game';
+import { flipTile, resolveBoardTurn } from './game';
 import { reduceGameplayCommand } from './gameplay-core';
 import { createGameplayBombCommand } from './gameplay-core-contracts';
 import { makeRun, makeTile } from './test/game-fixtures';
+import { WILD_PAIR_KEY } from './tile-identity';
 
 /*
  * The bomb (`applyBomb`, 2026-09-24): bought at the store stop, spent on the one card face up. Its
@@ -64,5 +65,20 @@ describe('the bomb', () => {
         expect(accepted.events.map((event) => event.type)).toEqual(['board.bombed', 'feedback.requested']);
         const refused = reduceGameplayCommand(board(), createGameplayBombCommand('bomb:test:2', 'b-2'));
         expect(refused.accepted).toBe(false);
+    });
+
+    it('does not count a wild joker as another pair and strand the floor', () => {
+        const run = makeRun([
+            makeTile('a-1', 'a', 'A'), makeTile('a-2', 'a', 'A'),
+            makeTile('joker', WILD_PAIR_KEY, '*')
+        ], { bombCharges: 1 });
+        run.board = { ...run.board!, pairCount: 1 };
+        const flipped = flipTile(run, 'a-1');
+        expect(bombTargetTileId(flipped)).toBeNull();
+        expect(applyBomb(flipped, 'a-1')).toBe(flipped);
+        expect(reduceGameplayCommand(flipped, createGameplayBombCommand('bomb:last-wild', 'a-1')).accepted).toBe(false);
+        const cleared = resolveBoardTurn(flipTile(flipped, 'a-2'));
+        expect(cleared.status).toBe('levelComplete');
+        expect(cleared.bombCharges).toBe(1);
     });
 });

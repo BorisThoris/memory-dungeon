@@ -128,8 +128,9 @@ interface TileBoardSceneProps {
     focusedTileId?: string | null;
     /** Manhattan distance-to-pair badge on flipped tiles (assist). */
     pairProximityHintsEnabled?: boolean;
-    /** Early floors: show pair-index badge on hidden backs (matches DOM tutorial chrome). */
+    /** Active tutorial only: show pair-index badges on the prompted pair's hidden backs. */
     showTutorialPairMarkers?: boolean;
+    onboardingTargetTileIds?: readonly string[];
     /** Presentation mutators: match `GameScreen` / `TileBoard` props (forwarded for WebGL parity). */
     wideRecallInPlay?: boolean;
     silhouetteDuringPlay?: boolean;
@@ -192,7 +193,8 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     silhouetteDuringPlay = false,
     nBackAnchorPairKey = null,
     nBackMutatorActive = false,
-    showTutorialPairMarkers = true,
+    showTutorialPairMarkers = false,
+    onboardingTargetTileIds,
     shiftingSpotlightActive = false,
     peekPowerVisualActive = false,
     peekEligibleTileIds = EMPTY_TILE_IDS,
@@ -299,6 +301,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
             runStatus,
             shiftingSpotlightActive,
             showTutorialPairMarkers,
+            onboardingTargetTileIds,
             silhouetteDuringPlay,
             stickyBlockedTileId,
             tileSwapEligibleTileIds,
@@ -336,6 +339,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         runStatus,
         shiftingSpotlightActive,
         showTutorialPairMarkers,
+        onboardingTargetTileIds,
         silhouetteDuringPlay,
         stickyBlockedTileId,
         tileSwapEligibleTileIds,

@@ -19,8 +19,9 @@
  *      true when it was written and became a lie the moment Gen 184 shipped. The current generation
  *      is the highest one the repository mentions, so this needs no constant to keep up to date.
  */
-import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { extname, join, relative, sep } from 'node:path';
+import { execFileSync } from 'node:child_process';
+import { existsSync, readFileSync, statSync } from 'node:fs';
+import { extname, join } from 'node:path';
 
 const ROOT = join(import.meta.dirname, '..');
 const SKIPPED_DIRECTORIES = new Set([
@@ -47,16 +48,6 @@ const GONE_MARKERS =
 /** A generation that has already happened cannot still be going to do something. */
 const PENDING_PHRASES =
     /\b(leaves?|goes?|lands?|arrives?|ships?|will (?:be|leave|go|land|ship)|planned|to be (?:removed|dropped|cut))\b[^.|]{0,40}\bin Gen (\d+)/gi;
-
-const collectFiles = (directory: string, out: string[] = []): string[] => {
-    for (const entry of readdirSync(directory)) {
-        if (SKIPPED_DIRECTORIES.has(entry)) continue;
-        const full = join(directory, entry);
-        if (statSync(full).isDirectory()) collectFiles(full, out);
-        else out.push(full);
-    }
-    return out;
-};
 
 export interface GenerationClaimIssue {
     readonly file: string;
@@ -90,13 +81,23 @@ export interface RepositoryFile {
  * record was never found and the audit reported every claim in the repository as stale.
  */
 export const readRepositoryFiles = (): RepositoryFile[] =>
-    collectFiles(ROOT).map((file) => ({
-        path: relative(ROOT, file).split(sep).join('/'),
-        text: readFileSync(file, 'utf8')
-    }));
+    [...new Set(execFileSync('git', ['ls-files', '--cached', '--others', '--exclude-standard', '-z'], {
+        cwd: ROOT,
+        encoding: 'utf8',
+        maxBuffer: 16 * 1024 * 1024
+    }).split('\0').filter(Boolean))]
+        .filter((file) => !file.split('/').some((part) => SKIPPED_DIRECTORIES.has(part)))
+        .filter((file) => existsSync(join(ROOT, file)) && statSync(join(ROOT, file)).isFile())
+        .map((file) => ({
+            path: file,
+            // Keep binary paths available for reference checks, but never decode artwork/audio
+            // as source. Walking local build outputs and environments used to exhaust the heap.
+            text: extname(file) === '.md' || SOURCE_EXTENSIONS.has(extname(file))
+                ? readFileSync(join(ROOT, file), 'utf8') : ''
+        }));
 
 /**
- * Paths a claim may name that `collectFiles` deliberately does not walk.
+ * Paths a claim may name that `readRepositoryFiles` deliberately does not scan.
  *
  * Skipping a directory is about not READING it - `.ai/repo-model.json` is several megabytes of
  * generated JSON with no prose in it worth scanning. But the skip also removed those paths from

@@ -69,6 +69,8 @@ vi.mock('./TileBoard', () => ({
                 armedPerkPayoff?: string | null;
             };
             guidedTargetTileIds?: string[];
+            showTutorialPairMarkers?: boolean;
+            onboardingTargetTileIds?: readonly string[];
             onViewportRestChange?: (atRest: boolean) => void;
             viewportResetToken?: number;
             recoveryContext?: {
@@ -126,6 +128,8 @@ vi.mock('./TileBoard', () => ({
                 data-armed-perk-label={props.chainContext?.armedPerkLabel ?? 'none'}
                 data-armed-perk-payoff={props.chainContext?.armedPerkPayoff ?? 'none'}
                 data-guided-targets={(props.guidedTargetTileIds ?? []).join(',')}
+                data-tutorial-markers={String(props.showTutorialPairMarkers ?? false)}
+                data-tutorial-targets={(props.onboardingTargetTileIds ?? []).join(',')}
                 data-recovery-action={props.recoveryContext?.action ?? 'none'}
                 data-recovery-detail={props.recoveryContext?.detail ?? 'none'}
                 data-recovery-impact-cue={props.recoveryContext?.impactCue ?? 'none'}
@@ -225,6 +229,40 @@ describe('GameScreen (OVR-014)', () => {
                 ...BOARD_FLOATER_POP_CLEAR
             });
         });
+    });
+
+    it('keeps answers hidden after onboarding is dismissed even before the powers tutorial is seen', () => {
+        const saveData = { ...createDefaultSaveData(), onboardingDismissed: true, powersFtueSeen: false };
+        useAppStore.setState({ saveData });
+        const run = finishMemorizePhase(createNewRun(0, { runSeed: 42_001 }));
+        render(<GameScreen achievements={[]} run={run} />);
+        expect(screen.getByTestId('tile-board-stub')).toHaveAttribute('data-tutorial-markers', 'false');
+        expect(screen.getByTestId('tile-board-stub')).toHaveAttribute('data-tutorial-targets', '');
+    });
+
+    it('disables Peek during an open flip instead of promising a peek that becomes a normal second flip', () => {
+        const run = finishMemorizePhase(createNewRun(0, { runSeed: 42_001 }));
+        const openRun = { ...run, peekCharges: 1, board: { ...run.board!, flippedTileIds: [run.board!.tiles[0]!.id] } };
+        const { rerender } = render(<GameScreen achievements={[]} run={openRun} />);
+        expect(screen.getByTestId('tool-peek')).toBeDisabled();
+        expect(screen.getByTestId('tool-peek')).toHaveAccessibleName('Finish the current flip first');
+        rerender(<GameScreen achievements={[]} run={{ ...run, peekCharges: 1 }} />);
+        expect(screen.getByTestId('tool-peek')).toBeEnabled();
+        act(() => useAppStore.setState({ peekModeArmed: true }));
+        expect(screen.getByTestId('tool-swap')).toBeDisabled();
+        expect(screen.getByTestId('tool-swap')).toHaveAccessibleName('Cancel Peek before swapping cards');
+    });
+
+    it('marks only the active guide target and hands back control after two matches', () => {
+        const saveData = { ...createDefaultSaveData(), onboardingDismissed: false, powersFtueSeen: false };
+        useAppStore.setState({ saveData });
+        const run = finishMemorizePhase(createNewRun(0, { runSeed: 42_001, onboardingSafeFirstFloor: true }));
+        const { rerender } = render(<GameScreen achievements={[]} run={run} />);
+        const board = screen.getByTestId('tile-board-stub');
+        expect(board).toHaveAttribute('data-tutorial-markers', 'true');
+        expect(board.getAttribute('data-tutorial-targets')!.split(',')).toHaveLength(2);
+        rerender(<GameScreen achievements={[]} run={{ ...run, board: { ...run.board!, matchedPairs: 2 } }} />);
+        expect(board).toHaveAttribute('data-tutorial-markers', 'false');
     });
 
     it('holds the board for a breath when the last pair resolves, then shows the floor-clear beat, then goes on by itself', () => {

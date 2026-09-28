@@ -11,6 +11,7 @@ export {
 } from './board-power-actions';
 
 export {
+    canPeekAtBoard,
     canRegionShuffle,
     canRegionShuffleRow,
     canShuffleBoard,

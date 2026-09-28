@@ -110,4 +110,13 @@ describe('the generation claim audit', () => {
         expect(report.claims).toBeGreaterThan(500);
         expect(report.files).toBeGreaterThan(90);
     }, WHOLE_REPOSITORY_TIMEOUT_MS);
+
+    it('keeps asset paths without decoding binaries or scanning ignored build environments', () => {
+        const files = repository();
+        const images = files.filter((file) => file.path.endsWith('.png'));
+        expect(images.length).toBeGreaterThan(0);
+        expect(images.every((file) => file.text === '')).toBe(true);
+        // A few reviewed screenshots under output/ are tracked; keep those paths, but not local artifacts.
+        expect(files.some((file) => /^(?:dist-build|tmp|\.venv-audio)\//.test(file.path))).toBe(false);
+    }, WHOLE_REPOSITORY_TIMEOUT_MS);
 });

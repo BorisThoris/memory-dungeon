@@ -131,15 +131,17 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
             : null;
     const tileCount = layoutTiles.length;
     /*
-     * The first three floors are authored (`authored-floors.ts`): the grid and the suit of every
-     * cell are fixed so the pop, the boundary and the reach are each guaranteed where a new
-     * player meets them. Symbols and which pair sits where still come from the seed. A board the
+     * The first three floors preserve authored lessons (`authored-floors.ts`): from rules 50 their
+     * suit geometry and separated pairs are seeded too, so the pop, boundary and isolated pair
+     * remain readable without repeating a fixed opening. Historical rules retain their shapes. A board the
      * layout cannot hold - it never happens on the curve, but the fallback is the honest deal,
      * not a wrong shape - is dealt the way every later floor is.
      */
-    const authored = authoredFloorLayout(level);
+    const authored = authoredFloorLayout(level, runSeed, rulesVersion);
     const authoredTiles = authored
         ? layAuthoredFloorTiles(layoutTiles, authored, {
+              runSeed,
+              rulesVersion,
               reservedPairKeys: [
                   ...(cursedPairKey ? [cursedPairKey] : []),
                   ...layoutTiles.filter((tile) => tile.findableKind != null).map((tile) => tile.pairKey)

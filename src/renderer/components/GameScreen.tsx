@@ -14,6 +14,7 @@ import { formatLevelResultObjectiveLine } from '../../shared/secondary-objective
 import { runFilteredArray, runFilteredStringArray } from '../../shared/run-array-guards';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import {
+    canPeekAtBoard,
     canRegionShuffle,
     canRegionShuffleRow,
     canShuffleBoard
@@ -42,6 +43,7 @@ import StoreSheetRows from './StoreSheetRows';
 import {
     BOARD_SHUFFLE_COPY,
     FLASH_PAIR_COPY,
+    PEEK_COPY,
     ROW_SHUFFLE_COPY,
     TILE_SWAP_COPY
 } from '../copy/boardPowerCopy';
@@ -390,16 +392,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     } = useGameScreenBoardVisualSettings();
     const viewportWantsMobileCamera = compactTouchChrome;
     const cameraViewportMode = deriveCameraViewportMode(settingsCameraViewportModePreference, viewportWantsMobileCamera);
-    const showTutorialPairMarkers = useMemo(
-        () =>
-            Boolean(
-                run.board &&
-                    !saveData.powersFtueSeen &&
-                    run.board.level <= TUTORIAL_PAIR_MARKER_MAX_LEVEL
-            ),
-        [run.board, saveData.powersFtueSeen]
-    );
     const onboardingStep = getPlayableOnboardingStep(run, saveData);
+    const showTutorialPairMarkers = onboardingStep != null;
     const onboardingBoardTargetIds = useMemo(() => onboardingStep?.targetTileIds ?? [], [onboardingStep]);
     const {
         boardPinMode,
@@ -1270,6 +1264,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const hiddenTileCount = run.board?.tiles.filter((tile) => tile.state === 'hidden').length ?? 0;
     const tileSwapDisabled = Boolean(
         run.activeContract?.noShuffle ||
+            peekModeArmed ||
             !run.board ||
             run.board.flippedTileIds.length > 0 ||
             hiddenTileCount < 2 ||
@@ -1294,7 +1289,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         return null;
     }
     const shuffleDisabled = !canShuffleBoard(run);
-    // A row needs two hidden tiles to be worth shuffling, so the button is only live when at least
+    // A row needs different hidden faces to be worth shuffling, so the button is only live when at least
     // one row on the board qualifies — otherwise the press would spend a charge on nothing.
     const rowCount = Math.ceil(run.board.tiles.length / run.board.columns);
     const hasShufflableRow =
@@ -1316,6 +1311,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         ? TILE_SWAP_COPY.scholarContract
         : run.board.flippedTileIds.length > 0
           ? TILE_SWAP_COPY.pendingFlip
+          : peekModeArmed
+            ? TILE_SWAP_COPY.peekArmed
           : hiddenTileCount < 2
             ? TILE_SWAP_COPY.needTwoHidden
               : run.regionShuffleCharges < 1
@@ -1406,7 +1403,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 glyph: RUN_SHELL_GLYPHS.peek,
                 charges: run.peekCharges,
                 armed: peekModeArmed,
-                title: 'Peek at a hidden tile',
+                disabled: !peekModeArmed && (!canPeekAtBoard(run) || boardPinMode || tileSwapArmed),
+                title: run.board.flippedTileIds.length > 0
+                    ? PEEK_COPY.pendingFlip
+                    : boardPinMode ? PEEK_COPY.pinArmed
+                    : tileSwapArmed ? PEEK_COPY.swapArmed
+                    : run.status !== 'playing' ? PEEK_COPY.unavailable
+                    : !canPeekAtBoard(run) ? PEEK_COPY.noTargets
+                    : PEEK_COPY.idle,
                 onClick: togglePeekMode
             },
             {
@@ -1616,6 +1620,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 debugPeekActive={run.debugPeekActive}
                                 dimmedTileIds={focusDimmedTileIds}
                                 guidedTargetTileIds={onboardingBoardTargetIds}
+                                onboardingTargetTileIds={onboardingBoardTargetIds}
                                 cardHeat={runChainMeter(run).fill}
                                 chainContext={{
                                     currentStreak: run.stats.currentStreak,

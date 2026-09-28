@@ -5,6 +5,7 @@ import type {
     Tile
 } from './contracts';
 import {
+    canPeekAtBoard,
     canRegionShuffle,
     canRegionShuffleRow,
     canShuffleBoard,
@@ -45,6 +46,28 @@ const run = (overrides: Partial<RunState> = {}): RunState => ({
 } as RunState);
 
 describe('board power availability rules', () => {
+    it('offers Peek only with a clear flip state and an unrevealed hidden target', () => {
+        const state = run({ peekCharges: 1, peekRevealedTileIds: [] });
+        expect(canPeekAtBoard(state)).toBe(true);
+        expect(canPeekAtBoard({ ...state, board: { ...state.board!, flippedTileIds: ['a1'] } })).toBe(false);
+        expect(canPeekAtBoard({ ...state, status: 'resolving' })).toBe(false);
+        expect(canPeekAtBoard({ ...state, peekCharges: 0 })).toBe(false);
+        expect(canPeekAtBoard({ ...state, peekRevealedTileIds: state.board!.tiles.map((tile) => tile.id) })).toBe(false);
+    });
+    it('refuses a current-rules row of twins but permits a row with different hidden faces', () => {
+        const state = run({ runRulesVersion: 50, board: board([
+            tile('a1', 'A'), tile('a2', 'A'), tile('b1', 'B'), tile('b2', 'B')
+        ], 2) });
+        expect(canRegionShuffleRow(state, 0)).toBe(false);
+        expect(canRegionShuffle(state)).toBe(false);
+        expect(canShuffleBoard({ ...state, weakerShuffleMode: 'rows_only' })).toBe(false);
+        const mixed = { ...state, board: board([
+            tile('a1', 'A'), tile('b1', 'B'), tile('a2', 'A'), tile('b2', 'B')
+        ], 2) };
+        expect(canRegionShuffleRow(mixed, 0)).toBe(true);
+        expect(canShuffleBoard({ ...mixed, weakerShuffleMode: 'rows_only' })).toBe(true);
+        expect(canRegionShuffleRow({ ...state, runRulesVersion: 49 }, 0)).toBe(true);
+    });
     it('requires playing state, clear flips, a shuffle charge, and enough hidden pairs for shuffle', () => {
         expect(canShuffleBoard(run())).toBe(true);
         expect(canShuffleBoard(run({ status: 'memorize' }))).toBe(false);

@@ -10,9 +10,18 @@ export const ROW_SHUFFLE_COPY = {
     idle: 'Shuffle one row of hidden tiles (uses 1 row/swap charge)',
     label: 'Row',
     noCharges: 'No row/swap charges',
-    noRow: 'Need a row with two hidden tiles',
+    noRow: 'Need a row with hidden cards from different pairs',
     pendingFlip: 'Finish the current flip first',
     scholarContract: 'Scholar contract: row shuffle disabled'
+} as const;
+
+export const PEEK_COPY = {
+    idle: 'Peek at a hidden tile',
+    pendingFlip: 'Finish the current flip first',
+    pinArmed: 'Turn off Pin before peeking',
+    swapArmed: 'Finish or cancel Swap before peeking',
+    unavailable: 'Peek is available while playing',
+    noTargets: 'No hidden cards left to peek at'
 } as const;
 
 /** Tile swap: the other half of the row/swap charge. */
@@ -21,6 +30,7 @@ export const TILE_SWAP_COPY = {
     idle: 'Swap two hidden tiles (uses 1 row/swap charge)',
     needTwoHidden: 'Need two hidden tiles to swap',
     noCharges: 'No row/swap charges',
+    peekArmed: 'Cancel Peek before swapping cards',
     pendingFlip: 'Finish the current flip first',
     scholarContract: 'Scholar contract: tile swap disabled',
     secondTile: 'Tap a second hidden tile to swap positions'

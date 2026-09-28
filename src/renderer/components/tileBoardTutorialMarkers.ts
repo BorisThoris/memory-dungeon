@@ -3,7 +3,8 @@ import { WILD_PAIR_KEY } from '../../shared/tile-identity';
 
 export const getTutorialPairOrdinalByKey = (
     board: BoardState,
-    showTutorialPairMarkers: boolean
+    showTutorialPairMarkers: boolean,
+    targetTileIds?: readonly string[]
 ): Map<string, number> | null => {
     if (!showTutorialPairMarkers) {
         return null;
@@ -12,6 +13,7 @@ export const getTutorialPairOrdinalByKey = (
     const keys = [
         ...new Set(
             board.tiles
+                .filter((tile) => targetTileIds === undefined || targetTileIds.includes(tile.id))
                 .map((tile) => tile.pairKey)
                 .filter((key) => key !== WILD_PAIR_KEY)
         )

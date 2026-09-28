@@ -74,6 +74,28 @@ const run = (overrides: Partial<RunState> = {}): RunState => ({
 
 describe('board power actions', () => {
 
+    it('always changes the pair arrangement when spending a current-rules shuffle', () => {
+        for (let seed = 1; seed <= 100; seed += 1) {
+            const state = run({
+                runSeed: seed, runRulesVersion: 50,
+                board: board([tile('a1', 'A'), tile('b1', 'B'), tile('a2', 'A'), tile('b2', 'B')])
+            });
+            const keys = state.board!.tiles.map((t) => t.pairKey);
+            for (const shuffled of [applyShuffle(state), applyRegionShuffle(state, 0), applyShuffle({ ...state, weakerShuffleMode: 'rows_only' })]) {
+                expect(shuffled.board!.tiles.map((t) => t.pairKey), `seed ${seed}`).not.toEqual(keys);
+                expect(shuffled.board!.tiles.map((t) => t.id).sort()).toEqual(state.board!.tiles.map((t) => t.id).sort());
+            }
+            expect(applyRegionShuffle(state, 0).board!.tiles.slice(2)).toEqual(state.board!.tiles.slice(2));
+        }
+    });
+
+    it('does not spend row charges moving indistinguishable twins or a row-only shuffle with no useful row', () => {
+        const state = run({ runRulesVersion: 50 });
+        expect(applyRegionShuffle(state, 0)).toBe(state);
+        const rowsOnly = { ...state, weakerShuffleMode: 'rows_only' as const };
+        expect(applyShuffle(rowsOnly)).toBe(rowsOnly);
+    });
+
 
 
 

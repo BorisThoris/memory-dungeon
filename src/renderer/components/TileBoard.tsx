@@ -675,7 +675,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         wardPairKey = null,
         bountyPairKey = null,
         runStatus = 'playing',
-        showTutorialPairMarkers = true,
+        showTutorialPairMarkers = false,
+        onboardingTargetTileIds,
         pairProximityHintsEnabled = true,
         onTileSelect,
         shiftingSpotlightActive = false,
@@ -3340,6 +3341,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         shuffleMotionDeadlineMs={shuffleMotionDeadlineMs}
                                         shuffleStaggerTileCount={shuffleStaggerTileCount}
                                         showTutorialPairMarkers={showTutorialPairMarkers}
+                                        onboardingTargetTileIds={onboardingTargetTileIds}
                                         silhouetteDuringPlay={silhouetteDuringPlay}
                                         wideRecallInPlay={wideRecallInPlay}
                                         shiftingSpotlightActive={shiftingSpotlightActive}
