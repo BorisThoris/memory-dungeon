@@ -256,6 +256,11 @@ describe('tileBoardRimVisualState', () => {
         expect(state.motion).toBe(tier.motion);
         expect(state.intensity).toBe(tier.baseIntensity);
         expect(state.visible).toBe(true);
+        const target = createFlameTarget();
+        applyMatchedVictoryFlameVisualState({ elapsedTime: 45, mat: target.material, mesh: target.mesh,
+            matchedVictoryBurst: 0, state });
+        expect(target.material.uniforms.uTime.value).toBe(0);
+        target.dispose();
     });
 
     it('hides matched victory flame when low quality or not persistently matched', () => {

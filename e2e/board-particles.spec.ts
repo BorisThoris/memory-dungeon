@@ -8,8 +8,8 @@ const canvas = (page: Page) => page.getByTestId('tile-board-stage').locator('can
 const count = async (page: Page, key: string): Promise<number> =>
     Number(await canvas(page).getAttribute(`data-particle-${key}`));
 
-const pick = async (page: Page, tileId: string): Promise<void> => {
-    const point = await page.evaluate((id) => {
+const cardPoint = async (page: Page, tileId: string) =>
+    page.evaluate((id) => {
         const w = window as unknown as {
             __e2eGetTileIdAtGrid1: (r: number, c: number) => string | null;
             __e2eGetTileClientRectAtGrid1: (r: number, c: number) => { left: number; top: number; width: number; height: number } | null;
@@ -21,7 +21,16 @@ const pick = async (page: Page, tileId: string): Promise<void> => {
         }
         throw new Error(`No rendered card ${id}`);
     }, tileId);
-    await page.mouse.click(point.x, point.y);
+const pick = async (page: Page, tileId: string): Promise<void> => {
+    await expect.poll(async () => {
+        const point = await cardPoint(page, tileId);
+        await page.mouse.click(point.x, point.y);
+        return page.evaluate(async (id) => {
+            const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+            const state = useAppStore.getState().run?.board?.tiles.find((tile) => tile.id === id)?.state;
+            return state !== undefined && state !== 'hidden';
+        }, tileId);
+    }).toBe(true);
 };
 
 for (const reduced of [false, true]) {
@@ -42,6 +51,34 @@ for (const reduced of [false, true]) {
             await expect(page.getByTestId('tool-bomb')).toBeEnabled({ timeout: 150_000 });
             await expect.poll(() => count(page, 'active')).toBe(0);
             expect(await count(page, 'bomb-bursts')).toBe(0);
+            const hover = await cardPoint(page, 'a-1');
+            await page.mouse.move(hover.x, hover.y);
+            if (reduced) {
+                await page.waitForTimeout(500);
+                expect(await count(page, 'rim-bursts')).toBe(0);
+            } else {
+                await expect.poll(async () => {
+                    // Follow the card while its entrance settles; one early point can miss the moving slab.
+                    const point = await cardPoint(page, 'a-1');
+                    await page.mouse.move(point.x, point.y);
+                    return count(page, 'rim-bursts');
+                }).toBeGreaterThan(0);
+                await page.screenshot({ path: 'output/playwright/particles-rim-focus-4k.png' });
+                await page.keyboard.press('p');
+                const pause = page.getByTestId('game-pause-overlay');
+                await expect(pause).toBeVisible();
+                await expect(canvas(page)).toHaveAttribute('data-particle-paused', 'true');
+                const pausedCount = await count(page, 'rim-bursts');
+                const pausedActive = await count(page, 'active');
+                await page.waitForTimeout(500);
+                expect(await count(page, 'rim-bursts')).toBe(pausedCount);
+                expect(await count(page, 'active')).toBe(pausedActive);
+                await pause.getByRole('button', { name: /^resume$/i }).click();
+                await expect(pause).toBeHidden();
+                await expect(canvas(page)).toHaveAttribute('data-particle-paused', 'false');
+            }
+            await page.mouse.move(0, 0);
+            await expect.poll(() => count(page, 'active')).toBe(0);
             await canvas(page).evaluate((node: HTMLCanvasElement) => {
                 node.dataset.particleAllocationErrors = '[]';
                 node.dataset.particleContextLosses = '0';
@@ -79,8 +116,21 @@ for (const reduced of [false, true]) {
             const flips = await count(page, 'flip-bursts');
             await pick(page, 'a-1');
             await expect.poll(() => count(page, 'flip-bursts')).toBe(flips + (reduced ? 0 : 1));
+            await canvas(page).evaluate((node: HTMLCanvasElement) => {
+                const capture = new MutationObserver(() => {
+                    if (Number(node.dataset.particleMatchBursts) === 0) return;
+                    capture.disconnect();
+                    requestAnimationFrame(() => requestAnimationFrame(() => {
+                        (window as unknown as { __rimMatchFrame: string }).__rimMatchFrame = node.toDataURL();
+                    }));
+                });
+                capture.observe(node, { attributes: true, attributeFilter: ['data-particle-match-bursts'] });
+            });
             await pick(page, 'a-2');
             await expect.poll(() => count(page, 'match-bursts')).toBe(2);
+            await expect.poll(() => page.evaluate(() => Boolean((window as unknown as { __rimMatchFrame?: string }).__rimMatchFrame))).toBe(true);
+            const matchFrame = await page.evaluate(() => (window as unknown as { __rimMatchFrame: string }).__rimMatchFrame);
+            writeFileSync(`output/playwright/particles-rim-match-${reduced ? 'reduced' : '4k'}.png`, Buffer.from(matchFrame.split(',')[1]!, 'base64'));
             await page.screenshot({ path: `output/playwright/particles-match-${reduced ? 'reduced' : '4k'}.png` });
             await expect.poll(() => count(page, 'active')).toBe(0);
             expect(await canvas(page).getAttribute('data-particle-allocation-errors')).toBe('[]');

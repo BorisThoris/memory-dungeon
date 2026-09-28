@@ -85,7 +85,7 @@ export const TileBoardSceneBoardGroup = ({
 }: TileBoardSceneBoardGroupProps) => (
     <group ref={boardGroupRef} rotation={[0, 0, 0]}>
         <TileBoardParticles board={board} compact={compact} graphicsQuality={graphicsQuality}
-            reduceMotion={reduceMotion} runStatus={runStatus} frames={particleFrames} />
+            reduceMotion={reduceMotion} runStatus={runStatus} frames={particleFrames} cardHeat={cardHeat} />
         {graphicsQuality !== 'low' ? (
             <mesh
                 geometry={boardRuneFieldGeometry}

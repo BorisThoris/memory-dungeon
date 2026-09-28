@@ -246,7 +246,7 @@ export const applyMatchedVictoryFlameVisualState = ({
     }
 
     const u = mat.uniforms as unknown as MatchedCardRimFireUniforms;
-    u.uTime.value = elapsedTime;
+    u.uTime.value = state.motion > 0 ? elapsedTime : 0;
     u.uBurst.value = matchedVictoryBurst;
     u.uMotion.value = state.motion;
     u.uSoftness.value = state.softness;

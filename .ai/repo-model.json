@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2750,
-    "codeFileCount": 970,
-    "exportedSymbolCount": 2944,
+    "trackedFileCount": 2752,
+    "codeFileCount": 972,
+    "exportedSymbolCount": 2948,
     "contentItemCount": 10,
     "mechanicCount": 51,
     "stateFieldCount": 92,
-    "relationshipCount": 7652
+    "relationshipCount": 7666
   },
   "inventory": [
     {
@@ -693,8 +693,8 @@
     {
       "path": "docs/gameplay/epic-board-rendering-assists.md",
       "category": "documentation",
-      "bytes": 5492,
-      "sha256": "7491da077f6347b9e494e7206137b4c7e4ed50713d44fac0417f159ea32a43cc"
+      "bytes": 6102,
+      "sha256": "f074fa1dd4c40897f045fe659c12fcfb64e665548e6764c4e02b5ab55265a5d7"
     },
     {
       "path": "docs/gameplay/epic-choose-your-path.md",
@@ -2374,7 +2374,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33561,
-      "sha256": "d634d90adff6600cabc9e3465f1d52d319675f13f4a9ed85515f2a7585cb9122"
+      "sha256": "8af0825b6175f6440fbd250ec222913c122705dae32dfdc9feaebe0c2d58f584"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3771,8 +3771,8 @@
     {
       "path": "e2e/board-particles.spec.ts",
       "category": "test",
-      "bytes": 6683,
-      "sha256": "c1791888335e4149af0b071a2dec58cc39b312c7a458b91befe2ce7f406bda80"
+      "bytes": 9870,
+      "sha256": "f324863186db88ea3fac23883194ba300836737d8fcb4d0014b3943a6ff5e17d"
     },
     {
       "path": "e2e/boardOverlayClearance.ts",
@@ -9073,16 +9073,28 @@
       "sha256": "a1fa996cfd4d44cd5997a044e52af97a80c18b3ee84527657a38040f6c8a5b3c"
     },
     {
+      "path": "src/renderer/components/boardParticleRim.test.ts",
+      "category": "test",
+      "bytes": 2540,
+      "sha256": "d9f7ee451774efdfcb3fd2f583a97258431c03546884f379384622a40a3b99b6"
+    },
+    {
+      "path": "src/renderer/components/boardParticleRim.ts",
+      "category": "source",
+      "bytes": 2769,
+      "sha256": "2dc2f3777dd68725951335e64e77bfc04ff93f3345fb542c7d23fa8a9872035e"
+    },
+    {
       "path": "src/renderer/components/boardParticleSystem.test.ts",
       "category": "test",
-      "bytes": 3407,
-      "sha256": "09df17014a4fd62a9824b811c6a1db598b090a4e90ffb535a96342e9727eb2dd"
+      "bytes": 4991,
+      "sha256": "44425984eb4ddd724856fc1b74a0d58f2e979ef2328ee9001405d2c2b48ccacd"
     },
     {
       "path": "src/renderer/components/boardParticleSystem.ts",
       "category": "source",
-      "bytes": 8193,
-      "sha256": "a585c90efe3e6fc9141ce7f58d0f5ab7cf7bd1b2b05f3f8dfa5b61f307594201"
+      "bytes": 10949,
+      "sha256": "d17cbf868e3a5fd1424a5239ac050acb2370a85af2bc8fab53418ed279cb0387"
     },
     {
       "path": "src/renderer/components/boardRuneFieldMaterial.ts",
@@ -9274,7 +9286,7 @@
       "path": "src/renderer/components/gameplayRenderProfile.ts",
       "category": "source",
       "bytes": 3348,
-      "sha256": "10774369f069e79620cd014b655acfbdcea8162e2a1c5246cbad3a480aae73ff"
+      "sha256": "42f642a8f29b66181fd8ed0d71cef725daca48bf17155ba50d7064b766485b7f"
     },
     {
       "path": "src/renderer/components/GameplayScene.module.css",
@@ -9309,8 +9321,8 @@
     {
       "path": "src/renderer/components/gameplayVisualConfig.ts",
       "category": "source",
-      "bytes": 13257,
-      "sha256": "2ca81e3ad859f7f8220362c0f42b3806b2b6ca958406e9e1df63b7c763bbba20"
+      "bytes": 13254,
+      "sha256": "051ae9e4138e38e8c848f6f3932f044afe85a1f18944a0236743a732308fdfde"
     },
     {
       "path": "src/renderer/components/GameScreen.module.css",
@@ -10161,8 +10173,8 @@
     {
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "category": "source",
-      "bytes": 3403,
-      "sha256": "3cb4f1176ffc8b642104be371389c43968fec48d8825bf422f61467c595b938b"
+      "bytes": 5590,
+      "sha256": "d359bf8449d024a92026eef498e427f2b2a2c5fa6fb2130d22cf181bd3319b30"
     },
     {
       "path": "src/renderer/components/tileBoardPick.test.ts",
@@ -10251,14 +10263,14 @@
     {
       "path": "src/renderer/components/tileBoardRimVisualState.test.ts",
       "category": "test",
-      "bytes": 12010,
-      "sha256": "8e9aebd48f483f7cd95d3bd3e2e6e1e10e692cb55f8aa5e023d0b72d474bdfb0"
+      "bytes": 12292,
+      "sha256": "43ec229a203d7ac5a91544ff5ffc80bd64ae5480d8ad78b207d194a4634438e0"
     },
     {
       "path": "src/renderer/components/tileBoardRimVisualState.ts",
       "category": "source",
-      "bytes": 7652,
-      "sha256": "be8b204cf50fec0700af1a4186746e4871195a4033989e7eccbd8828be218f9a"
+      "bytes": 7675,
+      "sha256": "0bbc6e19cb63236cb679a54008850c04b650c181dcb01f56e8b48c659019cfa3"
     },
     {
       "path": "src/renderer/components/tileBoardRowMarkers.test.ts",
@@ -10305,8 +10317,8 @@
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "category": "source",
-      "bytes": 7850,
-      "sha256": "b261d24e71c172dc253443f126c3e85786de526c3ad7fe02065b670ee2a2cddf"
+      "bytes": 7870,
+      "sha256": "9d8ede3cd0762b588722d9bfc1f92db285e5e7f76b4c179955b8d1fca0748db1"
     },
     {
       "path": "src/renderer/components/tileBoardSceneFrame.test.ts",
@@ -18867,11 +18879,45 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/boardParticleRim.test.ts",
+      "path": "src/renderer/components/boardParticleRim.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 38,
+      "imports": [
+        "file:src/renderer/components/boardParticleRim.ts",
+        "file:src/renderer/components/tileShatter.ts",
+        "file:src/shared/test/game-fixtures.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/boardParticleRim.ts",
+      "path": "src/renderer/components/boardParticleRim.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 49,
+      "imports": [
+        "file:src/renderer/components/tileBoardFramePropsSnapshot.ts",
+        "file:src/renderer/components/tileShatter.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/boardParticleRim.ts#getRimParticleMood",
+        "symbol:src/renderer/components/boardParticleRim.ts#RimParticleMood",
+        "symbol:src/renderer/components/boardParticleRim.ts#RimSample",
+        "symbol:src/renderer/components/boardParticleRim.ts#sampleCardRim"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/boardParticleRim.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/boardParticleSystem.test.ts",
       "path": "src/renderer/components/boardParticleSystem.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 70,
+      "lineCount": 98,
       "imports": [
         "file:src/renderer/components/boardParticleSystem.ts"
       ],
@@ -18883,8 +18929,9 @@
       "path": "src/renderer/components/boardParticleSystem.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 182,
+      "lineCount": 225,
       "imports": [
+        "file:src/renderer/components/boardParticleRim.ts",
         "file:src/renderer/components/tileBoardPick.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/rng.ts"
@@ -21822,9 +21869,10 @@
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 65,
+      "lineCount": 100,
       "imports": [
         "file:src/renderer/components/boardParticleCues.ts",
+        "file:src/renderer/components/boardParticleRim.ts",
         "file:src/renderer/components/boardParticleSystem.ts",
         "file:src/renderer/components/tileBoardFrameBag.ts",
         "file:src/renderer/components/tileBoardTransform.ts",
@@ -22086,7 +22134,7 @@
       "path": "src/renderer/components/tileBoardRimVisualState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 365,
+      "lineCount": 370,
       "imports": [
         "file:src/renderer/components/gameplayVisualConfig.ts",
         "file:src/renderer/components/matchedCardRimFireMaterial.ts",
@@ -23011,6 +23059,7 @@
         "symbol:src/renderer/components/tileShatter.ts#TileShatterVec3"
       ],
       "testedBy": [
+        "file:src/renderer/components/boardParticleRim.test.ts",
         "file:src/renderer/components/tileBoardTransform.test.ts",
         "file:src/renderer/components/tileShatter.test.ts",
         "file:src/renderer/components/tileTextures.test.ts"
@@ -33886,6 +33935,7 @@
       ],
       "testedBy": [
         "file:src/renderer/components/boardParticleCues.test.ts",
+        "file:src/renderer/components/boardParticleRim.test.ts",
         "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/bomb-power.test.ts",
         "file:src/shared/chunk-break-rules.test.ts",
@@ -37494,44 +37544,76 @@
       "endLine": 10
     },
     {
+      "id": "symbol:src/renderer/components/boardParticleRim.ts#getRimParticleMood",
+      "name": "getRimParticleMood",
+      "kind": "value",
+      "file": "src/renderer/components/boardParticleRim.ts",
+      "line": 39,
+      "endLine": 48
+    },
+    {
+      "id": "symbol:src/renderer/components/boardParticleRim.ts#RimParticleMood",
+      "name": "RimParticleMood",
+      "kind": "type",
+      "file": "src/renderer/components/boardParticleRim.ts",
+      "line": 4,
+      "endLine": 4
+    },
+    {
+      "id": "symbol:src/renderer/components/boardParticleRim.ts#RimSample",
+      "name": "RimSample",
+      "kind": "interface",
+      "file": "src/renderer/components/boardParticleRim.ts",
+      "line": 5,
+      "endLine": 5
+    },
+    {
+      "id": "symbol:src/renderer/components/boardParticleRim.ts#sampleCardRim",
+      "name": "sampleCardRim",
+      "kind": "value",
+      "file": "src/renderer/components/boardParticleRim.ts",
+      "line": 8,
+      "endLine": 36
+    },
+    {
       "id": "symbol:src/renderer/components/boardParticleSystem.ts#BOARD_PARTICLE_CAPACITY",
       "name": "BOARD_PARTICLE_CAPACITY",
       "kind": "value",
       "file": "src/renderer/components/boardParticleSystem.ts",
-      "line": 10,
-      "endLine": 10
+      "line": 11,
+      "endLine": 11
     },
     {
       "id": "symbol:src/renderer/components/boardParticleSystem.ts#boardParticleBudget",
       "name": "boardParticleBudget",
       "kind": "value",
       "file": "src/renderer/components/boardParticleSystem.ts",
-      "line": 11,
-      "endLine": 12
+      "line": 12,
+      "endLine": 13
     },
     {
       "id": "symbol:src/renderer/components/boardParticleSystem.ts#BoardParticleBurst",
       "name": "BoardParticleBurst",
       "kind": "interface",
       "file": "src/renderer/components/boardParticleSystem.ts",
-      "line": 14,
-      "endLine": 24
+      "line": 15,
+      "endLine": 29
     },
     {
       "id": "symbol:src/renderer/components/boardParticleSystem.ts#BoardParticleKind",
       "name": "BoardParticleKind",
       "kind": "type",
       "file": "src/renderer/components/boardParticleSystem.ts",
-      "line": 9,
-      "endLine": 9
+      "line": 10,
+      "endLine": 10
     },
     {
       "id": "symbol:src/renderer/components/boardParticleSystem.ts#createBoardParticleSystem",
       "name": "createBoardParticleSystem",
       "kind": "value",
       "file": "src/renderer/components/boardParticleSystem.ts",
-      "line": 85,
-      "endLine": 181
+      "line": 97,
+      "endLine": 224
     },
     {
       "id": "symbol:src/renderer/components/boardRuneFieldMaterial.ts#clampBoardRuneFieldDriverUniforms",
@@ -40290,8 +40372,8 @@
       "name": "TileBoardParticles",
       "kind": "value",
       "file": "src/renderer/components/TileBoardParticles.tsx",
-      "line": 10,
-      "endLine": 64
+      "line": 11,
+      "endLine": 99
     },
     {
       "id": "symbol:src/renderer/components/tileBoardPick.ts#isTilePickable",
@@ -64479,6 +64561,30 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/boardParticleRim.ts->symbol:src/renderer/components/boardParticleRim.ts#getRimParticleMood",
+      "source": "file:src/renderer/components/boardParticleRim.ts",
+      "target": "symbol:src/renderer/components/boardParticleRim.ts#getRimParticleMood",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardParticleRim.ts->symbol:src/renderer/components/boardParticleRim.ts#RimParticleMood",
+      "source": "file:src/renderer/components/boardParticleRim.ts",
+      "target": "symbol:src/renderer/components/boardParticleRim.ts#RimParticleMood",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardParticleRim.ts->symbol:src/renderer/components/boardParticleRim.ts#RimSample",
+      "source": "file:src/renderer/components/boardParticleRim.ts",
+      "target": "symbol:src/renderer/components/boardParticleRim.ts#RimSample",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardParticleRim.ts->symbol:src/renderer/components/boardParticleRim.ts#sampleCardRim",
+      "source": "file:src/renderer/components/boardParticleRim.ts",
+      "target": "symbol:src/renderer/components/boardParticleRim.ts#sampleCardRim",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/boardParticleSystem.ts->symbol:src/renderer/components/boardParticleSystem.ts#BOARD_PARTICLE_CAPACITY",
       "source": "file:src/renderer/components/boardParticleSystem.ts",
       "target": "symbol:src/renderer/components/boardParticleSystem.ts#BOARD_PARTICLE_CAPACITY",
@@ -83058,9 +83164,45 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/boardParticleRim.test.ts->src/renderer/components/boardParticleRim.ts",
+      "source": "file:src/renderer/components/boardParticleRim.test.ts",
+      "target": "file:src/renderer/components/boardParticleRim.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/boardParticleRim.test.ts->src/renderer/components/tileShatter.ts",
+      "source": "file:src/renderer/components/boardParticleRim.test.ts",
+      "target": "file:src/renderer/components/tileShatter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/boardParticleRim.test.ts->src/shared/test/game-fixtures.ts",
+      "source": "file:src/renderer/components/boardParticleRim.test.ts",
+      "target": "file:src/shared/test/game-fixtures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/boardParticleRim.ts->src/renderer/components/tileBoardFramePropsSnapshot.ts",
+      "source": "file:src/renderer/components/boardParticleRim.ts",
+      "target": "file:src/renderer/components/tileBoardFramePropsSnapshot.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/boardParticleRim.ts->src/renderer/components/tileShatter.ts",
+      "source": "file:src/renderer/components/boardParticleRim.ts",
+      "target": "file:src/renderer/components/tileShatter.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/boardParticleSystem.test.ts->src/renderer/components/boardParticleSystem.ts",
       "source": "file:src/renderer/components/boardParticleSystem.test.ts",
       "target": "file:src/renderer/components/boardParticleSystem.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/boardParticleSystem.ts->src/renderer/components/boardParticleRim.ts",
+      "source": "file:src/renderer/components/boardParticleSystem.ts",
+      "target": "file:src/renderer/components/boardParticleRim.ts",
       "kind": "imports"
     },
     {
@@ -86859,6 +87001,12 @@
       "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/boardParticleCues.ts",
       "source": "file:src/renderer/components/TileBoardParticles.tsx",
       "target": "file:src/renderer/components/boardParticleCues.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/boardParticleRim.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/renderer/components/boardParticleRim.ts",
       "kind": "imports"
     },
     {
@@ -100968,6 +101116,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/boardParticleRim.ts->file:src/renderer/components/boardParticleRim.test.ts",
+      "source": "file:src/renderer/components/boardParticleRim.ts",
+      "target": "file:src/renderer/components/boardParticleRim.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/boardParticleSystem.ts->file:src/renderer/components/boardParticleSystem.test.ts",
       "source": "file:src/renderer/components/boardParticleSystem.ts",
       "target": "file:src/renderer/components/boardParticleSystem.test.ts",
@@ -101697,6 +101851,12 @@
       "id": "tested_by:src/renderer/components/tileResolvingSelection.ts->file:src/renderer/components/tileResolvingSelection.test.ts",
       "source": "file:src/renderer/components/tileResolvingSelection.ts",
       "target": "file:src/renderer/components/tileResolvingSelection.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/tileShatter.ts->file:src/renderer/components/boardParticleRim.test.ts",
+      "source": "file:src/renderer/components/tileShatter.ts",
+      "target": "file:src/renderer/components/boardParticleRim.test.ts",
       "kind": "tested_by"
     },
     {
@@ -106305,6 +106465,12 @@
       "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/renderer/components/boardParticleCues.test.ts",
       "source": "file:src/shared/test/game-fixtures.ts",
       "target": "file:src/renderer/components/boardParticleCues.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/renderer/components/boardParticleRim.test.ts",
+      "source": "file:src/shared/test/game-fixtures.ts",
+      "target": "file:src/renderer/components/boardParticleRim.test.ts",
       "kind": "tested_by"
     },
     {

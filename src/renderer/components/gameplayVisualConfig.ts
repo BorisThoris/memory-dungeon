@@ -174,7 +174,7 @@ export const GAMEPLAY_BOARD_VISUALS = {
                 burstIntensity: 0.18,
                 emberStrength: 0.36,
                 innerWidthMul: 1,
-                motion: 0.06,
+                motion: 0,
                 outerWidthMul: 0.84
             }
         }

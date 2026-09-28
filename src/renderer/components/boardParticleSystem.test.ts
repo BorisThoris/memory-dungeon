@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
+import { Matrix4, Vector3 } from 'three';
 import { boardParticleBudget, createBoardParticleSystem, type BoardParticleBurst } from './boardParticleSystem';
 
 const burst: BoardParticleBurst = { kind: 'bomb', x: 1, y: 2, z: 0.1, seed: 41, time: 1,
@@ -38,7 +39,34 @@ describe('the shared board particle pool', () => {
         expect([movement.getX(0), movement.getY(0), movement.getZ(0)]).toEqual([0, 0, 0]);
         expect(pool.mesh.geometry.getAttribute('lifetime').getW(0)).toBe(3);
         expect(pool.emit({ ...burst, reduceMotion: true, kind: 'flip' })).toBe(0);
+        expect(pool.emit({ ...burst, reduceMotion: true, kind: 'rim' })).toBe(0);
         expect(pool.advance(1.6)).toBe(0);
+        pool.dispose();
+    });
+
+    it('keeps ambient rim trails from overwriting a busy impact pool', () => {
+        const pool = createBoardParticleSystem();
+        for (let i = 0; i < 20; i += 1) pool.emit(burst);
+        const before = pool.mesh.geometry.getAttribute('origin').array.slice();
+        expect(pool.emit({ ...burst, kind: 'rim' })).toBe(0);
+        expect(pool.mesh.geometry.getAttribute('origin').array).toEqual(before);
+        expect(pool.emit({ ...burst, kind: 'rim', time: 3 })).toBeGreaterThan(0);
+        pool.dispose();
+    });
+
+    it('places the match sweep on the tilted and scaled card perimeter', () => {
+        const pool = createBoardParticleSystem();
+        const cardMatrix = new Matrix4().makeRotationZ(0.6).scale(new Vector3(0.8, 0.8, 0.8)).setPosition(3, 4, 0.2);
+        const count = pool.emit({ ...burst, kind: 'match', cardMatrix, energy: 1 });
+        const origin = pool.mesh.geometry.getAttribute('origin');
+        const inverse = cardMatrix.clone().invert();
+        for (let i = 0; i < count; i += 1) {
+            const local = new Vector3(origin.getX(i), origin.getY(i), origin.getZ(i) - 0.06).applyMatrix4(inverse);
+            expect(Math.abs(local.x)).toBeLessThanOrEqual(0.383);
+            expect(Math.abs(local.y)).toBeLessThanOrEqual(0.553);
+            expect(Math.max(Math.abs(local.x) / 0.37, Math.abs(local.y) / 0.54)).toBeGreaterThan(0.9);
+        }
+        expect(pool.advance(2.5)).toBe(0);
         pool.dispose();
     });
 

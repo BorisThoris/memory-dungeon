@@ -35,6 +35,14 @@ the buffers and material are disposed on unmount. Floor changes and context reco
 do not replay old clears. Pausing freezes the effect clock. Reduced motion omits flip
 glints and replaces bursts with a stationary, short fade; no full-screen flash is used.
 
+The same pool drives rim trails on hovered or keyboard-focused cards, visibly charged
+trait routes, and successful resolving pairs. A rounded-perimeter sweep releases sparks
+when a match lands; chain heat increases their density and reach. Card-local transforms
+keep emission aligned with tilt, flip and departure scale. Ambient trails consume only
+free slots and stop while paused, suppressed or under reduced motion. Their emission is
+limited to 2 / 4 / 6 cards per tick across quality levels, with round-robin coverage.
+Reduced-motion rim bands use a frozen shader clock rather than a slowly moving flame.
+
 `boardParticleSystem.test.ts` checks bounds, reuse, lifetime, reduced motion and cleanup;
 `boardParticleCues.test.ts` checks transition selection. `e2e/board-particles.spec.ts`
 exercises real bomb, match and chain actions and checks shader errors, expiry and canvas
