@@ -353,7 +353,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         title: 'The bomb',
         mechanic: 'Flip a card, bomb it: its pair leaves the board with no miss, no turn, no score.',
         graphMechanicIds: ['power.bomb'],
-        tryThis: 'Flip any card, then press Bomb on the dock.',
+        tryThis: 'Press Bomb, then choose a card. You can also flip a card first and press Bomb.',
         // Uses the normal starting inventory, so this room catches an unreachable starter bomb.
         build: () => room(['a:e b:t', 'c:m a:e', 'b:t c:m']),
         script: [

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { applyBomb, bombTargetTileId } from './board-power-actions';
+import { applyBomb, bombSelectableTileIds, bombTargetTileId } from './board-power-actions';
 import type { RunState } from './contracts';
 import { flipTile, resolveBoardTurn } from './game';
 import { reduceGameplayCommand } from './gameplay-core';
@@ -26,6 +26,16 @@ describe('the bomb', () => {
         const flipped = flipTile(run, 'a-1');
         expect(bombTargetTileId(flipped)).toBe('a-1');
         expect(bombTargetTileId({ ...flipped, bombCharges: 0 })).toBeNull();
+    });
+
+    it('offers ordinary hidden pairs for button-first targeting without spending a charge', () => {
+        const run = board();
+        expect(bombSelectableTileIds(run)).toEqual(['a-1', 'a-2', 'b-1', 'b-2', 'c-1', 'c-2']);
+        expect(run.bombCharges).toBe(1);
+        expect(bombSelectableTileIds(flipTile(run, 'a-1'))).toEqual([]);
+        expect(bombSelectableTileIds({ ...run, bombCharges: 0 })).toEqual([]);
+        expect(bombSelectableTileIds({ ...run, status: 'memorize' })).toEqual([]);
+        expect(bombSelectableTileIds({ ...run, status: 'paused' })).toEqual([]);
     });
 
     it('takes the pair off the board, and costs a bomb and nothing else', () => {
@@ -54,6 +64,7 @@ describe('the bomb', () => {
             }
         };
         const flipped = flipTile(run, 'c-1');
+        expect(bombSelectableTileIds(run)).toEqual([]);
         expect(bombTargetTileId(flipped)).toBeNull();
         expect(applyBomb(flipped, 'c-1')).toBe(flipped);
     });
@@ -73,6 +84,7 @@ describe('the bomb', () => {
             makeTile('joker', WILD_PAIR_KEY, '*')
         ], { bombCharges: 1 });
         run.board = { ...run.board!, pairCount: 1 };
+        expect(bombSelectableTileIds(run)).toEqual([]);
         const flipped = flipTile(run, 'a-1');
         expect(bombTargetTileId(flipped)).toBeNull();
         expect(applyBomb(flipped, 'a-1')).toBe(flipped);

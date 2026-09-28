@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2744,
     "codeFileCount": 965,
-    "exportedSymbolCount": 2934,
+    "exportedSymbolCount": 2935,
     "contentItemCount": 10,
     "mechanicCount": 51,
     "stateFieldCount": 92,
-    "relationshipCount": 7620
+    "relationshipCount": 7621
   },
   "inventory": [
     {
@@ -790,7 +790,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 34945,
-      "sha256": "2f8e7b72537a7079e372d7276ca26e91ee249cdbd5372e1cb3a38d1faeeb20ef"
+      "sha256": "676fd79548e18cea2963c1ea74d10960c306f4c062f5641d11b14c9b04207df3"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -4047,8 +4047,8 @@
     {
       "path": "e2e/tools-usable.spec.ts",
       "category": "test",
-      "bytes": 12580,
-      "sha256": "eeeb7a334dc1ac1bff4f0ad294384177818f90289189ecf594c3bd333798b0e3"
+      "bytes": 13690,
+      "sha256": "00a8164a2d3cc8a4094ec694542cf69e5784cec004ce8207f879bdd01ec40845"
     },
     {
       "path": "e2e/ui-design-reference.spec.ts",
@@ -9291,14 +9291,14 @@
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
       "category": "test",
-      "bytes": 70530,
-      "sha256": "5e70ea9ff3bc85477967bb66dc37848f6b4144a983853888e5463a285203ed8b"
+      "bytes": 74507,
+      "sha256": "fec44fc71d4a608eff8d495512f8792d69fc976a84e58bc24798c0add060e5c9"
     },
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 95383,
-      "sha256": "f0c74dc530ec2e00fae2a7e01f991cb8390cc7056bd3b767b2dddef0d7895883"
+      "bytes": 97503,
+      "sha256": "a91e6c78d7bb4c134957394b8b010cfdc677896eda8987ad36c55999832882e8"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -10857,8 +10857,8 @@
     {
       "path": "src/renderer/copy/storeSheet.ts",
       "category": "source",
-      "bytes": 2312,
-      "sha256": "11d012d413b84f179d5d9b73299b68a028e11c218292098fb93c8f25c901eaa8"
+      "bytes": 2348,
+      "sha256": "6c24bdecc4a7cd1d6cd3f4608d61c3f9421fee109253748f64c89a75ee347ecc"
     },
     {
       "path": "src/renderer/copy/traitInteractionLaneMap.test.ts",
@@ -11986,7 +11986,7 @@
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
       "bytes": 35241,
-      "sha256": "3a03ebc3312291174d4525de81ac22cefcea9b5cc4a03c121260caa7a33e4cf4"
+      "sha256": "b7beceaaccd2a143515d0026346239886b0421f70dbb74b9f0cdd6f40940c085"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -12135,8 +12135,8 @@
     {
       "path": "src/shared/board-power-actions.ts",
       "category": "source",
-      "bytes": 13306,
-      "sha256": "ae94e8d8dbcbe3753dc29e659a353052a18657103551141889b3cfe0609bfb95"
+      "bytes": 14058,
+      "sha256": "ff5da2b5c3260c7df26781cc2c4ff7a30d16d23f4f2273cf9188d55b4c59f87a"
     },
     {
       "path": "src/shared/board-power-availability.test.ts",
@@ -12219,8 +12219,8 @@
     {
       "path": "src/shared/bomb-power.test.ts",
       "category": "test",
-      "bytes": 4168,
-      "sha256": "a86c815b0cf22bdf46db47dfeb670e6129453f912cbd53455512ebc17432408a"
+      "bytes": 4894,
+      "sha256": "8f96cca84ae188dc7c2b4e3d88db5530682689810359518017da6788971e55e8"
     },
     {
       "path": "src/shared/boss-encounters.test.ts",
@@ -13083,8 +13083,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 36484,
-      "sha256": "56535a3e35cad29222352d9716a823c30a5d32e51d549fd438e27e1995c21e6d"
+      "bytes": 36576,
+      "sha256": "26ab9ff5d99e487de9871924cdcad2481f2c0fbf0c401745f411a4b1e03eb97e"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -14019,8 +14019,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 66196,
-      "sha256": "c2149516d5455a35cf40d33592e8ab69c69e279d38e5663d104885a3257a40eb"
+      "bytes": 66231,
+      "sha256": "c951ac7284b91bbe8eb0d6372dbaa22d83c316a8ca63cc81eff35fd93b31486f"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -19399,7 +19399,7 @@
       "path": "src/renderer/components/GameScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1645,
+      "lineCount": 1721,
       "imports": [
         "file:src/renderer/components/GameScreen.tsx",
         "file:src/renderer/components/gameScreenFeedback.ts",
@@ -19420,7 +19420,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1996,
+      "lineCount": 2037,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -23825,7 +23825,7 @@
       "path": "src/renderer/copy/storeSheet.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 43,
+      "lineCount": 44,
       "imports": [
         "file:src/shared/run-store-rules.ts"
       ],
@@ -27141,7 +27141,7 @@
       "path": "src/shared/board-power-actions.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 369,
+      "lineCount": 386,
       "imports": [
         "file:src/shared/board-power-availability.ts",
         "file:src/shared/contracts.ts",
@@ -27161,6 +27161,7 @@
         "symbol:src/shared/board-power-actions.ts#applyRegionShuffle",
         "symbol:src/shared/board-power-actions.ts#applyShuffle",
         "symbol:src/shared/board-power-actions.ts#applyTileSwap",
+        "symbol:src/shared/board-power-actions.ts#bombSelectableTileIds",
         "symbol:src/shared/board-power-actions.ts#bombTargetTileId",
         "symbol:src/shared/board-power-actions.ts#cancelResolvingWithUndo"
       ],
@@ -27445,7 +27446,7 @@
       "path": "src/shared/bomb-power.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 85,
+      "lineCount": 97,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/contracts.ts",
@@ -37898,8 +37899,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 1995,
-      "endLine": 1995
+      "line": 2036,
+      "endLine": 2036
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -42683,7 +42684,7 @@
       "kind": "value",
       "file": "src/renderer/copy/storeSheet.ts",
       "line": 35,
-      "endLine": 42
+      "endLine": 43
     },
     {
       "id": "symbol:src/renderer/copy/storeSheet.ts#STORE_SHEET_COPY",
@@ -46242,8 +46243,8 @@
       "name": "applyBomb",
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
-      "line": 320,
-      "endLine": 342
+      "line": 337,
+      "endLine": 359
     },
     {
       "id": "symbol:src/shared/board-power-actions.ts#applyFlashPair",
@@ -46286,20 +46287,28 @@
       "endLine": 221
     },
     {
+      "id": "symbol:src/shared/board-power-actions.ts#bombSelectableTileIds",
+      "name": "bombSelectableTileIds",
+      "kind": "value",
+      "file": "src/shared/board-power-actions.ts",
+      "line": 297,
+      "endLine": 311
+    },
+    {
       "id": "symbol:src/shared/board-power-actions.ts#bombTargetTileId",
       "name": "bombTargetTileId",
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
-      "line": 296,
-      "endLine": 318
+      "line": 313,
+      "endLine": 335
     },
     {
       "id": "symbol:src/shared/board-power-actions.ts#cancelResolvingWithUndo",
       "name": "cancelResolvingWithUndo",
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
-      "line": 344,
-      "endLine": 368
+      "line": 361,
+      "endLine": 385
     },
     {
       "id": "symbol:src/shared/board-power-availability.ts#canPeekAtBoard",
@@ -70958,6 +70967,12 @@
       "id": "exports:src/shared/board-power-actions.ts->symbol:src/shared/board-power-actions.ts#applyTileSwap",
       "source": "file:src/shared/board-power-actions.ts",
       "target": "symbol:src/shared/board-power-actions.ts#applyTileSwap",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/board-power-actions.ts->symbol:src/shared/board-power-actions.ts#bombSelectableTileIds",
+      "source": "file:src/shared/board-power-actions.ts",
+      "target": "symbol:src/shared/board-power-actions.ts#bombSelectableTileIds",
       "kind": "exports"
     },
     {

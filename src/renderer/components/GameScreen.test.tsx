@@ -22,6 +22,8 @@ import {
 import { BOARD_FLOATER_POP_CLEAR } from '../store/matchScorePop';
 
 const gameSfxMocks = vi.hoisted(() => ({
+    playFlipSfx: vi.fn(),
+    playPeekPowerSfx: vi.fn(),
     playMismatchRecoveryCrescendoSfx: vi.fn(),
     playPowerArmSfx: vi.fn(),
     resumeAudioContext: vi.fn(),
@@ -62,6 +64,8 @@ vi.mock('./MainMenuBackground', () => ({ default: () => null }));
 vi.mock('./TileBoard', () => ({
     default: forwardRef(function TileBoardStub(
         props: {
+            board: NonNullable<RunState['board']>;
+            onTileSelect?: (tileId: string) => void;
             chainContext?: {
                 armedPerkId?: string | null;
                 armedPerkDetail?: string | null;
@@ -138,6 +142,8 @@ vi.mock('./TileBoard', () => ({
                 data-testid="tile-board-stub"
                 data-viewport-reset-token={props.viewportResetToken ?? 0}
             >
+                <button data-testid="tile-board-stub-pick" type="button"
+                    onClick={() => props.onTileSelect?.(props.board.tiles[0]!.id)} />
                 {/* Stands in for a pinch or a wheel: the board reports it has left its fitted frame. */}
                 <button
                     data-testid="tile-board-stub-move-camera"
@@ -238,6 +244,76 @@ describe('GameScreen (OVR-014)', () => {
         render(<GameScreen achievements={[]} run={run} />);
         expect(screen.getByTestId('tile-board-stub')).toHaveAttribute('data-tutorial-markers', 'false');
         expect(screen.getByTestId('tile-board-stub')).toHaveAttribute('data-tutorial-targets', '');
+    });
+
+    const renderBombRun = (): RunState => {
+        const run = finishMemorizePhase(createNewRun(0, { runSeed: 42_001, onboardingSafeFirstFloor: true }));
+        useAppStore.setState({ run, view: 'playing', boardPinMode: false, peekModeArmed: false,
+            regionShuffleArmed: false, tileSwapArmed: false, tileSwapFirstTileId: null });
+        const LiveScreen = () => {
+            const currentRun = useAppStore((state) => state.run)!;
+            return <GameScreen achievements={[]} run={currentRun} />;
+        };
+        render(<LiveScreen />);
+        return run;
+    };
+
+    it('lets a player press Bomb first and select a card to remove its pair', () => {
+        const run = renderBombRun();
+        const bomb = screen.getByTestId('tool-bomb');
+        expect(bomb).toBeEnabled();
+        fireEvent.click(bomb);
+        expect(bomb).toHaveAttribute('aria-pressed', 'true');
+        expect(bomb).toHaveAccessibleName(/choose a card to bomb/i);
+        expect(useAppStore.getState().run!.bombCharges).toBe(1);
+        fireEvent.click(screen.getByTestId('tile-board-stub-pick'));
+        const after = useAppStore.getState().run!;
+        expect(after.bombCharges).toBe(0);
+        expect(after.board!.tiles.filter((tile) => tile.state === 'removed')).toHaveLength(2);
+        expect(after.board!.flippedTileIds).toEqual([]);
+        expect(after.turnsThisFloor).toBe(run.turnsThisFloor);
+        expect(after.stats.totalScore).toBe(run.stats.totalScore);
+        expect(after.missBank).toEqual(run.missBank);
+        expect(screen.queryByTestId('tool-bomb')).not.toBeInTheDocument();
+    });
+
+    it('cancels Bomb with a second press or Escape without consuming it or pausing', () => {
+        renderBombRun();
+        const bomb = screen.getByTestId('tool-bomb');
+        fireEvent.click(bomb);
+        fireEvent.click(bomb);
+        expect(bomb).toHaveAttribute('aria-pressed', 'false');
+        fireEvent.click(bomb);
+        fireEvent.keyDown(document, { key: 'Escape', code: 'Escape' });
+        expect(bomb).toHaveAttribute('aria-pressed', 'false');
+        expect(useAppStore.getState().run!.status).toBe('playing');
+        fireEvent.click(screen.getByTestId('tile-board-stub-pick'));
+        expect(useAppStore.getState().run!.bombCharges).toBe(1);
+        expect(useAppStore.getState().run!.board!.flippedTileIds).toHaveLength(1);
+        // The original card-first flow still spends the charge immediately.
+        fireEvent.click(bomb);
+        expect(useAppStore.getState().run!.bombCharges).toBe(0);
+    });
+
+    it('clears competing tools on arm and cancels Bomb when another tool is chosen', () => {
+        renderBombRun();
+        act(() => useAppStore.setState({ boardPinMode: true }));
+        fireEvent.click(screen.getByTestId('tool-bomb'));
+        expect(useAppStore.getState().boardPinMode).toBe(false);
+        expect(screen.getByTestId('tool-bomb')).toHaveAttribute('aria-pressed', 'true');
+        fireEvent.click(screen.getByTestId('tool-pin'));
+        fireEvent.click(screen.getByTestId('tool-pin'));
+        expect(screen.getByTestId('tool-bomb')).toHaveAttribute('aria-pressed', 'false');
+        expect(useAppStore.getState().run!.bombCharges).toBe(1);
+    });
+
+    it('cancels Bomb when the run pauses so resume cannot retain a hidden target mode', () => {
+        renderBombRun();
+        fireEvent.click(screen.getByTestId('tool-bomb'));
+        act(() => useAppStore.getState().pause());
+        act(() => useAppStore.getState().resume());
+        expect(screen.getByTestId('tool-bomb')).toHaveAttribute('aria-pressed', 'false');
+        expect(useAppStore.getState().run!.bombCharges).toBe(1);
     });
 
     it('disables Peek during an open flip instead of promising a peek that becomes a normal second flip', () => {

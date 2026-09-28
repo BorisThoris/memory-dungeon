@@ -34,7 +34,7 @@ import {
 import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
 import { missBankSoonestToGo, missesLeft } from '../../shared/miss-bank';
 import { isStoreStopFloor, runGold } from '../../shared/run-store-rules';
-import { bombTargetTileId } from '../../shared/board-power-actions';
+import { bombSelectableTileIds, bombTargetTileId } from '../../shared/board-power-actions';
 import { isPassAndPlayRun } from '../../shared/pass-and-play-rules';
 import { relicDefinition } from '../../shared/run-relic-rules';
 import { SKITTISH_FLOATER_REASON } from '../copy/skittishCardsBeat';
@@ -339,6 +339,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const [boardViewportAtRest, setBoardViewportAtRest] = useState(true);
     const [abandonRunConfirmOpen, setAbandonRunConfirmOpen] = useState(false);
     const [shortcutsHelpOpen, setShortcutsHelpOpen] = useState(false);
+    // Targeting belongs to this exact run snapshot; a pause, floor change or other action cancels it.
+    const [bombArmedFor, setBombArmedFor] = useState<RunState | null>(null);
+    useEffect(() => useAppStore.subscribe((state, previous) => {
+        if (state.run !== previous.run || state.view !== previous.view || state.boardPinMode ||
+            state.peekModeArmed || state.regionShuffleArmed || state.tileSwapArmed) {
+            setBombArmedFor(null);
+        }
+    }), []);
     /*
      * The store stop (`isStoreStopFloor`): after every third floor's clear the beat hands over to
      * the store sheet instead of building the next floor, and Descend continues. Keyed on the floor
@@ -418,6 +426,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         }))
     );
     const settingsReduceMotion = useAppStore((state) => state.settings.reduceMotion);
+    const bombChoices = useMemo(() => bombSelectableTileIds(run), [run]);
+    const bombArmed = bombArmedFor === run && bombChoices.length > 0 &&
+        !boardPinMode && !peekModeArmed && !regionShuffleArmed && !tileSwapArmed;
     const reduceMotion = useEffectiveReducedMotion(settingsReduceMotion);
 
     const { matchScorePop, mismatchScorePop, dismissMatchScorePop, dismissMismatchScorePop } = useAppStore(
@@ -664,7 +675,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         dismissPowersFtue,
         goToMenu,
         buyStoreItem,
-        useBomb,
+        useBomb: spendBomb,
         openCodexFromPlaying,
         openInventoryFromPlaying,
         openSettings,
@@ -709,6 +720,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     }, [playUiBack]);
 
     const pauseShortcutStateRef = useLatestRef({
+        bombArmed,
         abandonRunConfirmOpen,
         lastLevelResult: run.lastLevelResult,
         pause,
@@ -743,6 +755,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 }
             }
             const state = pauseShortcutStateRef.current;
+            if (event.key === 'Escape' && state.bombArmed) {
+                event.preventDefault();
+                setBombArmedFor(null);
+                return;
+            }
             if (state.shortcutsHelpOpen) {
                 return;
             }
@@ -1214,8 +1231,19 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         : '';
 
     const handleTileSelect = useCallback((tileId: string): void => {
-        useAppStore.getState().pressTile(tileId);
-    }, []);
+        const state = useAppStore.getState();
+        if (bombArmed && state.run === run) {
+            if (!bombChoices.includes(tileId)) return;
+            state.pressTile(tileId);
+            const afterFlip = useAppStore.getState();
+            if (afterFlip.run && bombTargetTileId(afterFlip.run) === tileId) {
+                afterFlip.useBomb();
+                setBombArmedFor(null);
+            }
+            return;
+        }
+        state.pressTile(tileId);
+    }, [bombArmed, bombChoices, run]);
 
     useEffect(() => {
         if (activeSeatLabel === null) {
@@ -1414,19 +1442,29 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 onClick: togglePeekMode
             },
             {
-                /* The bomb aims at the card just flipped (`applyBomb`), so it needs no armed mode:
-                   it lights while exactly one card is face up and its pair is not the floor's last. */
                 ...toolSpec('bomb'),
                 glyph: RUN_SHELL_GLYPHS.bomb,
                 charges: run.bombCharges,
-                disabled: bombTargetTileId(run) === null,
-                title: bombTargetTileId(run) !== null ? BOMB_TOOL_COPY.ready
+                armed: bombArmed,
+                disabled: bombTargetTileId(run) === null && bombChoices.length === 0,
+                title: bombArmed ? BOMB_TOOL_COPY.armed
+                    : bombTargetTileId(run) !== null ? BOMB_TOOL_COPY.ready
                     : run.status === 'resolving' ? BOMB_TOOL_COPY.resolving
                     : run.status !== 'playing' ? BOMB_TOOL_COPY.unavailable
                     : run.board.pairCount - run.board.matchedPairs <= 1 ? BOMB_TOOL_COPY.lastPair
                     : run.board.flippedTileIds.length === 0 ? BOMB_TOOL_COPY.waiting
                     : BOMB_TOOL_COPY.noPartner,
-                onClick: useBomb
+                onClick: () => {
+                    if (bombArmed) {
+                        setBombArmedFor(null);
+                    } else if (bombTargetTileId(run) !== null) {
+                        spendBomb();
+                    } else if (bombChoices.length > 0) {
+                        useAppStore.setState({ boardPinMode: false, peekModeArmed: false,
+                            regionShuffleArmed: false, tileSwapArmed: false, tileSwapFirstTileId: null });
+                        setBombArmedFor(run);
+                    }
+                }
             },
             ...(showFlashPairPower
                 ? [
@@ -1553,17 +1591,20 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         data-html-ui-layer="gameplay-chrome-v2"
                     >
                         <RunShell
-                            feedback={visualHudAnnouncement}
+                            feedback={bombArmed ? BOMB_TOOL_COPY.armed : visualHudAnnouncement}
                             feedbackPriority={actionFeedbackPriority}
-                            onboardingLine={onboardingStep && run.status === 'playing' ? onboardingStep.prompt : null}
+                            onboardingLine={!bombArmed && onboardingStep && run.status === 'playing' ? onboardingStep.prompt : null}
                             onPause={pause}
                             personalBestDepth={run.achievementsEnabled && (run.board?.level ?? 0) > profileDeepestFloor(saveData)}
-                            politeAnnouncement={politeHudAnnouncement}
+                            politeAnnouncement={bombArmed ? BOMB_TOOL_COPY.armed : politeHudAnnouncement}
                             reduceMotion={reduceMotion}
                             run={run}
                             sfxGain={shuffleSfxGain}
                             shellLayout={shellProfile.layout}
-                            tools={runShellTools}
+                            tools={runShellTools.map((tool) => tool.id === 'bomb' ? tool : {
+                                ...tool,
+                                onClick: () => { setBombArmedFor(null); tool.onClick(); }
+                            })}
                         />
 
                         {/* Shown, not spoken: the HUD announcer queues this same line (keyed per

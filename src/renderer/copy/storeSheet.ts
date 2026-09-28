@@ -31,9 +31,10 @@ export const STORE_SHEET_COPY = {
     descend: 'Descend'
 } as const;
 
-/** The dock's bomb (`applyBomb`): it aims at the one card face up, so it says so until there is one. */
+/** The dock can arm before a flip or spend immediately on the one card already face up. */
 export const BOMB_TOOL_COPY = {
-    waiting: 'Flip a card first: a bomb takes the pair of the one card face up',
+    waiting: 'Bomb: choose a card to remove its pair',
+    armed: 'Choose a card to bomb. Press Bomb again or Escape to cancel.',
     unavailable: 'Bomb: wait for the floor to begin',
     resolving: 'Bomb: finish the current pair first',
     lastPair: 'Bomb: the last pair must be matched',

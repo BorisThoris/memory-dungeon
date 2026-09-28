@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 57 as const;
+export const ENCYCLOPEDIA_VERSION = 58 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -364,7 +364,7 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
         id: 'store',
         title: 'Gold and the store',
         description:
-            'New runs start with **one bomb**: flip one card, then press **Bomb** to remove its pair. The last pair must be matched. ' +
+            'New runs start with **one bomb**: press **Bomb**, then choose a card to remove its pair. Press Bomb again or Escape to cancel. You can also flip one card first and then press Bomb. The last pair must be matched. ' +
             'A floor clear pays **gold**: two, plus one for each rung of the chain it cleared at (Clean, Sharp, Fever), plus one for every turn under par, three at most. ' +
             'The **store** opens by itself after every third floor, with a **Descend** button when you are done. It sells another **miss** (into the bank, up to what it holds), a **peek** charge, a **shuffle** charge and a **bomb** - flip a card, then bomb it, and its pair leaves the board with no miss and no turn spent, though never the floor\'s last pair; ' +
             'each thing you buy costs more the next time this run. ' +

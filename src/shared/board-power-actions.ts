@@ -289,10 +289,27 @@ export const applyPeek = (run: RunState, tileId: string): RunState => {
  *
  * Destroy (removed Gen 200, `docs/REMOVED_POWERS.md`) was this power with nothing that granted a
  * charge. The store stop grants them now (`run-store-rules.ts`), and the bomb aims at the card the
- * player has just turned over rather than an armed target: flip a card, realise you do not know
- * where its twin is, and spend a bomb instead of a guess. No score, no miss, no turn, and the chain
+ * player has just turned over. The dock can also arm before that flip and spend on the chosen
+ * card immediately. No score, no miss, no turn, and the chain
  * stands. It may not take the floor's last pair - that pair is the clear, and the clear is a match.
  */
+/** Cards the dock can offer before a flip. The normal flip and bomb rules still validate the pick. */
+export const bombSelectableTileIds = (run: RunState): string[] => {
+    if (run.status !== 'playing' || !run.board || runNonNegativeInteger(run.bombCharges) < 1 ||
+        run.board.flippedTileIds.length !== 0) {
+        return [];
+    }
+    const hiddenPairs = new Map<string, string[]>();
+    for (const tile of run.board.tiles) {
+        if (tile.state !== 'hidden' || isSingletonUtilityPairKey(tile.pairKey)) continue;
+        const ids = hiddenPairs.get(tile.pairKey) ?? [];
+        ids.push(tile.id);
+        hiddenPairs.set(tile.pairKey, ids);
+    }
+    const pairs = [...hiddenPairs.values()].filter((ids) => ids.length === 2);
+    return pairs.length > 1 ? pairs.flat() : [];
+};
+
 export const bombTargetTileId = (run: RunState): string | null => {
     if (run.status !== 'playing' || !run.board || runNonNegativeInteger(run.bombCharges) < 1) {
         return null;

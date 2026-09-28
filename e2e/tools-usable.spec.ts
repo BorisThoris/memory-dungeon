@@ -81,6 +81,7 @@ const openRoom = async (page: Page, room: string): Promise<void> => {
 
 for (const display of [
     { name: 'desktop', width: 1280, height: 720, scale: 1 },
+    { name: 'phone', width: 390, height: 844, scale: 1 },
     { name: '4K', width: 3840, height: 2160, scale: 1 },
     { name: 'scaled 4K', width: 1920, height: 1080, scale: 2 }
 ]) {
@@ -99,9 +100,12 @@ for (const display of [
             await expect.poll(async () => (await read(page)).status).toBe('playing');
             const bomb = page.getByTestId('tool-bomb');
             await expect(bomb).toBeVisible();
-            await expect(bomb).toBeDisabled();
+            await expect(bomb).toBeEnabled();
             expect((await read(page)).bombs).toBe(1);
-            if (display.name !== 'desktop') {
+            await bomb.click();
+            await expect(bomb).toHaveAttribute('aria-pressed', 'true');
+            await expect(bomb).toHaveAccessibleName(/choose a card to bomb/i);
+            if (display.name.includes('4K')) {
                 await expect(page.getByTestId('gameplay-scene')).toHaveAttribute('data-scene-effect-tier', 'lean');
             }
             const target = await page.evaluate(() => {
@@ -115,8 +119,6 @@ for (const display of [
             });
             // A real mouse click exercises the canvas raycast, not an injected power inventory.
             await page.mouse.click(target.left + target.width / 2, target.top + target.height / 2);
-            await expect(bomb).toBeEnabled();
-            await bomb.click();
             await expect.poll(async () => (await read(page)).states[target.id]).toBe('removed');
             expect((await read(page)).bombs).toBe(0);
             expect(Object.values((await read(page)).states).filter((state) => state === 'removed')).toHaveLength(2);
@@ -156,12 +158,32 @@ test.describe('Every tool can be used from the dock', () => {
 
     test('bomb: turn a card, press Bomb, and its pair is gone', async ({ page }) => {
         await openRoom(page, 'bomb');
-        await expect(tool(page, /bomb/i)).toBeDisabled();
+        await expect(tool(page, /bomb/i)).toBeEnabled();
         await pick(page, 'b-1');
         await expect(tool(page, /bomb/i)).toBeEnabled();
         await tool(page, /bomb/i).click();
         await expect.poll(async () => (await read(page)).states['b-2']).toBe('removed');
         expect((await read(page)).bombs).toBe(0);
+    });
+
+    test('bomb: cancel targeting and preserve the last-pair guard', async ({ page }) => {
+        await openRoom(page, 'bomb');
+        const bomb = page.getByTestId('tool-bomb');
+        await bomb.click();
+        await expect(bomb).toHaveAttribute('aria-pressed', 'true');
+        await bomb.click();
+        await expect(bomb).toHaveAttribute('aria-pressed', 'false');
+        await bomb.click();
+        await page.keyboard.press('Escape');
+        await expect(bomb).toHaveAttribute('aria-pressed', 'false');
+        expect((await read(page)).status).toBe('playing');
+        expect((await read(page)).bombs).toBe(1);
+        await pick(page, 'b-1');
+        expect((await read(page)).states['b-1']).toBe('flipped');
+        expect((await read(page)).bombs).toBe(1);
+        await openRoom(page, 'bomb-last-pair');
+        await expect(page.getByTestId('tool-bomb')).toBeDisabled();
+        expect((await read(page)).bombs).toBe(1);
     });
 
     test('peek: press Peek, pick a card, it shows', async ({ page }) => {
