@@ -1230,7 +1230,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         ? formatHudActionFeedbackText(actionFeedbackAnnouncement)
         : '';
 
+    // R3F commits separately from the dock. A stable callback reads the current arm state even
+    // when a fast card click reaches a canvas frame from before the Bomb button was pressed.
+    const bombPickState = useLatestRef({ bombArmed, bombChoices, run });
     const handleTileSelect = useCallback((tileId: string): void => {
+        const { bombArmed, bombChoices, run } = bombPickState.current;
         const state = useAppStore.getState();
         if (bombArmed && state.run === run) {
             if (!bombChoices.includes(tileId)) return;
@@ -1243,7 +1247,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             return;
         }
         state.pressTile(tileId);
-    }, [bombArmed, bombChoices, run]);
+    }, [bombPickState]);
 
     useEffect(() => {
         if (activeSeatLabel === null) {

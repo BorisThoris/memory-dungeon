@@ -447,6 +447,9 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
 
             <TileBoardSceneBoardGroup
                 board={board}
+                compact={compact}
+                runStatus={runStatus}
+                particleFrames={tileFrameBagsRef}
                 boardColumns={totalColumns}
                 boardEntranceMotionBudgetMs={boardEntranceMotionBudgetMs}
                 boardEntranceMotionDeadlineMs={boardEntranceMotionDeadlineMs}

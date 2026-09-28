@@ -11,6 +11,7 @@ const tile = (id: string, state: Tile['state'], suit: Tile['suit']): Tile => ({
     symbol: id[0]!,
     label: id[0]!,
     state,
+    brokenByChunk: state === 'removed',
     suit
 });
 
@@ -36,6 +37,10 @@ describe('the break wave', () => {
     it('is zero for anything that is not leaving', () => {
         expect(getBreakWaveDelaySec(board, tiles[0]!)).toBe(0);
         expect(getBreakWaveDelaySec(board, tiles[3]!)).toBe(0);
+    });
+
+    it('lets a bomb depart immediately instead of waiting for an unrelated old match', () => {
+        expect(getBreakWaveDelaySec(board, { ...tiles[2]!, brokenByChunk: false })).toBe(0);
     });
 
     it('never waits longer than the cap, whatever the board size', () => {

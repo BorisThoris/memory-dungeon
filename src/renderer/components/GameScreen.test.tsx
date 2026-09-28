@@ -1,6 +1,6 @@
 import { NotificationHost, useNotificationStore } from '@cross-repo-libs/notifications';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { forwardRef, useImperativeHandle } from 'react';
+import { forwardRef, useImperativeHandle, useLayoutEffect } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { RunState } from '../../shared/contracts';
 import { createNewRun, finishMemorizePhase } from '../../shared/game-core';
@@ -59,6 +59,7 @@ const viewportSizeMock = vi.hoisted(() => ({
 const gameLeftToolbarMock = vi.hoisted(() => ({
     props: null as { rulesHintsExpanded?: boolean } | null
 }));
+const tilePickMock = vi.hoisted(() => ({ callback: null as ((tileId: string) => void) | null }));
 
 vi.mock('./MainMenuBackground', () => ({ default: () => null }));
 vi.mock('./TileBoard', () => ({
@@ -87,6 +88,7 @@ vi.mock('./TileBoard', () => ({
         },
         ref
     ) {
+        useLayoutEffect(() => { tilePickMock.callback = props.onTileSelect ?? null; }, [props.onTileSelect]);
         useImperativeHandle(ref, () => ({
             getTileClientRectAtGrid: () => null,
             getTileClientRectById: (tileId: string) => {
@@ -293,6 +295,15 @@ describe('GameScreen (OVR-014)', () => {
         // The original card-first flow still spends the charge immediately.
         fireEvent.click(bomb);
         expect(useAppStore.getState().run!.bombCharges).toBe(0);
+    });
+
+    it('uses the latest Bomb arm state when a card calls the previous canvas-frame listener', () => {
+        const run = renderBombRun();
+        const previousFramePick = tilePickMock.callback!;
+        fireEvent.click(screen.getByTestId('tool-bomb'));
+        act(() => previousFramePick(run.board!.tiles[0]!.id));
+        expect(useAppStore.getState().run!.bombCharges).toBe(0);
+        expect(useAppStore.getState().run!.board!.tiles.filter((tile) => tile.state === 'removed')).toHaveLength(2);
     });
 
     it('clears competing tools on arm and cancels Bomb when another tool is chosen', () => {

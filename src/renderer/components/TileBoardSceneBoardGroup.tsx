@@ -1,6 +1,8 @@
 import type { MutableRefObject, RefObject } from 'react';
 import type { Group, PlaneGeometry, ShaderMaterial } from 'three';
-import type { BoardState, GraphicsQualityPreset } from '../../shared/contracts';
+import type { BoardState, GraphicsQualityPreset, RunStatus } from '../../shared/contracts';
+import { TileBoardParticles } from './TileBoardParticles';
+import type { TileBezelFrameBag } from './tileBoardFrameBag';
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
 import { TileBezel, type TileHoverTiltState } from './TileBezel';
 import { noopMeshRaycast } from './tileBoardPick';
@@ -9,6 +11,9 @@ import type { TileBoardRuneFieldMetrics } from './tileBoardRuneField';
 
 interface TileBoardSceneBoardGroupProps {
     board: BoardState;
+    compact: boolean;
+    runStatus: RunStatus;
+    particleFrames: RefObject<Map<string, TileBezelFrameBag>>;
     /** Chain meter fill, 0..1: how hard the card backs burn. */
     cardHeat: number;
     cardGlowAnimated: boolean;
@@ -44,6 +49,9 @@ interface TileBoardSceneBoardGroupProps {
 
 export const TileBoardSceneBoardGroup = ({
     board,
+    compact,
+    runStatus,
+    particleFrames,
     cardGlowAnimated,
     cardHeat,
     boardColumns,
@@ -76,6 +84,8 @@ export const TileBoardSceneBoardGroup = ({
     tileFieldParallaxEnabled
 }: TileBoardSceneBoardGroupProps) => (
     <group ref={boardGroupRef} rotation={[0, 0, 0]}>
+        <TileBoardParticles board={board} compact={compact} graphicsQuality={graphicsQuality}
+            reduceMotion={reduceMotion} runStatus={runStatus} frames={particleFrames} />
         {graphicsQuality !== 'low' ? (
             <mesh
                 geometry={boardRuneFieldGeometry}

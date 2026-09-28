@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2744,
-    "codeFileCount": 965,
-    "exportedSymbolCount": 2935,
+    "trackedFileCount": 2750,
+    "codeFileCount": 970,
+    "exportedSymbolCount": 2944,
     "contentItemCount": 10,
     "mechanicCount": 51,
     "stateFieldCount": 92,
-    "relationshipCount": 7621
+    "relationshipCount": 7652
   },
   "inventory": [
     {
@@ -693,8 +693,8 @@
     {
       "path": "docs/gameplay/epic-board-rendering-assists.md",
       "category": "documentation",
-      "bytes": 3887,
-      "sha256": "05e10a94d66184dfd957cea85d2f893eb3a2cbe33e8cda3e521b3e5abe6560e5"
+      "bytes": 5492,
+      "sha256": "7491da077f6347b9e494e7206137b4c7e4ed50713d44fac0417f159ea32a43cc"
     },
     {
       "path": "docs/gameplay/epic-choose-your-path.md",
@@ -2374,7 +2374,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33561,
-      "sha256": "a6172dfd3fec32c23b38bcc78411ceeacb3d3f46cdb5dfac185aba8c6e78b676"
+      "sha256": "d634d90adff6600cabc9e3465f1d52d319675f13f4a9ed85515f2a7585cb9122"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3767,6 +3767,12 @@
       "category": "test",
       "bytes": 5796,
       "sha256": "9c07e113f65e54eebd63a0ef18d372b6a16cc21f0cd7ce129b7a50536babeba3"
+    },
+    {
+      "path": "e2e/board-particles.spec.ts",
+      "category": "test",
+      "bytes": 6683,
+      "sha256": "c1791888335e4149af0b071a2dec58cc39b312c7a458b91befe2ce7f406bda80"
     },
     {
       "path": "e2e/boardOverlayClearance.ts",
@@ -9055,6 +9061,30 @@
       "sha256": "5470dd100d54a16abe91f18d63dc3a12b53a933c3ddad5cbc5a05870002ba412"
     },
     {
+      "path": "src/renderer/components/boardParticleCues.test.ts",
+      "category": "test",
+      "bytes": 2292,
+      "sha256": "01b1beb71d73cfc04c17be82c4277859affbc856b129ce3d0022e44f18e60938"
+    },
+    {
+      "path": "src/renderer/components/boardParticleCues.ts",
+      "category": "source",
+      "bytes": 1589,
+      "sha256": "a1fa996cfd4d44cd5997a044e52af97a80c18b3ee84527657a38040f6c8a5b3c"
+    },
+    {
+      "path": "src/renderer/components/boardParticleSystem.test.ts",
+      "category": "test",
+      "bytes": 3407,
+      "sha256": "09df17014a4fd62a9824b811c6a1db598b090a4e90ffb535a96342e9727eb2dd"
+    },
+    {
+      "path": "src/renderer/components/boardParticleSystem.ts",
+      "category": "source",
+      "bytes": 8193,
+      "sha256": "a585c90efe3e6fc9141ce7f58d0f5ab7cf7bd1b2b05f3f8dfa5b61f307594201"
+    },
+    {
       "path": "src/renderer/components/boardRuneFieldMaterial.ts",
       "category": "source",
       "bytes": 1977,
@@ -9291,14 +9321,14 @@
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
       "category": "test",
-      "bytes": 74507,
-      "sha256": "fec44fc71d4a608eff8d495512f8792d69fc976a84e58bc24798c0add060e5c9"
+      "bytes": 75241,
+      "sha256": "aeaab4bedfb602609c93af2fb555fa70a8661906222ebdab45084f2e515fa1a5"
     },
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 97503,
-      "sha256": "a91e6c78d7bb4c134957394b8b010cfdc677896eda8987ad36c55999832882e8"
+      "bytes": 97823,
+      "sha256": "c15d36466cb4ad10e5b42b383a3ba0e80c92a95c7328245334bbb1bab42a50e4"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9789,14 +9819,14 @@
     {
       "path": "src/renderer/components/tileBoardBreakWave.test.ts",
       "category": "test",
-      "bytes": 3144,
-      "sha256": "3816ffe14fae75cd6c4c1398b4dbac16402602d67ec11b4d8a755581d8d5a3aa"
+      "bytes": 3381,
+      "sha256": "2d6e5f03eda37229bcf60e920e369fbd9925a95e34d0ee4fe6ab1dde29b59c0b"
     },
     {
       "path": "src/renderer/components/tileBoardBreakWave.ts",
       "category": "source",
-      "bytes": 3073,
-      "sha256": "41543a070577a5fce519527cca4a9926d9a07f19310677143a3ed9c45cd9e129"
+      "bytes": 3096,
+      "sha256": "964f5dade3f2a461bee7c1251a657558a2335aa366b40e54ada39b5e22b2ec5f"
     },
     {
       "path": "src/renderer/components/tileBoardCanvasContext.test.ts",
@@ -10129,6 +10159,12 @@
       "sha256": "b40bae44380cd0701889056d48f1b9d6715ff694a7a45b86d1a88d73ceb8feda"
     },
     {
+      "path": "src/renderer/components/TileBoardParticles.tsx",
+      "category": "source",
+      "bytes": 3403,
+      "sha256": "3cb4f1176ffc8b642104be371389c43968fec48d8825bf422f61467c595b938b"
+    },
+    {
       "path": "src/renderer/components/tileBoardPick.test.ts",
       "category": "test",
       "bytes": 3106,
@@ -10263,14 +10299,14 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 20065,
-      "sha256": "dc8de86688e0ea0b59f54bcf9aee644f60e3dca67081e72954a130467b297bd4"
+      "bytes": 20187,
+      "sha256": "683bb19579577b0098d8b36c3688d5f5e0a80aaa833d3eca9bce471ee8802704"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "category": "source",
-      "bytes": 7376,
-      "sha256": "20268b38727737a5e9597950694703933b2f28a3d28939c094921b00bfb717a6"
+      "bytes": 7850,
+      "sha256": "b261d24e71c172dc253443f126c3e85786de526c3ad7fe02065b670ee2a2cddf"
     },
     {
       "path": "src/renderer/components/tileBoardSceneFrame.test.ts",
@@ -18797,6 +18833,74 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/boardParticleCues.test.ts",
+      "path": "src/renderer/components/boardParticleCues.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 41,
+      "imports": [
+        "file:src/renderer/components/boardParticleCues.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/test/game-fixtures.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/boardParticleCues.ts",
+      "path": "src/renderer/components/boardParticleCues.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 25,
+      "imports": [
+        "file:src/renderer/components/boardParticleSystem.ts",
+        "file:src/renderer/components/tileBoardBreakWave.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/boardParticleCues.ts#BoardParticleCue",
+        "symbol:src/renderer/components/boardParticleCues.ts#collectBoardParticleCues",
+        "symbol:src/renderer/components/boardParticleCues.ts#particleBoardChanged"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/boardParticleCues.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/boardParticleSystem.test.ts",
+      "path": "src/renderer/components/boardParticleSystem.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 70,
+      "imports": [
+        "file:src/renderer/components/boardParticleSystem.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/boardParticleSystem.ts",
+      "path": "src/renderer/components/boardParticleSystem.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 182,
+      "imports": [
+        "file:src/renderer/components/tileBoardPick.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/rng.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/boardParticleSystem.ts#BOARD_PARTICLE_CAPACITY",
+        "symbol:src/renderer/components/boardParticleSystem.ts#boardParticleBudget",
+        "symbol:src/renderer/components/boardParticleSystem.ts#BoardParticleBurst",
+        "symbol:src/renderer/components/boardParticleSystem.ts#BoardParticleKind",
+        "symbol:src/renderer/components/boardParticleSystem.ts#createBoardParticleSystem"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/boardParticleSystem.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/boardRuneFieldMaterial.ts",
       "path": "src/renderer/components/boardRuneFieldMaterial.ts",
       "layer": "renderer",
@@ -19399,7 +19503,7 @@
       "path": "src/renderer/components/GameScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1721,
+      "lineCount": 1732,
       "imports": [
         "file:src/renderer/components/GameScreen.tsx",
         "file:src/renderer/components/gameScreenFeedback.ts",
@@ -19420,7 +19524,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2037,
+      "lineCount": 2041,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -20712,7 +20816,7 @@
       "path": "src/renderer/components/tileBoardBreakWave.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 63,
+      "lineCount": 68,
       "imports": [
         "file:src/renderer/components/tileBoardBreakWave.ts",
         "file:src/shared/contracts.ts"
@@ -21714,6 +21818,25 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/TileBoardParticles.tsx",
+      "path": "src/renderer/components/TileBoardParticles.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 65,
+      "imports": [
+        "file:src/renderer/components/boardParticleCues.ts",
+        "file:src/renderer/components/boardParticleSystem.ts",
+        "file:src/renderer/components/tileBoardFrameBag.ts",
+        "file:src/renderer/components/tileBoardTransform.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/rng.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/TileBoardParticles.tsx#TileBoardParticles"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/tileBoardPick.test.ts",
       "path": "src/renderer/components/tileBoardPick.test.ts",
       "layer": "renderer",
@@ -22126,7 +22249,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 490,
+      "lineCount": 493,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
@@ -22171,9 +22294,11 @@
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 180,
+      "lineCount": 190,
       "imports": [
         "file:src/renderer/components/TileBezel.tsx",
+        "file:src/renderer/components/tileBoardFrameBag.ts",
+        "file:src/renderer/components/TileBoardParticles.tsx",
         "file:src/renderer/components/tileBoardPick.ts",
         "file:src/renderer/components/tileBoardRows.ts",
         "file:src/renderer/components/tileBoardRuneField.ts",
@@ -28233,6 +28358,7 @@
         "file:src/renderer/audio/resolutionGapDuck.test.ts",
         "file:src/renderer/cardFace/programmaticCardFace.test.ts",
         "file:src/renderer/cardFace/resolveCardIllustrationUrl.test.ts",
+        "file:src/renderer/components/boardParticleCues.test.ts",
         "file:src/renderer/components/boardTrauma.test.ts",
         "file:src/renderer/components/codexScreenModel.test.ts",
         "file:src/renderer/components/CollectionScreen.test.tsx",
@@ -33759,6 +33885,7 @@
         "symbol:src/shared/test/game-fixtures.ts#playPerfectFloor"
       ],
       "testedBy": [
+        "file:src/renderer/components/boardParticleCues.test.ts",
         "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/bomb-power.test.ts",
         "file:src/shared/chunk-break-rules.test.ts",
@@ -37343,6 +37470,70 @@
       "endLine": 28
     },
     {
+      "id": "symbol:src/renderer/components/boardParticleCues.ts#BoardParticleCue",
+      "name": "BoardParticleCue",
+      "kind": "interface",
+      "file": "src/renderer/components/boardParticleCues.ts",
+      "line": 5,
+      "endLine": 5
+    },
+    {
+      "id": "symbol:src/renderer/components/boardParticleCues.ts#collectBoardParticleCues",
+      "name": "collectBoardParticleCues",
+      "kind": "value",
+      "file": "src/renderer/components/boardParticleCues.ts",
+      "line": 13,
+      "endLine": 24
+    },
+    {
+      "id": "symbol:src/renderer/components/boardParticleCues.ts#particleBoardChanged",
+      "name": "particleBoardChanged",
+      "kind": "value",
+      "file": "src/renderer/components/boardParticleCues.ts",
+      "line": 7,
+      "endLine": 10
+    },
+    {
+      "id": "symbol:src/renderer/components/boardParticleSystem.ts#BOARD_PARTICLE_CAPACITY",
+      "name": "BOARD_PARTICLE_CAPACITY",
+      "kind": "value",
+      "file": "src/renderer/components/boardParticleSystem.ts",
+      "line": 10,
+      "endLine": 10
+    },
+    {
+      "id": "symbol:src/renderer/components/boardParticleSystem.ts#boardParticleBudget",
+      "name": "boardParticleBudget",
+      "kind": "value",
+      "file": "src/renderer/components/boardParticleSystem.ts",
+      "line": 11,
+      "endLine": 12
+    },
+    {
+      "id": "symbol:src/renderer/components/boardParticleSystem.ts#BoardParticleBurst",
+      "name": "BoardParticleBurst",
+      "kind": "interface",
+      "file": "src/renderer/components/boardParticleSystem.ts",
+      "line": 14,
+      "endLine": 24
+    },
+    {
+      "id": "symbol:src/renderer/components/boardParticleSystem.ts#BoardParticleKind",
+      "name": "BoardParticleKind",
+      "kind": "type",
+      "file": "src/renderer/components/boardParticleSystem.ts",
+      "line": 9,
+      "endLine": 9
+    },
+    {
+      "id": "symbol:src/renderer/components/boardParticleSystem.ts#createBoardParticleSystem",
+      "name": "createBoardParticleSystem",
+      "kind": "value",
+      "file": "src/renderer/components/boardParticleSystem.ts",
+      "line": 85,
+      "endLine": 181
+    },
+    {
       "id": "symbol:src/renderer/components/boardRuneFieldMaterial.ts#clampBoardRuneFieldDriverUniforms",
       "name": "clampBoardRuneFieldDriverUniforms",
       "kind": "value",
@@ -37899,8 +38090,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2036,
-      "endLine": 2036
+      "line": 2040,
+      "endLine": 2040
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -40095,6 +40286,14 @@
       "endLine": 24
     },
     {
+      "id": "symbol:src/renderer/components/TileBoardParticles.tsx#TileBoardParticles",
+      "name": "TileBoardParticles",
+      "kind": "value",
+      "file": "src/renderer/components/TileBoardParticles.tsx",
+      "line": 10,
+      "endLine": 64
+    },
+    {
       "id": "symbol:src/renderer/components/tileBoardPick.ts#isTilePickable",
       "name": "isTilePickable",
       "kind": "value",
@@ -40659,8 +40858,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 489,
-      "endLine": 489
+      "line": 492,
+      "endLine": 492
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
@@ -40683,8 +40882,8 @@
       "name": "TileBoardSceneBoardGroup",
       "kind": "value",
       "file": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
-      "line": 45,
-      "endLine": 179
+      "line": 50,
+      "endLine": 189
     },
     {
       "id": "symbol:src/renderer/components/tileBoardSceneFrame.ts#runTileBoardSceneFrame",
@@ -64262,6 +64461,54 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/boardParticleCues.ts->symbol:src/renderer/components/boardParticleCues.ts#BoardParticleCue",
+      "source": "file:src/renderer/components/boardParticleCues.ts",
+      "target": "symbol:src/renderer/components/boardParticleCues.ts#BoardParticleCue",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardParticleCues.ts->symbol:src/renderer/components/boardParticleCues.ts#collectBoardParticleCues",
+      "source": "file:src/renderer/components/boardParticleCues.ts",
+      "target": "symbol:src/renderer/components/boardParticleCues.ts#collectBoardParticleCues",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardParticleCues.ts->symbol:src/renderer/components/boardParticleCues.ts#particleBoardChanged",
+      "source": "file:src/renderer/components/boardParticleCues.ts",
+      "target": "symbol:src/renderer/components/boardParticleCues.ts#particleBoardChanged",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardParticleSystem.ts->symbol:src/renderer/components/boardParticleSystem.ts#BOARD_PARTICLE_CAPACITY",
+      "source": "file:src/renderer/components/boardParticleSystem.ts",
+      "target": "symbol:src/renderer/components/boardParticleSystem.ts#BOARD_PARTICLE_CAPACITY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardParticleSystem.ts->symbol:src/renderer/components/boardParticleSystem.ts#boardParticleBudget",
+      "source": "file:src/renderer/components/boardParticleSystem.ts",
+      "target": "symbol:src/renderer/components/boardParticleSystem.ts#boardParticleBudget",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardParticleSystem.ts->symbol:src/renderer/components/boardParticleSystem.ts#BoardParticleBurst",
+      "source": "file:src/renderer/components/boardParticleSystem.ts",
+      "target": "symbol:src/renderer/components/boardParticleSystem.ts#BoardParticleBurst",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardParticleSystem.ts->symbol:src/renderer/components/boardParticleSystem.ts#BoardParticleKind",
+      "source": "file:src/renderer/components/boardParticleSystem.ts",
+      "target": "symbol:src/renderer/components/boardParticleSystem.ts#BoardParticleKind",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardParticleSystem.ts->symbol:src/renderer/components/boardParticleSystem.ts#createBoardParticleSystem",
+      "source": "file:src/renderer/components/boardParticleSystem.ts",
+      "target": "symbol:src/renderer/components/boardParticleSystem.ts#createBoardParticleSystem",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/boardRuneFieldMaterial.ts->symbol:src/renderer/components/boardRuneFieldMaterial.ts#clampBoardRuneFieldDriverUniforms",
       "source": "file:src/renderer/components/boardRuneFieldMaterial.ts",
       "target": "symbol:src/renderer/components/boardRuneFieldMaterial.ts#clampBoardRuneFieldDriverUniforms",
@@ -66323,6 +66570,12 @@
       "id": "exports:src/renderer/components/tileBoardPairProximityState.ts->symbol:src/renderer/components/tileBoardPairProximityState.ts#getTileBoardPairProximityDistance",
       "source": "file:src/renderer/components/tileBoardPairProximityState.ts",
       "target": "symbol:src/renderer/components/tileBoardPairProximityState.ts#getTileBoardPairProximityDistance",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/TileBoardParticles.tsx->symbol:src/renderer/components/TileBoardParticles.tsx#TileBoardParticles",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "symbol:src/renderer/components/TileBoardParticles.tsx#TileBoardParticles",
       "kind": "exports"
     },
     {
@@ -82769,6 +83022,66 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/boardParticleCues.test.ts->src/renderer/components/boardParticleCues.ts",
+      "source": "file:src/renderer/components/boardParticleCues.test.ts",
+      "target": "file:src/renderer/components/boardParticleCues.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/boardParticleCues.test.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/boardParticleCues.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/boardParticleCues.test.ts->src/shared/test/game-fixtures.ts",
+      "source": "file:src/renderer/components/boardParticleCues.test.ts",
+      "target": "file:src/shared/test/game-fixtures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/boardParticleCues.ts->src/renderer/components/boardParticleSystem.ts",
+      "source": "file:src/renderer/components/boardParticleCues.ts",
+      "target": "file:src/renderer/components/boardParticleSystem.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/boardParticleCues.ts->src/renderer/components/tileBoardBreakWave.ts",
+      "source": "file:src/renderer/components/boardParticleCues.ts",
+      "target": "file:src/renderer/components/tileBoardBreakWave.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/boardParticleCues.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/boardParticleCues.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/boardParticleSystem.test.ts->src/renderer/components/boardParticleSystem.ts",
+      "source": "file:src/renderer/components/boardParticleSystem.test.ts",
+      "target": "file:src/renderer/components/boardParticleSystem.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/boardParticleSystem.ts->src/renderer/components/tileBoardPick.ts",
+      "source": "file:src/renderer/components/boardParticleSystem.ts",
+      "target": "file:src/renderer/components/tileBoardPick.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/boardParticleSystem.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/boardParticleSystem.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/boardParticleSystem.ts->src/shared/rng.ts",
+      "source": "file:src/renderer/components/boardParticleSystem.ts",
+      "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/boardRuneFieldMaterial.ts->src/renderer/components/boardRuneFieldShaderGlsl.ts",
       "source": "file:src/renderer/components/boardRuneFieldMaterial.ts",
       "target": "file:src/renderer/components/boardRuneFieldShaderGlsl.ts",
@@ -86543,6 +86856,42 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/boardParticleCues.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/renderer/components/boardParticleCues.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/boardParticleSystem.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/renderer/components/boardParticleSystem.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/tileBoardFrameBag.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/renderer/components/tileBoardFrameBag.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/tileBoardTransform.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/renderer/components/tileBoardTransform.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/shared/rng.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/tileBoardPick.test.ts->src/renderer/components/tileBoardPick.ts",
       "source": "file:src/renderer/components/tileBoardPick.test.ts",
       "target": "file:src/renderer/components/tileBoardPick.ts",
@@ -87122,6 +87471,18 @@
       "id": "imports:src/renderer/components/TileBoardSceneBoardGroup.tsx->src/renderer/components/TileBezel.tsx",
       "source": "file:src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "target": "file:src/renderer/components/TileBezel.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardSceneBoardGroup.tsx->src/renderer/components/tileBoardFrameBag.ts",
+      "source": "file:src/renderer/components/TileBoardSceneBoardGroup.tsx",
+      "target": "file:src/renderer/components/tileBoardFrameBag.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardSceneBoardGroup.tsx->src/renderer/components/TileBoardParticles.tsx",
+      "source": "file:src/renderer/components/TileBoardSceneBoardGroup.tsx",
+      "target": "file:src/renderer/components/TileBoardParticles.tsx",
       "kind": "imports"
     },
     {
@@ -100601,6 +100962,18 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/boardParticleCues.ts->file:src/renderer/components/boardParticleCues.test.ts",
+      "source": "file:src/renderer/components/boardParticleCues.ts",
+      "target": "file:src/renderer/components/boardParticleCues.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/boardParticleSystem.ts->file:src/renderer/components/boardParticleSystem.test.ts",
+      "source": "file:src/renderer/components/boardParticleSystem.ts",
+      "target": "file:src/renderer/components/boardParticleSystem.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/boardRuneFieldMaterial.ts->file:src/renderer/components/cardArcaneGlowMaterial.test.ts",
       "source": "file:src/renderer/components/boardRuneFieldMaterial.ts",
       "target": "file:src/renderer/components/cardArcaneGlowMaterial.test.ts",
@@ -102752,6 +103125,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/cardFace/resolveCardIllustrationUrl.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/cardFace/resolveCardIllustrationUrl.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/boardParticleCues.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/renderer/components/boardParticleCues.test.ts",
       "kind": "tested_by"
     },
     {
@@ -105920,6 +106299,12 @@
       "id": "tested_by:src/shared/test-hall-rooms.ts->file:src/shared/test-hall-rooms.test.ts",
       "source": "file:src/shared/test-hall-rooms.ts",
       "target": "file:src/shared/test-hall-rooms.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/renderer/components/boardParticleCues.test.ts",
+      "source": "file:src/shared/test/game-fixtures.ts",
+      "target": "file:src/renderer/components/boardParticleCues.test.ts",
       "kind": "tested_by"
     },
     {

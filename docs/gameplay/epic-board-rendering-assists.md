@@ -9,6 +9,7 @@ How the board is shown (WebGL), optional player assists, and mutator-adjacent **
 | Feature | Status | Notes |
 |---------|--------|--------|
 | Tile board (R3F / Three) | **Shippable** | `TileBoardScene.tsx` — cards, rims, matched flame, pick mesh, etc. |
+| Shared card particles | **Implemented** | `TileBoardParticles.tsx` — bomb embers and rings at both cards, match sparks, flip glints, and delayed chain-pop bursts in the existing canvas. |
 | Shifting spotlight (ward/bounty) | **Shippable** | Props from `GameScreen` → `TileBoard` → `TileBoardScene`; corner/edge highlights for ward and bounty on relevant faces. |
 | Findables (`findables_floor`) | **Shippable** | `findableKind` drives corner ring + HUD strings; scoring in `game.ts`. |
 | Pair distance hints | **Shippable** (new) | `pairProximityHint.ts`, `PairProximityHintPlane.tsx`; setting `pairProximityHintsEnabled`; Manhattan distance to nearest legal pair partner; decoys show no badge. |
@@ -18,6 +19,27 @@ How the board is shown (WebGL), optional player assists, and mutator-adjacent **
 | `n_back_anchor` on-board cue | **Functional** | `nBackAnchorPairKey` + `nBackMutatorActive` forwarded; **cyan anchor emphasis** on the anchor pair’s flipped tiles (`presentationNBackAnchor`). HUD subline may still add context. |
 | Keyboard focus ring | **Shippable** | Gated to board `role="application"` DOM focus so one tile does not look permanently focused. |
 | Distraction channel | **Functional** | Score penalty + optional HUD overlay when mutator active and user enables `distractionChannelEnabled` and motion allows. |
+
+## Extending card particles
+
+`boardParticleSystem.ts` owns one instanced quad mesh and fixed typed buffers. Use its
+`emit({ kind, x, y, z, seed, time, delay, reduceMotion, quality })` API to add bursts;
+add a preset to `BoardParticleKind` and the emitter for a new visual style. Keep gameplay
+randomness separate: the emitter uses a local cosmetic seed. `boardParticleCues.ts`
+maps committed card transitions to presets, and `TileBoardParticles.tsx` supplies card
+positions and the scene clock. New effects should join this pool, not create another canvas.
+
+The hard budgets are 96 / 192 / 384 particles for low / medium / high quality. Old slots
+are reused during large cascades. The mesh stops drawing when all particles expire, and
+the buffers and material are disposed on unmount. Floor changes and context recovery
+do not replay old clears. Pausing freezes the effect clock. Reduced motion omits flip
+glints and replaces bursts with a stationary, short fade; no full-screen flash is used.
+
+`boardParticleSystem.test.ts` checks bounds, reuse, lifetime, reduced motion and cleanup;
+`boardParticleCues.test.ts` checks transition selection. `e2e/board-particles.spec.ts`
+exercises real bomb, match and chain actions and checks shader errors, expiry and canvas
+stability. On Windows, run browser tests headlessly through the noninteractive isolation
+launcher described in the user's desktop-safety instructions.
 
 ## Rough edges
 

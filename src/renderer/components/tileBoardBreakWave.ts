@@ -31,7 +31,7 @@ export const RIPPLE_WAVE_MAX_OFFSET_SECONDS = 1.2;
  * alone, in the tile, so nothing has to be threaded from the turn event through six components.
  */
 export const getBreakWaveDelaySec = (board: Pick<BoardState, 'columns' | 'tiles'>, tile: Tile): number => {
-    if (tile.state !== 'removed' || !tile.suit) {
+    if (tile.state !== 'removed' || !tile.brokenByChunk || !tile.suit) {
         return 0;
     }
     const columns = getSafeBoardColumns(board);
