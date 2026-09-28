@@ -697,6 +697,23 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         openSettings('playing');
     }, [openSettings]);
 
+    const openShortcutsHelp = useCallback((): void => {
+        // Help owns the same frozen run as Pause. Never cover an automatic floor transition
+        // or the retreat confirmation with a second dialog.
+        if (abandonRunConfirmOpen || !['playing', 'memorize', 'resolving', 'paused'].includes(run.status)) {
+            return;
+        }
+        if (run.status !== 'paused') {
+            pause();
+        }
+        playMenuOpen();
+        setShortcutsHelpOpen(true);
+    }, [abandonRunConfirmOpen, pause, playMenuOpen, run.status]);
+    const closeShortcutsHelp = useCallback((): void => {
+        playUiBack();
+        setShortcutsHelpOpen(false);
+    }, [playUiBack]);
+
     const pauseShortcutStateRef = useLatestRef({
         abandonRunConfirmOpen,
         lastLevelResult: run.lastLevelResult,
@@ -706,12 +723,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         shortcutsHelpOpen
     });
     const shortcutsHelpStateRef = useLatestRef({
-        playMenuOpen,
-        playUiBack,
+        openShortcutsHelp,
         shortcutsHelpOpen
     });
 
-    /** Pause / resume: toolbar control removed — **P** toggles pause when gameplay is active (not when meta overlays suppress status). */
+    /** P toggles pause; Escape pauses live play and lets the current dialog own its back action. */
     useEffect(() => {
         if (suppressStatusOverlays) {
             return;
@@ -723,7 +739,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             if (event.altKey || event.ctrlKey || event.metaKey) {
                 return;
             }
-            if (event.code !== 'KeyP') {
+            if (event.code !== 'KeyP' && event.key !== 'Escape') {
                 return;
             }
             const target = event.target;
@@ -743,6 +759,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 return;
             }
             if (state.runStatus === 'paused') {
+                // The dialog owns Escape so closing help cannot also resume the board.
+                if (event.key === 'Escape') {
+                    return;
+                }
                 event.preventDefault();
                 state.resume();
                 return;
@@ -775,19 +795,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 }
             }
             const state = shortcutsHelpStateRef.current;
-            if (event.key === 'Escape' && state.shortcutsHelpOpen) {
-                event.preventDefault();
-                state.playUiBack();
-                setShortcutsHelpOpen(false);
-                return;
-            }
             if (state.shortcutsHelpOpen) {
                 return;
             }
             if (event.code === 'F1' || event.key === '?') {
                 event.preventDefault();
-                state.playMenuOpen();
-                setShortcutsHelpOpen(true);
+                state.openShortcutsHelp();
             }
         };
         document.addEventListener('keydown', onKeyDown, true);
@@ -1467,7 +1480,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     // it too: it was the one modal a screen reader could still browse out of into the dock and HUD.
     const storeSheetOpen = run.status === 'levelComplete' && storeStopKey === floorClearKey;
     const gameplayShellInert =
-        !suppressStatusOverlays && (abandonRunConfirmOpen || run.status === 'paused' || storeSheetOpen);
+        !suppressStatusOverlays && (abandonRunConfirmOpen || shortcutsHelpOpen || run.status === 'paused' || storeSheetOpen);
     const reg104GameplayShellVariant =
         run.status === 'paused' ? 'paused' : run.status === 'levelComplete' ? 'floor_clear' : 'playing';
     return (
@@ -1768,10 +1781,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 : [
                                       {
                                           label: 'Controls',
-                                          onClick: () => {
-                                              playMenuOpen();
-                                              setShortcutsHelpOpen(true);
-                                          },
+                                          onClick: openShortcutsHelp,
                                           variant: 'secondary' as const
                                       }
                                   ]),
@@ -1905,13 +1915,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         actions={[
                             {
                                 label: 'Close',
-                                onClick: () => {
-                                    playUiBack();
-                                    setShortcutsHelpOpen(false);
-                                },
+                                onClick: closeShortcutsHelp,
                                 variant: 'secondary'
                             }
                         ]}
+                        onEscape={closeShortcutsHelp}
                         subtitle={
                             gamepadConnected
                                 ? SHORTCUTS_COPY.touch

@@ -30,6 +30,8 @@ const gameSfxMocks = vi.hoisted(() => ({
 }));
 
 const uiSfxMocks = vi.hoisted(() => ({
+    playPauseOpenSfx: vi.fn(),
+    playPauseResumeSfx: vi.fn(),
     playMenuOpenSfx: vi.fn(),
     playUiBackSfx: vi.fn(),
     playUiClickSfx: vi.fn(),
@@ -888,6 +890,73 @@ describe('GameScreen (OVR-014)', () => {
                 remainingPairCount: 3,
             })
         ).toBe('Next: trait surge landed; look for the next multi-trait route.');
+    });
+
+    it.each(['playing', 'memorize', 'resolving'] as const)('Controls freezes a %s run and closes back to Pause without resuming', (status) => {
+        const run: RunState = { ...finishMemorizePhase(createNewRun(0)), status };
+        useAppStore.setState({ run, view: 'playing' });
+        const pauseSpy = vi.spyOn(useAppStore.getState(), 'pause');
+        const resumeSpy = vi.spyOn(useAppStore.getState(), 'resume');
+        const LiveGame = () => {
+            const currentRun = useAppStore((state) => state.run)!;
+            return <GameScreen achievements={[]} run={currentRun} />;
+        };
+        try {
+            const { container } = render(
+                <PlatformTiltProvider><NotificationHost><LiveGame /></NotificationHost></PlatformTiltProvider>
+            );
+            fireEvent.keyDown(document, { code: 'F1' });
+            expect(pauseSpy).toHaveBeenCalledTimes(1);
+            expect(useAppStore.getState().run?.status).toBe('paused');
+            expect(useAppStore.getState().run?.timerState.pausedFromStatus).toBe(status);
+            expect(screen.getAllByRole('dialog')).toHaveLength(1);
+            expect(screen.getByTestId('game-shortcuts-help-overlay')).toBeInTheDocument();
+            expect(container.querySelector('[data-a11y-gameplay-inert="true"]')).toHaveAttribute('inert');
+            fireEvent.keyDown(document, { key: 'Escape' });
+            expect(screen.queryByTestId('game-shortcuts-help-overlay')).not.toBeInTheDocument();
+            expect(screen.getByTestId('game-pause-overlay')).toBeInTheDocument();
+            expect(resumeSpy).not.toHaveBeenCalled();
+        } finally {
+            pauseSpy.mockRestore();
+            resumeSpy.mockRestore();
+        }
+    });
+
+    it('does not open Controls over a floor transition or retreat confirmation', () => {
+        const { rerender } = render(
+            <PlatformTiltProvider><NotificationHost><GameScreen achievements={[]} run={levelCompleteRunFixture()} /></NotificationHost></PlatformTiltProvider>
+        );
+        fireEvent.keyDown(document, { code: 'F1' });
+        expect(screen.queryByTestId('game-shortcuts-help-overlay')).not.toBeInTheDocument();
+        const paused: RunState = { ...finishMemorizePhase(createNewRun(0)), status: 'paused' };
+        rerender(
+            <PlatformTiltProvider><NotificationHost><GameScreen achievements={[]} run={paused} /></NotificationHost></PlatformTiltProvider>
+        );
+        fireEvent.click(screen.getByRole('button', { name: 'Retreat' }));
+        fireEvent.keyDown(document, { key: '?' });
+        expect(screen.queryByTestId('game-shortcuts-help-overlay')).not.toBeInTheDocument();
+        expect(screen.getAllByRole('dialog')).toHaveLength(1);
+        expect(screen.getByRole('dialog', { name: 'Abandon run?' })).toBeInTheDocument();
+    });
+
+    it('Escape pauses live play but does not intercept typing, modifiers, or repeated keys', () => {
+        const pauseSpy = vi.spyOn(useAppStore.getState(), 'pause').mockImplementation(() => undefined);
+        try {
+            render(
+                <PlatformTiltProvider><NotificationHost><GameScreen achievements={[]} run={finishMemorizePhase(createNewRun(0))} /></NotificationHost></PlatformTiltProvider>
+            );
+            fireEvent.keyDown(document, { key: 'Escape', repeat: true });
+            fireEvent.keyDown(document, { key: 'Escape', ctrlKey: true });
+            const input = document.createElement('input');
+            document.body.append(input);
+            fireEvent.keyDown(input, { key: 'Escape' });
+            input.remove();
+            expect(pauseSpy).not.toHaveBeenCalled();
+            fireEvent.keyDown(document, { key: 'Escape' });
+            expect(pauseSpy).toHaveBeenCalledTimes(1);
+        } finally {
+            pauseSpy.mockRestore();
+        }
     });
 
     it('keyboard shortcuts overlay lists board navigation and Gambit tip after F1', () => {

@@ -78,6 +78,35 @@ const focusedLabel = (page: Page): Promise<string> =>
 test.describe('controller navigation', () => {
     test.describe.configure({ retries: 0 });
 
+    test('Controls freezes the board and B returns to Pause before resuming', async ({ page }) => {
+        test.setTimeout(300_000);
+        await installFakePad(page);
+        await openLevel1Play(page);
+        await waitLevel1PlayReady(page);
+        await pressPad(page, 3); // Y opens Controls through the shipping shortcut handler.
+        await expect(page.getByTestId('game-shortcuts-help-overlay')).toBeVisible();
+        await expect(page.getByRole('dialog')).toHaveCount(1);
+        await expect(page.locator('[data-a11y-gameplay-inert]')).toHaveAttribute('inert', '');
+        const readStatus = () => page.evaluate(async () => {
+            const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+            return useAppStore.getState().run?.status;
+        });
+        expect(await readStatus()).toBe('paused');
+        await page.screenshot({ path: 'test-results/controls-paused.png' });
+        await pressPad(page, BUTTON_B);
+        await expect(page.getByTestId('game-shortcuts-help-overlay')).toHaveCount(0);
+        await expect(page.getByTestId('game-pause-overlay')).toBeVisible();
+        expect(await readStatus()).toBe('paused');
+        await page.getByRole('button', { name: 'Controls', exact: true }).click();
+        await page.getByRole('button', { name: 'Close', exact: true }).click();
+        expect(await readStatus()).toBe('paused');
+        await pressPad(page, BUTTON_B);
+        await expect(page.getByRole('dialog')).toHaveCount(0);
+        expect(await readStatus()).toBe('playing');
+        await page.keyboard.press('Escape');
+        await expect(page.getByTestId('game-pause-overlay')).toBeVisible();
+    });
+
     test('a pad walks the main menu and opens what it lands on', async ({ page }) => {
         test.setTimeout(180_000);
         await installFakePad(page);

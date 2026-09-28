@@ -15,9 +15,9 @@ export const ABANDON_DIALOG_COPY = {
 } as const;
 
 export const SHORTCUTS_COPY = {
-    /** Shown on touch, where the list is a reference rather than something to press. */
-    touch: 'These work while a run is active. Your keyboard still does everything it did.',
-    withKeyboard: 'These shortcuts work while a run is active and when focus is not in a text field.'
+    /** Shown when a controller is connected. */
+    touch: 'The run is paused. Close Controls, then resume when you are ready.',
+    withKeyboard: 'The run is paused. Close Controls, then resume when you are ready. Shortcuts do not apply while typing.'
 } as const;
 
 /** Lines the board shows about the floor itself rather than about a power. */

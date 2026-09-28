@@ -3795,8 +3795,8 @@
     {
       "path": "e2e/controller-navigation.spec.ts",
       "category": "test",
-      "bytes": 20841,
-      "sha256": "ea59bff5dab3383debba11b87c9b9620ee06dad7944caa0c8771f9c433b9d502"
+      "bytes": 22519,
+      "sha256": "4c5ab07181e2e7369583e32152add14df07666c54874aac87b8a5002d2075456"
     },
     {
       "path": "e2e/cyp-review-capture.spec.ts",
@@ -3921,8 +3921,8 @@
     {
       "path": "e2e/playable-path-navigation.spec.ts",
       "category": "test",
-      "bytes": 10412,
-      "sha256": "7273c0568f6695e94822265ddceaef9b9aa8970d042e29deb552669d55e544b9"
+      "bytes": 10458,
+      "sha256": "3c896d5f408ac82fd98601a9595341d9279eede23fa3e09008285dd6119f0284"
     },
     {
       "path": "e2e/playablePathHelpers.ts",
@@ -4407,8 +4407,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 123016,
-      "sha256": "af1ab152499443418c830f3e61e410e7b1ba5b085be858cda346806aba0f9adb"
+      "bytes": 121873,
+      "sha256": "0f3a6c5864cdac63b3acafee25eaa5e9ddc62212f351390a23b1d2a6d3fcad4e"
     },
     {
       "path": "public/site.webmanifest",
@@ -9291,14 +9291,14 @@
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
       "category": "test",
-      "bytes": 63941,
-      "sha256": "ebcacc86702d5a722e4bde2345b7d0d67685640b21031d85e286de8d1bc8f0ef"
+      "bytes": 67824,
+      "sha256": "19670cf70afe3983f7682e97e4fef23230ccd1f42ffc07aafe09e6cfa1ff63ba"
     },
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 94263,
-      "sha256": "4f2c98ebf9026079f6b572ca322d0b504158b3d3109c3ef4af7ea88af7d28d00"
+      "bytes": 94598,
+      "sha256": "4155aaaacb0ecd68c4943d1fcd740979a46bff489b5875d4cacc7adefdaefc7d"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -10815,8 +10815,8 @@
     {
       "path": "src/renderer/copy/runDialogCopy.ts",
       "category": "source",
-      "bytes": 7220,
-      "sha256": "223b33da9c925ad7c1f94b717c1dfc5ac1fcc1569748a98fbf08be0c8fc18b5a"
+      "bytes": 7191,
+      "sha256": "c20a59a921a1d73d6b3fa5f090dc0665cc23a8f2a85f6ec65fdd204b9e825359"
     },
     {
       "path": "src/renderer/copy/runHistory.ts",
@@ -11277,8 +11277,8 @@
     {
       "path": "src/renderer/keyboard/gameplayShortcuts.ts",
       "category": "source",
-      "bytes": 1708,
-      "sha256": "ceefe07a08c4e26f5a4ca84d6c8d3e0305b4fc5123f4c15408fe22ef41a07869"
+      "bytes": 1751,
+      "sha256": "bfa6eb527770140609e8eb5957f67a1aa2515a9d82c15a9a0be9d9dc5d9fb2c2"
     },
     {
       "path": "src/renderer/main.tsx",
@@ -19399,7 +19399,7 @@
       "path": "src/renderer/components/GameScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1538,
+      "lineCount": 1607,
       "imports": [
         "file:src/renderer/components/GameScreen.tsx",
         "file:src/renderer/components/gameScreenFeedback.ts",
@@ -19420,7 +19420,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1978,
+      "lineCount": 1986,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -37881,8 +37881,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 1977,
-      "endLine": 1977
+      "line": 1985,
+      "endLine": 1985
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",

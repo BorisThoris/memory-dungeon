@@ -84,7 +84,7 @@ test.describe('Expanded playable navigation contract', () => {
         await closeVisibleModalByButton(page, /^close$/i);
         await expect(page.getByTestId('game-shortcuts-help-overlay')).toBeHidden();
 
-        await page.keyboard.press('p');
+        // Closing Controls keeps the run paused until the player explicitly resumes.
         await expect(page.getByTestId('game-pause-overlay')).toBeVisible();
         await page.getByTestId('game-pause-overlay').getByRole('button', { name: /^resume$/i }).click();
         await expect(page.getByTestId('game-pause-overlay')).toBeHidden();
