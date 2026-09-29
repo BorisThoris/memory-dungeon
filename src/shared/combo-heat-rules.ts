@@ -48,6 +48,28 @@ export const comboHeatStageIndex = (stage: ComboHeatStage): number => Math.max(0
  */
 export const comboHeat = (combo: number): number => 1 - Math.exp(-runNonNegativeInteger(combo) / 12);
 
+/**
+ * The stage a turn climbed to, or null: the rank-up moment the arcade tables stamp across the
+ * screen ("ON FIRE!"). Read from the combo before and after one resolved turn, so it is an event
+ * a turn produced and never something a mount or a restore replays. Warm is not called out: the
+ * first stage is the HUD warming, and a stamp for three in a row would be a stamp for nothing.
+ */
+export const comboStageReached = (comboBefore: number, comboAfter: number): Exclude<ComboHeatStage, 'cold' | 'warm'> | null => {
+    const before = comboHeatStageIndex(comboHeatStage(comboBefore));
+    const after = comboHeatStage(comboAfter);
+    const afterIndex = comboHeatStageIndex(after);
+    if (afterIndex <= before || afterIndex < 2) return null;
+    return after as Exclude<ComboHeatStage, 'cold' | 'warm'>;
+};
+
+/** What the stamp says, per stage: the arcade register, all caps, one word and a mark. */
+export const COMBO_STAGE_CALLOUTS: Readonly<Record<Exclude<ComboHeatStage, 'cold' | 'warm'>, string>> = {
+    hot: 'HOT!',
+    blazing: 'BLAZING!',
+    inferno: 'INFERNO!',
+    legendary: 'LEGENDARY!'
+};
+
 export const COMBO_HEAT_STAGE_LABELS: Readonly<Record<ComboHeatStage, string>> = {
     cold: '',
     warm: 'Warm',

@@ -725,6 +725,41 @@ under pause/relic modals.
     animation: matchScoreFloaterPulse var(--match-score-float-ms, 780ms) ease-out forwards;
 }
 
+/*
+ * The score floater grows with the combo heat (`--combo-heat` is on the shell): a pop at
+ * Legendary is half again the size of a cold one and burns in the stage's colour, the way the
+ * arcade tables' "+500" gets bigger and hotter the longer the streak.
+ */
+.matchScoreFloater {
+    font-size: calc(clamp(0.8rem, 2vi, 0.95rem) * (1 + 0.55 * var(--combo-heat, 0)));
+}
+
+.matchScoreFloater[data-combo-stage='hot'] {
+    --floater-heat: #ffa24f;
+}
+
+.matchScoreFloater[data-combo-stage='blazing'] {
+    --floater-heat: #ff7a3d;
+}
+
+.matchScoreFloater[data-combo-stage='inferno'] {
+    --floater-heat: #ff4d5e;
+}
+
+.matchScoreFloater[data-combo-stage='legendary'] {
+    --floater-heat: #e2b3ff;
+}
+
+.matchScoreFloater[data-combo-stage='hot'],
+.matchScoreFloater[data-combo-stage='blazing'],
+.matchScoreFloater[data-combo-stage='inferno'],
+.matchScoreFloater[data-combo-stage='legendary'] {
+    color: color-mix(in srgb, var(--floater-heat) 70%, var(--margin-paper));
+    text-shadow:
+        0 2px 24px color-mix(in srgb, var(--margin-ink) 90%, transparent),
+        0 0 calc(8px + 22px * var(--combo-heat, 0)) color-mix(in srgb, var(--floater-heat) 80%, transparent);
+}
+
 .matchScoreFloater[data-match-crescendo-tier='stack'],
 .matchScoreFloater[data-match-crescendo-tier='super'] {
     filter: drop-shadow(0 0 0.85rem color-mix(in srgb, var(--theme-gold-bright) 22%, transparent));

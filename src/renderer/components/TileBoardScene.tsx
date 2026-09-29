@@ -50,8 +50,10 @@ import {
     BOARD_TRAUMA_AT_START,
     type BoardTraumaMemory,
     readBoardTrauma,
-    sampleTraumaShake
+    sampleTraumaShake,
+    TRAUMA_STAGE_UP
 } from './boardTrauma';
+import { comboHeatLevels } from '../../shared/combo-heat-rules';
 import {
     applyInitialTileBoardViewportMotionState,
     computeInitialTileBoardViewportMotionState,
@@ -250,6 +252,21 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     const boardTraumaReading = useMemo(() => readBoardTrauma(board, runStatus), [board, runStatus]);
     const boardTraumaRef = useRef(0);
     const boardTraumaMemoryRef = useRef<BoardTraumaMemory>(BOARD_TRAUMA_AT_START);
+    /*
+     * The combo heat (`combo-heat-rules.ts`): breaks shake harder the hotter it is, and a stage
+     * reached is a hit of its own. The stage is read off the combo prop's rising edge - a board
+     * that mounts already Blazing takes no hit, the turn that gets there does.
+     */
+    const comboHeatNow = comboHeatLevels(combo);
+    const comboStageSeenRef = useRef<number | null>(null);
+    const traumaPulseRef = useRef(0);
+    useEffect(() => {
+        const seen = comboStageSeenRef.current;
+        comboStageSeenRef.current = comboHeatNow.stageIndex;
+        if (seen !== null && comboHeatNow.stageIndex > seen && comboHeatNow.stageIndex >= 2) {
+            traumaPulseRef.current += TRAUMA_STAGE_UP;
+        }
+    }, [comboHeatNow.stageIndex]);
     const boardPanRef = useRef<TileBoardPanState>({ x: boardViewport.panX, y: boardViewport.panY });
     const totalColumns = board.columns;
     const totalRows = board.rows;
@@ -418,8 +435,12 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         if (runStatus === 'paused') return;
         const delta = Math.max(0, Math.min(rawDelta, 0.1));
         const perfOn = boardWebglPerfSampleEnabled() || boardWebglPerfSampleVerboseEnabled();
+        const pulse = traumaPulseRef.current;
+        traumaPulseRef.current = 0;
         const advancedTrauma = advanceBoardTrauma({
             delta,
+            heat: comboHeatNow.heat,
+            pulse,
             previous: boardTraumaMemoryRef.current,
             reading: boardTraumaReading,
             reduceMotion,

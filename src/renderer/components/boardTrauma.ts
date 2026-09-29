@@ -242,14 +242,29 @@ export const BOARD_TRAUMA_AT_START: BoardTraumaMemory = { mismatchKey: null, rem
  * One frame of the model: decay what is there, then add what just happened. Decay first, so an
  * event landing on this frame is not shortened by the same frame's decay.
  */
+/**
+ * How much harder a break lands at full combo heat: a Fever break at Legendary is 0.5 × 1.5 =
+ * 0.75 trauma, well inside the model and audibly past a cold Fever. The arcade tables shake more
+ * the longer the run; here the cubic keeps it from being a lot more until it really is.
+ */
+export const TRAUMA_HEAT_SCALE = 0.5;
+/** A rank-up (`comboStageReached`) is a hit of its own, between a Sharp and a Fever break. */
+export const TRAUMA_STAGE_UP = 0.45;
+
 export const advanceBoardTrauma = ({
     delta,
+    heat = 0,
+    pulse = 0,
     previous,
     reading,
     reduceMotion,
     trauma
 }: {
     delta: number;
+    /** The combo heat, 0..1 (`comboHeat`): scales what a break is worth. */
+    heat?: number;
+    /** Trauma an event outside the board wants added this frame (a rank-up stamp). */
+    pulse?: number;
     previous: BoardTraumaMemory;
     reading: BoardTraumaReading;
     reduceMotion: boolean;
@@ -264,7 +279,10 @@ export const advanceBoardTrauma = ({
     }
     let next = decayTrauma(trauma, delta);
     if (reading.removedCount > previous.removedCount) {
-        next = addTrauma(next, TRAUMA_BY_SOURCE[reading.tier]);
+        next = addTrauma(next, TRAUMA_BY_SOURCE[reading.tier] * (1 + TRAUMA_HEAT_SCALE * clamp01(heat)));
+    }
+    if (pulse > 0) {
+        next = addTrauma(next, pulse);
     }
     if (reading.mismatchKey !== null && reading.mismatchKey !== previous.mismatchKey) {
         next = addTrauma(next, TRAUMA_BY_SOURCE.mismatch);

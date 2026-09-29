@@ -248,12 +248,13 @@ describe('gameSfx', () => {
         // Clean adds the shimmer: two voices for this call, three in total.
         playMatchSfx(g, 3);
         expect(createOscillator).toHaveBeenCalledTimes(3);
-        // Sharp adds body under it: three voices for this call, six in total.
+        // Sharp adds body under it, and six is Hot on the combo heat, which adds the sparkle a
+        // step up the key: four voices for this call, seven in total.
         playMatchSfx(g, 6);
-        expect(createOscillator).toHaveBeenCalledTimes(6);
-        // Fever adds the ring that holds: four voices for this call, ten in total.
+        expect(createOscillator).toHaveBeenCalledTimes(7);
+        // Fever adds the ring that holds, with the sparkle still on: five voices, twelve in total.
         playMatchSfx(g, 10);
-        expect(createOscillator).toHaveBeenCalledTimes(10);
+        expect(createOscillator).toHaveBeenCalledTimes(12);
     });
 
     it('voices the match layers off the meter rather than off the streak number', () => {

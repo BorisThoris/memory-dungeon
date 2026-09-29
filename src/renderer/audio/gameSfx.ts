@@ -4,6 +4,7 @@ import { runFiniteNumber, runNonNegativeInteger } from '../../shared/run-number-
 import { TILE_TRAIT_COUNT_KINDS } from '../../shared/session-stats-rules';
 import { getChainMilestoneFeedback, type ChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
 import { runChainMeter, runChainTier, type ChainMeter, type ChainTier } from '../../shared/chain-tier-rules';
+import { comboHeatLevels } from '../../shared/combo-heat-rules';
 import { CHAIN_MILESTONE_SEMITONES, cascadeNoteHz, chunkBreakNoteHz } from './musicalScale';
 import {
     comboFlipVoicing,
@@ -354,6 +355,53 @@ export const playMatchSfx = (gain: number, chainDepth = 1, meter?: ChainMeter | 
         });
     }
     playComboMatchLayers(gain, voicing);
+    playComboHeatSparkleSfx(gain, depth);
+};
+
+/**
+ * The heat on every match: from Hot, a bright short partial a step up the key for each stage,
+ * under the match rather than over it. The pool tables' cue gets a brighter *tink* the longer the
+ * run, and the ear reads "still climbing" from it before the eye has found the counter.
+ */
+const playComboHeatSparkleSfx = (gain: number, combo: number): void => {
+    const heat = comboHeatLevels(combo);
+    if (heat.stageIndex < 2) {
+        return;
+    }
+    const note = cascadeNoteHz(CHAIN_MILESTONE_SEMITONES.chain, heat.stageIndex + 2);
+    playTone({
+        frequency: note,
+        frequencyEnd: note * 1.01,
+        durationSec: 0.05 + heat.heat * 0.05,
+        gain: gain * (0.06 + heat.heat * 0.12),
+        type: 'sine',
+        category: 'match'
+    });
+};
+
+/**
+ * The rank-up sting (`ComboStageCallout`): three notes up the key, each higher than the stage
+ * before, with a held top note that grows with the stage. Played once per stage reached, by the
+ * screen that stamps it, keyed to the turn - never on a mount or a restore.
+ */
+export const playComboStageSfx = (gain: number, stageIndex: number): void => {
+    if (gain <= 0.001) {
+        return;
+    }
+    const root = CHAIN_MILESTONE_SEMITONES.surge + Math.max(0, Math.min(5, Math.floor(stageIndex))) * 2;
+    for (let step = 0; step < 3; step += 1) {
+        const note = cascadeNoteHz(root, step * 2);
+        scheduleCue(() => {
+            playTone({
+                frequency: note,
+                frequencyEnd: note,
+                durationSec: step === 2 ? 0.3 + stageIndex * 0.06 : 0.09,
+                gain: gain * (step === 2 ? 0.42 : 0.26),
+                type: step === 2 ? 'triangle' : 'sine',
+                category: 'match'
+            });
+        }, step * 70);
+    }
 };
 
 /**

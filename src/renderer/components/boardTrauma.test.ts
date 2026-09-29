@@ -16,6 +16,8 @@ import {
     TRAUMA_BY_SOURCE,
     TRAUMA_DECAY_PER_SECOND,
     TRAUMA_EXPONENT,
+    TRAUMA_HEAT_SCALE,
+    TRAUMA_STAGE_UP,
     traumaNoise,
     traumaShakeAmount
 } from './boardTrauma';
@@ -234,6 +236,28 @@ describe('the board shake', () => {
             trauma: first.trauma
         });
         expect(shaken.trauma).toBeCloseTo(TRAUMA_BY_SOURCE.fever, 6);
+        // The same break at full combo heat lands harder, and a rank-up pulse stacks on top.
+        const hot = advanceBoardTrauma({
+            delta: 1 / 60,
+            heat: 1,
+            previous: first.previous,
+            pulse: TRAUMA_STAGE_UP,
+            reading: readBoardTrauma(broken, 'playing'),
+            reduceMotion: false,
+            trauma: first.trauma
+        });
+        // 0.5 x 1.5 + 0.45 = 1.2: the model's ceiling, which is what a Fever break landing on a
+        // rank-up at full heat should be - violent, and rare.
+        expect(hot.trauma).toBe(1);
+        const hotAlone = advanceBoardTrauma({
+            delta: 1 / 60,
+            heat: 1,
+            previous: first.previous,
+            reading: readBoardTrauma(broken, 'playing'),
+            reduceMotion: false,
+            trauma: first.trauma
+        });
+        expect(hotAlone.trauma).toBeCloseTo(TRAUMA_BY_SOURCE.fever * (1 + TRAUMA_HEAT_SCALE), 6);
         // The casualties sit in the array while their wave plays; that is a state, not a new event.
         const held = advanceBoardTrauma({
             delta: 1 / 60,

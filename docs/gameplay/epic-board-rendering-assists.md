@@ -82,6 +82,15 @@ under negative gravity, tinted by stage; `data-particle-ember-bursts`). A vignet
 the whole screen (`.comboAura` in GameScreen) breathes faster the hotter it gets. Everything is
 static under reduced motion and nothing is drawn at cold.
 
+**Rank-up stamp.** The turn that reaches a heat stage from Hot up stamps the screen
+(`ComboStageCallout`: HOT! / BLAZING! / INFERNO! / LEGENDARY!, slammed in, a flash and a shock
+ring, gone in 1.15 s), keyed to the turn event via `comboStageReached` so a restore never
+replays it. It plays a three-note sting (`playComboStageSfx`) and adds `TRAUMA_STAGE_UP` to the
+board shake, read off the combo prop's rising edge in `TileBoardScene`. Break trauma itself
+scales × (1 + `TRAUMA_HEAT_SCALE` × heat), every match past Hot carries a sparkle a step up the
+key per stage, and the score floater grows and burns in the stage's colour. The study behind it:
+[combo-feedback-reference.md](./combo-feedback-reference.md).
+
 **Combo scaling.** The combo carries across floors until a miss, and the board's effects
 read it through `comboEffectIntensity` (saturating: 3 links ≈ 0.28, 10 ≈ 0.67, 20 ≈ 0.89).
 It sets each bolt's strands (one to three), forks, width, life and colour (cyan, gold,

@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2758,
-    "codeFileCount": 978,
-    "exportedSymbolCount": 2968,
+    "trackedFileCount": 2762,
+    "codeFileCount": 980,
+    "exportedSymbolCount": 2976,
     "contentItemCount": 10,
     "mechanicCount": 51,
     "stateFieldCount": 92,
-    "relationshipCount": 7722
+    "relationshipCount": 7736
   },
   "inventory": [
     {
@@ -685,6 +685,12 @@
       "sha256": "833ef893bf0a65760156817877e022ab70f32fe6c3863c354351e156b7275764"
     },
     {
+      "path": "docs/gameplay/combo-feedback-reference.md",
+      "category": "documentation",
+      "bytes": 5553,
+      "sha256": "7d52119a8a82c684d04caf9220a27d937c5dfeaecc45245da9bcf34f36e748ab"
+    },
+    {
       "path": "docs/gameplay/epic-audio-feedback.md",
       "category": "documentation",
       "bytes": 2099,
@@ -693,8 +699,8 @@
     {
       "path": "docs/gameplay/epic-board-rendering-assists.md",
       "category": "documentation",
-      "bytes": 9747,
-      "sha256": "186f11a857909120e193951ac326d167812220d39b5d117a90f3f765bfb61a64"
+      "bytes": 10462,
+      "sha256": "18c079b5e6994aadf3bec85b76f10f4a72350b72ba45b539f9b2bb03e62e9bcd"
     },
     {
       "path": "docs/gameplay/epic-choose-your-path.md",
@@ -861,8 +867,8 @@
     {
       "path": "docs/internal-wiki/DOCS_CATALOG.md",
       "category": "documentation",
-      "bytes": 18988,
-      "sha256": "22462c3d130360e6ef15131a5381a5f891d86a33584ac3d64f4989634e5e650a"
+      "bytes": 19145,
+      "sha256": "6d082e071789258d220aab190b54e8636d3a6e02780ab46dc6f1a8dcd923ebb7"
     },
     {
       "path": "docs/internal-wiki/E2E_AND_QA.md",
@@ -2374,7 +2380,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33561,
-      "sha256": "b51a1df2f9f875f203a393e989c6fa6634435251ca37f1c7c386ef85bdb9447b"
+      "sha256": "b6f79764a67124c99e75b3e57389a7382e417cf7d39822138e98732abdda957d"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -8685,14 +8691,14 @@
     {
       "path": "src/renderer/audio/gameSfx.test.ts",
       "category": "test",
-      "bytes": 43777,
-      "sha256": "4a7e90a056faa732026f3cfc43288f654d6993d202eb243b6a59106fa5177706"
+      "bytes": 43881,
+      "sha256": "01f556a3c4940c1cd3c6df418f4ca3e524b475dc8e7875d708e618dc9b1b5693"
     },
     {
       "path": "src/renderer/audio/gameSfx.ts",
       "category": "source",
-      "bytes": 32438,
-      "sha256": "7e2612cfdc8403a6e886af3a80cad4bd6511bc7ef2391793ee974172077f0996"
+      "bytes": 34314,
+      "sha256": "3b776f281cc0c87ae30358460f31479ac21efc26271b4f83eae8270c930a4428"
     },
     {
       "path": "src/renderer/audio/gameSfxCancellation.test.ts",
@@ -9135,14 +9141,14 @@
     {
       "path": "src/renderer/components/boardTrauma.test.ts",
       "category": "test",
-      "bytes": 14938,
-      "sha256": "ebd0d4119f25528d1686ca5acc78c3ce0788a74a0c156a3792cae5afb66b7baa"
+      "bytes": 15935,
+      "sha256": "bdb7837e64fe3e36e8906426dcc897b8451d2081afe357f61d0b2f8b7740ecf8"
     },
     {
       "path": "src/renderer/components/boardTrauma.ts",
       "category": "source",
-      "bytes": 13810,
-      "sha256": "2d969004565e6656f3e1bed6b91c8c3b72beeb17d23c84c9e7a5c3b565d61c84"
+      "bytes": 14612,
+      "sha256": "2436989f6dd73b2a4cfbb99194a15f4b17afb7893ed25889b95f083cd9b88004"
     },
     {
       "path": "src/renderer/components/cardArcaneGlowMaterial.test.ts",
@@ -9265,6 +9271,24 @@
       "sha256": "1028aec5fd203d6f99f911bad542616098f1ca6b68d83e140e5b2338d899a92b"
     },
     {
+      "path": "src/renderer/components/ComboStageCallout.module.css",
+      "category": "source",
+      "bytes": 5104,
+      "sha256": "abb78ec6757763d4fa4e5262a7bbdbf4cc8d245c353097705be695460caeaea4"
+    },
+    {
+      "path": "src/renderer/components/ComboStageCallout.test.tsx",
+      "category": "test",
+      "bytes": 2221,
+      "sha256": "9d1c02a72e4890593862324f544e47a244d8556db1b7f86ecca602777d3827e4"
+    },
+    {
+      "path": "src/renderer/components/ComboStageCallout.tsx",
+      "category": "source",
+      "bytes": 2935,
+      "sha256": "adae9e6536c35b136fbed2a98c20d8cc46f240cac43362a521a0378f4c4485e3"
+    },
+    {
       "path": "src/renderer/components/feedbackBeatPipCssCoverage.test.ts",
       "category": "test",
       "bytes": 11900,
@@ -9351,8 +9375,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 52801,
-      "sha256": "5ccf25d31c8b542f387c48bf658fce6b6f4f495ddcfddbb401f729670656bb5e"
+      "bytes": 53969,
+      "sha256": "f2a1dd066e4456bb5444db61991fbf6ffed5e472a6494eefd995f2ccfe4733bd"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -9363,8 +9387,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 98712,
-      "sha256": "e0d295dbf132d2cdbe5b86abd5d2b2372feec7d9f4897becb76744409df713f8"
+      "bytes": 99987,
+      "sha256": "c19ffefedc54fb4639b51e969a76b81ca4d84b7e0acf7eb2ee985786edc7ef07"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -10335,8 +10359,8 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 20733,
-      "sha256": "6b2001f99ee7bb091b300536ab19f91c9ed99f06a9f559396f545bd42275dab0"
+      "bytes": 21718,
+      "sha256": "6686c601dc16ed3f5f4c7450d708a9e26e5efa8d81041749bb211c92cea91b74"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
@@ -12459,14 +12483,14 @@
     {
       "path": "src/shared/combo-heat-rules.test.ts",
       "category": "test",
-      "bytes": 2844,
-      "sha256": "95112ef526804b36ff4c8a19dfcb8aba8acf1dd361595374fb71fde1aeeeed6e"
+      "bytes": 3707,
+      "sha256": "30c757c07977c0e599deed6cea23cc5a97fc3ba62e95a2b353e781de6a512eed"
     },
     {
       "path": "src/shared/combo-heat-rules.ts",
       "category": "source",
-      "bytes": 3839,
-      "sha256": "ed82a81b95171e9b8b7e511afab589004d591f0f0ec5bd82ef2a966b864e028e"
+      "bytes": 4951,
+      "sha256": "440f82070a700637299138980c4a68a060d00f26ba0258ed3917d532d57364c4"
     },
     {
       "path": "src/shared/content-lock-state.ts",
@@ -17809,7 +17833,7 @@
       "path": "src/renderer/audio/gameSfx.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1147,
+      "lineCount": 1148,
       "imports": [
         "file:src/renderer/assets/audio/sfx/manifest.json",
         "file:src/renderer/audio/audioInteractionCoverage.ts",
@@ -17826,7 +17850,7 @@
       "path": "src/renderer/audio/gameSfx.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 875,
+      "lineCount": 923,
       "imports": [
         "file:src/renderer/audio/audioSafety.ts",
         "file:src/renderer/audio/comboVoicing.ts",
@@ -17835,6 +17859,7 @@
         "file:src/renderer/audio/webAudioContext.ts",
         "file:src/renderer/copy/chainMilestoneFeedback.ts",
         "file:src/shared/chain-tier-rules.ts",
+        "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/run-array-guards.ts",
         "file:src/shared/run-number-guards.ts",
@@ -17844,6 +17869,7 @@
         "symbol:src/renderer/audio/gameSfx.ts#__resetGameSfxEngineForTests",
         "symbol:src/renderer/audio/gameSfx.ts#CHUNK_BREAK_MAX_NOTES",
         "symbol:src/renderer/audio/gameSfx.ts#playChainOpportunityBeatSfx",
+        "symbol:src/renderer/audio/gameSfx.ts#playComboStageSfx",
         "symbol:src/renderer/audio/gameSfx.ts#playFlipSfx",
         "symbol:src/renderer/audio/gameSfx.ts#playFloorClearSfx",
         "symbol:src/renderer/audio/gameSfx.ts#playGambitCommitSfx",
@@ -19092,7 +19118,7 @@
       "path": "src/renderer/components/boardTrauma.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 297,
+      "lineCount": 321,
       "imports": [
         "file:src/renderer/components/boardTrauma.ts",
         "file:src/shared/contracts.ts"
@@ -19105,7 +19131,7 @@
       "path": "src/renderer/components/boardTrauma.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 299,
+      "lineCount": 317,
       "imports": [
         "file:src/renderer/components/tileResolvingSelection.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -19133,6 +19159,8 @@
         "symbol:src/renderer/components/boardTrauma.ts#TRAUMA_BY_SOURCE",
         "symbol:src/renderer/components/boardTrauma.ts#TRAUMA_DECAY_PER_SECOND",
         "symbol:src/renderer/components/boardTrauma.ts#TRAUMA_EXPONENT",
+        "symbol:src/renderer/components/boardTrauma.ts#TRAUMA_HEAT_SCALE",
+        "symbol:src/renderer/components/boardTrauma.ts#TRAUMA_STAGE_UP",
         "symbol:src/renderer/components/boardTrauma.ts#traumaNoise",
         "symbol:src/renderer/components/boardTrauma.ts#traumaShakeAmount",
         "symbol:src/renderer/components/boardTrauma.ts#TraumaShakeMaxima"
@@ -19439,6 +19467,36 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/ComboStageCallout.test.tsx",
+      "path": "src/renderer/components/ComboStageCallout.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 38,
+      "imports": [
+        "file:src/renderer/components/ComboStageCallout.tsx"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/ComboStageCallout.tsx",
+      "path": "src/renderer/components/ComboStageCallout.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 61,
+      "imports": [
+        "file:src/shared/combo-heat-rules.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/ComboStageCallout.tsx#COMBO_STAGE_CALLOUT_MS",
+        "symbol:src/renderer/components/ComboStageCallout.tsx#ComboStageCallout",
+        "symbol:src/renderer/components/ComboStageCallout.tsx#ComboStageCalloutProps"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/ComboStageCallout.test.tsx"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/feedbackBeatPipCssCoverage.test.ts",
       "path": "src/renderer/components/feedbackBeatPipCssCoverage.test.ts",
       "layer": "renderer",
@@ -19682,13 +19740,14 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2051,
+      "lineCount": 2071,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/breakpoints.ts",
         "file:src/renderer/components/boardFloaterPlacement.ts",
+        "file:src/renderer/components/ComboStageCallout.tsx",
         "file:src/renderer/components/FloorClearBeat.tsx",
         "file:src/renderer/components/GameplayScene.tsx",
         "file:src/renderer/components/gameplayVisualConfig.ts",
@@ -22416,7 +22475,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 505,
+      "lineCount": 526,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
@@ -22447,6 +22506,7 @@
         "file:src/renderer/hooks/useSceneEffectTier.ts",
         "file:src/renderer/platformTilt/platformTiltTypes.ts",
         "file:src/renderer/styles/theme.ts",
+        "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts"
       ],
       "exports": [
@@ -28324,7 +28384,7 @@
       "path": "src/shared/combo-heat-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 59,
+      "lineCount": 75,
       "imports": [
         "file:src/shared/combo-heat-rules.ts"
       ],
@@ -28336,19 +28396,21 @@
       "path": "src/shared/combo-heat-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 90,
+      "lineCount": 112,
       "imports": [
         "file:src/shared/run-number-guards.ts"
       ],
       "exports": [
         "symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_STAGE_FROM",
         "symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_STAGE_LABELS",
+        "symbol:src/shared/combo-heat-rules.ts#COMBO_STAGE_CALLOUTS",
         "symbol:src/shared/combo-heat-rules.ts#comboHeat",
         "symbol:src/shared/combo-heat-rules.ts#comboHeatLevels",
         "symbol:src/shared/combo-heat-rules.ts#ComboHeatLevels",
         "symbol:src/shared/combo-heat-rules.ts#comboHeatStage",
         "symbol:src/shared/combo-heat-rules.ts#ComboHeatStage",
-        "symbol:src/shared/combo-heat-rules.ts#comboHeatStageIndex"
+        "symbol:src/shared/combo-heat-rules.ts#comboHeatStageIndex",
+        "symbol:src/shared/combo-heat-rules.ts#comboStageReached"
       ],
       "testedBy": [
         "file:src/shared/combo-heat-rules.test.ts"
@@ -36269,128 +36331,136 @@
       "name": "__resetGameSfxEngineForTests",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 40,
-      "endLine": 46
+      "line": 41,
+      "endLine": 47
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#CHUNK_BREAK_MAX_NOTES",
       "name": "CHUNK_BREAK_MAX_NOTES",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 449,
-      "endLine": 449
+      "line": 497,
+      "endLine": 497
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playChainOpportunityBeatSfx",
       "name": "playChainOpportunityBeatSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 556,
-      "endLine": 581
+      "line": 604,
+      "endLine": 629
+    },
+    {
+      "id": "symbol:src/renderer/audio/gameSfx.ts#playComboStageSfx",
+      "name": "playComboStageSfx",
+      "kind": "value",
+      "file": "src/renderer/audio/gameSfx.ts",
+      "line": 387,
+      "endLine": 405
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playFlipSfx",
       "name": "playFlipSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 220,
-      "endLine": 232
+      "line": 221,
+      "endLine": 233
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playFloorClearSfx",
       "name": "playFloorClearSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 857,
-      "endLine": 874
+      "line": 905,
+      "endLine": 922
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playGambitCommitSfx",
       "name": "playGambitCommitSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 263,
-      "endLine": 278
+      "line": 264,
+      "endLine": 279
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playMatchPayoffSfx",
       "name": "playMatchPayoffSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 674,
-      "endLine": 704
+      "line": 722,
+      "endLine": 752
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playMatchSfx",
       "name": "playMatchSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 338,
-      "endLine": 357
+      "line": 339,
+      "endLine": 359
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playMismatchRecoveryCrescendoSfx",
       "name": "playMismatchRecoveryCrescendoSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 583,
-      "endLine": 607
+      "line": 631,
+      "endLine": 655
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playPeekPowerSfx",
       "name": "playPeekPowerSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 796,
-      "endLine": 808
+      "line": 844,
+      "endLine": 856
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playPowerArmSfx",
       "name": "playPowerArmSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 781,
-      "endLine": 793
+      "line": 829,
+      "endLine": 841
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playResolveSfx",
       "name": "playResolveSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 710,
-      "endLine": 778
+      "line": 758,
+      "endLine": 826
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playShuffleSfx",
       "name": "playShuffleSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 814,
-      "endLine": 852
+      "line": 862,
+      "endLine": 900
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playStudyClosingTickSfx",
       "name": "playStudyClosingTickSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 247,
-      "endLine": 260
+      "line": 248,
+      "endLine": 261
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#resumeAudioContext",
       "name": "resumeAudioContext",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 50,
-      "endLine": 55
+      "line": 51,
+      "endLine": 56
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#sfxGainFromSettings",
       "name": "sfxGainFromSettings",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 67,
-      "endLine": 68
+      "line": 68,
+      "endLine": 69
     },
     {
       "id": "symbol:src/renderer/audio/musicalScale.ts#A4_HZ",
@@ -37893,8 +37963,8 @@
       "name": "advanceBoardTrauma",
       "kind": "value",
       "file": "src/renderer/components/boardTrauma.ts",
-      "line": 245,
-      "endLine": 273
+      "line": 254,
+      "endLine": 291
     },
     {
       "id": "symbol:src/renderer/components/boardTrauma.ts#BOARD_SHAKE_AT_REST",
@@ -38005,8 +38075,8 @@
       "name": "readBoardTrauma",
       "kind": "value",
       "file": "src/renderer/components/boardTrauma.ts",
-      "line": 278,
-      "endLine": 298
+      "line": 296,
+      "endLine": 316
     },
     {
       "id": "symbol:src/renderer/components/boardTrauma.ts#sampleTraumaShake",
@@ -38047,6 +38117,22 @@
       "file": "src/renderer/components/boardTrauma.ts",
       "line": 104,
       "endLine": 104
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#TRAUMA_HEAT_SCALE",
+      "name": "TRAUMA_HEAT_SCALE",
+      "kind": "value",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 250,
+      "endLine": 250
+    },
+    {
+      "id": "symbol:src/renderer/components/boardTrauma.ts#TRAUMA_STAGE_UP",
+      "name": "TRAUMA_STAGE_UP",
+      "kind": "value",
+      "file": "src/renderer/components/boardTrauma.ts",
+      "line": 252,
+      "endLine": 252
     },
     {
       "id": "symbol:src/renderer/components/boardTrauma.ts#traumaNoise",
@@ -38273,6 +38359,30 @@
       "endLine": 157
     },
     {
+      "id": "symbol:src/renderer/components/ComboStageCallout.tsx#COMBO_STAGE_CALLOUT_MS",
+      "name": "COMBO_STAGE_CALLOUT_MS",
+      "kind": "value",
+      "file": "src/renderer/components/ComboStageCallout.tsx",
+      "line": 29,
+      "endLine": 29
+    },
+    {
+      "id": "symbol:src/renderer/components/ComboStageCallout.tsx#ComboStageCallout",
+      "name": "ComboStageCallout",
+      "kind": "function",
+      "file": "src/renderer/components/ComboStageCallout.tsx",
+      "line": 31,
+      "endLine": 60
+    },
+    {
+      "id": "symbol:src/renderer/components/ComboStageCallout.tsx#ComboStageCalloutProps",
+      "name": "ComboStageCalloutProps",
+      "kind": "interface",
+      "file": "src/renderer/components/ComboStageCallout.tsx",
+      "line": 19,
+      "endLine": 26
+    },
+    {
       "id": "symbol:src/renderer/components/FloorClearBeat.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
@@ -38413,40 +38523,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2050,
-      "endLine": 2050
+      "line": 2070,
+      "endLine": 2070
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 240,
-      "endLine": 240
+      "line": 242,
+      "endLine": 242
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 238,
-      "endLine": 238
+      "line": 240,
+      "endLine": 240
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 242,
-      "endLine": 242
+      "line": 244,
+      "endLine": 244
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 232,
-      "endLine": 232
+      "line": 234,
+      "endLine": 234
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -41189,24 +41299,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 504,
-      "endLine": 504
+      "line": 525,
+      "endLine": 525
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
       "name": "TileBoardSceneHandle",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 157,
-      "endLine": 157
+      "line": 159,
+      "endLine": 159
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 77,
-      "endLine": 77
+      "line": 79,
+      "endLine": 79
     },
     {
       "id": "symbol:src/renderer/components/TileBoardSceneBoardGroup.tsx#TileBoardSceneBoardGroup",
@@ -48197,8 +48307,16 @@
       "name": "COMBO_HEAT_STAGE_LABELS",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 51,
-      "endLine": 58
+      "line": 73,
+      "endLine": 80
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-rules.ts#COMBO_STAGE_CALLOUTS",
+      "name": "COMBO_STAGE_CALLOUTS",
+      "kind": "value",
+      "file": "src/shared/combo-heat-rules.ts",
+      "line": 66,
+      "endLine": 71
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#comboHeat",
@@ -48213,16 +48331,16 @@
       "name": "comboHeatLevels",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 76,
-      "endLine": 89
+      "line": 98,
+      "endLine": 111
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#ComboHeatLevels",
       "name": "ComboHeatLevels",
       "kind": "interface",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 60,
-      "endLine": 72
+      "line": 82,
+      "endLine": 94
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#comboHeatStage",
@@ -48247,6 +48365,14 @@
       "file": "src/shared/combo-heat-rules.ts",
       "line": 42,
       "endLine": 42
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-rules.ts#comboStageReached",
+      "name": "comboStageReached",
+      "kind": "value",
+      "file": "src/shared/combo-heat-rules.ts",
+      "line": 57,
+      "endLine": 63
     },
     {
       "id": "symbol:src/shared/content-lock-state.ts#BuildFlavour",
@@ -63828,6 +63954,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/audio/gameSfx.ts->symbol:src/renderer/audio/gameSfx.ts#playComboStageSfx",
+      "source": "file:src/renderer/audio/gameSfx.ts",
+      "target": "symbol:src/renderer/audio/gameSfx.ts#playComboStageSfx",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/audio/gameSfx.ts->symbol:src/renderer/audio/gameSfx.ts#playFlipSfx",
       "source": "file:src/renderer/audio/gameSfx.ts",
       "target": "symbol:src/renderer/audio/gameSfx.ts#playFlipSfx",
@@ -65148,6 +65280,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#TRAUMA_HEAT_SCALE",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#TRAUMA_HEAT_SCALE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#TRAUMA_STAGE_UP",
+      "source": "file:src/renderer/components/boardTrauma.ts",
+      "target": "symbol:src/renderer/components/boardTrauma.ts#TRAUMA_STAGE_UP",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/boardTrauma.ts->symbol:src/renderer/components/boardTrauma.ts#traumaNoise",
       "source": "file:src/renderer/components/boardTrauma.ts",
       "target": "symbol:src/renderer/components/boardTrauma.ts#traumaNoise",
@@ -65313,6 +65457,24 @@
       "id": "exports:src/renderer/components/CollectionScreen.tsx->symbol:src/renderer/components/CollectionScreen.tsx#default",
       "source": "file:src/renderer/components/CollectionScreen.tsx",
       "target": "symbol:src/renderer/components/CollectionScreen.tsx#default",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/ComboStageCallout.tsx->symbol:src/renderer/components/ComboStageCallout.tsx#COMBO_STAGE_CALLOUT_MS",
+      "source": "file:src/renderer/components/ComboStageCallout.tsx",
+      "target": "symbol:src/renderer/components/ComboStageCallout.tsx#COMBO_STAGE_CALLOUT_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/ComboStageCallout.tsx->symbol:src/renderer/components/ComboStageCallout.tsx#ComboStageCallout",
+      "source": "file:src/renderer/components/ComboStageCallout.tsx",
+      "target": "symbol:src/renderer/components/ComboStageCallout.tsx#ComboStageCallout",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/ComboStageCallout.tsx->symbol:src/renderer/components/ComboStageCallout.tsx#ComboStageCalloutProps",
+      "source": "file:src/renderer/components/ComboStageCallout.tsx",
+      "target": "symbol:src/renderer/components/ComboStageCallout.tsx#ComboStageCalloutProps",
       "kind": "exports"
     },
     {
@@ -72762,6 +72924,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#COMBO_STAGE_CALLOUTS",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "symbol:src/shared/combo-heat-rules.ts#COMBO_STAGE_CALLOUTS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#comboHeat",
       "source": "file:src/shared/combo-heat-rules.ts",
       "target": "symbol:src/shared/combo-heat-rules.ts#comboHeat",
@@ -72795,6 +72963,12 @@
       "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#comboHeatStageIndex",
       "source": "file:src/shared/combo-heat-rules.ts",
       "target": "symbol:src/shared/combo-heat-rules.ts#comboHeatStageIndex",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#comboStageReached",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "symbol:src/shared/combo-heat-rules.ts#comboStageReached",
       "kind": "exports"
     },
     {
@@ -82899,6 +83073,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/audio/gameSfx.ts->src/shared/combo-heat-rules.ts",
+      "source": "file:src/renderer/audio/gameSfx.ts",
+      "target": "file:src/shared/combo-heat-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/audio/gameSfx.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/audio/gameSfx.ts",
       "target": "file:src/shared/contracts.ts",
@@ -84213,6 +84393,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/ComboStageCallout.test.tsx->src/renderer/components/ComboStageCallout.tsx",
+      "source": "file:src/renderer/components/ComboStageCallout.test.tsx",
+      "target": "file:src/renderer/components/ComboStageCallout.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ComboStageCallout.tsx->src/shared/combo-heat-rules.ts",
+      "source": "file:src/renderer/components/ComboStageCallout.tsx",
+      "target": "file:src/shared/combo-heat-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/FloorClearBeat.test.tsx->src/renderer/components/FloorClearBeat.tsx",
       "source": "file:src/renderer/components/FloorClearBeat.test.tsx",
       "target": "file:src/renderer/components/FloorClearBeat.tsx",
@@ -84618,6 +84810,12 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/boardFloaterPlacement.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/boardFloaterPlacement.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/ComboStageCallout.tsx",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/components/ComboStageCallout.tsx",
       "kind": "imports"
     },
     {
@@ -88194,6 +88392,12 @@
       "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/styles/theme.ts",
       "source": "file:src/renderer/components/TileBoardScene.tsx",
       "target": "file:src/renderer/styles/theme.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardScene.tsx->src/shared/combo-heat-rules.ts",
+      "source": "file:src/renderer/components/TileBoardScene.tsx",
+      "target": "file:src/shared/combo-heat-rules.ts",
       "kind": "imports"
     },
     {
@@ -101850,6 +102054,12 @@
       "id": "tested_by:src/renderer/components/CollectionScreen.tsx->file:src/renderer/components/CollectionScreen.test.tsx",
       "source": "file:src/renderer/components/CollectionScreen.tsx",
       "target": "file:src/renderer/components/CollectionScreen.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/ComboStageCallout.tsx->file:src/renderer/components/ComboStageCallout.test.tsx",
+      "source": "file:src/renderer/components/ComboStageCallout.tsx",
+      "target": "file:src/renderer/components/ComboStageCallout.test.tsx",
       "kind": "tested_by"
     },
     {

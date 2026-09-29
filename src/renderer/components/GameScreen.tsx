@@ -109,6 +109,7 @@ import TileBoard, { type TileBoardHandle } from './TileBoard';
 
 const MemoTileBoard = memo(TileBoard);
 import {
+    playComboStageSfx,
     playMismatchRecoveryCrescendoSfx,
     resumeAudioContext,
     sfxGainFromSettings
@@ -121,7 +122,8 @@ import {
     uiSfxGainFromSettings
 } from '../audio/uiSfx';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
-import { comboHeatLevels } from '../../shared/combo-heat-rules';
+import { comboHeatLevels, comboHeatStageIndex, comboStageReached } from '../../shared/combo-heat-rules';
+import { ComboStageCallout } from './ComboStageCallout';
 import { GameplayScene } from './GameplayScene';
 import { REG104_DATA_SHELL } from '../gameplay/regPhase4PlayContract';
 import styles from './GameScreen.module.css';
@@ -1025,12 +1027,28 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      */
     // The combo heat (`combo-heat-rules.ts`): the stage every surface below reads, once per render.
     const comboHeatLevelsNow = comboHeatLevels(run.stats.currentStreak);
+    /*
+     * The stage the latest turn reached (`comboStageReached`): the rank-up stamp and its sting
+     * are keyed to that turn, so a run that opens already Blazing shows nothing until it climbs.
+     */
+    const comboStageReachedNow = latestTurnForPulse
+        ? comboStageReached(latestTurnForPulse.announcement.currentStreakBefore, latestTurnForPulse.announcement.currentStreakAfter)
+        : null;
+    const comboStageKey = comboStageReachedNow && latestTurnForPulse ? `stage:${latestTurnForPulse.eventId}` : null;
     const feverArrivalKey =
         latestTurnForPulse &&
         latestTurnForPulse.announcement.chainTierAfter === 'fever' &&
         latestTurnForPulse.announcement.chainTierBefore !== 'fever'
             ? `fever:${latestTurnForPulse.eventId}`
             : null;
+    useEffect(() => {
+        if (comboStageKey === null || comboStageReachedNow === null) {
+            return;
+        }
+        playComboStageSfx(shuffleSfxGain, comboHeatStageIndex(comboStageReachedNow));
+        // The sting is the stamp's, once per turn that reached a stage; the gain is read as it is.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [comboStageKey]);
     useEffect(() => {
         if (pulseEventId === null || pulsePairs <= 0) {
             return undefined;
@@ -1576,6 +1594,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             </div>
             {/* The combo aura: the screen's edges burn with the combo, past anything the meter shows. */}
             <div aria-hidden="true" className={styles.comboAura} data-combo-stage={comboHeatLevelsNow.stage} data-testid="combo-aura" />
+            <ComboStageCallout calloutKey={comboStageKey} combo={run.stats.currentStreak} reduceMotion={reduceMotion} stage={comboStageReachedNow} />
             <div className={`${styles.gameForeground} ${cameraViewportMode ? styles.mobileCameraForeground : ''}`}>
                 <div
                     aria-hidden={gameplayShellInert ? true : undefined}
@@ -1752,6 +1771,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             : 'mismatch-score-floater'
                                     }
                                     data-feedback-intensity={boardFloaterIntensity}
+                                    data-combo-stage={comboHeatLevelsNow.stage}
                                     data-floater-placement={boardFloaterPos.placement}
                                     data-match-floater-heat={
                                         boardFloaterPayload.kind === 'match'

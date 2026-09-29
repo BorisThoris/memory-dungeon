@@ -58,6 +58,7 @@
 | [GAMEPLAY_POLISH_AND_GAPS.md](../gameplay/GAMEPLAY_POLISH_AND_GAPS.md) | Consolidated polish, partial implementations, UX/doc risks |
 | [epic-core-memory-loop.md](../gameplay/epic-core-memory-loop.md) | Flips, match flow, gambit, wild/decoy |
 | [epic-run-session-flow.md](../gameplay/epic-run-session-flow.md) | Memorize/play/resolve, pause, advance |
+| [combo-feedback-reference.md](../gameplay/combo-feedback-reference.md) | The escalating combo feedback loop and the arcade pool tables it is modelled on |
 | [epic-board-rendering-assists.md](../gameplay/epic-board-rendering-assists.md) | Board, findables, hints, WebGL |
 | [epic-mutators.md](../gameplay/epic-mutators.md) | Mutator IDs, endless schedule |
 | [epic-scoring-objectives.md](../gameplay/epic-scoring-objectives.md) | Scoring, objectives, penalties |
