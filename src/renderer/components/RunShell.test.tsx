@@ -543,16 +543,22 @@ describe('RunShell — The Margin', () => {
         // The combo carries whole until a miss while the ladder restarts each floor; a rail back on
         // Lone under a small "Chain 9" read as a lost combo, so the combo is the big number now.
         const base = playingRun();
-        const carried: RunState = { ...base, chainLinksAboveLadder: 8, stats: { ...base.stats, currentStreak: 9 } };
+        const carried: RunState = { ...base, comboLinksCarried: 8, board: { ...base.board!, pairCount: 12 }, stats: { ...base.stats, currentStreak: 9 } };
         const { rerender } = render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={carried} tools={[]} />);
         expect(screen.getByTestId('hud-combo')).toHaveAttribute('data-combo', '9');
         expect(screen.getByTestId('hud-combo')).toHaveTextContent(/9\s*Combo/);
         expect(screen.getByTestId('hud-combo-carried')).toHaveTextContent('8 carried');
-        // Only one link reaches this floor's ladder: the rung is still the floor's own.
-        expect(screen.getByTestId('hud-chain-rung-value')).toHaveAttribute('data-chain-tier', 'none');
+        // Nine is Hot: the shell carries the heat stage and the label says it beside the combo.
+        expect(screen.getByTestId('run-shell')).toHaveAttribute('data-combo-stage', 'hot');
+        expect(screen.getByTestId('hud-combo-stage')).toHaveTextContent('Combo · Hot');
+        expect(screen.getByTestId('hud-chain-flames')).toBeInTheDocument();
+        // The ladder came down the stairs with it: nine on twelve pairs is Fever.
+        expect(screen.getByTestId('hud-chain-rung-value')).toHaveAttribute('data-chain-tier', 'fever');
         rerender(<RunShell onPause={vi.fn()} personalBestDepth={false} run={{ ...base, stats: { ...base.stats, currentStreak: 2 } }} tools={[]} />);
         expect(screen.getByTestId('hud-combo')).toHaveAttribute('data-combo-carried', 'false');
         expect(screen.queryByTestId('hud-combo-carried')).toBeNull();
+        expect(screen.getByTestId('run-shell')).toHaveAttribute('data-combo-stage', 'cold');
+        expect(screen.getByTestId('hud-combo-stage')).toHaveTextContent(/^Combo$/);
     });
 
     /**

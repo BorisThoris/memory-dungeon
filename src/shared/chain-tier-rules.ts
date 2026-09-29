@@ -106,18 +106,13 @@ export const runChainMomentumPairs = (run: ChainMomentumRun): number =>
     runNonNegativeInteger(run.chunkPairsThisChain) + runNonNegativeInteger(run.skipMomentumThisChain);
 
 /**
- * The part of the combo the break ladder counts.
- *
- * The combo carries whole from floor to floor until a miss; the ladder may take only one link
- * across a boundary (`chain-carryover-rules.ts`), so every link above that is held in
- * `chainLinksAboveLadder` and left out here. Everything that decides a tier reads this, and
- * everything that shows or pays the combo (score, pitch, effects, the miss bank) reads the streak.
+ * The chain the ladder counts: the whole combo. It carries from floor to floor with every other
+ * source of momentum until a miss (`chain-carryover-rules.ts`).
  */
-export const runLadderChain = (run: Pick<RunState, 'stats' | 'chainLinksAboveLadder'>): number =>
-    Math.max(0, runNonNegativeInteger(run.stats?.currentStreak) - runNonNegativeInteger(run.chainLinksAboveLadder));
+export const runLadderChain = (run: Pick<RunState, 'stats'>): number => runNonNegativeInteger(run.stats?.currentStreak);
 
 /** The run's live tier: its momentum against its floor. The one call every surface should make. */
-export const runChainTier = (run: Pick<RunState, 'stats' | 'board' | 'chainLinksAboveLadder'> & ChainMomentumRun): ChainTier =>
+export const runChainTier = (run: Pick<RunState, 'stats' | 'board'> & ChainMomentumRun): ChainTier =>
     getChainTier(chainMomentum(runLadderChain(run), runChainMomentumPairs(run)), run.board?.pairCount ?? null);
 
 const CHAIN_TIER_ORDER: readonly ChainTier[] = ['none', 'clean', 'sharp', 'fever'];
@@ -174,7 +169,7 @@ export const chainMeter = (momentum: number, pairsOnFloor?: number | null): Chai
 };
 
 /** The run's own meter: its momentum against its floor. */
-export const runChainMeter = (run: Pick<RunState, 'stats' | 'board' | 'chainLinksAboveLadder'> & ChainMomentumRun): ChainMeter =>
+export const runChainMeter = (run: Pick<RunState, 'stats' | 'board'> & ChainMomentumRun): ChainMeter =>
     chainMeter(chainMomentum(runLadderChain(run), runChainMomentumPairs(run)), run.board?.pairCount ?? null);
 
 /**

@@ -26,17 +26,11 @@ export const createNextFloorRunState = (
     const nextBoard = options.board;
     const stats = normalizeSessionStats(run.stats);
     /*
-     * The chain crosses the boundary, capped short of the Clean rung (`chain-carryover-rules.ts`):
-     * the momentum is the player's, every tier is earned on the board that shows it. The cascade
-     * momentum does not cross at all.
+     * The combo and its whole ladder cross the boundary (`chain-carryover-rules.ts`): the streak,
+     * the pairs the cascade took and the momentum a skipped study bought all persist until a miss,
+     * so the meter a player climbed is the meter they open the next floor on.
      */
     const carriedChain = carriedChainForNextFloor(stats.currentStreak);
-    /*
-     * The combo itself crosses whole: it ends on a miss, never on the stairs. Only the ladder is
-     * capped, by holding every link above its one carried link out of what the tiers read
-     * (`runLadderChain`).
-     */
-    const combo = runNonNegativeInteger(stats.currentStreak);
 
     const nextRun: RunState = {
         ...run,
@@ -64,13 +58,11 @@ export const createNextFloorRunState = (
         chunkBreaksThisFloor: 0,
         chunkPairsBrokenThisFloor: 0,
         chunkScoreThisFloor: 0,
-        chunkPairsThisChain: 0,
-        skipMomentumThisChain: 0,
+        chunkPairsThisChain: runNonNegativeInteger(run.chunkPairsThisChain),
+        skipMomentumThisChain: runNonNegativeInteger(run.skipMomentumThisChain),
         feverBreaksThisFloor: 0,
-        // The carried chain is a chain this floor really holds, so it is this floor's record until
-        // a longer one lands. It is under the Clean rung by construction, so it can never credit
-        // `sharpFloorsThisRun` or `feverFloorsThisRun` for a rung the floor did not climb.
-        bestChainThisFloor: carriedChain,
+        // The floor's own record starts empty: a combo carried in is not a chain this board saw.
+        bestChainThisFloor: 0,
         peakChainTierThisFloor: 'none',
         chunkPairsDroppedThisFloor: 0,
         bestRippleThisFloor: 0,
@@ -97,9 +89,9 @@ export const createNextFloorRunState = (
             currentLevelScore: 0,
             rating: calculateRating(0),
             highestLevel: Math.max(stats.highestLevel, nextBoard.level),
-            currentStreak: combo
+            currentStreak: carriedChain
         },
-        chainLinksAboveLadder: combo - carriedChain
+        comboLinksCarried: carriedChain
     };
     /*
      * Whoever lives on the next floor moves in before anything else reads the run: their peek

@@ -8,7 +8,7 @@ import { noopMeshRaycast } from './tileBoardPick';
 import { sampleCardRim, type RimParticleMood } from './boardParticleRim';
 import { buildLightningPath, comboArcTint } from './boardGroupArcs';
 
-export type BoardParticleKind = 'bomb' | 'match' | 'flip' | 'chain' | 'rim' | 'ripple' | 'arc';
+export type BoardParticleKind = 'bomb' | 'match' | 'flip' | 'chain' | 'rim' | 'ripple' | 'arc' | 'ember';
 /** Room for a Fever break's bolts on top of its bursts: an arc is a few dozen segment quads. */
 export const BOARD_PARTICLE_CAPACITY = 640;
 export const boardParticleBudget = (quality: GraphicsQualityPreset): number =>
@@ -41,6 +41,8 @@ export interface BoardParticleBurst {
     cardMatrix?: Matrix4;
     energy?: number;
     rimMood?: RimParticleMood;
+    /** Ember colour, for the combo heat's palette; the warm default otherwise. */
+    tint?: string;
 }
 
 const vertexShader = `
@@ -227,32 +229,34 @@ export const createBoardParticleSystem = () => {
             const flip = burst.kind === 'flip';
             const rim = burst.kind === 'rim';
             const ripple = burst.kind === 'ripple';
+            // Ambient embers rising off a card while the combo burns: free slots only, like the rim.
+            const ember = burst.kind === 'ember';
             const edge = rim || burst.kind === 'match' || flip;
             const energy = Math.max(0, Math.min(1, burst.energy ?? 0));
             const warm = rim ? burst.rimMood === 'match' ? '#baffdf' : burst.rimMood === 'charge' ? '#ffb34b' : '#ffe3a3'
                 : bomb ? '#ffd391' : burst.kind === 'chain' ? '#ffb34b' : flip ? '#9cebea' : '#ffe0a0';
             const density = burst.quality === 'low' ? 0.45 : burst.quality === 'medium' ? 0.7 : 1;
-            const sparks = Math.round((rim ? 2 + energy * 2 : bomb ? 44 : flip ? 8 : 28 + energy * 12) * density);
+            const sparks = Math.round((rim ? 2 + energy * 2 : ember ? 2 + energy * 4 : bomb ? 44 : flip ? 8 : 28 + energy * 12) * density);
             const smoke = bomb ? Math.round(8 * density) : 0;
-            const count = burst.reduceMotion ? (flip || rim || ripple ? 0 : 1) : ripple ? (burst.quality === 'low' ? 2 : 3) : sparks + smoke + (edge ? 0 : 1);
+            const count = burst.reduceMotion ? (flip || rim || ripple || ember ? 0 : 1) : ripple ? (burst.quality === 'low' ? 2 : 3) : ember ? sparks : sparks + smoke + (edge ? 0 : 1);
             let emitted = 0;
             for (let index = 0; index < count; index += 1) {
                 // Ambient rim trails use only free slots, so hovering cannot erase an explosion.
-                if (rim) {
+                if (rim || ember) {
                     let checked = 0;
                     while (ends[cursor % budget]! > burst.time && checked++ < budget) cursor += 1;
                     if (checked >= budget) break;
                 }
-                if (!rim && !ripple) {
+                if (!rim && !ripple && !ember) {
                     let checked = 0;
                     while (ends[cursor % budget]! > burst.time && lifetime.getW(cursor % budget) === 6 && checked++ < budget) cursor += 1;
                     if (checked >= budget) break;
                 }
                 const slot = cursor++ % budget;
-                const kind = burst.reduceMotion ? 3 : ripple ? 6 : edge ? 4 : index >= sparks + smoke ? 1 : index >= sparks ? 2 : 0;
+                const kind = burst.reduceMotion ? 3 : ripple ? 6 : edge ? 4 : ember ? 0 : index >= sparks + smoke ? 1 : index >= sparks ? 2 : 0;
                 const angle = ripple ? 0 : rng() * Math.PI * 2;
                 const speed = kind === 0 ? (bomb ? 1.2 : 0.45) * (0.35 + rng()) : kind === 2 ? 0.28 : 0;
-                const life = burst.reduceMotion ? 0.5 : ripple ? 0.65 + index * 0.08 : rim ? 0.3 + rng() * 0.3 : kind === 1 ? 0.65 : kind === 2 ? 1.1 : 0.45 + rng() * 0.65;
+                const life = burst.reduceMotion ? 0.5 : ripple ? 0.65 + index * 0.08 : rim ? 0.3 + rng() * 0.3 : ember ? 0.9 + rng() * 0.8 : kind === 1 ? 0.65 : kind === 2 ? 1.1 : 0.45 + rng() * 0.65;
                 const start = burst.time + (burst.reduceMotion ? 0 : burst.delay ?? 0) + (ripple ? index * 0.085 : kind === 2 ? 0.05 : edge && !rim ? index / Math.max(1, sparks) * 0.16 : 0);
                 const size = ripple ? 2.1 + energy * 1.2 + index * 0.32 : kind === 3 ? 1.05 : kind === 4 ? (rim ? 0.065 : 0.11) + rng() * 0.055 + energy * 0.035
                     : kind === 1 ? (bomb ? 1.3 : 0.75) : kind === 2 ? 0.7 : 0.035 + rng() * (bomb ? 0.09 : 0.055);
@@ -270,13 +274,18 @@ export const createBoardParticleSystem = () => {
                     } else { point.x += burst.x; point.y += burst.y; point.z += burst.z; }
                     origin.setXYZ(slot, point.x, point.y, point.z + 0.06);
                     movement.setXYZW(slot, direction.x, direction.y + (rim ? 0.06 : 0.12), -0.08, 1.5);
+                } else if (ember) {
+                    // Born somewhere on the card's face, drifting up and a little sideways, rising
+                    // faster the longer it lives (negative gravity), damped so it never streaks.
+                    origin.setXYZ(slot, burst.x + (rng() - 0.5) * 0.55, burst.y + (rng() - 0.5) * 0.7, burst.z + 0.07);
+                    movement.setXYZW(slot, (rng() - 0.5) * 0.12, 0.18 + rng() * 0.25 + energy * 0.25, -(0.12 + energy * 0.2), 0.9);
                 } else {
                     origin.setXYZ(slot, burst.x + Math.cos(angle) * offset, burst.y + Math.sin(angle) * offset, ripple ? -0.025 : burst.z + 0.06);
                     movement.setXYZW(slot, Math.cos(angle) * speed, Math.sin(angle) * speed + (kind === 2 ? 0.35 : 0),
                         kind === 0 ? (bomb ? 1.2 : 0.25) : 0, bomb ? 2.1 : 1.2);
                 }
-                lifetime.setXYZW(slot, start, life, size, kind);
-                color.set(kind === 2 ? '#795a44' : warm);
+                lifetime.setXYZW(slot, start, life, ember ? 0.03 + rng() * 0.045 + energy * 0.03 : size, kind);
+                color.set(kind === 2 ? '#795a44' : ember && burst.tint ? burst.tint : warm);
                 if (kind === 0 && rng() > 0.7) color.set('#fff2ce');
                 tint.setXYZ(slot, color.r, color.g, color.b);
                 rotation.setXY(slot, angle, kind === 0 ? (rng() - 0.5) * 3 : 0);

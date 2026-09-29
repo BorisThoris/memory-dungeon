@@ -145,9 +145,12 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         if (run.stats.mismatches <= before.stats.mismatches) return `combo ${before.stats.currentStreak} -> ${run.stats.currentStreak} without a miss`;
         return run.stats.currentStreak === 0 ? null : `a miss left a combo of ${run.stats.currentStreak}`;
     },
-    'the ladder never counts links the combo does not hold': (_b, run) => {
-        const above = run.chainLinksAboveLadder ?? 0;
-        return nonNegativeInteger(above) && above <= run.stats.currentStreak ? null : `${String(above)} links above the ladder on a combo of ${run.stats.currentStreak}`;
+    'the ladder crosses the stairs whole': (before, run) => {
+        if (!before?.board || !run.board || run.board.level !== before.board.level + 1) return null;
+        const carried = run.stats.currentStreak === before.stats.currentStreak &&
+            (run.chunkPairsThisChain ?? 0) === (before.chunkPairsThisChain ?? 0) &&
+            (run.skipMomentumThisChain ?? 0) === (before.skipMomentumThisChain ?? 0);
+        return carried ? null : `combo ${before.stats.currentStreak}+${before.chunkPairsThisChain ?? 0} -> ${run.stats.currentStreak}+${run.chunkPairsThisChain ?? 0} on the stairs`;
     },
     'a floor only ever moves forward by one': (before, run) => {
         if (!before?.board || !run.board) return null;

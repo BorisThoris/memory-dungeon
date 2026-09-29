@@ -1500,6 +1500,7 @@
                 "src/renderer/copy/chainBeat.ts",
                 "src/renderer/components/tileBoardBreakWave.ts",
                 "src/renderer/components/boardGroupArcs.ts",
+                "src/shared/combo-heat-rules.ts",
                 "src/renderer/components/RunShell.tsx"
             ],
             "reads": [

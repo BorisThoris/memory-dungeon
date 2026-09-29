@@ -70,6 +70,18 @@ burst, is drawn tip-first so the charge is seen travelling, and strobes as it fa
 are instanced segment quads (particle kind 7) in the same bounded pool, which grew to
 640 / 320 / 128 slots for high / medium / low. Reduced motion draws none.
 
+**Combo heat.** Past Fever the meter is full, so the combo's own heat takes over
+(`src/shared/combo-heat-rules.ts`): six stages (cold, warm 3, hot 6, blazing 10, inferno 16,
+legendary 25) and a saturating 0..1 heat, read by every surface. The HUD shell carries
+`data-combo-stage` and `--combo-heat` / `--combo-aura` / `--combo-hue`: flames lick up the
+chain rail (`.ladderFlames`), the combo number takes an aura in the stage's colour and flickers
+from Hot, and the label names the stage. The room's ring brightens and turns further and its
+torches burn taller and faster past Fever (`sceneRingLevels`, `sceneFlameLevels` take a
+`heat` argument). From Hot, cards throw embers (particle kind `ember`, free slots only, rising
+under negative gravity, tinted by stage; `data-particle-ember-bursts`). A vignette aura around
+the whole screen (`.comboAura` in GameScreen) breathes faster the hotter it gets. Everything is
+static under reduced motion and nothing is drawn at cold.
+
 **Combo scaling.** The combo carries across floors until a miss, and the board's effects
 read it through `comboEffectIntensity` (saturating: 3 links ≈ 0.28, 10 ≈ 0.67, 20 ≈ 0.89).
 It sets each bolt's strands (one to three), forks, width, life and colour (cyan, gold,

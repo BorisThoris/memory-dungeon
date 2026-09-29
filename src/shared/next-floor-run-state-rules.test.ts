@@ -80,13 +80,14 @@ describe('createNextFloorRunState', () => {
 
         expect(next.stats.currentStreak).toBe(carriedChainForNextFloor(1));
         expect(next.stats.currentStreak).toBe(1);
-        // The floor holds the chain it was handed, so its own record starts there.
-        expect(next.bestChainThisFloor).toBe(1);
-        // The cascade momentum was measured against a board that is gone.
-        expect(next.chunkPairsThisChain).toBe(0);
+        // The floor's own record starts empty: a carried chain is not one this board saw.
+        expect(next.bestChainThisFloor).toBe(0);
+        // The cascade momentum crosses with the chain: the meter persists whole until a miss.
+        expect(next.chunkPairsThisChain).toBe(5);
+        expect(next.comboLinksCarried).toBe(1);
     });
 
-    it('carries the whole combo but caps the ladder short of Clean, so the floor opens holding no tier', () => {
+    it('carries the whole combo and its ladder, so the floor opens on the tier the player built', () => {
         const baseRun = createNewRun(0, { runSeed: 12 });
         const nextBoard = { ...baseRun.board!, level: 4 };
         const run = {
@@ -102,10 +103,9 @@ describe('createNextFloorRunState', () => {
         });
 
         expect(next.stats.currentStreak).toBe(40);
-        expect(next.chainLinksAboveLadder).toBe(40 - CHAIN_CARRYOVER_CAP);
-        expect(runLadderChain(next)).toBe(CHAIN_CARRYOVER_CAP);
-        expect(getChainTier(runLadderChain(next), nextBoard.pairCount)).toBe('none');
-        expect(runChainTier(next)).toBe('none');
+        expect(runLadderChain(next)).toBe(40);
+        expect(getChainTier(runLadderChain(next), nextBoard.pairCount)).toBe('fever');
+        expect(runChainTier(next)).toBe('fever');
     });
 
     it('normalizes malformed stat records before resetting next-floor stats', () => {

@@ -6,6 +6,25 @@ const burst: BoardParticleBurst = { kind: 'bomb', x: 1, y: 2, z: 0.1, seed: 41, 
     reduceMotion: false, quality: 'high' };
 
 describe('the shared board particle pool', () => {
+    it('lifts combo embers off a card in free slots, in the heat\'s colour, and none under reduced motion', () => {
+        const pool = createBoardParticleSystem();
+        const emitted = pool.emit({ ...burst, kind: 'ember', energy: 0.8, tint: '#ff4d5e' });
+        expect(emitted).toBeGreaterThan(0);
+        const movement = pool.mesh.geometry.getAttribute('movement');
+        const tint = pool.mesh.geometry.getAttribute('tint');
+        for (let index = 0; index < emitted; index += 1) {
+            expect(movement.getY(index)).toBeGreaterThan(0);
+            // Negative gravity: the spark rises faster as it lives rather than falling.
+            expect(movement.getZ(index)).toBeLessThan(0);
+            expect(tint.getX(index)).toBeCloseTo(1, 1);
+        }
+        expect(pool.emit({ ...burst, kind: 'ember', reduceMotion: true })).toBe(0);
+        // An explosion filling the pool leaves the embers nowhere to go: they never evict it.
+        for (let i = 0; i < 40; i += 1) pool.emit({ ...burst, seed: i });
+        expect(pool.emit({ ...burst, kind: 'ember', time: 1.01 })).toBe(0);
+        pool.dispose();
+    });
+
     it('places staggered contact ripples on the board using the same bounded buffers', () => {
         const pool = createBoardParticleSystem();
         expect(pool.emit({ ...burst, kind: 'ripple', delay: 0.14 })).toBe(3);

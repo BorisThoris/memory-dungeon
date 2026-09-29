@@ -169,9 +169,11 @@ export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
      */
     { id: 'featuredStreak', key: 'featuredObjectiveStreak', label: 'A floor cleared its featured objective', family: 'reward', cadence: 'common', kind: 'tally', player: 'reference', scope: 'run' },
     // The four charges below are handed out once and never refilled by the floor transition, so
-    // the run census is what bands them (Gen 207). The peek survives its `core` bar on the strength
-    // of the floor curios: three of them grant a peek charge, and it reads 0.904 across a run.
-    { id: 'peek', key: 'peekCharges', label: 'A peek was spent on a hidden tile', family: 'tools', cadence: 'core', kind: 'spend', player: 'tooled', scope: 'run' },
+    // the run census is what bands them (Gen 207). The peek held a `core` bar on the strength of
+    // the floor curios (three grant a peek charge; 0.904 across a run) until 2026-09-29, when the
+    // whole chain ladder began crossing floors: a floor opened at Fever is over before its peek
+    // gets a turn, and it reads 0.871. Common, then - a tool spent on most floors, not every one.
+    { id: 'peek', key: 'peekCharges', label: 'A peek was spent on a hidden tile', family: 'tools', cadence: 'common', kind: 'spend', player: 'tooled', scope: 'run' },
     // Was `core` on the floor census's 1.000. A run starts with one shuffle charge and one curio
     // grants another, so it lands on 0.196 of a run's floors: a tool you keep for when you need it.
     { id: 'shuffle', key: 'shuffleCharges', label: 'The board was shuffled', family: 'tools', cadence: 'common', kind: 'spend', player: 'tooled', scope: 'run' },

@@ -804,7 +804,6 @@ describe('game rules', () => {
         expect(resolved.stats.mismatches).toBe(1);
         // A miss is the one thing that ends the combo; the stairs never do.
         expect(resolved.stats.currentStreak).toBe(0);
-        expect(resolved.chainLinksAboveLadder).toBe(0);
         expect(resolved.stats.totalScore).toBe(0);
         expect(resolved.board?.tiles.every((tile) => tile.state === 'hidden')).toBe(true);
     });
@@ -996,9 +995,9 @@ describe('game rules', () => {
         expect(nextRun.stats.tries).toBe(0);
         expect(nextRun.stats.currentLevelScore).toBe(0);
         // The per-floor counters reset; the combo is not one of them. It crosses the stairs whole,
-        // and only the ladder is capped short of Clean (`chain-carryover-rules.ts`).
+        // ladder and all (`chain-carryover-rules.ts`).
         expect(nextRun.stats.currentStreak).toBe(finishedLevel.stats.currentStreak);
-        expect(runLadderChain(nextRun)).toBe(Math.min(finishedLevel.stats.currentStreak, CHAIN_CARRYOVER_CAP));
+        expect(runLadderChain(nextRun)).toBe(finishedLevel.stats.currentStreak);
         // Arriving on a floor also seats its resident, and some of them hand over a peek, a
         // shuffle or a longer look. Read the resident's contribution from the same seed the
         // advance used, so this stays an assertion about what carries over rather than a bet on

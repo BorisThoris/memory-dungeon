@@ -60,10 +60,14 @@ import { runNonNegativeInteger } from './run-number-guards';
 export const CHAIN_CARRYOVER_CAP = CHAIN_TIER_CLEAN_FROM - 2;
 
 /**
- * The chain floor N+1 opens with, given the chain standing when floor N's last pair went.
+ * **2026-09-29: the ladder carries whole.** The owner asked for the combo meter to persist from
+ * floor to floor until a miss, rungs and all - the earlier one-link cap left the rail back on Lone
+ * at every floor start, which read as the combo being taken. So the cap above is history: this
+ * returns the chain untouched, and the cascade and skip momentum cross with it
+ * (`next-floor-run-state-rules.ts`). The floor curve and the census were re-measured for it
+ * (`docs/BALANCE_NOTES.md`).
  *
  * Pure, total and defined for junk input: a malformed streak reads as 0 rather than carrying NaN
  * into the next floor's ladder.
  */
-export const carriedChainForNextFloor = (chainAtClear: number): number =>
-    Math.min(runNonNegativeInteger(chainAtClear), CHAIN_CARRYOVER_CAP);
+export const carriedChainForNextFloor = (chainAtClear: number): number => runNonNegativeInteger(chainAtClear);

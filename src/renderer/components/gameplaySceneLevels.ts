@@ -28,17 +28,23 @@ export interface SceneRingLevels {
 
 const clamp01 = (value: number): number => (Number.isFinite(value) ? Math.min(1, Math.max(0, value)) : 0);
 
-export const sceneRingLevels = (fill: number): SceneRingLevels => {
+/**
+ * `heat` is the combo heat (`combo-heat-rules.ts`), 0..1 of the raw combo past what the meter
+ * shows: at Fever the meter is full and the room would otherwise stop answering, so the heat keeps
+ * the ring brightening, turning further toward rose and then violet, and throwing more motes.
+ */
+export const sceneRingLevels = (fill: number, heat = 0): SceneRingLevels => {
     const f = clamp01(fill);
+    const h = clamp01(heat);
     // Ease in: the first pairs barely move the room, the last ones before Fever move it most.
     const eased = f * f * (3 - 2 * f);
     return {
-        light: round(0.5 + 0.8 * eased),
-        glow: round(0.68 + 0.72 * eased),
-        hueDeg: Math.round(-40 * eased) + 0, // + 0 folds -0 into 0 so the CSS variable never reads "-0deg"
-        saturate: round(1 + 0.4 * eased),
-        pulsePeak: round(0.35 + 0.9 * eased),
-        motes: round(eased)
+        light: round(0.5 + 0.8 * eased + 0.5 * h),
+        glow: round(0.68 + 0.72 * eased + 0.6 * h),
+        hueDeg: Math.round(-40 * eased - 50 * h) + 0, // + 0 folds -0 into 0 so the CSS variable never reads "-0deg"
+        saturate: round(1 + 0.4 * eased + 0.5 * h),
+        pulsePeak: round(0.35 + 0.9 * eased + 0.3 * h),
+        motes: round(Math.min(1.6, eased + 0.6 * h))
     };
 };
 
@@ -76,17 +82,20 @@ export interface SceneFlameLevels {
  * It is small on purpose. A room that lurched every fourth pair would be exhausting, and the draw
  * has to still read as the same fire.
  */
-export const sceneFlameLevels = (fill: number, imminent = false): SceneFlameLevels => {
+export const sceneFlameLevels = (fill: number, imminent = false, heat = 0): SceneFlameLevels => {
     const f = clamp01(fill);
+    const h = clamp01(heat);
     // Steep off zero: one pair is visible in the fire, and Fever is the top of a climb the player
     // has been watching rather than the only moment anything happened.
     const early = 1 - (1 - f) * (1 - f);
     const drawn = imminent ? 1 : 0;
+    // Past the meter the combo heat keeps the torches climbing: a legendary combo burns twice as
+    // fast and half again as tall, and the sparks come off it thick.
     return {
-        rate: round((0.92 + 0.62 * early) * (1 + 0.18 * drawn)),
-        lift: round((1 + 0.16 * early) * (1 - 0.07 * drawn)),
-        embers: round((0.5 + 0.5 * early) * (1 - 0.25 * drawn)),
-        emberRate: round(0.85 + 0.5 * early)
+        rate: round((0.92 + 0.62 * early + 0.7 * h) * (1 + 0.18 * drawn)),
+        lift: round((1 + 0.16 * early + 0.4 * h) * (1 - 0.07 * drawn)),
+        embers: round((0.5 + 0.5 * early + 0.5 * h) * (1 - 0.25 * drawn)),
+        emberRate: round(0.85 + 0.5 * early + 0.6 * h)
     };
 };
 

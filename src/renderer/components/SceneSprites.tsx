@@ -33,16 +33,18 @@ export interface SceneSpritesProps {
     heat?: number | null;
     /** The next pair would land a rung: the fire draws breath for it. Ignored without `heat`. */
     imminent?: boolean;
+    /** The combo heat past the meter (`combo-heat-rules.ts`), 0..1. Ignored without `heat`. */
+    comboHeat?: number;
 }
 
 const pct = (value: number): string => `${(value * 100).toFixed(3)}%`;
 
 /** Nothing at all when no run is behind the scene, so the CSS falls back to the painted flame. */
-const flameVars = (heat: number | null, imminent: boolean): CSSProperties => {
+const flameVars = (heat: number | null, imminent: boolean, comboHeat: number): CSSProperties => {
     if (heat === null) {
         return {};
     }
-    const levels = sceneFlameLevels(heat, imminent);
+    const levels = sceneFlameLevels(heat, imminent, comboHeat);
     return {
         '--flame-rate': levels.rate,
         '--flame-lift': levels.lift,
@@ -51,7 +53,7 @@ const flameVars = (heat: number | null, imminent: boolean): CSSProperties => {
     } as CSSProperties;
 };
 
-export function SceneSprites({ set, still, embers = false, heat = null, imminent = false }: SceneSpritesProps) {
+export function SceneSprites({ set, still, embers = false, heat = null, imminent = false, comboHeat = 0 }: SceneSpritesProps) {
     return (
         <div
             className={styles.sprites}
@@ -59,7 +61,7 @@ export function SceneSprites({ set, still, embers = false, heat = null, imminent
             data-still={still ? 'true' : 'false'}
             data-testid="scene-sprites"
             data-flame-drawing={heat !== null && imminent ? 'true' : undefined}
-            style={flameVars(heat, imminent)}
+            style={flameVars(heat, imminent, comboHeat)}
         >
             {set.sprites.map((sprite, index) => {
                 const clock = sceneSpriteClocks(sprite, index);

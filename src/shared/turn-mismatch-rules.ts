@@ -143,7 +143,7 @@ export const resolveMismatchTurnTransition = ({
         // itself; this line only takes the cascade away.
         chunkPairsThisChain: 0,
         skipMomentumThisChain: 0,
-        chainLinksAboveLadder: 0,
+        comboLinksCarried: 0,
         stats: {
             ...stats,
             tries: penalty.tries,

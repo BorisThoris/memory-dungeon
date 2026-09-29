@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2756,
-    "codeFileCount": 976,
-    "exportedSymbolCount": 2960,
+    "trackedFileCount": 2758,
+    "codeFileCount": 978,
+    "exportedSymbolCount": 2968,
     "contentItemCount": 10,
     "mechanicCount": 51,
     "stateFieldCount": 92,
-    "relationshipCount": 7707
+    "relationshipCount": 7722
   },
   "inventory": [
     {
@@ -285,8 +285,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 514384,
-      "sha256": "1757afa59d8434394ba5c57df0f7df7857fe64eb971c2d32c2a38c5615e4075f"
+      "bytes": 515819,
+      "sha256": "786ee77b116e739d4317d1078a2f11654fc087a1ee66c852bae6cccaa10b61c8"
     },
     {
       "path": "docs/balance/2026-09-25-balance-report.md",
@@ -693,8 +693,8 @@
     {
       "path": "docs/gameplay/epic-board-rendering-assists.md",
       "category": "documentation",
-      "bytes": 8773,
-      "sha256": "8c83ce0f8b957488a90d20e10cf7089456d660ac63ab639ee79319b5be4aeb78"
+      "bytes": 9747,
+      "sha256": "186f11a857909120e193951ac326d167812220d39b5d117a90f3f765bfb61a64"
     },
     {
       "path": "docs/gameplay/epic-choose-your-path.md",
@@ -789,8 +789,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 35984,
-      "sha256": "1d8486d7585ecac1324821b8c925187e36c60a0f563810de5def1566dd95c764"
+      "bytes": 36083,
+      "sha256": "75fefde1906dfc897b1451b21c06d82f1cc63a1e0b97684dbbc9e0455115166e"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2374,7 +2374,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33561,
-      "sha256": "2690d7677ae6dbeed5bc1f423b6011b13ae3dd0f45e13ea9ea1d15009d8746af"
+      "sha256": "b51a1df2f9f875f203a393e989c6fa6634435251ca37f1c7c386ef85bdb9447b"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -9111,14 +9111,14 @@
     {
       "path": "src/renderer/components/boardParticleSystem.test.ts",
       "category": "test",
-      "bytes": 6350,
-      "sha256": "f8a441e442338095ede93bf2309c901c4d893c8077510712118c0bb4b59d9946"
+      "bytes": 7481,
+      "sha256": "9d5916f29583dda0d52f6bf0e9d6b3ad9d6406ef194ed07a1b20cc014f60fee9"
     },
     {
       "path": "src/renderer/components/boardParticleSystem.ts",
       "category": "source",
-      "bytes": 18813,
-      "sha256": "1aea869232efe60643f16ad8e85ec3c42799a725af7cba2c64d7569b5b449ec9"
+      "bytes": 19755,
+      "sha256": "d80bc34f8f03a527088f18e8a95a838e7f9de491e7d26ae6edfca41afb362779"
     },
     {
       "path": "src/renderer/components/boardRuneFieldMaterial.ts",
@@ -9327,14 +9327,14 @@
     {
       "path": "src/renderer/components/GameplayScene.tsx",
       "category": "source",
-      "bytes": 10336,
-      "sha256": "66d43131af15bad6b044d257f016d4d0bba853a0807c0a4026701201554b6385"
+      "bytes": 10727,
+      "sha256": "e77fb9b0ea36060cc773f9fcf0393d66f680c21be3e768862d0748617330f879"
     },
     {
       "path": "src/renderer/components/gameplaySceneLevels.ts",
       "category": "source",
-      "bytes": 4958,
-      "sha256": "cc8212cb38a016ffee38d53fe3f938336f3058bac006116a3780bd16e490e038"
+      "bytes": 5616,
+      "sha256": "bc36ca7fc61ce0a99f46a25e2337dbda17f93c10589a2a773297d3a27bd147fb"
     },
     {
       "path": "src/renderer/components/gameplayVisualConfig.test.ts",
@@ -9351,8 +9351,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 50839,
-      "sha256": "4f16486a00a57ff658d1e5391f14f0a6b5836acff17c25ad19c0633ba00ff2fe"
+      "bytes": 52801,
+      "sha256": "5ccf25d31c8b542f387c48bf658fce6b6f4f495ddcfddbb401f729670656bb5e"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -9363,8 +9363,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 97903,
-      "sha256": "f2a178d6b7f85fd1f82b73547b6eb3426bcc3aa3eafb37b3bd7b2f96cfc0764c"
+      "bytes": 98712,
+      "sha256": "e0d295dbf132d2cdbe5b86abd5d2b2372feec7d9f4897becb76744409df713f8"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9633,20 +9633,20 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 42897,
-      "sha256": "7512c92143849f94c66b8c3f2d37abfc4fd79311e5b444545b7554f483dbcb66"
+      "bytes": 46261,
+      "sha256": "be2bd725a8d01da1731ef284fa8362f537f397b388254b917c6cff4b04347cd6"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 33217,
-      "sha256": "3848f6010a6e921589e7561e82b775748cb2282a330887ba5db639b325c232d8"
+      "bytes": 33781,
+      "sha256": "d666ee85ef22327a7025748dce4b696c2f44bd3ea237895b41ded5c6292a8bd2"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 38197,
-      "sha256": "920757cd07d10d3b3da81eaf8c3319d7744a5963152364c09ef37a8d65086f96"
+      "bytes": 39069,
+      "sha256": "681ca05ee4f7bacccf30c1cfcef031d2aa7ac3b25d406a48daea02a8ee92a868"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -9705,8 +9705,8 @@
     {
       "path": "src/renderer/components/SceneSprites.tsx",
       "category": "source",
-      "bytes": 5667,
-      "sha256": "5aed823e71c574bbb3a55dc115d9dcab0ec692b5a2dfb397226fea3d980e2fe0"
+      "bytes": 5843,
+      "sha256": "7f27fe139337e542f72b6d50f77ca58756dae9a5b4420edc3f466045f3256f4d"
     },
     {
       "path": "src/renderer/components/ScoreTermsLine.test.tsx",
@@ -10197,8 +10197,8 @@
     {
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "category": "source",
-      "bytes": 8008,
-      "sha256": "1be1cb32ceb9fbefa016fc1e013b19faa6c8ae03f7b347d53ff8c42ddb65211f"
+      "bytes": 9984,
+      "sha256": "1ce949db25f967e4aaa00c8e1db3049a6b163c3b7c89090145aa72c304f0bcfa"
     },
     {
       "path": "src/renderer/components/tileBoardPick.test.ts",
@@ -10701,8 +10701,8 @@
     {
       "path": "src/renderer/copy/chainBeat.ts",
       "category": "source",
-      "bytes": 8033,
-      "sha256": "1b94ce789dc99df9c42aae2f698898b549bb3da71e481490029113c03484e690"
+      "bytes": 8055,
+      "sha256": "e774b65b38bb9bb71ccbcfdb0e64deb201702f9c01f9ce2e847f093d5e10b7d6"
     },
     {
       "path": "src/renderer/copy/chainMilestoneFeedback.test.ts",
@@ -11799,8 +11799,8 @@
     {
       "path": "src/renderer/store/useAppStore.test.ts",
       "category": "test",
-      "bytes": 38028,
-      "sha256": "226cbc3abe9e4ddb64dd5268ba2acbdba58c31c5097914c0f97bd71bf0be44e5"
+      "bytes": 38023,
+      "sha256": "ed1f0d8888aedd602701138de0e43d63974f7f15c5cbd95f335f7dcb2511c039"
     },
     {
       "path": "src/renderer/store/useAppStore.ts",
@@ -12057,8 +12057,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 36280,
-      "sha256": "b92c47b1026266d4b173c39e6bbe4c40bbccf51e451f07a6f5cc34dc24291a9f"
+      "bytes": 36577,
+      "sha256": "141f9bfbd76b691f582451755b922fe84a50920ac9aabda050aa70ea695a7318"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -12285,8 +12285,8 @@
     {
       "path": "src/shared/board-turn-transition.ts",
       "category": "source",
-      "bytes": 19409,
-      "sha256": "fec8345ea96382069224d70a2c5709401e918769596596c60643e1f4af1b039e"
+      "bytes": 19219,
+      "sha256": "da0609f426e33dfb8eae379b3ce0e6fb256e75b2ce71b954dd0243ab17c25107"
     },
     {
       "path": "src/shared/bomb-power.test.ts",
@@ -12345,14 +12345,14 @@
     {
       "path": "src/shared/chain-carryover-rules.test.ts",
       "category": "test",
-      "bytes": 2216,
-      "sha256": "90767e20952d3059b8eeeedbf2f7576d862f465a39471ecf7aadd36acb46d68d"
+      "bytes": 1645,
+      "sha256": "6f617b54153a9b7c9c25676256504fa0bb658cfeaa67ab82461f8c13cb04c3b4"
     },
     {
       "path": "src/shared/chain-carryover-rules.ts",
       "category": "source",
-      "bytes": 4295,
-      "sha256": "12170de76483221bce42536ba814870065298d2889b543b47311a40479d9d9e2"
+      "bytes": 4665,
+      "sha256": "271eb516accc17c92563a0d5e6317f570261b797e8fb8867bbee1b110679d909"
     },
     {
       "path": "src/shared/chain-rung-value-rules.test.ts",
@@ -12387,8 +12387,8 @@
     {
       "path": "src/shared/chain-tier-rules.ts",
       "category": "source",
-      "bytes": 12117,
-      "sha256": "809170dc6221fadf9da0ed7bfcf3ae935e2e99b0c2418953f21e6f219952fa25"
+      "bytes": 11705,
+      "sha256": "b004d48b64ad63ccf99c850bc798b11eea5f85d78616633c48dce6eac392bd96"
     },
     {
       "path": "src/shared/challenge-progression.test.ts",
@@ -12457,6 +12457,18 @@
       "sha256": "b130bce12b7cee8fcd18d8a070b1ce35b8f6eea5f074cb00f84ca443970614ce"
     },
     {
+      "path": "src/shared/combo-heat-rules.test.ts",
+      "category": "test",
+      "bytes": 2844,
+      "sha256": "95112ef526804b36ff4c8a19dfcb8aba8acf1dd361595374fb71fde1aeeeed6e"
+    },
+    {
+      "path": "src/shared/combo-heat-rules.ts",
+      "category": "source",
+      "bytes": 3839,
+      "sha256": "ed82a81b95171e9b8b7e511afab589004d591f0f0ec5bd82ef2a966b864e028e"
+    },
+    {
       "path": "src/shared/content-lock-state.ts",
       "category": "source",
       "bytes": 1894,
@@ -12489,8 +12501,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 37016,
-      "sha256": "59ef35ca05144a3da078c6412acd4cb5b80cc00e77413dcca20202cbd9865316"
+      "bytes": 36990,
+      "sha256": "6bb4226eb8b40cd2f469c3803a2ce962901395b24eeea3642e882429c904c0e0"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -12771,8 +12783,8 @@
     {
       "path": "src/shared/game.test.ts",
       "category": "test",
-      "bytes": 67418,
-      "sha256": "41a77ff55dd9f75406f7f385d569bfb7f662fd1de29c39ceb7cb84220c433e19"
+      "bytes": 67301,
+      "sha256": "30fcf1a4aa139f236b6bd6a926a4a4ed37cc5e320c927491f50639c440354baa"
     },
     {
       "path": "src/shared/game.ts",
@@ -12873,8 +12885,8 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 92107,
-      "sha256": "ee1d9abd58bd6b73d95f47848d73d8248540092002ab4e659c69670c0fa19d34"
+      "bytes": 92157,
+      "sha256": "eebf9b77c554e7534cace8b985d70b23342d960c1b431c99ea9b1f10e08d5a68"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
@@ -13155,8 +13167,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 36759,
-      "sha256": "9b78520dc083dd951fcfcfa00472ecc4cb97f157a617df67fc2e163c45a8314f"
+      "bytes": 37037,
+      "sha256": "a5984116294b32eb85bf145d7968b95029be46d5223517547ffcce829cf295f0"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -13269,14 +13281,14 @@
     {
       "path": "src/shared/next-floor-run-state-rules.test.ts",
       "category": "test",
-      "bytes": 5405,
-      "sha256": "88ff2e9f483c8b28161cd5d9be1a34e7e1dd4746f97c24c62d18a49ba4f69ae2"
+      "bytes": 5383,
+      "sha256": "027928bcd716681efb225ab5a7f0efddacdb32bdd1807c3dffcee93fae6c3fa7"
     },
     {
       "path": "src/shared/next-floor-run-state-rules.ts",
       "category": "source",
-      "bytes": 4486,
-      "sha256": "c728a7db6ac7e057cd9a3e04d062c3d97dfc7af61364ba655b531fa63d11b266"
+      "bytes": 4118,
+      "sha256": "2a78ae972d65fa36aa5ae129f51df07a6b6b33c453c2e42b3edbb10179acc271"
     },
     {
       "path": "src/shared/next-floor-transition-rules.ts",
@@ -13617,8 +13629,8 @@
     {
       "path": "src/shared/run-creation-rules.ts",
       "category": "source",
-      "bytes": 8743,
-      "sha256": "27f23d4b7d812ac6a0234caf3c3359733d0b96bee67d864c3c7de4e29d8251c8"
+      "bytes": 8739,
+      "sha256": "7574df2a9b9c4a718c790556a535c8c54be92206dbba12bc61185dda95b23e37"
     },
     {
       "path": "src/shared/run-from-share-key.test.ts",
@@ -13803,8 +13815,8 @@
     {
       "path": "src/shared/run-soak.ts",
       "category": "source",
-      "bytes": 16888,
-      "sha256": "0605defca0f215dea8e1ad8a58f70c9a7b9693e1f75d0414f57bbde1715b4f05"
+      "bytes": 17185,
+      "sha256": "197774013f2a297b2477ee16922256f2dbf93a1ba4f5e9a435390a61017ca58b"
     },
     {
       "path": "src/shared/run-store-rules.test.ts",
@@ -14055,8 +14067,8 @@
     {
       "path": "src/shared/system-occupancy-simulation.ts",
       "category": "source",
-      "bytes": 58806,
-      "sha256": "ad4258f3563e7cbc3b1a44abbe1d6deba7f0e224e04271712c6710c97eb63f6f"
+      "bytes": 59004,
+      "sha256": "496a51cbbd552f02cf19b25082e0363d40e226c1f9ce568e01924b8f0d5cdbc1"
     },
     {
       "path": "src/shared/system-refinement-ledger.test.ts",
@@ -14067,8 +14079,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 51036,
-      "sha256": "36e746bc73b7885beebb10e48e23fc0ce9680c19216f8fac3f21a8712748ebd3"
+      "bytes": 51333,
+      "sha256": "7140061c008e028e0ad9a953474ba00aebcf3796bed92ab872044ce6cc00aecc"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -14091,8 +14103,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 69283,
-      "sha256": "ca69567d1f39e314659766379587cf3b403c7b325852821d7116df73aaab00b0"
+      "bytes": 69296,
+      "sha256": "fcc5251439daafb72251abac341174fe8169fea70151696c80ef06ac9b16fcf9"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -14313,8 +14325,8 @@
     {
       "path": "src/shared/turn-mismatch-rules.ts",
       "category": "source",
-      "bytes": 7712,
-      "sha256": "aeffaf9c65a4d53de4f6ab6c3e077e4660b5fccddfdfa52c95ba118bd3774295"
+      "bytes": 7708,
+      "sha256": "b86d6e3ec131acc0697dd26f1a6fe3e206701c22af9c64cb3ef0ca0c91e30de5"
     },
     {
       "path": "src/shared/turn-resolution.ts",
@@ -19012,7 +19024,7 @@
       "path": "src/renderer/components/boardParticleSystem.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 120,
+      "lineCount": 139,
       "imports": [
         "file:src/renderer/components/boardParticleSystem.ts"
       ],
@@ -19024,7 +19036,7 @@
       "path": "src/renderer/components/boardParticleSystem.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 362,
+      "lineCount": 371,
       "imports": [
         "file:src/renderer/components/boardGroupArcs.ts",
         "file:src/renderer/components/boardParticleRim.ts",
@@ -19561,7 +19573,7 @@
       "path": "src/renderer/components/GameplayScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 193,
+      "lineCount": 201,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
@@ -19572,6 +19584,7 @@
         "file:src/renderer/hooks/useSceneEffectTier.ts",
         "file:src/renderer/hooks/useSceneLook.ts",
         "file:src/shared/chain-tier-rules.ts",
+        "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts"
       ],
       "exports": [
@@ -19587,7 +19600,7 @@
       "path": "src/renderer/components/gameplaySceneLevels.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 111,
+      "lineCount": 120,
       "imports": [
         "file:src/shared/chain-tier-rules.ts"
       ],
@@ -19669,7 +19682,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2043,
+      "lineCount": 2051,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -19724,6 +19737,7 @@
         "file:src/shared/boss-encounters.ts",
         "file:src/shared/cameraViewportMode.ts",
         "file:src/shared/chain-tier-rules.ts",
+        "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-curio-greeting-rules.ts",
         "file:src/shared/floor-curio-rules.ts",
@@ -20348,7 +20362,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 606,
+      "lineCount": 612,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/shared/contracts.ts",
@@ -20363,7 +20377,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 721,
+      "lineCount": 735,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -20378,6 +20392,7 @@
         "file:src/renderer/ui/gameplayIcons.tsx",
         "file:src/shared/chain-rung-value-rules.ts",
         "file:src/shared/chain-tier-rules.ts",
+        "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-par.ts",
         "file:src/shared/mechanics-encyclopedia.ts",
@@ -20502,7 +20517,7 @@
       "path": "src/renderer/components/SceneSprites.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 122,
+      "lineCount": 124,
       "imports": [
         "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/components/gameplaySceneLevels.ts",
@@ -21969,7 +21984,7 @@
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 134,
+      "lineCount": 160,
       "imports": [
         "file:src/renderer/components/boardGroupArcs.ts",
         "file:src/renderer/components/boardMatchImpact.ts",
@@ -21978,6 +21993,7 @@
         "file:src/renderer/components/boardParticleSystem.ts",
         "file:src/renderer/components/tileBoardFrameBag.ts",
         "file:src/renderer/components/tileBoardTransform.ts",
+        "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/rng.ts"
       ],
@@ -27678,7 +27694,7 @@
       "path": "src/shared/board-turn-transition.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 438,
+      "lineCount": 437,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -27897,7 +27913,7 @@
       "path": "src/shared/chain-carryover-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 43,
+      "lineCount": 35,
       "imports": [
         "file:src/shared/chain-carryover-rules.ts",
         "file:src/shared/chain-tier-rules.ts"
@@ -27910,7 +27926,7 @@
       "path": "src/shared/chain-carryover-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 70,
+      "lineCount": 74,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/run-number-guards.ts"
@@ -28013,7 +28029,7 @@
       "path": "src/shared/chain-tier-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 218,
+      "lineCount": 213,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-number-guards.ts"
@@ -28301,6 +28317,41 @@
         "file:src/renderer/components/tileBoardReadability.test.ts",
         "file:src/shared/color-vision.test.ts",
         "file:src/shared/tile-trait-palette.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/shared/combo-heat-rules.test.ts",
+      "path": "src/shared/combo-heat-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 59,
+      "imports": [
+        "file:src/shared/combo-heat-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/combo-heat-rules.ts",
+      "path": "src/shared/combo-heat-rules.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 90,
+      "imports": [
+        "file:src/shared/run-number-guards.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_STAGE_FROM",
+        "symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_STAGE_LABELS",
+        "symbol:src/shared/combo-heat-rules.ts#comboHeat",
+        "symbol:src/shared/combo-heat-rules.ts#comboHeatLevels",
+        "symbol:src/shared/combo-heat-rules.ts#ComboHeatLevels",
+        "symbol:src/shared/combo-heat-rules.ts#comboHeatStage",
+        "symbol:src/shared/combo-heat-rules.ts#ComboHeatStage",
+        "symbol:src/shared/combo-heat-rules.ts#comboHeatStageIndex"
+      ],
+      "testedBy": [
+        "file:src/shared/combo-heat-rules.test.ts"
       ]
     },
     {
@@ -29561,7 +29612,7 @@
       "path": "src/shared/game.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1700,
+      "lineCount": 1699,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-powers.ts",
@@ -30088,7 +30139,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2758,
+      "lineCount": 2759,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -30882,7 +30933,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 661,
+      "lineCount": 662,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -31284,7 +31335,7 @@
       "path": "src/shared/next-floor-run-state-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 114,
+      "lineCount": 106,
       "imports": [
         "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/chain-carryover-rules.ts",
@@ -32960,7 +33011,7 @@
       "path": "src/shared/run-soak.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 327,
+      "lineCount": 330,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -33839,7 +33890,7 @@
       "path": "src/shared/system-occupancy-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1101,
+      "lineCount": 1103,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-power-actions.ts",
@@ -33978,13 +34029,12 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1203,
+      "lineCount": 1202,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/board-power-state.ts",
         "file:src/shared/board-tile-generation-rules.ts",
-        "file:src/shared/chain-carryover-rules.ts",
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-curio-rules.ts",
@@ -37788,7 +37838,7 @@
       "kind": "interface",
       "file": "src/renderer/components/boardParticleSystem.ts",
       "line": 30,
-      "endLine": 44
+      "endLine": 46
     },
     {
       "id": "symbol:src/renderer/components/boardParticleSystem.ts#BoardParticleKind",
@@ -37803,8 +37853,8 @@
       "name": "createBoardParticleSystem",
       "kind": "value",
       "file": "src/renderer/components/boardParticleSystem.ts",
-      "line": 139,
-      "endLine": 361
+      "line": 141,
+      "endLine": 370
     },
     {
       "id": "symbol:src/renderer/components/boardRuneFieldMaterial.ts#clampBoardRuneFieldDriverUniforms",
@@ -38275,40 +38325,40 @@
       "name": "GameplayScene",
       "kind": "function",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 85,
-      "endLine": 192
+      "line": 89,
+      "endLine": 200
     },
     {
       "id": "symbol:src/renderer/components/GameplayScene.tsx#GameplaySceneProps",
       "name": "GameplaySceneProps",
       "kind": "interface",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 57,
-      "endLine": 81
+      "line": 58,
+      "endLine": 85
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#sceneFlameLevels",
       "name": "sceneFlameLevels",
       "kind": "value",
       "file": "src/renderer/components/gameplaySceneLevels.ts",
-      "line": 79,
-      "endLine": 91
+      "line": 85,
+      "endLine": 100
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#SceneFlameLevels",
       "name": "SceneFlameLevels",
       "kind": "interface",
       "file": "src/renderer/components/gameplaySceneLevels.ts",
-      "line": 47,
-      "endLine": 56
+      "line": 53,
+      "endLine": 62
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#sceneRingLevels",
       "name": "sceneRingLevels",
       "kind": "value",
       "file": "src/renderer/components/gameplaySceneLevels.ts",
-      "line": 31,
-      "endLine": 43
+      "line": 36,
+      "endLine": 49
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#SceneRingLevels",
@@ -38323,8 +38373,8 @@
       "name": "sceneTorchFlarePeak",
       "kind": "value",
       "file": "src/renderer/components/gameplaySceneLevels.ts",
-      "line": 97,
-      "endLine": 110
+      "line": 106,
+      "endLine": 119
     },
     {
       "id": "symbol:src/renderer/components/gameplayVisualConfig.ts#CARD_INTERACTION_FEEDBACK",
@@ -38363,40 +38413,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2042,
-      "endLine": 2042
+      "line": 2050,
+      "endLine": 2050
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 239,
-      "endLine": 239
+      "line": 240,
+      "endLine": 240
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 237,
-      "endLine": 237
+      "line": 238,
+      "endLine": 238
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 241,
-      "endLine": 241
+      "line": 242,
+      "endLine": 242
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 231,
-      "endLine": 231
+      "line": 232,
+      "endLine": 232
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -38763,24 +38813,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 720,
-      "endLine": 720
+      "line": 734,
+      "endLine": 734
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 54,
-      "endLine": 84
+      "line": 55,
+      "endLine": 85
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 41,
-      "endLine": 52
+      "line": 42,
+      "endLine": 53
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
@@ -38939,8 +38989,8 @@
       "name": "SceneSprites",
       "kind": "function",
       "file": "src/renderer/components/SceneSprites.tsx",
-      "line": 54,
-      "endLine": 121
+      "line": 56,
+      "endLine": 123
     },
     {
       "id": "symbol:src/renderer/components/SceneSprites.tsx#SceneSpritesProps",
@@ -38948,7 +38998,7 @@
       "kind": "interface",
       "file": "src/renderer/components/SceneSprites.tsx",
       "line": 27,
-      "endLine": 36
+      "endLine": 38
     },
     {
       "id": "symbol:src/renderer/components/ScoreTermsLine.tsx#default",
@@ -40563,8 +40613,8 @@
       "name": "TileBoardParticles",
       "kind": "value",
       "file": "src/renderer/components/TileBoardParticles.tsx",
-      "line": 15,
-      "endLine": 133
+      "line": 18,
+      "endLine": 159
     },
     {
       "id": "symbol:src/renderer/components/tileBoardPick.ts#isTilePickable",
@@ -47076,7 +47126,7 @@
       "kind": "value",
       "file": "src/shared/board-turn-transition.ts",
       "line": 104,
-      "endLine": 437
+      "endLine": 436
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#BOSS_ENCOUNTER_IDENTITY",
@@ -47307,8 +47357,8 @@
       "name": "carriedChainForNextFloor",
       "kind": "value",
       "file": "src/shared/chain-carryover-rules.ts",
-      "line": 68,
-      "endLine": 69
+      "line": 73,
+      "endLine": 73
     },
     {
       "id": "symbol:src/shared/chain-carryover-rules.ts#CHAIN_CARRYOVER_CAP",
@@ -47443,24 +47493,24 @@
       "name": "chainCanBreakChunk",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 140,
-      "endLine": 141
+      "line": 135,
+      "endLine": 136
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#chainMeter",
       "name": "chainMeter",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 162,
-      "endLine": 174
+      "line": 157,
+      "endLine": 169
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#ChainMeter",
       "name": "ChainMeter",
       "kind": "interface",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 150,
-      "endLine": 160
+      "line": 145,
+      "endLine": 155
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#chainMomentum",
@@ -47483,16 +47533,16 @@
       "name": "chainRungApproach",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 201,
-      "endLine": 207
+      "line": 196,
+      "endLine": 202
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#ChainRungApproach",
       "name": "ChainRungApproach",
       "kind": "interface",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 192,
-      "endLine": 199
+      "line": 187,
+      "endLine": 194
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#ChainTier",
@@ -47515,32 +47565,32 @@
       "name": "getChainTier",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 130,
-      "endLine": 137
+      "line": 125,
+      "endLine": 132
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#higherChainTier",
       "name": "higherChainTier",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 126,
-      "endLine": 127
+      "line": 121,
+      "endLine": 122
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#nextChainTierAt",
       "name": "nextChainTierAt",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 210,
-      "endLine": 217
+      "line": 205,
+      "endLine": 212
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#runChainMeter",
       "name": "runChainMeter",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 177,
-      "endLine": 178
+      "line": 172,
+      "endLine": 173
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#runChainMomentumPairs",
@@ -47555,16 +47605,16 @@
       "name": "runChainTier",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 120,
-      "endLine": 121
+      "line": 115,
+      "endLine": 116
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#runLadderChain",
       "name": "runLadderChain",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 116,
-      "endLine": 117
+      "line": 112,
+      "endLine": 112
     },
     {
       "id": "symbol:src/shared/challenge-progression.ts#ChallengeGateId",
@@ -48133,6 +48183,70 @@
       "file": "src/shared/color-vision.ts",
       "line": 70,
       "endLine": 83
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_STAGE_FROM",
+      "name": "COMBO_HEAT_STAGE_FROM",
+      "kind": "value",
+      "file": "src/shared/combo-heat-rules.ts",
+      "line": 21,
+      "endLine": 27
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_STAGE_LABELS",
+      "name": "COMBO_HEAT_STAGE_LABELS",
+      "kind": "value",
+      "file": "src/shared/combo-heat-rules.ts",
+      "line": 51,
+      "endLine": 58
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-rules.ts#comboHeat",
+      "name": "comboHeat",
+      "kind": "value",
+      "file": "src/shared/combo-heat-rules.ts",
+      "line": 49,
+      "endLine": 49
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-rules.ts#comboHeatLevels",
+      "name": "comboHeatLevels",
+      "kind": "value",
+      "file": "src/shared/combo-heat-rules.ts",
+      "line": 76,
+      "endLine": 89
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-rules.ts#ComboHeatLevels",
+      "name": "ComboHeatLevels",
+      "kind": "interface",
+      "file": "src/shared/combo-heat-rules.ts",
+      "line": 60,
+      "endLine": 72
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-rules.ts#comboHeatStage",
+      "name": "comboHeatStage",
+      "kind": "value",
+      "file": "src/shared/combo-heat-rules.ts",
+      "line": 31,
+      "endLine": 39
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-rules.ts#ComboHeatStage",
+      "name": "ComboHeatStage",
+      "kind": "type",
+      "file": "src/shared/combo-heat-rules.ts",
+      "line": 18,
+      "endLine": 18
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-rules.ts#comboHeatStageIndex",
+      "name": "comboHeatStageIndex",
+      "kind": "value",
+      "file": "src/shared/combo-heat-rules.ts",
+      "line": 42,
+      "endLine": 42
     },
     {
       "id": "symbol:src/shared/content-lock-state.ts#BuildFlavour",
@@ -52563,16 +52677,16 @@
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 628,
-      "endLine": 646
+      "line": 629,
+      "endLine": 647
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 649,
-      "endLine": 660
+      "line": 650,
+      "endLine": 661
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
@@ -52580,7 +52694,7 @@
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
       "line": 568,
-      "endLine": 625
+      "endLine": 626
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
@@ -53308,7 +53422,7 @@
       "kind": "value",
       "file": "src/shared/next-floor-run-state-rules.ts",
       "line": 22,
-      "endLine": 113
+      "endLine": 105
     },
     {
       "id": "symbol:src/shared/next-floor-run-state-rules.ts#CreateNextFloorRunStateOptions",
@@ -55604,7 +55718,7 @@
       "kind": "value",
       "file": "src/shared/run-soak.ts",
       "line": 86,
-      "endLine": 197
+      "endLine": 200
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SOAK_PLAYERS",
@@ -55627,8 +55741,8 @@
       "name": "soakRun",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 208,
-      "endLine": 326
+      "line": 211,
+      "endLine": 329
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakRunReport",
@@ -56859,120 +56973,120 @@
       "name": "dominantSystemKeys",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1079,
-      "endLine": 1082
+      "line": 1081,
+      "endLine": 1084
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#floorBandedRows",
       "name": "floorBandedRows",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 996,
-      "endLine": 1001
+      "line": 998,
+      "endLine": 1003
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeRunOccupancy",
       "name": "judgeRunOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1037,
-      "endLine": 1077
+      "line": 1039,
+      "endLine": 1079
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
       "name": "judgeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1003,
-      "endLine": 1025
+      "line": 1005,
+      "endLine": 1027
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancyAgainstBaseline",
       "name": "judgeSystemOccupancyAgainstBaseline",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 963,
-      "endLine": 986
+      "line": 965,
+      "endLine": 988
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OCCUPANCY_SEEDS",
       "name": "OCCUPANCY_SEEDS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 793,
-      "endLine": 793
+      "line": 795,
+      "endLine": 795
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OccupancyFloorResult",
       "name": "OccupancyFloorResult",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 419,
-      "endLine": 423
+      "line": 421,
+      "endLine": 425
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#RunOccupancyReport",
       "name": "RunOccupancyReport",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 647,
-      "endLine": 665
+      "line": 649,
+      "endLine": 667
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#simulateRunOccupancy",
       "name": "simulateRunOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 667,
-      "endLine": 781
+      "line": 669,
+      "endLine": 783
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#simulateSystemOccupancy",
       "name": "simulateSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 795,
-      "endLine": 840
+      "line": 797,
+      "endLine": 842
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#summarizeRunOccupancy",
       "name": "summarizeRunOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 783,
-      "endLine": 791
+      "line": 785,
+      "endLine": 793
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#summarizeSystemOccupancy",
       "name": "summarizeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1084,
-      "endLine": 1100
+      "line": 1086,
+      "endLine": 1102
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BANDS",
       "name": "SYSTEM_OCCUPANCY_BANDS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 847,
-      "endLine": 867
+      "line": 849,
+      "endLine": 869
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE",
       "name": "SYSTEM_OCCUPANCY_BASELINE",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 917,
-      "endLine": 937
+      "line": 919,
+      "endLine": 939
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "name": "SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 954,
-      "endLine": 954
+      "line": 956,
+      "endLine": 956
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_COUNTERS",
@@ -56980,7 +57094,7 @@
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
       "line": 123,
-      "endLine": 253
+      "endLine": 255
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SystemOccupancyCounter",
@@ -56995,8 +57109,8 @@
       "name": "SystemOccupancyReport",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 284,
-      "endLine": 296
+      "line": 286,
+      "endLine": 298
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#staleLedgerIds",
@@ -57155,72 +57269,72 @@
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1118,
-      "endLine": 1178
+      "line": 1117,
+      "endLine": 1177
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "name": "TEST_HALL_ROOMS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 269,
-      "endLine": 1105
+      "line": 268,
+      "endLine": 1104
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1202,
-      "endLine": 1202
+      "line": 1201,
+      "endLine": 1201
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
       "name": "TestHallRoom",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 124,
-      "endLine": 135
+      "line": 123,
+      "endLine": 134
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
       "name": "TestHallRoomId",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 45,
-      "endLine": 92
+      "line": 44,
+      "endLine": 91
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1180,
-      "endLine": 1183
+      "line": 1179,
+      "endLine": 1182
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
       "name": "TestHallScriptLine",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 117,
-      "endLine": 122
+      "line": 116,
+      "endLine": 121
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
       "name": "TestHallStep",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 94,
-      "endLine": 115
+      "line": 93,
+      "endLine": 114
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1185,
-      "endLine": 1200
+      "line": 1184,
+      "endLine": 1199
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -58740,8 +58854,12 @@
           "line": 53
         },
         {
+          "path": "src/shared/combo-heat-rules.ts",
+          "line": 4
+        },
+        {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 89
+          "line": 90
         }
       ],
       "tests": [
@@ -59196,7 +59314,7 @@
       "evidence": [
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 11
+          "line": 12
         },
         {
           "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -59522,7 +59640,7 @@
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
-          "line": 50
+          "line": 44
         },
         {
           "path": "src/shared/flip-tile-transition.ts",
@@ -59578,7 +59696,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 8
+          "line": 9
         }
       ],
       "tests": [
@@ -59783,7 +59901,7 @@
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
-          "line": 49
+          "line": 43
         }
       ],
       "tests": [
@@ -60893,7 +61011,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 462
+          "line": 473
         }
       ],
       "tests": [
@@ -60932,7 +61050,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 462
+          "line": 473
         }
       ],
       "tests": [
@@ -60966,7 +61084,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 462
+          "line": 473
         }
       ],
       "tests": [
@@ -61000,7 +61118,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 462
+          "line": 473
         }
       ],
       "tests": [
@@ -72632,6 +72750,54 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_STAGE_FROM",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_STAGE_FROM",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_STAGE_LABELS",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_STAGE_LABELS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#comboHeat",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "symbol:src/shared/combo-heat-rules.ts#comboHeat",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#comboHeatLevels",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "symbol:src/shared/combo-heat-rules.ts#comboHeatLevels",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#ComboHeatLevels",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "symbol:src/shared/combo-heat-rules.ts#ComboHeatLevels",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#comboHeatStage",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "symbol:src/shared/combo-heat-rules.ts#comboHeatStage",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#ComboHeatStage",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "symbol:src/shared/combo-heat-rules.ts#ComboHeatStage",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#comboHeatStageIndex",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "symbol:src/shared/combo-heat-rules.ts#comboHeatStageIndex",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/content-lock-state.ts->symbol:src/shared/content-lock-state.ts#BuildFlavour",
       "source": "file:src/shared/content-lock-state.ts",
       "target": "symbol:src/shared/content-lock-state.ts#BuildFlavour",
@@ -80663,6 +80829,12 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:board.chain_chunk_fever->file:src/shared/combo-heat-rules.ts",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "file:src/shared/combo-heat-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:board.chain_chunk_fever->file:src/shared/tile-suit-rules.ts",
       "source": "mechanic:board.chain_chunk_fever",
       "target": "file:src/shared/tile-suit-rules.ts",
@@ -84317,6 +84489,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/shared/combo-heat-rules.ts",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "file:src/shared/combo-heat-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameplayScene.tsx->src/shared/contracts.ts",
       "source": "file:src/renderer/components/GameplayScene.tsx",
       "target": "file:src/shared/contracts.ts",
@@ -84728,6 +84906,12 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/chain-tier-rules.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/shared/chain-tier-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/combo-heat-rules.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/shared/combo-heat-rules.ts",
       "kind": "imports"
     },
     {
@@ -85562,6 +85746,12 @@
       "id": "imports:src/renderer/components/RunShell.tsx->src/shared/chain-tier-rules.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/shared/chain-tier-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/shared/combo-heat-rules.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/shared/combo-heat-rules.ts",
       "kind": "imports"
     },
     {
@@ -87416,6 +87606,12 @@
       "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/tileBoardTransform.ts",
       "source": "file:src/renderer/components/TileBoardParticles.tsx",
       "target": "file:src/renderer/components/tileBoardTransform.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/shared/combo-heat-rules.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/shared/combo-heat-rules.ts",
       "kind": "imports"
     },
     {
@@ -92975,6 +93171,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/combo-heat-rules.test.ts->src/shared/combo-heat-rules.ts",
+      "source": "file:src/shared/combo-heat-rules.test.ts",
+      "target": "file:src/shared/combo-heat-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/combo-heat-rules.ts->src/shared/run-number-guards.ts",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/content-lock-state.ts->src/shared/contracts.ts",
       "source": "file:src/shared/content-lock-state.ts",
       "target": "file:src/shared/contracts.ts",
@@ -97784,12 +97992,6 @@
       "id": "imports:src/shared/test-hall-rooms.ts->src/shared/board-tile-generation-rules.ts",
       "source": "file:src/shared/test-hall-rooms.ts",
       "target": "file:src/shared/board-tile-generation-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/test-hall-rooms.ts->src/shared/chain-carryover-rules.ts",
-      "source": "file:src/shared/test-hall-rooms.ts",
-      "target": "file:src/shared/chain-carryover-rules.ts",
       "kind": "imports"
     },
     {
@@ -103640,6 +103842,12 @@
       "id": "tested_by:src/shared/color-vision.ts->file:src/shared/tile-trait-palette.test.ts",
       "source": "file:src/shared/color-vision.ts",
       "target": "file:src/shared/tile-trait-palette.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/combo-heat-rules.ts->file:src/shared/combo-heat-rules.test.ts",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "file:src/shared/combo-heat-rules.test.ts",
       "kind": "tested_by"
     },
     {

@@ -1,6 +1,7 @@
 import { useRef, type CSSProperties } from 'react';
 import type { GraphicsQualityPreset } from '../../shared/contracts';
 import type { ChainTier } from '../../shared/chain-tier-rules';
+import type { ComboHeatStage } from '../../shared/combo-heat-rules';
 import { UI_ART } from '../assets/ui';
 import { SCENE_SPRITES } from '../assets/ui/sprites';
 import { useSceneEffectTier } from '../hooks/useSceneEffectTier';
@@ -78,6 +79,9 @@ export interface GameplaySceneProps {
     quality: GraphicsQualityPreset;
     reduceMotion: boolean;
     tier: ChainTier;
+    /** The combo heat (`combo-heat-rules.ts`): the room keeps answering past Fever. */
+    comboHeat?: number;
+    comboStage?: ComboHeatStage;
 }
 
 const bg = (url: string) => ({ backgroundImage: `url(${url})` });
@@ -92,10 +96,12 @@ export function GameplayScene({
     pulseKey,
     quality,
     reduceMotion,
-    tier
+    tier,
+    comboHeat = 0,
+    comboStage = 'cold'
 }: GameplaySceneProps) {
     const sceneRef = useRef<HTMLDivElement>(null);
-    const ring = sceneRingLevels(fill);
+    const ring = sceneRingLevels(fill, comboHeat);
     const effectTier = useSceneEffectTier(quality, reduceMotion);
     const still = effectTier === 'still';
     const alive = effectTier === 'full';
@@ -114,6 +120,7 @@ export function GameplayScene({
             data-scene-drawing={imminent ? 'true' : 'false'}
             data-scene-fill={fill.toFixed(2)}
             data-scene-tier={tier}
+            data-combo-stage={comboStage}
             data-still={still ? 'true' : 'false'}
             data-testid="gameplay-scene"
             ref={sceneRef}
@@ -126,6 +133,7 @@ export function GameplayScene({
                     '--scene-pulse-peak': ring.pulsePeak,
                     '--scene-flare-peak': sceneTorchFlarePeak(pulse),
                     '--scene-motes-opacity': ring.motes,
+                    '--combo-heat': comboHeat.toFixed(3),
                     '--scene-plate-aspect': `${flames.plate[0]} / ${flames.plate[1]}`
                 } as CSSProperties
             }
@@ -173,7 +181,7 @@ export function GameplayScene({
                     </div>
                 ) : null}
                 <div className={plate.things}>
-                    <SceneSprites embers={alive} heat={fill} imminent={imminent} set={flames} still={still} />
+                    <SceneSprites comboHeat={comboHeat} embers={alive} heat={fill} imminent={imminent} set={flames} still={still} />
                     {alive ? (
                         <div className={styles.ringMotes}>
                             <SceneMotes

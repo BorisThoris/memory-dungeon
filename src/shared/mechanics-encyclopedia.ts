@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 59 as const;
+export const ENCYCLOPEDIA_VERSION = 60 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -579,7 +579,8 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
             'A suit that can no longer pop - no two of its pairs within reach of each other - loses its last pair on its own: that is the drop, and it happens at any chain, so the last pair of a suit is never a pair you have to grind out. ' +
             'A break with a shape gets a name on the run line: a ripple that ran on, a drop, a long clump, a bridge into the suit next door, a treasure spill, a clean sweep of a suit. ' +
             'Clear the floor with momentum still standing and the floor-end bonus multiplies with the tier: 1.5x at Clean, 2.5x at Sharp, 5x at Fever - Extreme Fever. Never the rating. ' +
-            'Your **combo carries from floor to floor until you miss**: it keeps paying its score, and the lightning that runs through every pair and pop grows with it. The rungs are the floor\'s own - only **one link** of it counts toward them on a new floor, so two more matches reach Clean instead of three, and every tier is earned on the board that shows it. Cascade and early-start momentum stay behind with the floor where you earned them.'
+            'Your **combo carries from floor to floor until you miss** - the chain, its tier, its cascade and early-start momentum, all of it. A floor cleared at Fever opens the next one at Fever, and the only thing that ends it is a miss. ' +
+            'Past Fever the combo keeps heating: **Warm** from 3, **Hot** from 6, **Blazing** from 10, **Inferno** from 16, **Legendary** from 25. The heat changes nothing a rule reads - the rungs still decide what a break takes - but the whole game answers it: flames climb the chain rail, the combo number burns, embers rise off the cards, the torches and the ring go wild, lightning through every pop forks and thickens, and the edges of the screen glow in the stage\'s colour.'
     },
     {
         id: 'tile_suits',

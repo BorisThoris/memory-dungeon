@@ -21,8 +21,7 @@ import { getMemorizeDurationForRun } from './scoring-rules';
 import { anchorMarkedTileId } from './n-back-anchor-rules';
 import { orthogonalNeighbourIndices } from './skittish-cards-rules';
 import { WILD_PAIR_KEY } from './tile-identity';
-import { CHAIN_CARRYOVER_CAP } from './chain-carryover-rules';
-import { runChainTier, runLadderChain } from './chain-tier-rules';
+import { runChainTier } from './chain-tier-rules';
 
 /**
  * The test hall: one small authored room per mechanic, the game-dev "flat" where every system can
@@ -283,23 +282,23 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'combo-carries',
         title: 'The combo carries',
-        mechanic: 'The combo crosses the stairs whole and keeps paying; only one link of it counts toward the next floor\'s rungs.',
+        mechanic: 'The combo and its whole ladder cross the stairs and keep climbing: the meter you built is the meter the next floor opens on.',
         graphMechanicIds: ['board.chain_chunk_fever', 'progression.run_flow'],
-        tryThis: 'Your combo stands at seven. Match, clear the floor and descend: the combo is still there, the rungs start one link up.',
-        build: () => room(['a:e b:t c:m', 'c:m a:e b:t'], { streak: 7, run: { chainLinksAboveLadder: 6 } }),
+        tryThis: 'Your combo stands at seven. Match, clear the floor and descend: the combo, its tier and its cascade momentum are all still there.',
+        build: () => room(['a:e b:t c:m', 'c:m a:e b:t'], { streak: 7, run: { chunkPairsThisChain: 2 } }),
         script: [
             { step: { do: 'match', pairKey: 'a' }, says: 'the match adds a link', expect: (r) => (r.stats.currentStreak === 8 ? null : `combo ${r.stats.currentStreak}`) },
             { step: { do: 'clear' }, says: 'the floor clears with the combo standing', expect: expectAll(statusIs('levelComplete'), (r) => (r.stats.currentStreak >= 8 ? null : `combo ${r.stats.currentStreak}`)) },
             {
                 step: { do: 'advance' },
-                says: 'the next floor opens holding the whole combo, one link of it on the ladder and no tier',
+                says: 'the next floor opens holding the whole combo, its cascade momentum and its tier',
                 expect: expectAll(statusIs('memorize'), (r, b) =>
                     r.stats.currentStreak !== b.stats.currentStreak
                         ? `combo ${b.stats.currentStreak} -> ${r.stats.currentStreak}`
-                        : runLadderChain(r) !== CHAIN_CARRYOVER_CAP
-                          ? `ladder ${runLadderChain(r)}`
-                          : runChainTier(r) !== 'none'
-                            ? `tier ${runChainTier(r)}`
+                        : r.chunkPairsThisChain !== b.chunkPairsThisChain
+                          ? `cascade momentum ${b.chunkPairsThisChain} -> ${r.chunkPairsThisChain}`
+                          : runChainTier(r) !== runChainTier(b)
+                            ? `tier ${runChainTier(b)} -> ${runChainTier(r)}`
                             : null)
             }
         ]
@@ -309,19 +308,19 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         title: 'A miss ends the combo',
         mechanic: 'A combo carried down the stairs keeps climbing until a miss, and the miss ends all of it.',
         graphMechanicIds: ['board.chain_chunk_fever', 'core.board_turn_resolution'],
-        tryThis: 'You arrive with a combo of twelve, one link of it on the ladder. Match once, then miss.',
-        build: () => room(['a:e b:t', 'c:m a:e', 'b:t c:m'], { streak: 12, run: { chainLinksAboveLadder: 11 } }),
+        tryThis: 'You arrive with a combo of twelve at Fever. Match once, then miss.',
+        build: () => room(['a:e b:t', 'c:m a:e', 'b:t c:m'], { streak: 12, run: { chunkPairsThisChain: 3 } }),
         script: [
             {
                 step: { do: 'match', pairKey: 'a' },
-                says: 'the match adds a link to the combo and to the ladder',
-                expect: (r) => (r.stats.currentStreak === 13 && runLadderChain(r) === 2 ? null : `combo ${r.stats.currentStreak}, ladder ${runLadderChain(r)}`)
+                says: 'the match adds a link to the combo, still at Fever',
+                expect: (r) => (r.stats.currentStreak === 13 && runChainTier(r) === 'fever' ? null : `combo ${r.stats.currentStreak}, tier ${runChainTier(r)}`)
             },
             {
                 step: { do: 'miss', a: 'b-1', b: 'c-1' },
-                says: 'the miss ends the combo, carried links and all',
+                says: 'the miss ends the combo, carried links, cascade momentum and all',
                 expect: expectAll(missesAre(2), (r) =>
-                    r.stats.currentStreak === 0 && runLadderChain(r) === 0 && !r.chainLinksAboveLadder ? null : `combo ${r.stats.currentStreak}, above ${r.chainLinksAboveLadder}`)
+                    r.stats.currentStreak === 0 && r.chunkPairsThisChain === 0 && runChainTier(r) === 'none' ? null : `combo ${r.stats.currentStreak}, cascade ${r.chunkPairsThisChain}`)
             }
         ]
     },

@@ -121,6 +121,7 @@ import {
     uiSfxGainFromSettings
 } from '../audio/uiSfx';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
+import { comboHeatLevels } from '../../shared/combo-heat-rules';
 import { GameplayScene } from './GameplayScene';
 import { REG104_DATA_SHELL } from '../gameplay/regPhase4PlayContract';
 import styles from './GameScreen.module.css';
@@ -1022,6 +1023,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      * the top of the meter is an arrival rather than the end of a ramp; it clears as soon as a
      * later turn lands, which is what keeps a run sitting at Fever from strobing.
      */
+    // The combo heat (`combo-heat-rules.ts`): the stage every surface below reads, once per render.
+    const comboHeatLevelsNow = comboHeatLevels(run.stats.currentStreak);
     const feverArrivalKey =
         latestTurnForPulse &&
         latestTurnForPulse.announcement.chainTierAfter === 'fever' &&
@@ -1544,8 +1547,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             data-shell-orientation={shellProfile.orientation}
             {...{ [REG104_DATA_SHELL]: reg104GameplayShellVariant }}
             data-testid="game-shell"
+            data-combo-stage={comboHeatLevelsNow.stage}
             ref={shellRef}
-            style={GAMEPLAY_VISUAL_CSS_VARS}
+            style={{ ...GAMEPLAY_VISUAL_CSS_VARS, '--combo-heat': comboHeatLevelsNow.heat, '--combo-aura': comboHeatLevelsNow.aura, '--combo-hue': `${comboHeatLevelsNow.hueDeg}deg` } as CSSProperties}
         >
             <MainMenuBackground
                 fieldTiltRef={gameFieldTiltRef}
@@ -1566,8 +1570,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     quality={settingsGraphicsQuality}
                     reduceMotion={reduceMotion}
                     tier={runChainTier(run)}
+                    comboHeat={comboHeatLevelsNow.heat}
+                    comboStage={comboHeatLevelsNow.stage}
                 />
             </div>
+            {/* The combo aura: the screen's edges burn with the combo, past anything the meter shows. */}
+            <div aria-hidden="true" className={styles.comboAura} data-combo-stage={comboHeatLevelsNow.stage} data-testid="combo-aura" />
             <div className={`${styles.gameForeground} ${cameraViewportMode ? styles.mobileCameraForeground : ''}`}>
                 <div
                     aria-hidden={gameplayShellInert ? true : undefined}

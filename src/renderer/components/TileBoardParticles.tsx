@@ -9,8 +9,11 @@ import type { TileBezelFrameBag } from './tileBoardFrameBag';
 import { getRimParticleMood } from './boardParticleRim';
 import { beginMatchImpact, MATCH_CONTACT_SECONDS } from './boardMatchImpact';
 import { collectGroupArcCues, comboEffectIntensity } from './boardGroupArcs';
+import { comboHeatLevels } from '../../shared/combo-heat-rules';
 
-const PARTICLE_KINDS = ['bomb', 'match', 'flip', 'chain', 'rim', 'ripple', 'arc'] as const;
+const PARTICLE_KINDS = ['bomb', 'match', 'flip', 'chain', 'rim', 'ripple', 'arc', 'ember'] as const;
+/** Ember colour by heat stage: gold, orange, red-orange, rose, violet-white. */
+const EMBER_TINTS = ['#ffd27a', '#ffd27a', '#ffa24f', '#ff7a3d', '#ff4d5e', '#e2b3ff'] as const;
 
 export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMotion, runStatus, frames, cardHeat, combo = 0, time, sharedFrameClock }: {
     board: BoardState;
@@ -31,9 +34,11 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
     const motion = useRef(reduceMotion);
     const activeCount = useRef(-1);
     const peakCount = useRef(0);
-    const totals = useRef({ bomb: 0, match: 0, flip: 0, chain: 0, rim: 0, ripple: 0, arc: 0 });
+    const totals = useRef({ bomb: 0, match: 0, flip: 0, chain: 0, rim: 0, ripple: 0, arc: 0, ember: 0 });
     const nextRimTick = useRef(0);
     const rimTick = useRef(0);
+    const nextEmberTick = useRef(0);
+    const emberTick = useRef(0);
     const pausedFrame = useRef<boolean | null>(null);
     useEffect(() => () => system.dispose(), [system]);
     useLayoutEffect(() => {
@@ -113,6 +118,27 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
             }
             rimTick.current += limit;
             gl.domElement.setAttribute('data-particle-rim-bursts', String(totals.current.rim));
+        }
+        // The combo heat's embers: from Hot, cards on the board throw sparks that rise off the
+        // table, more cards and more often the hotter it gets, in the stage's colour.
+        const heat = comboHeatLevels(combo);
+        if (!reduceMotion && heat.embers > 0 && (runStatus === 'playing' || runStatus === 'resolving') && time.current >= nextEmberTick.current) {
+            nextEmberTick.current = time.current + (graphicsQuality === 'low' ? 0.5 : 0.34) * (1 - heat.heat * 0.45);
+            const groups = [];
+            for (const bag of frames.current.values()) {
+                const group = bag.groupRef.current;
+                if (group?.visible && group.scale.x >= 0.35 && group.scale.y >= 0.35 && bag.propsRef.current.tile.state !== 'removed') groups.push(group);
+            }
+            const limit = Math.min(groups.length, graphicsQuality === 'low' ? 1 : Math.round(heat.embers));
+            for (let index = 0; index < limit; index += 1) {
+                const group = groups[(emberTick.current + index) % groups.length]!;
+                const emitted = system.emit({ kind: 'ember', x: group.position.x, y: group.position.y, z: group.position.z,
+                    time: time.current, seed: (emberTick.current + index) * 7919 + Math.floor(time.current * 10), reduceMotion, quality: graphicsQuality,
+                    energy: heat.heat, tint: EMBER_TINTS[heat.stageIndex] });
+                if (emitted) totals.current.ember += 1;
+            }
+            emberTick.current += Math.max(1, limit);
+            gl.domElement.setAttribute('data-particle-ember-bursts', String(totals.current.ember));
         }
         const active = system.advance(time.current);
         if (active > peakCount.current) {

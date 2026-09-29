@@ -113,6 +113,58 @@
     );
 }
 
+/*
+ * The combo aura. The combo carries across floors and climbs past Fever (`combo-heat-rules.ts`),
+ * and the meter has nothing to say past its top, so the whole screen answers instead: an inset
+ * glow at the edges that warms from gold through orange and red to violet as the stages climb,
+ * breathing faster the hotter it gets. `--combo-aura`, `--combo-hue` and `--combo-heat` are set on
+ * the shell with the run. Static under reduce motion; nothing at all when cold.
+ */
+.comboAura {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: var(--combo-aura, 0);
+    box-shadow:
+        inset 0 0 calc(3rem + 9rem * var(--combo-heat, 0)) calc(0.5rem + 2rem * var(--combo-heat, 0))
+            color-mix(in srgb, var(--margin-fever, #facb8d) calc(30% + 40% * var(--combo-heat, 0)), transparent);
+    filter: hue-rotate(var(--combo-hue, 0deg));
+    transition: opacity 600ms ease, filter 600ms ease;
+}
+
+.comboAura[data-combo-stage='hot'],
+.comboAura[data-combo-stage='blazing'],
+.comboAura[data-combo-stage='inferno'],
+.comboAura[data-combo-stage='legendary'] {
+    animation: comboAuraBreathe calc(2.4s - 1.4s * var(--combo-heat, 0)) ease-in-out infinite alternate;
+}
+
+.comboAura[data-combo-stage='inferno'],
+.comboAura[data-combo-stage='legendary'] {
+    /* Past inferno the aura licks inward: a second, sharper ring in the flame's own colour. */
+    box-shadow:
+        inset 0 0 calc(3rem + 9rem * var(--combo-heat, 0)) calc(0.5rem + 2rem * var(--combo-heat, 0))
+            color-mix(in srgb, var(--margin-fever, #facb8d) calc(30% + 40% * var(--combo-heat, 0)), transparent),
+        inset 0 0 2rem 0.25rem color-mix(in srgb, #ff7a3d 55%, transparent);
+}
+
+@keyframes comboAuraBreathe {
+    from {
+        opacity: calc(var(--combo-aura, 0) * 0.7);
+    }
+
+    to {
+        opacity: var(--combo-aura, 0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .comboAura {
+        animation: none !important;
+    }
+}
+
 /* HUD-013: full in-game z-index ordering is documented in `App.tsx` (OVR-008 comment block). */
 .gameForeground {
     position: relative;

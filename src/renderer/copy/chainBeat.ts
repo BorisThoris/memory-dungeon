@@ -130,7 +130,7 @@ export const CHAIN_BEAT_COPY = {
     ): string =>
         `${momentumSourceLine(chain, cascaded, banked)}. ` +
         (archetype === 'breather' ? 'This breather lets every rung pop one more pair. ' : 'A match on its own clears its pair. ') +
-        `Clean from 3 can pop up to ${extraPairs(breakPairCap('clean', archetype))} by contact, Sharp from ${rungs.sharp} up to ${breakPairCap('sharp', archetype)} and can ripple, Fever from ${rungs.fever} up to ${breakPairCap('fever', archetype)} and can bridge into a neighbouring suit. A miss ends the chain and clears cascade and early-start momentum; nothing else does, so the combo crosses floors.`,
+        `Clean from 3 can pop up to ${extraPairs(breakPairCap('clean', archetype))} by contact, Sharp from ${rungs.sharp} up to ${breakPairCap('sharp', archetype)} and can ripple, Fever from ${rungs.fever} up to ${breakPairCap('fever', archetype)} and can bridge into a neighbouring suit. A miss ends the chain and clears cascade and early-start momentum; nothing else does, so the whole ladder crosses floors with the combo.`,
     /** What this floor's rung can add to a remembered pair, and how those extra pairs score. */
     rungValue: rungValueLine,
     /** The whole ladder in one line, for the hover hint: what each rung up pays. */

@@ -3,35 +3,27 @@ import { CHAIN_CARRYOVER_CAP, carriedChainForNextFloor } from './chain-carryover
 import { CHAIN_TIER_CLEAN_FROM, getChainTier } from './chain-tier-rules';
 
 /*
- * The cap is the whole rule, so it is the thing the cases pin: a chain under it is not touched, a
- * chain over it lands exactly on it, and no chain - however long, onto a board of any size - can
- * arrive holding a tier. The sweep runs every pair count a board can plausibly deal rather than
- * the two or three a hand-picked case would, because the rungs above Clean are a share of the
- * floor and a rule about shares breaks at the edges of the range, not in the middle of it.
+ * Since 2026-09-29 the whole chain crosses (the owner asked for the meter to persist until a
+ * miss), so what the cases pin is that nothing is trimmed, whatever the length and whatever the
+ * board it lands on, and that junk still reads as nothing. The old cap is kept as a documented
+ * constant so the reasoning it carried stays findable.
  */
 describe('the chain carried between floors', () => {
-    it('crosses the boundary untouched when the chain is under the cap', () => {
+    it('crosses the boundary untouched, however long it is', () => {
         expect(carriedChainForNextFloor(1)).toBe(1);
-        expect(carriedChainForNextFloor(CHAIN_CARRYOVER_CAP)).toBe(CHAIN_CARRYOVER_CAP);
+        expect(carriedChainForNextFloor(9)).toBe(9);
+        expect(carriedChainForNextFloor(999)).toBe(999);
     });
 
-    it('trims a long chain down to the cap rather than wiping it', () => {
-        expect(carriedChainForNextFloor(9)).toBe(CHAIN_CARRYOVER_CAP);
-        expect(carriedChainForNextFloor(999)).toBe(CHAIN_CARRYOVER_CAP);
-        expect(CHAIN_CARRYOVER_CAP).toBeGreaterThan(0);
-    });
-
-    it('stops two short of Clean: the clear is one link, not a rung', () => {
-        expect(CHAIN_CARRYOVER_CAP).toBe(CHAIN_TIER_CLEAN_FROM - 2);
-        // A player arrives one match from Clean rather than three, which is the whole reward.
-        expect(carriedChainForNextFloor(999) + 2).toBe(CHAIN_TIER_CLEAN_FROM);
-    });
-
-    it('never hands the next floor a tier, at any board size', () => {
+    it('hands the next floor the tier it earned, at any board size', () => {
         for (let pairs = 2; pairs <= 30; pairs += 1) {
-            expect(getChainTier(carriedChainForNextFloor(999), pairs), `${pairs} pairs`).toBe('none');
+            expect(getChainTier(carriedChainForNextFloor(999), pairs), `${pairs} pairs`).toBe('fever');
+            expect(getChainTier(carriedChainForNextFloor(1), pairs), `${pairs} pairs`).toBe('none');
         }
-        expect(getChainTier(carriedChainForNextFloor(999), null)).toBe('none');
+    });
+
+    it('keeps the old cap on record, two short of Clean', () => {
+        expect(CHAIN_CARRYOVER_CAP).toBe(CHAIN_TIER_CLEAN_FROM - 2);
     });
 
     it('carries nothing rather than junk when the streak is malformed', () => {

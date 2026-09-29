@@ -638,11 +638,11 @@ export interface RunState {
      */
     skipMomentumThisChain?: number;
     /**
-     * Links of the combo that crossed a floor boundary above the one link the break ladder may
-     * carry (`chain-carryover-rules.ts`). The combo (`stats.currentStreak`) carries whole until a
-     * miss; the ladder reads the combo minus these. Absent on older saves, and read as zero.
+     * Links the combo brought down the stairs: how much of the standing chain was built on earlier
+     * floors. The HUD says it beside the combo, so a floor that opens at Fever reads as earned.
+     * Reset with the combo. Absent on older saves, and read as zero.
      */
-    chainLinksAboveLadder?: number;
+    comboLinksCarried?: number;
     /** Breaks that landed at the Fever rung this floor, and the longest chain the floor saw. */
     feverBreaksThisFloor: number;
     bestChainThisFloor: number;
