@@ -28,6 +28,13 @@ export interface SceneMood {
     blackHoleKey: string | null;
     /** How far the frost has grown in from the edges, 0..1; only a frost run's. */
     frost: number;
+    /** Snow settled on the room's surfaces, 0..1, and the light in it; only a frost run's. */
+    snow: number;
+    snowGlow: number;
+    /** The ice sheet over the screen: how much pane, how far its cracks have run, the light in them. */
+    ice: number;
+    iceCracks: number;
+    iceGlow: number;
     /** A storm run's flashes, 0..1 with the heat; 0 otherwise. */
     storm: number;
     /** Grade over the plate: hue rotation, saturation and brightness, from the temper and the heat. */
@@ -73,12 +80,22 @@ export const deriveSceneMood = ({
     const blackHoleKey = blackHoleKeyFor(run, latestLoss);
     const plate: ScenePlateId = storeOpen ? 'shop' : blackHoleKey ? 'void' : 'dungeon';
     const frost = temper.id === 'frost' && plate === 'dungeon' ? round(Math.min(1, heat * 1.15)) : 0;
+    // Snow settles first, the pane follows, the cracks run last: the room freezes in that order.
+    const cold = temper.id === 'frost' && plate === 'dungeon' ? heat : 0;
+    const snow = round(Math.min(1, cold * 1.6));
+    const ice = round(Math.max(0, Math.min(1, (cold - 0.15) * 1.4)));
+    const iceCracks = round(Math.max(0, Math.min(1, (cold - 0.35) * 1.8)));
     const storm = temper.id === 'storm' && plate === 'dungeon' ? round(heat) : 0;
     const graded = plate === 'dungeon';
     return {
         plate,
         blackHoleKey,
         frost,
+        snow,
+        snowGlow: round(snow * (0.3 + 0.7 * cold)),
+        ice,
+        iceCracks,
+        iceGlow: round(iceCracks * (0.4 + 0.6 * cold)),
         storm,
         hueDeg: graded ? Math.round(temper.ringHueDeg * 0.35 * heat) + 0 : 0,
         saturate: round(graded ? (temper.id === 'frost' ? 1 - 0.45 * heat : 1 + 0.25 * heat) : plate === 'void' ? 0.8 : 1),

@@ -54,6 +54,11 @@ interface OverlayModalProps {
      */
     surface?: 'default' | 'margin';
     /**
+     * `clear`: the room behind the dialog stays readable - a light blur and a thin scrim - for a
+     * dialog that is a place as much as a sheet (the store, whose room is the merchant's vault).
+     */
+    scrim?: 'default' | 'clear';
+    /**
      * A wider page for dialogs that carry a table or a form (the run setup sheet, the shortcut
      * list) rather than a sentence and a choice. Margin surface only.
      */
@@ -141,6 +146,7 @@ const OverlayModal = ({
     actionPlacement = 'auto',
     onEscape,
     surface = 'margin',
+    scrim = 'default',
     wide = false,
     focusPrimaryActionFirst = false
 }: OverlayModalProps) => {
@@ -183,6 +189,7 @@ const OverlayModal = ({
     return (
         <div
             className={`${styles.backdrop} ${overlayToneClass(headerPlateTone)} ${surface === 'margin' ? styles.backdropMargin : ''}`.trim()}
+            data-scrim={scrim}
             onWheel={(event) => {
                 if (event.target === event.currentTarget) {
                     event.preventDefault();

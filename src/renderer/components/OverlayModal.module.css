@@ -19,6 +19,12 @@
     overscroll-behavior: contain;
 }
 
+/* A dialog that is a place: the room behind it stays readable (the store's vault, `sceneMood.ts`). */
+.backdrop[data-scrim='clear'] {
+    background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(8, 8, 12, 0.28), rgba(8, 8, 12, 0.7));
+    backdrop-filter: blur(1.5px) saturate(115%);
+}
+
 .modal[data-overlay-size='decision'],
 .modal[data-overlay-size='alert'] {
     width: min(680px, 100%);

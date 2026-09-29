@@ -178,6 +178,14 @@
     }
 }
 
+/* The ice sheet's host: over the board and the HUD, under the dialogs; the pane itself is the SVG inside. */
+.iceSheetHost {
+    position: absolute;
+    inset: 0;
+    z-index: 8;
+    pointer-events: none;
+}
+
 /* HUD-013: full in-game z-index ordering is documented in `App.tsx` (OVR-008 comment block). */
 .gameForeground {
     position: relative;

@@ -65,6 +65,173 @@
 }
 
 
+/* ------------------------------------------------------------------ the room itself */
+
+/*
+ * The grade (`sceneMood.ts`): the whole plate turns with the temper as the combo climbs - a frost
+ * run goes cold and pale, storm violet, ember a shade warmer. On the plate rather than the base so
+ * the light passes turn with the stone they light.
+ */
+.scene .plate {
+    filter: hue-rotate(var(--scene-grade-hue, 0deg)) saturate(var(--scene-grade-saturate, 1)) brightness(var(--scene-grade-brightness, 1));
+    transition: filter 900ms ease;
+}
+
+.scene[data-scene-prismatic='true'] .plate {
+    animation: scenePrismatic 12s linear infinite;
+}
+
+@keyframes scenePrismatic {
+    from {
+        filter: hue-rotate(0deg) saturate(1.2);
+    }
+
+    to {
+        filter: hue-rotate(360deg) saturate(1.2);
+    }
+}
+
+/* The other rooms sit over the dungeon's base and crossfade in; the light passes fade out with it. */
+.altPlate {
+    opacity: 0;
+    transition: opacity 900ms ease;
+}
+
+.altPlate[data-shown='true'] {
+    opacity: var(--scene-base-opacity, 1);
+}
+
+/* Another room is a switch, not a blend: the dungeon's stone, its light passes, its mist and
+   its flames all leave with it, and come back with it. */
+.dungeonBase,
+.things {
+    transition: opacity 900ms ease;
+}
+
+.scene[data-scene-plate='shop'] .dungeonBase,
+.scene[data-scene-plate='void'] .dungeonBase,
+.scene[data-scene-plate='shop'] .things,
+.scene[data-scene-plate='void'] .things,
+.scene[data-scene-plate='shop'] .layer,
+.scene[data-scene-plate='void'] .layer,
+.scene[data-scene-plate='shop'] .mist,
+.scene[data-scene-plate='void'] .mist {
+    opacity: 0 !important;
+    transition: opacity 900ms ease;
+}
+
+/*
+ * Snow (`--scene-snow`): the mask of the room's upward faces, laid over the stone as it settles.
+ * Normal blending, so it covers the stone the way snow does; its glow is a blurred copy above it,
+ * plus-lighter like the light passes, driven by `--scene-snow-glow`.
+ */
+.snow {
+    mix-blend-mode: normal;
+    opacity: var(--scene-snow, 0);
+    transition: opacity 1400ms ease;
+}
+
+.snowGlow {
+    opacity: calc(var(--scene-snow-glow, 0) * 0.9);
+    filter: blur(7px) brightness(1.4);
+    transition: opacity 1400ms ease;
+}
+
+/* Frost: the crystals are white on black, so they screen over the room and grow in with the heat.
+   Kept faint now that the snow and the ice sheet carry the cold; a rime at the very edges. */
+.frost {
+    mix-blend-mode: screen;
+    opacity: calc(var(--scene-frost, 0) * 0.35);
+    transform: scale(calc(1.55 - 0.4 * var(--scene-frost, 0)));
+    transition:
+        opacity 1200ms ease,
+        transform 1200ms ease;
+}
+
+/* Storm: a white flash across the room on an irregular beat, more often the hotter the combo. */
+.stormFlash {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 50% 20%, rgba(220, 200, 255, 0.55), transparent 70%);
+    opacity: 0;
+    mix-blend-mode: screen;
+    animation: sceneStormFlash calc(7s - 5s * var(--scene-storm, 0)) linear infinite;
+}
+
+@keyframes sceneStormFlash {
+    0%,
+    88%,
+    100% {
+        opacity: 0;
+    }
+
+    89% {
+        opacity: 1;
+    }
+
+    91% {
+        opacity: 0.2;
+    }
+
+    93% {
+        opacity: 0.8;
+    }
+
+    96% {
+        opacity: 0;
+    }
+}
+
+/* The black hole: a dark disc opens at the ring, the room is pulled toward it and darkens, and the
+   void plate is what is left when it settles. One animation per loss, keyed by the miss. */
+.blackHole {
+    position: absolute;
+    left: 50%;
+    top: 62%;
+    width: 30vmin;
+    height: 30vmin;
+    border-radius: 50%;
+    background: radial-gradient(circle, #000 0 38%, rgba(60, 20, 90, 0.9) 46%, rgba(120, 60, 200, 0.5) 56%, transparent 72%);
+    box-shadow: 0 0 60px 20px rgba(90, 40, 160, 0.6);
+    transform: translate(-50%, -50%) scale(0);
+    animation: sceneBlackHole 2400ms cubic-bezier(0.3, 0, 0.2, 1) forwards;
+    pointer-events: none;
+}
+
+@keyframes sceneBlackHole {
+    0% {
+        transform: translate(-50%, -50%) scale(0) rotate(0deg);
+        opacity: 0;
+    }
+
+    12% {
+        transform: translate(-50%, -50%) scale(0.4) rotate(40deg);
+        opacity: 1;
+    }
+
+    55% {
+        transform: translate(-50%, -50%) scale(7) rotate(520deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(9) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scene .plate,
+    .stormFlash,
+    .blackHole {
+        animation: none;
+    }
+
+    .stormFlash {
+        display: none;
+    }
+}
+
 /* ------------------------------------------------------------------ the ring */
 .ringLight {
     opacity: var(--scene-ring-light, 0.55);

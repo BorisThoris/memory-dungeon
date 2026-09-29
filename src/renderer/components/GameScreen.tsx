@@ -124,6 +124,8 @@ import {
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
 import { comboHeatLevels, comboHeatStageIndex, comboHeatThemeForSeed, comboStageReached } from '../../shared/combo-heat-rules';
 import { ScreenCalloutQueue } from './ScreenCalloutQueue';
+import { deriveSceneMood, latestMissEvent } from './sceneMood';
+import { IceSheetOverlay } from './IceSheetOverlay';
 import { derivePurchaseCallouts, deriveTurnCallouts, type ScreenCallout } from './screenCallouts';
 import { GameplayScene } from './GameplayScene';
 import { REG104_DATA_SHELL } from '../gameplay/regPhase4PlayContract';
@@ -1580,6 +1582,24 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     // The store stop is a dialog over the cleared board like pause is, so the board goes inert under
     // it too: it was the one modal a screen reader could still browse out of into the dock and HUD.
     const storeSheetOpen = run.status === 'levelComplete' && storeStopKey === floorClearKey;
+    /*
+     * What the room has become (`sceneMood.ts`): the temper grades it, a great combo's death
+     * collapses it into the void for the floor, and the store stop is the merchant's vault.
+     */
+    const sceneMood = useMemo(
+        () => deriveSceneMood({
+            combo: run.stats.currentStreak,
+            latestLoss: latestMissEvent(
+                (Array.isArray(run.gameplayEventJournal) ? run.gameplayEventJournal : []).filter(
+                    (event): event is BoardTurnResolvedEvent => (event as { type?: string }).type === 'board.turn_resolved'
+                )
+            ),
+            run,
+            storeOpen: storeSheetOpen,
+            temper: comboTemper
+        }),
+        [run, storeSheetOpen, comboTemper]
+    );
     const gameplayShellInert =
         !suppressStatusOverlays && (abandonRunConfirmOpen || shortcutsHelpOpen || run.status === 'paused' || storeSheetOpen);
     const reg104GameplayShellVariant =
@@ -1620,11 +1640,22 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     comboHeat={comboHeatLevelsNow.heat}
                     comboStage={comboHeatLevelsNow.stage}
                     comboHueDeg={comboTemper.ringHueDeg}
+                    mood={sceneMood}
                 />
             </div>
             {/* The combo aura: the screen's edges burn with the combo, past anything the meter shows. */}
             <div aria-hidden="true" className={styles.comboAura} data-combo-stage={comboHeatLevelsNow.stage} data-combo-theme={comboTemper.id} data-testid="combo-aura" />
             <ScreenCalloutQueue callouts={screenCallouts} reduceMotion={reduceMotion} />
+            {/* The ice sheet over the whole screen on a frost run; its variables are the room's. */}
+            {comboTemper.id === 'frost' ? (
+                <div
+                    aria-hidden="true"
+                    className={styles.iceSheetHost}
+                    style={{ '--scene-ice': sceneMood.ice, '--scene-ice-cracks': sceneMood.iceCracks, '--scene-ice-glow': sceneMood.iceGlow } as CSSProperties}
+                >
+                    <IceSheetOverlay reduceMotion={reduceMotion} seed={run.runSeed} />
+                </div>
+            ) : null}
             <div className={`${styles.gameForeground} ${cameraViewportMode ? styles.mobileCameraForeground : ''}`}>
                 <div
                     aria-hidden={gameplayShellInert ? true : undefined}
@@ -2011,6 +2042,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         onEscape={continueToNextLevel}
                         subtitle={STORE_SHEET_COPY.subtitle(run.lastLevelResult?.level ?? 0, runGold(run))}
                         testId="store-sheet"
+                        scrim="clear"
                         title={STORE_SHEET_COPY.title}
                     >
                         <StoreSheetRows

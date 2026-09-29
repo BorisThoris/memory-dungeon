@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2768,
-    "codeFileCount": 985,
-    "exportedSymbolCount": 2994,
+    "trackedFileCount": 2782,
+    "codeFileCount": 988,
+    "exportedSymbolCount": 2999,
     "contentItemCount": 10,
     "mechanicCount": 51,
     "stateFieldCount": 92,
-    "relationshipCount": 7787
+    "relationshipCount": 7799
   },
   "inventory": [
     {
@@ -687,8 +687,8 @@
     {
       "path": "docs/gameplay/combo-feedback-reference.md",
       "category": "documentation",
-      "bytes": 8452,
-      "sha256": "1dbaf5e1e3d6f90e75804b14f17559920f8d96472e668941a82d3aa9606295f1"
+      "bytes": 10606,
+      "sha256": "bea116cb7fc3c6cfa1fdffb0bdaa49a018bffbb415dfbfdeec2f9342a2a7a6f1"
     },
     {
       "path": "docs/gameplay/epic-audio-feedback.md",
@@ -2380,7 +2380,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33561,
-      "sha256": "2fd161582b18da8f1f4e7edfbce186dd46c81a4a8c4ba4f1ad4ac05bf17f395f"
+      "sha256": "da13fab981c7137dfc8e3b6ff9861d63e617aa42716bf0af52c29a229daaa431"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4245,8 +4245,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 33031,
-      "sha256": "0e4f88f6609deb5a5430af4ecc9a5414bde3b58c354649a1390e08897751e6e8"
+      "bytes": 32952,
+      "sha256": "98eecd621b77755606252ea3ef3b186c805a6437db549039ab1c954000d55cf4"
     },
     {
       "path": "packages/notifications/package.json",
@@ -5065,6 +5065,12 @@
       "sha256": "09f359e854492cd67730f221fc0212ed81bd59ce3b9f17c113f8a7afed336bb8"
     },
     {
+      "path": "scripts/deploy-pages.mjs",
+      "category": "script",
+      "bytes": 901,
+      "sha256": "3ae1eba34240ff5af83513b54d9c6208291279b1c4a1eaa9b9307e235e9a6d9c"
+    },
+    {
       "path": "scripts/e2e-locator-audit.ts",
       "category": "script",
       "bytes": 6442,
@@ -5471,6 +5477,12 @@
       "category": "script",
       "bytes": 7152,
       "sha256": "056652ae002961d7ba61ea0de1259adbba2b5c34bea2eceeac7b03735246abd4"
+    },
+    {
+      "path": "scripts/scene-pipeline/snow_mask.py",
+      "category": "script",
+      "bytes": 3587,
+      "sha256": "b39ee180112ca7941370553b4f2ca9dabfa61d1ea2c04caba4eb4b0342eed015"
     },
     {
       "path": "scripts/scene-pipeline/sprites/bg-gameplay-dungeon-ring.json",
@@ -7741,6 +7753,30 @@
       "sha256": "3fe7b080d00f7aa01305da1504b586619f90702d627344734fa83c2f2c663898"
     },
     {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-shop-v1.png",
+      "category": "source",
+      "bytes": 1333430,
+      "sha256": "1c99f9f1a89ad5407907119d96ba9527e9e2e9352c966bc1e2cabad278d69cf7"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-shop-v1.webp",
+      "category": "source",
+      "bytes": 86484,
+      "sha256": "2f6ec3bfe8985b75b7a54030a7a7690eeb42bac2eab4d53a49cd222c99d935a3"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-void-v1.png",
+      "category": "source",
+      "bytes": 1181066,
+      "sha256": "92410c92dbee2c1c8687d5f557a7872afd3c6e75a8020a183640c3b5a04528cc"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-void-v1.webp",
+      "category": "source",
+      "bytes": 53346,
+      "sha256": "1d830730ecdc650319508164363260cecc5ad3c7e919de264f6a672683d5d1b0"
+    },
+    {
       "path": "src/renderer/assets/ui/backgrounds/bg-main-menu-cathedral-v1.png",
       "category": "source",
       "bytes": 1599870,
@@ -7993,6 +8029,30 @@
       "sha256": "2fefad4549112dcfd7b6e9e1309099144e8b35e9e65af55e2ef8560eba5d4d7e"
     },
     {
+      "path": "src/renderer/assets/ui/backgrounds/overlay-frost-v1.png",
+      "category": "source",
+      "bytes": 1748976,
+      "sha256": "d5598caf4bdddf633654ad085a57dd375a0715a017c963c655dd7fb8623b4acb"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/overlay-frost-v1.webp",
+      "category": "source",
+      "bytes": 207302,
+      "sha256": "09825c8da1855056e629baefdf12f8076a5b4d39650616611b75ec14c51c3990"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/overlay-snow-dungeon-v1.png",
+      "category": "source",
+      "bytes": 375748,
+      "sha256": "0b7807ec082c6c44fb750f1607aa9bcb1778cb0d0692037d67921e16175c90f3"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/overlay-snow-dungeon-v1.webp",
+      "category": "source",
+      "bytes": 221586,
+      "sha256": "1e5ef99289a649400481569c8bb40276ce9b1a93997992e7b0510d2fa759bdca"
+    },
+    {
       "path": "src/renderer/assets/ui/brand-crest.svg",
       "category": "source",
       "bytes": 2251,
@@ -8103,8 +8163,8 @@
     {
       "path": "src/renderer/assets/ui/index.ts",
       "category": "source",
-      "bytes": 3998,
-      "sha256": "687554d8f85da5f4312b1b1d9df35e933a95cadfe0e913ed9b3edf7652c90393"
+      "bytes": 4790,
+      "sha256": "9c9a18a5bc559ad4fb05a2e748c6d51ecb0884eed1f65887d73163004102d84a"
     },
     {
       "path": "src/renderer/assets/ui/menu-emblem.svg",
@@ -9327,20 +9387,20 @@
     {
       "path": "src/renderer/components/GameplayScene.module.css",
       "category": "source",
-      "bytes": 6696,
-      "sha256": "7cdf5c461350d2494962dccff72b107c263254766eb361a90b36ebce22aa1a7d"
+      "bytes": 11210,
+      "sha256": "625ed2302bf014618a354be40534c3d6c887ddeed485240869926822abc1fdd9"
     },
     {
       "path": "src/renderer/components/GameplayScene.test.tsx",
       "category": "test",
-      "bytes": 14584,
-      "sha256": "89918e2b2e61b724b7cfba3ff7e40ceef5a2fdea57ac6143087ca32d8b326f5b"
+      "bytes": 14694,
+      "sha256": "1ddb85f2edd3a12b2306e564f0e9c16240f7e89bab9b96a0d24d6d5a2cab52f9"
     },
     {
       "path": "src/renderer/components/GameplayScene.tsx",
       "category": "source",
-      "bytes": 10881,
-      "sha256": "99edc0e349acab8820350d3e6c1145101a655a11b8fb909e5d0241c89375f47b"
+      "bytes": 13387,
+      "sha256": "135a320e2086b53348e56717c0c77e381ca79f8fa8ab75a09c50cca65c33a1ac"
     },
     {
       "path": "src/renderer/components/gameplaySceneLevels.ts",
@@ -9363,8 +9423,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 54338,
-      "sha256": "1292817eda7b078b3c97dfe31305f985f9c319dcc773659bbc835052778afeed"
+      "bytes": 54547,
+      "sha256": "2d3cd5059ed2c2de727c0f155312686a30d0732eac9edc5df7b82acea1636879"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -9375,8 +9435,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 101893,
-      "sha256": "0c6451349435adabd2d7d1483be653a4b9eb70128f6bfd6066bed572a1cf634f"
+      "bytes": 103408,
+      "sha256": "59cc68693efd09d03ccf34803cd337d9553b4512b217e104ac500615a353904a"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9401,6 +9461,30 @@
       "category": "source",
       "bytes": 1169,
       "sha256": "b4b14f25d865aa5048d0c70207f52043f43d9fa145c742b7b792d66de44ed745"
+    },
+    {
+      "path": "src/renderer/components/iceSheet.test.ts",
+      "category": "test",
+      "bytes": 1227,
+      "sha256": "23688174b92a9298b15bf21bce98a012517807d8f071196ae0a6dad7ee9b54f5"
+    },
+    {
+      "path": "src/renderer/components/iceSheet.ts",
+      "category": "source",
+      "bytes": 3332,
+      "sha256": "2b34b05d643698572bdbfac678b4110c8db7e45708a01d082e560e600c47ea3e"
+    },
+    {
+      "path": "src/renderer/components/IceSheetOverlay.module.css",
+      "category": "source",
+      "bytes": 1753,
+      "sha256": "8373ead68bcf9ee410abd2677d2984cbe1cb841baf721829060458b5ab865e23"
+    },
+    {
+      "path": "src/renderer/components/IceSheetOverlay.tsx",
+      "category": "source",
+      "bytes": 3561,
+      "sha256": "66aefa84619781f3153b1a1379420af8cd28471ad8c02e7cd78a5393b55c66fd"
     },
     {
       "path": "src/renderer/components/InventoryScreen.module.css",
@@ -9549,8 +9633,8 @@
     {
       "path": "src/renderer/components/OverlayModal.module.css",
       "category": "source",
-      "bytes": 21749,
-      "sha256": "7ed253db02bef7ff9a45ffcabff16825068f7897899ef8dc0f1a35474e047f1a"
+      "bytes": 22040,
+      "sha256": "f36dc3540d77809078fdcc81f1199cd1bccee5f63031dfda26432610c1e7b540"
     },
     {
       "path": "src/renderer/components/OverlayModal.test.tsx",
@@ -9561,8 +9645,8 @@
     {
       "path": "src/renderer/components/OverlayModal.tsx",
       "category": "source",
-      "bytes": 10752,
-      "sha256": "ab5c8b2f0c6449df76b34a86efd2781bafa644f3faf1f95ae152b2d2c62e75ca"
+      "bytes": 11051,
+      "sha256": "2a4054b49f137d8f0a4d48d46e7bb5b361010ece775ab6649131662f90b617ec"
     },
     {
       "path": "src/renderer/components/pairProximityBadges.ts",
@@ -9681,14 +9765,14 @@
     {
       "path": "src/renderer/components/sceneMood.test.ts",
       "category": "test",
-      "bytes": 3490,
-      "sha256": "68bd6823e87fc1cecb40075bc0f592a529a787438de558a220b747bf088035e1"
+      "bytes": 4121,
+      "sha256": "6ea2cbe725918098edc34d00a77194b8efa7bd963f5fc3200e67fc5dfa2ee286"
     },
     {
       "path": "src/renderer/components/sceneMood.ts",
       "category": "source",
-      "bytes": 4638,
-      "sha256": "f7cb53fa87816b3c2a9f70d9c8d3af70d8bfed60407ddd47b59ce6144be72852"
+      "bytes": 5460,
+      "sha256": "19cba07029bf33e3f50f45bc86b1a40269fa8ca08d4cfe41e8e32c8a4dd6cadc"
     },
     {
       "path": "src/renderer/components/SceneMotes.module.css",
@@ -17484,7 +17568,7 @@
       "path": "src/renderer/assets/ui/index.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 83,
+      "lineCount": 95,
       "imports": [
         "file:src/renderer/assets/ui/modeArt.ts"
       ],
@@ -19624,7 +19708,7 @@
       "path": "src/renderer/components/GameplayScene.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 258,
+      "lineCount": 259,
       "imports": [
         "file:src/renderer/components/GameplayScene.tsx",
         "file:src/renderer/components/gameplaySceneLevels.ts"
@@ -19637,11 +19721,12 @@
       "path": "src/renderer/components/GameplayScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 204,
+      "lineCount": 232,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/components/gameplaySceneLevels.ts",
+        "file:src/renderer/components/sceneMood.ts",
         "file:src/renderer/components/SceneMotes.tsx",
         "file:src/renderer/components/sceneSpriteClocks.ts",
         "file:src/renderer/components/SceneSprites.tsx",
@@ -19746,7 +19831,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2102,
+      "lineCount": 2134,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -19757,6 +19842,7 @@
         "file:src/renderer/components/GameplayScene.tsx",
         "file:src/renderer/components/gameplayVisualConfig.ts",
         "file:src/renderer/components/gameScreenStoreSelectors.ts",
+        "file:src/renderer/components/IceSheetOverlay.tsx",
         "file:src/renderer/components/MainMenuBackground.tsx",
         "file:src/renderer/components/matchScoreFloaterTiming.ts",
         "file:src/renderer/components/MemorizeSkipLayer.tsx",
@@ -19764,6 +19850,7 @@
         "file:src/renderer/components/RunShell.tsx",
         "file:src/renderer/components/runShellGlyphs.tsx",
         "file:src/renderer/components/runShellToolCatalog.ts",
+        "file:src/renderer/components/sceneMood.ts",
         "file:src/renderer/components/ScoreTermsLine.tsx",
         "file:src/renderer/components/ScreenCalloutQueue.tsx",
         "file:src/renderer/components/screenCallouts.ts",
@@ -19887,6 +19974,51 @@
       ],
       "exports": [
         "symbol:src/renderer/components/gameScreenStoreSelectors.ts#useGameScreenBoardVisualSettings"
+      ],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/iceSheet.test.ts",
+      "path": "src/renderer/components/iceSheet.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 26,
+      "imports": [
+        "file:src/renderer/components/iceSheet.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/iceSheet.ts",
+      "path": "src/renderer/components/iceSheet.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 67,
+      "imports": [
+        "file:src/shared/rng.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/iceSheet.ts#buildIceCracks",
+        "symbol:src/renderer/components/iceSheet.ts#ICE_SHEET_VIEWBOX",
+        "symbol:src/renderer/components/iceSheet.ts#IceCrack"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/iceSheet.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/IceSheetOverlay.tsx",
+      "path": "src/renderer/components/IceSheetOverlay.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 74,
+      "imports": [
+        "file:src/renderer/components/iceSheet.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/IceSheetOverlay.tsx#IceSheetOverlay",
+        "symbol:src/renderer/components/IceSheetOverlay.tsx#IceSheetOverlayProps"
       ],
       "testedBy": []
     },
@@ -20232,7 +20364,7 @@
       "path": "src/renderer/components/OverlayModal.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 279,
+      "lineCount": 286,
       "imports": [
         "file:src/renderer/a11y/overlayModalBodyState.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -20530,7 +20662,7 @@
       "path": "src/renderer/components/sceneMood.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 55,
+      "lineCount": 64,
       "imports": [
         "file:src/renderer/components/sceneMood.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
@@ -20545,7 +20677,7 @@
       "path": "src/renderer/components/sceneMood.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 98,
+      "lineCount": 115,
       "imports": [
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/shared/combo-heat-rules.ts",
@@ -35997,32 +36129,32 @@
       "name": "getUiArtRows",
       "kind": "value",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 76,
-      "endLine": 80
+      "line": 88,
+      "endLine": 92
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#MODE_CARD_ART",
       "name": "MODE_CARD_ART",
       "kind": "ExportSpecifier",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 82,
-      "endLine": 82
+      "line": 94,
+      "endLine": 94
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#MODE_POSTER_KEYS",
       "name": "MODE_POSTER_KEYS",
       "kind": "ExportSpecifier",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 82,
-      "endLine": 82
+      "line": 94,
+      "endLine": 94
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#resolveModePosterUrl",
       "name": "resolveModePosterUrl",
       "kind": "ExportSpecifier",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 82,
-      "endLine": 82
+      "line": 94,
+      "endLine": 94
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UI_ART",
@@ -36030,31 +36162,31 @@
       "kind": "value",
       "file": "src/renderer/assets/ui/index.ts",
       "line": 8,
-      "endLine": 39
+      "endLine": 47
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UI_ART_KEYS",
       "name": "UI_ART_KEYS",
       "kind": "value",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 43,
-      "endLine": 69
+      "line": 51,
+      "endLine": 81
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UiArtKey",
       "name": "UiArtKey",
       "kind": "type",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 41,
-      "endLine": 41
+      "line": 49,
+      "endLine": 49
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UiArtRow",
       "name": "UiArtRow",
       "kind": "interface",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 71,
-      "endLine": 74
+      "line": 83,
+      "endLine": 86
     },
     {
       "id": "symbol:src/renderer/assets/ui/modeArt.ts#getModePosterArtRows",
@@ -38557,16 +38689,16 @@
       "name": "GameplayScene",
       "kind": "function",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 91,
-      "endLine": 203
+      "line": 94,
+      "endLine": 231
     },
     {
       "id": "symbol:src/renderer/components/GameplayScene.tsx#GameplaySceneProps",
       "name": "GameplaySceneProps",
       "kind": "interface",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 58,
-      "endLine": 87
+      "line": 59,
+      "endLine": 90
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#sceneFlameLevels",
@@ -38645,40 +38777,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2101,
-      "endLine": 2101
+      "line": 2133,
+      "endLine": 2133
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 243,
-      "endLine": 243
+      "line": 245,
+      "endLine": 245
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 241,
-      "endLine": 241
+      "line": 243,
+      "endLine": 243
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 245,
-      "endLine": 245
+      "line": 247,
+      "endLine": 247
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 235,
-      "endLine": 235
+      "line": 237,
+      "endLine": 237
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -38735,6 +38867,46 @@
       "file": "src/renderer/components/gameScreenStoreSelectors.ts",
       "line": 5,
       "endLine": 20
+    },
+    {
+      "id": "symbol:src/renderer/components/iceSheet.ts#buildIceCracks",
+      "name": "buildIceCracks",
+      "kind": "value",
+      "file": "src/renderer/components/iceSheet.ts",
+      "line": 26,
+      "endLine": 66
+    },
+    {
+      "id": "symbol:src/renderer/components/iceSheet.ts#ICE_SHEET_VIEWBOX",
+      "name": "ICE_SHEET_VIEWBOX",
+      "kind": "value",
+      "file": "src/renderer/components/iceSheet.ts",
+      "line": 22,
+      "endLine": 22
+    },
+    {
+      "id": "symbol:src/renderer/components/iceSheet.ts#IceCrack",
+      "name": "IceCrack",
+      "kind": "interface",
+      "file": "src/renderer/components/iceSheet.ts",
+      "line": 14,
+      "endLine": 20
+    },
+    {
+      "id": "symbol:src/renderer/components/IceSheetOverlay.tsx#IceSheetOverlay",
+      "name": "IceSheetOverlay",
+      "kind": "function",
+      "file": "src/renderer/components/IceSheetOverlay.tsx",
+      "line": 20,
+      "endLine": 73
+    },
+    {
+      "id": "symbol:src/renderer/components/IceSheetOverlay.tsx#IceSheetOverlayProps",
+      "name": "IceSheetOverlayProps",
+      "kind": "interface",
+      "file": "src/renderer/components/IceSheetOverlay.tsx",
+      "line": 15,
+      "endLine": 18
     },
     {
       "id": "symbol:src/renderer/components/InventoryScreen.tsx#default",
@@ -38941,8 +39113,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/OverlayModal.tsx",
-      "line": 278,
-      "endLine": 278
+      "line": 285,
+      "endLine": 285
     },
     {
       "id": "symbol:src/renderer/components/OverlayModal.tsx#ModalAction",
@@ -39125,24 +39297,24 @@
       "name": "blackHoleKeyFor",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 50,
-      "endLine": 56
+      "line": 57,
+      "endLine": 63
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#deriveSceneMood",
       "name": "deriveSceneMood",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 58,
-      "endLine": 88
+      "line": 65,
+      "endLine": 105
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#latestMissEvent",
       "name": "latestMissEvent",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 91,
-      "endLine": 97
+      "line": 108,
+      "endLine": 114
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#SceneMood",
@@ -39150,7 +39322,7 @@
       "kind": "interface",
       "file": "src/renderer/components/sceneMood.ts",
       "line": 25,
-      "endLine": 39
+      "endLine": 46
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#ScenePlateId",
@@ -65924,6 +66096,36 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/iceSheet.ts->symbol:src/renderer/components/iceSheet.ts#buildIceCracks",
+      "source": "file:src/renderer/components/iceSheet.ts",
+      "target": "symbol:src/renderer/components/iceSheet.ts#buildIceCracks",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/iceSheet.ts->symbol:src/renderer/components/iceSheet.ts#ICE_SHEET_VIEWBOX",
+      "source": "file:src/renderer/components/iceSheet.ts",
+      "target": "symbol:src/renderer/components/iceSheet.ts#ICE_SHEET_VIEWBOX",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/iceSheet.ts->symbol:src/renderer/components/iceSheet.ts#IceCrack",
+      "source": "file:src/renderer/components/iceSheet.ts",
+      "target": "symbol:src/renderer/components/iceSheet.ts#IceCrack",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/IceSheetOverlay.tsx->symbol:src/renderer/components/IceSheetOverlay.tsx#IceSheetOverlay",
+      "source": "file:src/renderer/components/IceSheetOverlay.tsx",
+      "target": "symbol:src/renderer/components/IceSheetOverlay.tsx#IceSheetOverlay",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/IceSheetOverlay.tsx->symbol:src/renderer/components/IceSheetOverlay.tsx#IceSheetOverlayProps",
+      "source": "file:src/renderer/components/IceSheetOverlay.tsx",
+      "target": "symbol:src/renderer/components/IceSheetOverlay.tsx#IceSheetOverlayProps",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/InventoryScreen.tsx->symbol:src/renderer/components/InventoryScreen.tsx#default",
       "source": "file:src/renderer/components/InventoryScreen.tsx",
       "target": "symbol:src/renderer/components/InventoryScreen.tsx#default",
@@ -85031,6 +85233,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/sceneMood.ts",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "file:src/renderer/components/sceneMood.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/SceneMotes.tsx",
       "source": "file:src/renderer/components/GameplayScene.tsx",
       "target": "file:src/renderer/components/SceneMotes.tsx",
@@ -85223,6 +85431,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/IceSheetOverlay.tsx",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/components/IceSheetOverlay.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/MainMenuBackground.tsx",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/MainMenuBackground.tsx",
@@ -85262,6 +85476,12 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/runShellToolCatalog.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/runShellToolCatalog.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/sceneMood.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/components/sceneMood.ts",
       "kind": "imports"
     },
     {
@@ -85628,6 +85848,24 @@
       "id": "imports:src/renderer/components/gameScreenStoreSelectors.ts->src/renderer/store/useAppStore.ts",
       "source": "file:src/renderer/components/gameScreenStoreSelectors.ts",
       "target": "file:src/renderer/store/useAppStore.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/iceSheet.test.ts->src/renderer/components/iceSheet.ts",
+      "source": "file:src/renderer/components/iceSheet.test.ts",
+      "target": "file:src/renderer/components/iceSheet.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/iceSheet.ts->src/shared/rng.ts",
+      "source": "file:src/renderer/components/iceSheet.ts",
+      "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/IceSheetOverlay.tsx->src/renderer/components/iceSheet.ts",
+      "source": "file:src/renderer/components/IceSheetOverlay.tsx",
+      "target": "file:src/renderer/components/iceSheet.ts",
       "kind": "imports"
     },
     {
@@ -102698,6 +102936,12 @@
       "id": "tested_by:src/renderer/components/gameScreenFeedback.ts->file:src/renderer/components/GameScreen.test.tsx",
       "source": "file:src/renderer/components/gameScreenFeedback.ts",
       "target": "file:src/renderer/components/GameScreen.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/iceSheet.ts->file:src/renderer/components/iceSheet.test.ts",
+      "source": "file:src/renderer/components/iceSheet.ts",
+      "target": "file:src/renderer/components/iceSheet.test.ts",
       "kind": "tested_by"
     },
     {

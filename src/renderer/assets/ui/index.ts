@@ -21,6 +21,14 @@ export const UI_ART = {
     gameplaySceneLightRing: resolveUiBackgroundUrl('bg-gameplay-dungeon-ring-v2-light-ring.webp', ''),
     gameplaySceneLightTorchesL: resolveUiBackgroundUrl('bg-gameplay-dungeon-ring-v2-light-torches-l.webp', ''),
     gameplaySceneLightTorchesR: resolveUiBackgroundUrl('bg-gameplay-dungeon-ring-v2-light-torches-r.webp', ''),
+    /** The room the store stop opens into (`sceneMood.ts`): the merchant's vault. */
+    gameplaySceneShop: resolveUiBackgroundUrl('bg-gameplay-shop-v1.webp'),
+    /** The room a black hole leaves: the dungeon collapsed into the void, for the rest of the floor. */
+    gameplaySceneVoid: resolveUiBackgroundUrl('bg-gameplay-void-v1.webp'),
+    /** Frost crystals growing in from the edges, screened over the plate on a frost run. */
+    gameplaySceneFrost: resolveUiBackgroundUrl('overlay-frost-v1.webp'),
+    /** Snow lying on the room's ledges, brackets and stones (`scripts/scene-pipeline/snow_mask.py`). */
+    gameplaySceneSnow: resolveUiBackgroundUrl('overlay-snow-dungeon-v1.webp'),
     gameplayWorkshopScene: resolveUiBackgroundUrl('bg-gameplay-arcane-workshop-v1.webp'),
     gameplayWorkshopTable: resolveUiBackgroundUrl('bg-board-arcane-table-v1.webp'),
     menuEmblem: menuEmblemUrl,
@@ -53,6 +61,10 @@ export const UI_ART_KEYS = [
     'gameplaySceneLightRing',
     'gameplaySceneLightTorchesL',
     'gameplaySceneLightTorchesR',
+    'gameplaySceneShop',
+    'gameplaySceneVoid',
+    'gameplaySceneFrost',
+    'gameplaySceneSnow',
     'gameplayWorkshopScene',
     'gameplayWorkshopTable',
     'menuEmblem',

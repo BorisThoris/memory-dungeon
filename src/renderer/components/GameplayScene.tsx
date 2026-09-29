@@ -7,6 +7,7 @@ import { SCENE_SPRITES } from '../assets/ui/sprites';
 import { useSceneEffectTier } from '../hooks/useSceneEffectTier';
 import { useSceneLook } from '../hooks/useSceneLook';
 import { sceneRingLevels, sceneTorchFlarePeak } from './gameplaySceneLevels';
+import type { SceneMood } from './sceneMood';
 import { SceneMotes } from './SceneMotes';
 import { SceneSprites } from './SceneSprites';
 import { ringMotes } from './sceneSpriteClocks';
@@ -84,6 +85,8 @@ export interface GameplaySceneProps {
     comboStage?: ComboHeatStage;
     /** The temper's hue (`ComboHeatTheme.ringHueDeg`): where the ring turns at full heat. */
     comboHueDeg?: number;
+    /** What the room has become (`sceneMood.ts`): the plate, the frost, the black hole. */
+    mood?: SceneMood;
 }
 
 const bg = (url: string) => ({ backgroundImage: `url(${url})` });
@@ -101,7 +104,8 @@ export function GameplayScene({
     tier,
     comboHeat = 0,
     comboStage = 'cold',
-    comboHueDeg = 0
+    comboHueDeg = 0,
+    mood
 }: GameplaySceneProps) {
     const sceneRef = useRef<HTMLDivElement>(null);
     const ring = sceneRingLevels(fill, comboHeat, comboHueDeg);
@@ -124,6 +128,8 @@ export function GameplayScene({
             data-scene-fill={fill.toFixed(2)}
             data-scene-tier={tier}
             data-combo-stage={comboStage}
+            data-scene-plate={mood?.plate ?? 'dungeon'}
+            data-scene-prismatic={mood?.prismatic ? 'true' : 'false'}
             data-still={still ? 'true' : 'false'}
             data-testid="gameplay-scene"
             ref={sceneRef}
@@ -137,12 +143,23 @@ export function GameplayScene({
                     '--scene-flare-peak': sceneTorchFlarePeak(pulse),
                     '--scene-motes-opacity': ring.motes,
                     '--combo-heat': comboHeat.toFixed(3),
+                    '--scene-frost': mood?.frost ?? 0,
+                    '--scene-snow': mood?.snow ?? 0,
+                    '--scene-snow-glow': mood?.snowGlow ?? 0,
+                    '--scene-storm': mood?.storm ?? 0,
+                    '--scene-grade-hue': `${mood?.hueDeg ?? 0}deg`,
+                    '--scene-grade-saturate': mood?.saturate ?? 1,
+                    '--scene-grade-brightness': mood?.brightness ?? 1,
                     '--scene-plate-aspect': `${flames.plate[0]} / ${flames.plate[1]}`
                 } as CSSProperties
             }
         >
             <div className={plate.plate} data-testid="gameplay-scene-plate">
-                <div className={plate.base} style={bg(UI_ART.gameplaySceneBase)} />
+                <div className={`${plate.base} ${styles.dungeonBase}`} style={bg(UI_ART.gameplaySceneBase)} />
+                {/* The other rooms, crossfaded over the dungeon: the shop while the store is open, the
+                    void after a great combo died. The light passes below belong to the dungeon and fade with it. */}
+                <div className={`${plate.base} ${styles.altPlate}`} data-testid="gameplay-scene-shop" data-shown={mood?.plate === 'shop' ? 'true' : 'false'} style={bg(UI_ART.gameplaySceneShop)} />
+                <div className={`${plate.base} ${styles.altPlate}`} data-testid="gameplay-scene-void" data-shown={mood?.plate === 'void' ? 'true' : 'false'} style={bg(UI_ART.gameplaySceneVoid)} />
                 {lightPasses ? (
                     <>
                         <div className={`${plate.layer} ${styles.layer} ${styles.torchLightL}`} style={bg(UI_ART.gameplaySceneLightTorchesL)} />
@@ -169,6 +186,17 @@ export function GameplayScene({
                 ) : null}
                 <div className={`${plate.layer} ${styles.layer} ${styles.runeGlow}`} style={bg(UI_ART.gameplaySceneGlowRunes)} />
                 <div className={`${plate.layer} ${styles.layer} ${styles.ringGlow}`} style={bg(UI_ART.gameplaySceneGlowRing)} />
+                {/* A frost run: snow settles on the room's ledges and stones with the heat, and glows. */}
+                <div className={`${plate.layer} ${styles.snowGlow}`} style={bg(UI_ART.gameplaySceneSnow)} />
+                <div className={`${plate.layer} ${styles.snow}`} data-testid="gameplay-scene-snow" style={bg(UI_ART.gameplaySceneSnow)} />
+                {/* A frost run: ice grows in from the edges with the heat, screened over the room. */}
+                <div className={`${plate.layer} ${styles.frost}`} data-testid="gameplay-scene-frost" style={bg(UI_ART.gameplaySceneFrost)} />
+                {/* A storm run: the room flashes white now and then, more often the hotter it is. */}
+                {!still && (mood?.storm ?? 0) > 0 ? <div className={styles.stormFlash} data-testid="gameplay-scene-storm" /> : null}
+                {/* The black hole: the room collapses into it once, on the miss that opened it. */}
+                {mood?.blackHoleKey && !still ? (
+                    <div className={styles.blackHole} data-testid="gameplay-scene-black-hole" key={mood.blackHoleKey} />
+                ) : null}
                 {feverKey && !still ? (
                     <div
                         className={`${plate.layer} ${styles.layer} ${styles.feverArrival}`}

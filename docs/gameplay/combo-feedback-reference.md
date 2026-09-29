@@ -80,6 +80,36 @@ nothing a rule reads. The first time a non-ember run warms it stamps itself (FRO
 player learns what they drew. Separately, **combo milestones** at 50 and every 100 get their own
 stamp (HALF-CENTURY!, CENTURY!) - rare by nature rather than by roll.
 
+## The room itself (round six)
+
+The backdrop was a painting the run lit. Now the run changes the painting, the way the pool
+tables freeze over on an ice streak and the shop is a different room (`sceneMood.ts`,
+`GameplayScene`):
+
+- **The temper grades the room.** The plate takes a hue/saturation/brightness grade with the
+  heat; storm goes violet with white flashes on an irregular beat; prismatic cycles its hue slowly.
+- **A frost run freezes, in order, on variables.** Every layer is driven by a scene CSS variable
+  the way the light passes are (`--scene-snow`, `--scene-snow-glow`, `--scene-ice`,
+  `--scene-ice-cracks`, `--scene-ice-glow`, `--scene-frost`), so the run moves them and nothing
+  re-renders. Snow settles first: a mask of the room's upward-facing surfaces
+  (`scripts/scene-pipeline/snow_mask.py` derives it from the plate's own downward luminance
+  gradient - ledges, torch brackets, the ring's rim, the floor stones) laid over the stone, with a
+  blurred plus-lighter copy as its glow. Then a slick pane of ice over the whole screen
+  (`IceSheetOverlay`, one inline SVG: a drifting sheen, a frosted rim, and seeded cracks from
+  `iceSheet.ts` drawn in by stroke-dashoffset as the cracks variable climbs, glowing pale blue,
+  stopping short of the board). A faint rime of crystals (`overlay-frost-v1`) at the very edges.
+- **A black hole.** A combo of Inferno or better lost to a miss opens a dark disc at the ring
+  that swallows the room; the void plate (`bg-gameplay-void-v1`, the chamber collapsed into a
+  black hole) is what is left for the rest of that floor. The stairs are the way out: the next
+  floor is the dungeon again.
+- **The shop is a place.** While the store stop's sheet is open the room is the merchant's vault
+  (`bg-gameplay-shop-v1`), and the sheet's scrim is thinned so it shows; Descend crossfades the
+  dungeon back.
+
+All three are derived from run state (the turn event, the floor, the store stop), so a restore
+shows the same room and nothing replays on a mount. The plates were rendered with Z-Image-Turbo
+from `scripts/card-pipeline/scene-moods.zimage.manifest.json` at the dungeon's camera and size.
+
 ## What is deliberately not borrowed
 
 - **A decay timer.** The tables' streaks die on a clock; here the only thing that ends a combo is
